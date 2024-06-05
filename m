@@ -1,124 +1,162 @@
-Return-Path: <linux-i2c+bounces-3804-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3805-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 418788FC461
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 09:20:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EC688FC790
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 11:21:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E7F6B2719E
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 07:20:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B0B42841C6
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 09:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE4D1922CF;
-	Wed,  5 Jun 2024 07:20:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B85418FC85;
+	Wed,  5 Jun 2024 09:21:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W4pMKI30"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NdNp5wTv";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="UoIs5Twn";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NdNp5wTv";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="UoIs5Twn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD601922CB;
-	Wed,  5 Jun 2024 07:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3974718FC68;
+	Wed,  5 Jun 2024 09:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717572001; cv=none; b=ALmGByL0PKXIk4lMQxxS+mqQ8zNMdV9h7WneCSxEGLzDtc4FBkL4JptCBeDsqWvmU08m3FT8nOUr59Gg6fNgqMYoW4eAq8YwK+DyOW6xfTdUrrfsyeTJIzk8OhF7MmqVEDCbCIuiSuoxAAQzSZtu24PrxmhP0cjHtuL+CRXfXsU=
+	t=1717579264; cv=none; b=irv8HDx42oRL6PTcFiuGjWPsv/Uzk/9r8v5/KF07/al1J01Ll5+0hx3mXxRSjoa5Tqg6kWDJRIaowXL+mmDQ58m9ZuhIrAmm4LaoRZwYlopm7qpJS+WG8HpTD/otRAyH0LFW7YD9EJvOex0PHfD58prHpmVVQBiycjYrQ1IV0b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717572001; c=relaxed/simple;
-	bh=QibHYSNqXBQZglXhuWn0/MB/qPRlK5YRrW3DPEoBJy8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=M0vre8s79rUMXuGod6SJiWE8D/UdqiSvf4Hcvi8Mi0CA9KsPmmBd/ZP2C9Vvz/pxFi2/G6+Pz5KrCNKwxOvMjyfCaZG6L8nQc0ptlcQKTps6u/mD15+OWz5FuzHGDR6R8XTFmJ7gZNeWmtz0QK+cds/UOCNpSzeQY9ungOkXNpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W4pMKI30; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0048FC3277B;
-	Wed,  5 Jun 2024 07:19:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717572000;
-	bh=QibHYSNqXBQZglXhuWn0/MB/qPRlK5YRrW3DPEoBJy8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=W4pMKI30CFYdy6cnB+KD1SY+qpgqKded4GSi3g6RYy2hreBQBhsCsltUmCOVERYfm
-	 JOBL9hPTfKCI7gyyC/pkf5sQhOZl12eQYI39Gv5g9pViDDhxp2L7r8cMpmMfR/rUw7
-	 RAXUrZVpHjZnCFV39cLmKdoBxuePPbf9U15AHSg+fo2HIpmwA/107YqCSKKb3UNjUc
-	 1a56HzHBMt2OS2vCWTjPTsWQT54Bh6DbxW7TfKbGeuf9z/uedgu1bQ3QeLtpyioEXF
-	 2OohA4eyyMdPx80ZVnIm7mux2s+zZwke4DBGbkmx1ky0Au6FfGFQQfAfT02LZ3fas5
-	 klj9rrGFrsKoA==
-Date: Wed, 5 Jun 2024 09:19:57 +0200
-From: Wolfram Sang <wsa@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PULL REQUEST] i2c-for-6.10-rc3
-Message-ID: <ZmARnWliAuHLbwOy@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1717579264; c=relaxed/simple;
+	bh=3dD+DPEZQhGugyGqo62gS2c3dIvl2v9D29Io6wzlEXI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gWBytm5tM+idpApoje2zKgA9/P3qnbkhRoqEC3stf6QC5I//sIz5OXU0HQVIH2k6gx4Ylxi24VLcApb2ctfc7NuPOEtUxjxYbqWOyUm7m5L74XZ6D5B+3EWOvWNSWM9qHZCBK2rphRTJNusU2tV8QGSr1P0ondJpoSHrGuR4DtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NdNp5wTv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=UoIs5Twn; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NdNp5wTv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=UoIs5Twn; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 53B802198F;
+	Wed,  5 Jun 2024 09:21:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717579260; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qrADoXy+bcW3CggAAUu4f0wqlTejDtKqOk7V6ynGtGg=;
+	b=NdNp5wTvjmYo4GDz1XcffVPTefSwoc/I9XnU4D1sHIdrZaG4UAQnAD7aZFJW9jyNs+Necm
+	TcRpA0T1bdhbNODqXXSqMkTP5V6wsvWxgL1xo4sgotxtOc3vwOUandMiAG8cijcoDSX7nK
+	5IKy2odNKN/Vo71NnRCp7FPDGa9p/1c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717579260;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qrADoXy+bcW3CggAAUu4f0wqlTejDtKqOk7V6ynGtGg=;
+	b=UoIs5TwnzhUAAgIB1TPCf44vHd8ZvAyfQleTlW2+PvxOureEpLao51Qjf95q0PAz72yY7q
+	f+3tC2aTxYmzvIDQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717579260; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qrADoXy+bcW3CggAAUu4f0wqlTejDtKqOk7V6ynGtGg=;
+	b=NdNp5wTvjmYo4GDz1XcffVPTefSwoc/I9XnU4D1sHIdrZaG4UAQnAD7aZFJW9jyNs+Necm
+	TcRpA0T1bdhbNODqXXSqMkTP5V6wsvWxgL1xo4sgotxtOc3vwOUandMiAG8cijcoDSX7nK
+	5IKy2odNKN/Vo71NnRCp7FPDGa9p/1c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717579260;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qrADoXy+bcW3CggAAUu4f0wqlTejDtKqOk7V6ynGtGg=;
+	b=UoIs5TwnzhUAAgIB1TPCf44vHd8ZvAyfQleTlW2+PvxOureEpLao51Qjf95q0PAz72yY7q
+	f+3tC2aTxYmzvIDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 64DF113AA1;
+	Wed,  5 Jun 2024 09:20:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id hk3VEfstYGYbSQAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Wed, 05 Jun 2024 09:20:59 +0000
+Date: Wed, 5 Jun 2024 11:20:55 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin
+ <peda@axentia.se>
+Subject: Re: [PATCH] i2c: smbus: fix NULL function pointer dereference
+Message-ID: <20240605112055.7f057e46@endymion.delvare>
+In-Reply-To: <bk6rgqfcn5op5iuojoisogvtrp24ldblgkq4g62ffr4z7wnzug@xlp3ce5bx7bs>
+References: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
+	<1e626d93f4220cc348300bbc61089de32300122d.camel@suse.de>
+	<b2tnimag62ty6wndyjsy7u5fay6y52zn47vvifw6rh5abeqzpu@pqyyczutxcwu>
+	<20240604171113.232628f9@endymion.delvare>
+	<bk6rgqfcn5op5iuojoisogvtrp24ldblgkq4g62ffr4z7wnzug@xlp3ce5bx7bs>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fcFIjSC+7WZBrfM+"
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Flag: NO
+X-Spam-Score: -2.72
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.72 / 50.00];
+	BAYES_HAM(-2.92)[99.65%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_RCPT(0.00)[renesas];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
 
+Hi Wolfram,
 
---fcFIjSC+7WZBrfM+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, 4 Jun 2024 22:08:41 +0200, Wolfram Sang wrote:
+> > > gracefully because kicking off I2C transfers is not a hot path. Maybe we
+> > > could turn the dev_dbg into something louder to make people aware that
+> > > there is a bug?  
+> > 
+> > My previous message initially had a suggestion in that direction ;-)
+> > but I first wanted your opinion on the check itself. dev_dbg() is
+> > definitely not appropriate for a condition which should never happen
+> > and implies there's a bug somewhere else. A WARN_ON_ONCE would probably
+> > be better, so that the bug gets spotted and fixed quickly.  
+> 
+> So, are you okay with keeping the check where it is now and turning the
+> dev_dbg into WARN_ON_ONCE? I am.
 
-The following changes since commit c3f38fa61af77b49866b006939479069cd451173:
+Yes I am.
 
-  Linux 6.10-rc2 (2024-06-02 15:44:56 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.10-rc3
-
-for you to fetch changes up to c4aff1d1ec90d9596c71b6f06b0bfab40a36a34a:
-
-  Merge tag 'i2c-host-6.10-pt2' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current (2024-06-03 08:51:53 +0200)
-
-----------------------------------------------------------------
-This should have been my second pull request during the merge window but
-one dependency in the drm subsystem fell through the cracks and was only
-applied for rc2. Now, we can finally remove I2C_CLASS_SPD.
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      i2c: synquacer: Remove a clk reference from struct synquacer_i2c
-
-Heiner Kallweit (1):
-      i2c: Remove I2C_CLASS_SPD
-
-Wolfram Sang (1):
-      Merge tag 'i2c-host-6.10-pt2' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current
-
- drivers/i2c/busses/i2c-synquacer.c | 11 +++++------
- include/linux/i2c.h                |  1 -
- 2 files changed, 5 insertions(+), 7 deletions(-)
-
---fcFIjSC+7WZBrfM+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZgEZkACgkQFA3kzBSg
-KbY2wg//e5sCOTOhmxwm8B/EvNU1NPIXz12/nw7MC1wBqzscAE9QPlH+g72XZ381
-Er33VItKcZLByMybeBIH/+cXvtZQ368hJR5VSxNT8GUT4SPJbBmRK8HX2aCYPbAi
-UXPOTrjfBNWSYRzvcn85PBNE3eyOZ083DWs79KBzO/Z6PjmJ1OX7HLm/zvRgue2b
-qIK+bGsxeqNoW7C2u6+oUMuXZ8wuZk6zziHqiKWB+7I5YOqAr3nrVNbPpd6bpwHU
-63InhB+Acl+xSjp4g1NYJhl/lrlUgVqW5MbngHIw/P34uDEL9lsOSJ1RCzTSqt4q
-W3/pUfe+nTmBTT4QeetwjyTYhrWSUYH9nvy2ipsqZ3oi0iquz2vaE81xNoFeEio+
-4Vy/KMEjktep9HRoEohrvi17WKmRjiWOllNLMLIDlJWfqBP+EPv/0mepNoWO9xvs
-AG0QZCGO8w2HsoubMm+4m7ffXlu7dSGA60UZtvfADpl+2ppk4yo2mNBDwP/3SICi
-c6a6ZQ7kK+FZH06rFisQ6BdEniSuBdNdYfKgqLlLvZ2b9YyJrZPLilxo7tT9efr4
-ApMdKt9aIiXrGNzfFrfD0d/w1v+LT6VZSMvF6+gOH02b9ypO0Iyj88z2Y00U159h
-X0U57GVjy5mlDPZ4hkIAhq0oN5Ag/frDS3ff06SWOiKolzRpI3k=
-=RP3O
------END PGP SIGNATURE-----
-
---fcFIjSC+7WZBrfM+--
+Thanks,
+-- 
+Jean Delvare
+SUSE L3 Support
 
