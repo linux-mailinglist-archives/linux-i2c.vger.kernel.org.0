@@ -1,72 +1,54 @@
-Return-Path: <linux-i2c+bounces-3893-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3894-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07D808FE7B5
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 15:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 221058FF607
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 22:39:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AF221F23E48
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 13:27:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0FA61F22024
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 20:39:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB11195FD7;
-	Thu,  6 Jun 2024 13:27:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A025E745C0;
+	Thu,  6 Jun 2024 20:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WBcs6GA7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56DC193080;
-	Thu,  6 Jun 2024 13:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD423FB87
+	for <linux-i2c@vger.kernel.org>; Thu,  6 Jun 2024 20:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717680453; cv=none; b=mymNBhuHR8v7g19P537tIJVI+h+36S+ZHb37ITya7C0KsnVloNCIVJ8zUkj+YO/JY0i3koi/+s6pGcu2I8G5vG59hzD19LI3vhHZDyw1TMD4cgrvQnsTqM4Y49hzSS4uc1JXZBdUSpZcyZz7RQHffOBuWchUx7E7nERFm4s8UT4=
+	t=1717706239; cv=none; b=iBhMIVBMEzCwSdwOtaBdoRQER5Xk5yK277IMGTxaIbR8NhEguNPK/sKFGJX4/AYOixKkuEp1R8QDAIdr76Zh/8CvuNmqDrkS1uU5dXveDA3uPe8H0kWqZZCbr12jAAynGbO7+Tpa+ZbZF8LQWtnZ0vPPmQ+U7pnu0OTOnseKpc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717680453; c=relaxed/simple;
-	bh=l00UI0JD6AC6Q+cJo4FKqgL09aX1TgDCu9xOfXS9uoM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ouWzw/29qlqrNXIVI0izSUYT0ofkphUiBC7ANjZBWqBzddoSo7lfRAi/mW7I88NJgfn2leEQE5py8YYa4jgFfkbtdgKAcTuliSV5O39W6rpaWgkOXt6VVxEUWU2/2PjCmNkFoSXgbu3zllJIXO/zW0zEcyCqujZi/gbO7KPBbZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57864327f6eso355401a12.1;
-        Thu, 06 Jun 2024 06:27:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717680449; x=1718285249;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iuF5KD5rCo57TyG5EigT3fDurZ74w1tefad8AjM+COM=;
-        b=j8ikiYHAggBd94p9/sl8QgN9K/8bcidP+7iCCwstYypOJv6K2V5LLu7R8cPCHmbrd6
-         cJ8y0fp/qaqTX9MmKaJEvPqddtF9Km9CqHht98TQYQZ4n9gN5N/619SNf5ScA2ssv1FV
-         +SkSQuZwbp1fYkv9JQi+ALfhD0fsfZ0g10aXrJk7ktgvS7cGXzvp0/2MufC5HBwhjz8l
-         nTTLtLJLWMmrgC3RT5Akjm+5D+jKXJZVOFf8ojuEJgaLvj8R6AG8a4Em0aNqLqjUXfRL
-         oi65iiSLaV6BYqCuxIH4iJWoEfFyZezM7Z/daWgDJvMYFWN39VqxiGIbpoj8wUBgn5te
-         hIcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW3ws6I0ZEuxJKPUCUkt8NSTqxdLUcu+5Le4IR/z+3/dWjPfgmOQwUjtUqs5QKO85jNHIh8GSXV+VIlGnA2nQPfoSHw9M6+hUK+frCHMopbyDkXBZS98neqXAO35UvLU7ERR7ef3rRFzlnkqfw7VJYkt/4dfTTXpnUc2r0HZmJxZooNbGo=
-X-Gm-Message-State: AOJu0YxioFA+1P+SM47ZKabRc1EQ9XyRxmrPciTnv6JjDS/6suG5ZPn8
-	0ehsixZKixgAYsPCOU4gOHuA+FRYQRU4LmUFhEPR1DdZYhpHXm5s
-X-Google-Smtp-Source: AGHT+IGkCI92lpY9im28PFCaqOXR0tPwgGp8l0RK7fN48VWfjPlSf/gZ9WuRB7v6N3QBhFb+BZc/Fw==
-X-Received: by 2002:a50:ab02:0:b0:574:ebf4:f786 with SMTP id 4fb4d7f45d1cf-57aa558746amr2338378a12.16.1717680448842;
-        Thu, 06 Jun 2024 06:27:28 -0700 (PDT)
-Received: from localhost (fwdproxy-lla-120.fbsv.net. [2a03:2880:30ff:78::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57aae0caa84sm1103288a12.29.2024.06.06.06.27.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jun 2024 06:27:28 -0700 (PDT)
-From: Breno Leitao <leitao@debian.org>
-To: Laxman Dewangan <ldewangan@nvidia.com>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>
-Cc: paulmck@kernel.org,
-	apopple@nvidia.com,
-	Michael van der Westhuizen <rmikey@meta.com>,
-	linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
-	linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] [i2c-tegra] Do not mark ACPI devices as irq safe
-Date: Thu,  6 Jun 2024 06:27:07 -0700
-Message-ID: <20240606132708.1610308-1-leitao@debian.org>
+	s=arc-20240116; t=1717706239; c=relaxed/simple;
+	bh=MbKcToJ9jfMjRqclWrbv9+0f9nqvfRhx2gNEtc4Uh/E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KgEsk8wga8Fle0Sq9bCTiOBW2qxs+IRShQFH4EdBP+87WbX38to9egGocfhLsuQF1bd2xInbrG7gRToPCDpMdCrkdqWVfzjU1GLgE7P++Q/skZKOZvH8CpkPfJiHo46KGJGh3clL7tjJS2knKw6ZgEwD9X733WMi9/4xhw2VZSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WBcs6GA7; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=YPzYhUA/ql+8i4
+	z/cGDM/TzZ261D4WX/ce6UaCwmjwY=; b=WBcs6GA7OtVp+xbr6OzfxNTVuGV3AM
+	BppGTauf8o3iZ69TVuiS2kC8GVEemD8F4iNU6Xyej0ulsA3c8YCDrTm9WfjwaTMz
+	pBPULB1HBK/OOMf2zxFiJcdrG7PABUD38vDOc0xFGpwI3prtMoBYMKPwxamevfS8
+	d2v17FykmiHU+GolsOSqyEiAM/nCH1SlKGnAeBcCJI6tdNkJ9iB09TuWXe/Q6v7M
+	Mx9YaCkJHBznKdKj1fGkKe8t8+sb/r3XpPBCCstxlJaa4HWqbqA+qoRHR2O18If2
+	NgyzO5CKihWjSv1kkY0CyFUxGXEkv8zPfivVH/wk4O38kKXZMdJFWCmg==
+Received: (qmail 3107283 invoked from network); 6 Jun 2024 22:37:08 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Jun 2024 22:37:08 +0200
+X-UD-Smtp-Session: l3s3148p1@Ov+MpT4aAoJehhrL
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-i2c@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.de>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH] i2c: complain loudly if __i2c_transfer has no proper callback
+Date: Thu,  6 Jun 2024 22:36:58 +0200
+Message-ID: <20240606203657.22286-2-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -76,62 +58,32 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On ACPI machines, the tegra i2c module encounters an issue due to a
-mutex being called inside a spinlock. This leads to the following bug:
+In a discussion we concluded that having no working callback in
+__i2c_transfer is a serious bug, so dev_dbg() is not enough. Turn it
+into a WARN.
 
-	BUG: sleeping function called from invalid context at kernel/locking/mutex.c:585
-	in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1282, name: kssif0010
-	preempt_count: 0, expected: 0
-	RCU nest depth: 0, expected: 0
-	irq event stamp: 0
-
-	Call trace:
-	dump_backtrace+0xf0/0x140
-	show_stack (./arch/x86/include/asm/current.h:49
-		     arch/x86/kernel/dumpstack.c:312)
-	dump_stack_lvl (lib/dump_stack.c:89 lib/dump_stack.c:115)
-	dump_stack (lib/earlycpio.c:61)
-	__might_resched (./arch/x86/include/asm/current.h:49
-			 kernel/sched/core.c:10297)
-	__might_sleep (./include/linux/lockdep.h:231
-			 kernel/sched/core.c:10236)
-	__mutex_lock_common+0x5c/0x2190
-	mutex_lock_nested (kernel/locking/mutex.c:751)
-	acpi_subsys_runtime_resume+0xb8/0x160
-	__rpm_callback+0x1cc/0x4b0
-	rpm_resume+0xa60/0x1078
-	__pm_runtime_resume+0xbc/0x130
-	tegra_i2c_xfer+0x74/0x398
-	__i2c_transfer (./include/trace/events/i2c.h:122 drivers/i2c/i2c-core-base.c:2258)
-
-The problem arises because during __pm_runtime_resume(), the spinlock
-&dev->power.lock is acquired before rpm_resume() is called. Later,
-rpm_resume() invokes acpi_subsys_runtime_resume(), which relies on
-mutexes, triggering the error.
-
-To address this issue, devices on ACPI are now marked as not IRQ-safe,
-considering the dependency of acpi_subsys_runtime_resume() on mutexes.
-
-Co-developed-by: Michael van der Westhuizen <rmikey@meta.com>
-Signed-off-by: Michael van der Westhuizen <rmikey@meta.com>
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Link: https://lore.kernel.org/r/20240604171113.232628f9@endymion.delvare
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/i2c-core-base.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 85b31edc558d..6d783ecc3431 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1804,7 +1804,7 @@ static int tegra_i2c_probe(struct platform_device *pdev)
- 	 * VI I2C device shouldn't be marked as IRQ-safe because VI I2C won't
- 	 * be used for atomic transfers.
- 	 */
--	if (!IS_VI(i2c_dev))
-+	if (!IS_VI(i2c_dev) && !ACPI_HANDLE(i2c_dev->dev))
- 		pm_runtime_irq_safe(i2c_dev->dev);
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index db0d1ac82910..e5fd899c28c3 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -2207,10 +2207,8 @@ int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+ 	unsigned long orig_jiffies;
+ 	int ret, try;
  
- 	pm_runtime_enable(i2c_dev->dev);
+-	if (!adap->algo->master_xfer) {
+-		dev_dbg(&adap->dev, "I2C level transfers not supported\n");
++	if (WARN_ON_ONCE(!adap->algo->master_xfer))
+ 		return -EOPNOTSUPP;
+-	}
+ 
+ 	if (WARN_ON(!msgs || num < 1))
+ 		return -EINVAL;
 -- 
 2.43.0
 
