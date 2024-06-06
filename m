@@ -1,203 +1,141 @@
-Return-Path: <linux-i2c+bounces-3883-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3884-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04E608FDC29
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 03:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86E6B8FE018
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 09:42:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 780F32853F5
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 01:31:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2165F28255B
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 07:42:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D131094E;
-	Thu,  6 Jun 2024 01:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0DEF13C3F7;
+	Thu,  6 Jun 2024 07:42:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="cfhxf0BR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NL++cvwa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299734A31;
-	Thu,  6 Jun 2024 01:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F058F13AA54
+	for <linux-i2c@vger.kernel.org>; Thu,  6 Jun 2024 07:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717637507; cv=none; b=WupC5hKaCKFdLcGiWgQvsDfQiBISPKVI9RkGIBN2NmxKFpdGtbeWzzjuXInbMm1FlibFt1MW8/dlKs5bTLj79E2zf7Tb3vZGYZoOEPjHAFPNz4BS9ePWa+ZXMkDCpl/tssceUXRK7tIwe9AK8JKFAjIi5GPBt6mpMeqCtKOGEE8=
+	t=1717659764; cv=none; b=MdkKbrOuwgoNTqj7wUtAZbYmZt84wmSZF7PG+6vY8/CrSNzDNrNSwSk4AhTMvHUR5JKIfzBqY5AmT0KQNMc5bxFFSTSu6i+2KKcbdPbx356/v0zoFMAwRtQUs9i9veXBb7zjHmxk50UzrwFtmr5z8mxADnTHJBpEea7ZRMHy6iY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717637507; c=relaxed/simple;
-	bh=VkhuZl06ZudgXAx1mrFXZHb9fR10KMTsBJEt7jmSsSk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RcN7PVSstEbqy6+9+Fb5mxnMK9sFKHwMTunB46WxciPAHGWPcphsbDmIsGA3IczkkSotisMr0A6NkDjJYlPFsPkVXd5mur6oSvggZFdT5Tm6ZEpz2IAv6AundvMqrriiWvb47fCece9vIa07gD0GbCjhOOu3q8v8Pw+UYsIyaPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=cfhxf0BR; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-Received: from [192.168.68.112] (ppp118-210-171-248.adl-adc-lon-bras34.tpg.internode.on.net [118.210.171.248])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id AE9EB20154;
-	Thu,  6 Jun 2024 09:31:41 +0800 (AWST)
+	s=arc-20240116; t=1717659764; c=relaxed/simple;
+	bh=7OaWmqVFqUj8UiBMIFYvyTDVYpCRKRaVDuAaqAod2/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r4EfKDHV0Ya++hO6Y8vo5nzM9cOFhIyXXi9CbO0uzyv0LaNXHvOHZw1a6Mn/jXYbvkWR6TRaTvhb81xcC2mCqXGbIGDT4JKx46BYWwAOdMlnyYPJUZzXQhTttVNyv+H2bSo+PIvD6y1AKlJzrWvrsyZA1UY9XI391feusIngltw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NL++cvwa; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57a9a3bc085so763990a12.2
+        for <linux-i2c@vger.kernel.org>; Thu, 06 Jun 2024 00:42:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1717637502;
-	bh=7Y+Fi/S9iFVYn77ci9owMZTSbegdzVDaxHeOlwRPaGs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=cfhxf0BRfejrV5lGw89SKoK1CFwOsuKcHCvYL51e3sedQbbXH7LkO2OVLK18OfMbA
-	 PEruDGnP2IC12lpC9J2m9GGQiCn78Xzv4YXrO2sOuDr59rNv/w+WWX50Q7KN04ekul
-	 ioLz+hMseo7hu5KR2i93Kj85l0zwr5C3EfgaM+j2zUgrDR8owgcc4cDvX16/dgqwIM
-	 l+2A7fmAo5e7DYHZNwToQyGhwPcaHpfoPVcBt2rcPW3mcujn3aEiEcP/tFoXABXcQn
-	 QQy1CMxr2LBL/LqCUh9qj1HtEgbjrwaP24ZkU/ZTwusVkfs8mWVK6OKEm1i+jdd/lv
-	 o8FLgQ3gr/LXg==
-Message-ID: <b40486cf90de44bad177f034d13d8ab69ad9aac8.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v6 00/20] ARM: dts: aspeed: Add IBM P11 BMC systems
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- ninad@linux.ibm.com, lakshmiy@us.ibm.com, linux-i2c@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-aspeed@lists.ozlabs.org, joel@jms.id.au, 
- robh@kernel.org, conor+dt@kernel.org, krzk+dt@kernel.org,
- andi.shyti@kernel.org,  broonie@kernel.org
-Date: Thu, 06 Jun 2024 11:01:41 +0930
-In-Reply-To: <f2f70d62-3edb-4273-b40e-430d789f19dc@linux.ibm.com>
-References: <20240522192524.3286237-1-eajames@linux.ibm.com>
-	 <f2f70d62-3edb-4273-b40e-430d789f19dc@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        d=linaro.org; s=google; t=1717659760; x=1718264560; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7hn7A2vtREo0E7HfSwjkC9hqptsOSWf7nUvmnuVDMQY=;
+        b=NL++cvwa1YzNLaO02KuHXfdUWI0iBeBifsmyZyDIb5uMpknUdYDOeT/BDI/fB1OqHk
+         +7gCI0acVsZJ9rqdfi0zaMODPSc2iNqRCIIzabLp1tuBymzYzAtsSw1iGNJhqh8NyJ/4
+         bfRhWy9o8GJlE3fdPgPV+MIOX2Zas3+n6dR2PFZyU7rJMR6cFy0R0pMq+kF7E/jGpRD5
+         dXGJ+GxjzoVPjGZ3tiwUrB4gUVnyjnHucGul9epeD37Bp6ZiZqmXwZ1hXIrXEdNVrXJF
+         ilEl3P0UI+XCbpU9AbkrYXIGfV5G0BBv+rrjrB1As9IXmF71GnivuRMlHZ8mIiUgEiHw
+         uAJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717659760; x=1718264560;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7hn7A2vtREo0E7HfSwjkC9hqptsOSWf7nUvmnuVDMQY=;
+        b=GUGRrv92z6CDMbeMfLGusLwkhCFZnPR6JAi2h0Gn5sp9kp688sXk6x3SHrpMt3OxSD
+         Q2FDf+l9/Rbo8bWNM7F6sxDSr9L8Qsj3qTMcUgOEVb6kJs0GcsQZLsCG9lthIQxvvrUS
+         MnAT8ibXkLZroOTUiXljBCufRrnzdegg0rxRw7HjPooanAJeOqbtosd4htlYPbBGqF/i
+         CU16LuFknV/bDO/8B7GZSPSttcMwjgVC2EdhOH9yWWU2Sh1OXgHwzLnNN7LybmRpku6y
+         Fm1A9BYx180zbsGcCxfjAbVy7mnW+YhsT4L/XO+564wvSnKR0Jq7hGxfx+i60ovfTMyk
+         bwpg==
+X-Forwarded-Encrypted: i=1; AJvYcCUvp0TSXhA6wqbBy4thpWWLu8unqvLzbEMZS8IlIxrnE4PWTcD9mwuHLooHF/1T0/vAFU0COHsfTHqGIW5qW+oIZ7hDWSJIZ3I5
+X-Gm-Message-State: AOJu0Yw7wWM9ol93h8VlPw2R6uNcnrZyNkomkDbGvl6NFh89r0CM4feP
+	s5nuYp5nw5c8WxGp0MEQiaJyxyeACeR/CiBF/4NJkOliN1EDapIxgE03ZKUChgI=
+X-Google-Smtp-Source: AGHT+IG9fb84ekx6f8HaBtotI1FnubBAZuTJ3dgM/XdsdCeyuhCLEIFdUbolQkfIb3FKjJXzmIhddQ==
+X-Received: by 2002:a17:907:900e:b0:a68:fe79:9499 with SMTP id a640c23a62f3a-a699f88b67cmr343464966b.40.1717659760015;
+        Thu, 06 Jun 2024 00:42:40 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c806ebc43sm57149266b.141.2024.06.06.00.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jun 2024 00:42:39 -0700 (PDT)
+Date: Thu, 6 Jun 2024 10:42:35 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Joy Chakraborty <joychakr@google.com>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Zhihao Cheng <chengzhihao1@huawei.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+	manugautam@google.com
+Subject: Re: [PATCH v1 01/17] hwmon: pmbus: adm1266: Change nvmem
+ reg_read/write return type
+Message-ID: <08ff07f4-034d-4342-89da-d83044871ab1@moroto.mountain>
+References: <20240605175953.2613260-1-joychakr@google.com>
+ <20240605175953.2613260-2-joychakr@google.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240605175953.2613260-2-joychakr@google.com>
 
-Hi Eddie,
+On Wed, Jun 05, 2024 at 05:59:45PM +0000, Joy Chakraborty wrote:
+> Change nvmem read/write function definition return type to ssize_t.
+> 
+> Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> ---
+>  drivers/hwmon/pmbus/adm1266.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+> index 2c4d94cc8729..7eaab5a7b04c 100644
+> --- a/drivers/hwmon/pmbus/adm1266.c
+> +++ b/drivers/hwmon/pmbus/adm1266.c
+> @@ -375,7 +375,7 @@ static int adm1266_nvmem_read_blackbox(struct adm1266_data *data, u8 *read_buff)
+>  	return 0;
+>  }
+>  
+> -static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t bytes)
+> +static ssize_t adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t bytes)
+>  {
+>  	struct adm1266_data *data = priv;
+>  	int ret;
+> @@ -395,7 +395,7 @@ static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val, size_t
+>  
+>  	memcpy(val, data->dev_mem + offset, bytes);
+>  
+> -	return 0;
+> +	return bytes;
+>  }
 
-On Wed, 2024-06-05 at 10:47 -0500, Eddie James wrote:
-> On 5/22/24 14:25, Eddie James wrote:
-> > Add the Blueridge and Fuji BMC systems. Document many missing FSI relat=
-ed
-> > properties, and fix existing warnings. Make some minor fixes in OCC and
-> > SCOM drivers for the updated bindings.
->=20
->=20
-> Hi Joel/Andrew, what else needs to be fixed before this can be merged=20
-> (minus Huygens patch which I will resend)? I believe all the patches=20
-> have been reviewed.
->=20
+This breaks the build so it's not allowed.  The way to do it is to:
+1) add a new pointer which takes a ssize_t
+2) convert everything to the new pointer
+3) Rename the new pointer to the old name
 
-Firstly, thanks for your work here on the FSI bindings.
-
-However, the series is a bit awkward, as it sandwiches Aspeed
-devicetree patches that should go through Joel's bmc tree between the
-bindings and driver fixes that should go through the FSI tree.
-
-This is potentially less of a problem for Joel as he's the maintainer
-for both, but it's not my place to be touching the FSI tree.=20
-
-For now I've applied the dts patches and pushed them here after
-dropping the Huygens patch:
-
-https://github.com/amboar/linux/commits/for/bmc/dt-6.11/
-
-But I would appreciate it if you split series by subsystem in the
-future (see my comments on the other FSI series you have out for
-review).
-
-Andrew
-
->=20
-> Thanks,
->=20
-> Eddie
->=20
->=20
-> >=20
-> > Changes since v5:
-> >   - Switch from clock-frequency to bus-frequency for common FSI control=
-ler
-> >     properties
-> >   - Add reg properties for AST2700 FSI controller
-> >   - Fix patternProperties for i2c bus nodes under FSI-based I2C control=
-ler
-> >   - Add bus-frequency for P11 FSI device tree node
-> >   - Change model name from Blueridge to Blueridge 2U
-> >   - Add missing reset gpio to led controller on Fuji
-> >   - Add Huygens (Rainier with modified FSI wiring)
-> >=20
-> > Eddie James (20):
-> >    spi: dt-bindings: Document the IBM FSI-attached SPI controller
-> >    dt-bindings: fsi: fsi2spi: Document SPI controller child nodes
-> >    dt-bindings: fsi: Document the IBM SCOM engine
-> >    dt-bindings: fsi: p9-occ: Convert to json-schema
-> >    dt-bindings: fsi: Document the IBM SBEFIFO engine
-> >    dt-bindings: fsi: Document the FSI controller common properties
-> >    dt-bindings: fsi: ibm,i2cr-fsi-master: Reference common FSI controll=
-er
-> >    dt-bindings: fsi: ast2600-fsi-master: Convert to json-schema
-> >    dt-bindings: fsi: Document the AST2700 FSI controller
-> >    dt-bindings: fsi: Document the FSI Hub Controller
-> >    dt-bindings: i2c: i2c-fsi: Convert to json-schema
-> >    dt-bindings: arm: aspeed: add IBM P11 BMC boards
-> >    ARM: dts: aspeed: Add IBM P11 FSI devices
-> >    ARM: dts: aspeed: Add IBM P11 Blueridge BMC system
-> >    ARM: dts: aspeed: Add IBM P11 Blueridge 4U BMC system
-> >    ARM: dts: aspeed: Add IBM P11 Fuji BMC system
-> >    ARM: dts: aspeed: Add IBM Huygens BMC system
-> >    fsi: occ: Get device number from FSI minor number API
-> >    fsi: occ: Find next available child rather than node name match
-> >    fsi: scom: Update compatible string to match documentation
-> >=20
-> >   .../bindings/arm/aspeed/aspeed.yaml           |    2 +
-> >   .../fsi/aspeed,ast2600-fsi-master.yaml        |  121 +
-> >   .../bindings/fsi/fsi-controller.yaml          |   66 +
-> >   .../bindings/fsi/fsi-master-aspeed.txt        |   36 -
-> >   .../devicetree/bindings/fsi/ibm,fsi2spi.yaml  |   36 +-
-> >   .../bindings/fsi/ibm,i2cr-fsi-master.yaml     |    5 +-
-> >   .../bindings/fsi/ibm,p9-fsi-controller.yaml   |   45 +
-> >   .../devicetree/bindings/fsi/ibm,p9-occ.txt    |   16 -
-> >   .../devicetree/bindings/fsi/ibm,p9-occ.yaml   |   40 +
-> >   .../bindings/fsi/ibm,p9-sbefifo.yaml          |   46 +
-> >   .../devicetree/bindings/fsi/ibm,p9-scom.yaml  |   37 +
-> >   .../devicetree/bindings/i2c/i2c-fsi.txt       |   40 -
-> >   .../devicetree/bindings/i2c/ibm,i2c-fsi.yaml  |   76 +
-> >   .../devicetree/bindings/spi/ibm,spi-fsi.yaml  |   55 +
-> >   MAINTAINERS                                   |    2 +-
-> >   arch/arm/boot/dts/aspeed/Makefile             |    3 +
-> >   .../aspeed/aspeed-bmc-ibm-blueridge-4u.dts    |   21 +
-> >   .../dts/aspeed/aspeed-bmc-ibm-blueridge.dts   | 1691 +++++++
-> >   .../boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts   | 3881 ++++++++++++++++=
-+
-> >   .../dts/aspeed/aspeed-bmc-ibm-huygens.dts     |   23 +
-> >   .../arm/boot/dts/aspeed/ibm-power11-quad.dtsi | 1539 +++++++
-> >   drivers/fsi/fsi-occ.c                         |   49 +-
-> >   drivers/fsi/fsi-scom.c                        |    1 +
-> >   23 files changed, 7694 insertions(+), 137 deletions(-)
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/aspeed,ast26=
-00-fsi-master.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/fsi-controll=
-er.yaml
-> >   delete mode 100644 Documentation/devicetree/bindings/fsi/fsi-master-a=
-speed.txt
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-fsi-c=
-ontroller.yaml
-> >   delete mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.t=
-xt
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.y=
-aml
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-sbefi=
-fo.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-scom.=
-yaml
-> >   delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-fsi.txt
-> >   create mode 100644 Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.=
-yaml
-> >   create mode 100644 Documentation/devicetree/bindings/spi/ibm,spi-fsi.=
-yaml
-> >   create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-blueridge-=
-4u.dts
-> >   create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-blueridge.=
-dts
-> >   create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts
-> >   create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-huygens.dt=
-s
-> >   create mode 100644 arch/arm/boot/dts/aspeed/ibm-power11-quad.dtsi
-> >=20
+regards,
+dan carpenter
 
 
