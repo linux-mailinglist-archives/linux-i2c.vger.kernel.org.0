@@ -1,96 +1,119 @@
-Return-Path: <linux-i2c+bounces-3923-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3924-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60734900BCF
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2024 20:17:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6791A900D72
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2024 23:20:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 931212858F9
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2024 18:17:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0027E1F22C2F
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2024 21:20:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4889D4D9F6;
-	Fri,  7 Jun 2024 18:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0EC155398;
+	Fri,  7 Jun 2024 21:20:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="gljl7/U8"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="QlLlAFEI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF72520328;
-	Fri,  7 Jun 2024 18:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278E3154440
+	for <linux-i2c@vger.kernel.org>; Fri,  7 Jun 2024 21:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717784272; cv=none; b=ZypGuhczCTQgVzY6w94UzTzZf/9h9+BY4GqCUPYseQocgoPCKDUWcMbwgwuSBOm5d0gC4WH3JkG13qLdIpva+eIMcF4gNRMEbMytlvBGEJl4mwyFgo9dCOuDPOhJGtpJebJX3QTHajTwIwqCR1rGzFnl9WOTOZTg/HLRwUTs8/Q=
+	t=1717795216; cv=none; b=Kn6RYycDY96esy2Fe+l2zAf4hbQ1rjlchLVY4ZzDX8pKSmxiW2EpVZ7+yOZdvsNWONrp1WnP2VuyqN0peylbuCwyLmCk7ALaHd85n/JrTcPjtJXLb2OYg89g0DEf6ugxx52BMKm2XvTE23Lj2+vHMxYwtFmyq3VNlWQYaxyChL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717784272; c=relaxed/simple;
-	bh=Zvc0uGf/+ZSh7r7LBRpQmsHZ+U28a0XyakDZPbEa4/E=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=BnnyY0HdX6/dp4pJoDVrRhQjFcokYktP4mfRkStzScvN/aL5fdVbAOpGKVIYYhrnfgd7TTRD3cGuVhnvQbKKyEnSjqPVMBTaCQC/uOoukXf5xam8n6GeQPdPjYkFN5eaVRa6/MOAG4LGiLX4utZWio6IyzaWdzJXnGxyz4lNYTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=gljl7/U8; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.49.54] (c-73-118-245-227.hsd1.wa.comcast.net [73.118.245.227])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 5BF3920B915A;
-	Fri,  7 Jun 2024 11:17:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5BF3920B915A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1717784270;
-	bh=mgT5WWFF+1CTJUM1HUgzvebaxmCwTYZ7FOOIKhMzd+Y=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=gljl7/U8uzHf9P+ygZbNVCqxlFgh633na/pHbMrMa2jK0t/iGiVQelaV1Ys7LLB6x
-	 Ox2PDtbDsSMRADeDsuSoYs0O95YwBMGmg9CTWklf0/g8aV3CgHsAPegB7rqBOohqxd
-	 9rg3PQGwLKCYz1Fb3X6eZ5VXLTwG0uDD3h5CqGl8=
-Message-ID: <760abc2e-d6d6-41a4-8691-09e4040dd1b4@linux.microsoft.com>
-Date: Fri, 7 Jun 2024 11:17:49 -0700
+	s=arc-20240116; t=1717795216; c=relaxed/simple;
+	bh=Jiu3xAbeO4nEFEt+N6Nvptef1YE/pXXPdfDj3I+OOuc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bs0HGO3CPVd82fx0ojmofwYY1nCGQ4Tt8aAk1mQISyRaUvqJgh8NUiQu94WBkWEN709j8lIHaIOGIxYbCKRCoySe1uRdSpQiUMi41eQkeGuUp1vqZQsGsXJaxtp9hkaJiQKeN/xY3iftrmVBj8RC/uUtH1Cxh1mYwt3iYNjOf2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=QlLlAFEI; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=Jiu3
+	xAbeO4nEFEt+N6Nvptef1YE/pXXPdfDj3I+OOuc=; b=QlLlAFEIRKrGI7zg0yaw
+	zrUOccMiburdjHRH+MZpiAdoFTguqiKZR/AbvDt4CAcz4SY8I14gTLmLZWZSdZ2M
+	WCkerrALnVa7BZ+66ukhx9HyfpAjHWOYA5fZPNHLOQDrvRbgG1W9ZZ05Iz79HeDK
+	fDPNUKc9spatzQxVuvK/8yne4Jd0aI7tKWEWAK3xeWhQvSiQ8+Pok2y8EfEBWJPy
+	zoh/T8Gw/Fyw42OMNTdzCPxS2tlB/WXM7Js/Zh0XjVZ65JrXcRmcoZ9gOLyQT/IY
+	HMsLj64issGJHSLJnY4X2avxaIEPWLJCiYHffL41qVHQDMRUXTOF/oOQ7y7/2KHP
+	Pw==
+Received: (qmail 3445681 invoked from network); 7 Jun 2024 23:20:06 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Jun 2024 23:20:06 +0200
+X-UD-Smtp-Session: l3s3148p1@x2wOXVMaxttehhrL
+Date: Fri, 7 Jun 2024 23:20:05 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Easwar Hariharan <eahariha@linux.microsoft.com>
+Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] docs: i2c: summary: document use of inclusive
+ language
+Message-ID: <56qtono23q4couvjk4rdovqliujkcxjnvo7xrsgb3iturplmrw@o7jjxfklfr4c>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Easwar Hariharan <eahariha@linux.microsoft.com>, linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240607111726.12678-1-wsa+renesas@sang-engineering.com>
+ <20240607111726.12678-5-wsa+renesas@sang-engineering.com>
+ <dcd7adf8-bcb6-483b-859b-06e7b2831e23@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: eahariha@linux.microsoft.com, Andi Shyti <andi.shyti@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] docs: i2c: summary: rephrase paragraph explaining the
- figure
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org
-References: <20240607111726.12678-1-wsa+renesas@sang-engineering.com>
- <20240607111726.12678-6-wsa+renesas@sang-engineering.com>
-Content-Language: en-US
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-In-Reply-To: <20240607111726.12678-6-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2pekpatlprr4tko4"
+Content-Disposition: inline
+In-Reply-To: <dcd7adf8-bcb6-483b-859b-06e7b2831e23@linux.microsoft.com>
 
-On 6/7/2024 4:17 AM, Wolfram Sang wrote:
-> Use 'controller/target' and 'adapter/client' pairs consistently.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  Documentation/i2c/summary.rst | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
-> index b10b6aaafcec..1b5bc7ed46aa 100644
-> --- a/Documentation/i2c/summary.rst
-> +++ b/Documentation/i2c/summary.rst
-> @@ -55,9 +55,9 @@ in a directory specific to the feature they provide, for example
->  ``drivers/media/gpio/`` for GPIO expanders and ``drivers/media/i2c/`` for
->  video-related chips.
->  
-> -For the example configuration in figure, you will need a driver for your
-> -I2C adapter, and drivers for your I2C devices (usually one driver for each
-> -device).
-> +For the example configuration in the figure above, you will need one adapter
-> +driver for the I2C controller, and client drivers for your I2C targets. Usually
-> +one driver for each client.
->  
->  Outdated terminology
->  --------------------
 
-Similar feedback as for patch 4. I thought we agreed on using {local,
-remote} target for in-line clarity.
+--2pekpatlprr4tko4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Easwar
+
+> > +A **target** chip is a node that responds to communications when addre=
+ssed
+> > +by the controller. In Linux it is called a **client**. Client drivers =
+are kept
+>=20
+> Are we continuing to use client instead of local target and remote target?
+
+Nope, "client" is just the Linux word for "target". Like "adapter" for
+"controller". Historic legacy. So, in a way "local client" and "remote
+client" would also work to emphasize the distinction.
+
+This document so far only talks about "remote targets". I noticed this a
+few hours ago and concluded that another paragraph needs to be added
+explaining that Linux can be a target as well. And that this is called a
+"local target" while the other ones are "remote targets".
+
+Makes sense?
+
+
+--2pekpatlprr4tko4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZjeYEACgkQFA3kzBSg
+KbaPyw/7BisRsp9Zc7xEKDZRnF73eXTKc8ORJ0iIcRVRt6j1SA2RjCc6oSQ5tLr/
+TL3xOpKql6o7DOmTvDJu+KhUgEqiYf4VHdccWcsHysNRpk2UgpUGMx63gZ06iKDI
+AdjFrHCkqnNdeaZnYJ2Oht/VSM7ucybsgicQ8KcrlEx7WE6xfzo46qOvXZE8rGvW
+SkgB5sRawdk3Ux2OmP2jbcR0KwgINqlN/nHK9tIX1yANsm704XTWs584ggzMVMYp
+mYvgvtYc2KcC75Iom8bZVAjXjFdm5SlF+W86TvI+XSNRBnVn0hS6z+cothsBePxc
+s1u4fjPPNe2hSHL3wrX5Memq1r+IYS5RTBgGEUn4HL8BCQgLTYhfQTWFAh23sGPK
+aZXVOHid0fWEBpomP7PUAclUyWUG84n+r4+pu5PY/yDmj0jTqQxmuXezXlKW2ocm
+9CjmlgjSRUqakjamtWF+7IONskStuCdEhcCQSqPjHEGCS9l4ctngySdbXJO457ZE
+S0rMrPsEljEro2qYMmELN2A0wy9uu8gjCk7AcBOjbD5sEwXgAIArIDo2g7ZeYbhu
+upJL8eZktfgbz3l3FdoiyPYaKGNU0h4IcKty7fU/w291Swq0tHwu1Bv9pwFkptYd
+4kcKKaTbc4TMQqS/Le0VQ5MeQ90rHnlRyjJiNG3QNrb2a46aKCw=
+=Ql+c
+-----END PGP SIGNATURE-----
+
+--2pekpatlprr4tko4--
 
