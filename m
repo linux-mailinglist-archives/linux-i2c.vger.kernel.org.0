@@ -1,237 +1,172 @@
-Return-Path: <linux-i2c+bounces-3895-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3896-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50CD48FF756
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 23:59:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D858FFC65
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2024 08:46:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72C3C1C21A62
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jun 2024 21:59:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E8731C26B7C
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jun 2024 06:46:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D10113A89E;
-	Thu,  6 Jun 2024 21:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B336114F129;
+	Fri,  7 Jun 2024 06:46:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BITZ4XXL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UaKJInBY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29A04594A;
-	Thu,  6 Jun 2024 21:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90F745024
+	for <linux-i2c@vger.kernel.org>; Fri,  7 Jun 2024 06:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717711146; cv=none; b=okFdeg9J3hSq9eQWydKsg9ZTWvIvn8QpgpAmeP7P8+nFq1TAjtfLgFBovgDrjLpLMwRUsnXyYLiNoEFF6irhG87QQuPBSz6kdySyRos6lAmTeyckC++Minjfrwq+NvZJ8KOj/9x0zncv/325wKZeYHn1kBM8KqWYsvU6DvXDpSA=
+	t=1717742776; cv=none; b=XwPwpc/urIXJQ3gPWwhEdmXUUcMR5eqfpwY5EfZ3vohcn/MaNEE3THCD1ozgXwa6M8EQFaucBoLafHq644uQkNWLh9lpCtWzCGc4Ht1+pzjop96xxdqHcvpKPJGfcoTuMp5i19CODDAz9RgGmboqBuINKgO2fk0Cdva3ir0+Kqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717711146; c=relaxed/simple;
-	bh=jrAom1zZLijYtG6B0O71SabgAbFkOyYZqhjtSxs9wmI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YsNd1SUvpI27ksnd/d0qmBKiROFoACPjztRqXYoYA7A0lJbgo2GD040L664ycMh6zkeyA123JtxH/5Lqj9uB7/7i8h6TO4Jy0IvxxDz1yzVgT5ah5P48dW/Vgv7XuzMTN9Ncd0slDIoX8YXbB7n6UMhtt8wuJE5xyMcSh3qLMPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BITZ4XXL; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 456Lt8Qt028379;
-	Thu, 6 Jun 2024 21:58:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=pp1;
- bh=cMLJJuPScRuoSTRlqrKeZ0I0MMXCsv/JDEiYPjCFWXI=;
- b=BITZ4XXLeNaVIbXIymCiBslgk+mW65reBC56XbDlViSts/+T4JQQi7h2GCkeDjrC86w5
- tCMDC2mr5IvbFnVsZHc99ds0WN6MOcd/gpmdkq2raWUcb2GMLlcDjTgMGzWQBQltFgfg
- c5kY/jrNDBW5+HjTMjjOb7ChwzQ1NnL0YS6P76MgAkFi9qFIabpKcNa9sZTaDH0kzK5m
- WpAth1o7HeHuKRyd8VKRnWIhIOGYtEB/c6YOS5dQDPZgLzROA2nxLekFsiY5V1+8rF5m
- nU+kAkBxLSj2h2UAcTNKTTvyqehSG5EkMyDKnZzH3NLt4+7wvC/zvtknzGHyQKmrSX/g YA== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ykm5w08yq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 06 Jun 2024 21:58:47 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 456LeGwD008479;
-	Thu, 6 Jun 2024 21:58:42 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ygec15747-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 06 Jun 2024 21:58:42 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 456Lweov7209622
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 6 Jun 2024 21:58:42 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1EA635805E;
-	Thu,  6 Jun 2024 21:58:40 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B25A258045;
-	Thu,  6 Jun 2024 21:58:39 +0000 (GMT)
-Received: from [9.61.121.242] (unknown [9.61.121.242])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  6 Jun 2024 21:58:39 +0000 (GMT)
-Message-ID: <a8f8aefa-9013-4ede-adce-0f585d3e528f@linux.ibm.com>
-Date: Thu, 6 Jun 2024 16:58:39 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: muxes: pca954x: Allow sharing reset GPIO
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, peda@axentia.se,
-        p.zabel@pengutronix.de, krzysztof.kozlowski@linaro.org
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240311041412.3858710-1-chris.packham@alliedtelesis.co.nz>
-Content-Language: en-US
-From: Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <20240311041412.3858710-1-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _2EhWoFSDw-odVGyo3NfFBRKu2fsohFo
-X-Proofpoint-ORIG-GUID: _2EhWoFSDw-odVGyo3NfFBRKu2fsohFo
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1717742776; c=relaxed/simple;
+	bh=HNv9Qs6Djj31IvEPg/GplsTToM3nXwpGglo7o2V/O9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p5ow/idC1sBTLv/s28T8afeSVf2KxNULuhdFAGj0HqBDg62GjvbFyVN/ytgU+j9iqDjBDeS2TA5nosF6KlD655tkz6mSwmdcwx3lCSF8i4xlSfiJwgqiL1DyJQLPlr1e0dXZhOr06stu+lKo6ZW47EN9keINAXbNfEor/LhxmrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UaKJInBY; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-35ef1e928c9so2081828f8f.3
+        for <linux-i2c@vger.kernel.org>; Thu, 06 Jun 2024 23:46:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717742773; x=1718347573; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TgM4htnI+X4TgZ0Tu9HzazlKE8pD1poXdLHXcMZJBPc=;
+        b=UaKJInBYYWxXHohcjMhISgk1f6KTYS7P4Xalxg2DtBadWjo71AQtojLL/RRAYfSDA2
+         lpE3uBTIwVFiAvi1bikYZ4iA11thjPcAZ+aDc70M+gkWLB4LZbXpEjoJtRf3NXY9zY+I
+         W3aQkhBlR1AiFnwhM85zLAkBlH3G73jDDm27HszcsxrXjEMDa/+Wcn9APiriYYercT2S
+         29F+IODozj/R3tBF6bN30YvtKxcEXcZMWL2v2ckrIWrIBYvjwdgHsPxSd/ewr5Fa33Pd
+         1ezL3+2cMXZrTdVN5/DmWvzpZSNZDYxADyrgK93LFc5uNNpyZSJ6w3FKxHvnS69KRhKk
+         lN4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717742773; x=1718347573;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TgM4htnI+X4TgZ0Tu9HzazlKE8pD1poXdLHXcMZJBPc=;
+        b=r2iMNFXrulch/Oqzl1dYAsnQabSvOYbI29FwxIeniBxVWdlnJg8c76GfcYJLpql+je
+         ybGQouwO7mmVyxqM/QMUTo0+2ErcNK1Mx0dW+DvLcSRaycOjrd6dRr1maEbtYqWFuISM
+         dN1O3Nsz504ISEYiPtAdZESsYG8OJBw4zprjy+9ylSLUtVv37zAgro3wDh5Xyo0k51Vr
+         pa2OByHwRs36eLYRxNi6EPAa3o0o9bHuN1VX5eGqZ7xIAgjWQEF7om2Gbj06rcPhHyAK
+         mLFSNgr9WeFekKN3PoNB9ZsAbNBBshBoOZjNjP8QjCCDM83KbjGP3k8ba8ZjK0txOIAw
+         VBAw==
+X-Gm-Message-State: AOJu0YyP8vp2+6WAzz5r5ap7BtqliCwMi0E53r2pw+VUyYtvmOEmN32K
+	UHgIHdcKqzZN9zMHe2P1UugljZII/VKgqKnG8+MFY/R/us02EtrDGhpZqD2klqc5aAP8SbccEz8
+	2hQNWLA==
+X-Google-Smtp-Source: AGHT+IH9OxWfO16xiy/w9qCKD6ug6UJ5lS56XXORWzx+b1YzITZIZNI7kcB6tLngBoMN30NxoBzegg==
+X-Received: by 2002:adf:fd08:0:b0:34e:93c1:7979 with SMTP id ffacd0b85a97d-35efed5d77dmr1461398f8f.38.1717742772977;
+        Thu, 06 Jun 2024 23:46:12 -0700 (PDT)
+Received: from [192.168.2.24] ([110.93.11.116])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42160a19ae5sm30662635e9.18.2024.06.06.23.46.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jun 2024 23:46:12 -0700 (PDT)
+Message-ID: <31a9060a-aef3-4b1a-8db8-ada5e57833cc@linaro.org>
+Date: Fri, 7 Jun 2024 08:46:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-06_18,2024-06-06_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 phishscore=0 spamscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 clxscore=1011 malwarescore=0 mlxlogscore=999 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2406060152
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: muxes: pca954x: Allow sharing reset GPIO
+To: Eddie James <eajames@linux.ibm.com>,
+ Chris Packham <chris.packham@alliedtelesis.co.nz>, peda@axentia.se,
+ p.zabel@pengutronix.de
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240311041412.3858710-1-chris.packham@alliedtelesis.co.nz>
+ <a8f8aefa-9013-4ede-adce-0f585d3e528f@linux.ibm.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <a8f8aefa-9013-4ede-adce-0f585d3e528f@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 06/06/2024 23:58, Eddie James wrote:
+> 
+> On 3/10/24 23:14, Chris Packham wrote:
+>> Some hardware designs with multiple PCA954x devices use a reset GPIO
+>> connected to all the muxes. Support this configuration by making use of
+>> the reset controller framework which can deal with the shared reset
+>> GPIOs. Fall back to the old GPIO descriptor method if the reset
+>> controller framework is not enabled.
+> 
+> 
+> Hello Chris, Krzysztof,
+> 
+> 
+> This change makes it so that the reset subsystem reset doesn't behave in 
+> the same way as the fallback gpio reset. The gpio, as part of acquiring 
+> it, gets set high, and then set low in the mux driver. So, the device 
+> reset is toggled. In the case of the reset subsystem option, the reset 
+> is only de-asserted (so the device is taken out of reset).
+> 
+> 
+> I'm interested in preserving the previous behavior but with the shared 
+> reset line. This can't be done just by doing "assert" first because the 
+> shared reset subsystem doesn't allow that. So the reset-gpio driver 
+> would have to implement the reset operation - no problem. However, how 
+> to specify the wait time for the reset-gpio driver here? Something like 
+> the simple reset driver maybe? Or a function call from the reset 
+> consumer driver to specify the wait time for that reset?
 
-On 3/10/24 23:14, Chris Packham wrote:
-> Some hardware designs with multiple PCA954x devices use a reset GPIO
-> connected to all the muxes. Support this configuration by making use of
-> the reset controller framework which can deal with the shared reset
-> GPIOs. Fall back to the old GPIO descriptor method if the reset
-> controller framework is not enabled.
+You can check my slides from EOSS/OSSNA this year:
+https://ossna2024.sched.com/event/1aPvr?iframe=no
+maybe links to original work will help you.
 
+Best regards,
+Krzysztof
 
-Hello Chris, Krzysztof,
-
-
-This change makes it so that the reset subsystem reset doesn't behave in 
-the same way as the fallback gpio reset. The gpio, as part of acquiring 
-it, gets set high, and then set low in the mux driver. So, the device 
-reset is toggled. In the case of the reset subsystem option, the reset 
-is only de-asserted (so the device is taken out of reset).
-
-
-I'm interested in preserving the previous behavior but with the shared 
-reset line. This can't be done just by doing "assert" first because the 
-shared reset subsystem doesn't allow that. So the reset-gpio driver 
-would have to implement the reset operation - no problem. However, how 
-to specify the wait time for the reset-gpio driver here? Something like 
-the simple reset driver maybe? Or a function call from the reset 
-consumer driver to specify the wait time for that reset?
-
-
-Thanks,
-
-Eddie
-
-
->
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->
-> Notes:
->      This patch goes on top of Krzysztof's series adding the GPIO based reset
->      controller[1] which will be in linux-6.9. With this I'm able to
->      correctly describe my hardware platform in the DTS and have the resets
->      appropriately controlled.
->      
->      [1] - https://lore.kernel.org/all/20240129115216.96479-1-krzysztof.kozlowski@linaro.org/
->
->   drivers/i2c/muxes/i2c-mux-pca954x.c | 46 ++++++++++++++++++++++++-----
->   1 file changed, 38 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> index f5dfc33b97c0..c3f4ff08ac38 100644
-> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> @@ -49,6 +49,7 @@
->   #include <linux/pm.h>
->   #include <linux/property.h>
->   #include <linux/regulator/consumer.h>
-> +#include <linux/reset.h>
->   #include <linux/slab.h>
->   #include <linux/spinlock.h>
->   #include <dt-bindings/mux/mux.h>
-> @@ -116,6 +117,9 @@ struct pca954x {
->   	unsigned int irq_mask;
->   	raw_spinlock_t lock;
->   	struct regulator *supply;
-> +
-> +	struct gpio_desc *reset_gpio;
-> +	struct reset_control *reset_cont;
->   };
->   
->   /* Provide specs for the MAX735x, PCA954x and PCA984x types we know about */
-> @@ -518,6 +522,35 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
->   	return ret;
->   }
->   
-> +static int pca954x_get_reset(struct device *dev, struct pca954x *data)
-> +{
-> +	data->reset_cont = devm_reset_control_get_optional_shared(dev, NULL);
-> +	if (IS_ERR(data->reset_cont))
-> +		return dev_err_probe(dev, PTR_ERR(data->reset_cont),
-> +				     "Failed to get reset\n");
-> +	else if (data->reset_cont)
-> +		return 0;
-> +
-> +	/*
-> +	 * fallback to legacy reset-gpios
-> +	 */
-> +	data->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(data->reset_gpio)) {
-> +		return dev_err_probe(dev, PTR_ERR(data->reset_gpio),
-> +				     "Failed to get reset gpio");
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void pca954x_reset_deassert(struct pca954x *data)
-> +{
-> +	if (data->reset_cont)
-> +		reset_control_deassert(data->reset_cont);
-> +	else
-> +		gpiod_set_value_cansleep(data->reset_gpio, 0);
-> +}
-> +
->   /*
->    * I2C init/probing/exit functions
->    */
-> @@ -526,7 +559,6 @@ static int pca954x_probe(struct i2c_client *client)
->   	const struct i2c_device_id *id = i2c_client_get_device_id(client);
->   	struct i2c_adapter *adap = client->adapter;
->   	struct device *dev = &client->dev;
-> -	struct gpio_desc *gpio;
->   	struct i2c_mux_core *muxc;
->   	struct pca954x *data;
->   	int num;
-> @@ -554,15 +586,13 @@ static int pca954x_probe(struct i2c_client *client)
->   		return dev_err_probe(dev, ret,
->   				     "Failed to enable vdd supply\n");
->   
-> -	/* Reset the mux if a reset GPIO is specified. */
-> -	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-> -	if (IS_ERR(gpio)) {
-> -		ret = PTR_ERR(gpio);
-> +	ret = pca954x_get_reset(dev, data);
-> +	if (ret)
->   		goto fail_cleanup;
-> -	}
-> -	if (gpio) {
-> +
-> +	if (data->reset_cont || data->reset_gpio) {
->   		udelay(1);
-> -		gpiod_set_value_cansleep(gpio, 0);
-> +		pca954x_reset_deassert(data);
->   		/* Give the chip some time to recover. */
->   		udelay(1);
->   	}
 
