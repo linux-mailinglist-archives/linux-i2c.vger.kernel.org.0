@@ -1,79 +1,80 @@
-Return-Path: <linux-i2c+bounces-3928-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3929-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 513179012B7
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2024 18:20:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE8829012E6
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2024 19:04:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E311B2821FF
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2024 16:20:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55289B21D5C
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jun 2024 17:04:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46CCC17A906;
-	Sat,  8 Jun 2024 16:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1B0B17B40C;
+	Sat,  8 Jun 2024 17:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GEWWxrTv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Np7TrK1i"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D575C1474B9;
-	Sat,  8 Jun 2024 16:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998A4178385;
+	Sat,  8 Jun 2024 17:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717863613; cv=none; b=UZFL/MEfnzWntuZqGlk+8y+amqC+dYZgRcKNlQcko+JGM+9krdHK3y6kD0zVvS6G5Si3HU9P22vLiW9qDhSBCJEYhRALIAJHrAeQt4RbMHjPx0lxdh8ny0k3PVR5gMxrF3zUx7APzK471EcxUBZlXhEBxSYYXLqxVH91nhHxieQ=
+	t=1717866254; cv=none; b=XJj95gL0JxDp3/RhIY0WyvWK5IpH7uV9MxVLLy16GWa7nqHgAwLB+eqaiykhWBIlAtgz/qBhkNhnXdve+C9DT9TORJLKr1BssGpYVo2rsHn4v6Dh5IDlmA/o0hejoTiAjQRlnNCew5eyvwoQHQLcPjSLRk8k4QBKqvx30PH3vgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717863613; c=relaxed/simple;
-	bh=tlIHue1eVX2KWMUDHuFeU9qzRhgwiAsuAEe22Nyg3Bs=;
+	s=arc-20240116; t=1717866254; c=relaxed/simple;
+	bh=z6hcz0F9fMtfnwiX+iUxiM8f8ZduXCkVg0g5hvHDMMo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SwjmidOa2aWG2dpBzYsXCJ08aH5D6iXwPWNj9cN3ghuKoeQguci+eHDGbFVGKY4uVGLAy4w4b94qcK5tOZx6XgfmY3pFXP223qSuZv+3+mS5835CncpHhxxUh/ba5GT2DO+zYDW46E1kLvdqs42YeoFS8p0eQFqxWNnv/YoeSZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GEWWxrTv; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=iKKH4PBzSURxRSiKAuLnYTOetEdrbuV994XFby+fDQmp9EEb6klS4XTH9LrcCQH+7w9pXRYXRZutCRJyjSuRCNSHhEc+J+tBheo/3Y4K/RyOo2opBFeptXsVJuWN/SA3VrJfS1DwNk2xO09vnCzwHxnZpGh50iBMI6LSKvTDPHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Np7TrK1i; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717863611; x=1749399611;
+  t=1717866252; x=1749402252;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=tlIHue1eVX2KWMUDHuFeU9qzRhgwiAsuAEe22Nyg3Bs=;
-  b=GEWWxrTvMVVNIsYJrU9PrtB40EcSvQO0957PnOhKI3XkXJ/0+Zsr8gRZ
-   UEWrcHKH+1ic1/PlBGxltYSqsFvHZ3Hy2sKyvNOT9BbMM2LYoJavTUFPf
-   att6kQqqbDB8AJd6Felz80FctDZeUJXQowM0z1O8UAPqAWsP0f9fNb6St
-   hPEh9OVWTSOrodRB+sPeoYPxhW9fL1qh4yaaVwkJ3B97UeETqTD9bKUd7
-   gWaJ5Ecbe8mqsjb2KWb5dw9NtR/04TgxP+g/GAt3aKOmXgN1IERS9qZmm
-   AKK0kb/QPKhHcyyRaOPkVv3mPI0pb95ce+iqRTYCPvwWvsW/k5Y7UM7YB
+  bh=z6hcz0F9fMtfnwiX+iUxiM8f8ZduXCkVg0g5hvHDMMo=;
+  b=Np7TrK1iYoqlAf8iBDNxFMKU+q6keARrXG+fqw7KvVsdhG5bcBdIKyL+
+   7erjP3Yq43awy3upHPNOBHiqQtclZ0RJTMTgea77JTnjzF83k4596jmjK
+   oaTe3ZOkxRf26PT30CEsYQGtwKHG19b+CUybBWDtz8b5d0to8jCZiovM5
+   WHLx/ljPfTTXv4YL9uXsR5nEohPrHrgoCjr2ssb26D+RczpqEwlULHiIE
+   bk7aLSE/W11uaEJ9ykC3mgjzAys+Rxs4BtQHWXNgL/zWr/rv3AMW8iq9I
+   W/fTilvGHx/qkhmqmPpPyhnFGCd70Oev9cFzaj8OXWpIFNRw/WJ+uLH5F
    w==;
-X-CSE-ConnectionGUID: 2q0kdyhPTB+gGXMBAtYftw==
-X-CSE-MsgGUID: Fr2fWfJhShOpq8pM8q2kaA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11097"; a="25233104"
+X-CSE-ConnectionGUID: mMNlE7DiSVWp/JAdlHh/Hg==
+X-CSE-MsgGUID: Zsf1wyrIT56+TQWob2KFWg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11097"; a="18434297"
 X-IronPort-AV: E=Sophos;i="6.08,223,1712646000"; 
-   d="scan'208";a="25233104"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2024 09:20:10 -0700
-X-CSE-ConnectionGUID: 3qVkvh99RM+YI/m0X7VmoA==
-X-CSE-MsgGUID: Xr07b/w8Q1GSFyWX9rAizw==
+   d="scan'208";a="18434297"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2024 10:04:12 -0700
+X-CSE-ConnectionGUID: sW2ik39mR3KX67iTdnaFag==
+X-CSE-MsgGUID: 9HMY1i4sQTWyuPB9hzziWw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,223,1712646000"; 
-   d="scan'208";a="69409987"
+   d="scan'208";a="38630148"
 Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 08 Jun 2024 09:20:06 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 08 Jun 2024 10:04:08 -0700
 Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sFynT-0000CE-1v;
-	Sat, 08 Jun 2024 16:20:03 +0000
-Date: Sun, 9 Jun 2024 00:19:03 +0800
+	id 1sFzU6-0000G4-0n;
+	Sat, 08 Jun 2024 17:04:06 +0000
+Date: Sun, 9 Jun 2024 01:03:25 +0800
 From: kernel test robot <lkp@intel.com>
 To: Tommy Huang <tommy_huang@aspeedtech.com>, brendan.higgins@linux.dev,
 	benh@kernel.crashing.org, joel@jms.id.au, andi.shyti@kernel.org,
 	andrew@codeconstruct.com.au, wsa@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
-	openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, BMC-SW@aspeedtech.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	BMC-SW@aspeedtech.com
 Subject: Re: [PATCH v2] i2c: aspeed: Update the stop sw state when the bus
  recovery occurs
-Message-ID: <202406090041.5IMjYB8x-lkp@intel.com>
+Message-ID: <202406090027.3FWHQLNi-lkp@intel.com>
 References: <20240608043653.4086647-1-tommy_huang@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -99,41 +100,151 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Tommy-Huang/i2c-aspeed-Up
 base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
 patch link:    https://lore.kernel.org/r/20240608043653.4086647-1-tommy_huang%40aspeedtech.com
 patch subject: [PATCH v2] i2c: aspeed: Update the stop sw state when the bus recovery occurs
-config: arm-aspeed_g5_defconfig (https://download.01.org/0day-ci/archive/20240609/202406090041.5IMjYB8x-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240609/202406090041.5IMjYB8x-lkp@intel.com/reproduce)
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240609/202406090027.3FWHQLNi-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240609/202406090027.3FWHQLNi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406090041.5IMjYB8x-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406090027.3FWHQLNi-lkp@intel.com/
 
 All error/warnings (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-aspeed.c:28:39: warning: 'struct aspeed_i2c_bus' declared inside parameter list will not be visible outside of this definition or declaration
+   In file included from drivers/i2c/busses/i2c-aspeed.c:14:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/i2c/busses/i2c-aspeed.c:14:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/i2c/busses/i2c-aspeed.c:14:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/i2c/busses/i2c-aspeed.c:14:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/i2c/busses/i2c-aspeed.c:28:39: warning: declaration of 'struct aspeed_i2c_bus' will not be visible outside of this function [-Wvisibility]
       28 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
-         |                                       ^~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-aspeed.c: In function 'aspeed_i2c_recover_bus':
->> drivers/i2c/busses/i2c-aspeed.c:192:36: error: passing argument 1 of 'aspeed_i2c_do_stop' from incompatible pointer type [-Werror=incompatible-pointer-types]
+         |                                       ^
+>> drivers/i2c/busses/i2c-aspeed.c:192:22: error: incompatible pointer types passing 'struct aspeed_i2c_bus *' to parameter of type 'struct aspeed_i2c_bus *' [-Werror,-Wincompatible-pointer-types]
      192 |                 aspeed_i2c_do_stop(bus);
          |                                    ^~~
-         |                                    |
-         |                                    struct aspeed_i2c_bus *
-   drivers/i2c/busses/i2c-aspeed.c:28:55: note: expected 'struct aspeed_i2c_bus *' but argument is of type 'struct aspeed_i2c_bus *'
+   drivers/i2c/busses/i2c-aspeed.c:28:55: note: passing argument to parameter 'bus' here
       28 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~^~~
-   drivers/i2c/busses/i2c-aspeed.c: At top level:
->> drivers/i2c/busses/i2c-aspeed.c:396:13: error: conflicting types for 'aspeed_i2c_do_stop'; have 'void(struct aspeed_i2c_bus *)'
+         |                                                       ^
+>> drivers/i2c/busses/i2c-aspeed.c:396:13: error: conflicting types for 'aspeed_i2c_do_stop'
      396 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus)
-         |             ^~~~~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-aspeed.c:28:13: note: previous declaration of 'aspeed_i2c_do_stop' with type 'void(struct aspeed_i2c_bus *)'
+         |             ^
+   drivers/i2c/busses/i2c-aspeed.c:28:13: note: previous declaration is here
       28 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
-         |             ^~~~~~~~~~~~~~~~~~
->> drivers/i2c/busses/i2c-aspeed.c:28:13: warning: 'aspeed_i2c_do_stop' used but never defined
-   cc1: some warnings being treated as errors
+         |             ^
+   drivers/i2c/busses/i2c-aspeed.c:409:22: error: incompatible pointer types passing 'struct aspeed_i2c_bus *' to parameter of type 'struct aspeed_i2c_bus *' [-Werror,-Wincompatible-pointer-types]
+     409 |                 aspeed_i2c_do_stop(bus);
+         |                                    ^~~
+   drivers/i2c/busses/i2c-aspeed.c:28:55: note: passing argument to parameter 'bus' here
+      28 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
+         |                                                       ^
+   drivers/i2c/busses/i2c-aspeed.c:469:23: error: incompatible pointer types passing 'struct aspeed_i2c_bus *' to parameter of type 'struct aspeed_i2c_bus *' [-Werror,-Wincompatible-pointer-types]
+     469 |                         aspeed_i2c_do_stop(bus);
+         |                                            ^~~
+   drivers/i2c/busses/i2c-aspeed.c:28:55: note: passing argument to parameter 'bus' here
+      28 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
+         |                                                       ^
+   drivers/i2c/busses/i2c-aspeed.c:507:23: error: incompatible pointer types passing 'struct aspeed_i2c_bus *' to parameter of type 'struct aspeed_i2c_bus *' [-Werror,-Wincompatible-pointer-types]
+     507 |                         aspeed_i2c_do_stop(bus);
+         |                                            ^~~
+   drivers/i2c/busses/i2c-aspeed.c:28:55: note: passing argument to parameter 'bus' here
+      28 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
+         |                                                       ^
+   drivers/i2c/busses/i2c-aspeed.c:512:23: error: incompatible pointer types passing 'struct aspeed_i2c_bus *' to parameter of type 'struct aspeed_i2c_bus *' [-Werror,-Wincompatible-pointer-types]
+     512 |                         aspeed_i2c_do_stop(bus);
+         |                                            ^~~
+   drivers/i2c/busses/i2c-aspeed.c:28:55: note: passing argument to parameter 'bus' here
+      28 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
+         |                                                       ^
+   drivers/i2c/busses/i2c-aspeed.c:562:24: error: incompatible pointer types passing 'struct aspeed_i2c_bus *' to parameter of type 'struct aspeed_i2c_bus *' [-Werror,-Wincompatible-pointer-types]
+     562 |                                 aspeed_i2c_do_stop(bus);
+         |                                                    ^~~
+   drivers/i2c/busses/i2c-aspeed.c:28:55: note: passing argument to parameter 'bus' here
+      28 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
+         |                                                       ^
+   drivers/i2c/busses/i2c-aspeed.c:608:21: error: incompatible pointer types passing 'struct aspeed_i2c_bus *' to parameter of type 'struct aspeed_i2c_bus *' [-Werror,-Wincompatible-pointer-types]
+     608 |         aspeed_i2c_do_stop(bus);
+         |                            ^~~
+   drivers/i2c/busses/i2c-aspeed.c:28:55: note: passing argument to parameter 'bus' here
+      28 | static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
+         |                                                       ^
+   8 warnings and 8 errors generated.
 
 
-vim +/aspeed_i2c_do_stop +192 drivers/i2c/busses/i2c-aspeed.c
+vim +192 drivers/i2c/busses/i2c-aspeed.c
 
     27	
   > 28	static void aspeed_i2c_do_stop(struct aspeed_i2c_bus *bus);
