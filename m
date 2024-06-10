@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-3955-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3956-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08726902628
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 17:55:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9E28902663
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 18:14:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DAB82814A1
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 15:55:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97D7FB27E35
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 16:12:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8359143720;
-	Mon, 10 Jun 2024 15:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 386ED142E91;
+	Mon, 10 Jun 2024 16:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IkZiEQhb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JTE9o6DI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2C0142620;
-	Mon, 10 Jun 2024 15:55:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A871422CA;
+	Mon, 10 Jun 2024 16:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718034931; cv=none; b=kaOgkI1q4bJgn/QMVukabk2owg0TsnSQEVrVqz4UOiurE26panj7m3iq3PNi2C+I/H196Bap686OeodkqS1h1/D3azd2Fgbe5XvG7nAyDiULEfPGFuBjmgM6TLAlqUKpwFyBcnGPbhKD/OxVVUnC71l17qFavOPl+tfqd37bEOY=
+	t=1718035946; cv=none; b=U2VVxNRvqxAo6sVv0RcV/YbZfLQpwuCdW+dMypvzaiLlmiyg6RSCxr/qaqFTm8WHEK6qmK3LkoxoLlaS2PF+fQOsobhYmnmQkakwGBu3FYW1LkfqtS0hAIqhe/GB8RU0sgR2Mf9qPZ3d+5Zjr1HSJTPcVZFPkVJR3+l/FfO9T5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718034931; c=relaxed/simple;
-	bh=0UAOy9iN/3VaU4DeCVfVA/APVIl8ZsWFbJBPb0K/yFg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ea2mYxyD17DJDJuMhX08l4bRWErL5Z5oXOJbO1X410vKsp59ubKyhzs7z8u6lf7S4hYwNjMH/onJR1vQ9acRscJjfcNPTEnP7M+cX5B9yKh3nNCcv3KqV7uinfeKpn1LYyX8Hf2ZyEMcT6YDyv6TmMSRqd6RZvFOvpotz+LRJm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IkZiEQhb; arc=none smtp.client-ip=209.85.216.42
+	s=arc-20240116; t=1718035946; c=relaxed/simple;
+	bh=lblZXeRWjDuToTH9KitVv58LFxavQEZoqNO3ZJ8rGVQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ljbmsSm4viJga4KAr1p4Fw4ow0O3WxNkg0y6U0wRw5x20P06PmAJqYu+XVACz2/yZVCn2sTQYCW1lhvWKb9igt1jS3bWIr7VOIXBnFJeQkjFLsOQFXWJ7Fs3z+EolWFQJKxu08zb72jRbNZqy7aiJInCpr+axi0BzR9NhCLNIyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JTE9o6DI; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2c195eb9af3so90548a91.0;
-        Mon, 10 Jun 2024 08:55:29 -0700 (PDT)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-702555eb23bso3595127b3a.1;
+        Mon, 10 Jun 2024 09:12:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718034929; x=1718639729; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718035944; x=1718640744; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=/z9wCsj/Fmg2uAjDDnmr4Npa382kmTNiC957TY/YawU=;
-        b=IkZiEQhb46XInDECwqc6gS5Gyov6o45EvOuQMSlP+E2ujZBoET6b2U9MWm0MOny7Cc
-         Pv/MoNB4fXt/gyrCIF8ZbGWUHquzOr+8qP0MaI0MDh6y/I4pdetrRWVnNlZwDq2N3ahi
-         AkQXxnZccpUvsbXwuQvQzZ8KvwBaNC3iSTYdZdhHcb79gV/YixiNsXvn0tar7PxQ423Q
-         WQePT4VUh6bCXg/1uIa0mfyNdNJqUiLboenkyr95OVpwLQ7Uodkd3Mo8Jkgx0/Kgx+CD
-         tJ5R68P306QLQo1Pnp811pYwhFw+88Gii69oyb/irPO1eiPV2rzXnJsF5n0a4f+Yobt+
-         7qwg==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=VHssdS2Z1GPjcz1ZFtMToFtKH98jmrExattb+RM/d9Q=;
+        b=JTE9o6DI/xWCLP3RwEJxKotgqXrQDAUHt/ht95sP7ht/H9vEP39ulrlz/W/uYfeowT
+         jgQvr3B/UNeHisjG1k7M6wR9isXL9nBUCfWx17H998XKjxvx6gUUvpFt2G2yA5x5iyzn
+         6PyXpCMe1aFO8uX2yS3KPBM5S7iKaheotCkHwqZ2BLqJ+30sG29n80BRahPmUGz3bqAm
+         gnk5kNB1200DXTaDx8C6wHcGINx/fWFkejaCMBSeDwb91nMcF2umAhcH+XrUXxz7P6Og
+         6O1Lj8KM4dQ1gGm5nJp5BFJKTwxf+mGPye7yZ1RziE/N95T4H38K1DFhQj3Hw5uOONFi
+         I1Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718034929; x=1718639729;
+        d=1e100.net; s=20230601; t=1718035944; x=1718640744;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/z9wCsj/Fmg2uAjDDnmr4Npa382kmTNiC957TY/YawU=;
-        b=Io9n6FjVrO4DASRxGhizX/+vk5VyNQHAz24Q6Lg77mb/VYEUHgpBiRwdDqzD5A1mW7
-         sVWTFtBjb71CT3KKcWxbWl0pvkGIq9tZl+Hdge+3yI12CvrVUlGPgVTzt5/Rj5OcQdEG
-         2aRm1YFpevyh73GYire51RWZbRPqlF9Sb+k9gk3k/8+Ld1EPhs5IU61XHi0+ychbQtUA
-         DZJyfagG5TDBgEBRpqakkN+pJWp3B+DZkU0zYPhHog61gAjeCQoj69Q8zHvPfj+Aw9+H
-         FcpHXl39h8Lvuw6fqEllW1MxLgZjlbR5L/60YGuv5P/ufIQ/XZh1NArmoeApy1a1vhIZ
-         fgKg==
-X-Forwarded-Encrypted: i=1; AJvYcCVabRk0z1OxEXrRBNdiNpUC4Q83/m8gf3gxGI/2UcnctxTaHN1J90Aalu4tbF6doA+YCjG7zONQLxDoo9nnb2Idsb1HJBdRzF0J5hG2hKJ+wg22h9K0+tANPnWlJ4aaaXTKuASRFZbTR+bbgxLNWvgt/MJ2m0AmngSoFDEY05egQmimM3pAlr4WUGOO56CDMDN7PsXerhjdxEwtZsugvZEd
-X-Gm-Message-State: AOJu0Yx17+QkljLer8MX9Dr/+BoKwUI8VvvKWCmfat+duQUkFE6iktkz
-	hpgACWRUhAaLc/0+cSKmVi7xWGD9ym2S7E9T/qbvz4g8gyot/HRD
-X-Google-Smtp-Source: AGHT+IEOtZHkEZ180ah272mtnveSAqhNzLRQ3xHgJE7hlmjqg8aropZ+yP48JBqTZCTOonAsyWj/HQ==
-X-Received: by 2002:a17:90a:f98d:b0:2c3:7e3:6be0 with SMTP id 98e67ed59e1d1-2c307e36c7emr2895674a91.31.1718034929238;
-        Mon, 10 Jun 2024 08:55:29 -0700 (PDT)
+        bh=VHssdS2Z1GPjcz1ZFtMToFtKH98jmrExattb+RM/d9Q=;
+        b=p4IUZjBiMCoyv9YNBWV25wwXDUKKTCx0XB77AvgnvMqK1CS9CNoUCuBQHTkLLtbUhZ
+         R6SkLKavzEgGvuEeP/W225NwxB/pi7cpsmBE+DEYuWPt+MxBaCl18d3xMeca0VJvRiTX
+         b+3PMZSKCSO/P2WilbdI340NPUCdW8Cc9J3tM3dIwT5gRJO80j0fSI7yz5caJ1TY1aKK
+         XIo/R6Jh49SyfSm1nIimqkbf5Pp94k3AQkGXoHjPzt6QKFO7kNWet5U6cR4X0E2iJRb6
+         OYVxpk7UydQreUZSiGwa0PYtSqZ8FcjLGplxjuNtZ/Bb0oC/waH63JX2mbzuDtSAx5IN
+         x9PA==
+X-Forwarded-Encrypted: i=1; AJvYcCVi2iBGjTxiT2X/MrMRRqptomV+d15ZrH3vPTozykSKBnrbmyGLL3PIAaIllfWztzBNadUELq74oSluVrm7Kszecxm4hh6wCepYTzdPUxAf7woBQp5jUbTduoXnc1vTkKEEk2QaW4nitDmO8J30TqZhiSCcjT+sLbVCfELAbyvSygRUQA==
+X-Gm-Message-State: AOJu0Yx4qakll/cLX0s1QjYFgJ154dcd6S4EdCuuzdW6QgPdCsymtqAM
+	Wgd841vcUXFm7FbdrE/A3rqr+xikuSU4QyZtlQAWEFc/hSjT358p
+X-Google-Smtp-Source: AGHT+IHicvBtefeiX22cWZLBB3YLefIT/ZQUF5A/TrE+/yto8E4BO/P+114n+uwZPg21/kfGDcJLJA==
+X-Received: by 2002:a05:6a20:8412:b0:1b2:b16f:3b35 with SMTP id adf61e73a8af0-1b2f96d7e5dmr10169936637.10.1718035943620;
+        Mon, 10 Jun 2024 09:12:23 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c28066d573sm10747274a91.17.2024.06.10.08.55.27
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-703fd510cc9sm7122105b3a.200.2024.06.10.09.12.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jun 2024 08:55:28 -0700 (PDT)
+        Mon, 10 Jun 2024 09:12:22 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <79f406ae-cfc9-48bb-9c80-20f998c40b69@roeck-us.net>
-Date: Mon, 10 Jun 2024 08:55:26 -0700
+Message-ID: <4514c496-a809-45e0-95ee-4e9cc8d237e5@roeck-us.net>
+Date: Mon, 10 Jun 2024 09:12:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,20 +78,17 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Stephen Horvath <s.horvath@outlook.com.au>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-6-linux@roeck-us.net>
- <c939b0c7-2c8c-4cf1-8d5c-9309ce0b371a@gmx.de>
- <txliuvufu6muqucno2uex2q6xvnveozpjzahx7zryqlvvvzrs7@flv2zztine6r>
- <a7e38754-ff1a-4e15-99b2-4785827efc83@roeck-us.net>
- <ib6p4ivqdn56l3jzzarsoeijjhwak33bmqvj2qiddbhxdqzchk@txl4gdslx4gq>
+Subject: Re: [PATCH v5 0/6] hwmon: Add support for SPD5118 compliant chips
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>, Armin Wolf <W_Armin@gmx.de>,
+ Stephen Horvath <s.horvath@outlook.com.au>,
+ Paul Menzel <pmenzel@molgen.mpg.de>
+References: <20240610144103.1970359-1-linux@roeck-us.net>
+ <12f2b0e5-5130-4e07-be1f-38402f677f0c@t-8ch.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -137,72 +134,42 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <ib6p4ivqdn56l3jzzarsoeijjhwak33bmqvj2qiddbhxdqzchk@txl4gdslx4gq>
+In-Reply-To: <12f2b0e5-5130-4e07-be1f-38402f677f0c@t-8ch.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/10/24 07:52, Wolfram Sang wrote:
+On 6/10/24 08:27, Thomas Weißschuh wrote:
+> On 2024-06-10 07:40:57+0000, Guenter Roeck wrote:
+>> Add support for SPD5118 (Jedec JESD300) compliant chips supporting
+>> a temperature sensor and SPD NVRAM. Such devices are typically found on
+>> DDR5 memory modules.
 > 
->>> Yes, maybe this could be simplified to "(LP)DDR memory types"
->>>
+> <snip>
+> 
+>> ----------------------------------------------------------------
+>> Guenter Roeck (6):
+>>        dt-bindings: trivial-devices: Add jedec,spd5118
+>>        hwmon: Add support for SPD5118 compliant temperature sensors
+>>        hwmon: (spd5118) Add suspend/resume support
+>>        hwmon: (spd5118) Add support for reading SPD data
+>>        i2c: smbus: Support DDR5 and LPDDR5 SPD EEPROMs
+>>        hwmon: (spd5118) Add configuration option for auto-detection
 >>
->> I rephrased it to "Only works for (LP)DDR memory types up to DDR5".
+>>   .../devicetree/bindings/trivial-devices.yaml       |   2 +
+>>   Documentation/hwmon/index.rst                      |   1 +
+>>   Documentation/hwmon/spd5118.rst                    |  63 ++
+>>   drivers/hwmon/Kconfig                              |  31 +
+>>   drivers/hwmon/Makefile                             |   1 +
+>>   drivers/hwmon/spd5118.c                            | 658 +++++++++++++++++++++
+>>   drivers/i2c/i2c-smbus.c                            |   6 +-
+>>   7 files changed, 761 insertions(+), 1 deletion(-)
+>>   create mode 100644 Documentation/hwmon/spd5118.rst
+>>   create mode 100644 drivers/hwmon/spd5118.c
 > 
-> Thanks!
-> 
->> How about "Only works on systems with 1 to 8 memory slots" ?
-> 
-> This is a question for Heiner. I'd think it is is still correct, but I
-> don't know exactly.
-> 
+> Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 
-My interpretation was that it should work if the DIMMs are connected to
-multiplexed I2C busses, but probably not if they are connected to
-different adapters. The error message in that case is a bit misleading,
-though, because it claims that "More than 8 memory slots on a single bus",
-which isn't necessarily the case. For example, it should be perfectly valid
-to have up to 24 DIMMs in this system.
+Thanks!
 
-i2c-0/name:SMBus PIIX4 adapter port 0 at 0b00
-i2c-1/name:SMBus PIIX4 adapter port 2 at 0b00
-i2c-2/name:SMBus PIIX4 adapter port 1 at 0b20
-
-... but I guess that is a question for someone with such a system to answer.
-
-Ultimately the handling of systems with more than 8 memory slots will need
-to be updated at some point. On my systems, with 'i2c: piix4: Register SPDs'
-applied, I see
-
-i2c i2c-0: 4/4 memory slots populated (from DMI)
-     [my system is running 6.6.y which still generates that message]
-i2c i2c-0: Successfully instantiated SPD at 0x50
-i2c i2c-0: Successfully instantiated SPD at 0x51
-i2c i2c-0: Successfully instantiated SPD at 0x52
-i2c i2c-0: Successfully instantiated SPD at 0x53
-i2c i2c-1: 4/4 memory slots populated (from DMI)
-i2c i2c-2: 4/4 memory slots populated (from DMI)
-
-meaning the function is called for each adapter (which makes sense).
-However, the code counting the DIMMs doesn't really take the adapter
-into account, meaning adapters 1 and 2 are still probed even though
-all DIMMs were already instantiated from adapter 0.
-
-On a system with more than 8 DIMMs connected to different piix4 adapters
-(without mux) we'd probably see something like
-
-i2c i2c-0: More than 8 memory slots on a single bus, contact i801 maintainer ...
-i2c i2c-1: More than 8 memory slots on a single bus, contact i801 maintainer ...
-i2c i2c-2: More than 8 memory slots on a single bus, contact i801 maintainer ...
-
-which wouldn't be very helpful. I think the main problem may be that
-the i801 driver implements sub-adapters as muxes, but the piix4 driver
-doesn't do (or need) that. The message is also i801 centric which doesn't
-apply anymore after 'i2c: piix4: Register SPDs' is applied.
-
-However, I would not want to even try changing that code without access
-to a system using piix4 and supporting more than 8 memory slots.
-
-Thanks,
 Guenter
 
 
