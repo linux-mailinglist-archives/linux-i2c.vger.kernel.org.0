@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-3940-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3941-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CCB5901C94
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 10:12:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48C74901C97
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 10:12:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 937431C214AF
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 08:12:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7D82B22BC3
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 08:12:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F32A757EB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9858757F5;
 	Mon, 10 Jun 2024 08:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="fOJ3ANdm"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="QHAoB3qI"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5574171B45
-	for <linux-i2c@vger.kernel.org>; Mon, 10 Jun 2024 08:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F22A6BFCA
+	for <linux-i2c@vger.kernel.org>; Mon, 10 Jun 2024 08:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718007042; cv=none; b=ImKTMxalN0nzNlduWGk2qmCgrjPM8tFVaut3yw4CN/poRCEVxOhrijHpdBOWRevLFE8OAiiJV+qqrYEBKqCkhwkCxsdONV0nRvJkvxVSg1Bz29dn4Jyesb5wDJL1Os4kVcoeDGKutFF+vB7H93lph4NUasUq7AgaaXqC0luBZdk=
+	t=1718007042; cv=none; b=Urob6yfgOuPbcHFuRnE8bptNlKylPLInBVW2fwsO5Y76tMCGnq71pRwGQEpIaN/U3aodvY9s/9sPbOr+rMRb75mJ6GWqBK86LxvERd+OJCsfPXmF305U+nV3SK4waH/G52PvkysHlpu+wuRwYG06LVZ3an/WtmAYuNEmjuGg7Qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718007042; c=relaxed/simple;
-	bh=aSoXwM7AxjCYi4o5UPuDejbH07mKDQ5JXUxoQO258co=;
+	bh=YGdvbCsehvYJDIEB2j/KPv6aBB90Bcqxnbrz1sUyXJM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gppvtglDxM2rVy2aGLHm7DQSA/o0+Ssv2ff3uSaNptwWTImkGyTKCMp7NzL30JSsS0QiwYN1IXnkPMmweYM78GMMNaCnADmjdPQXn9Ulio8Cgl6TpftTfMuVZpn2HW2lu826E/e23WoUr6LmD1WAoSW+IaLEmudd28tvRD/RFmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=fOJ3ANdm; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=swT4ZYDLl/g9qSQc6awgRJXe//E6aHQxo/AgDV6uzzEK5Pff+T8px6yF9K0mTZ93G3rycKWbRCLyDPT8RBlraG2GK5GqmSF9mEFUctiY6p9jiZeeCBpOggECvgNp1ZqempZbN6VnmINO5fT1B1CPvlsD24vOR3dL73U7hnJC+ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=QHAoB3qI; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=kPW6Z47SSMaFsqhDVQlxCvLx2hDU95KMb1LtJY99czE=; b=fOJ3AN
-	dm6uYbD0EqFZCVW6nM5mULOgyWm4UJXZzb3h27EK1RrPcVFoR2gHpYDBe3cH0Onc
-	X+LgIu9H4wkOzDMwNPok/lwTreUOkjMqCfbQi4sFvXJGEFm8XtkkvemNqaXnn7T2
-	xwGfAtUAP+dH7NIAUGU6ve3VZ461n2i78NN2HnzPuzX4GPvZq68VbJAoel9k+vVV
-	EqU8slceu/iCe7lXzz4+4Ne//uVOawJhi5UvfvLaXzmxsZzt8xfiVRF0We4Ntxla
-	RvSujTwOMvGPhwPA7Pr/7gXAI84nvOqYEawnDpAWqnSMgGe44q9TS09DfbB1sePi
-	9wCJX/HqbmNuOWgQ==
-Received: (qmail 4192516 invoked from network); 10 Jun 2024 10:10:29 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Jun 2024 10:10:29 +0200
-X-UD-Smtp-Session: l3s3148p1@Kmi0roQa7OYgAwDPXymAAHMyzy0c7Kdl
+	 s=k1; bh=3JXnpw5ZxCWydN83TijKpBvVC1rCL3jaX5ZlTBQ9Tn0=; b=QHAoB3
+	qIDn0AoFTW+ZRt+50jEUI+E070NwfUPUOcPZD7g2tU/+/Im9Gepibx0xjk8zbyz0
+	FwFPjWeAgbpsGC0NfhdqjrUKXVB4N06lPj0ozb3G5LhWOZqKTtv6NO3ZZkl5jcZX
+	nMdfLLm9k5BCaQGfnVKWAekN0x35PiRuKGGLoLByNF/MnNfz+0EuD2XlIvyBrWm6
+	s/ACEkmj2HE5F2U42LYrBBCsJE0huz1IRITgeCkpf6pHya+UHmZo+wDTtq/pHk4R
+	P3o6xWpaej1IkAqhKZFpQ/AgD+C9CPesJDUeTz0Q59GvR2ooipWYGjFKR/QFbh9n
+	uXI4G63UIPfxDN+g==
+Received: (qmail 4192533 invoked from network); 10 Jun 2024 10:10:30 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Jun 2024 10:10:30 +0200
+X-UD-Smtp-Session: l3s3148p1@69q/roQa8OYgAwDPXymAAHMyzy0c7Kdl
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Easwar Hariharan <eahariha@linux.microsoft.com>,
@@ -51,9 +51,9 @@ Cc: Easwar Hariharan <eahariha@linux.microsoft.com>,
 	linux-doc@vger.kernel.org,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/6] docs: i2c: summary: document 'local' and 'remote' targets
-Date: Mon, 10 Jun 2024 10:10:20 +0200
-Message-ID: <20240610081023.8118-6-wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2 6/6] docs: i2c: summary: rephrase paragraph explaining the figure
+Date: Mon, 10 Jun 2024 10:10:21 +0200
+Message-ID: <20240610081023.8118-7-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240610081023.8118-1-wsa+renesas@sang-engineering.com>
 References: <20240610081023.8118-1-wsa+renesas@sang-engineering.com>
@@ -65,40 +65,30 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Because Linux can be a target as well, add terminology to differentiate
-between Linux being the target and Linux accessing targets.
+Use 'controller/target' and 'adapter/client' pairs consistently.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- Documentation/i2c/summary.rst | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ Documentation/i2c/summary.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
-index b10b6aaafcec..203f6c9b2472 100644
+index 203f6c9b2472..da76c787a6c5 100644
 --- a/Documentation/i2c/summary.rst
 +++ b/Documentation/i2c/summary.rst
-@@ -49,11 +49,16 @@ whole class of I2C adapters. Each specific adapter driver either depends on
- an algorithm driver in the ``drivers/i2c/algos/`` subdirectory, or includes
- its own implementation.
+@@ -60,9 +60,9 @@ Client drivers are kept in a directory specific to the feature they
+ provide, for example ``drivers/media/gpio/`` for GPIO expanders and
+ ``drivers/media/i2c/`` for video-related chips.
  
--A **target** chip is a node that responds to communications when addressed
--by the controller. In Linux it is called a **client**. Client drivers are kept
--in a directory specific to the feature they provide, for example
--``drivers/media/gpio/`` for GPIO expanders and ``drivers/media/i2c/`` for
--video-related chips.
-+A **target** chip is a node that responds to communications when addressed by a
-+controller. In the Linux kernel implementation it is called a **client**. While
-+targets are usually separate external chips, Linux can also act as a target
-+(needs hardware support) and respond to another controller on the bus. This is
-+then called a **local target**. In contrast, an external chip is called a
-+**remote target**.
-+
-+Client drivers are kept in a directory specific to the feature they
-+provide, for example ``drivers/media/gpio/`` for GPIO expanders and
-+``drivers/media/i2c/`` for video-related chips.
+-For the example configuration in figure, you will need a driver for your
+-I2C adapter, and drivers for your I2C devices (usually one driver for each
+-device).
++For the example configuration in the figure above, you will need one adapter
++driver for the I2C controller, and client drivers for your I2C targets. Usually
++one driver for each client.
  
- For the example configuration in figure, you will need a driver for your
- I2C adapter, and drivers for your I2C devices (usually one driver for each
+ Outdated terminology
+ --------------------
 -- 
 2.43.0
 
