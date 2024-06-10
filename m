@@ -1,141 +1,99 @@
-Return-Path: <linux-i2c+bounces-3942-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3943-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92C9B901F14
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 12:18:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CB6D902259
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 15:05:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A2581F20FFD
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 10:18:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3273D1C20959
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 13:05:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA2ED757FB;
-	Mon, 10 Jun 2024 10:18:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C851081AC6;
+	Mon, 10 Jun 2024 13:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aiPaDxZX"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="YWLZW0yx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BAC528EA
-	for <linux-i2c@vger.kernel.org>; Mon, 10 Jun 2024 10:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A2E8286A;
+	Mon, 10 Jun 2024 13:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718014687; cv=none; b=p3fkywsdlRQ+EKGy0fNyq638Q4SeskVM7PYE//Ff7VQa0B1srrcahwTJWu7HyqILVMqvWE6fBNpL9CwKra7atV1tCS58INcKLOlb2+NGDZKiL/Kd9Tgyu44YYC1rHrbUQpEfGayxAjZojJYCuZAMMpWBccCoV1p2wzYGZBIcCwo=
+	t=1718024685; cv=none; b=tJUxDkKrmwkaZbjTddDG/zVp6+NLFzmqimEyKzyBiisUmM9kDgpK+i/tCeVJe1FfGyZPIVSiz1oVs4BMQCJYkWklbytqeD3Scsg4fiHOKgMlLE/7xksruAVGKhh+FXoBsLsIGHymV+7BckM++oKooCNiHKDc1nJ8p5oRNM9JAII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718014687; c=relaxed/simple;
-	bh=qsaJDtGq0q1TEXO+T1qA74dpqOLu86Drjb2f2ycR0fw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u2QnoNpXhtVu9lyQhYSxpbXd7rTZA+z3xsse7qr2Go6ma9SFFSujHuc0m9FkaOCsFmUqcRpPBiYImUGmoKoGpQYOlellq9sguMwTInSkLO/z3iYaC4hxmF1kB7W+2vGlQx1NRouy6kxAL38UhZ8UonMqWaLophc0ZrZocOw6dU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aiPaDxZX; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718014687; x=1749550687;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qsaJDtGq0q1TEXO+T1qA74dpqOLu86Drjb2f2ycR0fw=;
-  b=aiPaDxZXX8X96NxCX8w3ViUO+55dYrSOwf2Nl6nyUMZeheFfDfixjJx4
-   21R6nG3+KM9KYq97TPgakczlYuAoA5+Qh78JGUTzDHKe1bXNeml+BZApf
-   2YjLWnbnGSEz7jDOoyIPKn9NWzA+9OWCVSvJ3zLkamnAaBttjZvrkrAQN
-   NphFKC73qi5HrigB3IygLZ8E/RZLBFEBYOvmxgXW62T7RqFDLW7ByL9vW
-   nN2qCg1ky+atKDMh97p+Jgg3ef869/5XSokamZLnyi0bgLjgVRx0+fm24
-   nFyKsHw0o0FchThHK+NPwnbFpK587DiOwDN1lPna8YZmHvggyucxCI2ID
-   w==;
-X-CSE-ConnectionGUID: SwUTIV3CThOzQ4At2WCfiA==
-X-CSE-MsgGUID: ErYHxfpSTvel/f/1fe86qA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11098"; a="14503705"
-X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="14503705"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 03:18:06 -0700
-X-CSE-ConnectionGUID: UVc3Q14fSK2Ml6orXpYqWw==
-X-CSE-MsgGUID: YI+eXn2iRS2Ta5wsYcZxGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="43449320"
-Received: from aquilante.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.151])
-  by fmviesa005.fm.intel.com with ESMTP; 10 Jun 2024 03:18:04 -0700
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To: linux-i2c@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH] i2c: i801: Add support for Intel Arrow Lake-H
-Date: Mon, 10 Jun 2024 13:18:01 +0300
-Message-ID: <20240610101801.453785-1-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1718024685; c=relaxed/simple;
+	bh=j3unPiR6cYjkj+QmmQQQODvkHswhgr4ev71KQWbcj1Q=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=CjsGnVAGssUDQEwRzGw+dYRpFY/D5GVOxi/RBR4C9TCeQOcr/0pWMCcaOJxa9/8sIP0Dw0yz8NwwSzCV30a0m7B2nibZViOU55w3rKgP5h5Owm5wJ+G/QLvEY9gUrdYrEazAc6ATNysn8UVBaVl+y0dkI+gbYNPLMUyG1X+f1Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=YWLZW0yx; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1718024645; x=1718629445; i=markus.elfring@web.de;
+	bh=j3unPiR6cYjkj+QmmQQQODvkHswhgr4ev71KQWbcj1Q=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=YWLZW0yxBi+tEZH0kDTStkErGCoHMAKQGxv0mAO78dlsZhrKyCfzmy9qyMNLUxjo
+	 nPLX6SqH0653WhmBZmVWjOtZ93494oob94pGUuXQJjtqC4eITVM4qJ54xQCSA/vql
+	 H844uAOMjcR6N9LkA35IYMSMrYNGtbOcI30me6hNGiMM//U8XEEe1GaTAnU1aTsBQ
+	 mQuFIWPFrhPFx8D4q59DoQGBp+aCXx6jvP/1doOxzpqgCjhrw2qEP9qPneOsmxPbn
+	 jOpgMBq8kH8SMMqRmwr36L9s3jwX8x5jVDDnUYSQmz/C4xhAA6iIYfea6jcFpi3sn
+	 SNlIF5FeAQjVPHOcfg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mxpmc-1scyfj39Be-015VYr; Mon, 10
+ Jun 2024 15:04:05 +0200
+Message-ID: <4bd94a7c-370c-4784-aae6-17d4b2a2ace0@web.de>
+Date: Mon, 10 Jun 2024 15:04:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+To: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>,
+ linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20240610025955.2308688-2-aryan.srivastava@alliedtelesis.co.nz>
+Subject: Re: [PATCH v5 1/2] i2c: octeon: refactor hlc r/w operations
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240610025955.2308688-2-aryan.srivastava@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:RDyYRvTaajZboBrUhgUvo02yyVdLboN8QBYaBY4rRJSjr6HecjG
+ +KOKaIvOm8j0KioFE1Op7ZsUh9DoMPPzUeQDCzHwAnD5f6KOzvGrHEWaColKNp84LdaQSmf
+ 6njWQ7VTrUXpgMnVjhXTDrWa03aEAnCw0I5lxxo7R1pqrShEkoimHfmXdiN+GYcalcqbn2G
+ oUubC91ZAbDYUPV+f25xQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:CsBIpItxYLU=;reCkyHB7FhGeCbO7+M48dCz99Ei
+ STW5LC554tuie/aV1Gb5kQWLGUaH+D83BCoEiN3L24Dp5qupJipz1Ob75MEUj5nLNYcdQOmpo
+ 4DDgi7txFOczW6EZ35Gh/eI1TxJmXEzGzaueatzpqFXL01tSWHuub0Gscf0vW33+dKBSfUKrB
+ HQxv3jmwuYUhlfbjbwn8W3IRUh1jDX6KaNsRNR+DbVO3yJ9th6WJ/FZWd8dbJGGDBeChkBRLD
+ aCAicrBBnL8HTt39ab8ti4LJruUVyYULm7HWgYLU26+14xMr+3hoKFJFXiLLEGuW3Epr6vWF4
+ KjQeikQ+vWMOqbQQZJ1OnYj9b3UXY+nkIdH/Di8W8TMan/sK3Xd23qbZCvhR1PX0XR1PFVHn7
+ 8HaxCRwVXjPnn1UDyWwduN1c8gGoq7rSe+Lm9qilkHraxrv3ALwk8ZqyAEflNjhmaFAqi08n4
+ e6ki4QYZth0zFp/yHL/0ZHErEWLuRMQE+MJcZnDizqS4DCXqmDDDd1QCfB6Gdbo/4jM3H1HK2
+ TWo/7qXiAYx6MhU4Q+fGGyaTNmgrnKTG5C3n/5zUW2N+qY+Xz1OEu2lHpfExUxsMyMvVciIWy
+ 3Pd5XmZUwiMj4wVEwFVltrFWxTSOuA6XORHUxT/iNHnsh7OClUIVrd4nuWWyWskAyjxPAEllt
+ 6JdXtfVL5TCXEztQZvLZCuNg8jm29Cx6GyLOkFsHYQaX9midk8PPCF9kXq57S7FgT8CskRK+h
+ vB01/8RrU1OxI6eRwgU5BYHWABRjYRPhosphefH8RRD5GBv07JVP/BJ/BAFBqDRKXo0LM8RHf
+ 5BoNHRw7Iphm7Gnc8sdUepy3Ad2y1b9tyaAOq9vxr3MBk=
 
-Add SMBus PCI ID on Intel Arrow Lake-H.
+=E2=80=A6
+> The write commands cannot be made entirely into common
+> code as there are distinct differences in the block mode
+=E2=80=A6
 
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
- Documentation/i2c/busses/i2c-i801.rst | 1 +
- drivers/i2c/busses/Kconfig            | 1 +
- drivers/i2c/busses/i2c-i801.c         | 3 +++
- 3 files changed, 5 insertions(+)
+You may put more than 56 characters into text lines of such change descrip=
+tions.
 
-diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
-index 10eced6c2e46..c840b597912c 100644
---- a/Documentation/i2c/busses/i2c-i801.rst
-+++ b/Documentation/i2c/busses/i2c-i801.rst
-@@ -48,6 +48,7 @@ Supported adapters:
-   * Intel Raptor Lake (PCH)
-   * Intel Meteor Lake (SOC and PCH)
-   * Intel Birch Stream (SOC)
-+  * Intel Arrow Lake (SOC)
- 
-    Datasheets: Publicly available at the Intel website
- 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index fe6e8a1bb607..85b57d2ec998 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -159,6 +159,7 @@ config I2C_I801
- 	    Raptor Lake (PCH)
- 	    Meteor Lake (SOC and PCH)
- 	    Birch Stream (SOC)
-+	    Arrow Lake (SOC)
- 
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-i801.
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index d2d2a6dbe29f..44e3e9bae5f1 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -80,6 +80,7 @@
-  * Meteor Lake SoC-S (SOC)	0xae22	32	hard	yes	yes	yes
-  * Meteor Lake PCH-S (PCH)	0x7f23	32	hard	yes	yes	yes
-  * Birch Stream (SOC)		0x5796	32	hard	yes	yes	yes
-+ * Arrow Lake-H (SOC)		0x7722	32	hard	yes	yes	yes
-  *
-  * Features supported by this driver:
-  * Software PEC				no
-@@ -237,6 +238,7 @@
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_M_SMBUS		0x54a3
- #define PCI_DEVICE_ID_INTEL_BIRCH_STREAM_SMBUS		0x5796
- #define PCI_DEVICE_ID_INTEL_BROXTON_SMBUS		0x5ad4
-+#define PCI_DEVICE_ID_INTEL_ARROW_LAKE_H_SMBUS		0x7722
- #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_S_SMBUS		0x7a23
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
- #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_P_SMBUS		0x7e22
-@@ -1052,6 +1054,7 @@ static const struct pci_device_id i801_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_SOC_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_PCH_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ PCI_DEVICE_DATA(INTEL, BIRCH_STREAM_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
-+	{ PCI_DEVICE_DATA(INTEL, ARROW_LAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ 0, }
- };
- 
--- 
-2.43.0
-
+Regards,
+Markus
 
