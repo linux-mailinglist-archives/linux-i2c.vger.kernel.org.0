@@ -1,379 +1,219 @@
-Return-Path: <linux-i2c+bounces-3933-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3934-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EC1B901980
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 05:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A70E4901C66
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 10:08:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A02A71F21B3F
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 03:00:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F9971F225A2
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jun 2024 08:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63591101D4;
-	Mon, 10 Jun 2024 03:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE996F2E1;
+	Mon, 10 Jun 2024 08:08:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="SV+6lMUh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SSdm1Yf7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2733C0C
-	for <linux-i2c@vger.kernel.org>; Mon, 10 Jun 2024 03:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612FE5FBB1
+	for <linux-i2c@vger.kernel.org>; Mon, 10 Jun 2024 08:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717988429; cv=none; b=oATQuEYwhc1L6roJDwl9O1m574pt5SqxkXOaLCvNycXblF9k6yPeI2D2kVjp7a3KLWKV5U16rUfWV+BRpZ4VPZbUprO//+h2wD+SZgW1GTO3oFSs6YeCrDJO9GFz4MLauO2CjsJmkABxmze53HZTgWCOrnCDvrdRQzD5oJLwhdg=
+	t=1718006896; cv=none; b=f2IoV3jMvOrKoWyZoS+rakeLATqJ2yDLZUAlbe0dY1zywt8q44rHMwqij49wOfBQz9s3URqW0WgKiMWBTVQyKrMMXoO0czb0rcSsflS7GCHpX+7JkQ4VPPryaMzaEB/Pee+S+GrJpy/TRR8Fb3iPsPEo9MVv5Ude932IX4murTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717988429; c=relaxed/simple;
-	bh=ls8lVLZI/JhlfN+lgoyPul05RRsn+IGQbtKfefjyEOk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fuU0M/yZJuzs/Eh8YFnBcSglezkM+DstnlfncCmRMntndTmTvEVzy2ZvRNXEi9pAGP0DI+BKbdyCH1U3jzmkxHaj94/1+6L2+9sA3GIIpSt9TyLsmHRvAruEQe3HOJp4m3KHP/qiKEHe4ws72lNtq4VW7xDcN4VCKVYNj+iu1v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=SV+6lMUh; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A44322C08BD;
-	Mon, 10 Jun 2024 15:00:24 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1717988424;
-	bh=P+Uxl+bBGM3zIF9XJgAP57gt674Rp7XeAf9PcWUJgXI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SV+6lMUhh8UdauBt/Iu3RBv6YEXLC1OhQhV6MiCzxLD7iR9ukVQhbunOgz1YroVnu
-	 gG5LTCOEMWeTOty8HXmgMGtl2eioDKnD6Q63rtTRmPBl8HqMJvgJDuLEwQaaIMjb54
-	 vH2FJ2+7yqdIqLPXrupHOEquHNonqU5yFR6Rh6s+7/0M3Me1ywTI8G84tI6Umrtgpc
-	 nRazvhFNyWu9n5xI9zH/VrmWgkOLnM6UxHhOhO18JGQMy/jr16gVxlUV4wHWGB0aMi
-	 A6+i3ZqN+BCjVxI6doUMvhmPKUfcrflVHpDaNbxMQ+MPg2+/o2qDmJI3GHYEoogv7g
-	 HNP8kAWw5wgPg==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B66666c480000>; Mon, 10 Jun 2024 15:00:24 +1200
-Received: from aryans-dl.ws.atlnz.lc (aryans-dl.ws.atlnz.lc [10.33.22.38])
-	by pat.atlnz.lc (Postfix) with ESMTP id 6ACCA13EE2B;
-	Mon, 10 Jun 2024 15:00:24 +1200 (NZST)
-Received: by aryans-dl.ws.atlnz.lc (Postfix, from userid 1844)
-	id 688F72A2270; Mon, 10 Jun 2024 15:00:24 +1200 (NZST)
-From: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
-To: andi.shyti@kernel.org
-Cc: aryan.srivastava@alliedtelesis.co.nz,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] i2c: octeon: Add block-mode r/w operations
-Date: Mon, 10 Jun 2024 14:59:55 +1200
-Message-ID: <20240610025955.2308688-3-aryan.srivastava@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240610025955.2308688-1-aryan.srivastava@alliedtelesis.co.nz>
-References: <20240610025955.2308688-1-aryan.srivastava@alliedtelesis.co.nz>
+	s=arc-20240116; t=1718006896; c=relaxed/simple;
+	bh=/L5y1Dv6ivY3eszYnYmdXRYc401x9YYY2yBAmmyUG/k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qkqrXwqKYLlEyi3tVNnUgBRGwYp67DNApdXC7s9xjE5vYoHs4jWqeRpBNALI9i7B8hSblO44aBS0MOnEwL/UllRVb73NADwC5n6I4d7z5TnGtjqTCAPGTXLTbcVln7k2nGTJgLYDadZKo9pzZaaCNRfvWNwNOo67SJTv2tltS+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SSdm1Yf7; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52bc1261f45so2568679e87.0
+        for <linux-i2c@vger.kernel.org>; Mon, 10 Jun 2024 01:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718006892; x=1718611692; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/L5y1Dv6ivY3eszYnYmdXRYc401x9YYY2yBAmmyUG/k=;
+        b=SSdm1Yf7Ra0G4T+e1Uib9M+gpZrMF9N8k3TFc0cVz1F5pABZzdduYWAgb/AYK6aN5U
+         uGRb/9C4DKJ1MAyhzNdKqtcLtbbSe8pWQRtjbEXBTFYju2cMxL2Ljf60A9rhzibs/z9k
+         58QLu/Go6rD3ZcOU2IPsm9uBcLwH6W8ua/ujy6yuJ5oy7dAijMMVBbsXY4yd4XeI8BMF
+         tBO40weDDLMTfnvv7w8kEWecrxwMfi5uAXCD7QK5dcWAdVEgifdMXyQiRMcm7v1g27Rl
+         Fpd3yivenYWJYij2nMGl+Ls46Hekj1+LChnFu8YHVJOJbKSpUse8j4k2fpw4j2G2Sdq2
+         vB0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718006892; x=1718611692;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/L5y1Dv6ivY3eszYnYmdXRYc401x9YYY2yBAmmyUG/k=;
+        b=IiLETBiOCqrK2ZgsUH06j2oLNxzRBd4totERway/6UYCRmsAXg7dWcW+qU8Vd/T55D
+         kUBY/yTgAewQW8Ycsb006AFrCjePkfwfpFLePBpl4E3pPDaC4BUHkQMPIm+eH2PfNa3b
+         Hc1KXvdUnJo7d7Yew0OY8rbbL2Yz2pvZxxTxVeE97KZzcWPexJprlGj/NUTID2WwMTFI
+         ISKbYP7cMJGIWOtbYIcTZt/5Hp44geLv2NIBamRvQnptGYhj/vCszWj4hOgfBpUoYnVf
+         b7y9O3M1IgTJkXnXCmyGlhbCbb9vGXqvC2NlEJmejydi/TOF11T+vBDvtdgbeV4aOrce
+         C+CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7rXAxQ9eaZoPF8ONi/WcWX7cllLOvmEaAK3QDfmkr328O3Apqj45qrRrxhMRcvGjgHBE//M6hXt+NRjhXiUvHbpWwxgKwCeF2
+X-Gm-Message-State: AOJu0YyuedJCFcwcw/MpiO6BbR+4nXslagzu+b82c5ar+aL0Y6t8alX6
+	1T+D4kP6Cjc34wT5lq90UU9ra5tD43wD7fsow3ga5k7k7daxrxN4sbUXf6aPmG+kNMIbblOWKm9
+	n8qFGR0kzE9at8PBFYNZfwBko7VSpKuHtEZx7PQ==
+X-Google-Smtp-Source: AGHT+IEoIIaopVbMhKiBzu+ZFeFG117iZrYhuaSy1PLsnicMvCE0nAaF1iUL9hhnUeVtUHqe9i20V059/u6XmSWe6yI=
+X-Received: by 2002:a05:6512:234d:b0:52b:be9b:cafe with SMTP id
+ 2adb3069b0e04-52bbe9bcbadmr5940256e87.21.1718006892189; Mon, 10 Jun 2024
+ 01:08:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240603211538.289765-1-andriy.shevchenko@linux.intel.com> <87tti9cfry.fsf@intel.com>
+In-Reply-To: <87tti9cfry.fsf@intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 10 Jun 2024 10:08:00 +0200
+Message-ID: <CACRpkdZFPG_YLici-BmYfk9HZ36f4WavCN3JNotkk8cPgCODCg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] treewide: Align match_string() with sysfs_match_string()
+To: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Corey Minyard <minyard@acm.org>, 
+	Allen Pais <apais@linux.microsoft.com>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, Perry Yuan <perry.yuan@amd.com>, 
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Nuno Sa <nuno.sa@analog.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Randy Dunlap <rdunlap@infradead.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Lee Jones <lee@kernel.org>, 
+	Samuel Holland <samuel@sholland.org>, Elad Nachman <enachman@marvell.com>, 
+	Arseniy Krasnov <AVKrasnov@sberdevices.ru>, Johannes Berg <johannes.berg@intel.com>, 
+	Gregory Greenman <gregory.greenman@intel.com>, Benjamin Berg <benjamin.berg@intel.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Robert Richter <rrichter@amd.com>, Vinod Koul <vkoul@kernel.org>, 
+	Chunfeng Yun <chunfeng.yun@mediatek.com>, Hans de Goede <hdegoede@redhat.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Nikita Kravets <teackot@gmail.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Stanley Chang <stanley_chang@realtek.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Abdel Alkuor <abdelalkuor@geotab.com>, 
+	Kent Overstreet <kent.overstreet@linux.dev>, Eric Biggers <ebiggers@google.com>, 
+	Kees Cook <keescook@chromium.org>, Ingo Molnar <mingo@kernel.org>, 
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>, Daniel Bristot de Oliveira <bristot@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Hugh Dickins <hughd@google.com>, 
+	Abel Wu <wuyun.abel@bytedance.com>, John Johansen <john.johansen@canonical.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Takashi Iwai <tiwai@suse.de>, Takashi Sakamoto <o-takashi@sakamocchi.jp>, 
+	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, Mark Brown <broonie@kernel.org>, 
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-ide@vger.kernel.org, openipmi-developer@lists.sourceforge.net, 
+	linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, qat-linux@intel.com, 
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
+	intel-xe@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-leds@vger.kernel.org, linux-sunxi@lists.linux.dev, 
+	linux-omap@vger.kernel.org, linux-mmc@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, netdev@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org, 
+	linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-bcachefs@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, alsa-devel@alsa-project.org, 
+	linux-sound@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, David Howells <dhowells@redhat.com>, 
+	"David S. Miller" <davem@davemloft.net>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Sergey Shtylyov <s.shtylyov@omp.ru>, Damien Le Moal <dlemoal@kernel.org>, 
+	Niklas Cassel <cassel@kernel.org>, Daniel Scally <djrscally@gmail.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Peter De Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>, 
+	Danilo Krummrich <dakr@redhat.com>, Jean Delvare <jdelvare@suse.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Tony Lindgren <tony@atomide.com>, Adrian Hunter <adrian.hunter@intel.com>, Hu Ziji <huziji@marvell.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+	Potnuri Bharat Teja <bharat@chelsio.com>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>, Kalle Valo <kvalo@kernel.org>, 
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>, "Oliver O'Halloran" <oohall@gmail.com>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, JC Kuo <jckuo@nvidia.com>, 
+	Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Sebastian Reichel <sre@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	Helge Deller <deller@gmx.de>, Brian Foster <bfoster@redhat.com>, 
+	Zhihao Cheng <chengzhihao1@huawei.com>, Tejun Heo <tj@kernel.org>, 
+	Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Clemens Ladisch <clemens@ladisch.de>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=F9L0dbhN c=1 sm=1 tr=0 ts=66666c48 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=T1WGqf2p2xoA:10 a=_GL4yYo1NFTcpOcRNZkA:9 a=3ZKOabzyN94A:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
 
-Add functions to perform block r/w operations. This applies
-for cases where the requested operation is for >8 bytes of data.
+On Tue, Jun 4, 2024 at 9:46=E2=80=AFAM Jani Nikula <jani.nikula@linux.intel=
+.com> wrote:
 
-When not using the block mode transfer, the driver will attempt a
-series 8 byte r/w operations until it reaches the desired total.
-For example, for a 40 byte request the driver will complete 5
-separate transactions. This results in large i2c transactions taking
-significant time to process.
+[Maybe slightly off-topic, ranty]
 
-Add block mode r/w such that the driver can request larger transactions,
-up to 1024 bytes in one transaction.
+> Why do we think it's a good idea to increase and normalize the use of
+> double-underscore function names across the kernel, like
+> __match_string() in this case? It should mean "reserved for the
+> implementation, not to be called directly".
+>
+> If it's to be used directly, it should be named accordingly, right?
 
-Many aspects of the block mode r/w is common with the regular 8 byte
-r/w operations. Use generic functions for parts or the message
-construction and sending the message. The key difference for the
-block mode is the usage of separate FIFO buffer to store data.
+It's a huge mess. "__" prefix is just so ambiguous I think it just
+shouldn't be used or prolifierated, and it usually breaks Rusty Russells
+API rules times over.
 
-Write to this buffer in the case of an i2c write (before command send).
-Read from this buffer in the case of an i2c read (after command send).
+Consider __set_bit() from <linux/bitops.h>, used all over the place,
+in contrast with set_bit() for example, what does "__" represent in
+this context that makes __set_bit() different from set_bit()?
 
-Data is written into this buffer by placing data into the MSB onwards.
-This means the bottom 8 bits of the r/w data will match the top 8 bits,
-and so on and so forth.
+It means "non-atomic"...
 
-Set specific bits in message for block mode, enable block mode transfers
-from global i2c management registers, construct message, send message,
-read or write from FIFO buffer as required.
+How does a random contributor know this?
 
-The block-mode transactions result in a significant speed increase in
-large i2c r/w requests.
+Yeah, you guess it. By the token of "everybody knows that".
+(Grep, google, repeat for the number of contributors to the kernel.)
 
-Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
----
- drivers/i2c/busses/i2c-octeon-core.c     | 146 ++++++++++++++++++++++-
- drivers/i2c/busses/i2c-octeon-core.h     |  14 +++
- drivers/i2c/busses/i2c-thunderx-pcidrv.c |   4 +
- 3 files changed, 158 insertions(+), 6 deletions(-)
+I was considering to send a script to Torvalds to just change all
+this to set_bit_nonatomic() (etc) but was hesitating because that
+makes the name unambiguous but long. I think I stayed off it
+because changing stuff like that all over the place creates churn
+and churn is bad.
 
-diff --git a/drivers/i2c/busses/i2c-octeon-core.c b/drivers/i2c/busses/i2=
-c-octeon-core.c
-index 6772359ca6c8..03d30e179728 100644
---- a/drivers/i2c/busses/i2c-octeon-core.c
-+++ b/drivers/i2c/busses/i2c-octeon-core.c
-@@ -130,6 +130,25 @@ static void octeon_i2c_hlc_disable(struct octeon_i2c=
- *i2c)
- 	octeon_i2c_ctl_write(i2c, TWSI_CTL_ENAB);
- }
-=20
-+static void octeon_i2c_block_enable(struct octeon_i2c *i2c)
-+{
-+	if (i2c->block_enabled || !TWSI_BLOCK_CTL(i2c))
-+		return;
-+
-+	i2c->block_enabled =3D true;
-+	octeon_i2c_writeq_flush(TWSI_MODE_STRETCH
-+		| TWSI_MODE_BLOCK_MODE, i2c->twsi_base + TWSI_MODE(i2c));
-+}
-+
-+static void octeon_i2c_block_disable(struct octeon_i2c *i2c)
-+{
-+	if (!i2c->block_enabled || !TWSI_BLOCK_CTL(i2c))
-+		return;
-+
-+	i2c->block_enabled =3D false;
-+	octeon_i2c_writeq_flush(TWSI_MODE_STRETCH, i2c->twsi_base + TWSI_MODE(i=
-2c));
-+}
-+
- /**
-  * octeon_i2c_hlc_wait - wait for an HLC operation to complete
-  * @i2c: The struct octeon_i2c
-@@ -268,6 +287,7 @@ static int octeon_i2c_start(struct octeon_i2c *i2c)
- 	u8 stat;
-=20
- 	octeon_i2c_hlc_disable(i2c);
-+	octeon_i2c_block_disable(i2c);
-=20
- 	octeon_i2c_ctl_write(i2c, TWSI_CTL_ENAB | TWSI_CTL_STA);
- 	ret =3D octeon_i2c_wait(i2c);
-@@ -606,6 +626,112 @@ static int octeon_i2c_hlc_comp_write(struct octeon_=
-i2c *i2c, struct i2c_msg *msg
- 	return ret;
- }
-=20
-+/**
-+ * octeon_i2c_hlc_block_comp_read - high-level-controller composite bloc=
-k read
-+ * @i2c: The struct octeon_i2c
-+ * @msgs: msg[0] contains address, place read data into msg[1]
-+ *
-+ * i2c core command is constructed and written into the SW_TWSI register=
-.
-+ * The execution of the command will result in requested data being
-+ * placed into a FIFO buffer, ready to be read.
-+ * Used in the case where the i2c xfer is for greater than 8 bytes of re=
-ad data.
-+ *
-+ * Returns 0 on success, otherwise a negative errno.
-+ */
-+static int octeon_i2c_hlc_block_comp_read(struct octeon_i2c *i2c, struct=
- i2c_msg *msgs)
-+{
-+	int len, ret =3D 0;
-+	u64 cmd =3D 0;
-+
-+	octeon_i2c_hlc_enable(i2c);
-+	octeon_i2c_block_enable(i2c);
-+
-+	/* Write (size - 1) into block control register */
-+	len =3D msgs[1].len - 1;
-+	octeon_i2c_writeq_flush((u64)(len), i2c->twsi_base + TWSI_BLOCK_CTL(i2c=
-));
-+
-+	/* Prepare core command */
-+	cmd =3D SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR;
-+	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-+
-+	/* Send core command */
-+	ret =3D octeon_i2c_hlc_cmd(i2c, msgs[0], cmd);
-+	if (ret)
-+		return ret;
-+
-+	cmd =3D __raw_readq(i2c->twsi_base + SW_TWSI(i2c));
-+	if ((cmd & SW_TWSI_R) =3D=3D 0)
-+		return octeon_i2c_check_status(i2c, false);
-+
-+	/* read data in FIFO */
-+	octeon_i2c_writeq_flush(TWSI_BLOCK_STS_RESET_PTR, i2c->twsi_base + TWSI=
-_BLOCK_STS(i2c));
-+	for (int i =3D 0; i < len; i +=3D 8) {
-+		u64 rd =3D __raw_readq(i2c->twsi_base + TWSI_BLOCK_FIFO(i2c));
-+		/* Place data into msg buf from FIFO, MSB onwards */
-+		for (int j =3D 7; j >=3D 0; j--)
-+			msgs[1].buf[i + (7 - j)] =3D (rd >> (8 * j)) & 0xff;
-+	}
-+
-+	octeon_i2c_block_disable(i2c);
-+	return ret;
-+}
-+
-+/**
-+ * octeon_i2c_hlc_block_comp_write - high-level-controller composite blo=
-ck write
-+ * @i2c: The struct octeon_i2c
-+ * @msgs: msg[0] contains address, msg[1] contains data to be written
-+ *
-+ * i2c core command is constructed and write data is written into the FI=
-FO buffer.
-+ * The execution of the command will result in HW write, using the data =
-in FIFO.
-+ * Used in the case where the i2c xfer is for greater than 8 bytes of wr=
-ite data.
-+ *
-+ * Returns 0 on success, otherwise a negative errno.
-+ */
-+static int octeon_i2c_hlc_block_comp_write(struct octeon_i2c *i2c, struc=
-t i2c_msg *msgs)
-+{
-+	bool set_ext =3D false;
-+	int len, ret =3D 0;
-+	u64 cmd, ext =3D 0;
-+
-+	octeon_i2c_hlc_enable(i2c);
-+	octeon_i2c_block_enable(i2c);
-+
-+	/* Write (size - 1) into block control register */
-+	len =3D msgs[1].len - 1;
-+	octeon_i2c_writeq_flush((u64)(len), i2c->twsi_base + TWSI_BLOCK_CTL(i2c=
-));
-+
-+	/* Prepare core command */
-+	cmd =3D SW_TWSI_V | SW_TWSI_SOVR;
-+	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-+
-+	/* Set parameters for extended message (if required) */
-+	set_ext =3D octeon_i2c_hlc_ext(i2c, msgs[0], &cmd, &ext);
-+
-+	/* Write msg into FIFO buffer */
-+	octeon_i2c_writeq_flush(TWSI_BLOCK_STS_RESET_PTR, i2c->twsi_base + TWSI=
-_BLOCK_STS(i2c));
-+	for (int i =3D 0; i < len; i +=3D 8) {
-+		u64 buf =3D 0;
-+		/* Place data from msg buf into FIFO, MSB onwards */
-+		for (int j =3D 7; j >=3D 0; j--)
-+			buf |=3D (msgs[1].buf[i + (7 - j)] << (8 * j));
-+		octeon_i2c_writeq_flush(buf, i2c->twsi_base + TWSI_BLOCK_FIFO(i2c));
-+	}
-+	if (set_ext)
-+		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
-+
-+	/* Send command to core (send data in FIFO) */
-+	ret =3D octeon_i2c_hlc_cmd_send(i2c, cmd);
-+	if (ret)
-+		return ret;
-+
-+	cmd =3D __raw_readq(i2c->twsi_base + SW_TWSI(i2c));
-+	if ((cmd & SW_TWSI_R) =3D=3D 0)
-+		return octeon_i2c_check_status(i2c, false);
-+
-+	octeon_i2c_block_disable(i2c);
-+	return ret;
-+}
-+
- /**
-  * octeon_i2c_xfer - The driver's master_xfer function
-  * @adap: Pointer to the i2c_adapter structure
-@@ -631,13 +757,21 @@ int octeon_i2c_xfer(struct i2c_adapter *adap, struc=
-t i2c_msg *msgs, int num)
- 		if ((msgs[0].flags & I2C_M_RD) =3D=3D 0 &&
- 		    (msgs[1].flags & I2C_M_RECV_LEN) =3D=3D 0 &&
- 		    msgs[0].len > 0 && msgs[0].len <=3D 2 &&
--		    msgs[1].len > 0 && msgs[1].len <=3D 8 &&
-+		    msgs[1].len > 0 &&
- 		    msgs[0].addr =3D=3D msgs[1].addr) {
--			if (msgs[1].flags & I2C_M_RD)
--				ret =3D octeon_i2c_hlc_comp_read(i2c, msgs);
--			else
--				ret =3D octeon_i2c_hlc_comp_write(i2c, msgs);
--			goto out;
-+			if (msgs[1].len <=3D 8) {
-+				if (msgs[1].flags & I2C_M_RD)
-+					ret =3D octeon_i2c_hlc_comp_read(i2c, msgs);
-+				else
-+					ret =3D octeon_i2c_hlc_comp_write(i2c, msgs);
-+				goto out;
-+			} else if (msgs[1].len <=3D 1024 && TWSI_BLOCK_CTL(i2c)) {
-+				if (msgs[1].flags & I2C_M_RD)
-+					ret =3D octeon_i2c_hlc_block_comp_read(i2c, msgs);
-+				else
-+					ret =3D octeon_i2c_hlc_block_comp_write(i2c, msgs);
-+				goto out;
-+			}
- 		}
- 	}
-=20
-diff --git a/drivers/i2c/busses/i2c-octeon-core.h b/drivers/i2c/busses/i2=
-c-octeon-core.h
-index 9bb9f64fdda0..81fcf413c890 100644
---- a/drivers/i2c/busses/i2c-octeon-core.h
-+++ b/drivers/i2c/busses/i2c-octeon-core.h
-@@ -85,6 +85,11 @@
- #define TWSI_INT_SDA		BIT_ULL(10)
- #define TWSI_INT_SCL		BIT_ULL(11)
-=20
-+#define TWSI_MODE_STRETCH		BIT_ULL(1)
-+#define TWSI_MODE_BLOCK_MODE		BIT_ULL(2)
-+
-+#define TWSI_BLOCK_STS_RESET_PTR	BIT_ULL(0)
-+#define TWSI_BLOCK_STS_BUSY		BIT_ULL(1)
- #define I2C_OCTEON_EVENT_WAIT 80 /* microseconds */
-=20
- /* Register offsets */
-@@ -92,11 +97,19 @@ struct octeon_i2c_reg_offset {
- 	unsigned int sw_twsi;
- 	unsigned int twsi_int;
- 	unsigned int sw_twsi_ext;
-+	unsigned int twsi_mode;
-+	unsigned int twsi_block_ctl;
-+	unsigned int twsi_block_sts;
-+	unsigned int twsi_block_fifo;
- };
-=20
- #define SW_TWSI(x)	(x->roff.sw_twsi)
- #define TWSI_INT(x)	(x->roff.twsi_int)
- #define SW_TWSI_EXT(x)	(x->roff.sw_twsi_ext)
-+#define TWSI_MODE(x)	(x->roff.twsi_mode)
-+#define TWSI_BLOCK_CTL(x)	(x->roff.twsi_block_ctl)
-+#define TWSI_BLOCK_STS(x)	(x->roff.twsi_block_sts)
-+#define TWSI_BLOCK_FIFO(x)	(x->roff.twsi_block_fifo)
-=20
- struct octeon_i2c {
- 	wait_queue_head_t queue;
-@@ -110,6 +123,7 @@ struct octeon_i2c {
- 	void __iomem *twsi_base;
- 	struct device *dev;
- 	bool hlc_enabled;
-+	bool block_enabled;
- 	bool broken_irq_mode;
- 	bool broken_irq_check;
- 	void (*int_enable)(struct octeon_i2c *);
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busse=
-s/i2c-thunderx-pcidrv.c
-index a77cd86fe75e..abde98117d7e 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -165,6 +165,10 @@ static int thunder_i2c_probe_pci(struct pci_dev *pde=
-v,
- 	i2c->roff.sw_twsi =3D 0x1000;
- 	i2c->roff.twsi_int =3D 0x1010;
- 	i2c->roff.sw_twsi_ext =3D 0x1018;
-+	i2c->roff.twsi_mode =3D 0x1038;
-+	i2c->roff.twsi_block_ctl =3D 0x1048;
-+	i2c->roff.twsi_block_sts =3D 0x1050;
-+	i2c->roff.twsi_block_fifo =3D 0x1058;
-=20
- 	i2c->dev =3D dev;
- 	pci_set_drvdata(pdev, i2c);
---=20
-2.43.2
-
+Yours,
+Linus Walleij
 
