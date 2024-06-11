@@ -1,235 +1,168 @@
-Return-Path: <linux-i2c+bounces-3965-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3966-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CE0990382A
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2024 11:51:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2E43903871
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2024 12:10:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66F8E1C22BA1
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2024 09:51:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB61F1C2363B
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2024 10:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E301779BA;
-	Tue, 11 Jun 2024 09:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2F4B178375;
+	Tue, 11 Jun 2024 10:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="CxsoHWHs"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="qTC4hI/i"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2098.outbound.protection.outlook.com [40.92.107.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DC517083F
-	for <linux-i2c@vger.kernel.org>; Tue, 11 Jun 2024 09:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718099487; cv=none; b=cn6jJctTp3DvsrV0wFHf+1kAd6z4E8VKFAlVSRbbuiOXjbkj1E0BpaCPgR3kijYcsq8epAuzlsFgdyDpv0lkme8LH9RcienR96bq9aenrvBRRuGDuZLs/lKhMm5J+fiFQqYuR/BFohfApkvhbqag/mX1Gn96Sn1OxseJ9blWxb8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718099487; c=relaxed/simple;
-	bh=M3sP57whPMEKglNBLqbJ/9YfpM3OYVMio9G5VSbZfCM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lKjlj46j5snCbZGnfO/DdjVcS9YEqOsarlWlm5pVifXiF1JWRlAosWVdti06k5CSihfjBq2tS68tD4pp8XrSlMH0/jZkPte5rDZQZH+aOIOsEpTUw4dpSy9ULSqlTogfiVb8dqg1PMYuGdae/V2ZlXSQ51IMdL9WZIhtsElTlRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=CxsoHWHs; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=0VI96GF2sRbXga
-	gYVUW48owhEm5vm0nVephK1lZYgUQ=; b=CxsoHWHsP3/5G3kCovWY7mLIE8p2+w
-	nBN7g0a8KUGdcAzSwyNbDtGVAraxJaUY3y0K6FXSw5ZTX+XMZf2JSWKg2IWU2GLG
-	muqwtXfrNMpT/2nvfAcEjTyDic2TumGwTreqLtSWpw/S1uP8F2b+eY4dKIlD9txw
-	DJ0oNKk3oCSjSB2DkxsnAL4ES1y+YciJ+EMPRiRRy8ChLnICWoMFWlNMaLv/Buy7
-	cqk8MFGQS4A2igNS/u1vWqszOdVKc4vSZ5tQ41mYPJZZwvXuGljQ2lkK0WnpRTKF
-	Jo/yIS0TyKquYC1h6QNBELRYCAOVVNdUIIrxr4hpECm25vN265wpVeuQ==
-Received: (qmail 380400 invoked from network); 11 Jun 2024 11:51:13 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Jun 2024 11:51:13 +0200
-X-UD-Smtp-Session: l3s3148p1@K8LFNJoaIJZehhrL
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F6BE57E;
+	Tue, 11 Jun 2024 10:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.107.98
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718100630; cv=fail; b=P1NixjZHgeDdRbAJY/iMwv2xFBqp/24+8P19gV/Y8+fbBuT2A3X58pHl2UDOnVlTlZ35ctVHDr+Ey2Ct/jo6XEN+4OfhF0sct6qmB2qg+viMKbCy3cFkILxzvlEKFKFpZnrr4LorrD88a/fqjsGNY0o+lPmjNynrODcF5YGvAN8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718100630; c=relaxed/simple;
+	bh=v3z+yl0/8RG/qR+fpQ53KEXYcUF0MZT14FPj2D9chLI=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=hEPqQxiq+zWuucdbq57M/7QseZIgvfT2RMX838sFBc7zsfl0gTNwE7DtHsI5r2M32WrVBZTVMDR/LfRfS7SPGhuC8bySvF8395XdACKbf8uAxdNDmU+9EyQST9c6p8Df3G5VWiOmwChlmwnIpOWGNZuomD2fgzXPpMSbu48cZv0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=qTC4hI/i; arc=fail smtp.client-ip=40.92.107.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZkPaSjM0gVMUIu8jcO6qMWjps6mvvm2TcrqYXKAi5FBEhHL9doHdIxEmkJ/Op5evsURCTQufabJ9P0q9l3WZjdlEcGaHIgjz+NwIzCqfDc/I5ZzYJ6o9/cTyIOl1TSlflEtOLsh3Gn7/C2TgDJjmRyUM/QT+v3C3KfcqBX+kzIObUgWf0UFZgdAt62PzaJxszy7NjgXVGzHK064zQ7HVQOe2Cy1r/RZXNHiFh3XdTUODqPfmT0tzZdI5o1HcWoq34Drn0HzBWB14wKlqSmxQ0KpROwzPVzLfOagtKLZj6Q2Px0yeGE2XTtRhY4HH0OnoE4jQ7Mch/xWhZhkTlXQKXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MlTC0MmEqUPF1Xw7+pgYaDiwDi/HOhKbMMZyttZyx7Y=;
+ b=gIc3Xf0sEUlUKACgqezcKQha7YtIPV+WrqWYuOgXYo2Ko7duJho5l4ocBnzZlqjbg55pT5cxpOArA7yX8dayIbFUyfAP4SjGfG5K2LVFKQGBL8jzBGMSgODPROCwf5wMrhfTb6KU7lQy8hYriAPlvD18j/RnDHEXa/STqs/HPDcyAhF3N+PfsggRX3oCZmCpj8c+MyJxq63B7FbfsqamuU6RuXV9bE1Qjz+qeIsMeipywkI23QgoVrm+2nrjgSGI7HS5eTnG9sgsipAvfC+Rq+/kpYxGSpKmzOvzNfR9gV8PbQoLwipGhIWcKKipak5vOdNNuJxMqppt9PkEUaz0eQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MlTC0MmEqUPF1Xw7+pgYaDiwDi/HOhKbMMZyttZyx7Y=;
+ b=qTC4hI/imiXwyZTOu9tqDmlHY3RL1QNi5MLfWWWGWfFZM4oRkukjvSh4ty63/PUnRMTKUTanAYb2o9/IJKOFPaQTmAyoU3iMFx1LnXvYaOmiwnbZvmeKJZXMOMIUjyYPwXcDE5e7nxdbyniyt4yw8kJ1oeoNqz18Vu28vVTVLJnWcuMws0emcxuhc0+xGEVA0NTrJtcmHugu70B0Z8d8VrcoLvtw9/qT/cocXVifu5VOua5ztF8vIWcs3+MxPcQxZfS50dJwHy9xkrLTs2nvmw4cP1X66Oe88dSXkJ9T0aHtI2VNrf0Y0eHS8KNGmtlMwE3jYj5B/lt9aFSWE1cAKA==
+Received: from SEYPR04MB6482.apcprd04.prod.outlook.com (2603:1096:101:be::7)
+ by TY0PR04MB6255.apcprd04.prod.outlook.com (2603:1096:400:328::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Tue, 11 Jun
+ 2024 10:10:23 +0000
+Received: from SEYPR04MB6482.apcprd04.prod.outlook.com
+ ([fe80::ca2b:8a48:a7ab:60e5]) by SEYPR04MB6482.apcprd04.prod.outlook.com
+ ([fe80::ca2b:8a48:a7ab:60e5%5]) with mapi id 15.20.7633.036; Tue, 11 Jun 2024
+ 10:10:17 +0000
+From: Noah Wang <noahwang.wang@outlook.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	linux@roeck-us.net,
+	conor+dt@kernel.org,
+	jdelvare@suse.com
+Cc: corbet@lwn.net,
+	Delphine_CC_Chiu@Wiwynn.com,
+	peteryin.openbmc@gmail.com,
+	javier.carrasco.cruz@gmail.com,
+	patrick.rudolph@9elements.com,
+	bhelgaas@google.com,
+	lukas@wunner.de,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: i2c: testunit: use proper reST
-Date: Tue, 11 Jun 2024 11:50:31 +0200
-Message-ID: <20240611095108.10639-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
+	Noah Wang <noahwang.wang@outlook.com>
+Subject: [PATCH v2 0/4] hwmon: Add support for MPS mp2993,mp9941 chip
+Date: Tue, 11 Jun 2024 18:09:59 +0800
+Message-ID:
+ <SEYPR04MB6482721F71C0527767A149DEFAC72@SEYPR04MB6482.apcprd04.prod.outlook.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN: [jcbAmZ4/zojxLzvi+3QccIyef+OQScRm]
+X-ClientProxiedBy: SG2PR06CA0234.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::18) To SEYPR04MB6482.apcprd04.prod.outlook.com
+ (2603:1096:101:be::7)
+X-Microsoft-Original-Message-ID:
+ <20240611101000.75593-1-noahwang.wang@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEYPR04MB6482:EE_|TY0PR04MB6255:EE_
+X-MS-Office365-Filtering-Correlation-Id: 567e8d97-381b-4fc3-21b0-08dc89feb128
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|461199019|440099019|3412199016|1710799017;
+X-Microsoft-Antispam-Message-Info:
+	3ZOxf9RFatiexFt+A7dZ4H6O3PFOm6aQtJM9iiLq9R/NoXKT46epW+KrCy7Re1zANK36dby5w7rRTAr7y4x5dLN8pO6vPY92NP474dN1/bjnOcpic7wA9i9oFKAgWKNGwyw97pw8S473d9Q7L3TCTG3N9Rgu2wE34yFN/+lRuMHPHh7E9mr+DOcIB5Wj/lgkDqeCr/TqgGC/yTDBJGG2eIF4/XQeF4bBLB9JGC2v40FXfQ+4+rgGdTc2McBXaCUHqRQzwcBHBgiv9rfA5IZqotAP/4E5UYGWN5T/6ebmAhiasSh0CsTb60f3bZ+7u7RdydtijPsZbKZghAxHyA3paNbDVBO1ThuA/yNLb5PcoJn7lk3YOjViA+u8salko7wA6Pm14cf7iBu2VqHBqqecmsgyr4T4MdpeLPRiEdpuoklzKKZ+DuhW3XDOTsA1l+AHEDxzLJcUqcFPlJeTanjaN/1lEr5picdbx7zagZLmGCToKnpCeaFhP4fK7SK529W5tqs3y8b3H1YJyR/qoBbrMzkGKO4NJ8UziyJ0ZL4+ykA2bWL/cL+if84AwdmDu7EGyH+oYuvwvQLhTEWoJd1Y0fcrD9NqAfwazM8lsluYwFomstOrpcXsAnuhQ0sVtL11
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?thNI4O4cn1BtMay3ORTbOyZ3QbidVSWBfRT5SZEH1hGTAZZHxyA8OEx7srjc?=
+ =?us-ascii?Q?pqYjSeEMcHUymI4lXKb6P37D8fS7+h76/YEfBZnRGFX/Je2rUqMoXH2+o420?=
+ =?us-ascii?Q?SswD/8Yg71dtPPU/EzCzDOjW2qqkrb8zcvzN4l5JDBYMuAq2eu7P5qo1j8Zq?=
+ =?us-ascii?Q?l89eMSm0vm8Uu398HIsOwUwufuDQehLL4SZIVXA7vqOCRWseqkPvPfF2xtLf?=
+ =?us-ascii?Q?X7jPkPsuEeRDmBQCIKbroXdrHHNBvpPpiC0dHjagOLIjmT1Xy4Cu8eF0zHU+?=
+ =?us-ascii?Q?vUkd2lvTzSgEwyLCZtGtkoJOnJ/76w6xa0lbZiewmhrGnmofYwYNd2XQ6HmZ?=
+ =?us-ascii?Q?23foKKLUO3z3wqLHLTGBqmdFMsAhDNdSQ4lJdTHNkD/8wAXekybGIhgLyeFl?=
+ =?us-ascii?Q?i4DZe0dNmQG1xU+qVm1uUxM++SyNzLlJ807DXI3PSE3qmn+TjCmK7PlRyc2Y?=
+ =?us-ascii?Q?oojMrKkB0gkZryN/e3JzB6aWT0XSB2T3wBYnRYv7vU+FpttNjFXYA406odwx?=
+ =?us-ascii?Q?DIkm99G0XmQJWaQnSTpPKERmpJpdVnEfN5MrLEYpw64Qa2gvHLyCTLSHUlBh?=
+ =?us-ascii?Q?A/miJFF0P2XMBenEtXsgTDs6+QtP04mEoXkzNUSsAvnJRBojeABLQ+dXI4+0?=
+ =?us-ascii?Q?afjwkPLT1boq2+2oGCURzms1xDW3g615t+dwXa8yG7WcmWunWsi8hpJtwt0I?=
+ =?us-ascii?Q?0BFvgpnvsXvtvTFtzb2GGBxSALst+2ms4+ZbMhSoq+Ebv0aT4/ZZj5Jy+YJ1?=
+ =?us-ascii?Q?ugDXbhVXHwZVEQCM7ClqjJVnj9ftJLkzgwkwuqjUgMNDz+X9251g/KwyG0t0?=
+ =?us-ascii?Q?BWaOeNj8HTEWOYxm2tz1gSemOi5fQyzgkZX5Ri3GpY/eDVETgrcwOyGeLccn?=
+ =?us-ascii?Q?8c+3mLIYM+qPqYRFoH5zaKO4jTKMk08v9wXowAP5Qr2H5BToXCubvkd3RNmP?=
+ =?us-ascii?Q?40kmqET3KC7aYQZIXBlkSBCWzWM/QOXZuQdUBxv0JIzwAtogsJSzeK6LtPOV?=
+ =?us-ascii?Q?dkd9MwZTvd158iffFIWObui0fWBN+vTfTpoxQIeGIGd8mf1w7uwyQ7jy8sDy?=
+ =?us-ascii?Q?OhNb2fGJrLHM3J0rRux4f1GTOJGUCDr0zy5PCuESxo/H1i3jLHdX9wcfLdx9?=
+ =?us-ascii?Q?Av2AKSQltK5JbZzjY5lVhfkRk8obd6SIZY60dcktY9XAyEQEBcr5EUWQbRFh?=
+ =?us-ascii?Q?VjJNlnwrB6Z6AzrQuNAT2XfI/OpO4ev3DVql+PEa+AJe9m6DYiyCPlceJkd8?=
+ =?us-ascii?Q?9w6SGuz4Lr/Bb4CuBJ46?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 567e8d97-381b-4fc3-21b0-08dc89feb128
+X-MS-Exchange-CrossTenant-AuthSource: SEYPR04MB6482.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 10:10:17.0722
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR04MB6255
 
-This document is hardly readable when converted to HTML. Mark code
-sections as such and use tables to improve readability a lot. Some
-content has slightly been moved around, but no significant changes were
-made.
+Add mp2993,mp9941 driver in hwmon and add dt-bindings for them.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+v1 -> v2:
+    1. add Krzysztof's Acked-by
+    2. remove useless code in mp2993.c and mp9941.c
 
-This is a preparational patch before adding more features to the
-testunit.
+Noah Wang (4):
+  dt-bindings: hwmon: Add MPS mp2993
+  hwmon: add MP2993 driver
+  dt-bindings: hwmon: Add MPS mp9941
+  hwmon: add MP9941 driver
 
- Documentation/i2c/slave-testunit-backend.rst | 122 +++++++++++++------
- 1 file changed, 82 insertions(+), 40 deletions(-)
+ .../devicetree/bindings/trivial-devices.yaml  |   4 +
+ Documentation/hwmon/index.rst                 |   2 +
+ Documentation/hwmon/mp2993.rst                | 150 +++++++++
+ Documentation/hwmon/mp9941.rst                |  92 +++++
+ MAINTAINERS                                   |  14 +
+ drivers/hwmon/pmbus/Kconfig                   |  18 +
+ drivers/hwmon/pmbus/Makefile                  |   2 +
+ drivers/hwmon/pmbus/mp2993.c                  | 261 ++++++++++++++
+ drivers/hwmon/pmbus/mp9941.c                  | 317 ++++++++++++++++++
+ 9 files changed, 860 insertions(+)
+ create mode 100644 Documentation/hwmon/mp2993.rst
+ create mode 100644 Documentation/hwmon/mp9941.rst
+ create mode 100644 drivers/hwmon/pmbus/mp2993.c
+ create mode 100644 drivers/hwmon/pmbus/mp9941.c
 
-diff --git a/Documentation/i2c/slave-testunit-backend.rst b/Documentation/i2c/slave-testunit-backend.rst
-index ecfc2abec32d..0df60c7c0be4 100644
---- a/Documentation/i2c/slave-testunit-backend.rst
-+++ b/Documentation/i2c/slave-testunit-backend.rst
-@@ -16,9 +16,9 @@ Note that this is a device for testing and debugging. It should not be enabled
- in a production build. And while there is some versioning and we try hard to
- keep backward compatibility, there is no stable ABI guaranteed!
- 
--Instantiating the device is regular. Example for bus 0, address 0x30:
-+Instantiating the device is regular. Example for bus 0, address 0x30::
- 
--# echo "slave-testunit 0x1030" > /sys/bus/i2c/devices/i2c-0/new_device
-+  # echo "slave-testunit 0x1030" > /sys/bus/i2c/devices/i2c-0/new_device
- 
- After that, you will have a write-only device listening. Reads will just return
- an 8-bit version number of the testunit. When writing, the device consists of 4
-@@ -26,14 +26,17 @@ an 8-bit version number of the testunit. When writing, the device consists of 4
- written to start a testcase, i.e. you usually write 4 bytes to the device. The
- registers are:
- 
--0x00 CMD   - which test to trigger
--0x01 DATAL - configuration byte 1 for the test
--0x02 DATAH - configuration byte 2 for the test
--0x03 DELAY - delay in n * 10ms until test is started
-+.. csv-table::
-+  :header: "Offset", "Name", "Description"
- 
--Using 'i2cset' from the i2c-tools package, the generic command looks like:
-+  0x00, CMD, which test to trigger
-+  0x01, DATAL, configuration byte 1 for the test
-+  0x02, DATAH, configuration byte 2 for the test
-+  0x03, DELAY, delay in n * 10ms until test is started
- 
--# i2cset -y <bus_num> <testunit_address> <CMD> <DATAL> <DATAH> <DELAY> i
-+Using 'i2cset' from the i2c-tools package, the generic command looks like::
-+
-+  # i2cset -y <bus_num> <testunit_address> <CMD> <DATAL> <DATAH> <DELAY> i
- 
- DELAY is a generic parameter which will delay the execution of the test in CMD.
- While a command is running (including the delay), new commands will not be
-@@ -45,44 +48,83 @@ result in the transfer not being acknowledged.
- Commands
- --------
- 
--0x00 NOOP (reserved for future use)
-+0x00 NOOP
-+~~~~~~~~~
-+
-+Reserved for future use.
-+
-+0x01 READ_BYTES
-+~~~~~~~~~~~~~~~
-+
-+.. list-table::
-+  :header-rows: 1
-+
-+  * - CMD
-+    - DATAL
-+    - DATAH
-+    - DELAY
-+
-+  * - 0x01
-+    - address to read data from (lower 7 bits, highest bit currently unused)
-+    - number of bytes to read
-+    - n * 10ms
-+
-+Also needs master mode. This is useful to test if your bus master driver is
-+handling multi-master correctly. You can trigger the testunit to read bytes
-+from another device on the bus. If the bus master under test also wants to
-+access the bus at the same time, the bus will be busy. Example to read 128
-+bytes from device 0x50 after 50ms of delay::
-+
-+  # i2cset -y 0 0x30 0x01 0x50 0x80 0x05 i
-+
-+0x02 SMBUS_HOST_NOTIFY
-+~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. list-table::
-+  :header-rows: 1
-+
-+  * - CMD
-+    - DATAL
-+    - DATAH
-+    - DELAY
- 
--0x01 READ_BYTES (also needs master mode)
--   DATAL - address to read data from (lower 7 bits, highest bit currently unused)
--   DATAH - number of bytes to read
-+  * - 0x02
-+    - low byte of the status word to send
-+    - high byte of the status word to send
-+    - n * 10ms
- 
--This is useful to test if your bus master driver is handling multi-master
--correctly. You can trigger the testunit to read bytes from another device on
--the bus. If the bus master under test also wants to access the bus at the same
--time, the bus will be busy. Example to read 128 bytes from device 0x50 after
--50ms of delay:
-+Also needs master mode. This test will send an SMBUS_HOST_NOTIFY message to the
-+host. Note that the status word is currently ignored in the Linux Kernel.
-+Example to send a notification after 10ms::
- 
--# i2cset -y 0 0x30 0x01 0x50 0x80 0x05 i
-+  # i2cset -y 0 0x30 0x02 0x42 0x64 0x01 i
- 
--0x02 SMBUS_HOST_NOTIFY (also needs master mode)
--   DATAL - low byte of the status word to send
--   DATAH - high byte of the status word to send
-+0x03 SMBUS_BLOCK_PROC_CALL
-+~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--This test will send an SMBUS_HOST_NOTIFY message to the host. Note that the
--status word is currently ignored in the Linux Kernel. Example to send a
--notification after 10ms:
-+.. list-table::
-+  :header-rows: 1
- 
--# i2cset -y 0 0x30 0x02 0x42 0x64 0x01 i
-+  * - CMD
-+    - DATAL
-+    - DATAH
-+    - DELAY
- 
--0x03 SMBUS_BLOCK_PROC_CALL (partial command)
--   DATAL - must be '1', i.e. one further byte will be written
--   DATAH - number of bytes to be sent back
--   DELAY - not applicable, partial command!
-+  * - 0x03
-+    - must be '1', i.e. one further byte will be written
-+    - number of bytes to be sent back
-+    - leave out, partial command!
- 
--This test will respond to a block process call as defined by the SMBus
--specification. The one data byte written specifies how many bytes will be sent
--back in the following read transfer. Note that in this read transfer, the
--testunit will prefix the length of the bytes to follow. So, if your host bus
--driver emulates SMBus calls like the majority does, it needs to support the
--I2C_M_RECV_LEN flag of an i2c_msg. This is a good testcase for it. The returned
--data consists of the length first, and then of an array of bytes from length-1
--to 0. Here is an example which emulates i2c_smbus_block_process_call() using
--i2ctransfer (you need i2c-tools v4.2 or later):
-+Partial command. This test will respond to a block process call as defined by
-+the SMBus specification. The one data byte written specifies how many bytes
-+will be sent back in the following read transfer. Note that in this read
-+transfer, the testunit will prefix the length of the bytes to follow. So, if
-+your host bus driver emulates SMBus calls like the majority does, it needs to
-+support the I2C_M_RECV_LEN flag of an i2c_msg. This is a good testcase for it.
-+The returned data consists of the length first, and then of an array of bytes
-+from length-1 to 0. Here is an example which emulates
-+i2c_smbus_block_process_call() using i2ctransfer (you need i2c-tools v4.2 or
-+later)::
- 
--# i2ctransfer -y 0 w3@0x30 0x03 0x01 0x10 r?
--0x10 0x0f 0x0e 0x0d 0x0c 0x0b 0x0a 0x09 0x08 0x07 0x06 0x05 0x04 0x03 0x02 0x01 0x00
-+  # i2ctransfer -y 0 w3@0x30 0x03 0x01 0x10 r?
-+  0x10 0x0f 0x0e 0x0d 0x0c 0x0b 0x0a 0x09 0x08 0x07 0x06 0x05 0x04 0x03 0x02 0x01 0x00
 -- 
-2.43.0
+2.25.1
 
 
