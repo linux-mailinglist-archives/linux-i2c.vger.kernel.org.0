@@ -1,649 +1,274 @@
-Return-Path: <linux-i2c+bounces-3970-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3972-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19CF690389C
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2024 12:16:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 422C1903B02
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2024 13:49:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B724A281A18
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2024 10:16:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E9E41C211B8
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2024 11:49:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A59C17B51D;
-	Tue, 11 Jun 2024 10:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4A417BB27;
+	Tue, 11 Jun 2024 11:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="qNOOfkAV"
+	dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b="aNHQmHki"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2080.outbound.protection.outlook.com [40.92.52.80])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2097.outbound.protection.outlook.com [40.107.22.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4305817B513;
-	Tue, 11 Jun 2024 10:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.52.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B411A17B50D;
+	Tue, 11 Jun 2024 11:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.97
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718100897; cv=fail; b=MtqQrFQmmcn0jid55wH4sBtj/s18116DP/O8sJYhilXs89ZvtWOjd0Sn7XpvQr7x191viiaajVThag3dOhP8YbG4L8ygKNj1ljbVUV1kcEsY2sh8cHVolwBl1sa46Ghi5Xyql6jPOQ4frYeUSwrP7ErAN5iaOPGMl77XEPG4kps=
+	t=1718106279; cv=fail; b=dI4XkHiWVJj8gq628In7gztQhgPQjlvhuvIsrSh1aPUv9utgSFBbG7BEBWEVSy+Uyo7F99mbfylrEILUeAScWC6pYyjgqsSzAqmHwbBTNlGA8i4IeWxcycHzV8VMLuFY6tkx1/0D/+Z7tGYeLlh76kQqGu+KQj26CbAcOVOcq7E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718100897; c=relaxed/simple;
-	bh=eHOVz/2RiWAJTp1O4iHV6eJkIvy0FlBDhPs1Zo/MTeA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uW+HRk1Y1iO/umAf5bvjqQVcKWMuwWOfm8BBBoPbext3hzLVV4gj0FcQAcR6jMNQ1N4vgr9Rh7xBL+x4C0Je2F/JxvNjNb3hUeZ/A6H5dHSJea3bKVpnu73mWQsxnAeFTlZy4Q5xn3Q6/07FNvGym3xI3jG70zFf78PqilbMT/s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=qNOOfkAV; arc=fail smtp.client-ip=40.92.52.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	s=arc-20240116; t=1718106279; c=relaxed/simple;
+	bh=JOZrUrNSD/xeJrxGOtvZknOW3Zx76zJJA7z6aDv1jWo=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=Htq4/33ub0StPkBo2ktzyrZkSN2lcvFXL/pdBHTvn6E/j4A3VNZ27NvoZQMkcWSPJLfPFl21jjUsIQEOTJYssBoZsdyC6rjAhamZkbU6xreF46611wABZGRAwhBq9MmCCbe+000sXnO9sOYKNjZZzzYP6uxHITVuS/NFIshb0ys=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de; spf=pass smtp.mailfrom=cherry.de; dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b=aNHQmHki; arc=fail smtp.client-ip=40.107.22.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cherry.de
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bLYAw5zL9BZ+8i5PSI7XAAlOWojZUl999N4hXWAUMv5aDY9BlFAFw5eFGEUgMaSBurIopf1BOoHvUu70CxizLVjth7IAUBLoeLKPAb5r3PNWIHrA7/63SCNyCAg3H0RKxcosoiwPZMCaUlaZNZOz42wetawhqJwsaZhdYgUtFLcYuBrxO0s9nr2ECIsgbErDdSQliYrAo1jvNCtT+AMLgIix7IHDVmR/gU6Fld3g3c5mdon0jqgsRh9H/PeZgL1VRrp+56WE4h2cU7YzIIdsW3g2AidvVba7hGOYghvQSm1I8vF9EwWGR2s4t3FNCgF8ZTaJ1NB2V6IgEzhdBGh9/Q==
+ b=FIwzp1xBaoLIX9UlPFqcux5zxUdACOrcOLrXKgnoTIr+qV7PpxVFPDSE3sFQHbP3JySePYD0JispBbnVKrpBRuhfr8zkXs9lxHGRAOgV3HEZHYkM132jnPsGLR7xuITjAMgo3WLzpFX/x2rd0axHRfXaj5DwN1DE9e7nDe9x9qM2ReHsnKQvdtSd8CMZ74ZhpJ05AOE85k5AAicXy1MdVSJJ5OUckkTQNdrKnDN7MIgeToNlUYWeld3Ad3dtkFQnujJQXxy2VW2qDy+B/yt7ak565cWSf7lYoOEUZDkD2er55dj9MQXkytGYzvjYIpDc/IfmLLftBDdIWb00q1jk5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GDTWhPwFqLtVKUg3P9kCjsCdfZz4YGA4tvsjnY+ngSE=;
- b=Eu9lamLki2FXrF1enWE9THDy9X330eJqTtB6p66FTx3uxn3rxtX+I5HQyCmxPsEqMWkqiSrqC0UB5rXRBl9b7AnwPvtATkexJQDrQQYw7AHNJXFGPZNC6OfXCucUF8YsJ+uPv/Rmm5dx7l36QPUzeS+JpEPqJzlPac6MrvFumpVlkgIb9Hf5/8yQ/eZxeIbBmK+MZ1ylnaRMpiGbM5NOGYh2KAw8QAPebb7/U16vFHqgF9lELd9EoDpV4uCJTId2PJsUZV4AwjiXcXmcFDnB8s78sR+kMb+F5w1+1lc4bFa+ywf4MCp64s4Xqs1bjQOniUl7GeWU2D6KZ+0bQfzFwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ bh=C3l5J7jsz7J2az0lxLN9NeimRvs7dviCrrCG2dI7VC4=;
+ b=ENOIc0VqOC1ewc2B6YNCEWWsAgqAH6+2EK8FmGYYcT2JUBw4LOer7Unh8wOTgXG5stDgpFdgWRr6phw+UPWobNyOX4wXSww/vBUCvOjlkvfV/l5HySpKhhHTmRxyXxnp4iihYdrLXSN5rwQWkskyb3VoPzylU/KRnpRjIlu54gHunjwgXCiFu5vpLPOD6KfUxHSdyjmoOgTwlgRjP8BdhnQOmHdyraeD7kUJFRVxiVR+J8CXNofZxZ71lxs1BdHQ6v+8v78DxPrbU63iVSyYtJrNhWoBE4vlWMCyh7LxjEgDsIRICLHBkqC/4O6JdSS6ueqB5BGc9ZBf/FzJjJ08ow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
+ dkim=pass header.d=cherry.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cherry.de;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GDTWhPwFqLtVKUg3P9kCjsCdfZz4YGA4tvsjnY+ngSE=;
- b=qNOOfkAVQN2jdKWq19ln2f0yRQV+04TC/16gotfm9YIy37hOO5W0vwRGEv+L8D9VWfjwU0p6DTP54mkrQKGYFPw87LskXBl435wewuVwwazGcGv6Q+KfUKw6/MI/3d45V8Sv8GatwY6+4xbONa7PpAs6OoeCDtLblL/H62e1Fq4DXO55KtE79Qh7bWDrYpWCfwVq7nCaIwd7dy65UI7QDn2CkCnGF0FsT3+JIjT7t8Pn97/De95xr2dDG+xASjKKiSGxhRzTftYd0KPb/iuiHHCYW7qGyAqE+RbzUYtNGrHLHLVdpHtqEQs5kEgb/z6WxKoiVM/OhBZMBIaHeHjvkg==
-Received: from SEYPR04MB6482.apcprd04.prod.outlook.com (2603:1096:101:be::7)
- by TYZPR04MB8231.apcprd04.prod.outlook.com (2603:1096:405:bc::12) with
+ bh=C3l5J7jsz7J2az0lxLN9NeimRvs7dviCrrCG2dI7VC4=;
+ b=aNHQmHki0p4SoSH/lkz0ZnG+0hD2WK4VeisYhDYHWQ6aqmgW31oZsJYWChUBn/cHb65hnTbeUH9cKN9sjKFHcKPdP0Yrv74pkYpgFnb14ffaH5U6jaNhdnE1qpH8fbtlqU+gk8i1tF989AnR8Bf21q6O5e05RZldsIe5+lEbBkM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cherry.de;
+Received: from VE1PR04MB6382.eurprd04.prod.outlook.com (2603:10a6:803:122::31)
+ by GVXPR04MB10301.eurprd04.prod.outlook.com (2603:10a6:150:1dd::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Tue, 11 Jun
- 2024 10:14:49 +0000
-Received: from SEYPR04MB6482.apcprd04.prod.outlook.com
- ([fe80::ca2b:8a48:a7ab:60e5]) by SEYPR04MB6482.apcprd04.prod.outlook.com
- ([fe80::ca2b:8a48:a7ab:60e5%5]) with mapi id 15.20.7633.036; Tue, 11 Jun 2024
- 10:14:43 +0000
-From: Noah Wang <noahwang.wang@outlook.com>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	linux@roeck-us.net,
-	conor+dt@kernel.org,
-	jdelvare@suse.com
-Cc: corbet@lwn.net,
-	Delphine_CC_Chiu@Wiwynn.com,
-	peteryin.openbmc@gmail.com,
-	javier.carrasco.cruz@gmail.com,
-	patrick.rudolph@9elements.com,
-	bhelgaas@google.com,
-	lukas@wunner.de,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Noah Wang <noahwang.wang@outlook.com>
-Subject: [PATCH v2 4/4] hwmon: add MP9941 driver
-Date: Tue, 11 Jun 2024 18:14:17 +0800
-Message-ID:
- <SEYPR04MB648294005D55F70736B519F6FAC72@SEYPR04MB6482.apcprd04.prod.outlook.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240611101417.76911-1-noahwang.wang@outlook.com>
-References: <SEYPR04MB6482721F71C0527767A149DEFAC72@SEYPR04MB6482.apcprd04.prod.outlook.com>
- <20240611101417.76911-1-noahwang.wang@outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN: [ZiHVcGdksCcvhaPkaBonr4XN/es5OKvX]
-X-ClientProxiedBy: TYWP286CA0004.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:178::6) To SEYPR04MB6482.apcprd04.prod.outlook.com
- (2603:1096:101:be::7)
-X-Microsoft-Original-Message-ID:
- <20240611101417.76911-4-noahwang.wang@outlook.com>
+ 2024 11:44:27 +0000
+Received: from VE1PR04MB6382.eurprd04.prod.outlook.com
+ ([fe80::2a24:328:711:5cd6]) by VE1PR04MB6382.eurprd04.prod.outlook.com
+ ([fe80::2a24:328:711:5cd6%5]) with mapi id 15.20.7633.036; Tue, 11 Jun 2024
+ 11:44:26 +0000
+From: Farouk Bouabid <farouk.bouabid@cherry.de>
+Subject: [PATCH v3 0/7] Add Mule I2C multiplexer support
+Date: Tue, 11 Jun 2024 13:43:51 +0200
+Message-Id: <20240611-dev-mule-i2c-mux-v3-0-08d26a28e001@cherry.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHc4aGYC/23NQQ6DIBAF0KsY1sUAitauvEfjAmEoJKU0YInGe
+ PeiadJFm9nM/8m8WVGEYCGiS7GiAMlG6x85VKcCSSMeN8BW5YwYYTXJgxUk7F733DOZlxl3lFR
+ SAWkJoyifPQNoOx/kdcjZ2Dj5sBwfEt3bD8aaXyxRTDCpuajPTDdaj/1kwI/BO4HjEidwsZTeo
+ R1O7Itx8g9jGRMdlR2vdcNV20sDISylAjRs2/YG8iWuIv0AAAA=
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>, 
+ Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Farouk Bouabid <farouk.bouabid@cherry.de>, 
+ Quentin Schulz <quentin.schulz@cherry.de>, Heiko Stuebner <heiko@sntech.de>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: VI1PR0902CA0050.eurprd09.prod.outlook.com
+ (2603:10a6:802:1::39) To VE1PR04MB6382.eurprd04.prod.outlook.com
+ (2603:10a6:803:122::31)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEYPR04MB6482:EE_|TYZPR04MB8231:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b0ea650-99ec-4bf8-cfb6-08dc89ff5016
-X-MS-Exchange-SLBlob-MailProps:
-	qdrM8TqeFBsqf8w0KrBP0QUs/UKQ/ZGbmVPmOtBRCfKhuEQ0ylKv6psW01r8gzWloRvSSlHvprXszoYvrTcNn/JARAIcHg4/5w2NHnxmCK7e59kJBfsjOOy1O05uWG3DZ6iDYPN4uMmNNx8Wu8J8QtCCBPkcRaOjCVBgynVS81upfP3/IcMELOfISZ0gMcsqjGQfLixdpEz/5zwVgNqlscd6+/oon5UtbB/Lq0ggCQSZlKWHwszjK9J1djlqVmhNiNR7eWUpjl322NJzUGwaIdQkInshpAIqAvUXVLCUEB77gZzwuywyS2F+kWEYHFOAHoCJEv4SfoBlnxWbqst14Is90EWKCq7GwqnkwOODPQZiJm/uERe6ts5Pd8liV+LyehJl5wNxkq+Qxi9F/EJ0XpqH0sQk/06wdTgn9CyRvPItHGZw7Q4Xv3Ywui+XZxYNVaGj0KYKZSdmxe6yNcRlSc7wtRQkvtUIm5NwcBS4nakaVgoXtTBFAIV1/HrJZ4tCqdFXUi6MOLjDq5WGdVwVICF9NohnJx/+fGgVv/ZvmeGNkMKnNphllj5spLD6/zENXCIt+IvWE8puIakQ83xIBwyCvdnRw7ZlRwnIEbsDxhOE5JaPEEC1lvCg/dVNK/mdKl62rB5hmsWz7uJnYBY0+5HWGQw9vm4s9UKapBf5RsC4bu75Si8EbxEtwxKpqRgaCTm+XKVx/aseOdV6VUKUf1e/lfQcduLPSGrlRN8VHA+2+UCjKNwrHm1Eis7tDuY4wT7EtcXlcz4VuNfeOki6B53U/LK725CW
+X-MS-TrafficTypeDiagnostic: VE1PR04MB6382:EE_|GVXPR04MB10301:EE_
+X-MS-Office365-Filtering-Correlation-Id: d76bb88e-df4c-44d6-d9ca-08dc8a0bd800
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199019|1602099003|3412199016|440099019|1710799017;
+	BCL:0;ARA:13230031|52116005|1800799015|376005|7416005|366007|38350700005;
 X-Microsoft-Antispam-Message-Info:
-	TlQE/MSffsKaWS3QuEu1kc7fTXoMBKRizSuxEyyBx2zgXrEZpHBG082f+W8tGcgwOiTTt44R2knlkebXCOv9FiIkaMbkyWMbN4a+hnO3FddWgNyolGokQoaY3i1zYSHMJV2Ppe4VrealWQmZfgY5onrF4I7Ra1ODGscDngddqJ4mYGwxvAAaGpj4Qm9hB+3zQ74HCJNoGqhDOQn7j4d9vx9fNUpY8GqQMjIgGvSwuWP72M7qWO2sjcB38YLD/EKz/s4BIIGVL7VzQ8q49L0bzvXotT1aX6eeIbsP/gsLex5fmvbi6L97mjYudmrRYtVOMhs71xzXG+SgodV5CMYgyBOPcDggt22sWRfinEky+/woANrPN/BBFnBf4tRKchmYp8EaI1prO1oHzvac7N8phHOuLGlxP0F9XRrPBkI+zRIy09da8BwkUXubQND6+Vu2xdhdxz2lReTykyQMT5fTSaGaC3t8ElXWwu8g+a0v0XXTd7iGtEp3KBBO9fI2FRR91JbvS6ZyJamb4i6VAQ9cxYNYCDH4C7hE9KZ8typUwmleWmF8WXECFolQOyrMfiXNu+TpZLvFvjatx2YUFwrIew/ZHKjkMsdf76Ygyym/DBpn7EYKU9/XSLS2wghxCijAAuSzRs1p9zuD/t8V5pay0phPatp00m4JqyA06hMOYncxUQm2xN1iEl8REWZnoWmv
+	=?utf-8?B?QzE0eUY5SjdLQ1lSbitwekVUR0FkVENCTExpNXJMWkxxV3VLeTNVczhLYk9B?=
+ =?utf-8?B?aCs3ZTJET25jRjIvbFdVNVV1ejB0Yllnb2RKN2NBM2h1SnFackpzZHpmam9Q?=
+ =?utf-8?B?OE80TXEyMzUrdXhHd1pGd0xkQWk0OTZNdkNJT1d3NjNGd21DWjF5RXY3bUNQ?=
+ =?utf-8?B?V1pKRDd1amFNaHVRRS9YVkl0a2YyV3ZPMWh3OWNSSkdyRS82TGtvcVNtRkxZ?=
+ =?utf-8?B?RWhJcFVOOCswdkE2ekFhOSs1NVNHZ1dXcjg4U1hIQnpKOEtjZnhlOVptVkFP?=
+ =?utf-8?B?WDQvdjBlQnJsNUZkUldwRDFwck0wOVdrcFRNUmNvM0FpWWhwOUk2OHpXamVI?=
+ =?utf-8?B?cnI0aVdjaHdXYlJlNzBIeklDWkQxYUE0c0FVeVJYZmQ4RnJ3T3paQWlYeXJL?=
+ =?utf-8?B?a0VWc2p5UmIzbDZ1My9NcE1QY3J5b3ViK2JGcmt5b0NmcVpuZHJpbEpGTlE5?=
+ =?utf-8?B?aEFOcFJQQk83eWdjWE9nMGpRWkJmTW45RlRVbEhsdUE3aldGbG9iR0lYaGJU?=
+ =?utf-8?B?WUxVbElIL09Iak9ubmZmRktBS2ROR2FuWittM1RCS1AzeGNCOHF6QTJ1cGJK?=
+ =?utf-8?B?UURGNmhzd2VFQ0w5Q1U4N2s2VW05UW5Td0hkSUJhWXgwNmthc2NmSVhQWEVM?=
+ =?utf-8?B?OFQ1bXEyY3NISUU0QThnWUkxR25GSmNhWVhVMnJ4cFBUVUZKMGxGbzJGSWNj?=
+ =?utf-8?B?Tmx3MStpMVR3TW81Yi9XVEFwU0FtdUQyK2U2ay8rTktTRkJSNjJxM0NrcmNY?=
+ =?utf-8?B?R0orV3h1L0E1M2UxbTNxR3pSblIzT2ZpT3JFNGtvbTNXeEdZbUFoZUVBWjhF?=
+ =?utf-8?B?RjdVc0crTXdDOXFEaWh0NlJ0RWhqTjdxU1U3c3ZwVEZOWmNWK2Q0Qkdqb1hp?=
+ =?utf-8?B?MHhncFF4a0xNVmhmN1dhYWJYODlpU0hZMXNBMi9XV0prczQrMUlaY3ViQ1Nv?=
+ =?utf-8?B?L2U4TjdCQlk2WUk3UkQ0eXFoQVE2OGdDRjErOHRudTl3bGhkejBRbm9mYXBI?=
+ =?utf-8?B?bXRNN01oakJ5amRoUU84M0NHVFczSVN1R2NRUGxqcmluZjNWMGhEQVptOUhr?=
+ =?utf-8?B?cWxrOGl0Ykx4ZlBoQVlxcmRlVVpwcDFaMDB2d2dPUC9mUjR3akdHUDFqUG5h?=
+ =?utf-8?B?OGx3ekZ3NVdnNFFKNG9obDJoREJUaDRrdHdsaGxhWG0ybjgwZCtjOUZOVEI5?=
+ =?utf-8?B?QmF6K0k4SzUwWW5ObG11RE45clJBRkV2ZlkrQzBuNEFVci9PM0k2TTcvSStP?=
+ =?utf-8?B?OXdvR1htMWEwMk4ySHFlWDRhamlPc0hKemxqamRZK1ZoQi9oV3QrOVQ4UUhJ?=
+ =?utf-8?B?RGxNRnJNSVB0dU5TOFhpOVdYWTJrcXhUa3g4NGNlWmMwTHN2S2l4MEFsNWJJ?=
+ =?utf-8?B?MUlXTzY1SE95dFh6dVg0dHByZzhvN0dGMDluNUpuMHZqZThWZUxIQVljRC9D?=
+ =?utf-8?B?V2pEWUpML0FpSGo4NU5mV0hMYitkVXNHSlkvdFVQRzI2RHNabnFPby9EMVBs?=
+ =?utf-8?B?RzJ6cjZVSlhCdy9mWGwvamY0VHBqZWo4TUdqYU5ETG9HNXp3Nk9SMmRUK1dC?=
+ =?utf-8?B?aXFuR0NMNzI0dXpPQ1B6WlByaC81Q1Mwa21EOW01UlhzWmVMU1NEQTZuN1lG?=
+ =?utf-8?B?djhHOVc5WTlPVnhYS1lmRjE1VUdqaGZNcGZvbFFNbE8rdlZnbm5XOTg1M0RJ?=
+ =?utf-8?B?WEcrN3BJamhuaEFVL24yYUFUWDg3MVRuaVRFMXVZTkV0V0NwdmxSVUYwQ0ps?=
+ =?utf-8?B?UDhxamRMa0tXZWd1ckE3UEl0MGdEMVZ4a2VmeU1GaU5qeXNQVWpDYkNxQWx5?=
+ =?utf-8?Q?90GYf7OLy+mI63LhbyosHh0GVwZeKk/9P7kIc=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6382.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(52116005)(1800799015)(376005)(7416005)(366007)(38350700005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?B+8y5DFm9ZtnfpylmFDBwQOi18rjY6SkesAIiLnEMytb2Nc7QAqhDV9Y0yOz?=
- =?us-ascii?Q?ix1lqZ1omM3LdwkIT1l22c1Rl9TUm9Os1Vc4D7tagaBy+s9mEJU8pS/1LH2D?=
- =?us-ascii?Q?xKVyBhwBIom6ns7fn18RK6n82yq9f8AYsBjQFufaAsvxFNVGXGzJMuFCKXiy?=
- =?us-ascii?Q?8KHpY0X9wgFUffZQFcwU9AhP2FdSEaKiA3B9I1c5YEX6hx776kV0RkMpuWQf?=
- =?us-ascii?Q?n8JC/+liduIO3brg58+kbdnnzovZVUJzXRcPqNrwkGfMjOrOQ5Ef+vDWGa79?=
- =?us-ascii?Q?inKITC2IMltFML8po4gH1m80lL9TyZDWE0GmmGMg0ZZvjQhuXcEA7sZ3d99K?=
- =?us-ascii?Q?trC40NrJjVY49Sj4ZDYk3Zztx+8eiNkMcLrI4pRyYIzBVEQeQghnPF+/jAV+?=
- =?us-ascii?Q?4br7CLPBnMHuqEYYLN+kIBDWpiLX4hh92zwDg80EQEzgl45pMX1q3TBdtsud?=
- =?us-ascii?Q?6hx+TE/nnTciw/9v2OpfviubVCsyxEBxMef8ULuN7+q/hKeiCLFUWz60RRzp?=
- =?us-ascii?Q?hAv7QYTomCspHjQAjZpDG6pzDJn6nfJDZdrxaaPgh3qyNu0t1LhuREn2VjnV?=
- =?us-ascii?Q?6UuqlITo2Vlv6CfAGZgAhRwoKM7zpaR36J8/Z56IJKvnTV+c0w1mD2FnV4f/?=
- =?us-ascii?Q?FcVd+NJjeg24RIAg0PSUDTI5mJAJdKTzZY4xAcsQ21RIKu7l+nWbTvye1fe7?=
- =?us-ascii?Q?mM39ENom2+9CwbveRMP+7RNmYLdf0rwfJe/8Ytm4y1hjS8crVK89iXVykvqb?=
- =?us-ascii?Q?lxHHLZfSEkc3FzOdT/2PUVxMZoOqgbnbVvkI2YUoNK+umgnW5dwhGSDZ2sOb?=
- =?us-ascii?Q?B6oE+MezRisEjzhKe1zrQUCX32ku5bfOVRkK75sM68+g5md0OiStrcDmcftq?=
- =?us-ascii?Q?87/XaIlmXO1I5qz/pY8Ez0SEM/2agjOFNzU50ZGkyoxUk5qqFnA13J72CeWR?=
- =?us-ascii?Q?cmxAUHjKcSdVj8ihTaMMn/Q8MfpWmXvgnBsjn1PvCQoEo3wFUAc1rLKFLm1k?=
- =?us-ascii?Q?OPC+uJTXoQDI6aXOmrlWBNXdE2Tjs1w4Qjv23P3DXDbUpEhvdAm+w9R/vJD+?=
- =?us-ascii?Q?eajVWvu9VvcHSA9NKHvUzq/4kzqV5zrKUgwS4+YrDmHEKqx9ZIjWxIr3N/rn?=
- =?us-ascii?Q?sFP0VAAA0gufQB+wdQ/Mp+wFznhjpXKoH83pDAG1HDaY/YX+CwQ79tT6laGu?=
- =?us-ascii?Q?kvu9JOCzsv7voldCtO/EF4ksyOf6hclmjibLEvDVssBG9FM8pXMe6+XsNyPJ?=
- =?us-ascii?Q?uNm+yo5zjA27PFVrG0nI?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b0ea650-99ec-4bf8-cfb6-08dc89ff5016
-X-MS-Exchange-CrossTenant-AuthSource: SEYPR04MB6482.apcprd04.prod.outlook.com
+	=?utf-8?B?NFk4MkVlZDA2K3BvNUtVRVRQTXArMHNINzhjWml1cnFLZ1VBOXEzRHpnTmNC?=
+ =?utf-8?B?c1c0MmVDRzhOL0E2UzRCMGozSmtoVm4yeVlqdXlha3dlVUZiZ1ltNitLTC9Z?=
+ =?utf-8?B?MTRKbkdQakRMQ1RWTit0cUxlZlIzRVh3Uk9GMFc4SFJkS2twMVZjY0hQRnds?=
+ =?utf-8?B?Z0srWkx0L0xGYUYxempQbWdFTnkrRDZPdkNUVG9zMXdsR0FCcWRvVGtyUUgv?=
+ =?utf-8?B?QUJjb09SeXpsUUhNNXViK2ZpK0tuT0c2cW02NElXUU5WU0JKRGxTTmhIcXpQ?=
+ =?utf-8?B?YUpmM1VUQVdGcUlxTk56UG54alJ3Z0l2WTNRbElHVmsxQjh5cis3VWxhRHdJ?=
+ =?utf-8?B?NmxsclpKTVQ2M0pSNU1zbW9MWFRtK2hGSm9JcUhPOWpEa0ZNSEZTc1hINFl3?=
+ =?utf-8?B?alZaZG1GMmt3MGdPTEkzRXJhbVdacXlmOHpSeVVvU1NSMXRiZ3cwVUVLUXU3?=
+ =?utf-8?B?ZmUxbiswU1NKU2kva0NOdVdhUnI5SjhuWXZxbmcyWmlwZlA4RGlscExsbWoy?=
+ =?utf-8?B?WGp3aXhEeWI4eW52Z2M2MCtxOHdhenVDZFlBVys0YkN4cUNNcmx4ZkdtYXpw?=
+ =?utf-8?B?VFNkb2Z6blpQRTFGRDBxbUtPdXJaSFIwTGhZL1p4NlYvZTlNbXVNK2NBK0hT?=
+ =?utf-8?B?M01rdHBwTkZseEhkdnE5bDkyNElhVnZoU1E2b2Q5cVlkajZneUNwNXV3bFVH?=
+ =?utf-8?B?MXM4enJvSXhZcXRyTisyaFlvZEZPR09NYXNXV2hUQi9QNXpGcHVBTVJpTDYv?=
+ =?utf-8?B?d3dSZmFDSkh6cGl6bis2L2NrUWJJUDFMbkdRMHpjWWdKUS9Sa1ZiQTYwTE84?=
+ =?utf-8?B?L0V5UU9Qa0pjalF5b2U3N2ZmejAxd0JpWElYYzh0WVExOUdIb2JEYUdDQTcx?=
+ =?utf-8?B?SWZqZ1gvNTBhdkk4QlJwNk9LSGxSNDNHaDZVTGRFTS9YSXUxeTBnNGs4d3d3?=
+ =?utf-8?B?OWM0TG5LemRMcWQ3S2FtajBpOExKSVdhN0NiaDJNVjBRd3BYMFk5cVlzUU9V?=
+ =?utf-8?B?Q1hvS200b3FNWkNtem10aCtEVzBPYkoyQysweFlwN2wxcllRYXJrN3hYeWd6?=
+ =?utf-8?B?K1FkSDM3bUoxekVXeUI4clZsVlNBL0UyQzBBUWdBSUhiSTBuMERXMnpOVmor?=
+ =?utf-8?B?aVlkR2FPL2lPTlA4RzAzTzV4MERubmdYcTY3YzNscHVaci9NMXBlRmV1Yllk?=
+ =?utf-8?B?NkVSVWxlU0lTOUNya3oyK2FzRkJ0SWNmMFowTW5pdWRVdVFJdFpWcXdmdXFU?=
+ =?utf-8?B?bEJGMzA3MEZkMy9sR0pNdHdVay9qaVlRTnlpSHZENVJwelJySVE0RFY2T1hm?=
+ =?utf-8?B?anZhTjJjRk40S1drUzVlOEh2aTdjKzdhcTh2V1M5c0htcWg3USs3cHFmOC9W?=
+ =?utf-8?B?clZIKzdzRmltcjhtVTRlbzloc01Za3FrTFlTMFZ5ODUxZEsrVG5xTEtjb3J5?=
+ =?utf-8?B?ZlVHZ0cvT1I3Vk5vT201bnBsVEdLYVNqRmxiaUNDQ0h2c3FodkUzdzlVWlVK?=
+ =?utf-8?B?OG1YY3dzWTFpMnBRMFViZEx3cVAwa1Q1VU9lbDh3N0g2aHNNd1NDc2dmRWdP?=
+ =?utf-8?B?VDBmeURsYTdGQlRZOWNmMzI2Smt1L0pJdUphdlhYTzZUNWZYaHU0UW9jdFJJ?=
+ =?utf-8?B?ckJtUE1mbFpRT201YnE5ODVWQmcyWi9vNThlMmNicHBsTW9zOW5EYUtnTUN0?=
+ =?utf-8?B?NFdWU2hZS3VZcWc3VllmTHN1OXYxajFSQlljMmRHMjlrcUlDUlI2ZGpvM1ZW?=
+ =?utf-8?B?ZnVwNFMxdXVKaG1neTVvN2xSaGRSRWNMN0R3NytLenUxc1VTaVdXWXhxbG1o?=
+ =?utf-8?B?R2krNkh5YVlCZ1RHNmR1M3JnZ0ppOUxqYmxuaTRmSmNTeGx6SjhHNHBjK3RH?=
+ =?utf-8?B?RkxERk00ODNLNWJTL2ZhdE9GTkJTQ3E1bW9BYjNIR1gzSm9ad3JNMGdBM01X?=
+ =?utf-8?B?UlRDemlJWlQ3MHRNc0lxQnJuVWRBSXFhVEdGc01lc0xnZHdCd2lnZ1hzRTVU?=
+ =?utf-8?B?K21NWmRuaHJYTmxJN2UyU3JRVHRlQm93T2x5TzNCYlp6UVdNeVF3NTVycXg0?=
+ =?utf-8?B?dUt5Y0NmdjBJN1hoSmIxcGFScmRIeXpoY1RIQjB0VnlRNGg5c1ZMRDBaS2N6?=
+ =?utf-8?B?RzlGb0FJbmRJRm8rRmpXR1g4UTJpUmo4SG4wZ3VRYmR1ZVgzeUFGeWpKUlRO?=
+ =?utf-8?B?dEE9PQ==?=
+X-OriginatorOrg: cherry.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: d76bb88e-df4c-44d6-d9ca-08dc8a0bd800
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6382.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 10:14:43.6447
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2024 11:44:26.4214
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR04MB8231
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QTBXPe6yDMJhYdd54Z8KrWpa/1lG6pQGFYWPyHcf1a9colxdfryYU8J20jhlLJD4SiD+jsPE2ynCUeMg0fVZ5WVUAI8o9Hh7p5G+JCBnenY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10301
 
-Add support for MPS step-down converter mp9941. This driver exposes
-telemetry and limit value readings and writtings.
+Mule is an mcu that emulates a set of I2C devices which are reachable
+through an I2C-mux.
 
-Signed-off-by: Noah Wang <noahwang.wang@outlook.com>
+The emulated devices share a single I2C address with the mux itself
+where the requested register is what determines which logic is executed
+(muxing logic or device logic):
+
+1- The devices on the mux can be selected (muxing functionality) by
+writing the appropriate device number to an I2C config register (0xff)
+that is not used by any device logic.
+
+2- Any access to a register other than the config register will be
+handled by the previously selected device.
+
+      +-------------------------------------------------------+
+      |  Mule                                                 |
+      |        +---------------+                              |
+    ----+-(1)->|Config register|-----+                        |
+      | |      +---------------+     |                        |
+      | |                            V_                       |
+      | |                            |  \          +--------+ |
+      | |                            |   \-------->| dev #0 | |
+      | |                            |   |         +--------+ |
+      | |                            | M |-------->| dev #1 | |
+      | +-----------(2)------------->| U |         +--------+ |
+      |                              | X |-------->| dev #2 | |
+      |                              |   |         +--------+ |
+      |                              |   /-------->| dev #3 | |
+      |                              |__/          +--------+ |
+      +-------------------------------------------------------+
+
+The current I2C-mux implementation does not allow the mux to use the
+I2C address of a child device. As a workaround, A new I2C-adapter quirk is
+introduced to skip the check for conflict between a child device and the
+mux core I2C address when adding the child device.
+
+This patch-series adds support for this multiplexer. Mule is integrated
+as part of rk3399-puma, px30-ringneck, rk3588-tiger and rk3588-jaguar
+boards.
+
+Signed-off-by: Farouk Bouabid <farouk.bouabid@cherry.de>
+
+Changes in v3:
+- Change "i2c" in comments/commit-logs to "I2C"
+- Fix long line-length
+- Warn when "share_addr_with_children" is set and the Mux is not an I2C device
+- Fix/stop propagating "I2C_AQ_SKIP_ADDR_CHECK" flag if "share_addr_with_children"
+  is not set.
+- Fix "old_fw" variable is used to indicate the reversed meaning.
+
+- Link to v2: https://lore.kernel.org/r/20240506-dev-mule-i2c-mux-v2-0-a91c954f65d7@cherry.de
+
+Changes in v2:
+- Add i2c-adapter quirks to skip checking for conflict between the mux core
+  and a child device address.
+- Rename dt-binding to "tsd,mule-i2c-mux.yaml"
+- Add Mule description to kconfig
+- Fix indentation
+- Move device table after probe
+
+- Link to v1: https://lore.kernel.org/r/20240426-dev-mule-i2c-mux-v1-0-045a482f6ffb@theobroma-systems.com
+
 ---
-V1 -> V2:
-    remove useless code in mp9941_set_vout_format(),
-    mp9941_identify_iin_scale() and mp9941_identify()
+Farouk Bouabid (7):
+      i2c: mux: add the ability to share mux address with child nodes
+      dt-bindings: i2c: mux: mule: add dt-bindings for mule i2c multiplexer
+      i2c: muxes: add support for mule i2c multiplexer
+      arm64: dts: rockchip: add mule i2c mux (0x18) on rk3399-puma
+      arm64: dts: rockchip: add mule i2c mux (0x18) on rk3588-tiger
+      arm64: dts: rockchip: add mule i2c mux (0x18) on px30-ringneck
+      arm64: dts: rockchip: add mule i2c mux (0x18) on rk3588-jaguar
 
- Documentation/hwmon/index.rst  |   1 +
- Documentation/hwmon/mp9941.rst |  92 ++++++++++
- MAINTAINERS                    |   7 +
- drivers/hwmon/pmbus/Kconfig    |   9 +
- drivers/hwmon/pmbus/Makefile   |   1 +
- drivers/hwmon/pmbus/mp9941.c   | 317 +++++++++++++++++++++++++++++++++
- 6 files changed, 427 insertions(+)
- create mode 100644 Documentation/hwmon/mp9941.rst
- create mode 100644 drivers/hwmon/pmbus/mp9941.c
+ .../devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  |  80 +++++++++++
+ arch/arm64/boot/dts/rockchip/px30-ringneck.dtsi    |  20 ++-
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      |  20 ++-
+ arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts     |  19 ++-
+ arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi     |  19 ++-
+ drivers/i2c/i2c-core-base.c                        |   6 +-
+ drivers/i2c/i2c-mux.c                              |  48 ++++++-
+ drivers/i2c/muxes/Kconfig                          |  18 +++
+ drivers/i2c/muxes/Makefile                         |   1 +
+ drivers/i2c/muxes/i2c-mux-mule.c                   | 157 +++++++++++++++++++++
+ include/linux/i2c-mux.h                            |   1 +
+ include/linux/i2c.h                                |   7 +
+ 12 files changed, 384 insertions(+), 12 deletions(-)
+---
+base-commit: 79c1f584335af42ce359ee3ff0f4e9cc324296ed
+change-id: 20240404-dev-mule-i2c-mux-9103cde07021
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 9d9d55b889f2..9ff8149d9a9d 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -169,6 +169,7 @@ Hardware Monitoring Kernel Drivers
-    mp2993
-    mp5023
-    mp5990
-+   mp9941
-    mpq8785
-    nct6683
-    nct6775
-diff --git a/Documentation/hwmon/mp9941.rst b/Documentation/hwmon/mp9941.rst
-new file mode 100644
-index 000000000000..1274fa20e256
---- /dev/null
-+++ b/Documentation/hwmon/mp9941.rst
-@@ -0,0 +1,92 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver mp9941
-+====================
-+
-+Supported chips:
-+
-+  * MPS mp9941
-+
-+    Prefix: 'mp9941'
-+
-+  * Datasheet
-+    https://scnbwymvp-my.sharepoint.com/:f:/g/personal/admin_scnbwy_com/Eth4kX1_J1hMsaASHiOYL4QBHU5a75r-tRfLKbHnJFdKLQ?e=vxj3DF
-+
-+Author:
-+
-+	Noah Wang <noahwang.wang@outlook.com>
-+
-+Description
-+-----------
-+
-+This driver implements support for Monolithic Power Systems, Inc. (MPS)
-+MP9941 digital step-down converter.
-+
-+Device compliant with:
-+
-+- PMBus rev 1.3 interface.
-+
-+The driver exports the following attributes via the 'sysfs' files
-+for input voltage:
-+
-+**in1_input**
-+
-+**in1_label**
-+
-+**in1_crit**
-+
-+**in1_crit_alarm**
-+
-+The driver provides the following attributes for output voltage:
-+
-+**in2_input**
-+
-+**in2_label**
-+
-+**in2_lcrit**
-+
-+**in2_lcrit_alarm**
-+
-+**in2_rated_max**
-+
-+**in2_rated_min**
-+
-+The driver provides the following attributes for input current:
-+
-+**curr1_input**
-+
-+**curr1_label**
-+
-+**curr1_max**
-+
-+**curr1_max_alarm**
-+
-+The driver provides the following attributes for output current:
-+
-+**curr2_input**
-+
-+**curr2_label**
-+
-+The driver provides the following attributes for input power:
-+
-+**power1_input**
-+
-+**power1_label**
-+
-+The driver provides the following attributes for output power:
-+
-+**power2_input**
-+
-+**power2_label**
-+
-+The driver provides the following attributes for temperature:
-+
-+**temp1_input**
-+
-+**temp1_crit**
-+
-+**temp1_crit_alarm**
-+
-+**temp1_max**
-+
-+**temp1_max_alarm**
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4fdd787b1401..14dfbba64a54 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15263,6 +15263,13 @@ S:	Maintained
- F:	Documentation/hwmon/mp2993.rst
- F:	drivers/hwmon/pmbus/mp2993.c
- 
-+MPS MP9941 DRIVER
-+M:	Noah Wang <noahwang.wang@outlook.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/mp9941.rst
-+F:	drivers/hwmon/pmbus/mp9941.c
-+
- MR800 AVERMEDIA USB FM RADIO DRIVER
- M:	Alexey Klimov <klimov.linux@gmail.com>
- L:	linux-media@vger.kernel.org
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index d875d31ce84c..7d32cfc19820 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -380,6 +380,15 @@ config SENSORS_MP5990
- 	  This driver can also be built as a module. If so, the module will
- 	  be called mp5990.
- 
-+config SENSORS_MP9941
-+	tristate "MPS MP9941"
-+	help
-+	  If you say yes here you get hardware monitoring support for MPS
-+	  MP9941.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called mp9941.
-+
- config SENSORS_MPQ7932_REGULATOR
- 	bool "Regulator support for MPQ7932"
- 	depends on SENSORS_MPQ7932 && REGULATOR
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 312d3f0c0540..6c7177fde355 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -40,6 +40,7 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
- obj-$(CONFIG_SENSORS_MP2993)	+= mp2993.o
- obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
- obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
-+obj-$(CONFIG_SENSORS_MP9941)	+= mp9941.o
- obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
- obj-$(CONFIG_SENSORS_MPQ8785)	+= mpq8785.o
- obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
-diff --git a/drivers/hwmon/pmbus/mp9941.c b/drivers/hwmon/pmbus/mp9941.c
-new file mode 100644
-index 000000000000..b7b0eda5b552
---- /dev/null
-+++ b/drivers/hwmon/pmbus/mp9941.c
-@@ -0,0 +1,317 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP9941)
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include "pmbus.h"
-+
-+/*
-+ * Vender specific registers. The MFR_ICC_MAX(0x02) is used to
-+ * config the iin scale. The MFR_RESO_SET(0xC7) is used to
-+ * config the vout format. The MFR_VR_MULTI_CONFIG_R1(0x0D) is
-+ * used to identify the vout vid step.
-+ */
-+#define MFR_ICC_MAX	0x02
-+#define MFR_RESO_SET	0xC7
-+#define MFR_VR_MULTI_CONFIG_R1	0x0D
-+
-+#define MP9941_VIN_LIMIT_UINT	1
-+#define MP9941_VIN_LIMIT_DIV	8
-+#define MP9941_READ_VIN_UINT	1
-+#define MP9941_READ_VIN_DIV	32
-+
-+#define MP9941_PAGE_NUM	1
-+
-+#define MP9941_RAIL1_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | \
-+							PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | \
-+							PMBUS_HAVE_TEMP | PMBUS_HAVE_PIN | \
-+							PMBUS_HAVE_IIN | \
-+							PMBUS_HAVE_STATUS_VOUT | \
-+							PMBUS_HAVE_STATUS_IOUT | \
-+							PMBUS_HAVE_STATUS_TEMP | \
-+							PMBUS_HAVE_STATUS_INPUT)
-+
-+struct mp9941_data {
-+	struct pmbus_driver_info info;
-+	int vid_resolution;
-+};
-+
-+#define to_mp9941_data(x) container_of(x, struct mp9941_data, info)
-+
-+static int mp9941_set_vout_format(struct i2c_client *client)
-+{
-+	int ret;
-+
-+	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = i2c_smbus_read_word_data(client, MFR_RESO_SET);
-+	if (ret < 0)
-+		return ret;
-+
-+	/*
-+	 * page = 0, MFR_RESO_SET[7:6] defines the vout format
-+	 * 2'b11 set the vout format as direct
-+	 */
-+	ret = (ret & ~GENMASK(7, 6)) | FIELD_PREP(GENMASK(7, 6), 3);
-+
-+	return i2c_smbus_write_word_data(client, MFR_RESO_SET, ret);
-+}
-+
-+static int
-+mp9941_identify_vid_resolution(struct i2c_client *client, struct pmbus_driver_info *info)
-+{
-+	struct mp9941_data *data = to_mp9941_data(info);
-+	int ret;
-+
-+	/*
-+	 * page = 2, MFR_VR_MULTI_CONFIG_R1[4:4] defines rail1 vid step value
-+	 * 1'b0 represents the vid step value is 10mV
-+	 * 1'b1 represents the vid step value is 5mV
-+	 */
-+	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = i2c_smbus_read_word_data(client, MFR_VR_MULTI_CONFIG_R1);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (FIELD_GET(GENMASK(4, 4), ret))
-+		data->vid_resolution = 5;
-+	else
-+		data->vid_resolution = 10;
-+
-+	return 0;
-+}
-+
-+static int mp9941_identify_iin_scale(struct i2c_client *client)
-+{
-+	int ret;
-+
-+	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = i2c_smbus_read_word_data(client, MFR_RESO_SET);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = (ret & ~GENMASK(3, 2)) | FIELD_PREP(GENMASK(3, 2), 0);
-+
-+	ret = i2c_smbus_write_word_data(client, MFR_RESO_SET, ret);
-+	if (ret < 0)
-+		return ret;
-+
-+	/*
-+	 * page = 2, MFR_ICC_MAX[15:13] defines the iin scale
-+	 * 3'b000 set the iout scale as 0.5A/Lsb
-+	 */
-+	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = i2c_smbus_read_word_data(client, MFR_ICC_MAX);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = (ret & ~GENMASK(15, 13)) | FIELD_PREP(GENMASK(15, 13), 0);
-+
-+	return i2c_smbus_write_word_data(client, MFR_ICC_MAX, ret);
-+}
-+
-+static int mp9941_identify(struct i2c_client *client, struct pmbus_driver_info *info)
-+{
-+	int ret;
-+
-+	ret = mp9941_identify_iin_scale(client);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = mp9941_identify_vid_resolution(client, info);
-+	if (ret < 0)
-+		return ret;
-+
-+	return mp9941_set_vout_format(client);
-+}
-+
-+static int mp9941_read_word_data(struct i2c_client *client, int page, int phase,
-+				 int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct mp9941_data *data = to_mp9941_data(info);
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_READ_VIN:
-+		/* The MP9941 vin scale is (1/32V)/Lsb */
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = DIV_ROUND_CLOSEST((ret & GENMASK(9, 0)) * MP9941_READ_VIN_UINT,
-+					MP9941_READ_VIN_DIV);
-+		break;
-+	case PMBUS_READ_IIN:
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = ret & GENMASK(10, 0);
-+		break;
-+	case PMBUS_VIN_OV_FAULT_LIMIT:
-+		/* The MP9941 vin ov limit scale is (1/8V)/Lsb */
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = DIV_ROUND_CLOSEST((ret & GENMASK(7, 0)) * MP9941_VIN_LIMIT_UINT,
-+					MP9941_VIN_LIMIT_DIV);
-+		break;
-+	case PMBUS_IIN_OC_WARN_LIMIT:
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = ret & GENMASK(7, 0);
-+		break;
-+	case PMBUS_VOUT_UV_FAULT_LIMIT:
-+	case PMBUS_MFR_VOUT_MIN:
-+	case PMBUS_MFR_VOUT_MAX:
-+		/*
-+		 * The vout scale is set to 1mV/Lsb(using r/m/b scale).
-+		 * But the vout uv limit and vout max/min scale is 1VID/Lsb,
-+		 * so the vout uv limit and vout max/min value should be
-+		 * multiplied by vid resolution.
-+		 */
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = ret * data->vid_resolution;
-+		break;
-+	case PMBUS_READ_IOUT:
-+	case PMBUS_READ_POUT:
-+	case PMBUS_READ_TEMPERATURE_1:
-+	case PMBUS_READ_VOUT:
-+	case PMBUS_READ_PIN:
-+	case PMBUS_OT_FAULT_LIMIT:
-+	case PMBUS_OT_WARN_LIMIT:
-+		ret = -ENODATA;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int mp9941_write_word_data(struct i2c_client *client, int page, int reg,
-+				  u16 word)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct mp9941_data *data = to_mp9941_data(info);
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_VIN_OV_FAULT_LIMIT:
-+		/* The MP9941 vin ov limit scale is (1/8V)/Lsb */
-+		ret = pmbus_write_word_data(client, page, reg,
-+					    DIV_ROUND_CLOSEST(word * MP9941_VIN_LIMIT_DIV,
-+							      MP9941_VIN_LIMIT_UINT));
-+		break;
-+	case PMBUS_VOUT_UV_FAULT_LIMIT:
-+	case PMBUS_MFR_VOUT_MIN:
-+	case PMBUS_MFR_VOUT_MAX:
-+		ret = pmbus_write_word_data(client, page, reg,
-+					    DIV_ROUND_CLOSEST(word, data->vid_resolution));
-+		break;
-+	case PMBUS_IIN_OC_WARN_LIMIT:
-+	case PMBUS_OT_FAULT_LIMIT:
-+	case PMBUS_OT_WARN_LIMIT:
-+		ret = -ENODATA;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct pmbus_driver_info mp9941_info = {
-+	.pages = MP9941_PAGE_NUM,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_CURRENT_IN] = direct,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_POWER] = linear,
-+	.format[PSC_TEMPERATURE] = direct,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+
-+	.m[PSC_TEMPERATURE] = 1,
-+	.R[PSC_TEMPERATURE] = 0,
-+	.b[PSC_TEMPERATURE] = 0,
-+
-+	.m[PSC_VOLTAGE_IN] = 1,
-+	.R[PSC_VOLTAGE_IN] = 0,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+
-+	.m[PSC_CURRENT_IN] = 2,
-+	.R[PSC_CURRENT_IN] = 0,
-+	.b[PSC_CURRENT_IN] = 0,
-+
-+	.m[PSC_VOLTAGE_OUT] = 1,
-+	.R[PSC_VOLTAGE_OUT] = 3,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+
-+	.func[0] = MP9941_RAIL1_FUNC,
-+	.read_word_data = mp9941_read_word_data,
-+	.write_word_data = mp9941_write_word_data,
-+	.identify = mp9941_identify,
-+};
-+
-+static int mp9941_probe(struct i2c_client *client)
-+{
-+	struct mp9941_data *data;
-+
-+	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	memcpy(&data->info, &mp9941_info, sizeof(mp9941_info));
-+
-+	return pmbus_do_probe(client, &data->info);
-+}
-+
-+static const struct i2c_device_id mp9941_id[] = {
-+	{"mp9941", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, mp9941_id);
-+
-+static const struct of_device_id __maybe_unused mp9941_of_match[] = {
-+	{.compatible = "mps,mp9941"},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mp9941_of_match);
-+
-+static struct i2c_driver mp9941_driver = {
-+	.driver = {
-+		.name = "mp9941",
-+		.of_match_table = mp9941_of_match,
-+	},
-+	.probe = mp9941_probe,
-+	.id_table = mp9941_id,
-+};
-+
-+module_i2c_driver(mp9941_driver);
-+
-+MODULE_AUTHOR("Noah Wang <noahwang.wang@outlook.com>");
-+MODULE_DESCRIPTION("PMBus driver for MPS MP9941");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
+Best regards,
 -- 
-2.25.1
+Farouk Bouabid <farouk.bouabid@cherry.de>
 
 
