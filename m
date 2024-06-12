@@ -1,115 +1,116 @@
-Return-Path: <linux-i2c+bounces-3987-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3988-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 667CB90522E
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2024 14:12:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C91BE905381
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2024 15:18:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EAA51C23E5C
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2024 12:12:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CCA8282FF0
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2024 13:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B18616F28F;
-	Wed, 12 Jun 2024 12:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 023E4176ACD;
+	Wed, 12 Jun 2024 13:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OApSNVQ9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649FE38F83;
-	Wed, 12 Jun 2024 12:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8DD16EC12;
+	Wed, 12 Jun 2024 13:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718194370; cv=none; b=Z1+Tp5M2gbN7NaRV56cMyIs/tEYNXSu1p0xVWSp2utp0KNarkpahIS6Hk32zMdzBR3RCktaKrvevy/YHo7I8mgtGSpNxh+JNQhrSMAbvE6r/3uTBpqlQzCyD65pfRA6Ipn6ZcO3uooyyiiyh4DKWrZrU3EqwpYPfd2TyyV1HbLk=
+	t=1718198285; cv=none; b=JJkwfVs2vSH5uI4qv/DBz3LKYT0MLLBpS011CNda4H0bZ8D0Ue0ZlvMISvTQerX8BeAJnfIF2z59Px8HJNU1FUtyCYuFDaFoK3hLmhPKfyUNwPRgc5+oqsjHtWc3l0H4HmjGlb5lHn6j3CAj89b8m/J8EwcbfptJJ0pw8eH2/kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718194370; c=relaxed/simple;
-	bh=VvWykEFj0IqDX/aWlkXc+2OJkJ4bnwO8Nif0QnQ/jdE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hsCw4lIE+DLcR8oke++gZMQiJvLD3dZRsP9wxq8QlYpBQLwXkgh6vY8k1HVhbX4QIkFXiQei7iLgi9q5OP2lsjkHBZPrzh0id5eZjFG1Gi1pKmF+i/PucpAj5iFqYVUHryUcenEJTTZwpzxL9Vhy7G6qm8jEvTvj9usZcFmaJsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a6f1dc06298so276667766b.1;
-        Wed, 12 Jun 2024 05:12:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718194367; x=1718799167;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kCzkCVOO/S6I7xxBKf3rQmzVC4qFCdmvbVAR9bBl8wg=;
-        b=LWhl2q7yCgz8FboLl+91EdsGpSRo858erh4R62l86sjyB9dB6aBgGTL74PtM8ARZoy
-         MUIrbGIXQvWA7KUEjPt1/cubMMSpTnbuxWoYUQGPNM3+1DaosSj/rHlGS3nciSceKy7G
-         lL3uNNigNcxmO2CDW2ilZL4wsZWKyUnNXU2UMm8UU0oy9uKGbWTo//qn2/DDbfxQlk9G
-         pR7e3Br64XtOnfWxsZt4rTsV/bJhbAnYzHy4O4QVD4H9aSuulk+v0vmrO7+2x2Q6PTfF
-         2wMHbvhzz6nhF5hw2vB/udtG8gv3rWHxLr7CiWd6iQPUO55x9L4a27OkLvzWCBGSFX8n
-         kDwA==
-X-Forwarded-Encrypted: i=1; AJvYcCVcuXNBk84aOkE45axKIzdsf+9zF04h37hg4DnZSYFkc4O3FV/IyG86OBEEFrzRkcrrBNPWF9/dTm3b+TvRHQdeVdFTSqQQoiNNr0WOQvk2F6maIu2fxqKZ9yLPLElY6Pt3htoeQ2KGkxdSc0lJXFHUJJVFCmENU49I2V8kJ3HAMjGNKfU=
-X-Gm-Message-State: AOJu0Yxh0C8quRpjul4XbHf/kaepS0KNNyPLGxctXV1WfQpLmD8WSVE/
-	ESNxkWfzVAQf1bLOulpji+VV1AZo8VlNdFjw1qFAn/nJf5UKlFDI
-X-Google-Smtp-Source: AGHT+IGR7F62IHl+JO/8MkXnchbbyZFgrbfk/pEQMitawRZHEq1nsIju8Ip26+AE0FN9ZIgHuNsCLQ==
-X-Received: by 2002:a17:906:b1c4:b0:a6f:e01:742f with SMTP id a640c23a62f3a-a6f47c9f048mr94138666b.31.1718194366273;
-        Wed, 12 Jun 2024 05:12:46 -0700 (PDT)
-Received: from gmail.com (fwdproxy-lla-000.fbsv.net. [2a03:2880:30ff::face:b00c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f42166597sm125092766b.115.2024.06.12.05.12.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jun 2024 05:12:45 -0700 (PDT)
-Date: Wed, 12 Jun 2024 05:12:43 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>, ldewangan@nvidia.com
-Cc: Laxman Dewangan <ldewangan@nvidia.com>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, paulmck@kernel.org,
-	apopple@nvidia.com, Michael van der Westhuizen <rmikey@meta.com>,
-	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] [i2c-tegra] Do not mark ACPI devices as irq safe
-Message-ID: <ZmmQu15Z2acgAjZQ@gmail.com>
-References: <20240606132708.1610308-1-leitao@debian.org>
- <ZmhHvpHlkxe4kid7@smile.fi.intel.com>
+	s=arc-20240116; t=1718198285; c=relaxed/simple;
+	bh=EAhhAkJSPT8m5ngR46DhDWBeRyQ+o42ANBwH3ptZVhg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fqg9X6enFyGfuaHx+TKNQCVe3De0MmandlpuSCB+hP6Hw9fzmEdwWxrtwXspygWJPeDOsG2t3KwYqit9MaxTTiTPRsKDgUUQNkKu/d5gI5r6xH26rER6pvlo25cHsLQJDX+HZYSPNJzgTGVWgeiPf7VMUxi5uflsOYE+coCewuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OApSNVQ9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40486C4AF50;
+	Wed, 12 Jun 2024 13:18:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718198285;
+	bh=EAhhAkJSPT8m5ngR46DhDWBeRyQ+o42ANBwH3ptZVhg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OApSNVQ9rxCDt78BplPKCVq47aEVD9f7bvXL595EXGUxakoQ5fNWgPRq+nw8FUdDB
+	 48+kmtTH+mDChhpxU9+TXo90WaGNshAaVz8EAdHmGQ8prHcI5l8gAAYoicWRbcugKs
+	 Fm4nbnlyjSaqcBUoghULX27RFQE5Qy5Op8b44vj8atRLQBvD63HHk5fUNWc9CQEfWo
+	 vgLuWdQUbCwrdVKv7d/DtFUwtutQCY+Tdx7lmUHRvad9/jbd95ikcEmisJp8jz5lVL
+	 xDrbvgdK7PNtYZ8L9fOwZ0LUVeyloZ8sttX/xFMnM4ZbPG4GsVj4crSSySPlW69pYQ
+	 zkrMyQBbPJ9MA==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52c7f7fdd24so2893841e87.1;
+        Wed, 12 Jun 2024 06:18:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVQGvJLOfIqKNLIAigHcdCE3BVNAdTciPjQitn+R//7Mhj0e9fu/dPLImMPAL0M9EkpqmhcSs9u8cUO5MpJlnjl82kavuTfVyVRYKRbHferwrJJm1y9oEwvusTDNFuG8x+xfPBFxmHnh8x4HMWA4NHa4EUhdk/QK5cV6xFEW5KX1awXIw==
+X-Gm-Message-State: AOJu0Yz+NlZYAiDBDfykWr7nYVTOYWfT9zcdGUAMS3S2m0ObTcofvAM1
+	qyXnTul2KGVN64f87hpTTUVUf9T081YCUO4icM3JeQ80eHPjU7lmdukDeLjYozSNs9lt8ffD21t
+	3pMU+2VQrEth81vweXiesIeS98w==
+X-Google-Smtp-Source: AGHT+IGRdGHPsMkRPpbZiPDo0vVmCHDqtl0Psn5HUImt9EEAE0lx3tPjGwXY5tKVUkqpNnOVIiW4L3JmK8xPdWvgy8M=
+X-Received: by 2002:a05:6512:3d1f:b0:52b:d48e:32e8 with SMTP id
+ 2adb3069b0e04-52c9a3fd878mr1250484e87.45.1718198283584; Wed, 12 Jun 2024
+ 06:18:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZmhHvpHlkxe4kid7@smile.fi.intel.com>
+References: <20240611-dev-mule-i2c-mux-v3-0-08d26a28e001@cherry.de>
+ <20240611-dev-mule-i2c-mux-v3-2-08d26a28e001@cherry.de> <171811272875.1782775.2673232019553624734.robh@kernel.org>
+In-Reply-To: <171811272875.1782775.2673232019553624734.robh@kernel.org>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 12 Jun 2024 07:17:51 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ83sz5-MZN+Cv6=AbLXWxAaYayw=k0_X=F2AAxU1j2Gg@mail.gmail.com>
+Message-ID: <CAL_JsqJ83sz5-MZN+Cv6=AbLXWxAaYayw=k0_X=F2AAxU1j2Gg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/7] dt-bindings: i2c: mux: mule: add dt-bindings for
+ mule i2c multiplexer
+To: Farouk Bouabid <farouk.bouabid@cherry.de>
+Cc: Heiko Stuebner <heiko@sntech.de>, Andi Shyti <andi.shyti@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Quentin Schulz <quentin.schulz@cherry.de>, 
+	linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Andy,
+On Tue, Jun 11, 2024 at 7:32=E2=80=AFAM Rob Herring (Arm) <robh@kernel.org>=
+ wrote:
+>
+>
+> On Tue, 11 Jun 2024 13:43:53 +0200, Farouk Bouabid wrote:
+> > Mule is an MCU that emulates a set of I2C devices which are reachable
+> > through an I2C-mux.
+> >
+> > The emulated devices share a single I2C address with the mux itself
+> > where the requested register is what determines which logic is executed
+> > (mux logic or device logic).
+> >
+> > Add support for the Mule I2C multiplexer bindings.
+> >
+> > Signed-off-by: Farouk Bouabid <farouk.bouabid@cherry.de>
+> > ---
+> >  .../devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  | 80 ++++++++++++++=
+++++++++
+> >  1 file changed, 80 insertions(+)
+> >
+>
+> My bot found errors running 'make dt_binding_check' on your patch:
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i=
+2c/tsd,mule-i2c-mux.example.dtb: fan@18: '#cooling-cells' does not match an=
+y of the regexes: 'pinctrl-[0-9]+'
+>         from schema $id: http://devicetree.org/schemas/trivial-devices.ya=
+ml#
 
-On Tue, Jun 11, 2024 at 03:49:02PM +0300, Andy Shevchenko wrote:
-> On Thu, Jun 06, 2024 at 06:27:07AM -0700, Breno Leitao wrote:
+You cannot add warnings. Please fix this or this patch will never be
+accepted. Either drop the property from the example or add it to the
+binding (by moving out of trivial-devices.yaml).
 
-> > The problem arises because during __pm_runtime_resume(), the spinlock
-> > &dev->power.lock is acquired before rpm_resume() is called. Later,
-> > rpm_resume() invokes acpi_subsys_runtime_resume(), which relies on
-> > mutexes, triggering the error.
-> > 
-> > To address this issue, devices on ACPI are now marked as not IRQ-safe,
-> > considering the dependency of acpi_subsys_runtime_resume() on mutexes.
-> 
-> ...
-> 
-> While it's a move in the right direction, the real fix is to get rid of
-> the IRQ safe PM hack completely.
-> Look at how OMAP code was modified for
-> the last few years and now it's pm_runtime_irq_safe()-free. The main
-> (ab)users are SH code followed by Tegra drivers.
-
-Thanks. 
-
-I think these are two different goals here. This near term goal is just
-fix the driver so it can use the pm_runtime_irq_safe() in a saner
-way, avoiding calling mutexes inside spinlocks.
-
-Getting rid of the IRQ safe PM seems to me to be more a long term
-desirable goal, and unfortunately I cannot afford doing it now.
-
-Laxman, what is your view on this topic?
-
---breno
+Rob
 
