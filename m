@@ -1,168 +1,115 @@
-Return-Path: <linux-i2c+bounces-3986-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3987-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C68E9046C7
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2024 00:13:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 667CB90522E
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2024 14:12:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1783284808
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Jun 2024 22:13:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EAA51C23E5C
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Jun 2024 12:12:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322971552F8;
-	Tue, 11 Jun 2024 22:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="C+9rKeQk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B18616F28F;
+	Wed, 12 Jun 2024 12:12:50 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669311527B3
-	for <linux-i2c@vger.kernel.org>; Tue, 11 Jun 2024 22:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649FE38F83;
+	Wed, 12 Jun 2024 12:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718143986; cv=none; b=h/aLHRXmfqpJIwCWkt9FL+wZwOnRm6jTKYHRjTYC78JB79CYST8pvvZz68AEH3ONDJ/IcI2fPFHslEexh7DBT6ccmRKAMozXD9gYJ2PUTzHAdIAYgetoyQ23ywHAGzZB9YPN14KlqsWsM4LwjWSIO6bcyH95vFgklu+jzQxRLNg=
+	t=1718194370; cv=none; b=Z1+Tp5M2gbN7NaRV56cMyIs/tEYNXSu1p0xVWSp2utp0KNarkpahIS6Hk32zMdzBR3RCktaKrvevy/YHo7I8mgtGSpNxh+JNQhrSMAbvE6r/3uTBpqlQzCyD65pfRA6Ipn6ZcO3uooyyiiyh4DKWrZrU3EqwpYPfd2TyyV1HbLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718143986; c=relaxed/simple;
-	bh=ntignwSd5BkQDAoVuBygKbCneHpXi8rp0ewb5JbG+YY=;
+	s=arc-20240116; t=1718194370; c=relaxed/simple;
+	bh=VvWykEFj0IqDX/aWlkXc+2OJkJ4bnwO8Nif0QnQ/jdE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kPdwoKXQxzRsn4bsOXun6z4y6z64Fc19pJg6hKVgfCu6CacKPT540BquKYZpVpNIsEgiVcl9alhcKKRMc9Un370tCxiqR5U7Wd4rjuZXIk5Mrqi3GrO07XjfSf26lj5voPdz/RkuEB4U6mEVTme/AA18lyv+U0YIf9GVqHJ1YQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=C+9rKeQk; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=9IZI
-	pdPzR9DR3MCp+AyrdUtLauredv0OWoF1WwgDZ50=; b=C+9rKeQklbHFCmWU7lCN
-	bd8ThpgmhSUQLC44BUTfUIFi1T9mP5KlAvXOtTzCHelbdlfqPj5hvilEzhXrxgl4
-	hUy75vkRoK1CUGXJx8D4RVm/EI6XGDfe6RftoFbE8H+rEJs5pF1x3fn+4ASgDy1N
-	44u1quA9f3LqtE2ervu7TH49wlNaQfre15O4lJ0btF9sIhbri3Zk+vl+jYPzvbdt
-	u2tELFsDEem2FFj9tLB4pO9RjnpbnSwTllvJNM+B5mb8FMQMwUFLrsyNe/0e1A+2
-	vDv+kywG35AuhNozt5g2fhsz6gcHqf2ntk84/EjuFRVzNMFF/o3ciAcDo7/Lpix+
-	Bw==
-Received: (qmail 574999 invoked from network); 12 Jun 2024 00:12:59 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Jun 2024 00:12:59 +0200
-X-UD-Smtp-Session: l3s3148p1@bqWOkaQaeIxehhrL
-Date: Wed, 12 Jun 2024 00:12:59 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Farouk Bouabid <farouk.bouabid@cherry.de>
-Cc: Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Quentin Schulz <quentin.schulz@cherry.de>, 
-	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v3 0/7] Add Mule I2C multiplexer support
-Message-ID: <ijj3xp5oacsyhygobi4nynerd6dxgfjxh5uzj6quvzraqrkf7x@eejujooa6odi>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Farouk Bouabid <farouk.bouabid@cherry.de>, Peter Rosin <peda@axentia.se>, 
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Quentin Schulz <quentin.schulz@cherry.de>, Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org
-References: <20240611-dev-mule-i2c-mux-v3-0-08d26a28e001@cherry.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hsCw4lIE+DLcR8oke++gZMQiJvLD3dZRsP9wxq8QlYpBQLwXkgh6vY8k1HVhbX4QIkFXiQei7iLgi9q5OP2lsjkHBZPrzh0id5eZjFG1Gi1pKmF+i/PucpAj5iFqYVUHryUcenEJTTZwpzxL9Vhy7G6qm8jEvTvj9usZcFmaJsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a6f1dc06298so276667766b.1;
+        Wed, 12 Jun 2024 05:12:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718194367; x=1718799167;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kCzkCVOO/S6I7xxBKf3rQmzVC4qFCdmvbVAR9bBl8wg=;
+        b=LWhl2q7yCgz8FboLl+91EdsGpSRo858erh4R62l86sjyB9dB6aBgGTL74PtM8ARZoy
+         MUIrbGIXQvWA7KUEjPt1/cubMMSpTnbuxWoYUQGPNM3+1DaosSj/rHlGS3nciSceKy7G
+         lL3uNNigNcxmO2CDW2ilZL4wsZWKyUnNXU2UMm8UU0oy9uKGbWTo//qn2/DDbfxQlk9G
+         pR7e3Br64XtOnfWxsZt4rTsV/bJhbAnYzHy4O4QVD4H9aSuulk+v0vmrO7+2x2Q6PTfF
+         2wMHbvhzz6nhF5hw2vB/udtG8gv3rWHxLr7CiWd6iQPUO55x9L4a27OkLvzWCBGSFX8n
+         kDwA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcuXNBk84aOkE45axKIzdsf+9zF04h37hg4DnZSYFkc4O3FV/IyG86OBEEFrzRkcrrBNPWF9/dTm3b+TvRHQdeVdFTSqQQoiNNr0WOQvk2F6maIu2fxqKZ9yLPLElY6Pt3htoeQ2KGkxdSc0lJXFHUJJVFCmENU49I2V8kJ3HAMjGNKfU=
+X-Gm-Message-State: AOJu0Yxh0C8quRpjul4XbHf/kaepS0KNNyPLGxctXV1WfQpLmD8WSVE/
+	ESNxkWfzVAQf1bLOulpji+VV1AZo8VlNdFjw1qFAn/nJf5UKlFDI
+X-Google-Smtp-Source: AGHT+IGR7F62IHl+JO/8MkXnchbbyZFgrbfk/pEQMitawRZHEq1nsIju8Ip26+AE0FN9ZIgHuNsCLQ==
+X-Received: by 2002:a17:906:b1c4:b0:a6f:e01:742f with SMTP id a640c23a62f3a-a6f47c9f048mr94138666b.31.1718194366273;
+        Wed, 12 Jun 2024 05:12:46 -0700 (PDT)
+Received: from gmail.com (fwdproxy-lla-000.fbsv.net. [2a03:2880:30ff::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f42166597sm125092766b.115.2024.06.12.05.12.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jun 2024 05:12:45 -0700 (PDT)
+Date: Wed, 12 Jun 2024 05:12:43 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>, ldewangan@nvidia.com
+Cc: Laxman Dewangan <ldewangan@nvidia.com>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>, paulmck@kernel.org,
+	apopple@nvidia.com, Michael van der Westhuizen <rmikey@meta.com>,
+	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] [i2c-tegra] Do not mark ACPI devices as irq safe
+Message-ID: <ZmmQu15Z2acgAjZQ@gmail.com>
+References: <20240606132708.1610308-1-leitao@debian.org>
+ <ZmhHvpHlkxe4kid7@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bkvmb62faawxzci5"
-Content-Disposition: inline
-In-Reply-To: <20240611-dev-mule-i2c-mux-v3-0-08d26a28e001@cherry.de>
-
-
---bkvmb62faawxzci5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZmhHvpHlkxe4kid7@smile.fi.intel.com>
 
-Hi Farouk,
+Hello Andy,
 
-first of all, thanks for the patches and tackling this problem. I have
-to say that I have many concerns on high-level, though. I hope to be
-able to give helpful recommendations.
+On Tue, Jun 11, 2024 at 03:49:02PM +0300, Andy Shevchenko wrote:
+> On Thu, Jun 06, 2024 at 06:27:07AM -0700, Breno Leitao wrote:
 
-> Mule is an mcu that emulates a set of I2C devices which are reachable
-> through an I2C-mux.
+> > The problem arises because during __pm_runtime_resume(), the spinlock
+> > &dev->power.lock is acquired before rpm_resume() is called. Later,
+> > rpm_resume() invokes acpi_subsys_runtime_resume(), which relies on
+> > mutexes, triggering the error.
+> > 
+> > To address this issue, devices on ACPI are now marked as not IRQ-safe,
+> > considering the dependency of acpi_subsys_runtime_resume() on mutexes.
+> 
+> ...
+> 
+> While it's a move in the right direction, the real fix is to get rid of
+> the IRQ safe PM hack completely.
+> Look at how OMAP code was modified for
+> the last few years and now it's pm_runtime_irq_safe()-free. The main
+> (ab)users are SH code followed by Tegra drivers.
 
-I am not 100% convinced this is really a mux. Another possible DT
-representation could be (pseudo-code):
+Thanks. 
 
-	i2c-bus {
-		mpu@42 {
-			comptible = "mule";
-			reg = <0x42>;
+I think these are two different goals here. This near term goal is just
+fix the driver so it can use the pm_runtime_irq_safe() in a saner
+way, avoiding calling mutexes inside spinlocks.
 
-			subdev@0 {
-				compatible = "subdev"
-				reg = <0x00>;
-			}
+Getting rid of the IRQ safe PM seems to me to be more a long term
+desirable goal, and unfortunately I cannot afford doing it now.
 
-			subdev@1 {
+Laxman, what is your view on this topic?
 
-			...
-
-		}
-
-	}
-
-Dunno if MFD can handle that. Maybe someone else knows?
-
-If all fails, I think you could write an I2C mux-driver which uses the
-above DT snippet. It should then do:
-
-- write the mule config register according to 'reg' of the subdev
-- replace 'addr' in all 'i2c_msgs' to the addr of the parent mule device
-- i2ctransfer
-- restore 'addr' in all 'i2c_msgs' to the original addr
-
-A little simiar of what i2c-atr.c does, check
-Documentation/i2c/i2c-address-translators.rst
-
-> The emulated devices share a single I2C address with the mux itself
-> where the requested register is what determines which logic is executed
-> (muxing logic or device logic):
-
-This design is... unfortunate, if you ask me. But well, things happen.
-
-> The current I2C-mux implementation does not allow the mux to use the
-> I2C address of a child device. As a workaround, A new I2C-adapter quirk is
-> introduced to skip the check for conflict between a child device and the
-> mux core I2C address when adding the child device.
-
-Not acceptable, sorry. The adapter itself is fine, so this is clearly
-not an adapter quirk. The client is what is quirky. I don't want to
-maintain patch 1 because of this one "creative" design of a client. I
-think we can handle it outside of the I2C core.
-
-So far understandable?
-
-Happy hacking,
-
-   Wolfram
-
---bkvmb62faawxzci5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZoy+cACgkQFA3kzBSg
-Kba3axAAgZhZa5f9hUe4bSz0GKDi69RP0Z8Vz038So0ej0oN/S6UtQikhS+zh1Gb
-ZJqvCEfw2Gzm6dK8QgpLNg8FsUCpiT1m2ZIQItoKUELSzGaL1R3svGj1cZuR268D
-Zr6gdsbFDjZwg+Fa8roHfCB6+dyIyYuvcHPgckpFtNB24knAN7l13wlW+1Z32/xP
-1OEOpThyD+Wq4R6gvJ3Yg0ZnJIJEu+qH+9Pm2ItalPsHgoZNtVTEKkCyLbki2dzZ
-5j+d3sl7avBP6mEeOFSCO+cJtf+D6Z8VPx/SlA7A+iSCJugU4t03u/OJyyDDvmhj
-bynHKAh6CHdzVlNdFvEjP4Hk5wPpqqcvzGDgNt+4zjq1zSf19hlaSS0fVfgT8QsN
-IjRMH/5nsHEadFlOwTkSKIbG5RTM3WFbAdtnWrh6UgYVZyDAClm4AsC1esxgNOOm
-kWCJV8yrc82BFovMQs0fTwZT2fMaLZoQNGGtySg9wtz+SyQfXTAkM59W2QuXzxpb
-S4OUDgdv1lOuW9PG2tG0rdLlwkG0qTYKzwDrdcKoSMNjbWJcRC++/c9++juwPJv0
-fM9oS0/wZjRGiDZkXMbKhdaQ5EoJOZGJxsZylgeHt8G77Rqy06nAkVqZBXRb1CP0
-VWeWBqaEGvpliLkVTp7Psfd6G0TaMza0/geIiOxw/puIBHVMbfU=
-=guh5
------END PGP SIGNATURE-----
-
---bkvmb62faawxzci5--
+--breno
 
