@@ -1,56 +1,48 @@
-Return-Path: <linux-i2c+bounces-4007-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4008-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A364906454
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 08:47:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CBF490645B
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 08:48:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8096F1C218EA
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 06:47:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E75322850A9
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 06:48:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57E8137746;
-	Thu, 13 Jun 2024 06:47:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6688C137758;
+	Thu, 13 Jun 2024 06:48:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ZscDM31Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BwlmB3qb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD562119;
-	Thu, 13 Jun 2024 06:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E39A46434;
+	Thu, 13 Jun 2024 06:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718261225; cv=none; b=lOXdsqEEUSNg0yV7ZV+hnXlzSx3kxX0RyEUXA8c9ljrb7/0c9cyN0tABi0xX96/7y5GWBF1NRALll+GGrlDU9So84tdJmnwxhFpFLi5x6Uyf0jSG8CQZiObDRHAM8lFVLoaszAIh7Qm3OmfuDDJjY8yPPO8Ml/gP678sG5sQQSY=
+	t=1718261297; cv=none; b=CXU+9jbqv4WkW61smG9tB5dEV8R5rcEtYqUQ+tjcM5FpfeKB7NC8snL9Aw8BOG5+j48A1dSTYScmpyRrO4ywMmo+KOn1S0qW0QnuyDNMlOlzkpIAoBwuFaqwm86P7DB7eafngwjjATfCSBVNQQSQJPjMbDLzoPyG89GXv1DOlnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718261225; c=relaxed/simple;
-	bh=fPVczjN6QqloCDP/VCGPXgoE3JwqY0vu//dwIeh6Nn0=;
+	s=arc-20240116; t=1718261297; c=relaxed/simple;
+	bh=PFs96SefEyPDWQmGOzgeOkRpcJcJvgXrS6ezsy6/IHo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PHJZjuOhDKuhmGXl0uo6hr3cwk1vRQddEOcJ/U+mFTNVlDuGWjRNW7IWVw3E4LIvzdi8VzydLJJOqPmqtEupgcztm+0gb2X8QkkeYJDTml1yuz+XG1rzVVVclKjSoX05OzUgMp+v1Ngn0fUGEVgRZo+b+AsJyDmV+PXjBe4uqtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ZscDM31Y; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1718261195; x=1718865995; i=markus.elfring@web.de;
-	bh=fPVczjN6QqloCDP/VCGPXgoE3JwqY0vu//dwIeh6Nn0=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=ZscDM31YM9VdKaZDF3/78lZqwhU/0DM6/P5LlyA851Ik9qCwj1/hcDqnPQIX4AHV
-	 j5lJ9rD89fJ6TtkNuE/41cGsnU/knLdDhs1/5D8l9BapufQDth9DqWFJNIQChGIR8
-	 8AoiBLstAf9MN3YneDYPfdymoFdT4E3DeTKp/Y/jM5L0FXJIGkEmq4eFgHQboXTu5
-	 xRjBD0vuOuvzaF+HjG8fcMMd9IToSKg+2pKHmro3LuoVDH0c7w7UexZwlCoCHrtbd
-	 ifs/rztZkHGWo7yKmArEeJc928CpIDDjhr7Q8fGizAh2Qh2+ki/XuxRNsvYzYpWkB
-	 TryFa47+vjqehfTuJA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1M2gkf-1sGHJc1VN9-00FHht; Thu, 13
- Jun 2024 08:46:35 +0200
-Message-ID: <77970d8c-503d-4ca2-af7f-dd50ee1c9bc5@web.de>
-Date: Thu, 13 Jun 2024 08:46:33 +0200
+	 In-Reply-To:Content-Type; b=EhUBLr55ny6B+Vr2iSju9vttPQluib8J2hljSodsOfZjq7DKRoD27kXTtKr+lOpXDGTkDv9MiY9wfblT3eM2TAkcLEgoLzCkukQ8UhLdHeu5NXTYZBCYCzfG0Uk639gkt+3Arp6o+Tuu6Oiv+l/5Q9FlZqDYK/XtS+81uQcgZhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BwlmB3qb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE6BFC2BBFC;
+	Thu, 13 Jun 2024 06:48:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718261296;
+	bh=PFs96SefEyPDWQmGOzgeOkRpcJcJvgXrS6ezsy6/IHo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BwlmB3qbUQDxFMhFC0XeZspkMr4ymT5+phlUxoJHD33CL01CcCrq54q3u1aDtsxq1
+	 BTTUUa2+h8b6KgxQpOH1LbKKlX/eNQIX63d1brmAwWjgcLhU6hq3cuCPfI/ZhVrlyU
+	 OC7GK4d8yYDoZvHpLwMdJyJ3zS+Eh8nTrHn9L/QuL6GsZ+2xRVBjjIHvmrqgOmPxHw
+	 YAv93kg1CUyrg2E1OGdMlrSStxra4Arw/vK8VFUja5ag6wMqPPQiLH4IZm11ADHGag
+	 iAwI0HDUSchFGSNZSYjzqiqLNqSBTNjtpSjMJXUlavCwYjM9r2thnfPUC8inpsCpbJ
+	 rAdPrA2q3Rc+Q==
+Message-ID: <16c20645-2746-4885-8248-8d50921d8f71@kernel.org>
+Date: Thu, 13 Jun 2024 08:48:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,43 +50,79 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] i2c: octeon: Add block-mode r/w operations
-To: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>,
+Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: qcom-cci: Document sm8550
+ compatible
+To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Jagadeesh Kona <quic_jkona@quicinc.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-i2c@vger.kernel.org
-Cc: Andi Shyti <andi.shyti@kernel.org>, Robert Richter <rric@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>
-References: <20240613025412.3848629-1-aryan.srivastava@alliedtelesis.co.nz>
- <20240613025412.3848629-3-aryan.srivastava@alliedtelesis.co.nz>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240613025412.3848629-3-aryan.srivastava@alliedtelesis.co.nz>
+References: <20240612215835.1149199-1-vladimir.zapolskiy@linaro.org>
+ <20240612215835.1149199-2-vladimir.zapolskiy@linaro.org>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240612215835.1149199-2-vladimir.zapolskiy@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:U+VonU8sDHW799I/QZw30s3qh6WLautldqzyfOo3puqWoezz/El
- NHf29vIq7bWLc2yDuLUjU8PeZ3kmB1IQ+2K2XRgkJl8xbZudmrhHeM7OSvETlp8p7egbb2d
- 6llAs//ktD6bu/H6tlGUCazvw/jdULKLPfq0UYEHy+ohrsMrHaLpTdcJeDEIIp6lURMCZbo
- d14XySZaohHpqfRGtFecg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Fm7PBpq/fpQ=;3IgQLR93+MK87XzZvhi5OoYfhdk
- IidE/i4Kt/v81gUBn4Z75hSJZNPiZF4hcuMz3PnsSK327EZRmnQ+nNz5hCE5iNi/zGMzGDHgN
- lQbWP9XaiAc6qTk/jLw0NZ7xVVPPcu9oS9ajAMCGUOSEA0HPkFsgrasRjRJTp9tgd4hiAJ8c9
- ztvuATLS+WDdn4W9ij1naHelXvSeJLyT4z+2sZBdHHF/VIChXmqfNoIxk9ZW3FPaReRzuV25H
- /QPo4xIVPg7nMmPksQ7DL0lX6e0V+ilJ6T3Nthz8eJYTOzRwBmBNpsYi8mLI24rkZyTjJpIN6
- /t2u4UGxvgp1usX9mdSM7SUpAL7tdvGVxPCKsWs1Ac5wlHZ6ML8rRxg/6oSLge4Fn61Nu3HnH
- TNh8Yh2IA5Ik467qz5/ozHrICsP/AYSkN1CWjRW7on4+pyzSaRvyAnYIQMEyGSlDHFyLrhdQ1
- 5mLr2/JM5FqSKPHL3sPzh27v73MWp4uROkB/eoqE+34ccBFatHxpcLCzX8ub1AzKXFNM9E6xr
- LnZaiznxJZcl9YMzJ3BNeT9gv3ZnCTu8ENKil03ZXucDx89SUd2eWMJiJm7dklD7rq9nc/aVu
- a5jMR9u3aOr6gKXRrAc/R8+2aBuner+S7dSxyoI9Zk5b0sBa4P3OCLT1Mr1i/FmO3VuyyF8tk
- 5wEiKMjm07O9YeEtWfKWvFBJUPg7IuiSM9HltDEIPBxK276AApiCBb1h39EID77T9TwoooDWP
- JL+T+y4qAVgzLa4gaNjB1KhOTQlL0kMNpKLWUI+6v3Nl6rWtl0SpLxJUP0w/zHJ9LguYKKc7F
- j8p1I6vwky8sbYtVpQAX0dQl9FMaRDofce4mcFajqLOr0=
+Content-Transfer-Encoding: 7bit
 
-=E2=80=A6
-> mode is the usage of separate FIFO buffer to store data.d
-=E2=80=A6
+On 12/06/2024 23:58, Vladimir Zapolskiy wrote:
+> Add sm8550 compatible consistent with CAMSS CCI interfaces, the list of
+> clocks is reduced by removing "slow_ahb_src" clock, which is derived
+> from "cpas_ahb" clock.
+> 
+> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-Will a typo be avoided for the final commit message?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Regards,
-Markus
+Best regards,
+Krzysztof
+
 
