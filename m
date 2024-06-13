@@ -1,56 +1,56 @@
-Return-Path: <linux-i2c+bounces-4006-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4007-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19E4F906417
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 08:33:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A364906454
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 08:47:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF4491F2150D
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 06:33:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8096F1C218EA
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 06:47:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D9B313440F;
-	Thu, 13 Jun 2024 06:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57E8137746;
+	Thu, 13 Jun 2024 06:47:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="dEqr5bpz"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ZscDM31Y"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mout.web.de (mout.web.de [212.227.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F453F9F8;
-	Thu, 13 Jun 2024 06:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD562119;
+	Thu, 13 Jun 2024 06:47:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718260425; cv=none; b=fH7kgvt7xQ0pU2oR5hBlNO6AH5t+uMTDlkVgXkppO2RN0LSMbeoEdsLM68ZLcdCBEUayOJpTFyvvTydbCsBF6YyuR0fe8zHh4bc+aFjm2UWwQmdqMkgJyF+eLVq0FmMCo5mnRuusZAjcIY186W0sa5LWgyMXx2E1AogP4LR1IKw=
+	t=1718261225; cv=none; b=lOXdsqEEUSNg0yV7ZV+hnXlzSx3kxX0RyEUXA8c9ljrb7/0c9cyN0tABi0xX96/7y5GWBF1NRALll+GGrlDU9So84tdJmnwxhFpFLi5x6Uyf0jSG8CQZiObDRHAM8lFVLoaszAIh7Qm3OmfuDDJjY8yPPO8Ml/gP678sG5sQQSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718260425; c=relaxed/simple;
-	bh=1uwMHLAGc1z2U93IpJeP9U1wmh5+aaNHRM2UIrMn67Y=;
+	s=arc-20240116; t=1718261225; c=relaxed/simple;
+	bh=fPVczjN6QqloCDP/VCGPXgoE3JwqY0vu//dwIeh6Nn0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N7Cmt4etQkNPFvI35MNLmN1WB3besW/2+YvHBZGQh2OkcUBsDwQfWIc7J7lhSDU1Evrr6Gcw+Z4MK3t593NDn1obeTWqoi9vR7KjpqYwuFi3nu98ZfFbOuIZKcghaHesU0UcjtzGtmnW3TbdlnTUckWTyoATD0PBctkaJG/ME3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=dEqr5bpz; arc=none smtp.client-ip=212.227.17.11
+	 In-Reply-To:Content-Type; b=PHJZjuOhDKuhmGXl0uo6hr3cwk1vRQddEOcJ/U+mFTNVlDuGWjRNW7IWVw3E4LIvzdi8VzydLJJOqPmqtEupgcztm+0gb2X8QkkeYJDTml1yuz+XG1rzVVVclKjSoX05OzUgMp+v1Ngn0fUGEVgRZo+b+AsJyDmV+PXjBe4uqtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ZscDM31Y; arc=none smtp.client-ip=212.227.17.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1718260383; x=1718865183; i=markus.elfring@web.de;
-	bh=XYFlE3j1QdMRcqnoXdyMkbWg0pD8rOylOq8xsgg0Sro=;
+	s=s29768273; t=1718261195; x=1718865995; i=markus.elfring@web.de;
+	bh=fPVczjN6QqloCDP/VCGPXgoE3JwqY0vu//dwIeh6Nn0=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
 	 References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=dEqr5bpzK5xdO1Go5kkN5R66O4T4sY2J1WeOjZxypm07Uq+4r7ewtAponHaLuf3r
-	 A1z64+8YKYgYhmO5Taz5CD0hfNKrTLKPeiK+YmlaYtUKJcEk5EM3NoXpHvL00EGk0
-	 +p2iCzf2MDwMC92EkaUsU10l8sh4Z8hUtehiFgbe4BAH4yR0XHcjZZC6BvWsw5qJP
-	 uIzoP9anVa8i7l3RigbB1sbpcLmD3W+MaO98p6/GXMPhVLUpic/bVs4W1iHZ5rJV4
-	 dgdHuRGYqM4g6EQA6gs8Bv2ewTsoUqJPXHAxluEwZXuAxxG5iQEyXyzGJ2HNEkb1k
-	 YXbZzFSY5D5kjTlNVw==
+	b=ZscDM31YM9VdKaZDF3/78lZqwhU/0DM6/P5LlyA851Ik9qCwj1/hcDqnPQIX4AHV
+	 j5lJ9rD89fJ6TtkNuE/41cGsnU/knLdDhs1/5D8l9BapufQDth9DqWFJNIQChGIR8
+	 8AoiBLstAf9MN3YneDYPfdymoFdT4E3DeTKp/Y/jM5L0FXJIGkEmq4eFgHQboXTu5
+	 xRjBD0vuOuvzaF+HjG8fcMMd9IToSKg+2pKHmro3LuoVDH0c7w7UexZwlCoCHrtbd
+	 ifs/rztZkHGWo7yKmArEeJc928CpIDDjhr7Q8fGizAh2Qh2+ki/XuxRNsvYzYpWkB
+	 TryFa47+vjqehfTuJA==
 X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MALeD-1s6PcC1eR9-000gnU; Thu, 13
- Jun 2024 08:33:03 +0200
-Message-ID: <8383c494-911f-40fd-abfa-9489fada67a3@web.de>
-Date: Thu, 13 Jun 2024 08:32:32 +0200
+Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1M2gkf-1sGHJc1VN9-00FHht; Thu, 13
+ Jun 2024 08:46:35 +0200
+Message-ID: <77970d8c-503d-4ca2-af7f-dd50ee1c9bc5@web.de>
+Date: Thu, 13 Jun 2024 08:46:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,49 +58,42 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] i2c: octeon: refactor hlc r/w operations
+Subject: Re: [PATCH v6 2/2] i2c: octeon: Add block-mode r/w operations
 To: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>,
  linux-i2c@vger.kernel.org
 Cc: Andi Shyti <andi.shyti@kernel.org>, Robert Richter <rric@kernel.org>,
  LKML <linux-kernel@vger.kernel.org>
 References: <20240613025412.3848629-1-aryan.srivastava@alliedtelesis.co.nz>
- <20240613025412.3848629-2-aryan.srivastava@alliedtelesis.co.nz>
+ <20240613025412.3848629-3-aryan.srivastava@alliedtelesis.co.nz>
 Content-Language: en-GB
 From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240613025412.3848629-2-aryan.srivastava@alliedtelesis.co.nz>
+In-Reply-To: <20240613025412.3848629-3-aryan.srivastava@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:AMXbYtNW60HooN3NBFXHbB1Y3NnLec7m6FvFtCaVNcyGPQvnTkp
- NXw9pIZUMq17KNouN//BAiLaa9m5/2/P/PzRhGRIJMor//+TaDkeyhD2PWk5zl+zFiIAhhc
- +EzHZhPB3Mo9kObe3FRNBmTnF79H+Vx3lGLeHD0txuO5sbdoadLM2VCuVyJt2PPT68juYHd
- 13Ay6jBdALkO9IkhljbHQ==
+X-Provags-ID: V03:K1:U+VonU8sDHW799I/QZw30s3qh6WLautldqzyfOo3puqWoezz/El
+ NHf29vIq7bWLc2yDuLUjU8PeZ3kmB1IQ+2K2XRgkJl8xbZudmrhHeM7OSvETlp8p7egbb2d
+ 6llAs//ktD6bu/H6tlGUCazvw/jdULKLPfq0UYEHy+ohrsMrHaLpTdcJeDEIIp6lURMCZbo
+ d14XySZaohHpqfRGtFecg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:mAI9eMX67FU=;y8bHKGC5TBFSkww85QHfeDMKMP5
- U27nlmA6XuE2ycXgh7EtqN4CT/KPdi0PPzOo1slHFiZjXDfPgoJC9PRaJWIbY9KeMe9cLLWJ4
- 6XoEVgiXQXRdwYgFSZNYtzq9lJ4jQUILWET710WnDAi4hwyPk9DuonJHZXsykIB3KqW26P8je
- I5qmVTPv+/KJaBTapWaR4nlboS4azXZxonKtcOgaML4GBcOanOhkNv8r5LL4T+vZKWE9HkCKS
- i3YIkRXu8RItixqvsBujmfIKFjfeqCBjpr0u4pyi6QJ7poY+9KxPgr75V6iqAv0R8pSBCt0Yj
- /f1VPypZ0ERGvz3RQvmIMdR7UJoM20+b2QW7aQbBwzFyc4l8YzRsF8qi0ICSnk3eTBOU93fJM
- SnbxpbYj+e3dG0hYvcplUifXd/oefIYAzrfKm4sg4OyXIcVdZY8mguAbHeSZYcHMLSeV5Hj8m
- G2NEKDSg9Z3pI/zv4TYIcAAr5le9xwv9igIzIdg1pcGhsYOkgubdGlL6juaWf7yxQ8idmHDTr
- eo12g8QzdN1q5diZOmvs3SnSPDdSRgvs02IrIzI3vaPA2pMaGxStKBnem3uptiqpVMd1qnELs
- uI+GMEvz13p3MChWFVWJ/gy0T7R2gs8fKNaYRWPz7C72Rf5A6PlnFUjRHACx0XCBL7MlCeXH1
- ApE8rlX7rpkb+kag0m2GNdpp28HdNefC4pEJbGNTigKR4GOrtYAix9pzRHVhieBmkTa5PMiJI
- d5TqQPC7+/SW/fhfik3IqiaGAujj9qdo+HQmD+HuAAPQRNqtzBSWAG86HmYxQHEs8ItA+guO8
- 9Z60hfYNZbUGWVg1vi+W1hepeAPeFJHHqHtx/QKqXA2so=
+UI-OutboundReport: notjunk:1;M01:P0:Fm7PBpq/fpQ=;3IgQLR93+MK87XzZvhi5OoYfhdk
+ IidE/i4Kt/v81gUBn4Z75hSJZNPiZF4hcuMz3PnsSK327EZRmnQ+nNz5hCE5iNi/zGMzGDHgN
+ lQbWP9XaiAc6qTk/jLw0NZ7xVVPPcu9oS9ajAMCGUOSEA0HPkFsgrasRjRJTp9tgd4hiAJ8c9
+ ztvuATLS+WDdn4W9ij1naHelXvSeJLyT4z+2sZBdHHF/VIChXmqfNoIxk9ZW3FPaReRzuV25H
+ /QPo4xIVPg7nMmPksQ7DL0lX6e0V+ilJ6T3Nthz8eJYTOzRwBmBNpsYi8mLI24rkZyTjJpIN6
+ /t2u4UGxvgp1usX9mdSM7SUpAL7tdvGVxPCKsWs1Ac5wlHZ6ML8rRxg/6oSLge4Fn61Nu3HnH
+ TNh8Yh2IA5Ik467qz5/ozHrICsP/AYSkN1CWjRW7on4+pyzSaRvyAnYIQMEyGSlDHFyLrhdQ1
+ 5mLr2/JM5FqSKPHL3sPzh27v73MWp4uROkB/eoqE+34ccBFatHxpcLCzX8ub1AzKXFNM9E6xr
+ LnZaiznxJZcl9YMzJ3BNeT9gv3ZnCTu8ENKil03ZXucDx89SUd2eWMJiJm7dklD7rq9nc/aVu
+ a5jMR9u3aOr6gKXRrAc/R8+2aBuner+S7dSxyoI9Zk5b0sBa4P3OCLT1Mr1i/FmO3VuyyF8tk
+ 5wEiKMjm07O9YeEtWfKWvFBJUPg7IuiSM9HltDEIPBxK276AApiCBb1h39EID77T9TwoooDWP
+ JL+T+y4qAVgzLa4gaNjB1KhOTQlL0kMNpKLWUI+6v3Nl6rWtl0SpLxJUP0w/zHJ9LguYKKc7F
+ j8p1I6vwky8sbYtVpQAX0dQl9FMaRDofce4mcFajqLOr0=
 
-> Refactor the current implementation of the high-level composite read and
-> write operations in preparation of the addition of block-mode read/write
-> operations.
+=E2=80=A6
+> mode is the usage of separate FIFO buffer to store data.d
 =E2=80=A6
 
-* I find that a cover letter can be helpful also for the presented small p=
-atch series.
-
-* How do you think about to replace any abbreviations in summary phrases?
-  - HLC
-  - r/w
-
+Will a typo be avoided for the final commit message?
 
 Regards,
 Markus
