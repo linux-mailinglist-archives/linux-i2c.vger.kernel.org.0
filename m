@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-4008-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4009-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CBF490645B
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 08:48:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7341390645E
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 08:48:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E75322850A9
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 06:48:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 851E91C2155F
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 06:48:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6688C137758;
-	Thu, 13 Jun 2024 06:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E32C137933;
+	Thu, 13 Jun 2024 06:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BwlmB3qb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYTRBpaf"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E39A46434;
-	Thu, 13 Jun 2024 06:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D1B2119;
+	Thu, 13 Jun 2024 06:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718261297; cv=none; b=CXU+9jbqv4WkW61smG9tB5dEV8R5rcEtYqUQ+tjcM5FpfeKB7NC8snL9Aw8BOG5+j48A1dSTYScmpyRrO4ywMmo+KOn1S0qW0QnuyDNMlOlzkpIAoBwuFaqwm86P7DB7eafngwjjATfCSBVNQQSQJPjMbDLzoPyG89GXv1DOlnE=
+	t=1718261303; cv=none; b=EOFyFrw4um8WUjGLqJr89Oa0JqsqRe8OviXCO/vql3TaabVQgQtC8db7vf05xMMfcmIyU29FlWVA6G7etJxIhf9pOFYfm/NDvMVUQ6nglOTd6iuyV+kgBeGQiWIq6G0NNTafCLeojP8BdgRnwqyER/uNNRTiLy1EcxHj/mdr7Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718261297; c=relaxed/simple;
-	bh=PFs96SefEyPDWQmGOzgeOkRpcJcJvgXrS6ezsy6/IHo=;
+	s=arc-20240116; t=1718261303; c=relaxed/simple;
+	bh=Dq1r15iOk7uYwsMnCJ4RUoQv/vBE/4LZKzdnFx3hdC8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EhUBLr55ny6B+Vr2iSju9vttPQluib8J2hljSodsOfZjq7DKRoD27kXTtKr+lOpXDGTkDv9MiY9wfblT3eM2TAkcLEgoLzCkukQ8UhLdHeu5NXTYZBCYCzfG0Uk639gkt+3Arp6o+Tuu6Oiv+l/5Q9FlZqDYK/XtS+81uQcgZhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BwlmB3qb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE6BFC2BBFC;
-	Thu, 13 Jun 2024 06:48:11 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Po1yJGqdwZN2GlgaGdp35vbw12bad8NilmzatkjA2RgShma5ZgvRNdKp8O4SiX1lZG6HiRMyMKA2s9PA2L+ojmqqCELqIEdNtPFfkePcy2D7mBKVM10ZljF8QPmbakwyRF0qLfPhOHnkM4yiavfC6WlnNGL1Xbz7hMy4gACUpYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYTRBpaf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1338C2BBFC;
+	Thu, 13 Jun 2024 06:48:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718261296;
-	bh=PFs96SefEyPDWQmGOzgeOkRpcJcJvgXrS6ezsy6/IHo=;
+	s=k20201202; t=1718261302;
+	bh=Dq1r15iOk7uYwsMnCJ4RUoQv/vBE/4LZKzdnFx3hdC8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BwlmB3qbUQDxFMhFC0XeZspkMr4ymT5+phlUxoJHD33CL01CcCrq54q3u1aDtsxq1
-	 BTTUUa2+h8b6KgxQpOH1LbKKlX/eNQIX63d1brmAwWjgcLhU6hq3cuCPfI/ZhVrlyU
-	 OC7GK4d8yYDoZvHpLwMdJyJ3zS+Eh8nTrHn9L/QuL6GsZ+2xRVBjjIHvmrqgOmPxHw
-	 YAv93kg1CUyrg2E1OGdMlrSStxra4Arw/vK8VFUja5ag6wMqPPQiLH4IZm11ADHGag
-	 iAwI0HDUSchFGSNZSYjzqiqLNqSBTNjtpSjMJXUlavCwYjM9r2thnfPUC8inpsCpbJ
-	 rAdPrA2q3Rc+Q==
-Message-ID: <16c20645-2746-4885-8248-8d50921d8f71@kernel.org>
-Date: Thu, 13 Jun 2024 08:48:09 +0200
+	b=iYTRBpafk8r5BqKdwmEpJ+ERwdhhJzL4/v34uMtV1TW6gP73qUYv8T+t1IV3dkLID
+	 ayTa0rOohGozU+FF92MyIj/4cY3leAYlV0WjSRdRO0G+ZKlM84YkHn6c6pwnm3Hayn
+	 y7wcQcm0TVk2MFqaiT780rE8rEGVuXTw2Vtknc4O9/xKWuPt2AX1+SCh72IskYPGLE
+	 BVPVS/TUHygQ1+whw6FyO164wM09pmD0XoG/RAijwlNVzAMFxTnCMQtrk9U4Br1zdq
+	 twAZwJ2dRLf3DR3C+VlsTsG71sZzouiMEfb7X+JIg7VkX7VDaHlBaMXnTyCIYWBw06
+	 qGMw2RtuWl4Iw==
+Message-ID: <00291739-7b2c-4e4d-ada8-dc8ed88a8c91@kernel.org>
+Date: Thu, 13 Jun 2024 08:48:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: qcom-cci: Document sm8550
+Subject: Re: [PATCH v2 2/4] dt-bindings: i2c: qcom-cci: Document sm8650
  compatible
 To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -63,9 +63,9 @@ Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
  linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-i2c@vger.kernel.org
 References: <20240612215835.1149199-1-vladimir.zapolskiy@linaro.org>
- <20240612215835.1149199-2-vladimir.zapolskiy@linaro.org>
-Content-Language: en-US
+ <20240612215835.1149199-3-vladimir.zapolskiy@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -109,16 +109,15 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240612215835.1149199-2-vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20240612215835.1149199-3-vladimir.zapolskiy@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/06/2024 23:58, Vladimir Zapolskiy wrote:
-> Add sm8550 compatible consistent with CAMSS CCI interfaces, the list of
-> clocks is reduced by removing "slow_ahb_src" clock, which is derived
-> from "cpas_ahb" clock.
+> Add sm8650 compatible consistent with CAMSS CCI interfaces.
 > 
 > Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> ---
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
