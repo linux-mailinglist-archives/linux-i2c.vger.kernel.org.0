@@ -1,136 +1,113 @@
-Return-Path: <linux-i2c+bounces-4014-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4015-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93FDB907342
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 15:14:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 509CF907CF7
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 21:52:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F12122875DD
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 13:14:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0C1EB2899B
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jun 2024 19:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8B3144D28;
-	Thu, 13 Jun 2024 13:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A5B7E0F6;
+	Thu, 13 Jun 2024 19:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oXZS6Y03"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="fIrj4a6P"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD835143C46;
-	Thu, 13 Jun 2024 13:13:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758DE77109
+	for <linux-i2c@vger.kernel.org>; Thu, 13 Jun 2024 19:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718284422; cv=none; b=bORedvrdwVY2j7Lz7X8fd0At+ekkPlLBUJ/x+tbRzu9Vwbqe9K/uKmAuFxm9fSJqsWDLsDyycbu7oKd7q9gh/BsefODe7ElGZz4H5NfACSY+S74qiFWEVZ//o0IxDBivM7chzr6FESNTO1IER/MArIAyMj6H4TiRB12pIj76Klo=
+	t=1718308342; cv=none; b=hfaX+nxMTwDUb0kFCH2aS0wfj/QL+XTwfMGbdZx65VOgkhYbyA4PlC7ILectmmde4+zbo9SX1vCFOpbFcY48W7WWLXJ2bqRYtKh8O3obJfskleDNaIYEgpdC3HAcKczsglfNdwWKZcQYgWcBmqKqMwQa49XZn0ruiqh/Wh++O9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718284422; c=relaxed/simple;
-	bh=Ty2UCqUCB0l7oVWoD5eKOXaiKOi1EakKfeomsmmXcoU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=n8ZJ3WUkLFxHADkOGrmOxE1tRkBGW7aduu9kQzuo5IbqmVZrz/QPhR3ZpJlAUL66DYaf5hFR2w2BYbdTg3PoES3Krkc2mDiDjcV7Ovgym37R3RIZVQkJ4ajMgqpYBPUg8CMw025B89dI3CB/UBiDq+oQVIyyexm+T59OX7IaGcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oXZS6Y03; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A012720003;
-	Thu, 13 Jun 2024 13:13:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1718284418;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NnXBYdyT0gNgWX4/GEGtMkJeHalCuEmPx0jaEIE6hhg=;
-	b=oXZS6Y03Py2abvBDLCedfdQ9y7RgtZWBDeY21qzLJK5MmtDCtpZP9WO0Yeibpug5vd9D9T
-	JhhcFZ0Xj86WrJ9C4OwAXxW1+v/0limydcCxwt5XnGYcAffUjWuGOl0Odc0xHGgpKG+CsM
-	v7vResNn1d6LrTDfTM+DBCPRNP3XyMzlo752JQBEsl3R9h1Q4gIeXJY2hXDQiamAm/aox5
-	QL3ivUvV/hoekJgSxe7BHmhDXcWAeMut8aPJJcCTWh+wDYOCByj2Qp/6yejU3pqaTGGR15
-	7xiTmZ6Vtr7nT8DBNDXcfpbrmprD7NaQh0iuraIMskpaKd39Tr67Nl5rSWfSlQ==
-From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Thu, 13 Jun 2024 15:13:28 +0200
-Subject: [PATCH 2/2] i2c: omap: wakeup the controller during suspend()
- callback
+	s=arc-20240116; t=1718308342; c=relaxed/simple;
+	bh=KFvrXf67RTEBCYQPpIVoPpW00n6DFoY1qOKUUMRVFhw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DM91Tczd3dP8t5akFsRoXO5b3dq9AQNiwAExDPQpI7wn/ZhH/D4PbJlXKcQUd5lqLjL8u08ecLBUDPm8oeU4In0RNpgXcHgYUFAJhYsljYTuaOMy//E4xwMiXYwh8pxFZY8Wl6uYDXlA8DY1V7h9lTjRso+0+y2wwxC9Xcwcvmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=fIrj4a6P; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=KFvr
+	Xf67RTEBCYQPpIVoPpW00n6DFoY1qOKUUMRVFhw=; b=fIrj4a6P5X5mKjhJlPjb
+	xpwhdFMdeWwkfdwt3+qq3u1tW0Iz+MiOg0vzvsR9bBQr6CTlyi0bPju5wo7BuacB
+	OzJMAVS/dNAF/mY8N7GFT/foi9LZ+6oTCBx0UAaJIHpYQz66vz1BQyk1rUnd6SpI
+	t6U0Q7qyUrgs/ksJsQOveTNrXbestG9l6qAEW9NzDoY7Hy8LaiuQfq099u1JBrZB
+	IZGc1aX7m4a1wMihU33mc+qj00xb+m+7ECZLBCzjp0p9rHGjedPjXFKDDX+WXNiP
+	XTXjBUhIO6Xnrbh0adihsxQMDNx9Cop8jMdX7pFsl/uUwV+zFHAjms2jnjUfFiMJ
+	pw==
+Received: (qmail 1285280 invoked from network); 13 Jun 2024 21:52:16 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jun 2024 21:52:16 +0200
+X-UD-Smtp-Session: l3s3148p1@D1kD1soatMFehh9j
+Date: Thu, 13 Jun 2024 21:52:16 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Easwar Hariharan <eahariha@linux.microsoft.com>
+Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] docs: i2c: summary: document use of inclusive
+ language
+Message-ID: <z7j5debqyetpts7xdufguiprzqvd4swupnbdenhl7brx4dtt3j@j67j5ufyzrtn>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Easwar Hariharan <eahariha@linux.microsoft.com>, linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240610081023.8118-1-wsa+renesas@sang-engineering.com>
+ <20240610081023.8118-5-wsa+renesas@sang-engineering.com>
+ <8e051ecf-a355-4aef-bc40-007f9b709ba6@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240613-i2c-omap-wakeup-controller-during-suspend-v1-2-aab001eb1ad1@bootlin.com>
-References: <20240613-i2c-omap-wakeup-controller-during-suspend-v1-0-aab001eb1ad1@bootlin.com>
-In-Reply-To: <20240613-i2c-omap-wakeup-controller-during-suspend-v1-0-aab001eb1ad1@bootlin.com>
-To: Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
- Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>, 
- Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org, 
- linux-kernel@vger.kernel.org, gregory.clement@bootlin.com, 
- theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com, 
- Thomas Richard <thomas.richard@bootlin.com>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-X-Mailer: b4 0.12.0
-X-GND-Sasl: thomas.richard@bootlin.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gyl7wq2x5obpwocp"
+Content-Disposition: inline
+In-Reply-To: <8e051ecf-a355-4aef-bc40-007f9b709ba6@linux.microsoft.com>
 
-A device may need the controller up during suspend_noirq() or
-resume_noirq().
-But if the controller is autosuspended, there is no way to wakeup it during
-suspend_noirq() or resume_noirq() because runtime pm is disabled at this
-time.
 
-The suspend() callback wakes up the controller, so it is available until
-its suspend_noirq() callback (pm_runtime_force_suspend()).
-During the resume, it's restored by resume_noirq() callback
-(pm_runtime_force_resume()). Then resume() callback enables autosuspend.
+--gyl7wq2x5obpwocp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-So the controller is up during a little time slot in suspend and resume
-sequences even if it's not used.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
----
- drivers/i2c/busses/i2c-omap.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+> > +Outdated terminology
+> > +--------------------
+> > +
+> > +Historically, controller was named "master" and client was named "slave". These
 
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index 410c8b37f768..35a3f0a64986 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -1574,9 +1574,31 @@ static int omap_i2c_runtime_resume(struct device *dev)
- 	return 0;
- }
- 
-+static int omap_i2c_suspend(struct device *dev)
-+{
-+	/*
-+	 * If the controller is autosuspended, there is no way to wakeup it once
-+	 * runtime pm is disabled (in suspend_late()).
-+	 * But a device may need the controller up during suspend_noirq() or
-+	 * resume_noirq().
-+	 * Wakeup the controller while runtime pm is enabled, so it is available
-+	 * until its suspend_noirq(), and from resume_noirq().
-+	 */
-+	return pm_runtime_resume_and_get(dev);
-+}
-+
-+static int omap_i2c_resume(struct device *dev)
-+{
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	return 0;
-+}
-+
- static const struct dev_pm_ops omap_i2c_pm_ops = {
- 	NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
- 				  pm_runtime_force_resume)
-+	SYSTEM_SLEEP_PM_OPS(omap_i2c_suspend, omap_i2c_resume)
- 	RUNTIME_PM_OPS(omap_i2c_runtime_suspend,
- 		       omap_i2c_runtime_resume, NULL)
- };
+Ahhh, while reworking the series I finally saw that I wrote "client" in
+the line above. That was an oversight, it should have been "target", of
+course. Next time, please quote directly below the errornous line, that
+makes it easier for me to understand what we are talking about.
 
--- 
-2.39.2
+Nonetheless, the rework is not in vain. I think the texts have gotten a
+tad better.
 
+
+--gyl7wq2x5obpwocp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZrTewACgkQFA3kzBSg
+KbZggA/9HEci6D5G4Hzeuv5wNp0PKU/K5dEE3ujqwPK3MstPwDeqdPYEYz77cxQl
+6VitfxdO5jYh0ycGZHZXv3C5LRM/VlMz3Q5CHNmDUxybIAtNVVzbs3pe5mdtSK1B
+hTbY5SJHKHVzVTLXxc8TM4f3tCV2izy28RiMpDBQbPH07YZjY+Ds6+7XK72BUzQp
+BYNMWCVEXmsMKdbsxgEAGvgq3PoEIBUleZ/xvYIIRQEFGZmWShB4u1UsG7Z6WypI
+BQsT6tFFogRSzXqI5KpvkOSWQxfER3GLf1YzLj61FFC6bgHgiD1SdbjJPA38WNiz
+1gAKaxKe5SM2G2Jf2TW48kLOLr4BspUiCLuTRoWLLhp2TjeAyGNQ7ERrYwBT2NzB
+dVC1PkKYAlHpCrQfhu90/ST13eIhK52bpE1lwc6gdMC4z3Y8bf2o2Run08p9Nqt/
+tbPf2ixUcNDHGQtrHxam1N4qcZdXkatf0H7cuHbt8Se9e0mgNBE5BukFobmucSSz
+xE7KmbsqDcNwrfbI+QZvx1G7ZjUO8FVdGcd6CUjk7Nw9E8cU3fCGFR8vsyyXWpYo
+kc1E2mY5BDuOxyHgSKnNhztX5x9cj8EZhNJ0aS9JfTxg9CYVmbChVwZC0p03T/EQ
+6fqHxT8djanPPHKvcbHSHIo+b9Jo7HYZ0DabwBXSlfP1cSsbgLU=
+=AGnG
+-----END PGP SIGNATURE-----
+
+--gyl7wq2x5obpwocp--
 
