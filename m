@@ -1,62 +1,76 @@
-Return-Path: <linux-i2c+bounces-4027-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4029-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 238BE9085E4
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jun 2024 10:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3072B9085EB
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jun 2024 10:15:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B167028B39C
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jun 2024 08:14:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C307D28B3DD
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jun 2024 08:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D4E1836EF;
-	Fri, 14 Jun 2024 08:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86DD11836F6;
+	Fri, 14 Jun 2024 08:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="PX3Vsfla"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ILuL2/vX"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF7B187333
-	for <linux-i2c@vger.kernel.org>; Fri, 14 Jun 2024 08:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7661822F8
+	for <linux-i2c@vger.kernel.org>; Fri, 14 Jun 2024 08:14:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718352779; cv=none; b=FA8pwZZUCKzUYRG6ES2FX1dmrAURo9gJmZRJhqpfOt2ClpntrL+JsxX7dSYeH9Y9lpBcstaTVBGQNFto6o+R4GNF2Hjk7QwXj8ze63cOtCq7CKqsuVJbeToRU5RXz0fEitGEQUlhzWZEAAmZ49uFhejAL+N9jBizfTKlEUzwXzA=
+	t=1718352874; cv=none; b=VT9yPDMCiywsVH2VK3jJCW1o1AIRwYW1/UgvaNMxV443fFLYWxhqAgrpUBzC1bUPVqvZgYRoK0rRkZ5YUtNt4NsvRUoll4vqwzHcUAtHBHD1fkpKa6suB2oELEjYZez0J5twaq3l4jWLtexNhAMgfc9J4Pyjum6dx/4IK9Rtmwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718352779; c=relaxed/simple;
-	bh=BVEwSEZWW70n3zK43WnEFFNovrnrFP6C9VNMi4Zg6mM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=acCjwo0BDrFcxCBym1gWDGhxYF3ACJa9oU5K31z3nRiBiXEfBXIoUCu3i+0dZrJxM4SXnRomuPYegLFNZGbGiSAegaozSAPQLOJTStZQIDNFMSLohZTnwiCisOGmrdutarl02OFrs2AGgYeKnY5xFdz2jJ27OwAd0XRA7ObZn3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=PX3Vsfla; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=x+OirvJmm2z8OY7TiPcj0ELlgpYDPQ+Seo1lKvUO+VI=; b=PX3Vsf
-	laINXXGy3e3zub0bL77RqjsZYszfE483pUzNdyKQdEEvpy6I9/Mtr6t/pVGqWb/R
-	dvaPM3v2WhJ9KefQ/ritD72/2c4eubbeE+PKAF93EoYbgnOzOLrD51nFjMIvhw5r
-	b5CVo2SsGSagW+NEgkJa9tOliyu3sPBf7EY55Oe5Qxdr/N8I0YNRp5yBHXV3VuCe
-	bE6aKjND8v0eLk7qyS0fI5IVAvkkpTjnmQ9kBfKjCltaGe5yLnbPL+aPNXrsOQW4
-	vajav7vusIciE4k2MuWTSjaOBGOezzRqEAz9Rp7Kqg/LIUF9vqHGmznNAZds7uiG
-	TfrbPUzL/Fi2yGNQ==
-Received: (qmail 1438219 invoked from network); 14 Jun 2024 10:12:51 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jun 2024 10:12:51 +0200
-X-UD-Smtp-Session: l3s3148p1@wNCFLtUaNIIgAwDPXzjQABqqX1QYyOSW
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-i2c@vger.kernel.org
-Cc: Easwar Hariharan <eahariha@linux.microsoft.com>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andi Shyti <andi.shyti@kernel.org>,
+	s=arc-20240116; t=1718352874; c=relaxed/simple;
+	bh=FsW1wDZcSI8zU9c+0ww1DluYDRtDKNmGA625lDy8Fpg=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=qG5nwFGj2iT3fhqC99hWG3T9ZckTgUWBON/e8OXI2O1Z/NoUD4sZY7jtxp/7EwEznPrBuRz9wwpOi2BLyFYpZZ4oC7LdI0e9iAKcNWlNicLBXwbbGyu537i15btLnzdj97KzdDpHRm06vF6QnknUS9+yS/DhG7EIE5OcBqTNnso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ILuL2/vX; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718352872; x=1749888872;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FsW1wDZcSI8zU9c+0ww1DluYDRtDKNmGA625lDy8Fpg=;
+  b=ILuL2/vX6cHAK5B6uvI0EbvmgCzx0pB9rNNeFMIyC238L3yGPiMcJ2cW
+   tlgFMUHWy1xD6JVdJ7/PLtmVKiIp79IKfBcbIW/hBHfHaKQvQbXLJo7mf
+   SuVYIOw0FM9dEKjfZywnWLER2VyJk5Wu6YattirhsXWUg6moM2nMXXXby
+   SC6Dr7TLx0tfvIeuOMNA/Gj6w4ruTxqZ74Da6b71BHcJ8OFUJ+HLVeUdw
+   6YL5DpiutWPBKOIJWBAFStR3zlJqBMJmaQg2iB/QDp6usdzExIrghOs6V
+   VfSgtdC+D+SqbIxMBRUpIdCLFUF52R8URhA+XGVH830IxFo1SkA0sOouK
+   g==;
+X-CSE-ConnectionGUID: wZBc7lNkQP6KEVMYE9QMgg==
+X-CSE-MsgGUID: LW3hyYowSqCDODsGLLcUJQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11102"; a="40643406"
+X-IronPort-AV: E=Sophos;i="6.08,237,1712646000"; 
+   d="scan'208";a="40643406"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 01:14:31 -0700
+X-CSE-ConnectionGUID: 4s0MMvB6TUqsmDO/Up66XQ==
+X-CSE-MsgGUID: oiK+h7/gSnWnRcQHlDP+Lg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,237,1712646000"; 
+   d="scan'208";a="71629259"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 01:14:30 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 2A9C811FBC0;
+	Fri, 14 Jun 2024 11:14:28 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1sI24q-00AW0C-0B;
+	Fri, 14 Jun 2024 11:14:28 +0300
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-i2c@vger.kernel.org,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH v3 6/6] docs: i2c: summary: be clearer with 'controller/target' and 'adapter/client' pairs
-Date: Fri, 14 Jun 2024 10:12:44 +0200
-Message-ID: <20240614081239.7128-14-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240614081239.7128-8-wsa+renesas@sang-engineering.com>
-References: <20240614081239.7128-8-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 1/1] i2c: Add nop fwnode operations
+Date: Fri, 14 Jun 2024 11:14:18 +0300
+Message-Id: <20240614081418.2506288-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,76 +79,71 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This not only includes rewording, but also where to put which emphasis
-on terms in this document.
+Add nop variants of i2c_find_device_by_fwnode(),
+i2c_find_adapter_by_fwnode() and i2c_get_adapter_by_fwnode() for use
+without CONFIG_I2C.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/i2c/summary.rst | 33 ++++++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 13 deletions(-)
+Hi Wolfram, others,
 
-diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
-index ff8bda32b9c3..90f46f1504fe 100644
---- a/Documentation/i2c/summary.rst
-+++ b/Documentation/i2c/summary.rst
-@@ -31,9 +31,7 @@ implement all the common SMBus protocol semantics or messages.
- Terminology
- ===========
+This is to support COMPILE_TEST (drivers/media/pci/intel/ipu-bridge.c for
+instance). Alternatively we'd need #ifdefs. Similar OF functions have
+dummies, too.
+
+We currently get:
+
+ERROR: modpost: "i2c_acpi_new_device_by_fwnode" [drivers/media/pci/intel/ipu-bridge.ko] undefined!
+ERROR: modpost: "i2c_find_device_by_fwnode" [drivers/media/pci/intel/ipu-bridge.ko] undefined!
+
+- Sakari
+
+ include/linux/i2c.h | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 9709537370ee..424acb98c7c2 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -960,8 +960,6 @@ int i2c_handle_smbus_host_notify(struct i2c_adapter *adap, unsigned short addr);
+ #define builtin_i2c_driver(__i2c_driver) \
+ 	builtin_driver(__i2c_driver, i2c_add_driver)
  
--The I2C bus connects one or more *controller* chips and one or more *target*
--chips.
+-#endif /* I2C */
 -
-+The I2C bus connects one or more controller chips and one or more target chips.
+ /* must call put_device() when done with returned i2c_client device */
+ struct i2c_client *i2c_find_device_by_fwnode(struct fwnode_handle *fwnode);
  
- .. kernel-figure::  i2c_bus.svg
-    :alt:    Simple I2C bus with one controller and 3 targets
-@@ -41,16 +39,16 @@ chips.
-    Simple I2C bus
+@@ -971,6 +969,28 @@ struct i2c_adapter *i2c_find_adapter_by_fwnode(struct fwnode_handle *fwnode);
+ /* must call i2c_put_adapter() when done with returned i2c_adapter device */
+ struct i2c_adapter *i2c_get_adapter_by_fwnode(struct fwnode_handle *fwnode);
  
- A **controller** chip is a node that starts communications with targets. In the
--Linux kernel implementation it is called an **adapter** or bus. Adapter
--drivers are in the ``drivers/i2c/busses/`` subdirectory.
-+Linux kernel implementation it is called an "adapter" or "bus". Controller
-+drivers are usually in the ``drivers/i2c/busses/`` subdirectory.
- 
--An **algorithm** contains general code that can be used to implement a
--whole class of I2C adapters. Each specific adapter driver either depends on
--an algorithm driver in the ``drivers/i2c/algos/`` subdirectory, or includes
--its own implementation.
-+An **algorithm** contains general code that can be used to implement a whole
-+class of I2C controllers. Each specific controller driver either depends on an
-+algorithm driver in the ``drivers/i2c/algos/`` subdirectory, or includes its
-+own implementation.
- 
- A **target** chip is a node that responds to communications when addressed by a
--controller. In the Linux kernel implementation it is called a **client**. While
-+controller. In the Linux kernel implementation it is called a "client". While
- targets are usually separate external chips, Linux can also act as a target
- (needs hardware support) and respond to another controller on the bus. This is
- then called a **local target**. In contrast, an external chip is called a
-@@ -60,9 +58,18 @@ Target drivers are kept in a directory specific to the feature they provide,
- for example ``drivers/gpio/`` for GPIO expanders and ``drivers/media/i2c/`` for
- video-related chips.
- 
--For the example configuration in figure, you will need a driver for your
--I2C adapter, and drivers for your I2C devices (usually one driver for each
--device).
-+For the example configuration in the figure above, you will need one driver for
-+the I2C controller, and drivers for your I2C targets. Usually one driver for
-+each target.
++#else /* I2C */
 +
-+Synonyms
-+--------
++static inline struct i2c_client *
++i2c_find_device_by_fwnode(struct fwnode_handle *fwnode)
++{
++	return NULL;
++}
 +
-+As mentioned above, the Linux I2C implementation historically uses the terms
-+"adapter" for controller and "client" for target. A number of data structures
-+have these synonyms in their name. So, to discuss implementation details, it
-+might be easier to use these terms. If speaking about I2C in general, the
-+official terminology is preferred.
- 
- Outdated terminology
- --------------------
++static inline struct i2c_adapter *
++i2c_find_adapter_by_fwnode(struct fwnode_handle *fwnode)
++{
++	return NULL;
++}
++
++static inline struct i2c_adapter *
++i2c_get_adapter_by_fwnode(struct fwnode_handle *fwnode)
++{
++	return NULL;
++}
++
++#endif /* !I2C */
++
+ #if IS_ENABLED(CONFIG_OF)
+ /* must call put_device() when done with returned i2c_client device */
+ static inline struct i2c_client *of_find_i2c_device_by_node(struct device_node *node)
 -- 
-2.43.0
+2.39.2
 
 
