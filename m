@@ -1,418 +1,183 @@
-Return-Path: <linux-i2c+bounces-4038-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4039-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 260DF9092A5
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jun 2024 20:59:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25BD69096B7
+	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jun 2024 10:03:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A116A1F225D0
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jun 2024 18:59:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 951B91F23865
+	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jun 2024 08:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E3BE1A0B04;
-	Fri, 14 Jun 2024 18:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E530D182B3;
+	Sat, 15 Jun 2024 08:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VSKw9hQO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jX5LQ8Ae"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857C082D6D;
-	Fri, 14 Jun 2024 18:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B885117C8D
+	for <linux-i2c@vger.kernel.org>; Sat, 15 Jun 2024 08:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718391573; cv=none; b=DUWUExqKOSgnWvFI2QSwFJfqxO14zfdISS6SDMTfKJLNocae2XKyS16eSRDYo4/igvW2LJLaNe3BAZasuSjHG0JzN1rARfxE1QQtleS+RI4tTb0gFGkEnipsFj2jDcBpd2pcrIiBE0OwkrHMO1a0koCvWf3f957FyDlEwdluuHg=
+	t=1718438595; cv=none; b=X/XF184bTbIwvMUD8kPSxVCFNTpXZIVJNdtTLm7zwx0qkDiTvFOMJdqIld5p4QIGmvMd4kOOCcqS4dlFAlJ38dR+0qF4CQO1qPKEOvifb0U9yTTJZU6kZqzGr4iYfpwJgDo3VaYbdDK+qCKzVS/oMlk+KF4D9eK9JkIesxqR2zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718391573; c=relaxed/simple;
-	bh=izinKD8qxZhmLsNG5ZHOywhsTSiCXkzhmdMCXLd6pOw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FUMgbpJ3FQXhWRJjPk0JxSvWBQTifH4L2tcwtjKoHmoeBirmksLUOnSaz2lTTWiqh5M5LkF4oreMIA6mkW6O0fwH+kHpeKJES+WzOp60lI33pr2GNIC6/UVeEUlbRcq2uLMVxPfU/VkQS7HhVYZQw2K3kILm2P8m3OMWTEdSPNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VSKw9hQO; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7024d571d8eso1970038b3a.0;
-        Fri, 14 Jun 2024 11:59:30 -0700 (PDT)
+	s=arc-20240116; t=1718438595; c=relaxed/simple;
+	bh=zh8wFqlkhu1LOYUvNSAdvMQzn9efxj16Mc5cp9NZux4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sxNqmNDBV8COPQHqpeuxi6zxAVv+men17Slq38+hJWS/BhcCUhyl4Mlr6fXeDinA0EzsW+CbWCicqFhyF0tqVyfsNfBDDKKu451tF4RKQWwYTgu6b63t9cpRMPBKXgiEzJvNBn5N7tDKf35sGmX5u/4n/hESXElgUVTBl4c2VUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jX5LQ8Ae; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57c83100cb4so3109078a12.1
+        for <linux-i2c@vger.kernel.org>; Sat, 15 Jun 2024 01:03:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718391570; x=1718996370; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FOb3CsA47zkA831K5pVYY7AgWfK/9r6iX+g6uL1ZPAU=;
-        b=VSKw9hQOzgjz4fWIg0+BZqiEXX5DOsNLTdT32lPcSej4mh4xeW2IJuaKvh96CG1zBV
-         DAXwXz7mzyuL3Ty5CtdmNHdMMW9WkptRODnp1GGHcQ1d8/RltRsQIUubQweR/wD+9G4m
-         fMaEa+C03FOAEdWZlndJkqmjYldKqzJziXYF3uiAFRncElAfr+n8AgJtDq0fqM2/hm2V
-         dF4Wp1I9O9cTcWBhrgJnG6NgwyjrnMbYtZko+Gl0J/3pOkkR7YmfttBoxzFEhXZJVyg5
-         iHXN3ipbaXsfcQfzmi9t/GYmNve4oXUCQJ33GK53AfLdglCuGWU3Mcngb/6rLNJ0lVWd
-         6euQ==
+        d=linaro.org; s=google; t=1718438591; x=1719043391; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=zOGB4ty0lN3NCNyIJ260rYDoej6YMyuL1DkilGLprq4=;
+        b=jX5LQ8AeBhA4W+2km7luY6Sixj9wKzjIEvWeYfkepTIGjA9eeGDqxR+WCuwszdcB8o
+         l/DCIvsqFa6WDwW1BFUqMXbzQrahZscIJ3YsdtQNDH/OMRRWZ2H8NUOJlySbDeKjg446
+         AQsxcgloWLZK9qtp+wyUrzAhOTTZnRIZgOYvB6PhfYUDLKj0NkLLi7e9s6J6cUhq1O9G
+         wYs7lG5MR9GgonV41hd/b4i4yVmYuWN6+a53cDy/tEvWj2J3n9IFVjzwCgPPgcGW1S3G
+         ooEnl4w+V22zwywAoWXhtZUzI4HuWcGzTyghygRxfaYvK6vm/lhilvwTVuB2iVYxeCtL
+         nINg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718391570; x=1718996370;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FOb3CsA47zkA831K5pVYY7AgWfK/9r6iX+g6uL1ZPAU=;
-        b=igu6A99o0oRusnqkHaIVWHua2pq4ssaWPIkWlVmI1lglaothm15edoZChM/TtNXOGO
-         B0IYhxpIPpchWSkZwYurRmiVlHcTOYFQiHB/RNVyzeV699hOzaH81bqqC4NSVySANktx
-         D4KZ+9PP8B1n0dCxNCFaSmHHXfyoVBsgqKtHCjlDDz4QI1/bVLlPmTSQoDQuoZcs0Dks
-         KhHCXg7SVGGSZoVeC5kNcyJloBA7NsH/45LD2yHX1yBFGrPPoHgzlD31GTR6yPL/Yy2q
-         DNHLqhN2EPmgHn7TNVRGJUi+98v5+XY0ZRImXZMmiZnLcdl2DaCQouONvr4l6OPesSf3
-         Vjiw==
-X-Forwarded-Encrypted: i=1; AJvYcCVVJmXVg4bMy8PskK9JuHkFaEo0OsWRIXwxPkBjszV2di83QAAfNvdFGHnzheMGkWEBgx1UIp+B9N34vSh+tJjNMcNDJ6IfUIFtGE0nMvGcs1h8nfLTjFaJ70r/+VFokBBmo38gu9EMdA==
-X-Gm-Message-State: AOJu0YxVs+BSM9e2ol5g7RL3aq+aSrAGg1ADemhpzU6anoMDwS2kvSFn
-	HxUC1mFKhHXy36I0FuoI9epJq4Mgqz3w5BEBB+C+/O3pKiwAK3PoY9KVwg==
-X-Google-Smtp-Source: AGHT+IEJwU9AojupZhWELDo34Lrcz7p46td1ywJEQMsWI5PAGByLqo0GspLHUDthMDyoXAtQviJzUg==
-X-Received: by 2002:a05:6a20:394b:b0:1b7:f59d:fd12 with SMTP id adf61e73a8af0-1bae8263edfmr4482871637.55.1718391569788;
-        Fri, 14 Jun 2024 11:59:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c4c466bf5fsm4288469a91.35.2024.06.14.11.59.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jun 2024 11:59:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: linux-hwmon@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?UTF-8?q?Ren=C3=A9=20Rebe?= <rene@exactcode.de>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Armin Wolf <W_Armin@gmx.de>,
-	Stephen Horvath <s.horvath@outlook.com.au>,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Sasha Kozachuk <skozachuk@google.com>,
-	John Hamrick <johnham@google.com>
-Subject: [RFT PATCH] hwmon: (spd5118) Add support for Renesas/ITD SPD5118 hub controllers
-Date: Fri, 14 Jun 2024 11:59:24 -0700
-Message-Id: <20240614185924.604672-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20230601; t=1718438591; x=1719043391;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zOGB4ty0lN3NCNyIJ260rYDoej6YMyuL1DkilGLprq4=;
+        b=YmxQxd3Xg94ntO0i2F9LhGEyJh9TUHsaEFCrMBmC7BzbVrEXRP0LHsMxVzY1/SlNfB
+         pMVqZpXqxX8PE4wYL1a1FJQS6mRZtagTi6PW4ZnzZfXQfE6ktGFv/pg320uliA2IGSDw
+         nMle6GrvKALo/sQ6RJUpI26QkqrGCruISWY8fsZN3yYBb1byIgDceItXejEgmNTv+k3t
+         /kNVd3dRQoeWcfS0ano+E0bpqfY2mvTVXk82H8WUSC9kQcUtUWBZOb/loL1xZ8ZnavOJ
+         Cnbn3JPMsQOshW0FUVjOQy1Rxll1wN9AKG2z/zk40PF6FCKdgVuvt7Cm1uCzsZ62MI7J
+         O6Qg==
+X-Forwarded-Encrypted: i=1; AJvYcCXG3XXu88YvELXB+cf4xXzht6LvKOMr5i6Ch5Cj73woruIFBFonsIQvpwu5CVlb54H5UvUiTQRT4YdMU8rmh3n9uS4/harEZRrd
+X-Gm-Message-State: AOJu0YwFptjQaBsUmi+Kxri9YUu1P+drS366QeYM4Z1d3vZ08yHKT4DI
+	mu8jvngi3U8lHzHzPwS/1fjAOoSZgJYVX41Hnadt9XydENFDX4xlG++ZQ7uawQY=
+X-Google-Smtp-Source: AGHT+IGcUqmW23OJOLctm0PilyvalwSahHFmwbkA/ty941zZUuGnFSGlIjdG0pmdv62CKNXHzx2K1Q==
+X-Received: by 2002:a50:a456:0:b0:57c:73fc:a8d7 with SMTP id 4fb4d7f45d1cf-57cbd69dd0dmr2882939a12.14.1718438591096;
+        Sat, 15 Jun 2024 01:03:11 -0700 (PDT)
+Received: from [192.168.0.18] ([78.10.206.163])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb72daa67sm3310438a12.38.2024.06.15.01.03.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Jun 2024 01:03:10 -0700 (PDT)
+Message-ID: <54dcddce-bd31-4e04-8fa3-ecca9b0162f8@linaro.org>
+Date: Sat, 15 Jun 2024 10:03:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: drop stale Anson Huang from maintainers
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>,
+ Peng Fan <peng.fan@nxp.com>, Frank Li <Frank.Li@nxp.com>,
+ devicetree@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20240614095927.88762-1-krzysztof.kozlowski@linaro.org>
+ <20240614170123.00002e0f@Huawei.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240614170123.00002e0f@Huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The SPD5118 specification says, in its documentation of the page bits
-in the MR11 register:
+On 14/06/2024 18:01, Jonathan Cameron wrote:
+> On Fri, 14 Jun 2024 11:59:27 +0200
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> 
+>> Emails to Anson Huang bounce:
+>>
+>>   Diagnostic-Code: smtp; 550 5.4.1 Recipient address rejected: Access denied.
+>>
+>> Add IMX platform maintainers for bindings which would become orphaned.
+> That doesn't make much sense for the magnetometer which has nothing to do with
+> imx.
+> 
+> Make that one my problem under my jic23@kernel.org address.
+> 
+> Thanks,
+> 
+> Jonathan
+> 
+> 
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+>> diff --git a/Documentation/devicetree/bindings/iio/magnetometer/fsl,mag3110.yaml b/Documentation/devicetree/bindings/iio/magnetometer/fsl,mag3110.yaml
+>> index 6b54d32323fc..467002a5da43 100644
+>> --- a/Documentation/devicetree/bindings/iio/magnetometer/fsl,mag3110.yaml
+>> +++ b/Documentation/devicetree/bindings/iio/magnetometer/fsl,mag3110.yaml
+>> @@ -7,7 +7,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+> 
+> Not sure the new maintainers make sense here.
+> 
+> Flip it to me if no one else volunteers.
 
-"
-This register only applies to non-volatile memory (1024) Bytes) access of
-SPD5 Hub device.
-For volatile memory access, this register must be programmed to '000'.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-"
+Indeed, too much automation. I'll do that for v2.
 
-Renesas/ITD SPD5118 hub controllers take this literally and disable access
-to volatile memory if the page selected in MR11 is != 0. Since the BIOS or
-ROMMON will access the non-volatile memory and likely select a page != 0,
-this means that the driver will not instantiate since it can not identify
-the chip. Even if the driver instantiates, access to volatile registers
-is blocked after a nvram read operation which selects a page other than 0.
-
-To solve the problem, add initialization code to select page 0 during
-probe. Before doing that, use basic validation to ensure that this is
-really a SPD5118 device and not some random EEPROM. Explicitly select
-page 0 when accessing the volatile register space, and protect volatile
-register access against nvmem access using the device mutex.
-
-Cc: Sasha Kozachuk <skozachuk@google.com>
-Cc: John Hamrick <johnham@google.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-This patch depends on the spd5118 patch series submitted earlier.
-
-RFT: I was only able to test this patch with DDR5 using the Montage
-Technology SPD5118 hub controller. It needs testing with the Renesas
-hub controller, and could use some additional testing with other DIMMs.
-
- drivers/hwmon/spd5118.c | 164 +++++++++++++++++++++++++++++-----------
- 1 file changed, 119 insertions(+), 45 deletions(-)
-
-diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-index ac94a6779360..96052ef4256b 100644
---- a/drivers/hwmon/spd5118.c
-+++ b/drivers/hwmon/spd5118.c
-@@ -74,7 +74,7 @@ static const unsigned short normal_i2c[] = {
- 
- struct spd5118_data {
- 	struct regmap *regmap;
--	struct mutex nvmem_lock;
-+	struct mutex access_lock;
- };
- 
- /* hwmon */
-@@ -92,6 +92,29 @@ static u16 spd5118_temp_to_reg(long temp)
- 	return (DIV_ROUND_CLOSEST(temp, SPD5118_TEMP_UNIT) & 0x7ff) << 2;
- }
- 
-+static int spd5118_set_page(struct regmap *regmap, int page)
-+{
-+	unsigned int old_page;
-+	int err;
-+
-+	err = regmap_read(regmap, SPD5118_REG_I2C_LEGACY_MODE, &old_page);
-+	if (err)
-+		return err;
-+
-+	if (page != (old_page & SPD5118_LEGACY_MODE_MASK)) {
-+		/* Update page and explicitly select 1-byte addressing */
-+		err = regmap_update_bits(regmap, SPD5118_REG_I2C_LEGACY_MODE,
-+					 SPD5118_LEGACY_MODE_MASK, page);
-+		if (err)
-+			return err;
-+
-+		/* Selected new NVMEM page, drop cached data */
-+		regcache_drop_region(regmap, SPD5118_EEPROM_BASE, 0xff);
-+	}
-+
-+	return 0;
-+}
-+
- static int spd5118_read_temp(struct regmap *regmap, u32 attr, long *val)
- {
- 	int reg, err;
-@@ -174,28 +197,44 @@ static int spd5118_read_enable(struct regmap *regmap, long *val)
- static int spd5118_read(struct device *dev, enum hwmon_sensor_types type,
- 			u32 attr, int channel, long *val)
- {
--	struct regmap *regmap = dev_get_drvdata(dev);
-+	struct spd5118_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
-+	int err;
- 
- 	if (type != hwmon_temp)
- 		return -EOPNOTSUPP;
- 
-+	mutex_lock(&data->access_lock);
-+
-+	err = spd5118_set_page(regmap, 0);
-+	if (err)
-+		goto unlock;
-+
- 	switch (attr) {
- 	case hwmon_temp_input:
- 	case hwmon_temp_max:
- 	case hwmon_temp_min:
- 	case hwmon_temp_crit:
- 	case hwmon_temp_lcrit:
--		return spd5118_read_temp(regmap, attr, val);
-+		err = spd5118_read_temp(regmap, attr, val);
-+		break;
- 	case hwmon_temp_max_alarm:
- 	case hwmon_temp_min_alarm:
- 	case hwmon_temp_crit_alarm:
- 	case hwmon_temp_lcrit_alarm:
--		return spd5118_read_alarm(regmap, attr, val);
-+		err = spd5118_read_alarm(regmap, attr, val);
-+		break;
- 	case hwmon_temp_enable:
--		return spd5118_read_enable(regmap, val);
-+		err = spd5118_read_enable(regmap, val);
-+		break;
- 	default:
--		return -EOPNOTSUPP;
-+		err = -EOPNOTSUPP;
-+		break;
- 	}
-+
-+unlock:
-+	mutex_unlock(&data->access_lock);
-+	return err;
- }
- 
- static int spd5118_write_temp(struct regmap *regmap, u32 attr, long val)
-@@ -256,14 +295,28 @@ static int spd5118_temp_write(struct regmap *regmap, u32 attr, long val)
- static int spd5118_write(struct device *dev, enum hwmon_sensor_types type,
- 			 u32 attr, int channel, long val)
- {
--	struct regmap *regmap = dev_get_drvdata(dev);
-+	struct spd5118_data *data = dev_get_drvdata(dev);
-+	struct regmap *regmap = data->regmap;
-+	int err;
-+
-+	mutex_lock(&data->access_lock);
-+
-+	err = spd5118_set_page(regmap, 0);
-+	if (err)
-+		goto unlock;
- 
- 	switch (type) {
- 	case hwmon_temp:
--		return spd5118_temp_write(regmap, attr, val);
-+		err = spd5118_temp_write(regmap, attr, val);
-+		break;
- 	default:
--		return -EOPNOTSUPP;
-+		err = -EOPNOTSUPP;
-+		break;
- 	}
-+
-+unlock:
-+	mutex_unlock(&data->access_lock);
-+	return err;
- }
- 
- static umode_t spd5118_is_visible(const void *_data, enum hwmon_sensor_types type,
-@@ -382,35 +435,12 @@ static const struct hwmon_chip_info spd5118_chip_info = {
- 
- /* nvmem */
- 
--static int spd5118_nvmem_set_page(struct regmap *regmap, int page)
--{
--	unsigned int old_page;
--	int err;
--
--	err = regmap_read(regmap, SPD5118_REG_I2C_LEGACY_MODE, &old_page);
--	if (err)
--		return err;
--
--	if (page != (old_page & SPD5118_LEGACY_MODE_MASK)) {
--		/* Update page and explicitly select 1-byte addressing */
--		err = regmap_update_bits(regmap, SPD5118_REG_I2C_LEGACY_MODE,
--					 SPD5118_LEGACY_MODE_MASK, page);
--		if (err)
--			return err;
--
--		/* Selected new NVMEM page, drop cached data */
--		regcache_drop_region(regmap, SPD5118_EEPROM_BASE, 0xff);
--	}
--
--	return 0;
--}
--
- static ssize_t spd5118_nvmem_read_page(struct regmap *regmap, char *buf,
- 				       unsigned int offset, size_t count)
- {
- 	int err;
- 
--	err = spd5118_nvmem_set_page(regmap, offset >> SPD5118_PAGE_SHIFT);
-+	err = spd5118_set_page(regmap, offset >> SPD5118_PAGE_SHIFT);
- 	if (err)
- 		return err;
- 
-@@ -439,19 +469,19 @@ static int spd5118_nvmem_read(void *priv, unsigned int off, void *val, size_t co
- 	if (off + count > SPD5118_EEPROM_SIZE)
- 		return -EINVAL;
- 
--	mutex_lock(&data->nvmem_lock);
-+	mutex_lock(&data->access_lock);
- 
- 	while (count) {
- 		ret = spd5118_nvmem_read_page(data->regmap, buf, off, count);
- 		if (ret < 0) {
--			mutex_unlock(&data->nvmem_lock);
-+			mutex_unlock(&data->access_lock);
- 			return ret;
- 		}
- 		buf += ret;
- 		off += ret;
- 		count -= ret;
- 	}
--	mutex_unlock(&data->nvmem_lock);
-+	mutex_unlock(&data->access_lock);
- 	return 0;
- }
- 
-@@ -524,15 +554,65 @@ static const struct regmap_config spd5118_regmap_config = {
- 	.cache_type = REGCACHE_MAPLE,
- };
- 
-+static int spd5118_init(struct i2c_client *client)
-+{
-+	struct i2c_adapter *adapter = client->adapter;
-+	int err, regval, mode;
-+
-+	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA |
-+				     I2C_FUNC_SMBUS_WORD_DATA))
-+		return -ENODEV;
-+
-+	regval = i2c_smbus_read_word_swapped(client, SPD5118_REG_TYPE);
-+	if (regval < 0 || (regval && regval != 0x5118))
-+		return -ENODEV;
-+
-+	/*
-+	 * If the type register returns 0, it is possible that the chip has a
-+	 * non-zero page selected and takes the specification literally, i.e.
-+	 * disables access to volatile registers besides the page register if
-+	 * the page is not 0. Try to identify such chips.
-+	 */
-+	if (!regval) {
-+		mode = i2c_smbus_read_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE);
-+		if (mode < 0 || (mode & 0xf0) || !(mode & 0x07))
-+			return -ENODEV;
-+
-+		err = i2c_smbus_write_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE, 0);
-+		if (err)
-+			return -ENODEV;
-+
-+		regval = i2c_smbus_read_word_swapped(client, SPD5118_REG_TYPE);
-+		if (regval != 0x5118) {
-+			i2c_smbus_write_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE, mode);
-+			return -ENODEV;
-+		}
-+	}
-+
-+	regval = i2c_smbus_read_byte_data(client, SPD5118_REG_CAPABILITY);
-+	if (regval < 0)
-+		return -ENODEV;
-+
-+	if (!(regval & SPD5118_CAP_TS_SUPPORT))
-+		return -ENODEV;
-+
-+	/* We are reasonably sure that this is really a SPD5118 hub controller */
-+	return 0;
-+}
-+
- static int spd5118_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
--	unsigned int regval, revision, vendor, bank;
-+	unsigned int revision, vendor, bank;
- 	struct spd5118_data *data;
- 	struct device *hwmon_dev;
- 	struct regmap *regmap;
- 	int err;
- 
-+	err = spd5118_init(client);
-+	if (err)
-+		return err;
-+
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
-@@ -541,12 +621,6 @@ static int spd5118_probe(struct i2c_client *client)
- 	if (IS_ERR(regmap))
- 		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed\n");
- 
--	err = regmap_read(regmap, SPD5118_REG_CAPABILITY, &regval);
--	if (err)
--		return err;
--	if (!(regval & SPD5118_CAP_TS_SUPPORT))
--		return -ENODEV;
--
- 	err = regmap_read(regmap, SPD5118_REG_REVISION, &revision);
- 	if (err)
- 		return err;
-@@ -561,7 +635,7 @@ static int spd5118_probe(struct i2c_client *client)
- 		return -ENODEV;
- 
- 	data->regmap = regmap;
--	mutex_init(&data->nvmem_lock);
-+	mutex_init(&data->access_lock);
- 	dev_set_drvdata(dev, data);
- 
- 	err = spd5118_nvmem_init(dev, data);
-@@ -572,7 +646,7 @@ static int spd5118_probe(struct i2c_client *client)
- 	}
- 
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, "spd5118",
--							 regmap, &spd5118_chip_info,
-+							 data, &spd5118_chip_info,
- 							 NULL);
- 	if (IS_ERR(hwmon_dev))
- 		return PTR_ERR(hwmon_dev);
--- 
-2.39.2
+Best regards,
+Krzysztof
 
 
