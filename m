@@ -1,102 +1,77 @@
-Return-Path: <linux-i2c+bounces-4042-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4043-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E861909983
-	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jun 2024 20:07:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6DE7909989
+	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jun 2024 20:12:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CB941C20E50
-	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jun 2024 18:07:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36BF1282FE6
+	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jun 2024 18:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92CC51C50;
-	Sat, 15 Jun 2024 18:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E1EC53361;
+	Sat, 15 Jun 2024 18:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OGXy8Fp/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LdS3FAl+"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0FC1870;
-	Sat, 15 Jun 2024 18:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453501870;
+	Sat, 15 Jun 2024 18:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718474853; cv=none; b=jKm/wTpJtAItygzPoZs9HVMFFaDPfYimwoGOGMoBRN3SMteqH0ZjHxugwwCibwZm+kxPCdFV0VT1iHVa4hHylF6/3vFLk4FfJEx5whViCpF5xpNcHmNoAxg5bO3RnSvngrFmxV24fwZkqAph6jbYFJa74cJHZBIw4Hhv3l9ZjZA=
+	t=1718475147; cv=none; b=fcouvad7+nxwjSihRQ0JLGQeIHVCBENAVk2OrByFFPSvP00UO+C1HgfU3Ox6hZnFpkSGvU4rrNPVDf9Eqp4S1XypzM5qHTzM1y+HgGScQjm/HY/+6+FrdSr+Iz9qRTuKbC3KLpS6g8n1eguBGOz3nGSuhlOtJwiF0zWlmx2K47I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718474853; c=relaxed/simple;
-	bh=9NR8eeQbajusaYpez6Kf5UH33FTgd/OTA7c7X3rT2Bk=;
+	s=arc-20240116; t=1718475147; c=relaxed/simple;
+	bh=Y3xdhPAl1VL1RrWQwDn+N7z+BanYi41WP+l/JHeMAxc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qWQXxUv0663XI5spzD0kV252MQIlkJr4k1f+G1Mgd9X/DArp9rfMVSQKx2YhXdr4GvmVJ7F9NRG+9v4nFy3tVjHE21s5AszvzCn5EFmwBneBAkaU3lyZrM4ldpj/u1HorJT0EQZK3JNlz8oCNICHsnxp/4RtBorXD/FNLSxAWeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OGXy8Fp/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED11C116B1;
-	Sat, 15 Jun 2024 18:07:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hn9pq7OjjKqNZKPNOxwmElLAQwzXYt+BjAQBpmA/L8vAW4GQ13eOGPxfvBXQbqqIuzl+d9L6RMxJnewWRjIjSDpL0FwbLhChCZNzmV7AtpmBW3fgLDXoygpQtdhuB9EgaBv1IoBlku9DeOPBaMpmqab1T3KY4v4H7wtsGVr2DJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LdS3FAl+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7354CC116B1;
+	Sat, 15 Jun 2024 18:12:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718474853;
-	bh=9NR8eeQbajusaYpez6Kf5UH33FTgd/OTA7c7X3rT2Bk=;
+	s=k20201202; t=1718475146;
+	bh=Y3xdhPAl1VL1RrWQwDn+N7z+BanYi41WP+l/JHeMAxc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OGXy8Fp/kP5grSvun2zzV/F+91qS3bhKOeS4sVAMgKd4pmXFGpZp8CG/t33rF8dMi
-	 Y4s2emXdfnqLFMmer8mEPOZli0e6ZXVmDoRJWDsvOsCQ8sejMGACHIKF7lo2dvS3pD
-	 1mmR52pw7PkF0u5joIckyOWNL11CQnyNqFZDwgbVbrNBfrnGFBaGaGBZijyfGasJIB
-	 6YmZD5iDXW+pdtIjNhlChCdajvFE5elyGWkttRWPjForO7jYS2FJgRAyHwiwhtw2W3
-	 K9skAoRBHcr/qJLTSWVos36g2kRw4y3Y2+7C4AoEGAMdSpbpPyWcyDKZ9Mzeo5unht
-	 E6Fz+Fsq5sAQQ==
-Date: Sat, 15 Jun 2024 20:07:28 +0200
+	b=LdS3FAl+GO5hwnMYTfzjm6OyqubqTCBxCL0AW1b9nq48vceSEHzU08A6kwLqon9mp
+	 MxqTwZI6YDas6JfADm5QMur14vW/HJA564Cvqx/w/b3xdgJch3gHYNCOCYsISRkQus
+	 xVThsJGo2cszvnhLuTtMndU/+Pn+DoiZRFI5kmfQr83NIhyEiZLnvJOw4vU1KnH4wv
+	 mfBh+us7yrhMCYJ94hJrBozcOzWWidLpmqFexYssoQMgKsnn5twFWA9LwC5d+zAbEV
+	 4/6BGDgygcwd+lie5ixHYHOSRSKt9uySsLYW1eeL5k9/rijf8tiLuJ8gzpO90OP+oX
+	 8EzyqB+yf1sCg==
+Date: Sat, 15 Jun 2024 20:12:23 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc: linux-i2c@vger.kernel.org, 
 	Easwar Hariharan <eahariha@linux.microsoft.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] docs: i2c: summary: update speed mode description
-Message-ID: <wmzvrtnhtnkc6j37ty3wm7cqsqbunzdbfidefdrgnb5fo3a4yn@pm6ee4ffaudc>
+Subject: Re: [PATCH v3 4/6] docs: i2c: summary: document use of inclusive
+ language
+Message-ID: <6qzf74ex5mrwfjbzknnqcaiy53ifjaiean2snutvn2hwoypsgy@xdcwzkmsxvzf>
 References: <20240614081239.7128-8-wsa+renesas@sang-engineering.com>
- <20240614081239.7128-11-wsa+renesas@sang-engineering.com>
+ <20240614081239.7128-12-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240614081239.7128-11-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20240614081239.7128-12-wsa+renesas@sang-engineering.com>
 
 Hi Wolfram,
 
-On Fri, Jun 14, 2024 at 10:12:41AM GMT, Wolfram Sang wrote:
-> Fastest I2C mode is 5 MHz. Update the docs and reword the paragraph
-> slightly.
-
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Reviewed-by: Easwar Hariharan <eahariha@linux.microsoft.com>
-> ---
->  Documentation/i2c/summary.rst | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri, Jun 14, 2024 at 10:12:42AM GMT, Wolfram Sang wrote:
+> We now have the updated I2C specs and our own Code of Conduct, so we
+> have all we need to switch over to the inclusive terminology. Define
+> them here.
 > 
-> diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
-> index e3ab1d414014..a1e5c0715f8b 100644
-> --- a/Documentation/i2c/summary.rst
-> +++ b/Documentation/i2c/summary.rst
-> @@ -3,8 +3,8 @@ Introduction to I2C and SMBus
->  =============================
->  
->  I²C (pronounce: I squared C and written I2C in the kernel documentation) is
-> -a protocol developed by Philips. It is a slow two-wire protocol (variable
-> -speed, up to 400 kHz), with a high speed extension (3.4 MHz). It provides
-> +a protocol developed by Philips. It is a two-wire protocol with variable
-> +speed (typically up to 400 kHz, high speed modes up to 5 MHz). It provides
-
-In a single sentence explanation this is correct :-)
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
 Thanks,
 Andi
-
->  an inexpensive bus for connecting many types of devices with infrequent or
->  low bandwidth communications needs. I2C is widely used with embedded
->  systems. Some systems use variants that don't meet branding requirements,
-> -- 
-> 2.43.0
-> 
 
