@@ -1,215 +1,127 @@
-Return-Path: <linux-i2c+bounces-4050-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4051-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 127A8909FB1
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jun 2024 22:26:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F9C909FF2
+	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jun 2024 23:30:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A606A282957
-	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jun 2024 20:26:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF071B211D7
+	for <lists+linux-i2c@lfdr.de>; Sun, 16 Jun 2024 21:30:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45DCD5490F;
-	Sun, 16 Jun 2024 20:26:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD3C36E614;
+	Sun, 16 Jun 2024 21:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UQdTJOcY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aafkBiRj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D0754660;
-	Sun, 16 Jun 2024 20:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE926A33F
+	for <linux-i2c@vger.kernel.org>; Sun, 16 Jun 2024 21:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718569595; cv=none; b=Z9den03t2kuBMsH+BUSiNTdIHBlGg3vixkIP4e9Eza7us45VUGgjPnGHjVpzmOuqAm86fnx/2q9d4EI/RDZqyy5GfGasxslnF0WHSNh7JvZtwf5+Z6tPshFqyQ9ldJ6F/+xMesuwEI7W4EFQYX/mrPf5wSqx5X2fXUwaFX9cD4w=
+	t=1718573400; cv=none; b=mPW/XrHWgM0d5/9lopaXZ92HWdlz3Odv/9xgdbnzDzgm/lRqKiA2rJG4d+y4enbP5No4nhqsOxxfrL9PjviyC+0BV9ogfUJfuIR/8qF1Pyp8A20JFBmI0/ChBq6HQYUl5dTOLk/YwMIdaEI0xdAkSoPyzPPleiLvbjP8lhMi34o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718569595; c=relaxed/simple;
-	bh=GxHq1I1yK4ushy+cbVDTnikWctzsVLN0jARxQzbhmAE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aAsWaAwl/33EKEXLxbb3qT5d7hkjJ+qpYIVOc1neCyoEIVa2/RifmakwQHCmrUn/f0AktJL74J7yUJY6L3bS9MsIk87IK8A3jlAyPApm5EELyiUQAGbCdmDd6GJuPAsnRWhNhQyQA3KPKpdT/miduYP3YbjA502wYJQKn9DdWCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UQdTJOcY; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-707040e3017so717711a12.3;
-        Sun, 16 Jun 2024 13:26:33 -0700 (PDT)
+	s=arc-20240116; t=1718573400; c=relaxed/simple;
+	bh=77qTZ2/jNB1s3kvHZeR23oY3xoIE8oX+Pbgo1oPSZVU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jjJ3qZ7vLvP4LvlXuJ4dSIuv+kzJTCQlkBXCJ/XlLGUS+kGt0yomQYFvRkg4aLEdywFUcR6HQGq2pFsUJxyc/mKEhygUj9V2z5xSWc04BE3FV7Yv4ogWxuC8tjeX2Ui9fX80+In0JmqEI2RgTS44mMT65oIm7ojJsnWSuusj5tU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aafkBiRj; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a6f8b0b10f4so10755266b.0
+        for <linux-i2c@vger.kernel.org>; Sun, 16 Jun 2024 14:29:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718569592; x=1719174392; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rzZNLXZyAad49lqyEMwbFZUTxKz2TWCABxME8TyuxUY=;
-        b=UQdTJOcYuqZJ8PZxKWB89xAG2Qt7Wee05o8j1FWvPQjE+Pv8tYv8wc3nnTjIAvd4zv
-         FgJ2XB3tHT+brw9L39Meo3B00CtuNWSWF5aDZZ89eiStmz4JbMrnwU7s2GUqe7ehJ+gQ
-         2LKOqxnBiiWFaM/cC497aPs4RSMFKxQoXTPnRzuvW9QfA3bTjGvkXSCDyajp6iWU7E7Q
-         zTb2SLz8X8UfJCYWrYenD6+KLXtWobR4XVmicqhqLUwij2AvH+F/aaLx3qPASEn/0t/D
-         eEmk2Kc5T/CHHS9QHdrgEBMTCBYiqoeVN4P1wWbcJ09mLOGulNphgLnu80dOAOZzYmcM
-         45ew==
+        d=linaro.org; s=google; t=1718573396; x=1719178196; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kmVQxJoiRRnVxUmJPLxuy9ofoBMY/z2Ox1ZWQdCQeiQ=;
+        b=aafkBiRj0Yn6c/bZ1p14eumNaiQ/bsJFCm37mOdKdnaPCC4XvrnCYuioEZO8WssSwO
+         6U637L21bQHhTg9w8tJYYy2hKeR+SxJFPzkLdWhOqoJXYHBSsa+J8nCyN8zpMloL6K8a
+         yZUuxrMnQUV//AliVgRgGoPDPt6bySgxZDyxVSHd2vxjKufne1dBh97wtR9uIOQj3Mdm
+         B+I9ATkEwxemVMAnxE2mSgRDXyEvY6plAI8GZrMxr9uc7ZPCeDgVP5XVP9xpsFqqvvTS
+         aV7UTIsvHOTjdhVbLbtgTs3qS3/NHg4Yp1UEHVf1ajOhEsb/6atr3qlZNA123inXNWDi
+         77oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718569592; x=1719174392;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1718573396; x=1719178196;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rzZNLXZyAad49lqyEMwbFZUTxKz2TWCABxME8TyuxUY=;
-        b=qmhluW2GyVomikbDn7dHQq1Nh4wnsGyOORHNiSt5n6Vg5NMVk+eoZbO1vwj/dhqVOP
-         Kg3GNVKqvAEuS6VuD5ZtkG0I3/Zfq6WnIfGFlf1GWwTxD1/wd7PYBVLg9Pbdth5qIsHI
-         rNguRKdlFhQw52f7i6miydKwn0uh99u7KVq76UTZzQQRMaUgLT5eDARyeEJGJECymay1
-         JZ6EMXbiq8zya0nP5yLyRYDJJR5dA5qgzZuL07h2NzeGukNZiTh8ku6tha6G2ArYBKvB
-         p+6hu/cFnVNNjGyT/YPFN6em/AsTeQ1ld1JcgVHY5zC7rqZeNo3HxkzD0VIPLD4dGkBx
-         /K+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWhqHdnxG4A022HWZYRA7oGyWKZ2g9jSipAkRyPTtfon13iqQKzXf+XUMMveRX0UiBi8JNnpkQK+T4PGH5B47Tnoc8K4JdB4UN1VrFwi8mo8ql0gluFmArfI+6mpMpW/Pxjcdyh3Jh1+hg/w0EyVHZu3fxU7HWD4u8KF22XnE/Ce+uCuHun
-X-Gm-Message-State: AOJu0YynFzdlQdR6YFZAuqgDQ2QN5wLS1+NBLH5ivShsmB0osiOyVlq4
-	Vj7uYptYmhnF47Ryn7EdPgvUf/6VvMayS4ZB92sP9PF0oenQilKU
-X-Google-Smtp-Source: AGHT+IEkv9TFVryZMuRXnrW9c7YuK4/7rSSgV4AcCArj1ccOtH/22/ytdQGihbdr31j/txPe/Mzfvw==
-X-Received: by 2002:a17:902:c20c:b0:1f8:44f8:a366 with SMTP id d9443c01a7336-1f8627ce3dfmr74464955ad.16.1718569592414;
-        Sun, 16 Jun 2024 13:26:32 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855f1a4fdsm67179965ad.233.2024.06.16.13.26.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jun 2024 13:26:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d2ba6ed1-3a6a-4481-9f43-265eee78c0c1@roeck-us.net>
-Date: Sun, 16 Jun 2024 13:26:29 -0700
+        bh=kmVQxJoiRRnVxUmJPLxuy9ofoBMY/z2Ox1ZWQdCQeiQ=;
+        b=OOt6EqWdjlHCIW6dgzeO3V+QWErEfMjhddFPMeiqkwk0cv3z29l/X5upPEmF6Ov3TI
+         JxY2KkQiWeDoZn+NUCy50xthU010brLaFcvGIw3OMIEPCA4ALvd8/bh2WMYRnASyjOsu
+         H+dSQNGERQ+ROvIninY8MrS8vfW5UTDc7oBXttYDMrf3mYdi8REBySw7kJS90JA09zr8
+         QkHzJKGlIz9hiEfWxQ5U5bCKqTGQdsS5FjHeNwr8sCsEwbrcURC7vDGpFMd8ER/xb3NW
+         l/nRDbPB/6UZR5efJTM7wMLyrvRhmAFI1SyAVTLPW1ZnvNyNRlrHanyRlq2RxKu1a5g2
+         4KrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7KIxtUHoUaiwCcftVylQfHMrLGJbVUo3ycRv99Abyg4JUZq/PGmMRE+kw+YOYBkGgx84sLm2gVnK1RX98z0/aLVWPSr98qE4A
+X-Gm-Message-State: AOJu0Yx4olMVE+0Ul/7hol+FQCySMIgLsP7VW+LgGnwf8d9SLTheN6U/
+	6wAvnSPFUU3P6a1+jNqqkgTFi/EjkJcJrM7x3Yr2+/Y3jP3ea1QOtWvg4PzGN6A=
+X-Google-Smtp-Source: AGHT+IEvUS/odyJPhKK7Glqf82cIjEvLFIs9anp+ZsBOp8SFgZaTIpP8nTwgP28wMtCwtrwni3h6Dg==
+X-Received: by 2002:a17:907:c302:b0:a6f:6337:1ad5 with SMTP id a640c23a62f3a-a6f63371be1mr650604966b.27.1718573396000;
+        Sun, 16 Jun 2024 14:29:56 -0700 (PDT)
+Received: from linaro.org ([188.24.162.56])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f5f1c8d6fsm384984166b.0.2024.06.16.14.29.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jun 2024 14:29:55 -0700 (PDT)
+Date: Mon, 17 Jun 2024 00:29:53 +0300
+From: Abel Vesa <abel.vesa@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>,
+	Peng Fan <peng.fan@nxp.com>, Frank Li <Frank.Li@nxp.com>,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: drop stale Anson Huang from maintainers
+Message-ID: <Zm9ZUWpievH+P8Yc@linaro.org>
+References: <20240614095927.88762-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT PATCH] hwmon: (spd5118) Add support for Renesas/ITD SPD5118
- hub controllers
-To: Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Stephen Horvath <s.horvath@outlook.com.au>,
- Paul Menzel <pmenzel@molgen.mpg.de>, Sasha Kozachuk <skozachuk@google.com>,
- John Hamrick <johnham@google.com>
-References: <20240614185924.604672-1-linux@roeck-us.net>
- <2046d2c3-bbf6-4842-bc51-b2f567f33c0a@gmx.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <2046d2c3-bbf6-4842-bc51-b2f567f33c0a@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240614095927.88762-1-krzysztof.kozlowski@linaro.org>
 
-Hi Armin,
-
-On 6/16/24 11:09, Armin Wolf wrote:
-> Am 14.06.24 um 20:59 schrieb Guenter Roeck:
+On 24-06-14 11:59:27, Krzysztof Kozlowski wrote:
+> Emails to Anson Huang bounce:
 > 
->> The SPD5118 specification says, in its documentation of the page bits
->> in the MR11 register:
->>
->> "
->> This register only applies to non-volatile memory (1024) Bytes) access of
->> SPD5 Hub device.
->> For volatile memory access, this register must be programmed to '000'.
->> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->> "
->>
->> Renesas/ITD SPD5118 hub controllers take this literally and disable access
->> to volatile memory if the page selected in MR11 is != 0. Since the BIOS or
->> ROMMON will access the non-volatile memory and likely select a page != 0,
->> this means that the driver will not instantiate since it can not identify
->> the chip. Even if the driver instantiates, access to volatile registers
->> is blocked after a nvram read operation which selects a page other than 0.
->>
->> To solve the problem, add initialization code to select page 0 during
->> probe. Before doing that, use basic validation to ensure that this is
->> really a SPD5118 device and not some random EEPROM. Explicitly select
->> page 0 when accessing the volatile register space, and protect volatile
->> register access against nvmem access using the device mutex.
+>   Diagnostic-Code: smtp; 550 5.4.1 Recipient address rejected: Access denied.
 > 
-> Hi,
+> Add IMX platform maintainers for bindings which would become orphaned.
 > 
-> maybe we can use struct regmap_range_cfg so the paged register accesses are being
-> done by the regmap code itself?
-> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-In theory that might work, but regmap does not permit a selector register to
-be part of another range. The first range would be the non-volatile registers,
-and the selector register is part of that for all ranges.
+[...]
 
-I tried the following ranges configuration.
+> diff --git a/Documentation/devicetree/bindings/clock/imx6q-clock.yaml b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+> index bae4fcb3aacc..74cfdcf1c93b 100644
+> --- a/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+> +++ b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+> @@ -7,7 +7,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Freescale i.MX6 Quad Clock Controller
+>  
+>  maintainers:
+> -  - Anson Huang <Anson.Huang@nxp.com>
+> +  - Shawn Guo <shawnguo@kernel.org>
+> +  - Sascha Hauer <s.hauer@pengutronix.de>
+> +  - Fabio Estevam <festevam@gmail.com>
+>  
 
-static const struct regmap_range_cfg spd5118_regmap_range_cfg[] = {
-         {
-         .selector_reg     = SPD5118_REG_I2C_LEGACY_MODE,
-         .selector_mask    = SPD5118_LEGACY_PAGE_MASK,
-         .selector_shift   = 0,
-         .window_start     = 0,
-         .window_len       = SPD5118_PAGE_SIZE,
-         .range_min        = 0,
-         .range_max        = SPD5118_PAGE_SIZE - 1,
-         },
-         {
-         .selector_reg     = SPD5118_REG_I2C_LEGACY_MODE,
-         .selector_mask    = SPD5118_LEGACY_PAGE_MASK,
-         .selector_shift   = 0,
-         .window_start     = SPD5118_PAGE_SIZE,
-         .window_len       = SPD5118_PAGE_SIZE,
-         .range_min        = SPD5118_PAGE_SIZE,
-         .range_max        = 9 * SPD5118_PAGE_SIZE - 1,
-         },
-};
+For the clocks, please add me as well. Don't mind having more help from
+the others :-) . But i.MX clock bindings usually go through my tree.
 
-This results in
-
-spd5118 0-0050: Range 0: selector for 1 in window
-spd5118 0-0050: error -EINVAL: regmap init failed
-
-If you have an idea how to configure the ranges differently,
-please let me know.
-
-Thanks,
-Guenter
-
+Thanks.
 
