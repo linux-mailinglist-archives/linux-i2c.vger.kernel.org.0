@@ -1,151 +1,148 @@
-Return-Path: <linux-i2c+bounces-4066-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4067-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B69490B595
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2024 18:00:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67CAB90B6EA
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2024 18:46:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 712301C22B57
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2024 16:00:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17F4A1F21FAA
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2024 16:46:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 581E314EC69;
-	Mon, 17 Jun 2024 15:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8978E16B3B3;
+	Mon, 17 Jun 2024 16:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQ2APQT+"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="efi+96RD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B85EAC5;
-	Mon, 17 Jun 2024 15:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DC416B39E
+	for <linux-i2c@vger.kernel.org>; Mon, 17 Jun 2024 16:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718639376; cv=none; b=S7aEgw8sgbsgZG6o83Id1CFSxLGpP9xpISVuP6XiCOzQpmVUWRYqGoxHUxyjegnbJXaCXJh5C5ItVzASnt4xgE/B518kXNGQmDgOsHK27AhTh0XbV88NbPDCMqaPk2pS7Jnzc4TnrZzoczxwPYR1kHAlt9wxjCDh8uiSeU2kTdo=
+	t=1718642729; cv=none; b=nnjZM9KSyLS5tgBpO2YXX2eIKpyS8JMk2XL76Pfm350G5MpsjvPvyXkeFwX5wmZiyAE2z/UzByWA3uNrCJUyC0AdWeH7ydzMR6rbqHd5997jipHP78bv/d4QYhLjAiPBt/aS6p3aVtlXwE9TwJPfGCsEi/OwGyu0j8Mr1/ybKt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718639376; c=relaxed/simple;
-	bh=9jxoacm0VNzafJu9FOapUXFOnY1Zd94cS5szpcO+6Zg=;
+	s=arc-20240116; t=1718642729; c=relaxed/simple;
+	bh=JF0DRVdvDrP/X63k/t+c0ChsmTu8fE208dmE5UAaqJU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VrVuZWPxS80t77K7rIGRMHBI99hc21jSEur0EE9AiBMccC/8ZdHd3JbsJdY/pp+6yNnoaiNbpwI1/wHC1+jqCO/HkiqxQSV8zS9a2IjD5252lufZlb/i7MF0ECSz4ai5Hdvd/4i8HpwkDWzNQOagsj1QhPR0QIPxfxqmk+29VGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQ2APQT+; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1f717608231so34377225ad.2;
-        Mon, 17 Jun 2024 08:49:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718639374; x=1719244174; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fHo927smNjkpt0+sCP+aYgix3Q+5w0hosKdaxQjMOgQ=;
-        b=MQ2APQT+iO+Eh0DXJQkI4uU+NnoTm57gpAHrOcGq3sb/q0iBES4aesC9E7BAFWyvzE
-         /8pP5TIM+H0bGTfECCMxrG+ru7qGjPZcaHg4lRspd5PFTw1i6TCPTqGBjeYIJqe4gUyw
-         bGEW7bwtLS7seet9zfDkBgk7GPiL/ZHitZJ5zDJ/W3+RFXdV/5pCZbPOL8/jFlOnej8Y
-         nXevDfIwy+xipH7Ixf3rgdIMOrDolXxI4hOhJIbNIcvFl1B2SGYrZQipwW+AahrSpmTV
-         CMdJfkzBeG0ZS6zSq0vAUq3Fz4p1ZLUIsl2W6WMOQ3ted8ttgmmEXPSsteZnvzHisi7W
-         30rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718639374; x=1719244174;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fHo927smNjkpt0+sCP+aYgix3Q+5w0hosKdaxQjMOgQ=;
-        b=XtuurV6AnhqW08ikfC/v7F/AbLBgYiLnbi0E6nyKKeG0W52yiCAPIF4VzcSpOGHAUd
-         BL6qjOjwdP7Q3Z/qdA3A6HiOhbgyxXArVjLIjBpJ15weTHE0HyqAn4OiXHgbOkU5RTFY
-         mBZePZQc6p3S4jmL74wD8liEoqtKe8jbAVjECUdHlDjWbTvJM4j9WpqjVkTlMKqaA0MR
-         7NZTYOZEvHkec/KwlhaoUA5qeBMUfgAbJDQbbKbUBS7kpUB4uq8oJ2J6Y1rfKDpiDryT
-         /7J4+Wjrqlx3dWIN2BnMxK6O6JBhRXnDtAuq3FAcNT1PFtlJZwLSacLMP7wZzYedJATn
-         L9Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCXXaikpSaFCDI9IPmEQp+B2Fuw0OK18xie+Y9nrweBdSv8FemS+CcEIahVP0k5R9oUHgSEEkdetK2dpo9a7DlJ7bzBoxYz/dVvqCx1V40NxyVF7MLKWszEbHKbUIpWMrjO/Doz2Cb41vnOSNxWXLOWEXQwY77azFCjvloA2ZXr6Yl13Fg==
-X-Gm-Message-State: AOJu0YzTJm0htyL7hociH7PmG0sWSf6Pc9oN3qGf94rzBXxIqETVBwCX
-	HaqKJq+yH3P9PTrVvf3wZj2uA0I29JXnMeGiQg6GIYO1Vi0AZEXw
-X-Google-Smtp-Source: AGHT+IGNbnjCGTfKI07a4UNbGPXQuG49aaEGA13NJD7JLoGUMWXHzLxcA414MUCJx0aBqKwSDo3jQQ==
-X-Received: by 2002:a17:902:e889:b0:1f7:4021:508a with SMTP id d9443c01a7336-1f8627c7d14mr158688035ad.33.1718639373888;
-        Mon, 17 Jun 2024 08:49:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855ee8349sm80467885ad.120.2024.06.17.08.49.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jun 2024 08:49:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 17 Jun 2024 08:49:30 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?iso-8859-1?Q?Ren=E9?= Rebe <rene@exactcode.de>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Armin Wolf <W_Armin@gmx.de>,
-	Stephen Horvath <s.horvath@outlook.com.au>
-Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-Message-ID: <4e09b843-3d2d-46d7-a8e1-2eabc4382dc7@roeck-us.net>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-6-linux@roeck-us.net>
- <a5aa120d-8497-4ca8-9752-7d800240b999@molgen.mpg.de>
- <efb77b37-30e5-48a8-b4af-eb9995a2882b@roeck-us.net>
- <33f369c1-1098-458e-9398-30037bd8c5aa@molgen.mpg.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=GUztZVgQFGI3FPVzGyzov1c/M7scg/RtWaDt8kL64pJUfU6+qJlcH1UVKb+KT18krPwnKP+/IA5IZVGgNW5/+J5YEv6qjfUz7mgy53YXFEJH2drV2USpcjqmIpFGDGwF1A883mCOD27nzNmR95MX5UgbDuAB9Y1hDIQwHO1+N14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=efi+96RD; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=BbrA
+	mQRWzGJDhWszxc7y+nTSszXSsCm9K0tXqx6rv4o=; b=efi+96RDtVB4BJnrqr7O
+	6Rqi120Ip6IDqJBQ93KM75t40Oamx2nEsr1emGQtybSMOEJI7T2PtnJUIc+SRizY
+	PESjNJ/kzJFGhqGjFNDXxR78Y2SSS1aJBWS1czF3JH8HArq7v3TogW/6ncq37hw/
+	jjOuTWFym5GQEcDC4DHKcMmWXsZ8gvgGF+2qiVSTxQ8D+TfqYrvjoTgGn/Zy/QTA
+	HLG5xh1TTMxVhJ3TLa8rxTZ0JQCsmXkqhv03KW9aOkotz07PgKGbwd/F/A7/w+fD
+	ku5houZctoWcksRXlp3zCK9VYeJKnD69LV43IUxV/GgipRbytXzWMc+sgR0dRm09
+	wA==
+Received: (qmail 2400428 invoked from network); 17 Jun 2024 18:45:17 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2024 18:45:17 +0200
+X-UD-Smtp-Session: l3s3148p1@hYmmsBgbwqNehh9j
+Date: Mon, 17 Jun 2024 18:45:16 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, 
+	Easwar Hariharan <eahariha@linux.microsoft.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] docs: i2c: summary: document 'local' and 'remote'
+ targets
+Message-ID: <ir47gr6evieqekm5ws6stmaqqc5td6o35s6orus4nqhgw27o2n@ex6bqs3yuejm>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org, 
+	Easwar Hariharan <eahariha@linux.microsoft.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240614081239.7128-8-wsa+renesas@sang-engineering.com>
+ <20240614081239.7128-13-wsa+renesas@sang-engineering.com>
+ <4zxr4rlqnjqbqh3oxmd2ufqi6uk4pxa3tniuya5pgjtqi6tswc@utq4r2zt6z6b>
+ <ed75fyc2xcsnwubq42eposf6ayt5aj2jmqz6mthugk6vm2zpi4@qqwlmuwayoo5>
+ <y34k2k25xdr5z4v7oejp4da237s4o5qym5npihyydwlbsdh75c@vhmfl7sw3pbm>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="grmagpcc5ztiysln"
 Content-Disposition: inline
-In-Reply-To: <33f369c1-1098-458e-9398-30037bd8c5aa@molgen.mpg.de>
+In-Reply-To: <y34k2k25xdr5z4v7oejp4da237s4o5qym5npihyydwlbsdh75c@vhmfl7sw3pbm>
 
-Hi Paul,
 
-On Mon, Jun 17, 2024 at 04:42:47PM +0200, Paul Menzel wrote:
-[ ... ]
-> 
-> I applied your patch
-> 
->     $ git log --oneline --no-decorate -2
->     00058a6 eeprom: Add basic spd5118 support
->     a0e5865 i2cdetect: only use "newer" I2C_FUNC_* flags if they exist
-> 
-> but reading eeprom fails:
-> 
->     $ sudo ./eeprom/decode-dimms
+--grmagpcc5ztiysln
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-decode-dimms does not need sudo, but that should not make a difference.
+Hi Andi
 
->     Cannot read /sys/bus/i2c/drivers/spd5118/0-0050/eeprom at
-> ./eeprom/decode-dimms line 2465.
-> 
-Well, it _is_ a hack ;-), but that specific operation should not fail.
+> > Have you read the paragraph "Synonyms" from patch 6? I don't think we
+> > can obsolete client because:
+> >=20
+> > $ git grep 'struct i2c_client \*client' | wc -l
+> > 6100
+>=20
+> yes, I know, but I would be happy if we start changing i2c_client
+> with i2c_target and at least saying that "target" is the
+> preferred name for what was called "client" until now.
 
-Please try the following:
+This is largely what patch 6 does? Let me quote:
 
-ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
-cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
-od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
-sudo i2cdump -y -f 0 0x50
++As mentioned above, the Linux I2C implementation historically uses the ter=
+ms                                                                         =
+                                            =E2=94=82
++"adapter" for controller and "client" for target. A number of data structu=
+res                                                                        =
+                                            =E2=94=82
++have these synonyms in their name. So, to discuss implementation details, =
+it                                                                         =
+                                            =E2=94=82
++might be easier to use these terms. If speaking about I2C in general, the =
+                                                                           =
+                                            =E2=94=82
++official terminology is preferred.                                        =
+                                                                           =
+                                            =E2=94=82
 
-All those should work, and the size of /tmp/eeprom should be
-1024 bytes. The output of i2cdump should start with something like
+> I think we should start somewhere from using the new naming
+> provided by the documentation.
 
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 51 18 0a 86 32 03 32 00 00 00 00 07 ff 7f 00 00    Q???2?2......?..
-                                     ^^
+I think I can justify replacing "master/slave" and create quite some
+churn because that terminology is unwanted language.
 
-and with
+I think I cannot justify replacing "adapter/client" just because it
+doesn't match the spec. Plus, the churn would be a lot bigger.
 
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 51 18 0a 86 32 03 32 00 00 00 00 00 ff 7f 00 00    Q???2?2......?..
-                                     ^^
+If everyone (especially affected subsystem maintainers) is like "Yeah,
+do it!" I can do it. But I have my doubts...
 
-after executing the "sensors" command.
+Happy hacking,
 
-Other than that, I can see that your system is an Intel system,
-meaning the i2c controller would be i801, not piix4. I wonder
-if that makes a difference. Has anyone else seeing this tested
-eeprom access with i801 (or any other controller besides piix4),
-by any chance ?
+   Wolfram
 
-Thanks,
-Guenter
+
+--grmagpcc5ztiysln
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZwaBgACgkQFA3kzBSg
+KbZXNxAAhjbiM9/e2Nkpvmf/06Db4tpb/+ObSgtj6WOEGfzeTKlaDjimYF9p34x+
+U4jjzfhK9X9FSaDqlYHrxsEAFVhn2bRWewgPXcm+/uge3kIkyhgbjTAmQESV9MeQ
+qZH0c0VKQaySF65tv2YnIFvQIDgjkkLx+tUgqiOixWZ/31Vr4++DS3xr6Q2TxfXq
+ibjgYNqD5v6znN5v0z5Hv1R2ZYf13S1AB3PxxSkQwirV4abRd3Gv0VOB4jO8gwN3
+jVudv/I22XHGNpl485GDS55UmN2V4KUGyF9SK5IrwFxTAjCHiuGAS2TdVwIXmbKf
+h8qnWyOj6FlcnmId7UinSegKKFEF5pvSxAPRd5efYpJM9vdQuvepZyLbOdHXZaBG
+t8XSVIV+lQSkbwEaqFvjXk5HT1+lo9oPso9CgtnNrECfqHIIHZD3sD3RFbxCpTPL
+I6n9pn4RgY0Igq7o+eWuJ1P/s7m5vy3uVFRTY2rhzxQR99vaIb/zEctFkeHzjpwu
+ZHrIiYnKix1/l7p7IWrNSm/tUbnHpk/sM9nOhf5ckyxr8yQW0R4P5uxPDkDDkOzn
+nsCUaTiMJVxvV92Xfl/FK70JVsMrurgYUrumBqhsIDa0xNKwOljHLF878padc23c
+cfh/G5w/OivNSG/PO6rJ9twGlmaRnYVPA8MiYt20FMb2koyrB4U=
+=SDUa
+-----END PGP SIGNATURE-----
+
+--grmagpcc5ztiysln--
 
