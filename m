@@ -1,43 +1,76 @@
-Return-Path: <linux-i2c+bounces-4100-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4101-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCBE690DC1D
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 21:00:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C313790DC72
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 21:31:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FE08B22AFF
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 19:00:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A7E6286AF6
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 19:31:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE62F15ECEF;
-	Tue, 18 Jun 2024 19:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51C0A16CD04;
+	Tue, 18 Jun 2024 19:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M5/DoLR+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33B11BF50;
-	Tue, 18 Jun 2024 19:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8939E383A9;
+	Tue, 18 Jun 2024 19:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718737238; cv=none; b=DqZ1jiNJIGpskrFgpiV8hFMgm2Ck9W6VQ61KDCGPbqlm+RSSuXH2YAWStoNFRN5Rsqab1y8MwbeO7ZndfVIGOIcExQtwFUXf79JXQisiJX9jIprVTqUHQS61b2JdmDAJxcFKYmcQM9FD+2RM6ldCFVse4OGeCX3IigbbHW66gU4=
+	t=1718739109; cv=none; b=B3SZCjaCkraxvyO7I+lUdAB1rKjJjj2rYx8lYvkP7yTCgA6tiFJDCcJSUyjo0XU4jHJSw+K2JEgVhUCVPgv6M2RWxqfE4oV0viDc+qdmRKW0uGampLncXEbdBTFJkBgA6Hk9FC+ehjEYMoYLGz2V0VU+1YYu391qzsb5QnGYcO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718737238; c=relaxed/simple;
-	bh=IwZ1eDfPuNfNDnk7397cPUG780kB1kbLU2g4cnIjPYA=;
+	s=arc-20240116; t=1718739109; c=relaxed/simple;
+	bh=9XNJU5dq29M1PPKaVt+6kRpA3+3bzw3uOrKrA3giA2A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=auhao0prb2/KIJfUzlMfzw8aCLlFY8QnMkRyae7EQ4mmevHf4GW1FL0bfPqx7F21aEfHQdjB+KcRJW4BVh04zSV5gSEBUs2Rjl0KtoV3m0BDYDNG/eNQwIe1taQkchuZWpjhZ3tp2eSkyybJC1vPaNYVmlf3fpLWmaGJmLHqX9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.2] (ip5f5af4b2.dynamic.kabel-deutschland.de [95.90.244.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2AE2961E5FE01;
-	Tue, 18 Jun 2024 20:59:46 +0200 (CEST)
-Message-ID: <0f18ac68-97b5-4834-987c-6d86ebb49e94@molgen.mpg.de>
-Date: Tue, 18 Jun 2024 20:59:45 +0200
+	 In-Reply-To:Content-Type; b=oYr7XNfqEUZq6aXgXhhsKukX/gu43iN1VRRGUloaPbDqL3qz8qnIO7Wx67lT6bjnYX2dPIHhZqHeLb2pZ4bgJP7mJ9iCX7VOlV1zWWJpMtm7uZJQju8ru/tC2aEB7XuOJv8KHutCYx61xp3e3ZozW6KLxDqtcvqVzPOzTAn5iT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M5/DoLR+; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-70df2135439so987394a12.1;
+        Tue, 18 Jun 2024 12:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718739107; x=1719343907; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=snDV6ppP6jN/LfMajoNt+Bchw1Qq+5Hrnx+Ibczj7lo=;
+        b=M5/DoLR+JsEZp5PhEvVKycUcm57arzsFyZ64xCW54Wkx1J54aLzvuPCVv2Hi5YpU5s
+         OQe7zwWxt+u7kULBiPqriUIn1yGajoxmyZ29Z/x7wAW5/LgQJcpp3uxvPdUC7ws/iSR2
+         hEUQs3n4NGjImGAYwylnkI0goyiM3w87CA7Lq5N+c+cdW99QKKwnqhL23lIfX9va49OR
+         SJE3qL+YdPxIp3FgLsAHWawTtcXgxXnl/2b+sqkE2zcomhARXdseQENjj/cN7Z43vSDf
+         u6OLsYXk/1FQHl8tI1DU+4k/DVlmT5zxNyS4RNegq99b6uPjmVFMtkYhb9EJQ+O/M8vo
+         bcJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718739107; x=1719343907;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=snDV6ppP6jN/LfMajoNt+Bchw1Qq+5Hrnx+Ibczj7lo=;
+        b=nQEvS9VCS9cPMFQZC5gGgMmUaJYZWiSSDndmxWt0rTUCsyQbGmpEMvG6Kv3EVxZUvs
+         y9jhtoJGTa2XM0wo4ceJ0PzuXnZkWsZTZGFNYN6J6Ha8WyJsAxVma3aGNVYr9IoOfjze
+         f++K9puJHK0t2T/JFtwoZfuxwQYYbfz/nMdrxZWSAhj1CdmLE8EyejvHTOsvQ/81+ILi
+         9Ilfn1kJwWKUAIVbU6/RP8GAOxIE2UokTtexQFgMhla101GLvmSRpVrBLYa0VvIqGXTc
+         33KTiJArDyN27AWOcBLVMgHKI9fvUTyTuvJsPWqvRHmV5hSyHq1aGw7L5iSeq5x6v1gn
+         WPBw==
+X-Forwarded-Encrypted: i=1; AJvYcCUpy/EBLJZz8VfA1YeGMWaVndrXaI+SWRFf3WHI1fmAc9VahCY5D9DcOGMasTMDectRLqkpHL4NB+8xYgZL7enm/+WwWOP6e1zA3drj/XGZA+JceM+MKytuZ2++AltH5L67XZ1kK3FCo8E5dsmGb6P6cefBig9Y9L2DbZYKfdfK9H4zIA==
+X-Gm-Message-State: AOJu0YwUWPhcb6J1vPSUvNWfFGDIgV3cMHSxb+pO2DSlsj/PAveojwIl
+	LqVWNwvylvbD2+Z7zRoR8hfRWBy3OdUXZXYuB3wC227xPaGpO85f
+X-Google-Smtp-Source: AGHT+IGJF1o6h2LfLWrzY9ps3szStReldQpmflhU3VxZmVxFH8i+xCrLghV4ON4gb005PZSOJRbZAw==
+X-Received: by 2002:a17:902:76c6:b0:1f6:89b1:a419 with SMTP id d9443c01a7336-1f9aa3d09cemr5271835ad.17.1718739106702;
+        Tue, 18 Jun 2024 12:31:46 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855eff755sm100920345ad.184.2024.06.18.12.31.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 12:31:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <342dae24-56c5-4b81-9591-dc23ddbb2806@roeck-us.net>
+Date: Tue, 18 Jun 2024 12:31:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -46,7 +79,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-To: Guenter Roeck <linux@roeck-us.net>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
 Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -68,97 +101,147 @@ References: <20240604040237.1064024-1-linux@roeck-us.net>
  <dc73070a-d266-47ca-bb11-77c2d9d6dece@roeck-us.net>
  <5b9379f4-5ccd-402c-8502-8895acc0cdb8@molgen.mpg.de>
  <b2fe83e6-8ebc-42f7-ba14-fbc1806a90f9@roeck-us.net>
+ <0f18ac68-97b5-4834-987c-6d86ebb49e94@molgen.mpg.de>
 Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <b2fe83e6-8ebc-42f7-ba14-fbc1806a90f9@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <0f18ac68-97b5-4834-987c-6d86ebb49e94@molgen.mpg.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Dear Guenter,
-
-
-Am 18.06.24 um 20:16 schrieb Guenter Roeck:
-> On 6/18/24 08:25, Paul Menzel wrote:
-
->> Am 18.06.24 um 17:10 schrieb Guenter Roeck:
->>> On 6/18/24 07:59, Paul Menzel wrote:
->>> [ ... ]
->>>
->>>> I did
+On 6/18/24 11:59, Paul Menzel wrote:
+> Dear Guenter,
+> 
+> 
+> Am 18.06.24 um 20:16 schrieb Guenter Roeck:
+>> On 6/18/24 08:25, Paul Menzel wrote:
+> 
+>>> Am 18.06.24 um 17:10 schrieb Guenter Roeck:
+>>>> On 6/18/24 07:59, Paul Menzel wrote:
+>>>> [ ... ]
 >>>>
->>>>      $ tail -3 /etc/sensors3.conf
->>>>      chip "spd5118-*"
->>>>          set temp1_max 56000
->>>>          set temp1_crit 84000
+>>>>> I did
+>>>>>
+>>>>>      $ tail -3 /etc/sensors3.conf
+>>>>>      chip "spd5118-*"
+>>>>>          set temp1_max 56000
+>>>>>          set temp1_crit 84000
+>>>>>
+>>>>> but it stays with the defaults:
+>>>>>
+>>>>> ```
+>>>>> $ sensors
+>>>>> spd5118-i2c-0-53
+>>>>> Adapter: SMBus I801 adapter at efa0
+>>>>> temp1:        +20.8°C  (low  =  +0.0°C, high = +55.0°C)
+>>>>>                         (crit low =  +0.0°C, crit = +85.0°C)
+>>>>>
 >>>>
->>>> but it stays with the defaults:
+>>>> You'd have to write directly into the attribute files.
+>>>> For example, if you have
 >>>>
->>>> ```
->>>> $ sensors
->>>> spd5118-i2c-0-53
->>>> Adapter: SMBus I801 adapter at efa0
->>>> temp1:        +20.8°C  (low  =  +0.0°C, high = +55.0°C)
->>>>                         (crit low =  +0.0°C, crit = +85.0°C)
+>>>> $ grep . /sys/class/hwmon/*/name
+>>>> /sys/class/hwmon/hwmon0/name:nvme
+>>>> /sys/class/hwmon/hwmon1/name:nct6687
+>>>> /sys/class/hwmon/hwmon2/name:k10temp
+>>>> /sys/class/hwmon/hwmon3/name:spd5118
+>>>> /sys/class/hwmon/hwmon4/name:spd5118
+>>>> /sys/class/hwmon/hwmon5/name:spd5118
+>>>> /sys/class/hwmon/hwmon6/name:spd5118
+>>>> /sys/class/hwmon/hwmon7/name:mt7921_phy0
+>>>> /sys/class/hwmon/hwmon8/name:amdgpu
 >>>>
+>>>> you could run
+>>>>
+>>>> sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
 >>>
->>> You'd have to write directly into the attribute files.
->>> For example, if you have
+>>>      $ sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
+>>>      bash: line 1: echo: write error: No such device or address
 >>>
->>> $ grep . /sys/class/hwmon/*/name
->>> /sys/class/hwmon/hwmon0/name:nvme
->>> /sys/class/hwmon/hwmon1/name:nct6687
->>> /sys/class/hwmon/hwmon2/name:k10temp
->>> /sys/class/hwmon/hwmon3/name:spd5118
->>> /sys/class/hwmon/hwmon4/name:spd5118
->>> /sys/class/hwmon/hwmon5/name:spd5118
->>> /sys/class/hwmon/hwmon6/name:spd5118
->>> /sys/class/hwmon/hwmon7/name:mt7921_phy0
->>> /sys/class/hwmon/hwmon8/name:amdgpu
->>>
->>> you could run
->>>
->>> sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
 >>
->>      $ sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
->>      bash: line 1: echo: write error: No such device or address
+>> Please add
 >>
+>>      .use_single_write = true,
+>>
+>> to the regmap configuration (spd5118_regmap_config) to see if it helps.
 > 
-> Please add
+> Unfortunately, it does not:
 > 
->      .use_single_write = true,
+>      $ git log --no-decorate -p -1
+>      commit c27ae51b689d7bdb7baf10c434438d501bd384aa
+>      Author: Paul Menzel <pmenzel@molgen.mpg.de>
+>      Date:   Tue Jun 18 20:26:17 2024 +0200
 > 
-> to the regmap configuration (spd5118_regmap_config) to see if it helps.
+>          hwmon: spd5118: Use .use_single_write = true,
+> 
+>      diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+>      index ac94a67793605..33a628840597e 100644
+>      --- a/drivers/hwmon/spd5118.c
+>      +++ b/drivers/hwmon/spd5118.c
+>      @@ -522,6 +522,7 @@ static const struct regmap_config spd5118_regmap_config = {
+>              .writeable_reg = spd5118_writeable_reg,
+>              .volatile_reg = spd5118_volatile_reg,
+>              .cache_type = REGCACHE_MAPLE,
+>      +       .use_single_write = true,
+>       };
+> 
+>       static int spd5118_probe(struct i2c_client *client)
+> 
+>      $ uname -r
+>      6.10.0-rc4.mx64.461-00048-gc27ae51b689d
+>      $ sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
+>      bash: line 1: echo: write error: No such device or address
+> 
+> 
 
-Unfortunately, it does not:
+Too bad. Still, thanks for trying!
 
-     $ git log --no-decorate -p -1
-     commit c27ae51b689d7bdb7baf10c434438d501bd384aa
-     Author: Paul Menzel <pmenzel@molgen.mpg.de>
-     Date:   Tue Jun 18 20:26:17 2024 +0200
+I have a more comprehensive patch series which I think _should_ work.
+I'll send it out for testing shortly.
 
-         hwmon: spd5118: Use .use_single_write = true,
+Thanks,
+Guenter
 
-     diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-     index ac94a67793605..33a628840597e 100644
-     --- a/drivers/hwmon/spd5118.c
-     +++ b/drivers/hwmon/spd5118.c
-     @@ -522,6 +522,7 @@ static const struct regmap_config 
-spd5118_regmap_config = {
-             .writeable_reg = spd5118_writeable_reg,
-             .volatile_reg = spd5118_volatile_reg,
-             .cache_type = REGCACHE_MAPLE,
-     +       .use_single_write = true,
-      };
-
-      static int spd5118_probe(struct i2c_client *client)
-
-     $ uname -r
-     6.10.0-rc4.mx64.461-00048-gc27ae51b689d
-     $ sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
-     bash: line 1: echo: write error: No such device or address
-
-
-Kind regards,
-
-Paul
 
