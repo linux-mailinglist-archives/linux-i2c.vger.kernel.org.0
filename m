@@ -1,43 +1,76 @@
-Return-Path: <linux-i2c+bounces-4076-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4077-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1E8990C969
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 13:29:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7103E90D329
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 15:59:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C63531C233A7
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 11:29:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 395D7B2449A
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 13:57:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96151419BA;
-	Tue, 18 Jun 2024 10:27:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E3A15FA96;
+	Tue, 18 Jun 2024 13:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ai+ac9+m"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8401865C;
-	Tue, 18 Jun 2024 10:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DCF154C02;
+	Tue, 18 Jun 2024 13:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718706426; cv=none; b=S0+bZjsUCP/uE6QlC9WJ5HB4XZJrfkZU07jkso6vYUAMUR2nUydA/HesYU4YzZ+H6o0U8vrLqaZndDVTgVxH/3IHw/qZgxL1lAixsmlkP3q2ltQJeagN/rP1NyI1ZAMV9BFNfOSN97Wh9sdrk5GwxpTN9C+2b4MVsnmgM7AfsAY=
+	t=1718717541; cv=none; b=b2r/Vi6qEj0UuET+/NHybbaVFNCmR/W5siWMWtbXRj2cfEEQCrNPWSqMpbHaxdt7CAbaoJBWXLMp6i1+UZIkT38B45rwOf00U/0jXJoQxrKK0EhZGgFlxud4vyl5sML7LEVhWWH3lvC3+xivGz4vdkxViTMHD6Dtwh3gQ4EjqE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718706426; c=relaxed/simple;
-	bh=EgwFcIP4Mgljm56n1SRuhnk08QUmy5FNLyu1V4L8EGQ=;
+	s=arc-20240116; t=1718717541; c=relaxed/simple;
+	bh=PPxLoT9BzBda+0TPqQBQVseMBZPIoA0HnsreLI0+ttg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CoaxXyJqLjjElZ/9MOo8gts2PMcPdHS1Rqdh+T62mUToOUwvBZ6LnUV6wSPWdSZb/2SUYAgA9iR0lh029ppTfjXO3N1e9SM+wq4wMW3dsp9W/C+f9bBGdUGTMC740xcHEUQFZOGPYyjaS0IQMU+H/FTElHbW2ZZg8R0jC890Fus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id B8FE361E5FE01;
-	Tue, 18 Jun 2024 12:25:55 +0200 (CEST)
-Message-ID: <f20ea816-5165-401e-948f-6e77682a2d1b@molgen.mpg.de>
-Date: Tue, 18 Jun 2024 12:25:55 +0200
+	 In-Reply-To:Content-Type; b=fBrOiY4xpFDosfmj3MCum2LE5pHOQf+mq0TZXDNhs/7fl8DRuPgkYo7XOqITE9mFIFXMzmL3b6hZdUOUhB/y+4lebTGsrg1buK8Y6i3DDfkzBgAE8P7ujsmYW6FcM6xQPPSX1SPD2xKwA/et9fWeKD5iKLMExPtFoLMXqSr29EU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ai+ac9+m; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70599522368so3848323b3a.2;
+        Tue, 18 Jun 2024 06:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718717539; x=1719322339; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=oID6sXnxDXA/SiLWafjjXs7e8AQ+wI2NLEuM6Dp+7Jg=;
+        b=Ai+ac9+mYZhEwB9u2c2BXM16m+Tbtmk8c0RjN5HLKZPXG1tEB9knV3bvn+8mHmP1tR
+         7vKPLnQaYzis7xfzP2CaeWYU0PtJFfVitITe7FcJQ++hmtbcOSuRsjxngMN6Ts+nXt31
+         rzUNL5LjnCYJyUsZn2Nc05x1LVkFGyMKDXQttfQoAml8sZkqPnNHOPHwbqI4MT1g61u2
+         CZfJqlj4Oz4fV8ovzfMipm4uPLvvKHfs3AT0i+jRSJM1xv9GFg1sJ70rAio+HUV4fzVt
+         i2jOGP9LZmmL7zMjDxfaNF3+Awf3IhfjQR7W2qYARIclWcC+/hiQ6xKg2zqU3DIcv19v
+         W3PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718717539; x=1719322339;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oID6sXnxDXA/SiLWafjjXs7e8AQ+wI2NLEuM6Dp+7Jg=;
+        b=OoQRdKUpAcxBvM7bpuNrHhcqtRugqV0UPOiXdPXqV2mhJCzpMB/M6QXcnY9pwiZ78E
+         YnewCotYZgHPSjQbI3Smqsa6o6H7YLIKouU6qC04ZK48tRL89cIdf5eSYgZA3GZmeQw2
+         bVA0bduCRHFm9SZL8kn2DXbYZH3y4woEvAAgl6ZmtYryj2Ak1tX5mLbQS/w1Cl4uimIL
+         asNAKN4C6RWi0U+44VHONzpHCXGnu6NyQmIObR5xH9I/L7qarrZN1Cl7JzwjxiRV3HTM
+         MrLIJfyLvJAuMa67cuk3GwrDdnGCBxFfTDm4Ij2zKCkKGMBiv1sQGxdkjcHKZy2Wmo7d
+         6uTw==
+X-Forwarded-Encrypted: i=1; AJvYcCXU8P/Q4qzY4elVKFW7WvlcLxp2TLOPd9Q1OWxXTCnm9GCne02BrGImwe2iqdH27RwHPRJ+UxPZdP34Lh7DAtqzRGlXoSlQyC6PjNKjEnaWYMfljBPNMgGktvgGjGI7G5vpljhvyb/9RqlMn99xjcyt1UZmWidkvMAeszAAKugYSP3Pzw==
+X-Gm-Message-State: AOJu0Yxf89X3mt3/KiF5M8CHpH6KFY2e0VM6ZiCVhzuxDUGsYeWOqHys
+	rAzpnsm00fODnBJui1odQlTeLv5OOaueolxwjpL9qcz6jYEklVBUcgLxuQ==
+X-Google-Smtp-Source: AGHT+IHksL6eMBnmENqjS1uVpx29FcncN0UOU745Ih8OCdjgve7QFKKkB8et2BOHKvMIOBQFtx41oQ==
+X-Received: by 2002:a05:6a20:7491:b0:1b2:ae30:95b5 with SMTP id adf61e73a8af0-1bae82a7234mr12451751637.56.1718717539203;
+        Tue, 18 Jun 2024 06:32:19 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb6b9c9sm8952931b3a.160.2024.06.18.06.32.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 06:32:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <975af7e5-b1b0-400e-a1c3-6d9140421f25@roeck-us.net>
+Date: Tue, 18 Jun 2024 06:32:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -46,7 +79,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-To: Guenter Roeck <linux@roeck-us.net>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
 Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -60,258 +93,85 @@ References: <20240604040237.1064024-1-linux@roeck-us.net>
  <efb77b37-30e5-48a8-b4af-eb9995a2882b@roeck-us.net>
  <33f369c1-1098-458e-9398-30037bd8c5aa@molgen.mpg.de>
  <4e09b843-3d2d-46d7-a8e1-2eabc4382dc7@roeck-us.net>
+ <f20ea816-5165-401e-948f-6e77682a2d1b@molgen.mpg.de>
 Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <4e09b843-3d2d-46d7-a8e1-2eabc4382dc7@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <f20ea816-5165-401e-948f-6e77682a2d1b@molgen.mpg.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Dear Guenter,
+Hi Paul,
 
-
-Thank you for your support.
-
-
-Am 17.06.24 um 17:49 schrieb Guenter Roeck:
-
-> On Mon, Jun 17, 2024 at 04:42:47PM +0200, Paul Menzel wrote:
-> [ ... ]
->>
->> I applied your patch
->>
->>      $ git log --oneline --no-decorate -2
->>      00058a6 eeprom: Add basic spd5118 support
->>      a0e5865 i2cdetect: only use "newer" I2C_FUNC_* flags if they exist
->>
->> but reading eeprom fails:
->>
->>      $ sudo ./eeprom/decode-dimms
+On 6/18/24 03:25, Paul Menzel wrote:
+[ ... ]
 > 
-> decode-dimms does not need sudo, but that should not make a difference.
+>      $ ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>      -r--r--r-- 1 root root 1024 Jun 18 12:17 /sys/bus/i2c/drivers /spd5118/0-0050/eeprom
+>      $ cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
+>      cp: error reading '/sys/bus/i2c/drivers/spd5118/0-0050/eeprom': No such device or address
+
+That suggests that the i801 driver got an error when trying some chip operation.
+Unfortunately I have no idea what that error or the failed operation might be.
+
+>      $ od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>      od: /sys/bus/i2c/drivers/spd5118/0-0050/eeprom: read error: No such device or address
+>      0000000
 > 
->>      Cannot read /sys/bus/i2c/drivers/spd5118/0-0050/eeprom at ./eeprom/decode-dimms line 2465.
->>
-> Well, it _is_ a hack ;-), but that specific operation should not fail.
+>> sudo i2cdump -y -f 0 0x50
 > 
-> Please try the following:
+>      $ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
+>      No size specified (using byte-data access)
+>      Error: Could not open file `/dev/i2c-0' or `/dev/i2c/0': No such file or directory
 > 
-> ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
-> cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
-> od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+This should work after you load the "i2c-dev" module.
 
-     $ ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
-     -r--r--r-- 1 root root 1024 Jun 18 12:17 /sys/bus/i2c/drivers 
-/spd5118/0-0050/eeprom
-     $ cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
-     cp: error reading '/sys/bus/i2c/drivers/spd5118/0-0050/eeprom': No 
-such device or address
-     $ od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
-     od: /sys/bus/i2c/drivers/spd5118/0-0050/eeprom: read error: No such 
-device or address
-     0000000
+If you get it to work, please provide the output. Maybe it helps tracking down
+the problem.
 
-> sudo i2cdump -y -f 0 0x50
+Thanks,
+Guenter
 
-     $ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
-     No size specified (using byte-data access)
-     Error: Could not open file `/dev/i2c-0' or `/dev/i2c/0': No such 
-file or directory
-
-> All those should work, and the size of /tmp/eeprom should be
-> 1024 bytes. The output of i2cdump should start with something like
-> 
->       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-> 00: 51 18 0a 86 32 03 32 00 00 00 00 07 ff 7f 00 00    Q???2?2......?..
->                                       ^^
-> 
-> and with
-> 
->       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-> 00: 51 18 0a 86 32 03 32 00 00 00 00 00 ff 7f 00 00    Q???2?2......?..
->                                       ^^
-> 
-> after executing the "sensors" command.
-
-Hopefully, I didn’t do something silly, that it does not work on my 
-system yet. `sensors` is able to read stuff:
-
-```
-$ sensors
-spd5118-i2c-0-53
-Adapter: SMBus I801 adapter at efa0
-temp1:        +20.8°C  (low  =  +0.0°C, high = +55.0°C)
-                        (crit low =  +0.0°C, crit = +85.0°C)
-
-spd5118-i2c-0-51
-Adapter: SMBus I801 adapter at efa0
-temp1:        +21.5°C  (low  =  +0.0°C, high = +55.0°C)
-                        (crit low =  +0.0°C, crit = +85.0°C)
-
-coretemp-isa-0000
-Adapter: ISA adapter
-Package id 0:  +32.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 0:        +27.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 4:        +29.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 8:        +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 12:       +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 16:       +25.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 20:       +26.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 24:       +24.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 28:       +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 32:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 33:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 34:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 35:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 36:       +29.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 37:       +29.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 38:       +29.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 39:       +29.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 40:       +31.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 41:       +31.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 42:       +31.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 43:       +31.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 44:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 45:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 46:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 47:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-
-spd5118-i2c-0-52
-Adapter: SMBus I801 adapter at efa0
-temp1:        +21.5°C  (low  =  +0.0°C, high = +55.0°C)
-                        (crit low =  +0.0°C, crit = +85.0°C)
-
-spd5118-i2c-0-50
-Adapter: SMBus I801 adapter at efa0
-temp1:        +21.5°C  (low  =  +0.0°C, high = +55.0°C)
-                        (crit low =  +0.0°C, crit = +85.0°C)
-```
-
-> Other than that, I can see that your system is an Intel system,
-> meaning the i2c controller would be i801, not piix4. I wonder
-> if that makes a difference. Has anyone else seeing this tested
-> eeprom access with i801 (or any other controller besides piix4),
-> by any chance?
-
-Sorry, I only have Intel systems with DDR5 RAM at disposal.
-
-
-Kind regards,
-
-Paul
-
-
-PS:
-
-```
-$ lsmod | grep i2c
-i2c_algo_bit           12288  1 i915
-regmap_i2c             12288  1 spd5118
-$ grep I2C /boot/config-6.10.0-rc4.mx64.461-00047-g801b6aad6fa7
-CONFIG_REGMAP_I2C=m
-# CONFIG_SENSORS_LIS3_I2C is not set
-# CONFIG_MOUSE_ELAN_I2C is not set
-# CONFIG_MOUSE_SYNAPTICS_I2C is not set
-# CONFIG_TCG_TIS_I2C is not set
-CONFIG_TCG_TIS_I2C_CR50=m
-CONFIG_TCG_TIS_I2C_ATMEL=m
-CONFIG_TCG_TIS_I2C_INFINEON=m
-CONFIG_TCG_TIS_I2C_NUVOTON=m
-CONFIG_TCG_TIS_ST33ZP24_I2C=m
-# I2C support
-CONFIG_I2C=y
-CONFIG_ACPI_I2C_OPREGION=y
-CONFIG_I2C_BOARDINFO=y
-CONFIG_I2C_COMPAT=y
-CONFIG_I2C_CHARDEV=m
-CONFIG_I2C_MUX=y
-# Multiplexer I2C Chip support
-# CONFIG_I2C_MUX_GPIO is not set
-# CONFIG_I2C_MUX_LTC4306 is not set
-# CONFIG_I2C_MUX_PCA9541 is not set
-# CONFIG_I2C_MUX_PCA954x is not set
-# CONFIG_I2C_MUX_REG is not set
-# CONFIG_I2C_MUX_MLXCPLD is not set
-# end of Multiplexer I2C Chip support
-CONFIG_I2C_HELPER_AUTO=y
-CONFIG_I2C_SMBUS=y
-CONFIG_I2C_ALGOBIT=m
-# I2C Hardware Bus support
-# CONFIG_I2C_ALI1535 is not set
-# CONFIG_I2C_ALI1563 is not set
-# CONFIG_I2C_ALI15X3 is not set
-CONFIG_I2C_AMD756=m
-CONFIG_I2C_AMD756_S4882=m
-CONFIG_I2C_AMD8111=m
-# CONFIG_I2C_AMD_MP2 is not set
-CONFIG_I2C_I801=y
-CONFIG_I2C_ISCH=m
-# CONFIG_I2C_ISMT is not set
-CONFIG_I2C_PIIX4=m
-CONFIG_I2C_NFORCE2=m
-CONFIG_I2C_NFORCE2_S4985=m
-# CONFIG_I2C_NVIDIA_GPU is not set
-CONFIG_I2C_SIS5595=m
-CONFIG_I2C_SIS630=m
-CONFIG_I2C_SIS96X=m
-CONFIG_I2C_VIA=m
-CONFIG_I2C_VIAPRO=m
-# CONFIG_I2C_ZHAOXIN is not set
-# CONFIG_I2C_SCMI is not set
-# I2C system bus drivers (mostly embedded / system-on-chip)
-# CONFIG_I2C_CBUS_GPIO is not set
-# CONFIG_I2C_DESIGNWARE_PCI is not set
-# CONFIG_I2C_GPIO is not set
-# CONFIG_I2C_OCORES is not set
-# CONFIG_I2C_PCA_PLATFORM is not set
-# CONFIG_I2C_SIMTEC is not set
-# CONFIG_I2C_XILINX is not set
-# External I2C/SMBus adapter drivers
-# CONFIG_I2C_DIOLAN_U2C is not set
-# CONFIG_I2C_CP2615 is not set
-# CONFIG_I2C_PARPORT is not set
-# CONFIG_I2C_PCI1XXXX is not set
-# CONFIG_I2C_ROBOTFUZZ_OSIF is not set
-# CONFIG_I2C_TAOS_EVM is not set
-# CONFIG_I2C_TINY_USB is not set
-# Other I2C/SMBus bus drivers
-# CONFIG_I2C_MLXCPLD is not set
-# CONFIG_I2C_VIRTIO is not set
-# end of I2C Hardware Bus support
-# CONFIG_I2C_STUB is not set
-# CONFIG_I2C_SLAVE is not set
-# CONFIG_I2C_DEBUG_CORE is not set
-# CONFIG_I2C_DEBUG_ALGO is not set
-# CONFIG_I2C_DEBUG_BUS is not set
-# end of I2C support
-# I2C GPIO expanders
-# end of I2C GPIO expanders
-# CONFIG_SENSORS_LTC2947_I2C is not set
-# CONFIG_SENSORS_NCT6775_I2C is not set
-# CONFIG_SENSORS_OCC_P8_I2C is not set
-# CONFIG_MFD_AXP20X_I2C is not set
-# CONFIG_MFD_CS42L43_I2C is not set
-# CONFIG_MFD_DA9052_I2C is not set
-# CONFIG_MFD_MC13XXX_I2C is not set
-# CONFIG_MFD_TPS65912_I2C is not set
-# CONFIG_MFD_TPS6594_I2C is not set
-# CONFIG_MFD_ARIZONA_I2C is not set
-# CONFIG_MFD_WM831X_I2C is not set
-# CONFIG_MFD_WM8350_I2C is not set
-# CONFIG_MFD_ATC260X_I2C is not set
-CONFIG_VIDEO_V4L2_I2C=y
-# audio, video and radio I2C drivers auto-selected by 'Autoselect 
-ancillary drivers'
-# I2C encoder or helper chips
-CONFIG_DRM_I2C_CH7006=m
-CONFIG_DRM_I2C_SIL164=m
-# CONFIG_DRM_I2C_NXP_TDA998X is not set
-# CONFIG_DRM_I2C_NXP_TDA9950 is not set
-# end of I2C encoder or helper chips
-CONFIG_I2C_HID=y
-# CONFIG_I2C_HID_ACPI is not set
-# CONFIG_I2C_HID_OF is not set
-# I2C RTC drivers
-CONFIG_RTC_I2C_AND_SPI=y
-# SPI and I2C RTC drivers
-```
 
