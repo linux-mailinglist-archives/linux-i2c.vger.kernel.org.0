@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-4098-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4099-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C242D90DAA8
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 19:31:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD45290DB6E
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 20:16:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C5F51F22E7F
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 17:31:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC0A21C21CE9
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 18:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF8E149001;
-	Tue, 18 Jun 2024 17:31:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBCF15E5BB;
+	Tue, 18 Jun 2024 18:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afWNON3N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NjxhyBIP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6B479FD;
-	Tue, 18 Jun 2024 17:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DF815DBC0;
+	Tue, 18 Jun 2024 18:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718731862; cv=none; b=DeVKou4byN1sPUgzVy6XAUD7NMQwDuXOUrHgyIbMiAfSyTtfdfd8+T5cWmP+vQW6skgMr99D2qFY2Q22wWR2jfrXJocjhrYyRmy5tVKUuZmVUBFBrAD0+N6m6iW3kRtlg8OFwfp8cPaNDt1ptDX7KfXNA2ebIHvIKvubHbUPZ0Q=
+	t=1718734601; cv=none; b=IEOqaRo8u1AhmqOzclMMyKxGLeMbqmWf4Ic2PP1uglrsXWLjKdpdmiKgaHOp+yHCOyxd3lW0isl6QbPJfoMh2pS5+BaihMXdmQdkMM+B8UmOMc9hqesFf4LjqnCEXy5cpbd2NqCN+kLP+T1crT9KWxYkBvl054+fPG5zpWjivxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718731862; c=relaxed/simple;
-	bh=/AQZntOEHmAeOiE4QJyncGSod5FVp13d9ADEKStKDuQ=;
+	s=arc-20240116; t=1718734601; c=relaxed/simple;
+	bh=wvu0t2RMj0hWv7/a1i8jrPL4+VhVeydIZx5hdX5Aa4c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KXwVIy2f3VHlBZQfOJbFmE37mJwGH631gE+TWG6Vf8CQVyPGtQh/YU5oJjaIzJtyPdOYqw80lV3RpDXUrJu+wJCruc+Z4VMtF83nnRiZtO/Q6dKDygtv65TjY51/0poTnl6iZPsM3maCbxzEmQAMvlMWjsYDPMusAtYVq9Fb5xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afWNON3N; arc=none smtp.client-ip=209.85.214.179
+	 In-Reply-To:Content-Type; b=SV3rFKRJyphhVEsHEeU9An2QDFBbTv/EFUgEC16tKkdI6uoQ+O+cFBAvI1IdnD/R1xpacGLcTeY5TypiQzEY/whAezwTUkzXypoHpacQsVSAHOeym+wXr0Z1E++EFovaVyQYubIR3faZcBDa/p9Xz6C6bnj04CsZy/bm8XM/cIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NjxhyBIP; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1f4a0050b9aso48768935ad.2;
-        Tue, 18 Jun 2024 10:31:00 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-705bf368037so5212212b3a.0;
+        Tue, 18 Jun 2024 11:16:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718731860; x=1719336660; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718734599; x=1719339399; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=UqTJDZYhzctseuzM+3YsX5BOkVLM074JPBaxMv1BDQE=;
-        b=afWNON3NHN1FH0aImzM1KTg6J1AAuHzGlquc4wD6I/CZBrpEtDdFhKyHo6y19JCZPk
-         E111RKC64Hx1UQUl96neh4L67PqXddljVAnVFeYTFhPRRD0WCZsbOVsjm1dCb7oYbAGv
-         CacMVBudi6XJ1afZE9URUSSmsgr7sBgUO6Q4C+UjkgCH3CrYGaYLCHTKvIs6ts+0mlOl
-         RIYmXX7HTUiCsdFN5zR6dV8e4GgCL5uEImsIxHa6wjVsbHpt4RoCB2eY4htvCgb/LzhJ
-         NUakPJqO9qzDEsqlIY31+16/Zy1p59nobfgIqtYSGnsulFLy1Pkbc8PhsTN0gZ6vzNG2
-         gc/w==
+        bh=HyuFVb251ygp3speAasV5OAz77xpbLHVPkTvd/3cQ0g=;
+        b=NjxhyBIPkyUCZsotA0thGIN0S3XLFjiNnaaVQWNA+0SYUHvbPxXKOdSDeD3WyVfzNQ
+         8IGAXs6/EUo5WBf+l7iVO0hzBGeSPxHnhTJeZ0U8A66bmYDv6+s+/1AMVjtTkyXGL3DY
+         k55j09JigDgL1N3ym79vE62TKPMlNi8yxP6dslaaPqDxU3xzYzNxMuAzntQnxP4HMEZ4
+         Qkw++xufcIETW5sMOTPXfa3fZVH9jYSTLX2kvFgHCyNuyVpWn1AVYC3XHk9Y42LFCG2q
+         SGBnwPrW9jri01uEGgFx2XX9XStK0oDMXURRfQ1wbP9DmxxBv02UN3MELx4Uf1Jg7x6F
+         fcbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718731860; x=1719336660;
+        d=1e100.net; s=20230601; t=1718734599; x=1719339399;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UqTJDZYhzctseuzM+3YsX5BOkVLM074JPBaxMv1BDQE=;
-        b=oMS8Rg0h42LwwaQfX33jBUei2p0OQBqsdeQqDVqemGZR+ZcrMc9uA/ZUgVkuACtnNq
-         5vHjHCNSYTly20MMGtk2aIcl1ctFq0oL9myfgCsqMDtvBSCXmtFcsvZv04h35Hv5pCBU
-         eenZwHSpMwDxMYhx36RWHwTKr0KnJ2IY5woazPW69/Ry6akqHJKdO6PqZyLNbKODclAz
-         M08re5YSsK3JAxWR/KfK/r4qptciFORJgel6K/humLbtU7nChKe0TkMTCg7XNxlulq0W
-         NExFsG9gmj0y6KmfZqBr8qFy56jtS1dmwPzILX36xtrRkh3HPAMjR3lMgwV9aI68DSW5
-         Z5kg==
-X-Forwarded-Encrypted: i=1; AJvYcCVqsr30BPxXsmi0NB3qs/1wX0MBDmkoBfXmiJIUEVw54AEfOokRfNbUySeQjOtmgAFlvFEfcvlnppPG3slJyfaZwHqwqYYINHZiDUyWO8/KYm2ooaLm/ducV/7TTHH02jLS94U1J6Bn5jKPCXnkDCS0jOgp88xlnGIHUhvWMvciYryOMg==
-X-Gm-Message-State: AOJu0YyYf3p0Rls2Ch6sN+JzwfvrnCKOopp5fxg41+lYHtaXUwvvDwK/
-	RZZgHiSqtVMfowdvdRv4jJ4bIN7//+FuhfZ4qPjWk4C74RHgvYnlcGrHLw==
-X-Google-Smtp-Source: AGHT+IGeAc3WdegYMc0Mx5MrWrXzd451ZIZm/yAoTLvtjgaxjUYBHwS/1UOR//L9zLk8emheL+QD3w==
-X-Received: by 2002:a17:903:2449:b0:1f7:3332:65d9 with SMTP id d9443c01a7336-1f9aa3afacbmr3944675ad.9.1718731859905;
-        Tue, 18 Jun 2024 10:30:59 -0700 (PDT)
+        bh=HyuFVb251ygp3speAasV5OAz77xpbLHVPkTvd/3cQ0g=;
+        b=ljHw1JTe5kn19KL7BIbBXrWx4s7ZJiWK4fBOBdqRghKwuZonvYTVTdDFa/t6f9ffra
+         B8Mei5cJ3NTYfr88Eo2ulob7HuE+uvHw7HBrfjLQVinIX6NE1HLefpm8St3D2I1rkKnQ
+         lu2d/9bc394SQZsXdRcxanfkeqH22agFOFI4ixklXsCzr2oaXsPVOUkmPmLM36Z2+EHH
+         Nt9aE3KwX3sYC51h2pGsfa+Nsy9rnVcJ86X0TaIjM2Qs9h1FKK3CzHcCOz12N1H/Cbbl
+         Zy0D876zBmydU/x9FYbL7qHm/7oypBR5CaspQp8RsuvNITDGXPdb+oAX2LSiQWD7CQHg
+         GD3g==
+X-Forwarded-Encrypted: i=1; AJvYcCW9d5/ZIGKCFJhG2JkuU0dsesb5r3yteYYbmLSQaSquEOvzJk6cElEiFCUeFdAeeEV1wS0avD9oIO153mPYBiP0W2qkJYMBCRT+h/2UHI7hHXsZCMZuAgRo2zrNtZNnni0s/CtLlqn97sbpSUipyYywRUrPbobbJMrq5pxn3V6j1DMw8g==
+X-Gm-Message-State: AOJu0YwOYi5e7nVqB5sY6SWYJHuQsIBOb017Q73l3IHOqETH4d+Fe+C6
+	RTXBS7OP1A9B3Zq5lWgTFoL3VnZvQXvh3n42zgtIj8XUi9jEQog0
+X-Google-Smtp-Source: AGHT+IEq8QKn5aYoONKoBuZpYdPoAjUPu+iuEJWGDFRkn1siRu/q1iLPH9VYz7kCtTfEKED8o0+Jmw==
+X-Received: by 2002:a05:6a20:96c3:b0:1b5:510a:ce3f with SMTP id adf61e73a8af0-1bcbb58b9aamr290124637.36.1718734598678;
+        Tue, 18 Jun 2024 11:16:38 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855ee8004sm100201725ad.121.2024.06.18.10.30.57
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ee30db14sm5579566b3a.109.2024.06.18.11.16.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jun 2024 10:30:58 -0700 (PDT)
+        Tue, 18 Jun 2024 11:16:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c2803eed-b4f4-44cf-a7f7-9557d05e798e@roeck-us.net>
-Date: Tue, 18 Jun 2024 10:30:56 -0700
+Message-ID: <b2fe83e6-8ebc-42f7-ba14-fbc1806a90f9@roeck-us.net>
+Date: Tue, 18 Jun 2024 11:16:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,19 +78,28 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/9] Add Mule MFD support
-To: Quentin Schulz <quentin.schulz@cherry.de>,
- Farouk Bouabid <farouk.bouabid@cherry.de>, Jean Delvare <jdelvare@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Peter Rosin <peda@axentia.se>, Heiko Stuebner <heiko@sntech.de>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
-References: <20240618-dev-mule-i2c-mux-v4-0-5462d28354c8@cherry.de>
- <fdeea79f-4568-4e70-9b49-0c02abc91170@roeck-us.net>
- <4f92528b-8311-4c0b-998b-f0221d7bd474@cherry.de>
+Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Armin Wolf <W_Armin@gmx.de>, Stephen Horvath <s.horvath@outlook.com.au>
+References: <20240604040237.1064024-1-linux@roeck-us.net>
+ <20240604040237.1064024-6-linux@roeck-us.net>
+ <a5aa120d-8497-4ca8-9752-7d800240b999@molgen.mpg.de>
+ <efb77b37-30e5-48a8-b4af-eb9995a2882b@roeck-us.net>
+ <33f369c1-1098-458e-9398-30037bd8c5aa@molgen.mpg.de>
+ <4e09b843-3d2d-46d7-a8e1-2eabc4382dc7@roeck-us.net>
+ <f20ea816-5165-401e-948f-6e77682a2d1b@molgen.mpg.de>
+ <975af7e5-b1b0-400e-a1c3-6d9140421f25@roeck-us.net>
+ <8719fc64-2b51-4b79-ba52-0a3b9216f2db@molgen.mpg.de>
+ <f76a4d07-887b-4efb-b20e-52979db31216@roeck-us.net>
+ <fd8868ef-6179-45a7-8249-ee17994a8e78@molgen.mpg.de>
+ <dc73070a-d266-47ca-bb11-77c2d9d6dece@roeck-us.net>
+ <5b9379f4-5ccd-402c-8502-8895acc0cdb8@molgen.mpg.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -136,58 +145,64 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <4f92528b-8311-4c0b-998b-f0221d7bd474@cherry.de>
+In-Reply-To: <5b9379f4-5ccd-402c-8502-8895acc0cdb8@molgen.mpg.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 6/18/24 09:51, Quentin Schulz wrote:
-> Hi Guenter,
+On 6/18/24 08:25, Paul Menzel wrote:
+> Dear Guenter,
 > 
-> On 6/18/24 6:29 PM, Guenter Roeck wrote:
->> On 6/18/24 09:06, Farouk Bouabid wrote:
->>> Mule is an MCU that emulates a set of I2C devices which are reachable
->>> through an I2C-mux.
+> 
+> Am 18.06.24 um 17:10 schrieb Guenter Roeck:
+>> On 6/18/24 07:59, Paul Menzel wrote:
+>> [ ... ]
+>>
+>>> I did
 >>>
->>> The mux and amc6821 combined make the Mule multi-function device (@0x18)
+>>>      $ tail -3 /etc/sensors3.conf
+>>>      chip "spd5118-*"
+>>>          set temp1_max 56000
+>>>          set temp1_crit 84000
+>>>
+>>> but it stays with the defaults:
+>>>
+>>> ```
+>>> $ sensors
+>>> spd5118-i2c-0-53
+>>> Adapter: SMBus I801 adapter at efa0
+>>> temp1:        +20.8°C  (low  =  +0.0°C, high = +55.0°C)
+>>>                         (crit low =  +0.0°C, crit = +85.0°C)
 >>>
 >>
->> I don't think that is appropriate. Those devices should all have separate
->> devicetree entries and be modeled as individual i2c devices.
+>> You'd have to write directly into the attribute files.
+>> For example, if you have
 >>
+>> $ grep . /sys/class/hwmon/*/name
+>> /sys/class/hwmon/hwmon0/name:nvme
+>> /sys/class/hwmon/hwmon1/name:nct6687
+>> /sys/class/hwmon/hwmon2/name:k10temp
+>> /sys/class/hwmon/hwmon3/name:spd5118
+>> /sys/class/hwmon/hwmon4/name:spd5118
+>> /sys/class/hwmon/hwmon5/name:spd5118
+>> /sys/class/hwmon/hwmon6/name:spd5118
+>> /sys/class/hwmon/hwmon7/name:mt7921_phy0
+>> /sys/class/hwmon/hwmon8/name:amdgpu
+>>
+>> you could run
+>>
+>> sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
 > 
-> I think there is a misunderstanding around the wording. They all have separate devicetree entries and they all are individual i2c devices (from the PoV of the kernel, they all are emulated within the same MCU).
-> 
-> - AMC6821 on address 0x18 for registers from 0x00 to 0xfe.
-> - Mux (paging, however you want to call it) on address 0x18 for register 0xff.
-> 
-> Note that AMC6821 is **emulated** in the MCU so this is not some HW trickery here.
-> 
-> This MCU also emulates ISL1208 on 0x6f, as well as a PWM controller (merge request pending) and two small AT24 "protocol" EEPROMs, on that same address. Those are behind a paging/muxing mechanism. You access ISL1208 through page 0, PWM controller through page 1, etc...
-> 
-> So basically, the point is:
-> - 0x18 on i2c is now MFD Mule
->    - two platform devices behind MFD = AMC6821 (reg 0x00 to 0xfe) + Mux (reg 0xff)
-> - 0x6f for devices "behind" the Mux
->    - page 0 for device behind adapter 0
->    - page 1 for device behind adapter 1
->    - ...
-> 
-> All of the above are part of the same MCU.
-> 
-> Mule MFD is a simple-mfd-i2c device with its own devicetree entry.
-> Child nodes of the Mule MFD are AMC6821 as a platform device (but operates over i2c) and Mule Mux. That's what was meant as "The mux and amc6821 combined make the Mule multi-function device (@0x18)".
-> 
-> The Mule Mux then creates N i2c adapters representing the mux/pages, all of those being represented in DT. Each of those have one device on address 0x6f, all represented in DT as well.
-> 
-> Nothing hidden or hardcoded, everything in DT.
-> 
-> Did I miss something here?
+>      $ sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
+>      bash: line 1: echo: write error: No such device or address
 > 
 
-If it is properly defined in devicetree, the emulated AMC6821 should be
-an i2c device, possibly sitting behind an i2c multiplexer, not a
-platform device.
+Please add
 
+	.use_single_write = true,
+
+to the regmap configuration (spd5118_regmap_config) to see if it helps.
+
+Thanks,
 Guenter
 
 
