@@ -1,126 +1,126 @@
-Return-Path: <linux-i2c+bounces-4070-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4071-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE72490BACD
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2024 21:25:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2DA790C62B
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 12:16:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66E652821D2
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jun 2024 19:25:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D1B21C21D89
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 10:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5AC1991AC;
-	Mon, 17 Jun 2024 19:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1544116B3AE;
+	Tue, 18 Jun 2024 07:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VDYRw7bD"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="czS7B6fi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1289A1991A9;
-	Mon, 17 Jun 2024 19:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF416BFAA;
+	Tue, 18 Jun 2024 07:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718652347; cv=none; b=QNTI7ToD9HqCBlHO9lXiecc67OaPHY3aOMCJQGcurKDV6VeZwzlBJTp9Ja8Mm/IbR2xyU1lBuco2BKzxrlfVhviZGCoJr52rhze4yFMv7lrfSzGgzYFMEEx5Etg1De3cJ8YIpWuMJ8HwcQwqspxb4W+Z+/TuDDyT/iVBxL97gNc=
+	t=1718696569; cv=none; b=U1OfXecyiAneWE4b4c2AsGxOkaWxyzXVwIGtdX2ZzkQZtc5kolUiKfzlbariGgfySU5WghjQl4yjYfDkzDcalnIPgqa+KAwFH2giABXrGsCtKKFU8yPNUR2Z8s6ABiCBVSTpSU7n6QuF1GeN7dXKNA/GEnExf/2/6F3DREoWDjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718652347; c=relaxed/simple;
-	bh=fiPM/txyC1MgvzsfZK1mZXhxNQ0K9EUihP4zzTA/5qI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c+x+NnrMoGlH22AcQuha2WUS5s4VMexxfLV/WLX8PijZR+vVJdyX54jewA2JSiE0ai15Zhc6OsmmeGpjnXtOSYLQZT821O/Cr4IvgpcYphmh6/xO/j6BGgsLSeYIZ07+6S51YnhDGyPrGgMm6FnQd0bdYdMbk79mIO3spEAnrmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VDYRw7bD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 070C3C2BD10;
-	Mon, 17 Jun 2024 19:25:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718652346;
-	bh=fiPM/txyC1MgvzsfZK1mZXhxNQ0K9EUihP4zzTA/5qI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VDYRw7bDOjeDOYj2rjUOlZyqGfr9UF0GR0AoQg5GbMvVBVGqpFFC86cxbiPLonUay
-	 Vk4sVTZKdkIVsoNdh5UHzdIPmi1SX0KRCEYBErrpUe2AOCnZhsMJgXVvMWNCWaGgkf
-	 c6M5GPnv3mrkGdeQ3z44X+1XNEaXlpdObEi622Uzq/jqfpExCnnQA8j0bgTd6iQDRh
-	 Iz7zAz84xXUSlsKS1ALSidDUhjuWSvpKDit3YIkkF9NpPe1dBwC+IUTmBY3+1YI1qE
-	 vjHe2jd1eFSHFu/CobLXJkRRP0Fr62/jiNBOkwKBOAVUcwnoP/LeEh9bH489bxmVa9
-	 XN92TWuqkZ8gQ==
-Date: Mon, 17 Jun 2024 21:25:42 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] docs: i2c: summary: document 'local' and 'remote'
- targets
-Message-ID: <boehtgry7j7ulhrw7tenkmzxujahmxfn25imvb7zw2ibtmebbk@u3jryw4v2y7h>
-References: <20240614081239.7128-8-wsa+renesas@sang-engineering.com>
- <20240614081239.7128-13-wsa+renesas@sang-engineering.com>
- <4zxr4rlqnjqbqh3oxmd2ufqi6uk4pxa3tniuya5pgjtqi6tswc@utq4r2zt6z6b>
- <ed75fyc2xcsnwubq42eposf6ayt5aj2jmqz6mthugk6vm2zpi4@qqwlmuwayoo5>
- <y34k2k25xdr5z4v7oejp4da237s4o5qym5npihyydwlbsdh75c@vhmfl7sw3pbm>
- <7d5f800f-fc65-4fbf-adad-616d51501c62@linux.microsoft.com>
+	s=arc-20240116; t=1718696569; c=relaxed/simple;
+	bh=yFUoZPLEvl9zKEWKLvMDdTp1Yngrq4RW/cuBQK35TNk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Bj4s7exM8++MuMpGajJXclmHoNeMrqvKqloJG7aY0Ij513xAjG9BIz2K6jPO4WQO34sZLD09Vkfn/+R+rLLXH5hjJMZSYlHbBx8wYHUUWNZsxzUCTAOAC9kC2auqaE7FemIMoN2rQBL5I2ch5KHTBW3IWdWiO0IOzCyjoAKnTIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=czS7B6fi; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DDC9FC000D;
+	Tue, 18 Jun 2024 07:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1718696564;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4utpiHnDm/jDD4wV/QlDCBTVNuIjZ+gRdkVJTonl0VY=;
+	b=czS7B6fib5UddaVPgCtk7cPfCHlvNKhF9bOjqgYkr2arubCarLH28ySfWd81HMFudSJoSw
+	FqFBZ7R6ypliWNrou3RqItbRYrl3j53W+cZQ6mCJ2+iSG+GQJ2Z67mJy0TT35hhjOQ8KA2
+	bclBQOg22YOnRjgBgjKdpJgk7UiTR3M4/mIuyHuP0IpB8y72DgTS9kuKj7eiBSoloITCcR
+	6yj5kCbF7Mt8Bd5CeVl6Zuf0XHMDjAK64Nsyooz0G/6sm5/mdDgLIVhqoQLL54Mg0dFBlL
+	WxHDqVYE0XuFuecRcefFNP8RCKvEf8ARiC98XC5J/SLwQS6YxWGhJ4+myU+XMw==
+From: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Subject: [PATCH v3 0/3] Add I2C support on TH1520
+Date: Tue, 18 Jun 2024 09:42:37 +0200
+Message-Id: <20240618-i2c-th1520-v3-0-3042590a16b1@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7d5f800f-fc65-4fbf-adad-616d51501c62@linux.microsoft.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAG06cWYC/2XMQQ6CMBCF4auQrq1ppy0QV97DsKDTIpMoJS0hG
+ sLdLeiGuHwv+b+FJR/JJ3YpFhb9TInCkIc6FQz7drh7Ti5vBgK00GA4AfKplwYE71Chl21tdQU
+ sB2P0Hb127Nbk3VOaQnzv9gzb+2WMPDAzcMGtNdJBXRkt6qsNYXrQcMbw3NxfVP1FTpXaSWUQs
+ TxEzbquHzWogmbbAAAA
+To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jisheng Zhang <jszhang@kernel.org>, 
+ Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+ Drew Fustini <dfustini@tenstorrent.com>, 
+ Emil Renner Berthing <emil.renner.berthing@canonical.com>, 
+ Conor Dooley <conor@kernel.org>, 
+ Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.14.0
+X-GND-Sasl: thomas.bonnefille@bootlin.com
 
-Hi,
+This adds I2C support in the device tree of the T-Head TH1520 RISCV-SoC
+and a default configuration for the BeagleV-Ahead. It appears that the
+TH1520 I2C is already supported in the upstream kernel through the
+Synopsis Designware I2C adapter driver.
 
-On Mon, Jun 17, 2024 at 09:57:12AM GMT, Easwar Hariharan wrote:
-> On 6/17/2024 4:58 AM, Andi Shyti wrote:
-> > On Sun, Jun 16, 2024 at 09:14:40PM GMT, Wolfram Sang wrote:
-> >>> I am not a big fan of the use of the word client. It's not used
-> >>> anywhere in the documentation and it's too generic as a name for
-> >>> giving it a specific meaning.
-> >>>
-> >>> I've seen already some confusion amongst reviewers and
-> >>> maintainers when Easwar sent the patch in drm.
-> >>>
-> >>> If it depends on me, I would stick to the only controller/target
-> >>> and render obsolet the use of the word "client" in the i2c
-> >>> context.
-> >>
-> >> Have you read the paragraph "Synonyms" from patch 6? I don't think we
-> >> can obsolete client because:
-> >>
-> >> $ git grep 'struct i2c_client \*client' | wc -l
-> >> 6100
-> 
-> > at least saying that "target" is the
-> > preferred name for what was called "client" until now.
-> 
-> I'm in agreement on obsoleting "client" as well. On the pace of change,
-> I'll defer to you. I was trying to elicit a recommendation on future use
-> of "client" when I asked:
-> 
-> ===
-> What's the combined effect of this documentation update in terms of the
-> recommendation for switching over the Linux kernel? Are we to use
-> controller/client or controller/target?
-> ===
-> 
-> "Synonyms" from patch 6 does say that controller/target is preferred but
-> couched it in the caveat "If speaking about I2C in general" and
-> adapter/client when "discuss[ing] implementation details." I was trying
-> to give space for an unambiguous recommendation.
+This patch depends on the clock patch from Drew Fustini
+Link: https://lore.kernel.org/linux-riscv/20240615-th1520-clk-v1-0-3ba4978c4d6b@tenstorrent.com
+and the pinctrl patch from Emil Renner Berthing
+Link: https://lore.kernel.org/linux-riscv/20240103132852.298964-1-emil.renner.berthing@canonical.com
 
-Exactly, this is what I referred to in my previous e-mails.
-These two statements sound a bit ambiguous to me, as well.
+Changed from v1:
+1. Remove redundant example for Synopsis DesignWare-I2C bindings
+2. Remove Node Ordering commit as it has already been taken
+3. Remove EEPROM label
+4. Rebase on pinctrl and clock driver patches
+5. Add pinctrl configuration
+6. Replaced the fixed-clock with a correct configuration
 
-Maybe we are wasting time at discussing minor details, but I
-consider this part important in order to give way to the major
-refactoring that Wolfram started at the beginning.
+Changed from v2:
+1. Reorder nodes to conserve ascending register node ordering
+2. Add support for I2C2 as it probably use the same controller
+3. Format comments to match kernel coding style
+4. Reorder nodes to conserve alphabetical node ordering
+6. Declare I2C2
+6. Set pinctrl pull-up resistor to the highest value
 
-Of course, as of now, I agree that replacing every "client" to
-"target" might not make much sense.
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+---
+Thomas Bonnefille (3):
+      dt-bindings: i2c: dw: Document compatible thead,th1520-i2c
+      riscv: dts: thead: Add TH1520 I2C nodes
+      riscv: dts: thead: Enable I2C on the BeagleV-Ahead
 
-Thanks,
-Andi
+ .../bindings/i2c/snps,designware-i2c.yaml          |  4 ++
+ arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts | 84 ++++++++++++++++++++++
+ arch/riscv/boot/dts/thead/th1520.dtsi              | 60 ++++++++++++++++
+ 3 files changed, 148 insertions(+)
+---
+base-commit: c7cdaf7e82015e7037131381bec6ba4b2b1eface
+change-id: 20240425-i2c-th1520-fc3ce1a8b472
 
-> I think we are on the same page here if we just remove the caveats.
-> 
-> Thanks,
-> Easwar
-> 
+Best regards,
+-- 
+Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+
 
