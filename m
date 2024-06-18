@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-4081-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4082-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AC8E90D6B1
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 17:11:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1741A90D6F5
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 17:19:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89EEF1F23121
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 15:11:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AC2E288A24
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 15:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FBD946453;
-	Tue, 18 Jun 2024 15:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B81145BF0;
+	Tue, 18 Jun 2024 15:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G7PyaHIT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V3621hHw"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC6B39AEC;
-	Tue, 18 Jun 2024 15:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B575523BE;
+	Tue, 18 Jun 2024 15:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718723431; cv=none; b=f7tTW2ByJStVklPbONzAtPmsdkcyPV99nSQTCm/MXbz+QQjV6t7wjyNFgRpuBYLGZOxBtLPeXEwukXO1duUGYbxSjPXgGP05JTjxuhHeJzKtY2vJ8RVBZ8snMfIzGVXPReFbIV25KUS1axg1LPDNzjHUB+usc+3Ad1hB5ZbGWfk=
+	t=1718723572; cv=none; b=DsTV9mIGKLWWDvBLbFx3fy3kCNYBPzUxvNfXzLGU5Rk2zeGglvzc5MsuNq3BCwy/hm3uzJbatwUscAJ5T8fPmrC+DTZ0byaVrzS+DQaggRMRCdA8q/LZWTxKg+WQsPWppIj7tAsiOnq3s67gHhElM3uUSb8ejuibhsBNLqJGvZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718723431; c=relaxed/simple;
-	bh=xN2mfAnka7AHk12FmpCy3OOhbQwpVNUdiE+wZmLKRbU=;
+	s=arc-20240116; t=1718723572; c=relaxed/simple;
+	bh=VmFNYzE1n5R7Mi+bi1Bih1Vka7yb6+Hzmuas90AeJP8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IsCNf8u9dpT1RImcaII5Ve7TC1avvAbskWZ4WB3/nBjVn+iFFhANlDxJdJ5pd0y1Q9Q1o0IVMpK/JM5bWe+9UQttVbe0YMbm03DC0zlHWdk22fR6Gp06H0g0qcaTOYLDyNk8dH/RG5lgdfR/+V3JWPoywyTlmXSUyfruoGvpDMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G7PyaHIT; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=ef6yw0Mu0mbUWNYYZ07RcQyxiWvSMY3Abwk580fKVfjg7ikkZWd/HLBppcwDFsNhXcltmV9Y6O/R+S3IQoIwgC+lm7gdd00/4XVJD9Z9o1Dkuyv0WldF8eqG17LnOEAktfeIY1JRQSoel2P0nAF3dXiiBMY1k65xJrrNfIolkzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V3621hHw; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1f99fe4dc5aso4838145ad.0;
-        Tue, 18 Jun 2024 08:10:30 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-705d9f4cd7bso3291819b3a.1;
+        Tue, 18 Jun 2024 08:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718723430; x=1719328230; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718723570; x=1719328370; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=llk5mM/CDBgeWUrb9/FImMBVCQSPWj3msI7bOeQH2Cw=;
-        b=G7PyaHITyzky5j/zsGPvn5PvIO2mgdsCl2/RNWlTKPv8blHEb+BLsyfn37ykITfuK1
-         AM5i+4K1JOzvJXCFXd1q449uNGMf3gz6POrU5cNAILmhCjTiCyIv6DsDpOylWBNrKfTh
-         O5DKsuFOjUZZTlr85XUSGnFp3dPwdETijK3KkaC0ifdqxpt5otNoNVOgxjpoau/w4fsC
-         lzjjX+BlIlXftn80g0flRPZCVe+v/FnjnGyYJE4uMgmAQosEe1KE+zxMn2ZABOrbzryx
-         h67wNmJdqBKs5hARWplHV7VDSHHRoOQPRjwWAod91x1ZJ7Dx9tAroFlwy81ZI+eVJIBW
-         VfUQ==
+        bh=OIBc07ZMpuSom2g6TOp1JREO7tlmjPpeaSY51LzNdW8=;
+        b=V3621hHwuWrGlVnavIwf3UitfRfXbZsezLmdoPwgTLdygdHaHeUCPhpBDVH4q5w/eC
+         pJCs3OCeyK43BY23qXy2xHUNKNdH9pJv4Ua4HupNAktQ+tHIz2HHmspu6NRn1Dcx3RrJ
+         L50ZcbitfyRxXIIpGjyWyVY8mImMRCDTFJcKqaj+EXlYQT1Px7tLdo25rNTAtknOa3ak
+         c6awOB3upz/Xpb0dv54pmzQxtewxYxOmQwEfGtuSb+R2OAvjHvHhGbU2oXuw3ZQgKcrF
+         ufMv1cCQ+80V4XGmwdO5DweLc5gYu1C8p4vtw/aL3zPVj18w94aJfBistDClNimW+H9v
+         mAKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718723430; x=1719328230;
+        d=1e100.net; s=20230601; t=1718723570; x=1719328370;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=llk5mM/CDBgeWUrb9/FImMBVCQSPWj3msI7bOeQH2Cw=;
-        b=jIPWR74+6B6+b5x9tAfg2+ejo4WwoSrN+KDwt3hSNUgqUCqA1q12T/vdFuIB76AqKy
-         bPHmeUmgmoLGm1BJa8V0njcr3UTW2g3ILa1aBUYglasaJZ+c+NchYgo6x6xMEklx6S+v
-         OJjibHvXO/opKptD520jyC1hPFCcAzyNVxwz7TMhXFNDnEtU1H9CAYrPUfk1+cTqSjPU
-         KdfA3vTMqFFiIK+lIiMXYkx+xLJNE0aAYDZON3boQRQhfhEdN+P5wxuytkUviiR1dR8k
-         6voUHR5Gsvptqtm21kGbv1ipATr8XyEAdr5G4/0YanUklCRWeZ+oKJDac8j0ceT7n5Yp
-         yRlA==
-X-Forwarded-Encrypted: i=1; AJvYcCVBuTByluc2/eVb9ZuBWgzbgpURmvwp54kXCGcmuT7HgtmzyQb7Se0cawgjEJkSxZ0+b9kLzPdb6R0Xvtv3m4vhsumtgi4o+ZuxKC0mxaHkSQOZRIS6DZnL1dAD3Vpw+I/LuIQgX9O8u95Vq1MYQh0wTEKFPCzt6vU8+mwDGZ6k/NMoaA==
-X-Gm-Message-State: AOJu0Yxm8m8yER7sbigQw6VI7Q5GEXRxGK40J1JFC/pjCMbez0oR8p3S
-	/2T9guCwv+dlSYqupHG0lFE5I/Zv5RYsGr2jLi/54A9Aj+26/xJ5
-X-Google-Smtp-Source: AGHT+IFz6s5oX3YKEyc4Fb2D5XO4b2N50oTkL7KFpITtcviobZGEeb53QbOSpCe2+dx1TS/hwVWRlg==
-X-Received: by 2002:a17:902:f552:b0:1f7:3379:1c71 with SMTP id d9443c01a7336-1f8625d96acmr140855505ad.27.1718723429519;
-        Tue, 18 Jun 2024 08:10:29 -0700 (PDT)
+        bh=OIBc07ZMpuSom2g6TOp1JREO7tlmjPpeaSY51LzNdW8=;
+        b=MSokArfngR2ZGW7Ujm+qjr2QYoATYOvKEe05s738zgYboywcU7/iVoSIs88oL9C2rd
+         CxCglXPj4e/MUunX/uQ7uuxjrRx0NWnKITe41IpIA/zezSAWMj3H8026LR2IU+GqiRoS
+         OVP+QFUG+27cOfPQJDCbiqnXywmlhjaSXbHfIcZoCZDo+cE5uU+fusp29gcYCtZV3utb
+         UfeTvkdRXIXUgFptW9nZNvv1yx36ljBAwmcxVoREvd1zJ6ptsJLiGEgK9+E4G8sy3g2d
+         2ItPC964Nrn/Su7RPNDE382VBbY7wG5PQ0Am5JsCOy7bwFRiw713i9j2oTW+nHg9Q+k7
+         Gf7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUAwxq9G+a3mQCJB/jrw/jLFoqTH10XMXy2BhkY8Q5Ruf7ZdxI531YQ3oJFobd3qcM2P2gWAKkX27+JiVem+ELxL0Plar418YdXJsQTcoIrWJNtxxaWGYlMRzdc6xwFjJ9kCwmBvN3FvniUKkcRbeDYBYorS0Yxn9cfK6w84CjfHj+D+A==
+X-Gm-Message-State: AOJu0YxQPXqEZl5BI3d9yJni3+kIGC/7i0DqOETcv4S2DfgiDM4ea93c
+	aeZn+u+N01iyPmKcQ+N+hBcwhqvJu4akt9a6uEWhSg//Y1D0zZ7j+PqXUA==
+X-Google-Smtp-Source: AGHT+IFauT8wQJUEYKoxfUqGp3B7tSk0s7iogE+J5JFtaQdlNyal7L44ebR+CZEOf/lNZ4iVGs4YwA==
+X-Received: by 2002:a05:6a20:5aa9:b0:1b6:a7c5:4faf with SMTP id adf61e73a8af0-1bae7eb3f32mr9931293637.19.1718723567696;
+        Tue, 18 Jun 2024 08:12:47 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9a24a3510sm7309415ad.65.2024.06.18.08.10.27
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6fee2c4083asm8065733a12.65.2024.06.18.08.12.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jun 2024 08:10:28 -0700 (PDT)
+        Tue, 18 Jun 2024 08:12:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dc73070a-d266-47ca-bb11-77c2d9d6dece@roeck-us.net>
-Date: Tue, 18 Jun 2024 08:10:26 -0700
+Message-ID: <2532ca4a-83dd-4ab8-af04-6ebcd5ca8673@roeck-us.net>
+Date: Tue, 18 Jun 2024 08:12:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -147,11 +147,97 @@ In-Reply-To: <fd8868ef-6179-45a7-8249-ee17994a8e78@molgen.mpg.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Paul,
-
 On 6/18/24 07:59, Paul Menzel wrote:
-[ ... ]
-
+> Dear Guenter,
+> 
+> 
+> Am 18.06.24 um 16:23 schrieb Guenter Roeck:
+>> On 6/18/24 06:51, Paul Menzel wrote:
+> 
+>>> Am 18.06.24 um 15:32 schrieb Guenter Roeck:
+>>>
+>>>> On 6/18/24 03:25, Paul Menzel wrote:
+>>>> [ ... ]
+>>>>>
+>>>>>      $ ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>>>>>      -r--r--r-- 1 root root 1024 Jun 18 12:17 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>>>>>      $ cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
+>>>>>      cp: error reading '/sys/bus/i2c/drivers/spd5118/0-0050/eeprom': No such device or address
+>>>>
+>>>> That suggests that the i801 driver got an error when trying some chip operation.
+>>>> Unfortunately I have no idea what that error or the failed operation might be.
+>>>>
+>>>>>      $ od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>>>>>      od: /sys/bus/i2c/drivers/spd5118/0-0050/eeprom: read error: No such device or address
+>>>>>      0000000
+>>>>>
+>>>>>> sudo i2cdump -y -f 0 0x50
+>>>>>
+>>>>>      $ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
+>>>>>      No size specified (using byte-data access)
+>>>>>      Error: Could not open file `/dev/i2c-0' or `/dev/i2c/0': No such file or directory
+>>>>>
+>>>> This should work after you load the "i2c-dev" module.
+>>>
+>>> Silly me. Thank you.
+>>>
+>>>> If you get it to work, please provide the output. Maybe it helps tracking down the problem.
+>>>
+>>> ```
+>>> $ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
+>>> No size specified (using byte-data access)
+>>>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+>>> 00: 51 18 0a 86 32 03 32 00 00 00 00 00 ff 01 00 00    Q???2?2......?..
+>>> 10: 00 00 00 00 00 00 00 00 00 00 00 00 70 03 00 00    ............p?..
+>>> 20: 50 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00    P?..............
+>>> 30: 00 58 01 00 00 00 00 00 00 00 00 00 00 00 00 00    .X?.............
+>>> 40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+>>> 50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+>>> 60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+>>> 70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+>>> 80: 30 10 12 02 04 00 20 62 00 00 00 00 90 02 00 00    0????. b....??..
+>>> 90: 00 00 00 00 a0 01 f2 03 7a 0d 00 00 00 00 80 3e    ....????z?....?>
+>>> a0: 80 3e 80 3e 00 7d 80 bb 30 75 27 01 a0 00 82 00    ?>?>.}??0u'??.?.
+>>> b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+>>> c0: 00 00 00 00 00 00 88 13 08 88 13 08 20 4e 20 10    ......?????? N ?
+>>> d0: 27 10 15 34 20 10 27 10 c4 09 04 4c 1d 0c 00 00    '??4 ?'????L??..
+>>> e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+>>> f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+>>> ```
+>>>
+>>> So (00,b) = 0x00 opposed to 0x07 in your example output.
+>>>
+>>
+>> Yes, that assumed that reading the nvram/eeprom succeeded, which it didn't.
+>> The value might also be 7 directly after booting and before loading
+>> the spd5118 driver.
+>>
+>> Anyway, it almost looks like setting the page doesn't work, or maybe write
+>> operations in general.
+>>
+>> Can you try the following ?
+>>
+>> dd if=/sys/bus/i2c/drivers/spd5118/0-0050/eeprom of=/tmp/eeprom count=64 bs=1
+>>
+>> and
+>>
+>> dd if=/sys/bus/i2c/drivers/spd5118/0-0050/eeprom of=/tmp/eeprom count=1 bs=64
+>>
+>> That should only try to read from page 0.
+> 
+>      $ sudo dd if=/sys/bus/i2c/drivers/spd5118/0-0050/eeprom of=/tmp/eeprom count=64 bs=1
+>      64+0 records in
+>      64+0 records out
+>      64 bytes copied, 0.046002 s, 1.4 kB/s
+>      $ sudo dd if=/sys/bus/i2c/drivers/spd5118/0-0050/eeprom of=/tmp/eeprom count=1 bs=64
+>      1+0 records in
+>      1+0 records out
+>      64 bytes copied, 0.000215414 s, 297 kB/s
+> 
+>> Also, please try to set a temperature limit, either temp1_max
+>> or temp1_crit. Setting temp1_max to, say, 56000, or temp1_crit
+>> to 84000 should do.
+> 
 > I did
 > 
 >      $ tail -3 /etc/sensors3.conf
@@ -163,29 +249,10 @@ On 6/18/24 07:59, Paul Menzel wrote:
 > 
 > ```
 > $ sensors
-> spd5118-i2c-0-53
-> Adapter: SMBus I801 adapter at efa0
-> temp1:        +20.8°C  (low  =  +0.0°C, high = +55.0°C)
->                         (crit low =  +0.0°C, crit = +85.0°C)
-> 
 
-You'd have to write directly into the attribute files.
-For example, if you have
+Did you run "sudo sensors -s" ?
 
-$ grep . /sys/class/hwmon/*/name
-/sys/class/hwmon/hwmon0/name:nvme
-/sys/class/hwmon/hwmon1/name:nct6687
-/sys/class/hwmon/hwmon2/name:k10temp
-/sys/class/hwmon/hwmon3/name:spd5118
-/sys/class/hwmon/hwmon4/name:spd5118
-/sys/class/hwmon/hwmon5/name:spd5118
-/sys/class/hwmon/hwmon6/name:spd5118
-/sys/class/hwmon/hwmon7/name:mt7921_phy0
-/sys/class/hwmon/hwmon8/name:amdgpu
-
-you could run
-
-sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
+I don't know if that would report errors, though.
 
 Thanks,
 Guenter
