@@ -1,76 +1,43 @@
-Return-Path: <linux-i2c+bounces-4077-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4078-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7103E90D329
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 15:59:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBFD690D4BC
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 16:25:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 395D7B2449A
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 13:57:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BA99B31488
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 14:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E3A15FA96;
-	Tue, 18 Jun 2024 13:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ai+ac9+m"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFC4C19E7E7;
+	Tue, 18 Jun 2024 13:52:02 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DCF154C02;
-	Tue, 18 Jun 2024 13:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515B319E7DD;
+	Tue, 18 Jun 2024 13:51:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718717541; cv=none; b=b2r/Vi6qEj0UuET+/NHybbaVFNCmR/W5siWMWtbXRj2cfEEQCrNPWSqMpbHaxdt7CAbaoJBWXLMp6i1+UZIkT38B45rwOf00U/0jXJoQxrKK0EhZGgFlxud4vyl5sML7LEVhWWH3lvC3+xivGz4vdkxViTMHD6Dtwh3gQ4EjqE0=
+	t=1718718722; cv=none; b=qQjrqAuXHHXu5Wu7EjhoTgbESzl56uAnyzDZHBEsC7NnO/7yCV6mYbHaRvQtHhfFb768e1V5GHPuwhRTW7hpvnX0Ib0DnLMIHyUAhWYpfNjRSYxZcAweg5tJOlVf+t9Sy2D4G8FfdJtUWZwZ+pAGu4hf0hw6uDOhHGCZWKSBbj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718717541; c=relaxed/simple;
-	bh=PPxLoT9BzBda+0TPqQBQVseMBZPIoA0HnsreLI0+ttg=;
+	s=arc-20240116; t=1718718722; c=relaxed/simple;
+	bh=VwKsrjIE10lvqke1zUsJ4ealB7C0M4kdJQQlSucPQmI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fBrOiY4xpFDosfmj3MCum2LE5pHOQf+mq0TZXDNhs/7fl8DRuPgkYo7XOqITE9mFIFXMzmL3b6hZdUOUhB/y+4lebTGsrg1buK8Y6i3DDfkzBgAE8P7ujsmYW6FcM6xQPPSX1SPD2xKwA/et9fWeKD5iKLMExPtFoLMXqSr29EU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ai+ac9+m; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70599522368so3848323b3a.2;
-        Tue, 18 Jun 2024 06:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718717539; x=1719322339; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oID6sXnxDXA/SiLWafjjXs7e8AQ+wI2NLEuM6Dp+7Jg=;
-        b=Ai+ac9+mYZhEwB9u2c2BXM16m+Tbtmk8c0RjN5HLKZPXG1tEB9knV3bvn+8mHmP1tR
-         7vKPLnQaYzis7xfzP2CaeWYU0PtJFfVitITe7FcJQ++hmtbcOSuRsjxngMN6Ts+nXt31
-         rzUNL5LjnCYJyUsZn2Nc05x1LVkFGyMKDXQttfQoAml8sZkqPnNHOPHwbqI4MT1g61u2
-         CZfJqlj4Oz4fV8ovzfMipm4uPLvvKHfs3AT0i+jRSJM1xv9GFg1sJ70rAio+HUV4fzVt
-         i2jOGP9LZmmL7zMjDxfaNF3+Awf3IhfjQR7W2qYARIclWcC+/hiQ6xKg2zqU3DIcv19v
-         W3PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718717539; x=1719322339;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oID6sXnxDXA/SiLWafjjXs7e8AQ+wI2NLEuM6Dp+7Jg=;
-        b=OoQRdKUpAcxBvM7bpuNrHhcqtRugqV0UPOiXdPXqV2mhJCzpMB/M6QXcnY9pwiZ78E
-         YnewCotYZgHPSjQbI3Smqsa6o6H7YLIKouU6qC04ZK48tRL89cIdf5eSYgZA3GZmeQw2
-         bVA0bduCRHFm9SZL8kn2DXbYZH3y4woEvAAgl6ZmtYryj2Ak1tX5mLbQS/w1Cl4uimIL
-         asNAKN4C6RWi0U+44VHONzpHCXGnu6NyQmIObR5xH9I/L7qarrZN1Cl7JzwjxiRV3HTM
-         MrLIJfyLvJAuMa67cuk3GwrDdnGCBxFfTDm4Ij2zKCkKGMBiv1sQGxdkjcHKZy2Wmo7d
-         6uTw==
-X-Forwarded-Encrypted: i=1; AJvYcCXU8P/Q4qzY4elVKFW7WvlcLxp2TLOPd9Q1OWxXTCnm9GCne02BrGImwe2iqdH27RwHPRJ+UxPZdP34Lh7DAtqzRGlXoSlQyC6PjNKjEnaWYMfljBPNMgGktvgGjGI7G5vpljhvyb/9RqlMn99xjcyt1UZmWidkvMAeszAAKugYSP3Pzw==
-X-Gm-Message-State: AOJu0Yxf89X3mt3/KiF5M8CHpH6KFY2e0VM6ZiCVhzuxDUGsYeWOqHys
-	rAzpnsm00fODnBJui1odQlTeLv5OOaueolxwjpL9qcz6jYEklVBUcgLxuQ==
-X-Google-Smtp-Source: AGHT+IHksL6eMBnmENqjS1uVpx29FcncN0UOU745Ih8OCdjgve7QFKKkB8et2BOHKvMIOBQFtx41oQ==
-X-Received: by 2002:a05:6a20:7491:b0:1b2:ae30:95b5 with SMTP id adf61e73a8af0-1bae82a7234mr12451751637.56.1718717539203;
-        Tue, 18 Jun 2024 06:32:19 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb6b9c9sm8952931b3a.160.2024.06.18.06.32.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jun 2024 06:32:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <975af7e5-b1b0-400e-a1c3-6d9140421f25@roeck-us.net>
-Date: Tue, 18 Jun 2024 06:32:16 -0700
+	 In-Reply-To:Content-Type; b=DtwD6zO1ZuhOJWEDQ66hZvEugzcbULAph58tsc5t5XOavdTmehz2NveUU+l+kM0JP5e6blO+3B7IJtzBbmGVEv6m+5ACKGXFTgaQ//gyULXQvA8AlCI82ZGjgPhpB4eydebYet/J5X2AOyc1qF8N5mt4MvFoo7m/O7X08GnbP9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 0328561E5FE01;
+	Tue, 18 Jun 2024 15:51:16 +0200 (CEST)
+Message-ID: <8719fc64-2b51-4b79-ba52-0a3b9216f2db@molgen.mpg.de>
+Date: Tue, 18 Jun 2024 15:51:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -79,7 +46,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-To: Paul Menzel <pmenzel@molgen.mpg.de>
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -94,84 +61,101 @@ References: <20240604040237.1064024-1-linux@roeck-us.net>
  <33f369c1-1098-458e-9398-30037bd8c5aa@molgen.mpg.de>
  <4e09b843-3d2d-46d7-a8e1-2eabc4382dc7@roeck-us.net>
  <f20ea816-5165-401e-948f-6e77682a2d1b@molgen.mpg.de>
+ <975af7e5-b1b0-400e-a1c3-6d9140421f25@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <f20ea816-5165-401e-948f-6e77682a2d1b@molgen.mpg.de>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <975af7e5-b1b0-400e-a1c3-6d9140421f25@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Paul,
+Dear Guenter,
 
-On 6/18/24 03:25, Paul Menzel wrote:
-[ ... ]
+
+Am 18.06.24 um 15:32 schrieb Guenter Roeck:
+
+> On 6/18/24 03:25, Paul Menzel wrote:
+> [ ... ]
+>>
+>>      $ ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>>      -r--r--r-- 1 root root 1024 Jun 18 12:17 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>>      $ cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
+>>      cp: error reading '/sys/bus/i2c/drivers/spd5118/0-0050/eeprom': No such device or address
 > 
->      $ ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
->      -r--r--r-- 1 root root 1024 Jun 18 12:17 /sys/bus/i2c/drivers /spd5118/0-0050/eeprom
->      $ cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
->      cp: error reading '/sys/bus/i2c/drivers/spd5118/0-0050/eeprom': No such device or address
-
-That suggests that the i801 driver got an error when trying some chip operation.
-Unfortunately I have no idea what that error or the failed operation might be.
-
->      $ od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
->      od: /sys/bus/i2c/drivers/spd5118/0-0050/eeprom: read error: No such device or address
->      0000000
+> That suggests that the i801 driver got an error when trying some chip 
+> operation.
+> Unfortunately I have no idea what that error or the failed operation 
+> might be.
 > 
->> sudo i2cdump -y -f 0 0x50
-> 
->      $ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
->      No size specified (using byte-data access)
->      Error: Could not open file `/dev/i2c-0' or `/dev/i2c/0': No such file or directory
-> 
-This should work after you load the "i2c-dev" module.
+>>      $ od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
+>>      od: /sys/bus/i2c/drivers/spd5118/0-0050/eeprom: read error: No such device or address
+>>      0000000
+>>
+>>> sudo i2cdump -y -f 0 0x50
+>>
+>>      $ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
+>>      No size specified (using byte-data access)
+>>      Error: Could not open file `/dev/i2c-0' or `/dev/i2c/0': No such file or directory
+>>
+> This should work after you load the "i2c-dev" module.
 
-If you get it to work, please provide the output. Maybe it helps tracking down
-the problem.
+Silly me. Thank you.
 
-Thanks,
-Guenter
+> If you get it to work, please provide the output. Maybe it helps 
+> tracking down the problem.
 
+```
+$ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
+No size specified (using byte-data access)
+      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: 51 18 0a 86 32 03 32 00 00 00 00 00 ff 01 00 00    Q???2?2......?..
+10: 00 00 00 00 00 00 00 00 00 00 00 00 70 03 00 00    ............p?..
+20: 50 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00    P?..............
+30: 00 58 01 00 00 00 00 00 00 00 00 00 00 00 00 00    .X?.............
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+80: 30 10 12 02 04 00 20 62 00 00 00 00 90 02 00 00    0????. b....??..
+90: 00 00 00 00 a0 01 f2 03 7a 0d 00 00 00 00 80 3e    ....????z?....?>
+a0: 80 3e 80 3e 00 7d 80 bb 30 75 27 01 a0 00 82 00    ?>?>.}??0u'??.?.
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+c0: 00 00 00 00 00 00 88 13 08 88 13 08 20 4e 20 10    ......?????? N ?
+d0: 27 10 15 34 20 10 27 10 c4 09 04 4c 1d 0c 00 00    '??4 ?'????L??..
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+```
+
+So (00,b) = 0x00 opposed to 0x07 in your example output.
+
+     $ sensors
+     […]
+
+Then there is no change:
+
+```
+$ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
+No size specified (using byte-data access)
+      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: 51 18 0a 86 32 03 32 00 00 00 00 00 ff 01 00 00    Q???2?2......?..
+10: 00 00 00 00 00 00 00 00 00 00 00 00 70 03 00 00    ............p?..
+20: 50 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00    P?..............
+30: 00 58 01 00 00 00 00 00 00 00 00 00 00 00 00 00    .X?.............
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+80: 30 10 12 02 04 00 20 62 00 00 00 00 90 02 00 00    0????. b....??..
+90: 00 00 00 00 a0 01 f2 03 7a 0d 00 00 00 00 80 3e    ....????z?....?>
+a0: 80 3e 80 3e 00 7d 80 bb 30 75 27 01 a0 00 82 00    ?>?>.}??0u'??.?.
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+c0: 00 00 00 00 00 00 88 13 08 88 13 08 20 4e 20 10    ......?????? N ?
+d0: 27 10 15 34 20 10 27 10 c4 09 04 4c 1d 0c 00 00    '??4 ?'????L??..
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
+```
+
+
+Kind regards,
+
+Paul
 
