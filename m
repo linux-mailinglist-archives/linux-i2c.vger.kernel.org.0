@@ -1,43 +1,76 @@
-Return-Path: <linux-i2c+bounces-4080-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4081-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0234A90D667
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 17:00:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AC8E90D6B1
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 17:11:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18E521C23F1C
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 15:00:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89EEF1F23121
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Jun 2024 15:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB881C6A3;
-	Tue, 18 Jun 2024 15:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FBD946453;
+	Tue, 18 Jun 2024 15:10:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G7PyaHIT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0641A2139AC;
-	Tue, 18 Jun 2024 15:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC6B39AEC;
+	Tue, 18 Jun 2024 15:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718722817; cv=none; b=Vnv1HoxDs/JY+w4RBqCNw8WFgTrlTq38lOLh96Y1mJkpkFCKSxgipOAuwmNlUG5w8iXZxprtNqd6CfTYGZhv3kVZK8JLgu1aCpONcZy2fLYbbrJpQEjN9YodlzKEi24h1PyRO/9E9b8N72IrJDJTpP3lSz7hqtaIo4eRqUS7yNA=
+	t=1718723431; cv=none; b=f7tTW2ByJStVklPbONzAtPmsdkcyPV99nSQTCm/MXbz+QQjV6t7wjyNFgRpuBYLGZOxBtLPeXEwukXO1duUGYbxSjPXgGP05JTjxuhHeJzKtY2vJ8RVBZ8snMfIzGVXPReFbIV25KUS1axg1LPDNzjHUB+usc+3Ad1hB5ZbGWfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718722817; c=relaxed/simple;
-	bh=woJD4wFg2/ZdP+6X/ByHM1hr7SWyHp6L48kgTdWsb1g=;
+	s=arc-20240116; t=1718723431; c=relaxed/simple;
+	bh=xN2mfAnka7AHk12FmpCy3OOhbQwpVNUdiE+wZmLKRbU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZaKwBf4f2MNkX6h40LBPa0fd3r095cueNszTMWjKitqAdXIOhdtwjA4EtKW0OU4e0dTkECzMW9SrIvsiyber/7JoXoQBrynEL8dhNzp2gQstWAjEZ2ck/8NaxFkynaIhs3ja2vUgrwgRiAXGi3PcWzhKGkpmcsFCs6jZF7Rl5kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id DF2EE61E5FE01;
-	Tue, 18 Jun 2024 16:59:09 +0200 (CEST)
-Message-ID: <fd8868ef-6179-45a7-8249-ee17994a8e78@molgen.mpg.de>
-Date: Tue, 18 Jun 2024 16:59:09 +0200
+	 In-Reply-To:Content-Type; b=IsCNf8u9dpT1RImcaII5Ve7TC1avvAbskWZ4WB3/nBjVn+iFFhANlDxJdJ5pd0y1Q9Q1o0IVMpK/JM5bWe+9UQttVbe0YMbm03DC0zlHWdk22fR6Gp06H0g0qcaTOYLDyNk8dH/RG5lgdfR/+V3JWPoywyTlmXSUyfruoGvpDMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G7PyaHIT; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1f99fe4dc5aso4838145ad.0;
+        Tue, 18 Jun 2024 08:10:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718723430; x=1719328230; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=llk5mM/CDBgeWUrb9/FImMBVCQSPWj3msI7bOeQH2Cw=;
+        b=G7PyaHITyzky5j/zsGPvn5PvIO2mgdsCl2/RNWlTKPv8blHEb+BLsyfn37ykITfuK1
+         AM5i+4K1JOzvJXCFXd1q449uNGMf3gz6POrU5cNAILmhCjTiCyIv6DsDpOylWBNrKfTh
+         O5DKsuFOjUZZTlr85XUSGnFp3dPwdETijK3KkaC0ifdqxpt5otNoNVOgxjpoau/w4fsC
+         lzjjX+BlIlXftn80g0flRPZCVe+v/FnjnGyYJE4uMgmAQosEe1KE+zxMn2ZABOrbzryx
+         h67wNmJdqBKs5hARWplHV7VDSHHRoOQPRjwWAod91x1ZJ7Dx9tAroFlwy81ZI+eVJIBW
+         VfUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718723430; x=1719328230;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=llk5mM/CDBgeWUrb9/FImMBVCQSPWj3msI7bOeQH2Cw=;
+        b=jIPWR74+6B6+b5x9tAfg2+ejo4WwoSrN+KDwt3hSNUgqUCqA1q12T/vdFuIB76AqKy
+         bPHmeUmgmoLGm1BJa8V0njcr3UTW2g3ILa1aBUYglasaJZ+c+NchYgo6x6xMEklx6S+v
+         OJjibHvXO/opKptD520jyC1hPFCcAzyNVxwz7TMhXFNDnEtU1H9CAYrPUfk1+cTqSjPU
+         KdfA3vTMqFFiIK+lIiMXYkx+xLJNE0aAYDZON3boQRQhfhEdN+P5wxuytkUviiR1dR8k
+         6voUHR5Gsvptqtm21kGbv1ipATr8XyEAdr5G4/0YanUklCRWeZ+oKJDac8j0ceT7n5Yp
+         yRlA==
+X-Forwarded-Encrypted: i=1; AJvYcCVBuTByluc2/eVb9ZuBWgzbgpURmvwp54kXCGcmuT7HgtmzyQb7Se0cawgjEJkSxZ0+b9kLzPdb6R0Xvtv3m4vhsumtgi4o+ZuxKC0mxaHkSQOZRIS6DZnL1dAD3Vpw+I/LuIQgX9O8u95Vq1MYQh0wTEKFPCzt6vU8+mwDGZ6k/NMoaA==
+X-Gm-Message-State: AOJu0Yxm8m8yER7sbigQw6VI7Q5GEXRxGK40J1JFC/pjCMbez0oR8p3S
+	/2T9guCwv+dlSYqupHG0lFE5I/Zv5RYsGr2jLi/54A9Aj+26/xJ5
+X-Google-Smtp-Source: AGHT+IFz6s5oX3YKEyc4Fb2D5XO4b2N50oTkL7KFpITtcviobZGEeb53QbOSpCe2+dx1TS/hwVWRlg==
+X-Received: by 2002:a17:902:f552:b0:1f7:3379:1c71 with SMTP id d9443c01a7336-1f8625d96acmr140855505ad.27.1718723429519;
+        Tue, 18 Jun 2024 08:10:29 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9a24a3510sm7309415ad.65.2024.06.18.08.10.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jun 2024 08:10:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dc73070a-d266-47ca-bb11-77c2d9d6dece@roeck-us.net>
+Date: Tue, 18 Jun 2024 08:10:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -46,7 +79,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-To: Guenter Roeck <linux@roeck-us.net>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
 Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -64,174 +97,97 @@ References: <20240604040237.1064024-1-linux@roeck-us.net>
  <975af7e5-b1b0-400e-a1c3-6d9140421f25@roeck-us.net>
  <8719fc64-2b51-4b79-ba52-0a3b9216f2db@molgen.mpg.de>
  <f76a4d07-887b-4efb-b20e-52979db31216@roeck-us.net>
+ <fd8868ef-6179-45a7-8249-ee17994a8e78@molgen.mpg.de>
 Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <f76a4d07-887b-4efb-b20e-52979db31216@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <fd8868ef-6179-45a7-8249-ee17994a8e78@molgen.mpg.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Dear Guenter,
+Hi Paul,
 
+On 6/18/24 07:59, Paul Menzel wrote:
+[ ... ]
 
-Am 18.06.24 um 16:23 schrieb Guenter Roeck:
-> On 6/18/24 06:51, Paul Menzel wrote:
-
->> Am 18.06.24 um 15:32 schrieb Guenter Roeck:
->>
->>> On 6/18/24 03:25, Paul Menzel wrote:
->>> [ ... ]
->>>>
->>>>      $ ls -l /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
->>>>      -r--r--r-- 1 root root 1024 Jun 18 12:17 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
->>>>      $ cp /sys/bus/i2c/drivers/spd5118/0-0050/eeprom /tmp
->>>>      cp: error reading '/sys/bus/i2c/drivers/spd5118/0-0050/eeprom': No such device or address
->>>
->>> That suggests that the i801 driver got an error when trying some chip 
->>> operation.
->>> Unfortunately I have no idea what that error or the failed operation 
->>> might be.
->>>
->>>>      $ od -t x1 /sys/bus/i2c/drivers/spd5118/0-0050/eeprom
->>>>      od: /sys/bus/i2c/drivers/spd5118/0-0050/eeprom: read error: No such device or address
->>>>      0000000
->>>>
->>>>> sudo i2cdump -y -f 0 0x50
->>>>
->>>>      $ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
->>>>      No size specified (using byte-data access)
->>>>      Error: Could not open file `/dev/i2c-0' or `/dev/i2c/0': No such file or directory
->>>>
->>> This should work after you load the "i2c-dev" module.
->>
->> Silly me. Thank you.
->>
->>> If you get it to work, please provide the output. Maybe it helps 
->>> tracking down the problem.
->>
->> ```
->> $ sudo LD_LIBRARY_PATH=~/src/i2c-tools/lib tools/i2cdump -y -f 0 0x50
->> No size specified (using byte-data access)
->>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
->> 00: 51 18 0a 86 32 03 32 00 00 00 00 00 ff 01 00 00    Q???2?2......?..
->> 10: 00 00 00 00 00 00 00 00 00 00 00 00 70 03 00 00    ............p?..
->> 20: 50 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00    P?..............
->> 30: 00 58 01 00 00 00 00 00 00 00 00 00 00 00 00 00    .X?.............
->> 40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
->> 50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
->> 60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
->> 70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
->> 80: 30 10 12 02 04 00 20 62 00 00 00 00 90 02 00 00    0????. b....??..
->> 90: 00 00 00 00 a0 01 f2 03 7a 0d 00 00 00 00 80 3e    ....????z?....?>
->> a0: 80 3e 80 3e 00 7d 80 bb 30 75 27 01 a0 00 82 00    ?>?>.}??0u'??.?.
->> b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
->> c0: 00 00 00 00 00 00 88 13 08 88 13 08 20 4e 20 10    ......?????? N ?
->> d0: 27 10 15 34 20 10 27 10 c4 09 04 4c 1d 0c 00 00    '??4 ?'????L??..
->> e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
->> f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    ................
->> ```
->>
->> So (00,b) = 0x00 opposed to 0x07 in your example output.
->>
+> I did
 > 
-> Yes, that assumed that reading the nvram/eeprom succeeded, which it didn't.
-> The value might also be 7 directly after booting and before loading
-> the spd5118 driver.
+>      $ tail -3 /etc/sensors3.conf
+>      chip "spd5118-*"
+>          set temp1_max 56000
+>          set temp1_crit 84000
 > 
-> Anyway, it almost looks like setting the page doesn't work, or maybe write
-> operations in general.
+> but it stays with the defaults:
 > 
-> Can you try the following ?
+> ```
+> $ sensors
+> spd5118-i2c-0-53
+> Adapter: SMBus I801 adapter at efa0
+> temp1:        +20.8°C  (low  =  +0.0°C, high = +55.0°C)
+>                         (crit low =  +0.0°C, crit = +85.0°C)
 > 
-> dd if=/sys/bus/i2c/drivers/spd5118/0-0050/eeprom of=/tmp/eeprom count=64 
-> bs=1
-> 
-> and
-> 
-> dd if=/sys/bus/i2c/drivers/spd5118/0-0050/eeprom of=/tmp/eeprom count=1 
-> bs=64
-> 
-> That should only try to read from page 0.
 
-     $ sudo dd if=/sys/bus/i2c/drivers/spd5118/0-0050/eeprom 
-of=/tmp/eeprom count=64 bs=1
-     64+0 records in
-     64+0 records out
-     64 bytes copied, 0.046002 s, 1.4 kB/s
-     $ sudo dd if=/sys/bus/i2c/drivers/spd5118/0-0050/eeprom 
-of=/tmp/eeprom count=1 bs=64
-     1+0 records in
-     1+0 records out
-     64 bytes copied, 0.000215414 s, 297 kB/s
+You'd have to write directly into the attribute files.
+For example, if you have
 
-> Also, please try to set a temperature limit, either temp1_max
-> or temp1_crit. Setting temp1_max to, say, 56000, or temp1_crit
-> to 84000 should do.
+$ grep . /sys/class/hwmon/*/name
+/sys/class/hwmon/hwmon0/name:nvme
+/sys/class/hwmon/hwmon1/name:nct6687
+/sys/class/hwmon/hwmon2/name:k10temp
+/sys/class/hwmon/hwmon3/name:spd5118
+/sys/class/hwmon/hwmon4/name:spd5118
+/sys/class/hwmon/hwmon5/name:spd5118
+/sys/class/hwmon/hwmon6/name:spd5118
+/sys/class/hwmon/hwmon7/name:mt7921_phy0
+/sys/class/hwmon/hwmon8/name:amdgpu
 
-I did
+you could run
 
-     $ tail -3 /etc/sensors3.conf
-     chip "spd5118-*"
-         set temp1_max 56000
-         set temp1_crit 84000
+sudo bash -c 'echo 56000 > /sys/class/hwmon/hwmon3/temp1_max'
 
-but it stays with the defaults:
+Thanks,
+Guenter
 
-```
-$ sensors
-spd5118-i2c-0-53
-Adapter: SMBus I801 adapter at efa0
-temp1:        +20.8°C  (low  =  +0.0°C, high = +55.0°C)
-                        (crit low =  +0.0°C, crit = +85.0°C)
-
-spd5118-i2c-0-51
-Adapter: SMBus I801 adapter at efa0
-temp1:        +21.5°C  (low  =  +0.0°C, high = +55.0°C)
-                        (crit low =  +0.0°C, crit = +85.0°C)
-
-coretemp-isa-0000
-Adapter: ISA adapter
-Package id 0:  +32.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 0:        +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 4:        +29.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 8:        +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 12:       +27.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 16:       +25.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 20:       +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 24:       +25.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 28:       +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 32:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 33:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 34:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 35:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 36:       +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 37:       +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 38:       +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 39:       +28.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 40:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 41:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 42:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 43:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 44:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 45:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 46:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-Core 47:       +30.0°C  (high = +80.0°C, crit = +100.0°C)
-
-spd5118-i2c-0-52
-Adapter: SMBus I801 adapter at efa0
-temp1:        +21.5°C  (low  =  +0.0°C, high = +55.0°C)
-                        (crit low =  +0.0°C, crit = +85.0°C)
-
-spd5118-i2c-0-50
-Adapter: SMBus I801 adapter at efa0
-temp1:        +21.5°C  (low  =  +0.0°C, high = +55.0°C)
-                        (crit low =  +0.0°C, crit = +85.0°C)
-
-```
-
-Sorry, if I did something wrong.
-
-
-Kind regards,
-
-Paul
 
