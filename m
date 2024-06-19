@@ -1,127 +1,155 @@
-Return-Path: <linux-i2c+bounces-4102-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4103-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E3A090E39D
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jun 2024 08:40:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85B3490E412
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jun 2024 09:10:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC72828177A
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jun 2024 06:40:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 136531F23BCE
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jun 2024 07:10:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E89496F2EF;
-	Wed, 19 Jun 2024 06:40:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB0A7580A;
+	Wed, 19 Jun 2024 07:10:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WkpyGp97"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="bym2FTkW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122984C98;
-	Wed, 19 Jun 2024 06:40:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E073A757E3
+	for <linux-i2c@vger.kernel.org>; Wed, 19 Jun 2024 07:10:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718779215; cv=none; b=Lpi3aEBHu9nXDA5tcmGjgLkzk0xOh3YEjMKdqLN2FPn+ypEc9nLa5MHlUozYvEEaeFib5TTIRH8Su9FsBn0UoU9NgI5Y8w5MYrF2rM+6I4PmLjVFVqUsCSg+GdQKqhCxxOJTq7GdH7CJfkGKxBkf85s2g660iDSfpydO6xtYK/Q=
+	t=1718781035; cv=none; b=ePXctp3NCweCwa5We9zxg77PTu7dnMIut9YwsntW73wflGvoTFvzZbHsaYD//054mLBLEESmco/dGRluBCoQX23plgMJxSyg5jnrsqtQaaERCm/LPek6FTLCYx5AqIhMb93iPDFpWfpRWFJdlKBJshuYZS4m0PlQP7D+RQknyMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718779215; c=relaxed/simple;
-	bh=BWCauMt68vFjBRrLNx3G2KlJT+7wCHlFSe+2GGiOfq8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IpdOmvg7d419dhO21WZb2C55qpMBjIthTMRuy7eY4GVNO2TTXj2dJp9sp6D5IQ7qDIwQJMoWHWwA0WiLJ40k6QIot8rW+eQ+3zOJBVAZjI3jKx2vtkOxZi+QX9nTUC36gMkcbNhCHXmea6jrc+zXi4w8XUzlW/m6IoPd36ITZoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WkpyGp97; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718779214; x=1750315214;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BWCauMt68vFjBRrLNx3G2KlJT+7wCHlFSe+2GGiOfq8=;
-  b=WkpyGp97rfKd3E61mx+S1I44VdWjv0+vu5edxhU7k/zh/DOSuNgIY1Fd
-   uaukhot9qsZuhh8vh48iaTZwNf7FyY9EECf/LBKOBdBN3sL3UkNFTCc1g
-   xZKtsujHcBPwb12jX0L6637PSRfO9CNFnaHQB8+1MzSlXLGkuQbSUlZdU
-   +TK9SyrUimSarUn2aqg0/ve5QgL6Eijlepu2CsXGXx5IhcHIdQe458iTZ
-   IZJjKcxVpsmb0N28fAJPYCzeEl2/N9994BmJBw79aLH4Ig6/7hhWgLB08
-   KWYnsoPCpbUCjY32fqRwQGnWm1x//JWT8GGAlZBW0/DkXcmr+Zr2ERlDH
-   w==;
-X-CSE-ConnectionGUID: IA7CVRFwRQ6IIG/fzxG4sQ==
-X-CSE-MsgGUID: JgY/uaYNQsOkfBczoaGVgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="27102379"
-X-IronPort-AV: E=Sophos;i="6.08,249,1712646000"; 
-   d="scan'208";a="27102379"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 23:40:14 -0700
-X-CSE-ConnectionGUID: j25NWx8hS6GtZnxJJ/Z/UQ==
-X-CSE-MsgGUID: p6/cW7vCSMW49szzklmGNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,249,1712646000"; 
-   d="scan'208";a="65045346"
-Received: from marquiz-s-2.fi.intel.com (HELO [10.237.72.58]) ([10.237.72.58])
-  by fmviesa002.fm.intel.com with ESMTP; 18 Jun 2024 23:40:09 -0700
-Message-ID: <f427b28c-420b-4174-a670-70f626f8061e@linux.intel.com>
-Date: Wed, 19 Jun 2024 09:40:07 +0300
+	s=arc-20240116; t=1718781035; c=relaxed/simple;
+	bh=+Y5juYbiYVPfmxaci7kMM+Wf55nqEx35suEP4/DlODo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ng0XS04gtjR+e+63UEjEvLzJuDBBytyH6IXPW+dhIbbNULt/NG6+ZYsSneHjl1hYTJwAUJa455ALcTYRGx1qxtcpg/pp2EffwqoU6k9aFXgWG1HCHN2/9PFMM8bLd+cnvS7m4N4TQ3EuVqNgPE5zNFixWyv2XAPHuOtSJS2Vd9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=bym2FTkW; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=h40K
+	XelLRYCvulzSdUHa0NxctZhV6+tpDl8kEhBwYG0=; b=bym2FTkWXtuwwTmNq2g+
+	XZCmuMKKJ3YsiyTLOX7rr75f7pbQkZUGuojs5wq5LkngRL63BA8oJD03PnhJb9uV
+	UNY1sQG1OaPtR7cr7axqMeGI5HrUzMAnFHf7stTCRwuK/eGiSr4WRCv7BSluoOrP
+	tGfOnN65u5GB0fQsVR28jjmPNgyTSv3okxFjJjCu4UQnTO+ldW/qYilwXI/JXHEM
+	0X9zIB5fXsIrxuSaUw/rwn3fF0Hr6xQQk1QNOUw6O8rQcyFzYO1zURLAIMGIgTMw
+	7YlK0vttqHX/4rWvpwo/Uh4LSE7KjHFuy0sWbJ116/wvwlvhgZB0Huar8yKDJahQ
+	3w==
+Received: (qmail 537824 invoked from network); 19 Jun 2024 09:10:26 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Jun 2024 09:10:26 +0200
+X-UD-Smtp-Session: l3s3148p1@WFWK5DgbCOtehh9j
+Date: Wed, 19 Jun 2024 09:10:26 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Easwar Hariharan <eahariha@linux.microsoft.com>, 
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] docs: i2c: summary: document 'local' and 'remote'
+ targets
+Message-ID: <cu2mkl42byhce6eytcnw7yseogbnypgtrkoirlezakwg35egdg@vjjye4ca7yey>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Easwar Hariharan <eahariha@linux.microsoft.com>, 
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240614081239.7128-8-wsa+renesas@sang-engineering.com>
+ <20240614081239.7128-13-wsa+renesas@sang-engineering.com>
+ <4zxr4rlqnjqbqh3oxmd2ufqi6uk4pxa3tniuya5pgjtqi6tswc@utq4r2zt6z6b>
+ <ed75fyc2xcsnwubq42eposf6ayt5aj2jmqz6mthugk6vm2zpi4@qqwlmuwayoo5>
+ <y34k2k25xdr5z4v7oejp4da237s4o5qym5npihyydwlbsdh75c@vhmfl7sw3pbm>
+ <7d5f800f-fc65-4fbf-adad-616d51501c62@linux.microsoft.com>
+ <boehtgry7j7ulhrw7tenkmzxujahmxfn25imvb7zw2ibtmebbk@u3jryw4v2y7h>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] dt-bindings: i2c: dw: Document compatible
- thead,th1520-i2c
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jisheng Zhang <jszhang@kernel.org>,
- Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
- Drew Fustini <dfustini@tenstorrent.com>,
- Emil Renner Berthing <emil.renner.berthing@canonical.com>,
- Conor Dooley <conor@kernel.org>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- Conor Dooley <conor.dooley@microchip.com>
-References: <20240618-i2c-th1520-v3-0-3042590a16b1@bootlin.com>
- <20240618-i2c-th1520-v3-1-3042590a16b1@bootlin.com>
-Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20240618-i2c-th1520-v3-1-3042590a16b1@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6e46fmxazdb334kp"
+Content-Disposition: inline
+In-Reply-To: <boehtgry7j7ulhrw7tenkmzxujahmxfn25imvb7zw2ibtmebbk@u3jryw4v2y7h>
 
-Hi
 
-On 6/18/24 10:42 AM, Thomas Bonnefille wrote:
-> Add documentation for compatible string thead,th1520-i2c which can be
-> used specifically for the TH1520 SoC.
-> 
-> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->   Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> index d9293c57f573..60035a787e5c 100644
-> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> @@ -33,6 +33,10 @@ properties:
->             - const: snps,designware-i2c
->         - description: Baikal-T1 SoC System I2C controller
->           const: baikal,bt1-sys-i2c
-> +      - description: T-HEAD TH1520 SoCs I2C controller
-> +        items:
-> +          - const: thead,th1520-i2c
-> +          - const: snps,designware-i2c
->   
+--6e46fmxazdb334kp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Your comment below makes me thinking is this change needed? So is it 
-enough to specify "snps,designware-i2c" for the compatible string in 
-patch 2/3?
+Hi,
 
-"It appears that the TH1520 I2C is already supported in the upstream 
-kernel through the Synopsis Designware I2C adapter driver."
+> > "Synonyms" from patch 6 does say that controller/target is preferred but
+> > couched it in the caveat "If speaking about I2C in general" and
+> > adapter/client when "discuss[ing] implementation details." I was trying
+> > to give space for an unambiguous recommendation.
+>=20
+> Exactly, this is what I referred to in my previous e-mails.
+> These two statements sound a bit ambiguous to me, as well.
+
+Okay, here is my proposed update:
+
+=3D=3D=3D
+
+diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
+index 90f46f1504fe..579a1c7df200 100644
+--- a/Documentation/i2c/summary.rst
++++ b/Documentation/i2c/summary.rst
+@@ -67,9 +67,9 @@ Synonyms
+=20
+ As mentioned above, the Linux I2C implementation historically uses the ter=
+ms
+ "adapter" for controller and "client" for target. A number of data structu=
+res
+-have these synonyms in their name. So, to discuss implementation details, =
+it
+-might be easier to use these terms. If speaking about I2C in general, the
+-official terminology is preferred.
++have these synonyms in their name. So, when discussing implementation deta=
+ils,
++you should be aware of these terms as well. The official wording is prefer=
+red,
++though.
+
+=3D=3D=3D
+
+I don't want to be stricter than "preferred". If someone still wants to
+use 'struct i2c_client *client' this is fine with me.
+
+> Maybe we are wasting time at discussing minor details, but I
+> consider this part important in order to give way to the major
+> refactoring that Wolfram started at the beginning.
+
+The refactoring only affects "master/slave" not "adapter/client". We are
+
+aligned here, aren't we?
+
+All the best,
+
+   Wolfram
+
+
+--6e46fmxazdb334kp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZyhGIACgkQFA3kzBSg
+Kbay2Q//Q1yK77UKCLXDK3rIDeNYUcLVaQou3ZvpZlqe5aBdZ1hAYSOSG2hjad5/
+m6GmUQYGwJpKbCRXPCNl6I533vOhUTkkqDYWNJyuX/sWT0+CUjQyOmRUDsx2Dnnu
+yAzTftJqkq5nVp326T2uLC2TG2zkEVwUnxZGpaYCZfWuLohiqkxaYGiPN+kDsOTU
+NKAkIofHa1v7gFZBEpWIQkUoAiOPqwIRpTmBw94VyfocItMA7cL+u3mO4Kaxmsyu
+ZjJOZlv7uyGbeMQIwqR0cWyPeMlmNOxjf6rP3MglghRGqLKfrOSy/RotfRtvgMGF
+3zGUYAqMKt08RVshN0rY1zlxWwMfqG7pKbykT7HtIf/b/uq2gbGoVuIqXFGU9h1H
+LSpMWWYkgxOz+e03H2Oqs0YYjqGLY7Ur0ntKMsV/F55RavJO8Sy01SdEOctgb7gp
+KJhEHKx4xNqlIR1oWv1m5mQEjldMI5Nj0NF1tZ6exAqRqdEWNVy5jM+LzMkfGkip
+B/4MPYBtyNg1w/ZYo1up3fBwVcU90Q+HcEolyv+R9LnRC8+lAlN6j45T0EADx/gS
+aFaGPMkuG4GpAanNP8PV1OYKfiWwLyBo59RRpDPAcEV/SshmkVdgYpxn8LFwKMYC
+hWSdJHhJ4a4eHWPIS50dN/IzKzX9gQ4Cd0RVPN5On0nQY3m5oqI=
+=Aen3
+-----END PGP SIGNATURE-----
+
+--6e46fmxazdb334kp--
 
