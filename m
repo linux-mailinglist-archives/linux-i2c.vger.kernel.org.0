@@ -1,148 +1,164 @@
-Return-Path: <linux-i2c+bounces-4126-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4127-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1272F9101FF
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 12:57:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC5AD91023F
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 13:11:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A085CB20D42
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 10:57:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78ABC28310F
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 11:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 120931A8C3B;
-	Thu, 20 Jun 2024 10:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BAD1AB341;
+	Thu, 20 Jun 2024 11:11:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BvFusHYV"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="dk+EwCbV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5BA1CD2B;
-	Thu, 20 Jun 2024 10:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CF921A19;
+	Thu, 20 Jun 2024 11:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718881033; cv=none; b=teoX6LZaNDFncrFnhoefVj6tQfCzD4IYj+NelEip5YI88rIHl/H9xL2p2JwTZIk2XMtutAyuwrS1xwNDIAZYxj7DXjEaoy05qOIrSHRwFO56dF9BI1LKfwRJyKp5OrJHm8S8v5CAEuFH6ItFCloJ8ENPDFpPaoHY/YPCM350WO0=
+	t=1718881883; cv=none; b=t0M7FnTW6ApUqfj3cRTgrNLyeNB2wc18hXHdkHnI+EBir83gz4L1yA0dCB54kAF4uDGOIcemVm4KVkv3b6nOZiphbLBQM3+VLtEn1UA6rUgB3e4eh6tdzIEvrweCWUVRh33VgUZdyw+/8jmfhbZOTq7NT2xw3T0ulv4VcBDcTc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718881033; c=relaxed/simple;
-	bh=TYNkqZOaxv0QvlXEWY8cmxFJgrP9XBmpUxAC/hes0og=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XHBgwM71SJTvYkHE1xhbRQAqpM6cIqdl4W+d8MVu8CjWCPQSA8uOm3L9cYYCZ/FR8j549RbVd8T15wWD04+8cH5BjywjnAEcIBtMv7iupiDsvp66D5AMNCyK2JZnfueZ0NvrwJYZWGwGcDhGb92vAMeB7NQDWu9QH8dZ9kaUCsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BvFusHYV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2642C2BD10;
-	Thu, 20 Jun 2024 10:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718881033;
-	bh=TYNkqZOaxv0QvlXEWY8cmxFJgrP9XBmpUxAC/hes0og=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BvFusHYVZoE0iN304P/3hSCsfD1VRPsQ54Ai5d6Z+/STeXH0HlrdPA09hZeKfkJGD
-	 VEmYLnkNOdTipERCY91lGH7oWKzyZh01oy6PplUJVZHyugAs+cqzihy1LX+6Eh0sIY
-	 Pvy6b+wyROFDZqjjcK/Vd4z8Kko9QKvVY1OM7z3thAgfSMsd6A3mLUXeOGQQHoDr/Y
-	 YuSGee3kt2b6vPABgDO2PU2UoY4vYdk2X7ABAC8T6S4/Tgycvj7+YQbyjzExUa8EUh
-	 V68kILKntgaDLXXvgrpagEf7VEex2RvqqFSqkcjf1qVCx0DwKQZC8cNnRBCvTpcks3
-	 qtb+sCt9Zv2EQ==
-Message-ID: <d613221e-f026-400a-acec-921ef110ac29@kernel.org>
-Date: Thu, 20 Jun 2024 12:57:07 +0200
+	s=arc-20240116; t=1718881883; c=relaxed/simple;
+	bh=95Ij0vKrYrGH00SkqoNbXKVDvTZtqsyiEyaQ1r0dl68=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=julO2FVFwfEpx3aFDT37Pn552V/anGEtnxYBNrYGlrtwcOCz4zp2vECQG7EHpZWpuPv1BvQd05oymOfNE6qfOw20iyCSsMo+/3Gy1hGDylWpk3cH0/eSQgYARZa/Jg4M1OfjjYpdd5JeIaeEVqQfqXKsMrZj10EzwOyEEL5TIT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=dk+EwCbV; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1718881880; x=1750417880;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=95Ij0vKrYrGH00SkqoNbXKVDvTZtqsyiEyaQ1r0dl68=;
+  b=dk+EwCbV+PzKTLnNIk+bx8zi3NGr71q5DnXv+ehlqzf7OmfJ2pbbd8BP
+   eTW9mvpU3DPuYwybpgRjlRHWu+41wUNCgrouPIubpmMA1MUGTeQzzIrBJ
+   YYth8NcJNnORqDrPmktCHD97nsyoj6lYqh+o17JB1YKHxSTSHfGPX121F
+   4p9ptbkQ/ZvekiPGimH55vhw6ftNv1JG65T71bDzyOEMefMoEaIdVymHR
+   Ox2zwIkDYT9wzXk+69EDjI4OGeK5VOxJHnwrqYOvcL6eTII2QUpwaHHmu
+   /RPmYcun1VXxLD8wq7b/qTH/jHXW+09FhUYJPk8BMSZ1jW4tZC4881+dC
+   A==;
+X-CSE-ConnectionGUID: gqLzAYtPQQ2L5OyNG4B4Sw==
+X-CSE-MsgGUID: vm2+jEyqQ6GzAavsNlO9Ng==
+X-IronPort-AV: E=Sophos;i="6.08,252,1712646000"; 
+   d="asc'?scan'208";a="28263518"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Jun 2024 04:11:19 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 20 Jun 2024 04:10:53 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Thu, 20 Jun 2024 04:10:51 -0700
+Date: Thu, 20 Jun 2024 12:10:32 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: <Andrei.Simion@microchip.com>
+CC: <conor@kernel.org>, <brgl@bgdev.pl>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <Nicolas.Ferre@microchip.com>,
+	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>, <arnd@arndb.de>,
+	<gregkh@linuxfoundation.org>, <linux-i2c@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 3/3] dt-bindings: eeprom: at24: Add at24,mac02e4 and
+ at24,mac02e6
+Message-ID: <20240620-bulge-sturdy-cd0f92f05de2@wendy>
+References: <20240619072231.6876-1-andrei.simion@microchip.com>
+ <20240619072231.6876-4-andrei.simion@microchip.com>
+ <20240619-thee-herald-82725e1526e2@spud>
+ <0d57b14b-48d1-4629-92f4-74934c6ecdeb@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: i2c: nxp,lpc1788-i2c: convert to dt
- schema
-To: Kanak Shilledar <kanakshilledar@gmail.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vladimir Zapolskiy <vz@mleia.com>,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240620054024.43627-2-kanakshilledar@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240620054024.43627-2-kanakshilledar@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="YJZ0paq/YzbEpWyV"
+Content-Disposition: inline
+In-Reply-To: <0d57b14b-48d1-4629-92f4-74934c6ecdeb@microchip.com>
 
-On 20/06/2024 07:40, Kanak Shilledar wrote:
-> Convert the NXP I2C controller for LPC2xxx/178x/18xx/43xx
-> to newer DT schema. Created DT schema based on the .txt file
-> which had `compatible`, `reg`, `interrupts`, `clocks`,
-> `#address-cells` and `#size-cells` as required properties.
-> 
+--YJZ0paq/YzbEpWyV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your patch. There is something to discuss/improve.
+On Thu, Jun 20, 2024 at 10:45:58AM +0000, Andrei.Simion@microchip.com wrote:
+> On 19.06.2024 20:53, Conor Dooley wrote:
+> >> Update regex check and add pattern to match both EEPROMs.
+> >>
+> >> Signed-off-by: Andrei Simion <andrei.simion@microchip.com>
+> >> ---
+> >>  Documentation/devicetree/bindings/eeprom/at24.yaml | 10 +++++++---
+> >>  1 file changed, 7 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Docu=
+mentation/devicetree/bindings/eeprom/at24.yaml
+> >> index 3c36cd0510de..46daa662f6e7 100644
+> >> --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
+> >> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+> >> @@ -18,7 +18,7 @@ select:
+> >>    properties:
+> >>      compatible:
+> >>        contains:
+> >> -        pattern: "^atmel,(24(c|cs|mac)[0-9]+|spd)$"
+> >> +        pattern: "^atmel,(24(c|cs|mac)[0-9]+[a-z0-9]*|spd)$"
+>=20
+> > Could we relax the pattern instead to make this bloat less? Would it be
+> > problematic to just allow "^atmel,(24(c|cs|mac)[a-z0-9]+|spd)$"?
+>=20
+> I) "^atmel,(24(c|cs|mac)[a-z0-9]+|spd)$" :
+> The first pattern does not specify where the digits must occur within
+> the alphanumeric sequence that follows 24c, 24cs, or 24mac. It allows
+> the sequence to be all letters, all digits, or any mix thereof.
+>=20
+> II) "^atmel,(24(c|cs|mac)[0-9]+[a-z0-9]*|spd)$" :
+> The second pattern specifically requires that at least one digit appears
+> immediately after 24c, 24cs, or 24mac, and only after this digit can
+> letters appear.
+
+> As hypothetical example :
+> atmel,24cabc would match the first pattern but not the second because
+> there are no digits immediately following 24c.
+> atmel,24c123 would match both patterns because there are digits
+> immediately following 24c, and the first pattern doesn't care about
+> the position of the digits within the alphanumeric sequence.
+>=20
+> In case of at24,mac02e4 and at24,mac02e6 match both patterns.
+>=20
+> Let me know your thoughts.
+
+Basically my reasoning here is that both patterns are very permissive
+(although one clearly more than the other) and do not stop people from
+creating compatibles that do not correspond to a real device, so I felt
+that the more complex regex didn't really provide enough benefit
+compared to keeping the regex simpler.
+
+> I agree to change the pattern as you suggest.
+
+:+1:
 
 
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    description: the desired I2C bus clock frequency in Hz
-> +    default: 100000
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - "#address-cells"
-> +  - "#size-cells"
 
-These should not be required, because you can have an enabled I2C
-controller without children in DT.
+--YJZ0paq/YzbEpWyV
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnQOKAAKCRB4tDGHoIJi
+0lggAQCYXfW9bQInGc1FKpTgtaCJ+HWNt14cEZjcpipzDaoOhgEAjLO9TIQb3XLn
+9ifpQlSmibEvLdi8Nfjj7sqeoIJrqQs=
+=CrCj
+-----END PGP SIGNATURE-----
 
-Best regards,
-Krzysztof
-
+--YJZ0paq/YzbEpWyV--
 
