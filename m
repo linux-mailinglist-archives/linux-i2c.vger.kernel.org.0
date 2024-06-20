@@ -1,68 +1,72 @@
-Return-Path: <linux-i2c+bounces-4120-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4121-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21FEF90FBE7
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 06:18:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1110690FBE9
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 06:18:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C440E284264
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 04:18:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10EEC1C22619
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 04:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B79DD22EED;
-	Thu, 20 Jun 2024 04:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97502E620;
+	Thu, 20 Jun 2024 04:17:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="rxuUbS8S"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="eGG8egoU"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FFA1CA9C
-	for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 04:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CFC22110F
+	for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 04:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718857076; cv=none; b=VugHMKaCPOhZjVEA/fzqkH+ZZ+HVMetEMRCK1JLTUdnHQBh6FmUWblp8Y8rA3qEfTLhBjO9FFCaRbKOmcRTiMdsmQBG86AHTU24gljJVGdXwoIr3sVG/o/FHYewl46Mj63e7qKcu6lqVTIuKZ8kcQkQC5ffaTcITJ/YruXAgsjQ=
+	t=1718857078; cv=none; b=gJel7tmCYcNncAftlPtudVXghi36OJHRaZcMchUPVqakCYHScbGZ9gYOn4OFbeDmaRksu7L1+FMtLdcAQPAvyrBi9r5rVyPfjUH31dq9reRCtgM9a5k8u/MGyOcLGugjQGtkYw0BZ3AtkZtWV2KJhInl9r3UFtc4XzD++hZSnjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718857076; c=relaxed/simple;
-	bh=uQHaf8yChIIhCYaHuI7LY4cDSqy2+PZXoDrEo28Kt7Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n1yC4sFgcXrCCk565bFOrkOfLtUdyCi+zmssQADxPCrA+2duHf/Y92+23r3LH00ZzC1zEWKsf24O1RyH9wEV/6ii1cN23Lm+uhbvsbGBhyMVNcENWDdSn0ck+dj9uPzb1IhiaQZZ81U1VZJPHlAXa/qHu4GXFekGbvn9BZFtvxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=rxuUbS8S; arc=none smtp.client-ip=202.36.163.20
+	s=arc-20240116; t=1718857078; c=relaxed/simple;
+	bh=XmHm8q56ht2uWYwDNvkSiQntjo+/xiVQ6k80qPa5ygw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HFUSUoXLEpr1Wv0pJE6nH6MLc2OnLcfA71V5oYEj+3gEt8NCTcGAhnUZY6BCRA+9ShjyDh34Rn3W0NZhC/d6GEtgdtGAI0ZB5Yg83uzBSNkYP3x7g4qRmTqlUoKjnYlMX3EEbej3E3y7pxYj2WFzHrqSuoKhfhpALZmVidene9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=eGG8egoU; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 259562C0659;
-	Thu, 20 Jun 2024 16:17:51 +1200 (NZST)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 072D62C09B7;
+	Thu, 20 Jun 2024 16:17:55 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1718857071;
-	bh=LGfmMYNwk03wF06503X9eyd3XeMGLgHv2wz6GaL77UU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rxuUbS8Shxi/olSi0wRaq7CiJiEis8LkL+2fzElaj5iLbFYpmQD+aZxY3A5wZz2Da
-	 WMC27GiLr1uJe5taictISFviHUn17oZGGauxYwgRxR7xC9y9RCqEmisTSEZJ5DJ7ww
-	 4+sEzYfBMi7cpjsptU2aYffjIzJmMksTBwcq+dQVYGHihvfCuJwg70V3t1VJ+VYKjL
-	 pWp3k0xwih+wFqLKq5tHPinli5J0l6b0b3VcIUDyjqzBydAFGPNSPgOqcgy7x0nVoN
-	 0hWkJQ6Bge6DG7bQlu7CWY+wEXH1mSIcVXyCErJ1tL8OC+HT/Bz7/3arjZS0HREyEg
-	 Ia1ujHoqLga/w==
+	s=mail181024; t=1718857075;
+	bh=eP938ZyMzex5Hw6dlUKdADqHrx3MLgXAzLWFaTTIruU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eGG8egoUL8LP9K3OeFsfCtYmjTSUKeKPPGdv9wL1VJGKdAyI2Ilwyl6fhcPzGiSOT
+	 UCskQb9C3Cwul0ZdoGfQ9sUzn1KNPXzXdtQiN9qLyDRh+DiVXiTE2st+JzHWFodjzP
+	 BNybWSv2OfjxuIgS35LKPDBSDsJoDwOyF0JBW2XzRCogURLvz8r24BCazHZh56MI/x
+	 yNU8v5yvATxCzCAIm7TjwYP3vzugSFkcqVsMBv92d1dAbzHk1+eN4I5j6vF8/055s2
+	 rTdEvFE8nJksnfo3lD4re0kjJW2m1a8enBTsQmsZHoQdEnRSJepeHN5zRluMXwZm3y
+	 n+evcBBtjWzuw==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6673ad6e0000>; Thu, 20 Jun 2024 16:17:50 +1200
+	id <B6673ad720000>; Thu, 20 Jun 2024 16:17:54 +1200
 Received: from aryans-dl.ws.atlnz.lc (aryans-dl.ws.atlnz.lc [10.33.22.38])
-	by pat.atlnz.lc (Postfix) with ESMTP id E6DAE13ED63;
-	Thu, 20 Jun 2024 16:17:50 +1200 (NZST)
+	by pat.atlnz.lc (Postfix) with ESMTP id D5A0213ED63;
+	Thu, 20 Jun 2024 16:17:54 +1200 (NZST)
 Received: by aryans-dl.ws.atlnz.lc (Postfix, from userid 1844)
-	id E0B0C2A0FF5; Thu, 20 Jun 2024 16:17:50 +1200 (NZST)
+	id D40312A0FF5; Thu, 20 Jun 2024 16:17:54 +1200 (NZST)
 From: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
 To: Markus Elfring <Markus.Elfring@web.de>,
 	Andi Shyti <andi.shyti@kernel.org>
 Cc: linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	aryan.srivastava@alliedtelesis.co.nz
-Subject: [PATCH v7 0/2] i2c: octeon: Add block-mode r/w
-Date: Thu, 20 Jun 2024 16:17:43 +1200
-Message-ID: <20240620041746.3315255-1-aryan.srivastava@alliedtelesis.co.nz>
+	aryan.srivastava@alliedtelesis.co.nz,
+	Robert Richter <rric@kernel.org>
+Subject: [PATCH v7 1/2] i2c: octeon: refactor common i2c operations
+Date: Thu, 20 Jun 2024 16:17:44 +1200
+Message-ID: <20240620041746.3315255-2-aryan.srivastava@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.43.2
+In-Reply-To: <20240620041746.3315255-1-aryan.srivastava@alliedtelesis.co.nz>
+References: <20240620041746.3315255-1-aryan.srivastava@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -70,49 +74,164 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=6673ad6e a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=T1WGqf2p2xoA:10 a=toHKM1xulaPNuss4LNwA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=6673ad72 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=T1WGqf2p2xoA:10 a=a7gkLlzbLAVbDXTTgMMA:9 a=3ZKOabzyN94A:10
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-Add support for block mode read/write operations on
-Thunderx chips.
+Refactor the current implementation of the high-level composite read and
+write operations in preparation of the addition of block-mode read/write
+operations.
 
--Refactor common code for i2c transactions.
--Add block mode transaction functionality.
+The sending of the i2c command is generic and will apply for both the
+block-mode and non-block-mode ops. Extract this from the current hlc
+ops, and place into a generic function, octeon_i2c_hlc_cmd_send.
+
+The considerations made for extended addresses in the command
+construction are common for all cases, extract these into
+octeon_i2c_hlc_ext.
+
+There are parts of the commands construction which are common (only in
+the read case), extract this and place into generic function
+octeon_i2c_hlc_read_cmd.
+
+The write commands cannot be made entirely into common code as there are
+distinct differences in the block mode and non-block-mode process.
+Particularly the writing of data into the buffer.
 
 Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
 ---
-Changes in v2:
-- comment style and formatting.
+ drivers/i2c/busses/i2c-octeon-core.c | 86 ++++++++++++++++------------
+ 1 file changed, 49 insertions(+), 37 deletions(-)
 
-Changes in v3:
-- comment style and formatting.
-
-Changes in v4:
-- Refactoring common code.
-- Additional comments.
-
-Changes in v5:
-- Further refactoring.
-- Split refactoring into separate patch in series.
-- Add more comments + details to comments.
-
-Changes in v6:
-- Reword/reformat commit messages
-
-Changes in v7:
-- Fix typo in commit message.
-- Remove usage of r/w and hlc abbreviations from commits.
-
-Aryan Srivastava (2):
-  i2c: octeon: refactor common i2c operations
-  i2c: octeon: Add block-mode i2c operations
-
- drivers/i2c/busses/i2c-octeon-core.c     | 232 ++++++++++++++++++-----
- drivers/i2c/busses/i2c-octeon-core.h     |  14 ++
- drivers/i2c/busses/i2c-thunderx-pcidrv.c |   4 +
- 3 files changed, 207 insertions(+), 43 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-octeon-core.c b/drivers/i2c/busses/i2=
+c-octeon-core.c
+index 845eda70b8ca..0b4a602dab8b 100644
+--- a/drivers/i2c/busses/i2c-octeon-core.c
++++ b/drivers/i2c/busses/i2c-octeon-core.c
+@@ -485,6 +485,50 @@ static int octeon_i2c_hlc_write(struct octeon_i2c *i=
+2c, struct i2c_msg *msgs)
+ 	return ret;
+ }
+=20
++/* Process hlc transaction */
++static int octeon_i2c_hlc_cmd_send(struct octeon_i2c *i2c, u64 cmd)
++{
++	octeon_i2c_hlc_int_clear(i2c);
++	octeon_i2c_writeq_flush(cmd, i2c->twsi_base + SW_TWSI(i2c));
++
++	return octeon_i2c_hlc_wait(i2c);
++}
++
++/* Generic consideration for extended internal addresses in i2c hlc r/w =
+ops */
++static bool octeon_i2c_hlc_ext(struct octeon_i2c *i2c, struct i2c_msg ms=
+g, u64 *cmd_in, u64 *ext)
++{
++	bool set_ext =3D false;
++	u64 cmd;
++
++	if (msg.flags & I2C_M_TEN)
++		cmd |=3D SW_TWSI_OP_10_IA;
++	else
++		cmd |=3D SW_TWSI_OP_7_IA;
++
++	if (msg.len =3D=3D 2) {
++		cmd |=3D SW_TWSI_EIA;
++		*ext =3D (u64)msg.buf[0] << SW_TWSI_IA_SHIFT;
++		cmd |=3D (u64)msg.buf[1] << SW_TWSI_IA_SHIFT;
++		set_ext =3D true;
++	} else {
++		cmd |=3D (u64)msg.buf[0] << SW_TWSI_IA_SHIFT;
++	}
++
++	*cmd_in |=3D cmd;
++	return set_ext;
++}
++
++/* Construct and send i2c transaction core cmd for read ops */
++static int octeon_i2c_hlc_read_cmd(struct octeon_i2c *i2c, struct i2c_ms=
+g msg, u64 cmd)
++{
++	u64 ext =3D 0;
++
++	if (octeon_i2c_hlc_ext(i2c, msg, &cmd, &ext))
++		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
++
++	return octeon_i2c_hlc_cmd_send(i2c, cmd);
++}
++
+ /* high-level-controller composite write+read, msg0=3Daddr, msg1=3Ddata =
+*/
+ static int octeon_i2c_hlc_comp_read(struct octeon_i2c *i2c, struct i2c_m=
+sg *msgs)
+ {
+@@ -499,26 +543,8 @@ static int octeon_i2c_hlc_comp_read(struct octeon_i2=
+c *i2c, struct i2c_msg *msgs
+ 	/* A */
+ 	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
+=20
+-	if (msgs[0].flags & I2C_M_TEN)
+-		cmd |=3D SW_TWSI_OP_10_IA;
+-	else
+-		cmd |=3D SW_TWSI_OP_7_IA;
+-
+-	if (msgs[0].len =3D=3D 2) {
+-		u64 ext =3D 0;
+-
+-		cmd |=3D SW_TWSI_EIA;
+-		ext =3D (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
+-		cmd |=3D (u64)msgs[0].buf[1] << SW_TWSI_IA_SHIFT;
+-		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
+-	} else {
+-		cmd |=3D (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
+-	}
+-
+-	octeon_i2c_hlc_int_clear(i2c);
+-	octeon_i2c_writeq_flush(cmd, i2c->twsi_base + SW_TWSI(i2c));
+-
+-	ret =3D octeon_i2c_hlc_wait(i2c);
++	/* Send core command */
++	ret =3D octeon_i2c_hlc_read_cmd(i2c, msgs[0], cmd);
+ 	if (ret)
+ 		goto err;
+=20
+@@ -554,19 +580,8 @@ static int octeon_i2c_hlc_comp_write(struct octeon_i=
+2c *i2c, struct i2c_msg *msg
+ 	/* A */
+ 	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
+=20
+-	if (msgs[0].flags & I2C_M_TEN)
+-		cmd |=3D SW_TWSI_OP_10_IA;
+-	else
+-		cmd |=3D SW_TWSI_OP_7_IA;
+-
+-	if (msgs[0].len =3D=3D 2) {
+-		cmd |=3D SW_TWSI_EIA;
+-		ext |=3D (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
+-		set_ext =3D true;
+-		cmd |=3D (u64)msgs[0].buf[1] << SW_TWSI_IA_SHIFT;
+-	} else {
+-		cmd |=3D (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
+-	}
++	/* Set parameters for extended message (if required) */
++	set_ext =3D octeon_i2c_hlc_ext(i2c, msgs[0], &cmd, &ext);
+=20
+ 	for (i =3D 0, j =3D msgs[1].len - 1; i  < msgs[1].len && i < 4; i++, j-=
+-)
+ 		cmd |=3D (u64)msgs[1].buf[j] << (8 * i);
+@@ -579,10 +594,7 @@ static int octeon_i2c_hlc_comp_write(struct octeon_i=
+2c *i2c, struct i2c_msg *msg
+ 	if (set_ext)
+ 		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
+=20
+-	octeon_i2c_hlc_int_clear(i2c);
+-	octeon_i2c_writeq_flush(cmd, i2c->twsi_base + SW_TWSI(i2c));
+-
+-	ret =3D octeon_i2c_hlc_wait(i2c);
++	ret =3D octeon_i2c_hlc_cmd_send(i2c, cmd);
+ 	if (ret)
+ 		goto err;
+=20
 --=20
 2.43.2
 
