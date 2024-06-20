@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-4142-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4143-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB8419110B4
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 20:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E0BAA911083
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 20:15:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70D88B266DF
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 18:08:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A70EB2A2E7
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 18:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 234571CF3D7;
-	Thu, 20 Jun 2024 17:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC3381D18FC;
+	Thu, 20 Jun 2024 17:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b="KoztGGCH"
+	dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b="X82Lh127"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDCBE1CEA1C
-	for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 17:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0F61D18E0
+	for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 17:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718906325; cv=none; b=LbnEnLUUR6YvzalyGoOPB19V0iplfUzJflTUbCmedEruZ0POrAZBXHbkaiHrHFle/96PmVw5bNE56Ob2UqEbpMp6nL4BqkX6lBOeCXF4xOWF8taOt+zldR4ZkrdFXuQUl65dWK31+ThBeIzG/nxVmUHPpl3kwt2o9WRxAfv9rps=
+	t=1718906344; cv=none; b=phpSxD5LdqaxnuhrweGKElTWvjz2PiMO9cVF/3jgIAoMkBMKsQtEwY61nPLC7oIzhjLX/AxoTH5cuQH6w3iNNpCtsElATceLONnmGg0E13B76WFq0L7ESUol+fl5+a1mNLtu3wt6AW9YHfhllCVpZU8URP+QVfWKZ9+dsHYSPKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718906325; c=relaxed/simple;
-	bh=4DQrIUMsTm81JssGC9KBdVsofE3jqG6GAjcZIQrb7tc=;
+	s=arc-20240116; t=1718906344; c=relaxed/simple;
+	bh=EMyHs6b9ptSnKztiiVKCqZSXFWuzO60Th0vGvDdv00s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WBYuv5sl3SjSPksa27B0kPqG4Vq8aDTzM1mvFAbBfF4SI1QYudS7cK53dlFpTprwjF+sWGHtyovJkzFXhj1JqUa1/fObXzg5kJxxMAS5jB+AU/zk56mRsGz1vjEfZ0F6J4vzVG/czfhzWv0oi1kIMiaPYZj/jMMQplY9AovIr80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com; spf=pass smtp.mailfrom=timesys.com; dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b=KoztGGCH; arc=none smtp.client-ip=209.85.208.52
+	 MIME-Version; b=FGUmwU5fQS+z50vmmAewZOk04P1z6d+p/t1LfXhv1k8F23IaLFIeSitWolbrsnoxRUI9p7jijoNZksrSPcZP7NoZScntclBQJDNHNgzRMuvzMh+ZP/BNBRp4nvoi3/UOQDPO0SR6jGXiMa8c7L3NPedUGyGRp/DhatJPHbbqWaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com; spf=pass smtp.mailfrom=timesys.com; dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b=X82Lh127; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=timesys.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57d1679ee83so1219647a12.2
-        for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 10:58:43 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a6f177b78dcso127730766b.1
+        for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 10:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20230601.gappssmtp.com; s=20230601; t=1718906322; x=1719511122; darn=vger.kernel.org;
+        d=timesys-com.20230601.gappssmtp.com; s=20230601; t=1718906340; x=1719511140; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=POfTgIlDMKnuctYd9TdkfbMoA75Hg7wnTz1QoAWu+kM=;
-        b=KoztGGCHFSS8tzWS8xmLpfOXPobgYuXHsk14gimU/XxPPsWFerDe+/fHc/ryuL5+Lf
-         CMHIstaNBcpyRoU3FSZtyzIpN7e9gIUlV3kiHy1uygZoKkJb/RGaitvfroIdVkWZHWyb
-         mTZzTYFFRbGAVWvjJzukVaJdGrH93/Mf1UVfEsriON1wIW2QxYFbPMHJ8ZaB32Fil8Yg
-         8w1zRudXZuVgKvvuKiXg1S9WjbJt3MfsjzIn2jT45gj42n26vJYBQa4ThFT/hzwWfLi0
-         toOUSnbYs/mnfLLZOg7+KHKSDao3Lx1BGOdBQRu0Kb4pbtNoan0qt/jBVnPVeFGsRJdW
-         sAAA==
+        bh=IJI26duvfMm0hH2VM1fi6stFJmPonSLGaDj169i8hcM=;
+        b=X82Lh1275jU1Lb9NHfNSZXx/jm7ow57L03G6u3oO6uf1D9y4w7p2DS7CMMhGXEzt+5
+         ofFLnboUvO4UnHUs5qTdYUXgEknrXZWrL9t74NLd0pwaZKcBMO3fqKj3Rewgo+ZtzwEj
+         Doy6e/T8dNfGOzQTnYB+K78wVyHFO2lbheWgm0tQhDXlXdiwVoupWJNTcCToPkbYaTTQ
+         wnbq2MwERWULCUBoStLL1GxPN7s3t/saZDGW9TOEFiFw9Wq1bkJcEqNIS/mNLSVrMv/n
+         D1b8dy9u8rvAnLwfT9YLgIPv1d87+GAgZP9DX7P0BucyRM5CpyTqjmHezqi9AqcwdrIf
+         3a9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718906322; x=1719511122;
+        d=1e100.net; s=20230601; t=1718906341; x=1719511141;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=POfTgIlDMKnuctYd9TdkfbMoA75Hg7wnTz1QoAWu+kM=;
-        b=tVJAXiyFXk6J93TZyul+1nZEJg0AlcNGjsfQfMQjX6y+zglJwSTe0lV8LHjEIS8mOe
-         rv2H4MuBF7/ar8jEkIZpCeLak68wtc1hfY7TSgkq2jeW05nO8k49YJWPDqY8ZEUbl1Fp
-         vz+Sdi/hVyj/VWvoTIzOAVhSf6t1VuFhyrESYSzzBxsiWPV/jqghRbl15xdEpw2ruIA2
-         2dkqzn7pLAFWFQwrJZjz5fai16IiUiLlYjp61WiBuVZWRTNDPcSjMbX5ZwCHdO7oWe3U
-         aV3Z6tFJ6CW3WIetJ0qipcUbWQxyYY3rzDzh5vK20GA1pTOeF1ibiz8Hx2ClVlYJpKrU
-         gxVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX04Vi5m1lxQ9HPFtJLMij795Bnbe++mh+fIqD1Q21TGgvOvVVvBnnV8fvHDUXq2AB+1cCjUAKPRz7R/GdaGKrmpRl1Q3HGcngD
-X-Gm-Message-State: AOJu0YyzCbkVwW0fdq2HGJkVlEi/MQyUx+fwRkbR7IqxuAc1ydaCU3dz
-	oca6wvr8u368WjXPVYuxsOpz8ZCKzzaAzIyb+QuULd6JNW/7/3mcjIjH81Pj7bg=
-X-Google-Smtp-Source: AGHT+IHTrvjRefjDyJtTKiBTdA/7eaPFIlKAqed0dBKu9bDkvkontU8BQ0nzLod+LvZtaEx3jpBdyA==
-X-Received: by 2002:a17:907:8b8b:b0:a6f:ad2f:ac5d with SMTP id a640c23a62f3a-a6fad2fad21mr380433766b.6.1718906321968;
-        Thu, 20 Jun 2024 10:58:41 -0700 (PDT)
+        bh=IJI26duvfMm0hH2VM1fi6stFJmPonSLGaDj169i8hcM=;
+        b=mIvkEGbXVYF7ycWyPDasc4i0UE7WP0hnlwaB9hdAnlzgkR5Pul+Gca18BS0gB0/LH2
+         pa/LkGwvMosVFsA4T3BR2dpuX+yZew7AQ+z7Ho9Ui/450nQDIcqQ2XLA8/tNTW7bNgyL
+         xqKpqOwlb2Y6EOO84SAwWjjA5dp019ed2RlEA+uIkXVDOdYBLHD3oyyFs5cVhauCf4x2
+         LCz88uZfHzBYOqaNTlSeNcegW+GKHSmn9cq4mIrchJMrTTzu9umZjzrpEXJMHptSVFIs
+         +ZWBfq4oiP9E37YawATg/4+imqoWTUbkLPl+llStxC1tCiVA82tgbWRB0/pu+f20E6yI
+         cKpA==
+X-Forwarded-Encrypted: i=1; AJvYcCXfDI62IduB4EZo2DXnHlYtR8BRJQ8OKPRKHNbxXN6JJBc92y52fRLuknmMYGJHzQHa/pQoCmx+Y4qNbCpnYOtwr9nez3nnkF++
+X-Gm-Message-State: AOJu0Yyn5fIkXgNMNJNJJj5ORETYQ3PcFhCtBwT84ZWdGSVO9DvNzt1+
+	gtZm4/Q9tW6wM9j/c0K9o92193bBLMwl52rVEyLyumUoZwDkLqd4Xfe57MFWFw8=
+X-Google-Smtp-Source: AGHT+IFE99yiH6KlSLSijoysmvGidn2b7gOkfW49nNmYq3cUnll4tztljhinaCegKpYiciiy0oFs8g==
+X-Received: by 2002:a17:907:1606:b0:a6f:b19d:90ac with SMTP id a640c23a62f3a-a6fb19d9667mr375299966b.69.1718906340595;
+        Thu, 20 Jun 2024 10:59:00 -0700 (PDT)
 Received: from localhost.localdomain ([91.216.213.152])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56f42e80sm781370766b.186.2024.06.20.10.58.40
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56f42e80sm781370766b.186.2024.06.20.10.58.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jun 2024 10:58:41 -0700 (PDT)
+        Thu, 20 Jun 2024 10:59:00 -0700 (PDT)
 From: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
 To: Vinod Koul <vkoul@kernel.org>,
 	Rob Herring <robh@kernel.org>,
@@ -86,8 +86,8 @@ To: Vinod Koul <vkoul@kernel.org>,
 	Vignesh Raghavendra <vigneshr@ti.com>,
 	Jaroslav Kysela <perex@perex.cz>,
 	Takashi Iwai <tiwai@suse.com>,
-	Yangtao Li <frank.li@vivo.com>,
 	Arnd Bergmann <arnd@arndb.de>,
+	Yangtao Li <frank.li@vivo.com>,
 	Li Zetao <lizetao1@huawei.com>,
 	Michael Ellerman <mpe@ellerman.id.au>,
 	Chancel Liu <chancel.liu@nxp.com>,
@@ -102,9 +102,9 @@ To: Vinod Koul <vkoul@kernel.org>,
 	linux-i2c@vger.kernel.org,
 	linux-mtd@lists.infradead.org
 Cc: Markus Elfring <Markus.Elfring@web.de>
-Subject: [Patch v4 03/10] ASoC: dt-bindings: lpc32xx: Add lpc32xx i2s DT binding
-Date: Thu, 20 Jun 2024 19:56:34 +0200
-Message-Id: <20240620175657.358273-4-piotr.wojtaszczyk@timesys.com>
+Subject: [Patch v4 04/10] ARM: dts: lpc32xx: Add missing dma and i2s properties
+Date: Thu, 20 Jun 2024 19:56:35 +0200
+Message-Id: <20240620175657.358273-5-piotr.wojtaszczyk@timesys.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
 References: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
@@ -116,131 +116,191 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add nxp,lpc3220-i2s DT binding documentation.
+Adds properties declared in the new DT bindings:
+ - nxp,lpc3220-i2s.yaml
+ - nxp,lpc3220-dmamux.yaml
+for dma router/mux and I2S interface.
 
 Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
 ---
 Changes for v4:
-- Custom dma-vc-names property with standard dmas and dma-names
-- Added to MAINTAINERS
+- This patch is renamed from
+  "ARM: dts: lpc32xx: Add missing properties for the i2s interfaces"
+  to describe dma changes as well
+- Added dmas and dma-names properties in to all node which have dma request signals
+- Add bus properties to pl08x dma node since they are removed from platform data in phy3250.c
+- Put clock-controller@0 and dma-router@7c under the same syscon, simple-mfd device
 
 Changes for v3:
-- Added '$ref: dai-common.yaml#' and '#sound-dai-cells'
-- Dropped all clock-names, references
-- Dropped status property from the example
-- Added interrupts property
-- 'make dt_binding_check' pass
+- Split previous commit for separate subsystems
+- Add properties to match dt binding
 
-Changes for v2:
-- Added maintainers field
-- Dropped clock-names
-- Dropped unused unneded interrupts field
+ arch/arm/boot/dts/nxp/lpc/lpc32xx.dtsi | 53 +++++++++++++++++++++++---
+ 1 file changed, 48 insertions(+), 5 deletions(-)
 
- .../bindings/sound/nxp,lpc3220-i2s.yaml       | 73 +++++++++++++++++++
- MAINTAINERS                                   | 10 +++
- 2 files changed, 83 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/nxp,lpc3220-i2s.yaml
-
-diff --git a/Documentation/devicetree/bindings/sound/nxp,lpc3220-i2s.yaml b/Documentation/devicetree/bindings/sound/nxp,lpc3220-i2s.yaml
-new file mode 100644
-index 000000000000..40a0877a8aba
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/nxp,lpc3220-i2s.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/nxp,lpc3220-i2s.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP LPC32XX I2S Controller
-+
-+description:
-+  The I2S controller in LPC32XX SoCs, ASoC DAI.
-+
-+maintainers:
-+  - J.M.B. Downing <jonathan.downing@nautel.com>
-+  - Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - nxp,lpc3220-i2s
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: input clock of the peripheral.
-+
-+  dmas:
-+    items:
-+      - description: RX DMA Channel
-+      - description: TX DMA Channel
-+
-+  dma-names:
-+    items:
-+      - const: rx
-+      - const: tx
-+
-+  "#sound-dai-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - dmas
-+  - dma-names
-+  - '#sound-dai-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/lpc32xx-clock.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2s@20094000 {
-+      compatible = "nxp,lpc3220-i2s";
-+      reg = <0x20094000 0x1000>;
-+      interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&clk LPC32XX_CLK_I2S0>;
-+      dmas = <&dma 0 1>, <&dma 13 1>;
-+      dma-names = "rx", "tx";
-+      #sound-dai-cells = <0>;
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f7adf9f66dfa..fadf1baafd89 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8918,6 +8918,16 @@ S:	Maintained
- F:	sound/soc/fsl/fsl*
- F:	sound/soc/fsl/imx*
+diff --git a/arch/arm/boot/dts/nxp/lpc/lpc32xx.dtsi b/arch/arm/boot/dts/nxp/lpc/lpc32xx.dtsi
+index 974410918f35..c58dc127e59f 100644
+--- a/arch/arm/boot/dts/nxp/lpc/lpc32xx.dtsi
++++ b/arch/arm/boot/dts/nxp/lpc/lpc32xx.dtsi
+@@ -67,6 +67,8 @@ slc: flash@20020000 {
+ 			reg = <0x20020000 0x1000>;
+ 			clocks = <&clk LPC32XX_CLK_SLC>;
+ 			status = "disabled";
++			dmas = <&dma 1 1>;
++			dma-names = "rx-tx";
+ 		};
  
-+FREESCALE SOC LPC32XX SOUND DRIVERS
-+M:	J.M.B. Downing <jonathan.downing@nautel.com>
-+M:	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-+R:	Vladimir Zapolskiy <vz@mleia.com>
-+L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
-+L:	linuxppc-dev@lists.ozlabs.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/sound/nxp,lpc3220-i2s.yaml
-+N:	lpc32xx
+ 		mlc: flash@200a8000 {
+@@ -75,6 +77,8 @@ mlc: flash@200a8000 {
+ 			interrupts = <11 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clk LPC32XX_CLK_MLC>;
+ 			status = "disabled";
++			dmas = <&dma 12 1>;
++			dma-names = "rx-tx";
+ 		};
+ 
+ 		dma: dma@31000000 {
+@@ -83,6 +87,13 @@ dma: dma@31000000 {
+ 			interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clk LPC32XX_CLK_DMA>;
+ 			clock-names = "apb_pclk";
++			#dma-cells = <2>;
++			dma-channels = <8>;
++			dma-requests = <16>;
++			lli-bus-interface-ahb1;
++			mem-bus-interface-ahb1;
++			memcpy-burst-size = <256>;
++			memcpy-bus-width = <32>;
+ 		};
+ 
+ 		usb {
+@@ -182,6 +193,8 @@ ssp0: spi@20084000 {
+ 				clock-names = "apb_pclk";
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
++				dmas = <&dmamux 14 1 1>, <&dmamux 15 1 1>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
+@@ -191,6 +204,8 @@ spi1: spi@20088000 {
+ 				clocks = <&clk LPC32XX_CLK_SPI1>;
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
++				dmas = <&dmamux 11 1 0>;
++				dma-names = "rx-tx";
+ 				status = "disabled";
+ 			};
+ 
+@@ -206,6 +221,8 @@ ssp1: spi@2008c000 {
+ 				clock-names = "apb_pclk";
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
++				dmas = <&dmamux 3 1 1>, <&dmamux 11 1 1>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
+@@ -215,12 +232,19 @@ spi2: spi@20090000 {
+ 				clocks = <&clk LPC32XX_CLK_SPI2>;
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
++				dmas = <&dmamux 3 1 0>;
++				dma-names = "rx-tx";
+ 				status = "disabled";
+ 			};
+ 
+ 			i2s0: i2s@20094000 {
+ 				compatible = "nxp,lpc3220-i2s";
+ 				reg = <0x20094000 0x1000>;
++				interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&clk LPC32XX_CLK_I2S0>;
++				dmas = <&dma 0 1>, <&dma 13 1>;
++				dma-names = "rx", "tx";
++				#sound-dai-cells = <0>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -231,12 +255,19 @@ sd: sd@20098000 {
+ 					     <13 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&clk LPC32XX_CLK_SD>;
+ 				clock-names = "apb_pclk";
++				dmas = <&dma 4 1>;
++				dma-names = "rx";
+ 				status = "disabled";
+ 			};
+ 
+ 			i2s1: i2s@2009c000 {
+ 				compatible = "nxp,lpc3220-i2s";
+ 				reg = <0x2009c000 0x1000>;
++				interrupts = <23 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&clk LPC32XX_CLK_I2S1>;
++				dmas = <&dma 2 1>, <&dmamux 10 1 1>;
++				dma-names = "rx", "tx";
++				#sound-dai-cells = <0>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -312,21 +343,27 @@ fab {
+ 			compatible = "simple-bus";
+ 			ranges = <0x20000000 0x20000000 0x30000000>;
+ 
+-			/* System Control Block */
+-			scb {
+-				compatible = "simple-bus";
+-				ranges = <0x0 0x40004000 0x00001000>;
++			syscon@40004000 {
++				compatible = "nxp,lpc3220-creg", "syscon", "simple-mfd";
++				reg = <0x40004000 0x114>;
+ 				#address-cells = <1>;
+ 				#size-cells = <1>;
++				ranges = <0 0x40004000 0x114>;
+ 
+ 				clk: clock-controller@0 {
+ 					compatible = "nxp,lpc3220-clk";
+ 					reg = <0x00 0x114>;
+ 					#clock-cells = <1>;
+-
+ 					clocks = <&xtal_32k>, <&xtal>;
+ 					clock-names = "xtal_32k", "xtal";
+ 				};
 +
- FREESCALE SOC SOUND QMC DRIVER
- M:	Herve Codina <herve.codina@bootlin.com>
- L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
++				dmamux: dma-router@7c {
++					compatible = "nxp,lpc3220-dmamux";
++					reg = <0x7c 0x8>;
++					#dma-cells = <3>;
++					dma-masters = <&dma>;
++				};
+ 			};
+ 
+ 			mic: interrupt-controller@40008000 {
+@@ -362,6 +399,8 @@ uart1: serial@40014000 {
+ 				compatible = "nxp,lpc3220-hsuart";
+ 				reg = <0x40014000 0x1000>;
+ 				interrupts = <26 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma 6 1>, <&dma 5 1>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
+@@ -369,6 +408,8 @@ uart2: serial@40018000 {
+ 				compatible = "nxp,lpc3220-hsuart";
+ 				reg = <0x40018000 0x1000>;
+ 				interrupts = <25 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma 8 1>, <&dma 7 1>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
+@@ -376,6 +417,8 @@ uart7: serial@4001c000 {
+ 				compatible = "nxp,lpc3220-hsuart";
+ 				reg = <0x4001c000 0x1000>;
+ 				interrupts = <24 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dmamux 10 1 0>, <&dma 9 1>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
 -- 
 2.25.1
 
