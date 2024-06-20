@@ -1,106 +1,127 @@
-Return-Path: <linux-i2c+bounces-4153-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4154-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D5AA911647
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 01:05:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19C5D9116EC
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 01:38:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4851528313F
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 23:05:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DD641C210ED
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 23:38:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E989143C58;
-	Thu, 20 Jun 2024 23:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7EBE149C65;
+	Thu, 20 Jun 2024 23:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dGsfH1Gp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IGHOo/vl"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D8782D83;
-	Thu, 20 Jun 2024 23:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8867D143737;
+	Thu, 20 Jun 2024 23:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718924741; cv=none; b=ejrbX45lgDc7C5JxvicTPnxJMlAUtsLS342p7U7Z+n5acDvFbSNdCLvYHcTjE1eTlioHiXoVm0px/pHlC6cIm6Y6w985Yyi2uCKctFdq8O9CornZKBLNBE8cKS1Q7VDYIdKcfRXS0gXMBkgMqRrcxpcLOE+KeWawcDUj4JPGtRc=
+	t=1718926718; cv=none; b=o6ObvY7tkH/DVccKl1Dgr9rH5VemQYFU6DXWC1JDQ7DddUWaiJjSsS4s78kgaMyE05PZrG+H2PznTRkj8yM6CY91vBQvpTQ1DDw2Ao/DbidYqo7TuDW3I/CMDv8CNYVJb1ydBuagf2qARGpcJoY2BBdThrLpZAnFcjrlVdKUavE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718924741; c=relaxed/simple;
-	bh=SaOaFRr/ohEIO5+x2sHjKUAw9989Q79otM9vhPABR3c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JBdkHgR1PAa7QZZJrG9d22mqZe6ThcwRYtlL8QnqJnYXjEdig8HsVSAzQtZKp0p440mJDOGIjKe+baXDwMLWyFBxCNddz3ZuF17O0BEbI1VTnpnR2BdrG0nfTc3bG3p6STuoAETTNsAcNGYc5IfWYHLVyfeDa55xOwfWoz5aQnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dGsfH1Gp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32575C2BD10;
-	Thu, 20 Jun 2024 23:05:40 +0000 (UTC)
+	s=arc-20240116; t=1718926718; c=relaxed/simple;
+	bh=1j+MPqd5427aFZk074Saqo2BYrlWM4GKrQyJbNXfGgM=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mr74FksdMwwQjiRuS2GeBADdnZvtHYXkHWJ0wcDjsdDRClt0ES+7pDvo61jgwhCD3t8AeEUSIeW4x7R+Z+Ruhcg3bRM89YnTpQxPxGFty8qk3BgrP7vdfTJZBa9MuTdvvdD3/g5h+MJdPc9rfjjrv+xdExZ7zoypzejoR+eIEUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IGHOo/vl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40A4AC2BD10;
+	Thu, 20 Jun 2024 23:38:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718924740;
-	bh=SaOaFRr/ohEIO5+x2sHjKUAw9989Q79otM9vhPABR3c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dGsfH1GpHmQGHTfZ1l4tF8Yc8IR5UiRboDTNredObqxtOQx82e5s0tzE5UQ3HRdti
-	 YEn9NRju/HM5BF130UGn7A/JtXSjes40KzIwRc9JuVBmqI+8j7E1dPyQ28nSZcPIyG
-	 TOptG9SYCZtxheOmn5MCrlB4o/pGRyWPoX1UppgceSz8O/DTcsfVNH4ydUcWt+i5IJ
-	 oqlDDSWtyhj2zce34mKlyDG9TYhoG/y5KLT8TEJYWtVuC7gL+IKxBIvHGJphOe3KMf
-	 rP0msnieHjZGex3A1fC77vPMeqWKD0e19wRR09Ly11BI6lTQHNI85BCFts6ZIC+fOW
-	 QUnaqIuN62HjA==
-Date: Fri, 21 Jun 2024 01:05:37 +0200
+	s=k20201202; t=1718926718;
+	bh=1j+MPqd5427aFZk074Saqo2BYrlWM4GKrQyJbNXfGgM=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=IGHOo/vlrJ4JI/KXQz6bwzqzXCJtKUPn0+DdE2y84JNZppIV03GhBuJZTZvYp9q+r
+	 JPYwnHDVLjwe72JkdBjw0l3TlMPECqfP/PntOk5Iw2BcM7tT4Egka0hZK1kbNbjZNi
+	 svkWX9FliFsEyM4FEFRFaeQ52Ojzcyc5Z3ciOcXk5LJx18nD22hLpk2Di9NigqdSL6
+	 HrYGPkxGMlpajEnFbQ1XGMY1xrYdBiibZM3WET7SkrBB43qwy/BmDEOKLcaxqXRFwO
+	 7HBU0KoPo3QtUQGlLB0a/guZ7EmoIUWSYPhQ9P/TrTRqkM+3RB7DxXDhszrE9agb3V
+	 e8dqtr4kApIWg==
+Date: Fri, 21 Jun 2024 01:38:33 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Sergiu Moga <sergiu.moga@microchip.com>, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	Doug Anderson <dianders@chromium.org>, Enric Balletbo i Serra <eballetbo@kernel.org>, 
-	Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Vignesh R <vigneshr@ti.com>, 
-	Kamal Dasu <kamal.dasu@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Chris Brandt <chris.brandt@renesas.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
-	linux-tegra@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>, 
-	linux-omap@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, stable@vger.kernel.org
-Subject: Re: [PATCH 0/7] dt-bindings: i2c: few fixes and cleanups
-Message-ID: <qru4aqjphjnjpo6yjxl2oznhlz774iv77u4u7u4jldnmlanps5@vpzxntuz6arp>
-References: <20240620-dt-bindings-i2c-clean-v1-0-3a1016a95f9d@linaro.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Easwar Hariharan <eahariha@linux.microsoft.com>, linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] docs: i2c: summary: document 'local' and 'remote'
+ targets
+Message-ID: <cbwamjer2rupkmyze6atgpkrszajcbhw2udb23ldl73ne3m6qr@jjs7q3codtx5>
+References: <20240614081239.7128-8-wsa+renesas@sang-engineering.com>
+ <20240614081239.7128-13-wsa+renesas@sang-engineering.com>
+ <4zxr4rlqnjqbqh3oxmd2ufqi6uk4pxa3tniuya5pgjtqi6tswc@utq4r2zt6z6b>
+ <ed75fyc2xcsnwubq42eposf6ayt5aj2jmqz6mthugk6vm2zpi4@qqwlmuwayoo5>
+ <y34k2k25xdr5z4v7oejp4da237s4o5qym5npihyydwlbsdh75c@vhmfl7sw3pbm>
+ <7d5f800f-fc65-4fbf-adad-616d51501c62@linux.microsoft.com>
+ <boehtgry7j7ulhrw7tenkmzxujahmxfn25imvb7zw2ibtmebbk@u3jryw4v2y7h>
+ <cu2mkl42byhce6eytcnw7yseogbnypgtrkoirlezakwg35egdg@vjjye4ca7yey>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240620-dt-bindings-i2c-clean-v1-0-3a1016a95f9d@linaro.org>
+In-Reply-To: <cu2mkl42byhce6eytcnw7yseogbnypgtrkoirlezakwg35egdg@vjjye4ca7yey>
 
-Cześć Krzysztof,
+Hi Wolfram,
 
-On Thu, Jun 20, 2024 at 01:34:48PM GMT, Krzysztof Kozlowski wrote:
-> Few fixes for I2C controller schemas. The third patch (atmel,at91sam)
-> depends on first, so I suggest not splitting this into fixes branch but
-> take as is via next branch.
+On Wed, Jun 19, 2024 at 09:10:26AM GMT, Wolfram Sang wrote:
+> > > "Synonyms" from patch 6 does say that controller/target is preferred but
+> > > couched it in the caveat "If speaking about I2C in general" and
+> > > adapter/client when "discuss[ing] implementation details." I was trying
+> > > to give space for an unambiguous recommendation.
+> > 
+> > Exactly, this is what I referred to in my previous e-mails.
+> > These two statements sound a bit ambiguous to me, as well.
 > 
-> Best regards,
-> Krzysztof
+> Okay, here is my proposed update:
 > 
-> ---
-> Krzysztof Kozlowski (7):
->       dt-bindings: i2c: atmel,at91sam: correct path to i2c-controller schema
->       dt-bindings: i2c: google,cros-ec-i2c-tunnel: correct path to i2c-controller schema
+> ===
+> 
+> diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
+> index 90f46f1504fe..579a1c7df200 100644
+> --- a/Documentation/i2c/summary.rst
+> +++ b/Documentation/i2c/summary.rst
+> @@ -67,9 +67,9 @@ Synonyms
+>  
+>  As mentioned above, the Linux I2C implementation historically uses the terms
+>  "adapter" for controller and "client" for target. A number of data structures
+> -have these synonyms in their name. So, to discuss implementation details, it
+> -might be easier to use these terms. If speaking about I2C in general, the
+> -official terminology is preferred.
+> +have these synonyms in their name. So, when discussing implementation details,
+> +you should be aware of these terms as well. The official wording is preferred,
+> +though.
 
-merged to i2c/i2c-host-fixes
+ACK!
 
->       dt-bindings: i2c: atmel,at91sam: drop unneeded address/size-cells
->       dt-bindings: i2c: nvidia,tegra20: drop unneeded address/size-cells
->       dt-bindings: i2c: samsung,s3c2410: drop unneeded address/size-cells
->       dt-bindings: i2c: ti,omap4: reference i2c-controller.yaml schema
->       dt-bindings: i2c: adjust indentation in DTS example to coding style
+> ===
+> 
+> I don't want to be stricter than "preferred". If someone still wants to
+> use 'struct i2c_client *client' this is fine with me.
 
-merged to i2c/i2c-host
+Sure, let's see how it goes.
 
-Thanks,
+> > Maybe we are wasting time at discussing minor details, but I
+> > consider this part important in order to give way to the major
+> > refactoring that Wolfram started at the beginning.
+> 
+> The refactoring only affects "master/slave" not "adapter/client". We are
+> 
+> aligned here, aren't we?
+
+Yes, of course. And I'm not really asking for the totality of the
+"client"'s to be replaced, rather than, when replacing slave, to
+choose "target" over "client" whenever possible(*).
+
+Thanks, Wolfram,
+
 Andi
+
+(*) E.g. if in a file "client" is used a lot, doesn't make sense
+    to go against the trend and use "target".
 
