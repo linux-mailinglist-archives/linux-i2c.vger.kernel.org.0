@@ -1,70 +1,72 @@
-Return-Path: <linux-i2c+bounces-4139-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4140-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F4C6910FC7
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 19:59:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39A10910FFC
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 20:04:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B46591F22F78
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 17:59:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA0A7283E1F
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Jun 2024 18:04:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52311BA87F;
-	Thu, 20 Jun 2024 17:57:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4306D1C2327;
+	Thu, 20 Jun 2024 17:58:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b="Ef2yOdoP"
+	dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b="Z1WAPFAm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5A61BA87E
-	for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 17:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CAB1B9AAF
+	for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 17:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718906239; cv=none; b=rqILXrNj9G1Ts2UjOCJmk688KjiRLfI+kdTnELf5JS8n1IK07YnA4a5QRTs2v7V7952mNMVAjrK2xaYnktHLUa5edJ/N6FEwkIsDxAsbx2MI/XvNMOwCYpqpaZpd4YBCfS4fjfMjvXXcHh8p1qK8kCKPb3U2nAIpYMq5VXXY2hU=
+	t=1718906284; cv=none; b=JXhb0zf1PUlN8r+jM3SfWcL4Klf4IUiGa1ZZWF1Tf0OflP1Ik2w+QrukqAL2EkEgiouim9V7sCGO6UkoP3eklo64PcASuI8dvij0/Xd3Ych5movibvzU+/zH/hrX7mgGpZp/3u7ePB/b+15wJKWUDH6c1JE23xbsPNVPBS57elQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718906239; c=relaxed/simple;
-	bh=lL5HxCJiZymjowcOr7xVA2M7Te/xs6i3j2oxZgMh+rs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ANyvid0NGBAmWb2DudSZkfRdjUeC0uHtJ1a2qoe8AhihvPo52Obh9ZRO84xy2xzrfMIGEqR3xpEt+UAB9UOkSqk1fNOGEyYSsVDsUx4nh1x/7sxhcogixigjRVa4aiOiv5/99A97ss8g1/77Qmxz77yf0JyBPusgV6LhX03FUxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com; spf=pass smtp.mailfrom=timesys.com; dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b=Ef2yOdoP; arc=none smtp.client-ip=209.85.218.42
+	s=arc-20240116; t=1718906284; c=relaxed/simple;
+	bh=57mSqvK5F8icDZvtosz8MW5pSg98mK2P/IkbkOYFjBo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=bb9iFGhzjJ/QtTwCJ2XyU86nqALJQVubD5z4yJE5j7Gh/ryhDvOYHoyFOlj9JSSbckPsTjxshcuCPW7UOFWDHO7DpwMoOUkBoeLZW+SXmFpN1IfJt1LD2fAfcFdmA5F+V0pHh3hB0TdEXe6FCEg1NpOQhCkhbbZlKTX2qwUTB/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com; spf=pass smtp.mailfrom=timesys.com; dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b=Z1WAPFAm; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=timesys.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a6f13dddf7eso146021966b.0
-        for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 10:57:16 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a6e349c0f2bso138732566b.2
+        for <linux-i2c@vger.kernel.org>; Thu, 20 Jun 2024 10:58:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20230601.gappssmtp.com; s=20230601; t=1718906235; x=1719511035; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UP/GNN9hhxz4nMUGrLaNfWrPk3mVaVMWtBi9huNJxPk=;
-        b=Ef2yOdoPvdrdIdPhr5LQiCJ0I9SLxjRSKaL/OqYMX5sqAZCEuTYZ7p/dgSstRd9dBo
-         453/Yyxx0wzRqZnwLXEhOVZlIMMOGUCt9mtMNngn1z/AFwrxtSyZeZigZvfq7nDB88xV
-         bfv/JdkfvxqG+JcOdNlu83TuBlMu8F15agYsQp6cQBRiayP82/3wP2Zfym+grexo+RbH
-         33uSmqeotVnrH7QfBwkcsJPqVTYCS6ltvJkZVCpj529Q28XwqxMs+LKs1pdi2dvKdODM
-         dBTtra4ZW7mcWHzmYzVTyIVE19mJcpcSI3bWWiS5kWd408yqD4I5puVMvo6ZbWc9XIqN
-         69lw==
+        d=timesys-com.20230601.gappssmtp.com; s=20230601; t=1718906280; x=1719511080; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LLJSsUsQJimHeyehvy4obxzFbfnPiiocs4Of944Xm3I=;
+        b=Z1WAPFAmggyZXgLQQ8xHRVLJyIdVqTm6EFiZQkqU98DYk6IGKMtR0IbCNv8eef7YzJ
+         4U5udbizQMs46zEqIFLLcbKD6EtEnSEv7giK2XYYh7iwjvYnoT/O3BVQt6wbbJy8D2jR
+         WvPVWf5OPR+9R73AdLBwFo6uXDNiyz4Q0GVRQbP4JgqR6vr1DSMg7WEOq3R+k69zaT5i
+         VDWjNunvXVyqv5ZGr2lZ8ZG4qGUrUJEnTdNpG1agdy5Rp1xak0eQNgAdsOXgyqale1hO
+         FHt1JdLhWZ4fm+JxXSREDbBVDzEf+viVWyUTEj8FpRgGHT6Fa0Ul950C885uZOllMtUi
+         WA6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718906235; x=1719511035;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UP/GNN9hhxz4nMUGrLaNfWrPk3mVaVMWtBi9huNJxPk=;
-        b=MeKdx83i34udlC3dnmcPSxvpcPExnh4DmpyhuROnGRhkcqV6+b7H+uINtTLdpJqY/z
-         2JHeejS83VIrfXrYwfCb3tQJPOv4mWYCqvcGX/BNbNclU9uwhPMKHRzsGIFP8x9/4ZNF
-         UzA5wQtTZKFkjZDj8NdgipEVTowax3UgBH8DC9+E4AG1SuGvzhhww7fTiNO6mN1a59l3
-         pUCXebajDRnqBNn6a+bkr7YEuRxcYoXL0hvtEK9zkxAC6e2AafOh6DpwQzLX7YQEgFl9
-         jhqCUEktgOkIbW7hjR9oChZQlF+DY2p6fTV0kRMIUJQhwZO79xEpqawOz4ImzDtVcBmu
-         rIcg==
-X-Forwarded-Encrypted: i=1; AJvYcCXXqSLAfRksVXsy/TJ+vTuImV4mKARk5ubQUCNoRj6FELHNy1BrkgOI+2llmKbST7oDIwJt0iOu6GmiDpA4+C61OoLMYpRVUhrx
-X-Gm-Message-State: AOJu0YzvXdDoIgeg554GYgip24vNmxGPj+ss9c8vkaLAr/yLVnm9BKRM
-	QTKM/jGMGFTLwMnpRIgCWhji433orbgugCRwCsvjHqCm3jlg53uj6G8NxK2J7Ms=
-X-Google-Smtp-Source: AGHT+IHwzCxasTWecNI2BQg/1Mqv76qvz0pqMMUj9hgHTBodTuDhBkY00q2aX9YgUG43J9U17WwHFQ==
-X-Received: by 2002:a17:906:a09:b0:a6e:f7bf:712e with SMTP id a640c23a62f3a-a6fab618973mr379689666b.27.1718906235388;
-        Thu, 20 Jun 2024 10:57:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718906280; x=1719511080;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LLJSsUsQJimHeyehvy4obxzFbfnPiiocs4Of944Xm3I=;
+        b=lYcNc4tR+JDC8s/uWD5uSaYY8HNNas6/RJOvF/qKQj4ELAkAK9Dw+JhtP0lU+VYuGZ
+         +PDoosrNRIJoAKjW/bK8ODOivNSJS5EGDJ1+y3vFjzC3euHB+rchtfp9LERLZgz8E1ny
+         dBuG7Cw8DaWpviBMQkHdyR1/yOzDjXFuhPQZbHZaie1BYt/yuJwiAsyHV8ORm5bmk4I/
+         3yAK7kEwOEXPL1qiXnm9cb2T2h8M6Z9Xw3iPcJS/CEb/0Xmp7C4Qky1RHy6RJrfV2bUB
+         npd9L8q7MpIjKty85zzUdgSdTOXqgGCRWYKqnOLvyjiYc4mwdZicFyhh1x4XuIQMnvoY
+         l4BA==
+X-Forwarded-Encrypted: i=1; AJvYcCVsnb0VpPdylDsCTUkjP0oqG7Qc3ePbow4YGmBEPuXUqdNFEdk5SZiLkgb8ZL5groC0Olrenu4ozotaLT7EfnLaCpNQMAdOgvT1
+X-Gm-Message-State: AOJu0YyLoEhrodvhWlDLLKY7I79iUfj3aBBPtwrGvDo2jaQUC2u0dX4h
+	9CxB4/dSir+P6eZ7lX8wA39mVzI8TrhQsedcy/awmVQ0HFUPhqe6KLMJAytNIPc=
+X-Google-Smtp-Source: AGHT+IGXtwYdokrlfBxhK8FxTp2sWYE+r/rA8OXrz8ajsAvjdcVPMUue0BkFzpXPCbEPXWGLdile5Q==
+X-Received: by 2002:a17:907:8025:b0:a6f:147f:7d06 with SMTP id a640c23a62f3a-a6fab7de093mr273780966b.77.1718906280266;
+        Thu, 20 Jun 2024 10:58:00 -0700 (PDT)
 Received: from localhost.localdomain ([91.216.213.152])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56f42e80sm781370766b.186.2024.06.20.10.57.13
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56f42e80sm781370766b.186.2024.06.20.10.57.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jun 2024 10:57:14 -0700 (PDT)
+        Thu, 20 Jun 2024 10:57:59 -0700 (PDT)
 From: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
 To: Vinod Koul <vkoul@kernel.org>,
 	Rob Herring <robh@kernel.org>,
@@ -87,8 +89,8 @@ To: Vinod Koul <vkoul@kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Yangtao Li <frank.li@vivo.com>,
 	Li Zetao <lizetao1@huawei.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
 	Chancel Liu <chancel.liu@nxp.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
 	dmaengine@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -100,10 +102,12 @@ To: Vinod Koul <vkoul@kernel.org>,
 	linux-i2c@vger.kernel.org,
 	linux-mtd@lists.infradead.org
 Cc: Markus Elfring <Markus.Elfring@web.de>
-Subject: [Patch v4 00/10] Add audio support for LPC32XX CPUs
-Date: Thu, 20 Jun 2024 19:56:31 +0200
-Message-Id: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
+Subject: [Patch v4 01/10] dt-bindings: dma: pl08x: Add dma-cells description
+Date: Thu, 20 Jun 2024 19:56:32 +0200
+Message-Id: <20240620175657.358273-2-piotr.wojtaszczyk@timesys.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
+References: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -112,49 +116,34 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This pach set is to bring back audio to machines with a LPC32XX CPU.
-The legacy LPC32XX SoC used to have audio spport in linux 2.6.27.
-The support was dropped due to lack of interest from mainaeners.
+Recover dma-cells description from the legacy DT binding.
 
-Piotr Wojtaszczyk (10):
-  dt-bindings: dma: pl08x: Add dma-cells description
-  dt-bindings: dma: Add lpc32xx DMA mux binding
-  ASoC: dt-bindings: lpc32xx: Add lpc32xx i2s DT binding
-  ARM: dts: lpc32xx: Add missing dma and i2s properties
-  clk: lpc32xx: initialize regmap using parent syscon
-  dmaengine: Add dma router for pl08x in LPC32XX SoC
-  ARM: lpc32xx: Remove pl08x platform data in favor for device tree
-  mtd: rawnand: lpx32xx: Request DMA channels using DT entries
-  ASoC: fsl: Add i2s and pcm drivers for LPC32xx CPUs
-  i2x: pnx: Use threaded irq to fix warning from del_timer_sync()
+Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
+---
+Changes for v4:
+- This patch is new in v4
 
- .../devicetree/bindings/dma/arm-pl08x.yaml    |   7 +
- .../bindings/dma/nxp,lpc3220-dmamux.yaml      |  56 +++
- .../bindings/sound/nxp,lpc3220-i2s.yaml       |  73 ++++
- MAINTAINERS                                   |  21 +
- arch/arm/boot/dts/nxp/lpc/lpc32xx.dtsi        |  53 ++-
- arch/arm/mach-lpc32xx/phy3250.c               |  54 ---
- drivers/clk/Kconfig                           |   1 +
- drivers/clk/nxp/clk-lpc32xx.c                 |  10 +-
- drivers/dma/Kconfig                           |   9 +
- drivers/dma/Makefile                          |   1 +
- drivers/dma/lpc32xx-dmamux.c                  | 195 +++++++++
- drivers/i2c/busses/i2c-pnx.c                  |   4 +-
- drivers/mtd/nand/raw/lpc32xx_mlc.c            |  10 +-
- drivers/mtd/nand/raw/lpc32xx_slc.c            |  10 +-
- sound/soc/fsl/Kconfig                         |   7 +
- sound/soc/fsl/Makefile                        |   2 +
- sound/soc/fsl/lpc3xxx-i2s.c                   | 376 ++++++++++++++++++
- sound/soc/fsl/lpc3xxx-i2s.h                   |  79 ++++
- sound/soc/fsl/lpc3xxx-pcm.c                   |  73 ++++
- 19 files changed, 954 insertions(+), 87 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/dma/nxp,lpc3220-dmamux.yaml
- create mode 100644 Documentation/devicetree/bindings/sound/nxp,lpc3220-i2s.yaml
- create mode 100644 drivers/dma/lpc32xx-dmamux.c
- create mode 100644 sound/soc/fsl/lpc3xxx-i2s.c
- create mode 100644 sound/soc/fsl/lpc3xxx-i2s.h
- create mode 100644 sound/soc/fsl/lpc3xxx-pcm.c
+ Documentation/devicetree/bindings/dma/arm-pl08x.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/dma/arm-pl08x.yaml b/Documentation/devicetree/bindings/dma/arm-pl08x.yaml
+index ab25ae63d2c3..191215d36c85 100644
+--- a/Documentation/devicetree/bindings/dma/arm-pl08x.yaml
++++ b/Documentation/devicetree/bindings/dma/arm-pl08x.yaml
+@@ -52,6 +52,13 @@ properties:
+   clock-names:
+     maxItems: 1
+ 
++  "#dma-cells":
++    const: 2
++    description: |
++      First cell should contain the DMA request,
++      second cell should contain either 1 or 2 depending on
++      which AHB master that is used.
++
+   lli-bus-interface-ahb1:
+     type: boolean
+     description: if AHB master 1 is eligible for fetching LLIs
 -- 
 2.25.1
 
