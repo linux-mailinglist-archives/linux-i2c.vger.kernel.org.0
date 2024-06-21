@@ -1,118 +1,145 @@
-Return-Path: <linux-i2c+bounces-4179-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4180-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A10791207C
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 11:27:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEEC291233F
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 13:23:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB43CB23247
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 09:27:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EF061F222DE
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 11:23:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5996C16E881;
-	Fri, 21 Jun 2024 09:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC19F172BC3;
+	Fri, 21 Jun 2024 11:23:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MvDBwLWb"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="guo/Uduo"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E377112D1EB;
-	Fri, 21 Jun 2024 09:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89ADD172BB9
+	for <linux-i2c@vger.kernel.org>; Fri, 21 Jun 2024 11:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718962048; cv=none; b=M7jtpBGUVhEttzMh+/N4c/HUd8hVN0k6b7fVG2TZCTx6N2i6Tp9DOJu8ZRo1GA7Ujg7nbU9eiTIsPwU6N5IU7n+VFF+ZcoP/H+KSuNd48YFCT5mf4H7CIEr1ipaJSdUatQlBCiAcSqbwM49Kvzot5qPteyVKYbA9k8QIW1oG+dA=
+	t=1718968998; cv=none; b=ivhjS9TdMUW4flufDbFlKGYXIbY+M2/DZgg8Cb7ue5/yrxhF2IlpEgq9d6qK2Qsv8DtjBBCBBpEXvfDLp2hMeTMh4VEYZG9z8r2XGN4DViV8AZhEL8Tei09/lLweuA+w1PcWR5e0ABhirDccDgj8t0uoQOJSp7X0abIToSCsPl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718962048; c=relaxed/simple;
-	bh=uhH10vmIJUKkPbdPA4/INQpMI+q9x/UjstbjxvXrdJE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bp+ricdlcQ9eAFMfxPiVCrLdhN4866P4WABO2DOReaRPrfpcm+TDBGsA4mYTDk8Oq+jONWUMEtFbB2p/bb6+AbZv8h6mFnQTR9chTuctP9Yvz6y5NG1qGvFx6m/A57QdTcsCy8PY2TLTG9AFqrLh2iOIEy4GCMPNNGEacdgLdss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MvDBwLWb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE34C2BBFC;
-	Fri, 21 Jun 2024 09:27:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718962047;
-	bh=uhH10vmIJUKkPbdPA4/INQpMI+q9x/UjstbjxvXrdJE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MvDBwLWb2dv893GPCGGbeTdvIWAMyKlOsPT/1BC5DgW8PlNDKB8sb9QRzT1auO0Q2
-	 lVxKjTcfQUsdJUTUT0vdx9mBmGvm9lGgwEvm6fwUW07u92IkS0lsWDnzoTl/NqoTE6
-	 eSArKee1Bsqtdy3KpGfXRDr1E+ZsnP2Q2JHUhUYmzipoD8sgrmFJg38on8AjE+O8qG
-	 ftviQRYS9VkELyn58VdzALl2sa9TQj5ph9057h7xNzdDMRRSmVuTjfPC1OxsC9Vpxc
-	 oOFLLdUfr1c2w/qRQBlLTGDjMm8YxxDZrrXpxIqahjcSO7wR6GB0oDXFxPfLQ4p776
-	 4H9YFZxq9vsXg==
-Date: Fri, 21 Jun 2024 11:27:23 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Sergiu Moga <sergiu.moga@microchip.com>, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	Doug Anderson <dianders@chromium.org>, Enric Balletbo i Serra <eballetbo@kernel.org>, 
-	Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Vignesh R <vigneshr@ti.com>, 
-	Kamal Dasu <kamal.dasu@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Chris Brandt <chris.brandt@renesas.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
-	linux-tegra@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>, 
-	linux-omap@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, stable@vger.kernel.org
-Subject: Re: [PATCH 0/7] dt-bindings: i2c: few fixes and cleanups
-Message-ID: <5vbvx7qnbv7dwugmnp2sitlpvvsor4hn573spbwaklwbwvilfy@evntmrout65x>
-References: <20240620-dt-bindings-i2c-clean-v1-0-3a1016a95f9d@linaro.org>
- <qru4aqjphjnjpo6yjxl2oznhlz774iv77u4u7u4jldnmlanps5@vpzxntuz6arp>
- <6bc864d6-11de-4762-b309-2e2a3bffaa24@linaro.org>
+	s=arc-20240116; t=1718968998; c=relaxed/simple;
+	bh=Fv7NlUCZI/OUwx7K8zdVj8ejFf+r5TqNY1XP6u/JAqY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CQ5Ufh6HQu86OVnUHmJW8/MEiIzZfuEjqei5HUqNKzFo9kFnz1iU/+0VDxqzeDPgvywFiopcDOD6GkAA0CHK95z46OWqjjcYHYXq6oLqdWW+pWCyrUGtgI5Tu/Jlg7DGvrwVu+sGgfmnt5b/SCyu7qOviFjJ+g5em3SoMKuj1I8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=guo/Uduo; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ec17eb4493so26677991fa.2
+        for <linux-i2c@vger.kernel.org>; Fri, 21 Jun 2024 04:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1718968993; x=1719573793; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6WDv/9m0rJF3vWnUpTVye3S1d4XL2apMBP+n7COuLg8=;
+        b=guo/UduoPOCW0J8rlt2S0YiTH4ajsrBArTKZrPZWklzsuhhR3FLKzvNSr5Vc/WAzXk
+         Dj2jCZN9i59mS90J0FoCOLH5GyA3ay2K8p+WBqGkvgwFqI7IjoTP/Yx7WUy5TKQKWpQA
+         vaeRissI5re4/EUfEAqnxf/Zt9gV+Nla52LjnLn07f02+aQVNVfAYVv8VTLzXSuNaa3g
+         SSkcsSYcPlQG6H6tNXbQEwGXJkquuaN34Kmnw+gut/g7ai6PPnIia+G+dTXptyW34tCF
+         95ych5/Ww5Hm/G2Z5LCVDse1a7afAb3pYbw74hScX9OSfFaTdlEPpVDl3FECFf9WWq+/
+         zfIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718968993; x=1719573793;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6WDv/9m0rJF3vWnUpTVye3S1d4XL2apMBP+n7COuLg8=;
+        b=br8/31CsRwq3MsoM6eICDsbbU6kKXK5sAinDyz36P4++YDRUz5cHKkImyE6l9KPzBE
+         +fFgKBPWQEWPTI6e7uj+PneU+hML104JjQPcsyuP2K8BpQQYY8iopW8r/slqFoj51cOa
+         ow7WPM5YYsp8XO5q93ADaJRkWCWRm+lEr51lUdXLJO/0DdtjOh3BEpC0RQGp3RZVsU46
+         sLmzjKswaNYrJVSLUPtYmKFWRD6gN9A1Mx+v9ON7MFs3NLrDgKorTDW1hb8KJhiwYb4v
+         BaDpTd2sbw5C7dbADrJZ/FSI4Vyc5yF7AsFfiZKZcekhoP7Sj7VFaNiS2hGkFXNXPQGV
+         Hpkw==
+X-Forwarded-Encrypted: i=1; AJvYcCVuVBUuKeUfn59bDGi362wrh6X52EVaAf7b7YAyldUjF9223DmtFbdHDuYCwZSwPimI0LsOYTV64xS3O5ceMktMhtzuBTeIGOHB
+X-Gm-Message-State: AOJu0YznVkcgwMy2MaHXHeVktvXwQqLk1m7sxeNnMSlWt66HpYBf33DL
+	CRRrI4f6u3klEsNBZ0U4T/43NSubjhzOGNNnpAcyGwnLwt053+RJT2BbtC2Vysk=
+X-Google-Smtp-Source: AGHT+IHpweSE3KdQsDRimuTsrhI6yOPpZ5O4BdQG93h1/gDFsFb9X1ELgh9R/GgZ3UFZqqr7CMVgfA==
+X-Received: by 2002:a2e:850f:0:b0:2ec:efb:8b60 with SMTP id 38308e7fff4ca-2ec3cec0d9dmr65254451fa.13.1718968993480;
+        Fri, 21 Jun 2024 04:23:13 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.70])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fd0838345sm64498466b.99.2024.06.21.04.23.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jun 2024 04:23:13 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: chris.brandt@renesas.com,
+	andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	geert+renesas@glider.be,
+	magnus.damm@gmail.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	p.zabel@pengutronix.de,
+	wsa+renesas@sang-engineering.com
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH 00/12] i2c: riic: Add support for Renesas RZ/G3S
+Date: Fri, 21 Jun 2024 14:22:51 +0300
+Message-Id: <20240621112303.1607621-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6bc864d6-11de-4762-b309-2e2a3bffaa24@linaro.org>
 
-On Fri, Jun 21, 2024 at 08:02:03AM GMT, Krzysztof Kozlowski wrote:
-> On 21/06/2024 01:05, Andi Shyti wrote:
-> > Cześć Krzysztof,
-> > 
-> > On Thu, Jun 20, 2024 at 01:34:48PM GMT, Krzysztof Kozlowski wrote:
-> >> Few fixes for I2C controller schemas. The third patch (atmel,at91sam)
-> >> depends on first, so I suggest not splitting this into fixes branch but
-> >> take as is via next branch.
-> >>
-> >> Best regards,
-> >> Krzysztof
-> >>
-> >> ---
-> >> Krzysztof Kozlowski (7):
-> >>       dt-bindings: i2c: atmel,at91sam: correct path to i2c-controller schema
-> >>       dt-bindings: i2c: google,cros-ec-i2c-tunnel: correct path to i2c-controller schema
-> > 
-> > merged to i2c/i2c-host-fixes
-> > 
-> >>       dt-bindings: i2c: atmel,at91sam: drop unneeded address/size-cells
-> >>       dt-bindings: i2c: nvidia,tegra20: drop unneeded address/size-cells
-> >>       dt-bindings: i2c: samsung,s3c2410: drop unneeded address/size-cells
-> >>       dt-bindings: i2c: ti,omap4: reference i2c-controller.yaml schema
-> >>       dt-bindings: i2c: adjust indentation in DTS example to coding style
-> > 
-> > merged to i2c/i2c-host
-> 
-> So you broke the binding... Why openly ignoring my first sentence?
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-It's not an issue. We can get the fixes first and apply the rest
-later, I can keep them in my -next branch and reapply next week.
+Hi,
 
-Otherwise I would wait for everything at the merge window, but I
-don't want to wait so long.
+Series adds I2C support for the Renesas RZ/G3S SoC.
 
-Thanks,
-Andi
+Series is split as follows:
+- patch 01/12      - add clock, reset and PM domain support
+- patch 02-03/12   - add some cleanups on RIIC driver
+- patch 05/12      - enable runtime autosuspend support on the RIIC driver
+- patch 06/12      - add suspend to RAM support on the RIIC driver
+- patch 07/12      - prepares for the addition of fast mode plus
+- patch 08/12      - updates the I2C documentation for the RZ/G3S SoC
+- patch 09/12      - add fast mode plus support on the RIIC driver
+- patches 10-12/12 - device tree support
+
+Thank you,
+Claudiu Beznea
+
+Claudiu Beznea (12):
+  clk: renesas: r9a08g045: Add clock, reset and power domain support for
+    I2C
+  i2c: riic: Use temporary variable for struct device
+  i2c: riic: Call pm_runtime_get_sync() when need to access registers
+  i2c: riic: Use pm_runtime_resume_and_get()
+  i2c: riic: Enable runtime PM autosuspend support
+  i2c: riic: Add suspend/resume support
+  i2c: riic: Define individual arrays to describe the register offsets
+  dt-bindings: i2c: renesas,riic: Document the R9A08G045 support
+  i2c: riic: Add support for fast mode plus
+  arm64: dts: renesas: r9a08g045: Add I2C nodes
+  arm64: dts: renesas: rzg3s-smarc: Enable i2c0 node
+  arm64: dts: renesas: rzg3s-smarc-som: Enable i2c1 node
+
+ .../devicetree/bindings/i2c/renesas,riic.yaml |   8 +
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  90 +++++++
+ .../boot/dts/renesas/rzg3s-smarc-som.dtsi     |   5 +
+ arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi  |   7 +
+ drivers/clk/renesas/r9a08g045-cpg.c           |  20 ++
+ drivers/i2c/busses/i2c-riic.c                 | 240 ++++++++++++------
+ 6 files changed, 299 insertions(+), 71 deletions(-)
+
+-- 
+2.39.2
+
 
