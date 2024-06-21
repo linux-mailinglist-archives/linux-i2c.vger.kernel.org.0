@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-4164-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4165-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40BF6911B5F
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 08:19:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51315911B74
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 08:20:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63FD91C21797
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 06:19:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 738F81C22275
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 06:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3670169AF7;
-	Fri, 21 Jun 2024 06:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F0816D33D;
+	Fri, 21 Jun 2024 06:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6ZF7uWa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQ5+RO+e"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C5F16938C;
-	Fri, 21 Jun 2024 06:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0F31552E3;
+	Fri, 21 Jun 2024 06:18:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718950645; cv=none; b=EnZ/Xee1YKaNCe/fmkMtDSwSU+Jw+GyvaTNoWDpB6Yxow2O92QLgUuhW68kNYyOIsknFnJCU+YSw5xhWJNNMGkFavH1sBVHivibOg4qaKHeWPVSbYwv1maoV1zBaQ2FMPkc/ot51z7MCf9CM/fiqAGrl/T08R42ltiQWKYkAQuQ=
+	t=1718950735; cv=none; b=RtPYK6jmh7Y4+0YdOlrLZ4Y/ugo+bhhFsevuAz8ngb61Vt3BbSQUw+L830D7LPvXxllMZW0Y9dxSJRh6c8kM0OEbuTzzqjQawEGIwyN7wzzj78hhcLY7KmeM0B853U7cqfaMupxax077Oqo9pFtcIRjlP7ZREAr26DqdJ5MJNnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718950645; c=relaxed/simple;
-	bh=grR7DKj1v9NfUIVXQ/wA7b9FGj3wa+ylhebh9dYyMss=;
+	s=arc-20240116; t=1718950735; c=relaxed/simple;
+	bh=iOKs0kuwYeauur49traV6Ei5QgiBo+V6ci2r2oGoz5Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ctsdfVUWmWCq+HTwvHRdKN+iLh/Pyz1tXtE8s7VTu5MY9g+1b1nPre7LaeZYILphJNR6T72JPgQTDw2QxN/vRZ5t1CaADnrCpbIJxDas0GFeC7MgCIDGyEQPyJW+ozqoVyLKElBY+RS0qw++zMsKpxY4lklamWyhsEMKvaR8TE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6ZF7uWa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0083FC2BBFC;
-	Fri, 21 Jun 2024 06:17:11 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=acpt4EWg4QwNT711+N8whGdQ2BSZLpLo8bhKDMT1pR2Oi6sWzgPjbPYWeRNMuLx+EXdhvSCfDHLH3SDI9KMzjABKlrE3mipzQaZBKvX+FvL/a9NrsHZJBcjgfzQGH6n2/+Cu377qB3VZwpHh9xRlvDHLuybTpKGe8QaSKMA9ftU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQ5+RO+e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22111C2BBFC;
+	Fri, 21 Jun 2024 06:18:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718950645;
-	bh=grR7DKj1v9NfUIVXQ/wA7b9FGj3wa+ylhebh9dYyMss=;
+	s=k20201202; t=1718950735;
+	bh=iOKs0kuwYeauur49traV6Ei5QgiBo+V6ci2r2oGoz5Y=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Y6ZF7uWao4h0Z17eZa8wQq/f0CTLyIVLWxIxqI5M6ALQOA6cuCSaTBHAqQFZMZL+D
-	 kDhCosVLaUyMk7fOJk+2lX7iobozai1v+8kmLHUPGKkI23lF3imFBxToa5NSjT5DCS
-	 KRioXx8CNZhk3Uu3zcRwvplrSxVbhOXRtye772hXYPjghPx0xexG7eZG4pGMihkVbj
-	 DAFrfCPCcM1MjpfKOlwj+PT/KlZjKjSh7lYyrfaoAmc1NZ3pXtpaJPCJJP4RQNnXUL
-	 9Iue/Ar7rXj/FIW4StHM8iMP5BqjyvWpQ+nYQ+i5w2/ngX36xc6Zp9KtbZIwp8A4Ia
-	 PexX5ULbTzcgA==
-Message-ID: <6aafffd6-4c1f-4041-abe0-9b17d669467f@kernel.org>
-Date: Fri, 21 Jun 2024 08:17:09 +0200
+	b=CQ5+RO+eixfOSNiyNe6mYshUgJvT0bBT4RbBHfzXKwWoWUVDdMTdin7bNvMeociBa
+	 nsxe1skVxv8y216/k3GjD97zpMhRmVcHnKNoQQjUEIDFLDXLOx3HazsbPRQpp8Wgtd
+	 URk3Blz7BFahR8cKNcyHmn2uxfK86Y/OqF9sI1Q245ew1hsIEgxFDimmiZ9+leoFKN
+	 bFTDPzHrfjIDkH0vL43WSNL6GWH6QcG//xXqawpgJXcVrGqP+6n8pqSHSc0LN28WsZ
+	 IWtKNkMhQE4HAfPFsV1PtgcWsaTID0wJ9ME+tjwO5TMqWlHdX4Miz81t8+Qz01ZGXY
+	 CxmBFLYjgBjFg==
+Message-ID: <f49c5ee8-6bdb-481b-a131-a6478526f1e1@kernel.org>
+Date: Fri, 21 Jun 2024 08:18:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch v4 02/10] dt-bindings: dma: Add lpc32xx DMA mux binding
+Subject: Re: [Patch v4 03/10] ASoC: dt-bindings: lpc32xx: Add lpc32xx i2s DT
+ binding
 To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
  Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -72,7 +73,7 @@ To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
  linux-mtd@lists.infradead.org
 Cc: Markus Elfring <Markus.Elfring@web.de>
 References: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
- <20240620175657.358273-3-piotr.wojtaszczyk@timesys.com>
+ <20240620175657.358273-4-piotr.wojtaszczyk@timesys.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -118,100 +119,31 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240620175657.358273-3-piotr.wojtaszczyk@timesys.com>
+In-Reply-To: <20240620175657.358273-4-piotr.wojtaszczyk@timesys.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 20/06/2024 19:56, Piotr Wojtaszczyk wrote:
-> LPC32XX SoCs use pl080 dma controller which have few request signals
-> multiplexed between peripherals. This binding describes how devices can
-> use the multiplexed request signals.
+> Add nxp,lpc3220-i2s DT binding documentation.
 > 
 > Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
 
-> +
-> +properties:
-> +  "#dma-cells":
-> +    const: 3
-> +    description: |
-> +      First two cells same as for device pointed in dma-masters.
-> +      Third cell represents mux value for the request.
-> +
-> +  compatible:
-> +    const: nxp,lpc3220-dmamux
+Thanks for doing this. Appreciated.
 
-Please put compatible first in the list of properties (and follow the
-same order in "required"). It's the most important piece, so we want it
-to be the first to see. It also follows the convention of DTS, where
-compatible is expected to be first.
-
-> +
-> +  dma-masters:
-> +    description: phandle to a dma node compatible with arm,pl080
-
-maxItems: 1
-
-> +
-> +  reg:
-> +    maxItems: 1
-
-Keep reg after compatible.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - dma-masters
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    syscon@40004000 {
-> +      compatible = "nxp,lpc3220-creg", "syscon", "simple-mfd";
-> +      reg = <0x40004000 0x114>;
-> +      ranges = <0 0x40004000 0x114>;
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-
-Drop the node above (you will see Rob's warning). Alternatively, this
-schema could skip the example and the nxp,lpc3220-creg could have one
-complete example for entire device with children.
-
-> +
-> +      dma-router@7c {
-> +        compatible = "nxp,lpc3220-dmamux";
-> +        reg = <0x7c 0x8>;
-> +        #dma-cells = <3>;
-> +        dma-masters = <&dma>;
-> +      };
-> +    };
-> +
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index aacccb376c28..f7adf9f66dfa 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2396,6 +2396,15 @@ F:	drivers/usb/host/ohci-nxp.c
->  F:	drivers/watchdog/pnx4008_wdt.c
->  N:	lpc32xx
 >  
-> +ARM/LPC32XX DMAMUX SUPPORT
-
-This should be just "LPC32XX DMAMUX SUPPORT"
-
+> +FREESCALE SOC LPC32XX SOUND DRIVERS
 > +M:	J.M.B. Downing <jonathan.downing@nautel.com>
 > +M:	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
 > +R:	Vladimir Zapolskiy <vz@mleia.com>
-> +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> +L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+> +L:	linuxppc-dev@lists.ozlabs.org
 > +S:	Maintained
-> +F:	Documentation/devicetree/bindings/dma/nxp,lpc3220-dmamux.yaml
+> +F:	Documentation/devicetree/bindings/sound/nxp,lpc3220-i2s.yaml
 > +N:	lpc32xx
 
-I think this entry is only foor DMAMUX so the last "N:" is not appropriate.
+Drop the last "N:".
 
-You are welcomed to help maintaining the platform. Add yourself to
-appropriate place of LPC32xx ARM.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
