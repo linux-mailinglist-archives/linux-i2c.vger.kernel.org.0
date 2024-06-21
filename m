@@ -1,128 +1,119 @@
-Return-Path: <linux-i2c+bounces-4195-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4196-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 338CE9124CA
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 14:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C5CF9124E3
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 14:16:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E308E287199
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 12:08:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB1F7286CEC
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 12:16:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E0D017554C;
-	Fri, 21 Jun 2024 12:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C73E014F9E0;
+	Fri, 21 Jun 2024 12:16:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b="bwNl9B2b"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="azfX01yH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AD6174EC6
-	for <linux-i2c@vger.kernel.org>; Fri, 21 Jun 2024 12:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8213528399;
+	Fri, 21 Jun 2024 12:16:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718971698; cv=none; b=BujFPO2P4dwm8ApmReU4fM4WZAgxmv7F+0LaLugW/d5IIL7ja53mIux+mBQOarbxyAClS1Btu38hPuQakW6TvIxvbZyFDPOhEEYxSXg2YazX7Tsw0FZMG6yolQpA5tUPFArIelArkDGlBVaHPVt07Jd3niJ3wd2RTtzZX+Er1GA=
+	t=1718972187; cv=none; b=fux/ZBxXa58iLYUrWvc0KIR3lrWqJpIoeQlQMGj6iadujQ4Sh+xeGUDFHSW4QkWRVngs+ibhwRvBZXHVITMLU7jrgNjSyg0vy8pubi8KYgqXmpby0NM45euDn35b+GqfStPM6WPtNlQETbfKE6WNPAQ2yzeiZ/98RePTLgLJb4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718971698; c=relaxed/simple;
-	bh=5CsIqk65T8h28pv7LSZHK/r+thMfNFgpmh7VKRl0UWQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t7bCvCMQwXV9Y1kGyuyOIX0un0JZ2L0KriP/mZ3rJT3pHhqKuvgbNh7qj9c3sUzNbn12mpusPbDZ2QkPMV+fjDs6jlbY5AujYXE2181lc/qtafOgauoML143qSqfOEksn620Zrk10OwrKP0O8suME1Kx7Y+gUj52dtoFD0TQA60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com; spf=pass smtp.mailfrom=timesys.com; dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b=bwNl9B2b; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=timesys.com
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7960454db4fso123516885a.2
-        for <linux-i2c@vger.kernel.org>; Fri, 21 Jun 2024 05:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20230601.gappssmtp.com; s=20230601; t=1718971694; x=1719576494; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5CsIqk65T8h28pv7LSZHK/r+thMfNFgpmh7VKRl0UWQ=;
-        b=bwNl9B2b5uBkts+d4e1DdRjRmxBlNK3fTwlrYckofd8DFZRyHpP+wuYJNoiJFzIY0N
-         6J2XMZlIWqrBJdPaUYzL7AaytwBd2cv+HOibYo5pDM/cXmrBDsHNLJJg2+DNxDbfTG01
-         PGNcSY0E5srlf0xby1j0hw0vKWRgAxMKkG1uK9hQshCVklS2nrHA+8JMmi+OcLH9ExEM
-         76uZVM00QNMp5apgZUS8HFiWsw1t/COUYq6QZDqgb2TK+SDiYiCU5xgaajdsU4GHyF4a
-         TgfV1+fSkkp2MooWuTU1LdWf577gqcZAi+/zsQBwMkDc00qjp1XBC1jfhw4NHZJs/Mg0
-         fn5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718971694; x=1719576494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5CsIqk65T8h28pv7LSZHK/r+thMfNFgpmh7VKRl0UWQ=;
-        b=mh3rtiN93O3qZsl2lLGwrDKM+pREs91b9HtT/GIWCn6gWwUHZvUrAQvcf1Mv9eROwL
-         uPjTU6X4YQ9R6iKX5ZyO/ehtzcb0AI9RpNdXM7VBmMuBvDBwsE7eB3G4vTUebm838YNy
-         JpoAK3VV0/VVfBpDGrFT9Ek5Uy1J9cS6VC8lD3qWUnRH1PzNBz+RfEcI5nTxVggM189P
-         vcFtleBJ0AvZAArhav6PoFWdTBeMeRmqg2uO2zE8UpZ5bSMZ2zDbfYQRd8abTRs+xzYv
-         Oe+3N9BLtfRxu1eK05owzO2Rsl9E9gtlZz6PwBCFnu3n4oFnVdGTUopN9aE7uSthdbYR
-         eCLw==
-X-Forwarded-Encrypted: i=1; AJvYcCWbB+kZuRGqW7t6mDIo3/SDa+k025OgnRFOjsYK/iM47xJ6In/Xe/b0ZtVuGOgiCo5sOjToEgYyDbqPLsGz7eU10ymeZW/vQMJ8
-X-Gm-Message-State: AOJu0Yy8bMY/wkCTygX0QU452l6npF1CQb9HFg/OGAf0WGyPiFZPyFre
-	Dw5wbuQQQtfcU72Mm0Mk2t44cYoTLu2jzPPApNKp/3yFgcz8d7yC5b/1H0dNBaZM3zFpcegZKM4
-	8/Gl0+kWtznkHm1Vo6cDtoZzsO6jHA+j9MnkHuQ==
-X-Google-Smtp-Source: AGHT+IH9SeiO8vfdoOxDABbDkc1VlJaHvluIQfS8YUVwP2eXorBPvqf3BAKJdJfTNAn0CNJ3/z1faNaXrP6fson02ac=
-X-Received: by 2002:ad4:4245:0:b0:6b0:6629:bdf9 with SMTP id
- 6a1803df08f44-6b501e2c710mr72849356d6.21.1718971694039; Fri, 21 Jun 2024
- 05:08:14 -0700 (PDT)
+	s=arc-20240116; t=1718972187; c=relaxed/simple;
+	bh=RrIkAfeF7Vo501++09i2l4ssWDTawSjUb/hFqT0/uEU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fibczHtTtOpxdihGsCPWBPkDAtF5LiqyYgwslK1ok40gflIZ+owBU/VIX0vKkaLizTbJqnOp+JMDToNgGDpPYaQdizruzlX0NLxKCgiwYDL5taNWIqge8lGusZuKnIvfsEmx7rLZfyjWA6xwL87S2b7ADzfrUXdRAaUqCdwC2Js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=azfX01yH; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1718972186; x=1750508186;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RrIkAfeF7Vo501++09i2l4ssWDTawSjUb/hFqT0/uEU=;
+  b=azfX01yHOZvsK6ifAdoHH2/AZGRJSgWCt5wjePIlLYwf3B7+W/0jda8F
+   IQiFYwQMcPhYXNTsONS9j37Dilvrz8feda3eBHRxeagETXprbQGo2z1FL
+   Zus8SCLUsUgfjENie2n4QtCeJ19ZtgEOZP8bXxHUqp7Qdhpt2lD1AFili
+   aqeS1Wwdb7WS0DY8Zk6OO4fqXuxjBGIcKgz5fgycK+XDm8e9149t3HJxT
+   ueO6bRnz4Cz/29JNeQ7Grch+gt3moQs4tue4Kd0RclWntHFIRsV2fWMyq
+   rh1hTw2B7DaBtiUnQNqMSHL6cEH9cYcDkQ+RsGaX6IaF+GrV05ljpHen/
+   g==;
+X-CSE-ConnectionGUID: gjF6r6nLSZ2qzzloD0+0Lw==
+X-CSE-MsgGUID: fzsivhhzSAyAVZBnb0DqIA==
+X-IronPort-AV: E=Sophos;i="6.08,254,1712646000"; 
+   d="scan'208";a="28341527"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Jun 2024 05:16:25 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 21 Jun 2024 05:16:01 -0700
+Received: from ROB-ULT-M76677.microchip.com (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Fri, 21 Jun 2024 05:15:58 -0700
+From: Andrei Simion <andrei.simion@microchip.com>
+To: <brgl@bgdev.pl>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>, <arnd@arndb.de>,
+	<gregkh@linuxfoundation.org>
+CC: <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	Andrei Simion <andrei.simion@microchip.com>
+Subject: [PATCH v2 0/3] Read MAC address through NVMEM for sama7g5ek
+Date: Fri, 21 Jun 2024 15:13:37 +0300
+Message-ID: <20240621121340.114486-1-andrei.simion@microchip.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
- <20240620175657.358273-11-piotr.wojtaszczyk@timesys.com> <jgqhlnysuwajlfxjwetas53jzdk6nnmewead2xzyt3xngwpcvl@xbooed6cwlq4>
-In-Reply-To: <jgqhlnysuwajlfxjwetas53jzdk6nnmewead2xzyt3xngwpcvl@xbooed6cwlq4>
-From: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-Date: Fri, 21 Jun 2024 14:08:03 +0200
-Message-ID: <CAG+cZ04suU53wR5f0PhudgNmkxTRtwEXTS1cWH1o9_rTNM94Cg@mail.gmail.com>
-Subject: Re: [Patch v4 10/10] i2x: pnx: Use threaded irq to fix warning from del_timer_sync()
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	"J.M.B. Downing" <jonathan.downing@nautel.com>, Vladimir Zapolskiy <vz@mleia.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Russell King <linux@armlinux.org.uk>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>, Yangtao Li <frank.li@vivo.com>, 
-	Li Zetao <lizetao1@huawei.com>, Chancel Liu <chancel.liu@nxp.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, dmaengine@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-sound@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	Markus Elfring <Markus.Elfring@web.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi Andi,
+This series proposes to add EEPROM support and reading MAC addresses through
+NVMEM (via Devicetree) for sama7g5ek:
+- Add in DT bindings document the EEPROM compatibles : "at24,mac02e4" and
+"at24,mac02e6"
+- Update to the driver to support "at24,mac02e4" and
+"at24,mac02e6" and adjusting offset for those 24AA025E{48, 64}.
+- Added the nodes in devicetree for eeproms where are stored eui48 MAC,
+and update gmac nodes to read the MAC via devicetree through NVMEM.
 
-On Fri, Jun 21, 2024 at 12:57=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org>=
- wrote:
-> On Thu, Jun 20, 2024 at 07:56:41PM GMT, Piotr Wojtaszczyk wrote:
-> > When del_timer_sync() is called in an interrupt context it throws a war=
-ning
-> > because of potential deadlock. Threaded irq handler fixes the potential
-> > problem.
-> >
-> > Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
->
-> did you run into a lockdep splat?
->
-> Anything against using del_timer(), instead? Have you tried?
+------------------------------------------------------------------
+v1 -> v2:
+* dt-bindings: eeprom: at24: Add at24,mac02e4 and at24,mac02e6
+  - change pattern into "^atmel,(24(c|cs|mac)[a-z0-9]+|spd)$" to keep simpler
 
-I didn't get a lockdep splat but console was flooded with warnings from
-https://github.com/torvalds/linux/blob/v6.10-rc4/kernel/time/timer.c#L1655
-In the linux kernel v5.15 I didn't see these warnings.
+* eeprom: at24: avoid adjusting offset for 24AA025E{48, 64}
+  - no change
 
-I'm not a maintainer of the driver and I didn't do any research on
-what kind of impact
-would have using del_timer() instad. Maybe Vladimir Zapolskiy will know tha=
-t.
+* ARM: dts: at91: at91-sama7g5ek: add EEPROMs
+  - remove unnecessary #address-cells #size-cells
 
---=20
-Piotr Wojtaszczyk
-Timesys
+------------------------------------------------------------------
+Andrei Simion (1):
+  dt-bindings: eeprom: at24: Add at24,mac02e4 and at24,mac02e6
+
+Claudiu Beznea (2):
+  eeprom: at24: avoid adjusting offset for 24AA025E{48, 64}
+  ARM: dts: at91: at91-sama7g5ek: add EEPROMs
+
+ .../devicetree/bindings/eeprom/at24.yaml      | 10 ++-
+ .../arm/boot/dts/microchip/at91-sama7g5ek.dts | 40 ++++++++++
+ drivers/misc/eeprom/at24.c                    | 73 +++++++++++--------
+ 3 files changed, 89 insertions(+), 34 deletions(-)
+
+
+base-commit: b992b79ca8bc336fa8e2c80990b5af80ed8f36fd
+-- 
+2.34.1
+
 
