@@ -1,223 +1,159 @@
-Return-Path: <linux-i2c+bounces-4227-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4228-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C56C091297C
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 17:23:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D9559129B1
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 17:31:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FCEF286CEE
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 15:23:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69B93B2BAEE
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 15:25:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5832B664C6;
-	Fri, 21 Jun 2024 15:22:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191CA79B96;
+	Fri, 21 Jun 2024 15:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hHvMoV45"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ibFHdMZB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF7257CA7;
-	Fri, 21 Jun 2024 15:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C39981AC3;
+	Fri, 21 Jun 2024 15:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718983373; cv=none; b=PL+CK/DGPhDh+5ys1bcSCbSs2QlL1lc4SJGyvMn0yhl76ak9oiIMpngOOhIrNJxbPaqibhRh/0mV2uO7/y3frDrfw8SjQkLxzfz6TBBFDvjqp741onZrdMVgK3OFQXBdYATqrwt0LO8mZoz/VZyn/OvfAvgUX/fK0CHELyWdERg=
+	t=1718983489; cv=none; b=IR5w8VMrHywqzfInuiVc3030vaM9Q+MyWcuBkS7Bo9kXsPxPXqO88IUM659cXMGdYaPLMxY57nkVVd+orhbRWnPeOE8zTzxycAHaDCs/R0U9x0rZAalAraE8ixrRfyBqPV9aC3CqFtEmnxTs1GDtVAoDnzQpkEpfPaskaKEfNEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718983373; c=relaxed/simple;
-	bh=mibplKt7yrg2ylNU1KRpiE4uThsNa8fXKWWgYJuVF9c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pQuF0fgLCi49Cta6NfLbqZKr+a3OhxRqqz5Sf+HGMaI+7kO2sAYlYBnVjuH6RJJBwhJtx7w/vjFme3haIko9kmAaRRp++xnLaua0MhZNn4qAu0CmS5S0X8sIW10oK9hVJPo3Clfy0r3V7G7dmWz/fjgSQqU+svjbeCQuKbk/oAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hHvMoV45; arc=none smtp.client-ip=209.85.221.43
+	s=arc-20240116; t=1718983489; c=relaxed/simple;
+	bh=pl74LSfHAjEuEahAE8rC5970tdmVlNJ5h4ZEpEhNC0s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fzLAVohl02Oi548kCjRJHLhVToWhlV9TSGqCHasqKBDf/INIi74hAeSlNgwHwABivOiigfFBSZP/JdvYpymuCAilaVPZcTSFzof447Fpkg1DEMLaQWygp9p4ij5vo+o3ZR0Y6dKPoZY9krs3hZUvgv6B6RfER6xL8/5MUkSt4h4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ibFHdMZB; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-36532d177a0so1210683f8f.2;
-        Fri, 21 Jun 2024 08:22:50 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a6fd7bee2feso53341266b.1;
+        Fri, 21 Jun 2024 08:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718983369; x=1719588169; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rkGR5EJentvUL1VShfMi+kg50D4pwOAkzJOrsMjz8qk=;
-        b=hHvMoV45XoKgA12jeEUPqgJX7yzaL5RXpJkR8awHJYncvjLXQFtFxDDEqEG7wQA6SG
-         iiNOsC1Z8H8mgmOtmNLQcI9cdSPe80Npx3pCybzZ4Bdvjrce3ENDEyEkco0ytV05bKbw
-         vCmDev7SCFMmc2PDMfq/jivTLd9V8zq2dEBknDk6JYHIHcbZ6PTetATD3OysstyqddZp
-         tCkgkp07eJwwash0bvDe2hqdP3OR7uK0MKHOn2GhAkQTnCUi+PZ2ntzgNEpCmFILD1bA
-         y4dsNVSADZHOxGvkPRFOYBlltZXp9IsEHvMnG6NadHwPSdORnJYQLZ6cd+4xV3/Dwz1M
-         miRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718983369; x=1719588169;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1718983487; x=1719588287; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rkGR5EJentvUL1VShfMi+kg50D4pwOAkzJOrsMjz8qk=;
-        b=XisVhFoHZnxqasOuVk0hC+8NUDjrL5a/L9jgF4jc8GDelU+pSCcq7JB1eGv2MAlvd+
-         uTIHIfrfvWE5crJ7YCjsRe42zMZ296PyUqO3Wkv87qBnbbvjz1c607N7i8xnI6IOtywB
-         e/STDK5B6UceWLfOE++2tXWKGLd+zLRqY1y/SNlv8G9c8Iga+gM1o6fjJ+G88xKU2o0l
-         E+pCyb6fk/b7dT+kloHv0nfznPPoF9c8AQaETUsq5xp/2a5SgfHizN0PgXJKY7St9bPm
-         Nhp/5NW/GmXRAiY7DtoMR1PYJJCZfzRBCkYcC4l+C0i3WsmUWLgd0jAA9VesHTdrE22a
-         agXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUE7BgqfzuCPMGfbju41yPHk0g8uFcpYAa5T223essjebJfsuNLzDobjWbjfOmBEJdNLt+i1hYYMwAXIvxKqPpL6Ul8G8k4tdyIb9p16/zKHSJuOCTlABXqFjo5kEB9Pef9NzmxHggM
-X-Gm-Message-State: AOJu0YxTrt7O3/4T80DbEDH6lvW9I6zan+roQwdf2ONEuGNibpdSE5kL
-	lQpAmUEYWW8/Y0+dE/foIMXZDqnawdaW+qIzZUf9lCRoLtfmnRs0
-X-Google-Smtp-Source: AGHT+IF9NG8saDwxeiICFI/hTyWoeWVUie5mWBddjO6sIoRMdxV0gFAvfVhnV74lANeVsONmdrpDxg==
-X-Received: by 2002:adf:eac1:0:b0:362:3526:4ebb with SMTP id ffacd0b85a97d-36317d737cbmr6808799f8f.37.1718983368601;
-        Fri, 21 Jun 2024 08:22:48 -0700 (PDT)
-Received: from eichest-laptop ([2a02:168:af72:0:b162:502a:9bd1:4c8b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36638d9c1aasm2020326f8f.55.2024.06.21.08.22.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 08:22:48 -0700 (PDT)
-Date: Fri, 21 Jun 2024 17:22:46 +0200
-From: Stefan Eichenberger <eichest@gmail.com>
-To: o.rempel@pengutronix.de, kernel@pengutronix.de, andi.shyti@kernel.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-	jic23@kernel.org, lars@metafoo.de, nuno.sa@analog.com,
-	andriy.shevchenko@linux.intel.com, marcelo.schmitt@analog.com,
-	gnstark@salutedevices.com, francesco.dolcini@toradex.com,
-	wsa+renesas@sang-engineering.com, andrew@lunn.ch
-Cc: linux-i2c@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Subject: Re: [RFC PATCH] i2c: imx: avoid rescheduling when waiting for bus
- not busy
-Message-ID: <ZnWaxtfgmLk3SplP@eichest-laptop>
-References: <20240531142437.74831-1-eichest@gmail.com>
+        bh=Ix9xhtVwApjWVQeLV+612sT4TrVLx0O3AjVOgGgrg6U=;
+        b=ibFHdMZBgkTWVePVwiV8HzjEUqNPjIc0AillbtN3AEtvzeZtgmsxKFcMWDOCT+SN61
+         Re/OVuWnr/eyXwXGtJ3zAISsH/MaNTAwNGa26Qh2BEE1acBzaY/QuYhLeWRHudzevxkX
+         oFboENzPmHEu+K5n+uT+K//aqAi3fUCICkK868/N5glgJzqpsVP6oi3j3cKHHTl2Uocm
+         aqkTBGG0LHHpmiFwnKNXpYV+2n8Y+T3zup8ll+/OlYDNNmrY2c/qI/p+n1mxXJpCNhUd
+         N/0NfU7kCLV7vTsTsj+BxyHpKnNd0b7pAUDu+YhqarjJJZsgQbPizstQG4y58ElAy0Fg
+         LQzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718983487; x=1719588287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ix9xhtVwApjWVQeLV+612sT4TrVLx0O3AjVOgGgrg6U=;
+        b=bZuRka2qzdvZwLDk3rmmtqyOJlhVzGPWTO8Iez9nANXVVFbaYVPXWwFja/1mozhpJ6
+         yFRudnSw5KPJJPos5iCZLz/+C5/8zxa5Pxga/n5aQLfwe/u5VeoWN4ztk91ACSi3O5kF
+         w5VJKWElLWw7PLR08ys+YnUXbpBx22QWdWKr9oVFZA4aEt/apFU5iHwTmVgyfCDAdxxw
+         MXYLnUeJufpykXGVMASpenxPA7uytA+Yz1YdI+Qh7CNQ7jH/FmWtVQmLX/ydvOjPTcoo
+         mEPcX+psnrRqTD6MLiI4glXVZKv5WGuoOGwGeJGt/ikiinsl78+CqLrzmtO6y4mFl3Ee
+         Avdg==
+X-Forwarded-Encrypted: i=1; AJvYcCX5tWpsNZP43qbO62mxPR8iz9TmB+8oELl8RKPvHRo6gMF1j2dP2McxoPB80TG65u4/3o8apisTLTWA66bFO+YTNsAeco2vywuA7NpIbxb/DJZiGp5wz8O/BFPeebOGSnU0ZwwurLySZu7iClMqnQ==
+X-Gm-Message-State: AOJu0Yzku6u5A4vf/HQtdDeHeRdTBYXDSU86oUKA084+BADuwWsFJgHr
+	Gh4geoeip7BjruKI1FdOCXhPCpCL4knjFoGHLMcs8WBShu/U+XS9FOCAQ7QEhiWggyxNFQY+6z2
+	GMeHvwqYDPCqPsvfAge/5KfRBBpsbRG6p
+X-Google-Smtp-Source: AGHT+IHZCFXzvVN5NzuTkg9fXuxNe8FkKbHtwjLzsdsTnGetNhmoRISKeHF/2ujchmBHHebYLBMhG+g1YncO68LYxBo=
+X-Received: by 2002:a17:907:d406:b0:a69:67e3:57f6 with SMTP id
+ a640c23a62f3a-a6fab605f2emr652830166b.5.1718983486691; Fri, 21 Jun 2024
+ 08:24:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240531142437.74831-1-eichest@gmail.com>
+References: <20240621122503.10034-1-hdegoede@redhat.com> <20240621122503.10034-4-hdegoede@redhat.com>
+In-Reply-To: <20240621122503.10034-4-hdegoede@redhat.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 21 Jun 2024 17:24:10 +0200
+Message-ID: <CAHp75VewivTXEfzdH=cE-HUtDq9RdpzVkBsUqQPTTksF9fJDDg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/6] platform/x86: dell-smo8800: Move instantiation of
+ lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>, Wolfram Sang <wsa@kernel.org>, 
+	eric.piel@tremplin-utc.net, Marius Hoch <mail@mariushoch.de>, 
+	Dell.Client.Kernel@dell.com, Kai Heng Feng <kai.heng.feng@canonical.com>, 
+	platform-driver-x86@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andi, Andrew, Wolfram, Oleksij,
+On Fri, Jun 21, 2024 at 2:25=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
+ wrote:
+>
+> It is not necessary to handle the Dell specific instantiation of
+> i2c_client-s for SMO88xx ACPI devices without an ACPI I2cResource
+> inside the generic i801 I2C adapter driver.
+>
+> The kernel already instantiates platform_device-s for these ACPI devices
+> and the drivers/platform/x86/dell/dell-smo8800.c driver binds to these
+> platform drivers.
+>
+> Move the i2c_client instantiation from the generic i2c-i801 driver to
+> the SMO88xx specific dell-smo8800 driver.
+>
+> Moving the i2c_client instantiation here has the following advantages:
+>
+> 1. This moves the SMO88xx ACPI device quirk handling away from the generi=
+c
+> i2c-i801 module which is loaded on all Intel x86 machines to the SMO88xx
+> specific dell-smo8800 module where it belongs.
+>
+> 2. This removes the duplication of the SMO88xx ACPI Hardware ID (HID) tab=
+le
+> between the i2c-i801 and dell-smo8800 drivers.
+>
+> 3. This allows extending the quirk handling by adding new code and relate=
+d
+> module parameters to the dell-smo8800 driver, without needing to modify
+> the i2c-i801 code.
 
-After some internal discussion we still have some questions which are
-blocking us from solving the issue.
+...
 
-On Fri, May 31, 2024 at 04:24:37PM +0200, Stefan Eichenberger wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> 
-> On our i.MX8M Mini based module we have an ADS1015 I2C ADC connected to
-> the I2C bus. The ADS1015 I2C ADC will timeout after 25ms when the I2C
-> bus is idle. The imx i2c driver will call schedule when waiting for the
-> bus to become idle after switching to master mode. When the i2c
-> controller switches to master mode it pulls SCL and SDA low, if the
-> ADS1015 I2C ADC sees this for more than 25 ms without seeing SCL
-> clocking, it will timeout and ignore all signals until the next start
-> condition occurs (SCL and SDA low). This can occur when the system load
-> is high and schedule returns after more than 25 ms.
-> 
-> This rfc tries to solve the problem by using a udelay for the first 10
-> ms before calling schedule. This reduces the chance that we will
-> reschedule. However, it is still theoretically possible for the problem
-> to occur. To properly solve the problem, we would also need to disable
-> interrupts during the transfer.
-> 
-> After some internal discussion, we see three possible solutions:
-> 1. Use udelay as shown in this rfc and also disable the interrupts
->    during the transfer. This would solve the problem but disable the
->    interrupts. Also, we would have to re-enable the interrupts if the
->    timeout is longer than 1ms (TBD).
-> 2. We use a retry mechanism in the ti-ads1015 driver. When we see a
->    timeout, we try again.
-> 3. We use the suggested solution and accept that there is an edge case
->    where the timeout can happen.
-> 
-> There may be a better way to do this, which is why this is an RFC.
-> 
-> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> ---
->  drivers/i2c/busses/i2c-imx.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 3842e527116b7..179f8367490a5 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -503,10 +503,18 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool a
->  				"<%s> I2C bus is busy\n", __func__);
->  			return -ETIMEDOUT;
->  		}
-> -		if (atomic)
-> +		if (atomic) {
->  			udelay(100);
-> -		else
-> -			schedule();
-> +		} else {
-> +			/*
-> +			 * Avoid rescheduling in the first 10 ms to avoid
-> +			 * timeouts for SMBus like devices
-> +			 */
-> +			if (time_before(jiffies, orig_jiffies + msecs_to_jiffies(10)))
-> +				udelay(10);
-> +			else
-> +				schedule();
-> +		}
->  	}
->  
->  	return 0;
-> -- 
-> 2.40.1
 
-If we want to be sure that the ADS1015 I2C ADC will never timeout, we
-would have to add a patch to disable preemption during transmission.
-This would look like this:
+> +static int smo8800_find_i801(struct device *dev, void *data)
+> +{
+> +       struct i2c_adapter *adap, **adap_ret =3D data;
+> +
+> +       adap =3D i2c_verify_adapter(dev);
+> +       if (!adap)
+> +               return 0;
+> +
+> +       if (!strstarts(adap->name, "SMBus I801 adapter"))
 
-@@ -1244,6 +1248,12 @@ static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
- 	bool is_lastmsg = false;
- 	struct imx_i2c_struct *i2c_imx = i2c_get_adapdata(adapter);
- 
-+	/* If we are in SMBus mode we need to do the transfer atomically */
-+	if (i2c_imx->smbus_mode) {
-+		preempt_disable();
-+		atomic = true;
-+	}
-+
- 	/* Start I2C transfer */
- 	result = i2c_imx_start(i2c_imx, atomic);
- 	if (result) {
-@@ -1320,6 +1330,9 @@ static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
- 	if (i2c_imx->slave)
- 		i2c_imx_slave_init(i2c_imx);
- 
-+	if (i2c_imx->smbus_mode)
-+		preempt_enable();
-+
- 	return (result < 0) ? result : num;
- }
+With the comment on the previous patch I'm wondering if it makes sense
+to have this to be as simple as strstr("I801") or strstr("I801 IDF")?
 
-However, we are aware that disabling preemption is not a good idea. So
-we were discussing how this is normally handled with SMBus devices? Is
-it just expected that SMBus devices will timeout in rare cases?
+> +               return 0;
+> +
+> +       *adap_ret =3D i2c_get_adapter(adap->nr);
+> +       return 1;
+> +}
 
-For our use case, the problem would be solved if we could get rid of the
-schedule call and replace it with a udelay. It seems that the i.MX8M
-Mini I2C controller needs a few ms to clear the IBB flag. In the
-reference manual, they write:
-> I2C bus busy bit. Indicates the status of the bus. NOTE: When I2C is
-> enabled (I2C_I2CR[IEN] = 1), it continuously polls the bus data (SDA)
-> and clock (SCL) signals to determine a Start or Stop condition. Bus is
-> idle. If a Stop signal is detected, IBB is cleared. Bus is busy. When
-> Start is detected, IBB is set.
-Unfortunately, it is not clear how often they poll. In our tests the
-issue disappeard when we used udelay instead of usleep or schedule for
-the first 10 ms.
+...
 
-Since we know we don't have a multi-master configuration, another way
-would be to not test for IBB and just start the transfer. We saw that
-other drivers use the multi-master device tree property to determine if
-multi-master is supported. Here another quote from the reference manual:
-> On a multimaster bus system, the busy bus (I2C_I2SR[IBB]) must be
-> tested to determine whether the serial bus is free.
-We assume this means it is not necessary to test for IBB if we know we
-are in a single-master configuration.
+> +       info.addr =3D (long)lis3lv02d_dmi_id->driver_data;
 
-Would either of these workarounds be acceptable, and which would be
-preferred?
+Hmm... Usually we use uintptr_t, but okay.
 
-Thanks,
-Stefan
+...
+
+> +               if (strstarts(adap->name, "SMBus I801 adapter"))
+
+A dup? Is there a possibility it may go desynchronized?
+
+--
+With Best Regards,
+Andy Shevchenko
 
