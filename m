@@ -1,83 +1,83 @@
-Return-Path: <linux-i2c+bounces-4229-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4230-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEDFC9129AA
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 17:31:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74097912A67
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 17:38:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73CFA281C31
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 15:31:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89E19B28621
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 15:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF69502BD;
-	Fri, 21 Jun 2024 15:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A09479B96;
+	Fri, 21 Jun 2024 15:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FtU7oA3p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ECXy0DgX"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A3ADDC4;
-	Fri, 21 Jun 2024 15:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F8917554;
+	Fri, 21 Jun 2024 15:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718983856; cv=none; b=O4x8Um57gFf9Wff8E695x01e29zNSEDv8FjbUrNi1Ol1+rWCMaFLE1OFXHGTvHgdsn0IgmUM6Tlm9j0wkHDg1kuTw+Z5pYVe+WE9aw4iXhVwx8n92P0PguTrIRf86BhSpV5OvbQwqgfI3qrgzS1RJygs6NjnopiKZ0w3rYxeduM=
+	t=1718984293; cv=none; b=mSk5GexIST7X+Pvipb9GZ1Nw+2Xt31Z3Bky6WCpjy/NpqBxB1Px6frFH7R1H5NhfEmkgoIP0BX+tlQSSHisHN5Gm8GKXHgZWbc10rkkEIhI+HxLwn+nmA1E4ZrSA8aNkJsk724d8Lp9mMA8bg0KEO52DbHQ9a1bwdqjnoefMVhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718983856; c=relaxed/simple;
-	bh=QAop+yWZ9ih1BC2Wd+nUobE15scTsvIQUVbqo+8zDzE=;
+	s=arc-20240116; t=1718984293; c=relaxed/simple;
+	bh=jMMrVL1rgmIwDEH0a7Oqa03pi1iQe89MfV1KSS9KNaY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PCOpvlJemTZwJdrLRR/ZYY0Q6WL7sL++Nm9k470HcDt7OGfefa+SfZVG5pE54X3KxVjK4khUV1YL79DqGBGG+gId092lNfkiC5l//YA1C8AG1IIFQgqLuGuayS84DU6yThU73NENok1mLHHAKYY86byu+EyijaW5olE+1TZSZzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FtU7oA3p; arc=none smtp.client-ip=209.85.218.49
+	 To:Cc:Content-Type; b=sxxwZQ1m1oCWZ0P3AAZrY8ccSFRC0VhyER5IsC5scpSf6Ykiyr+cYHYKHK2dtPkTIYQHxl5TGn7C6ZNKIgUyk7aQAPpZwPgNTprYuqTdMrmNp9VZWdFpGMSiuqNTQV0/0Y6+ph1/O3QjxUQP4d7z19nGjWZVizMIbFEu46jQmzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ECXy0DgX; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a6f1da33826so275439366b.0;
-        Fri, 21 Jun 2024 08:30:54 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a6ef64b092cso256512866b.1;
+        Fri, 21 Jun 2024 08:38:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718983853; x=1719588653; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718984290; x=1719589090; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4TUdLTfhiAEpx67icpjEWjmON9qGeQJf0uY5rhc4BPE=;
-        b=FtU7oA3pTAAlHN72aLOMWLc/cctsW+SLp5fhtnt3lpbDvKcRfCRX8qCnWa/byd2IpI
-         x5/nnNePZu0iavu1acgjsFPiB3MayDPLMmiUSWe77bbHfjkR5/SbST9X+4Poo2NX4KVX
-         Kd6B+dsf6Htkyy5rQvxmQ/duMIL+Qm+/uFiPtCgLMhIrVQIJRvlMG37VLV4pOJ2tHWCs
-         LPjyRWKgQonrqvFg14RJ80yFmQ3c6E+mIDXBOKGLu52JAqtwKMFMs4ozhZR5sKoqfYt7
-         3VAk982sgZnOD5/2P/4jmpcVUktAfXpfQ7NrsGG/4BPaqXtTqRzOje2Y19jlk+Oa/CMk
-         RKXw==
+        bh=ltQUr1dO5jYYGGbhW9Ya4ZQsIqGyRDxtW412nsUojBc=;
+        b=ECXy0DgX5cLDTs0RmYfYtBkOnY0eWX2JiqpEDBxVQhmfzcqsrbqcS1Ap9BODxtxTZS
+         z8Aqw4keTKS5nvd3nrwH/CBUOua4GbWkXu6wL3zLUuk+7EJ21jpdBUYzF+kQ72QRPzYz
+         USRI8Iy472WLaJVp4bzmobvkSDm8WU2BqiMsH06P3zr8k+/6P93Mq9efKiRU+LZ3qxMR
+         ZvP5gaYzwoEmlbpFuebAefi7RA4cK9ZHuXNptIa4gvEvXtay7LrSKTkW46X6IxFN3+Gx
+         S9zgfbxZSVaXnsPUDLUJufvlZWZqCKriP6Lvjs4ENHjbVe51HML5/rxGvqmry+OyXZA6
+         0Qdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718983853; x=1719588653;
+        d=1e100.net; s=20230601; t=1718984290; x=1719589090;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4TUdLTfhiAEpx67icpjEWjmON9qGeQJf0uY5rhc4BPE=;
-        b=oKDkBPw135y6NyCH+Jx+LHfLehuxnJ1vl6xl+MPsbBR8eaNDl2UE0rJRkl+/Sla3F3
-         twhlvKAqwPnFfBii9BZPgqav1mdqneqfsqIjXsumjNOlPWvrQ/tglcdSbv1v1eArkvDA
-         n0qD7yQnUAuxUElh6ZruUdv3YG5Tgq3Ze2L5AgTsI4b3S7Yly6MPttnsUrWHAPTPNz0i
-         rt7mDt2xJhrCEY5vAR2OUr9BwGCb+kXvZT48X3V8+y3yYedQBNLWfBipQOqyDtsWqkcF
-         OftaR3+5or4XG1F9zBQ+O6W5qwXUN81huM5+sxI9wrO0MLvNE/cLxr3RXB93DRDPbye3
-         FUrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxBr4VZ6VZh2jeS3il7KLQDxbNjV0ERxqlwS7oyCrrM+6GTblzx2/cwZQZE8o20jV/Ikk/pzbnNZ+4mSQTa+IcSxtEuENeQZkziLioZMu/cA1AKlLLU20TD02DOhdTxflgtZOjgiWpDiGzLUxbaQ==
-X-Gm-Message-State: AOJu0Yz5CnCb3AjEKerTidN/qhrEqkyUR7CuW6XCJ/tnvI7cD5qy9O1j
-	S5ppW6xNyW1maPaHyFk2BRJJvZ/rpE3+zl67OGnyd3nKYkaYV4btyHlpjWJlKAvZpE2Xci8qyYP
-	j4drNJ8iOIx0fCsMNUxiRYMKlpc4=
-X-Google-Smtp-Source: AGHT+IEa+5JoGUUSZAjCJbtOHjWTh/lbFKJ07LJOIn9dqocse43j6KG4lPkSFrFDCa+qXMX+6GhAcokyx2b0aBEM9KU=
-X-Received: by 2002:a17:906:1650:b0:a6f:21e8:ad06 with SMTP id
- a640c23a62f3a-a6fab62a711mr680352866b.20.1718983852771; Fri, 21 Jun 2024
- 08:30:52 -0700 (PDT)
+        bh=ltQUr1dO5jYYGGbhW9Ya4ZQsIqGyRDxtW412nsUojBc=;
+        b=q0ngmTapV48EAw/InArkAGM24BP/q9cd9r5YXA3f6bVkRPPV6TI51UuDE4GrufYdUZ
+         29MkROLbh7hspmutTdJCkpVfT4Se1vXbWCYQZA3zRv5iRCXsokKMtdAG3L0mVLhmEnQ3
+         AaBBJbqc3W47yhqZ9h0FN6qYUGU/IuyCWgOCPWNh0i8pP9AaFdoDrEFlpgmIXG1mLz6s
+         /4Y6jJX7WQtncKkriqLBD9zpdOVSStGLsN6QjfGbGMOFKRqC4vGk9WzkpYq+ykqsk4yc
+         qR+81LKX5gFYGBiFufFk3yGqOabiXerMzQXxpYtKdMuKDfnFcTbvUfvUIQQ6wcdr4GB2
+         u0IA==
+X-Forwarded-Encrypted: i=1; AJvYcCUzhCyPanH6cFG6ZrOOHnsoIpSdQBb/1Xezot5lGhFAodEIE6UM5d/L2pdHtndEy516HuMKY/dTmMm8ChDGshC039SWmq6xI1ac/22PnL+nHvCtdRwubYuj4VAehqVqqqob94HBf1lccsI+v1mPhQ==
+X-Gm-Message-State: AOJu0YyUqhbrZ8pwQm2455o9Dyoup3rHnwShQuCueXcO7wFnuT9gjmFu
+	2unTQa7yjvIQEApjhAAGDL5v5BwQp93Ls1OmUEYnb03RyDcCSGp/65LMrnj+9T4U3UAGqRVfStd
+	qMHV6DL9kEmy4Y2nQCKK7h8QR+4k=
+X-Google-Smtp-Source: AGHT+IG4cP6jEs97ecJysCiTcoac5DcXG1tFwcTAaDyNkPetKUOgAzlM9JMpHLn+zur6OfMtx/JjcIp3Q79N4cjZqm4=
+X-Received: by 2002:a17:906:2a18:b0:a6f:79e6:3518 with SMTP id
+ a640c23a62f3a-a6fab77a711mr564786866b.54.1718984289793; Fri, 21 Jun 2024
+ 08:38:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240621122503.10034-1-hdegoede@redhat.com> <20240621122503.10034-5-hdegoede@redhat.com>
-In-Reply-To: <20240621122503.10034-5-hdegoede@redhat.com>
+References: <20240621122503.10034-1-hdegoede@redhat.com> <20240621122503.10034-7-hdegoede@redhat.com>
+In-Reply-To: <20240621122503.10034-7-hdegoede@redhat.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 21 Jun 2024 17:30:16 +0200
-Message-ID: <CAHp75VdHRhC1txRfb3WrQxapOOcE0gQhpD8H-Bm=G-eakVW9FQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] platform/x86: dell-smo8800: Allow lis3lv02d
- i2c_client instantiation without IRQ
+Date: Fri, 21 Jun 2024 17:37:33 +0200
+Message-ID: <CAHp75VeSHVCKc-OvKXAQhr_euiA2bOMK0HZOnbZvnT9C=FeZGg@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] platform/x86: dell-smo8800: Add support for
+ probing for the accelerometer i2c address
 To: Hans de Goede <hdegoede@redhat.com>
 Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
 	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
@@ -92,84 +92,72 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Jun 21, 2024 at 2:26=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
  wrote:
 >
-> The Dell XPS 15 9550 can have a 60Wh battery, leaving space for a 2.5"
-> sata disk; or a 90Wh battery in which case the battery occupies the space
-> for the optional 2.5" sata disk.
+> Unfortunately the SMOxxxx ACPI device does not contain the i2c-address
+> of the accelerometer. So a DMI product-name to address mapping table
+> is used.
 >
-> On models with the 90Wh battery and thus without a 2.5" sata disk, the BI=
-OS
-> does not add an IRQ resource to the SMO8810 ACPI device.
+> At support to have the kernel probe for the i2c-address for modesl
+
+At --> Add ?
+
+models
+
+> which are not on the list.
 >
-> Make the misc-device registration and the requesting of the IRQ optional
-> and instantiate a lis3lv02d i2c_client independent of the IRQ being there=
+> The new probing code sits behind a new probe_i2c_addr module parameter,
+> which is disabled by default because probing might be dangerous.
+
+...
+
+> +/*
+> + * This is the kernel version of the single register device sanity check=
+s from
+> + * the i2c_safety_check function from lm_sensors sensor-detect script:
+
+i2c_safety_check()
+
+> + * This is meant to prevent access to 1-register-only devices,
+> + * which are designed to be accessed with SMBus receive byte and SMBus s=
+end
+> + * byte transactions (i.e. short reads and short writes) and treat SMBus
+> + * read byte as a real write followed by a read. The device detection
+> + * routines would write random values to the chip with possibly very nas=
+ty
+> + * results for the hardware. Note that this function won't catch all suc=
+h
+> + * chips, as it assumes that reads and writes relate to the same registe=
+r,
+> + * but that's the best we can do.
+> + */
+
+...
+
+> +       err =3D i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, data ^ 0x01=
 ,
-> so that the non freefall lis3lv02d functionality can still be used.
 
-non-freefall
+Is 0x01 defined already?
+Or BIT(0) ?
 
-> Note that IRQ 0 is not a valid IRQ number for platform IRQs
-> and this patch relies on that.
+> +                            I2C_SMBUS_BYTE_DATA, &smbus_data);
+> +       if (err < 0)
+> +               return err;
+> +
+> +       if (smbus_data.byte !=3D (data ^ 0x01))
+
+Ditto.
+
+> +               return 0; /* Not a 1-register-only device. */
 
 ...
 
-> +       err =3D platform_get_irq_optional(device, 0);
-> +       if (err > 0)
-> +               smo8800->irq =3D err;
-> +
-> +       if (smo8800->irq) {
+> +               dev_info(&device->dev, "Pass dell_smo8800.probe_i2c_addr=
+=3D1 on the kernel commandline to probe, this may be dangerous!\n");
 
-You can still do it in one branch less. But I think I understand the
-motivation of the split.
+command line
+...or...
+cmdline
 
-> +               err =3D misc_register(&smo8800->miscdev);
-> +               if (err) {
-> +                       dev_err(&device->dev, "failed to register misc de=
-v: %d\n", err);
-> +                       return err;
-> +               }
-> +
-> +               err =3D request_threaded_irq(smo8800->irq, smo8800_interr=
-upt_quick,
-> +                                          smo8800_interrupt_thread,
-> +                                          IRQF_TRIGGER_RISING | IRQF_ONE=
-SHOT,
-> +                                          DRIVER_NAME, smo8800);
-> +               if (err) {
-> +                       dev_err(&device->dev,
-> +                               "failed to request thread for IRQ %d: %d\=
-n",
-> +                               smo8800->irq, err);
-> +                       goto error;
-> +               }
-> +
-> +               dev_dbg(&device->dev, "device /dev/freefall registered wi=
-th IRQ %d\n",
-> +                        smo8800->irq);
->         }
-
-...
-
->  error_free_irq:
-> -       free_irq(smo8800->irq, smo8800);
-> +       if (smo8800->irq) {
-> +               free_irq(smo8800->irq, smo8800);
->  error:
-> -       misc_deregister(&smo8800->miscdev);
-> +               misc_deregister(&smo8800->miscdev);
-> +       }
-
-This is quite unusual.
-I would rather expect
-
-  label_foo:
-    if (...)
-      foo()
-  label_bar:
-    if (...)
-      bar()
-
-
---
+--=20
 With Best Regards,
 Andy Shevchenko
 
