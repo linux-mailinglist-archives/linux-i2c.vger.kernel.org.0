@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-4206-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4207-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89B5091252C
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 14:26:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE1A912532
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 14:26:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FC4F1F23089
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 12:26:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19B2B1C2178E
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 12:26:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71552152177;
-	Fri, 21 Jun 2024 12:26:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6DC15357A;
+	Fri, 21 Jun 2024 12:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O9mUBpJW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bDkbD4uy"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3B015216C
-	for <linux-i2c@vger.kernel.org>; Fri, 21 Jun 2024 12:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5227152166
+	for <linux-i2c@vger.kernel.org>; Fri, 21 Jun 2024 12:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718972789; cv=none; b=VbeVnsGntNB5L5l1JgdeETjGFXsTimhqcgnHmWBfxo1ntiz4GQuFzRZRwtgVXugib9rdBIdKHbn/2C3Nu2AHq6I/A4/cHT9oOvfdS9tTSuetqfWlvNHHwf07xovlNPuLF2XRClI2HlaUKU4ii2FZBnF6teWXo4xwLOGMxP1BQgg=
+	t=1718972794; cv=none; b=Wy1MSP4xlsmZyXFHGFiRJs8iYNiBkCG0SwPaPFevmgv1MOySjzf/2R0qGm+ub0xp7RxEqAP179DZkMouUbCAa5/F4AMYQpzSRxgZ7PeC/HpZGx8aEzVgNlTfBpUuZwyL8Sgum+LxCmlB8uPhozlmIsU8nNFSDZaTFcmw2OEXmf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718972789; c=relaxed/simple;
-	bh=GqCJUEu6HvllrEv6mt7zNui7VJwFT5x1A/AE8OsFp+I=;
+	s=arc-20240116; t=1718972794; c=relaxed/simple;
+	bh=A1l8Jhz+bDuY7N9pVlYA3yIk/SruRDs0ivBIjXPv9Dk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eghezDPy1Od9b3B0uhDmEvEN4weGsEDjN6q+d9wMnSAImTPqFIf7ceR+pdzxqYY0+w+j5uL4Tuio/QyntM5DtGPMCYKI/3rW9XpNZ5DqNeOktw/4jEe69YmLO/+nYOTqYhjrUMo40LDxalpa2PYdnFHH7H/sBX3d/OsGBmMrA9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O9mUBpJW; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=A8v3YKZ/pR7ScLgU2x8DV/hIu9uYbc0YO42ELo7ZRA/vIAmXHCyjMQ4rLaW96yF2lYano92Y0/mQRdBVNm+IcseBF/TfwszhbgkQqaI0bxIXrxF9DQTBk4OhwUS/6ozKgIOG4RZJgffSAwZurmsOTuxIO0FT9RhwZjhCokPAQ2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bDkbD4uy; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718972787;
+	s=mimecast20190719; t=1718972790;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6vIlGIjnZaRmqlGYYwh9589os9i1avVj+5PIgcozfw4=;
-	b=O9mUBpJWgxT+JsCsNuog5C774GOkoBFFEUQWMP/Fm/b1PojNr8ZGDqp/3KXAEwMw0eRshl
-	xTAOMeKVGWJXVy897MvcBo7Ud4fAQ4vOc73XLrN2UZ/nxSa+jboLE0hCyOsYpU2EeEGjbM
-	21Ys/IU5YKHI7/ASH1byAQHfc3iIeoQ=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+	bh=/CYA+8vSRT7esfgbbxqXlZIh5TtFOMmDACTrtwInIDY=;
+	b=bDkbD4uyChzmZySW5v/TAF7BcMslRm5aahn6d6avnHGWesticOCFerCBYWq4ZYyZZ9AgW0
+	5W2aySHEpGmhWnKbgrcOgsJJJ7fSzWA3k6B4OdW5+vccQNG+LCiIcW9Ap6OmIBtKNm1CUM
+	718jwpkwGSjkFsSQOa0NlNtmtq0g79c=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-217-IkT0cEbvPgCDX_HyHi4ZVg-1; Fri,
- 21 Jun 2024 08:26:19 -0400
-X-MC-Unique: IkT0cEbvPgCDX_HyHi4ZVg-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-549-HjhuZd9HMjC6EIy_xiCuNw-1; Fri,
+ 21 Jun 2024 08:26:25 -0400
+X-MC-Unique: HjhuZd9HMjC6EIy_xiCuNw-1
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 84F601955D89;
-	Fri, 21 Jun 2024 12:26:06 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7370F19373F3;
+	Fri, 21 Jun 2024 12:26:21 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.194.69])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E7965300144C;
-	Fri, 21 Jun 2024 12:25:49 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BB08D301B8DE;
+	Fri, 21 Jun 2024 12:26:05 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
@@ -71,9 +71,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Jean Delvare <jdelvare@suse.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH v3 5/6] platform/x86: dell-smo8800: Add a couple more models to dell_lis3lv02d_devices[]
-Date: Fri, 21 Jun 2024 14:25:00 +0200
-Message-ID: <20240621122503.10034-6-hdegoede@redhat.com>
+Subject: [PATCH v3 6/6] platform/x86: dell-smo8800: Add support for probing for the accelerometer i2c address
+Date: Fri, 21 Jun 2024 14:25:01 +0200
+Message-ID: <20240621122503.10034-7-hdegoede@redhat.com>
 In-Reply-To: <20240621122503.10034-1-hdegoede@redhat.com>
 References: <20240621122503.10034-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -85,58 +85,227 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Add the accelerometer address for the following laptop models
-to dell_lis3lv02d_devices[]:
+Unfortunately the SMOxxxx ACPI device does not contain the i2c-address
+of the accelerometer. So a DMI product-name to address mapping table
+is used.
 
-Dell Latitude E6330
-Dell Latitude E6430
-Dell XPS 15 9550
+At support to have the kernel probe for the i2c-address for modesl
+which are not on the list.
 
-Tested-by: Hans de Goede <hdegoede@redhat.com>
+The new probing code sits behind a new probe_i2c_addr module parameter,
+which is disabled by default because probing might be dangerous.
+
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/platform/x86/dell/dell-smo8800.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ drivers/platform/x86/dell/dell-smo8800.c | 152 ++++++++++++++++++++++-
+ 1 file changed, 147 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/platform/x86/dell/dell-smo8800.c b/drivers/platform/x86/dell/dell-smo8800.c
-index 2e49bbb569c6..4c79b2599d96 100644
+index 4c79b2599d96..d64d200e927a 100644
 --- a/drivers/platform/x86/dell/dell-smo8800.c
 +++ b/drivers/platform/x86/dell/dell-smo8800.c
-@@ -173,6 +173,20 @@ static const struct dmi_system_id smo8800_lis3lv02d_devices[] = {
- 		},
- 		.driver_data = (void *)0x29L,
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E6330"),
-+		},
-+		.driver_data = (void *)0x29L,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E6430"),
-+		},
-+		.driver_data = (void *)0x29L,
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-@@ -194,6 +208,13 @@ static const struct dmi_system_id smo8800_lis3lv02d_devices[] = {
- 		},
- 		.driver_data = (void *)0x29L,
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9550"),
-+		},
-+		.driver_data = (void *)0x29L,
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+@@ -10,6 +10,7 @@
+  */
+ 
+ #define DRIVER_NAME "smo8800"
++#define LIS3_WHO_AM_I 0x0f
+ 
+ #include <linux/device/bus.h>
+ #include <linux/dmi.h>
+@@ -25,6 +26,10 @@
+ #include <linux/uaccess.h>
+ #include <linux/workqueue.h>
+ 
++static bool probe_i2c_addr;
++module_param(probe_i2c_addr, bool, 0444);
++MODULE_PARM_DESC(probe_i2c_addr, "Probe the i801 I2C bus for the accelerometer on models where the address is unknown");
++
+ struct smo8800_device {
+ 	u32 irq;                     /* acpi device irq */
+ 	atomic_t counter;            /* count after last read */
+@@ -225,6 +230,130 @@ static const struct dmi_system_id smo8800_lis3lv02d_devices[] = {
+ 	{ }
+ };
+ 
++/*
++ * This is the kernel version of the single register device sanity checks from
++ * the i2c_safety_check function from lm_sensors sensor-detect script:
++ * This is meant to prevent access to 1-register-only devices,
++ * which are designed to be accessed with SMBus receive byte and SMBus send
++ * byte transactions (i.e. short reads and short writes) and treat SMBus
++ * read byte as a real write followed by a read. The device detection
++ * routines would write random values to the chip with possibly very nasty
++ * results for the hardware. Note that this function won't catch all such
++ * chips, as it assumes that reads and writes relate to the same register,
++ * but that's the best we can do.
++ */
++static int i2c_safety_check(struct device *dev, struct i2c_adapter *adap, u8 addr)
++{
++	union i2c_smbus_data smbus_data;
++	int err;
++	u8 data;
++
++	/*
++	 * First receive a byte from the chip, and remember it. This
++	 * also checks if there is a device at the address at all.
++	 */
++	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, 0,
++			     I2C_SMBUS_BYTE, &smbus_data);
++	if (err < 0)
++		return err;
++
++	data = smbus_data.byte;
++
++	/*
++	 * Receive a byte again; very likely to be the same for
++	 * 1-register-only devices.
++	 */
++	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, 0,
++			     I2C_SMBUS_BYTE, &smbus_data);
++	if (err < 0)
++		return err;
++
++	if (smbus_data.byte != data)
++		return 0; /* Not a 1-register-only device. */
++
++	/*
++	 * Then try a standard byte read, with a register offset equal to
++	 * the read byte; for 1-register-only device this should read
++	 * the same byte value in return.
++	 */
++	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, data,
++			     I2C_SMBUS_BYTE_DATA, &smbus_data);
++	if (err < 0)
++		return err;
++
++	if (smbus_data.byte != data)
++		return 0; /* Not a 1-register-only device. */
++
++	/*
++	 * Then try a standard byte read, with a slightly different register
++	 * offset; this should again read the register offset in return.
++	 */
++	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, data ^ 0x01,
++			     I2C_SMBUS_BYTE_DATA, &smbus_data);
++	if (err < 0)
++		return err;
++
++	if (smbus_data.byte != (data ^ 0x01))
++		return 0; /* Not a 1-register-only device. */
++
++	/*
++	 * Apparently this is a 1-register-only device, restore the original
++	 * register value and leave it alone.
++	 */
++	i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_WRITE, data,
++		       I2C_SMBUS_BYTE, NULL);
++	dev_warn(dev, "I2C safety check for address 0x%02x failed, skipping\n", addr);
++	return -ENODEV;
++}
++
++static int smo8800_detect_accel(struct smo8800_device *smo8800,
++				struct i2c_adapter *adap, u8 addr,
++				struct i2c_board_info *info, bool probe)
++{
++	union i2c_smbus_data smbus_data;
++	const char *type;
++	int err;
++
++	if (probe) {
++		dev_info(smo8800->dev, "Probing for accelerometer on address 0x%02x\n", addr);
++		err = i2c_safety_check(smo8800->dev, adap, addr);
++		if (err < 0)
++			return err;
++	}
++
++	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, LIS3_WHO_AM_I,
++			     I2C_SMBUS_BYTE_DATA, &smbus_data);
++	if (err < 0) {
++		dev_warn(smo8800->dev, "Failed to read who-am-i register: %d\n", err);
++		return err;
++	}
++
++	/* who-am-i register mappings from drivers/misc/lis3lv02d/lis3lv02d.c */
++	switch (smbus_data.byte) {
++	case 0x32:
++		type = "lis331dlh";
++		break;
++	case 0x33:
++		type = "lis2de12"; /* LIS3DC / HP3DC in drivers/misc/lis3lv02d/lis3lv02d.c */
++		break;
++	case 0x3a:
++		type = "lis3lv02dl_accel";
++		break;
++	case 0x3b:
++		type = "lis302dl";
++		break;
++	default:
++		dev_warn(smo8800->dev, "Unknown who-am-i register value 0x%02x\n",
++			 smbus_data.byte);
++		return -ENODEV;
++	}
++
++	dev_dbg(smo8800->dev, "Detected %s accelerometer on address 0x%02x\n", type, addr);
++	strscpy(info->type, "lis3lv02d", I2C_NAME_SIZE);
++	info->addr = addr;
++	return 0;
++}
++
+ static int smo8800_find_i801(struct device *dev, void *data)
+ {
+ 	struct i2c_adapter *adap, **adap_ret = data;
+@@ -247,6 +376,7 @@ static void smo8800_instantiate_i2c_client(struct work_struct *work)
+ 	const struct dmi_system_id *lis3lv02d_dmi_id;
+ 	struct i2c_board_info info = { };
+ 	struct i2c_adapter *adap = NULL;
++	int err;
+ 
+ 	if (smo8800->i2c_dev)
+ 		return;
+@@ -256,11 +386,22 @@ static void smo8800_instantiate_i2c_client(struct work_struct *work)
+ 		return;
+ 
+ 	lis3lv02d_dmi_id = dmi_first_match(smo8800_lis3lv02d_devices);
+-	if (!lis3lv02d_dmi_id)
++	if (lis3lv02d_dmi_id) {
++		info.addr = (long)lis3lv02d_dmi_id->driver_data;
++		/* Always detect the accel-type, this also checks the accel is actually there */
++		err = smo8800_detect_accel(smo8800, adap, info.addr, &info, false);
++		if (err)
++			goto out_put_adapter;
++	} else if (probe_i2c_addr) {
++		/* First try address 0x29 (most used) and then try 0x1d */
++		if (smo8800_detect_accel(smo8800, adap, 0x29, &info, true) != 0 &&
++		    smo8800_detect_accel(smo8800, adap, 0x1d, &info, true) != 0) {
++			dev_warn(smo8800->dev, "failed to probe for lis3lv02d I2C address\n");
++			goto out_put_adapter;
++		}
++	} else {
+ 		goto out_put_adapter;
+-
+-	info.addr = (long)lis3lv02d_dmi_id->driver_data;
+-	strscpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
++	}
+ 
+ 	smo8800->i2c_dev = i2c_new_client_device(adap, &info);
+ 	if (IS_ERR(smo8800->i2c_dev)) {
+@@ -357,7 +498,7 @@ static int smo8800_probe(struct platform_device *device)
+ 			 smo8800->irq);
+ 	}
+ 
+-	if (dmi_check_system(smo8800_lis3lv02d_devices)) {
++	if (dmi_check_system(smo8800_lis3lv02d_devices) || probe_i2c_addr) {
+ 		/*
+ 		 * Register i2c-bus notifier + queue initial scan for lis3lv02d
+ 		 * i2c_client instantiation.
+@@ -370,6 +511,7 @@ static int smo8800_probe(struct platform_device *device)
+ 	} else {
+ 		dev_warn(&device->dev,
+ 			 "lis3lv02d accelerometer is present on SMBus but its address is unknown, skipping registration\n");
++		dev_info(&device->dev, "Pass dell_smo8800.probe_i2c_addr=1 on the kernel commandline to probe, this may be dangerous!\n");
+ 		if (!smo8800->irq)
+ 			return -ENODEV;
+ 	}
 -- 
 2.45.1
 
