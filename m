@@ -1,56 +1,56 @@
-Return-Path: <linux-i2c+bounces-4159-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4160-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44891911A9B
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 07:46:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A748B911AA8
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 07:52:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1241281CCE
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 05:46:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D895C1C22070
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 05:52:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4678913B5B3;
-	Fri, 21 Jun 2024 05:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C56713C689;
+	Fri, 21 Jun 2024 05:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="BcHwKT8q"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="g9WFBtZJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from mout.web.de (mout.web.de [212.227.15.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A982883CD7;
-	Fri, 21 Jun 2024 05:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5883207;
+	Fri, 21 Jun 2024 05:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718948811; cv=none; b=p3yoZ/uOGgchCqFQXTSMqbxtJWfAlC9aDLvCfcV4AJUxH06/e9RJVyEk9E3bx4vRe34+mpaO9D5Jl+FMR1Dax1E4iVP2Z5bbMf1DsXWOSpBXeboteBrbz8/w5H2hCq//GJgiO6yt28S39vlBr0oUzxoJYK8fEjWs7IdIogI9WPE=
+	t=1718949164; cv=none; b=am6WMuOe0Mmv/PHkONZaqR4eY8Q35EHn+l9XhQlcR45D3pg1ED2uUJnzq4Nsf0nX3J3s2ctsTxk+VuBWZ8Y1I9sHNh8Q3C9cs6zPUx0yQrk2N05Mb4dkQDVqbyocto1MUlQQ1/pXqqV/uEBpacRE1qlKhVz9vygEM4fNkCPRUU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718948811; c=relaxed/simple;
-	bh=kkYqZYijKZreQC7isvDQVtuAI4cUP9+RI5g70SolPKQ=;
+	s=arc-20240116; t=1718949164; c=relaxed/simple;
+	bh=B/FtBrdM0MhQsIGzDSXhE0531n+bBkbvzx6WIgFpcl4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=t11XRK/jGDQsZeoS4LycVk6cKD/UZSoXl6eBjWwYc7PPvzttgbIqotHjpKuLAEcJH+MhKzLEVIR+3dwlTayoYDqo3VRjK26Iuy1ik9efD+a1fFzd0JrtAz6rOcKKI/mBiLVMp9HDt92GQ2J4TL+UEzTqdxQ43YOoBzqO+ojaRAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=BcHwKT8q; arc=none smtp.client-ip=212.227.15.14
+	 In-Reply-To:Content-Type; b=WF5dh5mhoERM/ShgLyO8maIbFDy93rbAGIiD5ixNvwJo9S4gV/8Pg/02WRT1RBbOywVONjiOfCxb4zzliOLfwctkgHtXYhiiZJzIbuYgf2/m4OU8Bkfl2Apz8mz+OR++ShzAO3lhOuUKfpaFIXllLGoF8gCPdSkya8zuB1IROUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=g9WFBtZJ; arc=none smtp.client-ip=212.227.15.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1718948759; x=1719553559; i=markus.elfring@web.de;
-	bh=kkYqZYijKZreQC7isvDQVtuAI4cUP9+RI5g70SolPKQ=;
+	s=s29768273; t=1718949090; x=1719553890; i=markus.elfring@web.de;
+	bh=B/FtBrdM0MhQsIGzDSXhE0531n+bBkbvzx6WIgFpcl4=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
 	 References:Cc:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=BcHwKT8qczQBUZmomUv0AM6QnX97SDGgPlBDIVTabydiiO2YNuvLTi0vxybiHhtx
-	 6ooiz0LklK63jJ12sUOR41eTFnHJ29i6E8dwPItmoNQ8eJ85122eKDwij4wJDHN7E
-	 jyhyIJVk1GiWjQyvMjc4L2HZ9tAkI56L1V1w9BsPe0Q4wpW9+gOOMaaqgQfI1/EfQ
-	 bL4WzQetE6FwBgkj0JRIkCdRabXU5Yl9TdVjHesjkqim7Er/RNbJyQ9UcnggovU/c
-	 jyo4VWLQUVqaDTF9GjRZ7doK/FlD0NXDCi2Nl/YD2mc268HvX7Rf/6BG240vgSaxa
-	 hJ2hXVSkzKRX78qM9Q==
+	b=g9WFBtZJ6jlB7Xhm4LApEB33Lek0861qyFNqPb11SiEuEbAqlDQlxKGJ5LkLcnKc
+	 BLrvnBx5OAZfeh7r05oZsGab+pZ3zwUw4URvK5pCKhai8AwyJ+I/pjcANj2N0e0Ok
+	 Mkmv5/vIM+W39FeC0LdnMz95DnOVdsSFEQ+vZOZ9m7d1f1aLUhBTEz2FlVHJ+Msge
+	 F2abgY6fqjIjiJCuN8Xjwe9BEutZDXssCtL8EMyIa8rMKy/KVuzTLEbV1DW2YCUKl
+	 jfdAXFHp5JAi+4+MgmH6z/bfnkBLFFTvtuXHYcrAekFxHSUZpK4NhTH0MVAPA7ATR
+	 7Ouc4OrP0NrGubXFlQ==
 X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MyvB8-1sYT6j1kTS-016cfq; Fri, 21
- Jun 2024 07:45:59 +0200
-Message-ID: <4b368817-11ba-4d6d-9a46-59bee8406ee7@web.de>
-Date: Fri, 21 Jun 2024 07:45:57 +0200
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MQPdl-1ryJTH0wtN-00XZsv; Fri, 21
+ Jun 2024 07:51:30 +0200
+Message-ID: <62a564df-e78f-470b-a1b3-2e49b6c05395@web.de>
+Date: Fri, 21 Jun 2024 07:51:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,8 +58,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch v4 05/10] clk: lpc32xx: initialize regmap using parent
- syscon
+Subject: Re: [Patch v4 06/10] dmaengine: Add dma router for pl08x in LPC32XX
+ SoC
 To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
  Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -71,45 +71,49 @@ To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
  Miquel Raynal <miquel.raynal@bootlin.com>,
  Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
  Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Arnd Bergmann <arnd@arndb.de>, Yangtao Li <frank.li@vivo.com>,
- Li Zetao <lizetao1@huawei.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Chancel Liu <chancel.liu@nxp.com>, dmaengine@vger.kernel.org,
+ Yangtao Li <frank.li@vivo.com>, Arnd Bergmann <arnd@arndb.de>,
+ Li Zetao <lizetao1@huawei.com>, Chancel Liu <chancel.liu@nxp.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, dmaengine@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
  linux-sound@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org
 References: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
- <20240620175657.358273-6-piotr.wojtaszczyk@timesys.com>
+ <20240620175657.358273-7-piotr.wojtaszczyk@timesys.com>
 Content-Language: en-GB
 Cc: LKML <linux-kernel@vger.kernel.org>
 From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240620175657.358273-6-piotr.wojtaszczyk@timesys.com>
+In-Reply-To: <20240620175657.358273-7-piotr.wojtaszczyk@timesys.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:/HnPeG1IAMU/Df3lJw189pApwGB8C6p6sxQOjGGDgYaEXEYX3rR
- 1fzF6oMG/oC3y4WJ7MEJ4TBAKQIyhyJR9kLS1DmPUSeNWoeRLiHOx6XiA4dc3aykL6q8xK8
- ppHVp27GOpJ/Bs+b4hwtsFX07S22yoUi7Yykat+/2SOia9gZAP0dOgdRdMUjNp+ybmCNrse
- f6I1C/okSjZJiM9p46NnQ==
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:bPaZvoxzJ/h40pvO52zJQM/EXwvqLuVGmwbJlhznsZdSb7+5vV9
+ ivg/UFZwjDfRawbpm6w0wCBUaQyp9SJcyDqFrot02cTYmewtQVP7vrWLKc5MV0m8Yvuzqml
+ 3MMYaa56tKHofEPv+LYWJE+ygSMZ+e5P2grD4YKSoPHdjNrcG5SnDh1+y4SlXyeVzIcF9Y6
+ 7Ufmk6v6MTeNw2cuMzL1w==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:RZzKrzeMnoA=;3Xr8mLJNU5K+f3Yl83BIysqGVe0
- 4rpRYhraZfI1bck68O03DyDm4Cg0Ralh0kzhMQ7XEn/NHb22XhOO/qEek+tkZj9AymaCo5rlw
- bSKPoi1i/ladDc5kcnxbIKRRmcQGzYb4SSgAVMqhYt/qj/PBeAEk81mo2AOh/48zJcgz+wqoi
- MPAi/oqcMFuSKBk+mdhb2o9DXXDBjHLdAU3Yav7jWcUVm9sv3UXQg5rkBV+K14j45sxBBfCgj
- BF0eH/zDH8oj6G819SSeDhWuOAk+DOSqO7rbNv2Qt7c+GSAO2UYlxSB/Rjlnk6hp8CJKsxJLN
- TYBNewFaMSiY6DlviClA4CjSyDZabDzR2UfartoiCxpy0CsdpCAwUZZ7+/W/nRM4IPTPBuXVq
- DZOPeZX3tdo2dEw49H4cW1veaubeQCNBos2daRlftqwTo/+d6d4aoQtD0rHTwlsvcd0g6RObu
- 37Jmd3rYX0642LHQoEDxlMQ9ZVSJCkdNf19a7al0wniU1zydyKkNOG7JOzZoS5qXb+WREAufY
- QKToA9R0LG4Ix6eTpjodQq1tzUl7rLtW1asXsu4MO6VZ+MSTWdYTmapSC2TD9GmScTYm+lZwY
- 5gpJpFwGpIL0viYTOu0iXtFgTO0Lpw2eVrKsKPMkDP++IbWbuu4VOrvp/t8bgavYXXMUu4T6N
- /6VsHf5yFd4+pm1faTJC+gQmyIZzRN78+tAQwW4DfScDwIVbbvlXUxZShAa6XFjM4//+SobX1
- GbjpiRCVpeFw+GzVaX7nD6J9JYgj6Gh8vBIsAD0+ZwHk6nmmTdIMTVYTFwx3FvFnzFu1tSMhy
- 9FKVb+6gaSPCl/M1gSvlML1hIN3Q3IKlJwNFX4wmTfG34=
+UI-OutboundReport: notjunk:1;M01:P0:UuJ6HPlnuco=;b+auAotmGPrPfJRrtNoxICqpvzR
+ pKZtILPKcz2H6Q3tjierCqUY1bw3iXANbljk6kGRZQ8Ir2J+sNZeAoqtxl3Ol0bMTRtSR+4A5
+ R+79tcqE/AFMIX8Tj1+dTIq7iGX7H4Z/u4Wn+kGkiczsJT8uP+YBDZA8XWHHbBvTsgBvIgd/M
+ t9dbgwBnBviEkn54bA4PV6n6FJWZ2Y4y+qtNc/0yhyMsZfG7v0588p63zWHDOl0BeqabSRk0R
+ iSEF/OpLj1jUM9QoM53KVYIxp38zUjrP0FNRW9Bg99ZVq+9y4Cm4pt4oIst1Zi6lZ24WYkyvF
+ BbLoTfMQq5eSvbcruXX4b4W4yMHhw5+LoDEdfBn/pTE++mjkuh4AWG5xEAjppkayQT5jEk7+e
+ yfcqBPTlRwvN6YwtV8y0qh3+k0GcUhaS/rk5Zy7282DcKttFw8dGIzfia8vte2yv9T+KDpp7x
+ ZoVyYf4Iic/IeCnBZg6D0yD+WT406j6qhg495/RmOh3i+X08miyIXWRWAtUxvD+Z2q98HXkGZ
+ OnDeEaI4pDSADbegqEszNfdwJ/7SJuW4t99TgT5m1p647pYuyGNkeHX71fk1jCeF/cva/8v4g
+ TaikQTpWxd8OrwGHTigbYnrR3Vlnp1LmtBfdQRH8Cw/GcZVyr+9cvXVDmQondRXAg7T013/yY
+ IUdhxPtFPZpkDp9Ex3fUOe4K5g0Yvq38AyBxinSmvccQ0O9581SX9FEcl6oyvQFs6TqaswsiA
+ v9A67FvaC4G/xzhDWdxVjzSCMCp7GXb3ZVKMN2KLd4wMMcDjDQRJ1S4hyog0GLC1LbvrxWaTj
+ pBtdYg/1eB+cdDSUEzEgIwCtPrPRwhWBwKvX/wkLonUvM=
 
-> This allows to share the regmap with other simple-mfd devices like
-> nxp,lpc32xx-dmamux
+=E2=80=A6
+> this driver allows to route a signal request line thru the multiplexer f=
+or
+> given peripheral.
 
-Please choose an imperative wording for an improved change description.
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.10-rc4#n94
+Would you like to choose an imperative wording for an improved change desc=
+ription?
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.10-rc4#n94
 
 Regards,
 Markus
