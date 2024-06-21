@@ -1,84 +1,134 @@
-Return-Path: <linux-i2c+bounces-4234-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4235-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C1B1912B02
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 18:12:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6B8A912C67
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 19:24:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21AAD287CC9
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 16:12:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02DB91C239FA
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 17:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8628F15FCE7;
-	Fri, 21 Jun 2024 16:12:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328931607B0;
+	Fri, 21 Jun 2024 17:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="CtUxue4e"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="vshZ12n4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F09F15FA65;
-	Fri, 21 Jun 2024 16:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AAC15D1;
+	Fri, 21 Jun 2024 17:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718986321; cv=none; b=PPWlOrPtdGeRqx4YV9zvI5hO060TJqwBjzpw/qRqg3Ti0KTlo+mgQyWQCC3j2f3fYidFRnM6KdpE9R6NJT3rpoCbWDQIET/kNJUjs0/gZefZEV9eD09Kl8kDzryVV3p8Fu0d4vUB+gvP0igABimTbTW1nC5cR0INkbLzr9Fmaoo=
+	t=1718990680; cv=none; b=B+V2wuoifhNIA/gAVrLqTQXMvW+hQWrZvjVHhM/9yQhI7AJTwesErzr2woD6wI96RN3mYFVLPfhAFZeM7epnrwfWtyRBdPljae49uLV7SCTF3gD5iEbhyxPUp0ADONmu4K1kdrLX55wHiDmwP1fFFALwIYPg77rMlLspdH6bUvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718986321; c=relaxed/simple;
-	bh=QvvDuDvbrukcLrOcjyh23EIIArxuyK9vhuF4A8WlSrc=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=R0CHh2PcwZBbX3SEsBJcWx4vPozB4L7cWa40toQeJFUR47t2fr8d40LYqp+9KxykqD5lMsO+hhbr6PA2x4FJ1isQntEkBIJd6lEmHmOg4BcCyBQWxYwomCD/pVoTvw3yYs4tpoCyYR6O2e0qkzwLr11e+L/x0z86CMdkARfk72s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=CtUxue4e; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.49.54] (c-73-118-245-227.hsd1.wa.comcast.net [73.118.245.227])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 8E38F20B7001;
-	Fri, 21 Jun 2024 09:11:59 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8E38F20B7001
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1718986319;
-	bh=EEiubN4IPYExst72rrOF1HBGfkUSySKf4nywX7nKgeg=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=CtUxue4e7A1g6TqPGMOO/KmQSaiIWobdlVVvGNa5CP+jrnUrohn1NAKNugUjOeEyk
-	 KSarcF8KDIktkvO/jXl5NXKj2+IdSVIBaajjQDw0DBPhygKNhH23VDAPf2WHA7nbpl
-	 /2JobM3nEhvMBRejxbWeXJQCUF0xr0zofuW6mShg=
-Message-ID: <ca2c671f-3e38-47ac-a96e-50ce776a3500@linux.microsoft.com>
-Date: Fri, 21 Jun 2024 09:11:59 -0700
+	s=arc-20240116; t=1718990680; c=relaxed/simple;
+	bh=BM3bDxKDGPmpPEKXjkEVhF9bTkX6yqKKTMfom9A1jjI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RJ3uHFzzp9KQYru3eT1WBhmBcGjBCZTXThF2ClQIywPJguo613EZ5p3QYlY/MUWw/T70gW5c5+J1GhkyvslbsDgIwmnV8q/tOzoJDQKWmGF8tbJ1IMIpz+ObmjLzgUEeYM57RISIX7A2TbNchgrk+d5Z8SIB/lKiRQR34JA18HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=vshZ12n4; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 21E5B207FD;
+	Fri, 21 Jun 2024 19:24:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1718990667;
+	bh=Fl+iPeAvxTiHF6A13dl6jLHuoX82uG52hv+zvo4/1eA=; h=From:To:Subject;
+	b=vshZ12n4/Ge4zRe7wHkrs8ulu3+HCMZnhuejxfioEELy3kOaKYhVd1E3OO1cuKVy/
+	 +7EULopnvXbzKf7DLJT6ZHjxGYZlnXhYrZDNtJNsuC6z/G8mXoyUe4IcVSjIIuKEBl
+	 Y3BgQtqc9VKaOjPxTLUq14HBlTkIT62iadTgxJ5cQE2j5VGmAxnXifsWbF4fFjbk4a
+	 NLDuvaeVbNLHO2Pvjui8xu/2Uu4XzX6ovmVlXo3Usep0YdOGSc+yJfdT4iCLsvzZO7
+	 M5MAHdZKK5yHyrN1hj0xgWrzGH+L+ixSAXWxY8go1SEJ7D3qXcZ4cSOWl23V+PSEiC
+	 pQj+sI2coAChg==
+Date: Fri, 21 Jun 2024 19:24:21 +0200
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Stefan Eichenberger <eichest@gmail.com>
+Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, andi.shyti@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+	jic23@kernel.org, lars@metafoo.de, nuno.sa@analog.com,
+	andriy.shevchenko@linux.intel.com, marcelo.schmitt@analog.com,
+	gnstark@salutedevices.com, francesco.dolcini@toradex.com,
+	wsa+renesas@sang-engineering.com, andrew@lunn.ch,
+	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Subject: Re: [RFC PATCH] i2c: imx: avoid rescheduling when waiting for bus
+ not busy
+Message-ID: <20240621172421.GA11258@francesco-nb>
+References: <20240531142437.74831-1-eichest@gmail.com>
+ <ZnWaxtfgmLk3SplP@eichest-laptop>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: eahariha@linux.microsoft.com, Andi Shyti <andi.shyti@kernel.org>,
- linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 6/6] docs: i2c: summary: be clearer with
- 'controller/target' and 'adapter/client' pairs
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- linux-kernel@vger.kernel.org
-References: <20240621073015.5443-1-wsa+renesas@sang-engineering.com>
- <20240621073015.5443-7-wsa+renesas@sang-engineering.com>
-Content-Language: en-US
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-In-Reply-To: <20240621073015.5443-7-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZnWaxtfgmLk3SplP@eichest-laptop>
 
-On 6/21/2024 12:30 AM, Wolfram Sang wrote:
-> This not only includes rewording, but also where to put which emphasis
-> on terms in this document.
+Hello Stefan,
+
+On Fri, Jun 21, 2024 at 05:22:46PM +0200, Stefan Eichenberger wrote:
+> Hi Andi, Andrew, Wolfram, Oleksij,
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  Documentation/i2c/summary.rst | 41 ++++++++++++++++++++---------------
->  1 file changed, 24 insertions(+), 17 deletions(-)
+> After some internal discussion we still have some questions which are
+> blocking us from solving the issue.
 > 
-> diff --git a/Documentation/i2c/summary.rst b/Documentation/i2c/summary.rst
-> index ff8bda32b9c3..579a1c7df200 100644
-> --- a/Documentation/i2c/summary.rst
-> +++ b/Documentation/i2c/summary.rst
-> @@ -31,9 +31,7 @@ implement all the common SMBus protocol semantics or messages.
+> On Fri, May 31, 2024 at 04:24:37PM +0200, Stefan Eichenberger wrote:
+> > From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> > 
+> > On our i.MX8M Mini based module we have an ADS1015 I2C ADC connected to
+> > the I2C bus. The ADS1015 I2C ADC will timeout after 25ms when the I2C
+> > bus is idle. The imx i2c driver will call schedule when waiting for the
+> > bus to become idle after switching to master mode. When the i2c
+> > controller switches to master mode it pulls SCL and SDA low, if the
+> > ADS1015 I2C ADC sees this for more than 25 ms without seeing SCL
+> > clocking, it will timeout and ignore all signals until the next start
+> > condition occurs (SCL and SDA low). This can occur when the system load
+> > is high and schedule returns after more than 25 ms.
+> > 
+> > This rfc tries to solve the problem by using a udelay for the first 10
+> > ms before calling schedule. This reduces the chance that we will
+> > reschedule. However, it is still theoretically possible for the problem
+> > to occur. To properly solve the problem, we would also need to disable
+> > interrupts during the transfer.
+> > 
+> > After some internal discussion, we see three possible solutions:
+> > 1. Use udelay as shown in this rfc and also disable the interrupts
+> >    during the transfer. This would solve the problem but disable the
+> >    interrupts. Also, we would have to re-enable the interrupts if the
+> >    timeout is longer than 1ms (TBD).
+> > 2. We use a retry mechanism in the ti-ads1015 driver. When we see a
+> >    timeout, we try again.
+> > 3. We use the suggested solution and accept that there is an edge case
+> >    where the timeout can happen.
+> > 
+> > There may be a better way to do this, which is why this is an RFC.
+> > 
+> > Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> > ---
 
-Looks good to me. Thanks for the patience and the update!
+...
 
-Reviewed-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+> > On a multimaster bus system, the busy bus (I2C_I2SR[IBB]) must be
+> > tested to determine whether the serial bus is free.
+> We assume this means it is not necessary to test for IBB if we know we
+> are in a single-master configuration.
+
+To me this is a very interesting option. If we can confirm that this
+busy-wait-loop is not required when we have a single master
+configuration we can just solve the issue in a clean way.
+
+And once the driver knows if it is multi-master mode or not we can also
+get rid of the EAGAIN that does not make any sense with single-master.
+There was an old discussion with some great contribution from Oleksij on
+this topic.
+
+Francesco
+
 
