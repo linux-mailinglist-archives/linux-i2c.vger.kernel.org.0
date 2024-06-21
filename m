@@ -1,140 +1,104 @@
-Return-Path: <linux-i2c+bounces-4192-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4193-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA7FF91237B
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 13:27:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FA439123C1
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 13:36:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2F273B24E38
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 11:27:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8028A1C25333
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Jun 2024 11:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C9317B43C;
-	Fri, 21 Jun 2024 11:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6740B17278D;
+	Fri, 21 Jun 2024 11:36:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="e8GGMkk+"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="lNDoFqPM"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4196B17B43D
-	for <linux-i2c@vger.kernel.org>; Fri, 21 Jun 2024 11:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE48E135A65
+	for <linux-i2c@vger.kernel.org>; Fri, 21 Jun 2024 11:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718969024; cv=none; b=T1NRJGGaMqmb9hx4jxTZrEnH+hla/yd6iMztUKNCpOYgPEi9ZeYZd1XFoMhbMTpGOhKTDuuFQFN/Ar0bnpWKYdJ3T2MTj2OWe7WpQYLCWAr7Twz235kGaMP2Becsa7u0/QN59GNyS72OlnkexA3zeWYAxRCVikgkt6gh+oqJdWw=
+	t=1718969788; cv=none; b=tHUOPe9XafUgsz+Y2QFp2MRbGXt2FpQ0HTvIgkliyJxTQQW47v5ALagSMsVsI4hydV5qhSX/g8CVaVmk89RRvYc+CplGkGbEnzVs87ESlNY2SapGkCaFbQQM5ThmGuVJqiEl9UuisZSTVmjlJKkoONn2IHTJ958Vzf1+IlLhou4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718969024; c=relaxed/simple;
-	bh=n02VnI1z3Lo/vCVvdYX3gNJ/na1w3LKQu6cqOd+GMII=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cxMqy4NeIH81GQZUu5Vz6YgiaibWDztA5S4tUgkuoZD4BDdaGvL9cOg4P9nwKYspe+3UtEqkE4ikpwdqUUurke31V4cNbHXJ+Cyp745VV8mRrmOO4JLKWgRQh0M+PWbg/cuOORjB87f658YA0uUJ4q6orzzBbP0My02nRHWGUE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=e8GGMkk+; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a6f1da33826so239062166b.0
-        for <linux-i2c@vger.kernel.org>; Fri, 21 Jun 2024 04:23:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1718969021; x=1719573821; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=veIrjSKIW0msyP1BPKwCOv7rRYyO3ebgm2ScapHwacw=;
-        b=e8GGMkk+MEXMMx8ecWdrmUcnfitLVwhwuDlqjvGYpUyGhaWvRXyN5hdsYkLxR7tuV1
-         IuxOuTN7n8C/W6q8+nERUdyT7V/jcGADm4gRzAneS+IkzEAxyJSSciw2rwOxAi3LmpzY
-         ajVubbLI+apSF3iG7ocIzwYsbcVXO9EB1er0xxTY/3JmfhNZQYeGC5yEUZGQJffmVGI4
-         3Ymvez3WGcJ1juZQ0TVoJI/ywBLAmc508wv2kQE0naQuF1ni/bTnnCRYx+NcpnGHaHj6
-         AlqSrHwEmsKSxrXxk+caxlBNtZAO8qJPJgJL5mKPq9kypOiiK7xqbY2H5MVCSy43L9NN
-         cOaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718969021; x=1719573821;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=veIrjSKIW0msyP1BPKwCOv7rRYyO3ebgm2ScapHwacw=;
-        b=Fwrli7b/UtaOHHpnFvqCUpnoQfM9qEtIvFuVrrJvApmvcatlmNqZoDmKMvy7hb7BrM
-         8G4Pfhlj370niLuwl75l+YQc7rN2kcHaDsiVlfZIp8SrqSiu8kHbCLh9cVuZoskbKp1f
-         iRjIAoVpTHizstus6kt22RK8VZKS6vdxglcP7E6ZLhR5Kaca2kAl+6Nb/quCyL3ppy0f
-         0d0oOdgSiJQHqAR6SMffUx8ZoGDAbl6sVnZadKuyPNBrYs50YHYG5VOnsgQ6yRFgR9s7
-         wHWoEO/NbFEEI3619lOMevUVI/Bq1g9p4nRWHWF6CT6WHuXFpEY4K9MxUjmEdeq8uqTP
-         Sl7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVATWq4Zowraea/XDoqTJLMHDDYTkBJkyjwCrZKOgnQc5EBY0dHLKqHmwMuUWPoeGjx4Aqoc7oqtD9bZ4tpqGPUb4U2mupzxkUZ
-X-Gm-Message-State: AOJu0YzQgECQTp1rMWj31Bx4/Ou9ua74p0RgyTaktUo+QTXz1wJd7C5L
-	d9TRns4XPprT4iwwOIbZabN2Nk68aYMYtv8opK98ZR6afpL0cIOecef+efhmLqa7XnO2SNCifzG
-	Y
-X-Google-Smtp-Source: AGHT+IEEH1uXQ9SWBQpZ3LT5PHwfn4wvDC947Dj2o3fom2F9AP5MXqF9KQPaa6c5ngH5rqOd6vpGow==
-X-Received: by 2002:a17:907:ca1b:b0:a63:49d3:e1c5 with SMTP id a640c23a62f3a-a6fab7d6a8emr476914666b.64.1718969021696;
-        Fri, 21 Jun 2024 04:23:41 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.70])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fd0838345sm64498466b.99.2024.06.21.04.23.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 04:23:41 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: chris.brandt@renesas.com,
-	andi.shyti@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	geert+renesas@glider.be,
-	magnus.damm@gmail.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	p.zabel@pengutronix.de,
-	wsa+renesas@sang-engineering.com
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH 12/12] arm64: dts: renesas: rzg3s-smarc-som: Enable i2c1 node
-Date: Fri, 21 Jun 2024 14:23:03 +0300
-Message-Id: <20240621112303.1607621-13-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240621112303.1607621-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240621112303.1607621-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1718969788; c=relaxed/simple;
+	bh=2AWdgNEjp/ZhWXNtkjNDFWPjysgoqMKMuu3u70xNsKk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b9/1b8d2U5rC/VFyOWvgGOWeSaMcJ4zsfT5VBZ2wABbz08gTZYsUd85tAl7Z/dlKhDhEIt7VLTgzHjAZub7OFO/RCY7o7HYNlZk5oumEDlS4KFYqLjQThA43Ziv+9cKl3WW71vGxF+UHqFjuMU7+7gXqRj66uATYeT85rxt8vVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=lNDoFqPM; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=2AWd
+	gNEjp/ZhWXNtkjNDFWPjysgoqMKMuu3u70xNsKk=; b=lNDoFqPMDD7KS3rnYEe2
+	lQjLQY9fCdB+KlA1ECQlmHNLysSFcIHQp9uX9zjjyKpM361M08Xr8rXVojzF+MLb
+	VcbPkBugSNLjNBjeN6XBUtXGv0+4AlZuRbmqTL15UyrknM3fiuaeKftQDlo8ddWK
+	1GruKsDh+2fbqrCH9qymHIu8YR5xWf8J/BKGb8y3HOUmenpEWBbIqHa0UNQXQaE5
+	VktqsUz3pFli4RySNMkFYFYAhmvVeUunPPIfOUiASdnwv+ROBo+sTpwyvV/CkOjE
+	4YfbKpyRlmPbs2ELB7LY0Hv30NLi2kxsSLSkuB+p/IN4eVe60FXsAh67Z53e3YM3
+	Rg==
+Received: (qmail 1356317 invoked from network); 21 Jun 2024 13:36:19 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Jun 2024 13:36:19 +0200
+X-UD-Smtp-Session: l3s3148p1@2gMY12QbRu0gAwDPXzjQABqqX1QYyOSW
+Date: Fri, 21 Jun 2024 13:36:19 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/1] i2c: Add nop fwnode operations
+Message-ID: <27irngtdi3bjhocwjrgw4etg6ieg5fq2g4bgkuyzxhedebvh2r@rlol5d7osyax>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, linux-i2c@vger.kernel.org
+References: <20240614081418.2506288-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="grhjjdyvvuwolhei"
+Content-Disposition: inline
+In-Reply-To: <20240614081418.2506288-1-sakari.ailus@linux.intel.com>
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Enable i2c1 node.
+--grhjjdyvvuwolhei
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
- arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+On Fri, Jun 14, 2024 at 11:14:18AM GMT, Sakari Ailus wrote:
+> Add nop variants of i2c_find_device_by_fwnode(),
+> i2c_find_adapter_by_fwnode() and i2c_get_adapter_by_fwnode() for use
+> without CONFIG_I2C.
+>=20
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-diff --git a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-index 8a3d302f1535..21bfa4e03972 100644
---- a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-+++ b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-@@ -32,6 +32,7 @@ / {
- 	compatible = "renesas,rzg3s-smarcm", "renesas,r9a08g045s33", "renesas,r9a08g045";
- 
- 	aliases {
-+		i2c1 = &i2c1;
- 		mmc0 = &sdhi0;
- #if SW_CONFIG3 == SW_OFF
- 		mmc2 = &sdhi2;
-@@ -150,6 +151,10 @@ &extal_clk {
- 	clock-frequency = <24000000>;
- };
- 
-+&i2c1 {
-+	status = "okay";
-+};
-+
- #if SW_CONFIG2 == SW_ON
- /* SD0 slot */
- &sdhi0 {
--- 
-2.39.2
+Applied to for-current, thanks!
 
+
+--grhjjdyvvuwolhei
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZ1Za8ACgkQFA3kzBSg
+KbbjnxAAi7iKDfPtS70No8yqIFpuuLNNIApAh3EJUacoJumoTDAM0QhaO4ht9b1t
+S1xDzx+QcfUURi3C2+CkF27rNZg74bjkmsHPO+2ueKrXw1WBBPcJMJfHKPr098o0
+HZFOeRkZEWhbWIUr8HyhCR7SoqxXkCSQaapXhqgCj+tg3SpypU5osCp0Srwm3B/F
+IqSZ+uoSD88vA6EZX710tEkBij6MHO4onzQY7hw+1K7pusc+lFHc0u5k9yeUy8Ow
+Xlqcc2zlTEMF+mLlHyqzEkPBMCMmyQH1R2vo+WZtCJr6pvcj5CeMNCzktMIJhOVR
+A7GVIJsTMrGMFGkUfp92LEjYqNcbIwUIuPJEoabI4tOIpbTjImQDG2Q9ag9EwLBm
+kOO1QiJpi7GLnEFCX9d+T0+bjdokbWohOO8ipVebcH42sw5t5phhaTGAbEmqtbHO
+rFS0avGvJB1x1t1tNUe4UP99pI2whIm5H9ekAoKkbhfq7M9wOPOU0gCqEzLWoCf3
+YPUpWNN3bEm00WSknHunfqflCtl0BzVG6jsIzpWCZkPSkKeS6IAAB2SpQ7h0/Gfs
+pNA/dktWvhGEoAEif/DPP39WbV2Liavf3us02tuVjSp60de9b8JtTViHf+iveF5i
+GHjtQ6H8OtEkzKDxAIGbrX/qxdjYXx58qljjNrTckVVIdjx+qTo=
+=b86l
+-----END PGP SIGNATURE-----
+
+--grhjjdyvvuwolhei--
 
