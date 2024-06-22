@@ -1,85 +1,85 @@
-Return-Path: <linux-i2c+bounces-4267-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4269-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BB129136B0
-	for <lists+linux-i2c@lfdr.de>; Sun, 23 Jun 2024 00:44:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 220999136C5
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Jun 2024 00:50:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CAB31C20C01
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jun 2024 22:44:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC2DB1F2269C
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jun 2024 22:50:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46EEF77A1E;
-	Sat, 22 Jun 2024 22:43:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF24056458;
+	Sat, 22 Jun 2024 22:50:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eSG7KBLC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DeE2p2vK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761D4629E4;
-	Sat, 22 Jun 2024 22:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6414D524;
+	Sat, 22 Jun 2024 22:50:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719096238; cv=none; b=pAmqAH0chCFQLPbdeTmZLr83KKeyzA5NiMVe/dVWqfMLLAs/B9H7TIC8EqNgkVEi4Ykvo987MWNT3ZbMOqZRPYjZ+zXlR4gA97gxFBhXS1nEYmvcVGI1Tc37dJeD8MdT6PcyOW4GOL73v2tRPKseDwbPUcpGVJq08nNBxFqa734=
+	t=1719096647; cv=none; b=uzZjshx5QYUQHAT9Z0v5Xv+5CroBgY8MYGc6Tib1mmhaJ5jGPAvxzItlsV8sHT2mT8u3pKQdyjU29DplA1jMk+z+/eo7BfiKNm/MGQDOqUecbZsm7ty2aLkpCroV2GbEZVV3n5t8kYbKV4OHQdEOr+ICyDQwVyC0Cmd9VRi6SOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719096238; c=relaxed/simple;
-	bh=cPqWY7xCNRchFC9ZKbfO5GFZRJ+alulxGrKML0JOE0c=;
+	s=arc-20240116; t=1719096647; c=relaxed/simple;
+	bh=B2m3LP+Y+ePM15jnmHfY7MEsmC/Z4ycQS/bp52qHAG4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E5ChsLO28fF5ViisGVD3Rzil9kfWONUUt3KdtoGd3nyNzm1N2xHFlmh/v2GA5z2ZjYh/WF54prWfKJpLL0QWBDn9COpMrtSowRLSbsb3eaC2HmwpEVNV01YOlnJ6a3AmKNI/uijSHrwH2bqb3TNRLb59CPmrxJfwp1VA6hG3/Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eSG7KBLC; arc=none smtp.client-ip=209.85.167.51
+	 To:Cc:Content-Type; b=HvgKeqa8ziG8Evc7g6JDtVujNhxw+OQRaIVC9Qhf4ufsppGGqTMwTYZ+I0ocYzsfDRlBOWE7kcWCHP3c72EpxYC3NNI3UBRlUto6L69BqVlRwPjG2ouORHiJChzmryNeLZsX2vD6wbye58NaOfr52/2UbMQCZBcyL0F8KyFqANU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DeE2p2vK; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5295e488248so3634794e87.2;
-        Sat, 22 Jun 2024 15:43:56 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52cdea1387eso782791e87.0;
+        Sat, 22 Jun 2024 15:50:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719096234; x=1719701034; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719096644; x=1719701444; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fnzURPUfEHBnj15KnhdvxzQ/Vy169RvhLQ3nLWjYHfU=;
-        b=eSG7KBLC0SbA1PsPfqaUUsrCmuQ0QF0HLeVGvNmtu50Z56FzK7IpnNXonWbmVvQiWz
-         mct16R0QPkHdKGlOvNFPdDgjCU8bhBGB4mQHNE/yeyaL7ygww7iaSL2EwfZUQ1iUuNFV
-         XWjYWiP969jGNlUhX4Iv3cDc3jvEn58L9CfIJTCrBIPGDYiZwT1EYilddXIWEV6inSet
-         i0Bx+VPWgEA1ghoIUnpmwBp4Y5jvnMQEbEM9PRtBO3oofMUSidqGEEoGWNdfUguCsA8q
-         a+VVGsQV4RiEiDPssBgPSvilZe9K9wBSMbPszvaTL+B30389S/uebmGyPO49t8C0B/si
-         /DDw==
+        bh=B2m3LP+Y+ePM15jnmHfY7MEsmC/Z4ycQS/bp52qHAG4=;
+        b=DeE2p2vKCnKGWrY9DXTLXZRo5scCgpP34sSDc3f5DJDJ3xPRRQyj16A8ehWnyRqES4
+         3qSGBSIyTVXEfwzl/gLbEnGiG2jnDqZjjq5kFhx75UbpNooQGomiUc2D6Rc8kaY0SDrL
+         5Ldf8K1Z6bD4SH1zVvuw3A/4z4ZTNn9Cf9w9iK5ZzRG9AjafhvbnSLFaLnE6vXiIvTab
+         irI4/oldb3sSsRGs9GCATUsidATRTpmN8pi6GsgoQ4gNP9ZmwpF/89UQBsOQw5dwtxwV
+         KtY8lOXIEDvr34a2hnSG2lVoacM4Z+S00MsCOB37WpXJaDMJHtQiCYKyTN7EgVkUuCEg
+         YS4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719096234; x=1719701034;
+        d=1e100.net; s=20230601; t=1719096644; x=1719701444;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fnzURPUfEHBnj15KnhdvxzQ/Vy169RvhLQ3nLWjYHfU=;
-        b=NbUI7LBFDRpit+BERWOxQwTqAlOeYYPxnnhOKbv9f45Fk1MmqxHOKX8S0eKVY9X0si
-         hFgUAGl8ic6IeqTRjT5iH/j5lRcb9oF89kx7ZPSjHVJGVbTmwgM8WOZq6IYXpPeueC7R
-         nup8TJknQIKGB+2OOzWICppShjGepiMfKPIeOco4gLsK2xdM6Og5FTsBcsx1EH2u4KEk
-         qiPa/8wZOft44FM1llAn9DFouKDG7aBm/lWePkBDOHxo8XgQ/22e7sg4OTGuo6J4rhTa
-         qYFsYV/FdzPFPZbxkD1Lyi3p5hUxh8CBtWGY9YBmUgFAHZwka+my4nzj+/wZTW+jZxRe
-         Kz5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUoyivc5BhXC1WNH3Vm1OG5D3auJFwkQqP+XDeb8BQ+tq/b295hoN5t/y8K2qd8ja3oxMkA1zsYQcGhInMAMj9bvZQ5dVfI2w5JZCws2DFSmImZB4OCzXFaew/p8PSKmwGtIQZBfXYXIijSwAVxDA==
-X-Gm-Message-State: AOJu0YxGou66JWFkHOiLUEUKHCpCEIsYkGXXjcjpBF3GOm71l1eF26bh
-	VvFYOp5ZB8YjnFqqAtFBJjuPvalK7Iv2y7zwD2IZhbS7Lt4tPwML+B1pbG6Gab2jqLK6P1AH2Nn
-	yN0Ur0TXyaxFbH1zK6gGj917pCAQ=
-X-Google-Smtp-Source: AGHT+IHyaxj5U8UqQ9uYcIWzp8VM691fLIAeNIjMTZIVBJazbzjeR6tEbggrkXU7h25hCe7kQ/ZTT34nMwthWFXLO78=
-X-Received: by 2002:a05:6512:48c6:b0:52c:818a:28f0 with SMTP id
- 2adb3069b0e04-52ce1832b8emr376968e87.6.1719096234291; Sat, 22 Jun 2024
- 15:43:54 -0700 (PDT)
+        bh=B2m3LP+Y+ePM15jnmHfY7MEsmC/Z4ycQS/bp52qHAG4=;
+        b=Tx7JsFDeE0o70ZMU4OlF7/pVe2jnCGXR1YPc8vTD9t0+fExCJcLWd7VcAtQFWl9kQL
+         ONwT+CNOmCSqAJy6dKz9U3RLeq7wIQ/Ly5e9x0KYlZALQ6h4cDZMn3TETmcj0J2cAF0h
+         oGrk+Ccezj+feAXcP6Xdtf3B8hEEP12TE8jmq5GgdRCAfXgI25OOMJKvnmzausySq5MI
+         7FnvHOGry6kekhZ2qg8cWs8NHmNkP9TCv3nV0HLy1KXDuChxEFpu0Orn0Sqwvip1OY+K
+         InxsAQQroQs3dn2KMaIx7um1hZV6NBAxx4PqvkQMf5fAmijLls8PfURLO4l1xHliAMNf
+         K4nw==
+X-Forwarded-Encrypted: i=1; AJvYcCV1IeP3aH0zbuxyrmcpMxEDMZeVxWvB5Sq7z1qe4DmyN35xnDlBsq+CK5lkXkSSpjjxHGOI/ElXHpVyIqPvQEtQyLG6hS4gwP303pwVwK1EWQEj+h9uOJBF2miswTwdPfBZ5PewJNBzjhzqW7RreA==
+X-Gm-Message-State: AOJu0Yzq9D3ffRhXvi18+B9LlR5cOVj2hUnLzqZt+a4dD5MfQCiG/2tS
+	8GSm5zXOsokgb8PROIK69DUVOwB5mLiVUDb1UkzJq+xkBZXurf50vFuD9mlx55VwaeB7SOxwEVH
+	j2IKwkDNdVf5QHdr0kszGln5bTn8=
+X-Google-Smtp-Source: AGHT+IH8JHrvcLY3Aouxs1PuAFreUd25xWPj1iI/ODsj8DEOm7EG4m3q3nJRV+fxIKnQ6iYJYtYJt0wJWqzAilOn+2s=
+X-Received: by 2002:a19:435b:0:b0:52c:df8a:df4 with SMTP id
+ 2adb3069b0e04-52ce1865a2emr341072e87.69.1719096643719; Sat, 22 Jun 2024
+ 15:50:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240621122503.10034-1-hdegoede@redhat.com> <20240621122503.10034-4-hdegoede@redhat.com>
- <20240622131650.qxoxtp6aaitpar6a@pali> <ffbb42d9-f6c6-456e-8427-0c75c2a2e90d@redhat.com>
- <20240622142015.7cfl2onabpr6kl6r@pali> <20240622164349.fycelzxcd45j4g22@pali>
-In-Reply-To: <20240622164349.fycelzxcd45j4g22@pali>
+References: <20240621122503.10034-1-hdegoede@redhat.com> <20240621122503.10034-7-hdegoede@redhat.com>
+ <20240622133237.b5xsetcxnfu4vu6u@pali> <fbc82ede-f23d-422e-ac76-7363e84764ee@redhat.com>
+ <20240622145057.ab7lsp3dtkjge6vd@pali>
+In-Reply-To: <20240622145057.ab7lsp3dtkjge6vd@pali>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sun, 23 Jun 2024 00:43:17 +0200
-Message-ID: <CAHp75VdVhiMN7TN-OwF=9ahv9W-2Yk+k=V5DvQGhTpUuR-b-xg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] platform/x86: dell-smo8800: Move instantiation of
- lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+Date: Sun, 23 Jun 2024 00:50:07 +0200
+Message-ID: <CAHp75VeRpkgoGEoeK+vskDcsyZ6jSMsnDhU6bwS66TH9-MHy7g@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] platform/x86: dell-smo8800: Add support for
+ probing for the accelerometer i2c address
 To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
 Cc: Hans de Goede <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
 	Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>, Wolfram Sang <wsa@kernel.org>, 
@@ -90,41 +90,50 @@ Cc: Hans de Goede <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.ja
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 22, 2024 at 6:43=E2=80=AFPM Pali Roh=C3=A1r <pali@kernel.org> w=
+On Sat, Jun 22, 2024 at 4:51=E2=80=AFPM Pali Roh=C3=A1r <pali@kernel.org> w=
 rote:
-> On Saturday 22 June 2024 16:20:15 Pali Roh=C3=A1r wrote:
+> On Saturday 22 June 2024 16:21:28 Hans de Goede wrote:
+> > On 6/22/24 3:32 PM, Pali Roh=C3=A1r wrote:
+> > > On Friday 21 June 2024 14:25:01 Hans de Goede wrote:
 
 ...
 
-> Definition of the table can be simplified by defining a macro which
-> expand to those verbose parts which are being repeating, without need to
-> introduce something "new". E.g.:
+> > > Have you communicated
+> > > with Dell about this problem?
+> >
+> > Dell is on the Cc of this thread, as well as the previous v2 posting:
+> >
+> > Cc: Dell.Client.Kernel@dell.com
 >
-> #define DELL_LIS3LV02D_DMI_ENTRY(product_name, i2c_addr) \
->         { \
->                 .matches =3D {
->                         DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."), \
->                         DMI_MATCH(DMI_PRODUCT_NAME, product_name), \
->                 }, \
->                 .driver_data =3D (void *)(i2c_addr), \
-
-I'm not against this as we have a lot of different examples similar to
-this (with maybe other types of ID tables). But what makes me worry is
-the use of (void *) here. Shouldn't it be (const void *) so we exclude
-the (potential) cases of dropping const qualifier?
-
->         }
+> And what do you think, that if you send tons of long emails with C code
+> to lot of recipients and add a carbon copy of all those your emails to
+> some corporate group address, that somebody on that group address will
+> read every one paragraph of every your email and tries to detect in if
+> there is not hidden some question to which you want to know answer?
+> No, with this behavior you are going to be put on the corporate
+> spam list by automated systems.
 >
-> static const struct dmi_system_id smo8800_lis3lv02d_devices[] =3D {
->         DELL_LIS3LV02D_DMI_ENTRY("Latitude E5250", 0x29),
->         DELL_LIS3LV02D_DMI_ENTRY("Latitude E5450", 0x29),
->         ...
->         { }
-> };
+> This looks like you just wanted to mark your personal checkbox
+> "I sent email to some dell address" and let it as is.
 >
-> Any opinion about this?
+> In past when I sent private email to dell I normally received responses.
+> Also they said to me that group address is (or at that time was)
+> monitored.
+>
+> So it would be nice to start communication with dell and figure out what
+> is the current state of smbus address detection via ACPI/WMI/DMI/whatever=
+,
+> instead of adding this hacks via poking of smbus addresses.
+>
+> And in case the mentioned group address does not work anymore there are
+> still other linux developers from dell who could be able to figure
+> something out.
 
-
+I would put it as "does Dell care about Linux?". If they do, they
+should react to the messages in the Cc list. I was trying, for
+example, to communicate with Relatek on some ACPI ID matters and
+despite having tons of active developers it was no help. They
+evidently don't care, so why would I?
 
 --=20
 With Best Regards,
