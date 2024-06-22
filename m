@@ -1,80 +1,80 @@
-Return-Path: <linux-i2c+bounces-4248-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4249-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08E9F913459
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jun 2024 16:06:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 064A291345F
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jun 2024 16:08:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AA2C284CFA
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jun 2024 14:06:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CC0E1F2232C
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jun 2024 14:08:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4A2F16F26D;
-	Sat, 22 Jun 2024 14:06:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E1A16F26D;
+	Sat, 22 Jun 2024 14:08:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W6YjaEGM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WubyE8xN"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58F716EC10
-	for <linux-i2c@vger.kernel.org>; Sat, 22 Jun 2024 14:06:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB8916F28B
+	for <linux-i2c@vger.kernel.org>; Sat, 22 Jun 2024 14:08:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719065169; cv=none; b=Mhxu7xlT0YbLaPNaPKMDAQKo97I0KZU50EIGfYEbIJG5384dL5RKz/g/ISUlVxb58SGMo6R/6hbtFBTPYxTaPJGM5LXMuTsfeg+gNwK4JZxaA5hvQ2ChSl8gSb+DgEMpm1Pyx2Gtd17kxVLrBaMXPXWTQapM3OWcMLeLi2WsWmg=
+	t=1719065282; cv=none; b=F/92JKTE2UA5PnCY0qqmVWIVnajTCKtWcS8RuR5Y/LhbH7WBOdOliE4+RAJVe0BGrnhiyIPn+sXIjIwpDWs0qN8M/s5ZFOBXGVe0ZcBaeF5YGlzJY5UpCdVL2nR2wRUm7A1G3bMK162oZCJX6owptTuyQUhOBdoCUbE7h+6X6hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719065169; c=relaxed/simple;
-	bh=lBv9ZaEwNeSR3K/R3VawOz4SF0/4bzpEhj3EHYfkTnE=;
+	s=arc-20240116; t=1719065282; c=relaxed/simple;
+	bh=qTFdmgO+j2Afdadsci9lT2KxmfwCbwy8CZNfczi2d8I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hRxVcwWIrCzVloBuoZyv0ArxDltX+wdDIF0msXdNj8IpbQR3BivHtRUB0cmeQVSkfqEiVOjmo0/Xn/wU2ZnWio9p/x6/jr6Q5KXLSnL9kWdszdbzgKnpw/RlX9xsSg8rcHQMlDmuqB2Cr1ggupJGWcqXhgWoAxKm/H0KxQOMxD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W6YjaEGM; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=eACkBXliyyqQcHzuegWsivqS1cvtkpBhYOhg2skhNGiTfSon92afw3hlfmZRTxs6tTshySc3mkNdepcDl6ZsXq4OihpQ/0xLCmLppd6wBRBVNk7ELJkgGxDDIIzF9drJLTAdn8FE3ehHvTfVc68Lg+mzZpVRa29tNNF3TU43Oe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WubyE8xN; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719065166;
+	s=mimecast20190719; t=1719065279;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=XtUcu0HtAIzk63m0+msOEK/WgZCGGMw0akUS4cIeGrs=;
-	b=W6YjaEGMsbEgc4YnmXDLj4B8LALWeset0q54YlhI95ccb9sMRYIJTecR3F9AaHdep8m50V
-	VhOPvYOqkJj6LCrDsem6whoO8GEHfx+qJeeQSnP3lLpHjTEZ11ZjvEX1S4kovoiDK+gUzy
-	qkdmA58GT91jgpfMUHSTCcShh0heveo=
+	bh=9YGV0mWke+1yU4Fc9eQD30u5SJefbeYebz8h9sfdD/E=;
+	b=WubyE8xNkkfKIZoB/AH5HFdqxU7iPlyy2IKifilBGVvGY1mkpEamsZqz0H34jYVMareIg2
+	gim4uKouWJdrmHkgtfPPDCA2Qt0Il42fqr1rmepLFRX/sbFELrIRHjTuARoirqG5Sth851
+	nkswvsUc62J/c/y13+9hECns4CU3WXk=
 Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
  [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-511-rSIkvDH3N3yIu3VuTw2DBQ-1; Sat, 22 Jun 2024 10:06:05 -0400
-X-MC-Unique: rSIkvDH3N3yIu3VuTw2DBQ-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a6f4a6537f7so127365166b.3
-        for <linux-i2c@vger.kernel.org>; Sat, 22 Jun 2024 07:06:04 -0700 (PDT)
+ us-mta-517-netXp-jRPsWMl2wmgcIToA-1; Sat, 22 Jun 2024 10:07:55 -0400
+X-MC-Unique: netXp-jRPsWMl2wmgcIToA-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a71e1625bdbso13610666b.2
+        for <linux-i2c@vger.kernel.org>; Sat, 22 Jun 2024 07:07:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719065163; x=1719669963;
+        d=1e100.net; s=20230601; t=1719065274; x=1719670074;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XtUcu0HtAIzk63m0+msOEK/WgZCGGMw0akUS4cIeGrs=;
-        b=ls7jsR0IQDRmtKg/Wenpk7zHaCkaOkG4s6iOlvLj42qgnyBCgeHOE8KpI0w0oj7L3n
-         wpa6Jata/1SvDhqXFQHhzA2kqa8ZiJOY5sqVuJEjlVn7UxU9BiwC3N6INvPewTXHn+Y8
-         a78Lq+ucG3XLvQ8L19eAcyXWv1ZUJ4gMEP6urwmyHYbrdbHzFy15wTS+Gm4pD+yqIk2w
-         1LPCi07r9XtM9cCriRRhO0qt/2b4xlMqydKtWhXm1kdSKFtW3V6HdVuFJPm+S1zoQQ2l
-         ZQ5ydK/eEzhea9kJ4uK3L7FD+D0fQyLcDbO0+it/XRjLnJSr2KtEVGiJULDqt7pricvE
-         bYnw==
-X-Forwarded-Encrypted: i=1; AJvYcCX4LthKLTW9F+FjS3bYRbxj42eLl/594BrathVQVVL2ocBQIq4n7eqcQfjazSUOPhR9tYdiC9ah2ru3I5U6biQN9B/AZl/J3MTT
-X-Gm-Message-State: AOJu0YzXtgCRuho+qxcBe7QzL2vMPDM1S8AKYQAV8uynUdCey3BAfS9a
-	QqU/F4gEZaTqT8AKjKzsrma3MryNyNsWHqLdwxTaMD4jvJpP98wbomTD74LxTOA/cHaHmwyu9iH
-	NGUPaduQljfNbJ04xx3Gw0eMAVF3VPDeStM7JGq87GNPCPFIr7TnyjpxUUA==
-X-Received: by 2002:a17:906:4e96:b0:a68:cc6f:cb5a with SMTP id a640c23a62f3a-a6fab7d7cb0mr584333666b.68.1719065163441;
-        Sat, 22 Jun 2024 07:06:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGj0YVNNgoYrpYtI9nEmcqoJ7LXUnifYEyAvx4nxh/RjVZTr9XPcd14KZyjCudByelZGU3Zwg==
-X-Received: by 2002:a17:906:4e96:b0:a68:cc6f:cb5a with SMTP id a640c23a62f3a-a6fab7d7cb0mr584331666b.68.1719065162961;
-        Sat, 22 Jun 2024 07:06:02 -0700 (PDT)
+        bh=9YGV0mWke+1yU4Fc9eQD30u5SJefbeYebz8h9sfdD/E=;
+        b=V0mIVgMHSQdNQEDt572gf7zH+jpYP4j+C6Me060doUkX8q8XYfUvt/oOLC0AFYShj0
+         YFIxVngmE/y9hsEsS+v9rSpCmGdhIU+I9uLAUafYurHR28ouiX5myH6Gv4cPKJ/DP6c6
+         9CA1T3UkH6vrkis6tzpQzUiQQuS1XKJhAWvkMTrmRqRzkN6cEhFKi+di0Zz6gXu2/npc
+         F6HWlfg+YIelFa6HliSArz7X4ag9vCMxi8rV3SbiTn1DfzynNMoPdd3KaWHQc2mN7e/K
+         lD2JAdqgCLL4a4nnLzlzb75mejq1V2RqokF8h3C1iEkWkYoICv4H2GaYTQLKMQbKHyVF
+         wKrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUesr+uTH3EVuQeSPlxXYsrKGpqxwiIDWpSMpp3XbqBDT5SL+u2g4us35cF3V8XIiA91jkZIYTxgodxDJAmCmbDG2XHPWDO3L/c
+X-Gm-Message-State: AOJu0Yyh53D5HuQYPaXMYbn4N/bFrjL8ME1q0YoaeEasQiXLjAMBUmvr
+	r1DW6lJfN1y8gMyNv5YUDXT0KXkqVxhx37Gidk99k8MTdjHamSuDgxYMlWp8l3378A28ijd1meA
+	w0dIODHmWMQ5dMuf7+mKBuNJMb53TNzFHr26+n4bkBh4MpIHC0omjIgMDvg==
+X-Received: by 2002:a17:906:c096:b0:a6f:86fd:72b8 with SMTP id a640c23a62f3a-a715f97972bmr67087266b.42.1719065274709;
+        Sat, 22 Jun 2024 07:07:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGbg9d+V7WpcfGD/Rrm2N/8gPnsBpEQzQsHVv9M4tHZ/SVSNPw5mxkA5UYxM/TViLT8Idf8fg==
+X-Received: by 2002:a17:906:c096:b0:a6f:86fd:72b8 with SMTP id a640c23a62f3a-a715f97972bmr67084866b.42.1719065274223;
+        Sat, 22 Jun 2024 07:07:54 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf5603a8sm199752666b.154.2024.06.22.07.06.02
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf4bab45sm201463266b.96.2024.06.22.07.07.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Jun 2024 07:06:02 -0700 (PDT)
-Message-ID: <ffbb42d9-f6c6-456e-8427-0c75c2a2e90d@redhat.com>
-Date: Sat, 22 Jun 2024 16:06:01 +0200
+        Sat, 22 Jun 2024 07:07:53 -0700 (PDT)
+Message-ID: <5685ad31-f147-4478-b67f-d918b17ed9b9@redhat.com>
+Date: Sat, 22 Jun 2024 16:07:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -82,8 +82,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/6] platform/x86: dell-smo8800: Move instantiation of
- lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+Subject: Re: [PATCH v3 4/6] platform/x86: dell-smo8800: Allow lis3lv02d
+ i2c_client instantiation without IRQ
 To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
 Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
  Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>,
@@ -93,218 +93,63 @@ Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
  platform-driver-x86@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
  Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
 References: <20240621122503.10034-1-hdegoede@redhat.com>
- <20240621122503.10034-4-hdegoede@redhat.com>
- <20240622131650.qxoxtp6aaitpar6a@pali>
+ <20240621122503.10034-5-hdegoede@redhat.com>
+ <20240622132045.tdm5os7ykdkdc3r6@pali>
 Content-Language: en-US, nl
 From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240622131650.qxoxtp6aaitpar6a@pali>
+In-Reply-To: <20240622132045.tdm5os7ykdkdc3r6@pali>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Hi Pali,
 
-On 6/22/24 3:16 PM, Pali Rohár wrote:
-> On Friday 21 June 2024 14:24:58 Hans de Goede wrote:
->> It is not necessary to handle the Dell specific instantiation of
->> i2c_client-s for SMO88xx ACPI devices without an ACPI I2cResource
->> inside the generic i801 I2C adapter driver.
+On 6/22/24 3:20 PM, Pali Rohár wrote:
+> On Friday 21 June 2024 14:24:59 Hans de Goede wrote:
+>> The Dell XPS 15 9550 can have a 60Wh battery, leaving space for a 2.5"
+>> sata disk; or a 90Wh battery in which case the battery occupies the space
+>> for the optional 2.5" sata disk.
 >>
->> The kernel already instantiates platform_device-s for these ACPI devices
->> and the drivers/platform/x86/dell/dell-smo8800.c driver binds to these
->> platform drivers.
->>
->> Move the i2c_client instantiation from the generic i2c-i801 driver to
->> the SMO88xx specific dell-smo8800 driver.
+>> On models with the 90Wh battery and thus without a 2.5" sata disk, the BIOS
+>> does not add an IRQ resource to the SMO8810 ACPI device.
 > 
-> Why it has to be in dell-smo8800 driver? Code for registering lis3lv02d
-> and freefall code for smo88xx are basically independent.
+> That is a pity, but OK, manufacturer decided that freefall sensor is
+> enabled by BIOS firmware only if the SATA is present.
 > 
-> lis3lv02d is for accelerometer axes and smo88xx is for freefall hardisk
-> detection. The only thing which have these "drivers" common is the ACPI
-> detection mechanism based on presence of SMO88?? identifiers from
-> acpi_smo8800_ids[] array.
-> 
-> I think it makes both "drivers" cleaner if they are put into separate
-> files as they are independent of each one.
-> 
-> What about moving it into drivers/platform/x86/dell/dell-lis3lv02d.c
-> instead (or similar name)? And just share list of ACPI ids via some
-> header file (or something like that).
-
-Interesting idea, but that will not work, only 1 driver can bind to
-the platform_device instantiated by the ACPI code for the SMO88xx ACPI device.
-
->> Moving the i2c_client instantiation here has the following advantages:
+>> Make the misc-device registration and the requesting of the IRQ optional
+>> and instantiate a lis3lv02d i2c_client independent of the IRQ being there,
+>> so that the non freefall lis3lv02d functionality can still be used.
 >>
->> 1. This moves the SMO88xx ACPI device quirk handling away from the generic
->> i2c-i801 module which is loaded on all Intel x86 machines to the SMO88xx
->> specific dell-smo8800 module where it belongs.
->>
->> 2. This removes the duplication of the SMO88xx ACPI Hardware ID (HID) table
->> between the i2c-i801 and dell-smo8800 drivers.
->>
->> 3. This allows extending the quirk handling by adding new code and related
->> module parameters to the dell-smo8800 driver, without needing to modify
->> the i2c-i801 code.
+>> Note that IRQ 0 is not a valid IRQ number for platform IRQs
+>> and this patch relies on that.
 >>
 >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 >> ---
->> Note the goto out_put_adapter, which can be avoided by moving the DMI check
->> up, is there deliberately as preparation for adding support to probe for
->> the i2c address in case there is no DMI match.
->> ---
->> Changes in v3:
->> - Use an i2c bus notifier so that the i2c_client will still be instantiated if
->>   the i801 i2c_adapter shows up later or is re-probed (removed + added again)
->> - Switch to standard dmi_system_id matching to check both sys-vendor +
->>   product-name DMI fields
->> - Use unique i2c_adapter->name prefix for primary i2c_801 controller
->>   to avoid needing to duplicate PCI ids for extra IDF i2c_801 i2c_adapter-s
->> - Drop MODULE_SOFTDEP("pre: i2c-i801"), this is now no longer necessary
->> - Rebase on Torvalds master for recent additions of extra models in
->>   the dell_lis3lv02d_devices[] list
+>>  drivers/platform/x86/dell/dell-smo8800.c | 67 +++++++++++++-----------
+>>  1 file changed, 37 insertions(+), 30 deletions(-)
 >>
->> Changes in v2:
->> - Use a pci_device_id table to check for IDF (non main) i2c-i801 SMBusses
->> - Add a comment documenting the IDF PCI device ids
->> ---
->>  drivers/i2c/busses/i2c-i801.c            | 124 -------------
->>  drivers/platform/x86/dell/dell-smo8800.c | 214 ++++++++++++++++++++++-
->>  2 files changed, 213 insertions(+), 125 deletions(-)
-
-<snip>
-
 >> diff --git a/drivers/platform/x86/dell/dell-smo8800.c b/drivers/platform/x86/dell/dell-smo8800.c
->> index f7ec17c56833..cd2e48405859 100644
+>> index cd2e48405859..2e49bbb569c6 100644
 >> --- a/drivers/platform/x86/dell/dell-smo8800.c
 >> +++ b/drivers/platform/x86/dell/dell-smo8800.c
-
-...
-
->> @@ -103,6 +112,184 @@ static const struct file_operations smo8800_misc_fops = {
->>  	.release = smo8800_misc_release,
->>  };
+>> @@ -310,33 +310,32 @@ static int smo8800_probe(struct platform_device *device)
+>>  	init_waitqueue_head(&smo8800->misc_wait);
+>>  	INIT_WORK(&smo8800->i2c_work, smo8800_instantiate_i2c_client);
 >>  
->> +/*
->> + * Accelerometer's I2C address is not specified in DMI nor ACPI,
->> + * so it is needed to define mapping table based on DMI product names.
->> + */
->> +static const struct dmi_system_id smo8800_lis3lv02d_devices[] = {
->> +	/*
->> +	 * Dell platform team told us that these Latitude devices have
->> +	 * ST microelectronics accelerometer at I2C address 0x29.
->> +	 */
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E5250"),
->> +		},
->> +		.driver_data = (void *)0x29L,
->> +	},
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E5450"),
->> +		},
->> +		.driver_data = (void *)0x29L,
->> +	},
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E5550"),
->> +		},
->> +		.driver_data = (void *)0x29L,
->> +	},
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E6440"),
->> +		},
->> +		.driver_data = (void *)0x29L,
->> +	},
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E6440 ATG"),
->> +		},
->> +		.driver_data = (void *)0x29L,
->> +	},
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E6540"),
->> +		},
->> +		.driver_data = (void *)0x29L,
->> +	},
->> +	/*
->> +	 * Additional individual entries were added after verification.
->> +	 */
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude 5480"),
->> +		},
->> +		.driver_data = (void *)0x29L,
->> +	},
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Precision 3540"),
->> +		},
->> +		.driver_data = (void *)0x29L,
->> +	},
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro V131"),
->> +		},
->> +		.driver_data = (void *)0x1dL,
->> +	},
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro 5568"),
->> +		},
->> +		.driver_data = (void *)0x29L,
->> +	},
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 7590"),
->> +		},
->> +		.driver_data = (void *)0x29L,
+>> -	err = misc_register(&smo8800->miscdev);
+>> -	if (err) {
+>> -		dev_err(&device->dev, "failed to register misc dev: %d\n", err);
+>> -		return err;
+>> +	err = platform_get_irq_optional(device, 0);
+>> +	if (err > 0)
+>> +		smo8800->irq = err;
 > 
-> At least for me, casting i2c address to LONG and then to pointer looks
-> very strange. If I look at this code without knowing what the number
-> 0x29 means I would not figure out that expression "(void *)0x29L" is i2c
-> address.
-> 
-> Is not there a better way to write i2c address? E.g. ".i2c_addr = 0x29"
-> instead of ".something = (void *)0x29L" to make it readable?
+> This code should be rather change to fail immediately. If the IRQ number
+> is not provided by the BIOS then the ACPI SMO88xx is not usable for us
+> at all. So return error from the smo8800_probe function.
 
-struct dmi_system_id is an existing structure and we cannot just go adding
-fields to it. driver_data is intended to tie driver specific data to
-each DMI match, often pointing to some struct, so it is a void *, but
-in this case we only need a single integer, so we store that in the
-pointer. That is is the address becomes obvious when looking at the code
-which consumes the data.
-
-> Also does the whole device table has to be such verbose with lot of
-> duplicated information (which probably also increase size of every linux
-> image which includes this driver into it)?
-
-struct dmi_system_id is the default way to specify DMI matches in
-the kernel. This avoids code duplication in the form of writing
-a DYI function to do the matching.
-
-In v2 of the patch-set I only matched on product-name, but you asked
-in the review of v2 to also match on sys-vendor and you mentioned
-we may want to support other sys-vendors too, since some other brands
-have SMO88xx ACPI devices too. This more or less automatically leads
-to using the kernel's standard, existing, DMI matching mechanism.
-
-We really want to avoid coming up with something "new" ourselves here
-leading to unnecessary code duplication.
+The goal of this patch is to still register the bus-notifier for i2c-client
+instantiation for the lis3lv02d driver. Existing immediately here (as was
+done before) means we will still not register the bus-notifier.
 
 Regards,
 
@@ -312,5 +157,96 @@ Hans
 
 
 
+
+
+>> +
+>> +	if (smo8800->irq) {
+>> +		err = misc_register(&smo8800->miscdev);
+>> +		if (err) {
+>> +			dev_err(&device->dev, "failed to register misc dev: %d\n", err);
+>> +			return err;
+>> +		}
+>> +
+>> +		err = request_threaded_irq(smo8800->irq, smo8800_interrupt_quick,
+>> +					   smo8800_interrupt_thread,
+>> +					   IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+>> +					   DRIVER_NAME, smo8800);
+>> +		if (err) {
+>> +			dev_err(&device->dev,
+>> +				"failed to request thread for IRQ %d: %d\n",
+>> +				smo8800->irq, err);
+>> +			goto error;
+>> +		}
+>> +
+>> +		dev_dbg(&device->dev, "device /dev/freefall registered with IRQ %d\n",
+>> +			 smo8800->irq);
+>>  	}
+>>  
+>> -	platform_set_drvdata(device, smo8800);
+>> -
+>> -	err = platform_get_irq(device, 0);
+>> -	if (err < 0)
+>> -		goto error;
+>> -	smo8800->irq = err;
+>> -
+>> -	err = request_threaded_irq(smo8800->irq, smo8800_interrupt_quick,
+>> -				   smo8800_interrupt_thread,
+>> -				   IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+>> -				   DRIVER_NAME, smo8800);
+>> -	if (err) {
+>> -		dev_err(&device->dev,
+>> -			"failed to request thread for IRQ %d: %d\n",
+>> -			smo8800->irq, err);
+>> -		goto error;
+>> -	}
+>> -
+>> -	dev_dbg(&device->dev, "device /dev/freefall registered with IRQ %d\n",
+>> -		 smo8800->irq);
+>> -
+>>  	if (dmi_check_system(smo8800_lis3lv02d_devices)) {
+>>  		/*
+>>  		 * Register i2c-bus notifier + queue initial scan for lis3lv02d
+>> @@ -350,14 +349,20 @@ static int smo8800_probe(struct platform_device *device)
+>>  	} else {
+>>  		dev_warn(&device->dev,
+>>  			 "lis3lv02d accelerometer is present on SMBus but its address is unknown, skipping registration\n");
+>> +		if (!smo8800->irq)
+>> +			return -ENODEV;
+>>  	}
+>>  
+>> +	platform_set_drvdata(device, smo8800);
+>>  	return 0;
+>>  
+>>  error_free_irq:
+>> -	free_irq(smo8800->irq, smo8800);
+>> +	if (smo8800->irq) {
+>> +		free_irq(smo8800->irq, smo8800);
+>>  error:
+>> -	misc_deregister(&smo8800->miscdev);
+>> +		misc_deregister(&smo8800->miscdev);
+>> +	}
+>> +
+>>  	return err;
+>>  }
+>>  
+>> @@ -371,9 +376,11 @@ static void smo8800_remove(struct platform_device *device)
+>>  		i2c_unregister_device(smo8800->i2c_dev);
+>>  	}
+>>  
+>> -	free_irq(smo8800->irq, smo8800);
+>> -	misc_deregister(&smo8800->miscdev);
+>> -	dev_dbg(&device->dev, "device /dev/freefall unregistered\n");
+>> +	if (smo8800->irq) {
+>> +		free_irq(smo8800->irq, smo8800);
+>> +		misc_deregister(&smo8800->miscdev);
+>> +		dev_dbg(&device->dev, "device /dev/freefall unregistered\n");
+>> +	}
+>>  }
+>>  
+>>  static const struct acpi_device_id smo8800_ids[] = {
+>> -- 
+>> 2.45.1
+>>
+> 
 
 
