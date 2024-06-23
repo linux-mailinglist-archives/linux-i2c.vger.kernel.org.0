@@ -1,121 +1,164 @@
-Return-Path: <linux-i2c+bounces-4276-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4277-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16A5C913844
-	for <lists+linux-i2c@lfdr.de>; Sun, 23 Jun 2024 08:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BCC9B9138E4
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Jun 2024 10:06:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D005B2236D
-	for <lists+linux-i2c@lfdr.de>; Sun, 23 Jun 2024 06:13:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 42D56B213FC
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Jun 2024 08:06:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E295C17C77;
-	Sun, 23 Jun 2024 06:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F99D54903;
+	Sun, 23 Jun 2024 08:06:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UrM1HzIr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tr5j8XDo"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1B5FC08
-	for <linux-i2c@vger.kernel.org>; Sun, 23 Jun 2024 06:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE541175AD;
+	Sun, 23 Jun 2024 08:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719123233; cv=none; b=fx10m9CS6Rl1HeSklqsFZkDAfQdRgCyyISzYahnVRqiO06f77AQvpEGlcEXBsKyev3UfxTPcjp0ukIfjQmtTRglXvBPzEy0y6/cdf7RFhOtqcAQXOb8Q32btjXto2Fv5HN0jLN+VG1F2XNxXH1UEj/BCuGkX2Hoq8qp/1XwdtMk=
+	t=1719129986; cv=none; b=Hr3gT793oNmhPx8tyC7N+Lv5rtmXU9wNATW8B9nKsmwtLrgndNODs/whN9c3yE3VI1QbXwml0SV8DveIN7tGob11xlNw0J5KvD2ILMcRxJ0dawfvFTAZaTCljafJkCwDDuXIKwfO7JLcO7ifi7XUD/eYQjXrTSgtdI33RzH7BIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719123233; c=relaxed/simple;
-	bh=o5uVPD7Iku4dfF/SMKPi4VCxRmUZNa2vE7HkCfkJu/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HtNqg5C+uKic3AqXi0xxaq9KmAT8o5+JoSH+H+CvobZjtVcnusIT+MdGny8dx0lKCMEVNxU/w1Z9oqesaNcce36Bqap4uCCqJE1C1hLxJQcZ/xJ+4OA5xWokqUHOhXkF8uZwmzkWgBFmxpR4rWDmAAfMkWzgcVzbTqYFS7oE6W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UrM1HzIr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2489C2BD10;
-	Sun, 23 Jun 2024 06:13:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1719123233;
-	bh=o5uVPD7Iku4dfF/SMKPi4VCxRmUZNa2vE7HkCfkJu/U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UrM1HzIrw5ou5zDf/QsHo22un2RdQyixJdRvkSXtZVXwmMe5NOSYZx/s+D26hoeYp
-	 umnryk1trk0v/mUOgVdilsuyuc+n7f2cVFB5n8VB2J8nddl4egoiIu7ybf9t7LmvCj
-	 Zm/pbHELbDcGcfZofgNIxCHrfOFvuPgc+oPL/C6I=
-Date: Sun, 23 Jun 2024 08:13:55 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Marek Vasut <marex@denx.de>
-Cc: linux-i2c@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH v2 4/4] nvmem: core: Implement force_ro sysfs attribute
-Message-ID: <2024062330-pound-endeared-b07a@gregkh>
-References: <20240623031752.353818-1-marex@denx.de>
- <20240623031752.353818-4-marex@denx.de>
+	s=arc-20240116; t=1719129986; c=relaxed/simple;
+	bh=UOYqyx8Z7pHMjU/0127+Y6My6nfe2PgdCm0DtuH/jjg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dQqxGVrV5FwmB/skD9iMKeN+Gb5Ipp8OhpM6TdHJYH9FmlQHeS7E2uw80A8xIP86+X3d0hjn/qNH5SE3xsnyMc0L3T+stJ446X6I/GM0f4i3Oory6GzFoxp3GRLyXu3I2Um72AdFV6BUFtp1p+9aKn+rOVYXFVzXV85XvF1TExk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tr5j8XDo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9E0BC2BD10;
+	Sun, 23 Jun 2024 08:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719129986;
+	bh=UOYqyx8Z7pHMjU/0127+Y6My6nfe2PgdCm0DtuH/jjg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=tr5j8XDohxOG5RXvP6Caeff5Yt3CHlSXjcnea0kieSlkNElyxe7gLZjR7RXdEdZWr
+	 tsLPOdME0pvN/jWgUHo5/RoV/n0b1jOHAQR7tD1xgzlM16BX+/1ePHcwM9/i47Nz9I
+	 FNsLsbeeO3wc13Fptob+FrftGsXaAD+N2W7MDkB3wEQeZzz/n+f8jTk8G/3aPsweOc
+	 YS0OK7LgtxHmgI0Aol/PviVwxd2VjLaMjiHjZC3DxiF55eiZ1vxbMsjbo/o0PMM0yf
+	 +pZStQnIuRajMqI7IdMO/qF9zR4nKz4/nwX9oforgDgSWIMPFJcGYbNbrIKJkQIr5J
+	 FCfn8c9ohOOvw==
+Date: Sun, 23 Jun 2024 10:06:22 +0200
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.10-rc5
+Message-ID: <ZnfXfkZfI5iNZqBW@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="CcDWrlTMmm+xypyo"
+Content-Disposition: inline
+
+
+--CcDWrlTMmm+xypyo
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240623031752.353818-4-marex@denx.de>
 
-On Sun, Jun 23, 2024 at 05:15:47AM +0200, Marek Vasut wrote:
-> Implement "force_ro" sysfs attribute to allow users to set read-write
-> devices as read-only and back to read-write from userspace. The choice
-> of the name is based on MMC core 'force_ro' attribute.
-> 
-> This solves a situation where an AT24 I2C EEPROM with GPIO based nWP
-> signal may have to be occasionally updated. Such I2C EEPROM device is
-> usually set as read-only during most of the regular system operation,
-> but in case it has to be updated in a controlled manner, it could be
-> unlocked using this new "force_ro" sysfs attribute and then re-locked
-> again.
-> 
-> The "read-only" DT property and config->read_only configuration is
-> respected and is used to set default state of the device, read-only
-> or read-write, for devices which do implement .reg_write function.
-> For devices which do not implement .reg_write function, the device
-> is unconditionally read-only and the "force_ro" attribute is not
-> visible.
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: linux-i2c@vger.kernel.org
-> ---
-> V2: - Document the force_ro attribute
->     - Use sysfs_emit()
-> ---
->  Documentation/ABI/stable/sysfs-bus-nvmem | 13 +++++++
->  drivers/nvmem/core.c                     | 44 ++++++++++++++++++++++++
->  drivers/nvmem/internals.h                |  1 +
->  3 files changed, 58 insertions(+)
-> 
-> diff --git a/Documentation/ABI/stable/sysfs-bus-nvmem b/Documentation/ABI/stable/sysfs-bus-nvmem
-> index 0e3a8492a1082..c713c4e6cecb1 100644
-> --- a/Documentation/ABI/stable/sysfs-bus-nvmem
-> +++ b/Documentation/ABI/stable/sysfs-bus-nvmem
-> @@ -1,3 +1,16 @@
-> +What:		/sys/bus/nvmem/devices/.../force_ro
-> +Date:		June 2024
-> +KernelVersion:	6.11
-> +Contact:	Marek Vasut <marex@denx.de>
-> +Description:
-> +		This read/write attribute allows users to set read-write
-> +		devices as read-only and back to read-write from userspace.
-> +		This can be used to unlock and relock write-protection of
-> +		devices which are generally locked, except during sporadic
-> +		programming operation.
-> +		Note: This file is only present if CONFIG_NVMEM_SYSFS
-> +		is enabled
+Linus,
 
-And what exactly are the values that can be read or written here?
+the doc updates not only fix outdated information but also set the base
+for new terminology which we want to apply soon to avoid dependencies.
 
-thanks,
+Please pull.
 
-greg k-h
+   Wolfram
+
+
+The following changes since commit 6ba59ff4227927d3a8530fc2973b80e94b54d58f:
+
+  Linux 6.10-rc4 (2024-06-16 13:40:16 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.10-rc5
+
+for you to fetch changes up to 2c50f892caadc94ff216d42accd8222e172b5144:
+
+  Merge tag 'i2c-host-fixes-6.10-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current (2024-06-23 02:13:27 +0200)
+
+----------------------------------------------------------------
+The core gains placeholders for recently added functions when CONFIG_I2C
+is not defined as well documentation fixes to start using inclusive
+terminology. The drivers get paths in DT bindings fixed as well as
+proper interrupt handling for the ocores driver.
+
+----------------------------------------------------------------
+Grygorii Tertychnyi (1):
+      i2c: ocores: set IACK bit after core is enabled
+
+Krzysztof Kozlowski (2):
+      dt-bindings: i2c: atmel,at91sam: correct path to i2c-controller schema
+      dt-bindings: i2c: google,cros-ec-i2c-tunnel: correct path to i2c-controller schema
+
+Sakari Ailus (1):
+      i2c: Add nop fwnode operations
+
+Wolfram Sang (7):
+      docs: i2c: summary: start sentences consistently.
+      docs: i2c: summary: update I2C specification link
+      docs: i2c: summary: update speed mode description
+      docs: i2c: summary: document use of inclusive language
+      docs: i2c: summary: document 'local' and 'remote' targets
+      docs: i2c: summary: be clearer with 'controller/target' and 'adapter/client' pairs
+      Merge tag 'i2c-host-fixes-6.10-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Conor Dooley (2):
+      (Rev.) dt-bindings: i2c: google,cros-ec-i2c-tunnel: correct path to i2c-controller schema
+      (Rev.) dt-bindings: i2c: atmel,at91sam: correct path to i2c-controller schema
+
+Easwar Hariharan (6):
+      (Rev.) docs: i2c: summary: be clearer with 'controller/target' and 'adapter/client' pairs
+      (Rev.) docs: i2c: summary: document 'local' and 'remote' targets
+      (Rev.) docs: i2c: summary: document use of inclusive language
+      (Rev.) docs: i2c: summary: update speed mode description
+      (Rev.) docs: i2c: summary: update I2C specification link
+      (Rev.) docs: i2c: summary: start sentences consistently.
+
+ .../devicetree/bindings/i2c/atmel,at91sam-i2c.yaml |  2 +-
+ .../bindings/i2c/google,cros-ec-i2c-tunnel.yaml    |  2 +-
+ Documentation/i2c/i2c_bus.svg                      | 15 ++--
+ Documentation/i2c/summary.rst                      | 79 ++++++++++++++--------
+ drivers/i2c/busses/i2c-ocores.c                    |  2 +-
+ include/linux/i2c.h                                | 24 ++++++-
+ 6 files changed, 83 insertions(+), 41 deletions(-)
+
+--CcDWrlTMmm+xypyo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZ3134ACgkQFA3kzBSg
+KbYPbw/9Ey6o45ZFS8G8SFCEn3CUSst8se3v1UE/Cn5mw2gAehELOqLn/f98AFAS
+2j05gkoD28TEglszRCIaWBSISSW2XM1xVDQ6I0szmSBJyJ/43ajy536wc4gVAENo
+BWGT8SxYCp6BM/x//hEx+sw3Ok1FKOTPb/pOZvcawXmmVXQbEA4fMPzHdRKSvFy4
+abY5UMwYT8z34BqfBzWWq/oOgvZTRvgeFpzvJGDlAHaEs7LOeqeWF0LwoRiHQ3Q+
+Mx03zbyy+r4fFKAY8UWUXWxVM/aBRVxhMp3CLfyRmq7tt7R4aru/v0P0GTawLtUU
+FFKBEDkjiBaXISMsoCORhX/3rkvqVJItGuX2m8jHIUpHwvSPn4zjjTB0yRcn84yE
+5MA0dQ8vngoP344EcBvN9zvAuTs0yzuv8mb7cVqSr4vf9ynkIwWEHkrI0M6U/Jti
+WD3/WXGPwv24xAkyNQKlmcM5EH19VZwKhwr3oTyUuh6t4af6PeTCUwM/614vAbaU
+hKs3GZ+DyhPCHXX75dqWvjkA/yv/ay2E/MhnWDWMICU15tKN78CizXbEUM1vaieR
+tB3BY359gdMBCxPnU1OVDkXj2MdQN4bPPNSSbTuHl4x/5dBZZHdDx84VNSKzEhf1
+tmn8Qwob2VolyPH+qvZNTWrDzJpP8AJfkKGWz6HTVGW35JEgG8w=
+=umm3
+-----END PGP SIGNATURE-----
+
+--CcDWrlTMmm+xypyo--
 
