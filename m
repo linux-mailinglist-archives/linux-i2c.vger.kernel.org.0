@@ -1,76 +1,75 @@
-Return-Path: <linux-i2c+bounces-4319-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4320-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E9D49157FA
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 22:30:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E33915861
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 22:58:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A15131F21E2F
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 20:30:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CDCEAB22251
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 20:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F504F615;
-	Mon, 24 Jun 2024 20:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D641A073B;
+	Mon, 24 Jun 2024 20:58:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m6JrK6OC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RQLYbvOB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC9E2233B;
-	Mon, 24 Jun 2024 20:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2F245010;
+	Mon, 24 Jun 2024 20:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719261038; cv=none; b=gGUVoqI8/GaV5KssTOZBcL2DgcfeKSc8dUHMuGWcTzS5KCxrNxIPWP30NkpLEIPWJf/q6vM/7Y+DDosVulkWREqJQ9fMpouWWxkYGYHSC2HdJytuGykwJ7nuNVYvEuqkCE4ubqgY9v200A5j7/wuekPqikyHv19AjIZpYA/7ong=
+	t=1719262685; cv=none; b=purKF5xwz2MjRnL4G5FDjGXjEjvhRioT7ic5Vbhl1Jt5zdAi+GRgJedav0cnOjCdFfootqzTvzMv12lx67FxpAu9uW2F5n80KxHlUbthKubnRWvF8S8GtJJ5nhZOdHuNVpFe350wDMUmvW1WPvHz5yryl2AxJSOv54NOquevT24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719261038; c=relaxed/simple;
-	bh=GTiYb6GrzxzcwObveaXj3I+TryD7LP1+DQrFJTDzePw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=k79hVY96JWnbBaYXyBv8e+DeOvvX6dGHyDVJ2NBKkzfYc6ZOcZ+R3WkxTQ+BEJgaA9pNR+QaHcJU/o466fcAF/Bpm82L2cUHXEz+AENOFBBApNz9Wn3fpoKX5pGV2eS5oYTPqjpeVRJLAblHUULW6hPk7gOQI2FDDitXagV9UgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m6JrK6OC; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1719262685; c=relaxed/simple;
+	bh=zj50skJPvJRf7JfXy6CIJbCp6EetG/W94ej3/nQ3+BE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ky5Q/ThHMDKCNq5E1zOUxopM8HWEsxfjmGPT/lSJozwMumMknaz7ZJIdZhl7oiiZ91nl6ZdXrHrf0YLry9WZJrY70LGpIRBu8fGxgxnesB3kn2ums64LbQo4eDgcrKwvDPXzBCr8Z9xg/9E1Aa4acA0FjjECTuVQ9gAn2aPiNj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RQLYbvOB; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-718354c17e4so1944384a12.1;
-        Mon, 24 Jun 2024 13:30:36 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a7252bfe773so171848366b.1;
+        Mon, 24 Jun 2024 13:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719261036; x=1719865836; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719262682; x=1719867482; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=0JCjzHa62U2GIxuqtrX2ey45JnspojXIKFnfDyNZmBY=;
-        b=m6JrK6OCtrk75nGW9cQjQZAeSMUP6mrHGPKLOapmOBNLvzlrNq9kKGQ9e3iG5FTONr
-         uOcD7bYxlyzKRuPGDRM6/Y/gbGgsM0BL/xHz9xTSHc0EqbB7BH2WR1WEzyyuwjKtGdnw
-         Z/HtDPEmb9Sc1/0V9js2y8CcwihJNwXRSHpILGzngzR1MxqIAbA/7PsnfcNychZa5QBx
-         k+ewt129q0MW7ZzRLK/E/umk+l42i7UoQ6SiLSxBgQJEpOpyUy8Q2WAyox/t6pVLDZtb
-         kmcR5CV8B82/5gZenb8WNalBq7lQ9G6p1uAoC3/QpLX4v0VAK3TWLUe2PjNWnYvoEz+1
-         YUOA==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Ohnk9BHFu/EJmzXal9cNmUB7ZWVcATXjjC+GZKOHz4=;
+        b=RQLYbvOBLnfZ6IoZbD0phB7Ewwz5/l0jizmYAj2Cb2zrKtAktqAx7BBqIa3zDA4h8a
+         0t7C+K9fLR62hTAgFgF2BZNQny8UUDPwqhQ8cUX3C2b3gEHdcTwtQMNZKeB7eECV+WQz
+         Grt/NvzS7UqVAfwX0/Tz/jyp25nWnkIMgsxS2QwUqSvnpTeVigxApxFD4CdYj/OcWkeM
+         y1fAJEjIWaxBydMR0+INwGv2AEE2YIe3Igtk1bYzM5I1CKs23Lg0Mnq0gUVob1JyAi/s
+         QEZ9xtj4a3JXUEPXi/I4poSkniwqI4MJBI8zYSjFvk/fyOOzvaiwNq2J7CuJjYl4z95g
+         gRrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719261036; x=1719865836;
+        d=1e100.net; s=20230601; t=1719262682; x=1719867482;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0JCjzHa62U2GIxuqtrX2ey45JnspojXIKFnfDyNZmBY=;
-        b=tbG+titwF+LEEN3TnoQjTJzfrwQIL1WeOwwuGJEogBQM6xicSJkIU47gXLqgZnCmVU
-         Yg3lHQO1pJWYLK4dFGt3yWMn+hwSxpC3PTxYPPL7qX4APQM2Zq3lvNbtihevNzI/vN7L
-         Ide447ca6+XsbQd8c13kFOQ4/wFClRxaMaD9NSaP0w9Ks4tzEasJawJ4k1ZZxZgoXCT0
-         j+u01hk3bQREn1N/GdotSlvtzMd/0n7qvlqoPeKp1HVH+hHW4YWP+YhCvGpiXgHIs3GR
-         Iy24xjnoW/3/x6/AVS7m1ue4hLkreS1+U+hjbod0a2aLOaqCo2VcPIMKgE4e3tlP+JBh
-         7Tzw==
-X-Forwarded-Encrypted: i=1; AJvYcCVp35hpBltPUij9G8+V7O/FK6wSSEC2X3Zxw+Pl2uIjrhBbtnn2Oyl9qDhvVT4FEGi4MNFBIe8imdTmekkN7dyEO3VS5BL2/yGj8UuZxM4ty/J3C5nxphK1U1mxIu3lffodGENGpZxbAu+K/26svbBUHq3t0PF9buneje0iD6c1KPOv5JBj9hMPFzsg78RcJP6MXTm6G9UhUplN7UAUqvqj
-X-Gm-Message-State: AOJu0YyL2UPjTu6Xs1t2rpHesHZFb7a16WqKHThdmb27URlTlzXYZJod
-	7I/17qL85dRqbOWNinaBrRw2zqeWhybhxRraccDtJ6I+UeSoH1L0+LrH6A==
-X-Google-Smtp-Source: AGHT+IE09v6jXfWM0B1dycTkIqlEwMVFtW6S6SQX/ldL1jJ32tdAE6dln6AaBljV17NP0tY1DsNYVQ==
-X-Received: by 2002:a17:90a:d084:b0:2c7:35f6:87e5 with SMTP id 98e67ed59e1d1-2c8612c6c27mr4625811a91.5.1719261035979;
-        Mon, 24 Jun 2024 13:30:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c819db94ddsm7185675a91.43.2024.06.24.13.30.33
+        bh=4Ohnk9BHFu/EJmzXal9cNmUB7ZWVcATXjjC+GZKOHz4=;
+        b=LDKeU6FD/43vsnX4UlfZKbRCD7+LJlQrZTKRMa4nVoyXg3VtkqfeytCySzVdwqSoGP
+         9BAkdjYXGtA27GkUY6OCA/tDa97cBDhrCu/rqmsC2IqmqyKqutmLPKw1vuRcslaUU7Uf
+         Vad0cCSgKt72nUE5yoCt8GAcHzwq4AROB450H92ukInauBbDfARpFFNCgYS21kYtViAT
+         vSOBEFE8+j9UuWxLZ/znrN6JycLrZOwXEu1+aENdbQV6nTc/v2qevW91Qk3rP7AwWAai
+         jFtYsbAIYOxZ21agWpC97P1VYXysRbLPNGyOOQ2b/i9K280W0pfhxvMmEPDmy20tYubn
+         yOpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzDMfC+R/o/SbS3axImmp+X5aISiSkyCo9yIet5mmult24u7A5sfAIQC7dlVKsGudyYKg9dZ3h8Vf/IvS6XJZ19nyAZA3CY46A2kxA0jPsVndB/C/Mnw6Ha50hL+icqINvZ6fnkwhWh0r76cuz2m2hmeu/LrtMDWFTfgYEwyzT2pmwTVg=
+X-Gm-Message-State: AOJu0Ywtl2UEbD0sLntXudi8wZeaMjqVOkp8Uo7926g2h8sxmBs35Lsn
+	60dhStqxgFb3cpdofaT8W/1+rxqypC+jesKLalvYMbJum1ThbKbM
+X-Google-Smtp-Source: AGHT+IEsxeZJ6VpPpIjo7zyVqgFT7luxLgOUgrUTPrJf7cWRQN/Fk/KldGVgaOD/hTUl/x66ksckfw==
+X-Received: by 2002:a17:906:7746:b0:a6f:3210:ac1d with SMTP id a640c23a62f3a-a7245df6125mr325802166b.63.1719262682115;
+        Mon, 24 Jun 2024 13:58:02 -0700 (PDT)
+Received: from ?IPV6:2a01:c23:c07d:2d00:ad78:a407:846a:969b? (dynamic-2a01-0c23-c07d-2d00-ad78-a407-846a-969b.c23.pool.telefonica.de. [2a01:c23:c07d:2d00:ad78:a407:846a:969b])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a6fe8c018fasm310522666b.21.2024.06.24.13.58.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jun 2024 13:30:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b361066a-d36c-42c6-9e54-5cde8c40c6b7@roeck-us.net>
-Date: Mon, 24 Jun 2024 13:30:33 -0700
+        Mon, 24 Jun 2024 13:58:01 -0700 (PDT)
+Message-ID: <797c8371-dff3-4112-9733-4d3119670dbf@gmail.com>
+Date: Mon, 24 Jun 2024 22:58:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,86 +77,207 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-To: Heiner Kallweit <hkallweit1@gmail.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>, Armin Wolf
- <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, =?UTF-8?Q?Ren=C3=A9_Rebe?=
- <rene@exactcode.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>, Stephen Horvath <s.horvath@outlook.com.au>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-6-linux@roeck-us.net>
- <c939b0c7-2c8c-4cf1-8d5c-9309ce0b371a@gmx.de>
- <txliuvufu6muqucno2uex2q6xvnveozpjzahx7zryqlvvvzrs7@flv2zztine6r>
- <a7e38754-ff1a-4e15-99b2-4785827efc83@roeck-us.net>
- <ib6p4ivqdn56l3jzzarsoeijjhwak33bmqvj2qiddbhxdqzchk@txl4gdslx4gq>
- <79f406ae-cfc9-48bb-9c80-20f998c40b69@roeck-us.net>
- <veggn7y6qeeqx2dsmjykktudpwifnt5xzxcx5ulfglkgtq574p@f5dzhj4otjgl>
- <9183dfda-d3f3-4fa1-9a4b-c6edeb30482d@gmail.com>
+Subject: Re: Regression caused by "eeprom: at24: Probe for DDR3 thermal sensor
+ in the SPD case" - "sysfs: cannot create duplicate filename"
+To: Guenter Roeck <linux@roeck-us.net>, =?UTF-8?Q?Krzysztof_Ol=C4=99dzki?=
+ <ole@ans.pl>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Wolfram Sang <wsa@the-dreams.de>
+Cc: stable@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-hwmon@vger.kernel.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <a57e9a39-13ce-4e4d-a7a1-c591f6b4ac65@ans.pl>
+ <0dfa2919-98eb-4433-acb4-aa1830787c9b@roeck-us.net>
+ <77c1b740-9e6d-40f7-83f0-9a949366f1c9@ans.pl>
+ <97c497ae-44f7-4cec-b7d9-f639e4597571@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <9183dfda-d3f3-4fa1-9a4b-c6edeb30482d@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <97c497ae-44f7-4cec-b7d9-f639e4597571@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 6/24/24 13:06, Heiner Kallweit wrote:
-[ ... ]
-> It seems Intel systems never have more than one i801 SMBUS adapter,
-> therefore systems with more than 8 memory slots have to use muxing.
-> The current code was developed for the Intel use case, and therefore
-> doesn't consider that a system may have dedicated SMBUS controllers
-> per 8 memory slots. So support for this scenario has to be added.
+On 24.06.2024 16:54, Guenter Roeck wrote:
+> On 6/24/24 01:38, Krzysztof Olędzki wrote:
+>> On 23.06.2024 at 22:33, Guenter Roeck wrote:
+>>> On 6/23/24 11:47, Krzysztof Olędzki wrote:
+>>>> Hi,
+>>>>
+>>>> After upgrading kernel to Linux 6.6.34 on one of my systems, I noticed "sysfs: cannot create duplicate filename" and i2c registration errors in dmesg, please see below.
+>>>>
+>>>> This seems to be related to https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-6.6.y&id=4d5ace787273cb159bfdcf1c523df957938b3e42 - reverting the change fixes the problem.
+>>>>
+>>>> Note that jc42 devices are registered correctly and work with and without the change.
+>>>>
+>>>
+>>> My guess is that the devices are fist instantiated through the jc42
+>>> driver's _detect function and then again from the at24 driver.
+>>> The at24 driver should possibly call i2c_new_scanned_device() instead
+>>> of i2c_new_client_device() to only instantiate the device if it wasn't
+>>> already instantiated.
+>>
+>> i2c_new_scanned_device() also calls i2c_default_probe() at the end (unless
+>> different probe is provided) which seems risky given the comment that explains
+>> that it would use quick write for that address. However, maybe it is safe in this case?
+>> I wish we had a way to just tell "no probing is needed".
+>>
+> 
+> Sorry, I don't understand why it would be less risky to just probe the device
+> without such a test.
+> 
+>> We also know the exact address so no scanning is needed.
+>>
+>> Perhaps it would be better to just call i2c_check_addr_busy() in
+>> at24_probe_temp_sensor()?
+>>
+>> Something like this:
+>> --- a/drivers/misc/eeprom/at24.c    2024-06-24 09:16:11.251855130 +0200
+>> +++ b/drivers/misc/eeprom/at24.c    2024-06-24 09:27:01.158170725 +0200
+>> @@ -603,6 +603,10 @@
+>>         info.addr = 0x18 | (client->addr & 7);
+>>   +    /* The device may be already instantiated through the jc42 driver */
+>> +    if (i2c_check_addr_busy(client->adapter, info.addr))
+>> +        return;
+>> +
+>>       i2c_new_client_device(client->adapter, &info);
+>>   }
+>>
+>> Unfortunately, i2c_check_addr_busy is not exported and declared as static,
+> 
+> That is why I did not suggest that.
+> 
+>> I assume intentionally? Unless this can be changed, we are back to the original
+>> recommendation:
+>>
+>> --- a/drivers/misc/eeprom/at24.c    2024-06-24 09:16:11.251855130 +0200
+>> +++ b/drivers/misc/eeprom/at24.c    2024-06-24 10:25:39.142567472 +0200
+>> @@ -585,6 +585,7 @@
+>>   {
+>>       struct at24_data *at24 = i2c_get_clientdata(client);
+>>       struct i2c_board_info info = { .type = "jc42" };
+>> +    unsigned short addr_list[] = { 0, I2C_CLIENT_END };
+>>       int ret;
+>>       u8 val;
+>>   @@ -601,9 +602,10 @@
+>>       if (ret || !(val & BIT(7)))
+>>           return;
+>>   -    info.addr = 0x18 | (client->addr & 7);
+>> +    addr_list[0] = 0x18 | (client->addr & 7);
+>>   -    i2c_new_client_device(client->adapter, &info);
+>> +    /* The device may be already instantiated through the jc42 driver */
+>> +    i2c_new_scanned_device(client->adapter, &info, addr_list, NULL);
+>>   }
+>>     static int at24_probe(struct i2c_client *client)
+>>
+>> For now compile-tested only given the write-test concern above.
+>>
+> 
+> The device detect code in the i2c core does that same write-test that you
+> are concerned about.
+> 
+>> That said, I have some follow-up questions:
+>>
+>> 1. if the jc42 driver handles this already, I wonder what's the point of adding
+>> at24_probe_temp_sensor()? Is there a situation where it would not do it properly?
+>> Or do we expect to remove the probing functionally from jc42.c?
+>>
+> 
+> The jc42 driver is not auto-loaded. When suggesting to remove the "probing
+> functionally", I assume you mean to remove its detect function. That would only
+> work if SPD EEPROMs were only connected to I2C adapters calling i2c_register_spd(),
+> and if the systems with those adapters would support DMI.
+> 
+> In v6.9, i2c_register_spd() is only called from the i801 driver (Intel systems).
+> In v6.11, piix4 (AMD) will be added. Even after that, all non-Intel / non-AMD systems
+> would no longer be able to support jc42 compatible chips by just loading the jc42
+> driver. That would not be acceptable.
+> 
+>> 2. I don't understand why we are also getting the "Failed creating jc42" and
+>> "sysfs: cannot create duplicate filename" errors since i2c_new_client_device() calls
+>> i2c_check_addr_busy() on its own and should abort after the first error message?
+>>
+> 
+> The "Failed creating" message is from the i2c core's detect function which
+> is only called if a new i2c adapter is added. This is actually the case here,
+> since the call sequence of the backtrace includes i801_probe(). It looks like
+> i2c_detect() runs asynchronously and doesn't protect itself against having
+> devices added to a bus while it is running on that same bus. That is just
+> a guess, though - I have not tried to verify it.
 > 
 
-I absolutely agree, hopefully by someone with such a system.
+Too me the issue also looks like a race. According to the OP's logs:
+- jc42 at 0x18 is instantiated successfully
+- jc42 at 0x19 returns -EBUSY. This is what is expected if the device
+  has been instantiated otherwise already.
+- jc42 at 0x1a returns -EEXIST. Here two instantiations of the the same
+  device seem to collide.
+- jc42 at 0x1b returns -EBUSY, like at 0x19.
 
-Thanks,
-Guenter
+So it looks like referenced change isn't wrong, but reveals an
+underlying issue with device instantiation races.
+I'll have a look how this could be fixed.
 
-
+> That does suggest, though, that even your suggested code above might not
+> completely fix the problem. It may be necessary to call i2c_lock_bus()
+> or similar from i2c_new_scanned_device() and i2c_detect(), but I don't know
+> if that is save, sufficient, or even possible.
+> 
+>> 3. (unrelated but found while looking at the code) The comment for
+>> delete_device_store() seems to be outdated as it mentions i2c_sysfs_new_device
+>> which does not exist any longer, as it was renamed in
+>> "i2c: core: Use DEVICE_ATTR_*() helper macros" back in 2019:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/i2c/i2c-core-base.c?id=54a19fd4a6402ef47fce5c3a5374c71f52373c40 -
+>>
+>> For the Greg's question if it is also in 6.9: I have not tested that kernel yet,
+>> but unless there have been some recent changes in the i2c code I would expect
+>> it should behave the same way. If required, I should be able to do this next week.
+>>
+> Agreed.
+> 
+> Guenter
+> 
 
 
