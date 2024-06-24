@@ -1,81 +1,87 @@
-Return-Path: <linux-i2c+bounces-4303-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4304-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3E9E914856
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 13:16:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B87F914998
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 14:15:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 100E9B246FB
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 11:16:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F22F1C221D8
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 12:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 621AB138495;
-	Mon, 24 Jun 2024 11:16:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C76413C669;
+	Mon, 24 Jun 2024 12:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Xd8KtO/l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mu0LvQ51"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909FC442C
-	for <linux-i2c@vger.kernel.org>; Mon, 24 Jun 2024 11:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A5613BAE4;
+	Mon, 24 Jun 2024 12:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719227781; cv=none; b=hyENL3oO/1Nb4s3cP+XYvTnOtSqYDEOITnI88Ez2CrkNOSofgHL4bV+Fmw14+Kq5L6vvF+9PF8zTc5GY4Geu24S73BZwaROFdZn+3JzHFo4ElJJoT4imqfXoWoEHrdM+VjfhHZMoamKrRlTZebkKMMBDx6JvfCsdp/zihJEnDdM=
+	t=1719231293; cv=none; b=hJmqcNc1SBN70+2ugsx+6Uxb98Obi1M9uRs43WU1sxxZ5qvbCAyk4gYeLN8Py/4GjaAjqFns/nh35kURZUjAzP/kBXI2vsxa+PT4k2aSvZ2Pnxt/OhV7jPTzkL1XdC3u1pfV8B18t6lwA1mIHXXy9KIpnkMfBPV71nJBNIB6ZfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719227781; c=relaxed/simple;
-	bh=f8K+KFCu4v2gxFcfZDlFE3CpP4AowUfk2+j7UrI7KIQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eyFKKs1GOnuCZ0x94KT0tvkD9cncXxudTto0Kf1/gByisbM6oJUjkPbqj0pyxBc2Iqjvp162xZ3/EWqEs/xAOFt6Hgq7MNGUh36Ln+5bqphPvr9L/B+5eLP6Y1cjkIEbW9Mrq4nlrs+zzp+u9YkpMoyxCVg3leuj79It1LjSQfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Xd8KtO/l; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719227778;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1MKQZAMPum9/XFHweBiLEqq+DxvimF2wmcbjyqmhaeM=;
-	b=Xd8KtO/lakhkYul0XeQOiYKmt+Ckh9I2ZJpZrVa2mEZLT2Ih3VAQ1xOYZZEDS4lhCMAkaI
-	kMNkSRIjEsyItfoJv1hgtjzU/fBkXOZpsNbmHgqat7KQZGIHP51Lrjfa1I5KB4HFgSE8Cz
-	XfTRbPWawi43M6WprYP9HlXoEkpSNmY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-528-jBoqmSz_Mt2Dq9flgCss5A-1; Mon,
- 24 Jun 2024 07:16:14 -0400
-X-MC-Unique: jBoqmSz_Mt2Dq9flgCss5A-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0035B195608E;
-	Mon, 24 Jun 2024 11:16:12 +0000 (UTC)
-Received: from x1.localdomain.com (unknown [10.39.193.82])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6CDB51956087;
-	Mon, 24 Jun 2024 11:16:07 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Wolfram Sang <wsa@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	eric.piel@tremplin-utc.net,
-	Marius Hoch <mail@mariushoch.de>,
-	Dell.Client.Kernel@dell.com,
-	Kai Heng Feng <kai.heng.feng@canonical.com>,
-	platform-driver-x86@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
+	s=arc-20240116; t=1719231293; c=relaxed/simple;
+	bh=KTY7AIwYLs2PMQ+nFYfy6HqLr5vj+giUt9AYetfTWnE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BEoh77Iw4egCSPrgHPmOsJoyb6e7qacw1NFH6wC0sU/MewvspWwE+RaLxj/yHrZh3egb00UpvZ6ybtPoiCzkVvBpcBPaV9gN00bTbag0G2QL+dIQoiKJS5rqRtOzeF9VHIVeKyhV9RArynKEb2vIKizCIXUJBQdzZ5alC9dMscw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mu0LvQ51; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7067272245aso998478b3a.1;
+        Mon, 24 Jun 2024 05:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719231292; x=1719836092; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l1T1d+qL+x9N3NhGvgQQLc9S1TRtkKHtV2wtCXAE6ZM=;
+        b=mu0LvQ51MbMHC020NdF9cEqL2GNSsVYDkboqMZnKtPOtLbljNf5SSAXZxXNs8IyXTf
+         8jnA8HsmI50HXMGhLPmJd0Cvpkv3jTMI7AbHLH3ydyMGqfXHg1n2N6/3kObrOAYIOuHm
+         /AnyPIghwB6SyKmA9wWuVFqR5gGKBthN7LTukat/ZrnQPk4B85Yh7+1sl6sTybUIHrBW
+         Rs8tzWaDjW8xRWa0EE8CnjAcvmECm+rJzNhT46TV696dNg6oC/OJp4JY8L7RKTjZCQyo
+         n96dLCvwKnXglBMa+T0wrWVPzlwdJhzJc4B/Uhp8dvEg3g9BYk7mOdsj9oVe/UqQu22p
+         Azow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719231292; x=1719836092;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l1T1d+qL+x9N3NhGvgQQLc9S1TRtkKHtV2wtCXAE6ZM=;
+        b=nQanuALT9hZZAO8ZeVGSXrDJaMXE1644Mu4zA/XQ82TW5veRo0WNWH1c0ogRdIL9St
+         FMs7R+WuzMWNmNDazQRoSwOFFcA9P+B+eeGVN+hbCWhIYst9rpqcQLaPruo2Dh23cXje
+         JXUVXGdCH87Z5faHVXFKPIVuyjxh3Q5Fe8eTijShk21IcsICT9z7aQ5zRKy+ddZJe0xt
+         29GYUsUXTXA60nZD6E23nJHqhHQ+0al1w7yOlbY0MV+LGyHJ146F78sI/3iW27jUTzA+
+         N9fI5zUoet7FhtjsL3ETIanRmoy60IEmuCj7MaAUT6fRQ2UkNgWjoWnKhj2NqrR5dlWo
+         6aHA==
+X-Forwarded-Encrypted: i=1; AJvYcCXAbehJsXadrfnH/zLYWo5zCF3Ekc/5dD0IZxRYmAqu55smsuWSRoqwg4Yti4lwLkNuGQyf1rifcm1EIkzff2YMObIYf4jFNQ5nCK5zvLDanElZusst7HVBlyiwxXtfDnFNw2vC7+VR7zFzeXHw6jXd1OJORB0DLDYAF48GadDZgfOTxg==
+X-Gm-Message-State: AOJu0YxM5wZP4MD4kkWdYcCLiDKrdaR1+MDSqxDAXASJvhfvZPf2HQT9
+	ZgYrghTyUDN3+4PEsbicnkbCti1WKbyAJ5quD+vqry9rNh2Q6W9X
+X-Google-Smtp-Source: AGHT+IGZQGm/zL2QtBi7MUQCzOJMhdVjFVj39ftHhLl2bP+nXSaA7BFv9kAwSmk88w+o6dU7EM1v6g==
+X-Received: by 2002:a05:6a20:4712:b0:1b8:622a:cf76 with SMTP id adf61e73a8af0-1bcf7fc2ccfmr2613766637.48.1719231291576;
+        Mon, 24 Jun 2024 05:14:51 -0700 (PDT)
+Received: from ga401ii.. ([2401:4900:1cc8:f161:e194:b8d8:3f20:dff1])
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-7065107c26esm6266761b3a.11.2024.06.24.05.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 05:14:51 -0700 (PDT)
+From: Kanak Shilledar <kanakshilledar@gmail.com>
+To: 
+Cc: Kanak Shilledar <kanakshilledar@gmail.com>,
+	kernel test robot <lkp@intel.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH v4 6/6] platform/x86: dell-smo8800: Add support for probing for the accelerometer i2c address
-Date: Mon, 24 Jun 2024 13:15:18 +0200
-Message-ID: <20240624111519.15652-7-hdegoede@redhat.com>
-In-Reply-To: <20240624111519.15652-1-hdegoede@redhat.com>
-References: <20240624111519.15652-1-hdegoede@redhat.com>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3] dt-bindings: i2c: nxp,lpc1788-i2c: convert to dt schema
+Date: Mon, 24 Jun 2024 17:44:17 +0530
+Message-ID: <20240624121421.549010-2-kanakshilledar@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,198 +89,147 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Unfortunately the SMOxxxx ACPI device does not contain the i2c-address
-of the accelerometer. So a DMI product-name to address mapping table
-is used.
+Convert the NXP I2C controller for LPC2xxx/178x/18xx/43xx
+to newer DT schema. Created DT schema based on the .txt file
+which had `compatible`, `reg`, `interrupts`, `clocks`,
+`#address-cells` and `#size-cells` as required properties.
 
-At support to have the kernel probe for the i2c-address for modesl
-which are not on the list.
+Additional changes to the original .txt binding
+- added maintainer from the MAINTAINERS file.
+- added resets property required by the corresponding DTS files.
 
-The new probing code sits behind a new probe_i2c_addr module parameter,
-which is disabled by default because probing might be dangerous.
-
-Link: https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de/
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202406200223.QexMAKqr-lkp@intel.com/
 ---
- drivers/platform/x86/dell/dell-lis3lv02d.c | 133 ++++++++++++++++++++-
- 1 file changed, 131 insertions(+), 2 deletions(-)
+Changes in v3:
+- removed "address-cells" and "size-cells" as per feedback.
+Changes in v2:
+- updated subject line to include device name.
+- changed removed description from properties except `clock-frequency`.
+- updated MAINTAINERS to track this file.
+---
+ .../devicetree/bindings/i2c/i2c-lpc2k.txt     | 33 ------------
+ .../bindings/i2c/nxp,lpc1788-i2c.yaml         | 54 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 55 insertions(+), 34 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml
 
-diff --git a/drivers/platform/x86/dell/dell-lis3lv02d.c b/drivers/platform/x86/dell/dell-lis3lv02d.c
-index a7409db0505b..173615fd2646 100644
---- a/drivers/platform/x86/dell/dell-lis3lv02d.c
-+++ b/drivers/platform/x86/dell/dell-lis3lv02d.c
-@@ -15,6 +15,8 @@
- #include <linux/workqueue.h>
- #include "dell-smo8800-ids.h"
- 
-+#define LIS3_WHO_AM_I 0x0f
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt b/Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt
+deleted file mode 100644
+index 4101aa621ad4..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt
++++ /dev/null
+@@ -1,33 +0,0 @@
+-NXP I2C controller for LPC2xxx/178x/18xx/43xx
+-
+-Required properties:
+- - compatible: must be "nxp,lpc1788-i2c"
+- - reg: physical address and length of the device registers
+- - interrupts: a single interrupt specifier
+- - clocks: clock for the device
+- - #address-cells: should be <1>
+- - #size-cells: should be <0>
+-
+-Optional properties:
+-- clock-frequency: the desired I2C bus clock frequency in Hz; in
+-  absence of this property the default value is used (100 kHz).
+-
+-Example:
+-i2c0: i2c@400a1000 {
+-	compatible = "nxp,lpc1788-i2c";
+-	reg = <0x400a1000 0x1000>;
+-	interrupts = <18>;
+-	clocks = <&ccu1 CLK_APB1_I2C0>;
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-};
+-
+-&i2c0 {
+-	clock-frequency = <400000>;
+-
+-	lm75@48 {
+-		compatible = "nxp,lm75";
+-		reg = <0x48>;
+-	};
+-};
+-
+diff --git a/Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml b/Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml
+new file mode 100644
+index 000000000000..9a1b95c2d03c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/nxp,lpc1788-i2c.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- #define DELL_LIS3LV02D_DMI_ENTRY(product_name, i2c_addr)                 \
- 	{                                                                \
- 		.matches = {                                             \
-@@ -57,6 +59,121 @@ static const struct dmi_system_id *lis3lv02d_dmi_id;
- static struct i2c_client *i2c_dev;
- static bool notifier_registered;
- 
-+static bool probe_i2c_addr;
-+module_param(probe_i2c_addr, bool, 0444);
-+MODULE_PARM_DESC(probe_i2c_addr, "Probe the i801 I2C bus for the accelerometer on models where the address is unknown");
++title: NXP I2C controller for LPC2xxx/178x/18xx/43xx
 +
-+/*
-+ * This is the kernel version of the single register device sanity checks from
-+ * the i2c_safety_check function from lm_sensors sensor-detect script:
-+ * This is meant to prevent access to 1-register-only devices,
-+ * which are designed to be accessed with SMBus receive byte and SMBus send
-+ * byte transactions (i.e. short reads and short writes) and treat SMBus
-+ * read byte as a real write followed by a read. The device detection
-+ * routines would write random values to the chip with possibly very nasty
-+ * results for the hardware. Note that this function won't catch all such
-+ * chips, as it assumes that reads and writes relate to the same register,
-+ * but that's the best we can do.
-+ */
-+static int i2c_safety_check(struct i2c_adapter *adap, u8 addr)
-+{
-+	union i2c_smbus_data smbus_data;
-+	int err;
-+	u8 data;
++maintainers:
++  - Vladimir Zapolskiy <vz@mleia.com>
 +
-+	/*
-+	 * First receive a byte from the chip, and remember it. This
-+	 * also checks if there is a device at the address at all.
-+	 */
-+	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, 0,
-+			     I2C_SMBUS_BYTE, &smbus_data);
-+	if (err < 0)
-+		return err;
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
 +
-+	data = smbus_data.byte;
++properties:
++  compatible:
++    const: nxp,lpc1788-i2c
 +
-+	/*
-+	 * Receive a byte again; very likely to be the same for
-+	 * 1-register-only devices.
-+	 */
-+	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, 0,
-+			     I2C_SMBUS_BYTE, &smbus_data);
-+	if (err < 0)
-+		return err;
++  reg:
++    maxItems: 1
 +
-+	if (smbus_data.byte != data)
-+		return 0; /* Not a 1-register-only device. */
++  interrupts:
++    maxItems: 1
 +
-+	/*
-+	 * Then try a standard byte read, with a register offset equal to
-+	 * the read byte; for 1-register-only device this should read
-+	 * the same byte value in return.
-+	 */
-+	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, data,
-+			     I2C_SMBUS_BYTE_DATA, &smbus_data);
-+	if (err < 0)
-+		return err;
++  clocks:
++    maxItems: 1
 +
-+	if (smbus_data.byte != data)
-+		return 0; /* Not a 1-register-only device. */
++  clock-frequency:
++    description: the desired I2C bus clock frequency in Hz
++    default: 100000
 +
-+	/*
-+	 * Then try a standard byte read, with a slightly different register
-+	 * offset; this should again read the register offset in return.
-+	 */
-+	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, data ^ 0x01,
-+			     I2C_SMBUS_BYTE_DATA, &smbus_data);
-+	if (err < 0)
-+		return err;
++  resets:
++    maxItems: 1
 +
-+	if (smbus_data.byte != (data ^ 0x01))
-+		return 0; /* Not a 1-register-only device. */
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
 +
-+	/*
-+	 * Apparently this is a 1-register-only device, restore the original
-+	 * register value and leave it alone.
-+	 */
-+	i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_WRITE, data,
-+		       I2C_SMBUS_BYTE, NULL);
-+	pr_warn("I2C safety check for address 0x%02x failed, skipping\n", addr);
-+	return -ENODEV;
-+}
++unevaluatedProperties: false
 +
-+static int detect_lis3lv02d(struct i2c_adapter *adap, u8 addr,
-+			    struct i2c_board_info *info)
-+{
-+	union i2c_smbus_data smbus_data;
-+	int err;
++examples:
++  - |
++    #include "dt-bindings/clock/lpc18xx-ccu.h"
 +
-+	pr_info("Probing for lis3lv02d on address 0x%02x\n", addr);
-+	err = i2c_safety_check(adap, addr);
-+	if (err < 0)
-+		return err;
-+
-+	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, LIS3_WHO_AM_I,
-+			     I2C_SMBUS_BYTE_DATA, &smbus_data);
-+	if (err < 0) {
-+		pr_warn("Failed to read who-am-i register: %d\n", err);
-+		return err;
-+	}
-+
-+	/* valid who-am-i values are from drivers/misc/lis3lv02d/lis3lv02d.c */
-+	switch (smbus_data.byte) {
-+	case 0x32:
-+	case 0x33:
-+	case 0x3a:
-+	case 0x3b:
-+		break;
-+	default:
-+		pr_warn("Unknown who-am-i register value 0x%02x\n", smbus_data.byte);
-+		return -ENODEV;
-+	}
-+
-+	pr_debug("Detected lis3lv02d on address 0x%02x\n", addr);
-+	info->addr = addr;
-+	return 0;
-+}
-+
- static bool i2c_adapter_is_main_i801(struct i2c_adapter *adap)
- {
- 	/*
-@@ -93,7 +210,17 @@ static void instantiate_i2c_client(struct work_struct *work)
- 	if (!adap)
- 		return;
- 
--	info.addr = (long)lis3lv02d_dmi_id->driver_data;
-+	if (lis3lv02d_dmi_id) {
-+		info.addr = (long)lis3lv02d_dmi_id->driver_data;
-+	} else {
-+		/* First try address 0x29 (most used) and then try 0x1d */
-+		if (detect_lis3lv02d(adap, 0x29, &info) != 0 &&
-+		    detect_lis3lv02d(adap, 0x1d, &info) != 0) {
-+			pr_warn("failed to probe for lis3lv02d I2C address\n");
-+			goto out_put_adapter;
-+		}
-+	}
-+
- 	strscpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
- 
- 	i2c_dev = i2c_new_client_device(adap, &info);
-@@ -104,6 +231,7 @@ static void instantiate_i2c_client(struct work_struct *work)
- 		pr_debug("registered lis3lv02d on address 0x%02x\n", info.addr);
- 	}
- 
-+out_put_adapter:
- 	i2c_put_adapter(adap);
- }
- static DECLARE_WORK(i2c_work, instantiate_i2c_client);
-@@ -166,8 +294,9 @@ static int __init dell_lis3lv02d_init(void)
- 	put_device(dev);
- 
- 	lis3lv02d_dmi_id = dmi_first_match(lis3lv02d_devices);
--	if (!lis3lv02d_dmi_id) {
-+	if (!lis3lv02d_dmi_id && !probe_i2c_addr) {
- 		pr_warn("accelerometer is present on SMBus but its address is unknown, skipping registration\n");
-+		pr_info("Pass dell_lis3lv02d.probe_i2c_addr=1 on the kernel commandline to probe, this may be dangerous!\n");
- 		return 0;
- 	}
- 
++    i2c@400a1000 {
++        compatible = "nxp,lpc1788-i2c";
++        reg = <0x400a1000 0x1000>;
++        interrupts = <18>;
++        clocks = <&ccu1 CLK_APB1_I2C0>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf9c9221c388..920e4f28b5ae 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2374,7 +2374,7 @@ ARM/LPC18XX ARCHITECTURE
+ M:	Vladimir Zapolskiy <vz@mleia.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt
++F:	Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml
+ F:	arch/arm/boot/dts/nxp/lpc/lpc43*
+ F:	drivers/i2c/busses/i2c-lpc2k.c
+ F:	drivers/memory/pl172.c
 -- 
-2.45.1
+2.45.2
 
 
