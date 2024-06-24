@@ -1,50 +1,48 @@
-Return-Path: <linux-i2c+bounces-4294-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4295-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A38D2914510
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 10:39:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 452C7914541
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 10:48:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 286CE1F213AA
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 08:39:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFD47280C4D
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 08:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C31F5EE97;
-	Mon, 24 Jun 2024 08:39:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C24B127E0F;
+	Mon, 24 Jun 2024 08:48:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ans.pl header.i=@ans.pl header.b="DVGrwhls"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZaGVMdup"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.emenem.pl (cmyk.emenem.pl [217.79.154.63])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6834F201;
-	Mon, 24 Jun 2024 08:39:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.79.154.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15841FAA;
+	Mon, 24 Jun 2024 08:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719218368; cv=none; b=t4Tw4fcB8VKi5I/sr/aHwSuYAO5aNHr2pvEi1tNPO8y1GZfHVTkEvKVIQ1y1PP80qjqfyPUrRkzYBi9vAzYAyNrUApDxpEFVDWdF+MYtcd5TRU2Krnleskf/S9UbZYV5XQBfyg76J2vFuCkUmZJKz73SdGe44ejonqsDgJone58=
+	t=1719218884; cv=none; b=sy/cwjqhnwRXJ0mdhbpsx0sNFUugtgoYSg6bA76TlGBvkdrBBf1f7N4GaFtIpIFzdiO1vT/L0gobwH7aACDcbX3HnpF91CIGVbu5ACgOIRiHxz4bRXQ1b2c7GLgc4Vypn2yXPx9dWpmeK3GZNKroKyFVOlnCfQhUjRDVmENOqqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719218368; c=relaxed/simple;
-	bh=EeByMmqv/4BudhVX/ufck5xtDHGs5+dVODbydkpdVW8=;
+	s=arc-20240116; t=1719218884; c=relaxed/simple;
+	bh=I3zxaQ5qXqvIdNZuB74w/F2c5TQY8XKfYUWKDvDC3nA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XRELq5bNgBNwhOIK2EdV3SvOKy0/fu6kt4ljrOmUzZmMeuhvms002JLwPC7vLg3zxJwdwKk1/JvRhtArAOnWM0qttJqPwn+38jpK9ZK1bX2hlU5hyjvkBkclSI0KYUxJ0LTjZs0Sn2zWWtF5iXpHwlVQhFbqYZ74+DaU8JTspqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ans.pl; spf=none smtp.mailfrom=ans.pl; dkim=pass (1024-bit key) header.d=ans.pl header.i=@ans.pl header.b=DVGrwhls; arc=none smtp.client-ip=217.79.154.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ans.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ans.pl
-X-Virus-Scanned: amavisd-new at emenem.pl
-Received: from [192.168.1.10] (c-98-45-176-131.hsd1.ca.comcast.net [98.45.176.131])
-	(authenticated bits=0)
-	by cmyk.emenem.pl (8.17.1.9/8.17.1.9) with ESMTPSA id 45O8cqxu007335
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Mon, 24 Jun 2024 10:38:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ans.pl; s=20190507;
-	t=1719218339; bh=NGZ9cnu+eI211OciJpJnI/vCKmWtAkXMO1gQPcPydxM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=DVGrwhlsZT3iclLlIVqG5SeQXfK/eg+veyG/li+r1DQ+BBDknTJo/MY9CpPZK9fJs
-	 tfBsEF3CchW5c1i5GNzZZRStmac7V1IAlcCo6DfpHgt+LLScuWKAgWfgvfMzqDKyJ5
-	 bwhieYgnlrhEXupjqWjTT/YEC1iantb9OuqVLNog=
-Message-ID: <77c1b740-9e6d-40f7-83f0-9a949366f1c9@ans.pl>
-Date: Mon, 24 Jun 2024 01:38:51 -0700
+	 In-Reply-To:Content-Type; b=nz4LhaZprRfBmVItYpaQDGYMVgP/HW26GTMnzh3j+PphXKSHeE6HYjDC5OPCPwnK+Ylrka07vCSxU8IDPm2G7+vBOOb/NHoINRy0m3meg1c3FejF2Z5LFRR27LXui3vRiczbATpX01ZdM8orFz2a7zCohFXDgkKvtAGceHq7f1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZaGVMdup; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D735BC2BBFC;
+	Mon, 24 Jun 2024 08:48:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719218884;
+	bh=I3zxaQ5qXqvIdNZuB74w/F2c5TQY8XKfYUWKDvDC3nA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZaGVMdupfQtckP186sh334siKWygPz2wTsW0GUPe9urt7a+r1TZyVHbDuWQxRal6P
+	 xpjBIJJxWcuIkAqR2KJbAqrd7JdLeszE/sEZ7OD+nDYhyy3ZajjcFJrukPNQ1RE7Yn
+	 z2BuNKxxKj806o2TSE812BG/8GLJsfMloY1UQEa/ER2eRdVVQa9h8exRvO7D396e/7
+	 A2bLx3OxWYa4PMHQV6rjl3tVJi7yc4VPc2YxmYEYJBwUa2INN9UBhbDrqNjDEbeRLv
+	 LPHKcBGvW4TEW9HsVTqlWb+4iXmGt7B9JLuAbg5uTr1gZWrARHk2a2UBgfxmg36e1i
+	 pHBFWhE9jA3tA==
+Message-ID: <c1ae6b88-78bc-4139-8046-5eecf5dbe6d6@kernel.org>
+Date: Mon, 24 Jun 2024 10:47:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,116 +50,92 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Regression caused by "eeprom: at24: Probe for DDR3 thermal sensor
- in the SPD case" - "sysfs: cannot create duplicate filename"
-To: Guenter Roeck <linux@roeck-us.net>,
-        Heiner Kallweit
- <hkallweit1@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc: stable@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <a57e9a39-13ce-4e4d-a7a1-c591f6b4ac65@ans.pl>
- <0dfa2919-98eb-4433-acb4-aa1830787c9b@roeck-us.net>
-From: =?UTF-8?Q?Krzysztof_Ol=C4=99dzki?= <ole@ans.pl>
+Subject: Re: [PATCH v2] dt-bindings: i2c: nxp,lpc1788-i2c: convert to dt
+ schema
+To: Kanak Shilledar <kanakshilledar@gmail.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Vladimir Zapolskiy <vz@mleia.com>,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20240620054024.43627-2-kanakshilledar@gmail.com>
+ <d613221e-f026-400a-acec-921ef110ac29@kernel.org>
+ <CAGLn_=t+GyhGvtfXO=VmXB6iC3XAsAexOpqGt6AWdMNW15Lf8g@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-In-Reply-To: <0dfa2919-98eb-4433-acb4-aa1830787c9b@roeck-us.net>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <CAGLn_=t+GyhGvtfXO=VmXB6iC3XAsAexOpqGt6AWdMNW15Lf8g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 23.06.2024 at 22:33, Guenter Roeck wrote:
-> On 6/23/24 11:47, Krzysztof Olędzki wrote:
->> Hi,
+On 24/06/2024 09:09, Kanak Shilledar wrote:
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - interrupts
+>>> +  - clocks
+>>> +  - "#address-cells"
+>>> +  - "#size-cells"
 >>
->> After upgrading kernel to Linux 6.6.34 on one of my systems, I noticed "sysfs: cannot create duplicate filename" and i2c registration errors in dmesg, please see below.
->>
->> This seems to be related to https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-6.6.y&id=4d5ace787273cb159bfdcf1c523df957938b3e42 - reverting the change fixes the problem.
->>
->> Note that jc42 devices are registered correctly and work with and without the change.
->>
+>> These should not be required, because you can have an enabled I2C
+>> controller without children in DT.
 > 
-> My guess is that the devices are fist instantiated through the jc42
-> driver's _detect function and then again from the at24 driver.
-> The at24 driver should possibly call i2c_new_scanned_device() instead
-> of i2c_new_client_device() to only instantiate the device if it wasn't
-> already instantiated.
+> You suggest removing the address cells and size cells from the
+> required properties?
 
-i2c_new_scanned_device() also calls i2c_default_probe() at the end (unless
-different probe is provided) which seems risky given the comment that explains
-that it would use quick write for that address. However, maybe it is safe in this case?
-I wish we had a way to just tell "no probing is needed".
+Yes.
 
-We also know the exact address so no scanning is needed.
+> I saw a few i2c dt-bindings and these had the address cells and size
+> cells in the required
+> property.
 
-Perhaps it would be better to just call i2c_check_addr_busy() in
-at24_probe_temp_sensor()?
+Could be.
 
-Something like this:
---- a/drivers/misc/eeprom/at24.c	2024-06-24 09:16:11.251855130 +0200
-+++ b/drivers/misc/eeprom/at24.c	2024-06-24 09:27:01.158170725 +0200
-@@ -603,6 +603,10 @@
- 
- 	info.addr = 0x18 | (client->addr & 7);
- 
-+	/* The device may be already instantiated through the jc42 driver */
-+	if (i2c_check_addr_busy(client->adapter, info.addr))
-+		return;
-+
- 	i2c_new_client_device(client->adapter, &info);
- }
 
-Unfortunately, i2c_check_addr_busy is not exported and declared as static,
-I assume intentionally? Unless this can be changed, we are back to the original
-recommendation:
-
---- a/drivers/misc/eeprom/at24.c	2024-06-24 09:16:11.251855130 +0200
-+++ b/drivers/misc/eeprom/at24.c	2024-06-24 10:25:39.142567472 +0200
-@@ -585,6 +585,7 @@
- {
- 	struct at24_data *at24 = i2c_get_clientdata(client);
- 	struct i2c_board_info info = { .type = "jc42" };
-+	unsigned short addr_list[] = { 0, I2C_CLIENT_END };
- 	int ret;
- 	u8 val;
- 
-@@ -601,9 +602,10 @@
- 	if (ret || !(val & BIT(7)))
- 		return;
- 
--	info.addr = 0x18 | (client->addr & 7);
-+	addr_list[0] = 0x18 | (client->addr & 7);
- 
--	i2c_new_client_device(client->adapter, &info);
-+	/* The device may be already instantiated through the jc42 driver */
-+	i2c_new_scanned_device(client->adapter, &info, addr_list, NULL);
- }
- 
- static int at24_probe(struct i2c_client *client)
-
-For now compile-tested only given the write-test concern above.
-
-That said, I have some follow-up questions:
-
-1. if the jc42 driver handles this already, I wonder what's the point of adding
-at24_probe_temp_sensor()? Is there a situation where it would not do it properly?
-Or do we expect to remove the probing functionally from jc42.c?  
-
-2. I don't understand why we are also getting the "Failed creating jc42" and
-"sysfs: cannot create duplicate filename" errors since i2c_new_client_device() calls
-i2c_check_addr_busy() on its own and should abort after the first error message?
-
-3. (unrelated but found while looking at the code) The comment for
-delete_device_store() seems to be outdated as it mentions i2c_sysfs_new_device
-which does not exist any longer, as it was renamed in
-"i2c: core: Use DEVICE_ATTR_*() helper macros" back in 2019:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/i2c/i2c-core-base.c?id=54a19fd4a6402ef47fce5c3a5374c71f52373c40 - 
-
-For the Greg's question if it is also in 6.9: I have not tested that kernel yet,
-but unless there have been some recent changes in the i2c code I would expect
-it should behave the same way. If required, I should be able to do this next week.
-
+Best regards,
 Krzysztof
+
 
