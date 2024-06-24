@@ -1,76 +1,127 @@
-Return-Path: <linux-i2c+bounces-4291-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4292-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EC37914245
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 07:44:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7A769142E6
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 08:39:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE0E81F23FCA
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 05:44:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A28B284B58
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 06:39:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85F6418AF9;
-	Mon, 24 Jun 2024 05:43:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7654B38DD2;
+	Mon, 24 Jun 2024 06:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="H7+oP0C2"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Y2dSdUb7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDC417BCC;
-	Mon, 24 Jun 2024 05:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FDC17BB6;
+	Mon, 24 Jun 2024 06:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719207837; cv=none; b=QnSzvuz0dQYFZo3qpjQgwHIpVwVZMdfbqMRSMo9brXNQV+/9jVV9R/GqiuQZS1XF02EKimcrFnvHAqhWfS6u22G34UuT4VV6AmA5VCbNjW3cJgBm/XAWJYlstvQT9OUwLVjxcHwQBlNZpF3zAGds4PWG1T2nAxYidRok679+C3s=
+	t=1719211154; cv=none; b=MZ82xCP4/ZPPr2JT8apkvbUfmDwBHwfF2wYgALs+m47U+dLAvdDHC0iLDzj7UxxAGrn5QgA/vrWnwjQQeMnBWQVL0P15AXqwXWzXnh411zdhku/dyCMCOl87E46cg++UghFGwlapR3QEnPppKKxMSaNcEN/0vhgvQ+K/DglOAp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719207837; c=relaxed/simple;
-	bh=v0l6EL4R60u2j8fdedrN1MycsDZlxEJ0pdW2Bbc1hcA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=scLcwnCmaj/QHnSnv8MHyJYS34e+oQR0JwZsCIE2F2DMvLAgcpL+ajKSMG2RSKWDqxEeKvvdkzA659eUCsKDt4VLwCpmRqH+sUlkZvaNSOCvUwH6MCDMhJBemY2x8vHfyrlYdtzkyw88XE6jW/nQdUDhYceUsHEEtfpltFRA9G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=H7+oP0C2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B312C2BBFC;
-	Mon, 24 Jun 2024 05:43:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1719207836;
-	bh=v0l6EL4R60u2j8fdedrN1MycsDZlxEJ0pdW2Bbc1hcA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H7+oP0C2FjkfvoXyxekTiiWFbUVe0HVnU/CWsWr0kEXiZLa5zu0Ys4K9KCJin7wBH
-	 8uZTEujY/QiELIA/AXD+ezyme3mjLaHBZw9jZCqkEIgplQVydjlY+Wa+E4IDPHMzRE
-	 CoDizf7Y1J22CEPJ8R97Ux2SrjLQW9I+R5SK2/ag=
-Date: Mon, 24 Jun 2024 07:43:59 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Krzysztof =?utf-8?Q?Ol=C4=99dzki?= <ole@ans.pl>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, stable@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Regression caused by "eeprom: at24: Probe for DDR3 thermal
- sensor in the SPD case" - "sysfs: cannot create duplicate filename"
-Message-ID: <2024062438-patriarch-spendable-96b9@gregkh>
-References: <a57e9a39-13ce-4e4d-a7a1-c591f6b4ac65@ans.pl>
+	s=arc-20240116; t=1719211154; c=relaxed/simple;
+	bh=8qQNy0cFi+vB5Mfp2npnGPe64P5YepXPolFgKOS6juw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iqDFfLV+1he0f4Xhhh3vw6m40jyRZ+5iGfaEiBJwJsEpMKwXNK/xXK6QN/MIL6fwrXkjBOJfUY/M1WV+rW3AGGD3dTA4R4uXsPIp0AwxjqwEYPhpG95cunrQrLoC1CjF7sPNlpc9IxZjKQNeN73HPWSDZPo3t2g1Mk2emfK6JOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Y2dSdUb7; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A1221C0006;
+	Mon, 24 Jun 2024 06:39:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1719211148;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8qQNy0cFi+vB5Mfp2npnGPe64P5YepXPolFgKOS6juw=;
+	b=Y2dSdUb7L45w0zOH/hMoZ0jqJMRt2RztXSF8cdHFJOQrvsC2d2TrOTWPfcBntkFhwN7H6/
+	hRjUcA+3RSAJ94uif8HqhAvbCWQJYiR+SVkX6EFFrYPEr/FW5wId9XKqYNzTH1dx6WDGG0
+	EpHqQyHHRgNy3VsxGvF0BTOq9xL4A+TxAGxtKMeEP3applLc9/8N0v4h797ONHvRbmXNoB
+	xidj39GDhF0L9I2O/NKLPWLoLxYKqnfunm/ZzhUtmDxgyWbMCW+SkvuckBwxpEg80TiaAu
+	EQMC92N1cUsplO1EO00oEc1qOUwmVwAOuZV611xRbhs1I+WiDGN7XvJsNyxmEw==
+Date: Mon, 24 Jun 2024 08:39:00 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
+Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "J.M.B.
+ Downing" <jonathan.downing@nautel.com>, Vladimir Zapolskiy <vz@mleia.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Russell King <linux@armlinux.org.uk>, Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi Shyti
+ <andi.shyti@kernel.org>, Richard Weinberger <richard@nod.at>, Vignesh
+ Raghavendra <vigneshr@ti.com>, Jaroslav Kysela <perex@perex.cz>, Takashi
+ Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>, Yangtao Li
+ <frank.li@vivo.com>, Li Zetao <lizetao1@huawei.com>, Chancel Liu
+ <chancel.liu@nxp.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+ linux-sound@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, Markus Elfring
+ <Markus.Elfring@web.de>
+Subject: Re: [Patch v4 08/10] mtd: rawnand: lpx32xx: Request DMA channels
+ using DT entries
+Message-ID: <20240624083900.14e38d82@xps-13>
+In-Reply-To: <CAG+cZ06GSxPsTzRLXSk23qWXMkp-qxYq7Z9av5-2cPHSJmVAHg@mail.gmail.com>
+References: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
+	<20240620175657.358273-9-piotr.wojtaszczyk@timesys.com>
+	<20240621103019.783271f4@xps-13>
+	<CAG+cZ06GSxPsTzRLXSk23qWXMkp-qxYq7Z9av5-2cPHSJmVAHg@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a57e9a39-13ce-4e4d-a7a1-c591f6b4ac65@ans.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Sun, Jun 23, 2024 at 11:47:39AM -0700, Krzysztof Olędzki wrote:
-> Hi,
-> 
-> After upgrading kernel to Linux 6.6.34 on one of my systems, I noticed "sysfs: cannot create duplicate filename" and i2c registration errors in dmesg, please see below.
-> 
-> This seems to be related to https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-6.6.y&id=4d5ace787273cb159bfdcf1c523df957938b3e42 - reverting the change fixes the problem.
+Hi Piotr,
 
-So is this also an issue in 6.9?
+piotr.wojtaszczyk@timesys.com wrote on Fri, 21 Jun 2024 14:44:21 +0200:
 
-thanks,
+> On Fri, Jun 21, 2024 at 10:30=E2=80=AFAM Miquel Raynal
+> <miquel.raynal@bootlin.com> wrote:
+> >
+> > Hi Piotr,
+> >
+> > piotr.wojtaszczyk@timesys.com wrote on Thu, 20 Jun 2024 19:56:39 +0200:
+> > =20
+> > > Move away from pl08x platform data towards device tree.
+> > >
+> > > Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com> =20
+> >
+> > I don't see any change regarding the NAND controller node in the device
+> > tree, is there any dependency with other patches from the same patchset
+> > or may I apply this directly to nand/next?
+> >
+> > Thanks,
+> > Miqu=C3=A8l =20
+>=20
+> Yes, this patch depends on "[v4,04/10] ARM: dts: lpc32xx: Add missing
+> dma and i2s properties"
+> which will be splitted into two or more separate patches per request
+> in the comments.
+> I'd like to keep driver changes and corresponding changes in DTS in
+> the same patch
+> but I've made a separate patch for DTS per request from v2 of the patch s=
+et.
 
-greg k-h
+These changes won't be applied to the same tries so they must be split.
+
+So I will not take this patch for the next merge window and instead
+will take it for the one after, if the DT patches have been applied.
+Please ping me at -rc1 again if the DT patches have gone through.
+
+Thanks,
+Miqu=C3=A8l
 
