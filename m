@@ -1,75 +1,76 @@
-Return-Path: <linux-i2c+bounces-4318-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4319-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98D38915788
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 22:05:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E9D49157FA
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 22:30:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41DF92823CF
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 20:05:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A15131F21E2F
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jun 2024 20:30:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36EA19FA95;
-	Mon, 24 Jun 2024 20:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F504F615;
+	Mon, 24 Jun 2024 20:30:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fv8xUNAp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m6JrK6OC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E806E19D08F;
-	Mon, 24 Jun 2024 20:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC9E2233B;
+	Mon, 24 Jun 2024 20:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719259528; cv=none; b=aJ6B8cy9HTsF8yIE+MSfN2mN3j10vMQFdo7neytNM8sy7hl9s49YP83ksWjVq1+xpMUZsLWgTtTgN7zrNfhNk+VJWfQQZF0OGdSeZ68Fi0IsEgIq8n7VWwIe5k/HJiUgWF+lYoiIhifsNMyo6wa4xmtOJfKH+No/jMig3/hECu0=
+	t=1719261038; cv=none; b=gGUVoqI8/GaV5KssTOZBcL2DgcfeKSc8dUHMuGWcTzS5KCxrNxIPWP30NkpLEIPWJf/q6vM/7Y+DDosVulkWREqJQ9fMpouWWxkYGYHSC2HdJytuGykwJ7nuNVYvEuqkCE4ubqgY9v200A5j7/wuekPqikyHv19AjIZpYA/7ong=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719259528; c=relaxed/simple;
-	bh=MyuLxVa9djGmJjwYX9q2rqv9NPBaa87X9GdSAeU8RdQ=;
+	s=arc-20240116; t=1719261038; c=relaxed/simple;
+	bh=GTiYb6GrzxzcwObveaXj3I+TryD7LP1+DQrFJTDzePw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nxI0hfjZCBMqkAMdrN68AwzV+HKBP3U6l+6RFp8BLhfmfCBBMwVkaJp8Y2Ul4GjT9OcgC95YdGyEKFZlpWt1vSosVIn0TVHznB8sp4ABFvEJZ4dwXNkM3qjv4olBzZ77so90ED+SvJ0pbVApaB1vNhcifQb5uYsFT6gQoYdaY0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fv8xUNAp; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 In-Reply-To:Content-Type; b=k79hVY96JWnbBaYXyBv8e+DeOvvX6dGHyDVJ2NBKkzfYc6ZOcZ+R3WkxTQ+BEJgaA9pNR+QaHcJU/o466fcAF/Bpm82L2cUHXEz+AENOFBBApNz9Wn3fpoKX5pGV2eS5oYTPqjpeVRJLAblHUULW6hPk7gOQI2FDDitXagV9UgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m6JrK6OC; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a7241b2fe79so242654066b.1;
-        Mon, 24 Jun 2024 13:05:26 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-718354c17e4so1944384a12.1;
+        Mon, 24 Jun 2024 13:30:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719259525; x=1719864325; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719261036; x=1719865836; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZSb7Ej4Ntq/nF2qlOXQSXh23B09xXPUbc9p3HR70r/g=;
-        b=Fv8xUNApPXw4WYwvkq3pVoDmN0J17KRxTFpMODzavzHT6QwkgoPAjMZmDx2G2wJG2v
-         m4AjTz/BDbqSgi8q0kEPgnrrcmiynyvk/9mV4OLcknQhmG/7VcdeELn7Ni2GMO7wMe8/
-         eKBjS/57Y11XTj/QBysOMWdz9YGB4cS2rl10tjKUp8IrYf44wzMoCi1/uMn4SB7uwLqb
-         DkwclW1xN14591/KBfiUtYkb16zuoOGdSZbY6Iavdu+nlVEOUMBf1LGoo1M/TqPp6lVp
-         i6LFGt3Ey3jsBNudnthZifw7uw31W3xAcaqM9gAlgstyHbKbizcE+LSmJHqGmc3b2a/b
-         JG8w==
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=0JCjzHa62U2GIxuqtrX2ey45JnspojXIKFnfDyNZmBY=;
+        b=m6JrK6OCtrk75nGW9cQjQZAeSMUP6mrHGPKLOapmOBNLvzlrNq9kKGQ9e3iG5FTONr
+         uOcD7bYxlyzKRuPGDRM6/Y/gbGgsM0BL/xHz9xTSHc0EqbB7BH2WR1WEzyyuwjKtGdnw
+         Z/HtDPEmb9Sc1/0V9js2y8CcwihJNwXRSHpILGzngzR1MxqIAbA/7PsnfcNychZa5QBx
+         k+ewt129q0MW7ZzRLK/E/umk+l42i7UoQ6SiLSxBgQJEpOpyUy8Q2WAyox/t6pVLDZtb
+         kmcR5CV8B82/5gZenb8WNalBq7lQ9G6p1uAoC3/QpLX4v0VAK3TWLUe2PjNWnYvoEz+1
+         YUOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719259525; x=1719864325;
+        d=1e100.net; s=20230601; t=1719261036; x=1719865836;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZSb7Ej4Ntq/nF2qlOXQSXh23B09xXPUbc9p3HR70r/g=;
-        b=jjKci6FUPhpsD3yP/eVUT29T5u/1SJm4xIQYgFWfgCTuS/jQb/FsFMGQagJ/4e5ipv
-         ewY9e2eYXEyQAz5wp+7K9fg9zaSxZrX6aSrHwVDslBBCkxui4jFJ1VI7K2DKvk7TbiDL
-         6oXceLBXMvnO5z+v6UKuRR4kZ8mwBBLOBoNZHfaCOCDHAawGGEtWYe4x8lygEIvVC8uY
-         u1lwFRLZTTbwboTveAMHPX/rw150npbgHGv5C0nXqvqJPae3ihoXpd8LLXvMLFDfKTbg
-         6JuiuqW/+mDahzZm/FOoJxDXia/kF5Qzu3ZRv4m9Brhf1Y+pzJPW4XtJHisez73cMdDG
-         MHtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVq/Co5Ko7VjRCt7bui8iaLD/PZ3+ZGx+6JpafuSJzXj/7laq+pkzYLDQjzvqCaxrmztCzq2B8kvHPmqEkUEM/SmY5zPHC418DWpEtSsfmYin1BH1kSX3fjFK2MLxgmI4loMO4CmK4fHWqUTDRXjZ/nAwFGNfoTQ56KrWbX8UlwAg3VHkHHGhsu/zhjscc3HhymtoscDk2cTV6DuxoQQ6H+
-X-Gm-Message-State: AOJu0YxVeVYZvrE9FYxz/s37cT1I3u78F8mcRQ2A+ddmCVeoI9HiM4RL
-	66YqFO9Em+APumOOHTai4dAbUhMZEJcoF0UjLpUexPlq/DWw71GO
-X-Google-Smtp-Source: AGHT+IEJRX6HByuxz940DKiakW8YDHAVFH4n++RFvUajH74pVeumXtNekgcQOaQlowfS4l15IQeGtw==
-X-Received: by 2002:a17:907:c98a:b0:a6f:d082:a2c1 with SMTP id a640c23a62f3a-a7242d2ab88mr360503066b.71.1719259524873;
-        Mon, 24 Jun 2024 13:05:24 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c07d:2d00:ad78:a407:846a:969b? (dynamic-2a01-0c23-c07d-2d00-ad78-a407-846a-969b.c23.pool.telefonica.de. [2a01:c23:c07d:2d00:ad78:a407:846a:969b])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a7248825d4bsm217402866b.207.2024.06.24.13.05.24
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0JCjzHa62U2GIxuqtrX2ey45JnspojXIKFnfDyNZmBY=;
+        b=tbG+titwF+LEEN3TnoQjTJzfrwQIL1WeOwwuGJEogBQM6xicSJkIU47gXLqgZnCmVU
+         Yg3lHQO1pJWYLK4dFGt3yWMn+hwSxpC3PTxYPPL7qX4APQM2Zq3lvNbtihevNzI/vN7L
+         Ide447ca6+XsbQd8c13kFOQ4/wFClRxaMaD9NSaP0w9Ks4tzEasJawJ4k1ZZxZgoXCT0
+         j+u01hk3bQREn1N/GdotSlvtzMd/0n7qvlqoPeKp1HVH+hHW4YWP+YhCvGpiXgHIs3GR
+         Iy24xjnoW/3/x6/AVS7m1ue4hLkreS1+U+hjbod0a2aLOaqCo2VcPIMKgE4e3tlP+JBh
+         7Tzw==
+X-Forwarded-Encrypted: i=1; AJvYcCVp35hpBltPUij9G8+V7O/FK6wSSEC2X3Zxw+Pl2uIjrhBbtnn2Oyl9qDhvVT4FEGi4MNFBIe8imdTmekkN7dyEO3VS5BL2/yGj8UuZxM4ty/J3C5nxphK1U1mxIu3lffodGENGpZxbAu+K/26svbBUHq3t0PF9buneje0iD6c1KPOv5JBj9hMPFzsg78RcJP6MXTm6G9UhUplN7UAUqvqj
+X-Gm-Message-State: AOJu0YyL2UPjTu6Xs1t2rpHesHZFb7a16WqKHThdmb27URlTlzXYZJod
+	7I/17qL85dRqbOWNinaBrRw2zqeWhybhxRraccDtJ6I+UeSoH1L0+LrH6A==
+X-Google-Smtp-Source: AGHT+IE09v6jXfWM0B1dycTkIqlEwMVFtW6S6SQX/ldL1jJ32tdAE6dln6AaBljV17NP0tY1DsNYVQ==
+X-Received: by 2002:a17:90a:d084:b0:2c7:35f6:87e5 with SMTP id 98e67ed59e1d1-2c8612c6c27mr4625811a91.5.1719261035979;
+        Mon, 24 Jun 2024 13:30:35 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c819db94ddsm7185675a91.43.2024.06.24.13.30.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jun 2024 13:05:24 -0700 (PDT)
-Message-ID: <9183dfda-d3f3-4fa1-9a4b-c6edeb30482d@gmail.com>
-Date: Mon, 24 Jun 2024 22:06:16 +0200
+        Mon, 24 Jun 2024 13:30:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b361066a-d36c-42c6-9e54-5cde8c40c6b7@roeck-us.net>
+Date: Mon, 24 Jun 2024 13:30:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,9 +79,9 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Guenter Roeck <linux@roeck-us.net>, Armin Wolf <W_Armin@gmx.de>,
- linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+To: Heiner Kallweit <hkallweit1@gmail.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>, Armin Wolf
+ <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, =?UTF-8?Q?Ren=C3=A9_Rebe?=
  <rene@exactcode.de>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
@@ -93,127 +94,70 @@ References: <20240604040237.1064024-1-linux@roeck-us.net>
  <ib6p4ivqdn56l3jzzarsoeijjhwak33bmqvj2qiddbhxdqzchk@txl4gdslx4gq>
  <79f406ae-cfc9-48bb-9c80-20f998c40b69@roeck-us.net>
  <veggn7y6qeeqx2dsmjykktudpwifnt5xzxcx5ulfglkgtq574p@f5dzhj4otjgl>
+ <9183dfda-d3f3-4fa1-9a4b-c6edeb30482d@gmail.com>
 Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <veggn7y6qeeqx2dsmjykktudpwifnt5xzxcx5ulfglkgtq574p@f5dzhj4otjgl>
-Content-Type: text/plain; charset=UTF-8
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <9183dfda-d3f3-4fa1-9a4b-c6edeb30482d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12.06.2024 18:19, Wolfram Sang wrote:
+On 6/24/24 13:06, Heiner Kallweit wrote:
+[ ... ]
+> It seems Intel systems never have more than one i801 SMBUS adapter,
+> therefore systems with more than 8 memory slots have to use muxing.
+> The current code was developed for the Intel use case, and therefore
+> doesn't consider that a system may have dedicated SMBUS controllers
+> per 8 memory slots. So support for this scenario has to be added.
 > 
-> CCing Heiner...
-> 
->>>>> Yes, maybe this could be simplified to "(LP)DDR memory types"
->>>>>
->>>>
->>>> I rephrased it to "Only works for (LP)DDR memory types up to DDR5".
->>>
->>> Thanks!
->>>
->>>> How about "Only works on systems with 1 to 8 memory slots" ?
->>>
->>> This is a question for Heiner. I'd think it is is still correct, but I
->>> don't know exactly.
->>>
->>
->> My interpretation was that it should work if the DIMMs are connected to
->> multiplexed I2C busses, but probably not if they are connected to
->> different adapters. The error message in that case is a bit misleading,
->> though, because it claims that "More than 8 memory slots on a single bus",
->> which isn't necessarily the case. For example, it should be perfectly valid
->> to have up to 24 DIMMs in this system.
->>
->> i2c-0/name:SMBus PIIX4 adapter port 0 at 0b00
->> i2c-1/name:SMBus PIIX4 adapter port 2 at 0b00
->> i2c-2/name:SMBus PIIX4 adapter port 1 at 0b20
->>
->> ... but I guess that is a question for someone with such a system to answer.
->>
->> Ultimately the handling of systems with more than 8 memory slots will need
->> to be updated at some point. On my systems, with 'i2c: piix4: Register SPDs'
->> applied, I see
->>
->> i2c i2c-0: 4/4 memory slots populated (from DMI)
->>     [my system is running 6.6.y which still generates that message]
->> i2c i2c-0: Successfully instantiated SPD at 0x50
->> i2c i2c-0: Successfully instantiated SPD at 0x51
->> i2c i2c-0: Successfully instantiated SPD at 0x52
->> i2c i2c-0: Successfully instantiated SPD at 0x53
->> i2c i2c-1: 4/4 memory slots populated (from DMI)
->> i2c i2c-2: 4/4 memory slots populated (from DMI)
->>
->> meaning the function is called for each adapter (which makes sense).
->> However, the code counting the DIMMs doesn't really take the adapter
->> into account, meaning adapters 1 and 2 are still probed even though
->> all DIMMs were already instantiated from adapter 0.
->>
->> On a system with more than 8 DIMMs connected to different piix4 adapters
->> (without mux) we'd probably see something like
->>
->> i2c i2c-0: More than 8 memory slots on a single bus, contact i801 maintainer ...
->> i2c i2c-1: More than 8 memory slots on a single bus, contact i801 maintainer ...
->> i2c i2c-2: More than 8 memory slots on a single bus, contact i801 maintainer ...
->>
->> which wouldn't be very helpful. I think the main problem may be that
->> the i801 driver implements sub-adapters as muxes, but the piix4 driver
->> doesn't do (or need) that. The message is also i801 centric which doesn't
->> apply anymore after 'i2c: piix4: Register SPDs' is applied.
->>
->> However, I would not want to even try changing that code without access
->> to a system using piix4 and supporting more than 8 memory slots.
->>
->> Thanks,
->> Guenter
->>
->>
 
-It seems Intel systems never have more than one i801 SMBUS adapter,
-therefore systems with more than 8 memory slots have to use muxing.
-The current code was developed for the Intel use case, and therefore
-doesn't consider that a system may have dedicated SMBUS controllers
-per 8 memory slots. So support for this scenario has to be added.
+I absolutely agree, hopefully by someone with such a system.
+
+Thanks,
+Guenter
+
+
 
 
