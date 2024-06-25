@@ -1,119 +1,152 @@
-Return-Path: <linux-i2c+bounces-4330-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4331-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6167E9165E0
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 13:08:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D0DB916720
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 14:14:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 150ED1F22836
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 11:08:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F3FF1C20A30
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 12:14:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E8814AD0C;
-	Tue, 25 Jun 2024 11:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771DE14D45E;
+	Tue, 25 Jun 2024 12:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PbYrjsGf"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="PSeuY2kT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AA614AD17;
-	Tue, 25 Jun 2024 11:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAAE5153567
+	for <linux-i2c@vger.kernel.org>; Tue, 25 Jun 2024 12:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719313682; cv=none; b=YQqunROBNVkC7NVofYccz43sR66+wJmfmItiQPNjHuA736AawE3am+ccwToF6uYOgOph4A48P5V/xyNxHzP0qW4QMGuhmxYA38jdDVqRfdGyfIimQik6spwZUYt4TktJBarYM3JQ3TTdgrOnHd8wdhNuA8oLeZ6oLZo3AdwMdTw=
+	t=1719317664; cv=none; b=hG04mqxMsbMVaUp/AEmrzV5KFUsnod8gpgIE7W6MY7ALZ+f0wbL1O0RadTtcR5U5RAhYx9Ddo/9zmmTBoXObqQ+4X5YzuM+VtFEbA1qyOOAFxWRhIUzQ1wJ2Ah6NnX6JIvaHBwrn/zPnNOWARpoe9CzXZ6KuY13pYAkG0EGqrJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719313682; c=relaxed/simple;
-	bh=EMGiarKQXGoQc0yA0COR4nttuOTzKKdusIL8aGAdE8E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PtDn8doN0QGi0u7+ne8D9DM+NA+1UktyiFjV75jcjHCuPKInE/N/8tixhda6YmgwXyGBzZIRzT2AlT7MiR05O/r7fHSBQeyW2eVk/Ysvjr/7jOjpoD4dC+il8rVAAkBJops9q1qCs6aIhS7Pb64ckE7T/2IhotJVtIG2TVaQfuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PbYrjsGf; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-57d4ee2aaabso2630021a12.2;
-        Tue, 25 Jun 2024 04:08:00 -0700 (PDT)
+	s=arc-20240116; t=1719317664; c=relaxed/simple;
+	bh=idPQeyWspSOYK9aQfE5d70UuHZFrItY0K6EWba5EaLQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LVoEs9gvtbWAGF0c7jWvgcaeL+SgFGyL84qNJmTaAX4kC+FMvRvMHZA0BxIgH0eHOK0Z23/UO5o6A/JTIy86ZIDJSG0v+ulfLH7qfjwPqwqtsc+4qnHOfyk+IQbrDqtPQTRmn6jtnoSprbrZG72DTY6e2KEhTPq8HY9WS4g9KNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=PSeuY2kT; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2ec0f3b9cfeso64420501fa.0
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Jun 2024 05:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719313679; x=1719918479; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EMGiarKQXGoQc0yA0COR4nttuOTzKKdusIL8aGAdE8E=;
-        b=PbYrjsGf5vFLrJ6HDBEvb7Uy00WhZ+u76TnMR7v+YVXYXe2pyssPGyr01ETcVP6qB1
-         6LPfj/W/p+LD3CnrVR+gfZk2SZTk9JWah7EUU5gF2Kh8a20B+2OsEPSAybBnHNvvbOOW
-         vnXK5kbRx8ljNnT5wc4+Yu6QYr4ZuB2FLjJ4FZYZlEpJPZn7xDZOJ4EQDeuEPplto+Ee
-         iO2wyLKHXeAh41fBNsOml04h82Y2bfNByS+seJ+S3rF2v5UZXbFswy656PeIfjbyrukA
-         xcXT3Yvk2FpGGB33FsB20aCgLR3a1bpFZ1dWCr+M3Le5aemM18L6xRKkGr3W5Z/o/gvQ
-         eEDw==
+        d=tuxon.dev; s=google; t=1719317660; x=1719922460; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=giiYhFtEnxQIqEEkjgAn3jwXftBpviVw0I+kAsd6PJM=;
+        b=PSeuY2kTkVd/DGhrUKY1dxEN1fn7hWeI3FA0u5V/a8q1oVAgC6onFgHS1bzOS3c02o
+         5388vhfouSwYpj67sNmhud99ga0iWIhbadN1BtLtZYu5/kBv9tqhBjQRcvJFElp1g9g9
+         6aP4YtH1rSIYD8JlY8SM7Hf3QNNz4CgHdO8Y6yp2vonyVLi+G4TLUrRPHlQ9H7ZNtYl0
+         mibi1rqc7ssUV7Aon4HcvCWKaDYWC4ad05EAcGSzh1SOJHSqkUSgmvp72uO7FMMTc4Nd
+         kvXnPFy4pHzqjUT0z9eG3BHXfOqEbHJWiuKXcv5EjtPBr5PgmgKe3m4ZvdwF7nX7ID+6
+         6ssQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719313679; x=1719918479;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EMGiarKQXGoQc0yA0COR4nttuOTzKKdusIL8aGAdE8E=;
-        b=KrbbOnmOh/LWVCC+vFGMEjS/++0N+i6jMR0pQAuwkkNKgtlGOxAYdOGZxqmKIGajZJ
-         iTxJ/Ac7Nu4+GeXCKeFd/Jt5KkDeNKItn24/Cn9XHP6ISIS90Y9aqBO2712xLzwg+/aI
-         85cjzGKh/ER12Q0POzEFgYdVcZ8VAWvEjI5W7RaiN/JBDHxaJw63ypmFVJMoUXlMMUAT
-         EGRPAn/PcaIuXhGMViGq5a9JForsQodCqbop17ayeMXnOaAoGNjBqgZ1CTMGwvl6scRZ
-         ChAThliK06P2WR+R0BJJpjspZwMd3dr8Y2AKklSpbG3zZvmeOy3hs9jYMRoUhGKPiLIj
-         rFMw==
-X-Forwarded-Encrypted: i=1; AJvYcCWD1ySu2qv525RfuzrNoKXaZxMpf4PwfZ+Mzcndg/M+1gO0gbwc/LqvOyefn0Unk1IDMjvpoNcufqKQ7UBLiQZcg+3sbZ5ixylBP/CYO7vKFKtb72in2un7a15rIBEKjzIkABGJzH50Q/HuMlt/ZkdsdtO6Z83wzJDmd3TIrgSttt63Vw==
-X-Gm-Message-State: AOJu0Yxh6fcTA5OYy0sGcl4QRMfVBnPAO6m9X0s4O2kSgwdzb+win0ZK
-	dBLYY3uh7lrECK2iCe4LhgOGI9zd0BCili4r068PA9Pef3/C5kGuAg76Mhw7Anj5azcjqabDHFU
-	2duUVVi5/hrg6yLS2DLywha7REUE=
-X-Google-Smtp-Source: AGHT+IEe2xGfvNx050QZvRa3uCMI4VfH32J96dIyH8WOhEq9Bxd1EpPG2PJBA8xq+rDXAELL8B8x7ekjeKRLmeJSQsY=
-X-Received: by 2002:a50:d79e:0:b0:57d:101f:ae9f with SMTP id
- 4fb4d7f45d1cf-57d4bdc76c9mr4563332a12.33.1719313679062; Tue, 25 Jun 2024
- 04:07:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719317660; x=1719922460;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=giiYhFtEnxQIqEEkjgAn3jwXftBpviVw0I+kAsd6PJM=;
+        b=IfI6qGkQTpWakigyWAZWRMuEyRGuGgB9SvXrOMorIPMNvHPZuM2Pt777HNjt2onb5m
+         57YJsga8sdI5ypv+NqlggIhcK3dvgYgmHxVOaT64ixVREmEZFO2zGROXTMdTaqo0YNNp
+         aH9P1P51Ri0kZ2401xtL4qAO0Ep/fsmKdNI10VGukgpRX3YhAg8WCekB7Sb41pCYNlMc
+         FlOEVd2EXlIg8HSJ9ExtH50b4Fc/Zq5DyzpyszG4+yhh0uEskGfdWuc0l0xPd+PbLxPA
+         v7YySxGF1f4qarwNKf6jqt3wjtpDkX6VEFOB6MUHTsd6twx5PH9d2zmPc5yZnMnpJicV
+         6qJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUqcRT+x1pFa/Zip7KlmJQFIHz8QdAtGIUk+t6Cjtk1X8IbvMAXrly+LvsuBX8MOhRXOHOU9IEkhPfBNhRiap4GdiSjP2Ypj0OC
+X-Gm-Message-State: AOJu0Yzb/0eWYqsbF92O9zZ/DyIOSbbM3sKxXT0w1M+Yx1qK90GG1et/
+	f0wGoixPYm4tyQsT6QQU0YZEJ6axs7afQ40x6w91yitSyWLhEs6nez16V8yQk+c=
+X-Google-Smtp-Source: AGHT+IF3Xj+dQee669e9P0ubfqBuwtjyt2JBWssz1nxN7eVQYZNX6hX5GHpL4DDBTEv9QR0Ta0Bg6w==
+X-Received: by 2002:a2e:8513:0:b0:2ec:3ca1:e53e with SMTP id 38308e7fff4ca-2ec595876damr44742311fa.51.1719317659791;
+        Tue, 25 Jun 2024 05:14:19 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.70])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3663a8c8b32sm12798437f8f.92.2024.06.25.05.14.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jun 2024 05:14:19 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: chris.brandt@renesas.com,
+	andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	geert+renesas@glider.be,
+	magnus.damm@gmail.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	p.zabel@pengutronix.de,
+	wsa+renesas@sang-engineering.com
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v2 00/12] i2c: riic: Add support for Renesas RZ/G3S
+Date: Tue, 25 Jun 2024 15:13:46 +0300
+Message-Id: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240625065939.6146-1-kanakshilledar@gmail.com>
- <03174142-a2c0-4f9f-81ca-2aeb7f57ab79@kernel.org> <329ef10f-14d1-4346-8496-906aaf91ccfe@kernel.org>
-In-Reply-To: <329ef10f-14d1-4346-8496-906aaf91ccfe@kernel.org>
-From: Kanak Shilledar <kanakshilledar@gmail.com>
-Date: Tue, 25 Jun 2024 16:37:47 +0530
-Message-ID: <CAGLn_=vWxoHJivPgLHov8h7wHxmTH0y19twN=Xhyh_rZEmjbOg@mail.gmail.com>
-Subject: Re: [PATCH v3] dt-bindings: i2c: nxp,lpc1788-i2c: convert to dt schema
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Vladimir Zapolskiy <vz@mleia.com>, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 25, 2024 at 12:33=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.o=
-rg> wrote:
->
-> On 25/06/2024 09:02, Krzysztof Kozlowski wrote:
-> > On 25/06/2024 08:59, Kanak Shilledar wrote:
-> >> Convert the NXP I2C controller for LPC2xxx/178x/18xx/43xx
-> >> to newer DT schema. Created DT schema based on the .txt file
-> >> - added maintainer from the MAINTAINERS file.
-> >> - added resets property required by the corresponding DTS files.
-> >>
-> >> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
-> >> ---
-> >> Changes in v3:
-> > you already sent v3 so this is rather v4. What happened here? Why are
-> > you resending this?
->
-> Ah, I see the changes - you dropped the incorrect tags. It's fine but it
-> should have been v4. Not sure how b4 or other tools will handle this.
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-I thought there is no need to bump up the version just for changing tags.
-Shall I resend it as v4 and update the commit message with the change
-log to include
-the removal of kernel bot tags and addition of your review tag?
+Hi,
 
-> Best regards,
-> Krzysztof
+Series adds I2C support for the Renesas RZ/G3S SoC.
 
-Thanks and Regards,
-Kanak Shilledar
+Series is split as follows:
+- patch 01/12      - add clock, reset and PM domain support
+- patch 02-03/12   - add some cleanups on RIIC driver
+- patch 05/12      - enable runtime autosuspend support on the RIIC driver
+- patch 06/12      - add suspend to RAM support on the RIIC driver
+- patch 07/12      - prepares for the addition of fast mode plus
+- patch 08/12      - updates the I2C documentation for the RZ/G3S SoC
+- patch 09/12      - add fast mode plus support on the RIIC driver
+- patches 10-12/12 - device tree support
+
+Thank you,
+Claudiu Beznea
+
+Changes in v2:
+- change the i2c clock names to match the documentation
+- update commit description for patch "i2c: riic: Use temporary
+  variable for struct device"
+- addressed review comments
+- dropped renesas,riic-no-fast-mode-plus DT property and associated code
+
+Claudiu Beznea (12):
+  clk: renesas: r9a08g045: Add clock, reset and power domain support for
+    I2C
+  i2c: riic: Use temporary variable for struct device
+  i2c: riic: Call pm_runtime_get_sync() when need to access registers
+  i2c: riic: Use pm_runtime_resume_and_get()
+  i2c: riic: Enable runtime PM autosuspend support
+  i2c: riic: Add suspend/resume support
+  i2c: riic: Define individual arrays to describe the register offsets
+  dt-bindings: i2c: renesas,riic: Document the R9A08G045 support
+  i2c: riic: Add support for fast mode plus
+  arm64: dts: renesas: r9a08g045: Add I2C nodes
+  arm64: dts: renesas: rzg3s-smarc: Enable i2c0 node
+  arm64: dts: renesas: rzg3s-smarc-som: Enable i2c1 node
+
+ .../devicetree/bindings/i2c/renesas,riic.yaml |   4 +
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  88 +++++++
+ .../boot/dts/renesas/rzg3s-smarc-som.dtsi     |   5 +
+ arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi  |   7 +
+ drivers/clk/renesas/r9a08g045-cpg.c           |  20 ++
+ drivers/i2c/busses/i2c-riic.c                 | 237 ++++++++++++------
+ 6 files changed, 289 insertions(+), 72 deletions(-)
+
+-- 
+2.39.2
+
 
