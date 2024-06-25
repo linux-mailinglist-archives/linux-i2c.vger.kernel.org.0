@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-4325-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4326-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBE68915F3E
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 09:02:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9ADD6915F44
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 09:03:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A3B31F23AA6
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 07:02:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53BA52844FA
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 07:03:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070EA14659F;
-	Tue, 25 Jun 2024 07:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E52E314659F;
+	Tue, 25 Jun 2024 07:03:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJWtDKxv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FBm9gNPU"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE182146593;
-	Tue, 25 Jun 2024 07:02:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99965802;
+	Tue, 25 Jun 2024 07:03:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719298931; cv=none; b=SdrrOGAvDnrq1ekdqutyGv4u6GI/72x63r3jrYU/amrLsQX9EbB/s29pvUDzH9EfstsvksFlVrInro4YHIlEIC8rb0Vc+v9yKIsvmgLnrgDFyUGR4BpeEUORP1NUTJXHx2LpMUtnZN86ytNTG3pk9GKMskBmvv+Ua509y5tS2gk=
+	t=1719298985; cv=none; b=awv/SWWU6V8wQ6Bd/XRTiP2NWuLEOSIkB66MjCYThoX+2n6NnOpU7JNBRWwy2HDNXfARKFxsIPM8KlukIeVNP/ayFGCNyvqSybSuKZfuTrTnktoyK4FvytSbyZatvBcIrK0042Q6hXqfOQownN0QlLaGD1Llyg1UAWhKwmziJ44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719298931; c=relaxed/simple;
-	bh=dka19UVHu4GfoxVgBURuqFbVwIz41E/bILjlqBgxWbU=;
+	s=arc-20240116; t=1719298985; c=relaxed/simple;
+	bh=dsN2YUIuE/Apf/nbQzc/ItIQDVlscvNLHKXP67LVE68=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kGSM6ZmUPjCV5scv1rnAWei5XN1eXzEviM8MAfQqZXzqMQmNUwGra4B6NemrZ40YczwCNixJaaQisTwkIFfoG+65YEpq03CwNFTM5ogJCrzl/l5YKWnEHNZqnyV1/35vq3m1zIIaeB/o/4tFhtxY6JjmpXNK+ZfWyRiUx2ihJXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJWtDKxv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F172AC32781;
-	Tue, 25 Jun 2024 07:02:07 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=fbOJjz3yWyCIxKZOQuOC40JFwEiFLHLvfS6fGfho01oS6S0lzBh6sCngeAab7HjY1piBPzFJsgiP8UoF2ANKqUbMr5jNpA6jiMBdDqxDELtscnXR9zNuG9J/zC6cQpFMuHVy8ZjqFO4zZz7teUHCEt31R1+euiPRIuhVo29gFPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FBm9gNPU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 240ABC32781;
+	Tue, 25 Jun 2024 07:03:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719298931;
-	bh=dka19UVHu4GfoxVgBURuqFbVwIz41E/bILjlqBgxWbU=;
+	s=k20201202; t=1719298985;
+	bh=dsN2YUIuE/Apf/nbQzc/ItIQDVlscvNLHKXP67LVE68=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DJWtDKxvAlsBCYR06l5gY06o7mwY0OFPQYdyq1x0+uR557oDaUTI574INnJyKepMc
-	 a7gFJlFCLvWRmUid93r2C+Dsg3z8axbXC33Orm3jEeZT+TAI1Mnc7HNY27CntK776s
-	 OBkN1QwtZTCztyn6oEpxLSZee7kgBPD9nMWlOY3fXwx8JSpSP6LHn9youoXO3eSt+G
-	 bE/1DQd5w7/WL0vhYpchP1W7yWhCpDeYxKgLMi4vZAjJrZ9XE9i7hETfX6zi/1a3Jh
-	 BHyw2D3DYL6nluSPrO4ymiByTjJ1J5JNjYU8NERf6TzMkopedCO32helDvdmJx3kKm
-	 lU3pgC3eucs3g==
-Message-ID: <03174142-a2c0-4f9f-81ca-2aeb7f57ab79@kernel.org>
-Date: Tue, 25 Jun 2024 09:02:05 +0200
+	b=FBm9gNPUBfrurgi3UqnZjOw5hPXQBWIr86QoVqMiLz4pFvRZvcabzGtDt3hhVbnu2
+	 xfR9KVV4dLgTgagcfpVszynIu0qHl5JnQvrAlMo6onGgyWUSegsYIlFVm2FwxIKSKU
+	 udPvY+CSxW3hPUwUIxyllah9wr2U+Wi2vIsSU3Lzglk740cONz9vIDj2Logmy2a8B0
+	 K//x7PHuOWEz/3gVPFnBEXoXvIkovj9puSbdzvs0iZaHxypwN+pYy/5jU3I3Y2+YUX
+	 HpTGy44XtquZR+4N4dj2aRTISFUi8WAfoOyCpySuUmr9IXxnqeFZk5BOKLylbh775N
+	 l7Ttw1S+3N3ow==
+Message-ID: <329ef10f-14d1-4346-8496-906aaf91ccfe@kernel.org>
+Date: Tue, 25 Jun 2024 09:02:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,8 +60,9 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20240625065939.6146-1-kanakshilledar@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <03174142-a2c0-4f9f-81ca-2aeb7f57ab79@kernel.org>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -105,44 +106,32 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240625065939.6146-1-kanakshilledar@gmail.com>
+In-Reply-To: <03174142-a2c0-4f9f-81ca-2aeb7f57ab79@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 25/06/2024 08:59, Kanak Shilledar wrote:
-> Convert the NXP I2C controller for LPC2xxx/178x/18xx/43xx
-> to newer DT schema. Created DT schema based on the .txt file
-> which had `compatible`, `reg`, `interrupts`, `clocks`,
-> `#address-cells` and `#size-cells` as required properties.
+On 25/06/2024 09:02, Krzysztof Kozlowski wrote:
+> On 25/06/2024 08:59, Kanak Shilledar wrote:
+>> Convert the NXP I2C controller for LPC2xxx/178x/18xx/43xx
+>> to newer DT schema. Created DT schema based on the .txt file
+>> which had `compatible`, `reg`, `interrupts`, `clocks`,
+>> `#address-cells` and `#size-cells` as required properties.
+>>
+>> Additional changes to the original .txt binding
+>> - added maintainer from the MAINTAINERS file.
+>> - added resets property required by the corresponding DTS files.
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
+>> ---
+>> Changes in v3:
+>> - removed "address-cells" and "size-cells" as per feedback.
 > 
-> Additional changes to the original .txt binding
-> - added maintainer from the MAINTAINERS file.
-> - added resets property required by the corresponding DTS files.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
-> ---
-> Changes in v3:
-> - removed "address-cells" and "size-cells" as per feedback.
+> you already sent v3 so this is rather v4. What happened here? Why are
+> you resending this?
 
-you already sent v3 so this is rather v4. What happened here? Why are
-you resending this?
-
-<form letter>
-This is a friendly reminder during the review process.
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-
-If a tag was not added on purpose, please state why and what changed.
-</form letter>
-
+Ah, I see the changes - you dropped the incorrect tags. It's fine but it
+should have been v4. Not sure how b4 or other tools will handle this.
 
 Best regards,
 Krzysztof
