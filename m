@@ -1,76 +1,74 @@
-Return-Path: <linux-i2c+bounces-4322-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4323-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5A1D915D70
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 05:45:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD57A915DED
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 07:07:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E6BA1F22663
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 03:45:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E6B52838BE
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 05:07:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 849EE32C85;
-	Tue, 25 Jun 2024 03:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63621144306;
+	Tue, 25 Jun 2024 05:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J2zgq7/9"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="qrP3uHEz"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D272F56;
-	Tue, 25 Jun 2024 03:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1143113C9B8
+	for <linux-i2c@vger.kernel.org>; Tue, 25 Jun 2024 05:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719287134; cv=none; b=U0TLlLA01tEAqwYVs+nXRQ5KBbYe2S18uO9Sqwgpv5hkxRfqPmo/YQfWZfh5a5IAP9tEWNDnQJJuA7ks53v7pl+mrpfpAOYeFvuv79KSVcQYyaltvUqy48QuXZqM6m4kNQeL8gbJqN8cz6vZmmjQKtgbAhK9Y2stj50YTUq/4N8=
+	t=1719292029; cv=none; b=UONAE6QMt/Gjtm8Q1DplcBMYk59Nr/K4UcJAUcDxZ7qEuTc0bZFlsnKNob+5ZPXBWXTRxkzf31yM2Nd02XDfQDMtUukJTG5iBF+FXEwL0aoKiwHDhXWRWwpE13aUFAerD3DfwkFYBYYfvWDY3eLCegDULuVs0gO9kNhVUWhYsbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719287134; c=relaxed/simple;
-	bh=akYYhE64gutriQphsCYtrgVyTh52zZni47qVxMnregk=;
+	s=arc-20240116; t=1719292029; c=relaxed/simple;
+	bh=XFnA16kYW5gGBpSDrWeOV5VEpEAexRRRucWlNmOgnjI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BZGqWVOWE963zIn+m2xbJrWgUHyCa+qcCaq3M+PXPo1tvbI9dU7CW10wWm7LQSk9Zo9vVWcQgEx8HW5EfF71UECSze85RO/431QD0s6KSFRJ6Yd7mv36p+xnE0L3AAhD83Kf4AJKMv7GeevrW7bkJADfYACaYSCPBBbabejLZJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J2zgq7/9; arc=none smtp.client-ip=209.85.161.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5b97a071c92so2427577eaf.1;
-        Mon, 24 Jun 2024 20:45:32 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=PHEDf2WF3OL0jGnCpbskA6CkL/R0EZ1RSmZ1gZiB4FNiWzhpbH7b1JVrTNCxiOAZ0RBRVuEhkXZxstw2OhEEVMzQFj2siUyfbFFofvfRXrVG2ve09VrHL13DY83/X3t67XvgUBdolBpBhWKg6Dfub/xkjxSz/RNX7P3Xb20upuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=qrP3uHEz; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52cd628f21cso4172413e87.3
+        for <linux-i2c@vger.kernel.org>; Mon, 24 Jun 2024 22:07:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719287131; x=1719891931; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=nAGv1C3HZZdBM5385FH4CpehIrO1aLyESVw6wair3LM=;
-        b=J2zgq7/9MdKLzYoCpX+qXzPRUHUAl2Awhaw4UtIBzs5Trx+uO/879y1qsXg1zIVe8I
-         vunZVkEaKQTzXznZV481ZnbVQ5XV6OA831rrnZnWBcR7X/Z+cCkgbxMgsl6qAl0/xPyv
-         u5/yheEI2L5I+RseFBUo/+Kfas9ei8lNkX1pKp6GpEDEiEtd3wDCZg3k9aY2C3T2ah9Z
-         HVXWDvHXy+Xgzu0Rhzym173M5nL3PxmHN5MFt1jHwd28T25rkPCh1AU/HzIIQlhVTZX1
-         hTlx213zFlIDSstsPAOwNRL3GJ9DMHNgYcR+oJ1H4oBxAgSZVuw7yVJzU5mffde9s8Y4
-         XMJQ==
+        d=tuxon.dev; s=google; t=1719292024; x=1719896824; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iMTfoPJSp/wlWQYq7ramEp8kDhcvFWSvsJvWkHGYsCg=;
+        b=qrP3uHEzfNLNzM2yRBsn4IrZUYI+bNIFcB1A+Wn0rAhuZDg0ulZv2VOB58bK0QGkjW
+         19LtbjxRhflLujofe+2Bu4+kflhzVXoOidNHWTcQWu1FF6o2A0xmSR20YGk/84lPEkb3
+         X/IdGBbEuvbQULId5SojIBaw4ifrx6p2A5SXw3KJQMLcONfKB8aotKL1TK1/DjhIQl+i
+         b7OeJrceaUb2fn825ntM+I6bZ9Lm22zfETIZrS5DN1ukIBHXYA4YQv84e4nKaveJPJAM
+         cWxSMYwlb0CmG5YBLpi5KLgJ4KkSttGgClXktgbfq822xCHOoqDyiOg6hLNSuOHi1tre
+         2/+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719287131; x=1719891931;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nAGv1C3HZZdBM5385FH4CpehIrO1aLyESVw6wair3LM=;
-        b=gH6wHAbpyz0RJlRF9nwLNMhGxNaxLCRepzHaqd7JYVqmxMxMixuETiJYY7Qpx6YjY0
-         E519YmG8yWXiz+DCM5B6/d3E+4NB9Bpi7Do3rPCmzj2lPx4ibYHiYj9DRn97YFarmo/R
-         46C0z+0KtLy/lKP97ugsvqUws/F3suL5IGxxin4YvPgWRsmQh9wQ7dteu+eidk4c8Zys
-         jjdYahl9g5F9V60p1HN2dlzU8TqjHk1xbO4iEsAtUqK8o59dmtIp4Jz7P1uwDVKggLVl
-         45qSHKrDTLI0w12wJZDwAlT6NARLtp/fmAjl19BirQMHCD2Cuc1reC6W99inc1P+3qiI
-         VFgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXNQpEu+cx4wj0MhG3DvzAVwBi7qCYCNgkq2PU8R8H0rYnOxvF9RrTBxQ/EBZbuFGmaxyh+N3lS+dIbSTy8k7BX0LJQeXCxov01s42hfdgC6OCryi41cGnqr0+JQXZW+oSpzy4WzHJFbEn/9ikypiZUMIsiqQ3BeUZe0mmjcVXLjnm6gcs=
-X-Gm-Message-State: AOJu0YyAFfj0XtWHjmKGFevFuJ0P1m4MSMj4isKNOHLxx7RIqqLCNXSJ
-	KupjxXlEhkmDci6/qVCG6bGC7lUWUb4KnJzUvKPkvTuhghJ1ilSs
-X-Google-Smtp-Source: AGHT+IFuMpIiyI/ambneXj2V/8PhRkYWS8YSC9Jtn9HUyffHKT4WhBv98Y8lT8RDDOn1kRo/O911/g==
-X-Received: by 2002:a05:6358:2823:b0:1a1:c5c6:9da6 with SMTP id e5c5f4694b2df-1a2389a5d8dmr871908455d.3.1719287131313;
-        Mon, 24 Jun 2024 20:45:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-716ba5b5f7asm6051573a12.64.2024.06.24.20.45.28
+        d=1e100.net; s=20230601; t=1719292024; x=1719896824;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iMTfoPJSp/wlWQYq7ramEp8kDhcvFWSvsJvWkHGYsCg=;
+        b=ADqxaYdorSqM/SAjso3lYfB4Lad8zNYckCNGEWxB7qxNwQdsRjte8dIqXhcDoilXPc
+         9G+t51DDgLS0nR+MJZburZMS0mEvvusOj7sjHxsOoRj3GxuxGYx706YdLM2sblww55qt
+         NZr5IlSjnKyWYDwbSZ9EhZmK2agOkd2CJExxI16cy061cAc/boPISkCjFf84lk51Y8Oc
+         tZv31WB+Y45f9b4+9S62cs2JUIPpw75zdXD9n4r8Z24HmVeCrcr109QNplSkBCkuCrhh
+         q22UPjSyC6qW4TZO6kfE/cTEfyAX7EdRPJHeNDPb87DfNHjocdLW9IrIllL6bzwV1VRa
+         QgAw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVckGyNtlFv7ywL1KkVlVzzN0Ti7XviO9SNq8j6vfP001P322zEwYo4tyk0ekOfiLmRl6m4ClWhyepzTLdekpFRmsz4EGZZzUg
+X-Gm-Message-State: AOJu0Yz6CZtznhIaae5N3YnrtRksVek9t92hfrj53081dd9iem33padr
+	3dVBBRm+QMKsfnf5GipCOuzfyeDjr0oH+UPZMLJjCWEfl4FC57PjDecxbpstj6U=
+X-Google-Smtp-Source: AGHT+IG7HDx2+AdxqahzNH7iyEFC9rGrJpKDudbwOlrJIC/1s7QOXQZz7eUKgfpp4ZPXuAssY8mYtA==
+X-Received: by 2002:a05:6512:2355:b0:52c:9468:c991 with SMTP id 2adb3069b0e04-52ce1832bffmr3986238e87.14.1719292024114;
+        Mon, 24 Jun 2024 22:07:04 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.70])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4249b4232f9sm6119065e9.0.2024.06.24.22.07.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jun 2024 20:45:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5a4e1cd6-5770-423b-9a25-a0fbfd93014a@roeck-us.net>
-Date: Mon, 24 Jun 2024 20:45:27 -0700
+        Mon, 24 Jun 2024 22:07:03 -0700 (PDT)
+Message-ID: <908ff65d-e9f0-47c2-94ab-47cac3aa58ce@tuxon.dev>
+Date: Tue, 25 Jun 2024 08:07:00 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,98 +76,90 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Regression caused by "eeprom: at24: Probe for DDR3 thermal sensor
- in the SPD case" - "sysfs: cannot create duplicate filename"
-To: Heiner Kallweit <hkallweit1@gmail.com>, =?UTF-8?Q?Krzysztof_Ol=C4=99dzki?=
- <ole@ans.pl>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Wolfram Sang <wsa@the-dreams.de>
-Cc: stable@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-hwmon@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <a57e9a39-13ce-4e4d-a7a1-c591f6b4ac65@ans.pl>
- <0dfa2919-98eb-4433-acb4-aa1830787c9b@roeck-us.net>
- <77c1b740-9e6d-40f7-83f0-9a949366f1c9@ans.pl>
- <97c497ae-44f7-4cec-b7d9-f639e4597571@roeck-us.net>
- <797c8371-dff3-4112-9733-4d3119670dbf@gmail.com>
+Subject: Re: [PATCH 08/12] dt-bindings: i2c: renesas,riic: Document the
+ R9A08G045 support
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <797c8371-dff3-4112-9733-4d3119670dbf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: chris.brandt@renesas.com, andi.shyti@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, magnus.damm@gmail.com,
+ mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+ wsa+renesas@sang-engineering.com, linux-renesas-soc@vger.kernel.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240621112303.1607621-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240621112303.1607621-9-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdULaO2dH_wrcM5P6=rDYzRXcMSGfVsBz3okWPGjOsMN4A@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdULaO2dH_wrcM5P6=rDYzRXcMSGfVsBz3okWPGjOsMN4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 6/24/24 13:58, Heiner Kallweit wrote:
-[ ... ]
+Hi, Geert,
+
+On 24.06.2024 18:40, Geert Uytterhoeven wrote:
+> Hi Claudiu,
 > 
-> Too me the issue also looks like a race. According to the OP's logs:
-> - jc42 at 0x18 is instantiated successfully
-> - jc42 at 0x19 returns -EBUSY. This is what is expected if the device
->    has been instantiated otherwise already.
-> - jc42 at 0x1a returns -EEXIST. Here two instantiations of the the same
->    device seem to collide.
-> - jc42 at 0x1b returns -EBUSY, like at 0x19.
+> On Fri, Jun 21, 2024 at 1:23 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Document the Renesas RZ/G3S (R9A08G045) RIIC IP. This is compatible with
+>> the version available on Renesas RZ/V2H (R9A09G075). Most of the IP
+>> variants that the RIIC driver is working with supports fast mode plus.
+>> However, it happens that on the same SoC to have IP instatiations that
+>> support fast mode plus as well as IP instantiation that doesn't support
+>> it. For this, introduced the renesas,riic-no-fast-mode-plus property.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> So it looks like referenced change isn't wrong, but reveals an
-> underlying issue with device instantiation races.
+> Thanks for your patch!
+> 
+>> --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+>> +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+>> @@ -25,6 +25,10 @@ properties:
+>>                - renesas,riic-r9a07g054  # RZ/V2L
+>>            - const: renesas,riic-rz      # RZ/A or RZ/G2L
+>>
+>> +      - items:
+>> +          - const: renesas,riic-r9a08g045   # RZ/G3S
+>> +          - const: renesas,riic-r9a09g057
+>> +
+> 
+> LGTM.
+> 
+>>        - const: renesas,riic-r9a09g057   # RZ/V2H(P)
+>>
+>>    reg:
+>> @@ -66,6 +70,10 @@ properties:
+>>    resets:
+>>      maxItems: 1
+>>
+>> +  renesas,riic-no-fast-mode-plus:
+>> +    description: specifies if fast mode plus is not supported
+>> +    type: boolean
+>> +
+> 
+> Do you really need this?
+> The bus' clock-frequency property should take into account the combined
+> capabilities of all of controller, target, and wiring.  It is up to the
+> DTS writer to validate that all timing conditions are met.
 
-It isn't just a race, though. Try to unload the at24 (or ee1004 driver
-for DDR4) and load it again, and you'll see the -EBUSY errors. Problem
-is that instantiating those drivers _always_ triggers the call to
-i2c_new_client_device() even if the jc42 device is already instantiated.
-Unloading the spd/eeprom driver doesn't unload the jc42 driver,
-so -EBUSY will be seen if the spd/eeprom driver is loaded again.
+On a second thought, I tend to agree with you on this.
 
-I have not been able to reproduce the backtrace with my systems, but those
-are all with AMD CPUs using the piix4 driver, so timing is likely different.
-Another difference is that my systems (with DDR4) use the ee1004 driver.
-That driver instantiates the jc42 devices under a driver lock, so it is
-guaranteed that a single instantiation doesn't interfere with other
-instantiations running in parallel.
+I added it to comply with "chapter 47.5.15 I2C Bus Interface Access
+Timing, note 7, Tfmin cannot meet the specification in fast-mode plus for
+the RIIC ch2 and ch3" statement from hw manual.
 
-Guenter
+Thank you,
+Claudiu Beznea
 
+> 
+>>  required:
+>>    - compatible
+>>    - reg
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
