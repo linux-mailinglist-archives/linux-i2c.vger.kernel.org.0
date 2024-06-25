@@ -1,143 +1,190 @@
-Return-Path: <linux-i2c+bounces-4343-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4344-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A959A91675D
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 14:17:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B23C916AC7
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 16:41:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB2B81C24B4A
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 12:17:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 031C328C2D2
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 14:41:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D08521553AF;
-	Tue, 25 Jun 2024 12:14:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FCB416F0ED;
+	Tue, 25 Jun 2024 14:40:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="XK9Eqwz3"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="cMTLoiU4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E00016D9B4
-	for <linux-i2c@vger.kernel.org>; Tue, 25 Jun 2024 12:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB4A17167F
+	for <linux-i2c@vger.kernel.org>; Tue, 25 Jun 2024 14:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719317690; cv=none; b=RFs2MVG04/MPoq6nUF9DCVYW+pQfrpD7lix/surqmBa3zYrRatQuv0NQTlTnhxRiVqu8HPwNyM7vBN4jfc64BLLFII1rOX6u9Ye9aqHhjEU8S3lJEWpDIZkW9AcUFTPTQwM3Z4sUkWKyOxLKqYgFfe41XLkntOlac3Oyunq++/k=
+	t=1719326436; cv=none; b=G/Vve2wfISxW96/oftAPprqEgrTPRXItYhr13SMFcT49QsGETBMFkrdggeA6CeWGaYZ+uaHNuusw92hZPcNgV4jInlF64g30RwxnRqqttcyjMfzCAT0nHJt/a0lBch2ytACe8Ujbogd4GTTZu0sbEHR4ZuasKjOxrX+OJ8sQNxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719317690; c=relaxed/simple;
-	bh=up+CKCw3ZtFCZT/R1IA59eXhUiHBrn4jrvl8EMaiQVI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=luRn3zZiMJZQYs5AKlx80v5V7oindnjV2T9npxF+bSqZoYGerBh+ZXTKf/ztSz2pB49eV3shdfYDCwL+R7YMd0bo9kqtq+HizzZoxs6U9awUXxGuCjvzzhDStpYVlUmhUoTaoS5tDsvc3eOt7G7ZNn5gLOTlov0E5VSdVEqFsNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=XK9Eqwz3; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-363826fbcdeso4006179f8f.0
-        for <linux-i2c@vger.kernel.org>; Tue, 25 Jun 2024 05:14:48 -0700 (PDT)
+	s=arc-20240116; t=1719326436; c=relaxed/simple;
+	bh=3mJVHd8KBZFHT/thrSQkQw2hQgCEKhQ/2kzH+DJ7kIE=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jp+wyn/eCJGR2YJCY/QEodHIEKnYzSW6yRO7pqD6a0YT9dKhErtUBSNB2o/dtBdTUyJClmFuyFKdHiwEa/N6myJsLJYr/2PRibAG7trlOHBDGoSQu8Wwhy+XAvxE9JQVFxtoi/jfkWYLCMjGpCn3JL8FUkiKee5Sjmx8aUdd5h8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=cMTLoiU4; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57cbc66a0a6so371295a12.1
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Jun 2024 07:40:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1719317687; x=1719922487; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6GKJ24v9TVtuWhV14muRJU3eBIqlecW/qbwYzBi7wQ4=;
-        b=XK9Eqwz36RcCgONU1DSVXSLa5fkTGq0t3D6igMER+Rd8d0nQyGfrfnWpaIVJMV6Qwf
-         2Z5t7ERPwN7J8/hnm+di/9zwSPzWXk/4NIkIrJ5NVfdYgkTktAqp+NSL3Wb62x20DEyR
-         3Ot0328/oQc4GzufJAGpvn5UPMy2jYa9L+sgCn5ahWR88vQNzLvsACh6YjcAJ/dqTHhs
-         CSvP9frn0mfDmbmPK8g+Xl+KPZ5UN6YBoEBSaU2jF3+ID2/qhH68d4h+g2cQJPZ/l6AI
-         5EWg4LSup/Q+yUDnj5KaG4O5L59ZCcJSgxTgzJpIu7FH0jiiasJ1T3U1Ocqc+HgghsXd
-         o27A==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1719326431; x=1719931231; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6kztJXKkjSq58lR5mrDXGoKvLAaQvzj68ZEFzcn43O8=;
+        b=cMTLoiU43RuVpcRAVgQcBH6NelJ9AuJmBG0sfvJRAJPzO/SgAulMyWRXyN5NTqZ+VH
+         kw12BbDg/trmS5AJ6gY3dqYDSedomSBAeRUO14mrpNJYqDozIURvy0StojTLm6ANDLx1
+         Rhcfft6kUuxtlwdy0HSd8gyAX/KtQbnm2TieXsG7TThSwD7onSd5WkftHN5pnrzAGS7p
+         T5Ro6YVah3tOMIrAh/CpLrCiA97ZX4SfYYTtGXv0y2HhQXv0roxLqAc91iFAez3yF+Ov
+         v+PSbssEamF5MsUZaJdXMi/5SZXePYSgHs0N18rEfml7cpwiOzjAs7Eey2FKrK7BXM97
+         HCMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719317687; x=1719922487;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6GKJ24v9TVtuWhV14muRJU3eBIqlecW/qbwYzBi7wQ4=;
-        b=VTNWNuX3oIjjfke8a8wR8zO9rOIr8H7+QtZPcqihqGWA1AxhEd0lb4Q09dbJ5W0M17
-         NYJLS6V9RP7XV2I6wz5yCBpEv0jMrtWHupn3P1tNao2FGzWf5u3dNTy8rFk9WDqG1trk
-         +c+F1zEdUJjqUgO7quRZmtd+LSArTWTXuZoQ/qlnfEoQJoToqcYTicQHJQjpBzls8Sk7
-         Uuyfnm8WxKHj8WGsWLgIUs70cIm5h3FExn77wWorqjAXMC//dfNIjSpdmV2zQoWQRR9h
-         MtzO6QRRnMHeJZ94Gr8DFrYBovt4QWoa6k9Tf/VpjTAtD3p41ijZxXAnDfaOfw0zAlRd
-         TSXw==
-X-Forwarded-Encrypted: i=1; AJvYcCVygu15ue5cg6EEHs79Jqo/8snBK1NGKiAkb0G2b51mGNfyQuTyqvEi+bFm7giR0Heg7gI6p2rQwdogTA6kwaPhu/cG08WxJf1w
-X-Gm-Message-State: AOJu0YwVhJPtVS+BTZkxy1pDURdCIQO79tSsBi8BrxXIVxUOe/Q5FbIJ
-	qUDV8nzKdzAQqROX4Ix5Uti6pPOdZYJFVHmX2Zm9vwtwfygEal18uxgcMSjzaUQ=
-X-Google-Smtp-Source: AGHT+IE0bik9VVIosKI1k5PcnDWp8XNvIEpEQaNWzDyB3Cpn8xenkx4I1ZQz7IJ1AZgs6x8KmksV/g==
-X-Received: by 2002:a5d:4ac9:0:b0:35f:1bb2:4354 with SMTP id ffacd0b85a97d-366e7a1065bmr4390465f8f.35.1719317687632;
-        Tue, 25 Jun 2024 05:14:47 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.70])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3663a8c8b32sm12798437f8f.92.2024.06.25.05.14.46
+        d=1e100.net; s=20230601; t=1719326431; x=1719931231;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6kztJXKkjSq58lR5mrDXGoKvLAaQvzj68ZEFzcn43O8=;
+        b=qA19JbV6/gYJx+RmHTIkSN+/J+NohFYwbxJsud794E1bXQLVI0a++56/8Grv51vusi
+         s4jCobXZtzwteUyVmsuw1mcModPo3Iu6qkCjLuVr2Ezkqm8+03iKis4xcfz70Jr962F7
+         dUu8c9qoTciVfMEGuDurAyp/LYWSCB2Ui7kXog+SZjnGH24wufxHb3N/+IjforM4VjdG
+         OJwFY6BuwjQtCQ2K8JQnvJ6bSz8rPVErNkhzAxYwUhUTekN2/hBmaXCUrTnTmqgnlq4X
+         zTADW59U2ybEb4T6h858WVa0ANpcu1QtMVdrBhBykS2NcVvozpA55Dd8xcQvK/0/wss7
+         8wIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrVz5zEEzA/z79DzVkyqwgbmsbBunnDwDkaq5gl/B9JjT5UJq7vAsR0wfKmMsdbhRiuSOQxLjNYs/v7aVjHk8IjDKfL+OpD0TK
+X-Gm-Message-State: AOJu0YyxC+lMZePsEMkA2fgwDlCHuIKA9U0B1qJjFN9qUSmwFbzNQiVq
+	XJCkM/BEJAIJ1qaIFb1QWMHu6MXN4JgZn26L+n3pWj5HDBKy4HPJVgre7ef1yLc=
+X-Google-Smtp-Source: AGHT+IFKW7+IFrFPHjDWuZRqySwLJPLqxFFEuDqszxboU3tI7sZEywMmk5XbNU3H561wYP8mjFp3Ew==
+X-Received: by 2002:a05:6402:34c6:b0:57d:45af:112c with SMTP id 4fb4d7f45d1cf-57d45af127amr8103974a12.4.1719326431233;
+        Tue, 25 Jun 2024 07:40:31 -0700 (PDT)
+Received: from localhost ([2a02:8071:b783:6940:aab0:97bd:4d50:ddf1])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57d303da254sm6007172a12.1.2024.06.25.07.40.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jun 2024 05:14:47 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: chris.brandt@renesas.com,
-	andi.shyti@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	geert+renesas@glider.be,
-	magnus.damm@gmail.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	p.zabel@pengutronix.de,
-	wsa+renesas@sang-engineering.com
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v2 12/12] arm64: dts: renesas: rzg3s-smarc-som: Enable i2c1 node
-Date: Tue, 25 Jun 2024 15:13:58 +0300
-Message-Id: <20240625121358.590547-13-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
+        Tue, 25 Jun 2024 07:40:30 -0700 (PDT)
+Date: Tue, 25 Jun 2024 16:40:28 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: Drop explicit initialization of struct
+ i2c_device_id::driver_data to 0
+Message-ID: <pja67neo74zw6rqpv5n7ekivlhejbmpuge6umtuatwhgjbmcwr@7u7f7vhpnwtt>
+References: <20240625083131.2205302-2-u.kleine-koenig@baylibre.com>
+ <rb2fmtnhaqicg2behqfijfypfsvkqatud4h6klal77u6scw2gp@cznyn5vof4x4>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ackgh62dyqhxvezi"
+Content-Disposition: inline
+In-Reply-To: <rb2fmtnhaqicg2behqfijfypfsvkqatud4h6klal77u6scw2gp@cznyn5vof4x4>
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Enable i2c1 node.
+--ackgh62dyqhxvezi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
+Hello Wolfram,
 
-Changes in v2:
-- none
+On Tue, Jun 25, 2024 at 11:47:29AM +0200, Wolfram Sang wrote:
+> > This prepares putting driver_data in an anonymous union which requires
+> > either no initialization or named designators.
+>=20
+> Any preview/RFC of what you are aiming for with this one?
 
- arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+There is an inconsistency in the different *_device_id structures. Some
+have a kernel_ulong_t for driver private data, others have a void*.
+Depending on how it's used in the drivers, one or the other is better.
+To get the best from both the idea is to do
 
-diff --git a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-index 8a3d302f1535..21bfa4e03972 100644
---- a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-+++ b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-@@ -32,6 +32,7 @@ / {
- 	compatible = "renesas,rzg3s-smarcm", "renesas,r9a08g045s33", "renesas,r9a08g045";
- 
- 	aliases {
-+		i2c1 = &i2c1;
- 		mmc0 = &sdhi0;
- #if SW_CONFIG3 == SW_OFF
- 		mmc2 = &sdhi2;
-@@ -150,6 +151,10 @@ &extal_clk {
- 	clock-frequency = <24000000>;
+diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetabl=
+e.h
+index 4338b1b4ac44..594c5ace303a 100644
+--- a/include/linux/mod_devicetable.h
++++ b/include/linux/mod_devicetable.h
+@@ -477,7 +477,10 @@ struct rpmsg_device_id {
+=20
+ struct i2c_device_id {
+ 	char name[I2C_NAME_SIZE];
+-	kernel_ulong_t driver_data;	/* Data private to the driver */
++	union {
++		kernel_ulong_t driver_data;	/* Data private to the driver */
++		const void *data;
++	};
  };
- 
-+&i2c1 {
-+	status = "okay";
-+};
-+
- #if SW_CONFIG2 == SW_ON
- /* SD0 slot */
- &sdhi0 {
--- 
-2.39.2
+=20
+ /* pci_epf */
 
+which then allows to drop quite a few casts, e.g.
+
+diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
+index 2354d12ddad8..6ba5dce0c951 100644
+--- a/drivers/clk/clk-cdce925.c
++++ b/drivers/clk/clk-cdce925.c
+@@ -818,10 +818,10 @@ static const struct clk_cdce925_chip_info clk_cdce949=
+_info =3D {
+ };
+=20
+ static const struct i2c_device_id cdce925_id[] =3D {
+-	{ .name =3D "cdce913", .driver_data =3D (kernel_ulong_t)&clk_cdce913_info=
+, },
+-	{ .name =3D "cdce925", .driver_data =3D (kernel_ulong_t)&clk_cdce925_info=
+, },
+-	{ .name =3D "cdce937", .driver_data =3D (kernel_ulong_t)&clk_cdce937_info=
+, },
+-	{ .name =3D "cdce949", .driver_data =3D (kernel_ulong_t)&clk_cdce949_info=
+, },
++	{ .name =3D "cdce913", .data =3D &clk_cdce913_info, },
++	{ .name =3D "cdce925", .data =3D &clk_cdce925_info, },
++	{ .name =3D "cdce937", .data =3D &clk_cdce937_info, },
++	{ .name =3D "cdce949", .data =3D &clk_cdce949_info, },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, cdce925_id);
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 49fdcb3eb8f6..d19ffe79681b 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -129,7 +129,7 @@ const void *i2c_get_match_data(const struct i2c_client =
+*client)
+ 		if (!match)
+ 			return NULL;
+=20
+-		data =3D (const void *)match->driver_data;
++		data =3D match->data;
+ 	}
+=20
+ 	return data;
+
+The only downside is that all initializers have to use either ".data =3D"
+or ".driver_data =3D". IMHO that is OK, as named initializers are more
+robust and explicit.
+
+Best regards
+Uwe
+
+--ackgh62dyqhxvezi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmZ61tkACgkQj4D7WH0S
+/k5TfQf/ZlpTjTe8IPmN2WUY736MIn5dUtO0Hw+8Srz07CA8iLlq7GG3MyypSxdv
+vna3KTTbwWUPzXgbHQXKVwFHfNCo+V4dPRhT1LFIeCb3fzBoOQ0deGLkE4zzG4Qr
+UXCyU+15k/ie4FV5++h8hZbTFNj6j7Azei3gQZwmjD1egdiNaix8nHvLjQkbft6T
+Rdyd/T3Ca/oT+kFnCwHnm+cczzmIQBdbeSxGQcuEdSFHM1hwvyC1qffYFHPLFL41
+U9TLhCzyTamUgTfx4PI66VrZ/P+3nETes0kJoHo2I6Vm86aKtlXe7EoyKS/ucsGW
+oe8WLxA3SotFZxv3mleOJahQVRz7lQ==
+=jPEM
+-----END PGP SIGNATURE-----
+
+--ackgh62dyqhxvezi--
 
