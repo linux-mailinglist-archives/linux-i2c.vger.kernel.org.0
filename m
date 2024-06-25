@@ -1,165 +1,234 @@
-Return-Path: <linux-i2c+bounces-4323-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4324-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD57A915DED
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 07:07:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87327915F31
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 09:00:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E6B52838BE
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 05:07:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6A8BB2185E
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 06:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63621144306;
-	Tue, 25 Jun 2024 05:07:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5C7146596;
+	Tue, 25 Jun 2024 06:59:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="qrP3uHEz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afJKxH+W"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1143113C9B8
-	for <linux-i2c@vger.kernel.org>; Tue, 25 Jun 2024 05:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5BAC1459E5;
+	Tue, 25 Jun 2024 06:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719292029; cv=none; b=UONAE6QMt/Gjtm8Q1DplcBMYk59Nr/K4UcJAUcDxZ7qEuTc0bZFlsnKNob+5ZPXBWXTRxkzf31yM2Nd02XDfQDMtUukJTG5iBF+FXEwL0aoKiwHDhXWRWwpE13aUFAerD3DfwkFYBYYfvWDY3eLCegDULuVs0gO9kNhVUWhYsbY=
+	t=1719298794; cv=none; b=Z+8aPZp/Y1kZijQg9DqB/n3oLlRcyF9ofsI3tNC7dj9DXSBCk9r5dZoclwwpZF09G7AjC2zebpEEc2RDZQB2KBqJJ0bVBT0k/LafCXS1J2G9toisANXkiESD95/ibTbE4lYdihp2oRPNqNhJ5iJnv4m0mJceFTL+M2HxeqqP/vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719292029; c=relaxed/simple;
-	bh=XFnA16kYW5gGBpSDrWeOV5VEpEAexRRRucWlNmOgnjI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PHEDf2WF3OL0jGnCpbskA6CkL/R0EZ1RSmZ1gZiB4FNiWzhpbH7b1JVrTNCxiOAZ0RBRVuEhkXZxstw2OhEEVMzQFj2siUyfbFFofvfRXrVG2ve09VrHL13DY83/X3t67XvgUBdolBpBhWKg6Dfub/xkjxSz/RNX7P3Xb20upuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=qrP3uHEz; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52cd628f21cso4172413e87.3
-        for <linux-i2c@vger.kernel.org>; Mon, 24 Jun 2024 22:07:05 -0700 (PDT)
+	s=arc-20240116; t=1719298794; c=relaxed/simple;
+	bh=IGNTzHHHcO2fQKpOgRnMv9Qr0WY0XbCxh81+BADNmSI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aRDB3jg0+mu1vh9K2arM7J0VySlGZJ7Vmuv821Tukzk23eGe3+jdKGoqpgBom6zUlxgX9RVThtEnep58ymMWe8rEogXq9r7iYzMGMkf8Wcatz/G1DCrb7V4YkxgTqzJMULj3ldy7cJQSrALjMTLalUBiQI+Hoz0H+Ez0X+ygpRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afJKxH+W; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1fa2782a8ccso15005985ad.2;
+        Mon, 24 Jun 2024 23:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1719292024; x=1719896824; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iMTfoPJSp/wlWQYq7ramEp8kDhcvFWSvsJvWkHGYsCg=;
-        b=qrP3uHEzfNLNzM2yRBsn4IrZUYI+bNIFcB1A+Wn0rAhuZDg0ulZv2VOB58bK0QGkjW
-         19LtbjxRhflLujofe+2Bu4+kflhzVXoOidNHWTcQWu1FF6o2A0xmSR20YGk/84lPEkb3
-         X/IdGBbEuvbQULId5SojIBaw4ifrx6p2A5SXw3KJQMLcONfKB8aotKL1TK1/DjhIQl+i
-         b7OeJrceaUb2fn825ntM+I6bZ9Lm22zfETIZrS5DN1ukIBHXYA4YQv84e4nKaveJPJAM
-         cWxSMYwlb0CmG5YBLpi5KLgJ4KkSttGgClXktgbfq822xCHOoqDyiOg6hLNSuOHi1tre
-         2/+w==
+        d=gmail.com; s=20230601; t=1719298792; x=1719903592; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bw+JuciPmVPvxL173XrvRPex6ZJzB6ISGkebILK54mY=;
+        b=afJKxH+WIObQG3tDsuwIJcNNFOR9pX5E6dokPGj7zf67u4lMJ4ykjMYI/uycGLHF8l
+         m0qBEU5yvwFbBVQns9h8MthFm1G7WCGDuxUZZ8PRZ3cgD0ACWUYQo7uKpochAf0jQIkK
+         t+0Kq4JMaLpU979trAIZFVfDuXk2CVhPAvbqRWS83k5gsNmNVLWdruYr00H96LP0v9mV
+         pDIzCHvW0Xh999H9HzNTlT2SU2DVfuK2e4cumIzMvJHQNgmlF8gD0geOv71ErG24UZqg
+         nxVF2qqZp/UtqJn3XHQ55HpXDFTEZQNIeMLcE5eZaaLnDxnw6mMas0NblWbp5VTyDfoq
+         lvbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719292024; x=1719896824;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iMTfoPJSp/wlWQYq7ramEp8kDhcvFWSvsJvWkHGYsCg=;
-        b=ADqxaYdorSqM/SAjso3lYfB4Lad8zNYckCNGEWxB7qxNwQdsRjte8dIqXhcDoilXPc
-         9G+t51DDgLS0nR+MJZburZMS0mEvvusOj7sjHxsOoRj3GxuxGYx706YdLM2sblww55qt
-         NZr5IlSjnKyWYDwbSZ9EhZmK2agOkd2CJExxI16cy061cAc/boPISkCjFf84lk51Y8Oc
-         tZv31WB+Y45f9b4+9S62cs2JUIPpw75zdXD9n4r8Z24HmVeCrcr109QNplSkBCkuCrhh
-         q22UPjSyC6qW4TZO6kfE/cTEfyAX7EdRPJHeNDPb87DfNHjocdLW9IrIllL6bzwV1VRa
-         QgAw==
-X-Forwarded-Encrypted: i=1; AJvYcCVVckGyNtlFv7ywL1KkVlVzzN0Ti7XviO9SNq8j6vfP001P322zEwYo4tyk0ekOfiLmRl6m4ClWhyepzTLdekpFRmsz4EGZZzUg
-X-Gm-Message-State: AOJu0Yz6CZtznhIaae5N3YnrtRksVek9t92hfrj53081dd9iem33padr
-	3dVBBRm+QMKsfnf5GipCOuzfyeDjr0oH+UPZMLJjCWEfl4FC57PjDecxbpstj6U=
-X-Google-Smtp-Source: AGHT+IG7HDx2+AdxqahzNH7iyEFC9rGrJpKDudbwOlrJIC/1s7QOXQZz7eUKgfpp4ZPXuAssY8mYtA==
-X-Received: by 2002:a05:6512:2355:b0:52c:9468:c991 with SMTP id 2adb3069b0e04-52ce1832bffmr3986238e87.14.1719292024114;
-        Mon, 24 Jun 2024 22:07:04 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.70])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4249b4232f9sm6119065e9.0.2024.06.24.22.07.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jun 2024 22:07:03 -0700 (PDT)
-Message-ID: <908ff65d-e9f0-47c2-94ab-47cac3aa58ce@tuxon.dev>
-Date: Tue, 25 Jun 2024 08:07:00 +0300
+        d=1e100.net; s=20230601; t=1719298792; x=1719903592;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bw+JuciPmVPvxL173XrvRPex6ZJzB6ISGkebILK54mY=;
+        b=McVDKHbx3E/1fI7K1sLailZYZuC/QyAeqMjDwh8jHfXkkSLWy6tQAMt81I74DLfRL0
+         qlZyF5/7ytHIOO5yT2gRo6aSwyOMndYMhyNl2XqqBzL0Cy5cvTHi8svaEAILAfGT63kj
+         lD76nGFbGUg5YowFmHO1RhFwWP6fVve6MTZQguKxQy9OcWThQe5YMhJrTVooRLdGQjNB
+         Ix2vuuW6OLGr+eVefH+Lw/GRlMaRaHXjjNHWtXK3ie/F2kxgkZ1LjIZEfyxDcn7XBpgj
+         Ia+9AnEyT2TV6KfjLoabICloKMYxkykiJ1pmzmP7Or/XnKs5RJvXucttQH3M93qvL5HD
+         oa2A==
+X-Forwarded-Encrypted: i=1; AJvYcCU/D6XS7mRVd9htU03dPbnB0QkH8n+rAtT3Nx4wR77N1QXF/WCyDMD86HDkWsjZ7GXb7p4r7FVDR0alDgBnnGtwMSJ8w04TUveGS2XAhSMe8fboHwUPKZBHLI11RmuvjtiwlHYItyl46w0Rg0vG5FQPtjDr6Y+9J2qZlalz74UizWny8w==
+X-Gm-Message-State: AOJu0Yy8o9HdErQiCsxCFOQY4v/JhWBNn1Y204sAGZdUYrZjmuCllpLN
+	JCVujX8S8iFcFHTIuX9pzOD3mvdfMkiz6R4xZ35tsVOw/y1Bhtge
+X-Google-Smtp-Source: AGHT+IG6L8tRjyFldqQM5owIqKHxJ6YI3PpEsCoaVkIWstg5l1QolFRdaUa+/mFWitIadxYiqj94TQ==
+X-Received: by 2002:a17:902:c943:b0:1f9:f6e6:5ace with SMTP id d9443c01a7336-1fa23f159cemr76844995ad.48.1719298791618;
+        Mon, 24 Jun 2024 23:59:51 -0700 (PDT)
+Received: from ga401ii.SRMIST.EDU.IN ([14.96.13.220])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-1f9eb2f0318sm74041615ad.2.2024.06.24.23.59.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 23:59:51 -0700 (PDT)
+From: Kanak Shilledar <kanakshilledar@gmail.com>
+To: 
+Cc: Kanak Shilledar <kanakshilledar@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3] dt-bindings: i2c: nxp,lpc1788-i2c: convert to dt schema
+Date: Tue, 25 Jun 2024 12:29:32 +0530
+Message-ID: <20240625065939.6146-1-kanakshilledar@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/12] dt-bindings: i2c: renesas,riic: Document the
- R9A08G045 support
-Content-Language: en-US
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: chris.brandt@renesas.com, andi.shyti@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, magnus.damm@gmail.com,
- mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
- wsa+renesas@sang-engineering.com, linux-renesas-soc@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240621112303.1607621-1-claudiu.beznea.uj@bp.renesas.com>
- <20240621112303.1607621-9-claudiu.beznea.uj@bp.renesas.com>
- <CAMuHMdULaO2dH_wrcM5P6=rDYzRXcMSGfVsBz3okWPGjOsMN4A@mail.gmail.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <CAMuHMdULaO2dH_wrcM5P6=rDYzRXcMSGfVsBz3okWPGjOsMN4A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi, Geert,
+Convert the NXP I2C controller for LPC2xxx/178x/18xx/43xx
+to newer DT schema. Created DT schema based on the .txt file
+which had `compatible`, `reg`, `interrupts`, `clocks`,
+`#address-cells` and `#size-cells` as required properties.
 
-On 24.06.2024 18:40, Geert Uytterhoeven wrote:
-> Hi Claudiu,
-> 
-> On Fri, Jun 21, 2024 at 1:23 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> Document the Renesas RZ/G3S (R9A08G045) RIIC IP. This is compatible with
->> the version available on Renesas RZ/V2H (R9A09G075). Most of the IP
->> variants that the RIIC driver is working with supports fast mode plus.
->> However, it happens that on the same SoC to have IP instatiations that
->> support fast mode plus as well as IP instantiation that doesn't support
->> it. For this, introduced the renesas,riic-no-fast-mode-plus property.
->>
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> 
-> Thanks for your patch!
-> 
->> --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
->> +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
->> @@ -25,6 +25,10 @@ properties:
->>                - renesas,riic-r9a07g054  # RZ/V2L
->>            - const: renesas,riic-rz      # RZ/A or RZ/G2L
->>
->> +      - items:
->> +          - const: renesas,riic-r9a08g045   # RZ/G3S
->> +          - const: renesas,riic-r9a09g057
->> +
-> 
-> LGTM.
-> 
->>        - const: renesas,riic-r9a09g057   # RZ/V2H(P)
->>
->>    reg:
->> @@ -66,6 +70,10 @@ properties:
->>    resets:
->>      maxItems: 1
->>
->> +  renesas,riic-no-fast-mode-plus:
->> +    description: specifies if fast mode plus is not supported
->> +    type: boolean
->> +
-> 
-> Do you really need this?
-> The bus' clock-frequency property should take into account the combined
-> capabilities of all of controller, target, and wiring.  It is up to the
-> DTS writer to validate that all timing conditions are met.
+Additional changes to the original .txt binding
+- added maintainer from the MAINTAINERS file.
+- added resets property required by the corresponding DTS files.
 
-On a second thought, I tend to agree with you on this.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
+---
+Changes in v3:
+- removed "address-cells" and "size-cells" as per feedback.
+Changes in v2:
+- updated subject line to include device name.
+- changed removed description from properties except `clock-frequency`.
+- updated MAINTAINERS to track this file.
+---
+ .../devicetree/bindings/i2c/i2c-lpc2k.txt     | 33 ------------
+ .../bindings/i2c/nxp,lpc1788-i2c.yaml         | 54 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 55 insertions(+), 34 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml
 
-I added it to comply with "chapter 47.5.15 I2C Bus Interface Access
-Timing, note 7, Tfmin cannot meet the specification in fast-mode plus for
-the RIIC ch2 and ch3" statement from hw manual.
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt b/Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt
+deleted file mode 100644
+index 4101aa621ad4..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt
++++ /dev/null
+@@ -1,33 +0,0 @@
+-NXP I2C controller for LPC2xxx/178x/18xx/43xx
+-
+-Required properties:
+- - compatible: must be "nxp,lpc1788-i2c"
+- - reg: physical address and length of the device registers
+- - interrupts: a single interrupt specifier
+- - clocks: clock for the device
+- - #address-cells: should be <1>
+- - #size-cells: should be <0>
+-
+-Optional properties:
+-- clock-frequency: the desired I2C bus clock frequency in Hz; in
+-  absence of this property the default value is used (100 kHz).
+-
+-Example:
+-i2c0: i2c@400a1000 {
+-	compatible = "nxp,lpc1788-i2c";
+-	reg = <0x400a1000 0x1000>;
+-	interrupts = <18>;
+-	clocks = <&ccu1 CLK_APB1_I2C0>;
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-};
+-
+-&i2c0 {
+-	clock-frequency = <400000>;
+-
+-	lm75@48 {
+-		compatible = "nxp,lm75";
+-		reg = <0x48>;
+-	};
+-};
+-
+diff --git a/Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml b/Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml
+new file mode 100644
+index 000000000000..9a1b95c2d03c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/nxp,lpc1788-i2c.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP I2C controller for LPC2xxx/178x/18xx/43xx
++
++maintainers:
++  - Vladimir Zapolskiy <vz@mleia.com>
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++properties:
++  compatible:
++    const: nxp,lpc1788-i2c
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-frequency:
++    description: the desired I2C bus clock frequency in Hz
++    default: 100000
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include "dt-bindings/clock/lpc18xx-ccu.h"
++
++    i2c@400a1000 {
++        compatible = "nxp,lpc1788-i2c";
++        reg = <0x400a1000 0x1000>;
++        interrupts = <18>;
++        clocks = <&ccu1 CLK_APB1_I2C0>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf9c9221c388..920e4f28b5ae 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2374,7 +2374,7 @@ ARM/LPC18XX ARCHITECTURE
+ M:	Vladimir Zapolskiy <vz@mleia.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/i2c/i2c-lpc2k.txt
++F:	Documentation/devicetree/bindings/i2c/nxp,lpc1788-i2c.yaml
+ F:	arch/arm/boot/dts/nxp/lpc/lpc43*
+ F:	drivers/i2c/busses/i2c-lpc2k.c
+ F:	drivers/memory/pl172.c
+-- 
+2.45.2
 
-Thank you,
-Claudiu Beznea
-
-> 
->>  required:
->>    - compatible
->>    - reg
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
 
