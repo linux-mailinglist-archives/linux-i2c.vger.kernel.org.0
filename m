@@ -1,326 +1,162 @@
-Return-Path: <linux-i2c+bounces-4383-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4384-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A08B591878A
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 18:37:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97F4D919892
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 21:53:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C43991C20847
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 16:37:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C17171C21C97
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 19:53:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC03A18F2F0;
-	Wed, 26 Jun 2024 16:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D42BD19149E;
+	Wed, 26 Jun 2024 19:53:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b="e3DY8tAe"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="k1AU9bl6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4BA18C33D;
-	Wed, 26 Jun 2024 16:37:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B901922DF
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 19:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719419866; cv=none; b=IL+E72qw3M2uL7AzdpXN6xak5Sr2zur/gZXB3OgpHLCVqbPKFTZd9nCAFpltySUVEy05u4JCpRIZfD3Aex2RQwhCz3/iY9OQr0HSJyeHoH2CbMnFLY0S/VG5qV8HWwWmbVeNKm28NlBFrIRIz+D3D03+ioSJ0RA445rLlQxR+ec=
+	t=1719431610; cv=none; b=qZx9xkQA5nd4IRQ9QxBaDFfGglllWfqKe6VOQPs6hHL1lyHGxwZyLqijMNxAyGN1VPoVxUcBhX3EmKMmSiY3p1f5z80zaPIg6cER8N96trzyuV/NcMXMkgzjB2loqZQjo99MofV7ZSLzsvGVS0Z6wRGach8cuZiS5/pmpp6gf8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719419866; c=relaxed/simple;
-	bh=pXoBfOlm+vXOvkm5WzoBB8e7MhFEuX6jxo6GpxgQ6r8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A8tE59pYIq566rZln4Qg5TZpgYKf2LtUdaEqmiMmY/svsnqw6YqA/xKTUP01kuv2yG9XEvHRV9m2YUj/9BMHX+XfMLMlX24Wt0ZQr8rrWK0xDDRLjWsTePfFicMPbJtYk6PYf10v6n/+bI2zd3gE0+kOW10xjD/WQ0gnGdl2WNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de; spf=pass smtp.mailfrom=t-8ch.de; dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b=e3DY8tAe; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-8ch.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-	t=1719419861; bh=pXoBfOlm+vXOvkm5WzoBB8e7MhFEuX6jxo6GpxgQ6r8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e3DY8tAe4K3IdjFVDBiPpOVhlFvg9YwTAkMYuUnPBnFXUy82oLXHvcjlBF78G7nmZ
-	 BeM5agWz4CSjuxSGI9AvkH6jbHCb+SbYDftRqlkja8zBcfrS09wYngVGUXso1cHGZv
-	 zPsf95jr8Uc/e1+qvD/RUQTVw7w1unAqduW8rEYo=
-Date: Wed, 26 Jun 2024 18:37:41 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To: Alex Vdovydchenko <keromvp@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Jonathan Corbet <corbet@lwn.net>, Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, 
-	Alex Vdovydchenko <xzeol@yahoo.com>, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: add MP5920 driver
-Message-ID: <89bc56c2-36af-483c-b04a-73f5c6423b48@t-8ch.de>
-References: <20240626142439.1407175-1-xzeol@yahoo.com>
- <20240626142439.1407175-3-xzeol@yahoo.com>
+	s=arc-20240116; t=1719431610; c=relaxed/simple;
+	bh=0Ybj4wtW95M6drlyUm9WmidvdRg5rnZr11IpSHb4Sd0=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RfyzHtvSX89uzQFvBuWWBjAYcO2rahWrbiWz/cFamNN2HjqhFj6fyzHNkzVLoDqXKMoJlST3gxVaKCafsDDBSIJwJSGkd9Xp2pI5LckElCSFSHqdmDK15JpRpG6GJHSn1ZXwC4Ydmmb6LNSf2Fj0PhgBlcxM0HW5aSloLiEsEHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=k1AU9bl6; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2ec595d0acbso51717691fa.1
+        for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 12:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1719431607; x=1720036407; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lRCmQ69BSqOdDqCtC+2XA7M6nsGtIS36NlCZuj8Lhm4=;
+        b=k1AU9bl6FwkfB9HbPryO1lwuo77m1RKbygNU8JUlDsJZZsKRXwU5hlF/W6q6SsLF3w
+         UiRr3EHtiYnte9aBdIx4kuZTVTPCiM8LPkj9jVq1hFcJIVhdZE/h7+uPSRuKopHd7X0x
+         OfgzhvEFSYtri1DLVFZGIgLvtSwhVg4M8pGdvIbWnT7e4qi8Xq/V4KHe78vrDgCmzcul
+         eh6HDW2v8IS2m1LEOek0xxQeJfhEERWwtdzr6cCamIs3Vuo7ZJ82ZFD/wsJ+GP+Fu44C
+         KgsmXRwers7roNSU1lHq5pg+1jRs4WRv7LiBAo2+q8RnQcM3Q+6owxCjWt4HtdohmcTf
+         9+ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719431607; x=1720036407;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lRCmQ69BSqOdDqCtC+2XA7M6nsGtIS36NlCZuj8Lhm4=;
+        b=hvwbCKOGX6zTY2jCqv4txU3gAgjfkKxgRVTiMAV8At7fqc06UyWrauLUxXDD4wg5qI
+         xgqFhgP3ETN3FIpe+ypzOs7ZUGRqIbDQWa3Vs0esfiZ4fb3r3KfQey4003L3yRDtaEN6
+         U+K21ksnn40sIgPFLSC6luI/e10ATUdKNAHGcpfU6NMKdeuQ3dYB5Zy8hjL1z4kW1NfA
+         XcADYMOu7wu8wisJv1Q/Hb59+lTeHQ/62Od4768ElpQIlzG1pLWL7jRUpQaJar+d93pl
+         nnsg9y3iRzagfS3xt+/oXx17LZG1zQgREW5QT1OUbZ4wrDEmn2HFHNKEDKXk4TdzQLmy
+         KCiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7iqaKiXDmaFlsHg8qRNubD1xygiuuJtN8yCwHu7YAxhApi9QPftLzmubBKsykMqtBuFC213BLR9XfqQQcCnT/cWYL3WFkZ5w6
+X-Gm-Message-State: AOJu0Yw4zfzUvVlYAr8KaStLA6ekpUR/SxX3PsSGH31G+gEwhCto4nxv
+	MAtdLsFbLT6WRFZHIAHJRLGrti5VxYzC+KsnGpk/M9xUGD6u5kfgSdex11doDEA=
+X-Google-Smtp-Source: AGHT+IFdmbxXiV37RcC2FIVseGLV7Xoe29GB0LBjDtgtJzPY16pt+6fWNxJtmJqdbRujSwfOb+Fihw==
+X-Received: by 2002:a2e:9213:0:b0:2ec:4de9:7334 with SMTP id 38308e7fff4ca-2ec5b2fd2bdmr84530621fa.11.1719431606495;
+        Wed, 26 Jun 2024 12:53:26 -0700 (PDT)
+Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57d305616dfsm7607391a12.79.2024.06.26.12.53.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jun 2024 12:53:26 -0700 (PDT)
+Date: Wed, 26 Jun 2024 21:53:24 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: Drop explicit initialization of struct
+ i2c_device_id::driver_data to 0
+Message-ID: <i25xsy5nnefy2gkk4htkhcxd2ifgpn5ljhps4kd7ixn3tcy5to@gd7vrvgjvbj4>
+References: <20240625083131.2205302-2-u.kleine-koenig@baylibre.com>
+ <rb2fmtnhaqicg2behqfijfypfsvkqatud4h6klal77u6scw2gp@cznyn5vof4x4>
+ <pja67neo74zw6rqpv5n7ekivlhejbmpuge6umtuatwhgjbmcwr@7u7f7vhpnwtt>
+ <siwnljn7t22tsqybv6w3dndhuiynhvudtshkmyh67q6kyxjl6j@wuisjuqlovyg>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rfuvtzq3as2b5mp6"
+Content-Disposition: inline
+In-Reply-To: <siwnljn7t22tsqybv6w3dndhuiynhvudtshkmyh67q6kyxjl6j@wuisjuqlovyg>
+
+
+--rfuvtzq3as2b5mp6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240626142439.1407175-3-xzeol@yahoo.com>
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-06-26 17:24:34+0000, Alex Vdovydchenko wrote:
-> Add support for MPS Hot-Swap controller mp5920. This driver exposes
-> telemetry and limits value readings and writtings.
-> 
-> Signed-off-by: Alex Vdovydchenko <xzeol@yahoo.com>
-> ---
->  Documentation/hwmon/index.rst  |  1 +
->  Documentation/hwmon/mp5920.rst | 91 +++++++++++++++++++++++++++++++++
->  drivers/hwmon/pmbus/Kconfig    |  9 ++++
->  drivers/hwmon/pmbus/Makefile   |  1 +
->  drivers/hwmon/pmbus/mp5920.c   | 93 ++++++++++++++++++++++++++++++++++
->  5 files changed, 195 insertions(+)
->  create mode 100644 Documentation/hwmon/mp5920.rst
->  create mode 100644 drivers/hwmon/pmbus/mp5920.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index e92a3d5c7..9eba7e402 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -168,6 +168,7 @@ Hardware Monitoring Kernel Drivers
->     mp2975
->     mp2993
->     mp5023
-> +   mp5920
->     mp5990
->     mp9941
->     mpq8785
-> diff --git a/Documentation/hwmon/mp5920.rst b/Documentation/hwmon/mp5920.rst
-> new file mode 100644
-> --- /dev/null
-> +++ b/Documentation/hwmon/mp5920.rst
-> @@ -0,0 +1,91 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver mp5920
-> +====================
-> +
-> +Supported chips:
-> +
-> +  * MPS MP5920
-> +
-> +    Prefix: 'mp5920'
-> +
-> +  * Datasheet
-> +
-> +    Publicly available at the MPS website : https://www.monolithicpower.com/en/mp5920.html
-> +
-> +Authors:
-> +
-> +	Tony Ao <tony_ao@wiwynn.com>
-> +	Alex Vdovydchenko <xzeol@yahoo.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
-> +MP5920 Hot-Swap Controller.
-> +
-> +Device compliant with:
-> +
-> +- PMBus rev 1.3 interface.
-> +
-> +Device supports direct and linear format for reading input voltage,
-> +output voltage, output current, input power and temperature.
-> +
-> +The driver exports the following attributes via the 'sysfs' files
-> +for input voltage:
-> +
-> +**in1_input**
-> +
-> +**in1_label**
-> +
-> +**in1_rated_max**
-> +
-> +**in1_rated_min**
-> +
-> +**in1_crit**
-> +
-> +**in1_alarm**
-> +
-> +The driver provides the following attributes for output voltage:
-> +
-> +**in2_input**
-> +
-> +**in2_label**
-> +
-> +**in2_rated_max**
-> +
-> +**in2_rated_min**
-> +
-> +**in2_alarm**
-> +
-> +The driver provides the following attributes for output current:
-> +
-> +**curr1_input**
-> +
-> +**curr1_label**
-> +
-> +**curr1_crit**
-> +
-> +**curr1_alarm**
-> +
-> +**curr1_rated_max**
-> +
-> +The driver provides the following attributes for input power:
-> +
-> +**power1_input**
-> +
-> +**power1_label**
-> +
-> +**power1_max**
-> +
-> +**power1_rated_max**
-> +
-> +The driver provides the following attributes for temperature:
-> +
-> +**temp1_input**
-> +
-> +**temp1_max**
-> +
-> +**temp1_crit**
-> +
-> +**temp1_alarm**
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -371,6 +371,15 @@ config SENSORS_MP5023
->  	  This driver can also be built as a module. If so, the module will
->  	  be called mp5023.
->  
-> +config SENSORS_MP5920
-> +	tristate "MPS MP5920"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Monolithic
-> +	  MP5920.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called mp5920.
-> +
->  config SENSORS_MP5990
->  	tristate "MPS MP5990"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -39,6 +39,7 @@ obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
->  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->  obj-$(CONFIG_SENSORS_MP2993)	+= mp2993.o
->  obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
-> +obj-$(CONFIG_SENSORS_MP5920)	+= mp5920.o
->  obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
->  obj-$(CONFIG_SENSORS_MP9941)	+= mp9941.o
->  obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
-> diff --git a/drivers/hwmon/pmbus/mp5920.c b/drivers/hwmon/pmbus/mp5920.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mp5920.c
-> @@ -0,0 +1,95 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for MP5920 and compatible chips.
-> + *
-> + * Copyright (c) 2019 Facebook Inc.
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License as published by
-> + * the Free Software Foundation; either version 2 of the License, or
-> + * (at your option) any later version.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-> + * GNU General Public License for more details.
-> + */
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +static struct pmbus_driver_info mp5920_info = {
-> +	pages = 1,
-> +	format[PSC_VOLTAGE_IN] = direct,
-> +	format[PSC_VOLTAGE_OUT] = direct,
-> +	format[PSC_CURRENT_OUT] = direct,
-> +	format[PSC_POWER] = direct,
-> +	format[PSC_TEMPERATURE] = direct,
-> +	m[PSC_VOLTAGE_IN] = 2266,
-> +	b[PSC_VOLTAGE_IN] = 0,
-> +	R[PSC_VOLTAGE_IN] = -1,
-> +	m[PSC_VOLTAGE_OUT] = 2266,
-> +	b[PSC_VOLTAGE_OUT] = 0,
-> +	R[PSC_VOLTAGE_OUT] = -1,
-> +	m[PSC_CURRENT_OUT] = 546,
-> +	b[PSC_CURRENT_OUT] = 0,
-> +	R[PSC_CURRENT_OUT] = -2,
-> +	m[PSC_POWER] = 5840,
-> +	b[PSC_POWER] = 0,
-> +	R[PSC_POWER] = -3,
-> +	m[PSC_TEMPERATURE] = 1067,
-> +	b[PSC_TEMPERATURE] = 20500,
-> +	R[PSC_TEMPERATURE] = -2,
-> +	func[0] = PMBUS_HAVE_VIN  | PMBUS_HAVE_VOUT |
-> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
-> +		PMBUS_HAVE_TEMP,
-> +};
-> +
-> +static int mp5920_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev =  &client->dev;
-> +	int chip_id;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_READ_WORD_DATA))
-> +		return -ENODEV;
+On Wed, Jun 26, 2024 at 12:34:05PM +0200, Wolfram Sang wrote:
+> Hi Uwe,
+>=20
+> > There is an inconsistency in the different *_device_id structures. Some
+> > have a kernel_ulong_t for driver private data, others have a void*.
+> > Depending on how it's used in the drivers, one or the other is better.
+> > To get the best from both the idea is to do
+> >=20
+> > diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_device=
+table.h
+> > index 4338b1b4ac44..594c5ace303a 100644
+> > --- a/include/linux/mod_devicetable.h
+> > +++ b/include/linux/mod_devicetable.h
+> > @@ -477,7 +477,10 @@ struct rpmsg_device_id {
+> > =20
+> >  struct i2c_device_id {
+> >  	char name[I2C_NAME_SIZE];
+> > -	kernel_ulong_t driver_data;	/* Data private to the driver */
+> > +	union {
+> > +		kernel_ulong_t driver_data;	/* Data private to the driver */
+> > +		const void *data;
+> > +	};
+> >  };
+> > =20
+> >  /* pci_epf */
+> >=20
+> > which then allows to drop quite a few casts, e.g.
+>=20
+> I personally could live with the casts, even though the above looks
+> clearer, of course. On suggestion, though, can we please have:
+>=20
+>  +		const void *data_ptr;
+>=20
+> There is no obvious difference between 'driver_data' and 'data' to
+> determine what is the ulong type and what is void*. 'data_ptr' makes
+> this instantly recognizable IMO.
 
-Already checked by pmbus_do_probe().
+I share that concern, the reason for considering "data" is the output of
 
-> +
-> +	chip_id = i2c_smbus_read_word_data(client, PMBUS_MFR_ID);
-> +	if (chip_id < 0) {
-> +		dev_err(dev, "Failed to read MFR ID");
-> +		return chip_id;
-> +	}
-> +
-> +	return pmbus_do_probe(client, &mp5920_info);
-> +}
-> +
-> +static const struct of_device_id mp5920_of_match[] = {
-> +	{ .compatible = "mps,mp5920" },
-> +	{}
-> +};
+	git grep 'const void *' include/linux/mod_devicetable.h
 
-MODULE_DEVICE_TABLE(of, mp5920_of_match);
+Getting these all into alignment, maybe even picking a better name than
+"driver_data", would be the eventual goal. IMHO "driver_data" vs
+"data_ptr" looks strange, maybe I'd prefer "driver_ptr" over
+"data" and "data_ptr"?!
 
-> +
-> +static const struct i2c_device_id mp5920_id[] = {
-> +	{"mp5920", 0},
-> +	{ }
+Best regards and thanks for your feedback,
+Uwe
 
-Inconsistent style between sentinels of both device tables.
+--rfuvtzq3as2b5mp6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +};
-> +MODULE_DEVICE_TABLE(i2c, mp5920_id);
-> +
-> +static struct i2c_driver mp5920_driver = {
-> +	.driver = {
-> +		.name = "mp5920",
-> +		.of_match_table = mp5920_of_match,
-> +	},
-> +	.probe = mp5920_probe,
-> +	.id_table = mp5920_id,
-> +};
-> +module_i2c_driver(mp5920_driver);
-> +
-> +MODULE_AUTHOR("Tony Ao <tony_ao@wiwynn.com>");
-> +MODULE_AUTHOR("Alex Vdovydchenko <xzeol@yahoo.com>");
-> +MODULE_DESCRIPTION("PMBus driver for MP5920 HSC");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
-> -- 
-> 2.43.0
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmZ8cbEACgkQj4D7WH0S
+/k53Cwf/VQIL34v5uMvrgjL1YTmr1pJOhbrfHIEuvYrNnvEK/AdlcME4v/v85UBu
+MWdlzgTqMefvfAWLgo6WSlDEFUHMGtaAhmpNY+GLgq0NqX50zyH++7bkvP3fPR7G
+1OMnWMLQVHDnryJ7rkS1ovcm+NEI2iPRhNrHCQLCpYtDQUcG7Anu0OZs8NnemynS
+vv4FfnoeWLwcs5rbYAQHK3FMMcfiUFQwoE98BazecnjEdR5rh5Pn86CfqOxqbHvR
+3rL+5/7brVDtejEdHPKhBnQRpbI0baMFRRqnrH8/yIFB0PaRtmB8ealXRz/1ohP0
+wYxTe0t1EUT+pPtaGWVJHG8S6KOGyQ==
+=8/Co
+-----END PGP SIGNATURE-----
+
+--rfuvtzq3as2b5mp6--
 
