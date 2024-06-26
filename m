@@ -1,124 +1,101 @@
-Return-Path: <linux-i2c+bounces-4377-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4378-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26F439181EE
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 15:13:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4233191838C
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 16:01:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA8141F221ED
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 13:13:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED0831F216DF
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 14:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD84185E46;
-	Wed, 26 Jun 2024 13:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FBBE181B85;
+	Wed, 26 Jun 2024 14:01:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eYTrcepq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XiKW5po0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F3A1822D6
-	for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 13:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5BEC136;
+	Wed, 26 Jun 2024 14:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719407244; cv=none; b=LvYnoTLeHYTR7AfhGH1HKvS4izPVC1RnsZZIgTpSMa5uyTV0E6jo8A6kz9fLyFCFOXkHcOuS5ddSwpnoRaVpvQJjo3R3ZPMH9qVrYH107QvOD0mIFBnnkv+iY5WmrcDH/aVEy5tOHIy2u1ugpvLdRC7Fa6l4F5AqYS0mMGVsT1Q=
+	t=1719410465; cv=none; b=XkSlnRtd39gpXLDHW/l3ygZhdnRV8est3KhfuzRfua1AUM4V3NIrJuQ8QY4CQ3JPilGx7nEMlz5y4UbaavR6OLMVmklUWwRhdoRmrONW293k022yltby8gIoUBd/IpvX/KrqpF30hEm8s3OpJcqQyNxwRn2k5Yd8Rmpr+eL6M/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719407244; c=relaxed/simple;
-	bh=zw0a9Xf9AqcDb8lK8o8wWOJU+75sjmGWL4bnJOJTfRM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HDkkXqcm5s2/jzC14A+IiJQTJLPHEZTxQQtabC4IGtvIJ27rzg/deqKI55XE64oEokiMIMI8Elxaa0dHt3uU5wHJnYc4mDilwydZq/q1tgzUi+ifjsL5jSlu5wl313aojSDir2ErLQ6BmCNlbuOuHSxctCDH2tZiW/lwjx6GXro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eYTrcepq; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4255fc43f1cso2886315e9.0
-        for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 06:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719407241; x=1720012041; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tDQy8BECqR3d9KG8alrRMJUS6CkD3eJI9ZwYScYLHPw=;
-        b=eYTrcepqLwfBb736vqvsvXdu8ipvoXtYefMnd+uBpwwJUOea4k7PxzeseP0XsZH/wM
-         CjoazB5JNxHPcbkofkJhQ1h8cFO9t1F+OMTBwMvCs5KYfxJWwTVKbTq/RjK0qrQLUucO
-         hESpcBbOovWLpZOhTd7N6SQDA6EkkZZT0CguRHfH4m7M099QYFUjD6zMtKcNPkXz3fWp
-         hErNcPtPlFus5vX4c88H08kHwT+msx0V2N+6392mtfG8SNUNZJwavv4mzOOP1E7CQCUO
-         G8kQXu53iHkuKwahD81CpomGlkrJTXjvYvSVZlqZzU9/yJTsJ2Rt0BpzsptH1vpqrQbH
-         F7wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719407241; x=1720012041;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tDQy8BECqR3d9KG8alrRMJUS6CkD3eJI9ZwYScYLHPw=;
-        b=GBGGIy8j6uinfQA9CmVUurs37FLTMegELLF46pbxhiUs6iSJ19UdCmtz3m0luoW+7h
-         njgEwqEkXc2xoSDIXU/IZ322JtuPPI3wJjh4pbzzHttnzEbhuvl8Bz2lFkbCu1nUmSvy
-         YXOKiCB+Uf//wO9llwgMQ82onGymEIDn6P8QX4hbK11DMGo0zwqYU0QlLO90hlprYwgs
-         B8KMIpBvPkO4iQZqS8XLIWUm6JJe5FWYgY00Uhi24sqaE+kCNSJxaoIg6kXtM3A4vUjj
-         e64Y2Qn/QvosD8rkTM89da6cQmCx6k1tBg04rxMKiYNIylmyuVPCAaHgdL7EhXyLJr8y
-         6wiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUlGQW/c5qW7GDrIouWWnPUEh79nILsV0eDHfrUe9mzaaylV68HEwN1wN1Lqb59hKP/BrLHY1WliU+HfNhpzR91p64Vgi6gyXMB
-X-Gm-Message-State: AOJu0Yx953p1cBoY7R3A9by/N4rSoKgMDr3ENJnRNGHZXDz49cBxE7PP
-	1W4qybuXQDorCTWKejqcKjaVeJAVUENKorLVF9EYe1fwKrE5Q0xPqHfxw3aPdFBLNvURHcV24Ms
-	/qv8=
-X-Google-Smtp-Source: AGHT+IFnI3BCzOm9FuKlL8pAB6vzhy4jH7oPlvuTldtaYqx2e+JcKbfH6B4nnzMZrXctUa2kqlJpZg==
-X-Received: by 2002:a5d:4c86:0:b0:360:727b:8b47 with SMTP id ffacd0b85a97d-366e9629df0mr7240449f8f.63.1719407241160;
-        Wed, 26 Jun 2024 06:07:21 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-367188300acsm2106768f8f.54.2024.06.26.06.07.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jun 2024 06:07:20 -0700 (PDT)
-Message-ID: <3e2f38a3-e151-42f1-97ca-b8327ade4acc@linaro.org>
-Date: Wed, 26 Jun 2024 14:07:19 +0100
+	s=arc-20240116; t=1719410465; c=relaxed/simple;
+	bh=Y6I6wohTOcfHXnc2xlk4UwZF0BqadzOjW0083GuqF7k=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=erUvF8eKk/Bhy9+hi5i7+WubPuMMxQ88ZjCYsZqZIz5SVzGRCxDiwS5YBRWnfygT2F4MBMvnOMXdaY+xllh5LAwTngWJYRg5z1lGgjONW+cYBXfX4ZyaHMStHeO3Rb6tHlzVxC8R+FIhljrzO9UJKXuKulFsq4jCXqUOk2S6jAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XiKW5po0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39D4DC116B1;
+	Wed, 26 Jun 2024 14:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719410464;
+	bh=Y6I6wohTOcfHXnc2xlk4UwZF0BqadzOjW0083GuqF7k=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=XiKW5po0uVzl3fyqJ38W+/TlmxEg9XC09/fBEK6DxRXqogVwpf7icO+WJdgtyJMLo
+	 JWV+2cDhv7amoguLF3e8456hJZmyDP3cPtM/QuPOj68CYX1+E2fOWLWdZTkljQsIcd
+	 kAdOY+2Nti6TOIxuSp45UdRGnd1thejwYrxrrHdvbvuS/xy1F5Mz5LqQWzNBVTA3Vx
+	 9aXRz1tu7adiOyb9uYIkKRsyZisywClVsletC5RQ6TO0KLQyRu4nFkLUXvsN0Sdcgj
+	 nFjgE3x5iB0ThHpPTtiYPppQVoJyjjdCrkNxxZ/9yb3YTkTWgKrsPeCRUxEFsgwvNm
+	 ibgNJb/FaGelQ==
+Date: Wed, 26 Jun 2024 16:01:01 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Arnd Bergmann <arnd@kernel.org>, Hans Hu <hanshu@zhaoxin.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Wentong Wu <wentong.wu@intel.com>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] i2c: viai2c: turn common code into a proper module
+Message-ID: <zxdgdwtw5o7juwd45ydnjmswz4j7rwxw2xcr6psvph3wkdyzj3@4mto7xnuddiw>
+References: <20240528120710.3433792-1-arnd@kernel.org>
+ <bi3lwgeh5egvd4g6aspwvefibk3cviwuzinvgkmnwy4f3bvua4@nf5a6w77cr7v>
+ <5shzq44g75xykn2tdbutbqa4u5by3sijvztam2x2scey5rglox@kgh7lul4j2el>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] nvmem: core: Implement force_ro sysfs attribute
-To: Marek Vasut <marex@denx.de>, linux-i2c@vger.kernel.org
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20240626041214.513242-1-marex@denx.de>
- <20240626041214.513242-4-marex@denx.de>
-Content-Language: en-US
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20240626041214.513242-4-marex@denx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5shzq44g75xykn2tdbutbqa4u5by3sijvztam2x2scey5rglox@kgh7lul4j2el>
 
+On Wed, Jun 26, 2024 at 12:42:03PM GMT, Wolfram Sang wrote:
+> On Tue, Jun 04, 2024 at 10:00:04AM GMT, Wolfram Sang wrote:
+> > On Tue, May 28, 2024 at 02:06:30PM +0200, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > > 
+> > > The i2c-viai2c-common.c file is used by two drivers, but is not a proper
+> > > abstraction and can get linked into both modules in the same configuration,
+> > > which results in a warning:
+> > > 
+> > > scripts/Makefile.build:236: drivers/i2c/busses/Makefile: i2c-viai2c-common.o is added to multiple modules: i2c-wmt i2c-zhaoxin
+> > > 
+> > > The other problems with this include the incorrect use of a __weak function
+> > > when both are built-in, and the fact that the "common" module is sprinked
+> > > with 'if (i2c->plat == ...)' checks that have knowledge about the differences
+> > > between the drivers using it.
+> > > 
+> > > Avoid the link time warning by making the common driver a proper module
+> > > with MODULE_LICENCE()/MODULE_AUTHOR() tags, and remove the __weak function
+> > > by slightly rearranging the code.
+> > > 
+> > > This adds a little more duplication between the two main drivers, but
+> > > those versions get more readable in the process.
+> > > 
+> > > Fixes: a06b80e83011 ("i2c: add zhaoxin i2c controller driver")
+> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > Andi, I am tempted to include this in my for-current pull request this
+> > week. Are you okay with this or do you want to review it more closely?
+> 
+> Meh, I forgot about it. Andi, do you plan a PR for rc6?
 
+yes, sorry, will take it.
 
-On 26/06/2024 05:11, Marek Vasut wrote:
->   
->   static const struct attribute_group *nvmem_dev_groups[] = {
-> @@ -945,6 +988,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->   
->   	nvmem->read_only = device_property_present(config->dev, "read-only") ||
->   			   config->read_only || !nvmem->reg_write;
-> +	nvmem->default_read_only = nvmem->read_only;
->   
->   #ifdef CONFIG_NVMEM_SYSFS
->   	nvmem->dev.groups = nvmem_dev_groups;
-> diff --git a/drivers/nvmem/internals.h b/drivers/nvmem/internals.h
-> index 18fed57270e5e..0667937ebb86b 100644
-> --- a/drivers/nvmem/internals.h
-> +++ b/drivers/nvmem/internals.h
-> @@ -16,6 +16,7 @@ struct nvmem_device {
->   	int			id;
->   	struct kref		refcnt;
->   	size_t			size;
-> +	bool			default_read_only;
+Sorry for having missed it.
 
-
-Its not very clear what is the need for this?
-
-
---srini
->   	bool			read_only;
->   	bool			root_only;
->   	int			flags;
+Andi
 
