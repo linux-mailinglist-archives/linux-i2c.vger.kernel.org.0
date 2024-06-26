@@ -1,246 +1,290 @@
-Return-Path: <linux-i2c+bounces-4365-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4366-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A8E1917AA1
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 10:15:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92E5D917AA8
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 10:16:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 819371C20CC7
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 08:15:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48E86284322
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 08:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71F9315F41B;
-	Wed, 26 Jun 2024 08:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A8DB1662E4;
+	Wed, 26 Jun 2024 08:16:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="DcEP56Fy"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="JxHQfBMn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2041.outbound.protection.outlook.com [40.107.113.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5B015B0E1;
-	Wed, 26 Jun 2024 08:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.113.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719389731; cv=fail; b=BC+Ej0e/tGRoO7HrMrHDXxo9jmUExM5sIBpFZym4aFb72/EI0bRFqo/mW9C5rAIwgLo8JUFw+xyd/Z6xYEv47Tnhs7WDDQ4bwCaaJ4Fd44JfwgMtHjzC7SgWp2PIT3EhPSHLX0hMpuikknHBreoMKPIJs2Ed18pFhN5Bcdc/HnU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719389731; c=relaxed/simple;
-	bh=Ftlsq7r3gzBH4HGeaPA43aHrDGfkcSiuBn+3W2FNP0g=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Vav48Vl8KQXSrRLnpFjFn9ls8t+YVUl25tZievhfCKEMx3DaU0ohb1TxGenAWErtAsQv8duN2BGzcQeNgRkjwbt74DeXhOvEVPJ5CpOXYEsUSbWozcFqtMK6OnmiSfoIoHIn/41ZTJpmHBePBKsoY9diII6ZyOmRv5q+sletJ18=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=DcEP56Fy; arc=fail smtp.client-ip=40.107.113.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z/JNvjncTZRFlAHs8ukt4trQ8clUtkPjekOrsULwtusNzlwIKTOA+Y7ZCtQJUF+q7Du82t5k8EY/SA3HN8HoZAQvBfQmQyPO9NqtfvJyV0ReYu7Ha3T4bYVX2lTywq5mBdfkFMmckB+zAG/me64aEQPxUavP9NJzMKXqpE+r3Z934mZO+hm7b6E8el8W0XRx5pLnXP00oNsaN9o4FUgnvLHsh6RDpYxnp0qL/Hf2Cvq+JKZ/2DDFz4jEeqG+WV7Hj9K8398NKPciO+hc5SsVTBpe1PmDGFmCaasgNMMGxuT8juZWkWtH84BSTgFrFy6gEC1ebQH8LaXAK3v3l53yaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ftlsq7r3gzBH4HGeaPA43aHrDGfkcSiuBn+3W2FNP0g=;
- b=V3EfZ3+qrJnMUt0sZCReAuhfiwuKofBFy0ZhMQ8kdT4uCo9bfKrORM4wSoj+jj4KVb4QejfpPyJfRzxAY+dVeCJVl80gQtkersTyKSy/7ycv2rRJiV0/59Pjn01fQLvNco/IalrvdfZosl7Vrr7BcBgs5RxRvpcBVeE3n0JsRKC2uOVNnK1wn9ijnYCeIns6L9hHTCZ+fCjChb2BNl3Svj1OcbmscihYMyTkmsRATeMa5SeeEbzsgajY9L3Y56UxPfRakzmMGeFq3ftJwjSntSfpi+MMZLYJAYLY6jLh3z3b4MQOxsa5l/QnuNo4dpmsO/dqu8btGXO0ePxotkCnIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ftlsq7r3gzBH4HGeaPA43aHrDGfkcSiuBn+3W2FNP0g=;
- b=DcEP56Fys1Nz6yKT1bUKbcqyVgGp6si3S8CKIjm57iKMlRlXozaqDHwCsFEuLhC12W513/3BVMLqVHVHU4N1mhiTqVV3Q1sFlUaQ7whIi98TqVK4nlj66SPmK4i5OpdFFUWQoeQIfXoHdrsxcRQnNlQl4tg89dixIhVgMsAszqI=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by TYAPR01MB5514.jpnprd01.prod.outlook.com (2603:1096:404:8035::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.30; Wed, 26 Jun
- 2024 08:15:23 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%4]) with mapi id 15.20.7698.025; Wed, 26 Jun 2024
- 08:15:23 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-CC: Claudiu.Beznea <claudiu.beznea@tuxon.dev>, Chris Brandt
-	<Chris.Brandt@renesas.com>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
-	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"magnus.damm@gmail.com" <magnus.damm@gmail.com>, "mturquette@baylibre.com"
-	<mturquette@baylibre.com>, "sboyd@kernel.org" <sboyd@kernel.org>,
-	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-	"wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, Claudiu Beznea
-	<claudiu.beznea.uj@bp.renesas.com>
-Subject: RE: [PATCH v2 04/12] i2c: riic: Use pm_runtime_resume_and_get()
-Thread-Topic: [PATCH v2 04/12] i2c: riic: Use pm_runtime_resume_and_get()
-Thread-Index: AQHaxvlYh4jiRKyfj0yWu87XUamtbLHYoIVQgADxhACAAAGdYIAADluAgAABRCA=
-Date: Wed, 26 Jun 2024 08:15:23 +0000
-Message-ID:
- <TY3PR01MB113462102306D834D5CA5DE0986D62@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
- <20240625121358.590547-5-claudiu.beznea.uj@bp.renesas.com>
- <TY3PR01MB11346F03386D05D608041DE8D86D52@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <14167607-e67b-4627-99f0-6e99acc7f880@tuxon.dev>
- <TY3PR01MB11346A47493E0EE96CB2CF17B86D62@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <CAMuHMdWDMMy-Q-1=DPcvpu9Co-oCQOvbStt-hLpdEwrLRdpt_A@mail.gmail.com>
-In-Reply-To:
- <CAMuHMdWDMMy-Q-1=DPcvpu9Co-oCQOvbStt-hLpdEwrLRdpt_A@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYAPR01MB5514:EE_
-x-ms-office365-filtering-correlation-id: 5fa99461-c787-4702-d158-08dc95b820c6
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230038|366014|376012|7416012|1800799022|38070700016;
-x-microsoft-antispam-message-info:
- =?utf-8?B?QTR2emk0SW1Td2pyN3NpelJOVm82c21PMzUzRDdSY21XRXF5WGxNdVl6aFRo?=
- =?utf-8?B?Y1NIK04yaS8xWC9hZlJBc0lYYnFuSTlKWG1HcDhNcHBSTmFQdG1PUEdtMFpp?=
- =?utf-8?B?ZCtSU3FQQUdHRnBBTExueWlZSlBOSVIrVm9IdUxuY2d3R3VJM1lXZStnQllP?=
- =?utf-8?B?NWNjQkpiVDN1cDRySUZZUFRXdU1ZME9BS0lPZmVpQUhybnRQRi9XMDNIMXV2?=
- =?utf-8?B?V2hYd2dvVGY4anVoQjVLV21kelZML0NqSGI2clh4d3A1eitGVlRPOGVXZmNZ?=
- =?utf-8?B?UU9zcFloWVpxQm9ndG82NGp1Y3VlQThBSlIxRWpINDQrZ1Q4YUxZNXU3bEUy?=
- =?utf-8?B?UnZwUVRqVGZvTjMxSlR0UjJIelllUHZLaWUvK3VrdmtrTEtac3FCWVVMK0hG?=
- =?utf-8?B?N2lFZDZvT1QxWE5Ha3EyV05KeDg3T1M2NU1DM3U1SkxMWDRQaTEzWndxQ002?=
- =?utf-8?B?T1hmS3RsM2hNRXY2YXE2UVk2NlQ4OENwSlE1dEgxU3ZVNEQrYUE0aUFqZTBQ?=
- =?utf-8?B?V0REdmNmaWtTNXFVVndBSHN1ZmR5SEJEOEF5ZHlhallKWXBXQ0dwOEpOR2d2?=
- =?utf-8?B?L2ExODk3VnJrZHo3RHJ4R3Arbkc4MENkYzFHUUJrSUVSZ0wwKzVUQUdVOGRO?=
- =?utf-8?B?UWpMRU5YQkhGUkVSeEY3VjZNYzNyYi95ZDFmdWFIcERvTHQyR1N5WEZGSTlo?=
- =?utf-8?B?WXVJK0ZPamFTdm5zSDUvQ1hQYVBSUjlxellZeXNWVmJHSU9TaGo1cENhdS9q?=
- =?utf-8?B?MFJQS0hpY0tvM2ErYTlxZExteVpyR2x4cTJpSnUyZTlpSExscnNlRmROQWtu?=
- =?utf-8?B?bWlUZWEyOXQ0UUJuN3VtQ1htakRTd3FZRVRYUzB4THA2eW1qZlcrNVFQeWcz?=
- =?utf-8?B?cG1tOUZMVENMN0FWbEFWU1JlY3lNSDFZc0doeUN5MFpLR2FLbitpaStEMnYx?=
- =?utf-8?B?dWtEczhYWS9OQ2VEWWsxUXdTeTlybzlXMGFWWHkzYUhqVEJPeE1RWVdZVElN?=
- =?utf-8?B?QXR0N1pSSEcreGNUd3lEakdJc2xXSXMzUDdadjFHdDh4TWxiYVQxT3MxM2Mz?=
- =?utf-8?B?UUxXT0MzS1VQWTBXb1VoUjY1NDJzNDFoYmVKcEpGZHdLRjYwSHdBczI4WDRZ?=
- =?utf-8?B?bitCYkJhdkx5V1R6T3RXR1hRT1lmU0sxTWRLR0c3RzBGZGEvZGI0OW5tTjc5?=
- =?utf-8?B?dUVpRVNsQTNrYSs0a0VPSzZhMlA1WURFL3U1R1pBYkxheUhKY3htOHMrSmgx?=
- =?utf-8?B?VHgyUjFxRFV2MkdFRDNVNFhnc3ZvclZrbmpzVjAwVE5xbXhISTRDenVzb3F2?=
- =?utf-8?B?WDhXSlR1OFB4OTVJREFQYmpjWXBTZlUxL0tNdi9ybVMwcGlSTS9sZkJBdm8w?=
- =?utf-8?B?YWdDSzJIV01JdjJiVG9XRVlRNXBtc0ttVTFIMFBvcUNwT01rcHhPQmludWJs?=
- =?utf-8?B?ZEpRMG8vYWovYURRNjZMUjc1UmcvS0Y0aTMzTkNYV2RtdjVROWNOeWRvWHA5?=
- =?utf-8?B?azhwNjMwRmZRSVg0aVNIdHZzUzd0OTd6K0pJQXBIZU9LTlJsT21DNmprakNt?=
- =?utf-8?B?U0J6ZTFHeS9UeVpWVE9kKzlIZUVsWmJ3Mk1GSkJzck9IQ0RBVXR2NUhHSmcv?=
- =?utf-8?B?cTIxai9xZTQ2RVd2WTNyNmJwd1BJMmlHUlUwMVdFaCtCMjFBWFRFYTR3WDNM?=
- =?utf-8?B?azhETTRBU3F2dnVHYXdMTnp4WUJvVmtRSnd2UktPQzc2cEJCcGhvUjJoY2Rn?=
- =?utf-8?Q?uA6i5cR2OvQEJhe9BR5TtPJQ+8i3C9ijhc5Ront?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230038)(366014)(376012)(7416012)(1800799022)(38070700016);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?Sm1lOTl5UG5ZZVREbjN5djBTSEFNbnhMK3BBSm9xdUlkdkx0UHZNWHFvNHBV?=
- =?utf-8?B?dWxxdUg2dys5WUVsWnpJaTM4U3gyK3dQWHdaS3pnR3U2Y3Zid0tUQVQ4Y0dl?=
- =?utf-8?B?YjhZVkRKS3dYMUx4YXliYkdXVklsa0U0Q1NvaS91Sk85V2xmT210THgxbGxo?=
- =?utf-8?B?dTdtRll2VVZpTGpjYTIwNWNibENHczBHUjFrRUoweGV0WFUxYjMrM3lSVWhU?=
- =?utf-8?B?MWJJRmx3ZjdtbkhrN2U2SzVsSnlqdWpBeDVtaVlOZ1lMTjdlc1JBa3A1ZGdC?=
- =?utf-8?B?V0ZmL2taaVduTFZmYUVFTk9IV3kyUXFQSUhGVWp4Y203VFlBTjJzU09pR1Jn?=
- =?utf-8?B?RnJsVGlCY21NblN4dmZrclphdEhRYit0T0g5eXRQKzl2YTFlQkJGNGsyZkd2?=
- =?utf-8?B?VXRWWDN3REZLdUptdU5qVjVaM2kxa2lycFBIaTFCSTA3aEhrMXJEQ3U4Q2d0?=
- =?utf-8?B?dHRKa0VtT1dmbC9PeS8rMHFWTisxUGIraUlaKzBORlN2b0xiaHc1bkNUQkMx?=
- =?utf-8?B?MDBhb0tkODlRVVN1azZoaGVmWlJueXdCVU9iZFcrN0cycXJMblJtSlpjUm5r?=
- =?utf-8?B?R0c0UVE3U2VGYi9lNVpJdHRldnQyclpvWnRkLzBGQmdWSFFqK2xldmVWdXBi?=
- =?utf-8?B?QXlTSmduSUE4VjhJaTdLSmJTbyt5MmtPMEhidmxTSFkyUTE0bXl4US9oTlo4?=
- =?utf-8?B?RDhBc0wzOTZRbTA1K1hYdnBCTHZ5SmQ1bXNRckpYUDVWeHRpMWpYVmU1djVx?=
- =?utf-8?B?Q1BPcjJZVU1kWHYxaGlOUTdPbGtZZnhPRDZBaWEwaldsSjlwdjFoWVBBNmlK?=
- =?utf-8?B?bTRZcHVsNEZTa1BhbjF2dHJxVWlqMm96amlJQnE1Q3dGQ0FRcWt6ZzdKQzU4?=
- =?utf-8?B?UjZXRU9yU0hqT3Y4Yis3UmhZR0VtclRoNFdkcUR6SXJ6TUwyL2I5U0tuMUZD?=
- =?utf-8?B?Y0FubGx2bEF3R0IyYlllaTFjd2lNZnVNRlk4VlVSd0l3T3dHbVFyWkhuTVpm?=
- =?utf-8?B?NTlLNXF6NHJlb3FKamVSdEt1U0Z3amQrVXFTVldvbVk2SzRmMXF0Y0hRRXN0?=
- =?utf-8?B?TUJWeEFnVTY2Z2JZaHV6ZThaRWxxa001bVFHaXdFcjdKdm41K05ZbzlIUzJP?=
- =?utf-8?B?TzdEbldYTThBMGJOWGIzcGswZXhxRlFiTXBUUk8ySG5MbGV5TFYzWlBGZEIw?=
- =?utf-8?B?L2Q3aVN6dWgzRy9RTThVcjFqL0lqKzdjVHZwZExhT2lud3BqQm55bmFLY2xp?=
- =?utf-8?B?UGdScnFyOGRqSFRIWUsvMVV1b2VpVzVHUHVkVnBkSHp2eFF4dkppcHhPUzdX?=
- =?utf-8?B?N3dIdVBwTjNOSXpDRStOTDRSNk5Wb210N0YrNk5mREl5Zko4MURoVHdTOUp2?=
- =?utf-8?B?bFhtVWtqNWtsTlA4c2Y4aGluekttZXRsMWkvOXhEcGdENjF0TjVPQ3pGK1Iz?=
- =?utf-8?B?QVVNeDVwOWNuYzdzMlgrYXpxNjJNNEd3TDJRYUdkOGY1elJZZ0JJVmxzMjE4?=
- =?utf-8?B?bUV0VVhuRTV6azZuR2N5dTgxYndCSFkzNThjdkprQWc0V3h1MlVvajlrbktL?=
- =?utf-8?B?ZklEODZLd21pVVdTSkZOQUJqejdub3JvMGJZczRpT1hrTU9sb25KYnRKSE5i?=
- =?utf-8?B?S1V3L01FaDNwZkpHaUg3d1lld2RrZjNOZXFJVURlWjR2ZXp6RHVtdWdSS0pU?=
- =?utf-8?B?Y3AwTCtMZHJBbCttWC9JTjlLdWc2VmRRZXVTNVM5MVo5aG1TdVRWM2thc3Ex?=
- =?utf-8?B?SjZrQTYrTTBHY0JYVlZWaUFiL1dJNWZwMlFqTlpvWDFjK2s2Q0NvZzlWTmpt?=
- =?utf-8?B?YUg0K29aaENFajRLMGpMMUZib0pJN3Y1ZmJqWG0xWEU2dTVrRVVwcTlEc0VJ?=
- =?utf-8?B?dVlSM09leFZXK0VrRHZyTWVYdmZKNUZVS0hmRGNQYTlSVXhVZUlaQldqQ0xY?=
- =?utf-8?B?L25obzZOaVVHeDhIMXRLUXdTSGhrMGpDTnA3U2ZOYnBkUS8rakkxMnUwc1Rq?=
- =?utf-8?B?ZTU3TDhRa0wwY1F2MDQyWldGMzhqNTR1NW55cGFsS3RXWXpDUkVjemtmRGNj?=
- =?utf-8?B?UHAyR0tzK2MwMmZrK3c4QXUvdWV6bXBESEdyck5HTjQ2K2pUZnp2MEU2NFdz?=
- =?utf-8?B?MExTZ05XbW5jSWtHWjZ6V25xUjZWWXliaWJQaDI4cVVoZTNWNFcwSUZGUzlR?=
- =?utf-8?B?ZlE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3748915B0E1
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 08:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719389776; cv=none; b=tvMM0Dd6XSP10FGE6GPVZxA2t59rxs6nX7WQ4rnHCGXWbOLvNNkApt9amVBPAVBAu4ZGMk2BF+PWLMBPOF7I0ftpwc2HSAZlknlPz7x0y3hu4DnSC1QypzAMyLVNwu77R7VIrut/rwG1UFWyNqcNDwAeaYY42vRG/m2kLaW66YQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719389776; c=relaxed/simple;
+	bh=FE7U271Et0zH3kSFczw/PdRB9ERnQk0y3yTaAdsdjcU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G+HBjiNf8Sn2+VgV7KEE3Aj/lAQIaJszUqyRKmbwTs0qGCbcf7cDZvkXDvkvyE8G/65E/FMIz6rPEXixeOaywhvgpU4nSOUI5iXcifpWfB3iKf9XY02ZKwwBgl9ww01rVk7IyW3BwzGWN4j/8DeaFUiMs0SiXO17SWuSbSjZQyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=JxHQfBMn; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ec1620a956so77059691fa.1
+        for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 01:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1719389771; x=1719994571; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SN/1D3fBasxOG37a9PwgmL+HryV/H3Cuqs551lJ08hk=;
+        b=JxHQfBMnTrYiigVHSWLl8RQODwVj3/PA02c5oESv2/RTdlWLRyWPB8qjR1OCjN6tAI
+         i/wmluBfCv/2phi2H8vD63U+aJHkwn0nx6QQMZXnSylQKvnQgILsPEj+GOhAfe9W0vpZ
+         JJplxYd9gXVFiblQqfOxLEyNqkc41HuSjMFG00Kr5V8WZcO5IE68exxzFNwtoGzOhbXH
+         6PbaiLWTKh7DbM7Oo48Hv3eZOgFssURUqec9LXwjTn2dNekQesIzcj2ufEEQ9ldajK9f
+         wJ4LdLnvEaWLmDud62Ixq4sPSNwXQw1TPyT5yaNmWrkkc4q3MSv7OEUc8ojn+WsnnckZ
+         qj+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719389771; x=1719994571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SN/1D3fBasxOG37a9PwgmL+HryV/H3Cuqs551lJ08hk=;
+        b=gU/9A+AO7KOd2ssvj5g9hdAbtxPhLjo0dQIy8T7SjgahvFk6BpN7rt+RugpwGvet15
+         koh9efncqbwESexEf7tYGZBzlJ+En7H3QXgxVaQe8L96N9rxG6eSf2YbXn6q41p1iFkU
+         pcHmqS/9viSxPjeMRYgjRr5dRnDsY2Tap0fD77reGp7F/IK97H5HI5zp6xBz/MBMXtcj
+         HsNCdXx/lmsKxB28wRh7KpCX4bAzvM9GRnrNh4SjG2P6xIXvy+UraRqKiEMgAAdRsqP/
+         vs6eHAmS0/D3/hOJrzz9pJvGTDEs9xfqcXMoXR/ea7DfMsvhCE5oU/OO3Y9xWQDhVfxA
+         pTog==
+X-Forwarded-Encrypted: i=1; AJvYcCW76dkJYnc+1ftJacT6IfCdoN2aRR+9qC0/gBWkenK2bsGlNVhK/dkKtFSXgQq8QR/Wvg4JBZG2pFMOKz+AZeMlzhytIiNKTsfW
+X-Gm-Message-State: AOJu0YwUupRa5DCvCqA/v1b+y5tSB53sFInbLYE6G0AUQ3ocLqQdYyPE
+	4z0ngw2ES8YfpzpxGVCFCq4A0NZ22k58/7DOG8U7Z0nA+lOHw0z1u8dMNl5P7auDVcbXGHiYjxI
+	CXNwNkWeY/Kyktr1RUebU6atnG/fN+lKOrd8USg==
+X-Google-Smtp-Source: AGHT+IHAfFPI2ymuV8CI0WM+vHlPTAP++dLqOpBf4m+jsmj8adHU4/5YqAzi57wyh80Nxr7OvQrOtM7Z51QfitwmbCM=
+X-Received: by 2002:a2e:80d5:0:b0:2ec:4fe0:38bc with SMTP id
+ 38308e7fff4ca-2ec5b388418mr51600041fa.35.1719389771288; Wed, 26 Jun 2024
+ 01:16:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fa99461-c787-4702-d158-08dc95b820c6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2024 08:15:23.5879
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fW/5vkVqMWFlhEuJVBVqv8doE0z3rYDvr6LF3yzb23LdhiByiY5nI7wevowBd03fdH0ZVjvWuShWUOb8mymSKI3IIPiT6uwt1pi7FiZHBBo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB5514
+References: <20240621121340.114486-1-andrei.simion@microchip.com> <20240621121340.114486-2-andrei.simion@microchip.com>
+In-Reply-To: <20240621121340.114486-2-andrei.simion@microchip.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 26 Jun 2024 10:16:00 +0200
+Message-ID: <CAMRc=McFF523PswO=mVGAErEAVCExGdKt+0zmOLnGebAwA+i_g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] eeprom: at24: avoid adjusting offset for
+ 24AA025E{48, 64}
+To: Andrei Simion <andrei.simion@microchip.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+	claudiu.beznea@tuxon.dev, arnd@arndb.de, gregkh@linuxfoundation.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Claudiu Beznea <claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGkgR2VlcnQsDQoNClRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrLg0KDQo+IC0tLS0tT3JpZ2luYWwg
-TWVzc2FnZS0tLS0tDQo+IEZyb206IEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2VlcnRAbGludXgtbTY4
-ay5vcmc+DQo+IFNlbnQ6IFdlZG5lc2RheSwgSnVuZSAyNiwgMjAyNCA4OjExIEFNDQo+IFN1Ympl
-Y3Q6IFJlOiBbUEFUQ0ggdjIgMDQvMTJdIGkyYzogcmlpYzogVXNlIHBtX3J1bnRpbWVfcmVzdW1l
-X2FuZF9nZXQoKQ0KPiANCj4gSGkgQmlqdSwNCj4gDQo+IE9uIFdlZCwgSnVuIDI2LCAyMDI0IGF0
-IDg6MjPigK9BTSBCaWp1IERhcyA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+IHdyb3RlOg0K
-PiA+ID4gRnJvbTogY2xhdWRpdSBiZXpuZWEgPGNsYXVkaXUuYmV6bmVhQHR1eG9uLmRldj4gT24g
-MjUuMDYuMjAyNCAxODo1MywNCj4gPiA+IEJpanUgRGFzIHdyb3RlOg0KPiA+ID4gPj4gRnJvbTog
-Q2xhdWRpdSA8Y2xhdWRpdS5iZXpuZWFAdHV4b24uZGV2Pg0KPiA+ID4gPj4gRnJvbTogQ2xhdWRp
-dSBCZXpuZWEgPGNsYXVkaXUuYmV6bmVhLnVqQGJwLnJlbmVzYXMuY29tPg0KPiA+ID4gPj4NCj4g
-PiA+ID4+IHBtX3J1bnRpbWVfZ2V0X3N5bmMoKSBtYXkgcmV0dXJuIHdpdGggZXJyb3IuIEluIGNh
-c2UgaXQgcmV0dXJucw0KPiA+ID4gPj4gd2l0aCBlcnJvcg0KPiA+ID4gPj4gZGV2LT5wb3dlci51
-c2FnZV9jb3VudCBuZWVkcyB0byBiZSBkZWNyZW1lbnRlZC4NCj4gPiA+ID4+IGRldi0+cG1fcnVu
-dGltZV9yZXN1bWVfYW5kX2dldCgpDQo+ID4gPiA+PiB0YWtlcyBjYXJlIG9mIHRoaXMuIFRodXMg
-dXNlIGl0Lg0KPiA+ID4gPj4NCj4gPiA+ID4+IFNpZ25lZC1vZmYtYnk6IENsYXVkaXUgQmV6bmVh
-IDxjbGF1ZGl1LmJlem5lYS51akBicC5yZW5lc2FzLmNvbT4NCj4gDQo+ID4gPiA+PiAtICBwbV9y
-dW50aW1lX2dldF9zeW5jKGRldik7DQo+ID4gPiA+PiArICByZXQgPSBwbV9ydW50aW1lX3Jlc3Vt
-ZV9hbmRfZ2V0KGRldik7ICBpZiAocmV0KSB7DQo+ID4gPiA+PiArICAgICAgICAgIGRldl9lcnIo
-ZGV2LCByaWljX3JwbV9lcnJfbXNnKTsNCj4gPiA+ID4NCj4gPiA+ID4gQXMgYXQgdGhlIG1vbWVu
-dCB3ZSBkb24ndCBrbm93IGhvdyB0byByZXByb2R1Y2UgdGhpcyBlcnJvcg0KPiA+ID4gPiBjb25k
-aXRpb24gQ2FuIHdlIHVzZSBXQVJOX09OX09OQ0UoKSBpbnN0ZWFkIHRvIGNhdGNoIGRldGFpbGVk
-IGVycm9yIGNvbmRpdGlvbiBoZXJlPz8NCj4gPiA+DQo+ID4gPiBbMV0gc3RhdGVzICJTbywgbmF0
-dXJhbGx5LCB1c2Ugb2YgV0FSTl9PTigpIGlzIGFsc28gbm93IGRpc2NvdXJhZ2VkDQo+ID4gPiBt
-dWNoIG9mIHRoZSB0aW1lIi4gSSd2ZSBnbyB3aXRoDQo+ID4gPiBkZXZfZXJyKCkgb3Igc29tZXRo
-aW5nIHNpbWlsYXIuDQo+ID4NCj4gPiBXQVJOX09OX09OQ0UoKSBzaG91bGQgYmUgb2sgSSBndWVz
-cyBhcyBwZW9wbGUgYXJlIHVzaW5nIGZvciBwcmludGluZyB0aGlzIGluZm8gb25seSBvbmNlPz8N
-Cj4gPg0KPiA+IEN1cnJlbnRseSB3ZSBkb24ndCBrbm93IGhvdyB0byB0cmlnZ2VyIHBtX3J1bnRp
-bWVfcmVzdW1lX2FuZF9nZXQoKQ0KPiA+IGVycm9yIGNvbmRpdGlvbiBpbiBvdXIgc2V0dXAgdXNp
-bmcgYSB0ZXN0YXBwIGFuZCB3ZSBhcmUgZXhwZWN0aW5nIGFuDQo+ID4gZXJyb3IgbWF5IGhhcHBl
-biBpbiBmdXR1cmUuIElmIGF0IGFsbCB0aGVyZSBpcyBhbiBlcnJvciBpbiBmdXR1cmUsIHdlDQo+
-ID4gbmVlZCBkZXRhaWxlZCBlcnJvciBpbmZvIHNvIHRoYXQgd2UgY2FuIGhhbmRsZSBpdCBhbmQg
-Zml4IHRoZSBidWcuDQo+IA0KPiBPbiBSZW5lc2FzIHN5c3RlbXMsIHBtX3J1bnRpbWVfcmVzdW1l
-X2FuZF9nZXQoKSBuZXZlciBmYWlscy4NCj4gVGhhdCdzIHRoZSByZWFzb24gd2h5IG9yaWdpbmFs
-bHkgd2UgZGlkbid0IGNhcmUgdG8gY2hlY2sgdGhlIHJldHVybiB2YWx1ZSBvZiBwbV9ydW50aW1l
-X2dldF9zeW5jKCkuDQoNCkkgYWdyZWUsIA0KDQpJIHdhcyB1bmRlciB0aGUgaW1wcmVzc2lvbiwg
-aWYgdGhlIGNvZGUgZ3VhcmFudGVlcyBiYWxhbmNlZCB1c2FnZSwNCnRoZW4gcG1fcnVudGltZV9n
-ZXRfc3luYygpL3B1dCgpIGl0IHdpbGwgbmV2ZXIgZmFpbHMuDQoNCkJ1dCBoZXJlIHdlIGFyZSBh
-ZGRpbmcgY2hlY2tzIGluIGZyZXF1ZW50IGNhbGxzIGxpa2UgeGZlcg0Kb24gdGhlIGFzc3VtcHRp
-b24gaXQgbWF5IGZhaWwgaW4gZnV0dXJlIGR1ZSB0byBQTSBjaGFuZ2VzLg0KDQpYZmVyLCB3ZSBh
-cmUgaW5jcmVtZW50aW5nIHBtIHVzYWdlIGNvdW50IHdpdGggcG1fcnVudGltZV9nZXRfc3luYygp
-DQpBbmQgdGhlbiBkZWNyZW1lbnRpbmcgaXQgd2l0aCBwbV9ydW50aW1lX3B1dCgpIG9uY2UgdHJh
-bnNmZXIgY29tcGxldGVkDQoNClNvLCB0aGVyZSBpcyBubyBpbWJhbGFuY2UgaGVyZS4NCg0KDQo+
-IA0KPiBUaGUgdmFyaW91cyBqYW5pdG9ycyBkaXNhZ3JlZWQsIGNhdXNpbmcgY2FzY2FkZWQgY2hh
-bmdlcyBhbGwgb3ZlciB0aGUgcGxhY2UuLi4NCg0KRXZlbiB0aGUgY29yZSBjb2RlIGRvZXMgbm90
-IGhhdmUgY2hlY2sgZm9yIHRoaXMuDQpodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC9s
-YXRlc3Qvc291cmNlL2RyaXZlcnMvYmFzZS9kZC5jI0w3OTINCg0KPiANCj4gSU1ITywgV0FSTl9P
-Tl9PTkNFKCkgaXMgZGVmaW5pdGVseSBvdmVya2lsbCwgb25seSBibG9hdGluZyB0aGUgY29kZS4N
-Cg0KSSBzdWdnZXN0ZWQgYmVjYXVzZSB3ZSBhcmUgYWRkaW5nIHRoaXMgY2hlY2sgYmVjYXVzZSBz
-b21ldGhpbmcgDQp3cm9uZyB3aWxsIGhhcHBlbiBpbiBmdXR1cmUgZHVlIHRvIFBNIHN1YnN5c3Rl
-bSBjaGFuZ2VzIGFuZCB0aGUgY2hlY2sgd2lsbCBjYXB0dXJlIHRoZQ0KaXNzdWUgYW5kIHdpbGwg
-Z2l2ZSBkZXRhaWxlZCB3YXJuaW5nIGluZm8gaW4ga2VybmVsIGxvZy4NCg0KQ2hlZXJzLA0KQmlq
-dQ0K
+On Fri, Jun 21, 2024 at 2:16=E2=80=AFPM Andrei Simion
+<andrei.simion@microchip.com> wrote:
+>
+> From: Claudiu Beznea <claudiu.beznea@microchip.com>
+>
+> The EEPROMs could be used only for MAC storage. In this case the
+> EEPROM areas where MACs resides could be modeled as NVMEM cells
+> (directly via DT bindings) such that the already available networking
+> infrastructure to read properly the MAC addresses (via
+> of_get_mac_address()). The previously available compatibles needs the
+> offset adjustment probably for compatibility w/ old DT bindings.
+> Added "atmel,24mac02e4", "atmel,24mac02e6" compatible for the usage w/
+
+Use imperative mode: "Add ...".
+
+What does e4 and e6 stand for? It's not explained in the commit message.
+
+> 24AA025E{48, 64} type of EEPROMs.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Co-developed-by: Andrei Simion <andrei.simion@microchip.com>
+> Signed-off-by: Andrei Simion <andrei.simion@microchip.com>
+> ---
+> v1 -> v2:
+> - no change
+> ---
+>  drivers/misc/eeprom/at24.c | 73 ++++++++++++++++++++++----------------
+>  1 file changed, 42 insertions(+), 31 deletions(-)
+>
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index 4bd4f32bcdab..8699a6c585c4 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -121,17 +121,19 @@ struct at24_chip_data {
+>         u32 byte_len;
+>         u8 flags;
+>         u8 bank_addr_shift;
+> +       u8 adjoff;
+>         void (*read_post)(unsigned int off, char *buf, size_t count);
+>  };
+>
+> -#define AT24_CHIP_DATA(_name, _len, _flags)                            \
+> +#define AT24_CHIP_DATA(_name, _len, _flags, _adjoff)                   \
+>         static const struct at24_chip_data _name =3D {                   =
+ \
+> -               .byte_len =3D _len, .flags =3D _flags,                   =
+   \
+> +               .byte_len =3D _len, .flags =3D _flags, .adjoff =3D _adjof=
+f, \
+>         }
+>
+
+This is a lot of churn for no reason, please keep this macro, add a
+new one extended with adjoff and just pass 0 to it by default from the
+existing one.
+
+> -#define AT24_CHIP_DATA_CB(_name, _len, _flags, _read_post)             \
+> +#define AT24_CHIP_DATA_CB(_name, _len, _flags, _adjoff, _read_post)    \
+>         static const struct at24_chip_data _name =3D {                   =
+ \
+>                 .byte_len =3D _len, .flags =3D _flags,                   =
+   \
+> +               .adjoff =3D _adjoff,                                     =
+ \
+>                 .read_post =3D _read_post,                               =
+ \
+>         }
+>
+> @@ -162,53 +164,57 @@ static void at24_read_post_vaio(unsigned int off, c=
+har *buf, size_t count)
+>  }
+>
+>  /* needs 8 addresses as A0-A2 are ignored */
+> -AT24_CHIP_DATA(at24_data_24c00, 128 / 8, AT24_FLAG_TAKE8ADDR);
+> +AT24_CHIP_DATA(at24_data_24c00, 128 / 8, AT24_FLAG_TAKE8ADDR, 0);
+>  /* old variants can't be handled with this generic entry! */
+> -AT24_CHIP_DATA(at24_data_24c01, 1024 / 8, 0);
+> +AT24_CHIP_DATA(at24_data_24c01, 1024 / 8, 0, 0);
+>  AT24_CHIP_DATA(at24_data_24cs01, 16,
+> -       AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+> -AT24_CHIP_DATA(at24_data_24c02, 2048 / 8, 0);
+> +       AT24_FLAG_SERIAL | AT24_FLAG_READONLY, 0);
+> +AT24_CHIP_DATA(at24_data_24c02, 2048 / 8, 0, 0);
+>  AT24_CHIP_DATA(at24_data_24cs02, 16,
+> -       AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+> +       AT24_FLAG_SERIAL | AT24_FLAG_READONLY, 0);
+>  AT24_CHIP_DATA(at24_data_24mac402, 48 / 8,
+> -       AT24_FLAG_MAC | AT24_FLAG_READONLY);
+> +       AT24_FLAG_MAC | AT24_FLAG_READONLY, 1);
+>  AT24_CHIP_DATA(at24_data_24mac602, 64 / 8,
+> -       AT24_FLAG_MAC | AT24_FLAG_READONLY);
+> +       AT24_FLAG_MAC | AT24_FLAG_READONLY, 1);
+> +AT24_CHIP_DATA(at24_data_24mac02e4, 48 / 8,
+> +       AT24_FLAG_MAC | AT24_FLAG_READONLY, 0);
+> +AT24_CHIP_DATA(at24_data_24mac02e6, 64 / 8,
+> +       AT24_FLAG_MAC | AT24_FLAG_READONLY, 0);
+>  /* spd is a 24c02 in memory DIMMs */
+>  AT24_CHIP_DATA(at24_data_spd, 2048 / 8,
+> -       AT24_FLAG_READONLY | AT24_FLAG_IRUGO);
+> +       AT24_FLAG_READONLY | AT24_FLAG_IRUGO, 0);
+>  /* 24c02_vaio is a 24c02 on some Sony laptops */
+>  AT24_CHIP_DATA_CB(at24_data_24c02_vaio, 2048 / 8,
+> -       AT24_FLAG_READONLY | AT24_FLAG_IRUGO,
+> +       AT24_FLAG_READONLY | AT24_FLAG_IRUGO, 0,
+>         at24_read_post_vaio);
+> -AT24_CHIP_DATA(at24_data_24c04, 4096 / 8, 0);
+> +AT24_CHIP_DATA(at24_data_24c04, 4096 / 8, 0, 0);
+>  AT24_CHIP_DATA(at24_data_24cs04, 16,
+> -       AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+> +       AT24_FLAG_SERIAL | AT24_FLAG_READONLY, 0);
+>  /* 24rf08 quirk is handled at i2c-core */
+> -AT24_CHIP_DATA(at24_data_24c08, 8192 / 8, 0);
+> +AT24_CHIP_DATA(at24_data_24c08, 8192 / 8, 0, 0);
+>  AT24_CHIP_DATA(at24_data_24cs08, 16,
+> -       AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+> -AT24_CHIP_DATA(at24_data_24c16, 16384 / 8, 0);
+> +       AT24_FLAG_SERIAL | AT24_FLAG_READONLY, 0);
+> +AT24_CHIP_DATA(at24_data_24c16, 16384 / 8, 0, 0);
+>  AT24_CHIP_DATA(at24_data_24cs16, 16,
+> -       AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+> -AT24_CHIP_DATA(at24_data_24c32, 32768 / 8, AT24_FLAG_ADDR16);
+> +       AT24_FLAG_SERIAL | AT24_FLAG_READONLY, 0);
+> +AT24_CHIP_DATA(at24_data_24c32, 32768 / 8, AT24_FLAG_ADDR16, 0);
+>  /* M24C32-D Additional Write lockable page (M24C32-D order codes) */
+> -AT24_CHIP_DATA(at24_data_24c32d_wlp, 32, AT24_FLAG_ADDR16);
+> +AT24_CHIP_DATA(at24_data_24c32d_wlp, 32, AT24_FLAG_ADDR16, 0);
+>  AT24_CHIP_DATA(at24_data_24cs32, 16,
+> -       AT24_FLAG_ADDR16 | AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+> -AT24_CHIP_DATA(at24_data_24c64, 65536 / 8, AT24_FLAG_ADDR16);
+> +       AT24_FLAG_ADDR16 | AT24_FLAG_SERIAL | AT24_FLAG_READONLY, 0);
+> +AT24_CHIP_DATA(at24_data_24c64, 65536 / 8, AT24_FLAG_ADDR16, 0);
+>  /* M24C64-D Additional Write lockable page (M24C64-D order codes) */
+> -AT24_CHIP_DATA(at24_data_24c64d_wlp, 32, AT24_FLAG_ADDR16);
+> +AT24_CHIP_DATA(at24_data_24c64d_wlp, 32, AT24_FLAG_ADDR16, 0);
+>  AT24_CHIP_DATA(at24_data_24cs64, 16,
+> -       AT24_FLAG_ADDR16 | AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+> -AT24_CHIP_DATA(at24_data_24c128, 131072 / 8, AT24_FLAG_ADDR16);
+> -AT24_CHIP_DATA(at24_data_24c256, 262144 / 8, AT24_FLAG_ADDR16);
+> -AT24_CHIP_DATA(at24_data_24c512, 524288 / 8, AT24_FLAG_ADDR16);
+> -AT24_CHIP_DATA(at24_data_24c1024, 1048576 / 8, AT24_FLAG_ADDR16);
+> +       AT24_FLAG_ADDR16 | AT24_FLAG_SERIAL | AT24_FLAG_READONLY, 0);
+> +AT24_CHIP_DATA(at24_data_24c128, 131072 / 8, AT24_FLAG_ADDR16, 0);
+> +AT24_CHIP_DATA(at24_data_24c256, 262144 / 8, AT24_FLAG_ADDR16, 0);
+> +AT24_CHIP_DATA(at24_data_24c512, 524288 / 8, AT24_FLAG_ADDR16, 0);
+> +AT24_CHIP_DATA(at24_data_24c1024, 1048576 / 8, AT24_FLAG_ADDR16, 0);
+> +AT24_CHIP_DATA(at24_data_24c2048, 2097152 / 8, AT24_FLAG_ADDR16, 0);
+>  AT24_CHIP_DATA_BS(at24_data_24c1025, 1048576 / 8, AT24_FLAG_ADDR16, 2);
+> -AT24_CHIP_DATA(at24_data_24c2048, 2097152 / 8, AT24_FLAG_ADDR16);
+>  /* identical to 24c08 ? */
+> -AT24_CHIP_DATA(at24_data_INT3499, 8192 / 8, 0);
+> +AT24_CHIP_DATA(at24_data_INT3499, 8192 / 8, 0, 0);
+>
+>  static const struct i2c_device_id at24_ids[] =3D {
+>         { "24c00",      (kernel_ulong_t)&at24_data_24c00 },
+> @@ -217,7 +223,9 @@ static const struct i2c_device_id at24_ids[] =3D {
+>         { "24c02",      (kernel_ulong_t)&at24_data_24c02 },
+>         { "24cs02",     (kernel_ulong_t)&at24_data_24cs02 },
+>         { "24mac402",   (kernel_ulong_t)&at24_data_24mac402 },
+> +       { "24mac02e4",  (kernel_ulong_t)&at24_data_24mac02e4 },
+>         { "24mac602",   (kernel_ulong_t)&at24_data_24mac602 },
+> +       { "24mac02e6",  (kernel_ulong_t)&at24_data_24mac02e6 },
+>         { "spd",        (kernel_ulong_t)&at24_data_spd },
+>         { "24c02-vaio", (kernel_ulong_t)&at24_data_24c02_vaio },
+>         { "24c04",      (kernel_ulong_t)&at24_data_24c04 },
+> @@ -250,7 +258,9 @@ static const struct of_device_id __maybe_unused at24_=
+of_match[] =3D {
+>         { .compatible =3D "atmel,24c02",          .data =3D &at24_data_24=
+c02 },
+>         { .compatible =3D "atmel,24cs02",         .data =3D &at24_data_24=
+cs02 },
+>         { .compatible =3D "atmel,24mac402",       .data =3D &at24_data_24=
+mac402 },
+> +       { .compatible =3D "atmel,24mac02e4",      .data =3D &at24_data_24=
+mac02e4 },
+>         { .compatible =3D "atmel,24mac602",       .data =3D &at24_data_24=
+mac602 },
+> +       { .compatible =3D "atmel,24mac02e6",      .data =3D &at24_data_24=
+mac02e6 },
+>         { .compatible =3D "atmel,spd",            .data =3D &at24_data_sp=
+d },
+>         { .compatible =3D "atmel,24c04",          .data =3D &at24_data_24=
+c04 },
+>         { .compatible =3D "atmel,24cs04",         .data =3D &at24_data_24=
+cs04 },
+> @@ -690,7 +700,8 @@ static int at24_probe(struct i2c_client *client)
+>         at24->read_post =3D cdata->read_post;
+>         at24->bank_addr_shift =3D cdata->bank_addr_shift;
+>         at24->num_addresses =3D num_addresses;
+> -       at24->offset_adj =3D at24_get_offset_adj(flags, byte_len);
+> +       at24->offset_adj =3D cdata->adjoff ?
+> +                               at24_get_offset_adj(flags, byte_len) : 0;
+>         at24->client_regmaps[0] =3D regmap;
+>
+>         at24->vcc_reg =3D devm_regulator_get(dev, "vcc");
+> --
+> 2.34.1
+>
+
+Bart
 
