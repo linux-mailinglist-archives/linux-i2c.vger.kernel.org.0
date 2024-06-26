@@ -1,58 +1,61 @@
-Return-Path: <linux-i2c+bounces-4371-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4372-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016E1917DCA
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 12:27:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EAA6917E3E
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 12:38:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8E84281D3A
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 10:27:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12600286FFF
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 10:38:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D31D217C7C3;
-	Wed, 26 Jun 2024 10:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1852422083;
+	Wed, 26 Jun 2024 10:34:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Ebg9xmYp"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Eifj/738"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8C517BB3F
-	for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 10:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1451A17B433
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 10:34:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719397633; cv=none; b=HhHjZ4R+psfwH/uQiuVbzUE60InoCccFMw20V4HmLEgSHn5wa6MRAtj/+IM26n90f3kGTNrpJUa/qWY/sIqQcMdif2te7/FH9hUjW003gTWmA+9PI02OzxOhhkvE0usJ3eezz1lTXptDVKXS5TneZxzvZJ6uRe/4GScPCW6TWb4=
+	t=1719398051; cv=none; b=pSZob2rvGu4taqkQ5pr71RJh9IjU55K6RrOysiXD8YP44KLY8wZQh84E1Vfxf4DrSvP4OGmjqJhhhcrYvmt7N6NxmKf+ZHaCRrB8mOUqjSW7LV6z0n0tdP6FaOlkUGlkk7VIhFdAgjbWcvddJvspW1HWgrD5wTHvarKnZ7dRMxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719397633; c=relaxed/simple;
-	bh=V5BzmDwdM8I83j7Gt1QKJNJi03bO1Uhs2MhQYSlRRGQ=;
+	s=arc-20240116; t=1719398051; c=relaxed/simple;
+	bh=O9UKWhxPFjvnOoPlX4mqge7XPSJmImHNaUkDxGx8WIY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QwIkKaQ6hWEhl8FsIH6Xyx7XkC0uTDLraymOcL3SL7Y4zgXXr83nPjPlxT0eysgvZib10dKH1WH/VLhrQZ69rxbYhJ+B8RQRvM3mpmwb/vTVxTW8xd04ozasG+2iOngFCrX6UmWB12q6Ncrbo1FkDuJ3VIrXzbFmdIznHseXiVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Ebg9xmYp; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=mQ0WFs/KxI9swkkg6pshKJAv/jSUzYn6LEf7bkDkorF2vNHkhOKyPF/28jH3RLk4t97u2i538/EcbjtLqt0+Vm3/ZVoHc4i4/8Zfs+9VM9ZrpOT0uCFBNM3UsF313waVQxT/f2BrpesRemM232fZur+ayVQeimiwRFtXDeabJUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Eifj/738; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=V5Bz
-	mDwdM8I83j7Gt1QKJNJi03bO1Uhs2MhQYSlRRGQ=; b=Ebg9xmYpXxMjxHYCYqhD
-	bGN9PqbuLwHj/FYZ/uRnwg6bTOkDnb4EJWogKR+s4fE9PNK363/HVA9FmN2DjyFK
-	3GjJoNLNWGk2+O7spItb0Fc8eqqSdkfKz1Kb5Tt+a1jNzQ+vEE5oMAejjWuPQ1vV
-	7OumbUqkaWZkSHagSgEWXDOE9CnF2TWR/ezJSrluFHKUIz/47mteMMCwhfZdizCP
-	AuF5paQXqnBoStfXnMIoK0UlBTOJOiTXBcsaHz0fUs8xhnGa37FGNkIslC4mKEkF
-	PAyDVifezLZaXYU4yuUWlj6wNj+A0e2ONB9p84TxwMptpnXkj+NYSorLRaG15xro
-	hA==
-Received: (qmail 534924 invoked from network); 26 Jun 2024 12:27:00 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jun 2024 12:27:00 +0200
-X-UD-Smtp-Session: l3s3148p1@bSJjdMgb+MogAwDPX0AHAIitiwsdozO7
-Date: Wed, 26 Jun 2024 12:27:00 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=PQ/K
+	QGXfKTAIoE9fLNLT4e3BeowYxs0SWQgc+ayl9YI=; b=Eifj/738eXzVWHCHK+he
+	MbIfMSsBIAcoFTrCf2IK5Qr1CgNvX6Nnp2ChQ3lSmzDZJX2Nh5WgC3ddt8WqNKXg
+	VUve0nqZCeGdWQa1xGyEsyuzIhJ9MN0i/I0Mb2hRfrxu/E3cPip7cM0xbbRdJQGm
+	EkfC3Foexn7mRM1qO+y1c+z/KUTGJR4C94C8KgRVKYeCkY12dn0nF15NpIdOfbTb
+	bs8wSQEUIp78jBwD/DYDQNGGVSsRp4eMmKZDHttTKvw53dpHp3dPtM3eHuRdPX2h
+	OnQBnBH/A/rcwZrKsB4qRasdTrSg3uME/ifzB6aKAdaezqAw+Y/oO8K0fSKIiSwO
+	eQ==
+Received: (qmail 537199 invoked from network); 26 Jun 2024 12:34:06 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jun 2024 12:34:06 +0200
+X-UD-Smtp-Session: l3s3148p1@yyDBjcgb9p4gAwDPX0AHAIitiwsdozO7
+Date: Wed, 26 Jun 2024 12:34:05 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: i2c: testunit: use proper reST
-Message-ID: <mxla6s6xkkg6ztkgh66yrwz4kyglibiffzmza3zaj6fuspddrv@r2tmnbz5nvyy>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: Drop explicit initialization of struct
+ i2c_device_id::driver_data to 0
+Message-ID: <siwnljn7t22tsqybv6w3dndhuiynhvudtshkmyh67q6kyxjl6j@wuisjuqlovyg>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240611095108.10639-2-wsa+renesas@sang-engineering.com>
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org
+References: <20240625083131.2205302-2-u.kleine-koenig@baylibre.com>
+ <rb2fmtnhaqicg2behqfijfypfsvkqatud4h6klal77u6scw2gp@cznyn5vof4x4>
+ <pja67neo74zw6rqpv5n7ekivlhejbmpuge6umtuatwhgjbmcwr@7u7f7vhpnwtt>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,46 +63,76 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="47ic2dwa5v7ymibs"
+	protocol="application/pgp-signature"; boundary="o453t2k6x3krfhvq"
 Content-Disposition: inline
-In-Reply-To: <20240611095108.10639-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <pja67neo74zw6rqpv5n7ekivlhejbmpuge6umtuatwhgjbmcwr@7u7f7vhpnwtt>
 
 
---47ic2dwa5v7ymibs
+--o453t2k6x3krfhvq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 11, 2024 at 11:50:31AM GMT, Wolfram Sang wrote:
-> This document is hardly readable when converted to HTML. Mark code
-> sections as such and use tables to improve readability a lot. Some
-> content has slightly been moved around, but no significant changes were
-> made.
+Hi Uwe,
+
+> There is an inconsistency in the different *_device_id structures. Some
+> have a kernel_ulong_t for driver private data, others have a void*.
+> Depending on how it's used in the drivers, one or the other is better.
+> To get the best from both the idea is to do
 >=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_deviceta=
+ble.h
+> index 4338b1b4ac44..594c5ace303a 100644
+> --- a/include/linux/mod_devicetable.h
+> +++ b/include/linux/mod_devicetable.h
+> @@ -477,7 +477,10 @@ struct rpmsg_device_id {
+> =20
+>  struct i2c_device_id {
+>  	char name[I2C_NAME_SIZE];
+> -	kernel_ulong_t driver_data;	/* Data private to the driver */
+> +	union {
+> +		kernel_ulong_t driver_data;	/* Data private to the driver */
+> +		const void *data;
+> +	};
+>  };
+> =20
+>  /* pci_epf */
+>=20
+> which then allows to drop quite a few casts, e.g.
 
-Applied to for-next, thanks!
+I personally could live with the casts, even though the above looks
+clearer, of course. On suggestion, though, can we please have:
+
+ +		const void *data_ptr;
+
+There is no obvious difference between 'driver_data' and 'data' to
+determine what is the ulong type and what is void*. 'data_ptr' makes
+this instantly recognizable IMO.
+
+Happy hacking,
+
+   Wolfram
 
 
---47ic2dwa5v7ymibs
+--o453t2k6x3krfhvq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZ77PQACgkQFA3kzBSg
-KbYOrhAAnYCmpSI7+2W4m/vCbosojJHbcr8ksIBpd1kaONAr4YLJBSExgNVBlGAs
-XwmFLT/18cczDs0/Q+JGStBhHR9yu3eiR2w0H37f67zQTKfa69wzwvJxkT2AegGD
-eEhuSPwxmbsM59Z82+yy4qwevmGjdq1nv5lBLjoiFiomhKU4yQ2IvXN23gpWEwxg
-fz1cz07BQpUf5pJHxJS6fKnIulRTRXl95MFSLGkHThFSuiEk89eyGYCpeBrL13O2
-o6eEbRYxMByo7bf36WXPADLwtmNXl2d9scK21XG2c921CWMuJmBQbIbk3kzyHyEW
-ojTMP7QKC2vW1KYJ5x+C6VQOGtU9CivEGUeMHNMn1mHSXCdfxIuO08CsGykIe2WQ
-XgGIzVX2xTNIviIqqnBjR2MUhYZFikxN71Hgv7TutkGPVeDkmq6qL8TlZZCgTYMj
-PcsM3CPD1lq2gT2wH+N7c0gdoX0rpcDoqbhajnSSgFwFJG2YPz4hkry7sqN5YFqf
-6NKNcHjphfLPAGHj4OYmtHMcZoDkTHpYYusaI/91eJXtnQXlZbxXeKpM5K6Crzxa
-+ggIRa+ElCAO3JBgICs/YTs3iFCT0xgAeYGA9J4pM2lm44ZtCHgV1VSawWtQnrMg
-JZ0i244i0tT0siAGpInwdZms7gL2n+Pti/Pqin/Ho7dMKlir2JY=
-=YQ/n
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZ77pkACgkQFA3kzBSg
+Kbb64A/9HS/mbkPgFprwstW6xsV3F9/mlG9A2IsM0hHO9NP/KWIUj5Eo1xEE1HzZ
+WogIgPxjsd4jZw8oR7DIvo4r2+K+Rd+YvvB1J5AVTKxDiqsBOdVhqgk0rjSoZv7P
+lNDv/o3uVHBY9Eb0kOCjeh3MooyGrxfSYiKmn8sEh0ZvZGtUejWpbFLnTc6bq11F
+QEbUsN45Wctb58hDMmy4epJms9Bzk83t2t5gqwvhdrPrcsDymSD1btQCAXdu4sdM
+8PS5f2t9+2v4jGt4udueve9Cm0+i0c0hbkUYepBmzerlzEU/zWjcabLoq2wGmZtM
+tpMdRhWa7nIF7o6HqJRtSg7KTt8MloFYeJ/QZzjJ9NM7UYRZKurOX2+rGzAbsfOn
+xvh9FMo5KW78hZaQSKPwX12T4iyQngkcpy8LrgzpxoPYe1J8n66b5aQAINeAGwHW
+eNjJjELRqmepL4qRvqnSjUWrj+UJQQSInBFHw/E7pKejvjXAjV6dRlf6PMlElUT0
+dxfbnmdRqd7h/bYd3aUe/DZ8c5Xzt2Oya83Vom1q4EnLnDdV6sFcPFL+qo5NIhJ5
+K5SWjLkJYP2+QjXm6e144386aWtZ5vuJGNzv7eW6jP6QYVh2SRTta+PAGnuDV5af
+X3KTbwviS5rzq8dAx/84XOnnNHDkL2X0+4yWMZsFfwI3yrEIFfE=
+=lCoO
 -----END PGP SIGNATURE-----
 
---47ic2dwa5v7ymibs--
+--o453t2k6x3krfhvq--
 
