@@ -1,228 +1,223 @@
-Return-Path: <linux-i2c+bounces-4358-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4359-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9E5491772C
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 06:12:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93C8D9178AE
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 08:14:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A1951C227F7
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 04:12:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B40531C229EB
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 06:14:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5539A13A869;
-	Wed, 26 Jun 2024 04:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C53A14D71E;
+	Wed, 26 Jun 2024 06:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="Fz0zW3Jz"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="l2KHR/DW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA691369B6
-	for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 04:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD9B14A4C1
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 06:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719375165; cv=none; b=udmq0RRM2JALB6KOs0DyzwR2tDogtUiW1IA58iCeTo5MUDtsPhNvfMSyVqsRLakJ71Uboe4F1CAg9b2pDtJbKb8rVv53y2mNmQLmT0NXGKILTvyfWg7nk3GGgnfwauSqQRR6s5yhtEBAz16fuKLrLV66NapcC+PrM08iAV+Q0zs=
+	t=1719382432; cv=none; b=u7rS4CxmD2y3Lrp8ErPOv3wuZoO9R3AH5WZZwVLTAG5V5ZWHlHtfQItYI/yjs7SZwE8fOearBqQX82Ia8InEhwvDZKP3aXHkACXd82xUs59/soK8Ih7PUNx977+wY2imEHCkSZLSfEiLd5ONTLx3wmExsf3RKNRYoBzmNL1dFq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719375165; c=relaxed/simple;
-	bh=zJXSuPTm2iFg66Kuu5zIAzQ0wZWatD4sATsUE8YFJXc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ciEmIEH7dO3/u2RsklJt225Sa8bOSvxQsxJy1mW8tGxhoQ8dsb+67QULZEZkSkExtGJ2SVLbPB5VIOC0/F5UBFlPvExIDDiYTHgwxVtmWy3RSUDLE2z9CEC9NhS4BGIhdZtYNj3xJXtRhqod3p9Ns6kXBdcgKglb8lEVAgXP47s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=Fz0zW3Jz; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id E82EA8844F;
-	Wed, 26 Jun 2024 06:12:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1719375161;
-	bh=3BhXKe+7/0qtKfP5AeeYitbsXZHR+OjtZSCYf5GAxeo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Fz0zW3JzL3uxuILj492SC6n4qfmWYzBQOKXhj0hp2Nn8k/HMsnnz0v8H/Sf/sLVaF
-	 PXS5MmqaicvBTUwYUxlImcAj4i2UfrqgZxxpalQyRy5E1u8Q51ZgRnMVpPMEimxcOP
-	 J359LOPQB0SHaGRU6l4pPtk/TWM/A1zFi55t7sqI4SdJwNMca/Rkhhk733GiNlTm+k
-	 HIjKDBi6F4WlqslbRTr31IvK9OliP9o1PC2ymf+bIyqnt2NMz8fBxJGqk9VvwHjPfh
-	 3mfGLha5fou90mC/MGUnDJsUBxMD2VXbQ7NdLTlocY4hCcVINqFPIL+PhB91x7xwmi
-	 YsjJ6GAPEVrJA==
-From: Marek Vasut <marex@denx.de>
-To: linux-i2c@vger.kernel.org
-Cc: Marek Vasut <marex@denx.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v3 4/4] nvmem: core: Implement force_ro sysfs attribute
-Date: Wed, 26 Jun 2024 06:11:17 +0200
-Message-ID: <20240626041214.513242-4-marex@denx.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240626041214.513242-1-marex@denx.de>
-References: <20240626041214.513242-1-marex@denx.de>
+	s=arc-20240116; t=1719382432; c=relaxed/simple;
+	bh=BJtQ9l+V2WAR5BzRXmZ0v9xaywUqO0Ckllr4TBtCJU8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FaMuSE2Xo/bKSGYkBG88DpE8fB87ewzVOZE6lF+cEffAbZIbjjempUTmTv28+mefdu5ja5LDCDTGv+TzWk3vGjbgySWbbdi6iUWJv8112/diQKDbtjjhIBwepjG0CVn5AzI6+l0iRIc80cgI5k3rAZYWo8wGTIv8A9m/dYLa4JY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=l2KHR/DW; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3651ee582cfso3460056f8f.2
+        for <linux-i2c@vger.kernel.org>; Tue, 25 Jun 2024 23:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1719382425; x=1719987225; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3MYj1syjPNYZBySDVupnxlkb67gyc3eu/jDgMDAJ8cA=;
+        b=l2KHR/DWvmu3ZJJm7LyULj0+2SWeZjDRcYCUdV3x0MuunR04zGf+UCeZzW6HDqtRXc
+         Nllno76v51jDC5wMjhCKeJss/d3gD5Z7lrZCuN4vlzT9F9K4qBd3cyw3aF64KlTNUYj5
+         wXPRrBstOB7vhRaOHG3uMotE05PY4XTXgHBr6LSd4jP8Wm4Jz6pVlz74A7YZ1Aa37gCG
+         GihMrtUDHAoa8J/Shutxe22fgPe+Mr7kr9NWqQ8D8Se94s9I2HBbjWtdoH8ZmwIpxEa1
+         WeIA3U+hi/10hvmZLrxbxS1YHcMW4PcjRimqxbr/1NW/g9sg7WyfZbA7cxu7kO93wGt5
+         PSbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719382425; x=1719987225;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3MYj1syjPNYZBySDVupnxlkb67gyc3eu/jDgMDAJ8cA=;
+        b=q8wxN+X+QkGPweQP8UgcZ9zcds5O4vHIxipOPc4dG0ogJhiwhi9tkwNS+PxtgfGGfC
+         rtdb3FhOF342OrxDl/azBykT7Cy9ypfYkMIGwaI+lpYFyDxR2D1i+YU+W7/s/PP2LcRR
+         /PuLE2ChCsGz4nnaL5Qen8HGHS3bPCOjOYucTEit6r/Xm1J19fQfCaN8GhGDEOHlbYg9
+         pBjbiAzZuxQy1sA1mqMC59YO7n/sn0k87x13N+xU3sQ8tdnRei8dx5pQuAzzWLylFN9O
+         xncqhimfPiGWVTpAgLNtfRGaNcNoJJ+6EE86sQXNL+YLTgjl+yQrqvRHL4sFXE03v584
+         WpRw==
+X-Forwarded-Encrypted: i=1; AJvYcCVhHPfaIQNevJB0w2foMUQEvnfum7zuK6558dhaXyaFgU3UzWG/1K2aE+BRVAwLvzep+VBvj4matGx2YvMDqAUj8giYjiFtynTv
+X-Gm-Message-State: AOJu0Yy5yuVycSF9CWTk9HjoBb7oEZQXt6+F3Ags3WZAfllxppF6dM9/
+	/zdsMsT8PGLrUqNcQ39yHdyIr1wpm6zozHdE1IHwiQIf300x1raEWP1S821TGdQ=
+X-Google-Smtp-Source: AGHT+IHbF71gbIghJoYKFbrg4W+yIrq0Ui8qDFkKVSeUFQObkIKWpiU0iUTb4PgiFnvihuycMlGCFw==
+X-Received: by 2002:a5d:4689:0:b0:35f:275c:fb63 with SMTP id ffacd0b85a97d-366e948fa5emr7116687f8f.25.1719382424899;
+        Tue, 25 Jun 2024 23:13:44 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.70])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-366f466979dsm7064166f8f.7.2024.06.25.23.13.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jun 2024 23:13:44 -0700 (PDT)
+Message-ID: <14167607-e67b-4627-99f0-6e99acc7f880@tuxon.dev>
+Date: Wed, 26 Jun 2024 09:13:42 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 04/12] i2c: riic: Use pm_runtime_resume_and_get()
+Content-Language: en-US
+To: Biju Das <biju.das.jz@bp.renesas.com>,
+ Chris Brandt <Chris.Brandt@renesas.com>,
+ "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+ "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+ <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "geert+renesas@glider.be" <geert+renesas@glider.be>,
+ "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+ "mturquette@baylibre.com" <mturquette@baylibre.com>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>
+Cc: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240625121358.590547-5-claudiu.beznea.uj@bp.renesas.com>
+ <TY3PR01MB11346F03386D05D608041DE8D86D52@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <TY3PR01MB11346F03386D05D608041DE8D86D52@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Implement "force_ro" sysfs attribute to allow users to set read-write
-devices as read-only and back to read-write from userspace. The choice
-of the name is based on MMC core 'force_ro' attribute.
+Hi, Biju,
 
-This solves a situation where an AT24 I2C EEPROM with GPIO based nWP
-signal may have to be occasionally updated. Such I2C EEPROM device is
-usually set as read-only during most of the regular system operation,
-but in case it has to be updated in a controlled manner, it could be
-unlocked using this new "force_ro" sysfs attribute and then re-locked
-again.
+On 25.06.2024 18:53, Biju Das wrote:
+> Hi Claudiu,
+> 
+>> -----Original Message-----
+>> From: Claudiu <claudiu.beznea@tuxon.dev>
+>> Sent: Tuesday, June 25, 2024 1:14 PM
+>> Subject: [PATCH v2 04/12] i2c: riic: Use pm_runtime_resume_and_get()
+>>
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> pm_runtime_get_sync() may return with error. In case it returns with error
+>> dev->power.usage_count needs to be decremented.
+>> dev->pm_runtime_resume_and_get()
+>> takes care of this. Thus use it.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> ---
+>>
+>> Changes in v2:
+>> - delete i2c adapter all the time in remove
+>>
+>>  drivers/i2c/busses/i2c-riic.c | 30 ++++++++++++++++++++++++------
+>>  1 file changed, 24 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c index
+>> 83e4d5e14ab6..002b11b020fa 100644
+>> --- a/drivers/i2c/busses/i2c-riic.c
+>> +++ b/drivers/i2c/busses/i2c-riic.c
+>> @@ -113,6 +113,8 @@ struct riic_irq_desc {
+>>  	char *name;
+>>  };
+>>
+>> +static const char * const riic_rpm_err_msg = "Failed to runtime
+>> +resume";
+>> +
+>>  static inline void riic_writeb(struct riic_dev *riic, u8 val, u8 offset)  {
+>>  	writeb(val, riic->base + riic->info->regs[offset]); @@ -133,10 +135,14 @@ static int
+>> riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+>>  	struct riic_dev *riic = i2c_get_adapdata(adap);
+>>  	struct device *dev = adap->dev.parent;
+>>  	unsigned long time_left;
+>> -	int i;
+>> +	int i, ret;
+>>  	u8 start_bit;
+>>
+>> -	pm_runtime_get_sync(dev);
+>> +	ret = pm_runtime_resume_and_get(dev);
+>> +	if (ret) {
+>> +		dev_err(dev, riic_rpm_err_msg);
+> 
+> As at the moment we don't know how to reproduce this error condition
+> Can we use WARN_ON_ONCE() instead to catch detailed error condition here??
 
-The "read-only" DT property and config->read_only configuration is
-respected and is used to set default state of the device, read-only
-or read-write, for devices which do implement .reg_write function.
-For devices which do not implement .reg_write function, the device
-is unconditionally read-only and the "force_ro" attribute is not
-visible.
+[1] states "So, naturally, use of WARN_ON() is also now discouraged much of
+the time". I've go with dev_err() or something similar.
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: linux-i2c@vger.kernel.org
----
-V2: - Document the force_ro attribute
-    - Use sysfs_emit()
-V3: - Expand ABI documentation with what the force_ro attribute
-      returns and what it can parse.
----
- Documentation/ABI/stable/sysfs-bus-nvmem | 17 +++++++++
- drivers/nvmem/core.c                     | 44 ++++++++++++++++++++++++
- drivers/nvmem/internals.h                |  1 +
- 3 files changed, 62 insertions(+)
+Thank you,
+Claudiu Beznea
 
-diff --git a/Documentation/ABI/stable/sysfs-bus-nvmem b/Documentation/ABI/stable/sysfs-bus-nvmem
-index 3f0a95250aa84..aa89adf18bc55 100644
---- a/Documentation/ABI/stable/sysfs-bus-nvmem
-+++ b/Documentation/ABI/stable/sysfs-bus-nvmem
-@@ -1,3 +1,20 @@
-+What:		/sys/bus/nvmem/devices/.../force_ro
-+Date:		June 2024
-+KernelVersion:	6.11
-+Contact:	Marek Vasut <marex@denx.de>
-+Description:
-+		This read/write attribute allows users to set read-write
-+		devices as read-only and back to read-write from userspace.
-+		This can be used to unlock and relock write-protection of
-+		devices which are generally locked, except during sporadic
-+		programming operation.
-+		Read returns '0' or '1' for read-write or read-only modes
-+		respectively.
-+		Write parses one of 'YyTt1NnFf0', or [oO][NnFf] for "on"
-+		and "off", i.e. what kstrbool() supports.
-+		Note: This file is only present if CONFIG_NVMEM_SYSFS
-+		is enabled.
-+
- What:		/sys/bus/nvmem/devices/.../nvmem
- Date:		July 2015
- KernelVersion:	4.2
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 5b3606114628b..91ff5e2ce613c 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -184,7 +184,30 @@ static ssize_t type_show(struct device *dev,
- 
- static DEVICE_ATTR_RO(type);
- 
-+static ssize_t force_ro_show(struct device *dev, struct device_attribute *attr,
-+			     char *buf)
-+{
-+	struct nvmem_device *nvmem = to_nvmem_device(dev);
-+
-+	return sysfs_emit(buf, "%d\n", nvmem->read_only);
-+}
-+
-+static ssize_t force_ro_store(struct device *dev, struct device_attribute *attr,
-+			      const char *buf, size_t count)
-+{
-+	struct nvmem_device *nvmem = to_nvmem_device(dev);
-+	int ret = kstrtobool(buf, &nvmem->read_only);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	return count;
-+}
-+
-+static DEVICE_ATTR_RW(force_ro);
-+
- static struct attribute *nvmem_attrs[] = {
-+	&dev_attr_force_ro.attr,
- 	&dev_attr_type.attr,
- 	NULL,
- };
-@@ -285,6 +308,25 @@ static umode_t nvmem_bin_attr_is_visible(struct kobject *kobj,
- 	return nvmem_bin_attr_get_umode(nvmem);
- }
- 
-+static umode_t nvmem_attr_is_visible(struct kobject *kobj,
-+				     struct attribute *attr, int i)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct nvmem_device *nvmem = to_nvmem_device(dev);
-+
-+	/*
-+	 * If the device has no .reg_write operation, do not allow
-+	 * configuration as read-write.
-+	 * If the device is set as read-only by configuration, it
-+	 * can be forced into read-write mode using the 'force_ro'
-+	 * attribute.
-+	 */
-+	if (attr == &dev_attr_force_ro.attr && !nvmem->reg_write)
-+		return 0;	/* Attribute not visible */
-+
-+	return attr->mode;
-+}
-+
- static struct nvmem_cell *nvmem_create_cell(struct nvmem_cell_entry *entry,
- 					    const char *id, int index);
- 
-@@ -341,6 +383,7 @@ static const struct attribute_group nvmem_bin_group = {
- 	.bin_attrs	= nvmem_bin_attributes,
- 	.attrs		= nvmem_attrs,
- 	.is_bin_visible = nvmem_bin_attr_is_visible,
-+	.is_visible	= nvmem_attr_is_visible,
- };
- 
- static const struct attribute_group *nvmem_dev_groups[] = {
-@@ -945,6 +988,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
- 
- 	nvmem->read_only = device_property_present(config->dev, "read-only") ||
- 			   config->read_only || !nvmem->reg_write;
-+	nvmem->default_read_only = nvmem->read_only;
- 
- #ifdef CONFIG_NVMEM_SYSFS
- 	nvmem->dev.groups = nvmem_dev_groups;
-diff --git a/drivers/nvmem/internals.h b/drivers/nvmem/internals.h
-index 18fed57270e5e..0667937ebb86b 100644
---- a/drivers/nvmem/internals.h
-+++ b/drivers/nvmem/internals.h
-@@ -16,6 +16,7 @@ struct nvmem_device {
- 	int			id;
- 	struct kref		refcnt;
- 	size_t			size;
-+	bool			default_read_only;
- 	bool			read_only;
- 	bool			root_only;
- 	int			flags;
--- 
-2.43.0
+[1] https://lwn.net/Articles/969923/
 
+> 
+> Cheers,
+> Biju
+> 
+>> +		return ret;
+>> +	}
+>>
+>>  	if (riic_readb(riic, RIIC_ICCR2) & ICCR2_BBSY) {
+>>  		riic->err = -EBUSY;
+>> @@ -301,6 +307,7 @@ static const struct i2c_algorithm riic_algo = {
+>>
+>>  static int riic_init_hw(struct riic_dev *riic, struct i2c_timings *t)  {
+>> +	int ret;
+>>  	unsigned long rate;
+>>  	int total_ticks, cks, brl, brh;
+>>  	struct device *dev = riic->adapter.dev.parent; @@ -379,7 +386,11 @@ static int
+>> riic_init_hw(struct riic_dev *riic, struct i2c_timings *t)
+>>  		 t->scl_fall_ns / (1000000000 / rate),
+>>  		 t->scl_rise_ns / (1000000000 / rate), cks, brl, brh);
+>>
+>> -	pm_runtime_get_sync(dev);
+>> +	ret = pm_runtime_resume_and_get(dev);
+>> +	if (ret) {
+>> +		dev_err(dev, riic_rpm_err_msg);
+>> +		return ret;
+>> +	}
+>>
+>>  	/* Changing the order of accessing IICRST and ICE may break things! */
+>>  	riic_writeb(riic, ICCR1_IICRST | ICCR1_SOWP, RIIC_ICCR1); @@ -498,11 +509,18 @@ static void
+>> riic_i2c_remove(struct platform_device *pdev)  {
+>>  	struct riic_dev *riic = platform_get_drvdata(pdev);
+>>  	struct device *dev = &pdev->dev;
+>> +	int ret;
+>>
+>> -	pm_runtime_get_sync(dev);
+>> -	riic_writeb(riic, 0, RIIC_ICIER);
+>> -	pm_runtime_put(dev);
+>>  	i2c_del_adapter(&riic->adapter);
+>> +
+>> +	ret = pm_runtime_resume_and_get(dev);
+>> +	if (ret) {
+>> +		dev_err(dev, riic_rpm_err_msg);
+>> +	} else {
+>> +		riic_writeb(riic, 0, RIIC_ICIER);
+>> +		pm_runtime_put(dev);
+>> +	}
+>> +
+>>  	pm_runtime_disable(dev);
+>>  }
+>>
+>> --
+>> 2.39.2
+>>
+> 
 
