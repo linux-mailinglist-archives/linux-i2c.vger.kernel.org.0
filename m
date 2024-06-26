@@ -1,116 +1,124 @@
-Return-Path: <linux-i2c+bounces-4376-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4377-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A24589180DB
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 14:20:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26F439181EE
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 15:13:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 579801F224CB
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 12:20:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA8141F221ED
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 13:13:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84A7181BA3;
-	Wed, 26 Jun 2024 12:20:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD84185E46;
+	Wed, 26 Jun 2024 13:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eYTrcepq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E402313D89B;
-	Wed, 26 Jun 2024 12:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F3A1822D6
+	for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 13:07:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719404401; cv=none; b=lud2LSo/P8xrinDbgSan2mO0qTT3Q7NWdqe4Ly0S89epz9FbOYLIK2RJji5WG/VnsbsjV4OTTNc7V/THZMai5g6lc1gK24eClb0R5B2LqflPhQvl6uu45bCmzYDLJbiZIOeNEgBP4BH1oJdF5A84/6fdlDT5rQUCO1QDrcrbMHg=
+	t=1719407244; cv=none; b=LvYnoTLeHYTR7AfhGH1HKvS4izPVC1RnsZZIgTpSMa5uyTV0E6jo8A6kz9fLyFCFOXkHcOuS5ddSwpnoRaVpvQJjo3R3ZPMH9qVrYH107QvOD0mIFBnnkv+iY5WmrcDH/aVEy5tOHIy2u1ugpvLdRC7Fa6l4F5AqYS0mMGVsT1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719404401; c=relaxed/simple;
-	bh=NhwS/0jPcbT+SWSnFrU9D7JHNSM/dl5lWw89NP0DRpM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jh94BsK1lYd0KYq7vBGaOexRCI6ZFOixlm2F2s9CK0IbXUH1Wd/PKsbSnRzsKwl9leZyQdjpVbMvHq10YKg+aQJEKTmbOY4K3u1ATpPiPZ4Z58+jwTeAXGKlQdogzh3mDSRZ5y4zRW485h3Gw3aSM5qOeqrxdMgUmRnDc/vP4Uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-64782323bbcso13134177b3.0;
-        Wed, 26 Jun 2024 05:19:59 -0700 (PDT)
+	s=arc-20240116; t=1719407244; c=relaxed/simple;
+	bh=zw0a9Xf9AqcDb8lK8o8wWOJU+75sjmGWL4bnJOJTfRM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HDkkXqcm5s2/jzC14A+IiJQTJLPHEZTxQQtabC4IGtvIJ27rzg/deqKI55XE64oEokiMIMI8Elxaa0dHt3uU5wHJnYc4mDilwydZq/q1tgzUi+ifjsL5jSlu5wl313aojSDir2ErLQ6BmCNlbuOuHSxctCDH2tZiW/lwjx6GXro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eYTrcepq; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4255fc43f1cso2886315e9.0
+        for <linux-i2c@vger.kernel.org>; Wed, 26 Jun 2024 06:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719407241; x=1720012041; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tDQy8BECqR3d9KG8alrRMJUS6CkD3eJI9ZwYScYLHPw=;
+        b=eYTrcepqLwfBb736vqvsvXdu8ipvoXtYefMnd+uBpwwJUOea4k7PxzeseP0XsZH/wM
+         CjoazB5JNxHPcbkofkJhQ1h8cFO9t1F+OMTBwMvCs5KYfxJWwTVKbTq/RjK0qrQLUucO
+         hESpcBbOovWLpZOhTd7N6SQDA6EkkZZT0CguRHfH4m7M099QYFUjD6zMtKcNPkXz3fWp
+         hErNcPtPlFus5vX4c88H08kHwT+msx0V2N+6392mtfG8SNUNZJwavv4mzOOP1E7CQCUO
+         G8kQXu53iHkuKwahD81CpomGlkrJTXjvYvSVZlqZzU9/yJTsJ2Rt0BpzsptH1vpqrQbH
+         F7wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719404398; x=1720009198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MDggygSOa6ZhSXSfpTpfRxS2RKvuyCdAPClaKesG9Ro=;
-        b=aocncRJys4RQWvmUit1Uy6wIuX3VdKDeSz5zL0XU7DlJnH1SMN3asTzeEUzqlRx/gP
-         ELNlHmMHRdiHppIHmpzi3GvRpIvXwE9rJ8JXoKs2UAhASzXyt34oIQg++2isI1YtWANz
-         uljflKbqXxIqD+z9qBVS7p9J7ACsY87P5q7H6xcSmz2s/CRE4nfPKLqvlGgoksvDkogA
-         TqtVrcyf+l99brWcimFzsyaPnVWYxX2ozeieVQxYt0VaFyS6x/pl+4wbgj3PDJM0yTdV
-         orp4SbgJr066FnXCfOV7y3sryKtm5m20cGWw2UHD0ktmjxMfEoBKEm7jPN5le6MfxoRV
-         hZlw==
-X-Forwarded-Encrypted: i=1; AJvYcCWasaTASBUFrmZ2zzUHLg44bT5p9nAqeHHVJD0W4ZTY43MsXzrxhnsUoe9GiGldMb2fqkKPdX3rK/HU9bsXhchJMark96FMsFUVAn1sCjFV5fMA/w7KQMMODzz6yfMKIb+MhFnb0rj3jelFsolHQnnkrWgrvktHmIsta3kEE8kqFME+3ig6OcPFhNZiXfIsCBJGmACI8TWolOQExqOKo5cc8y/H3+NsX9rsBT6tayOA7Uu9JrlYji+VHRIrCNUDByKL
-X-Gm-Message-State: AOJu0YyX6+lBYpxwetL0YOmyLO/Py9tNobS7ASWyYlZGkG8J4eYy84Fz
-	rkkT80/NEElWEUT43owhsVGjilOtVM3qyLRq+wDYuER5YHGb8BWG3ySi9uh9
-X-Google-Smtp-Source: AGHT+IGSU4qqzy0xMvoO4iDq9bk/h2bGl017/7n0ndbc9zZM0QvGHD4HWgPbc/FuX7go8vomx7jFIw==
-X-Received: by 2002:a81:c10c:0:b0:631:51f4:f3c6 with SMTP id 00721157ae682-64343ff1b0fmr87164997b3.47.1719404398275;
-        Wed, 26 Jun 2024 05:19:58 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-644bb43d712sm20014207b3.136.2024.06.26.05.19.57
+        d=1e100.net; s=20230601; t=1719407241; x=1720012041;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tDQy8BECqR3d9KG8alrRMJUS6CkD3eJI9ZwYScYLHPw=;
+        b=GBGGIy8j6uinfQA9CmVUurs37FLTMegELLF46pbxhiUs6iSJ19UdCmtz3m0luoW+7h
+         njgEwqEkXc2xoSDIXU/IZ322JtuPPI3wJjh4pbzzHttnzEbhuvl8Bz2lFkbCu1nUmSvy
+         YXOKiCB+Uf//wO9llwgMQ82onGymEIDn6P8QX4hbK11DMGo0zwqYU0QlLO90hlprYwgs
+         B8KMIpBvPkO4iQZqS8XLIWUm6JJe5FWYgY00Uhi24sqaE+kCNSJxaoIg6kXtM3A4vUjj
+         e64Y2Qn/QvosD8rkTM89da6cQmCx6k1tBg04rxMKiYNIylmyuVPCAaHgdL7EhXyLJr8y
+         6wiw==
+X-Forwarded-Encrypted: i=1; AJvYcCUlGQW/c5qW7GDrIouWWnPUEh79nILsV0eDHfrUe9mzaaylV68HEwN1wN1Lqb59hKP/BrLHY1WliU+HfNhpzR91p64Vgi6gyXMB
+X-Gm-Message-State: AOJu0Yx953p1cBoY7R3A9by/N4rSoKgMDr3ENJnRNGHZXDz49cBxE7PP
+	1W4qybuXQDorCTWKejqcKjaVeJAVUENKorLVF9EYe1fwKrE5Q0xPqHfxw3aPdFBLNvURHcV24Ms
+	/qv8=
+X-Google-Smtp-Source: AGHT+IFnI3BCzOm9FuKlL8pAB6vzhy4jH7oPlvuTldtaYqx2e+JcKbfH6B4nnzMZrXctUa2kqlJpZg==
+X-Received: by 2002:a5d:4c86:0:b0:360:727b:8b47 with SMTP id ffacd0b85a97d-366e9629df0mr7240449f8f.63.1719407241160;
+        Wed, 26 Jun 2024 06:07:21 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-367188300acsm2106768f8f.54.2024.06.26.06.07.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jun 2024 05:19:57 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-643efaf0786so34306907b3.1;
-        Wed, 26 Jun 2024 05:19:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUA1sQ5oqDoL1CL9lUqf7hGgxpilAmdcfo6HZD9ynOnc2ha1wBuniB5s/BFpvvLtmLT31ceKGx8FtqfMZe6lTdPTfOhIRA32Q5COd02H0eHeoANCMUPbLwoD76gQ1vN/gKQwMM4HXLY8mOsPd9zqAoNWenmPF5GwpNqXm+3+RPxjt34ZlrCeEeV3DjQdWzktVxXF/3GOYByJK8GYwtMQ59fYZKhYDGHpFC7/aiJ8dxRI2fUGRxzlytu3HT7HKu5cUz5
-X-Received: by 2002:a05:690c:1b:b0:62d:1eb6:87bf with SMTP id
- 00721157ae682-6433eaf087amr116831527b3.5.1719404397679; Wed, 26 Jun 2024
- 05:19:57 -0700 (PDT)
+        Wed, 26 Jun 2024 06:07:20 -0700 (PDT)
+Message-ID: <3e2f38a3-e151-42f1-97ca-b8327ade4acc@linaro.org>
+Date: Wed, 26 Jun 2024 14:07:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com> <20240625121358.590547-2-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240625121358.590547-2-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 26 Jun 2024 14:19:46 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWd1jyvbiXZBOBL9Gzxp94HLV7D6LjKRdW8VVK1W6MVKw@mail.gmail.com>
-Message-ID: <CAMuHMdWd1jyvbiXZBOBL9Gzxp94HLV7D6LjKRdW8VVK1W6MVKw@mail.gmail.com>
-Subject: Re: [PATCH v2 01/12] clk: renesas: r9a08g045: Add clock, reset and
- power domain support for I2C
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: chris.brandt@renesas.com, andi.shyti@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, magnus.damm@gmail.com, 
-	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de, 
-	wsa+renesas@sang-engineering.com, linux-renesas-soc@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/4] nvmem: core: Implement force_ro sysfs attribute
+To: Marek Vasut <marex@denx.de>, linux-i2c@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20240626041214.513242-1-marex@denx.de>
+ <20240626041214.513242-4-marex@denx.de>
+Content-Language: en-US
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20240626041214.513242-4-marex@denx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 25, 2024 at 2:14=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
-wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> Add clock, reset and power domain support for the I2C channels available
-> on the Renesas RZ/G3S SoC.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->
-> Changes in v2:
-> - updated clock names to match the documentation
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-clk for v6.11.
 
-Gr{oetje,eeting}s,
+On 26/06/2024 05:11, Marek Vasut wrote:
+>   
+>   static const struct attribute_group *nvmem_dev_groups[] = {
+> @@ -945,6 +988,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+>   
+>   	nvmem->read_only = device_property_present(config->dev, "read-only") ||
+>   			   config->read_only || !nvmem->reg_write;
+> +	nvmem->default_read_only = nvmem->read_only;
+>   
+>   #ifdef CONFIG_NVMEM_SYSFS
+>   	nvmem->dev.groups = nvmem_dev_groups;
+> diff --git a/drivers/nvmem/internals.h b/drivers/nvmem/internals.h
+> index 18fed57270e5e..0667937ebb86b 100644
+> --- a/drivers/nvmem/internals.h
+> +++ b/drivers/nvmem/internals.h
+> @@ -16,6 +16,7 @@ struct nvmem_device {
+>   	int			id;
+>   	struct kref		refcnt;
+>   	size_t			size;
+> +	bool			default_read_only;
 
-                        Geert
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Its not very clear what is the need for this?
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+
+--srini
+>   	bool			read_only;
+>   	bool			root_only;
+>   	int			flags;
 
