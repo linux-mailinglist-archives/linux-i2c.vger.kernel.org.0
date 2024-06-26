@@ -1,140 +1,126 @@
-Return-Path: <linux-i2c+bounces-4353-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4354-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11B9D91743D
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 00:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0188A9176DB
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 05:36:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A745EB22D91
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jun 2024 22:29:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7EC5FB21F16
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jun 2024 03:36:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE74117F37F;
-	Tue, 25 Jun 2024 22:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 225B473450;
+	Wed, 26 Jun 2024 03:36:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aHIBw3DB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FnWUG+7v"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E27617E905;
-	Tue, 25 Jun 2024 22:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69822AD39;
+	Wed, 26 Jun 2024 03:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719354544; cv=none; b=lRLgrbZ/+i8ofiZ9DUYt0OSJt4GMsLPzhoHJ/X5TtTmLph2ype4Tm9MQ2aJwT6EaFRXz+vtjCfii9YLrpj6lwJeSP7FrpgCsj87ptZTjpeek2M913vcHz4Iwj7sLGFmh6ePznLIG7KFKfXLfM5bqBD4A/Wc/jqG/nny8T5fO23I=
+	t=1719373006; cv=none; b=n8//1bb7ywSw3CCsLtl/F1km1seZBGITSrJ2E0OVg7nL3WpoiMdF0BP33+LrRnH6OceinI3jMav9TuIB50+gTt/VSNg0/UBk1Ko2gFb2OL0jGvd1HfqyWxPBo7ATz/m1TZWUmrO+y6jW9sqiVCrFT6CL3cxer2jl910MB8kH8IY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719354544; c=relaxed/simple;
-	bh=+L/emvVgtDd3ULOJoo20PaysUqptsWugNLJKhSGnCkg=;
+	s=arc-20240116; t=1719373006; c=relaxed/simple;
+	bh=Xe8TNf7d1vs0pD5qG46NvcUmG1EC+DhVUbm5EpXaVTY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N9xY9Hpih9mjZ7Ip6VPGC7OL0QIgFTRkTY0NzRH7cbZi4NG0U46xFjs897PTGMpgaYRXl7TndyaaWMqKR+lj3t1vyAUAnQI52Cw8/a6cqnZ4ni62Gs0BzfpDM8EmAxfcYlfB0DWLUrtJEkz6PR/rlDns0h3XaS4Fy9Bbs+F4oJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aHIBw3DB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F0AC32781;
-	Tue, 25 Jun 2024 22:29:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lEhLRrDBhr8wo/umbZfNxNfZ99nyAXb0m9eoYE6Lc/pSB+AFhBpMD5vIp0G9Uw3VanmFykHSBOkY1PAQKfK+OYC//Wtb0j8Bae2PzzY8DfYsAlOpLNbtYHuK3IgZsAzFsjdEQDyY6XkY0g5XQ5+uhLYXD9wHFljHZrg3ECQK3VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FnWUG+7v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E3CBC32781;
+	Wed, 26 Jun 2024 03:36:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719354544;
-	bh=+L/emvVgtDd3ULOJoo20PaysUqptsWugNLJKhSGnCkg=;
+	s=k20201202; t=1719373006;
+	bh=Xe8TNf7d1vs0pD5qG46NvcUmG1EC+DhVUbm5EpXaVTY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aHIBw3DBgsgjmcpsG44SasdTK/47SLheszc2AagGPy/V7LIt+KIuH7AKrKN0mdQ4m
-	 v/86HnwE7/KWPAzxgOoR5hd/JrDeNRp9OvGbCb53WyGFL4HooYtZJcZIp7AkX2QJaT
-	 +vHjK7JhSOiOAkpK9K/Uyzwtlo1NR5gjQek9RAJpOZqYT6fUx1Eow01E9Q9ijR15CZ
-	 38Zdrwgb2Jm2MNu4wtYm/QCdZo2set9VEJc9HQaVddLzXwUicN4X+XaslvpbMn/EO5
-	 WLDZHpj95vw9bZc+CTbvXsK9O1YX/XaWex8fqU8mdI6PeHJvGwff4q5XmL1qsCihxt
-	 HbV5Mb4qb0ZXA==
-Date: Tue, 25 Jun 2024 16:29:02 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>,
-	linux-gpio@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-pwm@vger.kernel.org,
-	Lars-Peter Clausen <lars@metafoo.de>, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Jonathan Cameron <jic23@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	linux-watchdog@vger.kernel.org, linux-iio@vger.kernel.org,
-	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	linux-clk@vger.kernel.org, Dong Aisheng <aisheng.dong@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Abel Vesa <abelvesa@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-	Zhang Rui <rui.zhang@intel.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2] dt-bindings: drop stale Anson Huang from maintainers
-Message-ID: <171935453992.325655.11101198917545671907.robh@kernel.org>
-References: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
+	b=FnWUG+7vFI5v6wyU9ue+37h/DvknNmndX0WkqYUuudK9moC+UyZhdLnkTVVTyU6OI
+	 lEgwMAm8O9oQX6+aHbSy7DJybDCYkp/OfvcXMAZETdFAAHtJJb5/Mq8MQ77EmJEWVi
+	 PzFEwPVUmB2j+nsnAdKCgaY604O9RqhUb6UNOL+/pW1BJFaGi3hVJpMrza6r4G9E+t
+	 +bIpuTAF+gCtnxeJktP5TwGNd8saG7IZpRhL0RuHkIQchOGRzmHsewqpM48fy3XXWq
+	 prmeZqdFCRnVLxuA1gaXS4idwAIpgzWjiX67BzhUv4f4Bh5BipS+wZJqPO23N4+7TX
+	 WZeFtgYptCU8A==
+Date: Tue, 25 Jun 2024 22:36:43 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: i2c: qcom-cci: Document sm8550
+ compatible
+Message-ID: <glda7ssote475kihs5c2wuff6k4slklzjb532uxiatxi5mdlfr@aiywubn3kert>
+References: <20240612215835.1149199-1-vladimir.zapolskiy@linaro.org>
+ <20240612215835.1149199-2-vladimir.zapolskiy@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240612215835.1149199-2-vladimir.zapolskiy@linaro.org>
 
+On Thu, Jun 13, 2024 at 12:58:32AM GMT, Vladimir Zapolskiy wrote:
+> Add sm8550 compatible consistent with CAMSS CCI interfaces, the list of
+> clocks is reduced by removing "slow_ahb_src" clock, which is derived
+> from "cpas_ahb" clock.
+> 
+> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-On Mon, 17 Jun 2024 08:58:28 +0200, Krzysztof Kozlowski wrote:
-> Emails to Anson Huang bounce:
-> 
->   Diagnostic-Code: smtp; 550 5.4.1 Recipient address rejected: Access denied.
-> 
-> Add IMX platform maintainers for bindings which would become orphaned.
-> 
-> Acked-by: Uwe Kleine-König <ukleinek@kernel.org>
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
-> Acked-by: Peng Fan <peng.fan@nxp.com>
-> Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com> # for I2C
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+Andi, could you please take the two binding patches from this series
+(patch 1 and 2) through your tree, so that I can take the dts changes
+through the Qualcomm DeviceTree tree?
+
+Regards,
+Bjorn
+
 > ---
+>  .../devicetree/bindings/i2c/qcom,i2c-cci.yaml  | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 > 
-> Changes in v2:
-> 1. Add acks/Rbs.
-> 2. Change clock maintainers to Abel Vesa and Peng Fan.
-> 3. Change iio/magnetometer maintainer to Jonathan.
-> ---
->  .../devicetree/bindings/arm/freescale/fsl,imx7ulp-sim.yaml    | 4 +++-
->  Documentation/devicetree/bindings/clock/imx6q-clock.yaml      | 3 ++-
->  Documentation/devicetree/bindings/clock/imx6sl-clock.yaml     | 3 ++-
->  Documentation/devicetree/bindings/clock/imx6sll-clock.yaml    | 3 ++-
->  Documentation/devicetree/bindings/clock/imx6sx-clock.yaml     | 3 ++-
->  Documentation/devicetree/bindings/clock/imx6ul-clock.yaml     | 3 ++-
->  Documentation/devicetree/bindings/clock/imx7d-clock.yaml      | 1 -
->  Documentation/devicetree/bindings/clock/imx8m-clock.yaml      | 3 ++-
->  Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml      | 4 +++-
->  Documentation/devicetree/bindings/gpio/gpio-mxs.yaml          | 1 -
->  Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml      | 4 +++-
->  .../devicetree/bindings/iio/magnetometer/fsl,mag3110.yaml     | 2 +-
->  .../devicetree/bindings/memory-controllers/fsl/mmdc.yaml      | 4 +++-
->  Documentation/devicetree/bindings/nvmem/imx-iim.yaml          | 4 +++-
->  Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml        | 4 +++-
->  Documentation/devicetree/bindings/nvmem/mxs-ocotp.yaml        | 4 +++-
->  Documentation/devicetree/bindings/pwm/imx-tpm-pwm.yaml        | 4 +++-
->  Documentation/devicetree/bindings/pwm/mxs-pwm.yaml            | 1 -
->  Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml      | 4 +++-
->  Documentation/devicetree/bindings/thermal/imx-thermal.yaml    | 1 -
->  Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml | 4 +++-
->  Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml  | 4 +++-
->  Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml   | 4 +++-
->  .../devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml         | 4 +++-
->  24 files changed, 52 insertions(+), 24 deletions(-)
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> index daf4e71b8e7f..e5c4b20446b6 100644
+> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> @@ -31,6 +31,7 @@ properties:
+>                - qcom,sm6350-cci
+>                - qcom,sm8250-cci
+>                - qcom,sm8450-cci
+> +              - qcom,sm8550-cci
+>            - const: qcom,msm8996-cci # CCI v2
+>  
+>    "#address-cells":
+> @@ -195,6 +196,23 @@ allOf:
+>              - const: cpas_ahb
+>              - const: cci
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sm8550-cci
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 3
+> +          maxItems: 3
+> +        clock-names:
+> +          items:
+> +            - const: camnoc_axi
+> +            - const: cpas_ahb
+> +            - const: cci
+> +
+>  additionalProperties: false
+>  
+>  examples:
+> -- 
+> 2.33.0
 > 
-
-Applied, thanks!
-
 
