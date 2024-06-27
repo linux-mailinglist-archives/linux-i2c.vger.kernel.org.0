@@ -1,76 +1,74 @@
-Return-Path: <linux-i2c+bounces-4397-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4398-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9406491A939
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jun 2024 16:31:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A235F91AA0D
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jun 2024 16:59:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9688B23742
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jun 2024 14:31:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D50B81C23220
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jun 2024 14:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E535195FE6;
-	Thu, 27 Jun 2024 14:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2832F19755A;
+	Thu, 27 Jun 2024 14:59:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z/7KwSK6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qzW+nax6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891001E51D;
-	Thu, 27 Jun 2024 14:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDC513DBBC
+	for <linux-i2c@vger.kernel.org>; Thu, 27 Jun 2024 14:59:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719498655; cv=none; b=AEbXFApiXTQ9SgT+i2GleALz31NgmiDnkp5gTLvC0AE9j+tGSXYlM5+hT0Hxr9CTNbY6hHoV11ZTQmV55ZgfcmQ67GFhyjXF8CydF34ZkZ9nD7N8pBgKBuaFwb31Es3sMBfU2DK+ki+pA25KG2/iBHYJmTNwMRC66lBUdr1DlpY=
+	t=1719500342; cv=none; b=trqA+EPgriIBA8Z342A2ol34fXgJY3hEx7F5Hm2+ubJdDaWFrYjkUO0ao1R2C7JewUlwmx0lOvqBM0geAKdxfNdEskQZZVZOVYHkfW1Cb8Qbxi2mLRz8oiVWpM6ERAFsmw/CGfr4EWq5aQlsX344LcO6cvXBn78OsqIJKWmCcQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719498655; c=relaxed/simple;
-	bh=KIobNT3FVqIbEuBkRXfA/d4XzamYSNXUXEShI192cu4=;
+	s=arc-20240116; t=1719500342; c=relaxed/simple;
+	bh=Ij4xretNLkxWm3FW/jOQBkgR14y+ictITaNY99SB4oE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pLNRqqX1grUsnWxWzmDIcOFoQtiB1pTmrUySIgWilZThPo+p8RI5hPfO36AvkXV4LBnAauKRHmAYUA5/+RBngtPVaUlZgJPbm4NyWbCbBd3bkbVV3LkNAGSURUlOZfmoQLHvDb2hacubc1rXIq3Nai/3efbOwfXx2SPymAfGTe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z/7KwSK6; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f9c6e59d34so65055665ad.2;
-        Thu, 27 Jun 2024 07:30:53 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=EHkS2E39/6d71Z7A67wmfGWiFU/Ds9La9J0gO01AelyltVNzx9xUToIa+1AIlwJwwsBbY51kmKAADCbCd030MBD+r51R0LVoPgPGNPGU0N87KoG6R08it5DgSNncugBAEazb1qlU9baOIv1Dg+zdSwp19SIQegbOlSea1NG0zBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qzW+nax6; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4249196a361so36361285e9.0
+        for <linux-i2c@vger.kernel.org>; Thu, 27 Jun 2024 07:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719498653; x=1720103453; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=prOX6eOKEHEmVNHglh0d/kTFjpassowhtDmDJYgcELU=;
-        b=Z/7KwSK6O4iyxuNxmTHU2wW0gGPl1P5LE/GnZask6P2i756KLNJWV5MQomG4d6tb3F
-         BEyFw+wgFl05KpMBS9dg0iI3E2jIOkV5ZrksDq3/7WDIK2iaFtarWlTf6v5k520uLGpb
-         Q+++Gm28YWWw9pJsCPc8qxGz1e8EzkqZjvmbxg2DITDyuwrszo8ApMOnIhLaFWrjq1Is
-         TKte98HYWpue4jLBhZIIVk6nPt9Uqb9gPJB4b2X/03MrHXI+jR2L5DRLyraGhbw6yIhA
-         aEKENC/nB+DM6p9cRiEEQf/tEjsNALMp6LtB3BzNeSAtDLKk40KG9BW4XnJZpKPdY9K5
-         sAcA==
+        d=linaro.org; s=google; t=1719500339; x=1720105139; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ig6U6g8++BTFMK/ibZIZTHmTmTBWih4H4lRJaCKKAlk=;
+        b=qzW+nax6XoL7N+wEW+56RewSkcMXSEL/REH0Op3wJT/f+n7+MlRPg5dcf5SN1Xq82c
+         NjnCJqw2d7DuV3VobehgzxX6Tj+CqsiAxAphEGcLY8HhDPK4Gb50l0Or0eihSDOHJivZ
+         XT1Ay24eM15j2KH6yNpLsq8ygeXj2nHf6y73OVt++77TsvVFl+tPu+OQsCMuLIuekZEb
+         RAyfqMSpUFtYpTFr7uUW+B2jALdnDYdYf7U3O6KE/pf/F17ccmBw7Xw80o6GwpqVphI+
+         6Q3gLz2iGfzZcOQUl7xEoBL2DJOcDyRXLz5MK9D7E4L5E6izYRHZA9k5CTIDcCobNNjI
+         oG6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719498653; x=1720103453;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=prOX6eOKEHEmVNHglh0d/kTFjpassowhtDmDJYgcELU=;
-        b=UrdMdZAxGWg1O2ksmshepJRfKz1ZNV6NFPvcenU2p2Mz29SZs+wb1PFcU+zDeY2+ld
-         8uUk62ols1LL5wduOEdkuKJWm/YyY3RC6cUDNYbA9pgElG6yNb/ECvOfzN+6HVbUB8xn
-         8mnYFK6ndDp9MI8QgK6VINXN/9axx8j9l0pMlGUJbaIupOe4NXSR3FQ3PFze99vi89ld
-         eq3EZCnCg2j8QrCBEHaG1ymiBQaThTfMQDRj9o/KgWI4tsVqO67dGqR5GunN/PvzlKRa
-         3o59MRyzgEnhMxUzSFc4XVR0aQidee9oTFEoLNYrbyBjbRBiGrfoOUsVA9UdE61xLB6p
-         PHqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWe4Y5Dqa8mlxTiY4n9qpNaS7b611E6ZJJ+DyuOPZzD+lByX3nxRdBJj7MpM9uUX4LonuNyRkaUemMFJI48gpdAgg+mbhk685z4i2GiLHCEYIDQ+2HWc4qw4E8D4z357TM0dO3lbJbe4/V4RwIFWEz4zOQBsy8/KxdCQBoXFcvvNJAYeK2fpAHIDI464Mn/nDyQvQTCz0Vv2uvF7CyFUlo=
-X-Gm-Message-State: AOJu0Yy3gfKqzadEL6G5mOByQblazDzunmJJdyjBxLY+LPiaOk58R+SZ
-	7ooaZdTi4oz9N31DEmDJMKxBrpLeQ5VbL3RSZzgXJAck23K9HHSt
-X-Google-Smtp-Source: AGHT+IGb6LRH5tSL0zxSz7eX5YcdjjvCFbgea762hMw2TlPtap0H5lu0zMnM2ToKTYoB42SKt9dD+Q==
-X-Received: by 2002:a17:903:22c6:b0:1f6:f814:d542 with SMTP id d9443c01a7336-1fa1d6acf16mr156972075ad.68.1719498652545;
-        Thu, 27 Jun 2024 07:30:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1faac995113sm13885535ad.188.2024.06.27.07.30.49
+        d=1e100.net; s=20230601; t=1719500339; x=1720105139;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ig6U6g8++BTFMK/ibZIZTHmTmTBWih4H4lRJaCKKAlk=;
+        b=cxLpwUONXgq030fQbnjKkhs2mc4lwfvyfJXP0Eo14C2O7MotN8WUmAzrsE5ZIPuQ7s
+         MXiPY+YlDVErmi2i8uEftyXRbMTUZLxEB3zPIcZt6XNzSMSXgg/cjLJgz8OAT/EWGZw9
+         XRgJ8NY+uM/vHHqWLm3afVUYrCHlhJC82TTKb3uwA6b/JbiwXc3jchnjSIXrkB5Wh75C
+         72WTwYW4mRSymuXHOuIw7F6auy/aySdCDOZ1QrQGYhbqQ7V5cetloufCeG+jLH7OZCp+
+         cpXX1C6GmzUzCHQR8Wuifon3yOEp+XfoEzXjbIK9acnUalS0qHHtO1MOy6/skXJwX4N9
+         2jGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUHg7g2DBzadwQbDNE8BgPUEwf3FTSEHeWrV7TEs8xT0sbbpksHcN53K5rlQwEA7Z6ITf/vnjF4sFCk+hTErWGMtPEEqcez7Frn
+X-Gm-Message-State: AOJu0YxH/WZwUfuArGMkeKYBoAUPS14DY0Av/zC+b/YCiFFYyuCHMEr2
+	+MBdTji3qUKEwoP9N+u5Hp1wG/HVKDQBYPRIEOxyjv7aueS44e/mzzXEknwdXp0=
+X-Google-Smtp-Source: AGHT+IGQ3865SpOoQ5Nj7avD95DekZCQPvE/pMNUIVq18FYi2h10ibmOwLw4a/AZ0SVy8hcZwa6b4g==
+X-Received: by 2002:a05:600c:1c9d:b0:425:6979:9b5f with SMTP id 5b1f17b1804b1-42569799dcfmr525975e9.6.1719500339597;
+        Thu, 27 Jun 2024 07:58:59 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42564b7baa9sm32404435e9.22.2024.06.27.07.58.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jun 2024 07:30:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d788697e-dad5-46b9-b61a-1016c55c4e83@roeck-us.net>
-Date: Thu, 27 Jun 2024 07:30:48 -0700
+        Thu, 27 Jun 2024 07:58:57 -0700 (PDT)
+Message-ID: <55e6f035-fc43-4a56-9bf6-3a1a0e63b85c@linaro.org>
+Date: Thu, 27 Jun 2024 15:58:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,89 +76,62 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] Add MPS MP5920 Host-Swap controller
-To: Alex Vdovydchenko <keromvp@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sean Anderson <sean.anderson@linux.dev>,
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-i2c@vger.kernel.org, Alex Vdovydchenko <xzeol@yahoo.com>
-References: <20240627090113.391730-1-xzeol@yahoo.com>
+Subject: Re: [PATCH v3 4/4] nvmem: core: Implement force_ro sysfs attribute
+To: Marek Vasut <marex@denx.de>, linux-i2c@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20240626041214.513242-1-marex@denx.de>
+ <20240626041214.513242-4-marex@denx.de>
+ <3e2f38a3-e151-42f1-97ca-b8327ade4acc@linaro.org>
+ <ab0cdad7-43e3-4acd-a4cb-b15c1cd26b38@denx.de>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240627090113.391730-1-xzeol@yahoo.com>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <ab0cdad7-43e3-4acd-a4cb-b15c1cd26b38@denx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 6/27/24 02:01, Alex Vdovydchenko wrote:
-> This series of patches adds the MP5920 Host-swap controller, which is used
-> as a protection and control IC for devices that are being inserted into a live
-> backplane. MP5920 acts as a voltage regulator (MP5911 etc) supervisor. IC
-> utilizes pmbus and provides monitoring, statistics and limits to electrical and
-> thermal characteristics such as:
-> - input and output voltage
-> - output current
-> - output power
-> - IC temperature
+
+
+On 26/06/2024 17:07, Marek Vasut wrote:
+> On 6/26/24 3:07 PM, Srinivas Kandagatla wrote:
+>>
+>>
+>> On 26/06/2024 05:11, Marek Vasut wrote:
+>>>   static const struct attribute_group *nvmem_dev_groups[] = {
+>>> @@ -945,6 +988,7 @@ struct nvmem_device *nvmem_register(const struct 
+>>> nvmem_config *config)
+>>>       nvmem->read_only = device_property_present(config->dev, 
+>>> "read-only") ||
+>>>                  config->read_only || !nvmem->reg_write;
+>>> +    nvmem->default_read_only = nvmem->read_only;
+>>>   #ifdef CONFIG_NVMEM_SYSFS
+>>>       nvmem->dev.groups = nvmem_dev_groups;
+>>> diff --git a/drivers/nvmem/internals.h b/drivers/nvmem/internals.h
+>>> index 18fed57270e5e..0667937ebb86b 100644
+>>> --- a/drivers/nvmem/internals.h
+>>> +++ b/drivers/nvmem/internals.h
+>>> @@ -16,6 +16,7 @@ struct nvmem_device {
+>>>       int            id;
+>>>       struct kref        refcnt;
+>>>       size_t            size;
+>>> +    bool            default_read_only;
+>>
+>>
+>> Its not very clear what is the need for this?
 > 
-> One must take into account the nonlinear character of readings, so there will be
-> a statistical error in the range 5–10 percents, depending on current passing
-> through. In order to use the IC, make sure to specify a valid I2C address
-> (consult to datasheet and dts-bindings)
-> MP5920 datasheet: https://www.monolithicpower.com/en/mp5920.html
-> 
-> Changes in v2:
->    -  fixed typos
+> This field is used to discern devices which are by default read-write 
+provider drivers or any drivers should not be accessing this struct 
+directly.
 
-... and ignored all other feedback without explaining the reasons.
+> from ones which are by default read-only. Only the former can be 
+Why should the drivers care about this?
+If the read_only flag is set in the core, nvmem core should prohibit any 
+writes for this provider.
 
-I am not even going to review this version.
+--srini
 
-Guenter
+> switched between read-write and read-only mode ; the later cannot be 
+> switched to read-write mode .
 
 
