@@ -1,282 +1,132 @@
-Return-Path: <linux-i2c+bounces-4430-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4433-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D542E91B31B
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 02:03:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D503A91B4C2
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 03:49:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04C331C21471
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 00:03:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 909AA284013
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 01:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A5417C2;
-	Fri, 28 Jun 2024 00:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D5191A716;
+	Fri, 28 Jun 2024 01:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DOgFB1hg"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="fg5NjlgK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BF617BAA;
-	Fri, 28 Jun 2024 00:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CD51755C
+	for <linux-i2c@vger.kernel.org>; Fri, 28 Jun 2024 01:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719532974; cv=none; b=RAxYY0d8UXxpAsGL8OcLqhYpmpJaGru1sRu/Fh7AlhwsKC02ffCx3OxXnV65kFrjPqG2NR3N10NeRcTU0SZUTaq7LqXe/uAM1h4des3P/kGTTF+x6rfbYrjRcuDwqIhg7uj/HRop5e2O9BWwbXZq+h6fVTbJownw5te/95IjeSE=
+	t=1719539370; cv=none; b=I87nqnyw41V7YCE0fRgkcZ4tdl0wLXom3zCwM6M9vGFhFj4ZLpVTXLuc3HeBfX1MdsA/+Ebks5ywSR+fsuwQyupiRZ4L7mSUisq+i9dnfwmBT98FuwAMs/e/XFXlg8YyZ+7Gldcoa0r+M3Hv9PFnQw3L9GOWlpXTJfTc3NorfEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719532974; c=relaxed/simple;
-	bh=E1YAMTWZQHJa0g1CplgYKEt95kLRiyCZDqokpEPY8bU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mm5ZFgBmL/lg48q8ouWSBZ5XYr2YUjqzH8wtOg5mV9Y5AZW76668kcgR5NEGTylhvKDT6mzPMZQnKbvONxWjfvWby+vN50B9aSwA+cHIrE24uhYaIkpd0RIqWl978e7dBCunvwseaxLm0qrRqeN5x2tMUKNCh8y2YyVKcyjZEHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DOgFB1hg; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719532973; x=1751068973;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E1YAMTWZQHJa0g1CplgYKEt95kLRiyCZDqokpEPY8bU=;
-  b=DOgFB1hgS9kBDgEs9yC4jYT8dlLfe6aaD+BBT7M/jqXCutA0uVPbwyxN
-   yzIZws+2XVFwJKT+onX+FDW14gSQZg+01TOs4t3hj8mKZ8kXry/oPS79D
-   jJDQkieLww6gFigjis265ozT7Tahu503N3MM55t31B/GDmtv7P1sK8g5T
-   z5vpI8apcz/s9LPxaAT+jGGb4yTOrDkJe99uDXhU6oVizoTRAwPVCLYRS
-   bEgDj14MUEJ//4zX/NUzKt4aghJimggJ8mtwnrqCHGXdTopcNKuZ2dO/6
-   cezXE+Ev9ohvLBN5uWKfORKj3Azxb5J4QeQreP3TvdUNDeyy/dhpMjIo9
-   w==;
-X-CSE-ConnectionGUID: XiidRTHkS2OUvZM+jWmiqQ==
-X-CSE-MsgGUID: 51Y2CulCTMq+MDdWDTB/aQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="39216938"
-X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="39216938"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 17:02:52 -0700
-X-CSE-ConnectionGUID: uXnR8qFXQaa0j4b4U4I/sw==
-X-CSE-MsgGUID: KU2C2W66THiFb79QcDcghA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="49470939"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 27 Jun 2024 17:02:49 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sMz4g-000Gdw-1E;
-	Fri, 28 Jun 2024 00:02:46 +0000
-Date: Fri, 28 Jun 2024 08:01:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans de Goede <hdegoede@redhat.com>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: oe-kbuild-all@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-	eric.piel@tremplin-utc.net, Marius Hoch <mail@mariushoch.de>,
-	Dell.Client.Kernel@dell.com,
-	Kai Heng Feng <kai.heng.feng@canonical.com>,
-	platform-driver-x86@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 4/6] platform/x86: dell-smo8800: Move instantiation of
- lis3lv02d i2c_client from i2c-i801 to dell-lis3lv02d
-Message-ID: <202406280739.e0s764jH-lkp@intel.com>
-References: <20240624111519.15652-5-hdegoede@redhat.com>
+	s=arc-20240116; t=1719539370; c=relaxed/simple;
+	bh=mMuz5ee6byG2fxXPSCdE3I3qG6GBngAFug68Busa1to=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OSksd5/Zttvcnv32gQrQoQWfZ6mjBHqvx7kPthXUBeCf59+Y5JsOv0G0vravNcDjye4XfFx0chMhQlP3sBqTd5Bu1XcDfNIn7bruGvaStU10kjUwIz+v6XWarGvUrYsbDSN/j+9Qw34NEfEmsB2CpqlLZuwve8Y6ul10JniTEaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=fg5NjlgK; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+	(No client certificate requested)
+	(Authenticated sender: marex@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id D266487B77;
+	Fri, 28 Jun 2024 03:49:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1719539359;
+	bh=hGdz+UC1G/HPh6TLtsMvnIjEZXP9PQWW6H/+36xQ+nY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fg5NjlgKbELTr/sMmSAjenBySIEdWGk2cB3bWELwUfr3RqY85xrvxAriOvQw9skGM
+	 aE5L58jqVnu08TJWV+FvWfqddy4eYy5VgzLxR4oRilLaE88dppPVQDFFX4EK22l44q
+	 0k5jryBx721E1/lMDErjmDAHLixI8QoTyHtX1VTjX4TxUiYn5AuAhdh//m5NWRH807
+	 e4bMLGQSHfwK0wuwYd52aCjbP7ClbNPUuyPzJy1+8TFCPU/iVEe70Hy7YMlW25AOlA
+	 cxE6iD4Q4iB/KDLE8XLRcNBw19ulVjX7O6+dK8DpxHhVARJNB5KCntl7C83Hh96Ses
+	 +M2hJnWkrnX+A==
+Message-ID: <21a0fec1-c133-4acc-a447-0632a232e45f@denx.de>
+Date: Fri, 28 Jun 2024 01:39:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240624111519.15652-5-hdegoede@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/4] nvmem: core: Implement force_ro sysfs attribute
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ linux-i2c@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20240626041214.513242-1-marex@denx.de>
+ <20240626041214.513242-4-marex@denx.de>
+ <3e2f38a3-e151-42f1-97ca-b8327ade4acc@linaro.org>
+ <ab0cdad7-43e3-4acd-a4cb-b15c1cd26b38@denx.de>
+ <55e6f035-fc43-4a56-9bf6-3a1a0e63b85c@linaro.org>
+ <5ee8b82e-72cb-4644-889c-1959a2318d1a@denx.de>
+ <92f0bec8-283b-4619-9b0b-d5a678fa200c@linaro.org>
+Content-Language: en-US
+From: Marek Vasut <marex@denx.de>
+In-Reply-To: <92f0bec8-283b-4619-9b0b-d5a678fa200c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-Hi Hans,
+On 6/27/24 6:21 PM, Srinivas Kandagatla wrote:
+> 
+> 
+> On 27/06/2024 16:55, Marek Vasut wrote:
+>> On 6/27/24 4:58 PM, Srinivas Kandagatla wrote:
+>>>
+>>>
+>>> On 26/06/2024 17:07, Marek Vasut wrote:
+>>>> On 6/26/24 3:07 PM, Srinivas Kandagatla wrote:
+>>>>>
+>>>>>
+>>>>> On 26/06/2024 05:11, Marek Vasut wrote:
+>>>>>>   static const struct attribute_group *nvmem_dev_groups[] = {
+>>>>>> @@ -945,6 +988,7 @@ struct nvmem_device *nvmem_register(const 
+>>>>>> struct nvmem_config *config)
+>>>>>>       nvmem->read_only = device_property_present(config->dev, 
+>>>>>> "read-only") ||
+>>>>>>                  config->read_only || !nvmem->reg_write;
+>>>>>> +    nvmem->default_read_only = nvmem->read_only;
+>>>>>>   #ifdef CONFIG_NVMEM_SYSFS
+>>>>>>       nvmem->dev.groups = nvmem_dev_groups;
+>>>>>> diff --git a/drivers/nvmem/internals.h b/drivers/nvmem/internals.h
+>>>>>> index 18fed57270e5e..0667937ebb86b 100644
+>>>>>> --- a/drivers/nvmem/internals.h
+>>>>>> +++ b/drivers/nvmem/internals.h
+>>>>>> @@ -16,6 +16,7 @@ struct nvmem_device {
+>>>>>>       int            id;
+>>>>>>       struct kref        refcnt;
+>>>>>>       size_t            size;
+>>>>>> +    bool            default_read_only;
+>>>>>
+>>>>>
+>>>>> Its not very clear what is the need for this?
+>>>>
+>>>> This field is used to discern devices which are by default read-write 
+>>> provider drivers or any drivers should not be accessing this struct 
+>>> directly.
+>>>
+>>>> from ones which are by default read-only. Only the former can be 
+>>> Why should the drivers care about this?
+>>> If the read_only flag is set in the core, nvmem core should prohibit 
+>>> any writes for this provider.
+>>
+>> I think this is a nvmem core patch , isn't it ?
+> All that I see in this patch is setting default_read_only and no user 
+> for it. unless am looking at wrong patch.
 
-kernel test robot noticed the following build errors:
+Oh, now I understand, doh ... this is a remnant which should be removed. 
+The force_ro attribute is now hidden for read-only devices outright in 
+nvmem_attr_is_visible, so they cannot be switched to read-write mode.
 
-[auto build test ERROR on andi-shyti/i2c/i2c-host]
-[also build test ERROR on wsa/i2c/for-next linus/master v6.10-rc5 next-20240627]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-de-Goede/i2c-core-Setup-i2c_adapter-runtime-pm-before-calling-device_add/20240626-053449
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20240624111519.15652-5-hdegoede%40redhat.com
-patch subject: [PATCH v4 4/6] platform/x86: dell-smo8800: Move instantiation of lis3lv02d i2c_client from i2c-i801 to dell-lis3lv02d
-config: i386-randconfig-002-20240628 (https://download.01.org/0day-ci/archive/20240628/202406280739.e0s764jH-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406280739.e0s764jH-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406280739.e0s764jH-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/platform/x86/dell/dell-lis3lv02d.c: In function 'find_i801':
->> drivers/platform/x86/dell/dell-lis3lv02d.c:77:21: error: implicit declaration of function 'i2c_get_adapter'; did you mean 'i2c_get_adapdata'? [-Werror=implicit-function-declaration]
-      77 |         *adap_ret = i2c_get_adapter(adap->nr);
-         |                     ^~~~~~~~~~~~~~~
-         |                     i2c_get_adapdata
->> drivers/platform/x86/dell/dell-lis3lv02d.c:77:19: warning: assignment to 'struct i2c_adapter *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-      77 |         *adap_ret = i2c_get_adapter(adap->nr);
-         |                   ^
-   drivers/platform/x86/dell/dell-lis3lv02d.c: In function 'instantiate_i2c_client':
->> drivers/platform/x86/dell/dell-lis3lv02d.c:96:19: error: implicit declaration of function 'i2c_new_client_device' [-Werror=implicit-function-declaration]
-      96 |         i2c_dev = i2c_new_client_device(adap, &info);
-         |                   ^~~~~~~~~~~~~~~~~~~~~
->> drivers/platform/x86/dell/dell-lis3lv02d.c:96:17: warning: assignment to 'struct i2c_client *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-      96 |         i2c_dev = i2c_new_client_device(adap, &info);
-         |                 ^
->> drivers/platform/x86/dell/dell-lis3lv02d.c:104:9: error: implicit declaration of function 'i2c_put_adapter' [-Werror=implicit-function-declaration]
-     104 |         i2c_put_adapter(adap);
-         |         ^~~~~~~~~~~~~~~
-   drivers/platform/x86/dell/dell-lis3lv02d.c: In function 'dell_lis3lv02d_module_exit':
->> drivers/platform/x86/dell/dell-lis3lv02d.c:193:9: error: implicit declaration of function 'i2c_unregister_device' [-Werror=implicit-function-declaration]
-     193 |         i2c_unregister_device(i2c_dev);
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +77 drivers/platform/x86/dell/dell-lis3lv02d.c
-
-    65	
-    66	static int find_i801(struct device *dev, void *data)
-    67	{
-    68		struct i2c_adapter *adap, **adap_ret = data;
-    69	
-    70		adap = i2c_verify_adapter(dev);
-    71		if (!adap)
-    72			return 0;
-    73	
-    74		if (!i2c_adapter_is_main_i801(adap))
-    75			return 0;
-    76	
-  > 77		*adap_ret = i2c_get_adapter(adap->nr);
-    78		return 1;
-    79	}
-    80	
-    81	static void instantiate_i2c_client(struct work_struct *work)
-    82	{
-    83		struct i2c_board_info info = { };
-    84		struct i2c_adapter *adap = NULL;
-    85	
-    86		if (i2c_dev)
-    87			return;
-    88	
-    89		bus_for_each_dev(&i2c_bus_type, NULL, &adap, find_i801);
-    90		if (!adap)
-    91			return;
-    92	
-    93		info.addr = (long)lis3lv02d_dmi_id->driver_data;
-    94		strscpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
-    95	
-  > 96		i2c_dev = i2c_new_client_device(adap, &info);
-    97		if (IS_ERR(i2c_dev)) {
-    98			pr_err("error %ld registering i2c_client\n", PTR_ERR(i2c_dev));
-    99			i2c_dev = NULL;
-   100		} else {
-   101			pr_debug("registered lis3lv02d on address 0x%02x\n", info.addr);
-   102		}
-   103	
- > 104		i2c_put_adapter(adap);
-   105	}
-   106	static DECLARE_WORK(i2c_work, instantiate_i2c_client);
-   107	
-   108	static int i2c_bus_notify(struct notifier_block *nb, unsigned long action, void *data)
-   109	{
-   110		struct device *dev = data;
-   111		struct i2c_client *client;
-   112		struct i2c_adapter *adap;
-   113	
-   114		switch (action) {
-   115		case BUS_NOTIFY_ADD_DEVICE:
-   116			adap = i2c_verify_adapter(dev);
-   117			if (!adap)
-   118				break;
-   119	
-   120			if (i2c_adapter_is_main_i801(adap))
-   121				queue_work(system_long_wq, &i2c_work);
-   122			break;
-   123		case BUS_NOTIFY_REMOVED_DEVICE:
-   124			client = i2c_verify_client(dev);
-   125			if (!client)
-   126				break;
-   127	
-   128			if (i2c_dev == client) {
-   129				pr_debug("lis3lv02d i2c_client removed\n");
-   130				i2c_dev = NULL;
-   131			}
-   132			break;
-   133		default:
-   134			break;
-   135		}
-   136	
-   137		return 0;
-   138	}
-   139	static struct notifier_block i2c_nb = { .notifier_call = i2c_bus_notify };
-   140	
-   141	static int match_acpi_device_ids(struct device *dev, const void *data)
-   142	{
-   143		const struct acpi_device_id *ids = data;
-   144	
-   145		return acpi_match_device(ids, dev) ? 1 : 0;
-   146	}
-   147	
-   148	static int __init dell_lis3lv02d_init(void)
-   149	{
-   150		struct device *dev;
-   151		int err;
-   152	
-   153		/*
-   154		 * First check for a matching platform_device. This protects against
-   155		 * SMO88xx ACPI fwnodes which actually do have an I2C resource, which
-   156		 * will already have an i2c_client instantiated (not a platform_device).
-   157		 */
-   158		dev = bus_find_device(&platform_bus_type, NULL, smo8800_ids, match_acpi_device_ids);
-   159		if (!dev) {
-   160			pr_debug("No SMO88xx platform-device found\n");
-   161			return 0;
-   162		}
-   163		put_device(dev);
-   164	
-   165		lis3lv02d_dmi_id = dmi_first_match(lis3lv02d_devices);
-   166		if (!lis3lv02d_dmi_id) {
-   167			pr_warn("accelerometer is present on SMBus but its address is unknown, skipping registration\n");
-   168			return 0;
-   169		}
-   170	
-   171		/*
-   172		 * Register i2c-bus notifier + queue initial scan for lis3lv02d
-   173		 * i2c_client instantiation.
-   174		 */
-   175		err = bus_register_notifier(&i2c_bus_type, &i2c_nb);
-   176		if (err)
-   177			return err;
-   178	
-   179		notifier_registered = true;
-   180	
-   181		queue_work(system_long_wq, &i2c_work);
-   182		return 0;
-   183	}
-   184	module_init(dell_lis3lv02d_init);
-   185	
-   186	static void __exit dell_lis3lv02d_module_exit(void)
-   187	{
-   188		if (!notifier_registered)
-   189			return;
-   190	
-   191		bus_unregister_notifier(&i2c_bus_type, &i2c_nb);
-   192		cancel_work_sync(&i2c_work);
- > 193		i2c_unregister_device(i2c_dev);
-   194	}
-   195	module_exit(dell_lis3lv02d_module_exit);
-   196	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Fixed in V4, thanks.
 
