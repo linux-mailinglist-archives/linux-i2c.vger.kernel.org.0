@@ -1,167 +1,268 @@
-Return-Path: <linux-i2c+bounces-4465-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4466-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDA0E91BCDE
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 12:50:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF38A91BD56
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 13:25:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A3571C21DC1
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 10:50:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D25A01C21D42
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 11:25:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D575155CB3;
-	Fri, 28 Jun 2024 10:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A2BB155CA8;
+	Fri, 28 Jun 2024 11:25:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="JlRLMEk8"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Sc3S8tdq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4F0481D7;
-	Fri, 28 Jun 2024 10:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A225155CAF
+	for <linux-i2c@vger.kernel.org>; Fri, 28 Jun 2024 11:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719571821; cv=none; b=sUZtRLDGVFSKzrXdNPVBQjw1HobQVA5aZ3eaVsX9n8ZIThJTLlxfansr3YTYl8jq850ehs6LCk8cCwdAW4kJ5dzWK3yaNvido3kT3MO/qSNzY5l7GIAU3etoQKePYk6/1kX88RW8ni+yOGwl9r9jK0yQs+hPpgHxPnpbT9AWGuo=
+	t=1719573904; cv=none; b=WeX6BxFYjdw9FBX4xBeBXk//tuBhiybW5+ul/laLgbpHKPjv/YTYLkxs3OS74Illg1QcoaU6ipWKMJ1NH/KRlgmDNG7pCOCJCRqUzuT4M2hCHK2h/gwgOdIHHXgJ8ko29F8jWOBgL7ofUjb13SzjtucuHGJAtzQ4aCbyblGa1A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719571821; c=relaxed/simple;
-	bh=ewJYo5B5Gn5p+bUGXnTqJoyHMt2jjLTs26XZMLBY5ts=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mkfFLgWN5laBbNdzXB1bHEiWeE2zgE6kRmLul8WiORFgkdlPEHGDDTTMjaIFRroKpc2w6DZ2im6ODRAW3oXOwa4smGSUZg0gTMqL+38dQXXVqBe4QdVN5KAJrDdtGzYqM4o8PXjZ6TgYgQTaAhO2lkWcCOOH11AvAL46B6+/NRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=JlRLMEk8; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1719571818; x=1751107818;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ewJYo5B5Gn5p+bUGXnTqJoyHMt2jjLTs26XZMLBY5ts=;
-  b=JlRLMEk838rFfCJCz65dqELDlrDMmS7cWmpSd5Zy2HVsEilZZ8kEe5Y4
-   eRmF0pU+VNkKHMyPZGpvOEUh3NHkXAJRUfvJ5F9Y9jOi6nu/qO8h6U/9v
-   shH8G/QrMtcQ+o803kX5b4Isb22iUDvRmuROZZNpvQYEecdNZHV6nrkwc
-   BDeJnIeQtp0FqV3PDYOY7gqNNIqGx6GoaK+v+JqQQgsI8FsQgTLqaE0HG
-   9W0OkUJc/ORPIqYj1E4X+GwCPcX7z/ejIZLzXhjb4tisRvC8v+albtArK
-   vse7Zs3AxNzwT+gXVO46NdBFQP+FtA0lzwanYDAFLI0UkD2i6wXRiubrp
-   g==;
-X-CSE-ConnectionGUID: 1fcM70mTSxeGp3bdmK8x+A==
-X-CSE-MsgGUID: 6jb0hYoOSIuLQoRgVTRgyQ==
-X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
-   d="asc'?scan'208";a="196017444"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2024 03:50:16 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 28 Jun 2024 03:49:43 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Fri, 28 Jun 2024 03:49:39 -0700
-Date: Fri, 28 Jun 2024 11:49:23 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-CC: Thomas Bonnefille <thomas.bonnefille@bootlin.com>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Jisheng Zhang <jszhang@kernel.org>, Guo Ren
-	<guoren@kernel.org>, Fu Wei <wefu@redhat.com>, Drew Fustini
-	<dfustini@tenstorrent.com>, Emil Renner Berthing
-	<emil.renner.berthing@canonical.com>, Conor Dooley <conor@kernel.org>, Jarkko
- Nikula <jarkko.nikula@linux.intel.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Paul Walmsley <paul.walmsley@sifive.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, =?iso-8859-1?Q?Miqu=E8l?=
- Raynal <miquel.raynal@bootlin.com>, <linux-i2c@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v3 0/3] Add I2C support on TH1520
-Message-ID: <20240628-joining-blooming-64aefbfd9897@wendy>
-References: <20240618-i2c-th1520-v3-0-3042590a16b1@bootlin.com>
- <xkdmrmtiizoqo6mpc7i6iyhilxlw57nawn6ogv6dryaveyqddc@ach3rwy4abpe>
+	s=arc-20240116; t=1719573904; c=relaxed/simple;
+	bh=V9KXg+SCmWZafo6obrdRFIhSGLezPfhb2JXZvNu0exU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L84GJWg/qTNVgmWIT7cqAU9fngvXnkBeRhu5ojYq/TR837FbFbDwG9rTtMcJZKZ5X7zxr5llm1jwtv8/ejNcNta1yUXpsXPu1TjpZCwoM5MO/dOiImZgzPyOWC7GJFFZSOd+KLqMaEs4iM5g0NXhu3gGgamBjf0vt232QOFMXl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Sc3S8tdq; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-367339bd00aso417286f8f.3
+        for <linux-i2c@vger.kernel.org>; Fri, 28 Jun 2024 04:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1719573899; x=1720178699; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+vT0oI1WLiPKuk+C4WN1sqVJ5ks3XibkeL1J+rw6OW0=;
+        b=Sc3S8tdq6Qx2OwJ5Jx4wgA/ImXi3UzAfdyuprMGELe8b0lLzRsXwr/VQXnhCy5MHSP
+         Q+88jtRepdzRcr2QUKOVz9GAY61c2gRM2UX3bYncyT++SNoq8wjnJBR6UQvYehijMRi3
+         F+o1YuDhw35FqIelK07ar674laPUQfD59EB4cS0q1BxWwW8LwZcOJnP16LHgBufcjVQT
+         OORu8jYR+gWQTsc/ANAxhDAIxuEjfW/Yi2pI48Ke22CpkhNt+7neOQ2HltRWm3na65bX
+         3oGtA4eRavGfrQ91Sz2bm8WLgtw4nVDIJBTS3jZErkkUFtNYfYZwC7qoxj9Pr4/IE5La
+         GhEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719573899; x=1720178699;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+vT0oI1WLiPKuk+C4WN1sqVJ5ks3XibkeL1J+rw6OW0=;
+        b=hZB+j+0HGK/MABuGfbhRareLT0fEhldfdFLuTC4jSN9VGy9Bb5EYQPnVYlmskl/DR3
+         3eE9rI9/+0NHWsPryHFhzlEhmGy36zZQfqhspwMv8amDApPJhtTqsROybwPy4LyPux9q
+         WaGENj+40MnQsf/ZOgMs5VN5OH3lGCWYKimoXRSq+cBTfOO0a4QtbYhsJPE3BlDbGHEP
+         ojHsI7VUykPKau+Xm4aqA2HDRr30B+rp9ixogvVHcLZBaeHZybAGMINbQYb25A1eWc9D
+         IpiriZ44EQSZD8NsZHnXiOIq+plnImkmgMVEh6/Ks1lsDjFW7Q7Wg/LS84ecdkCVHO7b
+         kj2g==
+X-Forwarded-Encrypted: i=1; AJvYcCWQ0XgOPSpX2U96M8SuZcyPngTTL+O6CBaXUteZ/yDPC/bHShO04qbrpbwI1XHqJLjYLWhIjz6Ag8xqoMW/921WVcNnh+FZGzt3
+X-Gm-Message-State: AOJu0YxAA1Ikripee9P26OYrl2MvSo/RLTYnVtYr8sB0THJTIT+yXRvh
+	W8tj0rW+VggP8uKxjwn9TMtMaAYsYaCL+dncyDcu10YutLo7cbzBBM6yQOPTiz8=
+X-Google-Smtp-Source: AGHT+IEg/llQOTje8PQzJ/D61BuZ9d+OzSn6/FeavrJj+1FuwRfzHkTT7CRfYqx6QCghqsKlm9fzjQ==
+X-Received: by 2002:a05:6000:2c2:b0:366:eb45:6d55 with SMTP id ffacd0b85a97d-366eb456ecemr14224463f8f.49.1719573899534;
+        Fri, 28 Jun 2024 04:24:59 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.70])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3675a0d8cb4sm2019563f8f.25.2024.06.28.04.24.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jun 2024 04:24:59 -0700 (PDT)
+Message-ID: <ae2223f8-4058-4bd1-b480-ed2b4b1d526f@tuxon.dev>
+Date: Fri, 28 Jun 2024 14:24:57 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="TjGWQMt2mYPYXnt4"
-Content-Disposition: inline
-In-Reply-To: <xkdmrmtiizoqo6mpc7i6iyhilxlw57nawn6ogv6dryaveyqddc@ach3rwy4abpe>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 07/12] i2c: riic: Define individual arrays to describe
+ the register offsets
+Content-Language: en-US
+To: Biju Das <biju.das.jz@bp.renesas.com>,
+ Chris Brandt <Chris.Brandt@renesas.com>,
+ "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+ "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+ <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "geert+renesas@glider.be" <geert+renesas@glider.be>,
+ "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+ "mturquette@baylibre.com" <mturquette@baylibre.com>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>
+Cc: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240625121358.590547-8-claudiu.beznea.uj@bp.renesas.com>
+ <TY3PR01MB11346EF9A001F68162148B70F86D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <6289f329-118f-4970-a525-75c3a48bd28b@tuxon.dev>
+ <TY3PR01MB1134603F92C72D9B6C6C3733C86D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <2f162986-33c5-4d80-958c-4f857adaad20@tuxon.dev>
+ <TY3PR01MB11346CA73575CF61B2024F3B386D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <79c26030-4b92-4ef3-b8ce-d011f492161b@tuxon.dev>
+ <TY3PR01MB11346A2DFBD7FE81337A748D386D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <20ff64a8-e619-4281-894f-1aa08ea67f18@tuxon.dev>
+ <TY3PR01MB1134678E3A8485DB152BD66D386D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <TY3PR01MB1134678E3A8485DB152BD66D386D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---TjGWQMt2mYPYXnt4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 28, 2024 at 11:30:28AM +0200, Andi Shyti wrote:
-> Hi,
->=20
-> On Tue, Jun 18, 2024 at 09:42:37AM GMT, Thomas Bonnefille wrote:
-> > This adds I2C support in the device tree of the T-Head TH1520 RISCV-SoC
-> > and a default configuration for the BeagleV-Ahead. It appears that the
-> > TH1520 I2C is already supported in the upstream kernel through the
-> > Synopsis Designware I2C adapter driver.
-> >=20
-> > This patch depends on the clock patch from Drew Fustini
-> > Link: https://lore.kernel.org/linux-riscv/20240615-th1520-clk-v1-0-3ba4=
-978c4d6b@tenstorrent.com
-> > and the pinctrl patch from Emil Renner Berthing
-> > Link: https://lore.kernel.org/linux-riscv/20240103132852.298964-1-emil.=
-renner.berthing@canonical.com
->=20
-> I think after these two go in...
->=20
-> > Changed from v1:
-> > 1. Remove redundant example for Synopsis DesignWare-I2C bindings
-> > 2. Remove Node Ordering commit as it has already been taken
-> > 3. Remove EEPROM label
-> > 4. Rebase on pinctrl and clock driver patches
-> > 5. Add pinctrl configuration
-> > 6. Replaced the fixed-clock with a correct configuration
-> >=20
-> > Changed from v2:
-> > 1. Reorder nodes to conserve ascending register node ordering
-> > 2. Add support for I2C2 as it probably use the same controller
-> > 3. Format comments to match kernel coding style
-> > 4. Reorder nodes to conserve alphabetical node ordering
-> > 6. Declare I2C2
-> > 6. Set pinctrl pull-up resistor to the highest value
-> >=20
-> > Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-> > ---
-> > Thomas Bonnefille (3):
-> >       dt-bindings: i2c: dw: Document compatible thead,th1520-i2c
->=20
-> ... this goes throught i2c...
->=20
-> >       riscv: dts: thead: Add TH1520 I2C nodes
-> >       riscv: dts: thead: Enable I2C on the BeagleV-Ahead
->=20
-> ... and these two go thrhough Conor's branches.
->=20
-> Do you mind sending a ping when Drew's patches are included in
-> the merge window? I can put the first patch on a special branch
-> to keep it under my watch.
 
-I think you can apply the binding whenever you want actually, there's no
-need for the i2c binding (or driver changes, were there to be any) to
-be held until the clock binding/driver is accepted.
+On 28.06.2024 13:49, Biju Das wrote:
+> Hi Claudiu,
+> 
+>> -----Original Message-----
+>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>> Sent: Friday, June 28, 2024 11:25 AM
+>> Subject: Re: [PATCH v2 07/12] i2c: riic: Define individual arrays to describe the register offsets
+>>
+>>
+>>
+>> On 28.06.2024 11:24, Biju Das wrote:
+>>> Hi Claudiu,
+>>>
+>>>> -----Original Message-----
+>>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>>> Sent: Friday, June 28, 2024 9:13 AM
+>>>> Subject: Re: [PATCH v2 07/12] i2c: riic: Define individual arrays to
+>>>> describe the register offsets
+>>>>
+>>>>
+>>>>
+>>>> On 28.06.2024 11:09, Biju Das wrote:
+>>>>>
+>>>>> Hi Claudiu,
+>>>>>
+>>>>>> -----Original Message-----
+>>>>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>>>>> Sent: Friday, June 28, 2024 9:03 AM
+>>>>>> Subject: Re: [PATCH v2 07/12] i2c: riic: Define individual arrays
+>>>>>> to describe the register offsets
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> On 28.06.2024 10:55, Biju Das wrote:
+>>>>>>> Hi Claudiu,
+>>>>>>>
+>>>>>>>> -----Original Message-----
+>>>>>>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>>>>>>> Sent: Friday, June 28, 2024 8:32 AM
+>>>>>>>> Subject: Re: [PATCH v2 07/12] i2c: riic: Define individual arrays
+>>>>>>>> to describe the register offsets
+>>>>>>>>
+>>>>>>>> Hi, Biju,
+>>>>>>>>
+>>>>>>>> On 28.06.2024 08:59, Biju Das wrote:
+>>>>>>>>> Hi Claudiu,
+>>>>>>>>>
+>>>>>>>>>> -----Original Message-----
+>>>>>>>>>> From: Claudiu <claudiu.beznea@tuxon.dev>
+>>>>>>>>>> Sent: Tuesday, June 25, 2024 1:14 PM
+>>>>>>>>>> Subject: [PATCH v2 07/12] i2c: riic: Define individual arrays
+>>>>>>>>>> to describe the register offsets
+>>>>>>>>>>
+>>>>>>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>>>>>>>
+>>>>>>>>>> Define individual arrays to describe the register offsets. In
+>>>>>>>>>> this way we can describe different IP variants that share the
+>>>>>>>>>> same register offsets but have differences in other characteristics.
+>>>>>>>>>> Commit prepares for the addition
+>>>>>>>> of fast mode plus.
+>>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Claudiu Beznea
+>>>>>>>>>> <claudiu.beznea.uj@bp.renesas.com>
+>>>>>>>>>> ---
+>>>>>>>>>>
+>>>>>>>>>> Changes in v2:
+>>>>>>>>>> - none
+>>>>>>>>>>
+>>>>>>>>>>  drivers/i2c/busses/i2c-riic.c | 58
+>>>>>>>>>> +++++++++++++++++++----------------
+>>>>>>>>>>  1 file changed, 31 insertions(+), 27 deletions(-)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/drivers/i2c/busses/i2c-riic.c
+>>>>>>>>>> b/drivers/i2c/busses/i2c-riic.c index
+>>>>>>>>>> 9fe007609076..8ffbead95492 100644
+>>>>>>>>>> --- a/drivers/i2c/busses/i2c-riic.c
+>>>>>>>>>> +++ b/drivers/i2c/busses/i2c-riic.c
+>>>>>>>>>> @@ -91,7 +91,7 @@ enum riic_reg_list {  };
+>>>>>>>>>>
+>>>>>>>>>>  struct riic_of_data {
+>>>>>>>>>> -	u8 regs[RIIC_REG_END];
+>>>>>>>>>> +	const u8 *regs;
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Since you are touching this part, can we drop struct and Use u8*
+>>>>>>>>> as device_data instead?
+>>>>>>>>
+>>>>>>>> Patch 09/12 "i2c: riic: Add support for fast mode plus" adds a
+>>>>>>>> new member to struct
+>>>>>> riic_of_data.
+>>>>>>>> That new member is needed to differentiate b/w hardware versions
+>>>>>>>> supporting fast mode plus based on compatible.
+>>>>>>>
+>>>>>>> Are we sure RZ/A does not support fast mode plus?
+>>>>>>
+>>>>>> From commit description of patch 09/12:
+>>>>>>
+>>>>>> Fast mode plus is available on most of the IP variants that RIIC
+>>>>>> driver is working with. The exception is (according to HW manuals
+>>>>>> of the SoCs where this IP is
+>>>> available) the Renesas RZ/A1H.
+>>>>>> For this, patch introduces the struct riic_of_data::fast_mode_plus.
+>>>>>>
+>>>>>> I checked the manuals of all the SoCs where this driver is used.
+>>>>>>
+>>>>>> I haven't checked the H/W manual?
+>>>>>>
+>>>>>> On the manual I've downloaded from Renesas web site the FMPE bit of
+>>>>>> RIICnFER is not available on RZ/A1H.
+>>>>>
+>>>>> I just found RZ/A2M manual, it supports FMP and register layout looks similar to RZ/G2L.
+>>>>
+>>>> I introduced struct riic_of_data::fast_mode_plus because of RZ/A1H.
+>>>
+>>> Maybe make the register layout as per SoC
+>>>
+>>> RZ/A1 --> &riic_rz_a_info
+>>> RZ/A2 and RZ/{G2L,G2LC,V2L,G2UL,FIVE} --> &riic_rz_g2_info RZ/G3S and
+>>> RZ/V2H --> &riic_rz_v2h_info
+>>
+>> Sorry, but I don't understand. Patch 09/12 already does that but a bit
+>> differently:
+> 
+> Now register layout is added to differentiate the SoCs for adding support
+> to RZ/G3S and this layout should match with the hardware manual for all supported SoCs.
+> Currently it is wrong for RZ/A2 SoC, while you fixed it for all other SoCs.
 
-Thanks,
-Conor.
+I checked RZ/A2M. There is nothing broken. The only thing that I see is
+that the FP+ is not enabled on RZ/A2M (please let me know if there is
+anything else I missed). I don't see this broken. It is the same behavior
+that was before this patch.
 
---TjGWQMt2mYPYXnt4
-Content-Type: application/pgp-signature; name="signature.asc"
+Anyway, I'll update it for that too, if nobody has something against, but I
+cannot test it. If any hardware bug for it, I cannot say.
 
------BEGIN PGP SIGNATURE-----
+> 
+>>
+>> RZ/{G2L, G2LC, G2UL, V2L, FIVE} -> riic_rz_g2_info RZ/G3S and RZ/V2H -> riic_rz_v2h_info Everything
+>> else: riic_rz_a_info
+>>
+>> I don't have anything at hand to test the "everything else" thus I enabled it for RZ/{G2L, G2LC,
+>> G2UL, V2L, FIVE}, RZ/G3S and RZ/V2H.
+> 
+> You don't need to test, as 
+> the existing other users don't have FMP+ enabled in device tree.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZn6VMwAKCRB4tDGHoIJi
-0jNHAP4m1oXXhAI8AJklzSf40W3ivqUXLHUeMZ8nHNOHB8i0pQD8CfKBFliZjMqv
-1e2iWkfTxBaM5iXO5IGnLhbQWp5W1gw=
-=AKI+
------END PGP SIGNATURE-----
+It's the same as today (w/o adding specific entry for it).
 
---TjGWQMt2mYPYXnt4--
+> 
+> Cheers,
+> Biju
 
