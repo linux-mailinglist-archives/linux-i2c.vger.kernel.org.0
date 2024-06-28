@@ -1,242 +1,237 @@
-Return-Path: <linux-i2c+bounces-4436-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4437-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C7E91B834
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 09:22:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C127991B874
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 09:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0F24283680
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 07:22:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B6E61F22ED2
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 07:32:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CD614262C;
-	Fri, 28 Jun 2024 07:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF0B140E47;
+	Fri, 28 Jun 2024 07:32:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nxu+xklR"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Jkn/0ttF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1094513E058;
-	Fri, 28 Jun 2024 07:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC627E785
+	for <linux-i2c@vger.kernel.org>; Fri, 28 Jun 2024 07:32:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719559344; cv=none; b=IS5Q9CWw+Do+o3KIyWBrLKajyInyOvoewyQqtnTkbPw1HWf2NzI9st+/2Hq+pDo31t6TsH88+swSQBv0mbunpnhQuxkw0NXoTnNUWcslOFHIbrsxaf85/O9W/7AFoWcsb8JZedrWkf8uT3nDNn6uk5BJB+Mxdzw8BzfusQJyoRw=
+	t=1719559957; cv=none; b=WE3uYGaACPz7TDi+8GZde2Ir4yn7tlrvV9PBFp+4Fjbjtp17Yjw2Elu6gngU/RkhU5I9OFB8AYYFosJJbbZLyP/faPbUDuzrkW+8sq6pfZwQgyMLqHnQz0wRliZvYciwa0BVU4WHmJcu8iyrLSU8LaMqoQn/sAD0Tmjbt9gupd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719559344; c=relaxed/simple;
-	bh=kk0jS6Zn/eajs/D76BtMMEDKGhKMcCaj28YrpERS6qw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jp6YA1zWCZd24i78WGnC+r4D7fKAgtY/2r1xQbSvj6UBxnCnRgJ1Em7xxu2hP26LVj82abNhgrmDRni+Bphcp+FR1pEWpHXLuk8CBW8TVyggokF4rjtKTPQsIipoySjW8RMxRZFBs0JhSFZE6+1SXTWdFqOKEMc9szrPRQCnODY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nxu+xklR; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719559341; x=1751095341;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kk0jS6Zn/eajs/D76BtMMEDKGhKMcCaj28YrpERS6qw=;
-  b=Nxu+xklRrCKBuy4TN8nVFGR5fUyyEcjxeNiUc1ouICMzL1piC3u1xQUR
-   pKcudj6F6+Bcxn35IJcbbOJhgxPhtpo3IVlt8zVAfSx+i9VqyqMb3qG6P
-   wVEBNpL9Igtp5I4MOjWgkDRJl5pKOVaIwSM7hzzMiK9on2etzkdR7nvqF
-   YERuROWgzYceIqJ8W0qaCNxKmjEzqax85mUGj949raG8RPyPUItztk02B
-   H2G3KLYqJRf7KYUD85yAPaxb8aJ0GuYE1K+ZIZwkhZZTx6ajzU6WWRPTg
-   a+6LtaEj+u/7rbtSwZzuYk8u0z77Vyzz9xopZ9wXBylUSwaPNOBswfpSR
-   w==;
-X-CSE-ConnectionGUID: oVioolhhSpGwNY3UavbQmQ==
-X-CSE-MsgGUID: T69KE4ovQAOqd9nUukrP3A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="16468202"
-X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
-   d="scan'208";a="16468202"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 00:22:20 -0700
-X-CSE-ConnectionGUID: CBI4nw8NSwuGvrqeMakrxQ==
-X-CSE-MsgGUID: VaE3baFuSwybmyPTgbBtPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
-   d="scan'208";a="49567540"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 28 Jun 2024 00:22:17 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sN5vx-000Gti-2j;
-	Fri, 28 Jun 2024 07:22:13 +0000
-Date: Fri, 28 Jun 2024 15:21:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Vdovydchenko <keromvp@gmail.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org, Alex Vdovydchenko <xzeol@yahoo.com>
-Subject: Re: [PATCH v2 2/2] hwmon: add MP5920 driver
-Message-ID: <202406281512.NAdadCZX-lkp@intel.com>
-References: <20240627090113.391730-3-xzeol@yahoo.com>
+	s=arc-20240116; t=1719559957; c=relaxed/simple;
+	bh=A401YoRPY2BYXZXMptssJ0+FDFzALUl8OZ77lFAkgzk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hjO4sGdkwzUXkq0KC29Sb4ujhxldQ3InScpImCkOCgm/SoxnEfyV43LsoXrabMD2ruOB5FJ9kvcBU8qh+/S4rnm83/qPjICjVb23nn0JkiQMpfnYmVVhQylnzliG1v9c+HsYTtmVjMK2XOY2XMuNbLcKSs1OV9HyxDVLW1U9wfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Jkn/0ttF; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42567ddf099so2441895e9.3
+        for <linux-i2c@vger.kernel.org>; Fri, 28 Jun 2024 00:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1719559952; x=1720164752; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VSdYYsERq4BglkmF4kqFHjBMai4DxG/z1x2hgxRtp5s=;
+        b=Jkn/0ttF1CI2FXescTgDoYlEjfed/AcregGivi1Ddl9fjId7teviDdlhKl/JYaUZtA
+         W2MFRoeQ0VtKr/d6dGDU89S411L4ipN8NcLFdroX5zCGUwyxKnDlxAoYe7ALt9CHcgsV
+         6tA9vlgDMzcfPHNroIlne4g2HSeKxy9h+/+xNYkT8kbdzmr1vZCoO/LFc0JUAc5JPX7M
+         ShB7WC/fARN9U71jhZzIbzJJuPlRXcaDHyr5214int9p/pJw6cFEstAI6KdbmmFj429A
+         dJz/srT57YHBZlHpMMe36hGJc3wv86w6Q9knBk6fwvIdBEzoMsqFi3c70Clh+UQc0R/9
+         163Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719559952; x=1720164752;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VSdYYsERq4BglkmF4kqFHjBMai4DxG/z1x2hgxRtp5s=;
+        b=ZWqcQOuC24l1CWVdl6qHlRuy41vdJ//HqNt2vuixcYJSQZauPzxSo7j12XXKs14ZGW
+         n5WupPrawNqMwU3jdKNf5xDK9Ohp3zYxJO2fiLnPfGa43DeZ930OtXXi0M+3Y7WEdcZr
+         cexCMg/jyvmCXrs8mglsskk7YIlo9ujEtCJd4FbJ0boD9G/TSMjKftcxsun3bpxtAEZl
+         PxaO0VKQXcA3VC8fNQkCfS7sSkuEMDzzM7C7GB5IDTPmUr+Cz1NlgL1fPUr1T/PPm2Hk
+         59vz3Pp4Hez4U0jfERuBlp6PK7drPS4yxTyHCqmHtBUpTUL3DIYbWH6IQfWlfhbeRzT+
+         DZEA==
+X-Forwarded-Encrypted: i=1; AJvYcCVkAKlBG1zk5LRQ1tNThv9Or5CUBzhHlqSY9fEV3M7SW7MT+q1toZp7+skpMSTXJ59JwTvUEntM93JUVICJsmfKPJhpTCsIHWkx
+X-Gm-Message-State: AOJu0Yw6vTBS1m4TjhQLfhNYpZS2bInUC1xqlrcKbu33Ih8VmxgbDURx
+	tZOqtlAmbvkvDJa0Gya7Npda/OMMSj81MF847CwkFoKprwobCzSixcEImWn1ZmA=
+X-Google-Smtp-Source: AGHT+IFt/kJGpdjMPUeslt8Yxh3oy1C0tE/fivaQ2JuElWKWqWkX3ZHZ5uko3ECPJTY2FRQhBkKh7Q==
+X-Received: by 2002:adf:f887:0:b0:361:dde2:87a0 with SMTP id ffacd0b85a97d-366e4f0cd03mr10365925f8f.65.1719559952307;
+        Fri, 28 Jun 2024 00:32:32 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.70])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3675a0fc623sm1382868f8f.87.2024.06.28.00.32.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jun 2024 00:32:31 -0700 (PDT)
+Message-ID: <6289f329-118f-4970-a525-75c3a48bd28b@tuxon.dev>
+Date: Fri, 28 Jun 2024 10:32:29 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240627090113.391730-3-xzeol@yahoo.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 07/12] i2c: riic: Define individual arrays to describe
+ the register offsets
+Content-Language: en-US
+To: Biju Das <biju.das.jz@bp.renesas.com>,
+ Chris Brandt <Chris.Brandt@renesas.com>,
+ "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+ "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+ <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "geert+renesas@glider.be" <geert+renesas@glider.be>,
+ "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+ "mturquette@baylibre.com" <mturquette@baylibre.com>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>
+Cc: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240625121358.590547-8-claudiu.beznea.uj@bp.renesas.com>
+ <TY3PR01MB11346EF9A001F68162148B70F86D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <TY3PR01MB11346EF9A001F68162148B70F86D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Alex,
+Hi, Biju,
 
-kernel test robot noticed the following build errors:
+On 28.06.2024 08:59, Biju Das wrote:
+> Hi Claudiu,
+> 
+>> -----Original Message-----
+>> From: Claudiu <claudiu.beznea@tuxon.dev>
+>> Sent: Tuesday, June 25, 2024 1:14 PM
+>> Subject: [PATCH v2 07/12] i2c: riic: Define individual arrays to describe the register offsets
+>>
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Define individual arrays to describe the register offsets. In this way we can describe different IP
+>> variants that share the same register offsets but have differences in other characteristics. Commit
+>> prepares for the addition of fast mode plus.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> ---
+>>
+>> Changes in v2:
+>> - none
+>>
+>>  drivers/i2c/busses/i2c-riic.c | 58 +++++++++++++++++++----------------
+>>  1 file changed, 31 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c index
+>> 9fe007609076..8ffbead95492 100644
+>> --- a/drivers/i2c/busses/i2c-riic.c
+>> +++ b/drivers/i2c/busses/i2c-riic.c
+>> @@ -91,7 +91,7 @@ enum riic_reg_list {
+>>  };
+>>
+>>  struct riic_of_data {
+>> -	u8 regs[RIIC_REG_END];
+>> +	const u8 *regs;
+> 
+> 
+> Since you are touching this part, can we drop struct and
+> Use u8* as device_data instead?
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on next-20240627]
-[cannot apply to robh/for-next krzk-dt/for-next linus/master v6.10-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Patch 09/12 "i2c: riic: Add support for fast mode plus" adds a new member
+to struct riic_of_data. That new member is needed to differentiate b/w
+hardware versions supporting fast mode plus based on compatible.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Vdovydchenko/dt-bindings-hwmon-Add-MPS-mp5920/20240628-021125
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20240627090113.391730-3-xzeol%40yahoo.com
-patch subject: [PATCH v2 2/2] hwmon: add MP5920 driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240628/202406281512.NAdadCZX-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406281512.NAdadCZX-lkp@intel.com/reproduce)
+Keeping struct riic_of_data is necessary (unless I misunderstood your
+proposal).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406281512.NAdadCZX-lkp@intel.com/
+Thank you,
+Claudiu Beznea
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/hwmon/pmbus/mp5920.c:18:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:39:
-   In file included from include/acpi/acpi_io.h:7:
-   In file included from arch/arm64/include/asm/acpi.h:14:
-   In file included from include/linux/memblock.h:12:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hwmon/pmbus/mp5920.c:26:2: error: use of undeclared identifier 'pages'
-      26 |         pages = 1,
-         |         ^
->> drivers/hwmon/pmbus/mp5920.c:27:2: error: use of undeclared identifier 'format'
-      27 |         format[PSC_VOLTAGE_IN] = direct,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:28:2: error: use of undeclared identifier 'format'
-      28 |         format[PSC_VOLTAGE_OUT] = direct,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:29:2: error: use of undeclared identifier 'format'
-      29 |         format[PSC_CURRENT_OUT] = direct,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:30:2: error: use of undeclared identifier 'format'
-      30 |         format[PSC_POWER] = direct,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:31:2: error: use of undeclared identifier 'format'
-      31 |         format[PSC_TEMPERATURE] = direct,
-         |         ^
->> drivers/hwmon/pmbus/mp5920.c:32:2: error: use of undeclared identifier 'm'
-      32 |         m[PSC_VOLTAGE_IN] = 2266,
-         |         ^
->> drivers/hwmon/pmbus/mp5920.c:33:2: error: use of undeclared identifier 'b'
-      33 |         b[PSC_VOLTAGE_IN] = 0,
-         |         ^
->> drivers/hwmon/pmbus/mp5920.c:34:2: error: use of undeclared identifier 'R'
-      34 |         R[PSC_VOLTAGE_IN] = -1,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:35:2: error: use of undeclared identifier 'm'
-      35 |         m[PSC_VOLTAGE_OUT] = 2266,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:36:2: error: use of undeclared identifier 'b'
-      36 |         b[PSC_VOLTAGE_OUT] = 0,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:37:2: error: use of undeclared identifier 'R'
-      37 |         R[PSC_VOLTAGE_OUT] = -1,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:38:2: error: use of undeclared identifier 'm'
-      38 |         m[PSC_CURRENT_OUT] = 546,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:39:2: error: use of undeclared identifier 'b'
-      39 |         b[PSC_CURRENT_OUT] = 0,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:40:2: error: use of undeclared identifier 'R'
-      40 |         R[PSC_CURRENT_OUT] = -2,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:41:2: error: use of undeclared identifier 'm'
-      41 |         m[PSC_POWER] = 5840,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:42:2: error: use of undeclared identifier 'b'
-      42 |         b[PSC_POWER] = 0,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:43:2: error: use of undeclared identifier 'R'
-      43 |         R[PSC_POWER] = -3,
-         |         ^
-   drivers/hwmon/pmbus/mp5920.c:44:2: error: use of undeclared identifier 'm'
-      44 |         m[PSC_TEMPERATURE] = 1067,
-         |         ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   5 warnings and 20 errors generated.
-
-
-vim +/pages +26 drivers/hwmon/pmbus/mp5920.c
-
-    24	
-    25	static struct pmbus_driver_info mp5920_info = {
-  > 26		pages = 1,
-  > 27		format[PSC_VOLTAGE_IN] = direct,
-    28		format[PSC_VOLTAGE_OUT] = direct,
-    29		format[PSC_CURRENT_OUT] = direct,
-    30		format[PSC_POWER] = direct,
-    31		format[PSC_TEMPERATURE] = direct,
-  > 32		m[PSC_VOLTAGE_IN] = 2266,
-  > 33		b[PSC_VOLTAGE_IN] = 0,
-  > 34		R[PSC_VOLTAGE_IN] = -1,
-    35		m[PSC_VOLTAGE_OUT] = 2266,
-    36		b[PSC_VOLTAGE_OUT] = 0,
-    37		R[PSC_VOLTAGE_OUT] = -1,
-    38		m[PSC_CURRENT_OUT] = 546,
-    39		b[PSC_CURRENT_OUT] = 0,
-    40		R[PSC_CURRENT_OUT] = -2,
-    41		m[PSC_POWER] = 5840,
-    42		b[PSC_POWER] = 0,
-    43		R[PSC_POWER] = -3,
-    44		m[PSC_TEMPERATURE] = 1067,
-    45		b[PSC_TEMPERATURE] = 20500,
-    46		R[PSC_TEMPERATURE] = -2,
-    47		func[0] = PMBUS_HAVE_VIN  | PMBUS_HAVE_VOUT |
-    48			PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
-    49			PMBUS_HAVE_TEMP,
-    50	};
-    51	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> ie, replace const struct riic_of_data *info->const u8 *regs in struct riic_dev
+> and use .data = riic_rz_xx_regs in of_match_table?
+> 
+> Cheers,
+> Biju
+>>  };
+>>
+>>  struct riic_dev {
+>> @@ -531,36 +531,40 @@ static void riic_i2c_remove(struct platform_device *pdev)
+>>  	pm_runtime_dont_use_autosuspend(dev);
+>>  }
+>>
+>> +static const u8 riic_rz_a_regs[RIIC_REG_END] = {
+>> +	[RIIC_ICCR1] = 0x00,
+>> +	[RIIC_ICCR2] = 0x04,
+>> +	[RIIC_ICMR1] = 0x08,
+>> +	[RIIC_ICMR3] = 0x10,
+>> +	[RIIC_ICSER] = 0x18,
+>> +	[RIIC_ICIER] = 0x1c,
+>> +	[RIIC_ICSR2] = 0x24,
+>> +	[RIIC_ICBRL] = 0x34,
+>> +	[RIIC_ICBRH] = 0x38,
+>> +	[RIIC_ICDRT] = 0x3c,
+>> +	[RIIC_ICDRR] = 0x40,
+>> +};
+>> +
+>>  static const struct riic_of_data riic_rz_a_info = {
+>> -	.regs = {
+>> -		[RIIC_ICCR1] = 0x00,
+>> -		[RIIC_ICCR2] = 0x04,
+>> -		[RIIC_ICMR1] = 0x08,
+>> -		[RIIC_ICMR3] = 0x10,
+>> -		[RIIC_ICSER] = 0x18,
+>> -		[RIIC_ICIER] = 0x1c,
+>> -		[RIIC_ICSR2] = 0x24,
+>> -		[RIIC_ICBRL] = 0x34,
+>> -		[RIIC_ICBRH] = 0x38,
+>> -		[RIIC_ICDRT] = 0x3c,
+>> -		[RIIC_ICDRR] = 0x40,
+>> -	},
+>> +	.regs = riic_rz_a_regs,
+>> +};
+>> +
+>> +static const u8 riic_rz_v2h_regs[RIIC_REG_END] = {
+>> +	[RIIC_ICCR1] = 0x00,
+>> +	[RIIC_ICCR2] = 0x01,
+>> +	[RIIC_ICMR1] = 0x02,
+>> +	[RIIC_ICMR3] = 0x04,
+>> +	[RIIC_ICSER] = 0x06,
+>> +	[RIIC_ICIER] = 0x07,
+>> +	[RIIC_ICSR2] = 0x09,
+>> +	[RIIC_ICBRL] = 0x10,
+>> +	[RIIC_ICBRH] = 0x11,
+>> +	[RIIC_ICDRT] = 0x12,
+>> +	[RIIC_ICDRR] = 0x13,
+>>  };
+>>
+>>  static const struct riic_of_data riic_rz_v2h_info = {
+>> -	.regs = {
+>> -		[RIIC_ICCR1] = 0x00,
+>> -		[RIIC_ICCR2] = 0x01,
+>> -		[RIIC_ICMR1] = 0x02,
+>> -		[RIIC_ICMR3] = 0x04,
+>> -		[RIIC_ICSER] = 0x06,
+>> -		[RIIC_ICIER] = 0x07,
+>> -		[RIIC_ICSR2] = 0x09,
+>> -		[RIIC_ICBRL] = 0x10,
+>> -		[RIIC_ICBRH] = 0x11,
+>> -		[RIIC_ICDRT] = 0x12,
+>> -		[RIIC_ICDRR] = 0x13,
+>> -	},
+>> +	.regs = riic_rz_v2h_regs,
+>>  };
+>>
+>>  static int riic_i2c_suspend(struct device *dev)
+>> --
+>> 2.39.2
+>>
+> 
 
