@@ -1,74 +1,48 @@
-Return-Path: <linux-i2c+bounces-4437-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4438-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C127991B874
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 09:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FD4491B8D4
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 09:47:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B6E61F22ED2
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 07:32:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 373B51F22FCB
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 07:47:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF0B140E47;
-	Fri, 28 Jun 2024 07:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C696143757;
+	Fri, 28 Jun 2024 07:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Jkn/0ttF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rw85o+ri"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC627E785
-	for <linux-i2c@vger.kernel.org>; Fri, 28 Jun 2024 07:32:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC4A558B9;
+	Fri, 28 Jun 2024 07:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719559957; cv=none; b=WE3uYGaACPz7TDi+8GZde2Ir4yn7tlrvV9PBFp+4Fjbjtp17Yjw2Elu6gngU/RkhU5I9OFB8AYYFosJJbbZLyP/faPbUDuzrkW+8sq6pfZwQgyMLqHnQz0wRliZvYciwa0BVU4WHmJcu8iyrLSU8LaMqoQn/sAD0Tmjbt9gupd0=
+	t=1719560864; cv=none; b=GylQ7F7kvNUN5Us9uMewYJOd4/Euf0zso1vTK3RwjGaN29WZmjuvt3V3EJel0GDPAWaTnTIAUJccmj9oviy3jWD1Cah/y6WeHL8RXh54Wox9ZaFHvpwSt0xweuJJi8CKApIOUR1rxalJ84zkj/+Upc8J6XrmDW5lQ4s1mRa8CYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719559957; c=relaxed/simple;
-	bh=A401YoRPY2BYXZXMptssJ0+FDFzALUl8OZ77lFAkgzk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hjO4sGdkwzUXkq0KC29Sb4ujhxldQ3InScpImCkOCgm/SoxnEfyV43LsoXrabMD2ruOB5FJ9kvcBU8qh+/S4rnm83/qPjICjVb23nn0JkiQMpfnYmVVhQylnzliG1v9c+HsYTtmVjMK2XOY2XMuNbLcKSs1OV9HyxDVLW1U9wfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Jkn/0ttF; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42567ddf099so2441895e9.3
-        for <linux-i2c@vger.kernel.org>; Fri, 28 Jun 2024 00:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1719559952; x=1720164752; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VSdYYsERq4BglkmF4kqFHjBMai4DxG/z1x2hgxRtp5s=;
-        b=Jkn/0ttF1CI2FXescTgDoYlEjfed/AcregGivi1Ddl9fjId7teviDdlhKl/JYaUZtA
-         W2MFRoeQ0VtKr/d6dGDU89S411L4ipN8NcLFdroX5zCGUwyxKnDlxAoYe7ALt9CHcgsV
-         6tA9vlgDMzcfPHNroIlne4g2HSeKxy9h+/+xNYkT8kbdzmr1vZCoO/LFc0JUAc5JPX7M
-         ShB7WC/fARN9U71jhZzIbzJJuPlRXcaDHyr5214int9p/pJw6cFEstAI6KdbmmFj429A
-         dJz/srT57YHBZlHpMMe36hGJc3wv86w6Q9knBk6fwvIdBEzoMsqFi3c70Clh+UQc0R/9
-         163Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719559952; x=1720164752;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VSdYYsERq4BglkmF4kqFHjBMai4DxG/z1x2hgxRtp5s=;
-        b=ZWqcQOuC24l1CWVdl6qHlRuy41vdJ//HqNt2vuixcYJSQZauPzxSo7j12XXKs14ZGW
-         n5WupPrawNqMwU3jdKNf5xDK9Ohp3zYxJO2fiLnPfGa43DeZ930OtXXi0M+3Y7WEdcZr
-         cexCMg/jyvmCXrs8mglsskk7YIlo9ujEtCJd4FbJ0boD9G/TSMjKftcxsun3bpxtAEZl
-         PxaO0VKQXcA3VC8fNQkCfS7sSkuEMDzzM7C7GB5IDTPmUr+Cz1NlgL1fPUr1T/PPm2Hk
-         59vz3Pp4Hez4U0jfERuBlp6PK7drPS4yxTyHCqmHtBUpTUL3DIYbWH6IQfWlfhbeRzT+
-         DZEA==
-X-Forwarded-Encrypted: i=1; AJvYcCVkAKlBG1zk5LRQ1tNThv9Or5CUBzhHlqSY9fEV3M7SW7MT+q1toZp7+skpMSTXJ59JwTvUEntM93JUVICJsmfKPJhpTCsIHWkx
-X-Gm-Message-State: AOJu0Yw6vTBS1m4TjhQLfhNYpZS2bInUC1xqlrcKbu33Ih8VmxgbDURx
-	tZOqtlAmbvkvDJa0Gya7Npda/OMMSj81MF847CwkFoKprwobCzSixcEImWn1ZmA=
-X-Google-Smtp-Source: AGHT+IFt/kJGpdjMPUeslt8Yxh3oy1C0tE/fivaQ2JuElWKWqWkX3ZHZ5uko3ECPJTY2FRQhBkKh7Q==
-X-Received: by 2002:adf:f887:0:b0:361:dde2:87a0 with SMTP id ffacd0b85a97d-366e4f0cd03mr10365925f8f.65.1719559952307;
-        Fri, 28 Jun 2024 00:32:32 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.70])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3675a0fc623sm1382868f8f.87.2024.06.28.00.32.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jun 2024 00:32:31 -0700 (PDT)
-Message-ID: <6289f329-118f-4970-a525-75c3a48bd28b@tuxon.dev>
-Date: Fri, 28 Jun 2024 10:32:29 +0300
+	s=arc-20240116; t=1719560864; c=relaxed/simple;
+	bh=uCD5TGiepGiYZ3McqKERrGy9PD1OaIIbz3xxYakKfFw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=mskmrTy5V75pPwgTf8lRm48goKqGCzZtz/4xtnvG/SQmTFl5w3nbT9CiVKEUNzxYF8mV5mZwPFq2NFQjO9WrOPjuFJ/8Q6bV0womYLwjxGjR7J6kGId4m5bjNkaMDrLlquamD5C1Z1I0INXFpHQB5lK4rLj+2Kup95X9yIGLbxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rw85o+ri; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B71C116B1;
+	Fri, 28 Jun 2024 07:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719560863;
+	bh=uCD5TGiepGiYZ3McqKERrGy9PD1OaIIbz3xxYakKfFw=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=rw85o+rim2AaTbsryjVXocCSTIlky1QApL8M2f6EISMpuQnbVCy6DKELhPL2Y+ves
+	 ic0hueZT0Vhjw5W/WMP8ScUwtmWgYe5ddFkp0WSMnfwkKyOIaPm8g72GAP4a9oRYIh
+	 eczRGNHi2x+9ZbEtaBPBCMAIRUWwewUQq0n+9WN/mn+H0p/41j6p7w9R7UUftUP2wp
+	 p5aDOhdD69kHxVxNI4gy4WJqN98J5POMN/Lrn6XJI0YFiO5MZcM4CjWCO4LKStdKd5
+	 zLwOMKhLv6NWw5ozJgMSKa7zNwOjxzyqTMkrfFOmbmAxHjZrQPoRrM9g8di5jQbsrx
+	 llS6jAQ+ZH/pA==
+Message-ID: <c99dbf5e-9396-44bc-973f-cb7edaf6c0dc@kernel.org>
+Date: Fri, 28 Jun 2024 09:47:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,162 +50,87 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/12] i2c: riic: Define individual arrays to describe
- the register offsets
+Subject: Re: [Patch v5 02/12] dt-bindings: dma: Add lpc32xx DMA mux binding
+To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+ Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, "J.M.B. Downing" <jonathan.downing@nautel.com>,
+ Vladimir Zapolskiy <vz@mleia.com>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Yangtao Li <frank.li@vivo.com>, Arnd Bergmann <arnd@arndb.de>,
+ Li Zetao <lizetao1@huawei.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Chancel Liu <chancel.liu@nxp.com>, Corentin Labbe <clabbe@baylibre.com>,
+ dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+ linux-sound@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org
+References: <20240627150046.258795-1-piotr.wojtaszczyk@timesys.com>
+ <20240627150046.258795-3-piotr.wojtaszczyk@timesys.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-To: Biju Das <biju.das.jz@bp.renesas.com>,
- Chris Brandt <Chris.Brandt@renesas.com>,
- "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "geert+renesas@glider.be" <geert+renesas@glider.be>,
- "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
- "mturquette@baylibre.com" <mturquette@baylibre.com>,
- "sboyd@kernel.org" <sboyd@kernel.org>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>
-Cc: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
- <20240625121358.590547-8-claudiu.beznea.uj@bp.renesas.com>
- <TY3PR01MB11346EF9A001F68162148B70F86D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <TY3PR01MB11346EF9A001F68162148B70F86D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240627150046.258795-3-piotr.wojtaszczyk@timesys.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi, Biju,
+On 27/06/2024 17:00, Piotr Wojtaszczyk wrote:
+> LPC32XX SoCs use pl080 dma controller which have few request signals
+> multiplexed between peripherals. This binding describes how devices can
+> use the multiplexed request signals.
+> 
+> Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
 
-On 28.06.2024 08:59, Biju Das wrote:
-> Hi Claudiu,
-> 
->> -----Original Message-----
->> From: Claudiu <claudiu.beznea@tuxon.dev>
->> Sent: Tuesday, June 25, 2024 1:14 PM
->> Subject: [PATCH v2 07/12] i2c: riic: Define individual arrays to describe the register offsets
->>
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> Define individual arrays to describe the register offsets. In this way we can describe different IP
->> variants that share the same register offsets but have differences in other characteristics. Commit
->> prepares for the addition of fast mode plus.
->>
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->> ---
->>
->> Changes in v2:
->> - none
->>
->>  drivers/i2c/busses/i2c-riic.c | 58 +++++++++++++++++++----------------
->>  1 file changed, 31 insertions(+), 27 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c index
->> 9fe007609076..8ffbead95492 100644
->> --- a/drivers/i2c/busses/i2c-riic.c
->> +++ b/drivers/i2c/busses/i2c-riic.c
->> @@ -91,7 +91,7 @@ enum riic_reg_list {
->>  };
->>
->>  struct riic_of_data {
->> -	u8 regs[RIIC_REG_END];
->> +	const u8 *regs;
-> 
-> 
-> Since you are touching this part, can we drop struct and
-> Use u8* as device_data instead?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Patch 09/12 "i2c: riic: Add support for fast mode plus" adds a new member
-to struct riic_of_data. That new member is needed to differentiate b/w
-hardware versions supporting fast mode plus based on compatible.
+Best regards,
+Krzysztof
 
-Keeping struct riic_of_data is necessary (unless I misunderstood your
-proposal).
-
-Thank you,
-Claudiu Beznea
-
-> 
-> ie, replace const struct riic_of_data *info->const u8 *regs in struct riic_dev
-> and use .data = riic_rz_xx_regs in of_match_table?
-> 
-> Cheers,
-> Biju
->>  };
->>
->>  struct riic_dev {
->> @@ -531,36 +531,40 @@ static void riic_i2c_remove(struct platform_device *pdev)
->>  	pm_runtime_dont_use_autosuspend(dev);
->>  }
->>
->> +static const u8 riic_rz_a_regs[RIIC_REG_END] = {
->> +	[RIIC_ICCR1] = 0x00,
->> +	[RIIC_ICCR2] = 0x04,
->> +	[RIIC_ICMR1] = 0x08,
->> +	[RIIC_ICMR3] = 0x10,
->> +	[RIIC_ICSER] = 0x18,
->> +	[RIIC_ICIER] = 0x1c,
->> +	[RIIC_ICSR2] = 0x24,
->> +	[RIIC_ICBRL] = 0x34,
->> +	[RIIC_ICBRH] = 0x38,
->> +	[RIIC_ICDRT] = 0x3c,
->> +	[RIIC_ICDRR] = 0x40,
->> +};
->> +
->>  static const struct riic_of_data riic_rz_a_info = {
->> -	.regs = {
->> -		[RIIC_ICCR1] = 0x00,
->> -		[RIIC_ICCR2] = 0x04,
->> -		[RIIC_ICMR1] = 0x08,
->> -		[RIIC_ICMR3] = 0x10,
->> -		[RIIC_ICSER] = 0x18,
->> -		[RIIC_ICIER] = 0x1c,
->> -		[RIIC_ICSR2] = 0x24,
->> -		[RIIC_ICBRL] = 0x34,
->> -		[RIIC_ICBRH] = 0x38,
->> -		[RIIC_ICDRT] = 0x3c,
->> -		[RIIC_ICDRR] = 0x40,
->> -	},
->> +	.regs = riic_rz_a_regs,
->> +};
->> +
->> +static const u8 riic_rz_v2h_regs[RIIC_REG_END] = {
->> +	[RIIC_ICCR1] = 0x00,
->> +	[RIIC_ICCR2] = 0x01,
->> +	[RIIC_ICMR1] = 0x02,
->> +	[RIIC_ICMR3] = 0x04,
->> +	[RIIC_ICSER] = 0x06,
->> +	[RIIC_ICIER] = 0x07,
->> +	[RIIC_ICSR2] = 0x09,
->> +	[RIIC_ICBRL] = 0x10,
->> +	[RIIC_ICBRH] = 0x11,
->> +	[RIIC_ICDRT] = 0x12,
->> +	[RIIC_ICDRR] = 0x13,
->>  };
->>
->>  static const struct riic_of_data riic_rz_v2h_info = {
->> -	.regs = {
->> -		[RIIC_ICCR1] = 0x00,
->> -		[RIIC_ICCR2] = 0x01,
->> -		[RIIC_ICMR1] = 0x02,
->> -		[RIIC_ICMR3] = 0x04,
->> -		[RIIC_ICSER] = 0x06,
->> -		[RIIC_ICIER] = 0x07,
->> -		[RIIC_ICSR2] = 0x09,
->> -		[RIIC_ICBRL] = 0x10,
->> -		[RIIC_ICBRH] = 0x11,
->> -		[RIIC_ICDRT] = 0x12,
->> -		[RIIC_ICDRR] = 0x13,
->> -	},
->> +	.regs = riic_rz_v2h_regs,
->>  };
->>
->>  static int riic_i2c_suspend(struct device *dev)
->> --
->> 2.39.2
->>
-> 
 
