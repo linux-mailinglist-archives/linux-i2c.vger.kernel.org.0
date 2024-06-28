@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-4438-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4439-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FD4491B8D4
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 09:47:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5441F91B8E2
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 09:48:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 373B51F22FCB
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 07:47:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85BE61C2284A
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 07:48:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C696143757;
-	Fri, 28 Jun 2024 07:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80F7143752;
+	Fri, 28 Jun 2024 07:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rw85o+ri"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6RiG23z"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC4A558B9;
-	Fri, 28 Jun 2024 07:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705F4558B9;
+	Fri, 28 Jun 2024 07:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719560864; cv=none; b=GylQ7F7kvNUN5Us9uMewYJOd4/Euf0zso1vTK3RwjGaN29WZmjuvt3V3EJel0GDPAWaTnTIAUJccmj9oviy3jWD1Cah/y6WeHL8RXh54Wox9ZaFHvpwSt0xweuJJi8CKApIOUR1rxalJ84zkj/+Upc8J6XrmDW5lQ4s1mRa8CYo=
+	t=1719560923; cv=none; b=QkqESfTghgosu0KYNx/wcQOsVImBWLqIbgSn28uUUWGGAAq0SMaVGeENqM0a3TZcUOTFebXvSTDn8WaRf5YflBv1TZBidU+yrBiZNuFhPBpXTSOlU9KGU/cgGpIJoTq6xyObFd71Hl/6uutMvbVTq4Dsv1GOKYlAzC2eam1ucSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719560864; c=relaxed/simple;
-	bh=uCD5TGiepGiYZ3McqKERrGy9PD1OaIIbz3xxYakKfFw=;
+	s=arc-20240116; t=1719560923; c=relaxed/simple;
+	bh=Med/e/5poH47sw+X9ut1CH7guRvVlCNxLW8j4nDVLsk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=mskmrTy5V75pPwgTf8lRm48goKqGCzZtz/4xtnvG/SQmTFl5w3nbT9CiVKEUNzxYF8mV5mZwPFq2NFQjO9WrOPjuFJ/8Q6bV0womYLwjxGjR7J6kGId4m5bjNkaMDrLlquamD5C1Z1I0INXFpHQB5lK4rLj+2Kup95X9yIGLbxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rw85o+ri; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B71C116B1;
-	Fri, 28 Jun 2024 07:47:31 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=YRI7dBekV8gIzJzzQQMGklwpUEQDDVx9SzJXOLCcpDy2lBygKrZOdzYaTHfqfHJVrKO64ZIw5xw3OkRJkx74NrrMOxmmaJLTmtce/IYrD6XVFxTSJbETg6UzRJyl0hQk+uy+w3+A+/wzJOCW3ls8H5QDsg51ebQQZdw9UiZ3OfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6RiG23z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 386D8C2BD10;
+	Fri, 28 Jun 2024 07:48:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719560863;
-	bh=uCD5TGiepGiYZ3McqKERrGy9PD1OaIIbz3xxYakKfFw=;
+	s=k20201202; t=1719560923;
+	bh=Med/e/5poH47sw+X9ut1CH7guRvVlCNxLW8j4nDVLsk=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=rw85o+rim2AaTbsryjVXocCSTIlky1QApL8M2f6EISMpuQnbVCy6DKELhPL2Y+ves
-	 ic0hueZT0Vhjw5W/WMP8ScUwtmWgYe5ddFkp0WSMnfwkKyOIaPm8g72GAP4a9oRYIh
-	 eczRGNHi2x+9ZbEtaBPBCMAIRUWwewUQq0n+9WN/mn+H0p/41j6p7w9R7UUftUP2wp
-	 p5aDOhdD69kHxVxNI4gy4WJqN98J5POMN/Lrn6XJI0YFiO5MZcM4CjWCO4LKStdKd5
-	 zLwOMKhLv6NWw5ozJgMSKa7zNwOjxzyqTMkrfFOmbmAxHjZrQPoRrM9g8di5jQbsrx
-	 llS6jAQ+ZH/pA==
-Message-ID: <c99dbf5e-9396-44bc-973f-cb7edaf6c0dc@kernel.org>
-Date: Fri, 28 Jun 2024 09:47:29 +0200
+	b=Y6RiG23z69aCffJy0NTLVKqSETo/QxSs1fcdyqXXZiDFikz81WLMMGSrZ8fpX2Xgs
+	 UrFrYHnFJp/x5hxoWuPRKpveFjZwJdEBRLsakz4VKTJS0nwReePrv5EPrifL+UTrKM
+	 ItWXec9mMmFLpcgb2r8w3JaP8gc2W4FKVhnWpwJS+5b3LIKggNTUPlwXlD/FX2RTaF
+	 0Bny5YFR3Tc6gV0IGjnPxS6imOUUb0XCfRMePJQ8AgAi3lg2Xp02u3qDH6zq4HO3qr
+	 RLbRySEO/+jFRA1BByRnPbR6TBap24tsrx1qrleN8F18zR3uLtTUFGE3qiiuToQg8A
+	 Sjp3BAR5UXmNg==
+Message-ID: <819cda69-8502-4a1d-94ed-742cb7e2b50c@kernel.org>
+Date: Fri, 28 Jun 2024 09:48:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch v5 02/12] dt-bindings: dma: Add lpc32xx DMA mux binding
+Subject: Re: [Patch v5 12/12] i2x: pnx: Fix potential deadlock warning from
+ del_timer_sync() call in isr
 To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
  Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -63,15 +64,15 @@ To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
  Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
  Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
  Yangtao Li <frank.li@vivo.com>, Arnd Bergmann <arnd@arndb.de>,
- Li Zetao <lizetao1@huawei.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Chancel Liu <chancel.liu@nxp.com>, Corentin Labbe <clabbe@baylibre.com>,
+ Li Zetao <lizetao1@huawei.com>, Chancel Liu <chancel.liu@nxp.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Corentin Labbe <clabbe@baylibre.com>,
  dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
  linux-sound@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org
 References: <20240627150046.258795-1-piotr.wojtaszczyk@timesys.com>
- <20240627150046.258795-3-piotr.wojtaszczyk@timesys.com>
+ <20240627150046.258795-13-piotr.wojtaszczyk@timesys.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -117,18 +118,19 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240627150046.258795-3-piotr.wojtaszczyk@timesys.com>
+In-Reply-To: <20240627150046.258795-13-piotr.wojtaszczyk@timesys.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/06/2024 17:00, Piotr Wojtaszczyk wrote:
-> LPC32XX SoCs use pl080 dma controller which have few request signals
-> multiplexed between peripherals. This binding describes how devices can
-> use the multiplexed request signals.
-> 
-> Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
+> When del_timer_sync() is called in an interrupt context it throws a warning
+> because of potential deadlock. The timer is used only to exit from
+> wait_for_completion() after a timeout so replacing the call with
+> wait_for_completion_timeout() allows to remove the problematic timer and
+> its related functions altogether.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject typo: i2c
+
 
 Best regards,
 Krzysztof
