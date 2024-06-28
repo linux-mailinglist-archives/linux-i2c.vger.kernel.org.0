@@ -1,65 +1,64 @@
-Return-Path: <linux-i2c+bounces-4484-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4485-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FCC991C5CE
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 20:34:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78F4F91C5D5
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 20:35:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 713D51C209D0
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 18:34:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DD461F21201
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 18:35:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E21EA1CE09E;
-	Fri, 28 Jun 2024 18:33:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C056E1CFD7F;
+	Fri, 28 Jun 2024 18:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jNNbF4ke"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Z4I56sd9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECC11CE095;
-	Fri, 28 Jun 2024 18:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFFB1CFD6E;
+	Fri, 28 Jun 2024 18:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719599608; cv=none; b=b0har60lTthKivqVq80AoGr/eCGGtSPxGrz4N/XYDvSNow80bw/UFirX5HAVIU6gqo7pope9LmsjLABL9hLgM1bdn9qGkGd1A1M9HI0mGHjhvm8DoFbFI2yUeT0RspkPMgXAZjMZzn7giECjmpr/s5g429hajLPEWksQn7WHhM0=
+	t=1719599611; cv=none; b=a9hmDOciBdr9Tn9/HCzDLEI2RzWANXACld2S6nIPPiw0rxpBpIU1v/17Ql0gxiBoKMCfUXhcf2eQeLFKsaNA1SVJtRvZk/DjQ+AAW1F0VvilaXZplVClfdPXpE4UO1XaTaAaty8j7KsHRxDzv3WVgFqZWP9TvcZPRWBEEl5eyMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719599608; c=relaxed/simple;
-	bh=SAeTdhTzDtl0fFBhjpmwjz26B2o2pEXlFxAhnOSVl3w=;
+	s=arc-20240116; t=1719599611; c=relaxed/simple;
+	bh=itUnfizkjmWvh/KtRO0AOl5/rTtZSZ3+zEgz3qRVdEA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Po5pbrtfvI/NO4vkGSEmQO5geomwuTCrLEfjGdVdUpogHk6cGDXosGBa5rG+w8Qpcej4lMtrleYQKtFntnMpwtWjyCxJnjLcBFbdy1a79bwNLv/kqCIh23H6aZraxFVgmLLxUd2AW3/dsrSSzNCrz2svTB2amyME3VWqjT/5t3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jNNbF4ke; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:CC; b=uAHWuSaqM90A6EdF1cSanSJrFz0OdqraVaSnudvJHVotFOQfJCtdZA37EEEzGRsLBRwydu97YCYpZeZ0ved9UN9wsWJ9RsYYffMfA+WdO/ebRWxWBgoP1YnfH4FFD0AmsmUtqSRzRGVzl2ERK4wIiYtVM8sUvkz7gXgLM6/ADhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Z4I56sd9; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45SGSG3H010656;
-	Fri, 28 Jun 2024 18:33:22 GMT
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45SHj1rd028637;
+	Fri, 28 Jun 2024 18:33:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	mq39WuBjbbhXR4vJo5xCtDNEnz8QDl/elFG9Wu63Hvo=; b=jNNbF4kez7EzfpYH
-	a5rsITzUcLbzVLX6wi8oG2h9/XpZHWWckAzXAyRcUnbcJKngr6iwY+hmlyYAGL6a
-	fKCcvJdoeGHZYCjM1LPNGUv9qaPzh2Xy+vz0kg/SgCOhUL+bnPWDuYjWBOUYTE6v
-	vmnjThwe1ULepiRdajzz170qPWR/Flbhqo1Rki8A6sPO4R2ZREbJ7KU7CJAi/ZxT
-	hyLmPXyq8VBrNw4r0wIBHoo8CfILKBL1+ZTqknctgzgDCXxFKaFGIiPs7M30fbaa
-	fBo4ms9JAToaxdFsS+f/fEp9BMFRlse2P9kEqWI7Pkj/PrAzLowISCqU/3SBWdHm
-	Y/jnTA==
+	1iaqd6qOwHhXsR0PkkgJNhyOo9NG/71cAUModrxQlYw=; b=Z4I56sd9iGbeA1R1
+	jSjJ4ruZaNrCU75jUarufmcUS1V+GJD74hVwj7dt8aCEFFXmoMCfJ3NUdIj8Sfb9
+	kkiBYRDMf8mcJh3WZ6Uf5dNjXqn55Zi3XGG2TJalUoSQPrVEvuCdfE3LJptPgRpx
+	a65qgtwooUbLgmgFfLemlCtlp9AlqjrvVBpfMj0KrUZejxqrKBJ+JosPYNPx4ddG
+	GtXpTMB7bU5cHS4HyZ4rTh1A6WpU1dS9K6ZyPkxu+wX5d1E4wMUfed7sEcjRhVz5
+	j/3UEDmVHp7OkTJO+Z3cCwkhg3aTdZbRIWoQ9xOqqO3yJcSjI+ebzHpNrqfBDoVm
+	UTATZg==
 Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 400bdqgvqa-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 401pm32mfg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 28 Jun 2024 18:33:22 +0000 (GMT)
+	Fri, 28 Jun 2024 18:33:25 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45SIXIHB030276
+	by NASANPPMTA05.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45SIXOsG030363
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 28 Jun 2024 18:33:18 GMT
+	Fri, 28 Jun 2024 18:33:24 GMT
 Received: from hu-vikramsa-hyd.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 28 Jun 2024 11:33:12 -0700
+ 15.2.1544.9; Fri, 28 Jun 2024 11:33:18 -0700
 From: Vikram Sharma <quic_vikramsa@quicinc.com>
-Date: Sat, 29 Jun 2024 00:02:38 +0530
-Subject: [PATCH 4/6] arm64: dts: qcom: qcs6490-rb3gen2: Enable IMX577
- camera sensor
+Date: Sat, 29 Jun 2024 00:02:39 +0530
+Subject: [PATCH 5/6] i2c: Enable IMX577 camera sensor for qcm6490
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -68,7 +67,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240629-camss_first_post_linux_next-v1-4-bc798edabc3a@quicinc.com>
+Message-ID: <20240629-camss_first_post_linux_next-v1-5-bc798edabc3a@quicinc.com>
 References: <20240629-camss_first_post_linux_next-v1-0-bc798edabc3a@quicinc.com>
 In-Reply-To: <20240629-camss_first_post_linux_next-v1-0-bc798edabc3a@quicinc.com>
 To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
@@ -95,114 +94,48 @@ CC: <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <linux-i2c@vger.kernel.org>, Vikram Sharma <quic_vikramsa@quicinc.com>,
         Hariram Purushothaman <quic_hariramp@quicinc.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719599566; l=2083;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1719599567; l=936;
  i=quic_vikramsa@quicinc.com; s=20240628; h=from:subject:message-id;
- bh=SAeTdhTzDtl0fFBhjpmwjz26B2o2pEXlFxAhnOSVl3w=;
- b=fSEkrDn5gOsEjxHEkYWvnC3QvQ9VI/wE5g8PQ6pVb9hJUKzmjiwXmWwKQaqfUmoyCByvgpo21
- XYbrovFrVE0DmaVLoxlNcueKscvXaJ6g3Va5sM1fA4mQDiQ9fRx5SOX
+ bh=itUnfizkjmWvh/KtRO0AOl5/rTtZSZ3+zEgz3qRVdEA=;
+ b=pSoWFc9+3u8Usa/vHe9ecUsr/LAXBsZhSomtmt7ZCMwYpCnqR7rUYQcPo4hvE07oDvIku6v9G
+ 2TOzflAVFQYAH7W0EK3pf5SR9jzk8ejgXR+wXzWy6F0gOo2IpOgbYLd
 X-Developer-Key: i=quic_vikramsa@quicinc.com; a=ed25519;
  pk=vQBkwZr1Hv+VXogAyTAu7AEx8/6bvkOmgrzYFbNGCDI=
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Q03Eu4Rhk116yCrrabxLyNLOGW_ZWbQl
-X-Proofpoint-GUID: Q03Eu4Rhk116yCrrabxLyNLOGW_ZWbQl
+X-Proofpoint-ORIG-GUID: PZPcc8oAxrgU_eBiFQs8Ri-wt6NwE6za
+X-Proofpoint-GUID: PZPcc8oAxrgU_eBiFQs8Ri-wt6NwE6za
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-28_14,2024-06-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=805
- adultscore=7 bulkscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
- mlxscore=0 suspectscore=0 priorityscore=1501 clxscore=1015 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
- definitions=main-2406280138
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 priorityscore=1501 suspectscore=0 mlxscore=0 bulkscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2406280138
 
-Enable IMX577 camera sensor for qcs6490-rb3gen2.
+This change enables IMX577 sensor driver for qcm6490.
 
 Signed-off-by: Hariram Purushothaman <quic_hariramp@quicinc.com>
 Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 67 ++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ drivers/i2c/busses/i2c-qcom-cci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-index c4cde4328e3d..237231600dca 100644
---- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-+++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
-@@ -513,6 +513,73 @@ vreg_bob_3p296: bob {
- 	};
- };
- 
-+&camcc {
-+	status = "okay";
-+};
-+
-+&camss {
-+	status = "disabled";
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		/* The port index denotes CSIPHY id i.e. csiphy2 */
-+		port@3 {
-+			reg = <3>;
-+			csiphy3_ep: endpoint {
-+				clock-lanes = <7>;
-+				data-lanes = <0 1 2 3>;
-+				remote-endpoint = <&imx412_ep>;
-+			};
-+		};
-+	};
-+};
-+
-+&cci0 {
-+	status = "okay";
-+};
-+
-+&cci1 {
-+	status = "okay";
-+};
-+
-+&cci1_i2c1 {
-+	camera@1a {
-+		/*
-+		 * rb3gen2 ships with an imx577. qcom treats imx412
-+		 * and imx577 the same way. Absent better data do the same here.
-+		 */
-+		compatible = "sony,imx412";
-+		reg = <0x1a>;
-+
-+		reset-gpios = <&tlmm 78 GPIO_ACTIVE_LOW>;
-+		pinctrl-names = "default", "suspend";
-+		pinctrl-0 = <&cam2_default>;
-+		pinctrl-1 = <&cam2_suspend>;
-+
-+		clocks = <&camcc CAM_CC_MCLK3_CLK>,
-+				 <&camcc CAM_CC_MCLK2_CLK>;
-+		assigned-clocks = <&camcc CAM_CC_MCLK3_CLK>,
-+				 <&camcc CAM_CC_MCLK2_CLK>;
-+		assigned-clock-rates = <24000000>,
-+							   <24000000>;
-+
-+		dovdd-supply  = <&vreg_l18b_1p8>;
-+		/* avdd-supply = <&vdc_5v>;
-+		 * dvdd-supply = <&vdc_5v>;
-+		 */
-+
-+		port {
-+			imx412_ep: endpoint {
-+				clock-lanes = <7>;
-+				link-frequencies = /bits/ 64 <600000000>;
-+				data-lanes = <0 1 2 3>;
-+				remote-endpoint = <&csiphy3_ep>;
-+			};
-+		};
-+	};
-+};
-+
- &gcc {
- 	protected-clocks = <GCC_CFG_NOC_LPASS_CLK>,
- 			   <GCC_MSS_CFG_AHB_CLK>,
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index 414882c57d7f..10e6df566ae3 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -817,6 +817,7 @@ static const struct of_device_id cci_dt_match[] = {
+ 	 * Do not add any new ones unless they introduce a new config
+ 	 */
+ 	{ .compatible = "qcom,msm8916-cci", .data = &cci_v1_data},
++	{ .compatible = "qcom,sc7280-cci", .data = &cci_v2_data},
+ 	{ .compatible = "qcom,sdm845-cci", .data = &cci_v2_data},
+ 	{ .compatible = "qcom,sm8250-cci", .data = &cci_v2_data},
+ 	{ .compatible = "qcom,sm8450-cci", .data = &cci_v2_data},
 
 -- 
 2.25.1
