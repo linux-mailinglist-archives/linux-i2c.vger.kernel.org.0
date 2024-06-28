@@ -1,72 +1,63 @@
-Return-Path: <linux-i2c+bounces-4479-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4480-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5E2891C598
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 20:23:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A8A291C5BA
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 20:33:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 151D81C23081
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 18:23:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E5AF286F4E
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jun 2024 18:33:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C9EF1CD5AE;
-	Fri, 28 Jun 2024 18:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E524E1CE083;
+	Fri, 28 Jun 2024 18:33:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZdyI0W+n"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="L3l3M+88"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85701C0DF0;
-	Fri, 28 Jun 2024 18:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DED1CB33D;
+	Fri, 28 Jun 2024 18:32:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719599023; cv=none; b=XCteQ3jldpDEaxn6A+zQ+qNn6MVXjXiBQ2r/pyjnbKQFfXUHMK6ojF7M4Dve58TdeIpdHfMHHwMrxQkoxXPVMoTC9V06p6xv3fgaZ2JOGSnmnZ3JumUs66BhxNfF9z7niKviBTSOGSHfYdqRN7rL79kGZrcIDGdCiBzb9KlUuEA=
+	t=1719599581; cv=none; b=bqYzGm9KgHlo2DUzA7pcAusZMENhmm6OyQeG8wMbTcp7ShkqX0o9Unl458wVhHVmVSXBmpck5bG5GrlHs/raEgxbPVsMldNJu65ZHVLQvajOXyduxDBhz3rmjlFSJodvnswMo49e9Nx/WWsuOO2iwn79Kq29cTKq3VqWAV1fPQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719599023; c=relaxed/simple;
-	bh=PSU3tdTo76FLPP7xiWLKc41rwOiwu52i+9dzvpqpwII=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=YITa3NWvSVBIJjjxew5TnX4sWnkMae3Eutk+9DibksXkIDizWHyu7ipLcjvDU7nqaY97yMWQ7PeKp8q9qcPfbG5/o0JjfkclRLVAI7l5PD9MZcvc39+61gDClDmXz8ALQLB1f5yjNv3BL8snxTt3kHFJizvlVcTJoo3wDoQG64I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZdyI0W+n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72894C116B1;
-	Fri, 28 Jun 2024 18:23:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719599023;
-	bh=PSU3tdTo76FLPP7xiWLKc41rwOiwu52i+9dzvpqpwII=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=ZdyI0W+nmqUJCWipPdNf4cmBtY+rypYDwx+itWdMspkZMxFXGqTXLiqwqj+P/L2HW
-	 ayxR9qnJXpys3ydRLPfokVQx98MOeqM03nKa/ytsBexikuA9liqDpHV1OfVVALU+tE
-	 f7Fj4nqi4PEUTPns+yPNM8egQuCOh0Ovv/wpOD+UZ/8SlcGE22Ghaiomf6798XikSx
-	 0fgHRjbt7tZT77y95s6ou8xunrmc2rYTHBH4XJGA+fSkOoEi4YpexqWOIht15+aPX7
-	 D00T9WThNkC2oKuTUBzvB83od0XpV7aqlLaIS7DCv64svIp/Io9uTUPLn1flWW5vhe
-	 Y1c3dtBmP4QfA==
-From: Mark Brown <broonie@kernel.org>
-To: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- "J.M.B. Downing" <jonathan.downing@nautel.com>, 
- Vladimir Zapolskiy <vz@mleia.com>, Liam Girdwood <lgirdwood@gmail.com>, 
- Russell King <linux@armlinux.org.uk>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Arnd Bergmann <arnd@arndb.de>, Yangtao Li <frank.li@vivo.com>, 
- Li Zetao <lizetao1@huawei.com>, Chancel Liu <chancel.liu@nxp.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Corentin Labbe <clabbe@baylibre.com>, 
- dmaengine@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org, 
- linux-sound@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-In-Reply-To: <20240627150046.258795-1-piotr.wojtaszczyk@timesys.com>
-References: <20240627150046.258795-1-piotr.wojtaszczyk@timesys.com>
-Subject: Re: (subset) [Patch v5 00/12] Add audio support for LPC32XX CPUs
-Message-Id: <171959901719.141669.17001815513243855671.b4-ty@kernel.org>
-Date: Fri, 28 Jun 2024 19:23:37 +0100
+	s=arc-20240116; t=1719599581; c=relaxed/simple;
+	bh=5LAdAIQuYnxGpxmiqIzO3Z9pvIcKdsqVhCyKx/HScdU=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=d6EV7dx6WBwVI9YapdIxV5Q5hREeBjxTNWEuUFoxjnGaFt8WTtiDSVH+KPZgF+dVnQ9qJO8k4V7Mp788vN+hqLKHXvgB5jeY8GxL8O4ePLiTrZfiMbrOKxsA9pAWazHXp02ltcHEOXeslVl+48e+BwCOMS6m2QITDW3xz38EAU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=L3l3M+88; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45SHWPvf000535;
+	Fri, 28 Jun 2024 18:32:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=r2Eq70wmRF03zhdc2osX0V
+	jF81z3X/LLIZfDvswHpUI=; b=L3l3M+88bSNL9TpIv5sX0KLJ7R+pwUFBvJ8QxC
+	o9pVdxjzTsngV4w6NWUOGZ78WNWSyCMPeYzNCncTnqklKsC71EHEQPigeMN9dJ1B
+	phaVOp4sH9oYoYEAj3K7NUvZ/zLdKsDAolQjwZ+bhm5kIaLZfZE+Uvjr8qILW+OQ
+	ZIijXhUxjE27OdMQNh2nqGZVXtuyTqYaondGA6FMlvFxHSosKkxYSBr36jps9Q/O
+	iEj8IrtgzULgwmyZLyHVtwK1PV5AItX432wxgNQQlsGJRPIzN/U557Y+s7m92Ga+
+	YYjWgJL3xUrwBgqWUo/0GC7wdxX7ILlUkdrGg0C2wjMwLxtA==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 401ubvsjvd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Jun 2024 18:32:54 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45SIWrq6020098
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Jun 2024 18:32:53 GMT
+Received: from hu-vikramsa-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 28 Jun 2024 11:32:47 -0700
+From: Vikram Sharma <quic_vikramsa@quicinc.com>
+Subject: [PATCH 0/6] media: qcom: camss: Add sc7280 support
+Date: Sat, 29 Jun 2024 00:02:34 +0530
+Message-ID: <20240629-camss_first_post_linux_next-v1-0-bc798edabc3a@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -74,59 +65,122 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14-dev-d4707
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMIBf2YC/x3MQQqAIBBA0avErBPMpKirREjYWANl4VQI0t2TN
+ h/e5idgDIQMfZEg4ENMh8+oygLsOvkFBc3ZoKTSslGtsNPObBwFvsx55Gzk72g8xks4XTW17aT
+ sagv5cAZ0FP/7ML7vB8dWiz5tAAAA
+To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        "Bryan
+ O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kapatrala Syed
+	<akapatra@quicinc.com>,
+        Hariram Purushothaman <hariramp@quicinc.com>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Loic
+ Poulain" <loic.poulain@linaro.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, Vikram Sharma <quic_vikramsa@quicinc.com>,
+        Suresh Vankadara <quic_svankada@quicinc.com>,
+        Trishansh Bhardwaj
+	<quic_tbhardwa@quicinc.com>,
+        Hariram Purushothaman
+	<quic_hariramp@quicinc.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1719599566; l=2390;
+ i=quic_vikramsa@quicinc.com; s=20240628; h=from:subject:message-id;
+ bh=5LAdAIQuYnxGpxmiqIzO3Z9pvIcKdsqVhCyKx/HScdU=;
+ b=gUV8kFwt16n8/gJijlTtUEqz9rm9j6sLP9cei1bsOxi2wuC9IEuBYp5e9krKWiNHpdTPJWydB
+ BW/zW8CaxzdDYn8Hl/jJeJE1WQZx+mavWOCLUMp8NWRNYlPXutAUPMJ
+X-Developer-Key: i=quic_vikramsa@quicinc.com; a=ed25519;
+ pk=vQBkwZr1Hv+VXogAyTAu7AEx8/6bvkOmgrzYFbNGCDI=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: T2uW-gkYVmSooAXMzR-xZg6bnDJbfcuk
+X-Proofpoint-GUID: T2uW-gkYVmSooAXMzR-xZg6bnDJbfcuk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-28_14,2024-06-28_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ bulkscore=0 clxscore=1011 suspectscore=0 spamscore=0 mlxlogscore=578
+ adultscore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2406280138
 
-On Thu, 27 Jun 2024 17:00:18 +0200, Piotr Wojtaszczyk wrote:
-> This pach set is to bring back audio to machines with a LPC32XX CPU.
-> The legacy LPC32XX SoC used to have audio spport in linux 2.6.27.
-> The support was dropped due to lack of interest from mainaeners.
-> 
-> Piotr Wojtaszczyk (12):
->   dt-bindings: dma: pl08x: Add dma-cells description
->   dt-bindings: dma: Add lpc32xx DMA mux binding
->   ASoC: dt-bindings: lpc32xx: Add lpc32xx i2s DT binding
->   ARM: dts: lpc32xx: Use simple-mfd for clock control block
->   ARM: dts: lpc32xx: Add missing dma properties
->   ARM: dts: lpc32xx: Add missing i2s properties
->   clk: lpc32xx: initialize regmap using parent syscon
->   dmaengine: Add dma router for pl08x in LPC32XX SoC
->   ARM: lpc32xx: Remove pl08x platform data in favor for device tree
->   mtd: rawnand: lpx32xx: Request DMA channels using DT entries
->   ASoC: fsl: Add i2s and pcm drivers for LPC32xx CPUs
->   i2x: pnx: Fix potential deadlock warning from del_timer_sync() call in
->     isr
-> 
-> [...]
+SC7280 is a Qualcomm SoC. This series adds support to
+bring up the CSIPHY, CSID, VFE/RDI interfaces in SC7280.
 
-Applied to
+SC7280 provides
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+- 3 x VFE, 3 RDI per VFE
+- 2 x VFE Lite, 4 RDI per VFE
+- 3 x CSID
+- 2 x CSID Lite
+- 5 x CSI PHY
 
-Thanks!
+This series is rebased based on：
+https://lore.kernel.org/linux-arm-msm/20240522154659.510-1-quic_grosikop@quicinc.com/
 
-[03/12] ASoC: dt-bindings: lpc32xx: Add lpc32xx i2s DT binding
-        commit: 752fea92d9b3e4255a2f75e7efa6fe148562ccbf
-[11/12] ASoC: fsl: Add i2s and pcm drivers for LPC32xx CPUs
-        commit: 0959de657a10cc40b2cc41cff9169ab0e0fd4456
+The changes are verified on SC7280 qcs6490-rb3gen2 board, the base dts for qcs6490-rb3gen2
+is:
+https://lore.kernel.org/all/20231103184655.23555-1-quic_kbajaj@quicinc.com/
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Suresh Vankadara (2):
+media: qcom: camss: support for camss driver on sc7280
+arm64: dts: qcom: sc7280: Add support for camss
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Trishansh Bhardwaj (2):
+media: qcom: camss: support for camss driver on sc7280
+arm64: dts: qcom: sc7280: Add support for camss
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Vikram Sharma (1):
+media: dt-bindings: media: camss: Add qcom,sc7280-camss binding
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Hariram Purshotam (3):
+i2c: Enable IMX577 camera sensor for qcm6490
+arm64: dts: qcom: qcs6490-rb3gen2: Enable IMX577 camera sensor
+arm64: dts: qcom: sc7280: Add IMX577 camera sensor
 
-Thanks,
-Mark
+Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
+---
+Suresh Vankadara (1):
+      media: qcom: camss: support for camss driver for sc7280
+
+Vikram Sharma (5):
+      media: dt-bindings: media: camss: Add qcom,sc7280-camss binding
+      arm64: dts: qcom: sc7280: Add support for camss
+      arm64: dts: qcom: sc7280: Add IMX577 camera sensor
+      arm64: dts: qcom: qcs6490-rb3gen2: Enable IMX577 camera sensor
+      i2c: Enable IMX577 camera sensor for qcm6490
+
+ .../bindings/media/qcom,sc7280-camss.yaml          | 477 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts       |  67 +++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 215 ++++++++++
+ drivers/i2c/busses/i2c-qcom-cci.c                  |   1 +
+ drivers/media/platform/qcom/camss/camss-csid.c     |  16 +-
+ .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     |   2 +
+ drivers/media/platform/qcom/camss/camss-vfe.c      |   2 +
+ drivers/media/platform/qcom/camss/camss.c          | 340 +++++++++++++++
+ drivers/media/platform/qcom/camss/camss.h          |   2 +
+ 9 files changed, 1119 insertions(+), 3 deletions(-)
+---
+base-commit: 18eeb2d92baca167809cd5d48eb60e0a5c036d51
+change-id: 20240627-camss_first_post_linux_next-f4163c90093c
+
+Best regards,
+-- 
+Vikram Sharma <quic_vikramsa@quicinc.com>
 
 
