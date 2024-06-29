@@ -1,175 +1,141 @@
-Return-Path: <linux-i2c+bounces-4502-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4503-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EA0F91CD04
-	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2024 15:10:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A674D91CD44
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2024 15:37:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0975E1F23621
-	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2024 13:10:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC7291C21596
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2024 13:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497787F487;
-	Sat, 29 Jun 2024 13:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B88A80BF7;
+	Sat, 29 Jun 2024 13:37:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lUgoBi7P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aqSLbEwA"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E5447F4A
-	for <linux-i2c@vger.kernel.org>; Sat, 29 Jun 2024 13:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B8980BEE;
+	Sat, 29 Jun 2024 13:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719666649; cv=none; b=YIcX8r6qx8/TaYWWU0ZHR2osDK1ZeizA+jndQzsdU4eHnPM7NuxqMXBnVURLH0UO6D8YTZPa6/SY6kobjh8Ztc3DJv+uRJX6y35bcmeQCHrMGd/fO4P7GEGOtwRIqXu3luE7YRYXiLeu1eXSEZCH03Ongo7iu4RO6xB5GlIaJGI=
+	t=1719668260; cv=none; b=evA9Z+CrZYRthhFJKTPt1LekJsELtPAxryD3HbtC55FEPqEFdy/wLjN3u/3Ow1jI32Sby5mRWZns5yHGHnT+p8w3H5vjfdQvvQTAeV7QTqPde9dVr0NL6ClaFWvjF0rnu7V+Ji8Hm3xHXPX2hLNqGQPXeFRHWMiiMOJYyvarZ7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719666649; c=relaxed/simple;
-	bh=Zc9sO0I5Bw+ymeOBrEoIlWnptOfQfEsWBo61k8+NyvY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fmzep8eGoTi1MezDLvK5YJKA4nZbupDCTHzPRu446wD31LBIBEB9yWPeoFkPNocJrfeJKo6yWR5gsmQJwhcFHY3dWoyHfM0UhyQvQMCOwZQaIOrmCa1V9/ztvsSD1ii9tk8t6YKn1POiXXG7wuo36HjDhCfKhRRkdbzTJJJ4wlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lUgoBi7P; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a72af03ebdfso201733066b.3
-        for <linux-i2c@vger.kernel.org>; Sat, 29 Jun 2024 06:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719666646; x=1720271446; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NYxUnwUSohZuqH5Y3Oi4aiVD5zcwYSgn+PulSvwJzXQ=;
-        b=lUgoBi7PZyZazKChLZOIhAWtoTXHWBvK73zEYmwhjyKyO/agvUBakL8OP2/pvnA4dd
-         aa/xzcqwxt4nHtIkuYTBNBbJ7jhdOLJJy1c37EeyApPs9zEw1CJxgBgkDtBXWw9yNxAs
-         G6oBbxhi/HqWMnSqs4t2id9i/0ZCa7lrCFz4I/HYd32APBMnUTS7uYywk1B2NyXuFKVu
-         ONm6Fxbx6Wkx/8MitNmzYK2jD0CF1aXF6bmBs2RGBF6HV6IXWTgVSbToouFnJxWzAlHz
-         5RJLVz2FALnnz/4gjOc3lOotpgiHqt8N9675edo998KAfsthvl7PcqEfDFwHlL+EieFr
-         nzgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719666646; x=1720271446;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NYxUnwUSohZuqH5Y3Oi4aiVD5zcwYSgn+PulSvwJzXQ=;
-        b=OZ7PK787gA7adRGNZ0U81X79mtnodbTZLkTDNJilXYCFu3baEcY+b29vl7vUQkY2R7
-         fi+cSQKL4Y0EE79i8A1uR+AFSvXMby/qhae3fQ4Z0N4TrlM2S+tpwBL7GeeTYlZNgYu0
-         Yw7O0JWsx5o7L4A/1gov/XHcxD1uSJR7ESGwNi+pChslKDCqlSyRM17LfWEN45eMbpvP
-         G2qlWxDUDLXV1gOmkcz1oMcWj/03EGGOTMyHtigxDJTNmqMFj6xux14nbDzFTOzgS7YM
-         Qn+zZWmXmoWUAoVw9ema0xtbKCn/9VtfvIMTKFbS0DU5tyeI0j2Q2wOh9sJSmr4hhpKT
-         JxZA==
-X-Forwarded-Encrypted: i=1; AJvYcCXcgXL6Vj3v0pvGBQtRyKBM/LxEHfDEop1iY7HXJdrNebUQhE9qrT+jf0KQ3k6GZ4DUM/QkPEBR3iq5JH/kAfrX7QNpXFFsrC2I
-X-Gm-Message-State: AOJu0YxxkP2uTxitZnUrwSXnzVf6vCOqazUw4Fp50dFOwGv23rrEUR+j
-	EbT6TYjF5rbGLgzb7EA3UwUAgU39oi/e4519PqzaTvv5Uup1TG/cHgYRMuzv6v8=
-X-Google-Smtp-Source: AGHT+IF+d1chV2WaX+/TeZL5Zwzjo9i5T/U6DacLXmVqnZmlmiiqw31CXiOO6ryly0BzFkD1Mv1m5Q==
-X-Received: by 2002:a17:907:728e:b0:a6f:9b06:6b42 with SMTP id a640c23a62f3a-a75142d855bmr67725466b.5.1719666645529;
-        Sat, 29 Jun 2024 06:10:45 -0700 (PDT)
-Received: from [192.168.215.29] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72ab0b56a0sm163117866b.199.2024.06.29.06.10.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Jun 2024 06:10:45 -0700 (PDT)
-Message-ID: <a35aacc5-a9d6-4a8e-b016-c23236413871@linaro.org>
-Date: Sat, 29 Jun 2024 15:10:41 +0200
+	s=arc-20240116; t=1719668260; c=relaxed/simple;
+	bh=dqQDZvowwBChjuJGhkhif3m/CmZP0CoBJ1KWcJsYoWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OsS9R8x1pRzh41aXAjNHmRCSzuEpUKkV8EBLiM2Rg74Vl9OSYlewbxdRuPSdx2x9GzK/JDrPqvXibcvMQ6/Oq/IU2j9Keb3You6IHi+lKe0iHPuDdeiwuEt0rGt8yHVrCfcDl180zE20U+uVrxnki71HcarzwfE77XUHKDrh2q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aqSLbEwA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A68DC2BBFC;
+	Sat, 29 Jun 2024 13:37:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719668259;
+	bh=dqQDZvowwBChjuJGhkhif3m/CmZP0CoBJ1KWcJsYoWY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=aqSLbEwAi+lF14D7sPC/B15D6Z7lGoZUVvGZxn9YX8o/H43KfUh56m2wPPo7smbys
+	 n8lndxZFWMcpd7ZVe7sb1y3CfkTMsvfTemFPPyvpJreXjP+RI0nAX2+qCUclsEGetT
+	 1/P/RrpSIdb9lAKTuTvnjrexKJPCvCT55N3QZiR07IGBecMXRfv+vN/5TlA554Kq0S
+	 ucYFqCs/Zi/qKSylmP9JPXr6i5wvXrWcqSwxCOnAAnMGRfaA+3HUV+s1hTgJiJ9a9n
+	 CePkSqUDF+jGdWemDD/Sw5yIpM4lq9zjLB20rqekhAYmOo8/1rAfndRw188Go5OypW
+	 GQmidjmWl9eGA==
+Date: Sat, 29 Jun 2024 15:37:36 +0200
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.10-rc6
+Message-ID: <ZoAOIATcp1T_89x2@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] arm64: dts: qcom: sc7280: Add IMX577 camera sensor
-To: Vikram Sharma <quic_vikramsa@quicinc.com>, Robert Foss
- <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Kapatrala Syed <akapatra@quicinc.com>,
- Hariram Purushothaman <hariramp@quicinc.com>,
- cros-qcom-dts-watchers@chromium.org, Bjorn Andersson <andersson@kernel.org>,
- Loic Poulain <loic.poulain@linaro.org>, Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, Hariram Purushothaman
- <quic_hariramp@quicinc.com>, Trishansh Bhardwaj <quic_tbhardwa@quicinc.com>
-References: <20240629-camss_first_post_linux_next-v1-0-bc798edabc3a@quicinc.com>
- <20240629-camss_first_post_linux_next-v1-3-bc798edabc3a@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20240629-camss_first_post_linux_next-v1-3-bc798edabc3a@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Etker0Y8FjzdLkMR"
+Content-Disposition: inline
 
-On 28.06.2024 8:32 PM, Vikram Sharma wrote:
-> Add support for IMX577 camera sensor for SC7280 SoC.
-> 
-> Signed-off-by: Hariram Purushothaman <quic_hariramp@quicinc.com>
-> Signed-off-by: Trishansh Bhardwaj <quic_tbhardwa@quicinc.com>
-> Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 9ac251fec262..1c99ee09a11a 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -5167,6 +5167,39 @@ cci3_sleep: cci3-sleep-state {
->  				bias-pull-down;
->  			};
->  
-> +			cam2_default: cam2-default {
-> +				rst {
-> +					pins = "gpio78"; /*cam3*/
 
-You can drop these comments.. the node name and label suggest this is
-cam*2* anyway
+--Etker0Y8FjzdLkMR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +					function = "gpio";
-> +					drive-strength = <2>;
-> +					bias-disable;
-> +				};
-> +
-> +				mclk {
-> +					pins = "gpio67"; /*cam3*/
-> +					function = "cam_mclk";
-> +					drive-strength = <2>; /*RB5 was 16 and i changed to 2 here*/
+Linus,
 
-/* why? */
+Arnd's patch seems a bit large for rc6. It was in place for rc3 but fell
+through the cracks :( We are sorry about that.
 
-Konrad
+The following changes since commit f2661062f16b2de5d7b6a5c42a9a5c96326b8454:
+
+  Linux 6.10-rc5 (2024-06-23 17:08:54 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.10-rc6
+
+for you to fetch changes up to c116deafd1a5cc1e9739099eb32114e90623209c:
+
+  i2c: testunit: discard write requests while old command is running (2024-06-28 20:44:38 +0200)
+
+----------------------------------------------------------------
+Two fixes for the testunit and and a fixup for the code reorganization
+of the previous wmt-driver
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      i2c: viai2c: turn common code into a proper module
+
+Wolfram Sang (3):
+      Merge tag 'i2c-host-fixes-6.10-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current
+      i2c: testunit: don't erase registers after STOP
+      i2c: testunit: discard write requests while old command is running
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andi Shyti (2):
+      (Rev.) i2c: testunit: discard write requests while old command is running
+      (Rev.) i2c: testunit: don't erase registers after STOP
+
+Hans Hu (1):
+      (Test) i2c: viai2c: turn common code into a proper module
+
+ drivers/i2c/busses/Makefile             |   6 +-
+ drivers/i2c/busses/i2c-viai2c-common.c  |  71 +++-----------------
+ drivers/i2c/busses/i2c-viai2c-common.h  |   2 +-
+ drivers/i2c/busses/i2c-viai2c-wmt.c     |  36 ++++++++++
+ drivers/i2c/busses/i2c-viai2c-zhaoxin.c | 113 +++++++++++++++++++++++++-------
+ drivers/i2c/i2c-slave-testunit.c        |   5 +-
+ 6 files changed, 143 insertions(+), 90 deletions(-)
+
+--Etker0Y8FjzdLkMR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaADiAACgkQFA3kzBSg
+KbaB/w/+IbGFUNgGgNSx7C/2JVazFD/j/QQWhdy+O/6SYGQMa4SIat3GYAwPy8d9
+QRl0SM0kds0e5v5Rdr7gpiuMxXnAqN/FSKYr+LPYbmOReDkWD+uaOBC5R8yRz5oA
+SeHeBqdPmwWxLFLXIMqZ3Ff55tV1kc41gR9Z+qKAHp3UdthgikDC02e4G1tX7X7S
+Ll3QItK+eGc4FPY8HpM87w34cDnR/yGipTG2vrxHFbuQR45Hs5Gmnqo7g/THVtya
+MdRJ8hZC25kWO3qb5CIcOn/IkBI/6XS/erdS0FhwhuIRvmvsEA/SerJ1aq9RVrkt
+gnDlt22BrDujX1zqKuaysjznH4kXk9p+aEKoZ02aZdpj12gpQdYilK9wGYoG5Dju
+WQSnkGEPqMJS93rx6akZ4nB75O0QYSJae6DE3Ly0x7joHlc1xwYSheC+ICJs7liQ
+aEM9oiebeF2WRLzd+MGFw7mBQ4QfTtVROJCIh3PDcEOBBS/s23+69gwlTropmquN
+B8EQt0oZbTuhKjW8ic2390kGtZcamCvhWQECjC2AwyvmnXH976/rIqH6sOWhiyQt
+A5an8GllmFrS0f6HsunZIVFyHbbRMxoEt4K/WasJbHnCDF/WAGIAeKQIUkT/vCfo
+h5RbFHn7Ms2aI3s39c+r6nIykcd1NZCQeZJ7xbFrRWO8axc2Yfw=
+=n1/r
+-----END PGP SIGNATURE-----
+
+--Etker0Y8FjzdLkMR--
 
