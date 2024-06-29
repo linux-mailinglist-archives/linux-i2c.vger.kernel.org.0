@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-4496-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4497-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86A3091CC3B
-	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2024 13:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B3BB91CC47
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2024 13:11:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBA0F283923
-	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2024 11:07:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5E2E281810
+	for <lists+linux-i2c@lfdr.de>; Sat, 29 Jun 2024 11:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993F14F602;
-	Sat, 29 Jun 2024 11:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D2F42A98;
+	Sat, 29 Jun 2024 11:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lFxBooZz"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="jE0sRWgR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9643F9F9
-	for <linux-i2c@vger.kernel.org>; Sat, 29 Jun 2024 11:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C338A3BBF4
+	for <linux-i2c@vger.kernel.org>; Sat, 29 Jun 2024 11:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719659254; cv=none; b=PU6CqRTkY/2vAdgCjUrNA8Z5CoHuuBqGO6M3YcGhW3UW7MQrVs2ue07c33OW+5oDqjHnGeUWaTSrotYtX5AY//D5OgVwPmHMlqShZC5r8QXXt6GIEny3tbm37xmyH8XUxlYCaEjjHA0ySfGlXfpJGR4TFr5npvvqBrLs3H0ZZyU=
+	t=1719659472; cv=none; b=u9ZlxxXGinUCXy4bzuWDMp7Lfz0g7qcqgYJWoecOlgsinVT3Dc4JY00tyHUqAQQm97bvBIzinPbKp+vCjIMly8MQnE4jCmOuAKzCkT0oLw+uQI2P4DUiyIZyoz/0L7yKdBgiP5boYqx0t3Y7SdAhMU7YMW2MGkd483OBaD5nzCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719659254; c=relaxed/simple;
-	bh=A27AZyvz2A7Q9roo7P9DdKR5Zk9tltXk4k5EOFMW2PE=;
+	s=arc-20240116; t=1719659472; c=relaxed/simple;
+	bh=vExeczRnVrI7UT25v1lNxQKRkxT3BOGoqkI3DI6fywQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aP27rVz2VNrJnIlYpoJ53Cj674PGTBEChnNMCol217yQeVou9lZ9Ta/yAVDoImAIU8UV8nbn2Vi656Mkf6rilfp/vsIHWkPYRsUMTBj5yWD35WPWuu1/baKUwpMzN7/sGCXmbO3Usf0cL9bWk1BRpPtpmwzwt0S+OeBRZCuRcws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lFxBooZz; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-36532d177a0so857613f8f.2
-        for <linux-i2c@vger.kernel.org>; Sat, 29 Jun 2024 04:07:31 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=t2PTz+PwucoOIfhyrHbu6mwpXipUlX7Ny0/cvw1uuCZ2K3Rt4Eqhk2KXjxaP/qXfNxCklf11fIaN/8lVCSTcvw5GWO3xCKTqkq32oG/Ra3WjxIWZaJ8aYBpi30fSZrLjSEBmHeQRFeojYYQ71yjSwgYMYWsjNnO0izGdRqq4qTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=jE0sRWgR; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-367339bd00aso1130962f8f.3
+        for <linux-i2c@vger.kernel.org>; Sat, 29 Jun 2024 04:11:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719659250; x=1720264050; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
+        d=tuxon.dev; s=google; t=1719659468; x=1720264268; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oeVOD5CA0cinTFO1deV1ecLyqh6tETXTXZTto3YUbA0=;
-        b=lFxBooZzp7TuRROQ2m3yEzXTLbffcnO3Yilqph9wnTL5E5b+ytlSdn/H63eAoyzpIq
-         6t48CUSaArjELxX3fnsHymiyNuJDKnozisXuU7HoyL6es14C49jC70s4LJgJC/l95Nsd
-         vEy+BmJwIw107Aym36MrVO2NFJ3Eynw621ehigotsjTIZQ9kKYUeWCSZbw7Jeh/cxHaK
-         9lH0Osntyhr1tZWrEjsefdQAy+JuldO1Wc8ySECIUIJGbsDmc2m2UJzPJUfWoUpSbkS4
-         cVBDG6aZMVZHm/QQKoaKzZbaDB8yIR4AjYEkEcHeqs9LyKicoQGg/ClNXts4PaSz8arR
-         Zgwg==
+        bh=5Xt/KmvrgieieUb7BSBOgm30lvwqq55l4c9xKge1N7E=;
+        b=jE0sRWgRU8OczQsiIUwwAw3w+OCmYdN0L3ChHI/n04+F462FoWmgIx4UPYa0yAnlVF
+         TC1/Mwx16aQC0a+CKIlofW4W32YuZIV0ZG1f6J5uiSk/hENlRetq1NtufZONCK/8oDnr
+         qrjPeaViTG+OQlbXuzfLaiYPIfTnBwe78iKU2YprE2cR2hL/sxo0Mlp5gM5fazyyZcnz
+         11kHafgZ7stqW3HGYOM5PtUlP/Z6TT/40mDgq9iUNhFvO7SlHaMKGhUCOxuluuIaH6Ez
+         qpaB1+MZ8AInnHGjfK+gRtZYl2/Z3RJJWBOmTlZtzbzKvy8MhPFsN0fhmKf75o1WX4W3
+         9Pxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719659250; x=1720264050;
-        h=content-transfer-encoding:in-reply-to:from:content-language
+        d=1e100.net; s=20230601; t=1719659468; x=1720264268;
+        h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oeVOD5CA0cinTFO1deV1ecLyqh6tETXTXZTto3YUbA0=;
-        b=RgUSROeHEkK1UUwUD+NeD8l51Bgu6VVzOaYNYuaRMHTpRD6RHWEuJuJIFAW4sTJ3lP
-         K/sHhHb+GogDJAOPfJzT5Cgs9fTqyHqPiL52eUB1dIhZ4SQs9UxehDsCEB9urD4IidAO
-         3wxLjsOMfihBADMdicyoyiL+/q02ANe2K99ImY1tyIDDwsvaLh/KT7bw13JENEtRtGfG
-         bL/uGrUbxTAJzvZJpFew7XImFoR5UYf6eNynKgMjyocUf9cBHhR9K+CKjXHGnRyZME+y
-         W61G5UdZXd64YT/dErjoGlhBUN0jeemHLwY+dtv1c0gyfqx9VshLXU7u7+3llnWxm6m8
-         ReMA==
-X-Forwarded-Encrypted: i=1; AJvYcCXQnj+huNbWLcEUtNM/Vjrf1U0Ea6/PuHuwg2T+5kLYlwlA1cYC6vxrk/L4Yaol1g+9C4ofY6+zMeMkRjzQ8s3/++3d/zMy1wQW
-X-Gm-Message-State: AOJu0YyX7pvyF+p44kaR8LeYRdWM871/SHEmd5Bj1RZCMWkI6oZw5G53
-	MOMzeIDvYxPsquz3AeHxe2EZ+PjxrF/E+2cTx1btxosjeFG546Bp8ogDLv5lzkA=
-X-Google-Smtp-Source: AGHT+IFp0LPwn95vvUy4qg44MiPqjUSQeFK9TzL595b4Lm8//Szl2OQ26nmO4n4sJUTNlSJn3a1JJg==
-X-Received: by 2002:a5d:4eca:0:b0:367:1e6:4ab1 with SMTP id ffacd0b85a97d-367756bb503mr390586f8f.33.1719659249815;
-        Sat, 29 Jun 2024 04:07:29 -0700 (PDT)
-Received: from [192.168.0.38] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3675a0cd71esm4641757f8f.21.2024.06.29.04.07.28
+        bh=5Xt/KmvrgieieUb7BSBOgm30lvwqq55l4c9xKge1N7E=;
+        b=U0hnBYQjK80a7G0ghBznudFjTYzRhnllTpzO8cAyFvzNsZG3ufNjmXRgEFakSA4KI+
+         5nwJPhUDJcHp2E6+do/g3WC9JIen6or1F+0Y6dAFMDIFRJRcHSBlgmhLzgKf82RMk5Zu
+         YNw4ecXHWZ7ul9H8cp4HbF3y7SYjrETwVaytfMU2kcwLkjtGHrmlobQpNqLE+Tqb1XHd
+         HzmPmC97wgLLJXM1PH1OHkSq9YWu7RymRf5ASu/7NdZF4T4kJnoJwUz0sGkGi2a5gErc
+         tL9MvDQ8wqMpIWFDBTfADgcgWyOGgx/6dMC4Vy3p/BvCdLvoJlWKwIhaBr5lwPwSmQr/
+         AFOA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+lV5uMhgjIloM2nDIc3SC9u6pRXb4YMnQWrZFx6JN2QUyMNVqOcQSs8rlOJtYSBTgsv0/fv4hn7Hj85liayAn1750ky67OyTK
+X-Gm-Message-State: AOJu0Yy0Oja/k0JbzqzhCfBK3cl0vuz9qAfKvBIExjq3op4REMbY0Rwv
+	2jMF5pBljeTsRYVLszt7xeg+1UP/ajmYpefkrde1j49USuChzrq1RD9JGw+XgiI=
+X-Google-Smtp-Source: AGHT+IFqpLX+00lyexUlkVp9WFDAXonVuJYiPnYyITmMVz0K/9z+LFGOHYAxHvC+6+cwE40Yy3Dg1Q==
+X-Received: by 2002:a5d:4949:0:b0:366:e9f2:a551 with SMTP id ffacd0b85a97d-36775721668mr630762f8f.43.1719659467926;
+        Sat, 29 Jun 2024 04:11:07 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.171])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3675a0fc434sm4581330f8f.76.2024.06.29.04.11.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Jun 2024 04:07:29 -0700 (PDT)
-Message-ID: <620d1bb9-99a4-43b2-8750-8f0f3e490bb7@linaro.org>
-Date: Sat, 29 Jun 2024 12:07:27 +0100
+        Sat, 29 Jun 2024 04:11:07 -0700 (PDT)
+Message-ID: <e2a3672a-5f1b-4969-8ddb-aad63a776db3@tuxon.dev>
+Date: Sat, 29 Jun 2024 14:11:05 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,65 +76,129 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] arm64: dts: qcom: sc7280: Add IMX577 camera sensor
-To: Vikram Sharma <quic_vikramsa@quicinc.com>, Robert Foss
- <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Kapatrala Syed <akapatra@quicinc.com>,
- Hariram Purushothaman <hariramp@quicinc.com>,
- cros-qcom-dts-watchers@chromium.org, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Loic Poulain <loic.poulain@linaro.org>, Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, Hariram Purushothaman
- <quic_hariramp@quicinc.com>, Trishansh Bhardwaj <quic_tbhardwa@quicinc.com>
-References: <20240629-camss_first_post_linux_next-v1-0-bc798edabc3a@quicinc.com>
- <20240629-camss_first_post_linux_next-v1-3-bc798edabc3a@quicinc.com>
+Subject: Re: [PATCH v2 07/12] i2c: riic: Define individual arrays to describe
+ the register offsets
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+ "andi.shyti@kernel.org" <andi.shyti@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+ Chris Brandt <Chris.Brandt@renesas.com>, "robh@kernel.org"
+ <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+ "mturquette@baylibre.com" <mturquette@baylibre.com>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240625121358.590547-8-claudiu.beznea.uj@bp.renesas.com>
+ <TY3PR01MB11346EF9A001F68162148B70F86D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <6289f329-118f-4970-a525-75c3a48bd28b@tuxon.dev>
+ <TY3PR01MB1134603F92C72D9B6C6C3733C86D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <2f162986-33c5-4d80-958c-4f857adaad20@tuxon.dev>
+ <TY3PR01MB11346CA73575CF61B2024F3B386D02@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <79c26030-4b92-4ef3-b8ce-d011f492161b@tuxon.dev>
+ <CAMuHMdXJ8eKLzMqCPR2ewS9gr_m5OQPneETPMC-rOOmW+--f5A@mail.gmail.com>
+ <7c542f46-c644-4f22-bbc4-408b7dad8273@tuxon.dev>
+ <CAMuHMdUmiQjsKt93jM62V5YR_NdtUDXhcxFs+F+BCu3NTNsx8Q@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
 Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20240629-camss_first_post_linux_next-v1-3-bc798edabc3a@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAMuHMdUmiQjsKt93jM62V5YR_NdtUDXhcxFs+F+BCu3NTNsx8Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 28/06/2024 19:32, Vikram Sharma wrote:
-> Add support for IMX577 camera sensor for SC7280 SoC.
+
+
+On 28.06.2024 14:39, Geert Uytterhoeven wrote:
+> On Fri, Jun 28, 2024 at 12:29 PM claudiu beznea
+> <claudiu.beznea@tuxon.dev> wrote:
+>> On 28.06.2024 12:13, Geert Uytterhoeven wrote:
+>>> On Fri, Jun 28, 2024 at 10:12 AM claudiu beznea
+>>> <claudiu.beznea@tuxon.dev> wrote:
+>>>> On 28.06.2024 11:09, Biju Das wrote:
+>>>>>> -----Original Message-----
+>>>>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>>>>> On 28.06.2024 10:55, Biju Das wrote:
+>>>>>>>> -----Original Message-----
+>>>>>>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>>>>>>> Patch 09/12 "i2c: riic: Add support for fast mode plus" adds a new member to struct
+>>>>>> riic_of_data.
+>>>>>>>> That new member is needed to differentiate b/w hardware versions
+>>>>>>>> supporting fast mode plus based on compatible.
+>>>>>>>
+>>>>>>> Are we sure RZ/A does not support fast mode plus?
+>>>>>>
+>>>>>> From commit description of patch 09/12:
+>>>>>>
+>>>>>> Fast mode plus is available on most of the IP variants that RIIC driver is working with. The
+>>>>>> exception is (according to HW manuals of the SoCs where this IP is available) the Renesas RZ/A1H.
+>>>>>> For this, patch introduces the struct riic_of_data::fast_mode_plus.
+>>>>>>
+>>>>>> I checked the manuals of all the SoCs where this driver is used.
+>>>>>>
+>>>>>> I haven't checked the H/W manual?
+>>>>>>
+>>>>>> On the manual I've downloaded from Renesas web site the FMPE bit of RIICnFER is not available on
+>>>>>> RZ/A1H.
+>>>>>
+>>>>> I just found RZ/A2M manual, it supports FMP and register layout looks similar to RZ/G2L.
+>>>>
+>>>> I introduced struct riic_of_data::fast_mode_plus because of RZ/A1H.
+>>>
+>>> Do you need to check for that?
+>>>
+>>> The ICFER_FMPE bit won't be set unless the user specifies the FM+
+>>> clock-frequency.  Setting clock-frequency beyond Fast Mode on RZ/A1H
+>>> would be very wrong.
+>>
+>> I need it to avoid this scenario ^. In patch 09/12 there is this code:
+>>
+>> +       if ((!info->fast_mode_plus && t->bus_freq_hz > I2C_MAX_FAST_MODE_FREQ) ||
+>> +           (info->fast_mode_plus && t->bus_freq_hz > I2C_MAX_FAST_MODE_PLUS_FREQ)) {
+>> +               dev_err(dev, "unsupported bus speed (%dHz). %d max\n", t->bus_freq_hz,
+>> +                       info->fast_mode_plus ? I2C_MAX_FAST_MODE_PLUS_FREQ :
+>> +                       I2C_MAX_FAST_MODE_FREQ);
+>>                 return -EINVAL;
+>>
+
+FTR, the full context of this change is (from patch 09/12):
+
+@@ -315,11 +319,13 @@ static int riic_init_hw(struct riic_dev *riic)
+ 	int total_ticks, cks, brl, brh;
+ 	struct i2c_timings *t = &riic->i2c_t;
+ 	struct device *dev = riic->adapter.dev.parent;
++	const struct riic_of_data *info = riic->info;
+
+-	if (t->bus_freq_hz > I2C_MAX_FAST_MODE_FREQ) {
+-		dev_err(dev,
+-			"unsupported bus speed (%dHz). %d max\n",
+-			t->bus_freq_hz, I2C_MAX_FAST_MODE_FREQ);
++	if ((!info->fast_mode_plus && t->bus_freq_hz > I2C_MAX_FAST_MODE_FREQ) ||
++	    (info->fast_mode_plus && t->bus_freq_hz > I2C_MAX_FAST_MODE_PLUS_FREQ)) {
++		dev_err(dev, "unsupported bus speed (%dHz). %d max\n", t->bus_freq_hz,
++			info->fast_mode_plus ? I2C_MAX_FAST_MODE_PLUS_FREQ :
++			I2C_MAX_FAST_MODE_FREQ);
+ 		return -EINVAL;
+ 	}
+
+Thank you,
+Claudiu Beznea
+
+>> to avoid giving the user the possibility to set FM+ freq on platforms not
+>> supporting it.
+>>
+>> Please let me know if I'm missing something (or wrongly understood your
+>> statement).
 > 
-> Signed-off-by: Hariram Purushothaman <quic_hariramp@quicinc.com>
-> Signed-off-by: Trishansh Bhardwaj <quic_tbhardwa@quicinc.com>
-> Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
-> ---
->   arch/arm64/boot/dts/qcom/sc7280.dtsi | 33 +++++++++++++++++++++++++++++++++
->   1 file changed, 33 insertions(+)
+> Wolfram/Andi: what is your view on this?
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 9ac251fec262..1c99ee09a11a 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -5167,6 +5167,39 @@ cci3_sleep: cci3-sleep-state {
->   				bias-pull-down;
->   			};
->   
-> +			cam2_default: cam2-default {
-> +				rst {
-> +					pins = "gpio78"; /*cam3*/
-
-I don't think the /* cam3 */ adds much here TBH.
-
-> +					function = "gpio";
-> +					drive-strength = <2>;
-> +					bias-disable;
-> +				};
-> +
-> +				mclk {
-> +					pins = "gpio67"; /*cam3*/
-> +					function = "cam_mclk";
-> +					drive-strength = <2>; /*RB5 was 16 and i changed to 2 here*/
-
-You can drop that comment too, actually more saliently, what are you 
-changing from 16 to 2 since its being mentioned ?
-
----
-bod
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
