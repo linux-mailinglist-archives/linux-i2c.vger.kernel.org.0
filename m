@@ -1,34 +1,34 @@
-Return-Path: <linux-i2c+bounces-4509-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4510-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59B4A91D3C7
-	for <lists+linux-i2c@lfdr.de>; Sun, 30 Jun 2024 22:16:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58B6991D415
+	for <lists+linux-i2c@lfdr.de>; Sun, 30 Jun 2024 23:02:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 683581C20941
-	for <lists+linux-i2c@lfdr.de>; Sun, 30 Jun 2024 20:16:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E7F4B20DB2
+	for <lists+linux-i2c@lfdr.de>; Sun, 30 Jun 2024 21:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC4F4502B;
-	Sun, 30 Jun 2024 20:16:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC6446444;
+	Sun, 30 Jun 2024 21:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="T3FuVU2+"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="I2a06YO9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx18lb.world4you.com (mx18lb.world4you.com [81.19.149.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970B3200C1
-	for <linux-i2c@vger.kernel.org>; Sun, 30 Jun 2024 20:16:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A47D3BBED
+	for <linux-i2c@vger.kernel.org>; Sun, 30 Jun 2024 21:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719778593; cv=none; b=cZoN2UQxCAi05fcvhwQSezH5aeTwDS0PZ5c00LuML9umIG6icxOvRLsU7PUL01Vneeap9GnLFTq7Kq4MTblZY5zmS31zGmFfH8Iu+wWI3hDcdBuuROWIe+rIis1X/pliQkbuUJDi271kN798N108BIeOqm0b3iNe73QU8+3YfRY=
+	t=1719781344; cv=none; b=aImfP5Zs4YMYYvt6eNn+yq2ttOjy1UwGsWzmGxlK5+glvcpBfPvHOlBaeCmZyaOVO/JNpXhb9cVpi5q1yyz1QVXGAWq5GNC92TsnqyNWDOiXrkKAYvV0RlzNf5l+Aj2aGveG/eZFNe5hIfRyiUqqZ1sdHwi/JYSys7KGNLIVHEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719778593; c=relaxed/simple;
-	bh=42jng3RuSmD0D8JGf7YMMAOCW6YIP5iy+knh7hoSxTY=;
+	s=arc-20240116; t=1719781344; c=relaxed/simple;
+	bh=2AYYuyATeFEhaIzzmeJX+pmhgmalAdmMO6gaTeJ0k7Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WA2BbkWs5FtJdITKmLQesELdHjYoztVKGVuK23n+L74OkaWSh3rFOHgZ4UykRYFaqEayWefT5a8nMc8vKt/6zMq/qCLCudiSNaKq63QGaeTkJkaIrfDg+2yJ+ouxXCRw9QlnW0dv0jIlrogTOsyKXnFhu0pc6xH1Ssu9P+VBcAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=T3FuVU2+; arc=none smtp.client-ip=81.19.149.128
+	 MIME-Version; b=oW9rOvN5Drp7PGwY63kCu41RwKlRr0GhvXgQaLfV6eXMpjbEciMNc9qipRRsWQYTV0Vdsqy8gILqsKfxdGZ79c4AFw1Mc03Sk2ZDxRPWMoDclzURloNMXZ3isq5uFOOUYncr8Ks0nRsKtkwfDgYWe16pu+l1fL5BNiFwb+kgvL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=I2a06YO9; arc=none smtp.client-ip=81.19.149.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,15 +37,15 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=GP8bgRvtVXL7sZ2Xg4he0VT5zFrPQIlIa7/rROvBzFU=; b=T3FuVU2+L5RgYxRREfogiqCDYS
-	Z184VmNm64y7ZLgnumZ0WbbJuBF2umw/VcqMvx7r/gj7r1hER/rtQRAJV/XVDXWd2yI2ASUbQp/CK
-	JaGeTh9LElqtnvvtUZfI2xBZeIUhY6oabwh0qvd5yMjv04rp2BaBdhwkbzYS3IAYcFSU=;
+	bh=Cs5bjuctF4VTm2TSpx8+eTNlnVio3h/qRd6iIrY0pvc=; b=I2a06YO9ZPHXGhyitcT6iWz0qV
+	7SIoagYjb7NqopOdD3YA+orKiv34S4ZB4x8bylxG75gf/MSKOObznWL66BVOBbvASQlXDVfzvx90a
+	Hq+BfkaAoL6FcMuBdF2lkAT+K5+FSn6+Jtng0AuznCnOuqz56tGm4BUVjcQot6P4S8dc=;
 Received: from 88-117-61-57.adsl.highway.telekom.at ([88.117.61.57] helo=hornet.engleder.at)
 	by mx18lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <gerhard@engleder-embedded.com>)
-	id 1sO0Wb-0004cO-2x;
-	Sun, 30 Jun 2024 21:47:50 +0200
+	id 1sO0Wd-0004cO-0S;
+	Sun, 30 Jun 2024 21:47:51 +0200
 From: Gerhard Engleder <gerhard@engleder-embedded.com>
 To: linux-i2c@vger.kernel.org
 Cc: andi.shyti@kernel.org,
@@ -53,9 +53,9 @@ Cc: andi.shyti@kernel.org,
 	gregkh@linuxfoundation.org,
 	Gerhard Engleder <gerhard@engleder-embedded.com>,
 	Gerhard Engleder <eg@keba.com>
-Subject: [PATCH v2 1/2] misc: keba: Add basic KEBA CP500 system FPGA support
-Date: Sun, 30 Jun 2024 21:47:39 +0200
-Message-Id: <20240630194740.7137-2-gerhard@engleder-embedded.com>
+Subject: [PATCH v2 2/2] i2c: keba: Add KEBA I2C controller support
+Date: Sun, 30 Jun 2024 21:47:40 +0200
+Message-Id: <20240630194740.7137-3-gerhard@engleder-embedded.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240630194740.7137-1-gerhard@engleder-embedded.com>
 References: <20240630194740.7137-1-gerhard@engleder-embedded.com>
@@ -71,609 +71,656 @@ X-ACL-Warn: X-W4Y-Internal
 
 From: Gerhard Engleder <eg@keba.com>
 
-The KEBA CP500 system FPGA is a PCIe device, which consists of multiple
-IP cores. Every IP core has its own auxiliary driver. The cp500 driver
-registers an auxiliary device for each device and the corresponding
-drivers are loaded by the Linux driver infrastructure.
+The KEBA I2C controller is found in the system FPGA of KEBA PLC devices.
+It is used to connect EEPROMs and hardware monitoring chips. The
 
-Currently 3 variants of this device exists. Every variant has its own
-PCI device ID, which is used to determine the list of available IP
-cores. In this first version only the auxiliary device for the I2C
-controller is registered.
-
-Besides the auxiliary device registration some other basic functions of
-the FPGA are implemented; e.g, FPGA version sysfs file, keep FPGA
-configuration on reset sysfs file, error message for errors on the
-internal AXI bus of the FPGA.
+It is a simple I2C controller with a fixed bus speed of 100 kbit/s. The
+whole message transmission is executed by the driver. The driver
+triggers all steps over control, status and data register. There are no
+FIFOs or interrupts.
 
 Signed-off-by: Gerhard Engleder <eg@keba.com>
 ---
- .../ABI/stable/sysfs-driver-misc-cp500        |  25 +
- drivers/misc/Kconfig                          |   1 +
- drivers/misc/Makefile                         |   1 +
- drivers/misc/keba/Kconfig                     |  12 +
- drivers/misc/keba/Makefile                    |   3 +
- drivers/misc/keba/cp500.c                     | 458 ++++++++++++++++++
- include/linux/misc/keba.h                     |  25 +
- 7 files changed, 525 insertions(+)
- create mode 100644 Documentation/ABI/stable/sysfs-driver-misc-cp500
- create mode 100644 drivers/misc/keba/Kconfig
- create mode 100644 drivers/misc/keba/Makefile
- create mode 100644 drivers/misc/keba/cp500.c
- create mode 100644 include/linux/misc/keba.h
+ drivers/i2c/busses/Kconfig    |  10 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-keba.c | 595 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 606 insertions(+)
+ create mode 100644 drivers/i2c/busses/i2c-keba.c
 
-diff --git a/Documentation/ABI/stable/sysfs-driver-misc-cp500 b/Documentation/ABI/stable/sysfs-driver-misc-cp500
-new file mode 100644
-index 000000000000..525bd18a2db4
---- /dev/null
-+++ b/Documentation/ABI/stable/sysfs-driver-misc-cp500
-@@ -0,0 +1,25 @@
-+What:		/sys/devices/pciXXXX:XX/0000:XX:XX.X/0000:XX:XX.X/version
-+Date:		June 2024
-+KernelVersion:	6.11
-+Contact:	Gerhard Engleder <eg@keba.com>
-+Description:	Version of the FPGA configuration bitstream as printable string.
-+		This file is read only.
-+Users:		KEBA
-+
-+What:		/sys/devices/pciXXXX:XX/0000:XX:XX.X/0000:XX:XX.X/keep_cfg
-+Date:		June 2024
-+KernelVersion:	6.11
-+Contact:	Gerhard Engleder <eg@keba.com>
-+Description:	Flag which signals if FPGA shall keep or reload configuration
-+		bitstream on reset. Normal FPGA behavior and default is to keep
-+		configuration bitstream and to only reset the configured logic.
-+
-+		Reloading configuration on reset enables an update of the
-+		configuration bitstream with a simple reboot. Otherwise it is
-+		necessary to power cycle the device to reload the new
-+		configuration bitstream.
-+
-+		This file is read/write. The values are as follows:
-+		1 = keep configuration bitstream on reset, default
-+		0 = reload configuration bitstream on reset
-+Users:		KEBA
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index faf983680040..ca0c6a728a00 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -602,4 +602,5 @@ source "drivers/misc/cardreader/Kconfig"
- source "drivers/misc/uacce/Kconfig"
- source "drivers/misc/pvpanic/Kconfig"
- source "drivers/misc/mchp_pci1xxxx/Kconfig"
-+source "drivers/misc/keba/Kconfig"
- endmenu
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 153a3f4837e8..af125aa25a50 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -69,3 +69,4 @@ obj-$(CONFIG_TMR_INJECT)	+= xilinx_tmr_inject.o
- obj-$(CONFIG_TPS6594_ESM)	+= tps6594-esm.o
- obj-$(CONFIG_TPS6594_PFSM)	+= tps6594-pfsm.o
- obj-$(CONFIG_NSM)		+= nsm.o
-+obj-y				+= keba/
-diff --git a/drivers/misc/keba/Kconfig b/drivers/misc/keba/Kconfig
-new file mode 100644
-index 000000000000..0ebca1d07ef4
---- /dev/null
-+++ b/drivers/misc/keba/Kconfig
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: GPL-2.0
-+config KEBA_CP500
-+	tristate "KEBA CP500 system FPGA support"
-+	depends on PCI
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 85b57d2ec998..d01aaeb8edbd 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -771,6 +771,16 @@ config I2C_JZ4780
+ 
+ 	 If you don't know what to do here, say N.
+ 
++config I2C_KEBA
++	tristate "KEBA I2C controller support"
++	depends on HAS_IOMEM
 +	help
-+	  This driver supports the KEBA CP500 system FPGA, which is used in
-+	  KEBA CP500 devices. It registers all sub devices present on the CP500
-+	  system FPGA as separate devices. A driver is needed for each sub
-+	  device.
++	  This driver supports the I2C controller found in KEBA system FPGA
++	  devices.
 +
-+	  This driver can also be built as a module. If so, the module will be
-+	  called cp500.
-diff --git a/drivers/misc/keba/Makefile b/drivers/misc/keba/Makefile
-new file mode 100644
-index 000000000000..0a8b846cda7d
---- /dev/null
-+++ b/drivers/misc/keba/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
++	  This driver can also be built as a module. If so, the module
++	  will be called i2c-keba.
 +
-+obj-$(CONFIG_KEBA_CP500)	+= cp500.o
-diff --git a/drivers/misc/keba/cp500.c b/drivers/misc/keba/cp500.c
+ config I2C_KEMPLD
+ 	tristate "Kontron COM I2C Controller"
+ 	depends on MFD_KEMPLD
+diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+index 78d0561339e5..ecc07c50f2a0 100644
+--- a/drivers/i2c/busses/Makefile
++++ b/drivers/i2c/busses/Makefile
+@@ -76,6 +76,7 @@ obj-$(CONFIG_I2C_IMX)		+= i2c-imx.o
+ obj-$(CONFIG_I2C_IMX_LPI2C)	+= i2c-imx-lpi2c.o
+ obj-$(CONFIG_I2C_IOP3XX)	+= i2c-iop3xx.o
+ obj-$(CONFIG_I2C_JZ4780)	+= i2c-jz4780.o
++obj-$(CONFIG_I2C_KEBA)		+= i2c-keba.o
+ obj-$(CONFIG_I2C_KEMPLD)	+= i2c-kempld.o
+ obj-$(CONFIG_I2C_LPC2K)		+= i2c-lpc2k.o
+ obj-$(CONFIG_I2C_LS2X)		+= i2c-ls2x.o
+diff --git a/drivers/i2c/busses/i2c-keba.c b/drivers/i2c/busses/i2c-keba.c
 new file mode 100644
-index 000000000000..9ba46f0f9392
+index 000000000000..f608df394593
 --- /dev/null
-+++ b/drivers/misc/keba/cp500.c
-@@ -0,0 +1,458 @@
++++ b/drivers/i2c/busses/i2c-keba.c
+@@ -0,0 +1,595 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) KEBA Industrial Automation Gmbh 2024
 + *
-+ * Driver for KEBA system FPGA
-+ *
-+ * The KEBA system FPGA implements various devices. This driver registers
-+ * auxiliary devices for every device within the FPGA.
++ * Driver for KEBA I2C controller FPGA IP core
 + */
 +
-+#include <linux/device.h>
 +#include <linux/i2c.h>
-+#include <linux/misc/keba.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
 +#include <linux/module.h>
-+#include <linux/pci.h>
++#include <linux/misc/keba.h>
 +
-+#define CP500 "cp500"
++#define KI2C "i2c-keba"
 +
-+#define PCI_VENDOR_ID_KEBA		0xCEBA
-+#define PCI_DEVICE_ID_KEBA_CP035	0x2706
-+#define PCI_DEVICE_ID_KEBA_CP505	0x2703
-+#define PCI_DEVICE_ID_KEBA_CP520	0x2696
++#define KI2C_CAPABILITY_REG		0x02
++#define   KI2C_CAPABILITY_CRYPTO	0x01
++#define   KI2C_CAPABILITY_DC		0x02
 +
-+#define CP500_SYS_BAR		0
-+#define CP500_ECM_BAR		1
++#define KI2C_CONTROL_REG	0x04
++#define   KI2C_CONTROL_MEN	0x01
++#define   KI2C_CONTROL_MSTA	0x02
++#define   KI2C_CONTROL_RSTA	0x04
++#define   KI2C_CONTROL_MTX	0x08
++#define   KI2C_CONTROL_TXAK	0x10
 +
-+/* BAR 0 registers */
-+#define CP500_VERSION_REG	0x00
-+#define CP500_RECONFIG_REG	0x11	/* upper 8-bits of STARTUP register */
-+#define CP500_AXI_REG		0x40
++#define KI2C_CONTROL_DC_REG	0x05
++#define   KI2C_CONTROL_DC_SDA	0x01
++#define   KI2C_CONTROL_DC_SCL	0x02
 +
-+/* Bits in BUILD_REG */
-+#define CP500_BUILD_TEST        0x8000	/* FPGA test version */
++#define KI2C_STATUS_REG		0x08
++#define   KI2C_STATUS_IN_USE	0x01
++#define   KI2C_STATUS_ACK_CYC	0x02
++#define   KI2C_STATUS_RXAK	0x04
++#define   KI2C_STATUS_MCF	0x08
 +
-+/* Bits in RECONFIG_REG */
-+#define CP500_RECFG_REQ		0x01	/* reconfigure FPGA on next reset */
++#define KI2C_STATUS_DC_REG	0x09
++#define   KI2C_STATUS_DC_SDA	0x01
++#define   KI2C_STATUS_DC_SCL	0x02
 +
-+/* MSIX */
-+#define CP500_AXI_MSIX		3
-+#define CP500_NUM_MSIX		8
-+#define CP500_NUM_MSIX_NO_MMI	2
-+#define CP500_NUM_MSIX_NO_AXI	3
++#define KI2C_DATA_REG		0x0c
 +
-+/* EEPROM */
-+#define CP500_HW_CPU_EEPROM_NAME	"cp500_cpu_eeprom"
++#define KI2C_INUSE_SLEEP_US	(2 * USEC_PER_MSEC)
++#define KI2C_INUSE_TIMEOUT_US	(10 * USEC_PER_SEC)
 +
-+#define CP500_IS_CP035(dev)	((dev)->pci_dev->device == PCI_DEVICE_ID_KEBA_CP035)
-+#define CP500_IS_CP505(dev)	((dev)->pci_dev->device == PCI_DEVICE_ID_KEBA_CP505)
-+#define CP500_IS_CP520(dev)	((dev)->pci_dev->device == PCI_DEVICE_ID_KEBA_CP520)
++#define KI2C_POLL_DELAY_US	5
 +
-+struct cp500_dev_info {
-+	off_t offset;
-+	size_t size;
++struct ki2c {
++	struct keba_i2c_auxdev *auxdev;
++	void __iomem *base;
++	struct i2c_adapter adapter;
++
++	struct i2c_client **client;
++	int client_size;
 +};
 +
-+struct cp500_devs {
-+	struct cp500_dev_info startup;
-+	struct cp500_dev_info i2c;
-+};
-+
-+/* list of devices within FPGA of CP035 family (CP035, CP056, CP057) */
-+static struct cp500_devs cp035_devices = {
-+	.startup   = { 0x0000, SZ_4K },
-+	.i2c       = { 0x4000, SZ_4K },
-+};
-+
-+/* list of devices within FPGA of CP505 family (CP503, CP505, CP507) */
-+static struct cp500_devs cp505_devices = {
-+	.startup   = { 0x0000, SZ_4K },
-+	.i2c       = { 0x5000, SZ_4K },
-+};
-+
-+/* list of devices within FPGA of CP520 family (CP520, CP530) */
-+static struct cp500_devs cp520_devices = {
-+	.startup     = { 0x0000, SZ_4K },
-+	.i2c         = { 0x5000, SZ_4K },
-+};
-+
-+struct cp500 {
-+	struct pci_dev *pci_dev;
-+	struct cp500_devs *devs;
-+	int msix_num;
-+	struct {
-+		int major;
-+		int minor;
-+		int build;
-+	} version;
-+
-+	/* system FPGA BAR */
-+	resource_size_t sys_hwbase;
-+	struct keba_i2c_auxdev *i2c;
-+
-+	/* ECM EtherCAT BAR */
-+	resource_size_t ecm_hwbase;
-+
-+	void __iomem *system_startup_addr;
-+};
-+
-+/* I2C devices */
-+static struct i2c_board_info cp500_i2c_info[] = {
-+	{	/* temperature sensor */
-+		I2C_BOARD_INFO("emc1403", 0x4c),
-+	},
-+	{	/*
-+		 * CPU EEPROM
-+		 * CP035 family: CPU board
-+		 * CP505 family: bridge board
-+		 * CP520 family: carrier board
-+		 */
-+		I2C_BOARD_INFO("24c32", 0x50),
-+		.dev_name = CP500_HW_CPU_EEPROM_NAME,
-+	},
-+	{	/* interface board EEPROM */
-+		I2C_BOARD_INFO("24c32", 0x51),
-+	},
-+	{	/*
-+		 * EEPROM (optional)
-+		 * CP505 family: CPU board
-+		 * CP520 family: MMI board
-+		 */
-+		I2C_BOARD_INFO("24c32", 0x52),
-+	},
-+	{	/* extension module 0 EEPROM (optional) */
-+		I2C_BOARD_INFO("24c32", 0x53),
-+	},
-+	{	/* extension module 1 EEPROM (optional) */
-+		I2C_BOARD_INFO("24c32", 0x54),
-+	},
-+	{	/* extension module 2 EEPROM (optional) */
-+		I2C_BOARD_INFO("24c32", 0x55),
-+	},
-+	{	/* extension module 3 EEPROM (optional) */
-+		I2C_BOARD_INFO("24c32", 0x56),
-+	}
-+};
-+
-+static ssize_t cp500_get_fpga_version(struct cp500 *cp500, char *buf,
-+				      size_t max_len)
++static int ki2c_inuse_lock(struct ki2c *ki2c)
 +{
-+	int n;
-+
-+	if (CP500_IS_CP035(cp500))
-+		n = scnprintf(buf, max_len, "CP035");
-+	else if (CP500_IS_CP505(cp500))
-+		n = scnprintf(buf, max_len, "CP505");
-+	else
-+		n = scnprintf(buf, max_len, "CP500");
-+
-+	n += scnprintf(buf + n, max_len - n, "_FPGA_%d.%02d",
-+		       cp500->version.major, cp500->version.minor);
-+
-+	/* test versions have test bit set */
-+	if (cp500->version.build & CP500_BUILD_TEST)
-+		n += scnprintf(buf + n, max_len - n, "Test%d",
-+			       cp500->version.build & ~CP500_BUILD_TEST);
-+
-+	n += scnprintf(buf + n, max_len - n, "\n");
-+
-+	return n;
-+}
-+
-+static ssize_t version_show(struct device *dev, struct device_attribute *attr,
-+			    char *buf)
-+{
-+	struct cp500 *cp500 = dev_get_drvdata(dev);
-+
-+	return cp500_get_fpga_version(cp500, buf, PAGE_SIZE);
-+}
-+static DEVICE_ATTR_RO(version);
-+
-+static ssize_t keep_cfg_show(struct device *dev, struct device_attribute *attr,
-+			     char *buf)
-+{
-+	struct cp500 *cp500 = dev_get_drvdata(dev);
-+	unsigned long keep_cfg = 1;
++	u8 sts;
++	int ret;
 +
 +	/*
-+	 * FPGA configuration stream is kept during reset when RECONFIG bit is
-+	 * zero
++	 * The I2C controller has an IN_USE bit for locking access to the
++	 * controller. This enables the use of I2C controller by other none
++	 * Linux processors.
++	 *
++	 * If the I2C controller is free, then the first read returns
++	 * IN_USE == 0. After that the I2C controller is locked and further
++	 * reads of IN_USE return 1.
++	 *
++	 * The I2C controller is unlocked by writing 1 into IN_USE.
++	 *
++	 * The IN_USE bit acts as a hardware semaphore for the I2C controller.
++	 * Poll for semaphore, but sleep while polling to free the CPU.
 +	 */
-+	if (ioread8(cp500->system_startup_addr + CP500_RECONFIG_REG) &
-+		CP500_RECFG_REQ)
-+		keep_cfg = 0;
++	ret = readb_poll_timeout(ki2c->base + KI2C_STATUS_REG,
++				 sts, (sts & KI2C_STATUS_IN_USE) == 0,
++				 KI2C_INUSE_SLEEP_US, KI2C_INUSE_TIMEOUT_US);
++	if (ret != 0)
++		dev_warn(&ki2c->auxdev->auxdev.dev, "%s err!\n", __func__);
 +
-+	return sysfs_emit(buf, "%lu\n", keep_cfg);
++	return ret;
 +}
 +
-+static ssize_t keep_cfg_store(struct device *dev, struct device_attribute *attr,
-+			      const char *buf, size_t count)
++static void ki2c_inuse_unlock(struct ki2c *ki2c)
 +{
-+	struct cp500 *cp500 = dev_get_drvdata(dev);
-+	unsigned long keep_cfg;
++	/* unlock the controller by writing 1 into IN_USE */
++	iowrite8(KI2C_STATUS_IN_USE, ki2c->base + KI2C_STATUS_REG);
++}
 +
-+	if (kstrtoul(buf, 10, &keep_cfg) < 0)
++static int ki2c_wait_for_bit(void __iomem *addr, u8 mask, unsigned long timeout)
++{
++	u8 val;
++
++	return readb_poll_timeout(addr, val, (val & mask), KI2C_POLL_DELAY_US,
++				  jiffies_to_usecs(timeout));
++}
++
++static int ki2c_wait_for_mcf(struct ki2c *ki2c)
++{
++	return ki2c_wait_for_bit(ki2c->base + KI2C_STATUS_REG, KI2C_STATUS_MCF,
++				 ki2c->adapter.timeout);
++}
++
++static int ki2c_wait_for_data(struct ki2c *ki2c)
++{
++	int ret;
++
++	ret = ki2c_wait_for_mcf(ki2c);
++	if (ret < 0)
++		return ret;
++
++	return ki2c_wait_for_bit(ki2c->base + KI2C_STATUS_REG,
++				 KI2C_STATUS_ACK_CYC,
++				 ki2c->adapter.timeout);
++}
++
++static int ki2c_wait_for_data_ack(struct ki2c *ki2c)
++{
++	unsigned int reg;
++	int ret;
++
++	ret = ki2c_wait_for_data(ki2c);
++	if (ret < 0)
++		return ret;
++
++	/* RXAK == 0 means ACK reveived */
++	reg = ioread8(ki2c->base + KI2C_STATUS_REG);
++	if (reg & KI2C_STATUS_RXAK)
++		return -EIO;
++
++	return 0;
++}
++
++static int ki2c_has_capability(struct ki2c *ki2c, unsigned int cap)
++{
++	unsigned int reg = ioread8(ki2c->base + KI2C_CAPABILITY_REG);
++
++	return (reg & cap) != 0;
++}
++
++static int ki2c_get_scl(struct ki2c *ki2c)
++{
++	unsigned int reg = ioread8(ki2c->base + KI2C_STATUS_DC_REG);
++
++	/* capability KI2C_CAPABILITY_DC required */
++	return (reg & KI2C_STATUS_DC_SCL) != 0;
++}
++
++static int ki2c_get_sda(struct ki2c *ki2c)
++{
++	unsigned int reg = ioread8(ki2c->base + KI2C_STATUS_DC_REG);
++
++	/* capability KI2C_CAPABILITY_DC required */
++	return (reg & KI2C_STATUS_DC_SDA) != 0;
++}
++
++static void ki2c_set_scl(struct ki2c *ki2c, int val)
++{
++	u8 control_dc;
++
++	/* capability KI2C_CAPABILITY_DC and KI2C_CONTROL_MEN = 0 reqired */
++	control_dc = ioread8(ki2c->base + KI2C_CONTROL_DC_REG);
++	if (val)
++		control_dc |= KI2C_CONTROL_DC_SCL;
++	else
++		control_dc &= ~KI2C_CONTROL_DC_SCL;
++	iowrite8(control_dc, ki2c->base + KI2C_CONTROL_DC_REG);
++}
++
++/*
++ * Resetting bus bitwise is done by checking SDA and applying clock cycles as
++ * long as SDA is low. 9 clock cycles are applied at most.
++ *
++ * Clock cycles are generated and ndelay() determines the duration of clock
++ * cycles. Generated clock rate is 100 KHz and so duration of both clock levels
++ * is: delay in ns = (10^6 / 100) / 2
++ */
++#define KI2C_RECOVERY_CLK_CNT	9
++#define KI2C_RECOVERY_NDELAY	5000
++static int ki2c_reset_bus_bitwise(struct ki2c *ki2c)
++{
++	int count = 0;
++	int val = 1;
++	int ret = 0;
++
++	/* disable I2C controller (MEN = 0) to get direct access to SCL/SDA */
++	iowrite8(0, ki2c->base + KI2C_CONTROL_REG);
++
++	/* generate clock cycles */
++	ki2c_set_scl(ki2c, val);
++	ndelay(KI2C_RECOVERY_NDELAY);
++	while (count++ < KI2C_RECOVERY_CLK_CNT * 2) {
++		if (val) {
++			/* SCL shouldn't be low here */
++			if (!ki2c_get_scl(ki2c)) {
++				dev_err(&ki2c->auxdev->auxdev.dev,
++					"SCL is stuck low!\n");
++				ret = -EBUSY;
++				break;
++			}
++
++			/* break if SDA is high */
++			if (ki2c_get_sda(ki2c))
++				break;
++		}
++
++		val = !val;
++		ki2c_set_scl(ki2c, val);
++		ndelay(KI2C_RECOVERY_NDELAY);
++	}
++
++	if (!ki2c_get_sda(ki2c)) {
++		dev_err(&ki2c->auxdev->auxdev.dev, "SDA is still low!\n");
++		ret = -EBUSY;
++	}
++
++	/* reenable controller */
++	iowrite8(KI2C_CONTROL_MEN, ki2c->base + KI2C_CONTROL_REG);
++
++	return ret;
++}
++
++/*
++ * Resetting bus bytewise is done by writing start bit, 9 data bits and stop
++ * bit.
++ *
++ * This is not 100% safe. If slave is an EEPROM and a write access was
++ * interrupted during the ACK cycle, this approach might not be able to recover
++ * the bus. The reason is, that after the 9 clock cycles the EEPROM will be in
++ * ACK cycle again and will hold SDA low like it did before the start of the
++ * routine. Furthermore the EEPROM might get written one additional byte with
++ * 0xff into it. Thus, use bitwise approach whenever possible, especially when
++ * EEPROMs are on the bus.
++ */
++static int ki2c_reset_bus_bytewise(struct ki2c *ki2c)
++{
++	int ret;
++
++	/* hold data line high for 9 clock cycles */
++	iowrite8(0xFF, ki2c->base + KI2C_DATA_REG);
++
++	/* create start condition */
++	iowrite8(KI2C_CONTROL_MEN | KI2C_CONTROL_MTX | KI2C_CONTROL_MSTA | KI2C_CONTROL_TXAK,
++		 ki2c->base + KI2C_CONTROL_REG);
++	ret = ki2c_wait_for_mcf(ki2c);
++	if (ret < 0) {
++		dev_err(&ki2c->auxdev->auxdev.dev, "Start condition failed\n");
++
++		return ret;
++	}
++
++	/* create stop condition */
++	iowrite8(KI2C_CONTROL_MEN | KI2C_CONTROL_MTX | KI2C_CONTROL_TXAK,
++		 ki2c->base + KI2C_CONTROL_REG);
++	ret = ki2c_wait_for_mcf(ki2c);
++	if (ret < 0)
++		dev_err(&ki2c->auxdev->auxdev.dev, "Stop condition failed\n");
++
++	return ret;
++}
++
++static int ki2c_reset_bus(struct ki2c *ki2c)
++{
++	int ret;
++
++	ret = ki2c_inuse_lock(ki2c);
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * If the I2C controller is capable of direct control of SCL/SDA, then a
++	 * bitwise reset is used. Otherwise fall back to bytewise reset.
++	 */
++	if (ki2c_has_capability(ki2c, KI2C_CAPABILITY_DC))
++		ret = ki2c_reset_bus_bitwise(ki2c);
++	else
++		ret = ki2c_reset_bus_bytewise(ki2c);
++
++	ki2c_inuse_unlock(ki2c);
++
++	return ret;
++}
++
++static void ki2c_write_target_addr(struct ki2c *ki2c, struct i2c_msg *m)
++{
++	u8 addr;
++
++	addr = m->addr << 1;
++	/* Bit 0 signals RD/WR */
++	if (m->flags & I2C_M_RD)
++		addr |= 0x01;
++
++	iowrite8(addr, ki2c->base + KI2C_DATA_REG);
++}
++
++static int ki2c_start_addr(struct ki2c *ki2c, struct i2c_msg *m)
++{
++	int ret;
++
++	/*
++	 * Store target address byte in the controller. This has to be done
++	 * before sending START condition.
++	 */
++	ki2c_write_target_addr(ki2c, m);
++
++	/* enable controller for TX */
++	iowrite8(KI2C_CONTROL_MEN | KI2C_CONTROL_MTX,
++		 ki2c->base + KI2C_CONTROL_REG);
++
++	/* send START condition and target address byte */
++	iowrite8(KI2C_CONTROL_MEN | KI2C_CONTROL_MTX | KI2C_CONTROL_MSTA,
++		 ki2c->base + KI2C_CONTROL_REG);
++
++	ret = ki2c_wait_for_data_ack(ki2c);
++	if (ret < 0)
++		/*
++		 * For EEPROMs this is normal behavior during internal write
++		 * operation.
++		 */
++		dev_dbg(&ki2c->auxdev->auxdev.dev,
++			"%s wait for ACK err at 0x%02x!\n", __func__, m->addr);
++
++	return ret;
++}
++
++static int ki2c_repstart_addr(struct ki2c *ki2c, struct i2c_msg *m)
++{
++	int ret;
++
++	/* repeated start and write is not supported */
++	if ((m->flags & I2C_M_RD) == 0) {
++		dev_warn(&ki2c->auxdev->auxdev.dev,
++			 "Repeated start not supported for writes\n");
 +		return -EINVAL;
-+
-+	/*
-+	 * In normal operation "keep_cfg" is "1". This means that the FPGA keeps
-+	 * its configuration stream during a reset.
-+	 * In case of a firmware update of the FPGA, the configuration stream
-+	 * needs to be reloaded. This can be done without a powercycle by
-+	 * writing a "0" into the "keep_cfg" attribute. After a reset/reboot th
-+	 * new configuration stream will be loaded.
-+	 */
-+	if (keep_cfg)
-+		iowrite8(0, cp500->system_startup_addr + CP500_RECONFIG_REG);
-+	else
-+		iowrite8(CP500_RECFG_REQ,
-+			 cp500->system_startup_addr + CP500_RECONFIG_REG);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(keep_cfg);
-+
-+static struct attribute *attrs[] = {
-+	&dev_attr_version.attr,
-+	&dev_attr_keep_cfg.attr,
-+	NULL
-+};
-+static const struct attribute_group attrs_group = { .attrs = attrs };
-+
-+static void cp500_i2c_release(struct device *dev)
-+{
-+	struct keba_i2c_auxdev *i2c =
-+		container_of(dev, struct keba_i2c_auxdev, auxdev.dev);
-+
-+	kfree(i2c);
-+}
-+
-+static int cp500_register_i2c(struct cp500 *cp500)
-+{
-+	int retval;
-+
-+	cp500->i2c = kzalloc(sizeof(*cp500->i2c), GFP_KERNEL);
-+	if (!cp500->i2c)
-+		return -ENOMEM;
-+
-+	cp500->i2c->auxdev.name = "i2c";
-+	cp500->i2c->auxdev.id = 0;
-+	cp500->i2c->auxdev.dev.release = cp500_i2c_release;
-+	cp500->i2c->auxdev.dev.parent = &cp500->pci_dev->dev;
-+	cp500->i2c->io = (struct resource) {
-+		 /* I2C register area */
-+		 .start = (resource_size_t) cp500->sys_hwbase +
-+			  cp500->devs->i2c.offset,
-+		 .end   = (resource_size_t) cp500->sys_hwbase +
-+			  cp500->devs->i2c.offset +
-+			  cp500->devs->i2c.size - 1,
-+		 .flags = IORESOURCE_MEM,
-+	};
-+	cp500->i2c->info_size = ARRAY_SIZE(cp500_i2c_info);
-+	cp500->i2c->info = cp500_i2c_info;
-+
-+	retval = auxiliary_device_init(&cp500->i2c->auxdev);
-+	if (retval) {
-+		kfree(cp500->i2c);
-+		cp500->i2c = NULL;
-+
-+		return retval;
 +	}
-+	retval = __auxiliary_device_add(&cp500->i2c->auxdev, "keba");
-+	if (retval) {
-+		auxiliary_device_uninit(&cp500->i2c->auxdev);
-+		cp500->i2c = NULL;
 +
-+		return retval;
++	/* send repeated start */
++	iowrite8(KI2C_CONTROL_MEN | KI2C_CONTROL_MSTA | KI2C_CONTROL_RSTA,
++		 ki2c->base + KI2C_CONTROL_REG);
++
++	ret = ki2c_wait_for_mcf(ki2c);
++	if (ret < 0) {
++		dev_warn(&ki2c->auxdev->auxdev.dev,
++			 "%s wait for MCF err at 0x%02x!\n", __func__, m->addr);
++		return ret;
++	}
++
++	/* write target-address byte */
++	ki2c_write_target_addr(ki2c, m);
++
++	ret = ki2c_wait_for_data_ack(ki2c);
++	if (ret < 0)
++		dev_warn(&ki2c->auxdev->auxdev.dev,
++			 "%s wait for ACK err at 0x%02x!\n", __func__, m->addr);
++
++	return ret;
++}
++
++static void ki2c_stop(struct ki2c *ki2c)
++{
++	iowrite8(KI2C_CONTROL_MEN, ki2c->base + KI2C_CONTROL_REG);
++	ki2c_wait_for_mcf(ki2c);
++}
++
++static int ki2c_write(struct ki2c *ki2c, const u8 *data, int len)
++{
++	int ret;
++
++	for (int i = 0; i < len; i++) {
++		/* write data byte */
++		iowrite8(data[i], ki2c->base + KI2C_DATA_REG);
++
++		ret = ki2c_wait_for_data_ack(ki2c);
++		if (ret < 0)
++			return ret;
 +	}
 +
 +	return 0;
 +}
 +
-+static void cp500_register_auxiliary_devs(struct cp500 *cp500)
++static int ki2c_read(struct ki2c *ki2c, u8 *data, int len)
 +{
-+	struct device *dev = &cp500->pci_dev->dev;
++	u8 control;
++	int ret;
 +
-+	if (cp500_register_i2c(cp500))
-+		dev_warn(dev, "Failed to register i2c!\n");
++	if (len == 0)
++		return 0;	/* nothing to do */
++
++	control = KI2C_CONTROL_MEN | KI2C_CONTROL_MSTA;
++
++	/* if just one byte => send tx-nack after transfer */
++	if (len == 1)
++		control |= KI2C_CONTROL_TXAK;
++
++	iowrite8(control, ki2c->base + KI2C_CONTROL_REG);
++
++	/* dummy read to start transfer on bus */
++	ioread8(ki2c->base + KI2C_DATA_REG);
++
++	for (int i = 0; i < len; i++) {
++		ret = ki2c_wait_for_data(ki2c);
++		if (ret < 0)
++			return ret;
++
++		/* send tx-nack after transfer of last byte */
++		if (i == len - 2)
++			iowrite8(KI2C_CONTROL_MEN | KI2C_CONTROL_MSTA | KI2C_CONTROL_TXAK,
++				 ki2c->base + KI2C_CONTROL_REG);
++
++		/*
++		 * switch to TX on last byte, so that reading DATA-register
++		 * does not trigger another read transfer.
++		 */
++		if (i == len - 1)
++			iowrite8(KI2C_CONTROL_MEN | KI2C_CONTROL_MSTA | KI2C_CONTROL_MTX,
++				 ki2c->base + KI2C_CONTROL_REG);
++
++		/* read byte and start next transfer (if not last byte) */
++		data[i] = ioread8(ki2c->base + KI2C_DATA_REG);
++	}
++
++	return len;
 +}
 +
-+static void cp500_unregister_dev(struct auxiliary_device *auxdev)
++static int ki2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
 +{
-+	auxiliary_device_delete(auxdev);
-+	auxiliary_device_uninit(auxdev);
++	struct ki2c *ki2c = i2c_get_adapdata(adap);
++	int ret;
++
++	ret = ki2c_inuse_lock(ki2c);
++	if (ret < 0)
++		return ret;
++
++	for (int i = 0; i < num; i++) {
++		struct i2c_msg *m = &msgs[i];
++
++		if (i == 0)
++			ret = ki2c_start_addr(ki2c, m);
++		else
++			ret = ki2c_repstart_addr(ki2c, m);
++		if (ret < 0)
++			break;
++
++		if (m->flags & I2C_M_RD)
++			ret = ki2c_read(ki2c, m->buf, m->len);
++		else
++			ret = ki2c_write(ki2c, m->buf, m->len);
++		if (ret < 0)
++			break;
++	}
++
++	ki2c_stop(ki2c);
++
++	ki2c_inuse_unlock(ki2c);
++
++	return (ret < 0) ? ret : num;
 +}
 +
-+static void cp500_unregister_auxiliary_devs(struct cp500 *cp500)
++static void ki2c_unregister_devices(struct ki2c *ki2c)
 +{
++	for (int i = 0; i < ki2c->client_size; i++) {
++		struct i2c_client *client = ki2c->client[i];
 +
-+	if (cp500->i2c) {
-+		cp500_unregister_dev(&cp500->i2c->auxdev);
-+		cp500->i2c = NULL;
++		if (client)
++			i2c_unregister_device(client);
 +	}
 +}
 +
-+static irqreturn_t cp500_axi_handler(int irq, void *dev)
++static int ki2c_register_devices(struct ki2c *ki2c)
 +{
-+	struct cp500 *cp500 = dev;
-+	u32 axi_address = ioread32(cp500->system_startup_addr + CP500_AXI_REG);
++	struct i2c_board_info *info = ki2c->auxdev->info;
 +
-+	/*
-+	 * FPGA signals AXI response error, print AXI address to indicate which
-+	 * IP core was affected
-+	 */
-+	dev_err(&cp500->pci_dev->dev, "AXI response error at 0x%08x\n",
-+		axi_address);
++	/* register all I2C devices from platform_data array */
++	for (int i = 0; i < ki2c->client_size; i++) {
++		struct i2c_client *client;
++		unsigned short const addr_list[2] = { info[i].addr,
++						      I2C_CLIENT_END };
 +
-+	return IRQ_HANDLED;
-+}
++		client = i2c_new_scanned_device(&ki2c->adapter, &info[i],
++						addr_list, NULL);
++		if (!IS_ERR(client)) {
++			ki2c->client[i] = client;
++		} else if (PTR_ERR(client) != -ENODEV) {
++			ki2c_unregister_devices(ki2c);
 +
-+static int cp500_enable(struct cp500 *cp500)
-+{
-+	int axi_irq = -1;
-+	int ret;
-+
-+	if (cp500->msix_num > CP500_NUM_MSIX_NO_AXI) {
-+		axi_irq = pci_irq_vector(cp500->pci_dev, CP500_AXI_MSIX);
-+		ret = request_irq(axi_irq, cp500_axi_handler, 0,
-+				  CP500, cp500);
-+		if (ret != 0) {
-+			dev_err(&cp500->pci_dev->dev,
-+				"Failed to register AXI response error!\n");
-+			return ret;
++			return PTR_ERR(client);
 +		}
 +	}
 +
 +	return 0;
 +}
 +
-+static void cp500_disable(struct cp500 *cp500)
++static u32 ki2c_func(struct i2c_adapter *adap)
 +{
-+	int axi_irq;
-+
-+	if (cp500->msix_num > CP500_NUM_MSIX_NO_AXI) {
-+		axi_irq = pci_irq_vector(cp500->pci_dev, CP500_AXI_MSIX);
-+		free_irq(axi_irq, cp500);
-+	}
++	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
 +}
 +
-+static int cp500_probe(struct pci_dev *pci_dev, const struct pci_device_id *id)
++static const struct i2c_algorithm ki2c_algo = {
++	.master_xfer   = ki2c_xfer,
++	.functionality = ki2c_func,
++};
++
++static int ki2c_probe(struct auxiliary_device *auxdev,
++		      const struct auxiliary_device_id *id)
 +{
-+	struct device *dev = &pci_dev->dev;
-+	struct resource startup;
-+	struct cp500 *cp500;
-+	u32 cp500_vers;
-+	char buf[64];
++	struct device *dev = &auxdev->dev;
++	struct i2c_adapter *adap;
++	struct ki2c *ki2c;
 +	int ret;
 +
-+	cp500 = devm_kzalloc(dev, sizeof(*cp500), GFP_KERNEL);
-+	if (!cp500)
++	ki2c = devm_kzalloc(dev, sizeof(*ki2c), GFP_KERNEL);
++	if (!ki2c)
 +		return -ENOMEM;
-+	cp500->pci_dev = pci_dev;
-+	cp500->sys_hwbase = pci_resource_start(pci_dev, CP500_SYS_BAR);
-+	cp500->ecm_hwbase = pci_resource_start(pci_dev, CP500_ECM_BAR);
-+	if (!cp500->sys_hwbase || !cp500->ecm_hwbase)
-+		return -ENODEV;
++	ki2c->auxdev = container_of(auxdev, struct keba_i2c_auxdev, auxdev);
++	ki2c->client = devm_kcalloc(dev, ki2c->auxdev->info_size,
++				    sizeof(*ki2c->client), GFP_KERNEL);
++	if (!ki2c->client)
++		return -ENOMEM;
++	ki2c->client_size = ki2c->auxdev->info_size;
++	auxiliary_set_drvdata(auxdev, ki2c);
 +
-+	if (CP500_IS_CP035(cp500))
-+		cp500->devs = &cp035_devices;
-+	else if (CP500_IS_CP505(cp500))
-+		cp500->devs = &cp505_devices;
-+	else if (CP500_IS_CP520(cp500))
-+		cp500->devs = &cp520_devices;
-+	else
-+		return -ENODEV;
++	ki2c->base = devm_ioremap_resource(dev, &ki2c->auxdev->io);
++	if (IS_ERR(ki2c->base))
++		return PTR_ERR(ki2c->base);
 +
-+	ret = pci_enable_device(pci_dev);
++	/* enable controller */
++	iowrite8(KI2C_CONTROL_MEN, ki2c->base + KI2C_CONTROL_REG);
++
++	adap = &ki2c->adapter;
++	strscpy(adap->name, "KEBA I2C adapter", sizeof(adap->name));
++	adap->owner = THIS_MODULE;
++	adap->class = I2C_CLASS_HWMON;
++	adap->algo = &ki2c_algo;
++	adap->dev.parent = dev;
++
++	i2c_set_adapdata(adap, ki2c);
++
++	/* reset bus before probing I2C devices */
++	ret = ki2c_reset_bus(ki2c);
 +	if (ret)
-+		return ret;
-+	pci_set_master(pci_dev);
++		goto out_disable;
 +
-+	startup = *pci_resource_n(pci_dev, CP500_SYS_BAR);
-+	startup.end = startup.start + cp500->devs->startup.size - 1;
-+	cp500->system_startup_addr = devm_ioremap_resource(&pci_dev->dev,
-+							   &startup);
-+	if (IS_ERR(cp500->system_startup_addr)) {
-+		ret = PTR_ERR(cp500->system_startup_addr);
++	ret = i2c_add_adapter(adap);
++	if (ret) {
++		dev_err(dev, "Failed to add adapter (%d)!\n", ret);
 +		goto out_disable;
 +	}
 +
-+	cp500->msix_num = pci_alloc_irq_vectors(pci_dev, CP500_NUM_MSIX_NO_MMI,
-+						CP500_NUM_MSIX, PCI_IRQ_MSIX);
-+	if (cp500->msix_num < CP500_NUM_MSIX_NO_MMI) {
-+		dev_err(&pci_dev->dev,
-+			"Hardware does not support enough MSI-X interrupts\n");
-+		ret = -ENODEV;
-+		goto out_disable;
++	ret = ki2c_register_devices(ki2c);
++	if (ret) {
++		dev_err(dev, "Failed to register devices (%d)!\n", ret);
++		goto out_delete;
 +	}
-+
-+	cp500_vers = ioread32(cp500->system_startup_addr + CP500_VERSION_REG);
-+	cp500->version.major = (cp500_vers & 0xff);
-+	cp500->version.minor = (cp500_vers >> 8) & 0xff;
-+	cp500->version.build = (cp500_vers >> 16) & 0xffff;
-+	cp500_get_fpga_version(cp500, buf, sizeof(buf));
-+
-+	dev_info(&pci_dev->dev, "FPGA version %s", buf);
-+
-+	pci_set_drvdata(pci_dev, cp500);
-+
-+	ret = sysfs_create_group(&pci_dev->dev.kobj, &attrs_group);
-+	if (ret != 0)
-+		goto out_free_irq;
-+
-+	ret = cp500_enable(cp500);
-+	if (ret != 0)
-+		goto out_remove_group;
-+
-+	cp500_register_auxiliary_devs(cp500);
 +
 +	return 0;
 +
-+out_remove_group:
-+	sysfs_remove_group(&pci_dev->dev.kobj, &attrs_group);
-+out_free_irq:
-+	pci_free_irq_vectors(pci_dev);
++out_delete:
++	i2c_del_adapter(adap);
 +out_disable:
-+	pci_clear_master(pci_dev);
-+	pci_disable_device(pci_dev);
-+
++	iowrite8(0, ki2c->base + KI2C_CONTROL_REG);
 +	return ret;
 +}
 +
-+static void cp500_remove(struct pci_dev *pci_dev)
++static void ki2c_remove(struct auxiliary_device *auxdev)
 +{
-+	struct cp500 *cp500 = pci_get_drvdata(pci_dev);
++	struct ki2c *ki2c = auxiliary_get_drvdata(auxdev);
 +
-+	cp500_unregister_auxiliary_devs(cp500);
++	ki2c_unregister_devices(ki2c);
 +
-+	cp500_disable(cp500);
++	i2c_del_adapter(&ki2c->adapter);
 +
-+	sysfs_remove_group(&pci_dev->dev.kobj, &attrs_group);
++	/* disable controller */
++	iowrite8(0, ki2c->base + KI2C_CONTROL_REG);
 +
-+	pci_set_drvdata(pci_dev, 0);
-+
-+	pci_free_irq_vectors(pci_dev);
-+
-+	pci_clear_master(pci_dev);
-+	pci_disable_device(pci_dev);
++	auxiliary_set_drvdata(auxdev, NULL);
 +}
 +
-+static struct pci_device_id cp500_ids[] = {
-+	{ PCI_DEVICE(PCI_VENDOR_ID_KEBA, PCI_DEVICE_ID_KEBA_CP035) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_KEBA, PCI_DEVICE_ID_KEBA_CP505) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_KEBA, PCI_DEVICE_ID_KEBA_CP520) },
-+	{ }
++static const struct auxiliary_device_id ki2c_devtype_aux[] = {
++	{ .name = "keba.i2c" },
++	{ },
 +};
-+MODULE_DEVICE_TABLE(pci, cp500_ids);
++MODULE_DEVICE_TABLE(auxiliary, ki2c_devtype_aux);
 +
-+static struct pci_driver cp500_driver = {
-+	.name = CP500,
-+	.id_table = cp500_ids,
-+	.probe = cp500_probe,
-+	.remove = cp500_remove,
++static struct auxiliary_driver ki2c_driver_aux = {
++	.name = KI2C,
++	.id_table = ki2c_devtype_aux,
++	.probe = ki2c_probe,
++	.remove = ki2c_remove,
 +};
-+module_pci_driver(cp500_driver);
++module_auxiliary_driver(ki2c_driver_aux);
 +
 +MODULE_AUTHOR("Gerhard Engleder <eg@keba.com>");
-+MODULE_DESCRIPTION("KEBA CP500 system FPGA driver");
++MODULE_DESCRIPTION("KEBA I2C bus controller driver");
 +MODULE_LICENSE("GPL");
-diff --git a/include/linux/misc/keba.h b/include/linux/misc/keba.h
-new file mode 100644
-index 000000000000..323b31a847c5
---- /dev/null
-+++ b/include/linux/misc/keba.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2024, KEBA Industrial Automation Gmbh */
-+
-+#ifndef _LINUX_MISC_KEBA_H
-+#define _LINUX_MISC_KEBA_H
-+
-+#include <linux/auxiliary_bus.h>
-+
-+struct i2c_board_info;
-+
-+/**
-+ * struct keba_i2c_auxdev - KEBA I2C auxiliary device
-+ * @auxdev: auxiliary device object
-+ * @io: address range of I2C controller IO memory
-+ * @info_size: number of I2C devices to be probed
-+ * @info: I2C devices to be probed
-+ */
-+struct keba_i2c_auxdev {
-+	struct auxiliary_device auxdev;
-+	struct resource io;
-+	int info_size;
-+	struct i2c_board_info *info;
-+};
-+
-+#endif /* _LINUX_MISC_KEBA_H */
 -- 
 2.39.2
 
