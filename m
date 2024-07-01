@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-4517-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4518-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9001991DAF9
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 11:02:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 918A691DB03
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 11:03:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C08551C22248
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 09:02:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01D731F232D0
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 09:03:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C5E612C486;
-	Mon,  1 Jul 2024 09:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A446C13D63B;
+	Mon,  1 Jul 2024 09:02:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GjkbU+Pc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hh/CwXh0"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC237CF39;
-	Mon,  1 Jul 2024 09:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523B582D69;
+	Mon,  1 Jul 2024 09:02:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719824483; cv=none; b=KPHgiDC4XwXDsu1AXofJoiQcuo3OwQJIRY6Ng3Yz7a0qUkVuTHddSkyJqTDOdMKMkZmcR5Wkg4GLGDCfr6DER9Dh9NZ3AH0yz7rBFJKrrr8INzLyVJXHM+p58GlbJLJcGHSYOdFJNgnaWkY1fsLMNF6rgyuiu5Gr26jdMo9IJOw=
+	t=1719824524; cv=none; b=Qk4qkNJUTNLV5pu+Sj4dW8J+lJuWokjdaM7/oNilUvT9t8LFs74T+dxNnRQdcf+wAuauglA22eDrnRpHwYAzBUstRS5DidYq4XQE085TYeO/Es0AEEla0TXjc7s3r5Rk6sSeGMbqv8pyzQBx+uL1zn58Cur5z0PYtXGX+bZTeTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719824483; c=relaxed/simple;
-	bh=s+TjvVPDBVzH6t17LdQaVkGzy2ywWd6bwHUeQGKDQzI=;
+	s=arc-20240116; t=1719824524; c=relaxed/simple;
+	bh=lkhMYXmgz1gcWBTRQm7auBZYbu3nACMpogMVfgW7hHU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oWCzohds3t0+l8wkuPTs8lXAU60ZhSIt7L2jwIG9isTe4sPfBhMM9+VJLaWIfIhrNN+csxb6d7++pqNtP9/gkSKtB5htRKeKD1TC3Htfkc0u7od3JgtPb0o+d1I5C+heIBYrxkelOz+Er17Av6lQ5UgS2ahmLU/lIqOQnG9iPmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GjkbU+Pc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD58C116B1;
-	Mon,  1 Jul 2024 09:01:16 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Vgm1qN5UszyGOpdJwDa63uuOsUulaJzYcbNQy1xuDf2Gyy84clsjMx+2iMM9NDiYsas6cOB8mkjxiFAcgpyXgHgLG7HAzq/n8b5G8/tTLF3Gl9kO82pd1/dx0sQ07MFPgHVr+DNbnoI1hU1sLXOetSY7MP23121pEEWNDwX4874=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hh/CwXh0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBDDC116B1;
+	Mon,  1 Jul 2024 09:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719824483;
-	bh=s+TjvVPDBVzH6t17LdQaVkGzy2ywWd6bwHUeQGKDQzI=;
+	s=k20201202; t=1719824524;
+	bh=lkhMYXmgz1gcWBTRQm7auBZYbu3nACMpogMVfgW7hHU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GjkbU+PcdCxDfNMRwOL5Yg87ZPbneJhx8++kAv5avlsjQs3zemEp8XRcQdq+a8HaY
-	 jcZj/CQx1T4WEyFPBO1DGVulipIb4nBqlUFipjDVD37qkbHVSuLoOOioFEXOKR+qRz
-	 4RDQHq7LkjFdLJK6COG9DiA40FgCUYKgQIQcR3hGINW7hYvrQVycaT2miA7Zcq+qlu
-	 EvLvMMOa8Gwmg8rwuDNr4jiOcEA7sv/OMYDRLBIbOenq1NB02jx6UauXFswjycchS5
-	 i5P6yo3WkQFLa5xbBxhxhVJJdgWUSJHYROtU4GuLd3RYSQCKqLISz4IAuRRDEx9Txk
-	 0n5/kk66DWlHw==
-Message-ID: <87cb2bdf-3b4c-4104-b2bb-aef117770646@kernel.org>
-Date: Mon, 1 Jul 2024 11:01:14 +0200
+	b=hh/CwXh0XmffSzAp0hxrbz6Z+OAFgiSKiuhLAxKZEPwM0ShvnbdJUTK5rOrfF3OIe
+	 zjH5BWYQFafqpSitYjDr0+JD6nO6gZ/+Ab9ladUsWhcpjew6xqxZtXiIzBZW5Eu2JG
+	 UpUHyDS4IAoKxrf/8iFRazEIK346xqjQAiUzn4MFMAGk52sBJW7VgGSdMuJaT71u07
+	 k0/FzDfvpYd6EwwK/GhhcXoqRtxRD+D6ZyqTGTj6r48ruDU6UWDH2DpwaNE1sHuWd0
+	 nhhH254oBP/4rfTc9iC8DIui8wYsKqHpQW/nfvdNYBhlsvN6YSl/5XlsFXbNwtamGr
+	 idWuLjLIvGX9w==
+Message-ID: <506e2f25-bd51-40c3-b02c-dc433062e422@kernel.org>
+Date: Mon, 1 Jul 2024 11:01:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -51,8 +51,8 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 5/6] i2c: Enable IMX577 camera sensor for qcm6490
-To: Vikram Sharma <quic_vikramsa@quicinc.com>, Robert Foss
- <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+To: Luca Weiss <luca@lucaweiss.eu>, Robert Foss <rfoss@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>,
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
  Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -60,12 +60,14 @@ To: Vikram Sharma <quic_vikramsa@quicinc.com>, Robert Foss
  Hariram Purushothaman <hariramp@quicinc.com>,
  cros-qcom-dts-watchers@chromium.org, Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konrad.dybcio@linaro.org>,
- Loic Poulain <loic.poulain@linaro.org>, Andi Shyti <andi.shyti@kernel.org>
+ Loic Poulain <loic.poulain@linaro.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Vikram Sharma <quic_vikramsa@quicinc.com>
 Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-i2c@vger.kernel.org, Hariram Purushothaman <quic_hariramp@quicinc.com>
 References: <20240629-camss_first_post_linux_next-v1-0-bc798edabc3a@quicinc.com>
  <20240629-camss_first_post_linux_next-v1-5-bc798edabc3a@quicinc.com>
+ <2902343.mvXUDI8C0e@g550jk>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,30 +113,43 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240629-camss_first_post_linux_next-v1-5-bc798edabc3a@quicinc.com>
+In-Reply-To: <2902343.mvXUDI8C0e@g550jk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 28/06/2024 20:32, Vikram Sharma wrote:
-> This change enables IMX577 sensor driver for qcm6490.
+On 29/06/2024 10:22, Luca Weiss wrote:
+> On Freitag, 28. Juni 2024 20:32:39 MESZ Vikram Sharma wrote:
+>> This change enables IMX577 sensor driver for qcm6490.
+>>
+>> Signed-off-by: Hariram Purushothaman <quic_hariramp@quicinc.com>
+>> Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
+>> ---
+>>  drivers/i2c/busses/i2c-qcom-cci.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+>> index 414882c57d7f..10e6df566ae3 100644
+>> --- a/drivers/i2c/busses/i2c-qcom-cci.c
+>> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
+>> @@ -817,6 +817,7 @@ static const struct of_device_id cci_dt_match[] = {
+>>  	 * Do not add any new ones unless they introduce a new config
+>>  	 */
+>>  	{ .compatible = "qcom,msm8916-cci", .data = &cci_v1_data},
+>> +	{ .compatible = "qcom,sc7280-cci", .data = &cci_v2_data},
 > 
-> Signed-off-by: Hariram Purushothaman <quic_hariramp@quicinc.com>
-> Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
-> ---
->  drivers/i2c/busses/i2c-qcom-cci.c | 1 +
->  1 file changed, 1 insertion(+)
+> Please read the comment above qcom,msm8916-cci.
 > 
-> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index 414882c57d7f..10e6df566ae3 100644
-> --- a/drivers/i2c/busses/i2c-qcom-cci.c
-> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -817,6 +817,7 @@ static const struct of_device_id cci_dt_match[] = {
->  	 * Do not add any new ones unless they introduce a new config
->  	 */
->  	{ .compatible = "qcom,msm8916-cci", .data = &cci_v1_data},
-> +	{ .compatible = "qcom,sc7280-cci", .data = &cci_v2_data},
+> And sc7280.dtsi already uses
+> 
+>   compatible = "qcom,sc7280-cci", "qcom,msm8996-cci";
+> 
+> So qcom,msm8996-cci with the same match data (cci_v2_data) gets used, so
+> just drop this patch.
+> 
 
-NAK, ridiculous.
+I think we put quite obvious comment, yet it is ignored.
+
+Any ideas how to change the comment so people will read it?
 
 Best regards,
 Krzysztof
