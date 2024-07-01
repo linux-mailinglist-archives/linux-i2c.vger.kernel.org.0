@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-4558-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4559-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 487D291E60D
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 18:58:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 452F391E612
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 18:58:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79C231C20D91
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 16:58:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF49C1F24C30
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 16:58:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF6B16EB40;
-	Mon,  1 Jul 2024 16:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7A2416EB71;
+	Mon,  1 Jul 2024 16:58:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQBy6paj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o40lU3+q"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564AF16E881;
-	Mon,  1 Jul 2024 16:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6337216EB5B;
+	Mon,  1 Jul 2024 16:58:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719853089; cv=none; b=BuHZUV/RUmXtHRXlufPcfRXbbh/7uC4JZ9L7ANNf/smb6dqf57+fP0ymDSUqGAgOEojFRNM/3M7L7rpQJ7qaN1Ul0mcGvB9maKxkN6zrFDcTRD5UL4XKvhrcT3btNhy+zpLQ6ynkDuStfjJQAf+lIp9m0PRljf7YWpd8xUadC0U=
+	t=1719853090; cv=none; b=ghktExruRs94YHokEAvFJYm6U6+DWcgS7PiaPVfPI+wNH+5N+piR/SgzkudnMTeVc+b0qwrCwBV27+8fYz1g01IOjXUhJyiC9fRsVvfNITtN/rtc6ujtA8t9KLbnNiZWBX3TXWVddbQCSHT2KhcFLVAkyjC9qMR2TM8gJYyzQzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719853089; c=relaxed/simple;
-	bh=agWLB1dSsil03LVg+k0hNyOLjUMIwQj5qW3YF6NP3VU=;
+	s=arc-20240116; t=1719853090; c=relaxed/simple;
+	bh=TgmAawkvwnXSaXC3mxIRK84/4eKNm+uRnN4qvy+cKlI=;
 	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=ldEILZdV6cddio5fCOZ5FgBuM6zpr5zxRJvKFI8Cc/jGzXN3fR3mSWnSMnN+4PPYRN+nNUI4od3B6mCNVHoM5FmQC5e2CdFVhCbC/AxI6l8z6jDvfpn+QImh6z0vB2xwnx6yV0axbcfmKspCIPVW2uI+QkV+smCGkJGFsjZOKw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQBy6paj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D62AC4AF10;
-	Mon,  1 Jul 2024 16:58:08 +0000 (UTC)
+	 Message-Id:Subject; b=bJMyBIIaeo6Uo+jJISqsk5YDq+cILFozjVin5sNVIFlvqlWsjs36xFjwyh5vaDeTmvxp/jyvpN55TF63dzZnZd6z0r3fQw3RAhVboNZ8IVy5cmdJMfMln+pXgvrYX/qytErXuzipj3saONA5ovgN6MLQM2K02CPIrbPUkiLe02o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o40lU3+q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6C74C4AF17;
+	Mon,  1 Jul 2024 16:58:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719853088;
-	bh=agWLB1dSsil03LVg+k0hNyOLjUMIwQj5qW3YF6NP3VU=;
+	s=k20201202; t=1719853090;
+	bh=TgmAawkvwnXSaXC3mxIRK84/4eKNm+uRnN4qvy+cKlI=;
 	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=CQBy6pajkwKMefcUd3lLxZDuM2/mVXIBQOKyhDxEq601044HXLrBRyTr8Oxz50wvb
-	 B2+WYfe73WqG7smoY27qDBwIyBEfV+NE9PtYzD8n37eENkfpRi2NW63XzCgYPgcUmb
-	 lT2XJmPmGl/UOhdVFxmRamz7bgKeQGXYvk1/Dkuv4NnaycfuA8qheMau/VNqF7/dOi
-	 TGsSa6M/v7dzQEvix1XwO60RILmZLWv6o3TNtUWHZJgfOYgX0uVGQGWaYG2VfSlN2c
-	 Mo10boDdEtXBvLaJBurfkpgSwWYmY88C/rJhrdQX9XY733HJE5/Vk7KoZ611tt3XbQ
-	 6LKnycCbANP4g==
-Date: Mon, 01 Jul 2024 10:58:07 -0600
+	b=o40lU3+quYwLTPcZr5Op6ZbcFXx5yUk+bUVd6zcwa4O3TrQ0I+DJQ1dID4dr+f2HM
+	 E0AywnRbTLZqkV86bmlbKZDSlVAyVNIrnkwuI1UYKfHbO6CKkheWvEgNbTdARkhM93
+	 PMZxaeHvXoqt1eOEBcksQwMIBHuoVGbRCwyJuHYDt0FwCJhY+Ag3JJoppTAmg/KqPE
+	 xScpOljMwBJIbDAMlJiFtWNluw3/Qjt31p1ZwokgNQaysa0bZGlA5aplVMz9WOhioR
+	 BVUlhWMTJZjmLvj5kMRPOe0F4hPCsI/WWVJhaB79d0hHGnyiHcWLy0lbw2v+YsbaUT
+	 6KQpjByW83Cmg==
+Date: Mon, 01 Jul 2024 10:58:09 -0600
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,29 +52,29 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: "Rob Herring (Arm)" <robh@kernel.org>
 To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc: thierry.reding@gmail.com, andi.shyti@kernel.org, krzk+dt@kernel.org, 
- ulf.hansson@linaro.org, linux-mmc@vger.kernel.org, 
- devicetree@vger.kernel.org, digetx@gmail.com, corbet@lwn.net, 
- linux-i2c@vger.kernel.org, jonathanh@nvidia.com, conor+dt@kernel.org, 
- ldewangan@nvidia.com, mkumard@nvidia.com, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, wsa+renesas@sang-engineering.com, 
- adrian.hunter@intel.com, linux-tegra@vger.kernel.org
-In-Reply-To: <20240701151231.29425-5-kyarlagadda@nvidia.com>
+Cc: ldewangan@nvidia.com, digetx@gmail.com, adrian.hunter@intel.com, 
+ mkumard@nvidia.com, thierry.reding@gmail.com, jonathanh@nvidia.com, 
+ conor+dt@kernel.org, andi.shyti@kernel.org, ulf.hansson@linaro.org, 
+ wsa+renesas@sang-engineering.com, krzk+dt@kernel.org, 
+ linux-tegra@vger.kernel.org, corbet@lwn.net, devicetree@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-i2c@vger.kernel.org
+In-Reply-To: <20240701151231.29425-6-kyarlagadda@nvidia.com>
 References: <20240701151231.29425-1-kyarlagadda@nvidia.com>
- <20240701151231.29425-5-kyarlagadda@nvidia.com>
-Message-Id: <171985308555.97890.11616650071980012094.robh@kernel.org>
-Subject: Re: [RFC PATCH V2 04/12] dt-bindings: misc: tegra-i2c: config
- settings
+ <20240701151231.29425-6-kyarlagadda@nvidia.com>
+Message-Id: <171985308638.97930.5431807770986392243.robh@kernel.org>
+Subject: Re: [RFC PATCH V2 05/12] dt-bindings: i2c: tegra-i2c: reference to
+ config
 
 
-On Mon, 01 Jul 2024 20:42:22 +0530, Krishna Yarlagadda wrote:
+On Mon, 01 Jul 2024 20:42:23 +0530, Krishna Yarlagadda wrote:
 > I2C interface timing registers are configured using config setting
-> framework. List available field properties for Tegra I2C controllers.
+> framework. Add reference to I2C config settings.
 > 
 > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 > ---
->  .../misc/nvidia,tegra-config-settings.yaml    | 83 +++++++++++++++++--
->  1 file changed, 74 insertions(+), 9 deletions(-)
+>  .../devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml          | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
 
 My bot found errors running 'make dt_binding_check' on your patch:
@@ -82,18 +82,11 @@ My bot found errors running 'make dt_binding_check' on your patch:
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/net/wireless/qcom,ath11k.example.dtb: /example-0/remoteproc@cd00000: failed to match any schema with compatible: ['qcom,ipq8074-wcss-pil']
-Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.example.dtb: /example-1/syscon@20e00000: failed to match any schema with compatible: ['sprd,sc9863a-glbregs', 'syscon', 'simple-mfd']
-Documentation/devicetree/bindings/clock/milbeaut-clock.example.dtb: /example-2/serial@1e700010: failed to match any schema with compatible: ['socionext,milbeaut-usio-uart']
-Documentation/devicetree/bindings/arm/hisilicon/controller/hi3798cv200-perictrl.example.dtb: /example-0/peripheral-controller@8a20000/phy@850: failed to match any schema with compatible: ['hisilicon,hi3798cv200-combphy']
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/stm32/st,mlahb.example.dtb: ahb@38000000: Unevaluated properties are not allowed ('reg' was unexpected)
-	from schema $id: http://devicetree.org/schemas/arm/stm32/st,mlahb.yaml#
-Documentation/devicetree/bindings/sound/st,stm32-sai.example.dtb: /example-0/sai@4400b000/audio-controller@4400b004: failed to match any schema with compatible: ['st,stm32-sai-sub-a']
-Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.example.dtb: /example-0/avs-monitor@7d5d2000: failed to match any schema with compatible: ['brcm,bcm2711-avs-monitor', 'syscon', 'simple-mfd']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml: config-settings: missing type definition
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240701151231.29425-5-kyarlagadda@nvidia.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240701151231.29425-6-kyarlagadda@nvidia.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
