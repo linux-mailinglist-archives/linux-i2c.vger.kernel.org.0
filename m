@@ -1,216 +1,159 @@
-Return-Path: <linux-i2c+bounces-4551-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4552-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5181091E421
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 17:30:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BCAF91E41F
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 17:29:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81755B2B015
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 15:18:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 210EA28450E
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 15:29:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B93CD16F8E1;
-	Mon,  1 Jul 2024 15:14:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 503F716CD03;
+	Mon,  1 Jul 2024 15:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nCu9Fefu"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Jf6ZCbzk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180B116F274;
-	Mon,  1 Jul 2024 15:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.60
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719846848; cv=fail; b=HVZ6dPCrarbCTE5vpca7WrFrLouTlwFUuduXxsYbcRHOXeR5J0puDifPEtMoFb06/WahuCxGp9vEHRb8juxyj+fVEZq245qruCZkFSRVcA8NUeZFa/t+XClWaF/if8LJnZyxUxKr4pDE/wMblejb7ahQ9MygjYSNynrK6ZVf004=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719846848; c=relaxed/simple;
-	bh=w8nOHJEzyzx/rqGB186Rg9RFwoQRrfLzbqfBMd0Rt+E=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VFCWiyG0IqanSvqLyM5YmiREcLSORj4X1K1sRwarWVCR5NgpOglfpT3azrQS+20y4IWnPuzAP0ecSqCCQ2wVqde7ubzLORXAjZUrWDzCk9FJYamCoHJvZJimcenJI8KezRrai619SISjfDRMscMhvzDsOFo5fpbHq3lUfYXjdO0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nCu9Fefu; arc=fail smtp.client-ip=40.107.244.60
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S2+eZewIN/alsvEdtVOWpjUubvBdO+PJ/ZO4EMAw8UQcnE/dsFqMVvqdClNEBz6HJdCfGp4Rti56zTIhaXbOe9dutObIFX/oBLDnUloWotzyB91Z2DRBNSq5qP94ENUSQ7KPKJMObyPLcgxxm0DDM4I1K1S+Z1G9jloeMMhvhtnK4Nzzzc0Lswjgh7Z/AaB0Y5hhtuUXjJd/30FD4qqE8L+NJ1WavHsvaND3lyay2QRxrNCD05d2cNiUnU6W4lQBllUlS5zBZ9fKOnGUrYmfUPQRxueCR03b8DxpTQmq8fQdXxW5PIgr2vxt95L2uB8Uxmvi2dAhlb8+IT6RpDFXfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fG9bitokcp9htrBGCsfTlwMtj+UydWce9WL2H2+Su2Q=;
- b=h+uHqVSeg/AQda/GQhJPtEaG8pJlAnGvzF9CDIg4dafWtwspGia9ZEd8e3stYqFw3uCLCTctQLWmxYjpltI/YjmBkB+Gq9tV5ACP7lRrs1wimAj8P+ddPSi659P0+Uy85D/CyI+75qx2OKUz+5iZRu5CijPU7C1hW60pBDyjJlojW3lgWFLZrhnXClvsouhtV481hI2FLKCURFuJfhtbBYHRvsJstPJx6vmG1ZcCPs+mfPIvBvabQ7NeRuuB03Koz5HMjTA5UjDAeMTj0H/DV5mrXtSmIXq8xuFZ1Bab+rWiwrKHxZtUYd4ClD+mJGwqZBuHgwwPCf58B0UwV3fysg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fG9bitokcp9htrBGCsfTlwMtj+UydWce9WL2H2+Su2Q=;
- b=nCu9Feful4So1y3ZnZV91R+3tV2/t+zFht7GsTd8m+1ewDt7PEWXT9vLWhOYKpKPPe35a7JUQx/TulHvm+c+h6eRY8b3KTQvJW7TOYNJSW75pG8aclJ52xmBe+xHWqQzuQ/vYP7yHkIH0ZD6vosOL5SjIlNMgYB6/BaA+GLsUPTOtz9YkyPfcLmPBxsgykrFv0k6n0Oh81b7ELmz4QzWakxwrawrIxqFRu/e1WcPUl+u31wiZmG+rwfn/Jg2wS595LCXBNgaSgeCsD8wf2xYVGBcLWRT0oSremnHfAHitpP1zHmNY/ctSEfoGOA5x+vAL1ANv37ZNIRgvfrdNZK8Mg==
-Received: from DM5PR07CA0095.namprd07.prod.outlook.com (2603:10b6:4:ae::24) by
- PH0PR12MB8174.namprd12.prod.outlook.com (2603:10b6:510:298::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7719.32; Mon, 1 Jul 2024 15:14:04 +0000
-Received: from CY4PEPF0000EE3A.namprd03.prod.outlook.com
- (2603:10b6:4:ae:cafe::29) by DM5PR07CA0095.outlook.office365.com
- (2603:10b6:4:ae::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.32 via Frontend
- Transport; Mon, 1 Jul 2024 15:14:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CY4PEPF0000EE3A.mail.protection.outlook.com (10.167.242.12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7741.18 via Frontend Transport; Mon, 1 Jul 2024 15:14:04 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 1 Jul 2024
- 08:13:49 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Mon, 1 Jul 2024 08:13:49 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Mon, 1 Jul 2024 08:13:44 -0700
-From: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To: <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-	<linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <thierry.reding@gmail.com>, <jonathanh@nvidia.com>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-	<andi.shyti@kernel.org>, <wsa+renesas@sang-engineering.com>,
-	<ulf.hansson@linaro.org>, <adrian.hunter@intel.com>, <digetx@gmail.com>,
-	<ldewangan@nvidia.com>, <kyarlagadda@nvidia.com>, <mkumard@nvidia.com>
-Subject: [RFC PATCH V2 12/12] arm64: tegra: SDHCI timing settings
-Date: Mon, 1 Jul 2024 20:42:30 +0530
-Message-ID: <20240701151231.29425-13-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240701151231.29425-1-kyarlagadda@nvidia.com>
-References: <20240701151231.29425-1-kyarlagadda@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD6516C6A9;
+	Mon,  1 Jul 2024 15:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719847787; cv=none; b=QuNlSl+cY4OSwe6IeAfIYXzpZQeBTXUODxs1QfuNYzfUv1kimVpA3aIMcibDLM5sM4Ccb9Ab6ICZIKK9L5ZhWxI1ZCqt7esCZvp/wptiHPFvrCrlU7PtvSqzII8FLKpG0vrxNeIn7Q6Y1rt5GCGr3D8hVBXdfnDSQKmaitcSaB4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719847787; c=relaxed/simple;
+	bh=InQZh7AMKKadM+s0dLV0UwYYE1oFpR7Ea7MTJqU5Te4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ouhj06LAcSdBAX24YNwYUvm7xjkwjfj7VD1b8Fj224oYcdS6TBmDzDwpRSPnxnvavizYSfVrnt7/10Fv7FVsLPozZ89o9DZ1ZsoEgkoIeSxZ4VDW0UBE+nJ//G5CwqWMJPNvmlgLLx1l/Uu3/AybGeAzADL1+GdZh4oWwOkMwUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Jf6ZCbzk; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 461F088C007808;
+	Mon, 1 Jul 2024 15:29:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=u
+	niWTNZhY6/PeN2PBXp9nxUxWcQ8eIFPOkQf1pvT4LY=; b=Jf6ZCbzkoD4m7gYMB
+	bnVL6XGh21Nwtv/YCIC9h//5Igs4GrdW/dhhaRNShK4fykKwVAwDGAxSicWLvo1d
+	hfrG1MiyiXc+OsT9lK89Xa6TKMTyPreKiUhDT08IVZoyd9qzCqjOSA176CoN4fdg
+	c2YHIxxsHKmuK4Q8ZdP/GMRWd6SKE2VyAPLlqWZ7CKAUI0t8yHGnZZvbRSZmyJAF
+	ewG5iQmkosvazaCmb6Hp890uLPSLXCcsE6BQLcShLd+ZgSYwZVTaxV/C/8R3EZUy
+	wiKF0NQtzeWMRfDTfMOM4IQe0czD5EyaZM8otac2HsKOryS5p21QGhDoNJSckbzI
+	18WCQ==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 403xpf025p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 01 Jul 2024 15:29:27 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 461CBTO2030030;
+	Mon, 1 Jul 2024 15:29:26 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 402x3mqumu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 01 Jul 2024 15:29:26 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 461FTNfV60621240
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 1 Jul 2024 15:29:25 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 484015806A;
+	Mon,  1 Jul 2024 15:29:23 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 950DB58053;
+	Mon,  1 Jul 2024 15:29:22 +0000 (GMT)
+Received: from [9.61.77.123] (unknown [9.61.77.123])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  1 Jul 2024 15:29:22 +0000 (GMT)
+Message-ID: <a242af91-5e7f-48e3-8445-46c4a8b6a4ef@linux.ibm.com>
+Date: Mon, 1 Jul 2024 10:29:21 -0500
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3A:EE_|PH0PR12MB8174:EE_
-X-MS-Office365-Filtering-Correlation-Id: 36177853-95f8-4dfe-fc22-08dc99e071db
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Dx8vdj0yP66t3L7F+Xsdt6AId6IUZxUh5+0knHHMMIc7pbjTsmMkyUuJGZXG?=
- =?us-ascii?Q?CfAvNul+U4ix6+4yBlL3hh3ZFpF6kkVv4CmvrcCpe7QdOel2hAeGNMlBw0KN?=
- =?us-ascii?Q?WrAuQn1DJph04+xYPdzMZg3NEIZX+GwAJKZOpP5jjwzQD4zVbrfKM6hpltS7?=
- =?us-ascii?Q?RhpftnMfrbL9ECgpVFKD7QCuNgTYkEkZn46Au5qY4iCmF/J85gR+nr9bSI4k?=
- =?us-ascii?Q?2dSjXawTWXOW/fD4o7iAQg+WtOsekGjIpAb1IV5qjO/mgEFPkuM5e4wYwBVI?=
- =?us-ascii?Q?sIhD5scfxFigxrgrTQkCs1WkXKphetwmJ2WcXlUKw0y0JZBt4h0WWtHRd0OD?=
- =?us-ascii?Q?0AariNLBotL8woyfr+TajEy4+fACZsmFf7tsbeaYxU930amV7PoBG4rUcqLQ?=
- =?us-ascii?Q?uM5Lw1KETWSAp1qaEuYCfpJUhDJTgC56WULG4QM2JWxgvsIxnafDT6LW3m00?=
- =?us-ascii?Q?uHDyLCbELLxu5aAI93xlRlSdY3E4ZnxKVVDaUD8/lBP5pIJtMmm/lMsj5BRS?=
- =?us-ascii?Q?lMTyKIOjeYisrt6hK47D/dytyTo3MMDkRtLfF8/E+84LvKvUi/R/Tade0EaJ?=
- =?us-ascii?Q?Od5OHLCcdM7APpubzaUtR01qtaQwggasIRyCtF7hShhLX6A0yFMDfws9WKBI?=
- =?us-ascii?Q?kaijsj2vdFd+tcoPBmMC5BqZwzGsoRr+8dcfJYEHUZF+T2z4Nsrr8fXns4GE?=
- =?us-ascii?Q?wL2Icos3CDaQmHiTd33QdISXXlJZrGDT6O1s4MlPcL8XuM71ddnR93+BeqDf?=
- =?us-ascii?Q?mpkCDi5FyWrZgLwJ29DW8lxsNMdx+x6hBYEl7yNoZuTkPNUhETr2drLkId5i?=
- =?us-ascii?Q?oBTs7l5O03NBH1wNvh86fIdqSY2DKqyu6WFqGGiPmRlOi/q2IYntKQ/kQobN?=
- =?us-ascii?Q?segPo7UAaHpV/YPzXfGTN6rM7OiLBKB8ta/nvVYoj3e3Su2tjHxA5/8EDtIy?=
- =?us-ascii?Q?iYlXqj9GxR6F8Z2M3WrTiId1YNwecdNf3j8pVUIHKnQoywMGtcvUPXg4NOX+?=
- =?us-ascii?Q?HsBUIKw8tFp8Ka5SVua2HXKJXKH19Xwy9krQayjuBNBTa8QSiHVIrazgfOGi?=
- =?us-ascii?Q?gk2DM32Q3TGys7kVVR38qAR1jvA9gOJuKjFqLu30pkj1I/0SgAmRml9HZdBL?=
- =?us-ascii?Q?hQfrWVbxbG3M4zPJBhW52sBweRlZ2Aq2m503EtpcrbCUmX1ot6g2ZcNztOwC?=
- =?us-ascii?Q?+2HYMqsc87S5mf2nh+i2jxZUEgMGX9MnvEFHdes+xm8BrTHFcStBRzzKUsDZ?=
- =?us-ascii?Q?9BLSk4WaRQNBbEQVOnZp4YW9co+utWzPfzsU0uk7aprQJbrPRs6p0RG+H2HQ?=
- =?us-ascii?Q?C41kA0m6zMLQ8FinM9+c9wbwbOIWt3YdWsSsnnW1nQ0wEu3Wp4APQN0Qlj9+?=
- =?us-ascii?Q?sty8JDhJYzXpMXbVlPNZXWDJSgHrBrPBIpLON4R49yfS+hxiJgQE8ImOZQ+E?=
- =?us-ascii?Q?a4hzTTRUPMtXfGHj+bZjM0mmBzKwOdnX?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(7416014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2024 15:14:04.0640
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36177853-95f8-4dfe-fc22-08dc99e071db
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EE3A.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8174
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 00/40] fsi: Add interrupt support
+To: Andrew Jeffery <andrew@codeconstruct.com.au>, linux-fsi@lists.ozlabs.org
+Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, broonie@kernel.org, andi.shyti@kernel.org,
+        joel@jms.id.au, alistair@popple.id.au, jk@ozlabs.org,
+        linux-aspeed@lists.ozlabs.org, ninad@linux.ibm.com,
+        lakshmiy@us.ibm.com
+References: <20240605212312.349188-1-eajames@linux.ibm.com>
+ <21490f28ab110ae2eca59ec23591fc9c676361cc.camel@codeconstruct.com.au>
+Content-Language: en-US
+From: Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <21490f28ab110ae2eca59ec23591fc9c676361cc.camel@codeconstruct.com.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Vnhkp8-_gSn0iLzqGVG5IlnMptV4-1Yb
+X-Proofpoint-GUID: Vnhkp8-_gSn0iLzqGVG5IlnMptV4-1Yb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-01_15,2024-07-01_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ mlxscore=0 spamscore=0 malwarescore=0 clxscore=1011 impostorscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2407010118
 
-Set SDHCI timing registers through config settings for
-Tegra234 chip and P3701 board.
 
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi | 36 ++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+On 6/5/24 20:02, Andrew Jeffery wrote:
+> On Wed, 2024-06-05 at 16:22 -0500, Eddie James wrote:
+>> Eddie James (40):
+> ...
+>
+>>   .../dts/aspeed/aspeed-bmc-ibm-everest.dts     |  32 +-
+>>   .../boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts |   1 +
+>>   .../arm/boot/dts/aspeed/ibm-power10-dual.dtsi |  17 +-
+>>   .../arm/boot/dts/aspeed/ibm-power10-quad.dtsi |  16 +-
+>>   drivers/fsi/Kconfig                           |   2 +
+>>   drivers/fsi/fsi-core.c                        | 888 +++++++++++++++---
+>>   drivers/fsi/fsi-master-aspeed.c               | 431 +++++----
+>>   drivers/fsi/fsi-master-hub.c                  | 244 ++---
+>>   drivers/fsi/fsi-master-i2cr.c                 |   2 +-
+>>   drivers/fsi/fsi-master.h                      |  33 +
+>>   drivers/fsi/fsi-slave.h                       | 117 +++
+>>   drivers/i2c/busses/i2c-fsi.c                  | 463 ++++++---
+>>   drivers/spi/spi-fsi.c                         |  33 +-
+>>   include/linux/fsi.h                           |   3 +
+>>   include/trace/events/fsi.h                    | 171 ++--
+>>   include/trace/events/fsi_master_aspeed.h      |  86 +-
+>>   include/trace/events/i2c_fsi.h                |  45 +
+>>   17 files changed, 1897 insertions(+), 687 deletions(-)
+>>   create mode 100644 include/trace/events/i2c_fsi.h
+>
+> That's a lot of patches, that span the trees of several maintainers.
+>
+> What's your expectation for those who should be merging work in this
+> combined series? Have you had any feedback in that regard?
+>
+> I'm asking because I need to make a call on what I do with respect to
+> the Aspeed devicetrees. I think it would clarify responsibility if this
+> series were split by subsystem. That way I can apply the devicetree
+> patches and the rest can go through their respective trees.
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi b/arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi
-index 7e5b9c10c617..30c125636123 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi
-@@ -426,6 +426,34 @@ i2c-standard-cfg {
- 
- 		};
- 
-+		configmmc1: config-mmc3400000 {
-+
-+			sdhci-mmc-hs200-cfg {
-+				nvidia,num-tuning-iter = <0x2>;
-+			};
-+
-+			sdhci-uhs-sdr104-cfg {
-+				nvidia,num-tuning-iter = <0x2>;
-+			};
-+
-+			sdhci-uhs-sdr50-cfg {
-+				nvidia,num-tuning-iter = <0x4>;
-+			};
-+
-+		};
-+
-+		configmmc2: config-mmc3460000 {
-+
-+			sdhci-mmc-hs200-cfg {
-+				nvidia,num-tuning-iter = <0x2>;
-+			};
-+
-+			sdhci-mmc-hs400-cfg {
-+				nvidia,num-tuning-iter = <0x2>;
-+			};
-+
-+		};
-+
- 	};
- 
- 	bus@0 {
-@@ -461,5 +489,13 @@ i2c@c250000 {
- 			config-settings = <&configi2c8>;
- 		};
- 
-+		mmc@3400000 {
-+			config-settings = <&configmmc1>;
-+		};
-+
-+		mmc@3460000 {
-+			config-settings = <&configmmc2>;
-+		};
-+
- 	};
- };
--- 
-2.43.2
 
+OK, I'll go ahead and split this up, and probably just wait for the FSI 
+changes to merge before sending other subsystems. Thanks for the 
+guidance on merging!
+
+
+Eddie
+
+
+
+>
+> If there are dependencies that require merging all or none, then it
+> would be helpful if they were outlined in the cover letter. Even then,
+> merging the leaves and waiting a cycle might make everyone's lives
+> easier?
+>
+> Andrew
 
