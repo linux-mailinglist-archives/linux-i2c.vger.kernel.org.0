@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-4515-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4516-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 953C091DAE2
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 11:01:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7873E91DAF2
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 11:02:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C96C288BF7
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 09:01:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B8D51C21591
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 09:02:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8194313D899;
-	Mon,  1 Jul 2024 08:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC6EE8528F;
+	Mon,  1 Jul 2024 09:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YK5grTHm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TuHpNScp"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C97514291E;
-	Mon,  1 Jul 2024 08:59:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADCC7CF39;
+	Mon,  1 Jul 2024 09:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719824380; cv=none; b=KdkHQmcgf4uPUlWJgURjOAGIv4Q+23SBm0mwrDPmqqcu5WUdfGyMoa+OYM1CrLWDpL4r4FQzjjL3QJrhI4tCx2SGvBZM0goLOVdeDum0OjCc1ROvbxFGLJmPZ++VbxSRkgbHEOL9p1GZl+U4xev8h6ew+y1tFdA4fhCpUcl2m24=
+	t=1719824445; cv=none; b=uKhQQKl5Pt1RsYISOD6mbMSQoMxA/7k2i3KZXytF5Zpll05gPozb6s8EMGyHyFeQZHUZi5QFKpWFlLKCNi+shHrLW2NHeJ1OP00Hlc/9pfDJEofxl4K+zPoJ3325rLgTAizkL80f+8oFAkKEUs63Nxt84UMHWYH3baBnh66LpLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719824380; c=relaxed/simple;
-	bh=9ZfPk+KmLBzz4kVmL3DX9NJeShj01o+xO7kLdqMiX7s=;
+	s=arc-20240116; t=1719824445; c=relaxed/simple;
+	bh=vmsET7fzOH4iINqniy43CwhaZEnpoVXdHROjlrW/Abc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WF0/tNFrnr//fIvdWsjdvQ7ch8UYCE3aYRwZwdlogQplZDtZohDXGVuFALUF4EZCAJIhAsxUBqhKoM+Gf5AXLRasOzTTrRCW8zUb6JrWdOl1OQhzehPyKSNXiIlZi2pXUmF9cAmDAB2umG0l2PHPfjziKhsAzFRYezitOAIA8Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YK5grTHm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E352C116B1;
-	Mon,  1 Jul 2024 08:59:31 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=onZne0oGL5iCOWjJRUqkuJGiQg0QaxEsNlJgTxLuJSCFITNcWLj5+OXWzn7kYFRG7LxUFxyPtcuzCYc0eHgk2wdW5+hGvRf6TAS/Da9jPV1Zb4j9O7tvCoa2+GSV5+Io/acnyi7Ewu3oTBpsQKIHKSrejlffRxMRq4tcSTjPPdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TuHpNScp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170C8C116B1;
+	Mon,  1 Jul 2024 09:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719824379;
-	bh=9ZfPk+KmLBzz4kVmL3DX9NJeShj01o+xO7kLdqMiX7s=;
+	s=k20201202; t=1719824445;
+	bh=vmsET7fzOH4iINqniy43CwhaZEnpoVXdHROjlrW/Abc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YK5grTHmioZR+9CBJEn5kPGyXymZVVnGwrBOqKQkdTT70Zep22jgcB/bZ+HChFjD6
-	 UBy+pisqSYFoUZje/1NaLgvhpM7Z/SbHsXOR0lnn5zlT+jFyh+RYFFpKpMv8FeSoGT
-	 NjkjfG2ar+jHul8AiUmmRn+Yaxu/BL0kXa/2OvTmlVKz97BcYHubJdyWBzvh5TX6vp
-	 vP8bKhlRPgoSJcek1We/me6X9nlpeRbHee3SxkyCJKL9xQdDyJNxLYEZ9ib1e28/2/
-	 KFbbKOadEFA3WiFCr1tOpA/ZMF+GJwI5fZyGxg4ewrWBa09DvHdamPF0r9QcC0QZC/
-	 DziMsmeijQurQ==
-Message-ID: <3b2d67d1-e27b-49f9-9332-19e44e5f111a@kernel.org>
-Date: Mon, 1 Jul 2024 10:59:29 +0200
+	b=TuHpNScpmCWIxELlck8NsotQMgci621BxxoQxpjTNN9iXGKKCAqYiaiAeU0YlVB9r
+	 OovlpGzcWfYelaSJsDj8DbgA8CVzYaim7IwYOZnj7Wm4DqYj0AzxfSEDWUK/iAoTMO
+	 ag0oafX0L/XZ+bIf/SmAxvRKuIfC4aynecCrl8CLjgULQW4fuVUaE5stKjhrYDoQGq
+	 kisl9DnMQt4h1dzycomBs7yVjDMBVbiSF3CKqn16FBoQWEObtl/8JJc/TZ5REsFeHz
+	 OhYSkgIYB/zOk8H2tAAKGQa3BXmEezDI1ipErR9CRo00iz5+9bxinMHxQIMdci58be
+	 FBAq8vN7Yfkpg==
+Message-ID: <cd510e0a-b19c-4d80-8293-4d21a17055a4@kernel.org>
+Date: Mon, 1 Jul 2024 11:00:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] arm64: dts: qcom: sc7280: Add IMX577 camera sensor
+Subject: Re: [PATCH 4/6] arm64: dts: qcom: qcs6490-rb3gen2: Enable IMX577
+ camera sensor
 To: Vikram Sharma <quic_vikramsa@quicinc.com>, Robert Foss
  <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
@@ -63,10 +64,9 @@ To: Vikram Sharma <quic_vikramsa@quicinc.com>, Robert Foss
  Loic Poulain <loic.poulain@linaro.org>, Andi Shyti <andi.shyti@kernel.org>
 Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, Hariram Purushothaman
- <quic_hariramp@quicinc.com>, Trishansh Bhardwaj <quic_tbhardwa@quicinc.com>
+ linux-i2c@vger.kernel.org, Hariram Purushothaman <quic_hariramp@quicinc.com>
 References: <20240629-camss_first_post_linux_next-v1-0-bc798edabc3a@quicinc.com>
- <20240629-camss_first_post_linux_next-v1-3-bc798edabc3a@quicinc.com>
+ <20240629-camss_first_post_linux_next-v1-4-bc798edabc3a@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -112,38 +112,88 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240629-camss_first_post_linux_next-v1-3-bc798edabc3a@quicinc.com>
+In-Reply-To: <20240629-camss_first_post_linux_next-v1-4-bc798edabc3a@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 28/06/2024 20:32, Vikram Sharma wrote:
-> Add support for IMX577 camera sensor for SC7280 SoC.
+> Enable IMX577 camera sensor for qcs6490-rb3gen2.
 > 
 > Signed-off-by: Hariram Purushothaman <quic_hariramp@quicinc.com>
-> Signed-off-by: Trishansh Bhardwaj <quic_tbhardwa@quicinc.com>
 > Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
 > ---
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
+>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts | 67 ++++++++++++++++++++++++++++
+>  1 file changed, 67 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 9ac251fec262..1c99ee09a11a 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -5167,6 +5167,39 @@ cci3_sleep: cci3-sleep-state {
->  				bias-pull-down;
->  			};
+> diff --git a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+> index c4cde4328e3d..237231600dca 100644
+> --- a/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+> +++ b/arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts
+> @@ -513,6 +513,73 @@ vreg_bob_3p296: bob {
+>  	};
+>  };
 >  
-> +			cam2_default: cam2-default {
+> +&camcc {
+> +	status = "okay";
+> +};
+> +
+> +&camss {
+> +	status = "disabled";
+> +	ports {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		/* The port index denotes CSIPHY id i.e. csiphy2 */
+> +		port@3 {
+> +			reg = <3>;
+> +			csiphy3_ep: endpoint {
+> +				clock-lanes = <7>;
+> +				data-lanes = <0 1 2 3>;
+> +				remote-endpoint = <&imx412_ep>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&cci0 {
+> +	status = "okay";
+> +};
+> +
+> +&cci1 {
+> +	status = "okay";
+> +};
+> +
+> +&cci1_i2c1 {
+> +	camera@1a {
+> +		/*
+> +		 * rb3gen2 ships with an imx577. qcom treats imx412
+> +		 * and imx577 the same way. Absent better data do the same here.
 
-There are tools. Use them, instead of us. Read you internal guideline -
-it asks you to do that.
+NAK, how qcom treats incorrect code, is not an correct argument.
 
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check W=1` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
+Use correct compatibles and correct bindings.
+
+> +		 */
+> +		compatible = "sony,imx412";
+> +		reg = <0x1a>;
+> +
+> +		reset-gpios = <&tlmm 78 GPIO_ACTIVE_LOW>;
+> +		pinctrl-names = "default", "suspend";
+> +		pinctrl-0 = <&cam2_default>;
+> +		pinctrl-1 = <&cam2_suspend>;
+> +
+> +		clocks = <&camcc CAM_CC_MCLK3_CLK>,
+> +				 <&camcc CAM_CC_MCLK2_CLK>;
+> +		assigned-clocks = <&camcc CAM_CC_MCLK3_CLK>,
+> +				 <&camcc CAM_CC_MCLK2_CLK>;
+> +		assigned-clock-rates = <24000000>,
+> +							   <24000000>;
+> +
+> +		dovdd-supply  = <&vreg_l18b_1p8>;
+> +		/* avdd-supply = <&vdc_5v>;
+> +		 * dvdd-supply = <&vdc_5v>;
+
+What's this?
 
 
 
