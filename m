@@ -1,41 +1,41 @@
-Return-Path: <linux-i2c+bounces-4528-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4527-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80ECD91E15F
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 15:54:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D613891E15D
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 15:54:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36AFD1F249A2
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 13:54:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12A7A1C231D0
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 Jul 2024 13:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19E1B15ECFF;
-	Mon,  1 Jul 2024 13:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5FED15ECE2;
+	Mon,  1 Jul 2024 13:54:14 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68CE115ECE4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9A715ECFF
 	for <linux-i2c@vger.kernel.org>; Mon,  1 Jul 2024 13:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719842054; cv=none; b=YtILxQuzyKeNsOUWTopnRLh8l8kz8xeflYzW/4eMMN/SMxMCaV683qXNzoK5lhsE7/2HZnucTnUsKZdRMXA/u/hrQuzqMrBXMnlkrdid5eNceAMCiv8o49zqNgKrpEsAKp7JGQX+6k4SbbuImolYq2tuB1mI+gmnOWNNxgZtKIc=
+	t=1719842054; cv=none; b=c9lgSHOc2MXigsvvxQWOdMXAIPoDF4+dnw7qheEI3MYJJYgaMbJ8s2NecMBniJh469JIdU2ADtvA1ejJIRUsSvChSntYfsKG38K6vUKOhJFyZxGN/iacPyCaiO9GgqMMqS7ESPpJ0kBKftQh2eZIo9wYWqomjFXVl1T/soiTq5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1719842054; c=relaxed/simple;
-	bh=TdcrekuqxkdGfFue0q5KkkRmhv3vqXpjDTGgiciypM8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fMk0IUZl8QXeugbO3xGTnhnDBSVMrx7jU5GFL1wUstUACnuJ6ucQsgC7sSOwHJ9IPGuDycFzVpQxi7ALUQmC6eBa3b2pOZ5zLAfhtTnOFTGvfF/LxDCLDvwmecdQnqGTohd5EP1o9IWRFrjkgmNspeJGcMPoLiJPdj95rlj1Uxo=
+	bh=zHeI+GWSdz7PR0D30nDNzWXJoqqyXyai8DQT6s7xrdw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=rGBnNDTOGjSII6ERHd2mN1Uh1k/P1W4hIFF6o3pThRuk+BO6MTABe/LWfy6nF81GDRtirAWMuojpIxz8QzUAk6/FjG8AQS54t1aemwkwxHyBYlr6cfD4jP3VAHQkbDrWuwOsBAjho6X0Xs9lEY1VqaH0K3TD3HceE9m198nQpY4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <m.felsch@pengutronix.de>)
-	id 1sOHTW-0001LY-Vb; Mon, 01 Jul 2024 15:53:46 +0200
+	id 1sOHTX-0001LY-37; Mon, 01 Jul 2024 15:53:47 +0200
 From: Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH 0/9] AT24 EEPROM MTD Support
-Date: Mon, 01 Jul 2024 15:53:39 +0200
-Message-Id: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
+Date: Mon, 01 Jul 2024 15:53:40 +0200
+Subject: [PATCH 1/9] mtd: core: add nvmem_write support
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -44,9 +44,9 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOO0gmYC/x3MQQqEMAxG4atI1hNIpTjoVcTF9DeO2WhpVQTx7
- haX3+K9i7Im00xddVHSw7KtS4H7VIT5t/yVbSymWmovX3EcPB8NO+FtjQbecwBviDCGD2gDoI1
- 4Kn1MOtn5vvvhvh826v1ZawAAAA==
+Message-Id: <20240701-b4-v6-10-topic-usbc-tcpci-v1-1-3fd5f4a193cc@pengutronix.de>
+References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
+In-Reply-To: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
 To: Miquel Raynal <miquel.raynal@bootlin.com>, 
  Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
  Arnd Bergmann <arnd@arndb.de>, 
@@ -85,87 +85,55 @@ X-SA-Exim-Mail-From: m.felsch@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-This series adds the intial support to handle EEPROMs via the MTD layer
-as well. This allow the user-space to have separate paritions since
-EEPROMs can become quite large nowadays.
-
-With this patchset applied EEPROMs can be accessed via:
-  - legacy 'eeprom' device
-  - nvmem device
-  - mtd device(s)
-
-The patchset targets only the AT24 (I2C) EEPROMs since I have no access
-to AT25 (SPI) EEPROMs nor to one of the other misc/eeprom/* devices.
-
-Note: I'm not familiar with Kconfig symbol migration so I don't know if
-the last patch is required at the moment. Please be notified that the
-list of recipients is quite large due to the defconfig changes.
-
-Regards,
-  Marco
+The MTD framework does support the NVMEM framework already but only the
+read support was implemented. This commit adds the write support if the
+MTD device supports writing (MTD_WRITEABLE is set).
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
-Marco Felsch (9):
-      mtd: core: add nvmem_write support
-      mtd: add mtd_is_master helper
-      mtd: add support to handle EEPROM devices
-      mtd: devices: add AT24 eeprom support
-      ARM: defconfig: convert to MTD_EEPROM_AT24
-      powerpc: convert to MTD_EEPROM_AT24
-      MIPS: configs: convert to MTD_EEPROM_AT24
-      LoongArch: convert to MTD_EEPROM_AT24
-      eeprom: at24: remove deprecated Kconfig symbol
+ drivers/mtd/mtdcore.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
- MAINTAINERS                                 |   2 +-
- arch/arm/configs/aspeed_g4_defconfig        |   2 +-
- arch/arm/configs/aspeed_g5_defconfig        |   2 +-
- arch/arm/configs/at91_dt_defconfig          |   2 +-
- arch/arm/configs/axm55xx_defconfig          |   2 +-
- arch/arm/configs/davinci_all_defconfig      |   2 +-
- arch/arm/configs/imx_v4_v5_defconfig        |   2 +-
- arch/arm/configs/imx_v6_v7_defconfig        |   2 +-
- arch/arm/configs/ixp4xx_defconfig           |   2 +-
- arch/arm/configs/keystone_defconfig         |   2 +-
- arch/arm/configs/lpc18xx_defconfig          |   2 +-
- arch/arm/configs/lpc32xx_defconfig          |   2 +-
- arch/arm/configs/multi_v5_defconfig         |   2 +-
- arch/arm/configs/multi_v7_defconfig         |   2 +-
- arch/arm/configs/mvebu_v5_defconfig         |   2 +-
- arch/arm/configs/mvebu_v7_defconfig         |   2 +-
- arch/arm/configs/mxs_defconfig              |   2 +-
- arch/arm/configs/omap2plus_defconfig        |   2 +-
- arch/arm/configs/pxa_defconfig              |   2 +-
- arch/arm/configs/s3c6400_defconfig          |   2 +-
- arch/arm/configs/sama5_defconfig            |   2 +-
- arch/arm/configs/sama7_defconfig            |   2 +-
- arch/arm/configs/shmobile_defconfig         |   2 +-
- arch/arm/configs/socfpga_defconfig          |   2 +-
- arch/arm/configs/tegra_defconfig            |   2 +-
- arch/arm/configs/wpcm450_defconfig          |   2 +-
- arch/loongarch/configs/loongson3_defconfig  |   2 +-
- arch/mips/configs/cavium_octeon_defconfig   |   2 +-
- arch/mips/configs/db1xxx_defconfig          |   2 +-
- arch/powerpc/configs/44x/warp_defconfig     |   2 +-
- arch/powerpc/configs/mpc512x_defconfig      |   2 +-
- arch/powerpc/configs/mpc5200_defconfig      |   2 +-
- arch/powerpc/configs/ppc6xx_defconfig       |   2 +-
- arch/powerpc/configs/skiroot_defconfig      |   2 +-
- drivers/misc/eeprom/Kconfig                 |  31 -------
- drivers/misc/eeprom/Makefile                |   1 -
- drivers/mtd/devices/Kconfig                 |  31 +++++++
- drivers/mtd/devices/Makefile                |   1 +
- drivers/{misc/eeprom => mtd/devices}/at24.c | 122 +++++++++++++++-------------
- drivers/mtd/mtdcore.c                       |  49 ++++++++++-
- include/linux/mtd/mtd.h                     |   5 ++
- include/uapi/mtd/mtd-abi.h                  |   2 +
- 42 files changed, 187 insertions(+), 123 deletions(-)
----
-base-commit: 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-change-id: 20240701-b4-v6-10-topic-usbc-tcpci-c4bc9bcce604
+diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+index 724f917f91ba..dcd97e59425e 100644
+--- a/drivers/mtd/mtdcore.c
++++ b/drivers/mtd/mtdcore.c
+@@ -544,6 +544,20 @@ static int mtd_nvmem_reg_read(void *priv, unsigned int offset,
+ 	return retlen == bytes ? 0 : -EIO;
+ }
+ 
++static int mtd_nvmem_reg_write(void *priv, unsigned int offset,
++			       void *val, size_t bytes)
++{
++	struct mtd_info *mtd = priv;
++	size_t retlen;
++	int err;
++
++	err = mtd_write(mtd, offset, bytes, &retlen, val);
++	if (err && err != -EUCLEAN)
++		return err;
++
++	return retlen == bytes ? 0 : -EIO;
++}
++
+ static int mtd_nvmem_add(struct mtd_info *mtd)
+ {
+ 	struct device_node *node = mtd_get_of_node(mtd);
+@@ -555,10 +569,11 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
+ 	config.owner = THIS_MODULE;
+ 	config.add_legacy_fixed_of_cells = of_device_is_compatible(node, "nvmem-cells");
+ 	config.reg_read = mtd_nvmem_reg_read;
++	config.reg_write = mtd_nvmem_reg_write;
+ 	config.size = mtd->size;
+ 	config.word_size = 1;
+ 	config.stride = 1;
+-	config.read_only = true;
++	config.read_only = !(mtd->flags & MTD_WRITEABLE);
+ 	config.root_only = true;
+ 	config.ignore_wp = true;
+ 	config.priv = mtd;
 
-Best regards,
 -- 
-Marco Felsch <m.felsch@pengutronix.de>
+2.39.2
 
 
