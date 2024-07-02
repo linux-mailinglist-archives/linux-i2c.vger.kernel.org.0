@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-4578-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4579-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5551C923E6E
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Jul 2024 15:10:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A79EE923E76
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Jul 2024 15:11:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FF6B284BFF
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Jul 2024 13:10:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D92331C228ED
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Jul 2024 13:10:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80ED019DF47;
-	Tue,  2 Jul 2024 13:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0103B19DF78;
+	Tue,  2 Jul 2024 13:10:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t3/pArb2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KX1DvoVI"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E43716C440;
-	Tue,  2 Jul 2024 13:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61C785C74;
+	Tue,  2 Jul 2024 13:10:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719925815; cv=none; b=FZptdt6Dc2dCZVn16KeHM3JzU2F9ParUmh9CHq0Zn348hFcWGwJagiek1kQW3qxrONoKeVdRhrk7Wx3DKrkbZpERLPwQ8QF+41+QgsuXw33ql+HzB05LpcEX/kJfZYgAyAatp3ktgZlrd+6bvSGXnUSrGN2eOvYIcrMebkbUhNU=
+	t=1719925844; cv=none; b=B5/RiMnHMB2xsVQTsOmnWtxsoYDhI2w7YHalOz1m5353Gtk8P3/qbqDh470jnnIYv6/Ap6cxgXeu6qhy8vPSTepGPE2VWI0P+uPfNGvfJep5P6TcbFFF/f+9J0O1/RbJv78+msOPysStTmDYbGnvyM2sNhI1oUJVLE3xIKh6JTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719925815; c=relaxed/simple;
-	bh=Jt8DVfdgZvvAbpWL7FQqpwi99LXJgC7nuNbJZLTHS4I=;
+	s=arc-20240116; t=1719925844; c=relaxed/simple;
+	bh=gTUvzjDM37z27yYoTrtM5Z4GIXEMOln7R9yBe19BcUc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DnqJKRdhwmw8QwRGC+X5gXYpRq1kejAkyjxky2hLwU8tFb0Z/Y8IKxbKOp7prMVG+6e0+MOjNMhH2CWnszang3+UKgV+k70u8UZOEo+J8jfratqIooG2H+8rA3yKsFdv1Vc54lGbxZjjkJhPK9IFGj6YZ8YkCfLDx5le3uxslQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t3/pArb2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CB9C116B1;
-	Tue,  2 Jul 2024 13:10:11 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=tIUE5N+aczMXBKC8eqZ38qHArT//Y8Fam+mb2Qy7yCENBq9/8dTt+DPTRJ/QV/VkIXcCsmw3acURaUGbc2RYHG8WS4McFPC8oTNaXTRfWlKOYIFtLRXlaUewcpjFqVe00oNde1jiPbc1aXhTaXS9WqY+jiTPeKs1RQdAqrt0hnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KX1DvoVI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5B6C116B1;
+	Tue,  2 Jul 2024 13:10:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719925815;
-	bh=Jt8DVfdgZvvAbpWL7FQqpwi99LXJgC7nuNbJZLTHS4I=;
+	s=k20201202; t=1719925844;
+	bh=gTUvzjDM37z27yYoTrtM5Z4GIXEMOln7R9yBe19BcUc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=t3/pArb2xRzyhPEDDB+zfRNZt08TwfmKuIBmbueRflhHfHESog8Row1NV7aCPwbbN
-	 FiILIJB8DpV3Nuso4Kj/RNudhfZx7Aqm0LYoQreRzaudCZbkZAzThRpIgCIDkouyr6
-	 Wz0nDwDfIWjKSgeL6NyVcDij1qWnHIk66/oWpX+6caggQZWNqFtHbQT1T6QFcSBmvF
-	 evs9FcSQxcRAISKVGJzvmloWEu7TgRLQ1kKqqwlQV/2B+RKK3OvBQZFc36Ab+ygt4b
-	 Jw0QpS7GO8qyEZ2UBToZjRnULPwj5GTsB1Dr52bGyvztKomqO5ikChN/c7AY7iuoZV
-	 ODzUzXiGYHz9A==
-Message-ID: <60bbc8cd-8b32-46ed-b92b-eaa6bd757519@kernel.org>
-Date: Tue, 2 Jul 2024 15:10:10 +0200
+	b=KX1DvoVIFjA5s5UUU7JkyxMT0elBAp3eZlvV46bSXunOkxGbagzOZ6DHIdDIlCCWO
+	 Ul93piDGNWJPE3cpaX1Oo8zHI68xAmCu9kJB5oeexuuuQZn0hJJ+O2mITmZ9pUyLn6
+	 BQn9NhR4cTi4uefLIZZCDa5qw8SW8HCaBBQKQZfNkMVJK3VpXdMVNNRXGv6GcVNETK
+	 pXVxT5XEb8EKdB4OeuUDTpqAYJcqsj9SyGY6/DeUPkgrB8zJ7ar/ywDcARXQ2IodZh
+	 CQbdotgE5irUQdvvbrRj1c7lS8O55fWZBImAeVPnjmnRqvwv0wxSg1wuQmy0xppmKy
+	 3CHxwSW28PUSA==
+Message-ID: <fcd91462-f8bb-4713-afc1-ba9473405396@kernel.org>
+Date: Tue, 2 Jul 2024 15:10:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,18 +50,19 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add MPS mp5920
-To: Alex Vdovydchenko <xzeol@yahoo.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sean Anderson <sean.anderson@linux.dev>,
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add MPS mp5920
+To: Conor Dooley <conor@kernel.org>, Alex Vdovydchenko <keromvp@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Sean Anderson <sean.anderson@linux.dev>,
  Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
  Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-i2c@vger.kernel.org
-References: <20240702115252.981416-1-xzeol@yahoo.com>
- <20240702115252.981416-2-xzeol@yahoo.com>
+ Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+ Alex Vdovydchenko <xzeol@yahoo.com>
+References: <20240701145603.1507516-1-xzeol@yahoo.com>
+ <20240701145603.1507516-2-xzeol@yahoo.com>
+ <20240701-mug-scuttle-dfe4c84b4e0b@spud>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,34 +108,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240702115252.981416-2-xzeol@yahoo.com>
+In-Reply-To: <20240701-mug-scuttle-dfe4c84b4e0b@spud>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 02/07/2024 13:52, Alex Vdovydchenko wrote:
-> Add support for MPS mp5920 controller
+On 01/07/2024 17:47, Conor Dooley wrote:
+> On Mon, Jul 01, 2024 at 05:56:00PM +0300, Alex Vdovydchenko wrote:
+>> Add support for MPS mp5920 controller
+>>
+>> Signed-off-by: Alex Vdovydchenko <xzeol@yahoo.com>
 > 
-> Signed-off-by: Alex Vdovydchenko <xzeol@yahoo.com>
+> Missing an ack from v2:
+> https://lore.kernel.org/all/20240627-swivel-grower-002af077b654@spud/
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-So you keep ignoring and ignoring?
-
-<form letter>
-This is a friendly reminder during the review process.
-
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-
-If a tag was not added on purpose, please state why and what changed.
-</form letter>
+That's third time you give the same ack. I suggest give up...
 
 Best regards,
 Krzysztof
