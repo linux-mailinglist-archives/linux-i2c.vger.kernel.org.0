@@ -1,157 +1,105 @@
-Return-Path: <linux-i2c+bounces-4590-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4591-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 779659247F4
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Jul 2024 21:16:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A781924850
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Jul 2024 21:30:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 265251F24BC9
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Jul 2024 19:16:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAA7C28A25C
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Jul 2024 19:30:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6D91CCCA2;
-	Tue,  2 Jul 2024 19:15:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7AF1CE09B;
+	Tue,  2 Jul 2024 19:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FobwSvBB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RH1OjcfH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB471CE09E
-	for <linux-i2c@vger.kernel.org>; Tue,  2 Jul 2024 19:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D764B1CB31A;
+	Tue,  2 Jul 2024 19:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719947758; cv=none; b=OLynAmyiG5ltl0Dp2JgE+MO7HznVg8dsVqAXChFxe/UOBgxya5KXFJ24jyjgVwfNsrxhEvT0ht2zs/UhMqxN+St6pWUF2SOCsEISTIt97H5aP/38CTe7lJy4ndtIWQv8Zhk5uAuDbm56imWlKfSd/UbnUUcfJeOS40HGqJj7Ofg=
+	t=1719948552; cv=none; b=MD7A50X5gj4AhijWNWOQqF4KBp/VRfWMrR1vfHGNT65Vop9H/A+mzeLDIvLfmm2yioTLfl27beOgTjSh7cTIxfn1FvCUv2dVNoCCUHnOXDgDYPiyeySUqJUdvK3QpYQBlEBUbP00pr3nQe/D1XkNB/eSsFXJdrIdBKKLNy1zH4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719947758; c=relaxed/simple;
-	bh=XVYgl7stxuApEvQU/C547hFtmCZvyIV7HG0E7UpAXus=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W9szTbmsG28zyowx5/eDVRxn/9laMRWvX8L+EiMpboBgzCahjPv+8YmawCdR6HEe+248rZ0Z0TtxafikB3AcQHmTigxFQMTh5SlMNXQSuYgNg9xcGeFTOCu3sBHzyg5uL1JrNd+zDR08uzUnyFbgWQXWqitfSn24VltLQPzlOkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FobwSvBB; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719947755;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2Hf4Hn8E9sYvRywOdnCFtlcglvdvtce0hhg7HQwgfjY=;
-	b=FobwSvBBjMkygsjoX4A4S9wkXYK/sI+evX+3QjiBPPVCNdeAOX8u40vd+7JgD8Jcur7z4Q
-	dmFXWo+gP9W2+n22ovEqPBY9EmNVuoOZV1Md9TUi4ZjwMvGAqQo1uj/cRv6KpRFmf+5QO7
-	orDlYYtNsN93FIkYp5z+X4xefM2Jg1k=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-45-V_57MAfiNOiLtvq1EA8tqw-1; Tue, 02 Jul 2024 15:15:52 -0400
-X-MC-Unique: V_57MAfiNOiLtvq1EA8tqw-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-58bd8406816so583763a12.0
-        for <linux-i2c@vger.kernel.org>; Tue, 02 Jul 2024 12:15:52 -0700 (PDT)
+	s=arc-20240116; t=1719948552; c=relaxed/simple;
+	bh=CBWZWmuugeImQuT2m4SY3zJJM7K1jAR3HFwIw9QBHR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rbvgVUTenrVGSHwLQ/EqVZn+sBJcMRaHD2ggD5jKrjWLnmjLcTP+opShUiZvNBjDvq54kKqL2kLmg0KG2ng2spN4TADDNnEdISsV1Jm/yui7ATR75loZAKADx6AiJWHVxZDxqQ5dVwiVYEe68gE8g6dd/B/fpbOuzWCsYAE9UxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RH1OjcfH; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7066a3229f4so3018019b3a.2;
+        Tue, 02 Jul 2024 12:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719948550; x=1720553350; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A4NCTmI4coc84e5gkxcvjfWMDSk5YUBVomKbGjgxM2A=;
+        b=RH1OjcfHniPjVRMDrsBixFbk4PAebY7jQG/VEG3OxMrjusstrVpXtxzsMnxuhRtgrz
+         wijq8iwQ0Dqt11eQMy+z6xsTeYme64RKTTDQDTpjqImwi88mevEoGvSBgN7BJ8nvj07/
+         8aE7uOGFx4rrkRRuQkcr5BZ/GZZWhjVlDqDk7BS/dUjI4lZMN23AeUqw47RYhicdTDyf
+         D6adExbpfLLyyI3iZXUbtRKzhckzRnGwspk09+dW++1lcJqsvaqcc0h5g7hgPVvUzyR4
+         DSqQT1F0X9AwI1NdqLZJs3RVb7tyVn7J3378LuwcYUN2eRhEZT+ZhQCqbEnLwgs5vLio
+         uw+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719947751; x=1720552551;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Hf4Hn8E9sYvRywOdnCFtlcglvdvtce0hhg7HQwgfjY=;
-        b=AkDQPNm0kgByOyzsoXIiFaKuiUChj9zMJHnD1bMTpr0jC/ibOepDKhoc87zbiw9jgh
-         XAZpQJhd5SGGYKjL4nUeak4+9B0gQgGw1dC0D1VdzCLnqVicvG7SXILcNouQ5y3sohEU
-         SqCpIi/bAEEcM4dS6zUsk39wRVO6EgSgjzU+routCOTul9PAgu9UcdYtuRniytKr8CcB
-         BSCYw2mnc3dDALCQ2v4m9Gt9KP1NkT+Desb5ywQN4cifSahQ6xhxqyqc/AobcjAC0oiO
-         uZaig1/BuzpD5r95K4j0Lw1hgYuh44x0xg40IeO6NfDt6/FZK7MGv6N1Z/hjsBQbJo7J
-         /rzA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdyH6XRkYycTlkFMgzTSl4pHkrSejBK+ENTyJ6ydc2lESfdWtr2fHlGVVpUJzkApGf4CUmqAPBVdNm7lnJ+rclRsmx0xsPZqis
-X-Gm-Message-State: AOJu0YyZsPjAhJeFzEygug6QZ05T6l9f/9zW1l7hwBHlynpL8FRa4eY0
-	cuptJyoA+H30xYWbWTEKDG7+YxIVcGL08DbnCOLimyp+808uHPTHUdIkv8euEW5K4s/nbwU4zp+
-	4+nWIinWEgKHIzZvb+fUhFe0hc0us5sqwkO1yrnk53RCMSfyzn8Biycssog==
-X-Received: by 2002:a05:6402:11c9:b0:57d:46f4:7df5 with SMTP id 4fb4d7f45d1cf-5879f59bbc2mr7325312a12.23.1719947751031;
-        Tue, 02 Jul 2024 12:15:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEPgNAvIl+uKPMrCm/+he16pQATca+s9p+IoIeAaWVXVH074kRYoqFuRlKUkXNT5j41pHQEHg==
-X-Received: by 2002:a05:6402:11c9:b0:57d:46f4:7df5 with SMTP id 4fb4d7f45d1cf-5879f59bbc2mr7325290a12.23.1719947750623;
-        Tue, 02 Jul 2024 12:15:50 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:2a07:3a01:e7a9:b143:57e6:261b? (2001-1c00-2a07-3a01-e7a9-b143-57e6-261b.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:e7a9:b143:57e6:261b])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-58613815e1csm6098873a12.44.2024.07.02.12.15.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jul 2024 12:15:50 -0700 (PDT)
-Message-ID: <c980f524-1259-4a3e-9326-5f533e62bb25@redhat.com>
-Date: Tue, 2 Jul 2024 21:15:49 +0200
+        d=1e100.net; s=20230601; t=1719948550; x=1720553350;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A4NCTmI4coc84e5gkxcvjfWMDSk5YUBVomKbGjgxM2A=;
+        b=GgEzt1NfD89ZDyoVOMRWEggg+E/EBFLcmhyfYVvNwXBJTc197isHUvHtGTN/bXVNKg
+         VRPz1kiOCSfNVn2jLt3LKkvYTEdSjicJewwAzRF78zK83aActHL+EJ6Vk9j6LCYuKZi3
+         fm1TQcT/aILH8n6FvgKmOtsgfS7eVtnwpquMLff/XtgFnw3OO0tk3ZCipVw1/uFjSBSs
+         r//xDGjfoEjuKgXUAr7hr7iWImJiPgdQBqVxWuEoTwu4imB40EEU2Aqmkm9QN3L2H/Nq
+         D4EE3Q6UDUmtyFfQVve7BkvP4sK6bqY8H7IuWk1YbE5ZjpyIIvyM53ZDfvXfonlToN9e
+         WRmw==
+X-Forwarded-Encrypted: i=1; AJvYcCXq8S5++sM7S24dxkg+ZjYKStK33KYPXLLRSH5OtxNm3LuaFmoHa76YrOVDF6mbhn7gnppq0NbSRd8MG6yYeIUoYLfeWyY4Vc2fW4cV7O9WR+fcEa/e4PCaGBIX78wm5K2ChNxCAWcSFAO3JFX9O59L7LcYkl6i+myEqn9lj6KVbvKro82RBGPS1BwnNQW/i3LRIwRm/F8ffwgKIhOQGC4dMNf6ICln9XlGr+QK4eGcB+wR3GMmteT9rD+Y
+X-Gm-Message-State: AOJu0YzFL4hVj8pJecxdV2tzSipBOkuGOUPFKxRNNmGyUgmlWbUfphjE
+	DMnEtIu9Q3Nr+J3pDsMP5wV5pLUPk1XAsTMk/k2z2MYF+XL3rb4V
+X-Google-Smtp-Source: AGHT+IFSlkcx7+6K80XNhQ8XSJJHHVBy3ib9ITKLvGpGc6h9GHUm/8KgUk8oukAES3IWcw0avTXE2g==
+X-Received: by 2002:a05:6a00:a8c:b0:706:742a:1c3b with SMTP id d2e1a72fcca58-70aaad388a7mr9228268b3a.8.1719948550014;
+        Tue, 02 Jul 2024 12:29:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-708045a9f52sm9197225b3a.177.2024.07.02.12.29.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jul 2024 12:29:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 2 Jul 2024 12:29:07 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Alex Vdovydchenko <xzeol@yahoo.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sean Anderson <sean.anderson@linux.dev>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add MPS mp5920
+Message-ID: <cdff38fb-ac8c-4f5f-8067-aa99acb7c677@roeck-us.net>
+References: <20240702115252.981416-1-xzeol@yahoo.com>
+ <20240702115252.981416-2-xzeol@yahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/6] platform/x86: dell-smo8800: Add a couple more
- models to lis3lv02d_devices[]
-To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>,
- Wolfram Sang <wsa@kernel.org>, eric.piel@tremplin-utc.net,
- Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com,
- Kai Heng Feng <kai.heng.feng@canonical.com>,
- platform-driver-x86@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-References: <20240624111519.15652-1-hdegoede@redhat.com>
- <20240624111519.15652-6-hdegoede@redhat.com>
- <20240624181456.k7ikngwy2dohoqnw@pali>
-Content-Language: en-US
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240624181456.k7ikngwy2dohoqnw@pali>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240702115252.981416-2-xzeol@yahoo.com>
 
-Hi,
-
-On 6/24/24 8:14 PM, Pali Rohár wrote:
-> On Monday 24 June 2024 13:15:17 Hans de Goede wrote:
->> Add the accelerometer address for the following laptop models
->> to lis3lv02d_devices[]:
->>
->> Dell Latitude E6330
->> Dell Latitude E6430
->> Dell XPS 15 9550
->>
->> Tested-by: Hans de Goede <hdegoede@redhat.com>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> q# Please enter the commit message for your changes. Lines starting
+On Tue, Jul 02, 2024 at 02:52:50PM +0300, Alex Vdovydchenko wrote:
+> Add support for MPS mp5920 controller
 > 
-> Garbage at the end of commit message.
+> Signed-off-by: Alex Vdovydchenko <xzeol@yahoo.com>
+> ---
 
-Thanks, fixed for v5.
+Applied, after adding Conor's Ack from v3.
 
-Regards,
-
-Hans
-
-
-
-> 
->> ---
->>  drivers/platform/x86/dell/dell-lis3lv02d.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/platform/x86/dell/dell-lis3lv02d.c b/drivers/platform/x86/dell/dell-lis3lv02d.c
->> index e581b8e2a603..a7409db0505b 100644
->> --- a/drivers/platform/x86/dell/dell-lis3lv02d.c
->> +++ b/drivers/platform/x86/dell/dell-lis3lv02d.c
->> @@ -43,10 +43,13 @@ static const struct dmi_system_id lis3lv02d_devices[] = {
->>  	 * Additional individual entries were added after verification.
->>  	 */
->>  	DELL_LIS3LV02D_DMI_ENTRY("Latitude 5480",      0x29),
->> +	DELL_LIS3LV02D_DMI_ENTRY("Latitude E6330",     0x29),
->> +	DELL_LIS3LV02D_DMI_ENTRY("Latitude E6430",     0x29),
->>  	DELL_LIS3LV02D_DMI_ENTRY("Precision 3540",     0x29),
->>  	DELL_LIS3LV02D_DMI_ENTRY("Vostro V131",        0x1d),
->>  	DELL_LIS3LV02D_DMI_ENTRY("Vostro 5568",        0x29),
->>  	DELL_LIS3LV02D_DMI_ENTRY("XPS 15 7590",        0x29),
->> +	DELL_LIS3LV02D_DMI_ENTRY("XPS 15 9550",        0x29),
->>  	{ }
->>  };
->>  
->> -- 
->> 2.45.1
->>
-> 
-
+Guenter
 
