@@ -1,134 +1,126 @@
-Return-Path: <linux-i2c+bounces-4599-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4600-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9101C9255D2
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 10:49:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA4159256EB
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 11:35:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 407E3285CC9
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 08:49:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBB7F1C22A69
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 09:35:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEBF213D2BE;
-	Wed,  3 Jul 2024 08:48:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05EAC13D60F;
+	Wed,  3 Jul 2024 09:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="MVLxkoiF"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="M57Z6r6t"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6EE513C8F4;
-	Wed,  3 Jul 2024 08:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26A61A28C;
+	Wed,  3 Jul 2024 09:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719996520; cv=none; b=rWHYbAQF3Ra25jl020BBgZJ9FHPma+BkfKykqTk0y5tXTJbCYQKiGcECFFGyWhaAor1fYZLwFBJgbZfpK3psk4+dN1FFx6fXxVfhLOaqK1cf40PxaAFBqiGiRbKYY/CAIVTGPE32jxVG+tFR6vaGYwBuRnY1z4yos8debWclM1E=
+	t=1719999328; cv=none; b=bjWl6oyAOZUK8rFfEyTVxgB8x6cD8jUL6GxzvRzPPG/cYV2gidlCXmD/7Iuo7kBTdfdZrQx0T1dhqfN/JUAz0zjQ97GyfFJx7Pc31GToytyRUhB5ERHH88B/XvXbRplldui+SRLG4DPkI6VnywAowPs1LeWE5n2y27LsPMP8wmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719996520; c=relaxed/simple;
-	bh=hkCQd1grkSXjq749gl/KZxjV8DnGi4H2CmXCRKQAUWU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oDypP+lGmSnqiNwcn7UaU5GZM4AuGuuf/1xEhfa7VfoPNtv5i+gafn6gVXHpbruwKOxh50OahEfLkQYRPX394WjHOu2YEz14kd+vsdZw9JGsZRzW5YYVXQYNCcX2HsZvnAcV2JiaNPfe2C9Ma0pyBL69kfbQJJoXKCe94+bL/io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=fail smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=MVLxkoiF; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1719996518; x=1751532518;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hkCQd1grkSXjq749gl/KZxjV8DnGi4H2CmXCRKQAUWU=;
-  b=MVLxkoiFc3AL4nxftdNqHGlq5Msuz9fSwrd/S5UQGF3qHvAcNo3/sZhe
-   hg+c1OH4LbY9R3jouKIKIUa8k5oJIGPJSp7tb9H3JpVPLLH3k6RhL5PUy
-   F+Gg/KhD7/q+NOpbqxgbselxBHYr2LB0P7JZoa23M4sS0Xnh0IFM4bj2x
-   aQalzIoCm2L6WyZE+JAsV2gniIEem21MniXTXqGwRxUHqBZp/ohDemunJ
-   pFu0+ivt9+KL/ABxd1EGuWNPqqsXo1PVhCGOzhhslWmpta3ljWm+n06J8
-   7tqXQ3vVJd2OPsoal5vZJAtil07RHxtTjFNMaLFp/IFcF4lM/srRNnNpJ
-   g==;
-X-CSE-ConnectionGUID: s71X572eQVinIeDMsyDqRg==
-X-CSE-MsgGUID: 5FRwwSPJSdyu4F+Y3OQNSQ==
-X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
-   d="scan'208";a="196193660"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Jul 2024 01:48:31 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 3 Jul 2024 01:48:08 -0700
-Received: from ROB-ULT-M76677.microchip.com (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Wed, 3 Jul 2024 01:48:05 -0700
-From: Andrei Simion <andrei.simion@microchip.com>
-To: <brgl@bgdev.pl>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
-	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>, <arnd@arndb.de>,
-	<gregkh@linuxfoundation.org>
-CC: <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	Andrei Simion <andrei.simion@microchip.com>, Conor Dooley
-	<conor.dooley@microchip.com>
-Subject: [PATCH v4 3/3] dt-bindings: eeprom: at24: Add Microchip 24AA025E48/24AA025E64
-Date: Wed, 3 Jul 2024 11:47:04 +0300
-Message-ID: <20240703084704.197697-4-andrei.simion@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240703084704.197697-1-andrei.simion@microchip.com>
-References: <20240703084704.197697-1-andrei.simion@microchip.com>
+	s=arc-20240116; t=1719999328; c=relaxed/simple;
+	bh=hyxdXXEw+6VSTFplXOuf3m30k/fibz4guY5RiPbIDuA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Vu3D+AoxqQxlmJ5EF6biqDVY+ZlpQPNRlr+OiVekyO431bjxER9062f9wt/rAcXXpwef4pOtC2KwvPVWWPLeCf5ygfeRrFCWEHDRx9mKs6rEadCg9ZlKtzXYNlKBl0m5fDV+4DuY+uGX9xBr7XL6xjSf9I4Ms7TqiOyG29tAL5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=M57Z6r6t; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6600E240005;
+	Wed,  3 Jul 2024 09:35:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1719999324;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vqzoLI1+yvmXy8VMaMNQtqCXe4bzPqUcV6pOw+4ir8s=;
+	b=M57Z6r6tLC60owdSAu6dzlV3nZt/TGP/+zwMmMxEW/XXTE1vr4pDslTkJhk8H1suZpUTfq
+	YTbwUP4BzczXwvBHBxo69cQy56ldCBDpAf2Q/ERCyJ6Ble3GPG45KqL7nWPhSOh+mhZJk+
+	ccMqRKEnBp0eQyBNrKFmwBV9E0rcG40eWJQvs85twxFnidOzFTPgIdg0xZRNofbk1PsHzC
+	YWcqs8L10ci5Sydv6MFkYAAUmS0Mntcdm5kD4l5I0zO53o/Buqg5wlGE8wP/rrFj248xhz
+	lBdyFk+zZMh8I7L5QaaF2WDsVx0CaJv72BclvpcidXzUjkt97+KV5PQKywkAbQ==
+Message-ID: <135887c3-4eac-4397-bad9-6bd0a03283de@bootlin.com>
+Date: Wed, 3 Jul 2024 11:35:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/3] i2c: mux: gpio: Add 'settle-time-us' property
+To: Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Peter Korsgaard <peter.korsgaard@barco.com>, Wolfram Sang <wsa@kernel.org>
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Herve Codina <herve.codina@bootlin.com>,
+ Christopher Cordahi <christophercordahi@nanometrics.ca>
+References: <20240617120818.81237-1-bastien.curutchet@bootlin.com>
+Content-Language: en-US
+From: Bastien Curutchet <bastien.curutchet@bootlin.com>
+In-Reply-To: <20240617120818.81237-1-bastien.curutchet@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: bastien.curutchet@bootlin.com
 
-Add support for compatible Microchip 24AA025E48/24AA025E64 EEPROMs.
+Hi all,
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Andrei Simion <andrei.simion@microchip.com>
----
-v3 -> v4:
-- change the rule to select compatible
+On 6/17/24 14:08, Bastien Curutchet wrote:
+> Hi all,
+> 
+> The i2c-gpio-mux can be used to describe a multiplexer built upon
+> several i2c isolators having an enable pin (such as LTC4310):
+> 
+>   +---------------+                     +------+  +------+
+>   | +-----------+ |                     | dev  |  | dev  |
+>   | | GPIO_EN_A |-|-----------|         +------+  +------+
+>   | +-----------+ |     +-----+---+         |         |
+>   |               |  |--| isol. A |---------+---------+
+>   |     +-----+   |  |  +---------+
+>   | SOC | I2C |---|--|
+>   |     +-----+   |  |  +---------+
+>   |               |  |--| isol. B |------+---------+---------+
+>   | +-----------+ |     +-----+---+      |         |         |
+>   | | GPIO_EN_B |-|-----------|      +------+  +------+  +------+
+>   | +-----------+ |                  | dev  |  | dev  |  | dev  |
+>   +---------------+                  +------+  +------+  +------+
+> 
+> These isolators often need some time between their enable pin's
+> assertion and the first i2c transfer. If the first i2c transfer
+> happens before this enabling time is reached, transfer fails.
+> 
+> There is no available option to configure such a time in the
+> i2c-gpio-mux driver.
+> 
+> Add a optional property in the bindings called 'transition-delay-us'.
+> If present, driver waits for this delay every time a new bus is
+> selected, i.e. before returning from the bus_select() callback.
+> 
+> Changes in v2:
+>   * Rewrite bindings' commit log
+>   * Express the 'transition delay' in us instead of ms
+> 
+> Changes in v3:
+>   * Rename DT property to 'settle-time-us'
+>   * Use fsleep instead of udelay
+> 
+> [v1] : https://lore.kernel.org/all/20240527113908.127893-1-bastien.curutchet@bootlin.com/
+> [v2] : https://lore.kernel.org/all/20240529091739.10808-1-bastien.curutchet@bootlin.com/
+> 
 
-v2 -> v3:
-- commit subject changed to reference Microchip 24AA025E48/24AA025E64
-- drop pattern: mac02e4$ and mac02e6$ and a-z from regex
-- add these two devices down at the bottom
-- added Reviewed-by
+I don't think I've received any feedback since the bindings were 
+reviewed by Krzysztof. Has anyone had a chance to look at this V3 
+iteration yet?
 
-v1 -> v2:
-- change pattern into "^atmel,(24(c|cs|mac)[a-z0-9]+|spd)$" to keep simpler
----
- Documentation/devicetree/bindings/eeprom/at24.yaml | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-index 3c36cd0510de..4d46b8c5439d 100644
---- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-+++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-@@ -18,7 +18,9 @@ select:
-   properties:
-     compatible:
-       contains:
--        pattern: "^atmel,(24(c|cs|mac)[0-9]+|spd)$"
-+        anyOf:
-+          - pattern: "^atmel,(24(c|cs|mac)[0-9]+|spd)$"
-+          - enum: ["microchip,24aa025e48", "microchip,24aa025e64"]
-   required:
-     - compatible
- 
-@@ -132,6 +134,10 @@ properties:
-               - renesas,r1ex24128
-               - samsung,s524ad0xd1
-           - const: atmel,24c128
-+      - items:
-+          - const: microchip,24aa025e48
-+      - items:
-+          - const: microchip,24aa025e64
-       - pattern: '^atmel,24c(32|64)d-wl$' # Actual vendor is st
- 
-   label:
--- 
-2.34.1
-
+Best regards,
+Bastien
 
