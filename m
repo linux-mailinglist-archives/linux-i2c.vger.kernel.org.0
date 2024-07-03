@@ -1,94 +1,124 @@
-Return-Path: <linux-i2c+bounces-4601-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4602-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87D1F925785
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 11:57:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71E78925791
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 11:59:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 317AE1F26DB9
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 09:57:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08EBCB245F2
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 09:59:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8DB142621;
-	Wed,  3 Jul 2024 09:56:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4007146A68;
+	Wed,  3 Jul 2024 09:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="2wn6T3Ja"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="YJyBCCR4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9BC13F45B
-	for <linux-i2c@vger.kernel.org>; Wed,  3 Jul 2024 09:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E823A1428F8
+	for <linux-i2c@vger.kernel.org>; Wed,  3 Jul 2024 09:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720000614; cv=none; b=Ylt7kuOourKvvIOzmbomx3pTvqGETC7GsRMnVxQDYAtffnrsOvZ0ejNELly8h+CmaB53Q1x6xAvvF76SYY/E4aQp/pI9APQpa+AP/C/QskRWo5zyz/zl+bD0rjEFQHtVNO6JoQraD1TkfZacY66OBEIt3idSUnuIHNU1SJ9eDBg=
+	t=1720000760; cv=none; b=Wy2cYu9lfLLBUUNcreeLmlkFFq6344rJIRHi3Pfv6sHLM7/nlRgUs1ZjoSYvjjhRP8Ki6J9zqGKJ/pfSVisOVXgW/EUhbAfTolRPsYi2M0yRKI4b9UcAyNVQLZX5HN8b5Cc5/ndkq70mxuIvVdxa+HNNLiReW3Se77HhGJNbZyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720000614; c=relaxed/simple;
-	bh=VRqNg8ZwdNFYMwEZZ15y9oaDxErqj4bO5XutmPE7nnY=;
+	s=arc-20240116; t=1720000760; c=relaxed/simple;
+	bh=sGAtnatO2J6eXqeP28h5k3NsoxK3kBN+dN2HTxFUaNQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xfd4V20YLgin97ywpmkIj2p7D7ScC7fV5x8bcke6P3rPvxnhpOpQxCFTOFfwDkpQ9rQZ3AeQnK8+WA3QXp6TD4wIp44vhFuDEwKx6OtH9Tg3DjyBeowdI1drBA/WYTtYKPWT9jWamBB+n6TEQfqG3eKalSZqZ9deNy9eVXWbz2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=2wn6T3Ja; arc=none smtp.client-ip=209.85.208.175
+	 MIME-Version:Content-Type; b=chahuqbNIcFwf8a1A4ysKL0HnCmxJK7E8/pJJJNr0tWbw8RxbiBkxcGrl4qwmw2ob5Lu3hK5Otr9D5SjMBo7LK9wbIj4+tO2LobOMKoz1U0WbMDnT7x9Wgp7Mq+zSuzDpDNG4IHKiX1DqJGz0xGbINk8HdfrIPQcXQDkFuCwujM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=YJyBCCR4; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ebe40673e8so62951681fa.3
-        for <linux-i2c@vger.kernel.org>; Wed, 03 Jul 2024 02:56:53 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4256aee6e4dso37599285e9.1
+        for <linux-i2c@vger.kernel.org>; Wed, 03 Jul 2024 02:59:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1720000611; x=1720605411; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1720000757; x=1720605557; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=644p2OqNe2TyfiDk6OFRaYAmlAu9C2CNKeyr0ia2jQo=;
-        b=2wn6T3JaeNHqvOS7BSJ17fgtERPLe2qH3ikYGO/YZscDHq9BF0FgfJsKowczXQ4TaT
-         yAdLmllo2q2IpLFoW5BrHw2+OA6YHfRlBXny2ZjBkS60VfXNwMxOg2Fh8m5VEPM3iubW
-         KdcNkbn27ATiwXTSwOPCE5K8gAPgCtYQ7YamQzxNF4sjE1BCwIFZJfL3iaiT8bpxVhhZ
-         kZRbm3BT8iS/RHGZAnYqrjLy7giMHi0cbwCq+ZFoSlWVZjPFD0pnvM8Hk8tbE4XzRdXo
-         nXkDazg3t8RckakT4JXtWAjFIb9Z9i2Ndmo6lk7sjK+LAxRhcI21xoli9DFKZYLzScs0
-         HLvg==
+        bh=XXjn2sMkd3Qhei4SC2lgBtREpiH+FC34ffCKLhev/MQ=;
+        b=YJyBCCR4AVPYr3FiuUnJ8It7BtdlO36YcC206Al/buLgp1HV3y5SHYb26/J1ge5YLh
+         M7/cc0hYftF7NDlbhvl98soeZ1jlZf/hvJySEPJLTuxzCrNHA0djZvU+zKko14DN2/vh
+         rVK9m/Eq0aY/VUlVMxF/RLGSLDjSS2tmFnWGA7bfH0hqqMgWmhGO2B3kE0BMwaglbagE
+         WgUZXaUkT18xfADsBCto2XeKkU+niT5vAkuBaPszyVcr8j/dkgm8Jvy+dy/wTkSPu6zP
+         a4a/icG/OGFAQRfaqB1tvMqCff/sm+5EuWaVYmW272oO+NdMVJG1z7k7i20/eRoFuRY/
+         0FMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720000611; x=1720605411;
+        d=1e100.net; s=20230601; t=1720000757; x=1720605557;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=644p2OqNe2TyfiDk6OFRaYAmlAu9C2CNKeyr0ia2jQo=;
-        b=iSJnqAQX0CWQwUYEJNxpauRracprrikF7i1P1KFBAQjUPSFh/VPjL80Dlth1ZQy4W0
-         28Oy+6setLZlvjEtkXLXX8zMq++wispH7b2Iig3EG1gpjb7uAjlXm9v6WvjP7OuH8p9g
-         eZ5TVJEwfjiUxlyq/IiS4u76Rw87xNLvIrnGmr4LGYSUhf4LBESmaHS3mTSzxVJk3SpW
-         V0tPQo6KkCNI+rq2NpUvjp2u/lqYIhOxTF8bNaYF4CP0SLHl02dZFfiku2weYT1ZPedU
-         1Se7iMxChHR/f/uOVFxH7xibG96Cw8ySv1KkMXMsp72HRjMd8YyjdS7G1PJVXJOM/Bbn
-         7KFA==
-X-Forwarded-Encrypted: i=1; AJvYcCWHGdyrBiOA5aPhqpqyT07jWi+FjK4VsU3+pWuJOK46Pnz0grPHPAdMA/+EFmJjPtnAqlPfNMVzgieFe+TkLQ0uuHRFC++Mp0Wz
-X-Gm-Message-State: AOJu0Yzs60eDkkNRv0aq62Dl3Gs6mZ9bq+mWed06lrDJlz7J6G1uYWVD
-	Ug0B8ZNqv/DOk7qg27C+kUUndb/83eIx7Y1dEuFZ3TBPfwRYeaeT3RBZstLcHQ0=
-X-Google-Smtp-Source: AGHT+IG0w3E0EYqPeaL1EPJl8rWjAk6xvFAdS0J0CS6iElVHC8biwZiYbyTZBy9yDP3+x2rBjsmnzQ==
-X-Received: by 2002:a05:651c:150d:b0:2ee:8698:10ed with SMTP id 38308e7fff4ca-2ee86981404mr8101741fa.49.1720000609610;
-        Wed, 03 Jul 2024 02:56:49 -0700 (PDT)
+        bh=XXjn2sMkd3Qhei4SC2lgBtREpiH+FC34ffCKLhev/MQ=;
+        b=eLJZ3CH/Ti2077ij4eKVkPFGJQfiVGNsangSnZkICOceYp291JIglzqHoo+NgnUz3n
+         kqVIP7yCOfVIR2bEml9f7n1D9o9ky45xKBkxgKbEm77ZEUHY0YDNO402fAhp81h94ofn
+         hw+MeY/Nn536nolj9xFOv+Ttjl6aSZaN1QZHdDfNbbPRsWBLfAfbQpATHbH3BV1G4nkI
+         R69k6Tba3iGV6vuX3lefMAhOfPj+yPfEEpA0JGgq6MUo/Vaw153ctH/LgoNqvFjcaASo
+         JGY4vYQEQ4AJWxh7XUniGiKZiIRa7je3KIjYCgeODvH5vAy9uygs9TEgihxaRZsRZYyQ
+         EXuw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVnusqrs4ktR+EWQk+wkRLPXd+0u1wlMEINGCLSt3PTiJ31DaRCYOvGO8/SQpxmo4DBd1nJ76sOa6VT5YReoOvtfG1zgedevMS
+X-Gm-Message-State: AOJu0YxxALFcNKnXYhAP+p7MkhGN0Qtxlj+z8MFoHd96SuBtPPPJSurO
+	DgSClq7znEMPj/waFJ+VbEEeSGhIv5LswRul9oYfepvG0+l2sjDL1URDgo55W1k=
+X-Google-Smtp-Source: AGHT+IE5t/Pvc5a0A5rMnsuOFd3tzIXs4aS23G7++Z5PDz6z4fb8QnIv+IEonyMakOI8QAVhkpkcDg==
+X-Received: by 2002:a05:600c:1c88:b0:424:ab90:ecf0 with SMTP id 5b1f17b1804b1-4257a020ecdmr79604865e9.31.1720000757100;
+        Wed, 03 Jul 2024 02:59:17 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:c37f:195e:538f:bf06])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256b0c1018sm231190095e9.40.2024.07.03.02.56.48
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256af376f5sm232858195e9.6.2024.07.03.02.59.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jul 2024 02:56:49 -0700 (PDT)
+        Wed, 03 Jul 2024 02:59:16 -0700 (PDT)
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: brgl@bgdev.pl,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	Andrei Simion <andrei.simion@microchip.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	linux-i2c@vger.kernel.org,
+To: Bartosz Golaszewski <brgl@bgdev.pl>,
+	Conor Dooley <conor+dt@kernel.org>,
 	devicetree@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	imx@lists.linux.dev,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 0/3] Read MAC address through NVMEM for sama7g5ek
-Date: Wed,  3 Jul 2024 11:56:47 +0200
-Message-ID: <172000059532.11489.8300421582989880074.b4-ty@linaro.org>
+	linux-renesas-soc@vger.kernel.org,
+	Li Yang <leoyang.li@nxp.com>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Robin Gong <yibin.gong@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Stefan Agner <stefan@agner.ch>,
+	Frieder Schrempf <frieder@fris.de>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Frieder Schrempf <frieder.schrempf@kontron.de>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Bo Liu <liubo03@inspur.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Gregor Herburger <gregor.herburger@ew.tq-group.com>,
+	Hiago De Franco <hiago.franco@toradex.com>,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
+	Joy Zou <joy.zou@nxp.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Marco Felsch <m.felsch@pengutronix.de>,
+	Marek Vasut <marex@denx.de>,
+	Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+	Mathieu Othacehe <m.othacehe@gmail.com>,
+	Peng Fan <peng.fan@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Tim Harvey <tharvey@gateworks.com>
+Subject: Re: [PATCH 0/7] Add support for Kontron OSM-S i.MX93 SoM and carrier board
+Date: Wed,  3 Jul 2024 11:59:14 +0200
+Message-ID: <172000073641.11832.10658723886073687420.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240703084704.197697-1-andrei.simion@microchip.com>
-References: <20240703084704.197697-1-andrei.simion@microchip.com>
+In-Reply-To: <20240702103155.321855-1-frieder@fris.de>
+References: <20240702103155.321855-1-frieder@fris.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -101,23 +131,22 @@ Content-Transfer-Encoding: 8bit
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
 
-On Wed, 03 Jul 2024 11:47:01 +0300, Andrei Simion wrote:
-> Our main boot sequence :
-> (1) ROM BOOT -> AT91Bootstrap -> U-Boot -> Linux Kernel.
-> U-Boot is the stage where we set up the MAC address.
-> Also we can skip U-Boot and use the following boot sequence :
-> (2) ROM BOOT -> AT91Boostrap -> Linux Kernel.
-> Add EEPROMs and nvmem-layout to describe eui48 MAC address region
-> to be used for case (2).
+On Tue, 02 Jul 2024 12:31:12 +0200, Frieder Schrempf wrote:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+> 
+> Patch 1-4: small DT binding fixups
+> Patch 5: board DT bindings
+> Patch 6: support PMIC driver without IRQ
+> Patch 7: add devicetrees
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] eeprom: at24: Add support for Microchip 24AA025E48/24AA025E64 EEPROMs
-      commit: b61ea8705095e5d242762268cfebf48c848315f6
-[3/3] dt-bindings: eeprom: at24: Add Microchip 24AA025E48/24AA025E64
-      commit: c1ec80e54afd0460d02b29a5731fd2a7b31f400b
+[1/7] dt-bindings: eeprom: at24: Move compatible for Belling BL24C16A to proper place
+      commit: d83c217778e7425d10105001150c5670e07f88fe
+[2/7] dt-bindings: eeprom: at24: Add compatible for ONSemi N24S64B
+      commit: 3a9ba4e32230df6c48cda1fd5cbca6facacc74c2
 
 Best regards,
 -- 
