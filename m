@@ -1,62 +1,63 @@
-Return-Path: <linux-i2c+bounces-4596-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4597-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79AC99255C9
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 10:48:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 117619255CC
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 10:48:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7A72B20D57
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 08:48:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42C091C24BC9
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 08:48:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F3A136E1A;
-	Wed,  3 Jul 2024 08:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7914313C66A;
+	Wed,  3 Jul 2024 08:48:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="pSsEFfbL"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="CF72EWJZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD90C182C3;
-	Wed,  3 Jul 2024 08:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972BA13BC0B;
+	Wed,  3 Jul 2024 08:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719996513; cv=none; b=sJZKsZKIxKttslqJIwCyS65D8vdYRq1rsM0S2l2huxRvX7Z7IX3ih9gVyxDoC2+bU/DtU/w/KeKXpIuF4TK/oy9pAZja7j83m71WdjHOrsW2u6MHi0QlazqwIu+/SXMhO2MMRLsblvuEgU5luSmbEt74USjFWgmZ3VPFkd+cjsc=
+	t=1719996518; cv=none; b=hDuX4fTMZYnOJduvWr/60gEwOABbOTDvxOwkVE5HBHL6awRYRq4zZBzTMhM8iAfTKy9YHPJzwHgkisGGS09w1yoJgJXW3W2qumJ/PHplIy2aMPgyzBdUO4oI1VJBBMEmIxabWnFr4YgX2caW+jIg8yIjVcK5qmSSHvyLgsUTvLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719996513; c=relaxed/simple;
-	bh=o8Vab3oK2e41iH2uJwl/mpjZ6PWChqVCRQGMvWU4P/s=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QgzPYoczRu0vFpdyBrm2Qm4I4f5J419l8qloqV5t03R+1XP2c5dzMxnI+sVyZSgASHUy2iRpntgWGvgf5CNkp04/6brWmo7CFDfhQLnbz1COMW8KnKmYyzlZfdHCUakoG9aNxQo7NPOHJyvxFrLqOZge4ez/2Tyf4MkvGPFFz4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=fail smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=pSsEFfbL; arc=none smtp.client-ip=68.232.153.233
+	s=arc-20240116; t=1719996518; c=relaxed/simple;
+	bh=z62RBtJdUWVJAzwa/Aeq8wYi4651I8agle+ZMpscrsI=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hxXnKzWvQLhIWfNMASJDrCinj8kRWvf71iD8TPiWk2gWMRECTZ/NQNzIaTzokd8XoBcNeSXgb1pw1q0TC0DYpkmvqxqXEBMy6QsN0hvHxVtzmxYlG8smAerqqn6dfybM65rSnQOMyBMr+xrQJUNj8DDAzmveqmtLnU62It35oC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=fail smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=CF72EWJZ; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1719996512; x=1751532512;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=o8Vab3oK2e41iH2uJwl/mpjZ6PWChqVCRQGMvWU4P/s=;
-  b=pSsEFfbLQje4vZIWZRHqgmFMpfiOwSHKzVOn9HjQZM8GP3bz2cnbHD8P
-   Mh4GYxMxdpUyMLOUDzTv+uusb4fT1VS0KtjDPf84vLhlVBF21rKJCElYN
-   G4wSLlpIxhEQUVFoG137+nDhGnMqaXLJI78Dy7UWsiTmSbaa88CYXp/pA
-   zIbps9PB8NJIRRgvEleJ/kUFSkbAE3iJvQ8gcUXWeAt/xWHKcpzEcfl0G
-   WmAaDWlXDGqi1BLRna1DlFcNgDeafTdAGhWG9xMZb3A8V1Ijp+7eQLN8E
-   T2uZ/663II39u80EGYQBceRyPh5RJ75BxoZuzmwY2nzR6beHPsHgdljIW
-   w==;
-X-CSE-ConnectionGUID: saTZmC0lTLSxy+qNNP4X9w==
-X-CSE-MsgGUID: AeHk27KuT0eHZHRbTgphfA==
+  t=1719996516; x=1751532516;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=z62RBtJdUWVJAzwa/Aeq8wYi4651I8agle+ZMpscrsI=;
+  b=CF72EWJZf9GheIzvWVZWX7gWGjXMvR1/gn2V1LwWlryFc2jQ20n7UA9M
+   aKzsL4tqPQq+gtNG83lN7o/4I7333b7tUCHAXH4azk0mpmst/J4WM92Xu
+   gOGDApLTF2tHLIxhFPxFN0Cy01rW+03DLwNkJRs9J7tYedhGHOZHrghL0
+   VJ/FS/z5Uou58K+IwiVNkUF/ak585gU6Lwo04HxMXvuYdwO1o+CtjWFjJ
+   szylYEMsy3p86K8DbddAjyLZHuZbKzdXxk6A7SfHFHzLGw6Xj8PGOIQGn
+   9NXxoV3CACyoxOrRR7KQHCMMLq0DMV02tzWy9JGNaWdJwwqXLquhoyQgE
+   g==;
+X-CSE-ConnectionGUID: s71X572eQVinIeDMsyDqRg==
+X-CSE-MsgGUID: 9JW94tPrRUmMAdhDudLbuA==
 X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
-   d="scan'208";a="28801127"
+   d="scan'208";a="196193650"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Jul 2024 01:48:25 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Jul 2024 01:48:29 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 3 Jul 2024 01:47:58 -0700
+ 15.1.2507.35; Wed, 3 Jul 2024 01:48:02 -0700
 Received: from ROB-ULT-M76677.microchip.com (10.10.85.11) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Wed, 3 Jul 2024 01:47:55 -0700
+ 15.1.2507.35 via Frontend Transport; Wed, 3 Jul 2024 01:47:59 -0700
 From: Andrei Simion <andrei.simion@microchip.com>
 To: <brgl@bgdev.pl>, <robh@kernel.org>, <krzk+dt@kernel.org>,
 	<conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
@@ -64,11 +65,14 @@ To: <brgl@bgdev.pl>, <robh@kernel.org>, <krzk+dt@kernel.org>,
 	<gregkh@linuxfoundation.org>
 CC: <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	Andrei Simion <andrei.simion@microchip.com>
-Subject: [PATCH v4 0/3] Read MAC address through NVMEM for sama7g5ek
-Date: Wed, 3 Jul 2024 11:47:01 +0300
-Message-ID: <20240703084704.197697-1-andrei.simion@microchip.com>
+	Claudiu Beznea <claudiu.beznea@microchip.com>, Andrei Simion
+	<andrei.simion@microchip.com>
+Subject: [PATCH v4 1/3] eeprom: at24: Add support for Microchip 24AA025E48/24AA025E64 EEPROMs
+Date: Wed, 3 Jul 2024 11:47:02 +0300
+Message-ID: <20240703084704.197697-2-andrei.simion@microchip.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240703084704.197697-1-andrei.simion@microchip.com>
+References: <20240703084704.197697-1-andrei.simion@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,80 +82,70 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Our main boot sequence :
-(1) ROM BOOT -> AT91Bootstrap -> U-Boot -> Linux Kernel.
-U-Boot is the stage where we set up the MAC address.
-Also we can skip U-Boot and use the following boot sequence :
-(2) ROM BOOT -> AT91Boostrap -> Linux Kernel.
-Add EEPROMs and nvmem-layout to describe eui48 MAC address region
-to be used for case (2).
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-This series proposes to add EEPROM support and reading MAC addresses
-through NVMEM (via Devicetree) for sama7g5ek:
-- Add in DT bindings document the EEPROM compatibles :
-"microchip,24aa025e48" and "microchip,24aa025e64"
-- Update to the driver to support "microchip,24aa025e48" and
-"microchip,24aa025e64".
-- Added the nodes in devicetree for eeproms where are stored EUI-48 MAC,
-and update gmac nodes to read the MAC via devicetree through NVMEM.
+Add "microchip,24aa025e48", "microchip,24aa025e64" compatible for the
+usage w/ 24AA025E{48, 64} type of EEPROMs where "24aa025e48" stands
+for EUI-48 address and "24aa025e64" stands for EUI-64 address.
 
------------------------------------------------------------------------
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+[andrei.simion@microchip.com: Use AT24_DATA_CHIP with AT24_FLAG_READONLY for
+24AA025E{48, 64} type of EEPROMs. Reword commit message.]
+Signed-off-by: Andrei Simion <andrei.simion@microchip.com>
+---
 v3 -> v4:
-* dt-bindings: eeprom: at24: Add Microchip 24AA025E48/24AA025E64
-  - update the rule to select compatible
-
-* eeprom: at24: Add support for Microchip 24AA025E48/24AA025E64 EEPROMs
-  - Use AT24_CHIP_DATA with AT24_FLAG_READONLY
-  - drop AT24_CHIP_DATA_CB_AO
-  - drop AT24_CHIP_DATA_AO
-  - drop u8 adjoff
-  - change commit message
-
-* ARM: dts: microchip: at91-sama7g5ek: add EEPROMs
-  - reword commit message
+- Use AT24_CHIP_DATA with AT24_FLAG_READONLY
+- drop AT24_CHIP_DATA_CB_AO
+- drop AT24_CHIP_DATA_AO
+- drop u8 adjoff
+- change the commit title
 
 v2 -> v3:
-* dt-bindings: eeprom: at24: Add Microchip 24AA025E48/24AA025E64
-  - commit subject changed to reference Microchip 24AA025E48/24AA025E64
-  - drop the pattern: mac02e4$ and mac02e6$ and a-z from regex
-  - add these two devices down at the bottom
-  - added Reviewed-by
-
-* eeprom: at24: avoid adjusting offset for 24AA025E{48, 64}
-  - add specific compatible names according with
+- add specific compatible name according with
 https://ww1.microchip.com/downloads/en/DeviceDoc/24AA02E48-24AA025E48-24AA02E64-24AA025E64-Data-Sheet-20002124H.pdf
-  - add extended macros to initialize the structure with explicit value for adjoff
-  - drop co-developed-by to maintain the commit history
-  (chronological order of modifications)
-
-* ARM: dts: at91: at91-sama7g5ek: add EEPROMs
-  - change from atmel,24mac02e4 to microchip,24aa025e48 to align with the datasheet
-  - drop co-developed-by to maintain the chronological order of the changes
+- add extended macros to init structure with explicit value for adjoff
+- drop co-developed-by to maintain the commit history
+ (chronological order of modifications)
 
 v1 -> v2:
-* dt-bindings: eeprom: at24: Add at24,mac02e4 and at24,mac02e6
-  - change pattern into "^atmel,(24(c|cs|mac)[a-z0-9]+|spd)$" to keep simpler
+- no change
+---
+ drivers/misc/eeprom/at24.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-* eeprom: at24: avoid adjusting offset for 24AA025E{48, 64}
-  - no change
-
-* ARM: dts: at91: at91-sama7g5ek: add EEPROMs
-  - remove unnecessary #address-cells #size-cells
------------------------------------------------------------------------
-Andrei Simion (1):
-  dt-bindings: eeprom: at24: Add Microchip 24AA025E48/24AA025E64
-
-Claudiu Beznea (2):
-  eeprom: at24: Add support for Microchip 24AA025E48/24AA025E64 EEPROMs
-  ARM: dts: microchip: at91-sama7g5ek: add EEPROMs
-
- .../devicetree/bindings/eeprom/at24.yaml      |  8 +++-
- .../arm/boot/dts/microchip/at91-sama7g5ek.dts | 40 +++++++++++++++++++
- drivers/misc/eeprom/at24.c                    |  8 ++++
- 3 files changed, 55 insertions(+), 1 deletion(-)
-
-
-base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index 4bd4f32bcdab..ca872e3465ed 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -174,6 +174,10 @@ AT24_CHIP_DATA(at24_data_24mac402, 48 / 8,
+ 	AT24_FLAG_MAC | AT24_FLAG_READONLY);
+ AT24_CHIP_DATA(at24_data_24mac602, 64 / 8,
+ 	AT24_FLAG_MAC | AT24_FLAG_READONLY);
++AT24_CHIP_DATA(at24_data_24aa025e48, 48 / 8,
++	AT24_FLAG_READONLY);
++AT24_CHIP_DATA(at24_data_24aa025e64, 64 / 8,
++	AT24_FLAG_READONLY);
+ /* spd is a 24c02 in memory DIMMs */
+ AT24_CHIP_DATA(at24_data_spd, 2048 / 8,
+ 	AT24_FLAG_READONLY | AT24_FLAG_IRUGO);
+@@ -218,6 +222,8 @@ static const struct i2c_device_id at24_ids[] = {
+ 	{ "24cs02",	(kernel_ulong_t)&at24_data_24cs02 },
+ 	{ "24mac402",	(kernel_ulong_t)&at24_data_24mac402 },
+ 	{ "24mac602",	(kernel_ulong_t)&at24_data_24mac602 },
++	{ "24aa025e48",	(kernel_ulong_t)&at24_data_24aa025e48 },
++	{ "24aa025e64",	(kernel_ulong_t)&at24_data_24aa025e64 },
+ 	{ "spd",	(kernel_ulong_t)&at24_data_spd },
+ 	{ "24c02-vaio",	(kernel_ulong_t)&at24_data_24c02_vaio },
+ 	{ "24c04",	(kernel_ulong_t)&at24_data_24c04 },
+@@ -270,6 +276,8 @@ static const struct of_device_id __maybe_unused at24_of_match[] = {
+ 	{ .compatible = "atmel,24c1024",	.data = &at24_data_24c1024 },
+ 	{ .compatible = "atmel,24c1025",	.data = &at24_data_24c1025 },
+ 	{ .compatible = "atmel,24c2048",	.data = &at24_data_24c2048 },
++	{ .compatible = "microchip,24aa025e48",	.data = &at24_data_24aa025e48 },
++	{ .compatible = "microchip,24aa025e64",	.data = &at24_data_24aa025e64 },
+ 	{ /* END OF LIST */ },
+ };
+ MODULE_DEVICE_TABLE(of, at24_of_match);
 -- 
 2.34.1
 
