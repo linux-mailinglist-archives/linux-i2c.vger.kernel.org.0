@@ -1,150 +1,113 @@
-Return-Path: <linux-i2c+bounces-4613-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4614-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37DC0926865
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 20:41:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD1F92697B
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 22:21:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1E041F24051
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 18:41:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 255D12893CE
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 20:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD199187570;
-	Wed,  3 Jul 2024 18:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4544018FDAF;
+	Wed,  3 Jul 2024 20:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OCdLWAX3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sk3J19kL"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621491DA313;
-	Wed,  3 Jul 2024 18:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9A4185095;
+	Wed,  3 Jul 2024 20:21:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720032085; cv=none; b=ecPzJWoLnN2iD8H/IvcxfuaM+hRRgMfAQDj8VX7Nrz9K47hiKlOPD7q5fXGptt+gQwrpLfnFEgZnPKQZLt4Yl/yDpNrB4uReDYBcd5AuvPUBgBsyFf7Je+rRQbjcHetPSRWSpPympaSqjdcltWLNy6Xk48pjqvBjfQiMmM3PQbE=
+	t=1720038079; cv=none; b=mmT5c3l9oVCDVv6I/Tqxvnt9zEfELJzkL7SIC3h5KIxFhiQ7r0oCqSzSKcQpRXimFE+mT0ua4yryc4WO9wkNHdCuspk//zhwcuPt3z3c+3hR1SwglhTbLZmyRP6Q8tmQcKfnyAVmQ9Djom0dNgRpc8D6dpl5TLmQUOZmo8PIWMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720032085; c=relaxed/simple;
-	bh=WQHx3jOyEbeCSMUJzC4YLdOFmbxFG1FTyErobtc/LIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t+Puw9PEE7TrYNMVvsBCbff9MtdNQ5mc2wm0JlyOrL6RVfQ9DtY58s/13c0mhTWERY1pBHPhTCb9+UHPqnH45lTHRvvdhY9zbrQwvQsW1NbiHa3+CkdGCeEXYh9KxG32WqTTZ8myA3Prjb7Q3YwXzuCdw8/2vKM0qgFDanEj7P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OCdLWAX3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E80C2BD10;
-	Wed,  3 Jul 2024 18:41:24 +0000 (UTC)
+	s=arc-20240116; t=1720038079; c=relaxed/simple;
+	bh=rPvIWW2IUaIr2Cw4CK82UCHdJ+i1JMw6S82PykL7SKg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CCT/cBt1U4So/EJh42o7zjEfk9zP/MJf7ills+3HRacJfSZ1YLOvgrYMp739ZQAm2wb21f1gl4Hn2E6qtpTX7iY2kI0IgEqt5XCcbeK9M8mLIQHZlP64eh+SBFmKywWujgsIUpxaPRGd5/+qKDtWNPtNMBnrXYrMtFLVx65GXR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sk3J19kL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E06C4AF0A;
+	Wed,  3 Jul 2024 20:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720032085;
-	bh=WQHx3jOyEbeCSMUJzC4YLdOFmbxFG1FTyErobtc/LIo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OCdLWAX3/SlM2mdURdWSadrF48z/BZxE5gx0VH626Ptq2q2rNffVL+vWJ/46hHMBd
-	 ORvSB8bqSKt+Upc0ZCmGf23DoOTGxUiuMYfAFPLP92uRbRxFACCvg5dJLIc4+/YuqC
-	 nyGt79Jh9AB3pSG7FQAVGePJTfebU4ac/sUD+odqFC/3NOgEaaGJr63/WyfFGwe0UJ
-	 WKQ6peeHgbS1JNqf8TsU90G9hfNO5Ikmn5cujM1/DsDaEJzfdvDfUU+YEIf3BmDPfm
-	 3wIq63Do/bYfOHCz+8Sh5E1pLNE8BJtsDYdlPAvvt7nNzHdUFRKFWA3vAmUf138fQX
-	 oBIZuSzmGrt9g==
-Received: by pali.im (Postfix)
-	id 7ABC389A; Wed,  3 Jul 2024 20:41:21 +0200 (CEST)
-Date: Wed, 3 Jul 2024 20:41:21 +0200
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Paul Menzel <pmenzel@molgen.mpg.de>, Wolfram Sang <wsa@kernel.org>,
-	eric.piel@tremplin-utc.net, Marius Hoch <mail@mariushoch.de>,
-	Dell.Client.Kernel@dell.com,
-	Kai Heng Feng <kai.heng.feng@canonical.com>,
-	platform-driver-x86@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 0/6] i2c-i801 / dell-lis3lv02d: Move instantiation of
- lis3lv02d i2c_client from i2c-i801 to dell-lis3lv02d
-Message-ID: <20240703184121.t2wh5sb5ki2kwots@pali>
-References: <20240624111519.15652-1-hdegoede@redhat.com>
- <20240624182812.fa6akymygv3qolug@pali>
- <a6a554d1-2cdb-4e34-ac07-2778d534b558@redhat.com>
+	s=k20201202; t=1720038078;
+	bh=rPvIWW2IUaIr2Cw4CK82UCHdJ+i1JMw6S82PykL7SKg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sk3J19kLZOWas8QOHSZltgbRvBLXaonPTXwU1DEW39b1yG0gY34KfKMbtMI3bHEU1
+	 yeDKp6QnUxPm3/Z9GWCo7kB4Ri/cTf3ZhDN4eiV4giODeRAp/WrziyOI/mWGY5WEUH
+	 QPjPFjd9PBsruzq9WOnYZhAcj7D3yCuS8PMYP3+ImqxuFGFW+36Kx2K7/KLav44qGO
+	 CXnQH/lPtIwJa6I/5yccS8fWOgCtWTs1JAQx0zta7B/V8BeBAFKpl3gTLTjkaJkUT+
+	 2GyaYA2LOPbL/ggBA3dEyBsFePpVS89NsBo3P6q3vgvCssmhucVEaxI3esqUJh9Oxd
+	 xSy/8kohjfzJw==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-52e764bb3fbso7754719e87.3;
+        Wed, 03 Jul 2024 13:21:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXUKo5xSAu/tkT4Yx5S+tBlEE6b+5vreVeSxcFDPSL8sCuGbStRQS4AYGsyH9S5L+5XlquOKBuIfWyBmAF6oytEemNtP5yu32XNry93swzxOr44mS7B8WoIUVYKIu6QMvHrV2nAetqzDCsPfgTbdoLmDqn6frh4NgquA6Cyf/h8d+c4PgWqBJMOO96vVTqJUaUXxTYxvtsaP9o/VqGNkYtoywtnX+E22M4u2GkK63NEvbB+/a2kNjSFnuvvvUgDyTxkobsZFgjfTEmD1/Ew+rbefH2LTVW2
+X-Gm-Message-State: AOJu0Yy3ATx1at4QujPJmsFbVBsO1Jf3oIMZTDJfBbOWcZSgyRm2CAgD
+	agkFdkQFxkPepklK4q3lBXBCBGy/u0fwOrmiNHIhWnePNUflNokNtPpzSFsAWGGDwm29flbWl0g
+	Mf6j1g0mZ/MksRe8w2Ok/tYUObQ==
+X-Google-Smtp-Source: AGHT+IHkJyLufysSPAp6OLlmdgVCxJhhtA7jCjroJG4RfWGCFjmvlqKevKnTA5kF72TY71LMsM29/tv7IaZgzL2wT8U=
+X-Received: by 2002:a05:6512:33d1:b0:52c:e3af:7c5c with SMTP id
+ 2adb3069b0e04-52e82686b63mr8472949e87.34.1720038076812; Wed, 03 Jul 2024
+ 13:21:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a6a554d1-2cdb-4e34-ac07-2778d534b558@redhat.com>
-User-Agent: NeoMutt/20180716
+References: <20240701151231.29425-1-kyarlagadda@nvidia.com>
+ <20240701151231.29425-5-kyarlagadda@nvidia.com> <20240701174227.GA148633-robh@kernel.org>
+ <hqlckp6hxvxwkkbiagdb5pm4eo5efu55hwuupdal6lojxj2xu5@5zibskqdbdju>
+In-Reply-To: <hqlckp6hxvxwkkbiagdb5pm4eo5efu55hwuupdal6lojxj2xu5@5zibskqdbdju>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 3 Jul 2024 14:21:04 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+hzbHKeKM9UnJ=VK8_rKs5HJpZRGH2YYWAvjtf9SbPRw@mail.gmail.com>
+Message-ID: <CAL_Jsq+hzbHKeKM9UnJ=VK8_rKs5HJpZRGH2YYWAvjtf9SbPRw@mail.gmail.com>
+Subject: Re: [RFC PATCH V2 04/12] dt-bindings: misc: tegra-i2c: config settings
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: Krishna Yarlagadda <kyarlagadda@nvidia.com>, linux-tegra@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, jonathanh@nvidia.com, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, corbet@lwn.net, andi.shyti@kernel.org, 
+	wsa+renesas@sang-engineering.com, ulf.hansson@linaro.org, 
+	adrian.hunter@intel.com, digetx@gmail.com, ldewangan@nvidia.com, 
+	mkumard@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wednesday 03 July 2024 12:58:01 Hans de Goede wrote:
-> Hi,
-> 
-> On 6/24/24 8:28 PM, Pali Rohár wrote:
-> > On Monday 24 June 2024 13:15:12 Hans de Goede wrote:
-> >> Hans de Goede (6):
-> >>   i2c: core: Setup i2c_adapter runtime-pm before calling device_add()
-> >>   i2c: i801: Use a different adapter-name for IDF adapters
-> >>   platform/x86: dell-smo8800: Move SMO88xx acpi_device_ids to
-> >>     dell-smo8800-ids.h
-> >>   platform/x86: dell-smo8800: Move instantiation of lis3lv02d i2c_client
-> >>     from i2c-i801 to dell-lis3lv02d
-> >>   platform/x86: dell-smo8800: Add a couple more models to
-> >>     lis3lv02d_devices[]
-> >>   platform/x86: dell-smo8800: Add support for probing for the
-> >>     accelerometer i2c address
-> > 
-> > Patches 1-5 looks good. There are just a few minor things, but you can add
-> > Reviewed-by: Pali Rohár <pali@kernel.org>
-> 
-> Thank you.
-> 
-> > For patch 6 as I mentioned previously I'm strictly against this change
-> > until somebody goes and politely ask Dell about the current situation of
-> > the discovering of accelerometer's i2c address.
-> 
-> Dell is on the Cc and not responding...
+On Tue, Jul 2, 2024 at 4:29=E2=80=AFAM Thierry Reding <thierry.reding@gmail=
+.com> wrote:
+>
+> On Mon, Jul 01, 2024 at 11:42:27AM GMT, Rob Herring wrote:
+> > On Mon, Jul 01, 2024 at 08:42:22PM +0530, Krishna Yarlagadda wrote:
+> > > I2C interface timing registers are configured using config setting
+> > > framework. List available field properties for Tegra I2C controllers.
+> >
+> > How is I2C bus timing parameters specific to NVIDIA? Just because you
+> > have more controls? No. That's no reason to invent a whole new way to
+> > specify parameters. Extend what's already there and make it work for
+> > anyone.
+>
+> This may be applicable to a subset of this, and yes, maybe we can find
+> generalizations for some of these parameters.
+>
+> However, we're also looking for feedback specifically on these config
+> nodes that go beyond individual timing parameters. For example in the
+> case of I2C, how should parameters for different operating modes be
+> described?
 
-And what do you expecting here? That somebody on the group address
-specified in CC list would react to all your tons of messages? Not
-mentioning the fact that you did not even ask anything.
+Like what? It all looks like timing to me.
 
-This is not how things works.
+> Would you agree with something along the lines provided in this series?
 
-If you do not change your attitude here then I highly doubt that
-somebody will respond to you.
+When there are multiple users/vendors of it, maybe.
 
-I have feeling that you are doing it on purpose just because you do not
-want to do anything, and trying to find some kind of proof that nobody
-is responding to you, to convince others for merge your last hack change.
+In general, it goes against the DT design of properties for foo go in
+foo's node. This looks more like how ACPI does things where it's add
+another table for this new thing we need.
 
-> > And if there is no other
-> > option than start discussion if Dell can include this information into
-> > DMI / ACPI / WMI or other part of firmware data which they can send from
-> > BIOS/UEFI to operating system.
-> 
-> AFAIK newer Dell laptops don't have a freefall sensor anymore since
-> everything has moved to nvme. Even the bigger laptops seems to simply
-> have multiple nvme slots rather then room for a 2.5" HDD. Note I did not
-> research this, this is is my observation from 3 newer Dell laptops which
-> I have access to.
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
-> >>  drivers/i2c/busses/i2c-i801.c                | 133 +-------
-> >>  drivers/i2c/i2c-core-base.c                  |  18 +-
-> >>  drivers/platform/x86/dell/Makefile           |   1 +
-> >>  drivers/platform/x86/dell/dell-lis3lv02d.c   | 331 +++++++++++++++++++
-> >>  drivers/platform/x86/dell/dell-smo8800-ids.h |  26 ++
-> >>  drivers/platform/x86/dell/dell-smo8800.c     |  16 +-
-> >>  6 files changed, 379 insertions(+), 146 deletions(-)
-> >>  create mode 100644 drivers/platform/x86/dell/dell-lis3lv02d.c
-> >>  create mode 100644 drivers/platform/x86/dell/dell-smo8800-ids.h
-> >>
-> >> -- 
-> >> 2.45.1
-> >>
-> > 
-> 
+Rob
 
