@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-4631-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4632-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EDC0927697
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 14:57:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A812F927699
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 14:57:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42CDB1C2214D
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 12:57:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53B131F2412B
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 12:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52C11AED4A;
-	Thu,  4 Jul 2024 12:57:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD8471AED54;
+	Thu,  4 Jul 2024 12:57:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="biuuw/0f"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UNHzWoqB"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EEF1AED25
-	for <linux-i2c@vger.kernel.org>; Thu,  4 Jul 2024 12:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE221AED50
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Jul 2024 12:57:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720097833; cv=none; b=O5ShLWvdqjBcmsS8oYOd3N0D4CqzYhehJXNSrbYoLx6GZFHzJUQstVLCh1lJ4PvUufNvPS3intfzjJwBN+LK0yBbn8/Jo19g3Jd/hQI4m5+yu5qJbBmVu3emALiRd7aW+ZWRDPZ72G8d9ax16aMizhw02tuR+Ewef0TrGTrPuqc=
+	t=1720097836; cv=none; b=qyZVLeVw0g8PhEfnvJ/ooVjYoIRpaJK4bvefBoX+QSAv3yMsGPipddae20KOj7cZIqJhCYLmS1zQCD4YZBjpoe+SbjAjFWSQuPC3Dtcuoqhmely8hHgNIvI8s4mAHUmaOxapF1ybRUXTjpq6/jG1baBkxChUkdZXZaRrNlBys8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720097833; c=relaxed/simple;
-	bh=efEmJWiaWLXEySbthcLrBmZ7OFoTbsAv0GexXllP328=;
+	s=arc-20240116; t=1720097836; c=relaxed/simple;
+	bh=9+5ijawvv6OCXAtYMN7exU9MzHfcU7rH6D4NZaW5bEc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eBcxSlClIyoEHuYyTgumqjjOqbId19K2e7Zm7+h4zQHU3YcH4iWJxLeyKWlmTxvz8ifV+5JzKjIlTJuUcFbUQgZTqiQaIexCLX+PvwTDeWgrM+ER2oP3lNZ5MIHm5tGxEm9KixveE7u+AOGwwPk//LiRaUptOH6zN2AVt9yL9aA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=biuuw/0f; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=gWKIRlieOgZ5nfTze6QJtI9nm/deWAueWBJPcUemAKJ0yryjSWy5h/5QSqHmvN/ZX3oqwfDoyhAgHO52/jqGIpGDOyvK26ka+TdxNCTuaMH4ofss30JVSRoulOgzBWQo+h78jb7G/14mDHqy1CFbeXsebdNZcP0IjuWvUReCyS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UNHzWoqB; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720097830;
+	s=mimecast20190719; t=1720097834;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Z/RoJuACAYXdPvVIHs2RyA6Fqb36Bl8RlhlvG114vS0=;
-	b=biuuw/0fZJBMcgPi5AHatQazGo7OpxV/KQMR9dcMNoh9IrpNBws5IgkqgX33fxjAgzwsN3
-	pnTXrefbBTwXpSYafYnFVbBDimfzrzIKnNUZ0btCRQGRiL+Ps7K+UUAqp2Z2OdpN2Vx3nP
-	jUc5WQ3Wal4NiNIH/2AJ3yfi15nkeMg=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=eyJ1dtPmMc1CBJtThTe3+L5azwDxbWybN3OCGIWy9go=;
+	b=UNHzWoqBDewv/YCnibJybaTs7jDryVeTxhn81fH1tP11WzWWwW5QvPlHTu8lnTTWi1lC/z
+	Kh2SUXb0L4DgKHhx24rthKQ5SqsUdFr7NI1VM+3xjWb6VeSLxRpJhn6LvEzJDiY+0sEzXw
+	FcIAtjSB44fR4gx8u4LDPwh7rT5HRF8=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-690-5fZlZtivPZSmy76QutRoGw-1; Thu,
- 04 Jul 2024 08:57:05 -0400
-X-MC-Unique: 5fZlZtivPZSmy76QutRoGw-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-532--6UoGEiDN-Cu64O_7gvDeA-1; Thu,
+ 04 Jul 2024 08:57:10 -0400
+X-MC-Unique: -6UoGEiDN-Cu64O_7gvDeA-1
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5698B196E098;
-	Thu,  4 Jul 2024 12:57:02 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1A96D1955F3B;
+	Thu,  4 Jul 2024 12:57:08 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.194.23])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E528E1955E80;
-	Thu,  4 Jul 2024 12:56:56 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5A9971955E8C;
+	Thu,  4 Jul 2024 12:57:02 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
@@ -71,9 +71,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Jean Delvare <jdelvare@suse.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH v6 2/6] i2c: i801: Use a different adapter-name for IDF adapters
-Date: Thu,  4 Jul 2024 14:56:39 +0200
-Message-ID: <20240704125643.22946-3-hdegoede@redhat.com>
+Subject: [PATCH v6 3/6] platform/x86: dell-smo8800: Move SMO88xx acpi_device_ids to dell-smo8800-ids.h
+Date: Thu,  4 Jul 2024 14:56:40 +0200
+Message-ID: <20240704125643.22946-4-hdegoede@redhat.com>
 In-Reply-To: <20240704125643.22946-1-hdegoede@redhat.com>
 References: <20240704125643.22946-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -86,50 +86,89 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On chipsets with a second 'Integrated Device Function' SMBus controller use
-a different adapter-name for the second IDF adapter.
-
-This allows platform glue code which is looking for the primary i801
-adapter to manually instantiate i2c_clients on to differentiate
-between the 2.
-
-This allows such code to find the primary i801 adapter by name, without
-needing to duplicate the PCI-ids to feature-flags mapping from i2c-i801.c.
+Move the SMO88xx acpi_device_ids to a new dell-smo8800-ids.h header,
+so that these can be shared with the new dell-lis3lv02d code.
 
 Reviewed-by: Pali Rohár <pali@kernel.org>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
 Changes in v4:
-- Use a single snprintf() with a conditional argument for the 2 names
-- Add a comment that the adapter-name is used by platform code
-
-Changes in v3:
 - This is a new patch in v3 of this patch-set
 ---
- drivers/i2c/busses/i2c-i801.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/platform/x86/dell/dell-smo8800-ids.h | 26 ++++++++++++++++++++
+ drivers/platform/x86/dell/dell-smo8800.c     | 16 +-----------
+ 2 files changed, 27 insertions(+), 15 deletions(-)
+ create mode 100644 drivers/platform/x86/dell/dell-smo8800-ids.h
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index d2d2a6dbe29f..94265ee300c0 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1760,8 +1760,15 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 
- 	i801_add_tco(priv);
- 
-+	/*
-+	 * adapter.name is used by platform code to find the main I801 adapter
-+	 * to instantiante i2c_clients, do not change.
-+	 */
- 	snprintf(priv->adapter.name, sizeof(priv->adapter.name),
--		"SMBus I801 adapter at %04lx", priv->smba);
-+		 "SMBus %s adapter at %04lx",
-+		 (priv->features & FEATURE_IDF) ? "I801 IDF" : "I801",
-+		 priv->smba);
+diff --git a/drivers/platform/x86/dell/dell-smo8800-ids.h b/drivers/platform/x86/dell/dell-smo8800-ids.h
+new file mode 100644
+index 000000000000..f85d8b707d85
+--- /dev/null
++++ b/drivers/platform/x86/dell/dell-smo8800-ids.h
+@@ -0,0 +1,26 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ *  ACPI SMO88XX lis3lv02d freefall / accelerometer device-ids.
++ *
++ *  Copyright (C) 2012 Sonal Santan <sonal.santan@gmail.com>
++ *  Copyright (C) 2014 Pali Rohár <pali@kernel.org>
++ */
++#ifndef _DELL_SMO8800_IDS_H_
++#define _DELL_SMO8800_IDS_H_
 +
- 	err = i2c_add_adapter(&priv->adapter);
- 	if (err) {
- 		platform_device_unregister(priv->tco_pdev);
++#include <linux/mod_devicetable.h>
++
++static const struct acpi_device_id smo8800_ids[] = {
++	{ "SMO8800" },
++	{ "SMO8801" },
++	{ "SMO8810" },
++	{ "SMO8811" },
++	{ "SMO8820" },
++	{ "SMO8821" },
++	{ "SMO8830" },
++	{ "SMO8831" },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, smo8800_ids);
++
++#endif
+diff --git a/drivers/platform/x86/dell/dell-smo8800.c b/drivers/platform/x86/dell/dell-smo8800.c
+index f7ec17c56833..f9119ed2bd92 100644
+--- a/drivers/platform/x86/dell/dell-smo8800.c
++++ b/drivers/platform/x86/dell/dell-smo8800.c
+@@ -14,10 +14,10 @@
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
+ #include <linux/miscdevice.h>
+-#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/uaccess.h>
++#include "dell-smo8800-ids.h"
+ 
+ struct smo8800_device {
+ 	u32 irq;                     /* acpi device irq */
+@@ -163,20 +163,6 @@ static void smo8800_remove(struct platform_device *device)
+ 	dev_dbg(&device->dev, "device /dev/freefall unregistered\n");
+ }
+ 
+-/* NOTE: Keep this list in sync with drivers/i2c/busses/i2c-i801.c */
+-static const struct acpi_device_id smo8800_ids[] = {
+-	{ "SMO8800", 0 },
+-	{ "SMO8801", 0 },
+-	{ "SMO8810", 0 },
+-	{ "SMO8811", 0 },
+-	{ "SMO8820", 0 },
+-	{ "SMO8821", 0 },
+-	{ "SMO8830", 0 },
+-	{ "SMO8831", 0 },
+-	{ "", 0 },
+-};
+-MODULE_DEVICE_TABLE(acpi, smo8800_ids);
+-
+ static struct platform_driver smo8800_driver = {
+ 	.probe = smo8800_probe,
+ 	.remove_new = smo8800_remove,
 -- 
 2.45.1
 
