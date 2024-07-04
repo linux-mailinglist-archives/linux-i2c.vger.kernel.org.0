@@ -1,81 +1,77 @@
-Return-Path: <linux-i2c+bounces-4635-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4636-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A3199276A0
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 14:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 24AB292786A
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 16:32:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EEFEB23C1E
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 12:57:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5645B21AF9
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 14:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B6F1AE87A;
-	Thu,  4 Jul 2024 12:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15BF91DFF8;
+	Thu,  4 Jul 2024 14:32:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TR95f+G0"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="C1FL2/By"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AAFE1AE871
-	for <linux-i2c@vger.kernel.org>; Thu,  4 Jul 2024 12:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD921AE87B
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Jul 2024 14:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720097852; cv=none; b=jC1PGv5Uno4gbAqV9OOM4UmuV/9BRchkU118KaESmPNlRZ+tXekXqkKgMCIPtiSmAmObA6n/Vvreh+yB0u3ZrFcShuPE6AMLUT202IaGheL9j57xA3BMq43+zv6oSnjcw3haUiZ8L2UPhUqoVGTyz4vDkPLkYX9VTEXq8uBmQAw=
+	t=1720103521; cv=none; b=dBuP4fslgrt/1Pziv7Vap5RrjaIUJDWAzRh5PSa434Q+qfDEnmHap+uLqDCTEKaqKqSrRf7BJ5q/c9mVn1adWFcXp2Ulx0kLz3vHqlwoWFcH4pLqjV1/V0RhwL8t+uiW4BAOUJ6QwKJSNHt+270pf/MwdDWZAAJJzHoP1n9DLU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720097852; c=relaxed/simple;
-	bh=j/roy3n3PP/7PCln4DxLr4kx9FyRZgWZo5OZKDlq8tc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L98W3eQZA6dBKK2yctfhI8FqGlIlzZMbo4fZhe4EvfHhM3LB8QT2gjw7a/4RzYbzc4uUozlbn2Itoz0sCfW9eCzV+GPlD75nJb/7KmNnq38gUi4VCt/Cc/jrHBqbdEsnI3IrQya4h/9gngcps6bM6DUhGCmVoW2FIrGnwtXxkOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TR95f+G0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720097849;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R43QSmytGgZzwpEXvE9HkKFfFTrNHCPB/mzSAwUsTy0=;
-	b=TR95f+G0DxJOlRMCuhRCBMlpc8TZAOvvT5e3vuRBzp5lA9ryM1hXoRaGpl7jF+5r1wF2AF
-	n/ubxX2uSABS4Ga4QU9sqCnL5TIs3xYYYMI5sc+6i01uX82Cys9j6d0rPjTruJROFREix6
-	PAzQxeFhieRufQVxLF0heitHCEbBsY4=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-281-0saX8sPPOJCQcr7vPxoliQ-1; Thu,
- 04 Jul 2024 08:57:24 -0400
-X-MC-Unique: 0saX8sPPOJCQcr7vPxoliQ-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C5D71954B0B;
-	Thu,  4 Jul 2024 12:57:22 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.194.23])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9F7B51955E8C;
-	Thu,  4 Jul 2024 12:57:17 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Wolfram Sang <wsa@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	eric.piel@tremplin-utc.net,
-	Marius Hoch <mail@mariushoch.de>,
-	Dell.Client.Kernel@dell.com,
-	Kai Heng Feng <kai.heng.feng@canonical.com>,
-	platform-driver-x86@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH v6 6/6] platform/x86: dell-smo8800: Add support for probing for the accelerometer i2c address
-Date: Thu,  4 Jul 2024 14:56:43 +0200
-Message-ID: <20240704125643.22946-7-hdegoede@redhat.com>
-In-Reply-To: <20240704125643.22946-1-hdegoede@redhat.com>
-References: <20240704125643.22946-1-hdegoede@redhat.com>
+	s=arc-20240116; t=1720103521; c=relaxed/simple;
+	bh=jTBQHrrwPJ7hkN25XtTLOnubWv4cUVtLBnENNqljAx0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DmHBaiRL0n3KA/JKtTQCFPlrn+32O8Ik/YUwypZMuV8UGV1b0N5OzrNGlGOkr2G6m2fZsSoIgRHV/5ag14mG2Eb9XF3edv1Pc7KHSKQ/lfb7/pkaZA7VqCLFRsSUvE4cheopVvSFAbrEqpEpQZcLad3LSFvIm7MppaENBVPEIcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=C1FL2/By; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-52ea2ce7abaso276483e87.0
+        for <linux-i2c@vger.kernel.org>; Thu, 04 Jul 2024 07:31:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1720103518; x=1720708318; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5NhqaUPaUf7BP0sBBsYRPCStsUyvFYmjk9x1Huz361A=;
+        b=C1FL2/ByaJCC6Lid4S9PplrareAnDKcWjMBjF8yUO9kxkIdAnwVKqD4bJ42OtsKNm4
+         k/jcjr2nVPPNrkiu3XiKlQTcjZz4V4UXyLr2P/XbjMxXGkoIJyGo4wBQ1p5QZa4X3VkR
+         fQGAlADxnzHaYAFg4W2Gwrq7fHkpSWtLkPMH0GQ3gsHRhjLfVjX1VfbtKXJUprmlwfcT
+         cP33q5miM0I7s4zTfw5M6X9eNr9+Mz9ARJG35GPbuTvd20wNLmOt4rbmiVk2RqyE5aI7
+         OfsEIgTOuvwH7lpRy6vb1qRdJ5StfkzJRq4i+8Ffjlj9PCSrr71vlMofwKx2i8ccdfYl
+         /UAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720103518; x=1720708318;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5NhqaUPaUf7BP0sBBsYRPCStsUyvFYmjk9x1Huz361A=;
+        b=d8ceX29W434Shrx4ZZpG4arcqNCwVxQmR1u7yQSOoq767M0UmvMhYn8mpiiZHYeY0D
+         ymn1wqVxHMubS30NPIk19K6GPz3L702Fhka7AVrSy7tO18JggHNYpxITVEKFAQ0VVIGg
+         mUMVRfAQo3I8b/c3A3vucfJjdaOz+EqbtL3pt4+r+2bM7wFWvG4T4rykdzhXXyz53uz5
+         DDVKUqgiVzOf3qnUJbMYthRXQwHRt8XX2YuugL5GkFSfvIKO0OdsiR4YpXLIvBiyyI3A
+         xKFUQ/47Ma9PoB48yYR2IeHEJ2S7GPvjMulU0e4XBVmMlXy9CSiOpEphi45Qnr/ncjAG
+         512Q==
+X-Gm-Message-State: AOJu0Yww3ISIf494Y5MqYedpbLcOYX0OkfXbPUOk1CdXvpvUZVrIlx2C
+	+8N5TanVE4u/39MXawon9/YekyTgH3oQrlRjhiwVgn8wAl+Nem0sAaTKOAAR6Vg=
+X-Google-Smtp-Source: AGHT+IGI03Z3uaki5ffx0gvPnmYIweIgyQtHrdxjOPmFp89B/VUhTTddX85DE8zIE3veI1DkGOhNgQ==
+X-Received: by 2002:a19:6908:0:b0:52c:d27b:ddcb with SMTP id 2adb3069b0e04-52ea0619e74mr1545234e87.3.1720103517825;
+        Thu, 04 Jul 2024 07:31:57 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:a7bc:91b4:6b09:23cc])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4264a2ca62bsm26793275e9.35.2024.07.04.07.31.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jul 2024 07:31:57 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Wolfram Sang <wsa@the-dreams.de>
+Cc: linux-i2c@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [GIT PULL] at24: updates for v6.11-rc1
+Date: Thu,  4 Jul 2024 16:31:48 +0200
+Message-ID: <20240704143148.28950-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,121 +79,50 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Unfortunately the SMOxxxx ACPI device does not contain the i2c-address
-of the accelerometer. So a DMI product-name to address mapping table
-is used.
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-At support to have the kernel probe for the i2c-address for modesl
-which are not on the list.
+Wolfram,
 
-The new probing code sits behind a new probe_i2c_addr module parameter,
-which is disabled by default because probing might be dangerous.
+Please pull the following set of updates for the upcoming merge window for
+the at24 EEPROM driver. Changes are quite simple: we support two new EEPROM
+models in the driver and document another model with a compatible fallback.
+While at it: unify fallbacks for two existing compatibles.
 
-Link: https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de/
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in v6:
-- Use i2c_new_scanned_device() instead of re-inventing it
+Best Regards,
+Bartosz Golaszewski
 
-Changes in v5:
-- Add "this may be dangerous warning" to MODULE_PARM_DESC(probe_i2c_addr)
----
- drivers/platform/x86/dell/dell-lis3lv02d.c | 52 ++++++++++++++++++++--
- 1 file changed, 48 insertions(+), 4 deletions(-)
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
-diff --git a/drivers/platform/x86/dell/dell-lis3lv02d.c b/drivers/platform/x86/dell/dell-lis3lv02d.c
-index ab02ad93758a..21390e6302a0 100644
---- a/drivers/platform/x86/dell/dell-lis3lv02d.c
-+++ b/drivers/platform/x86/dell/dell-lis3lv02d.c
-@@ -15,6 +15,8 @@
- #include <linux/workqueue.h>
- #include "dell-smo8800-ids.h"
- 
-+#define LIS3_WHO_AM_I 0x0f
-+
- #define DELL_LIS3LV02D_DMI_ENTRY(product_name, i2c_addr)                 \
- 	{                                                                \
- 		.matches = {                                             \
-@@ -57,6 +59,38 @@ static u8 i2c_addr;
- static struct i2c_client *i2c_dev;
- static bool notifier_registered;
- 
-+static bool probe_i2c_addr;
-+module_param(probe_i2c_addr, bool, 0444);
-+MODULE_PARM_DESC(probe_i2c_addr, "Probe the i801 I2C bus for the accelerometer on models where the address is unknown, this may be dangerous.");
-+
-+static int detect_lis3lv02d(struct i2c_adapter *adap, unsigned short addr)
-+{
-+	union i2c_smbus_data smbus_data;
-+	int err;
-+
-+	pr_info("Probing for lis3lv02d on address 0x%02x\n", addr);
-+
-+	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, LIS3_WHO_AM_I,
-+			     I2C_SMBUS_BYTE_DATA, &smbus_data);
-+	if (err < 0)
-+		return 0; /* Not found */
-+
-+	/* valid who-am-i values are from drivers/misc/lis3lv02d/lis3lv02d.c */
-+	switch (smbus_data.byte) {
-+	case 0x32:
-+	case 0x33:
-+	case 0x3a:
-+	case 0x3b:
-+		break;
-+	default:
-+		pr_warn("Unknown who-am-i register value 0x%02x\n", smbus_data.byte);
-+		return 0; /* Not found */
-+	}
-+
-+	pr_debug("Detected lis3lv02d on address 0x%02x\n", addr);
-+	return 1; /* Found */
-+}
-+
- static bool i2c_adapter_is_main_i801(struct i2c_adapter *adap)
- {
- 	/*
-@@ -93,10 +127,18 @@ static void instantiate_i2c_client(struct work_struct *work)
- 	if (!adap)
- 		return;
- 
--	info.addr = i2c_addr;
- 	strscpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
- 
--	i2c_dev = i2c_new_client_device(adap, &info);
-+	if (i2c_addr) {
-+		info.addr = i2c_addr;
-+		i2c_dev = i2c_new_client_device(adap, &info);
-+	} else {
-+		/* First try address 0x29 (most used) and then try 0x1d */
-+		static const unsigned short addr_list[] = { 0x29, 0x1d, I2C_CLIENT_END };
-+
-+		i2c_dev = i2c_new_scanned_device(adap, &info, addr_list, detect_lis3lv02d);
-+	}
-+
- 	if (IS_ERR(i2c_dev)) {
- 		pr_err("error %ld registering i2c_client\n", PTR_ERR(i2c_dev));
- 		i2c_dev = NULL;
-@@ -167,12 +209,14 @@ static int __init dell_lis3lv02d_init(void)
- 	put_device(dev);
- 
- 	lis3lv02d_dmi_id = dmi_first_match(lis3lv02d_devices);
--	if (!lis3lv02d_dmi_id) {
-+	if (!lis3lv02d_dmi_id && !probe_i2c_addr) {
- 		pr_warn("accelerometer is present on SMBus but its address is unknown, skipping registration\n");
-+		pr_info("Pass dell_lis3lv02d.probe_i2c_addr=1 on the kernel commandline to probe, this may be dangerous!\n");
- 		return 0;
- 	}
- 
--	i2c_addr = (long)lis3lv02d_dmi_id->driver_data;
-+	if (lis3lv02d_dmi_id)
-+		i2c_addr = (long)lis3lv02d_dmi_id->driver_data;
- 
- 	/*
- 	 * Register i2c-bus notifier + queue initial scan for lis3lv02d
--- 
-2.45.1
+  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/at24-updates-for-v6.11-rc1
+
+for you to fetch changes up to 3a9ba4e32230df6c48cda1fd5cbca6facacc74c2:
+
+  dt-bindings: eeprom: at24: Add compatible for ONSemi N24S64B (2024-07-03 11:57:52 +0200)
+
+----------------------------------------------------------------
+at24 updates for v6.11-rc1
+
+- add support for two new Microchip models
+- document even more new models in DT bindings (those use fallback
+  compatibles so no code changes)
+
+----------------------------------------------------------------
+Andrei Simion (1):
+      dt-bindings: eeprom: at24: Add Microchip 24AA025E48/24AA025E64
+
+Claudiu Beznea (1):
+      eeprom: at24: Add support for Microchip 24AA025E48/24AA025E64 EEPROMs
+
+Frieder Schrempf (2):
+      dt-bindings: eeprom: at24: Move compatible for Belling BL24C16A to proper place
+      dt-bindings: eeprom: at24: Add compatible for ONSemi N24S64B
+
+ Documentation/devicetree/bindings/eeprom/at24.yaml | 18 +++++++++++++-----
+ drivers/misc/eeprom/at24.c                         |  8 ++++++++
+ 2 files changed, 21 insertions(+), 5 deletions(-)
 
