@@ -1,80 +1,80 @@
-Return-Path: <linux-i2c+bounces-4627-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4628-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE138927497
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 13:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D11CA9274AD
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 13:12:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3937EB213E3
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 11:10:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44F0CB22A7D
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 11:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5AD1ABCC0;
-	Thu,  4 Jul 2024 11:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15AD1AC44E;
+	Thu,  4 Jul 2024 11:11:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C8a8zA64"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WlRPGV3z"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7644F1ABC36
-	for <linux-i2c@vger.kernel.org>; Thu,  4 Jul 2024 11:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD481AC43F
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Jul 2024 11:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720091412; cv=none; b=s1gJC32j6ydiopeCOK59d2GIabcMg6Wr+89k1MLmqP3IcKzOfZNv7Idu4AS2i/wQpekQaDGXiJy5YaPaqjKAu0fqXFaPhg/ZXkIJqkXgRcPEehDIidUBsCT0+QCBaAkG6hUZzEeC1f207cFeETwjksti7IVJdm312XzjWFvg03Y=
+	t=1720091498; cv=none; b=OOQU5iGSEROWJGDeYI9GC/0J5nCXk5hvltEa+oCTW/cTfl+aix5ipzYJ0mhr/w5Zda1U4wLY89mAKHLTzPk7qDSHwFsJvV/MVKlkfZRiI1CIsx9DR0qWzT8Nltewx91s5aJOgb7Hkx3X+QtyWBctOZ+pcGINSdUwmdjjfvN5BfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720091412; c=relaxed/simple;
-	bh=n//nYnVEcrM4ey4ic4TtEU7EnlIC5kaDGhab75eIi1U=;
+	s=arc-20240116; t=1720091498; c=relaxed/simple;
+	bh=WQw8r9RJjwmIUuDYeWbYNYJyy4f+vfYAzcLrra92Ov4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NSfHzgVEPBctv3j5AagG3qdTLW3DhUp9HsF9z39cQUPNpGj2Z4FX4lnF3RAI15kvW7JmRY+CCv0CKqPWoL3GqBMWR5QMcNA112JXy0CTxDvVgPeP8vcFlSFWYFfEAV6nRIUORCvG+DdO3MKZvYeo3Ak8Yv04OgK+ZUb79oU432c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C8a8zA64; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=Ax+C5sEfYnCdHfJwuUjl6fHIo3B04zp8w+0avJ6+NGL5qBLLz+lUOuQzRJRpw50sn3aN49Wcog9ubo0xYy+XPmMXCpTdgCgmK2s4hNcCcFL0g6afbITqUSae2S6ur3a97ojGF7p5BL2nYJU5AQevTIFC1HYT3oNw6sVVmP61rgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WlRPGV3z; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720091409;
+	s=mimecast20190719; t=1720091495;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=HbA0OgM0zV38UNrbMl2ytxTXmxX6AyzNUh1Kz0BMsR0=;
-	b=C8a8zA64K1478aKdO1AdqEd84B1IIfAY9A8l7RKu10uUCytk10u8pLOcWFNEae/cDlON5g
-	9R0Az6hdjfgZdSPXEtEDgaNp/Fv4qDi4JABZxSLIiG40byKYDscgiLF9pxaoInt+9P78Ko
-	pOsQCWwjVvks2OmEDXkzBMXeolPVtS0=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=cCDrq3It9x4jpjk0zpE93u7BjKvqdC4Uvp72686GGSw=;
+	b=WlRPGV3z8WRPBQf797IJtN+wIfBPjZzQpzJmG+XzEJISA0+kuqumjAJPlAEGiIN+79wrf+
+	GPxXkgKLG8wkhXDpDsw6xHygDoFOsHmcysN4JvpnPmchJZRS+zHjrPQi33M8LQXDWFvaQO
+	d1VufFja0/uGeB9b1cfpJJRxe9L9mfA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-692-yhPAz8-JPOmDXcRcwTjNQw-1; Thu, 04 Jul 2024 07:10:06 -0400
-X-MC-Unique: yhPAz8-JPOmDXcRcwTjNQw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a7293303843so49692166b.3
-        for <linux-i2c@vger.kernel.org>; Thu, 04 Jul 2024 04:10:05 -0700 (PDT)
+ us-mta-82-mPiZya5qMIywtq93h37ZTA-1; Thu, 04 Jul 2024 07:11:34 -0400
+X-MC-Unique: mPiZya5qMIywtq93h37ZTA-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-58b0dce2704so476001a12.1
+        for <linux-i2c@vger.kernel.org>; Thu, 04 Jul 2024 04:11:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720091405; x=1720696205;
+        d=1e100.net; s=20230601; t=1720091493; x=1720696293;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HbA0OgM0zV38UNrbMl2ytxTXmxX6AyzNUh1Kz0BMsR0=;
-        b=VmKZy3KPEquxW4qgB6zqFk9jiNgBjbxwnMyS/pSseKip8PXMlk3C2Re52eTyEFmmO4
-         2I1/uiAtB3YibnEHYOlyV9p/KdzwKLxe1TWckl/Izjl5ZyYcW2p/3cwl9UE/ZbkTgP18
-         f2HV138G/0yeDwIGqXNPSDyl+EreU0WUTdNz0+4rt+TLExDK0UyeDcFLeDM8ekM40FCv
-         TjYkIrVjPsvifJ5TFqumVAggWsNQ+C8cOeR4vgrkQd9j83dzKsvv0H8K3jWLGmWoBLFP
-         EnNkGss4RQUes/1RI965KbvmGb8l1EBJbxeTLKoX/f2ozhXvsU0albxYcQaE1rIMsnuW
-         ngrw==
-X-Forwarded-Encrypted: i=1; AJvYcCXikq/YjX39x/M8lrIYhUCACMHoTMZm55zZW/mBv3or/xkK/05DOM21cDsjmOjju65ml4JEV/KBZncy5Fj93qfa3OE3skU/BCTf
-X-Gm-Message-State: AOJu0YwBHu8pccoR0wG1e9hURJF4msidTaMg2eBoxI+9LFRYaR3Nnvyn
-	gQP9Y0pbQGJ39gaCgbokQMtGVIkS7jUuKZ75m6sH+7uMAO7pFyrFimOQEGNZxoumpAnOTePVHqZ
-	odQA5e3ezLXqq3nu633CghsroKzUquqEouacM6u5L7vQdyrsw8a4vHTrIug==
-X-Received: by 2002:a17:907:3f1d:b0:a72:8296:ca12 with SMTP id a640c23a62f3a-a77ba4cca5dmr93083966b.36.1720091404948;
-        Thu, 04 Jul 2024 04:10:04 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEDZi5daN4Z6QZyZwIJ4mHAMKRvD76nGrEOVA+EkuglUVPVUAVhJh9bbzKR1ggDZs/vDJ4++g==
-X-Received: by 2002:a17:907:3f1d:b0:a72:8296:ca12 with SMTP id a640c23a62f3a-a77ba4cca5dmr93081666b.36.1720091404402;
-        Thu, 04 Jul 2024 04:10:04 -0700 (PDT)
+        bh=cCDrq3It9x4jpjk0zpE93u7BjKvqdC4Uvp72686GGSw=;
+        b=hHtgKKlR6BpkQgRhx7Ywr0mKfr8bcLVy4vV8YoYd0+JBiIqV6W5js9jwRzUxI/Ixoz
+         VU3WLhxR0qMLlKozRGK55BlfRByma/K+CAPLccJEEU6SrrSwF1SgR47jvpIqT3+wI5kw
+         X41xuKaQZXnDMS3UXScGwTVhmqX7DZlu1vhs3yNIHV6Bs/w7v0p40YbRQQgjXIMyhxBk
+         x3/cAuwoGcZ5NswH84B9VtWrCZmI574MKtILa8MXjNTvr/V/Q37osTMn70lr8rVPCa3S
+         uSMbJrnd59U1qQM2qVWBMpfWtHMIPAZWUCgiqgRhahCgrI6VRX4LnzNvs9Ejt2Q/nRrz
+         LteA==
+X-Forwarded-Encrypted: i=1; AJvYcCUHbzidxLMEpFI5GNmTjunxo8aIhFKnZGlYPE1dN0KVDzNb8LBiUg56DxMCyO+9nYl+en4lBpbdXOMRmUHp2U++QYLUIjIH2gLw
+X-Gm-Message-State: AOJu0YzwErFKNIXUR1BKNSOpIYL8FbtXWiNcOHvHaM4Mj5xzzs1WRcDL
+	v6BW+W89/m57X9NjIG7LfPAE8PhgyU//uWOcBur6k1KHpzCS85SKRMu2ja3wkL3NPvZ6YV20taj
+	TlX8QK4yHgBfZHinuJftGVWlDCRPkBoAUsscflyr0c7QZUC8uLDdqLHdO1w==
+X-Received: by 2002:a05:6402:2548:b0:585:c001:c1b5 with SMTP id 4fb4d7f45d1cf-58e5a6f21bemr1048651a12.5.1720091493371;
+        Thu, 04 Jul 2024 04:11:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG8N946DgTJMPpq4lGmomXjiNhzaw7NQNW9STH0s63UPb3KH0LnSYptLnDIj7MndtV5BQPjIQ==
+X-Received: by 2002:a05:6402:2548:b0:585:c001:c1b5 with SMTP id 4fb4d7f45d1cf-58e5a6f21bemr1048627a12.5.1720091492841;
+        Thu, 04 Jul 2024 04:11:32 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72ab0900f1sm585347266b.168.2024.07.04.04.10.03
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5861324fe5dsm8340783a12.36.2024.07.04.04.11.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jul 2024 04:10:03 -0700 (PDT)
-Message-ID: <af959f83-719b-436f-8fe9-b97e3fcc5b79@redhat.com>
-Date: Thu, 4 Jul 2024 13:10:02 +0200
+        Thu, 04 Jul 2024 04:11:32 -0700 (PDT)
+Message-ID: <2fbbdbce-7c88-4d0d-a0c2-f05db67f0f63@redhat.com>
+Date: Thu, 4 Jul 2024 13:11:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -100,7 +100,7 @@ In-Reply-To: <20240703110512.21401-7-hdegoede@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi,
+Hi All,
 
 On 7/3/24 1:05 PM, Hans de Goede wrote:
 > Unfortunately the SMOxxxx ACPI device does not contain the i2c-address
@@ -115,6 +115,21 @@ On 7/3/24 1:05 PM, Hans de Goede wrote:
 > 
 > Link: https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de/
 > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+The discussion about i2c probing in the v4 patch-ser thread made me look
+at how the i2c-core handles the probing now a days and it now actually
+has a helper to do exactly what this patch is doing, scan a couple of
+addresses and instantiate an i2c_client on the first address where
+the device is found: i2c_new_scanned_device().
+
+So I plan to do a v6 of the series, updating this patch to use this
+helper instead of using DIY code.
+
+Regards,
+
+Hans
+
+
 
 > ---
 >  drivers/platform/x86/dell/dell-lis3lv02d.c | 136 ++++++++++++++++++++-
