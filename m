@@ -1,102 +1,113 @@
-Return-Path: <linux-i2c+bounces-4622-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4623-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2904926F83
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 08:27:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCB2B927376
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 11:58:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F5F82841C3
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 06:27:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A93AB22B80
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 09:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2101A01CA;
-	Thu,  4 Jul 2024 06:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5913B1AB8EF;
+	Thu,  4 Jul 2024 09:58:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPmjUgRV"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="FXiYq9Nn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9875C125BA;
-	Thu,  4 Jul 2024 06:27:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1AE1AB526
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Jul 2024 09:57:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720074469; cv=none; b=UD0lsZI9NPraZd4slCBfA60jvX663fWqsBs8tWYZ8XsegSRKLie3UolzpuKY/1t/RpJxn2qOVvo3PSCOwal0KLy/lnwMUj6w5ESaGN+/4h7TPCZNCouO+3o1DSDxi5cqZpSGQJyfiqQNWfY4vjlxBVjBIcpc0gMAN3E2PvrxeRU=
+	t=1720087080; cv=none; b=nDNP686LQoEEIYXGy3H+QzT/8zo6CHJ7SViWnd/tEvD9Z/7cMAPROVzZDYxE1vAu9prB+Fup3ny1OjQrenYdZzWbg7Lh8UPxvimFmhhIgfLyAMgIFIo68Q4vIlTZPZPcnpO42Nj0N7SE8CqWlctF8P930wuOELHRrYsqXxNN1hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720074469; c=relaxed/simple;
-	bh=kYDgXeZNcIv/y/+dAymkJ0jj3epStVF3HQNyZJiwDDY=;
+	s=arc-20240116; t=1720087080; c=relaxed/simple;
+	bh=YmOK4m5U6cknSGVhyDKOumu5MtRiP66NRo0AL7Q58Rc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rCkANLOq+IiKWozVTfQ9jzHTASL66yoQhiZA2TPPsfnVrXbqtgtk0XPWQIG/W6K9S8T7MTVtDotyIEUv8MtCZ9eSHu6L3J4j1pPzkFKgscHhf9dp33cZFXE7zkX8ZO2SY2F12oncAtW1HQJzJR4tFxT6BJk0AlsE21kUbHk2OwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPmjUgRV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 722C9C3277B;
-	Thu,  4 Jul 2024 06:27:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720074469;
-	bh=kYDgXeZNcIv/y/+dAymkJ0jj3epStVF3HQNyZJiwDDY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hPmjUgRVIzuNKxCFth1CGJ+Vllf09iWcGiP6WZ7Wb/k45M8UKgOBVhqRDf4YEgSYF
-	 fK3uBjriycXJ8caXHN+nVfWsiGlZNpfYGOhdSGg7JlZiS5BjLszvz5dtXNOWPcGuaq
-	 S7W4e1scUfQ/TBwWGSUoT4+SywhY6I3BhhmWQrfVfHz5CnsXdRlIcoee81Ay8uVASf
-	 krvGsgTUq8RSfO/Vf81eL/2KnQjaSblpxfb3KD4YEoB3KNWQ/5mGKYEfEo1a+ppgN2
-	 44tqo6HWYLN5jcNmWqwDQJXocmnv3vZS926dFTLNdduRRtNVfYjRNTxwll/Lx7yRk8
-	 ucbxTG3uvnuTQ==
-Date: Thu, 4 Jul 2024 08:27:44 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: marc.ferland@gmail.com
-Cc: michal.simek@amd.com, linux-arm-kernel@lists.infradead.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Marc Ferland <marc.ferland@sonatest.com>
-Subject: Re: [PATCH v2] i2c: xiic: improve error message when transfer fails
- to start
-Message-ID: <j4yli5bhj3rxzx4selo66mutjooe24eaqanr4srrus4ognwhrs@575agkscdbel>
-References: <20240513160324.3761564-1-marc.ferland@sonatest.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XxwbBfAcVBHAyTtExaaGUpGDdGLdwnlAbwTaVqavNeH00eCnTp/ePQACMr/V8JwyFphkuDgDtww9z4ACjWUrFRTs5R6OaZLnVDiifIOQs2UDHYXR4H7PtoJgcBSjiOl6+xHCFryhv4PGtFp4n2RPQODLl1SKCW7Kv1UZ/pxHtPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=FXiYq9Nn; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=YmOK
+	4m5U6cknSGVhyDKOumu5MtRiP66NRo0AL7Q58Rc=; b=FXiYq9NnYgeLYeH48jgZ
+	29xI2S96eODs/TZidl+XUBpi00eVU1OCBBDFn1zSO75nlzwyRkCVPQk9tQE+svrf
+	L00M41Q6umF2vxRpkUgXLkrbYhqOXwYjpDN5S/dykHmbmInqL0OmnC8fAYQaScYG
+	JfMW44BP1/Q+br+y40Ly81oGb42WWbXFiA4Msf7B6x3ZlwYqOPxfgDA1wZZzvOcH
+	vOHVSzkkQwBPI4O9aFyX7umKP40Gs0OaUKiYJUtc+f2Q9J/3CV9SZJaUY/RWE3fT
+	W4omk3/qnj6qOceuBrWFIO5UCl6o9ZiLLSfa3i4RZkZfi2qI/Tn14Q92lKE8Biso
+	vg==
+Received: (qmail 3114843 invoked from network); 4 Jul 2024 11:57:48 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Jul 2024 11:57:48 +0200
+X-UD-Smtp-Session: l3s3148p1@M7mn+mgcwZJtKPBS
+Date: Thu, 4 Jul 2024 11:57:47 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org, Dirk Behme <dirk.behme@de.bosch.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] i2c: rcar: bring hardware to known state when probing
+Message-ID: <ZoZyGzMquiIMwAni@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-renesas-soc@vger.kernel.org,
+	Dirk Behme <dirk.behme@de.bosch.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240703071625.5389-1-wsa+renesas@sang-engineering.com>
+ <g6mthbu3bbg2vl3aobci2gx7lbfy4qbiy7cy43v7wwgjldauc3@qv4yrctu2bmf>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Q0VeMWD0tWzjOhbn"
+Content-Disposition: inline
+In-Reply-To: <g6mthbu3bbg2vl3aobci2gx7lbfy4qbiy7cy43v7wwgjldauc3@qv4yrctu2bmf>
+
+
+--Q0VeMWD0tWzjOhbn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240513160324.3761564-1-marc.ferland@sonatest.com>
 
-Hi Marc,
 
-On Mon, May 13, 2024 at 12:03:24PM GMT, marc.ferland@gmail.com wrote:
-> From: Marc Ferland <marc.ferland@sonatest.com>
-> 
-> xiic_start_xfer can fail for different reasons:
-> 
-> - EBUSY: bus is busy or i2c messages still in tx_msg or rx_msg
-> - ETIMEDOUT: timed-out trying to clear the RX fifo
-> - EINVAL: wrong clock settings
-> 
-> Both EINVAL and ETIMEDOUT will currently print a specific error
-> message followed by a generic one, for example:
-> 
->     Failed to clear rx fifo
->     Error xiic_start_xfer
-> 
-> however EBUSY will simply output the generic message:
-> 
->     Error xiic_start_xfer
-> 
-> which is not really helpful.
-> 
-> This commit adds a new error message when a busy condition is detected
-> and also removes the generic message since it does not provide any
-> relevant information to the user.
-> 
-> Signed-off-by: Marc Ferland <marc.ferland@sonatest.com>
-> ---
-> Changes in v2:
->  - add a message where the error actually occurs (suggested by
->    Andi Shyti)
->  - remove the generic message completely (Andi Shyti)
+> Do we need the Fixes tag here?
 
-Thanks! Pushed to i2c/i2c-host.
+We can add the initial commit for this driver. That means the commit
+message is wrong because refactorization is not the culprit. So, I will
+resend with Fixes-tag and updated commit message.
 
-Thanks,
-Andi
+> Looks reasonable. If testing is fine I can queue this up for this
+> week's pull request.
+
+First testing looks good. I will do some more.
+
+
+--Q0VeMWD0tWzjOhbn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaGchcACgkQFA3kzBSg
+KbZEaw/+KSzAAXpVn6oMqen9AX/HHUDoFwzhp+2JzAnLG8MS9FA7mznH4INlKByj
+fb23DkO5qm7JOt/eoAhjV69kSrQYusFNbz/UbjVZV6R717+rzhEDmi6InOlgF0cA
+W3WBQ6sTUPAv8ts0X5crBKVr4YQ3sK+mB+RPXJfUn9FjW/RzTHJkWOuVAP7RFIEv
+nR1yu946og0uhpuieSfF55cp+hjFby9NLOMROmSgUcslrr6tjiQSFvS1h678tFYZ
+eBogpPwDo2vrBkMM+5o90C6dNLieFTSCS5PLrXkMQOtJoRD8GCkTsBM1sRHwH2/0
+JVl938Pdd1S862z2Q03rFQEkEU7H9Z3xI189CBpTYNHMiudZfhgBbKGH1pAEPsZG
+AqxWGW1WAi25aERNnb7l/OHQ8kRItnaNofyR+MTGKuHcDXcOi442pxECi2hrYlSz
+d8MKsUXZ2TI6xWw+MpZ2wAXClwaKAAD2PLBVDntLyrJlXpPO9cSNfeuRL9CpF8p5
+RBEf0ftFcKsGoumr+1VWT4g/EcLJTZ1co5yhcLdP40cOUzn9s4fJIPzsUHdK2JcY
+45/R/xHYlsoN0rM32JryqUt8X9LzhWj8avVygAO8p+i+l7bBgKgY/0lv3Mt9HWJS
+KuaUtKeoZ81MqIur4upYkC8pW3grgph/ELObrZ+3Vj/aVVy394w=
+=Yhm0
+-----END PGP SIGNATURE-----
+
+--Q0VeMWD0tWzjOhbn--
 
