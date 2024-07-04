@@ -1,109 +1,112 @@
-Return-Path: <linux-i2c+bounces-4619-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4620-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7282926B6B
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 00:21:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10358926E0D
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 05:30:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23FE91C214B6
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jul 2024 22:21:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1DB41F2290E
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 03:30:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D80AE15538C;
-	Wed,  3 Jul 2024 22:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 038CF1AAD7;
+	Thu,  4 Jul 2024 03:29:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Re8ZOA5l"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="DoCNbuw+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9470B13D638;
-	Wed,  3 Jul 2024 22:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8387517C98
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Jul 2024 03:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720045267; cv=none; b=FIbNVBlL+VzMTJIIusm8dWpY2YZicNEGuCwS5vrqt7GvJEvdOv9x2XFpZR5C07KdbH5prnGFGgSPMqULUejOe3Y4fYX5FfviTaQsGxrUXAowbnh31yXJA8oVla4lchyKZgFOtI73FQ2X9hA7qsAcAnVOi+KRMxcgQWyjbSeY868=
+	t=1720063797; cv=none; b=EiJIF6K90fgErH9EMJSPT2cqeZ+jYtkkltTLtDiSKGHLz70nqFgJo7iASF7iF5QpM4ZChR4sTVji9Z2UTqEzv1eIj0E8gBuR0JPGhsNZRk/TO9IG7hKWRNMTkwo/b1uPkNQxgkK41yxGGGXK4fEO/Ny0UlYbwGETuA4FHvSLt9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720045267; c=relaxed/simple;
-	bh=XS9/SidMjh9Kd2T3+k4yeCAqwsKugEYswV4ero2y9vA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QKwcfVfjUwx0Hv1W5DPyN9Dva28sRch9d+8cRqhHyxUKuj+H4HXkaDaC1VTsKtonk7NTJzMTcl5rGEXJg+RxCUzJrpZNKHzQbsmODWhYMTv6Bw+5Qkbyk6/tl6fqglmu4/hZB6Sp+yJ9j34jbeABxV+y4ZT9OXIdBLCERKh8OKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Re8ZOA5l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71488C2BD10;
-	Wed,  3 Jul 2024 22:21:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720045267;
-	bh=XS9/SidMjh9Kd2T3+k4yeCAqwsKugEYswV4ero2y9vA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Re8ZOA5lyb2svk5I+bE8qWBABVLZwOP8/Z4CrZIL4L53IBxaL4mtf7seZ5Ph1papn
-	 q+66589596DEQQ2qFrrUNbHpCL5o+fggArKSgQxeXYcIJNLi9vJHJycSarG/C4m/xr
-	 uSumfkrOFAcFVbsqGSJytwjRmtM/I7dkASR4oUvTVvKpZjasQumsMY3sx+3BHlysD6
-	 VrZDzPCxlCzPQxe+QOsHH47nKw9anXhuPhi3pRvIH8n4T16hbjiaDnAL3mv0BVKCqU
-	 ZPfE9v/1uDc5fJ677h7u/C5QlT2Z0J0kx+QqmwArOYSDDyG5NIWR4xWuTNdKNeIf22
-	 5+gMmWsQMhIAA==
-Date: Thu, 4 Jul 2024 00:21:03 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-Cc: Vladimir Zapolskiy <vz@mleia.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch v6] i2c: pnx: Fix potential deadlock warning from
- del_timer_sync() call in isr
-Message-ID: <cvpj5q2laopscchvwvndrl247tlkgyw7tw7nnpuevcs4g5qf52@hpruhtety5lt>
-References: <20240628152543.281105-1-piotr.wojtaszczyk@timesys.com>
- <dudh4jdce3yxwv5yw345gw23diwparhwvsl4jrpsyzpv3sgge3@ojtdgsdgwcor>
- <CAG+cZ06sqDuOer=fBcGhQkTUgWt9XqaLkAW0cmT8g=EJ+e8pWA@mail.gmail.com>
- <otsopuw5pqpe637mywdoecnv5xhfhcny5xsxnwoyxhy7gj5yy6@3s43zn2udeei>
+	s=arc-20240116; t=1720063797; c=relaxed/simple;
+	bh=K66/k4OrxD3yOShdH7RyMX56w7kmOb0xTzgS6oo0PIA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lfnqdC2Eo33POYv1E2Zh0q6W5xvlzD3vOzYf1s8xOG0wJD3UL/UORN2CAeda/H9VxEWq9HznziYYsAEoL8qxNj9+cCiURfDBf1shWy827m1sqEVU4b5tlrzvTFLm/V4zqK1Ta3JZiXw1JFA3gE68QFwzhBW0IcxHpWC3JHcrWMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=DoCNbuw+; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=+FwVn2hoDoZllu
+	xY/VlBMmu0HlEHODSX1vgatzGd2NI=; b=DoCNbuw+eLCBD8NjZumwHQxYqtDPd5
+	5urbiGaHd2ZpWDUAf5Kn/TAxmBDTXcyNpPf3C9p3LhyMCIOQSq7TJ/eTb63YADZV
+	nx+95+EBii+rJtfa83bk3PRIg6jFPobwB833jqNNbyReSuNausoffIbu9NYzhRsr
+	hFq+inBZH+NQMeeDiGGx9SzztyDU/E63JzXXzJ3OLf/AHXobIJDvfSxYv2GgA60F
+	/UpqE7XPVzN7bdXIzl5+IKg3skS6ZBjUji0uzyOt7DzMayt826h6lLivRbhhM4/R
+	s6eN4vd9dVz16VE0XA2OoFhT8WdLkDRVM5qlrsCGCCfwL4ITeDbE63wA==
+Received: (qmail 3004017 invoked from network); 4 Jul 2024 05:29:49 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Jul 2024 05:29:49 +0200
+X-UD-Smtp-Session: l3s3148p1@AnYpj2McZNQujnsa
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] i2c: add debug message for detected HostNotify alerts
+Date: Thu,  4 Jul 2024 05:28:59 +0200
+Message-ID: <20240704032940.4268-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <otsopuw5pqpe637mywdoecnv5xhfhcny5xsxnwoyxhy7gj5yy6@3s43zn2udeei>
 
-Hi Piotr,
+Setting up HostNotify can be tricky. Support debugging by stating
+when a HostNotify alert was received independent of the irq being
+mapped. Especially useful with the in-kernel i2c testunit. Update
+documentation as well.
 
-On Thu, Jul 04, 2024 at 12:19:38AM GMT, Andi Shyti wrote:
-> Hi Piotr,
-> 
-> On Tue, Jul 02, 2024 at 11:13:06AM GMT, Piotr Wojtaszczyk wrote:
-> > On Tue, Jul 2, 2024 at 1:01 AM Andi Shyti <andi.shyti@kernel.org> wrote:
-> > > > @@ -653,7 +624,10 @@ static int i2c_pnx_probe(struct platform_device *pdev)
-> > > >       alg_data->adapter.algo_data = alg_data;
-> > > >       alg_data->adapter.nr = pdev->id;
-> > > >
-> > > > -     alg_data->timeout = I2C_PNX_TIMEOUT_DEFAULT;
-> > > > +     alg_data->timeout = msecs_to_jiffies(I2C_PNX_TIMEOUT_DEFAULT);
-> > > > +     if (alg_data->timeout <= 1)
-> > > > +             alg_data->timeout = 2;
-> > >
-> > > I don't see the need for this check. The default timeout is
-> > > defined as 10.
-> > >
-> > > Thanks,
-> > > Andi
-> > 
-> > That's the timeout value which was in the previous timer in i2c_pnx_arm_timer(),
-> > without this I had time out events.
-> 
-> I meant the if() statement. We are sure timeout is not <= 1 at
-> this point.
-> 
-> Anyway, it doesn't matter. I applied the patch in
-> i2c/i2c-host-next.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+---
 
-Sorry, applied to i2c/i2c-host-fixes on
+Changes since v1:
+* added docs
+* added tags (Thanks, Andi!)
 
-git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+ Documentation/i2c/slave-testunit-backend.rst | 5 +++++
+ drivers/i2c/i2c-core-base.c                  | 2 ++
+ 2 files changed, 7 insertions(+)
 
-Thank you,
-Andi
+diff --git a/Documentation/i2c/slave-testunit-backend.rst b/Documentation/i2c/slave-testunit-backend.rst
+index 0df60c7c0be4..37142a48ab35 100644
+--- a/Documentation/i2c/slave-testunit-backend.rst
++++ b/Documentation/i2c/slave-testunit-backend.rst
+@@ -99,6 +99,11 @@ Example to send a notification after 10ms::
+ 
+   # i2cset -y 0 0x30 0x02 0x42 0x64 0x01 i
+ 
++If the host controller supports HostNotify, this message with debug level
++should appear (Linux 6.11 and later)::
++
++  Detected HostNotify from address 0x30
++
+ 0x03 SMBUS_BLOCK_PROC_CALL
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index db0d1ac82910..b94594e90a66 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1468,6 +1468,8 @@ int i2c_handle_smbus_host_notify(struct i2c_adapter *adap, unsigned short addr)
+ 	if (!adap)
+ 		return -EINVAL;
+ 
++	dev_dbg(&adap->dev, "Detected HostNotify from address 0x%02x", addr);
++
+ 	irq = irq_find_mapping(adap->host_notify_domain, addr);
+ 	if (irq <= 0)
+ 		return -ENXIO;
+-- 
+2.43.0
 
-Patches applied
-===============
-[1/1] i2c: pnx: Fix potential deadlock warning from del_timer_sync() call in isr
-      commit: f63b94be6942ba82c55343e196bd09b53227618e
 
