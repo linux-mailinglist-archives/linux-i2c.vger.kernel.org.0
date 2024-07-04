@@ -1,80 +1,79 @@
-Return-Path: <linux-i2c+bounces-4645-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4646-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E9A8927EC8
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 23:57:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07457927EFA
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 00:17:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBC4C284D53
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 21:57:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3EA64B21E64
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jul 2024 22:17:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 039BD14373B;
-	Thu,  4 Jul 2024 21:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C0531428F2;
+	Thu,  4 Jul 2024 22:17:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T0dO043U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OmbTpfzz"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB55F2BB06;
-	Thu,  4 Jul 2024 21:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDBBE405F8
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Jul 2024 22:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720130253; cv=none; b=PU/RnRwIcABjog87H6rjMAdjB/oS98y9iLX+ge7unDLy28r5sKnRG870Y78+4OzQjmwf8udIcPItadOzWQKEMz6oW8dj7TtwtqWjOvQH58Skge7AMw6F4yQLQydU+bt7eAk5pR+fp6TQf5nmVzPNJNpGTKaY+9vVHSkqgm8Cm0Y=
+	t=1720131437; cv=none; b=t9udSoSkAFcH/keGLDRsk3/Z7KsL/RSW/Hf/FWOWLAAe97IgksiYvm/Ce0mWXMovicTHySbmX/tIVLnPQMfsXaFjissOpvM7z/vqU0UFUsia66bAn51DyJ8US6W69AOXWZwMG/YOp/FRO5IoTG4+pUJ+4pLZqDmyf2fUkC3kbjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720130253; c=relaxed/simple;
-	bh=zkBiMl+ux9VR3M1YvSeomW7EpBU0lFts8Fs40iTv7Xc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=un3/T+RNVUvyq+AANRWIWdr2jedSL3koAUdgH/Nxshma+tTZG+dB4rnyE85MW+jlVZb3KC4X0U8AVWj0piWlsguHp8Lo4z+dz/U7r23TA/0T2Nwjus5z8sO7heCA7s0t4Zw2WvupBCiosIEvdjn1p6y9ovAR6x+Ho9v6PnRuodw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T0dO043U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84ED5C3277B;
-	Thu,  4 Jul 2024 21:57:31 +0000 (UTC)
+	s=arc-20240116; t=1720131437; c=relaxed/simple;
+	bh=zI+4NZtH+9RkdSC42kl7ihqfT0SZlGVGeTV3TktbRz8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HXnKb7zJLBDR4QWJjXdLTH1wx7PpehbHBJ7QjkwxJnwk/5CPgdADVIcj9CFBZhcab4klsmS0sF/EoQ73CZaYsZ/QUK8jclR59baBFk6xfDsnYpgZiYznrRgh6iirn6Kybp/9A7JP+qkCT/v5R6V4wTpuOu6JO2bcIC9sVIlyqAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OmbTpfzz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 227B5C3277B;
+	Thu,  4 Jul 2024 22:17:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720130253;
-	bh=zkBiMl+ux9VR3M1YvSeomW7EpBU0lFts8Fs40iTv7Xc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T0dO043UuO/ykS6x9C5hdiYasXYr4VD+q7mxPHtR6Q563zPUgu+od+I+baQIuVSKZ
-	 b7xwupB4cfOLpZolCIkB6NvTcfE7FiA+Ran44ipldMbWbjElBkHYSuFDaS5bViZsdM
-	 +E19kFixCEL+Ci/yeMckHJ3bKGmcGOzdC+wgkI00ghPx3FglWk3ol0rlQKmowaMPja
-	 kPhhrGFyZr0bpw3QrBx2+pNsTPcDWfMsMQgngV6vjkF8auJ7WoVX4TKqAGkBocpRgL
-	 0vgLVaonHMSWmn3WAyQGF5WsWEwmig0jFkCUd7V3yGcy2ggTYHMk6pNPCu6Wis7xZh
-	 KqIAfAFDvShdQ==
-Date: Thu, 4 Jul 2024 23:57:28 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v2 1/4] i2c: smbus: only limit max banks to eight
-Message-ID: <2mtehll54bpuozsjswynp2xron3dfxknsixnouovby2nxlnrun@3sxdqqbvfr22>
-References: <20240627-piix4-spd-v2-0-617ce47b8ff4@weissschuh.net>
- <20240627-piix4-spd-v2-1-617ce47b8ff4@weissschuh.net>
+	s=k20201202; t=1720131436;
+	bh=zI+4NZtH+9RkdSC42kl7ihqfT0SZlGVGeTV3TktbRz8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OmbTpfzzDgGJM0VkLaNmGt8M60/BmqkDGHwuOPm4mt/hFPnHCm2Od6M4scdLSgVlc
+	 jW5u+6ItYCywu36omkfAFnXim0fuJTfYWR2qKABKyxQM53GxLPY+6alHy+RrmTvV9o
+	 RciaUY5kU0MenhLc597U2jTNtC54TbShfwCWdJBRoNG3a7FmGdnd9x/N0/110t1/N+
+	 cCBrGzbaXbzeIMGTmHlWJ+aL5Ip7oyzmBuzBpe+OGjWkL0vOuNC/C4Vcs02eCXKvei
+	 L5jlHPQyOHK1kHUyagX95QJDbSy+OmQX8aFSXm5rmcpTlR5HMjAoWJMh87ikG25FSL
+	 f/StTKSFcr06g==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: linux-i2c@vger.kernel.org
+Cc: sr@denx.de,
+	andi.shyti@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	lorenzo.bianconi83@gmail.com,
+	upstream@airoha.com,
+	benjamin.larsson@genexis.eu
+Subject: [PATCH 0/2] Introduce Airoha EN7581 i2c support
+Date: Fri,  5 Jul 2024 00:16:13 +0200
+Message-ID: <cover.1720130844.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240627-piix4-spd-v2-1-617ce47b8ff4@weissschuh.net>
 
-Hi Thomas,
+Introduce i2c support to Airoha EN7581 SoC
 
-On Thu, Jun 27, 2024 at 07:48:11PM GMT, Thomas Weiﬂschuh wrote:
-> If there are less than eight slots in total,
-> only probe those.
-> Now the code matches the comment "..., then limit slots to 8".
-> 
-> Fixes: 8821c8376993 ("i2c: smbus: Prepare i2c_register_spd for usage on muxed segments")
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+Lorenzo Bianconi (2):
+  i2c: mt7621: Add Airoha EN7581 i2c support
+  i2c: mt7621: make device_reset optional
 
-I don't see the need for the Fixes here... was there a bug that
-has been fixed?
+ drivers/i2c/busses/Kconfig      | 2 +-
+ drivers/i2c/busses/i2c-mt7621.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Andi
+-- 
+2.45.2
+
 
