@@ -1,295 +1,162 @@
-Return-Path: <linux-i2c+bounces-4654-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4655-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC13292827E
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 09:10:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BB3592829C
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 09:20:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04C451C23E1B
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 07:10:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F3ED1F24AD9
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 07:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 376D1144D13;
-	Fri,  5 Jul 2024 07:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V19dC79v"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68BD4144D34;
+	Fri,  5 Jul 2024 07:20:04 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4B9143894
-	for <linux-i2c@vger.kernel.org>; Fri,  5 Jul 2024 07:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2977139D1B;
+	Fri,  5 Jul 2024 07:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720163437; cv=none; b=ULIOxYXWc0gFx8Oe0jMAb78nPhmPlpuGHZItNhtyZCdQIcuN3l9A/8oHnCVKuiRPBWswupNJceN9ib+SaLft6V1ZQlyzrNYQy0IabXk1vUPsW6GxYR+mBzq5Y4djcVpbESgbTDhtgDbdiOpACzJebAYygDslo7p9QrzFG70nUok=
+	t=1720164004; cv=none; b=LGowiwmzHuF8lQopT/Wrzlt/2WvILdSaGY5f/xr63Xzm/c/US1i35avnJcBws1DRFe57uQlR4myXNnfTZUy2x2Wv7s5roKojX0zsjUPEiUiF3+RzGDM3MKr8p5cILgizJVOQkfEIYt8pHPUpLsb9gOO75VWpGJpP0Kp3OwjKET0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720163437; c=relaxed/simple;
-	bh=1nMddftKdpnDP0X7aCCH1ArTl3o3jqzVnCTw6hOORN4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=P6LoUeYTgD48l1Wd9eJnv2eQxWFu6SNCGzK9YqBlEteSsIJWyfQ+23hlSdvK01f8WmwIIpMceIGyZhyRuy61kjUqPi23ufvG3GP0OhYF6MSP9wuVhVTxiOVEet9rqZbz2MhSf3hAnBFJrs2e/eXdLdHfv28HMOGf6fJgsuhkIx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V19dC79v; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720163433;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sqiFgHsVqj2MOxTGHjtVg9cbGDLNX96hL+N/xqbD5gE=;
-	b=V19dC79vVaF5Qaz6SzMoGjVag8i212l0FwsZnAaWk/3PhAxykIndNSoFfERb6toPXubXHL
-	7+N+jnWJ6MQzAg1V/H7POcNLS7H7vCHZF6gz5gsxAQZMcyJuQmwCwuLVifhBpmsDMBpTi7
-	9VuCX6EdMkiLmyVhEYw8/FUHLp99f8I=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-677-qOlCi-jWN4C9TRJMGxnVGA-1; Fri, 05 Jul 2024 03:10:31 -0400
-X-MC-Unique: qOlCi-jWN4C9TRJMGxnVGA-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-58c08df32e7so1105553a12.2
-        for <linux-i2c@vger.kernel.org>; Fri, 05 Jul 2024 00:10:30 -0700 (PDT)
+	s=arc-20240116; t=1720164004; c=relaxed/simple;
+	bh=hrYys/hSWnTYJsfYNVQHw8oZRpFWHaSeNxp6S+CTrwo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KfSI+6x0gT06K8gavYGtdjZVUVOOSGiKk2EsAlypZUNas/0GRzYKBXCDGwSpmZS45hteL4/WBIsJaLKrH5ORLx+V9D+dXtfEKyJxzw/Lp6ahd5ezU+hWv0Akfh5HPE1YFy/94CBnQb+xfcTAvTJxbvsmwkkWWMt7u7kvxqLmgqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dfef5980a69so1355209276.3;
+        Fri, 05 Jul 2024 00:20:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720163430; x=1720768230;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sqiFgHsVqj2MOxTGHjtVg9cbGDLNX96hL+N/xqbD5gE=;
-        b=b7x8FzYXGwQMB4f+/+AHn1D7o2yIy+FSlOQ5d45W0eD3KIxxgLJndCacTnpdvdiu+T
-         LEZnTe3PczyCGWriNjZn++8Cl7kGhU9gGNqf+Mbx5tAVFLnQy9ZP3MYGFN0yLeVphz2I
-         C0nww0iVY3OM7BOe30SkqGSZS/X69pDmpLKOt2uXhCt4bRLCuDvOLEuB8aA83iDSWVEo
-         wMcc/q8Rl7TMTknQRT2KdhpJ6qFJsYVO97/JIVM0vsi5DA53miRqJO6DfuPiY1dRI6Gw
-         oi2r4yewt16pQu1hnu4Aujh7z2cBNmOR9U84UWziVULBZaZXPh/Zk12Jtmmg80fK8smH
-         deFA==
-X-Forwarded-Encrypted: i=1; AJvYcCUegv6frrRYu7HplPmVKOAJa+qe/z9HG7iQEdvm/m+48a893YYKSdQHlusbuJlyPcDtUWD3lBS+rh4bRea9hrqUaft4xKqxn6Ud
-X-Gm-Message-State: AOJu0YxFbbeZhUfFPteu/rs68XfbSDEPseBczI8vQRGtBO99d1Fp1GO7
-	F7+EaPBW4tSinl4PsRT46mRtQlTdVA/X7DJ+fNUzynl2a8C1yXX72kRt7v0m9NJTIqOr87dKe4t
-	PIe5U0J5GBIHHK/BF+gWLf59GY+iixyw6RRuwfscXQBeY8rfGlBxlorggSw==
-X-Received: by 2002:aa7:c889:0:b0:58b:db7c:93cd with SMTP id 4fb4d7f45d1cf-58e5cd17427mr2204811a12.36.1720163429744;
-        Fri, 05 Jul 2024 00:10:29 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFwq2AR24siofhy5MW/93mW8jKB7HwcHUqwiMZzZ0uidPzWQLvoe7V3iaiBeLX65mqbe1CbPA==
-X-Received: by 2002:aa7:c889:0:b0:58b:db7c:93cd with SMTP id 4fb4d7f45d1cf-58e5cd17427mr2204791a12.36.1720163429164;
-        Fri, 05 Jul 2024 00:10:29 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-58fefca76d0sm225005a12.2.2024.07.05.00.10.27
+        d=1e100.net; s=20230601; t=1720164000; x=1720768800;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mQlRvdEIl3wW/T9tWerBdCapYf+E5WFW4Sl9gBRQc3I=;
+        b=KZvg8wCaXk4yDecd3ULRgiTgPhrQeuCM+JYP0BKEN8AuBM2SAg4lXFI7vZI+FGOnMa
+         1mfUG9GpjmTLtXmmgTxDn/Wzv0P6qRLTtg0U9/JtCmlgxmFxrAx1q9VXiDHdgnqsZbD5
+         rI2SCHX1CMdx+6/T8i1GzGBhswMkf1jlwa9r/8gUD57Lz98y4HgC2TyGSzdwMR0whI0N
+         4oAEDJHyJgESpPcXRw6oi461ZlXl1TwH7JcnNtsmP71bQxN54ycjTP+Bygp8TS4AIpSe
+         e9pR54I8k3Tjf9IeVDF7hZtU7FUTaFX6raJForsII9ETIcIHk7YyiDspb/HrAUifAw58
+         TYOw==
+X-Forwarded-Encrypted: i=1; AJvYcCVa6uKtLPUtsYzNfGWSR5ezmMcwXlcsUveMARmRetvJbMdPzNNOKAC6AbvFQGpy1is8vYLFZYz6S39uSQG56VD65tTMg20c7uKXVPqtbkWZuQUF808UqOgTvXh+vb9LxO+iLyRvTZfSDGSE7AvopMRz5GV+CkxLCBIc3uYOLW5cKyIS57874zGFZudaX+gDqUr5SnC5YaiIalf8GlYohJQYkFvmGAdGvKtHBFgkNdwXQ+Z3FdgjhlKBx6UzN7FAXOKl
+X-Gm-Message-State: AOJu0Yz+y8qgO2XwLfNTIis0aF9mdjIdZNwyJ4+WEFEabnuWmnu3GTTp
+	wLDk+vMFJNiPXaXi5ohCVRlgNTUOnJGwj0Te/l+DTELuHLhdSXgtlEFRkNBC
+X-Google-Smtp-Source: AGHT+IEdn+yZNpYbqFWcod6LpgXMbCvrh3sPAXeeQuLwG6G/P623/Qckq+WZefCWwErV7FFkjqu8Ew==
+X-Received: by 2002:a05:690c:6ac1:b0:64b:313f:d7cb with SMTP id 00721157ae682-652d5ef9153mr45515107b3.22.1720163999739;
+        Fri, 05 Jul 2024 00:19:59 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-64a9bf32efdsm27722627b3.123.2024.07.05.00.19.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jul 2024 00:10:28 -0700 (PDT)
-Message-ID: <a5d98a55-c014-4019-b40e-c832500bcf5a@redhat.com>
-Date: Fri, 5 Jul 2024 09:10:27 +0200
+        Fri, 05 Jul 2024 00:19:59 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6515b824117so11494207b3.3;
+        Fri, 05 Jul 2024 00:19:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWJjjFaLtdaAoJjiJEU+Ze07kQ5fEjatGeqDRl+zsBYroSrexw/cLT/JUy8ZgbjfDDHxlkjbmt+cB81CjQ1TT348a6fysTZh85sKRKA9+T/S4HT3eLecz4STYPJdZwzRyq9wPEXAa3+nsDygiCVgh0qEFibUpj84nrwYh52Shro6czGIVnhOHfLLdE7gRbEsfvITko0efYh4rfYHZqv4EfjlK819rbw2NEOsxgF01ZGQkrcqSumWeXGGNUC2vKD0elt
+X-Received: by 2002:a0d:e8cd:0:b0:643:ed61:11bb with SMTP id
+ 00721157ae682-652d5338f0dmr40312717b3.7.1720163999140; Fri, 05 Jul 2024
+ 00:19:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 6/6] platform/x86: dell-smo8800: Add support for
- probing for the accelerometer i2c address
-To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>,
- Wolfram Sang <wsa@kernel.org>, eric.piel@tremplin-utc.net,
- Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com,
- Kai Heng Feng <kai.heng.feng@canonical.com>,
- platform-driver-x86@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-References: <20240704125643.22946-1-hdegoede@redhat.com>
- <20240704125643.22946-7-hdegoede@redhat.com>
- <20240704213701.gtkgfnmahgeridir@pali>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240704213701.gtkgfnmahgeridir@pali>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240625121358.590547-5-claudiu.beznea.uj@bp.renesas.com> <2wm6vd4dib7tqpdq2eusjhyvfl3sofyvy65w6axvdjbkmgm5cn@bjltpbwwilc2>
+In-Reply-To: <2wm6vd4dib7tqpdq2eusjhyvfl3sofyvy65w6axvdjbkmgm5cn@bjltpbwwilc2>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 5 Jul 2024 09:19:46 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV=Uhqar6k_z_wo5jzge_7oY4tBK5zNiBbpsWa39Wvabw@mail.gmail.com>
+Message-ID: <CAMuHMdV=Uhqar6k_z_wo5jzge_7oY4tBK5zNiBbpsWa39Wvabw@mail.gmail.com>
+Subject: Re: [PATCH v2 04/12] i2c: riic: Use pm_runtime_resume_and_get()
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Claudiu <claudiu.beznea@tuxon.dev>, chris.brandt@renesas.com, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, magnus.damm@gmail.com, 
+	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de, 
+	wsa+renesas@sang-engineering.com, linux-renesas-soc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Andi,
 
-On 7/4/24 11:37 PM, Pali Rohár wrote:
-> On Thursday 04 July 2024 14:56:43 Hans de Goede wrote:
->> Unfortunately the SMOxxxx ACPI device does not contain the i2c-address
->> of the accelerometer. So a DMI product-name to address mapping table
->> is used.
->>
->> At support to have the kernel probe for the i2c-address for modesl
->> which are not on the list.
->>
->> The new probing code sits behind a new probe_i2c_addr module parameter,
->> which is disabled by default because probing might be dangerous.
->>
->> Link: https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de/
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> NAK.
-> 
-> This is a hack
+On Fri, Jul 5, 2024 at 12:42=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org> =
+wrote:
+> > diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-rii=
+c.c
+> > index 83e4d5e14ab6..002b11b020fa 100644
+> > --- a/drivers/i2c/busses/i2c-riic.c
+> > +++ b/drivers/i2c/busses/i2c-riic.c
+> > @@ -113,6 +113,8 @@ struct riic_irq_desc {
+> >       char *name;
+> >  };
+> >
+> > +static const char * const riic_rpm_err_msg =3D "Failed to runtime resu=
+me";
+>
+> Please, don't do this. Much clearer to write the message
+> explicitly.
 
-This is not a hack, notice the existing i2c_new_scanned_device() i2c-core
-function exists for a reason. As I have tried to explain before scanning
-for i2c-devices if we don't know the address is something which the kernel
-has been doing for a long time already.
+And the compiler will merge all identical strings, emitting
+just a single string.
 
-Current kernels scan for i2c devices on pretty much any Intel PC in the form
-of i2c_register_spd() running.
+>
+> > +
+> >  static inline void riic_writeb(struct riic_dev *riic, u8 val, u8 offse=
+t)
+> >  {
+> >       writeb(val, riic->base + riic->info->regs[offset]);
+> > @@ -133,10 +135,14 @@ static int riic_xfer(struct i2c_adapter *adap, st=
+ruct i2c_msg msgs[], int num)
+> >       struct riic_dev *riic =3D i2c_get_adapdata(adap);
+> >       struct device *dev =3D adap->dev.parent;
+> >       unsigned long time_left;
+> > -     int i;
+> > +     int i, ret;
+> >       u8 start_bit;
+> >
+> > -     pm_runtime_get_sync(dev);
+> > +     ret =3D pm_runtime_resume_and_get(dev);
+>
+> In principle I like the error message to be always checked and I
 
->, which should be avoided as specified in previous
-> discussions (e.g. it can cause regression for future or also existing
-> products).
+s/message/condition/?
 
-You have provided 0 proof or even any hypothesis / speculations how this can
-cause regressions. Al you have done is said this may cause regressions
-without providing any details as to how you believe this would cause
-regressions please provide details.
+> will always approve it. Whenever there is a return value, even
+> when we are sure it's always '0', it needs to be checked.
+>
+> I had lots of discussions in the past about this topic but I
+> haven't always found support. I'd love to have the ack from a
+> renesas maintainer here.
 
-Also the new code is only activated if a new module option is st. By default
-this options is not set, so this cannot cause any regressions since it
-does not change anything for end users unless they explicitly enable it.
+I don't mind checking for the error here.
 
-You have made it plenty clear that you don't like this approach, but
-claiming it can cause regressions when by default it does not do anything
-is just dishonest.
+>
+> > +     if (ret) {
+> > +             dev_err(dev, riic_rpm_err_msg);
 
-> Author refused to improve the code,
+Do you need to print these error messages?
+AFAIU, this cannot happen anyway.
+Ultimately, I expect the device driver that requested the transfer to
+handle failures, and print a message when needed.
 
-Really? I have gone out of my way to please you, I've moved all of the i2c
-handling to a separate file because you asked for this, adding a text to
-both the kernel message informing users about the module-parameter to
-probe and the module-param help text that this may be dangerous.
+Gr{oetje,eeting}s,
 
-Also after I last discussion I moved to i2c_new_scanned_device() instead
-of DIY code. There is a reason why this patch-set is at v6 and it is not
-because I'm refusing to improve it.
+                        Geert
 
-> also refused to ask vendor about the
-> details and proper implementation and author also refused to do any
-> future discussion about it.
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-As I have explained countless times I have no contacts inside Dell
-to ask about this. If e.g. Mario was still at Dell I would have asked
-Mario about this immediately back when the discussion started.
-
-Besides the Dell.Client.Kernel@dell.com which no-one seems to be
-reading, there is only one other @dell.com address in all of MAINTAINERS:
-Prasanth Ksr <prasanth.ksr@dell.com>
-
-To put an end to this whole discussion about contacting Dell I'll email
-them with you (Pali) in the Cc. I don't expect much to come from this
-but we will see.
-
-> Based on this state, this patch 6/6 should not be merged at all.
-
-Lets move forward with merging patches 1-5 and wait to see if we get
-any response from Dell. But I do very much want to move forward
-with this if contacting Dell does not result in another solution
-to allow users to easily find out what the i2c-address is.
-
-Regards,
-
-Hans
-
-
-> 
->> ---
->> Changes in v6:
->> - Use i2c_new_scanned_device() instead of re-inventing it
->>
->> Changes in v5:
->> - Add "this may be dangerous warning" to MODULE_PARM_DESC(probe_i2c_addr)
->> ---
->>  drivers/platform/x86/dell/dell-lis3lv02d.c | 52 ++++++++++++++++++++--
->>  1 file changed, 48 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/platform/x86/dell/dell-lis3lv02d.c b/drivers/platform/x86/dell/dell-lis3lv02d.c
->> index ab02ad93758a..21390e6302a0 100644
->> --- a/drivers/platform/x86/dell/dell-lis3lv02d.c
->> +++ b/drivers/platform/x86/dell/dell-lis3lv02d.c
->> @@ -15,6 +15,8 @@
->>  #include <linux/workqueue.h>
->>  #include "dell-smo8800-ids.h"
->>  
->> +#define LIS3_WHO_AM_I 0x0f
->> +
->>  #define DELL_LIS3LV02D_DMI_ENTRY(product_name, i2c_addr)                 \
->>  	{                                                                \
->>  		.matches = {                                             \
->> @@ -57,6 +59,38 @@ static u8 i2c_addr;
->>  static struct i2c_client *i2c_dev;
->>  static bool notifier_registered;
->>  
->> +static bool probe_i2c_addr;
->> +module_param(probe_i2c_addr, bool, 0444);
->> +MODULE_PARM_DESC(probe_i2c_addr, "Probe the i801 I2C bus for the accelerometer on models where the address is unknown, this may be dangerous.");
->> +
->> +static int detect_lis3lv02d(struct i2c_adapter *adap, unsigned short addr)
->> +{
->> +	union i2c_smbus_data smbus_data;
->> +	int err;
->> +
->> +	pr_info("Probing for lis3lv02d on address 0x%02x\n", addr);
->> +
->> +	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, LIS3_WHO_AM_I,
->> +			     I2C_SMBUS_BYTE_DATA, &smbus_data);
->> +	if (err < 0)
->> +		return 0; /* Not found */
->> +
->> +	/* valid who-am-i values are from drivers/misc/lis3lv02d/lis3lv02d.c */
->> +	switch (smbus_data.byte) {
->> +	case 0x32:
->> +	case 0x33:
->> +	case 0x3a:
->> +	case 0x3b:
->> +		break;
->> +	default:
->> +		pr_warn("Unknown who-am-i register value 0x%02x\n", smbus_data.byte);
->> +		return 0; /* Not found */
->> +	}
->> +
->> +	pr_debug("Detected lis3lv02d on address 0x%02x\n", addr);
->> +	return 1; /* Found */
->> +}
->> +
->>  static bool i2c_adapter_is_main_i801(struct i2c_adapter *adap)
->>  {
->>  	/*
->> @@ -93,10 +127,18 @@ static void instantiate_i2c_client(struct work_struct *work)
->>  	if (!adap)
->>  		return;
->>  
->> -	info.addr = i2c_addr;
->>  	strscpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
->>  
->> -	i2c_dev = i2c_new_client_device(adap, &info);
->> +	if (i2c_addr) {
->> +		info.addr = i2c_addr;
->> +		i2c_dev = i2c_new_client_device(adap, &info);
->> +	} else {
->> +		/* First try address 0x29 (most used) and then try 0x1d */
->> +		static const unsigned short addr_list[] = { 0x29, 0x1d, I2C_CLIENT_END };
->> +
->> +		i2c_dev = i2c_new_scanned_device(adap, &info, addr_list, detect_lis3lv02d);
->> +	}
->> +
->>  	if (IS_ERR(i2c_dev)) {
->>  		pr_err("error %ld registering i2c_client\n", PTR_ERR(i2c_dev));
->>  		i2c_dev = NULL;
->> @@ -167,12 +209,14 @@ static int __init dell_lis3lv02d_init(void)
->>  	put_device(dev);
->>  
->>  	lis3lv02d_dmi_id = dmi_first_match(lis3lv02d_devices);
->> -	if (!lis3lv02d_dmi_id) {
->> +	if (!lis3lv02d_dmi_id && !probe_i2c_addr) {
->>  		pr_warn("accelerometer is present on SMBus but its address is unknown, skipping registration\n");
->> +		pr_info("Pass dell_lis3lv02d.probe_i2c_addr=1 on the kernel commandline to probe, this may be dangerous!\n");
->>  		return 0;
->>  	}
->>  
->> -	i2c_addr = (long)lis3lv02d_dmi_id->driver_data;
->> +	if (lis3lv02d_dmi_id)
->> +		i2c_addr = (long)lis3lv02d_dmi_id->driver_data;
->>  
->>  	/*
->>  	 * Register i2c-bus notifier + queue initial scan for lis3lv02d
->> -- 
->> 2.45.1
->>
-> 
-
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
