@@ -1,133 +1,290 @@
-Return-Path: <linux-i2c+bounces-4664-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4665-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29420928A7D
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 16:17:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91BB8928D36
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 19:58:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABB3B1F24CCF
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 14:17:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4820228468D
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 17:58:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D42C16C689;
-	Fri,  5 Jul 2024 14:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D076516DEA4;
+	Fri,  5 Jul 2024 17:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WLN/JoOu"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="mF8iNNA9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mx13lb.world4you.com (mx13lb.world4you.com [81.19.149.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C560216B3B9
-	for <linux-i2c@vger.kernel.org>; Fri,  5 Jul 2024 14:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D963816D9DA
+	for <linux-i2c@vger.kernel.org>; Fri,  5 Jul 2024 17:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720189046; cv=none; b=R/GCWZEK+43jkN/ecJkHmqtIfZJEdGsmq4vE2iswRaYpofyYF953Vexo+ZJX2fFlaFp5Infha1GBIFSzUriKtmvEe+lVQh/anReLQeawoPitDVPiJYuiXG+h5awILgCBvCivUhZXVirS/kWLk9wLibAC6IzyTRT+GakaTKsgPh4=
+	t=1720202318; cv=none; b=aQ91i5Thua7k9f2VZ0QSPDXY5n+ITN4bUSudVwbMmciwfIhGcWrdyCHn82in3alzDSUe0ObRjgYhzmzLjB1gMG5/632zC5jGK9MBpymscOMqArh5073QcTMRaZZKhCL/dfZfNLDenVgfFormRrCecLzlsWWlqL7rMuDDaI4NrLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720189046; c=relaxed/simple;
-	bh=PLTacBsABDx18/B0CJmijpNycTNE0X9NuN/mgvkRdTg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CJZ7Obu4q0zIqCWBjwbqzRNjULSmnF1w8mIIfGXPJNaARMit1VqVILxeLJj77eWoSTnBoqgTzMcbRrwydS6aV/hXiz7KnGC84QlReonmrX9U/RAm00ZstXoRVPRaDi0t8MgRRuKJeKtJ9QZ01WW+ET27XJY07TJPq7MaqFWoJeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WLN/JoOu; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=7227
-	DF+1lpqCtRtZGuyjnIwZoT+lBkQuRsIH2JWIgu8=; b=WLN/JoOuzI8iXc3vlGYO
-	YqA7K95CiN4KeLvUzyD3467BUwf+KjK7D6MyfaG9hYlVqZetjclQpG7JKYzHGVHR
-	ZXJ5m3DJkzpkqYqbHdlC710F0Hrd3MNlGHNiyOMecSPo7Ns6KTPHVFmdmOEGQ2DK
-	EivPTmLdAtB/HT/ZjBE/ZW3ggKlpJ8zQWpYDzt4aHbeCT4wjQzLR+kE7g2/L0wNL
-	TYwPYeA4wo8M/xI/IPUTzvOBsnTcZPZ4r8a9bSD06oBMLsFc/ykd0GjP4nTORm3d
-	Y/vd4RSeiAdOxbB3PDasJEbc1NYIQuhoie7tjXaRspIKzKEa8jBbwzo5JWdWzjIT
-	hg==
-Received: (qmail 3561634 invoked from network); 5 Jul 2024 16:10:37 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Jul 2024 16:10:37 +0200
-X-UD-Smtp-Session: l3s3148p1@bvSyoIAcdoBQT+F6
-Date: Fri, 5 Jul 2024 16:10:37 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Wolfram Sang <wsa@kernel.org>, linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-Subject: Re: [GIT PULL] i2c-host-fixes for v6.10-rc7
-Message-ID: <Zof-3WEvkBfZeL_w@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-	linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-References: <snxb7qd23vzrhls4duer3bt46m3lwzil5fzx75s7jl4okhexak@2e23wyd6qe76>
+	s=arc-20240116; t=1720202318; c=relaxed/simple;
+	bh=xI6gVjCXhJ2ajCg4ZM0+Jsx5i4SAjR0yM2dkWVZ78iY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qc2cLHv76DklnNBiXlDqXa826LIZPb3Zu0MTPDhVsslT9uzzpwIWS25BqDmxs4BEXJUpt4h1pD9TEjNE+oqnfm3TEvLyF0IP7mBFsHWlCaDzdDMrlaYhrtFQ8GbRpYePLi7jIuq8auBc/Hd8aOXGwgpZFjCijMhqZX530bxGlYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=mF8iNNA9; arc=none smtp.client-ip=81.19.149.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=OSCtun3MQ9PCzlqjJsZ4kACB7fJa75HxsNZxgTMBPpA=; b=mF8iNNA9Z98okL7VtmFQTZpTwp
+	hl6SVbYGpJkRCDdzXRzqK4wtCsnCc1OsXmMw9VzQW41+9i7Wtm4MPZOWoRZS5RM7Ij0JJejbmyJYT
+	8678ZgSQojVQjJjVTvTC/X8a9lcC0mZQ9cwMFRRAZ3X8dEMaRY0Z/UCTDW5oAqysanyA=;
+Received: from [88.117.61.57] (helo=[10.0.0.160])
+	by mx13lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <gerhard@engleder-embedded.com>)
+	id 1sPmLl-0005XB-2u;
+	Fri, 05 Jul 2024 19:03:58 +0200
+Message-ID: <6021ab78-4d31-42d0-a3a8-ca1e54173618@engleder-embedded.com>
+Date: Fri, 5 Jul 2024 19:03:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eQMShuG1BI7VQ/0g"
-Content-Disposition: inline
-In-Reply-To: <snxb7qd23vzrhls4duer3bt46m3lwzil5fzx75s7jl4okhexak@2e23wyd6qe76>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] i2c: keba: Add KEBA I2C controller support
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+ Gerhard Engleder <eg@keba.com>
+References: <20240630194740.7137-1-gerhard@engleder-embedded.com>
+ <20240630194740.7137-3-gerhard@engleder-embedded.com>
+ <g3mjcdzl7fm5d2aimr5vb7ltzt6qrcepsblffmwjrgrjir7mld@n54s76dc2scz>
+Content-Language: en-US
+From: Gerhard Engleder <gerhard@engleder-embedded.com>
+In-Reply-To: <g3mjcdzl7fm5d2aimr5vb7ltzt6qrcepsblffmwjrgrjir7mld@n54s76dc2scz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AV-Do-Run: Yes
 
+On 04.07.24 00:09, Andi Shyti wrote:
+> Hi Gerhard,
 
---eQMShuG1BI7VQ/0g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Andi,
 
-On Fri, Jul 05, 2024 at 03:06:24PM +0200, Andi Shyti wrote:
-> Hi Wolfram,
->=20
-> Jist a nice fix from Piotr coming in this week.
->=20
-> Have a good weekend,
-> Andi
->=20
-> The following changes since commit 22a40d14b572deb80c0648557f4bd502d7e838=
-26:
->=20
->   Linux 6.10-rc6 (2024-06-30 14:40:44 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags=
-/i2c-host-fixes-6.10-rc7
->=20
-> for you to fetch changes up to f63b94be6942ba82c55343e196bd09b53227618e:
->=20
->   i2c: pnx: Fix potential deadlock warning from del_timer_sync() call in =
-isr (2024-07-04 00:17:47 +0200)
->=20
-> ----------------------------------------------------------------
-> This tag includes a nice fix in the PNX driver that has been
-> pending for a long time. Piotr has replaced a potential lock in
-> the interrupt context with a more efficient and straightforward
-> handling of the timeout signaling.
->=20
-> ----------------------------------------------------------------
+> 
+> ...
+> 
+>> +static int ki2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+>> +{
+>> +	struct ki2c *ki2c = i2c_get_adapdata(adap);
+>> +	int ret;
+>> +
+>> +	ret = ki2c_inuse_lock(ki2c);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	for (int i = 0; i < num; i++) {
+>> +		struct i2c_msg *m = &msgs[i];
+>> +
+>> +		if (i == 0)
+>> +			ret = ki2c_start_addr(ki2c, m);
+> 
+> do we want to keep the error if we fail to receive the data ack?
 
-Thanks, pulled!
+Yes that is intended. Is there something wrong with forwarding the
+error?
 
+> 
+>> +		else
+>> +			ret = ki2c_repstart_addr(ki2c, m);
+>> +		if (ret < 0)
+>> +			break;
+>> +
+>> +		if (m->flags & I2C_M_RD)
+>> +			ret = ki2c_read(ki2c, m->buf, m->len);
+>> +		else
+>> +			ret = ki2c_write(ki2c, m->buf, m->len);
+>> +		if (ret < 0)
+>> +			break;
+>> +	}
+>> +
+>> +	ki2c_stop(ki2c);
+>> +
+>> +	ki2c_inuse_unlock(ki2c);
+>> +
+>> +	return (ret < 0) ? ret : num;
+>> +}
+>> +
+>> +static void ki2c_unregister_devices(struct ki2c *ki2c)
+>> +{
+>> +	for (int i = 0; i < ki2c->client_size; i++) {
+>> +		struct i2c_client *client = ki2c->client[i];
+>> +
+>> +		if (client)
+>> +			i2c_unregister_device(client);
+>> +	}
+>> +}
+>> +
+>> +static int ki2c_register_devices(struct ki2c *ki2c)
+>> +{
+>> +	struct i2c_board_info *info = ki2c->auxdev->info;
+>> +
+>> +	/* register all I2C devices from platform_data array */
+>> +	for (int i = 0; i < ki2c->client_size; i++) {
+> 
+> Please declare the variable at the beginning of the function.
+> 
+> Did you run checkpatch.pl before sending?
 
---eQMShuG1BI7VQ/0g
-Content-Type: application/pgp-signature; name="signature.asc"
+Yes, multiple times, but it did not trigger. I will fix that
+declaration.
 
------BEGIN PGP SIGNATURE-----
+>> +		struct i2c_client *client;
+>> +		unsigned short const addr_list[2] = { info[i].addr,
+>> +						      I2C_CLIENT_END };
+>> +
+>> +		client = i2c_new_scanned_device(&ki2c->adapter, &info[i],
+>> +						addr_list, NULL);
+>> +		if (!IS_ERR(client)) {
+>> +			ki2c->client[i] = client;
+>> +		} else if (PTR_ERR(client) != -ENODEV) {
+>> +			ki2c_unregister_devices(ki2c);
+>> +
+>> +			return PTR_ERR(client);
+>> +		}
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static u32 ki2c_func(struct i2c_adapter *adap)
+>> +{
+>> +	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+>> +}
+>> +
+>> +static const struct i2c_algorithm ki2c_algo = {
+>> +	.master_xfer   = ki2c_xfer,
+>> +	.functionality = ki2c_func,
+>> +};
+>> +
+>> +static int ki2c_probe(struct auxiliary_device *auxdev,
+>> +		      const struct auxiliary_device_id *id)
+>> +{
+>> +	struct device *dev = &auxdev->dev;
+>> +	struct i2c_adapter *adap;
+>> +	struct ki2c *ki2c;
+>> +	int ret;
+>> +
+>> +	ki2c = devm_kzalloc(dev, sizeof(*ki2c), GFP_KERNEL);
+>> +	if (!ki2c)
+>> +		return -ENOMEM;
+>> +	ki2c->auxdev = container_of(auxdev, struct keba_i2c_auxdev, auxdev);
+>> +	ki2c->client = devm_kcalloc(dev, ki2c->auxdev->info_size,
+>> +				    sizeof(*ki2c->client), GFP_KERNEL);
+>> +	if (!ki2c->client)
+>> +		return -ENOMEM;
+>> +	ki2c->client_size = ki2c->auxdev->info_size;
+>> +	auxiliary_set_drvdata(auxdev, ki2c);
+>> +
+>> +	ki2c->base = devm_ioremap_resource(dev, &ki2c->auxdev->io);
+>> +	if (IS_ERR(ki2c->base))
+>> +		return PTR_ERR(ki2c->base);
+>> +
+>> +	/* enable controller */
+>> +	iowrite8(KI2C_CONTROL_MEN, ki2c->base + KI2C_CONTROL_REG);
+> 
+> Can we enable at the end? What's the point for enabling the
+> device so early? (We also save a few goto's)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaH/t0ACgkQFA3kzBSg
-KbaPVA/+PPnSuVe4FkBmTTAZaSHO9PjPIXVG2n7rwdIcq7awCN5pD2NtuoVAeXpD
-gXtGORuS6B1Q8uihyX3CJU5TcbaDYDUfzhVQNBhk1mQqRJ5pDz5jPVxTUbaoxPyA
-u+oeFYbhpvFwaExdfAqG8dR+oKNnm7IAoexega+k48YHNhy+AfUK8iY1Bs7yu8HC
-ojPKpiFdebzz0dub8otWxc1gNNhPzqCV5i7JiRl1I679WjGdqsLHJrpoRDGXhMe0
-YT8BaL93b3XxCN1EO3Uma5tP5uN+NmJHkjd6d8+dglg+1zM5jQX65lOeVVWSrwHK
-Ap1mGM+PV9USJRRJt4E8egB4kZ62xC4AK+AbaAFSO0JmDR0mXzFXeB2ue7/nZfap
-pT7TuG2Z1y8zhqvlNUNl5zsiIHgGPefYEd4SFG2rzFDhYh1cxRdIyHsiVUWID9gB
-HeFUZShZe5+PRB8YZNoVzRP9JRQrB0uumkFeLYFAH43h8fsm4OKBfW4uQY3AVVU/
-YNPzgV1kN0fHRovvDYAXl0LsVKvqXtb5zkE9U5F2n1Py8NWCtZbkm8nh4bo+F7ZC
-juf6jSP4/Sw6Fx+IwhIR/C+OzllFqw2MVPX5N0aXylXhglemx//zmqPEF819WbYb
-sS1UrMXWrxBGggGqeedw7j8QoCq9sEvsOm2lgXuGVWMSDXz9DrA=
-=luTg
------END PGP SIGNATURE-----
+You are right, I will enable it as late as possible.
 
---eQMShuG1BI7VQ/0g--
+>> +	adap = &ki2c->adapter;
+>> +	strscpy(adap->name, "KEBA I2C adapter", sizeof(adap->name));
+>> +	adap->owner = THIS_MODULE;
+>> +	adap->class = I2C_CLASS_HWMON;
+>> +	adap->algo = &ki2c_algo;
+>> +	adap->dev.parent = dev;
+>> +
+>> +	i2c_set_adapdata(adap, ki2c);
+>> +
+>> +	/* reset bus before probing I2C devices */
+>> +	ret = ki2c_reset_bus(ki2c);
+>> +	if (ret)
+>> +		goto out_disable;
+>> +
+>> +	ret = i2c_add_adapter(adap);
+> 
+> Please use devm_i2c_add_adapter()
+
+Another devm_ function I was not aware of. I will use it. Thanks
+for the advice!
+
+>> +	if (ret) {
+>> +		dev_err(dev, "Failed to add adapter (%d)!\n", ret);
+>> +		goto out_disable;
+>> +	}
+>> +
+>> +	ret = ki2c_register_devices(ki2c);
+>> +	if (ret) {
+>> +		dev_err(dev, "Failed to register devices (%d)!\n", ret);
+>> +		goto out_delete;
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +out_delete:
+>> +	i2c_del_adapter(adap);
+>> +out_disable:
+>> +	iowrite8(0, ki2c->base + KI2C_CONTROL_REG);
+> 
+> Can we define Value '0'? KI2C_CONTROL_DISABLE, perhaps?
+
+Will be done.
+
+Shall both patches go over i2c-host-next or over char-misc?
+
+Thank you for the review!
+
+Gerhard
+
+>> +	return ret;
+>> +}
+>> +
+>> +static void ki2c_remove(struct auxiliary_device *auxdev)
+>> +{
+>> +	struct ki2c *ki2c = auxiliary_get_drvdata(auxdev);
+>> +
+>> +	ki2c_unregister_devices(ki2c);
+>> +
+>> +	i2c_del_adapter(&ki2c->adapter);
+>> +
+>> +	/* disable controller */
+>> +	iowrite8(0, ki2c->base + KI2C_CONTROL_REG);
+>> +
+>> +	auxiliary_set_drvdata(auxdev, NULL);
+>> +}
+>> +
+>> +static const struct auxiliary_device_id ki2c_devtype_aux[] = {
+>> +	{ .name = "keba.i2c" },
+>> +	{ },
+>> +};
+>> +MODULE_DEVICE_TABLE(auxiliary, ki2c_devtype_aux);
+>> +
+>> +static struct auxiliary_driver ki2c_driver_aux = {
+>> +	.name = KI2C,
+>> +	.id_table = ki2c_devtype_aux,
+>> +	.probe = ki2c_probe,
+>> +	.remove = ki2c_remove,
+>> +};
+>> +module_auxiliary_driver(ki2c_driver_aux);
+>> +
+>> +MODULE_AUTHOR("Gerhard Engleder <eg@keba.com>");
+>> +MODULE_DESCRIPTION("KEBA I2C bus controller driver");
+>> +MODULE_LICENSE("GPL");
+>> -- 
+>> 2.39.2
+>>
 
