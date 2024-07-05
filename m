@@ -1,99 +1,131 @@
-Return-Path: <linux-i2c+bounces-4661-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4662-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE89A928853
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 13:56:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 680E8928881
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 14:14:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 842EFB2157C
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 11:56:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A2F81C22A3B
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jul 2024 12:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2967014A096;
-	Fri,  5 Jul 2024 11:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6F514A4D9;
+	Fri,  5 Jul 2024 12:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hkMbWpIt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mRNLJr9+"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F9F146A96;
-	Fri,  5 Jul 2024 11:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBA5149C52;
+	Fri,  5 Jul 2024 12:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720180587; cv=none; b=OOGGmtJQezF/j/uCrdbRUeXoGV1/hiv/9BNPQ0eaWoTyhPvIaxdCV99YoGoRMue4bnPTlnSnpPP9HZWxtV9f6L0atmZpLcNA+tlfal2BIyRVxzS8+Tjl1Z3g2vI+c8y3Gh5x6YFMZCGZaSWigauNxgARMN3ooF4nEyKhxsIHkZI=
+	t=1720181670; cv=none; b=QjRIFi9qDHWpIgLp5jp0radH/eiKhgDU/R6gFtgnx7wZBhz+ZSpmzPL7KEdnuHvVn/pdUOu4hNLBFI30v/8ds8pCAMUG+1SZ6fW0Z7xiJJn6VUKXCwaPwC//AFlcxpk6aZuGg6fFc6VfcYZYWN8CiIP7U28LFtbFAkRAYikqceM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720180587; c=relaxed/simple;
-	bh=k/YHBLBWjOt0yIDrM6yiv0CQetE7GMAcVImDtUBMBxM=;
+	s=arc-20240116; t=1720181670; c=relaxed/simple;
+	bh=KFWQMJ6Wph6R6V0qaI65f80zhp/w/EFE5FRhTDDL+xg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lqIuJPiDn6JuPD5BzLA78UcV1M8s1pAvLtSBZmNZFPsdRDz/G5Lvh6Nektwpag/pVBZZy9nCT+QJQzEgJoCS5c0Gx/Na7y02VRm+O2pzBZaZes4NOhOePFmrDUhNZJUNt621iBYfOUrNRX2M75eu+Kk2ipkvLBSe7yplEIPN1+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hkMbWpIt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04384C116B1;
-	Fri,  5 Jul 2024 11:56:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=gslrTJwPZ3IfG6OVaZ//bEWdQCPcEwVbnaXVJYCAYzkTOAzNK1QwgvoOADrpPmKsqcS/7/JjUl+NqWzC58WUrKDp8PcACZVK4ylCXhMWrOA7z1tmnaiHLyeTbv5SB+8+WhF6VO6DUCFZ1m8KABaYO+QyDgfJzUeDF91ouS8aD+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mRNLJr9+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2ADC116B1;
+	Fri,  5 Jul 2024 12:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720180587;
-	bh=k/YHBLBWjOt0yIDrM6yiv0CQetE7GMAcVImDtUBMBxM=;
+	s=k20201202; t=1720181669;
+	bh=KFWQMJ6Wph6R6V0qaI65f80zhp/w/EFE5FRhTDDL+xg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hkMbWpItLZJSOTvEyDYm8np8z5X33dTRcQMfLYT5zckTImLfyEhJgQKu7XVRsmiKM
-	 BJShWbtawbgYZ3PqRDt9qj9xJUyhbdmUgupic/iM3PRfWToLQ3RvEemhvcfLCSJGZi
-	 vsBlbLLbTgHnjNd+g4n6+2qYQKB5vhR724uhqHUF7fgzOfdWkz4MN2e8rnlJGu8QZD
-	 zlxgIgrwjmDAo8DLuSk94EyMwg/f6bEh500Tq0PiMDJFmOt/DRHS0oAHDswgtISM82
-	 bCGVv+/3P7mUnGQ8UKGuoX/xkllglo+domw1IQdWtRcp8IMQH9aqJgCGp7Bf55wZl/
-	 2CjxRA243CCCg==
-Date: Fri, 5 Jul 2024 13:56:24 +0200
+	b=mRNLJr9+eR+eutN+367lEVtaOqpNnKGvCTQZ2J7AXumKZGhVIy2hFWSw+9+My+beK
+	 p35b7s0npFsbQ04UczaxtAgee0ohsHYhIo9y+fOMrlYD83MLEXfBN84ztD8HV3W2Vd
+	 VU9+MEma+qXB5Qv8W4jtvmd2Z6890skNsd0YJQgRoosgTVYIxfjd2xqe2CgUWU27rf
+	 ej+u02/dINuhMO0G9sSRD8ATCRoTO/zoKbHWdRsROZXXNNhje4D9FLqIzV3ONUOT3p
+	 eppRfldJi30VRs5U1FzVD9dQlouh9Tk2EsRoAn0dWR3zsIWmplyrA/Rrx8Y5RHi+4C
+	 If4IMfXLtvoBA==
+Date: Fri, 5 Jul 2024 14:14:26 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Guenter Roeck <linux@roeck-us.net>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v2 1/4] i2c: smbus: only limit max banks to eight
-Message-ID: <ibxkewtaxywpabogm776h7ty3grjquravsuwhtjbe2k4j7vlw6@enzxsfkk326z>
-References: <20240627-piix4-spd-v2-0-617ce47b8ff4@weissschuh.net>
- <20240627-piix4-spd-v2-1-617ce47b8ff4@weissschuh.net>
- <2mtehll54bpuozsjswynp2xron3dfxknsixnouovby2nxlnrun@3sxdqqbvfr22>
- <7a70c707-6a57-4f0b-a068-7efefd679088@t-8ch.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Claudiu <claudiu.beznea@tuxon.dev>, chris.brandt@renesas.com, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, magnus.damm@gmail.com, 
+	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de, 
+	wsa+renesas@sang-engineering.com, linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH v2 04/12] i2c: riic: Use pm_runtime_resume_and_get()
+Message-ID: <5pg2ubwv5gl7md55rjo3n6qgssirdryyou3gsbwbm35gxk4boo@q3hcnrminnzm>
+References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240625121358.590547-5-claudiu.beznea.uj@bp.renesas.com>
+ <2wm6vd4dib7tqpdq2eusjhyvfl3sofyvy65w6axvdjbkmgm5cn@bjltpbwwilc2>
+ <CAMuHMdV=Uhqar6k_z_wo5jzge_7oY4tBK5zNiBbpsWa39Wvabw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a70c707-6a57-4f0b-a068-7efefd679088@t-8ch.de>
+In-Reply-To: <CAMuHMdV=Uhqar6k_z_wo5jzge_7oY4tBK5zNiBbpsWa39Wvabw@mail.gmail.com>
 
-Hi Thomas,
+Hi Geert,
 
-On Fri, Jul 05, 2024 at 07:55:21AM GMT, Thomas Weiﬂschuh  wrote:
-> Jul 4, 2024 23:57:36 Andi Shyti <andi.shyti@kernel.org>:
-> > On Thu, Jun 27, 2024 at 07:48:11PM GMT, Thomas Weiﬂschuh wrote:
-> >> If there are less than eight slots in total,
-> >> only probe those.
-> >> Now the code matches the comment "..., then limit slots to 8".
-> >>
-> >> Fixes: 8821c8376993 ("i2c: smbus: Prepare i2c_register_spd for usage on muxed segments")
-> >> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> > >  static inline void riic_writeb(struct riic_dev *riic, u8 val, u8 offset)
+> > >  {
+> > >       writeb(val, riic->base + riic->info->regs[offset]);
+> > > @@ -133,10 +135,14 @@ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+> > >       struct riic_dev *riic = i2c_get_adapdata(adap);
+> > >       struct device *dev = adap->dev.parent;
+> > >       unsigned long time_left;
+> > > -     int i;
+> > > +     int i, ret;
+> > >       u8 start_bit;
+> > >
+> > > -     pm_runtime_get_sync(dev);
+> > > +     ret = pm_runtime_resume_and_get(dev);
 > >
-> > I don't see the need for the Fixes here... was there a bug that
-> > has been fixed?
+> > In principle I like the error message to be always checked and I
 > 
-> More addresses are probed than are possible.
-> Which is a change from the old behavior and also
-> contradicts the comment.
-> IMO it's a bug. Probably not a big one and I'm not sure if user-observable.
-> Surely nothing for stable.
+> s/message/condition/?
 
-The Fixes tag means that you want the patch to be backported to
-stable kernels. Someone will take the effort of taking all the
-new "Fixes:" and port them to older kernels.
+yes :-)
 
-We want this when patches fix crashes, deadlocks, memory leaks,
-security holes, misbehaviours, earthquakes and floodings.
+> > will always approve it. Whenever there is a return value, even
+> > when we are sure it's always '0', it needs to be checked.
+> >
+> > I had lots of discussions in the past about this topic but I
+> > haven't always found support. I'd love to have the ack from a
+> > renesas maintainer here.
+> 
+> I don't mind checking for the error here.
+> 
+> >
+> > > +     if (ret) {
+> > > +             dev_err(dev, riic_rpm_err_msg);
+> 
+> Do you need to print these error messages?
 
+I don't think it's needed, indeed.
+
+> AFAIU, this cannot happen anyway.
+
+That's what I was saying earlier. It's just a different point of
+view.
+
+To be honest, I don't really mind.
+
+Thanks,
 Andi
 
-> But I'm not hung up on it and will drop that tag in the next revision.
+> Ultimately, I expect the device driver that requested the transfer to
+> handle failures, and print a message when needed.
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
