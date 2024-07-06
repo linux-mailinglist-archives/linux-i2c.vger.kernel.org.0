@@ -1,57 +1,58 @@
-Return-Path: <linux-i2c+bounces-4692-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4694-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 894ED929302
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 13:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B24E0929306
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 13:26:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAF521C20F34
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 11:26:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E40471C2115C
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 11:26:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2CCE14D452;
-	Sat,  6 Jul 2024 11:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7B314F9E6;
+	Sat,  6 Jul 2024 11:21:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="TfUmRLTM"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="efM9bYrw"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1EE149DEE
-	for <linux-i2c@vger.kernel.org>; Sat,  6 Jul 2024 11:21:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C8714B092
+	for <linux-i2c@vger.kernel.org>; Sat,  6 Jul 2024 11:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720264917; cv=none; b=e3zhoBHlenj5Hr8kpMm373gU2CKoimo+v0s3A3zjl6/BNlkvitmr/LsACY9aGxcRpzBd6t49bS9+Fnel4p3qkQfXc3nM0lh0BH5QcwRx4cfZAFshfPmH5GJF2jwXKoDpCC3Ms0A+M/NIBJMXepfR/KTb4nMAMDM4lqHMHEXdehM=
+	t=1720264918; cv=none; b=rlQBnbSg25wabormeltqGCspg+dupEyDYiBgz8NxoLY6kgneZ8PCddIipgHpjd3wdBy9cfAEIqR5UORorI0vFRZKAvMCS6/OMu1vOmwPSmgxXLr0Y98QWigUHwjwOvFKLUvstD9kfs8dEcNQws1NmFDoXajua3izcohnWkYVXwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720264917; c=relaxed/simple;
-	bh=WhEB32QR5+vdGbvGdgr3ulOt2WUVoQ3ffFanTD/1Jfk=;
+	s=arc-20240116; t=1720264918; c=relaxed/simple;
+	bh=9QWvlSczun9moMCOETWvHJGW+Uh7dk/ns0ejbWRYdP4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N0401q7RBur3Pg0AXlb6KDzoYZkx6F01kq68JxmAb6QMR9K30uy3Cv/cEaspAK+q+SrIKm8iOpUMkbJqWEeu0vXX0zR/OBoa3Xt7b9dTcK+pr/rvZ4KeZz4Wnuh0vQ8c7OAyJ0l9fhuoh97HADfM/PSbXrDXaKxmV18z+B4sDFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TfUmRLTM; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=OeI5f5+fCVg07tPKnTkoZX8cBI44EBbWu0lDBKSa8TXqfuApOLbpOSW+JtFQzDzcmI0YmXiaYwfP1dOA5+AmLGy0zhHACdbWNbnORDqJFnzvtUah77uv2TETig0Umu268ljgWyjRS+d3e0uE3kK1AUCoITWjV4TuKeT0bEUPtyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=efM9bYrw; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=SUv9JzPme2t2ffHT1WQETFl0fRpIq23L/uCConbVk74=; b=TfUmRL
-	TMcxkA3B5h7c0w1f7WC7ZMoTodBusywCSAmpn6EBIfkDhKr3XYFbZSUPw0FLcSQS
-	uiFC9Qxr9+xSogAxd2GkLo6Lmfukzj55bf6wXakgvPvRKVngH+J5WV9a4g1qde2f
-	5TiSxh3sotHmt/7KiJWrKV/ZL6Gufb9SCjmQZurBZT0GLTrvuqIr4Gs2psCJSe3b
-	mZiGSi+RJdWk+S9lkUTpjO+DjC1u6VG8C+UAWAb50RyJMLQPQidBijoeGUN6k+ST
-	ZvqEdo+imf407W0nxG5eVZG+Kfl9+f8tx8ferqbcdL0W3GTSmMI6D85Zo4j6kZZ/
-	irJsNYFrzdMIXFDA==
-Received: (qmail 3810210 invoked from network); 6 Jul 2024 13:21:40 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Jul 2024 13:21:40 +0200
-X-UD-Smtp-Session: l3s3148p1@ovlPYpIcXoZQT+F6
+	 s=k1; bh=Hx9gDFXCtpqgkO9P5FolartfjY2YrLB3I4D/2wnut1Q=; b=efM9bY
+	rwWk6x+sRL4PXlgbzPJPxa0L8ZkD2nq9dXimn81cssIy8DnQ4RtdLvCIKFmqDvqd
+	9reoeVoCV3snixD3Bj3MTrlaaCbi5mmZdpN9z/8mdZu0LgKs7wtsA6+lnE6Bkdb/
+	E33hv+ZMxKab1hHIUOq2h857ktQMOCh16EED3ngihq08G7jU1v1/qRKn6IWsEs75
+	KDyUnXeAbeJb9O6TUdbTRTjFmYh2prFhdd5Uj3uwhDjU5Ak0HoDxs11h9LDChWc5
+	XQYL/csCev/r4KsKgEY06fSzf7ZrHEDwPMCsFdmXKOgj10RoK2zulTp/uPpnlRLt
+	HP3yxCask96zYHHQ==
+Received: (qmail 3810263 invoked from network); 6 Jul 2024 13:21:41 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Jul 2024 13:21:41 +0200
+X-UD-Smtp-Session: l3s3148p1@gGJcYpIcZIZQT+F6
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 26/60] i2c: ljca: reword according to newest specification
-Date: Sat,  6 Jul 2024 13:20:26 +0200
-Message-ID: <20240706112116.24543-27-wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2 27/60] i2c: lpc2k: reword according to newest specification
+Date: Sat,  6 Jul 2024 13:20:27 +0200
+Message-ID: <20240706112116.24543-28-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
 References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
@@ -68,89 +69,51 @@ specifications and replace "master/slave" with more appropriate terms.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-ljca.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/i2c/busses/i2c-lpc2k.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-ljca.c b/drivers/i2c/busses/i2c-ljca.c
-index b4927622177c..0b70621cf9d3 100644
---- a/drivers/i2c/busses/i2c-ljca.c
-+++ b/drivers/i2c/busses/i2c-ljca.c
-@@ -76,7 +76,7 @@ static int ljca_i2c_init(struct ljca_i2c_dev *ljca_i2c, u8 id)
- 	return ret < 0 ? ret : 0;
+diff --git a/drivers/i2c/busses/i2c-lpc2k.c b/drivers/i2c/busses/i2c-lpc2k.c
+index e3660333e91c..9fb33cbf7419 100644
+--- a/drivers/i2c/busses/i2c-lpc2k.c
++++ b/drivers/i2c/busses/i2c-lpc2k.c
+@@ -50,7 +50,7 @@
+ 
+ /*
+  * 26 possible I2C status codes, but codes applicable only
+- * to master are listed here and used in this driver
++ * to controller mode are listed here and used in this driver
+  */
+ enum {
+ 	M_BUS_ERROR		= 0x00,
+@@ -157,7 +157,7 @@ static void i2c_lpc2k_pump_msg(struct lpc2k_i2c *i2c)
+ 		break;
+ 
+ 	case MR_ADDR_R_ACK:
+-		/* Receive first byte from slave */
++		/* Receive first byte from target */
+ 		if (i2c->msg->len == 1) {
+ 			/* Last byte, return NACK */
+ 			writel(LPC24XX_AA, i2c->base + LPC24XX_I2CONCLR);
+@@ -196,7 +196,7 @@ static void i2c_lpc2k_pump_msg(struct lpc2k_i2c *i2c)
+ 		}
+ 
+ 		/*
+-		 * One pre-last data input, send NACK to tell the slave that
++		 * One pre-last data input, send NACK to tell the target that
+ 		 * this is going to be the last data byte to be transferred.
+ 		 */
+ 		if (i2c->msg_idx >= i2c->msg->len - 2) {
+@@ -338,8 +338,8 @@ static u32 i2c_lpc2k_functionality(struct i2c_adapter *adap)
  }
  
--static int ljca_i2c_start(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr,
-+static int ljca_i2c_start(struct ljca_i2c_dev *ljca_i2c, u8 target_addr,
- 			  enum ljca_xfer_type type)
- {
- 	struct ljca_i2c_rw_packet *w_packet =
-@@ -88,7 +88,7 @@ static int ljca_i2c_start(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr,
- 
- 	w_packet->id = ljca_i2c->i2c_info->id;
- 	w_packet->len = cpu_to_le16(sizeof(*w_packet->data));
--	w_packet->data[0] = (slave_addr << 1) | type;
-+	w_packet->data[0] = (target_addr << 1) | type;
- 
- 	ret = ljca_transfer(ljca_i2c->ljca, LJCA_I2C_START, (u8 *)w_packet,
- 			    struct_size(w_packet, data, 1), (u8 *)r_packet,
-@@ -107,7 +107,7 @@ static int ljca_i2c_start(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr,
- 	return 0;
- }
- 
--static void ljca_i2c_stop(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr)
-+static void ljca_i2c_stop(struct ljca_i2c_dev *ljca_i2c, u8 target_addr)
- {
- 	struct ljca_i2c_rw_packet *w_packet =
- 			(struct ljca_i2c_rw_packet *)ljca_i2c->obuf;
-@@ -169,16 +169,16 @@ static int ljca_i2c_pure_read(struct ljca_i2c_dev *ljca_i2c, u8 *data, u8 len)
- 	return 0;
- }
- 
--static int ljca_i2c_read(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr, u8 *data,
-+static int ljca_i2c_read(struct ljca_i2c_dev *ljca_i2c, u8 target_addr, u8 *data,
- 			 u8 len)
- {
- 	int ret;
- 
--	ret = ljca_i2c_start(ljca_i2c, slave_addr, LJCA_I2C_READ_XFER_TYPE);
-+	ret = ljca_i2c_start(ljca_i2c, target_addr, LJCA_I2C_READ_XFER_TYPE);
- 	if (!ret)
- 		ret = ljca_i2c_pure_read(ljca_i2c, data, len);
- 
--	ljca_i2c_stop(ljca_i2c, slave_addr);
-+	ljca_i2c_stop(ljca_i2c, target_addr);
- 
- 	return ret;
- }
-@@ -213,16 +213,16 @@ static int ljca_i2c_pure_write(struct ljca_i2c_dev *ljca_i2c, u8 *data, u8 len)
- 	return 0;
- }
- 
--static int ljca_i2c_write(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr,
-+static int ljca_i2c_write(struct ljca_i2c_dev *ljca_i2c, u8 target_addr,
- 			  u8 *data, u8 len)
- {
- 	int ret;
- 
--	ret = ljca_i2c_start(ljca_i2c, slave_addr, LJCA_I2C_WRITE_XFER_TYPE);
-+	ret = ljca_i2c_start(ljca_i2c, target_addr, LJCA_I2C_WRITE_XFER_TYPE);
- 	if (!ret)
- 		ret = ljca_i2c_pure_write(ljca_i2c, data, len);
- 
--	ljca_i2c_stop(ljca_i2c, slave_addr);
-+	ljca_i2c_stop(ljca_i2c, target_addr);
- 
- 	return ret;
- }
-@@ -266,7 +266,7 @@ static const struct i2c_adapter_quirks ljca_i2c_quirks = {
+ static const struct i2c_algorithm i2c_lpc2k_algorithm = {
+-	.master_xfer	= i2c_lpc2k_xfer,
+-	.functionality	= i2c_lpc2k_functionality,
++	.xfer = i2c_lpc2k_xfer,
++	.functionality = i2c_lpc2k_functionality,
  };
  
- static const struct i2c_algorithm ljca_i2c_algo = {
--	.master_xfer = ljca_i2c_xfer,
-+	.xfer = ljca_i2c_xfer,
- 	.functionality = ljca_i2c_func,
- };
- 
+ static int i2c_lpc2k_probe(struct platform_device *pdev)
 -- 
 2.43.0
 
