@@ -1,62 +1,60 @@
-Return-Path: <linux-i2c+bounces-4673-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4674-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A3839292D7
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 13:22:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 961069292D9
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 13:22:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D14F91F21FCD
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 11:22:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB5551C20FA6
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 11:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80F113A3FD;
-	Sat,  6 Jul 2024 11:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E1D313A88D;
+	Sat,  6 Jul 2024 11:21:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="NkxjEHGM"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="XFkqYOFc"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB5B13174B
-	for <linux-i2c@vger.kernel.org>; Sat,  6 Jul 2024 11:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D6F74BED
+	for <linux-i2c@vger.kernel.org>; Sat,  6 Jul 2024 11:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720264903; cv=none; b=CGQyLVvYeVsJu8j/sOfwyuCNyWpOL7sXgv7swovo9YPku149n+64ib/JjBd+PTZ4wgu73kMUWFdpmR/8CTYhcUnoLfMQUJnLZaKkDqpKGWDG3Gq31e3UKG97BXlhiTwhBEFkWn5vMsVaZbsYqvzucN1gqfvyB2Iap48XWx1W3tM=
+	t=1720264904; cv=none; b=pBPMVFkzRbTgdpRAtIy/F9QjxU40Mmo74SQqVvKhzA8gG8ppkNDQVhuEiB30CcI9P45vM6EUKomTDz+y/ZpU+HgdNF5HkLCwGe/zAfv90dgYhA55T9A3k+UBWTfAqyPHWiLjkD3gWzACd1p85y9hNRtTzDvQ8eMA3VgtDwXefDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720264903; c=relaxed/simple;
-	bh=Zc+wW02bH3J2UC1dwJRqoeiRcawvKwtWN3nEDGpFDPw=;
+	s=arc-20240116; t=1720264904; c=relaxed/simple;
+	bh=7naUJZQki/G2mEWdYCGkSyTcv9ZwC7D/i4bEmhvvpnY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NoO+GwIlo1lrBvHafUgqBpz+GxsKezLARmXA0Cx3JqFwH8mz3aktiGibh9Rp+Eomn4hOsfWvxSFqgAZ5hO1VetFbOBtraqu0RQDdL3Q4EreTVlsECr8oYcVio99ZXNn6pPoLu5dmskXPaT6wTtHJEYqy3rCWs+fP3PhD0ArmwDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=NkxjEHGM; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=e1DV7Gf6MHFW3DFAHes+tHMnMmrHHAafeiZpeWbiIbEIzljRtufcKrTuW9Dl7W5MGJIqQC0kzkeu/L1TwUwGtCzqvIN50w/QeR2flTGrC2EcuuoKSOR/OxkhmR7vddGyRBnPG7Ivl1Cz/XMi6E7Z9uYSFoZRLZqXRW3wje4h0UQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=XFkqYOFc; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=VAp76v9wqr5uyKGx45JJw5dqdmqu/DJeqReZVoBu2X8=; b=NkxjEH
-	GM5SP4QGNYvFOGC2jpJWrGU0XNHJDAGC9uKbfQIOK9AXmNFm0iHpYUOYZG9/+ivM
-	mTWlR7CnR3mVFk5fmqBysMPTUCPpR9XlunOgGFWZNlu+X2/d/v9ozro08HU3QRjK
-	DCgtekmMcrp3DNvauZQLGOSp84hDhjcYypUqD+VefmJYRhG52ME4A8AKtHFtMmzH
-	3lz1E5SY5Rw9jh3Y25rQyZNaTv1nEN3r5gwyW8ARePKPX7aBGl5hSXvv7XXCnf6c
-	SU0U8KxZfEwv7H7Gv8H6+6UxbU2UfMgeU0vOngStdf1yqEVJYBtULUZ3aaxutRln
-	bIt3y+wU0mgyiizA==
-Received: (qmail 3809579 invoked from network); 6 Jul 2024 13:21:26 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Jul 2024 13:21:26 +0200
-X-UD-Smtp-Session: l3s3148p1@XZ93YZIcTpBQT+F6
+	 s=k1; bh=V1gvYkKbbk1D9KkI/4jZO0TrJg/YPs1bwwmD0YXlqzA=; b=XFkqYO
+	Fc8ztL0yqyjjiiUBKqfWZGDl6UHVcCNY6+TQ4j9p7F41PQQ1mAYJ62a9tSqoRxvp
+	Fxk41ZfWYVAGhSAMRI5bYjVbb4VKs0+7ttAQ5jDpy88st/ZukxUGz4MmQ6riomX1
+	2Bq11weLKUuoMMDlU52E22AJdpHlFg1uA6UPipZFHIh89ZqL2S3/KW4jlZatXWRG
+	S7EeH6GsWwfeZT96k19Wlx8QHuhavlrqYHpZn5vFs65frMgyxcEnY5A6ZAxPQK3e
+	vBgoqasK1z9g08yv2GT5e/B12tYAAs2sGuRQb1DczX95qv5UG/5lde7E/lkqfT55
+	c8nWvNdRu0qXnyZg==
+Received: (qmail 3809604 invoked from network); 6 Jul 2024 13:21:27 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Jul 2024 13:21:27 +0200
+X-UD-Smtp-Session: l3s3148p1@VPWCYZIcVJBQT+F6
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Kamal Dasu <kamal.dasu@broadcom.com>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	linux-rpi-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 06/60] i2c: bcm2835: reword according to newest specification
-Date: Sat,  6 Jul 2024 13:20:06 +0200
-Message-ID: <20240706112116.24543-7-wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2 07/60] i2c: brcmstb: reword according to newest specification
+Date: Sat,  6 Jul 2024 13:20:07 +0200
+Message-ID: <20240706112116.24543-8-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
 References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
@@ -70,54 +68,65 @@ Content-Transfer-Encoding: 8bit
 
 Change the wording of this driver wrt. the newest I2C v7 and SMBus 3.2
 specifications and replace "master/slave" with more appropriate terms.
+Remove a useless comment while here.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 ---
- drivers/i2c/busses/i2c-bcm2835.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-brcmstb.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-index 3045ba82380d..ae42e37052a8 100644
---- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * BCM2835 master mode driver
-+ * BCM2835 I2C controller driver
-  */
+diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-brcmstb.c
+index 38f276c99193..83b85011e377 100644
+--- a/drivers/i2c/busses/i2c-brcmstb.c
++++ b/drivers/i2c/busses/i2c-brcmstb.c
+@@ -67,7 +67,7 @@
  
- #include <linux/clk.h>
-@@ -25,7 +25,7 @@
- #define BCM2835_I2C_DEL		0x18
- /*
-  * 16-bit field for the number of SCL cycles to wait after rising SCL
-- * before deciding the slave is not responding. 0 disables the
-+ * before deciding the target is not responding. 0 disables the
-  * timeout detection.
-  */
- #define BCM2835_I2C_CLKT	0x1c
-@@ -223,7 +223,7 @@ static void bcm2835_drain_rxfifo(struct bcm2835_i2c_dev *i2c_dev)
- /*
-  * Repeated Start Condition (Sr)
-  * The BCM2835 ARM Peripherals datasheet mentions a way to trigger a Sr when it
-- * talks about reading from a slave with 10 bit address. This is achieved by
-+ * talks about reading from a target with 10 bit address. This is achieved by
-  * issuing a write, poll the I2CS.TA flag and wait for it to be set, and then
-  * issue a read.
-  * A comment in https://github.com/raspberrypi/linux/issues/254 shows how the
-@@ -390,8 +390,8 @@ static u32 bcm2835_i2c_func(struct i2c_adapter *adap)
+ /* BSC block register map structure to cache fields to be written */
+ struct bsc_regs {
+-	u32	chip_address;           /* slave address */
++	u32	chip_address;           /* target address */
+ 	u32	data_in[N_DATA_REGS];   /* tx data buffer*/
+ 	u32	cnt_reg;		/* rx/tx data length */
+ 	u32	ctl_reg;		/* control register */
+@@ -320,7 +320,7 @@ static int brcmstb_send_i2c_cmd(struct brcmstb_i2c_dev *dev,
+ 	return rc;
  }
  
- static const struct i2c_algorithm bcm2835_i2c_algo = {
--	.master_xfer	= bcm2835_i2c_xfer,
--	.functionality	= bcm2835_i2c_func,
-+	.xfer = bcm2835_i2c_xfer,
-+	.functionality = bcm2835_i2c_func,
+-/* Actual data transfer through the BSC master */
++/* Actual data transfer through the BSC controller */
+ static int brcmstb_i2c_xfer_bsc_data(struct brcmstb_i2c_dev *dev,
+ 				     u8 *buf, unsigned int len,
+ 				     struct i2c_msg *pmsg)
+@@ -441,7 +441,6 @@ static int brcmstb_i2c_do_addr(struct brcmstb_i2c_dev *dev,
+ 	return 0;
+ }
+ 
+-/* Master transfer function */
+ static int brcmstb_i2c_xfer(struct i2c_adapter *adapter,
+ 			    struct i2c_msg msgs[], int num)
+ {
+@@ -473,7 +472,7 @@ static int brcmstb_i2c_xfer(struct i2c_adapter *adapter,
+ 
+ 		brcmstb_set_i2c_start_stop(dev, cond);
+ 
+-		/* Send slave address */
++		/* Send target address */
+ 		if (!(pmsg->flags & I2C_M_NOSTART)) {
+ 			rc = brcmstb_i2c_do_addr(dev, pmsg);
+ 			if (rc < 0) {
+@@ -545,8 +544,8 @@ static u32 brcmstb_i2c_functionality(struct i2c_adapter *adap)
+ }
+ 
+ static const struct i2c_algorithm brcmstb_i2c_algo = {
+-	.master_xfer = brcmstb_i2c_xfer,
+-	.master_xfer_atomic = brcmstb_i2c_xfer_atomic,
++	.xfer = brcmstb_i2c_xfer,
++	.xfer_atomic = brcmstb_i2c_xfer_atomic,
+ 	.functionality = brcmstb_i2c_functionality,
  };
  
- /*
 -- 
 2.43.0
 
