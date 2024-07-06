@@ -1,57 +1,61 @@
-Return-Path: <linux-i2c+bounces-4671-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4672-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80F059292D2
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 13:22:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC74D9292D5
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 13:22:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 360B01F21E9B
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 11:22:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68CE6282EF1
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 11:22:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3426131E41;
-	Sat,  6 Jul 2024 11:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09CC2137932;
+	Sat,  6 Jul 2024 11:21:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="IAdTkFFw"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="hC7cMulZ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3F57D3E2
-	for <linux-i2c@vger.kernel.org>; Sat,  6 Jul 2024 11:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB95127E0D
+	for <linux-i2c@vger.kernel.org>; Sat,  6 Jul 2024 11:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720264901; cv=none; b=nYU9Rd4fqBIqUeOX6+vmfUUPJyoLf0SHAoQRh2lRbr1Ud3gQKom+ySm08ggG4g7aCKykBQ5H0Qvmm0H1JMyy1We5GQbYule2mTRU7KBqBHEO6ov6ahpEsGrkkJzkQfHVBGG29rDyVdJwq1RPrNMdZo/NXkfj58y1Oj2kk/3HB0g=
+	t=1720264902; cv=none; b=GdC00LVb76fhCPX7LdEyUtAE2xCRhnoCFtJLfNEaCvdfcUnOCTqcFIQNA80R9cpQ5H9sU7VWie8Tm/y1I68tQPOwPU5pEuBqXhBUfn4jUi9YtVSlbH+atLq/HWV+PWzp7clgaOoP7Wv/Ertq6IyJ5LX/UQt0irMU5halqlmiQv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720264901; c=relaxed/simple;
-	bh=SsZkd7/wUKCNjap4XGTF3u+PewuEnckoqoHnf1CfVGM=;
+	s=arc-20240116; t=1720264902; c=relaxed/simple;
+	bh=R3ERekSmwO8UxRD5OZgnmyUxVuR60ld5jYHEFvD7Ols=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZsIBwNOE5UXMGZJ0GDCVs79OLbTTT2kjPnTk5pD/Ym51p7xBj3BxIzz7AXprFyodT+Vr90TcPP1Esjf/4kz1Rhz6nL8AGqiIqPu63OgrjAfmFUlIrN4N4vg0SP7aEUKKnWwMDxZn7jcv+yNddXi11gkaeIDplIXcLjgSrjvsXkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=IAdTkFFw; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=l874sB0V7bbAC6DJ/6J0BOlNir0ZZfWzdciebece5IDSdmlcARnw5k12MqWuHXcDaAcBLa0DJIusBxASUpTkTek4Qg2wzg8lziG2M6lHqT5YWhc8L4Pt3ZsqR+w0clfyFqJCclevCztenlNT2v8v0/RCYKIM9rbcQH9semD39wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=hC7cMulZ; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=Z/gR8NXtX5QcB96VIv6XVRelpEFREJaI1Em8IfJabs0=; b=IAdTkF
-	Fw2pTebfAREEvpWowgJyf6To7rPDxoGi281TDKYnp0fwsnzREfuzpRof0rbhD6n/
-	CT7JKqclZsP4GxHvHN+V23scqHfER6Wsvo5appkt7rldve74re+gZz7AgOwamok+
-	GAi9qvAjZ8397KviBPm9jzPtqGPI+0notEPEkiSaowom58+7v/vMIAWGwKNqdn4D
-	Ma0H01ZrHPmf8/Wes4OzbPshS/IQNB5/vxrwo0SDLsk4CioAMtypHI9f6hmCi6Ic
-	nc7n9o+vqyNoktip+DvO3PcRc9epCxh/kpe4kZhZ6F9qiqVc94KMKW0SV5BfVIn9
-	GBWpsCrpO+e8O7Qw==
-Received: (qmail 3809530 invoked from network); 6 Jul 2024 13:21:25 +0200
+	 s=k1; bh=wHzq1UCnJh9pa5kOBbvthE0Pf+Oc7V69Wus2sqqvdAQ=; b=hC7cMu
+	lZ8TDaLtArdgwe7QQvB2qC0p0WdQ3dAtLtuM3r7qBuN7HMyVTfGkNn4NVfigVu8b
+	QG49tPsmiCRgc+h7XWkBzwAAc3IRzJVvq7Exx7A2Co1ZIAdieP1Evok6yr2l8plO
+	HDyqqynbfm23frTfCmRRcqpDIrwoBGj2s+t+V7ZEqiMo3Ju/JdV9mM2i6QG5a4iJ
+	bW0XtmbA9BXNqp9STPp3AyNmcjniaoIrJ6329Eji8W/TMHtXgYpLG6xh98FdizNA
+	cyeVXeSn9hwpoJ4MzUaUB49QRlhIMIiLxYlYzCoLXHfbP4UO242w98ii8x8ZVSUq
+	HJRj7by6qLe4lAvA==
+Received: (qmail 3809563 invoked from network); 6 Jul 2024 13:21:25 +0200
 Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Jul 2024 13:21:25 +0200
-X-UD-Smtp-Session: l3s3148p1@xQRjYZIcxtJQT+F6
+X-UD-Smtp-Session: l3s3148p1@7V1tYZIcSpBQT+F6
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 04/60] i2c: au1550: reword according to newest specification
-Date: Sat,  6 Jul 2024 13:20:04 +0200
-Message-ID: <20240706112116.24543-5-wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2 05/60] i2c: bcm-kona: reword according to newest specification
+Date: Sat,  6 Jul 2024 13:20:05 +0200
+Message-ID: <20240706112116.24543-6-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
 References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
@@ -68,71 +72,71 @@ specifications and replace "master/slave" with more appropriate terms.
 Remove a useless comment while here.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 ---
- drivers/i2c/busses/i2c-au1550.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-bcm-kona.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-au1550.c b/drivers/i2c/busses/i2c-au1550.c
-index 8e43f25c117e..902e420e761e 100644
---- a/drivers/i2c/busses/i2c-au1550.c
-+++ b/drivers/i2c/busses/i2c-au1550.c
-@@ -81,11 +81,10 @@ static int wait_ack(struct i2c_au1550_data *adap)
- 	return 0;
- }
+diff --git a/drivers/i2c/busses/i2c-bcm-kona.c b/drivers/i2c/busses/i2c-bcm-kona.c
+index a57088ec2b06..eb5c46a8f824 100644
+--- a/drivers/i2c/busses/i2c-bcm-kona.c
++++ b/drivers/i2c/busses/i2c-bcm-kona.c
+@@ -85,7 +85,7 @@
+ #define STD_EXT_CLK_FREQ		13000000UL
+ #define HS_EXT_CLK_FREQ			104000000UL
  
--static int wait_master_done(struct i2c_au1550_data *adap)
-+static int wait_controller_done(struct i2c_au1550_data *adap)
+-#define MASTERCODE			0x08 /* Mastercodes are 0000_1xxxb */
++#define CONTROLLER_CODE			0x08 /* Controller codes are 0000_1xxxb */
+ 
+ #define I2C_TIMEOUT			100 /* msecs */
+ 
+@@ -544,8 +544,8 @@ static int bcm_kona_i2c_switch_to_hs(struct bcm_kona_i2c_dev *dev)
  {
- 	int i;
+ 	int rc;
  
--	/* Wait for Master Done. */
- 	for (i = 0; i < 2 * adap->xfer_timeout; i++) {
- 		if ((RD(adap, PSC_SMBEVNT) & PSC_SMBEVNT_MD) != 0)
- 			return 0;
-@@ -120,12 +119,12 @@ do_address(struct i2c_au1550_data *adap, unsigned int addr, int rd, int q)
- 	if (q)
- 		addr |= PSC_SMBTXRX_STP;
- 
--	/* Put byte into fifo, start up master. */
-+	/* Put byte into fifo, start up controller */
- 	WR(adap, PSC_SMBTXRX, addr);
- 	WR(adap, PSC_SMBPCR, PSC_SMBPCR_MS);
- 	if (wait_ack(adap))
- 		return -EIO;
--	return (q) ? wait_master_done(adap) : 0;
-+	return (q) ? wait_controller_done(adap) : 0;
+-	/* Send mastercode at standard speed */
+-	rc = bcm_kona_i2c_write_byte(dev, MASTERCODE, 1);
++	/* Send controller code at standard speed */
++	rc = bcm_kona_i2c_write_byte(dev, CONTROLLER_CODE, 1);
+ 	if (rc < 0) {
+ 		pr_err("High speed handshake failed\n");
+ 		return rc;
+@@ -587,7 +587,6 @@ static int bcm_kona_i2c_switch_to_std(struct bcm_kona_i2c_dev *dev)
+ 	return rc;
  }
  
- static int wait_for_rx_byte(struct i2c_au1550_data *adap, unsigned char *out)
-@@ -175,7 +174,7 @@ static int i2c_read(struct i2c_au1550_data *adap, unsigned char *buf,
+-/* Master transfer function */
+ static int bcm_kona_i2c_xfer(struct i2c_adapter *adapter,
+ 			     struct i2c_msg msgs[], int num)
+ {
+@@ -637,7 +636,7 @@ static int bcm_kona_i2c_xfer(struct i2c_adapter *adapter,
+ 			}
+ 		}
  
- 	/* The last byte has to indicate transfer done. */
- 	WR(adap, PSC_SMBTXRX, PSC_SMBTXRX_STP);
--	if (wait_master_done(adap))
-+	if (wait_controller_done(adap))
- 		return -EIO;
- 
- 	buf[i] = (unsigned char)(RD(adap, PSC_SMBTXRX) & 0xff);
-@@ -204,7 +203,7 @@ static int i2c_write(struct i2c_au1550_data *adap, unsigned char *buf,
- 	data = buf[i];
- 	data |= PSC_SMBTXRX_STP;
- 	WR(adap, PSC_SMBTXRX, data);
--	if (wait_master_done(adap))
-+	if (wait_controller_done(adap))
- 		return -EIO;
- 	return 0;
- }
-@@ -246,8 +245,8 @@ static u32 au1550_func(struct i2c_adapter *adap)
+-		/* Send slave address */
++		/* Send target address */
+ 		if (!(pmsg->flags & I2C_M_NOSTART)) {
+ 			rc = bcm_kona_i2c_do_addr(dev, pmsg);
+ 			if (rc < 0) {
+@@ -697,7 +696,7 @@ static uint32_t bcm_kona_i2c_functionality(struct i2c_adapter *adap)
  }
  
- static const struct i2c_algorithm au1550_algo = {
--	.master_xfer	= au1550_xfer,
--	.functionality	= au1550_func,
-+	.xfer = au1550_xfer,
-+	.functionality = au1550_func,
+ static const struct i2c_algorithm bcm_algo = {
+-	.master_xfer = bcm_kona_i2c_xfer,
++	.xfer = bcm_kona_i2c_xfer,
+ 	.functionality = bcm_kona_i2c_functionality,
  };
  
- static void i2c_au1550_setup(struct i2c_au1550_data *priv)
+@@ -722,7 +721,7 @@ static int bcm_kona_i2c_assign_bus_speed(struct bcm_kona_i2c_dev *dev)
+ 		dev->std_cfg = &std_cfg_table[BCM_SPD_1MHZ];
+ 		break;
+ 	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
+-		/* Send mastercode at 100k */
++		/* Send controller code at 100k */
+ 		dev->std_cfg = &std_cfg_table[BCM_SPD_100K];
+ 		dev->hs_cfg = &hs_cfg_table[BCM_SPD_3P4MHZ];
+ 		break;
 -- 
 2.43.0
 
