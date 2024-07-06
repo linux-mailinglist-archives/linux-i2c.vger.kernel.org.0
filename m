@@ -1,57 +1,57 @@
-Return-Path: <linux-i2c+bounces-4689-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4687-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFFA49292F9
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 13:25:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A73F99292F8
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 13:25:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A0A41F22312
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 11:25:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 581D21F2207E
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jul 2024 11:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC7AA149E03;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099C21494B3;
 	Sat,  6 Jul 2024 11:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="QfvJv2ds"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="amUatpvt"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B371474A3
-	for <linux-i2c@vger.kernel.org>; Sat,  6 Jul 2024 11:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F16146013
+	for <linux-i2c@vger.kernel.org>; Sat,  6 Jul 2024 11:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720264915; cv=none; b=Gfy1Wnjlb80Rb2EIBlTZhEj9s7AKMoBRg4fb0CExKxZXFNwWMBIoCospIZDSehBFqEjot+20LrG1ATR6tTJ7YIoWCt6UZdnGZCkft9MdJ0Dx0KvxqrhA9b2rFcdT+xuOYTHidMHEioACiWc7EURl5CnlFcQcdv9LTosCmduoDf0=
+	t=1720264914; cv=none; b=LUhMYTXD3Ed3HUjxHzwco4Y0aEw5r4LKxGUWg4MKNMNuZ5c69dwON/wRykCqz072FdUoy2gorUl0M+fW7s6K+4hacf8jGBZ/NM6sl7JdD0Yt5y03oR5EK0AwC3JwEqhhFJXtf+AS9yjCRgTEQZHEDneTaQF88/oI1NxtpC3Lyak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720264915; c=relaxed/simple;
-	bh=TAMxqjwh0Yu6WLwnBKFhzPOrc+HgpJP7G8F/9/xOk+g=;
+	s=arc-20240116; t=1720264914; c=relaxed/simple;
+	bh=w4p5x6E9AF/XtTtu6q+8032MrinkSKAp8+QYHIUVFlY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aOH5jTWcT8MFH62MSzdXKZ/aZWpzRa4fuOHgu14+Qm9u2tPOHsCmDQi0rAd5OXucNWCWMWmc1bkfdbQabd4wIgP2OlIY2uBzGs8T2QoAajQKGWvcRE6X6Hyidm7K1/X31PDG/VlEC5Vveo0Ucy/UCeKIb9E/EJfRWKZqVDMD4ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=QfvJv2ds; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=DLYjFlO2hO7qODrMAEF3agE5HBub8ofnPPg4b4w6u8z+ahqOutkVeeLznbnNqrumLSoqBmHJA923WV2ZhRGN46gFPPZxkxFaUQPSs9ogY5FHw8OTrsbsegtmS28v+YqbonvXvcu2P9dGYVsQXnwMRQ8+6RsgLwIf6oYtO67onCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=amUatpvt; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=0h37wVaNas3ztHVctYiDS4mlh0QnQBIcJ3hxl1tjriA=; b=QfvJv2
-	ds4JG/nBsWlRStrEk/PUaZxBlePptH5MSB5j+vLMcLGwmxaNYnhaL49x6Gfab6Zm
-	9iHCmUy/PBnCPHlUW+RRQ2Z2OkpQr6B43oR4AdgzpsXqAysNbsz3RnkZWCjgxCz5
-	+2FkKYmZeZfsB4f0KEAxQv+VvIcNvXVhWb6FtVuum78ELRWGqe/K88DBHQyRAN9I
-	1F2ZQe79tBjqH9V9HUGdL0AD5dC2ZahhvENhrB7rc/zQMxDjLokCTdK6VK98N0Pl
-	Zb3UYGkl26UANA334S4iPMOvWHA6F/fbXwvEdRF7Idvx0bwA63JfXgDsdXXtvAm0
-	/ZkyqaMkCVystFnw==
-Received: (qmail 3809991 invoked from network); 6 Jul 2024 13:21:37 +0200
+	 s=k1; bh=CeHb9vjrMt9jgzTKk4gewrP64EVImhpH0TXk2i/YvJg=; b=amUatp
+	vtX+JVTnJKBqKk4AaWb+7jUjoeeq/bj7qlrw53vstcgKXyRWQhxWPAVRQNfdoudf
+	JfOZZpAz3BcAJ/aHuqGc5pGSyOOUtIgMlD+anz170ac9Fxk3GLI33mH8f7TyKGiw
+	+X05oaD1Ax+lNSYGeBLthALrybelTHyNpqaO2lgE+NFRwBxwmadPydhOFnvsoM0V
+	8y+Ox2r/ADb6fYSEqxNBzxRC8tdwLxFGqpezEC8U2ukT+8LFlMKszUHpi0Az66Zx
+	oz0CqMt0IPctKz45ujwFtgFoMQnT9xNeFXzPNjj3XeGcWC2WCA00tngQ7r70Uyqi
+	pA+FWzskUnTx5HdQ==
+Received: (qmail 3810015 invoked from network); 6 Jul 2024 13:21:37 +0200
 Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Jul 2024 13:21:37 +0200
-X-UD-Smtp-Session: l3s3148p1@ChgbYpIcOoZQT+F6
+X-UD-Smtp-Session: l3s3148p1@QCMlYpIcPoZQT+F6
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 21/60] i2c: ibm_iic: reword according to newest specification
-Date: Sat,  6 Jul 2024 13:20:21 +0200
-Message-ID: <20240706112116.24543-22-wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2 22/60] i2c: iop3xx: reword according to newest specification
+Date: Sat,  6 Jul 2024 13:20:22 +0200
+Message-ID: <20240706112116.24543-23-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
 References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
@@ -69,109 +69,57 @@ Remove a useless comment while here.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-ibm_iic.c | 27 +++++++++++----------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
+ drivers/i2c/busses/i2c-iop3xx.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-ibm_iic.c b/drivers/i2c/busses/i2c-ibm_iic.c
-index 7fb87b78923e..82dedb1bb5be 100644
---- a/drivers/i2c/busses/i2c-ibm_iic.c
-+++ b/drivers/i2c/busses/i2c-ibm_iic.c
-@@ -136,11 +136,11 @@ static void iic_dev_init(struct ibm_iic_private* dev)
- 
- 	DBG("%d: init\n", dev->idx);
- 
--	/* Clear master address */
-+	/* Clear remote target address */
- 	out_8(&iic->lmadr, 0);
- 	out_8(&iic->hmadr, 0);
- 
--	/* Clear slave address */
-+	/* Clear local target address */
- 	out_8(&iic->lsadr, 0);
- 	out_8(&iic->hsadr, 0);
- 
-@@ -337,7 +337,7 @@ static irqreturn_t iic_handler(int irq, void *dev_id)
- }
- 
- /*
-- * Get master transfer result and clear errors if any.
-+ * Get controller transfer result and clear errors if any.
-  * Returns the number of actually transferred bytes or error (<0)
+diff --git a/drivers/i2c/busses/i2c-iop3xx.c b/drivers/i2c/busses/i2c-iop3xx.c
+index 2e5f0165c3d3..859c14e340e7 100644
+--- a/drivers/i2c/busses/i2c-iop3xx.c
++++ b/drivers/i2c/busses/i2c-iop3xx.c
+@@ -22,7 +22,7 @@
+  * - Make it work with IXP46x chips
+  * - Cleanup function names, coding style, etc
+  *
+- * - writing to slave address causes latchup on iop331.
++ * - writing to local target address causes latchup on iop331.
+  *	fix: driver refuses to address self.
   */
- static int iic_xfer_result(struct ibm_iic_private* dev)
-@@ -352,7 +352,7 @@ static int iic_xfer_result(struct ibm_iic_private* dev)
- 		out_8(&iic->extsts, EXTSTS_IRQP | EXTSTS_IRQD |
- 			EXTSTS_LA | EXTSTS_ICT | EXTSTS_XFRA);
  
--		/* Flush master data buffer */
-+		/* Flush controller data buffer */
- 		out_8(&iic->mdcntl, in_8(&iic->mdcntl) | MDCNTL_FMDB);
+@@ -234,7 +234,7 @@ iop3xx_i2c_send_target_addr(struct i2c_algo_iop3xx_data *iop3xx_adap,
+ 	int status;
+ 	int rc;
  
- 		/* Is bus free?
-@@ -401,7 +401,7 @@ static void iic_abort_xfer(struct ibm_iic_private* dev)
- }
- 
- /*
-- * Wait for master transfer to complete.
-+ * Wait for controller transfer to complete.
-  * It puts current process to sleep until we get interrupt or timeout expires.
-  * Returns the number of transferred bytes or error (<0)
-  */
-@@ -452,9 +452,6 @@ static int iic_wait_for_tc(struct ibm_iic_private* dev){
- 	return ret;
+-	/* avoid writing to my slave address (hangs on 80331),
++	/* avoid writing to local target address (hangs on 80331),
+ 	 * forbidden in Intel developer manual
+ 	 */
+ 	if (msg->addr == MYSAR) {
+@@ -349,12 +349,9 @@ iop3xx_i2c_handle_msg(struct i2c_adapter *i2c_adap, struct i2c_msg *pmsg)
+ 	}
  }
  
 -/*
-- * Low level master transfer routine
+- * master_xfer() - main read/write entry
 - */
- static int iic_xfer_bytes(struct ibm_iic_private* dev, struct i2c_msg* pm,
- 			  int combined_xfer)
+ static int
+-iop3xx_i2c_master_xfer(struct i2c_adapter *i2c_adap, struct i2c_msg *msgs,
+-				int num)
++iop3xx_i2c_xfer(struct i2c_adapter *i2c_adap, struct i2c_msg *msgs,
++		int num)
  {
-@@ -511,9 +508,7 @@ static int iic_xfer_bytes(struct ibm_iic_private* dev, struct i2c_msg* pm,
- 	return ret > 0 ? 0 : ret;
+ 	struct i2c_algo_iop3xx_data *iop3xx_adap = i2c_adap->algo_data;
+ 	int im = 0;
+@@ -384,8 +381,8 @@ iop3xx_i2c_func(struct i2c_adapter *adap)
  }
  
--/*
-- * Set target slave address for master transfer
-- */
-+/* Set remote target address for transfer */
- static inline void iic_address(struct ibm_iic_private* dev, struct i2c_msg* msg)
- {
- 	volatile struct iic_regs __iomem *iic = dev->vaddr;
-@@ -546,7 +541,7 @@ static inline int iic_address_neq(const struct i2c_msg* p1,
- }
- 
- /*
-- * Generic master transfer entrypoint.
-+ * Generic transfer entrypoint.
-  * Returns the number of processed messages or error (<0)
-  */
- static int iic_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
-@@ -604,11 +599,11 @@ static int iic_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
- 		}
- 	}
- 	else {
--		/* Flush master data buffer (just in case) */
-+		/* Flush controller data buffer (just in case) */
- 		out_8(&iic->mdcntl, in_8(&iic->mdcntl) | MDCNTL_FMDB);
- 	}
- 
--	/* Load slave address */
-+	/* Load target address */
- 	iic_address(dev, &msgs[0]);
- 
- 	/* Do real transfer */
-@@ -624,8 +619,8 @@ static u32 iic_func(struct i2c_adapter *adap)
- }
- 
- static const struct i2c_algorithm iic_algo = {
--	.master_xfer 	= iic_xfer,
--	.functionality	= iic_func
-+	.xfer = iic_xfer,
-+	.functionality = iic_func
+ static const struct i2c_algorithm iop3xx_i2c_algo = {
+-	.master_xfer	= iop3xx_i2c_master_xfer,
+-	.functionality	= iop3xx_i2c_func,
++	.xfer = iop3xx_i2c_xfer,
++	.functionality = iop3xx_i2c_func,
  };
  
- /*
+ static void
 -- 
 2.43.0
 
