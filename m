@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-4772-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4773-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C23892AA30
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 21:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A8B292AA35
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 21:52:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE41C1C216CD
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 19:51:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C6321C213A6
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 19:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4816914D711;
-	Mon,  8 Jul 2024 19:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2C5614D705;
+	Mon,  8 Jul 2024 19:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UnlfPFF8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HfTqsvL9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F059B14D6EB;
-	Mon,  8 Jul 2024 19:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF0F1DDF4;
+	Mon,  8 Jul 2024 19:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720468314; cv=none; b=cRJaao85xtNcPrPBwnDkJ5qqYxfJ7CD+NFzc0NI4+3GfMiu57k1jOe3zgNQyhe7X8PXaKYd3mPoiStNvDNljl3LQmPGB69hMoGzGRUCovH3cFkVz6+CQSCleftlkCQZgBeT/EZIdFENRo4ICc5E7jZEmUTyvrEv9TLE3CzpZxrU=
+	t=1720468346; cv=none; b=KgAdU9JlKEqB3H9Pkto6X75tT9fCTYQ7nVNR0z7rm4quOq4zb94YB/I8PQ+6H44/D7KAXHHaZvmpqOhx27FRM4ldpjLO6iZwgArxi7ydB83IQAS5A5M1/39ZrdFw52BYc+ygIzK/8vr1OZz+4CARWCzrw7LlSWiPDEOZOo7pjUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720468314; c=relaxed/simple;
-	bh=tRdwL7MF07YdbCfg+yIRy3ZKvX6dkEv4gnX59kc9Bqw=;
+	s=arc-20240116; t=1720468346; c=relaxed/simple;
+	bh=D8cLFnUe7SaLV9LIrCSiNMfzBFWw1gFQoqk10wrY/w8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s1sPpmmWgbkAL4K0Ih9soEzuY6STDVw5NTqs+B8US9bLFUqVh97AlewPs9trxWLhaM2m29arl+T2HBI1QGw2ZQmJEeSMeq779IpPrwZFBFQj5xUlVS+/VIRPz0hSkf/whhUDGaFM9FhHvMjNqjKL/CD+r4YjBER+9RH39evAGRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UnlfPFF8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDD8FC116B1;
-	Mon,  8 Jul 2024 19:51:47 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=OvZHvSF7iH01+sKKzM0Qm3fOWQ4MPZfh9yXr5OqVi3a6V8WNwNtyKOYxYRmxiHYnmEmlE8pJNrXy3fusWKaAIaIOWcmm4AqfOeIhYvAZD6cGl/JKEGTYoGNKrSdzqozWg9yvzjwXiAsxtI4gCf88w3eX8XOw9oUE5TCTlMQPl0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HfTqsvL9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F5AC116B1;
+	Mon,  8 Jul 2024 19:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720468313;
-	bh=tRdwL7MF07YdbCfg+yIRy3ZKvX6dkEv4gnX59kc9Bqw=;
+	s=k20201202; t=1720468346;
+	bh=D8cLFnUe7SaLV9LIrCSiNMfzBFWw1gFQoqk10wrY/w8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UnlfPFF828SnGrlHVPsorunF++V4mAPlbz/klQ0+K/vJilE9BnG25c18BHfU4yUEA
-	 oZojOD2l0Qo4czPoRkxHAdLtRjVdGbtNZrpVbpjJnDXa9D8GCB0Es6Xp9b8Oq3jInS
-	 Jv06vcYleEsA/54WFyPLOvWnTsyR8P6llLduChghxaCYQu7d/oE3+fJglMbvD8csvf
-	 yYXdT5fTJ4kPhALj2SUpx3g+QwrbsV+T5eDmfwYzAOrJ50h7Cf4Bh0S9HEAHtSPmI0
-	 QhzGFrRhuM8Sfh7Zqydxy3PcXyj560TqkqSBcyxtoKlgFO1LiHiUvcWOe3eIaid1h4
-	 KlOlH6/g4/RPg==
-Message-ID: <6add148f-efe7-4444-82b3-20b1198c6d07@kernel.org>
-Date: Mon, 8 Jul 2024 21:51:44 +0200
+	b=HfTqsvL94QYErPs+LW8TDh73NTOS+/K8BUmejyX/WZrXX1pePOo7M0kKtIEi9sE7i
+	 I+PVndLsFQDFePiiHLymPBCQNbxjUD9qPVRK3tkGFB+YW7KIxod6BdOriDDgVGaZ84
+	 UosneYVty8ohNlw8f8S/kZ0Q/4Cap9cz7RNdQXY4c+uIOLa3kApiyltYgmQtpAOOOK
+	 ucMDQPeCXh9zvXjH47meIaziZv4ubgXQkU8l+MMXfplWXb9mUw0FsnGai9Hc5RaezS
+	 lOAwx84olP/aZJSbDv214DqIkp8OmAzdTMqVCA6LgHBoZudIR3WLu5OoZ1LO5jcoMP
+	 MPUiLk9w4m/Ug==
+Message-ID: <bcaa8435-43fd-47c1-bee3-433cdf128eb5@kernel.org>
+Date: Mon, 8 Jul 2024 21:52:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: spi: amlogic,a1-spifc: make
- power-domains required
+Subject: Re: [PATCH 3/4] dt-bindings: thermal: amlogic,thermal: add
+ power-domains
 To: George Stark <gnstark@salutedevices.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, neil.armstrong@linaro.org,
  khilman@baylibre.com, jbrunet@baylibre.com,
@@ -64,7 +64,7 @@ Cc: linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
  linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org, kernel@salutedevices.com
 References: <20240708194808.1819185-1-gnstark@salutedevices.com>
- <20240708194808.1819185-2-gnstark@salutedevices.com>
+ <20240708194808.1819185-4-gnstark@salutedevices.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,19 +110,19 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240708194808.1819185-2-gnstark@salutedevices.com>
+In-Reply-To: <20240708194808.1819185-4-gnstark@salutedevices.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 08/07/2024 21:48, George Stark wrote:
-> SPI Flash Controller has dedicated power domain so make the
-> corresponding property required.
+> On newer SoCs, the thermal hardware can require a power domain to
+> operate so add corresponding property as optional by default and as
+> required for Meson A1 due to it's temperature sensor has dedicated
+> power domain.
+> 
 
-That's an ABI break. Being part of power domain does not necessarily
-mean it must be required, so your commit msg lacks rationale. Especially
-on the ABI part.
-
-
+That's again ABI break with a reason "there is power domain", so not
+really sufficient.
 
 Best regards,
 Krzysztof
