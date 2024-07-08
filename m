@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-4769-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4768-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3741892AA18
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 21:48:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8768592AA13
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 21:48:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 681C21C21911
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 19:48:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BEC81F218CA
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 19:48:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C957614EC42;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93C0714D711;
 	Mon,  8 Jul 2024 19:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="ZMHqgFrA"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="TzqfUooc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377A11DA5F;
-	Mon,  8 Jul 2024 19:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8001914B07A;
+	Mon,  8 Jul 2024 19:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720468102; cv=none; b=q9Ns0dR+A3sfZ69fvv76hRHGDcif/LeylONaMsTnOmyDKVjwi6AodCUlwJdGvl48IVedpW8cPUya6IrUil/7VCPa28QZTPe8S/zxCRJGIsJqvxGNhrCscPMwusA7TpO6d7TwTyzWQUS/Dc20ePnZ0cfoEP3AjC1bWasWby2CmMk=
+	t=1720468102; cv=none; b=mkX0Q/P2eLZhNS+5SMFsQ1hIqVA+Ajq70q6ZF9SJmyju293ncgyVb3kL4XM4D4HYy1jSlSvGvTJRCulEMSwIBVqAY93XDeHWnO6d0HLqbdGg8FLa0G56GCNeHyNXhcNdQhWKHLsUO9KUMmMkUuEsELo3TeHcYBH1xILbU2xlRPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1720468102; c=relaxed/simple;
-	bh=vY7qWycpcpAoDIjy1i/UiTUFWRFwtNf0rhr1y51nNuQ=;
+	bh=VreQyBZR5zfoY4IT23mQvpurRY048K2atVlIdQgQxKo=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aN0dpxQyXhrFF/Dssm526KuFf1QNdw6o9ptsN/qxIu2lXUD7Ybs5BlFmrEr6XeQ8X1C+TEj+bKOlMZS8zg8VTrN8hxNm5AG3VAoPNisjxUrAp6sebsDDSthcXShEUmhCf2YT0z3bqHTDGdChifb1eLNAriqsamv/UWuprljMYoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=ZMHqgFrA; arc=none smtp.client-ip=45.89.224.132
+	 MIME-Version:Content-Type; b=dJleMGGGoTW4XKGTVHDlx7kG41S+vdW6kp09qgWyRu50vK6NJEmpQLN+Y6PAgY/LM/RNIbP7yS4PQYDaFK67u0b/RqSG0e1Q1phOHmFL0e6dPHZFtgOJDkALpGYtwabnK6K7UIhYdBeemvYqUdF/tQz3JY5X+NbHnMB50Eptn/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=TzqfUooc; arc=none smtp.client-ip=37.18.73.165
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
-Received: from p-infra-ksmg-sc-msk02.sberdevices.ru (localhost [127.0.0.1])
-	by mx1.sberdevices.ru (Postfix) with ESMTP id 8D5F1120008;
+Received: from p-infra-ksmg-sc-msk01.sberdevices.ru (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id CDDA210000B;
 	Mon,  8 Jul 2024 22:48:16 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8D5F1120008
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru CDDA210000B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
 	s=mail; t=1720468096;
-	bh=eYYjDzOe3nYpG5HmNbnsVn4oH2wx26XOb/Mak2E95m8=;
+	bh=AykYDjY8q3WXRCPSUKxvV879bXlNqxPuT07GICE1L0s=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=ZMHqgFrA5GFPtPF/Td8d7r4FodzDXFsxN/3QvscNO7gMtyX8yPtUgx8oDUKiO5fie
-	 fppAx22Hz+DvFpUpf/fOIk6L6tAYDWfwrfyX8bgAUbhJPtkJZqpCb0XJhD6/QszYd3
-	 28VCriXjRC71aIAYru6PZLJX1xPOyxLDN6vsZU1NYSgJWH4joAbUiNWw7365WNmNm2
-	 MOR/LUtBEacaD4cxaabeXUefySbHUxEnvJWbdduc1o9Y1/GLDCKxFBdIa3LkJnQDkM
-	 tynldDGnemxss5+jx6Dbd75Lb0408J53ceG1a8FCahmMNcgA8JwOuC01g0MQbg05+f
-	 HnSmnsPKGiTqg==
+	b=TzqfUoocWNhHo7kmW+OLm2lfN2KAMKggWXheTWWu5neQN+6r5dDvxYUAW0SMc1Jti
+	 +y39wdQQz9d2Gtw2LktT9EwGRC0NrZDQlwo4c74gaieimeh+0smmfPGbGb3l0QrHMx
+	 uFP48oYj0d0OX6K+lZh9YxKnXBWj+qn4nd1yXqt6Jps5dACR9q3MNErBfrs5xHeikF
+	 DENtJVany/K2eV+uW/7c+0vzhpQyqHrHaumv8nMGnAXM/HDXcknJDlHPnxtFFJibZB
+	 n2Y+lgMiumTwh/rfpJpiU0cXuABnsQYZ6033Sop2E1IkMM27Ih/PBbDwYa7hzeEcJb
+	 F8br8czROaMMw==
 Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
@@ -53,7 +53,7 @@ Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.1
 Received: from work.sberdevices.ru (100.64.160.123) by
  p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 8 Jul 2024 22:48:15 +0300
+ 15.2.1118.40; Mon, 8 Jul 2024 22:48:16 +0300
 From: George Stark <gnstark@salutedevices.com>
 To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
 	<neil.armstrong@linaro.org>, <khilman@baylibre.com>, <jbrunet@baylibre.com>,
@@ -66,9 +66,9 @@ CC: <linux-i2c@vger.kernel.org>, <linux-spi@vger.kernel.org>,
 	<linux-amlogic@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <kernel@salutedevices.com>, George Stark
 	<gnstark@salutedevices.com>
-Subject: [PATCH 2/4] dt-bindings: i2c: amlogic,meson6-i2c: add optional power-domains
-Date: Mon, 8 Jul 2024 22:48:06 +0300
-Message-ID: <20240708194808.1819185-3-gnstark@salutedevices.com>
+Subject: [PATCH 3/4] dt-bindings: thermal: amlogic,thermal: add power-domains
+Date: Mon, 8 Jul 2024 22:48:07 +0300
+Message-ID: <20240708194808.1819185-4-gnstark@salutedevices.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240708194808.1819185-1-gnstark@salutedevices.com>
 References: <20240708194808.1819185-1-gnstark@salutedevices.com>
@@ -91,37 +91,56 @@ X-KSMG-AntiSpam-Rate: 0
 X-KSMG-AntiSpam-Status: not_detected
 X-KSMG-AntiSpam-Method: none
 X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 23 0.3.23 8881c50ebb08f9085352475be251cf18bb0fcfdd, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;100.64.160.123:7.1.2;salutedevices.com:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;smtp.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-KSMG-AntiSpam-Info: LuaCore: 23 0.3.23 8881c50ebb08f9085352475be251cf18bb0fcfdd, {Tracking_from_domain_doesnt_match_to}, smtp.sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;salutedevices.com:7.1.1;100.64.160.123:7.1.2;127.0.0.199:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
 X-MS-Exchange-Organization-SCL: -1
 X-KSMG-AntiSpam-Interceptor-Info: scan successful
 X-KSMG-AntiPhishing: Clean
 X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/07/08 16:01:00 #25918429
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/07/08 19:07:00 #25919740
 X-KSMG-AntiVirus-Status: Clean, skipped
 
-On newer SoCs, the I2C hardware can require a power domain to operate.
-Since the same compatible is used for older and newer SoCs make
-power-domains property optional.
+On newer SoCs, the thermal hardware can require a power domain to
+operate so add corresponding property as optional by default and as
+required for Meson A1 due to it's temperature sensor has dedicated
+power domain.
 
 Signed-off-by: George Stark <gnstark@salutedevices.com>
 ---
- Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ .../bindings/thermal/amlogic,thermal.yaml          | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-index 26bed558c6b8..c4cc8af18280 100644
---- a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
+diff --git a/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+index 01fccdfc4178..5c9147e3b734 100644
+--- a/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
 @@ -30,6 +30,9 @@ properties:
    clocks:
-     minItems: 1
+     maxItems: 1
  
 +  power-domains:
 +    maxItems: 1
 +
- required:
-   - compatible
-   - reg
+   amlogic,ao-secure:
+     description: phandle to the ao-secure syscon
+     $ref: /schemas/types.yaml#/definitions/phandle
+@@ -44,6 +47,17 @@ required:
+   - clocks
+   - amlogic,ao-secure
+ 
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - amlogic,a1-cpu-thermal
++    then:
++      required:
++        - power-domains
++
+ additionalProperties: false
+ 
+ examples:
 -- 
 2.25.1
 
