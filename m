@@ -1,108 +1,84 @@
-Return-Path: <linux-i2c+bounces-4775-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4776-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C88C92AB7B
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 23:48:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8704692AC05
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 00:26:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31C61B214D8
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 21:48:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F6C6282259
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jul 2024 22:26:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55A4614F11C;
-	Mon,  8 Jul 2024 21:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC9D14F9FA;
+	Mon,  8 Jul 2024 22:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JaNN1c8O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jly/SpBk"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 029DE14EC43;
-	Mon,  8 Jul 2024 21:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51B43CF63;
+	Mon,  8 Jul 2024 22:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720475297; cv=none; b=V9IeulTB/J3dvZ0dkBjjps9ueOMb/+VB/Lr4IeEqESzA9oCpbGsaRTwhnCCxY5e/Sfj+vAP+K8LbpcZCsQNxhsBT3qwKuUoLlp1TPJYW9tBRjVmOW/3xXrBWPv+07rHtQwtbXTpSz6Q5KBGEn/hxQjXGaHm53W0u67bHT7Rh3Fk=
+	t=1720477603; cv=none; b=tm2yd9E01NIwglW6GIL0aAIQCZWVQuhzDrPffUxJo9s022je+Zh1OS7Z7wC9q9sSQy7e1g8JXScniy2axmes1Dfh9o+0tFOXDmUEee1boBAkVi/lyDNbhYDEvNhdZNsaHpLnddDrMbgXAQhp1ZgiGR4cyKcCSP4N6kNpHgm2a6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720475297; c=relaxed/simple;
-	bh=58cUh743dQOrMkAUwZvw9ESyA3J+L2orhwmh8ALge1A=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=DLFLsrGq8dulnhVK4A/kNBKGQmnsAOLQQLxaiK8YicrCiofu4zzw4NAErwV7QybMtVByYHyFHvA67kmkIOsU7sAv3b5eEN9kftCaxouHCEJmI6lClqFrur95khEfXs353LEjdh45VbWc7pqVf3lIZLglQ6Wuzfq43Y2QAiBXwik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JaNN1c8O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38DE5C116B1;
-	Mon,  8 Jul 2024 21:48:16 +0000 (UTC)
+	s=arc-20240116; t=1720477603; c=relaxed/simple;
+	bh=cXOksX8i8kMxB3z6SFQbhz7mh95szg7WejnNbiRlTpg=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OPt7NL+pmHO+yKUFBHyq74VwF+ZJPk+GeAUwbOJFAbxtA8UEcLNa5aMMKe7QwEQzE/pnzAHZYTADhZe10wx/fILGvfcYPvRySUpTESBKcwv0NtCvR6kwqA3SKW3Oel/J1c34/t2CqHglr8FnDvkL/FniegEiJKPgl/DltOibCzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jly/SpBk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005A3C116B1;
+	Mon,  8 Jul 2024 22:26:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720475296;
-	bh=58cUh743dQOrMkAUwZvw9ESyA3J+L2orhwmh8ALge1A=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=JaNN1c8OyAPkwuzPpGIQ/dJzBrA9gLBtTF4untiSSorTgPz52kCpG4m1ivgICujV2
-	 zM1bzIa0L1B5/vJO4UaGIN752t4mvj+bPijrEp71z1L899ue+oLozt3jVnLwu87ae6
-	 crxn9bmpoZ/4V0nlKCCuSQaAvwihC5vuPzQqdbRSaSynIxcwdZmTV7KH7jpgrOEr8h
-	 w+6JbSqIaELHULuaW6s5VK8qS51sCawyWsHQk7c9x8ukTHoL/wDIkpl2yaaeu0R+Sx
-	 +jLDMOjWI9wpI80zGP/dOyAr/6/Bv4W2Kf9M5720JBH1WGJKYcUbUO5KzyP81ku4eU
-	 PEvjHwpjPiOdw==
-Date: Mon, 08 Jul 2024 15:48:15 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1720477602;
+	bh=cXOksX8i8kMxB3z6SFQbhz7mh95szg7WejnNbiRlTpg=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=Jly/SpBk8CZAZ4gHL252Cto104of5S2XaXCjviTe0PAsDmrwr/JIUpnAtrKrarEei
+	 ELvHFEuAscaqppWfc2Ajjj3Gml3GmJonH4HJmoluEoLLyrC6pkak0+nIpLZrVBrPg7
+	 auVMkF4RCtjWY1VyMFPiP53vZkZwAk2FhV4ertYqpjXqwSAJmc6Lcnwx6oi2e30Uiw
+	 DaGMLtW0ccwhLvCExT/4PEqMEeblWnUEcygK1BMIm28NsyKzzG4hMlv6lSCxfI3SR+
+	 V2zI531VIP3vz1fbZJZkCDU0WeZ4QbRhyQ7ejJRiDRavJU8+xHePjvq4QF1BDaIUt1
+	 5nJYnSqLRhecw==
+Date: Tue, 9 Jul 2024 00:26:39 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Markus Elfring <Markus.Elfring@web.de>, linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v2 3/3] i2c: rcar: minor changes to adhere to coding style
+Message-ID: <5trq7ondxem43rfnckonywhrucvjvecc52pvyik2fsz64ivknv@r22caitz5y3s>
+References: <20240707082848.5424-4-wsa+renesas@sang-engineering.com>
+ <f93eda7e-e65f-42e9-b96d-e88290201ca0@web.de>
+ <Zop2vNCrzDmEKKiO@shikoro>
+ <Zou2g8nGBD7Pv8kR@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: George Stark <gnstark@salutedevices.com>
-Cc: rafael@kernel.org, krzk+dt@kernel.org, hkallweit1@gmail.com, 
- b.galvani@gmail.com, lukasz.luba@arm.com, conor+dt@kernel.org, 
- rui.zhang@intel.com, broonie@kernel.org, devicetree@vger.kernel.org, 
- linux-pm@vger.kernel.org, neil.armstrong@linaro.org, 
- daniel.lezcano@linaro.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, khilman@baylibre.com, 
- mmkurbanov@sberdevices.ru, linux-spi@vger.kernel.org, 
- martin.blumenstingl@googlemail.com, linux-i2c@vger.kernel.org, 
- jbrunet@baylibre.com, glaroque@baylibre.com, 
- linux-amlogic@lists.infradead.org, kernel@salutedevices.com
-In-Reply-To: <20240708194808.1819185-2-gnstark@salutedevices.com>
-References: <20240708194808.1819185-1-gnstark@salutedevices.com>
- <20240708194808.1819185-2-gnstark@salutedevices.com>
-Message-Id: <172047529524.3973694.1825285851935530574.robh@kernel.org>
-Subject: Re: [PATCH 1/4] dt-bindings: spi: amlogic,a1-spifc: make
- power-domains required
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Zou2g8nGBD7Pv8kR@shikoro>
 
+Hi Wolfram,
 
-On Mon, 08 Jul 2024 22:48:05 +0300, George Stark wrote:
-> SPI Flash Controller has dedicated power domain so make the
-> corresponding property required.
+On Mon, Jul 08, 2024 at 11:50:59AM GMT, Wolfram Sang wrote:
 > 
-> Signed-off-by: George Stark <gnstark@salutedevices.com>
-> ---
->  Documentation/devicetree/bindings/spi/amlogic,a1-spifc.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+> > > > -};
+> > > > +}
+> > > …
+> > > 
+> > > How do you think about to omit any blank lines at such source code places?
+> > 
+> > Oh yes, that newline should go as well. Thanks!
 > 
+> Andi, is it okay if I only resend this patch?
 
-My bot found errors running 'make dt_binding_check' on your patch:
+That's OK... if you want I can remove those blank lines before
+applying them, it's just two cases in your patch.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/amlogic,a1-spifc.example.dtb: spi@fd000400: Unevaluated properties are not allowed ('power-domains' was unexpected)
-	from schema $id: http://devicetree.org/schemas/spi/amlogic,a1-spifc.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240708194808.1819185-2-gnstark@salutedevices.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Andi
 
