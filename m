@@ -1,46 +1,47 @@
-Return-Path: <linux-i2c+bounces-4800-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4798-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6653992C299
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 19:36:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF28692C296
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 19:35:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FDC11C23346
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 17:36:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9D911C2200C
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 17:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20BB17B05F;
-	Tue,  9 Jul 2024 17:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC3D17B023;
+	Tue,  9 Jul 2024 17:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="kRvWZPpG"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="nLYoLWqy"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711E17F476;
-	Tue,  9 Jul 2024 17:35:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FF71B86CA;
+	Tue,  9 Jul 2024 17:35:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720546546; cv=none; b=e4nJ7gE8Qo8rMD/DQnjZ5eSERjlN4qr8cCZO1JzaEHtR1Pd2lGkAwFmJNMgYBL5a0Cfg2lLxjYlFpwM7pah81AcWS3SMTbLWJb+GHUA+gxZEuEQ3iqiALwF1idb9ZiL8+sRgqJAjR+xleDc5O32mCqNoVo8buqOuZOoJnaRiHIA=
+	t=1720546544; cv=none; b=E3UTYsHmuJxm0IhOwk0b/w6Pd285US0UJnkiAvomFN+Dqk7k97CxR86ixfibw0opBece8lJe2QWJHXOkHZMvw4rm9Tqo9sOf/malhhDVu2bEJjNPGvwK6yOgD4BDuCkfaE+a40tqDxQ081j7QUvPPzA55r/7BlozOV9lPhfgEp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720546546; c=relaxed/simple;
-	bh=He4okGE77ma+iy3EptPWaqUz3h77VnZ4vgs97Uw/Kuc=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=snMwACcyPwQDv4VfxyvYtNe0Z5Edu2UgLFEg+i5m/NR1kAxTzGTBI5ZQ6rohcUQYKznh94OEWNt6H8aVOtVa+Pvv+wJDjONUM81ERCAof1W4bxouR9t9fuHJJus+36b80gz3oam3SlS35UH2Ucb99coVdSE4JpvmTWBREuApYNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=kRvWZPpG; arc=none smtp.client-ip=159.69.126.157
+	s=arc-20240116; t=1720546544; c=relaxed/simple;
+	bh=xD0bGdV/2IW+jndC2zwfx+FiqpbSHBhUIj4wvFJCbMM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jgU1ueyIkVp67tjDYaaJc4pvl/6MTCIlNJuh291jnw1s8v1Mh6Zx4mZyg3XQRTolvH6ETHi6b+8M+hLv+EmHJNLKcvnzdqyLe6ajFxjRpXbZqJUwMOwYy3foL5qYFpbGQUTYEDqlasxNIKVHb19wxeGhKb3w6pYFJIJXxalW5/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=nLYoLWqy; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1720546537;
-	bh=He4okGE77ma+iy3EptPWaqUz3h77VnZ4vgs97Uw/Kuc=;
-	h=From:Subject:Date:To:Cc:From;
-	b=kRvWZPpGwUWw39OyvQnMqmajDoAd0WfeV3Zi7GiefuI5bclC/DMOI1MzMbA4vsZa7
-	 o15jCShxiRQihj+Hb4S17SFpmhxIOs6mIH2jHhSxdIS16u1Z2JPlPYJzo5SIIy15Co
-	 1E/ESPr7oJVkgfMnloHEumsmnuyRdYseVQ+9cQok=
+	bh=xD0bGdV/2IW+jndC2zwfx+FiqpbSHBhUIj4wvFJCbMM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=nLYoLWqyUMsKeXmmSWPFKZrtBRsth1b1TuVPXZCjPtwn86kO+JYgz4O0KkgbgOdlF
+	 Xs+OxjBATcleiCP3lV4H8/Umhvy47bgM41Ak3TEVC17XD1OCsAv4Gaj2BeynhpCi8g
+	 sdw3TQmA1p3Ro47gqDdd7z82V0Q0E8Kwq7gTq+Oo=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 0/2] i2c: smbus cleanups and SPD support for piix4
-Date: Tue, 09 Jul 2024 19:35:34 +0200
-Message-Id: <20240709-piix4-spd-v3-0-9d1daa204983@weissschuh.net>
+Date: Tue, 09 Jul 2024 19:35:35 +0200
+Subject: [PATCH v3 1/2] i2c: smbus: remove i801 assumptions from SPD
+ probing
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -49,10 +50,9 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAOZ0jWYC/22MwQ6CMBAFf4X07Jq2FLCe/A/jgZat3QuQFiuG8
- O8WLprocV7ezMIiBsLIzsXCAiaKNPQZykPBrG/7OwJ1mZnkUvGq5DASzQri2EGprahqI6WuNMv
- /MaCjeW9db5k9xWkIrz2dxLb+qyQBArQ1TrQGjVPi8kSKMVr/8MceJ7alkvzotWy+dQkcatFYV
- I05Oad+9HVd31p7wfrmAAAA
+Message-Id: <20240709-piix4-spd-v3-1-9d1daa204983@weissschuh.net>
+References: <20240709-piix4-spd-v3-0-9d1daa204983@weissschuh.net>
+In-Reply-To: <20240709-piix4-spd-v3-0-9d1daa204983@weissschuh.net>
 To: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>
 Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Guenter Roeck <linux@roeck-us.net>, 
@@ -60,60 +60,57 @@ Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
  Heiner Kallweit <hkallweit1@gmail.com>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1720546537; l=1620;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720546537; l=1642;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=He4okGE77ma+iy3EptPWaqUz3h77VnZ4vgs97Uw/Kuc=;
- b=epRxzLkUn4MZ8VTbPHbNYx/+efwIMfwUf9oW4OrIFktUePymBsd1ovtW2ksdau0tFxziPArYE
- kh+1FxpPRn5BmmltmrHW6XQs8RZvGQ7VEvEKnMxCp8h3IPBc2fqTXy9
+ bh=xD0bGdV/2IW+jndC2zwfx+FiqpbSHBhUIj4wvFJCbMM=;
+ b=IxmaWPNNkojL7XR0yRA11ZopG7fu2IPdYS0E7KUMMCUhnTnbox5cHYM2vSp2OalN/Y1OSfmut
+ Bgg1mNxoS1sCrOHWq5BnHz7sx8BbXA0wA/nsEDwSMG13zdmua+IlWOa
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Patches 1 is a preparation patch.
-Patch 2 is the actual change to piix4.
-
-Patch 1 drops the warning about muxed busses.
-I didn't feel that the warning only would warrant the additional
-complexity it introduces with multiple callers of i2c_register_spd().
-
-If others feel different, maybe a more generic warning/info or a source
-code comment would suffice.
-
-On a machine with 32 slots of which 16 are populated only the first 8
-slots are addressable, half of which are empty.
-Unfortunately I couldn't run a custom kernel for testing.
-But manually instantiating ee1004 devices worked as expected,
-so the proposed changes should also work.
-
-Tested with spd5118 and two DIMMs.
+The check and warning are very specific to the SPD usage of the i801
+driver. That was fine as long as i801 was the only caller of
+i2c_register_spd(). Now that piix4 will be added as another user of that
+function, the check and warning are not accurate anymore.
+Instead of introducing a more complicated calling protocol only to print
+a warning, drop the warning.
+Even in cases where not all slots can be probed,
+then at least probe the 8 slots that can be.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Changes in v3:
-- Apply tags from Guenter
-- Squash commits 1-3, and reword the message slightly
-- Drop Fixes:
-- Link to v2: https://lore.kernel.org/r/20240627-piix4-spd-v2-0-617ce47b8ff4@weissschuh.net
+ drivers/i2c/i2c-smbus.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-Changes in v2:
-- Add new i2c-smbus prep patches
-- Only register SPD for port 0
-- Link to v1: https://lore.kernel.org/r/20240530-piix4-spd-v1-1-9cbf1abebf41@weissschuh.net
+diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+index f809f0ef2004..f0ac35fd0c5a 100644
+--- a/drivers/i2c/i2c-smbus.c
++++ b/drivers/i2c/i2c-smbus.c
+@@ -352,18 +352,11 @@ void i2c_register_spd(struct i2c_adapter *adap)
+ 		return;
+ 
+ 	/*
+-	 * If we're a child adapter on a muxed segment, then limit slots to 8,
+-	 * as this is the max number of SPD EEPROMs that can be addressed per bus.
++	 * The max number of SPD EEPROMs that can be addressed per bus is 8.
++	 * If more slots are present either muxed or multiple busses are
++	 * necessary or the additional slots are ignored.
+ 	 */
+-	if (i2c_parent_is_i2c_adapter(adap)) {
+-		slot_count = 8;
+-	} else {
+-		if (slot_count > 8) {
+-			dev_warn(&adap->dev,
+-				 "More than 8 memory slots on a single bus, contact i801 maintainer to add missing mux config\n");
+-			return;
+-		}
+-	}
++	slot_count = min(slot_count, 8);
+ 
+ 	/*
+ 	 * Memory types could be found at section 7.18.2 (Memory Device — Type), table 78
 
----
-Thomas Weißschuh (2):
-      i2c: smbus: remove i801 assumptions from SPD probing
-      i2c: piix4: Register SPDs
-
- drivers/i2c/busses/Kconfig     |  1 +
- drivers/i2c/busses/i2c-piix4.c |  4 ++++
- drivers/i2c/i2c-smbus.c        | 15 ++++-----------
- 3 files changed, 9 insertions(+), 11 deletions(-)
----
-base-commit: 9746c2dd0307c80bd695e4e3065367f3e0154723
-change-id: 20240530-piix4-spd-39c156b22959
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.45.2
 
 
