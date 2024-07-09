@@ -1,151 +1,95 @@
-Return-Path: <linux-i2c+bounces-4792-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4793-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4676292B855
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 13:33:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7AB592B870
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 13:38:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 015B02827E0
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 11:33:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D915F1C22373
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 11:38:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73CD7157A6C;
-	Tue,  9 Jul 2024 11:33:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A22149C79;
+	Tue,  9 Jul 2024 11:37:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="r15hD5H3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kooiVBi7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E73255E4C;
-	Tue,  9 Jul 2024 11:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88FE1E522
+	for <linux-i2c@vger.kernel.org>; Tue,  9 Jul 2024 11:37:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720524792; cv=none; b=SgG2vyJya8PNgFPThZaE8nKCIPhbv9T9cg4Zrn4MgUdMAzo7P+ZirNos4V98JbTUg+IUv9KDRhKN+bpXYSrN1nyMDKuPIKkY5bNP6X70sE4pf3M9pifAb1ctIlaXQRsn94iv8Kc3ta51zDpiqpGsE22s4ZGCoRpsxKjsOq8q96M=
+	t=1720525079; cv=none; b=czVbqG8Nae+eSIjZqHUEweTPM1nwVvIynW3ClKZdpdmNCenxk+I395QVju865D9KtS8NWQiAQ+5WskplEcc9FYxnv6IyMdU+2Ev/BaFgKimw2Q9oaHPQ8iDVwL7kofAXU8r4sh1drpP2BIJk/ZLtSdK2wQGyQUZMDrJFph0iMtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720524792; c=relaxed/simple;
-	bh=lBtZOkfJyPcpzXO8Qc1kG/ymRCLuDT5d0JAGRrfTtQ4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FAbapoWDQG3a1/qy0dnrE8wKWK8n2qgQCgyGJFHoq1CRj5kEHbVkHh6sH6+BGpTPg+wGwnzQjtGl3seRtVa7Yp/bHTdTsfOULt0NQw486JIgJlqtc2Qsz1VU8ga5hGw/iNMi1X19G0hhCsn/izjAcd9HSaOf6XcUmtotcqwsWEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=r15hD5H3; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4696pDix011130;
-	Tue, 9 Jul 2024 13:32:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=selector1; bh=/S6wJW9F8VTUvVvLuJOhhpUi
-	VKNmEzWE/It5IEUxaQk=; b=r15hD5H30b3XfB5p1l9PU/nofzObR3/VQv8Xf5S5
-	r145yX84W9UzW6RRWdm0IRTdpKXMh60Fcq0CpAkQFv2/xTGdgvdLv+Ml/n5L2wyN
-	otO509vQwl31nSe3ZvC+p4TJSY3G1qc0bNwFOMkZBkHdcCfGRdBZC+AVEInsa5W+
-	Wwa/0zakjeWHvwwpFTpJ72L3NYDN8yAllaZxwpL/qR4XhRM+EIfqUUd0YNrw9t+p
-	+irDdr8BU6xz7dmhZ0Zt4JJJRM3XQJU8T8p9vlSoLcvZ0c/Ae5SHCUMr9RomwJ59
-	2cc7LEdhnmgGfylfWoJf5DGH5ztT0xgJVn5nvljRRRCSjg==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 407gvhs407-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 09 Jul 2024 13:32:54 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 8E0FA40045;
-	Tue,  9 Jul 2024 13:32:48 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 36ABF21ED54;
-	Tue,  9 Jul 2024 13:32:22 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 9 Jul
- 2024 13:32:21 +0200
-Date: Tue, 9 Jul 2024 13:32:16 +0200
-From: Alain Volmat <alain.volmat@foss.st.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-CC: <linux-i2c@vger.kernel.org>,
-        Pierre-Yves MORDRET
-	<pierre-yves.mordret@foss.st.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Maxime
- Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 47/60] i2c: stm32f4: reword according to newest
- specification
-Message-ID: <20240709113216.GA57449@gnbcxd0016.gnb.st.com>
-References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
- <20240706112116.24543-48-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1720525079; c=relaxed/simple;
+	bh=RzsfjCRuMVXjrLoMzQVrdW0dNd+mgjm3CFp7vGGdMSY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=kZYPwql56ja4ABHjfQY90RB1LP6YlII9YP0TCT6D0mGCK4+3ARyj8CliogJ7jjaHKcLKRZKI4sOf7uNdu7zGCeJIqjzki1KrsLGrRye7PA3V0pNzBQpz91gGGG464kRBNr+6eiOoug+5id8IS6/xUrGTw31rCzPpOZwT+n7BshE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kooiVBi7; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52eafa1717bso2324422e87.2
+        for <linux-i2c@vger.kernel.org>; Tue, 09 Jul 2024 04:37:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720525076; x=1721129876; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RzsfjCRuMVXjrLoMzQVrdW0dNd+mgjm3CFp7vGGdMSY=;
+        b=kooiVBi7keS4VtdhJlY6cej1iDnEbhztBxte7rP+/hkjyiN3Ae9oLi/ldq8IiqnH6V
+         vgRKvNnaT6xcXKYlqyJ8kevnVLckAbUKM79/h/ORVbIXOSBA7V6eTGVFTOiE2BAcebcp
+         Pe0il5SOkGdViVJufuOsWiH9m+Dh7nHcLXfRDKHtdJoCnQ3efnwihI7/aU/dRL6SlrE1
+         3nMne1sx5d0pEq96CK5dxzgN+SebJx5NQa1sf3iaM7wifI0QupzhFmgZJZzBI2ZYTpFN
+         G4jKSNrEpZEGZfs3/+wo7iWaW7q9E+Dgsgky0VDoYXBWNcYfnl35X4qZYomKjVDhilPN
+         aSvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720525076; x=1721129876;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RzsfjCRuMVXjrLoMzQVrdW0dNd+mgjm3CFp7vGGdMSY=;
+        b=KZaFCBjxYWCj5gx2O+jPVtPGrnkrMhOileMJuO1/moF0LGQTeqQy9LNw2Dl2l2gfqV
+         gbHsgQ9EDBB2OSJl6iZGmuuXoe4T6OrIe19pGfhozmS4fKlhUypj7euJUy39tNFZ+A7X
+         jlHYe3DwDAAYkPm03FhJETgw3pX2AKrmJI6kbQIE9I9AHW/Y+n8mM/bN8Yesq5CI3peo
+         cYAROMYUw7mOY7hkqbMIPMoyr2RIRmgWZH4mKox1ezvfSYWi8VNa5Rv+zyVMPWoMk/af
+         cCRxiEslc/O0BJp4v7KG8SjncA1P9vdb5wVdqFbOA9kPlbZE0FdlQ6ZRin+wMfnuf6Jk
+         AbXA==
+X-Gm-Message-State: AOJu0YwvzhHP3PE1G2S3eNsNi0KhnGSNkc4QBvjnmNkOie+B13Qas8ar
+	yhe/grGGC7b7xtE5Dc0SGG3MP9DXORbmnqkEfi8OxPFSQaSkPnFUf6Qv+8IfDGZjJRbmHmd//Rf
+	vWzpOCbR1I1xHWZU9NEL5RkrV72ApTKZU
+X-Google-Smtp-Source: AGHT+IHc+oJvO0N21NZ41c6FCsZxupksZDaUL/jvdvQDRgL4yxac29Rjy8QwXpWCiOCvDTkJEkIHtvwhgDWo7xoVqJY=
+X-Received: by 2002:a05:6512:401a:b0:52e:9423:867f with SMTP id
+ 2adb3069b0e04-52eb99a137bmr1593047e87.36.1720525075516; Tue, 09 Jul 2024
+ 04:37:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240706112116.24543-48-wsa+renesas@sang-engineering.com>
-X-Disclaimer: ce message est personnel / this message is private
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-09_02,2024-07-08_01,2024-05-17_01
+From: Kirill Yatsenko <kiriyatsenko@gmail.com>
+Date: Tue, 9 Jul 2024 13:37:44 +0200
+Message-ID: <CAH0WhdaLameP-Prvo0=empBsPhQu4CW+H4jKwwhe-gy1g4uMHw@mail.gmail.com>
+Subject: Generic i2c recovery, STOP condition question
+To: wsa+renesas@sang-engineering.com
+Cc: linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Wolfram,
+I'd like to know in which condition the STOP should be generated on the bus.
 
-On Sat, Jul 06, 2024 at 01:20:47PM +0200, Wolfram Sang wrote:
-> Change the wording of this driver wrt. the newest I2C v7 and SMBus 3.2
-> specifications and replace "master/slave" with more appropriate terms.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+By default the SDA line is set to input in i2c-core, therefore no STOP condition
+is send.
 
-Acked-by: Alain Volmat <alain.volmat@foss.st.com>
+In the "Linux I2C fault injection" doc, it's written:
 
-> ---
->  drivers/i2c/busses/i2c-stm32f4.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-stm32f4.c b/drivers/i2c/busses/i2c-stm32f4.c
-> index f8b12be6ef55..230fff0c0bf9 100644
-> --- a/drivers/i2c/busses/i2c-stm32f4.c
-> +++ b/drivers/i2c/busses/i2c-stm32f4.c
-> @@ -95,7 +95,7 @@
->  
->  /**
->   * struct stm32f4_i2c_msg - client specific data
-> - * @addr: 8-bit slave addr, including r/w bit
-> + * @addr: 8-bit target addr, including r/w bit
->   * @count: number of bytes to be transferred
->   * @buf: data buffer
->   * @result: result of the transfer
-> @@ -480,7 +480,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32f4_i2c_dev *i2c_dev)
->  
->  /**
->   * stm32f4_i2c_handle_rx_addr() - Handle address matched interrupt in case of
-> - * master receiver
-> + * controller receiver
->   * @i2c_dev: Controller's private data
->   */
->  static void stm32f4_i2c_handle_rx_addr(struct stm32f4_i2c_dev *i2c_dev)
-> @@ -643,7 +643,7 @@ static irqreturn_t stm32f4_i2c_isr_error(int irq, void *data)
->  
->  	/*
->  	 * Acknowledge failure:
-> -	 * In master transmitter mode a Stop must be generated by software
-> +	 * In controller transmitter mode a Stop must be generated by software
->  	 */
->  	if (status & STM32F4_I2C_SR1_AF) {
->  		if (!(msg->addr & I2C_M_RD)) {
-> @@ -749,7 +749,7 @@ static u32 stm32f4_i2c_func(struct i2c_adapter *adap)
->  }
->  
->  static const struct i2c_algorithm stm32f4_i2c_algo = {
-> -	.master_xfer = stm32f4_i2c_xfer,
-> +	.xfer = stm32f4_i2c_xfer,
->  	.functionality = stm32f4_i2c_func,
->  };
->  
-> -- 
-> 2.43.0
-> 
+`This is why bus recovery (up to 9 clock pulses) must either check SDA or send
+additional STOP conditions to ensure the bus has been released
+
+But where it's coming from, is there any documentation specifying if
+the controller need to generate STOP or not during the bus recovery?
+
+For example, in AN-686 "Implementing an I2C Reset" by Analog Devices it is
+written that the master needs to send STOP after it detects the SDA signal high.
+
+Best Regards
 
