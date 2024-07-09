@@ -1,213 +1,151 @@
-Return-Path: <linux-i2c+bounces-4791-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4792-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0964C92B57F
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 12:40:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4676292B855
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 13:33:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D4631C22867
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 10:40:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 015B02827E0
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 11:33:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A5C9156F44;
-	Tue,  9 Jul 2024 10:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73CD7157A6C;
+	Tue,  9 Jul 2024 11:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="r15hD5H3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BAD156883
-	for <linux-i2c@vger.kernel.org>; Tue,  9 Jul 2024 10:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E73255E4C;
+	Tue,  9 Jul 2024 11:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720521592; cv=none; b=nAZLL6zecL5I7qSxygTP5mqbi0UsDnMXJpdVBReT83Z2FYHO1dQjuGyTKwG2zM/izNz5D8HbGIgewS8SbuIuR8u/lpoIwRMHlkAoi1yH9xAYrGu8rxJrGsR49v0+umWqiVCLN0ifBy4hR2n/bd567aewvYc9+h2K0J+PKrX1zkE=
+	t=1720524792; cv=none; b=SgG2vyJya8PNgFPThZaE8nKCIPhbv9T9cg4Zrn4MgUdMAzo7P+ZirNos4V98JbTUg+IUv9KDRhKN+bpXYSrN1nyMDKuPIKkY5bNP6X70sE4pf3M9pifAb1ctIlaXQRsn94iv8Kc3ta51zDpiqpGsE22s4ZGCoRpsxKjsOq8q96M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720521592; c=relaxed/simple;
-	bh=dkzS4Rt/F9bV/4+ZvTyk+sKdEfjnuTkeRQWt5y9Atx4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IR5qeJmlnXrxNytSnqsbITdhXvTS7aL63sivRLyK0uNFo1+VzHtH2NxPdQqW5I8Tz7VlWyvZOKHyUOUHAxDJVPkTklwmSv8GbmWuBoErlUFOcNurgvaRMV4S60oMFilcj4lBrhxKjoTsG5whC7AOd2Ui8Coi0uCl6oP54mpi4mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sR8FD-0003rR-B5; Tue, 09 Jul 2024 12:38:47 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sR8F7-008G9a-MD; Tue, 09 Jul 2024 12:38:41 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sR8F7-006Uv6-1k;
-	Tue, 09 Jul 2024 12:38:41 +0200
-Date: Tue, 9 Jul 2024 12:38:41 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Maxime Ripard <mripard@kernel.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Russell King <linux@armlinux.org.uk>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Vladimir Zapolskiy <vz@mleia.com>, Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, linux-mtd@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	imx@lists.linux.dev, linux-omap@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-	openbmc@lists.ozlabs.org, linuxppc-dev@lists.ozlabs.org,
-	linux-mips@vger.kernel.org, loongarch@lists.linux.dev
-Subject: Re: [PATCH 4/9] mtd: devices: add AT24 eeprom support
-Message-ID: <20240709103841.7x7n4hdtqrunyoc3@pengutronix.de>
-References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
- <20240701-b4-v6-10-topic-usbc-tcpci-v1-4-3fd5f4a193cc@pengutronix.de>
- <07b701a9-7b52-45b7-8dba-1c25d77cbf15@linaro.org>
- <mafs0ikxnykpr.fsf@kernel.org>
- <20240702-congenial-vigilant-boar-aeae44@houat>
- <mafs0ed8byj5z.fsf@kernel.org>
- <20240702-mighty-brilliant-eel-b0d9fa@houat>
- <20240708084440.70186564@xps-13>
- <20240709092214.omr7ccphdzdk7z7j@pengutronix.de>
- <20240709114302.3c604ef3@xps-13>
+	s=arc-20240116; t=1720524792; c=relaxed/simple;
+	bh=lBtZOkfJyPcpzXO8Qc1kG/ymRCLuDT5d0JAGRrfTtQ4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FAbapoWDQG3a1/qy0dnrE8wKWK8n2qgQCgyGJFHoq1CRj5kEHbVkHh6sH6+BGpTPg+wGwnzQjtGl3seRtVa7Yp/bHTdTsfOULt0NQw486JIgJlqtc2Qsz1VU8ga5hGw/iNMi1X19G0hhCsn/izjAcd9HSaOf6XcUmtotcqwsWEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=r15hD5H3; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4696pDix011130;
+	Tue, 9 Jul 2024 13:32:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=selector1; bh=/S6wJW9F8VTUvVvLuJOhhpUi
+	VKNmEzWE/It5IEUxaQk=; b=r15hD5H30b3XfB5p1l9PU/nofzObR3/VQv8Xf5S5
+	r145yX84W9UzW6RRWdm0IRTdpKXMh60Fcq0CpAkQFv2/xTGdgvdLv+Ml/n5L2wyN
+	otO509vQwl31nSe3ZvC+p4TJSY3G1qc0bNwFOMkZBkHdcCfGRdBZC+AVEInsa5W+
+	Wwa/0zakjeWHvwwpFTpJ72L3NYDN8yAllaZxwpL/qR4XhRM+EIfqUUd0YNrw9t+p
+	+irDdr8BU6xz7dmhZ0Zt4JJJRM3XQJU8T8p9vlSoLcvZ0c/Ae5SHCUMr9RomwJ59
+	2cc7LEdhnmgGfylfWoJf5DGH5ztT0xgJVn5nvljRRRCSjg==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 407gvhs407-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Jul 2024 13:32:54 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 8E0FA40045;
+	Tue,  9 Jul 2024 13:32:48 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 36ABF21ED54;
+	Tue,  9 Jul 2024 13:32:22 +0200 (CEST)
+Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 9 Jul
+ 2024 13:32:21 +0200
+Date: Tue, 9 Jul 2024 13:32:16 +0200
+From: Alain Volmat <alain.volmat@foss.st.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+CC: <linux-i2c@vger.kernel.org>,
+        Pierre-Yves MORDRET
+	<pierre-yves.mordret@foss.st.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Maxime
+ Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 47/60] i2c: stm32f4: reword according to newest
+ specification
+Message-ID: <20240709113216.GA57449@gnbcxd0016.gnb.st.com>
+References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
+ <20240706112116.24543-48-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240709114302.3c604ef3@xps-13>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20240706112116.24543-48-wsa+renesas@sang-engineering.com>
+X-Disclaimer: ce message est personnel / this message is private
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-09_02,2024-07-08_01,2024-05-17_01
 
-On 24-07-09, Miquel Raynal wrote:
-> Hi Marco,
+Hi Wolfram,
+
+On Sat, Jul 06, 2024 at 01:20:47PM +0200, Wolfram Sang wrote:
+> Change the wording of this driver wrt. the newest I2C v7 and SMBus 3.2
+> specifications and replace "master/slave" with more appropriate terms.
 > 
-> > > > > >> I also found a thread from 2013 by Maxime Ripard (+Cc) suggesting adding
-> > > > > >> EEPROMs to MTD [1]. The main purpose would have been unifying the EEPROM
-> > > > > >> drivers under a single interface. I am not sure what came of it though,
-> > > > > >> since I can't find any patches that followed up with the proposal.    
-> > > > > >
-> > > > > > That discussion led to drivers/nvmem after I started to work on
-> > > > > > some early prototype, and Srinivas took over that work.    
-> > > > > 
-> > > > > So would you say it is better for EEPROM drivers to use nvmem instead of
-> > > > > moving under MTD?    
-> > > > 
-> > > > I thought so at the time, but that was more than 10y ago, and I have
-> > > > followed neither nvmem nor MTD since so I don't really have an opinion
-> > > > there.
-> > > > 
-> > > > It looks like drivers/misc/eeprom/at24.c has support for nvmem though,
-> > > > and MTD can be used as an nvmem provider too, so it's not clear to me
-> > > > why we would want to create yet another variant.
-> > > > 
-> > > > But again, you shouldn't really ask me in the first place :)
-> > > > 
-> > > > I'm sure Miquel, Srinivas, and surely others, are much more relevant to
-> > > > answer that question.  
-> > > 
-> > > More relevant, I doubt, but just a feeling: EEPROMs have their own
-> > > subsystem now, NVMEM, which, as Maxime said, was initially written for
-> > > that very specific case. EEPROMs don't have the complexity of MTD
-> > > devices, and thus pulling the whole MTD subsystem just for getting
-> > > partitions seems counter intuitive to me. You can definitely "split"
-> > > EEPROM devices with NVMEM as well anyway.  
-> > 
-> > I asked for feedback on my RFC [1] and all I got was to merge both
-> > drivers into one and make the driver backward compatible, which I did by
-> > this commit.
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Acked-by: Alain Volmat <alain.volmat@foss.st.com>
+
+> ---
+>  drivers/i2c/busses/i2c-stm32f4.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> I'm sorry for not bringing this earlier.
-
-The purpose of the RFC was exactly to figure out the way to go therefore
-I'm a bit surprised now :/
-
-> > > Overall I think the idea of getting rid of these misc/ drivers is goes
-> > > into the right direction, but registering directly into NVMEM makes
-> > > more sense IMO.  
-> > 
-> > So you propose to have two places for the partition handling (one for
-> > MTD and one for NVMEM) instead of one and moving the code into NVMEM
-> > directly?
-> 
-> Why two places for the partitions handling? Just one, in NVMEM. Also
-
-Without checking the details I think that converting the MTD
-partitioning code into NVMEM partitioning code is a bigger task. As you
-said below there are many legacy code paths you need to consider so they
-still work afterwards as well.
-
-> usually EEPROMs don't require very advanced partitioning schemes,
-> unlike flashes (which are the most common MTD devices today).
-
-As said in my cover letter EEPROMs can become quite large and MTD
-supports partitioning storage devices which is very handy for large
-EEPROMs as well.
-
-> > That doesn't sound right to me either. Also I don't get the
-> > point why EEPROMs can't be handled by the MTD layer?
-> 
-> They can, but should they? Just compile the two layers and observe
-> the size difference. MTD is complex and old, carries a lot of history,
-> and the user interface is also not straightforward because you need to
-> handle pages, blocks, erases, bitflips, ECC stats, OOB bytes and
-> positions, two OTP areas... None of that exists in the EEPROM world. So
-> why would you want to register into MTD and pull a huge subsystem while
-> there is a much more recent, simpler and way lighter subsystem fitting
-> much better your device?
-
-Didn't checked the size but the honest, MTD provides many Kconfig
-switches to trim the size down. As of now the mtd.o is made of up to 5
-(6 if chipreg.o is counted -> should be an opt) files which is of course
-larger than the pure misc/eeprom/at24.c driver but not that large. 
-
-Regards,
-  Marco
-
-> > The layer already
-> > supports devices of type MTD_RAM which are very simple and don't require
-> > an erase-op at least I don't see one.
-> 
-> MTD_RAM has been there forever, probably for "bad" reasons. BTW there
-> has been an attempt at removing it which was reverted in _2006_ and then
-> felt into the cracks:
-> 21c8db9eff95 ("[MTD] Restore MTD_ROM and MTD_RAM types")
-> 
-> Thanks,
-> Miquèl
+> diff --git a/drivers/i2c/busses/i2c-stm32f4.c b/drivers/i2c/busses/i2c-stm32f4.c
+> index f8b12be6ef55..230fff0c0bf9 100644
+> --- a/drivers/i2c/busses/i2c-stm32f4.c
+> +++ b/drivers/i2c/busses/i2c-stm32f4.c
+> @@ -95,7 +95,7 @@
+>  
+>  /**
+>   * struct stm32f4_i2c_msg - client specific data
+> - * @addr: 8-bit slave addr, including r/w bit
+> + * @addr: 8-bit target addr, including r/w bit
+>   * @count: number of bytes to be transferred
+>   * @buf: data buffer
+>   * @result: result of the transfer
+> @@ -480,7 +480,7 @@ static void stm32f4_i2c_handle_rx_done(struct stm32f4_i2c_dev *i2c_dev)
+>  
+>  /**
+>   * stm32f4_i2c_handle_rx_addr() - Handle address matched interrupt in case of
+> - * master receiver
+> + * controller receiver
+>   * @i2c_dev: Controller's private data
+>   */
+>  static void stm32f4_i2c_handle_rx_addr(struct stm32f4_i2c_dev *i2c_dev)
+> @@ -643,7 +643,7 @@ static irqreturn_t stm32f4_i2c_isr_error(int irq, void *data)
+>  
+>  	/*
+>  	 * Acknowledge failure:
+> -	 * In master transmitter mode a Stop must be generated by software
+> +	 * In controller transmitter mode a Stop must be generated by software
+>  	 */
+>  	if (status & STM32F4_I2C_SR1_AF) {
+>  		if (!(msg->addr & I2C_M_RD)) {
+> @@ -749,7 +749,7 @@ static u32 stm32f4_i2c_func(struct i2c_adapter *adap)
+>  }
+>  
+>  static const struct i2c_algorithm stm32f4_i2c_algo = {
+> -	.master_xfer = stm32f4_i2c_xfer,
+> +	.xfer = stm32f4_i2c_xfer,
+>  	.functionality = stm32f4_i2c_func,
+>  };
+>  
+> -- 
+> 2.43.0
 > 
 
