@@ -1,184 +1,150 @@
-Return-Path: <linux-i2c+bounces-4789-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4790-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62CA292B43D
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 11:43:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0979192B516
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 12:22:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D66001F240B8
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 09:43:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6AA6AB2152F
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 10:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161FE1553B3;
-	Tue,  9 Jul 2024 09:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A68E156654;
+	Tue,  9 Jul 2024 10:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pS12M/hF"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="jmtMqa7a"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D5415534D;
-	Tue,  9 Jul 2024 09:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15917154C04;
+	Tue,  9 Jul 2024 10:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720518192; cv=none; b=Tbd6w/9fSNdSwg6Jz8VSg96E1yofs0zXMD/LraWqwQt9x2H1lEC+V9mTpDBhU01fn0600RWDHqnotmBvL8QDLAbOgXEyaoQn0gCoAydj762dlpCweQX3b5eHJjp2EwAl+kptOEqzanbNuCCGWuzLc2nuzCZB0WGRAMeitasGiaA=
+	t=1720520529; cv=none; b=icsC4eqpkYJ5vvXw0I/g0o3EawELDodX+kcPts8HUse338YDFWmZJoA8mdRPA59VJn5pQ8KpkK6dLW1d/8EXvYMTA4Wjkk0GlsyFkODwS6rhRODWxoYSyTgAfOO/dRASuul0VED/Fl8qS3FIdK0ps/ViZk8t1FEAPvBzqCTs+PY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720518192; c=relaxed/simple;
-	bh=Z0HcHq7yzl+7AelddnrRR87bt+aU2j10VpepG5UbVu4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QiIvcl/KpeNm9lruFLKb7tmg/xYQRtik47v1Jh1DKMPp2Rj87zK5Lm/Im0TFsXN/vvQ9QqCwiU6VOcHmG+o82smL97vjmK6BOD/Y1TMkrZLHdiEGyZKiC4kAyMOH8YHtBE2kwehQ+TN7HofP/6r3uJNvBcDBrWrXBcrCSgQ4U/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pS12M/hF; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 896761BF20E;
-	Tue,  9 Jul 2024 09:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720518188;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WVMmtSjwlNQmVjxtUeUdR3iKhz4W+lQLl2pkn1Xk12k=;
-	b=pS12M/hFFtUvUahs26E5vD/JZJjIQ8CmyPf5kCaaSJzFbR3RDeMCaG4WkQ18U83Kje7Xfl
-	AyN919sqdbsVTsmreQhwHSygXqgRJ0kdPQ5zjcJUGtxlT4Ho9p8ijdF8YfTeIO6HFDK7eO
-	9ZWZUOd5wpLbo4/rkrKRN8+RnXilQYghyruJzJG1B0By1AlkPDEswaoM56ChbKqR9xzmtO
-	jhtQebyqSJwnet2P69DvwaCq24fYzhp/MVzppGLvK1eJdhxGBanp5/LzDMV65mb+L+itk6
-	lQKaVcgNUEyq8U3sZF8TqV+3RTbRtu+1Gi6vNNP28kc9H4uebjsO4mk9Ei94yg==
-Date: Tue, 9 Jul 2024 11:43:02 +0200
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Maxime Ripard <mripard@kernel.org>, Pratyush Yadav
- <pratyush@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Richard
- Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Arnd
- Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Russell King <linux@armlinux.org.uk>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery
- <andrew@codeconstruct.com.au>, Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
- <claudiu.beznea@tuxon.dev>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
- <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>,
- Andrew Lunn <andrew@lunn.ch>, Gregory Clement
- <gregory.clement@bootlin.com>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, Tony Lindgren <tony@atomide.com>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Magnus Damm
- <magnus.damm@gmail.com>, Dinh Nguyen <dinguyen@kernel.org>, Thierry Reding
- <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
- Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>, Michael
- Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao"
- <naveen.n.rao@linux.ibm.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Huacai Chen <chenhuacai@kernel.org>, WANG
- Xuerui <kernel@xen0n.name>, linux-mtd@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- imx@lists.linux.dev, linux-omap@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
- openbmc@lists.ozlabs.org, linuxppc-dev@lists.ozlabs.org,
- linux-mips@vger.kernel.org, loongarch@lists.linux.dev
-Subject: Re: [PATCH 4/9] mtd: devices: add AT24 eeprom support
-Message-ID: <20240709114302.3c604ef3@xps-13>
-In-Reply-To: <20240709092214.omr7ccphdzdk7z7j@pengutronix.de>
-References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
-	<20240701-b4-v6-10-topic-usbc-tcpci-v1-4-3fd5f4a193cc@pengutronix.de>
-	<07b701a9-7b52-45b7-8dba-1c25d77cbf15@linaro.org>
-	<mafs0ikxnykpr.fsf@kernel.org>
-	<20240702-congenial-vigilant-boar-aeae44@houat>
-	<mafs0ed8byj5z.fsf@kernel.org>
-	<20240702-mighty-brilliant-eel-b0d9fa@houat>
-	<20240708084440.70186564@xps-13>
-	<20240709092214.omr7ccphdzdk7z7j@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1720520529; c=relaxed/simple;
+	bh=EEZI0oOKHSccww6P7hFSmluieVKgyeacOxph00ecItI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u9vqpMrYrMw2FKdsJ5As0uopxKEo8Mec/H2IaBdhJRsiU62sZDg79GMRWBrFDNNsnqrIywzBmQVCZXiB5o2T8UJqCEk8O0mv4XQKQOofP70RkolJxzv0Tqobm17bINdbMF65gGVCDep+vHsE98eOs1YjJ+/0xQOsukI/X1zc3Vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=jmtMqa7a; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4698S9mv031021;
+	Tue, 9 Jul 2024 12:22:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=selector1; bh=61h9FpLIz7qYk5YX7xxf1ILI
+	zrao7vVFXIrWakkeQ0Q=; b=jmtMqa7aV7kvPEsVQHMliovwTWRYqgWJxojYA2dZ
+	gHue4FKVuhBDlfUQspGZd7k4PAVdHsYjtwY6gitiwcPcuGvOO7j2nn1GZu44cs1I
+	w3lNJFedBRTJpiY3si1WJ4oQ1diK40h7pfAtJ7XDSWFyVi9BpLBGoanminP+xqUz
+	1Rt/3OJwSJcilYdUtdBmsKj/V2GyaDJfYa0o+NHkuwhB8hwvE4uhKWGLdIWu5nRb
+	E7VZ5Mpai5KMSzWToSUWYFN8cNGhzTTB9f5GIaJSsJT6s2nuhm/86kPTUHTVQuwY
+	9bBle0QtdHvHXT7spft7p/XHmSbyigUo4yoy/04Xi/Qwhw==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 406whhk8jw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Jul 2024 12:22:00 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 83D8440044;
+	Tue,  9 Jul 2024 12:21:55 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B4A1F21B531;
+	Tue,  9 Jul 2024 12:21:39 +0200 (CEST)
+Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 9 Jul
+ 2024 12:21:39 +0200
+Date: Tue, 9 Jul 2024 12:21:34 +0200
+From: Alain Volmat <alain.volmat@foss.st.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+CC: <linux-i2c@vger.kernel.org>,
+        Patrice Chotard
+	<patrice.chotard@foss.st.com>,
+        Andi Shyti <andi.shyti@kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 60/60] i2c: st: reword according to newest
+ specification
+Message-ID: <20240709102134.GA55503@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-kernel@vger.kernel.org
+References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
+ <20240706112116.24543-61-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240706112116.24543-61-wsa+renesas@sang-engineering.com>
+X-Disclaimer: ce message est personnel / this message is private
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-09_01,2024-07-08_01,2024-05-17_01
 
-Hi Marco,
+Hi,
 
-> > > > >> I also found a thread from 2013 by Maxime Ripard (+Cc) suggestin=
-g adding
-> > > > >> EEPROMs to MTD [1]. The main purpose would have been unifying th=
-e EEPROM
-> > > > >> drivers under a single interface. I am not sure what came of it =
-though,
-> > > > >> since I can't find any patches that followed up with the proposa=
-l.   =20
-> > > > >
-> > > > > That discussion led to drivers/nvmem after I started to work on
-> > > > > some early prototype, and Srinivas took over that work.   =20
-> > > >=20
-> > > > So would you say it is better for EEPROM drivers to use nvmem inste=
-ad of
-> > > > moving under MTD?   =20
-> > >=20
-> > > I thought so at the time, but that was more than 10y ago, and I have
-> > > followed neither nvmem nor MTD since so I don't really have an opinion
-> > > there.
-> > >=20
-> > > It looks like drivers/misc/eeprom/at24.c has support for nvmem though,
-> > > and MTD can be used as an nvmem provider too, so it's not clear to me
-> > > why we would want to create yet another variant.
-> > >=20
-> > > But again, you shouldn't really ask me in the first place :)
-> > >=20
-> > > I'm sure Miquel, Srinivas, and surely others, are much more relevant =
-to
-> > > answer that question. =20
-> >=20
-> > More relevant, I doubt, but just a feeling: EEPROMs have their own
-> > subsystem now, NVMEM, which, as Maxime said, was initially written for
-> > that very specific case. EEPROMs don't have the complexity of MTD
-> > devices, and thus pulling the whole MTD subsystem just for getting
-> > partitions seems counter intuitive to me. You can definitely "split"
-> > EEPROM devices with NVMEM as well anyway. =20
->=20
-> I asked for feedback on my RFC [1] and all I got was to merge both
-> drivers into one and make the driver backward compatible, which I did by
-> this commit.
+On Sat, Jul 06, 2024 at 01:21:00PM +0200, Wolfram Sang wrote:
+> Change the wording of this driver wrt. the newest I2C v7 and SMBus 3.2
+> specifications and replace "master/slave" with more appropriate terms.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-I'm sorry for not bringing this earlier.
+Reviewed-by: Alain Volmat <alain.volmat@foss.st.com>
 
-> > Overall I think the idea of getting rid of these misc/ drivers is goes
-> > into the right direction, but registering directly into NVMEM makes
-> > more sense IMO. =20
->=20
-> So you propose to have two places for the partition handling (one for
-> MTD and one for NVMEM) instead of one and moving the code into NVMEM
-> directly?
-
-Why two places for the partitions handling? Just one, in NVMEM. Also
-usually EEPROMs don't require very advanced partitioning schemes,
-unlike flashes (which are the most common MTD devices today).
-
-> That doesn't sound right to me either. Also I don't get the
-> point why EEPROMs can't be handled by the MTD layer?
-
-They can, but should they? Just compile the two layers and observe
-the size difference. MTD is complex and old, carries a lot of history,
-and the user interface is also not straightforward because you need to
-handle pages, blocks, erases, bitflips, ECC stats, OOB bytes and
-positions, two OTP areas... None of that exists in the EEPROM world. So
-why would you want to register into MTD and pull a huge subsystem while
-there is a much more recent, simpler and way lighter subsystem fitting
-much better your device?
-
-> The layer already
-> supports devices of type MTD_RAM which are very simple and don't require
-> an erase-op at least I don't see one.
-
-MTD_RAM has been there forever, probably for "bad" reasons. BTW there
-has been an attempt at removing it which was reverted in _2006_ and then
-felt into the cracks:
-21c8db9eff95 ("[MTD] Restore MTD_ROM and MTD_RAM types")
-
-Thanks,
-Miqu=C3=A8l
+> ---
+>  drivers/i2c/busses/i2c-st.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
+> index 5e01fe3dbb63..05b19ede65a0 100644
+> --- a/drivers/i2c/busses/i2c-st.c
+> +++ b/drivers/i2c/busses/i2c-st.c
+> @@ -2,7 +2,7 @@
+>  /*
+>   * Copyright (C) 2013 STMicroelectronics
+>   *
+> - * I2C master mode controller driver, used in STMicroelectronics devices.
+> + * I2C controller driver, used in STMicroelectronics devices.
+>   *
+>   * Author: Maxime Coquelin <maxime.coquelin@st.com>
+>   */
+> @@ -150,7 +150,7 @@ struct st_i2c_timings {
+>  
+>  /**
+>   * struct st_i2c_client - client specific data
+> - * @addr: 8-bit slave addr, including r/w bit
+> + * @addr: 8-bit target addr, including r/w bit
+>   * @count: number of bytes to be transfered
+>   * @xfered: number of bytes already transferred
+>   * @buf: data buffer
+> @@ -667,7 +667,7 @@ static int st_i2c_xfer_msg(struct st_i2c_dev *i2c_dev, struct i2c_msg *msg,
+>  		i2c |= SSC_I2C_ACKG;
+>  	st_i2c_set_bits(i2c_dev->base + SSC_I2C, i2c);
+>  
+> -	/* Write slave address */
+> +	/* Write target address */
+>  	st_i2c_write_tx_fifo(i2c_dev, c->addr);
+>  
+>  	/* Pre-fill Tx fifo with data in case of write */
+> @@ -766,7 +766,7 @@ static u32 st_i2c_func(struct i2c_adapter *adap)
+>  }
+>  
+>  static const struct i2c_algorithm st_i2c_algo = {
+> -	.master_xfer = st_i2c_xfer,
+> +	.xfer = st_i2c_xfer,
+>  	.functionality = st_i2c_func,
+>  };
+>  
+> -- 
+> 2.43.0
+> 
+> 
 
