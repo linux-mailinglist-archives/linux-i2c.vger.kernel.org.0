@@ -1,102 +1,174 @@
-Return-Path: <linux-i2c+bounces-4842-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4843-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E48292D3EB
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 16:12:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C1A692D41F
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 16:21:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F1A01C228AA
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 14:12:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8E94283AC6
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 14:21:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7A2B194094;
-	Wed, 10 Jul 2024 14:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC2E19408E;
+	Wed, 10 Jul 2024 14:20:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JpgClfH0"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="a5CBbBb0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06291193448;
-	Wed, 10 Jul 2024 14:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501FF193459
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Jul 2024 14:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720620711; cv=none; b=T/nTIxVVy02QdUZRc85AnOEZUrkzEtGfSvwcAMhFPriROOspLieRCSv2nJJv495vLi8Pg7XVnUOVnwAu4GXSORMO1S3D6/X2JJj9IF/yds2TRhnc/B53vPC4gJm1I72BMlhFQI0ywlQVPrgcSCqmF22tj9UouskKMobUk/BNdNI=
+	t=1720621258; cv=none; b=BYJI4tHt/I/yD3Mz8Wfql9++UbssWuqVTHIJRbAYhh9RJYTTtda8NZLygiYkvnqbGE3gxTC23wb9M34+3RaUScPetTERBbGJWvRRi10ZV8sBnDayzOfH42pUOMxksZZ+PiCDjX0iuFH4GVivAZgNAdVzvLCAT2QooCt2Kl5sYNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720620711; c=relaxed/simple;
-	bh=trdn6cQsvGw0FukybJ8D6oyADdAlROUTuSyNsdnzU8w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GQCEqUsdY1El2k92eOjtN9kJ73vRX+OBON4lrb0cLC67Qn7PpKsPSDGWVaqfifLyIxgitaU490fMddPhQ8jJ7hwLZ0Dl82VMLbq4JDS52YbUInvouYLznQoma4/OqpsoE4UCZyLWup0Wrc3HuWOCSN2FAHMaQYhRbFpkMQ5sX3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JpgClfH0; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-701b0b0be38so4908549b3a.0;
-        Wed, 10 Jul 2024 07:11:49 -0700 (PDT)
+	s=arc-20240116; t=1720621258; c=relaxed/simple;
+	bh=W4h0IrOY8Uo6V+EuwKWOQCC/Cs9pfuzhIMe/Ba6k4+E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=vCHG+SBn8igHuVl9rITt8+2v9FpZARihrQ+K4/AbqSZO3KjdamLScLa8VT88J9HnycWihZD+WruzPXCaaXmt0mxqo6nb3gqmDbexDIkLCURkp1Pl455M1FeqZ10f/UQpc+m35X2PB4NDjUyeKy38tgObp2Qnn1pg+L+/HwIg/HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=a5CBbBb0; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42795086628so4363075e9.3
+        for <linux-i2c@vger.kernel.org>; Wed, 10 Jul 2024 07:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720620709; x=1721225509; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        d=tuxon.dev; s=google; t=1720621253; x=1721226053; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FEed6btgf2qApqgnj2unSejqwDiHIUVqOkzcgUjHrd4=;
-        b=JpgClfH0kvH+hIbbE/4ojH1pe9qpUBeGNxo28pxcx2Luht3qW4bcOnM7J06XAP8B0g
-         ZD7a6qXNrY4OvcvAcfs5Rwugvlqvrtn4laNH3NoUG2PkEnQ5Vj2FqNal7L+bCgDTvQiF
-         /OKZOLYoT2WLqrBPoMGvh52gqx8dcle8w1EjLGW7cWV6vqcCq/mUgEMXDVmX9QEgHYnI
-         6eygXU17QRbpVLYGaiPcqp8L+X4XE4ZEkyaWbvNB+S7YX9us4XUgwWlKCttM87Hq58J8
-         4linZOLbqWlfQngeLqHuiJV+kXjtKN67VmP8yOU1ZvQInjt176MbYq32TG0gIZYKWEzL
-         1oXw==
+        bh=hrBrrFwd71u927GXz6lBE6tAIH4agRf/nva9TIYQidY=;
+        b=a5CBbBb02yX1J/Q9l3BnEgt+YnO/DXVNOg4+4uXTm8daKJ2ZmjMWyFIG8xaYRiWe1C
+         NXpBGtu7lPVo5hm2PyUFHTmxLO5yxwSKvM+pavGEcWibds+gnjDkrS9cpYC2+f4+f8Ok
+         tLKyNm7dTAGCdULJe797B4hVgvauM9Is9DfRsB0XD328nQBbR4m+33DchU4hVTubCZr0
+         Ragyhc5qKR11VgKBTdG9+lMXuSYCOmdeaf/NEhN0XdP31FHY7h0rPEtD1a9MiPi1nrwQ
+         5etdCE9NFDTj08EsxMZGh1nQmd9oB8kyQMlE3DkolZyGntRrv9XKdflyMV0O4cGhM5We
+         28mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720620709; x=1721225509;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        d=1e100.net; s=20230601; t=1720621253; x=1721226053;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FEed6btgf2qApqgnj2unSejqwDiHIUVqOkzcgUjHrd4=;
-        b=GOORnK4jbybyulF1+EFaFWtPcuz/UifUgDLBtvI0Z6mPV1PSapy0nR7s3MlbwKGhmU
-         /m3hdraHFb0gVfwUzMo4r4rPKFgVScf0ptlVjNE08lCfcB2jsS2IX6p9CdZ4TWy05aW5
-         Ic1S5v20DI6WfgKY63nGVtnUUKr7dVitjJ9c/NScr68cE3kX96VvgtkzzCPSs3NkGwMV
-         iHVBjx1urubUJoXbadQZyviUp98c8KKhhQ/7PdaC6+5zb+ompBNMtCuxrWBcSICO3deD
-         +AvsyJWMC6aaG65RPjogHYwuXWgW9L4Q+7vgZ3aJ3i/ZO8tgUt6gtHQRL5li7hEuMD+Z
-         vmHg==
-X-Forwarded-Encrypted: i=1; AJvYcCWyOW9p8R+njoJsIbj5u/Tza8xX/YU4H4/PlVsbORg7FpnxGbL3EC4CXOp6jGWyLuSR+mEC+2ZtVXcizgad4ZoasBnELxs/YO7sB+0iVw3hatIvJ/IMXOXZswSEuJJXqfK3gh5rYg0=
-X-Gm-Message-State: AOJu0YzQRzq02v9E3w4nfEgk+MPlzN6phs2nsQ+1H/yrEwaNy/nZi0iT
-	f9R18yl8EwPUjX+LUzYhm8sML0pYtTPjRoOPIpg6u2fDA1FL7olH
-X-Google-Smtp-Source: AGHT+IHlotAfgT/0GueDFfgANwxoFv4FoiKAmecK0FndGp3OAXrBDZo5m0/pIWTv2je2qfY1VXAIfQ==
-X-Received: by 2002:a05:6a20:3d82:b0:1c2:93a7:2557 with SMTP id adf61e73a8af0-1c298398352mr6727388637.48.1720620709103;
-        Wed, 10 Jul 2024 07:11:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6a2a2e9sm34343595ad.97.2024.07.10.07.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jul 2024 07:11:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 10 Jul 2024 07:11:47 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/ltc4286) Drop unused i2c device ids
-Message-ID: <c6b9234d-e5f5-4263-b91d-f19f10e1cd51@roeck-us.net>
-References: <cover.1720600141.git.u.kleine-koenig@baylibre.com>
- <9a48ba0368e0c8cddc94c5e4cf3edd7eadc03a2d.1720600141.git.u.kleine-koenig@baylibre.com>
+        bh=hrBrrFwd71u927GXz6lBE6tAIH4agRf/nva9TIYQidY=;
+        b=hOJ8RgajavRz/n1WfmXuPoZ0TtrC7iE3kWf7GTbq8qg9qkidjrX2o0IY625VG7Qb7B
+         6MLFlikYjYrPbTkBTVhoF/qTnULve5MAl4xFefKYpJOZ8zCQIQsifeIHuo8TdgJ9fM9k
+         CzAPsCiSoUFJBvZpOJqhVkYmBvHLopTkfMMJrBhHfjVwz09HeLOljWb4V9fUzVX7c4A7
+         7trd223Bz3JfvZxtJlmkMw00v3Cu8he5a/5nerzjSmZ8aiOuILiCsxZMV0cxsCYsXioX
+         xHgt/7xqI97SKfkYl2QM9avhS4QsG8rMr8CpdIsN9S3kjKI6sooJ8HNyWtx/hcGZ8vP2
+         a4bw==
+X-Forwarded-Encrypted: i=1; AJvYcCXLe2gpOqGD02Aa45CGVZNnWZoZFqkCtc3WZQ+Hi0yM2aFQQc/FfXG9Y0dcgX6Xhz9tlKfalcGfPctRarhnrzqdPCEOzg4p3epP
+X-Gm-Message-State: AOJu0Yy1Hdz/JepvQVtaCDHab55BYsqVU27HINobVlBfXvIwHUftWUWD
+	7yyEcWmAzIFSwWmp50gpm6pgDhR8lIl27PTqjH85qgnSUD0Vb2I2b7tm0+NfCNo=
+X-Google-Smtp-Source: AGHT+IETxyB0snJNvMt9MaRxZtX7+j+x5oGjOWzm8oItSS/tUdUHCB4zwYBUxezahOThfFEGvBOjPA==
+X-Received: by 2002:a05:600c:6dca:b0:426:5269:983a with SMTP id 5b1f17b1804b1-426707cc00dmr43281485e9.8.1720621253364;
+        Wed, 10 Jul 2024 07:20:53 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.171])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4266f6f07dasm83508525e9.12.2024.07.10.07.20.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jul 2024 07:20:52 -0700 (PDT)
+Message-ID: <22db23bd-5872-49a0-990f-2a0e5f51bfb5@tuxon.dev>
+Date: Wed, 10 Jul 2024 17:20:50 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/12] i2c: riic: Add support for fast mode plus
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: chris.brandt@renesas.com, andi.shyti@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, magnus.damm@gmail.com,
+ mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+ wsa+renesas@sang-engineering.com, linux-renesas-soc@vger.kernel.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240625121358.590547-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240625121358.590547-10-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdX4hWou9OtdE8XgU7-U0ghJ6vk2kVqgT90U0ZjsxzR5DA@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <CAMuHMdX4hWou9OtdE8XgU7-U0ghJ6vk2kVqgT90U0ZjsxzR5DA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9a48ba0368e0c8cddc94c5e4cf3edd7eadc03a2d.1720600141.git.u.kleine-koenig@baylibre.com>
 
-On Wed, Jul 10, 2024 at 10:35:45AM +0200, Uwe Kleine-König wrote:
-> The driver doesn't make use of the different numbers assigned to the
-> different devices. So drop them.
+Hi, Geert, all,
+
+On 28.06.2024 12:22, Geert Uytterhoeven wrote:
+> Hi Claudiu,
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+> On Tue, Jun 25, 2024 at 2:14â€¯PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Fast mode plus is available on most of the IP variants that RIIC driver
+>> is working with. The exception is (according to HW manuals of the SoCs
+>> where this IP is available) the Renesas RZ/A1H. For this, patch
+>> introduces the struct riic_of_data::fast_mode_plus.
+>>
+>> Fast mode plus was tested on RZ/G3S, RZ/G2{L,UL,LC}, RZ/Five by
+>> instantiating the RIIC frequency to 1MHz and issuing i2c reads on the
+>> fast mode plus capable devices (and the i2c clock frequency was checked on
+>> RZ/G3S).
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> Thanks for your patch!
+> 
+>> --- a/drivers/i2c/busses/i2c-riic.c
+>> +++ b/drivers/i2c/busses/i2c-riic.c
+>> @@ -407,6 +413,9 @@ static int riic_init_hw(struct riic_dev *riic)
+>>         riic_writeb(riic, 0, RIIC_ICSER);
+>>         riic_writeb(riic, ICMR3_ACKWP | ICMR3_RDRFS, RIIC_ICMR3);
+>>
+>> +       if (info->fast_mode_plus && t->bus_freq_hz == I2C_MAX_FAST_MODE_PLUS_FREQ)
+>> +               riic_clear_set_bit(riic, 0, ICFER_FMPE, RIIC_ICFER);
+> 
+> Unless FM+ is specified, RIIC_ICFER is never written to.
+> Probably the register should always be initialized, also to make sure
+> the FMPE bit is cleared when it was set by the boot loader, but FM+
+> is not to be used.
 
-Applied.
+Instead of clearing only this bit, what do you think about using
+reset_control_reset() instead of reset_control_deassert() in riic_i2c_probe()?
 
-Thanks,
-Guenter
+HW manuals for all the devices listed in
+Documentation/devicetree/bindings/i2c/renesas,riic.yaml specifies that
+ICFER_FMPE register is initialized with a default value by reset. All the
+other registers are initialized with default values at reset (according to
+HW manuals). I've checked it on RZ/G3S and it behaves like this.
+
+With this:
+
+diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
+index ba969ad5f015..150e7841f178 100644
+--- a/drivers/i2c/busses/i2c-riic.c
++++ b/drivers/i2c/busses/i2c-riic.c
+@@ -457,7 +457,7 @@ static int riic_i2c_probe(struct platform_device *pdev)
+                return dev_err_probe(dev, PTR_ERR(riic->rstc),
+                                     "Error: missing reset ctrl\n");
+
+-       ret = reset_control_deassert(riic->rstc);
++       ret = reset_control_reset(riic->rstc);
+        if (ret)
+                return ret;
+
+I've did basic tests (i2cdetect + i2cget with FM+ frequency) on RZ/G2{L,
+LC, UL}, RZ/V2L and all was good.
+
+Thank you,
+Claudiu Beznea
+
+> 
+> 
+>> +
+>>         riic_clear_set_bit(riic, ICCR1_IICRST, 0, RIIC_ICCR1);
+>>
+>>         pm_runtime_mark_last_busy(dev);
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
