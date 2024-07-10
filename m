@@ -1,67 +1,61 @@
-Return-Path: <linux-i2c+bounces-4811-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4812-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F016B92CB10
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 08:29:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18E0892CB20
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 08:31:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D4D71C21F4E
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 06:29:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C74F2281D50
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 06:31:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4748C6FE16;
-	Wed, 10 Jul 2024 06:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 195CA64CEC;
+	Wed, 10 Jul 2024 06:31:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="HWx/VAlW"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="GCASBJhn"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8A7522E
-	for <linux-i2c@vger.kernel.org>; Wed, 10 Jul 2024 06:29:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009064AEF4
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Jul 2024 06:31:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720592986; cv=none; b=Z3A82IALvG6WVAfZfN3vH3woS15XHzZ3ZkzcjkWT1cM4S07nfA43WszVfFqZlDrJunKKVKniTLb077I+WB0jBtF7G7SdNH4RCZ8dNOsBkh+ImU+/kBvOlvHUHfqpsZd2uZ3QXzhPEdoXoea8EQBey59mOMGh4+BfbMedvf5oASg=
+	t=1720593112; cv=none; b=r7+wlIdld2rhjpXU2dGhpenkM/g8tQJq/ePRyKd8+VvYOy6EAgJndUgqMjGBq2jR1XbJRTKBSHeAFJd0+J5SCZzE8rB3f0PWgEewrFcDX0a/BVV+WkIAjzmwp0iG8lGK1ugBDCz9rQ4WgeaX469Ts6lSmKqvqoDTatrpnug5EJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720592986; c=relaxed/simple;
-	bh=0LeCYgifEtDjwIApEekRRIa7a2c+iCDVuMUvFa3BoKs=;
+	s=arc-20240116; t=1720593112; c=relaxed/simple;
+	bh=YNDrrTRBQSjhUMAakyE2kGoYvvxbKHmBOp6I/Rc0QpM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H8NA6MyZ5T5QGUTG3BRStCTSuXy6p0rATdv3I7SRusSmp5snEWpWwSSDU5rgDwAvNdXJEz00eSWR1+JNJCXodJutTsG8JQvK12ercbVI+mKlP8HflaGLe74XEwKbTh/Tyn6g5OVJnklLcyiwsYNC1Czjq4qSYBCv6PXCOIaYnmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=HWx/VAlW; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=d3xAb/UAgz/7krvbRdDyZNQC/Dx6QENorZlDKRxzpNTXnsjwVLJPKWU2U9q4/TdaNa3jIKiC/h/FoES3G5nA/vbyyuiQMC/mQpwmkUR4qfHz5lSrUO6jUpTLxSkUWRrNH7dxTN99ITonbH3fZ6Y0HsayRuUTK7dPh0I9QoAHOcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=GCASBJhn; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=0LeC
-	YgifEtDjwIApEekRRIa7a2c+iCDVuMUvFa3BoKs=; b=HWx/VAlWcDIs/Do7o3j3
-	HYDCUm76zsuu5TUOtpUcWS6owuxwqGie4w9DXyi96e+/srK0pXnUGQavIUdcnc3j
-	YaswKN0WZ69pekn+VzPWEwTAMqTbzbCre8qddG/MkDYKd/51DUH9mE8H8QKFEYr2
-	YqY1RqNg29AYoIYzU2hyaiDdhm+Jpmhi4b8QWxXiu0baR9qcId5i6wtNW45nrvHP
-	HKVI/sXZFtud9+EUlof7MerBRX/42mwa2tk/hmwgAau5gGGTmvCXZTlf5Pn3fgsI
-	imKATNo4KYBuAFsGO5HGnjvcAOny5X5UcoF8YuTzyxB/BnEt9YgzYb+R+Gy62cpf
-	Aw==
-Received: (qmail 429862 invoked from network); 10 Jul 2024 08:29:41 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Jul 2024 08:29:41 +0200
-X-UD-Smtp-Session: l3s3148p1@YsZxxd4cfIUujnsa
-Date: Wed, 10 Jul 2024 08:29:41 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=YNDr
+	rTRBQSjhUMAakyE2kGoYvvxbKHmBOp6I/Rc0QpM=; b=GCASBJhnrUssM10ejZm9
+	xA8xARZloXym1g7Fyzef3UUj69nj02V2BUKy9hvzADge2vvUJ+dXvCOfSsqGZXWD
+	vKwedEiUVRocwlT4aCYF3q7f+whxxmfUBhF/P9LuKQGPAJQr1KpYG1H0iS0PjqM6
+	aKMlc2GbYxVZ8EYFGU+U70cXU54zomHQ11U+02xAm0TBqpYEbnNBgp9giAtMIbfg
+	TquFpXgwkzJ61OLPcC1yGHNFftZlOz1eeoAaru6IXwVkVwqNq4TtNemawF7qdltV
+	v0eSl+dhZLifZwvqh5VHWqBnkoCWT7QTC/Q47Hp0QLKImCHgwu3N6sRpVTRZ3R7G
+	FQ==
+Received: (qmail 430513 invoked from network); 10 Jul 2024 08:31:48 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Jul 2024 08:31:48 +0200
+X-UD-Smtp-Session: l3s3148p1@8FcKzd4cPrAujnsa
+Date: Wed, 10 Jul 2024 08:31:48 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Markus Elfring <Markus.Elfring@web.de>, linux-i2c@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] i2c: rcar: minor changes to adhere to coding style
-Message-ID: <Zo4qVeIjGCQH5zXn@shikoro>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: add debug message for detected HostNotify alerts
+Message-ID: <Zo4q1NeXY-cI2GhD@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Markus Elfring <Markus.Elfring@web.de>, linux-i2c@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>
-References: <20240707082848.5424-4-wsa+renesas@sang-engineering.com>
- <f93eda7e-e65f-42e9-b96d-e88290201ca0@web.de>
- <Zop2vNCrzDmEKKiO@shikoro>
- <Zou2g8nGBD7Pv8kR@shikoro>
- <5trq7ondxem43rfnckonywhrucvjvecc52pvyik2fsz64ivknv@r22caitz5y3s>
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+References: <20240704032940.4268-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -69,41 +63,47 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IhJEtiCBxsxZ2Uge"
+	protocol="application/pgp-signature"; boundary="lNfHY2uifUQlosPe"
 Content-Disposition: inline
-In-Reply-To: <5trq7ondxem43rfnckonywhrucvjvecc52pvyik2fsz64ivknv@r22caitz5y3s>
+In-Reply-To: <20240704032940.4268-2-wsa+renesas@sang-engineering.com>
 
 
---IhJEtiCBxsxZ2Uge
+--lNfHY2uifUQlosPe
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jul 04, 2024 at 05:28:59AM +0200, Wolfram Sang wrote:
+> Setting up HostNotify can be tricky. Support debugging by stating
+> when a HostNotify alert was received independent of the irq being
+> mapped. Especially useful with the in-kernel i2c testunit. Update
+> documentation as well.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+
+Applied to for-next, thanks!
 
 
-> That's OK... if you want I can remove those blank lines before
-> applying them, it's just two cases in your patch.
-
-Then, please do that. Thanks!
-
-
---IhJEtiCBxsxZ2Uge
+--lNfHY2uifUQlosPe
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaOKlQACgkQFA3kzBSg
-KbbtzA/+Kw9xO01OGlslCruzbmZYhVCwLvE1SFNHOoutCgb/qBXc5L8Vq2V6akCB
-EsaVXvDdQfQ/xA/YxrGLJdwEi+/38wum8Vece7UxZLIJ9IV5aEJNOXA1Uu5hbBEV
-fCyZNLUMNHFgrdMeRbuLczh8sMz599hbbSoicBsxrvwtxUYX3dKxV8e4S8FqQtqa
-zqJqDI07SJsqDpzUeixZXRK39ozODJY1V2Bglb5Lp5UXzpDbq5eDKrS9PrJNTyYX
-1daqkXWr/NLpVmtg6uot/V9mGj2PJSvQA2BwFDQXg+ikKMbQZCQaXNgFYDi/WOsa
-GU+I9nx5JjzKAZZjbQ8QqJPE8d9UEbKDFdJ+/91QnC3ONE8Qy6My+TdJzWR88QVt
-NlAwq9548g34FwAUXG/70XOnooNZowlj6yt+jdmkemCsyoGmPv8hZIEiR5VF2qik
-exlEk6ceDXm/PJ+WfeyrRBcag4KBj0zEjCQE22hnzHthDIxX6bSa32+ZwXlU6l8n
-29KE3LmDg+6TGiU++8OKatnqdyuEZf6q5RBMyepfU8YBmy5Kb0AS4skMF7niMgc9
-FD9nLc1USju2Lh7bEC6p+Eer+OAciOtSGpTzZ3c1iw+5kTBG4ADmvgTx6Obkb17H
-F9enmw7Qjf9ss1MRu+ZR7TPBezEwZ6/inOiWU4M1umCSptroLmY=
-=jV4i
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaOKtQACgkQFA3kzBSg
+KbZ7Fw/6A8i37TXaEbXEtYmoR7BsLnIcOdYClfNGNCbg3+AReDDs3lHRTRmtHJUA
+v6Gn5EmgfBpBKi6potQf2mCrqGvosJrvwNdtk5/ydsMf9xRGp8p7MKFElMZoocQ1
+det8Br9vzh6WXLtfnaU6vOyICp/gE1TUkzlQ032HMf/iFdTAEibogSRGZXpzu26u
+sMIanEOiZ55++SOhXccY7yflvEggnAcZS93RPq1675FVeQxgBLp1t/VtsCgsITRN
+4/x7ydn3renfwI851lngio8eF16wKoY9541SJWRIHFtSgvCcIfRGr/LNZZfKehEq
+9Gutmjig1jFnB/Nma2iBknclzeyl9B+MEG+CExA1QZH0KgpjrpvydiWH5Ny8z0gY
+FH5Nq/ivOZEES3K7YeTDuq8hEl6XUJXlEniL/+OWULMmx+CoDBJUeS2zBg6aNP68
+Qt7/9llHwNyKIEaoQrxETfC3WP3I/wmXXiliHFI2RhJRh2dZblpHQ6ve66YXN0mb
+jCgOX9udkxTLrwgdqJcZUSRDdHZEM5vSe5uDiu9gnEpEiS+hjS3CmopbaEn6dGx8
+6nksdnAFsyocdCAW1WLxfw8lzaWhFvaCXjbJyXwAIxMhui6skoVAjvA0EXPB9nJ7
+ocUh4cRXo8ITHNGMDGY0ND5N3L1AQ3YcE7jPJCognoL+PwcdwwQ=
+=G+fr
 -----END PGP SIGNATURE-----
 
---IhJEtiCBxsxZ2Uge--
+--lNfHY2uifUQlosPe--
 
