@@ -1,85 +1,122 @@
-Return-Path: <linux-i2c+bounces-4810-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4813-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78FAF92C641
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 00:33:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 141E592CB38
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 08:36:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A23691C226DA
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Jul 2024 22:33:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A53CFB214A8
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 06:36:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55730155759;
-	Tue,  9 Jul 2024 22:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lit+yIT+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACEF764CEC;
+	Wed, 10 Jul 2024 06:36:36 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D1515099B;
-	Tue,  9 Jul 2024 22:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from pokefinder.org (pokefinder.org [135.181.139.117])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC36E4BAA6
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Jul 2024 06:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.181.139.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720564408; cv=none; b=AoRmGtvClkjGi5fqqJ6UpVDrkcwgqn7S6QC3plegF1tmcFTe/qDXdwTx7uI5AWjDbHBVlo4Yy6S6QRL34y5MPtg1G5yzVn9XWURHy45/FWuGjy6hRs/t1QzHEEfTC+zNWEshuvzqWqxsurlr/dhZs7OnitwX9Kv2jV6dBNXyLn8=
+	t=1720593396; cv=none; b=BhYyg6kbR4MF4LWZHXWVhYagRrYRoAJgqL2jNAj4njl3kc3zGBV4sjTqXSpnpWvDzVxvxl66D51o+t712wvTFLMAvtQwXi6bdHrFOAWQ4dXNXSz/V53yFsDyXrho5c2g/qSH/sqImrqc4HrMYXuJ+3EiebG5BNKX0s0IKMk442o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720564408; c=relaxed/simple;
-	bh=Q9uQCOkKIQfSM3BkI3XEz9JcNu77rKK1xtXOuK11mVI=;
+	s=arc-20240116; t=1720593396; c=relaxed/simple;
+	bh=nOMCeXyy7ZORE/0sNiiMDzfwCUg/EFzxXrBQsYQsLA0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Eu7VWqDPlzuKjKZnz9xNJSaFdPXpki/LkCBfUNer9W+4SCcQMfTBefT07YUjZM0CCnFmMY+EVaooAtANkG6LXaIZObU1gOla7xkNeIcxB3AsUaRD83R/r8BOcCqQrtgX3XuwqX8m78DWTEPvhMq40d4/gl8K1ZCxZez3Az1sLC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lit+yIT+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F21C3277B;
-	Tue,  9 Jul 2024 22:33:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720564407;
-	bh=Q9uQCOkKIQfSM3BkI3XEz9JcNu77rKK1xtXOuK11mVI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lit+yIT+eT3ELb6f+JhYW+NMJGC2EsP/CmTrI4u/abUiflzQu/ZVXz2MZcg9FcgBL
-	 NGGGQ8EYw4NQ4/ScxqsQn3YU6XoWlU7W3tMifW0nzYS1wUErwNPACU1i5rX80juo6D
-	 7viCGJBiY1iLCMu0kumibWlvGrmVbK5KnuFU2zokri513QTeogKsLV4p6t5yyl0CTi
-	 hxcSv2wjwEGHNhm2gQK6/+MwGoslLJxH7xzEMZYpjRCtUIZqg4dAKvCzp+IMOZJZjc
-	 X80QBnct63YMKZOJIGzUzTJTf7CLFZC5CGU2rkI9+rk4A5XeId3RSTY3SO2wnv7mGI
-	 zXCwqUJZ/Tj2A==
-Date: Wed, 10 Jul 2024 00:33:24 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v3 1/2] i2c: smbus: remove i801 assumptions from SPD
- probing
-Message-ID: <dbajkputlzoqukkjymfq7jd6jb4hz3o7q2f7fsbany2vqcx5dj@xhwltuotxqr5>
-References: <20240709-piix4-spd-v3-0-9d1daa204983@weissschuh.net>
- <20240709-piix4-spd-v3-1-9d1daa204983@weissschuh.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZMq9atJ8RIYH4tJ+qofEI/kaIHcR51E5Y0jkNZE2Tcam9S8WzFTvDKOa8J5Cf51nHK4JL4XXjLtOl5z24Nh9UJPJb1O6d6R/nHiDzeg+BFmGUOaVl7xB0Va91LuDfCWbMVgoZRrTYSlhQyD8hD3/A+IoVP/Bohi2q7f78MbSATM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de; spf=pass smtp.mailfrom=the-dreams.de; arc=none smtp.client-ip=135.181.139.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=the-dreams.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=the-dreams.de
+Received: from localhost (26-123-142-46.pool.kielnet.net [46.142.123.26])
+	by pokefinder.org (Postfix) with ESMTPSA id DFFD4A4A637;
+	Wed, 10 Jul 2024 08:27:37 +0200 (CEST)
+Date: Wed, 10 Jul 2024 08:27:37 +0200
+From: Wolfram Sang <wsa@the-dreams.de>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: linux-i2c@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [GIT PULL] at24: updates for v6.11-rc1
+Message-ID: <Zo4p2dJYJkJ_hX6A@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20240704143148.28950-1-brgl@bgdev.pl>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FWqaZIouFtfrI0+R"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240709-piix4-spd-v3-1-9d1daa204983@weissschuh.net>
+In-Reply-To: <20240704143148.28950-1-brgl@bgdev.pl>
 
-On Tue, Jul 09, 2024 at 07:35:35PM GMT, Thomas Weißschuh wrote:
-> The check and warning are very specific to the SPD usage of the i801
-> driver. That was fine as long as i801 was the only caller of
-> i2c_register_spd(). Now that piix4 will be added as another user of that
-> function, the check and warning are not accurate anymore.
-> Instead of introducing a more complicated calling protocol only to print
-> a warning, drop the warning.
 
-Well... it's not just a warning, it also returns.
+--FWqaZIouFtfrI0+R
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Even in cases where not all slots can be probed,
-> then at least probe the 8 slots that can be.
+On Thu, Jul 04, 2024 at 04:31:48PM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>=20
+> Wolfram,
+>=20
+> Please pull the following set of updates for the upcoming merge window for
+> the at24 EEPROM driver. Changes are quite simple: we support two new EEPR=
+OM
+> models in the driver and document another model with a compatible fallbac=
+k.
+> While at it: unify fallbacks for two existing compatibles.
+>=20
+> Best Regards,
+> Bartosz Golaszewski
+>=20
+> The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfab=
+d0:
+>=20
+>   Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/at24-=
+updates-for-v6.11-rc1
+>=20
+> for you to fetch changes up to 3a9ba4e32230df6c48cda1fd5cbca6facacc74c2:
+>=20
+>   dt-bindings: eeprom: at24: Add compatible for ONSemi N24S64B (2024-07-0=
+3 11:57:52 +0200)
+>=20
+> ----------------------------------------------------------------
+> at24 updates for v6.11-rc1
+>=20
+> - add support for two new Microchip models
+> - document even more new models in DT bindings (those use fallback
+>   compatibles so no code changes)
 
-I'm good with the change.
+Pulled, thanks!
 
-Jean, Heiner, any comment here? Do we want to add an extra check
-for i801?
 
-Andi
+--FWqaZIouFtfrI0+R
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaOKdgACgkQFA3kzBSg
+KbYzMg/9Flizb99SlcylJ7F1KwGE90z+Y4wG84ac9AG9kL1Gc2ittDLPKD/Vp9Qf
+3hwHiFzyakuRpCpH3iMrp9Of5ElqAlCpz1UCBU0DppNdtGW/SVrO+zf+Emb2PmGQ
+C+n2tpItM9BsDML24clyc+MB0Q+O8P9GuDBaXQjxnTiKdzzOlLe2bnOgl8w0m1DB
+nKsy6C8JJYwTuRMnraatSJR3+5eiFrEVZWTXp3GHN8HwqcKm9nLxa/uEVN0gwmAG
+IioEc4kIdk2Iq9tW/AH2jZwVAlHDnVVg8/SXKt6YVIOK5WG5obYsg0IF15VnmQVi
+V3Q36pfcyUpQLvuduk5Z0oc3+iuASMvNk7MWGnfPZphRASnQeTdk58Mkvi5emgyJ
+cEIufAJMhKpiizYUUfceZSdqHjyIv0mMnHj1A1aaLEyemjBq/Fd0JSTgBtYs2e5m
+Yqx1vuwMOnyF1c/WPgA5qAoEp+6qiVSbknGpBg+iOhSOTA9RJdnc0SflIBkeMubV
+wLXlnt+eLqRcVijVqdu8UaBzafmrmMX8Q6KJuWq36fI7MP62oTukiT0KxfJbpMq6
+iZH73pjY4q+S0JWBUJqAjfov6BVzyNLVboS9TuL/uY6mvU1DTUMdHXxug/UR3Lx+
+Vh4CQ7ElftbtthwWJp0+iM2gpBAeG4iR229sxHAg+TczboxoSos=
+=+AHe
+-----END PGP SIGNATURE-----
+
+--FWqaZIouFtfrI0+R--
 
