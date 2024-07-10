@@ -1,146 +1,111 @@
-Return-Path: <linux-i2c+bounces-4830-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4831-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6252D92CCD0
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 10:22:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A942592CD1D
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 10:36:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 617A71C231E8
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 08:22:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 533EE1F237AD
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 08:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1589B127E3A;
-	Wed, 10 Jul 2024 08:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DE0613C689;
+	Wed, 10 Jul 2024 08:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtUhFcGf"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="SN6+SRSS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB9985947;
-	Wed, 10 Jul 2024 08:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D541E130ADA
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Jul 2024 08:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720599725; cv=none; b=Y8I8EGUkPjIJTuX3Bnlc9ZcGWbfs8V2i9IbY5eoIG0W7Cs/TfSbHIMjU071e0QCgZPQh2syscGi1WiT9ge4iHGUvb5BEIR6RLLNXxDjBO1rXKFq2hNcy/WpU+kc8cwwQ+Hmo4gp9kf/Mkvou8rtBSRgfocZqmpRxuj1oePN2oXw=
+	t=1720600564; cv=none; b=hWgTnI+cKP49GSsDPJ+t6VaypCwB0tFv3etnVyYGHpEXBVkXtJ0kO+yzQS6s0D2icUrRsvWIN68lHhv95fkW7mFThQZ/T82L/2RwYF98niF2qqMspY6C042mIMBisOxLHHKKUdQNBb+poYdR1pQcmq5big03jGuwzyHXm77FM4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720599725; c=relaxed/simple;
-	bh=o0tPpsCYeUn7TKNumWeq6TWkwbORZPB4jdf9dJmh648=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ilNHgtRmwg2FF1EjTfDF12bAOs56H7/wyoZ8dtjmHJ6vnOKdPHBNip2w+VcNPJ+zs/n9W2wK1m7qPbRg+0wt86q6dhqIJ7mYE9f4e3TMiJJH7qhnBVj5ZGx1G8QD/g8BE/dFl6lQ2jjqkFl0QzhCjAaFlp+hFMUo96McO6Ka8aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtUhFcGf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6096C32781;
-	Wed, 10 Jul 2024 08:21:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720599725;
-	bh=o0tPpsCYeUn7TKNumWeq6TWkwbORZPB4jdf9dJmh648=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jtUhFcGfpxHHPjSS5i07F4mVMrCM8hIWvkkVt5wrrJYzvz0BnCO7wZZYl+4VCRn/w
-	 zx89o9Hlf6OuzAR01vd87PJF5IN2oCT3A/axvrBCn/ObE1C8Y6tctt4M6Onyfxe5Ne
-	 vMnenNcd7WefaptDjB627z8vQV7VNWhxRhwDqN97fOlcaNtCv87SrGFuOjYZTu9CJy
-	 0BSs3lYaHwoO/6razhMzNhoM/gwaC699/LULYF49xwBua/5GG0oEdOxRsKJvJ2AsqN
-	 uUKlKUHSr+i6nGs6nG8uAArEuk58DsjFT4O998NXEFg3HDlXpWy/o3fcfyoGM/G64E
-	 ZU1AHZbdcr5Bw==
-Message-ID: <6374ed31-3832-4b17-9d80-f668c419a016@kernel.org>
-Date: Wed, 10 Jul 2024 10:21:57 +0200
+	s=arc-20240116; t=1720600564; c=relaxed/simple;
+	bh=0DuTUjwKcmoUD+Ke26uRDuGLpnimVtC5VfEgQi4p3U0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=g5TdLuchHyyfhNgYA7TO7RDiHOuVh8DnGw6C01LPKsLxoQCp17CX7Ufe1TNTWW3gOnkCVsrIVqdplqLzCdfZD5JXWXW6/QKK92S+GkHaOfLrROZUGMEZBJW4rwMx/9Ti8cNsy2fpn7dm3EVgE1S3iB+gexKENcNWXJ6M5M0TRmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=SN6+SRSS; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a77baa87743so652269266b.3
+        for <linux-i2c@vger.kernel.org>; Wed, 10 Jul 2024 01:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1720600559; x=1721205359; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QLnwa9y8M8tKEvQAZNZ2w3HnhPeZmNOTX46tGK9rSpA=;
+        b=SN6+SRSS1eCPzL7u/6SnA1+sviuYLtGgXRGCRMPouQ2w2bRb11xdTy0DMo8WEo1kDt
+         HQ4bnkCzqH55hJc0fiw/GCN8o8W78rh5UfTZgQ/uOWNSwMKe7MXU6ay1bSbDk0ZEVQyj
+         KwIlR8yMJ40EmlYskO5p3pOIQH0KiVRlTI4f1vtn0H7/o5j/AOXH9G4mhJQH46xxTeg9
+         5uif4UsjCsEhL+nXnFf7VyFEWT4+OV3X5taqL22p+hCZMCfaPTFz7YLVOfWzimtWhUTT
+         ORoJ9vAQq93NfrhPapxbtv6YVSkbtv+3aJybNuROgGDFNblHO/mExZbQAOLlIHul/CFS
+         O4GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720600559; x=1721205359;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QLnwa9y8M8tKEvQAZNZ2w3HnhPeZmNOTX46tGK9rSpA=;
+        b=ObtWHusxKBSOAKyVU7kmsiaHHHaQOuRSsZCPY4jd5GgJ6D/q6rP/nZsVOSTD0qpHFt
+         olb04w+oJES5D9JTds7ATMhfoHLiVb4fwdQtlzK+kjWMpzJUGGbAqYO2O8MzB4FfAvvU
+         e1kduLhMoTBVU0OpgHtDXs39uySOwkcVKpCN9rMk6SAk5qwescBM6FpcK2rSNFWEjahB
+         eSULkOZU4U7GzpuXzepKdyP5etL/s+w6aWGtuYpelYszdSrX/EbTrZAjors9BrE/ny1n
+         51nPyrjQ/7G+dm2FH3l1uv7SoiUc36VmPk0VlfgSTezauy0BUPdCDkqJhdt/cd2iiCIv
+         ehBQ==
+X-Gm-Message-State: AOJu0Yyh2s4wL3m2UShYhOL3m4qqKHXIIPvMvPZ6O0ZgkmPhCIlpmXZs
+	a5zpj/NsPa9qQ9UbNMtiZ1gH4A57OvSPXq5E+IVCXZBrMHhZp4BeYPJo9UeHIw4=
+X-Google-Smtp-Source: AGHT+IEFUtftJWnURm9euQd5wYTZtACuxZYzLcX621O/JVpAJ423LEJTYkmjw4xT134ngDHl8bYBag==
+X-Received: by 2002:a17:906:c154:b0:a72:455f:e8b with SMTP id a640c23a62f3a-a780b5057b4mr465633866b.0.1720600559204;
+        Wed, 10 Jul 2024 01:35:59 -0700 (PDT)
+Received: from localhost (p50915eb1.dip0.t-ipconnect.de. [80.145.94.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a6bc6f6sm139986866b.9.2024.07.10.01.35.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jul 2024 01:35:58 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-i2c@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH 0/2] hwmon: (pmbus/ltc4286) two patches about device matching
+Date: Wed, 10 Jul 2024 10:35:43 +0200
+Message-ID: <cover.1720600141.git.u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: (subset) [PATCH v3 0/3] Add I2C support on TH1520
-To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jisheng Zhang <jszhang@kernel.org>,
- Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
- Drew Fustini <dfustini@tenstorrent.com>,
- Emil Renner Berthing <emil.renner.berthing@canonical.com>,
- Conor Dooley <conor@kernel.org>,
- Jarkko Nikula <jarkko.nikula@linux.intel.com>,
- Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- Conor Dooley <conor.dooley@microchip.com>
-References: <20240618-i2c-th1520-v3-0-3042590a16b1@bootlin.com>
- <172059771094.2294116.14777114514280404581.b4-ty@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <172059771094.2294116.14777114514280404581.b4-ty@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=714; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=0DuTUjwKcmoUD+Ke26uRDuGLpnimVtC5VfEgQi4p3U0=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmjkffDrfQJJHtXnrlvW+E3VTUKNuuKVdBRl1MF zTlV3x2jvuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZo5H3wAKCRCPgPtYfRL+ TmFzB/9QVm2ziqfe0y2Ptgw6IKf0pLBWTyuepzUAlEcFTz57HH9cNQEHvXAr1z/Fx6Lk6imTAIq sY5urp7SfQpnGYS2RT2KJooy/VY5M7sPlO4aJk0vnChFPhnosQCdOQzJIvR8EUEZNi80CLXSSTu AbBL385+rrfQTsAqUp8OMr8hKZHAnv1720y6RyOt83gRPnycZr6/id21SvM3l0r0wJjcY02tQ5n SmmyiQfWl3PtIDR4cbI5oe2pkO+7JH/z+epYMEP34ZrGwrnPVUN1oO1Vi7b1DvPzfdtD2jw7pO7 I+g7rF/8s9tKYh1IjhVmXaRKdnNSKshvkuPeIJv9ovEN3yCz
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 
-On 10/07/2024 09:48, Andi Shyti wrote:
-> Hi
-> 
-> On Tue, 18 Jun 2024 09:42:37 +0200, Thomas Bonnefille wrote:
->> This adds I2C support in the device tree of the T-Head TH1520 RISCV-SoC
->> and a default configuration for the BeagleV-Ahead. It appears that the
->> TH1520 I2C is already supported in the upstream kernel through the
->> Synopsis Designware I2C adapter driver.
->>
->> This patch depends on the clock patch from Drew Fustini
->> Link: https://lore.kernel.org/linux-riscv/20240615-th1520-clk-v1-0-3ba4978c4d6b@tenstorrent.com
->> and the pinctrl patch from Emil Renner Berthing
->> Link: https://lore.kernel.org/linux-riscv/20240103132852.298964-1-emil.renner.berthing@canonical.com
->>
->> [...]
-> 
-> Applied to i2c/i2c-host on
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/local tree
+Hello,
 
-Something got odd in the git repo above in your ty letters.
+while working on my quest to improve i2c_device_id I noticed some minor
+strange things in the pmbus/ltc4286 driver. The first patch just
+documents the first peculiarity found, so the next reader doesn't wonder if
+this is done on purpose (and the patch gives the opportunity to notice
+if this behaviour is unintended). The second drops the other peculiarity
+I identified.
 
-Best regards,
-Krzysztof
+Best regards
+Uwe
+
+Uwe Kleine-König (2):
+  hwmon: (pmbus/ltc4286) Improve device matching
+  hwmon: (pmbus/ltc4286) Drop unused i2c device ids
+
+ drivers/hwmon/pmbus/ltc4286.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
+
+base-commit: 82d01fe6ee52086035b201cfa1410a3b04384257
+-- 
+2.43.0
 
 
