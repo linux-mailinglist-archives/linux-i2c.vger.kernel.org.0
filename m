@@ -1,103 +1,115 @@
-Return-Path: <linux-i2c+bounces-4864-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4865-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8B9C92DBAD
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 00:11:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EADE492DBDC
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 00:21:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 812442816A1
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 22:11:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28DB41C238F4
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jul 2024 22:21:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EA3147C60;
-	Wed, 10 Jul 2024 22:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6E701494CE;
+	Wed, 10 Jul 2024 22:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eFbGJ+Dk"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="fQkH2e9H"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E7D145FE9;
-	Wed, 10 Jul 2024 22:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B37812F365
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Jul 2024 22:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720649480; cv=none; b=CCGryccZcFDhFdhDCp/4AUrR5ZCejxw26hxHOijBw2PHWQzbobSiJ9JrgM3q/h06zXF/eyWMytQjukA9i8MJn776wuh2roLSKdEPBsRzcRpZfeQxjZOmzCx/ZkCQ0oAGZbL5dklzJYpfSSeTbnAdKaPsvFe/IZsfQ4xPMFm+B9I=
+	t=1720650072; cv=none; b=ImksxGQKqvsjgXUpGZip1Fpv03mYmLM0ulYwgbMuyLv4f2VTdT6uOvUy8Xn22uP3EUFuLJfPxZRxX/iTaWCTvyulPjRBwdPTB3634LNkXyOwwAndmIIaSo1LEqfl2dnzGuy/XOiX3g4rDpfz/RAXFG3vFTHkgTRKMD/nB7ojvgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720649480; c=relaxed/simple;
-	bh=d6B92F2tYKYJnTS0wgiNBGVoxnrUXN8+RFUm3oqSyH4=;
+	s=arc-20240116; t=1720650072; c=relaxed/simple;
+	bh=UR9u1b1LERdObB5H9teSx8y9oN2qUYckeEFv+IKQgpA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B9WlGjutKPoWl8O2IY8/i/3EX/FB/SedEhFDGCZPrnefVsxBZQoTNZEU5KRc5/c00vSkTZTQgzGwVU655BMexp3D2ZhscLWK671FXOSCZI5j2sIGoGAV/csAATffAZv5fg4p6H8xIU1qmaMmtED5m/t0NetYw4FtWiEr6NjGRSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eFbGJ+Dk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76303C32781;
-	Wed, 10 Jul 2024 22:11:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720649480;
-	bh=d6B92F2tYKYJnTS0wgiNBGVoxnrUXN8+RFUm3oqSyH4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eFbGJ+Dkc4M2dHDjdjpepsHp/ZXCkdfeIXkyCbbCvBHP5n/t2tBEMqJDPRKFwwhCX
-	 h2baJAMwH96ypy9icX7JUo0/AzVUn6ClobIRtb/xhhXt6Zc3SwmYJQr0gahOx8xbxU
-	 VUeuGl1m9MZuK+YXHWxawz5Je34vGktjc/nqAnrzc62pIaU/8Sos6xn8wcIWWMYbnJ
-	 yQQsGk9VT6LYoNHjgYzL2pCyrT7lODkjNu7+mVgSH83tjEvrs7b0meiX6cL7p/kVVE
-	 uot/yJ+SHJmaC9GiQpbHJ/L/b/PL2vIGwf1LOUHlu4uTpSSXwzTHKp9IiDMza8VkxG
-	 rfHSAwsO86E2g==
-Date: Thu, 11 Jul 2024 00:11:16 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YmFWwaXh/ONZMUdmAn/sWOVCDd7aKoHd+EdZV3/WZVJS+dvQndLREQmvbVGRtrUstc9J+F94BQRfR/kvqbmuhSiN5lYMNjXCKu/w8YWitDMQGt1MnKh58GvmKlEI2jx2Wo+CVH3rTbvQ+mj6xjE2lbMsnUqnm9M0K83aGf4Po6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=fQkH2e9H; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=5Gfc
+	wj1h/9hwmssK1LHK7dJ8iHOpSHErohYtvx8U/Jg=; b=fQkH2e9HIcKdIvYY5oON
+	IKDJqF8DV06ALI+M7NVl+EUJ7ByYLtZEtjpFjUe7RSfepjl4z1YcMY5t7JdpcowN
+	ZPh6pf1a8s9JzHe3H2a/xfi2SIshs5Ww0LcUHtwYwYxQZ2X8NccO0+8bAO9+CxJm
+	Jmv9KiQzTfuF08mXTm5Y9BB0erDowCFY+KdwSVV/DUbd3jaUW/JGgY1T/0AHRHhh
+	3i196nYBA1OYsEdXjNIW2IlP8LJwkbmTybA39QeQ+7ky+yH5eYmmR4nXKJH16Kvv
+	O2LqjAbHfOAfTJvROgWQfB5DBepKAlZdxhtiLgy7+JrL2xikA6Cx7L6YiROfV0y1
+	/A==
+Received: (qmail 653563 invoked from network); 11 Jul 2024 00:21:05 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Jul 2024 00:21:05 +0200
+X-UD-Smtp-Session: l3s3148p1@NZTrD+wctoUujnsa
+Date: Thu, 11 Jul 2024 00:21:05 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
 Subject: Re: [PATCH v2 32/60] i2c: mv64xxx: reword according to newest
  specification
-Message-ID: <7szxutsq35uaydvbo6bzrpsvnx765de7ps3kpvzs3b4ubczq6x@weaxji5u2p7c>
+Message-ID: <Zo8JUWIfmHhKs4jd@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
 References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
  <20240706112116.24543-33-wsa+renesas@sang-engineering.com>
+ <7szxutsq35uaydvbo6bzrpsvnx765de7ps3kpvzs3b4ubczq6x@weaxji5u2p7c>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nxE7TigkqQEf5t7E"
+Content-Disposition: inline
+In-Reply-To: <7szxutsq35uaydvbo6bzrpsvnx765de7ps3kpvzs3b4ubczq6x@weaxji5u2p7c>
+
+
+--nxE7TigkqQEf5t7E
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240706112116.24543-33-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Wolfram,
 
-On Sat, Jul 06, 2024 at 01:20:32PM GMT, Wolfram Sang wrote:
-> Change the wording of this driver wrt. the newest I2C v7 and SMBus 3.2
-> specifications and replace "master/slave" with more appropriate terms.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/i2c/busses/i2c-mv64xxx.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
-> index dc160cbc3155..29f94efedf60 100644
-> --- a/drivers/i2c/busses/i2c-mv64xxx.c
-> +++ b/drivers/i2c/busses/i2c-mv64xxx.c
-> @@ -89,8 +89,8 @@ enum {
->  	MV64XXX_I2C_STATE_WAITING_FOR_RESTART,
->  	MV64XXX_I2C_STATE_WAITING_FOR_ADDR_1_ACK,
->  	MV64XXX_I2C_STATE_WAITING_FOR_ADDR_2_ACK,
-> -	MV64XXX_I2C_STATE_WAITING_FOR_SLAVE_ACK,
-> -	MV64XXX_I2C_STATE_WAITING_FOR_SLAVE_DATA,
-> +	MV64XXX_I2C_STATE_WAITING_FOR_TARGET_ACK,
-> +	MV64XXX_I2C_STATE_WAITING_FOR_TARGET_DATA,
+> > -	MV64XXX_I2C_STATE_WAITING_FOR_SLAVE_ACK,
+> > -	MV64XXX_I2C_STATE_WAITING_FOR_SLAVE_DATA,
+> > +	MV64XXX_I2C_STATE_WAITING_FOR_TARGET_ACK,
+> > +	MV64XXX_I2C_STATE_WAITING_FOR_TARGET_DATA,
+>=20
+> I searched online for the datasheet but couldn't find it. It
+> would be helpful to know if the SLAVE naming comes from the
+> datasheet or if it is arbitrary.
 
-I searched online for the datasheet but couldn't find it. It
-would be helpful to know if the SLAVE naming comes from the
-datasheet or if it is arbitrary.
+I was considering datasheet names, but obviously I concluded that these
+are custom names.
 
-If it originates from the hardware specifications, I suggest
-keeping the term "SLAVE."
 
-If anyone can share the datasheet, I would be happy to review it
-myself.
+--nxE7TigkqQEf5t7E
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Jean and Gregory, could you please check and provide your ack
-here?
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Andi
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaPCU0ACgkQFA3kzBSg
+Kbb/mhAArl6U/dAyn1dNsFQSmYcw7GLbDJWa3SOf5W39+JRUBruxGzNXub7Qq+uD
+V2j1V9t+yzD4O2+vyuzUHjQ3ru5Ky/Rc7INwiGGK+vwWmqvR9EG5lLQOZttAVfWf
+kkn1lw8oTCd4jVqUV+gKjsqJyOLGn6b3+Ysm+7ezSbPLCyMc9uaxFEecrBSjxIqi
+eMX2/DrGJ01XerhTAVbcP9dSXgtbwOZ2Qqg0L9Lw4LVHUUyYJ7Kkvi5aCt89KflN
+V7nSgl5vz1T7aS9BEXF0Apo+pBuiyMg8zzl+dsq/Y+8wuWz7jGjMF9mgYwfSDQ2X
+68IornfEriGfTsh3ylbdZzq0PZjRe/spqTFjs/j78DeFw6xuF7AjqZy/yPygJ/YN
+jqNTnt9HjE9n9UCiXe7wqgddeNm0uSXrZ8HDykDF6d+dLWWucXyVFkxPs4Hpp4op
+kse/w/I7WpXGhPeSvCSOPyeoZmGb5ueq1O7iEBrm26A1uJ+9mXetfZgWjf9nMIS0
+kbMjNFyJDKwsP8/25BsSQ04nhds7rrjnYi02k9g2RBwYwPNlMJWf6G5vtjshT6C1
+2oNewIuFTiYnnWMKdCnZraXMraTDqRD0WAAw0KxS9zY7aZU+NIDG/ZvdPiayf3VJ
+9LEgLY1wE2gyU/7H6JzNRO/NM7/LCSa5L33FrbMTQHPkTabAljw=
+=pPql
+-----END PGP SIGNATURE-----
+
+--nxE7TigkqQEf5t7E--
 
