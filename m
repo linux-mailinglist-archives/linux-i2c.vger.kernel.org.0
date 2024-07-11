@@ -1,359 +1,155 @@
-Return-Path: <linux-i2c+bounces-4876-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4877-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E5B992DF9C
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 07:30:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88E2892DFEF
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 08:15:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D89AAB21AD5
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 05:30:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1786F1F23A7E
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 06:15:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A0E13213D;
-	Thu, 11 Jul 2024 05:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 532BE84E1E;
+	Thu, 11 Jul 2024 06:15:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="eoGn8Qek"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K01sQ57h"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D943812EBD6;
-	Thu, 11 Jul 2024 05:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDF11C14
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 06:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720675751; cv=none; b=RxabEphfCr25ZBRssi4ExS6V1EcWiF7G6ZrLPEXE5DpgRUI1wW8Zv8vtCGXyF+sA0Qi6ZastNxWb5RmuWC4EyVlhnJq4nvBub/7SyJ8/83QwknTxT6JTsEYH7zZZJ2wlaIZ/dgAvzglG9ijhBu6u1BjVgF/2fDduU7QgUKSJRR0=
+	t=1720678516; cv=none; b=cjHaI2/mwPnn4G5ObpFbXlNzvUJYynbyMbIcdCxiEoggHUgJDXlhEJBMf6yKufEnCOmvoSPIc7Q8XLTVW7MrodUObWOGrOsEBzWHWMs/fweAmtFm0Mog4xBFFg7jdMFhRgR/ie8neSYQr9adIIV+ZDFDq4O8zODzcZ9Caec/adc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720675751; c=relaxed/simple;
-	bh=LjVFHUW1i5MW8BjuRxPGqlUs0KNO8F20PvjjZxW7Msg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ls1xt/Pt48bgf9Zy3xN24PIIiB+cPbqymwHB/T4r2c17F4E9QFArY3IYyYy/XHurRb+MmPEpDJgnMitiCsTPgfeEeeAj8OJ6OPDBLg1l6wf4hMGT3A2Ol1I4fOzQVc0FfhK5/mhBoJmbjn4lEE74GTEvYcxl76uw+XL+Ev/cKbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=eoGn8Qek; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from rrs24-12-35.corp.microsoft.com (unknown [131.107.159.213])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 91CE520B7165;
-	Wed, 10 Jul 2024 22:29:09 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 91CE520B7165
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1720675749;
-	bh=4zzt0sxaEK28Q73el3r0U92JO8hyIlQcIdU1sMN5SYU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eoGn8Qek5E9XSsJ2C10alVGfeRI/GzNSHI1/EexKzjrgWsychWzp8Ge+lGek14A/J
-	 MUw7Gos/0iZHXuMnVkt3Ib9Gd6v9b9vWi3i9BPGB45RuwnW2BN8APCzd4c6a7/vLya
-	 0KvnYyDte6YcPv6Z07Lp3J2rdrUZVExWoJeNWNLg=
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-To: Florian Tobias Schandinat <FlorianSchandinat@gmx.de>,
-	Helge Deller <deller@gmx.de>,
-	linux-fbdev@vger.kernel.org (open list:VIA UNICHROME(PRO)/CHROME9 FRAMEBUFFER DRIVER),
-	dri-devel@lists.freedesktop.org (open list:FRAMEBUFFER LAYER),
-	linux-kernel@vger.kernel.org (open list)
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Easwar Hariharan <eahariha@linux.microsoft.com>,
-	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-	linux-kernel@vger.kernel.org (open list),
-	intel-gfx@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS),
-	intel-xe@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS),
-	linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
-	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER),
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v4 6/6] fbdev/viafb: Make I2C terminology more inclusive
-Date: Thu, 11 Jul 2024 05:27:34 +0000
-Message-Id: <20240711052734.1273652-7-eahariha@linux.microsoft.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240711052734.1273652-1-eahariha@linux.microsoft.com>
-References: <20240711052734.1273652-1-eahariha@linux.microsoft.com>
+	s=arc-20240116; t=1720678516; c=relaxed/simple;
+	bh=y3ktNGebf/tND/IgigfoYQrfrqmmUczeIKkfquK10Hc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sLnJvW7NE9iMtpIk3Bna2qYErSTa3lKNAAC60+zQ4sM1uCJxxvYsM7GDH6XFfRE3g0nQf1ghKSgYaZ8tcGvN7DxMIpGVmEaygfd2LctPI6wk9Ibm59XjKN6Gjx17S6wXGty3ohnmDGLzZwPAurBO6URQJnTfIBCVAL5gWVJtwr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K01sQ57h; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4277a5ed48bso3472545e9.2
+        for <linux-i2c@vger.kernel.org>; Wed, 10 Jul 2024 23:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720678513; x=1721283313; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cjawB11cWRjKlURmq8JYtMfSCsTQ/YZW2fN5Rf+/I9k=;
+        b=K01sQ57h0OwN12RKsiEqWtPD1s4GvYoL+oNjTCHeQId/Zbw5KKIKP1yzRXVoEAt0eO
+         zVijg9tX5HC3mr8Pc46sF+LqbDUiclNV2vfMBSYv4CLdKCyEH4VbrCgoaziEm8s2gfv8
+         HiLiSYj4rCBt+0DOMNHRlPowsNVwdEkBoZX7uqTNrgtEm6a39iqDX46jQQp0LUPn3luJ
+         NkxNcN8nyVeor6fuWOwOjAA30PiiIRqHag8B5CjITgVWXadl+QfX+gcxWuYeafVXv3Qz
+         ufurvw6XOeBFRS79z1IPn/Zlg5Tz/RCqxJi8ccbngL1GpRaS3duPKdqzW0nnfTeBCX1o
+         B3rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720678513; x=1721283313;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cjawB11cWRjKlURmq8JYtMfSCsTQ/YZW2fN5Rf+/I9k=;
+        b=KaVxnttc2cG+5A8JuhSHF4cUNB++9laZthABQywILWhNr6xhdPRUZR7p9fQ/l0kuSz
+         NmtZ4dC/OUPDKoXLxfhgKGpFcWIuD10SAFggE2o+KiilbycYQzLjdEZPNUIBgcVH5chf
+         iUI1U8fSAWDoXEFxJl+MRJSJtfiWKJ5pDZo9oR6610VQr4DGIBDY6T1ZgbFg7oBvtjBB
+         EWgJWSy1L2ZFbewnK7QNF0P6IcxwuEVt0bM6v8ipfV6V2e1q+t0HlMaAKD/03lCIZLu7
+         MF1HTtADrLfcnb8WhV4yxdnY1e0qWBf+PQOdfQ3/nspkDPnIT/O0kCopBmTzO3hCjznp
+         6OJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfVO41qHw4qoe9hwal4bM/5stmdl3bm0mrEVXGQOQRGQ5TP9NYnDnnMMLSmGN6FPeQFaBwug+eTPTA8t39W/NuwfWfIZ5Coq76
+X-Gm-Message-State: AOJu0Yyb8MIO5XV5EqIlGm+EsN3xgEC2nSFMPA9IxS+95F6VsKKRttiY
+	FkK5fSS/6LVjHx4iuithfv02xSp0R1RKr2lnL2Hgx6M3n+0nykub1b2c1++VxKc=
+X-Google-Smtp-Source: AGHT+IHJdxRoUxGRPUS5DatMYQJ2oQCQWbcaVtzgeLwaD0vtkH2xliyHHpnQfljsoetf11o2SKnhmw==
+X-Received: by 2002:a05:600c:6dd2:b0:426:640a:9dec with SMTP id 5b1f17b1804b1-426708f9e89mr42037815e9.41.1720678512918;
+        Wed, 10 Jul 2024 23:15:12 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.137])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4264d5101ffsm259425375e9.16.2024.07.10.23.15.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jul 2024 23:15:12 -0700 (PDT)
+Message-ID: <90996362-a628-47dd-a6b2-d461724874ef@linaro.org>
+Date: Thu, 11 Jul 2024 08:15:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: i2c: at91: Add sama7d65 compatible string
+To: nicolas.ferre@microchip.com, Conor Dooley <conor.dooley@microchip.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ devicetree@vger.kernel.org
+Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-i2c@vger.kernel.org
+References: <20240710162615.332888-1-nicolas.ferre@microchip.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240710162615.332888-1-nicolas.ferre@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/slave"
-with more appropriate terms. Inspired by Wolfram's series to fix drivers/i2c/,
-fix the terminology for users of I2C_ALGOBIT bitbanging interface, now that
-the approved verbiage exists in the specification.
+On 10/07/2024 18:26, nicolas.ferre@microchip.com wrote:
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
+> 
+> Add compatible string for sama7d65. Like sama7g5, it currently binds to
+> "microchip,sam9x60-i2c" compatible string for this driver.
+> 
+> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml | 2 ++
 
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
----
- drivers/video/fbdev/via/chip.h    |  8 ++++----
- drivers/video/fbdev/via/dvi.c     | 24 ++++++++++++------------
- drivers/video/fbdev/via/lcd.c     |  6 +++---
- drivers/video/fbdev/via/via_aux.h |  2 +-
- drivers/video/fbdev/via/via_i2c.c | 12 ++++++------
- drivers/video/fbdev/via/vt1636.c  |  6 +++---
- 6 files changed, 29 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/video/fbdev/via/chip.h b/drivers/video/fbdev/via/chip.h
-index f0a19cbcb9e5d..f81af13630e28 100644
---- a/drivers/video/fbdev/via/chip.h
-+++ b/drivers/video/fbdev/via/chip.h
-@@ -69,7 +69,7 @@
- #define     VT1632_TMDS             0x01
- #define     INTEGRATED_TMDS         0x42
- 
--/* Definition TMDS Trasmitter I2C Slave Address */
-+/* Definition TMDS Trasmitter I2C Target Address */
- #define     VT1632_TMDS_I2C_ADDR    0x10
- 
- /**************************************************/
-@@ -88,21 +88,21 @@
- #define     TX_DATA_DDR_MODE        0x04
- #define     TX_DATA_SDR_MODE        0x08
- 
--/* Definition LVDS Trasmitter I2C Slave Address */
-+/* Definition LVDS Trasmitter I2C Target Address */
- #define     VT1631_LVDS_I2C_ADDR    0x70
- #define     VT3271_LVDS_I2C_ADDR    0x80
- #define     VT1636_LVDS_I2C_ADDR    0x80
- 
- struct tmds_chip_information {
- 	int tmds_chip_name;
--	int tmds_chip_slave_addr;
-+	int tmds_chip_target_addr;
- 	int output_interface;
- 	int i2c_port;
- };
- 
- struct lvds_chip_information {
- 	int lvds_chip_name;
--	int lvds_chip_slave_addr;
-+	int lvds_chip_target_addr;
- 	int output_interface;
- 	int i2c_port;
- };
-diff --git a/drivers/video/fbdev/via/dvi.c b/drivers/video/fbdev/via/dvi.c
-index 13147e3066ebf..27990a73bfa39 100644
---- a/drivers/video/fbdev/via/dvi.c
-+++ b/drivers/video/fbdev/via/dvi.c
-@@ -70,7 +70,7 @@ bool viafb_tmds_trasmitter_identify(void)
- 	/* Check for VT1632: */
- 	viaparinfo->chip_info->tmds_chip_info.tmds_chip_name = VT1632_TMDS;
- 	viaparinfo->chip_info->
--		tmds_chip_info.tmds_chip_slave_addr = VT1632_TMDS_I2C_ADDR;
-+		tmds_chip_info.tmds_chip_target_addr = VT1632_TMDS_I2C_ADDR;
- 	viaparinfo->chip_info->tmds_chip_info.i2c_port = VIA_PORT_31;
- 	if (check_tmds_chip(VT1632_DEVICE_ID_REG, VT1632_DEVICE_ID)) {
- 		/*
-@@ -128,14 +128,14 @@ bool viafb_tmds_trasmitter_identify(void)
- 	viaparinfo->chip_info->
- 		tmds_chip_info.tmds_chip_name = NON_TMDS_TRANSMITTER;
- 	viaparinfo->chip_info->tmds_chip_info.
--		tmds_chip_slave_addr = VT1632_TMDS_I2C_ADDR;
-+		tmds_chip_target_addr = VT1632_TMDS_I2C_ADDR;
- 	return false;
- }
- 
- static void tmds_register_write(int index, u8 data)
- {
- 	viafb_i2c_writebyte(viaparinfo->chip_info->tmds_chip_info.i2c_port,
--			    viaparinfo->chip_info->tmds_chip_info.tmds_chip_slave_addr,
-+			    viaparinfo->chip_info->tmds_chip_info.tmds_chip_target_addr,
- 			    index, data);
- }
- 
-@@ -144,7 +144,7 @@ static int tmds_register_read(int index)
- 	u8 data;
- 
- 	viafb_i2c_readbyte(viaparinfo->chip_info->tmds_chip_info.i2c_port,
--			   (u8) viaparinfo->chip_info->tmds_chip_info.tmds_chip_slave_addr,
-+			   (u8) viaparinfo->chip_info->tmds_chip_info.tmds_chip_target_addr,
- 			   (u8) index, &data);
- 	return data;
- }
-@@ -152,7 +152,7 @@ static int tmds_register_read(int index)
- static int tmds_register_read_bytes(int index, u8 *buff, int buff_len)
- {
- 	viafb_i2c_readbytes(viaparinfo->chip_info->tmds_chip_info.i2c_port,
--			    (u8) viaparinfo->chip_info->tmds_chip_info.tmds_chip_slave_addr,
-+			    (u8) viaparinfo->chip_info->tmds_chip_info.tmds_chip_target_addr,
- 			    (u8) index, buff, buff_len);
- 	return 0;
- }
-@@ -256,14 +256,14 @@ static int viafb_dvi_query_EDID(void)
- 
- 	DEBUG_MSG(KERN_INFO "viafb_dvi_query_EDID!!\n");
- 
--	restore = viaparinfo->chip_info->tmds_chip_info.tmds_chip_slave_addr;
--	viaparinfo->chip_info->tmds_chip_info.tmds_chip_slave_addr = 0xA0;
-+	restore = viaparinfo->chip_info->tmds_chip_info.tmds_chip_target_addr;
-+	viaparinfo->chip_info->tmds_chip_info.tmds_chip_target_addr = 0xA0;
- 
- 	data0 = (u8) tmds_register_read(0x00);
- 	data1 = (u8) tmds_register_read(0x01);
- 	if ((data0 == 0) && (data1 == 0xFF)) {
- 		viaparinfo->chip_info->
--			tmds_chip_info.tmds_chip_slave_addr = restore;
-+			tmds_chip_info.tmds_chip_target_addr = restore;
- 		return EDID_VERSION_1;	/* Found EDID1 Table */
- 	}
- 
-@@ -280,8 +280,8 @@ static void dvi_get_panel_size_from_DDCv1(
- 
- 	DEBUG_MSG(KERN_INFO "\n dvi_get_panel_size_from_DDCv1 \n");
- 
--	restore = tmds_chip->tmds_chip_slave_addr;
--	tmds_chip->tmds_chip_slave_addr = 0xA0;
-+	restore = tmds_chip->tmds_chip_target_addr;
-+	tmds_chip->tmds_chip_target_addr = 0xA0;
- 	for (i = 0x25; i < 0x6D; i++) {
- 		switch (i) {
- 		case 0x36:
-@@ -306,7 +306,7 @@ static void dvi_get_panel_size_from_DDCv1(
- 
- 	DEBUG_MSG(KERN_INFO "DVI max pixelclock = %d\n",
- 		tmds_setting->max_pixel_clock);
--	tmds_chip->tmds_chip_slave_addr = restore;
-+	tmds_chip->tmds_chip_target_addr = restore;
- }
- 
- /* If Disable DVI, turn off pad */
-@@ -427,7 +427,7 @@ void viafb_dvi_enable(void)
- 				viafb_i2c_writebyte(viaparinfo->chip_info->
- 					tmds_chip_info.i2c_port,
- 					viaparinfo->chip_info->
--					tmds_chip_info.tmds_chip_slave_addr,
-+					tmds_chip_info.tmds_chip_target_addr,
- 					0x08, data);
- 			}
- 		}
-diff --git a/drivers/video/fbdev/via/lcd.c b/drivers/video/fbdev/via/lcd.c
-index beec5c8d4d083..8673fced87492 100644
---- a/drivers/video/fbdev/via/lcd.c
-+++ b/drivers/video/fbdev/via/lcd.c
-@@ -147,7 +147,7 @@ bool viafb_lvds_trasmitter_identify(void)
- 		return true;
- 	/* Check for VT1631: */
- 	viaparinfo->chip_info->lvds_chip_info.lvds_chip_name = VT1631_LVDS;
--	viaparinfo->chip_info->lvds_chip_info.lvds_chip_slave_addr =
-+	viaparinfo->chip_info->lvds_chip_info.lvds_chip_target_addr =
- 		VT1631_LVDS_I2C_ADDR;
- 
- 	if (check_lvds_chip(VT1631_DEVICE_ID_REG, VT1631_DEVICE_ID)) {
-@@ -161,7 +161,7 @@ bool viafb_lvds_trasmitter_identify(void)
- 
- 	viaparinfo->chip_info->lvds_chip_info.lvds_chip_name =
- 		NON_LVDS_TRANSMITTER;
--	viaparinfo->chip_info->lvds_chip_info.lvds_chip_slave_addr =
-+	viaparinfo->chip_info->lvds_chip_info.lvds_chip_target_addr =
- 		VT1631_LVDS_I2C_ADDR;
- 	return false;
- }
-@@ -327,7 +327,7 @@ static int lvds_register_read(int index)
- 	u8 data;
- 
- 	viafb_i2c_readbyte(VIA_PORT_2C,
--			(u8) viaparinfo->chip_info->lvds_chip_info.lvds_chip_slave_addr,
-+			(u8) viaparinfo->chip_info->lvds_chip_info.lvds_chip_target_addr,
- 			(u8) index, &data);
- 	return data;
- }
-diff --git a/drivers/video/fbdev/via/via_aux.h b/drivers/video/fbdev/via/via_aux.h
-index 0933bbf20e588..464723fd514ca 100644
---- a/drivers/video/fbdev/via/via_aux.h
-+++ b/drivers/video/fbdev/via/via_aux.h
-@@ -24,7 +24,7 @@ struct via_aux_drv {
- 	struct list_head chain;		/* chain to support multiple drivers */
- 
- 	struct via_aux_bus *bus;	/* the I2C bus used */
--	u8 addr;			/* the I2C slave address */
-+	u8 addr;			/* the I2C target address */
- 
- 	const char *name;	/* human readable name of the driver */
- 	void *data;		/* private data of this driver */
-diff --git a/drivers/video/fbdev/via/via_i2c.c b/drivers/video/fbdev/via/via_i2c.c
-index 5825028105759..5edd3827ca271 100644
---- a/drivers/video/fbdev/via/via_i2c.c
-+++ b/drivers/video/fbdev/via/via_i2c.c
-@@ -104,7 +104,7 @@ static void via_i2c_setsda(void *data, int state)
- 	spin_unlock_irqrestore(&i2c_vdev->reg_lock, flags);
- }
- 
--int viafb_i2c_readbyte(u8 adap, u8 slave_addr, u8 index, u8 *pdata)
-+int viafb_i2c_readbyte(u8 adap, u8 target_addr, u8 index, u8 *pdata)
- {
- 	int ret;
- 	u8 mm1[] = {0x00};
-@@ -115,7 +115,7 @@ int viafb_i2c_readbyte(u8 adap, u8 slave_addr, u8 index, u8 *pdata)
- 	*pdata = 0;
- 	msgs[0].flags = 0;
- 	msgs[1].flags = I2C_M_RD;
--	msgs[0].addr = msgs[1].addr = slave_addr / 2;
-+	msgs[0].addr = msgs[1].addr = target_addr / 2;
- 	mm1[0] = index;
- 	msgs[0].len = 1; msgs[1].len = 1;
- 	msgs[0].buf = mm1; msgs[1].buf = pdata;
-@@ -128,7 +128,7 @@ int viafb_i2c_readbyte(u8 adap, u8 slave_addr, u8 index, u8 *pdata)
- 	return ret;
- }
- 
--int viafb_i2c_writebyte(u8 adap, u8 slave_addr, u8 index, u8 data)
-+int viafb_i2c_writebyte(u8 adap, u8 target_addr, u8 index, u8 data)
- {
- 	int ret;
- 	u8 msg[2] = { index, data };
-@@ -137,7 +137,7 @@ int viafb_i2c_writebyte(u8 adap, u8 slave_addr, u8 index, u8 data)
- 	if (!via_i2c_par[adap].is_active)
- 		return -ENODEV;
- 	msgs.flags = 0;
--	msgs.addr = slave_addr / 2;
-+	msgs.addr = target_addr / 2;
- 	msgs.len = 2;
- 	msgs.buf = msg;
- 	ret = i2c_transfer(&via_i2c_par[adap].adapter, &msgs, 1);
-@@ -149,7 +149,7 @@ int viafb_i2c_writebyte(u8 adap, u8 slave_addr, u8 index, u8 data)
- 	return ret;
- }
- 
--int viafb_i2c_readbytes(u8 adap, u8 slave_addr, u8 index, u8 *buff, int buff_len)
-+int viafb_i2c_readbytes(u8 adap, u8 target_addr, u8 index, u8 *buff, int buff_len)
- {
- 	int ret;
- 	u8 mm1[] = {0x00};
-@@ -159,7 +159,7 @@ int viafb_i2c_readbytes(u8 adap, u8 slave_addr, u8 index, u8 *buff, int buff_len
- 		return -ENODEV;
- 	msgs[0].flags = 0;
- 	msgs[1].flags = I2C_M_RD;
--	msgs[0].addr = msgs[1].addr = slave_addr / 2;
-+	msgs[0].addr = msgs[1].addr = target_addr / 2;
- 	mm1[0] = index;
- 	msgs[0].len = 1; msgs[1].len = buff_len;
- 	msgs[0].buf = mm1; msgs[1].buf = buff;
-diff --git a/drivers/video/fbdev/via/vt1636.c b/drivers/video/fbdev/via/vt1636.c
-index 8d8cfdb05618f..0d58ca144e190 100644
---- a/drivers/video/fbdev/via/vt1636.c
-+++ b/drivers/video/fbdev/via/vt1636.c
-@@ -44,7 +44,7 @@ u8 viafb_gpio_i2c_read_lvds(struct lvds_setting_information
- 	u8 data;
- 
- 	viafb_i2c_readbyte(plvds_chip_info->i2c_port,
--			   plvds_chip_info->lvds_chip_slave_addr, index, &data);
-+			   plvds_chip_info->lvds_chip_target_addr, index, &data);
- 	return data;
- }
- 
-@@ -60,7 +60,7 @@ void viafb_gpio_i2c_write_mask_lvds(struct lvds_setting_information
- 	data = (data & (~io_data.Mask)) | io_data.Data;
- 
- 	viafb_i2c_writebyte(plvds_chip_info->i2c_port,
--			    plvds_chip_info->lvds_chip_slave_addr, index, data);
-+			    plvds_chip_info->lvds_chip_target_addr, index, data);
- }
- 
- void viafb_init_lvds_vt1636(struct lvds_setting_information
-@@ -113,7 +113,7 @@ bool viafb_lvds_identify_vt1636(u8 i2c_adapter)
- 	DEBUG_MSG(KERN_INFO "viafb_lvds_identify_vt1636.\n");
- 
- 	/* Sense VT1636 LVDS Transmiter */
--	viaparinfo->chip_info->lvds_chip_info.lvds_chip_slave_addr =
-+	viaparinfo->chip_info->lvds_chip_info.lvds_chip_target_addr =
- 		VT1636_LVDS_I2C_ADDR;
- 
- 	/* Check vendor ID first: */
--- 
-2.34.1
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
 
