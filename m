@@ -1,110 +1,105 @@
-Return-Path: <linux-i2c+bounces-4890-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4891-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 960BF92E264
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 10:33:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A18C92E2AB
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 10:47:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33683B24A67
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 08:33:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 360C8283C1C
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 08:47:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D9E15A876;
-	Thu, 11 Jul 2024 08:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDDF114E2F1;
+	Thu, 11 Jul 2024 08:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="akx8IgIN"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="kXATyhs4"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F25A15748C
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 08:30:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AB878283
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 08:47:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720686659; cv=none; b=mBtTylkh71M627KIngveLO66LBDbpBFSAjo1tb1h/xJUiSxHEPr3zzpVi9GEgPU79W0W1Tq3Rcpgjw7xXbUF/yNcFADYcUl+oxW8G/skuNXZ4VYn2j6jua+iOf9VMiXiDwsRwFaH2yp1sfPxEhsiKvN5YljIkbppXMesAlobYXI=
+	t=1720687646; cv=none; b=IDrM30+AgyEaRZXj+M/RwtnuOH2ryY0IKoEZTyEkrnAkkDPWQ89T1w6Z3XyN3s2oxkWd1iKJlNWnhU++OPAL9EMXI/3t6eY+uYHB7DtYLt67RahA0nuhA9MaVAapxKcYZT9Xhbqb/2WckQKeS/Ur+zeaHJ6pZtdNTSJC29yBK8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720686659; c=relaxed/simple;
-	bh=GNnb2pMEpLCZWuU8exB1G4Ok1i/56wOMag9mtFIm49I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MjXLvQWxEtF+wyx0KISi3JW8t+Ck5wSeIwo3ap6/2w/LwfKY5r10dWZzzqvpN0mW3uAKqx6+ZUM39SBwBKXozuWQjPtBUKtoSna4ONjUNgz9G0AGuSEGk2AgK4wj9005b7KIUOuApWXWbbmAjSTo54giyNpwrAlQUZ2NeGMA0jY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=akx8IgIN; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1720687646; c=relaxed/simple;
+	bh=/UcrM9S9fPVMtzAalcskkXvVlbajPVnGUkiWQO2xdWU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GX7uNiJzkF3yagJm8yb1LMptP4sOwlCaPsFHuPyuMGv8LAG6xEgvH9pD+V+Dl9z6YAb/bqvS33zonRM2pV5BrKJv3UYxboFSrOroguDCyrgj0Frv24bRvUb17WIg0vze/ecUn+V4p9//GlvYcQTwWlQR41Sk6yw23iUkc8pocuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=kXATyhs4; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=P+uBeegXTfrwt6
-	z+MKaVDcauEQ2cMUwbT1jXu03xNsk=; b=akx8IgINx6+frcTynwYHGUMx3B3S/B
-	6ccUemnF+1fVjBblUeDVehwjMuW/h7tnSgoIq/EUmu4Oc7dpAkuqnsOy/Hb09sps
-	+QejBZW8wHdMGxZs8Topwla9ASdY7RvkNv0Q3YpBWi+en+utY/y2IhW+NoJ0Zi7s
-	WWSI2y8jTResX39Sx/Y9+tUWNUPY9i6VSnDvdcXtBm0HZnn/r7P+voEGijpjWn8w
-	USBSS02d/m2VxyL4JdOg4syIJDbrE71yjaQazLLnsm+VNz8CyiZBY1VpQTi68hXr
-	iOx2Lc1rQKN82y4iBSmygSgD7wDOKR2xmARP7atm3FHvg1FWZ1H7E7YQ==
-Received: (qmail 777695 invoked from network); 11 Jul 2024 10:30:52 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Jul 2024 10:30:52 +0200
-X-UD-Smtp-Session: l3s3148p1@0iKxlPQcOoQgAwDPXwmZAIsFIv4n+Dpm
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=/Ucr
+	M9S9fPVMtzAalcskkXvVlbajPVnGUkiWQO2xdWU=; b=kXATyhs4/LsJkNPCZwXN
+	V1fyBCC/+TxuDeQBSDqdIL7K3UJxMefdRXUv5q4GJ05xLsljauaIh8wHeSKuHx1s
+	Os5NLJz4UovGqRDyfGTOT4Eh8S9+D/KUSQvHFwNzEbiMj26HcD5K7giB8poixolX
+	dEwXFVvY1iEmXd1c2hE86A2XiAGwJFlhAqZvk5Ho3FB9wTe1KCqtgAeUChfSID16
+	nDUuLG4NyWLgBSTPRb/gLcABr4Y0uzrL6eMpWIYmMzjsptcG0CzGVeFLVYOnTX+p
+	HrX8AzrSpoeamZM9uysq2NOUH3gRTjUczXpVJ5Xd5bb6qqoxJe8dma7j7cgW+PJD
+	Cg==
+Received: (qmail 782210 invoked from network); 11 Jul 2024 10:47:22 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Jul 2024 10:47:22 +0200
+X-UD-Smtp-Session: l3s3148p1@O+6qz/QcHtwgAwDPXwmZAIsFIv4n+Dpm
+Date: Thu, 11 Jul 2024 10:47:21 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org,
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Jian Jun Chen <jian.jun.chen@intel.com>, linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: rcar: ensure Gen3+ reset does not disturb local targets
-Date: Thu, 11 Jul 2024 10:30:44 +0200
-Message-ID: <20240711083043.8334-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH] MAINTAINERS: delete entry for Conghui Chen
+Message-ID: <Zo-cGVD_mvezDMoZ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Jian Jun Chen <jian.jun.chen@intel.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+References: <20240706144150.2668-2-wsa+renesas@sang-engineering.com>
+ <20240708061937.p7lhz7eho4dh5bv7@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="LlX4jScTkSgHKceY"
+Content-Disposition: inline
+In-Reply-To: <20240708061937.p7lhz7eho4dh5bv7@vireshk-i7>
 
-R-Car Gen3+ needs a reset before every controller transfer. That erases
-configuration of a potentially in parallel running local target
-instance. To avoid this disruption, avoid controller transfers if a
-local target is running. Also, disable SMBusHostNotify because it
-requires being a controller and local target at the same time.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/i2c/busses/i2c-rcar.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+--LlX4jScTkSgHKceY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index 8f2ede534f30..29cbeda59f3e 100644
---- a/drivers/i2c/busses/i2c-rcar.c
-+++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -884,6 +884,10 @@ static int rcar_i2c_do_reset(struct rcar_i2c_priv *priv)
- {
- 	int ret;
- 
-+	/* Don't reset if a slave instance is currently running */
-+	if (priv->slave)
-+		return -EISCONN;
-+
- 	ret = reset_control_reset(priv->rstc);
- 	if (ret)
- 		return ret;
-@@ -1176,6 +1180,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
- 	if (of_property_read_bool(dev->of_node, "smbus"))
- 		priv->flags |= ID_P_HOST_NOTIFY;
- 
-+	/* R-Car Gen3+ needs a reset before every transfer */
- 	if (priv->devtype >= I2C_RCAR_GEN3) {
- 		priv->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
- 		if (IS_ERR(priv->rstc)) {
-@@ -1186,6 +1191,9 @@ static int rcar_i2c_probe(struct platform_device *pdev)
- 		ret = reset_control_status(priv->rstc);
- 		if (ret < 0)
- 			goto out_pm_put;
-+
-+		/* hard reset disturbs HostNotify local target, so disable it */
-+		priv->flags &= ~ID_P_HOST_NOTIFY;
- 	}
- 
- 	ret = platform_get_irq(pdev, 0);
--- 
-2.43.0
 
+> May be we can add Jian as "R:" here to keep someone from Intel in loop ?
+
+Yes, it would surely be nice to have someone from Intel in the loop. As
+Jian did not respond up to now, I suggest to add him with a seperate
+patch, though. Let's get rid of the bounce first.
+
+
+--LlX4jScTkSgHKceY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaPnBkACgkQFA3kzBSg
+KbYp+Q//bh9qbtiA0zdbNxQ3P37IvH19O7gILsfN3jffvqqBrVvhLmnjQ3olpPIM
+f3jI6TwCU+KlsvGt54IN0rMeF3R3PFDbq4fSbB3NwnucqX+MyeEBmM+nQsc/FPzd
+hXH9F3mdNNw0QPk24qOWLWwSe9m3H9yZvJg4wkj8w5jDAREtbTMZS/lPfuRcjE0l
+3iWzK6Rwj/v4zf/gbyP/3J3Udea0IJRO+oIdJKnXVbqwV4VyX+uKDFG8EKX84g5Q
+UBSW889qOa0aNs7T01Orn2an+jti0j+XAy/UQK10d6hC2UT8YL7p3KeKWKhLfgPC
+V8VLdRRrjMv08GCqgkpKq8w0odSuglmOqZ6pQgf+TaVRNic46+w4NI0yrICxEb3O
+c/ag3TqtJNvp7UFenM/irqDb4/448F0DHVD9XonZ1hvJr47I/15psxoBPHQlG9/T
+zm1FomYQiXlaXubD1U3W1xdgEkV0gbLcS4eMI9zzTiZXQenV1zLcsbkAXJccqUAo
+hBsZcueHh9piknxpPEbUfXy8VS9iL1zyo4/zsZMyklY68aCxdcH3r798FJwwIQVK
+ryvXe0BLBvGQoh4PK588d6R3b4Lp3tjkBS2jcjph4ncdA+A7JPbQOBkotmRfnrDY
+i27EJZ0OqqGRfw0/F015dgSNfq2YBJTk6K/eYDKw4bLyjULBjYA=
+=xJIJ
+-----END PGP SIGNATURE-----
+
+--LlX4jScTkSgHKceY--
 
