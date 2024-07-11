@@ -1,177 +1,62 @@
-Return-Path: <linux-i2c+bounces-4940-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4941-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C267E92EB00
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 16:45:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 289E292F0FB
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 23:19:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4B7D1C20E1D
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 14:45:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 526321C22A2B
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 21:19:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27028158DA2;
-	Thu, 11 Jul 2024 14:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3837C19FA87;
+	Thu, 11 Jul 2024 21:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="AuPvm2HY"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="hAoUEAEy"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1142415B97B
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 14:45:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1EA19FA65
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 21:17:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720709120; cv=none; b=YJeJmjKxiDqjWplCbbnE9j21KA6wh61d2WOTAwGK0bJXR0k/0Lszm98zT6HbAnI9wYFvP9rWcw66PeYP1aQiY3ZMPjKsd4kHv2UY6VQgdWQ+6j3uzKDCwqaUIhIXzGA/EBFgrfgj/l0NIsLXUekqnlYi8Qx1uUx97wMJ6k4BOUY=
+	t=1720732672; cv=none; b=ijUoZVwfE5GsvWAFYUawgkp+Bed2iD10l1Q3If1tw42f0Fa/7pZMB0pR1yvH6wvOYm+eA+fLNd+M8G4cRIFMK5Txn33DdhothHPZrMsmLk1GALS2/K4DStOFU1uwGEV1aT7IS1yUUAf8hzmfZt1TLRSf0EgMvsU/b2Afe2FfIss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720709120; c=relaxed/simple;
-	bh=X/Vus3odAr0nVoUkxLttzX7Pk94wValiSx+VwO4R69w=;
+	s=arc-20240116; t=1720732672; c=relaxed/simple;
+	bh=T0pMyu+dEeOOHsmMaRtnW/KHBfIg6LHAAXQX3YROcGI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jRmVxXJZ6P4vref4HTkPgsjw9kzhmi+NhhJYWq1MiSoDPFMSPtBHMf+3bLmUDO+EjAaghHj3Sk1LDcmghE+YYQZ66nu7oICyPh8nSZmPKtMoiWYtI9yVYNI15ptRRZk8ee1nDRiM1vKf0SrdtAfLM+LjuHqEvs8DUJYY+i5Dg0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=AuPvm2HY; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=JSkqOwtuGyFHz5pOqDsqKRSxvXnyf83ZpFMLSr89FOAUgONQbe6I5mc+/xvdbqsYbZiBvIEmaL/nVfa4lBY1rt8u5WvkXu7ArvD+aqdecXnUYtjgOUYOuvfUB7jr1Bj3l3ZvQpUXOef8ryNiRwjE5s8dCAlla4kkDLT6Ovd9Fh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=hAoUEAEy; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=X/Vu
-	s3odAr0nVoUkxLttzX7Pk94wValiSx+VwO4R69w=; b=AuPvm2HYrBBxPCRmojQD
-	7CRnGb08OzEAMIGsRtGo1cADF0LX2II9QCJrZUl8IaFo/ZZrZu7J+SrEBWtj60Pv
-	1FkcrDPS/qIZnwEyGkXZcTAvUt2AcDbXPu9bRoCsRQVJ3yq7hI4gN1/pRnYBoxmm
-	LrVreSCYG9WfR6AIcwartOTLwI8fldcBkiqrbY/9wh/UHI5zzHySLqznxmN0E27e
-	CL+TVhOO2A9S47NlInzK62SsP9b7IiXAGum0KbJErYmlY66z9pmjZt/lJ/IEYVUY
-	0s8pI4FRRnO0k8J6sY5OSdOg4ouZH//OI4WOka5wh84Dzu3nFqTCzDfn3u4TXjEA
-	qA==
-Received: (qmail 877093 invoked from network); 11 Jul 2024 16:45:16 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Jul 2024 16:45:16 +0200
-X-UD-Smtp-Session: l3s3148p1@33mez/kc+ORehhtW
-Date: Thu, 11 Jul 2024 16:45:15 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=1Cnf
+	7pWFKheCtd3q1iTzsFDAeHD0a9e5vdpFCoy3tcg=; b=hAoUEAEyd/lZBSbtIZm5
+	XvC73OWHJyrxHMbEwCAjxDXcWayhcVFAhvbliAjIddspGhoycFLpY8hRpautD/V/
+	Jy8OA6SyN76pWawnCOuPx+hUxpCkzSKkKyMvhoG9I3YhoearreERQrMkOPcJCY+9
+	4HSbIqKjpwTm+tRKzmgvaxLBKyGQegnUJtZXwZAf3lj0UWviDJeNtrWeLDrO2Kil
+	OU5+Mih2ePtH4W6EbR4tMmoelKX5ZI4UUpJVQdtGxhOhkILuGB3yQXq2HD+3Mv/e
+	6WqFriZaCAIz1DmGH/44Yd+GR8ZSU4m9xSzPF511Kx+rtzZiAIo/jsr4U/HkKT9h
+	6Q==
+Received: (qmail 957054 invoked from network); 11 Jul 2024 23:17:43 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Jul 2024 23:17:43 +0200
+X-UD-Smtp-Session: l3s3148p1@g/orS/8c7MZehhtW
+Date: Thu, 11 Jul 2024 23:17:43 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>,
-	Alain Volmat <alain.volmat@foss.st.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-	Andrew Lunn <andrew@lunn.ch>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	asahi@lists.linux.dev, Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Baruch Siach <baruch@tkos.co.il>,
-	Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
-	Benson Leung <bleung@chromium.org>,
-	Binbin Zhou <zhoubinbin@loongson.cn>, Chen-Yu Tsai <wens@csie.org>,
-	Chris Brandt <chris.brandt@renesas.com>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	chrome-platform@lists.linux.dev,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Conghui Chen <conghui.chen@intel.com>,
-	Eddie James <eajames@linux.ibm.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Hans de Goede <hdegoede@redhat.com>, Hans Hu <hanshu@zhaoxin.com>,
-	Hector Martin <marcan@marcan.st>, Heiko Stuebner <heiko@sntech.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Jochen Friedrich <jochen@scram.de>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Kamal Dasu <kamal.dasu@broadcom.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michael Shych <michaelsh@nvidia.com>, openbmc@lists.ozlabs.org,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Peter Korsgaard <peter@korsgaard.com>,
-	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-	Ray Jui <rjui@broadcom.com>, Robert Richter <rric@kernel.org>,
-	Samuel Holland <samuel@sholland.org>,
-	Scott Branden <sbranden@broadcom.com>, Stefan Roese <sr@denx.de>,
-	Sven Peter <sven@svenpeter.dev>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Thor Thayer <thor.thayer@linux.intel.com>,
-	Till Harbaum <till@harbaum.org>,
-	Vadim Pasternak <vadimp@nvidia.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	virtualization@lists.linux.dev, Vladimir Zapolskiy <vz@mleia.com>,
-	Yicong Yang <yangyicong@hisilicon.com>
-Subject: Re: [PATCH v2 00/60] i2c: reword first drivers according to newest
- specification
-Message-ID: <Zo_v-xk3Hh_88sNa@shikoro>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: rcar: ensure Gen3+ reset does not disturb local
+ targets
+Message-ID: <ZpBL90Ko-B9oxCLK@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-renesas-soc@vger.kernel.org,
 	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	Ajay Gupta <ajayg@nvidia.com>,
-	Alain Volmat <alain.volmat@foss.st.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-	Andrew Lunn <andrew@lunn.ch>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	asahi@lists.linux.dev, Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Baruch Siach <baruch@tkos.co.il>,
-	Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
-	Benson Leung <bleung@chromium.org>,
-	Binbin Zhou <zhoubinbin@loongson.cn>, Chen-Yu Tsai <wens@csie.org>,
-	Chris Brandt <chris.brandt@renesas.com>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	chrome-platform@lists.linux.dev,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Conghui Chen <conghui.chen@intel.com>,
-	Eddie James <eajames@linux.ibm.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Hans de Goede <hdegoede@redhat.com>, Hans Hu <hanshu@zhaoxin.com>,
-	Hector Martin <marcan@marcan.st>, Heiko Stuebner <heiko@sntech.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Jochen Friedrich <jochen@scram.de>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Kamal Dasu <kamal.dasu@broadcom.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michael Shych <michaelsh@nvidia.com>, openbmc@lists.ozlabs.org,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Peter Korsgaard <peter@korsgaard.com>,
-	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-	Ray Jui <rjui@broadcom.com>, Robert Richter <rric@kernel.org>,
-	Samuel Holland <samuel@sholland.org>,
-	Scott Branden <sbranden@broadcom.com>, Stefan Roese <sr@denx.de>,
-	Sven Peter <sven@svenpeter.dev>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Thor Thayer <thor.thayer@linux.intel.com>,
-	Till Harbaum <till@harbaum.org>,
-	Vadim Pasternak <vadimp@nvidia.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	virtualization@lists.linux.dev, Vladimir Zapolskiy <vz@mleia.com>,
-	Yicong Yang <yangyicong@hisilicon.com>
-References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
- <nbi3fngfcipt35gzguk2mh4zzh3vy5a5gsk7dti5smm2iimytl@drm7p2iqsinp>
+	linux-kernel@vger.kernel.org
+References: <20240711083043.8334-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -179,41 +64,90 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Vk6JWgUmE7mz+Biu"
+	protocol="application/pgp-signature"; boundary="UtqE6BQ8LQL5xqzI"
 Content-Disposition: inline
-In-Reply-To: <nbi3fngfcipt35gzguk2mh4zzh3vy5a5gsk7dti5smm2iimytl@drm7p2iqsinp>
+In-Reply-To: <20240711083043.8334-2-wsa+renesas@sang-engineering.com>
 
 
---Vk6JWgUmE7mz+Biu
+--UtqE6BQ8LQL5xqzI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jul 11, 2024 at 10:30:44AM +0200, Wolfram Sang wrote:
+> R-Car Gen3+ needs a reset before every controller transfer. That erases
+> configuration of a potentially in parallel running local target
+> instance. To avoid this disruption, avoid controller transfers if a
+> local target is running. Also, disable SMBusHostNotify because it
+> requires being a controller and local target at the same time.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-> Thanks for this big work, at the end it turned out quite nice and
-> I'm happy of the outcome!
+Fixes: 3b770017b03a ("i2c: rcar: handle RXDMA HW behaviour on Gen3")
 
-Me too. And thanks for the enormous review work!
+> ---
+>  drivers/i2c/busses/i2c-rcar.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+> index 8f2ede534f30..29cbeda59f3e 100644
+> --- a/drivers/i2c/busses/i2c-rcar.c
+> +++ b/drivers/i2c/busses/i2c-rcar.c
+> @@ -884,6 +884,10 @@ static int rcar_i2c_do_reset(struct rcar_i2c_priv *p=
+riv)
+>  {
+>  	int ret;
+> =20
+> +	/* Don't reset if a slave instance is currently running */
+> +	if (priv->slave)
+> +		return -EISCONN;
+> +
+>  	ret =3D reset_control_reset(priv->rstc);
+>  	if (ret)
+>  		return ret;
+> @@ -1176,6 +1180,7 @@ static int rcar_i2c_probe(struct platform_device *p=
+dev)
+>  	if (of_property_read_bool(dev->of_node, "smbus"))
+>  		priv->flags |=3D ID_P_HOST_NOTIFY;
+> =20
+> +	/* R-Car Gen3+ needs a reset before every transfer */
+>  	if (priv->devtype >=3D I2C_RCAR_GEN3) {
+>  		priv->rstc =3D devm_reset_control_get_exclusive(&pdev->dev, NULL);
+>  		if (IS_ERR(priv->rstc)) {
+> @@ -1186,6 +1191,9 @@ static int rcar_i2c_probe(struct platform_device *p=
+dev)
+>  		ret =3D reset_control_status(priv->rstc);
+>  		if (ret < 0)
+>  			goto out_pm_put;
+> +
+> +		/* hard reset disturbs HostNotify local target, so disable it */
+> +		priv->flags &=3D ~ID_P_HOST_NOTIFY;
+>  	}
+> =20
+>  	ret =3D platform_get_irq(pdev, 0);
+> --=20
+> 2.43.0
+>=20
 
-
---Vk6JWgUmE7mz+Biu
+--UtqE6BQ8LQL5xqzI
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaP7/sACgkQFA3kzBSg
-Kbbq3A/9FNY+7cgd8CU9HNabmoXmMSCsOVflmaDNapeEn/iIYZUiBBFhDcYnJczI
-T429i2bK95+lup88Nhn9fzXQ4hoPFa2TuPkQ5n3M7A9hjFnAOxLmTd91uO98BfVm
-8IYBr6EIu/AfX/+D6Rj1Ro1VpSwK4laze5p9WGyNjp6QIzJ+KqmRh+vf9Shg1urk
-9gNjTClxMD1OjQ60X0Vr4XmDONnsK8guT/Zkkk1gtDRDC8P92Jw17/3vtuBQnwP6
-S1NAFaqvdLbLKuRBsK7KwJ6oJ4sH5jq2LCiJk87GHsXnQBerXSR3AFORTQWjvEBF
-6qz8rHh0/GrQklzbs/VgVlqV3NygU4D2T18NZMyLxaJAGPmDPGeL5YvcweblR0TL
-yMMuXmSq7ACO+aTJgqIqt2Wx1PS4cbvSmaHUnG52eGrX28o1PgjIW5y0xGu9G5FU
-Funcvt0JlI2HtC1FI2FGDsCW77U3mh3U5N5NEo7y24XPebmTVhGifj2kWp/WkA3F
-UPgJdkXF0gUzDxQj3Febmvmeh3m58s+Io+3LWBncCK2eRgL4YyEaKpEegQfA43Rl
-PJGODikSLI1gh/8qN/WE44DGio65TYItOJrPX3b8VwOQLCgKgwz0y+a37vy2Jd7W
-X/LXLwb8txlca1gF88Bg07eWwR/jwNoHp4c/k2C80iwHtJ12Kcg=
-=ribe
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaQS/IACgkQFA3kzBSg
+KbY8HRAAg0U/3YGhBJzi0l9c7UC5yk6ZMjujDKLwjnye2S6Fs2cdhBR7gFM2JlUQ
+/Cuocm1+bzG6YJdUl5sa/ZMnGOyACaPpj9lqNA1Uc8zoKkYHaLA3CxQ2nsILvuKf
+E8scAHyeJbRrpbodbi1Pjx7QegDy9bG1kTLmlX/kSLmR2dFtMnwk/0yCVKr5swUU
+3kb+ZRQx4B0qig77JWJibnESJdqsDSpNZ6H3I5f210QtnfQZc0pYNOOEY7BPkPwC
+l7c4lkXcX+86KbYasWe6TmX5yeATlgmOt7nC+smd8AsBjIeNHBk8YJUGNWjj/7W2
+MEFKdR9gAPXkOrB5d+iaUfV9hZQwE8fSVBYOVVKpyhZwMWcH4Vh/2MWZ7ICfR9SF
+I2zDXIDVbkCHUabwvJ1HpBIt1QRaLzTZ/5Zn6JOhL28OC79jGtLD9eRSA6aOSNJf
+mxo9ldIhu/Pd0RCdATZ3Hsk3E3blBGR/IjpqS/DSTaB0PTvo7FrSvZ9xgwI14beR
+qJf7K1Ld+YSzqp5dhX6/2UqP4o7DO8Y2e/xQ5IeLYLIW09XoNeoMR8aYXQ4OMyGW
+lJFKs3ZG1+PoqyaWgZuU/6JbD+U6u5gviDdF1sMJysbGwzdWy/Ne+ndExwHj+Z8x
+rz+ws70gY5gUZx4d/MMy7xJ5m8esaz29rRQlzIX3pKMlKf6SjJ8=
+=1ESC
 -----END PGP SIGNATURE-----
 
---Vk6JWgUmE7mz+Biu--
+--UtqE6BQ8LQL5xqzI--
 
