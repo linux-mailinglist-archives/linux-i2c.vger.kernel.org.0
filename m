@@ -1,66 +1,63 @@
-Return-Path: <linux-i2c+bounces-4897-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4898-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B75DE92E367
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 11:26:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6304292E381
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 11:32:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 702AC284E1F
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 09:26:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8040B211A9
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 09:32:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6872215574C;
-	Thu, 11 Jul 2024 09:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A84156C69;
+	Thu, 11 Jul 2024 09:32:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="dC4WnT3x"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ZMFnahuW"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A5C155726
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 09:26:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623F8153517
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 09:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720690014; cv=none; b=RTxlotg8tX3J53gYGe5aH4T8vBBLEkogaKB/cKqzXfnREObNs+mSDY22C9TY/ZQdsCtkjkzLDi1UiMdkqyOxYhF++vvZuMy179Z2P80zkynw7PckN8mpvLI5oxX0vLwcgH2bCISehDIgQH/VNs8JFuKSyO9pcrVS0szKPv2olJs=
+	t=1720690323; cv=none; b=jdKl5UiiBss+Fbjys1DAxqkCtIWOLvIneiOi0rtTmb7rcDKwpn50Leim/S0JX2MMqToaIgnJLvDd5WaF2fs4hM5YGhi291Mqpt6mlYeHN5kDnvJGQv65WaLQzRHsJAmEims+Wt0/ewkX3rnYgSReRROIxp5JkD1fu/7vgd9/q/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720690014; c=relaxed/simple;
-	bh=2tFtKgxNYDhaOhDDfnqF4Tr26RPT96HhtvIaZw5Jfrs=;
+	s=arc-20240116; t=1720690323; c=relaxed/simple;
+	bh=/K4xju8p6m4TilrAA0l9EIy4LFWGDl7Uo/w+n7SfL4Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RMixYGCjhf3a3+gvu6f9DMA3AOiw7LUIYmNqBc/WctkAR9+BJKtSQYfpZZ7RGpPsz3zlCaaIcCoGbOWqlDD11hAV3FwAnp5HS7TQqm3Jy0GypG83zSF7A1kBABQoeLdY/LUYMQRHJRW1nwCQ+YeO4K2RRO91CzbonLC396RlzWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=dC4WnT3x; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=aMOx6tTBn/L/PdRbwMXpTovN2ZXfbCPuv3T2WM7bNXTC+dSj2xcD7Kz9ySbXO/5hiahh6fgx4iPLGouiESwPGxx3gM/PTn/pp5cjX/UpBorYNv/lU1D0SQYa8SmrlnuJL2aTYQCBdcgFC1Gs4GJxOcrMpix6qx9vMIAaKsHis38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ZMFnahuW; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=z++z
-	4PsmWomeVqtniGIkn0Y3nNRWhrQ+aa2t3xfmEjE=; b=dC4WnT3xETrUxe4YSQvV
-	yzuEM6+/vVIic2Vf7vI1X6W9et7uxOF4ApYwLqR7QDHTbIC/Ad1ezPRiel6gNa0e
-	IAxxS19zhUul/NGEbWHmi4smOSXX76ogZ3KkgdS8vTt7dKwKbshVE1iYKDare0ao
-	5WpXNn8n98ES3LtX2pfPtIiBBV+hidfN0agQx9Rhbvi0blxWb2fn6I6OqD1RlG3y
-	vl6Cyyo9cO1kouICtjngiO6S7Iys3ftpAJoTMC/bBl+PwmYuZQFYYGqXQrvmYUKb
-	o24d3MEaMWxALFu3wPR+I5hzxLeHFTpv7ekOPyvFWtFWENzUIWkqBNHir/JR5h4q
-	nA==
-Received: (qmail 793755 invoked from network); 11 Jul 2024 11:26:50 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Jul 2024 11:26:50 +0200
-X-UD-Smtp-Session: l3s3148p1@hEPTXPUcgK8gAwDPXwmZAIsFIv4n+Dpm
-Date: Thu, 11 Jul 2024 11:26:50 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=/K4x
+	ju8p6m4TilrAA0l9EIy4LFWGDl7Uo/w+n7SfL4Q=; b=ZMFnahuWB/sq9/ZF7+jf
+	hrPFNK0R8/vNZ+OuGc8D8bRFCOBfN6iMADiXgwlhdICq2PNGEyGtYENYBN3QYt+o
+	e3ypD80B9h4PEt3jbeD/fHjxavZtoM0jDUFaK3ATyKerL3/VSsX464TM/oB8unG1
+	8+wE0gQYr10iDhD0fsd1nELRllk/86wVAp18wYBSXzwtsflAMhdaWVJQLcrfPISb
+	qGJSRSb0/PpDEJTEK1HB/h2Nxgq/hIPzPN0RvmVahPpdWZhR53A4PBj52c0igOXq
+	6wCdux4cUV6QG7AtRu3qOnHq/n2pRiMp0Ri7+U9qjCBbKDUuiPA7/UDVXxFtQ8u5
+	Ow==
+Received: (qmail 795187 invoked from network); 11 Jul 2024 11:31:58 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Jul 2024 11:31:58 +0200
+X-UD-Smtp-Session: l3s3148p1@u7Iob/UcNNEgAwDPXwmZAIsFIv4n+Dpm
+Date: Thu, 11 Jul 2024 11:31:57 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc: linux-renesas-soc@vger.kernel.org,
-	Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
+To: linux-renesas-soc@vger.kernel.org
+Cc: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
 	Alain Volmat <alain.volmat@st.com>, linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] i2c: mark HostNotify target address as used
-Message-ID: <Zo-lWi3EtRoJa6kk@shikoro>
+Message-ID: <Zo-mjdgXQd-opb7R@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Sergei Shtylyov <sergei.shtylyov@gmail.com>,
 	linux-renesas-soc@vger.kernel.org,
 	Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
 	Alain Volmat <alain.volmat@st.com>, linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 References: <20240710085506.31267-2-wsa+renesas@sang-engineering.com>
- <c8f837f5-16b1-a5da-c687-a95d2ec42fa0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -68,41 +65,52 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ghnN+7tU7NIdeHXq"
+	protocol="application/pgp-signature"; boundary="8Oc0izMmPGwjjRq6"
 Content-Disposition: inline
-In-Reply-To: <c8f837f5-16b1-a5da-c687-a95d2ec42fa0@gmail.com>
+In-Reply-To: <20240710085506.31267-2-wsa+renesas@sang-engineering.com>
 
 
---ghnN+7tU7NIdeHXq
+--8Oc0izMmPGwjjRq6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jul 10, 2024 at 10:55:07AM +0200, Wolfram Sang wrote:
+> I2C core handles the local target for receiving HostNotify alerts. There
+> is no separate driver bound to that address. That means userspace can
+> access it if desired, leading to further complications if controllers
+> are not capable of reading their own local target. Bind the local target
+> to the dummy driver so it will marked as "handled by the kernel" if the
+> HostNotify feature is used. That protects aginst userspace access and
+> prevents other drivers binding to it.
+>=20
+> Fixes: 2a71593da34d ("i2c: smbus: add core function handling SMBus host-n=
+otify")
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Fixed the commit message, rebased to for-current and applied to
+for-current, thanks!
 
 
-> > to the dummy driver so it will marked as "handled by the kernel" if the
->                                 ^ be? :-)
-
-Yes, thanks!
-
-
---ghnN+7tU7NIdeHXq
+--8Oc0izMmPGwjjRq6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaPpVkACgkQFA3kzBSg
-KbbR+BAAgn9mPsdzPbBoJIYSuxAskuiXX+VC3m3aVXtcCy7BhOSgUg/dUkug9Ze6
-wXBehGmaeANq9SN3GjyW4AEozsOHW/DTqpnT6M9x0h7vl1UWGZsJKvlPKwub5YR1
-mLkzsTOnH120WIe2iCE+S1//Ljk90HNrODB9WwRLryQ0+48ZAzC4tnRHCVcJHH/V
-Np8dCfD7+Ac8FxpYdymgOqx2nXWpI9KGgOKvWROnreOE2zr5ShMC+/3pC1OjBWMk
-UZK205a8UoF8oQjavTqnG+k92kwydjYMiFy5SoXK47ODoU+LDoc30ZfWSOxMhEkk
-bIbO0qil9VjYYuOBqI3TA4KjKQ8okoAQFdF+gmCnJ0yK4xaSktrQO+IJY1LDEJMs
-scfiohh4IdJBKD7ZxNuS6s5BGtLN7yE/RdNq5CAXAFQ+Afssk2jWlFt1yr6oVMk3
-VPzkkt8JXIbAVoVeunBIbR/AE6jgpLi1FY2dFK+DJAdf+ex/xl3oHdn/p6DbTv9M
-HvuAOIUK7b0QkfHqcR9ZA8ceCQKkHhv+PIReXXei64DRrQWbosU+PLBJuVAbekvQ
-Y+TdN2ju+se4yvXm9K0MsMVDJrzpwX9fQB2YAT5hnJQX0Y6MKCUOd6ZaWL4sxYWR
-p8rkakj8FSYCn62Lf1ATEkc2+6ef1hMbDtvWwCPDEUnrgEkM9YA=
-=Z9sf
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaPpo0ACgkQFA3kzBSg
+KbbUpw/+Jaxs4GwneP0P8fGi00uhdAnwstPGDr9lk8TCgYGHNDmmgGkcjhQrv8RJ
+KHJ3uesRV+o9H7hgD2aaUtRL0+TTc8h3LK0EsQuqJF+33ydPwUf5foE7jDi6aPh1
+kVUaRcPsOVmG81nk+d3goSdIcv7xlq8ZLZ8ekiPIu0/IWN7Ah4n5F6qLj671Odud
+aKFtn5XNKD9WKcaZxTP6PblCi4XjKNPGA6LHDKy9EI965OMKdUvFGFWHAjDb1Wf0
+x9jqunwN6bBRXZ1Q7ar1UKeAfT5FkQPjnKtOG9xpL52zlCN8d8UTMtwTJVRnUXMr
+lD3tFJq4sYksG9qTkZpHsGLpqbaugx4G5s3Egw/asdJ/3H/QBdEkU7PSClMiNpwS
++ivoz2MLhU7gurU8s+qAut0Wd+htKOnlQ8l0449LDMkm13bEYpc1UZKDhGcdLiKb
+jIl9pct0N88vX7lPjiGBuqV1f6XYLxQsSWhlPVQAuNxgvy1Bx5kFkKsea2pZ9MMY
+7u1/VWJliIDxzGHrzU7RHJhCl+kMRf2UJ2vBut7U7s5Rhwf9DsCEMmMuKSbAL9cW
+2x6Muu53MazzFdDkOUO4XdYu+o3I588o8EMe5nXw6oBmsh3NnFa0tKu8/fHOUIGu
+tJGsx1ybqgyii9xbQD4dHv05Th1b2xpqcg1kMi/4r4k7D9kZQSc=
+=JXwk
 -----END PGP SIGNATURE-----
 
---ghnN+7tU7NIdeHXq--
+--8Oc0izMmPGwjjRq6--
 
