@@ -1,56 +1,56 @@
-Return-Path: <linux-i2c+bounces-4900-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4901-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22A9792E43B
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 12:09:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1777092E440
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 12:09:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC34B28939D
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 10:09:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AE591F21681
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 10:09:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58398158D6D;
-	Thu, 11 Jul 2024 10:09:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AEE81586D5;
+	Thu, 11 Jul 2024 10:09:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="Dg4rsamN"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="qxbJKLWi"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E4A15887C;
-	Thu, 11 Jul 2024 10:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C115E1581F9;
+	Thu, 11 Jul 2024 10:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720692546; cv=none; b=OWpZfVynt61C7/WjfeqjYRIWT1gJ1XbPxCEiUEZzD74CVCT1Eg1RZJTkOsy8XjF2pGRrNOYST/nArKSVP+73AQ9LyAHP+xUqhsPZNT3NR+168SBHNsCbg+Q5zi+pTt8Z/wNepHYhVWR2SApoyjVm0tMy7FcG18i3MzP0Lvn4VFg=
+	t=1720692584; cv=none; b=V79a40DPOYtkOX8gOsXg5MLL24udEiB90Pn1cJdel3pufKYCBYPC6JfGigbuZeYI2Rbr/NcVERuhWGE0Dic69d2Nyu4DCW9BcmwB2P4xtY5F4W/7QLC9KZrDOBOAqvGhKZu8k37eEHHm2s2YfbcLEqYqT+UF6erXErBWBqLSXHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720692546; c=relaxed/simple;
-	bh=TogIIJJ02n4A4hy8KVS94EmFlJNRJHgab8Y06q/j4oA=;
+	s=arc-20240116; t=1720692584; c=relaxed/simple;
+	bh=Z3Vdyi3zK/vmWZo3LvdbXGWWduyqjWq6f0oez7+rFTw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AbQBxvYZE4m4URkATuOFZtXZY7WR8OT3c/Y741zYjzh+gsafDYqyrcG1acityrPB7h6fBmM6MBLSPmXpx6RNrkwoNlXqfGYWBjgaie+imCpRbpaaPrVsx9mdB6EUyifZgUqNVxedIcGCxl0hs/7CR4UvvKCSv9rMW1tt1it0JLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=Dg4rsamN; arc=none smtp.client-ip=212.227.15.19
+	 In-Reply-To:Content-Type; b=b5aoxUfbV+48/GK0V6bZp7uFTWNcbqKK2xq68M5JViD8/xS36bFNOoul7seVJR3B0UdxghuKKerIFJ9a1uwoN+Dxjge6o4lFz22YbuGAokaveoJ/vqQ4O9vKrg/1Au2+0AM4FFIhIhPvLkFSKFVC0aiO6bKdlMdk7/DL0RuGWLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=qxbJKLWi; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1720692528; x=1721297328; i=deller@gmx.de;
-	bh=aeQ7MBI4uXNPRP9dfKZtJzB8V93jNRcQsBz9aaIg6tU=;
+	s=s31663417; t=1720692570; x=1721297370; i=deller@gmx.de;
+	bh=+bMT5NnSxXNV7Rt+gMDNsk011QJNzOVj00VzFIO0UKw=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
 	 References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=Dg4rsamN3w7DvlQh8zy1Tq2lAKCeA1Ho78V+OWibX70yJ3qh5JmH26AX8v3ybczf
-	 pg+Dii7dnC3Lcsk1r/30k8/XTlBUi++NKwVBgTJVWJ1mFrK8ZdRj82eEtatcYrIM8
-	 AjB4ug2PZ2LA7RlMdnNvPz9Mq0a9hNieY9IrQosGFwrXxf32gKa/eZ3ZJ6fSFobRM
-	 07X4P9dl42KM5og0UGZQVPpw9w/JT8umdGUcoapXN28c9i+VMFfpVqe1qtx7jJKYe
-	 nr3XfTpaflN5dEgVcMRZiHu1+vsw6Jm2Gq6ET/kBBPuORvbg45bQkwA9igWZeX1Qe
-	 AqgKi0ptT+ZVx6b10g==
+	b=qxbJKLWiaJ0zczzHVrjcZ6E1qYTcQBOy6Ox4UVbLd14ZAYG/oMK3gSCy/cp6tCus
+	 NehCFEPXfsFpPPBWbkCm0unX/kLzYKGkjz40rehDhSsmVvMjPB7PqYk+bGzzRnWt5
+	 NmJabuvB70I7jlclJURi0uVCPixMMNEtNt/17+BKC58PR4GIS+DyKiaXPC4UAHjcb
+	 6ApWNpdHxzJ3llo5IgU5ptxxnaJve3FhoenqKvRcMwJE3xWFd35e4E5fQJFcMCYDK
+	 ceeHh7oEPWFMxEP0bEQvOLlK5wJOPn68tHBcb6jL/Ot+XKsc5bCtOU6oTFxMjCRRO
+	 uQr7GqM/ZbULsaDGQA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [10.8.0.6] ([78.94.87.245]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MqJqD-1s4rtz1NtD-00eH7h; Thu, 11
- Jul 2024 12:08:48 +0200
-Message-ID: <4de25766-fe4e-4044-9233-cb54953d6d66@gmx.de>
-Date: Thu, 11 Jul 2024 12:08:46 +0200
+Received: from [10.8.0.6] ([78.94.87.245]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4hvR-1sH10246rP-016NPq; Thu, 11
+ Jul 2024 12:09:30 +0200
+Message-ID: <f057217d-0427-4f6a-9d46-a14204a70c77@gmx.de>
+Date: Thu, 11 Jul 2024 12:09:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,10 +58,10 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/6] fbdev/smscufx: Make I2C terminology more inclusive
+Subject: Re: [PATCH v4 6/6] fbdev/viafb: Make I2C terminology more inclusive
 To: Easwar Hariharan <eahariha@linux.microsoft.com>,
- Steve Glendinning <steve.glendinning@shawell.net>,
- "open list:SMSC UFX6000 and UFX7000 USB to VGA DRIVER"
+ Florian Tobias Schandinat <FlorianSchandinat@gmx.de>,
+ "open list:VIA UNICHROME(PRO)/CHROME9 FRAMEBUFFER DRIVER"
  <linux-fbdev@vger.kernel.org>,
  "open list:FRAMEBUFFER LAYER" <dri-devel@lists.freedesktop.org>,
  open list <linux-kernel@vger.kernel.org>
@@ -75,7 +75,7 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
  "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
  Thomas Zimmermann <tzimmermann@suse.de>
 References: <20240711052734.1273652-1-eahariha@linux.microsoft.com>
- <20240711052734.1273652-6-eahariha@linux.microsoft.com>
+ <20240711052734.1273652-7-eahariha@linux.microsoft.com>
 Content-Language: en-US
 From: Helge Deller <deller@gmx.de>
 Autocrypt: addr=deller@gmx.de; keydata=
@@ -121,27 +121,27 @@ Autocrypt: addr=deller@gmx.de; keydata=
  FwRDcGV6nxanxZGKEkSHHOm8jHwvQWvPP73pvuPBEPtKGLzbgd7OOcGZWtq2hNC6cRtsRdDx
  4TAGMCz4j238m+2mdbdhRh3iBnWT5yPFfnv/2IjFAk+sdix1Mrr+LIDF++kiekeq0yUpDdc4
  ExBy2xf6dd+tuFFBp3/VDN4U0UfG4QJ2fg19zE5Z8dS4jGIbLg==
-In-Reply-To: <20240711052734.1273652-6-eahariha@linux.microsoft.com>
+In-Reply-To: <20240711052734.1273652-7-eahariha@linux.microsoft.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:yguAnix3/rhAY9NbLXw9SbRVg0yIKZAv4hBgIl/ZY6P7oPAFvH8
- G67kkYtgZ9IPrLi6H+Z85Bgf3q6F6PdH1MtMx8rTK2+ivnckchJCMoSNXEZIzlCvpbp6Qhq
- 3x7mOjXGWG2ZfdQcqs98NMpDmOhOuBtttJz631cTgBoosv9X+ogefQgFvyrg27xAS/DqG0O
- xLJW75wNO74VckYuzk7WA==
+X-Provags-ID: V03:K1:nTuEi+J0pO0QgpxrgihiAsnCVNswa6CfvW/ncZy/Hs0dN75/QwL
+ 9CJuepXisexVP3qvIR3DTqFij72hsr02Fn6MqPAWfSuv7bdDMiYBUyB9wjrmFpTFhYM+gXw
+ CZQwNY41QL9vKDMxUPnNkP1DpnmXqLiZQ5i3IqDP8opjHDVhMdXuQUB+QX7BTTWOQsXBOCe
+ SJfefIJN1Tu/UviGe40aQ==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:5C30+QJnVNo=;lMkz9KKPOrhieJWtIaSoTvrp75/
- xzi787kv6Chx6e9ZZTXnZ9TJF3PrDacfa1mKly48yJIeQg1TNp+Y7pHVXZIA8J7xrjFTt6YXf
- 9Ley5sbCOzuMctlSVVICH5XSWewoG9ONfqovOHyUg/5XljQy1yvy0Ybce3lxXp06KT8ZCKKs1
- e5QER056WR1ZzXS94hgVsujOZivRKyZGzJZyrTdSPO/Ir5JG7Y6vrp3emBPyiv9alfanXPAWT
- KQA6rj9/ClxLyYaFdMjlPw1U3Ui/L2PGViUBIa18Xr1Q4k7DMg85jqoC/xKvZOeKpap8AqEtp
- 3hJuPTlSqWRV/gIJPd/uTr3onw3AGg6IXTK6cTz6hc248E35GnKyT+1SDgVeWIgxXCkFTtikU
- VSb7ItGPUh60yUwDPsIkGI4VY2kO28DES/6uYqw7N8BmG3na81hchCDf3GfuWd+JEgBfVPOQW
- iQn9mKnovrDqSBPXcq64uilccWaL3IMt/7kQgk0J503zMMSLf79awVnaTnezFY1LUjGDkJgPL
- spYKpSjLOloqZU4vfTM0GOx520AUjYwdLlfEmxqo64tE9S6lcvB1YNQDOnmMTJwUSLN120DOX
- swUOP6O9a3yX0yvvNNVVlAwlbu0NZaVaBn9ge2MmRLpxwEMFrxlBG0ZQGZFiluZdKfToAj+F8
- NXNKoKCaDepS2fsM59j1EjOwqCPvXMzwk+2DV9Rwflwp3XlMDh4x9qJiwf4uB/P6NJsvQKYAY
- CotozCCAZCIXwej/Yguak0ubXsfCYSckHXBSgb7qbbzxExIlpavbncdHng3/5y+ufHMD3N9Yr
- 9OgmAbbnWZBt9P4n0v3HEAWw==
+UI-OutboundReport: notjunk:1;M01:P0:57sjBI7H6D8=;+pORqeKudL3itMM829LC2hw9KiT
+ gFZBj/wgRN3u3+nGSbsq1G90rgjbtrh9kxvPs7ceSgHMjHPBYaD/UAfkZnmlSdli2KXD0J8qf
+ k+ZatENSAqP6xdjQpF19bgyIWyYIwFuxeAxlS/vUA/b2bJqNSLhi8asdbnv73/Hi1jfUuGuYW
+ T7cskBiJUsZJP6XU64YU+llmnyppSS6dbCZhbPaGZ/DUHKDOy9zk195BVJ0+sfWDwryMfL86w
+ hJx1fL23TntZCRyOOPW3fsn9aT4kzv+K9oljDWBbF4Xw3+m/bnrzWibsiPa2kdBQOPD2XR+0Y
+ u6ensX5BnPVgzkO0TFh5EOLuD/6aRP7Z4e7dYlNFVqpzsZMunJ7QbeNiYGVjxRUZ5ntT8AixK
+ pTrOsKLBFPKmrpCa/b1EgEfN4yUrcaiLIEL5Ytt+YuHW1AF6p5RysdD3L8yycBXh9wdvAlbkV
+ ECVnsnnnidaQz4e7sVhyyXO2xwij31HfzmIVMLojdHkJrZ2pOiBhuRAIAk6BGyiEsUfUiK4uI
+ qm5ll8nXaqOA5URstZ2ULjlNtPUGtZmo4zgZwxdq1+wl/Kv9+UR5ERd8R/QnzpI+kZHnUi3F1
+ RbT+Hd270qt0qm4etPtLTs5VCF3PxGRY8FSR7EJGN/q07KHCFoBijKRA5Wl3Pl22qGc2us72h
+ Go0YU4hwK0lrQ0e7oxbkEvBTknprfnuIPqq/JEecGqSQk5nvtIrF0iGA6LNjshsgQ301Xx8Mh
+ UB5KGN+RRz7LeJCLNYugpwkpZR+pU3wKllqSgx7dpgmV8dNJfIvoPr6Z091xmIxP9XcbG6Iiw
+ HM8zKG1qGLXtQZtd6N29ivZg==
 
 On 7/11/24 07:27, Easwar Hariharan wrote:
 > I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/sl=
@@ -155,12 +155,16 @@ hat
 > Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 > Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 > ---
->   drivers/video/fbdev/smscufx.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/video/fbdev/via/chip.h    |  8 ++++----
+>   drivers/video/fbdev/via/dvi.c     | 24 ++++++++++++------------
+>   drivers/video/fbdev/via/lcd.c     |  6 +++---
+>   drivers/video/fbdev/via/via_aux.h |  2 +-
+>   drivers/video/fbdev/via/via_i2c.c | 12 ++++++------
+>   drivers/video/fbdev/via/vt1636.c  |  6 +++---
+>   6 files changed, 29 insertions(+), 29 deletions(-)
 
-applied this patch to fbdev git tree.
+This patch was applied to the fbdev git tree.
 
 Thanks!
 Helge
-
 
