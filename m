@@ -1,79 +1,102 @@
-Return-Path: <linux-i2c+bounces-4948-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4949-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1E1292F2E6
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2024 02:02:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACC8F92F3A8
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2024 03:49:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 894BB28410E
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2024 00:02:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D232B21951
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2024 01:49:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DC96621;
-	Fri, 12 Jul 2024 00:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfi1kJR2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6298B7464;
+	Fri, 12 Jul 2024 01:49:01 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 20.mo581.mail-out.ovh.net (20.mo581.mail-out.ovh.net [46.105.49.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E31173;
-	Fri, 12 Jul 2024 00:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA039454
+	for <linux-i2c@vger.kernel.org>; Fri, 12 Jul 2024 01:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.49.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720742536; cv=none; b=CEHj5oHsE7PYdYXkabq+CL3ymWAoMUggcVDFn2Y90iUAgS3I81eyiA2/S2w6VUKwbUPDodanZuZdRYXwQzNMY5IiHsDmuUA7Ag/ITwZAEHxCdsbQeRNNFzLk/4fw0nc4FTGpJEFoe7gfMjpl8k5x1scQGItP8/y7qmbS0NUQqR8=
+	t=1720748941; cv=none; b=NtBHnLP1kM1Pz4cfX37P3EiBEs323JWnyAMTPBfTih9WBlouALWuzI44C8cdF4kvzn++ycwZt4uFCJ8LltAReyTcmb3Aq46ppI2j5+zZ2iuQOEl0+qPmxfBG8SAY4cJXQd3RIwKI4rMZBUgEkRF8VsluGgjvVM/p+HPmM0VAqII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720742536; c=relaxed/simple;
-	bh=Pj6CV5nFkkKCcUgoicfilyAIRMUovgedtDnOMpNlx4I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IZCSp5e0eVDPxglxKl14/G9k3GDJFmZxIH7QwHjJjrRySEEO8LShj4pz2x22JajgZ2lqSllL05UKRYrnjPA64U2Ed6ZRMIxaALbMymxA9rQSCBUOUDDQ5Rm0CKen56z2HlBcwgEyPTN/qAiiFf6iONwhEplu09HuF6tdaV7VY/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfi1kJR2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 404F7C116B1;
-	Fri, 12 Jul 2024 00:02:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720742535;
-	bh=Pj6CV5nFkkKCcUgoicfilyAIRMUovgedtDnOMpNlx4I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jfi1kJR26ByBAfe3tbzfXXfxi6CKTQRsNQtIkdB7Jy2otHzXaa7zNTcTidHEZOxcz
-	 IqyY07Ddl0+YUq2Hy5EwIzhXjAyHkg6UikbD1DJsc/n9LgR/0XzTTTOPX1BhEEIIuO
-	 YZ4bNhxa6xKuy+y1DYv6tiWcb1OG4t7RxZJUtXKt4tbeegyD8CXkGRTun4FAmfu1MY
-	 mUvk9MMoYBk6z8mYMpeyw1qWe/gPn9cpbKtFRCE7/513VhvLVTfdDDqgOClMo2tlJa
-	 C2iqH0tAOcGiKt4z/WVs4+nVL7jK40khF5lz9nPBJvcgdipDi6jD1MMiZrFaepq517
-	 ENWfdvfRlGuHw==
-Date: Fri, 12 Jul 2024 02:02:11 +0200
+	s=arc-20240116; t=1720748941; c=relaxed/simple;
+	bh=GK3R50NkNch+lbRG9vDNLoiia9t8YCkGRD93QMmXbH0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VYtAPTZ4s99sxQ6zpJ9ucNWney7BpzYBqs6H5iiAPEb2XGpMlLNvLC8Q6KjBZSa9THoAKDYMOHTOu0TM7z/G3tx3rtjiQWLEFLJrgN1BJv0AKraBTkJEYaNGnLl0baP2kb0VqNaCjoiTujqpQ5BLckW5ftRykyCI2zvcJBHiIxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.49.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director7.ghost.mail-out.ovh.net (unknown [10.109.176.203])
+	by mo581.mail-out.ovh.net (Postfix) with ESMTP id 4WKrL53xxjz1HgS
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 23:20:13 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-276s8 (unknown [10.110.96.35])
+	by director7.ghost.mail-out.ovh.net (Postfix) with ESMTPS id B92B51FDE0;
+	Thu, 11 Jul 2024 23:20:11 +0000 (UTC)
+Received: from etezian.org ([37.59.142.102])
+	by ghost-submission-6684bf9d7b-276s8 with ESMTPSA
+	id d61dKKtokGYCRycAIhEDZw
+	(envelope-from <andi@etezian.org>); Thu, 11 Jul 2024 23:20:11 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-102R004025ef779-b8ef-47a1-8f81-7534dfa48c8c,
+                    47FBFB77BDCA57EA66E7955FCDEBFA84A3B4AB1A) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:194.230.248.195
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v3 0/2] i2c: smbus cleanups and SPD support for piix4
-Message-ID: <sgeavkqhn2i2n7luiervclpibxyaroab5pmcdltmcrxvl5yaeh@ulp3clqgv3ix>
-References: <20240709-piix4-spd-v3-0-9d1daa204983@weissschuh.net>
+To: lkml <linux-kernel@vger.kernel.org>
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org,
+	virtualization@lists.linux.dev
+Subject: [PATCH 1/2] MAINTAINERS: i2c-virtio: Drop Conghui Chen from Maintainers
+Date: Fri, 12 Jul 2024 01:19:25 +0200
+Message-ID: <20240711231927.3103820-2-andi.shyti@kernel.org>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240711231927.3103820-1-andi.shyti@kernel.org>
+References: <20240711231927.3103820-1-andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240709-piix4-spd-v3-0-9d1daa204983@weissschuh.net>
+X-Ovh-Tracer-Id: 7542684953390811759
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrfeehgddvudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeefvddvgefhhfdtffefleehheevfeffhfefudehudejhefhjedtgfffhfekvedvtdenucffohhmrghinhepihhnthgvlhdrtghomhenucfkphepuddvjedrtddrtddruddpudelgedrvdeftddrvdegkedrudelhedpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekuddpmhhouggvpehsmhhtphhouhht
 
-Hi Wolfram,
+E-mails to Conghui Chen have bounced back:
 
-> Thomas Weißschuh (2):
->       i2c: smbus: remove i801 assumptions from SPD probing
+  <conghui.chen@intel.com>: host mgamail.eglb.intel.com[198.175.65.14] said: 550
+      #5.1.0 Address rejected. (in reply to RCPT TO command)
 
-this is yours...
+Remove him as maintainer of the i2c Virtio driver in the
+MAINTAINERS file.
 
->       i2c: piix4: Register SPDs
+Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org
+Cc: virtualization@lists.linux.dev
+---
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-... this is mine :-)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3e26555e52bfd..96745f7971100 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -23859,7 +23859,6 @@ S:	Maintained
+ F:	drivers/vhost/scsi.c
+ 
+ VIRTIO I2C DRIVER
+-M:	Conghui Chen <conghui.chen@intel.com>
+ M:	Viresh Kumar <viresh.kumar@linaro.org>
+ L:	linux-i2c@vger.kernel.org
+ L:	virtualization@lists.linux.dev
+-- 
+2.45.2
 
-Do you want me to pick them both up?
-
-Thanks,
-Andi
 
