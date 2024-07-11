@@ -1,115 +1,150 @@
-Return-Path: <linux-i2c+bounces-4914-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4915-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E14D092E6A4
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 13:29:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FCC692E774
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 13:52:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EF161C21BC0
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 11:29:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A3F51F243AA
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jul 2024 11:52:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E95431607AA;
-	Thu, 11 Jul 2024 11:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 097DF157A74;
+	Thu, 11 Jul 2024 11:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RhXgsXmc"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="LqcQmOhE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A55215B10A;
-	Thu, 11 Jul 2024 11:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F172904
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 11:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720697061; cv=none; b=fl8DVLZUH8nx5ZOzyMRCEVP98N+jltAK7HkmZn51sZKwg2D/o1AYVB/3FdnOK12g7LaY++6mE2beZfuuZfCcu8pRUJ8KI3dXTgg87cUgY5yFUCo7Gn9XiQJ/ul+noBnkoGATMSyimUv7W50KyHtYdClgPLOl6J3cgJjutyP/da4=
+	t=1720698740; cv=none; b=brCW1qaChcXPkHZoitAT7lRAN6EMfZcxh0wBPl4HQwMS1sjww5aapnXFPuB9zAxFCK77q7uyNoBaSwRI5lrMD0sQVNMC637HjaNEzs4NvQW4DCCw65W6czh6p62D7fa4urfFO5rzpjIXTH3hmVdlaBQE4RekGnbr3f8m2II3+aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720697061; c=relaxed/simple;
-	bh=o/2EvU8Ne6JzHNgJUsH762dUzuzFgrow+gSs4PLwHAA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dVCG390ZOtH78aqh67JdihcxlsWW8VgyXt8RUMv4bYP22X0RA591+VksCD/PKEFEmNTrAxZIi394DMtqWJQs+NkN1a5hkVtpoUyYTjWytssBR0EKiQ/rE8VQWkRZlqKeyb44JGJd/tlZBB5TsLW62N2VDXoQyRVcM04CRrrVDy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RhXgsXmc; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720697061; x=1752233061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o/2EvU8Ne6JzHNgJUsH762dUzuzFgrow+gSs4PLwHAA=;
-  b=RhXgsXmcnjKzr6B4rYihs3tmDxiz6p9GyMYYOEhCW4+RZ2y/k+t2FmrO
-   mde0V+TzEc6RdR8uD0UbUnwVcDhpzI1G70rSv+kk4wdw4mi+WkYNt6S+G
-   j1XJVwC46t2C32+OyX4FITIKoiPAyPImD2HkLDNwG8IL5u8YXJN4wh/GH
-   /z5eOs4n1VfxI3BAWj5hO98qfvyMeSgQgultvGfvIlGD1VlCbv5nsMv84
-   xJVJahtl6gkt6dls86A6johukKB4Fw2N5AzS6y56lqz2RfJjIxRArqS0z
-   2ITiQyA3gtJk9J7vfw8ojTkYdO7HKP7dOChBHvMQWpl9wrRRDigt4Hdx4
-   w==;
-X-CSE-ConnectionGUID: sEzytX45QsSQMMOCGfcjsQ==
-X-CSE-MsgGUID: mq5Q3y7SS0aOhso5V7gbjQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11129"; a="40582706"
-X-IronPort-AV: E=Sophos;i="6.09,200,1716274800"; 
-   d="scan'208";a="40582706"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2024 04:24:20 -0700
-X-CSE-ConnectionGUID: VsJm3oa9S3yZ6uUi3Zm8Fw==
-X-CSE-MsgGUID: VrbT04LEQ3+kl1RHWDS/FA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,200,1716274800"; 
-   d="scan'208";a="49178595"
-Received: from bergbenj-mobl1.ger.corp.intel.com (HELO intel.com) ([10.245.246.252])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2024 04:24:12 -0700
-Date: Thu, 11 Jul 2024 13:24:09 +0200
-From: Andi Shyti <andi.shyti@linux.intel.com>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Zhenyu Wang <zhenyuw@linux.intel.com>,
-	Zhi Wang <zhi.wang.linux@gmail.com>,
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-gfx@lists.freedesktop.org>,
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-xe@lists.freedesktop.org>,
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:INTEL GVT-g DRIVERS (Intel GPU Virtualization)" <intel-gvt-dev@lists.freedesktop.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
-	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-	"open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-	Zhi Wang <zhiwang@kernel.org>
-Subject: Re: [PATCH v4 3/6] drm/i915: Make I2C terminology more inclusive
-Message-ID: <Zo_A2Ykh3-YI7Nff@ashyti-mobl2.lan>
-References: <20240711052734.1273652-1-eahariha@linux.microsoft.com>
- <20240711052734.1273652-4-eahariha@linux.microsoft.com>
+	s=arc-20240116; t=1720698740; c=relaxed/simple;
+	bh=zWdcfiTIyyPAuOM52fLQggpwTWoly0MTLKNObUuKJ2w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=J3Ba1e3Pto2fbhrEz+P1QUP2btbRt4WV2hmwc5Zr0SRP7Ye8zaTlU0l7bQ+ItLQKl/wiFlopPQ7gZTYOPqnlxwIULwqSS95jREKxOUeFzavvK2oy33sh6sNEMHkk2KB2edQInFlksUmr2LZOiYX+TyBoUYDQ4eC3owVvT9yoB2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=LqcQmOhE; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4267345e746so5334785e9.0
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Jul 2024 04:52:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1720698737; x=1721303537; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AReyoq8j0UYL28c9GONhdzqknSDiTsmJyCU02ojVz8Q=;
+        b=LqcQmOhEfI5QUc9UptUSejeuVDJRCIz1fjVx6RV8WwHxv8MnpGnrKd1OKq6AQNu1Js
+         uio/9+8cY9W3mrvVVpw/pvrRngYUBeQi+xwv6qTOy/9/Irg4SFeTWPIPuW/q5n7KLTgZ
+         HA3EezxzPXrHzlfqZnUjddNbzVWXq56RJ8vAOZDcjMMtjFbsS1y992sJ9ns4Lbgakcab
+         xOaNu/Ur9dvyikbqJRCSWUNWCTI97izwyT5s458L/0bahC5LEbV0XT7arN9/8X3zg7g+
+         HSZ+2aRt2JB63nSuKParW6WV3j+nv/F+7lTstcbwubvkWquE+qvjRIsv53IKvq6mjoQB
+         2zAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720698737; x=1721303537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AReyoq8j0UYL28c9GONhdzqknSDiTsmJyCU02ojVz8Q=;
+        b=jjrbV+Qt4Yr1u6rQMrvf39tqIdRpMUPuEvYyt67o8FH46F6FzHl87EkpFT5ZJ5283U
+         8BKbMV7oIG9DbRXkNIhjg1n4y2WrQaTOMwZlkta7vknSZvOhAgE0G5SKa84qDpq4k0mv
+         ryc11FyWzlnFt1Ih+0bBOyLr/XwaFrJNKZX7E1hWDhlKTeKSOWJZlpBeHO3V+Vth3U5c
+         gX9Bwq24bqOA14HDwz7MzrdRqJJRgqBTTP1R6JUHR5pXCYstSpj2nCs7UDVHHsoqS68B
+         dIej7hL91oa5VuqVrEBnq2kgvT6c12f8UM4u0/LeztZDsNkz5BWBc80YDGD7gD8Qw8hK
+         rpBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXzMazUZ9LkfnJ0QuxDwwlrVjOPrnTq1BBTdkq+jFNOzOFz/hMgRJFwCRxc10LKo7cyT5gDk5zIg4mVlyZXaPF1UJE01KKxqwaR
+X-Gm-Message-State: AOJu0Yzz9ireciLeMB+mJbCb2tTwcj8etP+nJpj9z4JN6lHNYiohfvUi
+	IB+7HLSS3u+ZUzrLWGqlF/Mk1xk175xBq6V5YCGamLkB38WZriKe/58Q99aLfxY=
+X-Google-Smtp-Source: AGHT+IGdLSdp5aZa1rJO1UP5f+gQwkUgUvwswdqEDXPCExjrog+7nUhfU+Oi8UbcqLZhvZJFGluzTg==
+X-Received: by 2002:a05:600c:54e6:b0:426:5b22:4d61 with SMTP id 5b1f17b1804b1-426707e355dmr56946085e9.22.1720698737418;
+        Thu, 11 Jul 2024 04:52:17 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.171])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde891cesm7615728f8f.62.2024.07.11.04.52.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jul 2024 04:52:16 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: chris.brandt@renesas.com,
+	andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	geert+renesas@glider.be,
+	magnus.damm@gmail.com,
+	p.zabel@pengutronix.de,
+	wsa+renesas@sang-engineering.com
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v3 00/11] i2c: riic: Add support for Renesas RZ/G3S
+Date: Thu, 11 Jul 2024 14:51:56 +0300
+Message-Id: <20240711115207.2843133-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240711052734.1273652-4-eahariha@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Easwar,
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-On Thu, Jul 11, 2024 at 05:27:31AM +0000, Easwar Hariharan wrote:
-> I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/slave"
-> with more appropriate terms. Inspired by Wolfram's series to fix drivers/i2c/,
-> fix the terminology for users of I2C_ALGOBIT bitbanging interface, now that
-> the approved verbiage exists in the specification.
-> 
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Acked-by: Zhi Wang <zhiwang@kernel.org>
-> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+Hi,
 
-good job! Thanks for taking care of this!
+Series adds I2C support for the Renesas RZ/G3S SoC.
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+Series is split as follows:
+- patch 01-03/12   - add some cleanups on RIIC driver
+- patch 04/12      - enable runtime autosuspend support on the RIIC driver
+- patch 05/12      - add suspend to RAM support on the RIIC driver
+- patch 06/12      - prepares for the addition of fast mode plus
+- patch 07/12      - updates the I2C documentation for the RZ/G3S SoC
+- patch 08/12      - add fast mode plus support on the RIIC driver
+- patches 09-11/11 - device tree support
 
-Thanks,
-Andi
+Thank you,
+Claudiu Beznea
+
+Changes in v3:
+- dropped patch "clk: renesas: r9a08g045: Add clock, reset and power
+  domain support for I2C" as it was already integrated
+- addressed review comments
+
+Changes in v2:
+- change the i2c clock names to match the documentation
+- update commit description for patch "i2c: riic: Use temporary
+  variable for struct device"
+- addressed review comments
+- dropped renesas,riic-no-fast-mode-plus DT property and associated code
+
+Claudiu Beznea (11):
+  i2c: riic: Use temporary variable for struct device
+  i2c: riic: Call pm_runtime_get_sync() when need to access registers
+  i2c: riic: Use pm_runtime_resume_and_get()
+  i2c: riic: Enable runtime PM autosuspend support
+  i2c: riic: Add suspend/resume support
+  i2c: riic: Define individual arrays to describe the register offsets
+  dt-bindings: i2c: renesas,riic: Document the R9A08G045 support
+  i2c: riic: Add support for fast mode plus
+  arm64: dts: renesas: r9a08g045: Add I2C nodes
+  arm64: dts: renesas: rzg3s-smarc: Enable i2c0 node
+  arm64: dts: renesas: rzg3s-smarc-som: Enable i2c1 node
+
+ .../devicetree/bindings/i2c/renesas,riic.yaml |   4 +
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  88 +++++++
+ .../boot/dts/renesas/rzg3s-smarc-som.dtsi     |   5 +
+ arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi  |   7 +
+ drivers/i2c/busses/i2c-riic.c                 | 220 ++++++++++++------
+ 5 files changed, 255 insertions(+), 69 deletions(-)
+
+-- 
+2.39.2
+
 
