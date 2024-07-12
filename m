@@ -1,87 +1,101 @@
-Return-Path: <linux-i2c+bounces-4964-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-4965-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E9B592F9D2
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2024 14:01:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3208C92F9DE
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2024 14:03:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 280E21F2322F
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2024 12:01:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1FF5285095
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Jul 2024 12:03:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0982215E5B5;
-	Fri, 12 Jul 2024 12:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B61F216B388;
+	Fri, 12 Jul 2024 12:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ZOO43gpC"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Ai3jH4X8"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4378216CD13
-	for <linux-i2c@vger.kernel.org>; Fri, 12 Jul 2024 12:01:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8E415E5B5
+	for <linux-i2c@vger.kernel.org>; Fri, 12 Jul 2024 12:02:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720785673; cv=none; b=nUQP9TbJ67uSNccQ2pm5RqKj92JpM1BPAFEi9qywdP8v1hyp5Q/5TvFBZHd4ADYcmkgrErKuBaNcOgsd0SB39k2MzBCrjBSyxgjS79NonAr0q8b8+rsA50y3I/IdJHW0Of/FprF52nvJyFaFG4zotVFoZN4trU3vLXdxy0e+CWs=
+	t=1720785782; cv=none; b=OrpSUMwQGdk4M5fAWu8EeJMuoflkK8qZtHzdBhz0gYVj3GG3ImoebX5+UruwMlc8SNmM/KQP59E+ZDFksJ1n3uUUPC22CfO3kgDhWTIgvt7B6YLuN+aUYsPFbrLhqlcToTNBq97EjRmcCkRT4iT4rfiRZciI6fcaW4pV9941Ru8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720785673; c=relaxed/simple;
-	bh=uLiNU7ShxMJ2CqMbzJMTtjMmcgBj4Phnv/Wc5+odGsA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nhdP+ZT2K36m7SsEpuix48j7jj0wPbZBZVgsEwg+Hf1Y3QSdCyMoRgHUp3I/0VatJkj9UJ/wsbHZqR1COLzzoc0577Di6VpylNlkWcsjOH1IPlg2k7LaCLaou9qABWRYv1fPPWcvu+V/71Uv7Ebey3Xf3Ra/Z3xkZIDg83J5L3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ZOO43gpC; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1720785782; c=relaxed/simple;
+	bh=RlBx5l3ykWiRpKkHaLVYnsm06FU/v5RyZR9FqJrTPNA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uutRbd6ilAwvdSaiGFdVJleU37BniaPQyak6fgKXboNK8HALw2PdmEnE4VPxFzCA3SU3dVrByqdqJBqRytnLmOBxYbwhHr1zqWnzAfHj0AA1T0zy6/1r3tJjuvXG9htyvC6bxKfKCbkscMhz+AUYupWS+GUUTUmOBrttOXIyal8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Ai3jH4X8; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=U2vP5LERhTNzUq
-	Klh2w5cnLhN8oUQLgK6MVisBkC0gw=; b=ZOO43gpCLH65QQT50YxmdvLOj3ojn5
-	jcAAwKO+mVdOsKTn5ZlfpYyXlCWvWkuqeFiwk+/KRBvFRLQiV0ybSleowDfZcrYN
-	WHVI5me8ZyG7D/yrQiUkP67DwfZEc9QZEuRAH3hW1fmxn+V8YdYlFzquxt5svfLA
-	/YERAQ68UKr3pk/W8uiDezT5QcHSltlx73GXfLHYrVIqowYLI3XQG+DO5kdWgvU4
-	LkAmgFlqQK8ifXENDYrPtCYe8BWPiKKiz1iO05yq7eYtmgD+Mf59e4xeYj8d/OJw
-	BKeNEOTzyUE5NjZdAgZ7R+QdOpz7IxSinFzA8f9QXjjbV8suhHRgepEg==
-Received: (qmail 1147608 invoked from network); 12 Jul 2024 14:01:03 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Jul 2024 14:01:03 +0200
-X-UD-Smtp-Session: l3s3148p1@hwArogsdme5ehhtW
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=RlBx
+	5l3ykWiRpKkHaLVYnsm06FU/v5RyZR9FqJrTPNA=; b=Ai3jH4X8H96RroFEqwci
+	zi7A1bt0OBNvfYNAEVXdc2Wx2CP8b35MZerBNFbXtaXsrcvgzmfcf2kQuSPEIN7J
+	SYUgl9sGIqBo32K81WKYGjR6gHaJEgQCpAZDhTcuwf0fg3NUI3zorYXhDRFJg+9+
+	uGwVjjW9XiDo55fphPr56B3/uIVN2zRuMPIjs7ltnykPCnqGTxoTfso3K7QoRx4V
+	MUeUNihCq0410tvGfrosWdQEJ7+fMK5RVJJVzN3G4j6ZXDUSbbvy7c+eD0DfOwrA
+	WeVLgYizlyKfBNXX4Nw9SJSR4J6S6ERVo7YaqqpEs1jP8tchoDvIaBp0Fc1nfssB
+	Bg==
+Received: (qmail 1148112 invoked from network); 12 Jul 2024 14:02:55 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Jul 2024 14:02:55 +0200
+X-UD-Smtp-Session: l3s3148p1@IX7hqAsdSuZehhtW
+Date: Fri, 12 Jul 2024 14:02:54 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.de>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH i2c-tools] README: ask for DCO in contributions
-Date: Fri, 12 Jul 2024 14:00:53 +0200
-Message-ID: <20240712120053.4076-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Jean Delvare <jdelvare@suse.de>
+Subject: Re: [PATCH i2c-tools] README: ask for DCO in contributions
+Message-ID: <ZpEbbuELPjLKNoxy@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.de>
+References: <20240712120053.4076-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="MYGT3SvSpkaHgDtL"
+Content-Disposition: inline
+In-Reply-To: <20240712120053.4076-1-wsa+renesas@sang-engineering.com>
 
-Add some documentation we can point contributors to wrt. DCO.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- README | 8 ++++++++
- 1 file changed, 8 insertions(+)
+--MYGT3SvSpkaHgDtL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/README b/README
-index fb7bd03..98b4ae4 100644
---- a/README
-+++ b/README
-@@ -106,3 +106,11 @@ with Cc to the current maintainer:
-   Jean Delvare <jdelvare@suse.de>
- For additional information about this list, see:
-   http://vger.kernel.org/vger-lists.html#linux-i2c
-+
-+CONTRIBUTIONS
-+-------------
-+
-+Contributions are very welcome. Please send them to the linux-i2x mailing list
-+mentioned above. Make sure they include a 'Developer's certificate of origin'
-+as used for the Linux Kernel and described here:
-+  https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
--- 
-2.43.0
+> +Contributions are very welcome. Please send them to the linux-i2x mailing list
 
+Argh, who put an 'x' there to make it i2x??
+
+Anyhow, this is still a call for opinions on requesting DCO for
+i2c-tools...
+
+
+--MYGT3SvSpkaHgDtL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaRG24ACgkQFA3kzBSg
+KbbX6g//XJu2FmYNbCLrK53zLfi4536TOw22bhG3laUkJPMRF/0rD1JMtdxI9eMl
+gckCh28QfmGQhe1Isb7F+41r8hDp66uHe6dxUqOONdPWWGo5s6siPnvxvWy4EeMA
+2EWLJTiRNPYOkIGmniHa8oc9Bm0UMEWkDXicPdwYouRAdiv4FhX7RMeJ/lPm6Qv4
+11uVJqpA6SCNS3rIZWGbDhYZs5nzM/R9OT6ylpjIC6XYzlAE1TIOhnxav9ydaNfm
+1H0qT5ng3ichFH0Vs/RMlAnhHDBXCoMHF8pI3dGv774DApIasqK+7Arr3JX+6fRx
+WESwM8hEYc+7ptDSKs1ZdENW/MwY9Bgayqm8Eph09ciMmvB19371QWFufapmqgZ9
+hqilncFSYxZpbZZCNMr4rl2ezSebjSLqseJxDwKNzlX5hnMmNWjtHUE1hJtV5Lnh
+W+3r6DAzKmxuoyfAtOEJbb7Uq98b8gk0MW9dhljJAfE3AiuS1g7GwhuHYMPrXMO3
+wLS57fSAaeLhVKg+fvHLpdZS7KEID7TPLZRfHsokHv0MoIDG0on17VfrbbiQ2+LK
+CPyz24wvBP4SfCn4nCsGx+8y9zwVtURQ8BBLdseKpkc43QCDj79fBN6g+T/M/OtL
+HEAS83yb0KJVXurKMiR5YBoDEcp/qTUxMZfiV2JpYYjEYbXk44k=
+=SmZd
+-----END PGP SIGNATURE-----
+
+--MYGT3SvSpkaHgDtL--
 
