@@ -1,124 +1,106 @@
-Return-Path: <linux-i2c+bounces-5009-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5010-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5834E93455C
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jul 2024 02:23:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B633293455E
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jul 2024 02:25:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 942C9B21931
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jul 2024 00:23:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E5E31F223FC
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jul 2024 00:25:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD2E4A1B;
-	Thu, 18 Jul 2024 00:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80D32110A;
+	Thu, 18 Jul 2024 00:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Di740ZIG"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="DYZj4wF9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE984A05
-	for <linux-i2c@vger.kernel.org>; Thu, 18 Jul 2024 00:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86402800
+	for <linux-i2c@vger.kernel.org>; Thu, 18 Jul 2024 00:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721262191; cv=none; b=PbAPJ0NkEZM+41M2wcVk1x1aGpd3xPIMvPF8F0t5feyTu7y158EaHIUNpxN+BDmvllx91cWYAjrOcxpeH0IxSNyuwei+GcXOV8fkVTEvmpv6mVLxgLoEhFS1vCsdK6b6wjVzOYNZplqkTz7oMx8mSWt768yS8w4jyZ/TDJQyqMU=
+	t=1721262305; cv=none; b=LyKYGid2f3tAsWaQG3mFMm9e/ExW8kckFfdn7+8J/Sc1UUlzMO+0yEcBubV5g47gHQr+X7IkUOuJVdq4UJ7rQ5sYxZ7l/vZKJxgZYnbPlXEF/xCvjIcQY60cVkuyR1EyW7lHp9vLAIxbEsWgxwmLEpFI+kWwJsh9ry5F40O8npo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721262191; c=relaxed/simple;
-	bh=L3zztIlyA1ycT592luYaBx1AfG29G3i/a1u20U2mPCs=;
+	s=arc-20240116; t=1721262305; c=relaxed/simple;
+	bh=IJxNKounMxqXQ/v/BKFsifWplKcA9iwtXjgiC1PRubs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=l3jK+JM/xvHMhfHERg8g+OrFkgQ6RBtzui2zBdMTmqUpCHgKPERC080bA8BDVhsd8w1aT+MbMNZLz+glDMM69OSApu3z/+R0d18mX9JVFP/oVO3/193jEuZMGihSrxjph2cfXDF1NK7WG+hm1+Hn/Woas/5Lgv9eRoteSPSjBpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Di740ZIG; arc=none smtp.client-ip=209.85.167.53
+	 To:Content-Type; b=LRtn9M0YsVx7nKQ0vke9kRjWUXx81zzjFOLBy6/ZcFZGfHLwBGByZ1PGESN2JfA/SNCuHYTxMaufArUlM1V/P4kjwpZ9hYZEZKjYiJ0AJnULxEZZJ3u7yPh3QOuef+5W+QPN5Zm9aeGAeshrFB48Bn8rjmesIP5+MhyyRXxPHLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=DYZj4wF9; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52e96d4986bso293090e87.3
-        for <linux-i2c@vger.kernel.org>; Wed, 17 Jul 2024 17:23:08 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52ee4e26790so334081e87.0
+        for <linux-i2c@vger.kernel.org>; Wed, 17 Jul 2024 17:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1721262187; x=1721866987; darn=vger.kernel.org;
+        d=linux-foundation.org; s=google; t=1721262301; x=1721867101; darn=vger.kernel.org;
         h=to:subject:message-id:date:from:in-reply-to:references:mime-version
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=72WbVH44i/16Etq7iUNI2JboVOFCeVeL925LyzElDFM=;
-        b=Di740ZIGsub01MyA2rBZUTcilWKahEV2DTI97bc8qqcMUASkA/APzYehDaEJZl7Uny
-         P/U00AzzaO5bDdz2sJkY+ZKvxjpdQb5PG/DK6qF766Qw1NLbd7X1Lufx71oNCeQfDxfh
-         fAEpc1dsjvra9om8DvkEk7GVtqsIhApDIdqGU=
+        bh=uWt5MRgiFwtJHB8UyQZuipfHU1hROtorTGuhqMlfhd8=;
+        b=DYZj4wF9HNW4F97jt/TowK4y55yDIFWTkVs4D6CkVtJ0UYzxz8vvyD6hTFy6nmBWlI
+         1FtfLqnZ5epYKfd44BX6qnU1X0Dl1Xub3uD1lzoHr+wLQXq4Cl0EalWAr7greOqtYIhn
+         icPujdXnuSx0dei4ZTI+rigxiV0UlNO6EIjpo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721262187; x=1721866987;
+        d=1e100.net; s=20230601; t=1721262301; x=1721867101;
         h=to:subject:message-id:date:from:in-reply-to:references:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=72WbVH44i/16Etq7iUNI2JboVOFCeVeL925LyzElDFM=;
-        b=SO28ks+Ecc4jcq+OngsTBX0xCJS0sf+WlrbUAbJ4/PNWaTbIgIfeG4YVNLE8Eab7V0
-         xDeTD+rCekTm7Cj1pwsBgVQ0cRh6B6AVTVRpdEl35BHsPorf6JN+od+w7a0DcPGTS1el
-         jkFfV7aZk7iJyG7lrJQfl3pCUcocuZAFJYUVE7b1oU2d7rxRaxRB1U+YH6hXcS9Zw9EJ
-         W3cwU1u3O/vcZf1B5bzVmL3jIBVHnCP9It9Alinp/BYEf3p1a1Aw7PNVoCCsgLs+w0i+
-         7X04m3mJ5s/C/BticrF2kbBpEloUM+iyfDjN0DWk3Bv8ZvyyJ/Z0Ksq88pBoQ0SnxZk3
-         1SbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW/IxCUN3l34zIA/HWGdFrNoujxMqo+VoJ1Bvh6YLVXo+5TsZB+drzG+U0s8a3G6vi7OCBpAriVweWJ59Lqibegi63ain8p/ZPr
-X-Gm-Message-State: AOJu0Yw9dVaaocXRxp70MZ0kIdZr+IkTCFevjCLzntfdJeZZbXd5JumZ
-	9RH2Q1IgTWxeg8/xCKU6awWrMVpDqYIhmF8l8zIRbxaCR1epMOSg/K+Jg3t57pOTXYbGMlrufyK
-	bp7k7Sw==
-X-Google-Smtp-Source: AGHT+IHI/pTu4i84aKQ6dts2QR7YDyx62MnQxUp4cpqPPiX9NwRGsb//OBscxEof8Svt7Xy0Jp8QYQ==
-X-Received: by 2002:a05:6512:3d28:b0:52c:9e25:978d with SMTP id 2adb3069b0e04-52ee54460d7mr2136695e87.45.1721262187029;
-        Wed, 17 Jul 2024 17:23:07 -0700 (PDT)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a79bc80101fsm508848466b.179.2024.07.17.17.23.06
+        bh=uWt5MRgiFwtJHB8UyQZuipfHU1hROtorTGuhqMlfhd8=;
+        b=cnVWMb8V1JQJGkpKQJOrvxY39HLlyqz2INS3uVoBjTRvW712XZkrFJuZJAN/c3p1+p
+         UOO05+CgxthJb5++32J5vQEfWdVXQTASJSHFUeiK809i+CcoLtPaD3AwUp1A93Jp/ieT
+         mNM+C8FBOjlzhZ6jCAQGi+WQKKsi9bFF0RcQCBEFwfTzZ9UeMz9ocdYCdJUIllxnYJs5
+         oaQgBHjKQ1rJVNd0DLoAs8/b/EZT6egg/1Dz9WLHbMJyQY0Du9a8FhRyOdPhXV4yotk4
+         1e5oqN6jhq2XxAzNgPDpBKt8hrmkT/GBeDXq2igsuyNkTayWUzndI7wEq4eclPvu/Ztv
+         LcoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUhVAZN7sw+lLLTGPTNQ6VaBvQ+C7vCiR5x79hGj4IkQ2wmc4kZjXuRLZ+E/5bXrP6hY3kLy4KEimCQEs9jKTl6DqBm7EwHMMjF
+X-Gm-Message-State: AOJu0YwlbeJrhl11fzrSKQwkeV9US2bIXERf2o0aMDNlZe0EWl+wILei
+	uBUkqpa4Jz7C1wX6hCeOEIVduMrWVj53SHO7xpdxks8u2bNmanmkOmksgPMElZ4GHYfy+pzQTl0
+	T29vmXA==
+X-Google-Smtp-Source: AGHT+IHKUkPyStlhjl4nQewnQewWD0v6BF8hrq1Ox33IpiSX2Ghh+3FXnBYJf2vULt1YeT236TfEgQ==
+X-Received: by 2002:a05:6512:3c93:b0:52c:df6e:9517 with SMTP id 2adb3069b0e04-52ee53a582bmr2358732e87.11.1721262301506;
+        Wed, 17 Jul 2024 17:25:01 -0700 (PDT)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ed2538e96sm1642163e87.245.2024.07.17.17.25.00
         for <linux-i2c@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jul 2024 17:23:06 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5a108354819so237491a12.0
-        for <linux-i2c@vger.kernel.org>; Wed, 17 Jul 2024 17:23:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCULAZuCW5PAW/gG/bi46s8KFVBMWMPSaD7pCua3Lj861T1kk8kxCmsXFlciE4mnwgLdW95b6/SSh8V9V9XzWmuK5LU/mGeQmkcW
-X-Received: by 2002:a50:aa9c:0:b0:5a1:a447:9fab with SMTP id
- 4fb4d7f45d1cf-5a1a447a39fmr127340a12.28.1721262185767; Wed, 17 Jul 2024
- 17:23:05 -0700 (PDT)
+        Wed, 17 Jul 2024 17:25:00 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2eea8ea8c06so4151801fa.2
+        for <linux-i2c@vger.kernel.org>; Wed, 17 Jul 2024 17:25:00 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUntwE2uQo805CnQhE9F7gUZJ1lZMgv2pIqSDui755SJhuwkuZRjDWSZMW3/E5YDFqFAQTKmgvpi+bjJ8If1W3xy507Zew8pawz
+X-Received: by 2002:a2e:9d0a:0:b0:2eb:e365:f191 with SMTP id
+ 38308e7fff4ca-2ef05c6e43bmr5642541fa.15.1721262300266; Wed, 17 Jul 2024
+ 17:25:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZpY3X1tggZC3s_1X@shikoro>
-In-Reply-To: <ZpY3X1tggZC3s_1X@shikoro>
+References: <ZpY3X1tggZC3s_1X@shikoro> <CAHk-=wigtUnqv+RXkLZ2TwqV35YQeGrYsMnrowpnmQNN6wyhCg@mail.gmail.com>
+In-Reply-To: <CAHk-=wigtUnqv+RXkLZ2TwqV35YQeGrYsMnrowpnmQNN6wyhCg@mail.gmail.com>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 17 Jul 2024 17:22:49 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wigtUnqv+RXkLZ2TwqV35YQeGrYsMnrowpnmQNN6wyhCg@mail.gmail.com>
-Message-ID: <CAHk-=wigtUnqv+RXkLZ2TwqV35YQeGrYsMnrowpnmQNN6wyhCg@mail.gmail.com>
+Date: Wed, 17 Jul 2024 17:24:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wir5OYeNSytz+EocQnQxoFX0LY962R6FDj9cAHBiXFe5Q@mail.gmail.com>
+Message-ID: <CAHk-=wir5OYeNSytz+EocQnQxoFX0LY962R6FDj9cAHBiXFe5Q@mail.gmail.com>
 Subject: Re: [PULL REQUEST] i2c-for-6.11-rc1
 To: Wolfram Sang <wsa@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 16 Jul 2024 at 02:03, Wolfram Sang <wsa@kernel.org> wrote:
+On Wed, 17 Jul 2024 at 17:22, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Most changes are in the merged requests for I2C host drivers and the
-> at24 eeprom driver with their own explanations there.
+> I have looked up said explanations, but next time I need to go look
+> for explanations I'm just going to ignore the pull request as clearly
+> just not worth bothering with.
 
-Please don't do this.
+Actually, I looked more, and that's just part of it.
 
-What's the point of saying "all the explanations are somewhere else".
-That's not the point of a pull request.
+There are other merges in there too, and this just pisses me off.
 
-*I NEED TO KNOW*.
+If you can't be bothered to then write a summary for what the
+different merges do, I can't be bothered to pull it all.
 
-The explanation is why I would pull - without that explanation, why
-should I bother with a deficient pull request?
-
-Because this all is the whole point of a pull request, for chrissake!
-You are requesting me to pull, and dammit, that means that you should
-explain *WHY* I should pull.
-
-Not this "there's an explanation for this elsewhere" crap.
-
-That just makes me go "ok, so what, this pull request is garbage".
-
-I have looked up said explanations, but next time I need to go look
-for explanations I'm just going to ignore the pull request as clearly
-just not worth bothering with.
-
-Because I'm not AT ALL interested in getting pull requests that
-basically say "I'm not going to even bother telling you why to pull".
-
-And if you can't see that, I don't know what to say.
-
-               Linus
+                Linus
 
