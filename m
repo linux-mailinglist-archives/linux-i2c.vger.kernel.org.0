@@ -1,129 +1,159 @@
-Return-Path: <linux-i2c+bounces-5018-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5019-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A93DB9347EC
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jul 2024 08:17:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70EDA934ACE
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jul 2024 11:20:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3473CB22188
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jul 2024 06:17:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECB28B21D80
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jul 2024 09:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 664AF4D8D0;
-	Thu, 18 Jul 2024 06:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="POI6V7ce"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C6CB824A1;
+	Thu, 18 Jul 2024 09:20:19 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C510282EE
-	for <linux-i2c@vger.kernel.org>; Thu, 18 Jul 2024 06:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CBE7BAF4
+	for <linux-i2c@vger.kernel.org>; Thu, 18 Jul 2024 09:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721283415; cv=none; b=M6VDhzmqAoAnkgKRuxVdicyMfYBxj9thz+eyVQZvs1++Ge2kousidEpkBwpVUyuWiywYpaTULnVJWShNQGg83niEvDk659WeNsWWGcK3QwmJwesyTwqKfUI+86gAksIjJWmY5yNpcJs+IATJ/DRWarME7YXYDiu/jhnG1ZC1V2I=
+	t=1721294419; cv=none; b=J8kJgcuU0Kx9ikzdCnkec/idQGuPDef45G/KnrF9dNeyoWy18uv/x1+bqkEFjBg8SOsCWktCs1E3HSsXQqP6zSSztx3zvt0ZrIL4LjckjE05eUqM+uWChLQOYrGIvMVtYPYrKntZ2pTQp5216VDTKU9NquPVnMXxmHIzsxJY5mA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721283415; c=relaxed/simple;
-	bh=kyAEPQ8aqEpNHP56KgTxfs8DkAW5y/OXpKADmfMqipw=;
+	s=arc-20240116; t=1721294419; c=relaxed/simple;
+	bh=NVmocxKup4CnNxG4HHYvEU51kiKuUcSnBQFJoZmyjlw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SI5r6tTtT1GZ6IX0oUel6kk+xHRGntRIJ0Xbv8i/8Dc7LS5R6lEPTp52+P22fxYOCZwn4W+tf3OdEDMFmcGpUovUEyPtjubRoDLjWfWfsqwgoeXXWsE4/w5jhgraO+Ekl1kD+gJ/HZCNsRtCWCu2kPamDA2H29V+ceFRhJzDIDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=POI6V7ce; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=xdf5
-	pkRjQk/2l7quEdwVVAsVanyOiLoDYJ1UByBzIFM=; b=POI6V7cerUMTOAI3LNPa
-	SuZEQDja66K97w9kNDpZKFS1i0hZQ4C22Z/mPPBqtGJmTb1XBifYeKxfMPa4Vm2u
-	cpHLrmpn+Y2ct3lPvQzPHgPBZvlHQeyW+B4umKyk+5oVxWkBCLtODdYjEl9wojGB
-	ZpaD6dGweS6xuinPYe0sFEq9CWTtxZfu1Rp2B/6eVXuS+SX31ZvDNwwrIYMq2JGF
-	TnFO3vUnwqbrXNS/bEOD7MxjiwKJ1WgsDLc/iDgUImpSZ//2e0G/ldxsetFwuy60
-	qT9XBjaFjCjQNSfTpIm9IEYXiMaXZBVxgMUtChQSpuWuCkiDFzIn9p9hs8DNAdpe
-	iQ==
-Received: (qmail 784982 invoked from network); 18 Jul 2024 08:16:41 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Jul 2024 08:16:41 +0200
-X-UD-Smtp-Session: l3s3148p1@LqCmhX8dULK57tsn
-Date: Thu, 18 Jul 2024 08:16:40 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=le3NrQJDqQY5dgOLXib8+KR0H4Vfjseusyjs8r1sPcbReW2fBcn1UrY+4u/Vj53Ar/djUvyl+PQhspAaGblp8DfM4NwaCquWYvx7hIfsJZhvBFh/sQN4BhCGio2ys51lB3rMYWBgQ6J5Pc9cqY5wXVvmXlgCwMwh/VA0r2NBbd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1sUNGz-0002U5-TA; Thu, 18 Jul 2024 11:18:01 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1sUNGr-000PqF-MB; Thu, 18 Jul 2024 11:17:53 +0200
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1sUNGr-003zXS-1Y;
+	Thu, 18 Jul 2024 11:17:53 +0200
+Date: Thu, 18 Jul 2024 11:17:53 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Maxime Ripard <mripard@kernel.org>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: Re: [PULL REQUEST] i2c-for-6.11-rc1
-Message-ID: <ZpizSLI-sAIng0GO@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-References: <ZpY3X1tggZC3s_1X@shikoro>
- <CAHk-=wigtUnqv+RXkLZ2TwqV35YQeGrYsMnrowpnmQNN6wyhCg@mail.gmail.com>
- <CAHk-=wir5OYeNSytz+EocQnQxoFX0LY962R6FDj9cAHBiXFe5Q@mail.gmail.com>
+	Russell King <linux@armlinux.org.uk>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Vladimir Zapolskiy <vz@mleia.com>, Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, linux-mtd@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	imx@lists.linux.dev, linux-omap@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+	openbmc@lists.ozlabs.org, linuxppc-dev@lists.ozlabs.org,
+	linux-mips@vger.kernel.org, loongarch@lists.linux.dev
+Subject: Re: [PATCH 4/9] mtd: devices: add AT24 eeprom support
+Message-ID: <20240718091753.apwsrvmekn2vvo4k@pengutronix.de>
+References: <07b701a9-7b52-45b7-8dba-1c25d77cbf15@linaro.org>
+ <mafs0ikxnykpr.fsf@kernel.org>
+ <20240702-congenial-vigilant-boar-aeae44@houat>
+ <mafs0ed8byj5z.fsf@kernel.org>
+ <20240702-mighty-brilliant-eel-b0d9fa@houat>
+ <20240708084440.70186564@xps-13>
+ <20240709092214.omr7ccphdzdk7z7j@pengutronix.de>
+ <20240709114302.3c604ef3@xps-13>
+ <20240709103841.7x7n4hdtqrunyoc3@pengutronix.de>
+ <20240717101948.2e99f472@xps-13>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="V4NMR6WsPI0KAuJv"
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wir5OYeNSytz+EocQnQxoFX0LY962R6FDj9cAHBiXFe5Q@mail.gmail.com>
-
-
---V4NMR6WsPI0KAuJv
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240717101948.2e99f472@xps-13>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-Linus,
+Hi Miquel,
 
-> > I have looked up said explanations, but next time I need to go look
-> > for explanations I'm just going to ignore the pull request as clearly
-> > just not worth bothering with.
+On 24-07-17, Miquel Raynal wrote:
+> Hi Marco,
+> 
+> > > > > Overall I think the idea of getting rid of these misc/ drivers is goes
+> > > > > into the right direction, but registering directly into NVMEM makes
+> > > > > more sense IMO.    
+> > > > 
+> > > > So you propose to have two places for the partition handling (one for
+> > > > MTD and one for NVMEM) instead of one and moving the code into NVMEM
+> > > > directly?  
+> > > 
+> > > Why two places for the partitions handling? Just one, in NVMEM. Also  
+> > 
+> > Without checking the details I think that converting the MTD
+> > partitioning code into NVMEM partitioning code is a bigger task. As you
+> > said below there are many legacy code paths you need to consider so they
+> > still work afterwards as well.
+> > 
+> > > usually EEPROMs don't require very advanced partitioning schemes,
+> > > unlike flashes (which are the most common MTD devices today).  
+> > 
+> > As said in my cover letter EEPROMs can become quite large and MTD
+> > supports partitioning storage devices which is very handy for large
+> > EEPROMs as well.
+> 
+> Did you had a look at nvmem-layouts ? In particular the fixed-layout.
 
-Okay, I got the first part. My reasoning was that the summaries from the
-merges I pulled in were excellent and I could not add something to it
-*plus* I was assuming you skim through the patches you pull anyhow. But
-I can see that you want to know *before* you pull something. I will send
-you an updated PR.
+Yes I had a look at nvmem-layouts and we use them within a
+mtd-partition. Using them instead of a mtd-partition is not sufficient
+since they:
+ 1) don't support user-space write (I send a patch for it but it doesn't
+    seem to be accepted soon).
+ 2) If write would be supported the user-space need to write the
+    complete cell e.g. no partial writes.
 
-> There are other merges in there too, and this just pisses me off.
+> Is there anything you would like to achieve already that is not
+> possible with nvmem but is with mtd?
 
-That part I do not get:
-
-$ git log --pretty=oneline master..i2c/for-mergewindow | grep Merge
-479f18ccca110b727d99c2db60d769736bf390e6 Merge tag 'i2c-host-6.11' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-mergewindow
-711703013e340caac3e4a6a3a605324691292621 Merge tag 'at24-updates-for-v6.11-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux into i2c/for-mergewindow
-
-These two merges I mentioned. What others are in there?
+Please see above.
 
 Regards,
-
-   Wolfram
-
-
---V4NMR6WsPI0KAuJv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmaYs0QACgkQFA3kzBSg
-Kbb7ShAAsYkzZIWcYYi0+3xUnQTyFd7720G5Ow/1tZZ0GE4MsC6EfUtxoPZQ0Dez
-4F0gCIVUSf6YFgMN1oBrg1FgA8TEu6nnrpXB7BbyOz5FBwFo80UaFbYJMMH5FXit
-SWP1wxJSXfEwf9sSmHtOdSFCEVb31FwxR3VicYMlcv0DBpfFcrT/Jfl+Gk/9Ee+I
-wrtcuGDz0+ItNS+HZQEcUtG0wUP45DtQeRS7g1DHraEODP7W4YYiE50Y4nXwE0Ti
-c01kE3hF5JP5AAk3oIap0DmzmfLSE7pqp1MBycIRLl5YaGofc3TXYwWVMK3D62tq
-6jOzkUnyNq8sQqYajMsxfsvSdx/RRAb9g4FZPp5iRR6P8OeS9Iyg50FfFB5yy9Sj
-cY7sQZ2PS8N1/Fu1liMigXB2kBIuKLxpr10th1o1T9cS3C7GtqxKnpzxUfU7PdtS
-HdGRlCRGMVlnk1/r8ckxRvmKdjZoTeNSdH7YW5yOzvVEDMcoEm0cr1Dn/6BLwQ7Y
-83Q0PgK8qbzf8RRjFhpSbJjTsXGywfk53g1abxdwTMuD6PquGzax9u0IaZlxV97I
-otUdxGvZ/jVyo4Amb2UsalzI/fzNAZNHOj0P16NlpgSwa9MorJHlaPICNLU1zKo8
-bWJOUBySu/YVrDsgk7YWrjbN0u9wruv8xlOvJm+HIl3NZn5oDjU=
-=SQOV
------END PGP SIGNATURE-----
-
---V4NMR6WsPI0KAuJv--
+  Marco
 
