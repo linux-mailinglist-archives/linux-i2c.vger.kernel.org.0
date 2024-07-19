@@ -1,115 +1,102 @@
-Return-Path: <linux-i2c+bounces-5032-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5033-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12357937412
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jul 2024 08:41:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94AEE937765
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jul 2024 13:59:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B190328209B
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jul 2024 06:41:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 459521F21898
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jul 2024 11:59:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0702242076;
-	Fri, 19 Jul 2024 06:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CgcYeT8P"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F5C2128812;
+	Fri, 19 Jul 2024 11:58:51 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from greygoose-centos7.csh.rit.edu (greygoose-centos7.csh.rit.edu [129.21.49.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779E3383A5;
-	Fri, 19 Jul 2024 06:41:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB52126F2A;
+	Fri, 19 Jul 2024 11:58:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.21.49.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721371278; cv=none; b=BZt43mEpwN2qonP3XQjE0UQ+6y+244G1211gIO1OBLetQMKXS1QBMDg8YrvUrTk0MRAjpaPykxyoLR5BCOoZx+dE/rvO+s6dalEQNdpONMWE8u5HOuxPGdrixPudBmOVpyt/DN9+0kRYUD3c7eKjU5vo9JicsadoT3sF6kntf3M=
+	t=1721390331; cv=none; b=f1JoFMLP7m6i4O6mv3rZ7jdNTMWKA9dWTNrjRxIr2X1D7bukpy8eCOxIcXyO3ftEE/GZ0IqmbXmIrPL8ehIS4V/A2v8o9LQ/jYzsls4qzlWxPncBnm9+DDenuYSrprDtoyB7rqN9IxJp1ULm/0MRObgXgVCLFFdtuyWgGk1+uQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721371278; c=relaxed/simple;
-	bh=wnRHkCcsp2HkpohgU9XPRNYn+o7k8mTAF1Ghy3LwOa8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ex+J77jNzwuWakPCoTJQhPwVHJZhPhkXqnczJCq+rSlVYwtf8qgeckgoy9g17hixdvKmxY9OgZB1ClZ5KxkXAoNeAlBKBKUhOcqMs/A76RuxCRCcGD0hAAYcQHPDYRMQBMMmcFrlipSMFs1VAiR6bTU0eYAKnAt6iZWn+eWuWxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CgcYeT8P; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-70b703eda27so438688b3a.3;
-        Thu, 18 Jul 2024 23:41:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721371277; x=1721976077; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wylj3kGOIDYE2cN9wsFtunTW5uEeiidj5QZYKMEAguY=;
-        b=CgcYeT8P9IgXY0v8mSKjYZXvgL/jA+W9LJCil/4V4nTSirkFcLLiClvJMZEZ/P/gZA
-         o2hpWrk5eQQrNE/1JQwaw4sw2CjcFdZilXqe83A2PLDECeQJ8/bFbGnqGkNWCzbCwzOW
-         4InDE0EEtYsN9QtGYCFIKfORVS4YS1bDQyIjFJMN1Wd/PbnT/HFkwKG9y2kZxHD5Dn/O
-         7tBIWCnAREiAF+K44O/Gbhmfhh9CBn8FewIn8jQ40LoylVgDkxoYRn50IHu+gyckSpc1
-         n9vDidpz2OjTWNF25sS2zQGFIk+bLyUSSZsY0AXGYJPIwFs0uo6PXIQxwT8nA5vH3fzi
-         0gOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721371277; x=1721976077;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wylj3kGOIDYE2cN9wsFtunTW5uEeiidj5QZYKMEAguY=;
-        b=AhH4b4Mn4OHoWUG1BInDVYWY09rRer5Y6Iv+dhBfdR7x7uiQYwcbDcl2I+Ebu+7Ks2
-         i05XKV8+102+osq3FKfQU8s1VCb6RrJN6I3wsNs6rpTwzensyAPcvAKDZGcJATrzHMso
-         ieBnFSv5CXZNR5+pTNBA+G5focis6+rPM/z0GzNyQ0IwK/T35kK20iW3hL2rhvZdjCHw
-         UokfCqUaj1KSuJMmMpKZW/0VRX1qKExSBt8uFM5/OcoaZ1vq2cmFGKb7KPgKLamL+9w4
-         uupxJM9LXe29oY1QbZFpnNlTYTUGr9UsMJKtuDxjZGOq6pSTG779AnF6neJnMDqbJhSt
-         311g==
-X-Forwarded-Encrypted: i=1; AJvYcCXvJ8vjitD4yRmZw8OCaOisbTR+g504y7yKz6xZaz225/env5bCaxiG7aEqe5h7HBSvBU8ar5lIV6tF0hvuePCDp+YKFsu852uiPoGyGpoaU/0K1e6bEtmEP/s6JFClVS58GucnGvm9
-X-Gm-Message-State: AOJu0YzEGEH3rVE4YGCF1y8ZTrvrQGa0nXiGEE82b9v7fntIWjLWw5gz
-	5fEutJtQu6Yp71iNiclfMk/XVdv1qLDn4CTl9b8RW2TfqO8QXFiqSPms0QqZNpkzJjllpRQgWFA
-	RiEytCuyrnhCxyz9ggZbyb07xIj8=
-X-Google-Smtp-Source: AGHT+IG3nMlwOix2gzmKqVxWoGCy1vqIpD7oDhq77rjL4jTUXExgzWOFWJAse1xqRxzwvbBJ9JX2jQl4LZlKlWyksdY=
-X-Received: by 2002:a05:6a00:13a2:b0:705:a13b:e740 with SMTP id
- d2e1a72fcca58-70ce4e43247mr8232515b3a.19.1721371276612; Thu, 18 Jul 2024
- 23:41:16 -0700 (PDT)
+	s=arc-20240116; t=1721390331; c=relaxed/simple;
+	bh=RUkNIXP4ZZZQU7AmZzUNOsWOiYcu3bUy4EzOO8kC/7I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L/HoXjgewNwO8gf1UPAKFWAQ3CkwfU2DVbKQZQbCFhep7U2VImGDC01UWKh8gt2J8WrhHPpSZpDUUCOlHvOLDl+Edq/+WiCQrMgFffQi6ISj09BgXXXZdKuiA8BQIl1iw8VT5Mbv9puiZDajPyKNFT0lfbZjb8Sg1DoQndaZqPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=freedom.csh.rit.edu; spf=none smtp.mailfrom=freedom.csh.rit.edu; arc=none smtp.client-ip=129.21.49.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=freedom.csh.rit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=freedom.csh.rit.edu
+Received: from localhost (localhost [127.0.0.1])
+	by greygoose-centos7.csh.rit.edu (Postfix) with ESMTP id A2F9C40D7C9C;
+	Fri, 19 Jul 2024 07:58:41 -0400 (EDT)
+X-Virus-Scanned: amavisd-new at csh.rit.edu
+Received: from greygoose-centos7.csh.rit.edu ([127.0.0.1])
+ by localhost (mail.csh.rit.edu [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id c5mWgwAwWkWi; Fri, 19 Jul 2024 07:58:41 -0400 (EDT)
+Received: from freedom.csh.rit.edu (freedom.csh.rit.edu [129.21.49.182])
+	by greygoose-centos7.csh.rit.edu (Postfix) with ESMTPS id 3A44045735E9;
+	Fri, 19 Jul 2024 07:58:41 -0400 (EDT)
+Date: Fri, 19 Jul 2024 07:58:40 -0400
+From: Mary Strodl <mstrodl@freedom.csh.rit.edu>
+To: Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	Mary Strodl <mstrodl@csh.rit.edu>, linux-kernel@vger.kernel.org,
+	urezki@gmail.com, linux-mm@kvack.org, lee@kernel.org,
+	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+	s.hauer@pengutronix.de
+Subject: Re: [PATCH 1/3] mm: vmalloc: export __vmalloc_node_range
+Message-ID: <ZppU8FhsFd9cB-Fi@freedom.csh.rit.edu>
+References: <ZpiGIbczW4iItKVx@infradead.org>
+ <ZpkNOyuxuJHaTW35@freedom.csh.rit.edu>
+ <ZpkOV3mdOU1b8vMn@casper.infradead.org>
+ <ZpkPStwq_S3mJYb5@infradead.org>
+ <ZpkQQ5GzJ4atvR6a@casper.infradead.org>
+ <ZpkWj-iFiA-JHbbf@freedom.csh.rit.edu>
+ <20240718143103.82e33c556b2d1b6145ae43e0@linux-foundation.org>
+ <ZpmKho9_t0_MeOP7@casper.infradead.org>
+ <20240718143924.43e22f68cf639b064a83f118@linux-foundation.org>
+ <CAH9NwWf_S-PyY5X_cJGSW-8YDk4-C0VvnPCX8iVuo0FhTqsy2Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240718011504.4106163-1-mstrodl@csh.rit.edu> <20240718011504.4106163-2-mstrodl@csh.rit.edu>
- <ZpiGIbczW4iItKVx@infradead.org> <ZpkNOyuxuJHaTW35@freedom.csh.rit.edu>
- <ZpkOV3mdOU1b8vMn@casper.infradead.org> <ZpkPStwq_S3mJYb5@infradead.org>
- <ZpkQQ5GzJ4atvR6a@casper.infradead.org> <ZpkWj-iFiA-JHbbf@freedom.csh.rit.edu>
- <20240718143103.82e33c556b2d1b6145ae43e0@linux-foundation.org>
- <ZpmKho9_t0_MeOP7@casper.infradead.org> <20240718143924.43e22f68cf639b064a83f118@linux-foundation.org>
-In-Reply-To: <20240718143924.43e22f68cf639b064a83f118@linux-foundation.org>
-From: Christian Gmeiner <christian.gmeiner@gmail.com>
-Date: Fri, 19 Jul 2024 08:41:04 +0200
-Message-ID: <CAH9NwWf_S-PyY5X_cJGSW-8YDk4-C0VvnPCX8iVuo0FhTqsy2Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: vmalloc: export __vmalloc_node_range
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Matthew Wilcox <willy@infradead.org>, Mary Strodl <mstrodl@freedom.csh.rit.edu>, 
-	Christoph Hellwig <hch@infradead.org>, Mary Strodl <mstrodl@csh.rit.edu>, linux-kernel@vger.kernel.org, 
-	urezki@gmail.com, linux-mm@kvack.org, lee@kernel.org, andi.shyti@kernel.org, 
-	linux-i2c@vger.kernel.org, s.hauer@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH9NwWf_S-PyY5X_cJGSW-8YDk4-C0VvnPCX8iVuo0FhTqsy2Q@mail.gmail.com>
 
->
-> On Thu, 18 Jul 2024 22:35:02 +0100 Matthew Wilcox <willy@infradead.org> wrote:
->
-> > On Thu, Jul 18, 2024 at 02:31:03PM -0700, Andrew Morton wrote:
-> > > The hardware is weird, but we should try to support it in some fashion.
-> >
-> > Why?  It's been around since 2005, and Linux has done perfectly well
-> > without support for it.
->
-> Oh.  I was assuming it was some new thing.  This does weaken the case
-> a lot.
+On Fri, Jul 19, 2024 at 08:41:04AM +0200, Christian Gmeiner wrote:
+> This wonderful interface is used in recent products from them too.
+> Adding support for it
+> in an upstream-able way could be still a benefit, as these products
+> are used in different
+> industrial environments running on Linux.
 
-This wonderful interface is used in recent products from them too.
-Adding support for it
-in an upstream-able way could be still a benefit, as these products
-are used in different
-industrial environments running on Linux.
+Just seconding this. The hardware we have here (conga-TCA7) was
+released in 2021. As far as I know, congatec have been using this
+interface for a while and provided a pretty bad out-of-tree driver
+for it that needed a proprietary library in userspace to talk to
+devices instead of actually registering with the kernel facilities
+for i2c, watchdog, backlight, etc.
 
--- 
-greets
---
-Christian Gmeiner, MSc
+I think it's valuable functionality to support, but it'll need to
+happen safely.
 
-https://christian-gmeiner.info/privacypolicy
+Maybe some of the stuff the driver does right now could be moved into
+vmalloc? In other words, we could provide a different function that
+allocates an executable page, copies memory into it, then marks it
+read-only. Would that do better to alleviate concerns?
+
+Not sure what the restrictions on x86 are, but we could also start
+with a writable page, then mark it executable when we un-mark it
+writable.
+
+I think this is good discussion, thanks for sharing your thoughts
+everybody.
 
