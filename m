@@ -1,112 +1,236 @@
-Return-Path: <linux-i2c+bounces-5045-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5046-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC576938189
-	for <lists+linux-i2c@lfdr.de>; Sat, 20 Jul 2024 15:45:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01C7993868B
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2024 00:48:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 832611F21634
-	for <lists+linux-i2c@lfdr.de>; Sat, 20 Jul 2024 13:45:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0BA1B20C18
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 Jul 2024 22:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C36912E1EE;
-	Sat, 20 Jul 2024 13:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C34FB10A12;
+	Sun, 21 Jul 2024 22:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="TSjblke9"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="hrOB9nRP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3468405D
-	for <linux-i2c@vger.kernel.org>; Sat, 20 Jul 2024 13:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5219B168C4
+	for <linux-i2c@vger.kernel.org>; Sun, 21 Jul 2024 22:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721483114; cv=none; b=SmOEuk0He151HFSMgoWKteyroQy9eH4Shgp4t/oTaSAwOAcDgTI2hrsuLCo41XZG6cD4kzPZROVr/MtmMweXGpjfJjlrFGtccF8EChWN5+4zoghKvuKHIQYnhQrM8GfzlVg5pX7r+3G7EMifryisZxvQzkN2W9s1BGMfWhADsLU=
+	t=1721602079; cv=none; b=cDn1+a2bxoNYJQ4nFLw3290WcKhLxQPwnNQl1AOEhcW2rSUlsjhw/E5meDS2hFEe/2h+VwTLUUntRAnnbBa+JAeD2NI+DvbMHNmWNHEvVkYLtG0pKdWTkcY7CcVnWIzFYkfVULOI0/xAo/Si1+aHAWCJi6nLeoYZjsuFstt4oE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721483114; c=relaxed/simple;
-	bh=R2gBFB8UlDqHlYeJGvV0sDAvlR9JmWmslHfaWoZkzgE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sah4iUMpMiFCTX44ODkP9vG36q/oMdSkqDnjoppsVIIURhTe9cCPJugr4RmRfyeH2Rqtc3+uXY/iBS2CbX7dohDsl0uMXFx+wy/bPEqjnhdVt/jkUt5blO6edCnJXbxds/77M5YDuUWXLlFApZSuxllSpVC2e1QUi5DKujAIVhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TSjblke9; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=R2gB
-	FB8UlDqHlYeJGvV0sDAvlR9JmWmslHfaWoZkzgE=; b=TSjblke9vtm4gZGWPEEq
-	dkjp9fvqXkA/po15Y5dyQcpk10wq3AeU8rgtBNMTUK+GnC5mCOmkKQAJ8cNGDULX
-	dauW1GcfUvkYlBsIPMIMh7umdZllbRDyfyWtcA6dclJWTOuO37TItRqSQgPgv1vA
-	toA3BQWyn16DoB9OKNj2EKCBz2tnJVRywoynFhxcdOIfHUFi+bs4jppEWLqCzzFk
-	JpIbIdj1i5k8MuMosg+jJT4xltxqmHC3ASB7eAutzum198GSILuCC8VmPA3J/cMg
-	Ora9K4h64XHEqhNVQCaLHAxg0dsUGJhz5p09pRocAZ2OPvCOugqbUIAPIFRmOZsQ
-	KA==
-Received: (qmail 1473780 invoked from network); 20 Jul 2024 15:45:07 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Jul 2024 15:45:07 +0200
-X-UD-Smtp-Session: l3s3148p1@xiEVBa4dhtsujnsv
-Date: Sat, 20 Jul 2024 15:45:05 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] i2c-host for v6.11 - part 2
-Message-ID: <Zpu_YYAILdHLIKR5@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>
-References: <csu2tvshcxyz7yib2mrcczxa345m2qu6lavngulzq35b2hi7bz@ao5p3do67q7p>
- <ZpudPAKFtrIszTMS@shikoro>
- <fg2byff6apqkdztjmql4x7eknpxdokjpwne6zwyrrfdpjugcr6@joo4vdlvgb56>
+	s=arc-20240116; t=1721602079; c=relaxed/simple;
+	bh=DliTPczJmew9Tk+hDTUTx/VTPgaBCakYc5YIQufR5sw=;
+	h=From:In-Reply-To:References:Mime-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZWS6PJ6im8S3F6GDEoHp7LGcTyGEUKxHJ9tK6qY3oEgAyUpMU8c6o+4mYiJcDslyt2VKrZkYUszXi4zgEEJPbK/MaVVUW7J8/SeJfKVvcI++tjY9cnBBQ47TEjS/9vY6E+6xuPB9Pd3GvOoZwKXqZt7WaOpi1x4PattAMjYVIBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=hrOB9nRP; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 555543F2B8
+	for <linux-i2c@vger.kernel.org>; Sun, 21 Jul 2024 22:47:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1721602074;
+	bh=KO8tpQ9TxHjBPKSfhTTh06gsoP5zva/hPb58dTpZI7Q=;
+	h=From:In-Reply-To:References:Mime-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=hrOB9nRPrBbkxem5qJG6pJUmqCAbxvwCOoLclRe9q8oi54Evg8GwLklT1YneJGQx2
+	 H0TLCrHJS3ciaRRYlGJALjcOW3WAc+itVxkU6cCQyqS1C7cXExYrlu4Pg1kXlWNosJ
+	 PNlGuPCQBy7WPhMn+TRUgAQkM1PvLH/q96wrhZuwclHxzGlmr9OWbOepWjoUfquCh0
+	 6qHjE/LNVhD2nCA9xzTdPUtpHb8H/KIS0W2TtkF/KAEvxbuzmMnuPq94UKCw8AR0Fn
+	 jwfm7QWl5RCLeFmiI2UeA/tzzNX6avw8zCXVZZDZH8/n41MC0KTvOh5L9oDi81OclO
+	 U5/E7u/GpHutg==
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-79f006f9f14so585644885a.0
+        for <linux-i2c@vger.kernel.org>; Sun, 21 Jul 2024 15:47:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721602073; x=1722206873;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KO8tpQ9TxHjBPKSfhTTh06gsoP5zva/hPb58dTpZI7Q=;
+        b=QqJZq42KxuxonVUW6MdlaAC7dpXmTc92suJgJ45e+weCSkuB960yp+EwUsRmw48E2c
+         srYXeVFuFNG2GosWpgxeMLxApRFjA91i7efapxfzxBX+AEGLLKODeNg3PXRic/+Q8yVS
+         DtFoXpcO3UZMZuWI+xbqlrhZW46tCp72wJsvczIBpB2qT0MSIoFQsvtuZaXqqOCVT2b7
+         ZLCcuMCejMoBtvfhf/77ixv0EUp2QiKBNA669+JCUBruq+b7I9FTaLRr/uK430ywcP9z
+         FbQsLo1yw768VObPuIAAFLS1SvtHErH9Ubj/20iDgbbZOQiFj5MKWjNMOO50ze2Gp/Ga
+         LFjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWHZQR0IZT+QqseV7zciFEjmcTRnGWEk2bsEDsMKicQ0557H97KiNSe/zfg6zhZjymZCNTmasVu09YUb5ygW4L2o9SRnw+7toNV
+X-Gm-Message-State: AOJu0YyfXP9ReD8Y5BdOAjI7iLJeVKyyuSA7tW9FZuZ1ohQKT0fU4ofg
+	01SeQj7srp8szTs3lp02YjpRxMgiduTLchUZbV4BzCsaAf68tDUkaIG+oE3JeDfWefx/boUR+IY
+	HnUVIu87F+r72QM6RlZcVGv2VwBbKSWf3S/mD+qBw8mAnuIKnMHnj6orrYPP8DX/1ct8QBMPK/e
+	zlbwBgh3yAsZX28zBtD3DB2x5/G9Y+lGomLi7qv/Vxst9a6c97
+X-Received: by 2002:a05:620a:28ce:b0:79e:ff18:a510 with SMTP id af79cd13be357-7a1a18c7253mr1121276385a.2.1721602073206;
+        Sun, 21 Jul 2024 15:47:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEOPlLEtwtiEezjI4b0t9l3MvPIrUfLti48u+sapT3VI9Hw0/LGbiEv4A6CGCoCTi6t0+NceO6NQ3UvomsMYkM=
+X-Received: by 2002:a05:620a:28ce:b0:79e:ff18:a510 with SMTP id
+ af79cd13be357-7a1a18c7253mr1121273685a.2.1721602072728; Sun, 21 Jul 2024
+ 15:47:52 -0700 (PDT)
+Received: from 348282803490 named unknown by gmailapi.google.com with
+ HTTPREST; Sun, 21 Jul 2024 18:47:52 -0400
+From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+In-Reply-To: <20240618-i2c-th1520-v3-3-3042590a16b1@bootlin.com>
+References: <20240618-i2c-th1520-v3-0-3042590a16b1@bootlin.com> <20240618-i2c-th1520-v3-3-3042590a16b1@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="U5GN6b1BvEv9h6TZ"
-Content-Disposition: inline
-In-Reply-To: <fg2byff6apqkdztjmql4x7eknpxdokjpwne6zwyrrfdpjugcr6@joo4vdlvgb56>
+Mime-Version: 1.0
+Date: Sun, 21 Jul 2024 18:47:52 -0400
+Message-ID: <CAJM55Z9W7SYDCSeZy_NEQJBryGX5v+R8-xNxOzftivbGxA1TSg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] riscv: dts: thead: Enable I2C on the BeagleV-Ahead
+To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Drew Fustini <dfustini@tenstorrent.com>, 
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>, Conor Dooley <conor@kernel.org>, 
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	=?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
+Thomas Bonnefille wrote:
+> This commit enables the I2C0 controller of the TH1520, together with
+> the FT24C32A EEPROM that is connected to it.
+> In addition, this commit also enables the I2C controllers I2C2, I2C4
+> and I2C5 as they are all three exposed on headers (P9 19 and 20 for I2C2,
+> P9 17 and 18 for I2C5 and MikroBus 7 and 5 for I2C4).
+> It also defined the required pinctrl nodes.
+>
+> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+> ---
+>  arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts | 84 ++++++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>
+> diff --git a/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts b/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts
+> index 57a2578123eb..b5c4f1811955 100644
+> --- a/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts
+> +++ b/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts
+> @@ -122,6 +122,19 @@ led-pins {
+>  };
+>
+>  &padctrl0_apsys {
+> +	i2c2_pins: i2c2-0 {
+> +		i2c-pins {
+> +			pins = "I2C2_SDA",
+> +			       "I2C2_SCL";
+> +			function = "i2c";
+> +			bias-pull-up = <48000>;
 
---U5GN6b1BvEv9h6TZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+nit: This and below can just be written
 
+bias-pull-up;
 
-> Oh, yes, I wanted to separate the Reviewed-and-tested-by, but
-> then I forgot to remove it.
+> +			drive-strength = <7>;
+> +			input-enable;
+> +			input-schmitt-enable;
+> +			slew-rate = <0>;
+> +		};
+> +	};
+> +
+>  	uart0_pins: uart0-0 {
+>  		tx-pins {
+>  			pins = "UART0_TXD";
+> @@ -145,8 +158,79 @@ rx-pins {
+>  	};
+>  };
+>
+> +&padctrl1_apsys {
+> +	i2c0_pins: i2c0-0 {
+> +		i2c-pins {
+> +			pins = "I2C0_SDA",
+> +			       "I2C0_SCL";
+> +			function = "i2c";
+> +			bias-pull-up = <48000>;
+> +			drive-strength = <7>;
+> +			input-enable;
+> +			input-schmitt-enable;
+> +			slew-rate = <0>;
+> +		};
+> +	};
+> +
+> +	i2c4_pins: i2c4-0 {
+> +		i2c-pins {
+> +			pins = "GPIO0_19", /* I2C4_SDA */
+> +			       "GPIO0_18"; /* I2C4_SCL */
+> +			function = "i2c";
+> +			bias-pull-up = <48000>;
+> +			drive-strength = <7>;
+> +			input-enable;
+> +			input-schmitt-enable;
+> +			slew-rate = <0>;
+> +		};
+> +	};
+> +
+> +	i2c5_pins: i2c5-0 {
+> +		i2c-pins {
+> +			pins = "QSPI1_D0_MOSI", /* I2C5_SDA */
+> +			       "QSPI1_CSN0";    /* I2C5_SCL */
+> +			function = "i2c";
+> +			bias-pull-up = <48000>;
+> +			drive-strength = <7>;
+> +			input-enable;
+> +			input-schmitt-enable;
+> +			slew-rate = <0>;
+> +		};
+> +	};
+> +};
+> +
+>  &uart0 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&uart0_pins>;
+>  	status = "okay";
+>  };
+> +
+> +&i2c0 {
+> +	clock-frequency = <100000>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c0_pins>;
+> +	status = "okay";
+> +
+> +	eeprom@50 {
+> +		compatible = "atmel,24c32";
+> +		reg = <0x50>;
+> +	};
+> +};
+> +
+> +&i2c2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c2_pins>;
+> +	status = "okay";
+> +};
+> +
+> +&i2c4 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c4_pins>;
+> +	status = "okay";
+> +};
+> +
+> +&i2c5 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c5_pins>;
+> +	status = "okay";
+> +};
 
-Thanks for separating them. I prefer that as well. Maybe time for a
-script? :)
+These nodes are still not sorted alphabetically.
 
-> Thanks for checking it. I updated the branch and the tag. I'm
-
-Pulled.
-
-Have a nice weekend!
-
-
---U5GN6b1BvEv9h6TZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmabv10ACgkQFA3kzBSg
-KbYeCxAApDi5FfebnZmQaPY+1KK8iM5zLb+E/7l+d1xvrwSGcXBEy67FC7aQE0+E
-TSd0CKqp00YpZbGBkL6t2QUofE71CtiZYkW5GM4K5GIln4+mUD6KZ2YvpGLTamVu
-iGHj6Tz4oBa5XxHwENd1qMr85tG7DALyoIP9CdJTXcshlHLdmZjRo/aK4cTevQxJ
-vkro298xjL/fsnLhrqjEEJ4WSUAhnUhumGTa+/A3USG/0ncHqmZgCKfTQ4CNYNMy
-11W8pyVolxjTaGxphx+Xk0fjREn5A/vQsQXBiP00CweQFHTD7bJyn/wOhAnJpYpE
-USODKjjDe4g/7Ta4LLsJqC6WWFoxPHRw3U4RT4RhapQTltFabngi8soVWJbTCqHz
-Z/Xsv/v1/cGkW/tANAPFmrfA6WJyt98DfHTXI9QjvDihcAxf99Af8jRwzIAx7ul/
-HTyrYm18dCLgAPDhmW5lh4aC0OHcT8znhJKV28tkiT0zQYeb6QyhAYVCQrtCq8TT
-Tsb3ARQhOZbfcUU3N2wGToAZvRXZHrb2X5EHqlSh6dq3wDfy7z57qfL9x4ZMnmhh
-Ua+tZL8benbB4oXilb09mtXfnCvsFI6ktC8pmZk6bzZHDB6I+iR1z1gnxjB1u70O
-eyjPLNnBHPMZqXOn0rhZWp+d64ES/5oe9YSsaP0JXnG+ivd+fTw=
-=n98G
------END PGP SIGNATURE-----
-
---U5GN6b1BvEv9h6TZ--
+>
+> --
+> 2.45.2
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
