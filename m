@@ -1,88 +1,67 @@
-Return-Path: <linux-i2c+bounces-5047-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5048-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 105C2938F61
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2024 14:51:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F888939111
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2024 16:54:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77234B212A7
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2024 12:51:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 905AC1C21435
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2024 14:54:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D8416D4D1;
-	Mon, 22 Jul 2024 12:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V+YGW+Kp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42C1116DC2D;
+	Mon, 22 Jul 2024 14:54:45 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from greygoose-centos7.csh.rit.edu (greygoose-centos7.csh.rit.edu [129.21.49.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6801316CD35;
-	Mon, 22 Jul 2024 12:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35F9C8C7;
+	Mon, 22 Jul 2024 14:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.21.49.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721652663; cv=none; b=sXydc8ugbGt5BDrss5bt2noToTqZ9ymvgGEYCuxCLvAhuFWzQxc7xic33nlIfGW1gzlc5QGVgDzKMwFLBCrwCCcMuFFfgEDy36XgqSefIgekFN1DhlmAkzU5qR8TRllveECHmF8FL/nNvb1gJN8H2vR1AeN/HbCs9pWvAnS9Msw=
+	t=1721660085; cv=none; b=ko6HX1o2g21p/WnFOq7ASshlGI3b/ZQlOCHsqLueiF/JX5NnRwT8V8Q7JnlZrNOZrN7T9DEY6H+n0EDRH4VxHgj8yoM1UruE0UJY0Gx2QYDC4ZIRF5M6nker8RWA/uAwJhd9OUmP86O/n9zLdcb8UcESM0b1YWVYxmaCDNkba6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721652663; c=relaxed/simple;
-	bh=qrd1dTlK6YWzInxUMiE9Br8NUoMuylWX1TV8a6/aSko=;
+	s=arc-20240116; t=1721660085; c=relaxed/simple;
+	bh=r260F2Xl37oIGQIACcCpiElBJU7s/mlo4ZgNLXp+7Wk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C8X2sIYw2B1fK9zLuhiQDfMBWtRt/LkDXoBCFDN7b35vR3LjIK9+UQYYBzlnlp+J3/T2DMfM7/0EDSNU76cb+j26SXygOhAVFDa7/2dHz72hpfUIg6xpj6QbuudlgwX5QfzfL8h59RI9N909GZEXifKSDoLpdCIceHC3R/r0TU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V+YGW+Kp; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721652661; x=1753188661;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qrd1dTlK6YWzInxUMiE9Br8NUoMuylWX1TV8a6/aSko=;
-  b=V+YGW+KpeEntNyB9i4sod+UVERmulJfX3rEm/u05FblsEkm0PKniVXhf
-   0nDjVhzIZ1OwRDgnIPBie+7XEpUcQo5/OB9Yvo3adLNMyJoMvmLFbn89F
-   vDc//H8QH45lCyzUOMne+AukW5EYgsY2aLFA4o0Y/DHZaXsd/57qBewZr
-   GUZJez9ZZWF9p+9MaeMp2mw6IHEhFXq0f4nuXGF3OdZYGk3IwvO0JGIk4
-   vt+4+zjpDDgx8YQviIhiwqk1TiDseMSisdFAkKlEZ3zbz4ziwVuSDFQSH
-   m1TGRSpBZ9X9LAH/cMGKjjuR41tIIRS8e92Xg1BMqZNptbaPXcCEH9Hab
-   Q==;
-X-CSE-ConnectionGUID: Hhvmr43YSsanHUL94s9dMQ==
-X-CSE-MsgGUID: LXope0PNToeLdTQMuPJ2SA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11140"; a="29803592"
-X-IronPort-AV: E=Sophos;i="6.09,228,1716274800"; 
-   d="scan'208";a="29803592"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2024 05:51:00 -0700
-X-CSE-ConnectionGUID: +FA+TTCUTFKjLe6Hqnq4zQ==
-X-CSE-MsgGUID: Ww7Q5HfVRQa2jUd3zgIxWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,228,1716274800"; 
-   d="scan'208";a="56438782"
-Received: from bergbenj-mobl1.ger.corp.intel.com (HELO intel.com) ([10.245.246.206])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2024 05:50:54 -0700
-Date: Mon, 22 Jul 2024 14:50:51 +0200
-From: Andi Shyti <andi.shyti@linux.intel.com>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Zhenyu Wang <zhenyuw@linux.intel.com>,
-	Zhi Wang <zhi.wang.linux@gmail.com>,
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-gfx@lists.freedesktop.org>,
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-xe@lists.freedesktop.org>,
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:INTEL GVT-g DRIVERS (Intel GPU Virtualization)" <intel-gvt-dev@lists.freedesktop.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
-	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-	"open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-	Zhi Wang <zhiwang@kernel.org>
-Subject: Re: [PATCH v4 3/6] drm/i915: Make I2C terminology more inclusive
-Message-ID: <Zp5Vq9JoYC_OrA2C@ashyti-mobl2.lan>
-References: <20240711052734.1273652-1-eahariha@linux.microsoft.com>
- <20240711052734.1273652-4-eahariha@linux.microsoft.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dJBEu+uqyPV66AMJuVpU/R4AvFQ9oXUPqXdvl8v7CQJZLLZs0VvZ8o5NLz6nn/fbO3MbKPnA2Ud4VHxJNtIXqQDDkkB7tJy3tJmoZm3vWP4DVLa/0F9JEy/iNVrzOH75kMmJ0dXP6WsqiGjE8DaUDY6N49b+yJ0adME1NtQBdvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=freedom.csh.rit.edu; spf=none smtp.mailfrom=freedom.csh.rit.edu; arc=none smtp.client-ip=129.21.49.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=freedom.csh.rit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=freedom.csh.rit.edu
+Received: from localhost (localhost [127.0.0.1])
+	by greygoose-centos7.csh.rit.edu (Postfix) with ESMTP id 1194F40D7C93;
+	Mon, 22 Jul 2024 10:54:36 -0400 (EDT)
+X-Virus-Scanned: amavisd-new at csh.rit.edu
+Received: from greygoose-centos7.csh.rit.edu ([127.0.0.1])
+ by localhost (mail.csh.rit.edu [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id k_4pUcb4fZ1y; Mon, 22 Jul 2024 10:54:35 -0400 (EDT)
+Received: from freedom.csh.rit.edu (freedom.csh.rit.edu [129.21.49.182])
+	by greygoose-centos7.csh.rit.edu (Postfix) with ESMTPS id 9BA2A45735E9;
+	Mon, 22 Jul 2024 10:54:35 -0400 (EDT)
+Date: Mon, 22 Jul 2024 10:54:34 -0400
+From: Mary Strodl <mstrodl@freedom.csh.rit.edu>
+To: Rudolf Marek <r.marek@assembler.cz>
+Cc: Christian Gmeiner <christian.gmeiner@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	Mary Strodl <mstrodl@csh.rit.edu>, linux-kernel@vger.kernel.org,
+	urezki@gmail.com, linux-mm@kvack.org, lee@kernel.org,
+	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+	s.hauer@pengutronix.de
+Subject: Re: [PATCH 1/3] mm: vmalloc: export __vmalloc_node_range
+Message-ID: <Zp5yqoeH752kli8J@freedom.csh.rit.edu>
+References: <ZpkOV3mdOU1b8vMn@casper.infradead.org>
+ <ZpkPStwq_S3mJYb5@infradead.org>
+ <ZpkQQ5GzJ4atvR6a@casper.infradead.org>
+ <ZpkWj-iFiA-JHbbf@freedom.csh.rit.edu>
+ <20240718143103.82e33c556b2d1b6145ae43e0@linux-foundation.org>
+ <ZpmKho9_t0_MeOP7@casper.infradead.org>
+ <20240718143924.43e22f68cf639b064a83f118@linux-foundation.org>
+ <CAH9NwWf_S-PyY5X_cJGSW-8YDk4-C0VvnPCX8iVuo0FhTqsy2Q@mail.gmail.com>
+ <ZppU8FhsFd9cB-Fi@freedom.csh.rit.edu>
+ <b3d6d20d-1b14-447f-a6b2-aa7712df1156@assembler.cz>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -91,26 +70,33 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240711052734.1273652-4-eahariha@linux.microsoft.com>
+In-Reply-To: <b3d6d20d-1b14-447f-a6b2-aa7712df1156@assembler.cz>
 
-Hi Easwar,
+On Fri, Jul 19, 2024 at 09:59:37PM +0200, Rudolf Marek wrote:
+> I would suggest to simply run the BIOS code of this interface in usermode. Sort of similar to VM86 VESA stuff.
+> Last time I looked into this it used STI/CLI/RDMSR/WRMSR and couple of I/O ports and cf8/cfc for PCI.
 
-merged to drm-intel-next. Thanks!
+I took a look at uvesafb (which appears to be what you were talking about) and
+it looks like it starts a separate executable and uses some IPC to talk to it.
+Is that the best way to do it?
 
-On Thu, Jul 11, 2024 at 05:27:31AM +0000, Easwar Hariharan wrote:
-> I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/slave"
-> with more appropriate terms. Inspired by Wolfram's series to fix drivers/i2c/,
-> fix the terminology for users of I2C_ALGOBIT bitbanging interface, now that
-> the approved verbiage exists in the specification.
-> 
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+I guess it would look something like:
+- driver gets loaded
+- driver spawns /sbin/cgeb-helper
+- driver uses cn_netlink_send to send the `high_desc` to helper
 
-I realized after pushing that this had the tag:
+Then the calls to `board->entry` in the driver get replaced with
+`cn_netlink_send` with a `cgeb_fps`.
 
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+When the userspace helper gets the message with the `cgeb_fps`, it calls into
+the bios code and replies to the driver with send() and passes back cgeb_fps.
 
-Not a big deal, but it's still a minor mistake.
+From there, a callback registered with cn_add_callback will pick up the message
+and call `wake_up_interruptible` to send the message back to the `cgeb_call`
+caller.
 
-Andi
+Is this what you were imagining? Or is there a simpler way to do it?
+
+Where should the code for the userspace helper live? The vesa stuff appeared to
+be out of tree.
 
