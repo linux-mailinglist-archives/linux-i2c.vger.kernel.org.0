@@ -1,139 +1,145 @@
-Return-Path: <linux-i2c+bounces-5050-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5051-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B65D0939281
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2024 18:28:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C97FA9392A6
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2024 18:39:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4191FB214BB
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2024 16:28:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84D82282625
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jul 2024 16:39:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970D816EB65;
-	Mon, 22 Jul 2024 16:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F395E16EBE8;
+	Mon, 22 Jul 2024 16:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P2gvWKrW"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="S6Av95GY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1852907;
-	Mon, 22 Jul 2024 16:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6018316E89B;
+	Mon, 22 Jul 2024 16:39:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721665729; cv=none; b=Opj8hNkSsZvjpyvl1MET2kIUL8TfZxjMRrxo0GYvq6BTQsO2CI3456r9MjhyKrOCp+CMlXCkOl1deXSMj3jpccKRtqwACDHxKzZO6jiQZDwyEdV6rzNZc2V29P8xPUpD3C5TGqv8VM397kjhAICMCzoGoNbKjIwxtlAk6lGYfiw=
+	t=1721666379; cv=none; b=slhFB7W3kCDbrek8G8A3rIXeJCNTJM+KWR8weQUa9gI5xKOvBCQPyvv00lZrQpEGmQ07QxIyPRU1NboebILfh6k8yy/1HWOOk4oScrodZwKcobvBFJIfzTUC37r0K2xM+EfIBXUkkOOfys565ZcMfhu5JEOFqLXCVcT79yo2r1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721665729; c=relaxed/simple;
-	bh=O6PV0z1EQeDCS7838sXriVwFRCvZQyidYdmAWxD6its=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dGUGq4Ei1yhasp1y+rc4fLZJNRGFB1aN9cVE7UROEXcxJxMBkxr+1Nd9uzkZd7BDSpxc/G/KjLtBftrmFJwjYpP2NZP5pgXR/TUplG3SRd+eUauVRDwZyUQKhHYcfNPYStwUjZ2bcGvZFOmm2TfbnA1GRsIW2DjBd+Sf732I2Ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P2gvWKrW; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721665728; x=1753201728;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O6PV0z1EQeDCS7838sXriVwFRCvZQyidYdmAWxD6its=;
-  b=P2gvWKrWXYyOx4E3VUCEdFCAuHeVwyw085mFBfKVOnlMA6uzKYKGEzOE
-   7bCFXyX/OK4RCAhPAOMCuJXqqQy3AnhPsrMsMwQZCdltLTkDo+Qe8Wi/6
-   IzlY50Ey+qwlpgX4pIvpmdhKyMK8V2yu8gOOpxu07gwO1smJlnl+lUO4c
-   TIBqDRiSwZKALJBLogZYCTK7GDkgYQYEd4RRIJdbmxd3iezVlIzx1oqSb
-   rulPJljkq5aB0gDaZIVvik/6tbuDSHG+ph2h/1vdMsIrmNyXfYd0Gdfnj
-   Euv/dJocKL16X2m9WfuVbBth4zFWhWAfm4jmMWfQSezI20DbqoDAhuMrC
-   A==;
-X-CSE-ConnectionGUID: H3yXGf97TUu0XcT5HPQ61A==
-X-CSE-MsgGUID: NwUHk/IyRVCQ3S1XZ52cVg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11141"; a="18864854"
-X-IronPort-AV: E=Sophos;i="6.09,228,1716274800"; 
-   d="scan'208";a="18864854"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2024 09:27:48 -0700
-X-CSE-ConnectionGUID: Tr6MVFI8SpWBPVLz0HFYVg==
-X-CSE-MsgGUID: VKKt6ttPR/STmKV9N+0CoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,228,1716274800"; 
-   d="scan'208";a="56765396"
-Received: from fdefranc-mobl3.ger.corp.intel.com (HELO intel.com) ([10.245.246.28])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2024 09:27:42 -0700
-Date: Mon, 22 Jul 2024 18:27:37 +0200
-From: Andi Shyti <andi.shyti@linux.intel.com>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: Andi Shyti <andi.shyti@linux.intel.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Zhenyu Wang <zhenyuw@linux.intel.com>,
-	Zhi Wang <zhi.wang.linux@gmail.com>,
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-gfx@lists.freedesktop.org>,
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-xe@lists.freedesktop.org>,
-	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:INTEL GVT-g DRIVERS (Intel GPU Virtualization)" <intel-gvt-dev@lists.freedesktop.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
-	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-	"open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-	Zhi Wang <zhiwang@kernel.org>
-Subject: Re: [PATCH v4 3/6] drm/i915: Make I2C terminology more inclusive
-Message-ID: <Zp6IeYDbdCSeFmo9@ashyti-mobl2.lan>
-References: <20240711052734.1273652-1-eahariha@linux.microsoft.com>
- <20240711052734.1273652-4-eahariha@linux.microsoft.com>
- <Zp5Vq9JoYC_OrA2C@ashyti-mobl2.lan>
- <24fa9e9b-81a8-4bbe-8d13-4d559ee76a96@linux.microsoft.com>
+	s=arc-20240116; t=1721666379; c=relaxed/simple;
+	bh=TL1jutkvv3YvQIjehoa241BkB0CICQzeJpkPUCpNBAM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=C5AkUV6vuLpk5ogKBHCanJMiyaOFC17p2n1imkdSidy+coy9LISgTPGn1AnaiIXP46qjlA408/ofCVR/cAHxxii4176Hq/sL2OspzTwLkhOUbdHpEfup6suSOOttckoP/J76hKDVtxv9PJeD61cX+j3GRbnv4rxzDM0bIvpk9KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=S6Av95GY; arc=none smtp.client-ip=37.18.73.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk01.sberdevices.ru (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 8A00E10000F;
+	Mon, 22 Jul 2024 19:39:24 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8A00E10000F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1721666364;
+	bh=G2Z3S8wIHcZug9iXb9QT6hPkXn+2qflVBxbNjjuuZaQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+	b=S6Av95GYVVv1S0DXP5uPsra8kLVYxNrahmHeu35SgM2s6ivKZQfiLPTmojbNYczu0
+	 nge13K8kLu8L02xVnvuVCJmgl1mYCqZ2KbE+r057sNVv5DuLgQm53UBi9O2Blntat9
+	 RAfwxoV5/HD0ZQSKliweF5fXh1t+L1GHOJS8YoxT+OLt5VLMR4KAm0VU5gQorysLX5
+	 ztiu9z2VOKi9mQGyfz5u83ch9VZ6infPxKXz/kfSWbE9RP5aZvQwipOpf7Mne0x5Vc
+	 E/IbS6IEyIYmDZ6Fg8f3TKdlS+vtIaIiW0iDnkZ+i/GvWs8pKXX8SiyqqolZZXXprm
+	 Nn4xnkUUkpP+w==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Mon, 22 Jul 2024 19:39:24 +0300 (MSK)
+Received: from [192.168.1.143] (100.64.160.123) by
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 22 Jul 2024 19:39:23 +0300
+Message-ID: <b78abab9-ad62-480a-8260-6a8aa76fe9dd@salutedevices.com>
+Date: Mon, 22 Jul 2024 19:39:23 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24fa9e9b-81a8-4bbe-8d13-4d559ee76a96@linux.microsoft.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] amlogic SoC's power-domains fixes
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<neil.armstrong@linaro.org>
+CC: <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <glaroque@baylibre.com>,
+	<martin.blumenstingl@googlemail.com>, <khilman@baylibre.com>,
+	<jbrunet@baylibre.com>, <devicetree@vger.kernel.org>,
+	<linux-amlogic@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <kernel@salutedevices.com>,
+	<mmkurbanov@sberdevices.ru>, <b.galvani@gmail.com>, <rui.zhang@intel.com>,
+	<daniel.lezcano@linaro.org>, <rafael@kernel.org>, <lukasz.luba@arm.com>
+References: <20240710223214.2348418-1-gnstark@salutedevices.com>
+Content-Language: en-US
+From: George Stark <gnstark@salutedevices.com>
+In-Reply-To: <20240710223214.2348418-1-gnstark@salutedevices.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 186657 [Jul 22 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: gnstark@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 24 0.3.24 186c4d603b899ccfd4883d230c53f273b80e467f, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, smtp.sberdevices.ru:7.1.1,5.0.1;salutedevices.com:7.1.1;100.64.160.123:7.1.2;lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/07/22 13:53:00
+X-KSMG-LinksScanning: Clean, bases: 2024/07/22 15:57:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/07/22 07:11:00 #26122445
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-Hi Easwar,
+Hello
 
-On Mon, Jul 22, 2024 at 09:15:08AM -0700, Easwar Hariharan wrote:
-> On 7/22/2024 5:50 AM, Andi Shyti wrote:
-> > Hi Easwar,
-> > 
-> > merged to drm-intel-next. Thanks!
-> > 
-> > On Thu, Jul 11, 2024 at 05:27:31AM +0000, Easwar Hariharan wrote:
-> >> I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/slave"
-> >> with more appropriate terms. Inspired by Wolfram's series to fix drivers/i2c/,
-> >> fix the terminology for users of I2C_ALGOBIT bitbanging interface, now that
-> >> the approved verbiage exists in the specification.
-> >>
-> >> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> > 
-> > I realized after pushing that this had the tag:
-> > 
-> > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> > Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> > 
-> > Not a big deal, but it's still a minor mistake.
-> > 
-> > Andi
+ From this series i2c patch was applied.
+Are the thermal sensor's dts and bindings patches ok? Should I do 
+anything on it?
+
+
+On 7/11/24 01:32, George Stark wrote:
+> Here's some fixes to the bindings and device tree related to Amlogic A1 SoC.
+> The SoC provides dedicated power domain for for almost all periphery.
 > 
-> Thank you for the merge, Andi! I'm missing what the mistake is, I added
-> the tags as I got them. Was I supposed to drop the R-B when Rodrigo gave
-> an A-B?
+> Changes in v2:
+>    dt-bindings: spi: amlogic,a1-spifc: make power-domains required
+>      - drop the patch
+>    dt-bindings: thermal: amlogic,thermal: add optional power-domains
+>      - drop required conditional
+>      - rewrite commit message
+>    dt-bindings: i2c: amlogic,meson6-i2c: add optional power-domains
+>      - add RvB: Neil Armstrong <neil.armstrong@linaro.org>
+>      - add RvB: Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+>    arm64: dts: meson: a1: bind power domain to temperature sensor
+>      - add RvB: Neil Armstrong <neil.armstrong@linaro.org>
+>    previous version [1]
+> 
+> [1] https://lore.kernel.org/lkml/20240708194808.1819185-3-gnstark@salutedevices.com/T/#m398c283b369108c5c557e68b7a1ada9abf3e5cba
+> 
+> George Stark (3):
+>    dt-bindings: i2c: amlogic,meson6-i2c: add optional power-domains
+>    dt-bindings: thermal: amlogic,thermal: add optional power-domains
+>    arm64: dts: meson: a1: bind power domain to temperature sensor
+> 
+>   Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml  | 3 +++
+>   Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml | 3 +++
+>   arch/arm64/boot/dts/amlogic/meson-a1.dtsi                      | 1 +
+>   3 files changed, 7 insertions(+)
+> 
+> --
+> 2.25.1
+> 
 
-Sorry, it's not yours, it's mine. I should have checked more
-carefully the tag section before pushing. You did everything
-right.
-
-The dim tool (drm maintianers tool) picked up all the tags added
-and I missed the double tag.
-
-This was more a message for Rodrigo, in case he wanted to fix it,
-but I guess no one will complain about.
-
-Thanks a lot for your work and effort!
-Andi
+-- 
+Best regards
+George
 
