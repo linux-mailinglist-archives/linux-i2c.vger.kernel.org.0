@@ -1,205 +1,163 @@
-Return-Path: <linux-i2c+bounces-5073-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5074-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B628593E928
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jul 2024 22:05:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0C4393EA49
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2024 02:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 556831F2162E
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jul 2024 20:05:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F2D21C21404
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2024 00:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291FB55886;
-	Sun, 28 Jul 2024 20:05:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B403C1C3D;
+	Mon, 29 Jul 2024 00:31:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="eQU+gg7x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fFIGtnSN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C116E22071
-	for <linux-i2c@vger.kernel.org>; Sun, 28 Jul 2024 20:04:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E5F801;
+	Mon, 29 Jul 2024 00:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722197101; cv=none; b=S0E9qWMO1VduqwPpOjAH+/tJjhJMH+1fUt5WgvG6DldtD27p9bbuAT9otLgG0bjdTZubVh2kp0/SvRwybyXXS4Vw6IKuj/XntBEsYL+L5Es1tFgm9Ze0GiMl4sXEvN826rSZ5GW5FIewKMvaDqs4et12RCeRCaAP85SDmA7lBa0=
+	t=1722213074; cv=none; b=u28XOlK1nteSC725nhm81OEePiSIcIb1ZRHXP91tzohh7Hk9xKlnYwqe+z4qgOKWRuy+YJlRbSIZImAuGWIBfrffZE02t5TaxFp0O+/WjNzvR2VIyAseQPqDDbVjjfhhURyvZmF0VNcj+ZSXtL7R+Vkr2jkf1S5brY+5/O9Q8AY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722197101; c=relaxed/simple;
-	bh=Bsj0UcPfpB7hsVmHQPrCq7EkmORTzj6ABABBOiIL6PA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WNJ4u2JPmd7rJACXCY0g/UBoH562n7qS79OuDys0+uiCaMujmLpGBO/KUzDC6jeUWhzbRby13DPn+UrfUTb6OoCa0v7qG4OPlbpcTpZUQvqALwmDtPNVY82C6Co3lBVo8w9MFyc9mHUuCCbnwsU7WkPDdnbbeT95DVQO+thwjBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=eQU+gg7x; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=MCvo
-	EexRWvzr5vwoIEx3DiejdjXigMU83QfwTn8Akzk=; b=eQU+gg7xBDtm1ujcr+iJ
-	JMWH4PcWdQZvChMN6yRg6FRz8IJP/eQKH/HWYMusdRZjegszXDpJXr198nT3CvjP
-	lungRmbJEmMzdtLAfsi7/TNTbR/O/Sy8uN+J+hLWEcE/BBxrKVOE9sUcMcSPKlBU
-	pMOSgJPCEtz551LAWByu+cZwitJxRLQPkfYnRU3wTBCes1pn39NeAzhZNAAbdv1H
-	uRU9mobrcdzPyRt9mp1fmyr+4r7R4pzpS8nVEBg0NrQu86Ynx4AiUiAogbRw8CfG
-	HORoAtaXhjqrXzU01Nmycv1hPXsK+eESj4IfQOaFEK26jQ6DQvYODryAznHQXcX2
-	3Q==
-Received: (qmail 3889717 invoked from network); 28 Jul 2024 22:04:57 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Jul 2024 22:04:57 +0200
-X-UD-Smtp-Session: l3s3148p1@1QI0QlQeFo4ujnsv
-Date: Sun, 28 Jul 2024 22:04:56 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Wolfram Sang <wsa@kernel.org>, Jean Delvare <khali@linux-fr.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] i2c: smbus: Send alert notifications to all devices
- if source not found
-Message-ID: <ZqakaAn3f9Kg6Lgy@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Guenter Roeck <linux@roeck-us.net>, Wolfram Sang <wsa@kernel.org>,
-	Jean Delvare <khali@linux-fr.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-References: <20220110172857.2980523-1-linux@roeck-us.net>
- <20220110172857.2980523-3-linux@roeck-us.net>
+	s=arc-20240116; t=1722213074; c=relaxed/simple;
+	bh=Xc4hKw3D1lAjfW6UbY4tqXzP6Rz5Sl374JIAo7L476A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=FNL5n6RmgqN5Lvw2UVqUJc0Q3sTn6YEeOpQ2iJRZ06Q5fahudU4fx/E458agbkNy2qq+lIVg/Y7E0gOj26ZTWuBxSICnvgXGzbCbiHJUw40x5fdfNomgkWbX/gcgzHPVNPdWJ/h/1A3jIIYzwmWTRYH7ooy0de44OCywT0NSs4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fFIGtnSN; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1fc491f9b55so16394995ad.3;
+        Sun, 28 Jul 2024 17:31:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722213072; x=1722817872; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=//rZSeQzRqiNvQXtTT/CtjiYP4SkwNBAGmcV9pM3b3A=;
+        b=fFIGtnSNx5GZ0UV9FYRGbLuFjENrUNdYBGhhGXbZHr0SBzhoquOOQqt/5TnYtJV8vU
+         KBqmVnPa0LpdEejjXahx3WUq+NonxTD+RlcNi/sgszWSJlRvPL2fEAtZgb/3YnbDaztf
+         pne7+o3YMfehUpLjLwy3HFtSJKPjFaWxuE/D/JU8GnSdr5aeWaKbLiSxwQeUYqz9afkn
+         IcXtDLjk9Ou35Vc+naRYmk3bp0bg+tHsxwU17ZovtxZL+sqCx1j+adxVS4Hgye3WUXdW
+         8vd1RxvyjW36qpoMEDepHE0ZX+w0TbxOg1fsE38Iay4O1xtLjOCpem1+rd/ykrbAT+AR
+         PZLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722213072; x=1722817872;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=//rZSeQzRqiNvQXtTT/CtjiYP4SkwNBAGmcV9pM3b3A=;
+        b=FtkfxWNoMdUc/bSIclYNkLgcPABzhCIAsIIbod5BBxFQ17pKZFyiBRctWov2UGO/JV
+         aGfaRcYVxbB2DEsvsfQyvS25XROPhnt/C7Y+1V6ECRWwtQCUFInHlTT8n+Ur8hg7LC66
+         eYrQq/cm2N5cKlkyxdGxQ8JSSFJ9totgIPCka4oum8EWAs3p9BLWv/ehR22naAfMxww0
+         eV/n6xK+O2hCpqSagqIey+ubUVfm+6C68EKpXvICLU5A+fXHzJ6Kr+UOPYYtQtxGVF3i
+         f0LDBEGFO2RFGvgwIegT1JDeOdCcO93mjPE39F+gHx41o7/SnOSRSnJE9MJJ/VJ947EU
+         dogg==
+X-Forwarded-Encrypted: i=1; AJvYcCV2kq5U0GyFkR4KOlWLaiPmispKc/DD/wf/cw/u94QCF4kjl7p3PYA4jpYD5xHcI+u5r8VnGiHEZSueqzz6D7MqUgjX2mE8ZPm0yxiNLpWRJxstKr0JmLgJDHWNqAIwqGVrlvo/fCWc
+X-Gm-Message-State: AOJu0YxQg+qbR828YPbL7QqgYKa+oxaD4DDMoixb68Nd35GE4q8c9ytc
+	sVxzkGYGo23TfNxyo4uyGh/PfQ9wbdIdgzxwZbpepGcetBpShY/YpBtVOA==
+X-Google-Smtp-Source: AGHT+IF3ydjuFMap6YZ8wj1ug5kT5DXKw4roCiOqxwvp+ZaYsJ/dih12zUlCSoV1xp3bFRu+o/wHBg==
+X-Received: by 2002:a17:902:f684:b0:1fb:396c:7541 with SMTP id d9443c01a7336-1ff0481b580mr44070775ad.16.1722213072151;
+        Sun, 28 Jul 2024 17:31:12 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7f85868sm70212225ad.238.2024.07.28.17.31.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Jul 2024 17:31:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f5886c83-27c2-475d-b75a-4ad107d039ed@roeck-us.net>
+Date: Sun, 28 Jul 2024 17:31:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8IlNrYKcF1dSXsNz"
-Content-Disposition: inline
-In-Reply-To: <20220110172857.2980523-3-linux@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] i2c: smbus: Handle stuck alerts
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Wolfram Sang <wsa@kernel.org>, Jean Delvare <khali@linux-fr.org>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220110172857.2980523-1-linux@roeck-us.net>
+ <ZqajBUknxDaMp5wy@shikoro>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <ZqajBUknxDaMp5wy@shikoro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 7/28/24 12:59, Wolfram Sang wrote:
+> Hi Guenter,
+> 
+> as I mentioned before I now have to deal with SMBusAlert as well and had
+> a chance to review and test this series. When developing the SMBAlert
+> trigger mechanism for the i2c testunit, I also experienced the interrupt
+> storm and your patches helped. See later mails for details.
+> 
+>> Note that there is one situation which is not addressed by this set of
+>> patches: If the corrupted address points to yet another device with alert
+>> handler on the same bus, the alert handler of that device will be called.
+>> If it is not a source of the alert, we are back to the original problem.
+>> I do not know how to address this case.
+> 
+> I think this can only work if we require .alert-handlers to start with a
+> sanity check to make sure their device really raised an interrupt
+> condition. And then return either -EBUSY or 0, similar to IRQ_HANDLED or
+> IRQ_NONE. Or?
+> 
 
---8IlNrYKcF1dSXsNz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think so, but I am not sure if it is worth the effort. It would require
+changing the API, and each driver supporting alert callbacks would have
+to implement code to detect if it actually got an interrupt.
 
-On Mon, Jan 10, 2022 at 09:28:57AM -0800, Guenter Roeck wrote:
-> If a SMBUs alert is received and the originating device is not found,
-> the reason may be that the address reported on the SMBus alert address
-> is corrupted, for example because multiple devices asserted alert and
-> do not correctly implement SMBus arbitration.
->=20
-> If this happens, call alert handlers on all devices connected to the
-> given I2C bus, in the hope that this cleans up the situation. Retry
-> twice before giving up.
+Thanks,
+Guenter
 
-High level question: why the retry? Did you experience address
-collisions going away on the second try? My guess is that they would be
-mostly persistent, so we could call smbus_do_alert_force() right away?
-
->=20
-> This change reliably fixed the problem on a system with multiple devices
-> on a single bus. Example log where the device on address 0x18 (ADM1021)
-> and on address 0x4c (ADM7461A) both had the alert line asserted:
->=20
-> smbus_alert 3-000c: SMBALERT# from dev 0x0c, flag 0
-> smbus_alert 3-000c: no driver alert()!
-> smbus_alert 3-000c: SMBALERT# from dev 0x0c, flag 0
-> smbus_alert 3-000c: no driver alert()!
-> lm90 3-0018: temp1 out of range, please check!
-> lm90 3-0018: Disabling ALERT#
-> lm90 3-0029: Everything OK
-> lm90 3-002a: Everything OK
-> lm90 3-004c: temp1 out of range, please check!
-> lm90 3-004c: temp2 out of range, please check!
-> lm90 3-004c: Disabling ALERT#
->=20
-> Fixes: b5527a7766f0 ("i2c: Add SMBus alert support")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/i2c/i2c-smbus.c | 38 ++++++++++++++++++++++++++++++++++++--
->  1 file changed, 36 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-> index 533c885b99ac..f48cec19db41 100644
-> --- a/drivers/i2c/i2c-smbus.c
-> +++ b/drivers/i2c/i2c-smbus.c
-> @@ -65,6 +65,32 @@ static int smbus_do_alert(struct device *dev, void *ad=
-drp)
->  	return ret;
->  }
-> =20
-> +/* Same as above, but call back all drivers with alert handler */
-> +
-> +static int smbus_do_alert_force(struct device *dev, void *addrp)
-> +{
-> +	struct i2c_client *client =3D i2c_verify_client(dev);
-> +	struct alert_data *data =3D addrp;
-> +	struct i2c_driver *driver;
-> +
-> +	if (!client || (client->flags & I2C_CLIENT_TEN))
-> +		return 0;
-> +
-> +	/*
-> +	 * Drivers should either disable alerts, or provide at least
-> +	 * a minimal handler. Lock so the driver won't change.
-> +	 */
-> +	device_lock(dev);
-> +	if (client->dev.driver) {
-> +		driver =3D to_i2c_driver(client->dev.driver);
-> +		if (driver->alert)
-> +			driver->alert(client, data->type, data->data);
-> +	}
-> +	device_unlock(dev);
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * The alert IRQ handler needs to hand work off to a task which can issue
->   * SMBus calls, because those sleeping calls can't be made in IRQ contex=
-t.
-> @@ -74,6 +100,7 @@ static irqreturn_t smbus_alert(int irq, void *d)
->  	struct i2c_smbus_alert *alert =3D d;
->  	struct i2c_client *ara;
->  	unsigned short prev_addr =3D 0;	/* Not a valid address */
-> +	int retries =3D 0;
-> =20
->  	ara =3D alert->ara;
-> =20
-> @@ -111,8 +138,15 @@ static irqreturn_t smbus_alert(int irq, void *d)
->  		 * Note: This assumes that a driver with alert handler handles
->  		 * the alert properly and clears it if necessary.
->  		 */
-> -		if (data.addr =3D=3D prev_addr && status !=3D -EBUSY)
-> -			break;
-> +		if (data.addr =3D=3D prev_addr && status !=3D -EBUSY) {
-> +			/* retry once */
-> +			if (retries++)
-> +				break;
-> +			device_for_each_child(&ara->adapter->dev, &data,
-> +					      smbus_do_alert_force);
-> +		} else {
-> +			retries =3D 0;
-> +		}
->  		prev_addr =3D data.addr;
->  	}
-> =20
-> --=20
-> 2.33.0
->=20
-
---8IlNrYKcF1dSXsNz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmampGgACgkQFA3kzBSg
-KbarNRAAhWYjGkjFtwzTbgUtNhqIATHVLIeMeWA7bhONRowH4/pbEA6JNyjJrC82
-JN4ai+YA7v8dEohlyEqRmUWcNGbDR5JmkIHG8uPMP0c19FwgrgVjmdSRsCvXODg0
-AcWAsUi8uXdCdxKRVIYtnUOqgF/u9/dq6sHw8+kccZR6ZXhJkN46UJinwGXGPprt
-vV53P4h1eaMjOwtnWV69SxZ/xj7wxVdWkYXSmsx1fuFBp2dy8mHikWNsqcRix7Ll
-XS8U+To92H4CzV6jE9oP2wROOC0z/wmtVnQnceU1C7VVP3/Jr7GG5qoHIXw4KfAC
-21vdRVptUB8e6VWEzx/dhDx4ChziILDl25FFAzd/oy2dFOaqcWTfs0i63g/galVb
-hjhVLHk8xdayovt8n0XJcRvTwC+S6Ks8rc9CxwXmCXUj1A9QiR61Dgf4yKHwbsqF
-95q6NtSvtK8BNS3yEAg1TOyEVKP9Zzl3thoewNZblvVgFML3O7do3waw/CK+eehE
-VAIqd4gEaXD7+xft81GD6Va0VVwxQHARTAxsPfTsQ92mmKAqgDkcyV4KXs3ykrek
-wubj5YvaGb0+4jy+1mB3vHNcQ2GiWv0gRQA9cN3zi6tRnMpRJ/OB4PEHNOVsqxAe
-Nriy8sHbVLTH494ohgZKuGJcUXbuPQ5+rsmrHEy0HiQ+xJJi3UY=
-=tMwr
------END PGP SIGNATURE-----
-
---8IlNrYKcF1dSXsNz--
 
