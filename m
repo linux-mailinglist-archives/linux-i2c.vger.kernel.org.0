@@ -1,65 +1,63 @@
-Return-Path: <linux-i2c+bounces-5078-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5079-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BD5793EF34
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2024 09:57:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B73793EF5D
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2024 10:04:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 355A0283531
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2024 07:57:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8DDBB23252
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jul 2024 08:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB79132492;
-	Mon, 29 Jul 2024 07:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1F641386C6;
+	Mon, 29 Jul 2024 08:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="SgN9VmcE"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="CbhaTnYy"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D13AE131E38
-	for <linux-i2c@vger.kernel.org>; Mon, 29 Jul 2024 07:57:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F00136664
+	for <linux-i2c@vger.kernel.org>; Mon, 29 Jul 2024 08:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722239834; cv=none; b=ZHKfFtTcLgcAnd+idTy0WPrAiC/jF3md7PzO7xAMjvMPrh44srYUFNMaj0svm95OQ/mMH4N+L3tMJqQT7WAnmzWaku3lq9xngc6hogMSK7KXBz71AHV92qMIpcf0crh92LuORMqaVW74nQQRM/lP0RN0g0Tqw7UG3f+HnfqOKm0=
+	t=1722240279; cv=none; b=GMbYLDSG1UrTwzzYuAr2x6Hj3hTa6q6sNV+9wDKsVmLGkwxAPCY91tjgPyIrOt8FR5G6EQJUQW6nBPzSf/C7fRBe+H3L9hpvPApPp9Me00SbLfMaEGl62zMpYELp0LWAbgJEy8XQbh4miX1Rx1m+8JZuGQxXXC9zNuSJqXsuHoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722239834; c=relaxed/simple;
-	bh=0pmFYSHLJF0nMzU2zthIKlZ+WNb7UahZwvJRW0ih96A=;
+	s=arc-20240116; t=1722240279; c=relaxed/simple;
+	bh=CDZ0MBUFqX50yePb3p0ZQmToR/m3XVu2w81bkufPTxA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=epNOQQAnA0c2CgHQR7GgdrUJA/WUOExjPshjaPgAvIslMzLTaEIVQF6BF7FnUqLLK13lwrr9PpL6HisvMm4PznqFmXlp/wVQ7rkBf6j/pPQgxZz3cRlib42egFTcZuZvGFqv+/a8oi7mhrq/29Lho3RvS9iBdjVF6/8fJd/4Gcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=SgN9VmcE; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=aOB0iOSyz3yeSHcY0qi4ioGk3oelAzWajsLI5H9b3OPUrgSAQ7gN2jXsAPIGzGDIkeGzWe0sNfTN/fFUgIppuFJtDiZMHCxMTSIOdO9NeMO2rndLGx9B0Lm2xNV2qa6lQdsOFgiGEDCyngo8Rgl4Mnm8ZfqDi96uxuBiDIZaIyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=CbhaTnYy; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=S6sW
-	8jss2M4MV9hL7QWF2v02HzjqcI4qjr5zZRvln24=; b=SgN9VmcERgrdVXChYvaw
-	bM2fqXK+pCRFxN2ZrlUZs2OfHc5fF1qNf3r/3LGfdW/LxVafTLcZ9vPQDFYM3XLl
-	Lloo+/I3Q4ovvaYXYkx+K1PgLNhjIqAaCrL3QUuonnjf1Cv5VLWw1vLqvFzvogXZ
-	JToShLrixaZaGv/DulH6k/3X2tEh59sAry35Hg8mgOoRRvv/B8bbOi/XTWZNyHq/
-	gBxyVDzLz/L++BS6dAaaKGQVH0J/xfBramvTAq28rIVgF7JOWPegCEjXm8Ggr3ep
-	WHLYD6/I3Wo8NrOrojyQejhrc7dN4dr04ypsGxYdzb+Ix96zVd9Aov5CabS4plfh
-	7w==
-Received: (qmail 4023567 invoked from network); 29 Jul 2024 09:57:10 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Jul 2024 09:57:10 +0200
-X-UD-Smtp-Session: l3s3148p1@NcdPNV4eWIcujnsv
-Date: Mon, 29 Jul 2024 09:57:10 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=CDZ0
+	MBUFqX50yePb3p0ZQmToR/m3XVu2w81bkufPTxA=; b=CbhaTnYyJGc9/b4oM2QU
+	MmkHC5V2NEMmxSP1mzULYZ6Bgj4H88tEC2VUEG5HVOmwh+woEwZBTk1bMqXRb05j
+	FUuTv7PR6ELiK7yuC5CtCRR3ID3+aTF2HVdhIpFc30QrirI2CmPOTeePkfLuwc0r
+	76t5J7TNue5niYBQ4FSAK54c33+BRo+OmvndSlE1lRnw/wRDxNoKspByB6tTZFwC
+	sEyXEQOCcLE1QvvLbMUWKRYBgrrVqANo1/4mI/MbaMGlsH6FkvncrYzX+7yE0wGR
+	HebhxQvzS+7E1X9vk66TyWm3VfH26kHUwwgsyx1/3i1PzFP/1/Uv+hhDYZfV58sC
+	sw==
+Received: (qmail 4025975 invoked from network); 29 Jul 2024 10:04:35 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Jul 2024 10:04:35 +0200
+X-UD-Smtp-Session: l3s3148p1@js3TT14e+NYujnsv
+Date: Mon, 29 Jul 2024 10:04:35 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Wolfram Sang <wsa@kernel.org>, Jean Delvare <khali@linux-fr.org>,
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] i2c: smbus: Send alert notifications to all devices
- if source not found
-Message-ID: <ZqdLVg6IVTjsTWb4@shikoro>
+Subject: Re: [PATCH 0/2] i2c: smbus: Handle stuck alerts
+Message-ID: <ZqdNE2nFEmRU2y-l@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Guenter Roeck <linux@roeck-us.net>, Wolfram Sang <wsa@kernel.org>,
 	Jean Delvare <khali@linux-fr.org>, linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 References: <20220110172857.2980523-1-linux@roeck-us.net>
- <20220110172857.2980523-3-linux@roeck-us.net>
- <ZqakaAn3f9Kg6Lgy@shikoro>
- <7ad68f35-2e90-41b7-a95d-efe5f7db8f3b@roeck-us.net>
+ <ZqajBUknxDaMp5wy@shikoro>
+ <f5886c83-27c2-475d-b75a-4ad107d039ed@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,70 +65,52 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="A2G7ZnwO/aPIJdKm"
+	protocol="application/pgp-signature"; boundary="sQ06tBKQpmyQTR8K"
 Content-Disposition: inline
-In-Reply-To: <7ad68f35-2e90-41b7-a95d-efe5f7db8f3b@roeck-us.net>
+In-Reply-To: <f5886c83-27c2-475d-b75a-4ad107d039ed@roeck-us.net>
 
 
---A2G7ZnwO/aPIJdKm
+--sQ06tBKQpmyQTR8K
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Guenter,
 
-thanks for the feedback!
-
-> > High level question: why the retry? Did you experience address
-> > collisions going away on the second try? My guess is that they would be
-> > mostly persistent, so we could call smbus_do_alert_force() right away?
-> >=20
+> > I think this can only work if we require .alert-handlers to start with a
+> > sanity check to make sure their device really raised an interrupt
+> > condition. And then return either -EBUSY or 0, similar to IRQ_HANDLED or
+> > IRQ_NONE. Or?
 >=20
-> I honestly don't recall. I had some brute force code to trigger alerts
-> on connected chips. Maybe the idea was to catch situations where another
-> alert was raised after or during the first cycle.
+> I think so, but I am not sure if it is worth the effort. It would require
+> changing the API, and each driver supporting alert callbacks would have
+> to implement code to detect if it actually got an interrupt.
 
-Hmm, I'd think that SMBAlert then stays asserted and the whole alert
-handling will be started right away a second time? Given that all
-hardware works correctly, of course. Your setup showed that arbitration
-does not work well with actual hardware. Props for finding this out!
-
-> As for "call smbus_do_alert_force() right away", I am not sure I understa=
-nd.
-> Isn't that what the code is doing twice ?
-
-It calls smbus_do_alert() twice (without '_force'). If that fails, it
-calls the _force version. I am wondering now if we can't call the _force
-version right after smbus_do_alert() fails once. Meaning we could remove
-all the "retries" code from your patch. If there is no clear reason for
-the code, not having it is easier to maintain. That's why I ask.
-
-I hope the question is understandable now.
-
-Happy hacking,
-
-   Wolfram
+The more I think about it, the more I like this proposal. I mean, irq
+subsystem has IRQ_NONE also for a reason. And we do not have that many
+alert handlers to convert. They could all return EBUSY by default
+because that is what they currently behave like anyhow. That being said,
+it will not be a top priority on my list.
 
 
---A2G7ZnwO/aPIJdKm
+--sQ06tBKQpmyQTR8K
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmanS1YACgkQFA3kzBSg
-Kbb4ZBAApJjcmr3njHPjN4DXoGobRQFLog923G+cg4ZC0nVItt0/CKt8yG4+EcVi
-9Gs0CRvtq5HL3OuA1cxConwyAaXBFZKckZHOOklV/r/lktCqzl9kWstQ0WTWAYbV
-VBQEIKsViER0KCVJZazzQGP8PmPjZNyZcvVAYo9AgQ0AGzvuEntLDAQpjkNv4ILw
-NrQ19d2SfLeWxlg3RjfzWayVpD7quwVgSeDdCrizzBYHInXBltBGAEOWSqnX/eJm
-FEp3sWoNySjnwKo/S02cfyFILTIsnnL+PCiBho+icgFY4TrVKM4D6ijjzmbTcAMf
-uH/QzH2AWrJ/l1GopCnFTRXZBuHnNq2z/TAdztRUnjdwMFsdA99Pg81JQO4VkNou
-c+qE679nKaIsSFtvJjO5bW65ztfXbo5mIAXfyApUTsNzeMc7A7DagcnoaagNC8TK
-a6jbzEom/eO2+E4cNX5vUyDEic/5i8zO1dsywKjhE15lwBMdY7roqfDv91epKo7f
-fRWOeZfPrUGWptZ8iLD/D3fbc1OmYQeZWJ0TboYvrAHc9eGMkTo/ceab+2eJgygm
-apq+tL034wBB+pr/vXNb70FT+DNyvb1ztKsqERujiBhcd1MApk5wnZub+s24uXOL
-fe4vhTsbctm2Nfe0DflhZcHKGmtGg6hzn44XdduJ6SBcYCIJfmY=
-=AHUN
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmanTRMACgkQFA3kzBSg
+KbbdJA//Z9cKpMQGyjFHhfJho+NAJZ8+C3JY0naTlcW47CtpkTxoNgeueM3nRcDt
+DQzh5CPDyAWKP/8TCE1dwFn9N5Af8OaBQACr+bF/4GHelxStuVKB9xse8clBh8Ix
+PSYs2nkutmFMJcQiYuN43nzn+eA5521sz3Rf6u1InoW0B3VGQkR+rRGrdccQapSi
+Ag1oqNdPld7O6W2DksLkb9d2GXcB9n+qf9NlR0bDJtAF10Nlt6691WjhdNIsVAP7
+diEiPwIGN/UrU+6ukUV/kWhnsraTn+n0cHENk44rdpOo4o39DMJrARtIVoGW2LUl
+GujG/3s66d+sHohs3EViG7DX+Pi3iHe4F+YMYR0/NV93va9UTGGobmuqeeO0Cus/
+48x5sB9k8zsEmgCOqvCPnxpaL813LeBSo9K0PhRaMAYYjvYUijSnSXy4cCB7hlLB
+3ezxNyfKp/HyYosKacVzDd8H4IRPIaeEsotndSGJJ3eYyhv2A+8wLeOIsdgpHRxJ
+zUZLj5VsIGNxSMntVUXb1fPW6xnbZFRy8OMw6uU7SNhh2lbBlIKgK1iLAV7S7N/f
+daDsfuwaUR6ihl2loV43OhjpdTu+D7zNf3VyOwyZIHEOOVqWstRmuJS21ZMRvGxU
+l3EPTqDzDxTGhXT+XtP11md/SIiXTBoOCeHfIpLf0/RkDx6ay6A=
+=OVFI
 -----END PGP SIGNATURE-----
 
---A2G7ZnwO/aPIJdKm--
+--sQ06tBKQpmyQTR8K--
 
