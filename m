@@ -1,483 +1,141 @@
-Return-Path: <linux-i2c+bounces-5098-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5099-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C16089448B3
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2024 11:45:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FF69944DB3
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2024 16:10:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77F81283BAD
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2024 09:45:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49DBA1F23820
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2024 14:10:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6268E170A32;
-	Thu,  1 Aug 2024 09:44:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B63B1A0704;
+	Thu,  1 Aug 2024 14:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="laq23D7c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dhbuzQ5w"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2085.outbound.protection.outlook.com [40.107.101.85])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB4C171064;
-	Thu,  1 Aug 2024 09:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722505488; cv=fail; b=Hw/NIosth7gYFG3h4sGZbQQR0B38RSZsenPWX61cswAn0rrOhG9Lek0TVm5jqFQsZP4Qz9RdF83SvvWORgW4LQ6dsr/sWxGBR+G6IpJffc5Aabv7aLNAGlv88dLNpl7wwMLrFpq3r9WWBGDZrnFImF3BKRU2JIfzhyUO5nD8I0A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722505488; c=relaxed/simple;
-	bh=XBTrhhXXFvt2iW+2Y8q/oPKsHqjQ36Qxazg7MlxnqCo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gjwivnP9zOmqRNeAkc9YHQNAmFuWnuQGtYHC+mQ9bXM8CTHXqnUxrg7G+UNvydFKHQS4AfCJDVhkV2bXxC8ow4UXspu7UWr376Fjnw7eed1d8U5f0qSYtObqGJn5dVcQKYnsCDfzYi0CIDlTiwRkDawbPfqOxkTHYiueZbBiNYQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=laq23D7c; arc=fail smtp.client-ip=40.107.101.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Jmur/qC/iLQG+6U2tPjJ6bOSkjW8jVSRPIVq1GSRyo2UBCd0qCDAyVbIcBbKkzB8wGkCDDurBcgMAnZquxfyXkMz5hx4MB6Ii98kSZVeOp8a8W1Jr9f3n7zB1WZqR0B2ohOF3mvPzFHiKWilnEmHRwEI3QFPeLxRKVf9fC1pgFpvtM3hEMWGWz2U+/u2+K75UHRmIwRDw8VTQ32UD4x7mnL+t9NP9CgslRsdP7eFo/ZBm2gnmUKMUGVR+TbzWZCNLNIwjwpJTEoT7Jsvpid3CEN8tecoeP+oEgAM668O1qR/WqrvvP25Tvmd+DU/DwahEshLy4FhXONqh4rR9HNYqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=giiw7thtg0RWaqNT8pREJ2RKq059p0IDmXwhkxJC2QE=;
- b=MKpK0fmRhduPjpQLzU1Spd42Zp1JXHO7OHd0LPBljzgTJ01bVNJLiGH/qhpn/vlYiH1tBokIixLFabjYR+5HWlzSV+Ha+UxGWRffJaOtItWAeJT+sTRatO0+djY4HFfehmv6D0NoHx4VmVYkklMCNf+pRw7/WWiCipe0SUAgxGn/Gjt+Y7ewJz7RWuh+3LJ45IBtqQM55HeBOCbTTuMJmeVUmIB/QQ0gmxeKcVZkyiFwcYKPC9Ccnzw3YAmhksmb7rQc/tlpzM/n0Nne8qLJpM4lla2xseh2aXRPjkEjqD4clAIt9qLt5jsiNbrIvc3cafm7KT1GFfeY2OGsShTK/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=giiw7thtg0RWaqNT8pREJ2RKq059p0IDmXwhkxJC2QE=;
- b=laq23D7cy9lrd6+C/GbdTyJdYvaTKV+D+aotrg3zUQ8CIjYtvoAoBN1p/w+YzD4dzVuTNZ5j0DiMM68ktdAg1nnB3LdRBAtWOgfkAqMLx6cX4pYJmRUW//BCq8yNj+q+2L2Yx633ouFEIaz8ogORu0jCFH2Bod2LiAZ4IxvyZSk=
-Received: from MW4PR04CA0094.namprd04.prod.outlook.com (2603:10b6:303:83::9)
- by PH7PR12MB5686.namprd12.prod.outlook.com (2603:10b6:510:13d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Thu, 1 Aug
- 2024 09:44:42 +0000
-Received: from SJ1PEPF00001CE0.namprd05.prod.outlook.com
- (2603:10b6:303:83:cafe::29) by MW4PR04CA0094.outlook.office365.com
- (2603:10b6:303:83::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.22 via Frontend
- Transport; Thu, 1 Aug 2024 09:44:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- SJ1PEPF00001CE0.mail.protection.outlook.com (10.167.242.8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7828.19 via Frontend Transport; Thu, 1 Aug 2024 09:44:41 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 1 Aug
- 2024 04:44:40 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 1 Aug
- 2024 04:44:40 -0500
-Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Thu, 1 Aug 2024 04:44:37 -0500
-From: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-To: <git@amd.com>, <andi.shyti@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <michal.simek@amd.com>, <radhey.shyam.pandey@amd.com>,
-	<srinivas.goud@amd.com>, <shubhrajyoti.datta@amd.com>,
-	<manion05gk@gmail.com>, Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-Subject: [PATCH 3/3] i2c: cadence: Add atomic transfer support for controller version 1.4
-Date: Thu, 1 Aug 2024 15:14:08 +0530
-Message-ID: <20240801094408.2004460-4-manikanta.guntupalli@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240801094408.2004460-1-manikanta.guntupalli@amd.com>
-References: <20240801094408.2004460-1-manikanta.guntupalli@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2DF28F3
+	for <linux-i2c@vger.kernel.org>; Thu,  1 Aug 2024 14:10:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722521412; cv=none; b=BqaJgWiCw2ON49zfXE+aClLUbk1CWdnMCg7zdl5+YEErd2DcAcXiW600DLncgMw9ozZBOMkbg+rpCWJQoW5DnYE0jXDIUseeHCVraWN1Vz66clGlrIzB4CODjKOh2DmhfPv07v4s0hYSTJ14Tq4vxlo1Jc9ljYTTWKBNgop4VAo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722521412; c=relaxed/simple;
+	bh=lmRrW0iowZPUnRX+jBrP5lIpdO5wCtiPTnVHF9W6BsA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U8thD6AJB8XvuKp2JCFRVDQN+1vYeJpipnx4FwfJr984qs/9dBZ/z03BqlF1F/dn+wpdMpUUGu5nTG1bg8gGfVcZ2h+RSfG4g6IuoOjOwiILwYRK7jmUYoBItxw7WTftqYa58wjVbiznnNRwmInzd9QhIDmTZ2AHeSx2K776QL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dhbuzQ5w; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722521410; x=1754057410;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lmRrW0iowZPUnRX+jBrP5lIpdO5wCtiPTnVHF9W6BsA=;
+  b=dhbuzQ5wxuYi3JSwiRwXOeoEu3hkz+UCovNDNw4tJ/08Ho3LwzLX/Odc
+   cEOj+4d3xjbmf1jEDtMNE2ic9MNtK0wV05b+xNaDq3Cu7qAmTi7lfUUh2
+   fU0VL2UgJRz7r0pkKcqKWQB/AR5oyOW4GwG094F2TNsN/hJQwTorBZQTS
+   4Z5TghMx6H+Jh5aE17PH/ZRwmh3IxzsbL9Hxxk+yd25gs5lhDYlAJJg7b
+   C3VJ/XbwPQUNHZGJdhXUyHAlsp0LNZBW8/xWr1zZ5cEmIwTZq1PgE3AR6
+   Tl1ZVb8jV5ul4tkhWccJJtDi+pc6qiVK/4cFNLhaLf8KT8wCCLzYvV0q/
+   A==;
+X-CSE-ConnectionGUID: 0OrbpQFxTW+1T4x5aa5GtQ==
+X-CSE-MsgGUID: r1YV5jSOQU6luEz3eOHXEQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11151"; a="20367273"
+X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
+   d="scan'208";a="20367273"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 07:10:09 -0700
+X-CSE-ConnectionGUID: swLruNmeR16wDgVdvPvTJA==
+X-CSE-MsgGUID: +JUG83tMQU2p+SQ72bgKkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
+   d="scan'208";a="54956283"
+Received: from unknown (HELO [10.237.72.57]) ([10.237.72.57])
+  by fmviesa008.fm.intel.com with ESMTP; 01 Aug 2024 07:10:06 -0700
+Message-ID: <8295cbe1-a7c5-4a35-a189-5d0bff51ede6@linux.intel.com>
+Date: Thu, 1 Aug 2024 17:10:05 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB05.amd.com: manikanta.guntupalli@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE0:EE_|PH7PR12MB5686:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3c926ec-aac8-443c-ec27-08dcb20e914c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?T0tg3Fc2CVlvC9Dp8M/hF8SdizUbAJQ3vXXBmAQrxppiLRdoTmFHhvlLcyXZ?=
- =?us-ascii?Q?X8WsVy0d1qecVoT/QhuSSQnlNtY0awQY7sBVFwyr8Rm2wPMWso+7SWQqpob9?=
- =?us-ascii?Q?JB+t52yCbfXc3PQD/9PLQPb9gLt50gKc0MboijYe+Qb0WvZHqLCkXK0TFSwv?=
- =?us-ascii?Q?N139VFEdlqRhyGYYCTBChcrrrNDF8lzoHKV7uGzj+fLU4XUfCoWsSblM//pT?=
- =?us-ascii?Q?4VNX3kiznE9oxXIMtLjR4St1jnPNSmlPlmwqJkYHcVkimEJf107OlhrgAqIY?=
- =?us-ascii?Q?Zm72AWNlN6PowzGPKIIGzutR31VfG8T92ORgJ0fwlDoO40CRXE2ST2ZMs2Bi?=
- =?us-ascii?Q?43SmmJE4UYWMJZSV5/C4QG+kXQm/yAuRbxg18T6Z+GOIeZKodh+4kfqh2mTJ?=
- =?us-ascii?Q?/rJsxBE+fDTMW/TtGmEZ8pxi4AY5bHpIV0vyWa0JLRjFuoyHDjuYsLf3sCJc?=
- =?us-ascii?Q?1ZNXQwNjC+rBTcwYZEBWZyR4aLKDUkKa3kMlbgzcrojFoCMl3puaxaUWISQb?=
- =?us-ascii?Q?VbgBqmWooPTWFyDgAdJE2JKwyUfa5iFk6cqaiLkqhxSNdwNoF/QSVYbxbn5P?=
- =?us-ascii?Q?GirIomY/y38SJ80AtUGxZQKvH8E7mnl/QtWmBObfLkJuqVDB3TpjstG00Osj?=
- =?us-ascii?Q?wWxaY3n36lQZldBWU8UwfobuKsnwco+CVKfMR4ZDxxGv9V0WiojeGmj5lAbM?=
- =?us-ascii?Q?7zHDrX0urAC/uCZVqSkOVb1L2VpYK3Gx9xMxRKNGFTBSdjWR8ysIeJ8LDbmt?=
- =?us-ascii?Q?Db4kx4J+Vv66tsFRXe3c7DZs9N4SwbrjD0dN9Dp01p0lGBNM33sD+quUNTU+?=
- =?us-ascii?Q?KjYXG62gQCa/QNjqssq9DHbQ8STPIzaBfItIqvZStoYtP9XobICycRwFE/Ho?=
- =?us-ascii?Q?ppvPOnV2FgE9+MFcr+V7ojLKcK3QOjApaSeRRaxg3hc3/6+Bfzr7LCelcoUA?=
- =?us-ascii?Q?aTZpgVEV83RlsWjW40tl7xWL8JwqAddYO5RuwlyBHel48cstPxJMYpM94S2e?=
- =?us-ascii?Q?enEcTONBqdgJNBbENTc7er6oAdeXJ713QVKN/t5yQmgUvM0pmiwwUevXBXIs?=
- =?us-ascii?Q?Y0Sf5MOSwRvows1TqKSxFtDp0g74Pktz/v9mRgET1XZJhXOXazL+LZ7f/+VI?=
- =?us-ascii?Q?zEpajmkrFD2YjHUMBbpJil2P1phSXQYE3AN9fN5bP5xhWTIo0ArhIKQB3EY0?=
- =?us-ascii?Q?zjwvA1oVM8RnTRvZjGAy+QVhfv3y1dMM84Ka/Y8JeDHMvZi13L9DljWtCx4v?=
- =?us-ascii?Q?lAetbGrmlFF8tEVYLxx54oYwm5dwb8nN7wov63DHZVjSixpA6n+j5zdn1W3t?=
- =?us-ascii?Q?W5krkZeAQmIwxwjjrJ9/LscrUyAqZJfh7QbdKQ5J51QOOmof7aFfymoUDyVT?=
- =?us-ascii?Q?GL2+6r93VCqDlW8t/2e+BIS4kRcCxXt5nUlv42TshY/G0Aa0b6D0Oay80C5U?=
- =?us-ascii?Q?cTQnEEFzrY1bg0wrfJSPIjGZf3mep7H0?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2024 09:44:41.5385
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3c926ec-aac8-443c-ec27-08dcb20e914c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00001CE0.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5686
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] i2c: designware: Fix wrong setting for
+ {ss,fs}_{h,l}cnt registers
+To: Adrian Huang <adrianhuang0701@gmail.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Jan Dabros <jsd@semihalf.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+ Adrian Huang <ahuang12@lenovo.com>, Dong Wang <wangdong28@lenovo.com>
+References: <20240717065917.18399-1-ahuang12@lenovo.com>
+Content-Language: en-US
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20240717065917.18399-1-ahuang12@lenovo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Rework the read and write code paths in the driver to support operation
-in atomic contexts in master mode. This change does not apply to slave
-mode because there is no way to handle interruptions in that context.
+Hi
 
-Adjust the message timeout to include some extra time. For non-atomic
-contexts, 500 ms is added to the timeout. For atomic contexts,
-2000 ms is added because transfers happen in polled mode, requiring
-more time to account for the polling overhead.
+Sorry the delay.
 
-Similar changes have been implemented in other drivers, including:
-commit 3a5ee18d2a32 ("i2c: imx: implement master_xfer_atomic callback")
-commit 445094c8a9fb ("i2c: exynos5: add support for atomic transfers")
-commit ede2299f7101 ("i2c: tegra: Support atomic transfers")
-commit fe402bd09049 ("i2c: meson: implement the master_xfer_atomic
-callback")
+On 7/17/24 9:59 AM, Adrian Huang wrote:
+> From: Adrian Huang <ahuang12@lenovo.com>
+> 
+> When disabling CONFIG_X86_AMD_PLATFORM_DEVICE option, the driver
+> 'drivers/acpi/acpi_apd.c' won't be compiled. This leads to a situation
+> where BMC (Baseboard Management Controller) cannot retrieve the memory
+> temperature via the i2c interface after i2c DW driver is loaded. Note
+> that BMC can retrieve the memory temperature before booting into OS.
+> 
+> [Debugging Detail]
+>    1. dev->pclk and dev->clk are NULL when calling devm_clk_get_optional()
+>       in dw_i2c_plat_probe().
+> 
+>    2. The callings of i2c_dw_scl_hcnt() in i2c_dw_set_timings_master()
+>       return 65528 (-8 in integer format) or 65533 (-3 in integer format).
+>       The following log shows SS's HCNT/LCNT:
+> 
+>         i2c_designware AMDI0010:01: Standard Mode HCNT:LCNT = 65533:65535
+> 
+>    3. The callings of i2c_dw_scl_lcnt() in i2c_dw_set_timings_master()
+>       return 65535 (-1 in integer format). The following log shows SS's
+>       HCNT/LCNT:
+> 
+>         i2c_designware AMDI0010:01: Fast Mode HCNT:LCNT = 65533:65535
+> 
+>    4. i2c_dw_init_master() configures the register IC_SS_SCL_HCNT with
+>       the value 65533. However, the DW i2c databook mentioned the value
+>       cannot be higher than 65525. Quote from the DW i2c databook:
+> 
+>         NOTE: This register must not be programmed to a value higher than
+>               65525, because DW_apb_i2c uses a 16-bit counter to flag an
+>               I2C bus idle condition when this counter reaches a value of
+>               IC_SS_SCL_HCNT + 10.
+> 
+>    5. Since ss_hcnt, ss_lcnt, fs_hcnt, and fs_lcnt are the invalid
+>       values, we should not write the corresponding registers.
+> 
+> Fix the issue by returning 0 if ic_clk is 0 in i2c_dw_scl_{h,l}cnt().
+> Then, do not write the corresponding registers if those values are 0.
+> 
+You are correct, indeed driver miscalculates those timing parameters in 
+that case.
 
-Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
----
- drivers/i2c/busses/i2c-cadence.c | 202 ++++++++++++++++++++++++++++---
- 1 file changed, 188 insertions(+), 14 deletions(-)
+However debugging point of view below is misleading since it doesn't 
+necessarily match with HW registers since they are not touched and have 
+values what bootloader has left there.
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index e689448d229f..8b8433faf959 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -129,6 +129,7 @@
- 
- #define CDNS_I2C_BROKEN_HOLD_BIT	BIT(0)
- #define CDNS_I2C_POLL_US	100000
-+#define CDNS_I2C_POLL_US_ATOMIC	10
- #define CDNS_I2C_TIMEOUT_US	500000
- 
- #define cdns_i2c_readreg(offset)       readl_relaxed(id->membase + offset)
-@@ -189,6 +190,8 @@ enum cdns_i2c_slave_state {
-  * @slave_state:	I2C Slave state(idle/read/write).
-  * @fifo_depth:		The depth of the transfer FIFO
-  * @transfer_size:	The maximum number of bytes in one transfer
-+ * @atomic:		Mode of transfer
-+ * @err_status_atomic:	Error status in atomic mode
-  */
- struct cdns_i2c {
- 	struct device		*dev;
-@@ -219,6 +222,8 @@ struct cdns_i2c {
- #endif
- 	u32 fifo_depth;
- 	unsigned int transfer_size;
-+	bool atomic;
-+	int err_status_atomic;
- };
- 
- struct cdns_platform_data {
-@@ -256,7 +261,7 @@ static void cdns_i2c_init(struct cdns_i2c *id)
-  *
-  * Return: 0 always
-  */
--static int __maybe_unused cdns_i2c_runtime_suspend(struct device *dev)
-+static int cdns_i2c_runtime_suspend(struct device *dev)
- {
- 	struct cdns_i2c *xi2c = dev_get_drvdata(dev);
- 
-@@ -273,7 +278,7 @@ static int __maybe_unused cdns_i2c_runtime_suspend(struct device *dev)
-  *
-  * Return: 0 on success and error value on error
-  */
--static int __maybe_unused cdns_i2c_runtime_resume(struct device *dev)
-+static int cdns_i2c_runtime_resume(struct device *dev)
- {
- 	struct cdns_i2c *xi2c = dev_get_drvdata(dev);
- 	int ret;
-@@ -621,6 +626,90 @@ static irqreturn_t cdns_i2c_isr(int irq, void *ptr)
- 	return cdns_i2c_master_isr(ptr);
- }
- 
-+static bool cdns_i2c_error_check(struct cdns_i2c *id)
-+{
-+	unsigned int isr_status;
-+
-+	id->err_status = 0;
-+
-+	isr_status = cdns_i2c_readreg(CDNS_I2C_ISR_OFFSET);
-+	cdns_i2c_writereg(isr_status & CDNS_I2C_IXR_ERR_INTR_MASK, CDNS_I2C_ISR_OFFSET);
-+
-+	id->err_status = isr_status & CDNS_I2C_IXR_ERR_INTR_MASK;
-+	if (id->err_status)
-+		return true;
-+
-+	return false;
-+}
-+
-+static void cdns_i2c_mrecv_atomic(struct cdns_i2c *id)
-+{
-+	bool updatetx;
-+
-+	while (id->recv_count > 0) {
-+		/*
-+		 * Check if transfer size register needs to be updated again for a
-+		 * large data receive operation.
-+		 */
-+		updatetx = id->recv_count > id->curr_recv_count;
-+
-+		while (id->curr_recv_count > 0) {
-+			if (cdns_i2c_readreg(CDNS_I2C_SR_OFFSET) & CDNS_I2C_SR_RXDV) {
-+				*id->p_recv_buf++ = cdns_i2c_readreg(CDNS_I2C_DATA_OFFSET);
-+				id->recv_count--;
-+				id->curr_recv_count--;
-+
-+				/*
-+				 * Clear hold bit that was set for FIFO control
-+				 * if RX data left is less than or equal to
-+				 * FIFO DEPTH unless repeated start is selected
-+				 */
-+				if (id->recv_count <= id->fifo_depth && !id->bus_hold_flag)
-+					cdns_i2c_clear_bus_hold(id);
-+			}
-+			if (cdns_i2c_error_check(id))
-+				return;
-+			if (cdns_is_holdquirk(id, updatetx))
-+				break;
-+		}
-+
-+		/*
-+		 * The controller sends NACK to the slave when transfer size
-+		 * register reaches zero without considering the HOLD bit.
-+		 * This workaround is implemented for large data transfers to
-+		 * maintain transfer size non-zero while performing a large
-+		 * receive operation.
-+		 */
-+		if (cdns_is_holdquirk(id, updatetx)) {
-+			/* wait while fifo is full */
-+			while (cdns_i2c_readreg(CDNS_I2C_XFER_SIZE_OFFSET) !=
-+			       (id->curr_recv_count - id->fifo_depth))
-+				;
-+
-+			/*
-+			 * Check number of bytes to be received against maximum
-+			 * transfer size and update register accordingly.
-+			 */
-+			if (((int)(id->recv_count) - id->fifo_depth) >
-+			    id->transfer_size) {
-+				cdns_i2c_writereg(id->transfer_size,
-+						  CDNS_I2C_XFER_SIZE_OFFSET);
-+				id->curr_recv_count = id->transfer_size +
-+						      id->fifo_depth;
-+			} else {
-+				cdns_i2c_writereg(id->recv_count -
-+						  id->fifo_depth,
-+						  CDNS_I2C_XFER_SIZE_OFFSET);
-+				id->curr_recv_count = id->recv_count;
-+			}
-+		}
-+	}
-+
-+	/* Clear hold (if not repeated start) */
-+	if (!id->recv_count && !id->bus_hold_flag)
-+		cdns_i2c_clear_bus_hold(id);
-+}
-+
- /**
-  * cdns_i2c_mrecv - Prepare and start a master receive operation
-  * @id:		pointer to the i2c device structure
-@@ -715,7 +804,34 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
- 		cdns_i2c_writereg(addr, CDNS_I2C_ADDR_OFFSET);
- 	}
- 
--	cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK, CDNS_I2C_IER_OFFSET);
-+	if (!id->atomic)
-+		cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK, CDNS_I2C_IER_OFFSET);
-+	else
-+		cdns_i2c_mrecv_atomic(id);
-+}
-+
-+static void cdns_i2c_msend_rem_atomic(struct cdns_i2c *id)
-+{
-+	unsigned int avail_bytes;
-+	unsigned int bytes_to_send;
-+
-+	while (id->send_count) {
-+		avail_bytes = id->fifo_depth - cdns_i2c_readreg(CDNS_I2C_XFER_SIZE_OFFSET);
-+		if (id->send_count > avail_bytes)
-+			bytes_to_send = avail_bytes;
-+		else
-+			bytes_to_send = id->send_count;
-+
-+		while (bytes_to_send--) {
-+			cdns_i2c_writereg((*id->p_send_buf++), CDNS_I2C_DATA_OFFSET);
-+			id->send_count--;
-+		}
-+		if (cdns_i2c_error_check(id))
-+			return;
-+	}
-+
-+	if (!id->send_count && !id->bus_hold_flag)
-+		cdns_i2c_clear_bus_hold(id);
- }
- 
- /**
-@@ -778,7 +894,12 @@ static void cdns_i2c_msend(struct cdns_i2c *id)
- 	cdns_i2c_writereg(id->p_msg->addr & CDNS_I2C_ADDR_MASK,
- 						CDNS_I2C_ADDR_OFFSET);
- 
--	cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK, CDNS_I2C_IER_OFFSET);
-+	if (!id->atomic) {
-+		cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK, CDNS_I2C_IER_OFFSET);
-+	} else {
-+		if (id->send_count > 0)
-+			cdns_i2c_msend_rem_atomic(id);
-+	}
- }
- 
- /**
-@@ -818,7 +939,8 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 
- 	id->p_msg = msg;
- 	id->err_status = 0;
--	reinit_completion(&id->xfer_done);
-+	if (!id->atomic)
-+		reinit_completion(&id->xfer_done);
- 
- 	/* Check for the TEN Bit mode on each msg */
- 	reg = cdns_i2c_readreg(CDNS_I2C_CR_OFFSET);
-@@ -841,13 +963,24 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 	/* Minimal time to execute this message */
- 	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
- 	/* Plus some wiggle room */
--	msg_timeout += msecs_to_jiffies(500);
-+	if (!id->atomic)
-+		msg_timeout += msecs_to_jiffies(500);
-+	else
-+		msg_timeout += msecs_to_jiffies(2000);
- 
- 	if (msg_timeout < adap->timeout)
- 		msg_timeout = adap->timeout;
- 
--	/* Wait for the signal of completion */
--	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
-+	if (!id->atomic) {
-+		/* Wait for the signal of completion */
-+		time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
-+	} else {
-+		/* 0 is success, -ETIMEDOUT is error */
-+		time_left = !readl_poll_timeout_atomic(id->membase + CDNS_I2C_ISR_OFFSET,
-+						       reg, (reg & CDNS_I2C_IXR_COMP),
-+						       CDNS_I2C_POLL_US_ATOMIC, msg_timeout);
-+	}
-+
- 	if (time_left == 0) {
- 		cdns_i2c_master_reset(adap);
- 		return -ETIMEDOUT;
-@@ -876,11 +1009,16 @@ static int cdns_i2c_master_common_xfer(struct i2c_adapter *adap,
- 	bool hold_quirk;
- 
- 	/* Check if the bus is free */
--
--	ret = readl_relaxed_poll_timeout(id->membase + CDNS_I2C_SR_OFFSET,
--					 reg,
--					 !(reg & CDNS_I2C_SR_BA),
--					 CDNS_I2C_POLL_US, CDNS_I2C_TIMEOUT_US);
-+	if (!id->atomic)
-+		ret = readl_relaxed_poll_timeout(id->membase + CDNS_I2C_SR_OFFSET,
-+						 reg,
-+						 !(reg & CDNS_I2C_SR_BA),
-+						 CDNS_I2C_POLL_US, CDNS_I2C_TIMEOUT_US);
-+	else
-+		ret = readl_poll_timeout_atomic(id->membase + CDNS_I2C_SR_OFFSET,
-+						reg,
-+						!(reg & CDNS_I2C_SR_BA),
-+						CDNS_I2C_POLL_US_ATOMIC, CDNS_I2C_TIMEOUT_US);
- 	if (ret) {
- 		ret = -EAGAIN;
- 		if (id->adap.bus_recovery_info)
-@@ -926,7 +1064,7 @@ static int cdns_i2c_master_common_xfer(struct i2c_adapter *adap,
- 			return ret;
- 
- 		/* Report the other error interrupts to application */
--		if (id->err_status) {
-+		if (id->err_status || id->err_status_atomic) {
- 			cdns_i2c_master_reset(adap);
- 
- 			if (id->err_status & CDNS_I2C_IXR_NACK)
-@@ -992,6 +1130,41 @@ static int cdns_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 	return ret;
- }
- 
-+/**
-+ * cdns_i2c_master_xfer_atomic - The i2c transfer function in atomic mode
-+ * @adap:	pointer to the i2c adapter driver instance
-+ * @msgs:	pointer to the i2c message structure
-+ * @num:	the number of messages to transfer
-+ *
-+ * Return: number of msgs processed on success, negative error otherwise
-+ */
-+static int cdns_i2c_master_xfer_atomic(struct i2c_adapter *adap, struct i2c_msg *msgs,
-+				       int num)
-+{
-+	int ret;
-+	struct cdns_i2c *id = adap->algo_data;
-+
-+	ret = cdns_i2c_runtime_resume(id->dev);
-+	if (ret)
-+		return ret;
-+
-+	if (id->quirks & CDNS_I2C_BROKEN_HOLD_BIT) {
-+		dev_warn(id->adap.dev.parent,
-+			 "Atomic xfer not supported for version 1.0\n");
-+		return 0;
-+	}
-+
-+	id->atomic = true;
-+	ret = cdns_i2c_master_common_xfer(adap, msgs, num);
-+	if (!ret)
-+		ret = num;
-+
-+	id->atomic = false;
-+	cdns_i2c_runtime_suspend(id->dev);
-+
-+	return ret;
-+}
-+
- /**
-  * cdns_i2c_func - Returns the supported features of the I2C driver
-  * @adap:	pointer to the i2c adapter structure
-@@ -1056,6 +1229,7 @@ static int cdns_unreg_slave(struct i2c_client *slave)
- 
- static const struct i2c_algorithm cdns_i2c_algo = {
- 	.master_xfer	= cdns_i2c_master_xfer,
-+	.master_xfer_atomic = cdns_i2c_master_xfer_atomic,
- 	.functionality	= cdns_i2c_func,
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- 	.reg_slave	= cdns_reg_slave,
--- 
-2.25.1
+	i2c_designware i2c_designware.0: Standard Mode HCNT:LCNT = 0:0
 
+Would it work if patch just reads the dev->ss_hcnt, dev->ss_lcnt and so 
+on from HW registers in case they and ic_clk are not set in 
+i2c_dw_set_timings_master()? Then debug prints and HW values are in sync.
 
