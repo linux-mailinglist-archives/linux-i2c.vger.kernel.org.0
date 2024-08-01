@@ -1,141 +1,132 @@
-Return-Path: <linux-i2c+bounces-5099-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5100-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FF69944DB3
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2024 16:10:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 173B0945057
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2024 18:16:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49DBA1F23820
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2024 14:10:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78F9FB2A0E0
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Aug 2024 16:16:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B63B1A0704;
-	Thu,  1 Aug 2024 14:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881151B4C34;
+	Thu,  1 Aug 2024 16:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dhbuzQ5w"
+	dkim=pass (1024-bit key) header.d=csh.rit.edu header.i=@csh.rit.edu header.b="PoVx96se"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from greygoose-centos7.csh.rit.edu (greygoose-centos7.csh.rit.edu [129.21.49.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2DF28F3
-	for <linux-i2c@vger.kernel.org>; Thu,  1 Aug 2024 14:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C7E13D251;
+	Thu,  1 Aug 2024 16:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.21.49.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722521412; cv=none; b=BqaJgWiCw2ON49zfXE+aClLUbk1CWdnMCg7zdl5+YEErd2DcAcXiW600DLncgMw9ozZBOMkbg+rpCWJQoW5DnYE0jXDIUseeHCVraWN1Vz66clGlrIzB4CODjKOh2DmhfPv07v4s0hYSTJ14Tq4vxlo1Jc9ljYTTWKBNgop4VAo=
+	t=1722528919; cv=none; b=mWd9RkCYljEw2ggFIWrcro+aGdb1suSTtBATup31bSQGHccGa49ZO8LKB5z1kEl7XO3JRBE0CRQWY8k8UIsKwrJB8jdl8PbVXdq/RqY/KSy+TsgHstVnfRpuqdLHLHzKRJX0gLEA04sgXLRabl8it9yKyx/i+wMzTdz0oVaRHps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722521412; c=relaxed/simple;
-	bh=lmRrW0iowZPUnRX+jBrP5lIpdO5wCtiPTnVHF9W6BsA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U8thD6AJB8XvuKp2JCFRVDQN+1vYeJpipnx4FwfJr984qs/9dBZ/z03BqlF1F/dn+wpdMpUUGu5nTG1bg8gGfVcZ2h+RSfG4g6IuoOjOwiILwYRK7jmUYoBItxw7WTftqYa58wjVbiznnNRwmInzd9QhIDmTZ2AHeSx2K776QL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dhbuzQ5w; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722521410; x=1754057410;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lmRrW0iowZPUnRX+jBrP5lIpdO5wCtiPTnVHF9W6BsA=;
-  b=dhbuzQ5wxuYi3JSwiRwXOeoEu3hkz+UCovNDNw4tJ/08Ho3LwzLX/Odc
-   cEOj+4d3xjbmf1jEDtMNE2ic9MNtK0wV05b+xNaDq3Cu7qAmTi7lfUUh2
-   fU0VL2UgJRz7r0pkKcqKWQB/AR5oyOW4GwG094F2TNsN/hJQwTorBZQTS
-   4Z5TghMx6H+Jh5aE17PH/ZRwmh3IxzsbL9Hxxk+yd25gs5lhDYlAJJg7b
-   C3VJ/XbwPQUNHZGJdhXUyHAlsp0LNZBW8/xWr1zZ5cEmIwTZq1PgE3AR6
-   Tl1ZVb8jV5ul4tkhWccJJtDi+pc6qiVK/4cFNLhaLf8KT8wCCLzYvV0q/
-   A==;
-X-CSE-ConnectionGUID: 0OrbpQFxTW+1T4x5aa5GtQ==
-X-CSE-MsgGUID: r1YV5jSOQU6luEz3eOHXEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11151"; a="20367273"
-X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="20367273"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 07:10:09 -0700
-X-CSE-ConnectionGUID: swLruNmeR16wDgVdvPvTJA==
-X-CSE-MsgGUID: +JUG83tMQU2p+SQ72bgKkw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,254,1716274800"; 
-   d="scan'208";a="54956283"
-Received: from unknown (HELO [10.237.72.57]) ([10.237.72.57])
-  by fmviesa008.fm.intel.com with ESMTP; 01 Aug 2024 07:10:06 -0700
-Message-ID: <8295cbe1-a7c5-4a35-a189-5d0bff51ede6@linux.intel.com>
-Date: Thu, 1 Aug 2024 17:10:05 +0300
+	s=arc-20240116; t=1722528919; c=relaxed/simple;
+	bh=/8nriejmXzDzWVmm/IlmiLk0ggY6nmt4tGPeWk9wNsE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CcRdqswZhgVdqJktZc1qxMEBbXR1QdqLA/HKuXWkHVB6iWtLC7rcvqCxIVwWoiV4WTzkppIMRX4dU9hiGkriFB6iYp1lv6Rx2cAzftnoVLJEd5S2Qak8j5NFIU2Lv9IrPFQWyhd7xPvK10wW/2YfZ9ytFY6yRwNTt98kq6uoHf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csh.rit.edu; spf=pass smtp.mailfrom=csh.rit.edu; dkim=pass (1024-bit key) header.d=csh.rit.edu header.i=@csh.rit.edu header.b=PoVx96se; arc=none smtp.client-ip=129.21.49.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csh.rit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csh.rit.edu
+Received: from localhost (localhost [127.0.0.1])
+	by greygoose-centos7.csh.rit.edu (Postfix) with ESMTP id 62D5C456D91E;
+	Thu,  1 Aug 2024 12:06:23 -0400 (EDT)
+Authentication-Results: mail.csh.rit.edu (amavisd-new);
+ dkim=pass (1024-bit key) reason="pass (just generated, assumed good)"
+ header.d=csh.rit.edu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=csh.rit.edu; h=
+	content-transfer-encoding:mime-version:x-mailer:message-id:date
+	:date:subject:subject:from:from:received:received; s=mail; t=
+	1722528382; x=1724342783; bh=/8nriejmXzDzWVmm/IlmiLk0ggY6nmt4tGP
+	eWk9wNsE=; b=PoVx96se74RXOXibEBplzKOSXOOmf51PNbVy6gTdW38BwRj4xSE
+	+xN9S9FtKdp3kD73nLjy3lW/frcR+fZiFe0qzLn1xlDSPnIWjIK2IeRjOhK+V2t0
+	4Gx/vAhZf59DB4xpY2pS3rAZjUTJ1n8mPV5QSdMr4DbibUf9LV64hE/Q=
+X-Virus-Scanned: amavisd-new at csh.rit.edu
+Received: from greygoose-centos7.csh.rit.edu ([127.0.0.1])
+ by localhost (mail.csh.rit.edu [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id ZLVFkvNF_GIA; Thu,  1 Aug 2024 12:06:22 -0400 (EDT)
+Received: from freedom.csh.rit.edu (freedom.csh.rit.edu [129.21.49.182])
+	by greygoose-centos7.csh.rit.edu (Postfix) with ESMTP id AD7EB457328D;
+	Thu,  1 Aug 2024 12:06:22 -0400 (EDT)
+From: Mary Strodl <mstrodl@csh.rit.edu>
+To: linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	urezki@gmail.com,
+	hch@infradead.org,
+	linux-mm@kvack.org,
+	lee@kernel.org,
+	andi.shyti@kernel.org,
+	linux-i2c@vger.kernel.org,
+	s.hauer@pengutronix.de,
+	christian.gmeiner@gmail.com,
+	Mary Strodl <mstrodl@csh.rit.edu>
+Subject: [PATCH v2 0/2] Add support for Congatec CGEB BIOS interface
+Date: Thu,  1 Aug 2024 12:06:08 -0400
+Message-ID: <20240801160610.101859-1-mstrodl@csh.rit.edu>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] i2c: designware: Fix wrong setting for
- {ss,fs}_{h,l}cnt registers
-To: Adrian Huang <adrianhuang0701@gmail.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
- Adrian Huang <ahuang12@lenovo.com>, Dong Wang <wangdong28@lenovo.com>
-References: <20240717065917.18399-1-ahuang12@lenovo.com>
-Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20240717065917.18399-1-ahuang12@lenovo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-Hi
+The following series adds support for the Congatec CGEB interface
+found on some Congatec x86 boards. The CGEB interface is a BIOS
+interface which provides access to onboard peripherals like I2C
+busses and watchdogs. It works by mapping BIOS code and searching
+for magic values which specify the entry points to the CGEB call.
+The CGEB call is an API provided by the BIOS which provides access
+to the functions in an ioctl like fashion.
 
-Sorry the delay.
+At the request of some folks last time this series went out, CGEB
+now has a userspace component which runs the x86 blob (rather than
+running it directly in the kernel), which sends requests back and
+forth using the cn_netlink API.
 
-On 7/17/24 9:59 AM, Adrian Huang wrote:
-> From: Adrian Huang <ahuang12@lenovo.com>
-> 
-> When disabling CONFIG_X86_AMD_PLATFORM_DEVICE option, the driver
-> 'drivers/acpi/acpi_apd.c' won't be compiled. This leads to a situation
-> where BMC (Baseboard Management Controller) cannot retrieve the memory
-> temperature via the i2c interface after i2c DW driver is loaded. Note
-> that BMC can retrieve the memory temperature before booting into OS.
-> 
-> [Debugging Detail]
->    1. dev->pclk and dev->clk are NULL when calling devm_clk_get_optional()
->       in dw_i2c_plat_probe().
-> 
->    2. The callings of i2c_dw_scl_hcnt() in i2c_dw_set_timings_master()
->       return 65528 (-8 in integer format) or 65533 (-3 in integer format).
->       The following log shows SS's HCNT/LCNT:
-> 
->         i2c_designware AMDI0010:01: Standard Mode HCNT:LCNT = 65533:65535
-> 
->    3. The callings of i2c_dw_scl_lcnt() in i2c_dw_set_timings_master()
->       return 65535 (-1 in integer format). The following log shows SS's
->       HCNT/LCNT:
-> 
->         i2c_designware AMDI0010:01: Fast Mode HCNT:LCNT = 65533:65535
-> 
->    4. i2c_dw_init_master() configures the register IC_SS_SCL_HCNT with
->       the value 65533. However, the DW i2c databook mentioned the value
->       cannot be higher than 65525. Quote from the DW i2c databook:
-> 
->         NOTE: This register must not be programmed to a value higher than
->               65525, because DW_apb_i2c uses a 16-bit counter to flag an
->               I2C bus idle condition when this counter reaches a value of
->               IC_SS_SCL_HCNT + 10.
-> 
->    5. Since ss_hcnt, ss_lcnt, fs_hcnt, and fs_lcnt are the invalid
->       values, we should not write the corresponding registers.
-> 
-> Fix the issue by returning 0 if ic_clk is 0 in i2c_dw_scl_{h,l}cnt().
-> Then, do not write the corresponding registers if those values are 0.
-> 
-You are correct, indeed driver miscalculates those timing parameters in 
-that case.
+You can find a reference implementation of the userspace helper here:
+https://github.com/Mstrodl/cgeb-helper
 
-However debugging point of view below is misleading since it doesn't 
-necessarily match with HW registers since they are not touched and have 
-values what bootloader has left there.
+I didn't get an answer when I asked where the userspace component
+should live, so I didn't put a ton of work into getting the helper
+up to snuff since similar userspace helpers (like v86d) are not
+in-tree. If folks would like the helper in-tree, that's fine too.
 
-	i2c_designware i2c_designware.0: Standard Mode HCNT:LCNT = 0:0
+This series is based on the excellent work of Sascha Hauer and
+Christian Gmeiner. You can find their original work here:
 
-Would it work if patch just reads the dev->ss_hcnt, dev->ss_lcnt and so 
-on from HW registers in case they and ic_clk are not set in 
-i2c_dw_set_timings_master()? Then debug prints and HW values are in sync.
+http://patchwork.ozlabs.org/patch/219756/
+http://patchwork.ozlabs.org/patch/219755/
+http://patchwork.ozlabs.org/patch/219757/
+
+http://patchwork.ozlabs.org/patch/483262/
+http://patchwork.ozlabs.org/patch/483264/
+http://patchwork.ozlabs.org/patch/483261/
+http://patchwork.ozlabs.org/patch/483263/
+
+Mary Strodl (1):
+  x86: Add basic support for the Congatec CGEB BIOS interface
+
+Sascha Hauer (1):
+  i2c: Add Congatec CGEB I2C driver
+
+ drivers/i2c/busses/Kconfig             |    7 +
+ drivers/i2c/busses/Makefile            |    1 +
+ drivers/i2c/busses/i2c-congatec-cgeb.c |  189 ++++
+ drivers/mfd/Kconfig                    |   10 +
+ drivers/mfd/Makefile                   |    1 +
+ drivers/mfd/congatec-cgeb.c            | 1139 ++++++++++++++++++++++++
+ include/linux/mfd/congatec-cgeb.h      |  111 +++
+ include/uapi/linux/connector.h         |    4 +-
+ 8 files changed, 1461 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/i2c/busses/i2c-congatec-cgeb.c
+ create mode 100644 drivers/mfd/congatec-cgeb.c
+ create mode 100644 include/linux/mfd/congatec-cgeb.h
+
+--=20
+2.45.2
+
 
