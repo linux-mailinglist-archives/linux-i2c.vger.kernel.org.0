@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-5114-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5115-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F9F094656B
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Aug 2024 23:48:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 313A2946570
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Aug 2024 23:49:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F2EC1C2120C
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Aug 2024 21:48:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0322281001
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Aug 2024 21:49:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90F8714D712;
-	Fri,  2 Aug 2024 21:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94F714EC41;
+	Fri,  2 Aug 2024 21:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="xj9jSLoV"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KYNfRgEV"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBAB13B7BC;
-	Fri,  2 Aug 2024 21:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C9413B7BC;
+	Fri,  2 Aug 2024 21:45:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722635147; cv=none; b=T/zyEn7wud5PNiGlghwA22kAJrcwKdSiTECMAKtRVe0KcWbYjrqtWJpwbxm+UQuQG4Aqq4w4rzTXYtBPQZJxcd/iOWoQiSe+YCFZLd49IGPi1vZDINngDMiMGX2nBVl7rUFRih7v8mL2DV+2korrmekX9wEFNhzoUI2g3Cf/MrA=
+	t=1722635152; cv=none; b=kZ6PlYDf1VuUc+sW7nW59VwkKA33/9vZBRr+lXEeK3cMxRG/jN4QRCgiU7Y6Zqhekl8AfaGRag4t+Xw+RWfHo72OjUEAWIe0zqJOFvrvQL6QWKeHUOMo6jREzahPr1J/B1O6/r0mf3UF1JsVN9Sdt6BfjbSFvPDNA8Ef+A50VPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722635147; c=relaxed/simple;
-	bh=vhsFBWvnwRcvgkFFC3UkhcXZJdBWDgru/XEOUGrJnB4=;
+	s=arc-20240116; t=1722635152; c=relaxed/simple;
+	bh=Oh/OaypReJIgqoibrk2bMwhsUwD6+K6bd+DWfvLZlho=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dgF5rvjXf9rqjdda8T17OCLjupTFULqSRX4RhL0oot0mTGoIZjRf8Is5psPqR7n95113v2vKnw2SdE09L117E3e2wGVHE4ggajXLCnUkpZ0OCTgImcJBZXUOEXe0cOThb2pfd9ndrnAb6Xa6R4qxyrrFC/e6SZa86QST/e0I0Q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=xj9jSLoV; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=EvYdUFgPRZVEz/vtx6Fw7CBJ3ew0h1nlamf8OiOLuPdm/NAc8uYU3zoYVKpu0M7MYg565EuPL7sX0kDSKCpIILpI5nW/NbGKJmJ69clwe7rfkMAnOz5UMH8LXQn8pYnc5fFDymFxSII37LXbbB5FRyRodnZfp+qUwITKc1mOM7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KYNfRgEV; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722635144;
-	bh=vhsFBWvnwRcvgkFFC3UkhcXZJdBWDgru/XEOUGrJnB4=;
+	s=mail; t=1722635149;
+	bh=Oh/OaypReJIgqoibrk2bMwhsUwD6+K6bd+DWfvLZlho=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=xj9jSLoVOzd5vcWFsUJYQxmIxX2KpG/fuygaxF26IRo5FUldcH2yGoCrcpZCw+yyY
-	 fzbw/gyokUgrO0h9TiB3GCJiQASoQOy8CK7oJDsqroDNjEKlHYfzCjRoj3n3gyQlO4
-	 tQQxHh6rUbW08XBfwMyRNhXlIk3hvpjVXFf4sRDgmOG2h57sk6xYNHnW629iQIhzFu
-	 uOV2/SzwPEgwlgd3J8lCHuYquWee3xvPOyEnhl4BK1K+RafGZMYyaXaymbI/RFONkf
-	 d6qiqGjMIk0gJ223J7HNujSmWLYn0KCA92C6XwZTJCYC9osxwUEQJYJJzY6o9X9HsC
-	 iDscOcw426Qkw==
+	b=KYNfRgEV+bV/9MFk4LGxe53TKpTs+r+y2txdcFlTdG6oFXH70hFLSbn0qVxefdSJ1
+	 GjTkK8HO9/tsjPECeZqzQAJKrIGlLzUEJBIidJiedOIGM9yXD6LwEMMT7pEXMgU5wx
+	 S8Ki4gbVMKjHA66i5NtubJOYK8Ff+ZzYWy7bdD+4nNosIfTnmn5f9/rwuSYifj8d3K
+	 k1o/Tpfwmzo9Fq5Yq7Ar4b7+4WTpsa8+APcw5BbwNhEsY5wXZMxsmMZ5kNA7thALam
+	 iQ77rbmI5yr9Lvc8opWYW/XhRqB9Fvgo1J89nEVPzvfX7vAOvtPTOP8Es38lDnaBl4
+	 uJqXNanS+8agg==
 Received: from trenzalore.hitronhub.home (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: detlev)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 51A36378221D;
-	Fri,  2 Aug 2024 21:45:39 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 81A52378221F;
+	Fri,  2 Aug 2024 21:45:44 +0000 (UTC)
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: Rob Herring <robh@kernel.org>,
@@ -87,9 +87,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-iio@vger.kernel.org,
 	linux-serial@vger.kernel.org,
 	kernel@collabora.com
-Subject: [PATCH 05/10] dt-bindings: mfd: syscon: Add rk3576 QoS register compatible
-Date: Fri,  2 Aug 2024 17:45:32 -0400
-Message-ID: <20240802214612.434179-6-detlev.casanova@collabora.com>
+Subject: [PATCH 06/10] dt-bindings: serial: snps-dw-apb-uart: Add Rockchip RK3576
+Date: Fri,  2 Aug 2024 17:45:33 -0400
+Message-ID: <20240802214612.434179-7-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240802214612.434179-1-detlev.casanova@collabora.com>
 References: <20240802214612.434179-1-detlev.casanova@collabora.com>
@@ -101,33 +101,25 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Document rk3576 compatible for QoS registers.
+Add a Rockchip RK3576 compatible.
 
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 ---
- Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-index 9dc594ea36545..ce5eed77b3c81 100644
---- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-+++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-@@ -103,6 +103,7 @@ select:
-           - rockchip,rk3368-qos
-           - rockchip,rk3399-qos
-           - rockchip,rk3568-qos
-+          - rockchip,rk3576-qos
-           - rockchip,rk3588-qos
-           - rockchip,rv1126-qos
-           - st,spear1340-misc
-@@ -198,6 +199,7 @@ properties:
-           - rockchip,rk3368-qos
-           - rockchip,rk3399-qos
-           - rockchip,rk3568-qos
-+          - rockchip,rk3576-qos
-           - rockchip,rk3588-qos
-           - rockchip,rv1126-qos
-           - st,spear1340-misc
+diff --git a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+index 4cdb0dcaccf38..cfcfd7a6b78f2 100644
+--- a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+@@ -49,6 +49,7 @@ properties:
+               - rockchip,rk3368-uart
+               - rockchip,rk3399-uart
+               - rockchip,rk3568-uart
++              - rockchip,rk3576-uart
+               - rockchip,rk3588-uart
+               - rockchip,rv1108-uart
+               - rockchip,rv1126-uart
 -- 
 2.46.0
 
