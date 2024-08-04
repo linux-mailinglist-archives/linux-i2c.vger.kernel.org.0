@@ -1,116 +1,129 @@
-Return-Path: <linux-i2c+bounces-5135-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5137-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C281E946F51
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 16:34:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D967D9470A6
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 23:22:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4722FB213C7
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 14:34:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93DC2280F2F
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 21:22:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 537EF3BBF1;
-	Sun,  4 Aug 2024 14:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F377136320;
+	Sun,  4 Aug 2024 21:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="MJh13q/v"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qAhuHv13"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D2B3BB47
-	for <linux-i2c@vger.kernel.org>; Sun,  4 Aug 2024 14:34:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458FE768EC
+	for <linux-i2c@vger.kernel.org>; Sun,  4 Aug 2024 21:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722782055; cv=none; b=CXi5zJ6GSh9OSekz3amUONHfr1wdoGQuOzFt2HjjuHjY1oG9tl1/u14hYAuQLKEOVlKXVEy9uUSP5dM2Xwz6nYzx+GmsVWSvzhOl8aF31A8Qkl0EIi6/DiXESkfQwpW7T6ip9C7+MkyOnkaPfC2FKl4+DX1VU/q2eTYCQ5+i730=
+	t=1722806524; cv=none; b=GeOciIgR4yzepSDb8fUwXnJNCGqzrmWY6t2coGiSgMmM//EUNSyGBMLyBzK6fDodj9Zn5wIEA+6mEOGTg2YXw0fmuNTPyNtVZo1Pw6oIoJVjFxapJAX9r5V5wCMCoXQpRbJz45b6XSU06cgmgNiVAmiw0xBwx0ar01RjIHznrbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722782055; c=relaxed/simple;
-	bh=2lx3g7N36zwl+ThoqCfB7bZOdmmAoxKPpweee5Hr2W4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WmtvEjmUQxWsOIuYDy2BgCWpM9B/5FdwoB8ETq/UcoHlgAQjFFjrdMZUKrcKLKzwiTK53WDSrkMzNmK3WalohsHEa7JnCnR/9GWR3VhKmcJzMB8/s4uc6bgnxVDek33//nhpUOzkvgZOrPRkbycsEZgpBhRKcfK1Mkxu0YlnPgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=MJh13q/v; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=2lx3
-	g7N36zwl+ThoqCfB7bZOdmmAoxKPpweee5Hr2W4=; b=MJh13q/vmVE2a0vqrBQi
-	+hNRiubSP7c8MJ+S3suTHjV0BvYqaVAfhRvA1XESe4nPonoep/7v18aGCnQKUyd5
-	AMAqPUKluopu3/23u2Z9A0xWOtn8d4mTeCghbKyoTsOBej2zL++hClFpwpmcXiR2
-	xUxSMalKS9E2xG4ZK3bH9nSfarMJD0jwfFEpcN4ESGKL7W0lt12j7DPYpHzWH8+b
-	BmO4uZVLdFGe3642ejEd19Tr5jkHJ5ba+1iVddnGH/ThMllP0fh3vxdHhFqozlG6
-	GAPfZK9hgflqweiRzUNrJVaaeEOcwpQPDue1TOsx+RujOiNS3zU2/kxyyfi0EW0y
-	mw==
-Received: (qmail 1704320 invoked from network); 4 Aug 2024 16:34:07 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Aug 2024 16:34:07 +0200
-X-UD-Smtp-Session: l3s3148p1@dzzsc9weyOVehhtX
-Date: Sun, 4 Aug 2024 16:34:06 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc: tiwai@suse.com, broonie@kernel.org, mika.westerberg@linux.intel.com,
-	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	patches@opensource.cirrus.com
-Subject: Re: [PATCH v2 2/3] i2c: Fix conditional for substituting empty ACPI
- functions
-Message-ID: <Zq-RXoAhH1kZvdRZ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>, tiwai@suse.com,
-	broonie@kernel.org, mika.westerberg@linux.intel.com,
-	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	patches@opensource.cirrus.com
-References: <20240802152215.20831-1-rf@opensource.cirrus.com>
- <20240802152215.20831-3-rf@opensource.cirrus.com>
+	s=arc-20240116; t=1722806524; c=relaxed/simple;
+	bh=8T0BYdA9Kxi+oVjS9OAReH15eAFcU+2zMrtmp+uLA5U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lRkTBOPm6jOp+Sgh2IgoIuZD+7sigvIVss9ad1jYjVHZ0YFpk1zBL7SDMDiaSt71ABkhcnaNHd3ZFjKR++lD/CwbIQ8hqJNhJFiN4AniX15f1dkE4FjuTtU8zPNv4pkGD1vpbPVtxB83KHZMJia4INtHQmAZpw+5A97x85BD/JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qAhuHv13; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2ef243cc250so18705741fa.0
+        for <linux-i2c@vger.kernel.org>; Sun, 04 Aug 2024 14:22:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722806520; x=1723411320; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mqnu+yNGhehLSrkuhy5GkzzL6TnfVoi9+bUerYPLnpU=;
+        b=qAhuHv13A1xGhNkRwoNZ2VVcAQtz8ckrjrzy5xSIqCLDUN34jHEYfNeejWZ5me84jq
+         y+intyNFIUbXX5hNJ1dlcnz4QlHAijoIflerWtwyZEJS3bMWPqUXssV3ynWuox6Jl4J+
+         2yZ6BOg2ZZHyplAJgZV0TgsVJAKMeLYBb8nqg49K6yq3/8P/ia6iktCHcd9OAGtJhXdb
+         1W1zEJ0QQtGMUflc+EhyH3+wE4K5CWIcNq4CHmiQbh83ADSVhz/nETxfaSTUSyA7BJ/l
+         8VyRdgXsQ+yo/bj8sH2h2Fn3A/dYXlPYNEVrrdinyULPnTscu2WQ0eRl0iuGoVJlnmu6
+         q0PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722806520; x=1723411320;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mqnu+yNGhehLSrkuhy5GkzzL6TnfVoi9+bUerYPLnpU=;
+        b=df5oE8BJYAf6c6eTZvZlBvFnsfoXpSL5avqTrEc7en/9mMSFwY7VdFMSm8Vh4xatWR
+         MTJHfMoIvEkD/0PeNo0uueBNwbWO+/1A4F+b0dfmXV7pd/3TFMRWzDSsp94vEBdvp+Bi
+         AhJ/STkIBsID10/mxodNEZAXSCFtp69LVPGoaN14b17een+vUvq67RLzt2obYZYz5UaG
+         b+gQnnqauXxCpR39NXvXb0WRf4fXwm/uWqBazvKvJFiAMeDIVUCeU1UjUTUQyEUO7PR1
+         7ODw+hsrMtq3FTioGhgYuHvL9rALs626P3zrlwdL++sPMoECTyrcMrUeDKpFsNYPQNgv
+         IgyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUxr5b0gA6kaPbZtqcPvcCX8qDslR8j98/3Exn5K88Hrls8hSkTQ7kYBytlzLTOSY0mafozYVD0K5pyu2E68nCauEHHwLsn5VX8
+X-Gm-Message-State: AOJu0YxJfkScQ0+ap5+IuCOoZPlZBoW3i6CJJGcxQvc0dc7cP1juxZAT
+	WVya9GHwQeL4GohaF9Rp0/lBs4keJj/adtH2EYeM7Q+n586dUmEzRNbrPm7MJhU=
+X-Google-Smtp-Source: AGHT+IFmcMxMi0C7iCoG5ilO8+VdI9K5JR+E9gBGMc1h7WBJ6E8D38KzACtDsWOqM/stVtF8l3U3Fw==
+X-Received: by 2002:a05:6512:3ca4:b0:52f:c22f:32a4 with SMTP id 2adb3069b0e04-530bb3b52f4mr3588082e87.6.1722806520253;
+        Sun, 04 Aug 2024 14:22:00 -0700 (PDT)
+Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-530bba2a027sm896204e87.131.2024.08.04.14.21.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 04 Aug 2024 14:21:59 -0700 (PDT)
+Message-ID: <a12d2ec6-07b1-4577-8bed-981024c5cc9c@linaro.org>
+Date: Mon, 5 Aug 2024 00:21:53 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="K5x/eKI0KCQaJbDH"
-Content-Disposition: inline
-In-Reply-To: <20240802152215.20831-3-rf@opensource.cirrus.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next] i2c: qcom-geni: Add missing clk_disable_unprepare
+ in geni_i2c_runti
+To: Gaosheng Cui <cuigaosheng1@huawei.com>, andi.shyti@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20240803061041.283940-1-cuigaosheng1@huawei.com>
+Content-Language: en-US
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20240803061041.283940-1-cuigaosheng1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 8/3/24 09:10, Gaosheng Cui wrote:
+> Add the missing clk_disable_unprepare() before return in
+> geni_i2c_runti().
 
---K5x/eKI0KCQaJbDH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The function name above is scrambled, it should be geni_i2c_runtime_resume().
 
-On Fri, Aug 02, 2024 at 04:22:14PM +0100, Richard Fitzgerald wrote:
-> Add IS_ENABLED(CONFIG_I2C) to the conditional around a bunch of ACPI
-> functions.
->=20
-> The conditional around these functions depended only on CONFIG_ACPI.
-> But the functions are implemented in I2C core, so are only present if
-> CONFIG_I2C is enabled.
->=20
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> 
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> ---
+>   drivers/i2c/busses/i2c-qcom-geni.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 0a8b95ce35f7..78f43648e9f3 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -990,8 +990,10 @@ static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
+>   		return ret;
+>   
+>   	ret = geni_se_resources_on(&gi2c->se);
+> -	if (ret)
+> +	if (ret) {
+> +		clk_disable_unprepare(gi2c->core_clk);
+>   		return ret;
+> +	}
+>   
+>   	enable_irq(gi2c->irq);
+>   	gi2c->suspended = 0;
 
-Applied to for-current, thanks!
+The fix is correct, thank you.
 
+FWIW there is another missed call of geni_icc_disable(&gi2c->se) on the error paths.
 
---K5x/eKI0KCQaJbDH
-Content-Type: application/pgp-signature; name="signature.asc"
+Fixes: 14d02fbadb5d ("i2c: qcom-geni: add desc struct to prepare support for I2C Master Hub variant")
+Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmavkV4ACgkQFA3kzBSg
-Kba8kQ//R2hJFFtxTxAWIj5wBKxOw1RDWxS5D/37YhhcWnBCvMzImW/Dtlt7uoYB
-P9O1xQTLK7B0dxkzDX6glvIg94j46CWLsBTtUzCMu1yBVQK2FojAfxrOfVePSoGR
-FkBTjSAMhG6lJDQcipJGnDG1KdnMi0RJ9Y8FERD1A81YsLIkIDmIIUXPU6kmolsn
-RV1fZARoqLo0BuWwE2xZAv4fAULs2t62Z9LEIHlY//8IJnaCZT256BPU7BNK2tHj
-Rg3pa4U1aKmi8aWtiw2KTTrsTilvZFSvtdpjuePaFXZ+OJdH3JSh46dpajZ9b8qU
-/uEf8tz/O+UwDRvNLDlaTrH3mwjk1ks5D0tx5cXe4kpPhk9b/RXEFkGZiY5+owot
-N5WrNepRptCuJMDdv0XYbF/Hr/c9k9PsTasEkM74bxjJ74NinsMNua9jye8hV7n5
-HKJWiXRCjXMA5cjG+RCpshi5sDu0K3oBgTonKhl1RasqndzwL4mljYGRgkjtabvG
-MiR7lVvmqSwX/xRqKaK5d3tx0f7F6PY8KMJ0a0zVTmC1JwfjQh2CuzGNw8AUxWy/
-l+1sRjuc0lWFtG7YcVPnZenNKxX/yy3raDgpHL+dtJZmoRSqFQj7oapUbhhakf8H
-F+IQ72ohmiUnHz9POIDEr9/aGdtJn6K5B24xl+PIFh8IOlWXMjM=
-=nS/5
------END PGP SIGNATURE-----
-
---K5x/eKI0KCQaJbDH--
+--
+Best wishes,
+Vladimir
 
