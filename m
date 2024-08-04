@@ -1,332 +1,139 @@
-Return-Path: <linux-i2c+bounces-5125-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5126-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 722D5946B5C
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 00:38:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B2CA946DF4
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 11:47:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBE931F21B90
-	for <lists+linux-i2c@lfdr.de>; Sat,  3 Aug 2024 22:38:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF4E1B20DB9
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 09:47:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F26E5B05E;
-	Sat,  3 Aug 2024 22:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BDD2135B;
+	Sun,  4 Aug 2024 09:46:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F296FdM+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JyxRWToS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC35F12B64;
-	Sat,  3 Aug 2024 22:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98DFAD2C;
+	Sun,  4 Aug 2024 09:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722724731; cv=none; b=Kywa/MHvxbUU/7T5HHBZill20pON9Iqj02vIMvDZ0s1rdkKPjHVeWHrDTGMbuRmaRkccaeDIEkX41uP+R6CJd+dZLbVTMbV4kKQ31rDD5hzSJH2sH5zaq5l0i2EGkih60CubpM9rC3YGgFy3gE5ngxbLYP9/nN1iAMUECOmqG/Q=
+	t=1722764813; cv=none; b=uzeO/722N/Xid0iMSYVajigwoL/mbtaKNIKrBtYEuJBfXVvIDG/WfAfDJPtzQBk2iF7x7DjUmQahsIDmp72zrbepbwYZ8mlQyKwtidAkTNWf5U/TJDgSldK18QZEXpiXu88LKI3tHPoG5d+gXpsVuXYgir2EaMsmknkfO9p0Ktg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722724731; c=relaxed/simple;
-	bh=1jAKqZMAnQ2Z/pNG3/2MiYZgzSRttc+ErvQBuIso/Kw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UTo5ulEsZKp+/QIeDfLDnosat37CR23kJiVxhflpM4WTY3S/8ry6xhm84eK3ziDRcNBR+PcUAwWUtwfWxPMQ2dUSR8twzg054cN4QUKwjF865BtEGP5Z+rb18NjaT9D1c5zhf1sndosJ2V7KV/Ubl1PZlO+rIp+7SCz5w0rny60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F296FdM+; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722724729; x=1754260729;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1jAKqZMAnQ2Z/pNG3/2MiYZgzSRttc+ErvQBuIso/Kw=;
-  b=F296FdM+wpI8ODXyG3gnzMvZMuFLQsVIVAcVBBxsBQwtGRrVwA9bxBA+
-   P8K8b8LuDNGRsirNdwwLMXagtgoYaSncd4c2MbKcwAEneya7CcM9KDlQR
-   7MUADOOxcLA15yqOHjPO+MlduPG/VOt57LSCxZ+Xw1pLPRYx433gJNUuG
-   Q+ZGUV5RBICA2PU0hlVFGRmmD6LduuJDHdwWph41CXKRDTwAyc2XZwdP+
-   Ee7wRV/w7TjyPzb/kKNKjP0VcXInCA++4eICRuBWRmUMUtnG0uaYcdoVj
-   R7Tq1Fa7fabMSS7+D1R0x8kAdyl46UOAYqBeMYon2mDDCpRG9OP7LLsju
-   w==;
-X-CSE-ConnectionGUID: pqzCm4MTS0iFP3033V8YZA==
-X-CSE-MsgGUID: ZXN207rTTsGjydYC/zgOSw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11153"; a="20892356"
-X-IronPort-AV: E=Sophos;i="6.09,261,1716274800"; 
-   d="scan'208";a="20892356"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2024 15:38:48 -0700
-X-CSE-ConnectionGUID: Hjz/bKAjRam0bcsrxrXedg==
-X-CSE-MsgGUID: e7aXNycDSjKyoCnJWemujw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,261,1716274800"; 
-   d="scan'208";a="55995625"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 03 Aug 2024 15:38:45 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1saNOc-0000xC-1O;
-	Sat, 03 Aug 2024 22:38:42 +0000
-Date: Sun, 4 Aug 2024 06:37:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mary Strodl <mstrodl@csh.rit.edu>, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, akpm@linux-foundation.org,
-	urezki@gmail.com, hch@infradead.org, linux-mm@kvack.org,
-	lee@kernel.org, andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-	s.hauer@pengutronix.de, christian.gmeiner@gmail.com,
-	Mary Strodl <mstrodl@csh.rit.edu>
-Subject: Re: [PATCH v2 1/2] x86: Add basic support for the Congatec CGEB BIOS
- interface
-Message-ID: <202408040629.HQM8a5ga-lkp@intel.com>
-References: <20240801160610.101859-2-mstrodl@csh.rit.edu>
+	s=arc-20240116; t=1722764813; c=relaxed/simple;
+	bh=//8G5EIhsC0O0eDZcjhiFj0oSMs7e/z7zOCOTUH9P0M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dIdcrFHkK8hRgQSRyWL1TOyiXFVtCt8Rqru2JoaSY2Lv7cmow3LFyRa7ug6ChTuv8TV4pODbnryDVTDGoJPiGS/qilKjpiWWhlVOuiz8m65ioRsAIrfOKduNGQ1i6KLZIVgr7J17nYw6/jn2vTXav6Utvts9D4uvxL/MFQrZ6+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JyxRWToS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E18FC32786;
+	Sun,  4 Aug 2024 09:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722764813;
+	bh=//8G5EIhsC0O0eDZcjhiFj0oSMs7e/z7zOCOTUH9P0M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JyxRWToSGA0etAHECo+5/FjTAWDJ1RCo+T/oY/c5XbSXZv+HQ0cqVtddrimrCzlOp
+	 3pktxUmczPvxOdnfwvOh/pALketyR80NewjEgKLdh84gF0Nj8fFTGvYwZrYi7nDha0
+	 NIjQcBZe5FchImO5Y469GJAQaQjNNJ5ysyGtcF1KBmQcTqWrfqlny8nGZTIETd1x/M
+	 DAyvsM7m/wKnaeSOGAXqrsQ/No1pDUFeETK3yuoVHq6ve9nNOSii03O/WyuKmu1sEc
+	 ycGfWiQgtrxJkiP6MqHC/9PscTFzTqktCLHSrYECdFoCxzwxrcJc8i/T7pRxW5b8qG
+	 Q3zYZJFp9LlhA==
+Message-ID: <b9bb2424-c845-49d5-ac77-3fafa7918fb9@kernel.org>
+Date: Sun, 4 Aug 2024 11:46:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240801160610.101859-2-mstrodl@csh.rit.edu>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/10] dt-bindings: arm: rockchip: Add ArmSoM Sige 5
+To: Detlev Casanova <detlev.casanova@collabora.com>,
+ linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Chris Morgan <macromorgan@hotmail.com>, Jonas Karlman <jonas@kwiboo.se>,
+ Tim Lunn <tim@feathertop.org>, Muhammed Efe Cetin <efectn@protonmail.com>,
+ Andy Yan <andyshrk@163.com>, Jagan Teki <jagan@edgeble.ai>,
+ Dragan Simic <dsimic@manjaro.org>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Shresth Prasad <shresthprasad7@gmail.com>, Ondrej Jirman <megi@xff.cz>,
+ Weizhao Ouyang <weizhao.ouyang@arm.com>, Alexey Charkov <alchark@gmail.com>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Finley Xiao <finley.xiao@rock-chips.com>,
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+ Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
+References: <20240802214612.434179-1-detlev.casanova@collabora.com>
+ <20240802214612.434179-2-detlev.casanova@collabora.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <20240802214612.434179-2-detlev.casanova@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Mary,
+On 02/08/2024 23:45, Detlev Casanova wrote:
+> Add devicetree binding for the ArmSoM Sige 5 board.
+> 
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
 
-kernel test robot noticed the following build warnings:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on lee-mfd/for-mfd-fixes andi-shyti/i2c/i2c-host akpm-mm/mm-everything linus/master v6.11-rc1 next-20240802]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Best regards,
+Krzysztof
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mary-Strodl/x86-Add-basic-support-for-the-Congatec-CGEB-BIOS-interface/20240803-013725
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20240801160610.101859-2-mstrodl%40csh.rit.edu
-patch subject: [PATCH v2 1/2] x86: Add basic support for the Congatec CGEB BIOS interface
-config: x86_64-randconfig-121-20240804 (https://download.01.org/0day-ci/archive/20240804/202408040629.HQM8a5ga-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240804/202408040629.HQM8a5ga-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408040629.HQM8a5ga-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/mfd/congatec-cgeb.c:407:43: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got void *data @@
-   drivers/mfd/congatec-cgeb.c:407:43: sparse:     expected void [noderef] __user *to
-   drivers/mfd/congatec-cgeb.c:407:43: sparse:     got void *data
->> drivers/mfd/congatec-cgeb.c:436:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *code @@     got void *[addressable] data @@
-   drivers/mfd/congatec-cgeb.c:436:21: sparse:     expected void [noderef] __user *code
-   drivers/mfd/congatec-cgeb.c:436:21: sparse:     got void *[addressable] data
-   drivers/mfd/congatec-cgeb.c:527:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got void *data @@
-   drivers/mfd/congatec-cgeb.c:527:38: sparse:     expected void [noderef] __user *to
-   drivers/mfd/congatec-cgeb.c:527:38: sparse:     got void *data
->> drivers/mfd/congatec-cgeb.c:535:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user * @@     got void *data @@
-   drivers/mfd/congatec-cgeb.c:535:21: sparse:     expected void [noderef] __user *
-   drivers/mfd/congatec-cgeb.c:535:21: sparse:     got void *data
->> drivers/mfd/congatec-cgeb.c:564:25: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __user * @@     got void *[addressable] data @@
-   drivers/mfd/congatec-cgeb.c:564:25: sparse:     expected void [noderef] __user *
-   drivers/mfd/congatec-cgeb.c:564:25: sparse:     got void *[addressable] data
->> drivers/mfd/congatec-cgeb.c:572:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[assigned] data @@     got void [noderef] __user *memory @@
-   drivers/mfd/congatec-cgeb.c:572:23: sparse:     expected void *[assigned] data
-   drivers/mfd/congatec-cgeb.c:572:23: sparse:     got void [noderef] __user *memory
->> drivers/mfd/congatec-cgeb.c:612:49: sparse: sparse: Using plain integer as NULL pointer
->> drivers/mfd/congatec-cgeb.c:651:35: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *optr_user @@     got void *[addressable] optr @@
-   drivers/mfd/congatec-cgeb.c:651:35: sparse:     expected void [noderef] __user *optr_user
-   drivers/mfd/congatec-cgeb.c:651:35: sparse:     got void *[addressable] optr
->> drivers/mfd/congatec-cgeb.c:786:39: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[assigned] data @@     got void [noderef] __user *off @@
-   drivers/mfd/congatec-cgeb.c:786:39: sparse:     expected void *[assigned] data
-   drivers/mfd/congatec-cgeb.c:786:39: sparse:     got void [noderef] __user *off
-   drivers/mfd/congatec-cgeb.c:788:42: sparse: sparse: Using plain integer as NULL pointer
->> drivers/mfd/congatec-cgeb.c:863:40: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *off @@     got void *[addressable] virt @@
-   drivers/mfd/congatec-cgeb.c:863:40: sparse:     expected void [noderef] __user *off
-   drivers/mfd/congatec-cgeb.c:863:40: sparse:     got void *[addressable] virt
-   drivers/mfd/congatec-cgeb.c:865:42: sparse: sparse: Using plain integer as NULL pointer
->> drivers/mfd/congatec-cgeb.c:884:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[assigned] data @@     got void [noderef] __user *ptr @@
-   drivers/mfd/congatec-cgeb.c:884:23: sparse:     expected void *[assigned] data
-   drivers/mfd/congatec-cgeb.c:884:23: sparse:     got void [noderef] __user *ptr
->> drivers/mfd/congatec-cgeb.c:911:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *_mem @@     got void [noderef] __iomem *[assigned] pcur @@
-   drivers/mfd/congatec-cgeb.c:911:36: sparse:     expected void *_mem
-   drivers/mfd/congatec-cgeb.c:911:36: sparse:     got void [noderef] __iomem *[assigned] pcur
->> drivers/mfd/congatec-cgeb.c:938:37: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *_mem @@     got void [noderef] __iomem *[assigned] high_desc_virt @@
-   drivers/mfd/congatec-cgeb.c:938:37: sparse:     expected void *_mem
-   drivers/mfd/congatec-cgeb.c:938:37: sparse:     got void [noderef] __iomem *[assigned] high_desc_virt
-
-vim +407 drivers/mfd/congatec-cgeb.c
-
-   401	
-   402	static int cgeb_copy_to_user(struct cgeb_msg *resp, void *user)
-   403	{
-   404		struct cgeb_high_desc *high_desc;
-   405		unsigned long uncopied;
-   406		high_desc = user;
- > 407		uncopied = copy_to_user(resp->code.data, high_desc,
-   408					high_desc->code_size);
-   409		if (uncopied) {
-   410			pr_err("CGEB: Couldn't copy code into userspace! %ld\n",
-   411			       uncopied);
-   412			return -ENOMEM;
-   413		}
-   414		return 0;
-   415	}
-   416	
-   417	static int cgeb_upload_code(struct cgeb_high_desc *high_desc,
-   418				    struct cgeb_board_data *board)
-   419	{
-   420		struct cgeb_msg req = {0}, resp;
-   421		size_t len = high_desc->code_size;
-   422		int ret = 0;
-   423	
-   424		req.type = CGEB_MSG_ALLOC_CODE;
-   425		req.code.length = len;
-   426		pr_debug("CGEB: Allocating memory for code\n");
-   427		ret = cgeb_request(req, &resp, cgeb_copy_to_user, high_desc);
-   428		if (ret)
-   429			goto out;
-   430		if (resp.type != CGEB_MSG_CODE) {
-   431			pr_err("CGEB: Bad response type for alloc: %d\n", resp.type);
-   432			ret = -EINVAL;
-   433			goto out;
-   434		}
-   435	
- > 436		board->code = resp.code.data;
-   437		board->code_size = len;
-   438	
-   439		req.type = CGEB_MSG_CODE;
-   440		req.code.data = resp.code.data;
-   441		req.code.entry_rel = high_desc->entry_rel;
-   442		req.code.length = len;
-   443	
-   444		pr_debug("CGEB: Uploading code\n");
-   445		ret = cgeb_request(req, &resp, NULL, NULL);
-   446	
-   447		if (ret)
-   448			goto out;
-   449	
-   450		/* Do stuff with response */
-   451		if (resp.type != CGEB_MSG_ACK) {
-   452			pr_err("CGEB: Failed to upload code! Got non-ack response!\n");
-   453			ret = -EINVAL;
-   454		}
-   455	
-   456	out:
-   457		return ret;
-   458	}
-   459	
-   460	static unsigned short get_data_segment(void)
-   461	{
-   462		unsigned short ret;
-   463	
-   464	#ifdef CONFIG_X86_64
-   465		ret = 0;
-   466	#else
-   467		asm volatile("mov %%ds, %0\n"
-   468				  : "=r"(ret)
-   469				  :
-   470				  : "memory"
-   471		);
-   472	#endif
-   473	
-   474		return ret;
-   475	}
-   476	
-   477	static int cgeb_after_call(struct cgeb_msg *resp, void *user)
-   478	{
-   479		int ret = 0;
-   480		int alloc_size;
-   481		struct cgeb_call_user *data = user;
-   482		if (!resp->fps.fps.optr)
-   483			return ret;
-   484	
-   485		switch(resp->fps.fps.status) {
-   486		case CGEB_NEXT:
-   487		case CGEB_NOIRQS:
-   488		case CGEB_DELAY:
-   489		case CGEB_DBG_HEX:
-   490		case CGEB_DBG_DEC:
-   491			/* These lead to continuations, we don't need their memory */
-   492			return ret;
-   493	
-   494		/* Everything else we could need */
-   495		case CGEB_DBG_STR:
-   496			data->size = alloc_size = strnlen_user(resp->fps.fps.optr, 1023);
-   497			if (alloc_size > 1023) {
-   498				data->size = 1023;
-   499				alloc_size = data->size + 1;
-   500			}
-   501			/* Special case, because these come from program memory */
-   502			data->optr = kzalloc(alloc_size, GFP_KERNEL);
-   503			if (!data->optr)
-   504				return -ENOMEM;
-   505		}
-   506	
-   507		ret = copy_from_user(data->optr, resp->fps.fps.optr, data->size);
-   508	
-   509		if (ret) {
-   510			pr_err("CGEB: Couldn't copy optr out of userspace! %d\n", ret);
-   511			ret = -ENOMEM;
-   512		}
-   513	
-   514		if (resp->fps.fps.status == CGEB_SUCCESS && data->callback) {
-   515			data->callback(resp->fps.fps.optr, data->optr,
-   516				       data->callback_data);
-   517		}
-   518	
-   519		return ret;
-   520	}
-   521	
-   522	static int cgeb_after_alloc(struct cgeb_msg *resp, void *user)
-   523	{
-   524		int ret;
-   525		struct cgeb_after_alloc_data *data = user;
-   526	
- > 527		ret = copy_to_user(resp->code.data, data->kernel, data->length);
-   528	
-   529		if (ret) {
-   530			pr_err("CGEB: Couldn't copy iptr into userspace! %d\n", ret);
-   531	
-   532			ret = -ENOMEM;
-   533		}
-   534	
- > 535		*data->user = resp->code.data;
-   536	
-   537		return ret;
-   538	}
-   539	
-   540	static int cgeb_get_user_ptr(void *kernel, void __user **user, size_t length)
-   541	{
-   542		struct cgeb_msg req = {0}, resp;
-   543		struct cgeb_after_alloc_data data;
-   544	
-   545		data.kernel = kernel;
-   546		data.user = user;
-   547		data.length = length;
-   548	
-   549		req.type = CGEB_MSG_ALLOC;
-   550		req.code.length = length;
-   551		return cgeb_request(req, &resp, cgeb_after_alloc, &data);
-   552	}
-   553	
-   554	static void __user *cgeb_user_alloc(size_t length)
-   555	{
-   556		int ret;
-   557		struct cgeb_msg req = {0}, resp;
-   558		req.type = CGEB_MSG_ALLOC;
-   559		req.code.length = length;
-   560		ret = cgeb_request(req, &resp, NULL, NULL);
-   561		if (ret)
-   562			return NULL;
-   563	
- > 564		return resp.code.data;
-   565	}
-   566	
-   567	static int cgeb_user_free(void __user *memory)
-   568	{
-   569		struct cgeb_msg req = {0}, resp;
-   570	
-   571		req.type = CGEB_MSG_FREE;
- > 572		req.code.data = memory;
-   573		return cgeb_request(req, &resp, NULL, NULL);
-   574	}
-   575	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
