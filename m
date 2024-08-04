@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-5126-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5127-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B2CA946DF4
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 11:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E5F1946DF9
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 11:47:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF4E1B20DB9
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 09:47:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98504B2109A
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 09:47:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BDD2135B;
-	Sun,  4 Aug 2024 09:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10146224F2;
+	Sun,  4 Aug 2024 09:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JyxRWToS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MDNZIkbo"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98DFAD2C;
-	Sun,  4 Aug 2024 09:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9606210E4;
+	Sun,  4 Aug 2024 09:47:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722764813; cv=none; b=uzeO/722N/Xid0iMSYVajigwoL/mbtaKNIKrBtYEuJBfXVvIDG/WfAfDJPtzQBk2iF7x7DjUmQahsIDmp72zrbepbwYZ8mlQyKwtidAkTNWf5U/TJDgSldK18QZEXpiXu88LKI3tHPoG5d+gXpsVuXYgir2EaMsmknkfO9p0Ktg=
+	t=1722764840; cv=none; b=gEmb/dhXmYph6NlDtuJfwJTnX/GveavT9Aegjh1/7TlqxcKMC8gWmrP8xlnVdO3cSAE4jh7X6rb9AELvRkWh+FvtoAblyCj1K8OWNTklzXgu0Slgh8xzRHYjfRLM4ctBk65ZTtuWxe+oAgc3fFGv7FAr7NUKxNRQzCdkIWlvVe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722764813; c=relaxed/simple;
-	bh=//8G5EIhsC0O0eDZcjhiFj0oSMs7e/z7zOCOTUH9P0M=;
+	s=arc-20240116; t=1722764840; c=relaxed/simple;
+	bh=vWPW1/XmXJ5XBAVJM3CJkX8yDHIWMCym7v6IFeWGOhA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dIdcrFHkK8hRgQSRyWL1TOyiXFVtCt8Rqru2JoaSY2Lv7cmow3LFyRa7ug6ChTuv8TV4pODbnryDVTDGoJPiGS/qilKjpiWWhlVOuiz8m65ioRsAIrfOKduNGQ1i6KLZIVgr7J17nYw6/jn2vTXav6Utvts9D4uvxL/MFQrZ6+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JyxRWToS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E18FC32786;
-	Sun,  4 Aug 2024 09:46:43 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ENAFDjpF2RHA4gsqCCAId/5Ex6CdQetCDMcAlcTIwCrnohaz2IW0MUe0cBpBtIVQPSdRE/ER8UF/tbMpnX8p8V+g7toludn0R0Uxh3ChtaEWhXtQcxkzTqVxd/KrHS7wDJoJwseKv5u/0kRspONQ5aMsa7VyShG7A7AF+EvBu2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MDNZIkbo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A659C32786;
+	Sun,  4 Aug 2024 09:47:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722764813;
-	bh=//8G5EIhsC0O0eDZcjhiFj0oSMs7e/z7zOCOTUH9P0M=;
+	s=k20201202; t=1722764840;
+	bh=vWPW1/XmXJ5XBAVJM3CJkX8yDHIWMCym7v6IFeWGOhA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JyxRWToSGA0etAHECo+5/FjTAWDJ1RCo+T/oY/c5XbSXZv+HQ0cqVtddrimrCzlOp
-	 3pktxUmczPvxOdnfwvOh/pALketyR80NewjEgKLdh84gF0Nj8fFTGvYwZrYi7nDha0
-	 NIjQcBZe5FchImO5Y469GJAQaQjNNJ5ysyGtcF1KBmQcTqWrfqlny8nGZTIETd1x/M
-	 DAyvsM7m/wKnaeSOGAXqrsQ/No1pDUFeETK3yuoVHq6ve9nNOSii03O/WyuKmu1sEc
-	 ycGfWiQgtrxJkiP6MqHC/9PscTFzTqktCLHSrYECdFoCxzwxrcJc8i/T7pRxW5b8qG
-	 Q3zYZJFp9LlhA==
-Message-ID: <b9bb2424-c845-49d5-ac77-3fafa7918fb9@kernel.org>
-Date: Sun, 4 Aug 2024 11:46:41 +0200
+	b=MDNZIkbo2WbTmQ07bTb0UaT6kqh2okp3LxbBNzKF5nVTTVpwKKrq35sx+qLsvjUP2
+	 cIgbpQfX/NUVlS8wEQXSy5ga0hXNU0PMRLS0Hx26UcK2Kt0W8HABDBdijWD7ZrSj2d
+	 rhiMAeUDgEKDnwdK+/KcYKOYSuXoDjsfsFrHVOA/PLzvGyi4m//mezXq4XVjgk+nqx
+	 oepJkyi5HflrB5XbXHfAQ03SR7VgrXMf4HhGp7+mrNFPHZLG39lguoh5ObF3KN/Xds
+	 5oK0ldEG43tquzTeQxu0GDRSXKWDaNe3diJuLLnpJ64dGzyur8LALP6XgUX4aUSXMh
+	 bNUpg9XNeWlxQ==
+Message-ID: <6b8918dd-30fc-4052-8c2a-86c59b6858da@kernel.org>
+Date: Sun, 4 Aug 2024 11:47:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/10] dt-bindings: arm: rockchip: Add ArmSoM Sige 5
+Subject: Re: [PATCH 02/10] dt-bindings: arm: rockchip: Add rk576 compatible
+ string to pmu.yaml
 To: Detlev Casanova <detlev.casanova@collabora.com>,
  linux-kernel@vger.kernel.org
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -74,7 +75,7 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
  linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
 References: <20240802214612.434179-1-detlev.casanova@collabora.com>
- <20240802214612.434179-2-detlev.casanova@collabora.com>
+ <20240802214612.434179-3-detlev.casanova@collabora.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -120,18 +121,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240802214612.434179-2-detlev.casanova@collabora.com>
+In-Reply-To: <20240802214612.434179-3-detlev.casanova@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/08/2024 23:45, Detlev Casanova wrote:
-> Add devicetree binding for the ArmSoM Sige 5 board.
+> Add the compatible for the pmu mfd on rk3576.
 > 
 > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 > ---
->  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+>  Documentation/devicetree/bindings/arm/rockchip/pmu.yaml | 2 ++
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
