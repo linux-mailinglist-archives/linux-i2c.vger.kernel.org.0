@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-5132-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5133-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F48E946E15
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 11:49:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F3C946E1B
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 11:50:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A98D61F211F8
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 09:49:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C357F28153A
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 09:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D14C022F11;
-	Sun,  4 Aug 2024 09:49:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 715AA2C6B6;
+	Sun,  4 Aug 2024 09:49:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kg5KZSXK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DHcODPDe"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8375B224F2;
-	Sun,  4 Aug 2024 09:49:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCEC224F2;
+	Sun,  4 Aug 2024 09:49:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722764985; cv=none; b=h1ZMjGahUs3CSLUgEMkIBpiQYjq7r1qdOy6JiwJ/PhL8rclhn30CiRA5HPzD42J05acBVmxh0nPAxs0xloklK0q1tgKdU+g/HYBU1o3oWayfO6pdyBSvQMOslFhhHiMVPYOa6iY1zZqB5cjcpV3vjeTRTRyVx8o7ZtZpjz6pm/U=
+	t=1722764994; cv=none; b=AYiZoG0Ckon8IO99l+BHmfuBmczay3XHXd07mcODVxe3+2hCwACd91qhi91bOsHzji5nJWdZiDaHIoYCkI6rRih3jZuUca9xag80+hYW2FqqpMh+MYE0ZaLm6BZ/cgZRoofntEQiMvRmvFjuRiArOig40GVOwmWMYbquh806fCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722764985; c=relaxed/simple;
-	bh=LuUKiK5gZXQKxmR+ksY3vld4jhurn0VdbEHAT7HCnvA=;
+	s=arc-20240116; t=1722764994; c=relaxed/simple;
+	bh=7dT2QPNiuVGuCOfQ2uNPQUgG2Ozu/Xq7tscVaLz9x64=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cgZVpRdHwbi9g501DiuGbfnkF9m+QaG+Mk0NaNrWBSH0uFBLeWLeik3McGVbKt+NOsS9xXQ/4cIHzWFT0GaLjxQRyWSwM30SF2mnBNbGPmXGPwExJfu5yV3jWAgvBJl1UrPqNXChqAoZIiVgugj0hkLeNScLOsaXYctBqg0tFyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kg5KZSXK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9951C32786;
-	Sun,  4 Aug 2024 09:49:34 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=URyKdBTO9YX10+/JOpkE1S6vO2HQzKCI94lyT57MsM2Zva3KHzDqvpJ3pWuJnmp659aPyrzgxPSITl2T5/w/BzbvZ5HUueqO+3UcM5QTiyxsw34fDAt0KySHTcoQA5jTIqPZhqadARh4gKBdcOnNRQBbCTPgGmEhWeuG+ojyq50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHcODPDe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A3B0C4AF0E;
+	Sun,  4 Aug 2024 09:49:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722764985;
-	bh=LuUKiK5gZXQKxmR+ksY3vld4jhurn0VdbEHAT7HCnvA=;
+	s=k20201202; t=1722764994;
+	bh=7dT2QPNiuVGuCOfQ2uNPQUgG2Ozu/Xq7tscVaLz9x64=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Kg5KZSXKEerVXVEJfedXuWI9PSaicS9IyorVScre/k8peP86CuSTV89Y8Ha7SgQus
-	 5ddfPlex7Ab7Sqe63aOIYQNZXzP4EzSDp2NOhI2J8U+3WZAZxs+fOh3jxhJQSDEJxH
-	 mGzQpV9n5ILAz98Uv2tKYcWpEmNJ1Ky271Mq4hMVLckBQYBr89t/j3H+2J8krF8TOk
-	 EX0290X+9ys5aaCYJ49hALIbMj3uai/4CNjC+s+qx/9RCTmjyeDAKBwMhu5vWMUHBi
-	 Jjqq9u8XSmJIUgL3EKRD5AhlmR4FIzpMKBDUxfCeusr2JQwAHad23rkOBY/TmeiPOj
-	 WimdaZco/gb6A==
-Message-ID: <b9dd88c8-0e32-4c3f-8756-205dfa4c294f@kernel.org>
-Date: Sun, 4 Aug 2024 11:49:32 +0200
+	b=DHcODPDepagdmBVBC7scQ+NGYpsAY5a4xHsRcQ8c21sSR18LoWDwGXQpLN1X3M6z3
+	 ots+Ld/E7lIPjnhNtGWWF7RlhJPOdE/LIhKrGQhadtxLhdYibPxeqWV9kdOYbaSTy/
+	 OSTxOhcMPmhj/CsUo1VMBsxhwASpD40KugbihlYTDEZwq6V42QW8sJUgMHoz+vY8W1
+	 A5TUDxshZRuv7KW1S4oOWu1vO7gCeT/SUpkef7Oj380XZKTnLbvsie82Yp97QI0XDG
+	 kGgSw3Kol71azPtBii3BHRW0j5lXf239sQssixb0ZzqnKcVoHOGx83O76brwd3fSgt
+	 joiEdn2qfeBCQ==
+Message-ID: <bae0d0a1-5caf-459d-be6d-ed4279a052f3@kernel.org>
+Date: Sun, 4 Aug 2024 11:49:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/10] dt-bindings: soc: rockchip: Add rk3576 syscon
- compatibles
+Subject: Re: [PATCH 08/10] dt-bindings: timer: rockchip: Add rk3576 compatible
 To: Detlev Casanova <detlev.casanova@collabora.com>,
  linux-kernel@vger.kernel.org
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -75,7 +74,7 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
  linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
 References: <20240802214612.434179-1-detlev.casanova@collabora.com>
- <20240802214612.434179-8-detlev.casanova@collabora.com>
+ <20240802214612.434179-9-detlev.casanova@collabora.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -121,41 +120,15 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240802214612.434179-8-detlev.casanova@collabora.com>
+In-Reply-To: <20240802214612.434179-9-detlev.casanova@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/08/2024 23:45, Detlev Casanova wrote:
-> Add all syscon compatibles for RK3576.
+> Add compatible string for Rockchip RK3576 timer.
 > 
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> ---
->  .../devicetree/bindings/soc/rockchip/grf.yaml    | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-> index 78c6d5b64138f..4570fa6e67d61 100644
-> --- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-> +++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-> @@ -20,6 +20,20 @@ properties:
->                - rockchip,rk3568-pipe-grf
->                - rockchip,rk3568-pipe-phy-grf
->                - rockchip,rk3568-usb2phy-grf
-> +              - rockchip,rk3576-bigcore-grf
-> +              - rockchip,rk3576-cci-grf
-> +              - rockchip,rk3576-litcore-grf
-> +              - rockchip,rk3576-gpu-grf
 
-List is most likely ordered alphabetically, so g goes before l.
-
-> +              - rockchip,rk3576-npu-grf
-> +              - rockchip,rk3576-pmu1-grf
-> +              - rockchip,rk3576-php-grf
-> +              - rockchip,rk3576-pipe-phy-grf
-
-Here as well
-
-
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
