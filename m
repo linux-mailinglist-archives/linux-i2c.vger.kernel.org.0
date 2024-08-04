@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-5129-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5130-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 253C2946E03
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 11:48:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6236946E0B
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 11:48:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCF191F2171D
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 09:48:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D8D1B20DB8
+	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 09:48:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE97224FA;
-	Sun,  4 Aug 2024 09:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5098C225D9;
+	Sun,  4 Aug 2024 09:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WSr1vgxc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AS5ts1nX"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D18225AF;
-	Sun,  4 Aug 2024 09:47:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CB7224D4;
+	Sun,  4 Aug 2024 09:48:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722764876; cv=none; b=BtExmBKZReKgVkpHddMUlJTaakly82dchThzbpXZ35KDVUKXbvMIvSs1Vb2Xem3A9CzRitKL32cjFrNTiqAFnuvaXd8BclvNn+4T8+roynjTHdp1MnOew8VRwmQN7/JGZKC6NZMFMTEZFQWu2+7FZQLrhVJSslHLa8b+nZB7ifI=
+	t=1722764920; cv=none; b=N/BHzaiOSa+T+E0K0Oboo1Q/o62lhoiTDFJnv15WYa5W1Wz/UJJIiC+2XDnbMSAyj7Xd89fjnz0Or9HFI3UNic2HZKsn8FvqYrN/2oPuK240YhfMmbySrrjovpddluQdywftTLFTt0uLHnSfythUs1M+dFnXk5cPgBInIvEnM44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722764876; c=relaxed/simple;
-	bh=GqnftHx9W+a0dEby3EpNu34A0OqaIGFyINW72zaEdnc=;
+	s=arc-20240116; t=1722764920; c=relaxed/simple;
+	bh=SaK4XvoclEBkrnrsgQAptzUeCU5PqYnX0IcNKYyo+Kg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e5uNE9OPnZ2vQpL6KJ+skGGC1rjgkeCHkQvy9Zja9ajBCCVeAX02l8b7p9+BrIaPAPqN9GKiYwCWb+zX+lnZ81vdkgseWxP/6E2qcfnV8q+ljppdSTUJBzhBZ8BkEkS0Xmtzn7IsW8bnHTOt6s7qXk7fu6PEdHxeLKXoGRXKqYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WSr1vgxc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66A6FC32786;
-	Sun,  4 Aug 2024 09:47:47 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=IK6ViRBGC54embcPh6VyZ1x/j35M5ufIU2inwqPEZ5RWSiuMVy2Zl0+uVRrqZdGXrz6UMGpPqPtdt6QlkMA5NYXmF+IgSRJY5lasMEscbn78s11AFJPPLQAxGF2bRMBby7Qjff/bFwx3jNHNro0hjlmpOxhJCAxdgXJ5h4PVzYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AS5ts1nX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F87C32786;
+	Sun,  4 Aug 2024 09:48:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722764876;
-	bh=GqnftHx9W+a0dEby3EpNu34A0OqaIGFyINW72zaEdnc=;
+	s=k20201202; t=1722764919;
+	bh=SaK4XvoclEBkrnrsgQAptzUeCU5PqYnX0IcNKYyo+Kg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WSr1vgxcu9oeFQoOYolujvESI7BgFUSohsqDvY9+/R7b6Iwb07evrRF4c/fBBvLkc
-	 3OF+W+PR2Ly1jUTl+cr/KTps+E0M4Id2/1T++l37aeLZvPNV2fl0Y7D0oNBtOEQ9EX
-	 6Bx1NUlxSkVVhQm9ngAKpunmaOQUT36ACHNI2TDsG/qDeG3l+7XNJma9WPSvlGJVwx
-	 /ZC0U1qqieiLMyQ9Rt5kn2/FhEKK3+v8iV9Xz4m+gYc6gtMM2FNKNcyu6jnn3GurV9
-	 Yjut2VTZ2ivTq8aWva8PeddQwxfuuDW9wdWTalLphs09fSblPBdm+1BegCyX14W4QW
-	 qxlmyWmSazwPg==
-Message-ID: <66118cb8-595a-4149-84c9-0105a2949151@kernel.org>
-Date: Sun, 4 Aug 2024 11:47:44 +0200
+	b=AS5ts1nXYnjY3YGK6ok+IB1KPymFdJyyhiGDz7KlUY6dHBMLU4EMBy5m8YPozyGRU
+	 y2l/oUMmlzMv6a2xl4bac3qJCnmnW64Mgb8Rsov421eo+3La3gc8qEO9zlWDsbwLEa
+	 w2C9d4g4vwz3yK3u1rDC+hSfkfCX/DFiQ2Ndl76OxGigLg9Z+t+K0JEySwscfgzpKX
+	 HteJ54iGljrYVBVw1qfzjiYv8qJ9twdG4tyTRzcA7HQGrqH+F3jlBi7ECETlM3QhGj
+	 ik3f+v/+Qf9rFHry7y1EAqbhtj77vvZM7BEf6TJS2N9z0hInCoTRRSrRHvlVH8bADe
+	 Fg7k86LurySZg==
+Message-ID: <70f44083-cbeb-40b9-9efd-c54e967f680d@kernel.org>
+Date: Sun, 4 Aug 2024 11:48:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/10] dt-bindings: iio: adc: Add rockchip,rk3576-saradc
- string
+Subject: Re: [PATCH 05/10] dt-bindings: mfd: syscon: Add rk3576 QoS register
+ compatible
 To: Detlev Casanova <detlev.casanova@collabora.com>,
  linux-kernel@vger.kernel.org
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -75,7 +75,7 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
  linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
 References: <20240802214612.434179-1-detlev.casanova@collabora.com>
- <20240802214612.434179-5-detlev.casanova@collabora.com>
+ <20240802214612.434179-6-detlev.casanova@collabora.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -121,15 +121,14 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240802214612.434179-5-detlev.casanova@collabora.com>
+In-Reply-To: <20240802214612.434179-6-detlev.casanova@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/08/2024 23:45, Detlev Casanova wrote:
-> Add rockchip,rk3576-saradc compatible string.
-> The saradc on RK3576 is compatible with the one on RK3588, so they are
-> used together in an arm of the oneOf.
+> Document rk3576 compatible for QoS registers.
 > 
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
