@@ -1,132 +1,166 @@
-Return-Path: <linux-i2c+bounces-5146-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5147-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 416E6947CCC
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 16:28:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B318947D7A
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 17:01:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F408D2839E1
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 14:28:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1205F1F21DEE
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 15:01:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ABFD13A265;
-	Mon,  5 Aug 2024 14:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A914156F4A;
+	Mon,  5 Aug 2024 15:00:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SRXW1Yi5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUNOAheP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71E73EA64
-	for <linux-i2c@vger.kernel.org>; Mon,  5 Aug 2024 14:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EDA15532E;
+	Mon,  5 Aug 2024 15:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722868079; cv=none; b=hKuQJibBxhdrzmc4E8lGgoajF2f7ev2NMjhkaGUK/ysTWZ3OSXkM1lusaOUZYKvCWMrnOQBbQLn+ylgJdpk+KPeqi1jBmhiCKhWF0YBKHDtvb+6OLA0Zp51m+jxvmJiXHo5Zez42OfJ3Yclk3MjFCIYT2LNRKA+W4oi+WXBCNCg=
+	t=1722870016; cv=none; b=I7Aw2V2ShFFcMERYANRRkMaZn4CRzCZ7DZz6cQRyS5wHAHouBTooejplonI4NRD6PAuZfcV0pAeimX3+6ciG5eUC5j/+F8s3OM5oDZ1G15DJCaEYZjd91aRod80pjoeKySJbmPMr0FmXObx8Ky9xfUKfluYcDXD6KP/+eW2XOLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722868079; c=relaxed/simple;
-	bh=Np+C3lxz197BmSoqsfL05N/qqEzjCzQ/vCNwiBo0NYw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=klASBh9IWRCW+d17pjO4HpahgNtBz0R8ZNsRD5Dt8h1OIg39A0XUljgpP9elsixPucQY9Wt84nLmVWjhEEAriGO6A4c+gvBn8FQfYpd0aOD+BOH8gHpdiiwJI6WBEqlZ56ig3cB0FJR/OSW1UEbYPHsqT/IcBVSXivWkgljJALM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SRXW1Yi5; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722868078; x=1754404078;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Np+C3lxz197BmSoqsfL05N/qqEzjCzQ/vCNwiBo0NYw=;
-  b=SRXW1Yi5bguqU3WJphbjQwsUZVBa+FDUYZmzOqKDU1aKrFBpZXL9rZ48
-   KpcQvSnhuhsaIdzlBtl5b2glmxAhfymP76jET/40l/YZnO5WU1qkwA6LV
-   hGsA2X2JZpJZy7nEkxvy1omORvWl4HqlnZUwsEk7NJzoxC8SEqj7teWLQ
-   IeHEd/9fc5zrmM49le4MIZjzWFgLFky25LW5N3+k4ZHiSuDRCaAIAXwAj
-   EDiI/AWfePpesXbNRTZQp1LmqrQ9/4JKSwzlMOYMqq3OcKXUZ5xbkT2OL
-   H3wyqYD6RqWwfVS5g3+3Eo/GGvATMg7h9AYg6EOwixOFSzKblJpDYnSI4
-   Q==;
-X-CSE-ConnectionGUID: N6eg+4jJRbm9pC53wkqDeg==
-X-CSE-MsgGUID: bQUyJQtOTbatesU79zTivA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11155"; a="38340313"
-X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
-   d="scan'208";a="38340313"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2024 07:27:52 -0700
-X-CSE-ConnectionGUID: c36d7OoGRE21knju8BwPTw==
-X-CSE-MsgGUID: SSWPj4Y/SQ+u/sdLuWQGOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
-   d="scan'208";a="56123640"
-Received: from unknown (HELO [10.237.72.57]) ([10.237.72.57])
-  by fmviesa008.fm.intel.com with ESMTP; 05 Aug 2024 07:27:31 -0700
-Message-ID: <59353915-2360-42e7-b38d-ca64d59f5b45@linux.intel.com>
-Date: Mon, 5 Aug 2024 17:27:30 +0300
+	s=arc-20240116; t=1722870016; c=relaxed/simple;
+	bh=jIaq6vsuhkY+v59gy2RIN65uUrzZIQmOWCABGta2eFA=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=ucChEA2FvUJ89HSq8vF1VkyB/Aoe5fkDoIKniElwO6XTZ+2ZthC3L8StHmi2ZNcpxa0I/Jwt+EU6UOpCd1mZ+oroHacV0yT3qOB8hh1f0cIgHveMRIXcym7aUX3aoT0IFeYSmHYMZndV+RPCQlgEsoVKMGm/71hAsEvNdv/903c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUNOAheP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510FBC4AF1B;
+	Mon,  5 Aug 2024 15:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722870015;
+	bh=jIaq6vsuhkY+v59gy2RIN65uUrzZIQmOWCABGta2eFA=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=aUNOAhePbdYRdnQ4NLgBWizO6a2ufDlEftJTpPcnoXscyuQVgQ1SgiTStmZk64xfF
+	 knuG0ypn8Yq6ZrBAA+typSGh76Mx6BryZLQrhkVTqlCwOjXqLGVc+mFSytCRKx1Stb
+	 Y2edYu22uNU3rbJ3dschCb+Qcu3VWLp6spk/S53ER/y9mEk8q6Cc8E+5r53kvMZss3
+	 Kb7+uZSuGJzsZhK3icLmDg6gkWMZJVUScy4nyYXmpL8toq86aVoSRc4jNBfoAQLwwh
+	 9kuup35jodzPQrbI2h3JvLChLYj14yirHAyjyNtvx4n8BgRo2DjUtfjMn8K/vUtvhF
+	 LoqdP6PrIuj9Q==
+Date: Mon, 05 Aug 2024 09:00:14 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] i2c: designware: Fix wrong setting for
- {ss,fs,hs}_{h,l}cnt registers
-To: Adrian Huang <adrianhuang0701@gmail.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
- Adrian Huang <ahuang12@lenovo.com>, Dong Wang <wangdong28@lenovo.com>
-References: <20240802130143.26908-1-ahuang12@lenovo.com>
-Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20240802130143.26908-1-ahuang12@lenovo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Detlev Casanova <detlev.casanova@collabora.com>
+Cc: Elaine Zhang <zhangqing@rock-chips.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Ondrej Jirman <megi@xff.cz>, 
+ Chris Morgan <macromorgan@hotmail.com>, Lee Jones <lee@kernel.org>, 
+ Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, Conor Dooley <conor+dt@kernel.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+ Jagan Teki <jagan@edgeble.ai>, linux-iio@vger.kernel.org, 
+ Liang Chen <cl@rock-chips.com>, Thomas Gleixner <tglx@linutronix.de>, 
+ linux-serial@vger.kernel.org, Finley Xiao <finley.xiao@rock-chips.com>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Jimmy Hon <honyuenkwun@gmail.com>, devicetree@vger.kernel.org, 
+ Muhammed Efe Cetin <efectn@protonmail.com>, 
+ Shresth Prasad <shresthprasad7@gmail.com>, 
+ Weizhao Ouyang <weizhao.ouyang@arm.com>, Alexey Charkov <alchark@gmail.com>, 
+ Tim Lunn <tim@feathertop.org>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ linux-rockchip@lists.infradead.org, kernel@collabora.com, 
+ Lars-Peter Clausen <lars@metafoo.de>, linux-kernel@vger.kernel.org, 
+ Jonas Karlman <jonas@kwiboo.se>, Dragan Simic <dsimic@manjaro.org>, 
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>, 
+ Jonathan Cameron <jic23@kernel.org>, Andy Yan <andyshrk@163.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+In-Reply-To: <20240802214612.434179-1-detlev.casanova@collabora.com>
+References: <20240802214612.434179-1-detlev.casanova@collabora.com>
+Message-Id: <172286966767.2709106.17051987571770592906.robh@kernel.org>
+Subject: Re: [PATCH 00/10] Add device tree for ArmSoM Sige 5 board
 
-On 8/2/24 4:01 PM, Adrian Huang wrote:
-> From: Adrian Huang <ahuang12@lenovo.com>
+
+On Fri, 02 Aug 2024 17:45:27 -0400, Detlev Casanova wrote:
+> Add the rk3576-armsom-sige5 device tree as well as its rk3576.dtsi base
+> and pinctrl information in rk3576-pinctrl.dtsi.
 > 
-> When disabling CONFIG_X86_AMD_PLATFORM_DEVICE option, the driver
-> 'drivers/acpi/acpi_apd.c' won't be compiled. This leads to a situation
-> where BMC (Baseboard Management Controller) cannot retrieve the memory
-> temperature via the i2c interface after i2c DW driver is loaded. Note
-> that BMC can retrieve the memory temperature before booting into OS.
+> The other commits add DT bindings documentation for the devices that
+> already work with the current corresponding drivers.
 > 
-> [Debugging Detail]
->    1. dev->pclk and dev->clk are NULL when calling devm_clk_get_optional()
->       in dw_i2c_plat_probe().
+> The other bindings and driver implementations are in other patch sets:
+> - PMIC: https://lore.kernel.org/lkml/20240802134736.283851-1-detlev.casanova@collabora.com/
+> - CRU: https://lore.kernel.org/lkml/20240802214053.433493-1-detlev.casanova@collabora.com/
+> - PINCTRL: https://lore.kernel.org/lkml/20240802145458.291890-1-detlev.casanova@collabora.com/
+> - PM DOMAIN: https://lore.kernel.org/lkml/20240802151647.294307-1-detlev.casanova@collabora.com/
+> - DW-MMC: https://lore.kernel.org/lkml/20240802153609.296197-1-detlev.casanova@collabora.com/
+> - GMAC: https://lore.kernel.org/lkml/20240802173918.301668-1-detlev.casanova@collabora.com/
 > 
->    2. The callings of i2c_dw_scl_hcnt() in i2c_dw_set_timings_master()
->       return 65528 (-8 in integer format) or 65533 (-3 in integer format).
->       The following log shows SS's HCNT/LCNT:
+> Detlev Casanova (10):
+>   dt-bindings: arm: rockchip: Add ArmSoM Sige 5
+>   dt-bindings: arm: rockchip: Add rk576 compatible string to pmu.yaml
+>   dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
+>   dt-bindings: iio: adc: Add rockchip,rk3576-saradc string
+>   dt-bindings: mfd: syscon: Add rk3576 QoS register compatible
+>   dt-bindings: serial: snps-dw-apb-uart: Add Rockchip RK3576
+>   dt-bindings: soc: rockchip: Add rk3576 syscon compatibles
+>   dt-bindings: timer: rockchip: Add rk3576 compatible
+>   arm64: dts: rockchip: Add rk3576 SoC base DT
+>   arm64: dts: rockchip: Add rk3576-armsom-sige5 board
 > 
->         i2c_designware AMDI0010:01: Standard Mode HCNT:LCNT = 65533:65535
+>  .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+>  .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
+>  .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
+>  .../bindings/iio/adc/rockchip-saradc.yaml     |    3 +
+>  .../devicetree/bindings/mfd/syscon.yaml       |    2 +
+>  .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
+>  .../devicetree/bindings/soc/rockchip/grf.yaml |   16 +
+>  .../bindings/timer/rockchip,rk-timer.yaml     |    1 +
+>  arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+>  .../boot/dts/rockchip/rk3576-armsom-sige5.dts |  613 ++
+>  .../boot/dts/rockchip/rk3576-pinctrl.dtsi     | 5775 +++++++++++++++++
+>  arch/arm64/boot/dts/rockchip/rk3576.dtsi      | 1635 +++++
+>  12 files changed, 8055 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dts
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-pinctrl.dtsi
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3576.dtsi
 > 
->    3. The callings of i2c_dw_scl_lcnt() in i2c_dw_set_timings_master()
->       return 65535 (-1 in integer format). The following log shows SS's
->       HCNT/LCNT:
+> --
+> 2.46.0
 > 
->         i2c_designware AMDI0010:01: Fast Mode HCNT:LCNT = 65533:65535
 > 
->    4. i2c_dw_init_master() configures the register IC_SS_SCL_HCNT with
->       the value 65533. However, the DW i2c databook mentioned the value
->       cannot be higher than 65525. Quote from the DW i2c databook:
 > 
->         NOTE: This register must not be programmed to a value higher than
->               65525, because DW_apb_i2c uses a 16-bit counter to flag an
->               I2C bus idle condition when this counter reaches a value of
->               IC_SS_SCL_HCNT + 10.
-> 
->    5. Since ss_hcnt, ss_lcnt, fs_hcnt, and fs_lcnt are the invalid
->       values, we should not write the corresponding registers.
-> 
-> Fix the issue by reading dev->{ss,fs,hs}_hcnt and dev->{ss,fs,hs}_lcnt
-> from HW registers if ic_clk is not set.
-> 
-> Link: https://lore.kernel.org/linux-i2c/8295cbe1-a7c5-4a35-a189-5d0bff51ede6@linux.intel.com/
-> Suggested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Signed-off-by: Adrian Huang <ahuang12@lenovo.com>
-> Reported-by: Dong Wang <wangdong28@lenovo.com>
-> Tested-by: Dong Wang <wangdong28@lenovo.com>
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y rockchip/rk3576-armsom-sige5.dtb' for 20240802214612.434179-1-detlev.casanova@collabora.com:
+
+In file included from arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dts:14:
+arch/arm64/boot/dts/rockchip/rk3576.dtsi:6:10: fatal error: dt-bindings/clock/rockchip,rk3576-cru.h: No such file or directory
+    6 | #include <dt-bindings/clock/rockchip,rk3576-cru.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [scripts/Makefile.lib:434: arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb] Error 1
+make[2]: *** [scripts/Makefile.build:485: arch/arm64/boot/dts/rockchip] Error 2
+make[2]: Target 'arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb' not remade because of errors.
+make[1]: *** [/home/rob/proj/linux-dt-testing/Makefile:1389: rockchip/rk3576-armsom-sige5.dtb] Error 2
+make: *** [Makefile:224: __sub-make] Error 2
+make: Target 'rockchip/rk3576-armsom-sige5.dtb' not remade because of errors.
+
+
+
+
+
 
