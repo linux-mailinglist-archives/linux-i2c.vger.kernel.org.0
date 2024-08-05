@@ -1,203 +1,132 @@
-Return-Path: <linux-i2c+bounces-5145-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5146-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2AC1947BFF
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 15:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 416E6947CCC
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 16:28:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A97D1281A1C
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 13:39:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F408D2839E1
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 14:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B0213A1B0;
-	Mon,  5 Aug 2024 13:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ABFD13A265;
+	Mon,  5 Aug 2024 14:27:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fcJ84mj7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SRXW1Yi5"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37D8364AE
-	for <linux-i2c@vger.kernel.org>; Mon,  5 Aug 2024 13:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71E73EA64
+	for <linux-i2c@vger.kernel.org>; Mon,  5 Aug 2024 14:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722865140; cv=none; b=QGLP5n8xx9Gk6KKZRW1xOF3yEeM1Q8t1mCesnstcg5aiqdWWNPOAm1nCT01uZNhy0hiLSqQhBNjFc5rtFAqtqh9/ilXGLeF/tNzFawfkV3YapYdyfYQh8J6Gx9Cju/BCvUXKP+PyTKV4/PNExR3LlWtwmYNgE5nDiCFn1lhwxCk=
+	t=1722868079; cv=none; b=hKuQJibBxhdrzmc4E8lGgoajF2f7ev2NMjhkaGUK/ysTWZ3OSXkM1lusaOUZYKvCWMrnOQBbQLn+ylgJdpk+KPeqi1jBmhiCKhWF0YBKHDtvb+6OLA0Zp51m+jxvmJiXHo5Zez42OfJ3Yclk3MjFCIYT2LNRKA+W4oi+WXBCNCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722865140; c=relaxed/simple;
-	bh=jGR8kBkPPQ7J/+W1K8e2CgUZiCz0N9ydw8bbGIB+Z0Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CUivM6dapCPgqHfAMYYkfNDvIGvMCsvJDI1zLhPStnbWmPVFJ888WSVz7uQCYeb3tyqimPeSqFLOGCyORwVVjRVUMhHuCgHd99h4g5QJH530Bj0HwxMa2t68NhNzFVMAjjq2adi0e9eMwDoDsod5U/yUITffJP72XGOhHHCxmJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fcJ84mj7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722865138;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RIE1Tdqjj+u6sTzRWwSTUv019AwQqHsQmCFM7783DuE=;
-	b=fcJ84mj78ncAyMQhUhy643Osoh8TO6L+Nuv3vtx2hXepCDaAI31V/8I/Na6ht6h4dqmTHE
-	CCAyl/WwgohjkJ8OamepWGwl2B9cI55GStdGnNPYsiuQV1ZkoqY55u/TJqCQLN1/ZVCE/2
-	9Hsc4guWthIDM5yazr5g14FaxhuNGO8=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-208-7x4l2pVVPsmPeGNM8JBTRA-1; Mon,
- 05 Aug 2024 09:38:54 -0400
-X-MC-Unique: 7x4l2pVVPsmPeGNM8JBTRA-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A7EC71955D4E;
-	Mon,  5 Aug 2024 13:38:51 +0000 (UTC)
-Received: from x1.localdomain.com (unknown [10.39.193.139])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 47E7130001A9;
-	Mon,  5 Aug 2024 13:38:40 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Wolfram Sang <wsa@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	eric.piel@tremplin-utc.net,
-	Marius Hoch <mail@mariushoch.de>,
-	Dell.Client.Kernel@dell.com,
-	Kai Heng Feng <kai.heng.feng@canonical.com>,
-	platform-driver-x86@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH v7 6/6] platform/x86: dell-smo8800: Add support for probing for the accelerometer i2c address
-Date: Mon,  5 Aug 2024 15:37:08 +0200
-Message-ID: <20240805133708.160737-7-hdegoede@redhat.com>
-In-Reply-To: <20240805133708.160737-1-hdegoede@redhat.com>
-References: <20240805133708.160737-1-hdegoede@redhat.com>
+	s=arc-20240116; t=1722868079; c=relaxed/simple;
+	bh=Np+C3lxz197BmSoqsfL05N/qqEzjCzQ/vCNwiBo0NYw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=klASBh9IWRCW+d17pjO4HpahgNtBz0R8ZNsRD5Dt8h1OIg39A0XUljgpP9elsixPucQY9Wt84nLmVWjhEEAriGO6A4c+gvBn8FQfYpd0aOD+BOH8gHpdiiwJI6WBEqlZ56ig3cB0FJR/OSW1UEbYPHsqT/IcBVSXivWkgljJALM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SRXW1Yi5; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722868078; x=1754404078;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Np+C3lxz197BmSoqsfL05N/qqEzjCzQ/vCNwiBo0NYw=;
+  b=SRXW1Yi5bguqU3WJphbjQwsUZVBa+FDUYZmzOqKDU1aKrFBpZXL9rZ48
+   KpcQvSnhuhsaIdzlBtl5b2glmxAhfymP76jET/40l/YZnO5WU1qkwA6LV
+   hGsA2X2JZpJZy7nEkxvy1omORvWl4HqlnZUwsEk7NJzoxC8SEqj7teWLQ
+   IeHEd/9fc5zrmM49le4MIZjzWFgLFky25LW5N3+k4ZHiSuDRCaAIAXwAj
+   EDiI/AWfePpesXbNRTZQp1LmqrQ9/4JKSwzlMOYMqq3OcKXUZ5xbkT2OL
+   H3wyqYD6RqWwfVS5g3+3Eo/GGvATMg7h9AYg6EOwixOFSzKblJpDYnSI4
+   Q==;
+X-CSE-ConnectionGUID: N6eg+4jJRbm9pC53wkqDeg==
+X-CSE-MsgGUID: bQUyJQtOTbatesU79zTivA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11155"; a="38340313"
+X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
+   d="scan'208";a="38340313"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2024 07:27:52 -0700
+X-CSE-ConnectionGUID: c36d7OoGRE21knju8BwPTw==
+X-CSE-MsgGUID: SSWPj4Y/SQ+u/sdLuWQGOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
+   d="scan'208";a="56123640"
+Received: from unknown (HELO [10.237.72.57]) ([10.237.72.57])
+  by fmviesa008.fm.intel.com with ESMTP; 05 Aug 2024 07:27:31 -0700
+Message-ID: <59353915-2360-42e7-b38d-ca64d59f5b45@linux.intel.com>
+Date: Mon, 5 Aug 2024 17:27:30 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] i2c: designware: Fix wrong setting for
+ {ss,fs,hs}_{h,l}cnt registers
+To: Adrian Huang <adrianhuang0701@gmail.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Jan Dabros <jsd@semihalf.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+ Adrian Huang <ahuang12@lenovo.com>, Dong Wang <wangdong28@lenovo.com>
+References: <20240802130143.26908-1-ahuang12@lenovo.com>
+Content-Language: en-US
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20240802130143.26908-1-ahuang12@lenovo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Unfortunately the SMOxxxx ACPI device does not contain the i2c-address
-of the accelerometer. So a DMI product-name to address mapping table
-is used.
-
-At support to have the kernel probe for the i2c-address for modesl
-which are not on the list.
-
-The new probing code sits behind a new probe_i2c_addr module parameter,
-which is disabled by default because probing might be dangerous.
-
-Link: https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de/
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in v6:
-- Use i2c_new_scanned_device() instead of re-inventing it
-
-Changes in v5:
-- Add "this may be dangerous warning" to MODULE_PARM_DESC(probe_i2c_addr)
----
- drivers/platform/x86/dell/dell-lis3lv02d.c | 52 ++++++++++++++++++++--
- 1 file changed, 48 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/platform/x86/dell/dell-lis3lv02d.c b/drivers/platform/x86/dell/dell-lis3lv02d.c
-index ab02ad93758a..21390e6302a0 100644
---- a/drivers/platform/x86/dell/dell-lis3lv02d.c
-+++ b/drivers/platform/x86/dell/dell-lis3lv02d.c
-@@ -15,6 +15,8 @@
- #include <linux/workqueue.h>
- #include "dell-smo8800-ids.h"
- 
-+#define LIS3_WHO_AM_I 0x0f
-+
- #define DELL_LIS3LV02D_DMI_ENTRY(product_name, i2c_addr)                 \
- 	{                                                                \
- 		.matches = {                                             \
-@@ -57,6 +59,38 @@ static u8 i2c_addr;
- static struct i2c_client *i2c_dev;
- static bool notifier_registered;
- 
-+static bool probe_i2c_addr;
-+module_param(probe_i2c_addr, bool, 0444);
-+MODULE_PARM_DESC(probe_i2c_addr, "Probe the i801 I2C bus for the accelerometer on models where the address is unknown, this may be dangerous.");
-+
-+static int detect_lis3lv02d(struct i2c_adapter *adap, unsigned short addr)
-+{
-+	union i2c_smbus_data smbus_data;
-+	int err;
-+
-+	pr_info("Probing for lis3lv02d on address 0x%02x\n", addr);
-+
-+	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, LIS3_WHO_AM_I,
-+			     I2C_SMBUS_BYTE_DATA, &smbus_data);
-+	if (err < 0)
-+		return 0; /* Not found */
-+
-+	/* valid who-am-i values are from drivers/misc/lis3lv02d/lis3lv02d.c */
-+	switch (smbus_data.byte) {
-+	case 0x32:
-+	case 0x33:
-+	case 0x3a:
-+	case 0x3b:
-+		break;
-+	default:
-+		pr_warn("Unknown who-am-i register value 0x%02x\n", smbus_data.byte);
-+		return 0; /* Not found */
-+	}
-+
-+	pr_debug("Detected lis3lv02d on address 0x%02x\n", addr);
-+	return 1; /* Found */
-+}
-+
- static bool i2c_adapter_is_main_i801(struct i2c_adapter *adap)
- {
- 	/*
-@@ -93,10 +127,18 @@ static void instantiate_i2c_client(struct work_struct *work)
- 	if (!adap)
- 		return;
- 
--	info.addr = i2c_addr;
- 	strscpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
- 
--	i2c_dev = i2c_new_client_device(adap, &info);
-+	if (i2c_addr) {
-+		info.addr = i2c_addr;
-+		i2c_dev = i2c_new_client_device(adap, &info);
-+	} else {
-+		/* First try address 0x29 (most used) and then try 0x1d */
-+		static const unsigned short addr_list[] = { 0x29, 0x1d, I2C_CLIENT_END };
-+
-+		i2c_dev = i2c_new_scanned_device(adap, &info, addr_list, detect_lis3lv02d);
-+	}
-+
- 	if (IS_ERR(i2c_dev)) {
- 		pr_err("error %ld registering i2c_client\n", PTR_ERR(i2c_dev));
- 		i2c_dev = NULL;
-@@ -167,12 +209,14 @@ static int __init dell_lis3lv02d_init(void)
- 	put_device(dev);
- 
- 	lis3lv02d_dmi_id = dmi_first_match(lis3lv02d_devices);
--	if (!lis3lv02d_dmi_id) {
-+	if (!lis3lv02d_dmi_id && !probe_i2c_addr) {
- 		pr_warn("accelerometer is present on SMBus but its address is unknown, skipping registration\n");
-+		pr_info("Pass dell_lis3lv02d.probe_i2c_addr=1 on the kernel commandline to probe, this may be dangerous!\n");
- 		return 0;
- 	}
- 
--	i2c_addr = (long)lis3lv02d_dmi_id->driver_data;
-+	if (lis3lv02d_dmi_id)
-+		i2c_addr = (long)lis3lv02d_dmi_id->driver_data;
- 
- 	/*
- 	 * Register i2c-bus notifier + queue initial scan for lis3lv02d
--- 
-2.45.2
-
+On 8/2/24 4:01 PM, Adrian Huang wrote:
+> From: Adrian Huang <ahuang12@lenovo.com>
+> 
+> When disabling CONFIG_X86_AMD_PLATFORM_DEVICE option, the driver
+> 'drivers/acpi/acpi_apd.c' won't be compiled. This leads to a situation
+> where BMC (Baseboard Management Controller) cannot retrieve the memory
+> temperature via the i2c interface after i2c DW driver is loaded. Note
+> that BMC can retrieve the memory temperature before booting into OS.
+> 
+> [Debugging Detail]
+>    1. dev->pclk and dev->clk are NULL when calling devm_clk_get_optional()
+>       in dw_i2c_plat_probe().
+> 
+>    2. The callings of i2c_dw_scl_hcnt() in i2c_dw_set_timings_master()
+>       return 65528 (-8 in integer format) or 65533 (-3 in integer format).
+>       The following log shows SS's HCNT/LCNT:
+> 
+>         i2c_designware AMDI0010:01: Standard Mode HCNT:LCNT = 65533:65535
+> 
+>    3. The callings of i2c_dw_scl_lcnt() in i2c_dw_set_timings_master()
+>       return 65535 (-1 in integer format). The following log shows SS's
+>       HCNT/LCNT:
+> 
+>         i2c_designware AMDI0010:01: Fast Mode HCNT:LCNT = 65533:65535
+> 
+>    4. i2c_dw_init_master() configures the register IC_SS_SCL_HCNT with
+>       the value 65533. However, the DW i2c databook mentioned the value
+>       cannot be higher than 65525. Quote from the DW i2c databook:
+> 
+>         NOTE: This register must not be programmed to a value higher than
+>               65525, because DW_apb_i2c uses a 16-bit counter to flag an
+>               I2C bus idle condition when this counter reaches a value of
+>               IC_SS_SCL_HCNT + 10.
+> 
+>    5. Since ss_hcnt, ss_lcnt, fs_hcnt, and fs_lcnt are the invalid
+>       values, we should not write the corresponding registers.
+> 
+> Fix the issue by reading dev->{ss,fs,hs}_hcnt and dev->{ss,fs,hs}_lcnt
+> from HW registers if ic_clk is not set.
+> 
+> Link: https://lore.kernel.org/linux-i2c/8295cbe1-a7c5-4a35-a189-5d0bff51ede6@linux.intel.com/
+> Suggested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Signed-off-by: Adrian Huang <ahuang12@lenovo.com>
+> Reported-by: Dong Wang <wangdong28@lenovo.com>
+> Tested-by: Dong Wang <wangdong28@lenovo.com>
+> 
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
