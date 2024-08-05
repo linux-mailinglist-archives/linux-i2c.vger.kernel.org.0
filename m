@@ -1,129 +1,184 @@
-Return-Path: <linux-i2c+bounces-5137-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5138-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D967D9470A6
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 23:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC1AB947683
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 10:02:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93DC2280F2F
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Aug 2024 21:22:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9604E281A89
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Aug 2024 08:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F377136320;
-	Sun,  4 Aug 2024 21:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50CF149E05;
+	Mon,  5 Aug 2024 08:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qAhuHv13"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="13uQIKv7";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Mvv4jGto";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="13uQIKv7";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Mvv4jGto"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458FE768EC
-	for <linux-i2c@vger.kernel.org>; Sun,  4 Aug 2024 21:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4E25FBBA;
+	Mon,  5 Aug 2024 08:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722806524; cv=none; b=GeOciIgR4yzepSDb8fUwXnJNCGqzrmWY6t2coGiSgMmM//EUNSyGBMLyBzK6fDodj9Zn5wIEA+6mEOGTg2YXw0fmuNTPyNtVZo1Pw6oIoJVjFxapJAX9r5V5wCMCoXQpRbJz45b6XSU06cgmgNiVAmiw0xBwx0ar01RjIHznrbc=
+	t=1722844914; cv=none; b=iy/htWHSHP0k3SxJB5lGOi4iq10Osnj1apdqEWL5VLhudkssDN5+YwLCJwXIy4oE9h4G/YW3BU6Do/10e1OkuRk9nNt7CyFK9ZQucvq3rdiUFJjRJc/80f6LdbstcHxdeF7mYfOfz41VpaSMvUDNa+5GP9vf/lhLHB7YOLaz410=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722806524; c=relaxed/simple;
-	bh=8T0BYdA9Kxi+oVjS9OAReH15eAFcU+2zMrtmp+uLA5U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lRkTBOPm6jOp+Sgh2IgoIuZD+7sigvIVss9ad1jYjVHZ0YFpk1zBL7SDMDiaSt71ABkhcnaNHd3ZFjKR++lD/CwbIQ8hqJNhJFiN4AniX15f1dkE4FjuTtU8zPNv4pkGD1vpbPVtxB83KHZMJia4INtHQmAZpw+5A97x85BD/JE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qAhuHv13; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2ef243cc250so18705741fa.0
-        for <linux-i2c@vger.kernel.org>; Sun, 04 Aug 2024 14:22:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722806520; x=1723411320; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mqnu+yNGhehLSrkuhy5GkzzL6TnfVoi9+bUerYPLnpU=;
-        b=qAhuHv13A1xGhNkRwoNZ2VVcAQtz8ckrjrzy5xSIqCLDUN34jHEYfNeejWZ5me84jq
-         y+intyNFIUbXX5hNJ1dlcnz4QlHAijoIflerWtwyZEJS3bMWPqUXssV3ynWuox6Jl4J+
-         2yZ6BOg2ZZHyplAJgZV0TgsVJAKMeLYBb8nqg49K6yq3/8P/ia6iktCHcd9OAGtJhXdb
-         1W1zEJ0QQtGMUflc+EhyH3+wE4K5CWIcNq4CHmiQbh83ADSVhz/nETxfaSTUSyA7BJ/l
-         8VyRdgXsQ+yo/bj8sH2h2Fn3A/dYXlPYNEVrrdinyULPnTscu2WQ0eRl0iuGoVJlnmu6
-         q0PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722806520; x=1723411320;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mqnu+yNGhehLSrkuhy5GkzzL6TnfVoi9+bUerYPLnpU=;
-        b=df5oE8BJYAf6c6eTZvZlBvFnsfoXpSL5avqTrEc7en/9mMSFwY7VdFMSm8Vh4xatWR
-         MTJHfMoIvEkD/0PeNo0uueBNwbWO+/1A4F+b0dfmXV7pd/3TFMRWzDSsp94vEBdvp+Bi
-         AhJ/STkIBsID10/mxodNEZAXSCFtp69LVPGoaN14b17een+vUvq67RLzt2obYZYz5UaG
-         b+gQnnqauXxCpR39NXvXb0WRf4fXwm/uWqBazvKvJFiAMeDIVUCeU1UjUTUQyEUO7PR1
-         7ODw+hsrMtq3FTioGhgYuHvL9rALs626P3zrlwdL++sPMoECTyrcMrUeDKpFsNYPQNgv
-         IgyA==
-X-Forwarded-Encrypted: i=1; AJvYcCUxr5b0gA6kaPbZtqcPvcCX8qDslR8j98/3Exn5K88Hrls8hSkTQ7kYBytlzLTOSY0mafozYVD0K5pyu2E68nCauEHHwLsn5VX8
-X-Gm-Message-State: AOJu0YxJfkScQ0+ap5+IuCOoZPlZBoW3i6CJJGcxQvc0dc7cP1juxZAT
-	WVya9GHwQeL4GohaF9Rp0/lBs4keJj/adtH2EYeM7Q+n586dUmEzRNbrPm7MJhU=
-X-Google-Smtp-Source: AGHT+IFmcMxMi0C7iCoG5ilO8+VdI9K5JR+E9gBGMc1h7WBJ6E8D38KzACtDsWOqM/stVtF8l3U3Fw==
-X-Received: by 2002:a05:6512:3ca4:b0:52f:c22f:32a4 with SMTP id 2adb3069b0e04-530bb3b52f4mr3588082e87.6.1722806520253;
-        Sun, 04 Aug 2024 14:22:00 -0700 (PDT)
-Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-530bba2a027sm896204e87.131.2024.08.04.14.21.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Aug 2024 14:21:59 -0700 (PDT)
-Message-ID: <a12d2ec6-07b1-4577-8bed-981024c5cc9c@linaro.org>
-Date: Mon, 5 Aug 2024 00:21:53 +0300
+	s=arc-20240116; t=1722844914; c=relaxed/simple;
+	bh=Pg+7SCzJv6OtadhTgZlGWpeTcW5bKG3kPl2otJbqWTE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BEzGj+iiYyrTQTl+tDFrCRwiaRXbpDVQh1aZtu2VskucmGKv8jXQf1c4jH0tpm/w/LUeFCV6h6RthSTQ4lLEIN8fAwu3+m9V8C/g38bmUi1CN2TsITqNtDuYYOSQFmtmZq4Z/IHAGyda978sZZylnNxeY8FvVViiObqOEIX0eMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=13uQIKv7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Mvv4jGto; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=13uQIKv7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Mvv4jGto; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2820921B7A;
+	Mon,  5 Aug 2024 08:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1722844911; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WQBFVLgbh9yJT96vQAG+eO99zw3cCJbZ3algJD+xE/o=;
+	b=13uQIKv7d1dNkvZCmT5gr8jAnXEuMvmdAcaUIIpX/+awQCbkCdV6gMFEXkmMAcA5i3FKcj
+	4+8wyaVyNq5xPVcjfSc2XOH8I8bKha6+bvZq2bqh2yOvnvMan2A8T4si3ka25DRsAC6og4
+	gQiWtachLx88Hrb3IiaFE57qoUU2Txk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1722844911;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WQBFVLgbh9yJT96vQAG+eO99zw3cCJbZ3algJD+xE/o=;
+	b=Mvv4jGtoW+6+fZIl8xR45GIUtSZN01lix1fCLNr+IhWLBItdZFRDF6AkVTqxb9WfmVZvUv
+	rb6MENY80v0uChDQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=13uQIKv7;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Mvv4jGto
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1722844911; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WQBFVLgbh9yJT96vQAG+eO99zw3cCJbZ3algJD+xE/o=;
+	b=13uQIKv7d1dNkvZCmT5gr8jAnXEuMvmdAcaUIIpX/+awQCbkCdV6gMFEXkmMAcA5i3FKcj
+	4+8wyaVyNq5xPVcjfSc2XOH8I8bKha6+bvZq2bqh2yOvnvMan2A8T4si3ka25DRsAC6og4
+	gQiWtachLx88Hrb3IiaFE57qoUU2Txk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1722844911;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WQBFVLgbh9yJT96vQAG+eO99zw3cCJbZ3algJD+xE/o=;
+	b=Mvv4jGtoW+6+fZIl8xR45GIUtSZN01lix1fCLNr+IhWLBItdZFRDF6AkVTqxb9WfmVZvUv
+	rb6MENY80v0uChDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D2D7F13254;
+	Mon,  5 Aug 2024 08:01:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 3BVEMu6GsGZiVAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Mon, 05 Aug 2024 08:01:50 +0000
+Date: Mon, 05 Aug 2024 10:02:29 +0200
+Message-ID: <8734njl7my.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Mark Brown <broonie@kernel.org>,
+    Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Richard Fitzgerald <rf@opensource.cirrus.com>,
+    <tiwai@suse.com>,
+	<wsa+renesas@sang-engineering.com>,
+	<mika.westerberg@linux.intel.com>,
+	<linux-sound@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>,
+	<linux-i2c@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<patches@opensource.cirrus.com>
+Subject: Re: [PATCH v2 0/3] ALSA: Add support for new HP G12 laptops
+In-Reply-To: <20240802152215.20831-1-rf@opensource.cirrus.com>
+References: <20240802152215.20831-1-rf@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next] i2c: qcom-geni: Add missing clk_disable_unprepare
- in geni_i2c_runti
-To: Gaosheng Cui <cuigaosheng1@huawei.com>, andi.shyti@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20240803061041.283940-1-cuigaosheng1@huawei.com>
-Content-Language: en-US
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20240803061041.283940-1-cuigaosheng1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Spam-Score: -4.01
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 2820921B7A
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	DWL_DNSWL_MED(-2.00)[suse.de:dkim];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[renesas];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 
-On 8/3/24 09:10, Gaosheng Cui wrote:
-> Add the missing clk_disable_unprepare() before return in
-> geni_i2c_runti().
-
-The function name above is scrambled, it should be geni_i2c_runtime_resume().
-
+On Fri, 02 Aug 2024 17:22:12 +0200,
+Richard Fitzgerald wrote:
 > 
-> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-> ---
->   drivers/i2c/busses/i2c-qcom-geni.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+> Add support for HP G12 laptops that use CS35L54 or CS35L56 amplifiers
+> with Realtek HDA codecs. Some of these use the same SSID for models with
+> CS35L54 and models with CS35L56 so the ACPI entries are examined to
+> determine which amp is present.
 > 
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 0a8b95ce35f7..78f43648e9f3 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -990,8 +990,10 @@ static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
->   		return ret;
->   
->   	ret = geni_se_resources_on(&gi2c->se);
-> -	if (ret)
-> +	if (ret) {
-> +		clk_disable_unprepare(gi2c->core_clk);
->   		return ret;
-> +	}
->   
->   	enable_irq(gi2c->irq);
->   	gi2c->suspended = 0;
+> To avoid having to #ifdef around this code we've fixed the definitions
+> of SPI and I2C functions that were not correctly supplying dummy functions
+> when the real functions are not in the build.
+> 
+> Changes since V1:
+> Added I2C and SPI patches to provide dummy functions.
+> 
+> Richard Fitzgerald (2):
+>   spi: Add empty versions of ACPI functions
+>   i2c: Fix conditional for substituting empty ACPI functions
+> 
+> Simon Trimmer (1):
+>   ALSA: hda/realtek: Add support for new HP G12 laptops
 
-The fix is correct, thank you.
+Hm, the 3rd patch requires both patch 1 and 2, and now those seem to
+have been applied to two different trees, which makes hard to apply
+the 3rd one.
 
-FWIW there is another missed call of geni_icc_disable(&gi2c->se) on the error paths.
+Mark, Wolfram, will you guys submit PR for 6.11-rc3 including the
+patch 1 and 2?  If so, I can apply the patch 3 later on top of
+6.11-rc3.
 
-Fixes: 14d02fbadb5d ("i2c: qcom-geni: add desc struct to prepare support for I2C Master Hub variant")
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Or, I'd need to pull from both of you and apply the patch 3.
 
---
-Best wishes,
-Vladimir
+
+thanks,
+
+Takashi
 
