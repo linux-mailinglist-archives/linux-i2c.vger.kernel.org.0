@@ -1,59 +1,91 @@
-Return-Path: <linux-i2c+bounces-5169-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5170-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEF669492DC
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 16:21:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC8A2949B67
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 00:42:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D46401C23A2F
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 14:21:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65C7E1F2142B
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 22:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1062417AE10;
-	Tue,  6 Aug 2024 14:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71791173328;
+	Tue,  6 Aug 2024 22:42:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Xc9U1iDh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHwCKmvW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859DC18D64A
-	for <linux-i2c@vger.kernel.org>; Tue,  6 Aug 2024 14:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32A816BE0B;
+	Tue,  6 Aug 2024 22:42:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722954045; cv=none; b=VTmpJ4q/Md+XpZruuNbMexDjn22z5AxL5m6OcExGn85YVGL9StEroN+klJyo1WW4o7S6cxl+lxa1xhO8vfMoIBBuL8HNLaznwmyARci0dCTtxNO2UNNE+PowqAHjb6f9dqOAEjMof7bwc+bB7Q1w8wmNJlHx21HqFF4tyHPZVxw=
+	t=1722984157; cv=none; b=eY/PF1uhPLVjx5H9fm/lyZOEhUcUq3HARZrDDn3mpbJE00SPIOQCPJgjS+1nwk6oD8C7fNTVIA5QRw36N9YxYEHP23VhQeHBy2qwGX9DB0CYeYA/xeD1ddOWRKhHSL7H6Y52BMqHz97p0Wi3qB37mJ5WSNKX1pyX8IX7GReGADc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722954045; c=relaxed/simple;
-	bh=GcbsOglTmhNNwZpS47DIxBLpCSQcEHlfmE9HWgnOAXU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Wd3c5tLTbik3xnplG+4Gv+8Hay9ZW2cYKRv9syCNO60LLbbLaTcRT8s4lwokInS4MQV+coACHaf0UY5fjsCHFKcOnIBGdIQkFFc99qPYatJS1ldauhMgPoehLXQvKx7jVJfXEmIUhqBQyLEnjgNmyIhsRyD5F2ujFhVta9gKtGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Xc9U1iDh; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=OWcMsHYr3RRRiGrn/KyEpFLqpH5pnaD2wsuOUNsaofg=; b=Xc9U1i
-	DhLf9ZxwegNhwsBTr2yNg/6TuxZ+kQrQ2bOzJtLWwFfnb4ASxanE9dlY8WZThwwu
-	9U95wUEXJGqeAq1ABNnCb/iqc4VT59CYfxutg4JzMzUiX8LdlEZYDFrDct/ysgUS
-	R/4gqr3c7HGczcVORjl33f6almX4uTgTKQ65GCmQhS4sCmrL9kfuiBQlo8MxMrGT
-	gnyzytQxlf5RMFco9XJknwIZvyZRDkIOdbGygrEX5/LcxCqrWdVMZFROYHaylMeX
-	n7RHKLUa+wtNfSZHRzzAFZrecKhdu2P/luWqY/P6pSyE3ke7LphdWtqkdOYW6plk
-	vZylCLEggYb2qZ1A==
-Received: (qmail 249214 invoked from network); 6 Aug 2024 16:20:39 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Aug 2024 16:20:39 +0200
-X-UD-Smtp-Session: l3s3148p1@/I96fwQfIIYgAwDPXxLGAIH3oZkcU6AS
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH 3/3] i2c: testunit: return current command on read messages
-Date: Tue,  6 Aug 2024 16:20:32 +0200
-Message-ID: <20240806142033.2697-4-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240806142033.2697-1-wsa+renesas@sang-engineering.com>
-References: <20240806142033.2697-1-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1722984157; c=relaxed/simple;
+	bh=RVw0sbLiHcC3KTiUkhiQpIws+RDGPbzFfUXM8fQkVLQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=feWmurtMdX7Ag1tedd2eAVp7R4moyXMZB4aeryZKWPAvNtQL+wwIscNsoZ1CEW0CPUa7eAbN/b+z3rZUCfchIU3cW5owBHHG3AeLsI7Jg4s6+H+oCP94LZi+9k56mKnUbuAkaQ4VsT93Oq0eOpV77Exm/91RMLhUxacqI3F8jqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHwCKmvW; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7a1d436c95fso59763785a.3;
+        Tue, 06 Aug 2024 15:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722984155; x=1723588955; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NeEd6xA1yeqE7RV4SYqtjTS53k6kGoD3BfOt8IqEHho=;
+        b=aHwCKmvWHkygmt3fu+KMhiXSOIjX6MiPwfnivPPpZO2U69/j+a+IG0s6UX8VTPtwIh
+         obtxgVkVONvviTkPMI5JzT8d2gt95R/+B0mxwVfqxpRZfox5Ex5cPwLTkNKfiHoZoD1W
+         4flnxe7b+NPdBGh0STd/ATRAuqrFtR4l74Klmrtj0aRC1BZhJ+2BzFvJB5JIgercyLQ/
+         NKpe0oXSvEehznNe4GwVQVrzHoEGXqiXsKCcUyHwTCTtnTd4ZrCGRJcrIQS/cot6Szmk
+         veBWXNGSwZz3t+ikct7Vo5bA9bc90t2lyM2A592wrrFFiGf6747KHTNxLWulKo/F+fia
+         atQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722984155; x=1723588955;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NeEd6xA1yeqE7RV4SYqtjTS53k6kGoD3BfOt8IqEHho=;
+        b=D+kYZS6tbS+9qcAAhslam7n1sDXRny2ycuX/Eqa0P29i8+3X/DFnm8d2yj0RlmZ+WM
+         ssATAkTUGKt2QyI0Qydp4edswGUrkElD5vrYgBQkL0zMlGTHt4sdgEOPTaCxtm7G4E0q
+         ebtSsSQRkym2sRsp+FGdCkNcsw/uFynERC7/XPZnQD/TgAfVxRJJt7F/3WZFPbro+ALF
+         IVFx1cKFsig7ReQ+cFlWeAkn+LdKhHSosANcZrEoJiF1i0X2pUL444XAB9wrQbLGNsjq
+         kDPrgIXjcjpVi4ljiYJyslqNpt7ORDabdelW8MZmR8LAC+0Z4dWz02sjJ2Il+No1XtNf
+         LEQA==
+X-Forwarded-Encrypted: i=1; AJvYcCW5nwIGjJyXqdUTPqm1KX3OZas+x3eFoNeBGcCXBM/wrArEEA9bo145JRul1kAPaphwOTgT3frQiHM07qj8FHyblY3AEWSd4S95/AcFfr5YA1NdrOI7lKlTrveFJ1bH57tSQO+i05GNvuoxopStUCr0mYAmlVa+G6qonJ5oA1yhI7e9NfHj/DtiYBDJLQwen10V4zIyQo8Wwdozz00TkNhIuw==
+X-Gm-Message-State: AOJu0YyQxu/ym3SsbR/CuHvWNdJDggE7fG05FqYNep2YHVjP8+MdEcxZ
+	W1rzg+vqSFvtFLcRL/QjmN/Zy5N4qQg2JhIJmC4Mfld4HWtBhEvf66daYbjj
+X-Google-Smtp-Source: AGHT+IGdA5+nBo3wcFSQr1On4MK3/JRRGmgwy3ittXXiVIzZum1J2VGDjLr4AUXSaPGpZ+PJU1S22g==
+X-Received: by 2002:a05:620a:f01:b0:7a2:ce2:5702 with SMTP id af79cd13be357-7a34eeb8349mr1932927985a.10.1722984154504;
+        Tue, 06 Aug 2024 15:42:34 -0700 (PDT)
+Received: from localhost ([2607:fea8:52a3:d200:324c:b818:b179:79b])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a3785d25aesm4153785a.27.2024.08.06.15.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Aug 2024 15:42:33 -0700 (PDT)
+From: Richard Acayan <mailingradian@gmail.com>
+To: Loic Poulain <loic.poulain@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Todor Tomov <todor.too@gmail.com>,
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-i2c@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-media@vger.kernel.org
+Cc: Richard Acayan <mailingradian@gmail.com>
+Subject: [PATCH 0/4] Add SDM670 camera subsystem
+Date: Tue,  6 Aug 2024 18:42:21 -0400
+Message-ID: <20240806224219.71623-7-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,69 +94,22 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Because the testunit can start tests in the future via the DELAY
-register, it may happen that a command is still pending. Support
-detecting that by returning the number of a command in progress (if
-there is one).
+This adds support for the camera subsystem on the Snapdragon 670.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- Documentation/i2c/slave-testunit-backend.rst | 14 ++++++++------
- drivers/i2c/i2c-slave-testunit.c             |  4 ++--
- 2 files changed, 10 insertions(+), 8 deletions(-)
+Richard Acayan (4):
+  dt-bindings: i2c: qcom-cci: Document SDM670 compatible
+  dt-bindings: media: camss: Add qcom,sdm670-camss
+  media: camss: add support for SDM670 camss
+  arm64: dts: qcom: sdm670: add camss and cci
 
-diff --git a/Documentation/i2c/slave-testunit-backend.rst b/Documentation/i2c/slave-testunit-backend.rst
-index a0335782d109..b558adc59af2 100644
---- a/Documentation/i2c/slave-testunit-backend.rst
-+++ b/Documentation/i2c/slave-testunit-backend.rst
-@@ -20,11 +20,13 @@ Instantiating the device is regular. Example for bus 0, address 0x30::
- 
-   # echo "slave-testunit 0x1030" > /sys/bus/i2c/devices/i2c-0/new_device
- 
--After that, you will have a write-only device listening. Reads will just return
--an 8-bit version number of the testunit. When writing, the device consists of 4
--8-bit registers and, except for some "partial" commands, all registers must be
--written to start a testcase, i.e. you usually write 4 bytes to the device. The
--registers are:
-+After that, you will have the device listening. Reading will return a single
-+byte. Its value is 0 if the testunit is idle, otherwise the command number of
-+the currently running command.
-+
-+When writing, the device consists of 4 8-bit registers and, except for some
-+"partial" commands, all registers must be written to start a testcase, i.e. you
-+usually write 4 bytes to the device. The registers are:
- 
- .. csv-table::
-   :header: "Offset", "Name", "Description"
-@@ -170,4 +172,4 @@ are not equivalent to a REPEATED START. As an example, this returns just the
- default response::
- 
-   # i2cset -y 0 0x30 4 0 0 i; i2cget -y 0 0x30
--  0x01
-+  0x00
-diff --git a/drivers/i2c/i2c-slave-testunit.c b/drivers/i2c/i2c-slave-testunit.c
-index 19296ff09930..a3e1b5e8b659 100644
---- a/drivers/i2c/i2c-slave-testunit.c
-+++ b/drivers/i2c/i2c-slave-testunit.c
-@@ -15,7 +15,6 @@
- #include <linux/slab.h>
- #include <linux/workqueue.h> /* FIXME: is system_long_wq the best choice? */
- 
--#define TU_CUR_VERSION 0x01
- #define TU_VERSION_MAX_LENGTH 128
- 
- enum testunit_cmds {
-@@ -159,7 +158,8 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
- 		else if (is_proc_call)
- 			*val = tu->regs[TU_REG_DATAH];
- 		else
--			*val = TU_CUR_VERSION;
-+			*val = test_bit(TU_FLAG_IN_PROCESS, &tu->flags) ?
-+					tu->regs[TU_REG_CMD] : 0;
- 		break;
- 	}
- 
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml |   1 +
+ .../bindings/media/qcom,sdm670-camss.yaml     | 353 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sdm670.dtsi          | 222 +++++++++++
+ drivers/media/platform/qcom/camss/camss.c     |  12 +
+ 4 files changed, 588 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+
 -- 
-2.43.0
+2.46.0
 
 
