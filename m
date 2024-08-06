@@ -1,113 +1,132 @@
-Return-Path: <linux-i2c+bounces-5156-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5157-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3988948C52
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 11:46:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18B1B948D6F
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 13:06:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76EF4B25D2C
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 09:46:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B780A1F21BDD
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 11:06:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D041BDAA0;
-	Tue,  6 Aug 2024 09:45:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D4FA1C2317;
+	Tue,  6 Aug 2024 11:06:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=angelogioacchino.delregno@collabora.com header.b="Scpag60O"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="jHGVX4rE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268601BDA9A;
-	Tue,  6 Aug 2024 09:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722937558; cv=pass; b=sZLrFuLY8+EU1fosUlIOVnXusNd3kq/vc0J7X1xVaxB67RgMpknTEXe+FQgjyOD2vlExKkCITS08SuO+IQctuEAD4Uk1iezvorW0QgmNKJIiJi8SjJfHR9yYzVzMTIr05+1XXZyJR4J+BgRfDBAg5oqgOeRrnSuHUgYrOQAIiZs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722937558; c=relaxed/simple;
-	bh=29KL4w7YAbNwitGR9raEiDDwJFtodKNQ+SX6Q3frtBw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nd8E0hXY8EFMH06Z6huNj8FNI4oNyyNJ8Ex8TO6oMgbyRghli/z8NHxJOHAt9Y8orcMeNhuEcUbE96ugHbyoUumrcsBsuDEy3KX7Au4iX2ieSS8JchuUTxMRcdE3vqNmb602/InXiuKyoKfmVA9319K7GjWZds9SD9IGg2KvAFE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=angelogioacchino.delregno@collabora.com header.b=Scpag60O; arc=pass smtp.client-ip=136.143.188.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Delivered-To: angelogioacchino.delregno@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1722937543; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=ZctF7vNs94TXVz4Rm9jy4hDUQ6a9qtayt2LgYT34yiS/1s7P+6KtR+88tM6MR8Q6uOUMFrwBMXGdmMtff5tCKlFihNZEkdkzxMHH3LnLQ2j1SPvk64azZCpppCE2xlfEhWPj97fEnBRI9xH6kRVf8qJa1hVCZxJW+/eWOtD05W0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1722937543; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=LUy6mtPdj2DuYs9x688gR5X6TBdY76K1VdtXWohu5IE=; 
-	b=fCIMPjgS6J2yLdEv2js4Od7DDY+d8uBVAtqhGq6Jr9dvmffbLIsmiDHOZllRT6utXbfyt3IiA7WuR4IW+XFmvDyLPYB+TyeBNrd+19unKP9E5wTRsG1aq+nFceIsb28/pVCOoFqOtu76QJle3RmQUjWnka7y+xB+V3PqMcpDxBI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=angelogioacchino.delregno@collabora.com;
-	dmarc=pass header.from=<angelogioacchino.delregno@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1722937543;
-	s=zohomail; d=collabora.com;
-	i=angelogioacchino.delregno@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=LUy6mtPdj2DuYs9x688gR5X6TBdY76K1VdtXWohu5IE=;
-	b=Scpag60OL0XahnB2muQd3E/rU96vhvtYY1iR7o9njCbXKIA9hINwanTBHwjfN33o
-	r64sS4zlRrzUXRy1JZx3PtHFetxql1+snioKSKj6gXx0VwwqqO33Imk8KEdh8oasREf
-	lvyx6t3uDOyBFwmuFRR1MzlnU/cTcZBCVNadzGVM=
-Received: by mx.zohomail.com with SMTPS id 1722937543110540.4230663378206;
-	Tue, 6 Aug 2024 02:45:43 -0700 (PDT)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: qii.wang@mediatek.com
-Cc: andi.shyti@kernel.org,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	kernel@collabora.com
-Subject: [PATCH] i2c: mt65xx: Avoid double initialization of restart_flag in isr
-Date: Tue,  6 Aug 2024 11:45:37 +0200
-Message-ID: <20240806094537.90747-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.45.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566E9143C4B;
+	Tue,  6 Aug 2024 11:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722942413; cv=none; b=hAHUXKnp3VVXy5Pbx2PdFZoJD0j7LLvX80Lk6FS0X16aKjpxLi4EwgD98it0ViSk7UXrwXCUjMS01jVomAtVwaiQDVU5Mqn5RHgmp3Ul8Tw5Hir35EtRXRti+L0u1UHVOVsE1pJ5ACV4Kwm+j8bVX7PI0kFHHF6eFFlnXewmZz8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722942413; c=relaxed/simple;
+	bh=Sw5dr594Hkzi/16PGOf8YlqcJhmQf3Tt7Uejnpy/P4Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=aGytTmF8p3egHCRIvYxjD3tMpw5bui+GpCv9kXD9W7qcONLiX/kTHo5ZUAfm/HNGtY/grsC3idRTiocZ0Ao1alJCqDlxwv7+jyKVjRTuWgGVCXSy8+iBdZaqF7TCBmVHpAnBJJKvEhPy3UJJJVueF9al/YaxyQMgLkDSTuA8358=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=jHGVX4rE; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4765M7xU030035;
+	Tue, 6 Aug 2024 06:06:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=Nf2ivtkVUEro7FYxQCOMlIOvUdT5FT12s1OFg6w/Jkw=; b=
+	jHGVX4rEbVKlg+f7xBD7bqbLfr4dT1zOElJGezKjwHd51IW/ejg8HIIJHL+5+imT
+	2+g8PUKTHkwX6aS45EXAtl9QZvEQtSjYx83C08HzD9mzZPJ0mj+lmJXeizt3gi9E
+	VzRZ/Q8Qi2cbFajAHIHBfN+mMGNq/4HedxNrUmnu/QosRy5S+mq7GUk6gIHTTISu
+	wTeGKML3gNYRQXDhl5iPTbjNVJQC5dal99Upgaor7seiAccJfslh++NqkRKB3Z6v
+	2S2728A3FvJnaroG+LjA0XcmX1npPRdBAh5K7H3ktJ9gJVCBk0AmcskkYdD2FaAE
+	88X569/EdH1c5EflCRdM1g==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 40shxx2w6k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 06 Aug 2024 06:06:28 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 6 Aug 2024
+ 12:06:26 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1544.9 via Frontend Transport; Tue, 6 Aug 2024 12:06:26 +0100
+Received: from [198.61.68.170] (EDIN4L06LR3.ad.cirrus.com [198.61.68.170])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 997CF820241;
+	Tue,  6 Aug 2024 11:06:25 +0000 (UTC)
+Message-ID: <554660e1-01ea-4bb4-877f-fd8deb527ce7@opensource.cirrus.com>
+Date: Tue, 6 Aug 2024 12:06:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] ALSA: Add support for new HP G12 laptops
+To: Takashi Iwai <tiwai@suse.de>, Mark Brown <broonie@kernel.org>,
+        "Wolfram
+ Sang" <wsa+renesas@sang-engineering.com>
+CC: <tiwai@suse.com>, <mika.westerberg@linux.intel.com>,
+        <linux-sound@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+References: <20240802152215.20831-1-rf@opensource.cirrus.com>
+ <8734njl7my.wl-tiwai@suse.de>
+Content-Language: en-US
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <8734njl7my.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: 01hi_DCgg6ZDBsSEtbpvHU5pv1i8nfQa
+X-Proofpoint-ORIG-GUID: 01hi_DCgg6ZDBsSEtbpvHU5pv1i8nfQa
+X-Proofpoint-Spam-Reason: safe
 
-In the mtk_i2c_irq() handler, variable restart_flag is initialized
-to zero and then reassigned with I2C_RS_TRANSFER if and only if
-auto_restart is enabled.
+On 5/8/24 09:02, Takashi Iwai wrote:
+> On Fri, 02 Aug 2024 17:22:12 +0200,
+> Richard Fitzgerald wrote:
+>>
+>> Add support for HP G12 laptops that use CS35L54 or CS35L56 amplifiers
+>> with Realtek HDA codecs. Some of these use the same SSID for models with
+>> CS35L54 and models with CS35L56 so the ACPI entries are examined to
+>> determine which amp is present.
+>>
+>> To avoid having to #ifdef around this code we've fixed the definitions
+>> of SPI and I2C functions that were not correctly supplying dummy functions
+>> when the real functions are not in the build.
+>>
+>> Changes since V1:
+>> Added I2C and SPI patches to provide dummy functions.
+>>
+>> Richard Fitzgerald (2):
+>>    spi: Add empty versions of ACPI functions
+>>    i2c: Fix conditional for substituting empty ACPI functions
+>>
+>> Simon Trimmer (1):
+>>    ALSA: hda/realtek: Add support for new HP G12 laptops
+> 
+> Hm, the 3rd patch requires both patch 1 and 2, and now those seem to
+> have been applied to two different trees, which makes hard to apply
+> the 3rd one.
+> 
+> Mark, Wolfram, will you guys submit PR for 6.11-rc3 including the
+> patch 1 and 2?  If so, I can apply the patch 3 later on top of
+> 6.11-rc3.
+> 
+> Or, I'd need to pull from both of you and apply the patch 3.
+> 
+> 
+> thanks,
+> 
+> Takashi
 
-Avoid a double initialization of this variable by transferring the
-auto_restart check to the restart_flag declaration.
-
-This commit brings no functional changes.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/i2c/busses/i2c-mt65xx.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index a8b5719c3372..e0ba653dec2d 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -1306,12 +1306,9 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
- static irqreturn_t mtk_i2c_irq(int irqno, void *dev_id)
- {
- 	struct mtk_i2c *i2c = dev_id;
--	u16 restart_flag = 0;
-+	u16 restart_flag = i2c->auto_restart ? I2C_RS_TRANSFER : 0;
- 	u16 intr_stat;
- 
--	if (i2c->auto_restart)
--		restart_flag = I2C_RS_TRANSFER;
--
- 	intr_stat = mtk_i2c_readw(i2c, OFFSET_INTR_STAT);
- 	mtk_i2c_writew(i2c, intr_stat, OFFSET_INTR_STAT);
- 
--- 
-2.45.2
+We've just noticed that the SPI patches have gone into for-6.12.
+We really hoped that we could get the main patch (G12 support) into
+6.11 (yes, I know, I didn't actually say that we were targeting 6.11 -
+sorry).
 
 
