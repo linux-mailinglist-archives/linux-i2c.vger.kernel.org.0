@@ -1,120 +1,93 @@
-Return-Path: <linux-i2c+bounces-5165-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5167-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7103949007
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 15:05:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F31D9492D7
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 16:20:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6217B2818AA
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 13:05:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEFF21C2351A
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Aug 2024 14:20:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850211C9EB4;
-	Tue,  6 Aug 2024 13:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8DD316B741;
+	Tue,  6 Aug 2024 14:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p+sxBmg6"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="iyr/c8Vl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDA71C9EB0
-	for <linux-i2c@vger.kernel.org>; Tue,  6 Aug 2024 13:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C155D18D623
+	for <linux-i2c@vger.kernel.org>; Tue,  6 Aug 2024 14:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722949544; cv=none; b=GhGRbWTsNw/gbyT2UP/2bLJBkwbZnqD6cWPvVs52ov/YSKRjtDJ37lzn+igWmhjcHsuaZQ2pqWOAuuCTjlGk1EIV8JX7GDIxN4sgADhbvb9lfEP5Vs8q+EZNGMZNcTKiLDWwJhZvK3OFbwygMgjxbuIkQPczPgpZWjDJj1g9FoI=
+	t=1722954044; cv=none; b=g2CYLhmI42UhEqHPpFxh+aIiwrOJpbsUagpRRHQdIvB9ZHI62elFQelHzl+XHqne6F1qJ/8ZIlmdMcbqKYMB7qyqGCA7BS0wFfJ0foSR7tGZdljFgqIEv2lPjBmP6xHSYIuxirePFVEk92JKWSdEtOGQzi1igdvkOPBfPFuPkyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722949544; c=relaxed/simple;
-	bh=5xHO28RgwE+3Wyj1hop53WiOCG5gh1OY3ob1B5NF6UI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BNgO4oRn6xTY4GuQvNnqidTkKKLsqcj9/++qN8K9kslCB0t3o2a6o/VDBWXopyysIM8/Wkyuooetz2NfgiXxRbN4h0oaCK98J16yHdfFCM9mG80zjA/DuYQi41AFCEyEeWuNI0RjpBMRfz98XnCGJUWmUqs5B3j/fFlprTfNcFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p+sxBmg6; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2ef2c0f35f2so1168501fa.1
-        for <linux-i2c@vger.kernel.org>; Tue, 06 Aug 2024 06:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722949541; x=1723554341; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U3tjEHzI6vFcFefvKAUB9C3zJO79T9ISYwRwdzZDMPo=;
-        b=p+sxBmg6T3L0uP+Pmaof31vxW80U8ymeFQ3qOop61Q717dCx4oZuRA3iNpA/jQ6FfI
-         icq28X1Z1672M1vgu3T92iU68q1DRnjX4/qYNuQEOqbgZ1ZGAs8PjIqm4tvHixftpcRT
-         uTh5AUnX5oe7DYyJ5jiI9J7c5PuqlM5+DR3ssC4nyDkdpQWbvxyxMscU+6H91I1GBGyb
-         StmhyprDYARK2C0P+pNaMS7TGe5jNbcOOmUbVDuVTZrJKMWenmHaY7F3vlKBMCWBZcLa
-         cqfMDxU9PtjOjZ7S62yy3HyZXVAdujY4gspF/HBZIMxs7ysBCJs97P28xOaycVQ0Yd+/
-         ysiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722949541; x=1723554341;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U3tjEHzI6vFcFefvKAUB9C3zJO79T9ISYwRwdzZDMPo=;
-        b=Tno2WodrEVFwH+aNVGMsWaaFe/UIo39CrsROIqr7G1UoD5sYz+w2/ZWdtBET/hz8/6
-         AzwATGcEtWuxnW4g/alxnxoibZnDu4ZwOFfP9w/WtxCYjmBBPf0tY6vpvqQFBBCE4YJa
-         b5IXY7NmYT9LeXT7qASJKtWnc8ZTZsVEYbmrHUPbCc59c8fG7tt3jAiEipPgTxDHfENF
-         t1A4V0Po8Mi/5xuDp/v4EDUuQkpv5/o0eP5U3xI8POdopQEJOb70IuRTqDBxle7kr4rc
-         Pe00omBdM6+0RUDK0BHV18lbF5vX9uy2SZeO2r1BvxE1IKl8pnEg+oOhofOCLbG+trlk
-         WqFg==
-X-Forwarded-Encrypted: i=1; AJvYcCUQkxoq+3G7PAMytNrpsGbCMfJDnWI7IxMH5uonwMEDj5HsI9xR5LSG/Mf8/MLMF0NUdsfkOqeVTHG6mfd7Wpm7AHeal4mHx+Rp
-X-Gm-Message-State: AOJu0Yzu38uIHALr+Aty+WVuqpEEeed9Xzc28hlkswIF0I/AQpe8epeG
-	rOpzey8lP6bkSfz8VmV3FkRoNupCCQAgwpUOf9mt6mxmwou2Fl16nY2l1EF1NLY=
-X-Google-Smtp-Source: AGHT+IFUa5J/+kOkIYUURoo4FxbRJUyi+/bxaQpFZTdwfiTt7ERcDbaJXATBQnJIb5Wd7curx3Bd0g==
-X-Received: by 2002:a05:6512:b2a:b0:52f:e5:3765 with SMTP id 2adb3069b0e04-530bb39dc4fmr5973599e87.6.1722949540729;
-        Tue, 06 Aug 2024 06:05:40 -0700 (PDT)
-Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-530bba29f6asm1480694e87.120.2024.08.06.06.05.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Aug 2024 06:05:40 -0700 (PDT)
-Message-ID: <95681260-2d61-4d76-951a-720e94c76c79@linaro.org>
-Date: Tue, 6 Aug 2024 16:05:39 +0300
+	s=arc-20240116; t=1722954044; c=relaxed/simple;
+	bh=VJcYVzWxs+vXvSSDlJo4H6o0JJ8oED4u3PXvLG5sW04=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RgahzgIXK/Edet5KHjE20S+QjGei4awPmaKJWmRXvC+Yo7pOupm4aHx3gy3TMGbBQ0Ia00m+SmN3bpFh99iZudvwzDwAR0K/OAhKTbyYW2UwsvBwg4aUxiMPH5l20EjYEsZhB4ObekXRj6TThUBPS69EhIzo7YS09woDOJlQ2a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=iyr/c8Vl; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=eHozqRtR+0XFHu
+	NKYIsT3ljFRBGekEofoPaAeRrHhLQ=; b=iyr/c8VlGvrICgPo/Rn9GYAggsYBSu
+	JpeiJNQsC2KehRId9/vi15sVBdue2w4OFZVT80ozZv/XJYniSX87pRic5v/kjH7o
+	Cfl8ukf7sB1T5E+vD/JgkX4pgsGIL3pt57QGpHjgbILYr8cG5ekToX+JTe9NFAQI
+	nlKGMlvDmn3kJBBWkDur4mID2ElmQOcFibKzPy1nxcxLchFdWAlaa7wKSttqwWSF
+	/lcY5xYVUcJbdsSoHxw/BiUBOTAD0JRrKfCI096OLQOF/8EruHgtXaJoxn8kthJX
+	SPpoxf1rD6Zyy+bpyoufu/j6Jbv8wCjaOGgwzJ6wM3PVhuV3r17aDA+Q==
+Received: (qmail 249145 invoked from network); 6 Aug 2024 16:20:36 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Aug 2024 16:20:36 +0200
+X-UD-Smtp-Session: l3s3148p1@NoZHfwQfDoYgAwDPXxLGAIH3oZkcU6AS
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH 0/3] i2c: testunit: add rep_start test and rework versioning
+Date: Tue,  6 Aug 2024 16:20:29 +0200
+Message-ID: <20240806142033.2697-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next] i2c: qcom-geni: Add missing geni_icc_disable in
- geni_i2c_runtime_resume
-Content-Language: en-US
-To: Gaosheng Cui <cuigaosheng1@huawei.com>, andi.shyti@kernel.org,
- mka@chromium.org, akashast@codeaurora.org, andersson@kernel.org,
- wsa@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20240806125331.3170546-1-cuigaosheng1@huawei.com>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20240806125331.3170546-1-cuigaosheng1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/6/24 15:53, Gaosheng Cui wrote:
-> Add the missing geni_icc_disable() before return in
-> geni_i2c_runtime_resume().
-> 
-> Fixes: bf225ed357c6 ("i2c: i2c-qcom-geni: Add interconnect support")
-> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-> ---
->   drivers/i2c/busses/i2c-qcom-geni.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 8bc4040ba8be..2deaf502e6ff 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -992,6 +992,7 @@ static int __maybe_unused geni_i2c_runtime_resume(struct device *dev)
->   	ret = geni_se_resources_on(&gi2c->se);
->   	if (ret) {
->   		clk_disable_unprepare(gi2c->core_clk);
-> +		geni_icc_disable(&gi2c->se);
->   		return ret;
->   	}
->   
+On my way to let the testunit trigger SMBusAlert interrupts, I needed to
+rework the way the testunit responds to read messages. This series is
+the result of that with some very nice side effects. First, we now have
+a new test to check for proper repeated starts between messages in a
+transfer, patch 2. Also, the versioning has been improved, patch 3.
+Patch 1 makes the state machine a little easiert to follow.
 
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+The patches are based on i2c/for-current + a naming fix[1] and has been
+tested on a Renesas Lager board (R-Car H2) and a Renesas Falcon board
+(R-Car V3U).
 
---
-Best wishes,
-Vladimir
+Looking forward to comments. Once we got this in, I will send out the
+SMBusAlert additions. They do work already, they just need some
+documentation.
+
+Happy hacking!
+
+[1] https://lore.kernel.org/r/20240806113532.32679-2-wsa+renesas@sang-engineering.com
+
+
+Wolfram Sang (3):
+  i2c: testunit: sort case blocks
+  i2c: testunit: add command to support versioning and test rep_start
+  i2c: testunit: return current command on read messages
+
+ Documentation/i2c/slave-testunit-backend.rst | 50 ++++++++++++++++++--
+ drivers/i2c/i2c-slave-testunit.c             | 43 ++++++++++++-----
+ 2 files changed, 77 insertions(+), 16 deletions(-)
+
+-- 
+2.43.0
+
 
