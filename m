@@ -1,69 +1,69 @@
-Return-Path: <linux-i2c+bounces-5185-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5186-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D59FA94A4EB
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 12:03:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58C9194A4EE
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 12:04:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 120111C21403
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 10:03:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89ED31C214F9
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 10:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052E11D1F62;
-	Wed,  7 Aug 2024 10:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695A81D3628;
+	Wed,  7 Aug 2024 10:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GW/B0Qbp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JV4Tai2I"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C531D1F51;
-	Wed,  7 Aug 2024 10:03:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF311D2F73;
+	Wed,  7 Aug 2024 10:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723025013; cv=none; b=FdYG8mnNC/LJCf9rL9inZ8wQAecY5tmN5gsPxUGX2x50Cr41tQRjrsFbrQnVrbrL2innYbfg881StfaCLQVRLqzRfoXkLFENnSXzbyhq79ckq8Jf16L/1/WLbFYVOOL5ZERzTHZlg4CAl+UEPlOtyx/vi/IPz3fS7CXg/fTnui4=
+	t=1723025017; cv=none; b=U/Yf41BjuxhidPJYagP2YGUwLiEwqG7yGfgdVgugOiM/CUoFzpKHY+58Syokoeta6G0zlkHxVxjebOGMh92pkao7vnsSsBuHsEsGDKd3lhyrRRiasBGVt3PXfKRyES1Mt02ppj+HAysTAUYTSlcvAmW+EotHi57HhBJYpYklqyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723025013; c=relaxed/simple;
-	bh=wBHnpnXQR2YnVe3Z3Xy1CQXht+Ilg8+LY704lrvFnm0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=aEoYZkjae6QzTl2Ucz0JrD+h2ASy67V5mQaKPyDxkQsCN7yJx+9meRTtt3SR2JDxQ0OvjJuqB9uxBqBa96xYK1vDXzYGbJXcC+QkMc53Z2EF1BWHzb/IUnP1+ra4PeNptrkcwxCY2w09/7pbDiHSViQ15mOVvACnh7blWnHYPn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GW/B0Qbp; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1723025017; c=relaxed/simple;
+	bh=WiFkNY+L8Ma1TLKycukop1oNLXBvshI4BV9tUU4lSsU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=EXeyCwqN2w2rj3Rll38RbKuByEmNOcCBJgXIS1CKqhPiPZZCVPAqdNrLZVVpBEnlntd12KFb8MYkAIl5jvwGc51FKB0Cqp62DW1cIN57CTcplxZUlNLRi4A4J17f0HoxOrvoTm/EBgA/9Lo+KDNi9ZcND1I5Xwy/tM7h8mRmKrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JV4Tai2I; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fb3b7d0d56so10523025ad.1;
-        Wed, 07 Aug 2024 03:03:31 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1fdd6d81812so14527955ad.1;
+        Wed, 07 Aug 2024 03:03:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723025011; x=1723629811; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723025015; x=1723629815; darn=vger.kernel.org;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=CC5pNBBwbHzuFRI5vRop3kEGSaPPEJAGbytrwhnEs/A=;
-        b=GW/B0QbpqN9WhgTewoKg62Z3PvaRlcvKfMguNHU+WMnISbsa189BVBfgZuDmTnwBMB
-         wNJng5NF1JElrpZg9VlS+Z+tlVf7cAO/wbkYmG8IlIabxV4dMvfD/5i9+tDrqzV7XSfi
-         iJd6EzelSKZ79CQki4NOjSn3J4SHPqMeg6QqzSp5dUvV1XZx/BD+yR0ODY57xfcdalzm
-         s9iZAXcyl8cRIACkeInU/FXkesAPMDr01qs0mLXmEvecTNXbZ+POfZXuGk+ctKwGuYay
-         MiT2zZiiDBASh6c5NXsavb7o5/w2N0FxoLOwIdb9bv8jwI5fgUI0AV+0C0CGLQUWd2ej
-         WzDw==
+        bh=BDqYPFDQ8C1Tp5b7bagIZayk3yRE5OYklUz/hGN2mSE=;
+        b=JV4Tai2IIK2KqQwEKMsgwZ1YbtDxMY3dQJIzhk//eGpgQy5QeEv5WMBIQqxbjKsWUf
+         +ciIufux+xrm5UyBBTANTttLXDWVjVA/AmZ+LlfvdIRasjo9W6mqGAP8UcKc3W1vhhBp
+         al0k7qkT3Xlxip1vHoPxS2KOUD9XsA7TlBtkkcDXXYHXDTTJs3uewjRYgNhsd1IlYa47
+         kd43SaYo9ef9tBhxL+Oexpd7dE5NNK6kHgGPWmCDhMxldpCai/VoXYtgf52z9ujJ+ihO
+         46EeqSAsQQeUDqmFfUNk15vVnbposOZNiT+OZrj3DdR7sVFhUvvKNhxcNULGk4xik/Q9
+         9R6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723025011; x=1723629811;
+        d=1e100.net; s=20230601; t=1723025015; x=1723629815;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CC5pNBBwbHzuFRI5vRop3kEGSaPPEJAGbytrwhnEs/A=;
-        b=qVWtDUhS6SqKPJQ7NpCNIozNQJWsGAIVJ89ct8cbJO0AyK8D/Hiw2xHZ0IFITFVm8h
-         6nA/kEZ4nuPZQP/Ksu9m8Sv3sap7VGVhaw/Iz2z1dcaioJA8aFiKNhp8uBhYG8ogiwV1
-         cm6syJS+7CrtU4nY23LRj2MrUNMvoHtasIiNOReD9rDI1Ps6XKgE9bg5TbwFqRAzmnPw
-         2WJWQfrcV4sexA0KYXcTWKTSnaSNXYgnbkHiIBMczRAdAAcVLxeMrXJ+FR3kX/t16iZZ
-         EaAP4G6sdebhxB1t67jjcEU9arghILk1eMt+ZEgG23dol/34FtQZA+Gcb3WysPVP6JuH
-         5UMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV77OkxPnGTmCjLPXlIHkBnxQ6+zCeSZZIRldONn74IHrYMGxaLh73xe47o7ZZlCOgkctgU9XrFKJQwkJ3Z/gJDhUaj2UXB84LxPi9z
-X-Gm-Message-State: AOJu0YwSIw/i/y3atHRuewxA6vOEom7etuTMfaGP04hiMbVY92qjEjwx
-	Kh7NlOAUHnLihrSvFKypeCmS+TuEieosx0A0Q4+ESkEn7togtzc=
-X-Google-Smtp-Source: AGHT+IGaljIfOINvp35rTl5T4iijxPSBPWtVHz2ZOvAehR7Vkfor0vpEheNeOShza8gm7JoO5jsENQ==
-X-Received: by 2002:a17:902:ce10:b0:1fb:3b89:b11d with SMTP id d9443c01a7336-1ff57257f43mr185632175ad.4.1723025010560;
-        Wed, 07 Aug 2024 03:03:30 -0700 (PDT)
+        bh=BDqYPFDQ8C1Tp5b7bagIZayk3yRE5OYklUz/hGN2mSE=;
+        b=ocouxbTnh81fLpmNbZbxGxmLg11sq08J+haei1LEp7V9Ix/zWywStDbPKHTUi9JeeO
+         ueDRFLU4iA4McpiTbMUEn08XxNpzTU8u9CGwjxYnBpdYqPlIgtWJHshNxagblPALaOCj
+         xcv+0vr62XNhtGwLY8QnzLjaufrIHgi03fSRxb/aLfIu+O878s1Qes1KUkB+l1DyndRs
+         SZgT9vp7RArddBCYEaCygYrE+3CTNUAF+BWkfgzUwmeeslbKCfMcGyC9cJUGyps6V8b9
+         Ysc4ySin7q3WLkBaNxA2mqqIprLblaMTbKGVEi37x1RMKSXLM7L+No86gARmLjQauW9Y
+         0pfg==
+X-Forwarded-Encrypted: i=1; AJvYcCXs/yY/FC6aGJ3i/gcRP00n5WhGmayjDSjBxHwgrLCcAds3iSC5f1jqBJp24dhy6pT1/9VK6cv9d5uY2UANBVQhtNZRWtJS1qYKX3fW
+X-Gm-Message-State: AOJu0Yx9zMblMpNWZnLzOSRtJvnvlQJhRlISrWAOmPrUnPkTM0xQGIbZ
+	2DqeduyRR+CGVsnHQd01t1JOiNSmMbZYsJUVkQR87GoyQMoAUI4=
+X-Google-Smtp-Source: AGHT+IF6/COrwRqAiRFSVZRZmy72Ongk1XUuk5O7KX5dNirXd8DXP6iFhlCT6mU3VemP2quJG039bA==
+X-Received: by 2002:a17:902:f691:b0:1fb:8e98:4468 with SMTP id d9443c01a7336-1ff573f4efbmr191271825ad.50.1723025014926;
+        Wed, 07 Aug 2024 03:03:34 -0700 (PDT)
 Received: from localhost (2001-b400-e352-b705-880f-4661-e7a1-4abb.emome-ip6.hinet.net. [2001:b400:e352:b705:880f:4661:e7a1:4abb])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff59059f6dsm102022675ad.132.2024.08.07.03.03.29
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff58f6d80csm102373675ad.119.2024.08.07.03.03.34
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 07 Aug 2024 03:03:29 -0700 (PDT)
+        Wed, 07 Aug 2024 03:03:34 -0700 (PDT)
 From: warp5tw@gmail.com
 X-Google-Original-From: kfting@nuvoton.com
 To: tali.perry@nuvoton.com,
@@ -85,9 +85,9 @@ To: tali.perry@nuvoton.com,
 Cc: linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	openbmc@lists.ozlabs.org
-Subject: [PATCH v1 1/7] i2c: npcm: correct the read/write operation procedure
-Date: Wed,  7 Aug 2024 18:02:38 +0800
-Message-Id: <20240807100244.16872-2-kfting@nuvoton.com>
+Subject: [PATCH v1 2/7] i2c: npcm: use a software flag to indicate a BER condition
+Date: Wed,  7 Aug 2024 18:02:39 +0800
+Message-Id: <20240807100244.16872-3-kfting@nuvoton.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240807100244.16872-1-kfting@nuvoton.com>
 References: <20240807100244.16872-1-kfting@nuvoton.com>
@@ -99,40 +99,66 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 
 From: Tyrone Ting <kfting@nuvoton.com>
 
-Originally the driver uses the XMIT bit in SMBnST register to decide
-the upcoming i2c transaction. If XMIT bit is 1, then it will be an i2c
-write operation. If it's 0, then a read operation will be executed.
+If not clearing the BB (bus busy) condition in the BER (bus error)
+interrupt, the driver causes a timeout and hence the i2c core
+doesn't do the i2c transfer retry but returns the driver's return
+value to the upper layer instead.
 
-After checking the datasheet, the XMIT bit is valid when the i2c module
-is acting in a slave role. Use the software status to control the i2c
-transaction flow instead when the i2c module is acting in a master role.
+Clear the BB condition in the BER interrupt and a software flag is
+used. The driver does an i2c recovery without causing the timeout
+if the flag is set.
 
 Fixes: 48acf8292280 ("i2c: Remove redundant comparison in npcm_i2c_reg_slave")
 Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
 ---
- drivers/i2c/busses/i2c-npcm7xx.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-npcm7xx.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 2fe68615942e..c8503acdaff8 100644
+index c8503acdaff8..bd444ff83a8c 100644
 --- a/drivers/i2c/busses/i2c-npcm7xx.c
 +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -1626,13 +1626,10 @@ static void npcm_i2c_irq_handle_sda(struct npcm_i2c *bus, u8 i2cst)
- 			npcm_i2c_wr_byte(bus, bus->dest_addr | BIT(0));
- 	/* SDA interrupt, after start\restart */
+@@ -332,6 +332,7 @@ struct npcm_i2c {
+ 	u64 nack_cnt;
+ 	u64 timeout_cnt;
+ 	u64 tx_complete_cnt;
++	bool ber_state;
+ };
+ 
+ static inline void npcm_i2c_select_bank(struct npcm_i2c *bus,
+@@ -1519,6 +1520,7 @@ static void npcm_i2c_irq_handle_ber(struct npcm_i2c *bus)
+ 	if (npcm_i2c_is_master(bus)) {
+ 		npcm_i2c_master_abort(bus);
  	} else {
--		if (NPCM_I2CST_XMIT & i2cst) {
--			bus->operation = I2C_WRITE_OPER;
-+		if (bus->operation == I2C_WRITE_OPER)
- 			npcm_i2c_irq_master_handler_write(bus);
--		} else {
--			bus->operation = I2C_READ_OPER;
-+		else if (bus->operation == I2C_READ_OPER)
- 			npcm_i2c_irq_master_handler_read(bus);
--		}
++		bus->ber_state = true;
+ 		npcm_i2c_clear_master_status(bus);
+ 
+ 		/* Clear BB (BUS BUSY) bit */
+@@ -1697,6 +1699,7 @@ static int npcm_i2c_recovery_tgclk(struct i2c_adapter *_adap)
+ 		dev_dbg(bus->dev, "bus%d-0x%x recovery skipped, bus not stuck",
+ 			bus->num, bus->dest_addr);
+ 		npcm_i2c_reset(bus);
++		bus->ber_state = false;
+ 		return 0;
  	}
+ 
+@@ -1761,6 +1764,7 @@ static int npcm_i2c_recovery_tgclk(struct i2c_adapter *_adap)
+ 		if (bus->rec_succ_cnt < ULLONG_MAX)
+ 			bus->rec_succ_cnt++;
+ 	}
++	bus->ber_state = false;
+ 	return status;
  }
  
+@@ -2156,7 +2160,7 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+ 
+ 	} while (time_is_after_jiffies(time_left) && bus_busy);
+ 
+-	if (bus_busy) {
++	if (bus_busy || bus->ber_state) {
+ 		iowrite8(NPCM_I2CCST_BB, bus->reg + NPCM_I2CCST);
+ 		npcm_i2c_reset(bus);
+ 		i2c_recover_bus(adap);
 -- 
 2.34.1
 
