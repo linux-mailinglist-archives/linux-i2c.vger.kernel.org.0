@@ -1,55 +1,89 @@
-Return-Path: <linux-i2c+bounces-5199-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5200-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D32B094B373
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 01:14:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19E7B94B379
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 01:14:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FBE21F2253B
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 23:14:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AF8D1C21836
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 23:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB36E1553AA;
-	Wed,  7 Aug 2024 23:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9768155A59;
+	Wed,  7 Aug 2024 23:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKa+PcGu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MeKbRIwU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775A313C8EA;
-	Wed,  7 Aug 2024 23:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4318B1553BC;
+	Wed,  7 Aug 2024 23:14:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723072464; cv=none; b=dBlASPiRqZyLRJ9Vp8IcNAs/uPrkAcpHtOMm1dkXuNqLyf0ux2YRNn7l5zGkuTWwD88AFftetFxpsuNnSrFMK5d4dYwd5fmJq+hoYQTd00HrCbKpVX0p29PFCOcfP7eX5CDC95cxbIkuOILRmzITrRSPKy80p5ub6Kvf1uKOZ40=
+	t=1723072484; cv=none; b=LqAYaZ7FSFrlxH38u81VQGbkxu675PawMM+ghAQifmW2CrFnv3EdgkYgznzGQ3K3sc9ghnZh16aWsiGYpPkKeffVbTZ9mYgaIhfo/NQfS0Gpk6WHwatN+KvEmac1VKEWZDzOz4MaVf3m7nwXdCAg4r7fvmtVFFHYUI3nUHRCoFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723072464; c=relaxed/simple;
-	bh=MMApE+y1i7TH7kcZ40ixxUx/3NG1Vliy3cWf2maCfB0=;
+	s=arc-20240116; t=1723072484; c=relaxed/simple;
+	bh=rlvbH7U0JcMra9lxPNNeEXVHhjO7TnrdcHTeom1Fcis=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lKSQuUZ4nT+43mztvkvRCiPPzQxBQCti5gXC52pv4skYxFzKItoKlOzzpKvUZAN0uirRjQvNzPNsOzXp7LFZbHHd1z1IUMyopo5ZAoIdT3jWlGCR9ubJrQGvUADuSZzwf9nKwI/dzwrY9vLhBKNLbcZ6Mo+bGjKHxpeim9K6Mao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vKa+PcGu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A46A9C32781;
-	Wed,  7 Aug 2024 23:14:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723072464;
-	bh=MMApE+y1i7TH7kcZ40ixxUx/3NG1Vliy3cWf2maCfB0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vKa+PcGuo/Dhror5cMn2zoQ8FexRnmFm3o1ZnK9g8G8+ueTpV4uForWkP5f1o5/P+
-	 dBymeQJ5sRti6IRQ5L6LQXA66qIgbuIlDp/+kPjC0Zgs7K5nzE5yQs+AYGG9VFPcQe
-	 Rq/g8/Utb26N9rGhqXbrDN169YoXJiC3O7YD7T+7eSnBFWhtbXii/1UIuC7iuLH1T5
-	 TAGRD5W723gCYRSZhMQqXGPa+t9ZjOsGGW7SgKdAxexjBweQi01quk29K8KVLvVVTb
-	 OLJiveMgNZNU0U/B7GTZd7MqdZIjlS5a6l7hl88k+P+CdMtnpTokfBhBGpTO89Kor1
-	 pAMRnA5lVNclg==
-Date: Thu, 8 Aug 2024 00:14:18 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Mary Strodl <mstrodl@csh.rit.edu>
-Cc: linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
-	urezki@gmail.com, hch@infradead.org, linux-mm@kvack.org, lee@kernel.org, 
-	linux-i2c@vger.kernel.org, s.hauer@pengutronix.de, christian.gmeiner@gmail.com
-Subject: Re: [PATCH v2 0/2] Add support for Congatec CGEB BIOS interface
-Message-ID: <qqb5ho7urmhy6e55efu3uxiz4gupikhiqgngilzx35djfgouf2@wlo336gdkoer>
-References: <20240801160610.101859-1-mstrodl@csh.rit.edu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uaVUvBuEcjDZT5JG7ox5gUQe2JnLJAVxXYBrZ0Ke516K5FKUVXBq98O5QFDdJio9qqsM2TWSSJFckVxy4exKipJcVRGFop+tzYwWiOWk0lRPtYKA0vo0fsLq3WC1SveiojVKngFNTMDAirCETke3gY6V5uZjHIV+LblSQCkz7ZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MeKbRIwU; arc=none smtp.client-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5d5d0535396so237607eaf.1;
+        Wed, 07 Aug 2024 16:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723072482; x=1723677282; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nc+02bBxrPU3z7YbfbXPiG3TdH9ZHpsAB6H/P49aAMI=;
+        b=MeKbRIwUzsIgRJBK/akDoIunU0Ieoog7Dc3Z386RDPDYzIyIDW79UNlOzoSqrX3WVj
+         Jd1XBJ+D/LQG9rggxpb9rGc1Y+k8e4f2dsAQCBUNoAvcewNT/C7XKmtQksHpy1+JNZuz
+         xRSCC/ngOdBmc+SA331InpuL1eYv0ZDMQiwsVTU4QZZJcaYf9x/RQKkoyjxKTgVzdADJ
+         FC917216Gv5DETIT1Bj7Ef/qNZnXZjYQIUujmwH6qJvhPql3JextgQewgxJ+6SLJtwzl
+         kvWat90MJWgpJRbHJyiVGi+/pZmwoi47mTUyQH4lNpltip/Drib87HrCPkJgRBGj2AtK
+         vLaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723072482; x=1723677282;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nc+02bBxrPU3z7YbfbXPiG3TdH9ZHpsAB6H/P49aAMI=;
+        b=jfa7CkhScLCaXWJNUCsaDT6S2LreAzmKWBbja0587oF4u3TELUmkklomM/iPKPl6J7
+         TXS6dzd8Te21yFCKjQ0uxIS38UHGyGI7VYl9Aa5qOF2J//gKwck+E92HgFOGWVOAw1rM
+         ALF+z4pTeFaCtKPxtJXDGSF7QKiNNBMujVUBp8LxlYdh1/fsUQZe1IKf8bigfy/R2qLQ
+         M8/trgko666XXucIy9Rkk6fnqSN7rf/eSHPeubjtxUdmuEdYT3smOF+X4U9plC6TTsn3
+         lVWP0wl7R13CKu0RaifHRk/jzzh6nXME0AqkHveXlUWaHZaYHLxUIkuoRQ0t+mZ2sA0D
+         5NwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWbmJPEvLsBVW3ieWZeEH4TkQ/g1jURjfUw4F/6vmAMFIHqksnPG+JGGz4NHuxtv/+NTppEGhP+Tamffb/4EdCUvQ8I1VupQM1+V9WHcetohNgWkDCmX7IpWvPlgRW31uHwg8pZPfpAMWu41U1F5oNL/gxsas4RwAj0Yz73wBOsTdYoGqWUVmsaeY/8J6OnZ9Ct8WQxc7EUhQsBO70Yh1V3dQ==
+X-Gm-Message-State: AOJu0YwvSRQDumGsc2/ZScnhkxbaSjd1m20UOtPxh+iwvKCGph5cpyC7
+	Xs3yGJBo86PN6JwL/mcDdvEdNqmo98DmQvfHj6L0IZtRKxhmLw92+R8rLPfK
+X-Google-Smtp-Source: AGHT+IFVKAcqwxIm7XFe0JFRilJfmv0FqcpDOsLEIsUbljBi0ODx1QcAQqBLXH+JSeqngoUP8VkUmQ==
+X-Received: by 2002:a05:6870:8a07:b0:25e:1711:90e3 with SMTP id 586e51a60fabf-2692b61b17cmr175018fac.2.1723072482302;
+        Wed, 07 Aug 2024 16:14:42 -0700 (PDT)
+Received: from localhost ([2607:fea8:52a3:d200:324c:b818:b179:79b])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a3786b5680sm100993885a.100.2024.08.07.16.14.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Aug 2024 16:14:42 -0700 (PDT)
+Date: Wed, 7 Aug 2024 19:14:40 -0400
+From: Richard Acayan <mailingradian@gmail.com>
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Todor Tomov <todor.too@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-i2c@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-media@vger.kernel.org
+Subject: Re: [PATCH 2/4] dt-bindings: media: camss: Add qcom,sdm670-camss
+Message-ID: <ZrP_4NRIfo71wDwo@radian>
+References: <20240806224219.71623-7-mailingradian@gmail.com>
+ <20240806224219.71623-9-mailingradian@gmail.com>
+ <81192a77-ec22-45bd-91d6-4a0ec381a6f3@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,74 +92,70 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240801160610.101859-1-mstrodl@csh.rit.edu>
+In-Reply-To: <81192a77-ec22-45bd-91d6-4a0ec381a6f3@linaro.org>
 
-Hi Mary,
+On Tue, Aug 06, 2024 at 11:57:38PM +0100, Bryan O'Donoghue wrote:
+> On 06/08/2024 23:42, Richard Acayan wrote:
+>> Add the camera subsystem for the Snapdragon 670.
+>> 
+>> Adapted from SC8280XP camera subsystem.
+>
+> Hmm, I'd like a little bit more of a commit log here. sdm670 as found in
+> "spiffy device X" contains N CSIDs, Y VFEs.
+>
+> Its not super important but a description that is device specific would be
+> nice.
 
-On Thu, Aug 01, 2024 at 12:06:08PM GMT, Mary Strodl wrote:
-> The following series adds support for the Congatec CGEB interface
-> found on some Congatec x86 boards. The CGEB interface is a BIOS
-> interface which provides access to onboard peripherals like I2C
-> busses and watchdogs. It works by mapping BIOS code and searching
-> for magic values which specify the entry points to the CGEB call.
-> The CGEB call is an API provided by the BIOS which provides access
-> to the functions in an ioctl like fashion.
-> 
-> At the request of some folks last time this series went out, CGEB
-> now has a userspace component which runs the x86 blob (rather than
-> running it directly in the kernel), which sends requests back and
-> forth using the cn_netlink API.
+Ok.
 
-this little paragraph is the closest to a changelog I can see.
-Could you please write up a real changlog and list all the
-changes from v1 to v2?
+>> 
+>> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+>> ---
+>>   .../bindings/media/qcom,sdm670-camss.yaml     | 353 ++++++++++++++++++
+>>   1 file changed, 353 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+>> new file mode 100644
+>> index 000000000000..543fad1b5cd7
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+>> @@ -0,0 +1,353 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+>> +
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm SDM670 Camera Subsystem (CAMSS)
+>> +
+>> +maintainers:
+>> +  - Richard Acayan <mailingradian@gmail.com>
+>> +
+>> +description:
+>> +  The CAMSS IP is a CSI decoder and ISP present on Qualcomm platforms.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: qcom,sdm670-camss
+>> +
+>> +  clocks:
+>> +    maxItems: 33
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: camnoc_axi
+>> +      - const: cpas_ahb
+>> +      - const: cphy_rx_src
+>> +      - const: csi0
+>> +      - const: csi0_src
+>
+> These "_src" clocks should be dropped.
 
-You can do it as reply to this e-mail, but please, next time do
-it either in the cover letter or for each patch.
+Hi, this will require dedicated definitions for SDM670 in the driver, as
+SDM845 lists (and requires) the src clocks. It's certainly possible to
+do so, but I'm just not sure if it's what you expected.
 
-Thanks,
-Andi
-
-> You can find a reference implementation of the userspace helper here:
-> https://github.com/Mstrodl/cgeb-helper
-> 
-> I didn't get an answer when I asked where the userspace component
-> should live, so I didn't put a ton of work into getting the helper
-> up to snuff since similar userspace helpers (like v86d) are not
-> in-tree. If folks would like the helper in-tree, that's fine too.
-> 
-> This series is based on the excellent work of Sascha Hauer and
-> Christian Gmeiner. You can find their original work here:
-> 
-> http://patchwork.ozlabs.org/patch/219756/
-> http://patchwork.ozlabs.org/patch/219755/
-> http://patchwork.ozlabs.org/patch/219757/
-> 
-> http://patchwork.ozlabs.org/patch/483262/
-> http://patchwork.ozlabs.org/patch/483264/
-> http://patchwork.ozlabs.org/patch/483261/
-> http://patchwork.ozlabs.org/patch/483263/
-> 
-> Mary Strodl (1):
->   x86: Add basic support for the Congatec CGEB BIOS interface
-> 
-> Sascha Hauer (1):
->   i2c: Add Congatec CGEB I2C driver
-> 
->  drivers/i2c/busses/Kconfig             |    7 +
->  drivers/i2c/busses/Makefile            |    1 +
->  drivers/i2c/busses/i2c-congatec-cgeb.c |  189 ++++
->  drivers/mfd/Kconfig                    |   10 +
->  drivers/mfd/Makefile                   |    1 +
->  drivers/mfd/congatec-cgeb.c            | 1139 ++++++++++++++++++++++++
->  include/linux/mfd/congatec-cgeb.h      |  111 +++
->  include/uapi/linux/connector.h         |    4 +-
->  8 files changed, 1461 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/i2c/busses/i2c-congatec-cgeb.c
->  create mode 100644 drivers/mfd/congatec-cgeb.c
->  create mode 100644 include/linux/mfd/congatec-cgeb.h
-> 
-> -- 
-> 2.45.2
-> 
+Or I could send an RFT to drop them from SDM845...
 
