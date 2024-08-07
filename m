@@ -1,207 +1,131 @@
-Return-Path: <linux-i2c+bounces-5198-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5199-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A08C694B0BD
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 21:55:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D32B094B373
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 01:14:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2CF21C218AE
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 19:55:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FBE21F2253B
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 23:14:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED16D1459FD;
-	Wed,  7 Aug 2024 19:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB36E1553AA;
+	Wed,  7 Aug 2024 23:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cxOiv+yx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKa+PcGu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0A9144D39;
-	Wed,  7 Aug 2024 19:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775A313C8EA;
+	Wed,  7 Aug 2024 23:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723060527; cv=none; b=eFDS/HapBkc0VzDk5KF/fYP8D0Op9ydk6CDiX1Ievjqkzv70vD81F3U8tP6XsUlMlzOoecCHL9WZ9XgMgEGZ1mrs4CGDW/Sb0eGjqFyZJh69L9nLmwSo3VNE2eiYecOuUhDWcOxYnV892pRlNXorD4Mov3z0EQjtf32ukGXSUqE=
+	t=1723072464; cv=none; b=dBlASPiRqZyLRJ9Vp8IcNAs/uPrkAcpHtOMm1dkXuNqLyf0ux2YRNn7l5zGkuTWwD88AFftetFxpsuNnSrFMK5d4dYwd5fmJq+hoYQTd00HrCbKpVX0p29PFCOcfP7eX5CDC95cxbIkuOILRmzITrRSPKy80p5ub6Kvf1uKOZ40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723060527; c=relaxed/simple;
-	bh=az2X1EO5TQIgKmVStPC7eXwpf00XOreTyYeLTtf3ybg=;
+	s=arc-20240116; t=1723072464; c=relaxed/simple;
+	bh=MMApE+y1i7TH7kcZ40ixxUx/3NG1Vliy3cWf2maCfB0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bG4G/6CXKjuJpzHMLI9G2nF7Ff6IMpQsoEl7quFlhUrj6XeEdWBEKTzTUIsa+/RmG2b6J3EktJikd0e4bKDBjXCVgkqhN/6mgPwBiMWcLwIdbCSTPZyBH0jHn00GoKEHYlIXbxqcao4fJw22RyvWMlPSvoY44gG87SD6xLIUOxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cxOiv+yx; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723060526; x=1754596526;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=az2X1EO5TQIgKmVStPC7eXwpf00XOreTyYeLTtf3ybg=;
-  b=cxOiv+yxfrbFdKBSlalrHS/qr1FLg8xkC3TKsEQ8AEy+nWSmu1pqzVmY
-   JYC1IVjv851HJW4Y5TaAXhQ5SMSbP0SCWXN6MxTgK0tVnV+EKV0kplpwM
-   o5Jw8Cd5TbgJwRseeqyrYaOnZDq2zIJZ3CILfLmiDdmS2GNNCWOBNu0BQ
-   Q2Q6sqmNBiCOZ0vIatyrK4W3M9mI8Xb0KvHdglREosGfq/qtuGHY5jfnT
-   i8vETKIia3C1raBOoY1XmuV6H+lr0Gm+CgYLCnraDBk35ZnLAb/t8MKkd
-   FwPT1OKVSV+crNC5pI37RnL6CyiHth1/U1+I4gCeITm8GeIgPd6I4Wc3b
-   w==;
-X-CSE-ConnectionGUID: oH+kZXriS7KqvaA45n+H8A==
-X-CSE-MsgGUID: FGcpAHvmSg2857mInPYG/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11157"; a="21326078"
-X-IronPort-AV: E=Sophos;i="6.09,270,1716274800"; 
-   d="scan'208";a="21326078"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 12:55:26 -0700
-X-CSE-ConnectionGUID: s2NvMB4OSiSRitFGoGF4BQ==
-X-CSE-MsgGUID: G0rxdLxtSrqJAy8xlCI5RA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,270,1716274800"; 
-   d="scan'208";a="56647725"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 07 Aug 2024 12:55:21 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sbmkh-0005g1-1F;
-	Wed, 07 Aug 2024 19:55:19 +0000
-Date: Thu, 8 Aug 2024 03:55:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: warp5tw@gmail.com, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-	tomer.maimon@nuvoton.com, avifishman70@gmail.com,
-	tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-	yuenn@google.com, benjaminfair@google.com, andi.shyti@kernel.org,
-	wsa+renesas@sang-engineering.com, rand.sec96@gmail.com,
-	kwliu@nuvoton.com, jjliu0@nuvoton.com, kfting@nuvoton.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v1 5/7] drivers: i2c: use i2c frequency table
-Message-ID: <202408080319.de2B6PgU-lkp@intel.com>
-References: <20240807100244.16872-6-kfting@nuvoton.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lKSQuUZ4nT+43mztvkvRCiPPzQxBQCti5gXC52pv4skYxFzKItoKlOzzpKvUZAN0uirRjQvNzPNsOzXp7LFZbHHd1z1IUMyopo5ZAoIdT3jWlGCR9ubJrQGvUADuSZzwf9nKwI/dzwrY9vLhBKNLbcZ6Mo+bGjKHxpeim9K6Mao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vKa+PcGu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A46A9C32781;
+	Wed,  7 Aug 2024 23:14:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723072464;
+	bh=MMApE+y1i7TH7kcZ40ixxUx/3NG1Vliy3cWf2maCfB0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vKa+PcGuo/Dhror5cMn2zoQ8FexRnmFm3o1ZnK9g8G8+ueTpV4uForWkP5f1o5/P+
+	 dBymeQJ5sRti6IRQ5L6LQXA66qIgbuIlDp/+kPjC0Zgs7K5nzE5yQs+AYGG9VFPcQe
+	 Rq/g8/Utb26N9rGhqXbrDN169YoXJiC3O7YD7T+7eSnBFWhtbXii/1UIuC7iuLH1T5
+	 TAGRD5W723gCYRSZhMQqXGPa+t9ZjOsGGW7SgKdAxexjBweQi01quk29K8KVLvVVTb
+	 OLJiveMgNZNU0U/B7GTZd7MqdZIjlS5a6l7hl88k+P+CdMtnpTokfBhBGpTO89Kor1
+	 pAMRnA5lVNclg==
+Date: Thu, 8 Aug 2024 00:14:18 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Mary Strodl <mstrodl@csh.rit.edu>
+Cc: linux-kernel@vger.kernel.org, akpm@linux-foundation.org, 
+	urezki@gmail.com, hch@infradead.org, linux-mm@kvack.org, lee@kernel.org, 
+	linux-i2c@vger.kernel.org, s.hauer@pengutronix.de, christian.gmeiner@gmail.com
+Subject: Re: [PATCH v2 0/2] Add support for Congatec CGEB BIOS interface
+Message-ID: <qqb5ho7urmhy6e55efu3uxiz4gupikhiqgngilzx35djfgouf2@wlo336gdkoer>
+References: <20240801160610.101859-1-mstrodl@csh.rit.edu>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240807100244.16872-6-kfting@nuvoton.com>
+In-Reply-To: <20240801160610.101859-1-mstrodl@csh.rit.edu>
 
-Hi,
+Hi Mary,
 
-kernel test robot noticed the following build warnings:
+On Thu, Aug 01, 2024 at 12:06:08PM GMT, Mary Strodl wrote:
+> The following series adds support for the Congatec CGEB interface
+> found on some Congatec x86 boards. The CGEB interface is a BIOS
+> interface which provides access to onboard peripherals like I2C
+> busses and watchdogs. It works by mapping BIOS code and searching
+> for magic values which specify the entry points to the CGEB call.
+> The CGEB call is an API provided by the BIOS which provides access
+> to the functions in an ioctl like fashion.
+> 
+> At the request of some folks last time this series went out, CGEB
+> now has a userspace component which runs the x86 blob (rather than
+> running it directly in the kernel), which sends requests back and
+> forth using the cn_netlink API.
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on linus/master v6.11-rc2 next-20240807]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+this little paragraph is the closest to a changelog I can see.
+Could you please write up a real changlog and list all the
+changes from v1 to v2?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/warp5tw-gmail-com/i2c-npcm-correct-the-read-write-operation-procedure/20240807-182210
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20240807100244.16872-6-kfting%40nuvoton.com
-patch subject: [PATCH v1 5/7] drivers: i2c: use i2c frequency table
-config: arm-randconfig-001-20240808 (https://download.01.org/0day-ci/archive/20240808/202408080319.de2B6PgU-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408080319.de2B6PgU-lkp@intel.com/reproduce)
+You can do it as reply to this e-mail, but please, next time do
+it either in the cover letter or for each patch.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408080319.de2B6PgU-lkp@intel.com/
+Thanks,
+Andi
 
-All warnings (new ones prefixed by >>):
-
-   drivers/i2c/busses/i2c-npcm7xx.c: In function 'npcm_i2c_init_clk':
->> drivers/i2c/busses/i2c-npcm7xx.c:1926:14: warning: variable 'bus_freq_khz' set but not used [-Wunused-but-set-variable]
-    1926 |         u32  bus_freq_khz;
-         |              ^~~~~~~~~~~~
->> drivers/i2c/busses/i2c-npcm7xx.c:1925:14: warning: variable 'src_clk_khz' set but not used [-Wunused-but-set-variable]
-    1925 |         u32  src_clk_khz;
-         |              ^~~~~~~~~~~
-
-
-vim +/bus_freq_khz +1926 drivers/i2c/busses/i2c-npcm7xx.c
-
-56a1485b102ed1 Tali Perry          2020-05-27  1909  
-56a1485b102ed1 Tali Perry          2020-05-27  1910  /*
-56a1485b102ed1 Tali Perry          2020-05-27  1911   * npcm_i2c_init_clk: init HW timing parameters.
-0c47dd7d09bb5d Jonathan Neuschäfer 2022-01-29  1912   * NPCM7XX i2c module timing parameters are dependent on module core clk (APB)
-56a1485b102ed1 Tali Perry          2020-05-27  1913   * and bus frequency.
-0c47dd7d09bb5d Jonathan Neuschäfer 2022-01-29  1914   * 100kHz bus requires tSCL = 4 * SCLFRQ * tCLK. LT and HT are symmetric.
-0c47dd7d09bb5d Jonathan Neuschäfer 2022-01-29  1915   * 400kHz bus requires asymmetric HT and LT. A different equation is recommended
-56a1485b102ed1 Tali Perry          2020-05-27  1916   * by the HW designer, given core clock range (equations in comments below).
-56a1485b102ed1 Tali Perry          2020-05-27  1917   *
-56a1485b102ed1 Tali Perry          2020-05-27  1918   */
-56a1485b102ed1 Tali Perry          2020-05-27  1919  static int npcm_i2c_init_clk(struct npcm_i2c *bus, u32 bus_freq_hz)
-56a1485b102ed1 Tali Perry          2020-05-27  1920  {
-a946fe9698f261 Tyrone Ting         2024-08-07  1921  	struct  SMB_TIMING_T *smb_timing;
-a946fe9698f261 Tyrone Ting         2024-08-07  1922  	u8   scl_table_cnt = 0, table_size = 0;
-a946fe9698f261 Tyrone Ting         2024-08-07  1923  
-56a1485b102ed1 Tali Perry          2020-05-27  1924  	u8   fast_mode = 0;
-56a1485b102ed1 Tali Perry          2020-05-27 @1925  	u32  src_clk_khz;
-56a1485b102ed1 Tali Perry          2020-05-27 @1926  	u32  bus_freq_khz;
-56a1485b102ed1 Tali Perry          2020-05-27  1927  
-56a1485b102ed1 Tali Perry          2020-05-27  1928  	src_clk_khz = bus->apb_clk / 1000;
-56a1485b102ed1 Tali Perry          2020-05-27  1929  	bus_freq_khz = bus_freq_hz / 1000;
-56a1485b102ed1 Tali Perry          2020-05-27  1930  	bus->bus_freq = bus_freq_hz;
-56a1485b102ed1 Tali Perry          2020-05-27  1931  
-a946fe9698f261 Tyrone Ting         2024-08-07  1932  	switch (bus_freq_hz) {
-a946fe9698f261 Tyrone Ting         2024-08-07  1933  	case I2C_MAX_STANDARD_MODE_FREQ:
-a946fe9698f261 Tyrone Ting         2024-08-07  1934  		smb_timing = SMB_TIMING_100KHZ;
-a946fe9698f261 Tyrone Ting         2024-08-07  1935  		table_size = ARRAY_SIZE(SMB_TIMING_100KHZ);
-a946fe9698f261 Tyrone Ting         2024-08-07  1936  		break;
-a946fe9698f261 Tyrone Ting         2024-08-07  1937  	case I2C_MAX_FAST_MODE_FREQ:
-a946fe9698f261 Tyrone Ting         2024-08-07  1938  		smb_timing = SMB_TIMING_400KHZ;
-a946fe9698f261 Tyrone Ting         2024-08-07  1939  		table_size = ARRAY_SIZE(SMB_TIMING_400KHZ);
-56a1485b102ed1 Tali Perry          2020-05-27  1940  		fast_mode = I2CCTL3_400K_MODE;
-a946fe9698f261 Tyrone Ting         2024-08-07  1941  		break;
-a946fe9698f261 Tyrone Ting         2024-08-07  1942  	case I2C_MAX_FAST_MODE_PLUS_FREQ:
-a946fe9698f261 Tyrone Ting         2024-08-07  1943  		smb_timing = SMB_TIMING_1000KHZ;
-a946fe9698f261 Tyrone Ting         2024-08-07  1944  		table_size = ARRAY_SIZE(SMB_TIMING_1000KHZ);
-56a1485b102ed1 Tali Perry          2020-05-27  1945  		fast_mode = I2CCTL3_400K_MODE;
-a946fe9698f261 Tyrone Ting         2024-08-07  1946  		break;
-a946fe9698f261 Tyrone Ting         2024-08-07  1947  	default:
-56a1485b102ed1 Tali Perry          2020-05-27  1948  		return -EINVAL;
-56a1485b102ed1 Tali Perry          2020-05-27  1949  	}
-56a1485b102ed1 Tali Perry          2020-05-27  1950  
-a946fe9698f261 Tyrone Ting         2024-08-07  1951  	for (scl_table_cnt = 0 ; scl_table_cnt < table_size ; scl_table_cnt++)
-a946fe9698f261 Tyrone Ting         2024-08-07  1952  		if (bus->apb_clk >= smb_timing[scl_table_cnt].core_clk)
-a946fe9698f261 Tyrone Ting         2024-08-07  1953  			break;
-a946fe9698f261 Tyrone Ting         2024-08-07  1954  
-56a1485b102ed1 Tali Perry          2020-05-27  1955  	/* write sclfrq value. bits [6:0] are in I2CCTL2 reg */
-a946fe9698f261 Tyrone Ting         2024-08-07  1956  	iowrite8(FIELD_PREP(I2CCTL2_SCLFRQ6_0, smb_timing[scl_table_cnt].sclfrq & 0x7F),
-56a1485b102ed1 Tali Perry          2020-05-27  1957  		 bus->reg + NPCM_I2CCTL2);
-56a1485b102ed1 Tali Perry          2020-05-27  1958  
-56a1485b102ed1 Tali Perry          2020-05-27  1959  	/* bits [8:7] are in I2CCTL3 reg */
-a946fe9698f261 Tyrone Ting         2024-08-07  1960  	iowrite8(fast_mode | FIELD_PREP(I2CCTL3_SCLFRQ8_7, (smb_timing[scl_table_cnt].sclfrq >> 7)
-a946fe9698f261 Tyrone Ting         2024-08-07  1961  		 & 0x3),
-56a1485b102ed1 Tali Perry          2020-05-27  1962  		 bus->reg + NPCM_I2CCTL3);
-56a1485b102ed1 Tali Perry          2020-05-27  1963  
-56a1485b102ed1 Tali Perry          2020-05-27  1964  	/* Select Bank 0 to access NPCM_I2CCTL4/NPCM_I2CCTL5 */
-56a1485b102ed1 Tali Perry          2020-05-27  1965  	npcm_i2c_select_bank(bus, I2C_BANK_0);
-56a1485b102ed1 Tali Perry          2020-05-27  1966  
-56a1485b102ed1 Tali Perry          2020-05-27  1967  	if (bus_freq_hz >= I2C_MAX_FAST_MODE_FREQ) {
-56a1485b102ed1 Tali Perry          2020-05-27  1968  		/*
-56a1485b102ed1 Tali Perry          2020-05-27  1969  		 * Set SCL Low/High Time:
-56a1485b102ed1 Tali Perry          2020-05-27  1970  		 * k1 = 2 * SCLLT7-0 -> Low Time  = k1 / 2
-56a1485b102ed1 Tali Perry          2020-05-27  1971  		 * k2 = 2 * SCLLT7-0 -> High Time = k2 / 2
-56a1485b102ed1 Tali Perry          2020-05-27  1972  		 */
-a946fe9698f261 Tyrone Ting         2024-08-07  1973  		iowrite8(smb_timing[scl_table_cnt].scllt, bus->reg + NPCM_I2CSCLLT);
-a946fe9698f261 Tyrone Ting         2024-08-07  1974  		iowrite8(smb_timing[scl_table_cnt].sclht, bus->reg + NPCM_I2CSCLHT);
-56a1485b102ed1 Tali Perry          2020-05-27  1975  
-a946fe9698f261 Tyrone Ting         2024-08-07  1976  		iowrite8(smb_timing[scl_table_cnt].dbcnt, bus->reg + NPCM_I2CCTL5);
-56a1485b102ed1 Tali Perry          2020-05-27  1977  	}
-56a1485b102ed1 Tali Perry          2020-05-27  1978  
-a946fe9698f261 Tyrone Ting         2024-08-07  1979  	iowrite8(smb_timing[scl_table_cnt].hldt, bus->reg + NPCM_I2CCTL4);
-56a1485b102ed1 Tali Perry          2020-05-27  1980  
-56a1485b102ed1 Tali Perry          2020-05-27  1981  	/* Return to Bank 1, and stay there by default: */
-56a1485b102ed1 Tali Perry          2020-05-27  1982  	npcm_i2c_select_bank(bus, I2C_BANK_1);
-56a1485b102ed1 Tali Perry          2020-05-27  1983  
-56a1485b102ed1 Tali Perry          2020-05-27  1984  	return 0;
-56a1485b102ed1 Tali Perry          2020-05-27  1985  }
-56a1485b102ed1 Tali Perry          2020-05-27  1986  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> You can find a reference implementation of the userspace helper here:
+> https://github.com/Mstrodl/cgeb-helper
+> 
+> I didn't get an answer when I asked where the userspace component
+> should live, so I didn't put a ton of work into getting the helper
+> up to snuff since similar userspace helpers (like v86d) are not
+> in-tree. If folks would like the helper in-tree, that's fine too.
+> 
+> This series is based on the excellent work of Sascha Hauer and
+> Christian Gmeiner. You can find their original work here:
+> 
+> http://patchwork.ozlabs.org/patch/219756/
+> http://patchwork.ozlabs.org/patch/219755/
+> http://patchwork.ozlabs.org/patch/219757/
+> 
+> http://patchwork.ozlabs.org/patch/483262/
+> http://patchwork.ozlabs.org/patch/483264/
+> http://patchwork.ozlabs.org/patch/483261/
+> http://patchwork.ozlabs.org/patch/483263/
+> 
+> Mary Strodl (1):
+>   x86: Add basic support for the Congatec CGEB BIOS interface
+> 
+> Sascha Hauer (1):
+>   i2c: Add Congatec CGEB I2C driver
+> 
+>  drivers/i2c/busses/Kconfig             |    7 +
+>  drivers/i2c/busses/Makefile            |    1 +
+>  drivers/i2c/busses/i2c-congatec-cgeb.c |  189 ++++
+>  drivers/mfd/Kconfig                    |   10 +
+>  drivers/mfd/Makefile                   |    1 +
+>  drivers/mfd/congatec-cgeb.c            | 1139 ++++++++++++++++++++++++
+>  include/linux/mfd/congatec-cgeb.h      |  111 +++
+>  include/uapi/linux/connector.h         |    4 +-
+>  8 files changed, 1461 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/i2c/busses/i2c-congatec-cgeb.c
+>  create mode 100644 drivers/mfd/congatec-cgeb.c
+>  create mode 100644 include/linux/mfd/congatec-cgeb.h
+> 
+> -- 
+> 2.45.2
+> 
 
