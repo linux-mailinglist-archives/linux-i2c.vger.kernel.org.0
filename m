@@ -1,55 +1,56 @@
-Return-Path: <linux-i2c+bounces-5181-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5182-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55250949CB2
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 02:14:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE984949CB4
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 02:15:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 140D8285495
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 00:14:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D27428545E
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Aug 2024 00:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52B910E6;
-	Wed,  7 Aug 2024 00:14:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07884A06;
+	Wed,  7 Aug 2024 00:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UidWjxB+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GrNEfVxx"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4E2383;
-	Wed,  7 Aug 2024 00:14:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B1D10E4;
+	Wed,  7 Aug 2024 00:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722989690; cv=none; b=GdUfFz/6J2BMJ/BCmqxGcpHbpsQ6IZVqPTZKAsUlqRzJR3rFulqF+3NX0uUBT6vr/WPOBAha+51hfU190D4RuLmnDwaXle3OzmVKmkz3j7MWKxMBK9vU+5SF3TUV4TvFbDb83EoerNRpgqKQrK86bswOhP9yv43A6M2I5pWRC/Y=
+	t=1722989721; cv=none; b=u2Qx0lPkzB7tw+R4Y/hU4pjtTCpRty3++qSyg1qmxlEOVxMRz9rv9mzb/R/GYdp8OfHBZ6x7sQP3j35Xo4w7Xcg2RWI8jQnLu5740dxfFDX4B4JvDBhJe1tjLT31NIhg/Cdj0pltHDSJRxdCgk1dAc9Re+ju6XvFo6FuHP8fbgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722989690; c=relaxed/simple;
-	bh=1ljpXDyDB1RItJPMBZSMFbCJnzE3Uombm6fzwivOYq0=;
+	s=arc-20240116; t=1722989721; c=relaxed/simple;
+	bh=UA624rrIplYm5bYViBQrFeGAf4DqmN14dvZNWYvj+rI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gn4a6660Gen1SB6OU2Um2m4gXJhb1UUVOYFSw/wPw2vR7Noy9FsvGyGWq8HJ1v0ryyXf0y5Ck2LC6sObDAU8rDRDnPTBWYsAea60vOLc7YAj0G3nr9B5PfqRH+FsQ89E96J9xl6Zi4J+nK+mm8F1jyNsu203gP4TQCa4dWPNfiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UidWjxB+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA6C4C32786;
-	Wed,  7 Aug 2024 00:14:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=VbkxKU4YdkR43WC46xIoSoO4KUA0iMLjai6LyeZb08VfkFRG5KgF5alVunKiBMJYLD7LA0HtGxBenv4Ebdqfk/0heu+EyH3e/TYdn/YQnnr31KbaCSc7wowfSVzjsKHNmMepGCjt7DLav2ekYee3/WQfxhMB1CpJQKCEUj0p97k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GrNEfVxx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E05BAC32786;
+	Wed,  7 Aug 2024 00:15:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722989689;
-	bh=1ljpXDyDB1RItJPMBZSMFbCJnzE3Uombm6fzwivOYq0=;
+	s=k20201202; t=1722989721;
+	bh=UA624rrIplYm5bYViBQrFeGAf4DqmN14dvZNWYvj+rI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UidWjxB+PMscPCWgAza7YOyHAPpl6n0iDotjoOvi/VJPVNcQcpxv8Dz7UjxjuGtPf
-	 ng+YDBtzja6tMsCZphRFYQ8tBiJE+aT/2sPfJ1LCXijRyUbx5JrLlUv/rPEyvjGN4X
-	 ZgtJTPFqXlbjDJRVU7O/BizIUcAVq7rGcDiYSXBymOLASqPZHwLoHMdJuSyX0H7UKU
-	 5H5ODrSjWAsum3xO6mCZFEWflJcsac1JSqiwUO/0SBOsnn+Taz2FefVTmJvw30UEto
-	 TDKhZ5ckJ8xEHGrSYfHwaQRE5od3zj8slQD7g/7V/Z4YIp4U2Wfzjr3m+A7/IOC8ws
-	 ay79/HNHj33AQ==
-Date: Wed, 7 Aug 2024 01:14:43 +0100
+	b=GrNEfVxxAEryDmkW5lWsQzdnOXEy9efwM1g+L+9j2QXp8ZZfTJJW6nXAx0wUyuMrs
+	 8y7lHimdx4Hzx2IkAGZRQ5xZ1DfpVmGedOFBDAC5NLcjJTvHVvMCILf4vTTdi8cMWw
+	 AiW6A9oN4mDFzQS/BvP2LaEKTwKOqw/WNb4iVWZBAb8hmM6eVFbPc7WONrtjmGvZHi
+	 Zb5e1Fm31sYYILnZAtdCk21Pfz1rFIGTLy0Aq4TO28yQGbnFUFhFtam4quauteNF1r
+	 XfYOe2egsQbrA0i6X6b+MqjLm2nDqpkrtvg+NEfEWxYbg2bvP8hK9bmmhpo7XtZHDX
+	 OmzGAUZ6FTMZw==
+Date: Wed, 7 Aug 2024 01:15:14 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Gaosheng Cui <cuigaosheng1@huawei.com>
-Cc: mka@chromium.org, akashast@codeaurora.org, andersson@kernel.org, 
-	wsa@kernel.org, linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH -next] i2c: qcom-geni: Add missing geni_icc_disable in
- geni_i2c_runtime_resume
-Message-ID: <cu4bkeyoegz4tdfrvhhdyv3er3oiyuxbwkwfm7z5twbqydc6r4@j2z3ak5arbd4>
-References: <20240806125331.3170546-1-cuigaosheng1@huawei.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: qii.wang@mediatek.com, matthias.bgg@gmail.com, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH] i2c: mt65xx: Avoid double initialization of restart_flag
+ in isr
+Message-ID: <rmn65agbosovoto3zwr6pqio32ad4uyhekxncvqx46w7eyj4wj@cxhtrvmlj5sv>
+References: <20240806094537.90747-1-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,21 +59,24 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240806125331.3170546-1-cuigaosheng1@huawei.com>
+In-Reply-To: <20240806094537.90747-1-angelogioacchino.delregno@collabora.com>
 
-Hi Gaosheng,
+Hi Angelo,
 
-On Tue, Aug 06, 2024 at 08:53:31PM GMT, Gaosheng Cui wrote:
-> Add the missing geni_icc_disable() before return in
-> geni_i2c_runtime_resume().
+On Tue, Aug 06, 2024 at 11:45:37AM GMT, AngeloGioacchino Del Regno wrote:
+> In the mtk_i2c_irq() handler, variable restart_flag is initialized
+> to zero and then reassigned with I2C_RS_TRANSFER if and only if
+> auto_restart is enabled.
 > 
-> Fixes: bf225ed357c6 ("i2c: i2c-qcom-geni: Add interconnect support")
-> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> Avoid a double initialization of this variable by transferring the
+> auto_restart check to the restart_flag declaration.
+> 
+> This commit brings no functional changes.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-merged in i2c/i2c-host-fixes.
+merged to i2c/i2c-host.
 
-Next time, for fixes patches, please do Cc also the stable
-mailing list <stable@vger.kernel.org>.
-
+Thanks,
 Andi
 
