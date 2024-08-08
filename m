@@ -1,70 +1,69 @@
-Return-Path: <linux-i2c+bounces-5211-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5212-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4FE394BA4A
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 12:00:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 668E094BA4E
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 12:00:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 800AF282337
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 10:00:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2C03B22593
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 10:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D62E18A6DD;
-	Thu,  8 Aug 2024 09:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23EA918A933;
+	Thu,  8 Aug 2024 09:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SJ/Go+eF"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KcyJpvoI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A576D18A6C0
-	for <linux-i2c@vger.kernel.org>; Thu,  8 Aug 2024 09:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4203D189F32
+	for <linux-i2c@vger.kernel.org>; Thu,  8 Aug 2024 09:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723111193; cv=none; b=u/+lUAA8U/qCEftpLIO0/HSWOQsnzTe4tbPpcnTNAK1mrkCDuzZ7G+QM9tTtxqUkG0XpH+SVRNnhn7H3ZICPvZ9plRjs9Jcfe6dJSZCEx0lDoGt+RI9gsNSLhY6kv2yyZSaEUZDX/qfmJvDxqBzmUP5vrErvrOwgdBB+NPfCw9s=
+	t=1723111196; cv=none; b=fVaZgyX1/wzCpHQaWS8z84lYOZezwoV31KfcOxhbkDD1jF01sfgyvjXvB4C1xfmIkD4FHKO21af1ddC/svoNYKjkrsnyGqf9GPFbHSaz/f2BK21iUEbU0FhNtHOep0TArCpxQ8Dad4rTr99CBdH4pA6hFF4IsMAEtsuplIZCiOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723111193; c=relaxed/simple;
-	bh=/IAlJZ4lOSvaLE9tnhzTQ2epkpQjqOzpH5OlWZnuSA0=;
+	s=arc-20240116; t=1723111196; c=relaxed/simple;
+	bh=py16IRx3ZkhAud/YioWOf8kFrqTw6bFMSUXkOiTxpPw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YKxpTlHZ4GNgwX/QHEv6CO09eIWdPqGe8/7gbo6CNdXqhq9Agqhw8xNw8qAqSUJ+9XXZrrUPDDVf6E5WjD4vmdi7KvkULJQFb54H04c9jz5Pm8Crx2RzrjD1p0B0RdUAktz5kGVWIABP2+XrsaULuZvfVeHLytBR2NOHtVnQzWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SJ/Go+eF; arc=none smtp.client-ip=209.85.214.170
+	 MIME-Version; b=YaxYIAHFb3CEqhUd7haFuVNorBIvYRazoBfUYYjbt2RLbH/sO9t2NrJIoTqXVHXYxqLWJmqGJmMuIqxh0BGCmP3nkuNKkDmsfz6KCFL5Hwku/WpyitknioqczrDuFNa6kVWHV1gs2jEas3Cxy5ZPz7lHdklkEWn5aJl2zTqOVG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KcyJpvoI; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1fd90c2fc68so7480025ad.1
-        for <linux-i2c@vger.kernel.org>; Thu, 08 Aug 2024 02:59:51 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fd6ed7688cso8193135ad.3
+        for <linux-i2c@vger.kernel.org>; Thu, 08 Aug 2024 02:59:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1723111191; x=1723715991; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1723111195; x=1723715995; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wR1Udf/FWl7py4H5RQqWMXM0U9PswySd1hls6tNxB7g=;
-        b=SJ/Go+eFNfHALffJwWjYdhhbrGugna+yo0Xdy6wAU8QnFJCJCscVlrRemU606x+mY2
-         vTo6r2OlssSVThhC62Rfl1HkhrWXu8e4hmPn7RW0D/mQkZYZTTEBvYk/vLAUQsd1YCWZ
-         RNqvCHk5V1yqgc11aV5xLp/isWYE52205xQ3c=
+        bh=8qgCZ39zaMZ1pHgoNfFZBo55h8VlLpIWFFJKzWV3ijA=;
+        b=KcyJpvoILBTgeup5ng6u1qrB1vgIHMQWppO+zMx8HyQvsHqCPDeJJ3dAQ+rJLoErpU
+         lANO26nciRLAfJvLa1bNuwxENt0rye1Dyite/GJ61RtgKTMyt6Rq5r5XK9MG8zwiG2rk
+         gLKD0RZFmPfnPYsGqxLqStWKxDPMz6R/LBRUI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723111191; x=1723715991;
+        d=1e100.net; s=20230601; t=1723111195; x=1723715995;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wR1Udf/FWl7py4H5RQqWMXM0U9PswySd1hls6tNxB7g=;
-        b=nJ37OjM0E1tHbNBQdQN+aSWruA29NCAZh5fhj70y6joIGvHmzxlPVeW0sGdCpCjWts
-         oPaFJkNCwVCzx/qA1VfAdJuL0iNx0v4wYQRybK9fSfXB0ebc6qTnJyHWO6JihcGscsWq
-         dSP5oboYBONIXYMcnKUfUhzqmXIx20p2bV6bAN6H8m7mitmngudBHUI+XUrFLhwQzQrz
-         6ozlgzDIAAl2pwgh2AGEOKi96K+ATf459umucTWHroXnkeYvqihaglx/TTR7dcmuEeoz
-         UZrgxJJfu6XwQLU2GfXxcr5Jgcf0N9pVA0LwZXECG/eWCjbC/fQU8aOq2FshDeicyy4v
-         vZBg==
-X-Forwarded-Encrypted: i=1; AJvYcCWfleclE4qTIafqb7jYH0e8d0Oe4vRIq2v5YDU0BVL++TDD/gSp/VfkXP5muDprilnN4ujSPJAx55CRdfUQ8Upiw3JTAtRxsW4D
-X-Gm-Message-State: AOJu0YxMgxqmQyB5LBmfLFb7tBxujDQXnFdoMhRx1HsqGvbVsnMkz0Tb
-	njdEinTbRxnIONlIa/EvwtbzjKiwPvx7ga+QkbfaDhHbYDiDb4pzXZ9qLPL4+Yq0I5boeHKVTm0
-	=
-X-Google-Smtp-Source: AGHT+IHWAl+hZjv9nSvJy1SKpxCjwWYJJknIPCWUxWfBsX+zsM0IhYTrybxxtL2FsiZEr+fCR0sgcA==
-X-Received: by 2002:a17:903:40c5:b0:1fd:d55b:df26 with SMTP id d9443c01a7336-200952e9a8bmr13508545ad.61.1723111190903;
-        Thu, 08 Aug 2024 02:59:50 -0700 (PDT)
+        bh=8qgCZ39zaMZ1pHgoNfFZBo55h8VlLpIWFFJKzWV3ijA=;
+        b=eanM/T94i0Wl1kDn30eil6+JIYVjx7DBz1jzsnZ/LbNjRMKeFgwjPFKGmyPDK+VppK
+         x4hoEyZcgNTA/v+c3ZEcfzBly6PEQQAiudysvPYDHjhczt3mDRn6honxiW8Icyp6aifU
+         96/bX+qdm+1Ag9Ro68aN4B0D09RvF1pzPodP+CsJPAAA2/26rgeXiR75YVfBh3FpedLs
+         qJN9m1LPXrGdBlW7iR/94M1qDK+ApEC/fgVJMH8JM/Xz8uIRcwzdZGcbKIqEvc+TNIkk
+         JnYySfQpWdYqv4uBM+2rnWkthiZqpw83lgvLuArAuunAxOiR+zfORYZb0WVKK26abFgs
+         OlUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUAjm/yZuWWq/n+Q2Lz/Ic1+E/J29BKiPwhnZeKaGBmPJhazMELJL+u+3ipfFxd6+1I/8qOXm8FFvxzFhuM7OznGqCXX02/vPdN
+X-Gm-Message-State: AOJu0YzwWzVqMzOJzLCttR3776v/t9tXspqPrhYbfTfNyXBPwnQqgKme
+	UeemlHE1nHzQlKNyQMaaAq/1xgp0xvqiyIxyft+PJEaCkTPJp0IMq84OYvUo5g==
+X-Google-Smtp-Source: AGHT+IEKKGr+vmamMIgjjXNkXa4rHYEBsgcb5kjNPWWGBvxBXx4ElZWMNIirkJNIPkRsY8kGV6DcSg==
+X-Received: by 2002:a17:903:8ce:b0:1fb:7530:30be with SMTP id d9443c01a7336-2009527d432mr18198885ad.38.1723111194535;
+        Thu, 08 Aug 2024 02:59:54 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:8b53:87e6:914:a00d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff59297707sm120784985ad.254.2024.08.08.02.59.47
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff59297707sm120784985ad.254.2024.08.08.02.59.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Aug 2024 02:59:50 -0700 (PDT)
+        Thu, 08 Aug 2024 02:59:54 -0700 (PDT)
 From: Chen-Yu Tsai <wenst@chromium.org>
 To: Rob Herring <robh@kernel.org>,
 	Saravana Kannan <saravanak@google.com>,
@@ -86,9 +85,9 @@ Cc: Chen-Yu Tsai <wenst@chromium.org>,
 	Jiri Kosina <jikos@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH v4 2/6] regulator: Add regulator_of_get_optional() for pure DT regulator lookup
-Date: Thu,  8 Aug 2024 17:59:25 +0800
-Message-ID: <20240808095931.2649657-3-wenst@chromium.org>
+Subject: [PATCH v4 3/6] i2c: Introduce OF component probe function
+Date: Thu,  8 Aug 2024 17:59:26 +0800
+Message-ID: <20240808095931.2649657-4-wenst@chromium.org>
 X-Mailer: git-send-email 2.46.0.rc2.264.g509ed76dc8-goog
 In-Reply-To: <20240808095931.2649657-1-wenst@chromium.org>
 References: <20240808095931.2649657-1-wenst@chromium.org>
@@ -100,272 +99,265 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The to-be-introduced I2C component prober needs to enable regulator
-supplies (and toggle GPIO pins) for the various components it intends
-to probe. To support this, a new "pure DT lookup" method for getting
-regulator supplies is needed, since the device normally requesting
-the supply won't get created until after the component is probed to
-be available.
+Some devices are designed and manufactured with some components having
+multiple drop-in replacement options. These components are often
+connected to the mainboard via ribbon cables, having the same signals
+and pin assignments across all options. These may include the display
+panel and touchscreen on laptops and tablets, and the trackpad on
+laptops. Sometimes which component option is used in a particular device
+can be detected by some firmware provided identifier, other times that
+information is not available, and the kernel has to try to probe each
+device.
 
-This adds a new regulator_of_get_optional() for this purpose. The
-underlying code that support the existing regulator_get*() functions
-are extended to support this specific case.
+This change attempts to make the "probe each device" case cleaner. The
+current approach is to have all options added and enabled in the device
+tree. The kernel would then bind each device and run each driver's probe
+function. This works, but has been broken before due to the introduction
+of asynchronous probing, causing multiple instances requesting "shared"
+resources, such as pinmuxes, GPIO pins, interrupt lines, at the same
+time, with only one instance succeeding. Work arounds for these include
+moving the pinmux to the parent I2C controller, using GPIO hogs or
+pinmux settings to keep the GPIO pins in some fixed configuration, and
+requesting the interrupt line very late. Such configurations can be seen
+on the MT8183 Krane Chromebook tablets, and the Qualcomm sc8280xp-based
+Lenovo Thinkpad 13S.
+
+Instead of this delicate dance between drivers and device tree quirks,
+this change introduces a simple I2C component probe. function For a
+given class of devices on the same I2C bus, it will go through all of
+them, doing a simple I2C read transfer and see which one of them responds.
+It will then enable the device that responds.
+
+This requires some minor modifications in the existing device tree. The
+status for all the device nodes for the component options must be set
+to "failed-needs-probe". This makes it clear that some mechanism is
+needed to enable one of them, and also prevents the prober and device
+drivers running at the same time.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
 Changes since v3:
-- New patch
----
- drivers/regulator/core.c           | 81 ++++++++++++++++++++++--------
- drivers/regulator/devres.c         |  2 +-
- drivers/regulator/internal.h       |  2 +-
- include/linux/regulator/consumer.h |  8 +++
- 4 files changed, 69 insertions(+), 24 deletions(-)
+- Complete kernel-doc
+- Return different error if I2C controller is disabled
+- Expand comment to explain assumptions and constraints
+- Split for-loop finding target node and operations on target node
+- Add missing i2c_put_adapter()
+- Move prober code to separate file
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 7674b7f2df14..ba4542d76642 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -456,30 +456,29 @@ static struct device_node *of_get_child_regulator(struct device_node *parent,
+Rob also asked why there was a limitation of "exactly one touchscreen
+will be enabled across the whole tree".
+
+The use case this prober currently targets is a component on consumer
+electronics (tablet or laptop) being swapped out due to cost or supply
+reasons. Designs with multiple components of the same type are pretty
+rare. The way the next patch is written also assumes this for efficiency
+reasons.
+
+Changes since v2:
+- New patch split out from "of: Introduce hardware prober driver"
+- Addressed Rob's comments
+  - Move i2c prober to i2c subsystem
+  - Use of_node_is_available() to check if node is enabled.
+  - Use OF changeset API to update status property
+- Addressed Andy's comments
+  - Probe function now accepts "struct device *dev" instead to reduce
+    line length and dereferences
+  - Move "ret = 0" to just before for_each_child_of_node(i2c_node, node)
+---
+ drivers/i2c/Makefile             |   1 +
+ drivers/i2c/i2c-core-of-prober.c | 155 +++++++++++++++++++++++++++++++
+ include/linux/i2c.h              |   4 +
+ 3 files changed, 160 insertions(+)
+ create mode 100644 drivers/i2c/i2c-core-of-prober.c
+
+diff --git a/drivers/i2c/Makefile b/drivers/i2c/Makefile
+index 3f71ce4711e3..0c543c742895 100644
+--- a/drivers/i2c/Makefile
++++ b/drivers/i2c/Makefile
+@@ -9,6 +9,7 @@ i2c-core-objs 			:= i2c-core-base.o i2c-core-smbus.o
+ i2c-core-$(CONFIG_ACPI)		+= i2c-core-acpi.o
+ i2c-core-$(CONFIG_I2C_SLAVE) 	+= i2c-core-slave.o
+ i2c-core-$(CONFIG_OF) 		+= i2c-core-of.o
++i2c-core-$(CONFIG_OF_DYNAMIC) 	+= i2c-core-of-prober.o
  
- /**
-  * of_get_regulator - get a regulator device node based on supply name
-- * @dev: Device pointer for the consumer (of regulator) device
-+ * @node: Device node pointer for supply property lookup
-  * @supply: regulator supply name
-  *
-  * Extract the regulator device node corresponding to the supply name.
-  * returns the device node corresponding to the regulator if found, else
-  * returns NULL.
-  */
--static struct device_node *of_get_regulator(struct device *dev, const char *supply)
-+static struct device_node *of_get_regulator(struct device_node *node, const char *supply)
- {
- 	struct device_node *regnode = NULL;
- 	char prop_name[64]; /* 64 is max size of property name */
- 
--	dev_dbg(dev, "Looking up %s-supply from device tree\n", supply);
-+	pr_debug("%pOF: Looking up %s-supply from device tree\n", node, supply);
- 
- 	snprintf(prop_name, 64, "%s-supply", supply);
--	regnode = of_parse_phandle(dev->of_node, prop_name, 0);
-+	regnode = of_parse_phandle(node, prop_name, 0);
- 
- 	if (!regnode) {
--		regnode = of_get_child_regulator(dev->of_node, prop_name);
-+		regnode = of_get_child_regulator(node, prop_name);
- 		if (regnode)
- 			return regnode;
- 
--		dev_dbg(dev, "Looking up %s property in node %pOF failed\n",
--				prop_name, dev->of_node);
-+		pr_debug("%pOF: Looking up %s property failed\n", node, prop_name);
- 		return NULL;
- 	}
- 	return regnode;
-@@ -1996,8 +1995,14 @@ static struct regulator_dev *regulator_lookup_by_name(const char *name)
- /**
-  * regulator_dev_lookup - lookup a regulator device.
-  * @dev: device for regulator "consumer".
-+ * @node: device node for regulator supply lookup.
-+ *        Falls back to dev->of_node if NULL.
-  * @supply: Supply name or regulator ID.
-  *
-+ * If dev is NULL and node is not NULL, a pure device tree lookup is assumed.
-+ * That is, it will not use supply aliases and end after DT based lookup is
-+ * done.
+ obj-$(CONFIG_I2C_SMBUS)		+= i2c-smbus.o
+ obj-$(CONFIG_I2C_CHARDEV)	+= i2c-dev.o
+diff --git a/drivers/i2c/i2c-core-of-prober.c b/drivers/i2c/i2c-core-of-prober.c
+new file mode 100644
+index 000000000000..08aa736cc7a9
+--- /dev/null
++++ b/drivers/i2c/i2c-core-of-prober.c
+@@ -0,0 +1,155 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Linux I2C core OF component prober code
 + *
-  * If successful, returns a struct regulator_dev that corresponds to the name
-  * @supply and with the embedded struct device refcount incremented by one.
-  * The refcount must be dropped by calling put_device().
-@@ -2006,21 +2011,30 @@ static struct regulator_dev *regulator_lookup_by_name(const char *name)
-  * in the future.
-  */
- static struct regulator_dev *regulator_dev_lookup(struct device *dev,
-+						  struct device_node *node,
- 						  const char *supply)
- {
- 	struct regulator_dev *r = NULL;
--	struct device_node *node;
-+	struct device_node *regulator_node;
- 	struct regulator_map *map;
- 	const char *devname = NULL;
-+	bool pure_dt_lookup = false;
-+
-+	pure_dt_lookup = (node && !dev);
- 
--	regulator_supply_alias(&dev, &supply);
-+	/* Pure DT lookup should use given supply name directly */
-+	if (!pure_dt_lookup)
-+		regulator_supply_alias(&dev, &supply);
-+
-+	if (!node && dev && dev->of_node)
-+		node = dev->of_node;
- 
- 	/* first do a dt based lookup */
--	if (dev && dev->of_node) {
--		node = of_get_regulator(dev, supply);
--		if (node) {
--			r = of_find_regulator_by_node(node);
--			of_node_put(node);
-+	if (node) {
-+		regulator_node = of_get_regulator(node, supply);
-+		if (regulator_node) {
-+			r = of_find_regulator_by_node(regulator_node);
-+			of_node_put(regulator_node);
- 			if (r)
- 				return r;
- 
-@@ -2032,6 +2046,10 @@ static struct regulator_dev *regulator_dev_lookup(struct device *dev,
- 		}
- 	}
- 
-+	/* Pure DT lookup stops here. */
-+	if (pure_dt_lookup)
-+		return ERR_PTR(-ENODEV);
-+
- 	/* if not found, try doing it non-dt way */
- 	if (dev)
- 		devname = dev_name(dev);
-@@ -2076,7 +2094,7 @@ static int regulator_resolve_supply(struct regulator_dev *rdev)
- 	if (rdev->supply)
- 		return 0;
- 
--	r = regulator_dev_lookup(dev, rdev->supply_name);
-+	r = regulator_dev_lookup(dev, NULL, rdev->supply_name);
- 	if (IS_ERR(r)) {
- 		ret = PTR_ERR(r);
- 
-@@ -2169,8 +2187,8 @@ static int regulator_resolve_supply(struct regulator_dev *rdev)
- }
- 
- /* Internal regulator request function */
--struct regulator *_regulator_get(struct device *dev, const char *id,
--				 enum regulator_get_type get_type)
-+struct regulator *_regulator_get(struct device *dev, struct device_node *node,
-+				 const char *id, enum regulator_get_type get_type)
- {
- 	struct regulator_dev *rdev;
- 	struct regulator *regulator;
-@@ -2187,7 +2205,7 @@ struct regulator *_regulator_get(struct device *dev, const char *id,
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	rdev = regulator_dev_lookup(dev, id);
-+	rdev = regulator_dev_lookup(dev, node, id);
- 	if (IS_ERR(rdev)) {
- 		ret = PTR_ERR(rdev);
- 
-@@ -2318,7 +2336,7 @@ struct regulator *_regulator_get(struct device *dev, const char *id,
-  */
- struct regulator *regulator_get(struct device *dev, const char *id)
- {
--	return _regulator_get(dev, id, NORMAL_GET);
-+	return _regulator_get(dev, NULL, id, NORMAL_GET);
- }
- EXPORT_SYMBOL_GPL(regulator_get);
- 
-@@ -2345,7 +2363,7 @@ EXPORT_SYMBOL_GPL(regulator_get);
-  */
- struct regulator *regulator_get_exclusive(struct device *dev, const char *id)
- {
--	return _regulator_get(dev, id, EXCLUSIVE_GET);
-+	return _regulator_get(dev, NULL, id, EXCLUSIVE_GET);
- }
- EXPORT_SYMBOL_GPL(regulator_get_exclusive);
- 
-@@ -2371,10 +2389,29 @@ EXPORT_SYMBOL_GPL(regulator_get_exclusive);
-  */
- struct regulator *regulator_get_optional(struct device *dev, const char *id)
- {
--	return _regulator_get(dev, id, OPTIONAL_GET);
-+	return _regulator_get(dev, NULL, id, OPTIONAL_GET);
- }
- EXPORT_SYMBOL_GPL(regulator_get_optional);
- 
-+/**
-+ * regulator_of_get_optional - get optional regulator via device tree lookup
-+ * @node: device node for regulator "consumer"
-+ * @id: Supply name
-+ *
-+ * Returns a struct regulator corresponding to the regulator producer,
-+ * or IS_ERR() condition containing errno.
-+ *
-+ * This is intended for use by consumers that want to get a regulator
-+ * supply directly from a device node, and can and want to deal with
-+ * absence of such supplies. This will _not_ consider supply aliases.
-+ * See regulator_dev_lookup().
++ * Copyright (C) 2024 Google LLC
 + */
-+struct regulator *regulator_of_get_optional(struct device_node *node, const char *id)
++
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/slab.h>
++
++/*
++ * Some devices, such as Google Hana Chromebooks, are produced by multiple
++ * vendors each using their preferred components. Such components are all
++ * in the device tree. Instead of having all of them enabled and having each
++ * driver separately try and probe its device while fighting over shared
++ * resources, they can be marked as "fail-needs-probe" and have a prober
++ * figure out which one is actually used beforehand.
++ *
++ * This prober assumes such drop-in parts are on the same I2C bus, have
++ * non-conflicting addresses, and can be directly probed by seeing which
++ * address responds.
++ *
++ * TODO:
++ * - Support handling common regulators and GPIOs.
++ * - Support I2C muxes
++ */
++
++/**
++ * i2c_of_probe_component() - probe for devices of "type" on the same i2c bus
++ * @dev: &struct device of the caller, only used for dev_* printk messages
++ * @type: a string to match the device node name prefix to probe for
++ *
++ * Probe for possible I2C components of the same "type" on the same I2C bus
++ * that have their status marked as "fail".
++ *
++ * Assumes that across the entire device tree the only instances of nodes
++ * prefixed with "type" are the ones that need handling for second source
++ * components. In other words, if type is "touchscreen", then all device
++ * nodes named "touchscreen*" are the ones that need probing. There cannot
++ * be another "touchscreen" node that is already enabled.
++ *
++ * Assumes that for each "type" of component, only one actually exists. In
++ * other words, only one matching and existing device will be enabled.
++ *
++ * Context: Process context only. Does non-atomic I2C transfers.
++ *          Should only be used from a driver probe function, as the function
++ *          can return -EPROBE_DEFER if the I2C adapter is unavailable.
++ * Return: 0 on success or no-op, error code otherwise.
++ *         A no-op can happen when it seems like the device tree already
++ *         has components of the type to be probed already enabled. This
++ *         can happen when the device tree had not been updated to mark
++ *         the status of the to-be-probed components as "fail". Or this
++ *         function was already run with the same parameters and succeeded
++ *         in enabling a component. The latter could happen if the user
++ *         had multiple types of components to probe, and one of them down
++ *         the list caused a deferred probe. This is expected behavior.
++ */
++int i2c_of_probe_component(struct device *dev, const char *type)
 +{
-+	return _regulator_get(NULL, node, id, OPTIONAL_GET);
++	struct device_node *node, *i2c_node;
++	struct i2c_adapter *i2c;
++	struct of_changeset *ocs = NULL;
++	int ret;
++
++	node = of_find_node_by_name(NULL, type);
++	if (!node)
++		return dev_err_probe(dev, -ENODEV, "Could not find %s device node\n", type);
++
++	i2c_node = of_get_next_parent(node);
++	if (!of_node_name_eq(i2c_node, "i2c")) {
++		of_node_put(i2c_node);
++		return dev_err_probe(dev, -EINVAL, "%s device isn't on I2C bus\n", type);
++	}
++
++	if (!of_device_is_available(i2c_node)) {
++		of_node_put(i2c_node);
++		return dev_err_probe(dev, -ENODEV, "I2C controller not available\n");
++	}
++
++	for_each_child_of_node(i2c_node, node) {
++		if (!of_node_name_prefix(node, type))
++			continue;
++		if (of_device_is_available(node)) {
++			/*
++			 * Device tree has component already enabled. Either the
++			 * device tree isn't supported or we already probed once.
++			 */
++			of_node_put(node);
++			of_node_put(i2c_node);
++			return 0;
++		}
++	}
++
++	i2c = of_get_i2c_adapter_by_node(i2c_node);
++	if (!i2c) {
++		of_node_put(i2c_node);
++		return dev_err_probe(dev, -EPROBE_DEFER, "Couldn't get I2C adapter\n");
++	}
++
++	ret = 0;
++	for_each_child_of_node(i2c_node, node) {
++		union i2c_smbus_data data;
++		u32 addr;
++
++		if (!of_node_name_prefix(node, type))
++			continue;
++		if (of_property_read_u32(node, "reg", &addr))
++			continue;
++		if (i2c_smbus_xfer(i2c, addr, 0, I2C_SMBUS_READ, 0, I2C_SMBUS_BYTE, &data) < 0)
++			continue;
++
++		break;
++	}
++
++	/* Found a device that is responding */
++	if (node) {
++		dev_info(dev, "Enabling %pOF\n", node);
++
++		ocs = kzalloc(sizeof(*ocs), GFP_KERNEL);
++		if (!ocs) {
++			ret = -ENOMEM;
++			goto err_put_node;
++		}
++
++		of_changeset_init(ocs);
++		ret = of_changeset_update_prop_string(ocs, node, "status", "okay");
++		if (ret)
++			goto err_free_ocs;
++		ret = of_changeset_apply(ocs);
++		if (ret)
++			goto err_destroy_ocs;
++
++		of_node_put(node);
++	}
++
++	i2c_put_adapter(i2c);
++	of_node_put(i2c_node);
++
++	return 0;
++
++err_destroy_ocs:
++	of_changeset_destroy(ocs);
++err_free_ocs:
++	kfree(ocs);
++err_put_node:
++	of_node_put(node);
++	i2c_put_adapter(i2c);
++	of_node_put(i2c_node);
++	return ret;
 +}
-+EXPORT_SYMBOL_GPL(regulator_of_get_optional);
++EXPORT_SYMBOL_GPL(i2c_of_probe_component);
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 7eedd0c662da..0415d5d0f6ac 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -1030,6 +1030,10 @@ const struct of_device_id
+ int of_i2c_get_board_info(struct device *dev, struct device_node *node,
+ 			  struct i2c_board_info *info);
+ 
++#if IS_ENABLED(CONFIG_OF_DYNAMIC)
++int i2c_of_probe_component(struct device *dev, const char *type);
++#endif
 +
- static void destroy_regulator(struct regulator *regulator)
- {
- 	struct regulator_dev *rdev = regulator->rdev;
-@@ -4928,7 +4965,7 @@ int _regulator_bulk_get(struct device *dev, int num_consumers,
- 		consumers[i].consumer = NULL;
+ #else
  
- 	for (i = 0; i < num_consumers; i++) {
--		consumers[i].consumer = _regulator_get(dev,
-+		consumers[i].consumer = _regulator_get(dev, NULL,
- 						       consumers[i].supply, get_type);
- 		if (IS_ERR(consumers[i].consumer)) {
- 			ret = dev_err_probe(dev, PTR_ERR(consumers[i].consumer),
-diff --git a/drivers/regulator/devres.c b/drivers/regulator/devres.c
-index 7111c46e9de1..7d9ea8232959 100644
---- a/drivers/regulator/devres.c
-+++ b/drivers/regulator/devres.c
-@@ -28,7 +28,7 @@ static struct regulator *_devm_regulator_get(struct device *dev, const char *id,
- 	if (!ptr)
- 		return ERR_PTR(-ENOMEM);
- 
--	regulator = _regulator_get(dev, id, get_type);
-+	regulator = _regulator_get(dev, NULL, id, get_type);
- 	if (!IS_ERR(regulator)) {
- 		*ptr = regulator;
- 		devres_add(dev, ptr);
-diff --git a/drivers/regulator/internal.h b/drivers/regulator/internal.h
-index 77a502141089..51eb552cba01 100644
---- a/drivers/regulator/internal.h
-+++ b/drivers/regulator/internal.h
-@@ -120,7 +120,7 @@ enum regulator_get_type {
- 	MAX_GET_TYPE
- };
- 
--struct regulator *_regulator_get(struct device *dev, const char *id,
-+struct regulator *_regulator_get(struct device *dev, struct device_node *node, const char *id,
- 				 enum regulator_get_type get_type);
- int _regulator_bulk_get(struct device *dev, int num_consumers,
- 			struct regulator_bulk_data *consumers, enum regulator_get_type get_type);
-diff --git a/include/linux/regulator/consumer.h b/include/linux/regulator/consumer.h
-index d986ec13092e..76826d0d99f1 100644
---- a/include/linux/regulator/consumer.h
-+++ b/include/linux/regulator/consumer.h
-@@ -168,6 +168,8 @@ int devm_regulator_get_enable_read_voltage(struct device *dev, const char *id);
- void regulator_put(struct regulator *regulator);
- void devm_regulator_put(struct regulator *regulator);
- 
-+struct regulator *__must_check regulator_of_get_optional(struct device_node *node, const char *id);
-+
- int regulator_register_supply_alias(struct device *dev, const char *id,
- 				    struct device *alias_dev,
- 				    const char *alias_id);
-@@ -358,6 +360,12 @@ static inline void devm_regulator_put(struct regulator *regulator)
- {
- }
- 
-+static inline struct regulator *__must_check
-+regulator_of_get_optional(struct device_node *node, const char *id)
-+{
-+	return ERR_PTR(-ENODEV);
-+}
-+
- static inline void devm_regulator_bulk_put(struct regulator_bulk_data *consumers)
- {
- }
+ static inline struct i2c_client *of_find_i2c_device_by_node(struct device_node *node)
 -- 
 2.46.0.rc2.264.g509ed76dc8-goog
 
