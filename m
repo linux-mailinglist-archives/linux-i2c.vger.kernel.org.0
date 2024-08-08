@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-5218-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5219-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43F9B94C070
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 17:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B19C94C07F
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 17:03:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70E881C25A33
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 15:01:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AED01C26406
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 15:03:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F97918FC63;
-	Thu,  8 Aug 2024 15:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5965018F2F9;
+	Thu,  8 Aug 2024 15:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="aEP+UHP3"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="KdzYmQmX"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384EE18EFF1
-	for <linux-i2c@vger.kernel.org>; Thu,  8 Aug 2024 15:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E80318F2EA
+	for <linux-i2c@vger.kernel.org>; Thu,  8 Aug 2024 15:03:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723129247; cv=none; b=Rb6jv0FTbjpCgRqwNesknxohcpWw2I668EmEPsxgDQfN3OnxefaZp2iwwyUCWOqJI/RZ9PZkQthTqwjH6e/s4IyToa7d1tS5O+oO/Tz6ZBs6GvqiRwu2GBQmhuN26qIVpnDF/vot/gT9Vt2iqFMryPZlFG0AtjDqNSqht34DQ80=
+	t=1723129409; cv=none; b=BeauwUg5U+7WmG7kojKhfZ3FeZtrWZnFdW5Pkr3OQRCq6/g6JVQHvjs2q4AdiDsfzsDUokkMeknvv1SwoXdVfIT7IiGioGvcNaEn4LlOUo+eOF0TzuS6P7YlLA6qD3uI+Xtj9dahbmk5EVRI3IJQ6aP6lKVCnLNrvE0oAKIWbpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723129247; c=relaxed/simple;
-	bh=lcfbc8kqDOW5a9qjIc68nR/HZWnHBfFGHgWF4MQOB4I=;
+	s=arc-20240116; t=1723129409; c=relaxed/simple;
+	bh=SjSVxSPNg6gXfPmUVWJ2ez++3fToLx6+T2ZqUhkJgcM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WhNas4WoG5+Kg7ol0fvTyx42JBtNBl4r3DHbOkrXpC+5TEZU9meaZl60vY1JcmEwOnmpKYX0vpjYFCMogeGnJ7+Vm6AcciwLCaZIAh/20D0wD2KE+QBNkWmR/iiJo/V9N9EaqKw8Jo4YL8RIKMzsTsUfjmxE+8bOvlKT3PkSPJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=aEP+UHP3; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=O4ddiYBPtNW+F0Et5GdcCHJZAyik5pMp+HXlN00RBmhix8stKyAJzfSdCWC1aEO8O1eJvv8JNn4Q9lsgF1zf769CM5dQcdL3smzqxd9fLd2qC5uuZps6sjORFird6wdeJ2hKTlb4PJwwrw413qfJ1PYmcynvXtctzWpyuq4FlI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=KdzYmQmX; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=lcfb
-	c8kqDOW5a9qjIc68nR/HZWnHBfFGHgWF4MQOB4I=; b=aEP+UHP3Nw3R/DkswVWh
-	kN9Gi2bacxwWnyQvjzdobGyrZOEPvMQCzAxtJAdxZrwW9kEz1NMYpZrfavaJqAGv
-	dNkZvv9BCApGcEih1bWnj2Wl5DUuiKWKf+gDBsCHRtSvUH1vugkINBYKAKcifvGC
-	Qf3hvi1jt6WxeRbYI5LdmYQ+GG2seQTc3P62czb14fyAMOERwHWSTGlLM0Xs1Gwp
-	S7WTVrf5TghbgRKJFuDNys5tq0G2KdLMslZQgi1Ei/qC721m9L9UZpne6PYK6qlE
-	s3s12m7cT5ddOtwEoL1TsatgBtRCUmErSxHPWsqyATxZEFADPJvorg43LnOPkn3O
-	oA==
-Received: (qmail 349538 invoked from network); 8 Aug 2024 17:00:43 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Aug 2024 17:00:43 +0200
-X-UD-Smtp-Session: l3s3148p1@5kxsSi0fsCttKPBr
-Date: Thu, 8 Aug 2024 17:00:42 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=SjSV
+	xSPNg6gXfPmUVWJ2ez++3fToLx6+T2ZqUhkJgcM=; b=KdzYmQmXIWO0oNTwnjtf
+	4EOtDdu7Sap9Jrru5WX3t5SAjEnF7/32Tntx5GsafLQTIHmQqcD3YE8gW+5redjH
+	Lr2ivMAgQ9xikxfgSlQK+/beaOih7oAi/VeFcnVrMHETqJpQmwmz0GNQLOmxVGlG
+	mE9wi6ynhqNW1VMt7IWHwZusrFrnsiOcgL251gv4QJad0GupRfFYubHPw3di4mGc
+	/QNZpc6L58rQVlHZi655BE0CyCICtuQz0MPRFFP6nl/YP6yMgebbPyUH9Oc9qJGZ
+	dZiB6LrJodpMGWfm/Ky3VyyrhKdbDACoEwqdbQV19xTTbvvFGzyr6fXV/cd34iKP
+	yA==
+Received: (qmail 350361 invoked from network); 8 Aug 2024 17:03:25 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Aug 2024 17:03:25 +0200
+X-UD-Smtp-Session: l3s3148p1@DsoSVC0f+jxtKPBr
+Date: Thu, 8 Aug 2024 17:03:24 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Claudiu <claudiu.beznea@tuxon.dev>
 Cc: chris.brandt@renesas.com, andi.shyti@kernel.org, robh@kernel.org,
@@ -53,9 +53,8 @@ Cc: chris.brandt@renesas.com, andi.shyti@kernel.org, robh@kernel.org,
 	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH v3 02/11] i2c: riic: Call pm_runtime_get_sync() when need
- to access registers
-Message-ID: <ZrTdmqyzq_XLs5-z@shikoro>
+Subject: Re: [PATCH v3 03/11] i2c: riic: Use pm_runtime_resume_and_get()
+Message-ID: <ZrTePJJcSssmXXa4@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Claudiu <claudiu.beznea@tuxon.dev>, chris.brandt@renesas.com,
 	andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
@@ -65,7 +64,7 @@ Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	linux-kernel@vger.kernel.org,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 References: <20240711115207.2843133-1-claudiu.beznea.uj@bp.renesas.com>
- <20240711115207.2843133-3-claudiu.beznea.uj@bp.renesas.com>
+ <20240711115207.2843133-4-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -73,50 +72,50 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zHX5K+jQW1p1NSJH"
+	protocol="application/pgp-signature"; boundary="fBpy1sTNjYN8/eu3"
 Content-Disposition: inline
-In-Reply-To: <20240711115207.2843133-3-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240711115207.2843133-4-claudiu.beznea.uj@bp.renesas.com>
 
 
---zHX5K+jQW1p1NSJH
+--fBpy1sTNjYN8/eu3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 11, 2024 at 02:51:58PM +0300, Claudiu wrote:
+On Thu, Jul 11, 2024 at 02:51:59PM +0300, Claudiu wrote:
 > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >=20
-> There is no need to runtime resume the device as long as the IP registers
-> are not accessed. Calling pm_runtime_get_sync() at the register access
-> time leads to a simpler error path.
+> pm_runtime_get_sync() may return with error. In case it returns with error
+> dev->power.usage_count needs to be decremented. pm_runtime_resume_and_get=
+()
+> takes care of this. Thus use it.
 >=20
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Makes sense to me:
+Looks valid to me:
 
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---zHX5K+jQW1p1NSJH
+--fBpy1sTNjYN8/eu3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma03ZoACgkQFA3kzBSg
-Kbb5pw//RIVxyNAUBcwrlJncjgwrkUYptK3TLARFEbJXKT1KwA0hcjPTIRi1f10O
-PDmFPeMfm9hoFGWGCFkKm+5yhXIDpURMSei5lrqUcRTVl7U+ygQPtAYPsSJwayGS
-nrDQDhAkMNyl9/NMtovm2I27bJ9u/OhzZY5XkKs5wP3Uw91/9J4G5SiZ8ovUOghR
-9HuFHzaBgj8kf5XELQ8o2idwsZkduQ+MkOkFLZQ3nDpV94MBn934aaNZmeWFYkpt
-UnYoZVZCR+tD/mzGw8xp8ahJC/niTPlFFM9/jOtLnnaznVlorASgFZvTvb0d+e1a
-rbuR/Nj4gv+m+de9MmT3WzL+6cXvYj6zsC8eAnO5fsVvf1BOQokf1Htwv045b8Qh
-4+cyzYNHk9J11dqNNfxp1NqkGxdayq34tbgcd/k30xUPl+QL6bLvrbPMBc1PpZKT
-wWQiV9fu5vwMzKpc6rQRL+WPWwR1WwRAIFiPHcTsPiJnkjedVo6r4TAwst8DZI8q
-ZErMsWLyWIdTBoVCdrdtvUkmtY6x1L9vuEYvWIuXx/Aiu0ZWIFdeH5R33B9SN51h
-hv+LzhQrMK6K0TtdZu2h2uFBDZvy/Tg9rwDgN0h4jQP9n8k1azCQyLaPxP3dHirT
-FmDdKRS9R2wXsPn7NDaLcBLjJ8HL0R8q6Sq2Es4ZmGdtQamb7+A=
-=7jUQ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma03jwACgkQFA3kzBSg
+Kbb7sBAApOqY2362ZnU4mqDeiCP1kirXKGvmin/lCOag+1z82+2HEioZXSeE9bIu
+9H3wQDU8ua7xuQSfVGC9Wa9X2W7LuKmp0rKGicDcxbv95BkGfKgX5NglygXoyJQ2
+92z4eSLQL2fiD5oNq733FveEQu4ygrwyYCe1CA0yeVEwvE1WpxPsr+xnShAZz5xb
+bnCVqFMfSaAQzmUrC2uwpHc6owbD5EX7j4hJOvMJlcVn6Y4eAuTYlPhVTGRmwPSp
+unfHMAHXbQ/0QnMob8n2ut54rh+IhkxVdlJmPai5qjkN8L2MUOo3c1kvIZrDBwlS
+kFN8uyX0AtRAAAlVQr5XyvV1z2qpviflbp5xsrPXdU+qVeoMnHZarpZKrdJRfvVU
+8tkVvsYkplyv5wQL004N24eoB+fbgdC28FXmgfoTZF4eEjH9KejGm1sHr/EtpuEC
+OEM2khcb4BDnK497yPtXjrL2WZLHGFOo1UjRHRL51TFaz9kuxZ4xlk5SUJMODO01
+bt+bCMbkoC2jDoL04YGaM4Ik4pN7iC5TmvqqvIuNV5Nu4I3qxMPPdNqv4wtQARdQ
+4phfJEYzNYEonAyRnq+mtg40BO7BX9GObXh5Ps+DlA7BCJn3SDnlIn+2DBEqZIIR
+b9NRRFlnQvsEhGSlkPGTIbXOcYbOLDXD9+ZGX1ayL+eQooaji7M=
+=CXZK
 -----END PGP SIGNATURE-----
 
---zHX5K+jQW1p1NSJH--
+--fBpy1sTNjYN8/eu3--
 
