@@ -1,96 +1,72 @@
-Return-Path: <linux-i2c+bounces-5215-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5216-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B01094BA5F
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 12:01:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44E6794BD2A
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 14:15:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A17F2B22D38
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 10:01:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71B4F1C22847
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Aug 2024 12:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BB618C337;
-	Thu,  8 Aug 2024 10:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KDge5HAU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 887D218C355;
+	Thu,  8 Aug 2024 12:15:04 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2679118B498
-	for <linux-i2c@vger.kernel.org>; Thu,  8 Aug 2024 10:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF72D146A68;
+	Thu,  8 Aug 2024 12:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723111207; cv=none; b=DaT6ChsXMCZy+3AltCgdFiJ0EXyBVlzm7hRu+gFSUObLlcg+hLgAwXhcwevuR6k/oSfsyOSevhg+BVgkDvB1OiF5OZQXR2LNAA0Jq5yRViD37UtNiksPbjKmokujalY874ddaFJd+slX2y728uUinbgpADbbvxPWHSJYH+hsK6M=
+	t=1723119304; cv=none; b=uoNVr3gzQsktPLCyR/uG0rFoHgFgHLzpRLD9oTnEgYwNkKeovr0VhwZ27wYpsYUMjgfzsH7he5EgZepUlI70jk+WRiZY1i+f5yWQsLxREU/m3E7KJgfIgVfvkkXUUJ9EtjVvbm07WNYV6n2p6L5hTiFmC228xCp6JpTRJcjA4CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723111207; c=relaxed/simple;
-	bh=y4je3VWsBqj5qjHQT037MyYHsD/meXwgpUrJ0PrYeP8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GR4aL6ryy353aC2uvekKGHsrduwMpruVALfSZHVd9R62lwXBw8G2ssIiJYmor9fUsWqasbQEJlTMkOUE3581D1JUPECOxVcUxEDOlpLXT/NpalwqF2lU0BliVUs1whrtxZSxwI1dPvZGUkeVbtCvLxB62wBVmp10EMyLfU/PlUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KDge5HAU; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1fd66cddd07so6795565ad.2
-        for <linux-i2c@vger.kernel.org>; Thu, 08 Aug 2024 03:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1723111205; x=1723716005; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/9/QWNKXSA4i4sxpfMzvxA3Z99pgqscZPbDBz2zlFLI=;
-        b=KDge5HAULCxwG1dAkD5PR47SQ3x9WxzP+e2kF3BHRZJRhI/frnnVoafDpZy0Iu/59w
-         ngscPETIf0D/AFoOVUz3HBVDx0bnEIT6w+DRkucTiDiq6QCxMtoSQydkuRRyhWs7Z35B
-         /y9SBvOvj33GyEREu3RDnitwWTo30tMqErr6k=
+	s=arc-20240116; t=1723119304; c=relaxed/simple;
+	bh=CKThhCZanICJhopLFK61jjDhfM+xol9M87zX/V/w1uM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Uk3Kf7Wlvxpm69CnW88eLTjNh+fxOpNaEaWSWDMzeiLLvonZTVD/UAFzgVXB0flKW5DsvNTe1fBBDR4iDm8FM9DrC91mb7N+7uUzuq0Mk2wdo3zwEgfQ2XXHM9jJoWRKlZgjPnypLx7doeWpeEGiEr/xjbiB3ZUbS00qOLELT7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a7a975fb47eso102629666b.3;
+        Thu, 08 Aug 2024 05:15:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723111205; x=1723716005;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/9/QWNKXSA4i4sxpfMzvxA3Z99pgqscZPbDBz2zlFLI=;
-        b=rVTu8a9TtKg1JzQkqIsjdbNB744tli3JHeBwqTeT95Ebs+AR2NKov+EjsqUKnz0T1K
-         CyxUd/+x5oYRCVlZY1ZgrGgCupqwxQ/emois2C3cxijaCAjSoR/C5vSfwCfzq2GdEB6A
-         XOjUBArdAzbMUnLMMO3+ZQjM23jwxPQNO8WDmbbP8de5pb3RVVr/uuBPeGCs7ntNcSav
-         tbFAhofyDZvUeWBoOcwIWZ+EohoSaM3KFBpKMMCfS+G9lhVgfVMspEdkq+Dj2fid+frj
-         TUzt3H0r0Tvmpz66vadwniLwsQ5+0kLxT+QrS0oNIBRC5ZHRwcQIbS8MKI5MAIquhIuD
-         I30A==
-X-Forwarded-Encrypted: i=1; AJvYcCV2YdZFgKLgxB/tx6RA6Yv4adWeo11Mg+nh+fPdoBFABA/NPw9c57ym333WNUradmdwW1oBM6CzKXCCG2eKHIf39FFxXIRO+FWm
-X-Gm-Message-State: AOJu0YzWqv880vZ6EpVgcktd7K0F3oMG+ME1icMcvk7tJa2Jkl38Fsq5
-	RMiQAGD1M62Oz9yZGNa5dKnMwmD62+1knIuSjTp/28sNmGs+DnjcBR9hzB57uQ==
-X-Google-Smtp-Source: AGHT+IFHYCH6ZPttGWJyX5orsjVgIQjNRW8T6hIcAdANhk3iA3ouOxz6UxT/mqu55va9bKkOzlc4Ag==
-X-Received: by 2002:a17:902:ce81:b0:1fd:7724:c783 with SMTP id d9443c01a7336-200952654a3mr16237775ad.36.1723111205352;
-        Thu, 08 Aug 2024 03:00:05 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:8b53:87e6:914:a00d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff59297707sm120784985ad.254.2024.08.08.03.00.01
+        d=1e100.net; s=20230601; t=1723119301; x=1723724101;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fMcUzMkBN+al8N+NC2mYEn1bCR1LycpJRZmeNbrc0BQ=;
+        b=rfoy5OOqcdhbG85GFn2YheVLvLEeI3L4KuVp2wZdxtAVl+rsShlSrUBSNF38uTog1B
+         rRCzltPycY4efgPYF6KIQm1BK2eztPMNKeS7ZI01arGlp/dFLQ5+KHH5xx17GUIm/mV/
+         W7GNdRi7xj3x+U1ndWRp5EYG7v3R0zHaY2i4Y4BzLCh9N1NSoZGq6UdsWhN60CX3GvMO
+         IVgGHe7PwgF+7L/uXZ66U943DEZn8KrNJmRAfO71nsfhsVqdnLjiEX/7Mm1h+1JGqxTH
+         3fmpuZd8nk8JvlnIxpiPWg8tG7kOBIHv+MRhi7YYHR17qu9K/oJwIPOlMhuosXhiSXD/
+         1xyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUcJsjSU3Td4ltnxaw8lsCrgPnX4x8/CVO9BM9HtsANQSkUWooyCUksSEd9WsZNYn5snqEKsxBkPBVNTV6Gfykt9nThGwnBorTckM5N01O2ycPem5C1lM1rI6BxNCvllZZzMFLbSm+1mp+FoJAs2+7CkYKDKUwuwe7wH3gBdHaS1P/Ne4E=
+X-Gm-Message-State: AOJu0YzpP4ShKjOX4m0/ywd/a/l8K2k2KN6pPwmWcey8Ky3IYA8PSuxH
+	fV18CC9tZ4DD/c8RVfjz23ac5pxbBHy6mMGajy6zHzFJTFBd+6Oq
+X-Google-Smtp-Source: AGHT+IEq0fqh/fbFvC/CeimiMiT98URyhBh3Ul0GS07CDuW/RAGUPulUBmrdoQeqvoPEl82acqw/BA==
+X-Received: by 2002:a17:907:e683:b0:a7d:a080:baa with SMTP id a640c23a62f3a-a8090d94768mr130061266b.34.1723119300808;
+        Thu, 08 Aug 2024 05:15:00 -0700 (PDT)
+Received: from localhost (fwdproxy-lla-112.fbsv.net. [2a03:2880:30ff:70::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9bc423csm738210566b.26.2024.08.08.05.15.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Aug 2024 03:00:04 -0700 (PDT)
-From: Chen-Yu Tsai <wenst@chromium.org>
-To: Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>
-Cc: Chen-Yu Tsai <wenst@chromium.org>,
-	chrome-platform@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH v4 6/6] arm64: dts: mediatek: mt8173-elm-hana: Mark touchscreens and trackpads as fail
-Date: Thu,  8 Aug 2024 17:59:29 +0800
-Message-ID: <20240808095931.2649657-7-wenst@chromium.org>
-X-Mailer: git-send-email 2.46.0.rc2.264.g509ed76dc8-goog
-In-Reply-To: <20240808095931.2649657-1-wenst@chromium.org>
-References: <20240808095931.2649657-1-wenst@chromium.org>
+        Thu, 08 Aug 2024 05:15:00 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: Laxman Dewangan <ldewangan@nvidia.com>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>
+Cc: leit@meta.com,
+	Michael van der Westhuizen <rmikey@meta.com>,
+	linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
+	linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH RESEND] Do not mark ACPI devices as irq safe
+Date: Thu,  8 Aug 2024 05:14:46 -0700
+Message-ID: <20240808121447.239278-1-leitao@debian.org>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -99,93 +75,63 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Instead of having them all available, mark them all as "fail-needs-probe"
-and have the implementation try to probe which one is present.
+On ACPI machines, the tegra i2c module encounters an issue due to a
+mutex being called inside a spinlock. This leads to the following bug:
 
-Also remove the shared resource workaround by moving the pinctrl entry
-for the trackpad interrupt line back into the individual trackpad nodes.
+	BUG: sleeping function called from invalid context at kernel/locking/mutex.c:585
+	in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1282, name: kssif0010
+	preempt_count: 0, expected: 0
+	RCU nest depth: 0, expected: 0
+	irq event stamp: 0
 
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+	Call trace:
+	dump_backtrace+0xf0/0x140
+	show_stack (./arch/x86/include/asm/current.h:49
+		     arch/x86/kernel/dumpstack.c:312)
+	dump_stack_lvl (lib/dump_stack.c:89 lib/dump_stack.c:115)
+	dump_stack (lib/earlycpio.c:61)
+	__might_resched (./arch/x86/include/asm/current.h:49
+			 kernel/sched/core.c:10297)
+	__might_sleep (./include/linux/lockdep.h:231
+			 kernel/sched/core.c:10236)
+	__mutex_lock_common+0x5c/0x2190
+	mutex_lock_nested (kernel/locking/mutex.c:751)
+	acpi_subsys_runtime_resume+0xb8/0x160
+	__rpm_callback+0x1cc/0x4b0
+	rpm_resume+0xa60/0x1078
+	__pm_runtime_resume+0xbc/0x130
+	tegra_i2c_xfer+0x74/0x398
+	__i2c_transfer (./include/trace/events/i2c.h:122 drivers/i2c/i2c-core-base.c:2258)
+
+The problem arises because during __pm_runtime_resume(), the spinlock
+&dev->power.lock is acquired before rpm_resume() is called. Later,
+rpm_resume() invokes acpi_subsys_runtime_resume(), which relies on
+mutexes, triggering the error.
+
+To address this issue, devices on ACPI are now marked as not IRQ-safe,
+considering the dependency of acpi_subsys_runtime_resume() on mutexes.
+
+Co-developed-by: Michael van der Westhuizen <rmikey@meta.com>
+Signed-off-by: Michael van der Westhuizen <rmikey@meta.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes since v4:
-- Rebased
+ drivers/i2c/busses/i2c-tegra.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since v3:
-- Also remove second source workaround, i.e. move the interrupt line
-  pinctrl entry from the i2c node back to the components.
-
-Changes since v2:
-- Drop class from status
----
- arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi | 13 +++++++++++++
- arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi      |  4 ++--
- 2 files changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi
-index 8d1cbc92bce3..251e084bf7de 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi
-@@ -14,6 +14,7 @@ touchscreen2: touchscreen@34 {
- 		compatible = "melfas,mip4_ts";
- 		reg = <0x34>;
- 		interrupts-extended = <&pio 88 IRQ_TYPE_LEVEL_LOW>;
-+		status = "fail-needs-probe";
- 	};
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 85b31edc558d..6d783ecc3431 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1804,7 +1804,7 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+ 	 * VI I2C device shouldn't be marked as IRQ-safe because VI I2C won't
+ 	 * be used for atomic transfers.
+ 	 */
+-	if (!IS_VI(i2c_dev))
++	if (!IS_VI(i2c_dev) && !ACPI_HANDLE(i2c_dev->dev))
+ 		pm_runtime_irq_safe(i2c_dev->dev);
  
- 	/*
-@@ -26,6 +27,7 @@ touchscreen3: touchscreen@20 {
- 		reg = <0x20>;
- 		hid-descr-addr = <0x0020>;
- 		interrupts-extended = <&pio 88 IRQ_TYPE_LEVEL_LOW>;
-+		status = "fail-needs-probe";
- 	};
- 
- 	/* Lenovo Ideapad C330 uses G2Touch touchscreen as a 2nd source touchscreen */
-@@ -47,9 +49,12 @@ &i2c4 {
- 	trackpad2: trackpad@2c {
- 		compatible = "hid-over-i2c";
- 		interrupts-extended = <&pio 117 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&trackpad_irq>;
- 		reg = <0x2c>;
- 		hid-descr-addr = <0x0020>;
- 		wakeup-source;
-+		status = "fail-needs-probe";
- 	};
- };
- 
-@@ -74,3 +79,11 @@ pins_wp {
- 		};
- 	};
- };
-+
-+&touchscreen {
-+	status = "fail-needs-probe";
-+};
-+
-+&trackpad {
-+	status = "fail-needs-probe";
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-index b4d85147b77b..eee64461421f 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-@@ -358,12 +358,12 @@ touchscreen: touchscreen@10 {
- &i2c4 {
- 	clock-frequency = <400000>;
- 	status = "okay";
--	pinctrl-names = "default";
--	pinctrl-0 = <&trackpad_irq>;
- 
- 	trackpad: trackpad@15 {
- 		compatible = "elan,ekth3000";
- 		interrupts-extended = <&pio 117 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&trackpad_irq>;
- 		reg = <0x15>;
- 		vcc-supply = <&mt6397_vgp6_reg>;
- 		wakeup-source;
+ 	pm_runtime_enable(i2c_dev->dev);
 -- 
-2.46.0.rc2.264.g509ed76dc8-goog
+2.43.5
 
 
