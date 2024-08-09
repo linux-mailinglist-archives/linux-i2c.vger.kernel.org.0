@@ -1,123 +1,138 @@
-Return-Path: <linux-i2c+bounces-5257-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5258-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5220194D172
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 15:39:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E4CB94D293
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 16:52:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 196A7281E9F
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 13:39:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D13D31C21384
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 14:52:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECFA4195803;
-	Fri,  9 Aug 2024 13:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35A00197A8E;
+	Fri,  9 Aug 2024 14:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="EbwMsnsq"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FpTXDA+a"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D773C19538A
-	for <linux-i2c@vger.kernel.org>; Fri,  9 Aug 2024 13:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D8F195F0D;
+	Fri,  9 Aug 2024 14:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723210791; cv=none; b=nGgfvvNi7yZxmS1NdAqV9vBwL5Faj/+B93X9C6v4OlZ+NOKj5KJp+/4zR4CfSd0XrAnnwrbmNwVl1zy2FlaC2Xsg73gRiziLSUd8ZhsHhoAHjT8vfbfFvrXjnvJWrgmT/owxrDH4VOaWl1yo5EPkcr3X1kIi9Us8QblsVqlEvsA=
+	t=1723215165; cv=none; b=a6khOiHUtdfBP5ba/FgVa0fdlMfjNGfWdWUmF8YXc7frdZCXF1EPuPWK+d5/Qox5oav2r4osG7IbmiOBWyzhdYHZg9kkkAowRIxJ+H0rfyaIuwO38y7KdxUEr8P+WSus2hoog/dTtOqbUe9KjhTnQiSWsiQm52O070xCIK0HVYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723210791; c=relaxed/simple;
-	bh=d0ADfooSD+MQ9RnlKIStCtMA/V5ID+/9Ydemptv/6kA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kQA5xAtJcf1pyaaub33nLG7pBfRILOfy1gLl0KbY6RfSZ3Yasyxbj9up57N0NM+OHGwQNviPmDsEWcTz3sjVzfOuCkEzZiOQ70l3u8yPCf0NOqxK9n4+4O/ZM4sh+gTwMzZSAA47RFRkmLLyGxuHDOpY2c/c/ZSsntLe2YaNQV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=EbwMsnsq; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=d0AD
-	fooSD+MQ9RnlKIStCtMA/V5ID+/9Ydemptv/6kA=; b=EbwMsnsqe5b601/dfoiH
-	P0tRhsXZjJYY/U0XY23WsBZWDNxB5oCwjPor6GBrP0EFZhbVi9y39o38fNWgvCEV
-	JGeCHNUMUxeRikLx6oYmeqJmHvzSo51Ul9GCkaKmvw/WOd3gSeaJQGowvvR+Bv2g
-	gEHqTNWmQDRs47aWhBDsse+0hBHWOJ7xROtV1wAJwHx5z0zjBO5Tf29JoUioJbqs
-	Il4gFalhFnOPp4WcJZb0rf2jQ6J87C2Vs2ZRaVByp0IkAdA3HNGoJctM09Q/m2Tv
-	OGRw8iBE+en7oZfWB+i8DF1i3rCpJ8OYvWLD30S4kmmVqAIq6tVFTVqgKM+/AzKR
-	bg==
-Received: (qmail 626016 invoked from network); 9 Aug 2024 15:39:47 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Aug 2024 15:39:47 +0200
-X-UD-Smtp-Session: l3s3148p1@9knYRkAfRtsujnvj
-Date: Fri, 9 Aug 2024 15:39:46 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: claudiu beznea <claudiu.beznea@tuxon.dev>
-Cc: chris.brandt@renesas.com, andi.shyti@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, geert+renesas@glider.be,
-	magnus.damm@gmail.com, p.zabel@pengutronix.de,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v3 07/11] dt-bindings: i2c: renesas,riic: Document the
- R9A08G045 support
-Message-ID: <ZrYcIr2yHjWuaJk-@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	claudiu beznea <claudiu.beznea@tuxon.dev>, chris.brandt@renesas.com,
-	andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
-	p.zabel@pengutronix.de, linux-renesas-soc@vger.kernel.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-References: <20240711115207.2843133-1-claudiu.beznea.uj@bp.renesas.com>
- <20240711115207.2843133-8-claudiu.beznea.uj@bp.renesas.com>
- <ZrTiZtD9U4I2LYZj@shikoro>
- <e39ab10e-8e95-4fce-b75f-10fe918e81a5@tuxon.dev>
+	s=arc-20240116; t=1723215165; c=relaxed/simple;
+	bh=54QXor35iu4GsDL+IbSaowExg2cqF8oAk40RdmrZ9ro=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JOn11VSl3kwap1Xe3LrVXaNKVQT3bseoDAIo1iU1jcmD+yv03N+kq6asXyhG8+RfZtVUQjZVU4wmj2bmzB93ssfCkTpJomeeCMvJ8JjSz27E6yDQLA6MJG9tlETa8ZsNp6PSiaxPqAzyMnULNYkBozqh4Q5EGeooBP1/a+TygEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FpTXDA+a; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7293C40013;
+	Fri,  9 Aug 2024 14:52:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1723215153;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=x24MAzrCMKYNTrujF82LTVJxRbe78cQL5WaUMWGVif8=;
+	b=FpTXDA+aYU8FKWd1QYS9VxCeWO2yEnunehP7kSifsV/Ur9D23MIJEa7bXaSQPH32xkoU6j
+	n4FYUBJSolK4W3XCqBCpFrJic6Z+yQpR2W9P631VHLTVcjuZnYJOp19Gm+hZDj7DOFzY6a
+	+k3jJv/7bQ7IrApY0PP77BMJnqyQUG91aGW9lsLOmGpk67Y86H8F4O33Ub6fFDYTqFVfzc
+	3u3NZFbNjgAs075Rq7F8Bs0MZ+DspNxqR+s7t9OpXce+QlTRc/+rGLBWwfjha2iEXVaFkP
+	fzot6SZwwPDm6EHdarYxF+dZ95GpOiDeqNLnLMbPKIEdFDzRyWWIEVIq3KD4sw==
+From: Thomas Richard <thomas.richard@bootlin.com>
+Subject: [PATCH 0/5] Congatec Board Controller drivers
+Date: Fri, 09 Aug 2024 16:52:04 +0200
+Message-Id: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="LKWSB06+yuFlnXKJ"
-Content-Disposition: inline
-In-Reply-To: <e39ab10e-8e95-4fce-b75f-10fe918e81a5@tuxon.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABQttmYC/x3NwQrCMBAE0F8pezYQYyrFXxEPm822DdREdkMRS
+ v/dxONjmJkDlCWxwmM4QHhPmkpuuF4GoBXzwibFZnDWeTvam6GSF6xMJhSU2FmlbBuLmRzdw+Q
+ pekZo/YDKJghmWvvCG7Wy9OAjPKfv//T5Os8fdA2OHYQAAAA=
+To: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com, 
+ Thomas Richard <thomas.richard@bootlin.com>
+X-Mailer: b4 0.12.0
+X-GND-Sasl: thomas.richard@bootlin.com
 
+The Congatec Board Controller is a microcontroller embedded on the x86 SoM
+of Congatec. It's able to manage lots of features, such as a watchdog, some
+GPIOs, I2C busses ...
 
---LKWSB06+yuFlnXKJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There is no datasheet or specific documentation for this Board Controller.
+The only sources of information are the driver, library and tools provided
+by Congatec in their yocto metalayer [1].
 
+The Congatec implementation (available in [1]) doesn't follow the good
+practice (a unique driver, and all accesses are done using custom ioctls).
 
-> I kept it like this to avoid confusion b/w RZ/G3S and RZ/V2H(P) documented
-> below, as the RZ/G3S falls back to renesas,riic-r9a09g057 (RZ/V2H(P)).
->=20
-> I can add a comment here, too, if you still consider necessary. Please let
-> me know.
+This series implements an mfd driver, a gpio driver, a watchdog driver and
+an I2C bus driver, to use the standard API from userspace.
 
-I see. I don't know how such fallbacks are documented usually, so I
-won't consider it necessary. I was just wondering about it. Let's just
-be consistent with previous fallbacks, however they were handled.
+For now, only the conga-SA7 module [2] is supported. For this board, the
+Board Controller has:
+- Two I2C busses
+- 14 GPIOs
+- A wathdog (with pretimeout support)
 
+It also has temperature, voltage and fan sensors. They will be supported
+later.
 
---LKWSB06+yuFlnXKJ
-Content-Type: application/pgp-signature; name="signature.asc"
+For the development, the conga-SEVAL board [3] was used.
+With this board you have access to the 14 GPIOs, and the two I2C busses.
+On each I2C bus, a 24c16 EEPROM is present by default.
 
------BEGIN PGP SIGNATURE-----
+To be able to drive GPIO 4, 5 and 6, a specific BIOS configuration is
+needed: HD audio shall be disabled, and they shall be set in GPIO mode.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma2HCIACgkQFA3kzBSg
-KbbWeBAAhwySOswgim7RXFC0+wmYWTWMPQ//dQm/h/4zKInQ4cqR/IVJjo1qA0gq
-iIgmtyf0AUdG0TbPLGvRBtobSYulS9OTocCsLUAgO5qGNVYfptBkhl++JDC3ZKG2
-RRHJA9fsdGFuoLrN7BeADFXtC84VYvBFHoOoOUX9TV+qPU6WYk6ReVW7HllVaOr8
-mzuq/PGSQ2xieUpFj9lUdYu48WCkUQFBJu5/Cjas6NcHxKzyPbrsb5kFllXix+CN
-Yi8/w1+Q8uZnYC20uH2G7f0xamWvvAq7b34KJbLW5+xE1E0BVBO5xYUTZd8PtZZG
-vgTIDK0Qp0GM+afklmbLdVTrW0yn5YTQF8hWerjln2e2dW4KCK5zN9Ybw8ZYpcQw
-iOuKGt7CMDsEd/Dx/uNsrrOV9v5DxFkDrZC7bGoYtmo1C3bPlRUPziO7KXSzkwZ6
-6gSUFT+Df13pdXe4hUbtF2An20ytN+RxJtOvz3NrLlt6rv0R6aNE91Y0r0UJooUT
-VliQCQlkw5ncYUMy9EJG78SAPTqGPF4NQUxvou+VEnMeeVF4k98QET5zsvX0DoSq
-5z3lARzdrnwxPrxooHhT6LMH+p6bd77LD/CO5NxVtYeofOjFffSPESRIKpIBnKup
-d9dP5viQ/hMi80xCNQe97gHhkVbJpvJSAwHmuYIffIsMl3tw44s=
-=fyRb
------END PGP SIGNATURE-----
+[1] https://git.congatec.com/x86/meta-congatec-x86/
+[2] https://www.congatec.com/fileadmin/user_upload/Documents/Manual/SA70.pdf
+[3] https://www.congatec.com/fileadmin/user_upload/Documents/Manual/SEVAL.pdf
 
---LKWSB06+yuFlnXKJ--
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+Thomas Richard (5):
+      mfd: add Congatec Board Controller mfd driver
+      gpio: Congatec Board Controller gpio driver
+      i2c: Congatec Board Controller i2c bus driver
+      watchdog: Congatec Board Controller watchdog timer driver
+      MAINTAINERS: Add entry for Congatec Board Controller
+
+ MAINTAINERS                   |   9 +
+ drivers/gpio/Kconfig          |  10 +
+ drivers/gpio/Makefile         |   1 +
+ drivers/gpio/gpio-cgbc.c      | 203 +++++++++++++++++++
+ drivers/i2c/busses/Kconfig    |  10 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-cgbc.c | 407 +++++++++++++++++++++++++++++++++++++
+ drivers/mfd/Kconfig           |  12 ++
+ drivers/mfd/Makefile          |   1 +
+ drivers/mfd/cgbc-core.c       | 453 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/watchdog/Kconfig      |  10 +
+ drivers/watchdog/Makefile     |   1 +
+ drivers/watchdog/cgbc_wdt.c   | 217 ++++++++++++++++++++
+ include/linux/mfd/cgbc.h      |  44 ++++
+ 14 files changed, 1379 insertions(+)
+---
+base-commit: d31d4ea2a5e337e60f6da9a90e41d4061bdcec91
+change-id: 20240503-congatec-board-controller-82c6b84cd4ea
+
+Best regards,
+-- 
+Thomas Richard <thomas.richard@bootlin.com>
+
 
