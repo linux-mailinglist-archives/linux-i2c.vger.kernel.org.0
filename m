@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-5259-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5260-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92B9794D299
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 16:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA81094D29B
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 16:53:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB67DB22123
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 14:53:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C082B221CC
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 14:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB6919882C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58EA2198845;
 	Fri,  9 Aug 2024 14:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="H42b/MAA"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SHvNo+Cr"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75238197A66;
-	Fri,  9 Aug 2024 14:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93482197512;
+	Fri,  9 Aug 2024 14:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723215165; cv=none; b=jI4uQa6XIPJeRv9Pi/ODGZkNg3/dMTxRocX+Em13mnd7qS6Pq+5IGZEFJ5CksOav1ytCmm+MASwy0pp1QAfGmIkbHncUV0QuJpMSBokIASOLLM4wvQYYVrYWjRNW/rTh6BpyBFxiqqWMVeqKHJMUg5aKBOngRylTYiWf9t0XDEU=
+	t=1723215166; cv=none; b=uYfSCin+QyvABPQW9MQIjsFHT+HH8xotH/owaBgbJMEpqOPXSpWfN3P18FQvPdXGsz1TCUyMDSehKTch2uWvhMo9SrCnLykGapv2p6Ej6q+z2UqMRNmCFkcVwGM1hKdSAyZHuV4Ao2mbwy2GUQpbiavVGo5Hg5anxbI0/cg4Q/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723215165; c=relaxed/simple;
-	bh=2oc4eoTmRukHT9v6YNPh6vSAVagn6XjQPVEFY36Tqsg=;
+	s=arc-20240116; t=1723215166; c=relaxed/simple;
+	bh=MgX4Y9doq3nduiqv3nXn3S/Sl6ElRTZrwO72vQB8sv4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZFJWv+32OuuFV60e2fuAPpIlMdpoTartQoq5Jv80wgaOfOGyAFTX0/cfpWsUyee6mr2fDPlXP03WgJ7dm0W6JL15JzIaauvuPBOZ/wUf9BUdygcHKiD/siTc8oUSjQBd4NmM0yrmu/L+R4cX7wpLO9oPOHKmclqBxqIh6rscJ1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=H42b/MAA; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=NH/aelJWq8GHgmIyoWCv5KnbGxbV6kQEPzqzpHx1pTlBs7hzcyuHQr1VW1JhvVE1+OUnHkvKKiZvAWBNXKECrGLihJ3+UF70t+RdYval7iGDUiSNKywBRAyhYYuE8g8iTVa7Lja37nsbtd6UfhYuxRzFEFct23uonM8xBKzmH/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SHvNo+Cr; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1854640002;
-	Fri,  9 Aug 2024 14:52:34 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4AE6B40004;
+	Fri,  9 Aug 2024 14:52:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1723215155;
+	t=1723215156;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ty3oPC7+oNO4UtElrrdmnYePAOYrfKEvmMwMbWoHneA=;
-	b=H42b/MAA3V/dFAt4egHD6neUwfE7r+/14Rib3P6zaWzKtPXJX9m4wcXy46lwfVzN/5tui2
-	54O4MsKSQI+Mk4dIwYIJZa2mRixzFtdAQLl+np8VPeLXvbkyXLmjI3ENT4WmK6uTXR9lYC
-	Up/wjOuXbZ4F6WtwXhw8HiNRU4LQEUj/hYRHxqTz5Qe6LjjEkEtEdD2DHnrPh5E3+oRZ3Z
-	F9+1Gf5D5GN6bO/YZ+TE43Li8j4BqOD9hLHIspvGjmCoQ88b6Y4NPa5nErWhlfAEPcL6y5
-	rfAjqTjb8TPRRhSMyZ3qJ73q3IPjipqcmXSjagC0GTTEotKLwLGSaU3Xrvdd5A==
+	bh=cEe5eWxop6igHf93vf56/fh3/U5CavtxVjxV45rsRGU=;
+	b=SHvNo+Crih9WvCXb8V+Ys95YA9X7D5AMbdPcyF97lk16FxPnlP4tohPKDDxmQk9bqZAJ8E
+	QUbRUHNnpx4dkyBU7ZF2m1+yXCR0iuPpO0Xw508a3PbOMFG81tTbHpU6xIDHhO5OgDVkzN
+	W+F7ojJZvsV7Qj0zpNMR21BGsk1gzshNMU5tLhprFOifsp92m9g3viPVIjLYqBFOKPqgMa
+	gsoIEE3uKVwdH7Rgs4fb9aYlR0vwVFEOINVxaFEHJyTtSWUrNSgzuQieRJJ3j3VrJNJDnL
+	FqW4K+weWxiEPkTD5wZuBiqRnROKroXCQDsHHxL4SdTYEHDRhTxktrbOa67bcA==
 From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Fri, 09 Aug 2024 16:52:05 +0200
-Subject: [PATCH 1/5] mfd: add Congatec Board Controller mfd driver
+Date: Fri, 09 Aug 2024 16:52:06 +0200
+Subject: [PATCH 2/5] gpio: Congatec Board Controller gpio driver
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240503-congatec-board-controller-v1-1-fec5236270e7@bootlin.com>
+Message-Id: <20240503-congatec-board-controller-v1-2-fec5236270e7@bootlin.com>
 References: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
 In-Reply-To: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
 To: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
@@ -70,564 +70,257 @@ Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
 X-Mailer: b4 0.12.0
 X-GND-Sasl: thomas.richard@bootlin.com
 
-Add core MFD driver for the Board Controller found on some Congatec SMARC
-module. This Board Controller provides functions like watchdog, GPIO, and
-I2C busses.
-
-This commit add support only for the conga-SA7 module.
+Add gpio support for the Congatec Board Controller.
 
 Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 ---
- drivers/mfd/Kconfig      |  12 ++
- drivers/mfd/Makefile     |   1 +
- drivers/mfd/cgbc-core.c  | 453 +++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/mfd/cgbc.h |  44 +++++
- 4 files changed, 510 insertions(+)
+ drivers/gpio/Kconfig     |  10 +++
+ drivers/gpio/Makefile    |   1 +
+ drivers/gpio/gpio-cgbc.c | 203 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 214 insertions(+)
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index bc8be2e593b6..3e0530f30267 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -224,6 +224,18 @@ config MFD_AXP20X_RSB
- 	  components like regulators or the PEK (Power Enable Key) under the
- 	  corresponding menus.
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 58f43bcced7c..ce77bad40087 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -233,6 +233,16 @@ config GPIO_CADENCE
+ 	help
+ 	  Say yes here to enable support for Cadence GPIO controller.
  
-+config MFD_CGBC
-+	tristate "Congatec Board Controller"
-+	select MFD_CORE
-+	depends on X86
++config GPIO_CGBC
++	tristate "Congatec Board Controller GPIO support"
++	depends on MFD_CGBC
 +	help
-+	  This is the core driver of the Board Controller found on some Congatec
-+	  SMARC modules. The Board Controller provides functions like watchdog,
-+	  I2C busses, and GPIO controller.
++	  Select this option to enable GPIO support for the Congatec Board
++	  Controller.
 +
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called cgbc-core.
++	  This driver can also be built as a module. If so, the module will be
++	  called gpio-cgbc.
 +
- config MFD_CROS_EC_DEV
- 	tristate "ChromeOS Embedded Controller multifunction device"
- 	select MFD_CORE
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 02b651cd7535..d5da3fcd691c 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_SM501)		+= sm501.o
- obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
- obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
- obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
-+obj-$(CONFIG_MFD_CGBC)		+= cgbc-core.o
- obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
- obj-$(CONFIG_MFD_CS42L43)	+= cs42l43.o
- obj-$(CONFIG_MFD_CS42L43_I2C)	+= cs42l43-i2c.o
-diff --git a/drivers/mfd/cgbc-core.c b/drivers/mfd/cgbc-core.c
+ config GPIO_CLPS711X
+ 	tristate "CLPS711X GPIO support"
+ 	depends on ARCH_CLPS711X || COMPILE_TEST
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 64dd6d9d730d..3a96e3c27a2d 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -44,6 +44,7 @@ obj-$(CONFIG_GPIO_BD9571MWV)		+= gpio-bd9571mwv.o
+ obj-$(CONFIG_GPIO_BRCMSTB)		+= gpio-brcmstb.o
+ obj-$(CONFIG_GPIO_BT8XX)		+= gpio-bt8xx.o
+ obj-$(CONFIG_GPIO_CADENCE)		+= gpio-cadence.o
++obj-$(CONFIG_GPIO_CGBC)			+= gpio-cgbc.o
+ obj-$(CONFIG_GPIO_CLPS711X)		+= gpio-clps711x.o
+ obj-$(CONFIG_GPIO_SNPS_CREG)		+= gpio-creg-snps.o
+ obj-$(CONFIG_GPIO_CROS_EC)		+= gpio-cros-ec.o
+diff --git a/drivers/gpio/gpio-cgbc.c b/drivers/gpio/gpio-cgbc.c
 new file mode 100644
-index 000000000000..cca9b1170cc9
+index 000000000000..6da50c794872
 --- /dev/null
-+++ b/drivers/mfd/cgbc-core.c
-@@ -0,0 +1,453 @@
++++ b/drivers/gpio/gpio-cgbc.c
+@@ -0,0 +1,203 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Congatec Board Controller MFD core driver.
-+ *
-+ * The x86 Congatec modules have an embedded micro controller named Board
-+ * Controller.
-+ * This Board Controller have a watchdog timer, some GPIOs, and two i2c busses.
++ * Congatec Board Controller GPIO driver
 + *
 + * Copyright (C) 2024 Bootlin
 + * Author: Thomas Richard <thomas.richard@bootlin.com>
 + */
 +
-+#include <linux/dmi.h>
-+#include <linux/mfd/core.h>
++#include <linux/gpio/driver.h>
 +#include <linux/mfd/cgbc.h>
 +#include <linux/module.h>
++#include <linux/mutex.h>
 +#include <linux/platform_device.h>
-+#include <linux/iopoll.h>
-+#include <linux/sysfs.h>
 +
-+#define CGBC_MASK_STATUS        (BIT(6) | BIT(7))
-+#define CGBC_MASK_DATA_COUNT	0x1F
-+#define CGBC_MASK_ERROR_CODE	0x1F
++#define CGBC_GPIO_NGPIO	14
 +
-+#define CGBC_STATUS_DATA_READY	0x00
-+#define CGBC_STATUS_CMD_READY	BIT(6)
-+#define CGBC_STATUS_ERROR	(BIT(6) | BIT(7))
++#define CGBC_GPIO_CMD_GET	0x64
++#define CGBC_GPIO_CMD_SET	0x65
++#define CGBC_GPIO_CMD_DIR_GET	0x66
++#define CGBC_GPIO_CMD_DIR_SET	0x67
 +
-+#define CGBC_CMD_GET_FW_REV	0x21
-+
-+#define CGBC_IO_SESSION_BASE	0x0E20
-+#define CGBC_IO_SESSION_END	0x0E30
-+#define CGBC_IO_CMD_BASE	0x0E00
-+#define CGBC_IO_CMD_END		0x0E10
-+
-+#define CGBC_SESSION_CMD	0x00
-+#define		CGBC_SESSION_CMD_IDLE		0x00
-+#define		CGBC_SESSION_CMD_REQUEST	0x01
-+#define	CGBC_SESSION_DATA	0x01
-+#define CGBC_SESSION_STATUS	0x02
-+#define		CGBC_SESSION_STATUS_FREE	0x03
-+#define CGBC_SESSION_ACCESS	0x04
-+#define		CGBC_SESSION_ACCESS_GAINED	0x00
-+
-+#define CGBC_SESSION_VALID_MIN  0x02
-+#define CGBC_SESSION_VALID_MAX  0xFE
-+
-+#define CGBC_CMD_STROBE	0x00
-+#define CGBC_CMD_INDEX	0x02
-+#define		CGBC_CMD_INDEX_CBM_MAN8		0x00
-+#define		CGBC_CMD_INDEX_CBM_AUTO32	0x03
-+#define CGBC_CMD_DATA	0x04
-+#define CGBC_CMD_ACCESS	0x0C
-+
-+struct cgbc_platform_data {
-+	const struct resource	*ioresource;
-+	unsigned int		num_ioresource;
++struct cgbc_gpio_data {
++	struct gpio_chip	chip;
++	struct cgbc_device_data	*cgbc;
++	struct mutex lock;
 +};
 +
-+static struct platform_device *cgbc_pdev;
-+
-+static int cgbc_detect_device(struct cgbc_device_data *cgbc)
++static int cgbc_gpio_cmd(struct cgbc_device_data *cgbc,
++			 u8 cmd0, u8 cmd1, u8 cmd2, u8 *value)
 +{
-+	u16 status;
-+	int ret;
++	u8 cmd[3] = {cmd0, cmd1, cmd2};
 +
-+	ret = readx_poll_timeout(ioread16, cgbc->io_session + CGBC_SESSION_STATUS, status,
-+				 status == CGBC_SESSION_STATUS_FREE, 0, 500000);
-+
-+	if (ret || ioread32(cgbc->io_session + CGBC_SESSION_ACCESS))
-+		ret = -ENODEV;
-+
-+	return ret;
++	return cgbc_command(cgbc, cmd, sizeof(cmd), value, 1, NULL);
 +}
 +
-+static int cgbc_session_command(struct cgbc_device_data *cgbc, u8 cmd)
++static int cgbc_gpio_get(struct gpio_chip *chip, unsigned int offset)
 +{
++	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
++	struct cgbc_device_data *cgbc = gpio->cgbc;
 +	int ret;
 +	u8 val;
 +
-+	ret = readx_poll_timeout(ioread8, cgbc->io_session + CGBC_SESSION_CMD, val,
-+				 val == CGBC_SESSION_CMD_IDLE, 0, 100000);
++	mutex_lock(&gpio->lock);
++
++	ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_GET, (offset > 7) ? 1 : 0, 0, &val);
++
++	mutex_unlock(&gpio->lock);
++
++	offset %= 8;
++
 +	if (ret)
 +		return ret;
++	else
++		return (int)(val & (u8)BIT(offset));
++}
 +
-+	iowrite8(cmd, cgbc->io_session + CGBC_SESSION_CMD);
++static void __cgbc_gpio_set(struct gpio_chip *chip,
++			    unsigned int offset, int value)
++{
++	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
++	struct cgbc_device_data *cgbc = gpio->cgbc;
++	u8 val;
++	int ret;
 +
-+	ret = readx_poll_timeout(ioread8, cgbc->io_session + CGBC_SESSION_CMD, val,
-+				 val == CGBC_SESSION_CMD_IDLE, 0, 100000);
++	ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_GET, (offset > 7) ? 1 : 0, 0, &val);
 +	if (ret)
-+		return ret;
++		return;
 +
-+	ret = (int)ioread8(cgbc->io_session + CGBC_SESSION_DATA);
++	if (value)
++		val |= BIT(offset % 8);
++	else
++		val &= ~((u8)BIT(offset % 8));
 +
-+	iowrite8(CGBC_SESSION_STATUS_FREE,
-+		 cgbc->io_session + CGBC_SESSION_STATUS);
++	cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_SET, (offset > 7) ? 1 : 0, val, &val);
++}
++
++static void cgbc_gpio_set(struct gpio_chip *chip,
++			  unsigned int offset, int value)
++{
++	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
++
++	mutex_lock(&gpio->lock);
++	__cgbc_gpio_set(chip, offset, value);
++	mutex_unlock(&gpio->lock);
++}
++
++static int cgbc_gpio_direction_set(struct gpio_chip *chip,
++				   unsigned int offset, int direction)
++{
++	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
++	struct cgbc_device_data *cgbc = gpio->cgbc;
++	int ret;
++	u8 val;
++
++	ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_DIR_GET, (offset > 7) ? 1 : 0, 0, &val);
++	if (ret)
++		goto end;
++
++	if (direction == GPIO_LINE_DIRECTION_IN)
++		val &= ~((u8)BIT(offset % 8));
++	else
++		val |= BIT(offset % 8);
++
++	ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_DIR_SET, (offset > 7) ? 1 : 0, val, &val);
++
++end:
++	return ret;
++}
++
++static int cgbc_gpio_direction_input(struct gpio_chip *chip,
++				     unsigned int offset)
++{
++	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
++	int ret;
++
++	mutex_lock(&gpio->lock);
++	ret = cgbc_gpio_direction_set(chip, offset, GPIO_LINE_DIRECTION_IN);
++	mutex_unlock(&gpio->lock);
 +
 +	return ret;
 +}
 +
-+static int cgbc_session_request(struct cgbc_device_data *cgbc)
++static int cgbc_gpio_direction_output(struct gpio_chip *chip,
++				      unsigned int offset, int value)
 +{
-+	unsigned int ret = cgbc_detect_device(cgbc);
++	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
++	int ret;
 +
-+	if (ret)
-+		return dev_err_probe(cgbc->dev, ret, "device not found\n");
-+
-+	cgbc->session = cgbc_session_command(cgbc, CGBC_SESSION_CMD_REQUEST);
-+
-+	/* the Board Controller sent us a wrong session handle, we cannot
-+	 * communicate with it.
-+	 */
-+	if (cgbc->session < CGBC_SESSION_VALID_MIN ||
-+	    cgbc->session > CGBC_SESSION_VALID_MAX) {
-+		cgbc->session = 0;
-+		return dev_err_probe(cgbc->dev, (cgbc->session < 0) ? cgbc->session : -ECONNREFUSED,
-+				     "failed to get a valid session handle\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static void cgbc_session_release(struct cgbc_device_data *cgbc)
-+{
-+	if (cgbc_session_command(cgbc, cgbc->session) != cgbc->session)
-+		dev_err(cgbc->dev, "failed to release session\n");
-+}
-+
-+static bool cgbc_command_lock(struct cgbc_device_data *cgbc)
-+{
-+	iowrite8(cgbc->session, cgbc->io_cmd + CGBC_CMD_ACCESS);
-+
-+	return ioread8(cgbc->io_cmd + CGBC_CMD_ACCESS) == cgbc->session;
-+}
-+
-+static void cgbc_command_unlock(struct cgbc_device_data *cgbc)
-+{
-+	iowrite8(cgbc->session, cgbc->io_cmd + CGBC_CMD_ACCESS);
-+}
-+
-+static int __cgbc_command(struct cgbc_device_data *cgbc, u8 *cmd, u8 cmd_size,
-+			  u8 *data, u8 data_size, u8 *status)
-+{
-+	u8 checksum = 0, data_checksum = 0, istatus = 0, val;
-+	int mode_change = -1;
-+	bool lock;
-+	int ret, i;
-+
-+	mutex_lock(&cgbc->lock);
-+
-+	/* request access */
-+	ret = readx_poll_timeout(cgbc_command_lock, cgbc, lock, lock, 0, 100000);
-+	if (ret)
-+		goto out;
-+
-+	/* wait board controller is ready */
-+	ret = readx_poll_timeout(ioread8, cgbc->io_cmd + CGBC_CMD_STROBE, val,
-+				 val == CGBC_CMD_STROBE, 0, 100000);
-+	if (ret)
-+		goto release;
-+
-+	/* write command packet */
-+	if (cmd_size <= 2) {
-+		iowrite8(CGBC_CMD_INDEX_CBM_MAN8,
-+			 cgbc->io_cmd + CGBC_CMD_INDEX);
-+	} else {
-+		iowrite8(CGBC_CMD_INDEX_CBM_AUTO32,
-+			 cgbc->io_cmd + CGBC_CMD_INDEX);
-+		if ((cmd_size % 4) != 0x03)
-+			mode_change = (cmd_size & 0xFFFC) - 1;
-+	}
-+
-+	for (i = 0; i < cmd_size; i++) {
-+		iowrite8(cmd[i], cgbc->io_cmd + CGBC_CMD_DATA + (i % 4));
-+		checksum ^= cmd[i];
-+		if (mode_change == i)
-+			iowrite8((i + 1) | CGBC_CMD_INDEX_CBM_MAN8,
-+				 cgbc->io_cmd + CGBC_CMD_INDEX);
-+	}
-+
-+	/* append checksum byte */
-+	iowrite8(checksum, cgbc->io_cmd + CGBC_CMD_DATA + (i % 4));
-+
-+	/* perform command strobe */
-+	iowrite8(cgbc->session, cgbc->io_cmd + CGBC_CMD_STROBE);
-+
-+	/* rewind cmd buffer index */
-+	iowrite8(CGBC_CMD_INDEX_CBM_AUTO32,
-+		 cgbc->io_cmd + CGBC_CMD_INDEX);
-+
-+	/* wait command completion */
-+	ret = read_poll_timeout(ioread8, val, val == CGBC_CMD_STROBE, 0,
-+				100000, false,
-+				cgbc->io_cmd + CGBC_CMD_STROBE);
-+	if (ret)
-+		goto release;
-+
-+	istatus = ioread8(cgbc->io_cmd + CGBC_CMD_DATA);
-+	checksum = istatus;
-+
-+	/* check command status */
-+	switch (istatus & CGBC_MASK_STATUS) {
-+	case CGBC_STATUS_DATA_READY:
-+		if (istatus > data_size)
-+			istatus = data_size;
-+		for (i = 0; i < istatus; i++) {
-+			data[i] = ioread8(cgbc->io_cmd +
-+					  CGBC_CMD_DATA + ((i + 1) % 4));
-+			checksum ^= data[i];
-+		}
-+		data_checksum = ioread8(cgbc->io_cmd +
-+					CGBC_CMD_DATA + ((i + 1) % 4));
-+		istatus &= CGBC_MASK_DATA_COUNT;
-+		break;
-+	case CGBC_STATUS_ERROR:
-+	case CGBC_STATUS_CMD_READY:
-+		data_checksum = ioread8(cgbc->io_cmd +
-+					CGBC_CMD_DATA + 1);
-+		if ((istatus & CGBC_MASK_STATUS) == CGBC_STATUS_ERROR)
-+			ret = -EIO;
-+		istatus = istatus & CGBC_MASK_ERROR_CODE;
-+		break;
-+	default:
-+		data_checksum = ioread8(cgbc->io_cmd + CGBC_CMD_DATA + 1);
-+		istatus &= CGBC_MASK_ERROR_CODE;
-+		ret = -EIO;
-+		break;
-+	}
-+
-+	/* checksum verification */
-+	if (ret == 0 && data_checksum != checksum)
-+		ret = -EIO;
-+
-+release:
-+	cgbc_command_unlock(cgbc);
-+
-+out:
-+	mutex_unlock(&cgbc->lock);
-+
-+	if (status)
-+		*status = istatus;
++	mutex_lock(&gpio->lock);
++	__cgbc_gpio_set(chip, offset, value);
++	ret = cgbc_gpio_direction_set(chip, offset, GPIO_LINE_DIRECTION_OUT);
++	mutex_unlock(&gpio->lock);
 +
 +	return ret;
 +}
 +
-+int cgbc_command(struct cgbc_device_data *cgbc, void *cmd, unsigned int cmd_size,
-+		 void *data, unsigned int data_size, u8 *status)
++static int cgbc_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
 +{
-+	return __cgbc_command(cgbc, (u8 *)cmd, cmd_size, (u8 *)data, data_size, status);
-+}
-+EXPORT_SYMBOL_GPL(cgbc_command);
-+
-+static struct mfd_cell cgbc_devs[] = {
-+	{ .name = "cgbc-wdt"	},
-+	{ .name = "cgbc-gpio"	},
-+	{ .name = "cgbc-i2c", .id = 1 },
-+	{ .name = "cgbc-i2c", .id = 2 },
-+};
-+
-+static int cgbc_map(struct cgbc_device_data *cgbc)
-+{
-+	struct device *dev = cgbc->dev;
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct resource *ioport;
-+
-+	ioport = platform_get_resource(pdev, IORESOURCE_IO, 0);
-+	if (!ioport)
-+		return -EINVAL;
-+
-+	cgbc->io_session = devm_ioport_map(dev, ioport->start,
-+					   resource_size(ioport));
-+	if (!cgbc->io_session)
-+		return -ENOMEM;
-+
-+	ioport = platform_get_resource(pdev, IORESOURCE_IO, 1);
-+	if (!ioport)
-+		return -EINVAL;
-+
-+	cgbc->io_cmd = devm_ioport_map(dev, ioport->start,
-+				       resource_size(ioport));
-+	if (!cgbc->io_cmd)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
-+static struct resource cgbc_ioresource[] = {
-+	{
-+		.start  = CGBC_IO_SESSION_BASE,
-+		.end    = CGBC_IO_SESSION_END,
-+		.flags  = IORESOURCE_IO,
-+	},
-+	{
-+		.start  = CGBC_IO_CMD_BASE,
-+		.end    = CGBC_IO_CMD_END,
-+		.flags  = IORESOURCE_IO,
-+	},
-+};
-+
-+static const struct cgbc_platform_data cgbc_platform_data = {
-+	.ioresource = &cgbc_ioresource[0],
-+	.num_ioresource = ARRAY_SIZE(cgbc_ioresource),
-+};
-+
-+static int cgbc_create_platform_device(const struct cgbc_platform_data *pdata)
-+{
-+	const struct platform_device_info pdevinfo = {
-+		.name = "cgbc",
-+		.id = PLATFORM_DEVID_NONE,
-+		.res = pdata->ioresource,
-+		.num_res = pdata->num_ioresource,
-+	};
-+
-+	cgbc_pdev = platform_device_register_full(&pdevinfo);
-+	if (IS_ERR(cgbc_pdev))
-+		return PTR_ERR(cgbc_pdev);
-+
-+	return 0;
-+}
-+
-+static ssize_t cgbc_version_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct cgbc_device_data *cgbc = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "CGBCP%c%c%c\n", cgbc->version.feature,
-+			  cgbc->version.major, cgbc->version.minor);
-+}
-+
-+static DEVICE_ATTR_RO(cgbc_version);
-+
-+static struct attribute *cgbc_attrs[] = {
-+	&dev_attr_cgbc_version.attr,
-+	NULL
-+};
-+
-+ATTRIBUTE_GROUPS(cgbc);
-+
-+static int cgbc_get_version(struct cgbc_device_data *cgbc)
-+{
-+	u8 cmd = CGBC_CMD_GET_FW_REV;
-+	u8 data[4];
++	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
++	struct cgbc_device_data *cgbc = gpio->cgbc;
 +	int ret;
++	u8 val;
 +
-+	ret = cgbc_command(cgbc, &cmd, 1, &data, sizeof(data), NULL);
++	ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_DIR_GET, (offset > 7) ? 1 : 0, 0, &val);
 +	if (ret)
 +		return ret;
 +
-+	cgbc->version.feature = data[0];
-+	cgbc->version.major = data[1];
-+	cgbc->version.minor = data[2];
-+
-+	return 0;
++	if (val & BIT(offset % 8))
++		return GPIO_LINE_DIRECTION_OUT;
++	else
++		return GPIO_LINE_DIRECTION_IN;
 +}
 +
-+static int cgbc_init_device(struct cgbc_device_data *cgbc)
-+{
-+	int ret;
-+
-+	ret = cgbc_session_request(cgbc);
-+	if (ret)
-+		return ret;
-+
-+	ret = cgbc_get_version(cgbc);
-+	if (ret)
-+		return ret;
-+
-+	return mfd_add_devices(cgbc->dev, -1, cgbc_devs,
-+			       ARRAY_SIZE(cgbc_devs), NULL, 0, NULL);
-+}
-+
-+static int cgbc_probe(struct platform_device *pdev)
++static int cgbc_gpio_probe(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
-+	struct cgbc_device_data *cgbc;
++	struct cgbc_device_data *cgbc = dev_get_drvdata(dev->parent);
++	struct cgbc_gpio_data *gpio;
++	struct gpio_chip *chip;
 +	int ret;
 +
-+	cgbc = devm_kzalloc(dev, sizeof(*cgbc), GFP_KERNEL);
-+	if (!cgbc)
++	gpio = devm_kzalloc(dev, sizeof(*gpio), GFP_KERNEL);
++	if (!gpio)
 +		return -ENOMEM;
 +
-+	cgbc->dev = dev;
++	gpio->cgbc = cgbc;
 +
-+	ret = cgbc_map(cgbc);
++	platform_set_drvdata(pdev, gpio);
++
++	chip = &gpio->chip;
++	chip->label = dev_name(&pdev->dev);
++	chip->owner = THIS_MODULE;
++	chip->parent = dev;
++	chip->base = -1;
++	chip->direction_input = cgbc_gpio_direction_input;
++	chip->direction_output = cgbc_gpio_direction_output;
++	chip->get_direction = cgbc_gpio_get_direction;
++	chip->get = cgbc_gpio_get;
++	chip->set = cgbc_gpio_set;
++	chip->ngpio = CGBC_GPIO_NGPIO;
++
++	mutex_init(&gpio->lock);
++
++	ret = devm_gpiochip_add_data(dev, chip, gpio);
 +	if (ret)
-+		return ret;
++		return dev_err_probe(dev, ret, "Could not register GPIO chip\n");
 +
-+	mutex_init(&cgbc->lock);
-+
-+	platform_set_drvdata(pdev, cgbc);
-+
-+	return cgbc_init_device(cgbc);
++	return 0;
 +}
 +
-+static void cgbc_remove(struct platform_device *pdev)
-+{
-+	struct cgbc_device_data *cgbc = platform_get_drvdata(pdev);
-+
-+	cgbc_session_release(cgbc);
-+
-+	mfd_remove_devices(&pdev->dev);
-+}
-+
-+static struct platform_driver cgbc_driver = {
-+	.driver		= {
-+		.name		= "cgbc",
-+		.dev_groups	= cgbc_groups,
++static struct platform_driver cgbc_gpio_driver = {
++	.driver = {
++		.name = "cgbc-gpio",
 +	},
-+	.probe		= cgbc_probe,
-+	.remove_new	= cgbc_remove,
++	.probe	= cgbc_gpio_probe,
 +};
 +
-+static const struct dmi_system_id cgbc_dmi_table[] __initconst = {
-+	{
-+		.ident = "SA7",
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "congatec"),
-+			DMI_MATCH(DMI_BOARD_NAME, "conga-SA7"),
-+		},
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(dmi, cgbc_dmi_table);
++module_platform_driver(cgbc_gpio_driver);
 +
-+static int __init cgbc_init(void)
-+{
-+	const struct dmi_system_id *id;
-+	int ret = -ENODEV;
-+
-+	id = dmi_first_match(cgbc_dmi_table);
-+	if (IS_ERR_OR_NULL(id))
-+		return ret;
-+
-+	ret = cgbc_create_platform_device(&cgbc_platform_data);
-+	if (ret)
-+		return ret;
-+
-+	return platform_driver_register(&cgbc_driver);
-+}
-+
-+static void __exit cgbc_exit(void)
-+{
-+	platform_device_unregister(cgbc_pdev);
-+	platform_driver_unregister(&cgbc_driver);
-+}
-+
-+module_init(cgbc_init);
-+module_exit(cgbc_exit);
-+
-+MODULE_DESCRIPTION("Congatec Board Controller Core Driver");
++MODULE_DESCRIPTION("Congatec Board Controller GPIO Driver");
 +MODULE_AUTHOR("Thomas Richard <thomas.richard@bootlin.com>");
 +MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:cgbc-core");
-diff --git a/include/linux/mfd/cgbc.h b/include/linux/mfd/cgbc.h
-new file mode 100644
-index 000000000000..badbec4c7033
---- /dev/null
-+++ b/include/linux/mfd/cgbc.h
-@@ -0,0 +1,44 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Congatec Board Controller driver definitions
-+ *
-+ * Copyright (C) 2024 Bootlin
-+ * Author: Thomas Richard <thomas.richard@bootlin.com>
-+ */
-+
-+#ifndef _LINUX_MFD_CGBC_H_
-+
-+/**
-+ * struct cgbc_version - Board Controller device version structure
-+ * @feature:	Board Controller feature number
-+ * @major:	Board Controller major revision
-+ * @minor:	Board Controller minor revision
-+ */
-+struct cgbc_version {
-+	unsigned char feature;
-+	unsigned char major;
-+	unsigned char minor;
-+};
-+
-+/**
-+ * struct cgbc_device_data - Internal representation of the Board Controller device
-+ * @io_session:		Pointer to the session IO memory
-+ * @io_cmd:		Pointer to the command IO memory
-+ * @session:		Session id returned by the Board Controller
-+ * @dev:		Pointer to kernel device structure
-+ * @cgbc_version:	Board Controller version structure
-+ * @mutex:		Board Controller mutex
-+ */
-+struct cgbc_device_data {
-+	void __iomem		*io_session;
-+	void __iomem		*io_cmd;
-+	u8			session;
-+	struct device		*dev;
-+	struct cgbc_version	version;
-+	struct mutex		lock;
-+};
-+
-+int cgbc_command(struct cgbc_device_data *cgbc, void *cmd, unsigned int cmd_size,
-+		 void *data, unsigned int data_size, u8 *status);
-+
-+#endif /*_LINUX_MFD_CGBC_H_*/
++MODULE_ALIAS("platform:cgbc-gpio");
 
 -- 
 2.39.2
