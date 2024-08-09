@@ -1,31 +1,31 @@
-Return-Path: <linux-i2c+bounces-5251-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5252-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B74F594D03B
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 14:31:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 765D894D043
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 14:31:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DB6F2865FD
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 12:31:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CAD61F21345
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 12:31:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B7E8194129;
-	Fri,  9 Aug 2024 12:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81E219413C;
+	Fri,  9 Aug 2024 12:31:39 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260EA1DFF5;
-	Fri,  9 Aug 2024 12:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606D8193088;
+	Fri,  9 Aug 2024 12:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723206673; cv=none; b=l0a4trXICY4qJyI1IT+sm4MmLljpGaZHGBbw31hAyuLhKr+p3v67Z86vB4T0yqA+r+t9oG6gCeEaaMXmkVQUslOLVO1uRQofG5+ZcfqjGK+6IKXG6ZdwB1YCrqgf0WW1DbEtnLzVXRlXFkD7fi7QAfu2sGJ6BZNCSXFpXDLF6g0=
+	t=1723206699; cv=none; b=dLPo2/PUE2Oor9HZm9F7191dHGGmAtL7q8Yg9mqM5lpLnpp/rt5/uwX2vwAlhNY+mBmyVWEJz5xPQuNhJmif6VqCBJZdKfhVEXHc5AduYFHtN5cl77xXF8wnmxzVQZJiia++cAChYESWtHl42hHRlAsJ21XK0NGkz8R73NzK0TI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723206673; c=relaxed/simple;
-	bh=oCVKblgxupHewh9wbWPMSKodlXrZu/R0nv7UvqOhL6E=;
+	s=arc-20240116; t=1723206699; c=relaxed/simple;
+	bh=FhsDg3wPRzapa7Dr+La35JzbETjmwTm+XaR7/Go4q5Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JO2M642kWKZKWNd+PxqZav8VOXcumkAWCt99p0h66l4VkVTTZlZ6n2wUTFqJqaciPqz3LzGE/8S4cFxXItYzG2Oq7eQAkCuMaAAloLUQhT7TVI5pryV9ghXr+aSeHiA8KfkRhe0p0ylINUVsoZjHBrPhGJoBCH6ruQ9dYW5oJog=
+	 MIME-Version:Content-Type; b=fQEDQ6ZVvImalvFN7SbkIoRE/TRO5HwCabetjzY9p9+LGabyyDirr18ELmGNXAm7bhX6oltzQ3c3CFn2Dm7CaItTzkHufDGERb7jrQtbX346rfMDXfGmUuiOQNQQDuPuzNMrWFWJqySxbguLePdBs9MTL6Wqqy37pJfDwyAd4CA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
@@ -33,7 +33,7 @@ Received: from i53875b02.versanet.de ([83.135.91.2] helo=diego.localnet)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1scOld-0006QS-GS; Fri, 09 Aug 2024 14:30:49 +0200
+	id 1scOm6-0006R2-06; Fri, 09 Aug 2024 14:31:18 +0200
 From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
 To: linux-kernel@vger.kernel.org,
  Detlev Casanova <detlev.casanova@collabora.com>
@@ -57,14 +57,13 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
  linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
-Subject:
- Re: [PATCH 06/10] dt-bindings: serial: snps-dw-apb-uart: Add Rockchip RK3576
-Date: Fri, 09 Aug 2024 14:30:47 +0200
-Message-ID: <2795177.Nya5fj1elA@diego>
-In-Reply-To: <20240802214612.434179-7-detlev.casanova@collabora.com>
+Subject: Re: [PATCH 08/10] dt-bindings: timer: rockchip: Add rk3576 compatible
+Date: Fri, 09 Aug 2024 14:31:16 +0200
+Message-ID: <7799613.SKYDtnEIZr@diego>
+In-Reply-To: <20240802214612.434179-9-detlev.casanova@collabora.com>
 References:
  <20240802214612.434179-1-detlev.casanova@collabora.com>
- <20240802214612.434179-7-detlev.casanova@collabora.com>
+ <20240802214612.434179-9-detlev.casanova@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -74,8 +73,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 
-Am Freitag, 2. August 2024, 23:45:33 CEST schrieb Detlev Casanova:
-> Add a Rockchip RK3576 compatible.
+Am Freitag, 2. August 2024, 23:45:35 CEST schrieb Detlev Casanova:
+> Add compatible string for Rockchip RK3576 timer.
 > 
 > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 
