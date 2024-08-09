@@ -1,439 +1,402 @@
-Return-Path: <linux-i2c+bounces-5271-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5272-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9878B94D3B2
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 17:37:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 122E294D4B0
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 18:27:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD58F1C21D08
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 15:37:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE95D28167A
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 16:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0FC2199EA1;
-	Fri,  9 Aug 2024 15:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB081991C9;
+	Fri,  9 Aug 2024 16:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eyhlheKI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ov4Zyi+Y"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10DC71993B8;
-	Fri,  9 Aug 2024 15:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A393B1990C4;
+	Fri,  9 Aug 2024 16:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723217758; cv=none; b=NtFYfzqsSfgCwcj6+d7t3qdGhtY+c+7etIuP72A7I1iApW+kV+IE98dwsN8rfCoNeKLtZORZpYRShSgb02N7YCi975Sv+jejyjyvV8ImhTwKWZ/ORuINEqnS8NWPVzq5M4izDAFL/m7XwPfoJ3TiLq+q8gheBuH5Bg/++O/RflI=
+	t=1723220843; cv=none; b=HAbuJEtGoz2Rcgsht5KKTygv1e5r5GakQ3RSPghuDkk8i9cmazS3t1zjFSz15GMmIwMRpChiEIwLg/zIM9HR7Zy5Saz48OWD0J9ThX3YTJsisOeaR1Afp7UGYjqaHsLg9ihaNuy0y3bzyEcn1y1ModjdD4JwT2nL3FcCc97p3kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723217758; c=relaxed/simple;
-	bh=dNQcWdd/iWzRjVBCAWZe/Q7hHpy7CLXUD0gtLgIAXgM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=p6pc7wI29pXiXKUgfZAjKh0I+uN72tMF6zXiexQva+NJaHtRUKQnSKtQCHsmLKPqcXTL9UgEPill1+x1gj/Md4SBrmbdfrtvVDTqlIhs8U1nIAXwUD28iV+RbXgnmNDryQSrm8oxzM/UN086CAAFSZcGuf8NjFjULZglIQ2TXgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eyhlheKI; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 572D9C0004;
-	Fri,  9 Aug 2024 15:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1723217754;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3wLpKWsQiF7y/LUYEs8/Wz7zA91+yoPEauv87bwPtjw=;
-	b=eyhlheKIoL4c/nXLZKH975JXaGstp08K+gwzBLwtVhPf1GfUp3B5cKb3Cjz+aO9RdBXJYA
-	hv9LIGidU6ddiMdOTEEsDuSxB0xcWMhGJM5f9yA++tAeVnZNgbXX+NSHd+EI54XC+uxiY9
-	8zOw4p4iulf0ZZ+1Evw2hPhHy7DKqKSnECscWGkCw+m0bL/q1/lac7/qtxm4mAa1ky6du4
-	VMzTbnU5IGQ16UJyl8lg76TGb+c5pp16ydcOtrlV8geGarkDYE1o/TjHG3GTMFXwDhYm8+
-	AAh32vtzsVcnTVf4mYOawpFoc2675FeaIKBalPWfnmq1fA2+Z1qVKdfWhAazAQ==
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Fri, 09 Aug 2024 17:34:55 +0200
-Subject: [PATCH DO NOT APPLY v3 7/7] driver core: do not unblock consumers
- any drivers found
+	s=arc-20240116; t=1723220843; c=relaxed/simple;
+	bh=XC2t3eglu+1wwUwBcRuMSErGz59BiCXXn+Jmim/CEUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GKqbhVO6XfUF0OGyelFAJqlXch7/EK6pWPV+8DypC1EDUISkqO0aYsJQoZxr+swLzFBeHnVdfAas/JpEP4fHzYLZaZZp8nklEtK4T6Sud15woDouBXnxw2UO8JRBp5MA39Iru9McbUtdEZ0FWnAB0oocdalvATDREZMynK7+YQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ov4Zyi+Y; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2cb7cd6f5f2so1798259a91.2;
+        Fri, 09 Aug 2024 09:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723220841; x=1723825641; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i2vO+BsBv874WQr9+ko25g/qycgoznJt7V/QYU2K3xY=;
+        b=Ov4Zyi+YVrqrF541vyg/L6hc8mGDv8q+SNjKVfWNwMNlkTq4I/4Kz4Yuw1BYrO+59c
+         AULm/GUeQqjAu5KDaGMqpGIInbGNoKi/IWCthAoGAMPPVVaFqDDkBm7QUioQRu+1tkT7
+         KxlaZw+AU2LpBf395uzpsne4egRrIBKKbI1Uc0VmEzA4iHTp192XOybQk+LG403bqOsV
+         KBaFawPIPgS13byfi3zGATZCnBGcCDYnYO5BQYEB1R7DXiiMouwmrND5j100UnTOpl1s
+         XdcAnIpfiBL22CV6WfCQENjy1QiR4rCb7KMMsIP7b2tnNvRKHeDuIlT64+DfX3gwnrDi
+         9iXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723220841; x=1723825641;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i2vO+BsBv874WQr9+ko25g/qycgoznJt7V/QYU2K3xY=;
+        b=v5ibEkmvcdtr9V8ZrxvVxltZHgHqSNrH8CRljzgOCa6BO1CEt1JXl7VgxjTnoN0coS
+         F0WNiILdWEtBmrVRTLJ3kMYZ5vuIbmx2bFuJLUYCKOYF0YTdCCXGbdDIdv0dPY3maoxI
+         8PuD2vgmS2LtkkErg/xXvx6f0uufUE0FSqetYz66JQ7L3GrCEmHCSnEj615Pz54JvcCq
+         F4Fjng0F350ggUAiC0x+BzxqKW/2ipFwRXa/oHWaF8F/dgfs+jq+KAXCna+w0qdh//pU
+         lQ3c62tkQ1JF80yQr/jgAuv/05KlyAk9oPHgYvysmq43hRP+G3O94kB2yJhdBcyzgB8M
+         R8jA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqol4hOBhxFK8Iy4GtDS9J8OOoXJCSs3eOqBK2J/Z+WqSGvgWOW2jptie8ksgHSYSDRS+tUrs63la8IaBvumI=@vger.kernel.org, AJvYcCV0+LKk4zAK6Jz3tN0EYhu9aRWSxFN5MsUfpVd/PBZJNxFupIqB/Qs+9SrTkCqicMrjlXOXc3ktjbnp3lu9@vger.kernel.org, AJvYcCWNVKL1JawzRKkrEVBE2cWFP3gbRfRRUPTnTsmIIVv+cjOuNnC74AdEHyVxd1fT0TcywGK500ci/KfV@vger.kernel.org, AJvYcCWuUzJRZzLsn8NREieIp1v7EdIDqaqbKhQuiibOtrB4hBLx1RNQIZvrs5FEYkqXEdU9fodgQe6NRLIW@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrXVGB+ya1wx1bou9wBVTdWzNlqiuSCTXHPCci3xMCLZbBUjh4
+	fodOpmVdlF84MfY7pEtDT1dhyqJeYZEqXn0cShvDNrBs4CRnUuEz
+X-Google-Smtp-Source: AGHT+IH8jnctbuqSrq6dqDgvGc4MjSwcpaVVRHBke9TrvYbHFnyuMvCGjc89UybL4VKtI6KrFRwmaA==
+X-Received: by 2002:a17:90a:348f:b0:2c9:8650:404 with SMTP id 98e67ed59e1d1-2d1e80565f6mr2236934a91.30.1723220840700;
+        Fri, 09 Aug 2024 09:27:20 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1c9db3b9asm3190095a91.43.2024.08.09.09.27.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Aug 2024 09:27:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 9 Aug 2024 09:27:18 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com
+Subject: Re: [PATCH 4/5] watchdog: Congatec Board Controller watchdog timer
+ driver
+Message-ID: <d37e3fea-d35e-4688-a845-02be6ea5eaa3@roeck-us.net>
+References: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
+ <20240503-congatec-board-controller-v1-4-fec5236270e7@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240809-hotplug-drm-bridge-v3-7-b4c178380bc9@bootlin.com>
-References: <20240809-hotplug-drm-bridge-v3-0-b4c178380bc9@bootlin.com>
-In-Reply-To: <20240809-hotplug-drm-bridge-v3-0-b4c178380bc9@bootlin.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
- Derek Kiernan <derek.kiernan@amd.com>, 
- Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Saravana Kannan <saravanak@google.com>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Paul Kocialkowski <contact@paulk.fr>, 
- =?utf-8?q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-i2c@vger.kernel.org, 
- Paul Kocialkowski <paul.kocialkowski@bootlin.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-X-Mailer: b4 0.14.0
-X-GND-Sasl: luca.ceresoli@bootlin.com
-
-Quick summary:
-
-I have investigated a problem for a long time, I have a pretty good
-understanding, I tried various fixes but none except this is working. The
-goal of this patch is to discuss the problem to converge to the best
-solution.
-
----------------------------------
-Symptoms
----------------------------------
-
-The problem appeared while testing the v3 addon connector driver that is
-part of this seres, and which is based on device tree overlays.
-
-Note the symptom happens often, but not always. Changes to logging is a
-typical way to make it appear/disappear, so it appears as time sensitive.
-
-The relevant DT overlay snippet is:
-
-/ {
-    fragment@0 {
-        target-path = "";
-
-        __overlay__ {
-            nobus-devices {
-	        // nodes in here are populated as platform devices
-                reg_addon_3v3_lcd: regulator-addon-3v3-lcd {
-                    compatible = "regulator-fixed";
-                    regulator-name = "3V3_LCD_ADDON";
-                    gpios = <...>;
-                };
-
-                addon_panel_dsi_lvds: panel-dsi-lvds {
-                    compatible = "...";
-                    power-supply = <&reg_addon_3v3_lcd>;
-                };
-            };
-        };
-    };
-};
-
-So the regulator is a supplier to the panel. Nothing special here, except
-we are in an overlay.
-
-The overlay gets applied and all devices work correctly. Troubles start
-appearing in the form of two messages on overlay removal, in this order:
-
- * WARNING: CPU: 1 PID: 189 at drivers/regulator/core.c:5856 regulator_unregister+0x1ec/0x208
-
-   This is issued during removal of the 3V3_LCD_ADDON regulator because
-   rdev->open_count is 1, while it should be 0. This is because the panel
-   still hasn't closed the regulator.
-
- * Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-   Call trace:
-    regulator_lock_recursive+0x5c/0x200
-    regulator_lock_dependent+0xc0/0x140
-    regulator_enable+0x44/0x98
-    panel_simple_resume+0x38/0x108 [panel_simple]
-    pm_generic_runtime_resume+0x34/0x58
-    __rpm_callback+0x50/0x1f0
-    rpm_callback+0x70/0x88
-    rpm_resume+0x49c/0x678
-    __pm_runtime_resume+0x54/0xa0
-    device_release_driver_internal+0xd4/0x240
-    device_release_driver+0x20/0x38
-    bus_remove_device+0xd4/0x120
-    device_del+0x154/0x388
-
-   This happens while the panel driver is being removed and the devm infra
-   tries to close the regulator which is already gone.
-
-Both errors have the same origin: the regulator driver is removed before
-the panel driver.
-
----------------------------------
-Problem analysis
----------------------------------
-
-My analysis showed that the problem originates from devlink manipulation
-during overlay insertion, but shows its effects on removal. This is the
-sequence of events:
-
- * During overlay insertion:
-   1. the devlink code creates a devlink (A) with:
-        supplier = regulator-addon-3v3-lcd
-        consumer = panel-dsi-lvds
-        flags    = DL_FLAG_INFERRED (+ possibly others) because it has
-	           been inferred from firmware data
-   2. soon after, devlink A is relaxed and then dropped
-      - does not happen always, based on timing
-      - see below for details
-   3. the regulator-addon-3v3-lcd regulator gets probed as a platform device
-      - the probe function for regulator-addon-3v3-lcd is
-        reg_fixed_voltage_probe(), which calls devm_regulator_register() to
-        register a single new regulator class device for the voltage output
-        -  regulator_register() does, among others:
-          - instantiate a new regulator class device (3V3_LCD_ADDON), with
-            parent = regulator-addon-3v3-lcd
-          - adds a devlink (B)  with:
-              supplier = 3V3_LCD_ADDON
-              consumer = panel-dsi-lvds
-
-At this point we have these devices and devlinks:
-
- .---------------------------.
- |  regulator-addon-3v3-lcd  |
- | regulator platform device | supplier                consumer
- |      (struct device)      |<--------- devlink A -------------.
- '---------------------------'          (inferred)              |
-     ^                                                          V
-     |                                                  .-----------------.
-     | parent                                           | panel-dsi-lvds  |
-     |                                                  | (struct device) |
-     |                                                  '-----------------'
- .---------------------------.                                  ^
- |       3V3_LCD_ADDON       | supplier                consumer |
- |   regulator class device  |<--------- devlink B -------------'
- |      (struct device)      |          (created by
- '---------------------------'        regulator core)
-
-Depending on whether step 2 happens or not, devlink A will be still present
-or not during overlay removal.
-
-When step 2 happens and devlink A gets dropped (which happens to me almost
-always), the removal code calls:
-
--> device_release_driver(dev = regulator-addon-3v3-lcd)
-   -> device_release_driver_internal()
-      -> __device_release_driver()
-         -> if (device_links_busy()) // see below
-	     {
-	        device_links_unbind_consumers(dev = regulator-addon-3v3-lcd)
-		 -> for each consumer for which 'dev' is a supplier:
-		    {
-		       device_release_driver_internal(dev = panel-dsi-lvds)
-                    }
-             }
-
-The logic is pretty clear: before removing a device that is a supplier to
-other devices (regulator-addon-3v3-lcd), use devlink to find all consumers
-(panel-dsi-lvds) and remove them first, recursively.
-
-However in case devlink A had been initially dropped, there is no devlink
-between the two devices. The regulator removal will just proceed, and the
-regulator device gets removed before its consumer.
-
-Note devlink B is not at all within this removal phase. device_links_busy()
-looks at the platform device (regulator-addon-3v3-lcd), and it has no way
-to know about the class device (3V3_LCD_ADDON).
-
-Assuming the whole device_links_busy() / device_links_unbind_consumers()
-logic is correct, let's move to why devlink A gets dropped.
-
----------------------------------
-Why the devlink is dropped
----------------------------------
-
-It all starts in the device_add() for regulator-addon-3v3-lcd:
-
-  /*
-   * If all driver registration is done and a newly added device doesn't
-   * match with any driver, don't block its consumers from probing in
-   * case the consumer device is able to operate without this supplier.
-   */
-   if (dev->fwnode && fw_devlink_drv_reg_done && !dev->can_match)
-       fw_devlink_unblock_consumers(dev);
-
-The three conditions in the if() mean:
-
- 1. this device comes from firmware -> always true in my case (device tree)
- 2. this global flag is set via the deferred_probe_timeout_work as soon as
-    for 10 consecutive seconds there is no new driver being probed; it is
-    never cleared
- 3. no driver has been matched with this device so far (IOW the probe
-    function of the driver for this device has never been called,
-    regardless of the return value)
-
-If all condtions apply, fw_devlink_unblock_consumers() will (after some
-checks) call fw_devlink_relax_link() on every link to consumers and "relax"
-it. Relaxing means setting link flags to DL_FLAG_MANAGED |
-FW_DEVLINK_FLAGS_PERMISSIVE. Soon later, device_links_driver_bound() will
-take devlinks with these flags and drop them.
-
-I was unable to understand in full detail the flag manipulation logic
-happening in the devlink code. However I think the high-level logic here
-can be expressed as: if a devlink was inferred from firmware and its
-supplier device did not probe after a while (*) because no potential driver
-was found, then maybe that devlink was wrong or it is enforcing a supplier
-that is optional for the consumer: let's drop the link and see whether the
-(formerly devlink consumer) device can now probe.
-
-(*) "after a while" is implemented by the fw_devlink_drv_reg_done flag,
-     which typically gets set way less than a minute after boot
-
-    Basically fw_devlink_drv_reg_done flag splits the probing in two
-    phases. In phase 1 we try to probe all inferred suppliers before
-    probing consumers. Then we set fw_devlink_drv_reg_done and relax+drop
-    the "dangling" inferred devlinks. Then in phase 2 we try to probe
-    without inferred devlinks. This is to see if we can probe more devices
-    due to incorrectly inferred devlinks or missing drivers for optional
-    suppliers.
-
-Overlays however can be loaded at any time, even a long time after
-booting. This is totally normal when used for a hotplug connector, where
-the devices get physically connected by the user. This implies the
-fw_devlink_drv_reg_done flag is found already set when probing overlay
-devices. And so, conditions 1 and 2 above are always set in the overlay
-case.
-
-So we are left with condition 3 only. Again I haven't done a full analysis
-here, but it is perfectly fine that a driver is not immediately present
-when adding a new device. It can just have not yet been matched, possibly
-because a driver module is in process of being loaded from storage.
-
-I think there is a race here: on one side the driver becoming available and
-matched and the device to probe, on the other side the
-fw_devlink_unblock_consumers() logic to relax and drop inferred
-devlinks. If the device probes first, the link won't be dropped.
-
----------------------------------
-Same problem without DT overlays?
----------------------------------
-
-Based on the above, I suspect the exact same problem exists even without
-any overlay usage. Indeed, the conditions might exist in other corner
-cases. One example is a device whose driver is a module and is not loaded
-during boot: e.g. it is not on the root filesystem, it is being developed
-and the programmer sends the driver via SSH to a tmpfs to load and test it.
-
-As said, this is a matter of corner cases, but still possible.
-
-Note that no problem should happen to natively removable devices such as
-USB, because condition 1 defuses the whole if() above for devices not
-described in firmware.
-
----------------------------------
-Fixes I have tried (not working)
----------------------------------
-
-I tried a couple approaches based on devlink to fix this issue.
-
-One was augmenting the regulator core code to add a new devlink between the
-regulator platform device (regulator-addon-3v3-lcd) and the regulator class
-device (3V3_LCD_ADDON), to create a chain for device_links_busy() to
-follow. The devlink is created and persists until removal time. However it
-does not enforce the correct ordering: device_links_busy() ignores it
-because the link status is always "dormant". The reason appears to be that
-the "regulator output device" is a struct device but never has a
-driver. Recently Saravana pointed out that:
-
-> device links don't work correctly for "class" type devices
-(https://lore.kernel.org/all/CAGETcx-ioF=jTbyQMeD2fsYKz8q5vw_TWYWS9m8H5=pCo5KFYA@mail.gmail.com/)
-
-which is possibly related.
-
-I tried a variant: change the devlink already created by _regulator_get()
-to use the regulator platform device (regulator-addon-3v3-lcd) instead of
-the regulator class device (3V3_LCD_ADDON) as the supplier. That would make
-devlink B have the same endpoints as devlink A. However this did not work
-due to the link state staying "not tracked" and thus again being ignored by
-device_links_busy(). I haven't managed to find out the flag manipulations
-that would make it work.
-
----------------------------------
-Conclusions
----------------------------------
-
-The current logic is clearly OK for "typical" current use cases (not
-counting corner cases), but unsuitable for hotplugged devices described by
-firmware.
-
-The question is: do we have an underlying assumption that was valid so far
-but is wrong when overlays are added?
-
-One possible answer is: dropping inferred devlinks is wrong. Generally
-speaking, inferred devlinks are sometimes useless but don't hurt, so there
-is no need to drop them. This is what this patch changes.
-
-However I realize there is a use case for dropping inferred devlink:
-optional suppliers that prevent consumer probing until they are
-dropped. Indeed, inferring devlinks from firmware data can create links
-that prevent some device to probe. For this reason my first attempts have
-been to add or change the devlinks that subsystem code creates.
-
-So a more sophisticated idea is that after phase 1 we try to probe all
-not-probed-yet consumers ignoring the relaxed devlinks, instead of removing
-them. This would allow the same amount of devices to be probed using the
-same amount of optional suppliers, but leaving the inferred devlinks in
-place because they might be useful later on.
-
-And then of course there are the above solutions I failed to get working,
-which might be the right way but need some directions for me to have them
-working.
-
-I am very open to more answers and suggestions.
-
-Best regards,
-Luca
-
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
----
-
-This patch first appeared in v3.
----
- drivers/base/core.c | 21 ---------------------
- 1 file changed, 21 deletions(-)
-
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 5c4eebcd198b..024f189fa0a0 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -1875,19 +1875,6 @@ void __init wait_for_init_devices_probe(void)
- 	fw_devlink_best_effort = false;
- }
- 
--static void fw_devlink_unblock_consumers(struct device *dev)
--{
--	struct device_link *link;
--
--	if (!fw_devlink_flags || fw_devlink_is_permissive())
--		return;
--
--	device_links_write_lock();
--	list_for_each_entry(link, &dev->links.consumers, s_node)
--		fw_devlink_relax_link(link);
--	device_links_write_unlock();
--}
--
- #define get_dev_from_fwnode(fwnode)	get_device((fwnode)->dev)
- 
- static bool fwnode_init_without_drv(struct fwnode_handle *fwnode)
-@@ -3679,14 +3666,6 @@ int device_add(struct device *dev)
- 
- 	bus_probe_device(dev);
- 
--	/*
--	 * If all driver registration is done and a newly added device doesn't
--	 * match with any driver, don't block its consumers from probing in
--	 * case the consumer device is able to operate without this supplier.
--	 */
--	if (dev->fwnode && fw_devlink_drv_reg_done && !dev->can_match)
--		fw_devlink_unblock_consumers(dev);
--
- 	if (parent)
- 		klist_add_tail(&dev->p->knode_parent,
- 			       &parent->p->klist_children);
-
--- 
-2.34.1
-
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240503-congatec-board-controller-v1-4-fec5236270e7@bootlin.com>
+
+On Fri, Aug 09, 2024 at 04:52:08PM +0200, Thomas Richard wrote:
+> Add watchdog timer support for the Congatec Board Controller.
+> 
+> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+> ---
+>  drivers/watchdog/Kconfig    |  10 ++
+>  drivers/watchdog/Makefile   |   1 +
+>  drivers/watchdog/cgbc_wdt.c | 217 ++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 228 insertions(+)
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index bae1d97cce89..07b711fc8bb2 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1142,6 +1142,16 @@ config ALIM7101_WDT
+>  
+>  	  Most people will say N.
+>  
+> +config CGBC_WDT
+> +	tristate "Congatec Board Controller Watchdog Timer"
+> +	depends on MFD_CGBC
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Enables watchdog timer support for the Congatec Board Controller.
+> +
+> +	  This driver can also be built as a module. If so, the module will be
+> +	  called cgbc_wdt.
+> +
+>  config EBC_C384_WDT
+>  	tristate "WinSystems EBC-C384 Watchdog Timer"
+>  	depends on (X86 || COMPILE_TEST) && HAS_IOPORT
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index b51030f035a6..5aa66ba91346 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -106,6 +106,7 @@ obj-$(CONFIG_ADVANTECH_WDT) += advantechwdt.o
+>  obj-$(CONFIG_ADVANTECH_EC_WDT) += advantech_ec_wdt.o
+>  obj-$(CONFIG_ALIM1535_WDT) += alim1535_wdt.o
+>  obj-$(CONFIG_ALIM7101_WDT) += alim7101_wdt.o
+> +obj-$(CONFIG_CGBC_WDT) += cgbc_wdt.o
+>  obj-$(CONFIG_EBC_C384_WDT) += ebc-c384_wdt.o
+>  obj-$(CONFIG_EXAR_WDT) += exar_wdt.o
+>  obj-$(CONFIG_F71808E_WDT) += f71808e_wdt.o
+> diff --git a/drivers/watchdog/cgbc_wdt.c b/drivers/watchdog/cgbc_wdt.c
+> new file mode 100644
+> index 000000000000..9327e87b52e8
+> --- /dev/null
+> +++ b/drivers/watchdog/cgbc_wdt.c
+> @@ -0,0 +1,217 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Congatec Board Controller watchdog driver
+> + *
+> + * Copyright (C) 2024 Bootlin
+> + * Author: Thomas Richard <thomas.richard@bootlin.com>
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/watchdog.h>
+> +
+> +#include <linux/mfd/cgbc.h>
+> +
+> +#define CGBC_WDT_CMD_TRIGGER	0x27
+> +#define CGBC_WDT_CMD_INIT	0x28
+> +#define CGBC_WDT_DISABLE	0x00
+> +
+> +#define CGBC_WDT_MODE_SINGLE_EVENT 0x02
+> +
+> +#define DEFAULT_TIMEOUT_SEC	30
+> +#define DEFAULT_PRETIMEOUT_SEC	0
+> +
+> +enum action {
+> +	ACTION_INT = 0,
+> +	ACTION_SMI,
+> +	ACTION_RESET,
+> +	ACTION_BUTTON,
+> +};
+> +
+> +static unsigned int timeout = DEFAULT_TIMEOUT_SEC;
+> +module_param(timeout, uint, 0);
+> +MODULE_PARM_DESC(timeout,
+> +		 "Watchdog timeout in seconds. (>=0, default="
+> +		 __MODULE_STRING(DEFAULT_TIMEOUT_SEC) ")");
+> +
+> +static unsigned int pretimeout = DEFAULT_PRETIMEOUT_SEC;
+> +module_param(pretimeout, uint, 0);
+> +MODULE_PARM_DESC(pretimeout,
+> +		 "Watchdog pretimeout in seconds. (>=0, default="
+> +		 __MODULE_STRING(DEFAULT_PRETIMEOUT_SEC) ")");
+> +
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout,
+> +		 "Watchdog cannot be stopped once started (default="
+> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> +
+> +struct cgbc_wdt_data {
+> +	struct cgbc_device_data	*cgbc;
+> +	struct watchdog_device	wdd;
+> +	enum action timeout_action;
+> +	enum action pretimeout_action;
+> +};
+> +
+> +struct cgbc_wdt_cmd_cfg {
+> +	u8 cmd;
+> +	u8 mode;
+> +	u8 action;
+> +	u8 timeout1[3];
+> +	u8 timeout2[3];
+> +	u8 reserved[3];
+> +	u8 delay[3];
+> +} __packed;
+> +
+> +static_assert(sizeof(struct cgbc_wdt_cmd_cfg) == 15);
+
+static_assert() is declared in linux/build_bug.h. Please include all
+necessary include files explicitly and do not depend on indirect includes.
+
+> +
+> +static int cgbc_wdt_start(struct watchdog_device *wdd)
+> +{
+> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+
+Unusual way to get wdt_data instead of using container_of().
+Any special reason ?
+
+> +	struct cgbc_device_data *cgbc = wdt_data->cgbc;
+> +	unsigned int timeout1 = (wdd->timeout - wdd->pretimeout) * 1000;
+> +	unsigned int timeout2 = wdd->pretimeout * 1000;
+> +	u8 action;
+> +
+> +	struct cgbc_wdt_cmd_cfg cmd_start = {
+> +		.cmd = CGBC_WDT_CMD_INIT,
+> +		.mode = CGBC_WDT_MODE_SINGLE_EVENT,
+> +		.timeout1[0] = (u8)timeout1,
+> +		.timeout1[1] = (u8)(timeout1 >> 8),
+> +		.timeout1[2] = (u8)(timeout1 >> 16),
+> +		.timeout2[0] = (u8)timeout2,
+> +		.timeout2[1] = (u8)(timeout2 >> 8),
+> +		.timeout2[2] = (u8)(timeout2 >> 16),
+> +	};
+> +
+> +	if (wdd->pretimeout) {
+> +		action = 2;
+> +		action |= wdt_data->pretimeout_action << 2;
+> +		action |= wdt_data->timeout_action << 4;
+> +	} else {
+> +		action = 1;
+> +		action |= wdt_data->timeout_action << 2;
+> +	}
+> +
+> +	cmd_start.action = action;
+> +
+> +	return cgbc_command(cgbc, &cmd_start, sizeof(cmd_start), NULL, 0, NULL);
+> +}
+> +
+> +static int cgbc_wdt_stop(struct watchdog_device *wdd)
+> +{
+> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+> +	struct cgbc_device_data *cgbc = wdt_data->cgbc;
+> +	struct cgbc_wdt_cmd_cfg cmd_stop = {
+> +		.cmd = CGBC_WDT_CMD_INIT,
+> +		.mode = CGBC_WDT_DISABLE,
+> +	};
+> +
+> +	return cgbc_command(cgbc, &cmd_stop, sizeof(cmd_stop), NULL, 0, NULL);
+> +}
+> +
+> +static int cgbc_wdt_keepalive(struct watchdog_device *wdd)
+> +{
+> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+> +	struct cgbc_device_data *cgbc = wdt_data->cgbc;
+> +	u8 cmd_ping = CGBC_WDT_CMD_TRIGGER;
+> +
+> +	return cgbc_command(cgbc, &cmd_ping, sizeof(cmd_ping), NULL, 0, NULL);
+> +}
+> +
+> +static int cgbc_wdt_set_pretimeout(struct watchdog_device *wdd,
+> +				   unsigned int pretimeout)
+> +{
+> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+> +
+> +	wdd->pretimeout = pretimeout;
+> +	wdt_data->pretimeout_action = ACTION_SMI;
+> +
+> +	if (watchdog_active(wdd))
+> +		return cgbc_wdt_start(wdd);
+> +
+> +	return 0;
+> +}
+> +
+> +static int cgbc_wdt_set_timeout(struct watchdog_device *wdd,
+> +				unsigned int timeout)
+> +{
+> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+> +
+> +	if (timeout < wdd->pretimeout) {
+> +		dev_warn(wdd->parent, "timeout <= pretimeout. Setting pretimeout to zero\n");
+
+That is a normal condition which does not warrant a log message.
+Also see drivers/watchdog/watchdog_dev.c around line 385.
+
+> +		wdd->pretimeout = 0;
+> +	}
+> +
+> +	wdd->timeout = timeout;
+> +	wdt_data->timeout_action = ACTION_RESET;
+
+Both timeout_action and pretimeout_action are set statically.
+What is the point of doing that instead of just using
+ACTION_RESET and ACTION_SMI as needed irectly ?
+
+> +
+> +	if (watchdog_active(wdd))
+> +		return cgbc_wdt_start(wdd);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct watchdog_info cgbc_wdt_info = {
+> +	.identity	= "CGBC Watchdog",
+> +	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
+> +		WDIOF_MAGICCLOSE | WDIOF_PRETIMEOUT
+> +};
+> +
+> +static const struct watchdog_ops cgbc_wdt_ops = {
+> +	.owner		= THIS_MODULE,
+> +	.start		= cgbc_wdt_start,
+> +	.stop		= cgbc_wdt_stop,
+> +	.ping		= cgbc_wdt_keepalive,
+> +	.set_timeout	= cgbc_wdt_set_timeout,
+> +	.set_pretimeout = cgbc_wdt_set_pretimeout,
+> +};
+> +
+> +static int cgbc_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct cgbc_device_data *cgbc = dev_get_drvdata(pdev->dev.parent);
+> +	struct device *dev = &pdev->dev;
+> +	struct cgbc_wdt_data *wdt_data;
+> +	struct watchdog_device *wdd;
+> +	int ret;
+> +
+> +	wdt_data = devm_kzalloc(dev, sizeof(*wdt_data), GFP_KERNEL);
+
+devm_kzalloc() is declared in linux/device.h. Again, please include all
+necessary include files explicitly.
+
+> +	if (!wdt_data)
+> +		return -ENOMEM;
+> +
+> +	wdt_data->cgbc = cgbc;
+> +	wdd = &wdt_data->wdd;
+> +	wdd->parent = dev;
+> +
+
+No limits ? That is unusual. Are you sure the driver accepts all
+timeouts from 0 to UINT_MAX ?
+
+> +	wdd->info = &cgbc_wdt_info;
+> +	wdd->ops = &cgbc_wdt_ops;
+> +
+> +	watchdog_set_drvdata(wdd, wdt_data);
+> +	watchdog_set_nowayout(wdd, nowayout);
+> +
+> +	cgbc_wdt_set_timeout(wdd, timeout);
+> +	cgbc_wdt_set_pretimeout(wdd, pretimeout);
+
+The more common approach would be to set default limits in wdd->{timout,pretimeout}
+and only override the values if needed, ie if provided using module parameters.
+That implies initializing the module parameters with 0. YOur call, though.
+
+> +
+> +	platform_set_drvdata(pdev, wdt_data);
+> +	watchdog_stop_on_reboot(wdd);
+> +	watchdog_stop_on_unregister(wdd);
+> +
+> +	ret = devm_watchdog_register_device(dev, wdd);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+
+Why not just
+	return devm_watchdog_register_device(dev, wdd);
+?
+
+> +}
+> +
+> +static struct platform_driver cgbc_wdt_driver = {
+> +	.driver		= {
+> +		.name	= "cgbc-wdt",
+> +	},
+> +	.probe		= cgbc_wdt_probe,
+> +};
+> +
+> +module_platform_driver(cgbc_wdt_driver);
+> +
+> +MODULE_DESCRIPTION("Congatec Board Controller Watchdog Driver");
+> +MODULE_AUTHOR("Thomas Richard <thomas.richard@bootlin.com>");
+> +MODULE_LICENSE("GPL");
+> 
+> -- 
+> 2.39.2
+> 
+> 
 
