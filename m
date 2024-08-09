@@ -1,131 +1,85 @@
-Return-Path: <linux-i2c+bounces-5248-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5250-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFF8094CFFC
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 14:19:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B276494D02E
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 14:29:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81218282BE6
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 12:19:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22AC9B22AD8
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Aug 2024 12:29:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 229FC194081;
-	Fri,  9 Aug 2024 12:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KQ+RfkWG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36FC194A4C;
+	Fri,  9 Aug 2024 12:29:01 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A0A19309D;
-	Fri,  9 Aug 2024 12:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9749318E02F;
+	Fri,  9 Aug 2024 12:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723205959; cv=none; b=OjuysZQ0VKuMOlySoQwDqPG19vVll0fPpPyuOlMEkHKteNVRFC1bHbjCUz4Eq+yqfAL5USzdZLNurB6ArGlBgCip8Gx/KhrPDOxmw/93xKqfGATqqgPvlh5qjkDB1Q/j8IZkZ96qgDTFA8wvPm/j+g9I0o/YmGYeBYEhK7lenRk=
+	t=1723206541; cv=none; b=VQwQmC/nN4mWBvR1tH9jsBjB+crj1INlSO6n5spdvow/V05MGwNd9xn+c4vYpTs1MNVaiOT/utkAcP+8Ei2Y/C+/ochaKztQ9Q/5nkvJedZ7RnwCnr72sZrN8+os2dqm4f8+P03tlbzlEggn7P3k3Mdya57/uJJHRbxRAkSo8VA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723205959; c=relaxed/simple;
-	bh=EwpoTDeMRiz/mNTb0pde6dTI3Kfg9kV/geo7GvjFXps=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XgKtahF7CSpEcz6JHdkyaXZyfynrMrbEY+lyG1yo1W+VDcKYD+/EycJYb/JICiw1li4CZnfGH/gZpmPiyfiy9mgdLCxF50N48X42R1NoPhTVPlSYr3LWmHJB1REf8H5ivyLB5u4I6zf0QmDgZCfzAqFLSXuic3yHqaflN2uy7MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KQ+RfkWG; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723205958; x=1754741958;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EwpoTDeMRiz/mNTb0pde6dTI3Kfg9kV/geo7GvjFXps=;
-  b=KQ+RfkWGY6O7MLkA3vyTE7/yDmS9/XNO1xPl7eE8l8ErqFspNwn4gAbR
-   CQQn932E/xQa3acAhDGgmTiAZXo4HpArsft1vWiMMBYTpVAOXFxCEqWxf
-   soOdwd7N/EzNRQoSTA9PD5kmw3MNirOQwsym2cXn1n8uXCxp67ScCMP0/
-   PRdGEj/YbheQS/zueKrWVIiRXG88rBQhohu5UhCjgMv82+1dwjehp2qoH
-   o7clkwizJf87aILr6rgQdl/de80RMxBebwVflt+DCds7xZSlIRWXLQWm0
-   r5Hg6gQSQwp6FxNECjxeBDrjQlt/R6621+Q29BfX68PQcy/g6UGAzhLLb
-   g==;
-X-CSE-ConnectionGUID: 1Fx/GmXdSnu4Bdgq36NtsQ==
-X-CSE-MsgGUID: ShhLsWupTt+EQlDSY5ucNQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="20939203"
-X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
-   d="scan'208";a="20939203"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 05:19:16 -0700
-X-CSE-ConnectionGUID: 4K1gC6H/RZaDQcghtQpxFA==
-X-CSE-MsgGUID: jvcRsWdxTxG5Egytdxe0Pw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
-   d="scan'208";a="62505555"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 05:19:13 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1scOaL-0000000DPdS-3N8b;
-	Fri, 09 Aug 2024 15:19:09 +0300
-Date: Fri, 9 Aug 2024 15:19:09 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: ldewangan@nvidia.com, Dmitry Osipenko <digetx@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, paulmck@kernel.org,
-	apopple@nvidia.com, Michael van der Westhuizen <rmikey@meta.com>,
-	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] [i2c-tegra] Do not mark ACPI devices as irq safe
-Message-ID: <ZrYJPdW0-MQMejP3@smile.fi.intel.com>
-References: <20240606132708.1610308-1-leitao@debian.org>
- <ZmhHvpHlkxe4kid7@smile.fi.intel.com>
- <ZmmQu15Z2acgAjZQ@gmail.com>
+	s=arc-20240116; t=1723206541; c=relaxed/simple;
+	bh=QhTmdNiPQBdgYv29JclUBwXooYWQFaOtO2exgAChwo4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=a+1164yTBkB56TE98dSp1PV0f0AGV7EkDMWec+BgjnHnzUoPsoULL/Ry/qHVXtp1PWOJ0zP4RQBpTYfKHViyl6sE5tSwwLRAdP902N8tB1AdRVTJS9+6n7F1SdR3gh2gYRGPMSf+odeRNGzLpTvDhl+c1tQQZuYRB/NCrmFD2cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from i53875b02.versanet.de ([83.135.91.2] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1scOiz-0006Nc-37; Fri, 09 Aug 2024 14:28:05 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: linux-kernel@vger.kernel.org,
+ Detlev Casanova <detlev.casanova@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Chris Morgan <macromorgan@hotmail.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>,
+ Muhammed Efe Cetin <efectn@protonmail.com>, Andy Yan <andyshrk@163.com>,
+ Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>,
+ Detlev Casanova <detlev.casanova@collabora.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Shresth Prasad <shresthprasad7@gmail.com>, Ondrej Jirman <megi@xff.cz>,
+ Weizhao Ouyang <weizhao.ouyang@arm.com>, Alexey Charkov <alchark@gmail.com>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Finley Xiao <finley.xiao@rock-chips.com>,
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+ Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 03/10] dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
+Date: Fri, 09 Aug 2024 14:28:03 +0200
+Message-ID: <2741894.hTDNKPQEx9@diego>
+In-Reply-To: <20240802214612.434179-4-detlev.casanova@collabora.com>
+References:
+ <20240802214612.434179-1-detlev.casanova@collabora.com>
+ <20240802214612.434179-4-detlev.casanova@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZmmQu15Z2acgAjZQ@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Wed, Jun 12, 2024 at 05:12:43AM -0700, Breno Leitao wrote:
-> On Tue, Jun 11, 2024 at 03:49:02PM +0300, Andy Shevchenko wrote:
-> > On Thu, Jun 06, 2024 at 06:27:07AM -0700, Breno Leitao wrote:
+Am Freitag, 2. August 2024, 23:45:30 CEST schrieb Detlev Casanova:
+> Just like RK356x and RK3588, RK3576 is compatible to the existing
+> rk3399 binding.
 > 
-> > > The problem arises because during __pm_runtime_resume(), the spinlock
-> > > &dev->power.lock is acquired before rpm_resume() is called. Later,
-> > > rpm_resume() invokes acpi_subsys_runtime_resume(), which relies on
-> > > mutexes, triggering the error.
-> > > 
-> > > To address this issue, devices on ACPI are now marked as not IRQ-safe,
-> > > considering the dependency of acpi_subsys_runtime_resume() on mutexes.
-> > 
-> > ...
-> > 
-> > While it's a move in the right direction, the real fix is to get rid of
-> > the IRQ safe PM hack completely.
-> > Look at how OMAP code was modified for
-> > the last few years and now it's pm_runtime_irq_safe()-free. The main
-> > (ab)users are SH code followed by Tegra drivers.
-> 
-> Thanks. 
-> 
-> I think these are two different goals here. This near term goal is just
-> fix the driver so it can use the pm_runtime_irq_safe() in a saner
-> way, avoiding calling mutexes inside spinlocks.
-> 
-> Getting rid of the IRQ safe PM seems to me to be more a long term
-> desirable goal, and unfortunately I cannot afford doing it now.
-> 
-> Laxman, what is your view on this topic?
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 
-Yes, please, comment on this. We would like to get rid of the hack named "IRQ
-safe PM runtime".
-
--- 
-With Best Regards,
-Andy Shevchenko
+Acked-by: Heiko Stuebner <heiko@sntech.de>
 
 
 
