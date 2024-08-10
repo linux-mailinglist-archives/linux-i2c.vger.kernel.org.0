@@ -1,107 +1,150 @@
-Return-Path: <linux-i2c+bounces-5274-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5275-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25E8294DC08
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Aug 2024 11:39:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0705494DC6D
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Aug 2024 13:18:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF6B828212C
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Aug 2024 09:39:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC7CE1F21CDA
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Aug 2024 11:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0303B157464;
-	Sat, 10 Aug 2024 09:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4565A15278E;
+	Sat, 10 Aug 2024 11:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JQ8QQzMg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GZMAZs/o"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92361D555;
-	Sat, 10 Aug 2024 09:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 004621B810;
+	Sat, 10 Aug 2024 11:18:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723282738; cv=none; b=ktjE6bRK+rDfiZCM+voN//jDIUPAAQYLiAYgVLlNi4+uUQlQUpZIlMZOPYLz/HpoSrjaDiKMcNUwK4bTzvkGD8mwzI1iYceGoYxIa/M6jG1oDivi+3pSCy9FqqAcU6DWsMhhBL4MvY78iv15IELxHVFXK1YnUj8BkBwyTNr0/4k=
+	t=1723288685; cv=none; b=kTTIoE+364Pl+W67drdCOTcmRzAQWABn5jSbjy/yDSqX7IDVRvDWGxXpFD00+h6osVMZTsGwcSFRofpC89Nb6B7hzJ37VI3zGWeFcD+enXv9Z3iXMKhLl4alQkL19r0BWd4IKTCFrSoc6OeCQSF+c9S6Vp7yFwW12q0/UKbPMHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723282738; c=relaxed/simple;
-	bh=yGihDf4UPvnVbeBFvypXekjA1yNeJQAtpvjbIlX4CqY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DF3U/QTOEh8h02Mdb3ISpH/iyKPAeiafEonCAz2HAqgIzdxlucdzlw+DETAX7VjsexPyY6QvgIzCvts2RKO2HZqqI4dkxLm4caIheLY6VeFX50Wl3JSl9a+pygALSzdiKQaNz3pXVGB3Ad7pwBuP1zcZ/ou/NffJytXOt5IjLp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JQ8QQzMg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7004C32781;
-	Sat, 10 Aug 2024 09:38:46 +0000 (UTC)
+	s=arc-20240116; t=1723288685; c=relaxed/simple;
+	bh=dBUPbdDGqDsX3bSVuvRws3j2ItrGNGnfm8wLIuuT2M4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l2/95ZPPdPtbv32JEsxoaTduPR1Viu26wIqCkl8J8m+crs9AtPiaNum2V20SiYQMK2WYS6mHO9lqQZMLN+sqGZVCRYP6x8OD1QBFkPizSQVWgvlEd87oWi53sb0JFbV35O8e+dJuS59BTNNU+489fhJkcH7soaFtnabc/tyA0Nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GZMAZs/o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB11AC32781;
+	Sat, 10 Aug 2024 11:18:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723282738;
-	bh=yGihDf4UPvnVbeBFvypXekjA1yNeJQAtpvjbIlX4CqY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JQ8QQzMgM0Uvlfnfy3IDHI0GO+THTPSoCUsfXfJucyG/0X/0em3nRX+L9KNsXXZ9y
-	 8wnRm4nDZzapTf67U24uTTXgedsk8EzUl+EZ+ApduQDyICVmTBxto13YZqc0/Dt9gv
-	 OsN+fut7B13hM9gxcL0Pa6UjZa8rzbeZF9EOM2hrBIkXoh8j22QINgZcdoFDoXdG6C
-	 XiUDJ0m140PfV33fX6virJsn1k8b3xaz2qQcLgn+vJ8gCNSu3gtXPm/0OrGarAwuOJ
-	 WNAXfnpNNH6FAcPRD5L0xI/CFHpCAKocMg0ejq3QGJQiDFxurtE4/RKddRjLUIDPhq
-	 HsS3LhS/n23pA==
-Date: Sat, 10 Aug 2024 10:38:42 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Detlev Casanova <detlev.casanova@collabora.com>,
- linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Heiko
- Stuebner <heiko@sntech.de>, Andi Shyti <andi.shyti@kernel.org>, Lars-Peter
- Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
- Chris Morgan <macromorgan@hotmail.com>, Jonas Karlman <jonas@kwiboo.se>,
- Tim Lunn <tim@feathertop.org>, Muhammed Efe Cetin <efectn@protonmail.com>,
- Andy Yan <andyshrk@163.com>, Jagan Teki <jagan@edgeble.ai>, Dragan Simic
- <dsimic@manjaro.org>, Sebastian Reichel <sebastian.reichel@collabora.com>,
- Shresth Prasad <shresthprasad7@gmail.com>, Ondrej Jirman <megi@xff.cz>,
- Weizhao Ouyang <weizhao.ouyang@arm.com>, Alexey Charkov
- <alchark@gmail.com>, Jimmy Hon <honyuenkwun@gmail.com>, Finley Xiao
- <finley.xiao@rock-chips.com>, Yifeng Zhao <yifeng.zhao@rock-chips.com>,
- Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-serial@vger.kernel.org,
- kernel@collabora.com
-Subject: Re: [PATCH 04/10] dt-bindings: iio: adc: Add rockchip,rk3576-saradc
- string
-Message-ID: <20240810103842.19a60a22@jic23-huawei>
-In-Reply-To: <66118cb8-595a-4149-84c9-0105a2949151@kernel.org>
-References: <20240802214612.434179-1-detlev.casanova@collabora.com>
-	<20240802214612.434179-5-detlev.casanova@collabora.com>
-	<66118cb8-595a-4149-84c9-0105a2949151@kernel.org>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=k20201202; t=1723288684;
+	bh=dBUPbdDGqDsX3bSVuvRws3j2ItrGNGnfm8wLIuuT2M4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=GZMAZs/oAitTdGmz233ivEIikyJSUy7fzw9Z/hbH9QdBYfnUitfGjBcewpAuEt36U
+	 34eZWQ/6SEPwKy2epQcyguO3uvZifFRxwq2URDpmVM7fwPPq+HT/7oQPCUbRJmRQmv
+	 xHDDQBqhofens7+4Yo5Kh2A0N0hYCGBWMd6M7gbQSfDX0UyRiklt8cs+vSILlGKdQs
+	 DzzLnRa0r3owCSAr2H+6yAVuQQirf5sst1mK0/b5QV4ddlkQ1EpI1KVVzDW6VhTTVJ
+	 tvZGikHDlYIBJVtTGFcJvCPOXUpuBQoZlMSj0zVB4PA42F/fGzVxhc8NF/UAxprXr3
+	 d1Sbbp4vdroWg==
+Date: Sat, 10 Aug 2024 13:18:01 +0200
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.11-rc3
+Message-ID: <ZrdMaWTfpmCfKqeA@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+oB5Gc7SstWijNr7"
+Content-Disposition: inline
 
-On Sun, 4 Aug 2024 11:47:44 +0200
-Krzysztof Kozlowski <krzk@kernel.org> wrote:
 
-> On 02/08/2024 23:45, Detlev Casanova wrote:
-> > Add rockchip,rk3576-saradc compatible string.
-> > The saradc on RK3576 is compatible with the one on RK3588, so they are
-> > used together in an arm of the oneOf.
-> >   
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
+--+oB5Gc7SstWijNr7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Applied to the togreg branch of iio.git and pushed out as testing initially
-because otherstuff on that branch needs some build test before I make
-a mess of linux-next.
+The following changes since commit de9c2c66ad8e787abec7c9d7eff4f8c3cdd28aed:
 
-Thanks,
+  Linux 6.11-rc2 (2024-08-04 13:50:53 -0700)
 
-Jonathan
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.11-rc3
+
+for you to fetch changes up to 01a620d491592ead12eca039fe1c9e74908c35cf:
+
+  Merge tag 'i2c-host-fixes-6.11-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current (2024-08-09 15:28:08 +0200)
+
+----------------------------------------------------------------
+i2c-for-6.11-rc3
+
+SMBusAlert handling in the I2C core gets two fixes. One to avoid an
+endless loop when scanning for handlers and one to make sure handlers
+are always called even if HW has broken behaviour. The I2C header gets a
+compilation fix is ACPI is enabled but I2C isn't. The testunit gets a
+rename in the code to match the documentation.
+
+Two fixes on the Qualcomm GENI I2C controller are cleaning up the
+error exit patch in the runtime_resume() function. The first is
+disabling the clock, the second disables the icc on the way out.
+
+----------------------------------------------------------------
+Gaosheng Cui (2):
+      i2c: qcom-geni: Add missing clk_disable_unprepare in geni_i2c_runtime_resume
+      i2c: qcom-geni: Add missing geni_icc_disable in geni_i2c_runtime_resume
+
+Guenter Roeck (2):
+      i2c: smbus: Improve handling of stuck alerts
+      i2c: smbus: Send alert notifications to all devices if source not found
+
+Richard Fitzgerald (1):
+      i2c: Fix conditional for substituting empty ACPI functions
+
+Wolfram Sang (2):
+      i2c: testunit: match HostNotify test name with docs
+      Merge tag 'i2c-host-fixes-6.11-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Vladimir Zapolskiy (2):
+      (Rev.) i2c: qcom-geni: Add missing geni_icc_disable in geni_i2c_runtime_resume
+      (Rev.) i2c: qcom-geni: Add missing clk_disable_unprepare in geni_i2c_runtime_resume
+
+Wolfram Sang (1):
+      (Test) i2c: smbus: Improve handling of stuck alerts
+
+ drivers/i2c/busses/i2c-qcom-geni.c |  5 ++-
+ drivers/i2c/i2c-slave-testunit.c   |  4 +--
+ drivers/i2c/i2c-smbus.c            | 64 +++++++++++++++++++++++++++++++++-----
+ include/linux/i2c.h                |  2 +-
+ 4 files changed, 64 insertions(+), 11 deletions(-)
+
+--+oB5Gc7SstWijNr7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma3TGQACgkQFA3kzBSg
+KbZ4Kw/9FcqLUEB0fCwAg2JvxRqEO1Eav/SwbswJxWe/qEC1qFY/OJ74zg6iNKye
+4XGyERDS+nKBYCQWsfe3nCHH2AI9+q5+d0JGv3wJGAaIjisxZRxL+BTb9S3Qw7hI
+xP6/iRBH6ZVFPpUyP/zTJoiFDSwjbxIeRVM1Bm33TAJTfnhFVqPCooOJOWIGuv0E
+DeTADWGuEpLLhOFFb52c/5CPeSWr6yiHvsV3jaep69CKbO63L1GU4CeJBShKWJcl
+vD+C1YJ7CqiATbtVyxc/Y5XXjPvX0J1hsmjhRcSHhsw4eOsACarP9Z7pJL7fXXCR
+iT4iH3HVWOT5gTUYxwSZvabqgNGn0ullZNXEqSe/idg+hjazjBznSdnT4dDceUBS
+qFDDMCW+RYlT5LYsnl04EFG+G44tnwTlyf02eTS+BSB1W0yuPJiVOeX+tE1/OQA6
+3Nip1j0HULN6BmOjtJOc+SmEC0ZZrk/P1Ax5sfKSSqFqmIsynv5rThR24TFgH8Sb
+mn/H4wVRXu2f9V6zE30uCllDcWvYfWYp/CgGDZbv7zgut9k2i5vkbSLLM372rwr1
+n059RwKbk9Rp2u6bRDhAMw5i+W9RpCGZ/UA7xdwjV1x4sYuLXEI4DoXkvYmFi+co
+ZM6bTHucu0nfHoQ/7XEUr/eH1vd09Ig/hpA2VoPnfzl43dMEp6w=
+=zXid
+-----END PGP SIGNATURE-----
+
+--+oB5Gc7SstWijNr7--
 
