@@ -1,115 +1,102 @@
-Return-Path: <linux-i2c+bounces-5287-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5290-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7027694E2C1
-	for <lists+linux-i2c@lfdr.de>; Sun, 11 Aug 2024 21:27:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABD0A94E359
+	for <lists+linux-i2c@lfdr.de>; Sun, 11 Aug 2024 23:23:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA4EF281434
-	for <lists+linux-i2c@lfdr.de>; Sun, 11 Aug 2024 19:27:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6310D1F21184
+	for <lists+linux-i2c@lfdr.de>; Sun, 11 Aug 2024 21:23:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3024615855F;
-	Sun, 11 Aug 2024 19:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D039D15FA92;
+	Sun, 11 Aug 2024 21:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="0rRvsfug"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="IkJoBM0n"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2988F14B96F
-	for <linux-i2c@vger.kernel.org>; Sun, 11 Aug 2024 19:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F7611CAB
+	for <linux-i2c@vger.kernel.org>; Sun, 11 Aug 2024 21:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723404439; cv=none; b=sy6lz5aFc1JTq0WnFYT6OUbCll2D3vj9HGRQB93SENMKaDgM7uitglkaFKKWg0vYISHv+QmjZJl7Lm1wbe2UNcgLJ/7lCvLY+vOQ6hiSeC47jzSiourH+pO+QfxoDgirAy3XjsMJq4/SGDt1cl0z6E6Iy3C+whQpw7cdBivOCFU=
+	t=1723411410; cv=none; b=Ba2v6lDtpN3tMmhao1Cs7+GZQ9m14stdsRCbyrcMfFjzTTBo4gu0tsUj4Hr6kU8uDY0wOfTPJdMgbsgtdZTg0MW9anufBJjKGOV6FtSjuz226OvT5O0J75oGMhrLa+SLH9tfgx4E9Y9RQH5gtY+Z0en7oO8mkWwHbOfonN8fP3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723404439; c=relaxed/simple;
-	bh=fCMtz0tuHOR4dScOQBteNQbide3c0rC1YBKQmUX5DnU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QYWvfUdELjGJWu6NEhaJjUfOTNUbnS3SgiXccgeM6uzu3aBvFZ4TViQ3quikBFYkTRrd/xUX6Jp5+DHgfz6wcvqp0KFXPiAjTdQUjCQZ8IuIE8xwY9JDB9TIeF/DNO/4XV/P2YC6nlTLi9vfTPv5FcS6ZJAtcazwrW7V97sJjp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=0rRvsfug; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3687f8fcab5so1903559f8f.3
-        for <linux-i2c@vger.kernel.org>; Sun, 11 Aug 2024 12:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1723404435; x=1724009235; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qi4pCNP1Gdr9h0T5um8ZgiG7jkuJMsbVZXb0oh3Hft4=;
-        b=0rRvsfugDJv6Q2bwnrcxrI07Te9szTqH9lP6AQX0nFozBLLc6scN3kD5VDmKlIRiiQ
-         8RCEtzadsUavkwPOGRFIn7Dy54nA4eS7QxzHkHm+7QCXXJUljVqbTBTdIFqiEHKr7Hjt
-         TgxKuY4pH+qIlm9542kb3x4rOhaa1L/F98uKMRxwYBDUPcWpjDxSad+u5DP4rYasmbOY
-         O72Owsi5n8HUgIgUkJ3X1DPTY8pfsZBDS4KD9G+UMmVRvK33RAjCBcDJo4kj2G/OWD6M
-         xZ0NAzzalFBT1XEdF2pFQgfUwZG2Ge5XdOiMl6L/95Rmpizob4dfJxrXu/68fzE1I5fK
-         3BSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723404435; x=1724009235;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qi4pCNP1Gdr9h0T5um8ZgiG7jkuJMsbVZXb0oh3Hft4=;
-        b=tTp6APTuY5puWqsOAZmG9e75LiqjSQ7BH6R61KMomEl6jAnx1MjJmPT63uV7MFjYUc
-         B23Muwtg7eylEDKP0NJ2rkbrwYax7A0Ny8s2pEnpqs+9aYM8N9Vm0QIrU4EXMr+EzY8/
-         wUy5urvB8smJqLByTDCytKMT8fyXjmRCp7ChT6DPEonYHTroR7Oxt8LxRsg4bh9DsJEg
-         WytX4GAUdfIiTganEh+i4AF7JiDF7fcoXk1PqhaOfXgJBkaF9GhidqoC4GGwrxHX9Ejz
-         5JXCXJgci3Kmd4cP3Qy/r6IbKKxzpt1UrsVCQB2oOXCjqbTfr7TCvhx7ZMI6AWGrXWe7
-         iEkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUflYO0btJmbiYv1gLWZKMxvMvhNitmgLRlqHl03rQenXS5YUyCbhbfBaGimn9P07cp8fOkt2MRqXJ6nNZrUkIX3Ea7l/4VKXt5
-X-Gm-Message-State: AOJu0YxbKLmoeBIvUk5ec2TTrLDaM/cr1507jVUoXwaPSK/v+drZAi0+
-	UOsBAJfXGfcWkSdI8wdaUvkbYHA6J+Oz4oUgxjsF5TAs5v/cM0lZ8nqw08meOMo=
-X-Google-Smtp-Source: AGHT+IGagufT2xNn/QKQu3bmVrV6jU72TWeF3FBl77gAzQllDDZ8/5qNg/Q6eq++X65pc/tFy4d3Pw==
-X-Received: by 2002:adf:f349:0:b0:368:664a:d4f9 with SMTP id ffacd0b85a97d-36d5eb08646mr5681407f8f.28.1723404435210;
-        Sun, 11 Aug 2024 12:27:15 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:6978:7b03:bbeb:d1af])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4cfefe71sm5552517f8f.62.2024.08.11.12.27.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Aug 2024 12:27:14 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: brgl@bgdev.pl,
-	Heiko Stuebner <heiko@sntech.de>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	ukleinek@debian.org,
-	linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 1/2] dt-bindings: eeprom: at24: Add compatible for Giantec GT24C04A
-Date: Sun, 11 Aug 2024 21:27:13 +0200
-Message-ID: <172340442666.7060.12608274118090495917.b4-ty@linaro.org>
+	s=arc-20240116; t=1723411410; c=relaxed/simple;
+	bh=/JKenog5cXUZhlnwe9lyA2IoSnDbc1a+O19y4wmL83I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ipZ6ot802xysuHnQuQOZIuqVUUx7Vd+SPTmhNoX5NBe8z8owmyWBrL+xAZwIWhnZS7Ujorthz1MKAqVJ9JlXtUgUePyOiWAddLKcwuRmMJn43kPXJk7mFOh5hW13ipdk32BySWJA2WHd0CDY8XC5Aw3pw00KFmli8qZgixIddy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=IkJoBM0n; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=FnxzPukw+LsvL2
+	vz3lMOxWbIiduXn6N33AJ0R81zcVI=; b=IkJoBM0nmYp9Y/bewThn5ewFsEenwU
+	eYqcm6Sclf7Es2H353PuhXWRAK7yfUKhwUDKN8xUWs23PyIdarrMIyttJncm2wRq
+	5nU7dcH6fKXJSG2/RdVEoBhbGm6/TOH9lmsVH+lgr5Sd+Y13tLd1hHt6nO8uk5rj
+	IoAf1kB1j9RzM5/e31neotxTZpZMC1+Ui7zM+BZFtvYXGQjgcr+mXSlpO/2imkVp
+	pl2CgzC/4MMpXh19LbYHPHkW5/d/aZgDpmtEc/66idmntNzkZcRTyzZ/sqiIIzPE
+	C5yDplaRKEaMnqoacKko5bF1UrAdkHcAP/ETbQ8ZprMeO9FhobQuormw==
+Received: (qmail 1179527 invoked from network); 11 Aug 2024 23:23:22 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Aug 2024 23:23:22 +0200
+X-UD-Smtp-Session: l3s3148p1@ewJv/G4fEJUujnvj
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-i2c@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2 0/4] i2c: testunit: add rep_start test and rework versioning
+Date: Sun, 11 Aug 2024 23:23:12 +0200
+Message-ID: <20240811212317.16119-1-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240810211438.286441-2-heiko@sntech.de>
-References: <20240810211438.286441-1-heiko@sntech.de> <20240810211438.286441-2-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On my way to let the testunit trigger SMBusAlert interrupts, I needed to
+rework the way the testunit responds to read messages. This series is
+the result of that with some very nice side effects. First, we now have
+a new test to check for proper repeated starts between messages in a
+transfer which will also improve versioning (patch 3). Also, the state
+of the testunit can now be checked (patch 4). Patch 1 makes the state
+machine a little easiert to follow. And patch 2 improves documentation.
+
+The patches are based on Linus' tree close to rc3 and has been tested on
+a Renesas Lager board (R-Car H2) and a Renesas Falcon board (R-Car V3U).
+
+Looking forward to comments. Once we got this in, I will send out the
+SMBusAlert additions. They do work already, they just need some
+documentation.
+
+Changes since v1:
+* patch 2 added to improve documentation
+* added newline to the version string to make its printout
+  "self-contained"
+* for reading the new version string, the shell one liner to print
+  ASCII directly has been removed. Now we use a new feature of
+  i2ctransfer. Note, the docs mention version 4.4 already which is not
+  out yet, but it will be by the time 6.11 is released (tm).
+* rebased, dependencies are now in Linus' tree
+
+Happy hacking!
 
 
-On Sat, 10 Aug 2024 23:14:37 +0200, Heiko Stuebner wrote:
-> The gt24c04a is just yet another 2404 compatible eeprom, and does not
-> follow the generic naming matching, so add a separate compatible for it.
-> 
-> 
+Wolfram Sang (4):
+  i2c: testunit: sort case blocks
+  i2c: testunit: use decimal values in docs when appropriate
+  i2c: testunit: add command to support versioning and test rep_start
+  i2c: testunit: return current command on read messages
 
-Applied, thanks!
+ Documentation/i2c/slave-testunit-backend.rst | 60 ++++++++++++++++----
+ drivers/i2c/i2c-slave-testunit.c             | 43 ++++++++++----
+ 2 files changed, 82 insertions(+), 21 deletions(-)
 
-[1/2] dt-bindings: eeprom: at24: Add compatible for Giantec GT24C04A
-      commit: a825dea2cd27a30e49816f18b7bc16545d5f0f89
-
-Best regards,
 -- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+2.43.0
+
 
