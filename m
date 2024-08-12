@@ -1,140 +1,142 @@
-Return-Path: <linux-i2c+bounces-5310-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5311-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3FD694F154
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2024 17:09:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACAE094F226
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2024 17:55:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3EBC2B21FEC
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2024 15:09:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEE7A1C21F82
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2024 15:55:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B68317E8EA;
-	Mon, 12 Aug 2024 15:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8261184551;
+	Mon, 12 Aug 2024 15:55:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAIzYEwF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b42P5Lp7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CBA29CA;
-	Mon, 12 Aug 2024 15:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074E918453F
+	for <linux-i2c@vger.kernel.org>; Mon, 12 Aug 2024 15:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723475374; cv=none; b=Wj6QmZGfCSkYDN1TSffD1dtS0NyaMW+NqwkqNvZxqH0485ovlxc9JgM2yFxU/tWKbi0K7/RneyPL0XUMRj6kfY9Uzi14RVZkTzgZQun2CWIylh1BnfA8geURhnpv3/0AyG8XFz39M+eNFhcf87e5i570lTT0VDY2+30nPKlJK98=
+	t=1723478115; cv=none; b=O2pEm0rWeoLRnAqSFxFU5LAeZkJiYjICKS8APhUDFV2IinLvzxtgitiN5uV22Un1zoogLdCjo1aMu/s52TO7FWzao6dGTEQoJx0yEdZ5N0DkKuw5YIr1QwsYFA2qLIg0E2jMjeywxL/Gsk1n2U+KYj/3QkqeQaoI6Kmnc3lqpHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723475374; c=relaxed/simple;
-	bh=deWuRDJPCT5foWSV44HA7CYL8GYl7vdMf1Zpapv5XKo=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=rbGlj56bEHeKm+2PNyoqvxuDxrvUEk1OuCO5mHAVx6uPumvVOg+3Hlhnre7BYQzXreuds0dhe3ShOws9ZmTkbhd8gxY2PRqNsglP9x6oLHO0b1GHy/umrlP4uTXyoRZSo/B62ceCDGNwuc17zo7hr81MKHnnSh3ZYzwaqjkxUvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAIzYEwF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED03C32782;
-	Mon, 12 Aug 2024 15:09:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723475374;
-	bh=deWuRDJPCT5foWSV44HA7CYL8GYl7vdMf1Zpapv5XKo=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=AAIzYEwFnviJyUy/yD9Tw3CxmOF45cdw3/aF/vhW8GEyHCcIZBPuhVpzhJXB2Vsta
-	 9XbecjNGYw8q5pyqkdiR3ucGZ0wUSLmQLR69dC+IMBMIaJHxFWOFaSvQRCKISrrtNQ
-	 xiIlnoL2pBFsWohKL16xDtEf7nB8i+Qkac53bhyaER4+qi9z3bfP1iJuJ4KbTRRdDx
-	 o7M8/+jU1G1NxD4lZ/34RxQenx3jaw3jyLlkfk5KZshHzXL8eefGnXzUuhjsGCfO0A
-	 J41i+sV0lntGANeqwnlMfv6xWzFy68z0av4EJq8pqDIaWGwI6T/PWBh0Ew2Kov3uV4
-	 TnKaogwXhIdqQ==
-Date: Mon, 12 Aug 2024 09:09:32 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1723478115; c=relaxed/simple;
+	bh=SRJlBYgKdbjbfkFsJdCuB6Omo8OpSx3PFgBhr5GhngI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r4l7i9fstNxAof4bl6wW0RWBA1osJ9zdcraBhmdbHeq8/qbJO8Da01stgLyOiOzeNOCP6v4CkBxyzAIlUTYY8J9aVnotYx6TRkp9NfjU8/p3tjsbS+TbRZ964LCjdE3v+VEV0PjNAB+cPKKc8AvOnwQSlcGyALeZvLq4uQGSyRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b42P5Lp7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723478112;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cJBlz3I4RKTfnRNVjY03fZZ8bEJDc4HBraykC9tuV2o=;
+	b=b42P5Lp7OtxSvLyVIPs/E55K/VPi7CuVjA/bRm39pisOh2fb2fJwP3rhBF/3jnHYANPHoI
+	NSMKsMdEAkELNwrK6OAtzoBhFUOP/pVRQdjuR60ru3vuOlTGihzWl/ejEsvMK3IwmXyCIy
+	UQSVzqGhT7eE4nXh0WrZ14fjnHApiwA=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-98-9Ai6tWc8NYCT3YBBrRHNqw-1; Mon, 12 Aug 2024 11:55:11 -0400
+X-MC-Unique: 9Ai6tWc8NYCT3YBBrRHNqw-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5bb9bfa4b10so1641581a12.3
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Aug 2024 08:55:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723478110; x=1724082910;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cJBlz3I4RKTfnRNVjY03fZZ8bEJDc4HBraykC9tuV2o=;
+        b=Ts4byeueXEjzdcE35n4ij4Y+LxbFip0n6RQ+l0NoZOp1CEDQTsX1bAElhpp08IQP8i
+         rCfboKIKobhBao6xSqsMb6KgwMaG7+Dz9KvZ7t90uiXPmhFZNZP4UOUQJPKmMuSMUB9t
+         toJv4n2Out0ODGu3lMDTOfI7E65c3dtJOjvsLJoWfC/maGJmKBlbRfl3FGAyIoENwRGp
+         A5hMtf/nHUiiJcN+cNBgZSF/C49q8E2SNsHJ6tRzPFcIzIVnK0VL4StFWkyVAe0rtIhI
+         yctsZQReYgZ7G8kAch74Gl+lPOVlcFRgOJI/s0VzdDcF7mCtQ7N/xIqzikICHVrlZMg0
+         00xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVxjow+cSihBklAPH2ZdbuhnRWngNDX2JQ6WDzWgW++iNH+fPwiYbIj50diUf/I26rdUuAHz7EvCss=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLfO/zCOE/ETOwSqlza7nafnbgEGZvwMgPVYKZ/NAb9DzSEgDX
+	hqNcvEX8tgDFbQERwm53+TNC9PTVqmXnrWf67v0HHd5Bu3I1hOC/ID5FKV4m1rh4mjBdSl40zKU
+	Sj0fczutv1c8EySG+2GiZ8CSaElDNhT+GzdET/t/H1JUhe+fn2KK1J0sEJg==
+X-Received: by 2002:a05:6402:50cc:b0:599:4d01:1fb6 with SMTP id 4fb4d7f45d1cf-5bd44c26d93mr592057a12.16.1723478110268;
+        Mon, 12 Aug 2024 08:55:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGJrTWXUj1gJVwGkiVTFKT2siN0axioe9Cfakkl00HL7PFN0UoW/Ze1YeGwWMz0lET9tnzNlg==
+X-Received: by 2002:a05:6402:50cc:b0:599:4d01:1fb6 with SMTP id 4fb4d7f45d1cf-5bd44c26d93mr592025a12.16.1723478109695;
+        Mon, 12 Aug 2024 08:55:09 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a80bb0e4984sm240822666b.84.2024.08.12.08.55.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Aug 2024 08:55:09 -0700 (PDT)
+Message-ID: <3e483c97-a92a-4229-ae38-2e599b0f474d@redhat.com>
+Date: Mon, 12 Aug 2024 17:55:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Detlev Casanova <detlev.casanova@collabora.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, 
- Alexey Charkov <alchark@gmail.com>, linux-iio@vger.kernel.org, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- linux-serial@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-i2c@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
- Dragan Simic <dsimic@manjaro.org>, Jagan Teki <jagan@edgeble.ai>, 
- Yifeng Zhao <yifeng.zhao@rock-chips.com>, Tim Lunn <tim@feathertop.org>, 
- Elaine Zhang <zhangqing@rock-chips.com>, Andi Shyti <andi.shyti@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Heiko Stuebner <heiko@sntech.de>, Jonathan Cameron <jic23@kernel.org>, 
- Muhammed Efe Cetin <efectn@protonmail.com>, devicetree@vger.kernel.org, 
- Finley Xiao <finley.xiao@rock-chips.com>, 
- Lars-Peter Clausen <lars@metafoo.de>, 
- Shresth Prasad <shresthprasad7@gmail.com>, linux-kernel@vger.kernel.org, 
- Ondrej Jirman <megi@xff.cz>, Liang Chen <cl@rock-chips.com>, 
- Weizhao Ouyang <weizhao.ouyang@arm.com>, Jiri Slaby <jirislaby@kernel.org>, 
- Jimmy Hon <honyuenkwun@gmail.com>, linux-arm-kernel@lists.infradead.org, 
- kernel@collabora.com, linux-rockchip@lists.infradead.org, 
- Chris Morgan <macromorgan@hotmail.com>, Andy Yan <andyshrk@163.com>, 
- Lee Jones <lee@kernel.org>
-In-Reply-To: <20240802214612.434179-10-detlev.casanova@collabora.com>
-References: <20240802214612.434179-1-detlev.casanova@collabora.com>
- <20240802214612.434179-10-detlev.casanova@collabora.com>
-Message-Id: <172347513683.603014.1210944906291860196.robh@kernel.org>
-Subject: Re: [PATCH 09/10] arm64: dts: rockchip: Add rk3576 SoC base DT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 3/6] platform/x86: dell-smo8800: Move SMO88xx
+ acpi_device_ids to dell-smo8800-ids.h
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>,
+ Wolfram Sang <wsa@kernel.org>, eric.piel@tremplin-utc.net,
+ Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com,
+ Kai Heng Feng <kai.heng.feng@canonical.com>,
+ platform-driver-x86@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+ Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
+References: <20240805133708.160737-1-hdegoede@redhat.com>
+ <20240805133708.160737-4-hdegoede@redhat.com>
+ <CAHp75VckqF6==cJ7xoXXn3hr9kzYn7+oHqYZq01S5HEe9eK_-Q@mail.gmail.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75VckqF6==cJ7xoXXn3hr9kzYn7+oHqYZq01S5HEe9eK_-Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
-On Fri, 02 Aug 2024 17:45:36 -0400, Detlev Casanova wrote:
-> This device tree contains all devices necessary for booting from network
-> or SD Card.
+On 8/5/24 10:27 PM, Andy Shevchenko wrote:
+> On Mon, Aug 5, 2024 at 3:38 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Move the SMO88xx acpi_device_ids to a new dell-smo8800-ids.h header,
+>> so that these can be shared with the new dell-lis3lv02d code.
 > 
-> It supports CPU, CRU, PM domains, dma, interrupts, timers, UART and
-> SDHCI (everything necessary to boot Linux on this system on chip) as
-> well as Ethernet, I2C, SPI and OTP.
+> ...
 > 
-> Also add the necessary DT bindings for the SoC.
+>> +#ifndef _DELL_SMO8800_IDS_H_
+>> +#define _DELL_SMO8800_IDS_H_
+>> +
+>> +#include <linux/mod_devicetable.h>
+>> +
+>> +static const struct acpi_device_id smo8800_ids[] = {
+>> +       { "SMO8800" },
+>> +       { "SMO8801" },
+>> +       { "SMO8810" },
+>> +       { "SMO8811" },
+>> +       { "SMO8820" },
+>> +       { "SMO8821" },
+>> +       { "SMO8830" },
+>> +       { "SMO8831" },
+>> +       { }
+>> +};
+>> +MODULE_DEVICE_TABLE(acpi, smo8800_ids);
 > 
-> Signed-off-by: Liang Chen <cl@rock-chips.com>
-> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> [rebase, squash and reword commit message]
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> ---
->  .../boot/dts/rockchip/rk3576-pinctrl.dtsi     | 5775 +++++++++++++++++
->  arch/arm64/boot/dts/rockchip/rk3576.dtsi      | 1635 +++++
->  2 files changed, 7410 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-pinctrl.dtsi
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3576.dtsi
-> 
+> The macro definition is in module.h.
 
+Ok, I've added a #include for that for v8.
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+Regards,
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y rockchip/rk3576-armsom-sige5.dtb' for 20240802214612.434179-10-detlev.casanova@collabora.com:
-
-In file included from arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dts:14:
-arch/arm64/boot/dts/rockchip/rk3576.dtsi:6:10: fatal error: dt-bindings/clock/rockchip,rk3576-cru.h: No such file or directory
-    6 | #include <dt-bindings/clock/rockchip,rk3576-cru.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[3]: *** [scripts/Makefile.lib:434: arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb] Error 1
-make[2]: *** [scripts/Makefile.build:485: arch/arm64/boot/dts/rockchip] Error 2
-make[2]: Target 'arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dtb' not remade because of errors.
-make[1]: *** [/home/rob/proj/linux-dt-testing/Makefile:1389: rockchip/rk3576-armsom-sige5.dtb] Error 2
-make: *** [Makefile:224: __sub-make] Error 2
-make: Target 'rockchip/rk3576-armsom-sige5.dtb' not remade because of errors.
-
-
-
+Hans
 
 
 
