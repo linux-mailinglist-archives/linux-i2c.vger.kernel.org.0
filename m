@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-5305-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5306-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 179B794EDC9
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2024 15:11:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EFD594EDD0
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2024 15:13:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99E071F2105A
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2024 13:11:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6FA1FB21A49
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Aug 2024 13:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0814417BB2E;
-	Mon, 12 Aug 2024 13:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05EE17BB3D;
+	Mon, 12 Aug 2024 13:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQRlUWwh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ohxbVTY1"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA465170828;
-	Mon, 12 Aug 2024 13:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820FA17BB30;
+	Mon, 12 Aug 2024 13:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723468260; cv=none; b=YxQljfGERxMwn1lJy2YN24xZm6MahGFYtQD73Wpn4vk6D2CSa5SG/xRf2Sr9/cFw9pL9OWt9sGD78XSsh3G5uWglwILuzgimFrErbfa89FumKBFa8S5PGgXFHgSoKS5yCJSCR4NO8w2ppFJ8l6Atz17HhIuy8es5oDTnh4ZcHBc=
+	t=1723468399; cv=none; b=ErH4wzuDDDuuqYJrw5mbTbzKknFTmscWnv9H/27L+PkdEKQS+MQikBRQY4fYK4rtp4trXbQfzRQge0+X0c3N1v71bdQePBnLivO31z5cNWPCvmkdIBuMtmezqAjGK+vJZAzxvHF5TNG9fhuptHq2YO7fLbVP9N8hBJBZgYanP5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723468260; c=relaxed/simple;
-	bh=9pceFmA6z72sxXOnjaTJNtiGDc0SYLeSFqZUE6qpFJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Eh/6Gcstznk49L6LvPapPAFMDoJs3WFjwMDNXTyxG4+3K9f74Ifjv9zuatzbQ06RRVdOihJ6GAmgxLch0srQ2raIigTp4TnuE+lPUVLLD4G0cbPKDatyoJtVc6VwPhLSIDYi5T7MHTgHDdkVd2nc8zSrCh4MAMnigGVKLoye5es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQRlUWwh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0DBC32782;
-	Mon, 12 Aug 2024 13:10:55 +0000 (UTC)
+	s=arc-20240116; t=1723468399; c=relaxed/simple;
+	bh=zHWG9fUsgFS7BIhZ/fQc30T8uicddZvffvP29o/3yiI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=hP3+RxeQ0VXjKBX2NLNtvkJc5ulNp3AOoJFu/Bmh9d2ColmeuCRUOW3l+/zxwbH3Wtlk74AcMUB3NaOlKVC8kM5MVfaOb4sa3veR0ORqMzJOM0cWlRlwlBBTt8L3svV7PpQ3gyY0bIkreMgQEXWQyf88bt+haymvguVupS8/1e4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ohxbVTY1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E66C32782;
+	Mon, 12 Aug 2024 13:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723468260;
-	bh=9pceFmA6z72sxXOnjaTJNtiGDc0SYLeSFqZUE6qpFJ8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nQRlUWwh5V08H11ZQcdD8ZiQk+rCMZMm7Fn1PkF6FaTY8q5k5DtgYuTz7IoTxLYF/
-	 PdOZRQTsCs9CbWtjp2InABfukKIA/x6cyArzEXeu1DW/4VCHoZ6PUGX7oNJiflh0Yv
-	 cHofsaiv6CQfJmeWhw9kMISyKLGSnGaXw8Bxhqw/4QXx6vjYCHT7J884YbxEKr975B
-	 0gUpp/uSuJffqI/sCV5KfkQ8jZdRHATGQv75Hxi1wAuGAzDKPIyk1ymlDfKSvtwEUV
-	 ErOstJZr6Y0rRWfCMti2qti7r071pcL+gBuVJqfBqVVRCEO0TVKlYGJAS8f3+nbH+w
-	 rw6IGcHWfeH1A==
-Message-ID: <fa54c691-467f-4b9e-b483-023dfeb8d32b@kernel.org>
-Date: Mon, 12 Aug 2024 15:10:52 +0200
+	s=k20201202; t=1723468399;
+	bh=zHWG9fUsgFS7BIhZ/fQc30T8uicddZvffvP29o/3yiI=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=ohxbVTY1te80hR/df40FrTeJMVaU9NbT91pKVcyq9iSUNPhBXZMO7CwWhrrJSMSDE
+	 5P1gkf7mndin4Pg6m/ekHusE0o5uC4tS6HxH/Ps90aozv1shVBY1ukAT2hNfzKMBd+
+	 spOlXO66H49do+iWOet5ZW/4kQ/U8RTrvjaLRbSsGzAChanyE8mFfUN/li3HKLHNJZ
+	 U7NreEmZEYuzIuQaBk9czmZ9KtPaXM/JMXLEWD7ZnQ5aCVyGLzuNiPV2UbDVkedelz
+	 /4sS61krmqpPRXGVn1zp9VqBhb7GiAvNi1ATXQPD8Wy4dua90OZTLrFHUwqbjT1mpw
+	 jICIeoKR6EImg==
+Message-ID: <426eb8b6-9b2f-4594-9cc3-320ef0cee835@kernel.org>
+Date: Mon, 12 Aug 2024 15:13:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,21 +50,24 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/8] hwmon: (amc6821) add support for tsd,mule
-To: Quentin Schulz <quentin.schulz@cherry.de>,
- Guenter Roeck <linux@roeck-us.net>, Farouk Bouabid <farouk.bouabid@cherry.de>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+Subject: Re: [PATCH v6 2/8] i2c: muxes: add support for tsd,mule-i2c
+ multiplexer
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Quentin Schulz <quentin.schulz@cherry.de>,
+ Farouk Bouabid <farouk.bouabid@cherry.de>, Andi Shyti
+ <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
- Jean Delvare <jdelvare@suse.com>, Heiko Stuebner <heiko@sntech.de>,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org
 References: <20240725-dev-mule-i2c-mux-v6-0-f9f6d7b60fb2@cherry.de>
- <20240725-dev-mule-i2c-mux-v6-4-f9f6d7b60fb2@cherry.de>
- <5d5c44cd-6320-4fcd-9409-f3fc97bc5389@roeck-us.net>
- <40ff0c23-f037-454c-9d79-05dd72655052@kernel.org>
- <bd70a54a-ea41-44cc-a971-e9a764a4212c@cherry.de>
+ <20240725-dev-mule-i2c-mux-v6-2-f9f6d7b60fb2@cherry.de>
+ <728a8e06-81f1-4771-8031-ea043b9baf20@cherry.de>
+ <3a36e89b-b4e2-4eb8-9197-a7a1d04a7fb6@kernel.org> <ZrnekeUKciV4eAKC@shikoro>
+ <f6dfc6cc-365d-4f0a-9a4c-dc34cf4c5b7d@kernel.org> <Zrn-ZkgYKVquarDX@ninjato>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,84 +113,47 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <bd70a54a-ea41-44cc-a971-e9a764a4212c@cherry.de>
+In-Reply-To: <Zrn-ZkgYKVquarDX@ninjato>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 12/08/2024 13:58, Quentin Schulz wrote:
-> Hi Krzysztof,
+On 12/08/2024 14:21, Wolfram Sang wrote:
 > 
-> On 8/12/24 1:38 PM, Krzysztof Kozlowski wrote:
->> [Some people who received this message don't often get email from krzk@kernel.org. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
->>
->> On 31/07/2024 17:12, Guenter Roeck wrote:
->>> On Thu, Jul 25, 2024 at 03:27:50PM +0200, Farouk Bouabid wrote:
->>>> Theobroma Systems Mule is an MCU that emulates a set of I2C devices,
->>>> among which is an amc6821 and other devices that are reachable through
->>>> an I2C-mux.
->>>>
->>>> The devices on the mux can be selected by writing the appropriate device
->>>> number to an I2C config register (amc6821: reg 0xff)
->>>>
->>>> Implement "tsd,mule" compatible to instantiate the I2C-mux platform device
->>>> when probing the amc6821.
->>>>
->>>> Signed-off-by: Farouk Bouabid <farouk.bouabid@cherry.de>
->>>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->>>
->>> Applied.
->>
->> Eh, there is undocumented dependency on I2C here. Next has warning
->> because of this.
->>
+>> Yep, but to be fair the patchset did not say anything about
+>> dependencies. There is absolutely nothing in cover letter, nothing in
+>> the patches, so I do not wonder that this mishap happened.
 > 
-> I think you meant to comment this on 
-> https://lore.kernel.org/linux-i2c/20240725-dev-mule-i2c-mux-v6-0-f9f6d7b60fb2@cherry.de/T/#mdb7976f1dc16fce0b7db9abee6fd0b1fd0a2e2ba 
-> (patch 3 and not 4 of the series). This patch (4) is fine on its own I 
-> believe, no dependency on anything else. (well, except if we expect 
-> bindings to be absolutely merged before the drivers? I think what 
-> matters is the Device Tree changes making use of the new binding be 
-> merged after dt-binding changes?).
+> Still, one shouldn't take DT patches (which are even the last ones in
+> this series) until all other patches are at least in -next, or? Yes,
+> mistakes happen, so no big deal, but i2c is not to blame IMHO.
 
-Yeah, this was about DT binding.
+No, it's not. It was just a ping. The issue is here not describing
+dependency, allowing Guenter to take the patch and not even telling him
+that now next has warning. :/ It's like entire weight is on maintainers
+and contributors care only about getting their patch inside. Once it is
+inside, not my problem anymore... :(
+
 
 > 
-> I agree that there's a somewhat non-obvious dependency between patch 1 
-> and 3 (the dt-bindings) and 5-8 with everything before, we could have 
-> made this more explicit.
+>> Depends whether you rely on being CC-ed here. Existing entries do not
 > 
->> Farouk, please *always mention* the dependencies between patches.
->>
+> I don't rely on CC. I rely on patches being on the i2c list.
 > 
-> I wasn't aware of that rule, my apologies for not catching this before 
-> upstream submission.
+>> include you, thus you are not cc-ed on maintainers. Peter Rosin is, but
+>> it seems Peter does not apply patches. It could be intentional, but then
+>> I understand that all pings should go to Peter?
 > 
-> For anyone wondering the rule is made explicit here:
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#separate-your-changes
-> 
-> "If one patch depends on another patch in order for a change to be 
-> complete, that is OK. Simply note “this patch depends on patch X” in 
-> your patch description."
-> 
-> Question about b4 workflow though. I encourage using b4 to avoid as many 
-> mistakes as possible and make the workflow as painless as possible. I 
-> believe b4 doesn't allow you to have per-patch notes, only in the 
-> cover-letter.
+> Once Peter acks, I apply. He is the maintainer. Yet, he is very busy, so
+> I also apply when someone else I trust does a review. He is fine with
 
-"Patch description" or "per patch notes" is whatever you write in
-changelog, so under ---.
+Sure, that explains, so ping should not really go to you...
 
+> that and might chime in later, if needed. This patch here did not get
+> any review, sadly. As I said, resource problem. That being said, these
+> patches are somewhere on my todo list if nobody else steps up (what I
+> would prefer). But please, don't put pressure on me (or any other
+> potential reviewer) just because DT patches ended up upstream too early.
 
-> a) is this dependency list in cover-letter acceptable, or
-> b) need to add it to the patch note (below the ---), or
-
-One of above should be enough, both are more welcomed because many
-maintainers ignore completely cover letters.
-
-> c) can add it to the patch commit log
-
-No, if patches go through separate trees then it would be just confusing
-and not helping at all.
 
 Best regards,
 Krzysztof
