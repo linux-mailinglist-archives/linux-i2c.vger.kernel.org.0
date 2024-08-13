@@ -1,346 +1,209 @@
-Return-Path: <linux-i2c+bounces-5339-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5340-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 263699508CD
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2024 17:20:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02B7895091C
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2024 17:28:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B1661C23FC9
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2024 15:20:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 593C1B2296B
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2024 15:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036641A00D0;
-	Tue, 13 Aug 2024 15:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678ED1A01D8;
+	Tue, 13 Aug 2024 15:28:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k5Nl/hQ9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e6oA+cQO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABEB81E86A;
-	Tue, 13 Aug 2024 15:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A47619D886;
+	Tue, 13 Aug 2024 15:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723562343; cv=none; b=QCnAwlSd6GTLDyjV5JFc1zm3svJY06/0V3ByLnI+iysQCvc6LLnkWrWmZuklU0ALQr23EIOHxvarmHCJSu0rj5DMenIFkBm2LKBFDtIuR7OkuKEvSwzIOaxyL2yRmUv2DxIOjWbPiEzHAT++50gV4NL5kB8dCg5nXTwlqEM+6Hk=
+	t=1723562921; cv=none; b=nLoqmO/fP4OKO4eSqPZnx9rDy9rS0DhCXLE3XiAyMSFcApk4w+3aw0CdS5M9wA3Alszl1uqfOlGo5y4UoJn2/Bw46+qnlB5OuuPvNXqA9w7kcSPJFie7pTjywpem6256nvvc0IMfD/Yy4glr/VADFqF6XL4DgICrIeRHoqcoS1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723562343; c=relaxed/simple;
-	bh=YwFk3U8RSbKyk1/SfrfSfkAz/KdTodY7CpaCz0Yr9dc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mEe9sVuKSHHWCzp4u2fB7UuYUOTLVn3U+QPP4KhittmrFN2oeuWqdnO4IYbldLQtrKKKlIrBq/mKbo/iidZwUgCSCov6px/+p/B+nddssc+WWFrGnizvVyoHFm0xgkvYgFhffRZyEZ31u3eBykSdSZ5a44qjJoHGpVFSMT19Keg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k5Nl/hQ9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD920C4AF0F;
-	Tue, 13 Aug 2024 15:19:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723562343;
-	bh=YwFk3U8RSbKyk1/SfrfSfkAz/KdTodY7CpaCz0Yr9dc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k5Nl/hQ9T4TF5D2YCpoFawlSAwdVBdfHZkMTFAQpKzToPrZFJ8ynMYgBUb8zGIjx8
-	 c6ycSMK4/4x6wVKGzJYtlDHpzeA1eny34jxsrjK9iLh3iKKb9jNk+1pud+RLeziQvq
-	 1uxLfKWFjSl2B9MJKDx6ZcPS15EM0BoPdk4RTnRHRN8NOgK11qWaY/7tspw/D/WDEc
-	 vEcoJp7ZtRuW2dAHqqH+WSC+9ebCd75wHJ/HCzb2qQ5QEZodMTZAQQfpG2QidTvXaa
-	 AO6HXCQ96rr/aeQApRY2g9XKghTJzGNedTg3yLOIi3UMBBG6avbz0UVwlFB9piy7m6
-	 TfHBmbd+YylhA==
-Date: Tue, 13 Aug 2024 09:19:01 -0600
-From: Rob Herring <robh@kernel.org>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Paul Kocialkowski <contact@paulk.fr>,
-	=?iso-8859-1?Q?Herv=E9?= Codina <herve.codina@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: Re: [PATCH v3 1/7] dt-bindings: connector: add GE SUNH hotplug addon
- connector
-Message-ID: <20240813151901.GA953664-robh@kernel.org>
-References: <20240809-hotplug-drm-bridge-v3-0-b4c178380bc9@bootlin.com>
- <20240809-hotplug-drm-bridge-v3-1-b4c178380bc9@bootlin.com>
+	s=arc-20240116; t=1723562921; c=relaxed/simple;
+	bh=Ovr/D785l5BYc8W6iV5RgkT5O87h86WSv+qFh+XHzKk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gD8jTYeJI6L0Sq+xb65/em9S7XhdRJM61XF8XXApesgUSVTlJKLBiJ62LMyxQVtNBWIOT48yDn5S55NTAQSHejsj09yLVrpC1peRTxzdtE9TiPgA+bznZND/zu2+YzJ8jwA+lj1qEvtktwWBmiVEaJn5QSfH7yCTeZ5ROB4iBX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e6oA+cQO; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ef2d96164aso61198091fa.3;
+        Tue, 13 Aug 2024 08:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723562917; x=1724167717; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Az5RaI5b63ud2RixYEXJkMIxZwNm3gKEQ9Iv2ve9pLI=;
+        b=e6oA+cQOMNDqoeHFwqqDdU8jtJSYTqv00KjGivfXPY+FGNMzA1GCRCWxUKQ4shsMEF
+         sxCqfxYRPLKsd0lG/Of+fnQPwrzQMRgOctzyqoAhs/UvVBm/+Zu+Z3gSfea1FvVMLOxI
+         wXwYlTSV4yNr24XwwtOsYI9fKrXEecW32xMHkm2SUPgccFm9hgd2euJXAf4/Kpzy023C
+         ijbXX/fzTvb4SIuRKeJPLQgv6olLhhpoXn2NrJRAY/5DS7BYJ43yc4dia2UI36or36QS
+         QRsauUFUlP2ll3pbKd/UGR6W0SF+ycFhjP3Y9/1vL11Dkh68pPpBc9rlIGwjeLf6BPBX
+         qMDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723562917; x=1724167717;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Az5RaI5b63ud2RixYEXJkMIxZwNm3gKEQ9Iv2ve9pLI=;
+        b=ukk12gK8/PYbJ6uP1bknOJNQ6/wUgIGg/hF9HB6b1CBOFcWvnUzKRcIPZtHNWoj7QF
+         OuC8l/uTR6Tmfl/mVQtknlug2wT3jTnZEd17dQQCRSBOUQMrKGcYRL5N2fDwQ3KJPW3O
+         fYOL+70Tdpa66CFDQMMwpMSF5KRzFN2xruBzoJ420uSTqzTDA5Pxdf+9T0Vv6gFMOmc9
+         1qy8jQvN0sPliziHEj94uFrI18cEWt3Ivgvdgjlm5Tq4BPZ+WItSmcR35dVc+/PZUIZ1
+         QNHsyqQolxwaBfQAbU4MqyqvNtlF7cRqxIgG6x4Prx/E1boQvhf6E/nZMOdwnoH0kanY
+         kI4w==
+X-Forwarded-Encrypted: i=1; AJvYcCXG/DVQIxh1FvO7j+OeHeqc3Qt83iW9GWgL5YXmnsKTwt1uO75Yp+dEHglYCHqUaQrH0s8i3oS0Cncf9xu0Nh9G+wniHcVHmXVJ9Es7fHz9tprU+/v2/jFFZVaLezEjyAnMRCMgOBjXH2V6C22wIvYvb1+haZ5WHADqjkO5K2/VlEwEYe0=
+X-Gm-Message-State: AOJu0Yy2YpX1Hr1vfHmVWGy65fPlkAzmlKBHnd62iUhCBvhI6WDcpcPo
+	cqn6AUGMe6J9E6qzcpTsE+vZCAN134FJwe/CjJdMj7VrPmAuERdpYaX9gJUw
+X-Google-Smtp-Source: AGHT+IFJRLK1J7OBinMaGVyi5AHKztjR/0deAHLi2xkzUg7sJUQlSb9CP9w81gztjoWEeSttmEIygg==
+X-Received: by 2002:a2e:be87:0:b0:2ef:23ec:9356 with SMTP id 38308e7fff4ca-2f2b712f827mr35129951fa.8.1723562916946;
+        Tue, 13 Aug 2024 08:28:36 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-149-85.dynamic.spd-mgts.ru. [109.252.149.85])
+        by smtp.googlemail.com with ESMTPSA id 38308e7fff4ca-2f2ad92caddsm5475441fa.62.2024.08.13.08.28.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Aug 2024 08:28:36 -0700 (PDT)
+Message-ID: <cf2d6ff5-dfea-4e25-8eee-e4e8c9cb1e7e@gmail.com>
+Date: Tue, 13 Aug 2024 18:28:35 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240809-hotplug-drm-bridge-v3-1-b4c178380bc9@bootlin.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND] Do not mark ACPI devices as irq safe
+To: Breno Leitao <leitao@debian.org>,
+ Andy Shevchenko <andy.shevchenko@gmail.com>, dmitry.osipenko@collabora.com
+Cc: Andi Shyti <andi.shyti@kernel.org>, Laxman Dewangan
+ <ldewangan@nvidia.com>, Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>, leit@meta.com,
+ Michael van der Westhuizen <rmikey@meta.com>,
+ "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+ "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>
+References: <20240808121447.239278-1-leitao@debian.org>
+ <ff4haeeknghdr5pgpp3va7opnrx5ivlpaw5ppboqrq75733iul@zy4c7mu3foma>
+ <CAHp75VdbRexEx90ybaFsiPhg8O0CzvpkWT1ER31GnP-y8a1e+w@mail.gmail.com>
+ <ZrtgfkzuCbNju3i9@gmail.com>
+From: Dmitry Osipenko <digetx@gmail.com>
+Content-Language: en-US
+In-Reply-To: <ZrtgfkzuCbNju3i9@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 09, 2024 at 05:34:49PM +0200, Luca Ceresoli wrote:
-> Add bindings for the GE SUNH add-on connector. This is a physical,
-> hot-pluggable connector that allows to attach and detach at runtime an
-> add-on adding peripherals on non-discoverable busses.
-
-Overall, looks pretty good.
-
+13.08.2024 16:32, Breno Leitao пишет:
+> Hello Andy,
 > 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> On Fri, Aug 09, 2024 at 02:03:27PM +0300, Andy Shevchenko wrote:
+>> On Fri, Aug 9, 2024 at 2:57 AM Andi Shyti <andi.shyti@kernel.org> wrote:
+>>> On Thu, Aug 08, 2024 at 05:14:46AM GMT, Breno Leitao wrote:
 > 
-> ---
+>>>> The problem arises because during __pm_runtime_resume(), the spinlock
+>>>> &dev->power.lock is acquired before rpm_resume() is called. Later,
+>>>> rpm_resume() invokes acpi_subsys_runtime_resume(), which relies on
+>>>> mutexes, triggering the error.
+>>>>
+>>>> To address this issue, devices on ACPI are now marked as not IRQ-safe,
+>>>> considering the dependency of acpi_subsys_runtime_resume() on mutexes.
+>>
+>> This is a step in the right direction
 > 
-> Changed in v3:
->  - change the layout to only add subnodes, not properties
->  - add the 'nobus-devices' node description to hold devices not on any bus
->  - add 'i2c-*' nodes for the I2C busses, using a i2c-parent phandle
->  - and the 'dsi' node for the DSI bus
->  - move the entire port@1 node to the overlay (not only the remote-endpoint
->    property)
->  - remove the overlay examples (Overlays in examples are not supported)
->  - add more clarifying descriptions and comments for examples
->  - some rewording
+> Thanks
 > 
-> This patch was added in v2.
-> ---
->  .../connector/ge,sunh-addon-connector.yaml         | 185 +++++++++++++++++++++
->  MAINTAINERS                                        |   5 +
->  2 files changed, 190 insertions(+)
+>> but somewhere in the replies
+>> here I would like to hear about roadmap to get rid of the
+>> pm_runtime_irq_safe() in all Tegra related code.
 > 
-> diff --git a/Documentation/devicetree/bindings/connector/ge,sunh-addon-connector.yaml b/Documentation/devicetree/bindings/connector/ge,sunh-addon-connector.yaml
-> new file mode 100644
-> index 000000000000..2a0b4e0fd089
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/connector/ge,sunh-addon-connector.yaml
-> @@ -0,0 +1,185 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/connector/ge,sunh-addon-connector.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: GE SUNH hotplug add-on connector
-> +
-> +maintainers:
-> +  - Luca Ceresoli <luca.ceresoli@bootlin.com>
-> +
-> +description:
-
-You need '|' or '>' to preserve line breaks. Elsewhere too.
-
-> +  Represent the physical connector present on GE SUNH devices that allows
-> +  to attach and detach at runtime an add-on adding peripherals on
-> +  non-discoverable busses. Peripherals on the add-on include I2C sensors
-> +  and a video bridge controlled via I2C.
-> +
-> +  The connector has status GPIOs to notify the connection status to the CPU
-> +  and a reset GPIO to allow the CPU to reset all the peripherals on the
-> +  add-on. It also has I2C busses and a 4-lane MIPI DSI bus.
-> +
-> +  Different add-on models can be connected, each having different
-> +  peripherals. For this reason each add-on has a model ID stored in a
-> +  non-volatile memory, which is accessed in the same way on all add-ons.
-> +
-> +  Add-on removal can happen at any moment under user control and without
-> +  prior notice to the CPU, making all of its components not usable
-> +  anymore. Later on, the same or a different add-on model can be connected.
-> +
-> +properties:
-> +  compatible:
-> +    const: ge,sunh-addon-connector
-> +
-> +  reset-gpios:
-> +    description: An output GPIO to reset the peripherals on the add-on.
-
-Active state is?
-
-> +    maxItems: 1
-> +
-> +  plugged-gpios:
-> +    description: An input GPIO that is asserted if and only if an add-on is
-> +      physically connected.
-
-Asserted is high or low?
-
-> +    maxItems: 1
-> +
-> +  powergood-gpios:
-> +    description: An input GPIO that is asserted if and only if power rails
-> +      on the add-on are stable.
-
-Active state is?
-
-> +    maxItems: 1
-> +
-> +  nobus-devices:
-
-Just 'devices'.
-
-> +    description:
-> +      A container for devices not accessible via any data bus. Common use
-> +      cases include fixed and GPIO regulators, simple video panels and LED
-> +      or GPIO backlight devices. When not hot-pluggable, nodes such devices
-> +      are children of the root node.
-> +
-> +      This node should not be present in the connector description in the
-> +      base device tree. It should be added by overlays along with a subnode
-> +      per device.
-> +
-> +    type: object
-> +    additionalProperties: false
-
-The schema needs to work with the overlay applied too. 'true' is fine 
-here.
-
-> +
-> +  dsi:
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      ports:
-> +        $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +        description:
-> +          OF graph bindings modeling the MIPI DSI bus across the connector. The
-> +          connector splits the video pipeline in a fixed part and a removable
-> +          part.
-> +
-> +          The fixed part of the video pipeline includes all components up to
-> +          the display controller and 0 or more bridges. The removable part
-> +          includes any bridges and any other components up to the panel.
-> +
-> +        properties:
-> +          port@0:
-> +            $ref: /schemas/graph.yaml#/properties/port
-> +            description:
-> +              The last point of the non-removable part of the MIPI DSI bus
-> +              line. The remote-endpoint sub-node must point to the last
-> +              non-removable video component of the video pipeline.
-> +
-> +          port@1:
-> +            $ref: /schemas/graph.yaml#/properties/port
-> +            description:
-> +              The first point of the removable part of the MIPI DSI bus
-> +              line.  The remote-endpoint sub-node must point to the first
-> +              video pipeline component on the add-on. As it describes the
-> +              hot-pluggable hardware, the endpoint node cannot be filled
-> +              until an add-on is detected, so this node needs to be added
-> +              by a device tree overlay at runtime.
-> +
-> +        required:
-> +          - port@0
-> +          # port@1 is added by the overlay for any add-on using the DSI lines
-> +
-> +    required:
-> +      - ports
-> +
-> +patternProperties:
-> +  '^i2c-(dbat|gp|btp)$':
-> +    description:
-> +      An I2C bus that goes through the connector. The adapter (and possibly
-> +      some clients) are on the fixed side. Add-ons that have any clients on
-> +      this bus have to be added by the add-on overlay, inside this node.
-> +
-> +    $ref: /schemas/i2c/i2c-controller.yaml#
-> +    unevaluatedProperties: false
-> +    type: object
-> +
-> +    properties:
-> +      i2c-parent:
-> +        $ref: /schemas/types.yaml#/definitions/phandle
-> +        description:
-> +          Phandle pointing to the I2C bus controller on the fixed side that
-> +          drives this bus
-> +
-> +required:
-> +  - compatible
-> +  - i2c-dbat
-> +  - i2c-gp
-> +  - i2c-btp
-> +  - dsi
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  # This is the description of the connector as it should appear in the
-> +  # main DTS describing the "main" board up to the connector. This is
-> +  # supposed to be used together with the overlays in the two following
-> +  # examples. The addon_connector and hotplug_conn_dsi_out labels are
-> +  # referenced by the overlays in those examples.
-> +  - |
-> +    / {
-> +        #include <dt-bindings/gpio/gpio.h>
-> +
-> +        addon_connector: addon-connector {
-> +            compatible = "ge,sunh-addon-connector";
-> +            reset-gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
-> +            plugged-gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;
-> +            powergood-gpios = <&gpio1 3 GPIO_ACTIVE_HIGH>;
-> +
-> +            i2c-dbat {
-> +                i2c-parent = <&i2c5_ch2>;
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                // device subnodes to be added by overlays
-> +            };
-> +
-> +            i2c-gp {
-> +                i2c-parent = <&i2c4>;
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                // device subnodes to be added by overlays
-> +            };
-> +
-> +            i2c-btp {
-> +                i2c-parent = <&i2c3>;
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                // device subnodes to be added by overlays
-> +            };
-> +
-> +            dsi {
-> +                ports {
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +
-> +                    port@0 {
-> +                        reg = <0>;
-> +
-> +                        endpoint {
-> +                            remote-endpoint = <&previous_bridge_out>;
-> +                        };
-> +                    };
-> +
-> +                    // port@1 to be added by overlay
-> +                };
-> +            };
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 42decde38320..9e902db825d7 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10254,6 +10254,11 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
->  F:	drivers/iio/pressure/mprls0025pa*
+> Agree, that seems the right way to go, but this is a question to
+> maintainers, Laxman and Dmitry.
+> 
+> By the way, looking at lore, I found that the last email from Laxman is
+> from 2022. And Dmitry seems to be using a different email!? Let me copy
+> the Dmitry's other email (dmitry.osipenko@collabora.com) here.
+> 
+>>>> +     if (!IS_VI(i2c_dev) && !ACPI_HANDLE(i2c_dev->dev))
+>>>
+>>> looks good to me, can I have an ack from Andy here?
+>>
+>> I prefer to see something like
+>> is_acpi_node() / is_acpi_device_node() / is_acpi_data_node() /
+>> has_acpi_companion()
+>> instead depending on the actual ACPI representation of the device.
+>>
+>> Otherwise no objections.
+>> Please, Cc me (andy@kernel.org) for the next version.
+> 
+> Thanks for the feedback, I agree that leveraging the functions about
+> should be better. What about something as:
+> 
+> Author: Breno Leitao <leitao@debian.org>
+> Date:   Thu Jun 6 06:27:07 2024 -0700
+> 
+>     Do not mark ACPI devices as irq safe
+>     
+>     On ACPI machines, the tegra i2c module encounters an issue due to a
+>     mutex being called inside a spinlock. This leads to the following bug:
+>     
+>             BUG: sleeping function called from invalid context at kernel/locking/mutex.c:585
+>             in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1282, name: kssif0010
+>             preempt_count: 0, expected: 0
+>             RCU nest depth: 0, expected: 0
+>             irq event stamp: 0
+>     
+>             Call trace:
+>             __might_sleep
+>             __mutex_lock_common
+>             mutex_lock_nested
+>             acpi_subsys_runtime_resume
+>             rpm_resume
+>             tegra_i2c_xfer
+>     
+>     The problem arises because during __pm_runtime_resume(), the spinlock
+>     &dev->power.lock is acquired before rpm_resume() is called. Later,
+>     rpm_resume() invokes acpi_subsys_runtime_resume(), which relies on
+>     mutexes, triggering the error.
+>     
+>     To address this issue, devices on ACPI are now marked as not IRQ-safe,
+>     considering the dependency of acpi_subsys_runtime_resume() on mutexes.
+>     
+>     Co-developed-by: Michael van der Westhuizen <rmikey@meta.com>
+>     Signed-off-by: Michael van der Westhuizen <rmikey@meta.com>
+>     Signed-off-by: Breno Leitao <leitao@debian.org>
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index 85b31edc558d..1df5b4204142 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -1802,9 +1802,9 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+>  	 * domain.
+>  	 *
+>  	 * VI I2C device shouldn't be marked as IRQ-safe because VI I2C won't
+> -	 * be used for atomic transfers.
+> +	 * be used for atomic transfers. ACPI device is not IRQ safe also.
+>  	 */
+> -	if (!IS_VI(i2c_dev))
+> +	if (!IS_VI(i2c_dev) && !has_acpi_companion(i2c_dev->dev))
+>  		pm_runtime_irq_safe(i2c_dev->dev);
 >  
-> +HOTPLUG CONNECTOR FOR GE SUNH ADDONS
-> +M:	Luca Ceresoli <luca.ceresoli@bootlin.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/connector/ge,sunh-addon-connector.yaml
-> +
->  HP BIOSCFG DRIVER
->  M:	Jorge Lopez <jorge.lopez2@hp.com>
->  L:	platform-driver-x86@vger.kernel.org
+>  	pm_runtime_enable(i2c_dev->dev);
 > 
-> -- 
-> 2.34.1
-> 
+
+Looks good, thanks
+
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+
+> but somewhere in the replies
+> here I would like to hear about roadmap to get rid of the
+> pm_runtime_irq_safe() in all Tegra related code.
+
+What is the problem with pm_runtime_irq_safe()? There were multiple
+problems with RPM for this driver in the past, it wasn't trivial to make
+it work for all Tegra HW generations. Don't expect anyone would want to
+invest time into doing it all over again.
+
 
