@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-5332-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5333-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 301C2950356
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2024 13:11:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57373950381
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2024 13:22:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62D231C2238A
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2024 11:11:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D6971F244FE
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Aug 2024 11:22:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 047361990CC;
-	Tue, 13 Aug 2024 11:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D164194AE6;
+	Tue, 13 Aug 2024 11:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZBzg76gx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kna32EFk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C3560EC4;
-	Tue, 13 Aug 2024 11:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674CE190470;
+	Tue, 13 Aug 2024 11:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723547499; cv=none; b=HIFpxzagwo+Qx6ptDMvIOTPcZUEsX325mGclCmYjo0uE2UZ3+Yx+X3LMn9rOVph8KALkv7lGvqP7tP9j3/IsMsaHtrGSvgrYMyAMgxFJJeyCp2qv+tx1qJkJ+njwQqKL6ONvUIXDyA6scMXEwMyF4E35ruqxTJ+XqDvqFEZMh/c=
+	t=1723548150; cv=none; b=r0hAdqlCp2ADKyw/yznUVmF7vFexTfkyy8GnUyL2/5M9H/dVfWlj/P7SakHpUk8zCKWHLzROe3RuMrzBdz3dNWlIHRse0GFLIJc1pWCk3WcaTeD29uoKIP8LsURIWYiVZX0p91qccc9Af08kUz7El2nt5Mt/oCa3bULHdWBF4Lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723547499; c=relaxed/simple;
-	bh=9CYbKupifRahOwQ5D4eldN4XFRGyx70KQdl2CNH2QuA=;
+	s=arc-20240116; t=1723548150; c=relaxed/simple;
+	bh=mEePcR8nadTN2WwOSCJ4XUGSlm4GH5pq61cZ2MGoSgc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b5GKIgJbGuQNMkPIaDWwkKN83qapAgb2na/NYeGZWkjnkw6DUX4TF1VdXT8h/uy6pOzGEDaavPf7j0H7MMotuZkQOSIFc2g6/mboCPHi7ppZq2BlPb+ve7dnxDHt0DWe25gs3SiqPj84KtmMG3GL54Oc8OUBIIdB5ivKzpbJ1/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZBzg76gx; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=D1Z0pRDIxFtv4FOJNY0bkeKumV6P04CgxLfLuWYAbcyFYHbBVfd6hxJSKFipEuQ00zXdp3/eDIfVuoANz7SjD7CXDzA07feIy/Yy0w9GToiE1cOSHfb3+MGTrPqTot7BptlIBtonQRphBFbM2TuJUqWOLRjk9bFDcZPPJ2Ns9Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kna32EFk; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723547498; x=1755083498;
+  t=1723548148; x=1755084148;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9CYbKupifRahOwQ5D4eldN4XFRGyx70KQdl2CNH2QuA=;
-  b=ZBzg76gxjyXf9DRtaIbX1d9IRK+YIgUUmKj/vcNYj9wKLdvXqk64l6s4
-   T7oD0S3OdaEWtT/TcsZgJ1JJpGbW7Q6Fkh76Vkiuus8tubXqvux3ILKD6
-   h8oLdSyiKDUF2DKGCSys0NAFDzNSaYSOjuqVTMf1AhqJezNdti6JVvQ5M
-   +7my1PTFoTU0L7Hni5e1oNoiB3YchkFeMiCT5XD2HFPpnqyqB/XRLMg6l
-   nLwrbQfKbJF/jYdpn6Aedg708ZJWx39MO53VhoHHo658MVbryxokXmTjg
-   Q3WOhstEY3WiLmwPoGnxQeLcxMzstCcfOKXfc5fg+BSbQ8VYVQUHdMyZg
-   w==;
-X-CSE-ConnectionGUID: qtZUNTs2T2mAkWKdIfJn8Q==
-X-CSE-MsgGUID: 47O6I4ynTm+qfd3WAeSA7g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21571766"
+  bh=mEePcR8nadTN2WwOSCJ4XUGSlm4GH5pq61cZ2MGoSgc=;
+  b=kna32EFk+rB/2LoK8jQXVVpdU9fh4KdL1iguwdxlfcCCRlgH6Qn5f5nu
+   Tg3p/byEYrUo8ynCut8XNEFCVM3+ZhknRCprVrSBk4GqRzHJa1Q6Itj4y
+   Y16FFwTlWwZO4XwYlIDcpOglwWFNLdGfKJrrDAdLcSmkJ4G6t26ykHPd5
+   e0YPiMNxdKgl8eGkNA3Zd/gxw2q55JJnxXFBcQaxdBNSJ/KPd2pH2TqgY
+   XG/+CCbaJYA/Qwd3VZpBRQe1UnNk2rkew9oTZcMI6lyxnnvCkfe0cGbks
+   D5+FD2DaVb0USqVtrmooaaJczfeJs6PGI9HfIwvOmwKAPooYeRzJRohp8
+   A==;
+X-CSE-ConnectionGUID: qEv35sFzQyOt+j/4/WROfQ==
+X-CSE-MsgGUID: JEPn1LBATpCTiNVneOMSTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21263351"
 X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="21571766"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:11:37 -0700
-X-CSE-ConnectionGUID: ov+rmDnlQzOWIO73weRrvg==
-X-CSE-MsgGUID: KwVgZ/FVRbe2ddxlyiPVaw==
+   d="scan'208";a="21263351"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:22:28 -0700
+X-CSE-ConnectionGUID: iM9QhMsrRlC/RmA8aYMD7A==
+X-CSE-MsgGUID: LwyBf4ceQ4W+RavON2Bbug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,285,1716274800"; 
-   d="scan'208";a="96167459"
+   d="scan'208";a="58573160"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:11:34 -0700
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 04:22:24 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sdpR4-0000000Ehfz-1Xvv;
-	Tue, 13 Aug 2024 14:11:30 +0300
-Date: Tue, 13 Aug 2024 14:11:30 +0300
+	id 1sdpbY-0000000EhrZ-2ZRZ;
+	Tue, 13 Aug 2024 14:22:20 +0300
+Date: Tue, 13 Aug 2024 14:22:20 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Chen-Yu Tsai <wenst@chromium.org>
 Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
@@ -77,10 +77,11 @@ Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
 	Douglas Anderson <dianders@chromium.org>,
 	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
 	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] of: dynamic: Add of_changeset_update_prop_string
-Message-ID: <Zrs_YijPxKBFQF0_@smile.fi.intel.com>
+Subject: Re: [PATCH v4 2/6] regulator: Add regulator_of_get_optional() for
+ pure DT regulator lookup
+Message-ID: <ZrtB7NPmnqF5ya2A@smile.fi.intel.com>
 References: <20240808095931.2649657-1-wenst@chromium.org>
- <20240808095931.2649657-2-wenst@chromium.org>
+ <20240808095931.2649657-3-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -89,40 +90,80 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240808095931.2649657-2-wenst@chromium.org>
+In-Reply-To: <20240808095931.2649657-3-wenst@chromium.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Aug 08, 2024 at 05:59:24PM +0800, Chen-Yu Tsai wrote:
-> Add a helper function to add string property updates to an OF changeset.
-> This is similar to of_changeset_add_prop_string(), but instead of adding
-> the property (and failing if it exists), it will update the property.
+On Thu, Aug 08, 2024 at 05:59:25PM +0800, Chen-Yu Tsai wrote:
+> The to-be-introduced I2C component prober needs to enable regulator
+> supplies (and toggle GPIO pins) for the various components it intends
+> to probe. To support this, a new "pure DT lookup" method for getting
+> regulator supplies is needed, since the device normally requesting
+> the supply won't get created until after the component is probed to
+> be available.
 > 
-> This shall be used later in the DT hardware prober.
+> This adds a new regulator_of_get_optional() for this purpose. The
+> underlying code that support the existing regulator_get*() functions
+> are extended to support this specific case.
 
 ...
 
-> +int of_changeset_update_prop_string(struct of_changeset *ocs,
-> +				    struct device_node *np,
-> +				    const char *prop_name, const char *str)
-> +{
-> +	struct property prop;
+>  /**
+>   * regulator_dev_lookup - lookup a regulator device.
+>   * @dev: device for regulator "consumer".
+> + * @node: device node for regulator supply lookup.
+> + *        Falls back to dev->of_node if NULL.
+
+Please, avoid using dereferences in the comments. Use plain language:
+"Falls back to the OF node of the @dev, if NULL." or alike.
+
+>   * @supply: Supply name or regulator ID.
+
+>   */
+
+...
+
+>  static struct regulator_dev *regulator_dev_lookup(struct device *dev,
+> +						  struct device_node *node,
+
+This function has no of_ prefix in its name. If you want to make it for all,
+please use fwnode instead. Otherwise I would expect a new one with of_ prefix.
+(But I really prefer just agnostic, i.e. fwnode, approach!)
+
+>  						  const char *supply)
+>  {
+> +	bool pure_dt_lookup = false;
+
+Redundant assignment.
+
+> +	pure_dt_lookup = (node && !dev);
+>  
+> +	/* Pure DT lookup should use given supply name directly */
+> +	if (!pure_dt_lookup)
+> +		regulator_supply_alias(&dev, &supply);
 > +
-> +	prop.name = (char *)prop_name;
-> +	prop.length = strlen(str) + 1;
-> +	prop.value = (void *)str;
+> +	if (!node && dev && dev->of_node)
 
-Is it the existing style in the file? Otherwise I often see style like this
+The dev->of_node is redundant and with the above...
 
-	struct property prop = {
-		.name = (char *)prop_name;
-		.length = strlen(str) + 1;
-		.value = (void *)str;
-	};
+> +		node = dev->of_node;
 
-in the kernel (IRQ domain, platform core, ...).
+...this becomes as simple as
 
-> +	return of_changeset_update_prop_helper(ocs, np, &prop);
-> +}
+	if (!node && dev)
+
+> +	/* Pure DT lookup stops here. */
+> +	if (pure_dt_lookup)
+> +		return ERR_PTR(-ENODEV);
+
+Looking at this pure_dt_lookup and the above (somehow inverted) case I would
+rather use (node && !dev) or (!node && dev) explicitly everywhere.
+
+...
+
+> +struct regulator *_regulator_get(struct device *dev, struct device_node *node,
+> +				 const char *id, enum regulator_get_type get_type)
+
+Again, no of_ prefix and function becomes OF-specific...
 
 -- 
 With Best Regards,
