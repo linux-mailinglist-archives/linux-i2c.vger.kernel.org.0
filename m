@@ -1,371 +1,209 @@
-Return-Path: <linux-i2c+bounces-5374-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5375-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE2C0951776
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 11:17:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1589951868
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 12:10:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F27D7B20EE1
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 09:16:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A81B1283A3F
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 10:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A64143C65;
-	Wed, 14 Aug 2024 09:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 307541AD9D4;
+	Wed, 14 Aug 2024 10:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="pUqcu21W"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="j/iEdSU3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAEC13AA36
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 09:16:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3672A1AD9C7
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 10:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723627014; cv=none; b=plZSJSNbunl2QR6KKaVl3+RPXTaFHbzXHQ7n/HvGK8E/SRJTYV6+0dPZ+WsyJX/AyvBmtgIjz2IwAMW3vkY59OVy+Tj37WDdqaS6AgwLbYy7ROgCfHYrj/bQ8uGZXiuQdJ9AC3J7NIbMoPN1jgjkQ9Trp3asG2VC3pPohhGFVxc=
+	t=1723630219; cv=none; b=Tv/LVf8Opn17syxgNweTctbic5zifsr+yjrO4Kqq5/lt2ufIOSDSb0t3lS0RHuWHhQCEU7Zc1cdrAT66ZbUO+u9V3/wbCaGV5wz0bBNxJGX8zbqsXSg+LFL+0F3DZxeAfnQehP7n3YufgXEGbNz5GWdonPQwR4Owfycp5iUcN0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723627014; c=relaxed/simple;
-	bh=PZE/Rt9xs974mwZejqQUGxJHXzN/WzAHYJGpQWuS1s8=;
+	s=arc-20240116; t=1723630219; c=relaxed/simple;
+	bh=HtmsSU5ENdUZpr+MPxoYuH51F28PtAovj20fVUAbRwk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F6OeUf4uKvESUnYCVsuTd0auFfW9h5qFQD+d8nmakrFCNGdNHiKHFDfsOihJt/N0Ok+rECTEttDnbAwNgWwZAIuLex7loJ4gl7Q8fHzH5aoXEE+1s6aSPRKX9RGVksmQvlMtnJqZJyvX2UzwCUqU9Q0CaghMrygbuh996R2E36Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=pUqcu21W; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52efbb55d24so11308375e87.1
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 02:16:52 -0700 (PDT)
+	 To:Cc:Content-Type; b=fBErNn3hZFL1lyxqxeP+pNxxJkKLsv0m3C+DfFYa7/6TcjYD27DpjoGR4QB1Zs3DYLSa1mUGHRm8V038ZGq0r3y77o1/cGP7puvfG+kZ/l8jVzHfYfT0+zQgz499OUxe6W4rGu3w9YlA1jfvn2wR5jjQTKKFCF01rRk2Sgnlrio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=j/iEdSU3; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2ef2cce8be8so70949381fa.1
+        for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 03:10:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1723627011; x=1724231811; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1723630215; x=1724235015; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sxC7kdybifVhUqn7ncALrAjg97mdQ2TxZUkRfH1PSjI=;
-        b=pUqcu21W/XnqVcYu053rQwQzencrCf9f4ik6uBqz8SM0P5CC+E2oHiIUrfVyqxCr5D
-         +QQBt8FJHvgwKOnwtJt+V2ZokkbyVsuPnJGhRdLJOhgn22g4zwQMGgJN5a0gzZm8YVxj
-         ewJf+vtxpNUjDNRqYfw/aOoLStDzSuvR6nuvqltogkEQxBLT+QNYU2t4R6+10RJ8G4Bc
-         8UG6yROEtgu8GoI2vLljNG4VB3Dv2s561/x3qR5UwhEeYm6XMtBv1vjB7xiGIr6QTBXO
-         gl7bCUfix+2N/fKPY/7LSSWb8T5QN/fjE7sI4VyTUE4UzDcJySSLTiWSrj5dNi4523OX
-         o10Q==
+        bh=HQxN/7VWNI1muBwzClG5Zirbw85McBRj904vS8Fpu0c=;
+        b=j/iEdSU3Gv1uH9TUVPNvmrm/2QZpGumGlEgCXh1a8G+aqAIkvOXGrnRes9Lrj9FySQ
+         xVoyqhzc2aBlr6hgPU7xeJsD0dEhX0355GPFPcKSMIk6rXUh8/jNNQ5yTbGj91V8XY1R
+         cmGhzrXSkAi0yqSv6ol5zigy7mjAeL/f6iCoE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723627011; x=1724231811;
+        d=1e100.net; s=20230601; t=1723630215; x=1724235015;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sxC7kdybifVhUqn7ncALrAjg97mdQ2TxZUkRfH1PSjI=;
-        b=eWfXE7EP9wmyakNfyvP+vyXuYEN/u2Yb4EX/TWP2ecQBeC05XLdQdNL7Vw8TtdEHfZ
-         2ZwXppBPP03B+E9Ayee0zXzHyHjKEUt3XhGDlfSToBpg+vE/unxhilPKq2M9+mkXXpmw
-         o7P5sz3Z3p7NEmkGR4LGCAhjQ2vyTyRCZlsbEgv8SCnEU3MOoMQCPoxCfqNjxd99DSeM
-         XXukQAgM/2R7UschnSLJTorI/BSN0Wb2tnPoPUQpk73i51fDJyKtjCtr8qa1u6zjJynj
-         YTWMOKhxpG+wisGVe5D+SV1SnuTOKKtefG1UKrT5WNuiqJK3QKArrDtQFsEsbK9vmxxn
-         qfFw==
-X-Forwarded-Encrypted: i=1; AJvYcCUfaY7939/VJLARcDwk4dh/0hOMcEJn0T7aTl3DOBuqhQZtKOJ/anFvo++9I6rZea+GSMNtCHsOe2MTrVA1JjLALDh4+YjK+SqS
-X-Gm-Message-State: AOJu0YxEuGzgWo93RftAcqHnYCjdNUbKFh1Mq0dG5i91KzJ5Iy8I2bhb
-	WsHeZix+FMef1OYSvkq69Ua4Whco0kKOK/u1ZKUxEiDWV2vYSBmG9y/7iqsaG9Ykf4P0Y7V0zxt
-	/rStG2f0YwaOSg5XsH9BTyqcQ+jhOnxWK8ff/cQ==
-X-Google-Smtp-Source: AGHT+IFIsCffTyQseLNzVA8LUwSI98USyjdTuG0s4gY7q6vJflHoozaE+P1rkDLdW8Y+JLjetsoEnQsdUxhwHjoBOaM=
-X-Received: by 2002:a05:6512:104a:b0:52c:9877:71b7 with SMTP id
- 2adb3069b0e04-532edbd19f5mr1703786e87.59.1723627010847; Wed, 14 Aug 2024
- 02:16:50 -0700 (PDT)
+        bh=HQxN/7VWNI1muBwzClG5Zirbw85McBRj904vS8Fpu0c=;
+        b=QjQqKASu/ETq/buYvmYJuNo0YOHnMum0GoB5uzbIQ50JXSQ1bHDiV1vSnpRmgudl6E
+         1BxTzkeAJ2QQqEXNJ6zRehhOwwXvF+YczLV3mK7p6reMg0wiEKeMz5KNIxBmtFx4a9kZ
+         FAB2fU/4Xf5dq1qgcqpTv2mwhMbdj2NF5P6klo549O+dEESCpJfYNNaZSKh2HTihh8kF
+         voE1aIxeSZaPaMZtxmqUfPHPENFrxCnIrqyJXjv7a70HcLJQxmmT/M6q9+Mc+N2ka2pI
+         zxhZR/gg2c3Fnr/YfLDJwD2A/R+P8ei+nxD//KOGKS6IzIjUdkBSHEadBWEud6QED03O
+         ODKg==
+X-Forwarded-Encrypted: i=1; AJvYcCXcHWJGKhkB7e0yZ89VRXFo6XMa/JRI/HJCUg0sBtx5UeNNkH2n/R281lU0bKLq3C++kX09KkUamTg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrqucUW8bXCtcqGOWhHM46J9a3q/hw/X+pTXFC4HpCWej6LZU/
+	ZZjC8g+6Z++bKNEN3EeY71IG4b3eTQWDpcfwyra5R7kdT3Dl6gax/DeZ+wx+x69XaWfPLciqH+U
+	7g8RUXVFzxAHZDoBgxWCon1jsyknPRp0/+Qae
+X-Google-Smtp-Source: AGHT+IEe32jN8gUqbf1l9ngrSD5IPLARvV8fpV4Tje3WEqH7kkd+ZQY+1xW4UvomRXZlgVtw/pLaiYHStH4ShpBNc/E=
+X-Received: by 2002:a2e:4a1a:0:b0:2f0:33e:d286 with SMTP id
+ 38308e7fff4ca-2f3aa1a5198mr14064661fa.20.1723630214840; Wed, 14 Aug 2024
+ 03:10:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com> <20240503-congatec-board-controller-v1-2-fec5236270e7@bootlin.com>
-In-Reply-To: <20240503-congatec-board-controller-v1-2-fec5236270e7@bootlin.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 14 Aug 2024 11:16:39 +0200
-Message-ID: <CAMRc=MeC4q3BGxycxnOZCC8nD7p=8AO9rQasb5Gd4T1E+aKvHA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] gpio: Congatec Board Controller gpio driver
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Andi Shyti <andi.shyti@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com, 
-	blake.vermeer@keysight.com
+References: <20240808095931.2649657-1-wenst@chromium.org> <20240808095931.2649657-6-wenst@chromium.org>
+ <ZrtHhcNMiyHmKbal@smile.fi.intel.com>
+In-Reply-To: <ZrtHhcNMiyHmKbal@smile.fi.intel.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Wed, 14 Aug 2024 18:10:03 +0800
+Message-ID: <CAGXv+5EgqdziyheOt7wzkbe036fqPcw_UpSHiMsB3W_nTB3NWQ@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] platform/chrome: Introduce device tree hardware prober
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
+	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>, linux-i2c@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 9, 2024 at 4:52=E2=80=AFPM Thomas Richard
-<thomas.richard@bootlin.com> wrote:
+On Tue, Aug 13, 2024 at 7:46=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Add gpio support for the Congatec Board Controller.
+> On Thu, Aug 08, 2024 at 05:59:28PM +0800, Chen-Yu Tsai wrote:
+> > Some devices are designed and manufactured with some components having
+> > multiple drop-in replacement options. These components are often
+> > connected to the mainboard via ribbon cables, having the same signals
+> > and pin assignments across all options. These may include the display
+> > panel and touchscreen on laptops and tablets, and the trackpad on
+> > laptops. Sometimes which component option is used in a particular devic=
+e
+> > can be detected by some firmware provided identifier, other times that
+> > information is not available, and the kernel has to try to probe each
+> > device.
+> >
+> > This change attempts to make the "probe each device" case cleaner. The
+> > current approach is to have all options added and enabled in the device
+> > tree. The kernel would then bind each device and run each driver's prob=
+e
+> > function. This works, but has been broken before due to the introductio=
+n
+> > of asynchronous probing, causing multiple instances requesting "shared"
+> > resources, such as pinmuxes, GPIO pins, interrupt lines, at the same
+> > time, with only one instance succeeding. Work arounds for these include
+> > moving the pinmux to the parent I2C controller, using GPIO hogs or
+> > pinmux settings to keep the GPIO pins in some fixed configuration, and
+> > requesting the interrupt line very late. Such configurations can be see=
+n
+> > on the MT8183 Krane Chromebook tablets, and the Qualcomm sc8280xp-based
+> > Lenovo Thinkpad 13S.
+> >
+> > Instead of this delicate dance between drivers and device tree quirks,
+> > this change introduces a simple I2C component prober. For any given
+> > class of devices on the same I2C bus, it will go through all of them,
+> > doing a simple I2C read transfer and see which one of them responds.
+> > It will then enable the device that responds.
+> >
+> > This requires some minor modifications in the existing device tree.
+> > The status for all the device nodes for the component options must be
+> > set to "failed-needs-probe". This makes it clear that some mechanism is
+> > needed to enable one of them, and also prevents the prober and device
+> > drivers running at the same time.
 >
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-> ---
->  drivers/gpio/Kconfig     |  10 +++
->  drivers/gpio/Makefile    |   1 +
->  drivers/gpio/gpio-cgbc.c | 203 +++++++++++++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 214 insertions(+)
+> ...
 >
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 58f43bcced7c..ce77bad40087 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -233,6 +233,16 @@ config GPIO_CADENCE
->         help
->           Say yes here to enable support for Cadence GPIO controller.
+> > + * Copyright (c) 2023 Google LLC
 >
-> +config GPIO_CGBC
-> +       tristate "Congatec Board Controller GPIO support"
-> +       depends on MFD_CGBC
-> +       help
-> +         Select this option to enable GPIO support for the Congatec Boar=
-d
-> +         Controller.
-> +
-> +         This driver can also be built as a module. If so, the module wi=
-ll be
-> +         called gpio-cgbc.
-> +
->  config GPIO_CLPS711X
->         tristate "CLPS711X GPIO support"
->         depends on ARCH_CLPS711X || COMPILE_TEST
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index 64dd6d9d730d..3a96e3c27a2d 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -44,6 +44,7 @@ obj-$(CONFIG_GPIO_BD9571MWV)          +=3D gpio-bd9571m=
-wv.o
->  obj-$(CONFIG_GPIO_BRCMSTB)             +=3D gpio-brcmstb.o
->  obj-$(CONFIG_GPIO_BT8XX)               +=3D gpio-bt8xx.o
->  obj-$(CONFIG_GPIO_CADENCE)             +=3D gpio-cadence.o
-> +obj-$(CONFIG_GPIO_CGBC)                        +=3D gpio-cgbc.o
->  obj-$(CONFIG_GPIO_CLPS711X)            +=3D gpio-clps711x.o
->  obj-$(CONFIG_GPIO_SNPS_CREG)           +=3D gpio-creg-snps.o
->  obj-$(CONFIG_GPIO_CROS_EC)             +=3D gpio-cros-ec.o
-> diff --git a/drivers/gpio/gpio-cgbc.c b/drivers/gpio/gpio-cgbc.c
-> new file mode 100644
-> index 000000000000..6da50c794872
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-cgbc.c
-> @@ -0,0 +1,203 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Congatec Board Controller GPIO driver
-> + *
-> + * Copyright (C) 2024 Bootlin
-> + * Author: Thomas Richard <thomas.richard@bootlin.com>
-> + */
-> +
-> +#include <linux/gpio/driver.h>
-> +#include <linux/mfd/cgbc.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define CGBC_GPIO_NGPIO        14
-> +
-> +#define CGBC_GPIO_CMD_GET      0x64
-> +#define CGBC_GPIO_CMD_SET      0x65
-> +#define CGBC_GPIO_CMD_DIR_GET  0x66
-> +#define CGBC_GPIO_CMD_DIR_SET  0x67
-> +
-> +struct cgbc_gpio_data {
-> +       struct gpio_chip        chip;
-> +       struct cgbc_device_data *cgbc;
-> +       struct mutex lock;
-> +};
-> +
-> +static int cgbc_gpio_cmd(struct cgbc_device_data *cgbc,
-> +                        u8 cmd0, u8 cmd1, u8 cmd2, u8 *value)
-> +{
-> +       u8 cmd[3] =3D {cmd0, cmd1, cmd2};
-> +
-> +       return cgbc_command(cgbc, cmd, sizeof(cmd), value, 1, NULL);
-> +}
-> +
-> +static int cgbc_gpio_get(struct gpio_chip *chip, unsigned int offset)
-> +{
-> +       struct cgbc_gpio_data *gpio =3D gpiochip_get_data(chip);
-> +       struct cgbc_device_data *cgbc =3D gpio->cgbc;
-> +       int ret;
-> +       u8 val;
-> +
+> At bare minimum we are in 2024 now.
 
-Can you use scoped_guard() here and elsewhere?
+Ack.
 
-> +       mutex_lock(&gpio->lock);
-> +
-> +       ret =3D cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_GET, (offset > 7) ? 1 :=
- 0, 0, &val);
-> +
-> +       mutex_unlock(&gpio->lock);
-> +
-> +       offset %=3D 8;
-> +
-> +       if (ret)
-> +               return ret;
-> +       else
-> +               return (int)(val & (u8)BIT(offset));
-> +}
-> +
-> +static void __cgbc_gpio_set(struct gpio_chip *chip,
-> +                           unsigned int offset, int value)
-> +{
-> +       struct cgbc_gpio_data *gpio =3D gpiochip_get_data(chip);
-> +       struct cgbc_device_data *cgbc =3D gpio->cgbc;
-> +       u8 val;
-> +       int ret;
-> +
-> +       ret =3D cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_GET, (offset > 7) ? 1 :=
- 0, 0, &val);
-> +       if (ret)
-> +               return;
-> +
-> +       if (value)
-> +               val |=3D BIT(offset % 8);
-> +       else
-> +               val &=3D ~((u8)BIT(offset % 8));
-> +
-> +       cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_SET, (offset > 7) ? 1 : 0, val,=
- &val);
-> +}
-> +
-> +static void cgbc_gpio_set(struct gpio_chip *chip,
-> +                         unsigned int offset, int value)
-> +{
-> +       struct cgbc_gpio_data *gpio =3D gpiochip_get_data(chip);
-> +
-> +       mutex_lock(&gpio->lock);
-> +       __cgbc_gpio_set(chip, offset, value);
-> +       mutex_unlock(&gpio->lock);
-> +}
-> +
-> +static int cgbc_gpio_direction_set(struct gpio_chip *chip,
-> +                                  unsigned int offset, int direction)
-> +{
-> +       struct cgbc_gpio_data *gpio =3D gpiochip_get_data(chip);
-> +       struct cgbc_device_data *cgbc =3D gpio->cgbc;
-> +       int ret;
-> +       u8 val;
-> +
-> +       ret =3D cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_DIR_GET, (offset > 7) ?=
- 1 : 0, 0, &val);
-> +       if (ret)
-> +               goto end;
-> +
-> +       if (direction =3D=3D GPIO_LINE_DIRECTION_IN)
-> +               val &=3D ~((u8)BIT(offset % 8));
-> +       else
-> +               val |=3D BIT(offset % 8);
-> +
-> +       ret =3D cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_DIR_SET, (offset > 7) ?=
- 1 : 0, val, &val);
-> +
-> +end:
-> +       return ret;
-> +}
-> +
-> +static int cgbc_gpio_direction_input(struct gpio_chip *chip,
-> +                                    unsigned int offset)
-> +{
-> +       struct cgbc_gpio_data *gpio =3D gpiochip_get_data(chip);
-> +       int ret;
-> +
-> +       mutex_lock(&gpio->lock);
-> +       ret =3D cgbc_gpio_direction_set(chip, offset, GPIO_LINE_DIRECTION=
-_IN);
-> +       mutex_unlock(&gpio->lock);
-> +
-> +       return ret;
-> +}
-> +
-> +static int cgbc_gpio_direction_output(struct gpio_chip *chip,
-> +                                     unsigned int offset, int value)
-> +{
-> +       struct cgbc_gpio_data *gpio =3D gpiochip_get_data(chip);
-> +       int ret;
-> +
-> +       mutex_lock(&gpio->lock);
-> +       __cgbc_gpio_set(chip, offset, value);
-> +       ret =3D cgbc_gpio_direction_set(chip, offset, GPIO_LINE_DIRECTION=
-_OUT);
-> +       mutex_unlock(&gpio->lock);
-> +
-> +       return ret;
-> +}
-> +
-> +static int cgbc_gpio_get_direction(struct gpio_chip *chip, unsigned int =
-offset)
-> +{
-> +       struct cgbc_gpio_data *gpio =3D gpiochip_get_data(chip);
-> +       struct cgbc_device_data *cgbc =3D gpio->cgbc;
-> +       int ret;
-> +       u8 val;
-> +
-> +       ret =3D cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_DIR_GET, (offset > 7) ?=
- 1 : 0, 0, &val);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (val & BIT(offset % 8))
-> +               return GPIO_LINE_DIRECTION_OUT;
-> +       else
-> +               return GPIO_LINE_DIRECTION_IN;
-> +}
-> +
-> +static int cgbc_gpio_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev =3D &pdev->dev;
-> +       struct cgbc_device_data *cgbc =3D dev_get_drvdata(dev->parent);
-> +       struct cgbc_gpio_data *gpio;
-> +       struct gpio_chip *chip;
-> +       int ret;
-> +
-> +       gpio =3D devm_kzalloc(dev, sizeof(*gpio), GFP_KERNEL);
-> +       if (!gpio)
-> +               return -ENOMEM;
-> +
-> +       gpio->cgbc =3D cgbc;
-> +
-> +       platform_set_drvdata(pdev, gpio);
-> +
-> +       chip =3D &gpio->chip;
-> +       chip->label =3D dev_name(&pdev->dev);
-> +       chip->owner =3D THIS_MODULE;
-> +       chip->parent =3D dev;
-> +       chip->base =3D -1;
-> +       chip->direction_input =3D cgbc_gpio_direction_input;
-> +       chip->direction_output =3D cgbc_gpio_direction_output;
-> +       chip->get_direction =3D cgbc_gpio_get_direction;
-> +       chip->get =3D cgbc_gpio_get;
-> +       chip->set =3D cgbc_gpio_set;
-> +       chip->ngpio =3D CGBC_GPIO_NGPIO;
-> +
-> +       mutex_init(&gpio->lock);
+> ...
+>
+> > +#include <linux/array_size.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/module.h>
+>
+> > +#include <linux/of.h>
+>
+> Why?
 
-Please use devm_mutex_init() so that it gets cleaned up at exit. It's
-not strictly necessary but helps with lock debugging.
+Might have been left over from previous work and squashed into the wrong
+commit. Will remove.
 
-> +
-> +       ret =3D devm_gpiochip_add_data(dev, chip, gpio);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret, "Could not register GPIO c=
-hip\n");
-> +
-> +       return 0;
-> +}
-> +
-> +static struct platform_driver cgbc_gpio_driver =3D {
-> +       .driver =3D {
-> +               .name =3D "cgbc-gpio",
-> +       },
-> +       .probe  =3D cgbc_gpio_probe,
-> +};
-> +
-> +module_platform_driver(cgbc_gpio_driver);
-> +
-> +MODULE_DESCRIPTION("Congatec Board Controller GPIO Driver");
-> +MODULE_AUTHOR("Thomas Richard <thomas.richard@bootlin.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:cgbc-gpio");
+> > +#include <linux/platform_device.h>
+>
+> ...
+>
+> > +     for (size_t i =3D 0; i < ARRAY_SIZE(hw_prober_platforms); i++) {
+> > +             if (!of_machine_is_compatible(hw_prober_platforms[i].comp=
+atible))
+> > +                     continue;
+>
+> > +             int ret;
+>
+> I didn't know we allow this kind of definition mix besides for-loop and
+> __free()... Can you point me out where this style change was discussed?
+
+Will move to the top of the for loop block.
+
+> > +             ret =3D hw_prober_platforms[i].prober(&pdev->dev, hw_prob=
+er_platforms[i].data);
+> > +             /* Ignore unrecoverable errors and keep going through oth=
+er probers */
+> > +             if (ret =3D=3D -EPROBE_DEFER)
+> > +                     return ret;
+> > +     }
+>
+> ...
+>
+> > +static void chromeos_of_hw_prober_driver_exit(void)
+> > +{
+> > +     if (!chromeos_of_hw_prober_pdev)
+> > +             return;
+>
+> First of all, this is dup for the next call, second, when may this condit=
+ional
+> be true?
+
+When the module is loaded on a machine that doesn't match any entry,
+neither the driver nor the device are registered. Hence the check.
+
+Or maybe the proper way to handle it is to return -ENODEV or something?
+I'll work towards that.
+
+Thanks
+ChenYu
+
+> > +     platform_device_unregister(chromeos_of_hw_prober_pdev);
+> > +     platform_driver_unregister(&chromeos_of_hw_prober_driver);
+> > +}
+> > +module_exit(chromeos_of_hw_prober_driver_exit);
 >
 > --
-> 2.39.2
+> With Best Regards,
+> Andy Shevchenko
 >
-
-Bart
+>
 
