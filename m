@@ -1,247 +1,143 @@
-Return-Path: <linux-i2c+bounces-5403-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5404-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AC9B9521F8
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 20:22:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 137E9952219
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 20:35:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DEEF1C22120
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 18:22:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3884C1C22194
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 18:35:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3DC1BD504;
-	Wed, 14 Aug 2024 18:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E5AA1BD501;
+	Wed, 14 Aug 2024 18:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="TcoqiUoM"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="mY+iZ7XR"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7695E1BD4E9
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 18:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83341BBBC5
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 18:35:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723659738; cv=none; b=XZ7DDB5VUt04k2L8xvIRmE49wWk2jVlbUtgdScH6TTTpuHjsVHctHScHGdabqp4Mw2Uors7VobGJFUrHm/P+tB3CcYY5zZtjNer10WCNzPotUivM+zUPyGP6+vlNiPdft3RH1im1xbYKSpT6DK6IEbWFy9kdVB1VD7t6FHd1XrM=
+	t=1723660514; cv=none; b=fMc2ZxiD8B5nVhVQuCHp6y+zaxTUVRJJPOKG5RKtxDQ0hqMJyj359htY4tkaSWnlZBWHlCSWsW1SorVAxRrspN4cd7tKLiVkgU4zkoSYq6KJci+u6m+QqUoYKDHcHO9+OuPWDrRQPBIKOxWi38i7Tmbyjt8hmGkUmxRMYP8KoFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723659738; c=relaxed/simple;
-	bh=7Hq/gSPxiQWzaMXYeizVEdvcS8SoPkm1CW8TQ3ZfZJ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ATKh7deia8mcy531nzivg5nFi93qIVaUBTKk9nm2TdBYYlCmuqz8I4Q4ICDjEVvC1pCzt41lTovX/0HwTvun6JJzWJRaY8ahLa0eOrCWjMyG3zQKNl63iCpMhFqe+Rm7bpVB8IwHennU1ZFm8YPNdwoMgbNp3fovMhemD6zQPds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TcoqiUoM; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1723660514; c=relaxed/simple;
+	bh=MUsVmkMbnC8qkdjvgMcqptcSAWBcxioygXWViQZ4r5c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n4qTapXHCKBSLz1pthPPkpvxpejkag8is2efkeEod9xm+RBWle9BPuTCKMq/0unTVV87Rdpm1cusRSRigslutA199UqjQ+yteqdskz2qwKO3j+BacauJn5P+06DdL9XM0PwVv5hbso3muw6r0HoNxJw6f20DOhkXiyIgrikPLTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=mY+iZ7XR; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=QSg8b8MzYac1LcU0Mt07nJsx8x+kCS0GeQWXpYiJb5k=; b=TcoqiU
-	oMmWQC/nCT4NVq21jT6mCJY5ooDvWRtDHs+/2+TYG9QE5CjYlGf+P5PHFVJdVa5p
-	IB6tPQ1U34aUIjALxSzpsiMhtujqBn3m5QtLXkFlH8uSE8tB4AZxJxInx1vsr1BG
-	tF8qHrw8MWPUvmLiBNSqzUwHiY967VRXmt6nkxYT+8dXtx05AwqTpkR4CPRoQBWD
-	ztlh5rbDwog6K8AsZIIrUIltsl0tv0OLljGYKMETJBzRaTuG95g93kQTuHJ5KN/P
-	BLnlCb7eGZ+V4VHhUmjrayw5IOffkwagL4VsXKbVJzYhZdXaXG9fs1ZwSDnXkoPU
-	vDcRPEtdq8sBmzeg==
-Received: (qmail 2065515 invoked from network); 14 Aug 2024 20:22:14 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Aug 2024 20:22:14 +0200
-X-UD-Smtp-Session: l3s3148p1@FA4szqgfAMsgAQnoAHipAGJRnFk/ZdC8
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=bUOL
+	5SzurYGlyHVzvKS7IFjUtAlWTpd1foUKZXDOomM=; b=mY+iZ7XRbWLEQh4YrheK
+	vT/Gb2dUo9VHFitFybfHwp5bRiWyeBznvq3uDycaEanT4DdxoOlw8igc/6IWhw6S
+	m6Do65pa6loJYsLEgilDGwoHrQNd74UxPwmBQYBzr7lLOutZ3WZyhePiNWvBduco
+	91HYyQvRDBAfw30gQB56BVpQkT1ZxLAK0U8hs59xOJIgjuLmWVOjcfnmTtZblRyr
+	rCVRShPt9u0lx8klwZHe60dDFTWV8FzB+Fj8BZ6a0zneqfYqpgK/INN1NBKupEO4
+	1KRuulmTzDfWP4+oWV15QbmBdBlsPqfJxIWcckgpPMSSbFltdSCxfMdBWsWqjjvM
+	Ug==
+Received: (qmail 2068152 invoked from network); 14 Aug 2024 20:35:09 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Aug 2024 20:35:09 +0200
+X-UD-Smtp-Session: l3s3148p1@leVf/KgfguYgAQnoAHipAGJRnFk/ZdC8
+Date: Wed, 14 Aug 2024 20:35:09 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH 3/3] i2c: testunit: add SMBusAlert trigger
-Date: Wed, 14 Aug 2024 20:22:09 +0200
-Message-ID: <20240814182210.15382-4-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240814182210.15382-1-wsa+renesas@sang-engineering.com>
-References: <20240814182210.15382-1-wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Paul Menzel <pmenzel@molgen.mpg.de>, Wolfram Sang <wsa@kernel.org>,
+	eric.piel@tremplin-utc.net, Marius Hoch <mail@mariushoch.de>,
+	Dell.Client.Kernel@dell.com,
+	Kai Heng Feng <kai.heng.feng@canonical.com>,
+	platform-driver-x86@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v8 2/6] i2c: i801: Use a different adapter-name for IDF
+ adapters
+Message-ID: <Zrz43Qb62EB6o39e@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Paul Menzel <pmenzel@molgen.mpg.de>, Wolfram Sang <wsa@kernel.org>,
+	eric.piel@tremplin-utc.net, Marius Hoch <mail@mariushoch.de>,
+	Dell.Client.Kernel@dell.com,
+	Kai Heng Feng <kai.heng.feng@canonical.com>,
+	platform-driver-x86@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org
+References: <20240812203952.42804-1-hdegoede@redhat.com>
+ <20240812203952.42804-3-hdegoede@redhat.com>
+ <c35b6mawhhbhjioan6hvrlthtcoc6dqivwihhwz5ftvv6jcohs@ovctm27nnd2n>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="VMPTsIVp3oNgsXcF"
+Content-Disposition: inline
+In-Reply-To: <c35b6mawhhbhjioan6hvrlthtcoc6dqivwihhwz5ftvv6jcohs@ovctm27nnd2n>
 
-To test SMBusAlert handlers, let the testunit be able to trigger
-SMBusAlert interrupts. This new command needs a GPIO connected to the
-SMBAlert# line.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- Documentation/i2c/slave-testunit-backend.rst | 48 ++++++++++++++++
- drivers/i2c/i2c-slave-testunit.c             | 59 ++++++++++++++++++++
- 2 files changed, 107 insertions(+)
+--VMPTsIVp3oNgsXcF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/i2c/slave-testunit-backend.rst b/Documentation/i2c/slave-testunit-backend.rst
-index 3743188ecfc7..d752f433be07 100644
---- a/Documentation/i2c/slave-testunit-backend.rst
-+++ b/Documentation/i2c/slave-testunit-backend.rst
-@@ -185,3 +185,51 @@ default response::
- 
-   # i2cset -y 0 0x30 4 0 0 i; i2cget -y 0 0x30
-   0x00
-+
-+0x05 SMBUS_ALERT_REQUEST
-+~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+.. list-table::
-+  :header-rows: 1
-+
-+  * - CMD
-+    - DATAL
-+    - DATAH
-+    - DELAY
-+
-+  * - 0x05
-+    - response value (7 MSBs interpreted as I2C address)
-+    - currently unused
-+    - n * 10ms
-+
-+This test raises an interrupt via the SMBAlert pin which the host controller
-+must handle. The pin must be connected to the testunit as a GPIO. GPIO access
-+is not allowed to sleep. Currently, this can only be described using firmware
-+nodes. So, for devicetree, you would add something like this to the testunit
-+node::
-+
-+  gpios = <&gpio1 24 GPIO_ACTIVE_LOW>;
-+
-+The following command will trigger the alert with a response of 0xc9 after 1
-+second of delay::
-+
-+  # i2cset -y 0 0x30 5 0xc9 0x00 100 i
-+
-+If the host controller supports SMBusAlert, this message with debug level
-+should appear::
-+
-+  smbus_alert 0-000c: SMBALERT# from dev 0x64, flag 1
-+
-+This message may appear more than once because the testunit is software not
-+hardware and, thus, may not be able to react to the response of the host fast
-+enough. The interrupt count should increase only by one, though::
-+
-+  # cat /proc/interrupts | grep smbus_alert
-+   93:          1  gpio-rcar  26 Edge      smbus_alert
-+
-+If the host does not respond to the alert within 1 second, the test will be
-+aborted and the testunit will report an error.
-+
-+For this test, the testunit will shortly drop its assigned address and listen
-+on the SMBus Alert Response Address (0x0c). It will reassign its original
-+address afterwards.
-diff --git a/drivers/i2c/i2c-slave-testunit.c b/drivers/i2c/i2c-slave-testunit.c
-index df54185e5e9a..9fe3150378e8 100644
---- a/drivers/i2c/i2c-slave-testunit.c
-+++ b/drivers/i2c/i2c-slave-testunit.c
-@@ -8,6 +8,8 @@
- 
- #include <generated/utsrelease.h>
- #include <linux/bitops.h>
-+#include <linux/completion.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/module.h>
-@@ -22,6 +24,7 @@ enum testunit_cmds {
- 	TU_CMD_SMBUS_HOST_NOTIFY,
- 	TU_CMD_SMBUS_BLOCK_PROC_CALL,
- 	TU_CMD_GET_VERSION_WITH_REP_START,
-+	TU_CMD_SMBUS_ALERT_REQUEST,
- 	TU_NUM_CMDS
- };
- 
-@@ -44,10 +47,37 @@ struct testunit_data {
- 	u8 read_idx;
- 	struct i2c_client *client;
- 	struct delayed_work worker;
-+	struct gpio_desc *gpio;
-+	struct completion alert_done;
- };
- 
- static char tu_version_info[] = "v" UTS_RELEASE "\n\0";
- 
-+static int i2c_slave_testunit_smbalert_cb(struct i2c_client *client,
-+					  enum i2c_slave_event event, u8 *val)
-+{
-+	struct testunit_data *tu = i2c_get_clientdata(client);
-+
-+	switch (event) {
-+	case I2C_SLAVE_READ_PROCESSED:
-+		gpiod_set_value(tu->gpio, 0);
-+		fallthrough;
-+	case I2C_SLAVE_READ_REQUESTED:
-+		*val = tu->regs[TU_REG_DATAL];
-+		break;
-+
-+	case I2C_SLAVE_STOP:
-+		complete(&tu->alert_done);
-+		break;
-+
-+	case I2C_SLAVE_WRITE_REQUESTED:
-+	case I2C_SLAVE_WRITE_RECEIVED:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
- static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
- 				     enum i2c_slave_event event, u8 *val)
- {
-@@ -127,8 +157,10 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
- static void i2c_slave_testunit_work(struct work_struct *work)
- {
- 	struct testunit_data *tu = container_of(work, struct testunit_data, worker.work);
-+	unsigned long time_left;
- 	struct i2c_msg msg;
- 	u8 msgbuf[256];
-+	u16 orig_addr;
- 	int ret = 0;
- 
- 	msg.addr = I2C_CLIENT_END;
-@@ -150,6 +182,26 @@ static void i2c_slave_testunit_work(struct work_struct *work)
- 		msgbuf[2] = tu->regs[TU_REG_DATAH];
- 		break;
- 
-+	case TU_CMD_SMBUS_ALERT_REQUEST:
-+		i2c_slave_unregister(tu->client);
-+		orig_addr = tu->client->addr;
-+		tu->client->addr = 0x0c;
-+		ret = i2c_slave_register(tu->client, i2c_slave_testunit_smbalert_cb);
-+		if (ret)
-+			goto out_smbalert;
-+
-+		reinit_completion(&tu->alert_done);
-+		gpiod_set_value(tu->gpio, 1);
-+		time_left = wait_for_completion_timeout(&tu->alert_done, HZ);
-+		if (!time_left)
-+			ret = -ETIMEDOUT;
-+
-+		i2c_slave_unregister(tu->client);
-+out_smbalert:
-+		tu->client->addr = orig_addr;
-+		i2c_slave_register(tu->client, i2c_slave_testunit_slave_cb);
-+		break;
-+
- 	default:
- 		break;
- 	}
-@@ -176,8 +228,15 @@ static int i2c_slave_testunit_probe(struct i2c_client *client)
- 
- 	tu->client = client;
- 	i2c_set_clientdata(client, tu);
-+	init_completion(&tu->alert_done);
- 	INIT_DELAYED_WORK(&tu->worker, i2c_slave_testunit_work);
- 
-+	tu->gpio = devm_gpiod_get_index_optional(&client->dev, NULL, 0, GPIOD_OUT_LOW);
-+	if (gpiod_cansleep(tu->gpio)) {
-+		dev_err(&client->dev, "GPIO access which may sleep is not allowed\n");
-+		return -EDEADLK;
-+	}
-+
- 	if (sizeof(tu_version_info) > TU_VERSION_MAX_LENGTH)
- 		tu_version_info[TU_VERSION_MAX_LENGTH - 1] = 0;
- 
--- 
-2.43.0
+Hi Andi, Hans, all,
 
+> > +	/*
+> > +	 * adapter.name is used by platform code to find the main I801 adapter
+> > +	 * to instantiante i2c_clients, do not change.
+> > +	 */
+> >  	snprintf(priv->adapter.name, sizeof(priv->adapter.name),
+> > -		"SMBus I801 adapter at %04lx", priv->smba);
+> > +		 "SMBus %s adapter at %04lx",
+> > +		 (priv->features & FEATURE_IDF) ? "I801 IDF" : "I801",
+> > +		 priv->smba);
+> > +
+>=20
+> do you have any comment here?
+
+I have been scratching my head about this patch for a while. I still
+think that it is quite fragile to base features on this naming. The
+comment above helps, but I still have a bad feeling about it.
+
+I noticed now that the i801 driver does not use the algo_data field so
+far. Has it been considered to put a flag there?
+
+Happy hacking,
+
+   Wolfram
+
+
+--VMPTsIVp3oNgsXcF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma8+NkACgkQFA3kzBSg
+KbZ4Pg//Xnf1aRMQc8/vPwXCuJSs016oyTQDyYYmSrjLkG5qQ9S6bnN5Is9QYBD1
+zd739TPAOUFVb0oUEK1p4lumcsQn+sqylFJEc9VWO7IOKns5z1zGK9NmslW6qV4b
+hc5hBFBumZaruLHpuI5tkDtENumlftXw2fTFCyMmK79xPaQaVbGcURejDCeDV0Qv
+uWnXSH768LF1X42CRm6lorY6zX0CBusbR599NJtnpvs6gva2Rvko4gH8AHiDp48o
+i4eKFq9L0dUD30HqKZmxwz1RT64l4CzKeM+cMs6DtpYGjNh0Ce8vKizuvyVx5Frv
+etFP2hZV8HOJX3iQAV+/K8QCGpzSInFiN0s2uTjfVm7tE4g2mOI+SSIlHGhpaKdF
+CIC4tqjBozHbIMQ8OeYkRku2JYbIXbQRzZAy8NOXPIG3yoa6IXe4YvgotFTXI3kn
+LlnaEJmJERBUBo2Zp12OGE0LUeyi+tuKerlEulgXqaz0OlQsst6u5hR4CuGJ/2yq
+JLxn5fo9fTvjN+hglmBpgxws45kUMr58lp4kYnZHxyBrd2mu0dzWOZCbdTXKUH+C
+RffTiei1NNONUjUdgxfZjIJBjssp43pY5BC1jVPid+789y5mugx1a6UQa3yAJF68
+qgP5gk2ufYKK3flhteX+E46pPWyv7UzZtG4m4FAKk5hJD2QYd+g=
+=qh1w
+-----END PGP SIGNATURE-----
+
+--VMPTsIVp3oNgsXcF--
 
