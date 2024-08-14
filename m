@@ -1,46 +1,45 @@
-Return-Path: <linux-i2c+bounces-5363-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5364-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 439FF951213
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 04:18:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BCD5951221
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 04:20:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E29DC1F23DE6
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 02:18:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBFF1285DF2
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 02:19:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68CC71422CA;
-	Wed, 14 Aug 2024 02:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0315E38DCD;
+	Wed, 14 Aug 2024 02:15:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oK2QtcvP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3pZm7vx"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9841419A9;
-	Wed, 14 Aug 2024 02:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F0F383BF;
+	Wed, 14 Aug 2024 02:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723601723; cv=none; b=vDcyXsDH5QYNGsh6fRPFZv6xvyEhtMspm3XWB6ML4JbHbxWKDORCg2ov3TTMbxmo+0dcXXO+7jAotjS6XIMA4tlnVXX+8hn7PvRhgoJLvjMfIsN9fLDwWVI9JMuIfxdlB//6K901ZxgdPzn6rBKJyXADZiBac8MaZjkyaQ2ndBg=
+	t=1723601734; cv=none; b=IW9OOUkPhIsfQXpePHv5xCEODLQeY8WXV7quKbzM5nMPH6kuYBw8LbXOCsMY+ozo9TXIecgge7mSIVErrLBoxvlfNhi+1GwfIdc2hTsLT8Vcbzd0LsDNRcMl048VW4U6Y55XwqHAOsKRRiB1x+ht0b+pnqp5jTEUpAzXHLyxWlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723601723; c=relaxed/simple;
-	bh=M1d0cuB26UxfGsqNygD3iEsVrnVQKsorXrrI3VbpWu4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GaCFbVpQbymcRHvl8hjTfz6ecIkxROGYD0MPGZIlzWIRqhyx3yM9piMWI1hxE8rdDBwuGwmSj7sw85gvv/Uq2ILG584RlncPFC4kVyJbVvaL85p9X0hQ5wO36nDxd2xvsgsqg6YYPX9erohVow+I/a6ahXmkxDzktGj2WY06A1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oK2QtcvP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133E8C4AF12;
-	Wed, 14 Aug 2024 02:15:21 +0000 (UTC)
+	s=arc-20240116; t=1723601734; c=relaxed/simple;
+	bh=g7khX8F2a724400AFywCT1LDcS64ibhAjY4KcHSE76s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bkL+gQLpUuxHgOCR9Z8fTFtce7tbvsmpugDOAYkFs5fvEvHJ4EbixAIO4tNS1kp41Ic0ULhyXw5vqC2hwP2eICx0v7+MRywe+geQpHg8iyWVNpkOkF0TNACqjHrfjp2HuODfHdjugYYGrXbyiO8Aoalebqfcp3UaF14dZuabIIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3pZm7vx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 895D5C32782;
+	Wed, 14 Aug 2024 02:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723601722;
-	bh=M1d0cuB26UxfGsqNygD3iEsVrnVQKsorXrrI3VbpWu4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oK2QtcvPGZDvxLJJ23NB1Nz7lZPl25T8yVnd2VG2QJ8TKis4y/IaZbv2dxoYmrvur
-	 Agbcr9kvgt+CHBAQxQTWWYvH08RnKmyGNa4kRNkyR1OnZff7q+kIaBSLzLFLblyyck
-	 nn1gZCmuqfx+wSgzZ/kxnbi55NkOKUsbEfEp19Ot4Gk5ickFHmY9seif5ipHkH61Ez
-	 lxPYN+r6r/GKx+OpqoBQ1GyA8D5ZvdfDsMxjw40p9KQiZsfluKaSmwuWQDVMzTUUvZ
-	 46wQc7DsYXBmueJV0fOYpC3gzoBz/toVnBw8oDkve/PjRHzse4yXfZw09gOSy+l8qh
-	 0rbccEqydmLJQ==
+	s=k20201202; t=1723601734;
+	bh=g7khX8F2a724400AFywCT1LDcS64ibhAjY4KcHSE76s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=S3pZm7vxxD/wF931iwbIMgUYWu7fGjvD+uwf/BFqLq2yuoEl3DGOdgaNFli6A3SGU
+	 ohMYld79n3Xobb8o6XwzVpM23c6rIXueFvQ9zisUgKPtPZQTFZ+StVHbnj5EquJ0Xt
+	 L4IYBgYLiU0eQpyL7dOwGRtiv+LhDipjHJv5N/vdxqnrIICXvMPRRmqrD4PsDf5FwP
+	 Z0KYgGCe4vdH15yh72nFKSxxmgjm84jJiM9cHFXCfVw6Ao7emAb4Q6rO08OysKz3OC
+	 +1JdKpG48X/5PnuV+4ZUYDnChfr1Dgl7H+u8hd5dveM+Pbv4/uYBNhmGhEX5RUobE6
+	 aM544PDCywI3A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -48,12 +47,10 @@ Cc: Richard Fitzgerald <rf@opensource.cirrus.com>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 3/7] i2c: Fix conditional for substituting empty ACPI functions
-Date: Tue, 13 Aug 2024 22:15:09 -0400
-Message-ID: <20240814021517.4130238-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 1/4] i2c: Fix conditional for substituting empty ACPI functions
+Date: Tue, 13 Aug 2024 22:15:27 -0400
+Message-ID: <20240814021532.4130407-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240814021517.4130238-1-sashal@kernel.org>
-References: <20240814021517.4130238-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,7 +59,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.45
+X-stable-base: Linux 6.1.104
 Content-Transfer-Encoding: 8bit
 
 From: Richard Fitzgerald <rf@opensource.cirrus.com>
@@ -84,10 +81,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 0dae9db275380..296e7e73a75ef 100644
+index cfc59c3371cb2..aeb94241db52e 100644
 --- a/include/linux/i2c.h
 +++ b/include/linux/i2c.h
-@@ -1033,7 +1033,7 @@ static inline int of_i2c_get_board_info(struct device *dev,
+@@ -1035,7 +1035,7 @@ static inline int of_i2c_get_board_info(struct device *dev,
  struct acpi_resource;
  struct acpi_resource_i2c_serialbus;
  
