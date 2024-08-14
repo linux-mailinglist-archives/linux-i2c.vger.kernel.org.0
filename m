@@ -1,56 +1,56 @@
-Return-Path: <linux-i2c+bounces-5401-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5402-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05F209521F2
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 20:22:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F8629521F6
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 20:22:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B6F51C212E3
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 18:22:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05F931F2295B
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 18:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7FBE1BD4F8;
-	Wed, 14 Aug 2024 18:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA301BC09F;
+	Wed, 14 Aug 2024 18:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="O9uSC4wM"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="F6zM8EYN"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E501B86CC
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 18:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3261BBBDA
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 18:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723659736; cv=none; b=uRysykdTIP3urtIUzyWdKSDFn8ZIhnGGdZRd0F73Rfv2XNAmIB9LYoTlqRCwF7x+6W0DmxOs4gPVGFDGsQXGZin2TBA+SSjBh+a5u4a6yrvOhMgY6h6M/OTXMmoHWuyi4OPON5WNnaLfcHwRPNncVcgNoEmxXvh0VxxWox8z6iw=
+	t=1723659737; cv=none; b=nyIsfQDVIevYQ/kwaxbPVz/mFOZGz3eO0ncIRnUlVlgnovRl+Ia4+Chf1bzbxrxSZ+Cq3wH2xSRMi9o5+kDMWNIEe6xD3ypfQu81z6aKAcVbOc1dGZ0Kve6MfM4c56ITxivIat/p7mQLP5/JfeC0rP2Zgb4/RXXxFEmv3MgHCF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723659736; c=relaxed/simple;
-	bh=tQjuUaxdat+2KEGQjyVmeSbf2fFsAcFpB+QxVnFBRvo=;
+	s=arc-20240116; t=1723659737; c=relaxed/simple;
+	bh=XZ1itzioRl8PIZsWAe2xvdLETORUOqPKEf7RCJ12hes=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OwpT2Qlv3Jgv69WWB6ZRMWaWwNEvxwMQsbMkJvU586hcyE2Y+EQ96OWzYbfWuyHkIj5WEfErYt6mrj0O+ySPKjUUbqcWjQUpRX1ZyEDhdhJdol2bmzxO9iFIIEbOKG0LQxPOeLQbrYqa+upk1vcWkPJosLPf+BIltP+jpBXzMp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=O9uSC4wM; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=hN6nUuefpcPyxioynplwr9GUVBxG7OBkO2XaKNcTsrrpiYA65xVzegKvDVmP6DrvvoOiKyE5JL3mJH3jGCTa3RP6tECKBzDL1ppafdMShVyHuej6xlJF1Fg0yE1DNvrgpVyLdzGpbkYXr/IJ39t5DQoM6B4jrAZxQlo83TstD0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=F6zM8EYN; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=EZuSu/YjWTn+/F93ud8G89tPT7KFtw5MjmqiM/N9sro=; b=O9uSC4
-	wM5ANZqIIcNGRDMX5OM5K7Vd3nZr0+6SqQ0IbSPDol19DHiIHrDY0Tj/94+d3rfO
-	3f7Z7Jz5HfMEcl/SZZIGIqjQ1SMAp0ykTgYks5kCd7iMZqOcDgpLWuHC1lscFbw+
-	7BWT7XjkWkYif2QPGSnwV3uMY0INoBSA3EP9FlB+O0mk6iFaOrWNxjGAysNMJP4y
-	+NrhRJauRCcQPd2ZfJ7W/BbME5qOvr1mXTdHVwFVKueci5y4X93bT3eJ2XD5v7Tx
-	YgB+JHtXGhBLEEt64GW/yJEeKKTir0jXuAab4W9ZzCUM+9gdUClQai1JwcHMmLfC
-	tNbosPRJZbTEhgdQ==
-Received: (qmail 2065475 invoked from network); 14 Aug 2024 20:22:12 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Aug 2024 20:22:12 +0200
-X-UD-Smtp-Session: l3s3148p1@UfIPzqgf5sogAQnoAHipAGJRnFk/ZdC8
+	 s=k1; bh=Wf8kp5SNFQNORNJ8bbKih+D/mtQYOk4x6nQVHTDBrxc=; b=F6zM8E
+	YNwc2mAmTxhcHvknR8tgHeGd2cdzve9Jsgeu9Myc95KBnd2VmFim5orkYvdzKxDt
+	pp/srJe5oQ8Bu1yDeSP+vAJIeRjx8yJ5n6SmLJDIOp5zyE03HrqsEvNInvMBoD9K
+	uC9zr3ubvF7IxB7jHsQ/eP5EAqyy9cfCOx6JrBBYjmXGAcdZGFZ5e5z0a7u4pKD8
+	m7385xaUZsu/lb6ldHhU6WTIsuNWl+CN2zs0OX6+od7U3w2vEpe0HdmyvwwcGdZr
+	ANwd8XNmEh6+FVgLw0p66q3KkZlkHGSrevVi3wRlrEdmOOAsTSfypDQ6Zobc6Q8L
+	9a8cM8nVam3QtuiA==
+Received: (qmail 2065495 invoked from network); 14 Aug 2024 20:22:13 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Aug 2024 20:22:13 +0200
+X-UD-Smtp-Session: l3s3148p1@z1Mdzqgf9sogAQnoAHipAGJRnFk/ZdC8
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH 1/3] i2c: testunit: describe fwnode based instantiation
-Date: Wed, 14 Aug 2024 20:22:07 +0200
-Message-ID: <20240814182210.15382-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 2/3] i2c: testunit: move code to avoid a forward declaration
+Date: Wed, 14 Aug 2024 20:22:08 +0200
+Message-ID: <20240814182210.15382-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240814182210.15382-1-wsa+renesas@sang-engineering.com>
 References: <20240814182210.15382-1-wsa+renesas@sang-engineering.com>
@@ -62,37 +62,116 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The testunit can also be instantiated via firmware nodes. Give a
-devicetree node as an example.
+To avoid forward declarations in upcoming code, move the workqueue
+handler as-is downwards. This will ease review of the new features.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- Documentation/i2c/slave-testunit-backend.rst | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/i2c/i2c-slave-testunit.c | 84 ++++++++++++++++----------------
+ 1 file changed, 42 insertions(+), 42 deletions(-)
 
-diff --git a/Documentation/i2c/slave-testunit-backend.rst b/Documentation/i2c/slave-testunit-backend.rst
-index d3ab5944877d..3743188ecfc7 100644
---- a/Documentation/i2c/slave-testunit-backend.rst
-+++ b/Documentation/i2c/slave-testunit-backend.rst
-@@ -20,6 +20,18 @@ Instantiating the device is regular. Example for bus 0, address 0x30::
+diff --git a/drivers/i2c/i2c-slave-testunit.c b/drivers/i2c/i2c-slave-testunit.c
+index 04060bc8a9d0..df54185e5e9a 100644
+--- a/drivers/i2c/i2c-slave-testunit.c
++++ b/drivers/i2c/i2c-slave-testunit.c
+@@ -48,48 +48,6 @@ struct testunit_data {
  
-   # echo "slave-testunit 0x1030" > /sys/bus/i2c/devices/i2c-0/new_device
+ static char tu_version_info[] = "v" UTS_RELEASE "\n\0";
  
-+Or using firmware nodes. Here is a devicetree example (note this is only a
-+debug device, so there are no official DT bindings)::
+-static void i2c_slave_testunit_work(struct work_struct *work)
+-{
+-	struct testunit_data *tu = container_of(work, struct testunit_data, worker.work);
+-	struct i2c_msg msg;
+-	u8 msgbuf[256];
+-	int ret = 0;
+-
+-	msg.addr = I2C_CLIENT_END;
+-	msg.buf = msgbuf;
+-
+-	switch (tu->regs[TU_REG_CMD]) {
+-	case TU_CMD_READ_BYTES:
+-		msg.addr = tu->regs[TU_REG_DATAL];
+-		msg.flags = I2C_M_RD;
+-		msg.len = tu->regs[TU_REG_DATAH];
+-		break;
+-
+-	case TU_CMD_SMBUS_HOST_NOTIFY:
+-		msg.addr = 0x08;
+-		msg.flags = 0;
+-		msg.len = 3;
+-		msgbuf[0] = tu->client->addr;
+-		msgbuf[1] = tu->regs[TU_REG_DATAL];
+-		msgbuf[2] = tu->regs[TU_REG_DATAH];
+-		break;
+-
+-	default:
+-		break;
+-	}
+-
+-	if (msg.addr != I2C_CLIENT_END) {
+-		ret = i2c_transfer(tu->client->adapter, &msg, 1);
+-		/* convert '0 msgs transferred' to errno */
+-		ret = (ret == 0) ? -EIO : ret;
+-	}
+-
+-	if (ret < 0)
+-		dev_err(&tu->client->dev, "CMD%02X failed (%d)\n", tu->regs[TU_REG_CMD], ret);
+-
+-	clear_bit(TU_FLAG_IN_PROCESS, &tu->flags);
+-}
+-
+ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
+ 				     enum i2c_slave_event event, u8 *val)
+ {
+@@ -166,6 +124,48 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
+ 	return ret;
+ }
+ 
++static void i2c_slave_testunit_work(struct work_struct *work)
++{
++	struct testunit_data *tu = container_of(work, struct testunit_data, worker.work);
++	struct i2c_msg msg;
++	u8 msgbuf[256];
++	int ret = 0;
 +
-+  &i2c0	{
-+        ...
++	msg.addr = I2C_CLIENT_END;
++	msg.buf = msgbuf;
 +
-+	testunit@30 {
-+		compatible = "slave-testunit";
-+		reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
-+	};
-+  };
++	switch (tu->regs[TU_REG_CMD]) {
++	case TU_CMD_READ_BYTES:
++		msg.addr = tu->regs[TU_REG_DATAL];
++		msg.flags = I2C_M_RD;
++		msg.len = tu->regs[TU_REG_DATAH];
++		break;
 +
- After that, you will have the device listening. Reading will return a single
- byte. Its value is 0 if the testunit is idle, otherwise the command number of
- the currently running command.
++	case TU_CMD_SMBUS_HOST_NOTIFY:
++		msg.addr = 0x08;
++		msg.flags = 0;
++		msg.len = 3;
++		msgbuf[0] = tu->client->addr;
++		msgbuf[1] = tu->regs[TU_REG_DATAL];
++		msgbuf[2] = tu->regs[TU_REG_DATAH];
++		break;
++
++	default:
++		break;
++	}
++
++	if (msg.addr != I2C_CLIENT_END) {
++		ret = i2c_transfer(tu->client->adapter, &msg, 1);
++		/* convert '0 msgs transferred' to errno */
++		ret = (ret == 0) ? -EIO : ret;
++	}
++
++	if (ret < 0)
++		dev_err(&tu->client->dev, "CMD%02X failed (%d)\n", tu->regs[TU_REG_CMD], ret);
++
++	clear_bit(TU_FLAG_IN_PROCESS, &tu->flags);
++}
++
+ static int i2c_slave_testunit_probe(struct i2c_client *client)
+ {
+ 	struct testunit_data *tu;
 -- 
 2.43.0
 
