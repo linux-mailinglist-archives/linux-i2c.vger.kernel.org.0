@@ -1,127 +1,102 @@
-Return-Path: <linux-i2c+bounces-5361-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5362-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 291A1951100
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 02:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15AE49511FD
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 04:16:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA12A1F237A8
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 00:26:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAA241F23637
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 02:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F45C1FA3;
-	Wed, 14 Aug 2024 00:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E77627D3F4;
+	Wed, 14 Aug 2024 02:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WQgLDIDK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eOFWMJhS"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47D41859;
-	Wed, 14 Aug 2024 00:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0AFF6F305;
+	Wed, 14 Aug 2024 02:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723595178; cv=none; b=PEUZLo9TYpn+WJ7x8PnYMwIPDvmxCT1ru0lhA42wpWCDhmQFoVxRAeQCptMY/Srm8yk+UPZmeEBEkCS/qp5vIdw1zW6A8+fLuos9iD85qzpxyaGrNh3hWGbrDcOW27UrGbLKr3XlDRSExzUpMPjXB8X5RK5ROKcB/d+f0nPCrY0=
+	t=1723601703; cv=none; b=N1zkrWenq1yTcvx3HDPcxhLEnDbto0O/ipHVO5V57xaFIqQy2SBCzCvK5bSiVDaCh5qzW08Ohfg5wU6k4deWM+SM/REic0gR6uG3yRIBX3vP09Rt7p+iI3rHnO8FtkwktUqXxpfY3vqAu4xmOy/DHmvbjhoom00eQwUfhsIdLJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723595178; c=relaxed/simple;
-	bh=Fc/yY7CDbNdH/cz6/im6kwrc99NmQho63eE53m7feXM=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=bsAbYwRQwOuP/H1BieQP9qIQwuVQep5sYIAbfQOPlRFNgOzRDqGlfszeU6WQDGLUxhlxiNwcjbYboYZhLz/3X1TUp0UUsoO/edfeA7Bb4BNZDVARj94F8YfQZyNPKR7oDf1fgacQswZ4DjA4B0ELTAl3U5BWCcFvTiGrKdgGR58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WQgLDIDK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DABA0C32782;
-	Wed, 14 Aug 2024 00:26:16 +0000 (UTC)
+	s=arc-20240116; t=1723601703; c=relaxed/simple;
+	bh=smoPsyL0hkIuPP1MAxFEuTShBY5VcUvwBvCVrOPCp5Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TbMlTelGKl5zWedWhN5tpe/AQfB0+3xFEI3/vAV6budrnARf7WTZBDh+m+qIgj83A23y0YN3T0raoAydcgEzQnnPPf8cu66s8bL8LBABZGgA/Yh4GvbkN52g4tTEjIVZkZGTvMAkzB8HYEc6kFXp3pO0Zlu2dPP4KqFFifuRZmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eOFWMJhS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB9E8C4AF10;
+	Wed, 14 Aug 2024 02:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723595177;
-	bh=Fc/yY7CDbNdH/cz6/im6kwrc99NmQho63eE53m7feXM=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=WQgLDIDKTH8nM6R9k4Bhk13G/aSMxRHqq4ByEnTns+9q0H7BcbbJEBSBTjbKKKfxW
-	 OslBR6u5Rmi85Woed4BAMBGyC0MwcytS/zd/RGj0FI1Im7LuwJnSKI0IkcEp2+AOy9
-	 drT3tDGchslC30z+6Q7AjGgbqpjJVcxIvM6cxiblk1bDGdFr/aLtfq9qb8W9Tv6F8a
-	 gOFqME09cvh0kkx/gu/odDOniR092J5eJd6HIkSWJZ8T9Vc30UGOEN6VMEHO2A9QJn
-	 UEMRoZGyai14llSAqszJM0OxLIytwuwRIsVLCrr1JxGk7zSZrPPm25WFM3rbUt5Ubl
-	 wb/olrsJwSjtQ==
-Date: Tue, 13 Aug 2024 18:26:15 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1723601703;
+	bh=smoPsyL0hkIuPP1MAxFEuTShBY5VcUvwBvCVrOPCp5Y=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eOFWMJhS0AI6GFx5oLqTnSRq7zzyM3j9sUQIrWnIM2DpRbCNKIX5J7vvITtB1HT+o
+	 TdsqP+vdnuR7HSD4B+wR6gY4mXLIwEnOLtt/e66Jad9aDy9qq9C/ZYrlSPW7G99vmD
+	 VbwDSQW+mEqnn4dF05ReMTzje5FsvCNkECKy9R/ARltFXKXymNERCMSZh77Jr0Mzb3
+	 beYDNkEgwftz48a++tGHNk4XfPxd2SxSsKZJgPNS73OcdlpOPKeD2KFc5US+9pNBJW
+	 V+55Epnp7SFGdhpdacodXUTDzwA3krlXRr439+XuBF4ALiwKG/H6xjNmKvuYVthTqL
+	 JB5WcgM1ikDZA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.10 08/13] i2c: Fix conditional for substituting empty ACPI functions
+Date: Tue, 13 Aug 2024 22:14:39 -0400
+Message-ID: <20240814021451.4129952-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240814021451.4129952-1-sashal@kernel.org>
+References: <20240814021451.4129952-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Richard Acayan <mailingradian@gmail.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Bjorn Andersson <andersson@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
- Todor Tomov <todor.too@gmail.com>, Loic Poulain <loic.poulain@linaro.org>, 
- linux-media@vger.kernel.org, Robert Foss <rfoss@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, devicetree@vger.kernel.org, 
- linux-i2c@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>
-In-Reply-To: <20240813230037.84004-10-mailingradian@gmail.com>
-References: <20240813230037.84004-8-mailingradian@gmail.com>
- <20240813230037.84004-10-mailingradian@gmail.com>
-Message-Id: <172359517555.312475.7249351586799912303.robh@kernel.org>
-Subject: Re: [PATCH v2 2/5] dt-bindings: media: camss: Add
- qcom,sdm670-camss
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.10.4
+Content-Transfer-Encoding: 8bit
 
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
 
-On Tue, 13 Aug 2024 19:00:41 -0400, Richard Acayan wrote:
-> As found in the Pixel 3a, the Snapdragon 670 has a camera subsystem with
-> 3 CSIDs and 3 VFEs (including 1 VFE lite). Add this camera subsystem to
-> the bindings.
-> 
-> Adapted from SC8280XP camera subsystem.
-> 
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> ---
->  .../bindings/media/qcom,sdm670-camss.yaml     | 324 ++++++++++++++++++
->  1 file changed, 324 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
-> 
+[ Upstream commit f17c06c6608ad4ecd2ccf321753fb511812d821b ]
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Add IS_ENABLED(CONFIG_I2C) to the conditional around a bunch of ACPI
+functions.
 
-yamllint warnings/errors:
+The conditional around these functions depended only on CONFIG_ACPI.
+But the functions are implemented in I2C core, so are only present if
+CONFIG_I2C is enabled.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dts:32.19-150.15: Warning (unit_address_vs_reg): /example-0/soc/camss: node has a reg or ranges property, but no unit name
-Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dts:142.46-147.27: Warning (unit_address_vs_reg): /example-0/soc/camss/ports/port@0/endpoint: node has a reg or ranges property, but no unit name
-Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dts:142.46-147.27: Warning (graph_endpoint): /example-0/soc/camss/ports/port@0/endpoint: graph node unit address error, expected "0"
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dtb: camss: reg-names:0: 'csid0' was expected
-	from schema $id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dtb: camss: reg-names:1: 'csid1' was expected
-	from schema $id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dtb: camss: reg-names:2: 'csid2' was expected
-	from schema $id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dtb: camss: reg-names:4: 'csiphy0' was expected
-	from schema $id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dtb: camss: reg-names:6: 'csiphy1' was expected
-	from schema $id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dtb: camss: reg-names:8: 'csiphy2' was expected
-	from schema $id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dtb: camss: 'interconnects' is a required property
-	from schema $id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/qcom,sdm670-camss.example.dtb: camss: 'interconnect-names' is a required property
-	from schema $id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/linux/i2c.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240813230037.84004-10-mailingradian@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 424acb98c7c26..97b18dff3a4fc 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -1053,7 +1053,7 @@ static inline int of_i2c_get_board_info(struct device *dev,
+ struct acpi_resource;
+ struct acpi_resource_i2c_serialbus;
+ 
+-#if IS_ENABLED(CONFIG_ACPI)
++#if IS_ENABLED(CONFIG_ACPI) && IS_ENABLED(CONFIG_I2C)
+ bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
+ 			       struct acpi_resource_i2c_serialbus **i2c);
+ int i2c_acpi_client_count(struct acpi_device *adev);
+-- 
+2.43.0
 
 
