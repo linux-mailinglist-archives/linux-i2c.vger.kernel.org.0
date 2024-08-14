@@ -1,239 +1,119 @@
-Return-Path: <linux-i2c+bounces-5384-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5385-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B836951C47
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 15:53:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3276C951C77
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 16:01:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A030E1C22BBD
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 13:53:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C138CB26FCB
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 14:01:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1766186A;
-	Wed, 14 Aug 2024 13:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5481B3754;
+	Wed, 14 Aug 2024 14:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LBXZavRu"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="PApIccj3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CC11E4B2;
-	Wed, 14 Aug 2024 13:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BC11B3739
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 14:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723643591; cv=none; b=Ib19euFR30TJb1HvnJil0ZEmJ0pd9MPUXrjn2iPuznizXU7GdMKnJZW1l1KJY5EKKNIxUhbpvYSaBiWfMVnyl1KJeQexKZO+6QbmAIAjMQKzEWQvpvIGPE9EucKGhKFRZnHMokp0XH9INbjjw9nWpRBalnvErtiKDd0dc+0JR7I=
+	t=1723644033; cv=none; b=FE1YBExaxEEH5KGGYUcSxrBZMeG2T29/caT8qcWpsVr91WZ1lqO5t7jD/+lCypECfJKKsjHr90s/HTEaQGnHnFosVcrm5RlwU6DJLnr4ikNp524Z+y3Auya+UydTKn8oTHBlwTKHLGWeYmuF0h6rwk9pKPK0tPQZ48kEfZsE18k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723643591; c=relaxed/simple;
-	bh=sXDg6SJ866AaNtAk2Tp+FQv+cJ3dVaRfO0uMyWTSizM=;
+	s=arc-20240116; t=1723644033; c=relaxed/simple;
+	bh=tHn19Ni1LLbpXwJbilTrZJhHpHLAG9javyo89zYAfVE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JlQidZRuOHr4WrrCFVj4FjQ0VOpv0bQncbvjjEqRKzkFEEkyvDkACA+DeW2OQHMpWbA78TxL7Qdtzcti24pDyzQBEjCZYZ5us+S+w24ABLukzpxNjn2/e3/sL5ujE2l8Dw2ai+Id2p6RtgjDldK6hopCD2bjbUcvq5Tg/qRVYdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LBXZavRu; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723643590; x=1755179590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sXDg6SJ866AaNtAk2Tp+FQv+cJ3dVaRfO0uMyWTSizM=;
-  b=LBXZavRuN/Clknov31BXS/vhDRnJkwoQYV6YME382TaXupz4JSLilSsb
-   XzQwqqZnud5P9O+cxFgmPxw3pRdRIxExnNA2TZ9/XShjlcLV2fj6aLbOO
-   y5RjtKMaw494WPrWtUpam8Nu2SU3rtf1yGJu4gut8kCgwgaxiuXtAPYtf
-   dV+5yKxi6nGTlDW3F74VTYHGBLCX/IWzJ+BvD643bvmzLoKgEGt5J+vnA
-   xzrfAjEZR19YJvYWK+/+2UKXI1siDRi6HgaR1Gnwwb/J34HPjA/64ONmZ
-   ipaShrqrCAYrrZhBRxFfUYcJxfp1lf8kxRo6C4VNuc8q/+mwPOzxQ5AGV
-   w==;
-X-CSE-ConnectionGUID: miOM+WX5Tl+HOOiJ3IN7YQ==
-X-CSE-MsgGUID: i+6bE4NbTimBIZ7JswGNfQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11164"; a="22028617"
-X-IronPort-AV: E=Sophos;i="6.10,146,1719903600"; 
-   d="scan'208";a="22028617"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 06:53:09 -0700
-X-CSE-ConnectionGUID: GZjAjcOBS/2tvWYCAMukvQ==
-X-CSE-MsgGUID: DprzkeJOTT65SAJzcEe9iA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,146,1719903600"; 
-   d="scan'208";a="58898765"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 06:53:05 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1seEQv-0000000FCFz-3dM9;
-	Wed, 14 Aug 2024 16:53:01 +0300
-Date: Wed, 14 Aug 2024 16:53:01 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 4/6] i2c: of-prober: Add GPIO and regulator support
-Message-ID: <Zry2vbJ-BT4mI0eO@smile.fi.intel.com>
-References: <20240808095931.2649657-1-wenst@chromium.org>
- <20240808095931.2649657-5-wenst@chromium.org>
- <ZrtGXfKE6BwupPPA@smile.fi.intel.com>
- <CAGXv+5E+D8oXr7nh67HEPermJYoRp+Xf+oqSefOiUoCpyoKYUQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cflUYjBYm/t6JsZdRUDCvJuiAqFkn7bofzkveQYHen6RIlgmWN5asDi9qeJFXkJ/KiE/T05fDWGfjQXDVHedvkurcDLjxa5eEIJK3s+e0jM1PYHr7T6tViLjYKaVUHlWjDO1xSkxBs7gCq5gvKPRLabEHZXbCNWFPLX1Q+K+AjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=PApIccj3; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=tHn1
+	9Ni1LLbpXwJbilTrZJhHpHLAG9javyo89zYAfVE=; b=PApIccj3MofW7UjEhQgK
+	1VcDjYSiIKKDOsrMuH7UUKHw7MMIXVBlxbmrPEa8GoU3ifMVWZ0OWCcb52I46woF
+	zBW9w6HHvD8LXvnBVd9+3+QNMfNYyA5w+f0Tpy99ytOZKCPZP2QRWyhx+FfTd+JT
+	nvIbfcVoQbx3FYIFd2RKaA5bWXfxd4Ec4Af7j1WsZ2qhOSRQ7nsdo6W01mOah6NR
+	qtdBNJ3QVVlx2dkNXaEWVcqywD00/frO1aJt0HOyCfGS22WooOGvjDuEYrphaICo
+	9MEjCVHl5RxSH5XL+LSkremNygmZiBG7eMUHSyAcmvX7x+HpQ/I52Dv80UB1yIJO
+	ng==
+Received: (qmail 2005605 invoked from network); 14 Aug 2024 16:00:25 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Aug 2024 16:00:25 +0200
+X-UD-Smtp-Session: l3s3148p1@HA/aJaUf5oxehhrc
+Date: Wed, 14 Aug 2024 16:00:24 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Richard Fitzgerald <rf@opensource.cirrus.com>, tiwai@suse.com,
+	linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] i2c: Use IS_REACHABLE() for substituting empty ACPI
+ functions
+Message-ID: <Zry4eIOLOTwaYdaC@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Takashi Iwai <tiwai@suse.de>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>, tiwai@suse.com,
+	linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+	kernel test robot <lkp@intel.com>
+References: <20240814121649.261693-1-rf@opensource.cirrus.com>
+ <87mslfjk3n.wl-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="CnJw5lxH+cnRnBwX"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5E+D8oXr7nh67HEPermJYoRp+Xf+oqSefOiUoCpyoKYUQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Wed, Aug 14, 2024 at 07:34:00PM +0800, Chen-Yu Tsai wrote:
-> On Tue, Aug 13, 2024 at 7:41 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Thu, Aug 08, 2024 at 05:59:27PM +0800, Chen-Yu Tsai wrote:
-
-...
-
-> > > This adds GPIO and regulator management to the I2C OF component prober.
-
-> > Can this be two patches?
-> 
-> You mean one for GPIOs and one for regulators right? Sure.
-
-Yes.
-
-...
-
-> > > +#define RESOURCE_MAX 8
-> >
-> > Badly (broadly) named constant. Is it not the same that defines arguments in
-> > the OF phandle lookup? Can you use that instead?
-> 
-> I'm not sure what you are referring to. This is how many unique instances
-> of a given resource (GPIOs or regulators) the prober will track.
-> 
-> MAX_TRACKED_RESOURCES maybe?
-
-Better, but still ambiguous. We have a namespace approach, something like
-I2C_PROBER_... I have checked the existing constant and it's not what you
-want, so forget about that part, only name of the definition is questionable.
-
-...
-
-> > > +#define REGULATOR_SUFFIX "-supply"
-> >
-> > Name is bad, also move '-' to the code, it's not part of the suffix, it's a
-> > separator AFAICT.
-> 
-> OF_REGULATOR_SUPPLY_SUFFIX then?
-> 
-> Also, "supply" is not a valid property. It is always "X-supply".
-> Having the '-' directly in the string makes things simpler, albeit
-> making the name slightly off.
-
-Let's use proper SUFFIX and separator separately.
-
-#define I2C_PROBER_..._SUFFIX "supply"
-
-(or alike)
-
-...
-
-> > > +     p = strstr(prop->name, REGULATOR_SUFFIX);
-> >
-> > strstr()?! Are you sure it will have no side effects on some interesting names?
-> >
-> > > +     if (!p)
-> > > +             return 0;
-> >
-> > > +     if (strcmp(p, REGULATOR_SUFFIX))
-> > > +             return 0;
-> >
-> > Ah, you do it this way...
-> >
-> > What about
-> 
-> About? (feels like an unfinished comment)
-
-Yes, sorry for that. Since you found a better alternative, no need to finish
-this part :-)
-
-> Looking around, it seems I could just rename and export "is_supply_name()"
-> from drivers/regulator/of_regulator.c .
-
-Even better!
-
-Something similar most likely can be done with GPIO (if not, we are always open
-to the ideas how to deduplicate the code).
-
-...
-
-> > > +#define GPIO_SUFFIX "-gpio"
-> >
-> > Bad define name, and why not "gpios"?
-> 
-> "-gpio" in strstr() would match against both "foo-gpio" and "foo-gpios".
-> More like laziness.
-
-And opens can of worms with whatever ending of the property name.
-Again, let's have something that GPIO library provides for everybody.
-
-...
-
-> > > +     ret = of_parse_phandle_with_args_map(node, prop->name, "gpio", 0, &phargs);
-> > > +     if (ret)
-> > > +             return ret;
-
-(1)
-
-> > > +     gpiod = fwnode_gpiod_get_index(fwnode, con_id, 0, GPIOD_ASIS, "i2c-of-prober");
-> > > +     if (IS_ERR(gpiod)) {
-> > > +             of_node_put(phargs.np);
-> > > +             return PTR_ERR(gpiod);
-> > > +     }
-> >
-> > Try not to mix fwnode and OF specifics. You may rely on fwnode for GPIO completely.
-> 
-> Well, fwnode doesn't give a way to identify GPIOs without requesting them.
-> 
-> Instead I think I could first request GPIOs exclusively, and if that fails
-> try non-exclusive and see if that GPIO descriptor matches any known one.
-> If not then something in the DT is broken and it should error out. Then
-> the phandle parsing code could be dropped.
-
-What I meant, the, e.g., (1) can be rewritten using fwnode API, but if you know
-better way of doing things, then go for it.
-
-> > > +     if (data->gpiods_num == ARRAY_SIZE(data->gpiods)) {
-> > > +             of_node_put(phargs.np);
-> > > +             gpiod_put(gpiod);
-> > > +             return -ENOMEM;
-> > > +     }
-
-...
-
-> > > +     for (int i = data->regulators_num; i >= 0; i--)
-> > > +             regulator_put(data->regulators[i]);
-> >
-> > Bulk regulators?
-> 
-> Bulk regulators API uses its own data structure which is not just an
-> array. So unlike gpiod_*_array() it can't be used in this case.
-
-But it sounds like a bulk regulator case...
-Whatever, it's Mark's area and he might suggest something better.
-
--- 
-With Best Regards,
-Andy Shevchenko
+In-Reply-To: <87mslfjk3n.wl-tiwai@suse.de>
 
 
+--CnJw5lxH+cnRnBwX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+> > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> > Fixes: f17c06c6608a ("i2c: Fix conditional for substituting empty ACPI =
+functions")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202408141333.gYnaitcV-lkp=
+@intel.com/
+>=20
+> I suppose Wolfram will take this?
+>=20
+> Reviewed-by: Takashi Iwai <tiwai@suse.de>
+
+Yes, for rc4. I wonder why buildbot did not spot it for the branch I
+submitted to rc3. Things happen, I guess...
+
+
+--CnJw5lxH+cnRnBwX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma8uHUACgkQFA3kzBSg
+KbYcgQ/+Mf+9Ktg9qabb78lFK/mpsf36EHCsUIjOp2HPOoNGH2WTlHYUSWpfTKEu
+nEbH/lI6l7BTJlv18f2L2u1FhMVYGXIl7O0Zu9/8hNYhhNY6PIRQX9Tdg1EfM+ye
+1KNcCF/0EkXt5/lnycU7XsrpDFy1iwBIk3XbNddYtbD94qyhRKGQl0VeoGlDV2EV
+OKIeWjgcvyhcFRdkKJs/xThwXIk0ltu2vZVbzqT9pweKgfKTXYPbMFW6VmPllBYC
+wZPYSVkh/kSCsF/3fNbxkly+KMQBsdLhIU6VmFN5yu83FCptr5nMY6pMX9JhLA+m
+VwMvhs9ez3dIP3OVbieF5+TNBNYYzED22M4H4A/wN48Rwf9NDFXgzUvEs8Moooi+
+XwygktX0epZwGKVq9oC2wuwMSUvq47/Vf2f9kAhvX3XIwM16LgFKYy01gN1gySd1
+IZaEJH7A0VoRcPa8lobnzSXz3JJAknlrR+J7mu1SolT+J93Lw4FqkrFRnL3a8xKC
+9UblXfqL2Q5hGbuu3u/x24HzBKxXnSO9dk4CzntYT69PmhWjRDhHsPufurbIHbOy
+bGOWY8mfB7gukp1I9esbRAfTzwAPp+PiL+7Vp2Ojq6aEUCb1mvKNKWF4W5WIUsAW
+C0o+MWWRp+5/tlUKrEGsRrcOJSB5FKWQL2nTSMJrMANS51SoHnI=
+=c88m
+-----END PGP SIGNATURE-----
+
+--CnJw5lxH+cnRnBwX--
 
