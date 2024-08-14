@@ -1,179 +1,239 @@
-Return-Path: <linux-i2c+bounces-5383-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5384-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B734951C14
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 15:42:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B836951C47
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 15:53:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA3E41F262B3
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 13:42:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A030E1C22BBD
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 13:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A9E01B1432;
-	Wed, 14 Aug 2024 13:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1766186A;
+	Wed, 14 Aug 2024 13:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="COfGEDOw";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="TBTx0kkM";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Bl8kmKoe";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="FkzcDe9+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LBXZavRu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F0B1AE031;
-	Wed, 14 Aug 2024 13:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CC11E4B2;
+	Wed, 14 Aug 2024 13:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723642969; cv=none; b=O8m36Hsxs34jb8dvi1VOAOCKa17S2dZDMfCh2Zkus87LSMmdEsT0zANH5ZlDHezeBDEmecX+euwCQZmuoerYhw2TaU72T1b4kqE1VHdzxvh5dwNZBC9CywehCgCZO+aKcPYAF8NRM/gWQWzgugKcYxO7FpP9hq1QPSKvRsENXqg=
+	t=1723643591; cv=none; b=Ib19euFR30TJb1HvnJil0ZEmJ0pd9MPUXrjn2iPuznizXU7GdMKnJZW1l1KJY5EKKNIxUhbpvYSaBiWfMVnyl1KJeQexKZO+6QbmAIAjMQKzEWQvpvIGPE9EucKGhKFRZnHMokp0XH9INbjjw9nWpRBalnvErtiKDd0dc+0JR7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723642969; c=relaxed/simple;
-	bh=WElS3mfli0DGQioQOaCr4m+G9dLQ0kce+kM7l+R5D0w=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jG7O5al/LxzuFk2WD6D4HMp662UpT4I87KMpatSQduFz4/7haG94yVZxl9VuV68mHCTV2AAIuXE2M//CLpZt/QqoMYR96OllDEaJq+dG39lB5EAeGfDQACjgBoesIdgRr8KJz4M7ELQ129DaIRVB5uub7QvnUv1cxNENMhseIS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=COfGEDOw; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=TBTx0kkM; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Bl8kmKoe; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=FkzcDe9+; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7FE93227FA;
-	Wed, 14 Aug 2024 13:42:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1723642965; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2mvAsYeij2YEDtYX9o/Yq3K/UyNb/EsAUSLAOJHofjM=;
-	b=COfGEDOwKmywxLSIe8/65Mr/6iyMx1AlfhjTK0i4SEYCONQeT10mITVn/fYDZklZyRt827
-	19i4MpL3RZAO0kepms3x75tlA8ne9X8ws9y3fwxTRrCrAvoB8jxYq5st5Cfo9u3FBgWzeb
-	s/VRlZ4rkHDRwKwPClyZt3EClaZyvKg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1723642965;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2mvAsYeij2YEDtYX9o/Yq3K/UyNb/EsAUSLAOJHofjM=;
-	b=TBTx0kkMkZCEsUsopLSvuksfAGS7N6tmY29M80Po/ieHcmIGihxSj7NpHL888cnf5aVruF
-	4X1/4reYFuO/Z7Cg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Bl8kmKoe;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=FkzcDe9+
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1723642964; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2mvAsYeij2YEDtYX9o/Yq3K/UyNb/EsAUSLAOJHofjM=;
-	b=Bl8kmKoebd5bcmLeHUbOWkrakPknvXWs/0+a/qyaoKHn74sbc4FW+zbE+D8IxzYNVPv2H4
-	gefXFBIw2oQ+yV2GrAMAV6X69a0Zx+eD87Xo4ISe0vfLVWK6qDi5OWQ+PZcuOYIGGMOqT7
-	kbMf1W73/iMJ2n/vHMcKCWTNkBmdcUE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1723642964;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2mvAsYeij2YEDtYX9o/Yq3K/UyNb/EsAUSLAOJHofjM=;
-	b=FkzcDe9+HStoKw3iF8EzIeaKXvcVwqW4ODJLUXE8DrfA45wum0UPD34zkN1mVsAtrwp+Cx
-	R6IZpTy/kLruROAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 430EB1348F;
-	Wed, 14 Aug 2024 13:42:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id AEYMD1S0vGZcRQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Wed, 14 Aug 2024 13:42:44 +0000
-Date: Wed, 14 Aug 2024 15:43:24 +0200
-Message-ID: <87mslfjk3n.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc: <wsa+renesas@sang-engineering.com>,
-	<tiwai@suse.com>,
-	<linux-sound@vger.kernel.org>,
-	<linux-i2c@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>,
-	<patches@opensource.cirrus.com>,
-	"kernel test robot" <lkp@intel.com>
-Subject: Re: [PATCH] i2c: Use IS_REACHABLE() for substituting empty ACPI functions
-In-Reply-To: <20240814121649.261693-1-rf@opensource.cirrus.com>
-References: <20240814121649.261693-1-rf@opensource.cirrus.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1723643591; c=relaxed/simple;
+	bh=sXDg6SJ866AaNtAk2Tp+FQv+cJ3dVaRfO0uMyWTSizM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JlQidZRuOHr4WrrCFVj4FjQ0VOpv0bQncbvjjEqRKzkFEEkyvDkACA+DeW2OQHMpWbA78TxL7Qdtzcti24pDyzQBEjCZYZ5us+S+w24ABLukzpxNjn2/e3/sL5ujE2l8Dw2ai+Id2p6RtgjDldK6hopCD2bjbUcvq5Tg/qRVYdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LBXZavRu; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723643590; x=1755179590;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=sXDg6SJ866AaNtAk2Tp+FQv+cJ3dVaRfO0uMyWTSizM=;
+  b=LBXZavRuN/Clknov31BXS/vhDRnJkwoQYV6YME382TaXupz4JSLilSsb
+   XzQwqqZnud5P9O+cxFgmPxw3pRdRIxExnNA2TZ9/XShjlcLV2fj6aLbOO
+   y5RjtKMaw494WPrWtUpam8Nu2SU3rtf1yGJu4gut8kCgwgaxiuXtAPYtf
+   dV+5yKxi6nGTlDW3F74VTYHGBLCX/IWzJ+BvD643bvmzLoKgEGt5J+vnA
+   xzrfAjEZR19YJvYWK+/+2UKXI1siDRi6HgaR1Gnwwb/J34HPjA/64ONmZ
+   ipaShrqrCAYrrZhBRxFfUYcJxfp1lf8kxRo6C4VNuc8q/+mwPOzxQ5AGV
+   w==;
+X-CSE-ConnectionGUID: miOM+WX5Tl+HOOiJ3IN7YQ==
+X-CSE-MsgGUID: i+6bE4NbTimBIZ7JswGNfQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11164"; a="22028617"
+X-IronPort-AV: E=Sophos;i="6.10,146,1719903600"; 
+   d="scan'208";a="22028617"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 06:53:09 -0700
+X-CSE-ConnectionGUID: GZjAjcOBS/2tvWYCAMukvQ==
+X-CSE-MsgGUID: DprzkeJOTT65SAJzcEe9iA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,146,1719903600"; 
+   d="scan'208";a="58898765"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 06:53:05 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1seEQv-0000000FCFz-3dM9;
+	Wed, 14 Aug 2024 16:53:01 +0300
+Date: Wed, 14 Aug 2024 16:53:01 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v4 4/6] i2c: of-prober: Add GPIO and regulator support
+Message-ID: <Zry2vbJ-BT4mI0eO@smile.fi.intel.com>
+References: <20240808095931.2649657-1-wenst@chromium.org>
+ <20240808095931.2649657-5-wenst@chromium.org>
+ <ZrtGXfKE6BwupPPA@smile.fi.intel.com>
+ <CAGXv+5E+D8oXr7nh67HEPermJYoRp+Xf+oqSefOiUoCpyoKYUQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Action: no action
-X-Spam-Score: -2.01
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-2.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	TAGGED_RCPT(0.00)[renesas];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,suse.de:dkim,cirrus.com:email,intel.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Queue-Id: 7FE93227FA
-X-Spam-Level: 
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGXv+5E+D8oXr7nh67HEPermJYoRp+Xf+oqSefOiUoCpyoKYUQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, 14 Aug 2024 14:16:49 +0200,
-Richard Fitzgerald wrote:
+On Wed, Aug 14, 2024 at 07:34:00PM +0800, Chen-Yu Tsai wrote:
+> On Tue, Aug 13, 2024 at 7:41 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Thu, Aug 08, 2024 at 05:59:27PM +0800, Chen-Yu Tsai wrote:
+
+...
+
+> > > This adds GPIO and regulator management to the I2C OF component prober.
+
+> > Can this be two patches?
 > 
-> Replace IS_ENABLED() with IS_REACHABLE() to substitute empty stubs for:
->     i2c_acpi_get_i2c_resource()
->     i2c_acpi_client_count()
->     i2c_acpi_find_bus_speed()
->     i2c_acpi_new_device_by_fwnode()
->     i2c_adapter *i2c_acpi_find_adapter_by_handle()
->     i2c_acpi_waive_d0_probe()
+> You mean one for GPIOs and one for regulators right? Sure.
+
+Yes.
+
+...
+
+> > > +#define RESOURCE_MAX 8
+> >
+> > Badly (broadly) named constant. Is it not the same that defines arguments in
+> > the OF phandle lookup? Can you use that instead?
 > 
-> commit f17c06c6608a ("i2c: Fix conditional for substituting empty ACPI
-> functions") partially fixed this conditional to depend on CONFIG_I2C,
-> but used IS_ENABLED(), which is wrong since CONFIG_I2C is tristate.
+> I'm not sure what you are referring to. This is how many unique instances
+> of a given resource (GPIOs or regulators) the prober will track.
 > 
-> CONFIG_ACPI is boolean but let's also change it to use IS_REACHABLE()
-> to future-proof it against becoming tristate.
+> MAX_TRACKED_RESOURCES maybe?
+
+Better, but still ambiguous. We have a namespace approach, something like
+I2C_PROBER_... I have checked the existing constant and it's not what you
+want, so forget about that part, only name of the definition is questionable.
+
+...
+
+> > > +#define REGULATOR_SUFFIX "-supply"
+> >
+> > Name is bad, also move '-' to the code, it's not part of the suffix, it's a
+> > separator AFAICT.
 > 
-> Somehow despite testing various combinations of CONFIG_I2C and CONFIG_ACPI
-> we missed the combination CONFIG_I2C=m, CONFIG_ACPI=y.
+> OF_REGULATOR_SUPPLY_SUFFIX then?
 > 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Fixes: f17c06c6608a ("i2c: Fix conditional for substituting empty ACPI functions")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202408141333.gYnaitcV-lkp@intel.com/
+> Also, "supply" is not a valid property. It is always "X-supply".
+> Having the '-' directly in the string makes things simpler, albeit
+> making the name slightly off.
 
-I suppose Wolfram will take this?
+Let's use proper SUFFIX and separator separately.
 
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
+#define I2C_PROBER_..._SUFFIX "supply"
+
+(or alike)
+
+...
+
+> > > +     p = strstr(prop->name, REGULATOR_SUFFIX);
+> >
+> > strstr()?! Are you sure it will have no side effects on some interesting names?
+> >
+> > > +     if (!p)
+> > > +             return 0;
+> >
+> > > +     if (strcmp(p, REGULATOR_SUFFIX))
+> > > +             return 0;
+> >
+> > Ah, you do it this way...
+> >
+> > What about
+> 
+> About? (feels like an unfinished comment)
+
+Yes, sorry for that. Since you found a better alternative, no need to finish
+this part :-)
+
+> Looking around, it seems I could just rename and export "is_supply_name()"
+> from drivers/regulator/of_regulator.c .
+
+Even better!
+
+Something similar most likely can be done with GPIO (if not, we are always open
+to the ideas how to deduplicate the code).
+
+...
+
+> > > +#define GPIO_SUFFIX "-gpio"
+> >
+> > Bad define name, and why not "gpios"?
+> 
+> "-gpio" in strstr() would match against both "foo-gpio" and "foo-gpios".
+> More like laziness.
+
+And opens can of worms with whatever ending of the property name.
+Again, let's have something that GPIO library provides for everybody.
+
+...
+
+> > > +     ret = of_parse_phandle_with_args_map(node, prop->name, "gpio", 0, &phargs);
+> > > +     if (ret)
+> > > +             return ret;
+
+(1)
+
+> > > +     gpiod = fwnode_gpiod_get_index(fwnode, con_id, 0, GPIOD_ASIS, "i2c-of-prober");
+> > > +     if (IS_ERR(gpiod)) {
+> > > +             of_node_put(phargs.np);
+> > > +             return PTR_ERR(gpiod);
+> > > +     }
+> >
+> > Try not to mix fwnode and OF specifics. You may rely on fwnode for GPIO completely.
+> 
+> Well, fwnode doesn't give a way to identify GPIOs without requesting them.
+> 
+> Instead I think I could first request GPIOs exclusively, and if that fails
+> try non-exclusive and see if that GPIO descriptor matches any known one.
+> If not then something in the DT is broken and it should error out. Then
+> the phandle parsing code could be dropped.
+
+What I meant, the, e.g., (1) can be rewritten using fwnode API, but if you know
+better way of doing things, then go for it.
+
+> > > +     if (data->gpiods_num == ARRAY_SIZE(data->gpiods)) {
+> > > +             of_node_put(phargs.np);
+> > > +             gpiod_put(gpiod);
+> > > +             return -ENOMEM;
+> > > +     }
+
+...
+
+> > > +     for (int i = data->regulators_num; i >= 0; i--)
+> > > +             regulator_put(data->regulators[i]);
+> >
+> > Bulk regulators?
+> 
+> Bulk regulators API uses its own data structure which is not just an
+> array. So unlike gpiod_*_array() it can't be used in this case.
+
+But it sounds like a bulk regulator case...
+Whatever, it's Mark's area and he might suggest something better.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-thanks,
-
-Takashi
 
