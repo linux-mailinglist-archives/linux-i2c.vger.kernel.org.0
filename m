@@ -1,99 +1,135 @@
-Return-Path: <linux-i2c+bounces-5367-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5368-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4A6395123E
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 04:22:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05FC495137E
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 06:27:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A68A3283FEF
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 02:22:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B005F1F25F01
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 04:27:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4BC156677;
-	Wed, 14 Aug 2024 02:15:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 174E455E53;
+	Wed, 14 Aug 2024 04:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d6SpnSA8"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NuCPPJdN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787B8155C9B;
-	Wed, 14 Aug 2024 02:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD19558B7
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 04:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723601753; cv=none; b=KlMhjAm4ok2xCYrRn0uggJvVB2ZyaC+qLHnuqXHBykxc7rSVAPjJNFALhlwi2QYLzgwBhQKAOJ4dG40Hwu5HKDhbofdgychxuvbU+IAj69zWDHpHKeBzKvTLWKtr6HPSgU5fiQyRZQXhbAC6XAQkASz+oT8lLax3bU0RsOSjvio=
+	t=1723609622; cv=none; b=PhdRUHT0Z6/41EDOwFq7aAGjZqVnsf6qMM6urA0isRhObbSTmOpH8BlVxVBXpWUIovsEH0V4xQ4FQ2cAzsFz23AFvbVi9Il4kq+1qs/56iytmNCICE9vg4vzVNoJbYa6xC5yGFKFzwWJk5DMN6Bn5W184/YsKPrnkU5HDZL6tMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723601753; c=relaxed/simple;
-	bh=eJIFXPkQXIcqE85UJ3e7CdFtYuvDhidECh/7Iypk8rw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EJRuWky2PQ5lHUg0UKU4aPVbKqQy4YU2gLJK3QuzYwVeZT+tD+NVzp3/a6X8KV02pyiYXSVgOpfdSZCi1w1/fpH+mkLtxlNKxEVK+Xj68a65v/0ZHJyPIxQLmydMcScGmLCrsNi8sBlAFTRVSE8v1lCBYCwhtl12UQKhxgKCx2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d6SpnSA8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0564C32782;
-	Wed, 14 Aug 2024 02:15:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723601753;
-	bh=eJIFXPkQXIcqE85UJ3e7CdFtYuvDhidECh/7Iypk8rw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=d6SpnSA810YdmitKvKZbNmm6LnrQBk0iavrzxmqE6I2lg7MiXgrMyaQ6ssAm+GXoy
-	 xCIgz7ep/NCO8AEyZrG3B3CE8keE1W3HTeg450QpIpQSdt/Pg+IocXjuKbSYiyUxZz
-	 hUtaMJxZIujYryeOw9yqeI8HtsLyayp9kYNpdMVcVuD/xiqmdjUiYglaOw6ikt4XUO
-	 6vg6R/EmYclDQFFknqaELrxy3NHKn7wGalzx3jmbAewldzNSmrBUR9eJDPjfNGeUBs
-	 FLe9koPJU10FY8QhS++j8mmzBiTEkCdnBEorm05oTQuwj0sq/XnKqeNlJk2EL71e2n
-	 ajoEFKQ9V50MA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 1/2] i2c: Fix conditional for substituting empty ACPI functions
-Date: Tue, 13 Aug 2024 22:15:50 -0400
-Message-ID: <20240814021551.4130652-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1723609622; c=relaxed/simple;
+	bh=/OjkMvtUQsuACR66qNVjtKUOKRCwnBBFDXqQ+hO5LGA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=phl7jTBfA3yBr8Z5Epd8bRookUGuN+NDU75wEdYvooyp9iEKu4UDphueQHdiqJcoabI96C6IMiNIUx8ldvfXremXPPX/BFq4chcFsNze+vLdVUr5ZRNXPW6TmVIzEuVPGbDROUfkXCfXf3fJ7Genyd7ybtgTotX+kMfT65WBBvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=NuCPPJdN; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-52f04150796so8068441e87.3
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Aug 2024 21:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1723609619; x=1724214419; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p2sGTnWhAAxCBideXOSfildCbbJbkxzd9wlf9Y8JEp8=;
+        b=NuCPPJdNKZzhsd0tfp6D6NAqDFDhjkG0wPxzJoxakX9u0z5IZzFV99gfdSsEbikTmj
+         nvGW5bB4ERW86lSUE7L+RU5kBvTIxbHzcyy+NlxNo7rsL2eM/Woi6BvYx2OF57eoo1B1
+         636XrTzT+iULIPC0+dmIoae7+o6lhI52iRGTg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723609619; x=1724214419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p2sGTnWhAAxCBideXOSfildCbbJbkxzd9wlf9Y8JEp8=;
+        b=DDao+tp67JfpLRl/koaqwKbuxgo/U1hT9at1UY6LFlkjiCykySauIQUU4IHaSAcMjc
+         84nca6199GDtULw38Bw7YuTQy3WSCw7WQ91XOn2KX7LW/Hl7656gG4Lpehwd4wEBddPv
+         vgFkuX8iWz28jicILQP6e9LjJmVJO4atvIYo/jPc36IKLx/gEDxg7xabdGnUIpQRR9f9
+         i3eeF+8oc5qNbrYrUOkGgGePNxZNTPjA2+VrHGoD2LDDYs4Vb2ZwPSQ02fomtdfjyZGG
+         SmWJD/OBnG0lg0qebzHZgbIU6ZT3/a+K8fa0dMrbHlPnKs91Ka7r0/2wLQaaYx8DqJ8U
+         AVEg==
+X-Forwarded-Encrypted: i=1; AJvYcCUt6izZXdQuvK0dkrzbOY86yiT5U2nPHaIo7us9Pd9s1HsM72MhCisCgM0rTjK9jE9jSu4Em2+47f7HRtw/hDZqTg98ywb/L/p+
+X-Gm-Message-State: AOJu0YycCMINWJhUj9gHylJ8FA8j0OJmOTNnLgu7SrakkDr2UunXgiEU
+	on9w1B/xOr1HWqInt4WXT88rga4oVHEvIye9fxeWGAB9JxEnex7FXoOUR9d5pwRgm4e/iIzxgeM
+	CNUjOWMnP0OkFNF3NhQIcEWWmDBWu4KqMsuqga/nKP+6y3vU=
+X-Google-Smtp-Source: AGHT+IGq5JnrkQvBmtbDIMCjqiKcKn4UUIGlSmcL8VKx33PYxUW8uxuiq5DIDlEU7bjWcTHbhZFieWS9pBfHwDH245w=
+X-Received: by 2002:a05:6512:350f:b0:532:f1db:d0bc with SMTP id
+ 2adb3069b0e04-532f1dbd293mr332752e87.20.1723609619020; Tue, 13 Aug 2024
+ 21:26:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.281
-Content-Transfer-Encoding: 8bit
+References: <20240808095931.2649657-1-wenst@chromium.org> <20240808095931.2649657-2-wenst@chromium.org>
+ <Zrs_YijPxKBFQF0_@smile.fi.intel.com> <20240813191835.GA1598838-robh@kernel.org>
+In-Reply-To: <20240813191835.GA1598838-robh@kernel.org>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Wed, 14 Aug 2024 12:26:47 +0800
+Message-ID: <CAGXv+5ER7DDdE-778JJZu9WTQejy0W0dYM7WZhXj2MzrUWrC6g@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] of: dynamic: Add of_changeset_update_prop_string
+To: Rob Herring <robh@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Saravana Kannan <saravanak@google.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
+	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
+On Wed, Aug 14, 2024 at 3:18=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> On Tue, Aug 13, 2024 at 02:11:30PM +0300, Andy Shevchenko wrote:
+> > On Thu, Aug 08, 2024 at 05:59:24PM +0800, Chen-Yu Tsai wrote:
+> > > Add a helper function to add string property updates to an OF changes=
+et.
+> > > This is similar to of_changeset_add_prop_string(), but instead of add=
+ing
+> > > the property (and failing if it exists), it will update the property.
+> > >
+> > > This shall be used later in the DT hardware prober.
+> >
+> > ...
+> >
+> > > +int of_changeset_update_prop_string(struct of_changeset *ocs,
+> > > +                               struct device_node *np,
+> > > +                               const char *prop_name, const char *st=
+r)
+> > > +{
+> > > +   struct property prop;
+> > > +
+> > > +   prop.name =3D (char *)prop_name;
+> > > +   prop.length =3D strlen(str) + 1;
+> > > +   prop.value =3D (void *)str;
+> >
+> > Is it the existing style in the file? Otherwise I often see style like =
+this
 
-[ Upstream commit f17c06c6608ad4ecd2ccf321753fb511812d821b ]
+Yeah. This was mostly copy pasted.
 
-Add IS_ENABLED(CONFIG_I2C) to the conditional around a bunch of ACPI
-functions.
+> >
+> >       struct property prop =3D {
+> >               .name =3D (char *)prop_name;
+> >               .length =3D strlen(str) + 1;
+> >               .value =3D (void *)str;
+> >       };
+> >
+> > in the kernel (IRQ domain, platform core, ...).
+>
+> Okay with me to use this style regardless of existing style.
 
-The conditional around these functions depended only on CONFIG_ACPI.
-But the functions are implemented in I2C core, so are only present if
-CONFIG_I2C is enabled.
+Ack. I'll update it to the more modern style.
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/linux/i2c.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index af2b799d7a665..fee64a24f9877 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -979,7 +979,7 @@ static inline int of_i2c_get_board_info(struct device *dev,
- struct acpi_resource;
- struct acpi_resource_i2c_serialbus;
- 
--#if IS_ENABLED(CONFIG_ACPI)
-+#if IS_ENABLED(CONFIG_ACPI) && IS_ENABLED(CONFIG_I2C)
- bool i2c_acpi_get_i2c_resource(struct acpi_resource *ares,
- 			       struct acpi_resource_i2c_serialbus **i2c);
- u32 i2c_acpi_find_bus_speed(struct device *dev);
--- 
-2.43.0
-
+ChenYu
 
