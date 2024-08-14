@@ -1,131 +1,129 @@
-Return-Path: <linux-i2c+bounces-5390-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5391-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F42C951F48
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 18:00:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2750C952186
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 19:50:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81CC81C212B3
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 16:00:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5A061F237AC
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Aug 2024 17:50:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ACBF1B86C8;
-	Wed, 14 Aug 2024 16:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 945B71BD4E2;
+	Wed, 14 Aug 2024 17:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LuEz0ygT"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="l2w8oE0E"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8111B5808;
-	Wed, 14 Aug 2024 15:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9307C1BC082
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Aug 2024 17:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723651201; cv=none; b=VCJ/VxjhNA6nqip3pRZ+FHxPVdDZMuwYmWQuNQQcCb7OoqbsdomP0iBtV6TzB6dJ45PckZXgNCkHhnrFo4JNvWowYullZ1IiAR6ZhXlQZCKyD7QeW5n5vUa2XDfiWBRcWqf5rUP+vigaMdD4UF3CaqduBHCcIzOcshfuMhJgb/8=
+	t=1723657815; cv=none; b=uLth4shpUVPlPSnWPhYDSUTfaAqAg+rDnmv9eOD8v6LIh59FhLWfpcmYKwroj/pL+/du1+44IR/QaElD76HxVnb4/0eVFk0tgQXLaiGLqysh+PemkNqbUBbwI811SkQkwJaRhrHy/pZKf54jXSkb4LloK/c5+PTjQ0Byc5b1nNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723651201; c=relaxed/simple;
-	bh=PQcZv/InB58hwOmU/7tJIH9BqZDzz4d0NFM1872PSj0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AdxIKrLWseH/RDP6XraQfghThxAL+kwZeuA3yBJJaykOvBWE2C1uxggUxK8K4XyssYsktINhYocPDi+ktxb/xGkYspekfPikfqftvFv1ECqgwf+/I6Xovjfs0RL0Bh02LkP0cH3L+A7k2Hii4R2qDnbpcDzmJBeW5WdgMGWPxQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LuEz0ygT; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7F9BA60003;
-	Wed, 14 Aug 2024 15:59:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1723651196;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GRkxoicq+udhmwg+wufaOSiQiJFaDc9CkC4zDEA03bI=;
-	b=LuEz0ygT+vVGOFTRw10XG2JcHy16bomY6HgSOwv4iB8w9FdGfWYUimnPsQ0FpQT2qyEktF
-	H+5dNZOCb+Bae54z7nLfHgytAqKvphUUx4wY7iieblyM8WJvSLWaigYTXH+nX+mkhOvhVz
-	e4XmOQt2l61VH60ZRbCU8eVrAEkhEOIK2qjaN776bhNHKrQJ/LePEonItwIGt7FkDnKxtF
-	z2rOAgj9/3SdEce+iCk5XLqXlIRvbfCTOuflqIL759mTgA8sQBoXQnrwZtAkXTdmn22Hbh
-	97mA7zjflqvD16WR5dE8ze8O6eneug8zuqqB8lxYJqnvdO5vzs2RLd2ixCgPsQ==
-Date: Wed, 14 Aug 2024 17:59:52 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong
- <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent
- Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
- <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Derek Kiernan
- <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, Arnd
- Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Saravana Kannan <saravanak@google.com>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Paul Kocialkowski <contact@paulk.fr>, =?UTF-8?Q?Herv?=
- =?UTF-8?Q?=C3=A9?= Codina <herve.codina@bootlin.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-i2c@vger.kernel.org, Paul Kocialkowski
- <paul.kocialkowski@bootlin.com>
-Subject: Re: [PATCH v3 0/7] Add support for GE SUNH hot-pluggable connector
-Message-ID: <20240814175952.6b22b7ad@booty>
-In-Reply-To: <20240809-hotplug-drm-bridge-v3-0-b4c178380bc9@bootlin.com>
-References: <20240809-hotplug-drm-bridge-v3-0-b4c178380bc9@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1723657815; c=relaxed/simple;
+	bh=X+GvbaOtm8CvRiRC8yyK/CWiIh0EeZEROpQOGMGR56Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xh8YBGnT5KwRA9FljXubuuvSShZs9XTsNaAZ1iGU5wCOjzOeGUsbIVwAb+68zopaqEPhzLpzNIIJcoyr7rPW+nnjbEFjmRdy63ZvDivVre2B3uFxQjAqE63nC42Xu8dlQRGmy2ixWzkIqbRYHxGJDBiNCN/BxX9Fpz7quPKkqVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=l2w8oE0E; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=Or+S
+	2nEqMg9pqH/VFqnv0TUQJusbLS5yunAHABu31tM=; b=l2w8oE0E0WLc1QSVaIJJ
+	BmLJvSMVfpD5xqX1LK5BFL8cXhiLEEdPhjXe77K+6eqz582P6v92FlhdV74iag+Z
+	cp+D8OFq2nuVb7KsoYEtX5ztlpJkP5ng4vehT2WQHRjwDznPNxU1VKkZ5igPhZm8
+	fPc2OCYIex3upe8dEkwTC3AAdtncxt20h/QxVDWellbQ98CHRIjPLt0ZqYxNhnEF
+	qfYqCUxtGX/z4aVExdF2wSe2irlHwAJ5KCsQYii++r4BsFELTf/woiBfWlnD+wlF
+	Bo/INUTwDWnm87Hc3AW8hhQumd+IJL2YYPcZjcGd5kvBmySh+hkC0SPmChyuwuPu
+	ig==
+Received: (qmail 2058841 invoked from network); 14 Aug 2024 19:50:07 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Aug 2024 19:50:07 +0200
+X-UD-Smtp-Session: l3s3148p1@hnxRW6gfDOkgAQnoAHipAGJRnFk/ZdC8
+Date: Wed, 14 Aug 2024 19:50:07 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc: tiwai@suse.com, linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] i2c: Use IS_REACHABLE() for substituting empty ACPI
+ functions
+Message-ID: <ZrzuT3ShO2xeJ4bI@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>, tiwai@suse.com,
+	linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+	kernel test robot <lkp@intel.com>
+References: <20240814121649.261693-1-rf@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+Ehr6Vug+sZofqH5"
+Content-Disposition: inline
+In-Reply-To: <20240814121649.261693-1-rf@opensource.cirrus.com>
 
-Hello Rob,
 
-On Fri, 09 Aug 2024 17:34:48 +0200
-Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
+--+Ehr6Vug+sZofqH5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-...
+On Wed, Aug 14, 2024 at 01:16:49PM +0100, Richard Fitzgerald wrote:
+> Replace IS_ENABLED() with IS_REACHABLE() to substitute empty stubs for:
+>     i2c_acpi_get_i2c_resource()
+>     i2c_acpi_client_count()
+>     i2c_acpi_find_bus_speed()
+>     i2c_acpi_new_device_by_fwnode()
+>     i2c_adapter *i2c_acpi_find_adapter_by_handle()
+>     i2c_acpi_waive_d0_probe()
+>=20
+> commit f17c06c6608a ("i2c: Fix conditional for substituting empty ACPI
+> functions") partially fixed this conditional to depend on CONFIG_I2C,
+> but used IS_ENABLED(), which is wrong since CONFIG_I2C is tristate.
+>=20
+> CONFIG_ACPI is boolean but let's also change it to use IS_REACHABLE()
+> to future-proof it against becoming tristate.
+>=20
+> Somehow despite testing various combinations of CONFIG_I2C and CONFIG_ACPI
+> we missed the combination CONFIG_I2C=3Dm, CONFIG_ACPI=3Dy.
+>=20
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> Fixes: f17c06c6608a ("i2c: Fix conditional for substituting empty ACPI fu=
+nctions")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202408141333.gYnaitcV-lkp@i=
+ntel.com/
 
-> However a few new rough edges emerged that are not yet solved in this
-> v3. Discussion would help in finding the right direction:
-> 
->  * Describing the NVMEM cell addition still requires adding two properties
->    to a node in the base tree. Not sure the current NVMEM cell bindings
->    allow to do better.
+Applied to for-current, thanks!
 
-Do you have any thoughts about how to describe the NVMEM cell in DT
-without adding properties?
 
-As of now...
+--+Ehr6Vug+sZofqH5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 2: the "base" overlay
-> 
-> The "base" overlay describes the common components that are required to
-> read the model ID. These are identical for all add-on models, thus only one
-> "base" overlay is needed:
-> 
->     /dts-v1/;
->     /plugin/;
-> 
->     / {
->         fragment@0 {
->             target-path = "";
-> 
->             __overlay__ {
->                 nvmem-cells = <&addon_id>;
->                 nvmem-cell-names = "id";
+-----BEGIN PGP SIGNATURE-----
 
-...the nvmem-cell* properties are the only ones that for lack of a
-good solution get added to a node in the base tree, causing the memory
-leak issue to be still present.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma87ksACgkQFA3kzBSg
+KbaAPg//SUDlsQOz3zoOc/HzUtmGDHUWSX2BUNCwNtOgT+QnQruTJINXjOHopzwt
+KlH2OcNM5A2EgYr+oxxUb8bA/TYdnBin2V3ezSm3vnnU0X78aciyD5iByRyANp5w
+3TlHSjH3XZt1nN+S3NllGy66ewsZRzohIwS0WodJ9bFe+g/5KB5Jk4zauMBiM3LH
+U3yqIFNO6j4fE4X/3hRKUCHSXqAqV+CAs+B/tfoparY2U2Ky4t9jn+A+/+LmViVs
++LreDvQRTSlaGt55ejpbFguNHupgETZkvqoY7uc98FFewpqpP8ZoePh59YQy0vP+
+qYMwyiwcY40m+4J+66Pcv1Xqt3/Pa/DT9m9iw1TJ52Tw3GVA+jy0ePeVpdntvsgu
+8UqrjWRYuaX901jYbhhgyIAq5fxvNRXk4FS0b746Wkay4bNPcYBvcl5zaFrLYWQE
+QaC+26Ec3jnvneVDXm2ardDENp8Zp6T5A8r9B9cOR3Gb5436S7KbT3wdVD5VhKFn
++fKH6ZhLWlpdjziTIsUlf95UKMN2mTKZk2DxFM+DgmWH3CxJmXM1q1bP+F7XXC7x
+G8vrEACxbRT8fNnU/LEfBzdCgfMM8MrPA1VLzHbO5nofGiHD8pyvV+bXK6YVy6Db
+8ncRdgaGpFNdjNpEwXJ3cVVFwr6EFQS3JSNfc135xQpiKLLR9bk=
+=1fND
+-----END PGP SIGNATURE-----
 
-Luca
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--+Ehr6Vug+sZofqH5--
 
