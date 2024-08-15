@@ -1,81 +1,84 @@
-Return-Path: <linux-i2c+bounces-5415-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5416-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5244E9528B2
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 06:59:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78785952BF6
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 12:24:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC95F1F22861
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 04:59:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 193B41F2456E
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 10:24:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42EFB4315D;
-	Thu, 15 Aug 2024 04:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="2oZjKt8/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8699F1E673A;
+	Thu, 15 Aug 2024 09:10:01 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0189941C85;
-	Thu, 15 Aug 2024 04:59:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8A81E4EF6;
+	Thu, 15 Aug 2024 09:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723697957; cv=none; b=lgSLrgS+a7jEWhWHnO9xFKSiiY/WZBKC1U6cYwVUqnL39UCUTIij/zkZQxUmbLhnXXZRYRe7/bb8MsETYshEwgSvIPdaqpvH1a4XlVW6gO01DUGbLIWZJp7WeRz7PlZfJpgSXKS36KiaUDEf2viw8JODfn8MfsZtcbaLHfBjK64=
+	t=1723713001; cv=none; b=Qj/o12da1pAPbDhnbKwuTf0CfRsd6+ccACSIj7i9/ggeEWQMcNKeKujzB2h67Axctl+Cok5oSeIUiWaQP6gxj8ttAChWVCuANpK1ClHQu+oQEnOkEShPYzz0lbuQURderJ8ouAMXHTRICWpp6QHwf7hBMJ+5yIMQ/4uYMyZ1jsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723697957; c=relaxed/simple;
-	bh=ElrRls/AwSqDipe65WQsQ29B3GHjuh2BnFsb0+7fI2o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oad9hwcjm6LyPCdLCbeD9TtkFQ4nW90q+zoGgbSxulovv75wGriRwabp/QDvRgwej/nVhsvIPlb/54wwtZjllPD4nVXvvKFbUeOrFLcLpIv/2AZw1AVM+vQv6vFWp/VK0ys0VGgdefjeWJPSGCyrlhaQDgWIOITDMUfVEM+OXcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=2oZjKt8/; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=I9YsIjUPg7mWLOLjxqUqjobvMzYvNQqbEzmIlrvU5xY=; b=2oZjKt8/RNYe3lteggYoumClez
-	fnGAeFrqokx2z/1zNvo6AhBYwcLE/pMgtMSi5cx1gzyKkQV9odZOBpXKBIlHq34NQl91Fnw5J/F4P
-	kZ2ncn3dNhv9ZDXlsXWEnijseWqFP+MwfmLLwI6mhG69pLzXx/WGxRJNbztuQoLrJPwStnv0D9/vS
-	+Tv/0GUOOPsxnZEWQPNNsD3Z8R9R1fIVWOCV2QMzIZei00yJiTopt0EaP4Qvbbp8QwkjxzAcd/d4w
-	imzPosUXNcsVydAFehS21CUM+IVSk+KnsjqOk/OA4kt8kQg/5LPTfJQl9ZeO/3+CmUn1Qa36UH5oW
-	sElEeA8A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1seSZn-000000091dB-0wSh;
-	Thu, 15 Aug 2024 04:59:07 +0000
-Date: Wed, 14 Aug 2024 21:59:07 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Mary Strodl <mstrodl@csh.rit.edu>
-Cc: linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-	urezki@gmail.com, hch@infradead.org, linux-mm@kvack.org,
-	lee@kernel.org, andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-	s.hauer@pengutronix.de, christian.gmeiner@gmail.com,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org
-Subject: Re: [PATCH v4 1/2] x86: Add basic support for the Congatec CGEB BIOS
- interface
-Message-ID: <Zr2LGxZnU0nh2G0a@infradead.org>
-References: <20240814184731.1310988-1-mstrodl@csh.rit.edu>
- <20240814184731.1310988-2-mstrodl@csh.rit.edu>
+	s=arc-20240116; t=1723713001; c=relaxed/simple;
+	bh=lHn3fEVCycgTvABI3HB4fI3oU0AS1hAXMund21/jUZE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Rvtgp1QK6B+u8vogvLhRp+qDzkJqNhG6/SpBlG6spldI3FHthCf0oVC0wdgszV/gTAsJuXUhFsrIMckO5Wu0uyJlJHEoDH6ypBSsXaXTI0Jqyr4pRbl0jps0xXJsY439nzBOfM5X4XLVh8U1DU21CtKnSjTIVUrZYz9PkQL3bBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WkzlF2kffz1HGXm;
+	Thu, 15 Aug 2024 17:06:49 +0800 (CST)
+Received: from kwepemg500010.china.huawei.com (unknown [7.202.181.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id BEA4414011F;
+	Thu, 15 Aug 2024 17:09:54 +0800 (CST)
+Received: from huawei.com (10.67.174.76) by kwepemg500010.china.huawei.com
+ (7.202.181.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 15 Aug
+ 2024 17:09:54 +0800
+From: Yuntao Liu <liuyuntao12@huawei.com>
+To: <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+CC: <david-b@pacbell.net>, <khali@linux-fr.org>,
+	<wsa+renesas@sang-engineering.com>, <liuyuntao12@huawei.com>
+Subject: [PATCH] i2c: fix module autoloading
+Date: Thu, 15 Aug 2024 09:02:25 +0000
+Message-ID: <20240815090225.756845-1-liuyuntao12@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240814184731.1310988-2-mstrodl@csh.rit.edu>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemg500010.china.huawei.com (7.202.181.71)
 
-On Wed, Aug 14, 2024 at 02:47:30PM -0400, Mary Strodl wrote:
-> The Congatec CGEB is a BIOS interface found on some Congatec x86
-> modules. It provides access to on board peripherals like I2C busses
-> and watchdogs. This driver contains the basic support for accessing
-> the CGEB interface and registers the child devices.
+Add MODULE_DEVICE_TABLE(), so modules could be properly autoloaded
+based on the alias from i2c_device_id table.
 
-A very short description for very unusual code that copies exectutable
-code from the the BIOS.  You'd really want to extend on all that here
-in detail and explain how it is supposed to work and is safe.
+Fixes: e9f1373b64388 ("i2c: Add i2c_new_dummy() utility")
+Signed-off-by: Yuntao Liu <liuyuntao12@huawei.com>
+---
+ drivers/i2c/i2c-core-base.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index b63f75e44296..82622ef71b41 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1070,6 +1070,7 @@ static const struct i2c_device_id dummy_id[] = {
+ 	{ "smbus_host_notify", },
+ 	{ },
+ };
++MODULE_DEVICE_TABLE(i2c, dummy_id);
+ 
+ static int dummy_probe(struct i2c_client *client)
+ {
+-- 
+2.34.1
 
 
