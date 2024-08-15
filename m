@@ -1,78 +1,82 @@
-Return-Path: <linux-i2c+bounces-5419-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5420-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAA9F952D8C
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 13:32:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91877952DB8
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 13:46:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAA291C25263
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 11:32:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF8E1B213B4
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 11:46:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE2741714AE;
-	Thu, 15 Aug 2024 11:32:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B1A7DA9B;
+	Thu, 15 Aug 2024 11:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FoNcC9dU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDDWq1Lk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C6214AD1A
-	for <linux-i2c@vger.kernel.org>; Thu, 15 Aug 2024 11:32:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4761AC8A2;
+	Thu, 15 Aug 2024 11:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723721562; cv=none; b=KhBp6nNWXrst0MW5/LmLH/km/fTaEwtfhYSqoLzsRpTTSuLBizDqnq+oJbhEMo9pEN/9QyveCmOiRCmDaUri3DCpRGyCKFnVfBamS+UXeRy7D53VJwm79nrLBnYfaxsNCZIcsKLFIAQ2IJsuFAN+gpd4q4kmNJ0fbyL8UFHw9k0=
+	t=1723722362; cv=none; b=ZBAz+iwiQ6URV+7ErcSj1+lSNfml5vAU8Yc+2IDNreHlB7j8k87FyOJAdVTIpCIFe1Kx8qalFV7sZMTRTcN+O9A5Ble+35gUKhxj86HWD7/t0phLjCB0Lp4fwjdjaTXVJ/m9fsfv0GENRAwRWs2/d5sgT7QOqISqiTeV6PcG59Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723721562; c=relaxed/simple;
-	bh=qdrCPdY3XBiYUEslb4KEhpqzgaSlUPGZy1LMF2qmkPQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vBi06HxMBkJTdZVd5j0zynrUr6CoV6Wp6NASFA1M1MkgYUqWl0EBh7gnHUO+XWZj1+cA5AtJWA5NIEOSmcW3t7wPG/YSuLxUuiE0nN80IKXZw5n3EZinKNeFNtM4B8+ae6zuFWClE/G856gG5xzqKG42ZAsDIMsQL8Sh1ns6lug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FoNcC9dU; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723721560; x=1755257560;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qdrCPdY3XBiYUEslb4KEhpqzgaSlUPGZy1LMF2qmkPQ=;
-  b=FoNcC9dUn192Aoiw3J4Ul1+U2m/aP+Ew8dBlPfbuqQrhShARvPVKH0fI
-   7xyFYnasj/++wvEnzEHwbkCxUSOX/lMtH/0zUtzoeiWdsiU3cVOWjufAW
-   1bgieIbC3W41o0/bQSbG5MQttVew8Gva3Sta9SVGiUxC1t3370VkhgPno
-   RHhsMvVjBHzgJlDWvNvUy773SZ8hSiepQ1364N4CROi/TtatCsoKblZbW
-   LfLpyQBZiBX/eUnRO3eqGVrmDeJld4NWg/pzdIiwkgeF4wew37HFrMxmA
-   0UWexMSGg+Yeg7wSP89DFfdnStJc5AZOUb19tnxeV0gqJpU0/d1YM6cnh
-   A==;
-X-CSE-ConnectionGUID: Lc1K1vygStmUOexafuoxRA==
-X-CSE-MsgGUID: E+Yr8ZIHSTGLughC5MNlxw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11164"; a="47373576"
-X-IronPort-AV: E=Sophos;i="6.10,148,1719903600"; 
-   d="scan'208";a="47373576"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 04:30:16 -0700
-X-CSE-ConnectionGUID: /O9zFCFMQqifd/D9NwmFJw==
-X-CSE-MsgGUID: 7rEWyuojTLGbGnG8fgtNig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,148,1719903600"; 
-   d="scan'208";a="59480869"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 15 Aug 2024 04:30:14 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1seYgG-0003Ve-0U;
-	Thu, 15 Aug 2024 11:30:12 +0000
-Date: Thu, 15 Aug 2024 19:29:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	Krzysztof Piotr Oledzki <ole@ans.pl>
-Subject: Re: [PATCH] i2c: core: Lock address during client device
- instantiation
-Message-ID: <202408151708.WYTNiDnN-lkp@intel.com>
-References: <3b1964fa-56fd-464f-93d3-98d46c70b872@gmail.com>
+	s=arc-20240116; t=1723722362; c=relaxed/simple;
+	bh=VpjspMk453JIHOunH/RLTO9IPdQzWfX7Z/pxhe2EgHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OMY4OtGm7KKYh/dGVXpvf14GHey6WWV6l9D/Gfp8IbBdoM0lmu8mt0/Snswk1Ij9nWBaq305TradiQBUYCfWtt1IvMw1uPHs34l/GYAZTgenPjm9145+WV2/wEYISpSUes6WccTgVYxfn8P2LXW+qs+4ACTtzD5WR+JzuZGx8OY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jDDWq1Lk; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5b3fff87e6bso1155959a12.0;
+        Thu, 15 Aug 2024 04:46:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723722359; x=1724327159; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wceJuM/bJLtr3SVzfHfUR8ftk7EPEsj8fAnbxqXeEBU=;
+        b=jDDWq1LkCzF5s7C/7krTbe+3mydQXFgB4pfJffiCuC2xmzweKo255Nos9uwYm6u0/W
+         TeU5FVxpfO+r8HKeWHQyvzZG7Z+eplECiaAkynHGu0GZfev7CN4LyV3XCEYlkOWBQwUP
+         MYpuAnbEd5mmVwCFpboqCruqn2UOWSf8JQOV2G+uJdjh3ahahxpU+qNKElxPNseiCMb9
+         BlxqBO6rn8ppVoUp5kYpEftNHOZ/f41sB4jXUk4IHsXZy42HmWhuBWwk3KO4FpQqyEHe
+         3l5GNChpHaiAq7vzOKOHINBx+/Miy1fC853TTHAZOatgosjopv78CzMGdfQfjAYgqFhD
+         CHWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723722359; x=1724327159;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wceJuM/bJLtr3SVzfHfUR8ftk7EPEsj8fAnbxqXeEBU=;
+        b=hc0koqF9zNcBT9e2vdSuarO5bhT+EXg6f7Alm7Gh0qD5uoIJaAmMzRWPLy6BO7BAIO
+         Vj25RxK80liYhLOv6PjP6A/2PQT3Plm2Fw3RSlYLqGVQihp9QpEJFQJ9ro95tPQYk6pn
+         6H3MAdD+2jOGMZCNoerclqbw8lyskYUgBBYKpyYVtl6cxznSh4vu8Fe+kVWfPV+uYNTA
+         wx2JXvI+fYQ+W5qVE22ELj27l+YOScaEYzL65C87H44ZoTgCgrDyVLbkRHHrlUaEXSXQ
+         uP2be6A437M3tZQULtj+Fn/KArLVCpAtHVhHMCI9LupNcdQASifY9q6V7dbSjKoWfCkW
+         nsvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXaQ/oDMUAGvQLwpsHEGPj9Py/cS6lll+1CZ5ntG0sAIhY2+EcalfVPB9+wM5Nii+capPp+LW9i2ILNwTt5p6wymXQtO+BRsxlRuR72Sifgf/Ql/eR7o4LpGA0gnPvQhdrccEbtHiJpeQ==
+X-Gm-Message-State: AOJu0Yw3MJ3cjQrBYQmJ/a4KjHdgE2jb5PWVJI6k9Hp6ekqVBsNZREei
+	GxzLMK1am2blCaG/YoMylXpRMNSrDBWufDWiZuI00yU+QS4q5mnSeljfaw==
+X-Google-Smtp-Source: AGHT+IFfI013YzD7AXBUTaTeAMiug4U5ze+Uy2VcSdFs3BdEo+kN57GRnlGR9Zpdl/r6EoIuW1AFJg==
+X-Received: by 2002:a17:907:f1ea:b0:a77:dde0:d669 with SMTP id a640c23a62f3a-a83670335e9mr365570166b.45.1723722358319;
+        Thu, 15 Aug 2024 04:45:58 -0700 (PDT)
+Received: from standask-GA-A55M-S2HP (lu-nat-113-247.ehs.sk. [188.123.113.247])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfaffsm89703766b.76.2024.08.15.04.45.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Aug 2024 04:45:58 -0700 (PDT)
+Date: Thu, 15 Aug 2024 13:45:56 +0200
+From: Stanislav Jakubek <stano.jakubek@gmail.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: i2c: i2c-sprd: convert to YAML
+Message-ID: <Zr3qdNep9BCb7Knc@standask-GA-A55M-S2HP>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -81,56 +85,127 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3b1964fa-56fd-464f-93d3-98d46c70b872@gmail.com>
 
-Hi Heiner,
+Convert the Spreadtrum SC9860 I2C controller bindings to DT schema.
+Adjust filename to match compatible.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+---
+ .../devicetree/bindings/i2c/i2c-sprd.txt      | 31 ---------
+ .../bindings/i2c/sprd,sc9860-i2c.yaml         | 65 +++++++++++++++++++
+ 2 files changed, 65 insertions(+), 31 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-sprd.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.yaml
 
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on linus/master v6.11-rc3 next-20240814]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Heiner-Kallweit/i2c-core-Lock-address-during-client-device-instantiation/20240814-223311
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/3b1964fa-56fd-464f-93d3-98d46c70b872%40gmail.com
-patch subject: [PATCH] i2c: core: Lock address during client device instantiation
-config: x86_64-buildonly-randconfig-001-20240815 (https://download.01.org/0day-ci/archive/20240815/202408151708.WYTNiDnN-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240815/202408151708.WYTNiDnN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408151708.WYTNiDnN-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/i2c/i2c-core-base.c:919: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Serialize device instantiation in case it can be instantiated explicitly
-
-
-vim +919 drivers/i2c/i2c-core-base.c
-
-   917	
-   918	/**
- > 919	 * Serialize device instantiation in case it can be instantiated explicitly
-   920	 * and by auto-detection
-   921	 */
-   922	static int i2c_lock_addr(struct i2c_adapter *adap, unsigned short addr,
-   923				 unsigned short flags)
-   924	{
-   925		if (!(flags & I2C_CLIENT_TEN) && !(flags & I2C_CLIENT_SLAVE) &&
-   926		    test_and_set_bit(addr, adap->addrs_in_instantiation))
-   927			return -EBUSY;
-   928	
-   929		return 0;
-   930	}
-   931	
-
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-sprd.txt b/Documentation/devicetree/bindings/i2c/i2c-sprd.txt
+deleted file mode 100644
+index 7b6b3b8d0d11..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-sprd.txt
++++ /dev/null
+@@ -1,31 +0,0 @@
+-I2C for Spreadtrum platforms
+-
+-Required properties:
+-- compatible: Should be "sprd,sc9860-i2c".
+-- reg: Specify the physical base address of the controller and length
+-  of memory mapped region.
+-- interrupts: Should contain I2C interrupt.
+-- clock-names: Should contain following entries:
+-  "i2c" for I2C clock,
+-  "source" for I2C source (parent) clock,
+-  "enable" for I2C module enable clock.
+-- clocks: Should contain a clock specifier for each entry in clock-names.
+-- clock-frequency: Contains desired I2C bus clock frequency in Hz.
+-- #address-cells: Should be 1 to describe address cells for I2C device address.
+-- #size-cells: Should be 0 means no size cell for I2C device address.
+-
+-Optional properties:
+-- Child nodes conforming to I2C bus binding
+-
+-Examples:
+-i2c0: i2c@70500000 {
+-	compatible = "sprd,sc9860-i2c";
+-	reg = <0 0x70500000 0 0x1000>;
+-	interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+-	clock-names = "i2c", "source", "enable";
+-	clocks = <&clk_i2c3>, <&ext_26m>, <&clk_ap_apb_gates 11>;
+-	clock-frequency = <400000>;
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-};
+-
+diff --git a/Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.yaml b/Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.yaml
+new file mode 100644
+index 000000000000..ec0d39e73d26
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.yaml
+@@ -0,0 +1,65 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/sprd,sc9860-i2c.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Spreadtrum SC9860 I2C controller
++
++maintainers:
++  - Orson Zhai <orsonzhai@gmail.com>
++  - Baolin Wang <baolin.wang7@gmail.com>
++  - Chunyan Zhang <zhang.lyra@gmail.com>
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++properties:
++  compatible:
++    const: sprd,sc9860-i2c
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: I2C clock
++      - description: I2C source (parent) clock
++      - description: I2C module enable clock
++
++  clock-names:
++    items:
++      - const: i2c
++      - const: source
++      - const: enable
++
++  clock-frequency: true
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - clock-frequency
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c@70500000 {
++      compatible = "sprd,sc9860-i2c";
++      reg = <0x70500000 0x1000>;
++      interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
++      clocks = <&clk_i2c3>, <&ext_26m>, <&clk_ap_apb_gates 11>;
++      clock-names = "i2c", "source", "enable";
++      clock-frequency = <400000>;
++      #address-cells = <1>;
++      #size-cells = <0>;
++    };
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
