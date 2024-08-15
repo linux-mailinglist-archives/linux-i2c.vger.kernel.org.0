@@ -1,106 +1,131 @@
-Return-Path: <linux-i2c+bounces-5431-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5432-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9F0D95388E
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 18:48:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 832AB953A35
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 20:36:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82149288001
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 16:48:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 394DE1F218A3
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 18:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7465B1BA899;
-	Thu, 15 Aug 2024 16:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2B5357CBC;
+	Thu, 15 Aug 2024 18:36:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="xcgdGWJA"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="GmMBYAbW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974461BA888;
-	Thu, 15 Aug 2024 16:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC4B3A8CB
+	for <linux-i2c@vger.kernel.org>; Thu, 15 Aug 2024 18:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723740488; cv=none; b=qkRZrVtM/ryP/5IJRx6bAqt6dzTIHJFg3Z5BqZteXgjz+bt1ZHTFZuEzQCVDT8C5PXNlCXXsDV/YcNXnMcJQTN3nU6iDfqYJ6FXNNCY/15LL7ERhZ2TAxXMhEehr5UwVKUl+J0cH85dE9NaOdZMvr+DS7sg6/gbuNUnZg+Tj91Y=
+	t=1723746980; cv=none; b=rkOnZy/mMtBTj2jZUvTJDwVYYRsDZr6a6CBAWhlbvDkuKg9xLv+zGGnAZWNQglKllBPD+4FPQfYFua8uN7Fz5K07GksYT7MBNnUjKxCMA6Fw5XOPh8A99INydX9h8yOoabPViFi8mCa/oQoltS4hO338ytKdz1ewriKSIpAEEf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723740488; c=relaxed/simple;
-	bh=Q1OC/NEYSYZUerkp3zuU1pOQomn8wtGfvN913IM7gR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qPU0lWlJnWbJ2DkQ7jCKE+BwkZxIhxaacZJpkzmUy9vNMvobfQNwk/rCmeqmMt1cTcb4tBLV1ZXFrNfcl4kc4HgSH9BeqINlKcllerfAZoWkQ0MKiH6vtJgE79ics2VrL5rdpjux5Q1zrMtU6V9FnnDhqeh9TwGBZFPk6/yo64Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=xcgdGWJA; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=UW7NGhbbVZFB4W/eRQdKKgB4HFlv6v7OSqkUP1DgWjU=; b=xcgdGWJAZtGBdmAfDttyTq+6C+
-	gjfpgSg3G+A1R1zmBgE5JftQ3Zl7fCNQbqVhg0sztOAanWsxR/tXcuasOcDjFvHkvIfIzbiRAnTSF
-	0wBXfnB7TJ6QlKkmbSZofD3GopHS68PEjOW58RoGec0gE5Z2SRq3P+Pas8uSQThvOUkFdckVpWkb9
-	WojcyThpRA3inrFDlmQVI0pZQ4mra7wS6zT+CyWQJJHEFt1zQDSaf8Uh74VHRVsZbWU+cUjYioNjv
-	znDrFbqfZevMIoKQCqCvgYOPkUrGR34VHyoUznj3Es9Fz5EHb+LJvNDn7COplqBQgAXstrLs3MATa
-	IrfQhpoA==;
-Received: from i53875a9f.versanet.de ([83.135.90.159] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1seddq-0005br-Jr; Thu, 15 Aug 2024 18:48:02 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: brgl@bgdev.pl, Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, ukleinek@debian.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org
-Subject:
- Re: [PATCH 1/2] dt-bindings: eeprom: at24: Add compatible for Giantec
- GT24C04A
-Date: Thu, 15 Aug 2024 18:48:01 +0200
-Message-ID: <12584345.NizCu2HIMA@diego>
-In-Reply-To: <172340442666.7060.12608274118090495917.b4-ty@linaro.org>
-References:
- <20240810211438.286441-1-heiko@sntech.de>
- <20240810211438.286441-2-heiko@sntech.de>
- <172340442666.7060.12608274118090495917.b4-ty@linaro.org>
+	s=arc-20240116; t=1723746980; c=relaxed/simple;
+	bh=KhIzUyHW1AxqaXhoYB9qjz4xjKfFqKl+AsLLUWeOxFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y1HSDOwbwYaApyCQGiE58+JOhXnPm8RcK0a+eEtNKKhDJZY7zbF/zKoRPArmr5HAif+G7WagtS+Du+6rCSP/cxnny04YjrdohfehB5GQF00Tfhq1AMP8nl1+2a1rVpDlSUFeljuD2jMYuPPGNmFBRMhoXCF69V8WvuHrS0tctAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=GmMBYAbW; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=vUs5
+	/orZo4Fk8yuKSG+tTg8UMv+u5QuGJJbyy0pM0v4=; b=GmMBYAbW2i6yxQThZRnA
+	8TcF6v4aRGGCemXfQyWO9sBxnXmcFA5m9Khm8OiDxVDKm3B4kzKQVLSbDo5pYIH6
+	l5QKEmA+LEyRnNpqqZPSq13FnPq0xlc+Gv+j1td4mUhDyxOiyNogcUVOmaj156V8
+	uTKyK9SSCsVNJAu/K5Tes5m9DfTA0SQPKzsv5wS49Cz7lKc3YlnfZ5gmaN8ONjNJ
+	Wq3rxu6UHTHIHa+n4PFpoTww7MFKI6/zQIWznl+141uJPwPt3Ic0EgUQzqS8vaPX
+	IcZwvcksgkCQyPcuozXji+CXQSanElM3Ocv6JG1nsDsF/PDj1yj3C1tmEmz8Vugv
+	+w==
+Received: (qmail 2370641 invoked from network); 15 Aug 2024 20:36:13 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Aug 2024 20:36:13 +0200
+X-UD-Smtp-Session: l3s3148p1@1zMHHr0footehhrc
+Date: Thu, 15 Aug 2024 20:36:12 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Rob Herring <robh@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	devicetree-spec@vger.kernel.org
+Subject: Re: [PATCH dt-schema 0/3] schemas: i2c: fix "smbus_alert" handling
+Message-ID: <Zr5KnHR-Qjukqt8K@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Rob Herring <robh@kernel.org>, linux-renesas-soc@vger.kernel.org,
+	linux-i2c@vger.kernel.org, devicetree-spec@vger.kernel.org
+References: <20240815120935.5871-1-wsa+renesas@sang-engineering.com>
+ <CAL_JsqKJRhq9UzsjqbOAam0GSkm4R7m82FZ0zzYFp-mY2HS+Yw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-
-Hi,
-
-Am Sonntag, 11. August 2024, 21:27:13 CEST schrieb Bartosz Golaszewski:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> 
-> On Sat, 10 Aug 2024 23:14:37 +0200, Heiko Stuebner wrote:
-> > The gt24c04a is just yet another 2404 compatible eeprom, and does not
-> > follow the generic naming matching, so add a separate compatible for it.
-> > 
-> > 
-> 
-> Applied, thanks!
-> 
-> [1/2] dt-bindings: eeprom: at24: Add compatible for Giantec GT24C04A
->       commit: a825dea2cd27a30e49816f18b7bc16545d5f0f89
-
-just for my understanding, where is this commit living now?
-
-Because linux next seems to know it [0], but also says that
-"Notice: this object is not reachable from any branch."
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4Bv/rem0dk49VCmU"
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqKJRhq9UzsjqbOAam0GSkm4R7m82FZ0zzYFp-mY2HS+Yw@mail.gmail.com>
 
 
-Thanks
-Heiko
+--4Bv/rem0dk49VCmU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=a825dea2cd27a30e49816f18b7bc16545d5f0f89
+
+> >  error: Multiple top-level packages discovered in a flat-layout: ['patc=
+hes', 'dtschema'].
+>=20
+> Do you have a 'patches' directory? Not sure why that's a problem other
+> than python having specific ideas on directory structures.
+
+Oh, wow, yes, I had a 'patches' dir and that was really an issue. Weird.
+Thanks for helping out. I got one step further, now I get:
+
+  =C3=97 Building wheel for pylibfdt (pyproject.toml) did not run successfu=
+lly.
+  =E2=94=82 exit code: 1
+  =E2=95=B0=E2=94=80> [14 lines of output]
+      WARNING setuptools_scm.pyproject_reading toml section missing 'pyproj=
+ect.toml does not contain a tool.setuptools_scm section'
+      Traceback (most recent call last):
+        File "/tmp/pip-build-env-5v1x378l/normal/lib/python3.11/site-packag=
+es/setuptools_scm/_integration/pyproject_reading.py", line 36, in read_pypr=
+oject
+          section =3D defn.get("tool", {})[tool_name]
+                    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+      KeyError: 'setuptools_scm'
+      running bdist_wheel
+      running build
+      running build_py
+      running build_ext
+      building '_libfdt' extension
+      swigging libfdt/libfdt.i to libfdt/libfdt_wrap.c
+      swig -python -Ilibfdt -o libfdt/libfdt_wrap.c libfdt/libfdt.i
+      error: command 'swig' failed: No such file or directory
+      [end of output]
 
 
+--4Bv/rem0dk49VCmU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma+SpgACgkQFA3kzBSg
+KbZkEBAAj3dPwUldZB4PLdN8LQ8wY1LD/Xbba8eUX6UyZeI4cdXOe3bW7qN+s6Fd
+vuCAb6wmKzAeHWDj4qYkPR9b3qxkaWU4Gu+2oRugIMPXModeeaHMCqZaDnCfKQeB
+xGnd1n9fqq/BVxSIq4TSt4rKgKYJy1Nst6Vl9/FHZociooGq1g1fGr7xtkSwl49z
+NvTV3kH+yCgoy2Vwwsl/LKy7cCRPhGTZ2q9/lQrr9Z07DNqi4T5bLPa4taUgYQkx
+PlM6B+2NLvRWUDDFcT714YKApXJrTSXUX81Mu4W9QSW3OWbi2RM6TuanI2oD4+nI
+T5SxSfsWcMSUNCwzxtRoiN+ePflOoXP5g0D7I56sgUxdc3hu2nIaBfq/9Sw+Y7gs
+wlgzbq5V6EaG3J0GmTGuu69MTDdP/mdevbjKAhy61clxYLiOW2w5Hzx2NOv0Rbio
+cR2TJfLSvQcnR/UGK0y97F97USOnShOxQIiZzIZt+gkGW+NGlbrC4X4vzi+cn4Bw
+68c7/N4e3u2yNgAIAzbUcUbrMk7Gc9HwdjTlPtZl3d8LHhlYgLy9/YupFcKHnXIj
+GoMRKwkrbR5LmTIh63ohJarlpUNyefu5Tm8ITJ5JFO9H4gboxP33v8m6OdPgf2ip
+FJeRprYfzR74/Gx577ePDXxgrMwSR1RJOlHMSH0ieao/s12jyHw=
+=i6+Y
+-----END PGP SIGNATURE-----
+
+--4Bv/rem0dk49VCmU--
 
