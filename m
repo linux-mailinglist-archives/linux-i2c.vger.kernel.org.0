@@ -1,191 +1,136 @@
-Return-Path: <linux-i2c+bounces-5418-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5419-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46B4A952C5F
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 12:37:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAA9F952D8C
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 13:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB4BD2810F0
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 10:37:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAA291C25263
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Aug 2024 11:32:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D431717C9B2;
-	Thu, 15 Aug 2024 09:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE2741714AE;
+	Thu, 15 Aug 2024 11:32:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IbSJYmQk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FoNcC9dU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055B717C9BB
-	for <linux-i2c@vger.kernel.org>; Thu, 15 Aug 2024 09:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C6214AD1A
+	for <linux-i2c@vger.kernel.org>; Thu, 15 Aug 2024 11:32:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723715730; cv=none; b=ex1YTBuCkUdjnJXgAai+ZUtY+4aXiVz6KvuObJS9o7fATQ3La4YD4V+Pz7cz2yKDoIuSlQEQfk/PZ515HpWJDcq3m5oajyOUfXl5yloV/f1D2y/u84AhG4H9lT418cCGBNToTXa8DyJsXg1jG2QQlhH5qA7UXAzC7lUXUZV+asY=
+	t=1723721562; cv=none; b=KhBp6nNWXrst0MW5/LmLH/km/fTaEwtfhYSqoLzsRpTTSuLBizDqnq+oJbhEMo9pEN/9QyveCmOiRCmDaUri3DCpRGyCKFnVfBamS+UXeRy7D53VJwm79nrLBnYfaxsNCZIcsKLFIAQ2IJsuFAN+gpd4q4kmNJ0fbyL8UFHw9k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723715730; c=relaxed/simple;
-	bh=EEV0E6+PsW1vWpYqy+UhX5StmnnbQ0nvPdsdV1auktA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tNcCE03KzFJlhiPE/abp2Bz4urEIJmZleUh+gr+bUmyEe8+c+vjywDmYnkfVwRLq42zVTzt7YLyaZk1+R4rxpDR6hY8ax4uSlx/K4tgQ4vZ/vOmeOAwH9ySACe2XTs3AC/l9xIA3RRhm3IyC/cp5xcnr1s6PROcFx1BTGQ0u3UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=IbSJYmQk; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52f0277daa5so926435e87.0
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Aug 2024 02:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1723715727; x=1724320527; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m5h80tcGsfqjYM1UFpSbRtoNZZUnUPL2z1uKz9S/Kkk=;
-        b=IbSJYmQkpmbwP3G8wFqBBGDLj4aFC9TH+OhDJKA4QIDQKI/kmiwDNP84mpD1+0cdlU
-         8WuUmKEjtSt2ytBPHxSfOeZOmc4xUKhY7ligQ6ZKFnyzuLln+2IhLPV31VuWxXjoc53x
-         tKThVn06xZBDZ9Nwp23G6PtPRA3sT04xm3NHo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723715727; x=1724320527;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m5h80tcGsfqjYM1UFpSbRtoNZZUnUPL2z1uKz9S/Kkk=;
-        b=dscPQNH1+oht9c76XTK+hUJe9Q00meabR7pCxNNVWqTz3NWW1EDqDNQQBU7Bs62wZe
-         o1cFXAGSQXeh/ZjtE83Cc95jSQRHuoADqhje/jKHzTw5ER853z5CxaW9sJ0up9b902hi
-         1baGXcrVimt4DjWK4q1zBGU5EevKfxgt2qZ/iIO3cT8qgDFvMw6hpLpbEJQGjqME6Gbu
-         98cTLnPZyVqVXK5NuTGpsx7kOsC2KjzxmMcKTcaxV5Lgv2APm/MH+EDppg7OCi20JjIH
-         byuCHSoiH0KZ1b9pMDdn+11fksWx40yKgpzhbtYqgl1DflzPj7LKq1Tg7c1bQj8fHpVy
-         pJMw==
-X-Forwarded-Encrypted: i=1; AJvYcCWylnU0uHAZ2O66tADoqwGb29TNtItHuYikQUUwrwcpcWVcFsdP7WK0p+SVSJrwG4Eepf0U+0x3mUXxsha29NME23gtLQAmR1mb
-X-Gm-Message-State: AOJu0YyNNSxeDLuMJrGrJfYv0veyNEb0hRdgVQkBsoN8rkNQQm8wtq0I
-	cdXIKTOTcn90XcvmmxSutj2Ufgc1MFf/vUVR31PZO6BEnlyOT1BuSycnpL0UJ/IWdf8ymFEFXDS
-	VhtJaG17/JiSYWL/mcSRTyBCpKeL1d7wCg7Ow
-X-Google-Smtp-Source: AGHT+IHk5D9Axhf7aH2jIvdVPiigXA+7hFBYb9TbjKDhBcQ8ihLDumNSY3TL20N3WQe0JURETR/Gp6xRXUf3bXq00mc=
-X-Received: by 2002:a05:6512:2351:b0:52c:a0b8:4dc0 with SMTP id
- 2adb3069b0e04-532edbc076amr3321287e87.28.1723715726777; Thu, 15 Aug 2024
- 02:55:26 -0700 (PDT)
+	s=arc-20240116; t=1723721562; c=relaxed/simple;
+	bh=qdrCPdY3XBiYUEslb4KEhpqzgaSlUPGZy1LMF2qmkPQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vBi06HxMBkJTdZVd5j0zynrUr6CoV6Wp6NASFA1M1MkgYUqWl0EBh7gnHUO+XWZj1+cA5AtJWA5NIEOSmcW3t7wPG/YSuLxUuiE0nN80IKXZw5n3EZinKNeFNtM4B8+ae6zuFWClE/G856gG5xzqKG42ZAsDIMsQL8Sh1ns6lug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FoNcC9dU; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723721560; x=1755257560;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qdrCPdY3XBiYUEslb4KEhpqzgaSlUPGZy1LMF2qmkPQ=;
+  b=FoNcC9dUn192Aoiw3J4Ul1+U2m/aP+Ew8dBlPfbuqQrhShARvPVKH0fI
+   7xyFYnasj/++wvEnzEHwbkCxUSOX/lMtH/0zUtzoeiWdsiU3cVOWjufAW
+   1bgieIbC3W41o0/bQSbG5MQttVew8Gva3Sta9SVGiUxC1t3370VkhgPno
+   RHhsMvVjBHzgJlDWvNvUy773SZ8hSiepQ1364N4CROi/TtatCsoKblZbW
+   LfLpyQBZiBX/eUnRO3eqGVrmDeJld4NWg/pzdIiwkgeF4wew37HFrMxmA
+   0UWexMSGg+Yeg7wSP89DFfdnStJc5AZOUb19tnxeV0gqJpU0/d1YM6cnh
+   A==;
+X-CSE-ConnectionGUID: Lc1K1vygStmUOexafuoxRA==
+X-CSE-MsgGUID: E+Yr8ZIHSTGLughC5MNlxw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11164"; a="47373576"
+X-IronPort-AV: E=Sophos;i="6.10,148,1719903600"; 
+   d="scan'208";a="47373576"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 04:30:16 -0700
+X-CSE-ConnectionGUID: /O9zFCFMQqifd/D9NwmFJw==
+X-CSE-MsgGUID: 7rEWyuojTLGbGnG8fgtNig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,148,1719903600"; 
+   d="scan'208";a="59480869"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 15 Aug 2024 04:30:14 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1seYgG-0003Ve-0U;
+	Thu, 15 Aug 2024 11:30:12 +0000
+Date: Thu, 15 Aug 2024 19:29:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	Krzysztof Piotr Oledzki <ole@ans.pl>
+Subject: Re: [PATCH] i2c: core: Lock address during client device
+ instantiation
+Message-ID: <202408151708.WYTNiDnN-lkp@intel.com>
+References: <3b1964fa-56fd-464f-93d3-98d46c70b872@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240808095931.2649657-1-wenst@chromium.org> <20240808095931.2649657-4-wenst@chromium.org>
- <ZrtC4Q4N_3x2KTNb@smile.fi.intel.com>
-In-Reply-To: <ZrtC4Q4N_3x2KTNb@smile.fi.intel.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Thu, 15 Aug 2024 17:55:15 +0800
-Message-ID: <CAGXv+5GfCcft4+no1dTVRa3Sx7XbiufjSqJb4UPRc9yZv3b+rQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/6] i2c: Introduce OF component probe function
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b1964fa-56fd-464f-93d3-98d46c70b872@gmail.com>
 
-On Tue, Aug 13, 2024 at 7:26=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Aug 08, 2024 at 05:59:26PM +0800, Chen-Yu Tsai wrote:
-> > Some devices are designed and manufactured with some components having
-> > multiple drop-in replacement options. These components are often
-> > connected to the mainboard via ribbon cables, having the same signals
-> > and pin assignments across all options. These may include the display
-> > panel and touchscreen on laptops and tablets, and the trackpad on
-> > laptops. Sometimes which component option is used in a particular devic=
-e
-> > can be detected by some firmware provided identifier, other times that
-> > information is not available, and the kernel has to try to probe each
-> > device.
-> >
-> > This change attempts to make the "probe each device" case cleaner. The
-> > current approach is to have all options added and enabled in the device
-> > tree. The kernel would then bind each device and run each driver's prob=
-e
-> > function. This works, but has been broken before due to the introductio=
-n
-> > of asynchronous probing, causing multiple instances requesting "shared"
-> > resources, such as pinmuxes, GPIO pins, interrupt lines, at the same
-> > time, with only one instance succeeding. Work arounds for these include
-> > moving the pinmux to the parent I2C controller, using GPIO hogs or
-> > pinmux settings to keep the GPIO pins in some fixed configuration, and
-> > requesting the interrupt line very late. Such configurations can be see=
-n
-> > on the MT8183 Krane Chromebook tablets, and the Qualcomm sc8280xp-based
-> > Lenovo Thinkpad 13S.
-> >
-> > Instead of this delicate dance between drivers and device tree quirks,
-> > this change introduces a simple I2C component probe. function For a
-> > given class of devices on the same I2C bus, it will go through all of
-> > them, doing a simple I2C read transfer and see which one of them respon=
-ds.
-> > It will then enable the device that responds.
-> >
-> > This requires some minor modifications in the existing device tree. The
-> > status for all the device nodes for the component options must be set
-> > to "failed-needs-probe". This makes it clear that some mechanism is
-> > needed to enable one of them, and also prevents the prober and device
-> > drivers running at the same time.
->
-> ...
->
-> > +int i2c_of_probe_component(struct device *dev, const char *type)
->
-> Use respective scoped variants and remove the related of_node_put() calls=
-.
+Hi Heiner,
 
-Ack. Will also try splitting and reworking the code so they have
-tighter scopes.
+kernel test robot noticed the following build warnings:
 
-> ...
->
-> > +             ocs =3D kzalloc(sizeof(*ocs), GFP_KERNEL);
->
-> Use __free()
+[auto build test WARNING on wsa/i2c/for-next]
+[also build test WARNING on linus/master v6.11-rc3 next-20240814]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This ends up only a bit better than with gotos once this small section
-is split out into a helper function.
+url:    https://github.com/intel-lab-lkp/linux/commits/Heiner-Kallweit/i2c-core-Lock-address-during-client-device-instantiation/20240814-223311
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/3b1964fa-56fd-464f-93d3-98d46c70b872%40gmail.com
+patch subject: [PATCH] i2c: core: Lock address during client device instantiation
+config: x86_64-buildonly-randconfig-001-20240815 (https://download.01.org/0day-ci/archive/20240815/202408151708.WYTNiDnN-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240815/202408151708.WYTNiDnN-lkp@intel.com/reproduce)
 
-AFAIK ocs, or at least the underlying properties, have to be left around
-once the changeset is applied as they are now part of the dynamic live
-tree. And that's fine since once applied, nothing is going to un-apply
-it. OTOH in the error path it needs extra cleanup if any actions were
-added.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408151708.WYTNiDnN-lkp@intel.com/
 
-So I end up with the following to silence the "must check return value"
-warning on success, and cleanup on error:
+All warnings (new ones prefixed by >>):
 
-ret =3D of_changeset_apply(ocs);
-if (!ret) {
-        void *ptr __always_unused =3D no_free_ptr(ocs);
-} else {
-        of_changeset_destroy(ocs);
-}
-
-In my case it might actually be safe to do of_changeset_destroy(ocs) and
-free it regardless, but I'm not really confident.
+>> drivers/i2c/i2c-core-base.c:919: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Serialize device instantiation in case it can be instantiated explicitly
 
 
-ChenYu
+vim +919 drivers/i2c/i2c-core-base.c
 
+   917	
+   918	/**
+ > 919	 * Serialize device instantiation in case it can be instantiated explicitly
+   920	 * and by auto-detection
+   921	 */
+   922	static int i2c_lock_addr(struct i2c_adapter *adap, unsigned short addr,
+   923				 unsigned short flags)
+   924	{
+   925		if (!(flags & I2C_CLIENT_TEN) && !(flags & I2C_CLIENT_SLAVE) &&
+   926		    test_and_set_bit(addr, adap->addrs_in_instantiation))
+   927			return -EBUSY;
+   928	
+   929		return 0;
+   930	}
+   931	
 
-
-> > +             if (!ocs) {
-> > +                     ret =3D -ENOMEM;
-> > +                     goto err_put_node;
-> > +             }
->
-> > +err_free_ocs:
-> > +     kfree(ocs);
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
