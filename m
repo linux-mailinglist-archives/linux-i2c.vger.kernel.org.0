@@ -1,131 +1,118 @@
-Return-Path: <linux-i2c+bounces-5459-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5460-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FE6D954D26
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 16:55:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A411954D63
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 17:13:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E0E3B256F2
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 14:55:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 242D61F23239
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 15:13:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25FD71BDAA3;
-	Fri, 16 Aug 2024 14:49:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66BC81BD013;
+	Fri, 16 Aug 2024 15:13:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="j3lmPef1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s0aSfQci"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3B51BDAA4
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Aug 2024 14:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A63C817
+	for <linux-i2c@vger.kernel.org>; Fri, 16 Aug 2024 15:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723819752; cv=none; b=re7d7ewPv84WkRWw3Ti8ToRnxQdEzqsunlRWttFcKcRZBMwxPErgqaVSSDe19xXEd5EMx6J8Mp+Vg30+U4wnHWkTn9Drrfz14dLbQ6Dofom9eU+SgJ78/3M1Lc7FuDKOcBL3NrJI4YDKwXSUDau+06VAyYPaRvlx7EO70yEOj+E=
+	t=1723821228; cv=none; b=Y9xVU+IWi5l7ep6ZaHZV9eKHYBT2YlPYNtAzztXu3ZVY9mgyWPHigsV7aMHbAcTnlyn2fmTh5kuaSPbDxtGjo3Q2jFGbsQ8Zo+IZPefaTlVzdf5J+sqsOjVsh2ruz3+TBZXybl5PFVBkWvRV1se1x158oz55CMOREFrAh7wTk5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723819752; c=relaxed/simple;
-	bh=Y4tei9TZ7pV0iHtaob/Fcck48ClDR6t1GM2RVCH1uW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M5nH/mUVJEHqRAuUi1L2BeewX3bcgMdI/a9by7VrnsU7SLo2GO+Flnome14Fs/whNy+E8Pvek+ieFWBtD6obeqBb/NfsiWGmbzewcoeLYMU1AJe/kO+GXkS9+OJKVXuMorapyT+sS4YuzR6Ds0Y675bU7FBO7AkdaAQlatWz8gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=j3lmPef1; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=Y4te
-	i9TZ7pV0iHtaob/Fcck48ClDR6t1GM2RVCH1uW0=; b=j3lmPef1MGHfR3Q0XDrp
-	gnYujCbHuoBBtQNTJh1mlK+wS5jIj8XepfFaKThRQqVWq+R9zmalIhqv+toXzsOY
-	9MqoOygsJJFFuVbDf9ZOiif21yLwl7i1wosbeXs4nuRt12sXed2rwLj5uhGJLTuI
-	5Sm9ei3ZcmHXP9dtRsjlTaP8y6Iy6INlhnrEWpx/8dqXdEb8xOGmBk1w0klXpIT9
-	o40ACWtikby1xckQ4LDwnNmClpScwvHTszO/XtxUizmmvqmQvro+cZTk9/GXuRcS
-	6uCYVNtUHm3+B49XJT24iK+HEGHkrvXHlCdriNlTc6pylEX27Nuv08Tsg3HFjok+
-	wg==
-Received: (qmail 2630687 invoked from network); 16 Aug 2024 16:49:08 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Aug 2024 16:49:08 +0200
-X-UD-Smtp-Session: l3s3148p1@DbHDD84f0pBehhrc
-Date: Fri, 16 Aug 2024 16:49:08 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Wolfram Sang <wsa@kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	Krzysztof Piotr Oledzki <ole@ans.pl>
-Subject: Re: [PATCH] i2c: core: Lock address during client device
- instantiation
-Message-ID: <Zr9m5AYgD9VZzFIp@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	Krzysztof Piotr Oledzki <ole@ans.pl>
-References: <3b1964fa-56fd-464f-93d3-98d46c70b872@gmail.com>
- <ZryRqVexisiS-SGp@shikoro>
- <dfbe5afa-daf6-4366-8f53-c8f7434b0748@gmail.com>
- <Zr8ar4SCtYAiq-U0@shikoro>
- <271bc1f6-966d-4567-88e7-4bfb82d979aa@gmail.com>
+	s=arc-20240116; t=1723821228; c=relaxed/simple;
+	bh=XdX9TFTmAztBFpprLFXuMb8FszwPT5OGoKC3R6HmiE0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D8SrVzC7Nq6ZmVj6BSTDUOxsNVxIzCgwDBKLtjP0FaK7lr+EII8kQNH5TaXP8j+0zpKa0g9gXMiUA9GxBJjh8kteDHWFQpUHGnWeX8F03KpFFXvJQ4Pe0yS3pFk9Jl+YexB+gX+QXPEMhUmFs32XOQrE347d573ocbV8z7zpAa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s0aSfQci; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2f136e23229so22530811fa.1
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Aug 2024 08:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1723821224; x=1724426024; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ss5iRyP+GViMYSXSV6/9YpYWRY4hwPc+O4Zp1rAHqvE=;
+        b=s0aSfQci58PxvrSQy152ZVpO+6OOIon7eZLJssFRxBXFdRwKwrgkW/AbJuC9cqNw5D
+         fTnRaHHzN3zWDBZDMyiLawaDlU/1cmVtVbo1rfoJ+HCPndXdu+C9LGAUgnXDpa1CM8PU
+         m9SzDCveqnGnX833dDvpFu0o8phFQlStarXAEX/2mVHxp55FbmMTMg7+kMoer/e+4kGO
+         TRyW8eVF1L8mMKW55vo6E6sfOEZk2bHAQbAlFPyIm+8LMnyZNGmQc+vXWrMWHD3WO+/4
+         aLZXUDWamPLZiaUEO8RjEnSWsdcMFNKB3vIsuSGmwutHTAzJ7GBAuWoBfnbAgBZG347b
+         /YVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723821224; x=1724426024;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ss5iRyP+GViMYSXSV6/9YpYWRY4hwPc+O4Zp1rAHqvE=;
+        b=DRHG+SgZ+ksIOrgOIHVoZ2XUbe1FFcRReNsiuM3xvY4I8S/vrhvBDoSihG5G0vyghW
+         VDIui8OJiPZjfs6PMrAEkKaLNb338NVTDLSzGMh+5/gdOViWyftte+2w17WznhuFQ/pI
+         4ldAy67R1+ZmV4vLR/8f0zQdgiSdh+pZg6iKB7vuCrWpbPjJzkNGYK03mzw21G5FOCOC
+         LSO4/VX+h2rC//b1JbFQacOHXeCrG1eLjTBifiOWfo73diVUrSRfNFSCIGM2uMU9uRni
+         /dSVUITRNqUcObCBp3Jt6W9CzWM7NoBDgQBtx7AnWfg2RzYuireRDibk44Yct1LFSGTh
+         yf1A==
+X-Forwarded-Encrypted: i=1; AJvYcCUiCR6yChyA6SniKLWAvkK7dWOHu0Z0yo5hDzEoqZAhFxX1xyvqeD2istDfpuBPVd7/Jnqa57K8cCbfd1hUnU0Junv36sOp8ywq
+X-Gm-Message-State: AOJu0YyL2kn/japQeScpqePovHklH7k6YO86MMX8k+EmCepchbE8Yz0E
+	3z5qRaRxCqXHYZgrl7fLI5mP/Yncpq04ra2s/aQQ3m1zlezgRH+72iPbb9nIhNA=
+X-Google-Smtp-Source: AGHT+IENaJHmCWMCAiFDXiDCFYY5vetxC5fst5EKVjwRV83jh6OIzG2gQxGx/vK6egR/TndNLUxLUQ==
+X-Received: by 2002:a2e:a990:0:b0:2ef:23ec:9357 with SMTP id 38308e7fff4ca-2f3be3df688mr30264741fa.0.1723821224246;
+        Fri, 16 Aug 2024 08:13:44 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.215.209])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429ed649019sm25425415e9.8.2024.08.16.08.13.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2024 08:13:43 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] i2c: simplify with scoped for each OF child loop
+Date: Fri, 16 Aug 2024 17:13:40 +0200
+Message-ID: <20240816151340.154939-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PbmlJHRv2iSy9J/6"
-Content-Disposition: inline
-In-Reply-To: <271bc1f6-966d-4567-88e7-4bfb82d979aa@gmail.com>
+Content-Transfer-Encoding: 8bit
 
+Use scoped for_each_child_of_node_scoped() when iterating over device
+nodes to make code a bit simpler.
 
---PbmlJHRv2iSy9J/6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/i2c/i2c-core-slave.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
+index e3765e12f93b..faefe1dfa8e5 100644
+--- a/drivers/i2c/i2c-core-slave.c
++++ b/drivers/i2c/i2c-core-slave.c
+@@ -109,15 +109,12 @@ EXPORT_SYMBOL_GPL(i2c_slave_event);
+ bool i2c_detect_slave_mode(struct device *dev)
+ {
+ 	if (IS_BUILTIN(CONFIG_OF) && dev->of_node) {
+-		struct device_node *child;
+ 		u32 reg;
+ 
+-		for_each_child_of_node(dev->of_node, child) {
++		for_each_child_of_node_scoped(dev->of_node, child) {
+ 			of_property_read_u32(child, "reg", &reg);
+-			if (reg & I2C_OWN_SLAVE_ADDRESS) {
+-				of_node_put(child);
++			if (reg & I2C_OWN_SLAVE_ADDRESS)
+ 				return true;
+-			}
+ 		}
+ 	} else if (IS_BUILTIN(CONFIG_ACPI) && ACPI_HANDLE(dev)) {
+ 		dev_dbg(dev, "ACPI slave is not supported yet\n");
+-- 
+2.43.0
 
-> > In all those years, I didn't even find a device supporting 10 bit
-> > addresses. And I really looked especially for them. Some controllers
-> > offer 10-bit support in target mode, but that's all I found.
-> >=20
-> I found LM8330 which supports 10 bit addressing. However the upper three
-> bits of supported addresses are always zero, so there's no benefit in
-> using 10 bit addressing.
-
-Interesting. Never saw this. No Linux driver as well. And for some funny
-coincidence, I wrote the LM8333 (no 10 bit there) driver 12 years ago,
-and Dmitry asked me just yesterday if we can remove the driver because
-there is no user and nobody updated it for DT. But still, nice find!
-
-> > I don't really have a roadmap how to deprecate 10 bit support. Because
-> > it is exported to userspace, the first question is if we can deprecate
-> > it, after all. But not much bandwidth even for that, currently.
-> >=20
-> Yes, removing UAPI functionality may be tricky.
-> What I meant was that as a starting point we could replace the following =
-in
-> of_i2c_get_board_info() with an error message stating that 10 bit mode
-> support has been removed.
-
-Sorry, same answer. I'd need a big picture which I don't have yet.
-
-
---PbmlJHRv2iSy9J/6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma/ZuQACgkQFA3kzBSg
-KbYuzA//XAMaJEPSwo6aRG0jKkNTgFxq0fbBqUoAL2M0VxF3K22bXvzcQ40xQE6r
-8YJuWWHY/dGSmoX4ASEGGTaFMQz4jNQvinHHIZFIswfQVxkhbvoSBD3Ldi5KNMWR
-Zu4kzAsIhQo00pCnMb5sNeQ7wGKGWQdtlYbVYiLdKnsRum8SLfRgTGfK4cELUBmr
-R5ZbqR8YpDSfki84/XZ3LUz88ZtPlgU6meQHXARaKEIHMkC1C+WSABZRMkeukG/B
-p12pieNiueGj7T1Ay7ugnEyNwjiGNq61yGGNImXh2LExzvLHBLBOe+ggB9JhsK6M
-zaqOyIMAIQ418WQom2dcrzE6xQUkBm00IK5RPEEq9kKHixNuSeZ+Ghil3xtYAfk2
-YLJdo/v40Kzk5aw4prwDDVSDjFyNxvEQ3XtvZxHyclimz5XXRPjzcWPA/OSLOAhC
-cmxgU/X/AOY9X3OzKxaxuFp5CSfuMTLUjsdKhXzH46qhlmpgcupSqDA3G6k6yFa5
-2lYu333lbS6/NM3tiKezkeur2f7e+GvYEEB5ZOvxu2S9cFGGKz+urpOkasGLe9xQ
-urEhb3Fcib619UZAcGFN4kTmFlswhWPPHNag/5lYwyoJ/3HgsIETVRoF16IvG+Qd
-OrY7g+2B+/rQ/TBXFcg+hvmE/Ncb1Z7Z4lugqS754uu6YT19RkM=
-=blew
------END PGP SIGNATURE-----
-
---PbmlJHRv2iSy9J/6--
 
