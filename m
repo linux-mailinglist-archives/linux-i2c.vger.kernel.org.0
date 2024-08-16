@@ -1,130 +1,147 @@
-Return-Path: <linux-i2c+bounces-5448-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5449-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABC979543A2
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 10:03:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6AF89543C7
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 10:18:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3310283630
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 08:03:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEBB01F24187
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 08:18:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C9F12D758;
-	Fri, 16 Aug 2024 08:03:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E88D12C465;
+	Fri, 16 Aug 2024 08:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bP8I5jpJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fvJcOChx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE4C1DFFC
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Aug 2024 08:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29D71AC8BE;
+	Fri, 16 Aug 2024 08:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723795408; cv=none; b=R0y2sM6gAJD6kV17LYwz0qeVy+jQlhOywIrEjUmfdK6p4iK795mKr/uSj6ZmkR0Q0DeEkN0UWE7WuJ8xGfYm5yCwiuUyozPsklQ/TcnIengbnZLSTQzrrMM4nzdAYfZ46+rqjGle2XwmDw8lNsduMIrZbINfpszAZF72Q+S3Zgk=
+	t=1723796321; cv=none; b=CN2oXZrH1T6Sg83Hf6T7XCg1tiz9xHeARoW66ZyqkKg+KW3aHdSe7HhYm+opyyvMYM1VjkXA2kCFya8qGpgkt2pDjY3dNazUE7WoLfyOLvVMwpQuQjPB72x5Gj2JCdD1cXJjPOTDUxRnagV3xg1VYrCm2NmrZKG4OfC54U6NQb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723795408; c=relaxed/simple;
-	bh=lI5qZml5n8D8uMwE0Gj7rF8DkdSGFNzLx4uvrXbdiXI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A1bgM95Zl9B60CgDwTC1sgOLmkgsHm1S8PCZy1zNhj41FStpfBKdT9koB3+mKKlDXcTPoSKE4rF8p/YhRGcSLU8NyUmG/6XOLT8O3KGV25MBmPfb8UITSgGKzb4VBPSjzN1EqIB0CTQeSwfbe825P6VsS0OVFS51szB3CWCbaJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bP8I5jpJ; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-664b4589b1aso21160987b3.1
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Aug 2024 01:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723795405; x=1724400205; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VR26oQJGUDskARtTbfBCHHqlsRCVMlxxfj+UcLee/2U=;
-        b=bP8I5jpJwTljTyhANzKDsbOWZsQP9Zv9UwSRLL3QUkWHASY06wOrx+rehc9WxYlTY1
-         jV4ok6R04I+e1HA6fgHrLzj97ZbRlcgXMQ3E8/Bcraoj3ucA9weKsA22uqh8UHJqejb0
-         PKUMEnWFqPoBX5PTvtkTxDU38iAMzdpnCK3dD42p2nQAT2RVpQGJN7fMB8Jb0CJeHYby
-         WgcXGkz2Czgw5sla0DkrtciX/jkl1QPMld/PUwlkmmgqiEtwCf+ws3TSvnbFgOIF+SA/
-         DOgYcMY74+wHGHcMJrVZOBiSMFxht0Atu0dmx6wobj7KPrHfLcj9yyAKbJ2oKejAeOQu
-         phGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723795405; x=1724400205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VR26oQJGUDskARtTbfBCHHqlsRCVMlxxfj+UcLee/2U=;
-        b=Iw4k1F0vcyqsDvcOHbYrtfdPmL60mR4JsicM0bvN9mF9l4awBgAY6ZbN/4e58+9JS0
-         mJYeR/oX2GDOGT8pJa4wY0v+X3YBJYgoG7ymQ+TWlrZftDSkyXtrOGSy4JDg2cBi+oRD
-         s0PIbVjHzUA8oBOazXRXXaEi/WtSwUaGzA8mzWbCKmxbokvKbwnybenL/L5thAIaOwAl
-         X5C692GqxDf+2VoDtSiuIGOg8FgtgmBrelHxcdXso7uUsOIqQa6NHO47FXWWDeP0DqQi
-         I4l9hZGBqGdzx/Ef//KiZnuochviaixKBEb9TJwl49pkKwerGYaelVZ2XGqfngsG+A/8
-         GXuA==
-X-Forwarded-Encrypted: i=1; AJvYcCWJfUmagflbFUlzOrH4yKdaen5T6JWQh72/KXBsf4Kl4D5YACaKjAqzF0Ok1AbPVSq7zCVU/UM+kqHCnOBIPXicV7HZ/a0sPYAv
-X-Gm-Message-State: AOJu0Yw/WZETpgYl15NTROsPLyDMekZYt4AstlEwFmPpKGv11Y/bnw3d
-	O+K6JxJgZB+d4ODlSjuqcJtnoNpv+IwTJgiLj2Nar3VpxknExJQGnhjCIx8g7iSOfjJ3eR6kCYp
-	wbuv85fKoPAVxHJLR+AyvNem15qIRa7/xkrv1oA==
-X-Google-Smtp-Source: AGHT+IFPXaGhgnB1O38F+OQxY8qufXLZWG9hoZgdNA43kJdPxtWrN+zVXWCoEb1vrisLWBNqibFhFqz0HaYdqSO/ADM=
-X-Received: by 2002:a05:690c:397:b0:6af:a6aa:2b59 with SMTP id
- 00721157ae682-6b1ee4e050emr14403077b3.5.1723795405222; Fri, 16 Aug 2024
- 01:03:25 -0700 (PDT)
+	s=arc-20240116; t=1723796321; c=relaxed/simple;
+	bh=GonFGzxM4BBjGyFw4yrLw/w1GcbIfc11E9GHQPxxnGM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AZfb0a74HGG3E53QjaRdxZGyE8fq+Vk7CTsMCan2eKSsKpygvN4Q7jvF1UPc2rFulz0j6lpcbdizaTDCnV26mkjKBuEOrdZZ3gN59jEPjy3/c/+s7aGE2lXeSuklCCHhfs3qUDpPin6Lt9l52D19O2qS24cjqNY+QNUyUtF1hHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fvJcOChx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A23FC4AF0C;
+	Fri, 16 Aug 2024 08:18:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723796321;
+	bh=GonFGzxM4BBjGyFw4yrLw/w1GcbIfc11E9GHQPxxnGM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fvJcOChx3U/+8g/XPJc5nDucCdoEejHqfKrfp7SvniPXp+rz1IthxHo7dLrkvRgBG
+	 6xsftIbYaMNGLrJZXMsxLHuhoIUnhhoBXJRzhsa6o79w79fA+8XARgrSJnxhjWEFzB
+	 lHi1XT5nXg38zMrZ9xIjmySqTsxBItU9Ug4B3PpN+TcziIDxgq83G0DMMEPOWoef/2
+	 +0t/ib/e9AuSN395HLxVasidrhQCJkuj/5KsCRgAco3yMp8S3GjCCuqkraXSXyP81b
+	 77tl4nktYNSYEMNgTl/lrgHIOFqu6whLshr+UYwYcmRzC09d9nooL236ZqClCykxWH
+	 aVbC2Ywn2cO0A==
+Message-ID: <525e1561-367b-4890-958b-872bf4922355@kernel.org>
+Date: Fri, 16 Aug 2024 10:18:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240810211438.286441-1-heiko@sntech.de> <20240810211438.286441-2-heiko@sntech.de>
- <172340442666.7060.12608274118090495917.b4-ty@linaro.org> <12584345.NizCu2HIMA@diego>
-In-Reply-To: <12584345.NizCu2HIMA@diego>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Fri, 16 Aug 2024 10:03:14 +0200
-Message-ID: <CACMJSesFVdJDkJXyC4o5NZxeDB8kkg6Ks0_x6G1Bywr+_ONZVw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: eeprom: at24: Add compatible for Giantec GT24C04A
-To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	ukleinek@debian.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: eeprom: at24: Add compatible for Giantec
+ GT24C04A
+To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, ukleinek@debian.org, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
+References: <20240810211438.286441-1-heiko@sntech.de>
+ <20240810211438.286441-2-heiko@sntech.de>
+ <172340442666.7060.12608274118090495917.b4-ty@linaro.org>
+ <12584345.NizCu2HIMA@diego>
+ <CACMJSesFVdJDkJXyC4o5NZxeDB8kkg6Ks0_x6G1Bywr+_ONZVw@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <CACMJSesFVdJDkJXyC4o5NZxeDB8kkg6Ks0_x6G1Bywr+_ONZVw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 15 Aug 2024 at 18:48, Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Hi,
->
-> Am Sonntag, 11. August 2024, 21:27:13 CEST schrieb Bartosz Golaszewski:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> >
-> > On Sat, 10 Aug 2024 23:14:37 +0200, Heiko Stuebner wrote:
-> > > The gt24c04a is just yet another 2404 compatible eeprom, and does not
-> > > follow the generic naming matching, so add a separate compatible for =
-it.
-> > >
-> > >
-> >
-> > Applied, thanks!
-> >
-> > [1/2] dt-bindings: eeprom: at24: Add compatible for Giantec GT24C04A
-> >       commit: a825dea2cd27a30e49816f18b7bc16545d5f0f89
->
-> just for my understanding, where is this commit living now?
->
-> Because linux next seems to know it [0], but also says that
-> "Notice: this object is not reachable from any branch."
->
->
-> Thanks
-> Heiko
->
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/c=
-ommit/?id=3Da825dea2cd27a30e49816f18b7bc16545d5f0f89
->
->
+On 16/08/2024 10:03, Bartosz Golaszewski wrote:
+>>>
+>>> Applied, thanks!
+>>>
+>>> [1/2] dt-bindings: eeprom: at24: Add compatible for Giantec GT24C04A
+>>>       commit: a825dea2cd27a30e49816f18b7bc16545d5f0f89
+>>
+>> just for my understanding, where is this commit living now?
+>>
+>> Because linux next seems to know it [0], but also says that
+>> "Notice: this object is not reachable from any branch."
+>>
+>>
+>> Thanks
+>> Heiko
+>>
+>> [0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=a825dea2cd27a30e49816f18b7bc16545d5f0f89
+>>
+>>
+> 
+> It lives in my kernel.org tree[1]. You can get that information from
+> the MAINTAINERS file.
 
-It lives in my kernel.org tree[1]. You can get that information from
-the MAINTAINERS file.
+Or use simple template - only one entry needed:
+b4.thanks-commit-url-mask = https://git.kernel.org/MR_FOO/linux/c/%s
 
-Bart
+page 44 of PDF:
+https://lpc.events/event/17/contributions/1498/#preview:2452
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git/log/?h=
-=3Dat24/for-next
+Best regards,
+Krzysztof
+
 
