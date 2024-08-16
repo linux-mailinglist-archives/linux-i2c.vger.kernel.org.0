@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-5446-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5447-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DB3195418E
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 08:12:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D981954197
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 08:17:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95087285C60
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 06:12:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3A1B1F24B53
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 06:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CEB07E76F;
-	Fri, 16 Aug 2024 06:12:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA4C6F2E0;
+	Fri, 16 Aug 2024 06:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j20n7dVR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gsuGFnLc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CC075817
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Aug 2024 06:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BC43F9D5
+	for <linux-i2c@vger.kernel.org>; Fri, 16 Aug 2024 06:17:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723788771; cv=none; b=fzsxpzZ4l8RHOgL+ALYl8QDmJowvOU7nvo0ts+ww3il234dCjj2p8G9VwTnsJ70fIXt6eSe00i/8hzK/iGHzXHxWsgvdTHvnASl9z/W3KWE5cVrauochnw4YjL6dMq4/zN7dhe0DKIs1vknwFAVyi4NOaU1YpGcNX8L/QnmzO1k=
+	t=1723789024; cv=none; b=WgmY2fog0/9QzrOZ1nHU1rsyZhVtFySyQzbn+UAiI6Rs9w2qWoQVU4bTWgquqLhI6J+03jUTGXdYKb83SrrWU2d5VN9jJX7KLCHsNethp0e45108l57QlfLzO1YGnELcUHLDWq2WUrCM+LROEvDujjOoC3NxmIhjZGK+Pi1u4+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723788771; c=relaxed/simple;
-	bh=XWrVVzC3ODoqv+3mipm/AQDabZK5kzVJlWhApsNZdwM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lMJ1MfNecCLNS57K2FHhtZRpAA2I1cwdkpYFo4kcwBrX/KFMGTJ6f4tmclY+O/3IG+/f0+wO+EUB7pkz4lqR90cNNk891DUduxGkyACBriW61r6V9PF80zYHSBckJvUmDjdTTb92ZaBumyrUqDDnbFyZHcjsk7/J1YRfDo6TGEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j20n7dVR; arc=none smtp.client-ip=209.85.167.51
+	s=arc-20240116; t=1723789024; c=relaxed/simple;
+	bh=jmsxSIiCNnrecdF1GaJBa3IGkk98xCjdcc5P3kDwU1E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=c4GtDJP6Lu88s+w1eS6CH4DGqI3NnozEQeJcykFmUnpHX/qnNftAdQ2/6wDeJwfeyxX/6Qw/HUbmSDDtEhcYE37n1ZDKDefQ9/4ix+1KVvb6i6a3KkdotXwMgKBMKhmG6f9pD7iTLl5sJhUigfgB27Cjh4NLOeeroJ8kz6kn2B0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gsuGFnLc; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52f01b8738dso1536740e87.1
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Aug 2024 23:12:48 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3717de33d58so960039f8f.1
+        for <linux-i2c@vger.kernel.org>; Thu, 15 Aug 2024 23:17:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723788767; x=1724393567; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723789021; x=1724393821; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=cEAPc/iw8TfnpZfE8RCsfp5DNhNSSfOtqbtk9ioyMEc=;
-        b=j20n7dVR5mVd1JvxrUZ5pYxaclvZYPpNYUnTrsDeKHJwjqOjL4LfFPYjfbb7Cq94HR
-         h2b9TcDVuEaNN/0LfIfyicKSVyg8FcTm2NKtLREumHWc07mF5u9Henk1QnGvC1Kq+Wnn
-         /UGsIecBLZ0smjdTBVM2EcUiUyGNjcWOzZXQg6fsxt+9FhBQbpfWctV84RP9a6MLVZ/3
-         pyLKFuPeQ9T5IZkQTFwiPi16AuIykUzJ9SzifdnfnCP9MoJMJBR5j3qIZa7x1Qij+SZx
-         MI7FaWOyg4IPcpX6bfnY8MDPN5ULJTQ1Cb6Qj7/I9WMx8N9o2fq913Fi9C0YHwcjv7xJ
-         ZEwQ==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=5spsPyVwKMGzUe1L9dzoVIiNqxM24iavEJWijxA0JoM=;
+        b=gsuGFnLcIxbKeUivZgxzezx7X3Oo4qK4i5t8L97cRJvDyGi/PhfS+0lGMx6+FT1y6w
+         AfMFjeLhQJTAzmzLCch+aqgPTeDeKbohNxEPUZlCTfBYjqXVx84+m+QcW0/wubYBChl5
+         1t0+znIkg5fNeN6eje0IkiWK4ZE6CARnN+u7D6lOnmHf2S7cUEoDreEJdMIF01kUThp/
+         bQEdVvs9e4+TAAmaXw/CqVS+VBZlCHq5eAlupM2x9qGQAHXifqjzh1wBDNNLqMM/kva7
+         557xk6WuHmsp+VQ6btBiQVR/IbPle+JSgWFG1nHLZXhWR2YVAbTpO8U0BJrWMtwYhpMF
+         xDug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723788767; x=1724393567;
+        d=1e100.net; s=20230601; t=1723789021; x=1724393821;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cEAPc/iw8TfnpZfE8RCsfp5DNhNSSfOtqbtk9ioyMEc=;
-        b=K6zanIVUMNIQYA3e0vAlFb1JeNr/dmDKPJQd1ZhwAVB60oxBJyBPkyo2VKHPK7Bnyp
-         oA9CX+Lf5+TAaagFLst6PSzbbyVq5nzpY3tsC/DKrmlJ8Su2h0X+MA+8VSyijIMi/mrl
-         /e+xtB/g2AVFW8HD2QaFxsNnq8Xo1lBBneZpjSkpnon6EmIQSZbENAbXNVHmyzjcvEon
-         1OSfBu7vyb30/Mbsgq4BIm61mZm9rct7ibvTTOWsg5D5DmKLmFjJz9qPgfQ8NtorDRRq
-         ATeHSTAneJqaqQFk3dclGg3VftC9ZF6ruw0RT983xPJYRN6YZknP3oswm6AOZB+m80yA
-         cJbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ4e/SuOQfGweGNID73iORimIfCanAju3017lGpqWk6FIt67IcmoutTvwrDGxyP4+X4mu9agSOGM1Ros0HVR7ENStMm59Rsbzw
-X-Gm-Message-State: AOJu0YzdZAAbUSKf1ZqsLVCMK9QHHd8gYbH1mPqQjR+1Fkbpf40M1UFW
-	7eo8c0r4RwImTyCBFhoMnhPgwC9mgQJtIWniDwlltRXNePYyKDNw
-X-Google-Smtp-Source: AGHT+IFlA6jUpHtXH9FzSveE4S4BBhmdomIjtx3psORs8QO1xsd2dRzjjDK+U/1f1uLPaPhmcZQeiQ==
-X-Received: by 2002:a05:6512:238a:b0:530:dab8:7dce with SMTP id 2adb3069b0e04-5331c6a27abmr1063293e87.19.1723788766939;
-        Thu, 15 Aug 2024 23:12:46 -0700 (PDT)
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5spsPyVwKMGzUe1L9dzoVIiNqxM24iavEJWijxA0JoM=;
+        b=MIg+QStex3QRydkV4cDyJOR9QYnPn1YJ7ZcD4EZYyURB7sMv3Q8k8bZjuaxBQ8chIw
+         oOKl6aMB8S+Y1RRWhsMAp1fLFnoBGx/kqlEg7ONb3dlYGy2zkA1dxQvDsIVrEgar33Sh
+         BxYWxznp9AS/VnyVW1pSKQoDri2gg6cfBGE6/EejSbfYeSWdRYkDaKyJOx4wyhnB1Lb9
+         V0xeBwqqVJk9VQfrMfkZ/YR6SR7zZgPorhF4AEoJDn6G1zSZ55LjgYYhNitp8274tbHE
+         a2rMk7GOAjbqNcJrmH4sIwulBLPDylYW1SXXZ/Ck9EUb41YxSdbXcUj3J21BIFMUSMKo
+         TgzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkfloxlK9hhQ/L7vOSf8n6YvcyfFbrTS7R/tvQc1AVu6WlLSpiBjspbtr9dQTuQJZkOo/jvCDuDCBexc47qu14MpwRfkUKF+gC
+X-Gm-Message-State: AOJu0YwK+PnSjTDYSWNOJmg6/nl5aYK9ROqM5sAUTSgkccl2If3AAbTa
+	G+OD6ymivp8GLIwCQIvZHCXhbvFA71SlpxhpMB9b7RQbTL7qlaKwzPPx5w==
+X-Google-Smtp-Source: AGHT+IFHxmF0AN5w/463a3eS1zQTZ/Nb4VcZYp+NqZW7C8eGK8W3VjSE8gEbM4ct7ZP5H2mWWo6k9g==
+X-Received: by 2002:a5d:4e42:0:b0:371:88a1:3e49 with SMTP id ffacd0b85a97d-371946a03d8mr1001328f8f.53.1723789020610;
+        Thu, 15 Aug 2024 23:17:00 -0700 (PDT)
 Received: from ?IPV6:2a01:c22:73d1:9100:598d:a6c0:8c7e:b859? (dynamic-2a01-0c22-73d1-9100-598d-a6c0-8c7e-b859.c22.pool.telefonica.de. [2a01:c22:73d1:9100:598d:a6c0:8c7e:b859])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-429ed79da99sm13245755e9.46.2024.08.15.23.12.46
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-37189849606sm2945193f8f.32.2024.08.15.23.16.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Aug 2024 23:12:46 -0700 (PDT)
-Message-ID: <7260d24e-30c5-49ff-bc27-2c68bc2d6113@gmail.com>
-Date: Fri, 16 Aug 2024 08:12:47 +0200
+        Thu, 15 Aug 2024 23:17:00 -0700 (PDT)
+Message-ID: <dfbe5afa-daf6-4366-8f53-c8f7434b0748@gmail.com>
+Date: Fri, 16 Aug 2024 08:17:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,14 +77,14 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] i2c: core: Lock address during client device
+Subject: Re: [PATCH] i2c: core: Lock address during client device
  instantiation
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Wolfram Sang <wsa@kernel.org>,
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Wolfram Sang <wsa@kernel.org>,
  "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
  Krzysztof Piotr Oledzki <ole@ans.pl>
-References: <32a2d535-d7c8-47da-a42f-b41d3fae972f@gmail.com>
- <Zr6LAJPqabEMMy17@google.com>
+References: <3b1964fa-56fd-464f-93d3-98d46c70b872@gmail.com>
+ <ZryRqVexisiS-SGp@shikoro>
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
@@ -130,40 +130,41 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <Zr6LAJPqabEMMy17@google.com>
+In-Reply-To: <ZryRqVexisiS-SGp@shikoro>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16.08.2024 01:10, Dmitry Torokhov wrote:
+On 14.08.2024 13:14, Wolfram Sang wrote:
 > Hi Heiner,
 > 
-> On Thu, Aug 15, 2024 at 09:44:50PM +0200, Heiner Kallweit wrote:
->>  
->> +/*
->> + * Serialize device instantiation in case it can be instantiated explicitly
->> + * and by auto-detection
->> + */
+> thanks for tackling this!
+> 
 >> +static int i2c_lock_addr(struct i2c_adapter *adap, unsigned short addr,
 >> +			 unsigned short flags)
->> +{
->> +	if (!(flags & I2C_CLIENT_TEN) &&
->> +	    test_and_set_bit(addr, adap->addrs_in_instantiation))
->> +		return -EBUSY;
 > 
-> Why don't you add a list of client devices to the adapter structure
-> instead of using bitmap? Then you could handle cases with 10 bit
-> addresses as well.
+> What about just using 'struct i2c_client *client' here as an argument.
+> It has all we need and it currently seems unlikely that we need to call
+> it from somewhere else where we need this seperation.
 > 
-I think this question in the same as asked by Wolfram: whether a linked list
-would be better suited. It would require more complexity to deal with it than
-the bitmap. And we could use the bitmap also with 10bit addresses, then the
-bitmap would have 128 bytes. It's an acceptable tradeoff to exclude (very rare)
-10 bit addresses from the check.
+>> +	if (!(flags & I2C_CLIENT_TEN) && !(flags & I2C_CLIENT_SLAVE) &&
+> 
+> From a pedantic point of view, I don't see a reason for not handling
+> those two cases above. I hate to be pedantic because 10-bit mode is
+> practically unused (and I am tempted to remove support for it once in a
+> while because it makes other solutions clumsy). And the other one is
+> super unlikely to happen because the backends do not autoload. However,
+> it is theoretically possible if someone loads a devicetree overlay and
+> initiates via sysfs at the same time. I liked the solution with the
+> bitfield and atomic access, but maybe a linked list is better?
+> 
+Wrt 10 bit addresses:
+I didn't find a single dts(i) with a 10bit i2c device. Because you said
+that you're tempted to remove 10 bit support: Could the device tree part
+be a starting point?
 
-> I know that there is already a list of children in the driver core, but
-> it is populated too late for what we need.
+> Happy hacking,
 > 
-> Thanks.
+>    Wolfram
 > 
-
+Heiner
 
