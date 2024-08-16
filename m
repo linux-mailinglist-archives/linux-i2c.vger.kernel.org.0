@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-5456-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5457-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0897954C96
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 16:39:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC083954C94
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 16:39:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79C73B249B8
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 889742887B9
 	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 14:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA86B1BD01F;
-	Fri, 16 Aug 2024 14:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB181BCA1D;
+	Fri, 16 Aug 2024 14:39:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ItLrhkqD"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="OihBMHyc"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D221BCA14
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Aug 2024 14:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6449F1A7074
+	for <linux-i2c@vger.kernel.org>; Fri, 16 Aug 2024 14:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723819128; cv=none; b=VH+qARWTMV9rxgqxpHSeROrzlPVLxarfDym1TERDt9mvV/IalAnLBwyAyrHYLM2nDOehUnHCvMSToya8xulim9jrxzWIRQfZKqr8Dw6aFwrLv7zPG9kfcXBtwyst8mTotpxRSvvC9l1dHLYEitW+pqf0UUH4xx4FBcBFAw9kTzk=
+	t=1723819144; cv=none; b=TCyShDv24UD0KAzsBNvU92qA/Xz7ee+MCoC41ptt59qpbbpKrqKfzPy4ALwrKXb1LyixRkPgWvlVsmBrzvVt83AbJMqtUQrOY7agjKieNYKwWJqBSgomzK0DvPdmKZ4AI0SGwKz1U7KYnTBIBHeXJSJ2GHZO9nolF02XqUJZm+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723819128; c=relaxed/simple;
-	bh=Kvw+y0x+EGwRsnoiMAQC0XYdT8SUJROEwjwwZ0tEhjc=;
+	s=arc-20240116; t=1723819144; c=relaxed/simple;
+	bh=G+X7ItIBprB632k7lgo93Jf6esnNNu1S6FdIZkKRG6g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gAcD3wR5qdnvOvYFX1cT6/28tZEyz06OQ5jU4uyI/7uxP/ghXHhxPHQZ2WfzFrpe3j8PzcenZE9ECY8MgR6N9CeWDt/nTmBiEmYcJQ4MUAPGILkHxm+/Z/77xuQqp4HybN3GguAByDnn4i4R+M84hsCzsFANFdWr9fd2J3h5MWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ItLrhkqD; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=CAy0pnl344n/1LE0JPi/NegRd/5UlYoFxPRDlZ6PvScJAhdZ9rxtAYjeoTvFoIFq1unbITiLHL+TOIg1fFpt7uFYQnr1XWMJv2X3peT1fUPakG7rwtnzSe7690UZDGfVlMulVSfDthRIg4R4z3rWpMuUMy9rNuxVEd9fKQXfucw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=OihBMHyc; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=Kvw+
-	y0x+EGwRsnoiMAQC0XYdT8SUJROEwjwwZ0tEhjc=; b=ItLrhkqD93rZeBkKrh8q
-	RGAJbbAx4UdyzPvojyv0xpLa9IOuVXT31ri3WGkZJPe7XjM18iV+FvPY9DPf+Twi
-	hHHd+xLR9LytpnQskctMPCGkIwXF1qw5wX4gCkZE1tNbER6k0Toc6xinOWZ0VNc8
-	qM5XC1skW93TMvw9voZDtYMT78ZszRPWPPA6c/TP+5kQ5g66XumXsfv4TdQ/y8mj
-	JmibC5c3QPJg6qaPcZ8HxdnKy56CqYyVVbCyWNn1lQbiZA4QSOG2q2dw6Eh0CpeR
-	uww4rGzGWbanGIXd/IWlEu9ZJ19T2YZwnm99Q9NwjHNjnW04RNyK046f6ZDA7Efx
-	CQ==
-Received: (qmail 2628081 invoked from network); 16 Aug 2024 16:38:44 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Aug 2024 16:38:44 +0200
-X-UD-Smtp-Session: l3s3148p1@sXiN6s0fvLNehhrc
-Date: Fri, 16 Aug 2024 16:38:44 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=G+X7
+	ItIBprB632k7lgo93Jf6esnNNu1S6FdIZkKRG6g=; b=OihBMHycumD4oyKX1Y6g
+	YPzX/VkMGEiIjd79nYACpUzdIhW9fV0aWi3wuVJ7DCInCFEF5dBOreBtlccauJ0y
+	YY97gJCbfGrYZrGPzM7Lbq2S8ze1IBAc49mEyuzfPTHMR5+jGrOmsuKDt1d6fXIk
+	7m8ZYRGyVGMp2++lYVV45c3PS0pXe4xALMmYj7/fx/saCu8GrjreN07AZcxz/uR2
+	lMJ518jKTK6C874Xsg+SsOnGa6fU8n9D6PEZp4ICpOibqBk+m58rh95U6i2BoFSI
+	Hbwe+KeYPyoYsgk8vIgunnmNd/Icr7/cM9eD3el56cFQ19W4V9fbgwLpN9hYtuba
+	jA==
+Received: (qmail 2628222 invoked from network); 16 Aug 2024 16:39:00 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Aug 2024 16:39:00 +0200
+X-UD-Smtp-Session: l3s3148p1@jJF/680fUrpehhrc
+Date: Fri, 16 Aug 2024 16:38:59 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Hans de Goede <hdegoede@redhat.com>
 Cc: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
@@ -57,9 +57,9 @@ Cc: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
 	platform-driver-x86@vger.kernel.org,
 	Jean Delvare <jdelvare@suse.com>,
 	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v8 1/6] i2c: core: Setup i2c_adapter runtime-pm before
- calling device_add()
-Message-ID: <Zr9kdHSj2wl_MO4H@shikoro>
+Subject: Re: [PATCH v8 2/6] i2c: i801: Use a different adapter-name for IDF
+ adapters
+Message-ID: <Zr9kg1I_QZVivYp9@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Hans de Goede <hdegoede@redhat.com>,
 	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
@@ -73,7 +73,7 @@ Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Jean Delvare <jdelvare@suse.com>,
 	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
 References: <20240812203952.42804-1-hdegoede@redhat.com>
- <20240812203952.42804-2-hdegoede@redhat.com>
+ <20240812203952.42804-3-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -81,72 +81,53 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XhNpWf/lHsbYrC4F"
+	protocol="application/pgp-signature"; boundary="rmy4gmMHC7DUu2QS"
 Content-Disposition: inline
-In-Reply-To: <20240812203952.42804-2-hdegoede@redhat.com>
+In-Reply-To: <20240812203952.42804-3-hdegoede@redhat.com>
 
 
---XhNpWf/lHsbYrC4F
+--rmy4gmMHC7DUu2QS
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 12, 2024 at 10:39:47PM +0200, Hans de Goede wrote:
-> Platform glue code, which is not build into the kernel and thus cannot
-> use i2c_register_board_info() may want to use bus_register_notifier()
-> to listen for i2c-adapters to show up on which the platform code needs
-> to manually instantiate platform specific i2c_clients.
+On Mon, Aug 12, 2024 at 10:39:48PM +0200, Hans de Goede wrote:
+> On chipsets with a second 'Integrated Device Function' SMBus controller u=
+se
+> a different adapter-name for the second IDF adapter.
 >=20
-> This results in calling i2c_new_client_device() from the bus notifier
-> which happens near the device_add() call.
+> This allows platform glue code which is looking for the primary i801
+> adapter to manually instantiate i2c_clients on to differentiate
+> between the 2.
 >=20
-> If the i2c-core has not yet setup runtime-pm (specifically the
-> no-callbacks and ignore-children flags) for the device embedded
-> inside struct i2c_adapter and the driver for the i2c_client
-> calls pm_runtime_set_active() this will trigger the following
-> error inside __pm_runtime_set_status():
->=20
-> "runtime PM trying to activate child device %s but parent (%s) is not act=
-ive\n"
->=20
-> and the i2c_client's runtime-status will not be updated.
->=20
-> Split the device_register() call for the adapter into device_initialize()
-> and device_add() and move the pm-runtime init calls inbetween these 2 cal=
-ls
-> so that the runtime-status can be correctly set when a driver binds from
-> the bus-notifier.
->=20
-> Note the moved pm-runtime init calls just override the initial value of
-> some flags in struct device set by device_initialize() and calling these
-> before device_add() is safe.
+> This allows such code to find the primary i801 adapter by name, without
+> needing to duplicate the PCI-ids to feature-flags mapping from i2c-i801.c.
 >=20
 > Reviewed-by: Pali Roh=C3=A1r <pali@kernel.org>
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
 Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---XhNpWf/lHsbYrC4F
+--rmy4gmMHC7DUu2QS
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma/ZHMACgkQFA3kzBSg
-Kbb44RAArCNTA8JfDxMf8muwYQfDG8hyZu4G6VQcW9Yo9zqQYmvwSf2SU3rmgtEs
-eKV2xJf7mfjgkgtXgkJQtvygMSaSRwvO0GSFTyqTJeXx9yxb2BkTQkVSW516H/os
-E36hUpJzfzlaTCzfRWUK4OgiaSQBjw9jmlI3xcrLoM4M0GzJgl44n7Hjtdd5IsUU
-fuToWvrimbTG6CoJc/2d2yd8F4vvil3PkUuCceLybnDhL4ueUqq1IL3hDQpKQaqc
-voyrtqWnR+4g51wlQX25yGTTEXLp/yv21/YQjWHF9eQM3RWT2nRaKnb1o/XqRPXS
-J3X8EGUTnkO5q7Msr0AAnqk6OJii05XXg29bavosOGi4QkRPf0Om+huaLPmAERNr
-3nQHvFxYBf0ucKDtfmi8XncstsPJPNo8l/tm9U19tnK9MoRuJpsunGiU32M8hDA+
-O/Qy0mrAlxp6LaXxTDluUM3WM6IFbmWqx9dZ8w64vd8KDT3ZZXTdmrgW8Qz8Aj8s
-b0PM379qZG7ubRQb5G1fvZj9DsbO8PDa3+56atQUTatXJ6ePy6lBtyl8Ge4KKdM6
-Q+DqkRHIin0/mO/dDlftzO3KkQOgzW7asnGhM7Fdg60Q6jQZbkic2TtpBnhAYDNh
-iid4CQ4NVpAvG7HOCmE2VfcNZm9xeJB9kTH/euu9dqCbyVion2I=
-=f7hJ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAma/ZIMACgkQFA3kzBSg
+Kbar7Q//Zad040B4i6yXaWEnI0XULvXUOqWaEpIwb/M4Vvhm9Glyrnyr/bKmgauU
+umjlLbzTqsK59j3DGlGSkcofIv2T0ZhtXgQ+qg7HO9m2Rb+5+M+8GA5/ySmm3Nmm
+j9X9sxNpxbCWK7+KGUKGJXPlwiVU6u4aGaF5ugUK0XZoqNvAhj7ejtpkhExzsAj/
+Nky2jJt+ja+uzSXhK2ElKMy/Y5uBpt7bUMl/d0OYh4n4dyEEtlzRHhZi3ZRm5UOO
+dhQAtP+yxfBqzw+nJJ8JQNGzsx/byOCVj3fqZib/anQ3f/YtBQnWulmBGPAYdoXn
+XYb3YZQVc+yp67FIXp6xgBrAe7tH9/+Q7PSonBC/SCvmrY+dFRgzVGfSlSPCBDoa
+ygIva6duhXMkPGizmhpRK7erE1pYTm+JG0TWHlkunVSS7tKBousXM85DZaurivz+
+mvvKeR53O/x/hmyDVtZwegez7dQEBNXXWJsV0fSPA/KqVyU+RUqqMxeHAcPc5eEx
+9P7AhaiOvec01Q9ubZRk36xKl2Xl0mvg66tHGvsQODm9+5ZiMccqAFrBf9JNE1aM
+/ZLRUyHuhZKpTgVeg4LVYnE4SWv8IRD3VSc8QwKgN9KwQ40cviDLJbDh+UXD/LhP
+hgYQ1b+Ogycrk0VaDRHdu6vHC/ggwBktF1uf8ibnoPR//q6qLIQ=
+=ybDD
 -----END PGP SIGNATURE-----
 
---XhNpWf/lHsbYrC4F--
+--rmy4gmMHC7DUu2QS--
 
