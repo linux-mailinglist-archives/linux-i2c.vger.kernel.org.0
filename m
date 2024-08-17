@@ -1,136 +1,216 @@
-Return-Path: <linux-i2c+bounces-5464-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5469-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80125954FBD
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 19:13:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89B95955530
+	for <lists+linux-i2c@lfdr.de>; Sat, 17 Aug 2024 05:11:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00DD51F2342C
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Aug 2024 17:13:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE9DB1C2188D
+	for <lists+linux-i2c@lfdr.de>; Sat, 17 Aug 2024 03:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0C791C2315;
-	Fri, 16 Aug 2024 17:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0660354648;
+	Sat, 17 Aug 2024 03:11:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RO+EXmqf"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="kwQaMqBI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189B11C2307;
-	Fri, 16 Aug 2024 17:12:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF64E6FD3;
+	Sat, 17 Aug 2024 03:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723828361; cv=none; b=WnI/Av5b8a0sYwe+kKKuiTw+cZ/xcHEdpYDg7u5Sb6UiYsaUusUCijCYqHKc+IhHx0yCCMFRZoldt4lkU6rjU+POttaMnraSc9xvYGlEt0/Nkbji5JejBBgrTWNY/grYy6lmxSynZztAKItVO43gSTr9vHIuF2xPmzbYMpLfq2E=
+	t=1723864296; cv=none; b=mqkZqr82oOiU3BTvI4PioJeDPlPD+b9MoQtmaBex4r8NIyQeTqJrWSAYwQppykAu6o76rHE9N4InHVj+ATVoug8p8IAAVhXN32jxnFpPv0OX3tCAkawsc+hrYTSFVRrmtrs46l7SCCSLz9rSkVIrQbT9eDc0WPKVEis2gO3INoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723828361; c=relaxed/simple;
-	bh=Azq9qB8c+ZqCCIl0U60dNZORg3VJLIGkiKwQHx+8jz4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CibdHxSO+bUKzq2WYBD8h/ytR7S20wMWx/pMlK5RZStpQZZl9qrgMhWbzoiXFjkPyD3cgoitpGM/aiQLhy5ZHmcDo6sMhkkNbvDMXZTneNf6OVMS6WutOQMLFuw3hWGgfL5NPDkyV8gY92z0MoYfGkvon+Cd0F1qTn1OI+RBW6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RO+EXmqf; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723828360; x=1755364360;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Azq9qB8c+ZqCCIl0U60dNZORg3VJLIGkiKwQHx+8jz4=;
-  b=RO+EXmqfTHh2jWnxVNQU8AltvNIpEhEOzghdcYVm+AMX/WMtqRzXeRyt
-   xfa1hzr0dHCRU0rwt2gmSuUef50apvpMlPLwY0NSgu/UQdicPS262tovZ
-   5d64wdo1jCXbj1DYFIcrAbchBGkoe1Ibc9vDcwmOJa/5co8YX6urLvCxN
-   dm6lGCIvJ+U82A8CshQEoc5CW0qw8BjwIIsIEAPZAqw+M7L/IPifAybNP
-   cKaTTIntmKfi7A3jqmiCiLJjGjegnTBQZjDJ1a8zjC9W0HawxFAEpAxs+
-   zLK8APqEPZ/2CzhiyMJG0g+J5IAAigpEgspPud5ns3qi1L9pCwd61aKVM
-   g==;
-X-CSE-ConnectionGUID: lFE2KSq2QFuNdcQXilxasg==
-X-CSE-MsgGUID: ApgzBaIHTsGeqQ6n1Q0+Dg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="22101739"
-X-IronPort-AV: E=Sophos;i="6.10,152,1719903600"; 
-   d="scan'208";a="22101739"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 10:12:40 -0700
-X-CSE-ConnectionGUID: 5l52B8chR5W0B7BNtbvLJg==
-X-CSE-MsgGUID: SorZKKYIQBOKPvmppXlgZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,152,1719903600"; 
-   d="scan'208";a="97233141"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 16 Aug 2024 10:12:37 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id C32113B7; Fri, 16 Aug 2024 20:12:32 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Narasimhan.V@amd.com,
-	Borislav Petkov <bp@alien8.de>,
-	Kim Phillips <kim.phillips@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v1 7/7] i2c: designware: Drop return value from dw_i2c_of_configure()
-Date: Fri, 16 Aug 2024 20:02:05 +0300
-Message-ID: <20240816171225.3506844-8-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20240816171225.3506844-1-andriy.shevchenko@linux.intel.com>
-References: <20240816171225.3506844-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1723864296; c=relaxed/simple;
+	bh=l38IdzJYOwLZtyjjLa9m/LqkWwtiawxtuHaK2D68IlM=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=KbveEyw27+Qi9cSnJg6+s7S0fbyn6IaZ0ntuNmJPF7CXmrWcezJtE3Usz5cB1jpoGcFsw+2Ezw3gLfChJKEBMbATokZ7rROnhu/4yaqw2EgyuQhinWUteaVJWozLfIwahYfY9rFol13MV7kBPhtgQq51fx40wJpomlpQMt2GTWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=kwQaMqBI; arc=none smtp.client-ip=116.203.91.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+	t=1723864292;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=odkph5w0PVDl1mITUK856/Sf3iEO6l5n47FubRaBVgs=;
+	b=kwQaMqBIuqeUpD8pGTY+4isN7YnsejsZrk80UnjrwBa4yfM0eix0SWYi9q9jZgXWZmY4Zd
+	wWZveORCVtTZekiRupv8yVTqL3d32BHXbsAyI/kMzkgR4JWpE/siLGcT2Mt5yqsN0leVmG
+	w4mYe0H/1XBeYls5sovwqJwxOLtOqU3xSFOPPtN8I7DCyBSXHXvlmACLVimTLvPy7P7yko
+	fwb20S8gKajjtq5/fRdaQA6kUC65LUMdjAGnkQ5/OgtsrgM60u94INCthhybYegg+//ujN
+	BcPscnQadpyHUYJnYlvCA+2vm0ojvV+JK1jltT06cXFKL6ZZkrs3LScAMaxF/g==
+Date: Sat, 17 Aug 2024 05:11:30 +0200
+From: Dragan Simic <dsimic@manjaro.org>
+To: Detlev Casanova <detlev.casanova@collabora.com>
+Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Heiko
+ Stuebner <heiko@sntech.de>, Andi Shyti <andi.shyti@kernel.org>, Jonathan
+ Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones
+ <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri
+ Slaby <jirislaby@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Chris Morgan
+ <macromorgan@hotmail.com>, Jonas Karlman <jonas@kwiboo.se>, Tim Lunn
+ <tim@feathertop.org>, Muhammed Efe Cetin <efectn@protonmail.com>, Andy Yan
+ <andyshrk@163.com>, Jagan Teki <jagan@edgeble.ai>, Sebastian Reichel
+ <sebastian.reichel@collabora.com>, Shresth Prasad
+ <shresthprasad7@gmail.com>, Ondrej Jirman <megi@xff.cz>, Weizhao Ouyang
+ <weizhao.ouyang@arm.com>, Alexey Charkov <alchark@gmail.com>, Jimmy Hon
+ <honyuenkwun@gmail.com>, Finley Xiao <finley.xiao@rock-chips.com>, Yifeng
+ Zhao <yifeng.zhao@rock-chips.com>, Elaine Zhang <zhangqing@rock-chips.com>,
+ Liang Chen <cl@rock-chips.com>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-serial@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 09/10] arm64: dts: rockchip: Add rk3576 SoC base DT
+In-Reply-To: <20240802214612.434179-10-detlev.casanova@collabora.com>
+References: <20240802214612.434179-1-detlev.casanova@collabora.com>
+ <20240802214612.434179-10-detlev.casanova@collabora.com>
+Message-ID: <e794a247b52dd2fc10b470ed7df4d463@manjaro.org>
+X-Sender: dsimic@manjaro.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-dw_i2c_of_configure() is called without checking of the returned
-value, hence just drop it by converting to void.
+Hello Detlev,
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/busses/i2c-designware-platdrv.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Please see a few comments below.
 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 905557c7dfa4..0ea6c95ee60e 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -133,7 +133,7 @@ static int mscc_twi_set_sda_hold_time(struct dw_i2c_dev *dev)
- 	return 0;
- }
- 
--static int dw_i2c_of_configure(struct platform_device *pdev)
-+static void dw_i2c_of_configure(struct platform_device *pdev)
- {
- 	struct dw_i2c_dev *dev = platform_get_drvdata(pdev);
- 
-@@ -146,8 +146,6 @@ static int dw_i2c_of_configure(struct platform_device *pdev)
- 	default:
- 		break;
- 	}
--
--	return 0;
- }
- #else
- static int bt1_i2c_request_regs(struct dw_i2c_dev *dev)
-@@ -155,9 +153,8 @@ static int bt1_i2c_request_regs(struct dw_i2c_dev *dev)
- 	return -ENODEV;
- }
- 
--static inline int dw_i2c_of_configure(struct platform_device *pdev)
-+static inline void dw_i2c_of_configure(struct platform_device *pdev)
- {
--	return -ENODEV;
- }
- #endif
- 
--- 
-2.43.0.rc1.1336.g36b5255a03ac
+On 2024-08-02 23:45, Detlev Casanova wrote:
+> This device tree contains all devices necessary for booting from 
+> network
+> or SD Card.
+> 
+> It supports CPU, CRU, PM domains, dma, interrupts, timers, UART and
+> SDHCI (everything necessary to boot Linux on this system on chip) as
+> well as Ethernet, I2C, SPI and OTP.
+> 
+> Also add the necessary DT bindings for the SoC.
+> 
+> Signed-off-by: Liang Chen <cl@rock-chips.com>
+> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> [rebase, squash and reword commit message]
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> ---
 
+[snip]
+
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+> b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+> new file mode 100644
+> index 0000000000000..00c4d2a153ced
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+> @@ -0,0 +1,1635 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2023 Rockchip Electronics Co., Ltd.
+> + */
+> +
+> +#include <dt-bindings/clock/rockchip,rk3576-cru.h>
+> +#include <dt-bindings/reset/rockchip,rk3576-cru.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/phy/phy.h>
+> +#include <dt-bindings/power/rk3576-power.h>
+> +#include <dt-bindings/pinctrl/rockchip.h>
+> +#include <dt-bindings/soc/rockchip,boot-mode.h>
+> +
+> +/ {
+> +	compatible = "rockchip,rk3576";
+> +
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	aliases {
+> +		ethernet0 = &gmac0;
+> +		ethernet1 = &gmac1;
+
+Please remove ethernetX aliases from the SoC dtsi.  The consensus
+is that those aliases need to be defined at the board level instead.
+
+See the commit 5d90cb1edcf7 (arm64: dts: rockchip: Remove ethernet0
+alias from the SoC dtsi for RK3399, 2023-12-12), for example, for
+more details.
+
+> +		gpio0 = &gpio0;
+> +		gpio1 = &gpio1;
+> +		gpio2 = &gpio2;
+> +		gpio3 = &gpio3;
+> +		gpio4 = &gpio4;
+> +		i2c0 = &i2c0;
+> +		i2c1 = &i2c1;
+> +		i2c2 = &i2c2;
+> +		i2c3 = &i2c3;
+> +		i2c4 = &i2c4;
+> +		i2c5 = &i2c5;
+> +		i2c6 = &i2c6;
+> +		i2c7 = &i2c7;
+> +		i2c8 = &i2c8;
+> +		i2c9 = &i2c9;
+> +		serial0 = &uart0;
+> +		serial1 = &uart1;
+> +		serial2 = &uart2;
+> +		serial3 = &uart3;
+> +		serial4 = &uart4;
+> +		serial5 = &uart5;
+> +		serial6 = &uart6;
+> +		serial7 = &uart7;
+> +		serial8 = &uart8;
+> +		serial9 = &uart9;
+> +		serial10 = &uart10;
+> +		serial11 = &uart11;
+> +		spi0 = &spi0;
+> +		spi1 = &spi1;
+> +		spi2 = &spi2;
+> +		spi3 = &spi3;
+> +		spi4 = &spi4;
+> +	};
+> +
+> +	xin32k: clock-32k {
+
+Please use "xin32k: clock-xin32k { ... }" instead, because that follows
+the recently established revised pattern for clock names.  We should 
+have
+come consistency in the new SoC dtsi additions.
+
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <32768>;
+> +		clock-output-names = "xin32k";
+> +	};
+> +
+> +	xin24m: clock-24m {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <24000000>;
+> +		clock-output-names = "xin24m";
+> +	};
+
+Please use "xin24m: clock-xin24m { ... }" instead, for the same reasons
+as already described above.
+
+> +	spll: clock-702m {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <702000000>;
+> +		clock-output-names = "spll";
+> +	};
+
+Perhaps using "spll: clock-spll { ... }" instead would also be a good
+idea, because it would improve the overall consistency.
 
