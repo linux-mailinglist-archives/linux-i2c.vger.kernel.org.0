@@ -1,65 +1,65 @@
-Return-Path: <linux-i2c+bounces-5537-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5540-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 949FE9573DE
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 20:46:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 188329573E3
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 20:47:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50C29285209
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 18:46:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B78321F243A2
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 18:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43456189B98;
-	Mon, 19 Aug 2024 18:46:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 547A418A6D3;
+	Mon, 19 Aug 2024 18:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bC/om4c4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iRXpmHEh"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81719189916;
-	Mon, 19 Aug 2024 18:46:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985BD189BA6;
+	Mon, 19 Aug 2024 18:46:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724093167; cv=none; b=LQ0sWBxPNFLZqUT3gPoTfYutB+IjfaoX7aGnSOx05FyZwmDnG1/Vi2XAbCaY2khI0s353LlHv6qHHXwniAszBXiz3zlIFCxbwy2I254F0DjLvhKjOQVjz4HxbInYcLyb/V5nBu974siAH7eWUvZyKB3Kz6/bxm9G0lWppn00jfU=
+	t=1724093169; cv=none; b=osSNtJ95yeXMxH2faVnJvHb0J2BlhjJGz4T/b04vtAQIHytr2MXCrItgyweqETnwx6Y3+OmL9BkGzLjoTRgSBcwoWbC192XQqfnuOo2zL4N7juBh7TA5KARwwJSObAK6VtMhc9Q32uVeMHgexGSYRubmU6z11SRq+VoR9kZlEqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724093167; c=relaxed/simple;
-	bh=lmpJVHEI45bCw92NS0r5bbHGa1U4pmqHhD3BTF+AWZ0=;
+	s=arc-20240116; t=1724093169; c=relaxed/simple;
+	bh=wiNygSn0xYtYYKaHveS3CXKC0AKbBoJK3KI2wsMtOKk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OK4lRv11mOxK0jiOz4V7JYPd8upuwu3bT3gbwk8LHXkWDDi+Asrjf949uwJEeHAiW7W2ZlkdobV6+FYpf7b5RNmoAZu5f6A7mENy6ioYBq5Sax/XRViWgqDVZxsMNqKc1zXDKoswmHSpe8K/IV0Csc4SSTZ4mv19Qhptx9j4hEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bC/om4c4; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version; b=smNWwhFPwmzBFbDSEDbjqool2SSDBFxxjCdSvr4iONi+G3L3VIjOcKnG4DKs6Qx/jQo5npAVmUgrU7ljSvTxPYqoB9QO4623wYZPRYJsc9NmJZeiPyXmwomUW7uEi7hxPst5Jvbgim1/ubJfiTNoV1eBryG5g7sL1lR6LPry5Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iRXpmHEh; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724093166; x=1755629166;
+  t=1724093168; x=1755629168;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lmpJVHEI45bCw92NS0r5bbHGa1U4pmqHhD3BTF+AWZ0=;
-  b=bC/om4c4SS5vdqDvQ01gsl7woW8+WlDdwN1Gjq/SBjxQhURHeIhVIsPq
-   h8CHFzsJTOy4pA5SC1Uh3L1yKMn4FeETsvwUWND5kNbRaxMXGQIaElU1n
-   rLYFj+82ZWE0emUQNm4rSgfYjMrkYYC2akliV1wWwBE7c1+SSK+vLCt8+
-   HblHiHALOsILsbw2raJrE8rIDGG/VldoztSYyrnU9X7yOlGK6lowLRmjw
-   BW0HQjSm1pl2qXuE44b5y9bzwv2wV/o63iGqlMDVrzvegv9uDuQ+5Z+Yq
-   bWEVktllCr1q8LtlPGcOIq/iBgG7BgmiDJ9g17SM7cKU/tLw8kB68kTSk
-   g==;
-X-CSE-ConnectionGUID: ca3jwcA4TnK4jzHEXloLtw==
-X-CSE-MsgGUID: ts+9HLZjRzSzaF9mZ48UzQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="22537636"
+  bh=wiNygSn0xYtYYKaHveS3CXKC0AKbBoJK3KI2wsMtOKk=;
+  b=iRXpmHEhx2aDJij6XjMUpwHM5QHjGdJC/J9HYgdd+fx+ONfmS2rJRvG5
+   Sn2u1Nh4uFuSZUpoRAjswJLTdchwDcj/X9XPZN6JUiXIL470i49TSADIT
+   WZdGhuAZkKH1K+LrK7hY5OcFhtDk4qqbcmNPGMYRJNX2OCuPIm1iHUufz
+   XAg5HazoqolOtjHrb0zSHAO4gnsAu/As3iC0FKKUfQ4gm46toxpjEFImb
+   1PVAQehLDzVex0gicb/KeK3SU4msg8ebUmygrClciKeiYQy5MxrJZqoym
+   AH+Cr0Q/Mj74v+4v7YfD6EzoVinBEquCpKPrYB8mZR/+MuW7j/hraLz2C
+   A==;
+X-CSE-ConnectionGUID: qpJs/G+gTIiHBHXCQ+aOqg==
+X-CSE-MsgGUID: JDaxlWU0QxCMvIHCkZI3+w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="22537648"
 X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
-   d="scan'208";a="22537636"
+   d="scan'208";a="22537648"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
   by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 11:46:05 -0700
-X-CSE-ConnectionGUID: P943Wh3bRESwcQbF/Osa5Q==
-X-CSE-MsgGUID: Sf2ivcdmSpuaMRMjVxSE5Q==
+X-CSE-ConnectionGUID: s20/WfE9QX6mF2fXKHRk/g==
+X-CSE-MsgGUID: hLqKjEM9Sy+xa2pI/B+5rA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
-   d="scan'208";a="60433944"
+   d="scan'208";a="60433947"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orviesa009.jf.intel.com with ESMTP; 19 Aug 2024 11:46:02 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 293245CF; Mon, 19 Aug 2024 21:46:01 +0300 (EEST)
+	id 384F651C; Mon, 19 Aug 2024 21:46:01 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Andi Shyti <andi.shyti@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -71,9 +71,9 @@ Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
 	Narasimhan.V@amd.com,
 	Borislav Petkov <bp@alien8.de>,
 	Kim Phillips <kim.phillips@amd.com>
-Subject: [PATCH v3 2/7] i2c: designware: Let PCI core to take care about interrupt vectors
-Date: Mon, 19 Aug 2024 21:45:08 +0300
-Message-ID: <20240819184600.2256658-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 3/7] i2c: designware: Add missing 'c' into PCI IDs variable name
+Date: Mon, 19 Aug 2024 21:45:09 +0300
+Message-ID: <20240819184600.2256658-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 In-Reply-To: <20240819184600.2256658-1-andriy.shevchenko@linux.intel.com>
 References: <20240819184600.2256658-1-andriy.shevchenko@linux.intel.com>
@@ -85,65 +85,46 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-PCI core, after pcim_enable_device(), takes care about the allocated
-IRQ vectors, no need to do it explicitly and break the cleaning up
-order.
+Add missing 'c' into i2c_designware_pci_ids variable name.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-designware-pcidrv.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index a1b379a1e904..507e114332cd 100644
+index 507e114332cd..4cbcdae8cd90 100644
 --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
 +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -295,10 +295,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 
- 	if (controller->setup) {
- 		r = controller->setup(pdev, controller);
--		if (r) {
--			pci_free_irq_vectors(pdev);
-+		if (r)
- 			return r;
--		}
- 	}
- 
- 	i2c_dw_adjust_bus_speed(dev);
-@@ -307,10 +305,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 		i2c_dw_acpi_configure(&pdev->dev);
- 
- 	r = i2c_dw_validate_speed(dev);
--	if (r) {
--		pci_free_irq_vectors(pdev);
-+	if (r)
- 		return r;
--	}
- 
- 	i2c_dw_configure(dev);
- 
-@@ -330,10 +326,8 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	adap->nr = controller->bus_num;
- 
- 	r = i2c_dw_probe(dev);
--	if (r) {
--		pci_free_irq_vectors(pdev);
-+	if (r)
- 		return r;
--	}
- 
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
- 		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, &dgpu_node);
-@@ -359,8 +353,6 @@ static void i2c_dw_pci_remove(struct pci_dev *pdev)
- 	pm_runtime_get_noresume(&pdev->dev);
- 
+@@ -355,7 +355,7 @@ static void i2c_dw_pci_remove(struct pci_dev *pdev)
  	i2c_del_adapter(&dev->adapter);
--	devm_free_irq(&pdev->dev, dev->irq, dev);
--	pci_free_irq_vectors(pdev);
  }
  
- static const struct pci_device_id i2_designware_pci_ids[] = {
+-static const struct pci_device_id i2_designware_pci_ids[] = {
++static const struct pci_device_id i2c_designware_pci_ids[] = {
+ 	/* Medfield */
+ 	{ PCI_VDEVICE(INTEL, 0x0817), medfield },
+ 	{ PCI_VDEVICE(INTEL, 0x0818), medfield },
+@@ -403,16 +403,16 @@ static const struct pci_device_id i2_designware_pci_ids[] = {
+ 	{ PCI_VDEVICE(ATI,  0x7464), navi_amd },
+ 	{ 0,}
+ };
+-MODULE_DEVICE_TABLE(pci, i2_designware_pci_ids);
++MODULE_DEVICE_TABLE(pci, i2c_designware_pci_ids);
+ 
+ static struct pci_driver dw_i2c_driver = {
+ 	.name		= DRIVER_NAME,
+-	.id_table	= i2_designware_pci_ids,
+ 	.probe		= i2c_dw_pci_probe,
+ 	.remove		= i2c_dw_pci_remove,
+ 	.driver         = {
+ 		.pm     = &i2c_dw_pm_ops,
+ 	},
++	.id_table	= i2c_designware_pci_ids,
+ };
+ module_pci_driver(dw_i2c_driver);
+ 
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
