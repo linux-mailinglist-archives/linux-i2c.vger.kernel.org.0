@@ -1,44 +1,44 @@
-Return-Path: <linux-i2c+bounces-5517-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5518-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 586499569C8
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 13:49:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 014469569CD
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 13:49:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4405B237F9
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 11:49:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 344CD1C22314
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 11:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B0316CD3C;
-	Mon, 19 Aug 2024 11:47:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7575B16D4C6;
+	Mon, 19 Aug 2024 11:47:20 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE9616C87A;
-	Mon, 19 Aug 2024 11:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CF816D314;
+	Mon, 19 Aug 2024 11:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724068038; cv=none; b=njUSQiUOWqw4ZFuLC6gIWFKvALF2Umi2F9gDZWjjntR8u4AVeigfzwOJB6TVwuBzWdtZoqqQVJ4d/+lA54oGbF5TpiKktir5qR7ma/kc/fNxlyT43AM8SJHkdW9t4oZxTImiqQXn0Lo0+SRieI/oMNkQZTH/mJPnYdQyNKvw/I8=
+	t=1724068040; cv=none; b=dY4O+FX2FNLh/A7m/b9eA/DtDTzgjy2gbaqtRudnRmNPHjV2W0p0ktQxw8fffeQc3fj8cWu4dVKE9kIC+QfKBBerDPVuD/B+NaAKxMx+jIKkWos6FP+wBkcENzPqaDWAd6MF+ZfHj6z+3APHMMWYot9CcXClUQ/ZyqUXpRxMAtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724068038; c=relaxed/simple;
-	bh=n71Tc4j/yk2qLbxtHEISLr9b5WoeJfTIO0LlZ2c+ylI=;
+	s=arc-20240116; t=1724068040; c=relaxed/simple;
+	bh=FxkusQMvUe5wYHmZFBlnjdm/rzus8nNbq0ATgyGnGJk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u3gMfjdQ0SApZhCC0w017SnD2IZ+nKnNCYO2jWiLQLnpz7gqfW9JlYNXBZ2H5qRBAFFdanpZcUu0JkHv76HZQiq1efbEqwz8wng4VW7zxBYlCiJS5T3HPhUb6C48AqRJPkbZr8ZGqMSmg2x220w7SN8+yqvNinARcYDub9Tb5a4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+	 MIME-Version:Content-Type; b=AWuGkC56wl5XCe/CkIWKvKbwh6usafnlt7ocQdIq3AUzDAmHKqoajVeUTISl71tbBGqW7QzZCqPLNSw7OnVWko5Wi3zVzT8gfttIbHiS7rdyDGSGXJM+bOYk9UBrZUBwtlkiEVIdaR0Y2iqYnPRkPPgIy5R6WoaQSlj3MPkDkAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WnW4p277qzpTWN;
-	Mon, 19 Aug 2024 19:45:46 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WnW0n6XCnz2Cmxf;
+	Mon, 19 Aug 2024 19:42:17 +0800 (CST)
 Received: from kwepemg500010.china.huawei.com (unknown [7.202.181.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id A90761800A5;
-	Mon, 19 Aug 2024 19:47:14 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 61F561A016C;
+	Mon, 19 Aug 2024 19:47:16 +0800 (CST)
 Received: from huawei.com (10.67.174.76) by kwepemg500010.china.huawei.com
  (7.202.181.71) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 19 Aug
- 2024 19:47:13 +0800
+ 2024 19:47:15 +0800
 From: Yuntao Liu <liuyuntao12@huawei.com>
 To: <openipmi-developer@lists.sourceforge.net>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
@@ -54,9 +54,9 @@ CC: <minyard@acm.org>, <ludovic.desroches@microchip.com>, <vkoul@kernel.org>,
 	<stern@rowland.harvard.edu>, <u.kleine-koenig@pengutronix.de>,
 	<duje.mihanovic@skole.hr>, <broonie@kernel.org>,
 	<andriy.shevchenko@linux.intel.com>, <liuyuntao12@huawei.com>
-Subject: [PATCH -next 8/9] dmaengine: at_hdmac: fix module autoloading
-Date: Mon, 19 Aug 2024 11:38:54 +0000
-Message-ID: <20240819113855.787149-9-liuyuntao12@huawei.com>
+Subject: [PATCH -next 9/9] ipmi: ipmi_ssif: fix module autoloading
+Date: Mon, 19 Aug 2024 11:38:55 +0000
+Message-ID: <20240819113855.787149-10-liuyuntao12@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240819113855.787149-1-liuyuntao12@huawei.com>
 References: <20240819113855.787149-1-liuyuntao12@huawei.com>
@@ -76,21 +76,21 @@ based on the alias from platform_device_id table.
 
 Signed-off-by: Yuntao Liu <liuyuntao12@huawei.com>
 ---
- drivers/dma/at_hdmac.c | 1 +
+ drivers/char/ipmi/ipmi_ssif.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/dma/at_hdmac.c b/drivers/dma/at_hdmac.c
-index 40052d1bd0b5..614c60b16ee5 100644
---- a/drivers/dma/at_hdmac.c
-+++ b/drivers/dma/at_hdmac.c
-@@ -1904,6 +1904,7 @@ static const struct platform_device_id atdma_devtypes[] = {
- 		/* sentinel */
- 	}
+diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+index 96ad571d041a..e8e7b832c060 100644
+--- a/drivers/char/ipmi/ipmi_ssif.c
++++ b/drivers/char/ipmi/ipmi_ssif.c
+@@ -2085,6 +2085,7 @@ static const struct platform_device_id ssif_plat_ids[] = {
+     { "dmi-ipmi-ssif", 0 },
+     { }
  };
-+MODULE_DEVICE_TABLE(platform, atdma_devtypes);
++MODULE_DEVICE_TABLE(platform, ssif_plat_ids);
  
- static inline const struct at_dma_platform_data * __init at_dma_get_driver_data(
- 						struct platform_device *pdev)
+ static struct platform_driver ipmi_driver = {
+ 	.driver = {
 -- 
 2.34.1
 
