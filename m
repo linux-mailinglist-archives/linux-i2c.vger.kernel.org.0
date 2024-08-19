@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-5523-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5524-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B508F956A16
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 13:58:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8746A956A1B
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 13:58:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D90531C2203F
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 11:58:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 407CE288362
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 11:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E7916849F;
-	Mon, 19 Aug 2024 11:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE73116849F;
+	Mon, 19 Aug 2024 11:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="iAKp/Oxu";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rcL8NVYO"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fG+BnmgK";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Qk3p+HfW"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from fout5-smtp.messagingengine.com (fout5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C661B166F01;
-	Mon, 19 Aug 2024 11:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099F0166F39;
+	Mon, 19 Aug 2024 11:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724068672; cv=none; b=JBR92HzkQPVt/5MMbu+trdyEw5i+4yTK23fS0EF/emYT9ZWPevecyathPDzi9tgQxq7TF3A/D0oW220iErhBh3Lwff5ixIiRUeMnFdKGNwsK82BlwgakfSuFOXKB5tZF+sneWQ7O90nhawhJJV/nQ0TX2bxA4dC2WQb1UgUyStc=
+	t=1724068704; cv=none; b=Fzqjg7z3B/ZRelVLSSmALt54yig8qyUEfzmw2CRxFNzDC/ffFngk10r/cuQPpgOPFSf0R61NB7Mk8TJqiVOzgWTk/5PBOzGPtwC+ukPHOJR33IaiAlgvd++dq0Q5uiQaOlOPV4hPbVWvnpZREzimGXs5WUPBnWEUjLY6jkVu/R0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724068672; c=relaxed/simple;
-	bh=5Vg4IDhlG137GwbJEdL3OdobSWj0Xa/bnciOrpLN34Y=;
+	s=arc-20240116; t=1724068704; c=relaxed/simple;
+	bh=OwzthXrC3kqgtedRFAZH94vXLDyQn8vEa/2KQgncapQ=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ZDhgTHNQHWK3TQqf8lqDuSyVpdpgk6Jyfy9TkEMx9OEobGXU+TKPUvalRKgA2EEcH5+BtkVByoyuEmignxfVz3ACsbbG4YLlcVwBZRs/iwzsTIDzZjwALgIAsEhVWhmNqJwgWuAjQHQZpjVeuJLdo1FpZbT6alOl56FpY2GvsnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=iAKp/Oxu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rcL8NVYO; arc=none smtp.client-ip=103.168.172.148
+	 Subject:Content-Type; b=VnhtBtJgPubnvYfihMNUIb/IHCCm+R/EvT+8U1BCWe0x1qcagOwVeB4OaFJZ4oREKVc3DlXLJGnLONqQQkRN5T43zDulKIGNmvAsdMhVW0hcmm31wxCj2x6NoUcSS2x4vMpry70OnOoCje7X30AjykYHXN2nYfMAxJE4GIvsBiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fG+BnmgK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Qk3p+HfW; arc=none smtp.client-ip=103.168.172.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
-	by mailfout.nyi.internal (Postfix) with ESMTP id C46B1138FD76;
-	Mon, 19 Aug 2024 07:57:49 -0400 (EDT)
+	by mailfout.nyi.internal (Postfix) with ESMTP id 1F6F8138FFF0;
+	Mon, 19 Aug 2024 07:58:22 -0400 (EDT)
 Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-04.internal (MEProxy); Mon, 19 Aug 2024 07:57:49 -0400
+  by phl-compute-04.internal (MEProxy); Mon, 19 Aug 2024 07:58:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1724068669;
-	 x=1724155069; bh=h4wzlPsfJQiRwt3ClGapHTB9X8sJmK/ibZX4Or4H7kA=; b=
-	iAKp/OxuR/WBF3sTlSd60iHsBjLLKhIFOFSyVUEV6F/Zd1HXCp4hRH3CLLK/AoTt
-	xDhpIBRUDAyrWSTOkNaoa0JIQ3pGslFe/0dBvAh/4ygmvnKnNrPAXuAKRSM/MS+i
-	dX1gJcds65xhjUDJFs+PM4RdxaWuQYIoPSO+7hfo+kjitNkIonYJx8X2+HZRpv8a
-	3m3Gq/W7knLo6G1lVGwFFQGyaZ3QjfzQ1PQukatDHDR2jHRtY9NvQiGSA0LucOeG
-	4y0wv2g44X+KTJ394UCvQB/K79BXy9aL9Xs206zqf7dKPsAWUptutNPx0doP0pc5
-	Ycnr/sMotQEv2lkRL12BkA==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1724068702;
+	 x=1724155102; bh=1q//rQDyx9VX653DFqklT+rFuI5QqQwJi4cGGdU+mLU=; b=
+	fG+BnmgKh2r2F6/TJvNU8oUCDU2voklpgpdl2IGU7DDXViLSqIkoHeHimdGk04Bl
+	ClBnoYKtzbSkKGPdiNf0g9KCf/hUzG46+JzYubftlQ7XN6vMENZfxUsKWiJ54kzP
+	kbxiGn+RuYHwEmEvu5Z7YEtP0j5swfgXqar74/5Hc+NT9qNRYIAFXKWRAlCKR2UV
+	egJ8IBcjSngkSqRa7bLX92gFkQyQqJmWS15yFFKS1z8ITFSZIpWakr5cR6QKCGJf
+	p+K9kOilP52YSR1FXGynUIsb6YYGx6SiA80W4m4HQU82hzZaPcuSZsejTEdjbhkz
+	7fgF2Fjue9XectUND/9iVA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1724068669; x=
-	1724155069; bh=h4wzlPsfJQiRwt3ClGapHTB9X8sJmK/ibZX4Or4H7kA=; b=r
-	cL8NVYOgjDHTqB1UiVRyl8BFVwa/jLdJvE0Keui998kkvQngvDRZWr2iBzoZWIRl
-	4xMSif+DTf4Ekc69tHOQbIDQY+31sSO1Hu8nXmbWOi/SKY7IJa8P7Bj+JiIBCbOU
-	Gjz/Az+taJTfCid7X/Qp1q59tm598/kakx0xhoBaUv0I4GmCmrs2aGTtf05Rib6A
-	Pr4lpxQA5+qkLW6cCue5+XqXE/QCOYOB5keSJYsIpIRJ5jKaDKl7RnVaVdj4dAvm
-	MiBuLoeqKnziCNNjmgNEQ+6aLkT+LPastI1Ao0mT2Smn6fzR2uANKC+4wEb6Ri4L
-	kb2+Y4td6gdvkCCCJi0Gw==
-X-ME-Sender: <xms:PTPDZlETO2xwMA9OPitNmD4B1D9hCIbSjyNw8eyJyPJKM2EpkdfPhw>
-    <xme:PTPDZqUbJH2dXXogHID-n3vYpFEhiv9Vp28T3sNiEUNcOin3clexDHLSI4DAYAzqu
-    _O4WfBJVvMxorpEhkg>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1724068702; x=
+	1724155102; bh=1q//rQDyx9VX653DFqklT+rFuI5QqQwJi4cGGdU+mLU=; b=Q
+	k3p+HfWDP7eMOP0dCowh1s/eJfGGUJf7xKhidjR5W8Dhn+NvW9MpGQYKqDeNRy9q
+	ZjY6IIn7Or/d88ZSmjzSflWj97gYMz5qukje9Sc1gd1PLnN2Dr8L1q+7sVSF6+2d
+	YCekXdKakkNUvxFWQbj9U+B0SCcYSZ3+IPwHCbQCg8uunJ91JOhLNYSOrn49imao
+	lZRnzhvemh+gbxsPRjzovwmJNLxLpKTeLZ6RJwIpdIU71MwVz/AxvgiNuofX2FGq
+	cKKMyXy8FtGt+uvV95z9A8ufteIsMghlauibxGKXXsbSCeCYHr1AVnFfTJvN0+vP
+	pKeJsLxstv/GDF615j8Bg==
+X-ME-Sender: <xms:XTPDZnx-aMkctB6VDOuHCgNxPMWsNdKNg88lEqS-W6MRrSqBNeegEg>
+    <xme:XTPDZvReZw1zxoKn6p_9vGcMiFFjP7WNRk3kNJ1POKEHAlMy_sldj4jcCFlt7q2eZ
+    g9ajkOsdMQgoPYUNUw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddruddugedggeeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
     htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
     necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
     guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpe
     hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepfedu
     pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmihhnhigrrhgusegrtghmrdhorh
     hgpdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtohepjhgrmhgvshdr
@@ -80,14 +80,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddruddugedggeeiucetufdoteggod
     grihhlrdgtohhmpdhrtghpthhtohepmhhorhgsihgurhhsrgesghhmrghilhdrtghomhdp
     rhgtphhtthhopehlihhuhihunhhtrghouddvsehhuhgrfigvihdrtghomhdprhgtphhtth
     hopehtohhnhidrlhhutghksehinhhtvghlrdgtohhm
-X-ME-Proxy: <xmx:PTPDZnJbskLLT633CZqWiWzTgD5-_sTSRDEwamyFbWWi-vraJx-yWA>
-    <xmx:PTPDZrHHFBIQO4cRe9p2mxsAHtkFXqn_SZA2UWmnymm6as0Gu278rg>
-    <xmx:PTPDZrXQsS8DoqzPYbD2_IDiLcDuQ1DBc75Mf7J-9tm7F6vdTmkxxQ>
-    <xmx:PTPDZmMX--2dtB5QGgl5Edzu-KroeCUlJaezHtJykz7zdXtyaAL__g>
-    <xmx:PTPDZlj2BX2ZPqgYgGZamuzLIlVr4h_o0Z3yCJGpJtHggArS71p0_Y1S>
+X-ME-Proxy: <xmx:XjPDZhX-oqwAzr6WjjivovL1XLDiHvpbVVTu_sZVWxHpzB0z6964iQ>
+    <xmx:XjPDZhh57Ke7HHK7M6VgeziyeE5iD-PJ4OBLAB7eGXDqBA4UqstCcQ>
+    <xmx:XjPDZpDj3qI1FqH9zKE5v2fmWdZXNVqOHp7j25-4nFcgHqdN4H7KeQ>
+    <xmx:XjPDZqLgAMN94FAKPhoEw8kR8Dv2by2RW3Rvxj-PNx3M3uPXVrrtbg>
+    <xmx:XjPDZmMdiCbxn5ftHHXlGcMZVVeunv_wToMZyj6H_dMsdNDbkYTS3ovh>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 93E5E16005E; Mon, 19 Aug 2024 07:57:49 -0400 (EDT)
+	id DEE1416005E; Mon, 19 Aug 2024 07:58:21 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -95,7 +95,7 @@ List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 19 Aug 2024 13:57:19 +0200
+Date: Mon, 19 Aug 2024 13:58:01 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Yuntao Liu" <liuyuntao12@huawei.com>,
  openipmi-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
@@ -121,11 +121,11 @@ Cc: "Corey Minyard" <minyard@acm.org>,
  =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>,
  "Mark Brown" <broonie@kernel.org>,
  "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Message-Id: <d4024f47-96c4-40f2-8bfb-09f3539b2ed4@app.fastmail.com>
-In-Reply-To: <20240819113855.787149-6-liuyuntao12@huawei.com>
+Message-Id: <358410e9-1f0d-4a8a-bf74-084a8ea62440@app.fastmail.com>
+In-Reply-To: <20240819113855.787149-7-liuyuntao12@huawei.com>
 References: <20240819113855.787149-1-liuyuntao12@huawei.com>
- <20240819113855.787149-6-liuyuntao12@huawei.com>
-Subject: Re: [PATCH -next 5/9] mpc85xx_edac: fix module autoloading
+ <20240819113855.787149-7-liuyuntao12@huawei.com>
+Subject: Re: [PATCH -next 6/9] dmaengine: pxa: fix module autoloading
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
@@ -134,17 +134,13 @@ On Mon, Aug 19, 2024, at 13:38, Yuntao Liu wrote:
 > based on the alias from platform_device_id table.
 >
 > Signed-off-by: Yuntao Liu <liuyuntao12@huawei.com>
+> ---
+>  drivers/dma/pxa_dma.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+The legacy probe will soon be gone for pxa, so I would skip this
+one, like the other pxa patches.
 
->  	},
->  	{}
->  };
-> +MODULE_DEVICE_TABLE(platform, mpc85xx_pci_err_match);
-> 
-
-I see that this device is created in arch/powerpc/sysdev/fsl_pci.c,
-so your change makes sense here.
-
-     Arnd
+      Arnd
 
