@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-5549-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5550-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8421B95756E
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 22:12:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA65B95758C
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 22:20:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6240D1C232D1
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 20:12:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75CAB1F22DC9
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 20:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E5B1DD396;
-	Mon, 19 Aug 2024 20:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF0CC158A12;
+	Mon, 19 Aug 2024 20:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqlqA4WF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q9IuJ8UQ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1701DD390;
-	Mon, 19 Aug 2024 20:12:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6E8156C70;
+	Mon, 19 Aug 2024 20:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724098344; cv=none; b=T75EjnDe7XG5KNzUj9zTEnJJmZBGw4a597r7ccYybSTMOgU76LXDVZQi0i7xFXiBya6oIekffETKNexsiskiL87tsGBOsvAi963pPVnpXQfsEZuICjP6JHR9HAg5SatauqTt3GdK2aJXwEZhdecrRWsx9SCAHveAWJUYF/ri0OE=
+	t=1724098820; cv=none; b=Bipha16g3u8zKZCzbwSx6HoskWt9QkqGCcNS2lof3JxQ53AV+K2neWWDQObfIO9lt0FsgCOL2ZuNe2VLnNj+VSqBB+PQI4+v3Ap8vbXQx9n7JjnL37J3uVKU27HhkORn4FO2RGO40Eh+iMGmrYS3qz0WHYOAaa4cU5v8aYEJV0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724098344; c=relaxed/simple;
-	bh=t77ROfzbx+fZRo+3bBECC3laH+DWBME/BVezkDkcl9Y=;
+	s=arc-20240116; t=1724098820; c=relaxed/simple;
+	bh=xMl3KF1I77LcsYpUwuHdMfjHTgdWQ2Kk5sNZNCi9t7c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sGbiLUGt/i2yXrT5bXJB+ar2UJiNwJ2kSaC+L7k4AwUeVIi7J1ikQgsyRoe/tpRwJWGOCjztwwcAWXdmfo0HdaJWlUPNY7mlTZGMiOVVP3liWF/vnYXCPDusEziUxH4KWiZLgm7iJa97u6bwQCxVsmt0jYxXnHK6+4ZwqthiNgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eqlqA4WF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96038C32782;
-	Mon, 19 Aug 2024 20:12:22 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=fx/RTmDY5Pl1jT7IQcILekiU35nNv6ZbNprXXf6fRhA8TfYmqHzE8QKTFCoECSIS+ZuhksEwd2Zh27qCp5Ii/3gQVba+qsGNGTmMcEh7v5oowSgjZHxAPXCciwpv+8ISgk4leuG52euc58nX1OzCSRdn344qzkRIOtIb6DWVY3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q9IuJ8UQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E78EAC32782;
+	Mon, 19 Aug 2024 20:20:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724098343;
-	bh=t77ROfzbx+fZRo+3bBECC3laH+DWBME/BVezkDkcl9Y=;
+	s=k20201202; t=1724098819;
+	bh=xMl3KF1I77LcsYpUwuHdMfjHTgdWQ2Kk5sNZNCi9t7c=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eqlqA4WFv9cs5T44dwjH/4+gG0qflF2Zvm3bAF1NhoyTDFeW/0xRMWaYu8i6wq8j1
-	 DpprxrBxuNIiSfnrCzrus7F3bXQyP1MSG5T3y8RzYtmV/elGQ9iUp5n3ffR3Kr5zGk
-	 wY/eut7BOpY4jns4ABkdbRdZgr7G1hqBNzOPC8QPITLNEdcyRU9OKS3cYFdocfeBik
-	 kea2+B/vfjvPUzH2r3G861E4A4x01uMXPTyhZcdWUGI/V8AFN/VJXNksER5rzMvSCN
-	 h5RyTo4/V/r7NMzN+1NyS0bNrlRFqTVAX3r8xR7pv+7aS1xytY8am7REJMQ1qIbkli
-	 EOqTuUYhzw9sg==
-Date: Mon, 19 Aug 2024 22:12:17 +0200
+	b=Q9IuJ8UQe+UACGdbnqMEngscWzivAdHtTbMfltUUElolcVIyU/Jq1vAbUw6JFM0+d
+	 a6pnLy7w/L8hXxwKTqhx7Zqpyeu8sXwdpJ0brjNFj+tPuY+azGBuk3ppk3M8+2LcfH
+	 JEf2qB2joyZqY97fHhpWYI1KldTDvnQqFCbKqLzm2w2M08Fc5NRq7FJ/1EhyctES9R
+	 nQv3Qfp5nn/AX9DQ0J23zb6N7dzq3Q1/sJpK3ATXvbr6atAUGfKqFZnnqNQr7CVoEc
+	 GuiCSuUBICwg4rGUlMdvOjDm4w+oh8txKvZJME3qt5F4SoHgPV0P6COha6yeHlxVzU
+	 X1v4K+jXzO+Ng==
+Date: Mon, 19 Aug 2024 22:20:13 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Claudiu <claudiu.beznea@tuxon.dev>
 Cc: chris.brandt@renesas.com, robh@kernel.org, krzk+dt@kernel.org, 
@@ -49,10 +49,11 @@ Cc: chris.brandt@renesas.com, robh@kernel.org, krzk+dt@kernel.org,
 	p.zabel@pengutronix.de, wsa+renesas@sang-engineering.com, 
 	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH v4 08/11] i2c: riic: Add support for fast mode plus
-Message-ID: <hu4yt2a7ipxrqd7ciqqyg4izei2dr7yerpgf7j53quepxj4ed6@gzlv7l3etpqb>
+Subject: Re: [PATCH v4 06/11] i2c: riic: Define individual arrays to describe
+ the register offsets
+Message-ID: <vjtfwuxkkml2d6jf7sela2oocdme3s27qgymsgk5vosdkrzvxc@wckgz35siylj>
 References: <20240819102348.1592171-1-claudiu.beznea.uj@bp.renesas.com>
- <20240819102348.1592171-9-claudiu.beznea.uj@bp.renesas.com>
+ <20240819102348.1592171-7-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -61,48 +62,120 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240819102348.1592171-9-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240819102348.1592171-7-claudiu.beznea.uj@bp.renesas.com>
 
-Hi Claudiu,
+Geert,
 
-...
-
->  struct riic_dev {
-> @@ -311,11 +315,14 @@ static int riic_init_hw(struct riic_dev *riic)
->  	int total_ticks, cks, brl, brh;
->  	struct i2c_timings *t = &riic->i2c_t;
->  	struct device *dev = riic->adapter.dev.parent;
-> +	const struct riic_of_data *info = riic->info;
-
-Because you are only using info->fast_mode_plus, perhaps you can
-directly take:
-
-	fast_mode_plus = riic->info->fast_mode_plus;
-
-and you make it even more compact.
-
->  
-> -	if (t->bus_freq_hz > I2C_MAX_FAST_MODE_FREQ) {
-> +	if ((!info->fast_mode_plus && t->bus_freq_hz > I2C_MAX_FAST_MODE_FREQ) ||
-> +	    (info->fast_mode_plus && t->bus_freq_hz > I2C_MAX_FAST_MODE_PLUS_FREQ)) {
->  		dev_err(&riic->adapter.dev,
-> -			"unsupported bus speed (%dHz). %d max\n",
-> -			t->bus_freq_hz, I2C_MAX_FAST_MODE_FREQ);
-> +			"unsupported bus speed (%dHz). %d max\n", t->bus_freq_hz,
-
-super nitpick: can you please put t->bus_freq_hz on a new line,
-it looks better to either have everything put in columns or not.
-
-> +			info->fast_mode_plus ? I2C_MAX_FAST_MODE_PLUS_FREQ :
-> +			I2C_MAX_FAST_MODE_FREQ);
-
-another super-nitpick: can you please align
-I2C_MAX_FAST_MODE_PLUS_FREQ with I2C_MAX_FAST_MODE_FREQ? It makes
-more clear that there is a "? ... :" statement.
+do you have any comment here?
 
 Thanks,
 Andi
 
->  		return -EINVAL;
->  	}
+On Mon, Aug 19, 2024 at 01:23:43PM GMT, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> Define individual arrays to describe the register offsets. In this way
+> we can describe different IP variants that share the same register offsets
+> but have differences in other characteristics. Commit prepares for the
+> addition of fast mode plus.
+> 
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+> 
+> Changes in v4:
+> - collected tags
+> 
+> Changes in v3:
+> - none
+> 
+> Changes in v2:
+> - none
+> 
+>  drivers/i2c/busses/i2c-riic.c | 58 +++++++++++++++++++----------------
+>  1 file changed, 31 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
+> index f863b367fb85..cc2452853d19 100644
+> --- a/drivers/i2c/busses/i2c-riic.c
+> +++ b/drivers/i2c/busses/i2c-riic.c
+> @@ -91,7 +91,7 @@ enum riic_reg_list {
+>  };
+>  
+>  struct riic_of_data {
+> -	u8 regs[RIIC_REG_END];
+> +	const u8 *regs;
+>  };
+>  
+>  struct riic_dev {
+> @@ -522,36 +522,40 @@ static void riic_i2c_remove(struct platform_device *pdev)
+>  	pm_runtime_dont_use_autosuspend(dev);
+>  }
+>  
+> +static const u8 riic_rz_a_regs[RIIC_REG_END] = {
+> +	[RIIC_ICCR1] = 0x00,
+> +	[RIIC_ICCR2] = 0x04,
+> +	[RIIC_ICMR1] = 0x08,
+> +	[RIIC_ICMR3] = 0x10,
+> +	[RIIC_ICSER] = 0x18,
+> +	[RIIC_ICIER] = 0x1c,
+> +	[RIIC_ICSR2] = 0x24,
+> +	[RIIC_ICBRL] = 0x34,
+> +	[RIIC_ICBRH] = 0x38,
+> +	[RIIC_ICDRT] = 0x3c,
+> +	[RIIC_ICDRR] = 0x40,
+> +};
+> +
+>  static const struct riic_of_data riic_rz_a_info = {
+> -	.regs = {
+> -		[RIIC_ICCR1] = 0x00,
+> -		[RIIC_ICCR2] = 0x04,
+> -		[RIIC_ICMR1] = 0x08,
+> -		[RIIC_ICMR3] = 0x10,
+> -		[RIIC_ICSER] = 0x18,
+> -		[RIIC_ICIER] = 0x1c,
+> -		[RIIC_ICSR2] = 0x24,
+> -		[RIIC_ICBRL] = 0x34,
+> -		[RIIC_ICBRH] = 0x38,
+> -		[RIIC_ICDRT] = 0x3c,
+> -		[RIIC_ICDRR] = 0x40,
+> -	},
+> +	.regs = riic_rz_a_regs,
+> +};
+> +
+> +static const u8 riic_rz_v2h_regs[RIIC_REG_END] = {
+> +	[RIIC_ICCR1] = 0x00,
+> +	[RIIC_ICCR2] = 0x01,
+> +	[RIIC_ICMR1] = 0x02,
+> +	[RIIC_ICMR3] = 0x04,
+> +	[RIIC_ICSER] = 0x06,
+> +	[RIIC_ICIER] = 0x07,
+> +	[RIIC_ICSR2] = 0x09,
+> +	[RIIC_ICBRL] = 0x10,
+> +	[RIIC_ICBRH] = 0x11,
+> +	[RIIC_ICDRT] = 0x12,
+> +	[RIIC_ICDRR] = 0x13,
+>  };
+>  
+>  static const struct riic_of_data riic_rz_v2h_info = {
+> -	.regs = {
+> -		[RIIC_ICCR1] = 0x00,
+> -		[RIIC_ICCR2] = 0x01,
+> -		[RIIC_ICMR1] = 0x02,
+> -		[RIIC_ICMR3] = 0x04,
+> -		[RIIC_ICSER] = 0x06,
+> -		[RIIC_ICIER] = 0x07,
+> -		[RIIC_ICSR2] = 0x09,
+> -		[RIIC_ICBRL] = 0x10,
+> -		[RIIC_ICBRH] = 0x11,
+> -		[RIIC_ICDRT] = 0x12,
+> -		[RIIC_ICDRR] = 0x13,
+> -	},
+> +	.regs = riic_rz_v2h_regs,
+>  };
+>  
+>  static int riic_i2c_suspend(struct device *dev)
+> -- 
+> 2.39.2
+> 
 
