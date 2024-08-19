@@ -1,138 +1,131 @@
-Return-Path: <linux-i2c+bounces-5554-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5555-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E3969575E8
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 22:51:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4569B957692
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 23:28:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9902B22917
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 20:51:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEA451F22866
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Aug 2024 21:28:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976D3156C5F;
-	Mon, 19 Aug 2024 20:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE738176231;
+	Mon, 19 Aug 2024 21:27:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="T3YlUx+t"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="wNRJuV+u"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB68515E96
-	for <linux-i2c@vger.kernel.org>; Mon, 19 Aug 2024 20:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB8B1598F4;
+	Mon, 19 Aug 2024 21:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724100705; cv=none; b=YWw92ceGQIkYCg0mB7SQ+3pEpw7v/y0KFzwiJMFCOoHU8ml9zhDriEXyzrQvHwplBcQLoZz3XlnUBLwddTYr/hohz4f3lPl+s5OaM2930lVc4x/Mc2PsXKc+u3sMRy9p79bzK8WYnw1i0rsZUZXPcdGd46H+QPtq1L8GLJvbJzE=
+	t=1724102833; cv=none; b=a66+hRrSMYzGto8IGj/YxVJ98B16mRr8RHiSYR/pFQIxLp9MnRSKpU4KgrPu3zYBUVahcabH0mb8X6emDOEBmfmkoOGcxOxNYoJEbFUmUM7LDPaBbuGffcZsnscp6E4FfpG87JlPaeJ+BrMATreJi9EeGLWQFnIebXej6Kp7hJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724100705; c=relaxed/simple;
-	bh=7papm/ncz5DtBVkXWxuPDjMAnp2JHZupr9tn5JLb3Q8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r0fSrplgCl/hDdkZOLLUvv+ZsEyOnZ2gMTZZhW3zhw080oQZ/RuxRzkbKb2gJYFj5heZg8X9XMgFGtzyf92gamxTdM7YPsQixDTrA+8bX/81FTDKKV3UasCQJDx/xqMcUzXJ/ib9sCAndLOSKmpXvWpRer//DNgDEwYljt4cWg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=T3YlUx+t; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2021aeee5e4so13085285ad.0
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Aug 2024 13:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1724100703; x=1724705503; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2G0BlDQX2BP5LrBSVzTu3lq9EROMDDvEST6/TJJP3fo=;
-        b=T3YlUx+tuPCHL3qTn968oTWGN5y3FpCXWamE5vCZLNpe4/7Q1n3vt9eLiBxwJ9/z8L
-         s7ioC9L1Q2dwofq/JhjIWnsVHYWHlZqD/3QmzCebi2jTLJBR8Sr3CzsOuLE+cJB0OH5f
-         dMxAeCMNTauRMWBWOD4v/enj7+5QEP0hxPObZMOWCWbdPj055jD5bX57+QtgXmIwaBAW
-         jpvR9W9hlYjNJuyffC3TtmQVoNgka+PIiCG++xd55oj+Kl5ozDPHCrGeXcBEEuLzTxTl
-         S7DCv6no9CL0F1hSuQ2d4fA8nicO59uJcPPts8kCjuP2/87PJilGPJaGPF/ta2LCYAnH
-         fiWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724100703; x=1724705503;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2G0BlDQX2BP5LrBSVzTu3lq9EROMDDvEST6/TJJP3fo=;
-        b=cTBbWhNPD4xSwQsA0ZYbuLqwl3y/r7Mw57+WclkrJUspBvHUSZHYJnayDx/TFEiNEk
-         3cPczXrk8n+Murvh8sSR7SRS5gMeIqXtdCHvz4E1mtq6UTZtKUBRT0l30PJHAXysR32M
-         RldhhR7GerAMOC6dolv1chLfqOlUYccNl5Sg1xHVtySdUq6fA/83HKOtJVl69NxtmjG2
-         eCIpxevacaN3iOXvk/exB2qo9T+852DTzt4xlp2gc+D2u0JsH6FtG3OKNylST5fYH8Io
-         7QK3QjeoxIYsqBqRJJAfwaUATr7EiF29akNqcvKhZDDt3UXcEWrzZMe3bNFgF+G/PFVA
-         0cdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUfL3mh9SKjEsVM8RQhWH8RgS6Jp/YHiTAgoYrLSV9PLOCNc4lNdl+RZ9zEBv/81miQsgiYhTW1U+upUA1LgtrEYObOfXAG3UPZ
-X-Gm-Message-State: AOJu0YyMt0W4QjngwA5iOhZXx3/Ml6UFxmEM8qPMRf7asJGYkJehlOFL
-	+JPiJ2I4ifMf+bMJ7TWecdbx/HgokJtya9DOozf/3ABeqOwmjyfXRHVDdQXQAA==
-X-Google-Smtp-Source: AGHT+IFrFHCSqWHcu4Z8LDTRZvobn1L1Rvr4vbhhohOOJ0K9ILHv9DA+m26gbXUkQGlIbbzwJ83AuA==
-X-Received: by 2002:a17:902:e84b:b0:202:18de:b419 with SMTP id d9443c01a7336-20218deb7a8mr88897145ad.63.1724100702925;
-        Mon, 19 Aug 2024 13:51:42 -0700 (PDT)
-Received: from localhost.localdomain ([2604:3d08:7780:1ca9:d173:3faf:522f:33b9])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f039ef11sm66606405ad.248.2024.08.19.13.51.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2024 13:51:42 -0700 (PDT)
-From: Vasily Khoruzhick <vasilykh@arista.com>
-To: Seth Heasley <seth.heasley@intel.com>,
-	Neil Horman <nhorman@tuxdriver.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org
-Cc: Vasily Khoruzhick <vasilykh@arista.com>
-Subject: [PATCH] i2c: ismt: kill transaction in hardware on timeout
-Date: Mon, 19 Aug 2024 13:51:04 -0700
-Message-ID: <20240819205125.92358-1-vasilykh@arista.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1724102833; c=relaxed/simple;
+	bh=+sOmpMxl05XLDPuo4r7/zihYOtpqvtWf8lxC2z/W41A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=I4/kFIYAn/QcoQdIk7PFH8ev4YFjCQsM19CZlHQbvaxSXxCJJI6DoYL024LzyU4g/A72dLgbY7GZ60JmNhHywrW8RWA+oFggpRk7CCP8IKkj9UNuHeyOPs2ryEHRfY8hGH6TY1zI2+0+4gGFm3KolKCb16qnby5fBhPIbO+QfGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=wNRJuV+u; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=kT7Kuxp6fbaULbA/LwhMmUWF1CJosjyeQGtqZ9CJp+0=; b=wNRJuV+uiReaCGv60DiKRMQhAm
+	eOMs1pRGa6EHvcjoApT6Mt5LM3b5GpPAKD1+j2Tktv+nGAFu2xbK8PDX9tn25zqFUuGjAMinpkdcZ
+	CJ7+c3rDsJQPC8ZMbyvyVtnQlX7NzhAiLWUHdx1PlvLugrngoXqLffbvyJvrO5IEBY863rGZ30Uvz
+	ArvLeDZnfGgT8JEyzDAE77cHFtE+YnHPG7LtEbxE5OUcyeQl5cGttOfYdRMKOQUAUB1R7pQImU0NT
+	A1V3ZHPCQILEOpmUYokl/tQVOF2JmWyZe3ID0d8PRRxULB7x7tFRETjiKYukjEnC9kC1wfvW2EYOL
+	K37fH8RA==;
+Received: from i53875a9f.versanet.de ([83.135.90.159] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sg9tR-0003Xv-3A; Mon, 19 Aug 2024 23:26:25 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: linux-kernel@vger.kernel.org,
+ Detlev Casanova <detlev.casanova@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Chris Morgan <macromorgan@hotmail.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>,
+ Muhammed Efe Cetin <efectn@protonmail.com>, Andy Yan <andyshrk@163.com>,
+ Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Shresth Prasad <shresthprasad7@gmail.com>, Ondrej Jirman <megi@xff.cz>,
+ Weizhao Ouyang <weizhao.ouyang@arm.com>, Alexey Charkov <alchark@gmail.com>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Finley Xiao <finley.xiao@rock-chips.com>,
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+ Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 09/10] arm64: dts: rockchip: Add rk3576 SoC base DT
+Date: Mon, 19 Aug 2024 23:26:44 +0200
+Message-ID: <2553026.Sgy9Pd6rRy@diego>
+In-Reply-To: <23696360.6Emhk5qWAg@trenzalore>
+References:
+ <20240802214612.434179-1-detlev.casanova@collabora.com>
+ <21547916.mFnZMskM5D@diego> <23696360.6Emhk5qWAg@trenzalore>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-On Intel Denverton SoC ismt controller may enter weird state when
-transaction gets stuck. It times out in the driver, but unless
-transaction is explicitly killed in the controller, it won't be able to
-perform new transactions anymore.
+Am Montag, 19. August 2024, 19:59:45 CEST schrieb Detlev Casanova:
+> On Wednesday, 14 August 2024 11:31:04 EDT Heiko St=FCbner wrote:
+> > Hi Detlev,
+> >=20
+> > Am Freitag, 2. August 2024, 23:45:36 CEST schrieb Detlev Casanova:
+> > > This device tree contains all devices necessary for booting from netw=
+ork
+> > > or SD Card.
+> > >=20
+> > > It supports CPU, CRU, PM domains, dma, interrupts, timers, UART and
+> > > SDHCI (everything necessary to boot Linux on this system on chip) as
+> > > well as Ethernet, I2C, SPI and OTP.
+> > >=20
+> > > Also add the necessary DT bindings for the SoC.
+> > >=20
+> > > Signed-off-by: Liang Chen <cl@rock-chips.com>
+> > > Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+> > > Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> > > Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> > > [rebase, squash and reword commit message]
+> > > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> >=20
+> > looks like (since 2019) there is a strong suggestion for having a soc n=
+ode.
+> >=20
+> > See Krzysztof's mail in
+> >   =20
+> > https://lore.kernel.org/all/6320e4f3-e737-4787-8a72-7bd314ba883c@kernel=
+=2Eorg
+> > / that references
+> >     Documentation/devicetree/bindings/writing-bindings.rst [0]
+> >=20
+> > So I guess we should probably follow that - at least for new socs for n=
+ow.
+>=20
+> That make sense, but what is exactly covered by MMIO devices ? everything=
+=20
+> except cpus, firmware, psci and timer ?
 
-The issue is extremely difficult to reproduce and may take weeks of non-
-stop smbus traffic.
+if your node has a foo@mmio-address naming then it goes in there I guess
 
-Numerous hours with logic analyzer didn't yield any useful results, it
-looks like the controller stops toggling SCK line, i.e. the issue is
-likely in the controller, since device doesn't do clock stretching, so
-nothing is driving SCK except the host.
-
-Explicitly kill transaction on timeout to recover the controller from
-this state.
-
-Signed-off-by: Vasily Khoruzhick <vasilykh@arista.com>
----
- drivers/i2c/busses/i2c-ismt.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
-index 655b5d851c48..c93c02aa6ac8 100644
---- a/drivers/i2c/busses/i2c-ismt.c
-+++ b/drivers/i2c/busses/i2c-ismt.c
-@@ -381,6 +381,15 @@ static int ismt_process_desc(const struct ismt_desc *desc,
- 	return -EIO;
- }
- 
-+/**
-+ * ismt_kill_transaction() - kill current transaction
-+ * @priv: iSMT private data
-+ */
-+static void ismt_kill_transaction(struct ismt_priv *priv)
-+{
-+	writel(ISMT_GCTRL_KILL, priv->smba + ISMT_GR_GCTRL);
-+}
-+
- /**
-  * ismt_access() - process an SMBus command
-  * @adap: the i2c host adapter
-@@ -623,6 +632,7 @@ static int ismt_access(struct i2c_adapter *adap, u16 addr,
- 		dma_unmap_single(dev, dma_addr, dma_size, dma_direction);
- 
- 	if (unlikely(!time_left)) {
-+		ismt_kill_transaction(priv);
- 		ret = -ETIMEDOUT;
- 		goto out;
- 	}
--- 
-2.46.0
 
 
