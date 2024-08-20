@@ -1,52 +1,74 @@
-Return-Path: <linux-i2c+bounces-5572-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5573-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1884E958120
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 10:40:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 954E9958124
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 10:40:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3A901F23BFD
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 08:39:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08A1EB22951
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 08:40:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38F518A6CA;
-	Tue, 20 Aug 2024 08:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE1B18A6CE;
+	Tue, 20 Aug 2024 08:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c5HQjpd+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RsK5RmYF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D7818E342;
-	Tue, 20 Aug 2024 08:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0F218A6C2
+	for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 08:40:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724143194; cv=none; b=SpJQbVFfhCzWZZPG4p7qakCxdI5+YowRUJE1cXqtF6hjdlog22+iY4q4kOzlg8fuxxDq1k/HP+ex/jPCxF/lEjEBk/T8fZk7ne96EeteKrHc1jUFdnDRBKzHxgZCbiHrAyY1GPP16lPrnG/ihqMBzXzgY1Ks/U+nmui8yW2Nx/Q=
+	t=1724143229; cv=none; b=GZdo6rC0Xkj+XGn5t2+5cGJA6k1RaNZC6GhgIoFzzIStFxKEbKgrmzaQ4NtPlh1WEYbcSXJtzsoktQnt5Gor1XheR7+CFTOF5/5AXerKZ89/nMQDUuo5a00pC5XacIJm+t7E4in5zORNz/Oi6jzRnrXXTye8031OFJ6sRXFBOt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724143194; c=relaxed/simple;
-	bh=Y67lKScO+XHSKkPWwEJi0w1LvhlMtu8n19Sm6FXBPfo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gCVhC9FrTDUFuWa5mKM2ff0LHg6uGkTr62c40zx8tfSwTUB3x2wEP2zN00MOdi8WTjC4lFKz5YhTmO9RMAjPlLhM4z+zkVEcVi6KT4hRqTLtsgYpYMwu4y0ssQne0YqYQ+osde69LNQ3t6bcsB6xstI4K97tgS7zGNF4t3XD32I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c5HQjpd+; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 30B65240002;
-	Tue, 20 Aug 2024 08:39:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1724143183;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gjbZOxwR9PVGgaPf4uUaZd0JrjKtSGINO0OZPhHVGyE=;
-	b=c5HQjpd+Or9Pj+ejVrX1nGX4PvgGzQJftCNT2NtxvISrNrqvjgYe2dOBghNRWvDSJqIxZf
-	wCVNrnJZ2LeXP5uE9pswbO2yYpZMffoMrmuFoJ5V24+8DitD4lVy5/WE3TqQ3LVQl5npu4
-	mjn02iEzlkBSMj4TZy/Vk5RbEwFewbSlZ0LAVW2iKrqDDgEGsw1U++4G+Xf/fdwOtHRMHu
-	/1ck3f1fMrbVe1L33TqrUXttiGDqCnTX6JuC7eI2As+OtWdqpAtx7WEPMsfawOcybtjaeJ
-	WrpzC2hU3IOztDocVmDxBmPys0xLN710+YRTbYIpPWLbDrgOZ5xk1N9vbslUXA==
-Message-ID: <8d8b1967-1d41-44d9-9791-d7809bed269c@bootlin.com>
-Date: Tue, 20 Aug 2024 10:39:42 +0200
+	s=arc-20240116; t=1724143229; c=relaxed/simple;
+	bh=cqf+epztMqHF1S45aNOIbPhtm5ch919GzDP4oVJSlmU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=j/GdV3Ske+FAt0OqoRP1PyjEDYnN0MJlArGUa5IxiJf8R9UpQSU11g2X30YL65vurSGu/fvqsT9LbXvcAGaUR81p7heb0TXVFszPWIVYIdp38fTt/cPY8B4vyNh6u0prKQHXl1WPVwArF5ga7Vd+e051EhdS+79LN85c2SoJ50M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RsK5RmYF; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2ef2e37a171so11142501fa.2
+        for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 01:40:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724143226; x=1724748026; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gsPuvbP6J5tJc8IHjfOGPhqQKG4KJvX3tAwPjRBkj+s=;
+        b=RsK5RmYFWHQpta+QK5RAPno4iBZJtcdbPa4E9nmF64S8S12v3fht/vhwBh0qEXjfMY
+         0RqDn/7mWcNOAZC+qaxNjiX3C0nud81yG3zPIqWQP4o4pRfEbTz4gc7ZQpP0BOWQredO
+         fe9ouHtDdRjljs37BQtAZVyn1/2Hp6Hrebhk5bSp5mIziHqkum8B8p5ORSBT8TEZZNC3
+         z/qh6xIbPdMZ8iR8lsuxMj2ftb6GiKdc/SjgnwUhTlEBSAqU9//vIT0tSPmbTseH0rsq
+         Ghaid3lUoZ0DUb+kllrLbdz2wzjktQZ6AEfR5JtB3yuJTruaBOe5aaIhhme1Jbx7XM3I
+         xggA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724143226; x=1724748026;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gsPuvbP6J5tJc8IHjfOGPhqQKG4KJvX3tAwPjRBkj+s=;
+        b=vMlwDmgy7L4Qdxh/VoSBMqguoZ/ZlHIf0ucJc5HBCG0PpAIkQv9i2NiwCG+mOBfXu+
+         Zuw/X8b0iVBukl2aXLYnchbiVtksZ/Il9tSNIs1f2GRA2zBxBexv0dm8kdfznfrft4NL
+         +oofUneF9noMDlWtBvaGmKIcc9R/Et49sGAXN2QvoIhfmNQFWk/FBZU0Io3kz3rAbZ/x
+         6WnS25BJMHOiynjHiQJxrr2xqdyGNB7hvjJI0abUfjBNlPjYOBbas6HEaJ+KrwpBdu5H
+         d2qN3bWxue+p+uJD/M75IrbiNCVuTE4+hzwxwRN8up8RVwoUUJznmQwidDKXux7Sfpxw
+         x5dw==
+X-Forwarded-Encrypted: i=1; AJvYcCV4l3VGSWi2f+aP5QVkntUGsbykbf6lbNml2HnrJ1P3X9W7IuWVrz/w2yv0moK6pW3lBENaqhcnATo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybvTwY434he6mvITudFn1nXkWurDGJ1rAX0jPoqEmAWKb+I6F3
+	YOzfETJ5SIdqr1XO97mvknbZ/PsC1cISh4qmIIRk9tr4FGl8wp4+D3SkXIdECuY=
+X-Google-Smtp-Source: AGHT+IHhh6tGdOAQ9QA7mYKMmQvS8VzL37BMb4sv2wh+B2Y9vA+F6kCalp1a7r2B+m1tzo2G1x3zkA==
+X-Received: by 2002:a05:6512:1081:b0:530:e0fd:4a92 with SMTP id 2adb3069b0e04-5331c618ffemr5255451e87.0.1724143225524;
+        Tue, 20 Aug 2024 01:40:25 -0700 (PDT)
+Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5330d41ebaesm1687364e87.219.2024.08.20.01.40.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Aug 2024 01:40:25 -0700 (PDT)
+Message-ID: <0157ee30-8b61-45fd-a64a-da2cf5d983b1@linaro.org>
+Date: Tue, 20 Aug 2024 11:40:23 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -54,87 +76,79 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] Add support for Congatec CGEB BIOS interface
-To: Mary Strodl <mstrodl@csh.rit.edu>, linux-kernel@vger.kernel.org
-Cc: akpm@linux-foundation.org, urezki@gmail.com, hch@infradead.org,
- linux-mm@kvack.org, lee@kernel.org, andi.shyti@kernel.org,
- linux-i2c@vger.kernel.org, s.hauer@pengutronix.de,
- christian.gmeiner@gmail.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20240814184731.1310988-1-mstrodl@csh.rit.edu>
+Subject: Re: [PATCH v3 1/5] dt-bindings: i2c: qcom-cci: Document SDM670
+ compatible
 Content-Language: en-US
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <20240814184731.1310988-1-mstrodl@csh.rit.edu>
-Content-Type: text/plain; charset=UTF-8
+To: Richard Acayan <mailingradian@gmail.com>,
+ Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-media@vger.kernel.org
+References: <20240819221051.31489-7-mailingradian@gmail.com>
+ <20240819221051.31489-8-mailingradian@gmail.com>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20240819221051.31489-8-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
 
-On 8/14/24 20:47, Mary Strodl wrote:
-> The following series adds support for the Congatec CGEB interface
-> found on some Congatec x86 boards. The CGEB interface is a BIOS
-> interface which provides access to onboard peripherals like I2C
-> busses and watchdogs. It works by mapping BIOS code and searching
-> for magic values which specify the entry points to the CGEB call.
-> The CGEB call is an API provided by the BIOS which provides access
-> to the functions in an ioctl like fashion.
+On 8/20/24 01:10, Richard Acayan wrote:
+> The CCI on the Snapdragon 670 is the interface for controlling camera
+> hardware over I2C. Add the compatible so it can be added to the SDM670
+> device tree.
 > 
-> At the request of some folks the first time I sent this series out,
-> CGEB has a userspace component which runs the x86 blob (rather than
-> running it directly in the kernel), which sends requests back and
-> forth using the cn_netlink API.
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
+>   .../devicetree/bindings/i2c/qcom,i2c-cci.yaml  | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
 > 
-> You can find a reference implementation of the userspace helper here:
-> https://github.com/Mstrodl/cgeb-helper
-> 
-> I didn't get an answer when I asked where the userspace component
-> should live, so I didn't put a ton of work into getting the helper
-> up to snuff since similar userspace helpers (like v86d) are not
-> in-tree. If folks would like the helper in-tree, that's fine too.
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> index c33ae7b63b84..af6dd9a34fd4 100644
+> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+> @@ -27,6 +27,7 @@ properties:
+>             - enum:
+>                 - qcom,sc7280-cci
+>                 - qcom,sc8280xp-cci
+> +              - qcom,sdm670-cci
+>                 - qcom,sdm845-cci
+>                 - qcom,sm6350-cci
+>                 - qcom,sm8250-cci
+> @@ -138,6 +139,23 @@ allOf:
+>               - const: cci
+>               - const: camss_ahb
+>   
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sdm670-cci
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 4
+> +        clock-names:
+> +          items:
+> +            - const: camnoc_axi
+> +            - const: soc_ahb
+> +            - const: cpas_ahb
+> +            - const: cci
+> +
+>     - if:
+>         properties:
+>           compatible:
 
-Hello Mary !!
+After fixing a review comment by Krzysztof,
 
-It was by pure luck that I found your series.
+Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-It seems we are working on the same thing, the Congatec Board Controller.
-
-I sent a first version of my series few weeks ago [1].
-My implementation is very different.
-There is an MFD which maps the needed IO regions and declares cells
-(gpio, watchdog, i2c). It also contains all the code to communicate with
-the Board Controller (using ioread and iowrite).
-The DMI table is used to detect if the board is supported, so the driver
-can be probed (or not).
-Other drivers (gpio, i2c and watchdog for now) use the API provided by
-the MFD to communicate with the Board Controller.
-With this approach, I don't need a userspace component.
-
-For this work I used the Congatec driver (that Thomas Gleixner pointed
-you) as reference. But as mentioned by Thomas the driver is not well
-written at all.
-By the way their latest version is available in their yocto metalayer
-(please find the link in my series).
-
-For now I did the job for the conga-SA7 board (which has a 5th
-generation Board Controller).
-So if you have hardware which has the same generation of the Board
-Controller, you can easily test the series. You only need to add the DMI
-entry of your board in the MFD driver.
-
-For other generations, I had a quick look. The sequences seem very
-similar, with minor differences. It could be easily implemented in the
-future, and only the MFD will be modified.
-
-Please feel free to test/comment my series [1].
-
-[1]
-https://lore.kernel.org/all/20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com/
-
-Best Regards,
-
-Thomas
-
--- 
-Thomas Richard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+--
+Best wishes,
+Vladimir
 
