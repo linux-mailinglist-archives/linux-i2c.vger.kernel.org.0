@@ -1,151 +1,113 @@
-Return-Path: <linux-i2c+bounces-5568-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5569-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B9B6957F86
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 09:25:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16E3D957FAD
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 09:32:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7D171F226D8
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 07:25:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C90CC28401B
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 07:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25077188CBC;
-	Tue, 20 Aug 2024 07:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="NcdUsqbl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D90503FB9F;
+	Tue, 20 Aug 2024 07:31:59 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7D816D314
-	for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 07:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F33218E376;
+	Tue, 20 Aug 2024 07:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724138709; cv=none; b=LP9qct62k6dMu0tiuWiLlxOHWptjhDqsMRefLE3HjkXSJ0MPxFokkZXTMld7pPZq/07h7P2L7fTGg3ozrrM3UIGMPuXTXqemPkId3PSIiJDV8tWgHvpK2pD3WHa+1u2IIYlHgB7JIc0cXOcDIfzFIL+/Uxd1ZSjZklrewO0Di98=
+	t=1724139119; cv=none; b=DNVggnkmCqNGOmfIZP2ELEFXh/7O2t0QIiUOP5YTnfhGDy41kC+Ek9WqrbDzjeIkxJqZPxOVs967XOFNvPy2RLe+dFM1XuXrmEomw/2uT8KvBlWe609tlcm7rT1RbDeFF3OtTbp3c5ZxHTKvQNhtNVLWXNL+DTc9rq01R07+8lA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724138709; c=relaxed/simple;
-	bh=dgqu4JYBQj2QnVeSbZK0OLE8UCJZ7xEm/wPtjtV1EH4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JnXXjEWd3MzMyYusy8HjaE52GQatNR1tgzI146UJ2OKx6QrGl7N0qE3hpZLAmUCPXU5hCPKg1/qiGCUhi1iubyLhUjM/uHPCai8l9OSOP92DmNLPoBdz0eWebLRb3aUXKEyYK0NMJexcCqArH4OZd0/PaxgHe+fVZg+UDGr5tzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=NcdUsqbl; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2f3b8eb3df5so51978041fa.1
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 00:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1724138704; x=1724743504; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KY+Pn7UxCWwux6Nl2NUqCDNWg2E6CQrceaqKs6911ps=;
-        b=NcdUsqblH5apsH4vsbX0zy/PenbHRfhF2aQRPp5SXI4EVc6Ju1N/eCcybzg4R+vQxz
-         HRpP7t7spq/b5O8wWy/BU9R3Iim2y7LdF1dCd19tJZqFw03Qhxhk6zIoeQv9MSJSIJFt
-         7RzMHLWF28hHUxdscfRx/jAi3CxvdLjB4mF1s8Txmw6wtyNxyud57WHtralQ+/lDE/r/
-         FevvXmXGHgh+pqTdEl4SB+gYUOmktDy0KwWWz3evMkyyw+JLRbdNSJRHVkbbeOzFhuUs
-         JyrMKbQkcb3QN5+WnXXMxjUBplg8C44ge+/YYLWmeNMGjyi5FdGxABeZrx8yOBUhFtGU
-         09dg==
+	s=arc-20240116; t=1724139119; c=relaxed/simple;
+	bh=Qmx2xkZx6QjU8y0JpQ3DgBemV0QRZuTDRzUNGnGAqAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CSulkfH7ecLsRn3WHCGSIkZhMGbwaBgF/lvu3YBhpOBwDrUGk8CU7EUDJ3VDhka4rOjdtl2dIwrKdk5VYLiwDsmMBYUoCCL7C/u6oFBGopEdrTV73w10Cz+uvFRXS1I9UZyOKfwhklO0i7wA0IEnIduPxCO04rwqSLOA2thDw2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3717ff2358eso2787007f8f.1;
+        Tue, 20 Aug 2024 00:31:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724138704; x=1724743504;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KY+Pn7UxCWwux6Nl2NUqCDNWg2E6CQrceaqKs6911ps=;
-        b=RJbvWix5yLIaJvrIaSP0Fxx1yZcik9y0YwOLuiAbKqQmn2FNMzA8W/WJ7Fk0hwhALI
-         eDY6kmV49fSgpuKb2IDk9mURSwjMfQ21CB+4XEDSQqIUuCcgF6HFCu8E+hxJ266k0JfX
-         k4ixDYjWb2AFQ0ihox+QFY38HdnpVp3aM/RTwmm1vh8+zcbaeV/1H+qJNRNsRqVJhdFt
-         WTxlrsfH4b64admZkcdzpOFHIaurr33zeGHWW4IUsVyryH46iic6TKbf+U/VzPb2hhGo
-         GEkAlSNFu78uLJ6+98jMsQB08it985hk473bgJQI0PL3ur8z8VfsYIMQX+J37Q3AZiMN
-         cBOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVKD6N9oIF55vL7Bu77F9UTi6+LGY5OJPU48DEGcB6p14iG7Yi7t6DCRCjkFKXSOvuRzG1BPRPquK5ZBEOwWHMft2Oez4e3JgFR
-X-Gm-Message-State: AOJu0YxX446h4F2h4Lq6UZut3/J90TLAVRWJZ385Nv78RsxhPoolbxxY
-	jIE6N8AaLo0IV5hLLMd/TwY0c0GH4lORvzK42exErI7yN40xq3JXGJZxBBUULG4=
-X-Google-Smtp-Source: AGHT+IGTPNA2s+cNW2f69+8kmFELCsr7npIzZBbuC3yWFsocerzVeG9BMezpjpbwoOvRtOjCVaH9Zw==
-X-Received: by 2002:a05:651c:b06:b0:2f3:f1a7:9813 with SMTP id 38308e7fff4ca-2f3f1a79bf2mr1817831fa.43.1724138704232;
-        Tue, 20 Aug 2024 00:25:04 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.177])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bf0b0cc99fsm684362a12.49.2024.08.20.00.25.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Aug 2024 00:25:03 -0700 (PDT)
-Message-ID: <c9a466cc-97b5-465e-8420-ce69f307b362@tuxon.dev>
-Date: Tue, 20 Aug 2024 10:25:01 +0300
+        d=1e100.net; s=20230601; t=1724139116; x=1724743916;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zwQbZZzYKJfp9JXZBu90gOlgrt4jvpTVXR4uFjbp38Q=;
+        b=YYiM7fOmDJZSj/cwxKUHSsWdPoF9rS2gsC08v5U2w5+GlcmH08ID2rCy70sejmv5uD
+         OOWLmak2vO0mtgW5uD4ueNO7Gc73Fzm9hhg3sHw/JUJU+jmZm90oFMRtq8kW4xEZuy/3
+         MUmDvHSzrb2ipFutK4lrzb0BZcbFz4iC4/UHxXtMS6HyrfqV57qXTKLAf4y+pUfFrZ+G
+         47gHGXCk0UA/OvrHmmhJJlwlE6F2l/mn/+5C6L4BLNERHSiscelYEjaRGqpJ/cVwuS45
+         IPKFOhlNFB+yv3IWi6l8OE3w8lCyWSgdr9PpiYNaQT8AyMBimj4JQRkW4zbxbwP+0qZQ
+         qy5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWgVcYERPAwBdPS5uQkTL8G4X1PBX75+P1QyPFYhEf28r33RS8qxwXLUuCKOAuH76z0vF7MTv/Ffi/RnNmUOss9G074tJ7UxVLKt0DDLMzQ50n+JRxmKVgnf1vrmxg45Dan2TDy305OPx74gDlMFkLylLcPft4MliVUutKHIOWcachKDfECPo2fszkmDgjrCSBiXC3yBxwkfO8jYXBE9Kpc4A==
+X-Gm-Message-State: AOJu0Yz4vbKeHW8ovKilBoeb9oLWlE+W1PJoL3T33C9CuzCULzD53HME
+	H+Q/30sKjGCyLTDtpXu0N1netjGMa2BMO+90gMfAKkz5Mmp7ec8W
+X-Google-Smtp-Source: AGHT+IHTd/LmyAb9MTCxstjAsJD6mcKXnM89dKlsj660yY9f1w+dAMRpSYvFWk6FPDY5kqLqPENMjw==
+X-Received: by 2002:adf:8b59:0:b0:371:844f:e0c with SMTP id ffacd0b85a97d-37194314b17mr8264101f8f.10.1724139115875;
+        Tue, 20 Aug 2024 00:31:55 -0700 (PDT)
+Received: from krzk-bin ([178.197.215.209])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3718985a48asm12439743f8f.62.2024.08.20.00.31.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2024 00:31:55 -0700 (PDT)
+Date: Tue, 20 Aug 2024 09:31:52 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Richard Acayan <mailingradian@gmail.com>
+Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Todor Tomov <todor.too@gmail.com>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] dt-bindings: media: camss: Add qcom,sdm670-camss
+Message-ID: <u7enyv6sb5n2jjsxg6tyrzjdj3tswzo7733hl3vuxh3j5nshz4@mklofzu3dzqi>
+References: <20240819221051.31489-7-mailingradian@gmail.com>
+ <20240819221051.31489-9-mailingradian@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 05/11] i2c: riic: Add suspend/resume support
-Content-Language: en-US
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: chris.brandt@renesas.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
- p.zabel@pengutronix.de, wsa+renesas@sang-engineering.com,
- linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240819102348.1592171-1-claudiu.beznea.uj@bp.renesas.com>
- <20240819102348.1592171-6-claudiu.beznea.uj@bp.renesas.com>
- <ajj4fwoob5wq5guktq2b54h55fn5qlcakiybq6pk3xagiops7d@abpwevzemidy>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <ajj4fwoob5wq5guktq2b54h55fn5qlcakiybq6pk3xagiops7d@abpwevzemidy>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240819221051.31489-9-mailingradian@gmail.com>
 
-Hi, Andi,
+On Mon, Aug 19, 2024 at 06:10:54PM -0400, Richard Acayan wrote:
+> As found in the Pixel 3a, the Snapdragon 670 has a camera subsystem with
+> 3 CSIDs and 3 VFEs (including 1 VFE lite). Add this camera subsystem to
+> the bindings.
+> 
+> Adapted from SC8280XP camera subsystem.
+> 
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
+>  .../bindings/media/qcom,sdm670-camss.yaml     | 319 ++++++++++++++++++
+>  1 file changed, 319 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+> new file mode 100644
+> index 000000000000..5789cf66a516
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+> @@ -0,0 +1,319 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +
 
-On 19.08.2024 22:37, Andi Shyti wrote:
-> Hi Claudiu,
-> 
-> On Mon, Aug 19, 2024 at 01:23:42PM GMT, Claudiu wrote:
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> Add suspend/resume support for the RIIC driver. This is necessary for the
->> Renesas RZ/G3S SoC which support suspend to deep sleep state where power
->> to most of the SoC components is turned off. As a result the I2C controller
->> needs to be reconfigured after suspend/resume. For this, the reset line
->> was stored in the driver private data structure as well as i2c timings.
->> The reset line and I2C timings are necessary to re-initialize the
->> controller after resume.
->>
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> 
-> This patch doesn't have tags, so I'll add mine :-)
-> 
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
-> 
-> Just one thing, though...
-> 
-> ...
-> 
->> +static int riic_i2c_resume(struct device *dev)
->> +{
->> +	struct riic_dev *riic = dev_get_drvdata(dev);
->> +	int ret;
->> +
->> +	ret = reset_control_deassert(riic->rstc);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = riic_init_hw(riic);
->> +	if (ret) {
->> +		reset_control_assert(riic->rstc);
->> +		return ret;
-> 
-> Can I add a comment here saying:
-> 
-> 	/*
-> 	 * Since the driver remains loaded after resume,
-> 	 * we want the reset line to be asserted.
-> 	 */
+No blank line here.
 
-Sure, thank you!
+> +%YAML 1.2
 
-> 	reset_control_assert(riic->rstc);
-> 
-> Unless I missed the point :-)
-> 
-> Thanks,
-> Andi
+With above:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
