@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-5584-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5585-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 621EC958354
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 11:56:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB0D5958380
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 12:02:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8FEF1F25492
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 09:56:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 379571F2553E
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 10:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86BE518C35F;
-	Tue, 20 Aug 2024 09:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C8718A957;
+	Tue, 20 Aug 2024 10:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RnoXpU1B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DqoG66h2"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3852718C348;
-	Tue, 20 Aug 2024 09:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ECC218E37C;
+	Tue, 20 Aug 2024 10:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724147771; cv=none; b=IwS5ReRN+aEabi4IWHr2C014P6vw4Hypo4H6IY0L7z4gWZkiZkK8CAQa8frKZRIy52aiGOsi9mn3t7whT5VoRbxRuZDNmKUZtiooB10kkWyrt9zj1DxNTQuAEqpPRwHhh+jRqRlfX65z+CN92Vhmw+smfEpgHl3gESHBhgTv+Ho=
+	t=1724148123; cv=none; b=YIXT89kPeClkrvCzFHzM3uPcOuB80hFQvqGJFHhAiL6Eh0xrTJOFTvR4Bv86D7hZX6wXEixCLsRMLGEjnxCaPosS75ZIywonKpWG1YPd4Eab2D3iQiEj+MZyV6YqmoL2tmhU3j8PM2/vFgAyvRujTXry4t0VhOPjEAbIHH9xYvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724147771; c=relaxed/simple;
-	bh=mrrk7AixQHeb+sIOhbK+mRb+VKoG098zJfUJdZ8/JYQ=;
+	s=arc-20240116; t=1724148123; c=relaxed/simple;
+	bh=SPdFDbDd+Nv846EY7wkG6UtHA7zhvRTxYRxFLHapcfs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Y2GwcFin339S99D9xCr12/dNsWTmGYSW4MZFmhiiFWu5wUUIWew1bOs2/qLzgTinteZjFJTfyHfS6VCfXJhhNvDJx8DHdxdU30hj4/1X3h9ptyZfqof0z+hmR1tmbFgcuTSnJOiexbdHXV4aJbMK/cVg5zYqOblxa+/7SO3UKEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RnoXpU1B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D87C4AF09;
-	Tue, 20 Aug 2024 09:56:04 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=toROi4/g6gz7Mj7p8bER9hjP58F5O52dtRmc+qCimp0is0jW/4R9zzhKRvbq9uOF5wL7tnZ6+8HZx4KSYS/3TIdjCaQ/u72owFk7x40kxZO1WQ2ZDv51jDT4WW9NJz1sSTcF/5uJOUthk93JQofQhdY8DBEvbVYfhQMJYPoJ4dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DqoG66h2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 926BFC4AF09;
+	Tue, 20 Aug 2024 10:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724147770;
-	bh=mrrk7AixQHeb+sIOhbK+mRb+VKoG098zJfUJdZ8/JYQ=;
+	s=k20201202; t=1724148122;
+	bh=SPdFDbDd+Nv846EY7wkG6UtHA7zhvRTxYRxFLHapcfs=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=RnoXpU1Bm0io2J6RirFlnx0ZwLGObreqjKPqDIh8uUHoQ+/SSnB6zAN51Uk1+dUBI
-	 kYl4ijQIxzgFAaAkfdZ12hDgMhYOlWer+uMQ6PatoaXGTBCghLrBUiCVWwPJs0R7C1
-	 ZNL5biLKXmILDTLzssGbqLddZ93NsxhRaodMkJ4HT4J7ps+hwoZsI9x/n54fSJpoB/
-	 mmXV06b72lAr1CRWyvqF7M2yj2vdYzQie5n7cgI9/ijRSmcWh7f2xuW3Fyx91uhOEl
-	 j0k+/8ZK4Cd5rekSth04fnVNr6PJvYffiqaJBGFy7cyP+Jmy7kwW69af1+izkZwZFh
-	 o8l3Trq+FGknQ==
-Message-ID: <e34dd20c-e67e-4b69-88df-b4d34e01f8b8@kernel.org>
-Date: Tue, 20 Aug 2024 11:56:01 +0200
+	b=DqoG66h2GZIoVTFq6lPo9gE8QO5HbOuKrde+8T9at0xbpFk3HHvhOh84US8KMFe+L
+	 50CUalXZCm/O2gqNpl89punLwJIUe8oztTcISMAwCZeo3y4XoUGB18wt/34LR8b18M
+	 LCPmf0bsLbhqjDkaLJReS9XZI6NezojSgQ0Nwwmfr0g20fvmY6lzaIRNLW4HV4vXaP
+	 JepMn1RvpR+G2Z8YC0EytpU1UJxVO0pCnP8gHWoR4p1w7HlKqEVCgUUjclpOJLvMh4
+	 FRDv/bk9P1tpc3DazZe6DJ92FTOzSFdaBbbdwZ2Olz4yiEkiHckTyOeGfbhRVIPmQE
+	 NIYt7EAP29vwQ==
+Message-ID: <266f4b55-bddb-4c44-9eb5-3eef35757714@kernel.org>
+Date: Tue, 20 Aug 2024 12:01:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,22 +50,31 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/5] dt-bindings: media: camss: Add qcom,sdm670-camss
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Richard Acayan <mailingradian@gmail.com>,
- Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-media@vger.kernel.org
-References: <20240819221051.31489-7-mailingradian@gmail.com>
- <20240819221051.31489-9-mailingradian@gmail.com>
- <3b3774de-3aeb-4a58-8c0e-e494a2f2aaf8@linaro.org>
+Subject: Re: [PATCH v13 1/3] dt-bindings: i2c: aspeed: support for
+ AST2600-i2cv2
+To: Ryan Chen <ryan_chen@aspeedtech.com>,
+ "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
+ "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+ "joel@jms.id.au" <joel@jms.id.au>,
+ "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+ "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+ <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20240819092850.1590758-1-ryan_chen@aspeedtech.com>
+ <20240819092850.1590758-2-ryan_chen@aspeedtech.com>
+ <7237aa34-9821-4ba7-a45b-3b1d598bc282@kernel.org>
+ <OS8PR06MB75418A2ACA6693A8163F19E8F28D2@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <46a9280d-f4ef-4cfb-83a3-3744e04721f3@kernel.org>
+ <OS8PR06MB7541A25AC3A11C51DD57E1B4F28D2@OS8PR06MB7541.apcprd06.prod.outlook.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,174 +120,63 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <3b3774de-3aeb-4a58-8c0e-e494a2f2aaf8@linaro.org>
+In-Reply-To: <OS8PR06MB7541A25AC3A11C51DD57E1B4F28D2@OS8PR06MB7541.apcprd06.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 20/08/2024 11:15, Vladimir Zapolskiy wrote:
-> Hi Richard,
-> 
+On 20/08/2024 08:50, Ryan Chen wrote:
+>>>> Subject: Re: [PATCH v13 1/3] dt-bindings: i2c: aspeed: support for
+>>>> AST2600-i2cv2
+>>>>
+>>>> On 19/08/2024 11:28, Ryan Chen wrote:
+>>>>> Add ast2600-i2cv2 compatible and aspeed,global-regs,
+>>>>> aspeed,enable-dma and description for ast2600-i2cv2.
+>>>>>
+>>>>> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+>>>>> Reviewed-by: Krzysztof Kozlowski <krzk+dt@kernel.org>
+>>>>
+>>>> ?!?
+>>>>
+>>>> What happened here? Why are you amending tags?!? That's not allowed.
+>>>> You cannot change received tags, change people names or their data!
+>>>> And how is it even possible, srsly, how do you even work with git?
+>>>> Git would never do it, so you had to do it on purpose via some weird
+>> workflow.
+>>>>
+>>> Sorry, I don't know Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> is
+>> you or not.
+>>> Or should I still keep Krzysztof Kozlowski <krzk+dt@kernel.org>?
+>>>
+>>> https://patches.linaro.org/project/linux-i2c/patch/20230415012848.1777
+>>> 768-2-ryan_chen@aspeedtech.com/
+>>
+>> Here is the tag you received. You added it in v12.
+>>
+>> Why did you change the tag suddenly to something else?
+>>
+>> Do you understand that you are not allowed to change people tags? I have
+>> doubts if you ask about people's identities, which is entirely irrelevant.
+>>
+> Sorry, I am not understood.
 
-...
+I don't know how to say this simpler that you are not allowed to change
+tags.
 
->> +
->> +  clocks:
-> 
-> Please add
-> 
-> minItems: 22
-> 
->> +    maxItems: 22> +
->> +  clock-names:
->> +    items:
->> +      - const: camnoc_axi
->> +      - const: cpas_ahb
->> +      - const: csi0
->> +      - const: csi1
->> +      - const: csi2
->> +      - const: csiphy0
->> +      - const: csiphy0_timer
->> +      - const: csiphy1
->> +      - const: csiphy1_timer
->> +      - const: csiphy2
->> +      - const: csiphy2_timer
->> +      - const: gcc_camera_ahb
->> +      - const: gcc_camera_axi
->> +      - const: soc_ahb
->> +      - const: vfe0_axi
->> +      - const: vfe0
->> +      - const: vfe0_cphy_rx
->> +      - const: vfe1_axi
->> +      - const: vfe1
->> +      - const: vfe1_cphy_rx
->> +      - const: vfe_lite
->> +      - const: vfe_lite_cphy_rx
->> +
->> +  interrupts:
-> 
-> Please add
-> 
-> minItems: 9
-> 
->> +    maxItems: 9
->> +
->> +  interrupt-names:
->> +    items:
->> +      - const: csid0
->> +      - const: csid1
->> +      - const: csid2
->> +      - const: csiphy0
->> +      - const: csiphy1
->> +      - const: csiphy2
->> +      - const: vfe0
->> +      - const: vfe1
->> +      - const: vfe_lite
->> +
->> +  iommus:
-> 
-> Please add
-> 
-> minItems: 4>
->> +    maxItems: 4
->> +
->> +  power-domains:
->> +    items:
->> +      - description: IFE0 GDSC - Image Front End, Global Distributed Switch Controller.
->> +      - description: IFE1 GDSC - Image Front End, Global Distributed Switch Controller.
->> +      - description: Titan Top GDSC - Titan ISP Block, Global Distributed Switch Controller.
->> +
->> +  power-domain-names:
->> +    items:
->> +      - const: ife0
->> +      - const: ife1
->> +      - const: top
->> +
->> +  ports:
->> +    $ref: /schemas/graph.yaml#/properties/ports
->> +
->> +    description:
->> +      CSI input ports.
->> +
->> +    properties:
->> +      port@0:
->> +        $ref: /schemas/graph.yaml#/$defs/port-base
->> +        unevaluatedProperties: false
->> +        description:
->> +          Input port for receiving CSI data from CSIPHY0.
->> +
->> +        properties:
->> +          endpoint:
->> +            $ref: video-interfaces.yaml#
->> +            unevaluatedProperties: false
->> +
->> +            properties:
->> +              clock-lanes:
->> +                maxItems: 1
->> +
->> +              data-lanes:
->> +                minItems: 1
->> +                maxItems: 4
->> +
->> +            required:
->> +              - clock-lanes
->> +              - data-lanes
->> +
->> +      port@1:
->> +        $ref: /schemas/graph.yaml#/$defs/port-base
->> +        unevaluatedProperties: false
->> +        description:
->> +          Input port for receiving CSI data from CSIPHY1.
->> +
->> +        properties:
->> +          endpoint:
->> +            $ref: video-interfaces.yaml#
->> +            unevaluatedProperties: false
->> +
->> +            properties:
->> +              clock-lanes:
->> +                maxItems: 1
->> +
->> +              data-lanes:
->> +                minItems: 1
->> +                maxItems: 4
->> +
->> +            required:
->> +              - clock-lanes
->> +              - data-lanes
->> +
->> +      port@2:
->> +        $ref: /schemas/graph.yaml#/$defs/port-base
->> +        unevaluatedProperties: false
->> +        description:
->> +          Input port for receiving CSI data from CSIPHY2.
->> +
->> +        properties:
->> +          endpoint:
->> +            $ref: video-interfaces.yaml#
->> +            unevaluatedProperties: false
->> +
->> +            properties:
->> +              clock-lanes:
->> +                maxItems: 1
->> +
->> +              data-lanes:
->> +                minItems: 1
->> +                maxItems: 4
->> +
->> +            required:
->> +              - clock-lanes
->> +              - data-lanes
->> +
->> +  reg:
-> 
-> Please add
-> 
-> minItems: 9
+You receive tag, use b4 to apply it or add it manually. Do not alter it.
+Do not change it. Do not add things there. Do not remove parts of it.
+
+Tag is as is. You only copy and paste.
+
+Is this understood now?
 
 
-None of above are necessary and this contradicts review we give to drop
-these...
 
+> https://patches.linaro.org/project/linux-i2c/patch/20230415012848.1777768-2-ryan_chen@aspeedtech.com/
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> at v10
+> So, what should I do now at v13?? 
+
+Fix your workflow and go back to previous version which had correct tag.
+And answer - why did you decide to change it?
 
 Best regards,
 Krzysztof
