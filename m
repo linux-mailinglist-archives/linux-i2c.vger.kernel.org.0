@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-5576-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5577-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DCCE958143
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 10:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DEC595814A
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 10:45:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 924211C23CB0
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 08:45:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 620B51C23CF4
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 08:45:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 184CE18C024;
-	Tue, 20 Aug 2024 08:44:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E9718A938;
+	Tue, 20 Aug 2024 08:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ATdK3lcj"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="APusk8G3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E758718B472
-	for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 08:44:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F065C18C005
+	for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 08:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724143479; cv=none; b=rpXfFe5tPIZMC4EbQXfj7tEfVyF43AJ3EOQWBG6K+izog2EeUYv8zz9ArBSM2kdj1aX1B5FYpOkmKa2CfyheQW0ArhrMwKTYA6E6cvMhBedvBv4OT7msGuKNeSqw+YRXzF/Tf6V7eqdGgVp7uqPm1RcYq0sR+llUixfPol+ruww=
+	t=1724143481; cv=none; b=GsW7/Ngq3HcFi/QWy3JOrIlDTPADoa+UHJycTwF8/dNrAkX3Ft4/RTQrvaPrXS14iX2KDm2Au77KBuibfmA5Vm7VeRGcLTeaIH+S2Ie9voSbyHBi4J4dmpPDDgds/zAltwftP9o9xh8byXi27f3rEVw609RzqhJKa84QdSsFZ60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724143479; c=relaxed/simple;
-	bh=ACoKcvirNpvaaPTfka/NODi/Qq4lO1FWeGoQWC9ZgEQ=;
+	s=arc-20240116; t=1724143481; c=relaxed/simple;
+	bh=tuavY8B+K9C97HunEmyoljvzjotXaTEWqYBTIU/UZM4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LVPB/R8/ovqOWGjkX9zdPxtI3vR8ZDm6JBjRg11PnolEcSsmMNcMp+E52JSQrI1JiGy4BiNJdv1yUWlp8TExe26DzS8CKSQbfdiOTxJX2XwPgIxbRHePPAoRR2vA0tKwA9p7gaLS7Q9qZT5oe1kCegU6Skamf4VQx2pCeH2zxwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ATdK3lcj; arc=none smtp.client-ip=209.85.167.53
+	 In-Reply-To:To:Cc; b=eNTEa01Z68b7W9y44iHixv9jWzxhzEcvQffh4MR+N5KdYNEj1XoYxRLF4A2qmRcumSJz3FyTfNAhkEyGC+WwXKd+kOEdvogRqhYdtZ9OIu+jinYqCZzHiBdXv+zwxutMSPrtzke/77ieuYuJSMaYVsJEL4cK/OuQXFIRBnyTRZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=APusk8G3; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52efa16aad9so6501275e87.0
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 01:44:37 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5bf0261f162so1694120a12.0
+        for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 01:44:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724143476; x=1724748276; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1724143477; x=1724748277; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fuaP5uVIlhNOjKdFnLiti0TFBZrTydW9KqiKj5mZro8=;
-        b=ATdK3lcjx0dme97cWbtmFpfJH7oGapUumZ9sZfbezVfvuDIzoxKq8QRUIcvN041cji
-         EFe2a1ljSBUgSfTE2jqQcibb1VUpXRTwSwNxK5IM8yLzzJYAi170gNbkh54pjliJdDMY
-         2VV57j6S8f7et5FeCWtG5VGb82ogEq7dt0E3byOer6RiEHY8dorfcqD/8/C5IaL9Wqxj
-         +v3+8ggkl6um/cDe3vCIH2zDRwLsKGIHasEweHzvSkGpttFEURCfx11XUPP/TWN+lHX9
-         H5sgyvbVOV0pZ0nIaGGGO/DtM2PmcOWvNkW2CsZJnNckDXb6PRKiM2UkbowhEX/gq7Xn
-         LYcg==
+        bh=bLlU3+TlFuBxRVx2lzjivm2ZIQexem+IzXNKgKlDOlg=;
+        b=APusk8G35ZTj4ux5atL7HpkrLNFNHB0NxBK0X0nalqYNMzr++TEm56FwUOezG+BG6u
+         hzsIv5C+XWhmyFCuAz7gVP+3xkoZDEZ2sIlWdmJ1MMItbwSnAjavnTEAG7jIA6TKvTA6
+         iQAKaILgdEsCgKRCYd1TTKkR9uzFuxvu45d0oIFF6/70flAhbAxuhSJpyDr/2tbuc2L+
+         u6hQ5wBJYkv9RcAUBM0X6h7+07gjCSq6cIuUbl6BcybrGwNvURqA0Hhq1d0eZSa0+pYr
+         Eiw+fntAzGUHyNutvewi8Oa48zprlUSN0k9aCsZMpgZZ6vPR0tJ6urt53sGRtnXWjuUe
+         wmbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724143476; x=1724748276;
+        d=1e100.net; s=20230601; t=1724143477; x=1724748277;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fuaP5uVIlhNOjKdFnLiti0TFBZrTydW9KqiKj5mZro8=;
-        b=j1xKklbN0LvmtwxdPsOVM5eC2kdMZWKIA2RbG1svmITRzkh30kQH6eKOajopDWUAQ0
-         61tGJoIFH5kIfiD9gMH9KpPq7hqFvSF8Mz9VhE+dt5Y9faIRWldUTA4uWwJcQrCsWLVH
-         SNYMdazVqPrHl5FCMZLdK63usZUgMkrPOd1js2uC1QGs0q3zjtY8kyu3Fdetlt5At4aO
-         KphrikB7pNpt0I+u6VmVE8YP5dy1aN6uRqOB+N4uWgwzusXaKjHmnwyG73x8j/jNa4CE
-         U2dEtiB9gzBOddAUqTvCHkmltaf4i1lCghWo86XjMZxnRocz9XEQ9NPl8tXhgZczCt6g
-         757Q==
-X-Gm-Message-State: AOJu0Ywc9EEPvrwzINS+Su1OSQubD3RbKt1TGXoQCf4oXJcsYZVV4EOn
-	dkPPD5N5iQDK9uRudZm15n+LxaDd42nbqnoKQ2gqrZtaACckmwk0fd9pRbumwEY=
-X-Google-Smtp-Source: AGHT+IFljyfUprSxlzzNt0uKa9soJdmxltAzvfxFDydZduKSuBcQBiRjMjMwlN48DyfiOMVOy253KA==
-X-Received: by 2002:a05:6512:304c:b0:530:aeea:27e1 with SMTP id 2adb3069b0e04-5331c6ec909mr8282061e87.50.1724143475819;
-        Tue, 20 Aug 2024 01:44:35 -0700 (PDT)
+        bh=bLlU3+TlFuBxRVx2lzjivm2ZIQexem+IzXNKgKlDOlg=;
+        b=CK8EoAntBp5+ZdYJ8mM24EyGqw3mrAhx1Ga6ECxvUbWzdPcSMWhIpi8B0nVyQgrCsn
+         l9cc6nwbATOZY/Yd0cu2dDmR9lgLtaYGKrbcMcDR+wVAF9iB55u6PKcC29T52tPRxKbY
+         nUg9NqseqhjbLQ3HUg3eHhErflokKs6wXLESm9XArQHMlMi9CGLyGYOS/XWMzLAVvEKa
+         eE01qxNkimnqMXuXaR0DerMdckAUvzws36F96chAgm4MprqNbefObAsZoOjHkS/wEAj8
+         /4BA4TU6MY7dUplFLgdhHd3KiI3Ukcvb+0LnFuaLujkrn1Lr6Vrnd+i+mFjbhK50mKr1
+         hyCA==
+X-Gm-Message-State: AOJu0YzqylWzOl8uZO9qXW1xEbgbQQ3e/ab6wS83AQyalg1HGKHEMRW0
+	m8YrrgICbhjLcKZIq3hmLYeY1mdtN3g1N24PREDK8/p9gp3UsHL4sus8aJs25U0=
+X-Google-Smtp-Source: AGHT+IG3c3yEsOEYt0Ms552/y+JJoXTiNtytJKuxIEuDy+I8cVSDLVszMI5UxWNOdiCzcSoAoeEhpA==
+X-Received: by 2002:a17:907:e25a:b0:a7a:9f0f:ab26 with SMTP id a640c23a62f3a-a839292f340mr1049403666b.23.1724143477182;
+        Tue, 20 Aug 2024 01:44:37 -0700 (PDT)
 Received: from [127.0.1.1] ([178.197.215.209])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8383946973sm728037766b.160.2024.08.20.01.44.34
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8383946973sm728037766b.160.2024.08.20.01.44.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2024 01:44:35 -0700 (PDT)
+        Tue, 20 Aug 2024 01:44:36 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Tue, 20 Aug 2024 10:44:25 +0200
-Subject: [PATCH 2/3] dt-bindings: i2c: nvidia,tegra20-i2c: restrict also
- clocks in if:then:
+Date: Tue, 20 Aug 2024 10:44:26 +0200
+Subject: [PATCH 3/3] dt-bindings: i2c: nvidia,tegra20-i2c: define
+ power-domains top-level
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,7 +78,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240820-dt-bindings-i2c-nvidia-v1-2-2763e9a9a1b0@linaro.org>
+Message-Id: <20240820-dt-bindings-i2c-nvidia-v1-3-2763e9a9a1b0@linaro.org>
 References: <20240820-dt-bindings-i2c-nvidia-v1-0-2763e9a9a1b0@linaro.org>
 In-Reply-To: <20240820-dt-bindings-i2c-nvidia-v1-0-2763e9a9a1b0@linaro.org>
 To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -90,27 +90,28 @@ Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
  linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1347;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1168;
  i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
- bh=ACoKcvirNpvaaPTfka/NODi/Qq4lO1FWeGoQWC9ZgEQ=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBmxFdtv5yn7C0bYAm4bo0cIML6vITcffTHEhj5j
- oS2PGAp0nCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZsRXbQAKCRDBN2bmhouD
- 1/BBD/4pLbwK94nWazOSWABSjKtItrzSv7WqizBW47D598qfe1CPjekuL/OScpQmQWV6w6H/k1L
- rJBQoDzKfsiegx+F/KZwsNTBLiyO7QeHnJm9YZNU0mbx0cYlEcI9TMctE5JkwPDwSlfvtMxtT0z
- cD7EH0oPovZYeqd3XdJzY9KFvZ2rqH4WD34V/Cc5o0JSlO6Ke29kN6mFrawaiJUTWD6m59tWlJY
- yeC+SGpZ8L9PqBbUY7OVFOSPFvA2VNsEndB6p1ipk5GVnIwCu6d1za02FbOUCzU4zI9TppQht/5
- TSKuwvsp9L3XKZ0miP5eF8RB1ATdlmtxbu+HxmqO93EkaxZq6YoUQzPchrlb57TciwLqgSGLftN
- oixY/QFs/dfPvYGkgqWgWfTpjDpQt3PmpotsvBI83i5wPFrYY8Ekh535Y+qshFv0wdXUWRbQ62u
- 43b2dbdqXn9jib1gfy3+GLZ/seo36pdDOBwF96f+z3qFVmKhKmcduLK9RS2118cWliMIxCMtjNg
- 8YvAxHcThVMfM8PUEdKdtzKN0dFToD7exDF6MPq/9AAR1CapzOtu6KgGsDnDN+3sN8gIwvi1lR+
- txsqKjp4Ns4CWJj7skXOz2Bik4R8T2EhjLnWezSHOPOipG/2IKxXDRz3qFadrdgYvrXbhO1g+iB
- iTQVVU5/ZxTH4ag==
+ bh=tuavY8B+K9C97HunEmyoljvzjotXaTEWqYBTIU/UZM4=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBmxFducl0CivLBIidJgzplwyH3OS+XGj4W/ZkF4
+ pJsphTvNMKJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZsRXbgAKCRDBN2bmhouD
+ 1/2MD/kB+O/KfmEbReWf0/6iWQuEfJCxT8RTJOcit9xG2fcCDf8v4xRinTMTAPu7Cmn4ifH3FOJ
+ 0GKYtD+06DEsKYzsaQSNtAO/HJuvn8qFaTzdmSgSsiZVqdkNGSy+pw9FuQZZ+YG3qSYc/z5DQgx
+ /TdT0pOt/mKOQR0SxuwoGKTqtyIPVeXH4tLLEZMkbMzg+k2VDw682/YVeDX3aG/v9NuXPWKaFBK
+ l3sPa4cdgHQ+m3/fYU9SJ5QqDaNGCkzoKqvR5z0g6rfkh/6L4I9ybPn/X8jDnfYgCf8j4oUkAGD
+ uvV6/hPuQi9fDV4jQTCCmzywtLddIoy0tjzZkNT3p3IASEKqFFxK8Zjsj5Ia7fXztnvNwjktV3C
+ QuinUxVaRwK/3on7aMP8kNROGUQqDs8QsNXVVYJIEgCWHDwoDHa7cqwnbQV3EzsYk0Dj3LfuCQ/
+ 5rpb+0v6WdZDCkt2T7uQFJDVnOD0geeM9gfwL7baZw7dww+00zjvuMnfjZdA0wD1bHxSKQC+wCR
+ tiVoPdnYNthyWZkdB1VEg6rkaDj82lxRlHdOuwyPQjFNyR+E+14xbqQqEM2XSTnxdbpyY4IPmRy
+ MnSPSAiYaE9jRBCfaGCm1A+Lqtx3590pIlR+36zo3lmE0IS/VpZblLL5ptuIX1CwgsVJwBz3zYo
+ B/LOImh9cl7lw+Q==
 X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
  fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 
-Both xxx and xxx-names properties with variable number of items should
-be constrained in each "if:then:".  Add missing constraints for clocks,
-since we have such for clock-names.
+Properties are expected to be defined in top-level "properties:" block
+and further customized in "if:then:".  Only one variant has power
+domains, so add respective top-level property and disallow it for other
+devices.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
@@ -118,36 +119,29 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
  1 file changed, 6 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-index 5c92ef51287d..eeaa07fe3875 100644
+index eeaa07fe3875..b57ae6963e62 100644
 --- a/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
 +++ b/Documentation/devicetree/bindings/i2c/nvidia,tegra20-i2c.yaml
-@@ -124,6 +124,8 @@ allOf:
-               - nvidia,tegra30-i2c
-     then:
-       properties:
-+        clocks:
-+          minItems: 2
-         clock-names:
+@@ -103,6 +103,9 @@ properties:
+     items:
+       - const: i2c
+ 
++  power-domains:
++    maxItems: 1
++
+   dmas:
+     items:
+       - description: DMA channel for the reception FIFO
+@@ -162,6 +165,9 @@ allOf:
+         power-domains:
            items:
-             - const: div-clk
-@@ -138,6 +140,8 @@ allOf:
-               - nvidia,tegra210-i2c
-     then:
-       properties:
-+        clocks:
-+          maxItems: 1
-         clock-names:
-           items:
-             - const: div-clk
-@@ -149,6 +153,8 @@ allOf:
-             const: nvidia,tegra210-i2c-vi
-     then:
-       properties:
-+        clocks:
-+          minItems: 2
-         clock-names:
-           items:
-             - const: div-clk
+             - description: phandle to the VENC power domain
++    else:
++      properties:
++        power-domains: false
+ 
+ unevaluatedProperties: false
+ 
 
 -- 
 2.43.0
