@@ -1,221 +1,151 @@
-Return-Path: <linux-i2c+bounces-5567-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5568-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00095957EA0
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 08:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B9B6957F86
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 09:25:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7624B1F24F2B
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 06:50:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7D171F226D8
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 07:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D181B813;
-	Tue, 20 Aug 2024 06:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25077188CBC;
+	Tue, 20 Aug 2024 07:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="PZEZlaRV"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="NcdUsqbl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2120.outbound.protection.outlook.com [40.107.255.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2131A18E341;
-	Tue, 20 Aug 2024 06:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.120
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724136637; cv=fail; b=qtHm/I3jXymg1GYTSRuUfUzYy4ACXCfiKuUa2ePjP11/k+7f6KZTAHXDwIvkaB3R1+afSD3W5NgOrn5dvKNLmYr5nW6YOSqoikpWN+RrM51dFfufemwnLoYH/FJyn24jLNyfjdZdHnh9gtkLpkjHoRuW1S/SC1ZtRSONLc9xug8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724136637; c=relaxed/simple;
-	bh=FP935QoH++r9YE8Es8ORQsJSeBU+BXiyuyC7+EyhUog=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=H17S7uhSbFpUPVH4mzJs2TJ/AH/HwlF/Y9+9O/kDZniUtI4mpd1bAlag/l5/N1KDp0SrG9T14BZU4amZivwAvJwdTgpmVobLnqE4mlwP76iHTe1xboLOJBSUYZoWmuGY6XSAiNubHZJR04N/ZJcIclLW4MpDDk1jYqSvxEEGGhA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=PZEZlaRV; arc=fail smtp.client-ip=40.107.255.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qfF3VHaBpN+8k/iBQRlA08f2w/wbkRlLYgnxvQIj30S/Avy69oxzvSfQT1AeuU1K0hD76I4RFWlDGUXujPcA6akwuv2QRbnSwN2M+w9e02q8Me7IJKPljOdjgrtE0I1553Bx1YhhWJon/8qkhChIGJxWtPrjYIoay2GRwa6VfYXprA/qNOQ7GRnS5TX9D6ZsLr7bFqRrJXMBbxA05Xo6zXXBlaITUz7PXtxeiJ3oziRKcmRFyQB2rhPhQgd3gg/hjfIAcEnmUymj1Cc2uoTqDd0kH2lSxnl3Fqkrdp7lIWjy+r7/mBaWd3PLlXygda1GAk2tS8NGBMTb9YpFVIvrjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FP935QoH++r9YE8Es8ORQsJSeBU+BXiyuyC7+EyhUog=;
- b=gp0aQFfbnK+mzoNaHSthL2qEOjMuao77SwpsuA84qhjUy4e/5y7WhzbXLOU9mA8Xv0894YpNGEctALAcW52Kh2VTXvu1duqU2LB4qcqceMq4hdmZdsypwCfQLqUzpoXNPjqhboYNrBJwXb3ys1X7r3igDpfdxS1hwo19gjyEvN1Xqo7J09Akyxv7kzH4IVtLjzbF4bEdaiOdqI0rRGCY5QBbnGvh7NBB5WB/aZsq3uJeDQh+8rSYNCFZ+FhWsi7fBeLp0poPLxeDZ/L0oOW/GYHTJme2ykuiewQSQNwgN796M4RKN6M6T90raMoqyf5OdqRng4xO8qgV+qPHeylJQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FP935QoH++r9YE8Es8ORQsJSeBU+BXiyuyC7+EyhUog=;
- b=PZEZlaRVe6xqX95g9KoW0yJoJjBK1rjgTgI0tZ1CxklDRD+7zla+G77xgYSZIjphMck+nXy1/W/3PK/r8VwZL7PC17vJWz3Opxk5ylDaDCkQ8X3BXTzbKKCDxC116TN7CsiNXW00UYnORv7esMWo9NygusKqiAMXWAYNPRZ7r+zZ88LMFGE7AfJ0uSV05BAWyFfzmnHDk/dBCrXte+KcyOfI955ZiBBgGG5oysbyFnGyk2eL5XreyXSPFJcTLSKndbZOztikJWYDs66bXNfqQvKkSAt2GQjfO2be2iX2OJbLZmQOXAcjXQIqtz1Uo4M3EN3+CdFtzjjpe+aKt2pjmg==
-Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
- by KL1PR06MB6348.apcprd06.prod.outlook.com (2603:1096:820:e9::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Tue, 20 Aug
- 2024 06:50:30 +0000
-Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
- ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
- ([fe80::9f51:f68d:b2db:da11%5]) with mapi id 15.20.7875.019; Tue, 20 Aug 2024
- 06:50:28 +0000
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, "brendan.higgins@linux.dev"
-	<brendan.higgins@linux.dev>, "benh@kernel.crashing.org"
-	<benh@kernel.crashing.org>, "joel@jms.id.au" <joel@jms.id.au>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>, "robh@kernel.org"
-	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "andrew@codeconstruct.com.au"
-	<andrew@codeconstruct.com.au>, "p.zabel@pengutronix.de"
-	<p.zabel@pengutronix.de>, "andriy.shevchenko@linux.intel.com"
-	<andriy.shevchenko@linux.intel.com>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>, "openbmc@lists.ozlabs.org"
-	<openbmc@lists.ozlabs.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v13 1/3] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-Thread-Topic: [PATCH v13 1/3] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-Thread-Index: AQHa8ho549HAiRHYiEK49yrqFuaLn7IuYooAgAD5pxCAAFELAIAACBjQ
-Date: Tue, 20 Aug 2024 06:50:27 +0000
-Message-ID:
- <OS8PR06MB7541A25AC3A11C51DD57E1B4F28D2@OS8PR06MB7541.apcprd06.prod.outlook.com>
-References: <20240819092850.1590758-1-ryan_chen@aspeedtech.com>
- <20240819092850.1590758-2-ryan_chen@aspeedtech.com>
- <7237aa34-9821-4ba7-a45b-3b1d598bc282@kernel.org>
- <OS8PR06MB75418A2ACA6693A8163F19E8F28D2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <46a9280d-f4ef-4cfb-83a3-3744e04721f3@kernel.org>
-In-Reply-To: <46a9280d-f4ef-4cfb-83a3-3744e04721f3@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|KL1PR06MB6348:EE_
-x-ms-office365-filtering-correlation-id: e5cf7182-cb14-4f94-045b-08dcc0e46043
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|1800799024|7416014|366016|921020|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?eWRQTm5Ha2ZPZFdxNkRwQ3h2alpwaWRwSXk0dS9WK3g1TXExdWFJalY0SDZZ?=
- =?utf-8?B?Z3c2UndSRG93Y2Z2dVZyMnhGZjVFUnp1V1QyYy94Q2xOckd2ZmgyMTU0V3ZQ?=
- =?utf-8?B?VGhSUnZkUEJtTWpiTURiVXZZUnZJVUp5cFZieWdvWGdPSlJraGRET3ZpRTJB?=
- =?utf-8?B?TFRnbERJcVE3RThGWmRPZ1V0V1JuNkIxWllvaUs1ZFQzcUNZL1M2RHBNZFNH?=
- =?utf-8?B?WXZKeWprU3FzMXFUalJaN25UUnlKeXRuSXp4Y05HK1owRk90UFhZcmRxWENF?=
- =?utf-8?B?TENDUlVvay9pU3dqK2xwUnk4dzdWRGJoVEJiYWVkUEdMc01hWGtKa0hVbUpJ?=
- =?utf-8?B?TVRUWW51Q2RlVHNsZnE1N3p4dzVMVGxVUU04MmUweVdsd3d0Q3BieG5YWTh6?=
- =?utf-8?B?MUZkeGxoR3ZLT2t0VklKZW5DNzY5c3BoQnZXRnFEc1NWVjMxRmZ4ekV3cnBY?=
- =?utf-8?B?TlhmSVBsUHNhb1k0NktVL3pNUkhNQjFuMUZrZXd6WnJ0UmNoWHJDR3BKOGxO?=
- =?utf-8?B?Y25Sb2JZSkJxM1pXK3dXVHZoZnJtTjBjRVZ3V0lVYnZCbkVQZTI1a0hScE85?=
- =?utf-8?B?amRyZzBleWgzQjVsVjdNc1drdm85YUprcWUxNjBzVUVwaW8xY015QW05Nk50?=
- =?utf-8?B?MHdnMXg1WG4wdDlDSGdLclU0UUJZZE5iamxxN2RhT2ZBR0g5emVUWTZwUGdU?=
- =?utf-8?B?R2ZFNTRrZjMrbUtQckFyM1JRTm1GMFBTRHNuVE5VcFBsRnlFcW1RUEJDcUty?=
- =?utf-8?B?YzkxQ0dNUVVwYjE3ZGgwR0ZodzhSUmdJQlphelc0Ly9KM0duRDBHb1Z6OHEy?=
- =?utf-8?B?Y2MvcGlCR2pkTFZ2ZE9pc1VzdXRWU2ZIWnl2dXBGYXRDNEN6Z0dySFYvelRq?=
- =?utf-8?B?ckNZZTkzRzVWWjVIL1lDRTh0eSt1L0gyRFNscTJWTXRJeU5LTTBTYmdNbXJZ?=
- =?utf-8?B?YlUwbENDaHJPUzA5N2EwNVMwNm9pOEx0bkZPZHlmbmZhdEZmNnFrNHF3dDA5?=
- =?utf-8?B?ck5BdTVQeXZKaVlLUGxXazJNSFd2NERicEkwMzM5Mm9adE1rMXVJTGI4ZVhu?=
- =?utf-8?B?ZlNRRS9WOVBqQ2NRRlpBek9nbFJGWlV1Y010TzFkSEZOZzdCSVdmckw2TWIr?=
- =?utf-8?B?VUhld2hlcUxYcU5qV0xET04vcGtINnJlbTA0OFZoK3ZYMXBxYUl4bFJvNXNE?=
- =?utf-8?B?alZuMnc3SG5EUGN1YWJFbG96b0tGdGZyQ1U0WndTYnJMSHorV1QzQ21DKy8x?=
- =?utf-8?B?ZE5yTkxqMVh6ekF1NHpCYkFPRkxGNnFFL3lCa015Q2g0VWVQVkUzZkQ0Q3RQ?=
- =?utf-8?B?L3g3dkRaaXNySGFBNXJXZDRyWldNQU5YOUR3NURreFJxMThJNmxlZE40QlM4?=
- =?utf-8?B?VU45eGlkQTNFWGhBOFhHczE3Q2hDY0xLU0hjc0JNL01adlZvWnBYOU9BOVZw?=
- =?utf-8?B?cjg5dVZVNjlWZ1Z6bXFWaDEwZVcwdnRhNjkyL2syUjdLdTVsWnBKejlSNXMy?=
- =?utf-8?B?SHpBL0I0amJoZGJGRnRYc05EazdkNkloU3BySlZQaVU1NXFxS3FUQ0hlcU1L?=
- =?utf-8?B?MTRpOFpqclZBWWduNnMxUzl3WEhYQWtRVEpGeVhHQ0RvcVZiRS85K2J2end4?=
- =?utf-8?B?bEFDSWpHVkFMYURnTjRaSi9MaGVMV2VuRVVMNVZKM0tzSllaUnlCOGlwR05u?=
- =?utf-8?B?WUR6eHZGMUZ3MWJWRjNLdklRM1ljZXdEak9KTGxPTVZYUHo3dDNJUERoNEpN?=
- =?utf-8?B?S0tNakIySVdGSk4xMEZBcnZCc0kza0tsbGF5d0lzQ280TWtoa3hsOVlRMXBH?=
- =?utf-8?Q?nsiccFzpgeyoO6xeyZVIYoo5y/5mYbyINDrk8=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016)(921020)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?QUhGWlA5NGhmeFhsUDltdzNkK0FJY3dQWGI3VnkxSnh3WWpVMzEzVnA2RDVS?=
- =?utf-8?B?Y0EyMlNtUTZDL242N0dOSVZwTFdiK2lIYUsxWlBEdzJGNmREMmRtRGdsRStQ?=
- =?utf-8?B?UkFvN0VMbWpaN08zSEY2ajMrTGZ4TGloOXE0STFIQXZjVWI1MkpCZnRYb3pH?=
- =?utf-8?B?R0hzWWZNOG9vTkNldkNnM0pMemYwNmpDZ0RQa3haN09lK3BxOE5Rd0Rwekww?=
- =?utf-8?B?Y0tHeUZQNXlIYWFLcUVmNlNsOWJkRjZXQUwzS1dqTUFDZUFycXg1TFp4SmFV?=
- =?utf-8?B?N3ZCOGNsdlBQZmhRek84cW5JMytEb3hEMUhuejdtY3VndWVGN0VjeEQwaFpn?=
- =?utf-8?B?ZC9PYXkrUkFER2IvOUM2R2IybW0rMy8ydWVXMnp2aDhMMVdjVWZyYURrNWZK?=
- =?utf-8?B?NmdFK3p0K0xrUGdibE8rOEtCN0ZPdnA3ZzlyN0hnSHRmMU0vbFliUHQzOVh0?=
- =?utf-8?B?cGtzcHRNdWVkM21vWjZJWjIzUy9mMEtCUmIyZXE0eDBMQVZlRWQ0aHhST0U1?=
- =?utf-8?B?QS9HVGF1c3FnRHhqSkdNU3NkUGVXVWdITzcvVGlRbWY3UmluaTRMSDdVWDJv?=
- =?utf-8?B?RXVNZFpDZHR2aHFML1JDcEJQSVdSVldEVVpVRlcxZ2x3ZW52RisxM0JTZTd6?=
- =?utf-8?B?UzVnc3cyS2pudVZGN2F2RlJCVnRqYTZULzdUSm91Y0dNU09BVCtvMlpUOUU5?=
- =?utf-8?B?TTJuRnl4Vk5oaHFrWWc2b1gxc0FwMVcrVk91ZzNrRldxTXo2NTR5ajcxMkpq?=
- =?utf-8?B?S3ZiNVRDTmlRbHFjSEh6dHZ3aWo1S2ovTHFsdWtYK0VXOW1NNTZnWUlKUEZS?=
- =?utf-8?B?LzdabE9RTGlBYWZ2WGFHWllBeFhTaUVYQ1JEUm9sVU1MUmtEbVNsMEszUHZM?=
- =?utf-8?B?eTlwM1VkWjdiV29VQzVKMGVzc21pMy9TaHVVM3VKWE9LNEp1UmcrKy9SZVZ4?=
- =?utf-8?B?ek54S3BSd2k4VjV0MEJKQnNQSUlWVGNuR3ZrVTA4Und2LzRLU0s0WlRZbEVU?=
- =?utf-8?B?NzJyT1RsMVgvUm9hWE83OHRCTG8rdENIQVlKTXMzNUZKQ3B6aFg4RXZ1STZF?=
- =?utf-8?B?K3RvK2RIcmpMSFI0UU03blpxUHcya3NXWU04MU5LcmJ3YTUzb0xFd3poYnlz?=
- =?utf-8?B?RFlNZjdERHMydTZYekdzeDRXYTJ3WnRHNkdkMnhDSzlGMCthdXEvWGoyUHJS?=
- =?utf-8?B?UzE2S3Q2ZGpYcTFnby85REdpT2E0TUZXUUR4ZWJIL21zaENOQ2NvczJ5WXJV?=
- =?utf-8?B?Y3ZZOHloY1Blc0c5TFdrSVhTeFhFZXU0ekNpeFd6bVNJQXJ1UWpCcDdsMFZT?=
- =?utf-8?B?LzZqUVBVZ1lhY3YyK205MzR4ai9rTFlyQmJkcWd5eExQSUdvYmlCRnE5dW12?=
- =?utf-8?B?aXgvZ3RoU0RpRVVteWExdXVQQ3VJNnR3UVQzbEY5TDBKMVdnTXVZdUFNTm5J?=
- =?utf-8?B?YldUcXNYLzZFMVI1c28zandDRGhkSEZKVW5URXU1SzhRdUNHMlI5T1dMRU0y?=
- =?utf-8?B?dDY1UEpLLzZyNExxTHJCNW5sMmVyQTE0Tzh6Nmo3QWJWNFRLTUtjRXVTZHZo?=
- =?utf-8?B?aUNaYmJIRTFGa2V4VnF3dVhsSDVtcm40RGROMDVaMGhKcVBwenFGRlI0cnZz?=
- =?utf-8?B?SEdac1phSzNBZDI1RVAwWENVdUYzdjU4WmVmSkVVVzAyeUF6Q0VTbnE3Z29L?=
- =?utf-8?B?OE5sZ3B5bEZGMXVHY3NmdGxaZkpJd3ZDSGZwZVJkNFhDV2JsbVVKTDA2WW84?=
- =?utf-8?B?c3JFMEZ6N3JoYTRPVTV0YnQ1eFEvRTNDK21ZYk5kK0IxVzhDUjBoSDQrRFhp?=
- =?utf-8?B?a3B4MlREVjBIeDY4VHM4ejQxbFlvaTA4UWhBNHJIOXB0N2JzNTNacDdDQTBt?=
- =?utf-8?B?TWEyOG04VmtJYTVwRnY1R2N0MUlHUHBHTXpORjRsb2c1V1gzaHh5MVFtVEU1?=
- =?utf-8?B?c3A2V3NOMzY5cVUvcS82WG43VHBjZXB0RlRXUzhnanJKQklZWmEyMi9lVFlz?=
- =?utf-8?B?N2tNRWtYblJVaXAreTFVMjhyeWZYbjE5NTZLeThQa3dWOTJwWnNpempZRENr?=
- =?utf-8?B?NmU1bzJBOFQxN05CV29sTEg5L0Q1OC9JbFlUMlhWeUw1WWdiUHduNkJEWHJq?=
- =?utf-8?Q?GA/Kun3UxxphVc63NGyVPYhsT?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7D816D314
+	for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 07:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724138709; cv=none; b=LP9qct62k6dMu0tiuWiLlxOHWptjhDqsMRefLE3HjkXSJ0MPxFokkZXTMld7pPZq/07h7P2L7fTGg3ozrrM3UIGMPuXTXqemPkId3PSIiJDV8tWgHvpK2pD3WHa+1u2IIYlHgB7JIc0cXOcDIfzFIL+/Uxd1ZSjZklrewO0Di98=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724138709; c=relaxed/simple;
+	bh=dgqu4JYBQj2QnVeSbZK0OLE8UCJZ7xEm/wPtjtV1EH4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JnXXjEWd3MzMyYusy8HjaE52GQatNR1tgzI146UJ2OKx6QrGl7N0qE3hpZLAmUCPXU5hCPKg1/qiGCUhi1iubyLhUjM/uHPCai8l9OSOP92DmNLPoBdz0eWebLRb3aUXKEyYK0NMJexcCqArH4OZd0/PaxgHe+fVZg+UDGr5tzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=NcdUsqbl; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2f3b8eb3df5so51978041fa.1
+        for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 00:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1724138704; x=1724743504; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KY+Pn7UxCWwux6Nl2NUqCDNWg2E6CQrceaqKs6911ps=;
+        b=NcdUsqblH5apsH4vsbX0zy/PenbHRfhF2aQRPp5SXI4EVc6Ju1N/eCcybzg4R+vQxz
+         HRpP7t7spq/b5O8wWy/BU9R3Iim2y7LdF1dCd19tJZqFw03Qhxhk6zIoeQv9MSJSIJFt
+         7RzMHLWF28hHUxdscfRx/jAi3CxvdLjB4mF1s8Txmw6wtyNxyud57WHtralQ+/lDE/r/
+         FevvXmXGHgh+pqTdEl4SB+gYUOmktDy0KwWWz3evMkyyw+JLRbdNSJRHVkbbeOzFhuUs
+         JyrMKbQkcb3QN5+WnXXMxjUBplg8C44ge+/YYLWmeNMGjyi5FdGxABeZrx8yOBUhFtGU
+         09dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724138704; x=1724743504;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KY+Pn7UxCWwux6Nl2NUqCDNWg2E6CQrceaqKs6911ps=;
+        b=RJbvWix5yLIaJvrIaSP0Fxx1yZcik9y0YwOLuiAbKqQmn2FNMzA8W/WJ7Fk0hwhALI
+         eDY6kmV49fSgpuKb2IDk9mURSwjMfQ21CB+4XEDSQqIUuCcgF6HFCu8E+hxJ266k0JfX
+         k4ixDYjWb2AFQ0ihox+QFY38HdnpVp3aM/RTwmm1vh8+zcbaeV/1H+qJNRNsRqVJhdFt
+         WTxlrsfH4b64admZkcdzpOFHIaurr33zeGHWW4IUsVyryH46iic6TKbf+U/VzPb2hhGo
+         GEkAlSNFu78uLJ6+98jMsQB08it985hk473bgJQI0PL3ur8z8VfsYIMQX+J37Q3AZiMN
+         cBOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVKD6N9oIF55vL7Bu77F9UTi6+LGY5OJPU48DEGcB6p14iG7Yi7t6DCRCjkFKXSOvuRzG1BPRPquK5ZBEOwWHMft2Oez4e3JgFR
+X-Gm-Message-State: AOJu0YxX446h4F2h4Lq6UZut3/J90TLAVRWJZ385Nv78RsxhPoolbxxY
+	jIE6N8AaLo0IV5hLLMd/TwY0c0GH4lORvzK42exErI7yN40xq3JXGJZxBBUULG4=
+X-Google-Smtp-Source: AGHT+IGTPNA2s+cNW2f69+8kmFELCsr7npIzZBbuC3yWFsocerzVeG9BMezpjpbwoOvRtOjCVaH9Zw==
+X-Received: by 2002:a05:651c:b06:b0:2f3:f1a7:9813 with SMTP id 38308e7fff4ca-2f3f1a79bf2mr1817831fa.43.1724138704232;
+        Tue, 20 Aug 2024 00:25:04 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.177])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bf0b0cc99fsm684362a12.49.2024.08.20.00.25.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Aug 2024 00:25:03 -0700 (PDT)
+Message-ID: <c9a466cc-97b5-465e-8420-ce69f307b362@tuxon.dev>
+Date: Tue, 20 Aug 2024 10:25:01 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5cf7182-cb14-4f94-045b-08dcc0e46043
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2024 06:50:27.9763
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vc97SgnKd2mkcr+8b/FxWct6uRmLFLJ+AYof4VV33AkHekSzv/qm3sIYI/ROICxnn4ETwx4FaW+oixCrcC+5Pjt446QYFVM7iAqA+T+Bxlw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6348
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 05/11] i2c: riic: Add suspend/resume support
+Content-Language: en-US
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: chris.brandt@renesas.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
+ p.zabel@pengutronix.de, wsa+renesas@sang-engineering.com,
+ linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240819102348.1592171-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240819102348.1592171-6-claudiu.beznea.uj@bp.renesas.com>
+ <ajj4fwoob5wq5guktq2b54h55fn5qlcakiybq6pk3xagiops7d@abpwevzemidy>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <ajj4fwoob5wq5guktq2b54h55fn5qlcakiybq6pk3xagiops7d@abpwevzemidy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-PiA+PiBTdWJqZWN0OiBSZTogW1BBVENIIHYxMyAxLzNdIGR0LWJpbmRpbmdzOiBpMmM6IGFzcGVl
-ZDogc3VwcG9ydCBmb3INCj4gPj4gQVNUMjYwMC1pMmN2Mg0KPiA+Pg0KPiA+PiBPbiAxOS8wOC8y
-MDI0IDExOjI4LCBSeWFuIENoZW4gd3JvdGU6DQo+ID4+PiBBZGQgYXN0MjYwMC1pMmN2MiBjb21w
-YXRpYmxlIGFuZCBhc3BlZWQsZ2xvYmFsLXJlZ3MsDQo+ID4+PiBhc3BlZWQsZW5hYmxlLWRtYSBh
-bmQgZGVzY3JpcHRpb24gZm9yIGFzdDI2MDAtaTJjdjIuDQo+ID4+Pg0KPiA+Pj4gU2lnbmVkLW9m
-Zi1ieTogUnlhbiBDaGVuIDxyeWFuX2NoZW5AYXNwZWVkdGVjaC5jb20+DQo+ID4+PiBSZXZpZXdl
-ZC1ieTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6aytkdEBrZXJuZWwub3JnPg0KPiA+Pg0KPiA+
-PiA/IT8NCj4gPj4NCj4gPj4gV2hhdCBoYXBwZW5lZCBoZXJlPyBXaHkgYXJlIHlvdSBhbWVuZGlu
-ZyB0YWdzPyE/IFRoYXQncyBub3QgYWxsb3dlZC4NCj4gPj4gWW91IGNhbm5vdCBjaGFuZ2UgcmVj
-ZWl2ZWQgdGFncywgY2hhbmdlIHBlb3BsZSBuYW1lcyBvciB0aGVpciBkYXRhIQ0KPiA+PiBBbmQg
-aG93IGlzIGl0IGV2ZW4gcG9zc2libGUsIHNyc2x5LCBob3cgZG8geW91IGV2ZW4gd29yayB3aXRo
-IGdpdD8NCj4gPj4gR2l0IHdvdWxkIG5ldmVyIGRvIGl0LCBzbyB5b3UgaGFkIHRvIGRvIGl0IG9u
-IHB1cnBvc2UgdmlhIHNvbWUgd2VpcmQNCj4gd29ya2Zsb3cuDQo+ID4+DQo+ID4gU29ycnksIEkg
-ZG9uJ3Qga25vdyBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFy
-by5vcmc+IGlzDQo+IHlvdSBvciBub3QuDQo+ID4gT3Igc2hvdWxkIEkgc3RpbGwga2VlcCBLcnp5
-c3p0b2YgS296bG93c2tpIDxrcnprK2R0QGtlcm5lbC5vcmc+Pw0KPiA+DQo+ID4gaHR0cHM6Ly9w
-YXRjaGVzLmxpbmFyby5vcmcvcHJvamVjdC9saW51eC1pMmMvcGF0Y2gvMjAyMzA0MTUwMTI4NDgu
-MTc3Nw0KPiA+IDc2OC0yLXJ5YW5fY2hlbkBhc3BlZWR0ZWNoLmNvbS8NCj4gDQo+IEhlcmUgaXMg
-dGhlIHRhZyB5b3UgcmVjZWl2ZWQuIFlvdSBhZGRlZCBpdCBpbiB2MTIuDQo+IA0KPiBXaHkgZGlk
-IHlvdSBjaGFuZ2UgdGhlIHRhZyBzdWRkZW5seSB0byBzb21ldGhpbmcgZWxzZT8NCj4gDQo+IERv
-IHlvdSB1bmRlcnN0YW5kIHRoYXQgeW91IGFyZSBub3QgYWxsb3dlZCB0byBjaGFuZ2UgcGVvcGxl
-IHRhZ3M/IEkgaGF2ZQ0KPiBkb3VidHMgaWYgeW91IGFzayBhYm91dCBwZW9wbGUncyBpZGVudGl0
-aWVzLCB3aGljaCBpcyBlbnRpcmVseSBpcnJlbGV2YW50Lg0KPiANClNvcnJ5LCBJIGFtIG5vdCB1
-bmRlcnN0b29kLg0KaHR0cHM6Ly9wYXRjaGVzLmxpbmFyby5vcmcvcHJvamVjdC9saW51eC1pMmMv
-cGF0Y2gvMjAyMzA0MTUwMTI4NDguMTc3Nzc2OC0yLXJ5YW5fY2hlbkBhc3BlZWR0ZWNoLmNvbS8N
-ClJldmlld2VkLWJ5OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxp
-bmFyby5vcmc+IGF0IHYxMA0KU28sIHdoYXQgc2hvdWxkIEkgZG8gbm93IGF0IHYxMz8/IA0KDQo+
-IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQoNCg==
+Hi, Andi,
+
+On 19.08.2024 22:37, Andi Shyti wrote:
+> Hi Claudiu,
+> 
+> On Mon, Aug 19, 2024 at 01:23:42PM GMT, Claudiu wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Add suspend/resume support for the RIIC driver. This is necessary for the
+>> Renesas RZ/G3S SoC which support suspend to deep sleep state where power
+>> to most of the SoC components is turned off. As a result the I2C controller
+>> needs to be reconfigured after suspend/resume. For this, the reset line
+>> was stored in the driver private data structure as well as i2c timings.
+>> The reset line and I2C timings are necessary to re-initialize the
+>> controller after resume.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> This patch doesn't have tags, so I'll add mine :-)
+> 
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+> 
+> Just one thing, though...
+> 
+> ...
+> 
+>> +static int riic_i2c_resume(struct device *dev)
+>> +{
+>> +	struct riic_dev *riic = dev_get_drvdata(dev);
+>> +	int ret;
+>> +
+>> +	ret = reset_control_deassert(riic->rstc);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = riic_init_hw(riic);
+>> +	if (ret) {
+>> +		reset_control_assert(riic->rstc);
+>> +		return ret;
+> 
+> Can I add a comment here saying:
+> 
+> 	/*
+> 	 * Since the driver remains loaded after resume,
+> 	 * we want the reset line to be asserted.
+> 	 */
+
+Sure, thank you!
+
+> 	reset_control_assert(riic->rstc);
+> 
+> Unless I missed the point :-)
+> 
+> Thanks,
+> Andi
 
