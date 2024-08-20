@@ -1,144 +1,119 @@
-Return-Path: <linux-i2c+bounces-5609-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5610-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 689D895906F
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Aug 2024 00:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B184959106
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Aug 2024 01:19:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB52F1F22777
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 22:22:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF2311F22456
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 23:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BFC51C8223;
-	Tue, 20 Aug 2024 22:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5D81C8243;
+	Tue, 20 Aug 2024 23:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="TB4lQ46Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ONq7IcJ2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8386E1C7B84;
-	Tue, 20 Aug 2024 22:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E8815E5CF;
+	Tue, 20 Aug 2024 23:18:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724192548; cv=none; b=X5KI70IvYSkjmuqHRq0cCENwgxO3L6RVy90hv7ZMgHxS8UlkqEvurwqujtURGp+tAGZflXCoYb/0sBb/4ZEhlVCeUo2NDewYfyDiFe78OxAiPLRjN1JNvp1KOTXPPY+Ea4WJyo0Dw7HwatJEyksPy5Pq4s0Hl798kSwvtuN4ZME=
+	t=1724195934; cv=none; b=q46VI6Fywn8q3L9lIXoUeCxOzTuLA12bvy4YfVlT6u0uZ0dcO4oB+R/wrWz6n8wQtHTDtszLysE8EbkxILgX1L9UPjFrBymxSIkCy+c3DMufhKxySR48hXBXY7/ogzJjbZBQX7y3KBhu7Ja4GqRaL6pK3rzn7r1FbfFGW5c1T5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724192548; c=relaxed/simple;
-	bh=cY0arytASqw9MJmbVROI28Y/jFkWgZxEf5DWq846QoA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E5VtV+Le1Gz2QoKmELUOz+WR6LpVoawXpgql3cW1MgbcFngogj98UaHK1CS8iQxd3yLZ/BjDQWCLgw08nQ0FYMCgeC58NPWLdgQFEF8cpBjWHnRfBSOESD2u7gXnZtO6dN6VEjPCf6jb9+vXCmElnTMgbT5Kyj8Wz42+DTAWWBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=TB4lQ46Q; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=hjj+87QLKsVWqELEQdJDTGF+PvapcE9EyP48EXBCor0=; b=TB4lQ46QX6aaKrdK28q4j3020o
-	0cMq2m6AQ/3bRIQBrVf7KnpcYB83d4LKpwTNWHYHa/V0FOPkBNGYh/vagysqQNJR0VdqpXvcssmL1
-	k1dIcmEHzpmklbbOZeoT0JGxLp4x/HW5DrkwWB4EU5516QxNQwCl/vWewjkDipyMRKI/7GIm04LRl
-	eLeC6kqnXEk0eIi66LRd9jHhJZpPuP7hVpSHdDdWLtgtVPrzlNa3fTYnI+JQFb81ULt/GEs9iYm/G
-	X3LnQ6NuubAEzh/gfoR//3Uno1WKQIgOGm3tOPF740LdjMvQLLYLICunxIe3dxEOwDHMq8f2ysbkE
-	0nfLTAkw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:47054)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1sgXEt-0004d3-2J;
-	Tue, 20 Aug 2024 23:22:14 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1sgXEx-0000UW-4E; Tue, 20 Aug 2024 23:22:11 +0100
-Date: Tue, 20 Aug 2024 23:22:10 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Fabio Estevam <festevam@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>,
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
-	Oleksij Rempel <o.rempel@pengutronix.de>, andi.shyti@kernel.org,
-	linux-i2c <linux-i2c@vger.kernel.org>,
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: pca953x: Probing too early
-Message-ID: <ZsUXEkc5A5IBLpJv@shell.armlinux.org.uk>
-References: <CAOMZO5DvGF5OW6fGQocZcFf+6103OhOyUCRdWGLBKbewWOOLHw@mail.gmail.com>
- <CAOMZO5DiSvAG225poAoj9hHKioq9XSg_Y7kJ8PG66HEVo-SjMA@mail.gmail.com>
- <d3c5d73f-a756-4f35-97f1-9301529cce34@lunn.ch>
+	s=arc-20240116; t=1724195934; c=relaxed/simple;
+	bh=d60nT1u03Qy3Q7s2fv6T2XrNNU7KG4m5JFfp1UY20n0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E6Z15A1+UlQ7IxudvizLGeKz9K/Z4SfuONCBsGVqRSQUyYdLHAgILssV+rQ8U5dF99h0DdgBl2s92V6tJoIBqB7Rfw8L+UUCGHw3ZH4pL+GhCsKguv5YaqjSsw0NXUHjTQojvNHk2XLKB2fCWOCEr27xwpRPtqqRCFNUdj6re2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ONq7IcJ2; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2f3cb747ed7so43614771fa.0;
+        Tue, 20 Aug 2024 16:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724195931; x=1724800731; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JF6wfgyRdYKFN8d5+8XVfRoeXiJGMMUTPZXUm54bPBc=;
+        b=ONq7IcJ27MxR0RbeLVryPUjMMJqsg8vhlnbI9FB9V5d2C6krXvJxDVHVw/WqGUeHPI
+         XzUwJddU6EKa24z1L22uLfFt8Qn+iFfflY1wWhSZceceM2MK9NgApz0lQAkHwsaBue9H
+         Lf33ad0WsO5Ea/saBc86F669pWXTPyxTNYwKjy2HkBFzUofR0cBsCrmOf+xWMT9vQNIM
+         ygVBKSDIHlP/3wHlPFLTHBvjSXj5SM+q/tnyEzbtVP4HlsChsIqu0gtQA/SoDoU+MZh+
+         p0YFBNWhKvcso6nxSxftsv+agdIUORe4yQ3klXCHlq42SQVi522OKtid0WQRNUMip9Df
+         gi7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724195931; x=1724800731;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JF6wfgyRdYKFN8d5+8XVfRoeXiJGMMUTPZXUm54bPBc=;
+        b=BFZuX7lyW7MYqYQyqKDLJNgVN6/qHFKvsOHEAJJV9dzCpuIxOJruHAEMHQkfOBd2Uf
+         9wkOfzvivejarsOQ9vOc+VaXDfTQXFFlQxJzrIKeMsuuvX3PctbzbTX1bFcjfapqQR+8
+         dRiAxuyWLKSD5BvRfQkD9VKf//qc/E874xkhXDdydFsJfE3rco3PRMtpi2yZSpV+BGoS
+         x3AZqlOa63lMIJHQQLC6irmPMor8ET2y3WWE8jbm9cIZU5QG/epUVafjV9Q7b3wJ/Jb3
+         KglC1e8QS4hsQzUpiBGsEBowCAR6DSgmuKrXNEV1iUhgcv95xcF4CfAWokg/cEjjtBxh
+         TKpg==
+X-Forwarded-Encrypted: i=1; AJvYcCUj4/Rr7fJW4RUM7s9fsZ5BW8Zd8JVaMNtrL1zYkSYIIiMC1qfSbtxjTBts8/1FHcaLDu3vaGmEbC6d@vger.kernel.org, AJvYcCVjKQHliUJjk2pI12pMoaC5BXTdREbJxHtAhUtQKSMDlX9GjslUJ4iNO/axuyrIi5QeLvdMsMRD5VPr@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZUeDqdFsenziRWQnBWRzFP7Vcaqp3h7FkyjEX6w/8fvX9NLas
+	7iuLWQU/OBYe23cBWheQK0omh+GfNlt6o/oXcUJHjz4TTmwpYGHWBmtZ+Y4BuvHslA8SKU0Ia9L
+	4mFIKRB/846psR4N+GZJYOiJxlUY=
+X-Google-Smtp-Source: AGHT+IE1Ov1daYK0RsGFoMEB0RO19ht78k22yFLni1S5zEZjKgYuK2roDvpFAcrUbgGVXqiTfaLBjGwsK78HhqStM+U=
+X-Received: by 2002:a05:6512:3a94:b0:52c:e084:bb1e with SMTP id
+ 2adb3069b0e04-533485565cfmr211475e87.13.1724195930268; Tue, 20 Aug 2024
+ 16:18:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d3c5d73f-a756-4f35-97f1-9301529cce34@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <CAOMZO5DvGF5OW6fGQocZcFf+6103OhOyUCRdWGLBKbewWOOLHw@mail.gmail.com>
+ <CAOMZO5DiSvAG225poAoj9hHKioq9XSg_Y7kJ8PG66HEVo-SjMA@mail.gmail.com>
+ <d3c5d73f-a756-4f35-97f1-9301529cce34@lunn.ch> <ZsUXEkc5A5IBLpJv@shell.armlinux.org.uk>
+In-Reply-To: <ZsUXEkc5A5IBLpJv@shell.armlinux.org.uk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 20 Aug 2024 20:18:38 -0300
+Message-ID: <CAOMZO5CymmmUUhBrYwyCJ54sj=55wAVMqWpuYRbJOhoaroCUXA@mail.gmail.com>
+Subject: Re: pca953x: Probing too early
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Andrew Lunn <andrew@lunn.ch>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
+	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, Oleksij Rempel <o.rempel@pengutronix.de>, andi.shyti@kernel.org, 
+	linux-i2c <linux-i2c@vger.kernel.org>, 
+	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 20, 2024 at 11:29:07PM +0200, Andrew Lunn wrote:
-> On Tue, Aug 20, 2024 at 05:47:27PM -0300, Fabio Estevam wrote:
-> > Adding the i2c-folks on Cc.
-> > 
-> > On Tue, Aug 20, 2024 at 5:02 PM Fabio Estevam <festevam@gmail.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > I am seeing an issue with the PCA935X driver in 6.6.41 and
-> > > 6.11.0-rc4-next-20240820.
-> > >
-> > > The pca953x is getting probed before its I2C parent (i2c-2):
-> > >
-> > > [    1.872917] pca953x 2-0020: supply vcc not found, using dummy regulator
-> > > [    1.889195] pca953x 2-0020: using no AI
-> > > [    1.893260] pca953x 2-0020: failed writing register
-> > > [    1.898258] pca953x 2-0020: probe with driver pca953x failed with error -11
-> 
-> -11 is EAGAIN, which is a bit odd. Given your description, i would of
-> expected ENODEV. My guess is, it needs another resource, a GPIO,
-> regulator, or interrupt controller. That resources might not of probed
-> yet. If that is true, you want the pca953x_probe() to return
-> -EPROBE_DEFER. The driver core will then try the probe again sometime
-> later, hopefully when all the needed resources are available.
-> 
-> Track down where the EAGAIN is coming from.
+Hi Russell,
 
-This is where:
+On Tue, Aug 20, 2024 at 7:22=E2=80=AFPM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
 
-        ret = regmap_bulk_write(chip->regmap, regaddr, value, NBANK(chip));
-        if (ret < 0) {
-                dev_err(&chip->client->dev, "failed writing register\n");
+> This is where:
+>
+>         ret =3D regmap_bulk_write(chip->regmap, regaddr, value, NBANK(chi=
+p));
+>         if (ret < 0) {
+>                 dev_err(&chip->client->dev, "failed writing register\n");
 
-printing the error code in error messages would really help debugging.
-Sadly, people don't do this. I don't know why we don't bulk replace
-all error messages with just "Error!\n" to make them even more cryptic
-and undebuggable!
+Yes, correct. This is where -EAGAIN is coming from:
 
-It's likely that EAGAIN is coming from this - the probe function calls
-one of the init functions, and propagates the error up, and as that
-message is being printed... Tracing down, the I2C transfer function
-returns -EAGAIN if it fails the transfer, and __i2c_smbus_xfer() will
-itself retry it a number of times before propagating that -EAGAIN up.
+[    1.745657] pca953x 2-0020: supply vcc not found, using dummy regulator
+[    1.752502] pca953x 2-0020: using no AI
+[    1.756579] pca953x 2-0020: **** failed writing register: -11
+[    1.762510] pca953x: probe of 2-0020 failed with error -11
+[    1.768298] i2c i2c-2: IMX I2C adapter registered
 
-EAGAIN is supposed to only be generated on arbitration loss - I'm
-guessing that the I2C bus is in some kind of locked state, meaning
-that devices on this bus are not accessible. Maybe the I2C bus
-pull-ups aren't powered? Maybe there's a bad device on the bus
-pulling the bus down?
+The pca953x driver tries to write to the i2c-2 bus before i2c-2 is register=
+ed.
 
-Someone mentioned i2c-imx, maybe try enabling debug in that driver
-to see why it's failing to access the device?
+This is the point I don't understand: how can the pca953x driver get
+probed before its I2C bus parent?
 
--- 
-*** please note that I probably will only be occasionally responsive
-*** for an unknown period of time due to recent eye surgery making
-*** reading quite difficult.
-
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Thanks
 
