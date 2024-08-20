@@ -1,48 +1,74 @@
-Return-Path: <linux-i2c+bounces-5581-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5582-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35E36958228
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 11:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47A1C9582F8
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 11:42:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF4F41F24699
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 09:27:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F339C1F24CE4
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 09:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E61218C007;
-	Tue, 20 Aug 2024 09:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5EDF18C32E;
+	Tue, 20 Aug 2024 09:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nudKvcqn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oLgNv9mI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B5418A6C6;
-	Tue, 20 Aug 2024 09:26:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD51A18B496
+	for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 09:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724146019; cv=none; b=Lx86GYzNGcmY8NyrMl/uU70Z+xze6iz4/sd1935HZbLqr8JNREFvkoZQEnQjysIx+pyWTpwjATZ4S6dUtuFaJh4CzNIVA/Mj0e23MPGk4VZmJIooelrlnE1pbjpzzVg0MCzVyx3Rx9iQwfZbcQh3CeFQrJlxuK36v586UR/Na8c=
+	t=1724146816; cv=none; b=CqOw+0JAHMlDnFNbYvwWDmrdWODdAab6uY4UroUgki3mnHnro0H6U7wXA2ADQxMiA+Lpx57fMo/ycBa4QtAzd8nCirnoOttWjK8/FaWVULuFvJ1cfQJEZQLtdTOUMCIRjA02clOswdMPDDJx5tXfDIWfTYyvZo0iXiN1v1qIPA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724146019; c=relaxed/simple;
-	bh=kop63EL7ROeC8ZjTSa24ig982G1wGzEfLfTlKCt7Yi4=;
+	s=arc-20240116; t=1724146816; c=relaxed/simple;
+	bh=h4dh7CaNB4WkQEEbJfH7tP75tDnRV7swdehH667kjlI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=n5xCQUBZfBw0JBZu3pUzi4HMmR8JPD82UWh5KUUuVtX8c+dxNz0te1htOz+mxDjTkEqr0j8jQvWCy/Ao7U7KvKNdBrVYgVCtatd17oJIyfXrGOEERfiUrYfX6uPOP9oM6bfZIgncO7Dkkonb0GFyh+Z6oudoObY7MMNBmKpOVWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nudKvcqn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB9EC4AF09;
-	Tue, 20 Aug 2024 09:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724146019;
-	bh=kop63EL7ROeC8ZjTSa24ig982G1wGzEfLfTlKCt7Yi4=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=nudKvcqne9ZjBJo4UMhBnSm609IPW3AJvJbqzsheWiBYJgWyLB4HxpsiYJ7PYFwBt
-	 7qd7ENiCdoE15TqP10U3wXrG0qsTzJZKPK1npVHVXjmoQiLm5OpFB8+hbrL1Z+Schk
-	 5E0pUVnuEkZjHwqQ1UuwWD2NSaDJpp4Gd3Kn0LP1AQXvoSxsXm1eivAE2CP1bK1I0G
-	 9IYVG/XnRCMZzfLkovP1aqf8r3th+rUePiaRY4AOaI6mmEkkvAZ1MthIuPqhd1q5zB
-	 LWotEWjJtQW5yLYrMSVu8uXhz7Af5rnUKcckqPY0+o7zk4Fu+8gzGhXYdDCWVxEOi3
-	 qbj5NlXWwQV8w==
-Message-ID: <aeab1421-6171-40ec-8133-51734da6640e@kernel.org>
-Date: Tue, 20 Aug 2024 11:26:51 +0200
+	 In-Reply-To:Content-Type; b=sLLcBrJPE4gk+aA/SgZH62a2rA9Dwc0mLopGG9RV9P5Ff6ZgPDEfhy/Vc9oR+TdqM86H0W3EBdVsTA1MpxMx3hn8DcfwDlo8miZqc3tvq5ZRdJ+DJ2yiPucfEBvJaKtAbuTU+jP9Aq/ypMqr48j+BOEJ8JHUtbEw2dm2N2aZhHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oLgNv9mI; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53212e0aa92so5910981e87.0
+        for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 02:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724146813; x=1724751613; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=fFuH+vZGVMrawIFZ7bXsY051cjH5fetWTgyPYqHJdLU=;
+        b=oLgNv9mIgJz9p6WDjv8mmZg38HfutK9OHtDCBgFE/DJehI5G6wmqBgN691EqjYXRea
+         cYh1vsqPnH5jIaNzvXcPQi/IyrNAzjHW8E9x1uZebru8MP4putmX1v3iVpbVbNmqEomo
+         ma8hZAeBtR9b8VWxuYV/GlBb4AAbApo19ce75wybjUEvaALdJUZXcZnnkxE/lwb+eI7W
+         j3JKuotpKw2W3Xe2xn87fzMhx8E7DMC1XUHx5qlblsLvVNaxLFUyIZAB/GpeUTr5YHoH
+         /hVwZ7kW3K0TKJhzFdN9InRlkfWsXVB4HSabTMpbL/B3oLf0D20wAoWI9QY+0U/dB3sW
+         +TPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724146813; x=1724751613;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fFuH+vZGVMrawIFZ7bXsY051cjH5fetWTgyPYqHJdLU=;
+        b=APlOB/MRyMkSR7vgODkG7vXCDUrD64aHhym/4r03NFiU3Hk7aNqebBVzGh7pLIt2+N
+         F5hDjol1uTgWCvuJS4wFGWxudd9DAJjjhnFKrvtxVz2RvuDbJWMi9PV1RxF6iK3qKugq
+         a/DVvOi9zuU6kCjQjz0n3kHgdSuU9pyuNphAlXF0qCqVoHgurVX1xiyeHGC56kMoph17
+         NRJtdIIzhlElGB+Z3Z/B+8ZDObajVyTtI0UUVBw656vsd4kyzOxtvCC/810R3f3fp34U
+         PHfBq36KjJFM71zjbCQekXULLSrE3kfnPNXskKhj+V2StDtbpYTmGqweGXp//a3ASTNN
+         9Jzg==
+X-Forwarded-Encrypted: i=1; AJvYcCU9LM/KCjArdvRsIzTpyT3jdq4LulT9yOG5hIe6UftP4Y22xN7BLqHkZiTxirhPc63bLLNFrw2zjE6oU5ziYmYvHHEJslWGGIza
+X-Gm-Message-State: AOJu0YxQvZUOF6wbDejQL3Tr7PDhxUc1gAKpM5za+GJ8bt4LSmK1KnHg
+	vTPG6cdAKKV1jmYY7grJxgStHlt71JvZT5VGyn/3CdPhv4OX8VJ8S+WwnJByCBs=
+X-Google-Smtp-Source: AGHT+IElGwWSpEpk2zE5tI15XFgx0ouOncTxY/I2E06xW1H3aGfFZLK5sqWddHYBVO3wGlvPkVE/0w==
+X-Received: by 2002:a05:6512:ad2:b0:52c:de29:9ff with SMTP id 2adb3069b0e04-5331c692a14mr9861915e87.2.1724146812511;
+        Tue, 20 Aug 2024 02:40:12 -0700 (PDT)
+Received: from [192.168.0.25] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83839470ebsm740650366b.159.2024.08.20.02.40.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Aug 2024 02:40:12 -0700 (PDT)
+Message-ID: <ea5c2d1f-5ced-4084-8478-c722ad99be46@linaro.org>
+Date: Tue, 20 Aug 2024 10:40:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,59 +76,42 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] arm64: dts: qcom: sdm670: add camcc
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Richard Acayan <mailingradian@gmail.com>,
+Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sdm670: add camss and cci
+To: Richard Acayan <mailingradian@gmail.com>,
  Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
  Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
  Mauro Carvalho Chehab <mchehab@kernel.org>,
  Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
  linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
  linux-media@vger.kernel.org
 References: <20240819221051.31489-7-mailingradian@gmail.com>
- <20240819221051.31489-11-mailingradian@gmail.com>
- <7d26a62b-b898-4737-bd53-f49821e3b471@linaro.org>
+ <20240819221051.31489-12-mailingradian@gmail.com>
 Content-Language: en-US
-From: Konrad Dybcio <konradybcio@kernel.org>
-In-Reply-To: <7d26a62b-b898-4737-bd53-f49821e3b471@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20240819221051.31489-12-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 20.08.2024 11:23 AM, Vladimir Zapolskiy wrote:
-> On 8/20/24 01:10, Richard Acayan wrote:
->> The camera clock controller on SDM670 controls the clocks that drive the
->> camera subsystem. The clocks are the same as on SDM845. Add the camera
->> clock controller for SDM670.
->>
->> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sdm670.dtsi | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sdm670.dtsi b/arch/arm64/boot/dts/qcom/sdm670.dtsi
->> index 187c6698835d..ba93cef33dbb 100644
->> --- a/arch/arm64/boot/dts/qcom/sdm670.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sdm670.dtsi
->> @@ -1400,6 +1400,16 @@ spmi_bus: spmi@c440000 {
->>               #interrupt-cells = <4>;
->>           };
->>   +        camcc: clock-controller@ad00000 {
->> +            compatible = "qcom,sdm845-camcc";
+On 19/08/2024 23:10, Richard Acayan wrote:
+> Add the camera subsystem and CCI used to interface with cameras on the
+> Snapdragon 670.
 > 
-> Here it's wrong, and the compatible property value shall contain
-> "qcom,sdm670-camcc", probably it could contain both values though.
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
+>   arch/arm64/boot/dts/qcom/sdm670.dtsi | 188 +++++++++++++++++++++++++++
+>   1 file changed, 188 insertions(+)
 > 
-> It may require to add a new compatible to dt documentation and,
-> if needed, to the corresponding clock driver.
+> diff --git a/arch/arm64/boot/dts/qcom/sdm670.dtsi b/arch/arm64/boot/dts/qcom/sdm670.dtsi
+> index ba93cef33dbb..37bc4fa04286 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm670.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm670.dtsi
 
-+1, even if the blocks are physically the same, please add a SoC-specific
-compatible (with a fallback to 845 if that's the case) just in case there
-are some implementation problems only concerning this instance
+This looks neater - better indentation for example than what we have for 
+845 upstream.
 
-Konrad
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
 
