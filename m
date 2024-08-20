@@ -1,60 +1,66 @@
-Return-Path: <linux-i2c+bounces-5603-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5604-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 081AE958C78
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 18:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A80C958C92
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 18:45:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B3E11C2223C
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 16:40:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8361F1C21F7B
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 16:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E0FB1BD4F7;
-	Tue, 20 Aug 2024 16:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B51A1BD00C;
+	Tue, 20 Aug 2024 16:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfYfre4U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlEUuVk8"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02378198E75;
-	Tue, 20 Aug 2024 16:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4762C1BBBE4;
+	Tue, 20 Aug 2024 16:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724172011; cv=none; b=qN4zkzbukNShsKGR3SXFSP/YOGaWaTfp0xdUFyVku7WFarfiU/EL36IxL2o0lz62tLZ0IKTW5htgvEW8hxE1s3sQQlTdlNbIimwTWTaOKu9xBxdO6rxnivxttBfH/UXmytYXT7ZsLZsJvaEo68uBsBAD1cpu3N+X2SpsAEzG4JI=
+	t=1724172303; cv=none; b=n2SI4vRqnfFMcSb6VG3mttVEcV+lG5aaC5TiIOxpD8Lb0IqbgEjBiErmQOUUmCUo+FE9HpaUtmjS4V9PosfgvwibH6ynPhsktfGa8SRMGwGvedYAJ3xKn7riY7Wb+CF9GnTcrGX51pNJNGHh9lsvkepmvHvO3C4Ku7IWXzatR08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724172011; c=relaxed/simple;
-	bh=BHd6kvh31vcs/slQoIR8bY6zjNdEH3hVv63WtnyIoyo=;
+	s=arc-20240116; t=1724172303; c=relaxed/simple;
+	bh=ho6JjNvEWuP+RY0IE/9AanBGhiT9wEqvz0ePooctFh8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B8akSZ0gL6oQtF92XXtyv5cMP2u4qxucvl4jZgxKMLCiQxkyu6q9KBaq10HbUJRrjI2vOIpyCBR9mnYsvMSOmVIhJDnWSw4Y5Dr5R55lkz05+VmfN9PlxNvH9pUp/9RNqQiOG/R0zFwC78v/Q3g+DJ/QaQN80RG0f3YlwB65VAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfYfre4U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29925C4AF14;
-	Tue, 20 Aug 2024 16:40:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=gVgoWhQoovfiApHXsMeUHTvrI67ByWc1CMMvIijasGna4Sdb0N4WcFLQOmfyKKcjHFaZ4x4aKeZbKiuPOLzjq0pq+z4sKjCaaBHSsDQrk2Z97rM/intPC3kOMtGsMy56p31pW+K1hwnVvVip+BIz/nrI6oj4fIlcouD1huHUxU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dlEUuVk8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB2FC4AF0B;
+	Tue, 20 Aug 2024 16:44:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724172010;
-	bh=BHd6kvh31vcs/slQoIR8bY6zjNdEH3hVv63WtnyIoyo=;
+	s=k20201202; t=1724172303;
+	bh=ho6JjNvEWuP+RY0IE/9AanBGhiT9wEqvz0ePooctFh8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jfYfre4Uoz/Kx27j2UZB08UHtWUPsAQR8BH61G/0oz6DEmleYS56i8kuKdLvvApyB
-	 hh/bjjuMhHD6dtRbDYPpqJZFaIXmKvu9vz1nda4zVkDmR7br6/Yts1TqM5Fk2btpAX
-	 S4tnY2ReV0+kCCYUZ0z8Itzz7FBPEWRQoQvzuleJK3kRUbBUBnabcf4uS+/rj7Lfih
-	 FfeEZmLXpc9kOWCcxT5h7CIAXN1UVfC7+i9wya58KpCMSMSS3+rMXG5R/5e9kgLxjH
-	 6FsrcBuIVg0oMY6cDKf8QoPAIzJCWwmZaT9/GXomQLI7n+6whLC/RRNaphqEr9hnyb
-	 Y5DYtD5Lln9cQ==
-Date: Tue, 20 Aug 2024 17:40:06 +0100
+	b=dlEUuVk8K602CDJGNrteapJppPpyHPEnqiANWmQH2veRVn6NztdMZjuN6WvwznFGr
+	 zDG6+xOqv7Pqt7ghohnjBT5k4GPhhFPcQI6P9p0lfdoCFBkWbDzNMoDWMWnsBh9SbP
+	 DZqft6bGQ5I7YUm1kRg7t5/bFaCEoa+7J8vQY9GonAt7Pw5I4TOMIl5wkCo68AMHE6
+	 5lbx+KhK/obomN73kG/L/YingDlCyNhuJRrMe5b61uh+epiFaba05Opdask0+0bF1H
+	 cxg44OOBBTL1au/h3A/E4zqFu913DquVunsb82w9esDg1ZZ/gY66hbqAZM5X9w+63z
+	 Ha/foAvvOseMA==
+Date: Tue, 20 Aug 2024 17:44:57 +0100
 From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Richard Acayan <mailingradian@gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: qcom,i2c-cci: add missing clocks
- constraint in if:then:
-Message-ID: <20240820-carat-hangup-a890ffa166f5@spud>
-References: <20240820063124.9242-1-krzysztof.kozlowski@linaro.org>
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, chris.brandt@renesas.com,
+	andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
+	p.zabel@pengutronix.de, wsa+renesas@sang-engineering.com,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH v4 07/11] dt-bindings: i2c: renesas,riic: Document the
+ R9A08G045 support
+Message-ID: <20240820-skinning-submersed-855e69f5e3bc@spud>
+References: <20240819102348.1592171-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240819102348.1592171-8-claudiu.beznea.uj@bp.renesas.com>
+ <gxjlmdjicwzlexitsx673beyn7ijuf47637nao2luc5h6h6hvi@qstobttin7dw>
+ <e6377448-9af3-4807-a8fd-197f5b2b4aa4@tuxon.dev>
+ <56204f92-d1d4-4681-8a9d-f28925919ef4@kernel.org>
+ <20240819-sizing-devouring-17b74473d1a1@spud>
+ <709ddcee-637d-49d3-915b-0872b3c67f30@tuxon.dev>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,36 +68,67 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="9TWJiJFNcNtKqGNR"
+	protocol="application/pgp-signature"; boundary="1gDvInbFoz39wjDu"
 Content-Disposition: inline
-In-Reply-To: <20240820063124.9242-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <709ddcee-637d-49d3-915b-0872b3c67f30@tuxon.dev>
 
 
---9TWJiJFNcNtKqGNR
+--1gDvInbFoz39wjDu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 20, 2024 at 08:31:24AM +0200, Krzysztof Kozlowski wrote:
-> Top level defines clocks as variable from 3 to 6 items, so each clause
-> in if:then: should narrow it further with explicit min and maxItems.
-> Without minItems, the constrain from top-level is being applied, thus
-> qcom,msm8996-cci allows between 3 and 4 clocks.
+On Tue, Aug 20, 2024 at 10:45:43AM +0300, claudiu beznea wrote:
 >=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>=20
+> On 19.08.2024 19:39, Conor Dooley wrote:
+> > On Mon, Aug 19, 2024 at 01:22:39PM +0200, Krzysztof Kozlowski wrote:
+> >> On 19/08/2024 13:10, claudiu beznea wrote:
+> >>>
+> >>>
+> >>> On 19.08.2024 14:05, Krzysztof Kozlowski wrote:
+> >>>> On Mon, Aug 19, 2024 at 01:23:44PM +0300, Claudiu wrote:
+> >>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>>>>
+> >>>>> Document the Renesas RZ/G3S (R9A08G045) RIIC IP. This is compatible=
+ with
+> >>>>> the version available on Renesas RZ/V2H (R9A09G075).
+> >>>>>
+> >>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>>>> ---
+> >>>>>
+> >>>>> Changes in v4:
+> >>>>> - added comment near the fallback for RZ/G3S; because of this
+> >>>>>   dropped Conor's tag
+> >>>>
+> >>>> That's not a reason to request a re-review.
+> >=20
+> > FWIW, I don't care about how many binding patches I do or do not get
+> > credit for reviewing.=20
+>=20
+> I had no intention to drop your credit for reviewing this. In the past I
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+That comment was meant for Krzysztof, so that he wouldn't feel like he
+should avoid acking so that I could re-ack in similar situations in the
+future.
 
---9TWJiJFNcNtKqGNR
+> went though situations where reviewer complained due to keeping the tag a=
+nd
+> doing very simple adjustment on the next version. I dropped your tag to
+> avoid that situation here too and mentioned it in the change log.
+
+Ye, I did note that you'd not dropped it confusingly :)
+
+--1gDvInbFoz39wjDu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsTG5QAKCRB4tDGHoIJi
-0kRfAP9cb6itjjKUbb5tJ2ODvpw5MpyjsyOHNDbr28DhjSsk3gEA4q8OJA0Ov2gG
-05cKJcixhwAUtHnpLB+3ipoTNmwFMgM=
-=7Vmx
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsTICQAKCRB4tDGHoIJi
+0umDAP98mMrlkJcnJlOU7ydEwjrI6uMCdk1ivrabenaRSFg/4wEAmHFDk5RqGg/m
+htTGLITqSN6O52orO7nzj3xxLdB5VAI=
+=byR0
 -----END PGP SIGNATURE-----
 
---9TWJiJFNcNtKqGNR--
+--1gDvInbFoz39wjDu--
 
