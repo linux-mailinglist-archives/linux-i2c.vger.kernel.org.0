@@ -1,273 +1,186 @@
-Return-Path: <linux-i2c+bounces-5605-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5606-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4C02958E93
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 21:24:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53464958F4E
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 22:47:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 437DE1F231B4
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 19:24:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76A581C21D3B
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 20:47:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC17115AAB6;
-	Tue, 20 Aug 2024 19:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5341C3798;
+	Tue, 20 Aug 2024 20:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="g04M+uYG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d7yI+IRD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBC619478;
-	Tue, 20 Aug 2024 19:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724181848; cv=pass; b=jtO7v0QEwZoYtM2Bcqo88RdxW9o4GUqZoS1zOj7N1Ch7GkNUyuVhupqWIrJfQIMQ/EHbVTuyYx1xkjnE8I0I3r6B2lltiC3SjHcv0aJFat5xDCN6W+ISYtXkzlTfkdArdTvksi5fumiu/AK0vsPxeShFJSTK2z22f6LSCnI36GQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724181848; c=relaxed/simple;
-	bh=z3GuI3y4MsMq2tzsuXHVTmg5sDQk0xPIA4ZUAtiO+ps=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HMEMV9LIFQYBeMxWWoxe5DtHHVUVViMUt1gx3gUVnspOQ/rPqI3ru0RB8T1YDC62aKsVNyRjuJlEmtWruZL93R5DgklpqCtqfsarj8qE74iE43zUj47SiVUdgWfMukINwI8bt9Wd6vo0CHtbdxLpLkGbCAflGMkQql4H7S9G1HI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=g04M+uYG; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Delivered-To: sebastian.reichel@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724181757; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=jk3LVacixiOG0aJjhPGszugbAOO81rVHA7Y1Sr9RyHG7ZFdP9IcEh7umfkvxEfiV3Wo3H+EMNFFQU8eSXaUEGxi8ycBbbCNlug9GYWpp9DfoIw5AAQh/Tku3vTk7csJN2Eatq11UCYNqmz1ONPgrfqKaUXqXsi+eQrdklOhUXhQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724181757; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=AfJrCQJKAavx21ngm+ZjM4R3GCjrEmAM7/Ae1wSjgGM=; 
-	b=SaUutyxDt7d4a8CkGfmYPK+GL104NlYaVCMLror7rUoKoLvGBcrtOBzFwej6XZtXeMMDVzhX2ht6oQrPO/WXYEsSRhq9/upWFVGuLPAcjZcJ3NPH7HLV5Ddc9Cs93oqsIlh5Y4PkG563E0v09YpuLyAU9/sy8HMjNvGWqxSr3aE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
-	dmarc=pass header.from=<detlev.casanova@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724181757;
-	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=AfJrCQJKAavx21ngm+ZjM4R3GCjrEmAM7/Ae1wSjgGM=;
-	b=g04M+uYGBCTVj6Yq5/Aw/6DayBdPVt7+gQn4SWjQtwOdh9Z1So9dgkBVLoIUnRSd
-	clqOLIgORf9rkgaZWkoWnguTbOLXk3CV2b72uF2b4jCGfs7QVkyrUf2S7jhByEDLPl+
-	mxGT0gNSUQLearVZUxw+Yb9f4hf+sUeInfsnETK0=
-Received: by mx.zohomail.com with SMTPS id 1724181754738255.10140579420602;
-	Tue, 20 Aug 2024 12:22:34 -0700 (PDT)
-From: Detlev Casanova <detlev.casanova@collabora.com>
-To: linux-kernel@vger.kernel.org, Johan Jonker <jbx6244@yandex.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Thomas Gleixner <tglx@linutronix.de>, Chris Morgan <macromorgan@hotmail.com>,
- Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>,
- Muhammed Efe Cetin <efectn@protonmail.com>, Andy Yan <andyshrk@163.com>,
- Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Shresth Prasad <shresthprasad7@gmail.com>, Ondrej Jirman <megi@xff.cz>,
- Weizhao Ouyang <weizhao.ouyang@arm.com>, Alexey Charkov <alchark@gmail.com>,
- Jimmy Hon <honyuenkwun@gmail.com>, Finley Xiao <finley.xiao@rock-chips.com>,
- Yifeng Zhao <yifeng.zhao@rock-chips.com>,
- Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH 09/10] arm64: dts: rockchip: Add rk3576 SoC base DT
-Date: Tue, 20 Aug 2024 15:22:30 -0400
-Message-ID: <3785092.MHq7AAxBmi@bootstrap>
-In-Reply-To: <1d7ffd09-99b9-43d8-a2f5-6e5455b4e5a1@yandex.com>
-References:
- <20240802214612.434179-1-detlev.casanova@collabora.com>
- <1944590.atdPhlSkOF@trenzalore>
- <1d7ffd09-99b9-43d8-a2f5-6e5455b4e5a1@yandex.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260101514FB;
+	Tue, 20 Aug 2024 20:47:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724186863; cv=none; b=hHi/T0GKovxz7tOTKtdb5aQ7JUYpzckbfqq+fF5aRktTccxJ9oVSaZd7yj7/vrmoHa1mOA8L3swY+MQHKLMk4q+tx+SDM2ZkjpDQcLQaxW0HQIzTemzNUXgMRIHFpQMiDjW/6KxHJNLhXOM3PBAf5Gf8Ask1QPZLF7WSMcTLCeI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724186863; c=relaxed/simple;
+	bh=20jKGGT+L0EemIZaHolnCYzOefW0OCFwhE2SGr1OXOg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bEeC49B090JLEnsi+kqlCQsXoVS8ZPAfx8IYg5d5r9Si8xBTKKwtRBDVI+bHEHT8BxulYDTfAtwnLYcL6Vymf+FwnJ+QCslBZ7oNazRhtBqWQZoowiGEsCAo+u7nlyB648SMSGbViwUf2NestOJW3rBT/FpYnnoMWC+Q5JQq2JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d7yI+IRD; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-53343bf5eddso1486516e87.1;
+        Tue, 20 Aug 2024 13:47:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724186859; x=1724791659; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uykUVslv1+/fS0lVXK/wTmxMrj01bPI++FNqDHJmXmQ=;
+        b=d7yI+IRDE5uZaNkn5o/djB8WQTY0GvYrl9Lh6nd2ek3ZW1uty9XEro/1pan35fmRFs
+         lI1Dxaq04pIWPPu/6RiKY9z357rq+cf3JloUhYxSdyp+E4ExM5nq0o95ER+8mvzZxYyF
+         4x5gT6Hdxm7M/dviCeTFBCT2tbnjoQUIn8X+eMneK5Dp5DOfp1UCGaQtmZNTpB/zDxIA
+         pwgjHy4aZkWTlSkeciLjrgZkNNjfukIZFQHAlTlOQvaLUPFt8QAN7mvthvdWhVmGJVPQ
+         gCepDwH1Wt59IsG3Y0CbCvpRx87Ill/bgH9GEifqMyHUEUdYhIu9ZF5vqJkO6Tr1B1kQ
+         kpQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724186859; x=1724791659;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uykUVslv1+/fS0lVXK/wTmxMrj01bPI++FNqDHJmXmQ=;
+        b=r5RNyY8VMkSvirK8ad6fyEiNZQ6qM9cAcW4VsPfa2ZtXQbo2OAbSONwz6THbMFjD4z
+         bAAgTi9ki888zxvd4A4ZOilLgeLdR3fvXmT2MtdIGWTBuTi3PuiU/DwJNsRUzjgQFfGo
+         DvqHZhMaftB2Z5ozlrgPHeAxC4xiOZFZXtsAi6mBHt7ZXIuW0rUKTBMAPJRwG2HYYJCH
+         cAfD2eJhXUI6m3TbHWBzaAj1EAzR1L/TzP7aqHQZT1BvDS2iYOCNjYW1iDSodRjsLMlO
+         GXJmy68sVSp0nbQ71KUdlvN2s7pVhyOGE5ysuMe0we2EQe5YH7R3vrP92jlF8/75Qi2L
+         1UiA==
+X-Forwarded-Encrypted: i=1; AJvYcCV2WgBtO1Pp2EmZajxd0jZw+mXPqFPR2kRFuvsSlNa5fVXQRdPfolnC4BruxKinGp9z5XyZdGltOcU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzwm7d4gQELKYzNR6MwH/PZciezGAx6zG/ACncsgflmlwKJv9dc
+	DMGti/NQnOGXWxKQwvmS/5dbVufDwMP8JgAv7PEcWGnYvj8NB5NnzL1JteAFdRf1p2sArXF+o3p
+	o1o8EVMPROj+hhx12ecPHaJVNq6c=
+X-Google-Smtp-Source: AGHT+IHk01Un61zxCq+yuKZXrMijzTM+kp6mFCLY0BarTVDvWLm6zKKJx8BxgzrLN0AUKvDQ2F9vOo/qoezSuSKT5tg=
+X-Received: by 2002:a05:6512:3da8:b0:530:c1fb:5192 with SMTP id
+ 2adb3069b0e04-533485516ffmr15292e87.16.1724186858765; Tue, 20 Aug 2024
+ 13:47:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-X-ZohoMailClient: External
+References: <CAOMZO5DvGF5OW6fGQocZcFf+6103OhOyUCRdWGLBKbewWOOLHw@mail.gmail.com>
+In-Reply-To: <CAOMZO5DvGF5OW6fGQocZcFf+6103OhOyUCRdWGLBKbewWOOLHw@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 20 Aug 2024 17:47:27 -0300
+Message-ID: <CAOMZO5DiSvAG225poAoj9hHKioq9XSg_Y7kJ8PG66HEVo-SjMA@mail.gmail.com>
+Subject: Re: pca953x: Probing too early
+To: Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Andy Shevchenko <andy@kernel.org>
+Cc: "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
+	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, Oleksij Rempel <o.rempel@pengutronix.de>, andi.shyti@kernel.org, 
+	linux-i2c <linux-i2c@vger.kernel.org>, 
+	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Johan,
+Adding the i2c-folks on Cc.
 
-On Tuesday, 20 August 2024 09:34:58 EDT Johan Jonker wrote:
-> On 8/19/24 22:06, Detlev Casanova wrote:
-> > Hi Johan,
-> > 
-> > On Thursday, 15 August 2024 05:30:25 EDT Johan Jonker wrote:
-> >> Some comments below. Whenever useful.
-> >> 
-> >> On 8/2/24 23:45, Detlev Casanova wrote:
-> >>> This device tree contains all devices necessary for booting from network
-> >>> or SD Card.
-> >>> 
-> >>> It supports CPU, CRU, PM domains, dma, interrupts, timers, UART and
-> >>> SDHCI (everything necessary to boot Linux on this system on chip) as
-> >>> well as Ethernet, I2C, SPI and OTP.
-> >>> 
-> >>> Also add the necessary DT bindings for the SoC.
-> >>> 
-> >>> Signed-off-by: Liang Chen <cl@rock-chips.com>
-> >>> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-> >>> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> >>> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> >>> [rebase, squash and reword commit message]
-> >>> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> >>> ---
-> >> 
-> >> [..]
-> >> 
-> >>> diff --git a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-> >>> b/arch/arm64/boot/dts/rockchip/rk3576.dtsi new file mode 100644
-> >>> index 0000000000000..00c4d2a153ced
-> >>> --- /dev/null
-> >>> +++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-> >> 
-> >> [..]
-> >> 
-> >> For uart0..uart11:
-> >>> +
-> >>> +	uart1: serial@27310000 {
-> >>> +		compatible = "rockchip,rk3576-uart", "snps,dw-apb-
-> > 
-> > uart";
-> > 
-> >>> +		reg = <0x0 0x27310000 0x0 0x100>;
-> >>> 
-> >>> +		interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
-> >> 
-> >> "interrupts" are sort just like other properties. A mix of sort styles
-> >> exists, so check all nodes.
-> > 
-> > Ok, so it should be sorted alphabetically with the following exceptions:
-> > - 'compatible' and 'reg.*' on top
-> > - "#.*" at the end, sorted
-> > - "status" last.
-> > 
-> > Is that right ?
-> 
-> The dts-coding-style.rst does not say much about things with "#",
-> so below a property they refer to or at the end looks nicer.
-> No strict rule, but do it in a consistent style in file.
-> 
-> Original comment by robh for things with "reg":
-> "It makes more sense to keep reg-io-width together with reg."
-> https://lore.kernel.org/all/20240131135955.GA966672-robh@kernel.org/
-
-Ok, I'll fix the consistency in the file then, thanks for the clarification.
-
-> >>> +		clocks = <&cru SCLK_UART1>, <&cru PCLK_UART1>;
-> >>> +		clock-names = "baudclk", "apb_pclk";
-> >>> 
-> >>> +		reg-shift = <2>;
-> >>> +		reg-io-width = <4>;
-> >> 
-> >> Move below "reg".
-> >> 
-> >>> +		dmas = <&dmac0 8>, <&dmac0 9>;
-> >>> +		pinctrl-names = "default";
-> >>> +		pinctrl-0 = <&uart1m0_xfer>;
-> >>> +		status = "disabled";
-> >>> +	};
-> >>> +
-> >>> +	pmu: power-management@27380000 {
-> > 
-> > [...]
-> > 
-> >>> +				#address-cells = <1>;
-> >>> +				#size-cells = <0>;
-> >>> +				clocks = <&cru ACLK_VOP>,
-> >>> +					 <&cru HCLK_VOP>,
-> >>> +					 <&cru HCLK_VOP_ROOT>;
-> >>> +				pm_qos = <&qos_vop_m0>,
-> >>> +					 <&qos_vop_m1ro>;
-> >>> +
-> >>> +				power-domain@RK3576_PD_USB {
-> >> 
-> >> Since when is USB part of VOP?
-> >> Recheck?
-> > 
-> > The TRM doesn't tell me anything, but If I don't put it as a child of VOP,
-> > it just hangs when the kernel tries to shut it down.
-> 
-> Could the people from Rockchip disclose the USB PD location?
-> 
-> > [...]
-> > 
-> >>> +
-> >>> +	pinctrl: pinctrl {
-> >>> +		compatible = "rockchip,rk3576-pinctrl";
-> >>> +		rockchip,grf = <&ioc_grf>;
-> >>> +		rockchip,sys-grf = <&sys_grf>;
-> >>> +		#address-cells = <2>;
-> >>> +		#size-cells = <2>;
-> >>> +		ranges;
-> >>> +
-> >>> 
-> >>> +		gpio0: gpio@27320000 {
-> >> 
-> >> The use of gpio nodes as subnode of pinctrl is deprecated.
-> >> 
-> >> patternProperties:
-> >>   "gpio@[0-9a-f]+$":
-> >>     type: object
-> >>     
-> >>     $ref: /schemas/gpio/rockchip,gpio-bank.yaml#
-> >>     deprecated: true
-> >>     
-> >>     unevaluatedProperties: false
-> > 
-> > I tried putting the gpio nodes out of the pinctrl node, they should work
-> > because they already have a gpio-ranges field.
-> > But unfortunately, that seem to break the pinctrl driver which hangs at
-> > some point. Maybe some adaptations are needed to support this, or am I
-> > missing something ?
-> 
-> The aliases that we added to the DT files are a work around to prevent
-> damage when we moved to generic gpio node names. There just happened to be
-> some code for it in the driver...
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/dri
-> vers/gpio/gpio-rockchip.c#n719
-
-Just above that, it tries to get the pinctrl_dev from the parent node. So the 
-rockchip,gpio-bank nodes have to be children of the pinctrl node or the gpio 
-driver will just return -EPROBE_DEFER. 
-
-> Comment by robh:
-> "GPIO shouldn't really have an alias either IMO."
-> https://lore.kernel.org/linux-arm-kernel/20230118153236.GA33699-robh@kernel.
-> org/
+On Tue, Aug 20, 2024 at 5:02=E2=80=AFPM Fabio Estevam <festevam@gmail.com> =
+wrote:
 >
-> Mainline Rockchip gpio driver is not so to the standard.
-> The file gpio-rockchip.c currently does nothing with "gpio-ranges" vs. bank
-> and node relation. My simple patch was acked, but never applied. There's no
-> public maintainer response of what to improve. Guess, probably something
-> more complicated idiot prove "gpio-ranges" parsing/bank linking is needed?
-> https://lore.kernel.org/linux-arm-kernel/890be9a0-8e82-a8f4-bc15-d5d1597343
-> c2@gmail.com/
+> Hi,
+>
+> I am seeing an issue with the PCA935X driver in 6.6.41 and
+> 6.11.0-rc4-next-20240820.
+>
+> The pca953x is getting probed before its I2C parent (i2c-2):
+>
+> [    1.872917] pca953x 2-0020: supply vcc not found, using dummy regulato=
+r
+> [    1.889195] pca953x 2-0020: using no AI
+> [    1.893260] pca953x 2-0020: failed writing register
+> [    1.898258] pca953x 2-0020: probe with driver pca953x failed with erro=
+r -11
+> [    1.905575] i2c i2c-2: IMX I2C adapter registered
+>
+> This problem is seen on a custom imx8mp board.
+> I am not able to reproduce it on an imx8mm-evk.
+>
+> If I select the pca953x as a module or insert a delay inside its
+> probe() function, it probes successfully.
+>
+> The drivers/gpio/gpio-pca953x.c has the following comments:
+>
+> /* register after i2c postcore initcall and before
+>  * subsys initcalls that may rely on these GPIOs
+>  */
+> subsys_initcall(pca953x_init);
+>
+> but it seems this is not happening.
+>
+> I have also tried to register it like this:
+>
+> --- a/drivers/gpio/gpio-pca953x.c
+> +++ b/drivers/gpio/gpio-pca953x.c
+> @@ -1369,21 +1369,7 @@ static struct i2c_driver pca953x_driver =3D {
+>         .remove         =3D pca953x_remove,
+>         .id_table       =3D pca953x_id,
+>  };
+> -
+> -static int __init pca953x_init(void)
+> -{
+> -       return i2c_add_driver(&pca953x_driver);
+> -}
+> -/* register after i2c postcore initcall and before
+> - * subsys initcalls that may rely on these GPIOs
+> - */
+> -subsys_initcall(pca953x_init);
+> -
+> -static void __exit pca953x_exit(void)
+> -{
+> -       i2c_del_driver(&pca953x_driver);
+> -}
+> -module_exit(pca953x_exit);
+> +module_i2c_driver(pca953x_driver);
+> )
+>
+> but this did not help either.
+>
+> Does anyone have any suggestions on how to fix this problem when the
+> pca953x driver is built-in?
 
-Indeed, the driver could use the gpio-ranges to determine the node's bank 
-number. Currently it uses the aliases or falls back to the order of parsing 
-nodes.
- 
-> I leave this subject up to the experts to find out what is needed to
-> improve. Don't ask me.
+If I register the i2c-imx driver like this:
 
-My opinion on this is that the rockchip driver needs to be adapted if we want 
-the gpio nodes out of the pinctrl. I'm willing to have a look at this, but I 
-don't think it is in the scope for this patch set and don't think it should be 
-a blocker.
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1638,18 +1638,7 @@ static struct platform_driver i2c_imx_driver =3D {
+        },
+        .id_table =3D imx_i2c_devtype,
+ };
+-
+-static int __init i2c_adap_imx_init(void)
+-{
+-       return platform_driver_register(&i2c_imx_driver);
+-}
+-subsys_initcall(i2c_adap_imx_init);
+-
+-static void __exit i2c_adap_imx_exit(void)
+-{
+-       platform_driver_unregister(&i2c_imx_driver);
+-}
+-module_exit(i2c_adap_imx_exit);
++module_platform_driver(i2c_imx_driver);
 
-> Johan
-> 
+then the pca953x driver probes correctly.
 
-Regards,
-Detlev.
+:~/stable/linux$ git grep subsys_initcall drivers/i2c/ | wc -l
+15
 
+:~/stable/linux$ git grep module_platform_driver drivers/i2c/ | wc -l
+75
 
-
+Most of the I2C drivers are registered as module_platform_driver().
 
