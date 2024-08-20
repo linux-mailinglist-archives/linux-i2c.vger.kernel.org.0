@@ -1,74 +1,51 @@
-Return-Path: <linux-i2c+bounces-5600-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5601-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E4889585F8
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 13:37:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15A32958826
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 15:44:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A19FB2152B
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 11:37:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BD811F22C06
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 13:44:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C622B18E75A;
-	Tue, 20 Aug 2024 11:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5AA1917C8;
+	Tue, 20 Aug 2024 13:44:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y3exv8Rl"
+	dkim=pass (1024-bit key) header.d=yandex.com header.i=@yandex.com header.b="bhu5URS2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [178.154.239.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFA418CBF3
-	for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 11:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B88E19067A;
+	Tue, 20 Aug 2024 13:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724153856; cv=none; b=nTRXb1zFHIPHHzer/ISVMcqTerUzdlXBXF/1ev0MeH4a8xL6ysI+hMGmfZHnPSzeOCJJx2Ybw8zRrnz9YraXuxVVd3cjAnOyUDBRbTmeMTdD4ZyhttLR+l5+G8ESpGufE9bjuZoC3eR1EzwAaGU0tiKqkCXOrOKZMG5vyOQm6Kg=
+	t=1724161440; cv=none; b=ANYTGfpkMLBti1L83xeoxXPJyHZgy20H/fX4ztEZdJtjO/keUYlD7ezs+djCoChWaa9yEY/nL8SvJH4PMsHG+2UWc+8e1kN9UxrHYFaD4hUKCDTWt3/snx6+1BxA+wPgg2KLgXU7AS7HiIpHzh9uf62nr5nB9rJtKyNJZoEdyTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724153856; c=relaxed/simple;
-	bh=IvZBJUxFElI7oSzZMmvS6vB7Efvt3Xy4SUpSkkCUtPc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nC9n2HlHnxfPSZBgfmyJrhGzqhV2P2YOwyaDRtp0xeOJj2woVFL4A76ibNzF+1SOJLRE6SVPoxtydwI0bjxItA8+ko6lQrSKBdSKgcAcXUcQH2RFUi8GhRN9KnEhoheJH8vK+A6PtTHIWOFYow51Tta1mF9NLOuxdGZWyB9yXiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=y3exv8Rl; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-533446e53b5so75715e87.1
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 04:37:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724153853; x=1724758653; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BvQ5KNXMJMLakdVv034VXkUY0ogpNTCoT/KgikaWz60=;
-        b=y3exv8Rlk35ck1be4h47L1GST7T85+FbRXn6gLLsPaAp2C9tiWn8gUGw8y7kPZXBz1
-         zFu52SWFjzeLKrzj+qzE64sc+QFn6bCFCXulmh001pc87MfNdLmYwM5vf2iZB2Zd75xv
-         nVtRrZiRrbPFLh0JPiftMt681mWbkVHh5dK0Ju2/HbO0w0xtch5NcdUDd2aPJCm2/4Pz
-         dADiO9lwyoHCIpLCz9nMpDaEo4mtghvFomSNIHJkgYY9689ilc/HpHgccIzOKnm6icY0
-         8MJVqxdIh/a1/8MDHPndtnzWJNLMjmDHdMn1EDbgUjFZGrCokeHvffhcFOm3ar3VZEh/
-         Zi3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724153853; x=1724758653;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BvQ5KNXMJMLakdVv034VXkUY0ogpNTCoT/KgikaWz60=;
-        b=D8fOoi+bITB3oCMpkxy1/uoVL4hn/O8UweN4ocOuXfh6RaefPzRHdMDUYCtAe8eDh8
-         acVBBY06ReeQXiujuZj4JyJtiyt+Lj+UgjMCbK4gU4ITBZkEz/adI/OJSUOq8lp7bcRi
-         sddnG8igLHZASUiCVTRbFSg2azohST2vcf3q8qsl48ZUTfGNIUAVO0hrbpRJScyJS23i
-         0KZ7ambqDkkT9IVIPRWD+c7vPcnQRgjgpNQ58PftJg9hqK1WvBRPk3x3Sg/LdSu5hnxJ
-         e5sLHrCB5gxhgEP+DDUYSv6uebODuJth/ghP0bGXc9f1UuI8fuQIsfWjeeTXWQI6pJ8u
-         HNfA==
-X-Forwarded-Encrypted: i=1; AJvYcCU31xzCWVsCLambpnVIN7k1aZeoso9pESD+pgbrl6CxmeZagXlkSUmhHjrMY5syn/OsuoOgrU/YDXY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSVK+qWBDlnTRQ4MXKly4pa4urwqePojkbq2P4GBd/SFcAgmJR
-	FMs5Nj/aSlTiIwQa45kFi7jhFxn/2EG/yIKQD9DgXdu9D4YtLqCnaV9eFJixRqk=
-X-Google-Smtp-Source: AGHT+IEnAtcUPnLPniIn1G+PY8BSHGTXyXnIRA/xgiJW0ArDYm/MnZ9Zgqj+xLtJoMXC1pXKYENaLg==
-X-Received: by 2002:a05:6512:4007:b0:533:d28:b9f5 with SMTP id 2adb3069b0e04-5331c6f621amr5321803e87.9.1724153852473;
-        Tue, 20 Aug 2024 04:37:32 -0700 (PDT)
-Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5330d420357sm1758134e87.231.2024.08.20.04.37.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Aug 2024 04:37:32 -0700 (PDT)
-Message-ID: <48127e98-f489-4c62-a7e2-f207c875c77b@linaro.org>
-Date: Tue, 20 Aug 2024 14:37:30 +0300
+	s=arc-20240116; t=1724161440; c=relaxed/simple;
+	bh=qTsnJN49+aS05L1oPB0ek5eAdQnTO8MqCs+X6kYnMq0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LUa/GSXq36hb/z6eb03xhGSytxAk6OQ3JJmnkn3IsIeXvdP9o8BHqUd++Ra1/Lp+7vtozlOejXwO0mG6mzFcwM63Wp17jR7xPCcD4sdvrHXsd2IGD4UAR52KwUl9T+qaS5i3TeCtIFiRm9wXFGQAZVT3zt1VKyQFR4X6UxNzebw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.com; spf=pass smtp.mailfrom=yandex.com; dkim=pass (1024-bit key) header.d=yandex.com header.i=@yandex.com header.b=bhu5URS2; arc=none smtp.client-ip=178.154.239.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.com
+Received: from mail-nwsmtp-smtp-production-main-18.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-18.vla.yp-c.yandex.net [IPv6:2a02:6b8:c2b:1d5:0:640:773e:0])
+	by forward501a.mail.yandex.net (Yandex) with ESMTPS id C0386613DD;
+	Tue, 20 Aug 2024 16:35:05 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-18.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id wYNd7uDTquQ0-i9SdytvD;
+	Tue, 20 Aug 2024 16:35:04 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.com; s=mail;
+	t=1724160904; bh=Yc+SkPJPd/j9LC0nYHlrZb5VAOmJ1MFJRkiKmb/ch6A=;
+	h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+	b=bhu5URS2bSD/fVC8Dzn+eKEyID2HpY0mlyRqNtDTSUdfHvfOHvpoG8f/DIwhJOPxu
+	 eOMB7ZhqdzATeB1LPxOZQSQkmYA8bGSktt/+FWQxImxAPvg/JVNww43A4AKyEx+azv
+	 l024ikWXXXUw7S/kMhF9tVYCOBmo0Gs0gSpiSQ8A=
+Authentication-Results: mail-nwsmtp-smtp-production-main-18.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.com
+Message-ID: <1d7ffd09-99b9-43d8-a2f5-6e5455b4e5a1@yandex.com>
+Date: Tue, 20 Aug 2024 15:34:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,199 +53,225 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/5] dt-bindings: media: camss: Add qcom,sdm670-camss
+Subject: Re: [PATCH 09/10] arm64: dts: rockchip: Add rk3576 SoC base DT
+To: Detlev Casanova <detlev.casanova@collabora.com>,
+ linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Chris Morgan <macromorgan@hotmail.com>, Jonas Karlman <jonas@kwiboo.se>,
+ Tim Lunn <tim@feathertop.org>, Muhammed Efe Cetin <efectn@protonmail.com>,
+ Andy Yan <andyshrk@163.com>, Jagan Teki <jagan@edgeble.ai>,
+ Dragan Simic <dsimic@manjaro.org>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Shresth Prasad <shresthprasad7@gmail.com>, Ondrej Jirman <megi@xff.cz>,
+ Weizhao Ouyang <weizhao.ouyang@arm.com>, Alexey Charkov <alchark@gmail.com>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Finley Xiao <finley.xiao@rock-chips.com>,
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+ Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
+References: <20240802214612.434179-1-detlev.casanova@collabora.com>
+ <20240802214612.434179-10-detlev.casanova@collabora.com>
+ <c5014fe3-130b-4ace-a66e-8773a9a4f1dc@yandex.com>
+ <1944590.atdPhlSkOF@trenzalore>
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Richard Acayan <mailingradian@gmail.com>,
- Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-media@vger.kernel.org
-References: <20240819221051.31489-7-mailingradian@gmail.com>
- <20240819221051.31489-9-mailingradian@gmail.com>
- <3b3774de-3aeb-4a58-8c0e-e494a2f2aaf8@linaro.org>
- <e34dd20c-e67e-4b69-88df-b4d34e01f8b8@kernel.org>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <e34dd20c-e67e-4b69-88df-b4d34e01f8b8@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Johan Jonker <jbx6244@yandex.com>
+In-Reply-To: <1944590.atdPhlSkOF@trenzalore>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
 
-On 8/20/24 12:56, Krzysztof Kozlowski wrote:
-> On 20/08/2024 11:15, Vladimir Zapolskiy wrote:
->> Hi Richard,
->>
-> 
-> ...
-> 
->>> +
->>> +  clocks:
->>
->> Please add
->>
->> minItems: 22
->>
->>> +    maxItems: 22> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: camnoc_axi
->>> +      - const: cpas_ahb
->>> +      - const: csi0
->>> +      - const: csi1
->>> +      - const: csi2
->>> +      - const: csiphy0
->>> +      - const: csiphy0_timer
->>> +      - const: csiphy1
->>> +      - const: csiphy1_timer
->>> +      - const: csiphy2
->>> +      - const: csiphy2_timer
->>> +      - const: gcc_camera_ahb
->>> +      - const: gcc_camera_axi
->>> +      - const: soc_ahb
->>> +      - const: vfe0_axi
->>> +      - const: vfe0
->>> +      - const: vfe0_cphy_rx
->>> +      - const: vfe1_axi
->>> +      - const: vfe1
->>> +      - const: vfe1_cphy_rx
->>> +      - const: vfe_lite
->>> +      - const: vfe_lite_cphy_rx
->>> +
->>> +  interrupts:
->>
->> Please add
->>
->> minItems: 9
->>
->>> +    maxItems: 9
->>> +
->>> +  interrupt-names:
->>> +    items:
->>> +      - const: csid0
->>> +      - const: csid1
->>> +      - const: csid2
->>> +      - const: csiphy0
->>> +      - const: csiphy1
->>> +      - const: csiphy2
->>> +      - const: vfe0
->>> +      - const: vfe1
->>> +      - const: vfe_lite
->>> +
->>> +  iommus:
->>
->> Please add
->>
->> minItems: 4>
->>> +    maxItems: 4
->>> +
->>> +  power-domains:
->>> +    items:
->>> +      - description: IFE0 GDSC - Image Front End, Global Distributed Switch Controller.
->>> +      - description: IFE1 GDSC - Image Front End, Global Distributed Switch Controller.
->>> +      - description: Titan Top GDSC - Titan ISP Block, Global Distributed Switch Controller.
->>> +
->>> +  power-domain-names:
->>> +    items:
->>> +      - const: ife0
->>> +      - const: ife1
->>> +      - const: top
->>> +
->>> +  ports:
->>> +    $ref: /schemas/graph.yaml#/properties/ports
->>> +
->>> +    description:
->>> +      CSI input ports.
->>> +
->>> +    properties:
->>> +      port@0:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data from CSIPHY0.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +            required:
->>> +              - clock-lanes
->>> +              - data-lanes
->>> +
->>> +      port@1:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data from CSIPHY1.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +            required:
->>> +              - clock-lanes
->>> +              - data-lanes
->>> +
->>> +      port@2:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data from CSIPHY2.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +            required:
->>> +              - clock-lanes
->>> +              - data-lanes
->>> +
->>> +  reg:
->>
->> Please add
->>
->> minItems: 9
-> 
-> 
-> None of above are necessary and this contradicts review we give to drop
-> these...
 
-Thank you for the correction, I will memorize it.
+On 8/19/24 22:06, Detlev Casanova wrote:
+> Hi Johan,
+> 
+> On Thursday, 15 August 2024 05:30:25 EDT Johan Jonker wrote:
+>> Some comments below. Whenever useful.
+>>
+>> On 8/2/24 23:45, Detlev Casanova wrote:
+>>> This device tree contains all devices necessary for booting from network
+>>> or SD Card.
+>>>
+>>> It supports CPU, CRU, PM domains, dma, interrupts, timers, UART and
+>>> SDHCI (everything necessary to boot Linux on this system on chip) as
+>>> well as Ethernet, I2C, SPI and OTP.
+>>>
+>>> Also add the necessary DT bindings for the SoC.
+>>>
+>>> Signed-off-by: Liang Chen <cl@rock-chips.com>
+>>> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+>>> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+>>> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+>>> [rebase, squash and reword commit message]
+>>> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+>>> ---
+>>
+>> [..]
+>>
+>>> diff --git a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+>>> b/arch/arm64/boot/dts/rockchip/rk3576.dtsi new file mode 100644
+>>> index 0000000000000..00c4d2a153ced
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+>> [..]
+>>
+>> For uart0..uart11:
+>>> +
+>>> +	uart1: serial@27310000 {
+>>> +		compatible = "rockchip,rk3576-uart", "snps,dw-apb-
+> uart";
+>>> +		reg = <0x0 0x27310000 0x0 0x100>;
+>>>
+>>> +		interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+>>
+>> "interrupts" are sort just like other properties. A mix of sort styles
+>> exists, so check all nodes.
+> 
+> Ok, so it should be sorted alphabetically with the following exceptions:
+> - 'compatible' and 'reg.*' on top
+> - "#.*" at the end, sorted
+> - "status" last.
+> 
+> Is that right ?
 
---
-Best wishes,
-Vladimir
+The dts-coding-style.rst does not say much about things with "#",
+so below a property they refer to or at the end looks nicer.
+No strict rule, but do it in a consistent style in file. 
+
+Original comment by robh for things with "reg":
+"It makes more sense to keep reg-io-width together with reg."
+https://lore.kernel.org/all/20240131135955.GA966672-robh@kernel.org/
+
+> 
+>>> +		clocks = <&cru SCLK_UART1>, <&cru PCLK_UART1>;
+>>> +		clock-names = "baudclk", "apb_pclk";
+>>>
+>>> +		reg-shift = <2>;
+>>> +		reg-io-width = <4>;
+>>
+>> Move below "reg".
+>>
+>>> +		dmas = <&dmac0 8>, <&dmac0 9>;
+>>> +		pinctrl-names = "default";
+>>> +		pinctrl-0 = <&uart1m0_xfer>;
+>>> +		status = "disabled";
+>>> +	};
+>>> +
+>>> +	pmu: power-management@27380000 {
+> 
+> [...]
+> 
+>>> +				#address-cells = <1>;
+>>> +				#size-cells = <0>;
+>>> +				clocks = <&cru ACLK_VOP>,
+>>> +					 <&cru HCLK_VOP>,
+>>> +					 <&cru HCLK_VOP_ROOT>;
+>>> +				pm_qos = <&qos_vop_m0>,
+>>> +					 <&qos_vop_m1ro>;
+>>> +
+>>> +				power-domain@RK3576_PD_USB {
+>>
+>> Since when is USB part of VOP?
+>> Recheck?
+> 
+> The TRM doesn't tell me anything, but If I don't put it as a child of VOP, it 
+> just hangs when the kernel tries to shut it down.
+
+Could the people from Rockchip disclose the USB PD location?
+
+> 
+> [...]
+> 
+>>> +
+>>> +	pinctrl: pinctrl {
+>>> +		compatible = "rockchip,rk3576-pinctrl";
+>>> +		rockchip,grf = <&ioc_grf>;
+>>> +		rockchip,sys-grf = <&sys_grf>;
+>>> +		#address-cells = <2>;
+>>> +		#size-cells = <2>;
+>>> +		ranges;
+>>> +
+>>>
+>>> +		gpio0: gpio@27320000 {
+>>
+>> The use of gpio nodes as subnode of pinctrl is deprecated.
+>>
+>> patternProperties:
+>>   "gpio@[0-9a-f]+$":
+>>     type: object
+>>
+>>     $ref: /schemas/gpio/rockchip,gpio-bank.yaml#
+>>     deprecated: true
+>>
+>>     unevaluatedProperties: false
+> 
+
+> I tried putting the gpio nodes out of the pinctrl node, they should work 
+> because they already have a gpio-ranges field.
+> But unfortunately, that seem to break the pinctrl driver which hangs at some 
+> point. Maybe some adaptations are needed to support this, or am I missing 
+> something ?
+
+The aliases that we added to the DT files are a work around to prevent damage when we moved to generic gpio node names.
+There just happened to be some code for it in the driver...
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/gpio/gpio-rockchip.c#n719
+
+Comment by robh:
+"GPIO shouldn't really have an alias either IMO."
+https://lore.kernel.org/linux-arm-kernel/20230118153236.GA33699-robh@kernel.org/
+
+Mainline Rockchip gpio driver is not so to the standard.
+The file gpio-rockchip.c currently does nothing with "gpio-ranges" vs. bank and node relation.
+My simple patch was acked, but never applied. There's no public maintainer response of what to improve.
+Guess, probably something more complicated idiot prove "gpio-ranges" parsing/bank linking is needed?
+https://lore.kernel.org/linux-arm-kernel/890be9a0-8e82-a8f4-bc15-d5d1597343c2@gmail.com/
+
+I leave this subject up to the experts to find out what is needed to improve.
+Don't ask me.
+
+Johan
+> 
+>>> +			compatible = "rockchip,gpio-bank";
+>>
+>> When in use as separate node the compatible must be SoC related.
+>>
+>> Question for the maintainers: Extra entry to rockchip,gpio-bank.yaml ??
+>>
+>>> +			reg = <0x0 0x27320000 0x0 0x200>;
+>>> +			interrupts = <GIC_SPI 153 
+> IRQ_TYPE_LEVEL_HIGH>;
+>>> +			clocks = <&cru PCLK_GPIO0>, <&cru 
+> DBCLK_GPIO0>;
+>>> +
+>>> +			gpio-controller;
+>>> +			#gpio-cells = <2>;
+>>> +			gpio-ranges = <&pinctrl 0 0 32>;
+>>> +			interrupt-controller;
+>>> +			#interrupt-cells = <2>;
+>>> +		};
+>>> +
+>>> +		gpio1: gpio@2ae10000 {
+>>> +
+>>> +		gpio2: gpio@2ae20000 {
+>>> +
+>>> +		gpio3: gpio@2ae30000 {
+>>> +
+>>> +		gpio4: gpio@2ae40000 {
+>>> +	};
+>>> +};
+>>> +
+>>> +#include "rk3576-pinctrl.dtsi"
+> 
+> Regards,
+> 
+> Detlev
+> 
+> 
+> 
 
