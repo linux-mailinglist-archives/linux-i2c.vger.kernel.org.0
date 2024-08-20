@@ -1,74 +1,52 @@
-Return-Path: <linux-i2c+bounces-5571-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5572-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 977BB95803D
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 09:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1884E958120
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 10:40:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22CEA1F22749
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 07:47:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3A901F23BFD
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Aug 2024 08:39:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE74D18A6B8;
-	Tue, 20 Aug 2024 07:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38F518A6CA;
+	Tue, 20 Aug 2024 08:39:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="DKRRP2/l"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c5HQjpd+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D09189B97
-	for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 07:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D7818E342;
+	Tue, 20 Aug 2024 08:39:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724139949; cv=none; b=WboegLni+OfL0+n/7CxDH8awoos9q+jrSsNlOb7I/TO/kgX0hPWP28AOnN5tgc06iLnPBCOvwO7C49ROAdIItIiUs3UtIOk994Q/KLh4cBMLCrNeAEe23BDzpHCQE69PjIWTgOYFpX8u5WNTrqnjlYxoE1ZlPHL/dUMAnisfxFA=
+	t=1724143194; cv=none; b=SpJQbVFfhCzWZZPG4p7qakCxdI5+YowRUJE1cXqtF6hjdlog22+iY4q4kOzlg8fuxxDq1k/HP+ex/jPCxF/lEjEBk/T8fZk7ne96EeteKrHc1jUFdnDRBKzHxgZCbiHrAyY1GPP16lPrnG/ihqMBzXzgY1Ks/U+nmui8yW2Nx/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724139949; c=relaxed/simple;
-	bh=IzqUJpOxWHIZLXuAxFpK1IY0UQNTFwHq2Cl7sGYmSNc=;
+	s=arc-20240116; t=1724143194; c=relaxed/simple;
+	bh=Y67lKScO+XHSKkPWwEJi0w1LvhlMtu8n19Sm6FXBPfo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FEdv7jCxbe8FML489e5NaMcaOmWQ2OgQ2q7fpr7Eo21+mNg96dl5trMW3OR4DqZk3qR0bG++fl8yPl21yM2fkL83675iPo9ktOAawSi2QQQ/vhCP+46cHOLzy5/B0WLeLiUsER5tsZHxSAFiDggLDbiiwav2/SsSMRwHDUWU3c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=DKRRP2/l; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a7aa4ca9d72so680173666b.0
-        for <linux-i2c@vger.kernel.org>; Tue, 20 Aug 2024 00:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1724139946; x=1724744746; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CMkxnD7tJSGVlFCxUXgz+W1GqsA8QnvZFdBKuBS4r0w=;
-        b=DKRRP2/lG/KD15SJCI0RqTxdmoTIm/1E5+2iADrz5OzuMLyqV+l+AHC44dDGjw2ban
-         Q7hbUL52oIvC4RtRXVcN0eeL7dsM/ZWZgC6aRt/1rIs9vomRhARUOCvK/2ZJNYViHAsn
-         Qbib/usuNUVAkpvj8WZ77HU0/rTfUyChnYKf0eGQ8ULu6lr2yg11CDeiH1m201vkpp5k
-         Kl/B5Z7TddWkr88Z3g/dYVKlCGWtYOimqS0qt1Ei1RjzpiQ+Pjez/jDC7P4AM0Hz5kYN
-         kaPPOxhOWh4yL0rRTJVR5g6W4cBVhe1rKxeyixFxhHDwEm2Bveii3R8be9OVTKKZvMW9
-         rISQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724139946; x=1724744746;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CMkxnD7tJSGVlFCxUXgz+W1GqsA8QnvZFdBKuBS4r0w=;
-        b=iCh1BGuW/In7CC9iS0ZlEvLQnp1nhgf7msSgeQxGm8PbOlh/TVMa7UNs1JUjtW3DAD
-         DjBKSdGvP/gTESguiH8wHcLq8oKymYa7Zb1by2hzwUIHNe1Tl4JOYdCKqQHS/mNSCcRW
-         JH+6rAGPXnClZxGOGMmeIkVk/cPuOjFSPCh2zswIc0H//+trGvwF3xleSV3J4EkFZGX+
-         a7x6qffQTNeCsWvHGRFHbOIe+p8BGLU6C+qoyO7da+Nk9YY7noVqPKDnP4uoKIBstcFL
-         dxQ/qvIwWKdU4dXmPSSVnCnECW8J9hVmt+HaIS0cCww3vfJQsH+f2uKlQ8Ih3XAalf00
-         /BCg==
-X-Forwarded-Encrypted: i=1; AJvYcCUY5N20TsDIZKTWr7S5om6WZrDNH6XoYTFgw5nBYLqx/1ikW1KC6TJLROu2jK9jng/ExVoFsNiX+dIDW8VdTH6JyZku427UTRFu
-X-Gm-Message-State: AOJu0Yy0TT2EEhCkIQZcR83BclNrbO0l8qDYUjzrxc5pWpqEyfZgV2UJ
-	BIl06EFlSg27vjd6J5+abXxamfjxZMUHJtqrXyAs6ceQzSNKb9pI8GsAtzrXM7w=
-X-Google-Smtp-Source: AGHT+IGEB9b5o3lQUcpVrzOpOPM4TKWZrn6n4CB6Bt48ZfipcQPhnHGYi1zYToUDh19MHWDjV7QeBA==
-X-Received: by 2002:a17:907:6d02:b0:a77:da14:8403 with SMTP id a640c23a62f3a-a83928a64e3mr795678866b.2.1724139945917;
-        Tue, 20 Aug 2024 00:45:45 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83aeb6eb4dsm430535166b.35.2024.08.20.00.45.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Aug 2024 00:45:45 -0700 (PDT)
-Message-ID: <709ddcee-637d-49d3-915b-0872b3c67f30@tuxon.dev>
-Date: Tue, 20 Aug 2024 10:45:43 +0300
+	 In-Reply-To:Content-Type; b=gCVhC9FrTDUFuWa5mKM2ff0LHg6uGkTr62c40zx8tfSwTUB3x2wEP2zN00MOdi8WTjC4lFKz5YhTmO9RMAjPlLhM4z+zkVEcVi6KT4hRqTLtsgYpYMwu4y0ssQne0YqYQ+osde69LNQ3t6bcsB6xstI4K97tgS7zGNF4t3XD32I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c5HQjpd+; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 30B65240002;
+	Tue, 20 Aug 2024 08:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1724143183;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gjbZOxwR9PVGgaPf4uUaZd0JrjKtSGINO0OZPhHVGyE=;
+	b=c5HQjpd+Or9Pj+ejVrX1nGX4PvgGzQJftCNT2NtxvISrNrqvjgYe2dOBghNRWvDSJqIxZf
+	wCVNrnJZ2LeXP5uE9pswbO2yYpZMffoMrmuFoJ5V24+8DitD4lVy5/WE3TqQ3LVQl5npu4
+	mjn02iEzlkBSMj4TZy/Vk5RbEwFewbSlZ0LAVW2iKrqDDgEGsw1U++4G+Xf/fdwOtHRMHu
+	/1ck3f1fMrbVe1L33TqrUXttiGDqCnTX6JuC7eI2As+OtWdqpAtx7WEPMsfawOcybtjaeJ
+	WrpzC2hU3IOztDocVmDxBmPys0xLN710+YRTbYIpPWLbDrgOZ5xk1N9vbslUXA==
+Message-ID: <8d8b1967-1d41-44d9-9791-d7809bed269c@bootlin.com>
+Date: Tue, 20 Aug 2024 10:39:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,79 +54,87 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 07/11] dt-bindings: i2c: renesas,riic: Document the
- R9A08G045 support
+Subject: Re: [PATCH v4 0/2] Add support for Congatec CGEB BIOS interface
+To: Mary Strodl <mstrodl@csh.rit.edu>, linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org, urezki@gmail.com, hch@infradead.org,
+ linux-mm@kvack.org, lee@kernel.org, andi.shyti@kernel.org,
+ linux-i2c@vger.kernel.org, s.hauer@pengutronix.de,
+ christian.gmeiner@gmail.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20240814184731.1310988-1-mstrodl@csh.rit.edu>
 Content-Language: en-US
-To: Conor Dooley <conor@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>
-Cc: chris.brandt@renesas.com, andi.shyti@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, geert+renesas@glider.be,
- magnus.damm@gmail.com, p.zabel@pengutronix.de,
- wsa+renesas@sang-engineering.com, linux-renesas-soc@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240819102348.1592171-1-claudiu.beznea.uj@bp.renesas.com>
- <20240819102348.1592171-8-claudiu.beznea.uj@bp.renesas.com>
- <gxjlmdjicwzlexitsx673beyn7ijuf47637nao2luc5h6h6hvi@qstobttin7dw>
- <e6377448-9af3-4807-a8fd-197f5b2b4aa4@tuxon.dev>
- <56204f92-d1d4-4681-8a9d-f28925919ef4@kernel.org>
- <20240819-sizing-devouring-17b74473d1a1@spud>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20240819-sizing-devouring-17b74473d1a1@spud>
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <20240814184731.1310988-1-mstrodl@csh.rit.edu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-
-
-On 19.08.2024 19:39, Conor Dooley wrote:
-> On Mon, Aug 19, 2024 at 01:22:39PM +0200, Krzysztof Kozlowski wrote:
->> On 19/08/2024 13:10, claudiu beznea wrote:
->>>
->>>
->>> On 19.08.2024 14:05, Krzysztof Kozlowski wrote:
->>>> On Mon, Aug 19, 2024 at 01:23:44PM +0300, Claudiu wrote:
->>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>>
->>>>> Document the Renesas RZ/G3S (R9A08G045) RIIC IP. This is compatible with
->>>>> the version available on Renesas RZ/V2H (R9A09G075).
->>>>>
->>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>> ---
->>>>>
->>>>> Changes in v4:
->>>>> - added comment near the fallback for RZ/G3S; because of this
->>>>>   dropped Conor's tag
->>>>
->>>> That's not a reason to request a re-review.
+On 8/14/24 20:47, Mary Strodl wrote:
+> The following series adds support for the Congatec CGEB interface
+> found on some Congatec x86 boards. The CGEB interface is a BIOS
+> interface which provides access to onboard peripherals like I2C
+> busses and watchdogs. It works by mapping BIOS code and searching
+> for magic values which specify the entry points to the CGEB call.
+> The CGEB call is an API provided by the BIOS which provides access
+> to the functions in an ioctl like fashion.
 > 
-> FWIW, I don't care about how many binding patches I do or do not get
-> credit for reviewing. 
-
-I had no intention to drop your credit for reviewing this. In the past I
-went though situations where reviewer complained due to keeping the tag and
-doing very simple adjustment on the next version. I dropped your tag to
-avoid that situation here too and mentioned it in the change log.
-
-Thank you,
-Claudiu Beznea
-
-
-
-> Feel free to give a tag yourself Krzysztof in the
-> future if you come across these situations and I'll happily hit ctrl+d
-> and remove the thread from my mailbox rather than reply :)
+> At the request of some folks the first time I sent this series out,
+> CGEB has a userspace component which runs the x86 blob (rather than
+> running it directly in the kernel), which sends requests back and
+> forth using the cn_netlink API.
 > 
->>>
->>> Sorry for that, I wasn't aware of the procedure for this on bindings.
->>
->> There is no difference. Please read carefully submitting patches,
->> including the chapter about tags.
+> You can find a reference implementation of the userspace helper here:
+> https://github.com/Mstrodl/cgeb-helper
 > 
-> Yeah, I don't think this patch is materially different on those
-> grounds...
-> 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Cheers,
-> Conor.
+> I didn't get an answer when I asked where the userspace component
+> should live, so I didn't put a ton of work into getting the helper
+> up to snuff since similar userspace helpers (like v86d) are not
+> in-tree. If folks would like the helper in-tree, that's fine too.
+
+Hello Mary !!
+
+It was by pure luck that I found your series.
+
+It seems we are working on the same thing, the Congatec Board Controller.
+
+I sent a first version of my series few weeks ago [1].
+My implementation is very different.
+There is an MFD which maps the needed IO regions and declares cells
+(gpio, watchdog, i2c). It also contains all the code to communicate with
+the Board Controller (using ioread and iowrite).
+The DMI table is used to detect if the board is supported, so the driver
+can be probed (or not).
+Other drivers (gpio, i2c and watchdog for now) use the API provided by
+the MFD to communicate with the Board Controller.
+With this approach, I don't need a userspace component.
+
+For this work I used the Congatec driver (that Thomas Gleixner pointed
+you) as reference. But as mentioned by Thomas the driver is not well
+written at all.
+By the way their latest version is available in their yocto metalayer
+(please find the link in my series).
+
+For now I did the job for the conga-SA7 board (which has a 5th
+generation Board Controller).
+So if you have hardware which has the same generation of the Board
+Controller, you can easily test the series. You only need to add the DMI
+entry of your board in the MFD driver.
+
+For other generations, I had a quick look. The sequences seem very
+similar, with minor differences. It could be easily implemented in the
+future, and only the MFD will be modified.
+
+Please feel free to test/comment my series [1].
+
+[1]
+https://lore.kernel.org/all/20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com/
+
+Best Regards,
+
+Thomas
+
+-- 
+Thomas Richard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
