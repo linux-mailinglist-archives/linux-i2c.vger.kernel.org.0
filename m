@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-5634-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5635-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B395A95A60C
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Aug 2024 22:47:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D1E795A611
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Aug 2024 22:47:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A4CB283100
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Aug 2024 20:47:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12AB01F231AF
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Aug 2024 20:47:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5FC1662E4;
-	Wed, 21 Aug 2024 20:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7C3416DECB;
+	Wed, 21 Aug 2024 20:47:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V+hhiKUF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lu0L81nJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533671531C2
-	for <linux-i2c@vger.kernel.org>; Wed, 21 Aug 2024 20:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1B0166F07
+	for <linux-i2c@vger.kernel.org>; Wed, 21 Aug 2024 20:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724273220; cv=none; b=fi5rABVQ2WcyAXdRU7CPiDfJM4z9OZ2qnWmKyma2EIT2MRgw7pVAsIsApHylFtbTz1ICxXThnp5R07cD3izAlzxbGsDle8i4cXfMGzJq0RPQLkTGNOITk+yS+4MXehYhiNE1DQ/R4ze6EUQgsOAkXFCLfjUZ47nxQWQ0JGXbdQw=
+	t=1724273267; cv=none; b=lJzW9EhmuM3+yiO3z0eXwA/NP3gkEPcexnZZlB0XzJ7WTkzVBreL0hwdB5lefzwl+LRY+MhTHagmPpwBeLYPjA1pCg6MXIrNRDrm2JtzP5ktwphfbT+fDA7G5je6d0LFrhrWdaBZG3wwd+8u1XnDVvoH2GQLOJn7lh4v/7VLQrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724273220; c=relaxed/simple;
-	bh=/ftD15TMkMDtA2uICd0ArWMufJ0qH80+HUtt5Ue2AzA=;
+	s=arc-20240116; t=1724273267; c=relaxed/simple;
+	bh=Zc/wQKM6jYV86Da7nkznarmiRL1LAcp9Oxd8h3G1l+A=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Yx+JHtoH3uEDlMVsDLgEr4Mx8tKN0sjMjwmVK5vIFBhHMvGhypHPUOF8tK3yvb/pf6dy6OZbV2NjPwIQFZFmIZRY2MXmAkM/RioUPpFgyDUsa+bK9hX4ot6fNPK8BzuL8UB6TE9WMfq0tjVKYUYvVQNxvrdkSYDN6wPuXwtuuEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V+hhiKUF; arc=none smtp.client-ip=209.85.218.42
+	 In-Reply-To:Content-Type; b=nCrSausbJT4Er4YbER9qbYTEyJ7tOWhxnuqjRJqIXxD+U1/nPlbUPr+EqTaNk3RbSUkSgjGWI+8ACHccfdEumnqQYGnWNxXCRZ4OVSrxhbCLprNo8nVcpHGR2l6iouSAA8z6bewjw60w91oKmflbuGQtACUbCqiAtCecR7fHlW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lu0L81nJ; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a8682bb5e79so9496766b.2
-        for <linux-i2c@vger.kernel.org>; Wed, 21 Aug 2024 13:46:58 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a7a81bd549eso7315266b.3
+        for <linux-i2c@vger.kernel.org>; Wed, 21 Aug 2024 13:47:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724273217; x=1724878017; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724273264; x=1724878064; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FUcHbjcwB2shc8mKEGp6CYOM+QvPkIGA/Ohn38u7Kl0=;
-        b=V+hhiKUF/baRGdYXhHghuTemLwNTtREQ9CEYv+/ydjtQbGSKfbk7r9z85dEAHGj52c
-         RZCpLQBcHi/DOXLBWnwmCoDN+0xcvySWEs2wXYz+wS9eW0nUGTQGVy5aU7GAzBhlW3zJ
-         h0R2Ouoqt82wSRAxvtO7N1qKZT8f7MscrbgcCW+/au8YKyloMcrImwDC0wm6E/cGk+RR
-         K5SU0in1hyd5Ihf/iUASbEKWreIJyc2v/aWdAPbsHpFxdY/MlyFG7rt+SIlQSxQRuUk0
-         8HmTjqJD6d8wVw/1VHWdPiONFBVcEP5a5P2hB8irncbOeXx5eYiH9N6OjAU0SBF1LvJM
-         s6QQ==
+        bh=oKNdo7TwrLqn3vb9R/DeO9xho3SOHUiFKUzxQlmGZHA=;
+        b=Lu0L81nJ56uuzEoIctb8N7u76kceQsSkQarc1/0zafdmfpP1KHCeWomVTK2z5xCviy
+         VoI1QQeDuXmASg4Gx2+Aqe1nzl7piveRLJPy7PIVNy02grMJtXifhaZp28gn8TvIl4RE
+         MmGe8JQLpr543oVzLNHdTtW8MFlIvHmCju4vEl6/iK51b742CzhbJg1NFAx0VqT1zi0I
+         bvkA+TJuPClQqYxbTWiGBDfk7xot28L9fyu8jsLSMS86B7fjQH47QHngdxOvGq8S8mHS
+         5NAnMzswLQUZxtdMyOEdu+Ex646UtlrBP7pCg85p263BLmht26QRxnLChc1RCQz10nPT
+         ZenQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724273217; x=1724878017;
+        d=1e100.net; s=20230601; t=1724273264; x=1724878064;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FUcHbjcwB2shc8mKEGp6CYOM+QvPkIGA/Ohn38u7Kl0=;
-        b=XtXFMgVOEBN9nFGtDNnnUz5N9i2dX2YfirMztFnAmFw1W8KgeI7PGP35n3ttSaKhAs
-         11pPLbGSmAdDmJ4w4y1Nz4ZNThsu6iS+KaWOFvoX+Y22SMbcwZG+aeosqk4Z//l2Rv65
-         YM1OXzWFvP1chQh/aAwd9YtkYX+lbvu5cQ8Yb7bYRW/bSWnaMBFYrLslSkHJpztDL5+y
-         2mIwypficShWDb9V2DNL6cGQOisCNKebyFI+74MncVpvxLIjwt8ZELz9994P6qhaeDXc
-         kF7hxlQRcANj+Xb8J9UH8T3+NaNZSk17QvrM/lp+ZFp37vPK0iQMPC8y38tjJlGIvUO8
-         lWuA==
-X-Gm-Message-State: AOJu0YzGmCoOmBdXf7ksvh4w2S92fMGYwIWUntyyXC6EGjDUyN9Sslb1
-	Gn6Qe/OA1P9U3NP+zra6xTcPQWFwMkfFvx2pggKs3V153k0wx+KgJcwV2w==
-X-Google-Smtp-Source: AGHT+IFhmqNS9Ot0a+gFlkKn/QHN4xbjIfNP2g1TStkslBi6pM2iKHu1PVMbFgiupGliol/0jWOwJQ==
-X-Received: by 2002:a17:907:7fa1:b0:a7a:9a78:4b5a with SMTP id a640c23a62f3a-a866f8d9c68mr220914466b.52.1724273216104;
-        Wed, 21 Aug 2024 13:46:56 -0700 (PDT)
+        bh=oKNdo7TwrLqn3vb9R/DeO9xho3SOHUiFKUzxQlmGZHA=;
+        b=fjJ+Bj20oa3o2YuIwR70lNEVTx5JfwhETq8EcsR2ck/7AMzUEufRGZFUxxhrUdANRV
+         mWTtGpg+3LwSw6ER0tTdAbqzPoObpO8JkUVzPZrjnIO2vm/ceqLpU5lrZ2pqfRq2iMun
+         UQK9lFlGX98s4dnEn4GSD5cYJQIPZNtJhKh8oM28vkYYc3x0iq+KeH/1GwWbF3uYdHH6
+         oGvUO5U8QQ+0RacQkQhqXTUMUjhfzYM2y2M9t/9slwKKj+sKq4WDfEC3orwB0mHWZuKD
+         MKmlivjpxlk1lTMet7rM++6qx/QuLYFPLxjr7YW3TfepgDQCNd52WEktSgPHGJai9MS0
+         X17w==
+X-Gm-Message-State: AOJu0Yyon0P3H895tAAB55vZP+wP3VPgd7H8YdOvGy9RsU8WrFnq6x/6
+	BAos2b6H5JfIdLJk4IRtcbEkHWVc55nzDsKZ0X1M0FTmFwNr1YkP3DLRew==
+X-Google-Smtp-Source: AGHT+IF90YM8gCIfv0tOw4c2rBwXbjIKCYymyTIdnPMh2DfQ+I4tSwiFgnBoV1WDOt6wyuhmbNCJvA==
+X-Received: by 2002:a17:907:2d23:b0:a86:7f9f:9222 with SMTP id a640c23a62f3a-a867f9f9a0cmr237115066b.67.1724273263735;
+        Wed, 21 Aug 2024 13:47:43 -0700 (PDT)
 Received: from ?IPV6:2a01:c22:76de:5100:1131:aa83:adfe:51dd? (dynamic-2a01-0c22-76de-5100-1131-aa83-adfe-51dd.c22.pool.telefonica.de. [2a01:c22:76de:5100:1131:aa83:adfe:51dd])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a868f220d2bsm9454366b.43.2024.08.21.13.46.55
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a868f220d2bsm9544166b.43.2024.08.21.13.47.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Aug 2024 13:46:55 -0700 (PDT)
-Message-ID: <9eb8879b-f975-41fc-a098-0ad189cc583d@gmail.com>
-Date: Wed, 21 Aug 2024 22:46:55 +0200
+        Wed, 21 Aug 2024 13:47:43 -0700 (PDT)
+Message-ID: <a1af16cd-5262-432a-a22c-23957af8f8a2@gmail.com>
+Date: Wed, 21 Aug 2024 22:47:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,8 +76,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 1/3] i2c: Replace list-based mechanism for handling
- auto-detected clients
+Subject: [PATCH 2/3] i2c: Replace list-based mechanism for handling
+ userspace-created clients
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Wolfram Sang <wsa@kernel.org>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
@@ -130,156 +130,134 @@ In-Reply-To: <9fabf29f-2b45-461e-ae6e-4391a40bcaca@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-So far a list is used to track auto-detected clients per driver.
-The same functionality can be achieved much simpler by flagging
-auto-detected clients.
-
-Two notes regarding the usage of driver_for_each_device:
-In our case it can't fail, however the function is annotated __must_check.
-So a little workaround is needed to avoid a compiler warning.
-Then we may remove nodes from the list over which we iterate.
-This is safe, see the explanation at the beginning of lib/klist.c.
+Similarly to the list of auto-detected clients, we can also replace the
+list of userspace-created clients with flagging such client devices.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/i2c-core-base.c | 48 ++++++++++---------------------------
- include/linux/i2c.h         |  3 +--
- 2 files changed, 13 insertions(+), 38 deletions(-)
+ drivers/i2c/i2c-core-base.c | 58 ++++++++++++++-----------------------
+ include/linux/i2c.h         |  1 +
+ 2 files changed, 22 insertions(+), 37 deletions(-)
 
 diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 79292bb33..549bb76b7 100644
+index 549bb76b7..b9f1b1a1b 100644
 --- a/drivers/i2c/i2c-core-base.c
 +++ b/drivers/i2c/i2c-core-base.c
-@@ -1662,23 +1662,6 @@ int i2c_add_numbered_adapter(struct i2c_adapter *adap)
- }
- EXPORT_SYMBOL_GPL(i2c_add_numbered_adapter);
+@@ -1265,14 +1265,12 @@ new_device_store(struct device *dev, struct device_attribute *attr,
+ 		info.flags |= I2C_CLIENT_SLAVE;
+ 	}
  
--static void i2c_do_del_adapter(struct i2c_driver *driver,
--			      struct i2c_adapter *adapter)
--{
--	struct i2c_client *client, *_n;
++	info.flags |= I2C_CLIENT_USER;
++
+ 	client = i2c_new_client_device(adap, &info);
+ 	if (IS_ERR(client))
+ 		return PTR_ERR(client);
+ 
+-	/* Keep track of the added device */
+-	mutex_lock(&adap->userspace_clients_lock);
+-	list_add_tail(&client->detected, &adap->userspace_clients);
+-	mutex_unlock(&adap->userspace_clients_lock);
+ 	dev_info(dev, "%s: Instantiated device %s at 0x%02hx\n", "new_device",
+ 		 info.type, info.addr);
+ 
+@@ -1280,6 +1278,15 @@ new_device_store(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_WO(new_device);
+ 
++static int __i2c_find_user_addr(struct device *dev, void *addrp)
++{
++	struct i2c_client *client = i2c_verify_client(dev);
++	unsigned short addr = *(unsigned short *)addrp;
++
++	return client && client->flags & I2C_CLIENT_USER &&
++	       i2c_encode_flags_to_addr(client) == addr;
++}
++
+ /*
+  * And of course let the users delete the devices they instantiated, if
+  * they got it wrong. This interface can only be used to delete devices
+@@ -1294,7 +1301,8 @@ delete_device_store(struct device *dev, struct device_attribute *attr,
+ 		    const char *buf, size_t count)
+ {
+ 	struct i2c_adapter *adap = to_i2c_adapter(dev);
+-	struct i2c_client *client, *next;
++	struct i2c_client *client;
++	struct device *child_dev;
+ 	unsigned short addr;
+ 	char end;
+ 	int res;
+@@ -1311,27 +1319,16 @@ delete_device_store(struct device *dev, struct device_attribute *attr,
+ 	}
+ 
+ 	/* Make sure the device was added through sysfs */
+-	res = -ENOENT;
+-	mutex_lock_nested(&adap->userspace_clients_lock,
+-			  i2c_adapter_depth(adap));
+-	list_for_each_entry_safe(client, next, &adap->userspace_clients,
+-				 detected) {
+-		if (i2c_encode_flags_to_addr(client) == addr) {
+-			dev_info(dev, "%s: Deleting device %s at 0x%02hx\n",
+-				 "delete_device", client->name, client->addr);
 -
--	/* Remove the devices we created ourselves as the result of hardware
--	 * probing (using a driver's detect method) */
--	list_for_each_entry_safe(client, _n, &driver->clients, detected) {
--		if (client->adapter == adapter) {
--			dev_dbg(&adapter->dev, "Removing %s at 0x%x\n",
--				client->name, client->addr);
 -			list_del(&client->detected);
 -			i2c_unregister_device(client);
+-			res = count;
+-			break;
 -		}
--	}
--}
--
- static int __unregister_client(struct device *dev, void *dummy)
- {
- 	struct i2c_client *client = i2c_verify_client(dev);
-@@ -1694,12 +1677,6 @@ static int __unregister_dummy(struct device *dev, void *dummy)
- 	return 0;
- }
- 
--static int __process_removed_adapter(struct device_driver *d, void *data)
--{
--	i2c_do_del_adapter(to_i2c_driver(d), data);
--	return 0;
--}
--
- /**
-  * i2c_del_adapter - unregister I2C adapter
-  * @adap: the adapter being unregistered
-@@ -1723,11 +1700,6 @@ void i2c_del_adapter(struct i2c_adapter *adap)
++	child_dev = device_find_child(&adap->dev, &addr, __i2c_find_user_addr);
++	if (!child_dev) {
++		dev_err(dev, "Can't find userspace-created device at %#x\n", addr);
++		return -ENOENT;
  	}
+-	mutex_unlock(&adap->userspace_clients_lock);
++	client = i2c_verify_client(child_dev);
++	i2c_unregister_device(client);
++	put_device(child_dev);
+ 
+-	if (res < 0)
+-		dev_err(dev, "%s: Can't find device in list\n",
+-			"delete_device");
+-	return res;
++	return count;
+ }
+ static DEVICE_ATTR_IGNORE_LOCKDEP(delete_device, S_IWUSR, NULL,
+ 				  delete_device_store);
+@@ -1688,7 +1685,6 @@ static int __unregister_dummy(struct device *dev, void *dummy)
+ void i2c_del_adapter(struct i2c_adapter *adap)
+ {
+ 	struct i2c_adapter *found;
+-	struct i2c_client *client, *next;
+ 
+ 	/* First make sure that this adapter was ever added */
+ 	mutex_lock(&core_lock);
+@@ -1701,18 +1697,6 @@ void i2c_del_adapter(struct i2c_adapter *adap)
  
  	i2c_acpi_remove_space_handler(adap);
--	/* Tell drivers about this removal */
--	mutex_lock(&core_lock);
--	bus_for_each_drv(&i2c_bus_type, NULL, adap,
--			       __process_removed_adapter);
--	mutex_unlock(&core_lock);
  
- 	/* Remove devices instantiated from sysfs */
- 	mutex_lock_nested(&adap->userspace_clients_lock,
-@@ -1967,7 +1939,6 @@ int i2c_register_driver(struct module *owner, struct i2c_driver *driver)
- 	/* add the driver to the list of i2c drivers in the driver core */
- 	driver->driver.owner = owner;
- 	driver->driver.bus = &i2c_bus_type;
--	INIT_LIST_HEAD(&driver->clients);
- 
- 	/* When registration returns, the driver core
- 	 * will have called probe() for all matching-but-unbound devices.
-@@ -1985,10 +1956,13 @@ int i2c_register_driver(struct module *owner, struct i2c_driver *driver)
- }
- EXPORT_SYMBOL(i2c_register_driver);
- 
--static int __process_removed_driver(struct device *dev, void *data)
-+static int __i2c_unregister_detected_client(struct device *dev, void *argp)
- {
--	if (dev->type == &i2c_adapter_type)
--		i2c_do_del_adapter(data, to_i2c_adapter(dev));
-+	struct i2c_client *client = i2c_verify_client(dev);
-+
-+	if (client && client->flags & I2C_CLIENT_AUTO)
-+		i2c_unregister_device(client);
-+
- 	return 0;
- }
- 
-@@ -1999,7 +1973,10 @@ static int __process_removed_driver(struct device *dev, void *data)
-  */
- void i2c_del_driver(struct i2c_driver *driver)
- {
--	i2c_for_each_dev(driver, __process_removed_driver);
-+	/* Satisfy __must_check, function can't fail */
-+	if (driver_for_each_device(&driver->driver, NULL, NULL,
-+				   __i2c_unregister_detected_client)) {
-+	}
- 
- 	driver_unregister(&driver->driver);
- 	pr_debug("driver [%s] unregistered\n", driver->driver.name);
-@@ -2426,6 +2403,7 @@ static int i2c_detect_address(struct i2c_client *temp_client,
- 	/* Finally call the custom detection function */
- 	memset(&info, 0, sizeof(struct i2c_board_info));
- 	info.addr = addr;
-+	info.flags = I2C_CLIENT_AUTO;
- 	err = driver->detect(temp_client, &info);
- 	if (err) {
- 		/* -ENODEV is returned if the detection fails. We catch it
-@@ -2452,9 +2430,7 @@ static int i2c_detect_address(struct i2c_client *temp_client,
- 		dev_dbg(&adapter->dev, "Creating %s at 0x%02x\n",
- 			info.type, info.addr);
- 		client = i2c_new_client_device(adapter, &info);
--		if (!IS_ERR(client))
--			list_add_tail(&client->detected, &driver->clients);
--		else
-+		if (IS_ERR(client))
- 			dev_err(&adapter->dev, "Failed creating %s at 0x%02x\n",
- 				info.type, info.addr);
- 	}
+-	/* Remove devices instantiated from sysfs */
+-	mutex_lock_nested(&adap->userspace_clients_lock,
+-			  i2c_adapter_depth(adap));
+-	list_for_each_entry_safe(client, next, &adap->userspace_clients,
+-				 detected) {
+-		dev_dbg(&adap->dev, "Removing %s at 0x%x\n", client->name,
+-			client->addr);
+-		list_del(&client->detected);
+-		i2c_unregister_device(client);
+-	}
+-	mutex_unlock(&adap->userspace_clients_lock);
+-
+ 	/* Detach any active clients. This can't fail, thus we do not
+ 	 * check the returned value. This is a two-pass process, because
+ 	 * we can't remove the dummy devices during the first pass: they
 diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 377def497..910a9b259 100644
+index 910a9b259..ba2564fe4 100644
 --- a/include/linux/i2c.h
 +++ b/include/linux/i2c.h
-@@ -244,7 +244,6 @@ enum i2c_driver_flags {
-  * @id_table: List of I2C devices supported by this driver
-  * @detect: Callback for device detection
-  * @address_list: The I2C addresses to probe (for detect)
-- * @clients: List of detected clients we created (for i2c-core use only)
-  * @flags: A bitmask of flags defined in &enum i2c_driver_flags
-  *
-  * The driver.owner field should be set to the module owner of this driver.
-@@ -299,7 +298,6 @@ struct i2c_driver {
- 	/* Device detection callback for automatic device creation */
- 	int (*detect)(struct i2c_client *client, struct i2c_board_info *info);
- 	const unsigned short *address_list;
--	struct list_head clients;
- 
- 	u32 flags;
- };
-@@ -334,6 +332,7 @@ struct i2c_client {
- #define I2C_CLIENT_SLAVE	0x20	/* we are the slave */
+@@ -333,6 +333,7 @@ struct i2c_client {
  #define I2C_CLIENT_HOST_NOTIFY	0x40	/* We want to use I2C host notify */
  #define I2C_CLIENT_WAKE		0x80	/* for board_info; true iff can wake */
-+#define I2C_CLIENT_AUTO		0x100	/* for board_info; auto-detected */
+ #define I2C_CLIENT_AUTO		0x100	/* for board_info; auto-detected */
++#define I2C_CLIENT_USER		0x200	/* for board_info; userspace-created */
  #define I2C_CLIENT_SCCB		0x9000	/* Use Omnivision SCCB protocol */
  					/* Must match I2C_M_STOP|IGNORE_NAK */
  
