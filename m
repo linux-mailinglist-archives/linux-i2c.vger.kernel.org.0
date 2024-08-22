@@ -1,101 +1,137 @@
-Return-Path: <linux-i2c+bounces-5691-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5692-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87CF295BB18
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 17:56:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91BA095BB39
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 18:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40F23283989
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 15:55:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D3891F25BA4
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 16:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AEBF1CDA05;
-	Thu, 22 Aug 2024 15:53:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AAE617A588;
+	Thu, 22 Aug 2024 16:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qoBqUWbS"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="WHqj/wdl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95BB1CB33A;
-	Thu, 22 Aug 2024 15:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6101CC8B5
+	for <linux-i2c@vger.kernel.org>; Thu, 22 Aug 2024 16:01:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724342012; cv=none; b=WGC0mt1xYdo7tASc0Uw8cbrJvgnFApyfRBJ5YLEJnjn7RAZcAmPiGP17irRrp/dW6EXqxH9/l8Su/KI9Op8rV8mTmFo0ICedlOUodJGLVvWTcuoM1otRiToyOsOWyIEzR3CQnP84IMPcn8B2lb8k5ZL9Gp//3kH5GhwsDp6+OmU=
+	t=1724342466; cv=none; b=af7DmRwGxvCq70o3OqhOPVtmGeIPjjBonRJa5FO28L83gX0sAef7bebjG5PuvMOrBC4D0fiDs8v5FXlNAN2IeuBj/4OAS/BXBvv6ru1WIP56OqxmP39eHd7MEm0XgXNgaQ1bX9zaPAIVvOZF3yBk/LeFpr5uy/g885DOvc99jso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724342012; c=relaxed/simple;
-	bh=y8Ghfe/tRkWEXDuR4Lt66t9U6fIcWdkJxTjW9OqUWss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TzwGvMLbx9dpTrIolVS+hbGiU+QJPfj3aQopYHW6mgcz9Jck87Z/ndVsCO55MyVArgeEEUC2qyepb8meerKIVUBr9HVnZd7GhHwIbMlBFQDZkNaL3uPpu/TnlOtgRHYl2EC57j6LWh5Mxfkn/3C0osF6SDKa/16isBkl+Ugme8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qoBqUWbS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97399C4AF0C;
-	Thu, 22 Aug 2024 15:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724342010;
-	bh=y8Ghfe/tRkWEXDuR4Lt66t9U6fIcWdkJxTjW9OqUWss=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qoBqUWbSPmX9Pg8nA8QQm3Iu2itlnQcAwlPS/64dWFUekUSXYIn4EAlVNBJAMjvQQ
-	 wwgFtfoPcrSWsY5VN2Z2qSQh897FGGCpBr853lZfm1deo8Y11o+IMAFUr8NXfTAklp
-	 PAILip0H3otcs+udH26gHm1TI7yyKOOIQTdivZ91y7gtzwGciLSg1UTUf3h5gM5q3l
-	 OF44LGIWu7JozQ0oyAQO5p0HigHcumInjHcX3o9Se2G8jl6C53YYUN4eCGvmRf8oUS
-	 ps/C1psbZXVF/lZsmnv2F4ec26d73JbD91kpGSPL/Vo4itFaM9fMVz0AUu99CYrLPO
-	 rtHIcexDSYxMQ==
-Date: Thu, 22 Aug 2024 16:53:25 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Joel Stanley <joel@jms.id.au>, Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Rayn Chen <rayn_chen@aspeedtech.com>, linux-i2c@vger.kernel.org,
-	openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: aspeed: drop redundant multi-master
-Message-ID: <20240822-sibling-divinely-be19cb9cc0b0@spud>
-References: <20240822132708.51884-1-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1724342466; c=relaxed/simple;
+	bh=MclSXkOnOLTupbtg+RVJZ2pqMTD2zQzObzGTwq335G8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YluKfk3HQGABuh6KD5UGoVlqjKfZyJecHYE86Aev2YcD2DtGipyRwodGy39ibcHNRwRb3LvQjIqQQrAQIjOwDhGDRxnBs4cnG4SfnGbJ/qtZB2yMLhOXOXYKmmlhfl4qCm0ClXPvMbekiPqDDlal2LW3gBUCZcJ7/QpRisEpCOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=WHqj/wdl; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a868b739cd9so118412966b.2
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Aug 2024 09:01:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1724342463; x=1724947263; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GnuBeHZrfqyuSlw2s4S9P4UlMr865U+LGI9hzvnRLuQ=;
+        b=WHqj/wdlydUcJQ3ec9OPcfdfscp4yYjQ0SdpgZm3HjMksmPBmeSQ5na6r0xQIZUFU6
+         riYsf3huUlbnvmgO2XBriLTXZy/vN37MgSWvoAtlk2QPFoXZ4XL5mD6fzUgx1h73s4li
+         Q3/XiLXBlb5wUuQ1FC0ogbn0Z+/Ep8QZ2wyz1xMxXTZnbB/973Wk4a6QNV0WtUWGaurK
+         Ah8clkkaF29ZbHR9JzMQ+cSaKu+F4vhT+oNNnodR6UoY7JPihuqgPyRbz9UUAmLP/UN2
+         Ut14wPsuBFA6FSqAHvomAhKgWBo5ugPYA0lw5/8Kv7zKDac9/F+p/apIzXkBW3b3lHYZ
+         31Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724342463; x=1724947263;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GnuBeHZrfqyuSlw2s4S9P4UlMr865U+LGI9hzvnRLuQ=;
+        b=bvKLyeiP4DJ8GQvEuSN435sB9bg9Qy1X/QCT/HSsjcnvKUVrPZjZFcGOmzin5slCjn
+         c5kREDpWwITLc/92igoWNwJYDAgJ3L17sI3PFxeQNfJdWfuctQ/t4Sw51kwQay7o0gq1
+         LdsTumG0uYP713/SP/zcTNLB2tqRLUmJz4MijsJpbq1Q/Z9G2pAzCUk25UMtUAlvWBNv
+         9kuM5KSRtuULK1Hwu+q0W2GF6wS+NwnU262NXxzxmDwWU3ofAXC49THvUSZfYxPdnHDS
+         osu/tQd9MQkgpLpxBH86E1ZD15mh1fVyUgruTcuH3z3m+Mf1QJdSkQbg54Jq9PHrBVF9
+         7H+A==
+X-Gm-Message-State: AOJu0Yz+LG5ME1QRAM9EWTZ2mBx7f2pP8ohlCGRGbK84wp6mYjCZV1I+
+	IsNBC4vbUTKuLc299E7rwqe1bbQWtvWFni/Ip1+xhk+kpi7SbD4g1cSlwyWO300=
+X-Google-Smtp-Source: AGHT+IFmKsPnikBSvZwZHhHC4xxZMreb+EUxNzzV6xe+96SGsynHYu6THV9fmm8arTYP4of1spf7Nw==
+X-Received: by 2002:a17:907:72c5:b0:a7a:ab8a:38a with SMTP id a640c23a62f3a-a866f2b1458mr485782466b.27.1724342463358;
+        Thu, 22 Aug 2024 09:01:03 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a868f47c584sm136021266b.157.2024.08.22.09.01.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Aug 2024 09:01:02 -0700 (PDT)
+Message-ID: <1bca08ff-f3b5-4ab3-9bed-553acf13d54a@tuxon.dev>
+Date: Thu, 22 Aug 2024 19:01:01 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="vAAMaBzo7gFTFXce"
-Content-Disposition: inline
-In-Reply-To: <20240822132708.51884-1-krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: riic: Simplify unsupported bus speed handling
+Content-Language: en-US
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+ Chris Brandt <chris.brandt@renesas.com>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <dc6b10a56be9c90f580c50c55d829766fe2956a7.1724337807.git.geert+renesas@glider.be>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <dc6b10a56be9c90f580c50c55d829766fe2956a7.1724337807.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
---vAAMaBzo7gFTFXce
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 22, 2024 at 03:27:08PM +0200, Krzysztof Kozlowski wrote:
-> 'multi-master' property is defined by core i2c-controller schema in
-> dtschema package, so binding which references it and has
-> unevaluatedProperties:false, does not need to mention it.  It is
-> completely redundant here.
->=20
-> Suggested-by: Andi Shyti <andi.shyti@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 22.08.2024 17:45, Geert Uytterhoeven wrote:
+> Simplify checking for unsupported bus speeds and reporting errors by
+> factoring out the calculation of the maximum bus speed, and by using the
+> dev_err_probe() helper.
+> 
+> While at it, use "%u" for u32, and improve the error message.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
---vAAMaBzo7gFTFXce
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsde9QAKCRB4tDGHoIJi
-0ushAP9C1yIfxWTQ99m6oo/wi/XM+H4jeZV+tKwrhhhzcmD0WAEAzNs+M49QgnKF
-hxJp9x49f0FYIRnNsWDMLxqEEimrWwE=
-=CiH4
------END PGP SIGNATURE-----
-
---vAAMaBzo7gFTFXce--
+> ---
+>  drivers/i2c/busses/i2c-riic.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
+> index a6996f3c17110dd7..c7f3a4c02470238c 100644
+> --- a/drivers/i2c/busses/i2c-riic.c
+> +++ b/drivers/i2c/busses/i2c-riic.c
+> @@ -316,16 +316,13 @@ static int riic_init_hw(struct riic_dev *riic)
+>  	struct i2c_timings *t = &riic->i2c_t;
+>  	struct device *dev = riic->adapter.dev.parent;
+>  	bool fast_mode_plus = riic->info->fast_mode_plus;
+> +	u32 max_freq = fast_mode_plus ? I2C_MAX_FAST_MODE_PLUS_FREQ
+> +				      : I2C_MAX_FAST_MODE_FREQ;
+>  
+> -	if ((!fast_mode_plus && t->bus_freq_hz > I2C_MAX_FAST_MODE_FREQ) ||
+> -	    (fast_mode_plus && t->bus_freq_hz > I2C_MAX_FAST_MODE_PLUS_FREQ)) {
+> -		dev_err(&riic->adapter.dev,
+> -			"unsupported bus speed (%dHz). %d max\n",
+> -			t->bus_freq_hz,
+> -			fast_mode_plus ? I2C_MAX_FAST_MODE_PLUS_FREQ :
+> -					 I2C_MAX_FAST_MODE_FREQ);
+> -		return -EINVAL;
+> -	}
+> +	if (t->bus_freq_hz > max_freq)
+> +		return dev_err_probe(&riic->adapter.dev, -EINVAL,
+> +				     "unsupported bus speed %uHz (%u max)\n",
+> +				     t->bus_freq_hz, max_freq);
+>  
+>  	rate = clk_get_rate(riic->clk);
+>  
 
