@@ -1,138 +1,429 @@
-Return-Path: <linux-i2c+bounces-5639-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5640-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9133195A7D7
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 00:32:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FF2F95AAEF
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 04:24:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6FD91C2187A
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Aug 2024 22:32:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B042B1F22EBA
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 02:24:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3007317C213;
-	Wed, 21 Aug 2024 22:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF7317999;
+	Thu, 22 Aug 2024 02:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pi3Pxaz1"
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="N1tFL4LF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from HK2PR02CU002.outbound.protection.outlook.com (mail-eastasiaazon11020093.outbound.protection.outlook.com [52.101.128.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC190176FAC;
-	Wed, 21 Aug 2024 22:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724279518; cv=none; b=RdlmEOOu+8VwEkzVXNoY8SqzXnSBNYP1LpTrWzoAxcntOGiYFOxdR3wRUcCHDFCaPDO8nK/vDPzt+rc3ze9HtO3D+aAZLf8yjE/BywyQjlt0YqY2TuWHZ0qiaj3nhRlEcNonpehsoJkvZpnkF2EXjRL0TAuGJ6fjPFQDv3gXW80=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724279518; c=relaxed/simple;
-	bh=ceYKa9Fo2UqkhS6Q7NCDDpDLpaW9SLoPxqmcrFgYv9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r4K6+YmuE4jhouzhcZ9lpJoPJ9Mvxdee2oaFtHR4fEGj3XwkxzKl70yoeHVPhaG2T76vwO2q9vDGWwR0AZM1smFIn9sKre53oyzNVHqb3QDGFI5UFEQUkbUHV+1MuqiVUmQXjavcAJ/Gml3bayWjVNNG4WqrPLDLyWRRBwU/BJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pi3Pxaz1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54163C32781;
-	Wed, 21 Aug 2024 22:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724279517;
-	bh=ceYKa9Fo2UqkhS6Q7NCDDpDLpaW9SLoPxqmcrFgYv9M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pi3Pxaz1r2VFHsEdTYQOU0Droi2ntt7POTr8WrhjTM+uwhK5wqQmC4gwiKc2yp3kn
-	 H1yUGY/4FdBJ/OStVnth6v4KdrmXUZvy0tZblJSnT9IeFPp5vOsAs/PvHPhMFat47U
-	 Wu6+7Ah8IeSWFYbg/s4Nk0JwuHpJnLami93tgeaELbF6BlNmRQEDZC4U8biT7rxLU6
-	 +E8tCcf3alrT6DSm/XSQEynfK8WBMRBiF/Vtfdj1OJhciX9x473mjriJXhMt+WDz3N
-	 KXXlqkxDz/caD2SPigWQklyaBaUKCIF421RZi2pIx8ZpGmHB/2Msl9t9GubNTwVe1Y
-	 AXCy2t1d8ZwWg==
-Date: Thu, 22 Aug 2024 00:31:53 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, kernel@pengutronix.de, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, Frank.Li@nxp.com, francesco.dolcini@toradex.com, 
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Subject: Re: [PATCH v2 1/4] i2c: imx: only poll for bus busy in multi master
- mode
-Message-ID: <i5fkv3gx5mmegefc6ttydrwmsebozc6dcjzg7doc6vozjvekuv@hsn3mzobjggm>
-References: <20240819072052.8722-1-eichest@gmail.com>
- <20240819072052.8722-2-eichest@gmail.com>
- <CAOMZO5CYUNESmBdZBMSMwNraQbqvvsF5fn8i+nHr=MB_T_AG7w@mail.gmail.com>
- <ZsX8KzkQw0wJUCbc@pengutronix.de>
- <ZsYGbN36jwxyMAvE@eichest-laptop>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6337125AC;
+	Thu, 22 Aug 2024 02:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.128.93
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724293477; cv=fail; b=MXhqCPXnyrkVrylsOu4HY/vf30qhxWMc665QoNM/5nCJVs1kRcGaOBnRGjddn7HZYRMGnTN0vc8TZJq+YEWVBXL7af6ZFgcKOoa4+2I2GxP0ey3QOTVLFWkfwzhofNFSPmlw/iBnCCmJwR3YKI20Ip88XvEPHqFpTVTVklzcOR4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724293477; c=relaxed/simple;
+	bh=d5vazxIbnvfe14I4AbIHTtsn/RFiYoKjQYrVt6vrJ5g=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=WF3hSmSfdxDRbj98H6cPo3UMcitw8epH7v+ruqqQLgy1dd5pQ0RTBh12AnaHAXnAqLd4aMGIgM77xr0LAjqfo5OlbVk8lmqNjPMy99KV40JG1jeGYE9UuznYHQW6Owwo+YqLHAFAyu2Zi8rtO6SJf12M0s+eEBRXMm38wP1mlAI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=N1tFL4LF; arc=fail smtp.client-ip=52.101.128.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lfdCAa42CEcR0B29j0cacj5XKmnV0nuuGP5JcjPpXNecRhMtTMWl2un5O+qUiLiGsoqvb6yfZpqjPwZUsdmE2S0ID5DW6zZFBZ/GpBulXlSKRkAGr+Wki456zUmhVyJIpR329Sj3K980I16mFWNIkiLoMPs3e9A38+T6IB8VKEJ2rbivZVhqyWI1MTBav9UHyTlUv7q7XfnnS/fcdurAMFv96qoAoDSXi6+wL/lSAp6ps51un+HaDoXxUkTj7rO82gVv1P0gDcuy0EkMaCerfvPL+ULG8BSe2kIrVa+2xCR5F0U+/JMyPeCAaWEB6XQ1NXmxIGCrWfq3cHeIFT8S5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IAZLkh1h62Os4K6rQv45YOaeivGMcuXVcWBQSwnbhFY=;
+ b=mZ436PvC/62uJiiaRYcNjzDq9HsF2nTUJk1Q0XnoaMvhdJUENvEXnn4ayF1bIortFNFa7BIL4LYgNQkYKJIr7ZK3/HEhYgENXGF++olR90mIXFQrf6O7s578vgoarioXoeTlAtHL24YFmVMRNJVLF2k9zpZOzzLJAjygXWZp1e38Tcbym/eiXvFXz9z+OCyuWWwKUy5YPFMPkYodp+RIa4qSQvd4LqnNjkW7crcKIjzRt7csG1Jei0XhMPGIaXGqDX2zjsoiOMMvyh972x2Z6WLnXSz/ODr4YlsbaJObaa18nEktJ2fFkx74eTKEDVeUrwrG9mUX6YeN6iTRt/aGZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IAZLkh1h62Os4K6rQv45YOaeivGMcuXVcWBQSwnbhFY=;
+ b=N1tFL4LFvoFs6y4XKfpl8XKVQ798ZAXGywAslNS+dczgQOLPqSiA83rj5zT5jc//Ha/Sby+z00nidzxoNGiPsl+JtFt8CbaVLag8w7CyF4rlzhbmrbvtY6ylGQkKsCChiDy5b0tuJpTfh7TnwglH4y6JAw4i5s1TtEHkxDrkdmvrSf+E/FF43cEyKA08akMyD9JKC7LntAqwd+ftS6r3F7LmVshwwA3DpMWie+1RdS+9XG1V2UJzO85+4JQk6wtOI2d1sjVaIV2h2qF489dQxcpJWfC1yE501qGzjwge04njrLbb7oc6wxYoiycaTNhxY6rTb4/Yja78t9x0/nidiw==
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
+ by KL1PR06MB6162.apcprd06.prod.outlook.com (2603:1096:820:d3::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.25; Thu, 22 Aug
+ 2024 02:24:27 +0000
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11%5]) with mapi id 15.20.7875.019; Thu, 22 Aug 2024
+ 02:24:26 +0000
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
+	"benh@kernel.crashing.org" <benh@kernel.crashing.org>, "joel@jms.id.au"
+	<joel@jms.id.au>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new register
+ mode driver
+Thread-Topic: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new register
+ mode driver
+Thread-Index: AQHa8ho4oLFWUX2yC0qHT9Kfp3UIaLIuoMcAgAJo7hCAAJOvgIAA5YcA
+Date: Thu, 22 Aug 2024 02:24:26 +0000
+Message-ID:
+ <OS8PR06MB7541945591A62B956DA28AD9F28F2@OS8PR06MB7541.apcprd06.prod.outlook.com>
+References: <20240819092850.1590758-1-ryan_chen@aspeedtech.com>
+ <20240819092850.1590758-3-ryan_chen@aspeedtech.com>
+ <ZsNT7LPZ7-szrgBJ@smile.fi.intel.com>
+ <OS8PR06MB7541EE5BA5B400445FE0295EF28E2@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <ZsXVU2qy0GIANFrc@smile.fi.intel.com>
+In-Reply-To: <ZsXVU2qy0GIANFrc@smile.fi.intel.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|KL1PR06MB6162:EE_
+x-ms-office365-filtering-correlation-id: 26d522d7-77a6-41a5-2585-08dcc2518b8b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?gwXgYpevgIOyi1FS9w3zVdNiQ6ffoWacthlHHCFeLq3r73+5+bYGUG8CR7Ig?=
+ =?us-ascii?Q?zeVtKXq9x94FR4V/FFpxfX1mLK40Ffl4mqtuVHXdJaaz6ciej0iihlelu8rD?=
+ =?us-ascii?Q?kXDQrrDXUu/QAVGebx8zSTzCIdPJJcP1wB1tHR5R8QceDgco4C7IynwT9CPr?=
+ =?us-ascii?Q?LIaRyM8xinJLYjHhZFRFEKzuqcDVwVXqFbYPEnw7yKQjmShLdLJy/rz3G7LS?=
+ =?us-ascii?Q?a4SMmmnd1g5XXZsZn9U+9kO92UYgWDoMLsRut00Vql24OAuUZ1aMb78IFRsM?=
+ =?us-ascii?Q?TqMp0Zy1qnGdfVQOSAOMjIDUjEHpv3i0nogjPC+lI+YHnHF4bUcIHGFEZ7qy?=
+ =?us-ascii?Q?Q19w6Y8E/es9DTE0NTkyeVcflk7BN5Ya6zgdGBNfYsNPueQBspkBw33RU2IW?=
+ =?us-ascii?Q?SVgqyg1OLalC3ivA8Bwe9s+0LO0lsjnuWnMY5o+kgnGtGZFF5e9Ssmx12wpB?=
+ =?us-ascii?Q?9/UOCSn5fcaApgHh0Lj+q+rYQUIv2pV/ZmS6SWibHWwhrkPjJjabSaa1ccFA?=
+ =?us-ascii?Q?tth7SjZ9TgLz7SV8JQCp5sUNZwI9UajXvUsofVHmbZ/v4ZanhaApEUX52DsM?=
+ =?us-ascii?Q?vjCU6spBhLQkoIij31TT3bP0Eh2X4JsELrW+WrKbiUrzIW0Il8I2oWhFx1iV?=
+ =?us-ascii?Q?xxHyTTp9/iZpKiXBpydmPa22UCxDlVTOjfDpzTEUvjjRznKYNXmrbhiEhH8s?=
+ =?us-ascii?Q?RNyR7HSVkLBb/5MVze7cFc0OdASI0Xs9dzz3Vzy5QcQJdUPpz/uSqF2ce0zo?=
+ =?us-ascii?Q?lrOsLJ9whF0zMvlM7mmwDfweYQMFawp0Aorj5zjTXxoHNcrbhTjBpa3Ny5gv?=
+ =?us-ascii?Q?O18AaU76+NeFj8D1R/1/E1HB772AwBkywgVE/TAWdpJRQDaNk1v/lsu2SyS/?=
+ =?us-ascii?Q?qjET3VIKZInehcdf9QlMxXTlXfGx5LhSdswhdmn3tRapjVgORSOMUzXU8Vh0?=
+ =?us-ascii?Q?uAMk0G4yw4MhAPVhBq965igbmYIHMJyUmHggeRsZ25kNwJ8JstmK2vRIXPCu?=
+ =?us-ascii?Q?FJenC7aNuB4jGbioph+3+Kg8l6AXUb7UnGWEAUJ7ROuDE9lzg7EPojQ0y6++?=
+ =?us-ascii?Q?pGMdC3v3+XqOB8n+pStAuneeqzcqcHxJF+HmBI/iAyrWOw5T8VWoEwSJkcIS?=
+ =?us-ascii?Q?AefXoR2GuGNKvn4iUQYpKeMBQFb1Jg2Rc/liQaBLzstzx2lYBOaZW7bp17zZ?=
+ =?us-ascii?Q?57qS1OkVXluxpOCZCqudgUxS683K0HXMoUKOaJ3Ei4+HYTzB+Iuzv+wi36da?=
+ =?us-ascii?Q?K/Ohij+Up3d1+T9IQ6jjZn6mC6nOFwn5/ciSHtD/DB21uzwuc5WM7iWOhF6n?=
+ =?us-ascii?Q?CDpdt0wuOriexQEWv1VUy2xiCSgQ8xP8gMOX1zXT/1lkuHTlX1llomwJ6trB?=
+ =?us-ascii?Q?S0LK7QYrcs0ErcTpMKv7NTXjXB3ieuzD4n/NW9wKV6CawW5t+Q=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?BTYuAUZSB1d11FKksabwmW2wFYeJaAY5LIRXc/UNkrgCEHmnNtcaYz4iBb+o?=
+ =?us-ascii?Q?ZU6hOk5LfdNqC/U9eJy/z8BWMlS+kzPAYNHU6LfEGEpQpdfVGip314SSyWcm?=
+ =?us-ascii?Q?ipdaxu0q0VhOqWo8CN7EWBbXoKFCT2y7mbfmKAl0WQu5CG0tz0/HwwtPy80T?=
+ =?us-ascii?Q?k9ugxeJvWoGtMxqhU0fjawAD3/3DreH4HWMoJdqpJ0apU6/KfQWzuXN6kXQY?=
+ =?us-ascii?Q?ywLXKqkdsuMvB4NBVgqwFn9Aj9l9gggushIW80EdeoxFylhUXEa9s8z1keq8?=
+ =?us-ascii?Q?ZvrDmbxdk7j+Lad3dcTo7D8m+cRKipT1Jc5LDf93AtJVE0/jO0LdlVyzB/Dh?=
+ =?us-ascii?Q?pIxkRll6UFzkRBxNHwZLi4M3GAgjI1lLXzDgoto3YlllbltYD4cJ3cwM4eAr?=
+ =?us-ascii?Q?jz+0gukgASPXZNGxlKHCk7ZXUUQbJSEzHVvsTr9sQBqZGicYBHriecT6ZoYz?=
+ =?us-ascii?Q?lr8KXuJtHy2GWN+/Z/IyLBltS1HRBUa2nRu7Zgiubjeeff7V5N3brNahn/pv?=
+ =?us-ascii?Q?WOin7yyrekKdtTbm1MxL0i/yL2fpCNtGXtQMQ8dAbESlEClaYSLYHFdVf/+f?=
+ =?us-ascii?Q?5FryuI3V7Sz3XXCwZku5HaAXEGEzOaa/hN+kR99WPmgbPAvmFMkQ7HQbjj2J?=
+ =?us-ascii?Q?2oUnNfrxOj50RSEnquBKndcoEFl5JVCSw90vO0jAJ9kIsnDu0yvNdyRwKpLe?=
+ =?us-ascii?Q?FKj4+jQE872xnBFCrPmH+yYdWZUqoAKc65OScvyrJYZaoQMKQ2LS+HMbqoyJ?=
+ =?us-ascii?Q?c1VlET7xPb+z3vLQpaqtOE1PuNfRU5RzeUgvFeSsCRyNj88OFDiFbP3pisLJ?=
+ =?us-ascii?Q?vPqb1opDyV/1fKK27cUwzvvHVyu33oRccM7ExbylRlxNhsZ08XPTL7FNyf9W?=
+ =?us-ascii?Q?ZdCjr+8CGCFl3vpH1qCCyPOSPPbEEl7m6Nd3tL4H4u5MVZLb9iJ5p5tNhTfz?=
+ =?us-ascii?Q?zoHANtk/MM4/B81mN/cx3KV0P66imz/Ca1McWE15Xx5dF6PR5syOGbxvtZtU?=
+ =?us-ascii?Q?q++35JG6WphNIQ/nRC+uyRB8i/zMUc2Y6+JiL+lzT4MVPzghSG4ehPQKpUj3?=
+ =?us-ascii?Q?/yJWqQZUfhCLcv+++SjO3hUGbtalQk7u7fAoiDhZ4UbIjsYlVCmxWQijdbnj?=
+ =?us-ascii?Q?xjEk7ACEwQyxyXRm7I5WZpTwi5kQ1oLp2cfhLomnHViPKXYTPwG92LLe9RIZ?=
+ =?us-ascii?Q?WHQRfWEKGq6WTAxzVhgoFV49346ThnCKRn6kT0XxpprOxjWiGhXsz+SdZ+cS?=
+ =?us-ascii?Q?XyuG9ZJbTiNrjZj9EE4H4z4s7lxw5lQq4CkQCbmRJM55kdXPZ+QJR71z8/tl?=
+ =?us-ascii?Q?tDRoNR7SMAMRLlIeL87HEdjLXU9HQi84vI6uYfE9CJ90wi9BCelquRt3AAcd?=
+ =?us-ascii?Q?FyJBKUfyGdVALOlwGWUUVZBPGPByP/Oqy4lKXKtJwJaIqJAjU42pfI5Lkfzq?=
+ =?us-ascii?Q?tyu3cSBST20U9xV072knEDE89vg9QGlm3hahoP6wJhQiM5BzO5VbWumaBx5J?=
+ =?us-ascii?Q?elfqwO+wvAn0BmLhxBpGaZr5ry7sNkfilmCLtH9m0vgxJu595i8CVNr5lFTg?=
+ =?us-ascii?Q?AkWYd374PSW0qMtEwytWwoR1qsOihsihPNDuLiaB?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZsYGbN36jwxyMAvE@eichest-laptop>
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26d522d7-77a6-41a5-2585-08dcc2518b8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2024 02:24:26.8967
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mmsUGjFP2IAzj8U8grMkehgqftxPAtu32QsC0Mi2HrvaBZuZ8M/AW9UpLUEdlqaV61JdSS09lYZ4118Gtvwae5dOwEGZGaZZfuWFdqcaqVc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6162
 
-Hi Stefan,
+> Subject: Re: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new registe=
+r
+> mode driver
+>=20
+> On Wed, Aug 21, 2024 at 06:43:01AM +0000, Ryan Chen wrote:
+> > > On Mon, Aug 19, 2024 at 05:28:49PM +0800, Ryan Chen wrote:
+>=20
+> ...
+>=20
+> > > > +	/* Check 0x14's SDA and SCL status */
+> > > > +	state =3D readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
+> > > > +	if (!(state & AST2600_I2CC_SDA_LINE_STS) && (state &
+> > > AST2600_I2CC_SCL_LINE_STS)) {
+> > > > +		writel(AST2600_I2CM_RECOVER_CMD_EN, i2c_bus->reg_base
+> +
+> > > AST2600_I2CM_CMD_STS);
+> > > > +		r =3D wait_for_completion_timeout(&i2c_bus->cmd_complete,
+> > > i2c_bus->adap.timeout);
+> > > > +		if (r =3D=3D 0) {
+> > > > +			dev_dbg(i2c_bus->dev, "recovery timed out\n");
+> > > > +			ret =3D -ETIMEDOUT;
+> > > > +		} else {
+> > > > +			if (i2c_bus->cmd_err) {
+> > > > +				dev_dbg(i2c_bus->dev, "recovery error\n");
+> > > > +				ret =3D -EPROTO;
+> > > > +			}
+> > > > +		}
+> > > > +	}
+> > >
+> > > ret is set but maybe overridden.
+> >
+> > If will modify by following.
+> > 		if (r =3D=3D 0) {
+> > 			dev_dbg(i2c_bus->dev, "recovery timed out\n");
+> > 			ret =3D -ETIMEDOUT;
+> > 		} else if (i2c_bus->cmd_err) {
+> > 			dev_dbg(i2c_bus->dev, "recovery error\n");
+> > 			ret =3D -EPROTO;
+> > 		}
+> > If no error keep ret =3D 0;
+>=20
+> It doesn't change the behaviour. Still ret can be overridden below...
 
-On Wed, Aug 21, 2024 at 05:23:24PM GMT, Stefan Eichenberger wrote:
-> On Wed, Aug 21, 2024 at 04:39:39PM +0200, Oleksij Rempel wrote:
-> > On Wed, Aug 21, 2024 at 08:01:20AM -0300, Fabio Estevam wrote:
-> > > On Mon, Aug 19, 2024 at 4:20 AM Stefan Eichenberger <eichest@gmail.com> wrote:
-> > > > According to the i.MX8M Mini reference manual chapter "16.1.4.2
-> > > > Generation of Start" it is only necessary to poll for bus busy and
-> > > > arbitration lost in multi master mode. This helps to avoid rescheduling
-> > > > while the i2c bus is busy and avoids SMBus devices to timeout.
-> > > >
-> > > > Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> > > > Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> > > 
-> > > This fixes a pca953x probe error on an imx8mp board running linux-stable 6.6:
-> > > 
-> > > [    1.893260] pca953x 2-0020: failed writing register
-> > > [    1.898258] pca953x 2-0020: probe with driver pca953x failed with error -11
-> > > 
-> > > Could you please add a Fixes tag and Cc stable so that this can reach
-> > > the stable kernels?
-> > > 
-> > > Tested-by: Fabio Estevam <festevam@denx.de>
-> 
-> Thanks a lot for testing. Are the other patches required as well or did
-> only introducing the master mode flag solve the issue?
+Yes, it is expectable, previous is issue recovery command out then the foll=
+owing is double confirm the bus status.
+If bus still busy, the function still return recovery fail.
 
-The other patches don't need the Fix tag.
+Or should I modify by following?
+	/* Check 0x14's SDA and SCL status */
+	state =3D readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
+	if (!(state & AST2600_I2CC_SDA_LINE_STS) && (state & AST2600_I2CC_SCL_LINE=
+_STS)) {
+		writel(AST2600_I2CM_RECOVER_CMD_EN, i2c_bus->reg_base + AST2600_I2CM_CMD_=
+STS);
+		r =3D wait_for_completion_timeout(&i2c_bus->cmd_complete, i2c_bus->adap.t=
+imeout);
+		if (r =3D=3D 0) {
+			dev_dbg(i2c_bus->dev, "recovery timed out\n");
+			ret =3D -ETIMEDOUT;
+		} else if (i2c_bus->cmd_err) {
+				dev_dbg(i2c_bus->dev, "recovery error\n");
+				ret =3D -EPROTO;
+		}
+		/* check bus status */
+		state =3D readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
+		if (state & AST2600_I2CC_BUS_BUSY_STS) {
+			dev_dbg(i2c_bus->dev, "Can't recover bus [%x]\n", state);
+			ret =3D -EPROTO;
+		}
+	}
 
-One question, does the issue happen with atomic transfers or any
-transfers?
+>=20
+> > > > +	/* Recovery done */
+> > >
+> > > Even if it fails above?
+> >
+> > This will keep check the bus status, if bus busy, will give ret =3D
+> > -EPROTO;
+> >
+> > > > +	state =3D readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
+> > > > +	if (state & AST2600_I2CC_BUS_BUSY_STS) {
+> > > > +		dev_dbg(i2c_bus->dev, "Can't recover bus [%x]\n", state);
+> > > > +		ret =3D -EPROTO;
+>=20
+> ...here.
+>=20
+> > > > +	}
+> > > > +
+> > > > +	/* restore original master/slave setting */
+> > > > +	writel(ctrl, i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL);
+> > > > +	return ret;
+>=20
+> ...
+>=20
+>=20
+> > > > +		i2c_bus->master_dma_addr =3D
+> > > > +			dma_map_single(i2c_bus->dev, i2c_bus->master_safe_buf,
+> > > > +				       msg->len, DMA_TO_DEVICE);
+> > >
+> > > > +		if (dma_mapping_error(i2c_bus->dev,
+> i2c_bus->master_dma_addr))
+> > > {
+> > > > +			i2c_put_dma_safe_msg_buf(i2c_bus->master_safe_buf,
+> msg,
+> > > false);
+> > > > +			i2c_bus->master_safe_buf =3D NULL;
+> > >
+> > > > +			return -ENOMEM;
+> > >
+> > > Why is the dma_mapping_error() returned error code shadowed?
+> >
+> > Sorry, please point me why you are think it is shadowed?
+> > As I know dma_mapping_error() will return 0 or -ENOMEM. So I check if i=
+t
+> is !=3D0.
+> > Than return -ENOMEM.
+>=20
+> First of all, it is a bad style to rely on the implementation details whe=
+re it's not
+> crucial. Second, today it may return only ENOMEM, tomorrow it can return =
+a
+> different code or codes. And in general, one should not shadow an error c=
+ode
+> without justification.
+>=20
+Understood, The following is better, am I right? (if yest, those will updat=
+e in driver)
+		Int ret;
+		.....
+		ret =3D dma_mapping_error(i2c_bus->dev, i2c_bus->master_dma_addr)
+		if (ret) {
+			i2c_put_dma_safe_msg_buf(i2c_bus->master_safe_buf, msg, false);
+			i2c_bus->master_safe_buf =3D NULL;
+			return ret;
+		}
 
-> > It looks like with this patch, the I2SR_IAL interrupt is not cleared.
-> > I would expect some kind of interrupt storm. Can you confirm it?
-> 
-> This is a good question. i2c_imx_trx_complete was never called in the
-> interrupt handler. So that would mean the storm would already be there
-> before just for a shorter time. We only clear the IFF flag in the isr.
-> 
-> > This causes a processor interrupt request (if the interrupt enable is
-> > asserted [IIEN = 1]). The interrupt is set when one of the following
-> > occurs:
-> > - One byte transfer is completed (the interrupt is set at the falling
-> >   edge of the ninth clock).
-> > - An address is received that matches its own specific address in
-> >   Slave Receive mode.
-> > - Arbitration is lost.
-> 
-> Unfortunately, I don't have a device that uses multi master mode and we
-> would only see it on such a device. However, also from the reference
-> manual:
-> 
-> > IAL must be cleared by software by writing a "0" to it at the start of
-> > the interrupt service routine
-> 
-> So most likely it was wrong the whole the time we just didn't see it
-> before, could that be? I think a fix would be relatively easy we have to
-> clear it at the beginning of the isr but after we read the status. I
-> could add this to the series if you agree.
+> > > > +		}
+>=20
+> ...
+>=20
+> > > > +MODULE_DEVICE_TABLE(of, ast2600_i2c_bus_of_table);
+> > >
+> > > Why do you need this table before _probe()? Isn't the only user is be=
+low?
+> >
+> > It is for next generation table list. Do you suggest remove it?
+>=20
+> My question was regarding to the location of this table in the code, that=
+'s it, no
+> other implications.
+>=20
+I will move before platform_driver ast2600_i2c_bus_driver, like following.
 
-Please, if you can't test the patch don't send it.
+static const struct of_device_id ast2600_i2c_bus_of_table[] =3D {
+	{
+		.compatible =3D "aspeed,ast2600-i2cv2",
+	},
+	{}
+};
+MODULE_DEVICE_TABLE(of, ast2600_i2c_bus_of_table);
 
-Oleksij, I need your ack to apply this patch. What do you think
-here?
+static struct platform_driver ast2600_i2c_bus_driver =3D {
+.......
+}
 
-Thanks,
-Andi
+> ...
+>=20
+> > > > +	if (i2c_bus->mode =3D=3D BUFF_MODE) {
+> > > > +		i2c_bus->buf_base =3D
+> > > devm_platform_get_and_ioremap_resource(pdev, 1, &res);
+> > > > +		if (!IS_ERR_OR_NULL(i2c_bus->buf_base))
+> > > > +			i2c_bus->buf_size =3D resource_size(res) / 2;
+> > > > +		else
+> > > > +			i2c_bus->mode =3D BYTE_MODE;
+> > >
+> > > What's wrong with positive conditional? And is it even possible to
+> > > have NULL here?
+> > >
+> > Yes, if dtsi fill not following yaml example have reg 1, that will fail=
+ure at buffer
+> mode.
+> > And I can swith to byte mode.
+> >
+> > reg =3D <0x80 0x80>, <0xc00 0x20>;
+>=20
+> I was asking about if (!IS_ERR_OR_NULL(...)) line:
+> 1) Why 'if (!foo) {} else {}' instead of 'if (foo) {} else {}'?
+I will update to following.
+		if (IS_ERR(i2c_bus->buf_base))
+			i2c_bus->mode =3D BYTE_MODE;
+		else
+			i2c_bus->buf_size =3D resource_size(res) / 2;
+		=09
+> 2) Why _NULL?
+	If dtsi file is claim only 1 reg offset. reg =3D <0x80 0x80>; that will go=
+to byte mode.
+	reg =3D <0x80 0x80>, <0xc00 0x20>; can support buffer mode.
+	due to 2nd is buffer register offset.
+>=20
+> > > > +	}
+>=20
+> ...
+>=20
+> > > > +	strscpy(i2c_bus->adap.name, pdev->name,
+> > > > +sizeof(i2c_bus->adap.name));
+> > >
+> > > Use 2-argument strscpy().
+> > Do you mean strscpy(i2c_bus->adap.name, pdev->name); is acceptable?
+>=20
+> Yes. And not only acceptable but robust for the copying to the [string] a=
+rrays.
+Got it.
+>=20
+> ...
+>=20
+> > > > +	i2c_bus->alert_enable =3D device_property_read_bool(dev,
+> "smbus-alert");
+> > > > +	if (i2c_bus->alert_enable) {
+> > > > +		i2c_bus->ara =3D i2c_new_smbus_alert_device(&i2c_bus->adap,
+> > > &i2c_bus->alert_data);
+> > > > +		if (!i2c_bus->ara)
+> > > > +			dev_warn(dev, "Failed to register ARA client\n");
+> > > > +
+> > > > +		writel(AST2600_I2CM_PKT_DONE |
+> AST2600_I2CM_BUS_RECOVER
+> > > | AST2600_I2CM_SMBUS_ALT,
+> > > > +		       i2c_bus->reg_base + AST2600_I2CM_IER);
+> > > > +	} else {
+> > > > +		i2c_bus->alert_enable =3D false;
+> > > > +		/* Set interrupt generation of I2C master controller */
+> > > > +		writel(AST2600_I2CM_PKT_DONE |
+> AST2600_I2CM_BUS_RECOVER,
+> > > > +		       i2c_bus->reg_base + AST2600_I2CM_IER);
+> > > > +	}
+> > >
+> > > I2C core calls i2c_setup_smbus_alert() when registering the adapter.
+> > > Why do you need to have something special here?
+> > The ast2600 i2c support smbus alert, and according my reference.
+> > If enable alert, that will need i2c_new_smbus_alert_device for alert ha=
+ndler.
+> > When interrupt coming driver can use this hander to up use
+> > i2c_handle_smbus_alert And update layer will handle alert.
+> > Does I mis-understand. If yes, I will remove this in next.
+>=20
+> Have you seen i2c_new_smbus_alert_device() ?
+No, I think I will remove it, when if it is more clear. Thanks a lot.
+>=20
+> --
+> With Best Regards,
+> Andy Shevchenko
+>=20
+
 
