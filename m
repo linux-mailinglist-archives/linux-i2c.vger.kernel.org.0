@@ -1,247 +1,281 @@
-Return-Path: <linux-i2c+bounces-5677-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5678-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2003C95B7F7
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 16:06:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D4DC95B803
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 16:09:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC930283967
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 14:06:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C6DAB231F0
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 14:09:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 708211CC14B;
-	Thu, 22 Aug 2024 14:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA7B1CB316;
+	Thu, 22 Aug 2024 14:09:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="H3eC/EH2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DxhKk+7b"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2074.outbound.protection.outlook.com [40.107.117.74])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A843217D354;
-	Thu, 22 Aug 2024 14:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724335575; cv=fail; b=BGLJ1hPhfAFYquUwsn4SFsPAJxI+o+Qb5WQmKuSQHO32yDHHJAYFFmWQ4rHG45mywhIpWkQQje+4ErD5/k5vfnK59uGqtQaCZQVk+FzazSGC1i7wnnZibcu9Gz10SzBk81R8tWybl2wF3WdwyISR8/SY0VIjMMNem3klZ7uk4R8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724335575; c=relaxed/simple;
-	bh=vnalnjId2K+5bbr4HlD5b3d5EsYOi8iZr3cfDy4oQNM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pGzs6+E3SdKHu/Blu2J3SVFcc7OmUAP+b846xUj+5YN1ua5wFsPPi3c6XZcpnlDJ8RfE++m6GZsq3muZLlx9+mJDCAb0dg+bsHqgGAebPPScjm+hTqRRj/W22Q0ZMHGn4AVDaKSJa4yguikijtde9XDQeLmWD7PC4MgZDiERZQ8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=H3eC/EH2; arc=fail smtp.client-ip=40.107.117.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QSIXckn5ibmnHOhjIh0ACrf2JzhQinQk8SSEX7SR0Q+AdCA6fm4f0jALPMJP6GTYiRzJAOXgHy1//QbudxOJ2T0ZgDKOJMHseDQc/XbZ+LFqJ3Aj76m55P9hG33eXzN7TTaPkbFHKXsAQWFkWzqaupqbXbaDI5JUsQ1udqxjpZWlM+5qze26Wnq01HPYnxrHht7322eqgx2cM8ywrvpzszE1nQQ1IUTNdozeR6B82tE3Ckh2yK3fxJ5m5T5neiSvhsUKLDAn2bkC1C3aZA+mkMRyNCNi3zk7+U2/BxMtcjHnKKM1gJaZ/COyuV2XOR5FRJki5BDJzmRwY8MQ6/3jOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KD3mAZ47w3g6KpUQoAKSv2PDeCM4yshrE5QmLmclw4A=;
- b=fsugDLg7CZTP2kBXFmHZ3JN28QAp2JiH+UETELLqlH26Vi9sesGW6Mst8Pv3WNJ1ADPI6N9Q/3eXKMWfswlruTF3uX2zLfFrDLJ5qg2QNqKa2r4QYaSkTjM3o9zngj36w4Y76NQTHsR+o40vn5D2tAoJB66b29hFICDWUuk4XLPnmi0a3dLZubSTP2F52NbrHwSIHf4xO1H8gTUn3MDF7VnUVccdAmknC2zFPqv5PL4mfTQ7Bj9vQsXrfp1983hq3zuydTtEl8tO3pWUwje5uDltyD7JzBeijJSakXbsehLI16EH0JNhehy2XWPw/xe+S6deXKBmIOgDv2y3No1BVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KD3mAZ47w3g6KpUQoAKSv2PDeCM4yshrE5QmLmclw4A=;
- b=H3eC/EH2zbrQouLkWPiGni5jsUzbh+QzvJ1Mu+JeCVlllPOalHlY+5ydoyx+PiMbhmDIQe9388aaywfgJcMecuO054fkaqiOtc2LQMYZW8JPLWE+RP1dhTvzd4AXxKImUWpOk+lDeozHOTE/Uz0H23BmAUsqrryCHtSW55fs1FOKlK++DZrhGIYf5KEd6e67c+SN/lf9ybyzyatiAuS5VKnixEgfBbg2QapLPrbWusCRCjHKCOG22TUbbBlzD2/nZhPhKnq2uS8G/8xvtk6Pn6isIXZXDISQ1lkfniaIfMRXksh+BsygRfgXeE2WJZop6Nv9vujuPZwIrvUBktHZaA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
- SEYPR06MB5301.apcprd06.prod.outlook.com (2603:1096:101:82::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.19; Thu, 22 Aug 2024 14:06:11 +0000
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666%6]) with mapi id 15.20.7897.014; Thu, 22 Aug 2024
- 14:06:10 +0000
-From: Rong Qianfeng <rongqianfeng@vivo.com>
-To: biju.das.jz@bp.renesas.com,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Paul Cercueil <paul@crapouillou.net>,
-	linux-renesas-soc@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Cc: opensource.kernel@vivo.com,
-	Rong Qianfeng <rongqianfeng@vivo.com>
-Subject: [PATCH v2 3/3] i2c: jz4780: Use devm_clk_get_enabled() helpers
-Date: Thu, 22 Aug 2024 22:04:12 +0800
-Message-Id: <20240822140413.65369-4-rongqianfeng@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20240822140413.65369-1-rongqianfeng@vivo.com>
-References: <20240822140413.65369-1-rongqianfeng@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0294.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:3c8::6) To SI2PR06MB5140.apcprd06.prod.outlook.com
- (2603:1096:4:1af::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75FD3BA45;
+	Thu, 22 Aug 2024 14:09:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724335776; cv=none; b=cTJqaXWEjK2SYWY0Tv5V60inYE+eLggfNVGa7CI1gTBkmST6G49sys3E66aE9gObFxiXwM86Z097jZ6Qdhk/Sc0B61j1QULUtqiHGUOQlsXCkN/kL0CJG+VDQOqj9bGQOwRbe3W5Q5fjDJQVFeFDII8483kTHxzEAO9c51apcBI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724335776; c=relaxed/simple;
+	bh=Zz4O4whEUesMfAhJ7j0Z3pqJqU8Y23VLUAaNVPdDNDc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rCwP+w9Rp0/iTRt2zEk/t10ljUAi9Kr27ww/+8zJoKtN/oOHqSlGzU847bzxm0ropz1CtRBzvCykuvSIt/R1chWl5U/U5PkcWfLd72u0qrIbhlCgMub49XytqXNmhTi5r9rsYh9mwB5h+0MxnZHp2yv6wwXKEI/SiZVMXdkJH7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DxhKk+7b; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724335774; x=1755871774;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Zz4O4whEUesMfAhJ7j0Z3pqJqU8Y23VLUAaNVPdDNDc=;
+  b=DxhKk+7b+HRihOP5y4iZ+F18z+aFiLEawH8fNPt3MOHJqZkplto2m3DJ
+   AoXFknyVAZn5WlcPfvNnX6px43SfKaiYEDHorzf8rCbSr/gaijhzQq0da
+   6x8WuSGtD2I4dZtbSDd8bWZm5FikDpmko93UgfZj58coETHG8N+6UuFB3
+   78pqq4V1MXU4VWsPZEWeflkLNG0S7FgDk02Ol75qsshHy65W0i08DHCk0
+   d3pfN6vmF+TBXXzBehPQc27Jb5CHJ8NJItm5XYwBgfAXMpKzSsjvseWxC
+   rL0Fyu7ZyWfJGh4MxGOZCxOiIn74FU1F6GdKkTf+91Kmmackdta6bCAd7
+   A==;
+X-CSE-ConnectionGUID: KGwcGZMwS5GRcEFWg/Uw2g==
+X-CSE-MsgGUID: almexMnLT1OXqjij7u6Hkg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="33416183"
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="33416183"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 07:09:34 -0700
+X-CSE-ConnectionGUID: o0O4O1N9Q9eKJEQkwOUDag==
+X-CSE-MsgGUID: 4ThAX0y+RG21HH6ZEn/45w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="84625756"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 07:09:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sh8VB-00000000TUH-0yhz;
+	Thu, 22 Aug 2024 17:09:25 +0300
+Date: Thu, 22 Aug 2024 17:09:24 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v5 07/10] i2c: of-prober: Add regulator support
+Message-ID: <ZsdGlMyq4pwWAOk4@smile.fi.intel.com>
+References: <20240822092006.3134096-1-wenst@chromium.org>
+ <20240822092006.3134096-8-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|SEYPR06MB5301:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4978fd37-006d-4e2d-57ac-08dcc2b39350
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?aWlVKvXpTq3tjWTJWvN9PxtiMnWeitSxCgUseovHUKYyqINJbvGQ8u+99HmS?=
- =?us-ascii?Q?DW55EubMA9CSx/UpX3LjQnY01KWZ+XXfg71fnMJ0vB2Q2xkqtUrXVksbK1ct?=
- =?us-ascii?Q?VKJgF/9kbqPqIA8xiC1IeN91MPn1lw2/sJTOMKJIX1/7pnFkqz9/YuRER0Oi?=
- =?us-ascii?Q?DCt5Dy4LMrSYY27It1/GMqTQUT+unamRT44hxdRCgKPcYu+UZI20wcgzBENn?=
- =?us-ascii?Q?+lIDXdqbp8vWp70+p+EvUi1NkSqOQmHHTi2x/qCNsz07btVViAjB+9BQo14I?=
- =?us-ascii?Q?lzKI5/OTGip/UULjb26+sRy/x55D942e+y6qJ/krQUHUo5Abg7pavhKNuRuM?=
- =?us-ascii?Q?ixKjL9uXy4NsMtJvacPEho/R8bxDiYItgJGj98iVE14MWr71PFK2msGA4oCv?=
- =?us-ascii?Q?EXgAMJRU0VyaD8Qr3X1tYZlKtvccCkyO7Q8uq+1XD9hKVOroFVLwbSETYMjx?=
- =?us-ascii?Q?NOw+TVjWx1plyCkm3kemgGxTQXcrr+L5nnnkDpyK6tUvtWgikSZDBEhh3qqA?=
- =?us-ascii?Q?WBs2C73qLLMg1b+MrlMVvo1t9al5e1RAJwJs4K64u2w51QadrW+DQC0vNiJg?=
- =?us-ascii?Q?EZSteOO7HgCRgswcXPsdncnpea2sOAPOqnt/HsxMlPH4l/53PBYOSMtWEVGp?=
- =?us-ascii?Q?H7PNFTiKbIKzr7dunb4C7bpmotj9QxxEX6riTn5FkJtCfwyBVRnugx5mzGc7?=
- =?us-ascii?Q?2Vmc+jGrmTTAoNeB/W+/mNSMxKz+ZPLdXXDyHNYZ5gFUrifPR6pv2OY+Awia?=
- =?us-ascii?Q?fUZRvCQTfvVYUWCBQj5A6L1VIYxsZZHk5z3qPTks9RXcorz0VfC3YxmqzS6P?=
- =?us-ascii?Q?O0eTbvIn2bbsQ6AqYZsD6X+lZ28WrOhQkh6ZANtphPSkzlf+tT12izRtNUDA?=
- =?us-ascii?Q?D1Tv6E7DtcCxzsXeSNKVbbrq0T1A2lmIP0IKmd0ghC4rWzJDh4zKaOsQWtB9?=
- =?us-ascii?Q?rYmko1dD/lNokP+PBmzyfHqQbn0KqoEqmrQEioDYIUJnKT665Oe1Q+sGA0WW?=
- =?us-ascii?Q?W6jTbzSpkJdewb0lLUY0qWohN48zJgY6lZrSGMf8NclMqya3hx2Wb+HEqZxH?=
- =?us-ascii?Q?4mhgKXGvUTbgbyiDMGTh5LQC6S+2fbwoC7yIlVi3bLgVn89TT3de3jrZTAIv?=
- =?us-ascii?Q?vyxPz4bCAuJHlg1oq52l6CYRATIhTUelgV6pP0KPlMf8eZ2OeGjl5dnZ6U1x?=
- =?us-ascii?Q?ziOeYvGCoOg8Xh7lHumhntZJqC4FsLczEvnVy7OPeR4qM/lVD52QkQXfMYba?=
- =?us-ascii?Q?0u/G14pqjKfAQ9F+vY7O9/cNwKIOB73jTpi3PRgFyuoaKxkSI+eAs5GVV9wo?=
- =?us-ascii?Q?AOZQ81FTrB9XyLlwMXFl9gX6/4W+o5W+U++h1BI/PfEDiGBUxuK8+vK96zqT?=
- =?us-ascii?Q?+4F2DppfMHePQJ5XcgSgBdRNYgzjUAkpIZCRY02GIdTFzkL7sw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?hf3qwd0W6O6qDJojWcq57AvM12BRtcYz0T8Avt6mMdE2096dsbIWz4p2YYG+?=
- =?us-ascii?Q?Gc5ypN3lu9iLVsXWDBs4pmeY8z2DeFI5XMNwM1zWegquh9tFske09TdRPPVP?=
- =?us-ascii?Q?e6L2U+aPsSv5luap/rXeSQ+ElM0QbrZEL8lmnZPsLiYmc86/JRRSso6XPs3U?=
- =?us-ascii?Q?rhA2ya5FBq3gg4hdYh9EXyyHubxuSGIRzYkig+99j51kwS3Y2VF+NQ4HbJoO?=
- =?us-ascii?Q?38CEP3+E3ib7BArFH3/+c6IA9RtR4MtyHezUWcniZJY1heZUv11yz1XuM9xo?=
- =?us-ascii?Q?RRj+zF118Cb3me9VqlhUeaSisyJ0l2mEy+ByVesPcNJqekTu9UoTIAl4Q/8b?=
- =?us-ascii?Q?mUXTqWFqNQr+iWvEEkMZDOUmZsd0qTw2RrcxewoCQSxbe/ydaxf+6xRWdQC+?=
- =?us-ascii?Q?fwBXiGCugxh/fOgTCJu+0jQj715JcUyddbm+NgheUKde0ejpGvwfSVx/fb2K?=
- =?us-ascii?Q?L2X/AmcxI2gwgh5oMgvWsAha33eHSzDw1Z34JaW5p+vKzZuNWw31pW5rYdA0?=
- =?us-ascii?Q?oLmSaS7NR4viQg5YICHwVJUUZw4jNnxdxLZuc+g8t1ykv8xknH5bzMLjJHCk?=
- =?us-ascii?Q?r64Z4Tm1Q5KKXRdbzG08gCiZWju0MwF2OsVhZEKO5NB+3eLEOlL1EjOsMrax?=
- =?us-ascii?Q?4AsB9BlAXSmMipodUITDh1AuoeN0kDo7zirnbMZ14suFvagzwkX9e03gQH6d?=
- =?us-ascii?Q?F/2q6QwnsN/FpDGR5gu2RLDBuNZF1yXcRECt9Fl5EXlG50kHJlgqCBSR0ysk?=
- =?us-ascii?Q?L6dwduQK6fZ2tfN+slWkhFy3N0rr/NRNLQyWtfY2i94PMte+wfsDug7gr/76?=
- =?us-ascii?Q?sugL+jE5epMQkiwxN5zKKQk++aNQSEiDMwl78rt/pH4WExHk45GGQ7/emyVt?=
- =?us-ascii?Q?vrcSJNoaDjCSCqTMYip6zZ7mAGPuIzN9jk8Mf+LV+kCnphAm6KYe8p6WfpYP?=
- =?us-ascii?Q?zxBhqTCU722oYgvq+2IxcoPZbxL7SPg5QQvfZ4dxhfvy/ux5IF43wx7WNlvR?=
- =?us-ascii?Q?DL15/NSw1sxh447jHg6M8Ff3Y6AzRB77wzrttPOUkysyr1a2hvr6qux64XPJ?=
- =?us-ascii?Q?anXwKkxCcquAttHkuRys056GN63aI2wa0BQyXRfjlUNfR2x9Fhbf6UbWn6VD?=
- =?us-ascii?Q?kFWK20MY//KHAg69YjHoFSvBlPgkcY3FCtYOar/WF++AlBmmDV6ZqjL630Ug?=
- =?us-ascii?Q?KyMnmKjTWVp/k6OduLKC7LvkoHPcmlfpbfRq4TmlmJqoCrdq6zDdey/tDAU+?=
- =?us-ascii?Q?tfcic5Kdv1nam2mbbvd6L/0XquJwwlTgrQPIvmWUEDoW26i9ZgPaVnkjt4jh?=
- =?us-ascii?Q?50xuPuFAKAuwjT7kwkkW7/fmc1TK8v7TLrpfSG3+rIOFfztWKuHk86Vjd0CU?=
- =?us-ascii?Q?7mfMFl+qdEFJM1YHuVRxGxQd7ZGff49y2aqaZqU+D/EaGUIhgMbQFt6NcW2o?=
- =?us-ascii?Q?ecsjZPaaLZTE3qg9HdXFV6mVzJiKTibrs6suIxzm9FXSogscfG9lz25ylh5v?=
- =?us-ascii?Q?pXjPo7k+hDz2pFrzJWsa0bLh/FfjoRFOIxPQ23n2Sztm3Zt+Yc9JQtXJP6AL?=
- =?us-ascii?Q?Vy0DCBOZ/3OYi2fsBwaum8ZmfH9cGtZmUCX2mZpZ?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4978fd37-006d-4e2d-57ac-08dcc2b39350
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2024 14:06:10.8681
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oZ9fa7wmpRjRBUmi5BEK+eicE9uGzfaJRXcUvlEZu9HiFyvEJRE4sQdebs3GM447Ueu8pbxb6hUosNDWIGwNrA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5301
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240822092006.3134096-8-wenst@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-The devm_clk_get_enabled() helpers:
-    - call devm_clk_get()
-    - call clk_prepare_enable() and register what is needed in order to
-     call clk_disable_unprepare() when needed, as a managed resource.
+On Thu, Aug 22, 2024 at 05:20:00PM +0800, Chen-Yu Tsai wrote:
+> This adds regulator management to the I2C OF component prober.
+> Components that the prober intends to probe likely require their
+> regulator supplies be enabled, and GPIOs be toggled to enable them or
+> bring them out of reset before they will respond to probe attempts.
+> GPIOs will be handled in the next patch.
+> 
+> Without specific knowledge of each component's resource names or
+> power sequencing requirements, the prober can only enable the
+> regulator supplies all at once, and toggle the GPIOs all at once.
+> Luckily, reset pins tend to be active low, while enable pins tend to
+> be active high, so setting the raw status of all GPIO pins to high
+> should work. The wait time before and after resources are enabled
+> are collected from existing drivers and device trees.
+> 
+> The prober collects resources from all possible components and enables
+> them together, instead of enabling resources and probing each component
+> one by one. The latter approach does not provide any boot time benefits
+> over simply enabling each component and letting each driver probe
+> sequentially.
+> 
+> The prober will also deduplicate the resources, since on a component
+> swap out or co-layout design, the resources are always the same.
+> While duplicate regulator supplies won't cause much issue, shared
+> GPIOs don't work reliably, especially with other drivers. For the
+> same reason, the prober will release the GPIOs before the successfully
+> probed component is actually enabled.
 
-This simplifies the code and avoids the calls to clk_disable_unprepare().
+...
 
-While at it, no more special handling needed here, remove the goto
-label "err:".
+>  /*
 
-Signed-off-by: Rong Qianfeng <rongqianfeng@vivo.com>
-Acked-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/i2c/busses/i2c-jz4780.c | 21 ++++++---------------
- 1 file changed, 6 insertions(+), 15 deletions(-)
+>   * address responds.
+>   *
+>   * TODO:
+> - * - Support handling common regulators and GPIOs.
+> + * - Support handling common GPIOs.
 
-diff --git a/drivers/i2c/busses/i2c-jz4780.c b/drivers/i2c/busses/i2c-jz4780.c
-index 4aafdfab6305..f5362c5dfb50 100644
---- a/drivers/i2c/busses/i2c-jz4780.c
-+++ b/drivers/i2c/busses/i2c-jz4780.c
-@@ -792,26 +792,22 @@ static int jz4780_i2c_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, i2c);
- 
--	i2c->clk = devm_clk_get(&pdev->dev, NULL);
-+	i2c->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(i2c->clk))
- 		return PTR_ERR(i2c->clk);
- 
--	ret = clk_prepare_enable(i2c->clk);
--	if (ret)
--		return ret;
--
- 	ret = of_property_read_u32(pdev->dev.of_node, "clock-frequency",
- 				   &clk_freq);
- 	if (ret) {
- 		dev_err(&pdev->dev, "clock-frequency not specified in DT\n");
--		goto err;
-+		return ret;
- 	}
- 
- 	i2c->speed = clk_freq / 1000;
- 	if (i2c->speed == 0) {
- 		ret = -EINVAL;
- 		dev_err(&pdev->dev, "clock-frequency minimum is 1000\n");
--		goto err;
-+		return ret;
- 	}
- 	jz4780_i2c_set_speed(i2c);
- 
-@@ -827,29 +823,24 @@ static int jz4780_i2c_probe(struct platform_device *pdev)
- 
- 	ret = platform_get_irq(pdev, 0);
- 	if (ret < 0)
--		goto err;
-+		return ret;
- 	i2c->irq = ret;
- 	ret = devm_request_irq(&pdev->dev, i2c->irq, jz4780_i2c_irq, 0,
- 			       dev_name(&pdev->dev), i2c);
- 	if (ret)
--		goto err;
-+		return ret;
- 
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret < 0)
--		goto err;
-+		return ret;
- 
- 	return 0;
--
--err:
--	clk_disable_unprepare(i2c->clk);
--	return ret;
- }
- 
- static void jz4780_i2c_remove(struct platform_device *pdev)
- {
- 	struct jz4780_i2c *i2c = platform_get_drvdata(pdev);
- 
--	clk_disable_unprepare(i2c->clk);
- 	i2c_del_adapter(&i2c->adap);
- }
- 
+You can split this to two lines in the first place and have less churn in this
+patch and the other one.
+
+>   * - Support I2C muxes
+>   */
+
+..
+
+> +/* Returns number of regulator supplies found for node, or error. */
+> +static int i2c_of_probe_get_regulator(struct device *dev, struct device_node *node,
+> +				      struct i2c_of_probe_data *data)
+> +{
+> +	struct regulator_bulk_data *tmp, *new_regulators;
+> +	int ret;
+> +
+> +	ret = of_regulator_bulk_get_all(dev, node, &tmp);
+> +	if (ret <= 0)
+> +		return ret;
+
+I would split this and explain 0 case.
+
+
+> +	if (!data->regulators) {
+> +		data->regulators = tmp;
+> +		data->regulators_num = ret;
+> +		return ret;
+> +	};
+> +
+> +	new_regulators = krealloc(data->regulators,
+> +				  sizeof(*tmp) * (data->regulators_num + ret),
+
+krealloc_array()
+
+> +				  GFP_KERNEL);
+> +	if (!new_regulators) {
+> +		regulator_bulk_free(ret, tmp);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	data->regulators = new_regulators;
+
+> +	for (unsigned int i = 0; i < ret; i++)
+> +		memcpy(&data->regulators[data->regulators_num++], &tmp[i], sizeof(*tmp));
+
+Seems like copying array to array, no? If so, can't be done in a single memcpy() call?
+
+> +	return ret;
+> +}
+
+...
+
+> +static int i2c_of_probe_get_res(struct device *dev, struct device_node *node,
+> +				struct i2c_of_probe_data *data)
+> +{
+> +	struct property *prop;
+> +	int ret;
+> +
+> +	ret = i2c_of_probe_get_regulator(dev, node, data);
+> +	if (ret < 0) {
+> +		dev_err_probe(dev, ret, "Failed to get regulator supplies from %pOF\n", node);
+> +		goto err_cleanup;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_cleanup:
+> +	i2c_of_probe_free_res(data);
+> +	return ret;
+> +}
+
+Hmm... why not
+
+static int i2c_of_probe_get_res(struct device *dev, struct device_node *node,
+				struct i2c_of_probe_data *data)
+{
+	struct property *prop;
+	int ret;
+
+	ret = i2c_of_probe_get_regulator(dev, node, data);
+	if (ret < 0) {
+		i2c_of_probe_free_res(data);
+		return dev_err_probe(dev, ret, "Failed to get regulator supplies from %pOF\n", node);
+	}
+
+	return 0;
+}
+
+...
+
+> +static int i2c_of_probe_enable_res(struct device *dev, struct i2c_of_probe_data *data)
+> +{
+> +	int ret = 0;
+
+Redundant assignment.
+
+> +	dev_dbg(dev, "Enabling regulator supplies\n");
+> +
+> +	ret = regulator_bulk_enable(data->regulators_num, data->regulators);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* largest post-power-on pre-reset-deassert delay seen among drivers */
+> +	msleep(500);
+
+How would we monitor if any [new] driver wants to use bigger timeout?
+
+> +	return 0;
+> +}
+
+...
+
+>  	struct i2c_adapter *i2c;
+> +	struct i2c_of_probe_data probe_data = {0};
+
+Reversed xmas tree order?
+
+'0' is not needed.
+
+...
+
+> +	/* Grab resources */
+> +	for_each_child_of_node_scoped(i2c_node, node) {
+> +		u32 addr;
+> +
+> +		if (!of_node_name_prefix(node, type))
+> +			continue;
+
+Is it third or fourth copy of this code? At some point you probably want
+
+#define for_each_child_of_node_with_prefix_scoped()
+	for_each_if(...)
+
+(or equivalent)
+
+> +		if (of_property_read_u32(node, "reg", &addr))
+> +			continue;
+> +
+> +		dev_dbg(dev, "Requesting resources for %pOF\n", node);
+> +		ret = i2c_of_probe_get_res(dev, node, &probe_data);
+> +		if (ret)
+> +			return ret;
+> +	}
+
 -- 
-2.39.0
+With Best Regards,
+Andy Shevchenko
+
 
 
