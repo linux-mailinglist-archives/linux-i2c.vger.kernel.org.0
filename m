@@ -1,103 +1,132 @@
-Return-Path: <linux-i2c+bounces-5667-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5668-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C723F95B5CE
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 15:00:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FF9395B695
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 15:27:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FA882854E6
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 13:00:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE01B1F26BEC
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 13:27:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB971C9EAE;
-	Thu, 22 Aug 2024 12:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C5601CB13B;
+	Thu, 22 Aug 2024 13:27:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kK9JipIq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ygVBahdR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005FC1C9433;
-	Thu, 22 Aug 2024 12:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB401CBE97
+	for <linux-i2c@vger.kernel.org>; Thu, 22 Aug 2024 13:27:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724331594; cv=none; b=FWAW644Zek4U98AeKYAj1g0CEq1Uloe1k90ywg1ZeCruaQbT+8KAG4oXckr1/v/H95rOZZBLrWT5FwGtTdnQby94G5NHwIwOsrT4YjHXy7P276+YklgFm9CwoKFJWABtPiBh0v4TV5/O3EHj59FHErRqwO6ezxXz1XTx8N3rcqI=
+	t=1724333235; cv=none; b=n6f0oU4RMb1vp/hA3HmLBR1U+fSgNH+dd6CHMymYX7bWdFT8Xkbbbjo8T/nZeZCmBdfZsW6xIUF5uU+OhR51mTLwJx1x+N2kS6w2nN4lbsVNygBb+bE04pcDw3pCMr13V67YbihN//bp/WHT+BGn/YdLGlxYdLYA3xCNqQWdNr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724331594; c=relaxed/simple;
-	bh=EoO4sCNWaPPWmdIdCr2gmgPkfl+OMgV/V6faIdi9Nng=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xw3g69T8H15iNclaOacCzLQUn8aNW2isevgWO2EHxgtei0+SUmh3YMiMxMIVsXV7UHQToeEYcDtJXGQPQEega44iKjaFPLAguuvGzfcplmltJE350ho+H4o6gg33Jm7TM0gvW7YIgUZk6FyvKfAZBEXTIYhETUFWSrQ1kGVIv2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kK9JipIq; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5320d8155b4so886002e87.3;
-        Thu, 22 Aug 2024 05:59:52 -0700 (PDT)
+	s=arc-20240116; t=1724333235; c=relaxed/simple;
+	bh=mmPcytjB8m6exAvgg/oZ+VjBw5w/3yH5XfcO1PfEurs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SlJ5GmaXpky4w9iZ/E7GfwdbT8OfeySLIc+sjJx2/ldBUd+YO8y4V2WOqCucryoaAc+cQ0sr7vVDvMiQckDkn5FAAqNgkjIYfiwyQYQjRV371vmzuU3Efmav3wddF2nVipJzwxHp/sWZSb+56+9iAVjyilDj5RSEGJpV8KlJ/ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ygVBahdR; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-371c5cbc7c8so114529f8f.1
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Aug 2024 06:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724331591; x=1724936391; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EoO4sCNWaPPWmdIdCr2gmgPkfl+OMgV/V6faIdi9Nng=;
-        b=kK9JipIqoBUfNQV+XpvgJRqJX7NIhBhayht5HhZQsmUBtzUaGg0tu/ouY1RwA4sbFe
-         DPUsLTVBPe/s/+EIxXIIIW7CDF6ooeKqM3iDNEh8HhwMIeNZ4PnW8/MmXez95JPgLei7
-         cYl6CECjdJNq1GJ7EpMjMd1pjbiN6/Wz2ksxpjWSX8AjFcdGoE53nqp4wLDMrZXxWNGR
-         EKoK+vN8M6UMwwl45i8FybMgDm7rxGmVpMBsmjsoSCjV9mIkqKOf54P0DndZljdX9S5m
-         QizBIA9L3PZTbU+NcNDhov1GgPfT4Xt60fzgXsGjb2oYgKxDKXi6LTwV8utO8div8nLC
-         3L2g==
+        d=linaro.org; s=google; t=1724333232; x=1724938032; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=heGIarr05MZ0K7mmp6CHQvn8aVfPPIQkNf3ZJw1FViw=;
+        b=ygVBahdRZrMMH078Cx/+YPBzs7VsrQ5/y9GrsF76ck7YDWbs4boVqT7Xl55J+qOZG6
+         Wza9kBLB5KLt1Y+p21AQP+o+aoW2OwfHJ4/pBsTd7Y2usqfIN6tozFDzaBpdjg4WZSE8
+         GwoWIG0oyezZqg19Uk9AQ2lpUdWHXqHzekohjabE5ZTBJyXoP/xH6IIa8Kvm42d4J1wE
+         otk1r0ZH9WEf0N6IWxyHjD58wtV4kJx0/SzjCGjnlywd2dnvQ+325A7GCLMwKOZNaFCY
+         ku9O5LeKqJ5J1J2RXZribDEBwCAP+ww/xUAiwjHpKa300mZ1dass6NcPLe5OCGQbXqo6
+         FudA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724331591; x=1724936391;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EoO4sCNWaPPWmdIdCr2gmgPkfl+OMgV/V6faIdi9Nng=;
-        b=Z3r78fj85CaekfcyJFjNvpjVAOA2PZxvZ4w4F3Mf/6Kwciu9QhLS9bIFhfvX9DbohO
-         iZO88TC8TmklgGiD2laYDHL6jwpRx/QCnbhChlscLDEiMGWyww2r4Az+QnOBhQxnQYFL
-         yeq2fdZsfTUuCN10AsoU/iKecZ6dqopBxrj6f8WVxLKCVvmlYZOsv09v+vlr+wCuct6I
-         BvKXKPSx3LyyZ73+HlRnwsMwZeJLc02bu83hiO+Dvpiz2U7GyHb7luMAOpuIariGgpVI
-         BK7gvqDKikBMH5t0HfhSOqRXxXjGMh3I9U/yJt4Mdr912gQ29ap/4W7N4rzFtT8liNr6
-         yI5A==
-X-Forwarded-Encrypted: i=1; AJvYcCV3TC0yO/Kaeot3tbEqyrTt9/3kHkOR6asDjFhpFsOyuvH8xrXgsi+nZ2hjhRrmHZqHUfqbOst3HQqPbO8g@vger.kernel.org, AJvYcCW3sbdCesUeFAdSaci+7kITOA/jLH28ek3sUxUQxAtTSdpllbN8x5XTXWbzMP3CiLIYlxKGqscHdiI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmdpxwIiBJTst+YnWVr5b/7WzdHYsx9CcyYRNiml3XTiq01rAz
-	wjoIGGQLA7V7Ug34QO/k1RPCy4A+/8WdFJxRPX8n0owh0rKcSoDrcoyDHlx3M4r2xIgj1vk+8hv
-	Vve7nA0F5/7NZTdzg7Tp4FNbZEUI=
-X-Google-Smtp-Source: AGHT+IHS96aclJuolbPu0Uu3VPQBNy/41oHFLnv1W7KA1hySaSp8ImFVHLor+SorMz+bK5ND7I6vDrYc1U7/dyqzntQ=
-X-Received: by 2002:a05:6512:3f12:b0:533:4191:fa47 with SMTP id
- 2adb3069b0e04-5334fd54882mr1147315e87.47.1724331590564; Thu, 22 Aug 2024
- 05:59:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724333232; x=1724938032;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=heGIarr05MZ0K7mmp6CHQvn8aVfPPIQkNf3ZJw1FViw=;
+        b=VON7nL8hnxyHq24Y3BJI0xpXJQWUiLDehqKRmCn+E56n30SVWpEP3JGSKkYyb+JnI4
+         ngKxvND8ryPPFGmaTVvzQrj+niqaMmJijbsFaVq4v/I/0iO8Zuw5JYapVYFWsBskgTET
+         X3nl4Ge5UsNUyrrPX+VXelodG1NxNLMdl1qpNb2BKcZzNYA8ZoveOKSxvafN5qcQyGFC
+         pTNCY6H9NeQdeUwCpAdcdCQ5lTZM2PbTg0LdOpIqZukjS4Q8+dnFh4WBlBxxDiyoIjgB
+         tgi3B2qxTPKISWP1qbdIMX0Gbh/6lOTnjf/ls6E6wDXLsXXYrMVHavZZb0CSUodfdKpR
+         jSRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWORfzWkVBA2c51YOJGcdY69fZ6Fey597MTHcgDlSNywK9fjRMh/l3PVZRX4rz/FuqZ0bqeg8q6a6o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlubxfYMc3tx6x2LAkVk/SdR94DwKaYYrpmaUYaqGFlZk3U8tw
+	fRoNhxv9e+eR/huZohY/jbQx0Ram1QforW9byBTMbeHbTquDx8+wkjBg84psAbk=
+X-Google-Smtp-Source: AGHT+IHnNSVQHM2d9IRfmql1uFIKdsWiicdATDg1EWg6EFTqcFXlV2endQY0D9GvUsxJ5J4dgUJ6zQ==
+X-Received: by 2002:a5d:6d89:0:b0:364:8215:7142 with SMTP id ffacd0b85a97d-372fd584d52mr2486942f8f.1.1724333231717;
+        Thu, 22 Aug 2024 06:27:11 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.222.82])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3730810fb6bsm1703531f8f.21.2024.08.22.06.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2024 06:27:11 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Rayn Chen <rayn_chen@aspeedtech.com>,
+	linux-i2c@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: i2c: aspeed: drop redundant multi-master
+Date: Thu, 22 Aug 2024 15:27:08 +0200
+Message-ID: <20240822132708.51884-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240819072052.8722-1-eichest@gmail.com> <20240819072052.8722-2-eichest@gmail.com>
- <CAOMZO5CYUNESmBdZBMSMwNraQbqvvsF5fn8i+nHr=MB_T_AG7w@mail.gmail.com>
- <CAOMZO5CeT+LvQ__3GUf6teL3=8pZe5qxmFffYJX-h3E27UXwtQ@mail.gmail.com> <Zscl99sSlbhOTrnQ@eichest-laptop>
-In-Reply-To: <Zscl99sSlbhOTrnQ@eichest-laptop>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 22 Aug 2024 09:59:39 -0300
-Message-ID: <CAOMZO5Bdfe7fqJCCy9nqRG9jbOEKDNymMHp+--PaTygs5pZfFg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] i2c: imx: only poll for bus busy in multi master mode
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, andi.shyti@kernel.org, 
-	shawnguo@kernel.org, s.hauer@pengutronix.de, Frank.Li@nxp.com, 
-	francesco.dolcini@toradex.com, linux-i2c@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Stefan,
+'multi-master' property is defined by core i2c-controller schema in
+dtschema package, so binding which references it and has
+unevaluatedProperties:false, does not need to mention it.  It is
+completely redundant here.
 
-On Thu, Aug 22, 2024 at 8:50=E2=80=AFAM Stefan Eichenberger <eichest@gmail.=
-com> wrote:
+Suggested-by: Andi Shyti <andi.shyti@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> In your setup, do you know what mode (atomic, interrupt, dma) the driver
-> uses when it works and when it fails?
+---
 
-On the imx8mp board I am testing, the very first I2C register write
-done by the pca935x driver fails.
+Reference:
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/i2c-controller.yaml#L114
+---
+ Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Thanks
+diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+index 6df27b47b922..5b9bd2feda3b 100644
+--- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+@@ -44,11 +44,6 @@ properties:
+     description: frequency of the bus clock in Hz defaults to 100 kHz when not
+       specified
+ 
+-  multi-master:
+-    type: boolean
+-    description:
+-      states that there is another master active on this bus
+-
+ required:
+   - reg
+   - compatible
+-- 
+2.43.0
+
 
