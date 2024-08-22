@@ -1,235 +1,156 @@
-Return-Path: <linux-i2c+bounces-5700-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5701-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26E6E95BDF0
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 20:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 077AA95BF15
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 21:45:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4617B1C237D9
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 18:05:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24FD81C22FA3
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 19:45:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FAB91CFEA7;
-	Thu, 22 Aug 2024 18:04:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235661CC160;
+	Thu, 22 Aug 2024 19:45:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gu+1KxH9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RqVVVseF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850DF1D04B5;
-	Thu, 22 Aug 2024 18:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A0D7CF16;
+	Thu, 22 Aug 2024 19:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724349873; cv=none; b=WdRo9dDjvnou8T5mtOjv3MzvObrxGkuII8XPWHXTEAobsOgsN/8BassW0AbpYaUov2TSFZNLexjpLdOowobD/v8xB8ySoJmt7cpSiKZ5svv1MIzPDvfh6E/7F/ZkfMr4SFgcfiLODprA2Xp/+5y2ge0qcRKpmeyfslzjTkusWXw=
+	t=1724355940; cv=none; b=oK0hILxzaXoVx8R7HX7PR/zPsnwHsFJygeKJ81aQaGYrkwspLGNYeJDcnt4+iwRe+F3CB4gygqM8urzDf/e21aRxaCFgAPzkeNN+nEqhu32YtkspW9g3iPF9jhyhTQ1hakkoGfLujF4qNb5bajIBWPj5fUKiqivwMN5eSxC08gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724349873; c=relaxed/simple;
-	bh=PLg9DW14fUbZUKvPzBr5SKlhiqNP2bi/e6w3+deC6jY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M155sD5fNamCSCGXbWuJlGacqhsggwXETtEPxJoWVlG1zkN+jgkQtEVuas/bFDMECzVDp+TVuND+d7XQQSDWBWR1ZdCpc6w4mICz+LY6BcZDFfK7uMoob6amin1a/0n3rYjVpDhMlqGEYgDtJvaOPdjCEq/PXXxnEACf0oBm/qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gu+1KxH9; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724349871; x=1755885871;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PLg9DW14fUbZUKvPzBr5SKlhiqNP2bi/e6w3+deC6jY=;
-  b=gu+1KxH9HLT5tltbbxXV0FJzS355UeqGUNmf76g6q5t40sFaS44aODYX
-   R/icQF4Zp7Yq1pJo1yESQiM5331+8+MPOB/vZQWLp6ws29bQaFhissbxv
-   K2lBi2wpk11gFWuG8ur9kYBul9y+HoBnJ/oW15UoygyPq3U/w0SrKvqRX
-   LgxTWIYdk9OCcyLp48vsH5D5iurxxziNZ4Uwbi4xk6d1x3mK+ZYK1IoLb
-   hF51yUl3wZY2u78Bdek90IIi/lqI4L5NsSvtYDKWquQ3T10b9kh6JeVjZ
-   nVCytwtokLaSL0YXGVtJDGoBFNlWLkAHuK97MYX/bgY2DSCP75P9IAvGf
-   g==;
-X-CSE-ConnectionGUID: pDe+YdgoRLSZ2hcOrmPrdQ==
-X-CSE-MsgGUID: sgN0ZmVKQ+2MI2QcY3oeZQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="26656231"
-X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="26656231"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 11:04:30 -0700
-X-CSE-ConnectionGUID: XxlS/6KOR0GrlJwGcQU6iw==
-X-CSE-MsgGUID: jPU8kpFpTOeVkY75015g5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="62074266"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa007.jf.intel.com with ESMTP; 22 Aug 2024 11:04:28 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 8A4A94D7; Thu, 22 Aug 2024 21:04:12 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Narasimhan.V@amd.com,
-	Borislav Petkov <bp@alien8.de>,
-	Kim Phillips <kim.phillips@amd.com>
-Subject: [PATCH v1 5/5] i2c: designware: Remove ->disable() callback
-Date: Thu, 22 Aug 2024 20:58:41 +0300
-Message-ID: <20240822180411.2298991-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20240822180411.2298991-1-andriy.shevchenko@linux.intel.com>
-References: <20240822180411.2298991-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1724355940; c=relaxed/simple;
+	bh=nLuaHp9c/KLxay/uPGWso/mHvec43cEgGr+Jf7scjlE=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=D3Pszvk5yJ1FRXkZPJeKwL0PdfGxO2obqo4p1ZG3+sruSk8wy4/v/StAWu1yDmnV8vHwO1n2i2eIU1uYl4hRadtCGxdiTZL+0aZch6jeqQkyLQGhKeMMnyfQiKe7Wk8XA0tMFtZ4d7e7CCVtOV4ciS9eYpXTVhoUERWy/P6v5yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RqVVVseF; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a867a564911so164885366b.2;
+        Thu, 22 Aug 2024 12:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724355938; x=1724960738; darn=vger.kernel.org;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IeTYTgvLfgiOC9/H2l0kQ7dznzQOo/Hsjud5L+kZ+SE=;
+        b=RqVVVseFN1GhGvrLL4uU9dsbkvZvKohJabOm1LERjJUIe1PneR+PtPeyMLqXsUFZvU
+         l8rDF3WDbucSGOtEGg1TBFI+afU7QIYkBX9P8+AP3/8mLJRb8OQhQ7vSShbsjqKOgUSk
+         5O/+cEl1MeViFfBuhDOCNcG+/k/SDAMHRYrMg5ZT8fYZzNohx8wSvrfdxgJKs1scBHxA
+         6UAJFnZYNG0EeFKnaKiRhN5urM5bIup0hJnizIJbTrzulJOA2lr12YIfJzGrMhh4TthD
+         4hJyZ9Lpx+GfM7jmJfPxM9gWohpdeC0G5qAZDqR7j1Bpae00PJJqxd6/EYEqe2tr+qf4
+         K6Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724355938; x=1724960738;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IeTYTgvLfgiOC9/H2l0kQ7dznzQOo/Hsjud5L+kZ+SE=;
+        b=xJgoxr4IZ1rQx3NF067SaE9oy0YIjcMFqMYrstr/aAQfnaYCHRlkpWoqDArdSxcNQ1
+         HE2Oe0c5XZqVYJTq1t2o5nbWS7najt1Pdz61YMvvUqgpVpyU6oysRQGvUxD9ugE5dQ4g
+         DXSkpQp+ISiAV8pGeJyyehmKehFk6hU6nXA/efr00vD29uIchH7wyaQrGjzX46OjA4t0
+         9SX8mqAbRgBEEo1BpR/oqxMiVqnwdQ3ngjjDYsio0H+0NYaIDJVPzifpAcP5IV4GdZBp
+         ifOTIwLzaiU1VYyo9VKbIIGiFv4mZpcqgQbVU0OhMFP8Hg2qthJI9Yls0fZZIeQJ1uDc
+         si6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUhiGpXnfnIF3o6AfItposO9lzN/lyh3EEPvUk/j+LbhlN0bZGIXlhEqlIgjjyub/T0cN/LjW7i9Q6SoQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOLT3sAsZunWmFjhI3y5+UIt++96sbS8LtYVoKX7gjAzH6giGx
+	H3lNVVi4prNcB3VXUrdV1NL6Nfv8Jwhtk9/FG4JiIa288lcLVxc6
+X-Google-Smtp-Source: AGHT+IE9w2I5z7mdnn4r2XniS0jzzD8NBlxnL6j6pYfMTSnNBTnbV6lMJ1Ek7ZQG8JDtSNE0eXMgwQ==
+X-Received: by 2002:a17:907:3d8f:b0:a86:a3a6:c143 with SMTP id a640c23a62f3a-a86a3a6c9b0mr2021366b.31.1724355937410;
+        Thu, 22 Aug 2024 12:45:37 -0700 (PDT)
+Received: from ?IPV6:2a02:3100:9dc4:2200:e9ea:53e6:39db:eab3? (dynamic-2a02-3100-9dc4-2200-e9ea-53e6-39db-eab3.310.pool.telefonica.de. [2a02:3100:9dc4:2200:e9ea:53e6:39db:eab3])
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c0515a85fasm1297718a12.80.2024.08.22.12.45.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Aug 2024 12:45:37 -0700 (PDT)
+Message-ID: <3982b2a6-975e-40d2-bf02-2155e5c36c14@gmail.com>
+Date: Thu, 22 Aug 2024 21:45:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Wolfram Sang <wsa@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>
+Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ linux-sound@vger.kernel.org
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v2 0/4] i2c: Replace lists of special clients with flagging of
+ such clients
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Commit 90312351fd1e ("i2c: designware: MASTER mode as separated driver")
-introduced ->disable() callback but there is no real use for it. Both
-i2c-designware-master.c and i2c-designware-slave.c set it to the same
-i2c_dw_disable() and scope is inside the same kernel module.
+So far lists are used to track special clients, i.e. auto-detected and
+userspace-created clients. The same functionality can be achieved much
+simpler by flagging such clients.
 
-That said, replace the callback by explicitly calling the i2c_dw_disable().
+v2:
+- The i2c_driver.clients list is core-internal, however there's an ALSA
+  driver using it. So add patch 1 to address this first.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/busses/i2c-designware-common.c  | 1 +
- drivers/i2c/busses/i2c-designware-core.h    | 4 +---
- drivers/i2c/busses/i2c-designware-master.c  | 1 -
- drivers/i2c/busses/i2c-designware-pcidrv.c  | 5 +++--
- drivers/i2c/busses/i2c-designware-platdrv.c | 4 ++--
- drivers/i2c/busses/i2c-designware-slave.c   | 3 +--
- 6 files changed, 8 insertions(+), 10 deletions(-)
+Heiner Kallweit (4):
+  ALSA: ppc: Remove i2c client removal hack
+  i2c: Replace list-based mechanism for handling auto-detected clients
+  i2c: Replace list-based mechanism for handling userspace-created
+    clients
+  i2c: core: Remove obsolete members of i2c_adapter and i2c_client
 
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index 2601876f76ad..b60c55587e48 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -734,6 +734,7 @@ void i2c_dw_disable(struct dw_i2c_dev *dev)
- 
- 	i2c_dw_release_lock(dev);
- }
-+EXPORT_SYMBOL_GPL(i2c_dw_disable);
- 
- MODULE_DESCRIPTION("Synopsys DesignWare I2C bus adapter core");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index b9f97f4eedf5..723d599cca93 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -237,7 +237,6 @@ struct reset_control;
-  * @semaphore_idx: Index of table with semaphore type attached to the bus. It's
-  *	-1 if there is no semaphore.
-  * @shared_with_punit: true if this bus is shared with the SoCs PUNIT
-- * @disable: function to disable the controller
-  * @init: function to initialize the I2C hardware
-  * @set_sda_hold_time: callback to retrieve IP specific SDA hold timing
-  * @mode: operation mode - DW_IC_MASTER or DW_IC_SLAVE
-@@ -295,7 +294,6 @@ struct dw_i2c_dev {
- 	void			(*release_lock)(void);
- 	int			semaphore_idx;
- 	bool			shared_with_punit;
--	void			(*disable)(struct dw_i2c_dev *dev);
- 	int			(*init)(struct dw_i2c_dev *dev);
- 	int			(*set_sda_hold_time)(struct dw_i2c_dev *dev);
- 	int			mode;
-@@ -342,7 +340,6 @@ int i2c_dw_wait_bus_not_busy(struct dw_i2c_dev *dev);
- int i2c_dw_handle_tx_abort(struct dw_i2c_dev *dev);
- int i2c_dw_set_fifo_size(struct dw_i2c_dev *dev);
- u32 i2c_dw_func(struct i2c_adapter *adap);
--void i2c_dw_disable(struct dw_i2c_dev *dev);
- 
- static inline void __i2c_dw_enable(struct dw_i2c_dev *dev)
- {
-@@ -375,6 +372,7 @@ static inline void __i2c_dw_read_intr_mask(struct dw_i2c_dev *dev,
- }
- 
- void __i2c_dw_disable(struct dw_i2c_dev *dev);
-+void i2c_dw_disable(struct dw_i2c_dev *dev);
- 
- extern void i2c_dw_configure_master(struct dw_i2c_dev *dev);
- extern int i2c_dw_probe_master(struct dw_i2c_dev *dev);
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index a890a73e197e..e46f1b22c360 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -949,7 +949,6 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
- 	init_completion(&dev->cmd_complete);
- 
- 	dev->init = i2c_dw_init_master;
--	dev->disable = i2c_dw_disable;
- 
- 	ret = i2c_dw_init_regmap(dev);
- 	if (ret)
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 2f2085700594..dd188ccd961e 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -198,7 +198,7 @@ static int __maybe_unused i2c_dw_pci_runtime_suspend(struct device *dev)
- {
- 	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
- 
--	i_dev->disable(i_dev);
-+	i2c_dw_disable(i_dev);
- 	return 0;
- }
- 
-@@ -339,7 +339,8 @@ static void i2c_dw_pci_remove(struct pci_dev *pdev)
- {
- 	struct dw_i2c_dev *dev = pci_get_drvdata(pdev);
- 
--	dev->disable(dev);
-+	i2c_dw_disable(dev);
-+
- 	pm_runtime_forbid(&pdev->dev);
- 	pm_runtime_get_noresume(&pdev->dev);
- 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 7a3f4e96d59e..e49c68c6e142 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -328,7 +328,7 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
- 
- 	i2c_del_adapter(&dev->adapter);
- 
--	dev->disable(dev);
-+	i2c_dw_disable(dev);
- 
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
- 	pm_runtime_put_sync(&pdev->dev);
-@@ -357,7 +357,7 @@ static int dw_i2c_plat_runtime_suspend(struct device *dev)
- 	if (i_dev->shared_with_punit)
- 		return 0;
- 
--	i_dev->disable(i_dev);
-+	i2c_dw_disable(i_dev);
- 	i2c_dw_prepare_clk(i_dev, false);
- 
- 	return 0;
-diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
-index 5995361b5615..7035296aa24c 100644
---- a/drivers/i2c/busses/i2c-designware-slave.c
-+++ b/drivers/i2c/busses/i2c-designware-slave.c
-@@ -90,7 +90,7 @@ static int i2c_dw_unreg_slave(struct i2c_client *slave)
- 	struct dw_i2c_dev *dev = i2c_get_adapdata(slave->adapter);
- 
- 	regmap_write(dev->map, DW_IC_INTR_MASK, 0);
--	dev->disable(dev);
-+	i2c_dw_disable(dev);
- 	synchronize_irq(dev->irq);
- 	dev->slave = NULL;
- 	pm_runtime_put(dev->dev);
-@@ -237,7 +237,6 @@ int i2c_dw_probe_slave(struct dw_i2c_dev *dev)
- 	int ret;
- 
- 	dev->init = i2c_dw_init_slave;
--	dev->disable = i2c_dw_disable;
- 
- 	ret = i2c_dw_init_regmap(dev);
- 	if (ret)
+ drivers/i2c/i2c-core-base.c | 108 +++++++++++-------------------------
+ include/linux/i2c.h         |  10 +---
+ sound/ppc/keywest.c         |   7 +--
+ 3 files changed, 36 insertions(+), 89 deletions(-)
+
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
+2.46.0
+
 
 
