@@ -1,204 +1,115 @@
-Return-Path: <linux-i2c+bounces-5658-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5659-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 890A195B232
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 11:49:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5439495B293
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 12:05:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD5BE1C2392C
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 09:49:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7FE11F229F0
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 10:05:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0554E18660F;
-	Thu, 22 Aug 2024 09:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="g9+78//V"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A76D17C220;
+	Thu, 22 Aug 2024 10:04:57 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from aposti.net (aposti.net [89.234.176.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449A9186614;
-	Thu, 22 Aug 2024 09:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C2516F8E5
+	for <linux-i2c@vger.kernel.org>; Thu, 22 Aug 2024 10:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724319785; cv=none; b=g+r2TAeqO4hNV/hsdn/8OVtg9g7LAi/KDMyAzuUpPLt942FwkkwFNgkZR5ma/MqZ0FkHKvHPogSUSf6d8wZhzMT309LXIhd3yZCpIsCAdqhO2IwRmWKJGTRakla3VnkLXOFIX8c5bVreY3PKTdP9SL5uBtD7DFsqQrJ4BnwRLF8=
+	t=1724321097; cv=none; b=oHGxORXq2+ez58dLfrMLzW/ZEU3NC4wAT2gReYBAZIFS450Z0v7O0gGrapH9Re406V5ffmcKOuTSowF+Ezu6NQWG01ygVCSSCZrkYUAKqxPAC6+wc4HHF4F7MnvmjZZCSSm0DGEXBxMt7kLceuyPljXduzRFuzBKCsdqAx9j/98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724319785; c=relaxed/simple;
-	bh=GqWLqyuEja4Q0JOsfqAlVMLVNeplXtpPD4HXOSMp6dw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YzIXbh9pjPcptjYpHb0msLQ8Lz/wII22J8/VY4yoDEdWdM+q2gWOl4SFoHN0pC9668wd6Bebvd8CboE75dD6tH/4m9V/7vgvPj/tb1OiO7QC/5agRBI2sQKZCdiEV8RoyWnvv6dH+vIjlUvQbeAVPzOry9E8PJUNoVejiXw7dIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=g9+78//V; arc=none smtp.client-ip=89.234.176.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1724319338;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WN+VthHd3oguprV2+gdYjxF24d7fL0D3mFHfDOvyKpo=;
-	b=g9+78//V/pjfc5+pnhlgQPOUfA1KZgWIRotPAgc5Ei40ndZ7sccQ7C9ttkJCz2H1R9ABXO
-	vljARa1qBeFvPoOsA2oz2Bk0XZYS/TVjc/rLvTJNmVyCZwqogacWuCh/oDLHOa81Ws1azA
-	jMlQkIHPouPTq5e/36/NChiC1tguDvQ=
-Message-ID: <1473866ced990d435f31e541e03d1676aa04b4ae.camel@crapouillou.net>
-Subject: Re: [PATCH 2/2] i2c: jz4780: Use devm_clk_get_enabled() helpers
-From: Paul Cercueil <paul@crapouillou.net>
-To: Rong Qianfeng <rongqianfeng@vivo.com>, Wolfram Sang
-	 <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Cc: opensource.kernel@vivo.com
-Date: Thu, 22 Aug 2024 11:35:36 +0200
-In-Reply-To: <20240822025258.53263-3-rongqianfeng@vivo.com>
-References: <20240822025258.53263-1-rongqianfeng@vivo.com>
-	 <20240822025258.53263-3-rongqianfeng@vivo.com>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFC
- qaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IWYXnd
- JO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN70
- 62DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOt
- X0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEA
- AYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/
- Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmc
- Gu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2z
- McLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/
- 7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2c
- LUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1724321097; c=relaxed/simple;
+	bh=xQBwgLkBPFDSFjRuS4TJAEFmCZoN+w3PJZufqSqm4Rg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dkFWEOTaGiRPD+Vg9b7gtKzDRxGNEoiGMQEbUsGKhIY5OINktwJDmjvgxgibZF8cWQeGToqYnWFP8obn29T9yagKffjM5OQuUrEPEGhi4bU86l9CVVTRLrQMb2cXV0pn6AgMJiDJBmwmes3OkHeWb+7g7NF8rj+aPgb2A2MZE1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1sh4gP-0001Zq-3h; Thu, 22 Aug 2024 12:04:45 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1sh4gN-002DnD-P8; Thu, 22 Aug 2024 12:04:43 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1sh4gN-00HLZP-27;
+	Thu, 22 Aug 2024 12:04:43 +0200
+Date: Thu, 22 Aug 2024 12:04:43 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Stefan Eichenberger <eichest@gmail.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, kernel@pengutronix.de,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+	Frank.Li@nxp.com, francesco.dolcini@toradex.com,
+	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Subject: Re: [PATCH v2 1/4] i2c: imx: only poll for bus busy in multi master
+ mode
+Message-ID: <ZscNO2PKNlK3ru_7@pengutronix.de>
+References: <20240819072052.8722-1-eichest@gmail.com>
+ <20240819072052.8722-2-eichest@gmail.com>
+ <zudo7zjlxqfxipsi2x7e4kyhckvkjreovrdmsfxp3m6clbbgzv@ina4j4qxu24r>
+ <Zsbi2xcxBGE7o9uE@eichest-laptop>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Zsbi2xcxBGE7o9uE@eichest-laptop>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-Hi Rong,
+On Thu, Aug 22, 2024 at 09:03:55AM +0200, Stefan Eichenberger wrote:
+> Hi Andi,
+> 
+> On Thu, Aug 22, 2024 at 12:21:30AM +0200, Andi Shyti wrote:
+> > Hi Stefan,
+> > 
+> > > @@ -1468,6 +1473,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
+> > >  		goto rpm_disable;
+> > >  	}
+> > >  
+> > > +	i2c_imx->multi_master = of_property_read_bool(pdev->dev.of_node, "multi-master");
+> > > +
+> > 
+> > you might also want to add the multi-master boolean property in
+> > the binding.
+> 
+> We discussed this internally and weren't sure when it was required
+> because e.g. i2c-rcar and i2c-tegra don't have it documented in their
+> bindings. Is it still required if it is part of the dt-schema?
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/i2c-controller.yaml
 
-Le jeudi 22 ao=C3=BBt 2024 =C3=A0 10:52 +0800, Rong Qianfeng a =C3=A9crit=
-=C2=A0:
-> The devm_clk_get_enabled() helpers:
-> =C2=A0=C2=A0=C2=A0 - call devm_clk_get()
-> =C2=A0=C2=A0=C2=A0 - call clk_prepare_enable() and register what is neede=
-d in order
-> to
-> =C2=A0=C2=A0=C2=A0=C2=A0 call clk_disable_unprepare() when needed, as a m=
-anaged resource.
->=20
-> This simplifies the code and avoids the calls to
-> clk_disable_unprepare().
->=20
-> While at it, remove the goto label "err:", and use its return value
-> to=20
-> return the error code.
->=20
-> Signed-off-by: Rong Qianfeng <rongqianfeng@vivo.com>
+The i2c-imx.yaml has "unevaluatedProperties: false", which fill discard
+every thing not in this yaml
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+> If so, I will add it in the next version.
 
-With a small suggestion below.
+Yes, please.
 
-> ---
-> =C2=A0drivers/i2c/busses/i2c-jz4780.c | 21 ++++++---------------
-> =C2=A01 file changed, 6 insertions(+), 15 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-jz4780.c
-> b/drivers/i2c/busses/i2c-jz4780.c
-> index 4aafdfab6305..f5362c5dfb50 100644
-> --- a/drivers/i2c/busses/i2c-jz4780.c
-> +++ b/drivers/i2c/busses/i2c-jz4780.c
-> @@ -792,26 +792,22 @@ static int jz4780_i2c_probe(struct
-> platform_device *pdev)
-> =C2=A0
-> =C2=A0	platform_set_drvdata(pdev, i2c);
-> =C2=A0
-> -	i2c->clk =3D devm_clk_get(&pdev->dev, NULL);
-> +	i2c->clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
-> =C2=A0	if (IS_ERR(i2c->clk))
-> =C2=A0		return PTR_ERR(i2c->clk);
-> =C2=A0
-> -	ret =3D clk_prepare_enable(i2c->clk);
-> -	if (ret)
-> -		return ret;
-> -
-> =C2=A0	ret =3D of_property_read_u32(pdev->dev.of_node, "clock-
-> frequency",
-> =C2=A0				=C2=A0=C2=A0 &clk_freq);
-> =C2=A0	if (ret) {
-> =C2=A0		dev_err(&pdev->dev, "clock-frequency not specified
-> in DT\n");
-> -		goto err;
-> +		return ret;
-> =C2=A0	}
-
-Since there is no more special handling needed here, you could just:
-if (ret)
-    return dev_err_probe(&pdev->dev, ret, "clock-frequency...\n");
-
-And the same for the other error handling paths that you changed.
-
-I wouldn't request a V2 just for that though.
-
-Cheers,
--Paul
-
-> =C2=A0
-> =C2=A0	i2c->speed =3D clk_freq / 1000;
-> =C2=A0	if (i2c->speed =3D=3D 0) {
-> =C2=A0		ret =3D -EINVAL;
-> =C2=A0		dev_err(&pdev->dev, "clock-frequency minimum is
-> 1000\n");
-> -		goto err;
-> +		return ret;
-> =C2=A0	}
-> =C2=A0	jz4780_i2c_set_speed(i2c);
-> =C2=A0
-> @@ -827,29 +823,24 @@ static int jz4780_i2c_probe(struct
-> platform_device *pdev)
-> =C2=A0
-> =C2=A0	ret =3D platform_get_irq(pdev, 0);
-> =C2=A0	if (ret < 0)
-> -		goto err;
-> +		return ret;
-> =C2=A0	i2c->irq =3D ret;
-> =C2=A0	ret =3D devm_request_irq(&pdev->dev, i2c->irq, jz4780_i2c_irq,
-> 0,
-> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_name(&pdev->dev), i2c);
-> =C2=A0	if (ret)
-> -		goto err;
-> +		return ret;
-> =C2=A0
-> =C2=A0	ret =3D i2c_add_adapter(&i2c->adap);
-> =C2=A0	if (ret < 0)
-> -		goto err;
-> +		return ret;
-> =C2=A0
-> =C2=A0	return 0;
-> -
-> -err:
-> -	clk_disable_unprepare(i2c->clk);
-> -	return ret;
-> =C2=A0}
-> =C2=A0
-> =C2=A0static void jz4780_i2c_remove(struct platform_device *pdev)
-> =C2=A0{
-> =C2=A0	struct jz4780_i2c *i2c =3D platform_get_drvdata(pdev);
-> =C2=A0
-> -	clk_disable_unprepare(i2c->clk);
-> =C2=A0	i2c_del_adapter(&i2c->adap);
-> =C2=A0}
-> =C2=A0
-
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
