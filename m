@@ -1,129 +1,106 @@
-Return-Path: <linux-i2c+bounces-5663-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5664-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FFCE95B486
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 14:04:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CA7995B50D
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 14:32:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4883B1F23D56
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 12:04:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8C502890E1
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 12:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 210EB1C8FC9;
-	Thu, 22 Aug 2024 12:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4061C942E;
+	Thu, 22 Aug 2024 12:32:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lY7SHzWL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="STdO9ocB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541FC183CB7;
-	Thu, 22 Aug 2024 12:03:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96BF1DFD1;
+	Thu, 22 Aug 2024 12:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724328238; cv=none; b=nmm61gXOTZnZ1U/YCzhihkxo8Ohs52CoY50tvuVuKPb7pBr8pQ9Z5vF4MrsorkzWRQjmOe9U61fi/HMhp9QQh6B7La7woc1Bz/pGQlsOgh3c0ZUe4cLh86UAX38tMgrdnrhyG3KnRpCf60jBdpvfZdCNRX/akaPyrAgduvlq6L8=
+	t=1724329940; cv=none; b=GXZR0++DXhbiWRPuiZLNvZBKXR0q5U2fEO9zGG0lJci2yUj4VPT5BOZO6waaWm2NA8RpfzT+XZvBbYagxphDaqBa6DiGou8Q+wR8j6otRMP9xv8IdMDRpAqVVOCQ9HYnci4nK+TF9D0ccGaoebJHt+0kz8WsOCkUE7tTgBFTHGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724328238; c=relaxed/simple;
-	bh=/7JxRU4cpPBTZFx1w71DWizOwcTnSWrV3CmQH03IfkY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GQrsG6kKD7CumoRHLRfVw/yickolivVWEckCzgDxKwiWc6RWfFL/Pv8/E/ORhjy18DXtrg9JA4FvXUDYSuk3MmnLXZUH5xAK8rlpv1fdZ9ej0TJlLo8dwM+yM/yb8XCHLSi9YpxdIJPfUX8APc+9nmIGJ1hHBrMWOWuf+deX3Gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lY7SHzWL; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4280ee5f1e3so5537235e9.0;
-        Thu, 22 Aug 2024 05:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724328236; x=1724933036; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AY16LwIBghLKS2thXS/HdTgvr57cr8ORfO+2U5rpJTM=;
-        b=lY7SHzWLoQJZEBGU6XMZhIDOnG+9qKxc3puCbYG+gKfsbXnFThO7RiUR1eXB0j1mn8
-         IbJDwKAO/NAOPbXdqz4oYoME/nDgSwteJyGrOZPwEePoTIPl04+uNfhmLTmARLsNAhhs
-         SwBvg+Uv8XLK+CZiAkYlj5aO0ibXtSzqJMAUyw6Au85/bxb5WOxHIzms7HEq0IWaKQHn
-         Vsanz5s2LJNpQVdOAekoaIR2qfaKbjI/FnTbkIC7wN2OmCn/vbmEqs+vfdHN8LCh8DS/
-         47TPUReQrQ7duEqExN8rERlf5J6Vvc8pknnOa6lDMQxT22y1uljuunEHdrY9WngNTtL3
-         GzGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724328236; x=1724933036;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AY16LwIBghLKS2thXS/HdTgvr57cr8ORfO+2U5rpJTM=;
-        b=TVmIiIeFDGFRZ/C16/AEW0JHTPBSCJ0lNbcrGF2/Rxn6AkrExETy1bHU2YIQzeoVXk
-         LJ5Q511dffpXLhyJ111T7Pmtix9HsUkmdOXr+5G/pJ1ty1KIjSEKlOFV4LGCluh66F9L
-         eVIAvDIqa2aGvZryO85BD1Y4ocvoH/xBcq2DkyysWrpDDukGwsaZGoaUoW5Q2XF9VsuC
-         mEGb8MjPNVhFMR2dvvo+MB+4DABm0rA6dxkPVIGnIbg5bp0szl9e5+Pd0VTm1hSgvC5u
-         TsFFC6Fxm6rOYxet4KtU7fY49Vr3pWBgpG0Rd9Ys+Qe85r5ml7Gj/UaufSO8jfHNaDD3
-         RPsw==
-X-Forwarded-Encrypted: i=1; AJvYcCUI6wDbla3TLFqBVYjv9cQxH2QS1QaEoiPWd8NMbyjQ5kk88Ibec24MMgGccJUuyOfdddCdWaKIQLk=@vger.kernel.org, AJvYcCWvFs6othLPOPzuoFpJZL8ClJkTuEB7U5u8mqoGyAdTv586bfMqL2eyvq5mM6EWNYUqby+wOpcacLz6Ie3/@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQxxFAAuqaSiYMM7QSW4avcLFHOsjhoThcKcn/oQ7eNAUWqS3D
-	Fjl2LCBHJ+7r9GtEEOkzCFFOokeQ0TGHgvpXaS0PrXBQurR8AXdt
-X-Google-Smtp-Source: AGHT+IEFxPFmRaY+PNp14y1u8ekMx5ha3DFQw+w7+iWj6isuIlJVoOIiRVhai99HMnCgTpLp5x6Kjw==
-X-Received: by 2002:a05:600c:310c:b0:428:ec2a:8c94 with SMTP id 5b1f17b1804b1-42abd11e2famr45807665e9.10.1724328235478;
-        Thu, 22 Aug 2024 05:03:55 -0700 (PDT)
-Received: from eichest-laptop ([2a02:168:af72:0:daa9:644d:3c2:44bb])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ac51860e8sm21974725e9.48.2024.08.22.05.03.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2024 05:03:55 -0700 (PDT)
-Date: Thu, 22 Aug 2024 14:03:53 +0200
-From: Stefan Eichenberger <eichest@gmail.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Andi Shyti <andi.shyti@kernel.org>, kernel@pengutronix.de,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-	Frank.Li@nxp.com, francesco.dolcini@toradex.com,
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Subject: Re: [PATCH v2 1/4] i2c: imx: only poll for bus busy in multi master
- mode
-Message-ID: <ZscpKSzdYklxIkjZ@eichest-laptop>
-References: <20240819072052.8722-1-eichest@gmail.com>
- <20240819072052.8722-2-eichest@gmail.com>
- <zudo7zjlxqfxipsi2x7e4kyhckvkjreovrdmsfxp3m6clbbgzv@ina4j4qxu24r>
- <Zsbi2xcxBGE7o9uE@eichest-laptop>
- <ZscNO2PKNlK3ru_7@pengutronix.de>
+	s=arc-20240116; t=1724329940; c=relaxed/simple;
+	bh=3af2BVUg7wf877z1PfuGs3wFXkF2Hf6gkN6iUlwzOPg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rUDhnp4rB9b4gAW+yo+9wXT3m+MXKVxy8ftD+tn42H9xSU013jVliiuNJ/DR5r2UAB9gAJEIjGpK3kWTcQl2YCkDjLRWajeDANZTtoWmyIaAZPR6wKPQmjErNj2Dq7G61X4Emp5UZH8VHsNQChZwg3ltuF/w8+hZOH6ugTeRH7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=STdO9ocB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF54C32782;
+	Thu, 22 Aug 2024 12:32:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724329939;
+	bh=3af2BVUg7wf877z1PfuGs3wFXkF2Hf6gkN6iUlwzOPg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=STdO9ocBpTjzpKc8UC4eKGeTy6TjNmDSlWh9cjUoEzDxaESh2iNtis8wfxPGAkMVZ
+	 76wEdNXGmhRcmra25HKud7KEnicPW4ToYN0YAxLTd2dL/3KQAUUeDwvwIykOZWnxuI
+	 JbcPxtTSYjcQNngj7VufVPWLMY23zng8VmBY2tK5PX3unKNDXIoe48couPBQl97QEL
+	 UWxSuEX+KkiLzxErvdzvaPx8CjgzFqIVdv6PPflokB87v+RqjmFWf3tRwfjdQdwm6Q
+	 0TVKKjREqlhDcDFqtgcVtBf+qvz5vMByRv7lGQtt/IHV1A3xilmueBLcDZiEMtbIwT
+	 IOQhypjKqhXPA==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5342109d726so74522e87.0;
+        Thu, 22 Aug 2024 05:32:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUOcMUHOAWX1UtM0fMHEUE7/1VVKEvBEJEsiv9vjStFpanXUdHrBjc3txABWgg+b3QCpQzA0WuHJQG2@vger.kernel.org, AJvYcCWoXGjqublbXyNRytC92WAoWx0INM5FF92qDGjhtdBcL3xUxpF7K54h+xbOFLN5zbYiAiatJqYzpgDty8IV@vger.kernel.org, AJvYcCXj6Fvgm9u/Q/cxlb4XZ03QHGDA7LdirnjOdXRDmCrF5M8oAhsAnw6oFg9lLVfjxD1uCwqnkE+D+uCx@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6Cp5bZGmqBWXpP5Y3k2YzOo7aiYJHkFF15az2oYjVEr8Sm8Tl
+	zxpwXAbvcYEPD29O9+vLhVkHH4WnzEmsx14yjSNW+iVyhvKLAs7EqUE8GpUDpPcoJOS+6k/PzhE
+	w16sPsChlf8EM1OfK1rY5J9XXsg==
+X-Google-Smtp-Source: AGHT+IELJMuJDkhpPsO12MEEDtrpTV6xfsgInNXMN2DkC/1JY0q8qFL3c0BlEZIxWu6oS9dghQSXPb+CLV+6LMPxZ6c=
+X-Received: by 2002:a05:6512:1095:b0:533:4517:5363 with SMTP id
+ 2adb3069b0e04-5334cab22d9mr1028392e87.21.1724329937988; Thu, 22 Aug 2024
+ 05:32:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZscNO2PKNlK3ru_7@pengutronix.de>
+References: <20240822092006.3134096-1-wenst@chromium.org> <20240822092006.3134096-2-wenst@chromium.org>
+In-Reply-To: <20240822092006.3134096-2-wenst@chromium.org>
+From: Rob Herring <robh@kernel.org>
+Date: Thu, 22 Aug 2024 07:32:05 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJuiB8+PdH9SVum4CTNb8uM7Kzt3r2Y33yNE2yMGFVbug@mail.gmail.com>
+Message-ID: <CAL_JsqJuiB8+PdH9SVum4CTNb8uM7Kzt3r2Y33yNE2yMGFVbug@mail.gmail.com>
+Subject: Re: [PATCH v5 01/10] of: dynamic: Add of_changeset_update_prop_string
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Saravana Kannan <saravanak@google.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
+	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 22, 2024 at 12:04:43PM +0200, Oleksij Rempel wrote:
-> On Thu, Aug 22, 2024 at 09:03:55AM +0200, Stefan Eichenberger wrote:
-> > Hi Andi,
-> > 
-> > On Thu, Aug 22, 2024 at 12:21:30AM +0200, Andi Shyti wrote:
-> > > Hi Stefan,
-> > > 
-> > > > @@ -1468,6 +1473,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
-> > > >  		goto rpm_disable;
-> > > >  	}
-> > > >  
-> > > > +	i2c_imx->multi_master = of_property_read_bool(pdev->dev.of_node, "multi-master");
-> > > > +
-> > > 
-> > > you might also want to add the multi-master boolean property in
-> > > the binding.
-> > 
-> > We discussed this internally and weren't sure when it was required
-> > because e.g. i2c-rcar and i2c-tegra don't have it documented in their
-> > bindings. Is it still required if it is part of the dt-schema?
-> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/i2c-controller.yaml
-> 
-> The i2c-imx.yaml has "unevaluatedProperties: false", which fill discard
-> every thing not in this yaml
-> 
-> > If so, I will add it in the next version.
-> 
-> Yes, please.
+On Thu, Aug 22, 2024 at 4:20=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> w=
+rote:
+>
+> Add a helper function to add string property updates to an OF changeset.
+> This is similar to of_changeset_add_prop_string(), but instead of adding
+> the property (and failing if it exists), it will update the property.
+>
+> This shall be used later in the DT hardware prober.
+>
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+> Changes since v4:
+> - Use modern designated initializer for |prop|
+>
+> Changes since v3:
+> - Use new __of_prop_free() helper
+> - Add new line before header declaration
+>
+> Changes since v2:
+> - New patch added in v3
+> ---
+>  drivers/of/dynamic.c | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/of.h   |  4 ++++
+>  2 files changed, 48 insertions(+)
 
-Perfect, thanks for the explanation.
-
-Regards,
-Stefan
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
