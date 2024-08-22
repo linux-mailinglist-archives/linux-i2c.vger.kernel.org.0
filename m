@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-5672-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5673-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A70495B7C4
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 15:58:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A32CE95B7DB
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 16:02:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48BAD286792
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 13:58:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3221B1F25E69
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 14:02:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DFC1CC153;
-	Thu, 22 Aug 2024 13:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5A31CB319;
+	Thu, 22 Aug 2024 14:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZuwuYWbe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VZ718OJ8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF921CBE89;
-	Thu, 22 Aug 2024 13:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD31A1C9EBB;
+	Thu, 22 Aug 2024 14:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724334862; cv=none; b=bHlyoq73AgF0ekofFu+qDmKxfpTX3OY/NES80wGif1rZru8Z2hLkXJAGLTtVEhrZKV/Ol/Cq9u2DSaLSO2vp+A3guxWzLjHATCpEMWYDttvDFjMXbAXYFIl8qMbJQjkkhGtYpHhJf5WivEivEeNSpyNGhO5mm8z3aKRMKcIXnnk=
+	t=1724335322; cv=none; b=LW9xSaufWVLNu+r+ABe4HVB8fM5xRXGvsHBoRQJQl+qhAQx6gKed1IZ0DhiDimzXEgUuQ702JFLKugSjB/v5p63tRqZR82TAJn1JVmLnYdMDdY1zvYejbl/JAVCZkcR5/BRJ3zq/dFE33Edap99xV4Sd4apabiFf+SjxQN98RHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724334862; c=relaxed/simple;
-	bh=9YUyCrtIOi7mWuFM6fXfJzgv/Fnrb9gWjYwYg0/W3NI=;
+	s=arc-20240116; t=1724335322; c=relaxed/simple;
+	bh=DYajc8AW19c7b03Ic4Cd1e/BodGn5ZQSh80teMscdVc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rb1r3h8IFDy6kbGxKQZokTbUTVr/nC+pO5XnhNRTYwBaXcVfSpQaGv2jd5QzqDZbQjR0KPeFc4lmJuHi5tW+lOWr2PZjLWmyLZsJdTCb8hS0eXLxEU6d/W5RUxQef4x57f9gEExjnI9tEVGzAQNp65g2rMk7C6SdQJbGT2OjSAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZuwuYWbe; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=BQBPGPzfnorsTnnbtnZf8fgkdFYnGidzW0UsyOv7D3Vua+An6g3upo63P1HK7VSJ1DbB8SH4iI/wLAdOK56J8qF48M6xOF0pZjXy3pthe/cKbVecuW6w8DTyjEQAW/+wKAzwR/P/gacpVPc0lk8fZigBUXtF1Ev+fqjzctLw4gI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VZ718OJ8; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724334861; x=1755870861;
+  t=1724335321; x=1755871321;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9YUyCrtIOi7mWuFM6fXfJzgv/Fnrb9gWjYwYg0/W3NI=;
-  b=ZuwuYWbeA51dc43qB++0vKjza0eba8LB/WP+P4jtExmmhSfade4Od3HU
-   Kms5qYQGBz0CQMS+8ZBskQZTcH8mFQA00ZWknLSySd7w86v7kWNYnt4j+
-   VBF8GEkMsux0w0JyPuWhY9ZrurjpfHA0N5oblfA1hX7XprJitvV5JM6Y6
-   jk4He8Kx2vTyMJRoOBSbd1ApRbosQY2msr7asM2mTh9UdR+Zj/+yss1pz
-   3L/Li+0WAOY31QjRrZyHQFaoMK9GlAgtFG2iMWr5sPa4twxMP45HheB/4
-   qkaFUboiirBFkcOuBd47ixrj7NUKkN/RJBMExKtY54Qu8u6CbZxeITBDW
+  bh=DYajc8AW19c7b03Ic4Cd1e/BodGn5ZQSh80teMscdVc=;
+  b=VZ718OJ8/Pse7EFzTr6bPXuAk0V1B/R+4zLcoBcpmy7c0OTfhFJixnXo
+   Tag914afA/hA4ABnpitfY5nrpkKxPMvjlkEMsAcguizX4bLssi/Jiaahl
+   hvJiD+UUTAw6WMXuMA/kKnFaBgVcxd9Yq69MxRrIYWe4RjVvaMCXYLd8D
+   +N4WeuDg47IeJeONxd+b07q0s89RNDXnvlZwiE+qyojD8pbBKxjmTRZ6i
+   9DST6Td7i3fCo9X/8ZzhcYY0auWnpa9fk7HomR3FaeBAVB/Orw7eG0cid
+   5JIuEdq09Q2NfnOW3XYCBCqmrDBpzunuQ3kz7Tv/BGiJzvPUEv1YxVPZP
    w==;
-X-CSE-ConnectionGUID: dr2XSb1dTsu3I2ddccYnNQ==
-X-CSE-MsgGUID: wMjcN1H9TUSpPOpmws27Pw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="22561866"
+X-CSE-ConnectionGUID: rjyWNdc+SO+SgC4jVQBXIg==
+X-CSE-MsgGUID: P+HZ8MKhTcmdmuxwo1NS5A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="22619639"
 X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="22561866"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 06:54:21 -0700
-X-CSE-ConnectionGUID: cAc/ohFRQYyDttAPJPxQxA==
-X-CSE-MsgGUID: CKDH6XyBQuSuoE3L1FfDGA==
+   d="scan'208";a="22619639"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 07:02:00 -0700
+X-CSE-ConnectionGUID: wtMnhjT5Q7OY5YzBoCs16Q==
+X-CSE-MsgGUID: GpBRurRkQOykwsj44mUesQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="66273292"
+   d="scan'208";a="66347601"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 06:54:15 -0700
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 07:01:56 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sh8GP-00000000TFF-2VSn;
-	Thu, 22 Aug 2024 16:54:09 +0300
-Date: Thu, 22 Aug 2024 16:53:55 +0300
+	id 1sh8Nt-00000000TMP-0QuL;
+	Thu, 22 Aug 2024 17:01:53 +0300
+Date: Thu, 22 Aug 2024 17:01:52 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Chen-Yu Tsai <wenst@chromium.org>
 Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
@@ -77,11 +77,10 @@ Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
 	Douglas Anderson <dianders@chromium.org>,
 	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
 	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v5 04/10] regulator: Do pure DT regulator lookup in
- of_regulator_bulk_get_all()
-Message-ID: <ZsdC8wkgsdsMJuAL@smile.fi.intel.com>
+Subject: Re: [PATCH v5 06/10] i2c: Introduce OF component probe function
+Message-ID: <ZsdE0PxKnGRjzChl@smile.fi.intel.com>
 References: <20240822092006.3134096-1-wenst@chromium.org>
- <20240822092006.3134096-5-wenst@chromium.org>
+ <20240822092006.3134096-7-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -90,107 +89,74 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240822092006.3134096-5-wenst@chromium.org>
+In-Reply-To: <20240822092006.3134096-7-wenst@chromium.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Aug 22, 2024 at 05:19:57PM +0800, Chen-Yu Tsai wrote:
-> The to-be-introduced I2C component prober needs to enable regulator
-> supplies (and toggle GPIO pins) for the various components it intends
-> to probe. To support this, a new "pure DT lookup" method for getting
-> regulator supplies is needed, since the device normally requesting
-> the supply won't get created until after the component is probed to
-> be available.
+On Thu, Aug 22, 2024 at 05:19:59PM +0800, Chen-Yu Tsai wrote:
+> Some devices are designed and manufactured with some components having
+> multiple drop-in replacement options. These components are often
+> connected to the mainboard via ribbon cables, having the same signals
+> and pin assignments across all options. These may include the display
+> panel and touchscreen on laptops and tablets, and the trackpad on
+> laptops. Sometimes which component option is used in a particular device
+> can be detected by some firmware provided identifier, other times that
+> information is not available, and the kernel has to try to probe each
+> device.
 > 
-> Convert the existing of_regulator_bulk_get_all() for this purpose.
-> This function has no in-tree users, as the original patch [1] that
-> used it was never landed. This patch changes the function ABI, but
-> it is straightforward to convert users.
+> This change attempts to make the "probe each device" case cleaner. The
+> current approach is to have all options added and enabled in the device
+> tree. The kernel would then bind each device and run each driver's probe
+> function. This works, but has been broken before due to the introduction
+> of asynchronous probing, causing multiple instances requesting "shared"
+> resources, such as pinmuxes, GPIO pins, interrupt lines, at the same
+> time, with only one instance succeeding. Work arounds for these include
+> moving the pinmux to the parent I2C controller, using GPIO hogs or
+> pinmux settings to keep the GPIO pins in some fixed configuration, and
+> requesting the interrupt line very late. Such configurations can be seen
+> on the MT8183 Krane Chromebook tablets, and the Qualcomm sc8280xp-based
+> Lenovo Thinkpad 13S.
 > 
-> The underlying code that supports the existing regulator_get*()
-> functions has been reworked in previous patches to support this
-> specific case. An internal OF-specific version of regulator_get(),
-> of_regulator_get_optional(), is added for this.
-
-> [1] https://lore.kernel.org/all/20231220203537.83479-2-jernej.skrabec@gmail.com/
-
-Make it Link tag
-
-Link: https://lore.kernel.org/all/20231220203537.83479-2-jernej.skrabec@gmail.com/ [1]
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-
-...
-
->  	/* first do a dt based lookup */
->  	if (dev && dev->of_node) {
-
-	if (dev_of_node())
-
-
-> -		r = of_regulator_dev_lookup(dev, supply);
-> +		r = of_regulator_dev_lookup(dev, dev->of_node, supply);
-
-	dev_of_node()
-
->  		if (!IS_ERR(r))
->  			return r;
->  		if (PTR_ERR(r) == -EPROBE_DEFER)
+> Instead of this delicate dance between drivers and device tree quirks,
+> this change introduces a simple I2C component probe. function For a
+> given class of devices on the same I2C bus, it will go through all of
+> them, doing a simple I2C read transfer and see which one of them responds.
+> It will then enable the device that responds.
+> 
+> This requires some minor modifications in the existing device tree. The
+> status for all the device nodes for the component options must be set
+> to "failed-needs-probe". This makes it clear that some mechanism is
+> needed to enable one of them, and also prevents the prober and device
+> drivers running at the same time.
 
 ...
 
->  /**
->   * of_get_regulator - get a regulator device node based on supply name
-> - * @dev: Device pointer for the consumer (of regulator) device
-> + * @dev: Device pointer for dev_printk messages
+> --- a/drivers/i2c/Makefile
+> +++ b/drivers/i2c/Makefile
+> @@ -9,6 +9,7 @@ i2c-core-objs 			:= i2c-core-base.o i2c-core-smbus.o
+>  i2c-core-$(CONFIG_ACPI)		+= i2c-core-acpi.o
+>  i2c-core-$(CONFIG_I2C_SLAVE) 	+= i2c-core-slave.o
+>  i2c-core-$(CONFIG_OF) 		+= i2c-core-of.o
+> +i2c-core-$(CONFIG_OF_DYNAMIC) 	+= i2c-core-of-prober.o
 
-dev_printk()
-
-> + * @node: Device node pointer for supply property lookup
->   * @supply: regulator supply name
->   *
->   * Extract the regulator device node corresponding to the supply name.
->   * returns the device node corresponding to the regulator if found, else
->   * returns NULL.
->   */
+Seems like all the above (except ACPI) have the same issue, i.e. TABs/spaces
+mixture.
 
 ...
 
->  /** of_regulator_dev_lookup - lookup a regulator device with device tree only
-> - * @dev: Device pointer for regulator supply lookup.
-> + * @dev: Device pointer for dev_printk messages.
+> +	ret = of_changeset_apply(ocs);
+> +	if (!ret) {
 
-Ditto.
+Why not positive conditional?
 
-> + * @node: Device node pointer for regulator supply lookup.
->   * @supply: Supply name or regulator ID.
->   *
->   * If successful, returns a struct regulator_dev that corresponds to the name
-> @@ -636,13 +639,13 @@ static struct regulator_dev *of_find_regulator_by_node(struct device_node *np)
->   * -ENODEV if lookup fails permanently, -EPROBE_DEFER if lookup could succeed
->   * in the future.
->   */
-
-...
-
-> +/**
-> + * of_regulator_get_optional - get optional regulator via device tree lookup
-> + * @dev: device used for dev_printk messages
-
-Ditto.
-
-> + * @node: device node for regulator "consumer"
-> + * @id: Supply name
-> + *
-> + * Returns a struct regulator corresponding to the regulator producer,
-> + * or IS_ERR() condition containing errno.
-> + *
-> + * This is intended for use by consumers that want to get a regulator
-> + * supply directly from a device node, and can and want to deal with
-> + * absence of such supplies. This will _not_ consider supply aliases.
-> + * See regulator_dev_lookup().
-
-Fix kernel-doc warning.
-
-> + */
+> +		/*
+> +		 * ocs is intentionally kept around as it needs to
+> +		 * exist as long as the change is applied.
+> +		 */
+> +		void *ptr __always_unused = no_free_ptr(ocs);
+> +	} else {
+> +		/* ocs needs to be explicitly cleaned up before being freed. */
+> +		of_changeset_destroy(ocs);
+> +	}
 
 -- 
 With Best Regards,
