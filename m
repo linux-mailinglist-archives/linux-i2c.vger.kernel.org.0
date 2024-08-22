@@ -1,73 +1,75 @@
-Return-Path: <linux-i2c+bounces-5701-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5702-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 077AA95BF15
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 21:45:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44BDB95BF16
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 21:47:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24FD81C22FA3
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 19:45:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA763B2116A
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Aug 2024 19:47:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235661CC160;
-	Thu, 22 Aug 2024 19:45:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1C381D0492;
+	Thu, 22 Aug 2024 19:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RqVVVseF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XSvgCjUY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A0D7CF16;
-	Thu, 22 Aug 2024 19:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7BF7CF16;
+	Thu, 22 Aug 2024 19:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724355940; cv=none; b=oK0hILxzaXoVx8R7HX7PR/zPsnwHsFJygeKJ81aQaGYrkwspLGNYeJDcnt4+iwRe+F3CB4gygqM8urzDf/e21aRxaCFgAPzkeNN+nEqhu32YtkspW9g3iPF9jhyhTQ1hakkoGfLujF4qNb5bajIBWPj5fUKiqivwMN5eSxC08gc=
+	t=1724356041; cv=none; b=hYTR6UEIb3G45Ca0YEIWcLmrsVmaza9VH5PDNhxQghzEDjTj4xbd0F8tiplMZUTZHVhqeY1AjjfI/T8nykvJQA8Iqkd0UMsWrRP3V8e1QYUrMFlhjj0VADV4vAuNkVxgcF3vJOBWDEpd0tgZOSu7jJtOPMADft+cl6q14rsWuhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724355940; c=relaxed/simple;
-	bh=nLuaHp9c/KLxay/uPGWso/mHvec43cEgGr+Jf7scjlE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=D3Pszvk5yJ1FRXkZPJeKwL0PdfGxO2obqo4p1ZG3+sruSk8wy4/v/StAWu1yDmnV8vHwO1n2i2eIU1uYl4hRadtCGxdiTZL+0aZch6jeqQkyLQGhKeMMnyfQiKe7Wk8XA0tMFtZ4d7e7CCVtOV4ciS9eYpXTVhoUERWy/P6v5yE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RqVVVseF; arc=none smtp.client-ip=209.85.218.52
+	s=arc-20240116; t=1724356041; c=relaxed/simple;
+	bh=95M2pYBv8kJ4XtKvQd2P3AMbUptJ33Vh+TVHfgXrg68=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=HXA0BpqgeaNQeaVDlxrCqPXJBSAoDAShB+j8RZwO+ubxYgPWOhddBvRUs6a15Oz+UJ3ZpoI5lPSNvte/xVSFZw9PKLfvIyiclYectLtDfytz39VSBHpFVy0shw93hLxeJmygu26lhE1axf9FhzjwEAnNhQk+WdYtWsNSycbCGi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XSvgCjUY; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a867a564911so164885366b.2;
-        Thu, 22 Aug 2024 12:45:39 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a86933829dcso135829166b.3;
+        Thu, 22 Aug 2024 12:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724355938; x=1724960738; darn=vger.kernel.org;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IeTYTgvLfgiOC9/H2l0kQ7dznzQOo/Hsjud5L+kZ+SE=;
-        b=RqVVVseFN1GhGvrLL4uU9dsbkvZvKohJabOm1LERjJUIe1PneR+PtPeyMLqXsUFZvU
-         l8rDF3WDbucSGOtEGg1TBFI+afU7QIYkBX9P8+AP3/8mLJRb8OQhQ7vSShbsjqKOgUSk
-         5O/+cEl1MeViFfBuhDOCNcG+/k/SDAMHRYrMg5ZT8fYZzNohx8wSvrfdxgJKs1scBHxA
-         6UAJFnZYNG0EeFKnaKiRhN5urM5bIup0hJnizIJbTrzulJOA2lr12YIfJzGrMhh4TthD
-         4hJyZ9Lpx+GfM7jmJfPxM9gWohpdeC0G5qAZDqR7j1Bpae00PJJqxd6/EYEqe2tr+qf4
-         K6Xg==
+        d=gmail.com; s=20230601; t=1724356038; x=1724960838; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=OS5hdBLMjeepQt5jihnSH9xs/IrBga29YUL1v7SAGNc=;
+        b=XSvgCjUYJz4cthHKz7doKSZF8ieDbqjnzWhzWXFuYM9iLs9RmIAvIqkDtwbv7lF7CD
+         7jd3GmDd7CALnlDo8HqaUXnATyuIp7yBQEEYIFduAB1IBPV7st6TWWYND8K8dIKHZ6FQ
+         k86UlnTJ0B86EkrWiMKyNXnUkedAeNcGytYgBZwD4fWgRUMjrLIwZr6HKk7+JgxiMsdd
+         fu9foKPmxvAPqJyezNIsTJktjTD4GQBwEYUavpe41LdnhVZQAPkPVSPr73Zgetif6Uqf
+         NlPSdHfHyaop2pRQ7VvX4TGN5c+NB2Feq6uUQJBL7nErEuGfWMEC2UyMFIFnx82kXi9y
+         5HrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724355938; x=1724960738;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IeTYTgvLfgiOC9/H2l0kQ7dznzQOo/Hsjud5L+kZ+SE=;
-        b=xJgoxr4IZ1rQx3NF067SaE9oy0YIjcMFqMYrstr/aAQfnaYCHRlkpWoqDArdSxcNQ1
-         HE2Oe0c5XZqVYJTq1t2o5nbWS7najt1Pdz61YMvvUqgpVpyU6oysRQGvUxD9ugE5dQ4g
-         DXSkpQp+ISiAV8pGeJyyehmKehFk6hU6nXA/efr00vD29uIchH7wyaQrGjzX46OjA4t0
-         9SX8mqAbRgBEEo1BpR/oqxMiVqnwdQ3ngjjDYsio0H+0NYaIDJVPzifpAcP5IV4GdZBp
-         ifOTIwLzaiU1VYyo9VKbIIGiFv4mZpcqgQbVU0OhMFP8Hg2qthJI9Yls0fZZIeQJ1uDc
-         si6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUhiGpXnfnIF3o6AfItposO9lzN/lyh3EEPvUk/j+LbhlN0bZGIXlhEqlIgjjyub/T0cN/LjW7i9Q6SoQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOLT3sAsZunWmFjhI3y5+UIt++96sbS8LtYVoKX7gjAzH6giGx
-	H3lNVVi4prNcB3VXUrdV1NL6Nfv8Jwhtk9/FG4JiIa288lcLVxc6
-X-Google-Smtp-Source: AGHT+IE9w2I5z7mdnn4r2XniS0jzzD8NBlxnL6j6pYfMTSnNBTnbV6lMJ1Ek7ZQG8JDtSNE0eXMgwQ==
-X-Received: by 2002:a17:907:3d8f:b0:a86:a3a6:c143 with SMTP id a640c23a62f3a-a86a3a6c9b0mr2021366b.31.1724355937410;
-        Thu, 22 Aug 2024 12:45:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724356038; x=1724960838;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OS5hdBLMjeepQt5jihnSH9xs/IrBga29YUL1v7SAGNc=;
+        b=vUNh3aDzdlpkKY2/+hwEiltrXBUQ45PnfsJi9fdIepVIz5iPF6c2iPQtHO/4tXvH/K
+         o3KoLqs7+2NIxpeqANWvsYfpra1vmsXhvMHSD/FJ7bCL/5udgi8EkFCD+DxOftlxnpNF
+         G9zGsqLvC6bzda5ldwxndX7XiWSNqm33ab8FS164Lkiz+uQhgAkJazhhvagrEAHAnJbJ
+         b9CZYYqzQ6PXEN400YCc404/nQzOpOBYp94K0GGKrl3giviltU9FtvqwECAgzFBJacqP
+         r6yZJOAnWTdIenhMLxSS2M06mgmM9et9uX9xX9gd8P/jPHWt+uG6K4KZaQLWV1GJf5jd
+         Drug==
+X-Forwarded-Encrypted: i=1; AJvYcCXtpz2mOIVcbZppVFVs8NHqvRzFHF8qnuWwXmOyzc7RX6ZDimqe62Hko4i5O7JPSSkkM6cky3AhaHLfwQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz77XyS8ebLggmGPQ70hQ6PiU+laQInluH/RlHiSp0qLUqdweLD
+	cZCG4AkY5CLORhqZsEy/jggb2lzy3eyw7KLIvB/x7Ca0f36RYGaTqUUFrJGP
+X-Google-Smtp-Source: AGHT+IFkOFckROnQ8nohuFVtnc9HBTBh5gL1t6YK4Yzlk/RQpMT85RjX6YbvzaHX3RY2qObbJi1+Qw==
+X-Received: by 2002:a17:907:1b1a:b0:a80:f6a0:9c3c with SMTP id a640c23a62f3a-a866ee6448bmr501012066b.0.1724356037805;
+        Thu, 22 Aug 2024 12:47:17 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:9dc4:2200:e9ea:53e6:39db:eab3? (dynamic-2a02-3100-9dc4-2200-e9ea-53e6-39db-eab3.310.pool.telefonica.de. [2a02:3100:9dc4:2200:e9ea:53e6:39db:eab3])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c0515a85fasm1297718a12.80.2024.08.22.12.45.36
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a868f4f41edsm156428266b.199.2024.08.22.12.47.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Aug 2024 12:45:37 -0700 (PDT)
-Message-ID: <3982b2a6-975e-40d2-bf02-2155e5c36c14@gmail.com>
-Date: Thu, 22 Aug 2024 21:45:37 +0200
+        Thu, 22 Aug 2024 12:47:17 -0700 (PDT)
+Message-ID: <55cab333-c9ca-4edd-a002-1e2b650a9f5a@gmail.com>
+Date: Thu, 22 Aug 2024 21:47:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,14 +77,14 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-US
+Subject: [PATCH v2 1/4] ALSA: ppc: Remove i2c client removal hack
+From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Wolfram Sang <wsa@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
  Takashi Iwai <tiwai@suse.com>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
  linux-sound@vger.kernel.org
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH v2 0/4] i2c: Replace lists of special clients with flagging of
- such clients
+References: <3982b2a6-975e-40d2-bf02-2155e5c36c14@gmail.com>
+Content-Language: en-US
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -126,29 +128,44 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
+In-Reply-To: <3982b2a6-975e-40d2-bf02-2155e5c36c14@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-So far lists are used to track special clients, i.e. auto-detected and
-userspace-created clients. The same functionality can be achieved much
-simpler by flagging such clients.
+The i2c_driver.clients list is internal to I2C core and is going
+to be removed.  No driver should access it. Unregister the
+i2c client explicitly before deleting the i2c driver.
 
-v2:
-- The i2c_driver.clients list is core-internal, however there's an ALSA
-  driver using it. So add patch 1 to address this first.
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ sound/ppc/keywest.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-Heiner Kallweit (4):
-  ALSA: ppc: Remove i2c client removal hack
-  i2c: Replace list-based mechanism for handling auto-detected clients
-  i2c: Replace list-based mechanism for handling userspace-created
-    clients
-  i2c: core: Remove obsolete members of i2c_adapter and i2c_client
-
- drivers/i2c/i2c-core-base.c | 108 +++++++++++-------------------------
- include/linux/i2c.h         |  10 +---
- sound/ppc/keywest.c         |   7 +--
- 3 files changed, 36 insertions(+), 89 deletions(-)
-
+diff --git a/sound/ppc/keywest.c b/sound/ppc/keywest.c
+index 3d3513d9d..4ce81ac7f 100644
+--- a/sound/ppc/keywest.c
++++ b/sound/ppc/keywest.c
+@@ -61,12 +61,6 @@ static int keywest_attach_adapter(struct i2c_adapter *adapter)
+ 		return -ENODEV;
+ 	}
+ 	
+-	/*
+-	 * Let i2c-core delete that device on driver removal.
+-	 * This is safe because i2c-core holds the core_lock mutex for us.
+-	 */
+-	list_add_tail(&keywest_ctx->client->detected,
+-		      &to_i2c_driver(keywest_ctx->client->dev.driver)->clients);
+ 	return 0;
+ }
+ 
+@@ -99,6 +93,7 @@ static struct i2c_driver keywest_driver = {
+ void snd_pmac_keywest_cleanup(struct pmac_keywest *i2c)
+ {
+ 	if (keywest_ctx && keywest_ctx == i2c) {
++		i2c_unregister_device(keywest_ctx->client);
+ 		i2c_del_driver(&keywest_driver);
+ 		keywest_ctx = NULL;
+ 	}
 -- 
 2.46.0
 
