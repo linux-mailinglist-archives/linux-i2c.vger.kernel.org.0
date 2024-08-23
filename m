@@ -1,88 +1,88 @@
-Return-Path: <linux-i2c+bounces-5737-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5738-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5512E95CE43
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:44:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C311895CE4C
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:46:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B72B286218
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 13:44:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50AEAB25F83
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 13:46:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991661885AB;
-	Fri, 23 Aug 2024 13:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BFA918660E;
+	Fri, 23 Aug 2024 13:46:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZUV8zti0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HeVtSMUN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C281885A9;
-	Fri, 23 Aug 2024 13:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260C91DA23;
+	Fri, 23 Aug 2024 13:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724420627; cv=none; b=aTIiFsD48o5cbA9g0e3D2D1qo2A62pJbYYPKxweJuq1SAdQk1IVDPR8CKfyVYfLcJtwCkx0b87qBSmyeeqzxKFRPigM9NNFwXjvSCWw82EhNGX2BOm2MiPa4X4wGnPe90tM2vYtXNjHcnMCi8E7oQMefBZhfU/mIgnQPb2NJXbs=
+	t=1724420796; cv=none; b=LtJ4X6R2wV2C6VZRLe6+Bkf/OqTH0ycsWEfbbyFxjp/2Lp6u27uVGY79LNTxvwVfMWXvEkFjgF7wI4OKBwlzWlG4nhFTSo48CfgJ/pMGyLSI34ugncG1plkzdvTYFMejtZb0bChb+3Ov32P4m9czIBYRKR+60hYw9rziyvcQlDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724420627; c=relaxed/simple;
-	bh=ba1vCLOtZm/skZMHl+kh9JAeamdeHMIUzI4d2QX8+kM=;
+	s=arc-20240116; t=1724420796; c=relaxed/simple;
+	bh=oj4nyYMV4gB+mypoya7w5RGqytEUERznSMy5TvYxR6Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qelw+MJ3M3OLvL0gaJ/B/9ho0GvtViR1rrwD3KMllEHnPcyq15EDC4FEkarhGG5vb2P0xGWD1DehHWt+qJ7IMPHGahg9TRnhXxjqLCX9rRvsoy8jG4nzGZMmfyyNOF4Eh2NTgcLOLkMHoX4P1UCAY0tJ7UVweaa8w7QIO7hqgfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZUV8zti0; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5a10835487fso3243531a12.1;
-        Fri, 23 Aug 2024 06:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724420624; x=1725025424; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ume1kDbmwm/gc9DUAKqcuXKYCh92rtcN1bT0exEyFMM=;
-        b=ZUV8zti04tjUZkapzFAbxHpxkhP7RJpM9WITsOfb35BoyrfAbppHrVOMPTc4ZcL9GQ
-         GAdSoyWRJbdg2K/ZaDkKdzXSZeGi1chfdw6BdC/c0qzOEjHl5ih//I7bl8L15oLGOo8F
-         iwfxcrollgGQfKKIaHEi7AAhfakIbklMELRLztTv2YkY/+ajx/7HA2LmFeLqGF8+JILA
-         lj02FwXggGq+k9O1v+ySLHsKiKHx11YtvGzln05U8bbKKbAlQbjl7OHjH5kWbYT/ey9q
-         vDGb7KemUDPXjtpLQTf2QpKtUn3Tr1P9GgC/IzLEjnYuh5cqUsZ8FZEGnMD/5myuaUSR
-         VK2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724420624; x=1725025424;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ume1kDbmwm/gc9DUAKqcuXKYCh92rtcN1bT0exEyFMM=;
-        b=EBj5PyeAKBP5Rg65opaxWQyOu5bVWMolnGvK1hEqPjzrmTn6sW1DACNWKfmYVT7MRx
-         HOUbiGWUA5bn65rPbOocUgk4r2Bs6hpVYRkiodLCGj+IvWlQpronZ8PaJZKn1FjpdZy4
-         kZFI8Fc/xIzjSDSqVHVcp76INhmUBxF0nVfCz33MNGiB5E30732tT5CvtPQ3Vivy3jqx
-         Qk+Xn/QCPJ2ynngYjSWxj5MVJp3DiWeI7gGX21XYIqHaE7rD9lCHkdNBU/klc2nKIn4T
-         rjTdTBwVq5ZEmHQVhVIoT9hHuDi4DthO7NNJ9xQ35+MZrYK2+V+g3kMpU1SfOyJV4qWV
-         +eEA==
-X-Forwarded-Encrypted: i=1; AJvYcCU47u62ax0PHcDMGf2Ws+LbLZujtXV4c5iyEZxbq6CMlQxInCCZlM7nUiMfxHK7FekFVfvgkNt+Rho30MsH@vger.kernel.org, AJvYcCVpwuw79p9FHEADxlEnYZ3L3t1fbrmWln3Rj+GhfkfUL1gJZeQeGDcqVxi0YFShrZnCxNMvD8jle2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrMUU9koECmaDacOUaYS+GyFXCAGhnagDoP6WwrqoLdPbv8OpE
-	9IMXnzHVxp6skMmc4gc5uBiflZOXEyiccLYOwv2r/mcEm93Htu/e
-X-Google-Smtp-Source: AGHT+IHkv19M7e8G9uSEo4T7jKRhNlTTjiPTlWEKNa6PzU2aS6HcQNrZT7CqJ7oV33O7LbaaAkrHSg==
-X-Received: by 2002:a05:6402:3489:b0:5be:facd:aa51 with SMTP id 4fb4d7f45d1cf-5c0891ab86emr1553255a12.31.1724420623614;
-        Fri, 23 Aug 2024 06:43:43 -0700 (PDT)
-Received: from eichest-laptop ([2a02:168:af72:0:48ba:80d8:cf77:1f49])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c04a3cb0bdsm2103844a12.37.2024.08.23.06.43.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Aug 2024 06:43:42 -0700 (PDT)
-Date: Fri, 23 Aug 2024 15:43:41 +0200
-From: Stefan Eichenberger <eichest@gmail.com>
-To: Fabio Estevam <festevam@gmail.com>
-Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, andi.shyti@kernel.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, Frank.Li@nxp.com,
-	francesco.dolcini@toradex.com, linux-i2c@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Subject: Re: [PATCH v2 1/4] i2c: imx: only poll for bus busy in multi master
- mode
-Message-ID: <ZsiSDUYmxPKnNdHD@eichest-laptop>
-References: <20240819072052.8722-1-eichest@gmail.com>
- <20240819072052.8722-2-eichest@gmail.com>
- <CAOMZO5CYUNESmBdZBMSMwNraQbqvvsF5fn8i+nHr=MB_T_AG7w@mail.gmail.com>
- <CAOMZO5CeT+LvQ__3GUf6teL3=8pZe5qxmFffYJX-h3E27UXwtQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rALshZsp2SDhpmr5K1Hle4xpWbsdr0XYaOStbih2uhLBN9QLj8ia5RKRTvnNhS++PAXdjjPzgstcsvmUcKitRx91vj2wmzzGh4TYLpHvElbRfgxeyl1/novGNHsvN4Hv0p/ct94oq/xYGZRVAKnPHtOsLao0ycBY2DeP87DkIzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HeVtSMUN; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724420795; x=1755956795;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=oj4nyYMV4gB+mypoya7w5RGqytEUERznSMy5TvYxR6Y=;
+  b=HeVtSMUNgveKSRtG1UIa0YX8ECUoUU1synEkhOMgpPi+Cce43Fzaddux
+   OUT66GJiGP2QDO4bvTsebq51rpIpd7yBt5hQGUoSmdZ7cnsYRbHp+1Kdf
+   gvX1wPV/8682yzQolWgIdCQjs8m9Zp4fGWp2wcJenorFwRhs3QLJ6AlX7
+   CNa/pNyvnQuRdGlHmbRN1Qj5VQ//qoZkgEyrv3D63FFizTMZj/flad/zi
+   miSYkkLS06Vx01Ah9mAwTLWXKYhyntkn5Sk15VsBSWytk5tFaXa/+6xmJ
+   k5LoQQykhjkcBvtKsiVeKtsxKvdwb/ubZ9QOeINgp5i3fgyxh7ZLPwwoS
+   Q==;
+X-CSE-ConnectionGUID: 0xZDNFumRPKusJN874HT/g==
+X-CSE-MsgGUID: kFDw9S11SOOSGqFzI8n/AQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="33456386"
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="33456386"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 06:46:34 -0700
+X-CSE-ConnectionGUID: WWhL323KQ3WR5KbQYnhSwA==
+X-CSE-MsgGUID: rYcEtennSpqHFKRmjZnPvA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="66729372"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 06:46:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1shUcV-00000000oDe-2JZj;
+	Fri, 23 Aug 2024 16:46:27 +0300
+Date: Fri, 23 Aug 2024 16:46:27 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v5 05/10] gpiolib: Add gpio_property_name_length()
+Message-ID: <ZsiSs-OrZRrDBplk@smile.fi.intel.com>
+References: <20240822092006.3134096-1-wenst@chromium.org>
+ <20240822092006.3134096-6-wenst@chromium.org>
+ <ZsdNA2b9CDRrtno2@smile.fi.intel.com>
+ <CAGXv+5H0eGEjQU8qbKjua5qfbL2FaX2bMSyQg0PMVQrFfaiR8g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -92,83 +92,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOMZO5CeT+LvQ__3GUf6teL3=8pZe5qxmFffYJX-h3E27UXwtQ@mail.gmail.com>
+In-Reply-To: <CAGXv+5H0eGEjQU8qbKjua5qfbL2FaX2bMSyQg0PMVQrFfaiR8g@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Fabio,
+On Fri, Aug 23, 2024 at 03:50:55PM +0800, Chen-Yu Tsai wrote:
+> On Thu, Aug 22, 2024 at 10:37 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Thu, Aug 22, 2024 at 05:19:58PM +0800, Chen-Yu Tsai wrote:
 
-On Thu, Aug 22, 2024 at 08:07:44AM -0300, Fabio Estevam wrote:
-> Hi Stefan and Oleksij,
-> 
-> On Wed, Aug 21, 2024 at 8:01 AM Fabio Estevam <festevam@gmail.com> wrote:
-> 
-> > This fixes a pca953x probe error on an imx8mp board running linux-stable 6.6:
+...
+
+> > > +     len = strlen(str);
 > >
-> > [    1.893260] pca953x 2-0020: failed writing register
-> > [    1.898258] pca953x 2-0020: probe with driver pca953x failed with error -11
-> >
-> > Could you please add a Fixes tag and Cc stable so that this can reach
-> > the stable kernels?
-> >
-> > Tested-by: Fabio Estevam <festevam@denx.de>
+> > If it has a thousands characters...?
 > 
-> I am sorry, but I have to withdraw my Tested-by tag.
-> 
-> For debugging purposes, I kept 'fw_devlink=off' in the kernel command
-> line and that's what made it work.
-> 
-> Removing 'fw_devlink=off' I still get the probe failure, even with all
-> the series from Stefan applied:
-> 
-> [    1.849097] pca953x 2-0020: supply vcc not found, using dummy regulator
-> [    1.855857] pca953x 2-0020: using no AI
-> [    1.859965] i2c i2c-2: <i2c_imx_write> write failed with -6
-> [    1.865578] pca953x 2-0020: failed writing register: -6
-> 
-> In my case, I can get the pca953x driver to probe successfully in one
-> of the following cases:
-> 
-> 1. Select pca953x as a module instead of built-in
-> 
-> or
-> 
-> 2. Pass 'fw_devlink=off' in the kernel command line
-> 
-> or
-> 
-> 3.  Register the i2c-imx driver as module_platform_driver():
-> 
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1586,17 +1586,7 @@ static struct platform_driver i2c_imx_driver = {
->         .id_table = imx_i2c_devtype,
->  };
-> 
-> -static int __init i2c_adap_imx_init(void)
-> -{
-> -       return platform_driver_register(&i2c_imx_driver);
-> -}
-> -subsys_initcall(i2c_adap_imx_init);
-> -
-> -static void __exit i2c_adap_imx_exit(void)
-> -{
-> -       platform_driver_unregister(&i2c_imx_driver);
-> -}
-> -module_exit(i2c_adap_imx_exit);
-> +module_platform_driver(i2c_imx_driver);
-> 
-> or
-> 
-> 4. Use the NXP vendor kernel imx_6.1.22_2.0.0 kernel
-> 
-> Stefan, do you get the arbitration errors if you try methods 2 or 3 above?
+> Shouldn't matter much? I suppose using strrchr() as you suggested
+> requires one less pass.
 
-I have tried method 3 an it did not work for me. I still have the same
-issue as before that sometimes the timeout occurs and the ads1015 will
-not ack anymore. So the patch series is still the only way I found so
-far to get rid of the problem. I also checked the datasheet of a pca953x
-device (PCAL6416A) and it doesn't seem to have a timeout mechanism.
-Therefore, I don't think we are affected by the same issue.
+Yes, this is the point.
 
-Regards,
-Stefan
+...
+
+> > This can be combined with the above
+> >
+> >         for (const char *const *p = gpio_suffixes; *p; p++) {
+> >                 /*
+> >                  * Find right-most '-' and check if remainder matches suffix.
+> >                  * If no separator found, check for no-name cases.
+> >                  */
+> >                 dash = strrchr(propname, '-');
+> 
+> I believe this line could be moved out of the for-loop. Otherwise it
+> looks much more concise compared to my version. I'll omit the comment
+> though, as it is just rehashing the kerneldoc description, and now
+> that the function is so short, it shouldn't be hard to read.
+
+Agree. And I put comment inside the loop, while it should be outside. But then,
+as you said, the function becomes so little that kernel-doc above does the job,
+hence no comment in the code needed.
+
+> I'll add you as "Suggested-by".
+
+Fine with me.
+
+> >                 if (!strcmp(dash ? dash + 1 : propname, *p))
+> >                         return i;
+> >         }
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
