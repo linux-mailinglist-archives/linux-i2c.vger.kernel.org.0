@@ -1,368 +1,264 @@
-Return-Path: <linux-i2c+bounces-5767-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5768-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D827495D373
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 18:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A527895D9CA
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 01:44:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08EEA1C21A2E
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 16:31:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6D891C23740
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 23:44:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 843BE18A94E;
-	Fri, 23 Aug 2024 16:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A4E81C8FD5;
+	Fri, 23 Aug 2024 23:44:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c/3jv6KZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VC5oNgjA"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF3F18858B;
-	Fri, 23 Aug 2024 16:31:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D41F152196;
+	Fri, 23 Aug 2024 23:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724430678; cv=none; b=sWARN/GOZcA6snbt0Q/8eOqUn9YwlfObr4A/OCcI2BiheEAhkOTk+5JMJp4c9ypf1Z/ISoOzr5Tn/Bk9g+2cCZRKrAPD8i+o9EFNljNqejYV9E2KYvx3AMD9PlXAuGr3PkmXRDrgjlF8LjgTPx566PebAe1kCpKkwGvEO6PudXg=
+	t=1724456671; cv=none; b=D2u82ucXGiGxHN6PP6EKP/k6dP/Daohv48MOumBiUazRFOA7PGEADj+Seoe+WlU7RElaXuyoN4iNBFr2A7INXe7S+fn2y4Z2zZbtRGcM+6S0Fvm4Zsed1/a0LuUpdQLlikVTGLkx9hmmsEKtMidXqu2tSF3GHMV0LBxvp2HyKUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724430678; c=relaxed/simple;
-	bh=TtHDT83tvcfqaZqVoGV/9QPUuQm+l0VHLBt7eXQfi6s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mo9fkbqVz3aDTkSRnyV9J9ouHiBCnRtf5aeJCYapyOnGZdAISbuFzvWaXRd5QkLH8/NRrfBqliol0C4oivEIkX5JhvlwUl+jXVRxSF3WTCiNXdkWa7D2KDWuTemdJDQnW4byOEP1fTkS88+9AK7izJj6jPRMWVIu05OaY/FpPuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c/3jv6KZ; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724430676; x=1755966676;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TtHDT83tvcfqaZqVoGV/9QPUuQm+l0VHLBt7eXQfi6s=;
-  b=c/3jv6KZZV+/32VvCHqwsNtv+mSfJJ3XCK1fqJiU0OxnP65AHYW/+W1x
-   Vmv13tT8hhsvaRA0tCAyOpJ/pKD9WNEYimb2o1PYnuCdLjhXZt/Q2GZLH
-   iXIUmEobDOtPsk8KA1GzFcns0jQQl5TjxXO0OY8hDAIIoXU99pZ6pduTv
-   GnQnCAISqUGPZaKpR3fYb9cxhSoa5BrSxGygn0qO+Ie/4jvdAzxUKx7M9
-   nAyD3hqZycdLLxuuiV6Ko1wgjyvxrReMfnJbNRJ5C51Pw62yqcMR0hPuk
-   ZUWccTYVaUv+UD9RHcqpuQv2DI8ouJ2byE49Pay7R3v4QF7bprTxXwVKk
-   A==;
-X-CSE-ConnectionGUID: lXiQMoSrQsCVML9DVxDYOg==
-X-CSE-MsgGUID: ptJewJCvS3yNkUXGzS0pMQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="23075898"
-X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
-   d="scan'208";a="23075898"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 09:31:15 -0700
-X-CSE-ConnectionGUID: ve+/pSCTRUOb1PWVRrfWLg==
-X-CSE-MsgGUID: nYMDMltQSF2sMjr2dOam8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
-   d="scan'208";a="62005799"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa010.fm.intel.com with ESMTP; 23 Aug 2024 09:31:12 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id AB479209; Fri, 23 Aug 2024 19:31:00 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Narasimhan.V@amd.com,
-	Borislav Petkov <bp@alien8.de>,
-	Kim Phillips <kim.phillips@amd.com>
-Subject: [PATCH v1 1/1] i2c: designware: Consolidate PM ops
-Date: Fri, 23 Aug 2024 19:28:16 +0300
-Message-ID: <20240823163057.1175381-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	s=arc-20240116; t=1724456671; c=relaxed/simple;
+	bh=PKOqjsh55k0gUWF28he/tpFo7CnOI0T+o1W/ywoIY40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b3Kj9WUUQXVGVhe6KCYrD1blsvJkZIh9Mgt2Pm1fxWKf9aIv7dAbpDeYB4sVcdCH29IZxE6BhaAxGdx5r2jSw+2dFP08s7bKku/YBMBdOo3R2qiEwHeSZXRe7LFhryfO2V6SLsWrvvXWBmFDbNC64/P0lCxbTRWewANN5ZDe2IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VC5oNgjA; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6bf75ed0e0eso12955736d6.1;
+        Fri, 23 Aug 2024 16:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724456668; x=1725061468; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ye+Ps90cwlGsT4oHvYpdjI85sw14z4sG45EsgOKagSg=;
+        b=VC5oNgjAA01PpyWUv0wOeWT+XVdaltS73h7+vLfG6RfslSabKCrAdOJ7vqCJe9ckID
+         /Iw2uyTyOZZwAM51zdTU46f1ChNNAmTtk5I8Qug33wXNC56Cv07QxEMB/mcTQp75Ufr4
+         GK+4jiIadffLc9HUz7J9lMAfVmDc5sEBDAehZcaDt/vzZCaxwKD9p0eisHa9MGdhCKUA
+         x4BYF9T7IMjj07hw6vxI8WAsa+YSBAw6TcsM8LBtVe58jc4E99n13mtKSHnslIs4g5wP
+         LR0hg8TP6RvrGv/ypZRrtmd9hy4g/3MDUHsulMw+oWfdiVc3Y3jlaUwvVcvyvOMmLyPR
+         /atA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724456668; x=1725061468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ye+Ps90cwlGsT4oHvYpdjI85sw14z4sG45EsgOKagSg=;
+        b=N/nZIqTs6PQ4whp5tigyShnJccqQt9chaslw2UXvpLn09LEOjGaBWy6M+edxajdT/O
+         vKmkOSVhpCe/EG7GPlHmxH/JvkxOUS4M6pQJ6AlU0jfpLoIeLFPsMDIs21nDJiyehCqK
+         FxCeDV6A8v0Y5c74a78Js5h+XOFfbLo+pjbY8aQkPWsql6TlJKUk+5GGdxVHnSDL6dv+
+         pzVKidlkOhJ5vJSt044rqUvc4sRQmhgy+VbrpdN7RXJtFtDTAH16VQt5mIIStIlNeMpy
+         cY7qgqHYIoQkWIkn1Utcz3aQ3j1s3vWySHxozVu5A4uNGRpmOiExg/OmBGe2DwoDibCX
+         y4Mg==
+X-Forwarded-Encrypted: i=1; AJvYcCU2YoHuDLrQJtPBL19euYWKBDbethnsUNTFoGHidrZS1Vri4wYYB2edqU5508oeH1+M6HCf+VxKplqPlAOCnA==@vger.kernel.org, AJvYcCW8ISDUgr1eXYeXzTa5e2Sylae3uhZgtKHZ465tHMVDzq4ptLldfAkowCV+sIe7T9bq0rdCG0aSSqFS@vger.kernel.org, AJvYcCX1JsXBgzmpCbCCaAQnJBfjzgVN9UXjKOIQoNtC8CN2GtpW7VIobbckh0uceGAebONoBuQmbZZc2TDuNM4=@vger.kernel.org, AJvYcCX3wYE/UlNtzv5LHy0EVuifY+rC9BKgKHk8mvGQdvKLizJkRMVOGUDlf2fC1vs2RMYKpvHj0XHr4wzF@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCUsYIQoatBummyeRQ2WI9KzSpXA3aYR1HWEQYy7w7ZUMEe67E
+	bal6RCCqlZtI5CDBK5AQnxJlBjoovzSbPb2gUQUDGdr9ibde3BjKcmVkUfh/
+X-Google-Smtp-Source: AGHT+IHsrMKOopKNem9M07VfAEBD9lUhg2aiNwXgCaC6w49RC2sZLM8rvab1CMAWFtEWOEzJpHPW4Q==
+X-Received: by 2002:a05:6214:3382:b0:6b0:90b4:1ca9 with SMTP id 6a1803df08f44-6c16dc217c1mr39081636d6.6.1724456668104;
+        Fri, 23 Aug 2024 16:44:28 -0700 (PDT)
+Received: from localhost ([2607:fea8:52a3:d200:324c:b818:b179:79b])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c162d6548csm23198626d6.68.2024.08.23.16.44.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Aug 2024 16:44:27 -0700 (PDT)
+Date: Fri, 23 Aug 2024 19:44:26 -0400
+From: Richard Acayan <mailingradian@gmail.com>
+To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Todor Tomov <todor.too@gmail.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sdm670: add camss and cci
+Message-ID: <Zske2ptZAV12YLyf@radian>
+References: <20240819221051.31489-7-mailingradian@gmail.com>
+ <20240819221051.31489-12-mailingradian@gmail.com>
+ <40cd7a52-1c60-40dc-aee6-730b5247b216@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40cd7a52-1c60-40dc-aee6-730b5247b216@linaro.org>
 
-We have the same (*) PM ops in the PCI and plaform drivers.
-Instead, consolidate that PM ops under exported variable and
-deduplicate them.
+On Wed, Aug 21, 2024 at 01:40:14PM +0300, Vladimir Zapolskiy wrote:
+> On 8/20/24 01:10, Richard Acayan wrote:
+> > Add the camera subsystem and CCI used to interface with cameras on the
+> > Snapdragon 670.
+> > 
+> > Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> > ---
+> >   arch/arm64/boot/dts/qcom/sdm670.dtsi | 188 +++++++++++++++++++++++++++
+> >   1 file changed, 188 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sdm670.dtsi b/arch/arm64/boot/dts/qcom/sdm670.dtsi
+> > index ba93cef33dbb..37bc4fa04286 100644
+> > --- a/arch/arm64/boot/dts/qcom/sdm670.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sdm670.dtsi
+> > @@ -6,6 +6,7 @@
+> >    * Copyright (c) 2022, Richard Acayan. All rights reserved.
+> >    */
+> > +#include <dt-bindings/clock/qcom,camcc-sdm845.h>
+> >   #include <dt-bindings/clock/qcom,dispcc-sdm845.h>
+> >   #include <dt-bindings/clock/qcom,gcc-sdm845.h>
+> >   #include <dt-bindings/clock/qcom,rpmh.h>
+> > @@ -1168,6 +1169,34 @@ tlmm: pinctrl@3400000 {
+> >   			gpio-ranges = <&tlmm 0 0 151>;
+> >   			wakeup-parent = <&pdc>;
+> > +			cci0_default: cci0-default-state {
+> > +				pins = "gpio17", "gpio18";
+> > +				function = "cci_i2c";
+> > +				drive-strength = <2>;
+> > +				bias-pull-up;
+> > +			};
+> > +
+> > +			cci0_sleep: cci0-sleep-state {
+> > +				pins = "gpio17", "gpio18";
+> > +				function = "cci_i2c";
+> > +				drive-strength = <2>;
+> > +				bias-pull-down;
+> > +			};
+> > +
+> > +			cci1_default: cci1-default-state {
+> > +				pins = "gpio19", "gpio20";
+> > +				function = "cci_i2c";
+> > +				drive-strength = <2>;
+> > +				bias-pull-up;
+> > +			};
+> > +
+> > +			cci1_sleep: cci1-sleep-state {
+> > +				pins = "gpio19", "gpio20";
+> > +				function = "cci_i2c";
+> > +				drive-strength = <2>;
+> > +				bias-pull-down;
+> > +			};
+> > +
+> >   			qup_i2c0_default: qup-i2c0-default-state {
+> >   				pins = "gpio0", "gpio1";
+> >   				function = "qup0";
+> > @@ -1400,6 +1429,165 @@ spmi_bus: spmi@c440000 {
+> >   			#interrupt-cells = <4>;
+> >   		};
+> > +		cci: cci@ac4a000 {
+> > +			compatible = "qcom,sdm670-cci", "qcom,msm8996-cci";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +
+> > +			reg = <0 0x0ac4a000 0 0x4000>;
+> > +			interrupts = <GIC_SPI 460 IRQ_TYPE_EDGE_RISING>;
+> > +			power-domains = <&camcc TITAN_TOP_GDSC>;
+> > +
+> > +			clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
+> > +				 <&camcc CAM_CC_SOC_AHB_CLK>,
+> > +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
+> > +				 <&camcc CAM_CC_CCI_CLK>;
+> > +			clock-names = "camnoc_axi",
+> > +				      "soc_ahb",
+> > +				      "cpas_ahb",
+> > +				      "cci";
+> > +
+> > +			assigned-clocks = <&camcc CAM_CC_CCI_CLK>;
+> > +			assigned-clock-rates = <37500000>;
+> 
+> Please remove assigned-clocks and assigned-clock-rates properties.
 
-*)
-With the subtle ACPI and P-Unit behaviour differences in PCI case.
-But this is not a problem as for ACPI we need to take care of the
-P-Unit semaphore anyway and calling PM ops for PCI makes sense as
-it might provide specific operation regions in ACPI (however there
-are no known devices on market that are using it with PCI enabled I2C).
-Note, the clocks are not in use in the PCI case.
+Doing this adds a warning to dmesg, where the clock rate is set to 19.2
+MHz by default.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
+> > +
+> > +			pinctrl-names = "default", "sleep";
+> > +			pinctrl-0 = <&cci0_default &cci1_default>;
+> > +			pinctrl-1 = <&cci0_sleep &cci1_sleep>;
+> > +
+> > +			status = "disabled";
+> > +
+> > +			cci_i2c0: i2c-bus@0 {
+> > +				reg = <0>;
+> > +				clock-frequency = <1000000>;
+> > +				#address-cells = <1>;
+> > +				#size-cells = <0>;
+> > +			};
+> > +
+> > +			cci_i2c1: i2c-bus@1 {
+> > +				reg = <1>;
+> > +				clock-frequency = <1000000>;
+> > +				#address-cells = <1>;
+> > +				#size-cells = <0>;
+> > +			};
+> > +		};
+> > +
+> > +		camss: camera-controller@ac65000 {
+> > +			compatible = "qcom,sdm670-camss";
+> > +			reg = <0 0x0ac65000 0 0x1000>,
+> > +			      <0 0x0ac66000 0 0x1000>,
+> > +			      <0 0x0ac67000 0 0x1000>,
+> > +			      <0 0x0acaf000 0 0x4000>,
+> > +			      <0 0x0acb3000 0 0x1000>,
+> > +			      <0 0x0acb6000 0 0x4000>,
+> > +			      <0 0x0acba000 0 0x1000>,
+> > +			      <0 0x0acc4000 0 0x4000>,
+> > +			      <0 0x0acc8000 0 0x1000>;
+> > +			reg-names = "csiphy0",
+> > +				    "csiphy1",
+> > +				    "csiphy2",
+> > +				    "vfe0",
+> > +				    "csid0",
+> > +				    "vfe1",
+> > +				    "csid1",
+> > +				    "vfe_lite",
+> > +				    "csid2";
+> > +
+> > +			interrupts = <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 477 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 478 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 479 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "csid0",
+> > +					  "csid1",
+> > +					  "csid2",
+> > +					  "csiphy0",
+> > +					  "csiphy1",
+> > +					  "csiphy2",
+> > +					  "vfe0",
+> > +					  "vfe1",
+> > +					  "vfe_lite";
+> > +
+> > +			clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
+> > +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
+> > +				 <&camcc CAM_CC_IFE_0_CSID_CLK>,
+> > +				 <&camcc CAM_CC_IFE_1_CSID_CLK>,
+> > +				 <&camcc CAM_CC_IFE_LITE_CSID_CLK>,
+> > +				 <&camcc CAM_CC_CSIPHY0_CLK>,
+> > +				 <&camcc CAM_CC_CSI0PHYTIMER_CLK>,
+> > +				 <&camcc CAM_CC_CSIPHY1_CLK>,
+> > +				 <&camcc CAM_CC_CSI1PHYTIMER_CLK>,
+> > +				 <&camcc CAM_CC_CSIPHY2_CLK>,
+> > +				 <&camcc CAM_CC_CSI2PHYTIMER_CLK>,
+> > +				 <&gcc GCC_CAMERA_AHB_CLK>,
+> > +				 <&gcc GCC_CAMERA_AXI_CLK>,
+> > +				 <&camcc CAM_CC_SOC_AHB_CLK>,
+> 
+> Please put two &gcc and "soc_ahb" clock sources on top, it will
+> require a change in dt bindings documentation also.
 
-This is just a split of a single patch from bigger series [1].
-It was made in no functionality change manner, except the PCI case
-described above. But since it touches PM and it was an area where
-regressions were observed I would like to have a formal Tested-by
-from AMD people to make sure we don't break their setup /
-configurations.
-
-Link: https://lore.kernel.org/linux-i2c/20231207141653.2785124-1-andriy.shevchenko@linux.intel.com/ [1]
-
- drivers/i2c/busses/i2c-designware-common.c  | 62 +++++++++++++++++++++
- drivers/i2c/busses/i2c-designware-core.h    |  3 +
- drivers/i2c/busses/i2c-designware-pcidrv.c  | 44 +--------------
- drivers/i2c/busses/i2c-designware-platdrv.c | 62 ---------------------
- 4 files changed, 67 insertions(+), 104 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index b60c55587e48..fb65fe6d8122 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -21,6 +21,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/pm.h>
- #include <linux/pm_runtime.h>
- #include <linux/property.h>
- #include <linux/regmap.h>
-@@ -736,5 +737,66 @@ void i2c_dw_disable(struct dw_i2c_dev *dev)
- }
- EXPORT_SYMBOL_GPL(i2c_dw_disable);
- 
-+static int i2c_dw_prepare(struct device *device)
-+{
-+	/*
-+	 * If the ACPI companion device object is present for this device,
-+	 * it may be accessed during suspend and resume of other devices via
-+	 * I2C operation regions, so tell the PM core and middle layers to
-+	 * avoid skipping system suspend/resume callbacks for it in that case.
-+	 */
-+	return !has_acpi_companion(device);
-+}
-+
-+static int i2c_dw_runtime_suspend(struct device *device)
-+{
-+	struct dw_i2c_dev *dev = dev_get_drvdata(device);
-+
-+	if (dev->shared_with_punit)
-+		return 0;
-+
-+	i2c_dw_disable(dev);
-+	i2c_dw_prepare_clk(dev, false);
-+
-+	return 0;
-+}
-+
-+static int i2c_dw_suspend(struct device *device)
-+{
-+	struct dw_i2c_dev *dev = dev_get_drvdata(device);
-+
-+	i2c_mark_adapter_suspended(&dev->adapter);
-+
-+	return i2c_dw_runtime_suspend(device);
-+}
-+
-+static int i2c_dw_runtime_resume(struct device *device)
-+{
-+	struct dw_i2c_dev *dev = dev_get_drvdata(device);
-+
-+	if (!dev->shared_with_punit)
-+		i2c_dw_prepare_clk(dev, true);
-+
-+	dev->init(dev);
-+
-+	return 0;
-+}
-+
-+static int i2c_dw_resume(struct device *device)
-+{
-+	struct dw_i2c_dev *dev = dev_get_drvdata(device);
-+
-+	i2c_dw_runtime_resume(device);
-+	i2c_mark_adapter_resumed(&dev->adapter);
-+
-+	return 0;
-+}
-+
-+EXPORT_GPL_DEV_PM_OPS(i2c_dw_dev_pm_ops) = {
-+	.prepare = pm_sleep_ptr(i2c_dw_prepare),
-+	LATE_SYSTEM_SLEEP_PM_OPS(i2c_dw_suspend, i2c_dw_resume)
-+	RUNTIME_PM_OPS(i2c_dw_runtime_suspend, i2c_dw_runtime_resume, NULL)
-+};
-+
- MODULE_DESCRIPTION("Synopsys DesignWare I2C bus adapter core");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 723d599cca93..c6bd6f65a2d3 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -15,6 +15,7 @@
- #include <linux/dev_printk.h>
- #include <linux/errno.h>
- #include <linux/i2c.h>
-+#include <linux/pm.h>
- #include <linux/regmap.h>
- #include <linux/types.h>
- 
-@@ -341,6 +342,8 @@ int i2c_dw_handle_tx_abort(struct dw_i2c_dev *dev);
- int i2c_dw_set_fifo_size(struct dw_i2c_dev *dev);
- u32 i2c_dw_func(struct i2c_adapter *adap);
- 
-+extern const struct dev_pm_ops i2c_dw_dev_pm_ops;
-+
- static inline void __i2c_dw_enable(struct dw_i2c_dev *dev)
- {
- 	dev->status |= STATUS_ACTIVE;
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index dd188ccd961e..04377533f3ae 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -19,6 +19,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/pm.h>
- #include <linux/pm_runtime.h>
- #include <linux/power_supply.h>
- #include <linux/sched.h>
-@@ -194,47 +195,6 @@ static struct dw_pci_controller dw_pci_controllers[] = {
- 	},
- };
- 
--static int __maybe_unused i2c_dw_pci_runtime_suspend(struct device *dev)
--{
--	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
--
--	i2c_dw_disable(i_dev);
--	return 0;
--}
--
--static int __maybe_unused i2c_dw_pci_suspend(struct device *dev)
--{
--	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
--
--	i2c_mark_adapter_suspended(&i_dev->adapter);
--
--	return i2c_dw_pci_runtime_suspend(dev);
--}
--
--static int __maybe_unused i2c_dw_pci_runtime_resume(struct device *dev)
--{
--	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
--
--	return i_dev->init(i_dev);
--}
--
--static int __maybe_unused i2c_dw_pci_resume(struct device *dev)
--{
--	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
--	int ret;
--
--	ret = i2c_dw_pci_runtime_resume(dev);
--
--	i2c_mark_adapter_resumed(&i_dev->adapter);
--
--	return ret;
--}
--
--static const struct dev_pm_ops i2c_dw_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(i2c_dw_pci_suspend, i2c_dw_pci_resume)
--	SET_RUNTIME_PM_OPS(i2c_dw_pci_runtime_suspend, i2c_dw_pci_runtime_resume, NULL)
--};
--
- static const struct property_entry dgpu_properties[] = {
- 	/* USB-C doesn't power the system */
- 	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
-@@ -402,7 +362,7 @@ static struct pci_driver dw_i2c_driver = {
- 	.probe		= i2c_dw_pci_probe,
- 	.remove		= i2c_dw_pci_remove,
- 	.driver         = {
--		.pm     = &i2c_dw_pm_ops,
-+		.pm	= pm_ptr(&i2c_dw_dev_pm_ops),
- 	},
- 	.id_table	= i2c_designware_pci_ids,
- };
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index e49c68c6e142..ec2ac5d6f74c 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -29,7 +29,6 @@
- #include <linux/reset.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
--#include <linux/suspend.h>
- #include <linux/units.h>
- 
- #include "i2c-designware-core.h"
-@@ -339,67 +338,6 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
- 	reset_control_assert(dev->rst);
- }
- 
--static int dw_i2c_plat_prepare(struct device *dev)
--{
--	/*
--	 * If the ACPI companion device object is present for this device, it
--	 * may be accessed during suspend and resume of other devices via I2C
--	 * operation regions, so tell the PM core and middle layers to avoid
--	 * skipping system suspend/resume callbacks for it in that case.
--	 */
--	return !has_acpi_companion(dev);
--}
--
--static int dw_i2c_plat_runtime_suspend(struct device *dev)
--{
--	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
--
--	if (i_dev->shared_with_punit)
--		return 0;
--
--	i2c_dw_disable(i_dev);
--	i2c_dw_prepare_clk(i_dev, false);
--
--	return 0;
--}
--
--static int dw_i2c_plat_suspend(struct device *dev)
--{
--	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
--
--	i2c_mark_adapter_suspended(&i_dev->adapter);
--
--	return dw_i2c_plat_runtime_suspend(dev);
--}
--
--static int dw_i2c_plat_runtime_resume(struct device *dev)
--{
--	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
--
--	if (!i_dev->shared_with_punit)
--		i2c_dw_prepare_clk(i_dev, true);
--
--	i_dev->init(i_dev);
--
--	return 0;
--}
--
--static int dw_i2c_plat_resume(struct device *dev)
--{
--	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
--
--	dw_i2c_plat_runtime_resume(dev);
--	i2c_mark_adapter_resumed(&i_dev->adapter);
--
--	return 0;
--}
--
--static const struct dev_pm_ops dw_i2c_dev_pm_ops = {
--	.prepare = pm_sleep_ptr(dw_i2c_plat_prepare),
--	LATE_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
--	RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
--};
--
- static const struct of_device_id dw_i2c_of_match[] = {
- 	{ .compatible = "snps,designware-i2c", },
- 	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
--- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+I'll do this for the clocks themselves because they have no parents (so
+no obvious clock sources).
 
