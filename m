@@ -1,144 +1,129 @@
-Return-Path: <linux-i2c+bounces-5758-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5759-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA5B095D0DE
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 17:04:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E63595D169
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 17:30:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 560DD1F21D9D
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:04:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C1C7284638
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6D2018950A;
-	Fri, 23 Aug 2024 15:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3217318890B;
+	Fri, 23 Aug 2024 15:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="IK5SE3zb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hnca2AZR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF7418EFF3;
-	Fri, 23 Aug 2024 15:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724425294; cv=pass; b=TFpd+AuT90DZ+IJNfd7UmPI/kbFtr4CRa7l+Jg9Wu04/Vy2OxtQ47Hi/waGmsem/EFJlyLFbNY5+hRBRLdQ1gSrbzfjn7ezY5Pv9W+6D/ZPEXr6FRGnnFgyCECrWdDxxiMPMjl3MlkLyL+1wyFyIvEou+O6Tzct+xkoo0Qvryzk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724425294; c=relaxed/simple;
-	bh=JuaCx0Pq82oRXAICTL/kXfRKm8zCFLb+N5Kgnc21/J8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qxwK/W15I4IkZS0G+fv66HSUSLgnLqt+V1Z9VqYLyL2oPcGiTa/Ds5GH/WKDGQhpP2nwS7MSuVQyb7uMxbjP9ofIBXjLYadOPv1qZP6JRkDaKjM5I8XgV6JmN97cMj65HQRFyjKJf4KwBWhWwS7ZWHg5NqR7wffO7X52/YzbaEE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=IK5SE3zb; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Delivered-To: detlev.casanova@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724425211; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Dj2mvWjbRalcqiNcTBVtZ9YUJHrpH4IwEUyv362i7BNkYtCnJA8ratxHeOATpXHR56y9zwmQoEK0UbOBfW3SxVV4GMUPq9/aEs4bXS5Uhtuc0uDdlbI4T0XM4EHbEHxkcGnt7yaiTMz/N/netouV068exKrfikRkGLzkhq1uV5U=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724425211; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=8kgt/WHayX1JQch9XAM5RYvcZqKo8amtw9I5NRTG5h4=; 
-	b=KpFITTWxehKg2SJolFUwZttz0skyz0iSMRf/XuOsJsEyBSYF1NnL8Lq0DqAN2dgC0jWbZ7uZ+mOtBdsw/9vaRRKc4oayAV/ZIuv+KLtyP0Sl6Lyr7i+XPCvzn0rPEV2Q7ZRNosTvH4VXsXysI3OA56wVQkKXjXI1zESurhH4FqU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
-	dmarc=pass header.from=<detlev.casanova@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724425211;
-	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=8kgt/WHayX1JQch9XAM5RYvcZqKo8amtw9I5NRTG5h4=;
-	b=IK5SE3zbope9OE9ZH9rnIFQdZELh8OI80Ky0BcRalysYipyNIpyzKaU2R4h+/HgQ
-	bOOSlcw8g7i2BaYVPQLhP8tyWmpBiAuL5X0QnnjzYsHQKNzQVNdQTbnRNVg4Dw5TkVK
-	TNctOhvHuhd0i0V1LE3VnHOIHtZrDKEbIC0+HBtY=
-Received: by mx.zohomail.com with SMTPS id 1724425210997501.96783202863116;
-	Fri, 23 Aug 2024 08:00:10 -0700 (PDT)
-From: Detlev Casanova <detlev.casanova@collabora.com>
-To: linux-kernel@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC56186295;
+	Fri, 23 Aug 2024 15:30:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724427043; cv=none; b=que6G8aAP6w97HW7PK2NA78Qy0V4aiHqxmWpqN+zk8lBqTq+PxgyCfB2OuEx6kmvrmvVhK2ZsmGN40VhCmTHwLNUXfK2Ay+FqzmhpNneg5F+dnt1rG6Xnok4+I4sqTV8AHzk0RS9UAiTKCzHpUMDkvS57iJ5YKkfFPYnfOT/Cc8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724427043; c=relaxed/simple;
+	bh=kCb0qf3frDaVNH10iQvkHcTOZpKtB2zTgvyCiSJzD2E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HaqxnGfVrtv/XzCSUx9j19lVyc47A4RNUuLapY2tzam9SMmRcQSRmSDLrA0fHZHRx/hpymSZ4kHd0otyrVmUdeEr5r9WrtLcNGvteFIRMtvgAe/N2PkUsTpGoH1+u19UVSsIhjMhw3Kw6Ds9sDVlCuShkdsyGCwrNg6p4hZ+ISE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hnca2AZR; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724427041; x=1755963041;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kCb0qf3frDaVNH10iQvkHcTOZpKtB2zTgvyCiSJzD2E=;
+  b=hnca2AZR731QzDVBIGdrCRmJGxyy4vSLXQ2NmuK7hM2PH9fwHEViXV2e
+   t+ABB4UVzRlFTm4DW8rJVDAiHu+5VO0riPEIfxgd2afhrEjTh6jxNo9TK
+   lYSsWuD9AY5HZVuKTMI84bJjJEADWukZCU79iZ3jZMSholuKwiPx14ksd
+   AOxSHxPtNyl3uKPfSw1vH+hvwVVomYJOGRqr0mfOUYXuyYeU4lghj5h29
+   kAjjEmbf30f2luY+REA+zPCFhijsxLm9O1DL4O6sgCcI+y2gR9q21f/1d
+   WQ8BwxvqPnWkzCtaKT/tGNGmUF2J4lKoPF2utzQc7tCZj9FBwQXvIRjEQ
+   A==;
+X-CSE-ConnectionGUID: l1otv91aQ3WBRVQCXuBr9Q==
+X-CSE-MsgGUID: 9TaE1o8SQx28CujGtxRLgg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="23070139"
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="23070139"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 08:30:40 -0700
+X-CSE-ConnectionGUID: JxwaESHRTtmmEkeIvIRAQw==
+X-CSE-MsgGUID: IYq6XVg9TJupJRutz8aNpQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="61680496"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa010.jf.intel.com with ESMTP; 23 Aug 2024 08:30:37 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 77F64209; Fri, 23 Aug 2024 18:30:36 +0300 (EEST)
+Date: Fri, 23 Aug 2024 18:30:36 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Rong Qianfeng <rongqianfeng@vivo.com>
+Cc: biju.das.jz@bp.renesas.com,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Lee Jones <lee@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Tim Lunn <tim@feathertop.org>,
-	Chukun Pan <amadeus@jmu.edu.cn>,
-	Andy Yan <andyshrk@163.com>,
-	Muhammed Efe Cetin <efectn@protonmail.com>,
-	Jagan Teki <jagan@edgeble.ai>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Ondrej Jirman <megi@xff.cz>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Jimmy Hon <honyuenkwun@gmail.com>,
-	Alexey Charkov <alchark@gmail.com>,
-	Elon Zhang <zhangzj@rock-chips.com>,
-	Elaine Zhang <zhangqing@rock-chips.com>,
-	Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	Liang Chen <cl@rock-chips.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Jamie Iles <jamie@jamieiles.com>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	dri-devel@lists.freedesktop.org,
-	linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	kernel@collabora.com
-Subject: [PATCH v2 09/12] dt-bindings: watchdog: Add rockchip,rk3576-wdt compatible
-Date: Fri, 23 Aug 2024 10:52:36 -0400
-Message-ID: <20240823150057.56141-10-detlev.casanova@collabora.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240823150057.56141-1-detlev.casanova@collabora.com>
-References: <20240823150057.56141-1-detlev.casanova@collabora.com>
+	Paul Cercueil <paul@crapouillou.net>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+	opensource.kernel@vivo.com
+Subject: Re: [PATCH v3 1/4] i2c: emev2: Use devm_clk_get_enabled() helpers
+Message-ID: <ZsirHLneY1FiOStJ@black.fi.intel.com>
+References: <20240823035116.21590-1-rongqianfeng@vivo.com>
+ <20240823035116.21590-2-rongqianfeng@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240823035116.21590-2-rongqianfeng@vivo.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-It is compatible with the other rockchip SoCs.
+On Fri, Aug 23, 2024 at 11:51:13AM +0800, Rong Qianfeng wrote:
+> The devm_clk_get_enabled() helpers:
+>     - call devm_clk_get()
+>     - call clk_prepare_enable() and register what is needed in order to
+>      call clk_disable_unprepare() when needed, as a managed resource.
+> 
+> This simplifies the code and avoids the calls to clk_disable_unprepare().
 
-Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
----
- Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
- 1 file changed, 1 insertion(+)
+...
 
-diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-index c7aab0418a320..b5a3dc3770706 100644
---- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-@@ -29,6 +29,7 @@ properties:
-               - rockchip,rk3368-wdt
-               - rockchip,rk3399-wdt
-               - rockchip,rk3568-wdt
-+              - rockchip,rk3576-wdt
-               - rockchip,rk3588-wdt
-               - rockchip,rv1108-wdt
-           - const: snps,dw-wdt
+>  	ret = platform_get_irq(pdev, 0);
+>  	if (ret < 0)
+> -		goto err_clk;
+> +		return ret;
+>  	priv->irq = ret;
+
+(1)
+
+>  	ret = devm_request_irq(&pdev->dev, priv->irq, em_i2c_irq_handler, 0,
+>  				"em_i2c", priv);
+>  	if (ret)
+> -		goto err_clk;
+> +		return ret;
+>  
+
+>  	ret = i2c_add_adapter(&priv->adap);
+
+>  
+
+While at it, you may move this blank line to (1) above.
+
+>  	if (ret)
+> -		goto err_clk;
+> +		return ret;
+
+
 -- 
-2.46.0
+With Best Regards,
+Andy Shevchenko
+
 
 
