@@ -1,57 +1,57 @@
-Return-Path: <linux-i2c+bounces-5753-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5754-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EFC595D0B5
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 17:02:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10CFF95D0BF
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 17:03:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46F5D285EDD
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:02:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35C8E1C2121D
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:03:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69BC818BBAF;
-	Fri, 23 Aug 2024 15:01:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E92918BC26;
+	Fri, 23 Aug 2024 15:01:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="N/fwxotj"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="Pt4J873Y"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A384418A94F;
-	Fri, 23 Aug 2024 15:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E48818BC09;
+	Fri, 23 Aug 2024 15:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724425272; cv=pass; b=jVlJJcfOH/b8NHJ44BOq1MUKjpcJnR2l4XC08C0H3KV2EQpnkbXx8upTsmwfUpjdlFYgTakRs/hvYnIsv1KXYq0qrPXTYdY1ogGRArn1gkwH9IdKcTpy8YYx+J0JixYR6oEOu4MIBERWUIW5lMt5DL340g2cG/jdA2Mzp1iC7Kk=
+	t=1724425275; cv=pass; b=J7z6nRiYaEnYBXqXflgf2fs1DmVA0iVLPhPclsNJ041gJRUyCkDmENtMsDWFK14nXWzmjoEBd1eks9iSWoIaPUVn55EwWU8WhmAAig5Iwwkmw7+ta3Tmhq71WY1Mm3HVyM53Eg+oohQXX6lcjVJN0/Zw1yQR8TN55Z+3voomPAI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724425272; c=relaxed/simple;
-	bh=m3TyT+VMNTcZXHRsQYzqaiW8pAH1HRv7e4XuPh7QtP0=;
+	s=arc-20240116; t=1724425275; c=relaxed/simple;
+	bh=yuKAsTUgCzRuXipuK1rNtrJuK2JySddLhKRSeoVR75E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Guw4fDhvmoUr/TKhpIppIsZV8e8gEXYsJOTx4nIXmFJ/LyQXbuzdt/Gcm7nPHvKLhiRyUh49FPSNVBtWt19i1uJZHUUs+MbsFxuqVO+txiUUmef7Nbk6aFprWOq2O4uhYrkGfjIV84F3JRa0cOKjK382Nq+rhoDFlhOdVE1w9Ww=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=N/fwxotj; arc=pass smtp.client-ip=136.143.188.12
+	 MIME-Version; b=UuZHi9bcuGNWba752TGI/4xjXxNT5if0TlOlhCOzgVpdoJDv0sJRGFmhlQQ5g0DqwG0MTPPLkF+qJWykDeH3MNAPHMhcM5LR5l+UdUQLTromXewidlcT1jRI/KyfEnjji6e0v49yh1UX/Zj0rqNZ+/rYkXQMRJW8PcNOMB3gUVA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=Pt4J873Y; arc=pass smtp.client-ip=136.143.188.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Delivered-To: detlev.casanova@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724425189; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1724425193; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=LgIcx5p6wD9hOLbHxWYJAm4BFAoLoevlU3iP6VjiIJwkrziOFsIKmH6Goa/MylleKe8oA3F+bXMtOwL/0uGcMtPcA+dDeKqH/KU9XFv5Jyj0EJecvm/5vm/cLfKq16g1uIRYJqoP4mzbOI9OzelnmIkOEUQzX0NPBT0kTIhWW7Y=
+	b=c5XKDWtz0PyZ3llsxPSMlHilIDvXol2jyO3a53kmvb/9Ysghd89439JHu+xl7yfn3W21+kiL6oxMXXtZO3qwFXZaj7srk1LuvqjrRqDNgrF9t1O2CjrAeLXh+SpQCzjYBHUx1acY/HnB85ceKo7YqTeKZgbDFCAEjk/6/3bD9jg=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724425189; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=mdnBGIhQBYoBW+X6afozEXBo8GSP0k2RnpEEvLsjO1w=; 
-	b=kpVfYztzlNMSltKWpAaKuCEWM3bl/fv2P1WtfkUzFOcNE1T96ZWBJ1I2tWhZiP+wbbYDdBwwMOrdq53k0kpQhFbK16UPHMrVHANd9uUcTeh8CIxkCMf3MpE94ijQYDe9M+Mb+IzUAtQ7SnIygCWaQ4WomOAPYYa5DYtpa4nUQfY=
+	t=1724425193; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=w+8eUF8kdoiH28K3ACgnOOrkTbvlrzHo/4iCcj6+91A=; 
+	b=k2rrIE9z2irLYbmhWgLK6FoNW+vT4KB3Igw57y9iPskCw6gIQdok1gZxSvpu1dgnJleid8adG2hOZDbV4Z9axrtwZka8JZcR6bLKM+/gB1pjyHAbas7hVrjnFY6R/BGI36ZoIBN4bbwaRLQJjETOiH4o+0GcKuHEgJxsvG1Rz3Y=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
 	dmarc=pass header.from=<detlev.casanova@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724425189;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724425193;
 	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=mdnBGIhQBYoBW+X6afozEXBo8GSP0k2RnpEEvLsjO1w=;
-	b=N/fwxotjELTMxNkAQ74RvewcOni4xIt8f6D+w71TBd1ATP0rlCZoeiPoo1qYlQyA
-	XXq1w7qIaDMK0AKmWrerf/fJlTpdw91hpPh7RSX0hLhNeaj3cGJZthWPS2KHj2gC9KW
-	2+xWc0UuzzIfU1mj+qZxg57CMga0vU5aMVirgeqk=
-Received: by mx.zohomail.com with SMTPS id 1724425187513187.44987912681415;
-	Fri, 23 Aug 2024 07:59:47 -0700 (PDT)
+	bh=w+8eUF8kdoiH28K3ACgnOOrkTbvlrzHo/4iCcj6+91A=;
+	b=Pt4J873YdlCCjX+LgOQsRZzQKe+avzUHhH7fif8iYRsNERXSGQw/9L9GiDJHw7EI
+	6sTHqs7iiUixW51iLMhLl39zJ2lp/ANEcnZ0s1GwMhNdOs6qqmFCD5ksngmy5ZXsCW4
+	vp6ITFFlIyzkFRSGKgioBtLo7gS4AwOhWgRisrqU=
+Received: by mx.zohomail.com with SMTPS id 17244251923121003.7289406206586;
+	Fri, 23 Aug 2024 07:59:52 -0700 (PDT)
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: Rob Herring <robh@kernel.org>,
@@ -105,9 +105,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-watchdog@vger.kernel.org,
 	kernel@collabora.com,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 04/12] dt-bindings: iio: adc: Add rockchip,rk3576-saradc string
-Date: Fri, 23 Aug 2024 10:52:31 -0400
-Message-ID: <20240823150057.56141-5-detlev.casanova@collabora.com>
+Subject: [PATCH v2 05/12] dt-bindings: mfd: syscon: Add rk3576 QoS register compatible
+Date: Fri, 23 Aug 2024 10:52:32 -0400
+Message-ID: <20240823150057.56141-6-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240823150057.56141-1-detlev.casanova@collabora.com>
 References: <20240823150057.56141-1-detlev.casanova@collabora.com>
@@ -120,31 +120,35 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-Add rockchip,rk3576-saradc compatible string.
-The saradc on RK3576 is compatible with the one on RK3588, so they are
-used together in an arm of the oneOf.
+Document rk3576 compatible for QoS registers.
 
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Acked-by: Heiko Stuebner <heiko@sntech.de>
 ---
- Documentation/devicetree/bindings/iio/adc/rockchip-saradc.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/rockchip-saradc.yaml b/Documentation/devicetree/bindings/iio/adc/rockchip-saradc.yaml
-index aa24b841393c0..fd93ed3991e05 100644
---- a/Documentation/devicetree/bindings/iio/adc/rockchip-saradc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/rockchip-saradc.yaml
-@@ -16,6 +16,9 @@ properties:
-       - const: rockchip,rk3066-tsadc
-       - const: rockchip,rk3399-saradc
-       - const: rockchip,rk3588-saradc
-+      - items:
-+          - const: rockchip,rk3576-saradc
-+          - const: rockchip,rk3588-saradc
-       - items:
-           - enum:
-               - rockchip,px30-saradc
+diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+index 9dc594ea36545..ce5eed77b3c81 100644
+--- a/Documentation/devicetree/bindings/mfd/syscon.yaml
++++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+@@ -103,6 +103,7 @@ select:
+           - rockchip,rk3368-qos
+           - rockchip,rk3399-qos
+           - rockchip,rk3568-qos
++          - rockchip,rk3576-qos
+           - rockchip,rk3588-qos
+           - rockchip,rv1126-qos
+           - st,spear1340-misc
+@@ -198,6 +199,7 @@ properties:
+           - rockchip,rk3368-qos
+           - rockchip,rk3399-qos
+           - rockchip,rk3568-qos
++          - rockchip,rk3576-qos
+           - rockchip,rk3588-qos
+           - rockchip,rv1126-qos
+           - st,spear1340-misc
 -- 
 2.46.0
 
