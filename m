@@ -1,57 +1,57 @@
-Return-Path: <linux-i2c+bounces-5750-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5752-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 234A795D0A4
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 17:01:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16D1295D0B2
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 17:02:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C36DD1F2398E
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:01:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 423571C20A66
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:02:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70C23189515;
-	Fri, 23 Aug 2024 15:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FC1518BB8B;
+	Fri, 23 Aug 2024 15:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="DWX7qBb3"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="e5098YGn"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6597D188A03;
-	Fri, 23 Aug 2024 15:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981E518A94F;
+	Fri, 23 Aug 2024 15:01:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724425262; cv=pass; b=u7WSqaX3mbMnmyNQsCfsrUdDYgH4K2ILwjztY+Fk38hB60H6s0HVunYkq6gwnpJVM1XqUqfUDPycj6kZaWgRFNmTXcC32PPP3YuqQO9fEnLe28EyzumZzS9IQlGDlZjYAj00rO+84ZJFxaopYUGVwq4qQqzpPKbcDu5687fR6+A=
+	t=1724425267; cv=pass; b=ox+Kxu2Xrk9F9lfz+OkEjiiLeBYE9g7opI7/Xa0evGmQQbwb5z/d5B/yANuPp1x6vzr2D1u5XpsxvsMebkggPmeyaPAnM5GZQlVbbSYG7oBBuhjiaoRtZvrf/HkRnB4lxjWdo/+6Mh05wSSej7QHD1Og7VTgxbU4yKdKIpZFngQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724425262; c=relaxed/simple;
-	bh=z2SUvqe63SJS2CE9p3BAbkn6k0MB7WbzeBcqpXPi0Fc=;
+	s=arc-20240116; t=1724425267; c=relaxed/simple;
+	bh=WoxSM+k+cuevYDguM4MWkRGwCDOOhDcmxwW0zbfkaZ4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z1/DcoF+i8QNPOwC4uE9GbV6wu5weL6p6bxHRKcsCToACbEqUPUl57C9XFcj0Thbp7CC+McTEWT/ht5rNsshnXVbjCqUKH+vFEzQI1cIG8JX2/M7kAJZi0UjmF7yBoNNhE/Ul2ksoXttg6hnNbzH0D8QaB2nIax8r2EGgtmPpok=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=DWX7qBb3; arc=pass smtp.client-ip=136.143.188.12
+	 MIME-Version; b=UslAn3xkRIZKyfebnWIq2r/sn4mLaszfiGhbu8/MrQvPN1yFnMBsrpXx7twEYVTY9Xs8yyxGC4mCB9iOr4Zzakdi9SQtyzFqCd1DDnPyUfecqRPzNrWTl4BbWddcIHPdy5cI1gxFdqikU/M66np8UuYvQKbB+rVfrij7UvlLf8U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=e5098YGn; arc=pass smtp.client-ip=136.143.188.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Delivered-To: detlev.casanova@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724425175; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1724425179; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=V058mtWqfMNDjNrAC+8DcayYvMgJRA162Wx7goubjYNDwbjvW1YzgT088AFV273Z5mIL+9+r0V6X+BNe+9HIOsLfQn8i5UtiH5VvE4cS5gHATYvguKQ4n6TcpD4PbJ2zQuGG3Nlqzh7H9csXbWMTIIbNmRQ+xDzxzb2xjltIzxQ=
+	b=DsAul3WDdchZ4uZ5AlZTxQxzkGNpoIlnoKZrAFwvA6BRCfst6gFWToRCsCYamg0GsSZH/K4mdy8I0BkWGkCSjVO+68xkTBjO0on/AV2BwL3Wk7ktHWpQC7nqKoDAXK56Ej1wmKlxN7nR6rCZ/3Or/G7oAF0eGOFZm/8ktdFCFJg=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724425175; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=R/iXHj9XRAj21UA46LKyISi4VV83aGdjDzXvd1VkqnI=; 
-	b=VXK+jAouPWKABAvyYyURLx1U1Qj89Ug5+ald6pNB1USC5OJy6AhuCx47Y5PG13/49FzQoHD8AdPUx8Rb73rqzkgjmnJ26WvVZKasS4SMti5aBnWi6WqjWVzpsx/DLw7VQWL/PNz1NQXT1yUVcZpDLA1gcPM40ry47oNo1yC4dtg=
+	t=1724425179; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=6ajTO7IZ6dJnI29NzkSoxfUKtlwc97L8eOrSr1cciEo=; 
+	b=U9UUO0/4H8TlUni80jLQEMy/LIIE7+n3Q309Q+lXKE5AEERZSNqO7VjbGuZXvQc0dEXeut8w1Qe18nEHqiHBBCrEUzzflFHvGlbb1zLawFMSCNKlCl0Z2JcymvgqhJWBnsWQtz9oTCFCAI19Wb28O2Z9UW76ifQbKG/MD3Bp1z4=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
 	dmarc=pass header.from=<detlev.casanova@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724425175;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724425179;
 	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=R/iXHj9XRAj21UA46LKyISi4VV83aGdjDzXvd1VkqnI=;
-	b=DWX7qBb3qsEMDTCyIi8k169xFK0MknKIpRmZ3w7RXStWr7jSJLXZdjqCS6jWztNu
-	7QR3345vczOQtx3SJTO0F5q5JguXtrTqnW2qCe3sm/I0PgxD7sV5tkdM2LZ8cSH3Rwz
-	fR0+/K3GrOyhfMZSMb+kOAQrXbsiRQdJfrnYt3jI=
-Received: by mx.zohomail.com with SMTPS id 1724425173443655.5992718442818;
-	Fri, 23 Aug 2024 07:59:33 -0700 (PDT)
+	bh=6ajTO7IZ6dJnI29NzkSoxfUKtlwc97L8eOrSr1cciEo=;
+	b=e5098YGnBU7nMrejFEsZyhYexCJ3KmfF/CyYaNwrrjbmewbLFXEYAnCymG5ZrxKa
+	Whes1tcwtWDXzhfIjtc6c7fj7Qb1g2AKOmrPfIv0naALWRZetuc1269UH6GhzQswjmD
+	0GXf/ngWnAUJLuyVDav1r1I8sasgpErDTA3zgL9Q=
+Received: by mx.zohomail.com with SMTPS id 1724425178195358.9270958384599;
+	Fri, 23 Aug 2024 07:59:38 -0700 (PDT)
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: Rob Herring <robh@kernel.org>,
@@ -105,9 +105,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-watchdog@vger.kernel.org,
 	kernel@collabora.com,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 01/12] dt-bindings: arm: rockchip: Add ArmSoM Sige 5
-Date: Fri, 23 Aug 2024 10:52:28 -0400
-Message-ID: <20240823150057.56141-2-detlev.casanova@collabora.com>
+Subject: [PATCH v2 02/12] dt-bindings: arm: rockchip: Add rk3576 compatible string to pmu.yaml
+Date: Fri, 23 Aug 2024 10:52:29 -0400
+Message-ID: <20240823150057.56141-3-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240823150057.56141-1-detlev.casanova@collabora.com>
 References: <20240823150057.56141-1-detlev.casanova@collabora.com>
@@ -120,30 +120,34 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-Add devicetree binding for the ArmSoM Sige 5 board.
+Add the compatible for the pmu mfd on rk3576.
 
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/arm/rockchip/pmu.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 1ef09fbfdfaf5..c3449d9646591 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -49,6 +49,11 @@ properties:
-               - anbernic,rg-arc-s
-           - const: rockchip,rk3566
+diff --git a/Documentation/devicetree/bindings/arm/rockchip/pmu.yaml b/Documentation/devicetree/bindings/arm/rockchip/pmu.yaml
+index b79c81cd9f0e6..932f981265ccb 100644
+--- a/Documentation/devicetree/bindings/arm/rockchip/pmu.yaml
++++ b/Documentation/devicetree/bindings/arm/rockchip/pmu.yaml
+@@ -26,6 +26,7 @@ select:
+           - rockchip,rk3368-pmu
+           - rockchip,rk3399-pmu
+           - rockchip,rk3568-pmu
++          - rockchip,rk3576-pmu
+           - rockchip,rk3588-pmu
+           - rockchip,rv1126-pmu
  
-+      - description: ArmSoM Sige5 board
-+        items:
-+          - const: armsom,sige5
-+          - const: rockchip,rk3576
-+
-       - description: ArmSoM Sige7 board
-         items:
-           - const: armsom,sige7
+@@ -43,6 +44,7 @@ properties:
+           - rockchip,rk3368-pmu
+           - rockchip,rk3399-pmu
+           - rockchip,rk3568-pmu
++          - rockchip,rk3576-pmu
+           - rockchip,rk3588-pmu
+           - rockchip,rv1126-pmu
+       - const: syscon
 -- 
 2.46.0
 
