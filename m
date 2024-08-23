@@ -1,56 +1,55 @@
-Return-Path: <linux-i2c+bounces-5707-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5708-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DD9A95C293
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 02:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DEB195C298
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 02:47:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 710A51C22069
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 00:46:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90FC01C21F91
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 00:47:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C98111A1;
-	Fri, 23 Aug 2024 00:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21E310953;
+	Fri, 23 Aug 2024 00:47:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a1TPkt5m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETvE99Rz"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3FCC2FC;
-	Fri, 23 Aug 2024 00:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC57EC2FC;
+	Fri, 23 Aug 2024 00:47:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724373963; cv=none; b=EauJAJDXIsBx5df1FwUSnxz2Xr3JUTHmcjNup+L3+ck1b0FtWGIdetdo1WS1W8jXDFvywfq+8sOorRNWbjeft5ZcX1gKoJqcUaE68Zopm3IJU5Dxz+fQvPuvASH593HwMSXkA3o1YT/hNs0AVHy1um5Ti+NSEoxNlvKHzCu2goI=
+	t=1724374030; cv=none; b=V/3xaLnphKZa/HTJvlDQ24EqsnF+g0NfY+yxaoXgutiRzLY35Si19ReYpWV57+A8VieyHv/myIe6/GPF7qX+tYmlCiO4/QmEj97vEhGytz15hHN00JQJXlcga2H/NzBADelyludAJ3gof7+OsatnnZx1I4Kmt2/17fF/1lUp4JE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724373963; c=relaxed/simple;
-	bh=fnZBUB96igyMIbXpv/ZMYmsJZ5S05wAISgC14EO7dvg=;
+	s=arc-20240116; t=1724374030; c=relaxed/simple;
+	bh=7c8U8P17RBpksj9StMpvTn4yepCfU1cHFPsy5wDvMkk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AXdcfOHfJy1pu8Ai3SREiEe6VI04OqtjSvvfKsMO9k7adSjfg4bMq+e+lEsEIsXj9SNYpn8zMFP1QcLcldncpraOj72vTYTCSyCCAvcPLv5aLKAXlCfpAIPrxpo4QQuy8vqBOb0zlZONj0Q77i4BYnwU6R2Na7dXY6P6Yfq8zkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a1TPkt5m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D506CC32782;
-	Fri, 23 Aug 2024 00:46:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=f7TduSQ+/l2N8tBeFqrBp9miPYUS8xt8XtW/jUjPHZAtyP/n7JoieE4b6Uqiw++kJaJ3ts3s/O2UpIkPf6TxgQ9aeAhORn584udbZzgSysy2uBjFjvBX51wSV3gluNhF8EbtfDpiluShhVd48GcmfaWU/edp7V17uvNmfcdYw7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETvE99Rz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8165C32782;
+	Fri, 23 Aug 2024 00:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724373963;
-	bh=fnZBUB96igyMIbXpv/ZMYmsJZ5S05wAISgC14EO7dvg=;
+	s=k20201202; t=1724374030;
+	bh=7c8U8P17RBpksj9StMpvTn4yepCfU1cHFPsy5wDvMkk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a1TPkt5mcqVTFyJbTA1R8g4a7HYS1iuVTGrLxlyL9Rj+8Rf8ZPycMgMjVdOf1E1lC
-	 ReYPYnRKIjetSYH4btGeRNrRfzrh4xnSaa2Pvl7vI+WIoBA5T+ow65M4P6QhSBUuVn
-	 mN3DavOAYhXqDvJsV0y7N5R23uo1AJCBbYxommrZCVatnz0fQmLg00/Cm/WZyr/60z
-	 zfEj53780BtHA7cb5uX5tKn8fROCDPYaiTM0lMf/Px64yDTdqRqC5CJdhvHcyUnwQF
-	 6+zQPGF1aiSPLJHv9qVhO25b5uHDS30vGImg0Op0i+jE8GaCxGNZIiqSNbisBw0HF3
-	 1B3Kw5Pwa4iow==
-Date: Fri, 23 Aug 2024 02:45:58 +0200
+	b=ETvE99RzkV7wy7ScnEZFfNo7mfqo4cN0bPfrINf3qZPUZCcIotWNFG80KRjN5VYH+
+	 c9aWFJXC5imdGYgrppYKkoF0qdWXp70obGY2bTvc0nWNib70IRktanIxXm4e+todtI
+	 jAsIfTQmzQoDByqH5IOnFaTPNBV6WzKsYlk/f9KKxt3L0fohd30e0Cdo8mNA6wH+44
+	 201z7ZHdNvUJm4tChJdXC0jnRHhPHFBY80ad1CL05geKp+p0kwo/OJaN6gQzpkIAuM
+	 JOIqIWyi2peY9/z7BRAqLcoH8bc0Vw1mysgY5RVex+hcDxbd5GeoKmfYPtdfeD8UCU
+	 kWxiT4nTA6Xxw==
+Date: Fri, 23 Aug 2024 02:47:06 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, Narasimhan.V@amd.com, 
-	Borislav Petkov <bp@alien8.de>, Kim Phillips <kim.phillips@amd.com>
-Subject: Re: [PATCH v1 0/5] i2c: designware: Cleanups (part 2)
-Message-ID: <oo2wbjxoe5acqeamjmnngnu2n4e2fsmclepnwvra4hmc5nn64l@q7rnxilvtebu>
-References: <20240822180411.2298991-1-andriy.shevchenko@linux.intel.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Chris Brandt <chris.brandt@renesas.com>, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] i2c: riic: Simplify unsupported bus speed handling
+Message-ID: <qkqyys7dxu6tuihlznfxjjkk3addjjokd2tlar27mozvpgarmt@ibjpgmxh7pjg>
+References: <dc6b10a56be9c90f580c50c55d829766fe2956a7.1724337807.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,36 +58,23 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240822180411.2298991-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <dc6b10a56be9c90f580c50c55d829766fe2956a7.1724337807.git.geert+renesas@glider.be>
 
-Hi Andy,
+Hi Geert,
 
-On Thu, Aug 22, 2024 at 08:58:36PM GMT, Andy Shevchenko wrote:
-> This is the subset of the patches [1] that should not affect any
-> functionality. Here are:
-> - consolidation of FW parsing and configuring code 
-> - some function renaming / dropping
-> - switching to export namespace
+On Thu, Aug 22, 2024 at 04:45:54PM GMT, Geert Uytterhoeven wrote:
+> Simplify checking for unsupported bus speeds and reporting errors by
+> factoring out the calculation of the maximum bus speed, and by using the
+> dev_err_probe() helper.
 > 
-> In any case this is Cc'ed to AMD who reported a problem in [1]
-> presumably in the patch that is *not* included here.
+> While at it, use "%u" for u32, and improve the error message.
 > 
-> Link: https://lore.kernel.org/linux-i2c/20231207141653.2785124-1-andriy.shevchenko@linux.intel.com/ [1]
-> 
-> Andy Shevchenko (5):
->   i2c: designware: Rename dw_i2c_of_configure() -> i2c_dw_of_configure()
->   i2c: designware: Consolidate firmware parsing and configuring code
->   i2c: designware: Unify the firmware type checks
->   i2c: designware: Move exports to I2C_DW namespaces
->   i2c: designware: Remove ->disable() callback
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I merged these patches in i2c/i2c-host. Normally I leave patches
-a bit longer in the list, but they have been reviewed and
-discussed.
+Thanks for the cleanup, I missed the cleaner way during code
+review :-)
 
-If there will come some observations from others, we are in time
-to change them.
+Merged to i2c/i2c-host.
 
-Thanks,
 Andi
 
