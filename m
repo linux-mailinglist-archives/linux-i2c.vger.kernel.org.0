@@ -1,401 +1,165 @@
-Return-Path: <linux-i2c+bounces-5721-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5722-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E467C95C562
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 08:24:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E04F95C5CC
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 08:50:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBF41B235CA
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 06:24:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0448E284B71
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 06:50:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528A976025;
-	Fri, 23 Aug 2024 06:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B658BEF;
+	Fri, 23 Aug 2024 06:50:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="KtXsF0Qs"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Gvv+tMGc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2103.outbound.protection.outlook.com [40.107.117.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7F63F9F9;
-	Fri, 23 Aug 2024 06:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.103
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724394244; cv=fail; b=oiCF98t7OYJJTLFSXl+nWvnjfrx0ODrMFBahJKrnJCzW5KbnCp2H0ENLhnnL6gIPRb0XTjXQ9T2LnO4BZINBMK8wGYozAyuyV6Y2mexsOGEhiX5irBGUX9B5jdfIrUsvXfRofQzmPztPQLloXdfZmOpnzn38dIF31QfCnIQjVCg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724394244; c=relaxed/simple;
-	bh=R/21dd7w3rVysAK3/KthXnJocOxJUqx2HqfTIWnDY7E=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=A2PmpdMkkO6Q+XTdwsaDFFPK0TzS5ZJpkakHaFVxmCB+ugM2/51L2p1icy96rtnwB1lSGnW5wAtLFPlNism5F2xtAM805LTBtLJBCeHYl3Bta75XM8k6IV9ju1k+VcsvWukaV1SpJvQQBuLMkRA8GRgPRrLQftzWK4tOysYl2Ak=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=KtXsF0Qs; arc=fail smtp.client-ip=40.107.117.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kOx10aedKa4mTF2UwxV1OPVV5gf7CVrJZJnOaFmnXVG/dCqvGJv7W0mnO4ZMcdVINFJEv3AnPtwSB+R9HEithowkGLkywvlChK9z91YKYoZOn04FNQt/2XQI4/jEPRSwAygRgPoCGxNwMp3GgMsFRzjvScO/lt4QMAuQnkOhoLihRdsC1A2usbFqjtLpm0tzoqOExONWh9bYKm9irwEGP6Tu/sE9kpRQ4bISeNmKjZK8BBnGSZ5zJT6rh83IfQcBcBqMqwSuDD1vSDj6IkPJbEznpP8jrFhd84lERZZuIYpxoUwgZzobChwtDjL0eb6x3R/I9v395+L2YRSWY4Au1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PX4Abp43m/babbT5xL4hZJEVo3xCGLWRyiio7u1Wkgk=;
- b=VT5aoZy4YpYqGwtVWRLAFRDDmUp0+Bu2hIk52L8CADgy3AezCjwZOERFaHqWlzt1hf6tzMM3jt0GzZVuqSiyvp/3yazoYhdf8BbP33kbmwBDbKCUD9b6YP94KPjSIxP/MIGEgwxeDO9DkxR3boyAJOE+8tQjXtg3RTmC3Rl8wlAKh/uUWqwth8H3kunS4kWnU1NRUo6cKyHdN+wUvKvs1DIVFtxQ0SFpuG6leKHT3BpZrJhd4OI6iMcHNdIx2uW/B736BHusRWWc/Vni2vWcC0vVh331vjzCOXhORZZnulYsEsEJK73K/Fnbf4st0FAp2xDsPZC6jqxHkrmBctI2hA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PX4Abp43m/babbT5xL4hZJEVo3xCGLWRyiio7u1Wkgk=;
- b=KtXsF0Qs+Mz3jO7EpeQT/elt8GZ7AfmlAGO9BDhTE9GLr9GOjX+brWFj6tOY4QHzsDUdG8I25t8mqk/41bEMIhxhTAhNBXlUIcqeqnnEjJvMuJwLLZBv9jfD6XCb3wKykSDEa9nVI9El8LpqFT3CXOtZ1Jyj7VQI/md3n63VKKBtetcFXG5Ps6qdhnoqtpA/o5jPSVzhZE/Jd2RBA0IYlB2iAgbm8mydAZrxYfp/MGTXPq0OIdlpq9X2K3a+xarIWxpFas3zW4UTipKu1NjQqva9IHaGVW3kk1iOGsOhK+D9AwHSIr8fTI4h7vKSc6eYoQdeSNTO8juR+37Qz0JxDw==
-Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
- by KL1PR06MB5942.apcprd06.prod.outlook.com (2603:1096:820:de::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Fri, 23 Aug
- 2024 06:23:54 +0000
-Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
- ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
- ([fe80::9f51:f68d:b2db:da11%5]) with mapi id 15.20.7875.019; Fri, 23 Aug 2024
- 06:23:54 +0000
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
-	"benh@kernel.crashing.org" <benh@kernel.crashing.org>, "joel@jms.id.au"
-	<joel@jms.id.au>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
-	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
-	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new register
- mode driver
-Thread-Topic: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new register
- mode driver
-Thread-Index:
- AQHa8ho4oLFWUX2yC0qHT9Kfp3UIaLIuoMcAgAJo7hCAAJOvgIAA5YcAgADIa4CAARTpgA==
-Date: Fri, 23 Aug 2024 06:23:54 +0000
-Message-ID:
- <OS8PR06MB75419F3E3A222AE941DE3007F2882@OS8PR06MB7541.apcprd06.prod.outlook.com>
-References: <20240819092850.1590758-1-ryan_chen@aspeedtech.com>
- <20240819092850.1590758-3-ryan_chen@aspeedtech.com>
- <ZsNT7LPZ7-szrgBJ@smile.fi.intel.com>
- <OS8PR06MB7541EE5BA5B400445FE0295EF28E2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <ZsXVU2qy0GIANFrc@smile.fi.intel.com>
- <OS8PR06MB7541945591A62B956DA28AD9F28F2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <Zsc9_UddBybdnM1Z@smile.fi.intel.com>
-In-Reply-To: <Zsc9_UddBybdnM1Z@smile.fi.intel.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|KL1PR06MB5942:EE_
-x-ms-office365-filtering-correlation-id: 1df2a51c-254a-4f81-7633-08dcc33c299d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|376014|1800799024|7416014|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?NYkqazPXtW/WZgpCQJJQDI/pyfsxz6GYDPSu0aqGRZC2bhKIvRttd90cfLO9?=
- =?us-ascii?Q?PBuj0bnCj60aKT13j7bqDyPzXow/JcCTX8eB4JXsOnffMagkvc7T8Qv5Im7a?=
- =?us-ascii?Q?qw0H5XraJxigeJSh9keNq2DiX0+vp9NPFr6kh+xS8yUJa85i9B6HbzlLwplT?=
- =?us-ascii?Q?cI4focibGMYttwFe486F+Ty39YNGPi2NTKfMf2Djg947MwjcxJZloCUvFtbL?=
- =?us-ascii?Q?FY2O0F/FjCh+4fwLDfJ8jlru1+y44TDZ+k1hnW9IU8ooTFffOTpX1ykml/xx?=
- =?us-ascii?Q?Hxszws0DARVHBzmnQvAKg4++aKy5jbHsrbXC0hCPJ8RfdOjqpy/EvPZ+IbzT?=
- =?us-ascii?Q?pxvERm3uXC+XVbceXg6em0kMyUkZv5/PxthesbAurGtlWmZB/gbSlq3GBEWC?=
- =?us-ascii?Q?esv4aeJvC+ZyZnfuq6jxHStJW6aTT/QxZLmZk/MmqekkRL3ghKhJtUa5coTi?=
- =?us-ascii?Q?BEj3XaSYCGuSP33bKyjCCbWIqOI7Jr31A9UEUnAtFPVtjQSlWC3wwxZ0UAH9?=
- =?us-ascii?Q?130QIiX+r1sMuB0iJnBmIiUmdfirNJkFwwAGWPFhxZ6gCjnRnOmZ0N4HQQ9y?=
- =?us-ascii?Q?F7qiir5pXLKlF0qzIkiH8LYfRMkkllGNVIQm6HJ2B3D7FvHnSjSFqeRAEkUg?=
- =?us-ascii?Q?++wBuOEC0Fog/45Wa88BCPekTbcdBjT8Vcus//w3Uoux/e/NEwl3xDku7AS1?=
- =?us-ascii?Q?qPO8zKs7spE/rcKvshZ3PDhCUFhJzzUcv4wkqUeoq5xtXQtx/drIrNLeqNSN?=
- =?us-ascii?Q?76ZDRXMDqOd7aEZHyMismG1GWrd5d+eSkQKOh/sG0H/vYF3AdS98ClGCybkE?=
- =?us-ascii?Q?bMhSxB2/i6v3N6P5k/Dx3mL1nIuDW1XaWHhf03dHdreAA9jKPwPmiDpdkf9r?=
- =?us-ascii?Q?KXs/2RZ6TI4NJZzb64RhvP+NDks+RGU7pF2m6zUAqWBvB9GNi9u8SWxOHai5?=
- =?us-ascii?Q?OmiHZeG2HDtWF0VBgZ/pPIacXJDzQeiLH1svwpZG0sz+wVTrHNG8ogfWgDc1?=
- =?us-ascii?Q?o9/nijlqu9C0qDx/9FTazqIevCflSrmOHsH0XS+3zZmn9q9T0+ae6ipMVGDL?=
- =?us-ascii?Q?F9/10B7NdXXwmNzcQolNx/hCkkPp3/iycwB+EKhRpLshen2MzLi1VNrFI3CG?=
- =?us-ascii?Q?KVwvBdXAmu1RRXmJvXscSXA0sE6VcMOp/1tyXHwsPZAPlmlnAjT03S1hHx72?=
- =?us-ascii?Q?BMRMwj6k/3hRAwIPjSev0bGua3Xfs67ubUEooZQBjuBvg3hYSRbFsMWA/9Ui?=
- =?us-ascii?Q?sZjjXLdL/H5ajqw2tTh7gGDWJy/dmTAniw3071OQO+d7yG8jh6cZED74Smls?=
- =?us-ascii?Q?ItuIr4eiDGoLypBPhEtSJDTa/N9hV3I3X06TlYKpQWzTpV/BLPBi+JVtOw0k?=
- =?us-ascii?Q?fvHaHt3fRSBEwmNTtHhTMu4MBGc/XG4KSEHdyFk6fpSm5VXswA=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?C6EtPt3a6xYhkTNQYvgCwh+3yL6t2F+y4bMpfiwUoe9DGw+n4fjDGuJLrp6j?=
- =?us-ascii?Q?O/dkV3yM8Ptgm0xqBeZ6IbaQzyNgpGVNOKhFT01GEXPBKBiCDsUKkbFSuXFb?=
- =?us-ascii?Q?uG8gZZAq1s8TS79H9MbSxqJ+H0HwWQTwUbBEb7PpMC1Jkc+8cCwnGrNK6ipM?=
- =?us-ascii?Q?fr646SiVMAIq2+Uj6ukB63U2L7g6YQBjQyK5NJ78lhpZm2SgBMaZDs7pyB4s?=
- =?us-ascii?Q?U+H77ar/NZ8som/wU3kUVyXtJPQLcHVLXcB8FLvvnMG/MjTSU7voSWp1SUCQ?=
- =?us-ascii?Q?0uQ8V1XSxmaSubmFCwZ+cF7UjM8l6/H0NCrxB3qy6e7SWT+eksiAAiarkCpp?=
- =?us-ascii?Q?8vo7FwhjNDMkxyhFFLsurBwHtLO/eW9d5aPHGhhtiW1ygKnNZKcj69Sz6IhN?=
- =?us-ascii?Q?rwr7VM10TsSAJ7zEKT2F77fI64F1tqkzQVCm6dD3dtYgmaXWND+WeNP00UWx?=
- =?us-ascii?Q?decH/i7qBOUNdiiwvbZ5LtBK6oALFpYYfGnRcPX8UUB/o5EtfUF+fbyXuTMU?=
- =?us-ascii?Q?OjuF+QIVlBssyfSxpg5wMPTiaqCi7GaTGLEb0S0dhMkK4TxWH2HnTkiIx8wz?=
- =?us-ascii?Q?kS9YVvL3jF8M9HRPRzduDMRwUoFPTv90uPFyUGETEfwuPSCh6dA7K8gHXGOw?=
- =?us-ascii?Q?K7lugD+T1n0VYmrZSQGD+9nnlE+Hg8+PNYknaKG17qsmrQ5Do75cLc+SB8Dg?=
- =?us-ascii?Q?BE36pqCRW64MxfHZHe9lb3jaUrCDJBhQ5gC35zGuhi34oqP1TnnIG+wCRSds?=
- =?us-ascii?Q?JMC+Ui8EamL2hbUmSJZDw5HvkK6ScZc+pZqelaiBPdvPnJkadxYd2fJZYb8/?=
- =?us-ascii?Q?xBOIWpC+rgAmUZEsByhilASdu8PvGqeXra6Bau+k+ma4zBd+uhOyI0AIzKh4?=
- =?us-ascii?Q?GDAXKgpSrQssJuOimzn6wQbYfAEe8f2WxMUluYibIlg1A9H6pSEx/jj2FpbO?=
- =?us-ascii?Q?Tw0+TexIaL2FAuWEsrfKO4cbpFCHG9RZRS36a18RaZsQ3xHxKczemK3AZPJV?=
- =?us-ascii?Q?6cGhWKkAJMDYcMUorTz6KVCEg28ccRXfNGIGPQGjE/8jE2GN6WTqeCMctedj?=
- =?us-ascii?Q?MMNUOD8k9AXKm6Tu6YHEq56TvQv7bcsKbwirZdGPaKwuVPRYG6PbJnWp75Wk?=
- =?us-ascii?Q?xBtr+K0foKuTCGALUcCZ1VASaYGUcVhJfqoy0m8Bz1ruchqLhzwGP40nxER1?=
- =?us-ascii?Q?gZMYAA2fU/8RIKorzZL7lxef/+F9LSIvwBwDibw7+jU00uI1XWUa1Cspgz+8?=
- =?us-ascii?Q?kOmXAGoPahBhZADdDgnaw15DAVMdruNko0tXk+pFioqiWkdPC1UFVXGo9gVK?=
- =?us-ascii?Q?TH/HoI8i9Y1/Hh4dimPGLmNVag5ztOxFug4OtBJhMiWa8KTTdDdweQjnfIa4?=
- =?us-ascii?Q?Gmc/T4eyn/CHKYS8tAcezkEVGX1lAGujf1uieY+3k+dI1PRpRTgeBEtTeVub?=
- =?us-ascii?Q?qgq5bXPTtHdsmwF9ZGQ8ZeGD2KlksVzgULqbVRd5nQayBOBu//nY8tlm9BUR?=
- =?us-ascii?Q?JudFmUOKCVkDIFJcP4fhoPyQeCSGcvq+V5045drfL+1pBJkddoMZeeILf46k?=
- =?us-ascii?Q?B0rEHRHTrkHAlYOwHpKGYusLMYs7FHjMY+9ls9Ag?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E2812EBCA
+	for <linux-i2c@vger.kernel.org>; Fri, 23 Aug 2024 06:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724395814; cv=none; b=gcxM+pBFAIRGxTHz9iowT7G6/X6bJUGn+PLa85DNHv3ewvEe3pPTinzpNxei69uX3RI4+saIhX+a08C8LrSP71bgheOnKyNoVyVyJykxi12413k43rcLsaSsd30q7dvTtlwuecGt6yeK+pnbzOFfPbDbQdhVWZ8h0s5EbAiEUtk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724395814; c=relaxed/simple;
+	bh=TB2ZVz2m724zZx6Ujp8dGDELTqfijkJibPZvF/Zp9rA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UK11+lSD/f8y5k43gE6Y7ZPyNkWEBPzsOqlzunDAmt+6d2Lvn6/gMXNT/lAcDgXBiOfPZyrK309AngkU+zvIv24None+Y4AJYT5gmZNhzcWGvFd/boAh6a7Q75mnHW75LKetvBSgp69HTkeXbGMZGpOXOVNL0ACPbUtIhdyhVbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Gvv+tMGc; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53436e04447so772592e87.1
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Aug 2024 23:50:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1724395811; x=1725000611; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TB2ZVz2m724zZx6Ujp8dGDELTqfijkJibPZvF/Zp9rA=;
+        b=Gvv+tMGcaLCAIo95DPOu4NGSBE+k6B01zkdprZ62Qutz19xQa91MkTYV4l9iQNOALQ
+         h1vkNduotd17W0OBWHEA42DcDmWOUCk5RZzEnKarDeYtqmhpxSjQSb3YRPo2RgEXb4aN
+         zoJVr8Pj7lPqp1BHY0GAtRGoH6mqIDidRTQos=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724395811; x=1725000611;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TB2ZVz2m724zZx6Ujp8dGDELTqfijkJibPZvF/Zp9rA=;
+        b=hWgSXr1SKsSicuFmHfSPMyvDMkgEjvJl0eh0LCV0hZ+EZIumuWKzb/EB5pl/F3Po7J
+         v2Qux2jxo/Q4aFoXsGR0D4S0reXUtR29iR1nG+N9YLfqSK3myn5VoLFSiUgzCJDtIP33
+         EBLCpgiSk/mR2AkRPi65h2t6LRRj7jjlDlOv3uVd3DGFr+o/++7zQv0hfgSWf+QilsBq
+         gcQXz21tr8A38pjFjbTk0TXp+8upylvS6YAzA1U1EVH2NMxlEgKY1F7NIE23tGIw2y8l
+         jubHxKfKXtP6HI7l9Avs6aTlTQBxjagijl0NRHMdZIeJO7UBM1vTRXebnJUDTFT4+Yzo
+         qTKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPw/IoC5ey/z8X6RN1BOk2Nlt2jw0gJmeKGj+DiKDQsV/5LhoiyeeUic+n/mZgi/z+BjCE9hKdz58=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJt88s9y/1D22zjisuySQR7gNx2xz+E7QVzoke/I+Wqjep7LAz
+	o3d1VQETiHASfKxnYMjpwqRWaXo1/N/lOvCulO3AgzKC/SK7uP+9LECf+mdpx9DREchAEQ8ocqw
+	rZ5eDLTyiNZnwiQbvrwyftAzup5CTFjEnUTaP
+X-Google-Smtp-Source: AGHT+IGa3g4OYj5kLrZwDfDw6Q/Usbiq0edBIdEx656twbCcRzHHZoU+PFE0vnmEsF1p09zxCx1iToHq1XRcOx6R0cA=
+X-Received: by 2002:a05:6512:3052:b0:533:4613:21be with SMTP id
+ 2adb3069b0e04-5334ca861e8mr1890209e87.18.1724395810568; Thu, 22 Aug 2024
+ 23:50:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1df2a51c-254a-4f81-7633-08dcc33c299d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2024 06:23:54.2888
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2tWtjMwbUzCIrNOE67uG7Rg9M+KLRfzjeakPPz7M8FJszDKUvx9jcNPMJa8cLERp+Rj+WwSDiHV5jW59UfxKNaLrp2IQpOyMpGe3nW1oLi4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB5942
+References: <20240822092006.3134096-1-wenst@chromium.org> <20240822092006.3134096-3-wenst@chromium.org>
+ <ZsdBddTDuvNasHNq@smile.fi.intel.com>
+In-Reply-To: <ZsdBddTDuvNasHNq@smile.fi.intel.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Fri, 23 Aug 2024 14:49:59 +0800
+Message-ID: <CAGXv+5FjwxGQgV6SdLfTeNRYbpcgwkEnCWvaZiWh4rs3bhs-2A@mail.gmail.com>
+Subject: Re: [PATCH v5 02/10] regulator: Move OF-specific regulator lookup
+ code to of_regulator.c
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
+	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Subject: Re: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new registe=
-r
-> mode driver
->=20
-> On Thu, Aug 22, 2024 at 02:24:26AM +0000, Ryan Chen wrote:
-> > > On Wed, Aug 21, 2024 at 06:43:01AM +0000, Ryan Chen wrote:
-> > > > > On Mon, Aug 19, 2024 at 05:28:49PM +0800, Ryan Chen wrote:
->=20
+On Thu, Aug 22, 2024 at 9:47=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Aug 22, 2024 at 05:19:55PM +0800, Chen-Yu Tsai wrote:
+> > There's still a bit of OF-specific code in the regulator device lookup
+> > function.
+> >
+> > Move those bits of code over to of_regulator.c, and create a new
+> > function of_regulator_dev_lookup() to encapsulate the code moved out of
+> > regulator_dev_lookup().
+> >
+> > Also mark of_find_regulator_by_node() as static, since there are no
+> > other users in other compile units.
+> >
+> > There are no functional changes.
+>
 > ...
->=20
-> > > > > > +	/* Check 0x14's SDA and SCL status */
-> > > > > > +	state =3D readl(i2c_bus->reg_base +
-> AST2600_I2CC_STS_AND_BUFF);
-> > > > > > +	if (!(state & AST2600_I2CC_SDA_LINE_STS) && (state &
-> > > > > AST2600_I2CC_SCL_LINE_STS)) {
-> > > > > > +		writel(AST2600_I2CM_RECOVER_CMD_EN,
-> i2c_bus->reg_base
-> > > +
-> > > > > AST2600_I2CM_CMD_STS);
-> > > > > > +		r =3D
-> wait_for_completion_timeout(&i2c_bus->cmd_complete,
-> > > > > i2c_bus->adap.timeout);
-> > > > > > +		if (r =3D=3D 0) {
-> > > > > > +			dev_dbg(i2c_bus->dev, "recovery timed out\n");
-> > > > > > +			ret =3D -ETIMEDOUT;
-> > > > > > +		} else {
-> > > > > > +			if (i2c_bus->cmd_err) {
-> > > > > > +				dev_dbg(i2c_bus->dev, "recovery error\n");
-> > > > > > +				ret =3D -EPROTO;
-> > > > > > +			}
-> > > > > > +		}
-> > > > > > +	}
-> > > > >
-> > > > > ret is set but maybe overridden.
-> > > >
-> > > > If will modify by following.
-> > > > 		if (r =3D=3D 0) {
-> > > > 			dev_dbg(i2c_bus->dev, "recovery timed out\n");
-> > > > 			ret =3D -ETIMEDOUT;
-> > > > 		} else if (i2c_bus->cmd_err) {
-> > > > 			dev_dbg(i2c_bus->dev, "recovery error\n");
-> > > > 			ret =3D -EPROTO;
-> > > > 		}
-> > > > If no error keep ret =3D 0;
-> > >
-> > > It doesn't change the behaviour. Still ret can be overridden below...
-> >
-> > Yes, it is expectable, previous is issue recovery command out then the
-> > following is double confirm the bus status.
-> > If bus still busy, the function still return recovery fail.
-> >
-> > Or should I modify by following?
-> > 	/* Check 0x14's SDA and SCL status */
-> > 	state =3D readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
-> > 	if (!(state & AST2600_I2CC_SDA_LINE_STS) && (state &
-> AST2600_I2CC_SCL_LINE_STS)) {
-> > 		writel(AST2600_I2CM_RECOVER_CMD_EN, i2c_bus->reg_base +
-> AST2600_I2CM_CMD_STS);
-> > 		r =3D wait_for_completion_timeout(&i2c_bus->cmd_complete,
-> i2c_bus->adap.timeout);
-> > 		if (r =3D=3D 0) {
-> > 			dev_dbg(i2c_bus->dev, "recovery timed out\n");
->=20
-> > 			ret =3D -ETIMEDOUT;
->=20
-> This assignment doesn't make sense.
+>
+> > +/**
+> > + * of_get_child_regulator - get a child regulator device node
+> > + * based on supply name
+> > + * @parent: Parent device node
+> > + * @prop_name: Combination regulator supply name and "-supply"
+> > + *
+> > + * Traverse all child nodes.
+> > + * Extract the child regulator device node corresponding to the supply=
+ name.
+> > + * returns the device node corresponding to the regulator if found, el=
+se
+> > + * returns NULL.
+>
+> At the same time you may fix kernel-doc warnings (no "Return" section) in=
+ these
+> three (on your wish you may fix others in a separate change, but it's not
+> related to this series).
 
->=20
-> > 		} else if (i2c_bus->cmd_err) {
-> > 				dev_dbg(i2c_bus->dev, "recovery error\n");
-> > 				ret =3D -EPROTO;
-> > 		}
-> > 		/* check bus status */
-> > 		state =3D readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
-> > 		if (state & AST2600_I2CC_BUS_BUSY_STS) {
-> > 			dev_dbg(i2c_bus->dev, "Can't recover bus [%x]\n", state);
-> > 			ret =3D -EPROTO;
-> > 		}
-> > 	}
->=20
-> > > > > > +	/* Recovery done */
-> > > > >
-> > > > > Even if it fails above?
-> > > >
-> > > > This will keep check the bus status, if bus busy, will give ret =3D
-> > > > -EPROTO;
-> > > >
-> > > > > > +	state =3D readl(i2c_bus->reg_base +
-> AST2600_I2CC_STS_AND_BUFF);
-> > > > > > +	if (state & AST2600_I2CC_BUS_BUSY_STS) {
-> > > > > > +		dev_dbg(i2c_bus->dev, "Can't recover bus [%x]\n", state);
-> > > > > > +		ret =3D -EPROTO;
-> > >
-> > > ...here.
->=20
-> See above.
-OH, I understand now.
-I will modify following
+As you said some other functions are missing it as well, so I'll do a
+patch separate from this series to fix them all.
 
-	if (!(state & AST2600_I2CC_SDA_LINE_STS) && (state & AST2600_I2CC_SCL_LINE=
-_STS)) {
-		writel(AST2600_I2CM_RECOVER_CMD_EN, i2c_bus->reg_base + AST2600_I2CM_CMD_=
-STS);
-		r =3D wait_for_completion_timeout(&i2c_bus->cmd_complete, i2c_bus->adap.t=
-imeout);
-		if (r =3D=3D 0) {
-			dev_dbg(i2c_bus->dev, "recovery timed out\n");
-++			writel(ctrl, i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL);
-++			return -ETIMEDOUT;
-		} else {
-			if (i2c_bus->cmd_err) {
-				dev_dbg(i2c_bus->dev, "recovery error\n");
-				ret =3D -EPROTO;
-			}
-		}
-
-> > > > > > +	}
-> > > > > > +
-> > > > > > +	/* restore original master/slave setting */
-> > > > > > +	writel(ctrl, i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL);
-> > > > > > +	return ret;
->=20
+> > + */
+>
 > ...
->=20
-> > > > > > +		i2c_bus->master_dma_addr =3D
-> > > > > > +			dma_map_single(i2c_bus->dev,
-> i2c_bus->master_safe_buf,
-> > > > > > +				       msg->len, DMA_TO_DEVICE);
-> > > > >
-> > > > > > +		if (dma_mapping_error(i2c_bus->dev,
-> > > i2c_bus->master_dma_addr))
-> > > > > {
-> > > > > > +
-> 	i2c_put_dma_safe_msg_buf(i2c_bus->master_safe_buf,
-> > > msg,
-> > > > > false);
-> > > > > > +			i2c_bus->master_safe_buf =3D NULL;
-> > > > >
-> > > > > > +			return -ENOMEM;
-> > > > >
-> > > > > Why is the dma_mapping_error() returned error code shadowed?
-> > > >
-> > > > Sorry, please point me why you are think it is shadowed?
-> > > > As I know dma_mapping_error() will return 0 or -ENOMEM. So I check
-> > > > if it
-> > > is !=3D0.
-> > > > Than return -ENOMEM.
-> > >
-> > > First of all, it is a bad style to rely on the implementation
-> > > details where it's not crucial. Second, today it may return only
-> > > ENOMEM, tomorrow it can return a different code or codes. And in
-> > > general, one should not shadow an error code without justification.
-> > >
-> > Understood, The following is better, am I right? (if yest, those will
-> > update in driver)
->=20
-> Yes.
-Thanks.
->=20
-> > 		Int ret;
-> > 		.....
-> > 		ret =3D dma_mapping_error(i2c_bus->dev,
-> i2c_bus->master_dma_addr)
-> > 		if (ret) {
-> > 			i2c_put_dma_safe_msg_buf(i2c_bus->master_safe_buf, msg,
-> false);
-> > 			i2c_bus->master_safe_buf =3D NULL;
-> > 			return ret;
-> > 		}
-> >
-> > > > > > +		}
->=20
-> ...
->=20
-> > > > > > +	if (i2c_bus->mode =3D=3D BUFF_MODE) {
-> > > > > > +		i2c_bus->buf_base =3D
-> > > > > devm_platform_get_and_ioremap_resource(pdev, 1, &res);
-> > > > > > +		if (!IS_ERR_OR_NULL(i2c_bus->buf_base))
-> > > > > > +			i2c_bus->buf_size =3D resource_size(res) / 2;
-> > > > > > +		else
-> > > > > > +			i2c_bus->mode =3D BYTE_MODE;
-> > > > >
-> > > > > What's wrong with positive conditional? And is it even possible
-> > > > > to have NULL here?
-> > > > >
-> > > > Yes, if dtsi fill not following yaml example have reg 1, that will
-> > > > failure at buffer
-> > > mode.
-> > > > And I can swith to byte mode.
-> > > >
-> > > > reg =3D <0x80 0x80>, <0xc00 0x20>;
-> > >
-> > > I was asking about if (!IS_ERR_OR_NULL(...)) line:
-> > > 1) Why 'if (!foo) {} else {}' instead of 'if (foo) {} else {}'?
-> > I will update to following.
-> > 		if (IS_ERR(i2c_bus->buf_base))
-> > 			i2c_bus->mode =3D BYTE_MODE;
-> > 		else
-> > 			i2c_bus->buf_size =3D resource_size(res) / 2;
-> >
-> > > 2) Why _NULL?
-> > 	If dtsi file is claim only 1 reg offset. reg =3D <0x80 0x80>; that wil=
-l goto byte
-> mode.
-> > 	reg =3D <0x80 0x80>, <0xc00 0x20>; can support buffer mode.
-> > 	due to 2nd is buffer register offset.
->=20
-> I have asked why IS_ERR_OR_NULL() and not IS_ERR().
->=20
-OH, I will doing by this.
-		if (IS_ERR_OR_NULL(i2c_bus->buf_base))
-			i2c_bus->mode =3D BYTE_MODE;
-		else
-			i2c_bus->buf_size =3D resource_size(res) / 2;
+>
+> > +/** of_regulator_dev_lookup - lookup a regulator device with device tr=
+ee only
+>
+> Something went wrong with the indentation.
 
->=20
+Will fix, and also add a "Return" section.
+
+
+Thanks
+ChenYu
+
+> > + * @dev: Device pointer for regulator supply lookup.
+> > + * @supply: Supply name or regulator ID.
+> > + *
+> > + * If successful, returns a struct regulator_dev that corresponds to t=
+he name
+> > + * @supply and with the embedded struct device refcount incremented by=
+ one.
+> > + * The refcount must be dropped by calling put_device().
+> > + * On failure one of the following ERR-PTR-encoded values is returned:
+> > + * -ENODEV if lookup fails permanently, -EPROBE_DEFER if lookup could =
+succeed
+> > + * in the future.
+> > + */
+>
 > --
 > With Best Regards,
 > Andy Shevchenko
->=20
-
+>
+>
 
