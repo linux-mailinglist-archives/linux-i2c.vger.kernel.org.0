@@ -1,57 +1,57 @@
-Return-Path: <linux-i2c+bounces-5757-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5758-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F32FB95D0D7
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 17:04:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA5B095D0DE
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 17:04:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADF5A2811AB
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:04:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 560DD1F21D9D
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C330D18F2DD;
-	Fri, 23 Aug 2024 15:01:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6D2018950A;
+	Fri, 23 Aug 2024 15:01:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="QkeFlMnO"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="IK5SE3zb"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9929189509;
-	Fri, 23 Aug 2024 15:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF7418EFF3;
+	Fri, 23 Aug 2024 15:01:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724425292; cv=pass; b=nX1n+6zu2NQZdG4MTN7Rj9hWLQRSUMduZzHYXoVub0PHB40ViRJiiARr/IXyMLgK2CI8EMXGrfHFRQcOHcnJME9Y/Kd1V7dQEvjIytpMwK3Tqa+JnoPmZZ1x9GNTjzFwWy6aZWV0CPmGgfjQys6Ad4FXwSuoZXirS6iPRAHM/P0=
+	t=1724425294; cv=pass; b=TFpd+AuT90DZ+IJNfd7UmPI/kbFtr4CRa7l+Jg9Wu04/Vy2OxtQ47Hi/waGmsem/EFJlyLFbNY5+hRBRLdQ1gSrbzfjn7ezY5Pv9W+6D/ZPEXr6FRGnnFgyCECrWdDxxiMPMjl3MlkLyL+1wyFyIvEou+O6Tzct+xkoo0Qvryzk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724425292; c=relaxed/simple;
-	bh=PGoKcVGpo60oTqFpgWhhD5q5542I6RWe77W3V+ZA7yE=;
+	s=arc-20240116; t=1724425294; c=relaxed/simple;
+	bh=JuaCx0Pq82oRXAICTL/kXfRKm8zCFLb+N5Kgnc21/J8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qNC2KpNxQy8Uq/XFegnUeJ0bueubFM18TIrrPn8rV5gkd91vVuZO1Su96jdlB+7menLTvU9mxMWzfpo4z3GJYF/73Zuqz2iZzqJt5lO050kQN9EzfX8Hrcyaa7hZd49prOTJJXTSHqL2mAQFt949b5i7YjQboDXAKZqqshG3DSE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=QkeFlMnO; arc=pass smtp.client-ip=136.143.188.12
+	 MIME-Version; b=qxwK/W15I4IkZS0G+fv66HSUSLgnLqt+V1Z9VqYLyL2oPcGiTa/Ds5GH/WKDGQhpP2nwS7MSuVQyb7uMxbjP9ofIBXjLYadOPv1qZP6JRkDaKjM5I8XgV6JmN97cMj65HQRFyjKJf4KwBWhWwS7ZWHg5NqR7wffO7X52/YzbaEE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=IK5SE3zb; arc=pass smtp.client-ip=136.143.188.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Delivered-To: detlev.casanova@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724425207; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1724425211; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=To5UpMT5/dliQ9H4Idja7g2lB6q3/OgG7JBdO2puJdy9Djf5sdK+gpBAvZxOeYOI8r4jO+6Ev0w3dMJFKytQLwPL2plv3xW+cHTcrWYdKJD4mBbWq1lZZ9zmlqdjYcx3xlCdGKht5Sgg7eyhPQpfH2+BGAiQ/ZaPtuL0VCOviWc=
+	b=Dj2mvWjbRalcqiNcTBVtZ9YUJHrpH4IwEUyv362i7BNkYtCnJA8ratxHeOATpXHR56y9zwmQoEK0UbOBfW3SxVV4GMUPq9/aEs4bXS5Uhtuc0uDdlbI4T0XM4EHbEHxkcGnt7yaiTMz/N/netouV068exKrfikRkGLzkhq1uV5U=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724425207; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=RJt+jrzVWF99BF0Fo6GrGjf19zn92AkfQ+3EHeIwT/0=; 
-	b=IWoRsVDLJV863cdafosDQls3Vpdk9CryGTRLWdthI0PKe5q5YQYeculBXxwPn3wMKQ464NXtuPysATXGZ9Jc/GF/FhvTYS6xLgaDkNcb/7zx+Tdy29mGWwGMlpE2va5IMl52EQ+Qx+JOlZb8nJPpmyQXxIB+VEKMr22TQaXX0E0=
+	t=1724425211; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=8kgt/WHayX1JQch9XAM5RYvcZqKo8amtw9I5NRTG5h4=; 
+	b=KpFITTWxehKg2SJolFUwZttz0skyz0iSMRf/XuOsJsEyBSYF1NnL8Lq0DqAN2dgC0jWbZ7uZ+mOtBdsw/9vaRRKc4oayAV/ZIuv+KLtyP0Sl6Lyr7i+XPCvzn0rPEV2Q7ZRNosTvH4VXsXysI3OA56wVQkKXjXI1zESurhH4FqU=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
 	dmarc=pass header.from=<detlev.casanova@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724425207;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724425211;
 	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=RJt+jrzVWF99BF0Fo6GrGjf19zn92AkfQ+3EHeIwT/0=;
-	b=QkeFlMnOxLHfEBRAzc6+a7D6H9g9m3EreFowds7hTH23Fd+jz8ad6VhQk3uo8+rZ
-	GKhqi5I4rM9Zpg3A835zpcmN+j0Aj8ay9IMV7IASINlDE3rkD+XykRyfxgg8O85m4Ov
-	PI2kc9c5i2D2wqGylVDZEDFrKg1Cg/vO0wPPBiCk=
-Received: by mx.zohomail.com with SMTPS id 1724425206314104.53567088525097;
-	Fri, 23 Aug 2024 08:00:06 -0700 (PDT)
+	bh=8kgt/WHayX1JQch9XAM5RYvcZqKo8amtw9I5NRTG5h4=;
+	b=IK5SE3zbope9OE9ZH9rnIFQdZELh8OI80Ky0BcRalysYipyNIpyzKaU2R4h+/HgQ
+	bOOSlcw8g7i2BaYVPQLhP8tyWmpBiAuL5X0QnnjzYsHQKNzQVNdQTbnRNVg4Dw5TkVK
+	TNctOhvHuhd0i0V1LE3VnHOIHtZrDKEbIC0+HBtY=
+Received: by mx.zohomail.com with SMTPS id 1724425210997501.96783202863116;
+	Fri, 23 Aug 2024 08:00:10 -0700 (PDT)
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: Rob Herring <robh@kernel.org>,
@@ -104,9 +104,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-spi@vger.kernel.org,
 	linux-watchdog@vger.kernel.org,
 	kernel@collabora.com
-Subject: [PATCH v2 08/12] dt-bindings: gpu: Add rockchip,rk3576-mali compatible
-Date: Fri, 23 Aug 2024 10:52:35 -0400
-Message-ID: <20240823150057.56141-9-detlev.casanova@collabora.com>
+Subject: [PATCH v2 09/12] dt-bindings: watchdog: Add rockchip,rk3576-wdt compatible
+Date: Fri, 23 Aug 2024 10:52:36 -0400
+Message-ID: <20240823150057.56141-10-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240823150057.56141-1-detlev.casanova@collabora.com>
 References: <20240823150057.56141-1-detlev.casanova@collabora.com>
@@ -119,25 +119,25 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-Add the rockchip,rk3576-mali in arm,mali-bifrost.yaml
+It is compatible with the other rockchip SoCs.
 
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 ---
- Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml | 1 +
+ Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-index 278399adc5506..735c7f06c24e6 100644
---- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-+++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-@@ -26,6 +26,7 @@ properties:
-               - renesas,r9a07g054-mali
-               - rockchip,px30-mali
-               - rockchip,rk3568-mali
-+              - rockchip,rk3576-mali
-           - const: arm,mali-bifrost # Mali Bifrost GPU model/revision is fully discoverable
-       - items:
-           - enum:
+diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+index c7aab0418a320..b5a3dc3770706 100644
+--- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+@@ -29,6 +29,7 @@ properties:
+               - rockchip,rk3368-wdt
+               - rockchip,rk3399-wdt
+               - rockchip,rk3568-wdt
++              - rockchip,rk3576-wdt
+               - rockchip,rk3588-wdt
+               - rockchip,rv1108-wdt
+           - const: snps,dw-wdt
 -- 
 2.46.0
 
