@@ -1,141 +1,110 @@
-Return-Path: <linux-i2c+bounces-5744-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5745-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6C5C95CF63
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 16:19:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6986695CFBD
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 16:28:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0548F1C2211F
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 14:19:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D0D81F24C1B
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 14:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01BDF1A2C0E;
-	Fri, 23 Aug 2024 14:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2BF8188A1E;
+	Fri, 23 Aug 2024 14:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Of0FALvd"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFC51A2567
-	for <linux-i2c@vger.kernel.org>; Fri, 23 Aug 2024 14:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E868A188A0C;
+	Fri, 23 Aug 2024 14:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724421917; cv=none; b=mMzyKzMjmk5t/QSVAXkK3Ns/o276/cJ0mbMS919FHUZ28VPjgRHijDXn25VSvI4WGlHcHBT+qrXyw9otYVMxusKIW3GwnhmtAPiDvZPlvBgWcaTYYGGwukR7qRuquG2ZlAtczkA7mzTXPD/RBaWKY3dw6w5VtGbykDD3NTP8KBU=
+	t=1724422056; cv=none; b=MFY6Dpcd/3gt4tVvnQCqOCDW6qmeGtFl2HdSUTOemAurpN/qoJ2QZhl0W9tHhIeSdcYDphX+5EUxla+fySm018P2SXn52/BbU6OSkrYFwr9N1QKnfrVmj08X8F2z9GZE9rupe1+01zJx+NIrn8ifGZTHBbRKYXKxIKjPMu9kw04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724421917; c=relaxed/simple;
-	bh=AqkOfvfNc9NvSgAbdMoj8rgdg2S7o/v1UgIhgeSl2/E=;
+	s=arc-20240116; t=1724422056; c=relaxed/simple;
+	bh=EKFfVkwn77LEDFmisaebUcU/6+IOgNRft2gXZEe0Z3Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mjPvYdcnBy7oGI41nKoKjmhwkm7B0o4XC1bj8AIBmJZsEHzcEKXMJXGY0eq54OdUGkFD4Ycr34UzRaA79W26gd+uIlr7f16O6nnAOVVwKnnRZFKDdhWgf/4lQGtmyKVs1gWCBu7xxX4Aw2xpa91BQ6iWu0VYmtNmI3VOX9nw7XM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1shUuS-0001dh-AO; Fri, 23 Aug 2024 16:05:00 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1shUuQ-002UxU-VB; Fri, 23 Aug 2024 16:04:58 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1shUuQ-001dQP-2U;
-	Fri, 23 Aug 2024 16:04:58 +0200
-Date: Fri, 23 Aug 2024 16:04:58 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, kernel@pengutronix.de,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-	Frank.Li@nxp.com, francesco.dolcini@toradex.com,
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 1/4] i2c: imx: only poll for bus busy in multi master
- mode
-Message-ID: <ZsiXCqNOs0dHF379@pengutronix.de>
-References: <20240819072052.8722-1-eichest@gmail.com>
- <20240819072052.8722-2-eichest@gmail.com>
- <zudo7zjlxqfxipsi2x7e4kyhckvkjreovrdmsfxp3m6clbbgzv@ina4j4qxu24r>
- <Zsbi2xcxBGE7o9uE@eichest-laptop>
- <ZscNO2PKNlK3ru_7@pengutronix.de>
- <2bbddaxyjkxfmlgmq3yqcbzo7dsb2pq5bvdatk2y4ig4iintkt@35btqkdv7sy3>
- <ZsiTMITWF0Tj3o8Q@eichest-laptop>
+	 Content-Type:Content-Disposition:In-Reply-To; b=X33Zc3v918kCFe6HUyVfFN5RiQMS3RX7wSib5/V5p1dlBRgxJ4W1t1QJoLhz34ICSjnESy7xs80N166gqNhxCiBuBX+15kRgvUvOj5qGa1YuYTdSNac3EAlZbH/QvmkpkfxOY1Jk2dh+M4x0prIaNJoWTMRthROd7B02uIzLSXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Of0FALvd; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724422055; x=1755958055;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EKFfVkwn77LEDFmisaebUcU/6+IOgNRft2gXZEe0Z3Y=;
+  b=Of0FALvdDUDjC36XIIt9TN8xRvz1Wec0OMu1Hl83QyIUeXkQqUAI10Lm
+   ZuOiqNeFp+nP25MftlPZ6bVLK+6qn9k/O9H/lx9+L/+lyqhUiM/+7ZJnj
+   svmRKY4KWyeLSQgtC4TPZF5PYKK2/FGj58iOpv8sk/kFW7bV/5SMseJbB
+   EvM8/qLdK1t4trrur+1MJlgp2MNpldDOp22El+VzVg6RU5P8YdZIVvKN6
+   gCs7BG4bJ+fC0cs1bSffZn/KgSMW+XcuXgKi+o7+xFzBryIGOZC1quYak
+   eQFTtVQBYYQBbQdlPEq1QhdDznMLRA/sC0tObxNAQ0qW5pnjXecYgECLO
+   w==;
+X-CSE-ConnectionGUID: EHT8SooIRBuKQrcNp6DlcA==
+X-CSE-MsgGUID: OH2jIAhbRBmovE3TwYhSOw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="22488907"
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="22488907"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 07:07:34 -0700
+X-CSE-ConnectionGUID: Etlo/9RQRVqD3PMmpI7iIw==
+X-CSE-MsgGUID: dp2F2OqHR7mWtEylenYbfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
+   d="scan'208";a="92531216"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 07:07:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1shUwK-00000000oZw-2QCI;
+	Fri, 23 Aug 2024 17:06:56 +0300
+Date: Fri, 23 Aug 2024 17:06:56 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jiawen Wu <jiawenwu@trustnetic.com>
+Cc: andi.shyti@kernel.org, jarkko.nikula@linux.intel.com,
+	mika.westerberg@linux.intel.com, jsd@semihalf.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, rmk+kernel@armlinux.org.uk,
+	piotr.raczynski@intel.com, andrew@lunn.ch,
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+	mengyuanlou@net-swift.com, duanqiangwen@net-swift.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH net 2/3] i2c: designware: add device private data passing
+ to lock functions
+Message-ID: <ZsiXgHDZi8DpgOWs@smile.fi.intel.com>
+References: <20240823030242.3083528-1-jiawenwu@trustnetic.com>
+ <20240823030242.3083528-3-jiawenwu@trustnetic.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZsiTMITWF0Tj3o8Q@eichest-laptop>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20240823030242.3083528-3-jiawenwu@trustnetic.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Aug 23, 2024 at 03:48:32PM +0200, Stefan Eichenberger wrote:
-> Hi Andi,
-> 
-> On Fri, Aug 23, 2024 at 02:35:54AM +0200, Andi Shyti wrote:
-> > Hi,
-> > 
-> > On Thu, Aug 22, 2024 at 12:04:43PM GMT, Oleksij Rempel wrote:
-> > > On Thu, Aug 22, 2024 at 09:03:55AM +0200, Stefan Eichenberger wrote:
-> > > > Hi Andi,
-> > > > 
-> > > > On Thu, Aug 22, 2024 at 12:21:30AM +0200, Andi Shyti wrote:
-> > > > > Hi Stefan,
-> > > > > 
-> > > > > > @@ -1468,6 +1473,8 @@ static int i2c_imx_probe(struct platform_device *pdev)
-> > > > > >  		goto rpm_disable;
-> > > > > >  	}
-> > > > > >  
-> > > > > > +	i2c_imx->multi_master = of_property_read_bool(pdev->dev.of_node, "multi-master");
-> > > > > > +
-> > > > > 
-> > > > > you might also want to add the multi-master boolean property in
-> > > > > the binding.
-> > > > 
-> > > > We discussed this internally and weren't sure when it was required
-> > > > because e.g. i2c-rcar and i2c-tegra don't have it documented in their
-> > > > bindings. Is it still required if it is part of the dt-schema?
-> > > > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/i2c-controller.yaml
-> > > 
-> > > The i2c-imx.yaml has "unevaluatedProperties: false", which fill discard
-> > > every thing not in this yaml
-> > > 
-> > > > If so, I will add it in the next version.
-> > > 
-> > > Yes, please.
-> > 
-> > sorry for the confusion, please don't add it. I had a chat with
-> > Krzysztof and I will quote him: "this is a core property, coming
-> > with dtschema, so they dont need to update bindings".
-> > 
-> > He also sent a cleanup to remove the only binding using it.
-> 
-> No problem, thanks for the clarification. 
-> 
-> Should I still separate the multi-master patch from the rest of the
-> series, even though it doesn't seem to fix the problem Fabio sees? I did
-> some more testing today and the workarounds he found do not solve the
-> problem I see, so they are definitely not the same.
+On Fri, Aug 23, 2024 at 11:02:41AM +0800, Jiawen Wu wrote:
+> In order to add the hardware lock for Wangxun devices with minimal
+> modification, pass struct dw_i2c_dev to the acquire and release lock
+> functions.
 
-I'll try to review your DMA patches next week.
+...
 
-Regards,
-Oleksij
+> +static int iosf_mbi_block_punit_i2c_access_dev(struct dw_i2c_dev *dev)
+
+> +static void iosf_mbi_unblock_punit_i2c_access_dev(struct dw_i2c_dev *dev)
+
+Rather name them in accordance with the namespace of this module.
+
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+With Best Regards,
+Andy Shevchenko
+
+
 
