@@ -1,89 +1,88 @@
-Return-Path: <linux-i2c+bounces-5736-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5737-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF9F695CE3F
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:43:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5512E95CE43
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 15:44:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F27A01C2143C
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 13:43:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B72B286218
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 13:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFF1187FFD;
-	Fri, 23 Aug 2024 13:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991661885AB;
+	Fri, 23 Aug 2024 13:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RvKoed14"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZUV8zti0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04049186E55;
-	Fri, 23 Aug 2024 13:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C281885A9;
+	Fri, 23 Aug 2024 13:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724420611; cv=none; b=EHq9k2aOUfJiN7wUa7gP6G58+kU0Fg0yWimbMThrrantpkSlUeh5egBYAnahIr27Xaz/Jiyzdn7Wydo7d+Mw1sJvOh8XEslRs53ospnvj+ZvMpDR3zR9Gkyn2x8qc1zu3aFSvE5sNc1KGC/xmgDE4Xta3Q6FFJGXliRElkg/nMQ=
+	t=1724420627; cv=none; b=aTIiFsD48o5cbA9g0e3D2D1qo2A62pJbYYPKxweJuq1SAdQk1IVDPR8CKfyVYfLcJtwCkx0b87qBSmyeeqzxKFRPigM9NNFwXjvSCWw82EhNGX2BOm2MiPa4X4wGnPe90tM2vYtXNjHcnMCi8E7oQMefBZhfU/mIgnQPb2NJXbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724420611; c=relaxed/simple;
-	bh=ib4sJFch59+GHVbbNODHxykPpCp6swAnQhqC1AHvoNM=;
+	s=arc-20240116; t=1724420627; c=relaxed/simple;
+	bh=ba1vCLOtZm/skZMHl+kh9JAeamdeHMIUzI4d2QX8+kM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m1+wSPbP5aMX5YgZLh3hNkT2ayhivwKi7zH3WEjXRhB8qjsWCyC5NprWuHHmnA6deJy4He8tB4e0xIYSV1jd4MjUNgpFEOtTx4WXFNhEB3zgzYc9gZCtXZlccpfuYLgi5z8inwB7meTkmCeBNclwHLDvYh0MKJ2X9xLfHRTXkjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RvKoed14; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724420610; x=1755956610;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ib4sJFch59+GHVbbNODHxykPpCp6swAnQhqC1AHvoNM=;
-  b=RvKoed14wIVS7WWbe2RILh/yRicWZ0WL0A0AW+JtRxsAgrgaGMyF9dl4
-   vzwOcfjh1GHgL65wPAffcZDDaZpeUCNol5EOiq0FVE9ISLml8wEtaTrBR
-   CcriEG7eMwWEiI7WR8QIUeYmN0XY4PMFMQMLj+HPvFZYn3QcH9mhRtnvz
-   aKdtqZ1A5Q7I8OmwUaz25InCGlCDFTtmUbxRhdLSSseujcf6yNlOF5U32
-   h2AHepGNGEj5ze+lj/WtaaxyhOGlAymFzbm3FzH2F05QozLXGSoNCraMZ
-   Z3dS9f3AveHvYs6Xx/nUadlBZKP+V/Y7o/eFNUmMblU3VfkGXBzMoAGlw
-   A==;
-X-CSE-ConnectionGUID: BoaZ8bdPTb+OjzvpNWABUw==
-X-CSE-MsgGUID: ZSNoBZc3T76LAXnOXVDy2w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="40352809"
-X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
-   d="scan'208";a="40352809"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 06:43:29 -0700
-X-CSE-ConnectionGUID: S+vBFfveTkGCT/5A9bwGUw==
-X-CSE-MsgGUID: IoLQjP50Q9K73aFOWBIlnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
-   d="scan'208";a="84980367"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 06:43:25 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1shUZW-00000000oAz-2JFe;
-	Fri, 23 Aug 2024 16:43:22 +0300
-Date: Fri, 23 Aug 2024 16:43:22 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v5 02/10] regulator: Move OF-specific regulator lookup
- code to of_regulator.c
-Message-ID: <ZsiR-kizxnvZufgR@smile.fi.intel.com>
-References: <20240822092006.3134096-1-wenst@chromium.org>
- <20240822092006.3134096-3-wenst@chromium.org>
- <ZsdBddTDuvNasHNq@smile.fi.intel.com>
- <CAGXv+5FjwxGQgV6SdLfTeNRYbpcgwkEnCWvaZiWh4rs3bhs-2A@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qelw+MJ3M3OLvL0gaJ/B/9ho0GvtViR1rrwD3KMllEHnPcyq15EDC4FEkarhGG5vb2P0xGWD1DehHWt+qJ7IMPHGahg9TRnhXxjqLCX9rRvsoy8jG4nzGZMmfyyNOF4Eh2NTgcLOLkMHoX4P1UCAY0tJ7UVweaa8w7QIO7hqgfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZUV8zti0; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5a10835487fso3243531a12.1;
+        Fri, 23 Aug 2024 06:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724420624; x=1725025424; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ume1kDbmwm/gc9DUAKqcuXKYCh92rtcN1bT0exEyFMM=;
+        b=ZUV8zti04tjUZkapzFAbxHpxkhP7RJpM9WITsOfb35BoyrfAbppHrVOMPTc4ZcL9GQ
+         GAdSoyWRJbdg2K/ZaDkKdzXSZeGi1chfdw6BdC/c0qzOEjHl5ih//I7bl8L15oLGOo8F
+         iwfxcrollgGQfKKIaHEi7AAhfakIbklMELRLztTv2YkY/+ajx/7HA2LmFeLqGF8+JILA
+         lj02FwXggGq+k9O1v+ySLHsKiKHx11YtvGzln05U8bbKKbAlQbjl7OHjH5kWbYT/ey9q
+         vDGb7KemUDPXjtpLQTf2QpKtUn3Tr1P9GgC/IzLEjnYuh5cqUsZ8FZEGnMD/5myuaUSR
+         VK2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724420624; x=1725025424;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ume1kDbmwm/gc9DUAKqcuXKYCh92rtcN1bT0exEyFMM=;
+        b=EBj5PyeAKBP5Rg65opaxWQyOu5bVWMolnGvK1hEqPjzrmTn6sW1DACNWKfmYVT7MRx
+         HOUbiGWUA5bn65rPbOocUgk4r2Bs6hpVYRkiodLCGj+IvWlQpronZ8PaJZKn1FjpdZy4
+         kZFI8Fc/xIzjSDSqVHVcp76INhmUBxF0nVfCz33MNGiB5E30732tT5CvtPQ3Vivy3jqx
+         Qk+Xn/QCPJ2ynngYjSWxj5MVJp3DiWeI7gGX21XYIqHaE7rD9lCHkdNBU/klc2nKIn4T
+         rjTdTBwVq5ZEmHQVhVIoT9hHuDi4DthO7NNJ9xQ35+MZrYK2+V+g3kMpU1SfOyJV4qWV
+         +eEA==
+X-Forwarded-Encrypted: i=1; AJvYcCU47u62ax0PHcDMGf2Ws+LbLZujtXV4c5iyEZxbq6CMlQxInCCZlM7nUiMfxHK7FekFVfvgkNt+Rho30MsH@vger.kernel.org, AJvYcCVpwuw79p9FHEADxlEnYZ3L3t1fbrmWln3Rj+GhfkfUL1gJZeQeGDcqVxi0YFShrZnCxNMvD8jle2Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrMUU9koECmaDacOUaYS+GyFXCAGhnagDoP6WwrqoLdPbv8OpE
+	9IMXnzHVxp6skMmc4gc5uBiflZOXEyiccLYOwv2r/mcEm93Htu/e
+X-Google-Smtp-Source: AGHT+IHkv19M7e8G9uSEo4T7jKRhNlTTjiPTlWEKNa6PzU2aS6HcQNrZT7CqJ7oV33O7LbaaAkrHSg==
+X-Received: by 2002:a05:6402:3489:b0:5be:facd:aa51 with SMTP id 4fb4d7f45d1cf-5c0891ab86emr1553255a12.31.1724420623614;
+        Fri, 23 Aug 2024 06:43:43 -0700 (PDT)
+Received: from eichest-laptop ([2a02:168:af72:0:48ba:80d8:cf77:1f49])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c04a3cb0bdsm2103844a12.37.2024.08.23.06.43.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Aug 2024 06:43:42 -0700 (PDT)
+Date: Fri, 23 Aug 2024 15:43:41 +0200
+From: Stefan Eichenberger <eichest@gmail.com>
+To: Fabio Estevam <festevam@gmail.com>
+Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, andi.shyti@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, Frank.Li@nxp.com,
+	francesco.dolcini@toradex.com, linux-i2c@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Subject: Re: [PATCH v2 1/4] i2c: imx: only poll for bus busy in multi master
+ mode
+Message-ID: <ZsiSDUYmxPKnNdHD@eichest-laptop>
+References: <20240819072052.8722-1-eichest@gmail.com>
+ <20240819072052.8722-2-eichest@gmail.com>
+ <CAOMZO5CYUNESmBdZBMSMwNraQbqvvsF5fn8i+nHr=MB_T_AG7w@mail.gmail.com>
+ <CAOMZO5CeT+LvQ__3GUf6teL3=8pZe5qxmFffYJX-h3E27UXwtQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -93,65 +92,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5FjwxGQgV6SdLfTeNRYbpcgwkEnCWvaZiWh4rs3bhs-2A@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAOMZO5CeT+LvQ__3GUf6teL3=8pZe5qxmFffYJX-h3E27UXwtQ@mail.gmail.com>
 
-On Fri, Aug 23, 2024 at 02:49:59PM +0800, Chen-Yu Tsai wrote:
-> On Thu, Aug 22, 2024 at 9:47 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Thu, Aug 22, 2024 at 05:19:55PM +0800, Chen-Yu Tsai wrote:
+Hi Fabio,
 
-...
-
-> > > +/**
-> > > + * of_get_child_regulator - get a child regulator device node
-> > > + * based on supply name
-> > > + * @parent: Parent device node
-> > > + * @prop_name: Combination regulator supply name and "-supply"
-> > > + *
-> > > + * Traverse all child nodes.
-> > > + * Extract the child regulator device node corresponding to the supply name.
-> > > + * returns the device node corresponding to the regulator if found, else
-> > > + * returns NULL.
-> >
-> > At the same time you may fix kernel-doc warnings (no "Return" section) in these
-> > three (on your wish you may fix others in a separate change, but it's not
-> > related to this series).
+On Thu, Aug 22, 2024 at 08:07:44AM -0300, Fabio Estevam wrote:
+> Hi Stefan and Oleksij,
 > 
-> As you said some other functions are missing it as well, so I'll do a
-> patch separate from this series to fix them all.
-
-But you need to fix them in this patch series. We do not add patches with known
-issues, which are really easy to fix beforehand.
-
-(And below seems you indirectly agrees on that)
-
-> > > + */
-
-...
-
-> > > +/** of_regulator_dev_lookup - lookup a regulator device with device tree only
-> >
-> > Something went wrong with the indentation.
+> On Wed, Aug 21, 2024 at 8:01 AM Fabio Estevam <festevam@gmail.com> wrote:
 > 
-> Will fix, and also add a "Return" section.
+> > This fixes a pca953x probe error on an imx8mp board running linux-stable 6.6:
+> >
+> > [    1.893260] pca953x 2-0020: failed writing register
+> > [    1.898258] pca953x 2-0020: probe with driver pca953x failed with error -11
+> >
+> > Could you please add a Fixes tag and Cc stable so that this can reach
+> > the stable kernels?
+> >
+> > Tested-by: Fabio Estevam <festevam@denx.de>
+> 
+> I am sorry, but I have to withdraw my Tested-by tag.
+> 
+> For debugging purposes, I kept 'fw_devlink=off' in the kernel command
+> line and that's what made it work.
+> 
+> Removing 'fw_devlink=off' I still get the probe failure, even with all
+> the series from Stefan applied:
+> 
+> [    1.849097] pca953x 2-0020: supply vcc not found, using dummy regulator
+> [    1.855857] pca953x 2-0020: using no AI
+> [    1.859965] i2c i2c-2: <i2c_imx_write> write failed with -6
+> [    1.865578] pca953x 2-0020: failed writing register: -6
+> 
+> In my case, I can get the pca953x driver to probe successfully in one
+> of the following cases:
+> 
+> 1. Select pca953x as a module instead of built-in
+> 
+> or
+> 
+> 2. Pass 'fw_devlink=off' in the kernel command line
+> 
+> or
+> 
+> 3.  Register the i2c-imx driver as module_platform_driver():
+> 
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -1586,17 +1586,7 @@ static struct platform_driver i2c_imx_driver = {
+>         .id_table = imx_i2c_devtype,
+>  };
+> 
+> -static int __init i2c_adap_imx_init(void)
+> -{
+> -       return platform_driver_register(&i2c_imx_driver);
+> -}
+> -subsys_initcall(i2c_adap_imx_init);
+> -
+> -static void __exit i2c_adap_imx_exit(void)
+> -{
+> -       platform_driver_unregister(&i2c_imx_driver);
+> -}
+> -module_exit(i2c_adap_imx_exit);
+> +module_platform_driver(i2c_imx_driver);
+> 
+> or
+> 
+> 4. Use the NXP vendor kernel imx_6.1.22_2.0.0 kernel
+> 
+> Stefan, do you get the arbitration errors if you try methods 2 or 3 above?
 
-Thank you!
+I have tried method 3 an it did not work for me. I still have the same
+issue as before that sometimes the timeout occurs and the ads1015 will
+not ack anymore. So the patch series is still the only way I found so
+far to get rid of the problem. I also checked the datasheet of a pca953x
+device (PCAL6416A) and it doesn't seem to have a timeout mechanism.
+Therefore, I don't think we are affected by the same issue.
 
-> > > + * @dev: Device pointer for regulator supply lookup.
-> > > + * @supply: Supply name or regulator ID.
-> > > + *
-> > > + * If successful, returns a struct regulator_dev that corresponds to the name
-> > > + * @supply and with the embedded struct device refcount incremented by one.
-> > > + * The refcount must be dropped by calling put_device().
-> > > + * On failure one of the following ERR-PTR-encoded values is returned:
-> > > + * -ENODEV if lookup fails permanently, -EPROBE_DEFER if lookup could succeed
-> > > + * in the future.
-> > > + */
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Regards,
+Stefan
 
