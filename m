@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-5771-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5772-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B78A595DCAB
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 09:51:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1BC695DCB4
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 09:52:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7441B284485
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 07:51:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FE8D2845E0
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 07:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5736154BE5;
-	Sat, 24 Aug 2024 07:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257AB154BFE;
+	Sat, 24 Aug 2024 07:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blS2xJTS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aWz6a6Ub"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A93F257D;
-	Sat, 24 Aug 2024 07:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD0B257D;
+	Sat, 24 Aug 2024 07:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724485890; cv=none; b=NgetXm7qvGlCJvMkNios+vEgGFTerhcxb00Dozx40Lb8gnb5/msO4LkA8TY4r7BUpaSKwNAP900sN/6JOP6zI9EmZiYFk00c1bugn5BvBf/N1om4MbqU7D8rheU4rJ94Zh08UOjbNvjiMwFDop3i0Hb6RlmrwsQ8+oZRXapVnSk=
+	t=1724485942; cv=none; b=fps7eE2tuddIpvZXTc2sksC9lqL18YzyGSgrm0emOCeImav1zA8c9A3VAYQi8KihkpxCOrEpq01/hhgTsIZ8clWNfz1t2B+PUj1IIL/iZH+EPKa8JxRAvebLRnWRvcs3vE8/KUmIXlbRZu8UolLN2A1OzMGcL3RDB6D4gIUz6pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724485890; c=relaxed/simple;
-	bh=K+Iyolpoe01eXcw+Ed1bQ1LMT52uPuNW77oqpgcVIEc=;
+	s=arc-20240116; t=1724485942; c=relaxed/simple;
+	bh=J7CJ4ewK1ei4WvrIKvVeq7IO2mBtlvBtEoZL+GqcpiY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e4Cm3h59a8FsuhF0VQ1G53Hu0xtaYnMTBWTFqG8CeHCXLqyF86E2eMrAukptKraHaoD+oE+a7iq3Yu1jB/D9upIk1ByiORcY5H85W7jtp53+oZuflKvsgD9WxWiTcZTZs3zzXtQZJBDWu/dRPRuJLCtysOFN4BlwdCqPHGuNJuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blS2xJTS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 146CBC32781;
-	Sat, 24 Aug 2024 07:51:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=EUNHqYMtCRNOXg8uQqry0wdXzYH/24T6pSa9kJmXRWL9YtB8cvnxMCjSoz423RBh6KisVRJiydHumFA0pooK2w5It5Bx/xyR+0Lx79FTsqIPGezBWyyoxX1e3/gI3JXO7sB3wOqbh1v6Qx6RJ151nUbkCfB1u6QdDsPUui1A7ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aWz6a6Ub; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36470C32781;
+	Sat, 24 Aug 2024 07:52:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724485890;
-	bh=K+Iyolpoe01eXcw+Ed1bQ1LMT52uPuNW77oqpgcVIEc=;
+	s=k20201202; t=1724485942;
+	bh=J7CJ4ewK1ei4WvrIKvVeq7IO2mBtlvBtEoZL+GqcpiY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=blS2xJTSqpJ4riwJO+9+hBqZJaHOVdlFxCsVdPECFsXx814y0vmxZg+bQcCEcJJpH
-	 9J5r6PucoIYiTVCJv6jHQcxt14cR47Wd3f7DluNSu5Pm5rxofW9FsVw5QdvTN/QaGs
-	 /3gZ6KEJQ60N3THpT6LAJU0U55Yh32NPmG93VIT6IFKGY7FWsUeplgK8u/F3/y04AK
-	 EVSWZAMHSxcCZxolzhbV6czZGJkVjPZCdsaYNstNtjS8yoa5FiHTOBER1a429qfRgP
-	 OtfyFMBkq8Y9nXWXy2RAx2acUq3+VK6zOqyYoYJWHsoCHmZHJpENBlVHlIVtBGOb4h
-	 4G4PNHdKBLz0w==
-Date: Sat, 24 Aug 2024 09:51:08 +0200
+	b=aWz6a6UbzKGFpHdRPvkQh/kdN8iH1iiTbEgLvKfofw+awByVtTXMksxpWwxGubX+G
+	 AdAVZ7D2VLX3Yyw4cpTWJVxAMJvK19RXjeGUDt5/jBKq4secGcNpsJVYv0FzNdVsCI
+	 1X5RBcTsZ/qbDeL32MaAZ5i7U/8g+opq9kHqKe7K15YjlDvq9xjxcxWFKivUKAPaFm
+	 LAa30ZwXk7acwFePszse9qsy0gAtQdOnbD9es8bZU7egTxhHZ1foYLvkxazSn12C4W
+	 /Cs71gjB6O8boa6Rf1T8EqJ+8x8mXysDYjkK9+sm7LpwQaECHwD1GBlSGvA9+h4auM
+	 1ROhyqMBMd8kw==
+Date: Sat, 24 Aug 2024 09:52:01 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Detlev Casanova <detlev.casanova@collabora.com>
 Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, 
@@ -66,11 +66,11 @@ Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
 	dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, 
 	linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v2 08/12] dt-bindings: gpu: Add rockchip,rk3576-mali
+Subject: Re: [PATCH v2 09/12] dt-bindings: watchdog: Add rockchip,rk3576-wdt
  compatible
-Message-ID: <tnj5oxrnv2r2d6ztlqd3gdsxkjislqgwpj7f2x7b2uj4qp5kmg@cuc4tda7pzpr>
+Message-ID: <qqc6rj4a5hrme3b5adw4l65zeb2c7zjgtyror6hwtkhm5g3mkw@bc2xijdjddmv>
 References: <20240823150057.56141-1-detlev.casanova@collabora.com>
- <20240823150057.56141-9-detlev.casanova@collabora.com>
+ <20240823150057.56141-10-detlev.casanova@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -79,19 +79,12 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240823150057.56141-9-detlev.casanova@collabora.com>
+In-Reply-To: <20240823150057.56141-10-detlev.casanova@collabora.com>
 
-On Fri, Aug 23, 2024 at 10:52:35AM -0400, Detlev Casanova wrote:
-> Add the rockchip,rk3576-mali in arm,mali-bifrost.yaml
-
-This we see from the diff. And from commit subject. You have here plenty
-of space to explain shortly the hardware, e.g. it's new and not
-compatible with existing.
-
+On Fri, Aug 23, 2024 at 10:52:36AM -0400, Detlev Casanova wrote:
+> It is compatible with the other rockchip SoCs.
 > 
 > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> ---
->  Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml | 1 +
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
