@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-5770-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5771-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C624B95DCA2
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 09:50:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B78A595DCAB
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 09:51:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28D05B2243D
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 07:50:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7441B284485
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 07:51:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 003BC154BE2;
-	Sat, 24 Aug 2024 07:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5736154BE5;
+	Sat, 24 Aug 2024 07:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NU6FsG/Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blS2xJTS"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91630C148;
-	Sat, 24 Aug 2024 07:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A93F257D;
+	Sat, 24 Aug 2024 07:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724485803; cv=none; b=jIUgWdm8samYA40R0tZj2mWyrKCbh/uaJneS5TXnWuQ0bxC+FFgZpiDWKiZIzgP5QCN4vz6a8jN+fAhHqCINKsKtSUUao/VLSgdR1y2YVj7iT/aU8ZaTpce90ql3TA8XXrI8DBgysuz1iVUA8ZbrvtSNupoI/9xOCNQe720wJDA=
+	t=1724485890; cv=none; b=NgetXm7qvGlCJvMkNios+vEgGFTerhcxb00Dozx40Lb8gnb5/msO4LkA8TY4r7BUpaSKwNAP900sN/6JOP6zI9EmZiYFk00c1bugn5BvBf/N1om4MbqU7D8rheU4rJ94Zh08UOjbNvjiMwFDop3i0Hb6RlmrwsQ8+oZRXapVnSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724485803; c=relaxed/simple;
-	bh=Nv0/3MgPrEAyNKOaS42IrvhRzQWnn1NPBjKVsO0g2CU=;
+	s=arc-20240116; t=1724485890; c=relaxed/simple;
+	bh=K+Iyolpoe01eXcw+Ed1bQ1LMT52uPuNW77oqpgcVIEc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bt+W6wZ7eURpLoGaPHf7fwqBL5gOc0eR/Eq/FquYVDxL7PrblWuGujTKItN2gBbn+2LppytO8iSe+lni5hPMI6ELoJLWmCqMAJ9wtm/TevR8sWhfReR+WeHBkQuUrspbDfXrWfiwjXMmkBVZ9+KZwt7MSEfdj2g1vhq3EOWszr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NU6FsG/Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4310FC32781;
-	Sat, 24 Aug 2024 07:49:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=e4Cm3h59a8FsuhF0VQ1G53Hu0xtaYnMTBWTFqG8CeHCXLqyF86E2eMrAukptKraHaoD+oE+a7iq3Yu1jB/D9upIk1ByiORcY5H85W7jtp53+oZuflKvsgD9WxWiTcZTZs3zzXtQZJBDWu/dRPRuJLCtysOFN4BlwdCqPHGuNJuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blS2xJTS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 146CBC32781;
+	Sat, 24 Aug 2024 07:51:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724485803;
-	bh=Nv0/3MgPrEAyNKOaS42IrvhRzQWnn1NPBjKVsO0g2CU=;
+	s=k20201202; t=1724485890;
+	bh=K+Iyolpoe01eXcw+Ed1bQ1LMT52uPuNW77oqpgcVIEc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NU6FsG/Z8+3HTOXQscGhuRxz3D8QondwUnlJ5cqQVlXk5s2iGrPesO5jfCDDCpd3y
-	 Alr/J03o0SqGxtuQQ2MfVJtO8tmXJTeJdx+sssHs85tNfVE1YwOsBLHQOUNcbxaaI0
-	 Iz6O6vIVi6KEDKIJ+LAL9WsZ8Td29Jz96ZO9s67Q8YJ4CiFLHx9PmlG9t8qnFKtNR1
-	 18Xfl0CMSj62OhXv9mQnZPl7NFlc1yQ3fT8op+1Y3QG/4HyjF+ea42jWUaP6tK4IhQ
-	 7UlEmWmox5b53R5n3gCMYHTZCMRRBo48mrod0jvLR64xUYd/JvIH9xXdE2K9F8PcOq
-	 QgngRgRquBnOA==
-Date: Sat, 24 Aug 2024 09:49:42 +0200
+	b=blS2xJTSqpJ4riwJO+9+hBqZJaHOVdlFxCsVdPECFsXx814y0vmxZg+bQcCEcJJpH
+	 9J5r6PucoIYiTVCJv6jHQcxt14cR47Wd3f7DluNSu5Pm5rxofW9FsVw5QdvTN/QaGs
+	 /3gZ6KEJQ60N3THpT6LAJU0U55Yh32NPmG93VIT6IFKGY7FWsUeplgK8u/F3/y04AK
+	 EVSWZAMHSxcCZxolzhbV6czZGJkVjPZCdsaYNstNtjS8yoa5FiHTOBER1a429qfRgP
+	 OtfyFMBkq8Y9nXWXy2RAx2acUq3+VK6zOqyYoYJWHsoCHmZHJpENBlVHlIVtBGOb4h
+	 4G4PNHdKBLz0w==
+Date: Sat, 24 Aug 2024 09:51:08 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Detlev Casanova <detlev.casanova@collabora.com>
 Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, 
@@ -66,10 +66,11 @@ Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
 	dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, 
 	linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v2 07/12] dt-bindings: mmc: Add support for rk3576 eMMC
-Message-ID: <m5ua5jnbv4u36glqt2qrps35asuqfycxedgjrfhodi5bvs2r2h@xvy4qxt4gx74>
+Subject: Re: [PATCH v2 08/12] dt-bindings: gpu: Add rockchip,rk3576-mali
+ compatible
+Message-ID: <tnj5oxrnv2r2d6ztlqd3gdsxkjislqgwpj7f2x7b2uj4qp5kmg@cuc4tda7pzpr>
 References: <20240823150057.56141-1-detlev.casanova@collabora.com>
- <20240823150057.56141-8-detlev.casanova@collabora.com>
+ <20240823150057.56141-9-detlev.casanova@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,45 +79,21 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240823150057.56141-8-detlev.casanova@collabora.com>
+In-Reply-To: <20240823150057.56141-9-detlev.casanova@collabora.com>
 
-On Fri, Aug 23, 2024 at 10:52:34AM -0400, Detlev Casanova wrote:
-> The device is compatible with rk3588, so add an entry for the 2
-> compatibles together.
-> 
-> The rk3576 device has a power-domain that needs to be on for the eMMC to
-> be used. Add it as a requirement.
+On Fri, Aug 23, 2024 at 10:52:35AM -0400, Detlev Casanova wrote:
+> Add the rockchip,rk3576-mali in arm,mali-bifrost.yaml
+
+This we see from the diff. And from commit subject. You have here plenty
+of space to explain shortly the hardware, e.g. it's new and not
+compatible with existing.
+
 > 
 > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 > ---
->  .../bindings/mmc/snps,dwcmshc-sdhci.yaml      | 32 +++++++++++++------
->  1 file changed, 23 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml b/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
-> index 4d3031d9965f3..7d5e388587027 100644
-> --- a/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
-> @@ -12,16 +12,29 @@ maintainers:
->  
->  allOf:
->    - $ref: mmc-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: rockchip,rk3576-dwcmshc
-> +    then:
-> +      properties:
-> +        power-domains:
-> +          minItems: 1
+>  Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml | 1 +
 
-Plaese move the allOf: after the required: block. It grows too much with
-such if:then: and that's not the most important part of binding we need
-to see first.
-
-With above change:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
