@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-5772-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5773-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1BC695DCB4
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 09:52:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B6B195DCBD
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 09:53:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FE8D2845E0
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 07:52:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27C46283F8F
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 07:53:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257AB154BFE;
-	Sat, 24 Aug 2024 07:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7BC154C05;
+	Sat, 24 Aug 2024 07:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aWz6a6Ub"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GC9kHJnz"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD0B257D;
-	Sat, 24 Aug 2024 07:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7038514D6E9;
+	Sat, 24 Aug 2024 07:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724485942; cv=none; b=fps7eE2tuddIpvZXTc2sksC9lqL18YzyGSgrm0emOCeImav1zA8c9A3VAYQi8KihkpxCOrEpq01/hhgTsIZ8clWNfz1t2B+PUj1IIL/iZH+EPKa8JxRAvebLRnWRvcs3vE8/KUmIXlbRZu8UolLN2A1OzMGcL3RDB6D4gIUz6pg=
+	t=1724486018; cv=none; b=nGE2wKm21xh/GaPgUgS6MdEdz/DKkp0W57aLUAXn3mHklMLqlLOXdTzvVfivTIgIex3jWuh5Zb8UpJGUiFymXwfC3+CcCiqfZBzgl3x5FeBggD1YmApGM0mrB+Haif+2fZLq3bm9Io7BpT2Vj5YjD1DI8HtCpDdbAnGh3veWFuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724485942; c=relaxed/simple;
-	bh=J7CJ4ewK1ei4WvrIKvVeq7IO2mBtlvBtEoZL+GqcpiY=;
+	s=arc-20240116; t=1724486018; c=relaxed/simple;
+	bh=yRF+b26qzZbAF/lj54mqxmxSAmsnvppo3aM396oz6Qs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EUNHqYMtCRNOXg8uQqry0wdXzYH/24T6pSa9kJmXRWL9YtB8cvnxMCjSoz423RBh6KisVRJiydHumFA0pooK2w5It5Bx/xyR+0Lx79FTsqIPGezBWyyoxX1e3/gI3JXO7sB3wOqbh1v6Qx6RJ151nUbkCfB1u6QdDsPUui1A7ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aWz6a6Ub; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36470C32781;
-	Sat, 24 Aug 2024 07:52:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xi0XFTjtjG6AFBWUvttgYCoL4UMr5ZozqgcMOwbcJGJ6GGyOGtfymWodabBpUUTuTyFHY9FyXVzJOhjgf6B6SPfhI3EgQO+jZSDufVadCaCKeRbDltC6+obnES5DhGEDM+j65wY7OeBuSC6cMO2nkqIOZ+nF+7gGlAkvDg1mkco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GC9kHJnz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40974C32781;
+	Sat, 24 Aug 2024 07:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724485942;
-	bh=J7CJ4ewK1ei4WvrIKvVeq7IO2mBtlvBtEoZL+GqcpiY=;
+	s=k20201202; t=1724486018;
+	bh=yRF+b26qzZbAF/lj54mqxmxSAmsnvppo3aM396oz6Qs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aWz6a6UbzKGFpHdRPvkQh/kdN8iH1iiTbEgLvKfofw+awByVtTXMksxpWwxGubX+G
-	 AdAVZ7D2VLX3Yyw4cpTWJVxAMJvK19RXjeGUDt5/jBKq4secGcNpsJVYv0FzNdVsCI
-	 1X5RBcTsZ/qbDeL32MaAZ5i7U/8g+opq9kHqKe7K15YjlDvq9xjxcxWFKivUKAPaFm
-	 LAa30ZwXk7acwFePszse9qsy0gAtQdOnbD9es8bZU7egTxhHZ1foYLvkxazSn12C4W
-	 /Cs71gjB6O8boa6Rf1T8EqJ+8x8mXysDYjkK9+sm7LpwQaECHwD1GBlSGvA9+h4auM
-	 1ROhyqMBMd8kw==
-Date: Sat, 24 Aug 2024 09:52:01 +0200
+	b=GC9kHJnz+ylQDLPiCSV9p1V2P5SYmpcIHXMeumKkTQpWR3I4djBw5t6awd8n+lh43
+	 BQsxl4+R/IDmczuyWAn5JLsKKK+TxOHyRg359W4wkQFsCV49emeVklAqQBDgfTyUjB
+	 /TpsruLYtzV/F0YzMiqKiqkrvciC/tdruR/ISte5xtus0gncKbOPoIh0zUsXnvJwwk
+	 yFUa3sBs5H0PZmsMLcN6/IFMrnfYWbL45EIurmvwJZ0iXssWNXototDoBG70bZX38e
+	 22Q8zhFWt6s71D5uBzZ34ujfrusS9hXLtwif6chlSGgRQJf/z/oejJqoOrTwvoFQse
+	 aVO5Iuslho1Lg==
+Date: Sat, 24 Aug 2024 09:53:16 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Detlev Casanova <detlev.casanova@collabora.com>
 Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, 
@@ -66,11 +66,11 @@ Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
 	dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, 
 	linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v2 09/12] dt-bindings: watchdog: Add rockchip,rk3576-wdt
+Subject: Re: [PATCH v2 10/12] dt-bindings: spi: Add rockchip,rk3576-spi
  compatible
-Message-ID: <qqc6rj4a5hrme3b5adw4l65zeb2c7zjgtyror6hwtkhm5g3mkw@bc2xijdjddmv>
+Message-ID: <r474bbm3nnqwvgb6dumes5opxzw2sb7ck4ehqdhig7ejdabnxw@vgmafb7dayry>
 References: <20240823150057.56141-1-detlev.casanova@collabora.com>
- <20240823150057.56141-10-detlev.casanova@collabora.com>
+ <1995660.usQuhbGJ8B@trenzalore>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -79,12 +79,20 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240823150057.56141-10-detlev.casanova@collabora.com>
+In-Reply-To: <1995660.usQuhbGJ8B@trenzalore>
 
-On Fri, Aug 23, 2024 at 10:52:36AM -0400, Detlev Casanova wrote:
-> It is compatible with the other rockchip SoCs.
-> 
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+On Fri, Aug 23, 2024 at 12:07:10PM -0400, Detlev Casanova wrote:
+> It is compatible with the rockchip,rk3066-spi SPI core.
+
+Same comments...
+
+subject: spi: dt-bindings:
+
+Please use subject prefixes matching the subsystem. You can get them for
+example with  on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
