@@ -1,264 +1,87 @@
-Return-Path: <linux-i2c+bounces-5768-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5769-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A527895D9CA
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 01:44:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B48DD95DC45
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 08:31:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6D891C23740
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Aug 2024 23:44:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 549EDB22636
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Aug 2024 06:31:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A4E81C8FD5;
-	Fri, 23 Aug 2024 23:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VC5oNgjA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63D61537C9;
+	Sat, 24 Aug 2024 06:31:47 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D41F152196;
-	Fri, 23 Aug 2024 23:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902093A8E4;
+	Sat, 24 Aug 2024 06:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724456671; cv=none; b=D2u82ucXGiGxHN6PP6EKP/k6dP/Daohv48MOumBiUazRFOA7PGEADj+Seoe+WlU7RElaXuyoN4iNBFr2A7INXe7S+fn2y4Z2zZbtRGcM+6S0Fvm4Zsed1/a0LuUpdQLlikVTGLkx9hmmsEKtMidXqu2tSF3GHMV0LBxvp2HyKUA=
+	t=1724481107; cv=none; b=FO/8UTtBlOFfvUPbcXX3W8pY/TdZ1F4eXyerq4FQfaNey+lvn9jUkGy7T+VQfvfVCfx04srmOStU1MoMWKuRF4QDhHzi5lBAcfHvwtEj+XZ4U7BFZ0DwcZLdTzWp0rNrg+SjdfdMY0hbF/6+0UE2i+ZkWkwDVQqEcrcJQLOD2IU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724456671; c=relaxed/simple;
-	bh=PKOqjsh55k0gUWF28he/tpFo7CnOI0T+o1W/ywoIY40=;
+	s=arc-20240116; t=1724481107; c=relaxed/simple;
+	bh=2EdA9dYifcGgOE8+tCMyipwrc6qwM59V02r/mYYtTB8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b3Kj9WUUQXVGVhe6KCYrD1blsvJkZIh9Mgt2Pm1fxWKf9aIv7dAbpDeYB4sVcdCH29IZxE6BhaAxGdx5r2jSw+2dFP08s7bKku/YBMBdOo3R2qiEwHeSZXRe7LFhryfO2V6SLsWrvvXWBmFDbNC64/P0lCxbTRWewANN5ZDe2IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VC5oNgjA; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6bf75ed0e0eso12955736d6.1;
-        Fri, 23 Aug 2024 16:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724456668; x=1725061468; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ye+Ps90cwlGsT4oHvYpdjI85sw14z4sG45EsgOKagSg=;
-        b=VC5oNgjAA01PpyWUv0wOeWT+XVdaltS73h7+vLfG6RfslSabKCrAdOJ7vqCJe9ckID
-         /Iw2uyTyOZZwAM51zdTU46f1ChNNAmTtk5I8Qug33wXNC56Cv07QxEMB/mcTQp75Ufr4
-         GK+4jiIadffLc9HUz7J9lMAfVmDc5sEBDAehZcaDt/vzZCaxwKD9p0eisHa9MGdhCKUA
-         x4BYF9T7IMjj07hw6vxI8WAsa+YSBAw6TcsM8LBtVe58jc4E99n13mtKSHnslIs4g5wP
-         LR0hg8TP6RvrGv/ypZRrtmd9hy4g/3MDUHsulMw+oWfdiVc3Y3jlaUwvVcvyvOMmLyPR
-         /atA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724456668; x=1725061468;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ye+Ps90cwlGsT4oHvYpdjI85sw14z4sG45EsgOKagSg=;
-        b=N/nZIqTs6PQ4whp5tigyShnJccqQt9chaslw2UXvpLn09LEOjGaBWy6M+edxajdT/O
-         vKmkOSVhpCe/EG7GPlHmxH/JvkxOUS4M6pQJ6AlU0jfpLoIeLFPsMDIs21nDJiyehCqK
-         FxCeDV6A8v0Y5c74a78Js5h+XOFfbLo+pjbY8aQkPWsql6TlJKUk+5GGdxVHnSDL6dv+
-         pzVKidlkOhJ5vJSt044rqUvc4sRQmhgy+VbrpdN7RXJtFtDTAH16VQt5mIIStIlNeMpy
-         cY7qgqHYIoQkWIkn1Utcz3aQ3j1s3vWySHxozVu5A4uNGRpmOiExg/OmBGe2DwoDibCX
-         y4Mg==
-X-Forwarded-Encrypted: i=1; AJvYcCU2YoHuDLrQJtPBL19euYWKBDbethnsUNTFoGHidrZS1Vri4wYYB2edqU5508oeH1+M6HCf+VxKplqPlAOCnA==@vger.kernel.org, AJvYcCW8ISDUgr1eXYeXzTa5e2Sylae3uhZgtKHZ465tHMVDzq4ptLldfAkowCV+sIe7T9bq0rdCG0aSSqFS@vger.kernel.org, AJvYcCX1JsXBgzmpCbCCaAQnJBfjzgVN9UXjKOIQoNtC8CN2GtpW7VIobbckh0uceGAebONoBuQmbZZc2TDuNM4=@vger.kernel.org, AJvYcCX3wYE/UlNtzv5LHy0EVuifY+rC9BKgKHk8mvGQdvKLizJkRMVOGUDlf2fC1vs2RMYKpvHj0XHr4wzF@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCUsYIQoatBummyeRQ2WI9KzSpXA3aYR1HWEQYy7w7ZUMEe67E
-	bal6RCCqlZtI5CDBK5AQnxJlBjoovzSbPb2gUQUDGdr9ibde3BjKcmVkUfh/
-X-Google-Smtp-Source: AGHT+IHsrMKOopKNem9M07VfAEBD9lUhg2aiNwXgCaC6w49RC2sZLM8rvab1CMAWFtEWOEzJpHPW4Q==
-X-Received: by 2002:a05:6214:3382:b0:6b0:90b4:1ca9 with SMTP id 6a1803df08f44-6c16dc217c1mr39081636d6.6.1724456668104;
-        Fri, 23 Aug 2024 16:44:28 -0700 (PDT)
-Received: from localhost ([2607:fea8:52a3:d200:324c:b818:b179:79b])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c162d6548csm23198626d6.68.2024.08.23.16.44.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Aug 2024 16:44:27 -0700 (PDT)
-Date: Fri, 23 Aug 2024 19:44:26 -0400
-From: Richard Acayan <mailingradian@gmail.com>
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Todor Tomov <todor.too@gmail.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sdm670: add camss and cci
-Message-ID: <Zske2ptZAV12YLyf@radian>
-References: <20240819221051.31489-7-mailingradian@gmail.com>
- <20240819221051.31489-12-mailingradian@gmail.com>
- <40cd7a52-1c60-40dc-aee6-730b5247b216@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tFjbI54gXFDexyO+4/9nTyyx5hdjZ0NvoJKBtoK00QL561r8wgmiAegAVB9+xqvXtQ719NJuePmQ6xJ1BiwgAbM9nH6Wj5tRP4VHwPzspGx/26SmAAg9vsdM4zPWrw5fgHH3Elj96HZ5wFzLQbX1eY4d0pq416YFKr5BRxr1qSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79BEC32781;
+	Sat, 24 Aug 2024 06:31:31 +0000 (UTC)
+Date: Sat, 24 Aug 2024 08:31:28 +0200
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Detlev Casanova <detlev.casanova@collabora.com>
+Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
+	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Chris Morgan <macromorgan@hotmail.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>, Chukun Pan <amadeus@jmu.edu.cn>, 
+	Andy Yan <andyshrk@163.com>, Muhammed Efe Cetin <efectn@protonmail.com>, 
+	Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>, Ondrej Jirman <megi@xff.cz>, 
+	Michael Riesch <michael.riesch@wolfvision.net>, Jimmy Hon <honyuenkwun@gmail.com>, 
+	Alexey Charkov <alchark@gmail.com>, Elon Zhang <zhangzj@rock-chips.com>, 
+	Elaine Zhang <zhangqing@rock-chips.com>, Yifeng Zhao <yifeng.zhao@rock-chips.com>, 
+	Finley Xiao <finley.xiao@rock-chips.com>, Liang Chen <cl@rock-chips.com>, 
+	Jisheng Zhang <jszhang@kernel.org>, Jamie Iles <jamie@jamieiles.com>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v2 04/12] dt-bindings: iio: adc: Add
+ rockchip,rk3576-saradc string
+Message-ID: <wegeyglbv5xufuvpmf2ye2bu6w5ob753h4hfimxw3ozt2vnfoh@fgvdblizg5hc>
+References: <20240823150057.56141-1-detlev.casanova@collabora.com>
+ <20240823150057.56141-5-detlev.casanova@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <40cd7a52-1c60-40dc-aee6-730b5247b216@linaro.org>
+In-Reply-To: <20240823150057.56141-5-detlev.casanova@collabora.com>
 
-On Wed, Aug 21, 2024 at 01:40:14PM +0300, Vladimir Zapolskiy wrote:
-> On 8/20/24 01:10, Richard Acayan wrote:
-> > Add the camera subsystem and CCI used to interface with cameras on the
-> > Snapdragon 670.
-> > 
-> > Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> > ---
-> >   arch/arm64/boot/dts/qcom/sdm670.dtsi | 188 +++++++++++++++++++++++++++
-> >   1 file changed, 188 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm670.dtsi b/arch/arm64/boot/dts/qcom/sdm670.dtsi
-> > index ba93cef33dbb..37bc4fa04286 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm670.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sdm670.dtsi
-> > @@ -6,6 +6,7 @@
-> >    * Copyright (c) 2022, Richard Acayan. All rights reserved.
-> >    */
-> > +#include <dt-bindings/clock/qcom,camcc-sdm845.h>
-> >   #include <dt-bindings/clock/qcom,dispcc-sdm845.h>
-> >   #include <dt-bindings/clock/qcom,gcc-sdm845.h>
-> >   #include <dt-bindings/clock/qcom,rpmh.h>
-> > @@ -1168,6 +1169,34 @@ tlmm: pinctrl@3400000 {
-> >   			gpio-ranges = <&tlmm 0 0 151>;
-> >   			wakeup-parent = <&pdc>;
-> > +			cci0_default: cci0-default-state {
-> > +				pins = "gpio17", "gpio18";
-> > +				function = "cci_i2c";
-> > +				drive-strength = <2>;
-> > +				bias-pull-up;
-> > +			};
-> > +
-> > +			cci0_sleep: cci0-sleep-state {
-> > +				pins = "gpio17", "gpio18";
-> > +				function = "cci_i2c";
-> > +				drive-strength = <2>;
-> > +				bias-pull-down;
-> > +			};
-> > +
-> > +			cci1_default: cci1-default-state {
-> > +				pins = "gpio19", "gpio20";
-> > +				function = "cci_i2c";
-> > +				drive-strength = <2>;
-> > +				bias-pull-up;
-> > +			};
-> > +
-> > +			cci1_sleep: cci1-sleep-state {
-> > +				pins = "gpio19", "gpio20";
-> > +				function = "cci_i2c";
-> > +				drive-strength = <2>;
-> > +				bias-pull-down;
-> > +			};
-> > +
-> >   			qup_i2c0_default: qup-i2c0-default-state {
-> >   				pins = "gpio0", "gpio1";
-> >   				function = "qup0";
-> > @@ -1400,6 +1429,165 @@ spmi_bus: spmi@c440000 {
-> >   			#interrupt-cells = <4>;
-> >   		};
-> > +		cci: cci@ac4a000 {
-> > +			compatible = "qcom,sdm670-cci", "qcom,msm8996-cci";
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
-> > +
-> > +			reg = <0 0x0ac4a000 0 0x4000>;
-> > +			interrupts = <GIC_SPI 460 IRQ_TYPE_EDGE_RISING>;
-> > +			power-domains = <&camcc TITAN_TOP_GDSC>;
-> > +
-> > +			clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
-> > +				 <&camcc CAM_CC_SOC_AHB_CLK>,
-> > +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-> > +				 <&camcc CAM_CC_CCI_CLK>;
-> > +			clock-names = "camnoc_axi",
-> > +				      "soc_ahb",
-> > +				      "cpas_ahb",
-> > +				      "cci";
-> > +
-> > +			assigned-clocks = <&camcc CAM_CC_CCI_CLK>;
-> > +			assigned-clock-rates = <37500000>;
+On Fri, Aug 23, 2024 at 10:52:31AM -0400, Detlev Casanova wrote:
+> Add rockchip,rk3576-saradc compatible string.
+> The saradc on RK3576 is compatible with the one on RK3588, so they are
+> used together in an arm of the oneOf.
 > 
-> Please remove assigned-clocks and assigned-clock-rates properties.
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Heiko Stuebner <heiko@sntech.de>
+> ---
 
-Doing this adds a warning to dmesg, where the clock rate is set to 19.2
-MHz by default.
+Why do you keep sending the same patch which was already applied?
 
-> > +
-> > +			pinctrl-names = "default", "sleep";
-> > +			pinctrl-0 = <&cci0_default &cci1_default>;
-> > +			pinctrl-1 = <&cci0_sleep &cci1_sleep>;
-> > +
-> > +			status = "disabled";
-> > +
-> > +			cci_i2c0: i2c-bus@0 {
-> > +				reg = <0>;
-> > +				clock-frequency = <1000000>;
-> > +				#address-cells = <1>;
-> > +				#size-cells = <0>;
-> > +			};
-> > +
-> > +			cci_i2c1: i2c-bus@1 {
-> > +				reg = <1>;
-> > +				clock-frequency = <1000000>;
-> > +				#address-cells = <1>;
-> > +				#size-cells = <0>;
-> > +			};
-> > +		};
-> > +
-> > +		camss: camera-controller@ac65000 {
-> > +			compatible = "qcom,sdm670-camss";
-> > +			reg = <0 0x0ac65000 0 0x1000>,
-> > +			      <0 0x0ac66000 0 0x1000>,
-> > +			      <0 0x0ac67000 0 0x1000>,
-> > +			      <0 0x0acaf000 0 0x4000>,
-> > +			      <0 0x0acb3000 0 0x1000>,
-> > +			      <0 0x0acb6000 0 0x4000>,
-> > +			      <0 0x0acba000 0 0x1000>,
-> > +			      <0 0x0acc4000 0 0x4000>,
-> > +			      <0 0x0acc8000 0 0x1000>;
-> > +			reg-names = "csiphy0",
-> > +				    "csiphy1",
-> > +				    "csiphy2",
-> > +				    "vfe0",
-> > +				    "csid0",
-> > +				    "vfe1",
-> > +				    "csid1",
-> > +				    "vfe_lite",
-> > +				    "csid2";
-> > +
-> > +			interrupts = <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 477 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 478 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 479 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>;
-> > +			interrupt-names = "csid0",
-> > +					  "csid1",
-> > +					  "csid2",
-> > +					  "csiphy0",
-> > +					  "csiphy1",
-> > +					  "csiphy2",
-> > +					  "vfe0",
-> > +					  "vfe1",
-> > +					  "vfe_lite";
-> > +
-> > +			clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
-> > +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-> > +				 <&camcc CAM_CC_IFE_0_CSID_CLK>,
-> > +				 <&camcc CAM_CC_IFE_1_CSID_CLK>,
-> > +				 <&camcc CAM_CC_IFE_LITE_CSID_CLK>,
-> > +				 <&camcc CAM_CC_CSIPHY0_CLK>,
-> > +				 <&camcc CAM_CC_CSI0PHYTIMER_CLK>,
-> > +				 <&camcc CAM_CC_CSIPHY1_CLK>,
-> > +				 <&camcc CAM_CC_CSI1PHYTIMER_CLK>,
-> > +				 <&camcc CAM_CC_CSIPHY2_CLK>,
-> > +				 <&camcc CAM_CC_CSI2PHYTIMER_CLK>,
-> > +				 <&gcc GCC_CAMERA_AHB_CLK>,
-> > +				 <&gcc GCC_CAMERA_AXI_CLK>,
-> > +				 <&camcc CAM_CC_SOC_AHB_CLK>,
-> 
-> Please put two &gcc and "soc_ahb" clock sources on top, it will
-> require a change in dt bindings documentation also.
+Best regards,
+Krzysztof
 
-I'll do this for the clocks themselves because they have no parents (so
-no obvious clock sources).
 
