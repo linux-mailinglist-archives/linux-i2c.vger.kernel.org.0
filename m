@@ -1,155 +1,113 @@
-Return-Path: <linux-i2c+bounces-5789-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5791-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B01EB95EB2F
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Aug 2024 10:01:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92D6D95ECDD
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Aug 2024 11:16:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 658C11F22CD4
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Aug 2024 08:01:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BEB61F2200D
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Aug 2024 09:16:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D73F613A3F0;
-	Mon, 26 Aug 2024 07:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D5AB8172A;
+	Mon, 26 Aug 2024 09:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="CkrIopJR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C0113E039
-	for <linux-i2c@vger.kernel.org>; Mon, 26 Aug 2024 07:53:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0856E142E67
+	for <linux-i2c@vger.kernel.org>; Mon, 26 Aug 2024 09:16:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724658802; cv=none; b=LojHgUGdymtK0xYxlVH7etEFhXw+NnKw5DQ1iUSTjlkh2t710MwiaZ2XMPmRe6UmVCCjvWNAs0KzUNRTywP147vxMblfhFD0kPP8dymHF+gBrpZeavrUozwr1s4VP4rcy1ul+w2edj3NWwqyTu2+PsHGJwvWai+DvGp1/kR4nkQ=
+	t=1724663765; cv=none; b=VDyJ/bH+rLRgwudEi3D8LaxpR+MNPl26V5V/tuvB1vIir9fYe5EfxjoBJycP3PTWkZ2ZdU8641+FcLYknzyuWFzucsA0ci+llR9Qfi7GHeOtSCk9Xx8L0607FGCuDfz3qLviFPbmh1LRYpdfLB3ghLB0GKksgoNirAjcNoRoYMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724658802; c=relaxed/simple;
-	bh=Pzeast/KuQTsUx/8UNRiLKWBfOfCRK1vLZpSERoh2pU=;
+	s=arc-20240116; t=1724663765; c=relaxed/simple;
+	bh=K0ePHJHSuul5y3bsWp3mOBJT5h0AY8uuwLn8hFDUiq0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j9rg81WzEtXc0vAQXvkgedmKqUaeYn76eTDW9UE5FxQTgmBAtV4TigLazdCUm9aFsn+qXbUgzMKPfBwf0s76YBIfielD4iiMEJkaWFpEn6LpnT6iBEpotgOomIGF4YodLSMcQziG46wyyubW8a0Fmk/X8CQ9ZaGWXdMP3bPZTIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1siUVR-0006mO-Jk; Mon, 26 Aug 2024 09:51:17 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1siUVK-0038Ph-Cg; Mon, 26 Aug 2024 09:51:10 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1siUVK-006xmZ-0b;
-	Mon, 26 Aug 2024 09:51:10 +0200
-Date: Mon, 26 Aug 2024 09:51:10 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Russell King <linux@armlinux.org.uk>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Vladimir Zapolskiy <vz@mleia.com>, Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, linux-mtd@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	imx@lists.linux.dev, linux-omap@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-	openbmc@lists.ozlabs.org, linuxppc-dev@lists.ozlabs.org,
-	linux-mips@vger.kernel.org, loongarch@lists.linux.dev
-Subject: Re: [PATCH 0/9] AT24 EEPROM MTD Support
-Message-ID: <20240826075110.u3cxc6dootou72eq@pengutronix.de>
-References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
- <Zsi3s9XithGEROwX@smile.fi.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NSp8PGhaiFGLsVynYn9IyfftzSSpkF5KI8BoqCGhCATyRB8fsH4TwXYTkgMJrYv2PXPuhmExb/jYPAvk3rNdM8a1NoXdYuu9s00C6Rvb7gC5SDnWalOdn/86L6+w0y//6AdiQrKO9EbGQ4FCBrnCSW3QRYZSV+XMDyt/GcFAiBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=CkrIopJR; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=K0eP
+	HJHSuul5y3bsWp3mOBJT5h0AY8uuwLn8hFDUiq0=; b=CkrIopJRG3isFkgYx+Fz
+	VsD8l2djumyu4rOilgyIDdoH/pxoTYTNb4e9WMPfh3F4IBk8lO/JfIqH7tdALopI
+	Ea52mx+S67vDmPwejpnA/SHXErgZGFh7Iq6HIdO+v2ceeGwGP73uZKPGN0AQ5fuv
+	/1wl+WhHPeVBEGqahLKzzEvT2Qr/cquMOB1ovEVaewm8K9smCN/T9tPP+AFMQHmk
+	EOBihaqhlFq7z+sw9rOcxau+QLthYMUQWlcaodq347GXQeerT+pzxg2fxacHtTaS
+	mji0C9rXb7937hFLAcLTSwM2Z/m+JC9a8JyJk1W3W5wKUQZgCZm65fVUGRWNaS2O
+	7w==
+Received: (qmail 1931663 invoked from network); 26 Aug 2024 11:09:20 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Aug 2024 11:09:20 +0200
+X-UD-Smtp-Session: l3s3148p1@R33sepIg7IBehhrU
+Date: Mon, 26 Aug 2024 11:09:19 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Rong Qianfeng <rongqianfeng@vivo.com>
+Cc: biju.das.jz@bp.renesas.com, Andi Shyti <andi.shyti@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+	opensource.kernel@vivo.com
+Subject: Re: [PATCH v3 2/4] i2c: emev2: drop sclk from struct em_i2c_device
+Message-ID: <ZsxGP6HKQnBuEE7_@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Rong Qianfeng <rongqianfeng@vivo.com>, biju.das.jz@bp.renesas.com,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+	opensource.kernel@vivo.com
+References: <20240823035116.21590-1-rongqianfeng@vivo.com>
+ <20240823035116.21590-3-rongqianfeng@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="GzVTah3YJcw5sKqN"
+Content-Disposition: inline
+In-Reply-To: <20240823035116.21590-3-rongqianfeng@vivo.com>
+
+
+--GzVTah3YJcw5sKqN
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zsi3s9XithGEROwX@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+On Fri, Aug 23, 2024 at 11:51:14AM +0800, Rong Qianfeng wrote:
+> For no need to save clk pointer, drop sclk from struct em_i2c_device.
+>=20
+> Signed-off-by: Rong Qianfeng <rongqianfeng@vivo.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-On 24-08-23, Andy Shevchenko wrote:
-> On Mon, Jul 01, 2024 at 03:53:39PM +0200, Marco Felsch wrote:
-> > This series adds the intial support to handle EEPROMs via the MTD layer
-> > as well. This allow the user-space to have separate paritions since
-> > EEPROMs can become quite large nowadays.
-> > 
-> > With this patchset applied EEPROMs can be accessed via:
-> >   - legacy 'eeprom' device
-> >   - nvmem device
-> >   - mtd device(s)
-> > 
-> > The patchset targets only the AT24 (I2C) EEPROMs since I have no access
-> > to AT25 (SPI) EEPROMs nor to one of the other misc/eeprom/* devices.
-> > 
-> > Note: I'm not familiar with Kconfig symbol migration so I don't know if
-> > the last patch is required at the moment. Please be notified that the
-> > list of recipients is quite large due to the defconfig changes.
-> 
-> FWIW, I think that MTD is *not* the place for EEPROMs.
-> 
-> Yeah, we have the driver spread over the kernel for EEPROMs (mostly due to
-> historical reasons and absence an umbrella subsystem for them), but it's not
-> the reason to hack them into something which is not quite suitable.
+Should be folded into patch 1 IMO.
 
-Thank you for you input. There are two things to mention:
- 1st) I send a RFC patch and asked for feedback and all I got was: looks
-      okay, please send a proper patch [1] which I did.
- 2nd) I don't see the hacky part in this patchset.
 
-Anyway the customer doesn't need the nvmem-partitions anymore and
-therefore this patchset can be seen as obsolote.
+--GzVTah3YJcw5sKqN
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Regards,
-  Marco
+-----BEGIN PGP SIGNATURE-----
 
-[1] https://lore.kernel.org/lkml/20231201144441.imk7rrjnv2dugo7p@pengutronix.de/T/#m1e0e5778448971b50a883f62bd95622f6422b9a2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbMRj8ACgkQFA3kzBSg
+Kbaa4A//QRGxIflqtho+uXF6Bvym6CoHccm4nUUu4tjLRLtWsjsIT2mggNsr4KFW
+UwKinEPvouGc0EXeuq8zlmLiPvps42rhwlMok2yYNcf9+/QjnTe2Xlw2TgwqFpT5
+dXSDQqtF/bnXaE+jWEYESddXMCqiiMZxn81bXKKenYXdUSsYzZFGsQlBhOp33if0
+UlIH+GlJhivzRDVdYTZcdiFTK+hvSvLMRuHYLHst/Dnhko5kRjfxxIry10VOeWuX
+i7bt/0nGQNa5veXnpVhYYhuHRwTCPGifIWMNGErHAJ5t7PWGqf/Ch7m89F+HyiqT
+Qw+KGodk0FI2ebYwQrUXG4PGzV/nxXLc7R/1FtdfxUNm3+IYK9M3Kr34v+u1C9Bm
+ABeL+4CrCoTi6jIHFsICsOGwxfgiFZA5EUK1r60biqqXz+5TrvQte3iv52GctDf8
+SveEzZnkWGLmZr2Ef5ubQ5nCecAVhQ4bt3cUYF+QrvUWAH61X3a0v5yK5w4lPdB6
+Pzan4WfNyeNKn8Xg8RRiyGSsm+pEANO61reyaPn6cp9I6Cl8sqQZJ/HpLLPPI4gF
+l2s8LlpFYryAEUQ2JixIP66fCoMuGm0+W/iHujDvdCsv9Ggy+5xFkPKv05KrtMAh
+W3lp+Cy33PgJ6YdA6x2xt3kZYNlpY3+oWLeEM86Nt05JEaB2eK4=
+=cjT8
+-----END PGP SIGNATURE-----
 
-> 
-> If NVMEM needs to be updated and may cover these cases after all (and do not
-> forget about *small* size EEPROMs that most likely appear on the devices with
-> limited amount of resources!) in a reasonable size and performance, why not?
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
-> 
+--GzVTah3YJcw5sKqN--
 
