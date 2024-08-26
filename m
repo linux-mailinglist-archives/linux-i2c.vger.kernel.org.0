@@ -1,217 +1,250 @@
-Return-Path: <linux-i2c+bounces-5787-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5788-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4196F95EA45
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Aug 2024 09:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2079595EB28
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Aug 2024 10:01:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B79FF1F21C1B
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Aug 2024 07:21:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 968741F24C3C
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Aug 2024 08:01:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B561112BEBE;
-	Mon, 26 Aug 2024 07:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB5113C3CF;
+	Mon, 26 Aug 2024 07:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ca+2nGf6"
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="j47G0o/K"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2131.outbound.protection.outlook.com [40.107.117.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C899F376E6
-	for <linux-i2c@vger.kernel.org>; Mon, 26 Aug 2024 07:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724656878; cv=none; b=NsFKz8e1c8rSgUymj7bPrwOqKb6QRTfjX9/QRH/Om4kPg9nV48jHIMvE7Da+KZpC29CAfDFUzBTGaXn3juP57C+cWvPzQGJBMNgdXyg/HZ4BIAiAKxFDM1hqyAjmHS9QaZjhzu0/e3zPYYjdLsuMApoPXrP10XgdkUiSdpHJjs4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724656878; c=relaxed/simple;
-	bh=82WFEoh8dI6a0Rbl//ansxOC9mSUsYdhkWeiRVQn/Bo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fn0jYRxL0OMpMvWKeA8k0HJcXz+ciPqh5k3M6qJ0nSJ1QhzEbKTkNk4A1Sz+UnaFCM+zFLVlqI2NpjBebQLRnBgcWUAyXF8BZkgomul1BRpaBtsfE4G8Wwhh/UAuNAQ0b4splnil1+lS9FhjDjvulG26JaYVPtE1zrefdr3Kx0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ca+2nGf6; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-53438aa64a4so3353339e87.3
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Aug 2024 00:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1724656875; x=1725261675; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t9s80hAoba+vF/YE3Nvr8fKfluCQHu+8VdHsPUZS9vM=;
-        b=Ca+2nGf6mgohEbxkJrirCdMCKV0IAz+TOKjWORQxdPW2ptfaGcRBjTm6LLpllBsI0J
-         3aIgfjo4wjKzPokTwUv3x8zUWSyhCKL+6ywHiTd/yJ589tMGzTiw5U2+RA31PBGekY0e
-         S/8NKBZ917eEfWU/1IaoNsC0fxgHoq+L5GThs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724656875; x=1725261675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t9s80hAoba+vF/YE3Nvr8fKfluCQHu+8VdHsPUZS9vM=;
-        b=mtU/Ol47CeZAjnbtR9GevLQlqhFsQPHzZR665v/FTEiLHugs7cwpVYnCRkO62Xm53r
-         vHFcmBJIBPFZcq47+XT1uHjdPlEZW2HuCi+YpyYNJY9+uKELsJxacig0+9G2ZNlrbM+6
-         ekticoTqnnQIRvCUyce2v52YPtf7x4Q8xh4yY7c3OyWHZCh1msM3s6Bd9ovq7b9mC5Kj
-         RHgoaluOkfujuz7b9tSgeQZurIfFaZTvDSck1TjEOUVHhOSYm3TVSzyPTXp3oXOYiiwU
-         vkoc8pc9lARa08wR/mmJ+1+OOqHlXQQFqq8wqlFF7TV7TUOARqnsUy4Z6m9JmNdRWbaM
-         lKnA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdTArONHo9w3SkiXloX2F18uuOdfuz7FMdltKWMttJMl3AFj4BJDTNhzhAXHEDQnvK37A6ec8JER8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA8L8Os2lQeyjZ+dq4ft53j2CoPXcto/2WaUGzt7smpnp9vN98
-	eLIWsBHORxyjyTdrmWWLXyrX/ED+2tL4tgkGBAmTMNPqiApObAJzC8rpXXdzjsK+hpXU9cnZ0tQ
-	9EtF4A89lSMEnozkSE0ZP3KLpO/LHKWiLZasC
-X-Google-Smtp-Source: AGHT+IGihttkaipApdxajdI+u8zonSwerG1x9HLpL1VsK/H7AuQIzQB7NEiNyk7f9sK11N97AVeIrS8sEeRsiAeiSOI=
-X-Received: by 2002:a05:6512:3087:b0:52c:dc25:d706 with SMTP id
- 2adb3069b0e04-53438868deemr6871597e87.52.1724656874411; Mon, 26 Aug 2024
- 00:21:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5D413B587;
+	Mon, 26 Aug 2024 07:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.131
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724658633; cv=fail; b=T5UDBQOTcr5erbyTcsMQ+1Y8U6u0mZ4j5Qkb8DDjzTOsQh8XHJPzrASr9NMtOk33laN/5hBc34txgKFdK+OG5hMFbkJ8tVY6WNo6Vb7XbzxcmgVr8qjvVefW5CV1Es+tuNJIbvPZdIVLKLYRRGMYDmva03dHYHJYbxOhJWIBXls=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724658633; c=relaxed/simple;
+	bh=qT+ZkdxnpvBe53JSdSzMzK2z6Crh7fo1AMkSYhy0+cU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=CsC5a1hw3hLORed/PPZKs++Yz/OGwz8ilHTXkD9nI43KGz+812GiPLyLU3XRp8yukzdazBK23WaNr3gfv/oA86aZsjgvxJm15Ry556xSDIgUJVn5pXQ1WeDxERmKIb08bQm+DbFHy5e2MOr1Llgm8n42nxNJvNmyYE2eN+wskig=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=j47G0o/K; arc=fail smtp.client-ip=40.107.117.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TGyyHa6KntV4HeJ3XKntsuhdmfBCrVOEtSURqQsgVte27FcGyzBLXh4K7t9MANQIRzj4JiMwRhiArUc1HoyS93bAcMdjRZfn9nIWkA4An6TIsHz5FCndQVvuDcSXacngiz2yJyne3EzglW7IRDKVN54L5Vf4eIXzHYMjVBqvU/juaA0wmQCenpHfLxiB1LRzkT8tEd6ZwHQv7Jq/PtnH/5vMAbzPw7PKM+2plY2h8y58Lze8w2iUOVsVB3PlUb0CtG5k5MYF5y8XJ6V3U8KqkOSdHkpyOEbL3UflW7Ifcz7zZYo1g5AzBn4jP9u72F0IShCoFNyLkRPMwr34JCwCxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ArMdb11gM1IpnTa4bEEyTLdX+8ubS92moGd1CLqAEuQ=;
+ b=uTik9atGibjZhyzSfrBADZ4eJppxu4AJ3v4mu5IT81Fek8OdCuc0txVOXWzQRZpOPs0Mgki46yD8LqkNK5TcaxIZiu5PxdTWYGoe1aHd7VCd2uWldfx6kZSwlWmdPFW0nTuA3pvO6iu65lWtPgfvwy2qRRAQWnIH51EPxRsFkEKPhhb4bXnJs8seHFwqk71OEJedcJbYrVkB+7rp44w3VQsg+hVyqF2CuJfEq1faDVytTlwgbLEt+5XKIQMVieJn/B4dHwo29Z4KbMa+PblN0Oo1NsAqr0UMUv9a4xKPnmRdi1HyItds47gHKRx1nbCGFK+c+CYBp+qh8Gl6sT59zg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ArMdb11gM1IpnTa4bEEyTLdX+8ubS92moGd1CLqAEuQ=;
+ b=j47G0o/KWPsdXUkgjZPrI2iaVooW8CLjMSruQN/u0tW4UVKmewUyGS5yCo4h+mV0W1XXM8LVjObF5WY870sZABlkXRnhdqAYod3ZsXMorLw9i2ZNByxV2ieSnQdzdfyhWWmAm8S/P8qTv6p4FlO7nSbs+r/EqHRQGgel8cx/VL5cdztgc8gBgmoo4MRzeWXwTFLIAb47zXGXWiJvg5thNEGFhM0iSZvquBV0l5HySuyveOcJG64XcDZY3NztWXPsMdFoh9zrF1ImVVl2N1bp2FBTFgU/pjf2q8X7zmedtRY0sItIZwnqePKlV1PX/678fYGoCptEzVCn975KjIa1eg==
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
+ by SEYPR06MB5866.apcprd06.prod.outlook.com (2603:1096:101:c6::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.23; Mon, 26 Aug
+ 2024 07:50:24 +0000
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11%6]) with mapi id 15.20.7897.021; Mon, 26 Aug 2024
+ 07:50:24 +0000
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
+	"benh@kernel.crashing.org" <benh@kernel.crashing.org>, "joel@jms.id.au"
+	<joel@jms.id.au>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new register
+ mode driver
+Thread-Topic: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new register
+ mode driver
+Thread-Index:
+ AQHa8ho4oLFWUX2yC0qHT9Kfp3UIaLIuoMcAgAJo7hCAAJOvgIAA5YcAgADIa4CAARTpgIAAhfaAgARNnHA=
+Date: Mon, 26 Aug 2024 07:50:24 +0000
+Message-ID:
+ <OS8PR06MB7541A23130F469357B7FE5F4F28B2@OS8PR06MB7541.apcprd06.prod.outlook.com>
+References: <20240819092850.1590758-1-ryan_chen@aspeedtech.com>
+ <20240819092850.1590758-3-ryan_chen@aspeedtech.com>
+ <ZsNT7LPZ7-szrgBJ@smile.fi.intel.com>
+ <OS8PR06MB7541EE5BA5B400445FE0295EF28E2@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <ZsXVU2qy0GIANFrc@smile.fi.intel.com>
+ <OS8PR06MB7541945591A62B956DA28AD9F28F2@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <Zsc9_UddBybdnM1Z@smile.fi.intel.com>
+ <OS8PR06MB75419F3E3A222AE941DE3007F2882@OS8PR06MB7541.apcprd06.prod.outlook.com>
+ <ZsiWp5ENQ0BeBjMn@smile.fi.intel.com>
+In-Reply-To: <ZsiWp5ENQ0BeBjMn@smile.fi.intel.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|SEYPR06MB5866:EE_
+x-ms-office365-filtering-correlation-id: 66ddfc32-0723-4390-0688-08dcc5a3be3f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|376014|7416014|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?Tb4i0h66Oi7GHtmibAIzxpdnAQzqoc6I913qR4F42pQ15HIUhknvu/NjTHDz?=
+ =?us-ascii?Q?4RFu2uGMfd494F377azlOS2ufS7qlO9qpDREKBr9DwTggB1R/0KS/3Jz2/7w?=
+ =?us-ascii?Q?dOJEhKByPc+B1VpfJijiJaaqKZ5uOyf9HVBDZYeKfoCIbGk/f/TXhPuM0cVq?=
+ =?us-ascii?Q?1YtdnaE9T6/O5camTOiUyEI2SNSgPfFrlfaZDqRoRTnVMm7U//7tnJTBkU+X?=
+ =?us-ascii?Q?brJ67FZButROj94tXrJ4hUohP9jCFn+XWmIAE2lMfCzYrf8ne7mGxFmeeHNZ?=
+ =?us-ascii?Q?JMBsiV/kQdh149IcXj2gDedrKfF+ulnCUfSGW7N/R6LwD/VPS4KdC8FfFU+C?=
+ =?us-ascii?Q?peDNiLF7tGQbjS26LwuDptG6fJp70l16Z6/EqA+prnD+jFZW/svunB0nq74Y?=
+ =?us-ascii?Q?ikjLBUIVKKcAp+qyenlnHJ3vob8POxTkQ79E/uAu3tHNMBS7SxOBrN7WxsQQ?=
+ =?us-ascii?Q?RfyYUrFwT8sQtbqiUMb9cgi0yWWL3LaV1bvMAh9tpPyX2QrL7fKY+vy4p1mw?=
+ =?us-ascii?Q?gBnvH1zpXhfGrf2JAIJq1qcIoIt6X5mnBTlB99Bya0ZXg71NskbbbuUqq35o?=
+ =?us-ascii?Q?yBsgg1LHpglGwb7epurLcLXKq4WvTq4akyxf7LI5DN1d2/bmZEOVxHyhWfGy?=
+ =?us-ascii?Q?1KXlQbHmpBMnW5KRgmV7KYQvhJzDUMKAN8SHwn+zwgqO2HbModShDTN2HYiR?=
+ =?us-ascii?Q?1GaSpD+CyxY5P+5p9ZsopdqS5NnmrKaXaqVsp9gIzFyCOSrECFarN8dmeJz7?=
+ =?us-ascii?Q?USRznrqxJ/reXfq8RgOitC+j/NLLUmC/Otvwf9OKHlthDFID8XDEe/xU7LpP?=
+ =?us-ascii?Q?bPKpwt2CUGZRlb8PTAWguqF/1T0PrDUQlmUaSAlaBcHcuH4kOjxxOxbitdcY?=
+ =?us-ascii?Q?ks1JYLbA0OObGnDy1qWydm+jZKillA0r0oYbsqMCRFbm6rwry03uBt/llAwY?=
+ =?us-ascii?Q?o0qFChZkUK352bYVwA9trXg9k7ujXJtj4aHsjA19H4WGq79TM3MVuZBu2Ng9?=
+ =?us-ascii?Q?58J2gPWkrolUNU1uN7CoU/byFkP9JZSMW8HwPVuzagC4bussrlV7MTneFNXN?=
+ =?us-ascii?Q?ZCWNbmZRG9bcCiLjxhZ/KotovpIaGkdAZHa5tQhwfryrZCUdBrdaQ7ZWBZt1?=
+ =?us-ascii?Q?jqKUyjPYpqgg6/NnO2zR2CHcnhMZPC7eh0wHN62xiAHfDtbSAk1f0/I2daZl?=
+ =?us-ascii?Q?f8nEGWBmNAjPWTwDhhjy/chJg70fDBkVWy16TlWKJ/bkafpkwNmVS90D7NCf?=
+ =?us-ascii?Q?4gfhayIQAJr5JTjRRiQnT70Axl6+Naf8Y6sH5pneG26adK58X9T04ACdqVga?=
+ =?us-ascii?Q?zJUPZdllfrTimZk/OW6wL90o5o2YEt7vQvTQ8fsgCLuJE4wpltTfXehcoF/r?=
+ =?us-ascii?Q?O7TJ4E8UyMrWa0FF8Vsx7hYnapAH4ShVCbarOG8LYT99m92GpQ=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?fbUVmYU50z9YTkEVapSBkgjTv+Y8/29G8ZoN2smCqcdB3DttuhJHEkfM8wW6?=
+ =?us-ascii?Q?qg3AsrnZ6LsUdELZGTh7rVHYvWHV43z4X8CbXELK2laYr0TMJvS+loxbMRam?=
+ =?us-ascii?Q?/OZ4y68FCaHCzi3+0KLJPwMt5RyBMSHJ5Wo5Gs+n9nDt12TVR5/o0WUd5Jl6?=
+ =?us-ascii?Q?BsunQR8tt+sj3KLSYR7+ZxE33bBeZ0k2bk21CQrF2uAd4TqOwVmfqOOSpFi+?=
+ =?us-ascii?Q?iHnmgCMcW3uEby8mHonm3T6vNXcr3jD76fYoxADvsCDFGu942e5SCMnROR8i?=
+ =?us-ascii?Q?NDc9UGtHmbWgFedcfKt0HDrhv1G4lBZkBJTqrRgSTjfl7sNcCs5QBVBNtoX9?=
+ =?us-ascii?Q?AOfsKBDz++0fCHs7r7m5HlTkjtrrtzyLbw2WmcxaLKS4WUYtBjbYmW61z93v?=
+ =?us-ascii?Q?wjA0DyKABRubKTmqSKenbnYYKSFFwJF3do5uFjuV9WPsWaaxKaBUMwd0ulOJ?=
+ =?us-ascii?Q?DWUCLVksG6xVOeB+I9cqEz6kvf+llWQyvh9XZgKwqjGWlMoSegqizZarKzgO?=
+ =?us-ascii?Q?iU89dws6LU5fnY350zm2eyHwK4kT3YgNHFtXqQ5/haD6etgQIIyGP8wng1EC?=
+ =?us-ascii?Q?LbmhLkRsfwx+Fqn3RvthPIRKdJKiiPTwJB+AbHiQvB0beHvMCdOEIcnN4mzD?=
+ =?us-ascii?Q?GH3AY9+NkhULo6Nvx/Xj0e2UJROk1epKXVOHataaKFczZ+fukboNFRqnHHHk?=
+ =?us-ascii?Q?3H2/VwsZZzSEXwc3V+06RkvKS+suBNuSGXtI+Ect65NmN0q/h9rD6HxejqpL?=
+ =?us-ascii?Q?kQs6k2WkS1v94qNqL3Ou103uX0nysxR9rhdqp9esQjsNL4Bze7n70DicTd95?=
+ =?us-ascii?Q?jNZ1D7yvuVWiDgvZaftxRnzIjtCDSVOQNJ6gRVIZ5rXQAyfcBLdHZcxnOIc+?=
+ =?us-ascii?Q?zayl8nxLi+TPAIpgVliLyE9ad963huzNWpPZZJFPpbHcZrTTg6Zwn+p7+3iC?=
+ =?us-ascii?Q?av0ZcPq4N7ZKStaE5qaOgqsofb/FpAhMHo67LvwmuFU8NSx+8kbAU9KU4Mgg?=
+ =?us-ascii?Q?naDgoPmm1Yk5kXrB6/HL2m7puWfDVMo6/ZVmwt1OfjsdxBZseqhBnDh9aiMR?=
+ =?us-ascii?Q?t08ElaIzv9hsm4AVPkWIBvVApIso2Q67DebmxVv1Ac9FyyKjs1Qthvje1tLY?=
+ =?us-ascii?Q?KOZSGlolmRh42e6yU1+PWIYLe3KdLZcvd3OFf/b2ggel1AQ7sF3Cz9Yuyy4B?=
+ =?us-ascii?Q?EBTKlRU3K9RQecsdQItZgHIhZaIa/uzM4slnrbJyXWXHWl2cm0tM/F0zMfc9?=
+ =?us-ascii?Q?/f26Tg7nmFGddG1eDHXyJY/Izgt2zbYSx4BYC/qmIkgr5FnVMGyQgNn07TK2?=
+ =?us-ascii?Q?643Fq29Hwx7c1eUYGOAY6/kgYMl6820UYR9rcy7c6NrAlnCIHM5rG1s1FUgp?=
+ =?us-ascii?Q?KVWJoeBRyWA0gEy937rUaLlR4TSDASS2tO6vJIYMQWaNuT6lWaIz2iqCpcsx?=
+ =?us-ascii?Q?ZVzWYJPDJlAW+f7tQW6Ffrhw2tKW+LXb7cpoyAP85kio3tMrSFk+Q5k6t8Hd?=
+ =?us-ascii?Q?BkaVV6UdM8Y9D189/SxQ8e26z3YGo3QZSHisTakwiwuk5oBah9JzobEbevk9?=
+ =?us-ascii?Q?7kmyW/Edmgp9L25k9LVi78M5RW/3qKejWWQQF0Oa?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240822092006.3134096-1-wenst@chromium.org> <20240822092006.3134096-9-wenst@chromium.org>
- <ZsdJOUe44hiGur-s@smile.fi.intel.com> <CAGXv+5G7h08Pvd24_6LoUB_8w_Cd0RntRSjNdn_FjrRH1ZF5oQ@mail.gmail.com>
- <ZsiWALpt1IpTHsKg@smile.fi.intel.com>
-In-Reply-To: <ZsiWALpt1IpTHsKg@smile.fi.intel.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Mon, 26 Aug 2024 15:21:03 +0800
-Message-ID: <CAGXv+5FzMb3fERnUwd5DF_=TqXr2_6h+n_UPpfvJc_-eu7pNYg@mail.gmail.com>
-Subject: Re: [PATCH v5 08/10] i2c: of-prober: Add GPIO support
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66ddfc32-0723-4390-0688-08dcc5a3be3f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2024 07:50:24.1879
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qq0MeqNVbigML/1h2aTu5WT6eeRpDZEMwTKZ6Qi5iJdazx5vlYKYuqzWKFqHSEd3MdwTk3muH14mXdBIXfJf/l/kpC2tE9wPcc4puzQWrrU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5866
 
-On Fri, Aug 23, 2024 at 10:01=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Aug 23, 2024 at 06:32:16PM +0800, Chen-Yu Tsai wrote:
-> > On Thu, Aug 22, 2024 at 10:20=E2=80=AFPM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Thu, Aug 22, 2024 at 05:20:01PM +0800, Chen-Yu Tsai wrote:
->
+> Subject: Re: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new registe=
+r
+> mode driver
+>=20
+> On Fri, Aug 23, 2024 at 06:23:54AM +0000, Ryan Chen wrote:
+> > > On Thu, Aug 22, 2024 at 02:24:26AM +0000, Ryan Chen wrote:
+> > > > > On Wed, Aug 21, 2024 at 06:43:01AM +0000, Ryan Chen wrote:
+> > > > > > > On Mon, Aug 19, 2024 at 05:28:49PM +0800, Ryan Chen wrote:
+>=20
 > ...
->
-> > > > +     if (!data->gpiods)
-> > > > +             return 0;
+>=20
+> > > > > > > > +	if (i2c_bus->mode =3D=3D BUFF_MODE) {
+> > > > > > > > +		i2c_bus->buf_base =3D
+> > > > > > > devm_platform_get_and_ioremap_resource(pdev, 1, &res);
+> > > > > > > > +		if (!IS_ERR_OR_NULL(i2c_bus->buf_base))
+> > > > > > > > +			i2c_bus->buf_size =3D resource_size(res) / 2;
+> > > > > > > > +		else
+> > > > > > > > +			i2c_bus->mode =3D BYTE_MODE;
+> > > > > > >
+> > > > > > > What's wrong with positive conditional? And is it even
+> > > > > > > possible to have NULL here?
+> > > > > > >
+> > > > > > Yes, if dtsi fill not following yaml example have reg 1, that
+> > > > > > will failure at buffer
+> > > > > mode.
+> > > > > > And I can swith to byte mode.
+> > > > > >
+> > > > > > reg =3D <0x80 0x80>, <0xc00 0x20>;
+> > > > >
+> > > > > I was asking about if (!IS_ERR_OR_NULL(...)) line:
+> > > > > 1) Why 'if (!foo) {} else {}' instead of 'if (foo) {} else {}'?
+> > > > I will update to following.
+> > > > 		if (IS_ERR(i2c_bus->buf_base))
+> > > > 			i2c_bus->mode =3D BYTE_MODE;
+> > > > 		else
+> > > > 			i2c_bus->buf_size =3D resource_size(res) / 2;
+> > > >
+> > > > > 2) Why _NULL?
+> > > > 	If dtsi file is claim only 1 reg offset. reg =3D <0x80 0x80>; that
+> > > > will goto byte
+> > > mode.
+> > > > 	reg =3D <0x80 0x80>, <0xc00 0x20>; can support buffer mode.
+> > > > 	due to 2nd is buffer register offset.
 > > >
-> > > If it comes a new code (something else besides GPIOs and regulators) =
-this
-> > > will be a (small) impediment. Better to have a helper for each case a=
-nd do
+> > > I have asked why IS_ERR_OR_NULL() and not IS_ERR().
 > > >
-> > >         ret =3D ..._gpiods();
-> > >         if (ret)
-> > >                 ...
-> > >
-> > > Same for regulators and anything else in the future, if any.
-> >
-> > I'm not sure I follow. Do you mean wrap each individual type in a wrapp=
-er
-> > and call those here, like the following?
-> >
-> >     i2c_of_probe_enable_res(...)
-> >     {
-> >         ret =3D i2c_of_probe_enable_regulators(...)
-> >         if (ret)
-> >               return ret;
-> >
-> >         ret =3D i2c_of_probe_enable_gpios(...)
-> >         if (ret)
-> >               goto error_disable_regulators;
-> >
-> >         ...
-> >     }
->
-> Yes.
->
-> ...
->
-> > > > +             /*
-> > > > +              * reset GPIOs normally have opposite polarity compar=
-ed to
-> > >
-> > > "reset"
-> > >
-> > > > +              * enable GPIOs. Instead of parsing the flags again, =
-simply
-> > >
-> > > "enable"
-> > >
-> > > > +              * set the raw value to high.
-> > >
-> > > This is quite a fragile assumption. Yes, it would work in 98% cases, =
-but will
-> > > break if it's not true somewhere else.
-> >
-> > Well, this seems to be the de facto standard. Or it would have to remem=
-ber
-> > what each GPIO descriptor's name is, and try to classify those into eit=
-her
-> > "enable" or "reset", and set their respective logical values to 1 or 0.
-> > And then you run into a peripheral with a broken binding that has its
-> > "reset" GPIO inverted, i.e. it's driver behavior needs to follow the
-> > "enable" GPIO style. The class of devices this prober targets are
-> > consumer electronics (laptops, tablets, phones) that at least have gone
-> > through some component selection where the options won't have conflicti=
-ng
-> > requirements.
->
-> I'm talking from real life example(s) :-)
->
-> Recently I looked at the OV7251 sensor driver that expects "enable" GPIO =
-while
-> all users supply "reset"-as-"enable" with the exact trouble I described.
-> Yet it's pure software / ABI issue in that case, but who knows what PCB
-> engineers may come up with.
+> > OH, I will doing by this.
+> > 		if (IS_ERR_OR_NULL(i2c_bus->buf_base))
+>=20
+> The question about _NULL remains unanswered...
+Sorry, I may not catch your point.
+So, Do you mean I should passive coding by following?
 
-For the OV7251 case specifically, the current approach works fine, as the
-polarity is the same: high electric level for a working chip.
+If (i2c_bus->buf_base > 0)
+	i2c_bus->buf_size =3D resource_size(res) / 2;
+else
+    i2c_bus->mode =3D BYTE_MODE;
 
-But now that you mention it, camera sensors are exactly the case I had
-in mind, though not the same chip. Some of the OmniVision and GalaxyCore
-sensors have a "shutdown" pin that is active high, i.e. high electric
-level shuts down the chip.
-
-So I guess the alternative would be to remember each GPIO's name, and
-do the appropriate thing based on the name, and also set the logical
-value, not the raw value. If it says "shutdown" or "reset", set the
-logical value to 0; if it says "enable", set it to 1. And hopefully
-we don't run into a binding which has "shutdown" but is actually
-"enable" ...
-
-I don't have this case and I kind of want to leave it as a TODO though.
-I feel like the scope of the series is expanding ever so slightly.
-
-
-ChenYu
-
-> > And if the polarities of the possible components don't line up, then th=
-is
-> > probe structure can't really do anything. One would need something that
-> > power sequences each component separately and probes it. I would really
-> > like to avoid that if possible, as it makes the boot time (to periphera=
-l
-> > available) dependent on which component you have and how far down the
-> > list it is. We have Chromebooks that have 4 touchscreen components
-> > introduced over the years. In that case something more like Doug's
-> > original proposal would work better: something that forces mutual
-> > exclusivity among a class of devices.
->
-> Maybe. I just pointed out the potential problem.
->
-> > > > +              */
->
+>=20
+> > 			i2c_bus->mode =3D BYTE_MODE;
+> > 		else
+> > 			i2c_bus->buf_size =3D resource_size(res) / 2;
+>=20
 > --
 > With Best Regards,
 > Andy Shevchenko
->
->
+>=20
+
 
