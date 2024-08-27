@@ -1,131 +1,153 @@
-Return-Path: <linux-i2c+bounces-5828-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5829-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C57CA9609DE
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 14:19:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38E11960BFF
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 15:27:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E91C11C22C7C
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 12:19:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E292E1F2551F
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 13:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927121A0B16;
-	Tue, 27 Aug 2024 12:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242EE1C579A;
+	Tue, 27 Aug 2024 13:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="mxsxlHug"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Udj1fjaq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EC119F466;
-	Tue, 27 Aug 2024 12:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670F91C4EC6
+	for <linux-i2c@vger.kernel.org>; Tue, 27 Aug 2024 13:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724761143; cv=none; b=kdi5A15op2Qs14TwOkydKsKF9IM5OvxSdWTEJ5D5iMVWbsH3TE/55ahmDPw6mvMC57xFubWDqUzvURqw/LEcEsz6+EFbNbingBbI10OUfViCsXCBtk/GuLlkrp6Qp3/ZWaMedRCM6ekdBeFBKBgGsMH+xvjQ+p6zfu1OLtCznqM=
+	t=1724765086; cv=none; b=FKW3KT8G0Llt+so9PANrD7m/i0UlEDmeQI6LRsZGVZqfWU8kX1MXGoXtvIhsEvY9ueLmbQUS277FED4FUvyyO4YABBVLgw9hEfBmq7tGcDaqKM4jtQ+OW+kkKtBYpuWSvSDXLJNjvEO/lnUPniA2q+WryJPTj1EpDTvVdLLb2o8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724761143; c=relaxed/simple;
-	bh=UyJk422VZV1mSXQaP3ENhWXbmisnUHit76yj1IDatQ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kUzjH76pLQJjFpc7XtKx+t0bBSRl/PK8/CP7krphPiTm44UBR11aUJpBbauVYPOHvJ2tztCgC8YvOIPRAhN2tnlHXh39ZOxjRt6gZnQ5cKrbswqAyCwdt65lLR9tBynb2yqo6Hd+C9WViIyG18nR8M+sixOigSbWfLFnusB8Km0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=mxsxlHug; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=xezZ+taVNLl52dL3E6RzyYiJm+D3UDu4fY0+FPqfY48=; b=mxsxlHuglSBo5i99hIWS7AfAhl
-	xHRuObvOsLgAYeVSD7E9uegUt6/UupMKhpLrozYLEz36LJlWwZq05a3q9SPJLh2nda6IL87yMB6lm
-	lICNXpLo0FHWT1jah8jaaVXvLbJ6TtdM6LYGtMR+zXrNUuGRiw/vNnM8tpJc8w7bL5PI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1siv9b-005oYK-Ux; Tue, 27 Aug 2024 14:18:31 +0200
-Date: Tue, 27 Aug 2024 14:18:31 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Jiawen Wu <jiawenwu@trustnetic.com>
-Cc: andi.shyti@kernel.org, jarkko.nikula@linux.intel.com,
-	andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-	jsd@semihalf.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, rmk+kernel@armlinux.org.uk,
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-	mengyuanlou@net-swift.com, duanqiangwen@net-swift.com
-Subject: Re: [PATCH net 0/3] Add I2C bus lock for Wangxun
-Message-ID: <509abfeb-b1fb-4c53-9898-6106c8dde411@lunn.ch>
-References: <20240823030242.3083528-1-jiawenwu@trustnetic.com>
- <888f78a9-dea9-4f66-a4d0-00a57039733d@lunn.ch>
- <01d701daf75c$50db4450$f291ccf0$@trustnetic.com>
- <55ff5570-5398-48e9-bf56-d34da197d175@lunn.ch>
- <020f01daf827$d765ffd0$8631ff70$@trustnetic.com>
+	s=arc-20240116; t=1724765086; c=relaxed/simple;
+	bh=C1Psij49NxzQQVs/fLfKOjdWLfmrzStbUTmG4qlgoDQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LGY+MnFDUa2dvID/lvFSK4KehVpPQrYWQuo7z70iJsBsAt8m4j5shqJY2QN8VMiEkz1Tm6Q8zRATgxZXzP7vS1TyOmHHeJaR93l5zjK9qDPQLcQr9BLVNFv8DuWD7j0F1539K2hBxK65uF7EjgP1UEbDxrlVvHzUQFJpBFjI1YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Udj1fjaq; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724765084;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ca7L2Ypf1IuSrNf2s487D4RaOYQ0VQUUHqLQBFjj34U=;
+	b=Udj1fjaqf9+otj6J/nodPA7HFRGwEtwLXLfuY0Q7u2WtX9KaCf55fNWJ2Wvb6kF8PuMvxW
+	6wD25uKuoOm5hhweg+wHNt7fJtZXwlfd7M1y9/Jr0cJxv4RGb+zhvWDOPkI0U1PkdAulBm
+	IR14/h2USuLSHPPCpPyUSjY99gtDKrM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-311-_OD_7FyjMJGHwyr-_pfsGQ-1; Tue, 27 Aug 2024 09:24:43 -0400
+X-MC-Unique: _OD_7FyjMJGHwyr-_pfsGQ-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-428fb72245bso28767095e9.1
+        for <linux-i2c@vger.kernel.org>; Tue, 27 Aug 2024 06:24:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724765082; x=1725369882;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ca7L2Ypf1IuSrNf2s487D4RaOYQ0VQUUHqLQBFjj34U=;
+        b=ZVV4hQEPG+PBJZilK8k5B8hq24I1s7Fw/zXUa36U8opYn27Xv8PiuS7pbA3rhL8Nkv
+         T6wRIIb6UGsAP8A+ihNzKng5CY7UJ+ccGv/NsK61Ao+OceoKAsCyms0E8EjbGUlRAy1z
+         dl0Rk0JPWjclcRtJx2PDqxfM2+TCN6d9nAk2f8YMfpGqJ+68ENdwvW3/YB3Whz3DzPAa
+         o57Wh2kBf11XZW6izy7PMlLhJKX6N2kKZFn5qBYpgU4QILmPjAIIGJObp+MdeAQp+qMd
+         H0GGwdqR45Y2zRhlN4Rkhjmtma1nc3dtMZH9L5bUyA77DKcbRGDYMzY96Klgsa9RayN/
+         phAA==
+X-Forwarded-Encrypted: i=1; AJvYcCVuvYTOu/Dkwjm5rxWKaqUA4mfgNty3JEJFbnbhjKxDngrEUlk5aU60eLaDrrAvbYOAMN0OVKJUqlQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJfdBSXXbZjVbdlG689WuKdqGgevIObid7oEcdafHitZPYNNOs
+	ks5Wju44P1FnYmckavy1ZSGDNQHeoefNB2EIGlU1gJnG5w8KavahCPJDGwhg4c5GsRN0sO9ov+v
+	eMIRzwP+u0QEkbwyYXHrtiC2m91yJjMCqmK15DeTOywZuVhuOFi4mx8WRHQ==
+X-Received: by 2002:a05:600c:4f01:b0:424:8dbe:817d with SMTP id 5b1f17b1804b1-42b9a46d558mr18972085e9.10.1724765081986;
+        Tue, 27 Aug 2024 06:24:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF7rF2xZXsNit3rnRpHiOnC7cRxUpFHU0F4taw8YckE22isH+1s8w1ewwo4oiz7G7HWJwsUVA==
+X-Received: by 2002:a05:600c:4f01:b0:424:8dbe:817d with SMTP id 5b1f17b1804b1-42b9a46d558mr18971815e9.10.1724765081469;
+        Tue, 27 Aug 2024 06:24:41 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:1b67:7410:c8c6:fe2f:6a21:6a5a? ([2a0d:3344:1b67:7410:c8c6:fe2f:6a21:6a5a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ac51622b6sm184917205e9.22.2024.08.27.06.24.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Aug 2024 06:24:41 -0700 (PDT)
+Message-ID: <43c572e1-11bd-4fb6-8463-7940f57b8c7d@redhat.com>
+Date: Tue, 27 Aug 2024 15:24:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <020f01daf827$d765ffd0$8631ff70$@trustnetic.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 2/3] i2c: designware: add device private data passing
+ to lock functions
+To: Jiawen Wu <jiawenwu@trustnetic.com>, andi.shyti@kernel.org,
+ jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+ mika.westerberg@linux.intel.com, jsd@semihalf.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, rmk+kernel@armlinux.org.uk,
+ piotr.raczynski@intel.com, andrew@lunn.ch, linux-i2c@vger.kernel.org,
+ netdev@vger.kernel.org
+Cc: mengyuanlou@net-swift.com, duanqiangwen@net-swift.com,
+ stable@vger.kernel.org
+References: <20240823030242.3083528-1-jiawenwu@trustnetic.com>
+ <20240823030242.3083528-3-jiawenwu@trustnetic.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20240823030242.3083528-3-jiawenwu@trustnetic.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> > More details please.
-> > 
-> > Linux assume it is driving the hardware. Your firmware cannot be
-> > touching any registers which will clear on read. QSFP states that
-> > registers 3-31 of page 0 are all clear on read, for example. The
-> > firmware should also not be setting any registers, otherwise you can
-> > confuse Linux which assumes registers it set stay set, because it is
-> > controlling the hardware.
-> > 
-> > Your firmware also needs to handle that Linux can change the page. If
-> > the firmware changes the page, it must restore it back to whatever
-> > page Linux selected, etc.
-> > 
-> > The fact you are submitting this for net suggests you have seen real
-> > issues. Please describe what those issues are.
+
+
+On 8/23/24 05:02, Jiawen Wu wrote:
+> In order to add the hardware lock for Wangxun devices with minimal
+> modification, pass struct dw_i2c_dev to the acquire and release lock
+> functions.
 > 
-> The error log shows:
+> Cc: stable@vger.kernel.org
+> Fixes: 2f8d1ed79345 ("i2c: designware: Add driver support for Wangxun 10Gb NIC")
+> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-amdpsp.c   |  4 ++--
+>   drivers/i2c/busses/i2c-designware-baytrail.c | 14 ++++++++++++--
+>   drivers/i2c/busses/i2c-designware-common.c   |  4 ++--
+>   drivers/i2c/busses/i2c-designware-core.h     |  4 ++--
+>   4 files changed, 18 insertions(+), 8 deletions(-)
 > 
-> [257681.367827] sfp sfp.1025: Host maximum power 1.0W
-> [257681.370813] txgbe 0000:04:00.1: 31.504 Gb/s available PCIe bandwidth, limited by 8.0 GT/s PCIe x4 link at 0000:02:02.0 (capable
-> of 63.008 Gb/s with 8.0 GT/s PCIe x8 link)
-> [257681.373364] txgbe 0000:04:00.1 enp4s0f1: renamed from eth0
-> [257681.434719] txgbe 0000:04:00.1 enp4s0f1: configuring for inband/10gbase-r link mode
-> [257681.676747] sfp sfp.1025: EEPROM base structure checksum failure: 0x63 != 0x1f
-> [257681.676755] sfp EE: 00000000: 03 04 07 10 00 00 01 00 00 00 00 06 67 02 00 00  ............g...
-> [257681.676757] sfp EE: 00000010: 1e 0f 00 00 46 69 62 65 72 53 74 6f 72 65 20 64  ....FiberStore d
-> [257681.676759] sfp EE: 00000020: 20 20 20 20 00 00 1b 21 53 46 50 2d 31 30 47 53      ...!SFP-10GS
-> [257681.676760] sfp EE: 00000030: 52 2d 38 35 20 20 20 20 41 20 20 20 03 52 00 1f  R-85    A   .R..
-> [257681.676762] sfp EE: 00000040: 00 81 cd 5b df 25 0a bd 40 f6 c6 ce 47 8e ff ff  ...[.%..@...G...
-> [257681.676763] sfp EE: 00000050: 10 d8 24 33 44 8e ff ff 10 41 b0 9a ff ff ff ff  ..$3D....A......
->  
-> It looks like some fields are read incorrectly. For comparison, I printed the
->  SFP info when it loaded correctly:
-> 
-> [260908.194533] sfp EE: 00000000: 03 04 07 10 00 00 01 00 00 00 00 06 67 02 00 00  ............g...
-> [260908.194536] sfp EE: 00000010: 1e 0f 00 00 46 69 62 65 72 53 74 6f 72 65 20 20  ....FiberStore
-> [260908.194538] sfp EE: 00000020: 20 20 20 20 00 00 1b 21 53 46 50 2d 31 30 47 53      ...!SFP-10GS
-> [260908.194540] sfp EE: 00000030: 52 2d 38 35 20 20 20 20 41 20 20 20 03 52 00 1f  R-85    A   .R..
-> [260908.194541] sfp EE: 00000040: 40 63 bd df 40 8e ff ff 10 41 b0 9a ff ff ff ff  @c..@....A......
-> [260908.194543] sfp EE: 00000050: 10 58 5b 29 41 8e ff ff 10 41 b0 9a ff ff ff ff  .X[)A....A......
-> [260908.198205] sfp sfp.1025: module FiberStore       SFP-10GSR-85     rev A    sn G1804125607      dc 180605
-> 
-> Since the read mechanism of I2C is to write the offset and read command
-> first, and then read the target address. I think it's possible that the different
-> offsets be written at the same time, from Linux and firmware.
- 
-O.K, that is bad. The SFP is totally unreliable...
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> index 63454b06e5da..ee7cc4b33f4b 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -167,7 +167,7 @@ static void psp_release_i2c_bus_deferred(struct work_struct *work)
+>   }
+>   static DECLARE_DELAYED_WORK(release_queue, psp_release_i2c_bus_deferred);
+>   
+> -static int psp_acquire_i2c_bus(void)
+> +static int psp_acquire_i2c_bus(struct dw_i2c_dev *dev)
+>   {
+>   	int status;
+>   
 
-You however have still not answered my question. What is the firmware
-accessing? How does it handle pages?
+This function is used in a few other places in this compilation unit. 
+You need to update all the users accordingly.
 
-The hack you have put in place is per i2c transaction. But accessing
-pages is likely to be multiple transactions. One to change the page,
-followed by a few reads/writes in the new page, then maybe followed by
-a transactions to return to page 0.
+> @@ -206,7 +206,7 @@ static int psp_acquire_i2c_bus(void)
+>   	return 0;
+>   }
+>   
+> -static void psp_release_i2c_bus(void)
+> +static void psp_release_i2c_bus(struct dw_i2c_dev *dev)
+>   {
+>   	mutex_lock(&psp_i2c_access_mutex);
+>   
 
-I think your best solution is to simply take the mutex and never
-release it. Block your firmware from accessing the SFP.
+The same here.
 
-	Andrew
+Cheers,
+
+Paolo
+
 
