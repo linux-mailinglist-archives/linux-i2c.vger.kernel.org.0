@@ -1,113 +1,115 @@
-Return-Path: <linux-i2c+bounces-5824-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5825-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDE6896020D
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 08:40:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40C3A960214
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 08:41:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D32728378E
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 06:40:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E02781F21A67
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 06:41:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C238B1448E0;
-	Tue, 27 Aug 2024 06:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1338F13D53F;
+	Tue, 27 Aug 2024 06:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="npv1AQcX"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4363413D53F;
-	Tue, 27 Aug 2024 06:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17F93A1C4;
+	Tue, 27 Aug 2024 06:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724740761; cv=none; b=g4+7ttij1v34V1Op4GErryVAOiQbKlmRKMnil8PdiB0psTkmTQTDtWp9hMs7bfhYBVVp/6wuxZ/2d3rW9ZcCgJZprGpK9iRxG9tKlujIH7XZeaW5ymoTp/Wj+Jj1KlUTtxTpFxJorjWInFsdtuNCgcCNQpKgd0lc0Iq4hWvXQIE=
+	t=1724740909; cv=none; b=SQuZODKdKkvXWZKTffbZTKAVXN+CNf4FJPnxFvimjOmtgPYi0QJCyuAa42lKhmUWCcQDE5UeCu7JUkKWDjklEHdQtSDNPp12wLZF/LUND3hHWqwFx2AUMiIE3+MvM/uxkrDlqelJ6QK/LJEvdkWnUS7F6Aob/894+MUCmJmrpew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724740761; c=relaxed/simple;
-	bh=kw+SmGbNgU/Y7Ultd3TRCIDvjLA02UIU6oeUdCnjbAA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AbfwJO/xSJjmWWFJsRA+8OJkN3CM4yBNPsnQsC+2AvstVhncRhAWSSdlzH64pBoR+23BuLy0Ps93NVU1h3bsl6YaS8cfZvOtvXu1ajwdFPfIfzr68raA5csW8+mNUz/rZqpMaFghJLXOGezajCVXxALyy/vAvDU1Dwk7R9CsAfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6cf6d1a2148so9492207b3.3;
-        Mon, 26 Aug 2024 23:39:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724740757; x=1725345557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KGZ1SOA396NzpzsyvzdR1JE9oP9KWAqRS+PYDvwpUmk=;
-        b=Eh2N57MfpCJ6FHeqmS1F2iYZT10xwKkmNScxYBF6HIz7ZlOwdPjE/zkb9ihfmSqYck
-         pRs3QxW1XFm/Hc5ouhHRoErYi+/kFh5LzqH0e6A6NE2BstMt7uW3yDriWAxYrWL0IbOq
-         n5ihXn0X++zmXfZs8CqfSFu7xVeDzA71xryt9X1/n69ssL97aKxOICuLglV/KWBL+toN
-         IRMCHIX7VKb3n++C1X5iHW5P7hvyNRvPXiSYMB0A3He+45Z7HExY+MmY8DEZv4pXzKMH
-         qsHEuWi+tWV0JyvaM9hv5BaVmVTu/1l1yJVDYbudlWh2lTDo+eaeF/w45mLqj+xaPvOK
-         D+2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUA8mL3YhccSfr7ZtpI/Qx5A46aWXqDU6dmsjKFdDSgHB+5e25BrHpviIwMqtiTCFHJnrmgXH183z0p5Q==@vger.kernel.org, AJvYcCUrE5x4R36WpNqA61atf9CB3UuwWaQiN7KJV0IqJXsy71q41VI0fg6a7sZmF2SPqe0nPQ3JclHDkZo=@vger.kernel.org, AJvYcCWGHUqbcW0RwlCSE1BkFmPwtFKdvZCKTE/i4b5GVlTDGgrzfJZb+OqXeJkvyFrttNKKg6rA++RUiuzjeN5cwVVtAO4=@vger.kernel.org, AJvYcCXNB1Z304FD0d63sevP2xmHxDRVHyy+qU5L/AedHGQoSg6VHrzdHIPoeTiVo7Vznbr2CGsxR4GopvpmVSSg@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjDb1blniTuChc4S/DJY2D7IlL1WBcEdv+O6qlmqHYkIMCqlz7
-	A3pT9YTWMiRFbf8KFtpewqZJygQS0DK2A94GzpO/97/FLdxZZ5mfaYsXMsnB
-X-Google-Smtp-Source: AGHT+IGSGJGo9EYq8UwOLeR7HNY9lgHHLu6aRq0fNm2UcjnllzrOncfhlYU6EHq/THHLlb3MnG6e6w==
-X-Received: by 2002:a05:690c:4b08:b0:6be:2044:935b with SMTP id 00721157ae682-6cfba8726cdmr23225287b3.25.1724740756855;
-        Mon, 26 Aug 2024 23:39:16 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6c39d3a9df2sm17952847b3.103.2024.08.26.23.39.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Aug 2024 23:39:16 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6b59a67ba12so46965687b3.1;
-        Mon, 26 Aug 2024 23:39:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVZD2ht3JNYB5HhrWvZiAlUhFYX0xtOsCdep2+ndvcuhDxEM1RXNqhR8Q4lJz30Liio/5erlZFTAcsCvyj4@vger.kernel.org, AJvYcCWTfEX2caGBQhaak5S5nwP9ZkArjgFCPl6NIcBRL/lMNLva/HbMXxvbNhGFjJsaFX1ddRzXUZAyJUl2g9JNmnWDpEk=@vger.kernel.org, AJvYcCWrU+3GwFK7c2Awsjs7Z+1bLuvXEM6O9U/+VGMPbcVBgCQMUWTohTWjA68+5E8u55Au2c7y+AleFel7xA==@vger.kernel.org, AJvYcCWvWL0yHs97szEltq9fek56tEzqfe03XplHjPzvRt0b5f1PFxvXCw+439mTcwBAelryr54VgY97PaI=@vger.kernel.org
-X-Received: by 2002:a05:690c:38b:b0:6c7:a120:e10f with SMTP id
- 00721157ae682-6cfbbbd4c68mr20021307b3.29.1724740755948; Mon, 26 Aug 2024
- 23:39:15 -0700 (PDT)
+	s=arc-20240116; t=1724740909; c=relaxed/simple;
+	bh=ui3VLQCEUL/rPGRqsX+CA2DwY1epfB51S31pwoWE1q0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JDp9Eh0sOy4pNY/WAOMNoeWT+5gj/rBmrJT1ou7Yl7HXQSfAe9F6S6TtoDS2Sd2042PgnPHKZtYkoeO0XJN3MhQqIQkyTxQwYpx6wJXpTwxLFqSKbkz4MK1cCDrR3KsndGXDSbv+2lnkwDRZV6YftaPll9Y5T16qBv7rhhPsS30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=npv1AQcX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C6D1C8B7CE;
+	Tue, 27 Aug 2024 06:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724740909;
+	bh=ui3VLQCEUL/rPGRqsX+CA2DwY1epfB51S31pwoWE1q0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=npv1AQcXb1YaLvcl6io9Dy/x3pfnhTq6xFY8Sj7i0jqFOZ5Ekjf0ZZXDMXC35hCnA
+	 4q8DwmE4JMKMd2yjHVH/n5F0Iw08+Q2J2nMhLr8wpdVQFLC5QjJW0gJZQnMHQwej3L
+	 SxwA5IGh4XJECyxJ7Xvp5pSOpCh93XUscX8fJPFTiyoV2A1qfYitPzCE9JIY7uEpn/
+	 uP+g589e3CQzUN2iAR0ryVaUrr6mqgBgnjTEsuEi/1tY0SNYg39/B21L/w/hfY8sSK
+	 PEpEhL8qSc4XGmm7DsR3JPXAmES8pwOdIq5gfsNlv4cHx2x1bI/8AmHYP3U6Kbf2Sc
+	 wu2uwQh8Ah7uQ==
+Date: Tue, 27 Aug 2024 08:41:45 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] dt-bindings: i2c: renesas,rcar-i2c: document
+ SMBusAlert usage
+Message-ID: <uftaujyuofyvgnr64xg4ezvmk7etoga6ekfgirxdhtbsoqaoq3@eruhqbwjyjkd>
+References: <20240826150840.25497-4-wsa+renesas@sang-engineering.com>
+ <20240826150840.25497-5-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240827034841.4121-1-rongqianfeng@vivo.com> <20240827034841.4121-2-rongqianfeng@vivo.com>
-In-Reply-To: <20240827034841.4121-2-rongqianfeng@vivo.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 27 Aug 2024 08:39:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWNJJ6q88MA+bgimmYVLyO6gp7MomLkhNRwLTLdMkkFYQ@mail.gmail.com>
-Message-ID: <CAMuHMdWNJJ6q88MA+bgimmYVLyO6gp7MomLkhNRwLTLdMkkFYQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] i2c: emev2: Use devm_clk_get_enabled() helpers
-To: Rong Qianfeng <rongqianfeng@vivo.com>
-Cc: andriy.shevchenko@intel.com, biju.das.jz@bp.renesas.com, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Paul Cercueil <paul@crapouillou.net>, linux-renesas-soc@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240826150840.25497-5-wsa+renesas@sang-engineering.com>
 
-On Tue, Aug 27, 2024 at 5:49=E2=80=AFAM Rong Qianfeng <rongqianfeng@vivo.co=
-m> wrote:
-> The devm_clk_get_enabled() helpers:
->     - call devm_clk_get()
->     - call clk_prepare_enable() and register what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
->
-> This simplifies the code and avoids the calls to clk_disable_unprepare().
->
-> While at it, no need to save clk pointer, drop sclk from struct
-> em_i2c_device.
->
-> Signed-off-by: Rong Qianfeng <rongqianfeng@vivo.com>
+On Mon, Aug 26, 2024 at 05:08:42PM +0200, Wolfram Sang wrote:
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> Question: Should I remove 'smbus_alert' from the enum of
+> 'interrupt-names'? It is already documented here:
+> 
+> https://github.com/devicetree-org/dt-schema/commit/c51125d571cac9596048e888a856d70650e400e0
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+No, because dtschema is not specific there and allows any combination,
+while device bindings should make it constrained.
 
-Gr{oetje,eeting}s,
+> 
+> 
+>  .../bindings/i2c/renesas,rcar-i2c.yaml         | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/renesas,rcar-i2c.yaml b/Documentation/devicetree/bindings/i2c/renesas,rcar-i2c.yaml
+> index 6cc60c3f61cd..2eed3ae7c57d 100644
+> --- a/Documentation/devicetree/bindings/i2c/renesas,rcar-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/renesas,rcar-i2c.yaml
+> @@ -60,7 +60,20 @@ properties:
+>      maxItems: 1
+>  
+>    interrupts:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+> +    description:
+> +      Without interrupt-names, the first interrupt listed must be the one
+> +      of the IP core, the second optional interrupt listed must handle
+> +      SMBALERT#, likely a GPIO.
 
-                        Geert
+With interrupt-names the same... unless you want to allow anything? No
+clue what is being fixed here, no commit msg. Which interrupts are
+flexible? Why main can be skipped suddenly (or was it always)?
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      enum:
+> +        - main
+> +        - smbus_alert
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof
+
 
