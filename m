@@ -1,153 +1,141 @@
-Return-Path: <linux-i2c+bounces-5829-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5830-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38E11960BFF
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 15:27:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9306E960CE3
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 16:03:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E292E1F2551F
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 13:27:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE5381C225EB
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Aug 2024 14:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242EE1C579A;
-	Tue, 27 Aug 2024 13:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D62701BC9E6;
+	Tue, 27 Aug 2024 14:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Udj1fjaq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QCyoGDxv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670F91C4EC6
-	for <linux-i2c@vger.kernel.org>; Tue, 27 Aug 2024 13:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE2C1E487;
+	Tue, 27 Aug 2024 14:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724765086; cv=none; b=FKW3KT8G0Llt+so9PANrD7m/i0UlEDmeQI6LRsZGVZqfWU8kX1MXGoXtvIhsEvY9ueLmbQUS277FED4FUvyyO4YABBVLgw9hEfBmq7tGcDaqKM4jtQ+OW+kkKtBYpuWSvSDXLJNjvEO/lnUPniA2q+WryJPTj1EpDTvVdLLb2o8=
+	t=1724767417; cv=none; b=FGHpsYoQKvYm5HYSbNVd4qU+lhsIVtbAgqr7dshvDzCsmM2JlcTIVNZj4F9ZmgOKuDBT1QtbikS1O4eiIYUZ71gw03GHhKOgJ/3nl8gjkfGTV87sRGgVIfNeQsxrF6gx+FGNGazd296GZCEgcy3wEcIqoI3LyvLSqN2WASGUXyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724765086; c=relaxed/simple;
-	bh=C1Psij49NxzQQVs/fLfKOjdWLfmrzStbUTmG4qlgoDQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LGY+MnFDUa2dvID/lvFSK4KehVpPQrYWQuo7z70iJsBsAt8m4j5shqJY2QN8VMiEkz1Tm6Q8zRATgxZXzP7vS1TyOmHHeJaR93l5zjK9qDPQLcQr9BLVNFv8DuWD7j0F1539K2hBxK65uF7EjgP1UEbDxrlVvHzUQFJpBFjI1YA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Udj1fjaq; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724765084;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ca7L2Ypf1IuSrNf2s487D4RaOYQ0VQUUHqLQBFjj34U=;
-	b=Udj1fjaqf9+otj6J/nodPA7HFRGwEtwLXLfuY0Q7u2WtX9KaCf55fNWJ2Wvb6kF8PuMvxW
-	6wD25uKuoOm5hhweg+wHNt7fJtZXwlfd7M1y9/Jr0cJxv4RGb+zhvWDOPkI0U1PkdAulBm
-	IR14/h2USuLSHPPCpPyUSjY99gtDKrM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-311-_OD_7FyjMJGHwyr-_pfsGQ-1; Tue, 27 Aug 2024 09:24:43 -0400
-X-MC-Unique: _OD_7FyjMJGHwyr-_pfsGQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-428fb72245bso28767095e9.1
-        for <linux-i2c@vger.kernel.org>; Tue, 27 Aug 2024 06:24:42 -0700 (PDT)
+	s=arc-20240116; t=1724767417; c=relaxed/simple;
+	bh=Zd3UWEQAWdW9Qd64mpZsUzcJ28EFLpA0WpggxzlgmdU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MgRKomLBkH8vL9WVy9TSn0sSHcQY111lPlyZlVNGMhxFm04ZoEKs7fPLmkMWHszWZn2wm33HdaaJvBtVOLu58CvWxmacp4j/kTLkFnRo8W5kljpOjMUN0LnZnefZ2zyUnch0ykCOOcQBd+z5F7u8jOU08Bv+LJlCU5rema8EV9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QCyoGDxv; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5334c4d6829so7690310e87.2;
+        Tue, 27 Aug 2024 07:03:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724767414; x=1725372214; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8JWeiRXxJGI0Vclv4nm6xJV1hNbj4TAmtzDNg1YoNwM=;
+        b=QCyoGDxvEZLWmzHK22fx/W+OfBlzT5wYR6Q0KIQRjR2In8HbIZqEMK4Q7KgSmZIE09
+         cCS6U0+nLlD0M7fh2OidbI630upP4CJcHJZJ1dZTN62NAgJ5xc9p6x1BbTR3qnacNBkZ
+         29GoTEygH9erYvSz9O/wk/J7SA8/5lk6QYtjbNUpaa0vUpkWXa1K7r9KMOPpnyvSXPnh
+         Sfj7VzNiNXF4n/62zpiEg+VGToHXOPJ4xOvgWnjmPgzCo1Qo6DB2dMMyhdyIFL0fuf/d
+         SixfoVOQsnfCz7OQ/XhmVOW13Lg1HEFiboIRECydQWEHcu7XryX9frg8NnDpCD9INcan
+         38fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724765082; x=1725369882;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ca7L2Ypf1IuSrNf2s487D4RaOYQ0VQUUHqLQBFjj34U=;
-        b=ZVV4hQEPG+PBJZilK8k5B8hq24I1s7Fw/zXUa36U8opYn27Xv8PiuS7pbA3rhL8Nkv
-         T6wRIIb6UGsAP8A+ihNzKng5CY7UJ+ccGv/NsK61Ao+OceoKAsCyms0E8EjbGUlRAy1z
-         dl0Rk0JPWjclcRtJx2PDqxfM2+TCN6d9nAk2f8YMfpGqJ+68ENdwvW3/YB3Whz3DzPAa
-         o57Wh2kBf11XZW6izy7PMlLhJKX6N2kKZFn5qBYpgU4QILmPjAIIGJObp+MdeAQp+qMd
-         H0GGwdqR45Y2zRhlN4Rkhjmtma1nc3dtMZH9L5bUyA77DKcbRGDYMzY96Klgsa9RayN/
-         phAA==
-X-Forwarded-Encrypted: i=1; AJvYcCVuvYTOu/Dkwjm5rxWKaqUA4mfgNty3JEJFbnbhjKxDngrEUlk5aU60eLaDrrAvbYOAMN0OVKJUqlQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJfdBSXXbZjVbdlG689WuKdqGgevIObid7oEcdafHitZPYNNOs
-	ks5Wju44P1FnYmckavy1ZSGDNQHeoefNB2EIGlU1gJnG5w8KavahCPJDGwhg4c5GsRN0sO9ov+v
-	eMIRzwP+u0QEkbwyYXHrtiC2m91yJjMCqmK15DeTOywZuVhuOFi4mx8WRHQ==
-X-Received: by 2002:a05:600c:4f01:b0:424:8dbe:817d with SMTP id 5b1f17b1804b1-42b9a46d558mr18972085e9.10.1724765081986;
-        Tue, 27 Aug 2024 06:24:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF7rF2xZXsNit3rnRpHiOnC7cRxUpFHU0F4taw8YckE22isH+1s8w1ewwo4oiz7G7HWJwsUVA==
-X-Received: by 2002:a05:600c:4f01:b0:424:8dbe:817d with SMTP id 5b1f17b1804b1-42b9a46d558mr18971815e9.10.1724765081469;
-        Tue, 27 Aug 2024 06:24:41 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:1b67:7410:c8c6:fe2f:6a21:6a5a? ([2a0d:3344:1b67:7410:c8c6:fe2f:6a21:6a5a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ac51622b6sm184917205e9.22.2024.08.27.06.24.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Aug 2024 06:24:41 -0700 (PDT)
-Message-ID: <43c572e1-11bd-4fb6-8463-7940f57b8c7d@redhat.com>
-Date: Tue, 27 Aug 2024 15:24:39 +0200
+        d=1e100.net; s=20230601; t=1724767414; x=1725372214;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8JWeiRXxJGI0Vclv4nm6xJV1hNbj4TAmtzDNg1YoNwM=;
+        b=Ge2dm94jG+1/s1/ZVHEboJYkePDV3rvptOjnWhEK17sWhM9gqOXhdCaWrefW7DB3hb
+         Llj1cjZofSdKCMlerJKVC99ozTpyWd/c3UkyCVrpD8QNTC0VI9Cr8JZPTW/d3nGO6YYh
+         LjEnd2vEC1ZvT0/NlaPEvuhYljr5jcSRnljs4LEmcoKXUshbFZxhgxFAeqxc6kw1O2Z0
+         oITWq0MogUuX2TMu9HILCB26tU+vPWnD4RUPKgq2ZvColQTRyWGfXcAepp1ZaK8yM73Q
+         WSx4YpvJfKBEIK0mub51zK2kvIjLJoJKx+NZv58EApUVBNz++9ybTYtofZMP9y2Hgcqo
+         AVVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKv5uu7u3LuiJHRJLoSXxMiukIZO7IKz6rIB7T5lxXZlswb/MDGzYxAPEuos2hnZ0y9yHHpj2OUQdGtbXy@vger.kernel.org, AJvYcCVeJQ4Bkox6dO1z2tBCD4P7FSpZ123ox7eBRjtAD6eXqSa9ElaakXSuxrukp5HpSkWrm/jq3HnExC07GrI=@vger.kernel.org, AJvYcCWCoBRDt4fa59AffJcnSKPD6bH6N51rj824/ICoGo7TEqLQJh7eayj8w3TBxmYHWH1eMlrZPpaVK978@vger.kernel.org, AJvYcCWaNbo8LAl3rR0HyK2szqL522vEnsLbWh6Cc7+8gogWLEALiKBWhYKCHu8b4pjMJnwBJt8ayzVtI8fM@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywhk7+z7YQsTmj/BJJfrGoBJBEOYDh9JmD0VNQBTvpLlBWehtX6
+	X2UTiF/9ca1Az1QJ+YP18Ypauf3R0VseAF/S+i4/4Y59t0VOMxRm
+X-Google-Smtp-Source: AGHT+IHH9z8y8Jk5Y64/VlH603lmLgxAmUx7lLlMa6oGyFIoPdeLX9VWwC2ME5CuoIZXp9TP/ncQ/w==
+X-Received: by 2002:ac2:4c4e:0:b0:530:ad9f:8757 with SMTP id 2adb3069b0e04-5344e4ee3ebmr2220148e87.45.1724767412915;
+        Tue, 27 Aug 2024 07:03:32 -0700 (PDT)
+Received: from orome (p200300e41f29d300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f29:d300:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a86e5878066sm114044666b.151.2024.08.27.07.03.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2024 07:03:32 -0700 (PDT)
+Date: Tue, 27 Aug 2024 16:03:29 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] dt-bindings: i2c: nvidia,tegra20-i2c: minor cleanups
+Message-ID: <rzf7wiv7hvalx4svnnxxsu7z2ciprujxfdwbr7te7cqtmi6xkc@757xhotlbren>
+References: <20240820-dt-bindings-i2c-nvidia-v1-0-2763e9a9a1b0@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 2/3] i2c: designware: add device private data passing
- to lock functions
-To: Jiawen Wu <jiawenwu@trustnetic.com>, andi.shyti@kernel.org,
- jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
- mika.westerberg@linux.intel.com, jsd@semihalf.com, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, rmk+kernel@armlinux.org.uk,
- piotr.raczynski@intel.com, andrew@lunn.ch, linux-i2c@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: mengyuanlou@net-swift.com, duanqiangwen@net-swift.com,
- stable@vger.kernel.org
-References: <20240823030242.3083528-1-jiawenwu@trustnetic.com>
- <20240823030242.3083528-3-jiawenwu@trustnetic.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20240823030242.3083528-3-jiawenwu@trustnetic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ly2bvxqd2gxrtnkp"
+Content-Disposition: inline
+In-Reply-To: <20240820-dt-bindings-i2c-nvidia-v1-0-2763e9a9a1b0@linaro.org>
 
 
+--ly2bvxqd2gxrtnkp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 8/23/24 05:02, Jiawen Wu wrote:
-> In order to add the hardware lock for Wangxun devices with minimal
-> modification, pass struct dw_i2c_dev to the acquire and release lock
-> functions.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 2f8d1ed79345 ("i2c: designware: Add driver support for Wangxun 10Gb NIC")
-> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
+On Tue, Aug 20, 2024 at 10:44:23AM GMT, Krzysztof Kozlowski wrote:
+> Simple cleanups for nvidia I2C.
+>=20
+> Best regards,
+> Krzysztof
+>=20
 > ---
->   drivers/i2c/busses/i2c-designware-amdpsp.c   |  4 ++--
->   drivers/i2c/busses/i2c-designware-baytrail.c | 14 ++++++++++++--
->   drivers/i2c/busses/i2c-designware-common.c   |  4 ++--
->   drivers/i2c/busses/i2c-designware-core.h     |  4 ++--
->   4 files changed, 18 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> index 63454b06e5da..ee7cc4b33f4b 100644
-> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> @@ -167,7 +167,7 @@ static void psp_release_i2c_bus_deferred(struct work_struct *work)
->   }
->   static DECLARE_DELAYED_WORK(release_queue, psp_release_i2c_bus_deferred);
->   
-> -static int psp_acquire_i2c_bus(void)
-> +static int psp_acquire_i2c_bus(struct dw_i2c_dev *dev)
->   {
->   	int status;
->   
+> Krzysztof Kozlowski (3):
+>       dt-bindings: i2c: nvidia,tegra20-i2c: combine same if:then: clauses
+>       dt-bindings: i2c: nvidia,tegra20-i2c: restrict also clocks in if:th=
+en:
+>       dt-bindings: i2c: nvidia,tegra20-i2c: define power-domains top-level
+>=20
+>  .../bindings/i2c/nvidia,tegra20-i2c.yaml           | 27 ++++++++++++----=
+------
+>  1 file changed, 15 insertions(+), 12 deletions(-)
 
-This function is used in a few other places in this compilation unit. 
-You need to update all the users accordingly.
+It wasn't clear who you wanted to pick these up, so I've applied them to
+the Tegra tree. Shout if anybody wants to take them through a different
+tree.
 
-> @@ -206,7 +206,7 @@ static int psp_acquire_i2c_bus(void)
->   	return 0;
->   }
->   
-> -static void psp_release_i2c_bus(void)
-> +static void psp_release_i2c_bus(struct dw_i2c_dev *dev)
->   {
->   	mutex_lock(&psp_i2c_access_mutex);
->   
+Thanks,
+Thierry
 
-The same here.
+--ly2bvxqd2gxrtnkp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Cheers,
+-----BEGIN PGP SIGNATURE-----
 
-Paolo
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmbN3LEACgkQ3SOs138+
+s6FJLw/9EJKxOGUx2MDN7GO2ZxPMUOTq635/VpYp1fCu+A42npdhNZcNizZ5EIgB
+C6ArhW11k+WzmrxEYelzOUEq+VRMwQcFYQGkyEwvvLnj2+YWa+dEUrJNNBGS/6j4
+3cGj9dk6dahHDiUDpuHCRyVW7ZQnDBaoZDWIXwhSoqJh3rAJJv1XHLF/1Wer8vtv
+4VJ9wTaF0dCh2cK4rWCKXgvethTSHz/Ppnny1CocQ/EjtzEy4K3YtMVLl+cFEann
+D0nPl5eczy7VtrSBf3hpJq8LKDyE0F3yVe1JeFZeJxYxBPhBFIki26nQLK7uk0hY
+oMGqUK96s8Qj6zEr7fXunZHSNFe/liM4L9Gk+H2RLcfVfuy5OqvFP9A1Z1bHdSFf
+Kq/1NtmeASnbVuUYXKJOtO9QdAjQ1IYz/Wwt6eY5cFt36vPOadTNbCjITij4z45Y
+CWAs4XGRLTIqAK5sGZ86F3XUU6ePAQllV/s9xAsjKCthAETO2gvtEHyN/Kv23rFa
+wOXjWzJNmUirPyt6vRLh6YdsedsNTxCEo5xDe2Zr1LHmvetbXUmfUHDPrPY90/AN
+aWswEHm68xTsfTRpHQ3M5B1ImPS9eac5biYqOftgq0Bj4ZKYy9JPPMQxFW6BoEEo
+VNvm6DhUy+IDObZuC/JqGi15xJFd9VSyqtDTmBx/Is61A23UqJg=
+=wWXh
+-----END PGP SIGNATURE-----
 
+--ly2bvxqd2gxrtnkp--
 
