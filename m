@@ -1,54 +1,54 @@
-Return-Path: <linux-i2c+bounces-5841-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5842-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51FE1962B7B
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 17:11:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A301962B7F
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 17:12:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE210B25CCA
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 15:11:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC94A2818D8
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 15:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A2371A4B70;
-	Wed, 28 Aug 2024 15:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16D231A4F1A;
+	Wed, 28 Aug 2024 15:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="RrG7b4s1";
-	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="a62Q2ozU"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="kUbiSyjS";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="K2udBhiL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from a7-51.smtp-out.eu-west-1.amazonses.com (a7-51.smtp-out.eu-west-1.amazonses.com [54.240.7.51])
+Received: from a7-29.smtp-out.eu-west-1.amazonses.com (a7-29.smtp-out.eu-west-1.amazonses.com [54.240.7.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20531A257C;
-	Wed, 28 Aug 2024 15:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.7.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80BBF1A4F02;
+	Wed, 28 Aug 2024 15:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.7.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724857855; cv=none; b=sSVIGW7HNe+jKmQ5+Uh4wJ/YYJjMiC+UGKHYVqBtjFbvOGezfr2EK/8KWe3zOcFmMFMuNTfsVlr9mOdkQtYaqM30Ngcq3cJpUixxhOEEr3+TSV1m4pDgAbyiGgvhSOV7xIXCIPVOzSyQWUdWioKl8E4JUAQL5KlYnzrVZtO8jW0=
+	t=1724857859; cv=none; b=ZBmZiXGwt0GM73Y//iOhaMYw3Zq4/IBeEmIvsaBRGZ1zWE0wniXDrbQu4m4S2ecMwkPklnbKIdeQoIn5ZyxCsuBn21fUjdTt6H2zKvUVdpqn/sCvOzG7airWjWqjrgSDyw4+kmcWnLhLXnXoqWmmgwsQJ36/3W9AMmYI7mK5wM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724857855; c=relaxed/simple;
-	bh=q91nNqe25vY4zdGQ0jID+lBhXgdVdrS3Q9cXE35aK60=;
+	s=arc-20240116; t=1724857859; c=relaxed/simple;
+	bh=Fc+oP+745L0Ley8/lOLIn/gb6Yv4bpuntQ1Lm4ZSg+A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GkoR4CEfQM/0Mf/EfLUOE1zwHAJtuEHJRHUGPXxeLeyKzQGZrKXTeL5ln2JZq48bhZj5NPdu4YL5CALmvfyZ20K2dHqspLvF/WReeBDVCcY9dRRSnhBawi5qY7gRQjNj0qpNVQQh5ZIz5xKH4S+aNjxf22pMOEkwkT9CQ2nj3/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=amazonses.collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=RrG7b4s1; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=a62Q2ozU; arc=none smtp.client-ip=54.240.7.51
+	 MIME-Version; b=ZJU5MjNGkXll+0Sf87YppaC7zXOr0ke8+Hs3daByJ/Xj/apnUYSbs3dkSZWYEh5S6RfeLufMtk60P1/WERZYg+vkJ0ONuo/djs/Qff9sMaSpaQGhnstuAbyH7FFUxNS3POYk3S98+NIai5jNgoeNtmuxtUod0ARyTQ5irfqFlS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=amazonses.collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=kUbiSyjS; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=K2udBhiL; arc=none smtp.client-ip=54.240.7.29
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=4232tfv5ebdrjdwkr5zzm7kytdkokgug; d=collabora.com; t=1724857851;
+	s=4232tfv5ebdrjdwkr5zzm7kytdkokgug; d=collabora.com; t=1724857856;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=q91nNqe25vY4zdGQ0jID+lBhXgdVdrS3Q9cXE35aK60=;
-	b=RrG7b4s16zLja2ag7Y8K/z4JQWr+pmLBMS4W2478rKFBehqW89ZruBzHY5qoFqGE
-	eGHwxuJbR59Uc7nf4/py5DNkE938h29VtYQ/XMQ54aDK7Aq/Uljrao8xH+eayL3BRv4
-	ltQu5auvYeUabPq7prqLHub1OmRn3Mqs4Pw4sQMGheRazaPTWEpeAU4hp7pHp8NvPdy
-	FCCpue2RcEqQcTq3/z/qpV9xRhcica2J0uVMAto5HmQR8M8djQ+JsxTi/pxxW+mzYqi
-	VFupFFCsXRpmkblFcWf4WAd6AqPOp9faKe0J0mfoxDWKbAQeISLZbsPI3AfJaVsbCyE
-	EX4GMv0hDQ==
+	bh=Fc+oP+745L0Ley8/lOLIn/gb6Yv4bpuntQ1Lm4ZSg+A=;
+	b=kUbiSyjSsWwaIHaHae6VgmgWN/0ccko7Prq7nVUyDV8P8aWI1YFUIMRAG7fGLF7R
+	XWasngw05Shp0XMCWA8Hq5+PHff2Rx2Wac6svFNT8zi4BAMCY2lUt11EhwE97Mu9RFE
+	LKfZsZDV18BBL8zs+6Tv7Pbd60fRBdjbYSgGTqOLP3nFVOtKu+EnA4jokGi3Z2/8ImE
+	pUmRg+wQYVcZq5+LCt8bPWzM/+sBd119LTnPlHY92P1IGGwIbmH7GHibjvaGODLnuYj
+	HaMvfxcfVwEIlomlt7jJdgSfIWd+zIF0Sa/0LP1SJV6Yndol5tixvNORBL6MHfXTMVZ
+	p7DQmXJLww==
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=uku4taia5b5tsbglxyj6zym32efj7xqv; d=amazonses.com; t=1724857851;
+	s=uku4taia5b5tsbglxyj6zym32efj7xqv; d=amazonses.com; t=1724857856;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
-	bh=q91nNqe25vY4zdGQ0jID+lBhXgdVdrS3Q9cXE35aK60=;
-	b=a62Q2ozUn9zNB8cW0ZfO7YTbWP002yT8ZD7DPFWDmRvWqB5Gv6Ifs9LP7rNiYgSZ
-	0VPqpEW734zo7Ru7ej/VMBsq6aI09TiDf6xUYjmnTj1yjsMLWiidEH5A0UwQoWm6T9n
-	0rXUnyEIV49YIQzfKTUU76Vp+KqZX38WHs8FpmpA=
+	bh=Fc+oP+745L0Ley8/lOLIn/gb6Yv4bpuntQ1Lm4ZSg+A=;
+	b=K2udBhiL2XeLPPHQ0QvS4HkZcDfhC9kTcu+1ysL2v7hw55zT8o29Req9nEmVtz1S
+	BsDCppzm6rEcJntBhLR7vmSz1LE9R6l5PTDrwXbruMeERhykIvJxOHrshJ6Y+jJ4xh+
+	OAQvMVU6BOMBViQ/yxR7TDWMuYNsBDMBU0fl8WRE=
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -83,9 +83,9 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, kernel@collabora.com, 
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 03/11] dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
-Date: Wed, 28 Aug 2024 15:10:51 +0000
-Message-ID: <01020191998a1d21-c491afc1-ee3a-4920-989f-53c5d9bcfe38-000000@eu-west-1.amazonses.com>
+Subject: [PATCH v3 04/11] dt-bindings: mfd: syscon: Add rk3576 QoS register compatible
+Date: Wed, 28 Aug 2024 15:10:55 +0000
+Message-ID: <01020191998a2fd4-4d7b091c-9c4c-4067-b8d9-fe7482074d6d-000000@eu-west-1.amazonses.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240828151028.41255-1-detlev.casanova@collabora.com>
 References: <20240828151028.41255-1-detlev.casanova@collabora.com>
@@ -97,30 +97,37 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Feedback-ID: ::1.eu-west-1.YpP9ZbxnARFfy3Cb5pfsLd/pdsXBCNK0KEM7HforL4k=:AmazonSES
-X-SES-Outgoing: 2024.08.28-54.240.7.51
+X-SES-Outgoing: 2024.08.28-54.240.7.29
 
-Just like RK356x and RK3588, RK3576 is compatible to the existing
-rk3399 binding.
+Document rk3576 compatible for QoS registers.
 
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Acked-by: Heiko Stuebner <heiko@sntech.de>
 ---
- Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-index 82b9d6682297..a9dae5b52f28 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-@@ -38,6 +38,7 @@ properties:
-               - rockchip,rk3308-i2c
-               - rockchip,rk3328-i2c
-               - rockchip,rk3568-i2c
-+              - rockchip,rk3576-i2c
-               - rockchip,rk3588-i2c
-               - rockchip,rv1126-i2c
-           - const: rockchip,rk3399-i2c
+diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+index 9dc594ea3654..ce5eed77b3c8 100644
+--- a/Documentation/devicetree/bindings/mfd/syscon.yaml
++++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+@@ -103,6 +103,7 @@ select:
+           - rockchip,rk3368-qos
+           - rockchip,rk3399-qos
+           - rockchip,rk3568-qos
++          - rockchip,rk3576-qos
+           - rockchip,rk3588-qos
+           - rockchip,rv1126-qos
+           - st,spear1340-misc
+@@ -198,6 +199,7 @@ properties:
+           - rockchip,rk3368-qos
+           - rockchip,rk3399-qos
+           - rockchip,rk3568-qos
++          - rockchip,rk3576-qos
+           - rockchip,rk3588-qos
+           - rockchip,rv1126-qos
+           - st,spear1340-misc
 -- 
 2.46.0
 
