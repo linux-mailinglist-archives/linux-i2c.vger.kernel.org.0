@@ -1,184 +1,189 @@
-Return-Path: <linux-i2c+bounces-5837-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5838-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 360D6962970
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 15:56:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67B42962B5F
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 17:10:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9AFFFB20C9F
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 13:56:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E998E1F22A06
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 15:10:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 874E2188CB4;
-	Wed, 28 Aug 2024 13:56:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4534F1A2561;
+	Wed, 28 Aug 2024 15:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XQbBxOiZ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="So6GTcbv";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="NGAgRuxD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from a7-28.smtp-out.eu-west-1.amazonses.com (a7-28.smtp-out.eu-west-1.amazonses.com [54.240.7.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD4118801A;
-	Wed, 28 Aug 2024 13:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44939381C2;
+	Wed, 28 Aug 2024 15:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.7.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724853362; cv=none; b=dKkG+xkwnAUmpZB13Ro2QvjQHX3gGkAmCctjJ/Fgk2UbdQ7HjmKmUSHY7bCHkGyvkrf/7FZ221tUwtbgvSLHWwzj67zyrgDAt5IDTNmQ+AIreua+HwUmkv+G5xm8DHhJQxXowQMgqVdiRmLDgWnR21VsONCzJKZxUP/RskxTV9M=
+	t=1724857841; cv=none; b=aW/0aPmJMSu7X0JBY4eEsGK4IlKRX7G4OMv7Ddn2tv3L5uM2Rzc/djQQc9jvvF4dWzG/g4nli0hiTgwXisQCM8HfXofRNIchSoDb2IioITEqv8gZCfIMHATlxOaTMiyVxPhVRUesilqOC9Qzfp42kqIE55I96XxiuH0kcgad3mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724853362; c=relaxed/simple;
-	bh=0VzRvvBmgVfm22p7yRHWjS2uaHYDwDvXSohq3OgN8+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JnIrno/DlnOx3FCYqRgSc/dptnFakZgXmSczp3m8TkClcteSODF5lrOEkfYgNgQuASCSx52HR4aQX4Ipkd+dEhgnnTFfWl9YciMc9TrC3+DxQP8U/jrd4CXSBf5DUIZluae+rMh41IVPhhPKufDa76HMD8btDVA6PEGh6A4gbsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XQbBxOiZ; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724853360; x=1756389360;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0VzRvvBmgVfm22p7yRHWjS2uaHYDwDvXSohq3OgN8+4=;
-  b=XQbBxOiZgOL8vL0v/SZlGlwACUvSzMQNl2a1d2shS2iSxVonOM9KTtDJ
-   brx27Ps7/sZs1vvBKeU6pUqGTKwNhle8a7wMcRIpKL9ULtzhSAgFjnQwJ
-   LlqTe7t+gblokED5qSoevd5CvwH8d0+olFGBwbj5sOJel2rcz4UUl9zsP
-   tBVdX9GbXtE0aANSA0KVd0tdgC8K8IGsuoZiuQcuANXI8++Xt26pJRiY9
-   4D+fpKPbjT8Rq/AQ+DFbwIXS7swM8zrbYRXIr23nc61Ecdw+bHPR7yZck
-   l7HC7qX6ZRYpGppCP2b0u8jBJtKaDgdwjy1a9WCnWzXyJRS1aZDsaiaAc
-   Q==;
-X-CSE-ConnectionGUID: kRi//x+NTLqzukKs2MZ6qA==
-X-CSE-MsgGUID: IhSDKmTMQb6uCsByBLxQ3A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="34043155"
-X-IronPort-AV: E=Sophos;i="6.10,182,1719903600"; 
-   d="scan'208";a="34043155"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 06:55:59 -0700
-X-CSE-ConnectionGUID: 7KbLavxjTum9E1alb/+xbQ==
-X-CSE-MsgGUID: JxeN9lHhRK+ocKrrC6ERxA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,182,1719903600"; 
-   d="scan'208";a="67899095"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 06:55:55 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sjJ9M-00000002fDD-1iIN;
-	Wed, 28 Aug 2024 16:55:52 +0300
-Date: Wed, 28 Aug 2024 16:55:52 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Ryan Chen <ryan_chen@aspeedtech.com>
-Cc: "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
-	"benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-	"joel@jms.id.au" <joel@jms.id.au>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
-	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v13 2/3] i2c: aspeed: support AST2600 i2c new register
- mode driver
-Message-ID: <Zs8saJYtCp6bO-3k@smile.fi.intel.com>
-References: <ZsNT7LPZ7-szrgBJ@smile.fi.intel.com>
- <OS8PR06MB7541EE5BA5B400445FE0295EF28E2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <ZsXVU2qy0GIANFrc@smile.fi.intel.com>
- <OS8PR06MB7541945591A62B956DA28AD9F28F2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <Zsc9_UddBybdnM1Z@smile.fi.intel.com>
- <OS8PR06MB75419F3E3A222AE941DE3007F2882@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <ZsiWp5ENQ0BeBjMn@smile.fi.intel.com>
- <OS8PR06MB7541A23130F469357B7FE5F4F28B2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <ZsxbDK25mJ0sjcQy@smile.fi.intel.com>
- <OS8PR06MB75416ED990B2A32F98266A1DF2952@OS8PR06MB7541.apcprd06.prod.outlook.com>
+	s=arc-20240116; t=1724857841; c=relaxed/simple;
+	bh=/6xBr387lHpMiwXE06HG6XGKl2MHb0i9Xw/IsslGxeY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h/VpjMjNsvPYxOSZOy6Elr98917KpkQbF8ubC5DNobI4GVy8poGh8cOMVhO2S7OCzhVG62xcoTKqXHvPTFH2CmdhXs488wCSM1Vi5kJJfh7vLspV7i0aJVZFT/uYwrpg8fOCgPlwO8RjVuCz125eR9MaH7QAzVOMiGRdFDnk2qI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=amazonses.collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=So6GTcbv; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=NGAgRuxD; arc=none smtp.client-ip=54.240.7.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=4232tfv5ebdrjdwkr5zzm7kytdkokgug; d=collabora.com; t=1724857836;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
+	bh=/6xBr387lHpMiwXE06HG6XGKl2MHb0i9Xw/IsslGxeY=;
+	b=So6GTcbvolSMtNsUCWfb8CsMbmN8o1hLN+EU3OGSCp6G6ggakxwJR+tjfj4tuvmO
+	2iFphPt4sq3whGtEOFUlDZC0XFG7Ocmp3fzDtoj7lhbs4r7BBNudpIFNMLDJqIq7lFu
+	OtHXlEE0J6Tsk6+nt4i25p3SEtO2U7DX6P6MnfnUV/Q38nBG6RNnpIrEVLcj9dSlOEk
+	vZAgwDDjqiMUCl6Ziav3Nn/LyL7rdTuhGrwU2twVByj33MCEbtvHfh3piVEMQqcBnl5
+	5WhtHmiHN9c+mQ1Yhw5bNkyd5W2pncevISM+uTneW/tx1rFB60tC0uNnFAgzibv2z6V
+	C68N1PqD1w==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=uku4taia5b5tsbglxyj6zym32efj7xqv; d=amazonses.com; t=1724857836;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+	bh=/6xBr387lHpMiwXE06HG6XGKl2MHb0i9Xw/IsslGxeY=;
+	b=NGAgRuxDN5KLV7xQPZrLjHKHSu36qmbsagTi0A/Jw//EHQPMd3rky8uzhqSPZjzn
+	yW3h6SHcZ11Mi7D0oRMsawVkbWSuPcppzFU7IoxCqmkmivRRZFsS1gsservqYsNPHjE
+	cFeO8N7rwF4vkSpAlc2aIvusOfhoxD3Echpx1ZVU=
+From: Detlev Casanova <detlev.casanova@collabora.com>
+To: linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, 
+	Andi Shyti <andi.shyti@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, 
+	Chris Morgan <macromorgan@hotmail.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>, 
+	Chukun Pan <amadeus@jmu.edu.cn>, 
+	Muhammed Efe Cetin <efectn@protonmail.com>, 
+	Andy Yan <andyshrk@163.com>, Jagan Teki <jagan@edgeble.ai>, 
+	Dragan Simic <dsimic@manjaro.org>, 
+	Detlev Casanova <detlev.casanova@collabora.com>, 
+	Ondrej Jirman <megi@xff.cz>, Jimmy Hon <honyuenkwun@gmail.com>, 
+	Elon Zhang <zhangzj@rock-chips.com>, 
+	Finley Xiao <finley.xiao@rock-chips.com>, 
+	Elaine Zhang <zhangqing@rock-chips.com>, 
+	Liang Chen <cl@rock-chips.com>, 
+	Yifeng Zhao <yifeng.zhao@rock-chips.com>, 
+	Jisheng Zhang <jszhang@kernel.org>, Jamie Iles <jamie@jamieiles.com>, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org, 
+	linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel@collabora.com
+Subject: [PATCH v3 00/11] Add device tree for ArmSoM Sige 5 board
+Date: Wed, 28 Aug 2024 15:10:36 +0000
+Message-ID: <010201919989e3de-60b56341-85e0-4869-89d1-362407c4f2ec-000000@eu-west-1.amazonses.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OS8PR06MB75416ED990B2A32F98266A1DF2952@OS8PR06MB7541.apcprd06.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+Feedback-ID: ::1.eu-west-1.YpP9ZbxnARFfy3Cb5pfsLd/pdsXBCNK0KEM7HforL4k=:AmazonSES
+X-SES-Outgoing: 2024.08.28-54.240.7.28
 
-On Wed, Aug 28, 2024 at 02:34:43AM +0000, Ryan Chen wrote:
-> > On Mon, Aug 26, 2024 at 07:50:24AM +0000, Ryan Chen wrote:
-> > > > On Fri, Aug 23, 2024 at 06:23:54AM +0000, Ryan Chen wrote:
-> > > > > > On Thu, Aug 22, 2024 at 02:24:26AM +0000, Ryan Chen wrote:
-> > > > > > > > On Wed, Aug 21, 2024 at 06:43:01AM +0000, Ryan Chen wrote:
-> > > > > > > > > > On Mon, Aug 19, 2024 at 05:28:49PM +0800, Ryan Chen wrote:
+Add the rk3576-armsom-sige5 device tree as well as its rk3576.dtsi base
+and pinctrl information in rk3576-pinctrl.dtsi.
 
-...
+The other commits add DT bindings documentation for the devices that
+already work with the current corresponding drivers.
 
-> > > > > > > > > > > +	if (i2c_bus->mode == BUFF_MODE) {
-> > > > > > > > > > > +		i2c_bus->buf_base =
-> > > > > > > > > > devm_platform_get_and_ioremap_resource(pdev, 1, &res);
-> > > > > > > > > > > +		if (!IS_ERR_OR_NULL(i2c_bus->buf_base))
-> > > > > > > > > > > +			i2c_bus->buf_size = resource_size(res) / 2;
-> > > > > > > > > > > +		else
-> > > > > > > > > > > +			i2c_bus->mode = BYTE_MODE;
-> > > > > > > > > >
-> > > > > > > > > > What's wrong with positive conditional? And is it even
-> > > > > > > > > > possible to have NULL here?
-> > > > > > > > > >
-> > > > > > > > > Yes, if dtsi fill not following yaml example have reg 1,
-> > > > > > > > > that will failure at buffer
-> > > > > > > > mode.
-> > > > > > > > > And I can swith to byte mode.
-> > > > > > > > >
-> > > > > > > > > reg = <0x80 0x80>, <0xc00 0x20>;
-> > > > > > > >
-> > > > > > > > I was asking about if (!IS_ERR_OR_NULL(...)) line:
-> > > > > > > > 1) Why 'if (!foo) {} else {}' instead of 'if (foo) {} else {}'?
-> > > > > > > I will update to following.
-> > > > > > > 		if (IS_ERR(i2c_bus->buf_base))
-> > > > > > > 			i2c_bus->mode = BYTE_MODE;
-> > > > > > > 		else
-> > > > > > > 			i2c_bus->buf_size = resource_size(res) / 2;
-> > > > > > >
-> > > > > > > > 2) Why _NULL?
-> > > > > > > 	If dtsi file is claim only 1 reg offset. reg = <0x80 0x80>;
-> > > > > > > that will goto byte
-> > > > > > mode.
-> > > > > > > 	reg = <0x80 0x80>, <0xc00 0x20>; can support buffer mode.
-> > > > > > > 	due to 2nd is buffer register offset.
-> > > > > >
-> > > > > > I have asked why IS_ERR_OR_NULL() and not IS_ERR().
-> > > > > >
-> > > > > OH, I will doing by this.
-> > > > > 		if (IS_ERR_OR_NULL(i2c_bus->buf_base))
-> > > >
-> > > > The question about _NULL remains unanswered...
-> > > Sorry, I may not catch your point.
-> > > So, Do you mean I should passive coding by following?
-> > 
-> > No. I already mentioned that in one of the previous mails.
-> > Why do you use IS_ERR_OR_NULL() and not IS_ERR()?
-> > 
-> > You should understand your code better than me :-)
-> Understood, I will change to 
+Note that as is, the rockchip gpio driver needs the gpio nodes
+to be children of the pinctrl node, even though this is deprecated.
 
-OK!
+When the driver supports it, they can be moved out of the pinctrl node.
 
-> 	if (IS_ERR(i2c_bus->buf_base))
-> 		i2c_bus->mode = BYTE_MODE;
-> 	else
-> 		i2c_bus->buf_size = resource_size(res) / 2;
-> 
-> > > If (i2c_bus->buf_base > 0)
-> > > 	i2c_bus->buf_size = resource_size(res) / 2; else
-> > >     i2c_bus->mode = BYTE_MODE;
-> > >
-> > > > > 			i2c_bus->mode = BYTE_MODE;
-> > > > > 		else
-> > > > > 			i2c_bus->buf_size = resource_size(res) / 2;
+The power-domain@RK3576_PD_USB is a child of power-domain@RK3576_PD_VOP.
+That looks strange but it is how the hardware is, and confirmed by
+Rockchip: The NOC bus of USB passes through the PD of VOP, so it relies on
+VOP PD.
+
+The other bindings and driver implementations are in other patch sets:
+- PMIC: https://lore.kernel.org/all/20240802134736.283851-1-detlev.casanova@collabora.com/ (applied on next)
+- CRU: https://lore.kernel.org/all/20240822194956.918527-1-detlev.casanova@collabora.com/
+- PINCTRL: https://lore.kernel.org/all/20240822195706.920567-1-detlev.casanova@collabora.com/
+- PM DOMAIN: https://lore.kernel.org/all/20240814222824.3170-1-detlev.casanova@collabora.com/ (applied on next)
+- DW-MMC: https://lore.kernel.org/all/20240822212418.982927-1-detlev.casanova@collabora.com/
+- GMAC: https://lore.kernel.org/all/20240823141318.51201-1-detlev.casanova@collabora.com/
+
+Changes since v2:
+- Fix LEDs in armsom dts
+- mmc: Move allOf after the required block
+- Remove saradc dt-binding commit (already applied)
+- Remove opp-microvolt-L* fields
+- Reword mali commit message
+- Use rgmii-id and remove delays on gmac nodes
+
+Changes since v1:
+- Add eMMC support
+- Add gpu node
+- Add rtc node
+- Add spi compatible dt-bindings
+- Add watchdog support
+- Dropped timer compatible commit (applied in [0])
+- Move ethernet aliases to board dt
+- Move mmio nodes to soc node
+- Removed cru grf phandle
+- Removed gpio aliases
+- Removed grf compatibles (applied in [1])
+- Removed pinctrl php-grf phandle
+- Removed v2-tuning for sdcard
+- Renamed clock nodes
+- Renamed regulators do match regulator-vcc-<voltage>-<name>
+- Renamed the rkvdec_sram node to vdec_sram to match prior generations
+- Reorder fields consistently in nodes
+- Use correct #power-domain-cells values
+
+[0]: https://lore.kernel.org/all/918bb9e4-02d9-4dca-bed2-28bb123bdc10@linaro.org/
+[1]: https://lore.kernel.org/all/172441646605.877570.8075942261050000.b4-ty@sntech.de/
+
+Detlev.
+
+Detlev Casanova (11):
+  dt-bindings: arm: rockchip: Add ArmSoM Sige 5
+  dt-bindings: arm: rockchip: Add rk3576 compatible string to pmu.yaml
+  dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
+  dt-bindings: mfd: syscon: Add rk3576 QoS register compatible
+  dt-bindings: serial: snps-dw-apb-uart: Add Rockchip RK3576
+  dt-bindings: mmc: Add support for rk3576 eMMC
+  dt-bindings: gpu: Add rockchip,rk3576-mali compatible
+  dt-bindings: watchdog: Add rockchip,rk3576-wdt compatible
+  spi: dt-bindings: Add rockchip,rk3576-spi compatible
+  arm64: dts: rockchip: Add rk3576 SoC base DT
+  arm64: dts: rockchip: Add rk3576-armsom-sige5 board
+
+ .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+ .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
+ .../bindings/gpu/arm,mali-bifrost.yaml        |    1 +
+ .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
+ .../devicetree/bindings/mfd/syscon.yaml       |    2 +
+ .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |   38 +-
+ .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
+ .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
+ .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+ .../boot/dts/rockchip/rk3576-armsom-sige5.dts |  659 ++
+ .../boot/dts/rockchip/rk3576-pinctrl.dtsi     | 5775 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi      | 1644 +++++
+ 13 files changed, 8119 insertions(+), 12 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576.dtsi
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.46.0
 
 
