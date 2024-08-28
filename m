@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-5869-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5854-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 801949632AA
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 22:47:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1D69963209
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 22:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F24AF1F24DB4
-	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 20:47:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCE6B1C21EA1
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Aug 2024 20:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 615071B81AF;
-	Wed, 28 Aug 2024 20:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD5BF1AE84A;
+	Wed, 28 Aug 2024 20:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="j4bRYfPe"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OLZ9jTK9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21311B78E9;
-	Wed, 28 Aug 2024 20:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E9F1AD9C2;
+	Wed, 28 Aug 2024 20:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724877532; cv=none; b=YKjl1vMzl6gJv0KmOlQGFLcdKZlYGdWSY3KYLnowqH5KUP/sMXXC1822/N3Ek3i2KNz3YS85YFJ8eSDcKx7ZQ2pCthrw+exfZQ2KimG94KUYsFHeXRFizCOeXym+hUP33c10dNEs3KqjycbLn1P8mXNl0o/zLt+nOy+ZANJeWf4=
+	t=1724877511; cv=none; b=rN9EH+YaywPxZHCqv45mxiEKHZs9jeM1OBj83fZ2QPEfNueLQQxA7ZbYdAiKCJHUtwhItI1+qQO0U5UlP6YA5g2EdVOEKoDR67+favHuP9sUuTi8L2ZS4kYonz19xTNkBN+39OnD3CHnYD1rfuDhEO9aOqmw99eILbWU5+bh418=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724877532; c=relaxed/simple;
-	bh=tR3oFeK+MRScvoo6q/RXi9/a/5uo9KhPGN8a307ZOBk=;
+	s=arc-20240116; t=1724877511; c=relaxed/simple;
+	bh=2w7gqqoJLMsXpKxHp4+0+l0WFcqfRiJ0jjk+iSw7GI0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fjzp4OdPCJErKOnPAtonT3kIXjNfquFNbwUx+tJ2c23nZVYVxlNhJijyRe/5/jyaEZG2Vr7jQjPNfO1rLhTAMXOB+6R72kGRvLPxzuzSsQJAozMfQG+jVpnH+fKfP4pkNX0uVPwashfM6DylRcJ2N/N/jWzyFg3SvvS+V5eScIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=j4bRYfPe; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version:Content-Type; b=FH6VzHMmLQd5bfN0MXsr3JWCPzHkPEm1C4LbCsGesaUoOpz7nnNX1oaZMsGOpnQc1TljxUYOS0TVy+6YEEu++RBySWZ5+GbiM9PQhN2yu/WBTVT2Qlin4J45vX/ES+WjAGuwy91BKxTTuGNWb8iwtqqHxNJwsk9eVeBDCB/919I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OLZ9jTK9; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47SJMNeR013613;
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47SJMxZO009937;
 	Wed, 28 Aug 2024 20:38:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	VrUrfvvTbkR8lpQLzQjX8IiQmvFPW2U7aDaTXDtPm1I=; b=j4bRYfPeeP3LbkDU
-	iH2BKcArOHE+LbNOUwl1C4ym7+RO2K2rjGGHtm2vpTe3BVkEZZA+2z3yFh8pCv97
-	PndLrMDWlzEUBvV83UAGWjC19qDJbn3+WfvW5lwg8AqIgItsz8J6oGvaGDNMIb71
-	D8s/Dprut/ECUvpU25t8rdybeTCHrgduL4autsZzv1q8uo8jrKaDbuKzYHPb/WxC
-	8zvFZAR0RB9Q5ume9fF4qVM30xvr2zidJflM0Nx6PNxspI45kVEFaezFloTqAH+j
-	TpbTYxyuh6L70vGTX4rl3ZaTKZbBvI+k2y8g/jxwcapnwwsDHkvwmvOzCufYwwsJ
-	6O7ACw==
+	oItQm6k9uqEB+dl55eigq6bS3o0+tRH5BzwYY23drc4=; b=OLZ9jTK915DrV4aV
+	ldfAjh91uuai6vqsk5uUk5vJ3NnFxp2UezVu8s5myaj3UYhl/7WUACchzDAKJVwO
+	89/EtbWUppoqAU/Jb/yAGw8MzQealE1M1zEma7eVvEu8nN0HVd/nPaNOik+0w8Hz
+	gb1u8H7yGIAA/c6F0tp0vchVD5Nu1Gn1txH0ZHe/AyWlG3EC9GBrhERYj7mHRltg
+	f3tzlSNn5Wj1Zq/rfxqO3RINXm1dsOlq/eqRnq1Sk/UJDn6eLAF1usCuKxR2M307
+	IyV3td7LUBmnjW7bZmxZ3/19cktIORPcsmZBNCI3i9fkLLU3+WVatRmDtDi14Gb3
+	HNlOwQ==
 Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419px5k09e-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419pv0b0xq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Aug 2024 20:38:08 +0000 (GMT)
+	Wed, 28 Aug 2024 20:38:09 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47SKc7Hh025856
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47SKc8oC025864
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 28 Aug 2024 20:38:07 GMT
+	Wed, 28 Aug 2024 20:38:08 GMT
 Received: from hu-nkela-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 28 Aug 2024 13:38:03 -0700
+ 15.2.1544.9; Wed, 28 Aug 2024 13:38:04 -0700
 From: Nikunj Kela <quic_nkela@quicinc.com>
 To: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
         <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
@@ -79,9 +79,9 @@ CC: <robin.murphy@arm.com>, <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
         <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
         <quic_psodagud@quicinc.com>, <quic_tsoni@quicinc.com>,
         <quic_shazhuss@quicinc.com>, Nikunj Kela <quic_nkela@quicinc.com>
-Subject: [PATCH 10/22] dt-bindings: pinctrl: document support for SA8255p
-Date: Wed, 28 Aug 2024 13:37:09 -0700
-Message-ID: <20240828203721.2751904-11-quic_nkela@quicinc.com>
+Subject: [PATCH 11/22] pinctrl: qcom: sa8775p: Add support for SA8255p SoC
+Date: Wed, 28 Aug 2024 13:37:10 -0700
+Message-ID: <20240828203721.2751904-12-quic_nkela@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240828203721.2751904-1-quic_nkela@quicinc.com>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
@@ -97,45 +97,38 @@ X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: pJXZs3ggEU0Rq8p2NWHSt2-rJSrrnBBS
-X-Proofpoint-GUID: pJXZs3ggEU0Rq8p2NWHSt2-rJSrrnBBS
+X-Proofpoint-GUID: GnoFxWgNFrx-Sw0LQkUHqDcxNyYi0nKX
+X-Proofpoint-ORIG-GUID: GnoFxWgNFrx-Sw0LQkUHqDcxNyYi0nKX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-08-28_08,2024-08-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- adultscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0
- priorityscore=1501 bulkscore=0 mlxscore=0 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2408280149
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408280149
 
-Add compatible for pincontrol representing support on SA8255p.
-
-SA8255p uses the same TLMM block as SA8775p however the ownership
-of pins are split between Firmware VM and Linux VM on SA8255p. For
-example, pins used by UART are owned and configured by Firmware VM
-while pins used by ethernet are owned and configured by Linux VM.
-Therefore, adding a sa8255p specific compatible to mark the difference.
+SA8255p platform uses the same TLMM block as used in SA8775p,
+though the pins are split between Firmware VM and Linux VM.
+let's add SA8255p specific compatible.
 
 Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
 ---
- .../devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml        | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/pinctrl/qcom/pinctrl-sa8775p.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml
-index e9abbf2c0689..0d712153f9d7 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml
-@@ -17,7 +17,9 @@ allOf:
+diff --git a/drivers/pinctrl/qcom/pinctrl-sa8775p.c b/drivers/pinctrl/qcom/pinctrl-sa8775p.c
+index 5459c0c681a2..9a48abdf9b71 100644
+--- a/drivers/pinctrl/qcom/pinctrl-sa8775p.c
++++ b/drivers/pinctrl/qcom/pinctrl-sa8775p.c
+@@ -1519,6 +1519,7 @@ static int sa8775p_pinctrl_probe(struct platform_device *pdev)
+ }
  
- properties:
-   compatible:
--    const: qcom,sa8775p-tlmm
-+    enum:
-+      - qcom,sa8255p-tlmm
-+      - qcom,sa8775p-tlmm
- 
-   reg:
-     maxItems: 1
+ static const struct of_device_id sa8775p_pinctrl_of_match[] = {
++	{ .compatible = "qcom,sa8255p-tlmm", },
+ 	{ .compatible = "qcom,sa8775p-tlmm", },
+ 	{ },
+ };
 -- 
 2.34.1
 
