@@ -1,183 +1,133 @@
-Return-Path: <linux-i2c+bounces-5902-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5904-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1A52963FAB
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 11:16:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 058B2963FE2
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 11:25:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E0041C20AF4
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 09:16:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69815B252F5
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 09:25:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D2618CC19;
-	Thu, 29 Aug 2024 09:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A6718CC14;
+	Thu, 29 Aug 2024 09:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DNptZBb4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9CD118C33A;
-	Thu, 29 Aug 2024 09:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF402B9CD;
+	Thu, 29 Aug 2024 09:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724922971; cv=none; b=E0ecbMr6mLu885oVv/CL7FHdYe46cgMMs/FQKB/9EGtFRlgtF8+/LRWd4zBy+pEwCyhOMQK5Ieq1zt14JOmovgSLTVePxUZBk8MMuTmVKHpSudXsjdyUYZwObYQUmZ18STZ+tNQktkaZY+OAt0oxcDfqBuBbCeMppiWYcbGt8N0=
+	t=1724923494; cv=none; b=q5bjiYD9H9g34y7GT/ZkvpiBQ0wECORn01RrCDcZyvbguDLvjppvaz13e3ZTDl6itKCNZ2vg2Fo9IGbL2jdJLxIWs6ESP9i+jSAi0KjmWf3euJdrGZrXEi50CrThFBB60Ua8QJyNrkgHWoX4y3w56Us10tb7hyVCSALnfaobnfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724922971; c=relaxed/simple;
-	bh=xCDBkZb7O6CRtQvx2dqH72aOufa9musXZqVC7/rDEx8=;
-	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=nlopRYnywQSRlyw3ND4Ewc4XoD0DS+4Eu98OGSRQA9xLcO2g4JerKHXjIdRweof0v/h2Vdgijrb2uN2ttzzDj9wRlMwLrlKFw6/uBNZeGfQ1VjoRzThbesazN2utR05+Pi+zCGeYPkIX2OvH5ePqBFXALwfGjgU0KGtdp4Ae8rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trustnetic.com; spf=pass smtp.mailfrom=trustnetic.com; arc=none smtp.client-ip=54.207.22.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trustnetic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trustnetic.com
-X-QQ-mid:Yeas11t1724922944t046t35655
-Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [125.120.181.182])
-X-QQ-SSF:00400000000000F0FVF000000000000
-From: =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 13568882007759203019
-To: "'Andy Shevchenko'" <andriy.shevchenko@linux.intel.com>
-Cc: <andi.shyti@kernel.org>,
-	<jarkko.nikula@linux.intel.com>,
-	<mika.westerberg@linux.intel.com>,
-	<jsd@semihalf.com>,
-	<davem@davemloft.net>,
-	<edumazet@google.com>,
-	<kuba@kernel.org>,
-	<pabeni@redhat.com>,
-	<rmk+kernel@armlinux.org.uk>,
-	<andrew@lunn.ch>,
-	<linux-i2c@vger.kernel.org>,
-	<netdev@vger.kernel.org>,
-	<mengyuanlou@net-swift.com>,
-	<duanqiangwen@net-swift.com>,
-	<stable@vger.kernel.org>
-References: <20240823030242.3083528-1-jiawenwu@trustnetic.com> <20240823030242.3083528-4-jiawenwu@trustnetic.com> <ZsiZALjnoUpb0H_I@smile.fi.intel.com>
-In-Reply-To: <ZsiZALjnoUpb0H_I@smile.fi.intel.com>
-Subject: RE: [PATCH net 3/3] i2c: designware: support hardware lock for Wangxun 10Gb NIC
-Date: Thu, 29 Aug 2024 17:15:42 +0800
-Message-ID: <02a901daf9f4$063e8cf0$12bba6d0$@trustnetic.com>
+	s=arc-20240116; t=1724923494; c=relaxed/simple;
+	bh=BmUCgCURse82obfDJX2bdOHz4XrifLvgbgNu683Cygk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=h/fTrMPXiIn+XNx0V00ub/OsUQNOafrh1Jq6eb3/DHpDB6k+2s7a2v8JEA8EPp6gquACKBpAXCIls35Nz8mis4KD0r254A0OgG9h7ztzlr0ZZfs0vbJVldyqo8M7gJWSEZmoHbaIvWA7os2T+q+MZezAn/dYzJrJ3/A3kzGVbKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DNptZBb4; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47T8l4Be010874;
+	Thu, 29 Aug 2024 09:24:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=N4+3oYm3niOTMe23PBZmWX
+	kcp58aoGRPFpqbS642dQA=; b=DNptZBb4ACbzXYLi4DCsebMxb5C5VFHm5S1IPy
+	fSCF35bnnVozyPLDnN4SYoaA7be20ilzVebQKdindV8vVvBpJdpF5zK9z0tVmQAN
+	Yn/VAgfrIlRq6mkmlxIn23t30k2C7QuE2yi88dMtohNc0QY0PAcnSu4SCpP63qUL
+	zxrjZHRdo9ZDZrbp3/pN7gB8vRGDk6cdyC24L8uKdU1lgSW0V8DnjhP/Bf/pGADU
+	Ob3aD54d2CvVX/fwxSbBfyRpx0/MURMgbmAMjZdE4ktn3znDEe9c/95W+3Xd8CXk
+	m51EfIjwstXbECPskrfQnR1g57XSqGM6cG6HqZjxviEUOQYw==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419pv0mqbf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Aug 2024 09:24:48 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 47T9OjMX017800;
+	Thu, 29 Aug 2024 09:24:45 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 4178kmcgb1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Aug 2024 09:24:45 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 47T9Oios017508;
+	Thu, 29 Aug 2024 09:24:45 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-msavaliy-hyd.qualcomm.com [10.213.110.207])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 47T9OikD017246
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Aug 2024 09:24:44 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 429934)
+	id A5FC5240D0; Thu, 29 Aug 2024 14:54:43 +0530 (+0530)
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+To: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc: quic_vdadhani@quicinc.com,
+        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Subject: [PATCH v1 0/4] Enable shared SE support over I2C
+Date: Thu, 29 Aug 2024 14:54:14 +0530
+Message-Id: <20240829092418.2863659-1-quic_msavaliy@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: zh-cn
-Thread-Index: AQH8I/V4PrHZ+O/IFu6cfIurHK/3+gFePmA/AWrgqE+x5VSz4A==
-X-QQ-SENDSIZE: 520
-Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SN0ZsRaGfyXrJKAyerQpF4wqhoLMHHGA
+X-Proofpoint-ORIG-GUID: SN0ZsRaGfyXrJKAyerQpF4wqhoLMHHGA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-29_02,2024-08-29_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=537 bulkscore=0 impostorscore=0 phishscore=0 clxscore=1011
+ mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408290069
 
-On Fri, Aug 23, 2024 10:13 PM, Andy Shevchenko wrote:
-> On Fri, Aug 23, 2024 at 11:02:42AM +0800, Jiawen Wu wrote:
-> > Support acquire_lock() and release_lock() for Wangxun 10Gb NIC. Since the
-> > firmware needs to access I2C all the time for some features, the semaphore
-> > is used between software and firmware. The driver should set software
-> > semaphore before accessing I2C bus and release it when it is finished.
-> > Otherwise, there is probability that the correct information on I2C bus
-> > will not be obtained.
-> 
-> ...
-> 
-> >  i2c-designware-core-$(CONFIG_I2C_DESIGNWARE_SLAVE) 	+= i2c-designware-slave.o
-> 
-> >  i2c-designware-platform-y 				:= i2c-designware-platdrv.o
-> > +i2c-designware-platform-y 				+= i2c-designware-wx.o
-> 
-> These lines have TABs/spaces mixture. Please fix at least your entry to avoid
-> this from happening.
-> 
-> 
-> ...
-> 
-> >  int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev);
-> >  #endif
-> 
-> ^^^
-> 
-> > +int i2c_dw_txgbe_probe_lock_support(struct dw_i2c_dev *dev);
-> 
-> See below.
-> 
-> ...
-> 
-> >  		.probe = i2c_dw_amdpsp_probe_lock_support,
-> >  	},
-> >  #endif
-> 
-> ^^^
-> 
-> > +	{
-> > +		.probe = i2c_dw_txgbe_probe_lock_support,
-> > +	},
-> 
-> Do we all need this support? Even if the driver is not compiled? Why?
+This Series adds support to share QUP based I2C SE between subsystems.
+Each subsystem should have its own GPII which interacts between SE and
+GSI DMA HW engine.
 
-I'll add the macro CONFIG_I2C_DESIGNWARE_WX to control it.
+Subsystem must acquire Lock over the SE on GPII channel so that it
+gets uninterrupted control till it unlocks the SE. It also makes sure
+the commonly shared TLMM GPIOs are not touched which can impact other
+subsystem or cause any interruption. Generally, GPIOs are being
+unconfigured during suspend time. 
 
-> ...
-> 
-> > +#include <linux/platform_data/i2c-wx.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/pci.h>
-> 
-> This is a semi-random list. Please, take your time to understand the core you
-> wrote. Follow IWYU principle.
-> 
-> ...
-> 
-> > +static int i2c_dw_txgbe_acquire_lock(struct dw_i2c_dev *dev)
-> > +{
-> > +	void __iomem *req_addr;
-> > +	u32 swsm;
-> > +	int i;
-> > +
-> > +	req_addr = dev->ext + I2C_DW_TXGBE_MNG_SW;
-> > +
-> > +	for (i = 0; i < I2C_DW_TXGBE_REQ_RETRY_CNT; i++) {
-> 
-> Retry loops much better in a form of
-> 
-> 	unsigned int retries = ...;
-> 	...
-> 	do {
-> 		...
-> 	} while (--retries);
-> 
-> BUT... see below.
-> 
-> > +		writel(I2C_DW_TXGBE_MNG_SW_SM, req_addr);
-> > +
-> > +		/* If we set the bit successfully then we got semaphore. */
-> > +		swsm = readl(req_addr);
-> > +		if (swsm & I2C_DW_TXGBE_MNG_SW_SM)
-> > +			break;
-> > +
-> > +		udelay(50);
-> 
-> So, can a macro from iopoll.h be utilised here? Why not?
+GSI DMA engine is capable to perform requested transfer operations
+from any of the SE in a seamless way and its transparent to the
+subsystems. Make sure to enable “qcom,shared-se” flag only while
+enabling this feature. I2C client should add in its respective parent
+node.
 
-I need to write the register first and then read it in this loop.
-It does not seem to apply to the macros in iopoll.h.
+---
+Mukesh Kumar Savaliya (4):
+  dt-bindindgs: i2c: qcom,i2c-geni: Document shared flag
+  dma: gpi: Add Lock and Unlock TRE support to access SE exclusively
+  soc: qcom: geni-se: Export function geni_se_clks_off()
+  i2c: i2c-qcom-geni: Enable i2c controller sharing between two
+    subsystems
 
-> > +	}
-> > +
-> > +	if (i == I2C_DW_TXGBE_REQ_RETRY_CNT)
-> > +		return -ETIMEDOUT;
-> > +
-> > +	return 0;
-> > +}
-> 
-> > +int i2c_dw_txgbe_probe_lock_support(struct dw_i2c_dev *dev)
-> > +{
-> > +	struct platform_device *pdev = to_platform_device(dev->dev);
-> 
-> Why do you need this dance? I.o.w. how pdev is being used here?
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |  4 ++
+ drivers/dma/qcom/gpi.c                        | 37 ++++++++++++++++++-
+ drivers/i2c/busses/i2c-qcom-geni.c            | 29 +++++++++++----
+ drivers/soc/qcom/qcom-geni-se.c               |  4 +-
+ include/linux/dma/qcom-gpi-dma.h              |  6 +++
+ include/linux/soc/qcom/geni-se.h              |  3 ++
+ 6 files changed, 74 insertions(+), 9 deletions(-)
 
-I'll change to add the data in node property.
- 
+-- 
+2.25.1
 
 
