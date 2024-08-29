@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-5891-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5892-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECF90963D21
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 09:34:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D90A5963D31
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 09:37:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB1F3282495
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 07:34:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8383B1F25B3B
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 07:37:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB2AF188CC7;
-	Thu, 29 Aug 2024 07:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FC371891AC;
+	Thu, 29 Aug 2024 07:36:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WSWLRWEQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dD1LiOHQ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6975C39AD6;
-	Thu, 29 Aug 2024 07:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9368446D1;
+	Thu, 29 Aug 2024 07:36:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724916843; cv=none; b=l1HUWIu28j/uDFKoJUm+ijuqGQ1IchMee6JSPRl1AHVY8UMU2fXxK8teH2xvSRlb+03qQEYHwgxVyLN9of7lg0QKrVIo98OCR771w6gQBlZu2SCuXYAlVHezHxOzPVIhbBcNMon9IObVNV86wb9ADGWvuvuWsiuIVdqJtWQvwxw=
+	t=1724917019; cv=none; b=ksNxp0p0XBpFwmQhOGTaNEyASVmGRHab0RTknItl0uaAJCaFZwiiMuumttqZkpgvu90OO6SCKdzVrUkDdpVazss7/FjSE9nUOtX2sWKtXU4bs4n5kPPYRSKJ6OP9j1mLv3TpCiZ2ycr0rdP1EoHFmWdi2bOF0P6FR6IfeVhbpqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724916843; c=relaxed/simple;
-	bh=945OlGGbW9iNMQGOHatryeKgtzAnhWCkHNiqH0pF82E=;
+	s=arc-20240116; t=1724917019; c=relaxed/simple;
+	bh=VOH2tbPjus1K+75hQUURlDdBew1XrlSa96G/dSLpMow=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NLxw5uVOWCDww8uiG0fQbZcKBkNYf0qOQuAvvHbRXnwM2QOcAUD4efBLNmd2bK++ch7vVg73H7UO37fUmLZjTOh8gritweCD/L7P8yd0J7oR6hhqFZ+85F7LwtSqVbdI1jyN/4Deb0EIsR9ls0gd/4xftW6obIKIl8+vqZ8F3Zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WSWLRWEQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27063C4CEC1;
-	Thu, 29 Aug 2024 07:34:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=UI1eMbxcXb3Cnb8AuqAguLshLqRr1ncvKPEJYNk0T6B2Cwy7Zbxe3Ot/TtG0dc0QWoVlIRVe8kbjdUjOxASbj1UXA/nG6oNwswsmM5oUC4H6hpSbAoCTcHxB3hx5w/ihwzJa+e2C6q+mkpb528pmvPL7J5p9FxeNg7skBobtlhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dD1LiOHQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC624C4CEC1;
+	Thu, 29 Aug 2024 07:36:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724916843;
-	bh=945OlGGbW9iNMQGOHatryeKgtzAnhWCkHNiqH0pF82E=;
+	s=k20201202; t=1724917018;
+	bh=VOH2tbPjus1K+75hQUURlDdBew1XrlSa96G/dSLpMow=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WSWLRWEQxKCPFitoVBIBKt/rWPWqVuJcUnEr2YlFIthsAr9WwyxArjaTn/NNA2COK
-	 1DZtShJTDf1CjQiGvrHuKgABrTbWazHZzs8Tfg4SjBrswVaUrJ5oOP7kJvCF5xHtOi
-	 d4tmCNejHrXGwsicuvbnDjIlq3+PiSxtDMayOf3MjL0YYFGXFkemZjUUbKCsUc8Ay6
-	 IHESSzI07f7MkygLD6Z3nzJ2AXoFa+k6AG2CvvqY0xcvUVfrBaIb5Y9I3JfINAjJD0
-	 40kSh6wp9K+A/FWPO+WEITUeUYq3ROPwHs79drwdPGzct161jrqmMM242yLeMjaPXd
-	 +OyjYi/FDdbGA==
-Date: Thu, 29 Aug 2024 09:33:59 +0200
+	b=dD1LiOHQKYJ6888/AHJiuZt4q+YDLS8tlWv3rQvWYJx8GUybwuQaK0L93vtObjNL6
+	 Exihm/meEN55jt4IbbMphTx5yW0U3HTyJJ32Pxy2QI6T0gUOlFzcwu3iEjwnOGC340
+	 b5fVEiQDvnCDCkGL73Ti/NvI9w5WjRrN9c78fXXfcb232cJImJGb9ueVfPDpkYkfyj
+	 XtEQhW7bVF53SttpSF+T0EC/GkP3JNk0fFFhWr/qS6KViQYCFkkk1qbN6LojkpVoEX
+	 IG7E3Ch9wYjhG5pgY2+dU2vw8Vwdmi24GTp2ZyOvmX3HoMBjI5RGvPUEarU8wGkZM6
+	 2/IWW77o49yig==
+Date: Thu, 29 Aug 2024 09:36:54 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
@@ -59,11 +59,11 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
 	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com, 
 	quic_tsoni@quicinc.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH 13/22] dt-bindings: thermal: tsens: document support on
+Subject: Re: [PATCH 14/22] dt-bindings: arm-smmu: document the support on
  SA8255p
-Message-ID: <xeknor2eisi4iy6qp6gcgsyinjfijub6ecmtrl4nbuvenywenz@7z2tcgz6liyr>
+Message-ID: <ompfueg7civ5spjdumkhd7qgx4cnvjcftznf3z3q5duuxppt5d@fao7zx4oxfm3>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-14-quic_nkela@quicinc.com>
+ <20240828203721.2751904-15-quic_nkela@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -72,15 +72,22 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240828203721.2751904-14-quic_nkela@quicinc.com>
+In-Reply-To: <20240828203721.2751904-15-quic_nkela@quicinc.com>
 
-On Wed, Aug 28, 2024 at 01:37:12PM -0700, Nikunj Kela wrote:
-> Add compatible for sensors representing support on SA8255p.
+On Wed, Aug 28, 2024 at 01:37:13PM -0700, Nikunj Kela wrote:
+> Add compatible for smmu representing support on SA8255p.
 > 
 > Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+
+Your subjects contain quite redundant/excessive information. In the same
+time they lack information about device. 
+
+1. s/document the support on/add/
+2. s/SA8255p/SA8255p SMMU-or-whatever-device-it-is/
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
