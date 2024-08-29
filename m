@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-5881-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5882-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 602B5963B8D
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 08:29:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20015963B9C
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 08:29:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBF7E1F21867
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 06:29:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52DB71C24082
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 06:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2ACD15ECC8;
-	Thu, 29 Aug 2024 06:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6876615C136;
+	Thu, 29 Aug 2024 06:29:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYJ1MYc0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PlcZJT4F"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F2A14F130;
-	Thu, 29 Aug 2024 06:28:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8CA14A614;
+	Thu, 29 Aug 2024 06:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724912920; cv=none; b=IcR+QGGLCGHRMeP9T36FaLZpo1+7co0Ol9Zaq7Dh++LYymZgSuaYFztQFpH2xTPDIiEGgdXZ79T5aPDpkczCiN+i5d5xmkzUpGVpIk3O/FVkgKkLyxKKroFlwHytSomp4NgDV0KXuj/MU2LpyAL9oU4tEKfC3c19RafT6rT4mFM=
+	t=1724912949; cv=none; b=YDN/DgoQQK2RK7sGW4AFYiNRNi7IwUvtm13druKhCfJ7r9rBoacom3ghrUu4AohDHHz3lGhsGmBZU0AQEfrs4hL66io98rGRXiMcsx+0pOATXW4Ny6917hjkAZNdtDNnoDXg9fo0NuP6+zuhsWZcRDBQ88QM49tnvQBrIj5M4AM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724912920; c=relaxed/simple;
-	bh=54KP2b1xDA4wtQjCjQUVdKqmp8hEECRNDNsQhoEzaIg=;
+	s=arc-20240116; t=1724912949; c=relaxed/simple;
+	bh=vwvB0eQ2mbK4jMIDGT/ystLfn4DYmeXJlIDSgtLMP3g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qsHRX2n5Jo9Dd/fY+OaORO2L7LgF/XJz9cYQpwn9chdOAmxw4zyve55Eazv8J5lidWGuDL25QV9eurrT+DDSgUx8Mji/TcfXlv/wB4ByXkM16U0OC5AROwq5d5GOzdqztf+Ns4t+ybEOMkf3fhrtxmQT7RrqDFFayGhZmCovtg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JYJ1MYc0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F1A6C4CEC1;
-	Thu, 29 Aug 2024 06:28:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hBUYElRCFyl9QYOktKcPHpsIY0V84O4eejJ3kN23QMqC/pEwe+63PxEPSDuyzVNSRZkRWgAkNoNH4YJF3jiSAFFsv4xaHeBZWW4s/Atiqgg9kD8b4DngM8dTL385IXqwlLVP44EbFmDQk813u260upMH1Trd3vOOl+Jws1NaL8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PlcZJT4F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0CCEC4CEC1;
+	Thu, 29 Aug 2024 06:29:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724912919;
-	bh=54KP2b1xDA4wtQjCjQUVdKqmp8hEECRNDNsQhoEzaIg=;
+	s=k20201202; t=1724912948;
+	bh=vwvB0eQ2mbK4jMIDGT/ystLfn4DYmeXJlIDSgtLMP3g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JYJ1MYc0sBjY596GiqUr9H2WBjOFdoRIxSFEcphsRnfj37sRnXsccUjh084rTvh7t
-	 GR5h44E+vhYdqqPZt6tssHYMWA4AIbBsicGeLhfVx65+8U42NcB+3K3dTljD8/gjOE
-	 ULTbv76mim9vPBC4kqnobpU2EuE6ae54Ic3RhZwyOyo/N1RECstpN10ltdHI2j2Tii
-	 oWDZw4NhWCKURPFNOgnnUSo8zzOZB3DLIneRcrjV+SCcIZqLG18PBM44pE9vMSXS5U
-	 blOxv57xx/a2/N0Kf5oBeCWY6enxx7XB9JqKJIpZAPtFHOefxc8vVvLd3pJ8mZR16Z
-	 zqucLA3318PTQ==
-Date: Thu, 29 Aug 2024 08:28:35 +0200
+	b=PlcZJT4F7bOOHQ7Mc250hHoRQQr5vhlp/lDBjzOUEwCnxmMNVGH9E4IQd2Ca0yuyp
+	 Ecff7i/zOOIFRuOcG9XLJEErO/1/YmGbRJdiv6lFlxp4wGMYrr9crnIHMHlwJLHXQy
+	 TlG4Wq5+mJJGKAx/XLYlo3MIufM41WiIhUQ4dBB5k1AiqGyEVKY4KTSFqZNtCfXMBr
+	 3BwvHVsLXPeowjSn6ZwhzFhMmc4cxHtgWWWtVp7vFYAFAUVYAhO0tuRcccZNZ1LUQP
+	 o6gifrJ0dsbvOIEYJLCzoZpKj7RYmcdUI3PgFZAn9ZM+0wKw/zvGDPuw7mB92fjI19
+	 iGFkPOAd5Ienw==
+Date: Thu, 29 Aug 2024 08:29:05 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
@@ -59,11 +59,11 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
 	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com, 
 	quic_tsoni@quicinc.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH 04/22] dt-bindings: firmware: qcom,scm: document support
- for SA8255p
-Message-ID: <7ya5xi47oqkibqqwndcapermnuq32qmrd6dqttpcd6yps3axr3@u4hwvydgdfgs>
+Subject: Re: [PATCH 05/22] dt-bindings: mailbox: qcom-ipcc: document the
+ support for SA8255p
+Message-ID: <elwiasgdiqb5cvo5jy6dtevrmt4lleallq2maqlugy643q4kok@zk34niqejyi5>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-5-quic_nkela@quicinc.com>
+ <20240828203721.2751904-6-quic_nkela@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -72,16 +72,15 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240828203721.2751904-5-quic_nkela@quicinc.com>
+In-Reply-To: <20240828203721.2751904-6-quic_nkela@quicinc.com>
 
-On Wed, Aug 28, 2024 at 01:37:03PM -0700, Nikunj Kela wrote:
-> Add a compatible for the SA8255p platform's Secure Channel Manager
-> firmware interface.
+On Wed, Aug 28, 2024 at 01:37:04PM -0700, Nikunj Kela wrote:
+> Add a compatible for the ipcc on SA8255p platforms.
 > 
 > Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
