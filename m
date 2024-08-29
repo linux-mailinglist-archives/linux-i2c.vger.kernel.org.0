@@ -1,124 +1,144 @@
-Return-Path: <linux-i2c+bounces-5932-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5933-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27D4C964A03
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 17:28:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 235D2964A47
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 17:40:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D884C28412E
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 15:28:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C10241F23ED1
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 15:40:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFA51B29AD;
-	Thu, 29 Aug 2024 15:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A60791B4C2D;
+	Thu, 29 Aug 2024 15:39:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="LA3ziV72"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cz5wRa62"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF81B1B1D6A;
-	Thu, 29 Aug 2024 15:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05251B3733;
+	Thu, 29 Aug 2024 15:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724945287; cv=none; b=OXrdUn3gKxTMwtCzkwxuGzC7oipc8mQ4WjDsrMuJuE1lNOVrGjlNHlwO2xRriJ4+gw2KnpdZyL00PfBVJTv03RsZvJUkkQiThjGBqpUELTxiFSht2emGTgrLe8fG12DgaCClOCB7ZeQV8IAgffrKt6hgj7m+rNIvPUnT0E6/e0s=
+	t=1724945986; cv=none; b=hNH/4HMq9JM2T/C5CmxLW0bCiy5MV4aOVRXTkvXoWXhkPTph0388r6ambWc7rQHTxiebpsazF6xtLmQhHjNzn5zAh/xgfPnf03qo9vc5XdiIoPUB9GQRrxd+ucLY2pG/RiHXcnek6BCasVkmQ3DgLgbZNDyMjO/LTF/+vTUzj8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724945287; c=relaxed/simple;
-	bh=j3wF1/+CjvrnFq96OzU1cabBWLL9M370ULdhiAke8Bk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=es23Jr+354Z3t8/T9+LR/+JfBGRGWNM4JyJbfZjNSS1yfPivETMwxVW9E/LPb0G+j7+aAQ9V4f0mxDm6e4J7GSxvtFcs9OsRMru5+dAeRPiLHIIbPlVR+NReVSDEAcLUAjIe9HAsci7VkSK/bOyujdCOBN7C4Ma8HIFAIlIcIN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=LA3ziV72; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=iYajlu8nXcp9mdsq8dnR8bmfv3P3vLA5E9s6fy855Cg=; b=LA3ziV72IQuhqZuwGvmgCj8sJq
-	WI87+SDWfySdfgWdn2/0B7s7uuC7xlC2zQf10rAYMDN9u0/Ldrd0sb/l18485jA3DhlxAQs0wkL+y
-	k9km6FT6vSvVzbcZwmBkt943v716zSecJSyUQwjxDDQzRxUnlNBueU5HyWJUa8JQcpZg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sjh3t-00637r-K7; Thu, 29 Aug 2024 17:27:49 +0200
-Date: Thu, 29 Aug 2024 17:27:49 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Jiawen Wu <jiawenwu@trustnetic.com>
-Cc: andi.shyti@kernel.org, jarkko.nikula@linux.intel.com,
-	andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-	jsd@semihalf.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, rmk+kernel@armlinux.org.uk,
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-	mengyuanlou@net-swift.com, duanqiangwen@net-swift.com
-Subject: Re: [PATCH net 0/3] Add I2C bus lock for Wangxun
-Message-ID: <d91674af-1682-4efe-ad15-bd64f871c1de@lunn.ch>
-References: <20240823030242.3083528-1-jiawenwu@trustnetic.com>
- <888f78a9-dea9-4f66-a4d0-00a57039733d@lunn.ch>
- <01d701daf75c$50db4450$f291ccf0$@trustnetic.com>
- <55ff5570-5398-48e9-bf56-d34da197d175@lunn.ch>
- <020f01daf827$d765ffd0$8631ff70$@trustnetic.com>
- <509abfeb-b1fb-4c53-9898-6106c8dde411@lunn.ch>
- <02a001daf9de$529edd90$f7dc98b0$@trustnetic.com>
+	s=arc-20240116; t=1724945986; c=relaxed/simple;
+	bh=irlj6udq+ajkTOZDEaMhoHi3gHxomUq9PIygsVw5x/E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Bvsa4IZr59UdvwpDD0uOjwNRP8xVoV05P1WFdYVDlkmJKglwkd+bZu/vW/dh1G8CahqSnfT1xS1MQX4Zs2osGaiNbesdLuCMh9LzKboxjkyr2awY9vZ/8aj5sBhYZEAEC9rnRYwZFcPHVQ9UlB4ncdmifY90m5ksbMcSODaQDtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cz5wRa62; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47T8iLKF019432;
+	Thu, 29 Aug 2024 15:39:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	+oZZN423x3H8FcKjymhNN5um5bqyqXeBRwGPv3NzEfU=; b=cz5wRa62qjH8a5jV
+	7KkORyfpxFDnzfftfFP/PECkCs+D//aVBf0ez7mtdGCRq/4bA3izvRuLicMgvraT
+	/pr4/nmcAMeRtgCYgHQ6tQQ3hBLiITAsyGMf3cfewFd/Q4SNWAURhUa0QgJzxrIu
+	5nnCBuY2xq2OcniNEtDhG8efy3lG3OUMjG8hFikG+x46D5jDTbBXb69CccXEReTY
+	LDLB55/ztC0UrTN/3ZwjAac+zWWDeAUrxtJP4kMRB2U4wjWrVg2lOfiw6QNWuA1q
+	TYfbpTsi0NI7wicV6EA3efdjs84QBnVeGjqUy+QUHUOQf8znKuSs14Vy/GTDbNFk
+	+acI+Q==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419putntxy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Aug 2024 15:39:11 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47TFdAdg021485
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Aug 2024 15:39:10 GMT
+Received: from [10.110.28.107] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 29 Aug
+ 2024 08:39:06 -0700
+Message-ID: <e8e9cdcf-63c8-4bfa-aacc-d99338c7f8fa@quicinc.com>
+Date: Thu, 29 Aug 2024 08:39:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02a001daf9de$529edd90$f7dc98b0$@trustnetic.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 14/22] dt-bindings: arm-smmu: document the support on
+ SA8255p
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <joro@8bytes.org>,
+        <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <robin.murphy@arm.com>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <vkoul@kernel.org>, <quic_gurus@quicinc.com>,
+        <agross@kernel.org>, <bartosz.golaszewski@linaro.org>,
+        <quic_rjendra@quicinc.com>, <robimarko@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_tsoni@quicinc.com>,
+        <quic_shazhuss@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240828203721.2751904-15-quic_nkela@quicinc.com>
+ <ompfueg7civ5spjdumkhd7qgx4cnvjcftznf3z3q5duuxppt5d@fao7zx4oxfm3>
+Content-Language: en-US
+From: Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <ompfueg7civ5spjdumkhd7qgx4cnvjcftznf3z3q5duuxppt5d@fao7zx4oxfm3>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SpEicdg2VgDAFzoy96fzPwPyuZgqW6b8
+X-Proofpoint-ORIG-GUID: SpEicdg2VgDAFzoy96fzPwPyuZgqW6b8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-29_04,2024-08-29_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 phishscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 suspectscore=0 spamscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408290109
 
-> > O.K, that is bad. The SFP is totally unreliable...
-> > 
-> > You however have still not answered my question. What is the firmware
-> > accessing? How does it handle pages?
-> >
-> > The hack you have put in place is per i2c transaction. But accessing
-> > pages is likely to be multiple transactions. One to change the page,
-> > followed by a few reads/writes in the new page, then maybe followed by
-> > a transactions to return to page 0.
-> 
-> Do you mean the bus address A0 or A2? Firmware accesses I2C just like driver,
-> but it only change the page once per full transaction, during a possession of
-> the semaphore.  What you fear seems unlikely to happen.
 
-What sort of SFP is this? QSFP byte 127 selects the page for addresses
-128-255. Paged 0 and 3 are mandatory, pages 1 and 2 are optional.
+On 8/29/2024 12:36 AM, Krzysztof Kozlowski wrote:
+> On Wed, Aug 28, 2024 at 01:37:13PM -0700, Nikunj Kela wrote:
+>> Add compatible for smmu representing support on SA8255p.
+>>
+>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>> ---
+>>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+> Your subjects contain quite redundant/excessive information. In the same
+> time they lack information about device. 
+>
+> 1. s/document the support on/add/
+> 2. s/SA8255p/SA8255p SMMU-or-whatever-device-it-is/
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> Best regards,
+> Krzysztof
 
-SFP+ also uses byte 127 in the same way:
+Okay. I thought arm-smmu tag already indicate which device this patch is
+for but would put SMMU explicitly in the subject.
 
-10.3 Optional Page Select Byte [Address A2h, Byte 127]
+Thanks,
 
-In order to provide memory space for DWDM and CDR control functions
-and for other potential extensions, multiple Pages can be defined for
-the upper half of the A2h address space. At startup the value of byte
-127 defaults to 00h, which points to the User EEPROM. This ensures
-backward compatibility for transceivers that do not implement the
-optional Page structure. When a Page value is written to byte 127,
-subsequent reads and writes to bytes 128-255 are made to the relevant
-Page.
+-Nikunj
 
-This specification defines functions in Pages 00h-02h. Pages 03-7Fh
-are reserved for future use. Writing the value of a non-supported Page
-shall not be accepted by the transceiver. The Page Select byte shall
-revert to 0 and read / write operations shall be to the unpaged A2h
-memory map.
-
-ethtool allows you to access more than page 0.
-
-ethtool -m|--dump-module-eeprom|--module-info devname [raw on|off]
-        [hex on|off] [offset N] [length N] [page N] [bank N] [i2c N]
-
-> > I think your best solution is to simply take the mutex and never
-> > release it. Block your firmware from accessing the SFP.
-> 
-> Firmware accesses the SFP in order to provide information to the BMC.
-> So it cannot simply be blocked.
-
-Then you have a design problem. And i don't think locking the I2C bus
-per transaction is sufficient.
-
-	Andrew
 
