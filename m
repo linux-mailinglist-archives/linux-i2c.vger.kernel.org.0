@@ -1,143 +1,476 @@
-Return-Path: <linux-i2c+bounces-5930-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5931-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66F2F964883
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 16:33:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDDA896493D
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 16:55:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99F781C22122
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 14:33:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DE071F22F4A
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Aug 2024 14:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024251B0111;
-	Thu, 29 Aug 2024 14:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D57D91B011E;
+	Thu, 29 Aug 2024 14:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pUIn2GP9"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="TDbgkme1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2071.outbound.protection.outlook.com [40.107.244.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472941A76B7;
-	Thu, 29 Aug 2024 14:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724941977; cv=none; b=dkI6EZJi2FMFRY35fFxQZr0HdpACUlpOtBU4lxgftw9Lc6T/Y2gJWXJiMw+pL6SBSkDeflbL38pT2+gkg77kNMaVcMqQT8RXyPLgS/ZeLVtBipaSi/ixmQn6Gej+uqjo/FWxDCybUG5ruOCAg1tYdm4zABme2mZ3Q2l9C+Cc18Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724941977; c=relaxed/simple;
-	bh=Eb2ZPuL+3koYo3fJiQg7r+u2ELH+/JY4bfYIJUUyklQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=PM66MnWmM2MU+RigcYj5UkO6MJaNRxzocFXkS9c8pdfGutOI6Dp6B8+bcJz6ieP12HE0FmrKOp3jACKBxXrPMNyGs0STdI/wxGs1h/hGBXl6S7+O8aHjsJBus/gXCRikXegUgvLhPIfzhwk9MNAXxb9zB6i3TCPblLyzNysSi/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pUIn2GP9; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47T8OgEF010887;
-	Thu, 29 Aug 2024 14:32:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zqodGm77Krj1I3ICwjAgMZxw71umf4G4EfC6q1kQGnc=; b=pUIn2GP9ddnHQMb4
-	T2kX9Iqau3GZVC3a1ozrr4tFfUrgabfm+3+wAGdeP5QVJSSAGQnR7i6mRTiM7laZ
-	fyOpIFF+8NbM7EwE5mWqAcOMPx31DasKVQJSR6mc0st9dwYqzZHbugtrQfgptnYP
-	uLRcmPmzIl6SeMJfsTHakblCSOb1fPj040sgiC/7RqQdMaAE+/V97UYzcxNga84x
-	eU4GY0imdLwyQmiqV6/GQrPbaXO2Wpo+8fwbl/0YVTaz97VQ3Ypq/5Raz3bwVyfv
-	qC/kSEpO64eDMPm1AytzMMHI5Kw3YrV8rGhozJUbK9QQSJ+T01ifJmTOm5bPzwK6
-	YS7fFA==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419pv0nkr7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Aug 2024 14:32:22 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47TEWLm9000806
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Aug 2024 14:32:21 GMT
-Received: from [10.110.28.107] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 29 Aug
- 2024 07:32:17 -0700
-Message-ID: <b263cd16-b5c2-4dd8-a6fc-7d6861338bcb@quicinc.com>
-Date: Thu, 29 Aug 2024 07:32:16 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2521A7AE4;
+	Thu, 29 Aug 2024 14:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724943346; cv=fail; b=XmfVsPp1LWYbJoqMCEOur3Rf4BHWqRZ+zn/5IHLhCUOSm4i5h/iB0msfrhtMDi7O9b8Ew3ds+aEQVVfrOcDNQ4VWHtwvIUFLtggRWbyCTLeDJh1zYgrLd8JbbZCmQLMy01KdXx69ljFT4zYgMx+VU+WMPxS/FnPeFAcXxfq3yjw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724943346; c=relaxed/simple;
+	bh=LuswVS5Ia5SLEMC7kymB7AiO5IF6B/jqYX0UeeQFlUQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=PsKjD62N6fbWKl4aQyespFbwTtPYhg2wqP5yfMMQrp1XmQbf6pvqzXYAVM01WqD/qrBt8ukHOxBvHTHO+RqJ4vpYcCCTwxNIvEO/C0L/MU9QMFzw5GIPWXoJpcIBfyaXSRkH4PqpQ928PneSK0jx1XC6EOOPn+5bgR4gEAi8+wc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=TDbgkme1; arc=fail smtp.client-ip=40.107.244.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pIBLYhx6Y12RZ2wkS2OAAIH4rjp25rLIfh0HC5Oe8kCoZCkP7Jx3EqcM+gXZTXYRJxuQsNU8V9j/NlGkl6uFbP/AzmR6AmCvT4S6ejwMhl9hrhTBuUVBYnLQ7BmUgt7zTPPJVnCgZv6zmCv0S+IWz49moeKZNBN7E/gu2Yb47kM0LcLmAbfZu8bWWsrstglgKXeyWI3KjFo0nWy4jAMb2UE8ubaBWM/GSj1Oj/+7oAHQh++ov7CWWaAcBs4zKocUqpxQCpgqz+f+kbmJmtso9zEnEi/gaKJGs0rfwAs8XC86m6mX0FUDxMWG2wlr2Oyt5r5b5CekrK3L8QMoBk6rAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RQitDBFUh2gKJYiCRPcTu2kMygEeRGFuEtn47ddTtAk=;
+ b=jjBUqD3mGXGmIiGvPWA/jS+nh7CmBS92/4lCARlxhEW4gpLyVPKGWPU2Q/QUqIMSpg2lVYEPC0pcsZPHJaTd12XND1WkD/DeuuTOUzgNItBrcQcg8IpYX4x//q9oQy/nf3IkrtDXrWxol6Jt+Yvr9HOWhmrYVhNbQpyCpj4wjO25mlmC1iida7/3NeCK2fFcGcA/E1Z5Gd6GjazTf7EFDFH4FaJJ0KeBKy8VHBavbNko/0aM2Xd74gcd7JnmR0Yh9lWhPI+LaSx+mVPE6pP4hJKmlHvwSzFJvTgKdH8lQ88dzrxP3JuUbs2irGfcYq5jKmJ02ptnsvjgYgCkIdYAug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RQitDBFUh2gKJYiCRPcTu2kMygEeRGFuEtn47ddTtAk=;
+ b=TDbgkme1qL/zKwUoFOEQbo2dM6aaEfLQqilb7igBfGKpgCh/6xEyfEidt0x7mN/dWB8uZEOzkk5iDZUtjtjYK+EfXOWJnSiyvBOwLAJHMC98nvnyuoD+R9BoSC1XMpONSH02+QxZZ4WBbLZHFlooDJ2kua8nPD3WWrEWeWvcDpI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6102.namprd12.prod.outlook.com (2603:10b6:208:3ca::8)
+ by IA1PR12MB8408.namprd12.prod.outlook.com (2603:10b6:208:3db::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.26; Thu, 29 Aug
+ 2024 14:55:37 +0000
+Received: from MN0PR12MB6102.namprd12.prod.outlook.com
+ ([fe80::912e:40f0:1632:14ae]) by MN0PR12MB6102.namprd12.prod.outlook.com
+ ([fe80::912e:40f0:1632:14ae%6]) with mapi id 15.20.7897.027; Thu, 29 Aug 2024
+ 14:55:37 +0000
+Message-ID: <9d424592-c157-417a-9d6e-d12d80e19829@amd.com>
+Date: Thu, 29 Aug 2024 20:25:27 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] i2c: designware: Consolidate PM ops
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Jan Dabros <jsd@semihalf.com>, Narasimhan.V@amd.com,
+ Borislav Petkov <bp@alien8.de>, Kim Phillips <kim.phillips@amd.com>,
+ Shyam-sundar.S-k@amd.com
+References: <20240827150101.2171107-1-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US
+From: "Goswami, Sanket" <Sanket.Goswami@amd.com>
+In-Reply-To: <20240827150101.2171107-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA0PR01CA0082.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:ae::12) To MN0PR12MB6102.namprd12.prod.outlook.com
+ (2603:10b6:208:3ca::8)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/22] arm64: qcom: Introduce SA8255p Ride platform
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <sudeep.holla@arm.com>, <andi.shyti@kernel.org>, <tglx@linutronix.de>,
-        <will@kernel.org>, <joro@8bytes.org>, <jassisinghbrar@gmail.com>,
-        <lee@kernel.org>, <linus.walleij@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.net>
-CC: <robin.murphy@arm.com>, <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <vkoul@kernel.org>, <quic_gurus@quicinc.com>,
-        <agross@kernel.org>, <bartosz.golaszewski@linaro.org>,
-        <quic_rjendra@quicinc.com>, <robimarko@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_tsoni@quicinc.com>,
-        <quic_shazhuss@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <11c897d7-ea9c-4474-81f6-1fc2198d289d@kernel.org>
-From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <11c897d7-ea9c-4474-81f6-1fc2198d289d@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fv5TpYAMjB7nkZE4j2aSXpV4D3dEfStr
-X-Proofpoint-ORIG-GUID: fv5TpYAMjB7nkZE4j2aSXpV4D3dEfStr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-29_03,2024-08-29_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 bulkscore=0 impostorscore=0 phishscore=0 clxscore=1015
- mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408290100
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6102:EE_|IA1PR12MB8408:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee0972d9-cccf-471f-2552-08dcc83aa446
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MTRJaTZPak1Xck0wKzc2RUZnRXJiYWJoWEU0Z2Fxd1F3TjhKaHFQQjRXZ0Jv?=
+ =?utf-8?B?RklkSU8vVVdMU285aHRteFB1VUJYbTJDeGRUSlJrTFpDc0dDdmRNZHcrUkhy?=
+ =?utf-8?B?blFXMGc5dkhFSWVkUXI0d1hTa1RLRHB6NHp3MmNwSmY1bXdybS9heFkvalAy?=
+ =?utf-8?B?eU1KTjBIdU5LMGN2RTFpcnNCN3lQUFRtTUlWTDB1R2hqNVhDVWVmbVBCbjdB?=
+ =?utf-8?B?S3hnZE5oMlJZekNRM2FFN1FHVVVEdHpTQ3p2Q21UdFQ5SlhmWjNReXBRclJK?=
+ =?utf-8?B?Zkh5ZExsZzdsREYwT1FwYjhsT203N0lQdmlIQjdxeStaUzhoNTdXUDVqUVho?=
+ =?utf-8?B?RDJqZ1JBTmFnLzlaMTJKODdTN1BSM3djTkdzSjh0bnZYSWc0YXVuc1g4YVVO?=
+ =?utf-8?B?di9GRFp6QWl4V3VJWWJsTitiRldNVDJqbUhUY1JnNHRHM3p5K2QrbG5RSElC?=
+ =?utf-8?B?Z2p6cDhFN3V0MEZkSkF3S0FWZzJnQ3dDK2syQ3ZVdmFRUG13enVTaElpT2hv?=
+ =?utf-8?B?aitQaVlFNVNleVJrNWRyU3E4Qzk5eVVoM0lXbGNmYmZJK0lQcW5iUTI5UUVv?=
+ =?utf-8?B?R21CZzVROURKVGxBRUw3RzI5OTZLYmJVVTRzOFRtT3BtT0Q2dmJ5SEo1MnAx?=
+ =?utf-8?B?d21UcFZOS0xFdDhLNlZHazN0dkNRZUxNUm5EN2RVOE1wait4c3ZvZjlqYW94?=
+ =?utf-8?B?ZWVQUFZXaG4vRWI5UktwWFpPMFdpUlFVRDRZcGc5M1RvajcyRjNDOFZTUG9S?=
+ =?utf-8?B?QW9Dek5wUlhRaTZsdXo4Z3AxaTFibnFBRVFlS2t1YUlvdWlkSGpKbTZjY2hm?=
+ =?utf-8?B?dFAxa1YxaWdKaWRCaUJ3WlIyQlpjZ1hhOURXT3JzMU8zb0lCU2JvV1FObWxY?=
+ =?utf-8?B?QmtxY0VEM3d1M3NxWmp0Y1Nxa0R4MkJhaU1abi9pam03cjFCYTIweDN4K1JM?=
+ =?utf-8?B?TDdFcE5VVEo4SkFzQ2lvTXdPQ2FrdGFSeFFreHNiU0taYTJTS3dlZmNpcUZM?=
+ =?utf-8?B?U016WkdqclZIcWJYaW5NVG0rcytXRU9KMk9jaFphUEl5NnIzRFB6VlJtcm9F?=
+ =?utf-8?B?c3NtQThpMVZRb2tDRzFYZXRUTnRyWmRjZEcxSE1oMzhKOXdJT3ZHd0F3QzNj?=
+ =?utf-8?B?azVjMjNiUmhncTJJV0J2TGpCbnU1cldzUGhleGszTnFuaEJtWW1qMGtSNjdj?=
+ =?utf-8?B?NXJhUUYvSUV5d25xQVVyK293bHhIZ3VXYkNoeitTVWx6TlplTnJOcEtYSXBL?=
+ =?utf-8?B?NHZLeUZFZHpEUTJUYmNNRVVqSmFYbURlc3pEZUNXRExwbXpIb3AwempjdDJX?=
+ =?utf-8?B?dkYyZGFhSjBiZkFSOGw5ZzJsczNTY1JsOUJDam5oSU9qYm9QTmdvMzdtS1Rs?=
+ =?utf-8?B?NGRaZHR5TXlTamJNcWU0Y0Y3TDBsMGlUTTFjSFozc1NSMmxIZHYxV2ZjS295?=
+ =?utf-8?B?aVBlSG5ZeHlxVUZPcEZPb1JHSFd3aVhmRGRLQnF3OVRQa1ZrcWc3UC9qelZE?=
+ =?utf-8?B?NVJidVV4alNyazdjWHZ4bklqMGxPNDJVeHU2cFNUUk5jWjFwdWxvUGxQcUJ6?=
+ =?utf-8?B?cjJWazZtRnI4V3dLWkppZFhaS1ovVWVNK3NhYkVjR0F5UkUxdFBRMUpKblox?=
+ =?utf-8?B?WWJqV0MxTlhOZUxsTU1iZmZYWmVMbjlENEhmNGtDRElCTDQwZm0vckhKeWdq?=
+ =?utf-8?B?M1o1aTNQZ29MR2Y1NmlGRkt6bWppMFdjZW5lUEZndGFrRWZJbU9uRlhNd0dm?=
+ =?utf-8?Q?60I0gdH9TiZoizPgJE=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6102.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZlhWMys5WS9XMG1nckYwL3BQOCtaMmJHUGF4VjJJMTFYdk5Lc2NwNTQ1UTla?=
+ =?utf-8?B?azhwY2tXRkNxeUZpTTI2SVRyMnFLcGtySG94c3dCcWtPMXVJbVJHM284eVpT?=
+ =?utf-8?B?S2Y5cVI4R0h1OE9QWjhtTXdXY1JpOVhCOThvenh3SXhlMmRtbnV0U2w4VHl6?=
+ =?utf-8?B?UmI1eHFqZ0xxRmh5R0xQUGhBc0phemhvR0VOOG5QZytuMGV5SHd1NGhVVHVE?=
+ =?utf-8?B?VDFxMGljY0ZROS85bWwvSE1nV2N1b2lkRVpVQkpncUtsQ3QrWGdmMGNGNk85?=
+ =?utf-8?B?aG0zRVA5VmI0Q1J3M2hhMHJ3U3hGRWcvYnE4cWZialNPWG04OVl4MzlsTWZs?=
+ =?utf-8?B?VXl1UjZXMFBpdk9wRkllOUVpNjhaSFNsVTZHcUpFTWNFYm1kT1g2aW5YMDB4?=
+ =?utf-8?B?KzlBMStFQUFGV3RudnY5RkMxM0lRVTV5VHgzNGhQdFBRWlVSaGxmZFY2VFhl?=
+ =?utf-8?B?Tk5mbmtpM2E3dy9oTk5FNUYzdG94ZGNTczhDeHFiM3JoU1JBdEVkb1F5c2ZO?=
+ =?utf-8?B?QW5kajBlc2htOEJDcWVHL2RCRkNxTUpYRWFsWWpNaUo0L0xzS3ZERmVPNTMw?=
+ =?utf-8?B?aUlQTzUzVDhHQ2VUcFhYbDhYM2R2ODdaOWxTajFQK0ZIcjZoakNVU2VSYnd2?=
+ =?utf-8?B?YVNIYWYvV0pTVERwcW1scHY2Tys0OHU5Q2ZiaGNMWGtHaFpVek8xWFdRV1Nv?=
+ =?utf-8?B?dTVGYURDODNHdUdGaTk2a2JoSnUwaGt0T3V4UHZDZzE1eWtmR25KUGhaeGJy?=
+ =?utf-8?B?Vlk0cXpkVzJ0NksyMUQ5QUw0Y3pHY2JnN2ZIWjZ5b3F5TFhvMGQ4a242Tmw2?=
+ =?utf-8?B?VjlYZGQ4UU9uTFBMTGFEMm5mMElwc0FxTmlaMW13UWJXWkFINWo3d3lWbFVW?=
+ =?utf-8?B?MFY4Vm9QQXZ3dnFmV3BUN2tRbEhsNXA5cCtzYUlqLzROYmJSWWVrb04ybGJ1?=
+ =?utf-8?B?SGx0Q256NVVpbUZCUldSVEtkWGg0aDV0THBFZWlrYXF1KzV2d0ZEQmNNZkNM?=
+ =?utf-8?B?QXpPZGhCMVJrK3JKSjIrVEdLTjdLSHJEcEp4dEQ0T0t2a3RENUNKTkJjOWd5?=
+ =?utf-8?B?Nzl3ZFRORDBwenVVOVMxMk11RGk4VmtXZ3dscDljRjZybVdCaGxYajBtUHZ5?=
+ =?utf-8?B?ZEwzMmR3VEFHb0ZGVnVxNFdGbnhuTTVOYURhUnFsdzBpUlYrRld1bTVraEor?=
+ =?utf-8?B?V3NVdnpoencyUmhDNTV3S2hrZ2NBbU9manZTK3YwK2Z2Q3BFb1hrUnJUQkc4?=
+ =?utf-8?B?bitNbW9xY0NYV0gybDNuVGZWVWloRS84ckNxMU51YWtGMDJ2czdnRUhEeU9z?=
+ =?utf-8?B?SVliSldGOWNSajFFWmVqT09pSUtDQzBIZ3JHM1lKeFJyTDYyVm83UGh0SFZP?=
+ =?utf-8?B?bnB6Z1pPMDBCek1tMUFKNDR2aWF4RlYvYzBlK29hcUN3ejdJQ2pXMFhUN05Q?=
+ =?utf-8?B?RkUxcG5iaVpEMTRaRGUyOEx4aTlhQ2N2RUprZmZsRlg5NXZ4bFFpdU84VnRw?=
+ =?utf-8?B?Y00vUTF1SGFxLzgvTGJrVEZWaWxabzZRQWZ4OTNDc2hXY25QYnN0QjFNMjFV?=
+ =?utf-8?B?c0NTVE5BRkJEK1cxeDRkRnphZE9uZXM3NnJGRVhwN1FVN0xNbkgrMmVHTVho?=
+ =?utf-8?B?dVpZekl1QWN2S0QyZDg3TnZva00xN3oxM2p1cUUzYklkUUtTWm9PTmZwYVhN?=
+ =?utf-8?B?ZW5pb215NVczK0U5c1BKQ3JEVkQraXNjWjlHQzJhZlEwREd0bHAwWDd5Nytj?=
+ =?utf-8?B?M3hjUUx1Y0Q1TXZwamhRdStNalJOU2ZiTUVBUWhiWWViYzZRV0p6a24wU0tB?=
+ =?utf-8?B?UVdYRk1UWmFHdmU1MHZJS2NybFc5SWt3eUowY1JsSFFMcDNQWElnbi9ibjdL?=
+ =?utf-8?B?bkhPVGY2RFR6eTZkU3luTkxEYlk5NktIVk5UNmtaR1FZcmtpSE1QckxWaUhQ?=
+ =?utf-8?B?alU1U0ZQcGJoM0lUT0dQOWFPdXphellPamY1UzdUVkhPMlI2NHUyNDZsVkJX?=
+ =?utf-8?B?aDJqeWdQTjFKWkN5cWVWTjQraVQxWTBOdG14WEJoZVVDWGNhT1BDVERoWGNF?=
+ =?utf-8?B?aVVMbXRVSjc4dGw2eTdHMDlXU0hFa24zSzVJVk9seUVqdVJNWjFUQXMwRjBk?=
+ =?utf-8?Q?YJ9VZdyJ94mKOdWZieW0vWtUf?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee0972d9-cccf-471f-2552-08dcc83aa446
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6102.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2024 14:55:37.3132
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P48VWQmiWErdk6jQdEWaacs/18GWlH2VfE9Zs3+NQg1C+0bbGf+nsRwK559JWP+QXKu3ZNXBDfMt+q+xsyGodg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8408
 
+Adding Shyam (as he asked me to check this change on AMD systems)
 
-On 8/29/2024 12:57 AM, Krzysztof Kozlowski wrote:
-> On 28/08/2024 22:36, Nikunj Kela wrote:
->> This series enables the support for SA8255p Qualcomm SoC and Ride
->> platform. This platform uses SCMI power, reset, performance, sensor
->> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
->> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
->> transport driver.
->>
-> Who is supposed to merge it? The Cc-list is quite enormous and I got now
-> 20 bounces:
+On 8/27/2024 8:30 PM, Andy Shevchenko wrote:
+> We have the same (*) PM ops in the PCI and plaform drivers.
+> Instead, consolidate that PM ops under exported variable and
+> deduplicate them.
 >
-> "    Too many recipients to the message"
+> *)
+> With the subtle ACPI and P-Unit behaviour differences in PCI case.
+> But this is not a problem as for ACPI we need to take care of the
+> P-Unit semaphore anyway and calling PM ops for PCI makes sense as
+> it might provide specific operation regions in ACPI (however there
+> are no known devices on market that are using it with PCI enabled I2C).
+> Note, the clocks are not in use in the PCI case.
 >
-> at least drop some non-maintainer related, I counted 5-7 Qualcomm ones
-> which should not be needed.
->
-> Best regards,
-> Krzysztof
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Hi Krzysztof,
-
-I ran maintainers script to get all the emails. I kept maintainers,
-reviewers and "in file" ones in addition to some Qualcomm leads. I will
-drop "in file" and Qualcomm leads in next version.
+Tested-by: Sanket Goswami <Sanket.Goswami@amd.com>
 
 Thanks,
+Sanket
 
--Nikunj
+> ---
+>
+> This is just a split of a single patch from bigger series [1].
+> It was made in no functionality change manner, except the PCI case
+> described above. But since it touches PM and it was an area where
+> regressions were observed I would like to have a formal Tested-by
+> from AMD people to make sure we don't break their setup /
+> configurations.
+>                                                                                                                   
+> Link: https://lore.kernel.org/linux-i2c/20231207141653.2785124-1-andriy.shevchenko@linux.intel.com/ [1]
+>
+> v2: fixed rebase issue (LKP)
+>
+>   drivers/i2c/busses/i2c-designware-common.c  | 62 ++++++++++++++++++++
+>   drivers/i2c/busses/i2c-designware-core.h    |  3 +
+>   drivers/i2c/busses/i2c-designware-pcidrv.c  | 44 +-------------
+>   drivers/i2c/busses/i2c-designware-platdrv.c | 64 +--------------------
+>   4 files changed, 68 insertions(+), 105 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+> index b60c55587e48..fb65fe6d8122 100644
+> --- a/drivers/i2c/busses/i2c-designware-common.c
+> +++ b/drivers/i2c/busses/i2c-designware-common.c
+> @@ -21,6 +21,7 @@
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+> +#include <linux/pm.h>
+>   #include <linux/pm_runtime.h>
+>   #include <linux/property.h>
+>   #include <linux/regmap.h>
+> @@ -736,5 +737,66 @@ void i2c_dw_disable(struct dw_i2c_dev *dev)
+>   }
+>   EXPORT_SYMBOL_GPL(i2c_dw_disable);
+>   
+> +static int i2c_dw_prepare(struct device *device)
+> +{
+> +	/*
+> +	 * If the ACPI companion device object is present for this device,
+> +	 * it may be accessed during suspend and resume of other devices via
+> +	 * I2C operation regions, so tell the PM core and middle layers to
+> +	 * avoid skipping system suspend/resume callbacks for it in that case.
+> +	 */
+> +	return !has_acpi_companion(device);
+> +}
+> +
+> +static int i2c_dw_runtime_suspend(struct device *device)
+> +{
+> +	struct dw_i2c_dev *dev = dev_get_drvdata(device);
+> +
+> +	if (dev->shared_with_punit)
+> +		return 0;
+> +
+> +	i2c_dw_disable(dev);
+> +	i2c_dw_prepare_clk(dev, false);
+> +
+> +	return 0;
+> +}
+> +
+> +static int i2c_dw_suspend(struct device *device)
+> +{
+> +	struct dw_i2c_dev *dev = dev_get_drvdata(device);
+> +
+> +	i2c_mark_adapter_suspended(&dev->adapter);
+> +
+> +	return i2c_dw_runtime_suspend(device);
+> +}
+> +
+> +static int i2c_dw_runtime_resume(struct device *device)
+> +{
+> +	struct dw_i2c_dev *dev = dev_get_drvdata(device);
+> +
+> +	if (!dev->shared_with_punit)
+> +		i2c_dw_prepare_clk(dev, true);
+> +
+> +	dev->init(dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int i2c_dw_resume(struct device *device)
+> +{
+> +	struct dw_i2c_dev *dev = dev_get_drvdata(device);
+> +
+> +	i2c_dw_runtime_resume(device);
+> +	i2c_mark_adapter_resumed(&dev->adapter);
+> +
+> +	return 0;
+> +}
+> +
+> +EXPORT_GPL_DEV_PM_OPS(i2c_dw_dev_pm_ops) = {
+> +	.prepare = pm_sleep_ptr(i2c_dw_prepare),
+> +	LATE_SYSTEM_SLEEP_PM_OPS(i2c_dw_suspend, i2c_dw_resume)
+> +	RUNTIME_PM_OPS(i2c_dw_runtime_suspend, i2c_dw_runtime_resume, NULL)
+> +};
+> +
+>   MODULE_DESCRIPTION("Synopsys DesignWare I2C bus adapter core");
+>   MODULE_LICENSE("GPL");
+> diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+> index 723d599cca93..c6bd6f65a2d3 100644
+> --- a/drivers/i2c/busses/i2c-designware-core.h
+> +++ b/drivers/i2c/busses/i2c-designware-core.h
+> @@ -15,6 +15,7 @@
+>   #include <linux/dev_printk.h>
+>   #include <linux/errno.h>
+>   #include <linux/i2c.h>
+> +#include <linux/pm.h>
+>   #include <linux/regmap.h>
+>   #include <linux/types.h>
+>   
+> @@ -341,6 +342,8 @@ int i2c_dw_handle_tx_abort(struct dw_i2c_dev *dev);
+>   int i2c_dw_set_fifo_size(struct dw_i2c_dev *dev);
+>   u32 i2c_dw_func(struct i2c_adapter *adap);
+>   
+> +extern const struct dev_pm_ops i2c_dw_dev_pm_ops;
+> +
+>   static inline void __i2c_dw_enable(struct dw_i2c_dev *dev)
+>   {
+>   	dev->status |= STATUS_ACTIVE;
+> diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> index dd188ccd961e..04377533f3ae 100644
+> --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> @@ -19,6 +19,7 @@
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+>   #include <linux/pci.h>
+> +#include <linux/pm.h>
+>   #include <linux/pm_runtime.h>
+>   #include <linux/power_supply.h>
+>   #include <linux/sched.h>
+> @@ -194,47 +195,6 @@ static struct dw_pci_controller dw_pci_controllers[] = {
+>   	},
+>   };
+>   
+> -static int __maybe_unused i2c_dw_pci_runtime_suspend(struct device *dev)
+> -{
+> -	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> -
+> -	i2c_dw_disable(i_dev);
+> -	return 0;
+> -}
+> -
+> -static int __maybe_unused i2c_dw_pci_suspend(struct device *dev)
+> -{
+> -	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> -
+> -	i2c_mark_adapter_suspended(&i_dev->adapter);
+> -
+> -	return i2c_dw_pci_runtime_suspend(dev);
+> -}
+> -
+> -static int __maybe_unused i2c_dw_pci_runtime_resume(struct device *dev)
+> -{
+> -	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> -
+> -	return i_dev->init(i_dev);
+> -}
+> -
+> -static int __maybe_unused i2c_dw_pci_resume(struct device *dev)
+> -{
+> -	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> -	int ret;
+> -
+> -	ret = i2c_dw_pci_runtime_resume(dev);
+> -
+> -	i2c_mark_adapter_resumed(&i_dev->adapter);
+> -
+> -	return ret;
+> -}
+> -
+> -static const struct dev_pm_ops i2c_dw_pm_ops = {
+> -	SET_SYSTEM_SLEEP_PM_OPS(i2c_dw_pci_suspend, i2c_dw_pci_resume)
+> -	SET_RUNTIME_PM_OPS(i2c_dw_pci_runtime_suspend, i2c_dw_pci_runtime_resume, NULL)
+> -};
+> -
+>   static const struct property_entry dgpu_properties[] = {
+>   	/* USB-C doesn't power the system */
+>   	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
+> @@ -402,7 +362,7 @@ static struct pci_driver dw_i2c_driver = {
+>   	.probe		= i2c_dw_pci_probe,
+>   	.remove		= i2c_dw_pci_remove,
+>   	.driver         = {
+> -		.pm     = &i2c_dw_pm_ops,
+> +		.pm	= pm_ptr(&i2c_dw_dev_pm_ops),
+>   	},
+>   	.id_table	= i2c_designware_pci_ids,
+>   };
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index e49c68c6e142..285ba4c1803f 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -29,7 +29,6 @@
+>   #include <linux/reset.h>
+>   #include <linux/sched.h>
+>   #include <linux/slab.h>
+> -#include <linux/suspend.h>
+>   #include <linux/units.h>
+>   
+>   #include "i2c-designware-core.h"
+> @@ -339,67 +338,6 @@ static void dw_i2c_plat_remove(struct platform_device *pdev)
+>   	reset_control_assert(dev->rst);
+>   }
+>   
+> -static int dw_i2c_plat_prepare(struct device *dev)
+> -{
+> -	/*
+> -	 * If the ACPI companion device object is present for this device, it
+> -	 * may be accessed during suspend and resume of other devices via I2C
+> -	 * operation regions, so tell the PM core and middle layers to avoid
+> -	 * skipping system suspend/resume callbacks for it in that case.
+> -	 */
+> -	return !has_acpi_companion(dev);
+> -}
+> -
+> -static int dw_i2c_plat_runtime_suspend(struct device *dev)
+> -{
+> -	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> -
+> -	if (i_dev->shared_with_punit)
+> -		return 0;
+> -
+> -	i2c_dw_disable(i_dev);
+> -	i2c_dw_prepare_clk(i_dev, false);
+> -
+> -	return 0;
+> -}
+> -
+> -static int dw_i2c_plat_suspend(struct device *dev)
+> -{
+> -	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> -
+> -	i2c_mark_adapter_suspended(&i_dev->adapter);
+> -
+> -	return dw_i2c_plat_runtime_suspend(dev);
+> -}
+> -
+> -static int dw_i2c_plat_runtime_resume(struct device *dev)
+> -{
+> -	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> -
+> -	if (!i_dev->shared_with_punit)
+> -		i2c_dw_prepare_clk(i_dev, true);
+> -
+> -	i_dev->init(i_dev);
+> -
+> -	return 0;
+> -}
+> -
+> -static int dw_i2c_plat_resume(struct device *dev)
+> -{
+> -	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> -
+> -	dw_i2c_plat_runtime_resume(dev);
+> -	i2c_mark_adapter_resumed(&i_dev->adapter);
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct dev_pm_ops dw_i2c_dev_pm_ops = {
+> -	.prepare = pm_sleep_ptr(dw_i2c_plat_prepare),
+> -	LATE_SYSTEM_SLEEP_PM_OPS(dw_i2c_plat_suspend, dw_i2c_plat_resume)
+> -	RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
+> -};
+> -
+>   static const struct of_device_id dw_i2c_of_match[] = {
+>   	{ .compatible = "snps,designware-i2c", },
+>   	{ .compatible = "mscc,ocelot-i2c", .data = (void *)MODEL_MSCC_OCELOT },
+> @@ -442,7 +380,7 @@ static struct platform_driver dw_i2c_driver = {
+>   		.name	= "i2c_designware",
+>   		.of_match_table = dw_i2c_of_match,
+>   		.acpi_match_table = dw_i2c_acpi_match,
+> -		.pm	= pm_ptr(&dw_i2c_dev_pm_ops),
+> +		.pm	= pm_ptr(&i2c_dw_dev_pm_ops),
+>   	},
+>   	.id_table = dw_i2c_platform_ids,
+>   };
 
 
