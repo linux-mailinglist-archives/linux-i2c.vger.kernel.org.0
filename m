@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-5957-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5958-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FDB4965D5D
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 11:51:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CC99965D69
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 11:52:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF94528249F
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 09:51:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACF3E1C22BD5
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 09:52:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBBB417A918;
-	Fri, 30 Aug 2024 09:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E5E17B4E1;
+	Fri, 30 Aug 2024 09:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jICfdczX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n/wJkhj0"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AE91531CD;
-	Fri, 30 Aug 2024 09:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A9813A261;
+	Fri, 30 Aug 2024 09:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725011500; cv=none; b=kqgj/fmkmyCMtMA7fvjxPFD9NwpF42GYq0692v6/VicGceMPphlzJfXkSNDkgBOlnCJ/wmXk1FfNfrwMGCWO/9NqSDQWxg5EswDNaEy9fUHphF/l9uXXK1evBOgB+5duMr1HyOWYZmFa6StplkwKzDh8Tto+B0XPNGxk++1USR8=
+	t=1725011542; cv=none; b=GkOyzWYXsrVCrDXQ61nFiSlrhGPe67C2VJu+nOEtS1d3WTUi7gJVF+LC8TIhzwrFQ16lU1LSICfcjBOaiH9ab2Yzywo6qV4v87AGGZzWkZ0DCIKac5wSZ8ys55HhjMIhjNE8eylj2E0NLGCQuOxdSQ7w25WOmcLmglanKZKxKmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725011500; c=relaxed/simple;
-	bh=NDukMRi0OurMDQvb5Qn4QuwFUZUeJJQIQoFalgKICzI=;
+	s=arc-20240116; t=1725011542; c=relaxed/simple;
+	bh=A8QWYtow4Kdyv2X4gxev3Y0+4egvh+rdyD6lb3BXnLU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h1pm6g9KKFmLKPAK422LO1MB6gKcsUfBgnzNfoWgcj0zJnSsIbqgb+/QZcEYkgjRTfEU8biR2OxwxU4DZxlw8k4ElzKDekExeCQ06SmGHC8EiuhO4e1UtKfTbiffVbBEOchyEKIS9pTnURVyq8zpCZBElR4caWqWfrAQuKH1djM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jICfdczX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 981B9C4CEC2;
-	Fri, 30 Aug 2024 09:51:23 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=KoUgkr5qCsdamx4l12N+cr99uItdtSEQAgC+cMewAe9st5n9H2lAERTSJQGEsbCz7bdwSFpg3PMuWsHW2olZqUF5mJfdeAsHDMcbN6Klr2ersW1M5QuMU6rCT3mlMuHovYdiub5RuIuYakWBc9fryhkKxBUB7YyOfzDVkhYL6fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n/wJkhj0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F89FC4CEC2;
+	Fri, 30 Aug 2024 09:52:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725011499;
-	bh=NDukMRi0OurMDQvb5Qn4QuwFUZUeJJQIQoFalgKICzI=;
+	s=k20201202; t=1725011542;
+	bh=A8QWYtow4Kdyv2X4gxev3Y0+4egvh+rdyD6lb3BXnLU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jICfdczXbXRdkEcM9Xcn4s8UALWsaTcW+IxWBMT057MQ09wJVZduiDaJVbGZoks9I
-	 S5Iw6ni1FK8QoyFwfn2TarwefKowsrASoq1u2Gz5Dmf4AVVtMfF3u/1QYP7mMiWDyG
-	 FvSNza0qF9lYEVEsk9Um162KDVu2Zzue5dp1rqws5KLWyj1w+d63Bbg88CGdSnJr8T
-	 r2pmxgVPrAOxoSSzJOsodyUEp4psJVqEW2PPPTRiYwuPRjhu9uqqvU63u81uN7NIzD
-	 8ViVemtWP21Zqmcw0IkAmjyF+GeGqXNasiXqm6oQFCr+yPTvXUmTNuaZKvy3exh10e
-	 WPLYsJFx+M3lQ==
-Message-ID: <095f5048-5c39-438d-b5a9-7519199a8e9f@kernel.org>
-Date: Fri, 30 Aug 2024 11:51:20 +0200
+	b=n/wJkhj03vDqff8hmiDyFlG6mg0l8sxQyiqmo/cUWLcz1Gv7Za1ORmsXOlTjvxJmM
+	 ddUfZ54MMiTdQ8JpksAp0xxoVt2k3P46PPCxcsyxA7L9hzUrbzQqgpG+2LQpACogap
+	 CJS5mrRjPdiPuWoU7ndw6CijRmDkDblqAcXbDg5DntC3m2H0qVzEx4xlY3CtfpWwNX
+	 Vyx6tlsw7pANeeH5t7jWVMuhPTuquG9dnF4Dsf6XBOewLkzyZ4ekWZsHBNSX3S4/fY
+	 kUIjVmmwYaWjIRjJgDW+sd8LA+HCrzW5V3otWfRKSSFp/MK+mxlzoyqcrzRVCRLTFS
+	 yBmxHPJlSsF6A==
+Message-ID: <f227c799-cf9a-481a-b359-21828d6e8bca@kernel.org>
+Date: Fri, 30 Aug 2024 11:52:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,17 +50,16 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 22/22] arm64: dts: qcom: Add reduced functional DT for
- SA8255p Ride platform
-To: Nikunj Kela <quic_nkela@quicinc.com>, andersson@kernel.org,
- konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
- herbert@gondor.apana.org.au, davem@davemloft.net, sudeep.holla@arm.com,
- andi.shyti@kernel.org, tglx@linutronix.de, will@kernel.org, joro@8bytes.org,
- jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
- amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
- wim@linux-watchdog.org, linux@roeck-us.net
-Cc: robin.murphy@arm.com, cristian.marussi@arm.com, rui.zhang@intel.com,
+Subject: Re: [PATCH 11/22] pinctrl: qcom: sa8775p: Add support for SA8255p SoC
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
+ viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+ sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
+ will@kernel.org, joro@8bytes.org, jassisinghbrar@gmail.com, lee@kernel.org,
+ linus.walleij@linaro.org, amitk@kernel.org, thara.gopinath@gmail.com,
+ broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+ robin.murphy@arm.com, cristian.marussi@arm.com, rui.zhang@intel.com,
  lukasz.luba@arm.com, vkoul@kernel.org, quic_gurus@quicinc.com,
  agross@kernel.org, bartosz.golaszewski@linaro.org, quic_rjendra@quicinc.com,
  robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
@@ -73,9 +72,9 @@ Cc: robin.murphy@arm.com, cristian.marussi@arm.com, rui.zhang@intel.com,
  kernel@quicinc.com, quic_psodagud@quicinc.com, quic_tsoni@quicinc.com,
  quic_shazhuss@quicinc.com
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-23-quic_nkela@quicinc.com>
- <746be896-8798-44b0-aa86-e77cf34655e1@kernel.org>
- <57eee144-cdc4-48e7-838b-103cda6ec1dd@quicinc.com>
+ <20240828203721.2751904-12-quic_nkela@quicinc.com>
+ <erlzqkxrogk24ugfahfsxrramay6tfhljnxrcfcuhe24pla7k3@lytnz3kmszyj>
+ <d15927f9-bd00-4e32-9c25-535c69fe56f6@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -121,95 +120,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <57eee144-cdc4-48e7-838b-103cda6ec1dd@quicinc.com>
+In-Reply-To: <d15927f9-bd00-4e32-9c25-535c69fe56f6@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/08/2024 21:06, Nikunj Kela wrote:
+On 29/08/2024 16:17, Nikunj Kela wrote:
 > 
-> On 8/29/2024 12:49 AM, Krzysztof Kozlowski wrote:
->> On 28/08/2024 22:37, Nikunj Kela wrote:
->>> SA8255p Ride platform is an automotive virtual platform. This platform
->>> abstracts resources such as clocks, regulators etc. in the firmware VM.
->>> The device drivers request resources operations over SCMI using power,
->>> performance, reset and sensor protocols.
->>>
->>> Multiple virtual SCMI instances are being employed for greater parallelism.
->>> These instances are tied to devices such that devices can have dedicated
->>> SCMI channel. Firmware VM (runs SCMI platform stack) is SMP enabled and
->>> can process requests from agents in parallel. Qualcomm smc transport is
->>> used for communication between SCMI agent and platform.
->>>
->>> Let's add the reduced functional support for SA8255p Ride board.
->>> Subsequently, the support for PCIe, USB, UFS, Ethernet will be added.
->>>
->>> Co-developed-by: Shazad Hussain <quic_shazhuss@quicinc.com>
->>> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
->>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
->>> ---
->>>  arch/arm64/boot/dts/qcom/Makefile           |    1 +
->>>  arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi |   80 +
->>>  arch/arm64/boot/dts/qcom/sa8255p-ride.dts   |  149 ++
->>>  arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi  | 2312 ++++++++++++++++++
->>>  arch/arm64/boot/dts/qcom/sa8255p.dtsi       | 2405 +++++++++++++++++++
->>>  5 files changed, 4947 insertions(+)
->>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi
->>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-ride.dts
->>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi
->>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p.dtsi
->>>
->> ...
+> On 8/29/2024 12:29 AM, Krzysztof Kozlowski wrote:
+>> On Wed, Aug 28, 2024 at 01:37:10PM -0700, Nikunj Kela wrote:
+>>> SA8255p platform uses the same TLMM block as used in SA8775p,
+>>> though the pins are split between Firmware VM and Linux VM.
+>>> let's add SA8255p specific compatible.
+>> The change suggests devices are fully compatible, but above description
+>> does not.
 >>
->>> diff --git a/arch/arm64/boot/dts/qcom/sa8255p-ride.dts b/arch/arm64/boot/dts/qcom/sa8255p-ride.dts
->>> new file mode 100644
->>> index 000000000000..1dc03051ad92
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/qcom/sa8255p-ride.dts
->>> @@ -0,0 +1,149 @@
->>> +// SPDX-License-Identifier: BSD-3-Clause
->>> +/*
->>> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
->>> + */
->>> +
->>> +/dts-v1/;
->>> +
->>> +#include <dt-bindings/gpio/gpio.h>
->>> +
->>> +#include "sa8255p.dtsi"
->>> +#include "sa8255p-pmics.dtsi"
->>> +#include "sa8255p-scmi.dtsi"
->>> +
->>> +/ {
->>> +	model = "Qualcomm Technologies, Inc. SA8255P Ride";
->>> +	compatible = "qcom,sa8255p-ride", "qcom,sa8255p";
->>> +
->>> +	aliases {
->>> +		i2c11 = &i2c11;
->>> +		i2c18 = &i2c18;
->>> +		serial0 = &uart10;
->>> +		serial1 = &uart4;
->>> +		spi16 = &spi16;
->>> +		scmichannels = &scmichannels;
->> Nothing parses this.
+>> This looks conflicting.
 >>
-> We are using this alias in bootloader to speed up the parsing. Since we
+>> Best regards,
+>> Krzysztof
+> 
+> Hi Krzysztof,
+> 
+> Thanks for reviewing patches. TLMM HW block is exactly same as used in
+> SA8775p however ownership of pins can be split between firmware VM and
+> Linux VM. It is upto devices to decide what pins they want to use in
+> what VM. I will extend the subject with same description as used in DT
+> binding.
 
-Then please provide link to the bindings in this open-source upstream
-bootloader.
-
-Otherwise it is a clear no-go for me. We don't add properties because
-some downstream wants them. Imagine what would happen if we opened that
-can of worms...
-
-> are using 64 SCMI instances and SCMI smc transport driver for
-> Qualcomm(drivers/firmware/arm_scmi/transports/smc.c) expects
-> cap-id(created by hypervisor at boot time), our bootloader gets those
-> cap-id for each channel and populate them. This alias is an optimization
-> to save boottime as in automotive, boot KPIs are critical.
-
-I will refrain about commenting on KPIs...
-
-
+So there is no difference? Then devices should be made compatible with
+fallback.
 
 Best regards,
 Krzysztof
