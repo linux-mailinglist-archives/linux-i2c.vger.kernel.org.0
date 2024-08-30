@@ -1,115 +1,103 @@
-Return-Path: <linux-i2c+bounces-5951-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5952-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DA699659D0
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 10:15:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EB95965A53
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 10:30:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAA2F1F21EEF
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 08:15:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D71228D640
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 08:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7E8616D336;
-	Fri, 30 Aug 2024 08:14:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F37F716D4DE;
+	Fri, 30 Aug 2024 08:30:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n87VcqIl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F481662EF
-	for <linux-i2c@vger.kernel.org>; Fri, 30 Aug 2024 08:14:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A2514F13A;
+	Fri, 30 Aug 2024 08:30:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725005650; cv=none; b=JWFHwxk4Ta06QiexQMUt+t9h9tbwGBeKBOUKxRzSGApkBT4Z0DsQSUhnhaJ0jtYPtXbn4tHfNB8Qhw+6uv8vHwQiPodWr4vUDk8ZjCwhDI1bQmorpAWj9GtbvM44BHMuxL9elw2VZcFb10qjEmPmw0O77kvh0GRV5WuUKQFCD1Y=
+	t=1725006617; cv=none; b=SlNdlHqH7U2FKGQhEk2Q0UPfNWrGaHH/eEX2S3fvUkXv/BakBkYSxE/KGe7+BTVmYHn7C8bgzKVcnKboiiLxbePSyHGTd8TVrbQMiHCnvmnWGuY6S+WAXlU3n5k3fHuDVtdtxOed7TY56gxmvXzJ/vSODTCg7XfLEXCBefXavog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725005650; c=relaxed/simple;
-	bh=gs8m6XzA7rsiitgMax02+6Zf3kJfaVZMXfkZt6ROd0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OVoGxtaA5rKu3aEcCJIDm4CfgG3LSYmQMEq/aDhcT52LDDf0ZrRGb9kcrhdlnpLRKrKuvRQM6y0z2PjH4rbqHmJGtsVLGxPrWeqov+d/avGhIciern1nyCGKXaQ71wAXlvrEhM5dQVJK1jWKhB6xelwlsFVMXktnqawSb41Yr6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1sjwlZ-0007vV-UZ; Fri, 30 Aug 2024 10:13:57 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1sjwlY-0046c9-UI; Fri, 30 Aug 2024 10:13:56 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1sjwlY-00ERNa-2d;
-	Fri, 30 Aug 2024 10:13:56 +0200
-Date: Fri, 30 Aug 2024 10:13:56 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: kernel@pengutronix.de, andi.shyti@kernel.org, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, festevam@gmail.com, Frank.Li@nxp.com,
-	francesco.dolcini@toradex.com, linux-i2c@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Subject: Re: [PATCH v2 4/4] i2c: imx: prevent rescheduling in non dma mode
-Message-ID: <ZtF_RJaG9lj_Mvtb@pengutronix.de>
-References: <20240819072052.8722-1-eichest@gmail.com>
- <20240819072052.8722-5-eichest@gmail.com>
+	s=arc-20240116; t=1725006617; c=relaxed/simple;
+	bh=+qWkkkxG743ImM/aahK9UM7XRQPRK07QH/l7Lrn/2g4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=QLA2jMZC7TtrZ845uPtYsmT1I9L9tEthhxCaC/M2X7no9RcVqSgonYO4n3KxvhjPwhx/sdYH8VlD2TYje42vTPbZz1qh/b82M8yxivM2NfpzmnrqktOiSS/ptzlnTEsO8GstPxoetU2GAHHa94IgHNJQuezCu/I8FoWY2MKaWNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n87VcqIl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1355C4CEC2;
+	Fri, 30 Aug 2024 08:30:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725006617;
+	bh=+qWkkkxG743ImM/aahK9UM7XRQPRK07QH/l7Lrn/2g4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=n87VcqIld4h3oj7jmm7RfOPl4zckDOEs8srTmVTODlJPFoBWJTdLkpxKb/TTrDPNI
+	 RpHdWXpgebIFMc/qPmm4qzLIU/IUXikZBg9fEljw5P/AOGdNBkoPI9gH5NVY29Dhxj
+	 0X1uhyjUZT+Aui4Sd6KyzejiYNza+LZ5CXen9SIXDTegOWyX/nTpdat55CRq0o5GTY
+	 kwc8M8dElgz1oXzLOA1CYsDOeadPufbX+4woWWT7nRP10Yqzc9IYsRuD24HA4Io+QG
+	 F5nYBaRSeP36LV/Z3WWPzyZZZEr6rtTbrq62Rxt/JKgxUcvItsy5MM3zN18fyGINmP
+	 7xquAQuP5GK1g==
+From: Lee Jones <lee@kernel.org>
+To: linux-kernel@vger.kernel.org, 
+ Detlev Casanova <detlev.casanova@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ Andi Shyti <andi.shyti@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Mark Brown <broonie@kernel.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Chris Morgan <macromorgan@hotmail.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>, 
+ Chukun Pan <amadeus@jmu.edu.cn>, Muhammed Efe Cetin <efectn@protonmail.com>, 
+ Andy Yan <andyshrk@163.com>, Jagan Teki <jagan@edgeble.ai>, 
+ Dragan Simic <dsimic@manjaro.org>, Ondrej Jirman <megi@xff.cz>, 
+ Jimmy Hon <honyuenkwun@gmail.com>, Elon Zhang <zhangzj@rock-chips.com>, 
+ Finley Xiao <finley.xiao@rock-chips.com>, 
+ Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>, 
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>, 
+ Jisheng Zhang <jszhang@kernel.org>, Jamie Iles <jamie@jamieiles.com>, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org, 
+ linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, 
+ linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-watchdog@vger.kernel.org, kernel@collabora.com, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <01020191998a2fd4-4d7b091c-9c4c-4067-b8d9-fe7482074d6d-000000@eu-west-1.amazonses.com>
+References: <20240828151028.41255-1-detlev.casanova@collabora.com>
+ <01020191998a2fd4-4d7b091c-9c4c-4067-b8d9-fe7482074d6d-000000@eu-west-1.amazonses.com>
+Subject: Re: (subset) [PATCH v3 04/11] dt-bindings: mfd: syscon: Add rk3576
+ QoS register compatible
+Message-Id: <172500660860.97285.13837050366813522297.b4-ty@kernel.org>
+Date: Fri, 30 Aug 2024 09:30:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240819072052.8722-5-eichest@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13.0
 
-On Mon, Aug 19, 2024 at 09:19:10AM +0200, Stefan Eichenberger wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+On Wed, 28 Aug 2024 15:10:55 +0000, Detlev Casanova wrote:
+> Document rk3576 compatible for QoS registers.
 > 
-> We are experiencing a problem with the i.MX I2C controller when
-> communicating with SMBus devices. We are seeing devices time-out because
-> the time between sending/receiving two bytes is too long, and the SMBus
-> device returns to the idle state. This happens because the i.MX I2C
-> controller sends and receives byte by byte. When a byte is sent or
-> received, we get an interrupt and can send or receive the next byte.
 > 
-> The current implementation sends a byte and then waits for an event
-> generated by the interrupt subroutine. After the event is received, the
-> next byte is sent and we wait again. This waiting allows the scheduler
-> to reschedule other tasks, with the disadvantage that we may not send
-> the next byte for a long time because the send task is not immediately
-> scheduled. For example, if the rescheduling takes more than 25ms, this
-> can cause SMBus devices to timeout and communication to fail.
-> 
-> This patch changes the behavior so that we do not reschedule the
-> send/receive task, but instead send or receive the next byte in the
-> interrupt subroutine. This prevents rescheduling and drastically reduces
-> the time between sending/receiving bytes. The cost in the interrupt
-> subroutine is relatively small, we check what state we are in and then
-> send/receive the next byte. Before we had to call wake_up, which is even
-> less expensive. However, we also had to do some scheduling, which
-> increased the overall cost compared to the new solution. The wake_up
-> function to wake up the send/receive task is now only called when an
-> error occurs or when the transfer is complete.
-> 
-> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Applied, thanks!
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+[04/11] dt-bindings: mfd: syscon: Add rk3576 QoS register compatible
+        commit: 2f9709b8541dc742235743d19b8a6e2baa2e81d4
+
+--
+Lee Jones [李琼斯]
+
 
