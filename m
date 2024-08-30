@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-5959-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5960-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F434965DB3
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 11:59:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD2F6965DC1
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 12:01:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFBAE1C23176
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 09:59:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6646B282551
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 10:01:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF53017B4F6;
-	Fri, 30 Aug 2024 09:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12DB117B50A;
+	Fri, 30 Aug 2024 10:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tzt2dnQy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XcnojyBo"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3303713C3D5;
-	Fri, 30 Aug 2024 09:59:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D3316D302;
+	Fri, 30 Aug 2024 10:00:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725011944; cv=none; b=Sk+pODQQWgmGcEkPGNuwf6H2toSWYtDFU007acTJx5H9rZNbgQtXxvAaHcEy+0O6uxaY62rkjcBtpZja6VBa5I/0XDXgtoUPl+4JZAQGI9n1vVwWWDTsJJtT2brwuOzhOi5li5U6AAUdueEZT60/zj7yeuk+9csyVUkufmKxIMc=
+	t=1725012055; cv=none; b=Go4lCfVVlOxSkYjwUHEhylAajvtlDShAZVcCtN69Y7UDyI7tJwTjjbzSbEUS0q15yqL/DCPPdWHaMNKyld95jtrK5tCn4jW/XWQXSk0QO4P4REnJVqwMgcmzQBVprFWAjFLOHMpfiA6GZ822XVSIBilh23nRJRR30mqmoayG57Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725011944; c=relaxed/simple;
-	bh=Xz3mDx21E4z9kKk8sJRWgbNnSRev+LlOgd7/CHZsUyw=;
+	s=arc-20240116; t=1725012055; c=relaxed/simple;
+	bh=C3ag8Y3EtU5RLIBr1X7bSD/nVTfEcPkUuGp8nq5gfug=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GW3T1euEndA7OQgQlcfw/GgCuEbAz4bw+li+BZbYZVKZQBZnLQ+1SvkR7rNbK+GCY+BAJn3GdquExeB2s7fXTYE3CFbdSnMqC4+pwrX90ynJw9WACap+y0CIb92CeBo/p5c+qaiX40k9pKGFOUD4RqQjDR/7smmvZorl+ve5q+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tzt2dnQy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3BC4C4CEC2;
-	Fri, 30 Aug 2024 09:58:46 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=C5MpCjbBlAacZZLNpUC8mqa9siQoNhWunmnSSykZYzR9dRTTPinbwjFgMhnNidKEiTmPwj81j2x+YBB8zt8WlRCEt2BS9RNZXvRAFWhkbDbdULxRLwMm+Jc87GUM8NeYea+LMG2LjVWp/Njb3+CSCaheN5pr8rLrCKn3tXiv1rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XcnojyBo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AA0C4CEC2;
+	Fri, 30 Aug 2024 10:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725011943;
-	bh=Xz3mDx21E4z9kKk8sJRWgbNnSRev+LlOgd7/CHZsUyw=;
+	s=k20201202; t=1725012055;
+	bh=C3ag8Y3EtU5RLIBr1X7bSD/nVTfEcPkUuGp8nq5gfug=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Tzt2dnQyr/MecVXaYBLbiTTYVMo8Zle/mFym6vwsQUSCF5qsHklhlf+BjdAGlttON
-	 Bj3FbtZe/v5C+3lxbvCnJTLo8M9RBGAJhhZ4EscfzpE/pbRvu8AmuevVse5P2FUzX+
-	 cGyAAoCMEHxO1DIalRsjcDkG/fg9zulo+PGkYgvPoISPA1NfGqss+83D7+JVj12UG8
-	 qgZHyn4l4svQ2m184V1MrEml0jQAU87AdIeYJnGbOOJ8Ze4GRBfQ3ScsNTm+oM7a7L
-	 8K1hSo8rjzye3qQr6RLLDVhXY84haWX7IIvzFxCesm0HMSQhwyUKqiNummKOCiy+0M
-	 mAhzY+yM2YkLQ==
-Message-ID: <1941ebf9-8bcf-49f5-bf69-cb2c66435b9b@kernel.org>
-Date: Fri, 30 Aug 2024 11:58:44 +0200
+	b=XcnojyBoEw03okmEUhYyiuVGiudJln6+lDRs8RxPWqbnTVTN6kE3HlvahTSw+mzJf
+	 pvSuQIZGDFm5q7+PodHvHA+dKD54Xnc+KvOhMDDquwXX6MwvUMNevlgnga7+gF0liv
+	 etjGaB3lkh0Je4N09EdQu9CEAlXQ/vs40UgVTUTBSqM5vnBJ8s+libUlWcfcv5pJ3J
+	 8R2RznLX2M2oPYtLBta2qNizJWyc9vaRMvvZQytr+/SVRq4HibkkWVkyl6ltP6VhlB
+	 TcLdC+eKkVuq5aN9IBkdbZYrkKv8jadgoTwXPMmC0qulvRKpVx2+VqAc+OaUedNLyj
+	 KtqvrSS0g2iXQ==
+Message-ID: <b6c1a81e-1533-4a17-8d6a-49a209a38557@kernel.org>
+Date: Fri, 30 Aug 2024 12:00:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 16/22] dt-bindings: qcom: geni-se: document support for
- SA8255P
+Subject: Re: [PATCH 14/22] dt-bindings: arm-smmu: document the support on
+ SA8255p
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
@@ -71,11 +71,11 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
  linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
  kernel@quicinc.com, quic_psodagud@quicinc.com, quic_tsoni@quicinc.com,
- quic_shazhuss@quicinc.com, Praveen Talari <quic_ptalari@quicinc.com>
+ quic_shazhuss@quicinc.com
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-17-quic_nkela@quicinc.com>
- <zzznoxebkrksnpzmk55cff3wz5lhb7dd3qzcvtzkjjv2usmvbr@ebmlirkmahoj>
- <5ce821d8-ebf6-484c-9f0b-e78c227d799c@quicinc.com>
+ <20240828203721.2751904-15-quic_nkela@quicinc.com>
+ <ompfueg7civ5spjdumkhd7qgx4cnvjcftznf3z3q5duuxppt5d@fao7zx4oxfm3>
+ <e8e9cdcf-63c8-4bfa-aacc-d99338c7f8fa@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -121,59 +121,39 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <5ce821d8-ebf6-484c-9f0b-e78c227d799c@quicinc.com>
+In-Reply-To: <e8e9cdcf-63c8-4bfa-aacc-d99338c7f8fa@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/08/2024 16:23, Nikunj Kela wrote:
+On 29/08/2024 17:39, Nikunj Kela wrote:
 > 
-> On 8/29/2024 12:42 AM, Krzysztof Kozlowski wrote:
->> On Wed, Aug 28, 2024 at 01:37:15PM -0700, Nikunj Kela wrote:
->>> Add "qcom,sa8255p-geni-se-qup" compatible for representing QUP on
->>> SA8255p.
+> On 8/29/2024 12:36 AM, Krzysztof Kozlowski wrote:
+>> On Wed, Aug 28, 2024 at 01:37:13PM -0700, Nikunj Kela wrote:
+>>> Add compatible for smmu representing support on SA8255p.
 >>>
->>> Clocks are being managed by the firmware VM and not required on
->>> SA8255p Linux VM hence removing it from required list.
->>>
->>> CC: Praveen Talari <quic_ptalari@quicinc.com>
 >>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
 >>> ---
->>>  .../bindings/soc/qcom/qcom,geni-se.yaml       | 47 +++++++++++++++++--
->>>  1 file changed, 43 insertions(+), 4 deletions(-)
+>>>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 +++
+>>>  1 file changed, 3 insertions(+)
 >>>
->>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>> index 7b031ef09669..40e3a3e045da 100644
->>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>> @@ -22,17 +22,16 @@ properties:
->>>      enum:
->>>        - qcom,geni-se-qup
->>>        - qcom,geni-se-i2c-master-hub
->>> +      - qcom,sa8255p-geni-se-qup
->> Same problems. If you decide to use generic compatibles, it means it
->> covers all devices. Otherwise it does not make any sense.
+>> Your subjects contain quite redundant/excessive information. In the same
+>> time they lack information about device. 
+>>
+>> 1. s/document the support on/add/
+>> 2. s/SA8255p/SA8255p SMMU-or-whatever-device-it-is/
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> Hi Krzysztof,
-> 
-> SA8255p platform is not compatible with generic ones. At the time
-> generic compatibles were added, no one thought of such platform will
+> Okay. I thought arm-smmu tag already indicate which device this patch is
+> for but would put SMMU explicitly in the subject.
 
-That's kind of obvious and expected yet these were added...
-
-> appear in future. Please advise what should we do in this case?
-
-I don't know. We keep telling - do not use generic compatibles, because
-you will have something like this, but people use generic compatibles -
-so what can I say? I told you so?
-
-Can we get agreement that using generic compatibles is a wrong idea? Or
-sort of promise - we won't use them? Or policy? I don't know, we can
-move on assuming this was a mistake 8 years ago, approaches evolve,
-reviews change, but I am just afraid I will be repeating the same to
-several future contributions and every time come with long arguments
-exhausting my energy - don't add generic compatibles.
-
-If devices are not compatible, I suggest different bindings.
+arm,smmu indicates the binding file which might be or might not exactly
+be the same as actual device. Sometimes they have difference names. I am
+not saying that it would be beneficial here, but some other patches
+could benefit probably.
 
 Best regards,
 Krzysztof
