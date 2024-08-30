@@ -1,63 +1,63 @@
-Return-Path: <linux-i2c+bounces-5965-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5966-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44F9C9664B1
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 16:56:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A34C29664CE
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 16:59:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E098B21504
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 14:56:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C89AD1C23F88
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 14:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63EC61B3B08;
-	Fri, 30 Aug 2024 14:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C5D1B3B1C;
+	Fri, 30 Aug 2024 14:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="B2dtcPaL"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JW+UgMY0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F33E1B2ED5;
-	Fri, 30 Aug 2024 14:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B695A1917E2;
+	Fri, 30 Aug 2024 14:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725029787; cv=none; b=lAEvuG0rChGz1JeUQ5Jngm/gFigorkIHJI4uf9r9UafEiWnUsDCBYk/y+X0uZW2KdIf6Grx/49Dd2iXd/BkUhIpL1V41mHu3DVeXIVFkKr4Ad8S3OyI5B5+/JfB7gwBeegXD42Ew1YCcJhlXFPtaKV5VmQF6cCoa4QP/6Z4xgRY=
+	t=1725029978; cv=none; b=nRhW74K60H1ldr8B+RAl+gUxhCI9/AOWuASXzcBvr/45aIT+nS6nkRZwSNCyk42QB9GPzSebvh98yXt0xk/uXbRaidbHek0grvdVnEIF0cObo6G1pAargzpD2T9HZcy09Wt42hKh+b/r9eNmn5RGQzK3IxBXJle3YHji6CommO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725029787; c=relaxed/simple;
-	bh=HOSF8ykokzGj565EbQP8vVNTMTY1jPDC04y84KqAwBs=;
+	s=arc-20240116; t=1725029978; c=relaxed/simple;
+	bh=ZNinG2P8QRlT1ahrPp1CbuKepet2IrmxrveZ7JQJiWw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=QXpW6IXM99d4mLzrCq4fprHmLZXW8133uF0kDcm2wGq4/BnMd87r0WM6xG6JJTjLk6n7i8CFwnlq+0H7djQjGWm4LsF9X3xtczr2220QI29VidNJAg7IWpNUbBZQRMtL8vV8pknPa436qxuaYj9gsrKHwvj0zA1nwxBG0MB1GPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=B2dtcPaL; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=Wt0JXrLRnlmCSj3rpJfLkuKsXT9b6x4ZC6X2JkEwqkHmeSpJ/sc70WLgb++oNsPhQxeqZ/V/NF9HM9ildOweM9hnNrhZPZjVKOTq5h604F9NMZHakehxFaEgx+8BiYGDwS5vAfuqqHB9ep9hZJbIdG20fsYcytFccZC6PCzhAls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JW+UgMY0; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47U84iKL007721;
-	Fri, 30 Aug 2024 14:55:40 GMT
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47U80U5h017955;
+	Fri, 30 Aug 2024 14:59:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	sMOYdqpHR+jylrSdCdHY5P/j3IfMgumYyO5vaWdtRxc=; b=B2dtcPaLZAlSp4ta
-	NmtwkNZJqMPxHlYWx0uU8eqz/oRVGNTS3PYaLq80IrUB5sekdlQs+6M/Hw+ZRKD6
-	d+rtVQos2J/4xQTo6dPJVtCFPBcbcXZGCAKJBcX7ZSTAyCjGHwSjS4BlLyY1KD0z
-	rgXnETJcdEk0LQTc3bypEwkptcB3M9kPhcAKXxcp2hqHprLDN4/Y0QkOPobclLnK
-	MO+lCbG7SMGs8AMHnTMEdGP67pVEU7DvmnDSthpQMn68+WttPUve6HcEDEI8z3Fq
-	+uNwsDq7DTezOpSZ9/78Qk3IosQKQTm0kXtLetNrsItOCfjy9U2XV3VHEVKbH1Jm
-	VzVb9A==
+	LgF5ZYD5IR1SwpOQJWoYZ0vhtIBCV/uVX/Uy6jMvB+U=; b=JW+UgMY0WG7cYPxh
+	h5qbUmrcF7dtTxFEkfIeAqxlqBgxYcB+3CZny67trU3LOtF+0U4HIpspMGfzcOhq
+	msC1wvhSlwj8bpmjQ/Tx+Gmc2P2XwrixJ2abHLWGTV2V+mjBVoNI4jPgIB84/6F9
+	25Az8Tx0hT92YLi3vrSd2cTMoSUyzlfR+w7D5Q9y82On5OgO9C4F4VkLGgoi89xc
+	DhYo9p18OVlaEX4o56acMPom2eulqSSvGMtkGCvBAiWSOMs6zao8l0CHKTmVcMyq
+	RHawE0M2mn2qdcjMXxSqmkWQFSpRi6RsTP31Dv58UYgGmZptMM7CpgAhaCGnDrDu
+	e/jQsg==
 Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419pv0h631-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419puts9dj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 30 Aug 2024 14:55:40 +0000 (GMT)
+	Fri, 30 Aug 2024 14:58:59 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47UEtc23006572
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47UEwwPD011056
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 30 Aug 2024 14:55:38 GMT
+	Fri, 30 Aug 2024 14:58:58 GMT
 Received: from [10.110.28.107] (10.80.80.8) by nasanex01b.na.qualcomm.com
  (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 30 Aug
- 2024 07:55:34 -0700
-Message-ID: <b8cbaa23-ca1e-4192-a5d0-d0973916926d@quicinc.com>
-Date: Fri, 30 Aug 2024 07:55:34 -0700
+ 2024 07:58:55 -0700
+Message-ID: <9befe692-a05d-4fa0-9ff9-8d6030e4cb66@quicinc.com>
+Date: Fri, 30 Aug 2024 07:58:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,20 +65,19 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 16/22] dt-bindings: qcom: geni-se: document support for
- SA8255P
+Subject: Re: [PATCH 22/22] arm64: dts: qcom: Add reduced functional DT for
+ SA8255p Ride platform
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
-        <tglx@linutronix.de>, <will@kernel.org>, <joro@8bytes.org>,
-        <jassisinghbrar@gmail.com>, <lee@kernel.org>,
-        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+To: Krzysztof Kozlowski <krzk@kernel.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <sudeep.holla@arm.com>, <andi.shyti@kernel.org>, <tglx@linutronix.de>,
+        <will@kernel.org>, <joro@8bytes.org>, <jassisinghbrar@gmail.com>,
+        <lee@kernel.org>, <linus.walleij@linaro.org>, <amitk@kernel.org>,
         <thara.gopinath@gmail.com>, <broonie@kernel.org>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <robin.murphy@arm.com>,
-        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>
+CC: <robin.murphy@arm.com>, <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
         <lukasz.luba@arm.com>, <vkoul@kernel.org>, <quic_gurus@quicinc.com>,
         <agross@kernel.org>, <bartosz.golaszewski@linaro.org>,
         <quic_rjendra@quicinc.com>, <robimarko@gmail.com>,
@@ -90,90 +89,121 @@ CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
         <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
         <quic_psodagud@quicinc.com>, <quic_tsoni@quicinc.com>,
-        <quic_shazhuss@quicinc.com>, Praveen Talari <quic_ptalari@quicinc.com>
+        <quic_shazhuss@quicinc.com>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-17-quic_nkela@quicinc.com>
- <zzznoxebkrksnpzmk55cff3wz5lhb7dd3qzcvtzkjjv2usmvbr@ebmlirkmahoj>
- <5ce821d8-ebf6-484c-9f0b-e78c227d799c@quicinc.com>
- <1941ebf9-8bcf-49f5-bf69-cb2c66435b9b@kernel.org>
+ <20240828203721.2751904-23-quic_nkela@quicinc.com>
+ <746be896-8798-44b0-aa86-e77cf34655e1@kernel.org>
+ <57eee144-cdc4-48e7-838b-103cda6ec1dd@quicinc.com>
+ <095f5048-5c39-438d-b5a9-7519199a8e9f@kernel.org>
 From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <1941ebf9-8bcf-49f5-bf69-cb2c66435b9b@kernel.org>
+In-Reply-To: <095f5048-5c39-438d-b5a9-7519199a8e9f@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: P8CHtT4ahaeWh1f5LR3CsMBwdiaWy7Zc
-X-Proofpoint-ORIG-GUID: P8CHtT4ahaeWh1f5LR3CsMBwdiaWy7Zc
+X-Proofpoint-GUID: SkQErJ6yG1XnlEy5h9kGSvc-Bpyu79A9
+X-Proofpoint-ORIG-GUID: SkQErJ6yG1XnlEy5h9kGSvc-Bpyu79A9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-08-30_09,2024-08-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 suspectscore=0 lowpriorityscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 phishscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 suspectscore=0 spamscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2407110000 definitions=main-2408300114
 
 
-On 8/30/2024 2:58 AM, Krzysztof Kozlowski wrote:
-> On 29/08/2024 16:23, Nikunj Kela wrote:
->> On 8/29/2024 12:42 AM, Krzysztof Kozlowski wrote:
->>> On Wed, Aug 28, 2024 at 01:37:15PM -0700, Nikunj Kela wrote:
->>>> Add "qcom,sa8255p-geni-se-qup" compatible for representing QUP on
->>>> SA8255p.
+On 8/30/2024 2:51 AM, Krzysztof Kozlowski wrote:
+> On 29/08/2024 21:06, Nikunj Kela wrote:
+>> On 8/29/2024 12:49 AM, Krzysztof Kozlowski wrote:
+>>> On 28/08/2024 22:37, Nikunj Kela wrote:
+>>>> SA8255p Ride platform is an automotive virtual platform. This platform
+>>>> abstracts resources such as clocks, regulators etc. in the firmware VM.
+>>>> The device drivers request resources operations over SCMI using power,
+>>>> performance, reset and sensor protocols.
 >>>>
->>>> Clocks are being managed by the firmware VM and not required on
->>>> SA8255p Linux VM hence removing it from required list.
+>>>> Multiple virtual SCMI instances are being employed for greater parallelism.
+>>>> These instances are tied to devices such that devices can have dedicated
+>>>> SCMI channel. Firmware VM (runs SCMI platform stack) is SMP enabled and
+>>>> can process requests from agents in parallel. Qualcomm smc transport is
+>>>> used for communication between SCMI agent and platform.
 >>>>
->>>> CC: Praveen Talari <quic_ptalari@quicinc.com>
+>>>> Let's add the reduced functional support for SA8255p Ride board.
+>>>> Subsequently, the support for PCIe, USB, UFS, Ethernet will be added.
+>>>>
+>>>> Co-developed-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+>>>> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
 >>>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
 >>>> ---
->>>>  .../bindings/soc/qcom/qcom,geni-se.yaml       | 47 +++++++++++++++++--
->>>>  1 file changed, 43 insertions(+), 4 deletions(-)
+>>>>  arch/arm64/boot/dts/qcom/Makefile           |    1 +
+>>>>  arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi |   80 +
+>>>>  arch/arm64/boot/dts/qcom/sa8255p-ride.dts   |  149 ++
+>>>>  arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi  | 2312 ++++++++++++++++++
+>>>>  arch/arm64/boot/dts/qcom/sa8255p.dtsi       | 2405 +++++++++++++++++++
+>>>>  5 files changed, 4947 insertions(+)
+>>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi
+>>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-ride.dts
+>>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi
+>>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p.dtsi
 >>>>
->>>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>>> index 7b031ef09669..40e3a3e045da 100644
->>>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
->>>> @@ -22,17 +22,16 @@ properties:
->>>>      enum:
->>>>        - qcom,geni-se-qup
->>>>        - qcom,geni-se-i2c-master-hub
->>>> +      - qcom,sa8255p-geni-se-qup
->>> Same problems. If you decide to use generic compatibles, it means it
->>> covers all devices. Otherwise it does not make any sense.
->> Hi Krzysztof,
->>
->> SA8255p platform is not compatible with generic ones. At the time
->> generic compatibles were added, no one thought of such platform will
-> That's kind of obvious and expected yet these were added...
+>>> ...
+>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/sa8255p-ride.dts b/arch/arm64/boot/dts/qcom/sa8255p-ride.dts
+>>>> new file mode 100644
+>>>> index 000000000000..1dc03051ad92
+>>>> --- /dev/null
+>>>> +++ b/arch/arm64/boot/dts/qcom/sa8255p-ride.dts
+>>>> @@ -0,0 +1,149 @@
+>>>> +// SPDX-License-Identifier: BSD-3-Clause
+>>>> +/*
+>>>> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+>>>> + */
+>>>> +
+>>>> +/dts-v1/;
+>>>> +
+>>>> +#include <dt-bindings/gpio/gpio.h>
+>>>> +
+>>>> +#include "sa8255p.dtsi"
+>>>> +#include "sa8255p-pmics.dtsi"
+>>>> +#include "sa8255p-scmi.dtsi"
+>>>> +
+>>>> +/ {
+>>>> +	model = "Qualcomm Technologies, Inc. SA8255P Ride";
+>>>> +	compatible = "qcom,sa8255p-ride", "qcom,sa8255p";
+>>>> +
+>>>> +	aliases {
+>>>> +		i2c11 = &i2c11;
+>>>> +		i2c18 = &i2c18;
+>>>> +		serial0 = &uart10;
+>>>> +		serial1 = &uart4;
+>>>> +		spi16 = &spi16;
+>>>> +		scmichannels = &scmichannels;
+>>> Nothing parses this.
+>>>
+>> We are using this alias in bootloader to speed up the parsing. Since we
+> Then please provide link to the bindings in this open-source upstream
+> bootloader.
 >
->> appear in future. Please advise what should we do in this case?
-> I don't know. We keep telling - do not use generic compatibles, because
-> you will have something like this, but people use generic compatibles -
-> so what can I say? I told you so?
+> Otherwise it is a clear no-go for me. We don't add properties because
+> some downstream wants them. Imagine what would happen if we opened that
+> can of worms...
+
+Point taken! I will remove this alias and label from DT in next version.
+We can add it back if/once the bootloader changes are upstreamed. Thanks!
+
+
+>> are using 64 SCMI instances and SCMI smc transport driver for
+>> Qualcomm(drivers/firmware/arm_scmi/transports/smc.c) expects
+>> cap-id(created by hypervisor at boot time), our bootloader gets those
+>> cap-id for each channel and populate them. This alias is an optimization
+>> to save boottime as in automotive, boot KPIs are critical.
+> I will refrain about commenting on KPIs...
 >
-> Can we get agreement that using generic compatibles is a wrong idea? Or
-> sort of promise - we won't use them? Or policy? I don't know, we can
-> move on assuming this was a mistake 8 years ago, approaches evolve,
-> reviews change, but I am just afraid I will be repeating the same to
-> several future contributions and every time come with long arguments
-> exhausting my energy - don't add generic compatibles.
 >
-> If devices are not compatible, I suggest different bindings.
 >
 > Best regards,
 > Krzysztof
-
-Hi Krzysztof,
-
-I will bring your concerns (raised above) to Qualcomm leads' attention.
-Thank you for your feedback and support.
-
-Thanks,
-
--Nikunj
-
 >
 
