@@ -1,69 +1,69 @@
-Return-Path: <linux-i2c+bounces-5939-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5940-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8785D9655E6
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 05:49:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E33369655EA
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 05:49:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1B4EB23CCE
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 03:49:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A07E628188C
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Aug 2024 03:49:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A3A1494B4;
-	Fri, 30 Aug 2024 03:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09EEB1369AE;
+	Fri, 30 Aug 2024 03:49:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iZ+xp0Ec"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SJ4Y7eYO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E751369AE;
-	Fri, 30 Aug 2024 03:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47D4B14B95B;
+	Fri, 30 Aug 2024 03:48:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724989737; cv=none; b=Mh6KXzN8cTp7rKcsTzMX0wF8IhaYJW9Q3nM+zyr91ef5pdTI+yLWIIXwwwLbULQ8xDb3UBBiArRWfFj971QvtsoIk3Ola5A8dT9hiK4bSFdx2VGPu1g5c3bYh1dSYuCQqhSHkDxkqs8QadiktNT3DJY+wnnSIyDzSDVAKlImncE=
+	t=1724989740; cv=none; b=Zz58Si+3xMTlut29vKhJtuCxUxz5DDlFeA7j71waSV48yGFznYBpPI+xftMK+w2z+MLp8bTumyA9TV3c2PcZ4pLhaLaQHferwyuqcJvw5Z+ytW02cOoyB7CEBPKFh0C4WeCmrUllDufJ/hBNWHD20c3aFUs9XlRst9bN8Uo/VvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724989737; c=relaxed/simple;
-	bh=/Hh9cHSOWQABreVbQ8MWvIlvXbfjoJgtyHNDAPmLs54=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=KGCUJgDSyPLI3ob8fYkLs3PmYTU/lqXq3ZYg3M3b10J50JtpIwcUUOOvfp8EUYgWHMntNLh2tJPQAlrLH3AYOCoSpzfeaZCgHZbu9HjbA+YOVKxkkugx1EhQbh1mq+tyRFzegAlTGnIfrb9EZr9Ip9pFKsdMKcZXoVm1bFZEA+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iZ+xp0Ec; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1724989740; c=relaxed/simple;
+	bh=sHbyhwkdQzUqqbyCyCEmbs2jlo7Vy3Ug32cJpM0RiWo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=ugSdyNy/WyhFCnEdH7nIQs5VzRkhzx0PqSYTXvqL9kCEMeiztv/qVNfAIQEupBI39rhFr60BcmLbcgOZOUS1yoC2bAtmYhALmi8gLnRz8IxT3Ua6KeGfb0REbMTTHKokLX2p/3l7NH+65C60Yh5H7lWAZ/QNjIhkhsl0kjs5KfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SJ4Y7eYO; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20203988f37so13549695ad.1;
-        Thu, 29 Aug 2024 20:48:55 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2d3c098792bso1042072a91.1;
+        Thu, 29 Aug 2024 20:48:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724989735; x=1725594535; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724989738; x=1725594538; darn=vger.kernel.org;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=0Yuwb6+ZqfPT0JtISqh7yyK1d1c60sdj5zghOt5FrDU=;
-        b=iZ+xp0Ec4pbvM4Z8Mw2lxhoRw5hTYNGklx9fg6NxlQ2RfC2NQLCP8Y9Y6SZ6GQHTlB
-         lmbQy2PbQjaIXpV398eT4TT8ikfhawBF/IH77ff4gB1lSydsk8aS5KpV0TbSIVkkxGIi
-         dVFWMQlePHvCbjrufYdzQNLTYZDnmlOJ0bvdJfJKtwGPUq6BGd8TmsUO5phLFPlyh2mb
-         SSQbDAaOm95u5JsQ7I1alNE1Rk03nurRS/GO1m4xouCGcDiTnnqOgrSlnliu7BAl4ujW
-         ZhVXQJvbtEuJkDW347ND12InmxlcpI/IXr1jR6Ey1rV8NNBtaSd9llhxyWFyIWvGtdBM
-         fBIA==
+        bh=nuaU/FEUSJ1zDJhf2kq5x0CsZK8UIXnkrpW0Xmu9tsI=;
+        b=SJ4Y7eYOojUA5Z/rfEK0SFKlsMwk5rwQZH6TCL+PctRD5+nFogFwEJfOV1ESfD86rI
+         D3OdJJCSyELmcgvmHQ9xNEXx/aFyaeNPne1yWp3chaOQXsEdTZiLurx370e/o0wrt9cu
+         svFiSzm3mKIeSsXuyiNWG1CwPGuD5PYp7Bux1yZDq0LZg+NFv5dvuz5kiNHGKZ/JRBSq
+         GVI+LyWSbXoIWKOfxJcJwcxY+l+a588HTWX3J3wqMuud5Aqtv3hOPV4p47jvoXe9HmBj
+         /4nxjHRvNXo6Shuds2lGxq9CVYU18f2KgksOphuxXyoojhfb5qVj5M/1U0F3Coh30iw4
+         HLyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724989735; x=1725594535;
+        d=1e100.net; s=20230601; t=1724989738; x=1725594538;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Yuwb6+ZqfPT0JtISqh7yyK1d1c60sdj5zghOt5FrDU=;
-        b=t4r3vvCljDZ4Gpj4aiVXUZUluZrC0aqQIJ+IadHdoONHscWm2NJwgs14CVfA/ZPAMi
-         Pxl0Zi8AbZ66xvkOAjr+UhpqkScr52P4Mjf096CSVx7urW+lgiKB+H5N1aGOjVGQc6hz
-         Kcph3VptWv3mu6Qfhz/vvN9zAlV0Ggy9aqKrvcfUNVxk7QWti4Op7qf5tjn3Qt1o0tIl
-         kB/2pPMTFli+w0gkfTFTu0YOO2gCuEHGZmW7nnLEwxeY8f/8MjGhbhxvcU5udoU0PDzY
-         tu/uRNyeIe3SrSU8cCAQ+TI38WhdBHNkl/xzZ5Mp7Ke5+/g9Hl/1+mj+7fIyF4ZsJgp1
-         j1Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCURpA9qjVUsI8ep75jpVTgPAl1hzEx5WgL0vYq+REZEMvm1Rcl4ehgcaMhTAYkWDhbyP2k9kbqUKHc=@vger.kernel.org, AJvYcCVodA05hjImQieHYamE+EW92tpo+1EJ0mj+3aVHpWlqJiKqKTCx+QmitHJtmlgMS5+ru3Qat960uIZMys/Z@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSZ/wj/DUsp8IgBulFRD2UUZICgaIq221vTEBtjlNlq+KDi7yk
-	VU5C/qa/bfT0YtL+jC/lTIiqx+0QtjEH7v5U3kOVk7I6aa3kSi8=
-X-Google-Smtp-Source: AGHT+IFQRsKAjsdhrL2+vAvZzE83PEnwKYSeTkwNNHy+5kcEHFwYymLvN94tr8b32+bjiWubAZNy8A==
-X-Received: by 2002:a17:902:c94c:b0:201:e646:4d8 with SMTP id d9443c01a7336-2050c3a7166mr62180945ad.26.1724989734783;
-        Thu, 29 Aug 2024 20:48:54 -0700 (PDT)
+        bh=nuaU/FEUSJ1zDJhf2kq5x0CsZK8UIXnkrpW0Xmu9tsI=;
+        b=US+tL6kfjOgZDdZp8z7Vfg39Sbw9E+Y2vziDgZLtBNbC/67yHMVqPmssxUhXlNTINx
+         gyYB3GWfQlLkoQo0ekyjhnhlRXi9R6zJpUCUfivPoUKvFNH+GHbsBesPd53PQQbvcu1X
+         d3Bqi4nIkb+g+9LH7Ni/V+AU43/gVf3eOIUCPvVYW+0JeVXfrk5f4QEPSk36gu+gryB1
+         tnpBsOA9m3dUj9aAXyJ4fh2V0lMI1KuD6IX1WfBg4Y7Lm8+TqK0KRJmylOJ/pg1hnkK7
+         YbaFbmwZbn2/OtGXLNk6wkOhC0EVRA/Ty5unXpJwRA0JIbrC1WRa5a7WXghB2abE9rTB
+         A0qg==
+X-Forwarded-Encrypted: i=1; AJvYcCVeqzraPwustxE7zqQIgA4KFczrJmBtZCJ+7jdH+dRNeIAtbMVA0VV0juXb0fLWyn9apL6QOs0mux/4HcUZ@vger.kernel.org, AJvYcCXeIdbdQ9U2Yh0bPwjx9YeXvdNwl67+aQB74aOhOMkBuAY6xxyXFI5sR8F6LTvWkrgyiREu68dpn3U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7CECqZRTwcZxn5uAGRLsRbca1/DVnGaUJy54G5YL0Y9P1njXZ
+	v4uMB+Km3a07373bpRYhEuCTR1cCbTDRnKQ2tCYRVCpo8gH6BOU=
+X-Google-Smtp-Source: AGHT+IFvcywH8BJHv9GFcHbrQr1DMuLwHzrwh4tiQWWXNGDKDjjMuTvElE/5TNzEIJwRDxb0/LFeSA==
+X-Received: by 2002:a17:90b:d8f:b0:2d8:7a29:838f with SMTP id 98e67ed59e1d1-2d87a298613mr29080a91.10.1724989738433;
+        Thu, 29 Aug 2024 20:48:58 -0700 (PDT)
 Received: from localhost (2001-b400-e338-dab5-746d-1a82-f21e-bb0a.emome-ip6.hinet.net. [2001:b400:e338:dab5:746d:1a82:f21e:bb0a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205152b1225sm18350175ad.22.2024.08.29.20.48.53
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d85b11b7e0sm2616978a91.17.2024.08.29.20.48.57
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 29 Aug 2024 20:48:54 -0700 (PDT)
+        Thu, 29 Aug 2024 20:48:57 -0700 (PDT)
 From: Tyrone Ting <warp5tw@gmail.com>
 X-Google-Original-From: Tyrone Ting <kfting@nuvoton.com>
 To: avifishman70@gmail.com,
@@ -87,9 +87,9 @@ To: avifishman70@gmail.com,
 Cc: openbmc@lists.ozlabs.org,
 	linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/7] i2c: npcm: restore slave addresses array length
-Date: Fri, 30 Aug 2024 11:46:34 +0800
-Message-Id: <20240830034640.7049-2-kfting@nuvoton.com>
+Subject: [PATCH v2 2/7] i2c: npcm: correct the read/write operation procedure
+Date: Fri, 30 Aug 2024 11:46:35 +0800
+Message-Id: <20240830034640.7049-3-kfting@nuvoton.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20240830034640.7049-1-kfting@nuvoton.com>
 References: <20240830034640.7049-1-kfting@nuvoton.com>
@@ -99,39 +99,39 @@ List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 
-The smatch check warning is "buffer overflow 'npcm_i2caddr' 2 <= 9".
-The original design supports 10 slave addresses although only 2
-addresses are required for current implementation.
+Originally the driver uses the XMIT bit in SMBnST register to decide
+the upcoming i2c transaction. If XMIT bit is 1, then it will be an i2c
+write operation. If it's 0, then a read operation will be executed.
 
-Restore the npcm_i2caddr array length to fix the smatch warning.
+After checking the datasheet, the XMIT bit is valid when the i2c module
+is acting in a slave role. Use the software status to control the i2c
+transaction flow instead when the i2c module is acting in a master role.
 
-Fixes: 47d506d1a28f ("i2c: npcm: Remove own slave addresses 2:10")
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/r/202408130818.FgDP5uNm-lkp@intel.com/
+Fixes: 48acf8292280 ("i2c: Remove redundant comparison in npcm_i2c_reg_slave")
 Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
 ---
- drivers/i2c/busses/i2c-npcm7xx.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-npcm7xx.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 2fe68615942e..bbcb4d6668ce 100644
+index bbcb4d6668ce..2b76dbfba438 100644
 --- a/drivers/i2c/busses/i2c-npcm7xx.c
 +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -136,11 +136,13 @@ enum i2c_addr {
-  * Since the addr regs are sprinkled all over the address space,
-  * use this array to get the address or each register.
-  */
--#define I2C_NUM_OWN_ADDR 2
-+#define I2C_NUM_OWN_ADDR 10
- #define I2C_NUM_OWN_ADDR_SUPPORTED 2
- 
- static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] = {
--	NPCM_I2CADDR1, NPCM_I2CADDR2,
-+	NPCM_I2CADDR1, NPCM_I2CADDR2, NPCM_I2CADDR3, NPCM_I2CADDR4,
-+	NPCM_I2CADDR5, NPCM_I2CADDR6, NPCM_I2CADDR7, NPCM_I2CADDR8,
-+	NPCM_I2CADDR9, NPCM_I2CADDR10,
- };
- #endif
+@@ -1628,13 +1628,10 @@ static void npcm_i2c_irq_handle_sda(struct npcm_i2c *bus, u8 i2cst)
+ 			npcm_i2c_wr_byte(bus, bus->dest_addr | BIT(0));
+ 	/* SDA interrupt, after start\restart */
+ 	} else {
+-		if (NPCM_I2CST_XMIT & i2cst) {
+-			bus->operation = I2C_WRITE_OPER;
++		if (bus->operation == I2C_WRITE_OPER)
+ 			npcm_i2c_irq_master_handler_write(bus);
+-		} else {
+-			bus->operation = I2C_READ_OPER;
++		else if (bus->operation == I2C_READ_OPER)
+ 			npcm_i2c_irq_master_handler_read(bus);
+-		}
+ 	}
+ }
  
 -- 
 2.34.1
