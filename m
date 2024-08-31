@@ -1,122 +1,128 @@
-Return-Path: <linux-i2c+bounces-5970-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5971-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5B9496718E
-	for <lists+linux-i2c@lfdr.de>; Sat, 31 Aug 2024 14:25:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1C7D967265
+	for <lists+linux-i2c@lfdr.de>; Sat, 31 Aug 2024 17:31:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23A341C215B6
-	for <lists+linux-i2c@lfdr.de>; Sat, 31 Aug 2024 12:25:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3D4D1C219F4
+	for <lists+linux-i2c@lfdr.de>; Sat, 31 Aug 2024 15:31:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188FC17E46E;
-	Sat, 31 Aug 2024 12:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57FFE23775;
+	Sat, 31 Aug 2024 15:31:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OPdOYqLK"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="UdCpnIch"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B5317C216
-	for <linux-i2c@vger.kernel.org>; Sat, 31 Aug 2024 12:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469453CF4F
+	for <linux-i2c@vger.kernel.org>; Sat, 31 Aug 2024 15:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725107108; cv=none; b=tTjSC/chCFWsyAj6nJXK+4rpJw73GZADxjVoKvG2ExPmemKr4ejxR0k0Ge2q2QujEkxJpbzBcIms5lEwJN5VvZLoNpPIJP0/65Z9uB9rR9TbJQUG4uqJMVMP5DIbdJ5GAK+luS7ecDaE/1z8hj658Hm4K2LZPUuw1PcnbAiqN+U=
+	t=1725118302; cv=none; b=SR1upfH8mY6j/wn54dWp+0ps1KGmYeYFePdIhslFV9vkcNHJywKA4lytGIf/bjo4mMRzG1BsAaBARMPL9+xwrCKCq5BgbKl9WCBth35/I6gY7VZFxn0s+7gRCmybayi5i+FoRouUq0PBMJjfRbdiC4wBLJCHimekmXWqVshMkQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725107108; c=relaxed/simple;
-	bh=+kYu9N7nUWafMoOz8m4ixd5wnCvayuyVJJxCUolgL28=;
+	s=arc-20240116; t=1725118302; c=relaxed/simple;
+	bh=DYZUjdNNimKGZoyJCELSptbQ3XZTKhzJH8kg6cdiYs4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sq7aNFbzc7KC/3d8nVrF9ZbJCJ7uUy4Es1mzli3TZTT5ZpaS7EZmqucPFwcHQaOnECFifZoVQNP5NywU2zpb5IhT+bUo7bVoYfcsBJgCOxE5CHwRImN9j3Hrh2Fcr5OujSwrotncaKFFoywUGZxrtlS+ajTydlgjeDF0rXN+71s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OPdOYqLK; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725107107; x=1756643107;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+kYu9N7nUWafMoOz8m4ixd5wnCvayuyVJJxCUolgL28=;
-  b=OPdOYqLKSeVAc1UFOBxxFb+4HuV83cgxR9WzgvoCMT23mu8Kt3WxgM30
-   mMs99/68JtspAGGFvXWgGjz7jFS0AGG9B8KVy1aUYC5aAKdN2FmoJEYIo
-   Zk0MLy/HmhYi3rw09SX5qM/1JRvNVPzrrBe0+o5tFdTkjXnnoM4jJYoyg
-   B1+a01pm+9eS22E2eMxdSeDEnKZ8Fjvh/y9yvjmXwFBZLNrF2BoqFK7At
-   UZMRIvifdreXEdob29FmdzCeYNhq8lo7DVYq1710gmDIgzpecrXFQ7/K+
-   WM691c97m+D0Qeu28BnYfg7qsctICsEEfqNoALKQBBl0B2DGe0JqOKmau
-   A==;
-X-CSE-ConnectionGUID: aYzKoPUqTlWEteh5cwqgBg==
-X-CSE-MsgGUID: UrINIgLUTU2dGFvcqdrvrg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11181"; a="23257942"
-X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
-   d="scan'208";a="23257942"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 05:25:06 -0700
-X-CSE-ConnectionGUID: Fxy+PcEjRC+NwvNZO3pRwQ==
-X-CSE-MsgGUID: obp3rYC0Tz+0M2BUV+uPig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
-   d="scan'208";a="68950929"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 31 Aug 2024 05:25:04 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1skNA5-0002kM-1w;
-	Sat, 31 Aug 2024 12:25:01 +0000
-Date: Sat, 31 Aug 2024 20:24:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Andi Shyti <andi.shyti@kernel.org>
-Cc: Paul Gazzillo <paul@pgazz.com>,
-	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-	oe-kbuild-all@lists.linux.dev,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: designware: Group all DesignWare drivers under a
- single option
-Message-ID: <202408312050.fs0rCgDO-lkp@intel.com>
-References: <20240830111222.2131172-1-heikki.krogerus@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=AJ6HhW8BcHnjsuS+kXabbkHBIhOs8W1b1685wm8K2LQrNBDaD0FWr55btQjwee6vn93PoR35VItz1ZD7jHzeLUWDsCnAz5agjcIBXd+rmvjCmg8mT81urNdZYQGYRNLY8AfPdMiYzpj+17Z3YKJfPEjjyBjToG9fLGqpxCugY/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=UdCpnIch; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=bPIU
+	QgoAX+ZCwRz2joXdmT6IKhlmXSEgTdTYNX/r8Ok=; b=UdCpnIchaOKUq1DkMJPg
+	Lr6tmEkk//ctS+HH4nKUzxhQoC24tNgjYteeiW+fPnd3Hi1I/LQ18+CTEk2rimtI
+	tAJ9OaM/EFl/a0LTKLhumsrH7hU5H3w5nHwT+ORzFRnfX1/4oBJpi6LKRodo38GP
+	JmBzBU3Zd3tRIbFq//nOz76Y5mgqs+fgYvN6nBYu/8G2tLQD61G5n4pYsb9bGiy+
+	DxuQ+IWUo8UDGDzy4n20dtX3uvHyaHrb+2j5w0AttgagVeG0aAB4+++IfUuTOZcp
+	9DbW6cBzVNtwC3skpFoLd5XeOlLvemIUSnAIBKwAt/kh4lGLd/ihc3Bl3kLx7w9v
+	DA==
+Received: (qmail 3580804 invoked from network); 31 Aug 2024 17:31:30 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 31 Aug 2024 17:31:30 +0200
+X-UD-Smtp-Session: l3s3148p1@6ZXYZvwgpUBtKnNj
+Date: Sat, 31 Aug 2024 17:31:29 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-renesas-soc@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] dt-bindings: i2c: renesas,rcar-i2c: document
+ SMBusAlert usage
+Message-ID: <ZtM3Ufj1akqZckuu@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-renesas-soc@vger.kernel.org,
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org
+References: <20240826150840.25497-4-wsa+renesas@sang-engineering.com>
+ <20240826150840.25497-5-wsa+renesas@sang-engineering.com>
+ <CAMuHMdXiOLPm11-nBnFPC4pRa0WP1VviwCwYVVPHAeHLgXLe0g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2XyhbaEh6F/M9F/x"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXiOLPm11-nBnFPC4pRa0WP1VviwCwYVVPHAeHLgXLe0g@mail.gmail.com>
+
+
+--2XyhbaEh6F/M9F/x
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240830111222.2131172-1-heikki.krogerus@linux.intel.com>
 
-Hi Heikki,
+Hi Geert,
 
-kernel test robot noticed the following build warnings:
+> IIUIC, this is not a property of the hardware, but a side-channel
+> independent from the actual I2C controller hardware? Then a generic
+> "smbus-alert-gpios" property sounds more appropriate to me.
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on linus/master v6.11-rc5 next-20240830]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+It is not generic. While it is true that most I2C controllers do need
+GPIOs as a side channel, there are controllers having...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heikki-Krogerus/i2c-designware-Group-all-DesignWare-drivers-under-a-single-option/20240830-191656
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20240830111222.2131172-1-heikki.krogerus%40linux.intel.com
-patch subject: [PATCH] i2c: designware: Group all DesignWare drivers under a single option
-config: x86_64-kismet-CONFIG_I2C_DESIGNWARE_PLATFORM-CONFIG_TXGBE-0-0 (https://download.01.org/0day-ci/archive/20240831/202408312050.fs0rCgDO-lkp@intel.com/config)
-reproduce: (https://download.01.org/0day-ci/archive/20240831/202408312050.fs0rCgDO-lkp@intel.com/reproduce)
+> BTW, are you aware of any I2C controller having a dedicated input pin
+> for this?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408312050.fs0rCgDO-lkp@intel.com/
+... this. Check 'i2c-stm32f7.c' or 'i2c-xlp9xx.c'.
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for I2C_DESIGNWARE_PLATFORM when selected by TXGBE
-   WARNING: unmet direct dependencies detected for I2C_DESIGNWARE_PLATFORM
-     Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && I2C_DESIGNWARE_CORE [=n] && (ACPI [=y] && COMMON_CLK [=y] || !ACPI [=y])
-     Selected by [y]:
-     - TXGBE [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_WANGXUN [=y] && PCI [=y] && COMMON_CLK [=y]
+Thank you for your comments!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+   Wolfram
+
+
+--2XyhbaEh6F/M9F/x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbTN00ACgkQFA3kzBSg
+KbbcSw//Y4WgmjqBjMOuIktpE/VH08udl4GEalNkhyfd4rCNIfg1OLt4YXXcO/bN
+mmSkQ3vl38Pp/Z7U+9Kg2eHIQVfON5QQtjVXhor+b9ZVEgLSF+Miihyhh3KjbUbM
+FupkhZhq9kJV6OumBIqWkVzYuAJMTPtdn9YIrDHbtDiEZTyYLQmHeJdSoNvXA/n4
+vpMkzmwyH5cQr2SRzHrguR/zvIddBtIFEfSDr9jFj0LzZ0ovPaSrdYUHNz3n3lFS
+toTH2lgicwkPivVp0sqquxVjxtALEno2oNMjRVN2pMe+LhFjdmD6A4vm+uYT9PAY
+iUBCMS1wlopPZsdgnZTAyyuAJ0U1iVGrCtfNypRqy5gL6NYnZpNa6uPm+80ZjW3q
+UM+P5cBftbMXxu3s3Sf5dhE8tUi5voKlJmd/6OutWIR2qrWmyYxPFyBd+6g7kixt
+rS2/jFqS92YZ3N9tr3q2rRCVlFGTATPGml3OQ/WrbMt17WXtYgr3JRnPTG7TaYOI
+brmlNQoCHUSoNuZDKHAiHpmYmHkK3yus4VBkEGatpJEHMmjizaw8AwEMixDo80+W
+m/qp8L3gatDh/ZlmD0HfrhRxwCkKlBswXvlD+eTwcIcOxXibuyGse6awEyBfbYmV
+E2x1PLu3xNiIxImUyPU1+o80ch5eEkOyd8BExKkzaOepJ7Yku6k=
+=dyYg
+-----END PGP SIGNATURE-----
+
+--2XyhbaEh6F/M9F/x--
 
