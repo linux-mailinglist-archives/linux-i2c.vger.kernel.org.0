@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-5981-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-5982-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EADD7967BF8
-	for <lists+linux-i2c@lfdr.de>; Sun,  1 Sep 2024 22:08:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5813D967BF9
+	for <lists+linux-i2c@lfdr.de>; Sun,  1 Sep 2024 22:08:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BA6C281BCC
-	for <lists+linux-i2c@lfdr.de>; Sun,  1 Sep 2024 20:08:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94DA0B21106
+	for <lists+linux-i2c@lfdr.de>; Sun,  1 Sep 2024 20:08:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF2BD6F2F3;
-	Sun,  1 Sep 2024 20:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 364476F2FA;
+	Sun,  1 Sep 2024 20:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQodEhB1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZZSTFNxE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9AD37171
-	for <linux-i2c@vger.kernel.org>; Sun,  1 Sep 2024 20:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6233555884;
+	Sun,  1 Sep 2024 20:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725221280; cv=none; b=ncIbH3BqIhDZj0aHlFYtwQcO823KUt7wfuSec8cJONdncplrVLAIRyzfQP905iJn55woyennM/QzzIUD/l/KEtzAPn9I6Di/jDfpG0P+XzcYSRhRG7KJ8onXo8gHrZmYzbbpmNrwZrDIXBLunle3iEreHsLJoI856bC7hwzuBt0=
+	t=1725221324; cv=none; b=nOIfUF0q3Bds3I7MbAGIQhwDG3EAxLDd6dUdNRc+g7fuNpmVjrMmih8nrnwhfjPYQv3EvFF3eWpEfc+przl+aTjW2WQ1H+MFjmnldOjOVBMGWoi+d/sPq6tb/ZUl3QSoJvE4/dO1OMYYbs5aedwwoTBQ/FO7j8PvDUjkVF+I6tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725221280; c=relaxed/simple;
-	bh=vo6vN1mzrHk51R3QntZHzUeylOIOwQOBtYhJK87Bn2M=;
+	s=arc-20240116; t=1725221324; c=relaxed/simple;
+	bh=5GDiLXYPYR0yl4cdDkTQ7U5cfgzKtLmJ6SGoNL/OkHg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=H1mK/rJ3thRB+BGsV0YmQSV/O5l+DPUgmgdSmQ8D849lj3EdpAA48SWx1Tz1naaoo7oBZ06YLcJzXxkZHpzp600FBHO73VDWSjx3sKHjWkNKRDgHf0VJMLdetmD/cY7gtDvUzvboyXGeq0H426ZXizNDC5v/GxbIzsQICwV8vms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQodEhB1; arc=none smtp.client-ip=209.85.218.42
+	 In-Reply-To:Content-Type; b=hub6n5Yzq/KHScwcROebUKmXQ488ILQIU27CT8BHUCHKXW7734tjCGsC+xnPKJXyNqt3muVggpP2lvGGCqP/bW3K/yZ7216vuPOfZG6soykT2qGocs9RVLtW9oXhA0JYY99xWBor2I6MJpNi1U/OGjbGqwMiMgonD6lP26nlbqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZZSTFNxE; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a86c476f679so408638766b.1
-        for <linux-i2c@vger.kernel.org>; Sun, 01 Sep 2024 13:07:58 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2f4f24263acso52603781fa.0;
+        Sun, 01 Sep 2024 13:08:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725221277; x=1725826077; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725221320; x=1725826120; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q7olbAU6zPt1D06xM6iOrRYMA46lWZT9CDLv4ajAvX0=;
-        b=CQodEhB1uX7DQX7yDI0VrMLlH0HbKOR5jt0i9B74E/r+jvBZP8g3XLNs24+S896Xcm
-         UjKq83xgf3a5TbqeoInh9GqV88PW/Hnso70cwUq0CDkiNiRsIAFsk56xNnlDHCE4ZKfU
-         UuX172XhVYAOVWBNdPUzvPuDc4KjMaE39G1PY43ckLio7WmtPLlscFJdNidBpHs/bMf9
-         HXKMCtVvqrYyebTLmyhSjOA307vszMaJa7uJiSlJWVIOBbddDVk3UfbmFV4Qxy75soWe
-         32WoGUVmEaol4zTZ3npCvlwqKP+fI5uVIb38qHJ3ftAB04AwuwuhxhuCSmgwR3Q85A64
-         QD9A==
+        bh=xjqjSj/VGazRon4I2W0SxJIbXW1Oz0RFL3zE8cIx2xg=;
+        b=ZZSTFNxECGWsCcP0aNTDC/cGUtbQ/BNFi/hmcbUK/e1b6lKbTy/kmeu4AA8MSBDRgv
+         +vj/IP7x9/pGD/8IoPdxTY4ymQvVAdU2bHe3GNRdSJQqUJiPbMiejDQM8Mv+gyvrr1LM
+         k1Yz7jMsS93+6aRra7ZJJSZIvjDi1tfHRkIlgkckB0n1JbzVWEahsieHBh1h1bdTHu7c
+         74E1qEsvecK3KMW9YV93R0aIFDFze7p8B7IXeHNkb9sCsCEAMIqYZ5Zr5IbOjviqqOTv
+         /p/EoGXnx/DBJfu8BpPhBKPocfvTsoTUwrkGfzRjTZwxNkg9Lw4g61+pQV7JvceHcLqf
+         cBTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725221277; x=1725826077;
+        d=1e100.net; s=20230601; t=1725221320; x=1725826120;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q7olbAU6zPt1D06xM6iOrRYMA46lWZT9CDLv4ajAvX0=;
-        b=W24MPNAUIzdtDgyDgqn7cTJB6gSorXAETxqmKUcSTugwnSaOOi7dZIO/MIEw7XV+1Z
-         WIXR9xXl9kGan3yE4vmJVZqmDwxVuoPLaTiybw7vEAtwgL2jAzYW7uZa7NppfSGLPpYB
-         uKVOa8j8YPonXgOPUZdkcSiwNCAUofZ5MMqcM5WyuUuExtHFMnW4hfai+N5do86UCv2v
-         Wm0hGw+Xkyay9lsj+7T5z0/xu2vRNgix3SkmIFsz49TOkGPwvY3gQTrpwlsjCzn++i1K
-         x2jbNVkEsO5Jbf9DpvjnqKBVUTt7cph7xrPh0Bxxn7DZ7bppEKRVLnKX/mdD7aOEf99V
-         MR6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWyQMbPiN/9YB9ZTAHbxAWDW/mqksCkfovOhwTzWancXPLuUcL0yRzk143aX4rAGoi8kHGeHUWNqUo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVXNhuR7555uRHnyTfrBEAImqNPanzghnfBzzvcO7IPVXuzrJw
-	SZJ38Q5fq9ak4CgAcM6H9S/Egr7mq/NB1N9DW5OUe0ePSqn3l0WZ
-X-Google-Smtp-Source: AGHT+IEVROIO/FuhrOabJj2Prr68dR2GVaLun7nn+qVYqUkYblgfwuV7tOyEFpkMy8auvopOZSM0kQ==
-X-Received: by 2002:a17:907:3fa0:b0:a86:9176:ea1d with SMTP id a640c23a62f3a-a89b93da12cmr403106466b.7.1725221277025;
-        Sun, 01 Sep 2024 13:07:57 -0700 (PDT)
+        bh=xjqjSj/VGazRon4I2W0SxJIbXW1Oz0RFL3zE8cIx2xg=;
+        b=w6stnsg6zIdGlph2L18/zgGX+q/YWwm0r//iZiUnD9WK+ma649irmI6vVUMlqHXTUo
+         pAdKDMqlgRH11ZlFxIB+8gMeLQ876q2qU7AYCCXJHSdyKGpHVO5T42Z8JT5eCSbu6Z5G
+         8+zAqXThHKGGROCfnxmhtFeH5rIVNGWcDFf1+/VVl8msIIr57+mlLWoRNHnY7qqg/8Gk
+         QRY1q/F3557r7dZvCp9FM+KS7SoUMocKdDfbIQuqG0UXdzm1JTokvySnv3qBtby1pLrC
+         i36sSrXoFfM5+F9ZAGH5rI3mz1/Siu1ryQ40ALG/cNTSo6IDaaHNFJ+8LPGOSHWOnmNn
+         cGCg==
+X-Forwarded-Encrypted: i=1; AJvYcCVPAtiTFgpUxuQv8XClT4A1DVVrdh3/LiIfqI0Y+k1GmJjP+aU5jBeakaF7pfhtG5FqsZDncgruxGpL2v8=@vger.kernel.org, AJvYcCWTx/8Ie6m1M6kwXwV5mnUTroQ0GzhHEjWCKyyclL8RYqrvT9vRJzwuY+Uz/fJBylD2VGtjdm4mxrM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCpoaSOl4ZBmD/VG2gGG0RXCgQQp0HheJV7I2m7Nz5vt1F4P65
+	2NMJj1V/U9Et08cAT9+amHEkULavYjNJ0+8C+iVNLw3UcDWnLXlS
+X-Google-Smtp-Source: AGHT+IFJ0O501IVLkL8/1UtCpUnYb7N98arMju+uJ5w0tYDORU3GTViZEIXnRmA0in+tQf72szZTMA==
+X-Received: by 2002:a2e:a590:0:b0:2f3:cb70:d447 with SMTP id 38308e7fff4ca-2f6108ad85amr102923241fa.40.1725221319960;
+        Sun, 01 Sep 2024 13:08:39 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:9c81:5a00:ed3a:5232:3874:6e94? (dynamic-2a02-3100-9c81-5a00-ed3a-5232-3874-6e94.310.pool.telefonica.de. [2a02:3100:9c81:5a00:ed3a:5232:3874:6e94])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a8988feaf3fsm470891466b.40.2024.09.01.13.07.56
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a8989196500sm470092266b.138.2024.09.01.13.08.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Sep 2024 13:07:56 -0700 (PDT)
-Message-ID: <b41c44d9-75f9-4c45-ad95-e896179a6249@gmail.com>
-Date: Sun, 1 Sep 2024 22:08:00 +0200
+        Sun, 01 Sep 2024 13:08:39 -0700 (PDT)
+Message-ID: <930fbe3b-5e3f-4f0c-a193-dec1e0321037@gmail.com>
+Date: Sun, 1 Sep 2024 22:08:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,12 +77,15 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: Remove I2C_COMPAT config symbol and related code
+Subject: Re: [PATCH v2 0/4] i2c: Replace lists of special clients with
+ flagging of such clients
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Jean Delvare <jdelvare@suse.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <80c4a898-5867-4162-ac85-bdf7c7c68746@gmail.com>
- <ZtQueK8Y9x0FCWD1@shikoro>
+ Wolfram Sang <wsa@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ linux-sound@vger.kernel.org
+References: <3982b2a6-975e-40d2-bf02-2155e5c36c14@gmail.com>
+ <ZtQ0KMWUk9iAUCCl@shikoro>
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
@@ -128,42 +131,20 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <ZtQueK8Y9x0FCWD1@shikoro>
+In-Reply-To: <ZtQ0KMWUk9iAUCCl@shikoro>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 01.09.2024 11:06, Wolfram Sang wrote:
-> Hi Heiner,
+On 01.09.2024 11:30, Wolfram Sang wrote:
+> On Thu, Aug 22, 2024 at 09:45:37PM +0200, Heiner Kallweit wrote:
+>> So far lists are used to track special clients, i.e. auto-detected and
+>> userspace-created clients. The same functionality can be achieved much
+>> simpler by flagging such clients.
 > 
-> On Wed, Aug 21, 2024 at 10:13:04PM +0200, Heiner Kallweit wrote:
->> This code was added with 2bb5095affdb ("i2c: Provide compatibility links
->> for i2c adapters"). Commit message stated: Provide compatibility links
->> for [...] the time being. We will remove them after a long transition
->> period.
->> 15 years should have been a long enough transition period.
+> This looks promising and I like the idea from a high-level perspective.
+> Need to dive into the details. However, I think this is 6.13 material. I
+> want to let it cook in linux-next for a full cycle.
 > 
-> Well, in general, I totally agree.
-> 
-> It seems, however, that this slipped through the cracks. My Debian
-> kernelconfig has I2C_COMPAT still enabled, so I am reluctant to remove
-> it from one kernel release to the next.
-> 
-One reason may be that the default for I2C_COMPAT is still y.
-We should switch this to n, even though it doesn't help in cases like
-make oldconfig.
+Fine with me.
 
-> I wonder if we need some printout that it is really going away for a few
-> kernel releases.
-> 
-This may be a compromise.
-However I wonder how likely it is that somebody uses the latest kernel
-and hasn't updated his userspace tools for > 15 yrs.
-
-> Opinions? Jean?
-> 
-> Happy hacking,
-> 
->    Wolfram
-> 
-Heiner
 
