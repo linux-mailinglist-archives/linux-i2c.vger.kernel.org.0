@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-6009-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6010-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72E99968E11
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Sep 2024 21:01:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3809A968E14
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Sep 2024 21:02:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBEEE283D46
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Sep 2024 19:01:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C2411C22403
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Sep 2024 19:02:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE6A824A3;
-	Mon,  2 Sep 2024 19:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7F19824A3;
+	Mon,  2 Sep 2024 19:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="foLOvnJx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fCu3TNqP"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F521A3A9B;
-	Mon,  2 Sep 2024 19:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2991910F1;
+	Mon,  2 Sep 2024 19:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725303681; cv=none; b=hHSv/EX2KXlsEhzBJszEwFmDTA4TMPTo8Qi6SQhRokiAcYQTQM+++NOd9ILE1D3NJplOCwiuuleZl3eLwK/Nod3Iy0b2+INN1tyb+CfrTpQksttR+/gesl2uG9WhUgMFgqBUM3jkzWW5pNrLbyz5NLmecFIiB862iVpo52W/tDg=
+	t=1725303739; cv=none; b=dcdS35jf+YWrOhJ2hTg863NssOciCXyUMlQe9JTddyzDkWOGcU4PwJ5vdszoWTwvlkMgA1dREUWC7H/4C2Z5YVd/Tuk3kKwI2zzL51fHQVb2WNeQQYE123j6/Rcj8KirwM+bB4YYA8/ukSf9NvgqiJCpuUaeHiaZZpcDsSZQBEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725303681; c=relaxed/simple;
-	bh=RhAcVVrFGyE4DDo5KKO8+2qi2CZR1nFZg/F6HQIch3Q=;
+	s=arc-20240116; t=1725303739; c=relaxed/simple;
+	bh=jekyBicoxy1Sag1smlQITxm5LeUKfGARjH0XCeFmKGQ=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=dXJzAaoNgwqtqKO+ZuKWXHfRo0WOuEFNadrFkuUklkDELXCxxfMXHMomHISHxGKRvfo7RFlRVp9XONfNiy0ErdlhH6+7BPSJFCrZl4/bvuJK+HArD16iSKc5P2DVWHmUqULR+odzB39JDBTKriHkYdA1toT2xC3YEB0zVFubsGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=foLOvnJx; arc=none smtp.client-ip=209.85.208.52
+	 In-Reply-To:Content-Type; b=XnJvKp0TPjmve0EmWYdn4q2Z4KriCDtWMLF+fDx24hMnVGptAw911SYqhvH3WQlqECue/nUFCWJCjzkNX0B/espdqg5NxVYgsxU0xb/mluHvyl5aABegGkriRKZiBSC+KStrmNXczqdYIVtfrQD2yM17gHjUjmqk0BLF0gVCqj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fCu3TNqP; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5becfd14353so4392017a12.1;
-        Mon, 02 Sep 2024 12:01:19 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5a108354819so5698260a12.0;
+        Mon, 02 Sep 2024 12:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725303678; x=1725908478; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725303736; x=1725908536; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Ps7OSQ+/WWYlgzbouGxWDfS7QZCGq6Wzthb+kXHT6c=;
-        b=foLOvnJxBXF6WOZXRtPtSMWqDkA2kmelxvYCJ9A9vVKK3yakyx6zDfeULKM3pZ9UVi
-         aHTiTfZbGDciLD0j3Q4DkcDAtVonm434skdcwGiA7RV6VOFfV2HlBGcUP4Os/LZsUULP
-         GArzvW8dlr1C2Kqsjcc7z2tBvYPL/UXNEmCHpxffXlc0QaCv9P4eop2yQevdoCCreCJA
-         a2wES42qOBYO+78VScu3O4BUnAJp7VF/u6FHZbxZfSNrs5tgp/oFPceYH5TzCvRux59k
-         hhsBA77aFkoqEwrBevt4NyRlEl3m91fJ+hPLhgCMfvZj+89R1vZrV48QfYsIr8YPntuS
-         1DDw==
+        bh=JE8tjaYrPRmC/St8nENnImiGEh7cqqSlFkiE3QRB/jw=;
+        b=fCu3TNqPnAIt9Hu7YmnI9/3TdPPMAPvPh+Na1GSvX+qtwg2j44C0lxh+kMAguMftYK
+         TcswUf+wF05H885CvfIiEVSNv8BxxVwxhnD/J7lqYKg3ypKuy/+yl2zJ8qRHm4OFireG
+         Jxp3a5jC4wQ7oGPEBD/rGetJi/6+VV4IevS4NwuP9VkrrjCUfGYxTcb8oa2NZwUfricQ
+         MAmP1UCnI6NvI4AoudlJXF9Z3T5H1C70lEOLA3jCflLq9JiuaKrGaYhM6CDkv+siWCEb
+         ZduQuF9AgOx/1Msrk+Bdt18yVP0QKpfVdAhvSiNOTOS8n7tiDzFKW34MyOtwJbKfMrQL
+         zQQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725303678; x=1725908478;
+        d=1e100.net; s=20230601; t=1725303736; x=1725908536;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Ps7OSQ+/WWYlgzbouGxWDfS7QZCGq6Wzthb+kXHT6c=;
-        b=UARcFGslepvhfeO5XEVfDhNqs6mUR5xbd1XpMJo0tbSIRVJ9uM+gjAWa+Pl8gX3wdb
-         pAO+7mdjY9KMrBjt120x0c5VgJSmXdBHrN+BInJYIoCEFH+RBpGwxTHjWfEEVvjPx2kT
-         Y6jykqTJUBvLYE2KRyNe0nP1EAIUJZNCiWX2YFajxROP9HpGROVzEaLzw/HhIDfCafO5
-         BMXwcJSYdOONfbhUvOKI2JRuHiPGrCuJxe1BB7Wcmn0xKifpMZZqCJX4ieKTWGrJKoBx
-         9uANbZtc2OEnEbyDfzTU61gtsXo5q47w+zJFT3qYp2YmgFG0Nt4usufhOE4il8y0DnCZ
-         SZJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUF5qvcNH8ZzXUFfVMmuK1mCiHYNBmWbBwJjQci8XXH/Phq0DCA5Py1vDoOnwvg5NxSZ9Ae82JL1WwfFHQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrRJZWZExgz8i6a/VHHzf48nmM+K96YpsvQNfqRMOJ61obbSVd
-	hehzqtFTWGQZc0gQ7GnTRhUyh7DT9jhtYAOvLlbfaxzwx59UfIi+
-X-Google-Smtp-Source: AGHT+IEi///57DMhb6MpeOFPSUdEkV9pTZepKkM805G2PL1pzM7sZHb1tVGtvyaU1ip4Pr/uP0Kz+g==
-X-Received: by 2002:a05:6402:909:b0:5bb:9afd:8d05 with SMTP id 4fb4d7f45d1cf-5c21ed8bab1mr11279160a12.24.1725303677359;
-        Mon, 02 Sep 2024 12:01:17 -0700 (PDT)
+        bh=JE8tjaYrPRmC/St8nENnImiGEh7cqqSlFkiE3QRB/jw=;
+        b=iEYORqgs3CMpQNk2gQoHGzcZW8cCCOO3NMZy3TqssTt4tvD+ioGmhH27RA7y9kTECp
+         No1Lc1o1VK/6wVfSIBqZ9Q3dBdgE5lVG5Tm5sgx9kJ4P1ERs4/g3ag7xA/YF9GSvgDfH
+         qeQWuUJzwJMn4m4ejbt3PjAOfK7xfHJcZHeOhc3E5LLNfTg+iLRjwd+BJYuOs/omuR8S
+         e/j//6Ffo/fg+FXRXKrQ9aEc+IztlZWklAAZnDmAP5g5QYMnQEiGEs07pNAJ+rgs/SiF
+         aLL5BgODH7TAGtDgpxw/sd0/SySKET3r2673tMclci8rg36cdqIZgylv6pkN821W6SV2
+         2OZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWRFFYCTBWtdEhbBbTcmeKzKHBfk1esnnm9jkHc7LFBRVJ48+c5DAuCaAfiXIoGVKJGVyWwtuJfoT9YDLc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAFUSBU4qXzUZliHDizVQz566vs53/Y7No/f/xZHrHcddlf48P
+	RE8oBllo2V6RPbb25O7tKeqPYNooE8daMrMVENPE3m03A/WnQtuS9ZOPmYD1
+X-Google-Smtp-Source: AGHT+IFlUDCPuDLUJkOxbrN4p+zfJsGWppwL3n71jzaRP7czEyeky2vaV1rtIUMra8mQm7lgsUKHaA==
+X-Received: by 2002:a50:8d8c:0:b0:5c2:43bd:8ce8 with SMTP id 4fb4d7f45d1cf-5c243bd9034mr4521493a12.21.1725303736215;
+        Mon, 02 Sep 2024 12:02:16 -0700 (PDT)
 Received: from ?IPV6:2a01:c23:bc00:6b00:fd2d:3fc2:a936:4a81? (dynamic-2a01-0c23-bc00-6b00-fd2d-3fc2-a936-4a81.c23.pool.telefonica.de. [2a01:c23:bc00:6b00:fd2d:3fc2:a936:4a81])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c23bcc0718sm3672454a12.22.2024.09.02.12.01.16
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5c226ccff17sm5469626a12.73.2024.09.02.12.02.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Sep 2024 12:01:17 -0700 (PDT)
-Message-ID: <8e618f52-413c-41c1-9ac2-0260a1904792@gmail.com>
-Date: Mon, 2 Sep 2024 21:01:18 +0200
+        Mon, 02 Sep 2024 12:02:15 -0700 (PDT)
+Message-ID: <7bc5fa50-59f6-4455-8f77-1c89f1e17d0b@gmail.com>
+Date: Mon, 2 Sep 2024 21:02:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,7 +77,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 1/2] i2c: core: Switch I2C_COMPAT to default n
+Subject: [PATCH 2/2] driver core: class: warn if a compatibility class is
+ registered
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Wolfram Sang <wsa@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -133,33 +134,32 @@ In-Reply-To: <4660a46b-9128-4407-8baa-f257245784a3@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-I2C_COMPAT has been considered deprecated for 15 years now.
-Therefore make it default n, before we remove support for it
-in the near future.
+Kernel doc for this function states:
+"Compatibility class are meant as a temporary user-space compatibility
+workaround when converting a family of class devices to a bus devices."
+
+Therefore remind any potential user of the old ABI that support for it
+will be dropped soon.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/base/class.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/i2c/Kconfig b/drivers/i2c/Kconfig
-index 44710267d..e5721cebb 100644
---- a/drivers/i2c/Kconfig
-+++ b/drivers/i2c/Kconfig
-@@ -42,11 +42,11 @@ config I2C_BOARDINFO
+diff --git a/drivers/base/class.c b/drivers/base/class.c
+index 7b38fdf8e..f12a43736 100644
+--- a/drivers/base/class.c
++++ b/drivers/base/class.c
+@@ -556,6 +556,9 @@ struct class_compat *class_compat_register(const char *name)
+ {
+ 	struct class_compat *cls;
  
- config I2C_COMPAT
- 	bool "Enable compatibility bits for old user-space"
--	default y
-+	default n
- 	help
- 	  Say Y here if you intend to run lm-sensors 3.1.1 or older, or any
- 	  other user-space package which expects i2c adapters to be class
--	  devices. If you don't know, say Y.
-+	  devices. If you don't know, say N.
- 
- config I2C_CHARDEV
- 	tristate "I2C device interface"
++	pr_warn("Compatibility class %s will go away soon, please migrate userspace tools to use bus devices\n",
++		name);
++
+ 	cls = kmalloc(sizeof(struct class_compat), GFP_KERNEL);
+ 	if (!cls)
+ 		return NULL;
 -- 
 2.46.0
 
