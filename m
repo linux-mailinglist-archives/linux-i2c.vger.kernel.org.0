@@ -1,141 +1,107 @@
-Return-Path: <linux-i2c+bounces-6054-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6055-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EFF496A4CC
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 18:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E17496A4E6
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 18:56:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C5D11C23891
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 16:47:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C917E1C23BE2
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 16:56:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 758AA18BC13;
-	Tue,  3 Sep 2024 16:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lLY1YqOn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F65418BC19;
+	Tue,  3 Sep 2024 16:56:46 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBA81E492;
-	Tue,  3 Sep 2024 16:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD4E17A90F;
+	Tue,  3 Sep 2024 16:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725382041; cv=none; b=ptKfYKhy8yj0+b736TZi30hkqAtUcgHl4h+WNm1wOsnZ5/FSqyGk+Jw4CsYAuKI6PO5hCb3tfMbfheIL4mTHKtyZwjVDrqB8ZOd34UgRgfmeqzeNC5zG2eRieXF9ZO7VOcFOlwPJDNz5Jdc4wOR6KxEnY8Pve1S89clntrDgZyo=
+	t=1725382606; cv=none; b=CH16yAGkRewze/Ws2dnnKnbkOJq8kYyLi5OmJA/dYVzzwZhRxaDRp/ovGmncF6CPyW3Db80pTN6+2DHfcyUViZGRGiky7TY/0Xp/vaYK5X3YFLg3W758XDzfAhOi/xSKr5bwWKsTFpuFjqxFYzSS8gM8v355gQhr1dK7DQwBKdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725382041; c=relaxed/simple;
-	bh=5IBLt3q/BfuZsMvLmbLqTsdzGnY8HAd/pkHhflhyo9o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VAphFS5q6r7rMedAxKkDKqAeLFnzCPJQId2EkoXpvPTdwhepqqRq66PYdnrooBOFzc7HURv0tr16gudZ5hd8CW7dM7+WoygL0Ol2ZrBLt6BNDHwETnpZHUueBc2DtesLU1Bx6ryvf6eg2NI8GcbuVixj76bMmj4tuWDi8fcjj2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lLY1YqOn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C5AC4CEC4;
-	Tue,  3 Sep 2024 16:47:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725382040;
-	bh=5IBLt3q/BfuZsMvLmbLqTsdzGnY8HAd/pkHhflhyo9o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lLY1YqOn8wZTCeG/iOr1exXWmCjUhmI/EZYB5SeESLR6Ef62Kb2YHJweKIZwpLkKb
-	 z7DImi45xWjWmBSi5T7OK4n+B8HdTX1ch5M8+NKqv4dqdsrUAefoH2IVnwBrAXhYKn
-	 SkPkRhlyxcxwFV48sB60DN0uMBfYiyFtO+kRawL5sLV94+lQcIybBzdcdyp0m2dOap
-	 2MAEbDo5v+wetkXjqiN7F2pXw3+sIxENEdASv3YGEI0eG/6Fc3oSmeVFbl/ulUpyA5
-	 bjE0lgynAFAuBhkxELFRmzYLrhzauSdHb/IK3MW/Yh8O5hZ+jQpYGHr0YCnkx9CzHW
-	 RZOZZPp2ow2iQ==
-Date: Tue, 3 Sep 2024 18:47:17 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Detlev Casanova <detlev.casanova@collabora.com>
-Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heiko Stuebner <heiko@sntech.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Chris Morgan <macromorgan@hotmail.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>, Andy Yan <andyshrk@163.com>, 
-	Muhammed Efe Cetin <efectn@protonmail.com>, Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>, 
-	Ondrej Jirman <megi@xff.cz>, Michael Riesch <michael.riesch@wolfvision.net>, 
-	Jimmy Hon <honyuenkwun@gmail.com>, Elon Zhang <zhangzj@rock-chips.com>, 
-	Alexey Charkov <alchark@gmail.com>, Elaine Zhang <zhangqing@rock-chips.com>, 
-	Yifeng Zhao <yifeng.zhao@rock-chips.com>, Finley Xiao <finley.xiao@rock-chips.com>, 
-	Liang Chen <cl@rock-chips.com>, Jamie Iles <jamie@jamieiles.com>, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org, kernel@collabora.com, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 3/9] dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
-Message-ID: <ycbhqmkwz2hirnvp6j47kz3cxnli3db3i5ah76gngrezs5ww2r@57x2gxnr5hyk>
-References: <20240903152308.13565-1-detlev.casanova@collabora.com>
- <20240903152308.13565-4-detlev.casanova@collabora.com>
- <bnpwnuhikwkqyf3jos67qwywhfge3vm6tfmlfitypd5k62jzdn@fri4swkl2zbq>
- <12506188.O9o76ZdvQC@bootstrap>
+	s=arc-20240116; t=1725382606; c=relaxed/simple;
+	bh=rKkYRwFcgoQMTnREOmP35/mtE44/WeGdXpoaxJyIHhg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YDGc+I/AY41w3Rjg98hzmL4snUXSJOmgrY0lIvxj2IPU/FrEwuueaGjKyWcd1XcpM1UmCyv/dDzeaXrm4lnOi/fci3Z+hfUJXGl7lO0UR3dy/f9vXssSa8g0KSEnQ4a9v7MV0cIsRq3zwRN+8EsTnN52hxEop0PZYAzyZYosCFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WysGf22nGz9sSH;
+	Tue,  3 Sep 2024 18:56:42 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JzJmN4SzLcUB; Tue,  3 Sep 2024 18:56:42 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WysGf1FZ7z9sSC;
+	Tue,  3 Sep 2024 18:56:42 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 1A00F8B778;
+	Tue,  3 Sep 2024 18:56:42 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 1Eunu3JRLihx; Tue,  3 Sep 2024 18:56:42 +0200 (CEST)
+Received: from [192.168.234.228] (unknown [192.168.234.228])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 9C6338B774;
+	Tue,  3 Sep 2024 18:56:41 +0200 (CEST)
+Message-ID: <90924209-888d-4ff3-8f60-f82a073bcf1c@csgroup.eu>
+Date: Tue, 3 Sep 2024 18:56:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12506188.O9o76ZdvQC@bootstrap>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] of/irq: handle irq_of_parse_and_map() errors
+To: Ma Ke <make24@iscas.ac.cn>, jochen@scram.de, andi.shyti@kernel.org,
+ grant.likely@linaro.org, thierry.reding@gmail.com, rob.herring@calxeda.com
+Cc: linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20240830142127.3446406-1-make24@iscas.ac.cn>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20240830142127.3446406-1-make24@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
 
-On Tue, Sep 03, 2024 at 11:59:34AM GMT, Detlev Casanova wrote:
-> On Tuesday, 3 September 2024 11:46:00 EDT Andi Shyti wrote:
-> > Hi,
-> > 
-> > On Tue, Sep 03, 2024 at 11:22:33AM GMT, Detlev Casanova wrote:
-> > > Just like RK356x and RK3588, RK3576 is compatible to the existing
-> > > rk3399 binding.
-> > > 
-> > > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > Acked-by: Heiko Stuebner <heiko@sntech.de>
-> > 
-> > I will apply this after 1 and 2 have been merged.
+
+Le 30/08/2024 à 16:21, Ma Ke a écrit :
+> Zero and negative number is not a valid IRQ for in-kernel code and the
+> irq_of_parse_and_map() function returns zero on error.  So this check for
+> valid IRQs should only accept values > 0.
+
+unsigned int irq_of_parse_and_map(struct device_node *node, int index);
+
+I can't see how an 'unsigned int' can be negative.
+
+Christophe
+
 > 
-> Sure, although it is not really dependent on 1 and 2.
-
-yes, but I want to be sure that everything is coming in.
-
-> > BTW, who is maintaining rockchip.yaml?
+> Cc: stable@vger.kernel.org
+> Fixes: f7578496a671 ("of/irq: Use irq_of_parse_and_map()")
+> Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+> ---
+>   drivers/i2c/busses/i2c-cpm.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Heiko Stuebner is the maintainer of Rockchip SoC support.
-
-I would guess so, but I think we should also add the entry to
-the maintainer's file :-)
-
-Thanks,
-Andi
-
-> > Thanks,
-> > Andi
-> > 
-> > > ---
-> > > 
-> > >  Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-> > > b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml index
-> > > 82b9d6682297..a9dae5b52f28 100644
-> > > --- a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-> > > +++ b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
-> > > 
-> > > @@ -38,6 +38,7 @@ properties:
-> > >                - rockchip,rk3308-i2c
-> > >                - rockchip,rk3328-i2c
-> > >                - rockchip,rk3568-i2c
-> > > 
-> > > +              - rockchip,rk3576-i2c
-> > > 
-> > >                - rockchip,rk3588-i2c
-> > >                - rockchip,rv1126-i2c
-> > >            
-> > >            - const: rockchip,rk3399-i2c
-> 
-> 
-> 
-> 
+> diff --git a/drivers/i2c/busses/i2c-cpm.c b/drivers/i2c/busses/i2c-cpm.c
+> index 4794ec066eb0..41e3c95c0ef7 100644
+> --- a/drivers/i2c/busses/i2c-cpm.c
+> +++ b/drivers/i2c/busses/i2c-cpm.c
+> @@ -435,7 +435,7 @@ static int cpm_i2c_setup(struct cpm_i2c *cpm)
+>   	init_waitqueue_head(&cpm->i2c_wait);
+>   
+>   	cpm->irq = irq_of_parse_and_map(ofdev->dev.of_node, 0);
+> -	if (!cpm->irq)
+> +	if (cpm->irq <= 0)
+>   		return -EINVAL;
+>   
+>   	/* Install interrupt handler. */
 
