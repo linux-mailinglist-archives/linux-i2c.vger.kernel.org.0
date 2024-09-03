@@ -1,208 +1,134 @@
-Return-Path: <linux-i2c+bounces-6025-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6026-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83F6D969D15
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 14:10:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65A78969E3E
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 14:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A98F81C211EB
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 12:10:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 900231C215B3
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 12:48:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2126D1CCED6;
-	Tue,  3 Sep 2024 12:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C2265227;
+	Tue,  3 Sep 2024 12:45:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SQQFb0/3"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="DD8tL+9q"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D741C9858
-	for <linux-i2c@vger.kernel.org>; Tue,  3 Sep 2024 12:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6011F1CA691;
+	Tue,  3 Sep 2024 12:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725365427; cv=none; b=i9s6szMUgxBbDhbnj79n6uJn1onlXSrwnte0PuzwCQceIKwW7h/J4sM/pYuw2g/dzyXQv8UMNSl7LtnhmaDJUy4VIMlDS6PusG1c/MY/w+v3OmOjkK/Ff9LxHJG5fAZ5vjjHBFeLkkbPolW56OpD8qRE10KFtUBdWBlORGT9joU=
+	t=1725367548; cv=none; b=uSDzWLwDqbXZfrp11p5wOdT2cZtcaGWSyv4fCXGyb2EOI8U3Fz0TybfQbkBHTY4ZeXQzQMVMWXEvlUMOz+0CXfHp87WsnaMz+zmhLebYuwT2LXrIHb040NGv9+Iw7sPz7CpRAjyUmOwLSaMgaFJWIy8ED4TCcDqOQIhlniM7+eA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725365427; c=relaxed/simple;
-	bh=znd28+CqTJ4ghTxFrhF5A7Pb6/pnoUS7WGw5WGe/JFo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=prPJmwSPMetjEd+HoR4/4neLTWDul/yVbSKZgHY6aRMCOiNEKtq/A6ZOSarfL3c+XGcsAz3QBt6u7oAJYyck6BC2xaiN33D02PwJCN+AfsYfLD4RTacNIMY35kQvPWIwMDMqFaJOQiqgquiQGqZaV2R3ficWN6+9Q8gMfnK6pgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SQQFb0/3; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e03caab48a2so4012738276.1
-        for <linux-i2c@vger.kernel.org>; Tue, 03 Sep 2024 05:10:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725365424; x=1725970224; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4An20D90YPhjOzkwF+Hg8QYD3SJoIXYWy8cZWiHm4HE=;
-        b=SQQFb0/3adlLAu/pdNV9dt0/K4hdwnFZS1vR5KUwk/lQY1jXbaPD5o7B+DqPVpWI0f
-         CtFcltEL1sm1k/gaGds7efULROhFaLIM2tAoGBjQHbxcrqDJDveMsS4z1UbLUy/Js0aD
-         j3B7mqCY6w+HZKjlMmjqw5yXDop3IJIvdx5BCQkI5nez0BMN2Qc5msFI74KTzAdv0mMh
-         VxursKcGeYWsgXgmRy/LOfOG4xyBxOA9swXLcUCxJePCGRgwqH3zG5q1Chnxk8cxgpLG
-         dEpfVlS/jygBW9v4o6HvQ429OSyO/iOVJbS2HVkfENZIHqA6+t+NJTGGePVIJxJrmV1Y
-         a//A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725365424; x=1725970224;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4An20D90YPhjOzkwF+Hg8QYD3SJoIXYWy8cZWiHm4HE=;
-        b=tt9gOnwN23S/GWsx/ViVCT4+uNwYmQdg+Ug38DTd0NP2vM6VYldJ8yBN7q/Jq00Rfn
-         1zjChF2p5qcEzKiJSrVx9TDr1bydC0ip+xx3ZHcf7VQjAlHesZl7TszXdWA4M0uhdstC
-         g2SZIiDo2xVSpWkYfh6QqH5uh62RHo141SQftY19LwaE19xGrRknRWtuLP3FRnpaPS5Q
-         ti4M+t3Q6pJm3xbro8Jeg6AMfrG6Weqd2L8lPAHlNr5TXEh8fgmq7s1GlL8CcyXibUBq
-         /2eSpFhQ8MTap9vF46BNOM4MmFPoSQucPR8PKfMIjXz/zNKlQYUU7kKAFyJeg3unkQB3
-         /2Ww==
-X-Forwarded-Encrypted: i=1; AJvYcCW6me0H8eHJpkPmfsB5kd9zR4ono2jxRxR175kZ5m98P94pIzC47gmO3uXYVqeOAREsTubR2PHchlU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY7tL5PHoYT+JOC7ERFx67uCEW7y7ACV6OtqO9+mI8inhvJJWv
-	9JXuq8MhLRczsbyLQXSIUO/wMRXvTbbeIVuIlUIP1ZcD9y/AqOCR7tfgun8SKtdPnL87RqiTvHs
-	PuoDpYeiwb2H8hZ3JEWwDhweCQBxyO5g8Z4E5xg==
-X-Google-Smtp-Source: AGHT+IFX1MKd7/CniZfZMCZVstNgR+E8MEOhVGOhXHV1ehVIWPMeYpmWq3hGrzVCf5n6CzgXPAzIGrO6KiCqLNwVX0w=
-X-Received: by 2002:a05:6902:1002:b0:e03:c692:c8b5 with SMTP id
- 3f1490d57ef6-e1a7a1d20camr11923156276.19.1725365424176; Tue, 03 Sep 2024
- 05:10:24 -0700 (PDT)
+	s=arc-20240116; t=1725367548; c=relaxed/simple;
+	bh=7ttKxCoE7GSMsx2WogBL9+GX/hRN6m9P0iLBenm73qw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NvtrtyiEZW9YzMzmLi1mNRD3ugVT3s7KEDLveOu+Wy+ovWdNObySrwKJtTSe7uj5W3OFsIW8xZIYr1pYp0/N224ZzpyC5y2rPKXx5J5qHG7cr4JDvdM1RJog6zlCfEdEYwW/1Fb9Jisu2Vn7c24Swl8q2G1rAqhvawRQYzEr6YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=DD8tL+9q; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=cpg6a8Dw5deggTJRHinbjwWzY46RJB0BQlkELWRuOWo=; b=DD8tL+9q5H5pKcB+Qkocv8TQo5
+	IzsbaSq65KZR1IuXZyoJZM9VGQBRgVvNUYRlWGiKHm4KJ/4AUP3gCsVbFK/SHc6b6BdRhX/Aanp6y
+	ySQPo+n+zk8jVYYEW/24y5MM/L3xTZLrV09zOfoBXxTl9PoU3oUbT9CLgpkI0mDNmmwY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1slSuV-006QPX-I6; Tue, 03 Sep 2024 14:45:27 +0200
+Date: Tue, 3 Sep 2024 14:45:27 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Jiawen Wu <jiawenwu@trustnetic.com>
+Cc: andi.shyti@kernel.org, jarkko.nikula@linux.intel.com,
+	andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+	jsd@semihalf.com, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, rmk+kernel@armlinux.org.uk,
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+	mengyuanlou@net-swift.com, duanqiangwen@net-swift.com
+Subject: Re: [PATCH net 0/3] Add I2C bus lock for Wangxun
+Message-ID: <7485fc03-79c3-4797-ab9a-9026b09aac7f@lunn.ch>
+References: <20240823030242.3083528-1-jiawenwu@trustnetic.com>
+ <888f78a9-dea9-4f66-a4d0-00a57039733d@lunn.ch>
+ <01d701daf75c$50db4450$f291ccf0$@trustnetic.com>
+ <55ff5570-5398-48e9-bf56-d34da197d175@lunn.ch>
+ <020f01daf827$d765ffd0$8631ff70$@trustnetic.com>
+ <509abfeb-b1fb-4c53-9898-6106c8dde411@lunn.ch>
+ <02a001daf9de$529edd90$f7dc98b0$@trustnetic.com>
+ <d91674af-1682-4efe-ad15-bd64f871c1de@lunn.ch>
+ <03fc01dafdca$ef952100$cebf6300$@trustnetic.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240828151028.41255-1-detlev.casanova@collabora.com> <01020191998a55a9-697c3a2c-237e-49bb-b3dd-45762198d74f-000000@eu-west-1.amazonses.com>
-In-Reply-To: <01020191998a55a9-697c3a2c-237e-49bb-b3dd-45762198d74f-000000@eu-west-1.amazonses.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 3 Sep 2024 14:09:47 +0200
-Message-ID: <CAPDyKFoJoqwNTKvpK93QtK1wA9vzVUTzCrP32s_HEZcrujN2Mg@mail.gmail.com>
-Subject: Re: [PATCH v3 06/11] dt-bindings: mmc: Add support for rk3576 eMMC
-To: Detlev Casanova <detlev.casanova@collabora.com>
-Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heiko Stuebner <heiko@sntech.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Andi Shyti <andi.shyti@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Chris Morgan <macromorgan@hotmail.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>, Chukun Pan <amadeus@jmu.edu.cn>, 
-	Muhammed Efe Cetin <efectn@protonmail.com>, Andy Yan <andyshrk@163.com>, Jagan Teki <jagan@edgeble.ai>, 
-	Dragan Simic <dsimic@manjaro.org>, Ondrej Jirman <megi@xff.cz>, Jimmy Hon <honyuenkwun@gmail.com>, 
-	Elon Zhang <zhangzj@rock-chips.com>, Finley Xiao <finley.xiao@rock-chips.com>, 
-	Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>, 
-	Yifeng Zhao <yifeng.zhao@rock-chips.com>, Jisheng Zhang <jszhang@kernel.org>, 
-	Jamie Iles <jamie@jamieiles.com>, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org, 
-	kernel@collabora.com, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <03fc01dafdca$ef952100$cebf6300$@trustnetic.com>
 
-On Wed, 28 Aug 2024 at 17:11, Detlev Casanova
-<detlev.casanova@collabora.com> wrote:
->
-> The device is compatible with rk3588, so add an entry for the 2
-> compatibles together.
->
-> The rk3576 device has a power-domain that needs to be on for the eMMC to
-> be used. Add it as a requirement.
->
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> SFP+ is used on our device.
+> 
+> But I don't quite understand why this lock is not sufficient. The entire
+> transaction is locked, include setting the bus address and selecting pages,
+> and all subsequent reads and writes on this page. Also, firmware uses this
+> lock (hardware semaphore) in the same way. Neither driver nor firmware
+> switches pages whiling the other is reading / writing ?
+ 
+The standard say you cannot read past a 1/2 page boundary. So you do
+one i2c transaction to write to byte 127. You then do transactions to
+write/read in the range 128-255. And then you do a transaction to
+write to byte 127 to set the page back, maybe.
 
-This one doesn't apply as I have other changes queued up.
+You would need to hold the lock over all these transactions. The i2c
+bus driver is too low for this, it would need to be done in the SFP
+layer. The firmware would also need to do the same, hold the lock over
+all the transactions, not just one.
 
-Can you please re-base and post a new version based upon
-git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next.
+And i said 'maybe'. It could leave the page select byte on something
+other than page 0. Linux is driving the hardware... It might know it
+is going to use the same page sometime later. So the firmware will
+need to take the lock, read byte 127, change it to whatever it needs,
+do its read/writes, and then restore the page value at 127, and then
+release the lock..
 
-Kind regards
-Uffe
+Also, you have to think about the quirks. Cut/paste from sfp.c:
 
-> ---
->  .../bindings/mmc/snps,dwcmshc-sdhci.yaml      | 38 +++++++++++++------
->  1 file changed, 26 insertions(+), 12 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml b/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
-> index 4d3031d9965f..aff8106ec361 100644
-> --- a/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
-> @@ -10,18 +10,19 @@ maintainers:
->    - Ulf Hansson <ulf.hansson@linaro.org>
->    - Jisheng Zhang <Jisheng.Zhang@synaptics.com>
->
-> -allOf:
-> -  - $ref: mmc-controller.yaml#
-> -
->  properties:
->    compatible:
-> -    enum:
-> -      - rockchip,rk3568-dwcmshc
-> -      - rockchip,rk3588-dwcmshc
-> -      - snps,dwcmshc-sdhci
-> -      - sophgo,cv1800b-dwcmshc
-> -      - sophgo,sg2002-dwcmshc
-> -      - thead,th1520-dwcmshc
-> +    oneOf:
-> +      - items:
-> +          - const: rockchip,rk3576-dwcmshc
-> +          - const: rockchip,rk3588-dwcmshc
-> +      - enum:
-> +          - rockchip,rk3568-dwcmshc
-> +          - rockchip,rk3588-dwcmshc
-> +          - snps,dwcmshc-sdhci
-> +          - sophgo,cv1800b-dwcmshc
-> +          - sophgo,sg2002-dwcmshc
-> +          - thead,th1520-dwcmshc
->
->    reg:
->      maxItems: 1
-> @@ -38,7 +39,6 @@ properties:
->        - description: block clock for rockchip specified
->        - description: timer clock for rockchip specified
->
-> -
->    clock-names:
->      minItems: 1
->      items:
-> @@ -48,6 +48,9 @@ properties:
->        - const: block
->        - const: timer
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    resets:
->      maxItems: 5
->
-> @@ -63,7 +66,6 @@ properties:
->      description: Specify the number of delay for tx sampling.
->      $ref: /schemas/types.yaml#/definitions/uint8
->
-> -
->  required:
->    - compatible
->    - reg
-> @@ -71,6 +73,18 @@ required:
->    - clocks
->    - clock-names
->
-> +allOf:
-> +  - $ref: mmc-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: rockchip,rk3576-dwcmshc
-> +    then:
-> +      properties:
-> +        power-domains:
-> +          minItems: 1
-> +
->  unevaluatedProperties: false
->
->  examples:
-> --
-> 2.46.0
->
+/* SFP_EEPROM_BLOCK_SIZE is the size of data chunk to read the EEPROM
+ * at a time. Some SFP modules and also some Linux I2C drivers do not like
+ * reads longer than 16 bytes.
+ */
+#define SFP_EEPROM_BLOCK_SIZE   16
+
+        /* Some SFP modules (e.g. Nokia 3FE46541AA) lock up if read from
+         * address 0x51 is just one byte at a time. Also SFF-8472 requires
+         * that EEPROM supports atomic 16bit read operation for diagnostic
+         * fields, so do not switch to one byte reading at a time unless it
+         * is really required and we have no other option.
+         */
+
+/* GPON modules based on Realtek RTL8672 and RTL9601C chips (e.g. V-SOL
+ * V2801F, CarlitoxxPro CPGOS03-0490, Ubiquiti U-Fiber Instant, ...) do
+ * not support multibyte reads from the EEPROM. Each multi-byte read
+ * operation returns just one byte of EEPROM followed by zeros. There is
+ * no way to identify which modules are using Realtek RTL8672 and RTL9601C
+ * chips. Moreover every OEM of V-SOL V2801F module puts its own vendor
+ * name and vendor id into EEPROM, so there is even no way to detect if
+ * module is V-SOL V2801F. Therefore check for those zeros in the read
+ * data and then based on check switch to reading EEPROM to one byte
+ * at a time.
+ */
+
+How easy it is to update your firmware each time we add a quirk? There
+is no point Linux working around all the broken SFPs if your firmware
+then breaks it by not doing word reads when it should, reading 128
+bytes not 16, not falling back to byte reads and disabling your
+equivalent of HWMON for the sensors.
+
+	Andrew
 
