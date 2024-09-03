@@ -1,87 +1,123 @@
-Return-Path: <linux-i2c+bounces-6015-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6016-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86F139697CF
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 10:51:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EADC96983A
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 11:05:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 327651F23718
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 08:51:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12D58B27A49
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 09:05:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D31FC1C7669;
-	Tue,  3 Sep 2024 08:49:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 513D71C769F;
+	Tue,  3 Sep 2024 09:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Fkadgr2z"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="aDHsfxIb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861271C7662;
-	Tue,  3 Sep 2024 08:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8711C7676
+	for <linux-i2c@vger.kernel.org>; Tue,  3 Sep 2024 09:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725353385; cv=none; b=FoM3/kdeXLlr6DkVpSmTC2O+0N220h8m70iw+RJ7gbZZDC0vnKKFLQnkxfwyV/TpAsXGbHIySihPT8VjE4gfP/VE83ioQ4JQcUrqIUdVIqcpJ0AcZz4+0NGWYqJmH3TCYkGmF3IVv0dFZWs8O7P0x3meSsoVt8PUdrphT6+kGNA=
+	t=1725354291; cv=none; b=Qaw8PWEBO65CmZZMsWr3ZV7anz3i/MaB5x17BMuoWbSQQscAPj4dVRboGw1tHXy9RdU2f4to1PDvvkNZADgMDTy97tGzu0ShujzWwRcmlUqPtVw8t12Id3FxeZv4swl5AA13HP2pH0mx7ELndif1REIT4K71dz5MJxc6f6BB1R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725353385; c=relaxed/simple;
-	bh=XX9z8YCDy27CoDZtJF/sIR8V50PVNzRI4OMkqgjKb8k=;
+	s=arc-20240116; t=1725354291; c=relaxed/simple;
+	bh=HNKnJwweY5e+osURURYraHODvNdW8h+yTvbC3cD9Jq8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uHRFE15Iz/SwjNlxHJgOEjguo99swHeHWgS0W6V9S6bA3iNSNZcIcL7MUtUwzCGChIh8bGgwNwZCUG1A6lY1B5EZG/5Jan8aMgHJAoEI9wO2uzgPvbZ12yjYZK6iwlC4H5AWk82K8GtEjlbuTD/wB/IzvBV4PsoxbfUzH+m5XKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Fkadgr2z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960F1C4CEC4;
-	Tue,  3 Sep 2024 08:49:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725353385;
-	bh=XX9z8YCDy27CoDZtJF/sIR8V50PVNzRI4OMkqgjKb8k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fkadgr2zXJn6wfmFpEQneqHH+x4JJBcVPgAY0VFviigUYFNIoNejwMAzZrhMusPKW
-	 JJFDkb5EbxCosyUieY2TQpR7B2upbrkU+7cRpM5+vhK6vMar/MHrNpDOgx/gN8y9us
-	 8EK8K7dl4aBwEaClo/EJAR0yBCXD7yEAS8jEA/v8=
-Date: Tue, 3 Sep 2024 10:49:42 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Wolfram Sang <wsa@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=tE17bO8KL65ERpYIa1WWMn6ttbGbnlUazwQH25RESVPQhHbqM+UnpJISb5nQLmbUSi2V/lAZtCXDDwk+EjvFq+Oai9biAWGNhS8jyBSmXbQgC0uNZcyiUGfOSKlpdFsBX9IKIuoQWYFmAH0+ADkIFYcBSkFPZOjoP1gmxhfOVVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=aDHsfxIb; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=ia84
+	vY2WJq5acaDEubWgZY8HT104OC/RMhEmvePGa1c=; b=aDHsfxIbNei7cx4YFoHY
+	l5Uwy91lFLW5VTZ1EUJyS2cpzjSuO+itwhT5p4S7wmsFW78poQoKR+XBlyU07cBD
+	ujpiVIRpxiwM1ARqeFyNCZwAuv5Q3yWDlbyd/joUe1AC7rHdEYGpc2x6OHef2aFh
+	nbV4xnK2xgN7i+EfsbbLX1wn5Tx9Xfv1B0wlu1FxxjCiOTOoFJDADffmZuROZwq0
+	/gTdpH49RvLweFLV9wMJzrMhPQpDHy4OGJnLMFz/zSIQkqtWDJJO+KeGfWZFOTke
+	yeRv1L7uL881V/9zjkkDdKDfu23K84HlsLRMcWDlpGrFilOmC4QM9fAMPHhnuYHP
+	HA==
+Received: (qmail 193007 invoked from network); 3 Sep 2024 11:04:44 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Sep 2024 11:04:44 +0200
+X-UD-Smtp-Session: l3s3148p1@2Ws6WTMhes8gAwDPXwdRANgvu6DX4+2c
+Date: Tue, 3 Sep 2024 11:04:44 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
 	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] i2c: core: Switch I2C_COMPAT to default n
-Message-ID: <2024090319-subsystem-quack-27a1@gregkh>
+Subject: Re: [PATCH 2/2] driver core: class: warn if a compatibility class is
+ registered
+Message-ID: <ZtbRLOUO48PzOKmC@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 References: <4660a46b-9128-4407-8baa-f257245784a3@gmail.com>
- <8e618f52-413c-41c1-9ac2-0260a1904792@gmail.com>
+ <7bc5fa50-59f6-4455-8f77-1c89f1e17d0b@gmail.com>
+ <2024090242-smother-preview-a1d2@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zT2ZY26Hj8wvXt21"
+Content-Disposition: inline
+In-Reply-To: <2024090242-smother-preview-a1d2@gregkh>
+
+
+--zT2ZY26Hj8wvXt21
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8e618f52-413c-41c1-9ac2-0260a1904792@gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 02, 2024 at 09:01:18PM +0200, Heiner Kallweit wrote:
-> I2C_COMPAT has been considered deprecated for 15 years now.
-> Therefore make it default n, before we remove support for it
-> in the near future.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/i2c/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/Kconfig b/drivers/i2c/Kconfig
-> index 44710267d..e5721cebb 100644
-> --- a/drivers/i2c/Kconfig
-> +++ b/drivers/i2c/Kconfig
-> @@ -42,11 +42,11 @@ config I2C_BOARDINFO
->  
->  config I2C_COMPAT
->  	bool "Enable compatibility bits for old user-space"
-> -	default y
-> +	default n
 
-Just remove the default line, that way it will default to 'n'.
+> > +	pr_warn("Compatibility class %s will go away soon, please migrate use=
+rspace tools to use bus devices\n",
+> > +		name);
+>=20
+> That's not going to do anything except annoy users who have no control
+> over this, sorry.  Please just fix up all of the kernel and then delete
+> this function.
 
-thanks,
+So, we deprecated this sysfs-class 15 years ago and hid it with a
+Kconfig symbol. However, we never pursued this further, so e.g. Debian
+has the Kconfig symbol still enabled. Can we really remove this from one
+release to the next without another transition period? I am not afraid
+of tools like lm-sensors which were converted long ago. But custom code
+might rely on sysfs-paths created by this class. It was even advertised
+in IPMI docs until last week (fixed now).
 
-greg k-h
+
+--zT2ZY26Hj8wvXt21
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbW0SgACgkQFA3kzBSg
+KbaXHA/+OaFYR3SuuGEMiqSHnAMcj6WrHF7N1FaM/2mcuBm15g3xlnTiKQFrXwHs
+/GCxxFPqiw7hkFPJZgv7PVnRuGVtSRCF74r/MnNe2aUrtf2jOUIDuNyJSrMkKCz3
+vLSU/bNunfuNDPkjD6vvlbW5s+Um+ogUDTDIqjJYVbH/wjceekXZU9FhRx0Bf4pJ
+X5bolJd5GHQNdNePFKy9aPlutc3CHAkDEl1XWHPeGIGj12gkXUVnpS1YYDt38YlE
+uSTeuu4lxv1ZdelQZl2FBsb4yfsSQgj1Vo/oI1xOoPNZ4ZL/bU3i8Rih0W7CrytR
+D5V4rjeQa+AFS3pZWzB/1b32wtRv67f0YdG7ShjEVm2fx8NhONbzP8+nD0ZlD8lp
+wZ/KWq8mZAYQf8t7ehbOGd9csHYJ+zBEq1ng82ZEKXLiRTex/YKIo1N6HExTxxxs
+vD5ZPjhue3TeQh7ZwAl5sXDmdLe2OOxwhd+OeMXQAjGSS8OrLELjpDHTdPG1pmpx
+vALLj+1w4Rh0Q/l7gcqOOccIMaBJCZpASODUdxnpvsGB5Xboy4YmSlSpADRDmF1i
+f/oZb/BWmRdty7AWJA7A2JZ3L8Rb2OycCjBSoI7SXw753ez+vJ1mRmZTFNhWk2/P
+fSSRWVxJVwViob6HBuzUAfahn3u2UdkUc9427TXI+HEO+/+le0c=
+=Z+GB
+-----END PGP SIGNATURE-----
+
+--zT2ZY26Hj8wvXt21--
 
