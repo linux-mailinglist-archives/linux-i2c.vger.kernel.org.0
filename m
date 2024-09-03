@@ -1,92 +1,118 @@
-Return-Path: <linux-i2c+bounces-6020-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6021-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C755F969A4F
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 12:37:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 438B2969A7B
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 12:44:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 843D7282BE0
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 10:37:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E09C61F240DF
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Sep 2024 10:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E6161B984C;
-	Tue,  3 Sep 2024 10:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015DB1B984A;
+	Tue,  3 Sep 2024 10:43:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lUnjK+lq"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="SeSC/3Hs"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3851B985D;
-	Tue,  3 Sep 2024 10:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BEE71A0BEC
+	for <linux-i2c@vger.kernel.org>; Tue,  3 Sep 2024 10:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725359834; cv=none; b=CIc7Mb3hxV639esYoVTCkzqq40RO7gL8xzaO5NfLup1mfjEn1k1uPWsYPhlWsuJ21ncHHGJNa3GZKU3Udb3vKmzII35YqxUMrmX9NMiXyHpnXVLQ7BAVGvpdHDTTIxcSfFzYYxN4ug2oY1XQ1Xw4nLZGdjzj/s+AdZVyGhjAYEo=
+	t=1725360238; cv=none; b=Kq4VtF9NdTXmO5eN7XyJAAFaMtQYLIWBnRF5YOwSix4xfc7qZsGroitcr+XWzRpgByo66EUjHtZPkAnfksCETAPxXE63hG5szAyxZG0HUba927FfL0QbLWZ9/ZvsuB4aXJZMbAPCsmol6V7KJC1kWI7kMpeExhTcgCYDmtPleRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725359834; c=relaxed/simple;
-	bh=dk/6bx9a/f96GB4dmYYL2v01H8GNc48rV0oX7YiW1zc=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qFram7gP/kCZoAfXUkjDnP+etNwThUQe8bMc0mLOtpQmfvlzKhdnml5MnFtUlIRSZ4vvw8GSbqJF/O95Y4gL6Fl0RD5ZErNgMGSKsbmyIYLq757ENjphqxCWOMd+H7a5RKLb7Pt6URQL02nDvW+dAoN+FQTj/aejcIIWHnkNfgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lUnjK+lq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85495C4CEC5;
-	Tue,  3 Sep 2024 10:37:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725359833;
-	bh=dk/6bx9a/f96GB4dmYYL2v01H8GNc48rV0oX7YiW1zc=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=lUnjK+lqfdDSJTmmcisqEXtm36lkEhtW53u9eE5zbdT5NubT51wVKWbYOso8er6mp
-	 VFdag7F/C+3bafZO9BhIOUuOdyOOFGzDsmCWInkI8k3w2gi9AZI53vOAa0N1WAhR4B
-	 fX+N+7QZnLWs/3MyB4bXoNR0JDMItGz7zEvg4xhc=
-Date: Tue, 3 Sep 2024 12:06:11 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Wolfram Sang <wsa@kernel.org>,
+	s=arc-20240116; t=1725360238; c=relaxed/simple;
+	bh=2i4B9G9+XVzEn2mX2eDNvkuMH6tzga34ElDfEQFuRlE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T35x0AtXNHIPMQuB0ivJHdbWBZlmXFvca+Ofb3XC0ONJOM5o5yWLda+10zLgnGSx6a4DoSLngNUeHyFidoiaOsoIQZWKPe84vJuXm1YYUL93jT5cPanHK1cc9q06sO1HszQXjDWmMv0YLbDHj0FK2tTc755+oiaRLgnKTwymxIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=SeSC/3Hs; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=XFLl
+	8JzRHfz1hlmPwdert5vlD64V3d4tr2ywxwUOHp4=; b=SeSC/3HsA0tVUFCq99up
+	kIrWsLaVrN8O0lMHm1OUamCuwXxkTherwIptSsHabdVb6+6uq8wZ6yXfBfSlveBG
+	Vzv5bXwpWQgW8q0UrRENS1g4gNeplLaUUWf1CExSzMP2SqfMoHkeMIekTeaDL00j
+	enV+pi7R99U5MBCg76u4pnIpp8dz/poaofGohqQ8sOrqc4/zDB4mqEj0emceN86O
+	uDwN0VWXR7hDNjuWEi3ks4ScrQHRIvPx6kZVVjyMQIlUHFfxyRdLGI6LP10GkKyA
+	3L5MxyhAdyGDA/lM3AbLFU0VZl0vRrv2zjo6R9szvrBmBw5hbPK0+/C4mZwipnth
+	Pg==
+Received: (qmail 221057 invoked from network); 3 Sep 2024 12:43:52 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Sep 2024 12:43:52 +0200
+X-UD-Smtp-Session: l3s3148p1@6bLDuzQhZqggAwDPXwdRANgvu6DX4+2c
+Date: Tue, 3 Sep 2024 12:43:52 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 2/2] driver core: class: warn if a compatibility class is
  registered
-Message-ID: <2024090338-landfall-geek-58df@gregkh>
+Message-ID: <ZtboaI4b_aTfRWNk@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 References: <4660a46b-9128-4407-8baa-f257245784a3@gmail.com>
  <7bc5fa50-59f6-4455-8f77-1c89f1e17d0b@gmail.com>
  <2024090242-smother-preview-a1d2@gregkh>
  <ZtbRLOUO48PzOKmC@shikoro>
  <ZtbRpMbX6g6vLUzO@shikoro>
+ <2024090338-landfall-geek-58df@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Zrcz/tOtrh2Pzhj8"
+Content-Disposition: inline
+In-Reply-To: <2024090338-landfall-geek-58df@gregkh>
+
+
+--Zrcz/tOtrh2Pzhj8
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZtbRpMbX6g6vLUzO@shikoro>
 
-On Tue, Sep 03, 2024 at 11:06:44AM +0200, Wolfram Sang wrote:
-> On Tue, Sep 03, 2024 at 11:04:44AM +0200, Wolfram Sang wrote:
-> > 
-> > > > +	pr_warn("Compatibility class %s will go away soon, please migrate userspace tools to use bus devices\n",
-> > > > +		name);
-> > > 
-> > > That's not going to do anything except annoy users who have no control
-> > > over this, sorry.  Please just fix up all of the kernel and then delete
-> > > this function.
-> > 
-> > So, we deprecated this sysfs-class 15 years ago and hid it with a
-> > Kconfig symbol. However, we never pursued this further, so e.g. Debian
-> > has the Kconfig symbol still enabled. Can we really remove this from one
-> > release to the next without another transition period? I am not afraid
-> > of tools like lm-sensors which were converted long ago. But custom code
-> > might rely on sysfs-paths created by this class. It was even advertised
-> > in IPMI docs until last week (fixed now).
-> 
-> I missed that Heiner was changing the driver core, not I2C core. So, to
-> give more details, I am talking about I2C_COMPAT and the "i2c-adapter"
-> class. The main question from above still stands.
 
-Delete the code and see if anyone notices?  :)
+> Delete the code and see if anyone notices?  :)
 
-greg k-h
+"Never ever break userspace, at least until Greg says so" :D
+
+Seriously, Heiner initially sent a patch simply removing the code in
+question [1]. May I interpret your above statement as "Acked-by"?
+
+[1] https://lore.kernel.org/r/80c4a898-5867-4162-ac85-bdf7c7c68746@gmail.com
+
+
+--Zrcz/tOtrh2Pzhj8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbW6GQACgkQFA3kzBSg
+KbaB+RAArYXuYJrE39IZx8oz0n0QikWXtAEUIUH/AsZ39W1Z7/r5t0q+nfWCXVpJ
+L3x4I1essT1a3NFYX5Mp7eKAEV6MO/vPTJoyUM9g+m6Qd184755kHLHa+ltpF6oZ
+ksOcPnpFmeQoeKlUvf0C93+AKFYOYNB4DRDf0Wxc5UdWKREO7fGLtXPKJlicFMvP
+xlcFjKpkgdkI7fuVULL6n3x1ZAGjhpzh/XMrYjnoP/3lHL8r6UlKBPJOCzBNBYSX
+bFhtDGt+NH/ncJUh2HP+w64UpBIhrm06MIiz6EDOH4ylo62s+SCivF4TSStcoZY+
+PbM+uLS0gkIRzYHOr4EHPoPFcaaRdOO175JFR7LZoUN8Gf4ZBWjCiJJavr1dBUFS
+ruFyxXUu8uj/RvEiG73v5vquES1iafPfEzu5XeK5bR2AGknkDodcza0NKP4CYuty
+bOLOh7YzhCnfK8XlRVTGg9N3wFk3K2sYVUrN3e42YST5BR5wwpxYTr5b/3azmEsF
+nG3WOr2lK6qsl/vT9gUlLHAjwIZbi83Z3U+R/h06pfCbbD+DdtwbMwM7T0U9ZRZc
+cd1DDmdgUUf0l1JdnPhgc/rvTuj03chRyCGDLs4CzoT8U4I6hbAcz2FVheVhfz8D
+mmfIiadIjZFOhJLzUySVweUMjyQawmgQ19KY51na13/A80paZt0=
+=j3eC
+-----END PGP SIGNATURE-----
+
+--Zrcz/tOtrh2Pzhj8--
 
