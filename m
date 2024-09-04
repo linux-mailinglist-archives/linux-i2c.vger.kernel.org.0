@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6181-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6182-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C6896BE38
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 15:21:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A048E96BE47
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 15:22:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F34132815E9
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 13:21:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B9921F25248
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 13:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C581DA627;
-	Wed,  4 Sep 2024 13:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02EE41DA310;
+	Wed,  4 Sep 2024 13:21:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZTNG3ml"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i155sTFS"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACBA01D88DA;
-	Wed,  4 Sep 2024 13:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907311EBFEF;
+	Wed,  4 Sep 2024 13:21:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725456019; cv=none; b=idn+Ezh6RhDaiNKbUetCjJZA9PoDujXb7/jqdJXzebD2+1L2KkGYj9kl/rgM3QgLSdI5kOF9d32VEi2lXQsyI10Ai5alHSR85aCc7V5F3wOU7935cE8vfuvIF7lef8nUvmlaRpxeMb9Ohi3bpbjW0cmG2YyVv47QeKyFJQc3ky4=
+	t=1725456068; cv=none; b=tkbGP/ZmF3WtH/Wqbb+trLfBJKbS1fnEllTpMB+kLKTTPv6sycfbIXIL/NkHuDgxj0jnWkfWSIjbZYE7shgbC+aNa9Y883EpktZgCJImPiY+xWruFkkOpfEjVHMxPzQh43b2QzxIJuB951k7hvbgGtrRS5Q1I1rOEQsYo6A0hv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725456019; c=relaxed/simple;
-	bh=ji3ee7bEt2Ak5byQ+v6Y2EgVTfP+Cys2lyvNsofcdoA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fcfmn1IhOuxbIqQpFAGaczpIgl5XziHWxFSjOx90H8IZQePvQ8FdJNUakOeakW2Y6XjiLDn6GKB7FXMsBZKt95JXTgeFGi1UXF7rxL34C9wjys+ERB9Ih5Z1qFtx81cS5BNgYkyDAcA4Xgv0xHnTMXo1T+un62P3NqtDX+WBzz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZTNG3ml; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A20C4CEC2;
-	Wed,  4 Sep 2024 13:20:05 +0000 (UTC)
+	s=arc-20240116; t=1725456068; c=relaxed/simple;
+	bh=GIXKD4NV+ZGmiAM0z95gHVtIxkhK0xIhXHYtxrms8fY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ZiyDW6WelFSGdSzlU30gXJB+K4o8v8M4eUDY16SC45NSieklBj+h5wEDJVK9BhCQvHF9lhd5e1UtqcIraEgKCVyhOUkIAG3+RMM/oVvLnmAw5ZIqfE91Uo5XAnGpNYXw78RjVg5SiiOwFCEG4LmZ/i8EY49b8/elnSTm8qG7yTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i155sTFS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 514D1C4CEC2;
+	Wed,  4 Sep 2024 13:20:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725456019;
-	bh=ji3ee7bEt2Ak5byQ+v6Y2EgVTfP+Cys2lyvNsofcdoA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PZTNG3mlNHjLFyRUe+aJGbLfCjMrZHGnPiJXxH3DOSQkSOUGQs4G1MqXKAQkZyMrD
-	 MTPyenlX1AWmw2AOBy1sY7GVkv2BU9rJk8HM/lpS91WTlZqVQP5UBe4apMEgMTkBdf
-	 +WorKXTE07Nv0zr+NiGRnLGLkHQo2dbYIeDRA0hGWXQeuYP32Zm6wNXmTw3f3nzQFM
-	 EGDXdyY99qaV0ua7gq/OR8v8iaiyQl0QIXNbsNzLCHif1FGPXRiaVI1r3VvPFgdKoo
-	 OK9iF56M4geqQmx8wHFNK5Phqh8UhvZxUHYcRHuDw2Vs6HAAVlsFlMyvkE14qOJqJE
-	 nrgxHXpA3wpww==
-Message-ID: <3529c7ef-95e1-42b0-93c3-6ac4266c4b19@kernel.org>
-Date: Wed, 4 Sep 2024 15:20:01 +0200
+	s=k20201202; t=1725456068;
+	bh=GIXKD4NV+ZGmiAM0z95gHVtIxkhK0xIhXHYtxrms8fY=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=i155sTFSBENDPMqNOT2spcIh9yyL1bi87QRyDX/lgMKxjnr0pBpsZ8o1+P6ARyITU
+	 e7RXXGNqYtoQMZjuoKBTv7+Mcr9GUxMkaWhjAA85aEWVCqU5mGo2Ko34T/lwusGact
+	 snVlBK7pFrjzqoOBlJ7ZuDe5oGcHkLaGFekyLwlrjTgUqSOtnc/Z/0zqtshmO7Xnpr
+	 rNwl/aelz5gXFnzIADk4NiBwz7yefeA7Tlmt26X/OP7YjWrBfvCXPZ+N4JNWP8Et1D
+	 6wGopWEISkOaH0XWg/s93wc75EdgghpiPn453P/bv1HZQwPeD0XbWlCV/TorqsC7GS
+	 ZGJP4Zyx2istA==
+Message-ID: <08f35ef4-66ab-4581-9444-79b9eb9107fd@kernel.org>
+Date: Wed, 4 Sep 2024 15:20:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -51,16 +51,17 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 15/21] dt-bindings: i2c: document support for SA8255p
-To: Nikunj Kela <quic_nkela@quicinc.com>
-Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
- viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
- sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
- will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
- jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
- amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
- cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
- wim@linux-watchdog.org, linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
+To: Nikunj Kela <quic_nkela@quicinc.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>, andersson@kernel.org,
+ konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+ herbert@gondor.apana.org.au, davem@davemloft.net, sudeep.holla@arm.com,
+ andi.shyti@kernel.org, tglx@linutronix.de, will@kernel.org,
+ robin.murphy@arm.com, joro@8bytes.org, jassisinghbrar@gmail.com,
+ lee@kernel.org, linus.walleij@linaro.org, amitk@kernel.org,
+ thara.gopinath@gmail.com, broonie@kernel.org, cristian.marussi@arm.com,
+ rui.zhang@intel.com, lukasz.luba@arm.com, wim@linux-watchdog.org,
+ linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
  arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -72,10 +73,10 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-16-quic_nkela@quicinc.com>
- <xtguaoof7iblrtd2idsa2k4ml64qkttgliyijbeqw5thkdcbx3@jnm75a4wmbqd>
- <06968d9d-0428-4fe8-8526-c91db3d9f0e7@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <7fc1e4c3-ca09-4a0a-b072-0c4f1d21e44f@kernel.org> <ZtgSd_SLndvLLVYF@shikoro>
+ <24d4676f-4385-406d-9728-54afc3144e17@quicinc.com>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -119,150 +120,26 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <06968d9d-0428-4fe8-8526-c91db3d9f0e7@quicinc.com>
+In-Reply-To: <24d4676f-4385-406d-9728-54afc3144e17@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 04/09/2024 14:41, Nikunj Kela wrote:
+On 04/09/2024 14:45, Nikunj Kela wrote:
 > 
-> On 9/3/2024 11:31 PM, Krzysztof Kozlowski wrote:
->> On Tue, Sep 03, 2024 at 03:02:34PM -0700, Nikunj Kela wrote:
->>> Add compatible representing i2c support on SA8255p.
->>>
->>> Clocks and interconnects are being configured in Firmware VM
->>> on SA8255p, therefore making them optional.
->>>
->>> CC: Praveen Talari <quic_ptalari@quicinc.com>
->>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
->>> ---
->>>  .../bindings/i2c/qcom,i2c-geni-qcom.yaml      | 33 +++++++++++++++++--
->>>  1 file changed, 31 insertions(+), 2 deletions(-)
->>>
->> I don't know what to do with this patch. Using specific compatibles next
->> to generic compatible is just wrong, although mistake was probably
->> allowing generic compatible. The patch does not explain the differences
->> in interface which would explain why devices are not compatible.
+> On 9/4/2024 12:55 AM, Wolfram Sang wrote:
+>>> Just to clarify to I2C maintainers:
+>>> This is incomplete. Missing driver changes.
+>> Thanks, Krzysztof!
 > 
-> I mentioned in the description that clocks and interconnects on this
-> platform are configured in Firmware VM(over SCMI using power and perf
-> domains) therefore this is not compatible with existing generic compatible.
+> Driver changes are going through internal review and will soon be
+> posted. For your reference, we have pushed driver changes in CodeLinaro
+> git branch(nkela/sa8255p_v6_11_rc2)  in kernel-qcom repo [1]. You can
+> take a look at the changes that are in pipeline and will follow soon.
+> 
 
-It is not obvious to me. I doubt it is obvious to others. Commit msg
-does not say they are compatible and usually difference in
-clocks/interconnects is not reason of incompatibility. So why suddenly
-here we would understand it differently?
-
-
-> 
-> 
->>  In the
->> same time my advice of separate binding was not followed, because maybe
->> these devices are compatible? But then it should be expressed...
-> 
-> Sorry, I missed that. You want me to use 'oneOf' expression with this
-> compatible?
-
-I proposed separate binding file. But your commit msg suggested these
-are compatible. Lack of driver change is also proof of that.
-
-I don't want to keep discussing this because it does not lead to
-anywhere. We keep repeating the same.
-
-> 
-> 
->>
->> You have entire commit msg to explain what and why.
-> 
-> Will put more details in description.
-> 
-> 
->>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->>> index 9f66a3bb1f80..b477fae734b6 100644
->>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->>> @@ -15,6 +15,7 @@ properties:
->>>      enum:
->>>        - qcom,geni-i2c
->>>        - qcom,geni-i2c-master-hub
->>> +      - qcom,sa8255p-geni-i2c
->>>  
->>>    clocks:
->>>      minItems: 1
->>> @@ -69,8 +70,6 @@ properties:
->>>  required:
->>>    - compatible
->>>    - interrupts
->>> -  - clocks
->>> -  - clock-names
->>>    - reg
->>>  
->>>  allOf:
->>> @@ -81,6 +80,10 @@ allOf:
->>>            contains:
->>>              const: qcom,geni-i2c-master-hub
->>>      then:
->>> +      required:
->>> +        - clocks
->>> +        - clock-names
->>
->> So it is required here?
-> 
-> We are removing clocks from generic required list and enforcing rules
-> for all compatibles other than sa8255p.
-> 
-> 
->>> +
->>>        properties:
->>>          clocks:
->>>            minItems: 2
->>> @@ -100,7 +103,21 @@ allOf:
->>>            items:
->>>              - const: qup-core
->>>              - const: qup-config
->>> +
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            const: qcom,sa8255p-geni-i2c
->>> +    then:
->>> +      required:
->>> +        - power-domains
->>> +
->> And possible here? I assume with the same clocks? The same for
->> interconnects - same values are valid?
-> 
-> I guess I need to put here the same description as in the cover letter
-> to make it more clear. We are not using clocks and interconnects in this
-> platform in Linux. Instead, sending request to Firmware VM over
-> SCMI(using power and perf protocols)
-> 
-> 
->>
->>>      else:
->>> +      required:
->>> +        - clocks
->>> +        - clock-names
->> And clocks are required again?
-> Explained above.
->>> +
->>>        properties:
->>>          clocks:
->>>            maxItems: 1
->> Eeee? So now all other variants have max 1 clock?
-> 
-> I will make if block for sa8255p up so else is not applied to rest of
-> the platforms.
-> 
-> 
->>
->> Nope, this wasn't ever tested on real DTS.
-> 
-> This is tested on SA8255p DTS and I ran DT schema check on SA8775p DT as
-> well.
-
-You just affected all the DTS everywhere. It's your task to check all
-DTS everywhere. Not ours.
+Sorry, we are not reviewing other repos. Post patches ONLY when they are
+ready. Sending one piece without driver is not correct and it does not
+make any, absolutely any sense.
 
 Best regards,
 Krzysztof
