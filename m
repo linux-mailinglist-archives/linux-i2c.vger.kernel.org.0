@@ -1,34 +1,34 @@
-Return-Path: <linux-i2c+bounces-6215-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6216-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A486396C9BF
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 23:50:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0541696C9E3
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 23:55:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 588B8289297
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 21:50:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B12A71F28365
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 21:55:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E855517279E;
-	Wed,  4 Sep 2024 21:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B3417A599;
+	Wed,  4 Sep 2024 21:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="hCJDBgqk"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="MhhBhRKG"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54408148850;
-	Wed,  4 Sep 2024 21:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE87913B7BE;
+	Wed,  4 Sep 2024 21:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725486590; cv=none; b=ZZ2ELGvxAgnbbwjz+cXSryLhKTq2kNryAVs4I4AIivXanHgy6eZ+r3SBPJD+gukmDKM0atofqFrZgW/FUI7Vjc5FJBAZofEK+NStHLFWBt2lZlmlL3cYhgpSlHmbTscrhWLgLGH0rVJByHE67xYvAN6MoQeWXZJdm4KY0mP7xls=
+	t=1725486907; cv=none; b=NIahj7Nk12rKoVC3aJtSyRJjYi43mXtYAY6La8v/b4WQAsGDRAxsSRvqmIIST9iRfLGMGmL3oL8vyvXqhT6Ews45FUVUT2SONCFQ3vmis2sAARFv0TGpOTvLdmWl0+DsWWcm/e+gwmPNBJftZDaYcwr/rsFiYqmrEGopC/aF3FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725486590; c=relaxed/simple;
-	bh=1LNI88micgNHgbbB7KdA4HGKNqRpTitebIbdizJqpRU=;
+	s=arc-20240116; t=1725486907; c=relaxed/simple;
+	bh=xslog8XjIZI7isCnFHctxFpz2Mdpd5GZ2GUIQpbAZ3s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PHDqKzhFNLmmMXFl4knZam0qHytl2jwgzYVcmn9SxWJtLx5rCz5AD9IVy8Uqu8mN8ZM/GXucjQXWty9ijd0rL4OoOdQpaIBxY4QNOmoRNpSVmgPpOruEo2btpktA++SO8iz72NCvrJ2VJJjzdFKYA53AfSEmVq/L1vOfB1DZWAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=hCJDBgqk; arc=none smtp.client-ip=156.67.10.101
+	 Content-Type:Content-Disposition:In-Reply-To; b=TFJGrORvxD28Ky97zI7geGB2i6kzc5l00rf0hOmPwNqQ7mTVN1bgaUew96HoQgPL3+JoyBgA+YcUy/+Mj0fCRKCLwZO3FwPO+g4O7wZwxtQ14IXG53Cg/kpZwGwsfzH/XjIdkgZl0mu8uGZLbZG3RJsO8EEWLwG4lrimTECnh9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=MhhBhRKG; arc=none smtp.client-ip=156.67.10.101
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
@@ -36,13 +36,13 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
 	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
 	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=AM5l2g0QT9mXGqo3zZQMk1RexCjW5+duz7bC5MyWC2g=; b=hCJDBgqkKj6+sZte+boleCq8wn
-	N11rgsHjD8DL2T5xNS/SZ7wOAAoklvGVK0sM18thAlFvDyJlg46cc/J89wnvdlv8oU2eb/0YqsbSP
-	ZZxbAy/bMoP2XKnJWFKyciBNixYdyNG/AhMLYvEGIncBRWWFjN8eneH+ubMfCW/vClps=;
+	bh=ZPFlBqJcH08Jjxnq4snrrKR2XDfHTaWNnlnioXLkjWg=; b=MhhBhRKGy5SiJyei+w6QYCErKH
+	ocCiWSrlVM4bCqeucOBG9nvRKTA6AazQvtw9pfBuQLBEMVNpGt+eXxLcnWZ/kpTfizsaRZ09hJTjs
+	QCC47I+AcyGX79pRXK2lMyr2Srf7MX2rEu/vSOoXEp0EZXLs2fTj9z0iWxNBWryt/mug=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
 	(envelope-from <andrew@lunn.ch>)
-	id 1slxsX-006beQ-IN; Wed, 04 Sep 2024 23:49:29 +0200
-Date: Wed, 4 Sep 2024 23:49:29 +0200
+	id 1slxxf-006bgE-JV; Wed, 04 Sep 2024 23:54:47 +0200
+Date: Wed, 4 Sep 2024 23:54:47 +0200
 From: Andrew Lunn <andrew@lunn.ch>
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>, andersson@kernel.org,
@@ -64,17 +64,16 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>, andersson@kernel.org,
 	linux-watchdog@vger.kernel.org, kernel@quicinc.com,
 	quic_psodagud@quicinc.com,
 	Praveen Talari <quic_ptalari@quicinc.com>
-Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
-Message-ID: <a5fc36c6-6ca5-424a-b68a-f5695af00562@lunn.ch>
+Subject: Re: [PATCH v2 17/21] dt-bindings: serial: document support for
+ SA8255p
+Message-ID: <b64d3425-e7e9-4b28-bd47-ca6f99b39707@lunn.ch>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-17-quic_nkela@quicinc.com>
- <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
- <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
- <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
- <516f17e6-b4b4-4f88-a39f-cc47a507716a@quicinc.com>
- <2f11f622-1a00-4558-bde9-4871cdc3d1a6@lunn.ch>
- <204f5cfe-d1ed-40dc-9175-d45f72395361@quicinc.com>
+ <20240903220240.2594102-18-quic_nkela@quicinc.com>
+ <db4cb31f-b219-4ee8-b519-fdec7f7b8760@kernel.org>
+ <634ab05e-3b8c-4cc1-bf23-0c68c1d28484@quicinc.com>
+ <f42fe73d-1579-4fa1-89ed-9d2a4b7c7f6e@lunn.ch>
+ <c9255fe1-dc62-44f4-a105-54e94abde915@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,22 +82,19 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <204f5cfe-d1ed-40dc-9175-d45f72395361@quicinc.com>
+In-Reply-To: <c9255fe1-dc62-44f4-a105-54e94abde915@quicinc.com>
 
-> Qualcomm QUPs chips have serial engines that can be configured as
-> UART/I2C/SPI so QUPs changes require to be pushed in one series for all
-> 3 subsystems as they all are dependent.
+> No one is born with experience. You learn as you go. Please note that
+> this series has gone through internal review before I posted it in
+> upstream.
 
-So leave that until later. And when you do, explicit mention why you
-are cross posting to three subsystems, because the hardware is
-designed like that. And suggest a way it could be merged, which
-subsystem should take the lead, and the others just need to provide
-Acked-by. The Maintainers might disagree, want to do it differently,
-but i find it always helps to state this from the beginning, otherwise
-sometimes no Maintainer take the lead role.
+Then i'm surprise you were not told to submit lots of smaller
+patchsets, one per subsystem, which are complete.
 
-But this patchset appears to be much more than QUPs. You should be
-able the break the rest up into smaller patchsets, one per subsystem.
+I get nobody is born with experience, but for a company the size of
+Qualcomm, they can easily hire a few experienced mainline developers
+who can mentor you, rather than having overloaded Maintainers teach
+you the basics, and getting frustrated in the process.
 
 	Andrew
 
