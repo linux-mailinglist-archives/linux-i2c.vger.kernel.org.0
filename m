@@ -1,140 +1,145 @@
-Return-Path: <linux-i2c+bounces-6118-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6119-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F64396B3AD
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 09:57:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7246896B495
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 10:32:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 059121F26963
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 07:57:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A66CD1C21562
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 08:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA9FC16F287;
-	Wed,  4 Sep 2024 07:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="lHJfC8NL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CAC01CB300;
+	Wed,  4 Sep 2024 08:32:06 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D19F16F8E7
-	for <linux-i2c@vger.kernel.org>; Wed,  4 Sep 2024 07:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5498D1CB12C
+	for <linux-i2c@vger.kernel.org>; Wed,  4 Sep 2024 08:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725436549; cv=none; b=T8QWY91gJ8WNNlIlSBQ4ZshtmXiUqdYVlRDeHdzA11Tht+PWXx53xJzHREHbz19SCGlyUDY+egMUO1DMdD69KNbVBeUwTUx0mc+6ZO9eIeyVxx0OURFYu4x6toJvclR80hw2y1NpU8uxDJaW+bAH8n3ENIWwPe3xM6o1qNGfwnU=
+	t=1725438726; cv=none; b=BIfSjRdvqL0BkFI7I0l2YDjhodI4GHQRAxzfLiWwJ6Rbed2PX4MQEJbxpBPj4ktkL4QnlGjhUaRdfVfG52435xJMPw5QszSFrOtCzaiE0KwHZBFyrIwIe1L+crxmxDfU35UJopmRfrMGsARUfAEJYYQXqRCXjsj8ViblO++G9nY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725436549; c=relaxed/simple;
-	bh=aKREuGuvO5ZHE1yHZZsfwqNwpc5ngWPlAvJqmQi/mFA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rCV1GY2QvWz5ApCxJDrUnrwaq1xo/qwh+l0Svko25NxEuxTjlZeDlfQLjt83/QQq81E9aSyE+hUDEQ1s+9W4zhOL8G9ke/qoxFnjnCF9G+HcKYZMnfPcy7JS1yPtoFBxeb/nb7tHChI2R/+85dZdJtz1iOPanJZ6SoN3cBz1VJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=lHJfC8NL; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=aKRE
-	uGuvO5ZHE1yHZZsfwqNwpc5ngWPlAvJqmQi/mFA=; b=lHJfC8NLL5hM1d99YWjb
-	k8hDKbwT7sQf8dInSNM2O1kpA1swfRUSh15nms8BwX4XK7sQOPW/xU646LChoL7s
-	MlL6mj1/2d4+GpkSgFJnakGliodkpCyjufupzv5XqiJo4TZN0ytxUDDuqoOtWhcw
-	Ftacip61yFvUV0V9V8Eyu/o1oSEVbgN2RdE8+kWEb7GCFzV5oAi5AyzCYkfoebJA
-	/7HgHZSVS4QsdZaaMW51/42QLG8Wzrtmb4XGaKBOfOAaMiycCkPj2/JN9DPa+haG
-	ze9bm6J1gbHzupDjyCxJh3vuGJwM0K55flbm52CyxTjg8jfMmmuw6GBpIF2P5GCE
-	Gg==
-Received: (qmail 509259 invoked from network); 4 Sep 2024 09:55:35 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Sep 2024 09:55:35 +0200
-X-UD-Smtp-Session: l3s3148p1@4iHCf0YhlpwgAwDPXwdRANgvu6DX4+2c
-Date: Wed, 4 Sep 2024 09:55:35 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Nikunj Kela <quic_nkela@quicinc.com>, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-	herbert@gondor.apana.org.au, davem@davemloft.net,
-	sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
-	will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
-	jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
-	amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
-	cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
-	wim@linux-watchdog.org, linux@roeck-us.net,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-crypto@vger.kernel.org, arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, kernel@quicinc.com,
-	quic_psodagud@quicinc.com,
-	Praveen Talari <quic_ptalari@quicinc.com>
-Subject: Re: [PATCH v2 15/21] dt-bindings: i2c: document support for SA8255p
-Message-ID: <ZtgSd_SLndvLLVYF@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Nikunj Kela <quic_nkela@quicinc.com>, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-	herbert@gondor.apana.org.au, davem@davemloft.net,
-	sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
-	will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
-	jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
-	amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
-	cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
-	wim@linux-watchdog.org, linux@roeck-us.net,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-crypto@vger.kernel.org, arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, kernel@quicinc.com,
-	quic_psodagud@quicinc.com,
-	Praveen Talari <quic_ptalari@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-16-quic_nkela@quicinc.com>
- <7fc1e4c3-ca09-4a0a-b072-0c4f1d21e44f@kernel.org>
+	s=arc-20240116; t=1725438726; c=relaxed/simple;
+	bh=WBKAsoLfzoFNp15UQuj9A91GbaF3jKHoBhxpYHc344Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=bnEuwlezRYuQAWvVFJQP+dwKNDITOF6fG9eCkiRsh65IBtPj5JrGE3JoobajuOegD564GwD69MBggq+lJQeAIY4xMtjggPqajO2BuUfjsrVbVL9hWmsWzsc5l882Yb493VNHK2dnpXEZSYvvxiRygJILrnl0GYopDcYMdwr/HVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WzG1S1RWqz1j82s;
+	Wed,  4 Sep 2024 16:31:40 +0800 (CST)
+Received: from kwepemf500003.china.huawei.com (unknown [7.202.181.241])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3A7FB1401E9;
+	Wed,  4 Sep 2024 16:32:00 +0800 (CST)
+Received: from [10.174.176.82] (10.174.176.82) by
+ kwepemf500003.china.huawei.com (7.202.181.241) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 4 Sep 2024 16:31:59 +0800
+Message-ID: <9ad1e3f4-b09f-4507-8d6a-2dee1a73fdf9@huawei.com>
+Date: Wed, 4 Sep 2024 16:31:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FHEJDPFXKqntwo2j"
-Content-Disposition: inline
-In-Reply-To: <7fc1e4c3-ca09-4a0a-b072-0c4f1d21e44f@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: mpc: Use devm_clk_get() to simplify code
+To: <chris.packham@alliedtelesis.co.nz>, <andi.shyti@kernel.org>,
+	<linux-i2c@vger.kernel.org>
+References: <20240904070435.102768-1-zhangzekun11@huawei.com>
+From: "zhangzekun (A)" <zhangzekun11@huawei.com>
+In-Reply-To: <20240904070435.102768-1-zhangzekun11@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemf500003.china.huawei.com (7.202.181.241)
 
+Sorry for make noise. Please ignore this patch, there are some mistakes 
+in the commit message. I will send v2 to fix it.
 
---FHEJDPFXKqntwo2j
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Best Regards,
+Zekun
 
-
-> Just to clarify to I2C maintainers:
-> This is incomplete. Missing driver changes.
-
-Thanks, Krzysztof!
-
-
---FHEJDPFXKqntwo2j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbYEnYACgkQFA3kzBSg
-KbZVYBAAiXNxlHjbEKLTGAkGhtvJsfotjpV3nCHTOIX/wTow3SIk/EuRFp+rNX9D
-bvnB135tiFbnLkTasCvFaDoz1L5wOf3pnguvdpQAIauuzlIznrT6k//2iFhEBwKV
-FgaVWIWUvfGw6LMCubL9h54kRsAVjdMBb4pN4C0U4cQh63+3nbJYGsqgTaxVyFR8
-1vBhtghAuAT9uFYeOPgP4GsV0wm4G4far6kM9R0wdaiu/abnMT7aiIa7T2eGps1+
-N+NerB2mmf6E+XEDnK9eDRCNMUJcam4IfYVjaQzwC//aFSFdmVvvjXKfbnssf+JF
-Vfn0hqkLmMSxL37rtuVH9v1JE+QJ8yPCwNzJpey+GWDInsux2gFaEsj5y7DNaXz9
-rJl6yjzKGUEIaB3unQqDNIXOYa8t54sZOVPMiXyiwRf3n+itlcgM1UyIAhcJL62u
-khTLRb01S4AJCQU0i/tkvtxjThP+U40p/2HWHcvNIdv+FAvNwpP3Hwbr7hthVHXo
-yoOMh7BeGjoG2Kp9/5JanWIWUy4RiAVJiKKZA6wP+QQhnpRldvAbfv56htszdT8F
-epR8Zsy8YVvVQbgzZcCmFkKY5tHrkfOYaURZFpE5stum6qKUSt/asnkEsDxqkCss
-4D9DFaqxYU6zv5TvPEk8Ht4P+xoSS9D6XBET6SgXeNARud2kCSw=
-=F3tI
------END PGP SIGNATURE-----
-
---FHEJDPFXKqntwo2j--
+在 2024/9/4 15:04, Zhang Zekun 写道:
+> devm_clk_get() and clk_prepare_enable() can be replaced by helper
+> function devm_clk_get_enabled(). Let's use devm_clk_get_enabled() to
+> simplify code and avoid calling clk_disable_unprepare().
+> 
+> Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
+> ---
+>   drivers/i2c/busses/i2c-mpc.c | 23 ++++-------------------
+>   1 file changed, 4 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+> index 41d6c8ed163a..236d6b8ba867 100644
+> --- a/drivers/i2c/busses/i2c-mpc.c
+> +++ b/drivers/i2c/busses/i2c-mpc.c
+> @@ -88,7 +88,6 @@ struct mpc_i2c {
+>   	int irq;
+>   	u32 real_clk;
+>   	u8 fdr, dfsrr;
+> -	struct clk *clk_per;
+>   	u32 cntl_bits;
+>   	enum mpc_i2c_action action;
+>   	struct i2c_msg *msgs;
+> @@ -779,7 +778,6 @@ static int fsl_i2c_probe(struct platform_device *op)
+>   	struct clk *clk;
+>   	int result;
+>   	u32 clock;
+> -	int err;
+>   
+>   	i2c = devm_kzalloc(&op->dev, sizeof(*i2c), GFP_KERNEL);
+>   	if (!i2c)
+> @@ -809,18 +807,12 @@ static int fsl_i2c_probe(struct platform_device *op)
+>   	 * enable clock for the I2C peripheral (non fatal),
+>   	 * keep a reference upon successful allocation
+>   	 */
+> -	clk = devm_clk_get_optional(&op->dev, NULL);
+> -	if (IS_ERR(clk))
+> -		return PTR_ERR(clk);
+> -
+> -	err = clk_prepare_enable(clk);
+> -	if (err) {
+> +	clk = devm_clk_get_optional_enabled(&op->dev, NULL);
+> +	if (IS_ERR(clk)) {
+>   		dev_err(&op->dev, "failed to enable clock\n");
+> -		return err;
+> +		return PTR_ERR(clk);
+>   	}
+>   
+> -	i2c->clk_per = clk;
+> -
+>   	if (of_property_read_bool(op->dev.of_node, "fsl,preserve-clocking")) {
+>   		clock = MPC_I2C_CLOCK_PRESERVE;
+>   	} else {
+> @@ -876,14 +868,9 @@ static int fsl_i2c_probe(struct platform_device *op)
+>   
+>   	result = i2c_add_numbered_adapter(&i2c->adap);
+>   	if (result)
+> -		goto fail_add;
+> +		return result;
+>   
+>   	return 0;
+> -
+> - fail_add:
+> -	clk_disable_unprepare(i2c->clk_per);
+> -
+> -	return result;
+>   };
+>   
+>   static void fsl_i2c_remove(struct platform_device *op)
+> @@ -891,8 +878,6 @@ static void fsl_i2c_remove(struct platform_device *op)
+>   	struct mpc_i2c *i2c = platform_get_drvdata(op);
+>   
+>   	i2c_del_adapter(&i2c->adap);
+> -
+> -	clk_disable_unprepare(i2c->clk_per);
+>   };
+>   
+>   static int __maybe_unused mpc_i2c_suspend(struct device *dev)
 
