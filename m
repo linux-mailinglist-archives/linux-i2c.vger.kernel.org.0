@@ -1,44 +1,44 @@
-Return-Path: <linux-i2c+bounces-6154-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6156-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E15E696BC24
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:28:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E360F96BC2B
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:28:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F87B1C21C90
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 12:28:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F3062848CB
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 12:28:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0101B1D9356;
-	Wed,  4 Sep 2024 12:27:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D541D9D65;
+	Wed,  4 Sep 2024 12:27:42 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D521D9339;
-	Wed,  4 Sep 2024 12:27:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FD91D934A;
+	Wed,  4 Sep 2024 12:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725452860; cv=none; b=dvuLQliPpysjQlZnOhGBBWkkGMajB2c23HbffdKySs+dAfqDYYIQfDvS5dp1myVUCZmD4ptktQmTHU/w1V+hzMUJ84HPzB5jRyVsUzl7nHLFQa761C5Z+I2jjTC+LPPtty2VK1nRqZZ77MTAkisNcM8AQpVLLt+nfLEz+eXuxGI=
+	t=1725452862; cv=none; b=FWNecOcLK4/OxpbSJPKMMjhl1mzmmp9F9xpklx+XVOpbwom4mrt1m50FN6jdMpTwBIKtpXVsxPEVOuERsBFfoh4ML90fwu20eUQjzuFYBRqPej3GRk4J1BeGKbtenbJ6L8ZhTa6qPpc5WL3uSnNMi0qQcZDscDZQMqnvELiCbw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725452860; c=relaxed/simple;
-	bh=op25NKclmh5WszqVK31MArbkM2pkNrfc6LJ1tfFAAhE=;
+	s=arc-20240116; t=1725452862; c=relaxed/simple;
+	bh=Mt25IMtsKBHe3bcD5PB6r/GfTzzV6IPilXtjCw35K74=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QWqus4uvpnIdqC2Q+UyAqoRitkVS+4tLL/XnyqfKMXSubisswxRgGrNwNLvq3xT9yW5l+/deHfQTyBw1kuYyfQ1DJk7Ed8Qa/oAP2TRa0M/mcZ1eXlKtsfSgHPdqeH3MGLUK6AZ9BCf2hcozg8BmGzWFMqL22JjIr4nWMz7fFgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+	 MIME-Version:Content-Type; b=mW2LJmyxPbIBp4NXSE63CMAX/YP2OGluo9rAXc+cK4YEd6cF5H++lvDue+y8tx4z5F4hgM4n6eRDP5lWwUQeiaWQHQBXK+oiym6IH2PPYlUSL5caEqwf7USe79pvr6KUHOfECW2U2qu1LLNoMzQdNPYvb24uRZ/LYbZ8jzTSbj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4WzMDb077lzyR5f;
-	Wed,  4 Sep 2024 20:26:39 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WzM9j6CVBz1HJ9c;
+	Wed,  4 Sep 2024 20:24:09 +0800 (CST)
 Received: from kwepemd500012.china.huawei.com (unknown [7.221.188.25])
-	by mail.maildlp.com (Postfix) with ESMTPS id C0C461800FE;
-	Wed,  4 Sep 2024 20:27:36 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 67EDA1402CC;
+	Wed,  4 Sep 2024 20:27:37 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemd500012.china.huawei.com
  (7.221.188.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Wed, 4 Sep
- 2024 20:27:35 +0800
+ 2024 20:27:36 +0800
 From: Li Zetao <lizetao1@huawei.com>
 To: <jikos@kernel.org>, <bentiss@kernel.org>, <michael.zaidman@gmail.com>,
 	<gupt21@gmail.com>, <djogorchock@gmail.com>, <rrameshbabu@nvidia.com>,
@@ -49,9 +49,9 @@ To: <jikos@kernel.org>, <bentiss@kernel.org>, <michael.zaidman@gmail.com>,
 	<mezin.alexander@gmail.com>
 CC: <lizetao1@huawei.com>, <linux-input@vger.kernel.org>,
 	<linux-i2c@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-Subject: [PATCH -next 10/19] HID: hid-steam: Use devm_hid_hw_start_and_open in steam_probe()
-Date: Wed, 4 Sep 2024 20:35:58 +0800
-Message-ID: <20240904123607.3407364-11-lizetao1@huawei.com>
+Subject: [PATCH -next 11/19] HID: wiimote: Use devm_hid_hw_start_and_open in wiimote_hid_probe()
+Date: Wed, 4 Sep 2024 20:35:59 +0800
+Message-ID: <20240904123607.3407364-12-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240904123607.3407364-1-lizetao1@huawei.com>
 References: <20240904123607.3407364-1-lizetao1@huawei.com>
@@ -66,70 +66,67 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemd500012.china.huawei.com (7.221.188.25)
 
-Currently, the hid-steam module needs to maintain hid resources
+Currently, the wiimote module needs to maintain hid resources
 by itself. Consider using devm_hid_hw_start_and_open helper to ensure
 that hid resources are consistent with the device life cycle, and release
 hid resources before device is released. At the same time, it can avoid
-the goto-release encoding, drop the err_hw_close and err_hw_stop lables.
+the goto-release encoding, drop the err_close and err_stop lables.
 
 Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
- drivers/hid/hid-steam.c | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+ drivers/hid/hid-wiimote-core.c | 20 +++-----------------
+ 1 file changed, 3 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/hid/hid-steam.c b/drivers/hid/hid-steam.c
-index bf8b633114be..d393762bf52f 100644
---- a/drivers/hid/hid-steam.c
-+++ b/drivers/hid/hid-steam.c
-@@ -1236,18 +1236,10 @@ static int steam_probe(struct hid_device *hdev,
- 	 * With the real steam controller interface, do not connect hidraw.
- 	 * Instead, create the client_hid and connect that.
- 	 */
--	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_HIDRAW);
-+	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_HIDRAW);
- 	if (ret)
- 		goto err_cancel_work;
+diff --git a/drivers/hid/hid-wiimote-core.c b/drivers/hid/hid-wiimote-core.c
+index 26167cfb696f..28cd9ccbb617 100644
+--- a/drivers/hid/hid-wiimote-core.c
++++ b/drivers/hid/hid-wiimote-core.c
+@@ -1780,8 +1780,6 @@ static void wiimote_destroy(struct wiimote_data *wdata)
+ 	wiimote_ext_unload(wdata);
+ 	wiimote_modules_unload(wdata);
+ 	cancel_work_sync(&wdata->queue.worker);
+-	hid_hw_close(wdata->hdev);
+-	hid_hw_stop(wdata->hdev);
  
--	ret = hid_hw_open(hdev);
+ 	kfree(wdata);
+ }
+@@ -1806,22 +1804,14 @@ static int wiimote_hid_probe(struct hid_device *hdev,
+ 		goto err;
+ 	}
+ 
+-	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
 -	if (ret) {
--		hid_err(hdev,
--			"%s:hid_hw_open\n",
--			__func__);
--		goto err_hw_stop;
+-		hid_err(hdev, "HW start failed\n");
++	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_HIDRAW);
++	if (ret)
+ 		goto err;
 -	}
 -
- 	if (steam->quirks & STEAM_QUIRK_WIRELESS) {
- 		hid_info(hdev, "Steam wireless receiver connected");
- 		/* If using a wireless adaptor ask for connection status */
-@@ -1261,7 +1253,7 @@ static int steam_probe(struct hid_device *hdev,
- 			hid_err(hdev,
- 				"%s:steam_register failed with error %d\n",
- 				__func__, ret);
--			goto err_hw_close;
-+			goto err_cancel_work;
- 		}
+-	ret = hid_hw_open(hdev);
+-	if (ret) {
+-		hid_err(hdev, "cannot start hardware I/O\n");
+-		goto err_stop;
+-	}
+ 
+ 	ret = device_create_file(&hdev->dev, &dev_attr_extension);
+ 	if (ret) {
+ 		hid_err(hdev, "cannot create sysfs attribute\n");
+-		goto err_close;
++		goto err;
  	}
  
-@@ -1283,10 +1275,6 @@ static int steam_probe(struct hid_device *hdev,
- err_steam_unregister:
- 	if (steam->connected)
- 		steam_unregister(steam);
--err_hw_close:
--	hid_hw_close(hdev);
--err_hw_stop:
--	hid_hw_stop(hdev);
- err_cancel_work:
- 	cancel_work_sync(&steam->work_connect);
- 	cancel_delayed_work_sync(&steam->mode_switch);
-@@ -1312,8 +1300,6 @@ static void steam_remove(struct hid_device *hdev)
- 	if (steam->quirks & STEAM_QUIRK_WIRELESS) {
- 		hid_info(hdev, "Steam wireless receiver disconnected");
- 	}
--	hid_hw_close(hdev);
--	hid_hw_stop(hdev);
- 	steam_unregister(steam);
- }
+ 	ret = device_create_file(&hdev->dev, &dev_attr_devtype);
+@@ -1847,10 +1837,6 @@ static int wiimote_hid_probe(struct hid_device *hdev,
  
+ err_ext:
+ 	device_remove_file(&wdata->hdev->dev, &dev_attr_extension);
+-err_close:
+-	hid_hw_close(hdev);
+-err_stop:
+-	hid_hw_stop(hdev);
+ err:
+ 	input_free_device(wdata->ir);
+ 	input_free_device(wdata->accel);
 -- 
 2.34.1
 
