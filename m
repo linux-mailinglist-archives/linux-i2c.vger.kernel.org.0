@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-6109-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6110-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83E3996B1C3
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 08:35:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35A3C96B1D3
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 08:36:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EE901F27A18
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 06:35:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B2DDB21DC4
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 06:36:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB1668286F;
-	Wed,  4 Sep 2024 06:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DD0913D504;
+	Wed,  4 Sep 2024 06:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c/oM1lba"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VRoLNiOV"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC491386C9;
-	Wed,  4 Sep 2024 06:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07E04AEE6;
+	Wed,  4 Sep 2024 06:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725431523; cv=none; b=IlOswsQ5FI/nLeOVifisBQDDUDc8ES7ikyy9ganP7xoyFzoNOG/4ybWWC+0Vs7nUS+OI6wBl9TvGq/Nxl3jKf2PmP8U0JkIXfe2U0mh5xFF56WXXPHsVIvKlo7xPxXCD5tZCGBilau6tQ1acDQerwkcz994JifRO8V1Ea85GjQM=
+	t=1725431681; cv=none; b=k6w/QVa7gssaY8Qx6mNTTnNgHlGY/OCP9pGncVJJVSLTHS0medtXQRPjDQWLpdYLswxnkVHgQdEo8EJauROSP0D1wLlLq/FAE0GEXJjTSrDiFy/kzSLgQuQzcRASklXmdvB24hVaSpm0sX7ey8ghmzI6QPspntTwj93Ny37bWCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725431523; c=relaxed/simple;
-	bh=p6zo3cD/MS1jSLLM7Rm6ErwANFF4wNKY4HrupXO3AC4=;
+	s=arc-20240116; t=1725431681; c=relaxed/simple;
+	bh=59IuPyYeHUT6I4DfEN8S5tmVreRkgQpuZU3P0+eeQaQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oxnpVSHFiDBhD2LSVvQ/FRTsWjEe2t8vedWv7lU7PNAS3PISoOKFRTNaKRROnor1ojGMjlXZHnVIW8W8yUw2cFY7XMGx7d7F8QY2qkV7TCkTx6fSFfl3GLS7M6CSK5FHiNro3z9cgoJ9SlHDP1KXfkieSmGKsex11y6L53Cj5RY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c/oM1lba; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E96C4CEC2;
-	Wed,  4 Sep 2024 06:32:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=aLY2f2wAcAyJ6LZvdtMQFQT2mRX3/WOQwpUyZvp6JNxM6sAEkBx9Mmp4E22vOMQsbQI6YpoI3uI0TeDpLOqUS0hEd8pDkt9qsVm9EbOgFaPjTugo0jpAyvIpHFjqlkVQgvoxw/oG4P/GZetxKRS7HxcX6/QRRMIA4CEd8wvDJok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VRoLNiOV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DD1C4CEC2;
+	Wed,  4 Sep 2024 06:34:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725431522;
-	bh=p6zo3cD/MS1jSLLM7Rm6ErwANFF4wNKY4HrupXO3AC4=;
+	s=k20201202; t=1725431680;
+	bh=59IuPyYeHUT6I4DfEN8S5tmVreRkgQpuZU3P0+eeQaQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c/oM1lbaBVfW8xXoJk39xPrtyv63jVjNd+jQW/BBZ8Olrr/Ckv13ZEx+pbWDitVVX
-	 vcHd/Vb7oRDU2jghbU8t8bEYWPSumVPnu/R2jezkCn6jTJTybUPPwuNcAQQ2onvGCb
-	 bLwY54Jw6/e5Ce/23soMP9bK0FUYTRCW6S6q7jaotdQ2t0C3MOZPwNSffsLgD8CWvJ
-	 qXnhZMAcito18IBiiukvpF9NTVG/L2Yv9iN62s20GtdP91KXmI0/7Q5tliR/L9hDGN
-	 7y1w3JO6cuGNIKYljzgxLLPAsOaQTgR1w14laJ/AMxidj8U20oWlZk3nFEW6XqyUrC
-	 A9HEc92l1wbVg==
-Date: Wed, 4 Sep 2024 08:31:59 +0200
+	b=VRoLNiOV5XhECZrIKF5orhVO4gvPvZSaogdOy3gesWN4Ftg0AghOKFnFa4aPKfMLA
+	 rkSFgTHoYTTSySDAmZUA6UKnISgHjBjwoytgDeWg65YtB4/pcqH+JfxcUVlM4Q3Fjg
+	 zQ265OZKFajFBuWq17kNDkA4uKkNsFcGa2xUP8NyUIhXlkYr6i2HRaV474e51lhSL+
+	 jBKh5RDJ2ibtczJe1Ni3mQ7SxoLgCQka4NX9Q92NQ7wDIxdRLuJ61OiuEEokvCN/ZC
+	 Vr8fEDHTNg6rp3JaRHgMF2YQolbZSjRWOK86ruUEgtyD3C/qw/ibm94uIYzXBcRyr9
+	 gSvjrgfhKMG7g==
+Date: Wed, 4 Sep 2024 08:34:36 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
@@ -57,11 +57,11 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
 	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com, 
 	Praveen Talari <quic_ptalari@quicinc.com>
-Subject: Re: [PATCH v2 15/21] dt-bindings: i2c: document support for SA8255p
-Message-ID: <xtguaoof7iblrtd2idsa2k4ml64qkttgliyijbeqw5thkdcbx3@jnm75a4wmbqd>
+Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
+Message-ID: <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-16-quic_nkela@quicinc.com>
+ <20240903220240.2594102-17-quic_nkela@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -70,99 +70,83 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240903220240.2594102-16-quic_nkela@quicinc.com>
+In-Reply-To: <20240903220240.2594102-17-quic_nkela@quicinc.com>
 
-On Tue, Sep 03, 2024 at 03:02:34PM -0700, Nikunj Kela wrote:
-> Add compatible representing i2c support on SA8255p.
+On Tue, Sep 03, 2024 at 03:02:35PM -0700, Nikunj Kela wrote:
+> Add compatible representing spi support on SA8255p.
 > 
-> Clocks and interconnects are being configured in Firmware VM
-> on SA8255p, therefore making them optional.
+> Clocks and interconnects are being configured in firmware VM
+> on SA8255p platform, therefore making them optional.
 > 
+
+Please use standard email subjects, so with the PATCH keyword in the
+title.  helps here to create proper versioned patches.
+Another useful tool is b4. Skipping the PATCH keyword makes filtering of
+emails more difficult thus making the review process less convenient.
+
+
 > CC: Praveen Talari <quic_ptalari@quicinc.com>
 > Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
 > ---
->  .../bindings/i2c/qcom,i2c-geni-qcom.yaml      | 33 +++++++++++++++++--
->  1 file changed, 31 insertions(+), 2 deletions(-)
+>  .../bindings/spi/qcom,spi-geni-qcom.yaml      | 60 +++++++++++++++++--
+>  1 file changed, 56 insertions(+), 4 deletions(-)
 > 
-
-I don't know what to do with this patch. Using specific compatibles next
-to generic compatible is just wrong, although mistake was probably
-allowing generic compatible. The patch does not explain the differences
-in interface which would explain why devices are not compatible. In the
-same time my advice of separate binding was not followed, because maybe
-these devices are compatible? But then it should be expressed...
-
-You have entire commit msg to explain what and why.
-
-> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> index 9f66a3bb1f80..b477fae734b6 100644
-> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> @@ -15,6 +15,7 @@ properties:
->      enum:
->        - qcom,geni-i2c
->        - qcom,geni-i2c-master-hub
-> +      - qcom,sa8255p-geni-i2c
->  
->    clocks:
->      minItems: 1
-> @@ -69,8 +70,6 @@ properties:
->  required:
->    - compatible
->    - interrupts
-> -  - clocks
-> -  - clock-names
->    - reg
+> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+> index 2e20ca313ec1..75b52c0a7440 100644
+> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+> @@ -25,10 +25,45 @@ description:
 >  
 >  allOf:
-> @@ -81,6 +80,10 @@ allOf:
->            contains:
->              const: qcom,geni-i2c-master-hub
->      then:
-> +      required:
-> +        - clocks
-> +        - clock-names
-
-
-So it is required here?
-
-> +
->        properties:
->          clocks:
->            minItems: 2
-> @@ -100,7 +103,21 @@ allOf:
->            items:
->              - const: qup-core
->              - const: qup-config
-> +
+>    - $ref: /schemas/spi/spi-controller.yaml#
 > +  - if:
 > +      properties:
 > +        compatible:
 > +          contains:
-> +            const: qcom,sa8255p-geni-i2c
+> +            const: qcom,sa8255p-geni-spi
+
+Not much improved. All my previous (v1) and other patch (i2c) comments
+apply.
+
 > +    then:
 > +      required:
 > +        - power-domains
+> +        - power-domain-names
 > +
-
-And possible here? I assume with the same clocks? The same for
-interconnects - same values are valid?
-
->      else:
+> +      properties:
+> +        power-domains:
+> +          minItems: 2
+> +
+> +    else:
 > +      required:
 > +        - clocks
 > +        - clock-names
-
-And clocks are required again?
-
 > +
->        properties:
->          clocks:
->            maxItems: 1
+> +      properties:
+> +        power-domains:
+> +          maxItems: 1
+> +
+> +        interconnects:
+> +          minItems: 2
+> +          maxItems: 3
+> +
+> +        interconnect-names:
+> +          minItems: 2
+> +          items:
+> +            - const: qup-core
+> +            - const: qup-config
+> +            - const: qup-memory
+>  
+>  properties:
+>    compatible:
+> -    const: qcom,geni-spi
+> +    enum:
+> +      - qcom,geni-spi
+> +      - qcom,sa8255p-geni-spi
 
-Eeee? So now all other variants have max 1 clock?
-
-Nope, this wasn't ever tested on real DTS.
+You have entire commit msg to explain why this device's programming
+model is not compatible with existing generic compatible which must
+cover all variants (because it is crazy generic).
 
 Best regards,
 Krzysztof
