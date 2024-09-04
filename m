@@ -1,70 +1,72 @@
-Return-Path: <linux-i2c+bounces-6095-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6096-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4554496AE3A
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 04:05:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75B0E96AE3F
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 04:05:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AFF51C2360D
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 02:05:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EAB6286C3C
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 02:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0081BC2A;
-	Wed,  4 Sep 2024 02:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019404086A;
+	Wed,  4 Sep 2024 02:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTvzoOmd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VATbB0yD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20FED529;
-	Wed,  4 Sep 2024 02:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E9E335B5;
+	Wed,  4 Sep 2024 02:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725415496; cv=none; b=Pgh7LNsTNvw0zeMcHm91NStOaQXKcRtku0YDIng2BPK9SlQhCX2dL/RQEpYIdV3yZagy/5JWh0XSYyKEpy86HrVVfdfdbdLCVwE3uOvbZ3b7Y9Y8MOdiDLq32B3n/4eTDZz6QCxuuhtk+LapSNdFstT+/AG0oOwdPJOz0W83U04=
+	t=1725415498; cv=none; b=oohlfxvIidWzZ61ETh+9ma0y3xsbVUFW+Y2y8lHnPT+pyxyP0R9oWnLE9JWzFxXsPVsFwYqs6l2GlQq0DIdlWRCtmurcbrJt5eUyrTNvHFK8G20mc+mqP2YauRjajvU6QokbcuSzlJyr5gX/G4BXrOuGeqZbovD+Av3SQHRXRwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725415496; c=relaxed/simple;
-	bh=s4Jiezo9uL0aAB0mvZ0xJc4+WbaYsc/jG2jEIsn98UY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V4zkDTug9HeNYzRRikr5xRJxdfD/4Hr6xlV9yu1qAAR31/VWMl44fsN0vndv9Qd4xn9KZbXBI76wUl65pumGSsuMqju0S4j4pfd88SJV9blbrTIbEOsrRPTs0Tmb0TfQcs9hEmNXB7U93Y4+U9+xTOPwJHWS0ZBrW/5MM4AT9Ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GTvzoOmd; arc=none smtp.client-ip=209.85.219.178
+	s=arc-20240116; t=1725415498; c=relaxed/simple;
+	bh=NHYzKaITmdTJ6LDsa1MSFWey7gHnLUbYQtenL3wncDE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lgsV0kxaeAXAdmJ3pUtFUw6RrmvVAB5EdoXvgENfMFImZ9ahqs8FyUWxBQX28QmTOdU7Z2SEPeMtA43c+qMokq+KhbaDejMCYxAEd5ZRokKJLlbISAzyiW/kBykzrI9/D+B+RxFjdImQ+o36qHrGTkqefNZC3V62Ol99Eznm+gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VATbB0yD; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e1a90780f6dso3794281276.0;
-        Tue, 03 Sep 2024 19:04:54 -0700 (PDT)
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7a803a4f6dfso15873485a.1;
+        Tue, 03 Sep 2024 19:04:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725415494; x=1726020294; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qM3ZCVnrlMuurghg+8eAxbQKNT+spP3oTnGdsmJX1As=;
-        b=GTvzoOmdmZBPYBLoHEW+pAxhCIYTjfZrB1URpuHnACVSJEj0H7GULAwWf41onbS449
-         i2DIIFwqYSaedg3E1U4RnesuN/R5NQw7IZODc6r/HQM0gL8dFQ2fo1Gau+7c9tzusteK
-         TocRBAvyzD9ib5VTiJEBXOmn5Uiu/VQjlgPdnIb5du/mehg4dMFDKcp7mCFsGDgR9W75
-         YlrYrteBklfFyOsrGlhMT702WRHsjsE3DRUQvzBu8iWn23PIq2qUS0O1Ss5I/7SXMXmW
-         WJryk9chCgwI1folel43ktYv8hR5KAIrwy8PJL+x8bkbqypdZT+Ij/2B0np2erR6cUUu
-         erBg==
+        d=gmail.com; s=20230601; t=1725415496; x=1726020296; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nyl9Q+BjD+2w5Z9jzpRf4cTBIglEMGm1/CmOMLsQEu8=;
+        b=VATbB0yDeK2q50B8qqR8lAhgobF+qSMXbxdyJW92WnKRgrk8w3BmO854kg9VWonVRh
+         XHdyw29BWQ9g6qExbYReVds16FNVOoDPCY9ei2A9/6r2UCkSIW0OVYWalGa7xojb3prf
+         tVyAE4lrcYLKsOq8eIXDMono92Je42uBa+h3lmsKv9U7tESPGCoerTCFDOoG3HLziEC1
+         44W5OyVZagQHBIfGe3MRy6mYOA2piFR5AnlAOwFJH/I/3xOV6mA/sG7M4XKMdpPnh+re
+         tj2ToeNbzRVr0BZYvnfHGb/1YZNvDDO8+T4Z3Zy0FGXF3H4dut+bqVshluBCc2BuAzdZ
+         WJfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725415494; x=1726020294;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qM3ZCVnrlMuurghg+8eAxbQKNT+spP3oTnGdsmJX1As=;
-        b=w4OBVWqLF+nsmOINL1NZ/mE92tf0ZsCrNit8feZu+HFC1saNuctlTrxk4CNeb3yW4L
-         OuSxHDSRxiBCurvS6CVBPEXTJc1m6oYeXLkYi/vvR1oG3TK257iMtcahFW9//3oIirLm
-         PW3d0ILXfkOqJSvOY6geD22IEgoLc6RKw86Yco+CS9Hn5iVDieXdYzxO2SMEYjkNob94
-         JZ7cuautV+hyjnicrB+/xdTlzqD6O2fF4XuZpx2x5JgoN87m44tOzXo4FiXWo4Gw6YFx
-         KCDf5yOwYVD3xOeFb/1gMm5cYypFCpX2+gTEsF7hS5CY3JaeIaP9hm/TAeFWNoG+zdlW
-         mWVg==
-X-Forwarded-Encrypted: i=1; AJvYcCUU+BmP7G0lRyFbx4cFVOl+svSkJJcFLsg+mria0ibP6e77BZJwOhJHEqIzeIF/qtuww6LuxosQvXMRVhI=@vger.kernel.org, AJvYcCV1bYRNH50ptfPc/SSyMuEIhpOlaAklDB1bSk7rE3ljeGIdujolXgMAJ3VKuzZ2xW0CYm8y9AL+6VNX@vger.kernel.org, AJvYcCVJ2R3S8Fz+FwNpglMrtqpz7IR4fGSJVI/k64rckJ6sRXQoZceiJSScnbIrZ/ulMpNouZ757XD9pJkM@vger.kernel.org, AJvYcCWIz8BXOx8byT89EKeGjQFEJMeQ4KmtfkRWGCNK8uHKLVtqCEwQUC1Vpkjzxrd1snlZZ5EoLxEifDBsr9DjxA==@vger.kernel.org, AJvYcCXTExkW0H0rsscRkNBg7hslAAhXKGXavXWyDFTMo3OYpK1CZJmXUbX5areSYD7fyEJjwI3sAncz1azN@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm+g0ZZ5QGoXkCarB2hGcEwEsH6fj0XcKrrU09hdEhWfWLVxaw
-	8O2LIh0hqoJ6p2I8W6ZiqdRC4O/caPE2Tv+elkPZS7I2LUcPM7sIpXrrWNkR
-X-Google-Smtp-Source: AGHT+IHmLcyU2g/QYq23/BS1LXLImIdoLtFZWhjKoKdQhLAsKN6dgAbD1Lvs4axCzxRcGYk1gIBSqw==
-X-Received: by 2002:a05:6902:a90:b0:e1d:13a3:87ae with SMTP id 3f1490d57ef6-e1d13a38948mr19286276.10.1725415493804;
-        Tue, 03 Sep 2024 19:04:53 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725415496; x=1726020296;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nyl9Q+BjD+2w5Z9jzpRf4cTBIglEMGm1/CmOMLsQEu8=;
+        b=cjBSxqzHIgDU/JUEhOdIbkNgtZqLHa9bVkdr9ey3n+UTKSaLPPP6/s8bdBpVwloVql
+         II4oivzia1LxJz1UxJl6z96K/xSW3AM1le9cTAwdM9z8GRpixjpExuO3Jf0xUwgwLpou
+         LpoiJb8z9sS/xslxp5kFa35myNS6TEA+MtuQNzSNV4Gyyktvq0yeUcYDjeb7ZEK5O+HT
+         +YpN63STLVm1uGw6DdEqEd66hgFR8mfy9o8VoespeJ7COmXVv/XbRbfxJK/8x/soNsch
+         EDNdExeYcB3+xupf+Q3zLioXhJ7ZnuFCDWFzUpJqeDlyojLadRxaXTDm3VNuhpmUnJCN
+         y8CA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0P4iouX8RYk/nOAWsELoMWJlGcvo1xkJX9xJsZvNTjFUoDqFrltr1gxCM1H0M3X7jJ46Tfqmzx0udYrw=@vger.kernel.org, AJvYcCVDBcgabw6NUukTMwZ4HFIxkhcarnz1c6yZSgKnjwZwfuAZcYxy6XwXVxG5BrXYfpnaTcMPRw+XChdK@vger.kernel.org, AJvYcCW+hk+ZjXIs/O58vF4ZD5eCrI0ROhyMdYO6avCRKLHCDnjd6r4ZFxoK+DwQhstFEhJM48C9oro91ccW@vger.kernel.org, AJvYcCW06uSg+uUFZCxrlXUJY8nVeRJkVKgHo4vBKNokdkViyiG72J56/36WLB53tUEUlIUrdNb5Ekb5LEFe@vger.kernel.org, AJvYcCWUff0LW7BiHGuyTha4kut0CeeaYuINfeGgyg73SUnExLyeQETsnnc3+VIVzil1kUd4Tklg+OCvX2w74xXoTA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEVGG6AkqjKDPiLJ6BRyuVp89UkQ1goQRuBK1wXrniFm+4wSw2
+	VEmZPDECl7AaYajoCuYuonpcOTM5gsFXDIpqFy1dfV1lc56fc8QTpmbQBT5+
+X-Google-Smtp-Source: AGHT+IHhwPgmK6+bzNq/nDJYLPkx7CJea9h5V2B7qgr4MM6oRNKCgFyT9AnxdCD+9l1H0o8rRpZrkQ==
+X-Received: by 2002:a05:620a:448f:b0:7a3:5f3f:c084 with SMTP id af79cd13be357-7a8041c589fmr2270022585a.30.1725415496020;
+        Tue, 03 Sep 2024 19:04:56 -0700 (PDT)
 Received: from localhost ([2607:fea8:52a3:d200::24da])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c34e6e07a4sm48499376d6.6.2024.09.03.19.04.52
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a806c4c841sm583420985a.68.2024.09.03.19.04.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 19:04:53 -0700 (PDT)
+        Tue, 03 Sep 2024 19:04:55 -0700 (PDT)
 From: Richard Acayan <mailingradian@gmail.com>
 To: Bjorn Andersson <andersson@kernel.org>,
 	Michael Turquette <mturquette@baylibre.com>,
@@ -86,10 +88,12 @@ To: Bjorn Andersson <andersson@kernel.org>,
 	linux-media@vger.kernel.org
 Cc: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
 	Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH v4 0/7] Add SDM670 camera subsystem
-Date: Tue,  3 Sep 2024 22:04:49 -0400
-Message-ID: <20240904020448.52035-9-mailingradian@gmail.com>
+Subject: [PATCH v4 1/7] dt-bindings: clock: qcom,sdm845-camcc: add sdm670 compatible
+Date: Tue,  3 Sep 2024 22:04:50 -0400
+Message-ID: <20240904020448.52035-10-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240904020448.52035-9-mailingradian@gmail.com>
+References: <20240904020448.52035-9-mailingradian@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -98,69 +102,39 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds support for the camera subsystem on the Snapdragon 670.
+The camera clocks on SDM670 and SDM845 have no significant differences
+that would require a change in the clock controller driver. The only
+difference is the clock frequency at each level of the power domains,
+which is not specified in the clock driver. There should still be a
+compatible specific to the SoC, so add the compatible for SDM670 with
+the SDM845 compatible as fallback.
 
-As of next-20240902, camss seems to be a bit broken, but the same series
-works on stable (although it is much less reliable now that the CCI clock
-frequency is not being assigned).
+Link: https://android.googlesource.com/kernel/msm/+/d4dc50c0a9291bd99895d4844f973421c047d267/drivers/clk/qcom/camcc-sdm845.c#2048
+Suggested-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Suggested-by: Konrad Dybcio <konradybcio@kernel.org>
+Link: https://lore.kernel.org/linux-arm-msm/7d26a62b-b898-4737-bd53-f49821e3b471@linaro.org
+Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+---
+ .../devicetree/bindings/clock/qcom,sdm845-camcc.yaml        | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Changes since v3 (20240819221051.31489-7-mailingradian@gmail.com):
-- add specific sdm670 compatible for camcc to dt schema and dts (1/7, 6/7)
-- pick up patch from Bryan for CCI driver (3/7)
-- stop assigning CCI frequency in dts (7/7)
-- add maxItems for sdm670 cci clocks (2/7)
-- remove empty line at top of camss dt schema (4/7)
-- move regs and reg-names up in camss dt schema (4/7)
-- move gcc and ahb clocks up in dts and dt schema (4/7, 7/7)
-- add reviewed-by from Vladimir for CCI dt-bindings patch (2/7)
-- add reviewed-by from Bryan for dts patch (7/7)
-- add reviewed-by from Krzysztof for camss dt-bindings patch (4/7)
-- add rewiew tags for camss driver patch (5/7)
-
-Changes since v2 (20240813230037.84004-8-mailingradian@gmail.com):
-- drop unnecessary assigned AXI clock frequency (5/5)
-- drop src clocks from cci (5/5)
-- add unit name, remove mmio properties from port in example dts (2/5)
-- correct the reg-names order (2/5)
-- add parent_dev_ops to csid (3/5)
-- remove CSID clocks from VFE (3/5)
-- remove AXI clock from CSIPHY (3/5)
-- change subsystem part of the commit message summary (3/5)
-- add reviewed-by (4/5)
-
-Changes since v1 (20240806224219.71623-7-mailingradian@gmail.com):
-- define dedicated resource structs/arrays for sdm670 (3/5)
-- separate camcc device tree node into its own patch (4/5)
-- specify correct dual license (2/5)
-- add include directives in dt-bindings camss example (2/5)
-- remove src clocks from dt-bindings (2/5)
-- remove src clocks from dtsi (5/5)
-- add power-domain-names to camss (5/5)
-- specify power domain names (3/5)
-- restrict cci-i2c clocks (1/5)
-- populate a commit message with hw info (2/5)
-- reword commit message (3/5)
-
-Bryan O'Donoghue (1):
-  i2c: qcom-cci: Stop complaining about DT set clock rate
-
-Richard Acayan (6):
-  dt-bindings: clock: qcom,sdm845-camcc: add sdm670 compatible
-  dt-bindings: i2c: qcom-cci: Document SDM670 compatible
-  dt-bindings: media: camss: Add qcom,sdm670-camss
-  media: qcom: camss: add support for SDM670 camss
-  arm64: dts: qcom: sdm670: add camcc
-  arm64: dts: qcom: sdm670: add camss and cci
-
- .../bindings/clock/qcom,sdm845-camcc.yaml     |   6 +-
- .../devicetree/bindings/i2c/qcom,i2c-cci.yaml |  19 ++
- .../bindings/media/qcom,sdm670-camss.yaml     | 318 ++++++++++++++++++
- arch/arm64/boot/dts/qcom/sdm670.dtsi          | 195 +++++++++++
- drivers/i2c/busses/i2c-qcom-cci.c             |   8 -
- drivers/media/platform/qcom/camss/camss.c     | 191 +++++++++++
- 6 files changed, 728 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
-
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sdm845-camcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sdm845-camcc.yaml
+index 810b852ae371..fa95c3a1ba3a 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sdm845-camcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sdm845-camcc.yaml
+@@ -20,7 +20,11 @@ allOf:
+ 
+ properties:
+   compatible:
+-    const: qcom,sdm845-camcc
++    oneOf:
++      - items:
++          - const: qcom,sdm670-camcc
++          - const: qcom,sdm845-camcc
++      - const: qcom,sdm845-camcc
+ 
+   clocks:
+     items:
 -- 
 2.46.0
 
