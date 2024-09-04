@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-6192-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6193-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39B9196BFD5
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 16:15:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F58A96C014
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 16:21:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32C0D1C24BE9
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:15:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 735FB1C24F6D
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:21:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BFD1DB94D;
-	Wed,  4 Sep 2024 14:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 663F61E0B9C;
+	Wed,  4 Sep 2024 14:17:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqJPW66I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NqUGIEeT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580651DA614;
-	Wed,  4 Sep 2024 14:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534601E1314;
+	Wed,  4 Sep 2024 14:17:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725459295; cv=none; b=HsNAApdQJQNX6Fs/qPqH2EAxg4ZDAbxG0vm4CNrSmBk8sKnmijMcOVSdyVExi6zu/fHnH0eVDhBPBioGxPMZT0vjbLzquVGZiXmRSk97Q5+ABYEwY70UbNxhEdT6gXsDzc8K4jBrbBYt1vTSU4dEwgaxyMzzaqhlVoaoTwocODc=
+	t=1725459478; cv=none; b=S17k0fc4vQLrliu0IaK2XIaMKejM2/QmUB6oOnDpCWyywh4BpH2CwNWLlHh4XSD/crL1TGlU07T8eAbsRi76P6wcN+sC4X3UidoX3omzqdC2vD7BtsDrm/rLvtTDc1zbyBgQfiYYs4SmgYaTzLG+yiJCWD0ecFLV3i6ZfMqayCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725459295; c=relaxed/simple;
-	bh=2Ss0V4B3gqh3Djf2sq8g60nY0lGcMeN+IdkPOnUIhJQ=;
+	s=arc-20240116; t=1725459478; c=relaxed/simple;
+	bh=J/8YioB2/3mAp3pQ3UcghFPKXV+gh7LzADv/1iTmgZQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qNGGobsYtF20J9wO9vn0hCSnRx5QsmYDIE4jvTqFCkkZQsUFSleOI9vQUNv/k5UUKA5xu2tKYx3UAw+t4wpHxaAXG20gBbGrV6ACYWBsz2pW5KdV4/0LrsWfaae7tVxlFwGaeV2eu35YW0h9pJNHwEDbEFp1sNU4MxDPvP41JzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iqJPW66I; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=jmuMT6BZLJBXtb+Yw97x6KBRlls5CH5C3sf9KDAM+JMs+m/iaek0WYJOoT/GvuVq8wrfSieT8ngTFIhSMXPLrepeeXZW8PB45mvoD/gNV05C917hhtgV/T0cyaY+mpsGtU12+t6BBHiQaW97XmdWDZvEAwNXIXWTqQOEITtbHgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NqUGIEeT; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-205659dc63aso29408575ad.1;
-        Wed, 04 Sep 2024 07:14:53 -0700 (PDT)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7143165f23fso5284049b3a.1;
+        Wed, 04 Sep 2024 07:17:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725459292; x=1726064092; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725459474; x=1726064274; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=plTGgq85TqC+My2Us7LwZDVrWHrQelSPxxPPRZE6+jM=;
-        b=iqJPW66IDFuPJor0J7bsAT0Nk8Uuns55k4/A+PiU8fhlV4pyZNANSz0K5Wh5l9KwnC
-         qoZPtPEgsuEhpeOv6dRLntdRMlSgszFZiWz917tVkHtMnRcwBBwSgdMlXJ1QnRYgPMfE
-         MG6tB+T2I6jcFMTnGCTrUi+PDqivHOdQPPQcCqxAFDgnSK2IYqQszJtZXiCbIdaAU+q2
-         I6tNQHUUP6GKksV9wjtuxW7C9sRnTvb8xcMp94k1D+AzqT6NUpl+XrYOOKlxioAALWjZ
-         LwfW31In44jxIVYFm+5JzjR1uIuLejzT6uzJ8CQZdUwjWcwlSX0DYVV0DhBIcyFm4vbd
-         nwag==
+        bh=kIMuklvD8MNTKO3tSiXELL8Zr3YK8FdHsyTMRJ2iD9w=;
+        b=NqUGIEeTLZcMfTRTnA5hDhGTAslQCWa+Kgf5ke9EtwfnKPp01vdMZQ7Ac/V4atqZke
+         hFmeLdifusgJiOOzTG1HTT6/Hd49SykrAIiehMjcNwrVCUg4b3RPcVMVOli92OKGmc86
+         B+/3J3iXlkdS7ezLF5oWbD/9Q0XXBDS6PsB0PKbdUPx7m2KrNFS1czok6l+a/2NJNNPJ
+         3Ve/NKSK5+Wi+DhtTkzHau3u3O2F8c8moXSEKoIqK8hzjkgWtSpGSl7LDfz3E2Y+vnRS
+         oeJdpDckpAOxgAsjSYeyte+U6p6YSXjhiUZH1VZVK383PrwoVxqqlffeZHwYOmDtgNIC
+         pNsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725459292; x=1726064092;
+        d=1e100.net; s=20230601; t=1725459474; x=1726064274;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=plTGgq85TqC+My2Us7LwZDVrWHrQelSPxxPPRZE6+jM=;
-        b=W0AWWBkhm6DcUCkyHZ072u9F1z7l3aGlTXHdpI2b0P85Lh6fC/MtYAogi34MPU2GfU
-         3yh7Pkr3jMqR6GgDdCAZ+ukPyNP9kiYcnMrbMZESX1hCR1UMwfCE8WH/K+gJSSFjXP1v
-         FOkiDQVkmK6PeP2s0+Z77ksTKrWek8wW62IWSV3VjoulbOw3MFDFva3o8Y2fQLrYuDMT
-         aPjWSYg0LMr+zDh3QiED8IV0XPw/LrXuRnYSEY2Xj9tIMdsVqvVZdzhyFC0v9J5Y/bGJ
-         Y46uht6W85ResYq9yx32PyIUYPOfWLxKKEqUsa4NqeoERitecdqyds1q3CKt+fYE0Wkt
-         O8rw==
-X-Forwarded-Encrypted: i=1; AJvYcCWDb+3uq4OauIBMyY+q8h7Oxvxz/cFpt72tTvpsVKk+s+dn7YlvioSUX/bPdpbg31eVmSruJm637S3xHw==@vger.kernel.org, AJvYcCWW2GvDSqqpgPoFYCV47YEt625FpzPkQSeiRRde6/32tQgwPPGiMIx+o71jklDqrIaG+FV8BRNjm2TG@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgQrFNeyasq3hPAnyukKCmgfnq6WqVPUFP2mymZ7ZId3VKLKU8
-	gCr+JtIQZTkuK4m88a/aDQJVr5GlEjez8zMIZBdphOJpTAO5CaH0
-X-Google-Smtp-Source: AGHT+IH9dkeJYt0ZES8dcaGSQEh/EcAPlzczePOsOYZeyBvH8XsuyXVoiyeTYzpUAgz5nFLriPtbEA==
-X-Received: by 2002:a17:902:da8c:b0:206:9818:5439 with SMTP id d9443c01a7336-206981858c4mr84057205ad.19.1725459292464;
-        Wed, 04 Sep 2024 07:14:52 -0700 (PDT)
+        bh=kIMuklvD8MNTKO3tSiXELL8Zr3YK8FdHsyTMRJ2iD9w=;
+        b=msa63bE+wJgTOhquxLEn7VVs0VhRuIsmvwlH4w+iU7+dyeBxixwTt9Xo9W3pj6/jqe
+         Sm6ydZN7CkceLLFh6SaUoPjLy1aKTMNhOCnnVoQZQS/JRBHcxeJ/HUnIt/HitQnTi5mG
+         pAQWN86PS5YjzHcn2GGy7HAx54wQ35TOJZlMNBVsP9xVtKEQJxQsX1fEZkxdBc3YEtbS
+         GYn2jWfJGexk0YUjt4oZ1efin0/sIdbwXa+77Vcz2LK5zmkJFpldZHEU7u4BbwqPpCdF
+         8RRwJZsi/j1bZToQ6b0RQ3epsDaXYf2p7GF3QDCiLC3DbO+JMiWkxhakPTeJYghZu4lU
+         sA9A==
+X-Forwarded-Encrypted: i=1; AJvYcCU3i6T2INCdaGGA2+NDyga35zHLyr8rsoL7AQ7QSlZngbV6E6KjyzYJIGlvEoysHpHGoSrynmSrIXw+Xg==@vger.kernel.org, AJvYcCWH4VwEoFR1mRhbNb3QM16D1AEKI/0YP2n/O6YLhOISgoyA014dfelpvgRjWC+LU0eH/Zf26HG9wyn0@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNQ5Td7BnJM11t3xXm61/gCs/K5djaImNpaXGtA3quMxEyXa2b
+	IGfQJDHUw2EWG+SRT0beymXFSazzIfP1hg22PkCZ9DSzPRlWbjCF
+X-Google-Smtp-Source: AGHT+IHL9QvB+ygSNvhK0kC6A+7cC7adVGXMbGLJtvCHaZNgtqCH0UbZmcoFxjgZfe8X2SwZholtTg==
+X-Received: by 2002:a05:6a21:1805:b0:1c2:94ad:1c67 with SMTP id adf61e73a8af0-1ced04bef17mr14524758637.30.1725459474455;
+        Wed, 04 Sep 2024 07:17:54 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206ae90f076sm14189375ad.7.2024.09.04.07.14.49
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7177859894csm1661311b3a.153.2024.09.04.07.17.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 07:14:51 -0700 (PDT)
+        Wed, 04 Sep 2024 07:17:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <eb7ffcbb-1e6c-448b-a09f-e10fd187a1ef@roeck-us.net>
-Date: Wed, 4 Sep 2024 07:14:49 -0700
+Message-ID: <ce8b5a3c-74fd-421c-8b2c-6670828378da@roeck-us.net>
+Date: Wed, 4 Sep 2024 07:17:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,8 +78,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next 19/19] hwmon: (nzxt-smart2) Use
- devm_hid_hw_start_and_open in nzxt_smart2_hid_probe()
+Subject: Re: [PATCH -next 17/19] hwmon: (nzxt-kraken2) Use
+ devm_hid_hw_start_and_open in kraken2_probe()
 To: Li Zetao <lizetao1@huawei.com>, jikos@kernel.org, bentiss@kernel.org,
  michael.zaidman@gmail.com, gupt21@gmail.com, djogorchock@gmail.com,
  rrameshbabu@nvidia.com, bonbons@linux-vserver.org,
@@ -89,7 +89,7 @@ To: Li Zetao <lizetao1@huawei.com>, jikos@kernel.org, bentiss@kernel.org,
 Cc: linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
  linux-hwmon@vger.kernel.org
 References: <20240904123607.3407364-1-lizetao1@huawei.com>
- <20240904123607.3407364-20-lizetao1@huawei.com>
+ <20240904123607.3407364-18-lizetao1@huawei.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -135,96 +135,85 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240904123607.3407364-20-lizetao1@huawei.com>
+In-Reply-To: <20240904123607.3407364-18-lizetao1@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 9/4/24 05:36, Li Zetao wrote:
-> Currently, the nzxt-smart2 module needs to maintain hid resources
+> Currently, the nzxt-kraken2 module needs to maintain hid resources
 > by itself. Consider using devm_hid_hw_start_and_open helper to ensure
-
-For all patches:
-
-s/Consider using/Use/
-
 > that hid resources are consistent with the device life cycle, and release
 > hid resources before device is released. At the same time, it can avoid
-> the goto-release encoding, drop the out_hw_close and out_hw_stop
+> the goto-release encoding, drop the fail_and_close and fail_and_stop
 > lables, and directly return the error code when an error occurs.
 > 
 > Signed-off-by: Li Zetao <lizetao1@huawei.com>
 > ---
->   drivers/hwmon/nzxt-smart2.c | 22 +++-------------------
->   1 file changed, 3 insertions(+), 19 deletions(-)
+>   drivers/hwmon/nzxt-kraken2.c | 23 +++--------------------
+>   1 file changed, 3 insertions(+), 20 deletions(-)
 > 
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index df6fa72a6b59..b5721a42c0d3 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -750,14 +750,10 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->   	if (ret)
->   		return ret;
->   
+> diff --git a/drivers/hwmon/nzxt-kraken2.c b/drivers/hwmon/nzxt-kraken2.c
+> index 7caf387eb144..aaaf857b42ed 100644
+> --- a/drivers/hwmon/nzxt-kraken2.c
+> +++ b/drivers/hwmon/nzxt-kraken2.c
+> @@ -158,17 +158,9 @@ static int kraken2_probe(struct hid_device *hdev,
+>   	/*
+>   	 * Enable hidraw so existing user-space tools can continue to work.
+>   	 */
 > -	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+> -	if (ret) {
+> -		hid_err(hdev, "hid hw start failed with %d\n", ret);
 > +	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_HIDRAW);
->   	if (ret)
+> +	if (ret)
 >   		return ret;
->   
-> -	ret = hid_hw_open(hdev);
-> -	if (ret)
-> -		goto out_hw_stop;
-> -
->   	hid_device_io_start(hdev);
->   
->   	init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
-> @@ -765,19 +761,10 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->   	drvdata->hwmon =
->   		hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
->   						&nzxt_smart2_chip_info, NULL);
-> -	if (IS_ERR(drvdata->hwmon)) {
-> -		ret = PTR_ERR(drvdata->hwmon);
-> -		goto out_hw_close;
 > -	}
-> +	if (IS_ERR(drvdata->hwmon))
-> +		return PTR_ERR(drvdata->hwmon);
+> -
+> -	ret = hid_hw_open(hdev);
+> -	if (ret) {
+> -		hid_err(hdev, "hid hw open failed with %d\n", ret);
+> -		goto fail_and_stop;
+> -	}
+>   
+>   	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "kraken2",
+>   							  priv, &kraken2_chip_info,
+> @@ -176,16 +168,10 @@ static int kraken2_probe(struct hid_device *hdev,
+>   	if (IS_ERR(priv->hwmon_dev)) {
+>   		ret = PTR_ERR(priv->hwmon_dev);
+>   		hid_err(hdev, "hwmon registration failed with %d\n", ret);
+> -		goto fail_and_close;
+> +		return ret;
+>   	}
 >   
 >   	return 0;
 
-	return PTR_ERR_OR_ZERO(drvdata->hwmon);
-
-Also, this can be optimized further.
-
-	struct device *hwmon;	// and drop from struct drvdata
+	struct device *hwmon_dev;	// also drop from struct kraken2_priv_data
 	...
-	hwmon = devm_hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
-						     &nzxt_smart2_chip_info, NULL);
-	
-	return PTR_ERR_OR_ZERO(hwmon);
+	hwmon_dev = devm_hwmon_device_register_with_info(...);
+	return PTR_ERR_OR_ZERO(hwmon_dev);
 
-and drop the remove function entirely.
+and drop the remove function.
 
 Thanks,
 Guenter
 
 > -
-> -out_hw_close:
+> -fail_and_close:
 > -	hid_hw_close(hdev);
-> -
-> -out_hw_stop:
+> -fail_and_stop:
 > -	hid_hw_stop(hdev);
 > -	return ret;
 >   }
 >   
->   static void nzxt_smart2_hid_remove(struct hid_device *hdev)
-> @@ -785,9 +772,6 @@ static void nzxt_smart2_hid_remove(struct hid_device *hdev)
->   	struct drvdata *drvdata = hid_get_drvdata(hdev);
+>   static void kraken2_remove(struct hid_device *hdev)
+> @@ -193,9 +179,6 @@ static void kraken2_remove(struct hid_device *hdev)
+>   	struct kraken2_priv_data *priv = hid_get_drvdata(hdev);
 >   
->   	hwmon_device_unregister(drvdata->hwmon);
+>   	hwmon_device_unregister(priv->hwmon_dev);
 > -
 > -	hid_hw_close(hdev);
 > -	hid_hw_stop(hdev);
 >   }
 >   
->   static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
+>   static const struct hid_device_id kraken2_table[] = {
 
 
