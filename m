@@ -1,201 +1,288 @@
-Return-Path: <linux-i2c+bounces-6217-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6218-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C363996CAA5
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 00:57:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE90E96CB64
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 01:53:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45C6D1F27321
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 22:57:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5265AB25DE0
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 23:53:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AEEC17920E;
-	Wed,  4 Sep 2024 22:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BC5186610;
+	Wed,  4 Sep 2024 23:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="aEnPW06e"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jzSdou/9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7911714D8
-	for <linux-i2c@vger.kernel.org>; Wed,  4 Sep 2024 22:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA63149C7B;
+	Wed,  4 Sep 2024 23:51:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725490659; cv=none; b=AaBqwvck3A3HdMdrp874j3m05oSJnbrZ3zkmVvNkjZiOx+xXGISQjnz7CuL1/cCYBQ/y0wx9qdAWrUggMK1GAFidhs2zW6hg6n5KiPaElJyZuPR4Kf3AsnzEGMITtIwuyfN4C50PT7tUVM1jNaK7aLSgfIjUuisntTa1SAvS5V8=
+	t=1725493903; cv=none; b=NftfrKXHuXMdccNVeM1lIaRM5V2hy2FONWdk/aEJmDkN+JG1sjtDdH0sM3Bl2N3XzuGbdoNrds7C2T/vmEMTl61Q4FdYd7PcFNFwUWQgODEIDtyJ5i39F/oBKiTlXv6phK94MOtF3/ZHwuFVchSqiXYrXhb8x1svs1raajFqGfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725490659; c=relaxed/simple;
-	bh=9+gChnP5+JN/xcDHFnljOqSBOGQpXqxh0GSV4CRi4i4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XF4z6D/3ogi8rxwvdiuKU5b7WgQmSAMA4tPQAnYv5lDvijRXylfpRpwhCbWB3g9lek/y4U21SkomSVFAJ9VrakHeep/cJzO8cyoxAaTFbIomOw6b/31qG5xzc81ZKQPuYeyCBBbqi8mXNAOUZklwjJlPQaYjFrYaz0BRgrMKOyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=aEnPW06e; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7a80511d206so7682185a.3
-        for <linux-i2c@vger.kernel.org>; Wed, 04 Sep 2024 15:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1725490655; x=1726095455; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k696Bg6R54WASMTi+pz+LZlGCRBSQtRYcr6+VwRcm/8=;
-        b=aEnPW06emms+sZDb7+JXwCEiPms3yPFO8GUw2UUqV9S0Cn9XMVgR7n1Fxp4HtUrsud
-         4qSLegdgDm/AEN4i1qJ+XiWJXla7PGyhRdfUhEV1nSoiswVM/z7ohrXy3/Mhwa7OxGqE
-         gtVEN53Opuif/hubhs8rehsj0k9r8FmaQPbQo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725490655; x=1726095455;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k696Bg6R54WASMTi+pz+LZlGCRBSQtRYcr6+VwRcm/8=;
-        b=psKTWRz7/QDC7INwXxOaVT74wxUIVTseQv5Zvp45yKrVAHdjCscmFwwYpm3nNCOzi0
-         Kf0JjOQhTfe3BXH5JeFY4vcgZR/H0hZwkZiKiJgEeKSsO5ODi5o0nn9OA+flgoe9dPLl
-         wRyqY6lRDabfi8noMdkhAGCj+MytEfr7Pzy9sORgbTgcZBYeB3hcVR+Vcd5kZu2uNDIe
-         koC317Z/myjW1LJgixTFW99xsMmhxqw7T1TmEnKlCibEQMawkNzjYHMCeb2L2hfXDCDc
-         SEBrCpAIAjR41t5PK49iH4eYiGEsRqNetKK2tmojNQPFoFAFLa1W4EnDSdge+agsnx1V
-         9sqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXrW7j7tMFxQRjTBo4ed36CB6MSI0FSmSj2oLwNu7itTNTgtot/Gq9/SUMiRyasl1ti6XsPDRb5Kaw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCFOq4qRFzKhdzuwYUFvm7Zj/otFlZSFZTpdr6L7BFJyekQIK2
-	geo12hX2N4MnYFszf/3IGT9YvhLYTycEqyd7i6XA5CxKTCrkBxeuM3GgkaV1K4J5tNXfa1dPnd8
-	=
-X-Google-Smtp-Source: AGHT+IFqs/XPXON9RRr/D/faxrUOJ2N5iNgPOY+nxh3JYcc58XAbSAluRxUJBZhuhoZvCRgbSqqREg==
-X-Received: by 2002:a05:620a:28d6:b0:79f:16ec:92d with SMTP id af79cd13be357-7a8a3e3c0bamr2096621185a.27.1725490655000;
-        Wed, 04 Sep 2024 15:57:35 -0700 (PDT)
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com. [209.85.219.53])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a98ef17c1bsm27271485a.26.2024.09.04.15.57.34
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 15:57:34 -0700 (PDT)
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6c35427935eso822136d6.3
-        for <linux-i2c@vger.kernel.org>; Wed, 04 Sep 2024 15:57:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXtDIYX9VMaTX5setm8NU9DikeceGfA3gnEVPlFAkVkrf+bFD2o3oxtRHyXpXudKtAxK7Yo0znscUk=@vger.kernel.org
-X-Received: by 2002:a05:6214:3da0:b0:6b7:b277:dd12 with SMTP id
- 6a1803df08f44-6c3558475afmr184722756d6.49.1725490653502; Wed, 04 Sep 2024
- 15:57:33 -0700 (PDT)
+	s=arc-20240116; t=1725493903; c=relaxed/simple;
+	bh=KdN6M0uDTjRcTutonoP706+oqdXzsVro5VbFV4XpmDo=;
+	h=Message-ID:Date:MIME-Version:Subject:CC:References:From:
+	 In-Reply-To:Content-Type; b=jHKC6ENonppsJ+Rtrge5F54PfSjcwPP5WA5WK9X2FnzMS5GJXcsvZ7zwTLsyx+zsAwxRtX5JbRkreStpLC9hSMypGKEuSVM9ZJ4KYgsw0eXniNn8ZOVB8siBhEUXhHu7U7JQiHvJWuohtHKnMdEDICtHqooYDRggK/iDoI6zZuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jzSdou/9; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484N5KDK031912;
+	Wed, 4 Sep 2024 23:51:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject; s=qcppdkim1; bh=4/l
+	hBqWBq1YTQ539+j2Ux48JjcsIdAodVI3iskgBfkg=; b=jzSdou/9Ek+6lJRwJyk
+	KhUFI7YCM1sAif6GkLWh8Wxn0VfFuFVphGUEvt9JcahSXLMijZjCgvNLVVNgWlPx
+	cEhKzNUGbRHBVBHGgBeQHTyj44y/NNChvStZEk2mDWHm1ifIGxP9tr3mWyMDxZqS
+	3kh8HBKV08jJY7bqZ1NAGGZCaXkIw4VlcA1sNKhbS6eLsDVZ6mvYp933ytSEtKl3
+	c06GSRHyJVMwF1xKAmzxlgTQi673R+qHk7kG7Xv7gkGglN/qHk4MhWcqkeCsQNda
+	76DZK+RD8kDLiZsA2fnelMLnRw0VDENjRiFiD8NosSduOPc5RgZwaXLFDYkclGQP
+	vzw==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41bt674cha-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 23:51:04 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484Np2fZ012201
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Sep 2024 23:51:02 GMT
+Received: from [10.110.102.234] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
+ 16:50:58 -0700
+Message-ID: <1732bde7-aa72-4861-aa0a-414d55f68107@quicinc.com>
+Date: Wed, 4 Sep 2024 16:50:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240904090016.2841572-1-wenst@chromium.org> <20240904090016.2841572-10-wenst@chromium.org>
-In-Reply-To: <20240904090016.2841572-10-wenst@chromium.org>
-From: Doug Anderson <dianders@chromium.org>
-Date: Wed, 4 Sep 2024 15:57:18 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UGOz3Xzg7reJKP=tA1LqTxszv5w-CL9krmoXQtXdJLaQ@mail.gmail.com>
-Message-ID: <CAD=FV=UGOz3Xzg7reJKP=tA1LqTxszv5w-CL9krmoXQtXdJLaQ@mail.gmail.com>
-Subject: Re: [PATCH v6 09/12] i2c: of-prober: Add regulator support
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	linux-i2c@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/21] arm64: qcom: Introduce SA8255p Ride platform
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+Content-Language: en-US
+From: Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <20240903220240.2594102-1-quic_nkela@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: mGB5siCCyWRh_cGjj_b1FVY16FVhkQZJ
+X-Proofpoint-GUID: mGB5siCCyWRh_cGjj_b1FVY16FVhkQZJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-04_21,2024-09-04_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ bulkscore=0 mlxscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 lowpriorityscore=0 spamscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409040180
 
-Hi,
+Hi All,
 
-On Wed, Sep 4, 2024 at 2:01=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> wr=
-ote:
+I have decided to split this series into multiple smaller ones as follows:
+
+- Patches 1/21 - 11/21, 13/21 - 14/21, 19/21: will split them to each
+subsystem specific patch sets.
+
+- Patches 15/21 - 18/21: will come in separate series along with QUPs
+driver changes.
+
+- Patches 20/21 - 21/21: will come in separate series after above two
+sets are accepted.
+
+Thanks,
+
+-Nikunj
+
+
+On 9/3/2024 3:02 PM, Nikunj Kela wrote:
+> This series enables the support for SA8255p Qualcomm SoC and Ride
+> platform. This platform uses SCMI power, reset, performance, sensor
+> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
+> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
+> transport driver.
 >
-> This adds regulator management to the I2C OF component prober.
-> Components that the prober intends to probe likely require their
-> regulator supplies be enabled, and GPIOs be toggled to enable them or
-> bring them out of reset before they will respond to probe attempts.
-> GPIOs will be handled in the next patch.
+> Multiple virtual SCMI instances are being used to achieve the parallelism.
+> SCMI platform stack runs in SMP enabled VM hence allows platform to service
+> multiple resource requests in parallel. Each device is assigned its own
+> dedicated SCMI channel and Tx/Rx doorbells.
 >
-> Without specific knowledge of each component's resource names or
-> power sequencing requirements, the prober can only enable the
-> regulator supplies all at once, and toggle the GPIOs all at once.
-> Luckily, reset pins tend to be active low, while enable pins tend to
-> be active high, so setting the raw status of all GPIO pins to high
-> should work. The wait time before and after resources are enabled
-> are collected from existing drivers and device trees.
+> Resource operations are grouped together to achieve better abstraction
+> and to reduce the number of requests being sent to SCMI platform(server)
+> thus improving boot time KPIs. This design approach was presented during
+> LinaroConnect 2024 conference[1].
 >
-> The prober collects resources from all possible components and enables
-> them together, instead of enabling resources and probing each component
-> one by one. The latter approach does not provide any boot time benefits
-> over simply enabling each component and letting each driver probe
-> sequentially.
+> Architecture:
+> ------------
+>                                                           +--------------------+
+>                                                           |   Shared Memory    |
+>                                                           |                    |
+>                                                           | +----------------+ |                +----------------------------------+
+>      +----------------------------+                     +-+->  ufs-shmem     <-+---+            |            Linux VM              |
+>      |        Firmware VM         |                     | | +----------------+ |   |            |   +----------+   +----------+    |
+>      |                            |                     | |                    |   |            |   |   UFS    |   |   PCIe   |    |
+>      | +---------+ f +----------+ |                     | |                    |   |            |   |  Driver  |   |  Driver  |    |
+>      | |Drivers  <---+  SCMI    | |        e            | |         |          |   |            |   +--+----^--+   +----------+    |
+>      | | (clks,  | g | Server   +-+---------------------+ |                    |   |            |      |    |                      |
+>      | |  vreg,  +--->          | |        h              |         |          |  b|k           |     a|   l|                      |
+>      | |  gpio,  |   +--^-----+-+ |                       |                    |   |            |      |    |                      |
+>      | |  phy,   |      |     |   |                       |         |          |   |            |  +---v----+----+  +----------+   |
+>      | |  etc.)  |      |     |   |                       |                    |   +------------+--+  UFS SCMI   |  | PCIe SCMI|   |
+>      | +---------+      |     |   |                       |                    |                |  |  INSTANCE   |  | INSTANCE |   |
+>      |                  |     |   |                       |  +---------------+ |                |  +-^-----+-----+  +----------+   |
+>      |                  |     |   |                       |  |  pcie-shmem   | |                |    |     |                       |
+>      +------------------+-----+---+                       |  +---------------+ |                +----+-----+-----------------------+
+>                         |     |                           |                    |                     |     |
+>                         |     |                           +--------------------+                     |     |
+>                        d|IRQ i|HVC                                                                  j|IRQ c|HVC
+>                         |     |                                                                      |     |
+>                         |     |                                                                      |     |
+> +-----------------------+-----v----------------------------------------------------------------------+-----v------------------------------+
+> |                                                                                                                                         |
+> |                                                                                                                                         |
+> |                                                                                                                                         |
+> |                                                               HYPERVISOR                                                                |
+> |                                                                                                                                         |
+> |                                                                                                                                         |
+> +-----------------------------------------------------------------------------------------------------------------------------------------+
 >
-> The prober will also deduplicate the resources, since on a component
-> swap out or co-layout design, the resources are always the same.
-> While duplicate regulator supplies won't cause much issue, shared
-> GPIOs don't work reliably, especially with other drivers. For the
-> same reason, the prober will release the GPIOs before the successfully
-> probed component is actually enabled.
+>         +--------+   +--------+                                                                         +----------+  +-----------+
+>         | CLOCK  |   |  PHY   |                                                                         |   UFS    |  |   PCIe    |
+>         +--------+   +--------+                                                                         +----------+  +-----------+
 >
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+>
+> This series is based on next-20240903.
+>
+> [1]: https://resources.linaro.org/en/resource/wfnfEwBhRjLV1PEAJoDDte
+>
 > ---
-> Changes since v5:
-> - Split of_regulator_bulk_get_all() return value check and explain
->   "ret =3D=3D 0" case
-> - Switched to of_get_next_child_with_prefix_scoped() where applicable
-> - Used krealloc_array() instead of directly calculating size
-> - copy whole regulator array in one memcpy() call
-> - Drop "0" from struct zeroing initializer
-> - Split out regulator helper from i2c_of_probe_enable_res() to keep
->   code cleaner when combined with the next patch
-> - Added options for customizing power sequencing delay
-> - Rename i2c_of_probe_get_regulator() to i2c_of_probe_get_regulators()
-> - Add i2c_of_probe_free_regulator() helper
+> Changes in v2:
+>   - Patch 1/21 - 11/21
+>     - Added Reviewed-by tag
 >
-> Changes since v4:
-> - Split out GPIO handling to separate patch
-> - Rewrote using of_regulator_bulk_get_all()
-> - Replaced "regulators" with "regulator supplies" in debug messages
+>   - Patch 12/21
+>     - Already applied in the maintainers tree
 >
-> Changes since v3:
-> - New patch
+>   - Patch 13/21
+>     - Modified subject line
+>     - Fixed schema to include fallback
 >
-> This change is kept as a separate patch for now since the changes are
-> quite numerous.
-> ---
->  drivers/i2c/i2c-core-of-prober.c | 154 +++++++++++++++++++++++++++++--
->  include/linux/i2c.h              |  10 +-
->  2 files changed, 155 insertions(+), 9 deletions(-)
-
-I never jumped back into looking at this since you started sending new
-versions last month (sorry), but I finally did...
-
-At a high level, I have to say I'm not really a fan of the "reach into
-all of the devices, jam their regulators on, force their GPIOs high,
-and hope for the best" approach. It just feels like it's going to
-break at the first bit of slightly different hardware and cause power
-sequence violations left and right. If nothing else, regulators often
-need delays between when one regulator is enabled and the next. There
-may also be complex relationships between regulators and GPIOs, GPIOs,
-GPIOs that need to be low, or even GPIO "toggle sequences" (power on
-rail 1, wait 1 ms, assert reset, wait 10 ms, deassert reset, power on
-rail 2).
-
-IMO the only way to make this reliable is to have this stuff be much
-less automatic and much more driven by the board.
-
-I think that, in general, before the board prober checks i2c address
-then the prober should be in charge of setting up pinctrl and turning
-on regulators / GPIOs. Given that the same regulator(s) and GPIO(s)
-may be specified by different children, the prober will just have to
-pick one child to find those resources. It should have enough
-board-specific knowledge to make this choice. Then the prober should
-turn them on via a board-specific power-on sequence that's known to
-work for all the children. Then it should start probing.
-
-I think there can still be plenty of common helper functions that the
-board-specific prober can leverage, but overall I'd expect the actual
-power-on and power-off code to be board-specific.
-
-If many boards have in common that we need to turn on exactly one
-regulator + one GPIO, or just one regulator, or whatever then having a
-helper function that handles these cases is fine. ...but it should be
-one of many choices that a board proper could use and not the only
-one.
-
--Doug
+>   - Patch 14/21
+>     - Added constraints
+>
+>   - Patch 15/21
+>     - Modified schema to remove useless text
+>    
+>   - Patch 16/21
+>     - Modified schema formatting
+>     - Amended schema definition as advised
+>
+>   - Patch 17/21
+>     - Moved allOf block after required
+>     - Fixed formatting
+>     - Modified schema to remove useless text
+>
+>   - Patch 18/21
+>     - Fixed clock property changes
+>
+>   - Patch 19/21
+>     - Fixed scmi nodename pattern
+>
+>   - Patch 20/21
+>     - Modified subject line and description
+>     - Added EPPI macro
+>
+>   - Patch 21/21
+>     - Removed scmichannels label and alias
+>     - Modified scmi node name to conform to schema
+>     - Moved status property to be the last one in scmi instances
+>     - Changed to lower case for cpu labels
+>     - Added fallback compatible for tlmm node
+>
+> Nikunj Kela (21):
+>   dt-bindings: arm: qcom: add the SoC ID for SA8255P
+>   soc: qcom: socinfo: add support for SA8255P
+>   dt-bindings: arm: qcom: add SA8255p Ride board
+>   dt-bindings: firmware: qcom,scm: document support for SA8255p
+>   dt-bindings: mailbox: qcom-ipcc: document the support for SA8255p
+>   dt-bindings: watchdog: qcom-wdt: document support on SA8255p
+>   dt-bindings: crypto: qcom,prng: document support for SA8255p
+>   dt-bindings: interrupt-controller: qcom-pdc: document support for
+>     SA8255p
+>   dt-bindings: soc: qcom: aoss-qmp: document support for SA8255p
+>   dt-bindings: arm-smmu: document the support on SA8255p
+>   dt-bindings: mfd: qcom,tcsr: document support for SA8255p
+>   dt-bindings: thermal: tsens: document support on SA8255p
+>   dt-bindings: pinctrl: Add SA8255p TLMM
+>   dt-bindings: cpufreq: qcom-hw: document support for SA8255p
+>   dt-bindings: i2c: document support for SA8255p
+>   dt-bindings: spi: document support for SA8255p
+>   dt-bindings: serial: document support for SA8255p
+>   dt-bindings: qcom: geni-se: document support for SA8255P
+>   dt-bindings: firmware: arm,scmi: allow multiple virtual instances
+>   dt-bindings: arm: GIC: add ESPI and EPPI specifiers
+>   arm64: dts: qcom: Add reduced functional DT for SA8255p Ride platform
+>
+>  .../devicetree/bindings/arm/qcom.yaml         |    6 +
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     |   16 +
+>  .../devicetree/bindings/crypto/qcom,prng.yaml |    1 +
+>  .../bindings/firmware/arm,scmi.yaml           |    2 +-
+>  .../bindings/firmware/qcom,scm.yaml           |    2 +
+>  .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |   33 +-
+>  .../interrupt-controller/qcom,pdc.yaml        |    1 +
+>  .../devicetree/bindings/iommu/arm,smmu.yaml   |    3 +
+>  .../bindings/mailbox/qcom-ipcc.yaml           |    1 +
+>  .../devicetree/bindings/mfd/qcom,tcsr.yaml    |    1 +
+>  .../bindings/pinctrl/qcom,sa8775p-tlmm.yaml   |    8 +-
+>  .../serial/qcom,serial-geni-qcom.yaml         |   53 +-
+>  .../bindings/soc/qcom/qcom,aoss-qmp.yaml      |    1 +
+>  .../bindings/soc/qcom/qcom,geni-se.yaml       |   45 +-
+>  .../bindings/spi/qcom,spi-geni-qcom.yaml      |   60 +-
+>  .../bindings/thermal/qcom-tsens.yaml          |    1 +
+>  .../bindings/watchdog/qcom-wdt.yaml           |    1 +
+>  arch/arm64/boot/dts/qcom/Makefile             |    1 +
+>  arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi   |   80 +
+>  arch/arm64/boot/dts/qcom/sa8255p-ride.dts     |  148 +
+>  arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi    | 2312 ++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sa8255p.dtsi         | 2405 +++++++++++++++++
+>  drivers/soc/qcom/socinfo.c                    |    1 +
+>  include/dt-bindings/arm/qcom,ids.h            |    1 +
+>  .../interrupt-controller/arm-gic.h            |    2 +
+>  25 files changed, 5169 insertions(+), 16 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-pmics.dtsi
+>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-ride.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p-scmi.dtsi
+>  create mode 100644 arch/arm64/boot/dts/qcom/sa8255p.dtsi
+>
+>
+> base-commit: 6804f0edbe7747774e6ae60f20cec4ee3ad7c187
 
