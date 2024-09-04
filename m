@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-6097-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6098-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21B0996AE45
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 04:05:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10AEF96AE4A
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 04:05:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4444286A43
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 02:05:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43C3A1C2360F
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 02:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE5A354645;
-	Wed,  4 Sep 2024 02:05:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C56BC58ABC;
+	Wed,  4 Sep 2024 02:05:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BdlPgh+3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Joja58JA"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F4B44374;
-	Wed,  4 Sep 2024 02:04:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1864055769;
+	Wed,  4 Sep 2024 02:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725415500; cv=none; b=JuFb+uIxV4p77VsUSQO9VISrkTqBOB8uYxHLlVMMTpcmCVihqMd/n51g4dM6/IfaswUPQXMbeQVQdFW/CRtgTucl4geG5oujOF2qVXKfIyq0oE94g8D5ELWENcmTYcwywvESXHl1hOxEdyqGK3HUPZT+T7jFnJyAr9e3+NpdVdU=
+	t=1725415502; cv=none; b=au3lFPyBpQ1Xv0WPrxajW8OAD0PnxYPqanOHnXi0Ni6un5smdUM+q5TAF6l96nO1z9tUtBREBq5y0HjKWF0RmwvV0cAQfymXYs+eQIMDrkgfJohlO5zvSTiceBPmcNV+zL8A/3M8YnCuj24Fl1Vn8g2TMAPrVYVTAiVJsPVySs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725415500; c=relaxed/simple;
-	bh=80F2LjQUmJJWKZ21PkiJFWSKa9VSL6kZwTcqgz0h7QU=;
+	s=arc-20240116; t=1725415502; c=relaxed/simple;
+	bh=pUpq8UsXqLezGna/TEyJ9fymabJ0PAxI/7KbnXUIwTY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YKcm+TwclCAvjvXmbRaw3Rk70G3EjKbZ9RNAy1NsgVkJpRFETuxIJu44QsVzeH3Idq2bVGhwJJjUF9rCNhncf6lop0/r+eeS22v1PatAn4Ucs4mX3P2rboccJYLiSerpxJV6jQ+Ig1kUSmxtY0nRC2l73zEG/O1xBFcssiNAhq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BdlPgh+3; arc=none smtp.client-ip=209.85.217.48
+	 MIME-Version; b=RLBvFBrTbNNrQsfERhHexDUwuw6XrSNTWWotAyUH5zmNq6FPOTj+785DDBYFDsYuX04vcivfxEb8Q6nvOZbWNZCIQtkEoFM67bHsL7dLOsd59M6hflnIumDFcG4m/tuetmoScHeADH1HW/knXillBsLZvFFGgcUKPpWnqWcK778=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Joja58JA; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-498d7c77e91so2006559137.0;
-        Tue, 03 Sep 2024 19:04:59 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-457ce5fda1aso18256901cf.1;
+        Tue, 03 Sep 2024 19:05:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725415498; x=1726020298; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725415500; x=1726020300; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nbg9GpYaaGVz68lQk4MTu+zQF7Py/vg+LZiU0gYawY8=;
-        b=BdlPgh+3fx7lmK+TbT72Pu+g7vv4ZUw8TG4aQz+wTiwsTBB6CKHwXOvrBKsAnqCjf/
-         NC9T4PYUBM6ukOqxQwnGIllpSDQiqzBSianPbkHg26YRKb3i7WSJ/oXOcfRTmjNog018
-         VaNMMxY/i7++2HKHGk0qvRvYxWov4yPYEIevrYpNo70UERE6a6mtXmDEcDApGsgBNBGz
-         KCR+WsbcdY+umboa8wDk+r/bFep5+XzQB3HdpqsoXKe9l+BfIarqXnhR6mxYzrx//2wZ
-         D3x+tYaJhelbF1WA4i6gHs7tMmcedbsZdVsWnHjF/f/w65++YkS5MgMrF6+JVGGNOF2J
-         qGZg==
+        bh=zyQAdLSFbiT04JpmWn5P5vj4/UQ+i4Gu5Pn5Akf8UfE=;
+        b=Joja58JAcyAd4TfFlCNIXJqtfHJ6jpXbFO83aeX/JBZiTBjMzYyrUU/pnh7HQEIhk4
+         7wyYEJ4U96Da4wj6vOz43IgR2U96aTsgJGcb6q+NzAjBywlgLvjcdSPEaz8LvAFs9tPb
+         N+Mu3gbm1cIUY20V94SpHVsIq1mVMiRdzASvN8P/c1vfojjLe2AIXYqVyI45EohmXBRP
+         gCcnXNtJhztQatIyp9p9sQbYas5yAML+pjY4IBcuXbjsPDNz6xETloWZmEfkkJy8IkEq
+         yqa925tEbQvTkd68vz5O9/41vw8QhXwfkPNLd2NzDhb9VZR+rtqeP8jpji7dMRuCd3SU
+         1D/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725415498; x=1726020298;
+        d=1e100.net; s=20230601; t=1725415500; x=1726020300;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nbg9GpYaaGVz68lQk4MTu+zQF7Py/vg+LZiU0gYawY8=;
-        b=dKTiWq3ifUsjMxQ8TX3iVpYsVCuVpNzUxaV64KolgqGY9Vq2fHlAL7L15xlJkXS8Mt
-         Z6K/mvNfKTM+E3QyrI6cLNjfyt2nac5SqrufiZjH+NYQTY0rczeOrf/dGBqogRuRYBxG
-         Ryd8GUOXtFKQswG0np7d5nkaT2oyQiff+lWaWMBco1kQ0HficLMRTovBUGfaz+WCBy57
-         YQShLUKL86l+IsYok5UJesZed1zgFkgaKAJtBj491hrZ++X13jxZFdJC5b9615E8gTh1
-         /RVYK4XT8ez9/cju9XvItzNNIghCAm1RYyLy7TWz6kvzRXxzVgKgRwyLDvUuMXcttHfi
-         S0yw==
-X-Forwarded-Encrypted: i=1; AJvYcCU03pzpyPBtHwplaPIlEFlPMkj89OUBLzwQAOfdrDuP6XRxep9bgoaMsKIuBmICDy3WKt92Ncc2uozaohFrhA==@vger.kernel.org, AJvYcCVh1GyPPrzVczhumwXjofUB7LjGK6G7t6AfzccdGOyei5+zbd/ZkZLn8ndzZFFeHVWik4To2Onq/LpFrzE=@vger.kernel.org, AJvYcCVlYt3gBnGcb+re8TX7iru+Rv9UY23Wa7+LfH9sJjVXU9palSzb/sbuUH58VTQSjBTO/uvISPoRL9IV@vger.kernel.org, AJvYcCVt+k5VwtXj1kKKTxgz/DzNzG/GumHa7NX2hWXZQuwoLoIlxhSFMdy33vyj1EMzokdCsjSfrI+D45s1@vger.kernel.org, AJvYcCXGwbbZAkC469lX7y0fet47UKkd91NEVNItyfQS0WhmHj9dyqPzbKhge59/XC/1JR0MEFqjD68LMIvC@vger.kernel.org
-X-Gm-Message-State: AOJu0YwusOVP472vKms2hcBcqrc23AmtvdtzQWejXXfaP8smYD0m1J4c
-	os6UGMQB3pLC72X/wMsgHROps0U6YdIMcV9rJpGY9mZ15kWc9mZI
-X-Google-Smtp-Source: AGHT+IEv+N14ikL5WeAvbB/4lNDQ0RmekQgY8A2x3JQw+E7HX4AZfuIR+iBBt6XCV5kf/w5E4kO8iQ==
-X-Received: by 2002:a05:6102:3ec3:b0:492:a11f:a878 with SMTP id ada2fe7eead31-49ba8a8b6a3mr6804808137.23.1725415498005;
-        Tue, 03 Sep 2024 19:04:58 -0700 (PDT)
+        bh=zyQAdLSFbiT04JpmWn5P5vj4/UQ+i4Gu5Pn5Akf8UfE=;
+        b=Bo4UtOZVbGouKeXhB+OVb5nh5P61MK57q/QWGXL+k4WaVMGw8tWHlNzuGU8wSv+OAQ
+         sY6UT562i0v94nhPnynjUUoJuwHksM7wJ+cdZPUrXqh2WT2tmYNhwGtkwtjyqfbHcQHU
+         YC7/jyaeTOx9xcbNkQef44uulYq57ykccFkFKopCojm5AbP+l9fNEWdhgfu779h/Y2J6
+         l4bsS8HWYFZMfgZI4B2hJ4JaV8L28yaS3jPQlT51EJQDer6AhvIwp47Ll7Zpd7ue+oiv
+         RuxrzrQtgViTcrzbu7uHD/QqBKsEY6L5UAIn+MJ2K1vrXzV6IyCv+qpcfxro1tbdTA2e
+         +1cA==
+X-Forwarded-Encrypted: i=1; AJvYcCUdFvPCWz1V0jL4mkbyOvX2E3voKtq33/21niOF6JlD3NSNFdo3/qgQzkyJdAp4UIb6rRqx3x4Pe81e@vger.kernel.org, AJvYcCVOi8F8CfCtLRr76Hx28QE68HJ6zRfvqDTPzF9a5+FlLffjHeJULGv8D1650T0iG6Vkx/Ug7JsjOMWC@vger.kernel.org, AJvYcCVRfEEF2Y9zt2t2O5FB2AZ4ycWySL9Gl0cLMAxlufAinlEnNaLZEMD6ZfpWLRMaIDaLqyv13dcj+uUN@vger.kernel.org, AJvYcCVml9XzJA8A8xU1qNTUQ5To6ncpAAkAgy90tBvKDqCVoZw/RMwrJTA9Qa+aeTklWHMq+ZGIuTM1QPYREYk=@vger.kernel.org, AJvYcCXP+HHf4RXJ7ccAnazhnaEPND9ee24hId5x1AE5lb+kDyc7Tr34Em6J3RveM1RfSSgjhi5kBcw4iReLVEAs5Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHKCRxIdD8l7yBng7icDoznLLvKJK3QPLJ0YKYTeWP7UAOrPdH
+	j/8aXWd+UIZjo6jIKYDszWB00egn/9j8AG776P5i9V+5WySKmUer
+X-Google-Smtp-Source: AGHT+IEcB9Nkptpf7aJS2Wv07l2GIS4ZSjmqFDlo0KAZt831u7HbQ/D9UOdCjuh/bXzTwN9NbCzhHQ==
+X-Received: by 2002:ac8:5793:0:b0:457:c593:50b5 with SMTP id d75a77b69052e-457c5935305mr153522051cf.30.1725415499884;
+        Tue, 03 Sep 2024 19:04:59 -0700 (PDT)
 Received: from localhost ([2607:fea8:52a3:d200::24da])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a806d61c77sm582969985a.109.2024.09.03.19.04.57
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45682d9573dsm55060981cf.84.2024.09.03.19.04.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 19:04:57 -0700 (PDT)
+        Tue, 03 Sep 2024 19:04:59 -0700 (PDT)
 From: Richard Acayan <mailingradian@gmail.com>
 To: Bjorn Andersson <andersson@kernel.org>,
 	Michael Turquette <mturquette@baylibre.com>,
@@ -88,9 +88,9 @@ To: Bjorn Andersson <andersson@kernel.org>,
 	linux-media@vger.kernel.org
 Cc: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
 	Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH v4 2/7] dt-bindings: i2c: qcom-cci: Document SDM670 compatible
-Date: Tue,  3 Sep 2024 22:04:51 -0400
-Message-ID: <20240904020448.52035-11-mailingradian@gmail.com>
+Subject: [PATCH v4 3/7] i2c: qcom-cci: Stop complaining about DT set clock rate
+Date: Tue,  3 Sep 2024 22:04:52 -0400
+Message-ID: <20240904020448.52035-12-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240904020448.52035-9-mailingradian@gmail.com>
 References: <20240904020448.52035-9-mailingradian@gmail.com>
@@ -102,53 +102,48 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The CCI on the Snapdragon 670 is the interface for controlling camera
-hardware over I2C. Add the compatible so it can be added to the SDM670
-device tree.
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+It is common practice in the downstream and upstream CCI dt to set CCI
+clock rates to 19.2 MHz. It appears to be fairly common for initial code to
+set the CCI clock rate to 37.5 MHz.
+
+Applying the widely used CCI clock rates from downstream ought not to cause
+warning messages in the upstream kernel where our general policy is to
+usually copy downstream hardware clock rates across the range of Qualcomm
+drivers.
+
+Drop the warning it is pervasive across CAMSS users but doesn't add any
+information or warrant any changes to the DT to align the DT clock rate to
+the bootloader clock rate.
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Link: https://lore.kernel.org/linux-arm-msm/20240824115900.40702-1-bryan.odonoghue@linaro.org
+Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 ---
- .../devicetree/bindings/i2c/qcom,i2c-cci.yaml | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/i2c/busses/i2c-qcom-cci.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-index c33ae7b63b84..b4450cbba3b2 100644
---- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-@@ -27,6 +27,7 @@ properties:
-           - enum:
-               - qcom,sc7280-cci
-               - qcom,sc8280xp-cci
-+              - qcom,sdm670-cci
-               - qcom,sdm845-cci
-               - qcom,sm6350-cci
-               - qcom,sm8250-cci
-@@ -138,6 +139,24 @@ allOf:
-             - const: cci
-             - const: camss_ahb
+diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
+index 414882c57d7f..99e4305a3373 100644
+--- a/drivers/i2c/busses/i2c-qcom-cci.c
++++ b/drivers/i2c/busses/i2c-qcom-cci.c
+@@ -602,14 +602,6 @@ static int cci_probe(struct platform_device *pdev)
+ 		}
+ 	}
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sdm670-cci
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 4
-+          maxItems: 4
-+        clock-names:
-+          items:
-+            - const: camnoc_axi
-+            - const: soc_ahb
-+            - const: cpas_ahb
-+            - const: cci
-+
-   - if:
-       properties:
-         compatible:
+-	if (cci_clk_rate != cci->data->cci_clk_rate) {
+-		/* cci clock set by the bootloader or via assigned clock rate
+-		 * in DT.
+-		 */
+-		dev_warn(dev, "Found %lu cci clk rate while %lu was expected\n",
+-			 cci_clk_rate, cci->data->cci_clk_rate);
+-	}
+-
+ 	ret = cci_enable_clocks(cci);
+ 	if (ret < 0)
+ 		return ret;
 -- 
 2.46.0
 
