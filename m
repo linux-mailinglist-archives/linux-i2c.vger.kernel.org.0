@@ -1,63 +1,63 @@
-Return-Path: <linux-i2c+bounces-6170-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6168-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5706796BD30
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:55:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3785996BCF4
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:49:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01C971F23EEE
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 12:55:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E828C280D83
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 12:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B089F1DC070;
-	Wed,  4 Sep 2024 12:52:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BC61D9D95;
+	Wed,  4 Sep 2024 12:49:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pVerrnM/"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CIhWxk6F"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AF71D9337;
-	Wed,  4 Sep 2024 12:52:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7081D9345;
+	Wed,  4 Sep 2024 12:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725454356; cv=none; b=ppT2mymD125xQg8CtCVAKN0xEkty9tiabkcnlA3znIAjVv6xLBUJgi/Yzy4oLgjrcG3iSu6N9WKEZIjswYaFcsm2mJ9ttTRkwtynXYmWCIbwG7bocvjzxjUFqM/wjnsGiaYDRgS61q9bRummN7pQMkNWTkC5wX3J/7gy4bu89K0=
+	t=1725454169; cv=none; b=OQd+RVTEqP58RivJLrv/j+HyspRdBOHSZgbdMfXNKPLveaiWrVOVsZJrfu/1Mb0pe80BWVHqCefAesSpHzatrU01WCbN/f5ID+kC8MPkGvW14nZ2tw/Mb1L5wqCsdge7YbTsqiqcjZc4ZbWqcAg+u7gUqrnluPiMWGDLafLvraU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725454356; c=relaxed/simple;
-	bh=2FI7kUugQ8AZNyDv48uoku3rUnL9chur7kuEfnt2whs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=kGU7+VBqHOpzdcvjBhtRMYO0hvjtI118/zBAydiJ0J8DSPh8igXl7jaS5+XXsxsstObFynMsoCcqVclwYR/xTSj6jRfCTEWSnccFrw3/ydvGYN4mg9ug/pI05RP6KUxbBvMS6wByopRJHw21DL9AGdxpI0hcNsBqG5+FQoAHdWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pVerrnM/; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1725454169; c=relaxed/simple;
+	bh=azGb5AfJAgiTEYDuQyHOzUW0J1SqZRGExsvO7T/TmwE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gDcO4ceqHCD3Pk/O0wpENLXj7iQUPolfR0r7NCrD+2FIgfirhMPLjNm5pLd8oAQETWJ4WT02IZPuSsMMaa8C4KI9NunJkAqiCD0+tt3wTWDmNcU46oRMgqolGbEV88L6fxbk5Wn23EpFjCerKGVhh6fy2dcw9tClVl+NLR7Q3TI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CIhWxk6F; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4849hvk9031157;
-	Wed, 4 Sep 2024 12:45:10 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 484AQ995011042;
+	Wed, 4 Sep 2024 12:48:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	2FI7kUugQ8AZNyDv48uoku3rUnL9chur7kuEfnt2whs=; b=pVerrnM/J4KZjcOE
-	/hnl/13e5yz0GENRYaQ/u2vhLTLsMLqlEhq6CeHU7KYupbYeO3csiuFcSXQZhvvs
-	hSj8JHX7d6OPemM1nwFnWy6ww1vxL56TOVKNxxCgr4aAutdr21eKEmkDLB+IS+OQ
-	1M2NtoSf4ZHgu2sqH+vuLlfyXulXDI4Ae0bQ5IFkfOlUJ5wIGI8GkD0vnwhcmBDG
-	9s4fMeweWXqwlDly96iTh/AAhbPEBnmTV0mgHKhvFDNI1nyLDK4ojV7dNo0cO120
-	rzrC9eA9zHXe7ooiOh7/IdSinlBK50h7cgPjPT/lx016nCtQK8pQB2U/xI/MIkoG
-	tHxrng==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41bvbkjkq2-1
+	drXNeLYBuC6sbfU/KpueXIJR614bjNyR90QeHlTxI98=; b=CIhWxk6FDSFZjc6U
+	s4yNP2NWiicy4BWh7FRdjAM1oGV5bEt5Cix1X8r5M+OOVCWAuWgEd7suY3ezFo75
+	lxx5TCCUNGtt+po2nNu6u3emICh526eLcsAtblWwAa+LxwNx+3uJ+MGxC20NdemZ
+	OP1vSagT5NOtB+pxmifksCkjEX/ZYr7hBqDRRZOnO8c2dQyrrPPSZz6V9mbhfACA
+	tbBotviD2HUeppvyVPo9GVi4eOouGm94No4AfUSBb8YyGK690uiU0Oq1GoSCB+7T
+	ACKVEoolrynf+BenOfVGkdKS6JR1UZgBb0h5oPXadNEVvYhKVo61LRcYF/2Dy2Mn
+	LCpPRQ==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41buxfak5t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Sep 2024 12:45:10 +0000 (GMT)
+	Wed, 04 Sep 2024 12:48:41 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484Cj9hC013102
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 484Cmdt9028666
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 4 Sep 2024 12:45:09 GMT
+	Wed, 4 Sep 2024 12:48:39 GMT
 Received: from [10.110.120.207] (10.80.80.8) by nasanex01b.na.qualcomm.com
  (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Sep 2024
- 05:45:05 -0700
-Message-ID: <24d4676f-4385-406d-9728-54afc3144e17@quicinc.com>
-Date: Wed, 4 Sep 2024 05:45:05 -0700
+ 05:48:36 -0700
+Message-ID: <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
+Date: Wed, 4 Sep 2024 05:48:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,17 +65,15 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 15/21] dt-bindings: i2c: document support for SA8255p
+Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
 Content-Language: en-US
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Krzysztof Kozlowski
-	<krzk@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <sudeep.holla@arm.com>, <andi.shyti@kernel.org>, <tglx@linutronix.de>,
-        <will@kernel.org>, <robin.murphy@arm.com>, <joro@8bytes.org>,
-        <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <joro@8bytes.org>, <jassisinghbrar@gmail.com>, <lee@kernel.org>,
         <linus.walleij@linaro.org>, <amitk@kernel.org>,
         <thara.gopinath@gmail.com>, <broonie@kernel.org>,
         <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
@@ -87,44 +85,112 @@ To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
         <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
         <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_psodagud@quicinc.com>,
-        Praveen Talari
-	<quic_ptalari@quicinc.com>
+        <quic_psodagud@quicinc.com>, Praveen Talari <quic_ptalari@quicinc.com>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-16-quic_nkela@quicinc.com>
- <7fc1e4c3-ca09-4a0a-b072-0c4f1d21e44f@kernel.org> <ZtgSd_SLndvLLVYF@shikoro>
+ <20240903220240.2594102-17-quic_nkela@quicinc.com>
+ <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
 From: Nikunj Kela <quic_nkela@quicinc.com>
-In-Reply-To: <ZtgSd_SLndvLLVYF@shikoro>
+In-Reply-To: <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GfWhUZz5Jq0_pwPHu9T0QF37Le3YywI6
-X-Proofpoint-GUID: GfWhUZz5Jq0_pwPHu9T0QF37Le3YywI6
+X-Proofpoint-GUID: 7EhcKdCr4xy2lalYszDfkLbRKP5Nk-Ng
+X-Proofpoint-ORIG-GUID: 7EhcKdCr4xy2lalYszDfkLbRKP5Nk-Ng
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-04_10,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
- impostorscore=0 malwarescore=0 bulkscore=0 spamscore=0 clxscore=1011
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409040096
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ adultscore=0 clxscore=1015 mlxlogscore=999 lowpriorityscore=0 phishscore=0
+ bulkscore=0 mlxscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2409040096
 
 
-On 9/4/2024 12:55 AM, Wolfram Sang wrote:
->> Just to clarify to I2C maintainers:
->> This is incomplete. Missing driver changes.
-> Thanks, Krzysztof!
+On 9/3/2024 11:34 PM, Krzysztof Kozlowski wrote:
+> On Tue, Sep 03, 2024 at 03:02:35PM -0700, Nikunj Kela wrote:
+>> Add compatible representing spi support on SA8255p.
+>>
+>> Clocks and interconnects are being configured in firmware VM
+>> on SA8255p platform, therefore making them optional.
+>>
+> Please use standard email subjects, so with the PATCH keyword in the
+> title.  helps here to create proper versioned patches.
+Where did I miss PATCH keyword in the subject here? It says "[PATCH v2
+16/21] dt-bindings: spi: document support for SA8255p"
+> Another useful tool is b4. Skipping the PATCH keyword makes filtering of
+> emails more difficult thus making the review process less convenient.
+>
+>
+>> CC: Praveen Talari <quic_ptalari@quicinc.com>
+>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>> ---
+>>  .../bindings/spi/qcom,spi-geni-qcom.yaml      | 60 +++++++++++++++++--
+>>  1 file changed, 56 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>> index 2e20ca313ec1..75b52c0a7440 100644
+>> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>> @@ -25,10 +25,45 @@ description:
+>>  
+>>  allOf:
+>>    - $ref: /schemas/spi/spi-controller.yaml#
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: qcom,sa8255p-geni-spi
+> Not much improved. All my previous (v1) and other patch (i2c) comments
+> apply.
+>> +    then:
+>> +      required:
+>> +        - power-domains
+>> +        - power-domain-names
+>> +
+>> +      properties:
+>> +        power-domains:
+>> +          minItems: 2
+>> +
+>> +    else:
+>> +      required:
+>> +        - clocks
+>> +        - clock-names
+>> +
+>> +      properties:
+>> +        power-domains:
+>> +          maxItems: 1
+>> +
+>> +        interconnects:
+>> +          minItems: 2
+>> +          maxItems: 3
+>> +
+>> +        interconnect-names:
+>> +          minItems: 2
+>> +          items:
+>> +            - const: qup-core
+>> +            - const: qup-config
+>> +            - const: qup-memory
+>>  
+>>  properties:
+>>    compatible:
+>> -    const: qcom,geni-spi
+>> +    enum:
+>> +      - qcom,geni-spi
+>> +      - qcom,sa8255p-geni-spi
+> You have entire commit msg to explain why this device's programming
+> model is not compatible with existing generic compatible which must
+> cover all variants (because it is crazy generic).
+>
+> Best regards,
+> Krzysztof
 
-Driver changes are going through internal review and will soon be
-posted. For your reference, we have pushed driver changes in CodeLinaro
-git branch(nkela/sa8255p_v6_11_rc2)  in kernel-qcom repo [1]. You can
-take a look at the changes that are in pipeline and will follow soon.
+I will put more details in the description of the patch, though, I had
+put the description in the cover letter for this entire series.
 
-[1]:
-https://git.codelinaro.org/clo/linux-kernel/kernel-qcom/-/tree/nkela/sa8255p_v6_11_rc2?ref_type=heads
 
+>
 
