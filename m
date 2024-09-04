@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-6105-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6106-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2631A96B0D6
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 08:00:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5EAE96B137
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 08:12:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C579F1F2652B
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 06:00:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24BC81C21C17
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 06:12:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCF486277;
-	Wed,  4 Sep 2024 05:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B779D136657;
+	Wed,  4 Sep 2024 06:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qB4IvGAT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DzfJxgSi"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49ACA1FC8;
-	Wed,  4 Sep 2024 05:57:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D1684E0A;
+	Wed,  4 Sep 2024 06:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725429470; cv=none; b=I/VEuMNyY0OPq3WnlItKYeIc930GyntQvQmaBj04rbLt0yP5ik6GVT5WuJWssaTQhZc530fRfmecONo/rvZx9k9aUUFz0K3WOglr4C9Jc5ku+2gcsdFjQq54DJQ+PS4iTstlxOG0OZQtkJLdbUGNhislr7rqpqsLuac6wQOWd9Q=
+	t=1725430301; cv=none; b=YaU8WlnzXgf93abw00SEaXRogli1/K5PUusjdbph16SNDWLh6O59iIhs4ZbWf0s+OPdAB+Jfv24cO0vL7oJDHMJoXt5vVsie64LxztwrKhhnUI66d2+RupTQ//xXvwflidK6HSPI1ESgPh5XB+Vpq/CsdGc7xgO1bbiMnnSjCxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725429470; c=relaxed/simple;
-	bh=1Uq+s42VoGWl7UxVx2ytzpaQeaggcvLNs5AnTqz4oYc=;
+	s=arc-20240116; t=1725430301; c=relaxed/simple;
+	bh=5rS/xtLtwNLghugO3W3yuSsZC+d6Enu/7XCKm8WxyoI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nbsNPzRDcJea4PgjRluyyWyCoc2XRVuPdHDEJ7KcXVkoUWCye1iKqeKEpBEm/Tuj9eDSxK0PPgdd4zNetdDpLnM2oicGzncEdnceIDdkiy5OH6v3MS76mt9551NdPQV8XfIazAsGbiVRc1argnWMjp6G/LhPsePPlkd08OMSVLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qB4IvGAT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6D2C4CEC2;
-	Wed,  4 Sep 2024 05:57:48 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=FWPBcpve2LIh/2c5yK7+2hNBfYdmd1RgarptwPi5lwl3O39Px6xANF6S3NlQUVZRcCbLrMLoGiAaYLyFLl10L9gYdLpys+lOGFSHKbZsbd1epLAWf1mnUaU0pZFm7hS86sbMlC2Xegita+I63AMT0xQKZnGEYGD/JVq3qKztVOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DzfJxgSi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC96C4CEC3;
+	Wed,  4 Sep 2024 06:11:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725429469;
-	bh=1Uq+s42VoGWl7UxVx2ytzpaQeaggcvLNs5AnTqz4oYc=;
+	s=k20201202; t=1725430300;
+	bh=5rS/xtLtwNLghugO3W3yuSsZC+d6Enu/7XCKm8WxyoI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qB4IvGATZyM4MYlUC2TsiGOS/gY25DDr/DiwLysYex8m2mD67lCvNm+Sf3fKWur0c
-	 knXljQnxyvukXdy6v86Qy1wCP5osdrCqglIfHbnCc+rzFFSomhyUDQA0O9dyY4pznt
-	 Nb+CVOiXuzeDd4MV/mfo/Yqo1KP6aDH1osR6yQSHNBFf3pXvwU87kpQ8nF5PYSaDtI
-	 YY8hXg9AaSiKgdA2t1CYs6ndXR7iZzmfy8KGQGQODTRBmrQ/uII1/KTx9iBh/UpfWd
-	 ToyM8/JQQrFGGLvZ7rC/g5Pz+A6L6LyUugDwae928wN7s5oStFmOgSqarzXE11lcPI
-	 ERJvhdV4DK+6A==
-Date: Wed, 4 Sep 2024 07:57:45 +0200
+	b=DzfJxgSiJJTf0eH4odHIu2hX2Z4o2Q9mwl5Bxe2Z+GBj2ivN3lGdoBj9VCHu4G1yQ
+	 wLmUMKpzKLXz0T1qaTg7B0/mKY9P6s8m76v/F4IIinwAg631+9pMSGRhNAeOdUtCkJ
+	 ZoeVqnPf9pPCIw3Ljzv7HYY/iyugDaHajIGjUllFkkXSDvcFoxF1Ec7ymxZ6A7Lnr7
+	 QOVhPQs0jea6TrGH91MBw/DEp4s1qJm6ZqZsBJipTBnUWg/MhdpeoUsTz2TeHvB7aW
+	 oOlWfpPldC8UqenSlQyvqz4sEZ6X8poH1ahqNULgFjFY5Kae/iM9DbJIm3ynafmx0P
+	 NSNQGwqcFsj2w==
+Date: Wed, 4 Sep 2024 08:11:36 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Richard Acayan <mailingradian@gmail.com>
 Cc: Bjorn Andersson <andersson@kernel.org>, 
@@ -53,10 +53,11 @@ Cc: Bjorn Andersson <andersson@kernel.org>,
 	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org, linux-media@vger.kernel.org, 
 	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Subject: Re: [PATCH v4 4/7] dt-bindings: media: camss: Add qcom,sdm670-camss
-Message-ID: <h2i6qigozgzjxnlq5gmo3m7obdy5hmvfdnpsrcs325dc6hgezo@mrhok2ljnxni>
+Subject: Re: [PATCH v4 1/7] dt-bindings: clock: qcom,sdm845-camcc: add sdm670
+ compatible
+Message-ID: <sdolo6nutcr7e633ouchz352qoycdbq7of47il5yypfpbtgziu@tvn2mlfq25k3>
 References: <20240904020448.52035-9-mailingradian@gmail.com>
- <20240904020448.52035-13-mailingradian@gmail.com>
+ <20240904020448.52035-10-mailingradian@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,19 +66,24 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240904020448.52035-13-mailingradian@gmail.com>
+In-Reply-To: <20240904020448.52035-10-mailingradian@gmail.com>
 
-On Tue, Sep 03, 2024 at 10:04:53PM -0400, Richard Acayan wrote:
-> As found in the Pixel 3a, the Snapdragon 670 has a camera subsystem with
-> 3 CSIDs and 3 VFEs (including 1 VFE lite). Add this camera subsystem to
-> the bindings.
+On Tue, Sep 03, 2024 at 10:04:50PM -0400, Richard Acayan wrote:
+> The camera clocks on SDM670 and SDM845 have no significant differences
+> that would require a change in the clock controller driver. The only
+> difference is the clock frequency at each level of the power domains,
+> which is not specified in the clock driver. There should still be a
+> compatible specific to the SoC, so add the compatible for SDM670 with
+> the SDM845 compatible as fallback.
 > 
-> Adapted from SC8280XP camera subsystem.
-> 
+> Link: https://android.googlesource.com/kernel/msm/+/d4dc50c0a9291bd99895d4844f973421c047d267/drivers/clk/qcom/camcc-sdm845.c#2048
+> Suggested-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> Suggested-by: Konrad Dybcio <konradybcio@kernel.org>
+> Link: https://lore.kernel.org/linux-arm-msm/7d26a62b-b898-4737-bd53-f49821e3b471@linaro.org
 > Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
 
-This wasn't tested.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
