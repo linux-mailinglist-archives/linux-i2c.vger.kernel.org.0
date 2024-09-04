@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6115-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6116-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C687596B346
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 09:48:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22DC196B357
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 09:49:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44E7C1F24169
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 07:48:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D495D2829F9
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 07:49:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 469EF14B94C;
-	Wed,  4 Sep 2024 07:47:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8028D154BE0;
+	Wed,  4 Sep 2024 07:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kIj+oy0x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dQa9ogNU"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4611482E7;
-	Wed,  4 Sep 2024 07:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D4E1487C0;
+	Wed,  4 Sep 2024 07:49:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725436072; cv=none; b=LKMOt1biQ8i156GhT/tatD6YU9vPZ+t9624ky7vLGaqeIM8wv1z6zkvHdpG0e8arSJaIEeXAwcGF0jADdl6Ff45udgLBt0xciEFHgsIlD2SEW0seH6hwbacVc9daMxi8yMb/y1heF2gmaT+OjqD0/44I89vQXuRBYObIU+IpAtw=
+	t=1725436156; cv=none; b=YXzam/xSaNddbkB4obizcuaWVBk+EY5uJeN/C0LPsny20yI8rBn8i1/T/PADrVRoCaZrJgZjF+GHujw0XDH161mGQ5z0I1fjfelgXA0p//FGm6/KUIE8Em6dGbLYHYbB3qrPq+3yvTgCe3EWKAdyn5rGRDK371cO+U6ll/Lyxhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725436072; c=relaxed/simple;
-	bh=eIKr8cAo4XHci2u7+szz00vb8bkmDe1laUVSo8kbitM=;
+	s=arc-20240116; t=1725436156; c=relaxed/simple;
+	bh=6Bm7uTUvhVH7PpSFjOKDk4rW79vyeC/zdZLwv/1f/9Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IvtoVSOWBQ/1Izd0umuBxu02LjyHQgNDPgG6MrDjQ7578K5zPxOUUS6TGfCU0u2srOjSdrETzXZR4lQ71r1O6ZugALkyvrs7WeOrIr2Fw1x+7W/bivfWcRGQsVxy1zpZG/CvUJk2xj/mU/AKU0L2R9NoSawNXUt3rZ5tqoU/+yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kIj+oy0x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C708DC4CEC8;
-	Wed,  4 Sep 2024 07:47:36 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=cLfKHrceJoiidWsZ70Cv2hFOXg7cXs315S6OIxwufhDUoilbTuKsicQce8s0AZvY7yebL6GK7oyVNUR3nHtu3gPM11q9n5SHQwFNieq/tfa4jUSIVhEO78dV5yqh8UNLJyCy9p0VG6dhjoUer4BCdfxKEgCZfDBoFjpz79KjDqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dQa9ogNU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD5BC4CEC8;
+	Wed,  4 Sep 2024 07:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725436071;
-	bh=eIKr8cAo4XHci2u7+szz00vb8bkmDe1laUVSo8kbitM=;
+	s=k20201202; t=1725436155;
+	bh=6Bm7uTUvhVH7PpSFjOKDk4rW79vyeC/zdZLwv/1f/9Y=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kIj+oy0xywVYlEUt1FPAKZEIbvjbWV7hk9mI8N4Mic+IL0QO0ob9XYDk+saKva8dv
-	 tllMyQdDS/2QqMOR2u80cxl9+6qD5CspOE+4ZEqMwwl2UjmeYCKV9/Lnz7+MfWzP6p
-	 N9hKTDiiA6HmeVtxuGZapuATd7S2EiMc1YnhFX/CsifFWoMXhRd/ZvkDcMJlrWzIle
-	 wj3lKayasljlQ6QGL5dCdPD5j8Tiog4sYsluE3046xO4M13REYdlMHOBKNSxeDsJQ5
-	 EEurUwQX+VHpPwLDRGLPq3UC230jmdkgbPhtxjGzhPL3VbgBIrLW5QqH3Fjz4tO/fn
-	 kbrcX98yIQbqA==
-Message-ID: <db4cb31f-b219-4ee8-b519-fdec7f7b8760@kernel.org>
-Date: Wed, 4 Sep 2024 09:47:34 +0200
+	b=dQa9ogNUvAyh4PCCyFYNHZ2um6jHsvKf3404lBskn2/DWVZ6zGoB3aTqHGWGAZaXr
+	 S/p53Uwrb3JWOwhupo3BCZiSlHps76loZyjwjDwK+ku5uh+k5l8J6YuppHhzqK6L84
+	 RrZqBg6NbvMYR317Yp+zVK5L2ZBMrz4Wk5m3qC+7fs4k5q/YtCtDbCA/kDvmRr2TMY
+	 wUX0V4mu06kdE8B83IVYDRy4Co8Byz3hAomcK3BTM9jbP0NQMOvMmvnPdM6QKPNzwG
+	 BNWakxNjgork4SYa667vv6xCBxZuP/3NgUctUBt4jZqD7GPh9s8xEghHN9WDzbt7Re
+	 AC7NczY4uOLkQ==
+Message-ID: <66458a5c-5054-44ac-914f-e66281ee43a9@kernel.org>
+Date: Wed, 4 Sep 2024 09:48:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 17/21] dt-bindings: serial: document support for
- SA8255p
+Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
@@ -72,7 +71,7 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  Praveen Talari <quic_ptalari@quicinc.com>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-18-quic_nkela@quicinc.com>
+ <20240903220240.2594102-17-quic_nkela@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -118,46 +117,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240903220240.2594102-18-quic_nkela@quicinc.com>
+In-Reply-To: <20240903220240.2594102-17-quic_nkela@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 04/09/2024 00:02, Nikunj Kela wrote:
-> Add compatibles representing UART support on SA8255p.
+> Add compatible representing spi support on SA8255p.
 > 
-> Clocks and interconnects are being configured in the firmware VM
+> Clocks and interconnects are being configured in firmware VM
 > on SA8255p platform, therefore making them optional.
 > 
 > CC: Praveen Talari <quic_ptalari@quicinc.com>
 > Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
-> ---
->  .../serial/qcom,serial-geni-qcom.yaml         | 53 ++++++++++++++++---
->  1 file changed, 47 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
-> index dd33794b3534..b63c984684f3 100644
-> --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
-> @@ -10,14 +10,13 @@ maintainers:
->    - Andy Gross <agross@kernel.org>
->    - Bjorn Andersson <bjorn.andersson@linaro.org>
->  
-> -allOf:
-> -  - $ref: /schemas/serial/serial.yaml#
-> -
->  properties:
->    compatible:
->      enum:
->        - qcom,geni-uart
->        - qcom,geni-debug-uart
-> +      - qcom,sa8255p-geni-uart
-> +      - qcom,sa8255p-geni-debug-uart
 
-
-Anyway, the entire patchset is organized wrong. Or you sent only subset.
-
-Where is the driver change? This cannot work. To remind bindings go with
-the driver (nothing new here).
+Also this is incomplete - adding compatible without driver change is not
+expected. It cannot even work.
 
 Best regards,
 Krzysztof
