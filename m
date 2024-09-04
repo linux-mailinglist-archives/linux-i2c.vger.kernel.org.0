@@ -1,243 +1,230 @@
-Return-Path: <linux-i2c+bounces-6191-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6192-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AF1996BF8B
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 16:04:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39B9196BFD5
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 16:15:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD7331F21FD1
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:04:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32C0D1C24BE9
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:15:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3780F1DA10D;
-	Wed,  4 Sep 2024 14:04:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BFD1DB94D;
+	Wed,  4 Sep 2024 14:14:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jWYT5WFS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqJPW66I"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878EF1EBFF7;
-	Wed,  4 Sep 2024 14:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580651DA614;
+	Wed,  4 Sep 2024 14:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725458651; cv=none; b=EuOBDnhoLN2/ipNAWMdGNtF3UE+X1t5T9zBUftQ2AeW0/eqLUeY560e0Zt1Ened8Gv0crXjJBCoSoQy6ODgJgqUoeJWjncdN7yzBP19/kY8eVSPKoZLPsSM4Cz7p71E22U1/YIdT5jLsMQQJqMsrRSqPcMJIUd7JlXFiGcGvSlw=
+	t=1725459295; cv=none; b=HsNAApdQJQNX6Fs/qPqH2EAxg4ZDAbxG0vm4CNrSmBk8sKnmijMcOVSdyVExi6zu/fHnH0eVDhBPBioGxPMZT0vjbLzquVGZiXmRSk97Q5+ABYEwY70UbNxhEdT6gXsDzc8K4jBrbBYt1vTSU4dEwgaxyMzzaqhlVoaoTwocODc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725458651; c=relaxed/simple;
-	bh=4TSPzyXFo3mbtoWssEyI2IeYSaBZSS1lpLsVvyGQj+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VadFAVlzXRRwMIvYftVgXIdiO2UeVG20DJIDXOHaXxihWzg9rfP6k0CjyyVZVGgvRToQNSiKcG0xeNSeYeWehBD2ZJOfawTNurqeljOjo4PL/VZ41VQQsnbEOVvfikemLZkB5q5YRJPI4IoWE8m6zlPr7hyLdpwCTMeL+pvDJ7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jWYT5WFS; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725458650; x=1756994650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4TSPzyXFo3mbtoWssEyI2IeYSaBZSS1lpLsVvyGQj+w=;
-  b=jWYT5WFSSAd++YWDOM6kYfYT/Fwzd4ocz7iJQxFcLr4G45harGxmBQgg
-   vwkD72oIrcUpXVxvCK0rnV6HAsTMGjvcxKui1/roq9nHUt+jvZ+Ua0lbJ
-   xURYoPRcaL4/UlcTvdRYLs0NK2T+URMMbM+kAWgWBwpMAqiRbl7Bc+7V9
-   5GCDIXEgcr91gjNItOLNUWynDlFY1RpECFb5JuLEGa8wdKJDHrVcXrQh7
-   7lzqYYUMrixfQxlKM5292VhFrzM3og9EjZ8cdh0ZhFyTMvRhpAO5GVIRr
-   Z+G98ChGMnyAo6BfIC+4JxG+2CXmz1Zo3vQNRwJS8sAoerHH1a237vLcM
-   Q==;
-X-CSE-ConnectionGUID: 0SneqrSkRq+9ax95WV73tQ==
-X-CSE-MsgGUID: fAstGxtiQ2SPUqgdMG/igw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="24263230"
-X-IronPort-AV: E=Sophos;i="6.10,202,1719903600"; 
-   d="scan'208";a="24263230"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 07:04:09 -0700
-X-CSE-ConnectionGUID: vo0i1YUjRZmNB8mT1EJMSw==
-X-CSE-MsgGUID: iLEpjnPLTGeJk6AuL3/5Qg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,202,1719903600"; 
-   d="scan'208";a="65120093"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 07:04:05 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1slqc6-000000055Ds-0KY5;
-	Wed, 04 Sep 2024 17:04:02 +0300
-Date: Wed, 4 Sep 2024 17:04:01 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v6 10/12] i2c: of-prober: Add GPIO support
-Message-ID: <Ztho0WuqgFZxpD1Q@smile.fi.intel.com>
-References: <20240904090016.2841572-1-wenst@chromium.org>
- <20240904090016.2841572-11-wenst@chromium.org>
+	s=arc-20240116; t=1725459295; c=relaxed/simple;
+	bh=2Ss0V4B3gqh3Djf2sq8g60nY0lGcMeN+IdkPOnUIhJQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qNGGobsYtF20J9wO9vn0hCSnRx5QsmYDIE4jvTqFCkkZQsUFSleOI9vQUNv/k5UUKA5xu2tKYx3UAw+t4wpHxaAXG20gBbGrV6ACYWBsz2pW5KdV4/0LrsWfaae7tVxlFwGaeV2eu35YW0h9pJNHwEDbEFp1sNU4MxDPvP41JzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iqJPW66I; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-205659dc63aso29408575ad.1;
+        Wed, 04 Sep 2024 07:14:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725459292; x=1726064092; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=plTGgq85TqC+My2Us7LwZDVrWHrQelSPxxPPRZE6+jM=;
+        b=iqJPW66IDFuPJor0J7bsAT0Nk8Uuns55k4/A+PiU8fhlV4pyZNANSz0K5Wh5l9KwnC
+         qoZPtPEgsuEhpeOv6dRLntdRMlSgszFZiWz917tVkHtMnRcwBBwSgdMlXJ1QnRYgPMfE
+         MG6tB+T2I6jcFMTnGCTrUi+PDqivHOdQPPQcCqxAFDgnSK2IYqQszJtZXiCbIdaAU+q2
+         I6tNQHUUP6GKksV9wjtuxW7C9sRnTvb8xcMp94k1D+AzqT6NUpl+XrYOOKlxioAALWjZ
+         LwfW31In44jxIVYFm+5JzjR1uIuLejzT6uzJ8CQZdUwjWcwlSX0DYVV0DhBIcyFm4vbd
+         nwag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725459292; x=1726064092;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=plTGgq85TqC+My2Us7LwZDVrWHrQelSPxxPPRZE6+jM=;
+        b=W0AWWBkhm6DcUCkyHZ072u9F1z7l3aGlTXHdpI2b0P85Lh6fC/MtYAogi34MPU2GfU
+         3yh7Pkr3jMqR6GgDdCAZ+ukPyNP9kiYcnMrbMZESX1hCR1UMwfCE8WH/K+gJSSFjXP1v
+         FOkiDQVkmK6PeP2s0+Z77ksTKrWek8wW62IWSV3VjoulbOw3MFDFva3o8Y2fQLrYuDMT
+         aPjWSYg0LMr+zDh3QiED8IV0XPw/LrXuRnYSEY2Xj9tIMdsVqvVZdzhyFC0v9J5Y/bGJ
+         Y46uht6W85ResYq9yx32PyIUYPOfWLxKKEqUsa4NqeoERitecdqyds1q3CKt+fYE0Wkt
+         O8rw==
+X-Forwarded-Encrypted: i=1; AJvYcCWDb+3uq4OauIBMyY+q8h7Oxvxz/cFpt72tTvpsVKk+s+dn7YlvioSUX/bPdpbg31eVmSruJm637S3xHw==@vger.kernel.org, AJvYcCWW2GvDSqqpgPoFYCV47YEt625FpzPkQSeiRRde6/32tQgwPPGiMIx+o71jklDqrIaG+FV8BRNjm2TG@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgQrFNeyasq3hPAnyukKCmgfnq6WqVPUFP2mymZ7ZId3VKLKU8
+	gCr+JtIQZTkuK4m88a/aDQJVr5GlEjez8zMIZBdphOJpTAO5CaH0
+X-Google-Smtp-Source: AGHT+IH9dkeJYt0ZES8dcaGSQEh/EcAPlzczePOsOYZeyBvH8XsuyXVoiyeTYzpUAgz5nFLriPtbEA==
+X-Received: by 2002:a17:902:da8c:b0:206:9818:5439 with SMTP id d9443c01a7336-206981858c4mr84057205ad.19.1725459292464;
+        Wed, 04 Sep 2024 07:14:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206ae90f076sm14189375ad.7.2024.09.04.07.14.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Sep 2024 07:14:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <eb7ffcbb-1e6c-448b-a09f-e10fd187a1ef@roeck-us.net>
+Date: Wed, 4 Sep 2024 07:14:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240904090016.2841572-11-wenst@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next 19/19] hwmon: (nzxt-smart2) Use
+ devm_hid_hw_start_and_open in nzxt_smart2_hid_probe()
+To: Li Zetao <lizetao1@huawei.com>, jikos@kernel.org, bentiss@kernel.org,
+ michael.zaidman@gmail.com, gupt21@gmail.com, djogorchock@gmail.com,
+ rrameshbabu@nvidia.com, bonbons@linux-vserver.org,
+ roderick.colenbrander@sony.com, david@readahead.eu, savicaleksa83@gmail.com,
+ me@jackdoan.com, jdelvare@suse.com, mail@mariuszachmann.de,
+ wilken.gottwalt@posteo.net, jonas@protocubo.io, mezin.alexander@gmail.com
+Cc: linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20240904123607.3407364-1-lizetao1@huawei.com>
+ <20240904123607.3407364-20-lizetao1@huawei.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240904123607.3407364-20-lizetao1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 04, 2024 at 05:00:12PM +0800, Chen-Yu Tsai wrote:
-> This adds GPIO management to the I2C OF component prober.
-> Components that the prober intends to probe likely require their
-> regulator supplies be enabled, and GPIOs be toggled to enable them or
-> bring them out of reset before they will respond to probe attempts.
-> regulator support was added in the previous patch.
+On 9/4/24 05:36, Li Zetao wrote:
+> Currently, the nzxt-smart2 module needs to maintain hid resources
+> by itself. Consider using devm_hid_hw_start_and_open helper to ensure
+
+For all patches:
+
+s/Consider using/Use/
+
+> that hid resources are consistent with the device life cycle, and release
+> hid resources before device is released. At the same time, it can avoid
+> the goto-release encoding, drop the out_hw_close and out_hw_stop
+> lables, and directly return the error code when an error occurs.
 > 
-> Without specific knowledge of each component's resource names or
-> power sequencing requirements, the prober can only enable the
-> regulator supplies all at once, and toggle the GPIOs all at once.
-> Luckily, reset pins tend to be active low, while enable pins tend to
-> be active high, so setting the raw status of all GPIO pins to high
-> should work. The wait time before and after resources are enabled
-> are collected from existing drivers and device trees.
+> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+> ---
+>   drivers/hwmon/nzxt-smart2.c | 22 +++-------------------
+>   1 file changed, 3 insertions(+), 19 deletions(-)
 > 
-> The prober collects resources from all possible components and enables
-> them together, instead of enabling resources and probing each component
-> one by one. The latter approach does not provide any boot time benefits
-> over simply enabling each component and letting each driver probe
-> sequentially.
-> 
-> The prober will also deduplicate the resources, since on a component
-> swap out or co-layout design, the resources are always the same.
-> While duplicate regulator supplies won't cause much issue, shared
-> GPIOs don't work reliably, especially with other drivers. For the
-> same reason, the prober will release the GPIOs before the successfully
-> probed component is actually enabled.
+> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+> index df6fa72a6b59..b5721a42c0d3 100644
+> --- a/drivers/hwmon/nzxt-smart2.c
+> +++ b/drivers/hwmon/nzxt-smart2.c
+> @@ -750,14 +750,10 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+> +	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_HIDRAW);
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = hid_hw_open(hdev);
+> -	if (ret)
+> -		goto out_hw_stop;
+> -
+>   	hid_device_io_start(hdev);
+>   
+>   	init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
+> @@ -765,19 +761,10 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>   	drvdata->hwmon =
+>   		hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
+>   						&nzxt_smart2_chip_info, NULL);
+> -	if (IS_ERR(drvdata->hwmon)) {
+> -		ret = PTR_ERR(drvdata->hwmon);
+> -		goto out_hw_close;
+> -	}
+> +	if (IS_ERR(drvdata->hwmon))
+> +		return PTR_ERR(drvdata->hwmon);
+>   
+>   	return 0;
 
-...
+	return PTR_ERR_OR_ZERO(drvdata->hwmon);
 
-> +static int i2c_of_probe_get_gpiod(struct device_node *node, struct property *prop,
-> +				  struct i2c_of_probe_data *data)
-> +{
-> +	struct fwnode_handle *fwnode = of_fwnode_handle(node);
-> +	struct gpio_descs *gpiods;
-> +	struct gpio_desc *gpiod;
-> +	char propname[32]; /* 32 is max size of property name */
-> +	char *con_id = NULL;
-> +	size_t new_size;
-> +	int len, ret;
-> +
-> +	len = gpio_get_property_name_length(prop->name);
-> +	if (len < 0)
-> +		return 0;
-> +
-> +	ret = strscpy(propname, prop->name);
-> +	if (ret < 0) {
-> +		pr_err("%pOF: length of GPIO name \"%s\" exceeds current limit\n",
-> +		       node, prop->name);
-> +		return -EINVAL;
+Also, this can be optimized further.
 
-Any good reason to shadow the error code from strscpy() here?
+	struct device *hwmon;	// and drop from struct drvdata
+	...
+	hwmon = devm_hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
+						     &nzxt_smart2_chip_info, NULL);
+	
+	return PTR_ERR_OR_ZERO(hwmon);
 
-> +	}
-> +
-> +	if (len > 0) {
-> +		/* "len < ARRAY_SIZE(propname)" guaranteed by strscpy() above */
+and drop the remove function entirely.
 
-is guaranteed
+Thanks,
+Guenter
 
-> +		propname[len] = '\0';
-
-Please, check if it's guaranteed by strscpy() (IIRC it is, hence redundant line).
-
-> +		con_id = propname;
-> +	}
-> +
-> +	/*
-> +	 * GPIO descriptors are not reference counted. GPIOD_FLAGS_BIT_NONEXCLUSIVE
-> +	 * can't differentiate between GPIOs shared between devices to be probed and
-> +	 * other devices (which is incorrect). If the initial request fails with
-> +	 * -EBUSY, retry with GPIOD_FLAGS_BIT_NONEXCLUSIVE and see if it matches
-> +	 * any existing ones.
-> +	 */
-> +	gpiod = fwnode_gpiod_get_index(fwnode, con_id, 0, GPIOD_ASIS, "i2c-of-prober");
-> +	if (IS_ERR(gpiod)) {
-> +		if (PTR_ERR(gpiod) != -EBUSY || !data->gpiods)
-> +			return PTR_ERR(gpiod);
-> +
-> +		gpiod = fwnode_gpiod_get_index(fwnode, con_id, 0,
-> +					       GPIOD_ASIS | GPIOD_FLAGS_BIT_NONEXCLUSIVE,
-> +					       "i2c-of-prober");
-> +		for (unsigned int i = 0; i < data->gpiods->ndescs; i++)
-> +			if (gpiod == data->gpiods->desc[i])
-> +				return 1;
-> +
-> +		return -EBUSY;
-> +	}
-> +
-> +	new_size = struct_size(gpiods, desc, data->gpiods ? data->gpiods->ndescs + 1 : 1);
-> +	gpiods = krealloc(data->gpiods, new_size, GFP_KERNEL);
-> +	if (!gpiods) {
-> +		gpiod_put(gpiod);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	data->gpiods = gpiods;
-> +	data->gpiods->desc[data->gpiods->ndescs++] = gpiod;
-> +
-> +	return 1;
-> +}
-
-...
-
-> +static int i2c_of_probe_set_gpios(struct device *dev, struct i2c_of_probe_data *data)
-> +{
-> +	int ret;
-> +	int gpio_i;
-
-Why signed? And can it be simply named 'i'?
-
-> +
-> +	if (!data->gpiods)
-> +		return 0;
-> +
-> +	for (gpio_i = 0; gpio_i < data->gpiods->ndescs; gpio_i++) {
-> +		/*
-> +		 * "reset" GPIOs normally have opposite polarity compared to
-> +		 * "enable" GPIOs. Instead of parsing the flags again, simply
-> +		 * set the raw value to high.
-> +		 */
-> +		dev_dbg(dev, "Setting GPIO %d\n", gpio_i);
-> +		ret = gpiod_direction_output_raw(data->gpiods->desc[gpio_i], 1);
-> +		if (ret)
-> +			goto disable_gpios;
-> +	}
-> +
-> +	msleep(data->opts->post_reset_deassert_delay_ms);
-> +
-> +	return 0;
-> +
-> +disable_gpios:
-
-> +	for (gpio_i--; gpio_i >= 0; gpio_i--)
-
-	while (i--)
-
-> +		gpiod_set_raw_value_cansleep(data->gpiods->desc[gpio_i], 0);
-> +
-> +	return ret;
-> +}
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> -
+> -out_hw_close:
+> -	hid_hw_close(hdev);
+> -
+> -out_hw_stop:
+> -	hid_hw_stop(hdev);
+> -	return ret;
+>   }
+>   
+>   static void nzxt_smart2_hid_remove(struct hid_device *hdev)
+> @@ -785,9 +772,6 @@ static void nzxt_smart2_hid_remove(struct hid_device *hdev)
+>   	struct drvdata *drvdata = hid_get_drvdata(hdev);
+>   
+>   	hwmon_device_unregister(drvdata->hwmon);
+> -
+> -	hid_hw_close(hdev);
+> -	hid_hw_stop(hdev);
+>   }
+>   
+>   static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
 
 
