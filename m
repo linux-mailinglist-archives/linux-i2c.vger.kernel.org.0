@@ -1,76 +1,48 @@
-Return-Path: <linux-i2c+bounces-6194-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6196-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 755D096C031
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 16:23:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7134D96C07C
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 16:30:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 488E0B29100
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:23:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C6A7286C79
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 14:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C351E0096;
-	Wed,  4 Sep 2024 14:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834791DB943;
+	Wed,  4 Sep 2024 14:30:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YOwO1TxZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gw5+6Lru"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5E61D014A;
-	Wed,  4 Sep 2024 14:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4A15C96;
+	Wed,  4 Sep 2024 14:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725459630; cv=none; b=n30LvtNX2oGiWQoJ3IvyTLYvLiSjWBSPEsBYdM5L8zM13M+MaVyJ6DKi2I0TyIItdaRIrc6ukVISFsSUriOdky+chMLdB6AdvFZkXqpg5vUtvaWwGmy/Ha4UU8OJBxYOf29eovm+dKbxzsoyO/xHIhbuA0DKaQkUyCsFrgUNTaM=
+	t=1725460207; cv=none; b=me18HeMv54gU0GLRlFxyhD9PAQcn6zotz6QAeOjuF+BW9GRsje7/ZRGo6mEc9TVJcYEHLXC1E+kAORKobbtcS9PeNaDNFXd8wJtHEB//r8pFoMcszK5Xj5YmKC9sK/sqrgYHnGe1pDWScDXPoJU2NF6Xg64W6Z8LrkAiNjnOAlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725459630; c=relaxed/simple;
-	bh=NlJHUT+M3zDIrYDJvouIBEOXpW1aLIm7Vq49+NEFJJk=;
+	s=arc-20240116; t=1725460207; c=relaxed/simple;
+	bh=IGbzTX5KEMiOqp/btvJ1ccQvnyeDHf44Oxf/FGejqvI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EOgrn3uevlc1jpZLjiaao1WHIlyoMIF2rpRutd6tPmea0J3e11FgYScBfujX5WldEyAIH2KpmwPSW2BaiYkGSSqxKDCxfTZrKgr/XHrnbQgqcpabZ3JxIvnxhPs0mkF80FRhK/Uqb2O//3LvGl9w2YUPR4ToubMSLcmXE3Ksmm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YOwO1TxZ; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7d4f0181be2so1340391a12.0;
-        Wed, 04 Sep 2024 07:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725459628; x=1726064428; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8mh+qFo6PV3VOZOTOmXjn4bsf1iOHyrGELUejlwzbKs=;
-        b=YOwO1TxZci4+CUe+5KUlyWCpT7nTByXfZIwcXMwhWY9gCwBJErhOiikFBqwdYvexIA
-         cLplJxCfXRxadA9qNlNo6uuXZIu6k66/SGJEk8Q+DyFZzyxlFfJbzYjnX73EdklkeYh2
-         2WKGW4BdqOlo/JQVzl3oEAAWsw/WVPnq+qankpOQ53/JHknGrL/xXyijX93E8dbwQVH9
-         9dMnaNF6hPb5CjYaZN6GZPiSno+DyOvqRK9mT66+6fRwZbmrCpivVnejfK8jYY+MhXMF
-         EYaWmRSfiwHvsHUMAUj8v4mx4wCp1mNHSfA7gG3Qht4PNlXpX6zqOezn3wJLaj1e4MbD
-         MIWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725459628; x=1726064428;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8mh+qFo6PV3VOZOTOmXjn4bsf1iOHyrGELUejlwzbKs=;
-        b=NyHAHGcOk0RATgcc5yauDu84rKp1ZfyE/vFOeKg10s8TVujlfvgxbhwmtBdk1eS8lt
-         tKaVGSbZi0itUaO4VaweVAbnYzBkcJyKTAQ7aSMan56xQgSO/0XRBE2eXGZkvL7bHaHr
-         6jef206rZz70pI82nTVgXgXO0ZQRTkvvfZwSwFDBiGcCHvKE1RH3XVFol5gQftgh9Dph
-         4I1K73605FtYUw8BEmSPBT0pcVjOtDpJ7XVgyXmAy0dJufO2ol7DYEwDFY2mDg77QO7Y
-         NFb9O0L+KbU/KdOq8kGo9XgflxYNPsPgHqhHJiCOYmUxxyufeUd3BWB9Y/AlE6DpFjqI
-         tSRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWT3btZZafIPlRyfMW/FZWTWTV3N3upfPiWXQF+IG2Iml+nEEalMWtccLXXXkZ+AzCxnb5qMarkt7d4fg==@vger.kernel.org, AJvYcCXz0hoVCiHDjYt3ubjU/eUWN3rMbOQRiacL+zzWO+WzNFs6/tfbv14W9DxZ3t/QIHOWNoPi1shVjkJr@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLESV6BbcFiRAhyAO8g535zLo8x1v5854okFvsJ52Jc2I0EVUD
-	HLPtlkqsYrOESYMzvr6oywK/d/OD9E+aggS6xHE05vD0b8FkY2O3
-X-Google-Smtp-Source: AGHT+IH5n/ZZh2DoU+a7VJbyUt1vO8aYjfyw/EZECgwJmqDiMZLGMi8FDkp4msPbNpNfBTL/mKLYkQ==
-X-Received: by 2002:a17:90a:4b85:b0:2cf:7388:ad9e with SMTP id 98e67ed59e1d1-2d85616eccamr23756138a91.2.1725459627798;
-        Wed, 04 Sep 2024 07:20:27 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8c5d48a8esm7287873a91.35.2024.09.04.07.20.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 07:20:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9b0b39c6-21b7-445e-9496-875a7fe5cf6a@roeck-us.net>
-Date: Wed, 4 Sep 2024 07:20:25 -0700
+	 In-Reply-To:Content-Type; b=WRHYE0L6C4sOLIdV5AHD7QNnFcePc+p8lQ/CSmEmVqoL6dq6yZPHw5hInxNgas9I5Apr+lxM8rlNOFLR0wsnwQf8Gst2IX2zrqNsiQZUeAJgvKYTIn6vWrqB5aNq5/plLiZVWHgmwn6zs8+A8vCC2u+EzZJMTHDJ+C2PisZKUNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gw5+6Lru; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF92EC4CEC2;
+	Wed,  4 Sep 2024 14:29:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725460206;
+	bh=IGbzTX5KEMiOqp/btvJ1ccQvnyeDHf44Oxf/FGejqvI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Gw5+6LrupMCviKvLpbyxwQl6v/VPtEtiCInsUzN21yDLYNvAh2KUEHQH2txBVglAo
+	 Bk+eOg5sZgyG7I0KR4rzFmIEUhJRQ/Q12D3hI3cyiJZVVUd8OzL63w8FFWtzImM7RT
+	 WcN+SP8JJT+Om8z05RBN4wfGSVT3UWfiIegxoPdzHEDNhNabk+128mWyfAvYKMbBHo
+	 XGg6IBIp/bkR3O7YKhmhqAmCqpXxKew2wOm6id79OZdMKaRtv6Ey7StboL101Mf8pU
+	 xUJxeZ0H98YDzFet19o2GdTx5kI9PMulaDv9g3R1YIOuit0PxbEgRUbAy8iBRAd3Hp
+	 80+WccgKKSBSg==
+Message-ID: <51e9fa5a-ac6f-42e8-85e5-7c5c02075a56@kernel.org>
+Date: Wed, 4 Sep 2024 16:29:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,151 +50,156 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next 13/19] hwmon: Use devm_hid_hw_start_and_open in
- rog_ryujin_probe()
-To: Li Zetao <lizetao1@huawei.com>, jikos@kernel.org, bentiss@kernel.org,
- michael.zaidman@gmail.com, gupt21@gmail.com, djogorchock@gmail.com,
- rrameshbabu@nvidia.com, bonbons@linux-vserver.org,
- roderick.colenbrander@sony.com, david@readahead.eu, savicaleksa83@gmail.com,
- me@jackdoan.com, jdelvare@suse.com, mail@mariuszachmann.de,
- wilken.gottwalt@posteo.net, jonas@protocubo.io, mezin.alexander@gmail.com
-Cc: linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20240904123607.3407364-1-lizetao1@huawei.com>
- <20240904123607.3407364-14-lizetao1@huawei.com>
+Subject: Re: [PATCH v2 14/21] dt-bindings: cpufreq: qcom-hw: document support
+ for SA8255p
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
+ viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+ sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
+ will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
+ jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+ amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
+ cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
+ linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ kernel@quicinc.com, quic_psodagud@quicinc.com
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-15-quic_nkela@quicinc.com>
+ <odg5ssqu2soaqp6m4rambj7qhqiyp7othkvu4v6fu6xtuhbdho@vccya6qcwgoz>
+ <1b831fc1-9360-4038-91b2-b2c0cea513ed@quicinc.com>
+ <baf00e50-10b2-410b-9c56-713564a2d1b9@kernel.org>
+ <c163149b-bdf1-423b-ab51-f734d00277fe@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240904123607.3407364-14-lizetao1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <c163149b-bdf1-423b-ab51-f734d00277fe@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/4/24 05:36, Li Zetao wrote:
-> Currently, the rog_ryujin module needs to maintain hid resources
-> by itself. Consider using devm_hid_hw_start_and_open helper to ensure
-> that hid resources are consistent with the device life cycle, and release
-> hid resources before device is released. At the same time, it can avoid
-> the goto-release encoding, drop the fail_and_close and fail_and_stop
-> lables, and directly return the error code when an error occurs.
+On 04/09/2024 16:19, Nikunj Kela wrote:
 > 
-> Signed-off-by: Li Zetao <lizetao1@huawei.com>
-> ---
->   drivers/hwmon/asus_rog_ryujin.c | 29 +++++------------------------
->   1 file changed, 5 insertions(+), 24 deletions(-)
+> On 9/4/2024 6:17 AM, Krzysztof Kozlowski wrote:
+>> On 04/09/2024 14:27, Nikunj Kela wrote:
+>>> On 9/3/2024 11:26 PM, Krzysztof Kozlowski wrote:
+>>>> On Tue, Sep 03, 2024 at 03:02:33PM -0700, Nikunj Kela wrote:
+>>>>> Add compatible for the cpufreq engine representing support on SA8255p.
+>>>>>
+>>>>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>>>>> ---
+>>>>>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml        | 16 ++++++++++++++++
+>>>>>  1 file changed, 16 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>>>> index 1e9797f96410..84865e553c8b 100644
+>>>>> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>>>> @@ -34,6 +34,7 @@ properties:
+>>>>>          items:
+>>>>>            - enum:
+>>>>>                - qcom,qdu1000-cpufreq-epss
+>>>>> +              - qcom,sa8255p-cpufreq-epss
+>>>>>                - qcom,sa8775p-cpufreq-epss
+>>>>>                - qcom,sc7280-cpufreq-epss
+>>>>>                - qcom,sc8280xp-cpufreq-epss
+>>>>> @@ -206,6 +207,21 @@ allOf:
+>>>>>          interrupt-names:
+>>>>>            minItems: 2
+>>>>>  
+>>>>> +  - if:
+>>>>> +      properties:
+>>>>> +        compatible:
+>>>>> +          contains:
+>>>>> +            enum:
+>>>>> +              - qcom,sa8255p-cpufreq-epss
+>>>>> +    then:
+>>>>> +      properties:
+>>>>> +        reg:
+>>>>> +          minItems: 2
+>>>>> +          maxItems: 2
+>>>>> +
+>>>>> +        reg-names:
+>>>>> +          minItems: 2
+>>>>> +          maxItems: 2
+>>>> What about interrupts? You need to constrain each of such lists.
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>> Interrupts are not required, I still need to put constraints for
+>> It's irrelevant whether they are required or not. Each property should
+>> be narrowed.
 > 
-> diff --git a/drivers/hwmon/asus_rog_ryujin.c b/drivers/hwmon/asus_rog_ryujin.c
-> index f8b20346a995..da03ba3b4e0f 100644
-> --- a/drivers/hwmon/asus_rog_ryujin.c
-> +++ b/drivers/hwmon/asus_rog_ryujin.c
-> @@ -520,23 +520,13 @@ static int rog_ryujin_probe(struct hid_device *hdev, const struct hid_device_id
->   	}
->   
->   	/* Enable hidraw so existing user-space tools can continue to work */
-> -	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-> -	if (ret) {
-> -		hid_err(hdev, "hid hw start failed with %d\n", ret);
-> +	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_HIDRAW);
-> +	if (ret)
->   		return ret;
-> -	}
-> -
-> -	ret = hid_hw_open(hdev);
-> -	if (ret) {
-> -		hid_err(hdev, "hid hw open failed with %d\n", ret);
-> -		goto fail_and_stop;
-> -	}
->   
->   	priv->buffer = devm_kzalloc(&hdev->dev, MAX_REPORT_LENGTH, GFP_KERNEL);
-> -	if (!priv->buffer) {
-> -		ret = -ENOMEM;
-> -		goto fail_and_close;
-> -	}
-> +	if (!priv->buffer)
-> +		return -ENOMEM;
->   
->   	mutex_init(&priv->status_report_request_mutex);
->   	mutex_init(&priv->buffer_lock);
-> @@ -553,16 +543,10 @@ static int rog_ryujin_probe(struct hid_device *hdev, const struct hid_device_id
->   	if (IS_ERR(priv->hwmon_dev)) {
->   		ret = PTR_ERR(priv->hwmon_dev);
->   		hid_err(hdev, "hwmon registration failed with %d\n", ret);
-> -		goto fail_and_close;
-> +		return ret;
->   	}
+> So evenif we don't use interrupts property in our DT(patch#21), we need
+> to mention interrupts here? You suggest we put interrupts with maxItems: 0?
 
-	struct device *hwmon_dev;
+I don't understand. You use three quite separate statements. "Not
+required", "don't use" and here "maxItems: 0" which means not allowed.
 
-         hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "rog_ryujin",
-                                                     priv, &rog_ryujin_chip_info, NULL);
-	return PTR_ERR_OR_ZERO(hwmon_dev);
+All of these mean something else and I keep guessing and responding
+according to what you write. Probably half of my advises are just trash,
+because it turns out it is something entirely else than what I read.
 
-and drop the remove function.
+Make a decision how the hardware looks like.
 
-Thanks,
-Guenter
+> 
+> I wonder why SA8775p compatible is not in constraint list..
+> 
+>>> interrupts? BTW, there is no if block for SA8775p binding in this file.
+>>
+>>
+>> Best regards,
+>> Krzysztof
+>>
 
->   
->   	return 0;
-> -
-> -fail_and_close:
-> -	hid_hw_close(hdev);
-> -fail_and_stop:
-> -	hid_hw_stop(hdev);
-> -	return ret;
->   }
->   
->   static void rog_ryujin_remove(struct hid_device *hdev)
-> @@ -570,9 +554,6 @@ static void rog_ryujin_remove(struct hid_device *hdev)
->   	struct rog_ryujin_data *priv = hid_get_drvdata(hdev);
->   
->   	hwmon_device_unregister(priv->hwmon_dev);
-> -
-> -	hid_hw_close(hdev);
-> -	hid_hw_stop(hdev);
->   }
->   
->   static const struct hid_device_id rog_ryujin_table[] = {
+Best regards,
+Krzysztof
 
 
