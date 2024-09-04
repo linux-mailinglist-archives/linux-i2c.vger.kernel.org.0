@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6179-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6180-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC3C796BE09
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 15:16:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE63996BE4C
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 15:22:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F16DB1C250E4
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 13:16:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49532B2561F
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 13:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F3C41DA0E5;
-	Wed,  4 Sep 2024 13:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CD61DA0E5;
+	Wed,  4 Sep 2024 13:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXhU08Id"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nZgF4sGV"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06BFB1CD25;
-	Wed,  4 Sep 2024 13:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAC14C96;
+	Wed,  4 Sep 2024 13:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725455793; cv=none; b=jdf4VZor/nNjg2skEj3NCY6/x+QGUiqs8PdQi7FFtl5VEqwJxevVFxEbk29StQDFzekApo4h5bhLfbLjtGty0KSk0GPNxoc01CTq5qX81VA+6X6/koLiY14lUWLRKCagNi1r8iy7kaCv7xGll+LMFZ9u8FodwVuP7he4Bp3AJvE=
+	t=1725455842; cv=none; b=RWzVfq1vhAzl9h4HlZzRNQdxXcEYk8fiYaiiKudwRszAL08j82DlWhDVEIf32+ZHL8OGkYvqGZn+KAuzRUmUtvbleoLS1ckD77bL0eEbd2iapg9VHiybvbaM9llvc9vGQW8tW5lRHHnTUtOZ9lNnSyPlJL/zOu16efpMiVWTXlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725455793; c=relaxed/simple;
-	bh=Pv9qNlumKPsCsg5RdJmk3gX4rtBxVUFmucagd5bhTQk=;
+	s=arc-20240116; t=1725455842; c=relaxed/simple;
+	bh=aqVlxHGtPxE77BcGNRg59GH4QcO0QoDoOK0LUVlfoM4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uz4FQESUwPA2J/27HvPC6OW14jczDGoYe07XgXveN9GuXdX8am5UkfD/x97B+vqIqK7wu+Le5h6f0gCbPH1G5bPLjOait322kZ1DvBVvOUSbA2PvezD3jcLlORA6YSrbv3bM6gdyPA2jxsmN6K4DFVdX7EjnNZZJGZpw6GNCPWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GXhU08Id; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B12E2C4CEC8;
-	Wed,  4 Sep 2024 13:16:19 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=aYd+5kxUCF6/Z9/qNQ1SRpDaQp9n+AbCjKgvMUq29qaw9bjw+NNu1PlsI3BEq4EjQSEW0voOt595fsCjE0JhaJvgETWnDfLRTv7ZunqUZJQj9vuRXY3wOwxxf/OsaptYLKFCeZ03hMxq2Rc5Ix0Eq5rfYjR4c0h/eVG7kEITlyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nZgF4sGV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A7E3C4CEC2;
+	Wed,  4 Sep 2024 13:17:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725455792;
-	bh=Pv9qNlumKPsCsg5RdJmk3gX4rtBxVUFmucagd5bhTQk=;
+	s=k20201202; t=1725455841;
+	bh=aqVlxHGtPxE77BcGNRg59GH4QcO0QoDoOK0LUVlfoM4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GXhU08IddS9UmWhALF7wVA8JLbrWoq4+qlYxqVvfvhschzu4RCDEPXu9tdOgMmfaL
-	 psX6WjkzHdb5Rd3OlpG4N4KN5dNwuS6ZNx3XZQyrrrxk3dGqDYmj8aaFQ3ocpsfaNz
-	 mqgBn+FdYM42EDuK2OvkSp0xnAY0ULwSWA9bL34g+f//evyQqf4Y2irCnX8FiHBIHh
-	 f4FAq0Zq7W2EdyGnhW4B6Fv/XKVSL16pfYHLGElP2aj/bNJV8e5puH5YoPUTrIA1MS
-	 kqxdjPJaS1qABiRD0zmyJo5RXJp493qx0hmPDIubAfipz63oiVnwdURO95S7waaQCi
-	 f5kGkDOivGwnw==
-Message-ID: <7e5f5ce4-12e0-47b4-b4a0-af10e09da3b8@kernel.org>
-Date: Wed, 4 Sep 2024 15:16:15 +0200
+	b=nZgF4sGV8/tK3fkm9L+JD0W2QuW1KWrF5yN9eq9QXzZU+rhtrP2vJX1EOV0O0VNt/
+	 ia9hbA/kfkd+k523EA+8c/nJg0KnLngEAMVqbH94eYjtg7XYl20lZk88e1gW7H/IgN
+	 HlEdL8HMr2BwGLk2KHqTOFnRKdblNuRLJmD9KF9qWRptVdUFo9w3SBE4lefV3hihf6
+	 nkYkoGhW9hKWdcQiYbtbQvRL2mgJwPkFnBW5waoMTiSzyPWdZcp9GOvID08YlaHZNe
+	 2dlGDFfCyN0boXwigf3NYtnUKYdaB824FBlf6lc5d8JxGZcmYojj5zy0kIeRCdznJw
+	 hchFMhh2FggIg==
+Message-ID: <baf00e50-10b2-410b-9c56-713564a2d1b9@kernel.org>
+Date: Wed, 4 Sep 2024 15:17:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 17/21] dt-bindings: serial: document support for
- SA8255p
+Subject: Re: [PATCH v2 14/21] dt-bindings: cpufreq: qcom-hw: document support
+ for SA8255p
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
@@ -68,13 +68,12 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
  linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
  linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
- kernel@quicinc.com, quic_psodagud@quicinc.com,
- Praveen Talari <quic_ptalari@quicinc.com>
+ kernel@quicinc.com, quic_psodagud@quicinc.com
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-18-quic_nkela@quicinc.com>
- <db4cb31f-b219-4ee8-b519-fdec7f7b8760@kernel.org>
- <634ab05e-3b8c-4cc1-bf23-0c68c1d28484@quicinc.com>
+ <20240903220240.2594102-15-quic_nkela@quicinc.com>
+ <odg5ssqu2soaqp6m4rambj7qhqiyp7othkvu4v6fu6xtuhbdho@vccya6qcwgoz>
+ <1b831fc1-9360-4038-91b2-b2c0cea513ed@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -120,59 +119,65 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <634ab05e-3b8c-4cc1-bf23-0c68c1d28484@quicinc.com>
+In-Reply-To: <1b831fc1-9360-4038-91b2-b2c0cea513ed@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/09/2024 14:56, Nikunj Kela wrote:
+On 04/09/2024 14:27, Nikunj Kela wrote:
 > 
-> On 9/4/2024 12:47 AM, Krzysztof Kozlowski wrote:
->> On 04/09/2024 00:02, Nikunj Kela wrote:
->>> Add compatibles representing UART support on SA8255p.
+> On 9/3/2024 11:26 PM, Krzysztof Kozlowski wrote:
+>> On Tue, Sep 03, 2024 at 03:02:33PM -0700, Nikunj Kela wrote:
+>>> Add compatible for the cpufreq engine representing support on SA8255p.
 >>>
->>> Clocks and interconnects are being configured in the firmware VM
->>> on SA8255p platform, therefore making them optional.
->>>
->>> CC: Praveen Talari <quic_ptalari@quicinc.com>
 >>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
 >>> ---
->>>  .../serial/qcom,serial-geni-qcom.yaml         | 53 ++++++++++++++++---
->>>  1 file changed, 47 insertions(+), 6 deletions(-)
+>>>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml        | 16 ++++++++++++++++
+>>>  1 file changed, 16 insertions(+)
 >>>
->>> diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>> index dd33794b3534..b63c984684f3 100644
->>> --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>> +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>> @@ -10,14 +10,13 @@ maintainers:
->>>    - Andy Gross <agross@kernel.org>
->>>    - Bjorn Andersson <bjorn.andersson@linaro.org>
+>>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>> index 1e9797f96410..84865e553c8b 100644
+>>> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>>> @@ -34,6 +34,7 @@ properties:
+>>>          items:
+>>>            - enum:
+>>>                - qcom,qdu1000-cpufreq-epss
+>>> +              - qcom,sa8255p-cpufreq-epss
+>>>                - qcom,sa8775p-cpufreq-epss
+>>>                - qcom,sc7280-cpufreq-epss
+>>>                - qcom,sc8280xp-cpufreq-epss
+>>> @@ -206,6 +207,21 @@ allOf:
+>>>          interrupt-names:
+>>>            minItems: 2
 >>>  
->>> -allOf:
->>> -  - $ref: /schemas/serial/serial.yaml#
->>> -
->>>  properties:
->>>    compatible:
->>>      enum:
->>>        - qcom,geni-uart
->>>        - qcom,geni-debug-uart
->>> +      - qcom,sa8255p-geni-uart
->>> +      - qcom,sa8255p-geni-debug-uart
->>
->> Anyway, the entire patchset is organized wrong. Or you sent only subset.
->>
->> Where is the driver change? This cannot work. To remind bindings go with
->> the driver (nothing new here).
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - qcom,sa8255p-cpufreq-epss
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          minItems: 2
+>>> +          maxItems: 2
+>>> +
+>>> +        reg-names:
+>>> +          minItems: 2
+>>> +          maxItems: 2
+>> What about interrupts? You need to constrain each of such lists.
 >>
 >> Best regards,
 >> Krzysztof
 > 
-> The driver changes will soon be posted. They are being reviewed
-> internally. For a quick look on what is coming next, you can refer to
-> CodeLinaro git repo[1]
+> Interrupts are not required, I still need to put constraints for
 
-Upstream does not work like that. This patch is just wrong and pointless
-without driver change. Never send such stuff separately from the driver.
-Or fix the binding, if the intention was there is no driver.
+It's irrelevant whether they are required or not. Each property should
+be narrowed.
+
+> interrupts? BTW, there is no if block for SA8775p binding in this file.
+
+
 
 Best regards,
 Krzysztof
