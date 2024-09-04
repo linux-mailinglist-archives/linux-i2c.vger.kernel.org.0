@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6180-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6181-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE63996BE4C
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 15:22:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46C6896BE38
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 15:21:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49532B2561F
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 13:17:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F34132815E9
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 13:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CD61DA0E5;
-	Wed,  4 Sep 2024 13:17:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C581DA627;
+	Wed,  4 Sep 2024 13:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nZgF4sGV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZTNG3ml"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAC14C96;
-	Wed,  4 Sep 2024 13:17:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACBA01D88DA;
+	Wed,  4 Sep 2024 13:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725455842; cv=none; b=RWzVfq1vhAzl9h4HlZzRNQdxXcEYk8fiYaiiKudwRszAL08j82DlWhDVEIf32+ZHL8OGkYvqGZn+KAuzRUmUtvbleoLS1ckD77bL0eEbd2iapg9VHiybvbaM9llvc9vGQW8tW5lRHHnTUtOZ9lNnSyPlJL/zOu16efpMiVWTXlI=
+	t=1725456019; cv=none; b=idn+Ezh6RhDaiNKbUetCjJZA9PoDujXb7/jqdJXzebD2+1L2KkGYj9kl/rgM3QgLSdI5kOF9d32VEi2lXQsyI10Ai5alHSR85aCc7V5F3wOU7935cE8vfuvIF7lef8nUvmlaRpxeMb9Ohi3bpbjW0cmG2YyVv47QeKyFJQc3ky4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725455842; c=relaxed/simple;
-	bh=aqVlxHGtPxE77BcGNRg59GH4QcO0QoDoOK0LUVlfoM4=;
+	s=arc-20240116; t=1725456019; c=relaxed/simple;
+	bh=ji3ee7bEt2Ak5byQ+v6Y2EgVTfP+Cys2lyvNsofcdoA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aYd+5kxUCF6/Z9/qNQ1SRpDaQp9n+AbCjKgvMUq29qaw9bjw+NNu1PlsI3BEq4EjQSEW0voOt595fsCjE0JhaJvgETWnDfLRTv7ZunqUZJQj9vuRXY3wOwxxf/OsaptYLKFCeZ03hMxq2Rc5Ix0Eq5rfYjR4c0h/eVG7kEITlyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nZgF4sGV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A7E3C4CEC2;
-	Wed,  4 Sep 2024 13:17:07 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Fcfmn1IhOuxbIqQpFAGaczpIgl5XziHWxFSjOx90H8IZQePvQ8FdJNUakOeakW2Y6XjiLDn6GKB7FXMsBZKt95JXTgeFGi1UXF7rxL34C9wjys+ERB9Ih5Z1qFtx81cS5BNgYkyDAcA4Xgv0xHnTMXo1T+un62P3NqtDX+WBzz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZTNG3ml; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A20C4CEC2;
+	Wed,  4 Sep 2024 13:20:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725455841;
-	bh=aqVlxHGtPxE77BcGNRg59GH4QcO0QoDoOK0LUVlfoM4=;
+	s=k20201202; t=1725456019;
+	bh=ji3ee7bEt2Ak5byQ+v6Y2EgVTfP+Cys2lyvNsofcdoA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nZgF4sGV8/tK3fkm9L+JD0W2QuW1KWrF5yN9eq9QXzZU+rhtrP2vJX1EOV0O0VNt/
-	 ia9hbA/kfkd+k523EA+8c/nJg0KnLngEAMVqbH94eYjtg7XYl20lZk88e1gW7H/IgN
-	 HlEdL8HMr2BwGLk2KHqTOFnRKdblNuRLJmD9KF9qWRptVdUFo9w3SBE4lefV3hihf6
-	 nkYkoGhW9hKWdcQiYbtbQvRL2mgJwPkFnBW5waoMTiSzyPWdZcp9GOvID08YlaHZNe
-	 2dlGDFfCyN0boXwigf3NYtnUKYdaB824FBlf6lc5d8JxGZcmYojj5zy0kIeRCdznJw
-	 hchFMhh2FggIg==
-Message-ID: <baf00e50-10b2-410b-9c56-713564a2d1b9@kernel.org>
-Date: Wed, 4 Sep 2024 15:17:04 +0200
+	b=PZTNG3mlNHjLFyRUe+aJGbLfCjMrZHGnPiJXxH3DOSQkSOUGQs4G1MqXKAQkZyMrD
+	 MTPyenlX1AWmw2AOBy1sY7GVkv2BU9rJk8HM/lpS91WTlZqVQP5UBe4apMEgMTkBdf
+	 +WorKXTE07Nv0zr+NiGRnLGLkHQo2dbYIeDRA0hGWXQeuYP32Zm6wNXmTw3f3nzQFM
+	 EGDXdyY99qaV0ua7gq/OR8v8iaiyQl0QIXNbsNzLCHif1FGPXRiaVI1r3VvPFgdKoo
+	 OK9iF56M4geqQmx8wHFNK5Phqh8UhvZxUHYcRHuDw2Vs6HAAVlsFlMyvkE14qOJqJE
+	 nrgxHXpA3wpww==
+Message-ID: <3529c7ef-95e1-42b0-93c3-6ac4266c4b19@kernel.org>
+Date: Wed, 4 Sep 2024 15:20:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 14/21] dt-bindings: cpufreq: qcom-hw: document support
- for SA8255p
+Subject: Re: [PATCH v2 15/21] dt-bindings: i2c: document support for SA8255p
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
@@ -68,12 +67,13 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
  linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
  linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
- kernel@quicinc.com, quic_psodagud@quicinc.com
+ kernel@quicinc.com, quic_psodagud@quicinc.com,
+ Praveen Talari <quic_ptalari@quicinc.com>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-15-quic_nkela@quicinc.com>
- <odg5ssqu2soaqp6m4rambj7qhqiyp7othkvu4v6fu6xtuhbdho@vccya6qcwgoz>
- <1b831fc1-9360-4038-91b2-b2c0cea513ed@quicinc.com>
+ <20240903220240.2594102-16-quic_nkela@quicinc.com>
+ <xtguaoof7iblrtd2idsa2k4ml64qkttgliyijbeqw5thkdcbx3@jnm75a4wmbqd>
+ <06968d9d-0428-4fe8-8526-c91db3d9f0e7@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -119,65 +119,150 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <1b831fc1-9360-4038-91b2-b2c0cea513ed@quicinc.com>
+In-Reply-To: <06968d9d-0428-4fe8-8526-c91db3d9f0e7@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/09/2024 14:27, Nikunj Kela wrote:
+On 04/09/2024 14:41, Nikunj Kela wrote:
 > 
-> On 9/3/2024 11:26 PM, Krzysztof Kozlowski wrote:
->> On Tue, Sep 03, 2024 at 03:02:33PM -0700, Nikunj Kela wrote:
->>> Add compatible for the cpufreq engine representing support on SA8255p.
+> On 9/3/2024 11:31 PM, Krzysztof Kozlowski wrote:
+>> On Tue, Sep 03, 2024 at 03:02:34PM -0700, Nikunj Kela wrote:
+>>> Add compatible representing i2c support on SA8255p.
 >>>
+>>> Clocks and interconnects are being configured in Firmware VM
+>>> on SA8255p, therefore making them optional.
+>>>
+>>> CC: Praveen Talari <quic_ptalari@quicinc.com>
 >>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
 >>> ---
->>>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml        | 16 ++++++++++++++++
->>>  1 file changed, 16 insertions(+)
+>>>  .../bindings/i2c/qcom,i2c-geni-qcom.yaml      | 33 +++++++++++++++++--
+>>>  1 file changed, 31 insertions(+), 2 deletions(-)
 >>>
->>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
->>> index 1e9797f96410..84865e553c8b 100644
->>> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
->>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
->>> @@ -34,6 +34,7 @@ properties:
->>>          items:
->>>            - enum:
->>>                - qcom,qdu1000-cpufreq-epss
->>> +              - qcom,sa8255p-cpufreq-epss
->>>                - qcom,sa8775p-cpufreq-epss
->>>                - qcom,sc7280-cpufreq-epss
->>>                - qcom,sc8280xp-cpufreq-epss
->>> @@ -206,6 +207,21 @@ allOf:
->>>          interrupt-names:
->>>            minItems: 2
+>> I don't know what to do with this patch. Using specific compatibles next
+>> to generic compatible is just wrong, although mistake was probably
+>> allowing generic compatible. The patch does not explain the differences
+>> in interface which would explain why devices are not compatible.
+> 
+> I mentioned in the description that clocks and interconnects on this
+> platform are configured in Firmware VM(over SCMI using power and perf
+> domains) therefore this is not compatible with existing generic compatible.
+
+It is not obvious to me. I doubt it is obvious to others. Commit msg
+does not say they are compatible and usually difference in
+clocks/interconnects is not reason of incompatibility. So why suddenly
+here we would understand it differently?
+
+
+> 
+> 
+>>  In the
+>> same time my advice of separate binding was not followed, because maybe
+>> these devices are compatible? But then it should be expressed...
+> 
+> Sorry, I missed that. You want me to use 'oneOf' expression with this
+> compatible?
+
+I proposed separate binding file. But your commit msg suggested these
+are compatible. Lack of driver change is also proof of that.
+
+I don't want to keep discussing this because it does not lead to
+anywhere. We keep repeating the same.
+
+> 
+> 
+>>
+>> You have entire commit msg to explain what and why.
+> 
+> Will put more details in description.
+> 
+> 
+>>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>>> index 9f66a3bb1f80..b477fae734b6 100644
+>>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>>> @@ -15,6 +15,7 @@ properties:
+>>>      enum:
+>>>        - qcom,geni-i2c
+>>>        - qcom,geni-i2c-master-hub
+>>> +      - qcom,sa8255p-geni-i2c
 >>>  
+>>>    clocks:
+>>>      minItems: 1
+>>> @@ -69,8 +70,6 @@ properties:
+>>>  required:
+>>>    - compatible
+>>>    - interrupts
+>>> -  - clocks
+>>> -  - clock-names
+>>>    - reg
+>>>  
+>>>  allOf:
+>>> @@ -81,6 +80,10 @@ allOf:
+>>>            contains:
+>>>              const: qcom,geni-i2c-master-hub
+>>>      then:
+>>> +      required:
+>>> +        - clocks
+>>> +        - clock-names
+>>
+>> So it is required here?
+> 
+> We are removing clocks from generic required list and enforcing rules
+> for all compatibles other than sa8255p.
+> 
+> 
+>>> +
+>>>        properties:
+>>>          clocks:
+>>>            minItems: 2
+>>> @@ -100,7 +103,21 @@ allOf:
+>>>            items:
+>>>              - const: qup-core
+>>>              - const: qup-config
+>>> +
 >>> +  - if:
 >>> +      properties:
 >>> +        compatible:
 >>> +          contains:
->>> +            enum:
->>> +              - qcom,sa8255p-cpufreq-epss
+>>> +            const: qcom,sa8255p-geni-i2c
 >>> +    then:
->>> +      properties:
->>> +        reg:
->>> +          minItems: 2
->>> +          maxItems: 2
+>>> +      required:
+>>> +        - power-domains
 >>> +
->>> +        reg-names:
->>> +          minItems: 2
->>> +          maxItems: 2
->> What about interrupts? You need to constrain each of such lists.
->>
->> Best regards,
->> Krzysztof
+>> And possible here? I assume with the same clocks? The same for
+>> interconnects - same values are valid?
 > 
-> Interrupts are not required, I still need to put constraints for
+> I guess I need to put here the same description as in the cover letter
+> to make it more clear. We are not using clocks and interconnects in this
+> platform in Linux. Instead, sending request to Firmware VM over
+> SCMI(using power and perf protocols)
+> 
+> 
+>>
+>>>      else:
+>>> +      required:
+>>> +        - clocks
+>>> +        - clock-names
+>> And clocks are required again?
+> Explained above.
+>>> +
+>>>        properties:
+>>>          clocks:
+>>>            maxItems: 1
+>> Eeee? So now all other variants have max 1 clock?
+> 
+> I will make if block for sa8255p up so else is not applied to rest of
+> the platforms.
+> 
+> 
+>>
+>> Nope, this wasn't ever tested on real DTS.
+> 
+> This is tested on SA8255p DTS and I ran DT schema check on SA8775p DT as
+> well.
 
-It's irrelevant whether they are required or not. Each property should
-be narrowed.
-
-> interrupts? BTW, there is no if block for SA8775p binding in this file.
-
-
+You just affected all the DTS everywhere. It's your task to check all
+DTS everywhere. Not ours.
 
 Best regards,
 Krzysztof
