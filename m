@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6183-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6184-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4C7796BE56
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 15:23:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AC1A96BE65
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 15:24:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B0061F269F4
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 13:23:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52EE1280AAB
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Sep 2024 13:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56B91DB927;
-	Wed,  4 Sep 2024 13:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21D601DA2FB;
+	Wed,  4 Sep 2024 13:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rZEMzfNF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EaZA3Zoc"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E37D1DA300;
-	Wed,  4 Sep 2024 13:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4601441D;
+	Wed,  4 Sep 2024 13:24:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725456125; cv=none; b=UOdbb8vcmPteeVxdqZtdW6dRn6F7KnpXLA36iYu7RlguJHjZh/j+8qPKrkmX6xXpC6SnZekIQ6y0kP8NS3uDwsIiN1+q3R1wSRtynT/rX3w0KsGfV7LAiOLBh/EhRyWMvZl9QyDAPb5G0R2o5v5KROKKULkh8FEftJwF80D2CD8=
+	t=1725456279; cv=none; b=TYiZEJgQbe8VKIBQ6JL3TyFvN7pWohxe3sDbUZEdgMLJC7MnLxdgWjp/W2qjacWtQDMVzFyNjLa408jwiknJZ+DDC7jEzpWtom6xsh8JemdYmxE5o/WNqQxvgDcNjbfRTkjwzyT5tV9Io5Xq0hZc8NrzCpAKh1NTtHy3yEvOCtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725456125; c=relaxed/simple;
-	bh=hYHvkiEayhLRrZMAjqwXELhzpUX7yqWDJElWJa81RGI=;
+	s=arc-20240116; t=1725456279; c=relaxed/simple;
+	bh=VD4Uy7oAc+nT7ov65tbrV4jCOunVuSnuaZX67sZ/AD8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k8mFQ2aJ+xC1gcqkwpnLEjoRb4h8fSASgl4hSSpUOMiawcbOqQH/u1DtAEg+Q/D0JLPNcjqsnxCerQAW6sKCuLc8gnUj0xo0I/hN0bbMt4G1AZGr1W8E4gSScxyXkHg4XVfvQzX5wPYkMMUZUcsqZDk+BgGqJG9wqnpmvfcL1Fc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rZEMzfNF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FAEC4CEC3;
-	Wed,  4 Sep 2024 13:21:50 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=m/k9WmPo6ukG+AyIYsZePL1fC2ZYXADdg9QaVGncD/XT68LmNvbF3TcOaVn1FjdMAujXRCXhL3gtPGnFbE1dE0q+5lGD3ADTX+/yCMhiSgeqLNDGh1evwEQoUIExOxkb7pWcY3XP5q47NirJvajzrD1SXvmhXzImeq+O3fekVxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EaZA3Zoc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF76C4CEC2;
+	Wed,  4 Sep 2024 13:24:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725456124;
-	bh=hYHvkiEayhLRrZMAjqwXELhzpUX7yqWDJElWJa81RGI=;
+	s=k20201202; t=1725456279;
+	bh=VD4Uy7oAc+nT7ov65tbrV4jCOunVuSnuaZX67sZ/AD8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rZEMzfNF6vaLzOxlmjAbd08QYJR7U58C7TC9xNBRqX7ai56ZOc7Pckh/4lWX7iNnJ
-	 jfvrWt+HVtYNX3ywfnCVr8YobmGnGDY+Q8qV2WgZ/v7I7hL0lvr+QOxY8DJ6Oz5L/D
-	 SqwnGt0jMQS0d5Dh5nQmybVuXBt41NC84E/Ru4K6806S58dh9E0RiTeYgc0P5iq/hT
-	 2Qvj1N1N6s+0PMqd9Ccog2/MUq+eIdvA1+2zO9WSV+50J2vT16q5tlOVGuN254e6u7
-	 JMJ+vFbTagdqrxFV73Mfc47Qvrsq4fpjDcOYEPlIoMyJvaRTcrPY2m6yn1cOeAa0UL
-	 qFta5N+cz43sg==
-Message-ID: <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
-Date: Wed, 4 Sep 2024 15:21:46 +0200
+	b=EaZA3ZocO9yeFcLWnQAMtGEkip86DBt1O5MM3Zi+MIiWlMApYGZLT71+bvGX4QX0s
+	 GzBGd9kEpW3E4pKUA6YDOPUgHm3Z81C/b18Nzgg4oT+G1LWPjiAYum78+jItZd72EO
+	 gj5xBz5Fk2ts+TNEta4t0cTkDj1paLqxjCXH040xSXtye+xXtm3faE8B8mXAIXeP0A
+	 FyKLBPpFTpPW1iJ5Ugh9taN9x2d9+U+iJNEx7VD+99J7IOCNCQLjofSBU7olyHNeaH
+	 QP+Z1eaYSJlC4gLKcNSgQB4hLoiQBfsDEE/jS43+FQ46wAXjppCl3vz+VpvLPmM3um
+	 ClLE8oJQvyGDA==
+Message-ID: <e352a836-82ef-4031-ac46-3ac7e0cb77ec@kernel.org>
+Date: Wed, 4 Sep 2024 15:24:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
+Subject: Re: [PATCH v2 17/21] dt-bindings: serial: document support for
+ SA8255p
 To: Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
@@ -71,9 +72,9 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  Praveen Talari <quic_ptalari@quicinc.com>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-17-quic_nkela@quicinc.com>
- <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
- <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
+ <20240903220240.2594102-18-quic_nkela@quicinc.com>
+ <jzpx66l4tesnyszmpc3nt5h7mezbvdhtcbls5rbwlmpveb6d6y@i3jf7jsajjjd>
+ <6fed4714-5239-473b-b4a0-886d83c459c3@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -119,33 +120,79 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
+In-Reply-To: <6fed4714-5239-473b-b4a0-886d83c459c3@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/09/2024 14:48, Nikunj Kela wrote:
+On 04/09/2024 14:54, Nikunj Kela wrote:
 > 
-> On 9/3/2024 11:34 PM, Krzysztof Kozlowski wrote:
->> On Tue, Sep 03, 2024 at 03:02:35PM -0700, Nikunj Kela wrote:
->>> Add compatible representing spi support on SA8255p.
+> On 9/3/2024 11:36 PM, Krzysztof Kozlowski wrote:
+>> On Tue, Sep 03, 2024 at 03:02:36PM -0700, Nikunj Kela wrote:
+>>> Add compatibles representing UART support on SA8255p.
 >>>
->>> Clocks and interconnects are being configured in firmware VM
+>>> Clocks and interconnects are being configured in the firmware VM
 >>> on SA8255p platform, therefore making them optional.
 >>>
->> Please use standard email subjects, so with the PATCH keyword in the
->> title.  helps here to create proper versioned patches.
-> Where did I miss PATCH keyword in the subject here? It says "[PATCH v2
-> 16/21] dt-bindings: spi: document support for SA8255p"
+>>> CC: Praveen Talari <quic_ptalari@quicinc.com>
+>>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+>>> ---
+>>>  .../serial/qcom,serial-geni-qcom.yaml         | 53 ++++++++++++++++---
+>>>  1 file changed, 47 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+>>> index dd33794b3534..b63c984684f3 100644
+>>> --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+>>> +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+>>> @@ -10,14 +10,13 @@ maintainers:
+>>>    - Andy Gross <agross@kernel.org>
+>>>    - Bjorn Andersson <bjorn.andersson@linaro.org>
+>>>  
+>>> -allOf:
+>>> -  - $ref: /schemas/serial/serial.yaml#
+>>> -
+>>>  properties:
+>>>    compatible:
+>>>      enum:
+>>>        - qcom,geni-uart
+>>>        - qcom,geni-debug-uart
+>>> +      - qcom,sa8255p-geni-uart
+>>> +      - qcom,sa8255p-geni-debug-uart
+>> Why devices are not compatible? What changed in programming model?
+> 
+> The cover-letter explains what is changed for devices in this platform.
+> I will add the description in this patch too.
 
-Oh, wrong template. It was about spi prefix, should be this one:
+Many of us do not read cover letters. They don't really matter,
+especially that serial tree will not include it. Each commit must stand
+on its own.
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching. For bindings, the preferred subjects are
-explained here:
-https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
-
+> 
+> 
 >>
+>>>  
+>>>    clocks:
+>>>      maxItems: 1
+>>> @@ -51,18 +50,49 @@ properties:
+>>>        - const: sleep
+>>>  
+>>>    power-domains:
+>>> -    maxItems: 1
+>>> +    minItems: 1
+>>> +    maxItems: 2
+>>> +
+>>> +  power-domain-names:
+>> This does not match power-domains anymore.
+> 
+> Single power domain doesn't need to use power-domain-names binding as it
+> is not needed however for multiple(in this case 2), you need to provide
+> names. I will add this property to if block and only keep maxItems here.
+
+The xxx and xxx-names properties always go in sync. Otherwise we do not
+really know what is the power domain for other variants.
+
+You are allowed to be unspecific about power domain (so maxItems: 1) if
+it is obvious. You now made it non-obvious, so above flexibility does
+not apply anymore.
 
 Best regards,
 Krzysztof
