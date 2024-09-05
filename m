@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-6281-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6282-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE4D796E501
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 23:24:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF16F96E517
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 23:29:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63BED1F251A2
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 21:24:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 879771F256FD
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 21:29:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0700E1A76AF;
-	Thu,  5 Sep 2024 21:24:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85C231AD24F;
+	Thu,  5 Sep 2024 21:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vB3qGyo3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjqXgjvM"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8574186E40;
-	Thu,  5 Sep 2024 21:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1CC14F121;
+	Thu,  5 Sep 2024 21:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725571440; cv=none; b=qMcEQaqXE5mTLJXFv3l9u4zoV9B/Xb8ieh8ZZYWg6B/VUjQ3RC2SZ4KQMJIUkc3mUfms4MUaoIcBOUSxCpJoiZyD/8s6e14CDf4zqsXSF1VhRklJZTtxZs2l1f4nxEs5aoLWTaodKpqjzLpaknivLfmmwzJ5V3BhQ7QAs1tPyAQ=
+	t=1725571771; cv=none; b=Avzh6DN23socr5gfnlSmqZ9GdBrX1AxdRhxoyl2ygiGUeqsbkRT3Ty98Rbio75PoKTnyX5i5l8KKzeRLvxaGjCAzcqJXpIdg+w+Pv0YaiYN1W6fnDdM1SvLwSBSnHzQfVMFVCyiEpYXIHxlpxftZhsn+u/FvKjXH7SG/5X0ypWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725571440; c=relaxed/simple;
-	bh=b3ULdFogwoeI0XvlpVirzfRUhuJ43tY9H/6dFn25c6w=;
+	s=arc-20240116; t=1725571771; c=relaxed/simple;
+	bh=OmBgrEF/RkgsDad9jaNJHIgbQrpptrQqnbEiyIW5bb4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ElSYsESSN/Y2qv9j+/aPQBu0LK4s94J+3h5FRw4nTd0cnYOv/LdsY5U0o8QQV4G1thVTaJT8o1fllbgtawtd+fg9tsqUUNlJODUzvLnOJB3FIZry5U3cnGBntaJcP2yYB+PEUOtdWhlMi9xljt0cObYvKZtBJJow8drCEx1Okhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vB3qGyo3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 726F7C4CEC3;
-	Thu,  5 Sep 2024 21:23:59 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LhFjjqZkrVER4D9rxmUlqdTFR2lCAneNtQEIQCIGBx9ARJGoUHNN26NvrslHeRmYM5treR66nz+dUStdPUykfr+/UO9wDBAzZV6Ps9Aa+oNQC9ibWuZXF2CmIPrY07SFjQQKoe3ngDuq/ZNN0hisqgyGDUpmNWu1sbumqq+wAjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjqXgjvM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3179C4CEC3;
+	Thu,  5 Sep 2024 21:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725571440;
-	bh=b3ULdFogwoeI0XvlpVirzfRUhuJ43tY9H/6dFn25c6w=;
+	s=k20201202; t=1725571770;
+	bh=OmBgrEF/RkgsDad9jaNJHIgbQrpptrQqnbEiyIW5bb4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vB3qGyo35LrR5C41h10LIV33t3xyDtceS/qKSEAHhWj1WDAH7+lAjcSvT7wJOdMTZ
-	 gu0VqPYo7BEEGeq4qjd0vvVuRFUoX0TUgUn35MI5LjJfQAUncHYCYOcoCxQ997V8WX
-	 49sn5PdSFqnZEUbGWquG7epp6wRZnXrkpIgX11wPAtxJ8ooJf6wJ5LEOYHI2iOnzWD
-	 mJnMvjhgbTduP1YutUQ6oGYsni/GJtxOam6Plc3ohf8fA3WcI5nxun01OxDUG1Drz6
-	 37tfxXxFLK9YIhv28cmAFJCr0AWmdnINNxQPR8RFu0CbemhsLB1UHN0nXSHX57JnrG
-	 SSI1MwV9twtJw==
-Date: Thu, 5 Sep 2024 23:23:56 +0200
+	b=mjqXgjvMKsK8Vt0qCApGNVfGH5yR5D5Bwz07M7QDar/+K6hbxnf7XRTNnLyrm02i1
+	 IqwsdcCOwsfLP8X1uuHtGR/GbhrKjaukpHyHGRGXypGSDJddj4z5cAIOiCLPKaWjVn
+	 +cKf2t35H+L4skI/Aw4FzITFFMFYYUB22GKP73c4ugbbloMaEX1LF9TUO1dr01f/2B
+	 /WR2v9bqVoDTs3VA1K/XBf1x3qD+WB3ww7I/OZdyWgnBlmDpAwvmVu5rsLkDbt2k5n
+	 zFVG2dgwxJNuhzMN5AylAjBEOvM3wpP9XvULuyzPhSNAsQ9Ep8rEM6UnI3sKN7ZSll
+	 IIQJ9VY9TYYbg==
+Date: Thu, 5 Sep 2024 23:29:26 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Tyrone Ting <warp5tw@gmail.com>
 Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, 
@@ -50,96 +50,75 @@ Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
 	wsa+renesas@sang-engineering.com, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com, 
 	tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com, 
 	openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/7] i2c: npcm: restore slave addresses array length
-Message-ID: <o4vds7grtpvgn34afke5vbkb5ymqqglvudi2hdb4oekz52ujs6@ymuhslhr5oh7>
+Subject: Re: [PATCH v2 2/7] i2c: npcm: correct the read/write operation
+ procedure
+Message-ID: <cfdfldh5tuhb4r5pdpgolcr2roeewsobedet2uvmpbnqlw5yh4@c4a2szsbs2r2>
 References: <20240830034640.7049-1-kfting@nuvoton.com>
- <20240830034640.7049-2-kfting@nuvoton.com>
+ <20240830034640.7049-3-kfting@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240830034640.7049-2-kfting@nuvoton.com>
+In-Reply-To: <20240830034640.7049-3-kfting@nuvoton.com>
 
-Hi Tyrone,
+Hi Tyronne,
 
-On Fri, Aug 30, 2024 at 11:46:34AM GMT, Tyrone Ting wrote:
-> The smatch check warning is "buffer overflow 'npcm_i2caddr' 2 <= 9".
-> The original design supports 10 slave addresses although only 2
-
-please remember that the "slave" term has been replaced by the
-"target" term. I will change it when applying the patch.
-
-> addresses are required for current implementation.
+On Fri, Aug 30, 2024 at 11:46:35AM GMT, Tyrone Ting wrote:
+> Originally the driver uses the XMIT bit in SMBnST register to decide
+> the upcoming i2c transaction. If XMIT bit is 1, then it will be an i2c
+> write operation. If it's 0, then a read operation will be executed.
 > 
-> Restore the npcm_i2caddr array length to fix the smatch warning.
+> After checking the datasheet, the XMIT bit is valid when the i2c module
+> is acting in a slave role. Use the software status to control the i2c
+> transaction flow instead when the i2c module is acting in a master role.
 > 
-> Fixes: 47d506d1a28f ("i2c: npcm: Remove own slave addresses 2:10")
+> Fixes: 48acf8292280 ("i2c: Remove redundant comparison in npcm_i2c_reg_slave")
 
-I don't think the Fixes tag is necessary here. This change is
-primarily addressing a static analyzer warning. While some cases
-come close to a buffer overflow, it couldn’t have occurred in
-practice since we don't actually have the devices listed in
-npcm_i2caddr[].
+Fixes needs to be used if you are fixing a bug (crash,
+device malfunction, etc.). If you want to use it, please describe
+the bug you are fixing. Otherwise, please, remove it.
 
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Closes: https://lore.kernel.org/r/202408130818.FgDP5uNm-lkp@intel.com/
 > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
 > ---
->  drivers/i2c/busses/i2c-npcm7xx.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/i2c/busses/i2c-npcm7xx.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-> index 2fe68615942e..bbcb4d6668ce 100644
+> index bbcb4d6668ce..2b76dbfba438 100644
 > --- a/drivers/i2c/busses/i2c-npcm7xx.c
 > +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> @@ -136,11 +136,13 @@ enum i2c_addr {
->   * Since the addr regs are sprinkled all over the address space,
->   * use this array to get the address or each register.
->   */
-> -#define I2C_NUM_OWN_ADDR 2
-> +#define I2C_NUM_OWN_ADDR 10
->  #define I2C_NUM_OWN_ADDR_SUPPORTED 2
->  
->  static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] = {
-> -	NPCM_I2CADDR1, NPCM_I2CADDR2,
-> +	NPCM_I2CADDR1, NPCM_I2CADDR2, NPCM_I2CADDR3, NPCM_I2CADDR4,
-> +	NPCM_I2CADDR5, NPCM_I2CADDR6, NPCM_I2CADDR7, NPCM_I2CADDR8,
-> +	NPCM_I2CADDR9, NPCM_I2CADDR10,
+> @@ -1628,13 +1628,10 @@ static void npcm_i2c_irq_handle_sda(struct npcm_i2c *bus, u8 i2cst)
+>  			npcm_i2c_wr_byte(bus, bus->dest_addr | BIT(0));
+>  	/* SDA interrupt, after start\restart */
+>  	} else {
+> -		if (NPCM_I2CST_XMIT & i2cst) {
+> -			bus->operation = I2C_WRITE_OPER;
+> +		if (bus->operation == I2C_WRITE_OPER)
+>  			npcm_i2c_irq_master_handler_write(bus);
+> -		} else {
+> -			bus->operation = I2C_READ_OPER;
+> +		else if (bus->operation == I2C_READ_OPER)
+>  			npcm_i2c_irq_master_handler_read(bus);
 
-Looks a bit hacky, but serves the purpose.
+mmmhhh... you are changing the logic here and you are not
+describing the logic change in the commit log.
 
-The core issue in "npcm_i2c_slave_enable()" is the lack of an
-upper boundary check, which could potentially lead to a buffer
-overflow. In practice, we rely on the assumption that these
-addresses don’t exist in the real world.
+Without looking at the details, if this is a state machine you
+are breaking it.
 
-An easier fix could have been:
-
-@@ -629,7 +629,7 @@ static int npcm_i2c_slave_enable(struct npcm_i2c *bus, enum i2c_addr addr_type,
-        if (addr_type > I2C_SLAVE_ADDR2 && addr_type <= I2C_SLAVE_ADDR10)
-                dev_err(bus->dev, "try to enable more than 2 SA not supported\n");
-
--       if (addr_type >= I2C_ARP_ADDR)
-+       if (addr_type > I2C_SLAVE_ADDR2)
-                return -EFAULT;
-
-        /* Set and enable the address */
-
-But yours is a bit more robust, so that I'm going to take this
-patch.
-
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+Can anyone from the ARM/NUVOTON NPCM supporters and reviewers
+take a look at this patch?
 
 Thanks,
 Andi
 
->  };
->  #endif
+> -		}
+>  	}
+>  }
 >  
 > -- 
 > 2.34.1
