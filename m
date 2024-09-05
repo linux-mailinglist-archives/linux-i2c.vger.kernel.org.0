@@ -1,99 +1,192 @@
-Return-Path: <linux-i2c+bounces-6286-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6287-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E0C696E53E
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 23:43:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CB1396E5A2
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 00:10:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39DFA284167
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 21:43:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB6FE1F240A5
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 22:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C3681AD27E;
-	Thu,  5 Sep 2024 21:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 350281A726E;
+	Thu,  5 Sep 2024 22:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RK8Rgy8L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AhW8F7vN"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189831AB6D9;
-	Thu,  5 Sep 2024 21:43:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CE414B95F;
+	Thu,  5 Sep 2024 22:10:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725572615; cv=none; b=C1RfCRq/Nc8lZ6drt7bAlSkPS4KRBXFuT62HKezYvLfC2fNvKv9q44X7XrONWpdwddcKppQVzOeVqyMm1vYHcvYyhmJE88K/19F82bQhtO+H1JBFK1GuW6EHqvYhnJxkTg0HGL/qK6UU1RIqbltwQqMpCg9abSqaBxWlxMnnrcU=
+	t=1725574201; cv=none; b=sGnigD4OBdBSTtvXYX/W+SUZMnIBvFl3CGhwwwZjgzgP/R5S+ne5hB/omGEafbO/mumWiLe8r3yYEH5VYnFhpDP1KEAYEnb1/C8VFmDVgN7y7a8IGwAmgxLIt9TKsT0tUQBa7bbY46gdlm6cSO4/hwHtXw6OLtDf2kt+AMkR0/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725572615; c=relaxed/simple;
-	bh=7lGyC41JD4CgqMu6iaebpgliZkHn/0RJMVcb4xV6/LU=;
+	s=arc-20240116; t=1725574201; c=relaxed/simple;
+	bh=vHaiXF8jFJgRzwoyRWonjyeyJm3/gmc7FeB29SMdR7Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hif5LQiaWTL0iqocnqcLaDwXwvY7Q6p6ddj6XqTA27GPTMSoCgDRd7HJY52CcUQ4NsF6nazog06NxHLA1eLJpEAMr/2Z+KPAWx0w7KyiBP3w5fa6FysK7UKX2cfLImmH7SA+HPoWyIue3ABxjsTEhY/jTP9amUYKS7M8c9FK6b4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RK8Rgy8L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B879C4CEC3;
-	Thu,  5 Sep 2024 21:43:33 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=KxW3Ue4k3NPrktcH54l8sSIswWldoAoYw3CuXp4jKt6B5CcaFimU5Ir+avjQonZrxkLbgWFXhATGrfopXyLvF0SQIzgwYpMPXPBiWYmjuUvS+BswAKOsen3e+0eNKO6djm0hXxDE1mxgEeN1cnZTnAmbrv0DpoC0OYU/48H9io8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AhW8F7vN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C27C0C4CEC3;
+	Thu,  5 Sep 2024 22:09:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725572614;
-	bh=7lGyC41JD4CgqMu6iaebpgliZkHn/0RJMVcb4xV6/LU=;
+	s=k20201202; t=1725574200;
+	bh=vHaiXF8jFJgRzwoyRWonjyeyJm3/gmc7FeB29SMdR7Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RK8Rgy8L4M8VPqnHXtCNjNZzJYUQMHhFNgadI4HCB2qnjCfakIt1VHLnK7OeAwyAy
-	 0MUR0y8nNf4Q7OuTt5W77DjJc47m+LqhHiIkRIghJ0TpCpZY2L4VhW/P60cOujiwHD
-	 dctaJPuu4FPy5Boxka8YvsYEDVIq6vpokjLbWQCoqenxyRfmJI3Vd4LS967SSQBHnQ
-	 Gr1XZQQE99eCsEeYirkfLepcqxIxtuBymzOOVO8NIhmeEoQx71JYiIBb0dU+X4aeto
-	 4lAgK0yrbx9C7iQo3oFPN7aXkHS4cSnL2UA6tiFWWEVfw/Y+MX+tOFhrcmHiVFdgti
-	 YDR6ixRvRkghw==
-Date: Thu, 5 Sep 2024 23:43:30 +0200
+	b=AhW8F7vNyvRDrKI/dAIAIoBP1jOvx4sViDSPJogt8bsc/Ji/rY1ABi+nFaLXcXO1G
+	 sIntLcRMsSDqj6iBxEKBLhy7wWqcZj26TDBIH+z9iMAQ+dtzh5IGngCN84bYJeiHI5
+	 hlqIRbEjLOWYYDMhxwuHXskEk8EBq6v4WjzfGkZlzeLY5JPNE4tJxaNCRpRGzSa1hC
+	 VP9GrGlavPYAyO/MY4TAPACnsSNLI6r43igZ8BR/MEdjEghXPpCNEBESwxZr/c1Ot5
+	 i5vpO9vpJ0RO9ZbXjFq+C3Cn3sYb8/57qqi28yC8zRNGH9OAS3CyxL47e3K96l9QDZ
+	 GAvesbmXO1hoA==
+Date: Fri, 6 Sep 2024 00:09:56 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Tyrone Ting <warp5tw@gmail.com>
-Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, 
-	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
-	andriy.shevchenko@linux.intel.com, wsa@kernel.org, rand.sec96@gmail.com, 
-	wsa+renesas@sang-engineering.com, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com, 
-	tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com, 
-	openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] i2c: npcm: use i2c frequency table
-Message-ID: <3wz36hrpicogoakqhmveppcrt6s52zmlcgjpio3wwpil3rdwdi@ft7tloqqf2zt>
-References: <20240830034640.7049-1-kfting@nuvoton.com>
- <20240830034640.7049-7-kfting@nuvoton.com>
+To: carlos.song@nxp.com
+Cc: aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de, 
+	kernel@pengutronix.de, festevam@gmail.com, linux-i2c@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] i2c: imx-lpi2c: add target mode support
+Message-ID: <qcoguhxtkwn2aowtccfybutn6xgzrqvhdob4tzericerpfntfh@q6f5upgegba7>
+References: <20240829105444.2885653-1-carlos.song@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240830034640.7049-7-kfting@nuvoton.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240829105444.2885653-1-carlos.song@nxp.com>
 
-Hi,
+Hi Carlos,
 
-On Fri, Aug 30, 2024 at 11:46:39AM GMT, Tyrone Ting wrote:
-> Modify i2c frequency from table parameters
-> for NPCM i2c modules.
+Looks good, just few little comments.
+
+On Thu, Aug 29, 2024 at 06:54:44PM GMT, carlos.song@nxp.com wrote:
+> From: Carlos Song <carlos.song@nxp.com>
 > 
-> Supported frequencies are:
-> 
-> 1. 100KHz
-> 2. 400KHz
-> 3. 1MHz
+> Add target mode support for LPI2C.
 
-I agree with Andy, please add a good explanation for this change.
+Can you please be a bit more descriptive? What is this mode
+doing, how it works, what are you adding, etc. etc. etc.
 
-> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> Signed-off-by: Carlos Song <carlos.song@nxp.com>
 > ---
->  drivers/i2c/busses/i2c-npcm7xx.c | 230 +++++++++++++++++++------------
->  1 file changed, 144 insertions(+), 86 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-> index 67d156ed29b9..cac4ea0b69b8 100644
-> --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> @@ -263,6 +263,121 @@ static const int npcm_i2caddr[I2C_NUM_OWN_ADDR] = {
->  #define I2C_FREQ_MIN_HZ			10000
->  #define I2C_FREQ_MAX_HZ			I2C_MAX_FAST_MODE_PLUS_FREQ
->  
-> +struct SMB_TIMING_T {
+> Change for V2:
+> - remove unused variable ‘lpi2c_imx’ in lpi2c_suspend_noirq.
 
-Please run checkpatch.pl before sending the patches.
+this was part of a 5 patches series. Is that series superseded?
+
+(please, next time when you send a series with more than one
+patch, include a cover letter).
+
+...
+
+> +#define SCR_SEN		BIT(0)
+> +#define SCR_RST		BIT(1)
+> +#define SCR_FILTEN	BIT(4)
+> +#define SCR_RTF		BIT(8)
+> +#define SCR_RRF		BIT(9)
+> +#define SCFGR1_RXSTALL	BIT(1)
+> +#define SCFGR1_TXDSTALL	BIT(2)
+> +#define SCFGR2_FILTSDA_SHIFT	24
+> +#define SCFGR2_FILTSCL_SHIFT	16
+> +#define SCFGR2_CLKHOLD(x)	(x)
+> +#define SCFGR2_FILTSDA(x)	((x) << SCFGR2_FILTSDA_SHIFT)
+> +#define SCFGR2_FILTSCL(x)	((x) << SCFGR2_FILTSCL_SHIFT)
+> +#define SSR_TDF		BIT(0)
+> +#define SSR_RDF		BIT(1)
+> +#define SSR_AVF		BIT(2)
+> +#define SSR_TAF		BIT(3)
+> +#define SSR_RSF		BIT(8)
+> +#define SSR_SDF		BIT(9)
+> +#define SSR_BEF		BIT(10)
+> +#define SSR_FEF		BIT(11)
+> +#define SSR_SBF		BIT(24)
+> +#define SSR_BBF		BIT(25)
+> +#define SSR_CLEAR_BITS	(SSR_RSF | SSR_SDF | SSR_BEF | SSR_FEF)
+> +#define SIER_TDIE	BIT(0)
+> +#define SIER_RDIE	BIT(1)
+> +#define SIER_AVIE	BIT(2)
+> +#define SIER_TAIE	BIT(3)
+> +#define SIER_RSIE	BIT(8)
+> +#define SIER_SDIE	BIT(9)
+> +#define SIER_BEIE	BIT(10)
+> +#define SIER_FEIE	BIT(11)
+> +#define SIER_AM0F	BIT(12)
+> +#define SASR_READ_REQ	0x1
+> +#define SLAVE_INT_FLAG	(SIER_TDIE | SIER_RDIE | SIER_AVIE | \
+> +						SIER_SDIE | SIER_BEIE)
+
+I'm not happy about the alignment here, can we have the columns
+well aligned, please?
+
+> +
+>  #define I2C_CLK_RATIO	2
+>  #define CHUNK_DATA	256
+
+...
+
+> +	if (sier_filter & SSR_SDF) {
+> +		/* STOP */
+> +		i2c_slave_event(lpi2c_imx->target, I2C_SLAVE_STOP, &value);
+> +	}
+
+nit: no need for brackets here.
+
+...
+
+> +static irqreturn_t lpi2c_imx_isr(int irq, void *dev_id)
+> +{
+> +	struct lpi2c_imx_struct *lpi2c_imx = dev_id;
+> +	u32 ssr, sier_filter;
+> +	unsigned int scr;
+
+why is ssr unsigned int and not u32?
+
+Can we define ssr, sier_filter and scr in the innermost section?
+i.e. inside the "if () { ... }"
+
+> +
+> +	if (lpi2c_imx->target) {
+> +		scr = readl(lpi2c_imx->base + LPI2C_SCR);
+> +		ssr = readl(lpi2c_imx->base + LPI2C_SSR);
+> +		sier_filter = ssr & readl(lpi2c_imx->base + LPI2C_SIER);
+> +		if ((scr & SCR_SEN) && sier_filter)
+> +			return lpi2c_imx_target_isr(lpi2c_imx, ssr, sier_filter);
+> +		else
+> +			return lpi2c_imx_master_isr(lpi2c_imx);
+> +	} else {
+> +		return lpi2c_imx_master_isr(lpi2c_imx);
+> +	}
+
+this can be simplified a bit:
+
+	if (...) {
+		scr = ...
+		ssr = ...
+		sier_filter = ...
+
+		/* a nice comment */
+		if (...)
+			return lpi2c_imx_target_isr(...)
+	}
+
+	return lpi2c_imx_master_isr(lpi2c_imx);
+
+Not a binding comment. Your choice.
+
+> +}
+> +
+> +static void lpi2c_imx_target_init(struct lpi2c_imx_struct *lpi2c_imx)
+> +{
+> +	int temp;
+
+u32?
 
 Thanks,
 Andi
