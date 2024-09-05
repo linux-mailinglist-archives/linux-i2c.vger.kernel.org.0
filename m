@@ -1,129 +1,113 @@
-Return-Path: <linux-i2c+bounces-6247-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6248-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C09596DA22
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 15:23:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A14C796DAEE
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 15:57:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B97BB21149
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 13:23:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 590CC1F259CB
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 13:57:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB06319D081;
-	Thu,  5 Sep 2024 13:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5132F19DF70;
+	Thu,  5 Sep 2024 13:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HMulNgST"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3vjdln7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9696A19D064
-	for <linux-i2c@vger.kernel.org>; Thu,  5 Sep 2024 13:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F324719C573;
+	Thu,  5 Sep 2024 13:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725542584; cv=none; b=FfDZhE2T/U7tSxe2W8pyydfZDu6lydOiyK0LoQ628D4pcaTj5CnCcsKrlm/q24hVzsYZcypc67DomilMw2SG1YzggkAWz+iu1JFSJ0LscIpS7JePxUhr8NyHNQ22qTguG97LjI0wFnwDDMuRiXZfBohNPJUpXI2wNYIw0stTE1A=
+	t=1725544632; cv=none; b=GqpS1nkUb+3CQGNP147zCpE5RfrG9FD5eXISwXp0ZLa/IXsWP/sOTEWjbjCuZQcPoI5SyOGwTELZ3aCDOwQH8TmISsV8fZ8UaC4mSqTfOtrIx1MS9AJnxxQVmH4ol/m2GsaYX4eV8FWn9FGkBGg6NhD2EOWySLHZzeObsc0WMQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725542584; c=relaxed/simple;
-	bh=kidWxzS9Q95Q5dbm7Dd7JdsGGV+Dkyu2kbgsrCl8iIc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cme9TDDzRncVUCVo1tYxryWlM9U57HA/Ed/y/uf2mSpEqkw1Mjg4Ih+5yM09ykN3RwWTmRjOAooe6g1UYGSCB2zq+MEy96URkAR0eyfBROwBbg/iKVB/rb0QSZV2NGJtCctnZioK19/EDi/wG8E9H4iZuP05I/qR9ptSH1aOOQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HMulNgST; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5356bb5522bso1012244e87.1
-        for <linux-i2c@vger.kernel.org>; Thu, 05 Sep 2024 06:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725542581; x=1726147381; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vgOzNn37XJnh9r05Bul3VVmu7PlnqW66dmTY+HEc/b0=;
-        b=HMulNgSTSPhvxAw82bJ6ERuONzU2gTBC2gV1uuYVoECMLGDtJetnC2SWHiQbxrzKHp
-         NmjI0kCvX9YxCwHv/ah+7/BEt0lr3qRQX18IhTAqaOGCyCzd/ESjvAr2zOOL3C2MGv8I
-         u/3uOFr+wmasRiW7eybnx9U5rwyDbF0fhxu/rbPHYEqnhobEPC04RwB7huzKFDetCpyL
-         wy7TFDXiKKlxs9yck721nXiS58SAM39phSBIpqRhCPsDkqMQKe4wOaO2zB9fmqGtedHb
-         f/qpF0EyZSeX5GgR7ZSw2KTEDC1QzBdYBeErTlMDrxz30ztkhs3Z92z38OWrhGpw2HpS
-         KWYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725542581; x=1726147381;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vgOzNn37XJnh9r05Bul3VVmu7PlnqW66dmTY+HEc/b0=;
-        b=n2zG9r+iyeN1mJZtFh7aO2XFhN64fWMb6IbGac53Q/uq0J1AChTode884B6+CRZyIp
-         lj20FabqmKCa126nBnENG5L+nQUywtF/MMkgs1zQM0JaZrsyVb8NpoaPRaBFZBn5YdXe
-         MoztdACVWvH/g93UN6pF1pGMow270+tkmaR5LVyPKt4iJGfoOTWx25hNa5svDpeeLHhW
-         +ijvKo31ZkKFbTTDmriAwQjPBLcBQJMBjPCFWjT1sj9DiUZq+Y9sc49WvI/Y0gHG0Bju
-         v0NChl3yG72xS6YumTiPory7Z0r/Jh544qWQSpncsQGVUQRD/fL73wPP47xcwBcb6HUH
-         Jf6w==
-X-Forwarded-Encrypted: i=1; AJvYcCW8O8DmcibjfDwYBfYGDXa14Yma/cWQPN3AqL2V7VEcWW1csmR1CUCimokQ9YDmEM5jwMNCGBNGIaQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlAgsjqZVXUJP/Uec3OmHQpQ7ZVF94odmMn+4R3AOIfXxh5DBu
-	sYp/EdcncKo+GaLznwa0KAc4Muyp6ZoJBWMvcObH5diLZByb0AXvgcWmYoth5DM=
-X-Google-Smtp-Source: AGHT+IFQNXuLaQLGzDvCoIvfmxCmDxrL6iOajkCgUhh3bCEud0vFaRWrE+nDSh1i5VB6t3aa0vfOqg==
-X-Received: by 2002:a05:6512:2c90:b0:535:698e:6e2e with SMTP id 2adb3069b0e04-535698e718dmr3322918e87.18.1725542579933;
-        Thu, 05 Sep 2024 06:22:59 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-535681cfa59sm434490e87.187.2024.09.05.06.22.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 06:22:59 -0700 (PDT)
-Date: Thu, 5 Sep 2024 16:22:57 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Nikunj Kela <quic_nkela@quicinc.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, andersson@kernel.org, 
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	rafael@kernel.org, viresh.kumar@linaro.org, herbert@gondor.apana.org.au, 
-	davem@davemloft.net, sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de, 
-	will@kernel.org, robin.murphy@arm.com, joro@8bytes.org, jassisinghbrar@gmail.com, 
-	lee@kernel.org, linus.walleij@linaro.org, amitk@kernel.org, 
-	thara.gopinath@gmail.com, broonie@kernel.org, cristian.marussi@arm.com, 
-	rui.zhang@intel.com, lukasz.luba@arm.com, wim@linux-watchdog.org, linux@roeck-us.net, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org, arm-scmi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com, 
-	Praveen Talari <quic_ptalari@quicinc.com>
-Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
-Message-ID: <vk2jiq2rjgz7fdoq65qdhxdx37lbkoe4uq2c2fmu7aiu3c5pmn@l5skg7xvogun>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-17-quic_nkela@quicinc.com>
- <66458a5c-5054-44ac-914f-e66281ee43a9@kernel.org>
- <9394ce8b-9a43-485b-8d7f-33930251ccac@quicinc.com>
+	s=arc-20240116; t=1725544632; c=relaxed/simple;
+	bh=YwhGNWwOD7YnFzp2eQqZuiFp3983dv8ZOgPhaiQXc7g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AeoiwK/KuhiQy2TTPv/jjLZoyp5qEU47/vPimFYuHCu6n3ieA1qVrzi8ueq9SU65mcl0TVU+NBYl+AxDt09C8OyDn9EqFs+XoLW1z0fHgZhn5KDbBRcSdBJIFBm2aCYQ6th02B1vFGsOSmD+KNxKRjpaw/BJ2NI8M8aaApIMkfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3vjdln7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE682C4CEC3;
+	Thu,  5 Sep 2024 13:57:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725544631;
+	bh=YwhGNWwOD7YnFzp2eQqZuiFp3983dv8ZOgPhaiQXc7g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=V3vjdln7r6k1XOFa4pcz7LpHWEbE50GKVoUw4p48poItjMSM82bAdCoDahnkzBkr9
+	 U8K8Lq0rMH8J5JK5c0g1VlTenokujaM6UX2tVFhqlXVxt8tsbeR4lAzgr9fufsT4sW
+	 kdEfncrje4xEi6mGuos7G4yK8i+c6VO1GXkdXKxVsCgGM7p6Nm+H+m+fWLBz0wgNjN
+	 nEHiKadebk/KG+7sxxOjBC2UPudM2khxSXaSSxNzb/7vV2J0Jt1yOjDx+sExzjyv1+
+	 BSRYCXHYcDdln1eNev5gxYvDYW5cCHvYMirDvejjYazpnCoayzsSeGOHJD5vnrixcW
+	 Y0OTkw0YOqmww==
+Message-ID: <917917cc-3e78-4ab6-8fa4-82d9a6fe3fdd@kernel.org>
+Date: Thu, 5 Sep 2024 15:57:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9394ce8b-9a43-485b-8d7f-33930251ccac@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/7] i2c: qcom-cci: Stop complaining about DT set clock
+ rate
+To: Richard Acayan <mailingradian@gmail.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Loic Poulain <loic.poulain@linaro.org>,
+ Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-media@vger.kernel.org
+Cc: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+References: <20240904020448.52035-9-mailingradian@gmail.com>
+ <20240904020448.52035-12-mailingradian@gmail.com>
+Content-Language: en-US
+From: Konrad Dybcio <konradybcio@kernel.org>
+In-Reply-To: <20240904020448.52035-12-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 04, 2024 at 05:49:40AM GMT, Nikunj Kela wrote:
+On 4.09.2024 4:04 AM, Richard Acayan wrote:
+> From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > 
-> On 9/4/2024 12:48 AM, Krzysztof Kozlowski wrote:
-> > On 04/09/2024 00:02, Nikunj Kela wrote:
-> >> Add compatible representing spi support on SA8255p.
-> >>
-> >> Clocks and interconnects are being configured in firmware VM
-> >> on SA8255p platform, therefore making them optional.
-> >>
-> >> CC: Praveen Talari <quic_ptalari@quicinc.com>
-> >> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
-> > Also this is incomplete - adding compatible without driver change is not
-> > expected. It cannot even work.
-> >
-> > Best regards,
-> > Krzysztof
+> It is common practice in the downstream and upstream CCI dt to set CCI
+> clock rates to 19.2 MHz. It appears to be fairly common for initial code to
+> set the CCI clock rate to 37.5 MHz.
 > 
-> Link for CLO branch is provided in I2C patch series. The driver changes
-> will soon follow.
+> Applying the widely used CCI clock rates from downstream ought not to cause
+> warning messages in the upstream kernel where our general policy is to
+> usually copy downstream hardware clock rates across the range of Qualcomm
+> drivers.
+> 
+> Drop the warning it is pervasive across CAMSS users but doesn't add any
+> information or warrant any changes to the DT to align the DT clock rate to
+> the bootloader clock rate.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> Link: https://lore.kernel.org/linux-arm-msm/20240824115900.40702-1-bryan.odonoghue@linaro.org
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
 
-So, what's the point of posting the dt-bindings without corresponding
-driver changes?
+I.. am not sure this is really a problem? On some platforms the core
+clock is only 19.2 Mhz, but e.g. on sdm845 we have:
 
--- 
-With best wishes
-Dmitry
+static const struct freq_tbl ftbl_cam_cc_cci_clk_src[] = {
+        F(19200000, P_BI_TCXO, 1, 0, 0),
+        F(37500000, P_CAM_CC_PLL0_OUT_EVEN, 16, 0, 0),
+        F(50000000, P_CAM_CC_PLL0_OUT_EVEN, 12, 0, 0),
+        F(100000000, P_CAM_CC_PLL0_OUT_EVEN, 6, 0, 0),
+        { }
+};
+
+Shouldn't this be somehow dynamically calculated?
+
+Konrad
 
