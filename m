@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6229-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6230-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9BDC96D13F
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 10:05:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC3A596D18A
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 10:12:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49543B23820
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 08:05:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F126D1C20A56
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 08:12:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C59194A5A;
-	Thu,  5 Sep 2024 08:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DBE319B3EC;
+	Thu,  5 Sep 2024 08:08:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NFmvtyFL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IgV101gV"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE322AE96;
-	Thu,  5 Sep 2024 08:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B68195383;
+	Thu,  5 Sep 2024 08:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725523509; cv=none; b=BQ+nv7LMN1ImfchpESptGRTx1dla6btGyp/Pj7kyNwLvmde7O9VW9xDwH1yYecFRIZCJBk6bW6/x4B4m/MG5fSG3BVAqiLmImvNoztflcPBc20IiLJRLQr/7da83HpXWdfHX5aK2z99Vzm0mLmiWXBm5IzyptdssORMIxcWs/Hw=
+	t=1725523717; cv=none; b=MMD2J+c2AYXb/hf4fZOVy+CuJ4VmpO971b5hHf6fvmtVXlWfeOr0Pmkbx9xf8CV5yg23hkmhIo6mUoyGXXRoXzPbuO0tXyZRI6+mXO4A1+cVpPdheRQWjwZ6aBagThFQGK0P+xS+Ti5si4GqVxWlyYHS3KUG7NZO4uMw2E3SSx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725523509; c=relaxed/simple;
-	bh=SLJolgqxxpCuR5zbqIclh1OOtja/y7k9ppSY8hpWXVc=;
+	s=arc-20240116; t=1725523717; c=relaxed/simple;
+	bh=aiphdbxj3rcUgPpWhtlfJXWQb0TZKkWpIjwS9KXxsyU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tf27qbpso+FfpJYShA4dkerrZf+/EgstWOFcGLj/daCTbfVD+bbZyGSWtE5Vk+ghLaVob11K+cX2uqCdk/f1u0PM7ORkUlal/igXsPYr9od0GQBhLQ+cSvgbxyDP7B6FZlcwi3qUOV5v+ZSNw0LxrRsA0L1QUI84zfA81bvNuPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NFmvtyFL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B0F4C4CEC3;
-	Thu,  5 Sep 2024 08:04:53 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bmwueMvoqUMAyZcUcATvFcZ1vOubQuYwKle49OB6t2q5+Ia+it/6d4lnHodO5kLkcuOn9LDWJL3eQ0wW/pzgvsTF8EsJv7qJo/AuGDYJtX1DzUuH7uAHXBaHSONvPCCLijVmqWkVCGqONgRoGKnZRI/FOZKREyqTg5jk9gZuBJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IgV101gV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFA2C4CEC3;
+	Thu,  5 Sep 2024 08:08:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725523508;
-	bh=SLJolgqxxpCuR5zbqIclh1OOtja/y7k9ppSY8hpWXVc=;
+	s=k20201202; t=1725523716;
+	bh=aiphdbxj3rcUgPpWhtlfJXWQb0TZKkWpIjwS9KXxsyU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NFmvtyFL35bPrTmXqvsQH8UI6oTD7GEbaTrMQPLHuvCEPh8/1G68QZklDC6EDxDos
-	 tci5smfQ/EP2p/jjnT4/qS+chI+hg0AzYA/Ik346w809sHnZszg/DX4gUMO0anSdBg
-	 fPlE5QKrO1+O/iC4cHPAlDoLhKJjf1j61KuYxEiBTypI5n9ygD8MOZZEcHbXiDT4MV
-	 pe+/4jymtMLw5CKPLbAsJ2vkjACivy1y0js5uTdR+WZBXpXC5xkPN+lA/wHSSaj0t8
-	 BRhEwWxYCqUlrSrpwNkCX0YsQ4ZaHyVBOt0ihznESA3iDb7m+ErIf+MTFfKLT1UDav
-	 6vB84x7aB8MxA==
-Message-ID: <70c75241-b6f1-4e61-8451-26839ec71317@kernel.org>
-Date: Thu, 5 Sep 2024 10:04:50 +0200
+	b=IgV101gVFNa+QlilZYeRlxcVUR4HIRey0h1QGP79l71+0qxn7LlHbbUdL/ZhQGXB+
+	 fAzBjCtC0rGwG61ZbL50mKH7FmRYgMSlVAgKgLFrf9E9rJ0gbqv7JhBBqdnAJccY6i
+	 LLRPHZ+pztwWhJsfc1XsoWog9dvsK0IYfYmAIJzXjlBjfi+b4pq8Tv5Sup0Bwupidh
+	 e94qTEW78eFYLQ4p/KskOzZJXiXc9GYGIDXVvmXiwHy8dr8gwG7xX7EDciRPzfCCB4
+	 Wk9CYH7+J1+DOaGLpT6aqsToRlpsaCAfLg6WegGPNGj6UdXychiBhiOoEYmi7p5uX/
+	 v4PpATCbuhAcw==
+Message-ID: <156bbd40-bfa6-4b81-bbc6-bdd019a1b585@kernel.org>
+Date: Thu, 5 Sep 2024 10:08:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,9 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
-To: Nikunj Kela <quic_nkela@quicinc.com>, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v2 17/21] dt-bindings: serial: document support for
+ SA8255p
+To: Andrew Lunn <andrew@lunn.ch>, Nikunj Kela <quic_nkela@quicinc.com>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
  viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
@@ -71,13 +72,12 @@ Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  Praveen Talari <quic_ptalari@quicinc.com>
 References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-17-quic_nkela@quicinc.com>
- <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
- <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
- <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
- <516f17e6-b4b4-4f88-a39f-cc47a507716a@quicinc.com>
- <2f11f622-1a00-4558-bde9-4871cdc3d1a6@lunn.ch>
- <204f5cfe-d1ed-40dc-9175-d45f72395361@quicinc.com>
+ <20240903220240.2594102-18-quic_nkela@quicinc.com>
+ <db4cb31f-b219-4ee8-b519-fdec7f7b8760@kernel.org>
+ <634ab05e-3b8c-4cc1-bf23-0c68c1d28484@quicinc.com>
+ <f42fe73d-1579-4fa1-89ed-9d2a4b7c7f6e@lunn.ch>
+ <c9255fe1-dc62-44f4-a105-54e94abde915@quicinc.com>
+ <b64d3425-e7e9-4b28-bd47-ca6f99b39707@lunn.ch>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -123,31 +123,33 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <204f5cfe-d1ed-40dc-9175-d45f72395361@quicinc.com>
+In-Reply-To: <b64d3425-e7e9-4b28-bd47-ca6f99b39707@lunn.ch>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 04/09/2024 23:06, Nikunj Kela wrote:
+On 04/09/2024 23:54, Andrew Lunn wrote:
+>> No one is born with experience. You learn as you go. Please note that
+>> this series has gone through internal review before I posted it in
+>> upstream.
 > 
-> On 9/4/2024 9:58 AM, Andrew Lunn wrote:
->>> Sorry, didn't realize SPI uses different subject format than other
->>> subsystems. Will fix in v3. Thanks
->> Each subsystem is free to use its own form. e.g for netdev you will
->> want the prefix [PATCH net-next v42] net: stmmac: dwmac-qcom-ethqos:
-> of course they are! No one is disputing that.
->>
->> This is another reason why you should be splitting these patches per
->> subsystem, and submitting both the DT bindings and the code changes as
->> a two patch patchset. You can then learn how each subsystem names its
->> patches.
+> Then i'm surprise you were not told to submit lots of smaller
+> patchsets, one per subsystem, which are complete.
+
+We did... multiple times. We gave examples how entire new Qualcomm SoC
+should be upstreamed, how this process should be organized. We gave
+trainings. Some listen, some not. Sometimes people do not even come to a
+training (for free). But there will be always an excuse for patchset
+doing something entirely different than community expects...
+
+The patchset here is a result of some misconceptions and not
+understanding what is the dependency (claiming there is while there is
+no) and what are the maintainer trees.
+
 > 
-> Qualcomm QUPs chips have serial engines that can be configured as
-> UART/I2C/SPI so QUPs changes require to be pushed in one series for all
-> 3 subsystems as they all are dependent.
-
-No, they are not dependent. They have never been. Look how all other
-upstreaming process worked in the past.
-
+> I get nobody is born with experience, but for a company the size of
+> Qualcomm, they can easily hire a few experienced mainline developers
+> who can mentor you, rather than having overloaded Maintainers teach
+> you the basics, and getting frustrated in the process.
 
 Best regards,
 Krzysztof
