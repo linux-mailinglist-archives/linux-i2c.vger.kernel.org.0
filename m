@@ -1,150 +1,190 @@
-Return-Path: <linux-i2c+bounces-6224-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6225-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF4296CF17
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 08:21:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6131F96CF74
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 08:37:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAF9F287BEF
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 06:21:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5A61B20C16
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 06:37:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B04218991C;
-	Thu,  5 Sep 2024 06:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC5EE18BB9B;
+	Thu,  5 Sep 2024 06:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N1VRSiwl"
+	dkim=pass (2048-bit key) header.d=readahead.eu header.i=@readahead.eu header.b="SucWx4wW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="n/79yWOx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh3-smtp.messagingengine.com (fhigh3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BEAE2BB15;
-	Thu,  5 Sep 2024 06:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DD7189BB5;
+	Thu,  5 Sep 2024 06:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725517300; cv=none; b=JXZMGWQQq7wA4JfUo90SUMxsxRCly52Hxw3Pxd2Wcr6hDQFOZPFClmUg7GagI8+BhfF7L6iv3vWTEMP28XVtI9oit2wWQVfKECj34xqH3+34T5BhrJ+lVgLEyfKm+P+b6mikV4P+Y8j7FAOfcJArOlgonsHBiCPFUEcpCk9UH20=
+	t=1725518195; cv=none; b=PAGzPGZEuaQsa+EriZALdNOwAkxTCXbZd7UqC/CUtSLcbOS9+YL7/l3gYOBRyFmz+AxtW84l5tf7s3WDm+drDDDfq+I6gdaIwY05QDivHvto73eMc1dikd/DQ9dBVQYTGjstnjVD1Lj25KKXeppPscmuN7DaXuWBx2pKfnh5CtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725517300; c=relaxed/simple;
-	bh=sZTowVQmdtCFZcfiYVNZ4zocQ+AolAKfo4MSe7xfMwo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rEu/ixsxc2OcvHf7KCBkeQ8/AC7/WbVIjItEG86KbH3/QTXt/SErrUC7NOpbJtkDfzs1+dOwJYERW0XyBATQkavxCRZmNP1rL5oS2e1OgNMMAtQjpRqTOSdVB1xzCrV8Kc6Yd3JTzdEhAWF81c2zsfQCVi/z1n0VeFZIs4pBoeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N1VRSiwl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F9DBC4CEC4;
-	Thu,  5 Sep 2024 06:21:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725517299;
-	bh=sZTowVQmdtCFZcfiYVNZ4zocQ+AolAKfo4MSe7xfMwo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=N1VRSiwlaPgqhu7MnabOpaTT7B+/8mBs72Xo+IhXsVKeP2vnNPGLAf2erTMdmGIFv
-	 9KoY01i9rRnYo3G6xQzwKW4e4sXkdOsliSrrN/RZMH4OgOSLNLf/LyihZoULOLC0BA
-	 CrXfHXFovAYxIz9mXNlgjfA25H7tgoAdLKA2qRL18zaSsY8oGqkgeaFwBYnzk9mzry
-	 +1gBdWATLr6KXM0r1I0+fHT60gSjY4F28rx0CJOXzgYA7FL3ZCcyGMtKNSSVchD4pa
-	 AH1pH7xgAIBVa7UFwJSJYJ/DLPB3cfxokohz4Nau+26W80l+rSIGt2b54fgDbo7SFE
-	 tn+Yhh554k0Ng==
-Message-ID: <497c8852-8aa5-4d46-b547-9ca22f1c7673@kernel.org>
-Date: Thu, 5 Sep 2024 08:21:34 +0200
+	s=arc-20240116; t=1725518195; c=relaxed/simple;
+	bh=ieGdSh4onMR57QpajuWhSOfOVKy2H+a4sMG+vBKM9V0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=jc/49MuVqUXoLEkiOt2f8OehycZ61PcnOKaIf+kNZZSIBHPFXMZa/o2rjgJllbNzKq+Qhq9GImqpF81TA6wtv18WBd8LWYjCtcdJw8CU82XXK3StSoJ0016HXmXilZ2VkPLOq/sYXgwoHFex7A7VaNkBtTv3RkcBMv590qdbPI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readahead.eu; spf=pass smtp.mailfrom=readahead.eu; dkim=pass (2048-bit key) header.d=readahead.eu header.i=@readahead.eu header.b=SucWx4wW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=n/79yWOx; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readahead.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=readahead.eu
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 4DCA7114021B;
+	Thu,  5 Sep 2024 02:36:30 -0400 (EDT)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-01.internal (MEProxy); Thu, 05 Sep 2024 02:36:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=readahead.eu; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1725518190;
+	 x=1725604590; bh=PWDzdW/xLq6m2UP0K8K6zATWTvz4LuIj8tZS0VhhB4I=; b=
+	SucWx4wW6cKtN5PAPPhPNywyyhvAcZpPHrEJRTA3npT72wsfcUREElaA80vdKtlr
+	i5ejbUjTrznXF6imLEmMOkHZJLv3T7uN4HkpIXpNd1jTQZ6GLJ1Nj5I+Oohw0129
+	gVZXBAEGCxgK/bqaYl4l7ALUaBVl8XZLTrltybPt3PU7SZk8kH/9bHpuyqgHbA43
+	vRl+sp4q+SI3bnklo7qG8K64FSD+CrNdt755SypKbDrTr9fFy2DA3R5usRPRUm3b
+	49TRajtYDXq3YIxNZAJaYdTMlCmC5Jz4ZRXhnZN7aGb7v5mZ8dyPUkiPYoJKDMT6
+	q9C2aNmgqeZMxeu43CnhXA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725518190; x=
+	1725604590; bh=PWDzdW/xLq6m2UP0K8K6zATWTvz4LuIj8tZS0VhhB4I=; b=n
+	/79yWOxKwjxIuy21AMf+VJAb/dF0sgsYAS46h+4WNmA0Az+/Sdu5XzWKwnRLThQZ
+	1fB/sTpAaQkDo8wEcc+Ytg9t8uF0X2Y/E9zatmGtmL/1GJ1jFi7pdSNtjJXISJJb
+	4Fn28TNATlHsTsByIz3nEPkIPnkD9F9DlMFyZsLpOzIsk7i/0IxK2OW+s84d6SQN
+	+kw/69sz8FZSGFBOomjf2iQjG8WEBly1OtiLKUoRj5QFY82VqzblWaFAga45Fa9k
+	yin/0h/JbYDwxsn/hr9wZXxZxbb58NBiX5nacVsYFfP82PtA/6kYnOZ08+4hVWoI
+	vYoCJ0cpyn4ht6t/kyCIA==
+X-ME-Sender: <xms:bFHZZhWgmCSgbcsqfye8PhJXoXgVald2uLdlrhmO-5oVETaXTL7X4w>
+    <xme:bFHZZhkjIcayL-66KnkP3nAxnaYn_EluqMDaolK5uusd8EQESkKjAw-eWy25cixwj
+    D0CRxK8FMNGEzrupdg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehkedgudduudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdffrghvihguucfthhgvihhnshgsvghrghdfuceouggrvhhiugesrh
+    gvrggurghhvggrugdrvghuqeenucggtffrrghtthgvrhhnpeethfetfefhfeetffffffet
+    veeujeelieehteegheffieelveefhfekgeekfeegleenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegurghvihgusehrvggruggrhhgvrggurdgv
+    uhdpnhgspghrtghpthhtohepvddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
+    gujhhoghhorhgthhhotghksehgmhgrihhlrdgtohhmpdhrtghpthhtohepghhuphhtvddu
+    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgviihinhdrrghlvgigrghnuggvrhesgh
+    hmrghilhdrtghomhdprhgtphhtthhopehmihgthhgrvghlrdiirghiughmrghnsehgmhgr
+    ihhlrdgtohhmpdhrtghpthhtohepshgrvhhitggrlhgvkhhsrgekfeesghhmrghilhdrtg
+    homhdprhgtphhtthhopehlihiivghtrghoudeshhhurgifvghirdgtohhmpdhrtghpthht
+    ohepmhgvsehjrggtkhguohgrnhdrtghomhdprhgtphhtthhopegsvghnthhishhssehkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehjihhkohhssehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:bFHZZta_ECLfNlzlzCciklQfSk_yoRPIszW__6fTDcmiJN5kHiFMTw>
+    <xmx:bFHZZkVepz8xCGQj_T9PK-hxO7o3QL53Fe5LQmThvtjsn1f22KfA1Q>
+    <xmx:bFHZZrnl1HJaQQ3v6Y7GP86x0AvUlLDf8O4GI5kXKSN42JMQwqv_6w>
+    <xmx:bFHZZheifOB8UDK-jhPf9mYbf-V14chrek4CWBpezDOzoMLCF_Qd_Q>
+    <xmx:blHZZtoVerMoggq4Gn2z3pAsmQygTW-f3tvDVNlQEoPwUT2zLEnWIGbt>
+Feedback-ID: id2994666:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D177618A006B; Thu,  5 Sep 2024 02:36:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
- flag
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
- konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
- linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc: quic_vdadhani@quicinc.com
-References: <20240829092418.2863659-1-quic_msavaliy@quicinc.com>
- <20240829092418.2863659-2-quic_msavaliy@quicinc.com>
- <74c13a4a-0d4b-4cbd-9a75-9933c098c3ba@kernel.org>
- <cb7613d0-586e-4089-a1b6-2405f4dc4883@quicinc.com>
- <a4bbb898-bf91-4dcb-b7da-ab032b228aa2@kernel.org>
- <dc434cb2-7eb0-48fc-967f-5ed93ad1284c@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <dc434cb2-7eb0-48fc-967f-5ed93ad1284c@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Date: Thu, 05 Sep 2024 08:35:57 +0200
+From: "David Rheinsberg" <david@readahead.eu>
+To: "Li Zetao" <lizetao1@huawei.com>, "Jiri Kosina" <jikos@kernel.org>,
+ bentiss@kernel.org, michael.zaidman@gmail.com, gupt21@gmail.com,
+ djogorchock@gmail.com, rrameshbabu@nvidia.com, bonbons@linux-vserver.org,
+ roderick.colenbrander@sony.com, savicaleksa83@gmail.com, me@jackdoan.com,
+ jdelvare@suse.com, linux@roeck-us.net, mail@mariuszachmann.de,
+ wilken.gottwalt@posteo.net, jonas@protocubo.io, mezin.alexander@gmail.com
+Cc: linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Message-Id: <13b7ede6-0e84-4a48-891b-2b75bff9c342@app.fastmail.com>
+In-Reply-To: <20240904123607.3407364-12-lizetao1@huawei.com>
+References: <20240904123607.3407364-1-lizetao1@huawei.com>
+ <20240904123607.3407364-12-lizetao1@huawei.com>
+Subject: Re: [PATCH -next 11/19] HID: wiimote: Use devm_hid_hw_start_and_open in
+ wiimote_hid_probe()
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 05/09/2024 07:43, Mukesh Kumar Savaliya wrote:
+Hi
+
+On Wed, Sep 4, 2024, at 2:35 PM, Li Zetao wrote:
+> Currently, the wiimote module needs to maintain hid resources
+> by itself. Consider using devm_hid_hw_start_and_open helper to ensure
+> that hid resources are consistent with the device life cycle, and release
+> hid resources before device is released. At the same time, it can avoid
+> the goto-release encoding, drop the err_close and err_stop lables.
+>
+> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+> ---
+>  drivers/hid/hid-wiimote-core.c | 20 +++-----------------
+>  1 file changed, 3 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/hid/hid-wiimote-core.c b/drivers/hid/hid-wiimote-core.c
+> index 26167cfb696f..28cd9ccbb617 100644
+> --- a/drivers/hid/hid-wiimote-core.c
+> +++ b/drivers/hid/hid-wiimote-core.c
+> @@ -1780,8 +1780,6 @@ static void wiimote_destroy(struct wiimote_data *wdata)
+>  	wiimote_ext_unload(wdata);
+>  	wiimote_modules_unload(wdata);
+>  	cancel_work_sync(&wdata->queue.worker);
+> -	hid_hw_close(wdata->hdev);
+> -	hid_hw_stop(wdata->hdev);
 > 
+>  	kfree(wdata);
+>  }
+> @@ -1806,22 +1804,14 @@ static int wiimote_hid_probe(struct hid_device *hdev,
+>  		goto err;
+>  	}
 > 
-> On 9/4/2024 11:50 PM, Krzysztof Kozlowski wrote:
->> On 04/09/2024 20:12, Mukesh Kumar Savaliya wrote:
->>>> Tools like b4 or scripts/get_maintainer.pl provide you proper list of
->>>> people, so fix your workflow. Tools might also fail if you work on some
->>>> ancient tree (don't, instead use mainline) or work on fork of kernel
->>>> (don't, instead use mainline). Just use b4 and everything should be
->>>> fine, although remember about `b4 prep --auto-to-cc` if you added new
->>>> patches to the patchset.
->>>>
->>>> You missed at least devicetree list (maybe more), so this won't be
->>>> tested by automated tooling. Performing review on untested code might be
->>>> a waste of time.
->>>>
->>>
->>> You mean flag addition into DTSI file ? If yes, then the intention was
->>> to just enable feature support but not into mainline because it should
->>> happen per board or usecase. Please suggest if i can enable particular
->>> node with DTSI feature flag.
->>> Please correct me if my understanding on your ask went wrong.
->>
->> How is this related?
-> "You missed at least devicetree list (maybe more)" - Do you mean to say 
-> i missed to add DTSI changes OR maintainers for DTSI ? seeking clarity 
-> to avoid confusion.
+> -	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+> -	if (ret) {
+> -		hid_err(hdev, "HW start failed\n");
+> +	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_HIDRAW);
+> +	if (ret)
+>  		goto err;
+> -	}
+> -
+> -	ret = hid_hw_open(hdev);
+> -	if (ret) {
+> -		hid_err(hdev, "cannot start hardware I/O\n");
+> -		goto err_stop;
+> -	}
+> 
+>  	ret = device_create_file(&hdev->dev, &dev_attr_extension);
+>  	if (ret) {
+>  		hid_err(hdev, "cannot create sysfs attribute\n");
+> -		goto err_close;
+> +		goto err;
+>  	}
+> 
+>  	ret = device_create_file(&hdev->dev, &dev_attr_devtype);
+> @@ -1847,10 +1837,6 @@ static int wiimote_hid_probe(struct hid_device *hdev,
+> 
+>  err_ext:
+>  	device_remove_file(&wdata->hdev->dev, &dev_attr_extension);
+> -err_close:
+> -	hid_hw_close(hdev);
+> -err_stop:
+> -	hid_hw_stop(hdev);
+>  err:
+>  	input_free_device(wdata->ir);
+>  	input_free_device(wdata->accel);
+> -- 
+> 2.34.1
 
-You did not CC maintainers and necessary list. I wrote nothing about
-DTSI. You are expected to use tools, not manually come with some address
-list.
+Looks good!
 
-Best regards,
-Krzysztof
+Reviewed-by: David Rheinsberg <david@readahead.eu>
 
+Thanks
+David
 
