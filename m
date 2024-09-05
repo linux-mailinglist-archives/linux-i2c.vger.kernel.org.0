@@ -1,218 +1,160 @@
-Return-Path: <linux-i2c+bounces-6226-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6227-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A535996D01D
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 09:09:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C65B96D076
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 09:33:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED84EB21C94
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 07:09:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B09431F215FD
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 07:33:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA55192D7D;
-	Thu,  5 Sep 2024 07:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="soqfohpc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6793F193432;
+	Thu,  5 Sep 2024 07:33:39 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail03.siengine.com (mail03.siengine.com [43.240.192.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68130192D64
-	for <linux-i2c@vger.kernel.org>; Thu,  5 Sep 2024 07:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75319146A72;
+	Thu,  5 Sep 2024 07:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.240.192.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725520152; cv=none; b=hTgcw+DYkTecKAc4dUFENr2s89PKZY7AmsRwqUM55fnMlZeFWAjovp4bIvMHW7WY2ElvBrLyLKMuYaiccOwkF4IE8vbgFhmW/BWMs4Df5owJjlzZZrEB1yrTTW4KWHxevQag5NxPsRBlDQkQMHM+dLjxDR/fXTLT1dgmmFLvRSI=
+	t=1725521619; cv=none; b=Y9mO6JeIRrz4JHS53R/BvD+nqa3KX5wlt3St1vG81tJK5yOX/uThb/Xj4vJrTJhfeZTiZthCzMIjrZSnY++Csbl5CnNgX282Xt7aURSGG2G+u6h0Fo6p2mln0FuNIPAd9vnI5x9GplqJ2hIKeBFad4iF16GdG9UrKLdXQ3w9LsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725520152; c=relaxed/simple;
-	bh=HajNEILBB4LpQ5qrTS6oyEUq2nWFUFEfj4Vct4lymWg=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Az34ZKPkf/RzB984KgbyDUmSfTcBERqXQCazlyITYYVY3qhQ3ZgVSjRDZOe+hggAN8IbA2nQlObTo+Ohf//pqiYRLixriGLkfnfviY+zsESSJGsMjJCAAkU94+RNO+BqyufY640W9lYpAdsYmQE3gM4T7PnaXJfThfe79CfUROo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=soqfohpc; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-371ba7e46easo255793f8f.0
-        for <linux-i2c@vger.kernel.org>; Thu, 05 Sep 2024 00:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725520148; x=1726124948; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9Bbuf05tKm9Qvab1AkCEZPP/Lhf9RimDxEVIFSjCvS4=;
-        b=soqfohpcigvHfO4/iL+zasRvVRVmL9VpMxPuT/A6+1CpiAved9VxEQKnjYAmzTSFp+
-         RMPrm3WfuGafWwzvz8xdUU/6R1ZuOi5cCjKjXLkNdtDu4OwxnDESKrnaIxi7Z4b5RSlt
-         Byp7nPDdlGMakN0kKUHkNuoXNdbTbY/rqVVrPNN+rjt/bKg7v5DrI/y6MBBpvED81xOa
-         Bmh/iQoqtc4eQSUODXoldSyUf4SCaYK0W8zOU3Mry0+IthyTb9RbsUL8mjNb/72uW1WL
-         HVOmVUnBg5bsTmWy1ufltd2S/UIpp7H1Q79tul8rfHUdkFet4AfOqMv1k0eNOQYJsqvX
-         neCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725520148; x=1726124948;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9Bbuf05tKm9Qvab1AkCEZPP/Lhf9RimDxEVIFSjCvS4=;
-        b=Y9Tygtzrea8TIy95Y97duyIYsDBHkLCxxGHs2wXCAQiCjH/RpBLvdbQagUnNPVM8AU
-         vTIw0cxuB+fDb4bb1D7MR/ImR0S3WvitA3Xe4g7baHN8GBDQqkn1sseZBcoQqbMWauIA
-         YCqIreL61o0xlo2o0ErnbrL4BqylmHMovQVYwhxvVw45SKOp+9Q+DmpycTUw+tgHHvPv
-         c54DnmnscqOKroU3TB86BWZ20feObiHeYEMqlwFef9BfiiY4NULTK78EaPqHN+URvQFM
-         FAvRC5MiJ6h6X4lpSCo9UP6sbnVpvR48LaClG5WkD+fQ43ttnHshH4lZLpsBa8nrnbco
-         TyFw==
-X-Forwarded-Encrypted: i=1; AJvYcCXyn9GE9Ijj5aAkpEHuOPVxizP7e2HvTXNyaebVmomL4+hVH5pa+FB2+rBhARToQ8aRKO4MJtB3+hg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywcq2JnW3ISlY1YDkjWp/Vb+mqMBUursFksBP6DGoyjLWzfMtOd
-	1+6X6eAvD1R9wMWfVmn/w46+4mGKVizXKe4CBb9DqPaJF36Px3LTXs4eASyM44E=
-X-Google-Smtp-Source: AGHT+IFGtqWGPfN57BbsP+goPfpz21z0hGGf3AAIeBS26xwMEAXiy1urdpZbC1d8JRM7ZNC4sTv2TQ==
-X-Received: by 2002:adf:f206:0:b0:366:eade:bfbb with SMTP id ffacd0b85a97d-374bcfe5bd4mr10395488f8f.46.1725520147400;
-        Thu, 05 Sep 2024 00:09:07 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:4a45:fd0d:4bfe:dc52? ([2a01:e0a:982:cbb0:4a45:fd0d:4bfe:dc52])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6e27364sm222939605e9.34.2024.09.05.00.09.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Sep 2024 00:09:06 -0700 (PDT)
-Message-ID: <169e9428-e328-4c2a-b54c-c49852016a81@linaro.org>
-Date: Thu, 5 Sep 2024 09:09:06 +0200
+	s=arc-20240116; t=1725521619; c=relaxed/simple;
+	bh=lQXjfigg+HsYXd8iVhyU+nKiUVkBXqAoH7mRtHr/PR8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=dhZhQbhPrqzjBvKxAzlKzDXuJW3nmUwYyNHrdeNsuv0vV79P3c6ccbZwmrzxF/S4DjZth0cZxJU4raiBAiM2mQlqYlKRWvXPK8fJaMYzUK7q+eytEo3QsBUwVgmGz/0LQXmhNophvzvU21/+vNI/gq3ybO6gYN9XQ2bHnEFTwLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com; spf=pass smtp.mailfrom=siengine.com; arc=none smtp.client-ip=43.240.192.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siengine.com
+Received: from dsgsiengine01.siengine.com ([10.8.1.61])
+	by mail03.siengine.com with ESMTPS id 4857W7XA033674
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Thu, 5 Sep 2024 15:32:07 +0800 (+08)
+	(envelope-from kimriver.liu@siengine.com)
+Received: from SEEXMB03-2019.siengine.com (SEEXMB03-2019.siengine.com [10.8.1.33])
+	by dsgsiengine01.siengine.com (SkyGuard) with ESMTPS id 4WzrfG2c6nz7ZMlW;
+	Thu,  5 Sep 2024 15:32:06 +0800 (CST)
+Received: from SEEXMB05-2019.siengine.com (10.8.1.153) by
+ SEEXMB03-2019.siengine.com (10.8.1.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1544.11; Thu, 5 Sep 2024 15:32:06 +0800
+Received: from SEEXMB03-2019.siengine.com (10.8.1.33) by
+ SEEXMB05-2019.siengine.com (10.8.1.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1544.9; Thu, 5 Sep 2024 15:32:06 +0800
+Received: from SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe]) by
+ SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe%16]) with mapi id
+ 15.02.1544.011; Thu, 5 Sep 2024 15:32:06 +0800
+From: =?gb2312?B?TGl1IEtpbXJpdmVyL8H1vfC60w==?= <kimriver.liu@siengine.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "jsd@semihalf.com" <jsd@semihalf.com>,
+        "andi.shyti@kernel.org"
+	<andi.shyti@kernel.org>,
+        "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: =?gb2312?B?u9i4tDogW1BBVENIXSBpMmM6IGRlc2lnbndhcmU6IGZpeCBtYXN0ZXIgaXMg?=
+ =?gb2312?Q?holding_SCL_low_while_ENABLE_bit_is_disabled?=
+Thread-Topic: [PATCH] i2c: designware: fix master is holding SCL low while
+ ENABLE bit is disabled
+Thread-Index: AQHa/pXqYN5O6bu3D02ZGK2PUsfYN7JHECeAgAG68NA=
+Date: Thu, 5 Sep 2024 07:32:06 +0000
+Message-ID: <0498cff909fe4794b7827ad399cb4e43@siengine.com>
+References: <20240904064224.2394-1-kimriver.liu@siengine.com>
+ <ZthYwQfj3Vy6dU-S@smile.fi.intel.com>
+In-Reply-To: <ZthYwQfj3Vy6dU-S@smile.fi.intel.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 0/4] Enable shared SE support over I2C
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
- konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
- linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc: quic_vdadhani@quicinc.com
-References: <20240829092418.2863659-1-quic_msavaliy@quicinc.com>
- <d1ceab6e-907a-4939-8be4-6b460d6c594f@linaro.org>
- <f70baa0a-f897-42af-931f-082e8c5c12b6@quicinc.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <f70baa0a-f897-42af-931f-082e8c5c12b6@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-DKIM-Results: [10.8.1.61]; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:mail03.siengine.com 4857W7XA033674
 
-Hi,
-
-On 04/09/2024 20:07, Mukesh Kumar Savaliya wrote:
-> Thanks Neil !
-> 
-> On 8/30/2024 1:17 PM, neil.armstrong@linaro.org wrote:
->> Hi,
->>
->> On 29/08/2024 11:24, Mukesh Kumar Savaliya wrote:
->>> This Series adds support to share QUP based I2C SE between subsystems.
->>> Each subsystem should have its own GPII which interacts between SE and
->>> GSI DMA HW engine.
->>>
->>> Subsystem must acquire Lock over the SE on GPII channel so that it
->>> gets uninterrupted control till it unlocks the SE. It also makes sure
->>> the commonly shared TLMM GPIOs are not touched which can impact other
->>> subsystem or cause any interruption. Generally, GPIOs are being
->>> unconfigured during suspend time.
->>>
->>> GSI DMA engine is capable to perform requested transfer operations
->>> from any of the SE in a seamless way and its transparent to the
->>> subsystems. Make sure to enable “qcom,shared-se” flag only while
->>> enabling this feature. I2C client should add in its respective parent
->>> node.
->>>
->>> ---
->>> Mukesh Kumar Savaliya (4):
->>>    dt-bindindgs: i2c: qcom,i2c-geni: Document shared flag
->>>    dma: gpi: Add Lock and Unlock TRE support to access SE exclusively
->>>    soc: qcom: geni-se: Export function geni_se_clks_off()
->>>    i2c: i2c-qcom-geni: Enable i2c controller sharing between two
->>>      subsystems
->>>
->>>   .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |  4 ++
->>>   drivers/dma/qcom/gpi.c                        | 37 ++++++++++++++++++-
->>>   drivers/i2c/busses/i2c-qcom-geni.c            | 29 +++++++++++----
->>>   drivers/soc/qcom/qcom-geni-se.c               |  4 +-
->>>   include/linux/dma/qcom-gpi-dma.h              |  6 +++
->>>   include/linux/soc/qcom/geni-se.h              |  3 ++
->>>   6 files changed, 74 insertions(+), 9 deletions(-)
->>>
->>
->> I see in downstream that this flag is used on the SM8650 qupv3_se6_i2c,
->> and that on the SM8650-HDK this i2c is shared between the aDSP battmgr and
->> the linux to access the HDMI controller.
->>
->> Is this is the target use-case ?
-> Not exactly that usecase. Here making it generic in a way to transfer data which is pushed from two subsystems independently. Consider for example one is ADSP i2c client and another is Linux i2c client. Not sure in what manner battmgr and HDMI sends traffic. we can debug it separately over that email.
-
-Considering battmgr runs in ADSP, it matches this use-case, no ?
-
->>
->> We have some issues on this platform that crashes the system when Linux
->> does some I2C transfers while battmgr does some access at the same time,
->> the problem is that on the Linux side the i2c uses the SE DMA and not GPI
->> because fifo_disable=0 so by default this bypasses GPI.
->>
->> A temporary fix has been merged:
->> https://lore.kernel.org/all/20240605-topic-sm8650-upstream-hdk-iommu-fix-v1-1-9fd7233725fa@linaro.org/
->> but it's clearly not a real solution
->>
-> Seems you have added SID for the GPII being used from linux side. Need to know why you have added it and is it helping ? I have sent an email to know more about this issue before 2 weeks.
-
-I've added this because it actually avoids crashing when doing I2C6 transactions over SE DMA, now we need to understand why.
-
-> 
->> What would be the solution to use the shared i2c with on one side battmgr
->> using GPI and the kernel using SE DMA ?
->>
-> I have already sent an email on this issue, please respond on it. We shall debug it separately since this feature about sharing is still under implementation as you know about this patch series.
-
-Sorry for the delay, I was technically unable to answer, let me resume it now that I'm able again.
-
-Thanks,
-Neil
-
-> 
->> In this case, shouldn't we force using GPI on linux with:
->> ==============><=====================================================================
->> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
->> index ee2e431601a6..a15825ea56de 100644
->> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->> @@ -885,7 +885,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
->>          else
->>                  fifo_disable = readl_relaxed(gi2c->se.base + GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
->>
->> -       if (fifo_disable) {
->> +       if (gi2c->is_shared || fifo_disable) {
->>                  /* FIFO is disabled, so we can only use GPI DMA */
->>                  gi2c->gpi_mode = true;
->>                  ret = setup_gpi_dma(gi2c);
->> ==============><=====================================================================
->>
->> Neil
-
+QW5keSBTaGV2Y2hlbmtvOiANCiAgVG9kYXksIEkgZm9sbG93ZWQgeW91ciBzdWdnZXN0aW9uIHRv
+IHJlc2VuZCB0aGUgcGF0Y2gsIGJ1dCBJIGZvdW5kIHRoYXQgDQp0aGVyZSBpcyBhbiBpbmFjY3Vy
+YXRlIGlzc3VlIHdpdGggZGV0ZXJtaW5pbmcgd2hldGhlciBpMmMgaXMgZW5hYmxlZCwNCkkgd2ls
+bCB1cGRhdGUgdGhlIHBhdGNoIGFnYWluIHRoaXMgYWZ0ZXJub29uIGFuZCBzZW5kIGl0IHRvIHlv
+dS4gVGhhbmsgeW91Lg0KDQo+ICAJYWJvcnRfbmVlZGVkID0gcmF3X2ludHJfc3RhdHMgJiBEV19J
+Q19JTlRSX01TVF9PTl9IT0xEOw0KPiAgCWlmIChhYm9ydF9uZWVkZWQpIHsNCi0JCWlmICghZW5h
+YmxlKSB7DQorCQlpZiAoIShlbmFibGUgJiBEV19JQ19FTkFCTEVfRU5BQkxFKSkgew0KIAkJCXJl
+Z21hcF93cml0ZShkZXYtPm1hcCwgRFdfSUNfRU5BQkxFLCBEV19JQ19FTkFCTEVfRU5BQkxFKTsN
+CiAJCQllbmFibGUgfD0gRFdfSUNfRU5BQkxFX0VOQUJMRTsNCg0KQmVzdCBSZWdhcmRzDQpLaW1y
+aXZlci5saXUNCg0KLS0tLS3Tyrz+1K28/i0tLS0tDQq3orz+yMs6IEFuZHkgU2hldmNoZW5rbyA8
+YW5kcml5LnNoZXZjaGVua29AbGludXguaW50ZWwuY29tPiANCreiy83KsbzkOiAyMDI0xOo51MI0
+yNUgMjA6NTUNCsrVvP7IyzogTGl1IEtpbXJpdmVyL8H1vfC60yA8a2ltcml2ZXIubGl1QHNpZW5n
+aW5lLmNvbT4NCrOty806IGphcmtrby5uaWt1bGFAbGludXguaW50ZWwuY29tOyBtaWthLndlc3Rl
+cmJlcmdAbGludXguaW50ZWwuY29tOyBqc2RAc2VtaWhhbGYuY29tOyBhbmRpLnNoeXRpQGtlcm5l
+bC5vcmc7IGxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5l
+bC5vcmcNCtb3zOI6IFJlOiBbUEFUQ0hdIGkyYzogZGVzaWdud2FyZTogZml4IG1hc3RlciBpcyBo
+b2xkaW5nIFNDTCBsb3cgd2hpbGUgRU5BQkxFIGJpdCBpcyBkaXNhYmxlZA0KDQpPbiBXZWQsIFNl
+cCAwNCwgMjAyNCBhdCAwMjo0MjoyNFBNICswODAwLCBraW1yaXZlciBsaXUgd3JvdGU6DQo+IEZy
+b206ICJraW1yaXZlci5saXUiIDxraW1yaXZlci5saXVAc2llbmdpbmUuY29tPg0KPiANCj4gRmFp
+bHVyZSBpbiBub3JtYWwgU3RvcCBvcGVyYXRpb25hbCBwYXRoDQo+IA0KPiBUaGlzIGZhaWx1cmUg
+aGFwcGVucyByYXJlbHkgYW5kIGlzIGhhcmQgdG8gcmVwcm9kdWNlLiBEZWJ1ZyB0cmFjZSANCj4g
+c2hvd2VkIHRoYXQgSUNfU1RBVFVTIGhhZCB2YWx1ZSBvZiAweDIzIHdoZW4gU1RPUF9ERVQgb2Nj
+dXJyZWQsIA0KPiBpbW1lZGlhdGVseSBkaXNhYmxlIEVOQUJMRSBiaXQgdGhhdCBjYW4gcmVzdWx0
+IGluIA0KPiBJQ19SQVdfSU5UUl9TVEFULk1BU1RFUl9PTl9IT0xEIGhvbGRpbmcgU0NMIGxvdy4N
+Cj4gDQo+IEZhaWx1cmUgaW4gRU5BQkxFIGJpdCBpcyBkaXNhYmxlZCBwYXRoDQo+IA0KPiBJdCB3
+YXMgb2JzZXJ2ZWQgdGhhdCBtYXN0ZXIgaXMgaG9sZGluZyBTQ0wgbG93IGFuZCB0aGUgSUNfRU5B
+QkxFIGlzIA0KPiBhbHJlYWR5IGRpc2FibGVkLCBFbmFibGUgQUJPUlQgYml0IGFuZCBFTkFCTEUg
+Yml0IHNpbXVsdGFuZW91c2x5IA0KPiBjYW5ub3QgdGFrZSBlZmZlY3QuDQo+IA0KPiBDaGVjayBp
+ZiB0aGUgbWFzdGVyIGlzIGhvbGRpbmcgU0NMIGxvdyBhZnRlciBFTkFCTEUgYml0IGlzIGFscmVh
+ZHkgDQo+IGRpc2FibGVkLiBJZiBTQ0wgaXMgaGVsZCBsb3csIFRoZSBzb2Z0d2FyZSBjYW4gc2V0
+IHRoaXMgQUJPUlQgYml0IG9ubHkgDQo+IHdoZW4gRU5BQkxFIGlzIGFscmVhZHkgc2V0o6xvdGhl
+cndpc2UsDQo+IHRoZSBjb250cm9sbGVyIGlnbm9yZXMgYW55IHdyaXRlIHRvIEFCT1JUIGJpdC4g
+V2hlbiB0aGUgYWJvcnQgaXMgZG9uZSwgDQo+IHRoZW4gcHJvY2VlZCB3aXRoIGRpc2FibGluZyB0
+aGUgY29udHJvbGxlci4NCj4gDQo+IFRoZXNlIGtlcm5lbCBsb2dzIHNob3cgdXAgd2hlbmV2ZXIg
+YW4gSTJDIHRyYW5zYWN0aW9uIGlzIGF0dGVtcHRlZCANCj4gYWZ0ZXIgdGhpcyBmYWlsdXJlLg0K
+PiBpMmNfZGVzaWdud2FyZSBlOTVlMDAwMC5pMmM6IHRpbWVvdXQgaW4gZGlzYWJsaW5nIGFkYXB0
+ZXIgDQo+IGkyY19kZXNpZ253YXJlIGU5NWUwMDAwLmkyYzogdGltZW91dCB3YWl0aW5nIGZvciBi
+dXMgcmVhZHkNCj4gDQo+IFRoZSBwYXRjaCBjYW4gYmUgZml4IHRoZSBjb250cm9sbGVyIGNhbm5v
+dCBiZSBkaXNhYmxlZCB3aGlsZSBTQ0wgaXMgDQo+IGhlbGQgbG93IGluIEVOQUJMRSBiaXQgaXMg
+YWxyZWFkeSBkaXNhYmxlZC4NCg0KLi4uDQoNCj4gIAlhYm9ydF9uZWVkZWQgPSByYXdfaW50cl9z
+dGF0cyAmIERXX0lDX0lOVFJfTVNUX09OX0hPTEQ7DQo+ICAJaWYgKGFib3J0X25lZWRlZCkgew0K
+PiArCQlpZiAoIWVuYWJsZSkgew0KPiArCQkJcmVnbWFwX3dyaXRlKGRldi0+bWFwLCBEV19JQ19F
+TkFCTEUsIERXX0lDX0VOQUJMRV9FTkFCTEUpOw0KPiArCQkJZW5hYmxlIHw9IERXX0lDX0VOQUJM
+RV9FTkFCTEU7DQoNCj4gKwkJCXVzbGVlcF9yYW5nZSgyNSwgMTAwKTsNCg0KZnNsZWVwKCkNCg0K
+QW5kIGFkZCBhIHNob3J0IGNvbW1lbnQgdG8gZXhwbGFpbiB0aGUgY2hvc2VuIHZhbHVlLg0KDQo+
+ICsJCX0NCg0KLi4uDQoNCj4gK3N0YXRpYyBpbnQgaTJjX2R3X2NoZWNrX21zdF9hY3Rpdml0eShz
+dHJ1Y3QgZHdfaTJjX2RldiAqZGV2KSB7DQo+ICsJdTMyIHN0YXR1cyA9IDA7DQo+ICsJaW50IHJl
+dCA9IDA7DQo+ICsNCj4gKwlyZWdtYXBfcmVhZChkZXYtPm1hcCwgRFdfSUNfU1RBVFVTLCAmc3Rh
+dHVzKTsNCj4gKwlpZiAoc3RhdHVzICYgRFdfSUNfU1RBVFVTX01BU1RFUl9BQ1RJVklUWSkgew0K
+PiArCQlyZXQgPSByZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQoZGV2LT5tYXAsIERXX0lDX1NUQVRV
+Uywgc3RhdHVzLA0KPiArCQkJCSEoc3RhdHVzICYgRFdfSUNfU1RBVFVTX01BU1RFUl9BQ1RJVklU
+WSksDQo+ICsJCQkJMTEwMCwgMjAwMDApOw0KPiArCQlpZiAocmV0KQ0KPiArCQkJZGV2X2Vycihk
+ZXYtPmRldiwgImkyYyBtc3QgYWN0aXZpdHkgbm90IGlkbGUgJWRcbiIsIHJldCk7DQo+ICsJfQ0K
+PiArDQo+ICsJcmV0dXJuIHJldDsNCg0KVGhpcyBjYW4gYmUgcmV3cml0dGVuIGFzDQoNCgl1MzIg
+c3RhdHVzID0gMDsNCglpbnQgcmV0Ow0KDQoJcmVnbWFwX3JlYWQoZGV2LT5tYXAsIERXX0lDX1NU
+QVRVUywgJnN0YXR1cyk7DQoJaWYgKCFzdGF0dXMgJiBEV19JQ19TVEFUVVNfTUFTVEVSX0FDVElW
+SVRZKSkNCgkJcmV0dXJuIDA7DQoNCglyZXQgPSByZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQoZGV2
+LT5tYXAsIERXX0lDX1NUQVRVUywgc3RhdHVzLA0KCQkJIShzdGF0dXMgJiBEV19JQ19TVEFUVVNf
+TUFTVEVSX0FDVElWSVRZKSwNCgkJCTExMDAsIDIwMDAwKTsNCglpZiAocmV0KQ0KCQlkZXZfZXJy
+KGRldi0+ZGV2LCAiaTJjIG1zdCBhY3Rpdml0eSBub3QgaWRsZSAlZFxuIiwgcmV0KTsNCg0KCXJl
+dHVybiByZXQ7DQoNCj4gK30NCg0KLi4uDQoNCj4gKwlyZXQgPSBpMmNfZHdfY2hlY2tfbXN0X2Fj
+dGl2aXR5KGRldik7DQo+ICsJaWYgKCFyZXQpDQo+ICsJCV9faTJjX2R3X2Rpc2FibGVfbm93YWl0
+KGRldik7DQoNCi4uLmJ1dCBsb29raW5nIGF0IHRoZSB1c2FnZSwgSSB0aGluayB0aGUgcHJvcGVy
+IGlzIHRvIGhhdmUgdGhlIGFib3ZlIHRvIHJldHVybiBib29sZWFuLiBBbmQgYWxzbyB1cGRhdGUg
+dGhlIG5hbWUgdG8gZm9sbG93IHRoZSB1c3VhbCBwYXR0ZXJuIGZvciBib29sZWFuIGhlbHBlcnMu
+DQoNCnN0YXRpYyBib29sIGkyY19kd19pc19tc3RfaWRsaW5nKHN0cnVjdCBkd19pMmNfZGV2ICpk
+ZXYpIC4uLg0KCWlmIChpMmNfZHdfaXNfbXN0X2lkbGluZyhkZXYpKQ0KCQlfX2kyY19kd19kaXNh
+YmxlX25vd2FpdChkZXYpOw0KDQouLi4NCg0KQWxzbyB3aGF0IGRvZXMgdGhlIGhlY2sgIm1zdCIg
+c3RhbmQgZm9yPyBQbGVhc2UsIHVzZSBkZWNyeXB0ZWQgd29yZHMgaW4gZnVuY3Rpb24gbmFtZXMg
+YW5kIGVycm9yIG1lc3NhZ2VzLi4NCg0KLS0NCldpdGggQmVzdCBSZWdhcmRzLA0KQW5keSBTaGV2
+Y2hlbmtvDQoNCg0K
 
