@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6266-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6267-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA43896E097
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 18:57:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EE4D96E0AC
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 19:00:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 721C32830EB
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 16:57:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFEDB28992B
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Sep 2024 17:00:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5041A3A8D;
-	Thu,  5 Sep 2024 16:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8DB1A2572;
+	Thu,  5 Sep 2024 17:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ssw/Bo3e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l2ERLA1M"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E021A0B1E;
-	Thu,  5 Sep 2024 16:57:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF8D152166;
+	Thu,  5 Sep 2024 17:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725555421; cv=none; b=Lv/aUvvGqF1WwEJLOuNSCaFZcLIcLXk9Qc6gd5VZcDEDcz9Q7UvGBvusmiAaFTGLO8rs1Qj/xZAVOVWXHR7HhAsyeWEF97tQjGx8NSZK/1I0161k3hQNSnzUw3z0ZCFL/smsZ3I6s3qshTVlnSNadp49gP57qmz6DAZ+L2EM0gU=
+	t=1725555633; cv=none; b=c66yxU20ULN942S87VBLzkUwFrVW05jdSqMB2Ziag7QeOrMOgbt+KSVTloxUkOzvfMOwY1BnRhwHaTh2bKyoNlghD9K2MHWfrXo90dUGOz/2LsElPHrgWYtgfn4GHW4uqSKEDxE6rQbsEEeMj6YxNgoDgZGx2FYkgw4LLFi8ah8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725555421; c=relaxed/simple;
-	bh=REwzquBrwTrVU2SKXUDHLjtToZtZU/lyVbTT0o3bv1U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cv45RQDNI7JhYDB7DAxPJXyFlel6dfz9Cr7KLq9WWGOHN3bwFqZRG5CWeO2PdfB0EjlF0t00tOry7U2UUpBglqUYlxlp1ebwYWQe8Ft3GcYBTMOGnv7JXV9ZdDRnFOjRt17V9XF9TzaMM2/V2nAH+wlJ2O7q5of4Yja0zswzebM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ssw/Bo3e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D435AC4CEC7;
-	Thu,  5 Sep 2024 16:56:48 +0000 (UTC)
+	s=arc-20240116; t=1725555633; c=relaxed/simple;
+	bh=/vubQF0Ug67aNHJMpNq07RHqPnrfb0UDXIiDsimGUhk=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=pGTfWemsw45ywQXHCz0wLRVYkW3dUATtCJ/STgOa5RRqZQcamFiGhMK3wpdIlzfkNnbv4iECzzAxQJHNmQE3tDyKrJOaGed/rNTDk1+bnzZOjQjAx6uju7ud6twZBAP1/gfrt5T6LQLynI2yhpFhCA8YnDYL9sPX5+gbb9G4nG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l2ERLA1M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5BBC4CEC3;
+	Thu,  5 Sep 2024 17:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725555420;
-	bh=REwzquBrwTrVU2SKXUDHLjtToZtZU/lyVbTT0o3bv1U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ssw/Bo3eazEvp0aYQc2Ds+zgEuc/uYfNpbnYLSMwMnPN6t8iHXyQQfr/+BUz7YPWx
-	 vuErk3C56T6t/fILXOoRGIVvOr9sUC367XCSA4dugLSmvFdHmBLjaagqQUv+zbtfvM
-	 emsShXku5gskGoFAq7URQxGdXaCfnmlREgONL+UXBRs1UjzlbLWuBkSzqcjHlRhHXW
-	 KLVwuQVNz6JASMkyjx7PQI+Bx8nzaAwxIgvL9jyG+9XwdyZ9W36g6qgOSuUzTNCCd8
-	 wGlTndfuVwvFL8Zmidl7TdVVfIkKsQN7F/UlvMi2mn5hLxhTYaVzP9FrSBc7KL2d14
-	 +m6zj08k7Il2A==
-Message-ID: <f0cd5f5c-270f-4d9b-8169-be6180fc9925@kernel.org>
-Date: Thu, 5 Sep 2024 18:56:46 +0200
+	s=k20201202; t=1725555633;
+	bh=/vubQF0Ug67aNHJMpNq07RHqPnrfb0UDXIiDsimGUhk=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=l2ERLA1MlGAAqieYGfgLgy2w5ppbiEBqMzF2KezkfT6cgpbAiZm7meuhcFBMRRT07
+	 H0XP6sdsiORxGJ12xT2VEx4J0FTn3tP+XmlPaJ84ZHSh8h3Cjs2Czb4kbxlNvwcRJL
+	 fVqVeu7uMB0sLOq/cfzk8a8EFdgrPapiUcQHYMuSYBoNmFhklhaFmyJ5k/nnVE0XUE
+	 pUa/qcy85UiZgvo/TRwjuFVQTQY0ss9FFUAG0xgZQZHxg9DuwOTUVv8AMCNYhNUzbR
+	 EeY2xQxxf9ToilY7h6VRKg2zfY3TTDGTTm/AkOrL20UuqsvgjsToNx8g/VfU63Y5hZ
+	 Lngx4WL2NXviQ==
+Message-ID: <644f0bfd-bd96-4dca-9bf9-203d423cfe01@kernel.org>
+Date: Thu, 5 Sep 2024 19:00:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -51,6 +51,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Nikunj Kela <quic_nkela@quicinc.com>, Andrew Lunn <andrew@lunn.ch>
 Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
@@ -84,7 +85,7 @@ References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
  <4896510e-6e97-44e0-b3d7-7a7230f935ec@quicinc.com>
  <b1ad1c7a-0995-48e0-8ebc-46a39a5ef4b3@kernel.org>
  <515a2837-69c3-47b2-978b-68ad3f6ad0fc@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <f0cd5f5c-270f-4d9b-8169-be6180fc9925@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -129,62 +130,66 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <515a2837-69c3-47b2-978b-68ad3f6ad0fc@quicinc.com>
+In-Reply-To: <f0cd5f5c-270f-4d9b-8169-be6180fc9925@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 05/09/2024 18:08, Nikunj Kela wrote:
+On 05/09/2024 18:56, Krzysztof Kozlowski wrote:
+> On 05/09/2024 18:08, Nikunj Kela wrote:
+>>
+>> On 9/5/2024 7:39 AM, Krzysztof Kozlowski wrote:
+>>> On 05/09/2024 16:15, Nikunj Kela wrote:
+>>>> On 9/5/2024 7:09 AM, Krzysztof Kozlowski wrote:
+>>>>> On 05/09/2024 16:03, Nikunj Kela wrote:
+>>>>>> On 9/5/2024 1:04 AM, Krzysztof Kozlowski wrote:
+>>>>>>> On 04/09/2024 23:06, Nikunj Kela wrote:
+>>>>>>>> On 9/4/2024 9:58 AM, Andrew Lunn wrote:
+>>>>>>>>>> Sorry, didn't realize SPI uses different subject format than other
+>>>>>>>>>> subsystems. Will fix in v3. Thanks
+>>>>>>>>> Each subsystem is free to use its own form. e.g for netdev you will
+>>>>>>>>> want the prefix [PATCH net-next v42] net: stmmac: dwmac-qcom-ethqos:
+>>>>>>>> of course they are! No one is disputing that.
+>>>>>>>>> This is another reason why you should be splitting these patches per
+>>>>>>>>> subsystem, and submitting both the DT bindings and the code changes as
+>>>>>>>>> a two patch patchset. You can then learn how each subsystem names its
+>>>>>>>>> patches.
+>>>>>>>> Qualcomm QUPs chips have serial engines that can be configured as
+>>>>>>>> UART/I2C/SPI so QUPs changes require to be pushed in one series for all
+>>>>>>>> 3 subsystems as they all are dependent.
+>>>>>>> No, they are not dependent. They have never been. Look how all other
+>>>>>>> upstreaming process worked in the past.
+>>>>>> Top level QUP node(patch#18) includes i2c,spi,uart nodes.
+>>>>>> soc/qcom/qcom,geni-se.yaml validate those subnodes against respective
+>>>>>> yaml. The example that is added in YAML file for QUP node will not find
+>>>>>> sa8255p compatibles if all 4 yaml(qup, i2c, spi, serial nodes) are not
+>>>>>> included in the same series.
+>>>>>>
+>>>>> So where is the dependency? I don't see it. 
+>>>> Ok, what is your suggestion on dt-schema check failure in that case as I
+>>>> mentioned above? Shall we remove examples from yaml that we added?
+>>> I don't understand what sort of failure you want to fix and why examples
+>>> have any problem here. 
+>>
+>> If the QUPs yaml changes are not included in the same series with
 > 
-> On 9/5/2024 7:39 AM, Krzysztof Kozlowski wrote:
->> On 05/09/2024 16:15, Nikunj Kela wrote:
->>> On 9/5/2024 7:09 AM, Krzysztof Kozlowski wrote:
->>>> On 05/09/2024 16:03, Nikunj Kela wrote:
->>>>> On 9/5/2024 1:04 AM, Krzysztof Kozlowski wrote:
->>>>>> On 04/09/2024 23:06, Nikunj Kela wrote:
->>>>>>> On 9/4/2024 9:58 AM, Andrew Lunn wrote:
->>>>>>>>> Sorry, didn't realize SPI uses different subject format than other
->>>>>>>>> subsystems. Will fix in v3. Thanks
->>>>>>>> Each subsystem is free to use its own form. e.g for netdev you will
->>>>>>>> want the prefix [PATCH net-next v42] net: stmmac: dwmac-qcom-ethqos:
->>>>>>> of course they are! No one is disputing that.
->>>>>>>> This is another reason why you should be splitting these patches per
->>>>>>>> subsystem, and submitting both the DT bindings and the code changes as
->>>>>>>> a two patch patchset. You can then learn how each subsystem names its
->>>>>>>> patches.
->>>>>>> Qualcomm QUPs chips have serial engines that can be configured as
->>>>>>> UART/I2C/SPI so QUPs changes require to be pushed in one series for all
->>>>>>> 3 subsystems as they all are dependent.
->>>>>> No, they are not dependent. They have never been. Look how all other
->>>>>> upstreaming process worked in the past.
->>>>> Top level QUP node(patch#18) includes i2c,spi,uart nodes.
->>>>> soc/qcom/qcom,geni-se.yaml validate those subnodes against respective
->>>>> yaml. The example that is added in YAML file for QUP node will not find
->>>>> sa8255p compatibles if all 4 yaml(qup, i2c, spi, serial nodes) are not
->>>>> included in the same series.
->>>>>
->>>> So where is the dependency? I don't see it. 
->>> Ok, what is your suggestion on dt-schema check failure in that case as I
->>> mentioned above? Shall we remove examples from yaml that we added?
->> I don't understand what sort of failure you want to fix and why examples
->> have any problem here. 
+> They cannot be included in the same series. You just think that
+> including here solves the problem so go ahead, simulate the merging:
+> 1. Bjorn applies soc/qcom/qcom,geni-se.yaml patch and tests. His tree
+> MUST build, so it also must pass dt_binding_check.
+> Does it pass? No.
 > 
-> If the QUPs yaml changes are not included in the same series with
-
-They cannot be included in the same series. You just think that
-including here solves the problem so go ahead, simulate the merging:
-1. Bjorn applies soc/qcom/qcom,geni-se.yaml patch and tests. His tree
-MUST build, so it also must pass dt_binding_check.
-Does it pass? No.
-
-2. SPI maintainer... ah, no point even going there.
-
-> i2c,serial yaml changes, you see these errors:
+> 2. SPI maintainer... ah, no point even going there.
 > 
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: serial@990000:compatible:0: 'qcom,sa8255p-geni-uart' is not one of ['qcom,geni-uart', 'qcom,geni-debug-uart']
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: i2c@984000:compatible:0: 'qcom,sa8255p-geni-i2c' is not one of ['qcom,geni-i2c', 'qcom,geni-i2c-master-hub']
+>> i2c,serial yaml changes, you see these errors:
+>>
+>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: serial@990000:compatible:0: 'qcom,sa8255p-geni-uart' is not one of ['qcom,geni-uart', 'qcom,geni-debug-uart']
+>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.example.dtb: geniqup@9c0000: i2c@984000:compatible:0: 'qcom,sa8255p-geni-i2c' is not one of ['qcom,geni-i2c', 'qcom,geni-i2c-master-hub']
+> 
+> Don't grow examples if not needed. Or create dependencies and ask
+> maintainers to cross-merge.
 
-Don't grow examples if not needed. Or create dependencies and ask
-maintainers to cross-merge.
+Or soc/geni-se binding could be also converted to just list compatibles
+instead of referencing other schema, just like MDSS.
 
 Best regards,
 Krzysztof
