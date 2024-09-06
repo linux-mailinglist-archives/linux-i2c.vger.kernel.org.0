@@ -1,311 +1,170 @@
-Return-Path: <linux-i2c+bounces-6316-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6317-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB95596F431
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 14:24:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C377496F4E3
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 15:00:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 158B61C22360
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 12:24:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FDFF1F253A6
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 13:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ADB01CB313;
-	Fri,  6 Sep 2024 12:24:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEF6D1CDA31;
+	Fri,  6 Sep 2024 13:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J/A4NDBd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GCc2uuLa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E55A17C9B
-	for <linux-i2c@vger.kernel.org>; Fri,  6 Sep 2024 12:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177B11CB330
+	for <linux-i2c@vger.kernel.org>; Fri,  6 Sep 2024 13:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725625457; cv=none; b=r5iWg1OxscAImjxn34sOJmAXx7M4BYKyJkR1mVhGOBaksu1IjhvIK3aTXw/6ynHg0R6WCjvWf/1Jl8mzyW37NLO2tSrXdZSuwBmxnTYrtxmJo3vT5dSORiRLin04GJHiYGxHHVh7szKOWOK0u4FTfUwG+h6nDWjYi9glXIAZr9k=
+	t=1725627637; cv=none; b=g2GlwB9TVTbRTQVhO4IwkWJFrtn4MU49jm8gVP5h2kqUgR0EkK5sqBS8YdlL4VvbmHpq61DZGbzksdU/6zrmEb/z0GNOeQrp9/rb0ecAyyK7627079gA2XhU1gbiS/+jE4wrxYfKAfFec9fWGfUwra9Fu2zqxaht8AZGTHWBGI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725625457; c=relaxed/simple;
-	bh=bsBPFWqUMpwRaIbWXtlkXM/IrXGwl2WRXlvajy2+BmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rlE1NvuN0Rd5VKsgt4IgEeVQFbn+810d+ZkqSRY7NgJAreqq9MRIBGg9HqyMzJDVSyk2S6dZaTmhQfgB7NYKHsDbIaS0p0yM7eC4fOiSdWxEY/1pCddg/RLbRr0EyXcaSNsxUzBZXaBwTxGyA0JjSHSmQnh5a2b98mgTcaIfkio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J/A4NDBd; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725625455; x=1757161455;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bsBPFWqUMpwRaIbWXtlkXM/IrXGwl2WRXlvajy2+BmU=;
-  b=J/A4NDBdd2+zKWqsoDPhOMnClCpKOaAraEXd42sd9xyjGsfM1lpcv4A2
-   WbFO6dj/FKXHSBb9Q9ofxy1kjeX82wj2qRc8qQqobewhdkBL7l+b+6QJv
-   z0NkUVee4Ubj1H8YJWOMy9nAnVgZE7BPgc1LsjQxy7jr+N/7hupxIh+Jg
-   CTlfkA1eg/zxfpE3nfJr7Fm3GHi3v3bLZlraXqg9eH/Z4q+g4wI7V0rWb
-   iYVp0cm7mwoDuBf0Cca5iYXAz0HjnKsC0EREUH89PXPt4diGH464AdCtk
-   RTRyQS0ojG4Y8J+4t53uUTZ/6i5ZihdZgsfw12O6WhTkygD0O59/FxUee
-   w==;
-X-CSE-ConnectionGUID: dcKqdi2mRZ+Od4NtBVzT6g==
-X-CSE-MsgGUID: W4WOWeJ8TMiVeZ0h8w52TQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="49796577"
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="49796577"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 05:24:14 -0700
-X-CSE-ConnectionGUID: uoqzwzMMSz2/LYFK1nlr4A==
-X-CSE-MsgGUID: n2PGReF2SdeITC18EFMgnA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="70355234"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 05:24:13 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1smY0Y-00000005mZm-3vJ9;
-	Fri, 06 Sep 2024 15:24:10 +0300
-Date: Fri, 6 Sep 2024 15:24:10 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org, Sanket.Goswami@amd.com
-Subject: Re: [PATCH v3 3/5] i2c: piix4: Add ACPI support for ASF SMBus device
-Message-ID: <Ztr0alsDWrBodtyv@smile.fi.intel.com>
-References: <20240906071201.2254354-1-Shyam-sundar.S-k@amd.com>
- <20240906071201.2254354-4-Shyam-sundar.S-k@amd.com>
+	s=arc-20240116; t=1725627637; c=relaxed/simple;
+	bh=a3n6h+tmjlmVA4Afuyy01EvnM6vGCqk59VkMNlPDoxA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rKfimJG4VUjqsFB1DH8rGCBUoZhFuhS21IiEN/9HiXv1rOsSWHQ7UT6qy0NqQuiBhijbiSnfcyoCybV9ds+c/BtvnngQ5V/N0qHw3Lag4EySpDtCAlHKAKDKrOSANx+ScHyfzdCZ/X84SzGElRKsZGUOH3wPAI5GrotoRaRPc/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GCc2uuLa; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53658e2d828so137501e87.2
+        for <linux-i2c@vger.kernel.org>; Fri, 06 Sep 2024 06:00:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725627634; x=1726232434; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+HldWfppnPmR7E3ewI2SdbP6fmafd7q2H7imYAtRaLo=;
+        b=GCc2uuLa1lVY4mSDdkzNUD9eoBqS3S8LqAsSF9IjfTVrHsby10gmkQggMhho5X6NxV
+         HoUTf10QmGnofQl/R+V98RLhFGEAO1y4hfGomvNLCqRNSzf6scn8AEJuDMXF0EvyiHIy
+         lx/XJurbyttNVmnWDlCIy4Ia2Tif4ItRiVIORYbzFa0CQuupxGjzeuAxFMevhuSh4OGG
+         Q+Y1+51ulq2EEzqMJ1GbJlAM6eYIgUDjRWPGA/pMc1MF1idyaVrYZ7VB6yPW1N4YJ/jD
+         TQLThgFhR8IwlHPvxfTsZn2TiUYiirJKAWMMzdlLZx4q5ykDp0lgyCzVV6qX5y48/o/S
+         yzQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725627634; x=1726232434;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+HldWfppnPmR7E3ewI2SdbP6fmafd7q2H7imYAtRaLo=;
+        b=s3EnXPlwDWvMSr49FbDGcYGIWeLlGuBp7fUZravAG3P363D46wI3F/L5Hu9gDorhvH
+         zUilXWtUKTz7re3QyEALfQhEr5TibzyTB0h4FfbsP0vkELBVMvYyNKNHV7yvYCAK0kG/
+         xBQP0PViM9Hwhr5xCn2PxD+Zni+R2eGAfWI3dAujQsO8ak2IHvWLNnS/AiMapVlEUWbK
+         s6DuKHnn5+UTEgFp/WqxRHEbcTWIvAb6psFhPgsoztox0AebUcWlCjygJtpCoUFofale
+         RRYjMEJoB9saDRWjv3uw/0L4hQpT0B5mjPH1Bizby4xG6lIeFhiEpvzxhWzsUKMaIjhN
+         sHew==
+X-Forwarded-Encrypted: i=1; AJvYcCVcbxje0ZKP0+L1+HEqCv3EcATP0FW28XzuO4AcGGK4qH6ybZEvq+GEbeTjxtD4ZolPmeRd+JGPSGc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTEXDxhDJd0dmpWll23UqgdNmn6/ZR/HleAaQuD9o2wiPqPM0P
+	kuZm1tAz+8cfPQMnaBBRB5jSfPsexBDZ520Fr3GzMyLnioBZd4JwsBNdMPvK3zc=
+X-Google-Smtp-Source: AGHT+IEPgCZe7nIoVPCspseu508VwlLQFUeA/X0Be0jNtg/3vmAW2na6nGzOrDVGstjDu5h3e861tg==
+X-Received: by 2002:a05:6512:3d1b:b0:536:55f2:2ad0 with SMTP id 2adb3069b0e04-53658814568mr887069e87.9.1725627634001;
+        Fri, 06 Sep 2024 06:00:34 -0700 (PDT)
+Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53569ee732fsm624590e87.156.2024.09.06.06.00.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Sep 2024 06:00:33 -0700 (PDT)
+Message-ID: <a27adb94-5280-4213-a532-0dcc907f80b7@linaro.org>
+Date: Fri, 6 Sep 2024 16:00:32 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240906071201.2254354-4-Shyam-sundar.S-k@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/7] Add SDM670 camera subsystem
+Content-Language: en-US
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Richard Acayan <mailingradian@gmail.com>, Andi Shyti <andi.shyti@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Loic Poulain <loic.poulain@linaro.org>,
+ Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-media@vger.kernel.org
+References: <20240904020448.52035-9-mailingradian@gmail.com>
+ <tthbaop6bkyvebpibiyvyct4khrd5o4apdbipqdthnidxmu2cx@m726xv4ocblg>
+ <ZtpqrANbJurWNOzV@radian> <5c58b41a-7fc7-456d-979c-edb8dbe4305d@linaro.org>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <5c58b41a-7fc7-456d-979c-edb8dbe4305d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 06, 2024 at 12:41:59PM +0530, Shyam Sundar S K wrote:
-> The AMD ASF controller is presented to the operating system as an ACPI
-> device. The piix4 driver can obtain the ASF handle through ACPI to
-> retrieve information about the ASF controller's attributes, such as the
-> ASF address space and interrupt number, and to handle ASF interrupts.
+Hi Bryan, Richard,
 
-Can you share an excerpt of DSDT to see how it looks like?
+On 9/6/24 15:19, Bryan O'Donoghue wrote:
+> On 06/09/2024 03:36, Richard Acayan wrote:
+>> On Thu, Sep 05, 2024 at 10:09:34PM +0200, Andi Shyti wrote:
+>>> Hi Richard,
+>>>
+>>> On Tue, Sep 03, 2024 at 10:04:49PM GMT, Richard Acayan wrote:
+>>>> This adds support for the camera subsystem on the Snapdragon 670.
+>>>>
+>>>> As of next-20240902, camss seems to be a bit broken, but the same series
+>>>> works on stable (although it is much less reliable now that the CCI clock
+>>>> frequency is not being assigned).
+>>>
+>>> I am not understanding this bit: is this series making it better
+>>> or not? Can you please clarify what is broken, what is less
+>>> reliable and what works?
+>>
+>> When applying this camss series and some camera sensor patches on
+>> linux-next, the Pixel 3a seems to hang when camera capture starts.
+>>
+>> When applying the same patches on stable, the camera does not cause the
+>> Pixel 3a to hang.
+> 
+> Right so -next isn't stable that's not exactly a revelation.
+> 
+> 
+>> When these device tree properties from the previous series were removed:
+>>
+>> 			assigned-clocks = <&camcc CAM_CC_CCI_CLK>;
+>> 			assigned-clock-rates = <37500000>;
+>>
+>> the CCI would sometimes fail to probe with the error:
+> 
+> Right, we don't have clk_set_rate in the cci driver.
+> 
+> Maybe just leave the assigned clock for this submission and we can do a
+> sweep of fixes to CCI at a later stage including setting the clock
+> instead of having it be assigned.
 
-> Currently, the piix4 driver assumes that a specific port address is
-> designated for AUX operations. However, with the introduction of ASF, the
-> same port address may also be used by the ASF controller. Therefore, a
-> check needs to be added to ensure that if ASF is advertised and enabled in
-> ACPI, the AUX port is not set up.
+first of all it would be nice to confirm that the setting of a particular
+clock frequency is actually needed.
 
-> Additionally, include a 'depends on X86' Kconfig entry for
-> CONFIG_I2C_PIIX4, as the current patch utilizes acpi_dev_get_resources(),
-> which is compiled only when CONFIG_ACPI is enabled, and CONFIG_ACPI
-> depends on CONFIG_X86.
+Fortunately it's pretty trivial to check it in runtime with a temporary
+modification in the board dts file, namely disable CAMSS in board dts file,
+but keep CCI enabled, then simply scan the bus with a regular "i2cdetect"
+tool in runtime.
 
-Yeah, please don't do that. If it requires ACPI, make it clear, there is
-no x86 compile-time dependency.
+If i2cdetect on the CCI bus works only for 37.5MHz clock frequency, then it
+is needed, otherwise (and this is my expectation) it is not needed neither
+in the dtsi files nor in the driver.
 
-Second issue with this is that now you require entire ACPI machinery for
-the previous cases where it wasn't needed. Imagine an embedded system with
-limited amount of memory for which you require +1Mbyte just for nothing.
+>>
+>> 	[   51.572732] i2c-qcom-cci ac4a000.cci: deferred probe timeout, ignoring dependency
+>> 	[   51.572769] i2c-qcom-cci ac4a000.cci: probe with driver i2c-qcom-cci failed with error -110
+>>
+>> On further testing, the rate can be set to 19.2 MHz, and there would be
+>> no failure (or rather, it wouldn't happen often enough for me to witness
+>> it).
+> 
+> That's expected 19.2 and 37.5 MHz are supported by CAMCC for your part.
+>
 
-Look how the other do (hint: ifdeffery in the code with stubs).
+I read it as the setting of 37.5MHz clock frequency is not needed, please
+correct me.
 
-> +#define SB800_ASF_ACPI_PATH			"\\_SB.ASFC"
-
-...
-
-> +static void sb800_asf_process_slave(struct work_struct *work)
-> +{
-> +	struct i2c_piix4_adapdata *adapdata =
-> +		container_of(work, struct i2c_piix4_adapdata, work_buf.work);
-> +	unsigned short piix4_smba = adapdata->smba;
-> +	u8 data[SB800_ASF_BLOCK_MAX_BYTES];
-
-> +	u8 bank, reg, cmd = 0;
-
-Move cmd assignment into the respective branch of the conditional below, in
-that case it will be closer and more symmetrical.
-
-> +	u8 len, val = 0;
-
-> +	int i;
-
-Why signed?
-
-> +	/* Read slave status register */
-> +	reg = inb_p(ASFSLVSTA);
-> +
-> +	/* Check if no error bits are set in slave status register */
-> +	if (reg & SB800_ASF_ERROR_STATUS) {
-> +		/* Set bank as full */
-> +		reg = reg | GENMASK(3, 2);
-> +		outb_p(reg, ASFDATABNKSEL);
-> +	} else {
-> +		/* Read data bank */
-> +		reg = inb_p(ASFDATABNKSEL);
-
-> +		bank = (reg & BIT(3)) >> 3;
-
-Try
-		bank = (reg & BIT(3)) ? 1 : 0;
-
-Probably it doesn't affect the code generation, but at least seems cleaner
-to read.
-
-> +		/* Set read data bank */
-> +		if (bank) {
-> +			reg = reg | BIT(4);
-> +			reg = reg & ~BIT(3);
-> +		} else {
-> +			reg = reg & ~BIT(4);
-> +			reg = reg & ~BIT(2);
-> +		}
-> +
-> +		/* Read command register */
-> +		outb_p(reg, ASFDATABNKSEL);
-> +		cmd = inb_p(ASFINDEX);
-> +		len = inb_p(ASFDATARWPTR);
-> +		for (i = 0; i < len; i++)
-> +			data[i] = inb_p(ASFINDEX);
-> +
-> +		/* Clear data bank status */
-> +		if (bank) {
-> +			reg = reg | BIT(3);
-> +			outb_p(reg, ASFDATABNKSEL);
-> +		} else {
-> +			reg = reg | BIT(2);
-> +			outb_p(reg, ASFDATABNKSEL);
-> +		}
-> +	}
-> +
-> +	outb_p(0, ASFSETDATARDPTR);
-> +	if (cmd & BIT(0))
-> +		return;
-> +
-> +	i2c_slave_event(adapdata->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
-> +	for (i = 0; i < len; i++) {
-> +		val = data[i];
-> +		i2c_slave_event(adapdata->slave, I2C_SLAVE_WRITE_RECEIVED, &val);
-> +	}
-> +	i2c_slave_event(adapdata->slave, I2C_SLAVE_STOP, &val);
-> +}
-
-...
-
-> +static irqreturn_t sb800_asf_irq_handler(int irq, void *ptr)
-> +{
-> +	struct i2c_piix4_adapdata *adapdata = ptr;
-> +	unsigned short piix4_smba = adapdata->smba;
-> +	u8 slave_int = inb_p(ASFSTA);
-> +
-> +	if (slave_int & BIT(6)) {
-> +		/* Slave Interrupt */
-> +		outb_p(slave_int | BIT(6), ASFSTA);
-> +		schedule_delayed_work(&adapdata->work_buf, HZ);
-> +	} else {
-> +		/* Master Interrupt */
-
-Please, start using inclusive non-offensive terms instead of old 'master/slave'
-terminology. Nowadays it's a part of the standard AFAIU.
-
-Note, I'm talking only about comments and messages, the APIs is another story
-that should be addressed separately.
-
-> +		sb800_asf_update_bits(piix4_smba, SB800_ASF_SLV_INTR, SMBHSTSTS, true);
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-
-...
-
-> +static int sb800_asf_add_adap(struct pci_dev *dev)
-> +{
-> +	struct i2c_piix4_adapdata *adapdata;
-> +	struct resource_entry *rentry;
-> +	struct sb800_asf_data data;
-
-> +	struct list_head res_list;
-
-Why not LIST_HEAD(); as it was in the previous version?
-
-> +	struct acpi_device *adev;
-> +	acpi_status status;
-> +	acpi_handle handle;
-> +	int ret;
-
-> +	status = acpi_get_handle(NULL, SB800_ASF_ACPI_PATH, &handle);
-> +	if (ACPI_FAILURE(status))
-> +		return -ENODEV;
-> +
-> +	adev = acpi_fetch_acpi_dev(handle);
-> +	if (!adev)
-> +		return -ENODEV;
-
-This approach I don't like. I would like to see DSDT for that
-as I mentioned above.
-
-> +	INIT_LIST_HEAD(&res_list);
-
-See above.
-
-> +	ret = acpi_dev_get_resources(adev, &res_list, NULL, NULL);
-> +	if (ret < 0) {
-
-> +		dev_err(&dev->dev, "Error getting ASF ACPI resource: %d\n", ret);
-> +		return ret;
-
-		return dev_err_probe(...);
-
-> +	}
-> +
-> +	list_for_each_entry(rentry, &res_list, node) {
-> +		switch (resource_type(rentry->res)) {
-> +		case IORESOURCE_IO:
-> +			data.addr = rentry->res->start;
-> +			break;
-> +		case IORESOURCE_IRQ:
-> +			data.irq = rentry->res->start;
-> +			break;
-> +		default:
-> +			dev_warn(&adev->dev, "Invalid ASF resource\n");
-> +			break;
-> +		}
-> +	}
-> +
-> +	acpi_dev_free_resource_list(&res_list);
-> +	ret = piix4_add_adapter(dev, data.addr, SMBUS_ASF, piix4_adapter_count, false, 0,
-> +				piix4_main_port_names_sb800[piix4_adapter_count],
-> +				&piix4_main_adapters[piix4_adapter_count]);
-> +	if (ret) {
-> +		dev_err(&dev->dev, "Failed to add ASF adapter: %d\n", ret);
-> +		return -ENODEV;
-
-		return dev_err_probe(...);
-
-> +	}
-> +
-> +	adapdata = i2c_get_adapdata(piix4_main_adapters[piix4_adapter_count]);
-> +	ret = devm_request_irq(&dev->dev, data.irq, sb800_asf_irq_handler, IRQF_SHARED,
-> +			       "sb800_smbus_asf", adapdata);
-> +	if (ret) {
-> +		dev_err(&dev->dev, "Unable to request irq: %d for use\n", data.irq);
-> +		return ret;
-
-		return dev_err_probe(...);
-
-> +	}
-> +
-> +	INIT_DELAYED_WORK(&adapdata->work_buf, sb800_asf_process_slave);
-> +	adapdata->is_asf = true;
-> +	/* Increment the adapter count by 1 as ASF is added to the list */
-> +	piix4_adapter_count++;
-> +	return 1;
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--
+Best wishes,
+Vladimir
 
