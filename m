@@ -1,131 +1,124 @@
-Return-Path: <linux-i2c+bounces-6305-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6306-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BCDE96EBD6
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 09:21:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BEA696EC2E
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 09:39:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D58FB2345C
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 07:21:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA7061F24CE0
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 07:39:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A14214B955;
-	Fri,  6 Sep 2024 07:21:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C4A715532A;
+	Fri,  6 Sep 2024 07:39:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a10YbZlr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cB0wo8oG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E6E17C9B;
-	Fri,  6 Sep 2024 07:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB11914A630
+	for <linux-i2c@vger.kernel.org>; Fri,  6 Sep 2024 07:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725607269; cv=none; b=FVJ3fT4S5c7uODBwQlyL1Gc5CN41OJz8dyPRVh4Jt9bTRNpWQt+0ZnOyO+iU5DGJuOVoB00vUZzFoLHp34Gx1z9eR2/LgzxvpOQ73QAYcPlZ+zXMfi0x0ZBn+xrGrJh7KcwI094afehyeELAZGLd6Gqye0OOeBffGHmYv5ERAmk=
+	t=1725608343; cv=none; b=NfpZPWn9ZyBtNOmY7b0U9COJOu/RoZfJ/psxezZRVw8fDCz4KUasj5gvZHuSCR03bxIDnIjmWxAuN2FdUqoc6Yp7HO4WjXl5P7ZEzkWmYQnA8JPpQBMGIOlP577f/UfjN2NqXpd8lwWO0spxCjQgkwdF58pUEUD+I3pwZ9pQpgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725607269; c=relaxed/simple;
-	bh=XH2QzjP1CufEq8D/+0yCvenvO3KuEuFwhuTKcq7Vxz0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HofZW//Ibn9t8j5BNQt9qhmM8XBzsolKGRmlzDOL2UyppFe4RdnCA9X3QiziKTsuJjkIeVqHfqPYpV7eusxKWSCnps2p+YK5Pt3Q2FjM0HdSSzUawRmfnLwUqe/Ws4owW8+5oKeVcdVeCvwvWe0WJfV9+OfJGIAiaSatEaZpzFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a10YbZlr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4984FC4CEC4;
-	Fri,  6 Sep 2024 07:21:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725607269;
-	bh=XH2QzjP1CufEq8D/+0yCvenvO3KuEuFwhuTKcq7Vxz0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a10YbZlrC+BkaBwuH8U8LtN0ZB3KbrVXgtag0KdHoq3/qt+tPPotLhyGEaAmy73x+
-	 WcHqA5ncjVzF2JRLrtuubpDHf0ABaIQd+gRUZLBVcHvhaNCfqqMjyaXFGjN/gWXmBa
-	 P349v9CGW8rFADmaC++KQvVa0BQWymFy7i4IKiSSZJVwzxJDQJg2uguJGtEpTgPLgf
-	 o0uAK4daqQhswhX8k7CKjVCYAQume/uP0BL0ptsVDaItKTois/53B/MV7C2WthT58o
-	 kk4/U0KQqJZKgokzptTxgcHM9M0m205K0IvXztv2t50WITZn8qb2FZ/+G/ejtUN8qR
-	 3j3JUVYuDRO1Q==
-Date: Fri, 6 Sep 2024 09:21:04 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Richard Acayan <mailingradian@gmail.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>, 
-	Todor Tomov <todor.too@gmail.com>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-media@vger.kernel.org, 
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Subject: Re: [PATCH v4 0/7] Add SDM670 camera subsystem
-Message-ID: <vjfddnykgeihdjlp5wzaeu4d4qn2boc22hufe2ceajt5wazznb@nysgwxk4ksdm>
-References: <20240904020448.52035-9-mailingradian@gmail.com>
- <tthbaop6bkyvebpibiyvyct4khrd5o4apdbipqdthnidxmu2cx@m726xv4ocblg>
- <ZtpqrANbJurWNOzV@radian>
+	s=arc-20240116; t=1725608343; c=relaxed/simple;
+	bh=/VfN5TZBKFESX0ktdJnLpkP+3s1XJrbvW7+e2JjstSQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JMghxj7WmLQtA8pb2S+INt3F1Zm52tNx32j1kIropDG1Obe/y9f+CQ3alpnLBOlHtQXgd1ls9Bf0i0PxToiWvytTWY6vFngXyHg5U/WeIgpM1TuSqUmN2Yqqil8o2dsvuhKhaBbCL+/QvmWnYZ4TYtui9zImLt8jm9R+jos7Eio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cB0wo8oG; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-374c180d123so901021f8f.3
+        for <linux-i2c@vger.kernel.org>; Fri, 06 Sep 2024 00:39:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725608339; x=1726213139; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xz9IdLmzy/T20GbDRPSYjXR1GKGx3xeoUvnivTDuQzM=;
+        b=cB0wo8oGQ4gkqzsJUvwKF2bKsP3JPyJcvK8bOlIjlrk+jEwF2DTaekiQ5x9nIxU/UZ
+         HaCsFa7RX/okxuGsDJAAUa9wIbIqORlQfJwHEEqjhATDZFBZXnh4K0gjB8TM9nBNytTH
+         Lpx4ZaujIBV1Y4PChxe/m+H3cnhkvFDulli0meNFfyNDTGKB6IYEnbfb+WZVDITwgwyf
+         Mtg9oW5A2dL3K3TxhVhVOTy8lY0hnWAOlVabsmGFF1FagxFC2iQ5AdRCVdjFdzQ4DQI1
+         aRafG/lG6ZWwZAaCW2b0/DfSRhZ0jDCKGlajtSZAp+/RjNDaPd4p0xjNgqps9c0zsTCp
+         8UzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725608339; x=1726213139;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xz9IdLmzy/T20GbDRPSYjXR1GKGx3xeoUvnivTDuQzM=;
+        b=wbFlAlq6MG6evqLONyI/kLnQi77ttHbNs1tyrx/amXVe9b+jtkdPzwWnlrykUNGWOE
+         Tk5ltFsfKIBt3QbXFTF5olceI1G0L7qoWCZY9titLxeVIGlEuiQd07DlZoa/X5dreNH9
+         0pLvXtsQXLsuYje++m57LBs/ryaHCz9bfiHHgSjeMUBAGcAiJG+JNfx68o3eiorKyUu1
+         AgX8XYCayl2N/rpa6HYvVovUbW++J2jCCi7lZrVtrXbKZeTH8eV85XfxPvM82yXff3Cm
+         QsqJemZPFYzqA+x6AyBWm38bO+NcKPGGrj5WSb73iE/5Hi5PXsCVxPgwUVHz+rqX372/
+         0tBw==
+X-Forwarded-Encrypted: i=1; AJvYcCV6x8z0nhKh3ZxaHeBtTEwLtr/R0nkkeLZrHkS31bzVXSFEEkd3GeaFL5psQ7FRIYGGvQuDWQUmNas=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2txmp2kuU3vIfsckQjs0XC6+eUtQL8liBcTJAds3BRQVjUyyB
+	77Fro1a5OAwVhT0/deJ5eNUdXmhpYcbVVd6FsKkzsjY+aX2/t0Gb38taef+v4n0=
+X-Google-Smtp-Source: AGHT+IGFHwFQ99mHOKHLLsrCtuLnOv+VrrxaTcWgKFCATGwuZhLv7Zk5Z474pGF9RhYDinH0QTPZug==
+X-Received: by 2002:a5d:5f4a:0:b0:374:c269:df79 with SMTP id ffacd0b85a97d-374c269e0d7mr16000044f8f.22.1725608338871;
+        Fri, 06 Sep 2024 00:38:58 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3749eea60e2sm21002351f8f.62.2024.09.06.00.38.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Sep 2024 00:38:58 -0700 (PDT)
+Message-ID: <64758ccf-7ad4-4490-b938-864ade9ae74c@linaro.org>
+Date: Fri, 6 Sep 2024 09:38:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZtpqrANbJurWNOzV@radian>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 12/21] dt-bindings: thermal: tsens: document support on
+ SA8255p
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
+ viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+ sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
+ will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
+ jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+ amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
+ cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
+ linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ kernel@quicinc.com, quic_psodagud@quicinc.com,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-13-quic_nkela@quicinc.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240903220240.2594102-13-quic_nkela@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Richard,
+On 04/09/2024 00:02, Nikunj Kela wrote:
+> Add compatible for sensors representing support on SA8255p.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> ---
 
-On Thu, Sep 05, 2024 at 10:36:28PM GMT, Richard Acayan wrote:
-> On Thu, Sep 05, 2024 at 10:09:34PM +0200, Andi Shyti wrote:
-> > Hi Richard,
-> > 
-> > On Tue, Sep 03, 2024 at 10:04:49PM GMT, Richard Acayan wrote:
-> > > This adds support for the camera subsystem on the Snapdragon 670.
-> > > 
-> > > As of next-20240902, camss seems to be a bit broken, but the same series
-> > > works on stable (although it is much less reliable now that the CCI clock
-> > > frequency is not being assigned).
-> > 
-> > I am not understanding this bit: is this series making it better
-> > or not? Can you please clarify what is broken, what is less
-> > reliable and what works?
-> 
-> When applying this camss series and some camera sensor patches on
-> linux-next, the Pixel 3a seems to hang when camera capture starts.
-> 
-> When applying the same patches on stable, the camera does not cause the
-> Pixel 3a to hang.
-> 
-> When these device tree properties from the previous series were removed:
-> 
-> 			assigned-clocks = <&camcc CAM_CC_CCI_CLK>;
-> 			assigned-clock-rates = <37500000>;
-> 
-> the CCI would sometimes fail to probe with the error:
-> 
-> 	[   51.572732] i2c-qcom-cci ac4a000.cci: deferred probe timeout, ignoring dependency
-> 	[   51.572769] i2c-qcom-cci ac4a000.cci: probe with driver i2c-qcom-cci failed with error -110
-> 
-> On further testing, the rate can be set to 19.2 MHz, and there would be
-> no failure (or rather, it wouldn't happen often enough for me to witness
-> it).
-> 
-> > Besides, I'm reading that this series has not been tested and it
-> > makes it difficult for me to take this in, considering that you
-> > are adding a new support.
-> 
-> Of course. This revision of the series wasn't submitted to rush into
-> v6.12-rc1. It can wait until everything is resolved.
-> 
-> When device tree maintainers comment "not tested" on the documentation,
-> it usually means that `make dt_bindings_check DT_SCHEMA_FILES=...` gives
-> errors or warnings (even though the device tree and driver may work on
-> the hardware). It's a separate test and one of the things I haven't
-> scripted into my workflow, although it's still a responsibility.
+Applied, thanks
 
-OK, thanks for clarifying. Then, please, next time, to avoid
-confusion, make it an RFC; or, if the series is in an advanced
-state with little things to improve, state it clearly in the
-cover letter or after the '---' section.
 
-For now, thanks a lot, I will keep the R-b's for the time being
-(unless the reviewers are against) and I will wait for you to
-know the outcome of the tests.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Andi
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
