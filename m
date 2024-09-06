@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-6300-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6301-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B63C96EBB5
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 09:13:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C9B596EBB6
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 09:13:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68D091C21105
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 07:13:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE9491F26D2C
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 07:13:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA1C145B11;
-	Fri,  6 Sep 2024 07:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C8E14A630;
+	Fri,  6 Sep 2024 07:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="kjbrGsJT"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="hL4Z3LZF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2083.outbound.protection.outlook.com [40.107.220.83])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2076.outbound.protection.outlook.com [40.107.244.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56A514AD24
-	for <linux-i2c@vger.kernel.org>; Fri,  6 Sep 2024 07:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19BB913BC0D
+	for <linux-i2c@vger.kernel.org>; Fri,  6 Sep 2024 07:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725606787; cv=fail; b=S0sHHSD6Xvu4Uhagln0OmTfnilnaYI9r5u1ldThNj2uiYHvoBefLqNMFhAZC4UIKnaVuXxOdGCOdr09RnGUX4LFLBngxxXHcu9QK3lGkesE5yy6DT9IOLV4yCmH4zUxVwPMv9hFn9hyRVw+DBbPZNE0gVT2gMQvygJYumzuJvxg=
+	t=1725606792; cv=fail; b=lLJn3Oies+0N7itn4vxrHggLz+LbubjoXk/azXflD5vaDSxbQ65geDI8pBWqEHIZTablQGY9T/Car+dSj0R3tT0sk/7/7zRNogNEpo/jINjrWEZRdWhJA6Ghw0Borp8Fy73krmwTkFQrAL4yCSbHp2YWfdA+HfcL0fXH8u/54lo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725606787; c=relaxed/simple;
-	bh=rg1lcDXJ8gCAIAR7Y0W2HgJDHt/b7m8jn0l+ll1fUTU=;
+	s=arc-20240116; t=1725606792; c=relaxed/simple;
+	bh=pmMnWKKXonWbFOWwsCBt6xF+D/X3IGBvv5MgYodIo9w=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=em7hh8mTJf+1ATaLIwPuoDRcie4E6DWMlbyx/4TariLwqo312TNW9CS1rWP9oOuiLMgYWQcp5vfOGOBq1p3/D5MEYSksFrsoRLMXT8PoR8Wu31tA3lAZGenTqvTAOiepnbgFNjle6oYZhUrRWnnvio+pu1DHpVC6o3vhYVPItl8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=kjbrGsJT; arc=fail smtp.client-ip=40.107.220.83
+	 MIME-Version:Content-Type; b=hAnVrQsByd+BBKnEk9PB/exNLJrjjuKkoCkFDmzsSIVYIMS/+OoCqVAEVMc30VhQpmwqBoa2RD4Xf5Cv2RriNIjpwCd5v/+CIjw1hw2hk445kjDuqDLXl7hHpc01gb3lK43RM60K/kKsKlAnDiRxVOSy9+bU6NYcs7AWHZOr3yw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=hL4Z3LZF; arc=fail smtp.client-ip=40.107.244.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nBvCCn+aRl3pPpd3x2S5+wMq0ac1m57Vd6GdrZrScTZjg7Y76yi18a/4Eh9kJ1Nre04Xi/8ZAaUSWjiVYpVZMNRbMEKAjx1xN924sFcNHupJqdiu9uC9wbtrmEQt5AtuNbr+7AqcvSF/6QcfeMiBcktUaGSf3B8higEJlcaPh/yI4Qa4FVvuBabsB295H2auu9qdpiNyl3S5NhCaX8A2nxtUw8Vub0rtA6D+9vfuR7WvNVyB1k8IFQCgW1pvzVn3Oi6pc687fV00PBR52Tboj9uJ+G8pV+gg1zMG3tBM18t6EfI5jYHkwcLibZMjOpyWxB17FNgPVZu9RTCd0oCe/A==
+ b=PRd1uT3SczxSFeCrdEELnK39i7q50OSX+CWB/dTMfjw+YUkKs4MFAy9hAy3SXKlB2RJOM5zqNI+Isb54jiQRTTwQUpCfIUNiWnTl3iqMVXgPLnw65THWNYLGbEtqvthC3pXi5fHUttDDEFbZxMHBoRucl9U4NWppUdk/z6G+PkwUSyl436AUm/F7v0ZcEUXK5CvFbhTxdy/+fxttLP5zwKoyBUGWj3l2zmmFNQvnjBZxGexDnugSs1xEU7hyw3y2xBXgsosd4m7JcuNUtPqJiac8A36E+4ef1U9hCWlJXYho69/672QrwFOrqmYbOvP7E2kUCXRTktIg5ddWWkMMzA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BtkGnaivglQN8mgA5itO0X+KlrOt/o9MqIsaJToHItk=;
- b=o/MOJvXWvh3/HEbB2ZGiNktjs7tI0k9I8WEFmvoBVSTZSplRwa1PCkUmgTEyxmbZHRyHmvFPnI7y/r18BIwHbwsOATb6YNyeZREFA4TLDKFt99wwzVWu7uyXzMRbN06Aq33kQnoUQBOiaDgoXjwPaJBAuY0QHC7t4wbIn/HMEjowm0RbQxtPrAhLuYQe2uv7D2oOC3m2YXrdNfzXGNQeKa9oHSzcbGIvP/hl6XYnNBsjxeCx89dra3f2rnHVhqag1v6HK9rY9Cs8WGkaIYN5B+FZT639bn9O9HWnJ4w6YcbyXjWSOfA459aQd8kk9C6w4k22Mjn5EWJRFRekIZPA2Q==
+ bh=5vJBEuvfJu5mRKySbWPiUUYyrpOjn+viF9j74iU44eo=;
+ b=ErnJqnGLISbHpgD+SyC9oCzE0TPMU+moIQXoW4oZe270uA0qXCrz/NwVJKEKkwMCF3V3KDGCuCSRDP8kYr0l34g9ljVRjbJdJC1KPvW+Lng5pX1jfgGqvC8vY22S1n+CaCpmuDxWj3uvAdc2TR0CtNp7MlXDzSbyG67Q+RUQW46sprAW9npXj5DmhlsvU0tOFD4ZQHoGAZwfpE/WdK14qYqVC22H8vkX7KNi9hqQTLcdrKUwCUKcDI/l0q+w+CDCybg7eedCrivbrKVnNf2JCRUTKypfZc4Jotogk0PAVqtQ4ULiU+SU0VMG8q1uKPolCtiRc6nvrQT/XI0GpJGkKQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BtkGnaivglQN8mgA5itO0X+KlrOt/o9MqIsaJToHItk=;
- b=kjbrGsJTi2i+1BpCQvh1xFSMrh53Hm1F75mRgS9iDrLJBX8rDihkCYGI4dVnaE1dgGd7c5M+1l69Vm/NPvL6gHY8ymdTWgNNPefIMLA80MdZiJUZ5YtrahvvO5TVssV6BCU+3KzfE/O+U3u45Z72XKjGBXiosFo6kBdEngsx4pY=
-Received: from DM6PR07CA0094.namprd07.prod.outlook.com (2603:10b6:5:337::27)
- by MN2PR12MB4046.namprd12.prod.outlook.com (2603:10b6:208:1da::23) with
+ bh=5vJBEuvfJu5mRKySbWPiUUYyrpOjn+viF9j74iU44eo=;
+ b=hL4Z3LZFrfFVSck+LpXN4jSXq+Vw+KBYstSC5suQaulIbOMnB2Ra7emcc6gdJ4n4Nn8kXedQ6tRJjO3T0eEQagIu80asFy5PASW0EmUcmtzB3FS5HoBEvxrkcF4g2qdVFUyt9RF6ZyAgLyfimj8OWY7oplunOx+KXfLWG9dYJjk=
+Received: from CY5PR20CA0007.namprd20.prod.outlook.com (2603:10b6:930:3::26)
+ by CY5PR12MB6252.namprd12.prod.outlook.com (2603:10b6:930:20::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.20; Fri, 6 Sep
- 2024 07:13:02 +0000
-Received: from CY4PEPF0000EDD7.namprd03.prod.outlook.com
- (2603:10b6:5:337:cafe::92) by DM6PR07CA0094.outlook.office365.com
- (2603:10b6:5:337::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.14 via Frontend
- Transport; Fri, 6 Sep 2024 07:13:01 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Fri, 6 Sep
+ 2024 07:13:04 +0000
+Received: from CY4PEPF0000EDD1.namprd03.prod.outlook.com
+ (2603:10b6:930:3:cafe::e) by CY5PR20CA0007.outlook.office365.com
+ (2603:10b6:930:3::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27 via Frontend
+ Transport; Fri, 6 Sep 2024 07:13:04 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,20 +63,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CY4PEPF0000EDD7.mail.protection.outlook.com (10.167.241.203) with Microsoft
+ CY4PEPF0000EDD1.mail.protection.outlook.com (10.167.241.197) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7918.13 via Frontend Transport; Fri, 6 Sep 2024 07:13:01 +0000
+ 15.20.7918.13 via Frontend Transport; Fri, 6 Sep 2024 07:13:04 +0000
 Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 6 Sep
- 2024 02:12:59 -0500
+ 2024 02:13:01 -0500
 From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
 CC: <linux-i2c@vger.kernel.org>, <Sanket.Goswami@amd.com>, Shyam Sundar S K
 	<Shyam-sundar.S-k@amd.com>
-Subject: [PATCH v3 1/5] i2c: piix4: Allow more than two algo selection for SMBus
-Date: Fri, 6 Sep 2024 12:41:57 +0530
-Message-ID: <20240906071201.2254354-2-Shyam-sundar.S-k@amd.com>
+Subject: [PATCH v3 2/5] i2c: piix4: Add i2c_algorithm operations to support AMD ASF with SMBus
+Date: Fri, 6 Sep 2024 12:41:58 +0530
+Message-ID: <20240906071201.2254354-3-Shyam-sundar.S-k@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240906071201.2254354-1-Shyam-sundar.S-k@amd.com>
 References: <20240906071201.2254354-1-Shyam-sundar.S-k@amd.com>
@@ -92,170 +92,317 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
  (10.181.40.144)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD7:EE_|MN2PR12MB4046:EE_
-X-MS-Office365-Filtering-Correlation-Id: 467c9a72-794b-484d-d5ba-08dcce435830
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD1:EE_|CY5PR12MB6252:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9578bb0d-ff96-49a6-1da6-08dcce4359cc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024;
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vp+klbgHXTjIN+2blMU3xKcfgsfcdl0wv+UglUC97Ku5ySHSo/QU6x0wj0Dw?=
- =?us-ascii?Q?KxkWRLAELBcLXy9cmitZEmXbi8CSD1Uh7IoX4vrn2HZaM54oxSyhXL7XnFhY?=
- =?us-ascii?Q?e2+V+jeDCYOeqAxeIVLAHCawcXG9XHpMEMJ+o6d65eFCY7Y8wmEkXSaO6vjP?=
- =?us-ascii?Q?ocFa/rM9OIISMhu+jDht/6OG8RHeZM5gB9kE7aHlY9YNO8O2YGjWrlOiPs7K?=
- =?us-ascii?Q?q8nOUkTdZB3d3kyDFTG/Tku6HEIrDXNDLjExWXJwpBIFTEyLg7Xtzu8sVkWh?=
- =?us-ascii?Q?GKS2CYykhmppD5lcPtici6GQSBme07Twt0+3mekqqgntxWhkEmH0Yy+OOv6d?=
- =?us-ascii?Q?QJFFJqsx/y4//JaN+zvHi7ofrvV5dciFw6GwQssRUVb60soqK7x1QB50RpyJ?=
- =?us-ascii?Q?XZQaXkgmz7J4q9ltu9qTDMK2ybptWE410MikWLcNfwlraYyRg2Xg4heIZlUc?=
- =?us-ascii?Q?YvXQbl2+B64YcirB4625/vQV4+GS8g/+MZAE8H+IGkrVf5gPdYcKEmk6RmcN?=
- =?us-ascii?Q?VwC1tSC5GPrRPgcA+QMpplzRgGMKuJ9rrW6qgDuyb5zkJTLjRLIZuRgeQiNL?=
- =?us-ascii?Q?cj1N2OW6O8uelqeWRVomBxroYVnYncMcDwPSdETq5qee72STRECrPU6OEiIf?=
- =?us-ascii?Q?3/q2EsTGHkZ+1nrxEB7/8fHsW4R7bzFnJbtsptVA4WSTLKQcH7El1nDYjTJQ?=
- =?us-ascii?Q?aOKaM+fjqHEbKDwvbrL9unINS0R0Kj2O1nplURXjVLfd7lr+BAAse+2fFqxR?=
- =?us-ascii?Q?uIe7NXEz8eJV2BokLy6iTMs8FiBTGL/0a+nDb+CNTkjYukksRL4ByvP6HyiT?=
- =?us-ascii?Q?3Dv3suJFE2elk/j7tBpzQQYouWTWDzMoelfNjsQoyOG1DJkN5nOEnqTPIGxQ?=
- =?us-ascii?Q?XOhpSVBJf+8/Uag8pvrWmsG+FO26r/tnZyefbegXjUCNn/9RnN2w9HAvk5P1?=
- =?us-ascii?Q?sdkspVc5PfUX327/5ctzkM+Nz6+rqeG55Q/iLlOTl3X2vqUlKkXFdzWS8Hre?=
- =?us-ascii?Q?JRk0Mnp30HX/UCuF6gwi5qrBWBM2/2J64aRNdbIrOS3n4e19nsTPs67lPaqh?=
- =?us-ascii?Q?ampr90wdaV7em4kluVyrZLn0cERV/+nQG6hrOZK/GmtqpiUVJIhMkowdlrKC?=
- =?us-ascii?Q?WBnDublcOjcaoAvX21/Ui5rlS23335raXzpqmHBoutbqMIUlsYrNLSA0O6tE?=
- =?us-ascii?Q?lTqitGxN1IzuwfpScU3YBlbmPPd5JVNCG6cbEZuZeoxbUtJ3nZhB1p2Yd++6?=
- =?us-ascii?Q?edJFfUuV3dlG5qtazUyu/jwV1YCVlgrgRxxyCzmuMIovf4hJkbq7xkqkZyOp?=
- =?us-ascii?Q?PK5Ige9+IusX3h4pRj31uA3veYQoo5AeKUH1JrvEbTh8YzPaNDxtghutyEch?=
- =?us-ascii?Q?LYkCAWmQI0sXxJTI0aJY4W0VZSitLo3iyoFwBV1P5Xs9w/AHmBnDpcC1wVSN?=
- =?us-ascii?Q?LzV5noWcjnyNqHvNoAq31Vn3jMiOOM4q?=
+	=?us-ascii?Q?/52IAv0hkDX3dTU2ZPWpHKUXp87IFKC0Z3VKVSd+JWjeOxURqnK2jrQLMGcC?=
+ =?us-ascii?Q?Sw4Po5k1q3NtaVvIOI53Al0SXwQ4TgzaI8852pVO/MrB/fnCKl9O8LD/ieOa?=
+ =?us-ascii?Q?Oqzhz1ko0VxHIOyJuDmouGVzZtxJwpuCgtzwxsY2Cvuz2VW66uw4qlm2oap6?=
+ =?us-ascii?Q?CV+2I3vcap/7J2nJqzOi0G4kUTsIzWhq0oJqnE3K5FEX3WQZKd/XN6HZqh7C?=
+ =?us-ascii?Q?69X4zRSnYx7U2Iqdh94t/YSuuPaUorquKyr+wQUfWQvCH7in7s9d1hu4lvoB?=
+ =?us-ascii?Q?iDjZBwXvzoJ7Uk3l8wXZATPh2sXFiHN7v8bKPdcFm2aESUJOZHaZML2fTRy0?=
+ =?us-ascii?Q?5GbbIQIxfTieSq2iRh6pv0sBxOSEvRbjKzj96AukpXrr9YC1wQ/7XuURNSOB?=
+ =?us-ascii?Q?GU0Jm760NgmyJ2jwSrVrKLb/KKSJb/rjsYND0vrXeGStBnUpVNUPilmYgu+S?=
+ =?us-ascii?Q?N5gbAfDRmwU2RZ4SQ0S7zwzGFYrdnckijRjqxinEb/k3DXQVx3So8uB03O1G?=
+ =?us-ascii?Q?OdQrmHHmPl0nxSu+VxPaYq8nueMlHpe/c80/OrbWpcAv9QDegqdczsOz8fi/?=
+ =?us-ascii?Q?+/CPBB0759kACKGpYIPJo4PiJmuSQVhIwwQsHLUtXf5ZRt8Wl0jVC2uCcsPJ?=
+ =?us-ascii?Q?7RYVQOpqQNjs7DdtI62ZofEZwcYIXxyt9Ly4yHEFcMwuMB/zX+D3rHVWzJCG?=
+ =?us-ascii?Q?am4ggmlgkA03x9EmWhZTGEMK4Fj1TCvtKKnmtpEYMw+LP6z0oVpdo0YnkIEX?=
+ =?us-ascii?Q?ipGcrocrO8nBtwGToxjhHccyihwWVJzuI3wUl8ioWl8OZYzKfLYZCxkAt5eI?=
+ =?us-ascii?Q?SjpK/slsslFSkFaHnbEwJEyP4r9EvaMLjjrtVyU1fVetq7doPrigw1lXpJcU?=
+ =?us-ascii?Q?NDENEAWEDL28+PNW2qLfeOZC5yAw75U8mk9HqaHfHZUt06DUXKAwyUgEykak?=
+ =?us-ascii?Q?IbGlHM6Y48Lge/ekBPnY4Lsv13EYTZXntDvAZsMvU+MkE6Q3qEw74EmMDPRr?=
+ =?us-ascii?Q?cwU7duT+sYts6iZDds86mFE23XGR9ZrCh4Dch6EXtGkhoKF1eAf0g5BPunGK?=
+ =?us-ascii?Q?sfyq/yjko1VJfJc006b9aEp2pjesk5InhJiFmftUBYIgbk7CinidQhUvb6iP?=
+ =?us-ascii?Q?OhWLkMuRxeQGF/Ag+eneFIEIe+jjF7GL89VM2pWgGDtl3WlhZFtEKqK4Y/XB?=
+ =?us-ascii?Q?urj1YH22F3gDH9UQk553dyTLUaEhQz4UK1pPulZyRyKpQwwsddx6vHhDsbR3?=
+ =?us-ascii?Q?Mh8CfbkeJtUsFxiBWV5CzVY1awlD4rHrOuOw39ywD+IBQohJuXwbIBy1Tneu?=
+ =?us-ascii?Q?nua9Vgt/i/VYe8QTvV/KCTbJhtOsKbedCTXmZjagOVZrrl31V3fgwjzpSjiW?=
+ =?us-ascii?Q?kDr83hCHZfYpUVzoUBZoblf4/vFHaV6hgJY5BTulNF10um2g50uohjziEGFf?=
+ =?us-ascii?Q?0qYadtTruaEPYK8B3uz4RiRXyZ6l6dSi?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2024 07:13:01.5775
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2024 07:13:04.2728
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 467c9a72-794b-484d-d5ba-08dcce435830
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9578bb0d-ff96-49a6-1da6-08dcce4359cc
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EDD7.namprd03.prod.outlook.com
+	CY4PEPF0000EDD1.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4046
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6252
 
-The current implementation of the piix4 driver has a limitation in that it
-only supports two algorithms for the I2C adapter:
+Implement the i2c_algorithm operations to enable support for AMD ASF
+(Alert Standard Format) with SMBus. This enhancement includes:
 
-- SB800 Algorithm: This is used for newer AMD chipsets.
-- Legacy PIIX4 Algorithm: This is used for older systems.
+- Adding functionality to identify and select the supported ASF functions.
+- Implementing mechanisms for registering and deregistering I2C slave
+  devices.
+- Providing support for data transfer operations over ASF.
 
-The selection between these two algorithms is controlled by a boolean
-parameter in the piix4_add_adapter() function. This means that the driver
-can only toggle between these two options, which limits its flexibility.
+These changes will extend the piix4 driver to accommodate the additional
+capabilities provided by AMD's ASF Controller.
 
-AMD's SMBus (System Management Bus) implementation supports additional
-functionalities, such as ASF (Alert Standard Format). ASF is a protocol
-used for system management and monitoring, which can be part of the SoC
-(System on Chip). To support ASF or any other future algorithms, the
-driver needs to be more flexible in its algorithm selection.
-
-The proposed change involves modifying the piix4_add_adapter() function to
-accommodate more than just two algorithm selections. Instead of using a
-boolean parameter to select between two algorithms, the function signature
-will be updated to allow for multiple algorithm options.
+Additionally, include a 'select' Kconfig entry for CONFIG_I2C_PIIX4, as
+the current patch utilizes reg_slave and unreg_slave callbacks, which are
+controlled by IS_ENABLED(CONFIG_I2C_SLAVE).
 
 Co-developed-by: Sanket Goswami <Sanket.Goswami@amd.com>
 Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
 Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 ---
- drivers/i2c/busses/i2c-piix4.c | 30 +++++++++++++++++++++++-------
- 1 file changed, 23 insertions(+), 7 deletions(-)
+ drivers/i2c/busses/Kconfig     |   1 +
+ drivers/i2c/busses/i2c-piix4.c | 184 +++++++++++++++++++++++++++++++++
+ 2 files changed, 185 insertions(+)
 
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index a22f9125322a..10ad839bf4a2 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -197,6 +197,7 @@ config I2C_PIIX4
+ 	tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
+ 	depends on PCI && HAS_IOPORT
+ 	select I2C_SMBUS
++	select I2C_SLAVE
+ 	help
+ 	  If you say yes to this option, support will be included for the Intel
+ 	  PIIX4 family of mainboard I2C interfaces.  Specifically, the following
 diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-index 4e32d57ae0bf..d56083e58a2d 100644
+index d56083e58a2d..003cb04312cf 100644
 --- a/drivers/i2c/busses/i2c-piix4.c
 +++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -165,6 +165,11 @@ struct sb800_mmio_cfg {
- 	bool use_mmio;
+@@ -50,6 +50,22 @@
+ #define SMBSLVEVT	(0xA + piix4_smba)
+ #define SMBSLVDAT	(0xC + piix4_smba)
+ 
++/* SB800 ASF register bits */
++#define SB800_ASF_SLV_LISTN	0
++#define SB800_ASF_SLV_INTR	1
++#define SB800_ASF_SLV_RST	4
++#define SB800_ASF_PEC_SP	5
++#define SB800_ASF_DATA_EN	7
++#define SB800_ASF_MSTR_EN	16
++#define SB800_ASF_CLK_EN	17
++
++/* SB800 ASF address offsets */
++#define ASFLISADDR		(9 + piix4_smba)
++#define ASFSTA			(0xA + piix4_smba)
++#define ASFSLVSTA		(0xD + piix4_smba)
++#define ASFDATABNKSEL		(0x13 + piix4_smba)
++#define ASFSLVEN		(0x15 + piix4_smba)
++
+ /* count for request_region */
+ #define SMBIOSIZE	9
+ 
+@@ -101,6 +117,7 @@
+ 
+ #define SB800_PIIX4_FCH_PM_ADDR			0xFED80300
+ #define SB800_PIIX4_FCH_PM_SIZE			8
++#define SB800_ASF_BLOCK_MAX_BYTES		72
+ 
+ /* insmod parameters */
+ 
+@@ -168,6 +185,7 @@ struct sb800_mmio_cfg {
+ enum piix4_algo {
+ 	PIIX4_SB800,
+ 	PIIX4_SMBUS,
++	SMBUS_ASF,
  };
  
-+enum piix4_algo {
-+	PIIX4_SB800,
-+	PIIX4_SMBUS,
-+};
-+
  struct i2c_piix4_adapdata {
- 	unsigned short smba;
- 
-@@ -173,6 +178,7 @@ struct i2c_piix4_adapdata {
- 	bool notify_imc;
+@@ -179,6 +197,7 @@ struct i2c_piix4_adapdata {
  	u8 port;		/* Port number, shifted */
  	struct sb800_mmio_cfg mmio_cfg;
-+	u8 algo_select;
+ 	u8 algo_select;
++	struct i2c_client *slave;
  };
  
  static int piix4_sb800_region_request(struct device *dev,
-@@ -929,7 +935,7 @@ static struct i2c_adapter *piix4_aux_adapter;
- static int piix4_adapter_count;
+@@ -887,6 +906,168 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+ 	return retval;
+ }
  
- static int piix4_add_adapter(struct pci_dev *dev, unsigned short smba,
--			     bool sb800_main, u8 port, bool notify_imc,
-+			     enum piix4_algo algo, u8 port, bool notify_imc,
- 			     u8 hw_port_nr, const char *name,
- 			     struct i2c_adapter **padap)
- {
-@@ -945,8 +951,18 @@ static int piix4_add_adapter(struct pci_dev *dev, unsigned short smba,
- 
- 	adap->owner = THIS_MODULE;
- 	adap->class = I2C_CLASS_HWMON;
--	adap->algo = sb800_main ? &piix4_smbus_algorithm_sb800
--				: &smbus_algorithm;
++static void sb800_asf_update_bits(unsigned short piix4_smba, u8 bit, unsigned long offset, bool set)
++{
++	unsigned long reg;
 +
-+	switch (algo) {
-+	case PIIX4_SMBUS:
-+		adap->algo = &smbus_algorithm;
-+		break;
-+	case PIIX4_SB800:
-+		adap->algo = &piix4_smbus_algorithm_sb800;
-+		break;
-+	default:
-+		dev_err(&dev->dev, "Unsupported SMBus algorithm\n");
++	reg = inb_p(offset);
++	if (set)
++		set_bit(bit, &reg);
++	else
++		clear_bit(bit, &reg);
++	outb_p(reg, offset);
++}
++
++static void sb800_asf_update_bytes(struct i2c_piix4_adapdata *adap, u8 bit, bool set)
++{
++	unsigned long reg;
++
++	reg = ioread32(adap->mmio_cfg.addr);
++	if (set)
++		set_bit(bit, &reg);
++	else
++		clear_bit(bit, &reg);
++	iowrite32(reg, adap->mmio_cfg.addr);
++}
++
++static void sb800_asf_setup_slave(struct i2c_piix4_adapdata *adap)
++{
++	unsigned short piix4_smba = adap->smba;
++
++	/* Reset both host and slave before setting up */
++	outb_p(0, SMBHSTSTS);
++	outb_p(0, ASFSLVSTA);
++	outb_p(0, ASFSTA);
++
++	/* Update slave address */
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_SLV_LISTN, ASFLISADDR, true);
++	/* Enable slave and set the clock */
++	sb800_asf_update_bytes(adap, SB800_ASF_MSTR_EN, false);
++	sb800_asf_update_bytes(adap, SB800_ASF_CLK_EN, true);
++	/* Enable slave interrupt */
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_SLV_INTR, ASFSLVEN, true);
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_SLV_RST, ASFSLVEN, false);
++	/* Enable PEC and PEC append */
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_DATA_EN, SMBHSTCNT, true);
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_PEC_SP, SMBHSTCNT, true);
++}
++
++static s32 sb800_asf_access(struct i2c_adapter *adap, u16 addr, u8 command, u8 *data)
++{
++	struct i2c_piix4_adapdata *adapdata = i2c_get_adapdata(adap);
++	unsigned short piix4_smba = adapdata->smba;
++	u8 len;
++	int i;
++
++	outb_p((addr << 1), SMBHSTADD);
++	outb_p(command, SMBHSTCMD);
++	len = data[0];
++	if (len == 0 || len > SB800_ASF_BLOCK_MAX_BYTES)
 +		return -EINVAL;
++
++	outb_p(len, SMBHSTDAT0);
++	inb_p(SMBHSTCNT); /* Reset SMBBLKDAT */
++	for (i = 1; i <= len; i++)
++		outb_p(data[i], SMBBLKDAT);
++
++	outb_p(PIIX4_BLOCK_DATA, SMBHSTCNT);
++	/* Enable PEC and PEC append */
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_DATA_EN, SMBHSTCNT, true);
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_PEC_SP, SMBHSTCNT, true);
++
++	return piix4_transaction(adap);
++}
++
++static int sb800_asf_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
++{
++	struct i2c_piix4_adapdata *adapdata = i2c_get_adapdata(adap);
++	unsigned short piix4_smba = adapdata->smba;
++	u8 asf_data[SB800_ASF_BLOCK_MAX_BYTES];
++	struct i2c_msg *dev_msgs = msgs;
++	u8 prev_port;
++	int ret;
++
++	if (msgs->flags & I2C_M_RD) {
++		dev_err(&adap->dev, "Read not supported\n");
++		return -EOPNOTSUPP;
 +	}
- 
- 	adapdata = kzalloc(sizeof(*adapdata), GFP_KERNEL);
- 	if (adapdata == NULL) {
-@@ -957,7 +973,7 @@ static int piix4_add_adapter(struct pci_dev *dev, unsigned short smba,
- 
- 	adapdata->mmio_cfg.use_mmio = piix4_sb800_use_mmio(dev);
- 	adapdata->smba = smba;
--	adapdata->sb800_main = sb800_main;
-+	adapdata->algo_select = algo;
- 	adapdata->port = port << piix4_port_shift_sb800;
- 	adapdata->notify_imc = notify_imc;
- 
-@@ -1013,7 +1029,7 @@ static int piix4_add_adapters_sb800(struct pci_dev *dev, unsigned short smba,
- 	for (port = 0; port < piix4_adapter_count; port++) {
- 		u8 hw_port_nr = port == 0 ? 0 : port + 1;
- 
--		retval = piix4_add_adapter(dev, smba, true, port, notify_imc,
-+		retval = piix4_add_adapter(dev, smba, PIIX4_SB800, port, notify_imc,
- 					   hw_port_nr,
- 					   piix4_main_port_names_sb800[port],
- 					   &piix4_main_adapters[port]);
-@@ -1085,7 +1101,7 @@ static int piix4_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 			return retval;
- 
- 		/* Try to register main SMBus adapter, give up if we can't */
--		retval = piix4_add_adapter(dev, retval, false, 0, false, 0,
-+		retval = piix4_add_adapter(dev, retval, PIIX4_SMBUS, 0, false, 0,
- 					   "", &piix4_main_adapters[0]);
- 		if (retval < 0)
- 			return retval;
-@@ -1114,7 +1130,7 @@ static int piix4_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	if (retval > 0) {
- 		/* Try to add the aux adapter if it exists,
- 		 * piix4_add_adapter will clean up if this fails */
--		piix4_add_adapter(dev, retval, false, 0, false, 1,
-+		piix4_add_adapter(dev, retval, PIIX4_SMBUS, 0, false, 1,
- 				  is_sb800 ? piix4_aux_port_name_sb800 : "",
- 				  &piix4_aux_adapter);
- 	}
++
++	/* Exclude the receive header and PEC */
++	if (msgs->len > SB800_ASF_BLOCK_MAX_BYTES - 3) {
++		dev_err(&adap->dev, "ASF max message length exceeded\n");
++		return -EOPNOTSUPP;
++	}
++
++	asf_data[0] = dev_msgs->len;
++	memcpy(asf_data + 1, dev_msgs[0].buf, dev_msgs->len);
++
++	ret = piix4_sb800_region_request(&adap->dev, &adapdata->mmio_cfg);
++	if (ret)
++		return ret;
++
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_SLV_RST, ASFSLVEN, true);
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_SLV_LISTN, ASFLISADDR, false);
++	/* Clear ASF slave status */
++	outb_p(0, ASFSLVSTA);
++
++	/* Enable ASF SMBus master function */
++	sb800_asf_update_bytes(adapdata, SB800_ASF_MSTR_EN, true);
++	prev_port = piix4_sb800_port_sel(adapdata->port, &adapdata->mmio_cfg);
++	ret = sb800_asf_access(adap, msgs->addr, msgs[0].buf[0], asf_data);
++	piix4_sb800_port_sel(prev_port, &adapdata->mmio_cfg);
++	sb800_asf_setup_slave(adapdata);
++	piix4_sb800_region_release(&adap->dev, &adapdata->mmio_cfg);
++	return ret;
++}
++
++static int sb800_asf_reg_slave(struct i2c_client *slave)
++{
++	struct i2c_piix4_adapdata *adapdata = i2c_get_adapdata(slave->adapter);
++	unsigned short piix4_smba = adapdata->smba;
++	int ret;
++	u8 reg;
++
++	if (adapdata->slave)
++		return -EBUSY;
++
++	ret = piix4_sb800_region_request(&slave->dev, &adapdata->mmio_cfg);
++	if (ret)
++		return ret;
++
++	reg = (slave->addr << 1) | BIT(0);
++	outb_p(reg, ASFLISADDR);
++
++	sb800_asf_setup_slave(adapdata);
++	adapdata->slave = slave;
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_DATA_EN, ASFDATABNKSEL, false);
++	piix4_sb800_region_release(&slave->dev, &adapdata->mmio_cfg);
++	return 0;
++}
++
++static int sb800_asf_unreg_slave(struct i2c_client *slave)
++{
++	struct i2c_piix4_adapdata *adapdata = i2c_get_adapdata(slave->adapter);
++	unsigned short piix4_smba = adapdata->smba;
++
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_SLV_INTR, ASFSLVEN, false);
++	sb800_asf_update_bits(piix4_smba, SB800_ASF_SLV_RST, ASFSLVEN, true);
++	adapdata->slave = NULL;
++	return 0;
++}
++
++static u32 sb800_asf_func(struct i2c_adapter *adapter)
++{
++	return I2C_FUNC_SMBUS_BLOCK_DATA | I2C_FUNC_SMBUS_BYTE |
++		I2C_FUNC_SLAVE | I2C_FUNC_SMBUS_WRITE_BLOCK_DATA | I2C_FUNC_SMBUS_PEC;
++}
++
++static const struct i2c_algorithm sb800_asf_smbus_algorithm = {
++	.master_xfer = sb800_asf_xfer,
++	.reg_slave = sb800_asf_reg_slave,
++	.unreg_slave = sb800_asf_unreg_slave,
++	.functionality = sb800_asf_func,
++};
++
+ static u32 piix4_func(struct i2c_adapter *adapter)
+ {
+ 	return I2C_FUNC_SMBUS_QUICK | I2C_FUNC_SMBUS_BYTE |
+@@ -959,6 +1140,9 @@ static int piix4_add_adapter(struct pci_dev *dev, unsigned short smba,
+ 	case PIIX4_SB800:
+ 		adap->algo = &piix4_smbus_algorithm_sb800;
+ 		break;
++	case SMBUS_ASF:
++		adap->algo = &sb800_asf_smbus_algorithm;
++		break;
+ 	default:
+ 		dev_err(&dev->dev, "Unsupported SMBus algorithm\n");
+ 		return -EINVAL;
 -- 
 2.25.1
 
