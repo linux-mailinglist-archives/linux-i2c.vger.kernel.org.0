@@ -1,83 +1,77 @@
-Return-Path: <linux-i2c+bounces-6311-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6312-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4728896F340
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 13:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D360896F37A
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 13:48:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07BB1289A81
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 11:41:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91393283826
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 11:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41B8A1CB336;
-	Fri,  6 Sep 2024 11:41:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B190F1CBEA2;
+	Fri,  6 Sep 2024 11:47:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KxpKwfmT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PivsV9vW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A296415852B;
-	Fri,  6 Sep 2024 11:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1661CBE8F;
+	Fri,  6 Sep 2024 11:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725622864; cv=none; b=RR8caA6S/kKOgCgwJ4XNLqLKk6xQPuJNC2WOBA+HOZI9tmlFduxKU85LVB03BBvpm/NKFV0JQGwJxvMbEFvPU/Ohw86udnFRJThe4n2G99KQD2wBR9JYaOPw8UNALNfrtS68jCNF0T5Hfwa2tdI1kK6+SOgYI9H+wedwvwWRQPI=
+	t=1725623274; cv=none; b=CHNx3O2oKqKGMQw0GrPtCibTPftXe/jXZH9kTfDwCkmzGn9cFuFqenIkY0VHZ95T/X+bPtvnPgu1II20w6BG8o29118ANLPo1K+DRMksDOq3JphhAFvfVJ5mFdCM0A4KI6/HTOaRCm+6DVaUk8syeyfRQxeOZzUgLOGJadRYwbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725622864; c=relaxed/simple;
-	bh=YGHl4O8g0y5wAhBvvDSoCsRTbOvTVD97w2B1eAugi6k=;
+	s=arc-20240116; t=1725623274; c=relaxed/simple;
+	bh=N5aKQU5kkjMWnod8/X4iS0VDX8jjc/t6Cugpf7X/brQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DzuL4ctg2jtEDbA6f+UdXqpEUeoqrb1f2sYd9fQlO5CnGphsXyEsq8w4RmT1Vbqh/KO8bGHkn2TdpdsXooWRrfSDCBaQNgL1HO31JvToHG01N9XCRiOPRv5d4/9ldrbEkIX9uN+EIxczxB3vxb14U8EvFBXrLabdeV4CnmoJ0K8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KxpKwfmT; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=smkdKo6t7LaqWyDUKZMIcwrAxsND5/ToFdAoMaOCKY1yP1+gpjwLFn0mGKDSzAdb4m1DSHO9hrnR67bhufIYo/OkyNtzuXEcLFf7AsjuDjVHKWQvNildQi92Lvx31rzk567nsnJR6qsXwWnvbQnTPt0eA4ECtPLwxBA0mr6SLSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PivsV9vW; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725622863; x=1757158863;
+  t=1725623273; x=1757159273;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YGHl4O8g0y5wAhBvvDSoCsRTbOvTVD97w2B1eAugi6k=;
-  b=KxpKwfmTn7rCQHOb2owvwfdtDhmYBWVpOhnm5Mg14rF5FSnzCMGSStqj
-   IXazn74c2+N8lL2C5q9tJsvFnyByvT3LhW1unQ+p5QR104w1XqyHD372e
-   7dW196bnu3nobt6kVelBkN3qm0TJM0VvO4d6gr/lweljb7xAve8X41bA1
-   FRR5sczL0r4I7PIUPSPqzNFWUv+lqzEF95HjoElawQK2GoxCVp+Z3Rc+d
-   cXTWfTlvyUzzvA/Atwz/1oUaAl065k3n+SoTFe4wKA1PnrJ0HWudUM8ni
-   VYGbybsfmMKUtnPEf1i9VH66IypGByTEnnbu66XatJWqjdxc8GHfx8i+q
-   Q==;
-X-CSE-ConnectionGUID: 5KzKzNb9ScGyZPu8UtXNUw==
-X-CSE-MsgGUID: pKnBySZpQk+a2YJ2anc0lA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="35730374"
+  bh=N5aKQU5kkjMWnod8/X4iS0VDX8jjc/t6Cugpf7X/brQ=;
+  b=PivsV9vWmSyA4V/87eycNhcVrvbkpuLWokJkmTmCEFQn3A8XIuQZQQii
+   M5u5RI86F9aXoL5+fHXn7MwXYfoPBLO6tEAJcZNTTt2++qt6whoDLDVvq
+   qpMzhHldMJkHpuQcskXScx/yYIO/t2mqoorIKs2TWY9Beh2Y/EZULRXGj
+   0KRKcBR4pKgZv0vI6+NB6KqsBA6gPGiAhDZJdPsViLyn47cN29qqOlykG
+   kNJpTa4z/A69RKi9SSAY2VL6u4IFerqkKUxx7IANAhnJ1zwqkxaQwSqz1
+   S1i9SQSGqTaM0NuuI15/sBk6VFGM90V67LqfS/9cvUSw3sz0d2F7ZnlIu
+   w==;
+X-CSE-ConnectionGUID: rHKanv31RqS8FKv9zQUjXw==
+X-CSE-MsgGUID: wuBjWv5cRFuJ+3zGL1JBTA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="13408814"
 X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="35730374"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 04:41:03 -0700
-X-CSE-ConnectionGUID: WQK9yInwQwaYZ/2sETdENg==
-X-CSE-MsgGUID: +kM31qQnQxSVCYmefBQkbg==
+   d="scan'208";a="13408814"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 04:47:52 -0700
+X-CSE-ConnectionGUID: EZwPke7qTb2ylIfRFgVDXw==
+X-CSE-MsgGUID: Gv4/ZtQ6Qxyo1IzLOUXTPg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="103406212"
+   d="scan'208";a="66163030"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 04:40:57 -0700
+  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 04:47:50 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1smXKg-00000005lsd-1cyA;
-	Fri, 06 Sep 2024 14:40:54 +0300
-Date: Fri, 6 Sep 2024 14:40:53 +0300
+	id 1smXRL-00000005lzo-3BAq;
+	Fri, 06 Sep 2024 14:47:47 +0300
+Date: Fri, 6 Sep 2024 14:47:47 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
-	tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-	yuenn@google.com, benjaminfair@google.com, wsa@kernel.org,
-	rand.sec96@gmail.com, wsa+renesas@sang-engineering.com,
-	tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-	tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-	kfting@nuvoton.com, openbmc@lists.ozlabs.org,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/7] i2c: npcm: restore slave addresses array length
-Message-ID: <ZtrqRc5XYmYBtonw@smile.fi.intel.com>
-References: <20240830034640.7049-1-kfting@nuvoton.com>
- <20240830034640.7049-2-kfting@nuvoton.com>
- <xdaufg4bju3iq5fqeo2gdej3yaxyufhuaiuyixnla234l2ej3r@fmvann767tib>
+To: Kimriver Liu <kimriver.liu@siengine.com>
+Cc: jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+	jsd@semihalf.com, andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: designware: fix master is holding SCL low while
+ ENABLE bit is disabled
+Message-ID: <Ztrr4-igQ20gu0VS@smile.fi.intel.com>
+References: <20240906054250.2745-1-kimriver.liu@siengine.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -86,27 +80,45 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <xdaufg4bju3iq5fqeo2gdej3yaxyufhuaiuyixnla234l2ej3r@fmvann767tib>
+In-Reply-To: <20240906054250.2745-1-kimriver.liu@siengine.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Sep 05, 2024 at 11:36:45PM +0200, Andi Shyti wrote:
-> On Fri, Aug 30, 2024 at 11:46:34AM GMT, Tyrone Ting wrote:
-> > The smatch check warning is "buffer overflow 'npcm_i2caddr' 2 <= 9".
-> > The original design supports 10 slave addresses although only 2
-> > addresses are required for current implementation.
-> > 
-> > Restore the npcm_i2caddr array length to fix the smatch warning.
-> > 
-> > Fixes: 47d506d1a28f ("i2c: npcm: Remove own slave addresses 2:10")
-> > Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > Closes: https://lore.kernel.org/r/202408130818.FgDP5uNm-lkp@intel.com/
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+On Fri, Sep 06, 2024 at 01:42:50PM +0800, Kimriver Liu wrote:
+> It was observed issuing ABORT bit(IC_ENABLE[1]) will not work when
+> IC_ENABLE is already disabled.
 > 
-> your email used in From: is different that your e-mail used the
-> SoB. Is this done in purpose? If so I will keep it as it is, no
-> problem for me, otherwise I can fix it while applying it.
+> Check if ENABLE bit(IC_ENABLE[0]) is disabled when the master is
+> holding SCL low. If ENABLE bit is disabled, the software need
+> enable it before trying to issue ABORT bit. otherwise,
+> the controller ignores any write to ABORT bit
+> 
+> Signed-off-by: Kimriver Liu <kimriver.liu@siengine.com>
+> 
+> ---
 
-IIRC Linux Next has the respective check and it will become your problem :-)
+> V3->V4:
+
+Nice, but the Subject (which is most important part) still has no versioning :-(
+
+>       1. update commit messages and add patch version and changelog
+>       2. move print the error message in i2c_dw_xfer
+> V2->V3: change (!enable) to (!(enable & DW_IC_ENABLE_ENABLE))
+> V1->V2: used standard words in function names and addressed review comments
+
+...
+
+> +			/*
+> +			 * Wait two ic_clk delay when enabling the i2c to ensure ENABLE bit
+> +			 * is already set by the driver (for 400KHz this is 25us)
+> +			 * as described in the DesignWare I2C databook.
+> +			 */
+> +			fsleep(25);
+
+And if we use 100kHz?
+Please, calculate this delay based on the actual speed in use
+(or about to be in use).
+
+> +		}
 
 -- 
 With Best Regards,
