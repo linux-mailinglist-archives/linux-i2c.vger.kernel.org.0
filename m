@@ -1,130 +1,146 @@
-Return-Path: <linux-i2c+bounces-6289-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6290-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E531096E7B3
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 04:28:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B03AD96E7CE
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 04:36:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDDD01C22C85
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 02:28:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA0F3B22A9C
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 02:36:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8EE208A0;
-	Fri,  6 Sep 2024 02:28:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6039A288B1;
+	Fri,  6 Sep 2024 02:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NSQnFRPW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fQDwoTPC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579D81CA94;
-	Fri,  6 Sep 2024 02:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C074C1B969;
+	Fri,  6 Sep 2024 02:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725589726; cv=none; b=gR02IeAumueie40SNq07ZwoPSQXkYbJAuTuwZDfpscxiqxEdXvtOG/knwoiKUWnWGeahERid4cKUT5UPqgmrKkYMjg0rwV3QczkwYfFpSByE8NbDI6rp+PNfDChQWJxNHftDBIRsCuY6Xv3inHgnNDclNwquUK6un7cs4byr1AE=
+	t=1725590195; cv=none; b=uDe7FHmYMnqccbX1NQS8SPx2woERup+t1i3Gyh9M5+LgqzI7azdDCTB7vikGv10m0915rpu/J2AmegAFoO5Yo42+/KCOZbjHUZSEnLkt7YWv2edYXC8uJjUTf1a1UmGQ1vA9c3N1RX39cWKnoxdSTL4Ato5zg87PfyWJbr/z5Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725589726; c=relaxed/simple;
-	bh=GK7dt7abJmn961GOVaVJQUoLvO/GNZzeN3uTR3aqVdc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ovYH5j8A47Qm2DeZ7VH7c4TQLHkjefA04W0NpcLA+g33r+CGHG14jSUFHHsokMmnYUV3Ft7lNp75WBsmO/C+513nxkSA96N1urWyyT0Z4WLiiueRVa0noE+9SQohsbxHeWNB/mcSw0dgVz283zqfqNaWNdRKJm+n6FAS/YLZHcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NSQnFRPW; arc=none smtp.client-ip=209.85.167.41
+	s=arc-20240116; t=1725590195; c=relaxed/simple;
+	bh=l/L5FGZqn4EE3bWvcZ4oUF9HzXQWZkujyE9rwI0wzNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=guTumuWo8fp1FDqKWz6MWTdfmCxg8cyeInNKagnbazRdaTlEuvex6CR+NTcZAhbS1waVkaNL7De0eq7vqez7LTvvx9z8xWvu9K72SzbDQUxLbJEoSu9t7tnWCJ2Vsw8Gq3Mrj44JOKkKz1lya9ZPP6kYQi3DJv0/FCj4cz2uloo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fQDwoTPC; arc=none smtp.client-ip=209.85.219.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53653ff0251so1400837e87.0;
-        Thu, 05 Sep 2024 19:28:44 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e1a989bd17aso1622170276.1;
+        Thu, 05 Sep 2024 19:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725589722; x=1726194522; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GK7dt7abJmn961GOVaVJQUoLvO/GNZzeN3uTR3aqVdc=;
-        b=NSQnFRPWUKKRStIsvbZ2M6JVXUD4tiYQzNiPyiykMAlfNoCapC+tALDE75/ezmjxFi
-         cRapkwquFBHHswg1/Zh/e9x28Jc5k5ndLG0sE3lDAtYxFSWTJndgnbBkVizYJDbag3Tb
-         rpMqcCdxnJwiwa2dvcLxHnWbyu6kVVwcXH666q5c4oQkMafN43nZamqdlZoh6RR4eSF4
-         x5SBI6Hp3qQb024EDcjI2ts0h2F4dmzxpySUohWlcm0b7HpUBfrUrpAfllKkZxYKjyQ0
-         ALr6EfPWgHUC5xDcztjPyRf5ZGqG9GAvJrb2vngla+rB30xKHMr8JSeOWETO0Xbh0cSa
-         joog==
+        d=gmail.com; s=20230601; t=1725590193; x=1726194993; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pVMdGlIj9xk2r5uxVbI4SIjTki6YfCzvVODN1CuCuF4=;
+        b=fQDwoTPC+78YKZ6MP+CBwjsd+bilaqolyPHTNhTZlMM0RWxFksAG9x8RLCm9x6tOAs
+         exaJ6LUji8q/MfQAq9nWBFQSpazW7rn9mfSmZkuElz59gO4BXlJhYmGbioen9IOKdCBD
+         9TAasB9smhuMSlZ4Yc9BlXyOk+FlDr4AtzTko91SEv6yOZEzgQBcLZQQGJ2qNfR/dMAL
+         f6DgY0G4KUJLHPfDr6leNFw36Axy0spEh+CZVCWUVzQNNe+ysj8XXgPfQ/bZRmyJEL/B
+         Yl6Mawk5pTls1hbMTSn8QZIuuEby13WOXbeXY4qSA8FfKQZldQmH2sF9jjnCRPDzzQAO
+         Ob4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725589722; x=1726194522;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GK7dt7abJmn961GOVaVJQUoLvO/GNZzeN3uTR3aqVdc=;
-        b=sqphTI71deM8070iWMf9cZxQTb9mnm30IMJgfp5Z0d5ZZF2Jqh2QLCov18OgxKJyZB
-         b0Rs6UfhcJliKnnmE4zWYbt/+E6mB8kCIWtem9zTD9jto2aScXK/Hmu4tCKh14D4e2Ai
-         8G6IXy5d6IbTIXwqB7zofIPv2dUK2cr8WuT8dxpby+bW44IauUzRkhN3iSIX8V/YFY87
-         sqpe7uixKd2ufgvHuUuWMuFYYel6rDlYbuK4wp25AiFgX/BpAq3sBPbqxhBBMsfhytqz
-         Ukrhc4Ggobj3dQRXfzpBraNx7Qm+j/lclByyC5ttLEEiAZ6F5RevhMuN9/YUtcNec1Tr
-         yGlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1QTuEgTnqlGdrIPZhoSeh8g2SGbT8j43nJmnLYkAZ6rn5PmEgW5E0MkjozWs/N5JNUzukXKXxirXTf65i@vger.kernel.org, AJvYcCWbI/J6gNxEoiaUl8OsBwGe4g/XD25o30S0262ivNMOaZbqbBCr4IYMGIKuk2/0B/HaO1RbhuEL+iQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygFmI0cj2n85GyX0DWjuI23NZFRMe+haruZ7LBk9ZjeYQ/d2zE
-	QTtBXza+4KkPYJm0Q/f1V8reQoiMi3WnQzoWoZ5p8SUqMjKC46CI4HhlIr0lIx30GhRV/8Gfka2
-	Y/KxE8U7pBXmLafH3LjTThbO7oA==
-X-Google-Smtp-Source: AGHT+IGLL8kBf9+/E2NQeP7puMX03Eq9h3iMuhuBHNNWVlWmSqelsEaUKLbRuja63ty1DA8DhKY62ve783uWcW8rsPQ=
-X-Received: by 2002:ac2:4f08:0:b0:52c:e05e:849b with SMTP id
- 2adb3069b0e04-536587fc823mr490630e87.39.1725589721463; Thu, 05 Sep 2024
- 19:28:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725590193; x=1726194993;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pVMdGlIj9xk2r5uxVbI4SIjTki6YfCzvVODN1CuCuF4=;
+        b=B9ZYu+Mt9uox6xIpzx4IeUa+r0kwJVlhUvaaMfU86nWjHsNO6rji+AWnwYmY0fc14n
+         58i2JqDLbTVbSx3QYATDVdyiI60OvYjoordNo/sN6CkeKF+u6GqNOajJtppHV8zoGVV3
+         wxjCMoX1H0CIXVJzO1XfpYxSa7g9PUX9jBvS65MBXfi5fZ9DN6h0/iR4DA+6Y9Cz3TkL
+         FOq6N/suW9+Git8+f+U71eEZJ6gcpczwYKyzg8RbTUklXi9sBCCf1qLhJOSNO5wOztWb
+         oYJr1ZiGyS6PNflbV0halXqICeJ5N5Ak82F9JgndpJm5NMuSYQrl5hcxm6rSqgkCrlhd
+         vwuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUBj7J+ZQcHYJV3/Yg0yzgtKtC12iihi2O250Qd6HbOy4Zb2kJ3b0KB78TFvJABL+6RNvmJqeeKXlkE@vger.kernel.org, AJvYcCV7ReY+OPLEYLJCSSzXDxxJx09VIJji7eKFvW5lsw9tFEZimCH1MLtEo935uD3hJPj7qbwomZhE34axYopSnA==@vger.kernel.org, AJvYcCV9knSbij/dARIrm5AD6J2uajlhH4SiW9TZG6vaDX4DwCG7wwEssEFMy75KJmWYo8kMb8yzcqgfRmsB@vger.kernel.org, AJvYcCVShNLuxzLdVeqEIH5WEGT/mutdoqov9aqMXN5OaCFUPhceCY3rbhYKRrHObV9dLZD0hmog75yoJSZE@vger.kernel.org, AJvYcCWH+REPiqJqbDWwhsdip7Ao6fmnNRAJ20SFRdqOiEJCuRmp95xzXRYn2ayw2nP0e06qoDBjI6WKAJs0RmU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7kiCOqldnNF4M+YGpl5f5osml35+Q/2siFyqp2lIzmriR62wL
+	/TSDeKrOef/Lfnmc4tSLCcowH7iEMJn9Xi1A8jiGBdSiQeB6adoL
+X-Google-Smtp-Source: AGHT+IF86jLnkCVqdhTbMHpt4/KAK2kFi9egstzyzRlVhvtwUHnadDj+kjXTpmL6llQZUVva33ipRg==
+X-Received: by 2002:a05:6902:1242:b0:e1a:b04d:673 with SMTP id 3f1490d57ef6-e1d34a3a94emr1447077276.55.1725590192531;
+        Thu, 05 Sep 2024 19:36:32 -0700 (PDT)
+Received: from localhost ([2607:fea8:52a3:d200::4eac])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45801b35d07sm12458121cf.27.2024.09.05.19.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 19:36:31 -0700 (PDT)
+Date: Thu, 5 Sep 2024 22:36:28 -0400
+From: Richard Acayan <mailingradian@gmail.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Subject: Re: [PATCH v4 0/7] Add SDM670 camera subsystem
+Message-ID: <ZtpqrANbJurWNOzV@radian>
+References: <20240904020448.52035-9-mailingradian@gmail.com>
+ <tthbaop6bkyvebpibiyvyct4khrd5o4apdbipqdthnidxmu2cx@m726xv4ocblg>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830034640.7049-1-kfting@nuvoton.com> <20240830034640.7049-2-kfting@nuvoton.com>
- <xdaufg4bju3iq5fqeo2gdej3yaxyufhuaiuyixnla234l2ej3r@fmvann767tib>
-In-Reply-To: <xdaufg4bju3iq5fqeo2gdej3yaxyufhuaiuyixnla234l2ej3r@fmvann767tib>
-From: Tyrone Ting <warp5tw@gmail.com>
-Date: Fri, 6 Sep 2024 10:28:30 +0800
-Message-ID: <CACD3sJYt12H3DNqRwOU0ULDwJj2TbqUR5NhYWxBgvFggqKVyGw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] i2c: npcm: restore slave addresses array length
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, 
-	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
-	andriy.shevchenko@linux.intel.com, wsa@kernel.org, rand.sec96@gmail.com, 
-	wsa+renesas@sang-engineering.com, tali.perry@nuvoton.com, 
-	Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, 
-	JJLIU0@nuvoton.com, kfting@nuvoton.com, openbmc@lists.ozlabs.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tthbaop6bkyvebpibiyvyct4khrd5o4apdbipqdthnidxmu2cx@m726xv4ocblg>
 
-Hi Andy:
+On Thu, Sep 05, 2024 at 10:09:34PM +0200, Andi Shyti wrote:
+> Hi Richard,
+> 
+> On Tue, Sep 03, 2024 at 10:04:49PM GMT, Richard Acayan wrote:
+> > This adds support for the camera subsystem on the Snapdragon 670.
+> > 
+> > As of next-20240902, camss seems to be a bit broken, but the same series
+> > works on stable (although it is much less reliable now that the CCI clock
+> > frequency is not being assigned).
+> 
+> I am not understanding this bit: is this series making it better
+> or not? Can you please clarify what is broken, what is less
+> reliable and what works?
 
-Thank you for your comments.
+When applying this camss series and some camera sensor patches on
+linux-next, the Pixel 3a seems to hang when camera capture starts.
 
-Andi Shyti <andi.shyti@kernel.org> =E6=96=BC 2024=E5=B9=B49=E6=9C=886=E6=97=
-=A5 =E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=885:36=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Hi Tyrone,
->
-> On Fri, Aug 30, 2024 at 11:46:34AM GMT, Tyrone Ting wrote:
-> > The smatch check warning is "buffer overflow 'npcm_i2caddr' 2 <=3D 9".
-> > The original design supports 10 slave addresses although only 2
-> > addresses are required for current implementation.
-> >
-> > Restore the npcm_i2caddr array length to fix the smatch warning.
-> >
-> > Fixes: 47d506d1a28f ("i2c: npcm: Remove own slave addresses 2:10")
-> > Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > Closes: https://lore.kernel.org/r/202408130818.FgDP5uNm-lkp@intel.com/
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
->
-> your email used in From: is different that your e-mail used the
-> SoB. Is this done in purpose? If so I will keep it as it is, no
-> problem for me, otherwise I can fix it while applying it.
->
+When applying the same patches on stable, the camera does not cause the
+Pixel 3a to hang.
 
-I'll add the option "--from kfting@nuvoton.com", same as the patch
-author's email while using the tool "git send-email"
-in the next patch set.
+When these device tree properties from the previous series were removed:
 
-> Andi
+			assigned-clocks = <&camcc CAM_CC_CCI_CLK>;
+			assigned-clock-rates = <37500000>;
 
-Have a nice day.
+the CCI would sometimes fail to probe with the error:
 
-Thank you.
+	[   51.572732] i2c-qcom-cci ac4a000.cci: deferred probe timeout, ignoring dependency
+	[   51.572769] i2c-qcom-cci ac4a000.cci: probe with driver i2c-qcom-cci failed with error -110
 
-Regards,
-Tyrone
+On further testing, the rate can be set to 19.2 MHz, and there would be
+no failure (or rather, it wouldn't happen often enough for me to witness
+it).
+
+> Besides, I'm reading that this series has not been tested and it
+> makes it difficult for me to take this in, considering that you
+> are adding a new support.
+
+Of course. This revision of the series wasn't submitted to rush into
+v6.12-rc1. It can wait until everything is resolved.
+
+When device tree maintainers comment "not tested" on the documentation,
+it usually means that `make dt_bindings_check DT_SCHEMA_FILES=...` gives
+errors or warnings (even though the device tree and driver may work on
+the hardware). It's a separate test and one of the things I haven't
+scripted into my workflow, although it's still a responsibility.
 
