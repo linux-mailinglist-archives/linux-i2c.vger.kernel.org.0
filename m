@@ -1,67 +1,67 @@
-Return-Path: <linux-i2c+bounces-6335-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6336-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1A2696FBEC
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 21:14:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C55696FBF1
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 21:15:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 811D4282835
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 19:14:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDFB8282676
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 19:15:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0178C1D4609;
-	Fri,  6 Sep 2024 19:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7987C1D2F51;
+	Fri,  6 Sep 2024 19:14:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hAngnSiW"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="D6oMQ7RI"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA521C7B68;
-	Fri,  6 Sep 2024 19:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC43B1C7B68;
+	Fri,  6 Sep 2024 19:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725650071; cv=none; b=turl/jy9ArScD49uKzERET8iDCRyti0Mii9ILaF7BOPdqC88+nPlUAq1Nb+HAUsUGC05L73c74ncAOjzS/em/EfpzTefQg+BaNZcP9+N/ON9WLUjZtXRSmqTJsNoWOhyqgFo/krVD1NogfxoQKn7TzvhlQEVueYmLUDIGki6dtA=
+	t=1725650096; cv=none; b=L8RiuheQqO6M+l9wvbbry5zzWgu+GS9nHYTkF25VFkqx/orzuUi7XTTyaylhsfEE5R9q0XUtQvVzLxLkZM/GymenHQJCVQlVWn7VWJwmgo79LU3EGsrOuuVFTkBwKSS+SIEZqt6m89xDOYTQ9pF0M8WDjEBccPATpYB9KC3PtPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725650071; c=relaxed/simple;
+	s=arc-20240116; t=1725650096; c=relaxed/simple;
 	bh=ZvJZWzdz4jNdMO3kOKAhwF0UfgUENPl360oLYkkdpSw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=aJ9i/RHZrMcPqdXqp24gqugWbjhYKeWxlPs4Vvn/ScDiHOaXUQOX7rC0E23f/r2xxrPJbW10J+tiuGo2iXz0DVjbZye68PRp9dM7tFF2FLf1GqLzGkssnJfT6rcMfJXNTeMN5yRo+Sb+GFi1gk/E09XePiXCpo2Yk74us7rwXfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hAngnSiW; arc=none smtp.client-ip=205.220.168.131
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=mnlHcAYrwYUok82/6F1+U+Z3y8VsSgQm792zlx9kE0EI7kiGuh52vGZOIVwRs+PIA2NfVGMD1b8hnKjCsg2/R7eQ4bKjPSmdgV85dKKfDfwGA44jLXX9u9gj81PvjiL3kIcX35QeOSTfvZyY8WRFuLn4bJIOeB4V2G4QxTIeSgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=D6oMQ7RI; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4868sjVC024778;
-	Fri, 6 Sep 2024 19:14:21 GMT
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4868boiX022025;
+	Fri, 6 Sep 2024 19:14:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:message-id
 	:mime-version:subject:to; s=qcppdkim1; bh=FW9JLL9skAXPxLyeTf+kco
-	n76yi61/xeR0qeqfGZIo0=; b=hAngnSiWtogbQAfRdZcBB8s0JEEYeLyI9ymB+e
-	vIfzFiW/33C2MJh9SD/+k8+onMtQpYsjgs06enjY7VsK+s2DGgZumhdLYxuB/2km
-	eg//DdJ6H7qm28XZ+tuXiqzWQtrRkl0B/pk6FcEjjy5GzBu+9Qo+bqFz2vC6wTqg
-	wtgl4jZGktKz7cduIbPs034jW4rdyXxzIhq7xKqjMuxMSP7mQzbbeu9hPhbzNKQ5
-	Why/oE4ZOtJVC02sr6O86brm3Ae2HWa4uLjy5OpEGNPwRDNwizvxWTCSYEosplPv
-	YQcbgxjlErZtgx6p4KK33tuKfu50A9VGEAzzlhMxOBGveaPA==
+	n76yi61/xeR0qeqfGZIo0=; b=D6oMQ7RI4/QpX+Mkl/tCv3QrJuKVZN27U4K1Jh
+	EXcBOdsMvH0G5Bplkh2AC7DRVIvaifri10FtQhui2GDQUnIp6ZU8d1r74NNDbmcP
+	mC1ahwufJOtMUAOMFo4SFG9h7iogAgbFcyNuepQd7YiB7kXHgjw9LWD/jPGLk/3w
+	3dhYnjlUC2KzgfUwlv8WLSLbtv6oGNX36UcW14LyxIoyXy+xpIP8WTPgyRFEcCHD
+	uOhACJCB1c0mRkHmkD4EaHA33z4/l/yENaxyVU0rPQn0kCtU55VFpkbgKji7i8NW
+	uKU/weyVDrh24stQs8CPlTi/L7XwjQytCxy53zzJRJ11aASQ==
 Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41fj03b4ug-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41fhwu36na-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Sep 2024 19:14:20 +0000 (GMT)
+	Fri, 06 Sep 2024 19:14:45 +0000 (GMT)
 Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 486JEG2M012919;
-	Fri, 6 Sep 2024 19:14:16 GMT
+	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 486JEgKp013053;
+	Fri, 6 Sep 2024 19:14:42 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 41bv8mxxyg-1
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 41bv8mxy1c-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Sep 2024 19:14:16 +0000
+	Fri, 06 Sep 2024 19:14:42 +0000
 Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 486JEGOT012914;
-	Fri, 6 Sep 2024 19:14:16 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 486JEfTR013045;
+	Fri, 6 Sep 2024 19:14:41 GMT
 Received: from hu-maiyas-hyd.qualcomm.com (hu-msavaliy-hyd.qualcomm.com [10.213.110.207])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 486JEFH4012909
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 486JEfOX013042
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Sep 2024 19:14:16 +0000
+	Fri, 06 Sep 2024 19:14:41 +0000
 Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 429934)
-	id 00FFE240F3; Sat,  7 Sep 2024 00:44:14 +0530 (+0530)
+	id 8C7A7240F3; Sat,  7 Sep 2024 00:44:40 +0530 (+0530)
 From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
 To: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
         linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
@@ -69,10 +69,11 @@ To: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
         conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
         vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
         Frank.Li@nxp.com, konradybcio@kernel.org
-Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: quic_vdadhani@quicinc.com,
+        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
 Subject: [PATCH v2 0/4] Enable shared SE support over I2C
-Date: Sat,  7 Sep 2024 00:44:06 +0530
-Message-Id: <20240906191410.4104243-1-quic_msavaliy@quicinc.com>
+Date: Sat,  7 Sep 2024 00:44:34 +0530
+Message-Id: <20240906191438.4104329-1-quic_msavaliy@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -86,16 +87,16 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kNJkQDQEvelD5F3nBq0hlLibNHD80gFM
-X-Proofpoint-ORIG-GUID: kNJkQDQEvelD5F3nBq0hlLibNHD80gFM
+X-Proofpoint-GUID: 6wPWdHI6QhGH67MN8ykSCn5qfVyT1jVY
+X-Proofpoint-ORIG-GUID: 6wPWdHI6QhGH67MN8ykSCn5qfVyT1jVY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_04,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=746
- impostorscore=0 suspectscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 clxscore=1011 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2408220000
- definitions=main-2409060141
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=737 adultscore=0
+ priorityscore=1501 bulkscore=0 mlxscore=0 phishscore=0 suspectscore=0
+ impostorscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2408220000 definitions=main-2409060141
 
 This Series adds support to share QUP (Qualcomm Unified peripheral)
 based I2C SE (Serial Engine) controller between two subsystems.
