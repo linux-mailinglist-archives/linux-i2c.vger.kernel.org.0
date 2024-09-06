@@ -1,72 +1,70 @@
-Return-Path: <linux-i2c+bounces-6324-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6323-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B078196F8C4
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 17:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AD0596F8C0
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 17:56:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33E401F229BA
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 15:56:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 802611F219BE
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Sep 2024 15:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133671D3653;
-	Fri,  6 Sep 2024 15:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B20BE1D31B7;
+	Fri,  6 Sep 2024 15:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b="Utsxc0n+"
+	dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b="gima8s+u"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11011064.outbound.protection.outlook.com [52.101.65.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5BA1D31B8;
-	Fri,  6 Sep 2024 15:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4544E1D0DC6;
+	Fri,  6 Sep 2024 15:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.64
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725638157; cv=fail; b=hYZvbWKdCO08mEqSoK3gVPfaIkQ0HvKJODNR/FjMb7gqcqoeXP03eMGTcwMTNXhGyGYlbYT3sTDaX/VRLct8/KyeydJIo6Ebp2OU6QHWFi7HmY8IxJRjy0Iszvqzwr+2uqSsjaZChH9yq9R6nwhlcBUMYzx2ySm0Jc06fqZOgBM=
+	t=1725638154; cv=fail; b=RODQLAd7Lih3VPjq158sHuuJONCPDR+57OWboSPhCGqK3IRX22FtzdnOZ4rJEJebmi+9aO8QdtBX0zLzwxKQ+QhvdgQ7GHisa9bfeulyGKnUEyHxsqBOfOqkKFxtHP9rjiUnkrX43M5/t9dWbaTm6tcFj2sCsYAsvCkxpb6GD4Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725638157; c=relaxed/simple;
-	bh=97R6EWXKGgVsm78UkCcL/Zc6vv0Me7KdDubx5Xqetjw=;
-	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=X+Hqj3eIcvElUMbD3GjEsAnJMvCk8shOU+AcPsb5YnlbNBqv+QQ5OIQAT8SZeSkU9/Jsod8Idk2bC2zGCJvZZ5P5B352KOGQP5ggVdnkH/PYP1kc6QvHtPKOriXzRxvlRyxuo6SHy/RPmeeE2C4eQcnbDSh4Cpwp2ATS03MNgm4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de; spf=pass smtp.mailfrom=cherry.de; dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b=Utsxc0n+; arc=fail smtp.client-ip=52.101.65.64
+	s=arc-20240116; t=1725638154; c=relaxed/simple;
+	bh=SfE8/mJSj688fz7/D9o92rF+AocyZF/L3sDEh7JPBVo=;
+	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
+	 To:Cc:MIME-Version; b=BEtKyfxZ/Z9PUfPrHooCPwx4d+ehnfIR6xRuARzNN0FG8TjRq8qOEd8SZA+ZrRSyRb67DseRvW872v3IlUkil4guZvA5falLQSxoit5LY07DK1IZLisiewW1YOGlhlMlL41tXbawC4XERKXTPQJPXN9HbanBjdIveBq/QQpCuOI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de; spf=pass smtp.mailfrom=cherry.de; dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b=gima8s+u; arc=fail smtp.client-ip=52.101.65.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cherry.de
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dMDrhn62WvuqPIvmS1T02jGk5gVEUPMJ+4OUUafHoFEcUyadBUiz0+kJFnE8TsG5HtpG5L5mOOI9ZSwl7GI1s+MXTJn1ldBqkaKWb+gfyFan8IdQ9Pcy2Xv9A0eU0GVkjC5LCde2XWKvag7yUe6Y1/RjD4RfENx6OBB0QIO4k0LnxbdKHvMzVaDpy2Tqd30dCw20IKYoU1XEbiydlKjVXaSQutsnTUdjzF7Cr1aAEzI7Oiy8M41JkN3kCq4lgorGW0lqi+C2lPQWckWC3Dpsy3zqtcS4Sl8ebs/uIWJQT9zIHl16/PXKZJzFO0qmaGjwj4O8fik/3RHvmVWuXL0Chg==
+ b=l1xSyCGiNfQ59u1LhG7JZiaLZB2vMquWEBKrVJFgXY5P7YbpbW4lRVtrfaCHMmEMF2f9+c341BbczoD02RLSgLevn9nNQaILdJ7lWqhx1Cd+Aap8XC7iDIUlvs+RkBmy07Oz1EDE/e99Axy8hcVYhgxQkGr1BJ1DQhTH6US4YBNh/GyAjMrPFgcnBTffeSh5AsPMFdB991TAk4uYdgT25iixWTbcrr3Hb7qTvqB5KAUu5n4zsOCQxravxuSY1aHZswxVxS2xbbqawKyw1q9rEnsUMA/gqLVewe+DzLd59u4dOGyQMquLehtERX29ej1popNTqWxO3Ukay3yA6+Kksw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7+w15CH8bXqA69gsezT+sNCd9C3M8DhxBSQArqnmRyE=;
- b=Fd7HQT+dndJtNHP3HvGGnPPkJUBVwU/jWj5SrI3foc2f3QU/wKdqGV3/1sEysENYNpwHcIwvnh79C86CA3yX/ODsYXcm7sXLJ3WqQZzZgxpu6J4t5Z05u0zPGaIcVHnjnMl4OhLdiYEBe6fejqa0FXPGeJPAk4sSDBdIZ/8xSJCn006IbK0FZ5gtntt36iX4mDM4Z77o7OoycU4hGmt2iWCzLlPx2ydDN4DHq5H8WnNeai2LAzSmF3L2ryn9AHE0QrahW2omMoIM30alJOr+mtFxN6y1pT7WDGLTxR303vj0rgZrK5mPPXXjwLofFKbpOnoZGTugalTGd9Pn6fhqWw==
+ bh=rcoef2dM8l/6IOP+6VXDoZrZ0qTu1WQx0TD6c7JIpl0=;
+ b=A9T9v2YBQGylSFNjbuxUC9FUdg7MJvUnKPwN9n08TKiPWps0Qe0W+X9CB9Zph5mpEviaB9bAtNxclyvW1hezinJF5+PBwmUDeUkl6Bqj5Op9fMHVuq3fdk3nnQtVZwRNjM80lQaIgramsCqN1tJ+MgWLhpoBA+lrmlg1gW7SdlCdkPiUOUrJyqQbCqBPJqJQodb43poO6wVhoSLKiRtQMATO8zVAE9efIthq+yt2cAXOWdrPASWBckbsflfdr5+rq9BLwkxzS4gJN8QHFzOam13hAW38846Ud8bwczPbRFzuc1EDrfW0eXYZmVieZ/PuICb3bXihVIpKGZCkeLnl/w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
  dkim=pass header.d=cherry.de; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cherry.de;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7+w15CH8bXqA69gsezT+sNCd9C3M8DhxBSQArqnmRyE=;
- b=Utsxc0n+gy6oP0KzHGr0C+IHGkmMO35S+A00zHeTJcvFkOG+weSxlgI+/YBY+yAv2aVnDZOnykrAQjda//WwZxSWLmuQGlqcsxqEcuNWQtRLG2vOn6Hix+3Z2aPSeY/b+YGJOLPFfkKRFr4TL+u/Rf7Y37laI1YJckl0m9qVpfE=
+ bh=rcoef2dM8l/6IOP+6VXDoZrZ0qTu1WQx0TD6c7JIpl0=;
+ b=gima8s+u1mbd9mSfIZeo5DhWknDC6RBYU0ds0SSKlYbYVGQP+8PhAziYi2MGdbu8W4nzPkw74egyXv/kkwObqOiFl+5N4uICtsh5GIIu3hX5qkToXc6DZLwaG9JRwVnbE9A0Rd/u8wwMFA13Ky2VG2DG0OpJ437AyrSYdd6AeDw=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=cherry.de;
 Received: from DU0PR04MB9562.eurprd04.prod.outlook.com (2603:10a6:10:321::10)
  by PAXPR04MB8319.eurprd04.prod.outlook.com (2603:10a6:102:1c3::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.17; Fri, 6 Sep
- 2024 15:55:46 +0000
+ 2024 15:55:47 +0000
 Received: from DU0PR04MB9562.eurprd04.prod.outlook.com
  ([fe80::ad4d:8d53:1663:d181]) by DU0PR04MB9562.eurprd04.prod.outlook.com
  ([fe80::ad4d:8d53:1663:d181%6]) with mapi id 15.20.7918.020; Fri, 6 Sep 2024
- 15:55:46 +0000
+ 15:55:47 +0000
 From: Farouk Bouabid <farouk.bouabid@cherry.de>
-Subject: [PATCH v8 0/8] Add tsd,mule-i2c-mux support
-Date: Fri, 06 Sep 2024 17:54:11 +0200
-Message-Id: <20240906-dev-mule-i2c-mux-v8-0-dbd28a150e41@cherry.de>
+Date: Fri, 06 Sep 2024 17:54:12 +0200
+Subject: [PATCH v8 1/8] dt-bindings: i2c: add support for tsd,mule-i2c-mux
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKMl22YC/23OzW6DMAwH8Fepcl4qx+SLnfoe0w4kcQbSKFPCU
- FHFuy90k9gY8sV/S/7Zd5YpdZTZ8+nOEk1d7oZrCfbpxHzbXN+Id6FkhoASSvFAE+8/38scfWl
- uvBZQ+UBgAAUrax+JYnd7kC+vJbddHoc0Py5MYp3+YKj/Y5PgwEGqRlqMOkZ3GVsaXBr6huc5j
- 9Tnsx96tsITbpiCIwwL1tTC10pGrYK5+JZSms+BvoFqA7QQB0C1fmMD6gYtAYg9oDbAgD0AVAG
- MkFKHKoKzYQ/oXwCqA0AXINZRB+M0RId7wGxADXgAmAK4aJyNqrKK/nywLMsXoROLNQECAAA=
+Message-Id: <20240906-dev-mule-i2c-mux-v8-1-dbd28a150e41@cherry.de>
+References: <20240906-dev-mule-i2c-mux-v8-0-dbd28a150e41@cherry.de>
+In-Reply-To: <20240906-dev-mule-i2c-mux-v8-0-dbd28a150e41@cherry.de>
 To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, 
@@ -90,225 +88,185 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DU0PR04MB9562:EE_|PAXPR04MB8319:EE_
-X-MS-Office365-Filtering-Correlation-Id: 387ded1c-db2d-48eb-5c0b-08dcce8c5ecb
+X-MS-Office365-Filtering-Correlation-Id: 3914f20d-8916-49b6-15ba-08dcce8c5f55
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|52116014|921020|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?RUZsYnhHcDRWWXh1SzZFUE9WNGFyN1BOeWZrREpjNXdMaDl5Y2VWYWF5MFdG?=
- =?utf-8?B?eDhkTG85WUptN0xyTVhxckZPaGJlWjFPbElmc1VjcEV1OVY0V2FvRUdFV3cx?=
- =?utf-8?B?eDVNbTdnNkJVWDdCNzNINmFUY2lHSmxxT0QreFYvMk0zZm9oTnJ0UHVNOE1l?=
- =?utf-8?B?NVpPTThvdzA0MTV5RmNPVWhLYVhsS3JKUGVreGRsWGkxcjhvNk1INUlaZG9H?=
- =?utf-8?B?SGg4T2E3SHp1ZXByNlFWc0xodnZQbWtjZ05WNC9Yd3lqNXQ2UjBkdFMvSEVr?=
- =?utf-8?B?eHJvdENtY0FnY2swYTU4N0N6REFucXV0LzkrdzJKcEd6TGNGUTEveUc4OEVG?=
- =?utf-8?B?OFovTWpzTTBsRTg3MTd6MmtJNlhLdnhrWnc2TVBkbUM5Q0dqT1hJOGV6eUJF?=
- =?utf-8?B?UnBKTnptWGpCeUtCanFFV2tNMVVSalpsR0RuaGF3elNIa2RQWDNqQkYzbkpp?=
- =?utf-8?B?bmtmQ1FoMnNpSFk1eXV4K1VNMGcvaTIzWnhVNW5Ib1RWZ0hmaDNoM09xNHJv?=
- =?utf-8?B?Vk5kdGFiTHJJOGcxeHNqSzNROWFDbnRLQzNYRGRFSlkxUlV6VGdxUnM5bHkx?=
- =?utf-8?B?MWw4a3NrbURDNkdUMW5RN3JveHBhSmF3bHFRRTB0MzFUampsdEQrdU1JS1lx?=
- =?utf-8?B?T0NXeEVzTnBCVVpTVlJBMDNBVllXTTVqa1dVY2VrS04vcWd0SzhUckxnTnlP?=
- =?utf-8?B?T2lOUnBHWUQzRHFQWGxYbEI1eGZzMk45RGRvaEd6NlIrWms3WTczMkVXOEV6?=
- =?utf-8?B?akJiYUsyWDVpckdoeUQwTjd4ZDhWRXZGV25GZzlxMGN5U3k4a2hFQ3doTXFp?=
- =?utf-8?B?aER6SmFjSjQ3bm4xVU1rcWJTdWVJZ1ZDa1FIKy9wcFhqaHlWSFFJSDFGRXh0?=
- =?utf-8?B?VWhqZzc2Yk1UcThzWkdweGt1c1ltVWY1OXNxeml4ekExK2NSY216aUFnZnpR?=
- =?utf-8?B?RE4vZjhGdlhrU0tlMDFPdU5IdTBmM1I2WHhDQ2V6Zi9IMTJiUGRINklpYWFJ?=
- =?utf-8?B?Qi93aHBGWk1sc3pKQzBSTnlEZ3VSWHhHeWpoczY1Z0IvbzE1ZVVqakYrR0Fj?=
- =?utf-8?B?blBVeDQwVXBTSjFjSWpYa1VXWDlKaVFWWnRRT21Nd1FsVHJjTTJXb2p2cmNF?=
- =?utf-8?B?amtuWVpmcGFlODVvaDRTN1FLMzlDNHVaOWoyaFUyak1ISFcySzVUQXZnRVUz?=
- =?utf-8?B?NUF2Y0hlL05WalNnQVV5ODN5WjBabTBKQUk3VGhXY2xieDNKVU9aZGJBVkg2?=
- =?utf-8?B?Rkt3a0pWSnJRZmE2T053Q09XOEFiSFRlZFFYbzk3SkI3RUk5NVBqSUlvRzk5?=
- =?utf-8?B?eEkweG5sSWJBRmtEMG5iYTV1bjlyOGhpK0dtelN0MlZTSmswYUtDNkVEc0ow?=
- =?utf-8?B?R0FuTXJQRjF3SFJTUnVoMlVKbUFJSElLWEVpNzBPNVgvckp0emNETFk5S3ZB?=
- =?utf-8?B?WUtwR21tNUlZTHZ4SUtGNEluNkpVVXhESkJDM2NmNDVFS2dkZ3ZQclh5bHdq?=
- =?utf-8?B?Z0pUdk1mZnlubEhtZG1JNTdWaXdPeHl6Rk1UbUlCYzViTDFBNzBjMlFYV3Zz?=
- =?utf-8?B?UmVCUnRzb3RpbDJEdVN4N2x4bzdnVGVmaVB2UUY4RUVid0E2WEFuYW42eXd1?=
- =?utf-8?B?dHJySG44bGtxdG9vdmFRYmllZUZEdWtHak9zWkhHMkExRC8yV3FLWWdHVlFl?=
- =?utf-8?B?ano2cjRDbVUxSzE5QlpqN25kc210Z01OY1JOVERUZzl2WHRTT3ViN3RBMVNQ?=
- =?utf-8?B?M1VMeEI1ait2b2psMXpjMElQTVdxeEMvbE94YW92bmF3eTlPYWV4Q1NpQUdT?=
- =?utf-8?B?N2E5WUh1TFR6UmRIbzdoWFNYTUdxMUNkbVdtdWZpWWtKaFpsUGxJaldpM0R3?=
- =?utf-8?B?K2F6VzZhTmEzYlBOUzgrWnkwUE0yNUxEUzJyVHN5VXJxR2xHeXRreHpsOXlF?=
- =?utf-8?Q?kFHDBi2n9ww=3D?=
+	=?utf-8?B?WFNyTklDdHRQZHJKemo3SlZyUi9qMllGYkZqN3ptZHluV2IzSUt2MzFvODFm?=
+ =?utf-8?B?a2tVbmtwQ0lnWHJnS3ljV2UxWCtCMnFVV25iRldFNVVIUHFsaGpYMFdMOXlJ?=
+ =?utf-8?B?NXVGYy81ZjlnRDB3K1lrV21IdjFnTkdHRTBZUzhlN01tdEN2ak1wR2hEUGJX?=
+ =?utf-8?B?KzkrZHhvbWpoSGswdEgwd2NOVXVJZEFEc00wU1ZNeHpYUldTeU5jd1pGZ1lD?=
+ =?utf-8?B?eFhLeUxzMUVZRmNkYml3ZE52T0NpZllwSHl1UnY1VDAxekxNUTdnTzlOeGFZ?=
+ =?utf-8?B?RThoN09NTlc2WFNyY1N2RHp1ZXpIeWJJK1h3aE10THBjb3l3cnEzajBWYTFz?=
+ =?utf-8?B?YzlpdVRpUnAxMUNKeVFMUDlKdDQ4RTFwTU04d290bmdwbVdYeVlTSm83dE9X?=
+ =?utf-8?B?T1NYNEsyekEyeFVyazUzZVJDaXhNN2FQTjYxYStlVncya0JnTnh2YWJLRmNF?=
+ =?utf-8?B?SmdxdVBicnh3Vk14WW90QkFCMENvdzEwa29FZ2xJQW9ULytYZUZHVEFSK3Q0?=
+ =?utf-8?B?VFptVzhreE9CeU5ESUt2ZlZFekxXeWVuWnovZ0E5Y0V1bUErU05UZFFYeGFo?=
+ =?utf-8?B?c05HcEZlZDR2MzFLUll2MTh3U0pjM3NxbzFKc2JMVzNWaTVRSllCVDl6L0p3?=
+ =?utf-8?B?MjFNdW1IS1dEUUtRTDIvZEo0MlNWbWN0WkpIb0gvUXFyYU1ZdC9UQjc2U2Jp?=
+ =?utf-8?B?T3pVSHI0K3dyL0dibVhjTzRUVTQvVUY3aFZjNk11dWorQWh6aHpzSFhwemtY?=
+ =?utf-8?B?ZW5wVHJvZHNmVHVaYnB0RkREVjRtK1pnVXlteXBRTk1ZNVloVDhvN1h3R0I4?=
+ =?utf-8?B?eFV1L1UrdytMbDNlQnFLU0xScVMvVE5QOUt5aFkwWklPVmxBNStlNjU4RzZl?=
+ =?utf-8?B?cUZBdXlXV2gvYWFON0tDL3FKQW1ISHcwVjl6ZGpwbU9kK2RmN3JPQy9LRlpD?=
+ =?utf-8?B?WFZVWWEvRmE4WmZ6aWM2ZkM4R1AydlRURVUzU21JcVcwRGhraDNuOVFpMXVS?=
+ =?utf-8?B?T2gyelpzeWRRUmp1bVRjUllmMyt5cDhmOVh1V1o4TkhPQzV5cUdHMi9qbGls?=
+ =?utf-8?B?M3RLZk1BQklZaVk4bmovVFZHZkcrUU9LQ1VNVHNmRVBYREtGM3N1SWZwUVg2?=
+ =?utf-8?B?VWhMYU9ScU9LQ2dzcU0vdjFGcXFWTWpDdlNvQ2VQU1pkVC9tWEphNHlKc1E1?=
+ =?utf-8?B?blllY1EzVUxaRjFNNkhhVk9IaWVaSWNpVVlLS09SODE3bmpBdVdtUW5lbVI4?=
+ =?utf-8?B?ZlNwZVZOL3BSSVlaUXk2dUk4d0ZpVzFMUEVZcm94a1ZiRWhySmhpZVdic3FM?=
+ =?utf-8?B?S28zUVRFZXpZaC9wNkFQc2sxeW5PSmlNWVFCcjluSXFtYU9taEJQcDVseW9M?=
+ =?utf-8?B?WUNoZnpZOGZsV2NidnNlMGN6TGh1L205Qm5ZZzM1aENJYUNmNW0wUlRpZDJp?=
+ =?utf-8?B?Sit1MHEvSVNJaHVnSXVodGNHdTR6czROczJrclROS25BbDJnUlpmWjFMdnNa?=
+ =?utf-8?B?Y3dwd3Q4YVVlT3MyQy9wamkyVGJFbFVaZWpTSUVjbkRNdDZsRFllMkhOaUg4?=
+ =?utf-8?B?bVhRUEpMczZmQjRyTTZCODNwZVVJZXhaWUhWSmRYZG1kK09tS0cxemh5NEZ3?=
+ =?utf-8?B?ZjEvTWFwN3cvcDdybUUvNjFNSTdnNzFqY0YvQlkyVzBnaUFhclRyTTZNNnd0?=
+ =?utf-8?B?WTFCRUh5SFVMTS9Gc3d6dzIyaDFBbkNnNWdQcHNIWlpDNng4TWlzdEpMNzlK?=
+ =?utf-8?B?b1p0aGpYWW9HTzdkbjZHRnBPQzk1VUpRZjkvbncwVmN2MFRoVjVhODgyQWFB?=
+ =?utf-8?Q?uR1QhBm8FqCWVbgDC4XUxUyFo+ZKrAKXmPOys=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9562.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(52116014)(921020)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RGwwTGloSW5ZMVh0M21GR1ZmNG9ZRWpIYjNqaGh3MHRqOWd1b2ttRTZMTlR4?=
- =?utf-8?B?TDdJRzFZQ2lrQXpmR01RallkQVZUMXlzREQ2SnIwTVBpaXhrUmlaUEorSDVX?=
- =?utf-8?B?ZVpWWEQwcWFmNXJkeW84cGdOUUlzY0dpNTJHbU42WE9tbU9YRE5xWmE1V04r?=
- =?utf-8?B?a2RZTGtnL0ZHalY0R3B2cXk0cW5kOHd5VlJMTzA4dEgrVXFDT29XWEQ5bW9H?=
- =?utf-8?B?dEE0MnJkbVkxRVBTY2FuTVNzU25samM0T1BwNlhubTRyZEJmTHhVWEVPa0pR?=
- =?utf-8?B?bEpzcXFMOHVHWWtxUHQ5VFVnT2FCaVRWWEJkMkZkdVI4b0RQdjdUdGlCQVlj?=
- =?utf-8?B?QTFuSlRNM1k4STBlK1hEY1NXNGk1RnFBUm5McDlJNHZhcjlkRHZkT3FkbDR0?=
- =?utf-8?B?N0JFbDM4blZCT2QxbDRQWjFac21rRTlvb2cxV01xLzhEL0ZVRGUrWVdEOXhR?=
- =?utf-8?B?Vnp5S3hiY3FGRUkxcW9FbmZVZ0thY0puWnYvYzQ3ZUFhb3pzM3lmcXl6bGc4?=
- =?utf-8?B?N2NNWjBkTE1jVkRkb3c0RGg1cGhiRVdJYmtXaHVmZHVGRS9kQml0QVFqN0Zk?=
- =?utf-8?B?SFJjSlErRnN6VmFGTmVUdGZ5SDNxcHUvcm1SY2t4VHhYWU9xRWhFeWNma2Q1?=
- =?utf-8?B?ck1YdzFTeGdjc1ZBNlBaenduZ1M2YWFvekNvWU5wM09EbGxtOXNXd05zSGtS?=
- =?utf-8?B?czJLcytVcTZISm0wcTFMVzJjd3ZXakJtdHRlOWhGZzdrL3M5ZllPQlBjb2J5?=
- =?utf-8?B?NFd0QWRvNWxycXdMRmNBdEZ2eFh1SG5LU1B1bkhiN3EyajE2dUgyMmtPL3Y5?=
- =?utf-8?B?Y0hhRDdvK0w0QXI2djVSQUhENzU5NUZGY1N5dHdGWFlhMGVWZDlTRUI4SGN1?=
- =?utf-8?B?OWtFOGZWYVN4aHhjS0JxZFE0Zkw4YWVRTXJ5OXorRFQxcUcrQ3QrTzB0S3FE?=
- =?utf-8?B?MU1LQ3YwcFdsUnlHakNtZktyYzNrbUNtejYzNnRMbXMzaWdOOWE2VTNOUVY0?=
- =?utf-8?B?bWJWYmhWVzNiV1NnQStmbUVOQTFiMkFQVTRHZFhiSGY1anhQSTRJeTRsdDNQ?=
- =?utf-8?B?ekJMTGl5QzExU3MzRzhnU0tyNmloYmNUOWxIeVlvbGo2SDRua0FzR1ZHOEEx?=
- =?utf-8?B?cXJYTCtMWDU4emQvUHJsdC85Nms5UTNHL0t5NUc2T1g0cythRzNVdGxydDZX?=
- =?utf-8?B?US9sVjhEVXZ5L2JZcTBuWkZlNGVFc3lMZHdZVE9WY1JzSHZTck1CNXF0dGxS?=
- =?utf-8?B?T1dZRzd4WnVSOTZFNjZFaU1zTFg4SWpEOERoUGJVeFEwR1oyTkpMOG51U001?=
- =?utf-8?B?T0ViME5lcGRKMCs2TWVHdUo1NVdOa3BZakhZV0VQeWhvc2RIWm5PWWdvVjBh?=
- =?utf-8?B?OGFzN1gvdUZkQjkyVldpT3Fpb3FBTXFPWU5aajQ1cEx3Mkp3TFhUSVNxSWZT?=
- =?utf-8?B?RXZyWU5ZdXRUZ1hFdmV1bzBTQktic3lWb3BXMnN4UDNnU2FZQUNZUm1QNkdB?=
- =?utf-8?B?dE9kNmUzc3lzcHYxMy9xOGd1Z3ZHbU5Ga0E0YzI1N0Z5REFjWUNlSFl4WFY5?=
- =?utf-8?B?SkNXY0toN2NiMFJvUnViN2pEWG9kUjRDbGlYLytTWWRFK1MzT1ptWE1GSXV1?=
- =?utf-8?B?RnpqUGJyRU1ZUEJySERueHdaSENFZThYaTB1YmphWWR6TnQ2eEVQK3labk41?=
- =?utf-8?B?K0RjMjJVb2N1aEM1MURXT2lETWV6Y3JSYUMrNUpzdTN0WTh3TFZHZVplK1hp?=
- =?utf-8?B?SHdCTElITmJDNVJHdkpEc3pOaEJkRGFaVGJkMjBWTmdWc2Q5NE5KYkZENFhF?=
- =?utf-8?B?RE4ra3Z0Y0psYjI3THdCaE9ibFYrTFR6TGt4Qm9Vd1ZiYXlhVzlLeTBIdS84?=
- =?utf-8?B?V0E4ZnhGa1dKS1MxMlpwbTNiU3NncmRHLzlHMEF0UlpDTzZqcE5ZMXoxOTFh?=
- =?utf-8?B?TStDZUpzWHpYcFR0aXJaaTlNVzV2QW0yT0VoVy9wR1czVXZRQWJQdCtkWVZ2?=
- =?utf-8?B?OFNjaUlvdmwzVmZMTHdORmRaZ3k1ZzltU1hpc21MdndueHBEYmdLTU12ZGor?=
- =?utf-8?B?WFlXT1ZiMHFnRzBoK3prOXBRUkxnamZYdWx5RVJnRnFOM0oza0ZCZExRUC9K?=
- =?utf-8?B?by9oMHZ3ZDVRZ0s4QnBXRjBvTWlsQUQ4aTZod01jSnBFNEZYaWxsMjRPa3BI?=
- =?utf-8?B?S2c9PQ==?=
+	=?utf-8?B?OXUybUFBZHIzM0N2WXd6bzU3eUVjOVdscnhtN3lZUzl6RUcvZ0tIdHpVTUlI?=
+ =?utf-8?B?VlRwYStjTnVRaWR6dzF1UVVkNkNOM281TXI4WUIyWEJnTkpzMGRtamQvK0x0?=
+ =?utf-8?B?Wit0NmdGRFVsMXNHQ3NwY1UxZUxUU1hWNVRQQVMyVUdOWU5JamQ3cEtJOFBO?=
+ =?utf-8?B?SGJxdUZqSDM3Zy9oZjBPSkc1cm1xbk1DVDM1dVhDZ0VKMjBETUFjOUNTbVk1?=
+ =?utf-8?B?dGZzY0s0SE1SQ3JkT3hlL1loN0ZNZnRyNWx5NzY5Qy9FemI5QjFZK1ZFUjZl?=
+ =?utf-8?B?UW1QVHEwMS9lbWNnVE9uSHZ5S1F2QURiMFl3bGwvOGFBTUR6bFpURG1KOXRw?=
+ =?utf-8?B?S3dQaEJTZHVhWnJuV3ZOQ0k1blh3b0RaejlyMU42blZzN3lyS3RkWDB0Ukhw?=
+ =?utf-8?B?NU9vRWU0aUpjbUQrVFQyV015NEt3c29SYVBiNjhCeE1LRmpETGxNQkczTU11?=
+ =?utf-8?B?eFZHaVVOMENqcGNkSUNpT3dDOW4yUHh3RnppZFhUMHZhc2JmOWVyOFpCRE1J?=
+ =?utf-8?B?WVArZ2twVWpVL1N4bE1DY2NjbHVjYXVkVVhwYzc3RCsvUmtoL2VjZlpCM095?=
+ =?utf-8?B?YkNKbW9IUU1rSjZJNUZFQ0Q1VCsrVTJvQVZsRys0VHp4L1JoUnJWK1VkcmxO?=
+ =?utf-8?B?bjMwOHY1Rk1HazZEZHNsZnFMR1dEZnBRUHZCQ2NjZGdCVGJFSDRKOXQ5Y0dD?=
+ =?utf-8?B?d3hrRHowd1lnTW1TTVU2bldaNGtzdXNsbW1QL1hBRWtyZmtOQnBVcFprb1RY?=
+ =?utf-8?B?TDduOGNPNDBxdXFjU2NLSXVuNFZpK2JxNjBJYmRpaU1WdXh2RklMdnhaUmJj?=
+ =?utf-8?B?bjNKdDlQcURpOEhHT1AzOEF2OWZKKzRFK2V2OXd5Wi9oU1FkNU1FKzdUY1Vs?=
+ =?utf-8?B?cUpKeWs2akJoUEJ3Ym5abEFla2NVcFRnQzVMZXRHOWQyQytUL2tISWlOVitU?=
+ =?utf-8?B?enk4YS9IN0ZYdWNFRlN2K013N2dkb1RrTDA1TnYzTTFlelExM1NuL3VJNWx0?=
+ =?utf-8?B?UWo5MTV6RVp3NHVCUE90NU5KbXBkb3psUlRFOCs0cGIxNUdHc1EvRm54cmV1?=
+ =?utf-8?B?cG5zZVJUakJGclZTT3lJbk9xaktOYXdBazEzeVhYeGlOYXBwblp6eVl4K3BE?=
+ =?utf-8?B?V1F5c2VHRjBpNVhaMWoxZlJKNHF4OWJsUGhLZ1dVcmxXL29mdWYyUGVUQUdN?=
+ =?utf-8?B?K1NrTGM2aGwrQWJKTzhSVk1OanZXazBUODBMK2k5cEhESWdmU0JnaDhpSHh3?=
+ =?utf-8?B?V1pqbHFaN3NrWUtOT1hoelB1MmRoUXYxZ3phbldPSXBSVXlFaUFqdW41YlBa?=
+ =?utf-8?B?bDdXZ2wwTzhvdnBtenhvYTRneGoxUnhqT2djamMvMjM0WkFEOTRmTktFZmdp?=
+ =?utf-8?B?SFNkbFlVUWsrZ0VQRFRXVGhoRnBlWGtTUmhqKy9iTElyNzJtMzlkSjRjU0ZN?=
+ =?utf-8?B?dTQ0clBNeUlTZWRLR2R4ZndiYlRTVHhiNGprZzNnTy9MZGFVeURhbklTUlcy?=
+ =?utf-8?B?NldGTVlUbHZ1MGVjRGFITnBxcUZiVGlNYnlLeGNyK3gyZmFWUVF5OUVvODkv?=
+ =?utf-8?B?SmcrK25nN2N6R1hCZ3drd2lldXViNEJPbG5hWVpYOStLYjZ6UEFYTStUeTFH?=
+ =?utf-8?B?d0FBemxLMXpLWSs0Q1BXYTVjVmtON3N5dnUycFhVcXdyekViOGZmQ1VWSHBD?=
+ =?utf-8?B?MmYvaFREWGpXZ256cHdxRjdreFhQWjBjM2R6NStsYkQ1NkNKTFFhdExMRFoz?=
+ =?utf-8?B?QzVjK1ErUW1rK1BSTFJRdlpEZVNycGRYUy9OTHNRQWIvRk5RMmljeElHYVZR?=
+ =?utf-8?B?N0pDaXdaNDJyQVZqcmhlY0F4SmR2WGY4cjkwK1habDVScGo0VFBweEpZYXpi?=
+ =?utf-8?B?MWd4azVvcHBKa2Era1hVdjBIUzFqaVNCbytGWW5PWk9YdXJUY21XT1EwOTNU?=
+ =?utf-8?B?K1daQytyNFBhcDljSCs2V1JOSVFKS2RaYzFRN2ZXYXNNQnBjN0F5bFpZOFQ2?=
+ =?utf-8?B?QUZ0dmhNM0g5N2oveVc5RHpaMDlZbU8xWldrOVFjTkFIUWZoLzJUU0JqbFJz?=
+ =?utf-8?B?NENQeVBrSVRKMDdSOGxlOXVpTEFQM244YnlTUm12dW0zSXRvTnUvY0t1dndm?=
+ =?utf-8?B?N01HOFBCTXFsSmp0cURKZVUwY3B3VE1UVm13MmFSNmppamdCb0s2SUsrNGd2?=
+ =?utf-8?B?QkE9PQ==?=
 X-OriginatorOrg: cherry.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 387ded1c-db2d-48eb-5c0b-08dcce8c5ecb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3914f20d-8916-49b6-15ba-08dcce8c5f55
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9562.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2024 15:55:46.1749
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2024 15:55:47.0595
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RGxWP0/7krjihkK41o3+5FGhWWeTThjyHjLm4giepVicHkxtdg/TODovvjiEF06sJ/thVGRHq2X8kJGWxuy5TBWwANWacjzsjViHZbXH6PY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: S7NqOAZjL0JmEL0j37tC2nK5VpqxbWleHI3rjjAL8Fo3x9Q9/05uuX3BZIOhSKSgaEb5w9Q4fb1FCyAD/DC9aUYZ44BlwVKxvgIBjbHbzsk=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8319
 
-Theobroma Systems Mule is an MCU that emulates a set of I2C devices which
-are reachable through an I2C-mux.
+Theobroma Systems Mule is an MCU that emulates a set of I2C devices,
+among which devices that are reachable through an I2C-mux. The devices
+on the mux can be selected by writing the appropriate device number to
+an I2C config register.
 
-The devices on the mux can be selected by writing the appropriate
-device number to an I2C config register (0xff) that is not used by
-amc6821 logic. This required us to add a new compatible to the amc6821
-driver, from which, the new platform device "tsd,mule-i2c-mux" is probed.
-
-The selected device on the mux can be accessed for reading and writing
-at I2C address 0x6f.
-
-      +--------+----------------+------------------------------+
-      |  Mule                                                  |
- 0x18 |        +------------------+                            |
---------+----->|    amc6821       |                            |
-      | |      +------------------+                            |
-      | +----->| tsd,mule-i2c-mux |---+                        |
-      |        +------------------+   |                        |
-      |                               V__          +---------+ |
-      |                              |   \-------->| isl1208 | |
-      |                              |   |         +---------+ |
- 0x6f |                              | M |-------->| dev #1  | |
------------------------------------->| U |         +---------+ |
-      |                              | X |-------->| dev #2  | |
-      |                              |   |         +---------+ |
-      |                              |   /-------->| dev #3  | |
-      |                              |__/          +---------+ |
-      +--------------------------------------------------------+
-
-This patch-series adds support for the tsd,mule-i2c multiplexer
-as part of rk3399-puma, px30-ringneck, rk3588-tiger and rk3588-jaguar
-boards.
-
-Please merge patch 1 before patch 3
-Please merge patches 2, 3 and 4 (and 1) before patches 5, 6, 7, 8
-
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Signed-off-by: Farouk Bouabid <farouk.bouabid@cherry.de>
-
-Changes in v8:
-- Rename functions/macro in i2c-mux-mule.c that have "mux_" prefix using
-  prefix "mule_i2c_mux_" instead.
-- Remove extra "/t" after .driver in i2c-mux-mule.c
-- Add a space after "{"" and before "}" for mule_i2c_mux_of_match.
-- Link to v7: https://lore.kernel.org/r/20240902-dev-mule-i2c-mux-v7-0-bf7b8f5385ed@cherry.de
-
-Changes in v7:
-- Merged __mux_select and mux_select functions in patch 2
-- Removed unnecessary prints after mux_alloc and add_adapter calls in patch 2
-- Added Guenter's Reviewed-by tag
-- Added Rob's Reviewed-by tag
-- Added Wolfram's Reviewed/Acked-by tags
-- Link to v6: https://lore.kernel.org/r/20240725-dev-mule-i2c-mux-v6-0-f9f6d7b60fb2@cherry.de
-
-Changes in v6:
-- Move ti,amc6821 from trivial-devices into its own dt-bindings
-- Use same regmap config structure for both tsd,mule and ti,amc6821
-- Remove max_register from regmap config structure for amc6821
-
-- Link to v5: https://lore.kernel.org/r/20240708-dev-mule-i2c-mux-v5-0-71446d3f0b8d@cherry.de
-
-Changes in v5:
-- Drop the mfd implementation of v4
-- Add more dev_probe_err callbacks to tsd,mule-i2c-mux
-- Instantiate tsd,mule-i2c-mux as a platform device from amc6821 driver
-- add "Theobroma Systems" when describing mule.
-
-- Link to v4: https://lore.kernel.org/lkml/20240618-dev-mule-i2c-mux-v4-0-5462d28354c8@cherry.de/
-
-Changes in v4:
-- Drop the previously added i2c adapter quirks
-- Add platform driver probe to amc6821.
-- Change mule-i2c-mux driver to a platform driver
-- Add dev_probe_err in mule-i2c-mux driver
-- Add support for tsd,mule in simple-mfd-i2c
-- Add tsd,mule mfd to supported dts
-
-- Link to v3: https://lore.kernel.org/r/20240611-dev-mule-i2c-mux-v3-0-08d26a28e001@cherry.de
-
-Changes in v3:
-- Change "i2c" in comments/commit-logs to "I2C"
-- Fix long line-length
-- Warn when "share_addr_with_children" is set and the Mux is not an I2C device
-- Fix/stop propagating "I2C_AQ_SKIP_ADDR_CHECK" flag if "share_addr_with_children"
-  is not set.
-- Fix "old_fw" variable is used to indicate the reversed meaning.
-
-- Link to v2: https://lore.kernel.org/r/20240506-dev-mule-i2c-mux-v2-0-a91c954f65d7@cherry.de
-
-Changes in v2:
-- Add i2c-adapter quirks to skip checking for conflict between the mux core
-  and a child device address.
-- Rename dt-binding to "tsd,mule-i2c-mux.yaml"
-- Add Mule description to kconfig
-- Fix indentation
-- Move device table after probe
-
-- Link to v1: https://lore.kernel.org/r/20240426-dev-mule-i2c-mux-v1-0-045a482f6ffb@theobroma-systems.com
-
 ---
-Farouk Bouabid (8):
-      dt-bindings: i2c: add support for tsd,mule-i2c-mux
-      i2c: muxes: add support for tsd,mule-i2c multiplexer
-      dt-bindings: hwmon: add support for ti,amc6821
-      hwmon: (amc6821) add support for tsd,mule
-      arm64: dts: rockchip: add tsd,mule-i2c-mux on rk3588-jaguar
-      arm64: dts: rockchip: add tsd,mule-i2c-mux on rk3399-puma
-      arm64: dts: rockchip: add tsd,mule-i2c-mux on rk3588-tiger
-      arm64: dts: rockchip: add tsd,mule-i2c-mux on px30-ringneck
+ .../devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
- .../devicetree/bindings/hwmon/ti,amc6821.yaml      |  86 ++++++++++++
- .../devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  |  69 ++++++++++
- .../devicetree/bindings/trivial-devices.yaml       |   2 -
- arch/arm64/boot/dts/rockchip/px30-ringneck.dtsi    |  24 +++-
- arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      |  24 +++-
- arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts     |  25 +++-
- arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi     |  23 +++-
- drivers/hwmon/amc6821.c                            |  12 +-
- drivers/i2c/muxes/Kconfig                          |  16 +++
- drivers/i2c/muxes/Makefile                         |   1 +
- drivers/i2c/muxes/i2c-mux-mule.c                   | 148 +++++++++++++++++++++
- 11 files changed, 404 insertions(+), 26 deletions(-)
----
-base-commit: b831f83e40a24f07c8dcba5be408d93beedc820f
-change-id: 20240404-dev-mule-i2c-mux-9103cde07021
+diff --git a/Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml b/Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml
+new file mode 100644
+index 000000000000..28139b676661
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/tsd,mule-i2c-mux.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Theobroma Systems Mule I2C multiplexer
++
++maintainers:
++  - Farouk Bouabid <farouk.bouabid@cherry.de>
++  - Quentin Schulz <quentin.schulz@cherry.de>
++
++description: |
++  Theobroma Systems Mule is an MCU that emulates a set of I2C devices, among
++  which devices that are reachable through an I2C-mux. The devices on the mux
++  can be selected by writing the appropriate device number to an I2C config
++  register.
++
++
++      +--------------------------------------------------+
++      | Mule                                             |
++  0x18|    +---------------+                             |
++  -------->|Config register|----+                        |
++      |    +---------------+    |                        |
++      |                         V_                       |
++      |                        |  \          +--------+  |
++      |                        |   \-------->| dev #0 |  |
++      |                        |   |         +--------+  |
++  0x6f|                        | M |-------->| dev #1 |  |
++  ---------------------------->| U |         +--------+  |
++      |                        | X |-------->| dev #2 |  |
++      |                        |   |         +--------+  |
++      |                        |   /-------->| dev #3 |  |
++      |                        |__/          +--------+  |
++      +--------------------------------------------------+
++
++
++allOf:
++  - $ref: /schemas/i2c/i2c-mux.yaml#
++
++properties:
++  compatible:
++    const: tsd,mule-i2c-mux
++
++required:
++  - compatible
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c-mux {
++        compatible = "tsd,mule-i2c-mux";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        i2c@0 {
++            reg = <0x0>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            rtc@6f {
++                compatible = "isil,isl1208";
++                reg = <0x6f>;
++            };
++        };
++    };
++...
++
 
-Best regards,
 -- 
-Farouk Bouabid <farouk.bouabid@cherry.de>
+2.34.1
 
 
