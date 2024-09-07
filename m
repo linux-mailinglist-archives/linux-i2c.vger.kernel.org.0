@@ -1,173 +1,109 @@
-Return-Path: <linux-i2c+bounces-6345-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6346-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A07BF970144
-	for <lists+linux-i2c@lfdr.de>; Sat,  7 Sep 2024 11:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 35F6897032A
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 Sep 2024 18:32:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19C4A1F23439
-	for <lists+linux-i2c@lfdr.de>; Sat,  7 Sep 2024 09:05:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C24E81F22192
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 Sep 2024 16:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6E715383C;
-	Sat,  7 Sep 2024 09:05:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A3415ADAF;
+	Sat,  7 Sep 2024 16:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B8rECbeg"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="FC8aTlCD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DBF1B85FE;
-	Sat,  7 Sep 2024 09:05:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFC4B657
+	for <linux-i2c@vger.kernel.org>; Sat,  7 Sep 2024 16:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725699902; cv=none; b=MhFV9nKEDHy2sAy0tdZcW/whube0z9KH+qG2cKPmQkQWlpIw99v5+vGMHQEoATIiuyLiG6CAZbCGbPncEeM5VkbL+TPSQl+1fzKB6etsQ+5u5d7HXSo+lBTVIZ9xO+p+N12SHfpl7UASRfqNh+WlqsSpZGoNFk045oPjNAgfuy8=
+	t=1725726764; cv=none; b=GfJW/5rAVnBZbsLIsfV2fHTsqYsYArw6JIJcJCYBvX81mEc5FV/dAUyFxIw22PA1I9fFddM1dyOQ9llYBWM0Pajd+G16E7Uu4iwBNPSV98OuZ/ATYVwllkJEcro+oCqwSKEsJEi4X2/6JC7FepReTD2cOxDcvUXFF4yaNArsBPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725699902; c=relaxed/simple;
-	bh=Oc4c9658hATv4jpuLXLCt063YPY9lTknyxbmtFbeoTc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ejdPN48bovxS1VWe13EDrGfLZXM1NVqW20+GgIhJJ34RPbYQhDh4HtpaylFRl2SI9zmQsYp6TynYnUoSML7a5xZ425F5SeeeNr/ws2VWwuwJ1zfK0ejHlVcGrL/ky1uehql6Rdvq14N43lOq+LRms5YA+joGVfo5h7NlXirarcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B8rECbeg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B36C4CEC2;
-	Sat,  7 Sep 2024 09:04:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725699901;
-	bh=Oc4c9658hATv4jpuLXLCt063YPY9lTknyxbmtFbeoTc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=B8rECbegIStIkBXs2dnFpBTEixrAchtTB3AgZvojyJCNNxfX4as89qUgOqLe+/tc/
-	 /lle5EfnXwQf+xTO/lk2kWrw+s7rmOpw7GB3lqM2XYwveqsMk5Ku+oGO7/5iS1bKvS
-	 kGuG/CLZYVAfGxcyhjwTwPHov3SubXq2c0ZkWGhyILbLAbiU/TcSxTpSvYdy1fKOcl
-	 VMi+XR6Tm726IseRtMizRtBMFqA8rz2tP6ke14lSjVIgT+OFLjgYf/Tg8cX3nzhmeq
-	 j5lIAwSK+i1rswYTzTGv3wD+yO3iWefuHR1hUxd6MhJ73ohd4hDpOSuKsz4EcZ6ytk
-	 CZb6/HhqLkpoQ==
-Message-ID: <6a6fc102-a18c-4ae3-9104-59eb3172f407@kernel.org>
-Date: Sat, 7 Sep 2024 11:04:53 +0200
+	s=arc-20240116; t=1725726764; c=relaxed/simple;
+	bh=RqyJiFLQ6SyIFcymeqr7hq+2LwRmkb6op/Ue7WGwHk0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nAMzdDJRf3l3JWKOt7rSTgwYi4dFDTQx9evtai3GY1uaN+8W4+s/fNscvzWORSqvCch3EqVwzlarDIKYaIMQ533s8q2i5rA4sjPtA76QCqaBy3hROwwUyYl4k/mDxvTLz3e48aXRgyRYhXkfPW8alean1GwPZmIsgk6A5sB7e3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=FC8aTlCD; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=RqyJ
+	iFLQ6SyIFcymeqr7hq+2LwRmkb6op/Ue7WGwHk0=; b=FC8aTlCDDuaTF1tYg1t4
+	j39DHSgfEWCQG+DfDVRdSiw3cCFEgBTla4EPi1vEjGsuEOsAE1OvODc7RiVXVk+P
+	wrS4gyC9ga4HWjfLnZNco82LXmlX9I0/YmnBqpq3a3QhK/mlpzdg1xNlIyh5afA2
+	P3xw1R2jtuSwDyJ2ib/P8Nd2cTBKB7fi1GWPG6+faGT85Yd8UHr7NPdpXa4zGn4r
+	Pv3zc3n5s7Ro2Q6ABeHy+tjfX/QGEvBEIFyrxHSMGvLUG6SVsp3h1PORgsS+0D8N
+	qNRaXVnaReasYEVDjXPhQ1CozUtrlojllGceq+QFDIWCbW/nZuIkN+hQ6fROpCj2
+	GQ==
+Received: (qmail 1567190 invoked from network); 7 Sep 2024 18:32:28 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Sep 2024 18:32:28 +0200
+X-UD-Smtp-Session: l3s3148p1@E03QEYohqMsujnvu
+Date: Sat, 7 Sep 2024 18:32:25 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: Remove I2C_COMPAT config symbol and related code
+Message-ID: <ZtyAGTw6_ZcdJZzJ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <80c4a898-5867-4162-ac85-bdf7c7c68746@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
- flag
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
- konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
- linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
- vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
- Frank.Li@nxp.com, konradybcio@kernel.org
-Cc: quic_vdadhani@quicinc.com
-References: <20240906191438.4104329-1-quic_msavaliy@quicinc.com>
- <20240906191438.4104329-2-quic_msavaliy@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240906191438.4104329-2-quic_msavaliy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kRf6ogCndLhW+1Br"
+Content-Disposition: inline
+In-Reply-To: <80c4a898-5867-4162-ac85-bdf7c7c68746@gmail.com>
 
-On 06/09/2024 21:14, Mukesh Kumar Savaliya wrote:
-> Adds qcom,shared-se flag usage. Use this when particular I2C serial
-> controller needs to be shared between two subsystems.
 
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC (and consider --no-git-fallback argument). It might
-happen, that command when run on an older kernel, gives you outdated
-entries. Therefore please be sure you base your patches on recent Linux
-kernel.
+--kRf6ogCndLhW+1Br
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-</form letter>
+On Wed, Aug 21, 2024 at 10:13:04PM +0200, Heiner Kallweit wrote:
+> This code was added with 2bb5095affdb ("i2c: Provide compatibility links
+> for i2c adapters"). Commit message stated: Provide compatibility links
+> for [...] the time being. We will remove them after a long transition
+> period.
+> 15 years should have been a long enough transition period.
+>=20
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-You already got this comment, so how many times it has to be repeated?
-Your process is just wrong if you do not use the tools for this.
-	
+Applied to for-next, thanks!
 
-> 
-> SE = Serial Engine, meant for I2C controller here.
-> TRE = Transfer Ring Element, refers to Queued Descriptor.
-> 
-> Example :
-> Two clients from different SS can share an I2C SE for same slave device
 
-What is SS?
+--kRf6ogCndLhW+1Br
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> OR their owned slave devices.
-> Assume I2C Slave EEPROM device connected with I2C controller.
-> Each client from ADSP SS and APPS Linux SS can perform i2c transactions.
-> This gets serialized by lock TRE + DMA Transfers + Unlock TRE at HW level.
-> 
-> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> index 9f66a3bb1f80..ae423127f736 100644
-> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> @@ -60,6 +60,10 @@ properties:
->    power-domains:
->      maxItems: 1
->  
-> +  qcom,shared-se:
-> +    description: True if I2C needs to be shared between two or more subsystems.
+-----BEGIN PGP SIGNATURE-----
 
-What is a subsystem? With commit msg I still do not understand this.
-Maybe presence of hwlock defines it anyway, so this is redundant?
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbcgBYACgkQFA3kzBSg
+KbaO1w/+NMsAlWK+Fd2AJH2DcKCPkaiqvmMoTlzXQ0dylNret+22iFmRMlr+HhD/
+8hwYgXEDN4BzfXqiFbWANHC0yV2HE8UDD58LPpPkG0f8ifLqpbiCYp1ezYorPyOy
+TnWwF7EXZ6sMtEcvlINus0HHf03QSb0uh5Nm7lePRQjVIQRYIEzTtoI8pEHm9jcR
+O8M9a/fTE09ESV/K5PdELEaVwOgQKgBlCJF8S810VhbOP/WznWY/zDB2aWjqO+7G
+Nkzgq2vWaVzP2/nuzi1prZ9rsalE4VYMFhRygx2YaXvtyjkW8f0GWET6aUM7gh+a
+L/qyraahuzVsXHOuC8WbTO3gQyMankAkl6l2Yh8z3NK+oDBTMfZISkQE0rFQDkes
+wv+bRQnz7NX2WNDvkNNhBOsz83SC5dSI1XB6XGnpjUe50z9bWGJMkJ9DCuO1e9TT
+60C2RUpOo6ovTewHRvHNkKu8LkhM9hl0UIoXz2Jj3Q/th5hGFyGYOJnybwwJN0Ie
+uJlswmdEShXceQwMl6xXkCbK6X25a59HuBN6l73wnYnqpATAggCoxZTSUk6XhTgB
+eRyjRHn9HyLP6vgB6esqjKjnbxBasvD7kYTQKFq7oGy/MPLXKoBe6ToA4kanl474
+G0X7fRmEET2g5jU6CrEeUAcJ1C+vGRZ6usEs50Xra7Ks5lKexPY=
+=2Chk
+-----END PGP SIGNATURE-----
 
-Best regards,
-Krzysztof
-
+--kRf6ogCndLhW+1Br--
 
