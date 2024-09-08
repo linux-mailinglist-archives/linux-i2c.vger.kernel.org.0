@@ -1,88 +1,87 @@
-Return-Path: <linux-i2c+bounces-6353-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6354-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A3729705E4
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 10:55:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14A819706A3
+	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 12:39:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 933C91C20E90
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 08:55:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3A5B281FAC
+	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 10:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 125C45FBB1;
-	Sun,  8 Sep 2024 08:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AC0B150984;
+	Sun,  8 Sep 2024 10:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/mS/vFh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ham38r2j"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B4727442;
-	Sun,  8 Sep 2024 08:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DAE1DDC9;
+	Sun,  8 Sep 2024 10:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725785705; cv=none; b=IQcEtOMohDkBCNcDH5HRvqHdO/5ylrb/ChLXEwcmDZjjUd6Asp7NGf95MPuvzhJtA0MZOcJb2NCFaC1fWKygo6pkqwaaVaQkpXy0zVrAhUDRTTAwI3zBCVBTuoSsRSL1PJ86Cd9DYXVPCY225jW7qs/ZZDBQjypczsukBG3DFcc=
+	t=1725791964; cv=none; b=nlwOFQgn/R/TxWouwND9S9YdwG7PZICTuMoEL+iljvaMXrJuYHUB8V/qAfqBlikEz5jA2B1Kbgr4v3agkkYZ6tAg7VvKW4NRJIfBmpxApA92sNdQ1wDIIKAWRW/f742Oog+mTpk49/PSF7PSm8jqn3n2K7hforq/lQmK9+11W0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725785705; c=relaxed/simple;
-	bh=9JD1vPA6nENu4r8g78FFrQX/VYp2ni6MK1UWczeROl0=;
+	s=arc-20240116; t=1725791964; c=relaxed/simple;
+	bh=WIpuUnXJlsMs+zuwt8sFWY0A+PiiPlSaPMHytO9GMuw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NlLXknYGMOeOMqLT/6jtPH/qSRmYKJv76e2PLpsL+QexCNYqBARZX0WngjM1FGKZVyuNXLCsmbYqAnqNHwHjER7Y1KM+EBuCbpOvVg4FHnoSWYQa11AR5uVXOi+DAB6cbCHsyNWTnZDp6K0vaDDM8dU1bcJXqtGCxZ75x9SSPv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T/mS/vFh; arc=none smtp.client-ip=209.85.218.49
+	 To:Cc:Content-Type; b=hSeGPkG5f1/2t+WNP2UTAYDy2AMZMBr7aVbvGtfgZXhR99s9fbPHapt2e12rTXTIHBPjv7lZl2ScJM6G+S2h/6q6u6dRE4ImEb4DIMHuoK2yWx2BbNh9EgX7px8dNq++g+eKdiy9PL/cL+N5adJRXZbE84ckU4dvugccuIXZmz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ham38r2j; arc=none smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8d2b24b7a8so138696066b.1;
-        Sun, 08 Sep 2024 01:55:03 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2f7528f4658so21759331fa.3;
+        Sun, 08 Sep 2024 03:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725785702; x=1726390502; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725791961; x=1726396761; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Nq5WJ2pHAHyT2QwFtM7kzrtPjs0zR32si2qK77Z+LEw=;
-        b=T/mS/vFh5ktiecqnJiUXDuzb/F2K+uUFyQzemOkzlcaXJQEcjhKMfJ81ys1a4Y8Cqt
-         9Te5Ioy9k0p3xJZp9JeZe+Uxoq28rHywGYYFOezk4O4kVxJEY+WljFSaA5R8w3uqRR2k
-         8AUW7zWaxS5d6W0nCZFhuGLilFYNLGm9NFt0+yPEonDgErDVWA9Y9oKCtFPlu3AhB5GS
-         DbW3Hky8/67x3rM3GCe19JKeUUvhGsBZdwao9YHb9A7uccniTaTeuuWCXSDIZWDYwVSl
-         6pzJHfWLfv2DsoEDZ7+y24HK0OZpO5e+sWuvyfS4yeFp47QFsCzIc3ivPvRhs+YS6ENF
-         65Hg==
+        bh=QBlzT4DhXGVmK0DDC40shs2P1XOGabvgOZdRTDdJKzA=;
+        b=ham38r2joHdgz5KhAYwEb7f39eqXtWecLZ+CbHPhx5fjQnGMSrYOXB/0Hv4jilepn9
+         TNMkctruQ4ZxJSafCJNR8KTGlutc+rQfR/5hxQhsJJqKN1wXTRq7VxPNIMM1AjsK8pA1
+         QNpUc6uVstIismfEUDXeQHUziSFUxr/Lo1W03OLf8Y2RbVIluXJyTNN5Nvlnk3UDRFwZ
+         pSz1OaV8Pscz2K6DtNPpFfiwwBrbWzFjhqVwQIOBy/5dFTpQ7JHL3uJu1sj7eUEQPvhY
+         IGK3a4O/LGIGPW94BZhNiFAboBq6ALRK25vF3KmKwcSzO+B4LU9l2DPBmUejhHs+i/e3
+         24sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725785702; x=1726390502;
+        d=1e100.net; s=20230601; t=1725791961; x=1726396761;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Nq5WJ2pHAHyT2QwFtM7kzrtPjs0zR32si2qK77Z+LEw=;
-        b=JcD7XZjhAkQy9NTnatczDjzUjhq2keZYfWsu6sHOyHJfxMb+aY1FMQtwDywGlD7ynS
-         M0FfzDnjmV9Op6z0LLOQr7EaV3yMpBQ6JJRrf10rXVYYAnkf1rApgV3lzJk/ijocvl1Z
-         xMFmxENlR+iawO1TP3TK6gxBc34XwPgtYsD0bnP20gBx8GOsHE7b4Xm1IU7WjRlrq3MV
-         N9RfqSTxebi+lN+PrVDbqd+wcEZBMSahQ4KK+CjDdj/EdYDVTqjiH8jIN5vcPDBxs0pF
-         LJ8N/PtqBW3V9+GqVmmeWq4Me/Y0gpS4KDPD5FskRY6zvqcYjzQS2m2gq1gH5HvhV5rV
-         QVVA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5yAy6e477wTno6fN84PwINA3CauEuRQIyfqiqox5XaGliZTnH/c9VzGW4pBVBVL/E0tZycXs/ck5nVsfs@vger.kernel.org, AJvYcCXZlN7XT6UikV52aWV0wmwnLs/zm2w/2t+9rwQjbg6NTYBbSznaQthoJobww2SMqecbnjjqurNaAHU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjAHOkjn5XurE457iwj15pJx8Q4aREszD6rQpaXqR6Rkl/wJHn
-	36kjmMza1rWlRi2kosmoxuLWdHWOQAc2V6QJlhM08kXla2KiBWkdQ5PADJrj2QD55JC7GrwGWcz
-	uwfBMdi6G344BYH0JGmViLtsik24=
-X-Google-Smtp-Source: AGHT+IGh/mOI9VQapbeOWVjXZtarUc22MPB8ax7nNK0XjS+Txuppy6n3+QBXGfNuyoB8Y/EZ24dbDWaIDHrHw4x8upI=
-X-Received: by 2002:a17:907:7b95:b0:a72:5967:b34 with SMTP id
- a640c23a62f3a-a8a863f664amr914111866b.22.1725785701564; Sun, 08 Sep 2024
- 01:55:01 -0700 (PDT)
+        bh=QBlzT4DhXGVmK0DDC40shs2P1XOGabvgOZdRTDdJKzA=;
+        b=ICFpHY33N/34G8kU4QqFFP0Z52EQSBt+wyFROoGHWiAjqVb2xuMzpfI+8TccGbEpom
+         C9atUra7IF8cmuZx5boo1XSPfCFPJAQBz4OPpcBvIu2NFRdfXvbL8pTt5jBcot85kQXE
+         0IekzcVxXU2djFazDWhCcGUHophXBA/65abrDfVwHKy3Wr+82B1uXTvDh7iZ5GpN1Eal
+         dlbbxbqjVuy8JH+NSU2Qpk6Mry1eyeWbdl+51CTCBqRwiPr0ArqJiOi09nLJqI9lzOUM
+         PAxJv5BXi0c/fesXDK+IAMu5GHNDxe/WhCbqgcZzt9H5PjrMXp+GzOD2XgmY++ReOu/x
+         BIXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAnB8KOPyGE8Qj/tNfAqZnGTlpf3EQBeJRlVuhD3LV90nCce5YWxVmgi3StzzQGbgVGk2mvZ7XSUg=@vger.kernel.org, AJvYcCVH+5mHbX5PoatZ92I04xrt+2a8wmMJl5ZgeGo4c7dgUrgLqKX6KbbwNyP44MUFGCwU8CldBmNcaYgC5Oqv@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXRzr5Zu3nu8GB3nRSyr6k+CNJcNYsgMoAYw6H5QZBI43NH6Nu
+	YCXN5JQTsOS6634ECPL6yQrmPgmxo2nJ7DNAMrOIzk9HT8CiCTP8D647126ZaL3FQncrzTOl9K8
+	/461YMMjx1OjYwd7ihcZc4++/wi4=
+X-Google-Smtp-Source: AGHT+IF8YSDnTUVBg5gTulU8iOWZhp8+Web6nIHMCIZHXU6A4YxtGVVmAIDqAaz7dyJzivALraGk1Qt4N0/Zujzb45E=
+X-Received: by 2002:a05:651c:2127:b0:2f6:43fd:f870 with SMTP id
+ 38308e7fff4ca-2f751f69865mr54977021fa.31.1725791959684; Sun, 08 Sep 2024
+ 03:39:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830034640.7049-1-kfting@nuvoton.com> <20240830034640.7049-7-kfting@nuvoton.com>
- <ZtIbM4NTbldBIDXf@smile.fi.intel.com> <CAHb3i=vWNmokQYyOZJOVeaJaT6XAroct2gZiJYPVQf6rHzR5LA@mail.gmail.com>
- <ZtWnPTSu1RKmIlhK@smile.fi.intel.com>
-In-Reply-To: <ZtWnPTSu1RKmIlhK@smile.fi.intel.com>
+References: <20240830034640.7049-1-kfting@nuvoton.com> <20240830034640.7049-3-kfting@nuvoton.com>
+ <cfdfldh5tuhb4r5pdpgolcr2roeewsobedet2uvmpbnqlw5yh4@c4a2szsbs2r2>
+In-Reply-To: <cfdfldh5tuhb4r5pdpgolcr2roeewsobedet2uvmpbnqlw5yh4@c4a2szsbs2r2>
 From: Tali Perry <tali.perry1@gmail.com>
-Date: Sun, 8 Sep 2024 11:54:50 +0300
-Message-ID: <CAHb3i=uN5jtczEjHhzwL9E9c6d9rU-QZckhU79KzPuY5n81CyA@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] i2c: npcm: use i2c frequency table
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Sun, 8 Sep 2024 13:39:08 +0300
+Message-ID: <CAHb3i=sHzF8p572SBMvfCVQmo+7VcYbOYuqUU-H2sEiTkfWD7A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] i2c: npcm: correct the read/write operation procedure
+To: Andi Shyti <andi.shyti@kernel.org>
 Cc: Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com, tmaimon77@gmail.com, 
 	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
-	andi.shyti@kernel.org, wsa@kernel.org, rand.sec96@gmail.com, 
+	andriy.shevchenko@linux.intel.com, wsa@kernel.org, rand.sec96@gmail.com, 
 	wsa+renesas@sang-engineering.com, tali.perry@nuvoton.com, 
 	Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, 
 	JJLIU0@nuvoton.com, kfting@nuvoton.com, openbmc@lists.ozlabs.org, 
@@ -90,86 +89,89 @@ Cc: Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com, tmaimon77@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+Hi Andi,
 
-On Mon, Sep 2, 2024 at 3:00=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Fri, Sep 6, 2024 at 12:29=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org> =
+wrote:
 >
-> On Sun, Sep 01, 2024 at 06:53:38PM +0300, Tali Perry wrote:
-> > On Fri, Aug 30, 2024 at 10:19=E2=80=AFPM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > On Fri, Aug 30, 2024 at 11:46:39AM +0800, Tyrone Ting wrote:
-> > > > Modify i2c frequency from table parameters
-> > > > for NPCM i2c modules.
-> > > >
-> > > > Supported frequencies are:
-> > > >
-> > > > 1. 100KHz
-> > > > 2. 400KHz
-> > > > 3. 1MHz
-> > >
-> > > There is no explanations "why". What's wrong with the calculations do=
-ne in the
-> > > current code?
-> > >
-> > > --
-> > > With Best Regards,
-> > > Andy Shevchenko
-> > >
-> > >
-> > Hi Andy,
+> Hi Tyronne,
+>
+> On Fri, Aug 30, 2024 at 11:46:35AM GMT, Tyrone Ting wrote:
+> > Originally the driver uses the XMIT bit in SMBnST register to decide
+> > the upcoming i2c transaction. If XMIT bit is 1, then it will be an i2c
+> > write operation. If it's 0, then a read operation will be executed.
 > >
-> > The original equations were tested on a variety of chips and base clock=
-s.
-> > Since we added devices that use higher frequencies of the module we
-> > saw that there is a mismatch between the equation and the actual
-> > results on the bus itself, measured on scope.
-> > So instead of using the equations we did an optimization per module
-> > frequency, verified on a device.
-> > Most of the work was focused on the rise time of the SCL and SDA,
-> > which depends on external load of the bus and PU.
-> > We needed to make sure that in all valid range of load the rise time
-> > is compliant of the SMB spec timing requirements.
+> > After checking the datasheet, the XMIT bit is valid when the i2c module
+> > is acting in a slave role. Use the software status to control the i2c
+> > transaction flow instead when the i2c module is acting in a master role=
+.
 > >
-> > This patch include the final values after extensive testing both at
-> > Nuvoton as well as at customer sites.
+> > Fixes: 48acf8292280 ("i2c: Remove redundant comparison in npcm_i2c_reg_=
+slave")
 >
-> But:
-> 1) why is it better than do calculations?
-> 2) can it be problematic on theoretically different PCB design in the fut=
-ure?
+> Fixes needs to be used if you are fixing a bug (crash,
+> device malfunction, etc.). If you want to use it, please describe
+> the bug you are fixing. Otherwise, please, remove it.
 >
-> P.S. If there is a good explanations to these and more, elaborate this in=
- the
-> commit message.
+> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> > ---
+> >  drivers/i2c/busses/i2c-npcm7xx.c | 7 ++-----
+> >  1 file changed, 2 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-=
+npcm7xx.c
+> > index bbcb4d6668ce..2b76dbfba438 100644
+> > --- a/drivers/i2c/busses/i2c-npcm7xx.c
+> > +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> > @@ -1628,13 +1628,10 @@ static void npcm_i2c_irq_handle_sda(struct npcm=
+_i2c *bus, u8 i2cst)
+> >                       npcm_i2c_wr_byte(bus, bus->dest_addr | BIT(0));
+> >       /* SDA interrupt, after start\restart */
+> >       } else {
+> > -             if (NPCM_I2CST_XMIT & i2cst) {
+> > -                     bus->operation =3D I2C_WRITE_OPER;
+> > +             if (bus->operation =3D=3D I2C_WRITE_OPER)
+> >                       npcm_i2c_irq_master_handler_write(bus);
+> > -             } else {
+> > -                     bus->operation =3D I2C_READ_OPER;
+> > +             else if (bus->operation =3D=3D I2C_READ_OPER)
+> >                       npcm_i2c_irq_master_handler_read(bus);
 >
-> --
-> With Best Regards,
-> Andy Shevchenko
+> mmmhhh... you are changing the logic here and you are not
+> describing the logic change in the commit log.
 >
+> Without looking at the details, if this is a state machine you
+> are breaking it.
+>
+> Can anyone from the ARM/NUVOTON NPCM supporters and reviewers
+> take a look at this patch?
 >
 
-Thanks for your comments,
+Indeed, the driver can use both the register bits or the state machine
+to determine the current state of the bus.
+In slave mode the XMIT bit can simply be used directly to set the state.
+XMIT bit can be used as indication to the current state of the state
+machine during slave operation.
+(meaning XMIT =3D 1 during writing and XMIT =3D 0 during reading).
+In master operation XMIT is valid only if there are no bus errors.
+For example: in a multi master where the same module is switching from
+master to slave at runtime, and there are collisions,
+the XMIT bit cannot be trusted.
+However the maser already "knows" what the bus state is, so this bit
+is not needed and the driver can just track
+what it is currently doing.
 
-1) The equations were not accurate to begin with.
-  They are an approximation of the ideal value.
-  The ideal value is calculated per frequency of the core module.
-2) As you wrote , different PCB designs, or specifically to this case
-: the number and type of targets on the bus,
-   impact the required values for the timing registers.
-   Users can recalculate the numbers for each bus ( out of 24) and get
-an even better optimization,
-   but our users chose not to.
-  Instead - we manually picked values per frequency that match the
-entire valid range of targets (from 1 to max number).
-  Then we check against the AMR described in SMB spec and make sure
-that none of the values is exceeding.
-  this process was led by the chip architect and included a lot of testing.
 
-Do we need to add this entire description to the commit message? It
-sounds a bit too detailed to me.
 
-Thanks,
-Tali Perry, Nuvoton
+
+> Thanks,
+> Andi
+>
+> > -             }
+> >       }
+> >  }
+> >
+> > --
+> > 2.34.1
+> >
 
