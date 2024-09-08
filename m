@@ -1,83 +1,83 @@
-Return-Path: <linux-i2c+bounces-6354-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6355-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14A819706A3
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 12:39:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 005F19706B4
+	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 12:48:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3A5B281FAC
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 10:39:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9313282364
+	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 10:48:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AC0B150984;
-	Sun,  8 Sep 2024 10:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6C661531CA;
+	Sun,  8 Sep 2024 10:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ham38r2j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yb3mDOcV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DAE1DDC9;
-	Sun,  8 Sep 2024 10:39:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06604B5AE;
+	Sun,  8 Sep 2024 10:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725791964; cv=none; b=nlwOFQgn/R/TxWouwND9S9YdwG7PZICTuMoEL+iljvaMXrJuYHUB8V/qAfqBlikEz5jA2B1Kbgr4v3agkkYZ6tAg7VvKW4NRJIfBmpxApA92sNdQ1wDIIKAWRW/f742Oog+mTpk49/PSF7PSm8jqn3n2K7hforq/lQmK9+11W0c=
+	t=1725792489; cv=none; b=JgiOK0rzTiCc83xHqfobEd9Hug37jEgiQFHlg6A6a1waY3RkveKAhVh6HeUL/XWANtPTSHCJexuOGWYoWTTzz+2i5Khb2iLhpno38wI2RG8lvshNfEHYxy9Ik7W88Yyz4fLc1xyRTPthfBwmxk3ZEzANzPdt3K9a3DUPJ9h4/UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725791964; c=relaxed/simple;
-	bh=WIpuUnXJlsMs+zuwt8sFWY0A+PiiPlSaPMHytO9GMuw=;
+	s=arc-20240116; t=1725792489; c=relaxed/simple;
+	bh=NMML0K5lNKFbCf6flKYuyjLpkFnoliipCnmTYS8DTaY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hSeGPkG5f1/2t+WNP2UTAYDy2AMZMBr7aVbvGtfgZXhR99s9fbPHapt2e12rTXTIHBPjv7lZl2ScJM6G+S2h/6q6u6dRE4ImEb4DIMHuoK2yWx2BbNh9EgX7px8dNq++g+eKdiy9PL/cL+N5adJRXZbE84ckU4dvugccuIXZmz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ham38r2j; arc=none smtp.client-ip=209.85.208.179
+	 To:Cc:Content-Type; b=cyT7rnvo07cYfOUAHkk19phFZvwByHoJjK31AopuF/bkrPl7/3gUdqLZtifia6qv3L8Hj7/djlVM0zSV4w6VUP1gLF3CV6SEwRCj9D9tPTPWvJ6cmlx6voc8YyUYqpSMpUE1sxuLlOboR//p5Ai7cRFHtO5hyMzaG1bdz3S+QNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yb3mDOcV; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2f7528f4658so21759331fa.3;
-        Sun, 08 Sep 2024 03:39:22 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c26b5f1ea6so4118382a12.0;
+        Sun, 08 Sep 2024 03:48:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725791961; x=1726396761; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725792486; x=1726397286; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QBlzT4DhXGVmK0DDC40shs2P1XOGabvgOZdRTDdJKzA=;
-        b=ham38r2joHdgz5KhAYwEb7f39eqXtWecLZ+CbHPhx5fjQnGMSrYOXB/0Hv4jilepn9
-         TNMkctruQ4ZxJSafCJNR8KTGlutc+rQfR/5hxQhsJJqKN1wXTRq7VxPNIMM1AjsK8pA1
-         QNpUc6uVstIismfEUDXeQHUziSFUxr/Lo1W03OLf8Y2RbVIluXJyTNN5Nvlnk3UDRFwZ
-         pSz1OaV8Pscz2K6DtNPpFfiwwBrbWzFjhqVwQIOBy/5dFTpQ7JHL3uJu1sj7eUEQPvhY
-         IGK3a4O/LGIGPW94BZhNiFAboBq6ALRK25vF3KmKwcSzO+B4LU9l2DPBmUejhHs+i/e3
-         24sQ==
+        bh=NMML0K5lNKFbCf6flKYuyjLpkFnoliipCnmTYS8DTaY=;
+        b=Yb3mDOcVxnUSVZwMbGl2hpVsJAUsrNrO00RUgBLybaSmBXEc10mZ7azL/P9FB37bXO
+         pPvOoLAnCZ+xdbU+ho5CHFt6g8TactB85f8gqeU9NwAEk/nTwbDBGCRbHDl/e0hHtRtq
+         ky0Cyu0e4pjGj2bmeLeEBN5XA8kDUOR4sSlJzNvClM8GLde+RLSjBcB/yLB29PpLe00J
+         3bi7Zjdv0E6qb4URRNHnMV4p6+sRvkQjmNyVg+5gKvDGFOXci8clJtqMe4CrnaNmdT7R
+         fYX4UOF1M9IbqICMPm2Y4eB/o37EfJT/ihI6ovl0d8fxYj2P/jGhX/FlXSlHKXXixp9D
+         HxNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725791961; x=1726396761;
+        d=1e100.net; s=20230601; t=1725792486; x=1726397286;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QBlzT4DhXGVmK0DDC40shs2P1XOGabvgOZdRTDdJKzA=;
-        b=ICFpHY33N/34G8kU4QqFFP0Z52EQSBt+wyFROoGHWiAjqVb2xuMzpfI+8TccGbEpom
-         C9atUra7IF8cmuZx5boo1XSPfCFPJAQBz4OPpcBvIu2NFRdfXvbL8pTt5jBcot85kQXE
-         0IekzcVxXU2djFazDWhCcGUHophXBA/65abrDfVwHKy3Wr+82B1uXTvDh7iZ5GpN1Eal
-         dlbbxbqjVuy8JH+NSU2Qpk6Mry1eyeWbdl+51CTCBqRwiPr0ArqJiOi09nLJqI9lzOUM
-         PAxJv5BXi0c/fesXDK+IAMu5GHNDxe/WhCbqgcZzt9H5PjrMXp+GzOD2XgmY++ReOu/x
-         BIXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVAnB8KOPyGE8Qj/tNfAqZnGTlpf3EQBeJRlVuhD3LV90nCce5YWxVmgi3StzzQGbgVGk2mvZ7XSUg=@vger.kernel.org, AJvYcCVH+5mHbX5PoatZ92I04xrt+2a8wmMJl5ZgeGo4c7dgUrgLqKX6KbbwNyP44MUFGCwU8CldBmNcaYgC5Oqv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXRzr5Zu3nu8GB3nRSyr6k+CNJcNYsgMoAYw6H5QZBI43NH6Nu
-	YCXN5JQTsOS6634ECPL6yQrmPgmxo2nJ7DNAMrOIzk9HT8CiCTP8D647126ZaL3FQncrzTOl9K8
-	/461YMMjx1OjYwd7ihcZc4++/wi4=
-X-Google-Smtp-Source: AGHT+IF8YSDnTUVBg5gTulU8iOWZhp8+Web6nIHMCIZHXU6A4YxtGVVmAIDqAaz7dyJzivALraGk1Qt4N0/Zujzb45E=
-X-Received: by 2002:a05:651c:2127:b0:2f6:43fd:f870 with SMTP id
- 38308e7fff4ca-2f751f69865mr54977021fa.31.1725791959684; Sun, 08 Sep 2024
- 03:39:19 -0700 (PDT)
+        bh=NMML0K5lNKFbCf6flKYuyjLpkFnoliipCnmTYS8DTaY=;
+        b=s3t70yu6W/4DWGjIStP+ASpC70iwiMhgDT2i/iJN7nIlGjBqMNXxNnmhxCABLwq2tM
+         Q0XW+nUiPOxFkmGHy7K2TV0xB04hxm3VOgInaewGK+gfyNkZL4svFUp0ThhoJS1eWzvP
+         20on9KwA4PggvejNmUAFH5dGA1Z1/I7k72PtjDZ3H5RpOTQ83/CJE4HKmo3vde6YtRTz
+         gJHJopZB+kD9Hst+sIYS8vtoz9IlU5yHGj1un4c6jlwNQvhTbHtOaR2DFFPWhJfwBo6+
+         nmpnc0hysMoMlfjRQhw1Bw8jgzx52Qc7D3sn+MHlwzAB3XDBfpFS2vW0VaXeJiUvHSFs
+         HS9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV1831HJlmRCYsK0sNsX6e2dDZUfjbrlCy2ugxkBcXkfqhoK3+RUWsDljP4fI7OVq1FyvstiVpwtx3J6A9b@vger.kernel.org, AJvYcCVjKJPnlW1Jg9JuE2yIRnVk+2V9Yz+0TWTXFInfTuHPBiPpzdvpHQ6FV4XeMIy9Ti+EImQ/N7s/Y04=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3/UmGwvzLEw+hpSIaE5qyaHmBD+K+AhDcw9w46+TqSDBVvChn
+	G4mEZG8oOZY8eeC4gPDvYaC9k1Fgaeq533KO1hsVZHsZRtrOF0zvp3GMAVW9xOUyAAMrVjbZ0tr
+	d/4No+hgXWHl0VLFqfXHiJU1TO/LXXKRv
+X-Google-Smtp-Source: AGHT+IHvdt35a1Sb9j5VA1uW+AQ9HLQkn8DAn8JPS0ljn6ntkvFJmzdlfn2w4O5PEkP/4iO5AeZfM68ifOlGVGZioOw=
+X-Received: by 2002:a05:6402:2110:b0:5c2:2b1d:31e6 with SMTP id
+ 4fb4d7f45d1cf-5c3dc7c3e8emr4894088a12.29.1725792485533; Sun, 08 Sep 2024
+ 03:48:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830034640.7049-1-kfting@nuvoton.com> <20240830034640.7049-3-kfting@nuvoton.com>
- <cfdfldh5tuhb4r5pdpgolcr2roeewsobedet2uvmpbnqlw5yh4@c4a2szsbs2r2>
-In-Reply-To: <cfdfldh5tuhb4r5pdpgolcr2roeewsobedet2uvmpbnqlw5yh4@c4a2szsbs2r2>
+References: <20240830034640.7049-1-kfting@nuvoton.com> <20240830034640.7049-5-kfting@nuvoton.com>
+ <stnyjmnqdobzq2f2ntq32tu4kq6ohsxyevjn5rgz3uu2qncuzl@nt4ifscgokgj>
+In-Reply-To: <stnyjmnqdobzq2f2ntq32tu4kq6ohsxyevjn5rgz3uu2qncuzl@nt4ifscgokgj>
 From: Tali Perry <tali.perry1@gmail.com>
-Date: Sun, 8 Sep 2024 13:39:08 +0300
-Message-ID: <CAHb3i=sHzF8p572SBMvfCVQmo+7VcYbOYuqUU-H2sEiTkfWD7A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] i2c: npcm: correct the read/write operation procedure
+Date: Sun, 8 Sep 2024 13:47:54 +0300
+Message-ID: <CAHb3i=vSUqbsoRhnnyMOoteKP3GCoXmCd+UKQSN_QWqkRweuiA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] i2c: npcm: Modify timeout evaluation mechanism
 To: Andi Shyti <andi.shyti@kernel.org>
 Cc: Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com, tmaimon77@gmail.com, 
 	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
@@ -91,87 +91,41 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi Andi,
 
-On Fri, Sep 6, 2024 at 12:29=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org> =
+On Fri, Sep 6, 2024 at 12:39=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org> =
 wrote:
 >
-> Hi Tyronne,
+> Hi Tyrone,
 >
-> On Fri, Aug 30, 2024 at 11:46:35AM GMT, Tyrone Ting wrote:
-> > Originally the driver uses the XMIT bit in SMBnST register to decide
-> > the upcoming i2c transaction. If XMIT bit is 1, then it will be an i2c
-> > write operation. If it's 0, then a read operation will be executed.
-> >
-> > After checking the datasheet, the XMIT bit is valid when the i2c module
-> > is acting in a slave role. Use the software status to control the i2c
-> > transaction flow instead when the i2c module is acting in a master role=
-.
+> On Fri, Aug 30, 2024 at 11:46:37AM GMT, Tyrone Ting wrote:
+> > Increase the timeout and treat it as the total timeout, including retri=
+es.
+> > The total timeout is 2 seconds now.
+>
+> Why?
+
+The users want to connect a lot of masters on the same bus.
+This timeout is used to determine the time it takes to take bus ownership.
+The transactions are very long, so waiting 35ms is not enough.
+
+>
+> > The i2c core layer will have chances to retry to call the i2c driver
+> > transfer function if the i2c driver reports that the bus is busy and
+> > returns EAGAIN.
 > >
 > > Fixes: 48acf8292280 ("i2c: Remove redundant comparison in npcm_i2c_reg_=
 slave")
 >
-> Fixes needs to be used if you are fixing a bug (crash,
-> device malfunction, etc.). If you want to use it, please describe
-> the bug you are fixing. Otherwise, please, remove it.
+> What is the bug you are fixing?
 >
 > > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> > ---
-> >  drivers/i2c/busses/i2c-npcm7xx.c | 7 ++-----
-> >  1 file changed, 2 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-=
-npcm7xx.c
-> > index bbcb4d6668ce..2b76dbfba438 100644
-> > --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> > +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> > @@ -1628,13 +1628,10 @@ static void npcm_i2c_irq_handle_sda(struct npcm=
-_i2c *bus, u8 i2cst)
-> >                       npcm_i2c_wr_byte(bus, bus->dest_addr | BIT(0));
-> >       /* SDA interrupt, after start\restart */
-> >       } else {
-> > -             if (NPCM_I2CST_XMIT & i2cst) {
-> > -                     bus->operation =3D I2C_WRITE_OPER;
-> > +             if (bus->operation =3D=3D I2C_WRITE_OPER)
-> >                       npcm_i2c_irq_master_handler_write(bus);
-> > -             } else {
-> > -                     bus->operation =3D I2C_READ_OPER;
-> > +             else if (bus->operation =3D=3D I2C_READ_OPER)
-> >                       npcm_i2c_irq_master_handler_read(bus);
 >
-> mmmhhh... you are changing the logic here and you are not
-> describing the logic change in the commit log.
+> Still... can someone from the nuvoton supporters/reviewers check
+> this patch?
 >
-> Without looking at the details, if this is a state machine you
-> are breaking it.
->
-> Can anyone from the ARM/NUVOTON NPCM supporters and reviewers
-> take a look at this patch?
->
-
-Indeed, the driver can use both the register bits or the state machine
-to determine the current state of the bus.
-In slave mode the XMIT bit can simply be used directly to set the state.
-XMIT bit can be used as indication to the current state of the state
-machine during slave operation.
-(meaning XMIT =3D 1 during writing and XMIT =3D 0 during reading).
-In master operation XMIT is valid only if there are no bus errors.
-For example: in a multi master where the same module is switching from
-master to slave at runtime, and there are collisions,
-the XMIT bit cannot be trusted.
-However the maser already "knows" what the bus state is, so this bit
-is not needed and the driver can just track
-what it is currently doing.
-
-
-
-
 > Thanks,
 > Andi
->
-> > -             }
-> >       }
-> >  }
-> >
-> > --
-> > 2.34.1
-> >
+
+Thanks,
+Tali Perry,
+Nuvoton Technologies.
 
