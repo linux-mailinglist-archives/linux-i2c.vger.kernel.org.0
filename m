@@ -1,107 +1,126 @@
-Return-Path: <linux-i2c+bounces-6432-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6433-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE4899721C5
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 20:23:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39E319721CB
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 20:24:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CB4F1F23A31
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 18:23:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 652CA1C22C3C
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 18:24:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95A2B188CAF;
-	Mon,  9 Sep 2024 18:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protocubo.io header.i=@protocubo.io header.b="eNHlooe1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA93C187856;
+	Mon,  9 Sep 2024 18:24:37 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76C517DFF7
-	for <linux-i2c@vger.kernel.org>; Mon,  9 Sep 2024 18:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F50C16D9AF;
+	Mon,  9 Sep 2024 18:24:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725906194; cv=none; b=BmnFf9RVL/YtuapiRaClBNf8kSf6sa25Vi9IIOVJRwSomwfVxWtVgiyEnTAxs60dJ3A1CXja0FpMAcp8PYowDdnignyQuF/BrY6p7rxf9nwDwIqWY1j9bBHGWwLFoGR2uWOd0RHwAXy5cTiV1WgIy19siinsSaDaGl6wfnmKSV0=
+	t=1725906277; cv=none; b=JRfFzcupPPps9uiwebQKbAWRnNcKKW4hMkX6LtMH2j8582iiBZM9wD1JFsVPizQmBKTky+u0umRG/xZ0j/kV3GStx2ydv0iGnnJbmRpnyTfgvraXtmk5mcUnF0EE2a0EIKkxKnlwtwisBbKkhQyhm6jJnFdTU2cF2m40o/BR3Kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725906194; c=relaxed/simple;
-	bh=1aitMlV23kVkVlK+hhq13LkYQUy97YyRmnk0qYwLNpc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KcXaAILcnvE0Xfsw4Gtp2v38WDV6x4UKMQcrmqDZ2amoXg9Te6oWCxylsQkzH4QSFV2jBHJKV/FgIRgIBWnj3RpAz2jh/gCqIhnUyELvaGQkFfEebEP5fCzcsrWhGH99euLRUuyfTxX9y/YnlWrkISDAaWRqCo/BH7cuXYIlzCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=protocubo.io; spf=pass smtp.mailfrom=protocubo.io; dkim=pass (2048-bit key) header.d=protocubo.io header.i=@protocubo.io header.b=eNHlooe1; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=protocubo.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protocubo.io
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7d50ac2e3f8so612193a12.2
-        for <linux-i2c@vger.kernel.org>; Mon, 09 Sep 2024 11:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protocubo.io; s=google; t=1725906192; x=1726510992; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eO4L9jnbspdn3rrqanyKN+GU+DDQw2EjhWjOuAI0zjw=;
-        b=eNHlooe1rI24/CXd0sQathPdWD92AXwjD/EfLUjdXT5shmHcxORb9BDbWIhqY8q8H7
-         17Ie4h110kmkztcDV6gQ6leWoQU0MZj86t/g+OSZiLTwRWcp9r31lwvHTMp6zT8lQaCh
-         9CQ3tAxbUJQOVnGyFMBpiFivH7G+OpyU0ouQaht/pAEOJnc3gEMdTN0lneAiT+L0KoXB
-         tlYS9b/TgNzoujSgsYPfPew7tdAsp7oPYwCCytfrBs/6DC4/JclHdH6YXoH/0Lx3rTmS
-         xPsJAHcNIEbq/K8ZY92isPWNeBZEpSYDADqC2PB6VeSxuWj3NpPoBFjggxrlWU+rUrCO
-         8Vzw==
+	s=arc-20240116; t=1725906277; c=relaxed/simple;
+	bh=H1HrYV3nGu7dk6DeTttTdNdhYwRQg0LmmbTolyu8hX0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SoAB6JVx/Z8TjCwdrVkQ3gMeef0DgK/rnPHhDjnSgpLIJl5mLw45F8Q5ZsP1Ji9HGfq3jBVlxldOPJH6JHrxYEXXhtm560WrK6DyLDFIivT7E0GIeMr6LNkTP0tJhnjFWvlw3Mic3m87IjPfA+NSNARm1NGu6kc7EWDTCKcMwmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e1651f48c31so5155753276.0;
+        Mon, 09 Sep 2024 11:24:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725906192; x=1726510992;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eO4L9jnbspdn3rrqanyKN+GU+DDQw2EjhWjOuAI0zjw=;
-        b=onsSB0tiuRHmIc+26BEbeteKPlvTVbpyJN/jEMPgaQcMgJ0X/w+z/JHreSZP1Tq/2J
-         Z7QHaTfVlq6LFyQQS8ul4/ldEngV7ziaohMXRNlqN9IbF8nnLae2o3n/Er31AzBWxNik
-         BXe/+/YmCFm+qoa7jsA16ZclEJZSrc7Kn7LyhE9dqbVfC/Rdhcy+flM7sRhcRkLSIXsi
-         ww+RLOf/ePJj9dNOF/DrkcMxVW7jI4CVjeEmVg5u0LrS8f9oA14jAJRvZfIicw8AypGX
-         iLAyc+IkbNCHAsnxbvHMoQJMGzXFkgjJ9mXbJpffKXa2Q/ziEzkX/Zix/Ow4H50x8KPq
-         0GKg==
-X-Forwarded-Encrypted: i=1; AJvYcCUWcSJBIM7ssgMEjL/rGtd4XkBZ4E7Fb19h6lrjeYS+3yGGwvcJvhdEpLm8PP7wKH0dQzcI4kBCjLc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnohYXEOfQSwujCdyVEcxOD1x1sE2UI1J9d/Rfq4DPb/lYaqyb
-	Lv1xhVaMMPtAYO2e1L6+LIyV21u977/tDEUEdaGnWkr9w7iZq0ZhsB9RQRxNJz4=
-X-Google-Smtp-Source: AGHT+IHRmLzz8gpcfkuwt9GgoLc7rdf9w2BVWj6aOOK5a0OAJ8CoyNVq5WjyElAeTQosquDXIT2aJw==
-X-Received: by 2002:a17:902:ec89:b0:206:a027:8aa3 with SMTP id d9443c01a7336-206f036439amr63524295ad.0.1725906192178;
-        Mon, 09 Sep 2024 11:23:12 -0700 (PDT)
-Received: from calvin.localdomain ([2804:14d:5c5e:6038::1000])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20710f3552bsm36716195ad.289.2024.09.09.11.23.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2024 11:23:11 -0700 (PDT)
-Date: Mon, 9 Sep 2024 15:23:03 -0300
-From: Jonas Malaco <jonas@protocubo.io>
-To: Li Zetao <lizetao1@huawei.com>
-Cc: jikos@kernel.org, bentiss@kernel.org, michael.zaidman@gmail.com, 
-	gupt21@gmail.com, djogorchock@gmail.com, roderick.colenbrander@sony.com, 
-	savicaleksa83@gmail.com, me@jackdoan.com, jdelvare@suse.com, linux@roeck-us.net, 
-	mail@mariuszachmann.de, wilken.gottwalt@posteo.net, mezin.alexander@gmail.com, 
-	linux-input@vger.kernel.org, linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH -next v2 13/15] hwmon: (nzxt-kraken2) Use
- devm_hid_hw_start_and_open in kraken2_probe()
-Message-ID: <yfdm7idqc445lb2cl554xgsav5nzpfv6o5emlnv37ae67wauli@dcbvtbiwrpax>
-References: <20240909012313.500341-1-lizetao1@huawei.com>
- <20240909012313.500341-14-lizetao1@huawei.com>
+        d=1e100.net; s=20230601; t=1725906274; x=1726511074;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GT+93N3cYqkEubN3oqEdQZHocdjlebcPKNrk4DFLYiw=;
+        b=DSsQ+S3hTncgUcfX5zdNjHevvKSnNg1Ip2+tRJPT+qN+KO9K0czt1/tW69NmtVCe9G
+         0U737jPkcBditMXs/NCkhAQ13LPmdFnvs3UcCSi07eVDaGR9JN1ouKFxD1lFgtjxYkcN
+         7u8ub8PQ7/XRcMsCBZrS76u/82vDdqGtI9CYMcApKnE3x7jMeiBtyaYxSoqa9Q6rzPm/
+         WJzVyrKYynPqx+2ZTX0ssG7HYkETsoFRuMR8PaltZSTxTUpHOY1X2asH/PQ+AfM1H4hC
+         xdlS6qUZrSVzx1lICQxeB85J0LB4k1tIjahGj2IgF0pKEgjM1WX0Oi0skXCbw3S6n82P
+         gk4g==
+X-Forwarded-Encrypted: i=1; AJvYcCW8gElmb2ghlxHizsNH+DjXTSadM2E2TByV0nPAd0l/TfmM4QM0RyItfQ+fQ35T4nQwybShTNq3J6VtiNTjEisA4sw=@vger.kernel.org, AJvYcCXSyGZxt034GcGbN858PuUeUoJi9Ueeo7fFGPup+Di9zok2Ur+dXTcWzfGg49r1rJEak4lZtra39Nc+@vger.kernel.org, AJvYcCXq90JhUnBY2YBYGnaNjWfYqgsYMX1B3gVsyBreLTUs3zV/BnNIuAcXodRuUuvGG0KCfCYqOm7RkWGnjbpDx8I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5SEZbA6q/TjYKFsrNUuX8LngI3J14jsUS8xGEOdUo8j/ETnK1
+	/yEACoIJqESWK7qVRU9P7ZzDn/WaHQX+948SiaIa/Ir4zepQgRU/6rJDluUm
+X-Google-Smtp-Source: AGHT+IHs3ybvb/kwPIC9K7Q0KGaUz7WgzJcr7z8v9fn3rtxmq4Jy/a+kvZkE3RcoamYKX0+eWEQFLw==
+X-Received: by 2002:a05:6902:2012:b0:e1d:449:31b7 with SMTP id 3f1490d57ef6-e1d348650bemr11519121276.8.1725906274126;
+        Mon, 09 Sep 2024 11:24:34 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e1d7b9db608sm16027276.6.2024.09.09.11.24.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Sep 2024 11:24:33 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e1a7c25e350so4480485276.3;
+        Mon, 09 Sep 2024 11:24:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU935LWDDb3JIhM9gjl3QcvDBRSZH2jTFU2Ar2lOot2wYnWvTwQ1IoAjDoJS0EcuPFE8l0DraMUR9n7Z1GD3+o=@vger.kernel.org, AJvYcCUB2dfWmUXf0VfGt5dTwq7BFpoOTI/NaEyrbelNCHPzVLIkmQeNZF7xJDo5GAReD5I8f4l10qoUx35NKqARdfnvC84=@vger.kernel.org, AJvYcCViy4UcEJf0iCTmC57SXFzgpprFHcoPR6T28zl9bngUoQttOTotVoyVMaAXhanv4abBSc+UsMpd5Fuw@vger.kernel.org
+X-Received: by 2002:a05:690c:2d09:b0:6db:5567:6907 with SMTP id
+ 00721157ae682-6db55676eb2mr89491407b3.14.1725906273718; Mon, 09 Sep 2024
+ 11:24:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240909012313.500341-14-lizetao1@huawei.com>
+References: <20240909105835.28531-1-wsa+renesas@sang-engineering.com>
+ <CAL_JsqLui9=K_LdAoEAibxRo30_2ahdGXhCW50ow8rcqCp6jZA@mail.gmail.com>
+ <CAMuHMdWGtuAuQ3M3HonY8zfODTTz_izV6g9555iwuPLSY+P9_g@mail.gmail.com> <CAL_Jsq+cFb56e5WvipL1nR-0TDz+v6vnFDvz9F9JbXinxkEt1Q@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+cFb56e5WvipL1nR-0TDz+v6vnFDvz9F9JbXinxkEt1Q@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 9 Sep 2024 20:24:21 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV4xf37BLwORE=bh1s-SGXH4vnhEqFkvxu+h4RJKB1F6w@mail.gmail.com>
+Message-ID: <CAMuHMdV4xf37BLwORE=bh1s-SGXH4vnhEqFkvxu+h4RJKB1F6w@mail.gmail.com>
+Subject: Re: [PATCH dt-schema] schemas: i2c: add optional GPIO binding for
+ SMBALERT# line
+To: Rob Herring <robh@kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, devicetree-spec@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 09, 2024 at 09:23:11AM GMT, Li Zetao wrote:
-> Currently, the nzxt-kraken2 module needs to maintain hid resources
-> by itself. Use devm_hid_hw_start_and_open helper to ensure that hid
-> resources are consistent with the device life cycle, and release
-> hid resources before device is released. At the same time, it can avoid
-> the goto-release encoding, drop the fail_and_close and fail_and_stop
-> lables, and directly return the error code when an error occurs.
-> 
-> Further optimization, use devm_hwmon_device_register_with_info to replace
-> hwmon_device_register_with_info, the remote operation can be completely
-> deleted, and the kraken2_priv_data no longer needs to hold hwmon device.
-> 
-> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+Hi Rob,
 
-Acked-by: Jonas Malaco <jonas@protocubo.io>
+On Mon, Sep 9, 2024 at 3:40=E2=80=AFPM Rob Herring <robh@kernel.org> wrote:
+> On Mon, Sep 9, 2024 at 8:31=E2=80=AFAM Geert Uytterhoeven <geert@linux-m6=
+8k.org> wrote:
+> > On Mon, Sep 9, 2024 at 3:07=E2=80=AFPM Rob Herring <robh@kernel.org> wr=
+ote:
+> > > On Mon, Sep 9, 2024 at 5:58=E2=80=AFAM Wolfram Sang
+> > > <wsa+renesas@sang-engineering.com> wrote:
+> > > >
+> > > > Most I2C controllers do not have a dedicated pin for SMBus Alerts. =
+Allow
+> > > > them to define a GPIO as a side-channel.
+> > >
+> > > Most GPIOs are also interrupts, so shouldn't the existing binding be
+> > > sufficient? The exception is if the GPIO needs to be polled.
+> >
+> > If the GPIO pin supports multiple functions, it must be configured as
+> > a GPIO  first. devm_gpiod_get() takes care of that.  Just calling
+> > request_irq() does not.  In addition, the mapping from GPIO to IRQ
+> > number may not be fixed, e.g. in case the GPIO controller supports
+> > less interrupt inputs than GPIOs, and needs to map them when requested.
+>
+> All sounds like Linux problems...
+
+Let me rephrase in the familiar way: in the case of the latter, the
+interrupt number is not a property of the hardware, but depends on
+software configuration.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
