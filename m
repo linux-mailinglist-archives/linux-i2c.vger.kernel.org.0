@@ -1,131 +1,133 @@
-Return-Path: <linux-i2c+bounces-6409-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6410-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1F91971A70
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 15:11:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F4B2971B12
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 15:31:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE745287968
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 13:11:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AC76283B9E
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 13:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5CB81BBBE8;
-	Mon,  9 Sep 2024 13:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ed1QGc1h"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8957B1B9B28;
+	Mon,  9 Sep 2024 13:31:11 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34AF1BBBE3;
-	Mon,  9 Sep 2024 13:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2970F175562;
+	Mon,  9 Sep 2024 13:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725887309; cv=none; b=AjcoFdtmwtXT5eBktyJ82of4Z8+tJQTCdm0vRqyVyq2A0hh48EcK4zVQqYadpaFY1MW1cRxmqEmkfz6rhtR8qSEUUXA12P8IfsoCqSm/UGzb0cXK2QsymuKlPMKCNTQZo1h2+8XNrTqE0Y/4sinRCmz2Av/heUhqhJeIt3X1Cdc=
+	t=1725888671; cv=none; b=AFgvAUEPWn5e3RDCY/Utr7wGAOO9/1Xj16yCPvyvmElZKpMzOd8cuddC/cpvL5kX5392dMMzVpNQviUmnUgwf1fYdLHiW2iYHlo4uDE79AhKgEEHTLEFqxrJLM7rdOYAWlbBCkoopI7edw5SJgDWpRm54CegFHQipf8uChfWFKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725887309; c=relaxed/simple;
-	bh=EgMs+TbVTeQGo2kimjC1q99O6NPUAD9k97y6im6JB8c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B1S8nMTzEn5I8GwyaCskMUmH7tNR8nDUsk3WwKmMNJ19wvC/yL0PTxj7R0TFNNJ9/HCNBjWPndvLCuq+XT0elwWF8Uu5QNBjIdyj0Is5xjCMAiOlxtsCKUVmbPpzcefvHCaZAYxLtkUeKAY/XQuNwryKowI8KDDpIjUFWUI7Ifc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ed1QGc1h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2367C4CEC7;
-	Mon,  9 Sep 2024 13:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725887309;
-	bh=EgMs+TbVTeQGo2kimjC1q99O6NPUAD9k97y6im6JB8c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ed1QGc1h6aTtYmiBuwJbQJm6rxM3VY/jX6mn6ksD/QB37N+osWcz8rFoXCr2QNmEv
-	 bEPOlxkaRdidGYyfp7GOvy4ZF09lSLz0YUdJ2sPpC5C6OUZHYKujipxJ7Vg0E6qkee
-	 xcBA0ndIsNYugrVOIS8G9lQPVR0jjccmT5NUumA6ePS9DU3zYNSmfcC614e+vocM0a
-	 IffogVlqBq5MeRFRt6BfWPPpesgTm8yARmV0Gqcf64i8nzao3pQ0EQzOT5YeIBSxDy
-	 GVa3lnsl5YUe6TSOz9lWqBGpNQ9/hxAvycpRLOQMyxdsDQqMY3vX5uOebH96kEyWJr
-	 5AncAhFKAxqzg==
-Date: Mon, 9 Sep 2024 15:08:25 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Kimriver Liu <kimriver.liu@siengine.com>
-Cc: jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com, 
-	mika.westerberg@linux.intel.com, jsd@semihalf.com, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] i2c: designware: fix master is holding SCL low while
- ENABLE bit is disabled
-Message-ID: <traj5uhqbny5yro3hf72k2qpga7ez7cuqv2mesvl73fku2b5xq@uw5dqjdc6mms>
-References: <20240909015646.2285-1-kimriver.liu@siengine.com>
+	s=arc-20240116; t=1725888671; c=relaxed/simple;
+	bh=pOFig3eU0wBb1qCL+nsbHBh/qyBtiYCCd6tB5xK4AmY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N0Av1DyoGfidKyMIZ7bRYZebxXNdMRtnLwA3F8sYQciyoCvSoqdWIV3cELzUEirbLakHTYAtjOyE5Y2bXX8vlK9jc3GvKx/i/pAzpfMpKGgGAwp/jy/f9Us5IRX0wIxfmwMv6xm2PIXNq76+ZEuunmCoX0P+2MwEkwl1um36dlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e1a7e54b898so4060115276.2;
+        Mon, 09 Sep 2024 06:31:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725888668; x=1726493468;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ex72KcEBC32BEvrz/AzGLG+FsBKHihpIBTF/blpU0cc=;
+        b=nk6CGRbVQVKeLPfa9LXiMXpKJ+pLCdz699Z9KPSOrPhSXvsBKxN8y2oAy950Z1PJkm
+         SFsfDSHIeep261vqQaCBR1VfdTUZMMhQlKhGLLat41NgyE8KJ9DcizcOlvdgfGdsC5aC
+         LliGQKxLZSkHu2jD9lo3VXD7Mw+aMq2SGwhLm4oYPWQPRRiljU1cwRWOA0tI/xFBG3RN
+         OXakvmU4BN6ObrpDISoylCXaNLmfBTP+x0cK9RfM1dITdeL6VnnQ3rpoKxn8Kmc9W8P3
+         zfNs97YrNvGZaVh94ZtT4GCP5fwtpnZiZRcrGSEdhlKy6kwt6NBvlElYzY97wZHJWciL
+         /MxA==
+X-Forwarded-Encrypted: i=1; AJvYcCUEbm4UA0lH/JJHvbSJO/ZjoWs1cK4beR4FYDsHXNzFYs81nAZnAqVisXQi8JBxguDhGrkY5F1Cp+VBMiv9fAI=@vger.kernel.org, AJvYcCVuDAzUP/0x/iWxBYCOxBw8SYfXkl+2B9NxDe2jn5FHqvBkmDDk71uZ8HQPeps18WngXl4XkNBDdknV@vger.kernel.org, AJvYcCXa8pO5yF+s8qlrvgRevl4ng240GcU2/aHhCN86nxKyP2jYCUh/Hq4+Rn3AOTLDJiwqPXNqJ5TDRpA+S3OWQ67EwSU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbIWxfKe89OnuEUSWYqCZ0O6Y9DUXQHAD8NzitqXIESveNW7Uc
+	nTbFEXc3OUx2cFo9VYzn7SKRtakh7YHz2IsAkqatRDOZ3nzkWjQ1wtl1uIH7
+X-Google-Smtp-Source: AGHT+IEK/DPcX2EkuJp30m92OblQSWNKMeYLvxqYtCbIaUZ3hTHax0prwc1aMS4UCrfHuzceNDT5vQ==
+X-Received: by 2002:a05:6902:230a:b0:e16:6aae:e65 with SMTP id 3f1490d57ef6-e1d3487f52emr9039359276.13.1725888667690;
+        Mon, 09 Sep 2024 06:31:07 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e1d4b4ae070sm995049276.62.2024.09.09.06.31.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Sep 2024 06:31:07 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6d6a3ab427aso32535747b3.2;
+        Mon, 09 Sep 2024 06:31:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU1GwO0XT0IBaB8SkaAiHq7yXoMpdLcWxQGBnEo56lQdtmMUw18YBdsKxG4ROLiWNoAfOPghasUHWOR@vger.kernel.org, AJvYcCUrqGnsCjt094nUUSVyW0ugjYTm8/rGkaRfxR5UA3zvIh9m2izxeukWgUvMwN4D3JPsy551PUGCeR+asglWaRI=@vger.kernel.org, AJvYcCXzncPXhF6wxHiEfe2ifT1EU5JND5elwGtcZt+JbrIV8jnv95QFrdeBVG4u17rO9EJqprIJZMgcSXQbrHhcjjuQAW8=@vger.kernel.org
+X-Received: by 2002:a05:690c:fc1:b0:6d6:94b2:f3cb with SMTP id
+ 00721157ae682-6db4515405dmr88200357b3.36.1725888666984; Mon, 09 Sep 2024
+ 06:31:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240909015646.2285-1-kimriver.liu@siengine.com>
+References: <20240909105835.28531-1-wsa+renesas@sang-engineering.com> <CAL_JsqLui9=K_LdAoEAibxRo30_2ahdGXhCW50ow8rcqCp6jZA@mail.gmail.com>
+In-Reply-To: <CAL_JsqLui9=K_LdAoEAibxRo30_2ahdGXhCW50ow8rcqCp6jZA@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 9 Sep 2024 15:30:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWGtuAuQ3M3HonY8zfODTTz_izV6g9555iwuPLSY+P9_g@mail.gmail.com>
+Message-ID: <CAMuHMdWGtuAuQ3M3HonY8zfODTTz_izV6g9555iwuPLSY+P9_g@mail.gmail.com>
+Subject: Re: [PATCH dt-schema] schemas: i2c: add optional GPIO binding for
+ SMBALERT# line
+To: Rob Herring <robh@kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, devicetree-spec@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kimriver,
+Hi Rob,
 
-On Mon, Sep 09, 2024 at 09:56:46AM GMT, Kimriver Liu wrote:
-> It was observed issuing ABORT bit(IC_ENABLE[1]) will not work when
-> IC_ENABLE is already disabled.
-> 
-> Check if ENABLE bit(IC_ENABLE[0]) is disabled when the master is
-> holding SCL low. If ENABLE bit is disabled, the software need
-> enable it before trying to issue ABORT bit. otherwise,
-> the controller ignores any write to ABORT bit.
-> 
-> Signed-off-by: Kimriver Liu <kimriver.liu@siengine.com>
+On Mon, Sep 9, 2024 at 3:07=E2=80=AFPM Rob Herring <robh@kernel.org> wrote:
+> On Mon, Sep 9, 2024 at 5:58=E2=80=AFAM Wolfram Sang
+> <wsa+renesas@sang-engineering.com> wrote:
+> >
+> > Most I2C controllers do not have a dedicated pin for SMBus Alerts. Allo=
+w
+> > them to define a GPIO as a side-channel.
+>
+> Most GPIOs are also interrupts, so shouldn't the existing binding be
+> sufficient? The exception is if the GPIO needs to be polled.
 
-You forgot:
+If the GPIO pin supports multiple functions, it must be configured as
+a GPIO  first. devm_gpiod_get() takes care of that.  Just calling
+request_irq() does not.  In addition, the mapping from GPIO to IRQ
+number may not be fixed, e.g. in case the GPIO controller supports
+less interrupt inputs than GPIOs, and needs to map them when requested.
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+See also the different handling of interrupts and gpios by gpio-keys.
 
-> ---
-> V6->V7:
-> 	1. add Subject versioning [PATCH v7]
-> 	2. change fsleep(25) to usleep_range(25, 250)
-> 	3. Add macro definition DW_iC_ENABLE_ENABLE to fix compile errors
-> 	4. base: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=master
+> > --- a/dtschema/schemas/i2c/i2c-controller.yaml
+> > +++ b/dtschema/schemas/i2c/i2c-controller.yaml
+> > @@ -135,6 +135,11 @@ properties:
+> >        use this information to detect a stalled bus more reliably, for =
+example.
+> >        Can not be combined with 'multi-master'.
+> >
+> > +  smbalert-gpios:
+> > +    maxItems: 1
+> > +    description:
+> > +      Specifies the GPIO used for the SMBALERT# line. Optional.
+> > +
+> >    smbus:
+> >      type: boolean
+> >      description:
 
-Thanks a lot for following up! :-)
+Gr{oetje,eeting}s,
 
-> V5->V6: restore i2c_dw_is_master_idling() function checking
-> V4->V5: delete master idling checking
-> V3->V4:
-> 	1. update commit messages and add patch version and changelog
-> 	2. move print the error message in i2c_dw_xfer
-> V2->V3: change (!enable) to (!(enable & DW_IC_ENABLE_ENABLE))
-> V1->V2: used standard words in function names and addressed review comments
-> 
-> link to V1:
-> https://lore.kernel.org/lkml/20240904064224.2394-1-kimriver.liu@siengine.com/
-> ---
+                        Geert
 
-...
 
-> --- a/drivers/i2c/busses/i2c-designware-common.c
-> +++ b/drivers/i2c/busses/i2c-designware-common.c
-> @@ -453,6 +453,18 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
->  
->  	abort_needed = raw_intr_stats & DW_IC_INTR_MST_ON_HOLD;
->  	if (abort_needed) {
-> +		if (!(enable & DW_IC_ENABLE_ENABLE)) {
-> +			regmap_write(dev->map, DW_IC_ENABLE, DW_IC_ENABLE_ENABLE);
-> +			enable |= DW_IC_ENABLE_ENABLE;
-> +			/*
-> +			 * Need two ic_clk delay when enabling the I2C to ensure ENABLE bit
-> +			 * is already set. Wait 10 times the signaling period of the highest
-> +			 * I2C transfer supported by the driver(for 400KHz this is 25us)
-> +			 * as described in the DesignWare I2C databook.
-> +			 */
-> +			usleep_range(25, 250);
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-I think there is a misunderstanding here. Andy asked you to use
-flseep and improve the calculation: "Please, calculate this delay
-based on the actual speed in use (or about to be in use)."[*]
-
-Andy can you please clarify with Kimriver here?
-
-Thanks,
-Andi
-
-[*] Message-ID: <6392ecd3f9934e9d8641b5f608ee6d60@siengine.com>
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
