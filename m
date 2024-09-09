@@ -1,181 +1,134 @@
-Return-Path: <linux-i2c+bounces-6358-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6360-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 299719707D6
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 15:32:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F533970AF7
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 03:14:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8B441F21B88
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Sep 2024 13:32:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16449B213F2
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 01:14:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F646166F05;
-	Sun,  8 Sep 2024 13:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LQcGR9F4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D53511173F;
+	Mon,  9 Sep 2024 01:14:26 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D298161306;
-	Sun,  8 Sep 2024 13:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B971F9EC;
+	Mon,  9 Sep 2024 01:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725802343; cv=none; b=FLCJTGyDryETPtpnD/eTb3HdWDJCoOdRD6pAsPgXWeFYujxI7xEWgzBXHpdgUrJtFFQMpxkOKWrGCN9kxYLMberfZEBbGzapV8pW6j7JD27Bnaq1Y2p1zwIQGCA7txT23RKNgrI0ss5ZoeutgP3fT+7qaDOj4JSQMhadKkqB5cA=
+	t=1725844466; cv=none; b=JB7Su1LkgR4VVgIgLAhP9TEvJIzrUsaZSdT3+VXd2lqpuovjLltNFUvyAlR6fLnhXDyupBQ43cOmP56UDw1VaALgLXW5IDMHVnE3fL1tq2I18O64EUI5K2oO5thjwX79jG24wWFDJ0s6dCBrOpvnBGSfNjEjRFH0bqfE9QWY2Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725802343; c=relaxed/simple;
-	bh=6bArD0WILUY5I5Fe0W9HdSzvuwHGO4vcaHpwE4fX98Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VNC/Dm57kvMAoAFCR/faSshwDKPcxPY84z21njTQyFgKmk3pT7lM4R9g8NlDfuXgZZQ1/S43bExFU7XTXdrSmmrxwRSxit6BbRspc70wwNRWvY9mdgdGq8vDeiVAHLkuzUqol4AL0f5RUiqdmf1ITInqQQds1b6mU6GaJsU0ZWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LQcGR9F4; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725802340; x=1757338340;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6bArD0WILUY5I5Fe0W9HdSzvuwHGO4vcaHpwE4fX98Q=;
-  b=LQcGR9F462GYsBm86f/M85O45aTOUBua/6w/Zbo5oOluSrERGUhKTJKr
-   qbMLgFFBMYZz2ovMTZ6DzhMNs3dKNr1bQZcRYisUB4ipQ1aFLjc6/u20G
-   rmoqSQ/6vuRfP0SifmfWv/UiT6NvYDkeIr5MKZ654ybFxn3aWSIiKvU01
-   5xTSj17VjmmR3VLjxfH5i+9h6bLFBO7/tm9Z4krFcDNakmmmg/2ioxzKU
-   O16LRmZ8Fk5tqfStzpEbnTHfkT9VFNnWAu9KS99cGHWZaLYuTcZlYRW4N
-   NMdQ6vn2HRLJXRTqsl37IJO2lXZRG/62FEfT/5CQ7RRdsOnDLkwKato/s
-   A==;
-X-CSE-ConnectionGUID: T4piLYn9Sjy2KV1Zn6xf2w==
-X-CSE-MsgGUID: UdSLXjr4RJ+Y3/+h3tbj8w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="35876032"
-X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="35876032"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 06:32:20 -0700
-X-CSE-ConnectionGUID: s95PrwJrR3ClxUDgnyccWw==
-X-CSE-MsgGUID: hu3CmFqKQx+YIIp98nYT7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="89681106"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 08 Sep 2024 06:32:17 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snI1X-000DZb-0i;
-	Sun, 08 Sep 2024 13:32:15 +0000
-Date: Sun, 8 Sep 2024 21:31:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: kimriver liu <kimriver.liu@siengine.com>, jarkko.nikula@linux.intel.com
-Cc: oe-kbuild-all@lists.linux.dev, andriy.shevchenko@linux.intel.com,
-	mika.westerberg@linux.intel.com, jsd@semihalf.com,
-	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kimriver.liu@siengine.com
-Subject: Re: [PATCH] i2c: designware: fix master is holding SCL low while
- ENABLE bit is disabled
-Message-ID: <202409082011.9JF6aYsk-lkp@intel.com>
-References: <20240905074211.2278-1-kimriver.liu@siengine.com>
+	s=arc-20240116; t=1725844466; c=relaxed/simple;
+	bh=6bcvZU1rTtHXISVQ5qkXgIcYAt31PhLF45p5DV9bjI0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NvOHNlgeR3MbQ23ArxEnp9n6tOMu2oHO0eEaGl33+hkYLNAhxqFNmO9DIr3exbHKcwPdKhr9FbzxuO6cX814CS4xw5AMOBTihcdbP80x+9fwZLlQfxs9pQoXQQEq25t7xHz4gVydAiZSCqRCvq0pTXiPr8zjADmb/KZpDacKKCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4X28273BkRzpVCL;
+	Mon,  9 Sep 2024 09:12:15 +0800 (CST)
+Received: from kwepemd500012.china.huawei.com (unknown [7.221.188.25])
+	by mail.maildlp.com (Postfix) with ESMTPS id 13807140360;
+	Mon,  9 Sep 2024 09:14:15 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemd500012.china.huawei.com
+ (7.221.188.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Mon, 9 Sep
+ 2024 09:14:14 +0800
+From: Li Zetao <lizetao1@huawei.com>
+To: <jikos@kernel.org>, <bentiss@kernel.org>, <michael.zaidman@gmail.com>,
+	<gupt21@gmail.com>, <djogorchock@gmail.com>,
+	<roderick.colenbrander@sony.com>, <savicaleksa83@gmail.com>,
+	<me@jackdoan.com>, <jdelvare@suse.com>, <linux@roeck-us.net>,
+	<mail@mariuszachmann.de>, <wilken.gottwalt@posteo.net>, <jonas@protocubo.io>,
+	<mezin.alexander@gmail.com>
+CC: <lizetao1@huawei.com>, <linux-input@vger.kernel.org>,
+	<linux-i2c@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+Subject: [PATCH -next v2 00/15] HID: convert to devm_hid_hw_start_and_open()
+Date: Mon, 9 Sep 2024 09:22:58 +0800
+Message-ID: <20240909012313.500341-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240905074211.2278-1-kimriver.liu@siengine.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemd500012.china.huawei.com (7.221.188.25)
 
-Hi kimriver,
+v1 -> v2:
+ 1) drop some risky patches, such as patch 7, which may have race issues
+ 2) Some patches can be further optimized. By replacing
+hwmon_device_register_with_info with devm_hwmon_device_register_with_info,
+the .remove operation can be completely deleted.
+ 3) Adjust some commit information and use "Use" to replace
+"Consider using"
 
-kernel test robot noticed the following build errors:
+v1:
+https://lore.kernel.org/all/20240904123607.3407364-1-lizetao1@huawei.com/
 
-[auto build test ERROR on andi-shyti/i2c/i2c-host]
-[also build test ERROR on linus/master v6.11-rc6 next-20240906]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi, all
 
-url:    https://github.com/intel-lab-lkp/linux/commits/kimriver-liu/i2c-designware-fix-master-is-holding-SCL-low-while-ENABLE-bit-is-disabled/20240905-154711
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20240905074211.2278-1-kimriver.liu%40siengine.com
-patch subject: [PATCH] i2c: designware: fix master is holding SCL low while ENABLE bit is disabled
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20240908/202409082011.9JF6aYsk-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409082011.9JF6aYsk-lkp@intel.com/reproduce)
+This patchset is dedicated to using the life cycle approach to manage
+hid resources. By keeping hid resources consistent with the life cycle
+of the device, we ensure that resources are available during the life
+cycle and the hid resources can be released before device release.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409082011.9JF6aYsk-lkp@intel.com/
+Going one step further, since the module does not need to recycle hid
+resources by itself, the goto-release resource release coding can be
+avoided. It also reduces the risk of resources not being released.
 
-All errors (new ones prefixed by >>):
+Thanks,
+Li Zetao.
 
-   drivers/i2c/busses/i2c-designware-common.c: In function '__i2c_dw_disable':
->> drivers/i2c/busses/i2c-designware-common.c:538:32: error: 'DW_IC_ENABLE_ENABLE' undeclared (first use in this function); did you mean 'DW_IC_ENABLE_STATUS'?
-     538 |                 if (!(enable & DW_IC_ENABLE_ENABLE)) {
-         |                                ^~~~~~~~~~~~~~~~~~~
-         |                                DW_IC_ENABLE_STATUS
-   drivers/i2c/busses/i2c-designware-common.c:538:32: note: each undeclared identifier is reported only once for each function it appears in
+Li Zetao (15):
+  HID: core: Use devm_add_action_or_reset helper to manage hid resources
+  HID: cp2112: Use devm_hid_hw_start_and_open in cp2112_probe()
+  HID: ft260: Use devm_hid_hw_start_and_open in ft260_probe()
+  HID: mcp2200: Use devm_hid_hw_start_and_open in mcp2200_probe()
+  HID: mcp2221: Use devm_hid_hw_start_and_open in mcp2221_probe()
+  HID: nintendo: Use devm_hid_hw_start_and_open in nintendo_hid_probe()
+  HID: playstation: Use devm_hid_hw_start_and_open in ps_probe()
+  hwmon: (aquacomputer_d5next) Use devm_hid_hw_start_and_open in
+    aqc_probe()
+  hwmon: Use devm_hid_hw_start_and_open in rog_ryujin_probe()
+  hwmon: (corsair-cpro) Use devm_hid_hw_start_and_open in ccp_probe()
+  hwmon: (corsair-psu) Use devm_hid_hw_start_and_open in
+    corsairpsu_probe()
+  hwmon: (gigabyte_waterforce) Use devm_hid_hw_start_and_open in
+    waterforce_probe()
+  hwmon: (nzxt-kraken2) Use devm_hid_hw_start_and_open in
+    kraken2_probe()
+  hwmon: (nzxt-kraken3) Use devm_hid_hw_start_and_open in
+    kraken3_probe()
+  hwmon: (nzxt-smart2) Use devm_hid_hw_start_and_open in
+    nzxt_smart2_hid_probe()
 
-
-vim +538 drivers/i2c/busses/i2c-designware-common.c
-
-   523	
-   524	void __i2c_dw_disable(struct dw_i2c_dev *dev)
-   525	{
-   526		unsigned int raw_intr_stats;
-   527		unsigned int enable;
-   528		int timeout = 100;
-   529		bool abort_needed;
-   530		unsigned int status;
-   531		int ret;
-   532	
-   533		regmap_read(dev->map, DW_IC_RAW_INTR_STAT, &raw_intr_stats);
-   534		regmap_read(dev->map, DW_IC_ENABLE, &enable);
-   535	
-   536		abort_needed = raw_intr_stats & DW_IC_INTR_MST_ON_HOLD;
-   537		if (abort_needed) {
- > 538			if (!(enable & DW_IC_ENABLE_ENABLE)) {
-   539				regmap_write(dev->map, DW_IC_ENABLE, DW_IC_ENABLE_ENABLE);
-   540				enable |= DW_IC_ENABLE_ENABLE;
-   541	
-   542				/*
-   543				 * Wait two ic_clk delay when enabling the i2c to ensure ENABLE bit
-   544				 * is already set by the driver (for 400KHz this is 25us)
-   545				 * as described in the DesignWare I2C databook.
-   546				 */
-   547				fsleep(25);
-   548			}
-   549	
-   550			regmap_write(dev->map, DW_IC_ENABLE, enable | DW_IC_ENABLE_ABORT);
-   551			ret = regmap_read_poll_timeout(dev->map, DW_IC_ENABLE, enable,
-   552						       !(enable & DW_IC_ENABLE_ABORT), 10,
-   553						       100);
-   554			if (ret)
-   555				dev_err(dev->dev, "timeout while trying to abort current transfer\n");
-   556		}
-   557	
-   558		do {
-   559			__i2c_dw_disable_nowait(dev);
-   560			/*
-   561			 * The enable status register may be unimplemented, but
-   562			 * in that case this test reads zero and exits the loop.
-   563			 */
-   564			regmap_read(dev->map, DW_IC_ENABLE_STATUS, &status);
-   565			if ((status & 1) == 0)
-   566				return;
-   567	
-   568			/*
-   569			 * Wait 10 times the signaling period of the highest I2C
-   570			 * transfer supported by the driver (for 400KHz this is
-   571			 * 25us) as described in the DesignWare I2C databook.
-   572			 */
-   573			usleep_range(25, 250);
-   574		} while (timeout--);
-   575	
-   576		dev_warn(dev->dev, "timeout in disabling adapter\n");
-   577	}
-   578	
+ drivers/hid/hid-core.c              | 40 ++++++++++++++++++++++++
+ drivers/hid/hid-cp2112.c            | 26 ++--------------
+ drivers/hid/hid-ft260.c             | 32 +++++---------------
+ drivers/hid/hid-mcp2200.c           | 22 ++------------
+ drivers/hid/hid-mcp2221.c           | 26 ++--------------
+ drivers/hid/hid-nintendo.c          | 23 +++-----------
+ drivers/hid/hid-playstation.c       | 27 +++--------------
+ drivers/hwmon/aquacomputer_d5next.c | 39 ++++++------------------
+ drivers/hwmon/asus_rog_ryujin.c     | 47 +++++------------------------
+ drivers/hwmon/corsair-cpro.c        | 24 +++------------
+ drivers/hwmon/corsair-psu.c         | 24 +++------------
+ drivers/hwmon/gigabyte_waterforce.c | 29 +++---------------
+ drivers/hwmon/nzxt-kraken2.c        | 45 +++++----------------------
+ drivers/hwmon/nzxt-kraken3.c        | 34 +++++----------------
+ drivers/hwmon/nzxt-smart2.c         | 38 +++--------------------
+ include/linux/hid.h                 |  2 ++
+ 16 files changed, 114 insertions(+), 364 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
