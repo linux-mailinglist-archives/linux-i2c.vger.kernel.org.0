@@ -1,38 +1,39 @@
-Return-Path: <linux-i2c+bounces-6360-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6365-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F533970AF7
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 03:14:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81ADE970B08
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 03:14:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16449B213F2
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 01:14:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADFD61C21621
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 01:14:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D53511173F;
-	Mon,  9 Sep 2024 01:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7B018E1E;
+	Mon,  9 Sep 2024 01:14:27 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B971F9EC;
-	Mon,  9 Sep 2024 01:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B849BBA42;
+	Mon,  9 Sep 2024 01:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725844466; cv=none; b=JB7Su1LkgR4VVgIgLAhP9TEvJIzrUsaZSdT3+VXd2lqpuovjLltNFUvyAlR6fLnhXDyupBQ43cOmP56UDw1VaALgLXW5IDMHVnE3fL1tq2I18O64EUI5K2oO5thjwX79jG24wWFDJ0s6dCBrOpvnBGSfNjEjRFH0bqfE9QWY2Ws=
+	t=1725844467; cv=none; b=uYpVj4CUJJ4l7UC3+QD9Z4BmYwJaQwrRo366LAQt57Kr343ZbgCAdiNHiaP/vPY/+vIj97SeHPBpEGUAvePiLxbJV4KmPBer4WUqgmxwpOjH3absdueZz8sLTw0DGg6m3csoxtZayzd0umWNZWuwPAfSWVml54hyG8KiFzQFyv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725844466; c=relaxed/simple;
-	bh=6bcvZU1rTtHXISVQ5qkXgIcYAt31PhLF45p5DV9bjI0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NvOHNlgeR3MbQ23ArxEnp9n6tOMu2oHO0eEaGl33+hkYLNAhxqFNmO9DIr3exbHKcwPdKhr9FbzxuO6cX814CS4xw5AMOBTihcdbP80x+9fwZLlQfxs9pQoXQQEq25t7xHz4gVydAiZSCqRCvq0pTXiPr8zjADmb/KZpDacKKCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+	s=arc-20240116; t=1725844467; c=relaxed/simple;
+	bh=wK0YNdrtg68ij9JLDEKdfQf95eHGfo+KduP/pbWdKlk=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=L0hagKugiTtIH/zX3Wir+d5Z7m1AnLrjHCvp3lsSEm5GvBrMDWnNoOuUII4BZodqcu4HhAOi3AujJ2aQEYcLaRGmkazQOgYdsjhE9+BJbWbHlgs2FpIHlZJk92mlodOV4wxpA1SXJ6vDyLvhW1nw5zFUjXX4WYHGk6TlOyOFpfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4X28273BkRzpVCL;
-	Mon,  9 Sep 2024 09:12:15 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4X283x3LYyz2DbxK;
+	Mon,  9 Sep 2024 09:13:49 +0800 (CST)
 Received: from kwepemd500012.china.huawei.com (unknown [7.221.188.25])
-	by mail.maildlp.com (Postfix) with ESMTPS id 13807140360;
+	by mail.maildlp.com (Postfix) with ESMTPS id B12F01A016C;
 	Mon,  9 Sep 2024 09:14:15 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemd500012.china.huawei.com
  (7.221.188.25) with Microsoft SMTP Server (version=TLS1_2,
@@ -47,10 +48,12 @@ To: <jikos@kernel.org>, <bentiss@kernel.org>, <michael.zaidman@gmail.com>,
 	<mezin.alexander@gmail.com>
 CC: <lizetao1@huawei.com>, <linux-input@vger.kernel.org>,
 	<linux-i2c@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-Subject: [PATCH -next v2 00/15] HID: convert to devm_hid_hw_start_and_open()
-Date: Mon, 9 Sep 2024 09:22:58 +0800
-Message-ID: <20240909012313.500341-1-lizetao1@huawei.com>
+Subject: [PATCH -next v2 01/15] HID: core: Use devm_add_action_or_reset helper to manage hid resources
+Date: Mon, 9 Sep 2024 09:22:59 +0800
+Message-ID: <20240909012313.500341-2-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240909012313.500341-1-lizetao1@huawei.com>
+References: <20240909012313.500341-1-lizetao1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,72 +65,89 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  kwepemd500012.china.huawei.com (7.221.188.25)
 
-v1 -> v2:
- 1) drop some risky patches, such as patch 7, which may have race issues
- 2) Some patches can be further optimized. By replacing
-hwmon_device_register_with_info with devm_hwmon_device_register_with_info,
-the .remove operation can be completely deleted.
- 3) Adjust some commit information and use "Use" to replace
-"Consider using"
+By adding a custom action to the device, it can bind the hid resource
+to the hid_device life cycle. The framework automatically close and stop
+the hid resources before hid_device is released, and the users do not
+need to pay attention to the timing of hid resource release.
 
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+---
+v1 -> v2: Add function usage constraints in comments
 v1:
-https://lore.kernel.org/all/20240904123607.3407364-1-lizetao1@huawei.com/
+https://lore.kernel.org/all/cyils23bh4xaiw7bydlpapz4ngqpya3c4kesifrdpnme2t4bib@6elk7u3wvhh2/
 
-Hi, all
+ drivers/hid/hid-core.c | 44 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/hid.h    |  2 ++
+ 2 files changed, 46 insertions(+)
 
-This patchset is dedicated to using the life cycle approach to manage
-hid resources. By keeping hid resources consistent with the life cycle
-of the device, we ensure that resources are available during the life
-cycle and the hid resources can be released before device release.
-
-Going one step further, since the module does not need to recycle hid
-resources by itself, the goto-release resource release coding can be
-avoided. It also reduces the risk of resources not being released.
-
-Thanks,
-Li Zetao.
-
-Li Zetao (15):
-  HID: core: Use devm_add_action_or_reset helper to manage hid resources
-  HID: cp2112: Use devm_hid_hw_start_and_open in cp2112_probe()
-  HID: ft260: Use devm_hid_hw_start_and_open in ft260_probe()
-  HID: mcp2200: Use devm_hid_hw_start_and_open in mcp2200_probe()
-  HID: mcp2221: Use devm_hid_hw_start_and_open in mcp2221_probe()
-  HID: nintendo: Use devm_hid_hw_start_and_open in nintendo_hid_probe()
-  HID: playstation: Use devm_hid_hw_start_and_open in ps_probe()
-  hwmon: (aquacomputer_d5next) Use devm_hid_hw_start_and_open in
-    aqc_probe()
-  hwmon: Use devm_hid_hw_start_and_open in rog_ryujin_probe()
-  hwmon: (corsair-cpro) Use devm_hid_hw_start_and_open in ccp_probe()
-  hwmon: (corsair-psu) Use devm_hid_hw_start_and_open in
-    corsairpsu_probe()
-  hwmon: (gigabyte_waterforce) Use devm_hid_hw_start_and_open in
-    waterforce_probe()
-  hwmon: (nzxt-kraken2) Use devm_hid_hw_start_and_open in
-    kraken2_probe()
-  hwmon: (nzxt-kraken3) Use devm_hid_hw_start_and_open in
-    kraken3_probe()
-  hwmon: (nzxt-smart2) Use devm_hid_hw_start_and_open in
-    nzxt_smart2_hid_probe()
-
- drivers/hid/hid-core.c              | 40 ++++++++++++++++++++++++
- drivers/hid/hid-cp2112.c            | 26 ++--------------
- drivers/hid/hid-ft260.c             | 32 +++++---------------
- drivers/hid/hid-mcp2200.c           | 22 ++------------
- drivers/hid/hid-mcp2221.c           | 26 ++--------------
- drivers/hid/hid-nintendo.c          | 23 +++-----------
- drivers/hid/hid-playstation.c       | 27 +++--------------
- drivers/hwmon/aquacomputer_d5next.c | 39 ++++++------------------
- drivers/hwmon/asus_rog_ryujin.c     | 47 +++++------------------------
- drivers/hwmon/corsair-cpro.c        | 24 +++------------
- drivers/hwmon/corsair-psu.c         | 24 +++------------
- drivers/hwmon/gigabyte_waterforce.c | 29 +++---------------
- drivers/hwmon/nzxt-kraken2.c        | 45 +++++----------------------
- drivers/hwmon/nzxt-kraken3.c        | 34 +++++----------------
- drivers/hwmon/nzxt-smart2.c         | 38 +++--------------------
- include/linux/hid.h                 |  2 ++
- 16 files changed, 114 insertions(+), 364 deletions(-)
-
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 30de92d0bf0f..132c81639753 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2416,6 +2416,50 @@ void hid_hw_close(struct hid_device *hdev)
+ }
+ EXPORT_SYMBOL_GPL(hid_hw_close);
+ 
++static void hid_hw_close_and_stop(void *data)
++{
++	struct hid_device *hdev = data;
++
++	hid_hw_close(hdev);
++	hid_hw_stop(hdev);
++}
++
++/**
++ * devm_hid_hw_start_and_open - manage hid resources through custom action
++ *
++ * @hdev: hid device
++ * @connect_mask: which outputs to connect, see HID_CONNECT_*
++ *
++ * Bind the hid resource to the hid_device life cycle and register
++ * an action to release the hid resource. The users do not need to
++ * pay attention to the release of hid.
++ *
++ * Some usage constraints of this function: hid_device also needs to be
++ * allocated through the Devres API, such as devm_kzalloc; hid_hw_stop should
++ * be followed immediately by hid_hw_close in the remove operation.
++ */
++
++int devm_hid_hw_start_and_open(struct hid_device *hdev, unsigned int connect_mask)
++{
++	int ret;
++
++	ret = hid_hw_start(hdev, connect_mask);
++	if (ret) {
++		hid_err(hdev, "hw start failed with %d\n", ret);
++		return ret;
++	}
++
++	ret = hid_hw_open(hdev);
++	if (ret) {
++		hid_err(hdev, "hw open failed with %d\n", ret);
++		hid_hw_stop(hdev);
++		return ret;
++	}
++
++	return devm_add_action_or_reset(&hdev->dev, hid_hw_close_and_stop, hdev);
++}
++EXPORT_SYMBOL_GPL(devm_hid_hw_start_and_open);
++
+ /**
+  * hid_hw_request - send report request to device
+  *
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index 121d5b8bc867..0ce217aa5f62 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -1125,6 +1125,8 @@ int __must_check hid_hw_start(struct hid_device *hdev,
+ void hid_hw_stop(struct hid_device *hdev);
+ int __must_check hid_hw_open(struct hid_device *hdev);
+ void hid_hw_close(struct hid_device *hdev);
++int __must_check devm_hid_hw_start_and_open(struct hid_device *hdev,
++					    unsigned int connect_mask);
+ void hid_hw_request(struct hid_device *hdev,
+ 		    struct hid_report *report, enum hid_class_request reqtype);
+ int __hid_hw_raw_request(struct hid_device *hdev,
 -- 
 2.34.1
 
