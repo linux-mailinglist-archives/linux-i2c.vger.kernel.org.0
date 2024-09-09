@@ -1,155 +1,124 @@
-Return-Path: <linux-i2c+bounces-6396-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6397-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A80C971632
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 13:05:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C4389716B3
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 13:24:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42D4C284EC1
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 11:05:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 787E01C2309A
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 11:24:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7961B5327;
-	Mon,  9 Sep 2024 11:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F07F1B5ED0;
+	Mon,  9 Sep 2024 11:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="EBK+HVwu"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ItBs81DN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD351B3740
-	for <linux-i2c@vger.kernel.org>; Mon,  9 Sep 2024 11:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B500B38DD4;
+	Mon,  9 Sep 2024 11:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725879881; cv=none; b=ehR2uja0EAQMr5tqCFFf04Fb5TVNs58r7wirJXXiO5uRq5X1GWTMuhVr7MigpAooBqH2MSuTb7FAgDNfi0Zxh0uf6mRcqRUvx4HrYhPhiWFUDLlGeJIlStrTtEpdMZjf1jjwMlL9lmU3GpfvxW//rEZm9AzHGNx1Spz/36nHes8=
+	t=1725881009; cv=none; b=jq2AsCCMwzco0S/QyMRSYxJa0HM16sZgxQqaqdEJlixusYnRqR/yOyPJMwrmgJm3FyNERpq2FCx9HMqQ8pEpgAglavZB2eq5J32TxCW04h9YATl/YSydraeJ6bwDcIoz/gkgsV05rSUKxSxw89HeaOvmuOj8oylQ0JNUJ2Xgaqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725879881; c=relaxed/simple;
-	bh=zF6nNOLaWt6XkEDtLj/07rRlaDuazwntiZeBTXBPocM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZXIJnBGMcuupMOW89ylH57FCZ1pur6B6J/JutdrPYdWysVvTYjgRwhIGUG5S+h8SVU/j6gTYjL/0wqPBgNDCIP/Tfqo61deH6Lkka6P124LL/npYHgb3iX2rsvUAIQ5ARF1GwKoXnbH9tU+5F6yUmFxGa2wGyAxQCnEsKFL4vdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=EBK+HVwu; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=cOLyNcc3iNOFVs
-	y9ED1adc21EFOIvSBFTc/nnP+fFbk=; b=EBK+HVwuUCzkIUTufn41ytigAJtR+a
-	SN/CvATjQFPEWxKU1UJwftvU26EFlWod3YPjMeyu22JH8QkORmH+XdjtKvTDXIC6
-	uGDYtJnff69JrK1Emw8wax6ddwlpF9fy2USIheKGKsygoaKvalWBwRSwpUozKJ8T
-	xej5A8y+M3Gi4DToPQOJaL3u6VA+o+DG4j+7yF1Z2MNKJabY3Aa+Ua0AoKemdlre
-	yXbfHBCL8gPLbiuk2f/8sd24d5ucGuj6aHj2xCVLMCahDBJ9K+V5TtGRO9rXN9+6
-	2Lw7m5cz/hGENu0Fke1KW97sBAVxDCJAslk44Xm0XusR78IE6Poro4KQ==
-Received: (qmail 2046826 invoked from network); 9 Sep 2024 13:04:37 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Sep 2024 13:04:37 +0200
-X-UD-Smtp-Session: l3s3148p1@jhb/uK0huNYgAwDPXwlaAFpYOMUD2VTJ
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c: support gpio-binding for SMBAlerts
-Date: Mon,  9 Sep 2024 13:02:56 +0200
-Message-ID: <20240909110430.28665-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1725881009; c=relaxed/simple;
+	bh=zLM7+cMuFs6iukBYw5n+MPt84i4IDbR/JlHH34jlnQU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=le3PCYPDurAyq9bdAuhvLZoxc8CIVHYwsRmNEQ/+5w4pL2SDjzIHyEss3PUTSYlvJF4pQ4F5VysyqBrFc6eFOwjSf7vTxjInppHG0BUW3FHBy03adzhW1st2PyBEJywvHxd2ZnJG5M+/mdokYnYdLUEzMDV9iTX947oE8S03Gi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ItBs81DN; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1725881007; x=1757417007;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zLM7+cMuFs6iukBYw5n+MPt84i4IDbR/JlHH34jlnQU=;
+  b=ItBs81DN06x40gbP3RQuO1/nJTXRhc2OrgPr4Meo5d/qHJr9+Cbo06be
+   pDgr9b1CrnT3d3HeGT1WqFiC1RTH1fqsRMi8u2JL0fbNmkPpigrVDBX8S
+   CMdfMZ2tgxGo+mPk0WgSBOHHXvwrs2Xg6YTzksHiiRxByQR2ZIi92zVDh
+   L8BpW/mL4867y+xFO7barfjs/y7AzpKD2KjD3NA4+EH69T9s8wBxFJCIB
+   zjwFidVi9+VtW2kzkjRlD7WUGcFxZS9xsW5UpKrDXQXCxdcTA55MEsyPm
+   pN0lRGUqHa112lky1an97ppUA5RaZ9BVMiNh06QvBSji54rpa1uNJYc6s
+   A==;
+X-CSE-ConnectionGUID: ROYUbOWeSBCl9l3tx7dRMQ==
+X-CSE-MsgGUID: nBNhi4ddSa20nViLHtbeSQ==
+X-IronPort-AV: E=Sophos;i="6.10,214,1719903600"; 
+   d="asc'?scan'208";a="198945806"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Sep 2024 04:23:26 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 9 Sep 2024 04:22:56 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Mon, 9 Sep 2024 04:22:54 -0700
+Date: Mon, 9 Sep 2024 12:22:22 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+CC: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Jarkko Nikula
+	<jarkko.nikula@linux.intel.com>, Andy Shevchenko
+	<andriy.shevchenko@linux.intel.com>, Mika Westerberg
+	<mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>,
+	<linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 7/7] i2c: designware: Group all DesignWare drivers
+ under a single option
+Message-ID: <20240909-jugular-cucumber-b7d9bc614f74@wendy>
+References: <20240903142506.3444628-1-heikki.krogerus@linux.intel.com>
+ <20240903142506.3444628-8-heikki.krogerus@linux.intel.com>
+ <o4bks5pxn5olnvobln3z2axi6jx57vz5pq2kazyzxemptbp6fb@p7qsppr7ks55>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="uxjVq46O5l/YZo1k"
+Content-Disposition: inline
+In-Reply-To: <o4bks5pxn5olnvobln3z2axi6jx57vz5pq2kazyzxemptbp6fb@p7qsppr7ks55>
 
-Most I2C controllers do not have a dedicated pin for SMBus Alerts. Allow
-them to define a GPIO as a side-channel.
+--uxjVq46O5l/YZo1k
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+On Thu, Sep 05, 2024 at 10:46:02PM +0200, Andi Shyti wrote:
+> Hi Heikki,
+>=20
+> On Tue, Sep 03, 2024 at 05:25:06PM GMT, Heikki Krogerus wrote:
+> > There are quite a few drivers and options for the DesignWare
+> > I2C adapter in the Kconfig. Grouping all of them under the
+> > I2C_DESIGNWARE_CORE. That makes the menuconfig a bit more
+> > easier to understand.
+> >=20
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>=20
+> Thanks for your patch, I can take this only after the other
+> patches have been taken in.
 
-The binding addition for dt-schema is here:
-https://lore.kernel.org/r/20240909105835.28531-1-wsa+renesas@sang-engineering.com
+I assume then that you're expecting the prereqs to go through the
+various arch trees? Is this not trivial enough that you could chuck it
+on a dedicated branch in your tree and if, for some reason, there's a
+non-trivial conflict the affected could pull it in?
 
-Tested with a Renesas Lager board (R-Car H2).
+--uxjVq46O5l/YZo1k
+Content-Type: application/pgp-signature; name="signature.asc"
 
- drivers/i2c/i2c-core-smbus.c |  9 ++++++---
- drivers/i2c/i2c-smbus.c      | 22 ++++++++++++++++------
- 2 files changed, 22 insertions(+), 9 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-index 967bd712c638..fb3d4674be0c 100644
---- a/drivers/i2c/i2c-core-smbus.c
-+++ b/drivers/i2c/i2c-core-smbus.c
-@@ -712,12 +712,15 @@ int i2c_setup_smbus_alert(struct i2c_adapter *adapter)
- 	if (!parent || i2c_verify_adapter(parent))
- 		return 0;
- 
-+	/* Report serious errors */
- 	irq = device_property_match_string(parent, "interrupt-names", "smbus_alert");
--	if (irq == -EINVAL || irq == -ENODATA)
--		return 0;
--	else if (irq < 0)
-+	if (irq < 0 && irq != -EINVAL && irq != -ENODATA)
- 		return irq;
- 
-+	/* Skip setup when no irq was found */
-+	if (irq < 0 && !device_property_present(parent, "smbalert-gpios"))
-+		return 0;
-+
- 	return PTR_ERR_OR_ZERO(i2c_new_smbus_alert_device(adapter, NULL));
- }
- #endif
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index bf23e3446123..10198e5efb50 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -9,6 +9,7 @@
- #define DEBUG
- #include <linux/device.h>
- #include <linux/dmi.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/i2c-smbus.h>
- #include <linux/interrupt.h>
-@@ -168,6 +169,8 @@ static int smbalert_probe(struct i2c_client *ara)
- 	struct i2c_smbus_alert_setup *setup = dev_get_platdata(&ara->dev);
- 	struct i2c_smbus_alert *alert;
- 	struct i2c_adapter *adapter = ara->adapter;
-+	unsigned long irqflags = IRQF_SHARED | IRQF_ONESHOT;
-+	struct gpio_desc *gpiod;
- 	int res, irq;
- 
- 	alert = devm_kzalloc(&ara->dev, sizeof(struct i2c_smbus_alert),
-@@ -180,18 +183,25 @@ static int smbalert_probe(struct i2c_client *ara)
- 	} else {
- 		irq = fwnode_irq_get_byname(dev_fwnode(adapter->dev.parent),
- 					    "smbus_alert");
--		if (irq <= 0)
--			return irq;
-+		if (irq <= 0) {
-+			gpiod = devm_gpiod_get(adapter->dev.parent, "smbalert", GPIOD_IN);
-+			if (IS_ERR(gpiod))
-+				return PTR_ERR(gpiod);
-+
-+			irq = gpiod_to_irq(gpiod);
-+			if (irq <= 0)
-+				return irq;
-+
-+			irqflags |= IRQF_TRIGGER_FALLING;
-+		}
- 	}
- 
- 	INIT_WORK(&alert->alert, smbalert_work);
- 	alert->ara = ara;
- 
- 	if (irq > 0) {
--		res = devm_request_threaded_irq(&ara->dev, irq,
--						NULL, smbus_alert,
--						IRQF_SHARED | IRQF_ONESHOT,
--						"smbus_alert", alert);
-+		res = devm_request_threaded_irq(&ara->dev, irq, NULL, smbus_alert,
-+						irqflags, "smbus_alert", alert);
- 		if (res)
- 			return res;
- 	}
--- 
-2.43.0
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZt7abgAKCRB4tDGHoIJi
+0kbuAP9R+mwXyTEYXLHhGDAg1NcN7IBZ+2d3j9RPRVsfNy14jAD/fW8juYkVOF3i
+TX3M1RBw8CRw8Ws7BOScozP9bKauNAk=
+=XHNm
+-----END PGP SIGNATURE-----
 
+--uxjVq46O5l/YZo1k--
 
