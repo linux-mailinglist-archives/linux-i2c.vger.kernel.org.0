@@ -1,147 +1,138 @@
-Return-Path: <linux-i2c+bounces-6412-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6413-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 178D2971C79
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 16:27:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B4EA971C81
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 16:28:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B05EC283330
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 14:27:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CC4B1F2362B
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Sep 2024 14:28:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35AB21BA27B;
-	Mon,  9 Sep 2024 14:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55AD01BA292;
+	Mon,  9 Sep 2024 14:28:06 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail03.siengine.com (mail03.siengine.com [43.240.192.165])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8322146D75;
-	Mon,  9 Sep 2024 14:27:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.240.192.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EE0146D75;
+	Mon,  9 Sep 2024 14:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725892040; cv=none; b=ahU3KXQoxYJFj00h8xy2G7N5w1+OL4+oYz3sHhhjsXcQBc0hhm1tB615VK+U3wI6Bu6XezQBuX9ZxJata7b66jN0isXhG8Ixw+Jn9RkOQuyvfY1Er4OUOPeVVxv/SuRiMUJfUqsYQyqWo4JWAVQijGG9t/KbKRxjejDRO11NyWM=
+	t=1725892086; cv=none; b=BZAP6umjc1l+DusS29OF+8vs4v8CIe+VeKXETunVy4UAqNfPMFRoah6r5KVL4LcOEnVPWIYh/NnhF9eM1PvhC66iwmwMD8RAa8EOnxCyDJEPEOWRjeIBCSgcUgImu7l3u9mVNGD29uouxbPaEQvBbc2eI0dw3LHavWBaJzbob9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725892040; c=relaxed/simple;
-	bh=qA+N2Vn+WVOiYIn7d+r2813WD9/UASlD19dk1a1qpLY=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=NvvMIz9ElKJpaMxn2sZLeojnrUAY5k3X3dfHzAvo6ZmslrUW7wNmFbL2XuGm43rhnwuBVBPpakyYPp0qMOlBADhq0k+cGAyN8EipFTKo1ByJnizCn4oBfRnFp3de6gdwzNvM3crsDifql8ik6B2QN7W2XhR14KhlirXmXcIQRjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com; spf=pass smtp.mailfrom=siengine.com; arc=none smtp.client-ip=43.240.192.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siengine.com
-Received: from dsgsiengine01.siengine.com ([10.8.1.61])
-	by mail03.siengine.com with ESMTPS id 489EQWSd097314
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 9 Sep 2024 22:26:32 +0800 (+08)
-	(envelope-from kimriver.liu@siengine.com)
-Received: from SEEXMB03-2019.siengine.com (SEEXMB03-2019.siengine.com [10.8.1.33])
-	by dsgsiengine01.siengine.com (SkyGuard) with ESMTPS id 4X2Tfb2zWQz7ZMkV;
-	Mon,  9 Sep 2024 22:26:31 +0800 (CST)
-Received: from SEEXMB05-2019.siengine.com (10.8.1.153) by
- SEEXMB03-2019.siengine.com (10.8.1.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1544.11; Mon, 9 Sep 2024 22:26:30 +0800
-Received: from SEEXMB03-2019.siengine.com (10.8.1.33) by
- SEEXMB05-2019.siengine.com (10.8.1.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1544.9; Mon, 9 Sep 2024 22:26:30 +0800
-Received: from SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe]) by
- SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe%16]) with mapi id
- 15.02.1544.011; Mon, 9 Sep 2024 22:26:30 +0800
-From: =?utf-8?B?TGl1IEtpbXJpdmVyL+WImOmHkeaysw==?= <kimriver.liu@siengine.com>
-To: "andi.shyti@kernel.org" <andi.shyti@kernel.org>
-CC: "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "jsd@semihalf.com" <jsd@semihalf.com>,
-        "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "jarkko.nikula@linux.intel.com"
-	<jarkko.nikula@linux.intel.com>
-Subject: Re: [PATCH v7] i2c: designware: fix master is holding SCL low while
- ENABLE bit is disabled
-Thread-Topic: [PATCH v7] i2c: designware: fix master is holding SCL low while
- ENABLE bit is disabled
-Thread-Index: AQHbAsRDmIldr9ML/Uut0TSKanMDVw==
-Date: Mon, 9 Sep 2024 14:26:30 +0000
-Message-ID: <9B8C909B-AF7A-4F0F-BD75-ED368BE71E28@siengine.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-messagesentrepresentingtype: 1
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2BC699AB27B51C4A90CDC923735E6D3F@siengine.com>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1725892086; c=relaxed/simple;
+	bh=Upr2kVJPeIeM/kmdb+9pvBJ2V0ID4O32UEDnljK+yw4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rUIFtR+luAH12BGxmudlQSdkrKqOU8zIHR/Xu7kodracybnpcMUCCAjYpVZz2FbEzy+fhhTA47i6sPcXY0GVKzhYi6eU/oPaeyRZxCb8UpV/z+Wbt+/wl4ZEB5qA0tZelVc2yaul9KhZEnmTBDHYDHXppMYMjLKPt72LtR55+ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e1d4368ad91so1535044276.0;
+        Mon, 09 Sep 2024 07:28:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725892082; x=1726496882;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AXkyE1Z714MyovHiivV/drnn/cmkdD/V8e57YXHJufo=;
+        b=qfBWPtJhVFe9lyzAuYEhvWG7rCf6KntSxeDYmn1p+08xQ/0EFuc9cP8bcTnlnLGWSa
+         DBefelUEuybslokbWttJouWrCZW/Jeh9jT0WYwpujPREVutAcPzsczXlZZKsV9vTEeDo
+         dULkKf3V851mXRWBH9qjIp34e/R2OF6sHlMDDa+cF1AJfsdJX1lU+EPHUIwELy013pXM
+         Gidn8cVCzi2N2LVUCbCzd+pKBqQ4Wv8SnJ6w546CJjq/hQwq46e5WTECeij2Y9RPiMkK
+         J1ZoiOPvOTrJqqorxW/Ej5rWFokf1E/rqXd5bhsESzECcPAZ8Vr/UQKGRdZIZ2ZcDqN1
+         FWHg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3x9LvT8JtX4ZnfH9++MF4tw4cscQR8RdaZ6lrVOO4klWZSiGFQhHAWdfF+y3/bH3WSYMs0j48VTUSO04QPZc=@vger.kernel.org, AJvYcCWUzhLw1iX7XPxqNvTysaxqZF56zrVgSL+AuXm0KIGVkzmZyZMMAfFxD2TkYQgrqpF/GHZK6WvUBmBpwgkfPvPvTfI=@vger.kernel.org, AJvYcCXvrV8Nn5a05BwCdjzpxzDydAGFpDIy/3dStOjOVFrBXcqzuLwVJSOjmF+7Rj5BvMuYRGqNY9MhPCsU@vger.kernel.org
+X-Gm-Message-State: AOJu0YzR0EcY3HWNFDF2pnPVe68fR/SZHkkK28MyHo47pIyEfwggqgKo
+	xtP1loQO0oKry8AwQWxdNVyb67sNtAC/dpANEK18SpTj0NrcV1ukicutsQwr
+X-Google-Smtp-Source: AGHT+IGsX230Z/gtLB7z9dEoMXgkkyAidsDqGhBpyGP/dFb3orlaEFV/DfJ96wV+HOqtIv85VUqf8w==
+X-Received: by 2002:a05:690c:c93:b0:6af:8f7a:28ce with SMTP id 00721157ae682-6db445f32famr95138147b3.20.1725892082353;
+        Mon, 09 Sep 2024 07:28:02 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6db5c7007c8sm9168737b3.145.2024.09.09.07.28.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Sep 2024 07:28:02 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6d7073a39dcso48157267b3.1;
+        Mon, 09 Sep 2024 07:28:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVr07afTSHnZ3VrAYQu1XE0qqL+Na3xZsZuG3iN8NPHyr3PHLOUkDpKSk577mCsZiDGWS1jQSBa8aJWbNTiQAU=@vger.kernel.org, AJvYcCWGt/ue6PW8w4KlW8KM2nV41rjYNpDQR7xooU1RFbOELeJBjmPycBAh3mNEXcowjo6GHXORgVvVRZD1@vger.kernel.org, AJvYcCXQZUb9HHiX269QdB6P0BFW0jErvjOJb12ITPHtuflezMmcomXj6WrrHYyl06EDras635UILCNs96ZrdrOFd+srwYY=@vger.kernel.org
+X-Received: by 2002:a05:690c:3687:b0:6d9:807f:5115 with SMTP id
+ 00721157ae682-6db2603b6c0mr150438347b3.19.1725892081850; Mon, 09 Sep 2024
+ 07:28:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-DKIM-Results: [10.8.1.61]; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:mail03.siengine.com 489EQWSd097314
+References: <20240909105835.28531-1-wsa+renesas@sang-engineering.com>
+ <CAL_JsqLui9=K_LdAoEAibxRo30_2ahdGXhCW50ow8rcqCp6jZA@mail.gmail.com>
+ <CAMuHMdWGtuAuQ3M3HonY8zfODTTz_izV6g9555iwuPLSY+P9_g@mail.gmail.com> <CAL_Jsq+cFb56e5WvipL1nR-0TDz+v6vnFDvz9F9JbXinxkEt1Q@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+cFb56e5WvipL1nR-0TDz+v6vnFDvz9F9JbXinxkEt1Q@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 9 Sep 2024 16:27:48 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXiY4kxTaiYk3FOmW_JsK5Beyia1w73DA3grL9mu55X_Q@mail.gmail.com>
+Message-ID: <CAMuHMdXiY4kxTaiYk3FOmW_JsK5Beyia1w73DA3grL9mu55X_Q@mail.gmail.com>
+Subject: Re: [PATCH dt-schema] schemas: i2c: add optional GPIO binding for
+ SMBALERT# line
+To: Rob Herring <robh@kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, devicetree-spec@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-DQpISSBhbmRpDQoNCkR1ZSB0byBhIDEyIHRpbWUgZGlmZmVyZW5jZe+8jEkgaGFkIGJlZW4gb2Zm
-IHdvcmsuDQpJIGFtIHZlcnkgc29ycnkgdGhhdCBJIGNhbid0IHJlcGx5IGVtYWlsIGluIHRpbWUu
-IEkgd2lsbCByZXBseSB0byB5b3VyIGVtYWlsICBpbW1lZGlhdGVseSBhZnRlciBnb2luZyB0byB3
-b3JrIHRvbW9ycm93Lg0KDQrlj5Hoh6rmiJHnmoTigIZpUGhvbmUNCg0KPkZyb206IEFuZGkgU2h5
-dGkgPGFuZGkuc2h5dGlAa2VybmVsLm9yZz4NCj5UbzogS2ltcml2ZXIgTGl1IDxraW1yaXZlci5s
-aXVAc2llbmdpbmUuY29tPg0KPkNjOiBqYXJra28ubmlrdWxhQGxpbnV4LmludGVsLmNvbSwgYW5k
-cml5LnNoZXZjaGVua29AbGludXguaW50ZWwuY29tLA0KCSBtaWthLndlc3RlcmJlcmdAbGludXgu
-aW50ZWwuY29tLCBqc2RAc2VtaWhhbGYuY29tLA0KCWxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmcs
-ICBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+U3ViamVjdDogUmU6IFtQQVRDSCB2N10g
-aTJjOiBkZXNpZ253YXJlOiBmaXggbWFzdGVyIGlzIGhvbGRpbmcgU0NMIGxvdyB3aGlsZSBFTkFC
-TEUgYml0IGlzIGRpc2FibGVkDQo+RGF0ZTogTW9uLCA5IFNlcCAyMDI0IDE1OjA4OjI1ICswMjAw
-CVt0aHJlYWQgb3ZlcnZpZXddDQo+TWVzc2FnZS1JRDogPHRyYWo1dWhxYm55NXlybzNoZjcyazJx
-cGdhN2V6N2N1cXYybWVzdmw3M2ZrdTJiNXhxQHV3NWRxamRjNm1tcz4gKHJhdykNCj5Jbi1SZXBs
-eS1UbzogPDIwMjQwOTA5MDE1NjQ2LjIyODUtMS1raW1yaXZlci5saXVAc2llbmdpbmUuY29tPg0K
-DQo+SGkgS2ltcml2ZXIsDQoNCj5PbiBNb24sIFNlcCAwOSwgMjAyNCBhdCAwOTo1Njo0NkFNIEdN
-VCwgS2ltcml2ZXIgTGl1IHdyb3RlOg0KPj4gSXQgd2FzIG9ic2VydmVkIGlzc3VpbmcgQUJPUlQg
-Yml0KElDX0VOQUJMRVsxXSkgd2lsbCBub3Qgd29yayB3aGVuDQo+PiBJQ19FTkFCTEUgaXMgYWxy
-ZWFkeSBkaXNhYmxlZC4NCj4+IA0KPj4gQ2hlY2sgaWYgRU5BQkxFIGJpdChJQ19FTkFCTEVbMF0p
-IGlzIGRpc2FibGVkIHdoZW4gdGhlIG1hc3RlciBpcw0KPj4gaG9sZGluZyBTQ0wgbG93LiBJZiBF
-TkFCTEUgYml0IGlzIGRpc2FibGVkLCB0aGUgc29mdHdhcmUgbmVlZA0KPj4gZW5hYmxlIGl0IGJl
-Zm9yZSB0cnlpbmcgdG8gaXNzdWUgQUJPUlQgYml0LiBvdGhlcndpc2UsDQo+PiB0aGUgY29udHJv
-bGxlciBpZ25vcmVzIGFueSB3cml0ZSB0byBBQk9SVCBiaXQuDQo+PiANCj4+IFNpZ25lZC1vZmYt
-Ynk6IEtpbXJpdmVyIExpdSA8a2ltcml2ZXIubGl1QHNpZW5naW5lLmNvbT4NCg0KPllvdSBmb3Jn
-b3Q6DQoNCj5SZXZpZXdlZC1ieTogTWlrYSBXZXN0ZXJiZXJnIDxtaWthLndlc3RlcmJlcmdAbGlu
-dXguaW50ZWwuY29tPg0KICANCiAgVGhhbmsgeW91IGZvciB0ZWxsaW5nIG1lDQogIA0KPj4gLS0t
-DQo+PiBWNi0+Vjc6DQo+PiAJMS4gYWRkIFN1YmplY3QgdmVyc2lvbmluZyBbUEFUQ0ggdjddDQo+
-PiAJMi4gY2hhbmdlIGZzbGVlcCgyNSkgdG8gdXNsZWVwX3JhbmdlKDI1LCAyNTApDQo+PiAJMy4g
-QWRkIG1hY3JvIGRlZmluaXRpb24gRFdfaUNfRU5BQkxFX0VOQUJMRSB0byBmaXggY29tcGlsZSBl
-cnJvcnMNCj4+IAk0LiBiYXNlOiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgv
-a2VybmVsL2dpdC9zdGFibGUvbGludXguZ2l0L2NvbW1pdC8/aD1tYXN0ZXINCg0KPlRoYW5rcyBh
-IGxvdCBmb3IgZm9sbG93aW5nIHVwISA6LSkNCg0KPj4gVjUtPlY2OiByZXN0b3JlIGkyY19kd19p
-c19tYXN0ZXJfaWRsaW5nKCkgZnVuY3Rpb24gY2hlY2tpbmcNCj4+IFY0LT5WNTogZGVsZXRlIG1h
-c3RlciBpZGxpbmcgY2hlY2tpbmcNCj4+IFYzLT5WNDoNCj4+IAkxLiB1cGRhdGUgY29tbWl0IG1l
-c3NhZ2VzIGFuZCBhZGQgcGF0Y2ggdmVyc2lvbiBhbmQgY2hhbmdlbG9nDQo+PiAJMi4gbW92ZSBw
-cmludCB0aGUgZXJyb3IgbWVzc2FnZSBpbiBpMmNfZHdfeGZlcg0KPj4gVjItPlYzOiBjaGFuZ2Ug
-KCFlbmFibGUpIHRvICghKGVuYWJsZSAmIERXX0lDX0VOQUJMRV9FTkFCTEUpKQ0KPj4gVjEtPlYy
-OiB1c2VkIHN0YW5kYXJkIHdvcmRzIGluIGZ1bmN0aW9uIG5hbWVzIGFuZCBhZGRyZXNzZWQgcmV2
-aWV3IGNvbW1lbnRzDQo+PiANCj4+IGxpbmsgdG8gVjE6DQo+PiBodHRwczovL2xvcmUua2VybmVs
-Lm9yZy9sa21sLzIwMjQwOTA0MDY0MjI0LjIzOTQtMS1raW1yaXZlci5saXVAc2llbmdpbmUuY29t
-Lw0KPj4gLS0tDQoNCi4uLg0KDQo+PiAtLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWRlc2ln
-bndhcmUtY29tbW9uLmMNCj4+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtZGVzaWdud2Fy
-ZS1jb21tb24uYw0KPj4gQEAgLTQ1Myw2ICs0NTMsMTggQEAgdm9pZCBfX2kyY19kd19kaXNhYmxl
-KHN0cnVjdCBkd19pMmNfZGV2ICpkZXYpDQo+PiAgDQo+PiAgCWFib3J0X25lZWRlZCA9IHJhd19p
-bnRyX3N0YXRzICYgRFdfSUNfSU5UUl9NU1RfT05fSE9MRDsNCj4+ICAJaWYgKGFib3J0X25lZWRl
-ZCkgew0KPj4gKwkJaWYgKCEoZW5hYmxlICYgRFdfSUNfRU5BQkxFX0VOQUJMRSkpIHsNCj4+ICsJ
-CQlyZWdtYXBfd3JpdGUoZGV2LT5tYXAsIERXX0lDX0VOQUJMRSwgRFdfSUNfRU5BQkxFX0VOQUJM
-RSk7DQo+PiArCQkJZW5hYmxlIHw9IERXX0lDX0VOQUJMRV9FTkFCTEU7DQo+PiArCQkJLyoNCj4+
-ICsJCQkgKiBOZWVkIHR3byBpY19jbGsgZGVsYXkgd2hlbiBlbmFibGluZyB0aGUgSTJDIHRvIGVu
-c3VyZSBFTkFCTEUgYml0DQo+PiArCQkJICogaXMgYWxyZWFkeSBzZXQuIFdhaXQgMTAgdGltZXMg
-dGhlIHNpZ25hbGluZyBwZXJpb2Qgb2YgdGhlIGhpZ2hlc3QNCj4+ICsJCQkgKiBJMkMgdHJhbnNm
-ZXIgc3VwcG9ydGVkIGJ5IHRoZSBkcml2ZXIoZm9yIDQwMEtIeiB0aGlzIGlzIDI1dXMpDQo+PiAr
-CQkJICogYXMgZGVzY3JpYmVkIGluIHRoZSBEZXNpZ25XYXJlIEkyQyBkYXRhYm9vay4NCj4+ICsJ
-CQkgKi8NCj4+ICsJCQl1c2xlZXBfcmFuZ2UoMjUsIDI1MCk7DQoNCj5JIHRoaW5rIHRoZXJlIGlz
-IGEgbWlzdW5kZXJzdGFuZGluZyBoZXJlLiBBbmR5IGFza2VkIHlvdSB0byB1c2UNCj5mbHNlZXAg
-YW5kIGltcHJvdmUgdGhlIGNhbGN1bGF0aW9uOiAiUGxlYXNlLCBjYWxjdWxhdGUgdGhpcyBkZWxh
-eQ0KPmJhc2VkIG9uIHRoZSBhY3R1YWwgc3BlZWQgaW4gdXNlIChvciBhYm91dCB0byBiZSBpbiB1
-c2UpLiJbKl0NCg0KPkFuZHkgY2FuIHlvdSBwbGVhc2UgY2xhcmlmeSB3aXRoIEtpbXJpdmVyIGhl
-cmU/DQoNCiBpZiB3ZSB1c2UgNDAwa0h6ICxuZWVkIHNldHRpbmcgZmxzZWVwKDI1KTsNCiBpZiB3
-ZSB1c2UgMTAwa0h6ICxuZWVkIHNldHRpbmcgZmxzZWVwKDEwMCk7DQogT3ZlcmFsbCwgdGFrZSB0
-aGUgbWF4aW11bSB2YWx1ZTpmbHNlZXAoMTAwKTsNCg0KPiAtLQ0KPiAyLjE3LjENCg==
+Hi Rob,
+
+On Mon, Sep 9, 2024 at 3:40=E2=80=AFPM Rob Herring <robh@kernel.org> wrote:
+> On Mon, Sep 9, 2024 at 8:31=E2=80=AFAM Geert Uytterhoeven <geert@linux-m6=
+8k.org> wrote:
+> > On Mon, Sep 9, 2024 at 3:07=E2=80=AFPM Rob Herring <robh@kernel.org> wr=
+ote:
+> > > On Mon, Sep 9, 2024 at 5:58=E2=80=AFAM Wolfram Sang
+> > > <wsa+renesas@sang-engineering.com> wrote:
+> > > >
+> > > > Most I2C controllers do not have a dedicated pin for SMBus Alerts. =
+Allow
+> > > > them to define a GPIO as a side-channel.
+> > >
+> > > Most GPIOs are also interrupts, so shouldn't the existing binding be
+> > > sufficient? The exception is if the GPIO needs to be polled.
+> >
+> > If the GPIO pin supports multiple functions, it must be configured as
+> > a GPIO  first. devm_gpiod_get() takes care of that.  Just calling
+> > request_irq() does not.  In addition, the mapping from GPIO to IRQ
+> > number may not be fixed, e.g. in case the GPIO controller supports
+> > less interrupt inputs than GPIOs, and needs to map them when requested.
+>
+> All sounds like Linux problems...
+
+;-)
+
+> > See also the different handling of interrupts and gpios by gpio-keys.
+>
+> I believe "gpios" is what was originally supported, but now it is
+> preferred if GPIOs are used as interrupts then we use interrupts in
+> DT.
+
+You really do not want to use gpio-keys with interrupts, unless you
+have no choice.  Some shortcomings are outlined in "[PATCH RFC 3/3]
+Input: gpio-keys - Fix ghost events with both-edge irqs" [1].
+They do not matter for SMBALERT, though.
+
+[1] https://lore.kernel.org/r/356b31ade897af77a06d6567601f038f56b3b2a2.1638=
+538079.git.geert+renesas@glider.be
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
