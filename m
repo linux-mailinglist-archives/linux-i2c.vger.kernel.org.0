@@ -1,304 +1,198 @@
-Return-Path: <linux-i2c+bounces-6474-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6475-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEEFA9733F0
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 12:36:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F41FB973536
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 12:46:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F1061F25B09
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 10:36:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B52D1289A5E
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 10:46:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4241C192B78;
-	Tue, 10 Sep 2024 10:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6307191466;
+	Tue, 10 Sep 2024 10:45:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ts3Yzfq+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MXpnqWih"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C770B18595E;
-	Tue, 10 Sep 2024 10:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF041552FD;
+	Tue, 10 Sep 2024 10:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725964389; cv=none; b=B+T8L02rx3Kgy6/pntf5hdKWMuQuIwJq634l7uOM0LdadgCckNSdoOQVkTCJ6BkoPX+7V08AEswlrtbU9xsUBfGCiDeDb8uKBnt6jdaIp+zet8jHW8gfLxI7stNPBmSjbBpE2H5332rqhxKd+5Ovs+oVEpu9Xt4V+KuRAm3lLvA=
+	t=1725965114; cv=none; b=DunUyI4kKMUyJMpk1GASTT6kWWpjIR+YIljYVml7UigZ3gM48bxHkjerljQ3ycqMWUyPDhyXKfmFTabgQSJuQTTjUedDnC0fZmwxY5kf9zAb1RNN5q7uRuM1QzZXimVaBFsYxRLha/5d9C/Pf1/rYAh1ymThWQh0/wd0ZO5D1wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725964389; c=relaxed/simple;
-	bh=m4rLZiBxy1v0tyc+rkItksP01I5QS7BSDV6XBZRddM4=;
+	s=arc-20240116; t=1725965114; c=relaxed/simple;
+	bh=/mmHqklSPEhEgo8V06sQ63fRm4Mg6nIuO6VmxgWugTk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AnhwS3NVClXnI9uHTF/H5CljJcq0spBLrDXBe60yBi53jsp5LPOOoPnnbyrf+ZaI21sgsLi0qqy0+bDZLuI0bNRd1fEuuyPOfsWxOHJJPakxaHmO5yU+ai8CcTrqBAFSz5RTrMMKcjdEdBAhEBw1uHCwWZac8Ri7prjQrfMfhPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ts3Yzfq+; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=KtMbpwDkPWeDEATYnPcUw4ULucLYGLwiuplrLFEY7f9eFH+Zh7n7aNubNQoXf5YD4y3rewkzOWbJ0yksoqERUsRY+kJr1cn4XdYnp1264+5pF9ZjjT0ULwlAZWVHIe63/VQ3KSpQVKI3UH3lbAlwpVXK/q+ecwS1lQdAYayc+gU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MXpnqWih; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725964387; x=1757500387;
+  t=1725965112; x=1757501112;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m4rLZiBxy1v0tyc+rkItksP01I5QS7BSDV6XBZRddM4=;
-  b=Ts3Yzfq+6ql54ALFS7aziWBdVLQzJC9mPhVV1l3bX+45ov+hcNOfp/3N
-   YzQp2jce0bmx+u93bp+eXNoTbrD1IITXVMBHy5kTVbRpysJ+Bd+tKkntg
-   pTZyNW0BDRbW+hDqGr/cau/6Le7rBflh2vtCV5fMEY5VW6125yJi18O3S
-   ykX9xg+gSA8N0yIeHPKwky0CWqMojCMdgvjCgmvSfwZKWJub3NPDFkCIo
-   PL1+6bKxsVQEpAdUGnS+cPW1HIatkRjvC8lSkdDxZJQcAPP1HfWL0y1FG
-   JHXDaqvORNv0iTnmzasCti/AQrGmM8kPQL0BNdTVRXOoFhGOV7uG1rg9d
-   Q==;
-X-CSE-ConnectionGUID: la59HlZ5TRGXFsMgISfezA==
-X-CSE-MsgGUID: Z1LtTAr7TkqQUSHrM6G2eA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24846318"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/mmHqklSPEhEgo8V06sQ63fRm4Mg6nIuO6VmxgWugTk=;
+  b=MXpnqWih2au1XH4tAWMTJHW4gjB/zWYBTYENzikj9PJKRsjrpTzAt7Qc
+   EUdJ4lghyFrDgzwE2VnzATDkf34VlA0ngwnY++bYIjMkuxnMxbeAm17LQ
+   DkUvR9WWb8f/xnxqRSkd7Gv8XrCEEdxGb7eEKHaLi35PgagaxTFgbNXjC
+   BtZRCF3uCXHjqN5c9uUDf/6TW7mhrGFmeUPC2t/cG+8X3q04LC+01j6mu
+   MUPQ6s3q7JXW8UnMQzd5Xe1pAj/wk0zF1UQaxBMoeRVLPF1cDsgD0BW7k
+   pNG3DrnS5cuoLXwpE25McdrPLqxt6IVjpAZBSthLe6R8TQdZAskdBPUW5
+   A==;
+X-CSE-ConnectionGUID: qBzOEBEwSwqIqf4FFJo/XQ==
+X-CSE-MsgGUID: 7UJfrNVyQ2SCus3pxyoQ8A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="36083839"
 X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="24846318"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 03:32:57 -0700
-X-CSE-ConnectionGUID: gkCTnSf3SbK9cWkk6ZBOTw==
-X-CSE-MsgGUID: YoVJC/vlQDeMAQbmagT15g==
+   d="scan'208";a="36083839"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 03:45:12 -0700
+X-CSE-ConnectionGUID: +YyFryRrSWCFm4lMklyLmA==
+X-CSE-MsgGUID: b3bscvFuT6CP92JifYEtiQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="97683495"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 10 Sep 2024 03:32:53 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snyB1-0001WW-0R;
-	Tue, 10 Sep 2024 10:32:51 +0000
-Date: Tue, 10 Sep 2024 18:32:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jerome Brunet <jbrunet@baylibre.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (pmbus/tps25990): add initial support
-Message-ID: <202409101807.GjHADcvQ-lkp@intel.com>
-References: <20240909-tps25990-v1-3-39b37e43e795@baylibre.com>
+   d="scan'208";a="66609199"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 03:45:09 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1snyMt-000000079pd-0m3T;
+	Tue, 10 Sep 2024 13:45:07 +0300
+Date: Tue, 10 Sep 2024 13:45:06 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Liu =?utf-8?B?S2ltcml2ZXIv5YiY6YeR5rKz?= <kimriver.liu@siengine.com>
+Cc: "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
+	"mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+	"jsd@semihalf.com" <jsd@semihalf.com>,
+	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8] i2c: designware: fix master is holding SCL low while
+ ENABLE bit is disabled
+Message-ID: <ZuAjMmr7q4f8VJpA@smile.fi.intel.com>
+References: <9d181a45f3edf92364c9e6b729638f0b3f2e7baa.1725946886.git.kimriver.liu@siengine.com>
+ <ZuALQVyTBFugG0Sw@smile.fi.intel.com>
+ <743187d2fde54a9ebf86d42e29eadfb4@siengine.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240909-tps25990-v1-3-39b37e43e795@baylibre.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <743187d2fde54a9ebf86d42e29eadfb4@siengine.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Jerome,
+On Tue, Sep 10, 2024 at 09:38:53AM +0000, Liu Kimriver/刘金河 wrote:
+> >From: Andy Shevchenko <andriy.shevchenko@linux.intel.com> 
+> >Sent: 2024年9月10日 17:03
+> >To: Liu Kimriver/刘金河 <kimriver.liu@siengine.com>
+> >On Tue, Sep 10, 2024 at 02:13:09PM +0800, Kimriver Liu wrote:
 
-kernel test robot noticed the following build errors:
+...
 
-[auto build test ERROR on d22bd451d5606411895ef55cb105277e4f4f6e54]
+> >master --> controller
+> 
+>  Update it in V9
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jerome-Brunet/dt-bindings-hwmon-pmbus-add-ti-tps25990-documentation/20240909-234152
-base:   d22bd451d5606411895ef55cb105277e4f4f6e54
-patch link:    https://lore.kernel.org/r/20240909-tps25990-v1-3-39b37e43e795%40baylibre.com
-patch subject: [PATCH 3/3] hwmon: (pmbus/tps25990): add initial support
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240910/202409101807.GjHADcvQ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409101807.GjHADcvQ-lkp@intel.com/reproduce)
+Also in the Subject.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409101807.GjHADcvQ-lkp@intel.com/
+...
 
-All errors (new ones prefixed by >>):
+> >> holding SCL low. If ENABLE bit is disabled, the software need
+> >> enable it before trying to issue ABORT bit. otherwise,
+> >> the controller ignores any write to ABORT bit.
+> 
+> >Fixes tag?
+> 
+>  Patch rebase:  on Linux v6.11.0-rc6 (89f5e14d05b)
 
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/pmbus/tps25990.c:267:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     267 |                 ret = FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-         |                       ^
->> drivers/hwmon/pmbus/tps25990.c:337:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     337 |                                              FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-         |                                              ^
-   7 warnings and 2 errors generated.
+No, this one is done by understanding where the problem appear first.
+What you mentioned above may be achieved by using --base option when
+format the patch.
 
+...
 
-vim +/FIELD_GET +267 drivers/hwmon/pmbus/tps25990.c
+> >> +static bool i2c_dw_is_master_idling(struct dw_i2c_dev *dev)
+> 
+> >Sorry if I made a mistake, but again, looking at the usage you have again
+> >negation here and there...
+> 
+> >	i2c_dw_is_controller_active
+> 
+> > (note new terminology, dunno if it makes sense start using it in function
+> > names, as we have more of them following old style)
+> 
+>  Last week , You suggested that I used this i2c_dw_is_master_idling(dev)
 
-   254	
-   255	static int tps25990_read_word(struct i2c_client *client,
-   256				      int page, int phase, int reg)
-   257	{
-   258		int ret, addr;
-   259	
-   260		addr = tps25990_get_addr(reg);
-   261		if (addr < 0)
-   262			return addr;
-   263	
-   264		switch (reg) {
-   265		case PMBUS_VIRT_SAMPLES:
-   266			ret = pmbus_read_byte_data(client, page, addr);
- > 267			ret = FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-   268			break;
-   269	
-   270		case PMBUS_IIN_OC_FAULT_LIMIT:
-   271			ret = pmbus_read_byte_data(client, page, addr);
-   272			break;
-   273	
-   274		default:
-   275			ret = pmbus_read_word_data(client, page, -1, addr);
-   276			break;
-   277		}
-   278	
-   279		if (ret >= 0)
-   280			ret = tps25990_read_adapt_value(reg, ret);
-   281	
-   282		return ret;
-   283	}
-   284	
-   285	static int tps25990_write_adapt_value(int reg, int val)
-   286	{
-   287		switch (reg) {
-   288		case PMBUS_VIN_UV_WARN_LIMIT:
-   289		case PMBUS_VIN_UV_FAULT_LIMIT:
-   290		case PMBUS_VIN_OV_WARN_LIMIT:
-   291		case PMBUS_VOUT_UV_WARN_LIMIT:
-   292		case PMBUS_IIN_OC_WARN_LIMIT:
-   293		case PMBUS_OT_WARN_LIMIT:
-   294		case PMBUS_OT_FAULT_LIMIT:
-   295		case PMBUS_PIN_OP_WARN_LIMIT:
-   296		case PMBUS_POWER_GOOD_OFF:
-   297			val >>= TPS25990_8B_SHIFT;
-   298			val = clamp(val, 0, 0xff);
-   299			break;
-   300	
-   301		case PMBUS_VIN_OV_FAULT_LIMIT:
-   302			val -= TPS25990_VIN_OVF_OFF;
-   303			val = DIV_ROUND_CLOSEST(val * TPS25990_VIN_OVF_DIV, TPS25990_VIN_OVF_NUM);
-   304			val = clamp_val(val, 0, 0xf);
-   305			break;
-   306	
-   307		case PMBUS_IIN_OC_FAULT_LIMIT:
-   308			val -= TPS25990_IIN_OCF_OFF;
-   309			val = DIV_ROUND_CLOSEST(val * TPS25990_IIN_OCF_DIV, TPS25990_IIN_OCF_NUM);
-   310			val = clamp_val(val, 0, 0x3f);
-   311			break;
-   312	
-   313		case PMBUS_VIRT_SAMPLES:
-   314			val = clamp_val(val, 1, 1 << PK_MIN_AVG_AVG_CNT);
-   315			val = ilog2(val);
-   316			break;
-   317		}
-   318	
-   319		return val;
-   320	}
-   321	
-   322	static int tps25990_write_word(struct i2c_client *client,
-   323				       int page, int reg, u16 value)
-   324	{
-   325		int addr, ret;
-   326	
-   327		addr = tps25990_get_addr(reg);
-   328		if (addr < 0)
-   329			return addr;
-   330	
-   331		value = tps25990_write_adapt_value(reg, value);
-   332	
-   333		switch (reg) {
-   334		case PMBUS_VIRT_SAMPLES:
-   335			ret = pmbus_update_byte_data(client, page, addr,
-   336						     PK_MIN_AVG_AVG_CNT,
- > 337						     FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-   338			break;
-   339	
-   340		case PMBUS_IIN_OC_FAULT_LIMIT:
-   341			ret = pmbus_write_byte_data(client, page, addr,
-   342						    value);
-   343			break;
-   344	
-   345		default:
-   346			ret = pmbus_write_word_data(client, page, addr, value);
-   347			break;
-   348		}
-   349	
-   350		return ret;
-   351	}
-   352	
+Yes, sorry about that. I did maybe not clearly get how it is going to
+look like.
+
+> >> +{
+> >> +	u32 status;
+> >> +
+> >> +	regmap_read(dev->map, DW_IC_STATUS, &status);
+> >> +	if (!(status & DW_IC_STATUS_MASTER_ACTIVITY))
+> >> +		return true;
+> 
+> 		return false;
+> 
+> >> +	return !regmap_read_poll_timeout(dev->map, DW_IC_STATUS, status,
+> >> +			!(status & DW_IC_STATUS_MASTER_ACTIVITY),
+> >> +			1100, 20000);
+> 
+> >...and drop !.
+> 
+>  We reproduce this issue in RTL simulation(About(~1:500) in our soc). It is necessary
+>  to add waiting DW_IC_STATUS_MASTER_ACTIVITY idling before disabling I2C when 
+>  I2C transfer completed.  as described in the DesignWare
+>  I2C databook(Flowchart for DW_apb_i2c Controller)
+
+Cool, but here I'm talking purely about inverting the logic (with renaming),
+nothing more.
+
+> >> +}
+
+...
+
+> >> +	/*
+> >> +	 * This happens rarely and is hard to reproduce. Debug trace
+> 
+> >Rarely how? Perhaps put a ration in the parentheses, like
+> 
+> >"...rarely (~1:100)..."
+>  About(~1:500) in our soc
+
+Yes, what I showed was just an example, put the real numbers into the comment.
+
+> >> +	 * showed that IC_STATUS had value of 0x23 when STOP_DET occurred,
+> >> +	 * if disable IC_ENABLE.ENABLE immediately that can result in
+> >> +	 * IC_RAW_INTR_STAT.MASTER_ON_HOLD holding SCL low.
+> >> +	 */
+> >> +	if (!i2c_dw_is_master_idling(dev))
+> 
+> >...and here
+> 
+> >	if (i2c_dw_is_controller_active(dev))
+> 
+> >But please double check that I haven't made any mistakes in all this logic.
+> 
+>  Last week , You suggested that I used this i2c_dw_is_master_idling(dev)
+>  keep using i2c_dw_is_master_idling(dev) , Ok?
+
+See above.
+
+> >> +		dev_err(dev->dev, "I2C master not idling\n");
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
 
