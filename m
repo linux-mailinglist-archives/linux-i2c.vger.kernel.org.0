@@ -1,65 +1,65 @@
-Return-Path: <linux-i2c+bounces-6510-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6508-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E87E4973D53
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 18:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33D8D973D49
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 18:32:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7626D1F25B0E
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 16:34:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD3C61F26407
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 16:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CA431A4F3F;
-	Tue, 10 Sep 2024 16:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320481A3BB8;
+	Tue, 10 Sep 2024 16:31:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e7K+iKI7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jT7D1neM"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535331A4B88;
-	Tue, 10 Sep 2024 16:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777111A3BA4;
+	Tue, 10 Sep 2024 16:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725985897; cv=none; b=KQ1Il/PLSXGU30Drsdxx/s319RmZFnIhUmPEiSDUHHtmGXyBUEEVHzFFyWDvFQlQuLN51n5eJZ75chGoj+jaAMGPopeqNUvUyXa56La1I7cQqaFpk7VUrBEpZQaPDyOkLFDlpmVCm9SSKGBZ9iYJ2V//VIzcQR50fCH4ZG6H6FY=
+	t=1725985890; cv=none; b=e1BqO+K7GRwwNCl2VLqiNpF2qTIBXxSx7piir0sA1chYdQy36gXTzAlcQnCkSczvsIH4yfqAeH0yBmFbnvhxMqL1sDY6+EJwMDM8TUWRqOwYYGNBRMXSJopUV5wsVePGd/QyG2a5r2yr+q1jg+Y1CnvZM0eRVvZPCwtgueuqMQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725985897; c=relaxed/simple;
-	bh=vEW5qV4d0ZwrlZRzn8eAWwa3WaWsA63I80urDlIb264=;
+	s=arc-20240116; t=1725985890; c=relaxed/simple;
+	bh=USi9uav+M8F7wd4G7BM+uWeTrTFoG8YEiyIQDm/jji0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XIZnIb85DrQ7D7WAU5YpHyiK1hdR629FNUmi333LFxXAJfVnuo6MdxyYWktG8c2aC5UD1IcGS74SBqfeHtRmASqK6H/t6vyABlEwHDX6t6N1s45thMBobrnsQF7VxmsO0A8W1rOZD2WCMEDdHYH84U+LFfbfQcCz4bF+3GnSxW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e7K+iKI7; arc=none smtp.client-ip=192.198.163.11
+	 MIME-Version; b=n42OazqJYkt39DHWdpWaM373VmAVd5L7AglN4VanycZYH77gNKO16TNXoY9ozdCRE1YHWJzIXsuOaxf3l2C0AhqbKVbU0QCQexyhVwSQBCzlTrSc5tzHLtpYQ2M5/kslimiQOIntRqe8ZA+UCgPKmggcHuf1KsjD5F34JP2TmFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jT7D1neM; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725985896; x=1757521896;
+  t=1725985888; x=1757521888;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=vEW5qV4d0ZwrlZRzn8eAWwa3WaWsA63I80urDlIb264=;
-  b=e7K+iKI7YkaQeGfoPsTKFJLk8ITxNU7/lPAglhr26gmqy6o6J6XTRziO
-   ULTlbuqSEqVYSkVBvqaZqOgOrhI9KCNK/6Vy0eYHRsII4yzT/C0R4qcCx
-   ObPsfIcNZ9rkq07j3h06V9IsEu9jajpPAbytKxJB5zp+IyqF8KqSUZx7r
-   vqh9CpQVrTXruERnCwPDHBSlFd914xww8N6oiKAmHXD5EpOefzEb6P00a
-   kWrvwMrlDT23vhGGrzKOYj7LJPIeZ8JWtSnknByGSbcCB5OBvpy9l4h1G
-   JOwZfdwIc/CjzcP0aTU1RtnyqlH3jPivtpmIFEFzl2eZsfIy1J4TPlRpG
-   Q==;
-X-CSE-ConnectionGUID: G3HTaWKTTn6xTNM7028qtA==
-X-CSE-MsgGUID: o3x+5lyHQpCAnT9HEdKzpA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="35341739"
+  bh=USi9uav+M8F7wd4G7BM+uWeTrTFoG8YEiyIQDm/jji0=;
+  b=jT7D1neMnSucw/YDLh46ufnRir3FzCuwPgJtaWUzgNHHU5VJiLAAo/Hc
+   GNqd2daf8UWPvkWr2e3QUq2KQbNVgFTIUtauAARH7eiX+bj5eFL5cT/eS
+   d9BK1LkhYcbY6SiosinWIPvQm0j8VCCO3l0o4iUPH6u413qq6IlFvbbfs
+   ugRXr9bz5sU91uwxt0UZ2gPGYqEHYPdDaSN5NPJbuOgY8VQEiv1R++fsr
+   Ob+uImr6XnHBuTR79YipfsC2ryOd+aqa7L1OsGPAFO6w3dtIp3hynXYLc
+   KbUZZw2iFs89IlD5E15ClonmP+hfJdsISxDYLt/NQH+PO2HtC2DbogfAI
+   w==;
+X-CSE-ConnectionGUID: jcKElCuOQ2m1PcQeZpN6hA==
+X-CSE-MsgGUID: +R6+TtwfQse8lst/weVKrg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="24888649"
 X-IronPort-AV: E=Sophos;i="6.10,217,1719903600"; 
-   d="scan'208";a="35341739"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 09:31:33 -0700
-X-CSE-ConnectionGUID: z3e9f7hkSVmNU0tmp5TZSA==
-X-CSE-MsgGUID: dITHEob3TbGqy1RgwsxdXw==
+   d="scan'208";a="24888649"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 09:31:28 -0700
+X-CSE-ConnectionGUID: j+ezFjuPSeq2WEsmT6GXmQ==
+X-CSE-MsgGUID: 76P2cZDWRQCaxc5QTwJfFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,217,1719903600"; 
-   d="scan'208";a="71681501"
+   d="scan'208";a="67845219"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa004.fm.intel.com with ESMTP; 10 Sep 2024 09:31:26 -0700
+  by orviesa008.jf.intel.com with ESMTP; 10 Sep 2024 09:31:26 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id E532E20B; Tue, 10 Sep 2024 19:31:24 +0300 (EEST)
+	id F1978432; Tue, 10 Sep 2024 19:31:24 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Andi Shyti <andi.shyti@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -68,9 +68,9 @@ To: Andi Shyti <andi.shyti@kernel.org>,
 Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>,
 	Jan Dabros <jsd@semihalf.com>
-Subject: [PATCH v1 1/3] i2c: designware: Uninline i2c_dw_probe()
-Date: Tue, 10 Sep 2024 19:28:44 +0300
-Message-ID: <20240910163123.2499931-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/3] i2c: designware: Propagate firmware node
+Date: Tue, 10 Sep 2024 19:28:45 +0300
+Message-ID: <20240910163123.2499931-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 In-Reply-To: <20240910163123.2499931-1-andriy.shevchenko@linux.intel.com>
 References: <20240910163123.2499931-1-andriy.shevchenko@linux.intel.com>
@@ -82,84 +82,70 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since i2c_dw_probe() is going to be extended, uninline it to reduce
-the noise in the common header.
+Propagate firmware node by using a specific API call, i.e. device_set_node().
 
 Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-designware-common.c | 14 ++++++++++++++
- drivers/i2c/busses/i2c-designware-core.h   | 17 ++---------------
- 2 files changed, 16 insertions(+), 15 deletions(-)
+ drivers/i2c/busses/i2c-designware-common.c  | 2 ++
+ drivers/i2c/busses/i2c-designware-pcidrv.c  | 2 --
+ drivers/i2c/busses/i2c-designware-platdrv.c | 3 ---
+ 3 files changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index fb65fe6d8122..a6dbccd85565 100644
+index a6dbccd85565..080204182bb5 100644
 --- a/drivers/i2c/busses/i2c-designware-common.c
 +++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -737,6 +737,20 @@ void i2c_dw_disable(struct dw_i2c_dev *dev)
- }
- EXPORT_SYMBOL_GPL(i2c_dw_disable);
+@@ -739,6 +739,8 @@ EXPORT_SYMBOL_GPL(i2c_dw_disable);
  
-+int i2c_dw_probe(struct dw_i2c_dev *dev)
-+{
-+	switch (dev->mode) {
-+	case DW_IC_SLAVE:
-+		return i2c_dw_probe_slave(dev);
-+	case DW_IC_MASTER:
-+		return i2c_dw_probe_master(dev);
-+	default:
-+		dev_err(dev->dev, "Wrong operation mode: %d\n", dev->mode);
-+		return -EINVAL;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(i2c_dw_probe);
-+
- static int i2c_dw_prepare(struct device *device)
+ int i2c_dw_probe(struct dw_i2c_dev *dev)
  {
- 	/*
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index c6bd6f65a2d3..1ac2afd03a0a 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -10,9 +10,7 @@
++	device_set_node(&dev->adapter.dev, dev_fwnode(dev->dev));
++
+ 	switch (dev->mode) {
+ 	case DW_IC_SLAVE:
+ 		return i2c_dw_probe_slave(dev);
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 04377533f3ae..64f7bd8c7faf 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -9,7 +9,6 @@
+  * Copyright (C) 2009 Provigent Ltd.
+  * Copyright (C) 2011, 2015, 2016 Intel Corporation.
   */
- 
- #include <linux/bits.h>
--#include <linux/compiler_types.h>
- #include <linux/completion.h>
--#include <linux/dev_printk.h>
+-#include <linux/acpi.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
  #include <linux/errno.h>
- #include <linux/i2c.h>
- #include <linux/pm.h>
-@@ -388,19 +386,6 @@ static inline void i2c_dw_configure_slave(struct dw_i2c_dev *dev) { }
- static inline int i2c_dw_probe_slave(struct dw_i2c_dev *dev) { return -EINVAL; }
- #endif
+@@ -273,7 +272,6 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 	adap = &dev->adapter;
+ 	adap->owner = THIS_MODULE;
+ 	adap->class = 0;
+-	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
+ 	adap->nr = controller->bus_num;
  
--static inline int i2c_dw_probe(struct dw_i2c_dev *dev)
--{
--	switch (dev->mode) {
--	case DW_IC_SLAVE:
--		return i2c_dw_probe_slave(dev);
--	case DW_IC_MASTER:
--		return i2c_dw_probe_master(dev);
--	default:
--		dev_err(dev->dev, "Wrong operation mode: %d\n", dev->mode);
--		return -EINVAL;
--	}
--}
--
- static inline void i2c_dw_configure(struct dw_i2c_dev *dev)
- {
- 	if (i2c_detect_slave_mode(dev->dev))
-@@ -409,6 +394,8 @@ static inline void i2c_dw_configure(struct dw_i2c_dev *dev)
- 		i2c_dw_configure_master(dev);
- }
+ 	r = i2c_dw_probe(dev);
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 732e444d0dfc..36041e624e3e 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -8,7 +8,6 @@
+  * Copyright (C) 2007 MontaVista Software Inc.
+  * Copyright (C) 2009 Provigent Ltd.
+  */
+-#include <linux/acpi.h>
+ #include <linux/clk-provider.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+@@ -279,8 +278,6 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+ 	adap->owner = THIS_MODULE;
+ 	adap->class = dmi_check_system(dw_i2c_hwmon_class_dmi) ?
+ 					I2C_CLASS_HWMON : I2C_CLASS_DEPRECATED;
+-	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
+-	adap->dev.of_node = pdev->dev.of_node;
+ 	adap->nr = -1;
  
-+int i2c_dw_probe(struct dw_i2c_dev *dev);
-+
- #if IS_ENABLED(CONFIG_I2C_DESIGNWARE_BAYTRAIL)
- int i2c_dw_baytrail_probe_lock_support(struct dw_i2c_dev *dev);
- #endif
+ 	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
