@@ -1,39 +1,39 @@
-Return-Path: <linux-i2c+bounces-6499-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6498-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDA7C973C3B
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 17:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FF6A973C38
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 17:37:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87D78284FC1
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 15:37:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1F41283600
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 15:37:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6062719F404;
-	Tue, 10 Sep 2024 15:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928BF19EEB4;
+	Tue, 10 Sep 2024 15:37:01 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A2219ABBD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A3819AA75;
 	Tue, 10 Sep 2024 15:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725982622; cv=none; b=ugh5a60TRknP/9pCrD7Yd3nMgZEuYnv93iLnQxJS4W3pAXT3EMxG6xIuUMY9kA4AyfibgjQ9SBYEcxe7FdufahMyX24jz2rRN0fNEtcF/m3m2x7iBJP7YY/CCaRVZYqI2CO/eMDmkmfmti+VIDQ0z01JwvyLGlNnkhLv6C5efoU=
+	t=1725982621; cv=none; b=QjHV3qPzQyzuUF4n2Ahhd4ZcmokdXRqp3Ht9U3srI5+sso/Q3DemmC/E+8ISWej/MgAiQOWzMKs4oOohXKUV4U45pmR+5OoIcoWaRtaWJhRF8brT40gwtGudE/pnxXq7es3/8PiJXhP4mvmLy2AWQ+8h0iYhcs1r/68EICJdims=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725982622; c=relaxed/simple;
-	bh=8ykD/AS/fwG8dSMjZIPtP5G72F/K7cY7tggrJuM7Ylc=;
+	s=arc-20240116; t=1725982621; c=relaxed/simple;
+	bh=fPodBcRmooQc412mo89NDHrao5EJWLAEnyMWs+S2xpE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GM/QfYsPSfqNPsyiczg10mbq2tYiYpzln76Evi2nt3oppGkWn/YalSBz61RyYTItI7oQ0thpFysiZQCAxCjAAJUZ4dL6e39w+l0mNnd6Z1IUJCaKXe+66JZaXIFz+qLmIkgpgV8Rs07jqSnhIp5RWfRGN/f0C6xG4eurGAeSQEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+	 MIME-Version:Content-Type; b=hkBV3r59Lfnijmbrad2fJglvLJlqDIBB5AXSL9iUII4Kqql4UrZglOxiOyGqvC6NYTtr4169jjZXjr8kxB3r05lP1DhRMAm6KUPbAdyOzITJt09qXmxv9YOZUTY4K5DnrFBaNyiIhP7Rxou1dk18uUcBSansKCGn6BaAsuXG6yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4X378s189qz1j8Pq;
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4X378s0DjHz2Dc4l;
 	Tue, 10 Sep 2024 23:36:29 +0800 (CST)
 Received: from kwepemd500012.china.huawei.com (unknown [7.221.188.25])
-	by mail.maildlp.com (Postfix) with ESMTPS id 49FCC1A0191;
+	by mail.maildlp.com (Postfix) with ESMTPS id 57FB31A0188;
 	Tue, 10 Sep 2024 23:36:57 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemd500012.china.huawei.com
  (7.221.188.25) with Microsoft SMTP Server (version=TLS1_2,
@@ -49,9 +49,9 @@ To: <jikos@kernel.org>, <bentiss@kernel.org>, <michael.zaidman@gmail.com>,
 	<mezin.alexander@gmail.com>
 CC: <lizetao1@huawei.com>, <linux-input@vger.kernel.org>,
 	<linux-i2c@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-Subject: [PATCH -next v3 14/15] hwmon: (nzxt-kraken3) Use devm_hid_hw_start_and_open in kraken3_probe()
-Date: Tue, 10 Sep 2024 23:45:44 +0800
-Message-ID: <20240910154545.736786-15-lizetao1@huawei.com>
+Subject: [PATCH -next v3 15/15] hwmon: (nzxt-smart2) Use devm_hid_hw_start_and_open in nzxt_smart2_hid_probe()
+Date: Tue, 10 Sep 2024 23:45:45 +0800
+Message-ID: <20240910154545.736786-16-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240910154545.736786-1-lizetao1@huawei.com>
 References: <20240910154545.736786-1-lizetao1@huawei.com>
@@ -66,107 +66,108 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemd500012.china.huawei.com (7.221.188.25)
 
-Currently, the nzxt-kraken3 module needs to maintain hid resources
+Currently, the nzxt-smart2 module needs to maintain hid resources
 by itself. Use devm_hid_hw_start_and_open helper to ensure that hid
 resources are consistent with the device life cycle, and release
 hid resources before device is released. At the same time, it can avoid
-the goto-release encoding, drop the fail_and_close and fail_and_stop
+the goto-release encoding, drop the out_hw_close and out_hw_stop
 lables, and directly return the error code when an error occurs.
 
+Further optimization, use devm_hwmon_device_register_with_info to replace
+hwmon_device_register_with_info, the remote operation can be completely
+deleted, and the drvdata no longer needs to hold hwmon device
+
 Acked-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Aleksa Savic <savicaleksa83@gmail.com>
 Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
-v2 -> v3: Change "nzxt-kraken2" to "nzxt-kraken3" in the commit message.
-v2: https://lore.kernel.org/all/20240909012313.500341-15-lizetao1@huawei.com/
-v1 -> v2: Adjust commit information
-v1: https://lore.kernel.org/all/20240904123607.3407364-19-lizetao1@huawei.com/
+v2 -> v3: None
+v2: https://lore.kernel.org/all/20240909012313.500341-16-lizetao1@huawei.com/
+v1 -> v2:
+  1) Further optimize using devm_hwmon_device_register_with_info
+and remove the .remove operation
+  2) Adjust commit information
+v1: https://lore.kernel.org/all/20240904123607.3407364-20-lizetao1@huawei.com/
 
- drivers/hwmon/nzxt-kraken3.c | 34 +++++++---------------------------
- 1 file changed, 7 insertions(+), 27 deletions(-)
+ drivers/hwmon/nzxt-smart2.c | 38 +++++--------------------------------
+ 1 file changed, 5 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/hwmon/nzxt-kraken3.c b/drivers/hwmon/nzxt-kraken3.c
-index 00f3ac90a290..71b8c21cfe1b 100644
---- a/drivers/hwmon/nzxt-kraken3.c
-+++ b/drivers/hwmon/nzxt-kraken3.c
-@@ -897,17 +897,9 @@ static int kraken3_probe(struct hid_device *hdev, const struct hid_device_id *id
- 	}
+diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+index df6fa72a6b59..9c6d020ac896 100644
+--- a/drivers/hwmon/nzxt-smart2.c
++++ b/drivers/hwmon/nzxt-smart2.c
+@@ -172,7 +172,6 @@ struct set_fan_speed_report {
  
- 	/* Enable hidraw so existing user-space tools can continue to work */
--	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
--	if (ret) {
--		hid_err(hdev, "hid hw start failed with %d\n", ret);
-+	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_HIDRAW);
-+	if (ret)
+ struct drvdata {
+ 	struct hid_device *hid;
+-	struct device *hwmon;
+ 
+ 	u8 fan_duty_percent[FAN_CHANNELS];
+ 	u16 fan_rpm[FAN_CHANNELS];
+@@ -730,6 +729,7 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+ 				 const struct hid_device_id *id)
+ {
+ 	struct drvdata *drvdata;
++	struct device *hwmon;
+ 	int ret;
+ 
+ 	drvdata = devm_kzalloc(&hdev->dev, sizeof(struct drvdata), GFP_KERNEL);
+@@ -750,44 +750,17 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+ 	if (ret)
  		return ret;
--	}
--
+ 
+-	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
++	ret = devm_hid_hw_start_and_open(hdev, HID_CONNECT_HIDRAW);
+ 	if (ret)
+ 		return ret;
+ 
 -	ret = hid_hw_open(hdev);
--	if (ret) {
--		hid_err(hdev, "hid hw open failed with %d\n", ret);
--		goto fail_and_stop;
--	}
- 
- 	switch (hdev->product) {
- 	case USB_PRODUCT_ID_X53:
-@@ -928,15 +920,12 @@ static int kraken3_probe(struct hid_device *hdev, const struct hid_device_id *id
- 		device_name = "kraken2023elite";
- 		break;
- 	default:
--		ret = -ENODEV;
--		goto fail_and_close;
-+		return -ENODEV;
- 	}
- 
- 	priv->buffer = devm_kzalloc(&hdev->dev, MAX_REPORT_LENGTH, GFP_KERNEL);
--	if (!priv->buffer) {
--		ret = -ENOMEM;
--		goto fail_and_close;
--	}
-+	if (!priv->buffer)
-+		return -ENOMEM;
- 
- 	mutex_init(&priv->buffer_lock);
- 	mutex_init(&priv->z53_status_request_lock);
-@@ -948,7 +937,7 @@ static int kraken3_probe(struct hid_device *hdev, const struct hid_device_id *id
- 	ret = kraken3_init_device(hdev);
- 	if (ret < 0) {
- 		hid_err(hdev, "device init failed with %d\n", ret);
--		goto fail_and_close;
-+		return ret;
- 	}
- 
- 	ret = kraken3_get_fw_ver(hdev);
-@@ -960,18 +949,12 @@ static int kraken3_probe(struct hid_device *hdev, const struct hid_device_id *id
- 	if (IS_ERR(priv->hwmon_dev)) {
- 		ret = PTR_ERR(priv->hwmon_dev);
- 		hid_err(hdev, "hwmon registration failed with %d\n", ret);
--		goto fail_and_close;
-+		return ret;
- 	}
- 
- 	kraken3_debugfs_init(priv, device_name);
- 
- 	return 0;
+-	if (ret)
+-		goto out_hw_stop;
 -
--fail_and_close:
+ 	hid_device_io_start(hdev);
+ 
+ 	init_device(drvdata, UPDATE_INTERVAL_DEFAULT_MS);
+ 
+-	drvdata->hwmon =
+-		hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
+-						&nzxt_smart2_chip_info, NULL);
+-	if (IS_ERR(drvdata->hwmon)) {
+-		ret = PTR_ERR(drvdata->hwmon);
+-		goto out_hw_close;
+-	}
+-
+-	return 0;
+-
+-out_hw_close:
 -	hid_hw_close(hdev);
--fail_and_stop:
+-
+-out_hw_stop:
 -	hid_hw_stop(hdev);
 -	return ret;
- }
- 
- static void kraken3_remove(struct hid_device *hdev)
-@@ -980,9 +963,6 @@ static void kraken3_remove(struct hid_device *hdev)
- 
- 	debugfs_remove_recursive(priv->debugfs);
- 	hwmon_device_unregister(priv->hwmon_dev);
+-}
+-
+-static void nzxt_smart2_hid_remove(struct hid_device *hdev)
+-{
+-	struct drvdata *drvdata = hid_get_drvdata(hdev);
+-
+-	hwmon_device_unregister(drvdata->hwmon);
 -
 -	hid_hw_close(hdev);
 -	hid_hw_stop(hdev);
++	hwmon = devm_hwmon_device_register_with_info(&hdev->dev, "nzxtsmart2", drvdata,
++						     &nzxt_smart2_chip_info, NULL);
++	return PTR_ERR_OR_ZERO(hwmon);
  }
  
- static const struct hid_device_id kraken3_table[] = {
+ static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
+@@ -807,7 +780,6 @@ static struct hid_driver nzxt_smart2_hid_driver = {
+ 	.name = "nzxt-smart2",
+ 	.id_table = nzxt_smart2_hid_id_table,
+ 	.probe = nzxt_smart2_hid_probe,
+-	.remove = nzxt_smart2_hid_remove,
+ 	.raw_event = nzxt_smart2_hid_raw_event,
+ #ifdef CONFIG_PM
+ 	.reset_resume = nzxt_smart2_hid_reset_resume,
 -- 
 2.34.1
 
