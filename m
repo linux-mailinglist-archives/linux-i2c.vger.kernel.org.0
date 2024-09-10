@@ -1,200 +1,284 @@
-Return-Path: <linux-i2c+bounces-6479-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6480-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 462069736A4
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 14:01:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C18AA97386B
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 15:16:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF91A28A88C
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 12:01:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E67AC1C2477F
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Sep 2024 13:16:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60354194C96;
-	Tue, 10 Sep 2024 11:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3446B18FDDF;
+	Tue, 10 Sep 2024 13:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="meqtgCd8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQkDqtXB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8815619007F;
-	Tue, 10 Sep 2024 11:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E386D18CC1A;
+	Tue, 10 Sep 2024 13:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725969556; cv=none; b=g0pj//Equmm233EfZTvqvjI7o+sZ9bDMbFdJ5H6NLhuq31dbW3dRXxhxKnSMOCBlzUjK4+Ibc/i6F18QzPTNwK9JTAfpS8b4Mw+h5ug7sXeqWK6wccxt3euP7mRAgLiJKxhuUb21AcUT74gN/2tQ/GzbXCZcdXWIiYcab6vbHCg=
+	t=1725974161; cv=none; b=OkZLd0C6OisTH/+6DbD63sOAd/x8dcLdANCChKgf4wFPHskRLDUAAqnxX7/JRIdlfSPh3A3sen/zTTvuHksWn+Cdnn/Z1o1jB53us2NbOTZRo6gTKYrFlDSrIPTIIayiizSrSEwF26ZJIch//P3aeQEMU6rNX3YLkbHnPlqRj8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725969556; c=relaxed/simple;
-	bh=h4ChVf/sIAKwdyEF+eNO9Uwa4wM3FfIPgFRZrrTl8J4=;
+	s=arc-20240116; t=1725974161; c=relaxed/simple;
+	bh=pA3WfyCvcUox1V8UZ8zntvA+e1BepjnNRZYmfnvhAAU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GCieoy9TxiGaUteO4rJUSJdMAwQkUOw0MF0Skb4FtFPeZdZ+xt11YMr32yi7gUIIs1hcrQcEj02n4bl8xLRUqmWhLfooarqfH0PGvgQqVDup5ml+QZ+FN+G92MejrgiSOsmyeb0mlZaioDMk7jDfiOkuo2pQ901E/Vm2JXxTpe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=meqtgCd8; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725969555; x=1757505555;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=h4ChVf/sIAKwdyEF+eNO9Uwa4wM3FfIPgFRZrrTl8J4=;
-  b=meqtgCd89blcS79lKa+B8wbTwz5h//AvTNgk210bfZ0scxVFkPfYa9GZ
-   ZlhuQxluu0cnjhsUGwXrHJ5yo4SpD+96ghYVhrHCAKRULrz30DnC/cPnW
-   q7j6zTXm9vaTFzRvqrREO4n+0NHlvi/8+Wdf0D38fEfvH1jJRol5fLZMv
-   U0JPUgHN4jW0NPZxjnh7KTWSTb4tvtnpJk8CXkrZWS4VNlD4xnhf/DaLJ
-   1MSbqzdbHL+15TLVNhzq54bCqXdH9wASV1eFfdkznmIxmVunZfBKXfSQc
-   dWhIZMjPvSTByt1pHLvee9GoNUzCIfzZmOzT4DZjKyeKl8o4bzu1QQMAY
-   Q==;
-X-CSE-ConnectionGUID: YhhLmhOLQcGIDtcBf5ET1w==
-X-CSE-MsgGUID: 2pV/xoGrSTez8A4RIrf5AQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24853797"
-X-IronPort-AV: E=Sophos;i="6.10,217,1719903600"; 
-   d="scan'208";a="24853797"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 04:59:14 -0700
-X-CSE-ConnectionGUID: s55Ld9X/So6BSlosQS6LZA==
-X-CSE-MsgGUID: l3h2D2F8RpeilQjq28C/WA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,217,1719903600"; 
-   d="scan'208";a="71783276"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 04:59:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1snzWW-00000007BYR-45g2;
-	Tue, 10 Sep 2024 14:59:08 +0300
-Date: Tue, 10 Sep 2024 14:59:08 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Liu =?utf-8?B?S2ltcml2ZXIv5YiY6YeR5rKz?= <kimriver.liu@siengine.com>
-Cc: "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
-	"mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-	"jsd@semihalf.com" <jsd@semihalf.com>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8] i2c: designware: fix master is holding SCL low while
- ENABLE bit is disabled
-Message-ID: <ZuA0jMCfGdyPR-T5@smile.fi.intel.com>
-References: <9d181a45f3edf92364c9e6b729638f0b3f2e7baa.1725946886.git.kimriver.liu@siengine.com>
- <ZuALQVyTBFugG0Sw@smile.fi.intel.com>
- <743187d2fde54a9ebf86d42e29eadfb4@siengine.com>
- <ZuAjMmr7q4f8VJpA@smile.fi.intel.com>
- <36e6d80999cf493f8a866fb013710682@siengine.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YkYyLJVht/hhU7EfSqZpLSEHuCyNe1O4i/DVkY81sDe1s+DrP651BNQiTKh0qhs2xyAIVAY4Xm31gAnpHlYGl4V+PU4kL9/i8ekpSvFBZOXVWXucua3LyXC3IL4+WIzMC5Hh3cxjV0PN32W6agrDsgzjyQBMU3YHFFbuhzhlPDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GQkDqtXB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5484AC4CEC3;
+	Tue, 10 Sep 2024 13:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725974160;
+	bh=pA3WfyCvcUox1V8UZ8zntvA+e1BepjnNRZYmfnvhAAU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GQkDqtXB1ec8DLXGnGVbF67VyIpOPxH1to6G21A5MVMa4glqaIjzWSfWU/PAoYRFY
+	 7y+/cvl1UVkvw0ORLNlKKODkGtaHooEXKx3+QeTuSR4yigpUxvLc3NYYgQLwYkWRHA
+	 /32tH0UnaPEuGDWnaoqXZKvTW7aSyf2lnm3VACbaizeCuN8Ely1KVaMc4Cb6jXK8h7
+	 X57xPOWgIvmMmgNlYgNfQy+xbouOFDJ9CxFpehUGwZ6tDoxzqNIQWwyDLMVFCGi5zt
+	 VwYjSy/TsqgcnO2xW+b+io+tC2OIwmLL9eettWYECOiyIV3x1MfZkE1oaYFvqqCX7+
+	 wRQvsDlw0xH+Q==
+Date: Tue, 10 Sep 2024 15:15:57 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+Cc: git@amd.com, linux-arm-kernel@lists.infradead.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, michal.simek@amd.com, 
+	radhey.shyam.pandey@amd.com, srinivas.goud@amd.com, shubhrajyoti.datta@amd.com, 
+	manion05gk@gmail.com
+Subject: Re: [PATCH 3/3] i2c: cadence: Add atomic transfer support for
+ controller version 1.4
+Message-ID: <5hjezq5ag4etru6suzbntvg2fwn45acckiyxsujmsjxsrgqxrd@asub7zr2t3gd>
+References: <20240801094408.2004460-1-manikanta.guntupalli@amd.com>
+ <20240801094408.2004460-4-manikanta.guntupalli@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <36e6d80999cf493f8a866fb013710682@siengine.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20240801094408.2004460-4-manikanta.guntupalli@amd.com>
 
-On Tue, Sep 10, 2024 at 11:43:34AM +0000, Liu Kimriver/刘金河 wrote:
-> >-----Original Message-----
-> >From: Andy Shevchenko <andriy.shevchenko@linux.intel.com> 
-> >Sent: 2024年9月10日 18:45
-> >On Tue, Sep 10, 2024 at 09:38:53AM +0000, Liu Kimriver/刘金河 wrote:
-> >> >From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> >> >Sent: 2024年9月10日 17:03
-> >> >at 02:13:09PM +0800, Kimriver Liu wrote:
+Hi Manikata,
+
+Sorry for the delay in reviewing this patch. Looks good, just a
+few notes below.
 
 ...
 
-> > >> +static bool i2c_dw_is_master_idling(struct dw_i2c_dev *dev)
-> >> 
-> >> >Sorry if I made a mistake, but again, looking at the usage you have 
-> >> >again negation here and there...
-> > 
-> >> >	i2c_dw_is_controller_active
-> >> 
-> >> > (note new terminology, dunno if it makes sense start using it in 
-> >> > function names, as we have more of them following old style)
-> >> 
-> >>  Last week , You suggested that I used this 
-> >> i2c_dw_is_master_idling(dev)
-> 
-> >Yes, sorry about that. I did maybe not clearly get how it is going to look like.
-> 
-> >> >> +{
-> >> >> +	u32 status;
-> >> >> +
-> >> >> +	regmap_read(dev->map, DW_IC_STATUS, &status);
-> >> >> +	if (!(status & DW_IC_STATUS_MASTER_ACTIVITY))
-> >> >> +		return true;
-> >> 
-> >> 		return false;
-> >> 
-> >> >> +	return !regmap_read_poll_timeout(dev->map, DW_IC_STATUS, status,
-> >> >> +			!(status & DW_IC_STATUS_MASTER_ACTIVITY),
-> >> >> +			1100, 20000);
-> >> 
-> >> >...and drop !.
-> >> 
-> >>  We reproduce this issue in RTL simulation(About(~1:500) in our soc). 
-> >> It is necessary  to add waiting DW_IC_STATUS_MASTER_ACTIVITY idling 
-> >> before disabling I2C when  I2C transfer completed.  as described in 
-> >> the DesignWare  I2C databook(Flowchart for DW_apb_i2c Controller)
-> 
-> >Cool, but here I'm talking purely about inverting the logic (with renaming), nothing more.
-> 
->  as described in the DesignWare I2C databook:
->  DW_IC_STATUS[5].MST_ACTIVITY Description as follows:
->  Controller FSM Activity Status. When the Controller Finite
->  State Machine (FSM) is not in the IDLE state, this bit is set.
->  Note: IC_STATUS[0]-that is, ACTIVITY bit-is the OR of
->  SLV_ACTIVITY and MST_ACTIVITY bits.
->  Values:
->  ■ 0x1 (ACTIVE): Controller not idle
->  ■ 0x0 (IDLE): Controller is idle
-> 
-> We need waiting DW_IC_STATUS.MST_ACTIVITY idling,
-> If Controller not idle, Wait for a while.
-> Return value: 
->   false(0): Controller is idle
->   timeout(-110): Controller activity
-> 
-> Ok, change the function name i2c_dw_is_master_idling(dev) to i2c_dw_is_controller_active(dev)
-> it seems more reasonable
-> 
-> static int i2c_dw_is_controller_ active(struct dw_i2c_dev *dev)
-> {
-> 	u32 status;
-> 
-> 	regmap_read(dev->map, DW_IC_STATUS, &status);
-> 	if (!(status & DW_IC_STATUS_MASTER_ACTIVITY))
-> 		return false;
-> 
-> 	return regmap_read_poll_timeout(dev->map, DW_IC_STATUS, status,
-> 			!(status & DW_IC_STATUS_MASTER_ACTIVITY),
-> 			1100, 20000);
-> }
+> +static bool cdns_i2c_error_check(struct cdns_i2c *id)
+> +{
+> +	unsigned int isr_status;
+> +
+> +	id->err_status = 0;
+> +
+> +	isr_status = cdns_i2c_readreg(CDNS_I2C_ISR_OFFSET);
+> +	cdns_i2c_writereg(isr_status & CDNS_I2C_IXR_ERR_INTR_MASK, CDNS_I2C_ISR_OFFSET);
+> +
+> +	id->err_status = isr_status & CDNS_I2C_IXR_ERR_INTR_MASK;
+> +	if (id->err_status)
+> +		return true;
+> +
+> +	return false;
 
-Yes, thank you. This is pure readability wise, you may actually leave the above
-text as a comment on top of that helper. It will add a value of understanding
-what's behind the scenes.
+return !!id->err_status;
 
-> >> >> +}
+> +}
+> +
+> +static void cdns_i2c_mrecv_atomic(struct cdns_i2c *id)
+> +{
+> +	bool updatetx;
 
-...
+Please move the udatex declaration inside the while loop.
 
-> I will be off work, If there are still emails that I have not been replied
-> to, I will reply to your email immediately after going to work tomorrow.
+> +	while (id->recv_count > 0) {
+> +		/*
+> +		 * Check if transfer size register needs to be updated again for a
+> +		 * large data receive operation.
+> +		 */
+> +		updatetx = id->recv_count > id->curr_recv_count;
+> +
+> +		while (id->curr_recv_count > 0) {
+> +			if (cdns_i2c_readreg(CDNS_I2C_SR_OFFSET) & CDNS_I2C_SR_RXDV) {
+> +				*id->p_recv_buf++ = cdns_i2c_readreg(CDNS_I2C_DATA_OFFSET);
 
-No problem. Just keep your time, proof-read and test the v9 before sending and
-I believe it will be the last iteration. Thank you for your patience and energy
-to push this change forward!
+Can you please expand this operation to be a bit more clearer,
+without asking people to check on operation precedence?
 
-...
+> +				id->recv_count--;
+> +				id->curr_recv_count--;
+> +
+> +				/*
+> +				 * Clear hold bit that was set for FIFO control
+> +				 * if RX data left is less than or equal to
+> +				 * FIFO DEPTH unless repeated start is selected
 
-> Thanks you for your suggestion!
+mmhhh... the lack of punctuation makes this comment difficult to
+understand.
 
-You are welcome!
+> +				 */
+> +				if (id->recv_count <= id->fifo_depth && !id->bus_hold_flag)
+> +					cdns_i2c_clear_bus_hold(id);
+> +			}
+> +			if (cdns_i2c_error_check(id))
+> +				return;
+> +			if (cdns_is_holdquirk(id, updatetx))
+> +				break;
+> +		}
+> +
+> +		/*
+> +		 * The controller sends NACK to the slave when transfer size
 
--- 
-With Best Regards,
-Andy Shevchenko
+/slave/target/
 
+> +		 * register reaches zero without considering the HOLD bit.
+> +		 * This workaround is implemented for large data transfers to
+> +		 * maintain transfer size non-zero while performing a large
+> +		 * receive operation.
+> +		 */
+> +		if (cdns_is_holdquirk(id, updatetx)) {
+> +			/* wait while fifo is full */
+> +			while (cdns_i2c_readreg(CDNS_I2C_XFER_SIZE_OFFSET) !=
+> +			       (id->curr_recv_count - id->fifo_depth))
+> +				;
+> +
+> +			/*
+> +			 * Check number of bytes to be received against maximum
+> +			 * transfer size and update register accordingly.
+> +			 */
+> +			if (((int)(id->recv_count) - id->fifo_depth) >
 
+The cast is not needed here.
+
+> +			    id->transfer_size) {
+> +				cdns_i2c_writereg(id->transfer_size,
+> +						  CDNS_I2C_XFER_SIZE_OFFSET);
+> +				id->curr_recv_count = id->transfer_size +
+> +						      id->fifo_depth;
+> +			} else {
+> +				cdns_i2c_writereg(id->recv_count -
+> +						  id->fifo_depth,
+> +						  CDNS_I2C_XFER_SIZE_OFFSET);
+> +				id->curr_recv_count = id->recv_count;
+> +			}
+> +		}
+> +	}
+> +
+> +	/* Clear hold (if not repeated start) */
+> +	if (!id->recv_count && !id->bus_hold_flag)
+> +		cdns_i2c_clear_bus_hold(id);
+> +}
+> +
+>  /**
+>   * cdns_i2c_mrecv - Prepare and start a master receive operation
+>   * @id:		pointer to the i2c device structure
+> @@ -715,7 +804,34 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
+>  		cdns_i2c_writereg(addr, CDNS_I2C_ADDR_OFFSET);
+>  	}
+>  
+> -	cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK, CDNS_I2C_IER_OFFSET);
+> +	if (!id->atomic)
+> +		cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK, CDNS_I2C_IER_OFFSET);
+> +	else
+> +		cdns_i2c_mrecv_atomic(id);
+> +}
+> +
+> +static void cdns_i2c_msend_rem_atomic(struct cdns_i2c *id)
+> +{
+> +	unsigned int avail_bytes;
+> +	unsigned int bytes_to_send;
+
+Please move these inside the while.
+
+> +
+> +	while (id->send_count) {
+> +		avail_bytes = id->fifo_depth - cdns_i2c_readreg(CDNS_I2C_XFER_SIZE_OFFSET);
+> +		if (id->send_count > avail_bytes)
+> +			bytes_to_send = avail_bytes;
+> +		else
+> +			bytes_to_send = id->send_count;
+> +
+> +		while (bytes_to_send--) {
+> +			cdns_i2c_writereg((*id->p_send_buf++), CDNS_I2C_DATA_OFFSET);
+> +			id->send_count--;
+> +		}
+> +		if (cdns_i2c_error_check(id))
+> +			return;
+> +	}
+> +
+> +	if (!id->send_count && !id->bus_hold_flag)
+> +		cdns_i2c_clear_bus_hold(id);
+>  }
+>  
+>  /**
+> @@ -778,7 +894,12 @@ static void cdns_i2c_msend(struct cdns_i2c *id)
+>  	cdns_i2c_writereg(id->p_msg->addr & CDNS_I2C_ADDR_MASK,
+>  						CDNS_I2C_ADDR_OFFSET);
+>  
+> -	cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK, CDNS_I2C_IER_OFFSET);
+> +	if (!id->atomic) {
+> +		cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK, CDNS_I2C_IER_OFFSET);
+> +	} else {
+> +		if (id->send_count > 0)
+
+If you do:
+
+	} else if (id->send_count > 0) {
+
+we save a level of indentation.
+
+> +			cdns_i2c_msend_rem_atomic(id);
+> +	}
+>  }
+>  
+>  /**
+> @@ -818,7 +939,8 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+>  
+>  	id->p_msg = msg;
+>  	id->err_status = 0;
+> -	reinit_completion(&id->xfer_done);
+> +	if (!id->atomic)
+> +		reinit_completion(&id->xfer_done);
+>  
+>  	/* Check for the TEN Bit mode on each msg */
+>  	reg = cdns_i2c_readreg(CDNS_I2C_CR_OFFSET);
+> @@ -841,13 +963,24 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+>  	/* Minimal time to execute this message */
+>  	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
+>  	/* Plus some wiggle room */
+> -	msg_timeout += msecs_to_jiffies(500);
+> +	if (!id->atomic)
+> +		msg_timeout += msecs_to_jiffies(500);
+> +	else
+> +		msg_timeout += msecs_to_jiffies(2000);
+
+You explained this in the commit log, can you add it in a
+comment, as well?
+
+>  
+>  	if (msg_timeout < adap->timeout)
+>  		msg_timeout = adap->timeout;
+>  
+> -	/* Wait for the signal of completion */
+> -	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
+> +	if (!id->atomic) {
+> +		/* Wait for the signal of completion */
+> +		time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
+> +	} else {
+> +		/* 0 is success, -ETIMEDOUT is error */
+> +		time_left = !readl_poll_timeout_atomic(id->membase + CDNS_I2C_ISR_OFFSET,
+> +						       reg, (reg & CDNS_I2C_IXR_COMP),
+> +						       CDNS_I2C_POLL_US_ATOMIC, msg_timeout);
+> +	}
+
+You can merge this if/else with the one above, to save some code.
+
+> +
+
+Thanks,
+Andi
 
