@@ -1,436 +1,330 @@
-Return-Path: <linux-i2c+bounces-6519-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6520-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C24D974B36
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 09:26:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6C13974B3E
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 09:28:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACF071C24060
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 07:26:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E1DEB22F61
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 07:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6A7213A265;
-	Wed, 11 Sep 2024 07:26:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5096613B284;
+	Wed, 11 Sep 2024 07:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Bdz427zK"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gcrwQ+MV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2050.outbound.protection.outlook.com [40.107.220.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29C8136341;
-	Wed, 11 Sep 2024 07:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726039595; cv=fail; b=sPJC/srHHLVHgfwbeRoAPGt/n7Fa0WaLMtFj1evIh33PreV/95y8lZ/h+N589R9IuGIWYW0A6IxU01r4DrZInCnHRQbjFdFibFNUWVJAFuCbJS/66SSr7hHiSKzWm0dHwnPa10iH56VgOdj9nLxRzKDmtp3XTcYxNcTQQJgvoC8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726039595; c=relaxed/simple;
-	bh=tOO+TbUH9nCkqfcQFywKW/3YRGUlbmgynG59QVXca18=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=RKQZZWvQbm/kSAInqLql4yZ3rxvC2skKzsHDfG3A8zOSSaa8ib8iewXAVw7AczIEFmI3lh/foXGmXBFXb9nfTuf+kfqgx0FKwtdKxmhBZb3K8O9wgCvGViwUI9TwzuOebwLkoyHb/xdSwAxj4J6WV291Xb6JrNvaymjThwlR5dQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Bdz427zK; arc=fail smtp.client-ip=40.107.220.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wAo2PIU2Qj2ConBLm6qLLQmwNugP0aAEw1DAtz+z2xVojmKdTrBoo4/0Y30pqfd/690FzLBdVEMpTwKLTZMhEX4eTNQn7aZOzZ25Zh5WDVpvl6MutghQ1msIxy83Vj6pbCDLiW0S7Eg88iblu7xBOLLaJRrAzSNEmKdt/2iiwT0WDppW7wiPATNo/BTgKBNaUUnpnRqe1oOioXoHXWyqMJBNkR2duyTn8pTN9c9uQg1I0EUI3iH3OZBNYVgEbKJff+a2O4C9qhZoIZb1/pKEBO2w67Ye4vzCUeLBbIbsPtApYlRz3m2Jex28O7OQ0Zh2PYXys7vXqxKOUBydlxddcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k5kPRlvueHceK3vyvseQuYkpJ88cUWaqqS4vZbbyKAE=;
- b=VXPE3I5U079Ffz2oAlCdqufPM9tCjvX0koWXgTN1ZGRnL+c/VpTfTJU24ksis8yVsqGyrurnQcIV0/2ixdQq7HAlCObgApvLrfNeucu26OvSOcPtcjWnKDHIou80uuNfbxKv1Ze+/If0PmLGGKlq2P/suKWrhu7/5KsNSa2Mz07kNEX8dueNG8v+uBqF9CAb8HJYZMlFBwDqOA1uBSymUu5i8JgebSRMLe7Fmx5ipRyRJD2rYePVg5UtzBDfgKJ4vDYAM0Bi5IxTy+ll2oDsxgZcmHBqkomgWS5dfFaUt+dYJiQgXRONM6orV9w30TkKEr6XkfBpln8ljcsKzwFzug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k5kPRlvueHceK3vyvseQuYkpJ88cUWaqqS4vZbbyKAE=;
- b=Bdz427zKHbqunIkCrplaF2FhwAaw0xPYr0dBpqj1NhhA+Qa0l9NNDJ6WimQuhTGKBB4SK4+YnFBc5SzMW3EmIQ+5bR/1rJ7g+uIt8vn/fCQWswGJQnSli/6LoWG6UEwy9GffBEf5Tj+zHlZ3aGQbsPYQ5QRmSw4fG9E3TVI0/1M=
-Received: from DM4PR12MB6109.namprd12.prod.outlook.com (2603:10b6:8:ae::11) by
- CH3PR12MB8484.namprd12.prod.outlook.com (2603:10b6:610:158::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7939.24; Wed, 11 Sep 2024 07:26:31 +0000
-Received: from DM4PR12MB6109.namprd12.prod.outlook.com
- ([fe80::680c:3105:babe:b7e1]) by DM4PR12MB6109.namprd12.prod.outlook.com
- ([fe80::680c:3105:babe:b7e1%3]) with mapi id 15.20.7962.016; Wed, 11 Sep 2024
- 07:26:31 +0000
-From: "Guntupalli, Manikanta" <manikanta.guntupalli@amd.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-CC: "git (AMD-Xilinx)" <git@amd.com>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "Simek, Michal" <michal.simek@amd.com>,
-	"Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>, "Goud, Srinivas"
-	<srinivas.goud@amd.com>, "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
-	"manion05gk@gmail.com" <manion05gk@gmail.com>
-Subject: RE: [PATCH 3/3] i2c: cadence: Add atomic transfer support for
- controller version 1.4
-Thread-Topic: [PATCH 3/3] i2c: cadence: Add atomic transfer support for
- controller version 1.4
-Thread-Index: AQHa4/d1fUhXdL0Y7U6RgxGWXLGsjrJRPzWAgAEgEWA=
-Date: Wed, 11 Sep 2024 07:26:30 +0000
-Message-ID:
- <DM4PR12MB61098BA9557140DB0BEA36848C9B2@DM4PR12MB6109.namprd12.prod.outlook.com>
-References: <20240801094408.2004460-1-manikanta.guntupalli@amd.com>
- <20240801094408.2004460-4-manikanta.guntupalli@amd.com>
- <5hjezq5ag4etru6suzbntvg2fwn45acckiyxsujmsjxsrgqxrd@asub7zr2t3gd>
-In-Reply-To: <5hjezq5ag4etru6suzbntvg2fwn45acckiyxsujmsjxsrgqxrd@asub7zr2t3gd>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB6109:EE_|CH3PR12MB8484:EE_
-x-ms-office365-filtering-correlation-id: 20972204-7791-47af-edf9-08dcd2330e9b
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?+22/NQX+YZkoeuewKdOWnNY62K4rj7Br1ry37BAqsdmBCpbnfnaaxYmUpD36?=
- =?us-ascii?Q?C6WCEsEf1uLRv6Y/9F+Riz0y0SnTYjnkbea8irLlL7Kzv12nS8a/bA1GkyWv?=
- =?us-ascii?Q?2Z8qmpY71QBz8futbIDtiZ9HfQ9iKmL6nKCwXiMGvHsmvkIag/+rPZfIzc9v?=
- =?us-ascii?Q?EIjCXWSxVF2k5RusiigTHwwJ5r+jsqqYnp2kesrsHvZIVVyvbWTr4ibpXrZh?=
- =?us-ascii?Q?OaGdFKplmStaYo6v5wf7WRwXbQIBT25AaU7b4Fj2N3nhMYGQ7lCkmWqTce/Y?=
- =?us-ascii?Q?F/touqAd8EIECh83FUJKN8YT2aIfuhbQtiZrgcmr8l210MBUowfskxnyG4vD?=
- =?us-ascii?Q?bpKKn1IIrcjzxKv8o5sbLAO3UZHZrTLdFzwSSvXZISpHR7ruoASDNM4zdYLn?=
- =?us-ascii?Q?mZ2WbcA/F5RytsOrJ93RqS7ucozv18/X1VZiSxWAQmK/6ztW4BZK7Qgh96Xi?=
- =?us-ascii?Q?0NkoYv0TIJNzIisDgGyHKt2mTaAo/bXIbwZzNuPx+5qUTMv2z0fL1rYOoBNZ?=
- =?us-ascii?Q?KEhjF/HUz39SxGSe9314iCJnTgST1YJTrTsP2psbgkJlMAbpPd/uqIprHr4L?=
- =?us-ascii?Q?wHmiTs0/S3rqcTI/MQwyAGdDxnfVSDBRzjRLgNRXqm4SUqn+3TBPilREfreJ?=
- =?us-ascii?Q?ByIvbpF/GuzLI38HboxTb4wv54dmwHFtjx0u1WPPpwoSIsZFBOKPk4qLRLDJ?=
- =?us-ascii?Q?exPXsVfD4Z/RWLX8uy5T93EwG/CLpvWtx4PIhSJBmT47HBEr5wDQHLDtHWYv?=
- =?us-ascii?Q?L+YtGffbZN5jzJ6hxJzEj002l2bzVEP0nrbdrxWXr0ovEnT8KZoiqw3d59MY?=
- =?us-ascii?Q?8DmF8c6sa/zGeGXlIVL3QcodxLZtlT/Kv1ra1agZALU9Clr+Q/KF1ftCYkDc?=
- =?us-ascii?Q?rg6q38DxSJb22meO975mATCHnlqMRTeekPnizUBfsBAXK4y4hI5RXlvRv3PZ?=
- =?us-ascii?Q?5xWwcnWdWmm0XZwFExJ0BvYn2FmFn6TD2u1xi7CxvcasrdyZMUdYPe/sft0a?=
- =?us-ascii?Q?5HhSeiopqZqCLEuqBmzBVVvajH6VbofxWOBdKxDfZVt7u1tCUcj/a2mSXdY7?=
- =?us-ascii?Q?wWnyEpIVF0W8bD4YBCsJIZ4c9yTh/ahdwBIrNMV3D3x7WnpjBD6EFQqzZXf5?=
- =?us-ascii?Q?8m4WzsjWJI7Y5I/imDGITXWbusBb51Turf4jwxirkbDhtk3rNJP+/+iX0ORT?=
- =?us-ascii?Q?Eou3qtpUwKYF7zVYQ7Dad0riA0oN32N46lOy2k2YE3cM57mnTeNJCF0awZJA?=
- =?us-ascii?Q?JNRm0Vws8qRT5SeJffaeYEwQ8Jt5DU4u6zmEfCdoQRUHpZR0x/FfaJ703erM?=
- =?us-ascii?Q?acZuj896DFbCurIbosydSv4FFqltQnvQDyVGr4v7mH1sPemBNK1nM2MKbbOu?=
- =?us-ascii?Q?YFOkZSzYvABNINvNkgqoinqTIXj9RnrpyPlYqSuqpr0tWCsBAg=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?NGudt+erk57A8Zu7FY23HhsuwaKkXfbbY/AeC0dTiDGiZh1ObHbB7/YmTmu/?=
- =?us-ascii?Q?r/v5KSxvzlbC4zKFkalXDEDUFjv28Iw5Ix84nmjrws2uKE8SJ4XXS42JSNe7?=
- =?us-ascii?Q?xz+ELpTUmxM0Stf4xD0PhA8lWCod5AjZKL8+sqN1BgwGxPkJV0TR/v4eKiSG?=
- =?us-ascii?Q?jwgG1COn0tS1PC/Wt/zwqJMiKs+wXhSURmU5DivelW8bj95aysRxNrnqYDOK?=
- =?us-ascii?Q?x00VhQQ97W2r5Slk8Fsh0S91QZlfKzwMgwoQShR1uIyT1lWQIQwNOJ+cJ0rJ?=
- =?us-ascii?Q?smVBKAjz6AhB+CTiYbyng/UVbFKw1uc6/vC7OP5AuZlsvhxEqqXgu9Ew8Glu?=
- =?us-ascii?Q?j46zwz8sanxq6no339c6I0j/MWV2qYIY6voGZRTOohNrQ2mTY1+UOPxwnyhJ?=
- =?us-ascii?Q?a978d/vVumqVDvGVH4h1Dtne47T8/Ekb/hNCz39UrHwMXMdiXY6hTEIkRhle?=
- =?us-ascii?Q?Z89OJ3isD9GMkrjHi62DHpvUqtHhE/6oik88XrQnPFXPQVSKfSX9voGQzKmp?=
- =?us-ascii?Q?kLMOlz8gDtJEY2BwL5YhbZOAJ+u9ItYBX/mWjSKduw0+2Be23ocQYW38cWBi?=
- =?us-ascii?Q?i20tPwT72J0t8knZKgHC4BRJ6oNttmd7bgkTU7sdtDYtnjoLM4eFVmvj8ZmK?=
- =?us-ascii?Q?8LACOOKdaTdIeR3Pyo7/Ey21G/PcXqNjYlOlQnhXkvTGWBk04mrSHiBrtiGj?=
- =?us-ascii?Q?7BYZFA6M7xDWA2LepBr6Qf9iHxLGvp2XcpIzT5Uk/rEH475YAkrCX6DM3WU3?=
- =?us-ascii?Q?WZaRAa4uUVtkprUEh/MRqKy4EcBWBF6KUSECMTZel31Km5ap4oTQzQ02oGuZ?=
- =?us-ascii?Q?rHi2u7ZMDhYRArWkPYlL9JUZ6p3XXLu5jrN98P00EuNAVOaljhFR+FK8zmQy?=
- =?us-ascii?Q?/8adwVAZr2E5Osd6fuo704BzXx/z80+jL2GAfvLf9rw/51f+qj6XYZzCnaWD?=
- =?us-ascii?Q?utLxqgsOr282GkMI39BCNF8raBQdMsZa3OfuudaxYJEPwT7QcZdDBS0YjEgD?=
- =?us-ascii?Q?8o09gNYZJmwlt2Y3qekP5XO9k5O52SvSN9YhqIm5GFgR2Lmit1lWb9D3lBju?=
- =?us-ascii?Q?fT6X1pWQFGxnz9Ilsq9BD4e0/tOKN8XX/glltrGi2NlOonRv63fbi/AdV7go?=
- =?us-ascii?Q?YU3P6o8oy5luWQKXpYdlhDjaBiHpVRqjNavQIPrVYMnkP4XlgbweY9R4UuuZ?=
- =?us-ascii?Q?QvSvF/pAr1tzFvhpEi3ilJNcTl7DdI4WoIbYspe3rFUuv0hb/NTsTW18BCBi?=
- =?us-ascii?Q?FlQOkRlGZPurcTf1wtkdchyKIKtOsmR22xNE4bVML0FTwj0TiTMqbb4uJHm1?=
- =?us-ascii?Q?oNeX4BBvvDasbDR/pBcWPO/ei68qSmhUAPvgUtWlTfpv6byPTecujF4UwHwM?=
- =?us-ascii?Q?loLZb50RwniQwRp6Wx6nRLA8/FehFaYetyZ3HLMB+V5dQapVA8OlsxQ8i9a5?=
- =?us-ascii?Q?GMiMUKpQBjQH8dh+yr/ufdJssQ++A7wZ9TfCl8xD6fHOzwWk7QVMY5dmH9yJ?=
- =?us-ascii?Q?F+Pxg2OTNGbdpM2eQLMpa1kXI7al2YWjo1kIL5okwQQRZciJxomLpRYNtLHO?=
- =?us-ascii?Q?a9THoNIdqEI+HjhhDrw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE1E1311AC
+	for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 07:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726039701; cv=none; b=A9HFnWZj/kEY+O4tAJZzcO9o8ztOBH03DRTjokdkXVQZ59uBDDN+2Rc89lB12rIvsddejsG/IIgA5f7BXLzoCTLhx9vTSGVIF6LeUXuP32vTWb8tKLwDgzfFdZpZEVNUhuhtUPgYwxiITk+G040S/Tb0GiuOsegCn9OpIgTu/LQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726039701; c=relaxed/simple;
+	bh=vMhuC8PNZN3+G8Jw50ke9CsdZzsyUD/t8c7FpFFbaPs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R4qJWbFd7is3Q5nasdmhj44egcskJF65Si8HONLno9loKiAFUAS9OSEFSPr4G6UyAW6ebeMFd5GGl/Ey8K6qSyPY8qIevJ8OMjaedFN1nGeTClEzDNmIbeoL2i5xx396KNAqI3It5RKjwtHgefNSjjViNfmFdhg3c2EM4Lm2474=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=gcrwQ+MV; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7d4ed6158bcso4509340a12.1
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 00:28:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1726039698; x=1726644498; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTKgkUpPxMjt6Wkjy0VL4B+YQKQwbZqLJmtteD1Fqgg=;
+        b=gcrwQ+MVyyNjh0NJkPbnr6wfxamVSFbnnJczUovY9Ckxl3MbQWVPWoDs1ZfKRylep1
+         VqdzfZX3fIglWZHk9Mv51C/tastmIlzLPKFM+dDvi/MJb0tSUG7oHUHnxRzCguDL2Gvh
+         FzqfJUhOV48FpWH/IeQPA2+5DHJK4WLHehItI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726039698; x=1726644498;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hTKgkUpPxMjt6Wkjy0VL4B+YQKQwbZqLJmtteD1Fqgg=;
+        b=IOSsM8kFMFRvKqbIkoaebaol+NrJrNJAIYY/9S7ZlSiqYe7csHKJAdwC6ceVNUFH04
+         gG5D2JCy6Ob7jzKocTThcIiOAX2ZrBwKD7861YYn5/j+nAbh3nlyjzRO2nAHz3mdiQZ/
+         vzv7an3nUzl1vBpLcJga9IA3F7Sb9Dykgx88SOs3PzOaSq+8IJgi+ygnDPX9qkx5iw+x
+         0os7dp/6+u/I8noqx8FkehqGLRplDD7TUwCcrEOzZg17DsrUUY8+kV4mmbN6o34WQoxl
+         NKTRMSZpdG9l6kwMYd3g1LRkbr8gf7TcH+D4nxrE3UQzULy+FiNjm0KcpioH6tvE2GCj
+         uCqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWfeaCmQm6bYcdY7xyfjwhUtdSTa4kTENUElJKYEUudEqllTmpNlmiXIX8PPCT4M4QGDBmSGOWYwRA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+KVuxmcIRsebrSmXSLpAIgrOrdx9oWfMA+Sy3lBtePkYu/Ui1
+	Zd8xKtF5wXLboG5t8b+gL5g3snZEamrxSORkNoMiWXEsV0U8KJ3XbMyEaL9Pxw==
+X-Google-Smtp-Source: AGHT+IEfFgxwFodCBOOV4Mey4FyzVGvUwL6y+0sWBJDlwOxvwP6rBYJkox3CrjRNGWdE04s4ZrrqPA==
+X-Received: by 2002:a05:6a20:d521:b0:1cf:2aaf:60d9 with SMTP id adf61e73a8af0-1cf5e157915mr4469402637.33.1726039698517;
+        Wed, 11 Sep 2024 00:28:18 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:8398:fe34:eba2:f301])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71908fe4e7esm2399415b3a.80.2024.09.11.00.28.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2024 00:28:18 -0700 (PDT)
+From: Chen-Yu Tsai <wenst@chromium.org>
+To: Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>
+Cc: Chen-Yu Tsai <wenst@chromium.org>,
+	chrome-platform@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH v7 00/10] platform/chrome: Introduce DT hardware prober
+Date: Wed, 11 Sep 2024 15:27:38 +0800
+Message-ID: <20240911072751.365361-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.46.0.598.g6f2099f65c-goog
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6109.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20972204-7791-47af-edf9-08dcd2330e9b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2024 07:26:30.9810
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dn47T/cY9/epAuI9zAfkbKpKX7LlQqaUUii0ys+rthKy6Kh6n+lTHL37Huj5LFN9Le9YaWftPdFzLR5KvQw+vA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8484
+Content-Transfer-Encoding: 8bit
 
-Hi Andi,
-Thank you for taking the time to review our patch. We appreciate your detai=
-led feedback and will address and fix all the review comments, except for t=
-he last one, which we believe may not be applicable.
+Hi everyone,
 
-Please find our inline replies to your comments below for further clarifica=
-tion.
+This is v7 of my "of: Introduce hardware prober driver" [1] series.
+v7 mainly refactors the code into a series of helpers. The scope of
+supported components is also reduced to those with at most one regulator
+supply and one GPIO pin. Also the helpers expect these to be named and
+so the "bulk get" API changes have been dropped.
 
-> -----Original Message-----
-> From: Andi Shyti <andi.shyti@kernel.org>
-> Sent: Tuesday, September 10, 2024 6:46 PM
-> To: Guntupalli, Manikanta <manikanta.guntupalli@amd.com>
-> Cc: git (AMD-Xilinx) <git@amd.com>; linux-arm-kernel@lists.infradead.org;=
- linux-
-> i2c@vger.kernel.org; linux-kernel@vger.kernel.org; Simek, Michal
-> <michal.simek@amd.com>; Pandey, Radhey Shyam
-> <radhey.shyam.pandey@amd.com>; Goud, Srinivas <srinivas.goud@amd.com>;
-> Datta, Shubhrajyoti <shubhrajyoti.datta@amd.com>; manion05gk@gmail.com
-> Subject: Re: [PATCH 3/3] i2c: cadence: Add atomic transfer support for co=
-ntroller
-> version 1.4
->=20
-> Hi Manikata,
->=20
-> Sorry for the delay in reviewing this patch. Looks good, just a few notes=
- below.
->=20
-> ...
->=20
-> > +static bool cdns_i2c_error_check(struct cdns_i2c *id) {
-> > +	unsigned int isr_status;
-> > +
-> > +	id->err_status =3D 0;
-> > +
-> > +	isr_status =3D cdns_i2c_readreg(CDNS_I2C_ISR_OFFSET);
-> > +	cdns_i2c_writereg(isr_status & CDNS_I2C_IXR_ERR_INTR_MASK,
-> > +CDNS_I2C_ISR_OFFSET);
-> > +
-> > +	id->err_status =3D isr_status & CDNS_I2C_IXR_ERR_INTR_MASK;
-> > +	if (id->err_status)
-> > +		return true;
-> > +
-> > +	return false;
->=20
-> return !!id->err_status;
-We will fix.
->=20
-> > +}
-> > +
-> > +static void cdns_i2c_mrecv_atomic(struct cdns_i2c *id) {
-> > +	bool updatetx;
->=20
-> Please move the udatex declaration inside the while loop.
-We will fix.
->=20
-> > +	while (id->recv_count > 0) {
-> > +		/*
-> > +		 * Check if transfer size register needs to be updated again for a
-> > +		 * large data receive operation.
-> > +		 */
-> > +		updatetx =3D id->recv_count > id->curr_recv_count;
-> > +
-> > +		while (id->curr_recv_count > 0) {
-> > +			if (cdns_i2c_readreg(CDNS_I2C_SR_OFFSET) &
-> CDNS_I2C_SR_RXDV) {
-> > +				*id->p_recv_buf++ =3D
-> cdns_i2c_readreg(CDNS_I2C_DATA_OFFSET);
->=20
-> Can you please expand this operation to be a bit more clearer, without as=
-king
-> people to check on operation precedence?
-We will fix.
->=20
-> > +				id->recv_count--;
-> > +				id->curr_recv_count--;
-> > +
-> > +				/*
-> > +				 * Clear hold bit that was set for FIFO control
-> > +				 * if RX data left is less than or equal to
-> > +				 * FIFO DEPTH unless repeated start is selected
->=20
-> mmhhh... the lack of punctuation makes this comment difficult to understa=
-nd.
-Sorry, we will update.
->=20
-> > +				 */
-> > +				if (id->recv_count <=3D id->fifo_depth && !id-
-> >bus_hold_flag)
-> > +					cdns_i2c_clear_bus_hold(id);
-> > +			}
-> > +			if (cdns_i2c_error_check(id))
-> > +				return;
-> > +			if (cdns_is_holdquirk(id, updatetx))
-> > +				break;
-> > +		}
-> > +
-> > +		/*
-> > +		 * The controller sends NACK to the slave when transfer size
->=20
-> /slave/target/
-We will update.
->=20
-> > +		 * register reaches zero without considering the HOLD bit.
-> > +		 * This workaround is implemented for large data transfers to
-> > +		 * maintain transfer size non-zero while performing a large
-> > +		 * receive operation.
-> > +		 */
-> > +		if (cdns_is_holdquirk(id, updatetx)) {
-> > +			/* wait while fifo is full */
-> > +			while (cdns_i2c_readreg(CDNS_I2C_XFER_SIZE_OFFSET) !=3D
-> > +			       (id->curr_recv_count - id->fifo_depth))
-> > +				;
-> > +
-> > +			/*
-> > +			 * Check number of bytes to be received against maximum
-> > +			 * transfer size and update register accordingly.
-> > +			 */
-> > +			if (((int)(id->recv_count) - id->fifo_depth) >
->=20
-> The cast is not needed here.
-We will fix.
->=20
-> > +			    id->transfer_size) {
-> > +				cdns_i2c_writereg(id->transfer_size,
-> > +						  CDNS_I2C_XFER_SIZE_OFFSET);
-> > +				id->curr_recv_count =3D id->transfer_size +
-> > +						      id->fifo_depth;
-> > +			} else {
-> > +				cdns_i2c_writereg(id->recv_count -
-> > +						  id->fifo_depth,
-> > +						  CDNS_I2C_XFER_SIZE_OFFSET);
-> > +				id->curr_recv_count =3D id->recv_count;
-> > +			}
-> > +		}
-> > +	}
-> > +
-> > +	/* Clear hold (if not repeated start) */
-> > +	if (!id->recv_count && !id->bus_hold_flag)
-> > +		cdns_i2c_clear_bus_hold(id);
-> > +}
-> > +
-> >  /**
-> >   * cdns_i2c_mrecv - Prepare and start a master receive operation
-> >   * @id:		pointer to the i2c device structure
-> > @@ -715,7 +804,34 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
-> >  		cdns_i2c_writereg(addr, CDNS_I2C_ADDR_OFFSET);
-> >  	}
-> >
-> > -	cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK,
-> CDNS_I2C_IER_OFFSET);
-> > +	if (!id->atomic)
-> > +		cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK,
-> CDNS_I2C_IER_OFFSET);
-> > +	else
-> > +		cdns_i2c_mrecv_atomic(id);
-> > +}
-> > +
-> > +static void cdns_i2c_msend_rem_atomic(struct cdns_i2c *id) {
-> > +	unsigned int avail_bytes;
-> > +	unsigned int bytes_to_send;
->=20
-> Please move these inside the while.
-We will update.
->=20
-> > +
-> > +	while (id->send_count) {
-> > +		avail_bytes =3D id->fifo_depth -
-> cdns_i2c_readreg(CDNS_I2C_XFER_SIZE_OFFSET);
-> > +		if (id->send_count > avail_bytes)
-> > +			bytes_to_send =3D avail_bytes;
-> > +		else
-> > +			bytes_to_send =3D id->send_count;
-> > +
-> > +		while (bytes_to_send--) {
-> > +			cdns_i2c_writereg((*id->p_send_buf++),
-> CDNS_I2C_DATA_OFFSET);
-> > +			id->send_count--;
-> > +		}
-> > +		if (cdns_i2c_error_check(id))
-> > +			return;
-> > +	}
-> > +
-> > +	if (!id->send_count && !id->bus_hold_flag)
-> > +		cdns_i2c_clear_bus_hold(id);
-> >  }
-> >
-> >  /**
-> > @@ -778,7 +894,12 @@ static void cdns_i2c_msend(struct cdns_i2c *id)
-> >  	cdns_i2c_writereg(id->p_msg->addr & CDNS_I2C_ADDR_MASK,
-> >  						CDNS_I2C_ADDR_OFFSET);
-> >
-> > -	cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK,
-> CDNS_I2C_IER_OFFSET);
-> > +	if (!id->atomic) {
-> > +		cdns_i2c_writereg(CDNS_I2C_ENABLED_INTR_MASK,
-> CDNS_I2C_IER_OFFSET);
-> > +	} else {
-> > +		if (id->send_count > 0)
->=20
-> If you do:
->=20
-> 	} else if (id->send_count > 0) {
->=20
-> we save a level of indentation.
-We will fix.
->=20
-> > +			cdns_i2c_msend_rem_atomic(id);
-> > +	}
-> >  }
-> >
-> >  /**
-> > @@ -818,7 +939,8 @@ static int cdns_i2c_process_msg(struct cdns_i2c
-> > *id, struct i2c_msg *msg,
-> >
-> >  	id->p_msg =3D msg;
-> >  	id->err_status =3D 0;
-> > -	reinit_completion(&id->xfer_done);
-> > +	if (!id->atomic)
-> > +		reinit_completion(&id->xfer_done);
-> >
-> >  	/* Check for the TEN Bit mode on each msg */
-> >  	reg =3D cdns_i2c_readreg(CDNS_I2C_CR_OFFSET);
-> > @@ -841,13 +963,24 @@ static int cdns_i2c_process_msg(struct cdns_i2c *=
-id,
-> struct i2c_msg *msg,
-> >  	/* Minimal time to execute this message */
-> >  	msg_timeout =3D msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / =
-id-
-> >i2c_clk);
-> >  	/* Plus some wiggle room */
-> > -	msg_timeout +=3D msecs_to_jiffies(500);
-> > +	if (!id->atomic)
-> > +		msg_timeout +=3D msecs_to_jiffies(500);
-> > +	else
-> > +		msg_timeout +=3D msecs_to_jiffies(2000);
->=20
-> You explained this in the commit log, can you add it in a comment, as wel=
-l?
-We will update.
->=20
-> >
-> >  	if (msg_timeout < adap->timeout)
-> >  		msg_timeout =3D adap->timeout;
-> >
-> > -	/* Wait for the signal of completion */
-> > -	time_left =3D wait_for_completion_timeout(&id->xfer_done, msg_timeout=
-);
-> > +	if (!id->atomic) {
-> > +		/* Wait for the signal of completion */
-> > +		time_left =3D wait_for_completion_timeout(&id->xfer_done,
-> msg_timeout);
-> > +	} else {
-> > +		/* 0 is success, -ETIMEDOUT is error */
-> > +		time_left =3D !readl_poll_timeout_atomic(id->membase +
-> CDNS_I2C_ISR_OFFSET,
-> > +						       reg, (reg & CDNS_I2C_IXR_COMP),
-> > +						       CDNS_I2C_POLL_US_ATOMIC,
-> msg_timeout);
-> > +	}
->=20
-> You can merge this if/else with the one above, to save some code.
-Thank you for your suggestion to merge the if/else blocks to streamline the=
- code. We have considered this approach; however, merging them would necess=
-itate duplicating the following lines in both the if and else blocks:
-     if (msg_timeout < adap->timeout)
-                msg_timeout =3D adap->timeout;
+Also, a pull request to document the "fail-needs-probe" status has been
+sent: https://github.com/devicetree-org/dt-schema/pull/141
+
+v2 continued Doug's "of: device: Support 2nd sources of probeable but
+undiscoverable devices" [2] series, but follows the scheme suggested by
+Rob, marking all second source component device nodes as "fail-needs-probe",
+and having a hardware prober driver enable the one of them.
 
 
-Thanks,
-Manikanta.
+Changes since v6:
+- Link to v6:
+  https://lore.kernel.org/all/20240904090016.2841572-1-wenst@chromium.org/
+- Dropped patch "gpiolib: Add gpio_property_name_length()"
+  No longer needed
+- Dropped patch "regulator: Move OF-specific regulator lookup code to of_regulator.c"
+  Already merged
+- Patch 2 "of: base: Add for_each_child_of_node_with_prefix()"
+  - Changed helper name to "for_each_child_of_node_with_prefix()"
+- Patch 4 "regulator: Add of_regulator_get_optional() for pure DT regulator lookup"
+  - Was "regulator: Do pure DT regulator lookup in of_regulator_bulk_get_all()"
+  - Changed reference [1] to Link: tag
+  - Rebased on top of commit 401d078eaf2e ("regulator: of: Refactor
+    of_get_*regulator() to decrease indentation")
+  - Exported of_regulator_get_optional()
+  - Changed commit message to focus on "of_regulator_get_optional()"
+  - Dropped change to of_regulator_bulk_get_all()
+- Patch 5 "i2c: core: Remove extra space in Makefile"
+  - Collected Andy's Reviewed-by
+- Patch 6 "i2c: Introduce OF component probe function"
+  - Correctly replaced for_each_child_of_node_scoped() with
+    for_each_child_of_node_with_prefix()
+  - Added namespace for exported symbols
+  - Made the probe function a framework with hooks
+  - Split out a new header file
+  - Added MAINTAINERS entry
+  - Reworded kernel-doc
+  - Dropped usage of __free from i2c_of_probe_component() since error
+    path cleanup is needed anyway
+- Patch 7 "i2c: of-prober: Add simple helpers for regulator support"
+  - Moved change of of_get_next_child_scoped() to
+    of_get_next_child_with_prefix() to previous patch
+  - Restructured into helpers for the I2C OF component prober
+  - Reduced to only handle one regulator
+  - Commit message updated
+- Patch 8 "i2c: of-prober: Add GPIO support to simple helpers"
+  - Restructured into helpers for the I2C OF component prober
+  - Reduced to only handle one GPIO
+  - Set GPIO to input on (failure) cleanup
+  - Updated commit message
+- Patch 9 "platform/chrome: Introduce device tree hardware prober"
+  - Adapted to new I2C OF prober interface
+  - Collected Acked-by tag
+
+Changes since v5:
+- Link to v5:
+  https://lore.kernel.org/all/20240822092006.3134096-1-wenst@chromium.org/
+- Patch 1 "of: dynamic: Add of_changeset_update_prop_string"
+  - Collected Rob's reviewed-by
+- Patch 2 "of: base: Add for_each_child_of_node_with_prefix_scoped()"
+  - New patch
+- Patch 3 "regulator: Move OF-specific regulator lookup code to of_regulator.c"
+  - Fix kerneldoc format of of_regulator_dev_lookup()
+  - Fix stub compile error for !CONFIG_OF in drivers/regulator/internal.h
+- Patch 4 "regulator: Split up _regulator_get()"
+  - Fixed kerneldoc "Return" section format for _regulator_get_common()
+  - Slightly reworded return value description
+- Patch 5 "regulator: Do pure DT regulator lookup in of_regulator_bulk_get_all()"
+  - Used "dev_of_node(dev)" instead of "dev->of_node"
+  - Replaced "dev_printk" with "dev_printk()" in kerneldoc mentions
+  - Fixed kerneldoc "Return" section format for of_regulator_get_optional()
+  - Fix @np parameter name in of_regulator_dev_lookup() kerneldoc
+- Patch 6 "gpiolib: Add gpio_property_name_length()"
+  - Changed function name to "gpio_get_property_name_length()"
+  - Changed argument name to "propname"
+  - Clarified return value for "*-<GPIO suffix>" case
+  - Reworked according to Andy's suggestion
+  - Added stub function
+- Patch 7 "i2c: core: Remove extra space in Makefile"
+  - New patch
+- Patch 8 "i2c: Introduce OF component probe function"
+  - Fixed indent in Makefile
+  - Split regulator and GPIO TODO items
+  - Reversed final conditional in i2c_of_probe_enable_node()
+- Patch 9 "i2c: of-prober: Add regulator support"
+  - Split of_regulator_bulk_get_all() return value check and explain
+    "ret == 0" case
+  - Switched to of_get_next_child_with_prefix_scoped() where applicable
+  - Used krealloc_array() instead of directly calculating size
+  - copy whole regulator array in one memcpy() call
+  - Drop "0" from struct zeroing initializer
+  - Split out regulator helper from i2c_of_probe_enable_res() to keep
+    code cleaner when combined with the next patch
+  - Added options for customizing power sequencing delay
+  - Rename i2c_of_probe_get_regulator() to i2c_of_probe_get_regulators()
+  - Add i2c_of_probe_free_regulator() helper
+- Patch 10 "i2c: of-prober: Add GPIO support"
+  - Renamed "con" to "propname" in i2c_of_probe_get_gpiod()
+  - Copy string first and check return value of strscpy() for overflow in
+    i2c_of_probe_get_gpiod()
+  - Add parenthesis around "enable" and "reset" GPIO names in comments
+  - Split resource count debug message into two separate lines
+  - Split out GPIO helper from i2c_of_probe_enable_res() to keep code
+    cleaner following the previous patch
+  - Adopted options for customizing power sequencing delay following
+    previous patch
+- Patch 11 "platform/chrome: Introduce device tree hardware prober"
+  - Adapt to new i2c_of_probe_component() parameters
+- Patch 12 "arm64: dts: mediatek: mt8173-elm-hana: Mark touchscreens and
+	    trackpads as fail"
+  - None
+
+See v5 cover letter for previous change logs.
+
+For the I2C component (touchscreens and trackpads) case from the
+original series, the hardware prober driver finds the particular
+class of device in the device tree, gets its parent I2C adapter,
+and tries to initiate a simple I2C read for each device under that
+I2C bus. When it finds one that responds, it considers that one
+present, marks it as "okay", and returns, letting the driver core
+actually probe the device.
+
+This works fine in most cases since these components are connected
+via a ribbon cable and always have the same resources. The prober
+will also grab these resources and enable them.
+
+The other case, selecting a display panel to use based on the SKU ID
+from the firmware, hit a bit of an issue with fixing the OF graph.
+It has been left out since v3.
+
+Patch 1 adds of_changeset_update_prop_string(), as requested by Rob.
+
+Patch 2 adds for_each_child_of_node_with_prefix(), as suggested by Andy.
+
+Patches 3 through 4 reorganize the OF-specific regulator core code and
+adds a new of_regulator_get_optional() function to look up regulator
+supplies solely using device tree nodes.
+
+Patch 5 cleans up some extra spaces in the i2c core Makefile
+
+Patch 6 implements probing the I2C bus for presence of components as
+a hookable helper function in the I2C core.
+
+Patch 7 implements regulator supply support as a set of simple helpers
+for the I2C component prober.
+
+Patch 8 implements GPIO support for the I2C component prober simple
+helpers.
+
+Patch 9 adds a ChromeOS specific DT hardware prober. This initial
+version targets the Hana Chromebooks, probing its I2C trackpads and
+touchscreens.
+
+Patch 10 modifies the Hana device tree and marks the touchscreens
+and trackpads as "fail-needs-probe", ready for the driver to probe.
+
+
+The patch and build time dependencies for this series is now quite
+complicated:
+
+  regulator cleanups in -next -> regulator patches here ----
+							   |
+							   v
+  platform/chrome device tree hardware prober <--- i2c of-prober
+ 
+The regulator patches in this series depend on other cleanup patches [1]
+that are already in -next. Patches 6 through 8 introducting i2c of-prober
+depend on the first 5 patches. Patch 11, The chrome prober, depends on
+patch 6 for now.
+
+I think it would be easier if the respective maintainers take the first
+four patches for -rc1. Wolfram has agreed to take the remaining i2c and
+chrome patches through the i2c tree once the other bits have landed,
+Patch 12 can go in only after everything else is in. This should be
+better than having an immutable branch on top of some commit in -next
+for other trees to consume.
+
+This might be the last revision I send out before ELCE / Plumbers, as
+I'm traveling to Austria a few day earlier. If there are more concerns
+about the design, maybe we could discuss it in person then if all
+concerned parties are present.
+
+
+Thanks
+ChenYu
+
+
+Chen-Yu Tsai (10):
+  of: dynamic: Add of_changeset_update_prop_string
+  of: base: Add for_each_child_of_node_with_prefix()
+  regulator: Split up _regulator_get()
+  regulator: Add of_regulator_get_optional() for pure DT regulator
+    lookup
+  i2c: core: Remove extra space in Makefile
+  i2c: Introduce OF component probe function
+  i2c: of-prober: Add simple helpers for regulator support
+  i2c: of-prober: Add GPIO support to simple helpers
+  platform/chrome: Introduce device tree hardware prober
+  arm64: dts: mediatek: mt8173-elm-hana: Mark touchscreens and trackpads
+    as fail
+
+ MAINTAINERS                                   |   8 +
+ .../boot/dts/mediatek/mt8173-elm-hana.dtsi    |  13 +
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi  |   4 +-
+ drivers/i2c/Makefile                          |   7 +-
+ drivers/i2c/i2c-core-of-prober.c              | 455 ++++++++++++++++++
+ drivers/of/base.c                             |  35 ++
+ drivers/of/dynamic.c                          |  44 ++
+ drivers/platform/chrome/Kconfig               |  11 +
+ drivers/platform/chrome/Makefile              |   1 +
+ .../platform/chrome/chromeos_of_hw_prober.c   | 125 +++++
+ drivers/regulator/core.c                      |  58 ++-
+ drivers/regulator/internal.h                  |   6 +
+ drivers/regulator/of_regulator.c              |  51 +-
+ include/linux/i2c-of-prober.h                 | 131 +++++
+ include/linux/of.h                            |  13 +
+ include/linux/regulator/consumer.h            |   4 +
+ 16 files changed, 942 insertions(+), 24 deletions(-)
+ create mode 100644 drivers/i2c/i2c-core-of-prober.c
+ create mode 100644 drivers/platform/chrome/chromeos_of_hw_prober.c
+ create mode 100644 include/linux/i2c-of-prober.h
+
+-- 
+2.46.0.598.g6f2099f65c-goog
+
 
