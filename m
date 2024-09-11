@@ -1,153 +1,143 @@
-Return-Path: <linux-i2c+bounces-6564-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6565-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED9019755DD
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 16:45:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24737975600
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 16:50:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B9141C226CD
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 14:45:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57A9A1C26762
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 14:50:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5EF52AE90;
-	Wed, 11 Sep 2024 14:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193CF1ABECE;
+	Wed, 11 Sep 2024 14:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BuRVAhNq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VH/SF1r+"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8297D27713;
-	Wed, 11 Sep 2024 14:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C202B8F6C;
+	Wed, 11 Sep 2024 14:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726065934; cv=none; b=I/AxTagOVE2P5b8pchf7pPRvZ3LJwDRMf5OVpn6J5oZdKPJVdj3c+7Se6Qq/Xeq3TgzjOVPMNsArXWPvCV0TvkLSOo2Qko6UE3O3xAJjjYWQfu3ii8fU5E/lu0zbzwGPhX4rUMvx21CF+ncEsp7OYJMfaRTvkWIae1ZtBFTfIjE=
+	t=1726066178; cv=none; b=sfD1XziVX7pAz6dXmIV/ve6wDk1jpRjpNRTTwr/GPCbnUDKhBCMqaf0Rj0441Ravkt5nh3l78neN0EA2ykW8PRG5b/aWdM1SN6slJjm/FzY+T5IjyVZjwJ8Yfm/f21mOGkJITmKVvGFqPvMoXn8JkcketyYAomtxEcL+u1vAPRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726065934; c=relaxed/simple;
-	bh=z7r9sC95kQfnORF/MXv5p7BPRF1PGeUCRk6SxIm93dM=;
+	s=arc-20240116; t=1726066178; c=relaxed/simple;
+	bh=2JdHIhcBYlO+XznGW1xNfxUvSnrmZ68daqxqk4z1Tx8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XSnaJ1ZxCmLQhUmN6t6BdpKv5detD1uGRLajVEUcpDKm73QAtdNM3TFb0ndckUpxTwJAy8BfTZIyJ3K75B7mleW7Tjw13XoewikAkD9cSWeYWzFzZ4SUrPO8+fmcYN3hutHkp41Z3mSId0GMFqhfA5woWzn4uHlVtaMQ+AoMKro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BuRVAhNq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5072C4CEC0;
-	Wed, 11 Sep 2024 14:45:33 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ql/r9ng1cId0pT+4e0EguIk1j+dwmENlYQ0kUE78+WpR9eJAO+kaXTbAotAIGAbvSzMGggMYsOH4hPy8ji06hq45DHCqGYzjRhFnek/ayhQZpE2NXNklUGaYAgtk0Nht+xx/e7ce/6vlX+hAlVV4f8Vya4dHYaQJzUb8ea4dUIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VH/SF1r+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1A9C4CEC0;
+	Wed, 11 Sep 2024 14:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726065933;
-	bh=z7r9sC95kQfnORF/MXv5p7BPRF1PGeUCRk6SxIm93dM=;
+	s=k20201202; t=1726066177;
+	bh=2JdHIhcBYlO+XznGW1xNfxUvSnrmZ68daqxqk4z1Tx8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BuRVAhNq/du/429/es1wHIju+QoyfEMgnVRRXB2SB3R1YYZmRvumNInoQhl+EGh3F
-	 aAy0rf7udbsPm/01hRaQlVIyr9fyTx2Fa7G9D7tw5I367TaTnjFrVrKCalHVl/pOwj
-	 0ebQ95MJH5jDueYktqOynfCCcumX+UZOnHGDmL4y6w9i1dgvRWZm0VshlvmoYexsVw
-	 kt7i8n4iMFOmaHe8EEhsR49Q5LaXOS8IwIbq5LV/Wp7JDGm7mXrIUbSNbRHOoWXwB3
-	 UUZzbk64u6b9HY/3RUN/gOsfcywF+u9NimnDVceh10mH4AdOInQmv5VsxJGUNhShHl
-	 tmkzcuxcze7dA==
-Date: Wed, 11 Sep 2024 09:45:32 -0500
-From: Rob Herring <robh@kernel.org>
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	b=VH/SF1r+qzueFeFY91a/5Ugk2cBwOm1vAdHvoXS2owgWYZ0bvPhqQ5OENtkbgJqpT
+	 jMZM8l52luP0ltqb8TwjWwaN8rdL0KCviRwk11e2ukUdcjSgBQFrY8tycF5XHeSyaQ
+	 o/fIEyXjbmS3Yg1uj4pVs9q+ML+8Esi/zKI8F48nWX95awjMSJD2VgPp64pRx0651x
+	 ErqzO7JUsmENZhAFGj4YNZjeJf13GaoNIs1sTiqjfSwnao0Lyp3RnicUgjtmmdoOXK
+	 c9igHap2/BslYVdPGeLYo8jgcI83wRP3PsoQimPfM965LX0tihSEUuquYQvU9Y8gkZ
+	 tX2jM2ddx+RkQ==
+Date: Wed, 11 Sep 2024 15:49:31 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Doug Anderson <dianders@chromium.org>,
+	Chen-Yu Tsai <wenst@chromium.org>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
 	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: pmbus: add ti tps25990
- documentation
-Message-ID: <20240911144532.GA154835-robh@kernel.org>
-References: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
- <20240909-tps25990-v1-1-39b37e43e795@baylibre.com>
- <3efbzcys4762rhx2h2cbhqvi6dgik7pfrxcziccdko34pb5z54@joodcym6c3s4>
- <1jzfofsvmh.fsf@starbuckisacylon.baylibre.com>
+Subject: Re: [PATCH v6 09/12] i2c: of-prober: Add regulator support
+Message-ID: <04704b5d-ae3f-488f-91a5-acdbc993efc6@sirena.org.uk>
+References: <20240904090016.2841572-1-wenst@chromium.org>
+ <20240904090016.2841572-10-wenst@chromium.org>
+ <CAD=FV=UGOz3Xzg7reJKP=tA1LqTxszv5w-CL9krmoXQtXdJLaQ@mail.gmail.com>
+ <CAGXv+5F27K76t=ht5v75jKsNF-J+C0r5+m=czHz6PtV3t5DxcQ@mail.gmail.com>
+ <CAD=FV=XVrAdQN8p9QJtt3Ah_YQAG7Y-D4wDx8_+qb1EGN7+Uig@mail.gmail.com>
+ <CAGXv+5HO=POHNL_tQHCsy+8=a0gPLMDVHcWMguferahVU+BnZA@mail.gmail.com>
+ <CAD=FV=U2yDGv74GQWRQuHN9sjdY5iThqpH-br-jYXMkV1cujEg@mail.gmail.com>
+ <ZuGrX67LzMe9S6ce@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="0YYjs5cw/PRZRTra"
 Content-Disposition: inline
-In-Reply-To: <1jzfofsvmh.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <ZuGrX67LzMe9S6ce@smile.fi.intel.com>
+X-Cookie: No Canadian coins.
 
-gOn Tue, Sep 10, 2024 at 11:31:18AM +0200, Jerome Brunet wrote:
-> On Tue 10 Sep 2024 at 09:48, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> 
-> > On Mon, Sep 09, 2024 at 05:39:03PM +0200, Jerome Brunet wrote:
-> >> Add DT binding documentation for the Texas Instruments TPS25990 eFuse
-> >> 
-> >> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-> >> ---
-> >>  .../bindings/hwmon/pmbus/ti,tps25990.yaml          | 73 ++++++++++++++++++++++
-> >>  1 file changed, 73 insertions(+)
-> >>
-> >
-> > A nit, subject: drop second/last, redundant "documentation". The
-> > "dt-bindings" prefix is already stating that these are bindings/docs.
-> > See also:
-> > https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
-> >
-> >> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
-> >> new file mode 100644
-> >> index 000000000000..e717942b3598
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
-> >> @@ -0,0 +1,73 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +
-> >
-> > Drop blank line.
-> >
-> >> +$id: http://devicetree.org/schemas/hwmon/pmbus/ti,tps25990.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Texas Instruments TPS25990 Stackable eFuse
-> >> +
-> >> +maintainers:
-> >> +  - Jerome Brunet <jbrunet@baylibre.com>
-> >> +
-> >> +description: |
-> >
-> > Do not need '|' unless you need to preserve formatting.
-> >
-> >> +  The TI TPS25990 is an integrated, high-current circuit
-> >> +  protection and power management device with PMBUS interface
 
-And wrap at 80.
+--0YYjs5cw/PRZRTra
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    const: ti,tps25990
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >> +
-> >> +  ti,rimon-milli-ohms:
-> >> +    description:
-> >> +      milli Ohms value of the resistance installed between the Imon pin
-> >> +      and the ground reference.
-> >
-> > Ohms is not enough? We don't have mOhm in property units.
-> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
-> >
-> 
-> Same discussion as we've had on the driver change.
-> At the moment Ohms is enough for the cases I've seen.
-> 
-> Will it be, not sure.
-> Using mOhms is' way to avoid "S**t, R is 80.2 Ohms, I
-> need another digit to not loose precision " kind of situation and
-> introduce a second property just for that.
-> 
-> No idea if Rimon will get that low. Probably not.
-> 
-> I'll switch to Ohms.
+On Wed, Sep 11, 2024 at 05:38:23PM +0300, Andy Shevchenko wrote:
+> On Tue, Sep 10, 2024 at 05:30:07PM -0700, Doug Anderson wrote:
+> > On Thu, Sep 5, 2024 at 8:45=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org=
+> wrote:
 
-You can can use "-micro-ohms" too. The reason we don't have every 
-possible unit is so we have everyone picking their own.
+> > > At least for one Chromebooks it's a bit more tricky because that one
+> > > HID-over-I2C component shares the same address as a non-HID one. We
+> > > currently have different SKU IDs and thus different device trees for
+> > > them, but we could make the prober work with this. It just has be able
+> > > to tell if the component it's currently probing needs the special
+> > > prober and is it responding correctly. This bit I need to think about.
 
-Rob
+> > I guess Mark Brown also thought that there wouldn't be some magic
+> > register, but my gut still tells me that most i2c devices have some
+> > way to confirm that they are what you expect even if it's not an
+> > official "vendor" or "version" register. Some type of predictable
+> > register at a predictable location that you could use, at least if you
+> > knew all of the options that someone might stuff.
+
+> "most" is way too optimistic to say, I believe that not even close to maj=
+ority
+> of I=C2=B2C target devices they are not reliably discoverable.
+
+> That's the downside of non-discoverable busses like I=C2=B2C. Maybe I=C2=
+=B3C has
+> a mechanism for that, but I am not an expert, just wondering.
+
+There's no standard mechanism for I2C, however it is relatively common
+for devices to have some kind of ID registers.  This is especially true
+if you're confining yourself to a particular class of device, bigger and
+more modern devices are more likely to have this - if you want to pick
+your audio CODEC or touchscreen controller it's a lot more likely
+that'll work than something like a simple DAC or ADC for example.  You
+also have the different I2C addresses that vendors pick to help out.
+It's not an actual specified discovery mechanism, but practically
+speaking you probably can generalise some of the ID register probing.
+Though equally it's good practice for drivers to check this anyway so
+it's not clear how much benefit there is over just trying to run probe().
+
+--0YYjs5cw/PRZRTra
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbhrfoACgkQJNaLcl1U
+h9CmRwf/VSzg1giqNuZPz5GoiuFRE5wHodDTSi786A/EN8dxvsAsG1ssePbuaBXk
+aO6EZG/ZWCFSvhHSt21PAqohQTFpQu+WAplJXngeufmeq6oPwGAGNRnSs/eaBByC
+NXANkH0haNf3iB4QxpVUmdNH2IApfpYzw++kDzZNP6TPnyfcmnSbWREl9qqird32
+b3PKovhh+VYtDavqXpT6PeQ9Ovl39KAD/wq3WyMzJo2Kjr8JPDZ6cmFj1BBnfUHg
+Ca6F0hXH0jyPfVDJQ8j7eeOXsRNpTK786YcsaGuRbSNetxZjYsYRY8UFzN1trP90
+i52gDob4jcrCTRHr5HUhK+SmvtMggw==
+=MIYK
+-----END PGP SIGNATURE-----
+
+--0YYjs5cw/PRZRTra--
 
