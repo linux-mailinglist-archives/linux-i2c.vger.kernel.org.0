@@ -1,172 +1,280 @@
-Return-Path: <linux-i2c+bounces-6517-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6518-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71B179749B7
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 07:25:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67465974A2A
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 08:13:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3540328780A
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 05:25:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B8891C21419
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 06:13:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABAD742052;
-	Wed, 11 Sep 2024 05:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0569878C9D;
+	Wed, 11 Sep 2024 06:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="ZXBx0Lsi"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hACQQODt"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2049.outbound.protection.outlook.com [40.107.247.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8692F30
-	for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 05:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726032333; cv=fail; b=n9KzeRyIHmZ4QOC1pOtps4GLxWcWTUFq4OaROTgUvTnZ7Jrc5X+sGmqomeeXVkYmMrVBVHnAsk/wXIiSPHWdIVK9aheK9XCdHfMX0nKGLY7WiNHiFiqwNrucdhUHJ2AabNNxAc07hihEQLeNrU4Iwanvgq2HU/0zwVv8u22qdKo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726032333; c=relaxed/simple;
-	bh=2D7Rbra6Jpy9NX57TvzgatxeBZHizqfr+cgzCLB9sz8=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=LMnyO2MLsmc5Va410z/3kqpixd6qkVt8axfByLNHgGwsCYyBxWJoDbNJzpfOVm9wAns7oBSuTgKty0hS0wRK4e12Qjui9nbS7HsaZLhOanbqQ0dv7wZOPVShrQuzPG4B3fTTv+IUCH3sbipedaKD5n7joSqShyyR12AcuZuPGuk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=ZXBx0Lsi; arc=fail smtp.client-ip=40.107.247.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TEmGhTppUwGHjlyorE0UxJHyBzhml37XmIdql8pRPYwiCm5jKxQoMxbIxGX6ltBchYlSHIiK5M4Al7xNGkXQh91xjlcNXsp1DtgYwdIhy3O8ZXdmDafdEU8S9pc9w4cP5N46BKVi4E4HyUn6Glu7/ug/eIcH6NMvG7KX6xl+VATWGwwd32IQ8d8n+fFz27B64w8E+BGHzoYItG2o5Mpc4NrYyaXLKgFjgRf+DT+h+jWSFioV9FU/2RwBwtLmesmVQH4vYmHoURn5Kd1iSdU4f6pp8XPNC4otFyI6m9APt2iwhzrq1Dla3bLpYPur9nnM4m0iCp9vFsmEPRB+8xt0bQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2D7Rbra6Jpy9NX57TvzgatxeBZHizqfr+cgzCLB9sz8=;
- b=Zsdlw0D2txjVD7YoKOqa9Imq2A2bTzH02USl9zV5RHa98CBUu+QDgXgH0NdHagbLj3GYFEGOd0w4glb5kEztXkh0g6Ye6M/nzCpm6u9zortKNWxlOvP1jN2PbAuY+tsBgmEtqEret6kpfG/zBbkStAYO/GZ42GwHLCngeMbyFZRPAS9SaCrIFTuz4SB4aXhXb+12pIseW7YeAAUR0QmcSup/yTzkrD1sQiTA7q3by/W1ftTR7PODWQPto9anNmucbUHs7uZlFrdJzeZRhn+CN+ot7S+T4MlK1QWtOmtyTscuqUP8rnFEsBSpJqnoa+/OYRPA3mmmP1bxKkIjGR44+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2D7Rbra6Jpy9NX57TvzgatxeBZHizqfr+cgzCLB9sz8=;
- b=ZXBx0LsiC7nIru5ZKVEoYEI/sALqeztCUsc49fZpqpZUsSCvzMj7ldISUs099CQLY/+W10G47e5xdIqawSk0mAsfJ98uxhvI25Z4+WLF74AvtbkwyVvu77OHLXxHxRU2m9NKWYiAWn4IYiG3iE5Fx/6JAoxtcHSadtRrRvBSD792895hokbB/tN0vfbp0g1uL4ttnqflEYgwHDtmAaVGK/65HIEQWtChDj19lIb44nMoxirNg7mejT0R6BOizWF/ceYNIG7IeMqP9b8V/jTeF+37nXaXvI+vrGtw7oRZ2mvtB/jBqzSclpbG+9XuooBSL77B4O/ZiMdtbn0p/YhbPg==
-Received: from DB6PR07MB3509.eurprd07.prod.outlook.com (2603:10a6:6:21::16) by
- AM9PR07MB8020.eurprd07.prod.outlook.com (2603:10a6:20b:30a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.17; Wed, 11 Sep
- 2024 05:25:28 +0000
-Received: from DB6PR07MB3509.eurprd07.prod.outlook.com
- ([fe80::5484:a966:1322:f78b]) by DB6PR07MB3509.eurprd07.prod.outlook.com
- ([fe80::5484:a966:1322:f78b%6]) with mapi id 15.20.7939.022; Wed, 11 Sep 2024
- 05:25:28 +0000
-From: "Wojciech Siudy (Nokia)" <wojciech.siudy@nokia.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-CC: Peter Rosin <peda@axentia.se>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>
-Subject: ODP: [PATCH v2] pca954x: Reset if channel select fails
-Thread-Topic: [PATCH v2] pca954x: Reset if channel select fails
-Thread-Index: AQHa79MbyYnkGBOn7E2e85VmQT3fT7IuNhcAgAL+JQ+AHvBbAIABAv9l
-Date: Wed, 11 Sep 2024 05:25:28 +0000
-Message-ID:
- <DB6PR07MB35090FF8DDEC34ED9B55C0759D9A2@DB6PR07MB3509.eurprd07.prod.outlook.com>
-References:
- <DB6PR07MB35090E8350CC105E00E0462C9D812@DB6PR07MB3509.eurprd07.prod.outlook.com>
- <7c2ca9a7-c328-6d88-eb16-9c940114ceb0@axentia.se>
- <DB6PR07MB3509CF232310CBFEEAB0A3639D8E2@DB6PR07MB3509.eurprd07.prod.outlook.com>
- <3tpj6ohcx3hrnlhwzu32xbzeob7yhtlf5cs4itm7obiwevdpz4@4m6ycn2wkmqq>
-In-Reply-To: <3tpj6ohcx3hrnlhwzu32xbzeob7yhtlf5cs4itm7obiwevdpz4@4m6ycn2wkmqq>
-Accept-Language: pl-PL, en-US
-Content-Language: pl-PL
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB6PR07MB3509:EE_|AM9PR07MB8020:EE_
-x-ms-office365-filtering-correlation-id: 4463b263-cb4b-4eb7-d0a1-08dcd22225cd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-2?Q?jc/bFzzHNTOMYvFJ4TQ0f7byoPC2tQcKFUYk0ZIAcpN9qSd/qL9r3/PJDN?=
- =?iso-8859-2?Q?HbohOkEdcjYZ/HdVc1w6/msKGEnFdf7dEfzYql9UrJ1ThBEAYiWqWy9Yed?=
- =?iso-8859-2?Q?2nQ8lTW9XHKWYGfyOD6E5vugWBtyi3AjI3KlCzLmen2wGf8VxhFe00VUSq?=
- =?iso-8859-2?Q?fyjD9aF4wycrv/QCYsqj/FEpGxvUn3B0KSPGih1ShCE4SwsyxMMfM6cKjR?=
- =?iso-8859-2?Q?1vNwetx6vYSPK9wOSGE6g1mJU5EcA714ADOOwL1Af8K1muX36H4RvZbhM7?=
- =?iso-8859-2?Q?FLS0+bVIerZRdzriJj+s8WwvjReNqthtzE7gtjKcHx9nnAgvaL1GzKtENs?=
- =?iso-8859-2?Q?tyUfN8pUj1wSZJU8Y4VmAQThAZfhVlxGqLQ5aqrlT8ztBnpdBQBV/Bdm2g?=
- =?iso-8859-2?Q?fky6EAoyB2BrLr3DKEVYwctD/7sH2H4lJ+MAv5rPpYU9At6IXAs5dfwpb7?=
- =?iso-8859-2?Q?ettUde52WdKkC9COMh0Vdz5+GaVkf23ytAk9SEq42qUaRpK/Yde9+KwcPj?=
- =?iso-8859-2?Q?22XKN/Lwb0HROI5Pzg0joVWToQBtpjFALhHhGVtZ7FUXtckYtwDWB7SXAN?=
- =?iso-8859-2?Q?QOSNzhmbEf3QSqQvrbopg7KME+/ay9JqXZLTV2xebg4/wpIyFo2gQkDqAy?=
- =?iso-8859-2?Q?kPn6qAiOebu4VCFfKT5E/XQFvgDo+pg0HhyRGKF0e1/NVGFdgTu/2hVEsF?=
- =?iso-8859-2?Q?RXAkr912RG2iPOFYQJ1V7LlOxfUWKIyXt9sKyYq3669l4qIWpgL03Uf8ib?=
- =?iso-8859-2?Q?xXylIzN3zVBqmObewF6IO/N5d4DhKU850xOiiJ+ka5zOL/Y11j6I/EQ9/Y?=
- =?iso-8859-2?Q?PmcE/GhvnxjVe/0BWx3o6zJfrETPSUTbmONJIYrP7foq5L/fFAADY8EE73?=
- =?iso-8859-2?Q?9THQvGC5iV5NK589kmZA1s/pmhCe1ddN8jGFqq73FSIm6/5Cp91zId8z9t?=
- =?iso-8859-2?Q?sC+8l1RBfNrPp4FwMfrUYU0VWbzK/VirYwoEQ4B/orPgPyIXTBobbHqMGa?=
- =?iso-8859-2?Q?Nkf5jkHP+qqRZYPMd9xQodgsFW8bpTtM7+l3k6u7lvU5VD758/EjfavFLu?=
- =?iso-8859-2?Q?8jHJOGFGkrTBzB+0FRfkTgQ2qPfL7pCeqQZdn6F8uzV2V50QfYuXc/2nHG?=
- =?iso-8859-2?Q?Y+OmUST/lHgUvoLEYhCuafXqb6JbU68aBdKfdZsMlCsoFVa56bA+vd3n+q?=
- =?iso-8859-2?Q?2U1PeWobOnVpB9aGQtL+9E1VykWfluLirPz1dIFSmrwBnnQe0LO72064xc?=
- =?iso-8859-2?Q?MNpSPzG+mIbAyNCPHtQuK85Qyd+JAMWvhTb+zHv2SwwKkNijXjl5J+3VXU?=
- =?iso-8859-2?Q?W/7tWdkQtgN2WF6ik7RaxD3tUd3878gNL5sAU9yWIfQKTANGNAZ2bBjYR6?=
- =?iso-8859-2?Q?eUeUsxWhlq4cPYegQggYPCir/162RSM7SsX+XWxz1sRqdAVEgFmVSv1Zt1?=
- =?iso-8859-2?Q?uS2dEThRWJNhqJYqcDOOsjuOqW/PJUHyIFkLDw=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR07MB3509.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-2?Q?jo2l2JrH6JQwMrFeSNOlZLh2aa/sjr9F/Nk2phVqHbYurej1+Mk2jAkUnD?=
- =?iso-8859-2?Q?1/1Oa1885NuLOlI8iyDScfIuoQz9sUi+pz0BFna1BqIYaMmyDux4zxWxFs?=
- =?iso-8859-2?Q?+Tf2Pflo53BjXq7oSsIFYyEsn4A2Bcx1RgLFxqbtoqTg1AeRrKPbHsC3nC?=
- =?iso-8859-2?Q?/DgyXTCVoPz2JpRfK3j64EBGeia9+p9ed7ZqiQ510qLzNi5coq9q0A67kz?=
- =?iso-8859-2?Q?6rMYX7URsrM3upPXa5b/FwD/AerLRb22w6yj4GU4zsQqdPI3lqnfwkRhWn?=
- =?iso-8859-2?Q?tIpfXaIUtwbHHjdJ2vidOkyye1BoIfeM8UU0SL6pgZ41WI7XQTExCdChV/?=
- =?iso-8859-2?Q?1ocx2Nb/kQuHMHWRGQAHMrt9BY4i/pRY6XgjsiqjJ6k8/xlkP65g/zfw7z?=
- =?iso-8859-2?Q?kElgBHAO2Jl0rrW8/Tnf6DQd0zpim2AjzV/ejNzz3xk4UyDvJEpmxldJD8?=
- =?iso-8859-2?Q?AgPcpWqrcA2sEJwEsW+jU8UeWDWdzhjJl87NgOxjWgS61LH0uuWhVnwcrA?=
- =?iso-8859-2?Q?AXJew7PhCX8QyZVIlf8++l+bp0TPyT6EOR526F08caUvY/2Tb99fhkedv6?=
- =?iso-8859-2?Q?/AaKm28lfFLxfzMzpYPrlddwzdc7ypH7ffRjHtsAUTGT1Ehm8HTRzotpFv?=
- =?iso-8859-2?Q?KLQ9oNX4l0GPRdFP3yOm9RiEHzoua8p6H8o2Ue6rK0bnAvTEtfJEB/CBB9?=
- =?iso-8859-2?Q?oXAKEz8UxkQSZ0mikJEkKwv5bv26jQpTNaJID6Gsv6TOMQm9KTr/LZb+Bn?=
- =?iso-8859-2?Q?ghdGZ3odxYcd25OavWZQRcw8OjUG+ZWvkyDlTVIxbmIeSWlsPw99dLS0mC?=
- =?iso-8859-2?Q?XIryBgaxQcZLvVsTw37Jqyuyl8Y2ZwvGt7deQVTOv4mPC6IJpdS7CNciy8?=
- =?iso-8859-2?Q?hM5PBdoVjpEZEe5omikOgu3ExQXdkmC8Y4iCbi/lR8qqdqccbYjag2vl4t?=
- =?iso-8859-2?Q?lZBLHPtZoU+DfiA4ZPsqBuPxrxEvOXq56A/7sBlra6u/mauK4RrswnXCZG?=
- =?iso-8859-2?Q?xcRCdxRlVyFwyxEnKpcufBgNzFZPxqpYbv3bzlWxPiXOL1cRkX4IpzYHII?=
- =?iso-8859-2?Q?RWVfTNTbHzRY7malAcMmthrzCkFpXx3ppmYJKVtmTydRiPcWoqovmbMCsi?=
- =?iso-8859-2?Q?CGv4gke1kHRycIF8i7CIS8GQPrOeLQKNavSc/IzueZZCJ8XDId/HQcSTZH?=
- =?iso-8859-2?Q?Z2fiqaeuXlF/nY/spP6pvL99bavEVwECTBMx4OUg9wvR+5Yngz1Nl1COxt?=
- =?iso-8859-2?Q?bSAPL0zV0lmI3qqIsPuL+u6NkWdLckAJtOCd36vWPZLOqHL7RiPenKQT+H?=
- =?iso-8859-2?Q?/BeNja+pIwUnTpzRbLhcb5wiova4mrVzAL9xinvhOULDX2+yNYz1tYBlU3?=
- =?iso-8859-2?Q?JfbiYeVU0IQR+zruugnWUnrgm3ZQ1R2EKSFIzqZELluN131Xy2/of4K2LU?=
- =?iso-8859-2?Q?zD6RD4toSx2koSpy8WcVpeWt+w1OiQNz48kVzqTkLUzLYetOpGQYnGcpTX?=
- =?iso-8859-2?Q?r66xPJwKxeHkQ8oJBu/nVYC6U2HsPf3/0Niidh0GctChCysGYW21N4O6rW?=
- =?iso-8859-2?Q?CxvX4m3rjOI0hvvZO3XF+KrVf/75pk05gFkdgKSvic9JujA01dE69b6K1K?=
- =?iso-8859-2?Q?eceD94xgFxswgIjgXXWHIVj2hV+uEy/R6n?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90D67D3F4
+	for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 06:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726035175; cv=none; b=EpF9NMz31gylZQF/6uVyx9h+TH1RUuB+U1iZEa9iAz5CabAAi7QIq7HWtGXK9M60U87IlYcxSLVnVY6z7FrBzIoXB9Rm6ckpU7TqF9fEyLFE3hh+7ZKInFJN8DGEwfhk8US7WrSQ6lyGLDjwadE0D5TZQbdnHXL5LjHThY32yHc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726035175; c=relaxed/simple;
+	bh=lWel3D6GMiP9Rfq6kYs4mMzndOOkGErK+hNpBxYCXh0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jU2cTB4arfnCk+9jdBU7oRKkMCKbhjjtdr49ZVdAYQYH80YuGVsaXxoHACdrA2399FUHFQ4QUUCg3cHA4Jp9hRFsboDiUyXs7YfDg64wX0BzgoPj3SPY5vPFNBybxZsgoYkAAn0lHww6xjsImBM1Xthq9Jndz+Ll3FH0JUHaRAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hACQQODt; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-535be093a43so2158236e87.3
+        for <linux-i2c@vger.kernel.org>; Tue, 10 Sep 2024 23:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1726035172; x=1726639972; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4XNFzyMI6KqMDwE1IO9Ek2dtaONrpE2artFV7jstPIM=;
+        b=hACQQODtdJHgQCW0ZPco3c1Ge3TOnTTBm4nXJnQnBuddDSQhjAEdhviZeIG4XZTa3B
+         Z34qWxrlMIVTgFRTTIu99xjEIi9sCS+RDwfdLBFsNg8suwcX85djXu0IkkPDKfkIcQmO
+         gI7cgbeO4JzY28u56wxHpqGt+jzusnVZfAuvM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726035172; x=1726639972;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4XNFzyMI6KqMDwE1IO9Ek2dtaONrpE2artFV7jstPIM=;
+        b=ITU+wLKp0eVklNpaB5Ef2DM1/IUU4WWYpOZ9BaZfFrcHS5z2I7RPpm6ZMeem/fYenX
+         Pv8Mjvm5rtX+77VnnM9Ygl2R8ag/17REfZ3ER0LBrB2bpdV8p/IcTG51f1LNppN+uPLG
+         0zut3g09JqMLP+2xQzL0dxpGtf62LChXHE5lurHQBtzK0/NAa3no1Ww+2wNCEx5hiP5L
+         hy8ArwyBy+JgqCWYVHTeJ4djZYwbUeFlub4Yl8TG+jZk6cDKlfMnLzlOKrKaFqd1Jl/A
+         I9tVmAFdl5lj9de/oJmEeeZiAWPKycbEM6PQwlTGUvHXsVJEP1b5zkD13TcqeNdiPqta
+         CNgg==
+X-Forwarded-Encrypted: i=1; AJvYcCWhdc25B5mKrR8dwOyV2Gh02OkjVXLYyJGhSPAuTBuXENydCwvVSMll7AKajwJXtpXhA2ylgA37vtQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXEKg5v7Wpj5+prdiw0e5evYS4RT/mMNjdiIby12V1sudsb3A9
+	BUGL6Ibpg5WXQf3V4rWGNu1o477A/zQjrkX4u+9r5SFomXCjh7ipfd01YVNY12wrWhTdS95zT35
+	ScIwiO5JDQHw+tM0Bd3nIw+8PpT+RWxkt+8RH
+X-Google-Smtp-Source: AGHT+IESpl9e5qogMXjCi+PCfTVtTiD2A76c7HZC3GBajms5nyfib2OnEjFoW3h6xIM0cWiUrvCKreVPmCVCrosR47U=
+X-Received: by 2002:a05:6512:e85:b0:536:53f0:2f8e with SMTP id
+ 2adb3069b0e04-53673c96a8fmr856177e87.37.1726035171499; Tue, 10 Sep 2024
+ 23:12:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR07MB3509.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4463b263-cb4b-4eb7-d0a1-08dcd22225cd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2024 05:25:28.4456
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CO31hUp5zy0ntkgXuR7entzL5NGgDOxFQNJaMWfv2eAYI4wq1vZLlH1h787gdUCovbcBw+92QrszvsMinQoOEAWxkBF2gUo/JB3wUdPLoAU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR07MB8020
+References: <20240904090016.2841572-1-wenst@chromium.org> <20240904090016.2841572-10-wenst@chromium.org>
+ <CAD=FV=UGOz3Xzg7reJKP=tA1LqTxszv5w-CL9krmoXQtXdJLaQ@mail.gmail.com>
+ <CAGXv+5F27K76t=ht5v75jKsNF-J+C0r5+m=czHz6PtV3t5DxcQ@mail.gmail.com>
+ <CAD=FV=XVrAdQN8p9QJtt3Ah_YQAG7Y-D4wDx8_+qb1EGN7+Uig@mail.gmail.com>
+ <CAGXv+5HO=POHNL_tQHCsy+8=a0gPLMDVHcWMguferahVU+BnZA@mail.gmail.com> <CAD=FV=U2yDGv74GQWRQuHN9sjdY5iThqpH-br-jYXMkV1cujEg@mail.gmail.com>
+In-Reply-To: <CAD=FV=U2yDGv74GQWRQuHN9sjdY5iThqpH-br-jYXMkV1cujEg@mail.gmail.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Wed, 11 Sep 2024 14:12:40 +0800
+Message-ID: <CAGXv+5G9pMOU+SZpNH=Rk31wnhADQc3MTm4TjykmdGb=WXdVDw@mail.gmail.com>
+Subject: Re: [PATCH v6 09/12] i2c: of-prober: Add regulator support
+To: Doug Anderson <dianders@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
+	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andi,=0A=
-new version enabling this functionality via device tree property nearly don=
-e, but not sent because I didn't have time yet to make proper testing. Will=
- do this week.=0A=
-=0A=
-Regards,=0A=
-Wojciech=0A=
+On Wed, Sep 11, 2024 at 8:30=E2=80=AFAM Doug Anderson <dianders@chromium.or=
+g> wrote:
+>
+> Hi,
+>
+> On Thu, Sep 5, 2024 at 8:45=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org> =
+wrote:
+> >
+> > > > IIUC we could have the "options" data structure have much more boar=
+d
+> > > > specific information:
+> > > >
+> > > >   - name of node to fetch resources (regulator supplies and GPIOs) =
+from
+> > > >   - names of the resources for the node given from the previous ite=
+m
+> > > >   - delay time after each resource is toggled
+> > > >   - polarity in the case of GPIOs
+> > > >   - prober callback to do power sequencing
+> > > >
+> > > > The "resource collection" step would use the first two items to ret=
+rieve
+> > > > the regulator supplies and GPIOS instead of the bulk APIs used righ=
+t now.
+> > > >
+> > > > The power sequencing callback would use the resources combined with=
+ the
+> > > > given delays to enable the supplies and toggle the GPIOs.
+> > > >
+> > > > For now I would probably only implement a generic one regulator sup=
+ply
+> > > > plus one GPIO helper. That is the common case for touchscreens and
+> > > > trackpads connected over a ribbon cable.
+> > > >
+> > > > Does that sound like what you have in mind?
+> > >
+> > > I guess I'd have to see how the code looks to know for sure, but if I
+> > > understand it sounds a little awkward. Specifically, the "options"
+> > > sound like they might become complicated enough that you're inventing
+> > > your own little programming language (with delays, abilities to drive
+> > > pins low and high, abilities to turn on/off clocks, and abilities to
+> > > turn off/on regulators) and then probers need to code up their
+> > > programs in this language. You also need to handle undoing things
+> > > properly if there is a failure in the middle. Like your "program"
+> > > would look like this (obviously you'd have to play with enums more,
+> > > but you get the idea):
+> > >
+> > > {
+> > >    { OPCODE_TURN_REGULATOR_ON, "vdd" },
+> > >    { OPCODE_DELAY, 10 },
+> > >    { OPCODE_GPIO_ASSERT, "reset" },
+> > >    { OPCODE_DELAY, 5 },
+> > >    { OPCODE_GPIO_DEASSERT "reset" },
+> > >    { OPCODE_DELAY, 100 },
+> > >    { OPCODE_TURN_REGULATOR_ON, "vddIO" },
+> > > }
+> > >
+> > > Why not just expect the board probers to write C code to turn things
+> > > on before looking for i2c devices, then provide helpers to the C code=
+?
+> > >
+> > > So there wouldn't be some generic "resource collection" API, but you'=
+d
+> > > provide a helper to make it easy to grab regulators from one of the
+> > > nodes by name. If you think bulk enabling regulators is common then
+> > > you could make a helper that grabs all of the regulators from a node
+> > > in a way that is consistent with the bulk APIs, but I wouldn't expect
+> > > every driver to use that since devices I've seen expect regulators to
+> > > be enabled in a very specific order even if they don't need a delay
+> > > between them.
+> > >
+> > > I wouldn't expect a "collect all GPIOs" API because it seems really
+> > > weird to me that we'd ever want to jam multiple GPIOs in a state
+> > > without knowing exactly which GPIO was what and asserting them in the
+> > > right sequence.
+> >
+> > So I'm slightly confused, as it sounds like at this point the i2c probe=
+r
+> > would be litter more than just a framework, and the heavy lifting is to
+> > be all done by callbacks provided by the board-specific driver?
+> >
+> > So the framework becomes something like:
+> >
+> > 1. find i2c bus node
+> > 2. call provided callback with i2c bus node to gather resources;
+> >    let callback handle specifics
+> > 3. call provided callback to enable resources
+> > 4. for each i2c component, call provided callback to probe
+>
+> I don't think I'd do it as callbacks but just have the HW prober call
+> the functions directly. AKA, instead of doing:
+>
+>   i2c_of_probe_component(dev, "touchscreen", ts_opts, ts_callbacks);
+>
+> Do:
+>
+>   grab_touchscreen_resources(...);
+>   power_on_touchscreens(...);
+>   i2c_of_probe_component(...);
+>   power_off_touchscreen(...);
+>   release_touchscreen_resources(...);
+>
+> Obviously I'm spitballing here, though. Without writing the code it's
+> hard for me to know that my proposal would be better, but my gut tells
+> me that trying to write something overly generic with lots of options
+> / callbacks would be more confusing.
+
+The helpers would be exported along with the framework, so there's nothing
+preventing others from using the helpers directly. The framework provides
+boilerplate so that scenarios fitting it won't have to duplicate the code.
+Obviously I'm basing it on my scenario here, but I think it works out for
+the simpler cases.
+
+I'll send out what I have reworked, and we can continue the discussion
+either on the mailing list or in person at ELCE and Plumbers.
+
+> >   If the probe succeeded:
+> >
+> >     5. call provided callback for early release of resources (GPIOs)
+> >     6. set "status" to "okay"
+> >     7. call provided callback for late release of resources (regulators=
+)
+> >
+> >   Otherwise at the end of the loop
+> >
+> > 8. release resources
+> >
+> > The current code can be reworked into helpers for steps 2, 3, 5, 7 for
+> > the single regulator single GPIO case.
+> >
+> > > > This next item would be a later enhancement (which isn't implemente=
+d in
+> > > > this series anyway):
+> > > >
+> > > >   - optional prober callback that does actual probing
+> > > >
+> > > > In our case it would only be used for cases where an HID-over-I2C
+> > > > component shares the same address as a non-HID one, and some extra
+> > > > work is needed to determine which type it is. I still need to think
+> > > > about the structure of this.
+> > >
+> > > IMO _that_ would be a great option to the i2c prober. It feels like
+> > > you could have an optional register read that needs to match to have
+> > > the i2c prober succeed. Most people would leave it blank (just the i2=
+c
+> > > device existing is enough) but probably a single register read would
+> > > be enough to confirm you got the right device. Most i2c devices have
+> > > some sort of "version" / "vendor" / "id" type register somewhere.
+> >
+> > At least for the stuff that we have (touchscreens and trackpads) such
+> > registers typically don't exist, unless it's an HID-over-I2C device,
+> > in which case there's the standard HID descriptor at some address.
+> > But, yeah, reading the HID descriptor was the use case I had in mind.
+> >
+> > At least for one Chromebooks it's a bit more tricky because that one
+> > HID-over-I2C component shares the same address as a non-HID one. We
+> > currently have different SKU IDs and thus different device trees for
+> > them, but we could make the prober work with this. It just has be able
+> > to tell if the component it's currently probing needs the special
+> > prober and is it responding correctly. This bit I need to think about.
+>
+> I guess Mark Brown also thought that there wouldn't be some magic
+> register, but my gut still tells me that most i2c devices have some
+> way to confirm that they are what you expect even if it's not an
+> official "vendor" or "version" register. Some type of predictable
+> register at a predictable location that you could use, at least if you
+> knew all of the options that someone might stuff.
+>
+> For instance, in elan trackpads you can see elan_i2c_get_product_id().
+> That just reads a location (ETP_I2C_UNIQUEID_CMD =3D 0x0101) that could
+> theoretically be used to figure out (maybe in conjunction with other
+> registers) that it's an elan trackpad instead of an i2c-hid one. You'd
+> have to (of course) confirm that an i2c-hid device wouldn't somehow
+> return back data from this read that made it look like an elan
+> trackpad, but it feels like there ought to be some way to figure it
+> out with a few i2c register reads.
+>
+> ...that being said, I guess my original assertion that you might be
+> able to figure out with a simple register read was naive and you'd
+> actually need a function (maybe as a callback) to figure this out.
+
+Yeah, that's my plan for a follow-up series, likely after the SKU ID
+based prober work is done. The actual probe function would likely only
+target the known cases of I2C address conflicts we have on ChromeOS
+devices.
 
