@@ -1,131 +1,185 @@
-Return-Path: <linux-i2c+bounces-6592-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6593-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F849975921
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 19:15:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A7D1975952
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 19:26:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 820F71C232BE
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 17:15:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C046B1C23794
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 17:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C27F71B1D6E;
-	Wed, 11 Sep 2024 17:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247111B142E;
+	Wed, 11 Sep 2024 17:26:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eO2RmY19"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="RLTfxw5x"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBAD1A3047
-	for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 17:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534D14D8B9
+	for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 17:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726074943; cv=none; b=R5csEoe4DQkIldwaL3TFWBLV7sySaKQwHvYKyOZ6GPLr72dwuWxqeEqURHDUaWkZqHEx3xcQSHJpG8gTP9QiQhmoGkn0dgkr85Cu/ckZcYmfuAGaLWYy3VFAQuu/hhthWJtbSd7FuQrxjfR6mgbdXlZhUoaRenUM9G7F46dGBDo=
+	t=1726075585; cv=none; b=WxKYsOuLUNwu+fRYaRUcvngVu0Hl7gmk09uR48mHvz86PseZyT77YRIjO1oArN57/rYEjFSvBsxZIFeiFzBGV6BUzIi4UBsxjMZiwkTtIiPlO56MjzvlHXphiOlMhtKb9Thwk3HvV6pcZTDSgwzjW6FC3mCQ4aSv/2Uc2mZxQug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726074943; c=relaxed/simple;
-	bh=gKSJcWcx7/FQZ2m0mQH0VM1o1ZdEvOQ4khTHZUPZj0g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F7tq9KKzl7GnsOZNmfmCRzp2t20HlKpKVj+cNeT/xJRJjcEa73OXTv37r61+kMyoz9gECx1f2qe7IH8V6Qmgp9R9oQabNZSIRgJMRg6b38L3AfGsbOpLth5b8Q3TFyjBNzaJY9pWGlJyaYT+UfAtJ2sPPe6SY8B3LTdOP5c+CDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eO2RmY19; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-374b5f27cf2so67429f8f.1
-        for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 10:15:41 -0700 (PDT)
+	s=arc-20240116; t=1726075585; c=relaxed/simple;
+	bh=j4LfUsx854x7YJ4n3qpUsMJcQSYqch/FDWG/7MZN6hg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=jiQ09JZTFTiZ3VMRESjHvoFF9jxB2MOPgVe0OYRDCZ42v6MwF13I5tFBcTO/FDAplSvITlw/eqK0617CGZBOgdx77Lswkv0B3zk37TOVhixNj9gp52QLrw/VU4uQdW7xlLK6RtEPqUsx4DER9cwoDcW3Q5UhzqyQ3UDE94c2D78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=RLTfxw5x; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42cacabd2e0so20881275e9.3
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 10:26:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726074940; x=1726679740; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7hIkqY6yzMI19aPeRgJcYOawca4yCAFYgaDnXopqdZw=;
-        b=eO2RmY19Wwb90cmwTy1uXwIv0RIAV+JI5M2nKyExKJbeO3+1ez3Yeud9Y7Wzb+lqeL
-         EpPoekWJ+u3RYgddgZ1jZNInA2WZ3gZ1RQQBH/soBW1QMa5F3TLTeorb4NqVewY0Jr1q
-         61DWBZ1aIqgXGvvY238nwuOrNdd5FVaE27yAJpjYKpdSpBGwmgMPUPC7yOb2C5dM6Ai4
-         iWx2879ACyePrnQI/O9qqQlGiJTwBGXeH4BZa8NrAv98lmleou20jNQ7UMPf5x/sGZcm
-         vkXPnM8dt7VFkuZ995GzezZhtPhOzhZ9zZuKfozxulyY2f8M2GEFZoLVo19siCMqdcgt
-         zylQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1726075581; x=1726680381; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HLZX+SWdHz2tB91UF3usEBJbpzw/IHLAgfNzOfmxmj0=;
+        b=RLTfxw5xjaulz4Fgppqf+838Phf5Qm/KRabvOD/E4QrPBdfU1+YNeBVHUvfxC2kTac
+         FCdGG31ezs//EDw6jyo/9N1W765YOrbwgUddEjZJXjDLkWl0JMoF5SDGRgA8998AUg5W
+         Oy21iDDfyTzIi7pHTN5dFLzuab1m5D11aVKN3DaSyTzUXUvA/guIjWBKZBQVSqEonrgW
+         ewHURwuIM3mznE78SeGlpnOT9TfsIoE7EnYaKiaK9fiE++iQyn8q3r+Gm2yRZKXIcOoe
+         AI1krpr7+3DqzEsLlhIdKa3T5bbif4iwc7pL9PkANyR1O/QFVhmMGXgj/jVS/VzH9UJ/
+         TYbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726074940; x=1726679740;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hIkqY6yzMI19aPeRgJcYOawca4yCAFYgaDnXopqdZw=;
-        b=PY+38iYx5459UQgXSZtJiM0TLB/liqDYhJu2X1g2PF0bEWzngaMOmP+/SWDDh9Mpm2
-         0z+8vspLWoyCj8SGsofSkUOkaCztUbwLDb07mNMvqoGDtMGg15AhO1qTA+2w9RBmRBMF
-         HFDFTM8b6T5qX9c02+xI+U3D49tr8O5KhNuhTnfg4vU2497PQjhrApWLswRh5fMYc+cf
-         ZuMptV6GlrIWWiZ2xK4kAfhmGtiY9PW6fiXEca6geLzC+/2wYySU7rmRO8XO/HHJGYeG
-         brYYh97ayW9H+g2B7iLHDApLY6Dbo8NCjqQ52SrhEnZujD3xk3kiUkkO1GzfvaKIb3Qu
-         LUeg==
-X-Forwarded-Encrypted: i=1; AJvYcCVP7Ns5RSdimdExjDMMMBNNUVfXEafJHUk1yHRaWeTYe41m8nozT90w0CtUYQaNEYzIk41huJNRkJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJPpISiX8Fy3zAAnOSdpH/gcs6tw44wSMEyNRXk2GORR+zQIi1
-	xsMlhgrHVmPnpq9dP59cmK6XlpmoWTcws598Zxrs66TkJlNNm1ahVfiQKOOxh1Q=
-X-Google-Smtp-Source: AGHT+IFwsGFDDcYLdQbQDbnH2ecaEuRN6fTPY6e7kQA/Klr6JIoXz9qoW0zDvWsGSBZmy4CX8Oxabg==
-X-Received: by 2002:a05:6000:124b:b0:374:c942:a6b4 with SMTP id ffacd0b85a97d-3789268ee7amr8782092f8f.20.1726074940059;
-        Wed, 11 Sep 2024 10:15:40 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3789564a340sm12072218f8f.24.2024.09.11.10.15.39
+        d=1e100.net; s=20230601; t=1726075581; x=1726680381;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HLZX+SWdHz2tB91UF3usEBJbpzw/IHLAgfNzOfmxmj0=;
+        b=MtoWj06qMWx9I2EGHJyft07pEKL9ggD3rYLQsep7h0F3qxj50pWXuouKYAZEPAqoIB
+         Ts0McdMjeYI203IE8NdLEMLPU9GT+ChvZ4uCaQ2t58Ptt5ztEAXyzv8tYtGd145mABC5
+         BO3eZlB+Iy2PUtlNMREOqIJI08yGhpttwpf2gygI5dTc1fsULi9NNJIzSbNpo4VH4Gpr
+         FylfKi7hS+xUqYFQ7V8U3PESF3tqCFtCVxaRdFEcppRGqJBM2SIvPuP69kzi8GgxFmvu
+         p08J99ICS0RFw7DYXob2iVZhDXDERrSWOPnbHNjkdxuVCzqUcyHZRFxOq3/VN6aNnc2b
+         2emA==
+X-Forwarded-Encrypted: i=1; AJvYcCVqES1TNNhFaGZyAsh7JsXXjQkdUA3OWjK63UTP/rDueZrqL5MxudnveM+T7V5gXLhW6PW66i8gYfY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/j5krBe6a0SXJsfPAirGJBKvXpTly4tEcewFTlshkPI5bhAFR
+	rWtN1/11tZggepDkNEgehF7O3WCP8/RHgzQR26hMjIChCE4ssW5KpsBZJ4BqgQg=
+X-Google-Smtp-Source: AGHT+IFkbjwusK7GBMy+uvOrk1ENPvXDg5jbLTlihJ6/ABtP7FGYUmy39dxdfPmSU+lvToCwURKoow==
+X-Received: by 2002:a05:600c:5123:b0:42c:bae0:f05b with SMTP id 5b1f17b1804b1-42cdb4e6bbcmr2458165e9.1.1726075580979;
+        Wed, 11 Sep 2024 10:26:20 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:7388:2adc:a5d5:ff63])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42cb5a66475sm118471705e9.44.2024.09.11.10.26.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Sep 2024 10:15:39 -0700 (PDT)
-Date: Wed, 11 Sep 2024 20:15:36 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Vinod Koul <vkoul@kernel.org>
-Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-	konrad.dybcio@linaro.org, andersson@kernel.org,
-	andi.shyti@kernel.org, linux-arm-msm@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, conor+dt@kernel.org, agross@kernel.org,
-	devicetree@vger.kernel.org, linux@treblig.org, Frank.Li@nxp.com,
-	konradybcio@kernel.org
-Subject: Re: [PATCH v2 0/4] Enable shared SE support over I2C
-Message-ID: <ddb6143c-1dab-4397-817a-32015984ff55@stanley.mountain>
-References: <20240906191410.4104243-1-quic_msavaliy@quicinc.com>
- <ZuHNJl7VvMSv8q8l@vaman>
+        Wed, 11 Sep 2024 10:26:20 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,  Jean Delvare
+ <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>,  Krzysztof
+ Kozlowski <krzk+dt@kernel.org>,  Conor Dooley <conor+dt@kernel.org>,
+  Jonathan Corbet <corbet@lwn.net>,  Delphine CC Chiu
+ <Delphine_CC_Chiu@wiwynn.com>,  linux-hwmon@vger.kernel.org,
+  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-doc@vger.kernel.org,  linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: hwmon: pmbus: add ti tps25990
+ documentation
+In-Reply-To: <20240911144532.GA154835-robh@kernel.org> (Rob Herring's message
+	of "Wed, 11 Sep 2024 09:45:32 -0500")
+References: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
+	<20240909-tps25990-v1-1-39b37e43e795@baylibre.com>
+	<3efbzcys4762rhx2h2cbhqvi6dgik7pfrxcziccdko34pb5z54@joodcym6c3s4>
+	<1jzfofsvmh.fsf@starbuckisacylon.baylibre.com>
+	<20240911144532.GA154835-robh@kernel.org>
+Date: Wed, 11 Sep 2024 19:26:19 +0200
+Message-ID: <1j7cbiqeys.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZuHNJl7VvMSv8q8l@vaman>
+Content-Type: text/plain
 
-On Wed, Sep 11, 2024 at 10:32:30PM +0530, Vinod Koul wrote:
-> On 07-09-24, 00:44, Mukesh Kumar Savaliya wrote:
-> > This Series adds support to share QUP (Qualcomm Unified peripheral)
-> > based I2C SE (Serial Engine) controller between two subsystems.
-> > Each subsystem should have its own dedicated GPII (General Purpose -
-> > Interface Instance) acting as pipe between SE and GSI (Generic SW -
-> > Interface) DMA HW engine.
-> > 
-> > Subsystem must acquire Lock over the SE so that it gets uninterrupted
-> > control till it unlocks the SE. It also makes sure the commonly shared
-> > TLMM GPIOs are not touched which can impact other subsystem or cause
-> > any interruption. Generally, GPIOs are being unconfigured during
-> > suspend time.
-> > 
-> > GSI DMA engine is capable to perform requested transfer operations
-> > from any of the I2C client in a seamless way and its transparent to
-> > the subsystems. Make sure to enable “qcom,shared-se” flag only while
-> > enabling this feature. I2C client should add in its respective parent
-> > node.
-> > 
-> > Example : 
-> > Two clients from different SS can share an I2C SE for same slave device
-> > OR their owned slave devices.
-> > Assume I2C Slave EEPROM device connected with I2C controller.
-> > Each client from ADSP SS and APPS Linux SS can perform i2c transactions.
-> > This gets serialized by lock TRE + DMA Transfers + Unlock TRE at HW level.
-> 
-> Where is the rest of the series, I see only this cover letter??
-> 
+On Wed 11 Sep 2024 at 09:45, Rob Herring <robh@kernel.org> wrote:
 
-Something went wrong sending the series.  Here is the resend:
-https://lore.kernel.org/all/20240906191438.4104329-1-quic_msavaliy@quicinc.com/
+> gOn Tue, Sep 10, 2024 at 11:31:18AM +0200, Jerome Brunet wrote:
+>> On Tue 10 Sep 2024 at 09:48, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>> 
+>> > On Mon, Sep 09, 2024 at 05:39:03PM +0200, Jerome Brunet wrote:
+>> >> Add DT binding documentation for the Texas Instruments TPS25990 eFuse
+>> >> 
+>> >> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>> >> ---
+>> >>  .../bindings/hwmon/pmbus/ti,tps25990.yaml          | 73 ++++++++++++++++++++++
+>> >>  1 file changed, 73 insertions(+)
+>> >>
+>> >
+>> > A nit, subject: drop second/last, redundant "documentation". The
+>> > "dt-bindings" prefix is already stating that these are bindings/docs.
+>> > See also:
+>> > https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+>> >
+>> >> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+>> >> new file mode 100644
+>> >> index 000000000000..e717942b3598
+>> >> --- /dev/null
+>> >> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/ti,tps25990.yaml
+>> >> @@ -0,0 +1,73 @@
+>> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> >> +%YAML 1.2
+>> >> +---
+>> >> +
+>> >
+>> > Drop blank line.
+>> >
+>> >> +$id: http://devicetree.org/schemas/hwmon/pmbus/ti,tps25990.yaml#
+>> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> >> +
+>> >> +title: Texas Instruments TPS25990 Stackable eFuse
+>> >> +
+>> >> +maintainers:
+>> >> +  - Jerome Brunet <jbrunet@baylibre.com>
+>> >> +
+>> >> +description: |
+>> >
+>> > Do not need '|' unless you need to preserve formatting.
+>> >
+>> >> +  The TI TPS25990 is an integrated, high-current circuit
+>> >> +  protection and power management device with PMBUS interface
+>
+> And wrap at 80.
+>
+>> >> +
+>> >> +properties:
+>> >> +  compatible:
+>> >> +    const: ti,tps25990
+>> >> +
+>> >> +  reg:
+>> >> +    maxItems: 1
+>> >> +
+>> >> +  ti,rimon-milli-ohms:
+>> >> +    description:
+>> >> +      milli Ohms value of the resistance installed between the Imon pin
+>> >> +      and the ground reference.
+>> >
+>> > Ohms is not enough? We don't have mOhm in property units.
+>> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+>> >
+>> 
+>> Same discussion as we've had on the driver change.
+>> At the moment Ohms is enough for the cases I've seen.
+>> 
+>> Will it be, not sure.
+>> Using mOhms is' way to avoid "S**t, R is 80.2 Ohms, I
+>> need another digit to not loose precision " kind of situation and
+>> introduce a second property just for that.
+>> 
+>> No idea if Rimon will get that low. Probably not.
+>> 
+>> I'll switch to Ohms.
+>
+> You can can use "-micro-ohms" too. The reason we don't have every 
+> possible unit is so we have everyone picking their own.
 
-regards,
-dan carpenter
+Noted. after discussing with Guenter, I'll use micro-ohms in the next
+version, not ohms
 
+>
+> Rob
+
+-- 
+Jerome
 
