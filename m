@@ -1,56 +1,55 @@
-Return-Path: <linux-i2c+bounces-6596-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6597-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C112975BB4
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 22:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C23975C7A
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 23:35:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EB051C21D01
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 20:27:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D0011C22984
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 21:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839BA1BA276;
-	Wed, 11 Sep 2024 20:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 458C814F9E6;
+	Wed, 11 Sep 2024 21:35:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z3PQyaiY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QnL8yuGC"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4467D1B9B58
-	for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 20:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BB4149003;
+	Wed, 11 Sep 2024 21:35:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726086430; cv=none; b=X4zrEsL2I+wEaJkZqvqArBW9fqYq16MGKLaY2yz9aM54aHHQfABYyHQUZEn+MvtsC10fOtG5D6dP2QQnUbEpuf8hooE/vxDrSxyD1SlVEP4hK/2abn1gBM7GXQvVvz93FY1nof2lskhx0/x4kPscTU2ImA8R+d0X6SDmIInDL6o=
+	t=1726090505; cv=none; b=iL4ZCYvGxn+nklvqBaFLipW8+GKKIGGfXvlhZ0rvHzVvKwqt67b1ZG4Gix6JREfrZXsfTtmh4weB/fBZoc6si17myt2V4SbGHlO3RkwHCSJkgllGQkSC/0KRrtokvAWkKRtntkJBbDlz0YHOmjWD60FOoEqsKIupgvwO8pwy1Z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726086430; c=relaxed/simple;
-	bh=Iyf9Q0WDt+xygIxkU05zbG+rqa3XPCUPV6BgSByYLE0=;
+	s=arc-20240116; t=1726090505; c=relaxed/simple;
+	bh=lGBtan08hNTRPWie4/KFkvU95dYKZY2Iq5dArSn9Ja0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kygjxnHeIKRc0KOdirx7GwOj4V+SE+CcgCPV+Gt/gZJccnzyBXL20TdJI1mSBSI4NHO3xLltosgGEhSSKlaGWmqnuyMvDpqr4Nss2PWwpYUoW7Ql0TcgBkIlrnWrKuJOjzF4MBDYilGMgSylzpCpMwfX0FfGIlYBMDSJ19UjroY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z3PQyaiY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB10AC4CEC0;
-	Wed, 11 Sep 2024 20:27:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=owtEptJHgVHw3loKqNcdbuD4vgrxugavsbFzd+qvY/BGXXnuYtqDW8Wj5BxwuGyHmy+7LXLaMFdI8I5RUh7NZco+OlZs7AWPL/fRE9iPZNiOr5zsth5CKbSGtCxHA8VkQw7JGWKxLPSewn3cMXXv/JwUTUm660xf4bniZpMpEAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QnL8yuGC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A5A5C4CEC0;
+	Wed, 11 Sep 2024 21:35:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726086428;
-	bh=Iyf9Q0WDt+xygIxkU05zbG+rqa3XPCUPV6BgSByYLE0=;
+	s=k20201202; t=1726090504;
+	bh=lGBtan08hNTRPWie4/KFkvU95dYKZY2Iq5dArSn9Ja0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z3PQyaiYrr01REztJ/qswSQ2ZmkNvxqGIeonTyptXwnrscZbzQtBvAiBYEF7ey2xz
-	 3kmYHjPIpNrd5pPQMCMQus1gAd0jlk9uGRbKdv8nF7KgAlGjobFuBrsy3fMco8Xkte
-	 VQAQ9kjDudjI+mJc2jhzlbbz3Nle/iwIzhddo8kpYRC9KHmDpucm6bNMbIM0yOeRdL
-	 1lVN0w9AD5kAxSkzYuf3BpJ/wx9JmOWe6Dios7jhCKiZ1KFpB9ihUht37+C12X39ee
-	 Kc7gUbLUQhIlGkzqJ95dy6lh6oqEP3Y3yk1AiqMxrbmCER+EgDKhGNvWSH6FrzK265
-	 VJFainkIAL6Xg==
-Date: Wed, 11 Sep 2024 22:27:04 +0200
+	b=QnL8yuGCOI1yG8OqS9Cq3JkP2bZr7qk2F2LSAosHNxVhpeI/D//D7uSgZE+F4RCOI
+	 dFO1VzlPA40lQXx38Mt6YbnsuJ+ETkC9G3+WcNdHYDSIKr08842WJbMe4bERMQngyN
+	 Xo0/rxtNBEuYeDaAN4ULcdIxDp5Zd9NhukM5HHn6HVXRt5KD/E6V0I1VbpypRiNwQw
+	 VbL2l7igJJZ7OqNSbUyfno2+7URVN4DAFPqaAg9Y44dNoJgu3FV8htDq8rC4DUjIE7
+	 LVLT9Lf7tSpodCE9rJG0i2Fpf3Zz+u5xB66e4pcbgkB1PifXcyK9Ykt5iNGkzpzYor
+	 suO7vuIks3L4w==
+Date: Wed, 11 Sep 2024 23:35:01 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Robert Hancock <robert.hancock@calian.com>
-Cc: "michal.simek@amd.com" <michal.simek@amd.com>, 
-	"ben-linux@fluff.org" <ben-linux@fluff.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
-	Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-Subject: Re: [PATCH v2 0/2] Xilinx I2C driver fixes
-Message-ID: <z2isywj6rb3gr7i5ba5ihwqllxkon6u6rl3tovsgqiebm55tkk@vqp64uvceq57>
-References: <20231121180855.1278717-1-robert.hancock@calian.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v1 01/12] i2c: isch: Add missed 'else'
+Message-ID: <ow7ym7aobu5qukkwvds3dtt5qy65jp5ltzirtzhwr5aef3rxd3@6xceyxzy5orc>
+References: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
+ <20240911154820.2846187-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,30 +58,24 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231121180855.1278717-1-robert.hancock@calian.com>
+In-Reply-To: <20240911154820.2846187-2-andriy.shevchenko@linux.intel.com>
 
-Hi,
+Hi Andy,
 
-On Tue, Nov 21, 2023 at 06:10:52PM GMT, Robert Hancock wrote:
-> A couple of fixes for the Xilinx I2C driver.
-> 
-> Changed since v1:
-> -Fixed an issue in first patch where an additional message could still have
-> been written to the TX FIFO without waiting for it to empty.
-> 
-> Robert Hancock (2):
->   i2c: xiic: Wait for TX empty to avoid missed TX NAKs
->   i2c: xiic: Try re-initialization on bus busy timeout
+On Wed, Sep 11, 2024 at 06:39:14PM GMT, Andy Shevchenko wrote:
+> In accordance with the existing comment and code analysis
+> it is quite likely that there is a missed 'else' when adapter
+> times out. Add it.
 
-merged to i2c/i2c-host-fixes.
+Good catch! Very likely this was an oversight.
 
-I just added in the tag section:
+> Fixes: 5bc1200852c3 ("i2c: Add Intel SCH SMBus support")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Cc: <stable@vger.kernel.org> # v2.6.34+
+I merged just this patch to i2c/i2c-host-fixes.
 
-As requested by the stable kernel rules.
+I will take the rest of the series after the merge window.
 
-Thanks Manikanta for the reminder.
-
+Thanks,
 Andi
 
