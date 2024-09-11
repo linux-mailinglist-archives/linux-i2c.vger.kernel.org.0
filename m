@@ -1,180 +1,114 @@
-Return-Path: <linux-i2c+bounces-6581-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6584-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E404A97578C
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 17:50:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D7379757AD
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 17:54:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACBB628A433
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 15:50:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FEA31C261D7
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 15:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB951B532C;
-	Wed, 11 Sep 2024 15:48:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4BDB1AAE36;
+	Wed, 11 Sep 2024 15:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hi5ZLoAP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PBWv22ZG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49A01B29A9;
-	Wed, 11 Sep 2024 15:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA32192D86;
+	Wed, 11 Sep 2024 15:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726069716; cv=none; b=F9C1hHX4vJGgy2u9fStdzNJ4HlsTg5u07xQV7dCHVqvMF4VZbaMkaYNlLZtZVVBqDgru0LuJiSoH8WTd0Wywhec0PJG6iLQEfF2Y7I5bbqYwEIW4FYGddHbOybWmi9IL7eC7+9Wiwrkdvn1p3DKRJjM1YWw8o7FI0OSU5dQIKBk=
+	t=1726070062; cv=none; b=mLp/fwNR0lnjIBEZv2Uukh12r6aKCHuDvwdNvbKjzabSQteYLMJoGJeU6yCVoD5hyEWutG4BU9a6gON8VqxoxD1Xm/rXYqlj+UEottXiZpV0aLUUAjYnIFHN8LAGWu9kX3yVMtUTlIFzL9KZNZosLpLqaaAtBRmicsBs0Zcebuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726069716; c=relaxed/simple;
-	bh=fbOdtbUqLO2b0hGOuyDJ1swIlNsS7eQ2jI47dwBgPCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qOWoQZkmdY1CRx3mN7lIBA7tlWAASDEXlENRFVJ45nqJXujCGj5khzBiFLsKy+iBznEotHhIeG8wcFCN6VB//hfXkFx4NpasUu2PCYnBlLlC8RfH3SMTeyZuy0IY10m3z+zwsiL2SBDiMa0pYZeVfkbwtquTbS5QLkJhbgMomYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hi5ZLoAP; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726069715; x=1757605715;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fbOdtbUqLO2b0hGOuyDJ1swIlNsS7eQ2jI47dwBgPCI=;
-  b=hi5ZLoAPWaz9mqS5BqnvXG1oekuukG+db9jd6CFezPhGzPhlrTq9fbT0
-   QUWAUWckfabwXQX/x6ZttY9V5AMkKNnP8QPYAOoCguRzgWaLg47lMcpdB
-   h1p393TfMLH20xqhjIWzD0lbxoghMKcmA/YeZr6DsRl03hsl12NVQTu6i
-   DMT+qpy4weaY0ExkO0Foxh4SQUUrzK+zDnlg3qSnY9K8XNmkQ9Tg7t3L0
-   h3e0HuHXdqoWmHk/Us6HWoh8hQHHvppJu2oHyP3emQzNZ/xwh3VfBD3Ub
-   K1rnS5Ei81FEaI/vg7YBjEmZVP0avFeCSg/bRwsao//1JBoM/SnKu7xOC
-   w==;
-X-CSE-ConnectionGUID: 75C/QMv0QnuyFt3Nq1OGsg==
-X-CSE-MsgGUID: l7abm2CbQ4mlYg3MMmN38g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="24701857"
-X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
-   d="scan'208";a="24701857"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 08:48:27 -0700
-X-CSE-ConnectionGUID: bDvppkeiT4y2th4H5Ah6YA==
-X-CSE-MsgGUID: bbEbQH2lRPykFhZT8IUIAA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
-   d="scan'208";a="72388567"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 11 Sep 2024 08:48:25 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id D1D895D7; Wed, 11 Sep 2024 18:48:21 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PATCH v1 12/12] i2c: isch: Convert to kernel-doc
-Date: Wed, 11 Sep 2024 18:39:25 +0300
-Message-ID: <20240911154820.2846187-13-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
-References: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1726070062; c=relaxed/simple;
+	bh=ZkB3CWsdIJOZ4M4galTAh3aYUNJfnGGRA3TBjTjVxio=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MP7YADq/MVXZmfdRzchoIqHuXbOoQj6eN7l82tveiMzgex084WgfDup79zJ4JzWa+w/pMIG/VG2AsW56wkwzaIXfCxo5S8tRS7GuYwGbRscyzTwHE13zFiwSRDihbyxEnfGpaV0A31EiyHENYeoJo+iPfOan3FHALws3qALpCI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PBWv22ZG; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-206e614953aso213665ad.1;
+        Wed, 11 Sep 2024 08:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726070061; x=1726674861; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PPhqrR+rUKLY9Ke/C76E17iBv1z5TKbqfgaCfQBPdgE=;
+        b=PBWv22ZGpDdMCFytpq8zTvU43mgPd7CW3QFrQcI4rpAXI7zlIbxcE2f3fEUOgraWuZ
+         WrPwOrZz2+Rd1hY3rtzIILGrYXep97Cpx0WN9sK1oRbyZTYB/6Ws2y3GuXVGKnwex09A
+         shvVxTvScqbtsTOgKHKaWLkURwHT4s4ePS6+XkKBRMP6qYfygT+txzpJsN/YpLNmmr5k
+         H32Mz5N5b+7wzafop55RqbvDvhp1SCQzPn2qyrlSIn3WBcVwbc6v2UHuRd+yW4JS+awz
+         Mu4P+QwO7WVPUqsm69edhLROy+KGwKGpJdWQCznvV29gh6kg+iAeBzUPX9ILpYiqXrS4
+         NIOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726070061; x=1726674861;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PPhqrR+rUKLY9Ke/C76E17iBv1z5TKbqfgaCfQBPdgE=;
+        b=LXzFvE29dzhzk/Y53lbYV+fCCtkxUfMbWYoeRoGDl7VHHN5LW9k3ODCoe63vYkHqiZ
+         yF/y2I+jpYoxGpHTi/GIqHa5nR7CTDlrS4/znvkd7HtUC+Ca4Epez2W9pPeYvREiGidD
+         K56cd5jIs8Uv5HHXJvJJpisb1bI/ieqA0YydzFIbm/THYA89tGR8+LzaKOJUC5pUgAOu
+         nyoX29iFqLxrLbsGw6675yFXYx2TfYqinBfCY/c5XecmaYraPUg5JC/lmwzc4JlMDy0F
+         1JshRf6L6fmYS3s3zacHW69cJ8i0TGxl5ZRPifXhM/OnK3ZdTb9zctXyry23XB4yYPDf
+         CC6A==
+X-Forwarded-Encrypted: i=1; AJvYcCXoxIb49mnnlnk2WlFIGhgOedMW8cqvqluQ16a2umdS+WVwXFRWO57F2mATye9xgiE4g0vA6CJmSHrr4sk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0aN/n0Y9BQoCJxx7jzY9hQn3Bbs4UaFzoZZKpQIoMi30YaAvZ
+	P6GiTQug12PR9W5bhI+gyR1lloAvMCzCPHVNZnx2vReppK7BKvT1661LlSlLwgpxcT7W9m0Ky9W
+	CnyzFFVIfOIECo858+aGzTg2tDWk=
+X-Google-Smtp-Source: AGHT+IFRcM3zM6MOhmIE7dVzBD5H48pHxY7bqxvSLeqzD9ebgH+YW7mvcY8RKA6RvREhtYueCMyCfFWipm+OqkOm+dc=
+X-Received: by 2002:a17:902:ea08:b0:205:7db3:fdd1 with SMTP id
+ d9443c01a7336-2074c6240c5mr60051715ad.36.1726070060455; Wed, 11 Sep 2024
+ 08:54:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com> <20240911154820.2846187-12-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240911154820.2846187-12-andriy.shevchenko@linux.intel.com>
+From: Jesper Juhl <jesperjuhl76@gmail.com>
+Date: Wed, 11 Sep 2024 17:53:44 +0200
+Message-ID: <CAHaCkmd_HWCgyfiAV56VgENgMaS3kG9cz5CPrUzyiVoy0y1oBg@mail.gmail.com>
+Subject: Re: [PATCH v1 11/12] i2c: isch: Prefer to use octal permission
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Convert existing descriptions to kernel-doc format and unify
-the rest of the comments to follow the modern style.
+Personally I find this to be *less* readable, but maybe that's just me.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/busses/i2c-isch.c | 48 ++++++++++++++++++++---------------
- 1 file changed, 28 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-isch.c b/drivers/i2c/busses/i2c-isch.c
-index a6aa28000568..333312a50deb 100644
---- a/drivers/i2c/busses/i2c-isch.c
-+++ b/drivers/i2c/busses/i2c-isch.c
-@@ -1,13 +1,12 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
--    i2c-isch.c - Linux kernel driver for Intel SCH chipset SMBus
--    - Based on i2c-piix4.c
--    Copyright (c) 1998 - 2002 Frodo Looijaard <frodol@dds.nl> and
--    Philip Edelbrock <phil@netroedge.com>
--    - Intel SCH support
--    Copyright (c) 2007 - 2008 Jacob Jun Pan <jacob.jun.pan@intel.com>
--
--*/
-+ *  Linux kernel driver for Intel SCH chipset SMBus
-+ *  - Based on i2c-piix4.c
-+ *  Copyright (c) 1998 - 2002 Frodo Looijaard <frodol@dds.nl> and
-+ *  Philip Edelbrock <phil@netroedge.com>
-+ *  - Intel SCH support
-+ *  Copyright (c) 2007 - 2008 Jacob Jun Pan <jacob.jun.pan@intel.com>
-+ */
- 
- /* Supports: Intel SCH chipsets (AF82US15W, AF82US15L, AF82UL11L) */
- 
-@@ -72,10 +71,14 @@ static inline void sch_io_wr16(struct sch_i2c *priv, unsigned int offset, u16 va
- 	iowrite16(value, priv->smba + offset);
- }
- 
--/*
-- * Start the i2c transaction -- the i2c_access will prepare the transaction
-- * and this function will execute it.
-- * return 0 for success and others for failure.
-+/**
-+ * sch_transaction - Start the i2c transaction
-+ * @adap: the i2c adapter pointer
-+ *
-+ * The sch_access() will prepare the transaction and
-+ * this function will execute it.
-+ *
-+ * Return: 0 for success and others for failure.
-  */
- static int sch_transaction(struct i2c_adapter *adap)
- {
-@@ -105,7 +108,7 @@ static int sch_transaction(struct i2c_adapter *adap)
- 		}
- 	}
- 
--	/* start the transaction by setting bit 4 */
-+	/* Start the transaction by setting bit 4 */
- 	temp = sch_io_rd8(priv, SMBHSTCNT);
- 	temp |= 0x10;
- 	sch_io_wr8(priv, SMBHSTCNT, temp);
-@@ -141,12 +144,17 @@ static int sch_transaction(struct i2c_adapter *adap)
- 	return rc;
- }
- 
--/*
-- * This is the main access entry for i2c-sch access
-- * adap is i2c_adapter pointer, addr is the i2c device bus address, read_write
-- * (0 for read and 1 for write), size is i2c transaction type and data is the
-- * union of transaction for data to be transferred or data read from bus.
-- * return 0 for success and others for failure.
-+/**
-+ * sch_access - the main access entry for i2c-sch access
-+ * @adap: the i2c adapter pointer
-+ * @addr: the i2c device bus address
-+ * @flags: I2C_CLIENT_* flags (usually zero or I2C_CLIENT_PEC)
-+ * @read_write: 0 for read and 1 for write
-+ * @command: Byte interpreted by slave, for protocols which use such bytes
-+ * @size: the i2c transaction type
-+ * @data: the union of transaction for data to be transferred or data read from bus
-+ *
-+ * Return: 0 for success and others for failure.
-  */
- static s32 sch_access(struct i2c_adapter *adap, u16 addr,
- 		 unsigned short flags, char read_write,
-@@ -281,7 +289,7 @@ static int smbus_sch_probe(struct platform_device *pdev)
- 	if (!priv->smba)
- 		return dev_err_probe(dev, -EBUSY, "SMBus region %pR already in use!\n", res);
- 
--	/* set up the sysfs linkage to our parent device */
-+	/* Set up the sysfs linkage to our parent device */
- 	priv->adapter.dev.parent = dev;
- 	priv->adapter.owner = THIS_MODULE,
- 	priv->adapter.class = I2C_CLASS_HWMON,
--- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+On Wed, 11 Sept 2024 at 17:51, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Octal permissions are preferred over the symbolics ones
+> for readbility. This ceases warning message pointed by checkpatch.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/i2c/busses/i2c-isch.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-isch.c b/drivers/i2c/busses/i2c-isch.c
+> index 8fa48a346e12..a6aa28000568 100644
+> --- a/drivers/i2c/busses/i2c-isch.c
+> +++ b/drivers/i2c/busses/i2c-isch.c
+> @@ -49,7 +49,7 @@ struct sch_i2c {
+>  };
+>
+>  static int backbone_speed = 33000; /* backbone speed in kHz */
+> -module_param(backbone_speed, int, S_IRUSR | S_IWUSR);
+> +module_param(backbone_speed, int, 0600);
+>  MODULE_PARM_DESC(backbone_speed, "Backbone speed in kHz, (default = 33000)");
+>
+>  static inline u8 sch_io_rd8(struct sch_i2c *priv, unsigned int offset)
+> --
+> 2.43.0.rc1.1336.g36b5255a03ac
+>
+>
 
