@@ -1,270 +1,176 @@
-Return-Path: <linux-i2c+bounces-6515-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6516-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 060BC974762
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 02:30:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA12A9747DC
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 03:38:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B739B2219F
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 00:30:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61AD21F276BF
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 01:38:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492153C30;
-	Wed, 11 Sep 2024 00:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="oEmmr0+X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB35F28E0F;
+	Wed, 11 Sep 2024 01:38:24 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail03.siengine.com (mail03.siengine.com [43.240.192.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660548460
-	for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 00:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3F5273FC;
+	Wed, 11 Sep 2024 01:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.240.192.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726014623; cv=none; b=IpdcF0XVyAXyNMg9fxVnV4SGJcOvQp07v/h5GzdKTjeNKV71w+KotXPq03HP2Ox+swYHNhCa1f4ELxeQPzDxCsDGWgpiSC21ncRJMTb6+b+eVTIr7IAosnj4e4tapUHEr1L1dB8fv+FcjCJcBI3+agqDMPDtdf31HbedEGNO4jk=
+	t=1726018704; cv=none; b=pdRqO+efSj2EOxN4aPNjLkCxGH1LQm23dBZp47uUpnmeFC96+ULLyV/e/7fi/YQr9Tz83gherGcSvtAm+Fi6H9k0cZD22DIKJeIVMqyuCDfEKRETFbyOuLp7/f3NQonZJH0NeaZRPxGt8/gWRX0suzAaP4A1967+63musZiImlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726014623; c=relaxed/simple;
-	bh=CWQ3FKYSH0+6wrCe/fWknwQLJk3iFkVwYWj/rMRRcdI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N1x8kzxarZNtCCOuQRpzn/p4Pk33yJy+r0H7HQG13Cyst6KLkMQlJB465Vxw8oUj2cW9ERRMcCCC9nqwR94V69QDoRL3dDFl4Vo/XxEFFuvbJ/Qz1RvAOC2sVgoIa3ckVVDRBWWoqwbdTFzAfzJmq0cJNslUlRWgJM6/JCCVwJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=oEmmr0+X; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7a9aa913442so261581285a.1
-        for <linux-i2c@vger.kernel.org>; Tue, 10 Sep 2024 17:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1726014620; x=1726619420; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XXQuFZTJ8lIqW5Ag+qwYyd702ndWzlmLQdZRxiEWDFg=;
-        b=oEmmr0+XkrS3VojqjVzjUqykS7OIBxZomFPDbhJRmwtaeAjda5biohnMowxQCrTuez
-         nNJn2UtWFTJZLR6IDyubAFKBKZgjnqeM9+C8U8A/f73ilzcw0FTxc8jJ0WXxhkunR84P
-         L2z2SskkjPOx8m5v7PzRPPsyrLK/uSlc52uNk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726014620; x=1726619420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XXQuFZTJ8lIqW5Ag+qwYyd702ndWzlmLQdZRxiEWDFg=;
-        b=nAF9wMfwMJyR/o3vXHXGJqYH5KPeP5pVuOhUA9MxvM3GTA2RmJcSR4yV+RKW5ARn5C
-         1Ko11+S+luyIO7PMml40qKqptKdN4vZuY5Wkm7KfrTY0f/6C1GQKXiX4XxCIq3bkuOKa
-         lYX2AzOtp3UuyI0fO0/eBmf2x27LQAef2ZwZkwKviLPZae3Qt13jRygV50kzH8pTPbae
-         noTeyLU2VjXimmHPnNkzu0xSxrB4S1rfSTZ8p7ILQTWdbFZDnpdyEfrFhGJYfJuQyEPj
-         2cEGmY4gk3B5DXTxlbXBdCS3nK+kU3q6a8JbYgEtvGiv5+thGB1MQ+xBrfvk9wSc1X/3
-         GEAA==
-X-Forwarded-Encrypted: i=1; AJvYcCV09/zsNoZ4E4feir8IuPNB136uvWJ+n3id82IK4f2x7/tlqFDkAP5aM6LuHEOHEw+XSCNUYcjjhsg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySWE9pkbpUZ9KFrJoDKaEqBX5wMI1W2fYrEfngu0ZMSCwKj9KT
-	2UC2XlnBbJTw1mfLW3JZtv56wpPPYDFQCK5V4hbcZxsD2U3ojnzKLG/oSwi7xVwfAEwQc92qdvY
-	=
-X-Google-Smtp-Source: AGHT+IGi90jU/d2fqpngn7Hne+/evvuN2d2c30moKl2q1+gvJ9WahUmsuJIoFjoLynkmKm1UAre58w==
-X-Received: by 2002:a05:620a:3728:b0:7a9:c8a1:5d7e with SMTP id af79cd13be357-7a9c8a16118mr577095885a.17.1726014620229;
-        Tue, 10 Sep 2024 17:30:20 -0700 (PDT)
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com. [209.85.219.46])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a796ad15sm358103285a.30.2024.09.10.17.30.19
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Sep 2024 17:30:20 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6c54a5fbceeso17386646d6.2
-        for <linux-i2c@vger.kernel.org>; Tue, 10 Sep 2024 17:30:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX8gxcbVAWNbG8lYEDZvseULU8LTqC2k13Tf8vf1tN81b5S1+VS6fYUcDitLD2EhiGICjOEYYmT+wY=@vger.kernel.org
-X-Received: by 2002:a05:6214:5b06:b0:6c5:52d5:bbd0 with SMTP id
- 6a1803df08f44-6c552d5bbf8mr80721586d6.32.1726014619235; Tue, 10 Sep 2024
- 17:30:19 -0700 (PDT)
+	s=arc-20240116; t=1726018704; c=relaxed/simple;
+	bh=zjgCeBJbI2vfvwjfzlO+32xESlfuGNuHxD1Gjm5qIqg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Ytq+ZINSdnAnRvLAO0goO4tFiIcnbMVYZR7WglKGtPJn3yZqRTHVPW76nqT0O3CKDb+VhlfVT2hdFbCMXRubVO2bb3MbW9nB9EGtwieczzbauxdx1dg8rLKIOPfpHslytpOqC6DptE61kwXUBFBFRnqxyegruDZPDYMyKsly/BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com; spf=pass smtp.mailfrom=siengine.com; arc=none smtp.client-ip=43.240.192.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siengine.com
+Received: from dsgsiengine01.siengine.com ([10.8.1.61])
+	by mail03.siengine.com with ESMTPS id 48B1bjPJ076135
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Wed, 11 Sep 2024 09:37:45 +0800 (+08)
+	(envelope-from kimriver.liu@siengine.com)
+Received: from SEEXMB03-2019.siengine.com (SEEXMB03-2019.siengine.com [10.8.1.33])
+	by dsgsiengine01.siengine.com (SkyGuard) with ESMTPS id 4X3NVc20Lbz7ZMhG;
+	Wed, 11 Sep 2024 09:37:44 +0800 (CST)
+Received: from SEEXMB05-2019.siengine.com (10.8.1.153) by
+ SEEXMB03-2019.siengine.com (10.8.1.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1544.11; Wed, 11 Sep 2024 09:37:44 +0800
+Received: from SEEXMB03-2019.siengine.com (10.8.1.33) by
+ SEEXMB05-2019.siengine.com (10.8.1.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1544.9; Wed, 11 Sep 2024 09:37:44 +0800
+Received: from SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe]) by
+ SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe%16]) with mapi id
+ 15.02.1544.011; Wed, 11 Sep 2024 09:37:44 +0800
+From: =?utf-8?B?TGl1IEtpbXJpdmVyL+WImOmHkeaysw==?= <kimriver.liu@siengine.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "jsd@semihalf.com" <jsd@semihalf.com>,
+        "andi.shyti@kernel.org"
+	<andi.shyti@kernel.org>,
+        "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v8] i2c: designware: fix master is holding SCL low while
+ ENABLE bit is disabled
+Thread-Topic: [PATCH v8] i2c: designware: fix master is holding SCL low while
+ ENABLE bit is disabled
+Thread-Index: AQHbA0iDEXTpjDBp/E6xp/M7s9EaBrJQM8eAgACJC/D//5N/AIAAiqkw//+KBwCAAWKo0A==
+Date: Wed, 11 Sep 2024 01:37:43 +0000
+Message-ID: <981861a36edc4b759e20f9be45d243c7@siengine.com>
+References: <9d181a45f3edf92364c9e6b729638f0b3f2e7baa.1725946886.git.kimriver.liu@siengine.com>
+ <ZuALQVyTBFugG0Sw@smile.fi.intel.com>
+ <743187d2fde54a9ebf86d42e29eadfb4@siengine.com>
+ <ZuAjMmr7q4f8VJpA@smile.fi.intel.com>
+ <36e6d80999cf493f8a866fb013710682@siengine.com>
+ <ZuA0jMCfGdyPR-T5@smile.fi.intel.com>
+In-Reply-To: <ZuA0jMCfGdyPR-T5@smile.fi.intel.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240904090016.2841572-1-wenst@chromium.org> <20240904090016.2841572-10-wenst@chromium.org>
- <CAD=FV=UGOz3Xzg7reJKP=tA1LqTxszv5w-CL9krmoXQtXdJLaQ@mail.gmail.com>
- <CAGXv+5F27K76t=ht5v75jKsNF-J+C0r5+m=czHz6PtV3t5DxcQ@mail.gmail.com>
- <CAD=FV=XVrAdQN8p9QJtt3Ah_YQAG7Y-D4wDx8_+qb1EGN7+Uig@mail.gmail.com> <CAGXv+5HO=POHNL_tQHCsy+8=a0gPLMDVHcWMguferahVU+BnZA@mail.gmail.com>
-In-Reply-To: <CAGXv+5HO=POHNL_tQHCsy+8=a0gPLMDVHcWMguferahVU+BnZA@mail.gmail.com>
-From: Doug Anderson <dianders@chromium.org>
-Date: Tue, 10 Sep 2024 17:30:07 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U2yDGv74GQWRQuHN9sjdY5iThqpH-br-jYXMkV1cujEg@mail.gmail.com>
-Message-ID: <CAD=FV=U2yDGv74GQWRQuHN9sjdY5iThqpH-br-jYXMkV1cujEg@mail.gmail.com>
-Subject: Re: [PATCH v6 09/12] i2c: of-prober: Add regulator support
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-DKIM-Results: [10.8.1.61]; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:mail03.siengine.com 48B1bjPJ076135
 
-Hi,
-
-On Thu, Sep 5, 2024 at 8:45=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org> wr=
-ote:
->
-> > > IIUC we could have the "options" data structure have much more board
-> > > specific information:
-> > >
-> > >   - name of node to fetch resources (regulator supplies and GPIOs) fr=
-om
-> > >   - names of the resources for the node given from the previous item
-> > >   - delay time after each resource is toggled
-> > >   - polarity in the case of GPIOs
-> > >   - prober callback to do power sequencing
-> > >
-> > > The "resource collection" step would use the first two items to retri=
-eve
-> > > the regulator supplies and GPIOS instead of the bulk APIs used right =
-now.
-> > >
-> > > The power sequencing callback would use the resources combined with t=
-he
-> > > given delays to enable the supplies and toggle the GPIOs.
-> > >
-> > > For now I would probably only implement a generic one regulator suppl=
-y
-> > > plus one GPIO helper. That is the common case for touchscreens and
-> > > trackpads connected over a ribbon cable.
-> > >
-> > > Does that sound like what you have in mind?
-> >
-> > I guess I'd have to see how the code looks to know for sure, but if I
-> > understand it sounds a little awkward. Specifically, the "options"
-> > sound like they might become complicated enough that you're inventing
-> > your own little programming language (with delays, abilities to drive
-> > pins low and high, abilities to turn on/off clocks, and abilities to
-> > turn off/on regulators) and then probers need to code up their
-> > programs in this language. You also need to handle undoing things
-> > properly if there is a failure in the middle. Like your "program"
-> > would look like this (obviously you'd have to play with enums more,
-> > but you get the idea):
-> >
-> > {
-> >    { OPCODE_TURN_REGULATOR_ON, "vdd" },
-> >    { OPCODE_DELAY, 10 },
-> >    { OPCODE_GPIO_ASSERT, "reset" },
-> >    { OPCODE_DELAY, 5 },
-> >    { OPCODE_GPIO_DEASSERT "reset" },
-> >    { OPCODE_DELAY, 100 },
-> >    { OPCODE_TURN_REGULATOR_ON, "vddIO" },
-> > }
-> >
-> > Why not just expect the board probers to write C code to turn things
-> > on before looking for i2c devices, then provide helpers to the C code?
-> >
-> > So there wouldn't be some generic "resource collection" API, but you'd
-> > provide a helper to make it easy to grab regulators from one of the
-> > nodes by name. If you think bulk enabling regulators is common then
-> > you could make a helper that grabs all of the regulators from a node
-> > in a way that is consistent with the bulk APIs, but I wouldn't expect
-> > every driver to use that since devices I've seen expect regulators to
-> > be enabled in a very specific order even if they don't need a delay
-> > between them.
-> >
-> > I wouldn't expect a "collect all GPIOs" API because it seems really
-> > weird to me that we'd ever want to jam multiple GPIOs in a state
-> > without knowing exactly which GPIO was what and asserting them in the
-> > right sequence.
->
-> So I'm slightly confused, as it sounds like at this point the i2c prober
-> would be litter more than just a framework, and the heavy lifting is to
-> be all done by callbacks provided by the board-specific driver?
->
-> So the framework becomes something like:
->
-> 1. find i2c bus node
-> 2. call provided callback with i2c bus node to gather resources;
->    let callback handle specifics
-> 3. call provided callback to enable resources
-> 4. for each i2c component, call provided callback to probe
-
-I don't think I'd do it as callbacks but just have the HW prober call
-the functions directly. AKA, instead of doing:
-
-  i2c_of_probe_component(dev, "touchscreen", ts_opts, ts_callbacks);
-
-Do:
-
-  grab_touchscreen_resources(...);
-  power_on_touchscreens(...);
-  i2c_of_probe_component(...);
-  power_off_touchscreen(...);
-  release_touchscreen_resources(...);
-
-Obviously I'm spitballing here, though. Without writing the code it's
-hard for me to know that my proposal would be better, but my gut tells
-me that trying to write something overly generic with lots of options
-/ callbacks would be more confusing.
-
-
->   If the probe succeeded:
->
->     5. call provided callback for early release of resources (GPIOs)
->     6. set "status" to "okay"
->     7. call provided callback for late release of resources (regulators)
->
->   Otherwise at the end of the loop
->
-> 8. release resources
->
-> The current code can be reworked into helpers for steps 2, 3, 5, 7 for
-> the single regulator single GPIO case.
->
-> > > This next item would be a later enhancement (which isn't implemented =
-in
-> > > this series anyway):
-> > >
-> > >   - optional prober callback that does actual probing
-> > >
-> > > In our case it would only be used for cases where an HID-over-I2C
-> > > component shares the same address as a non-HID one, and some extra
-> > > work is needed to determine which type it is. I still need to think
-> > > about the structure of this.
-> >
-> > IMO _that_ would be a great option to the i2c prober. It feels like
-> > you could have an optional register read that needs to match to have
-> > the i2c prober succeed. Most people would leave it blank (just the i2c
-> > device existing is enough) but probably a single register read would
-> > be enough to confirm you got the right device. Most i2c devices have
-> > some sort of "version" / "vendor" / "id" type register somewhere.
->
-> At least for the stuff that we have (touchscreens and trackpads) such
-> registers typically don't exist, unless it's an HID-over-I2C device,
-> in which case there's the standard HID descriptor at some address.
-> But, yeah, reading the HID descriptor was the use case I had in mind.
->
-> At least for one Chromebooks it's a bit more tricky because that one
-> HID-over-I2C component shares the same address as a non-HID one. We
-> currently have different SKU IDs and thus different device trees for
-> them, but we could make the prober work with this. It just has be able
-> to tell if the component it's currently probing needs the special
-> prober and is it responding correctly. This bit I need to think about.
-
-I guess Mark Brown also thought that there wouldn't be some magic
-register, but my gut still tells me that most i2c devices have some
-way to confirm that they are what you expect even if it's not an
-official "vendor" or "version" register. Some type of predictable
-register at a predictable location that you could use, at least if you
-knew all of the options that someone might stuff.
-
-For instance, in elan trackpads you can see elan_i2c_get_product_id().
-That just reads a location (ETP_I2C_UNIQUEID_CMD =3D 0x0101) that could
-theoretically be used to figure out (maybe in conjunction with other
-registers) that it's an elan trackpad instead of an i2c-hid one. You'd
-have to (of course) confirm that an i2c-hid device wouldn't somehow
-return back data from this read that made it look like an elan
-trackpad, but it feels like there ought to be some way to figure it
-out with a few i2c register reads.
-
-...that being said, I guess my original assertion that you might be
-able to figure out with a simple register read was naive and you'd
-actually need a function (maybe as a callback) to figure this out.
-
-
--Doug
+SGkgQW5keQ0KDQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IEFuZHkgU2hl
+dmNoZW5rbyA8YW5kcml5LnNoZXZjaGVua29AbGludXguaW50ZWwuY29tPiANCj5TZW50OiAyMDI0
+5bm0OeaciDEw5pelIDE5OjU5DQo+VG86IExpdSBLaW1yaXZlci/liJjph5HmsrMgPGtpbXJpdmVy
+LmxpdUBzaWVuZ2luZS5jb20+DQo+Q2M6IGphcmtrby5uaWt1bGFAbGludXguaW50ZWwuY29tOyBt
+aWthLndlc3RlcmJlcmdAbGludXguaW50ZWwuY29tOyBqc2RAc2VtaWhhbGYuY29tOyBhbmRpLnNo
+eXRpQGtlcm5lbC5vcmc7IGxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2
+Z2VyLmtlcm5lbC5vcmcNCj5TdWJqZWN0OiBSZTogW1BBVENIIHY4XSBpMmM6IGRlc2lnbndhcmU6
+IGZpeCBtYXN0ZXIgaXMgaG9sZGluZyBTQ0wgbG93IHdoaWxlIEVOQUJMRSBiaXQgaXMgZGlzYWJs
+ZWQNCg0KPk9uIFR1ZSwgU2VwIDEwLCAyMDI0IGF0IDExOjQzOjM0QU0gKzAwMDAsIExpdSBLaW1y
+aXZlci/liJjph5HmsrMgd3JvdGU6DQo+PiA+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4+
+ID5Gcm9tOiBBbmR5IFNoZXZjaGVua28gPGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmludGVsLmNv
+bT4NCj4+ID5TZW50OiAyMDI05bm0OeaciDEw5pelIDE4OjQ1DQo+PiA+T24gVHVlLCBTZXAgMTAs
+IDIwMjQgYXQgMDk6Mzg6NTNBTSArMDAwMCwgTGl1IEtpbXJpdmVyL+WImOmHkeaysyB3cm90ZToN
+Cj4+ID4+ID5Gcm9tOiBBbmR5IFNoZXZjaGVua28gPGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4Lmlu
+dGVsLmNvbT4NCj4+ID4+ID5TZW50OiAyMDI05bm0OeaciDEw5pelIDE3OjAzDQo+PiA+PiA+YXQg
+MDI6MTM6MDlQTSArMDgwMCwgS2ltcml2ZXIgTGl1IHdyb3RlOg0KPg0KPi4uLg0KPg0KPj4gPiA+
+PiArc3RhdGljIGJvb2wgaTJjX2R3X2lzX21hc3Rlcl9pZGxpbmcoc3RydWN0IGR3X2kyY19kZXYg
+KmRldikNCj4+ID4+IA0KPj4gPj4gPlNvcnJ5IGlmIEkgbWFkZSBhIG1pc3Rha2UsIGJ1dCBhZ2Fp
+biwgbG9va2luZyBhdCB0aGUgdXNhZ2UgeW91IA0KPj4gPj4gPmhhdmUgYWdhaW4gbmVnYXRpb24g
+aGVyZSBhbmQgdGhlcmUuLi4NCj4+ID4gDQo+PiA+PiA+CWkyY19kd19pc19jb250cm9sbGVyX2Fj
+dGl2ZQ0KPj4gPj4gDQo+PiA+PiA+IChub3RlIG5ldyB0ZXJtaW5vbG9neSwgZHVubm8gaWYgaXQg
+bWFrZXMgc2Vuc2Ugc3RhcnQgdXNpbmcgaXQgaW4gDQo+PiA+PiA+IGZ1bmN0aW9uIG5hbWVzLCBh
+cyB3ZSBoYXZlIG1vcmUgb2YgdGhlbSBmb2xsb3dpbmcgb2xkIHN0eWxlKQ0KPj4gPj4gDQo+PiA+
+PiAgTGFzdCB3ZWVrICwgWW91IHN1Z2dlc3RlZCB0aGF0IEkgdXNlZCB0aGlzDQo+PiA+PiBpMmNf
+ZHdfaXNfbWFzdGVyX2lkbGluZyhkZXYpDQo+PiANCj4+ID5ZZXMsIHNvcnJ5IGFib3V0IHRoYXQu
+IEkgZGlkIG1heWJlIG5vdCBjbGVhcmx5IGdldCBob3cgaXQgaXMgZ29pbmcgdG8gbG9vayBsaWtl
+Lg0KPj4gDQo+PiA+PiA+PiArew0KPj4gPj4gPj4gKwl1MzIgc3RhdHVzOw0KPj4gPj4gPj4gKw0K
+Pj4gPj4gPj4gKwlyZWdtYXBfcmVhZChkZXYtPm1hcCwgRFdfSUNfU1RBVFVTLCAmc3RhdHVzKTsN
+Cj4+ID4+ID4+ICsJaWYgKCEoc3RhdHVzICYgRFdfSUNfU1RBVFVTX01BU1RFUl9BQ1RJVklUWSkp
+DQo+PiA+PiA+PiArCQlyZXR1cm4gdHJ1ZTsNCj4+ID4+IA0KPj4gPj4gCQlyZXR1cm4gZmFsc2U7
+DQo+PiA+PiANCj4+ID4+ID4+ICsJcmV0dXJuICFyZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQoZGV2
+LT5tYXAsIERXX0lDX1NUQVRVUywgc3RhdHVzLA0KPj4gPj4gPj4gKwkJCSEoc3RhdHVzICYgRFdf
+SUNfU1RBVFVTX01BU1RFUl9BQ1RJVklUWSksDQo+PiA+PiA+PiArCQkJMTEwMCwgMjAwMDApOw0K
+Pj4gPj4gDQo+PiA+PiA+Li4uYW5kIGRyb3AgIS4NCj4+ID4+IA0KPj4gPj4gIFdlIHJlcHJvZHVj
+ZSB0aGlzIGlzc3VlIGluIFJUTCBzaW11bGF0aW9uKEFib3V0KH4xOjUwMCkgaW4gb3VyIHNvYyku
+IA0KPj4gPj4gSXQgaXMgbmVjZXNzYXJ5ICB0byBhZGQgd2FpdGluZyBEV19JQ19TVEFUVVNfTUFT
+VEVSX0FDVElWSVRZIGlkbGluZyANCj4+ID4+IGJlZm9yZSBkaXNhYmxpbmcgSTJDIHdoZW4gIEky
+QyB0cmFuc2ZlciBjb21wbGV0ZWQuICBhcyBkZXNjcmliZWQgaW4gDQo+PiA+PiB0aGUgRGVzaWdu
+V2FyZSAgSTJDIGRhdGFib29rKEZsb3djaGFydCBmb3IgRFdfYXBiX2kyYyBDb250cm9sbGVyKQ0K
+Pj4gDQo+PiA+Q29vbCwgYnV0IGhlcmUgSSdtIHRhbGtpbmcgcHVyZWx5IGFib3V0IGludmVydGlu
+ZyB0aGUgbG9naWMgKHdpdGggcmVuYW1pbmcpLCBub3RoaW5nIG1vcmUuDQo+PiANCj4+ICBhcyBk
+ZXNjcmliZWQgaW4gdGhlIERlc2lnbldhcmUgSTJDIGRhdGFib29rOg0KPj4gIERXX0lDX1NUQVRV
+U1s1XS5NU1RfQUNUSVZJVFkgRGVzY3JpcHRpb24gYXMgZm9sbG93czoNCj4+ICBDb250cm9sbGVy
+IEZTTSBBY3Rpdml0eSBTdGF0dXMuIFdoZW4gdGhlIENvbnRyb2xsZXIgRmluaXRlICBTdGF0ZSAN
+Cj4+IE1hY2hpbmUgKEZTTSkgaXMgbm90IGluIHRoZSBJRExFIHN0YXRlLCB0aGlzIGJpdCBpcyBz
+ZXQuDQo+PiAgTm90ZTogSUNfU1RBVFVTWzBdLXRoYXQgaXMsIEFDVElWSVRZIGJpdC1pcyB0aGUg
+T1Igb2YgIFNMVl9BQ1RJVklUWSANCj4+IGFuZCBNU1RfQUNUSVZJVFkgYml0cy4NCj4+ICBWYWx1
+ZXM6DQo+PiAg4pagIDB4MSAoQUNUSVZFKTogQ29udHJvbGxlciBub3QgaWRsZQ0KPj4gIOKWoCAw
+eDAgKElETEUpOiBDb250cm9sbGVyIGlzIGlkbGUNCj4+IA0KPj4gV2UgbmVlZCB3YWl0aW5nIERX
+X0lDX1NUQVRVUy5NU1RfQUNUSVZJVFkgaWRsaW5nLCBJZiBDb250cm9sbGVyIG5vdCANCj4+IGlk
+bGUsIFdhaXQgZm9yIGEgd2hpbGUuDQo+PiBSZXR1cm4gdmFsdWU6IA0KPj4gICBmYWxzZSgwKTog
+Q29udHJvbGxlciBpcyBpZGxlDQo+PiAgIHRpbWVvdXQoLTExMCk6IENvbnRyb2xsZXIgYWN0aXZp
+dHkNCj4+IA0KPj4gT2ssIGNoYW5nZSB0aGUgZnVuY3Rpb24gbmFtZSBpMmNfZHdfaXNfbWFzdGVy
+X2lkbGluZyhkZXYpIHRvIA0KPj4gaTJjX2R3X2lzX2NvbnRyb2xsZXJfYWN0aXZlKGRldikgaXQg
+c2VlbXMgbW9yZSByZWFzb25hYmxlDQo+PiANCg0KDQogQ2hhbmdlIGFib3ZlIHRleHQgYXMgYSBj
+b21tZW50Og0KDQovKg0KICogVGhpcyBmdW5jdGlvbnMgd2FpdHMgY29udHJvbGxlciBpZGxpbmcg
+YmVmb3JlIGRpc2FibGluZyBJMkMNCiAqIFdoZW4gdGhlIGNvbnRyb2xsZXIgaXMgbm90IGluIHRo
+ZSBJRExFIHN0YXRlLCANCiAqIE1TVF9BQ1RJVklUWSBiaXQgKElDX1NUQVRVU1s1XSkgaXMgc2V0
+Og0KICogMHgxIChBQ1RJVkUpOiBDb250cm9sbGVyIG5vdCBpZGxlDQogKiAweDAgKElETEUpOiBD
+b250cm9sbGVyIGlzIGlkbGUNCiAqIFRoZSBmdW5jdGlvbiBpcyBjYWxsZWQgYWZ0ZXIgcmV0dXJu
+aW5nIHRoZSBlbmQgb2YgdGhlIGN1cnJlbnQgdHJhbnNmZXINCiAqIFJldHVybnM6DQogKiBSZXR1
+cm4gMCBhcyBjb250cm9sbGVyIElETEUsDQogKiBSZXR1cm4gYSBuZWdhdGl2ZSBlcnJubyBhcyBj
+b250cm9sbGVyIEFDVElWRQ0KICovIA0KDQo+PiBzdGF0aWMgaW50IGkyY19kd19pc19jb250cm9s
+bGVyX2FjdGl2ZShzdHJ1Y3QgZHdfaTJjX2RldiAqZGV2KSB7DQo+PiAJdTMyIHN0YXR1czsNCj4+
+IA0KPj4gCXJlZ21hcF9yZWFkKGRldi0+bWFwLCBEV19JQ19TVEFUVVMsICZzdGF0dXMpOw0KPj4g
+CWlmICghKHN0YXR1cyAmIERXX0lDX1NUQVRVU19NQVNURVJfQUNUSVZJVFkpKQ0KPj4gCQlyZXR1
+cm4gMDsNCj4+IA0KPj4gCXJldHVybiByZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQoZGV2LT5tYXAs
+IERXX0lDX1NUQVRVUywgc3RhdHVzLA0KPj4gCQkJIShzdGF0dXMgJiBEV19JQ19TVEFUVVNfTUFT
+VEVSX0FDVElWSVRZKSwNCj4+IAkJCTExMDAsIDIwMDAwKTsNCj4+IH0NCg0KPlllcywgdGhhbmsg
+eW91LiBUaGlzIGlzIHB1cmUgcmVhZGFiaWxpdHkgd2lzZSwgeW91IG1heSBhY3R1YWxseSBsZWF2
+ZSB0aGUgYWJvdmUgdGV4dCBhcyBhIGNvbW1lbnQgb24gdG9wIG9mIHRoYXQgaGVscGVyLiBJdCB3
+aWxsIGFkZCBhIHZhbHVlIG9mIHVuZGVyc3RhbmRpbmcgd2hhdCdzIGJlaGluZCB0aGUgc2NlbmVz
+Lg0KDQo+ID4+ID4+ICt9DQoNCi4uLg0KDQo+PiBJIHdpbGwgYmUgb2ZmIHdvcmssIElmIHRoZXJl
+IGFyZSBzdGlsbCBlbWFpbHMgdGhhdCBJIGhhdmUgbm90IGJlZW4gDQo+PiByZXBsaWVkIHRvLCBJ
+IHdpbGwgcmVwbHkgdG8geW91ciBlbWFpbCBpbW1lZGlhdGVseSBhZnRlciBnb2luZyB0byB3b3Jr
+IHRvbW9ycm93Lg0KDQo+Tm8gcHJvYmxlbS4gSnVzdCBrZWVwIHlvdXIgdGltZSwgcHJvb2YtcmVh
+ZCBhbmQgdGVzdCB0aGUgdjkgYmVmb3JlIHNlbmRpbmcgYW5kIEkgYmVsaWV2ZSBpdCB3aWxsIGJl
+IHRoZSBsYXN0IGl0ZXJhdGlvbi4gVGhhbmsgeW91IGZvciB5b3VyIHBhdGllbmNlIGFuZCBlbmVy
+Z3kgdG8gcHVzaCB0aGlzIGNoYW5nZSBmb3J3YXJkIQ0KDQogIEFmdGVyIHRoZSB0ZXN0aW5nIGFu
+ZCB2YWxpZGF0aW9uIGFyZSBjb21wbGV0ZWQsIEkgd2lsbCByZXNlbmQgdjkgdmVyc2lvbi4NCiAg
+VGhhbmsgeW91IQ0KPg0KPi4uLg0KPg0KPj4gVGhhbmtzIHlvdSBmb3IgeW91ciBzdWdnZXN0aW9u
+IQ0KDQo+WW91IGFyZSB3ZWxjb21lIQ0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0NCkJlc3QgUmVnYXJkcw0KS2ltcml2ZXIgTGl1DQoNCg==
 
