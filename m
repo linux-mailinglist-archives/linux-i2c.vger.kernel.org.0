@@ -1,74 +1,77 @@
-Return-Path: <linux-i2c+bounces-6572-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6573-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1012597577D
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 17:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56825975784
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 17:49:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBAE7B2661C
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 15:48:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29FEDB272DC
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 15:49:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD341AAE36;
-	Wed, 11 Sep 2024 15:48:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E452A1AE864;
+	Wed, 11 Sep 2024 15:48:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BlwdF8Mm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fgzpf+wO"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3CF1AB6EE;
-	Wed, 11 Sep 2024 15:48:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF221AC8A3;
+	Wed, 11 Sep 2024 15:48:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726069708; cv=none; b=FkqnkO7itOPK0BdVguLAZqHu+d3B48Z1w+TWf85cUJ3dkZovuV/VKg5o9rB92mHy9uFsxDIV2SvzV7YDFgH89ftwWVK+Sil/EZ41A3BMhKm1ikxiqoWRQGFJSP2CFBUTLoilLXZ1VpiWASLLS76yeFuytP/d+Xh0CrUnzQ6Lj7Q=
+	t=1726069710; cv=none; b=UcUJ/eOkWXX+S8i86K8nom61+49uNCfnu9zoYaoTBirPRRFKv3EdSIVLj9ktK0tImGXtElRfBFTqWxdCiFlKzOAUnWbCZ1Hucb6jmjNs50u2NfkW16yCdlubfOYIvxIY3+iYkGdRGIkCRtn6a2uplPeeRsNxZcTezs4SQvvUPtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726069708; c=relaxed/simple;
-	bh=mV6ILRaBFdFJqNuFP2DqfImznEowX5VXUP5QeNB3dPs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U9FU+StZgm5ybGcoykQFNhEA4d6siE4OszdlF2Op/czfX/w0otHiMma7KVXanj2xCL39heW43El+6N8V1DlJ9OcTfBNmMdzRI5+krk7viQFrFhlhbwoUeowOju3tct25jOxeDKcdQ/wdYGn6WjhwdYsTG+5mjXsdY2mmnOO8tl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BlwdF8Mm; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1726069710; c=relaxed/simple;
+	bh=fbdMbu/WJ3UEOautWFpku/qMpEGheGBW2zuf4DXNYiQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=njjT93FF56nheXTeEhZq9O51quxeWogP+6/EAU1igC0JRJKyyy83zyyOn2NsBUcnewJMtjDcfDNExytwuqrDC4B7FYp+ziy6RSLEDM6gxJg5bVwt3sCut7ERrOo4R87m6i3QZygu957Kk2IqME4QN/MsxC0bqs1VvAs/mYb0cpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fgzpf+wO; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726069707; x=1757605707;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mV6ILRaBFdFJqNuFP2DqfImznEowX5VXUP5QeNB3dPs=;
-  b=BlwdF8MmPxYzfz8izESN8oISSYBWRL3cCqpSmvPHdQZLt2Hp3Y1gWm3X
-   3G4jqTkA7KCUjXslwkpjizgMw76WheTi0cO7b0YAT6XNkIF/aiVq5mRlY
-   0nhtlICiKADi6T7rJqKoZKJmGxS8jy808x2XtTK8yEKmGOT/U64gyu8UX
-   g98NpQCycpqHbM3Sxclq4d1g/P8EeWMNQd/aDUyDJW446iZ+2ikCtaOHG
-   j6v34TJ+VrPaIzOfFnTSCLyztDo+hRs6Quo6XCAxNSWDwzt8NZ7oDpXGn
-   ylNVYrMxL8wygs9Xt6z2e9fJbxmP59RDPmAye59ZyxsQbcOuiLo3ACaz+
-   A==;
-X-CSE-ConnectionGUID: plLgWu0FTEOmZb7iiq91uQ==
-X-CSE-MsgGUID: QzkbwBS3Tbq/Ne5bW2GYqA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="24701820"
+  t=1726069709; x=1757605709;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fbdMbu/WJ3UEOautWFpku/qMpEGheGBW2zuf4DXNYiQ=;
+  b=Fgzpf+wOPL4nOWRbRdLFOBap4n2VutwoZUEtCbXutbOnJURPFz3C0b5+
+   Pfc6MPeDB6gVNwLqKvS7w0v+2DBCzK3O3JHr9b3EMFaE4Hu/6tYdbH0Xu
+   WTyV9JjG+0uQ23/8Ov4X75kq4YPYVcyohHvyXdkcv0sYi9d481yO2JCWb
+   5H6dKvBhiPYXQO07kdNnB2Ryk0FHJubJob4eGMHzZ9aaJxuPc1ctEwHmw
+   ikVNv98oi6LavHy/N9HGLmn3zlRdsJQJl1jpomFNeeSUvqWEg7bAgsjun
+   NpBo0ctzjD8knmIA9k9s1HJnjt9mNm7O0GsyL62fpQEupIsDtXs6eK9vD
+   Q==;
+X-CSE-ConnectionGUID: 3LBulcMFQWO2op0qRR3izg==
+X-CSE-MsgGUID: rj7F/FjmQgax2WZL6LFvEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="24701828"
 X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
-   d="scan'208";a="24701820"
+   d="scan'208";a="24701828"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 08:48:24 -0700
-X-CSE-ConnectionGUID: 6aevm9mLR/68/Ah9SL/IEQ==
-X-CSE-MsgGUID: JVozvP9cTQ2KfsgJ7s9/vQ==
+X-CSE-ConnectionGUID: AUjjk1B3QVOV311pcL8wig==
+X-CSE-MsgGUID: C+fM6kAzR4+7YVs5WgffvQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
-   d="scan'208";a="67255175"
+   d="scan'208";a="67255177"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orviesa010.jf.intel.com with ESMTP; 11 Sep 2024 08:48:23 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 47139192; Wed, 11 Sep 2024 18:48:21 +0300 (EEST)
+	id 573B3170; Wed, 11 Sep 2024 18:48:21 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Jean Delvare <jdelvare@suse.com>,
 	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PATCH v1 00/12] i2c: isch: Put the driver into shape
-Date: Wed, 11 Sep 2024 18:39:13 +0300
-Message-ID: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 01/12] i2c: isch: Add missed 'else'
+Date: Wed, 11 Sep 2024 18:39:14 +0300
+Message-ID: <20240911154820.2846187-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+In-Reply-To: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
+References: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,30 +80,30 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Driver code is quite outdated WRT modern in-kernel APIs and
-also has one non-critival bug.
+In accordance with the existing comment and code analysis
+it is quite likely that there is a missed 'else' when adapter
+times out. Add it.
 
-The series is to address the above. Has been tested on
-Minnowboard (Intel Tunnel Creek platform) with connected
-LM95245 HW monitor chip.
+Fixes: 5bc1200852c3 ("i2c: Add Intel SCH SMBus support")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-isch.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Andy Shevchenko (12):
-  i2c: isch: Add missed 'else'
-  i2c: isch: Pass pointer to struct i2c_adapter down
-  i2c: isch: Use string_choices API instead of ternary operator
-  i2c: isch: Switch to memory mapped IO accessors
-  i2c: isch: Use custom private data structure
-  i2c: isch: switch i2c registration to devm functions
-  i2c: isch: Utilize temporary variable to hold device pointer
-  i2c: isch: Use read_poll_timeout()
-  i2c: isch: Unify the name of the variable to hold an error code
-  i2c: isch: Don't use "proxy" headers
-  i2c: isch: Prefer to use octal permission
-  i2c: isch: Convert to kernel-doc
-
- drivers/i2c/busses/i2c-isch.c | 324 +++++++++++++++++-----------------
- 1 file changed, 165 insertions(+), 159 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-isch.c b/drivers/i2c/busses/i2c-isch.c
+index 33dbc19d3848..f59158489ad9 100644
+--- a/drivers/i2c/busses/i2c-isch.c
++++ b/drivers/i2c/busses/i2c-isch.c
+@@ -99,8 +99,7 @@ static int sch_transaction(void)
+ 	if (retries > MAX_RETRIES) {
+ 		dev_err(&sch_adapter.dev, "SMBus Timeout!\n");
+ 		result = -ETIMEDOUT;
+-	}
+-	if (temp & 0x04) {
++	} else if (temp & 0x04) {
+ 		result = -EIO;
+ 		dev_dbg(&sch_adapter.dev, "Bus collision! SMBus may be "
+ 			"locked until next hard reset. (sorry!)\n");
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
