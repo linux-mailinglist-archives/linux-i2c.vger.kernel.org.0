@@ -1,145 +1,149 @@
-Return-Path: <linux-i2c+bounces-6559-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6560-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1583C9752AB
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 14:41:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ABD69755BE
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 16:40:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02FC4B22A26
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 12:41:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D848728B0B4
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 14:40:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C426183092;
-	Wed, 11 Sep 2024 12:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 378561A3AB3;
+	Wed, 11 Sep 2024 14:38:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="id9Yc7yC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RGIRZf7F"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A04D770E8
-	for <linux-i2c@vger.kernel.org>; Wed, 11 Sep 2024 12:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7756319F126;
+	Wed, 11 Sep 2024 14:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726058453; cv=none; b=jLb/Rz4wvyigVFzi3mN459GDoxmjFAR+SASG9owI63/jmkIxrwKf7Oq/a1WB5zHInaHx9DCXnhG1XRSJ7BtpnAdrvljX6lsrzP2Mu0BXWr0RCXUqrVp8njAGoiihNA8olwJVy/SWCrgco5I065VoWBOp0dnXQZsUopWJ+irIBEM=
+	t=1726065513; cv=none; b=EWv7we2gjT0nTncLYyHi+Ii5S/Edq4hC+aJ6OIb0mCdywXoHjhg1Zec58HhoJYcv2MK7cs7903nCxFbRpxJAdFkiRiuLS6PA2p9eP2qCRchCYX3W+R4UfxGTbPWXfS7OchlZtP/o3PI1jRQWLPla/F1U60tMGCrxoEikfJA7Gj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726058453; c=relaxed/simple;
-	bh=+1pBdasWGNk+1Kvgs6A/Tq0yqXTL+ck36VbkzTZ6Zag=;
+	s=arc-20240116; t=1726065513; c=relaxed/simple;
+	bh=Ldou9neFantEFPxbcntEHkUQuwTXsLxrT82B9jmiQRQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F+WjxmiKLcRXz87zIOVCDRK2yq2MNRPc+n1dNwh2LraYVlHfrCw/8IMzdk5z9LNdjnCRt3tQ9OuELtGzeHFbknLMytTyJhogek/QKs1UmsjRr8XOZ290dkKllGPcW33wV1zDZhuEJJvC1gBwaiU5g8pjLTSKHAz0aei2W3+9rVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=id9Yc7yC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41EA2C4CEC5;
-	Wed, 11 Sep 2024 12:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726058452;
-	bh=+1pBdasWGNk+1Kvgs6A/Tq0yqXTL+ck36VbkzTZ6Zag=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=id9Yc7yCQtKfRxmFLNGZHnoqQQ1f9V3iXTK1ScOU8Zn6om+o7at7driqRF9QWa3lZ
-	 tN3VndT+XcIDoycwoTXKpd1q9GSuaqjWR3p2N8n3+KYvRxWrFtkWBDA4CLzpLIyLPN
-	 6X8SmNtZIE85b08viZbWazF6BV0ILUwskZwQkoGAYP4fjrbk6XbyHbWcYcmzUPk1NI
-	 GwCN30NlT/5k+Hv0X+VBsy8k2koGCMg6RmbpP46/FK+wK7GaAbpoVUyHM58YQHZb3j
-	 kUMrz1WluzKlgsiNRhhlt/ZrPJ2Fig3vCHmBIUftUqPfijFVJtVtE2omIyLN8+Zhr0
-	 sqjFAIBbTPsmA==
-Date: Wed, 11 Sep 2024 14:40:48 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Robert Hancock <robert.hancock@calian.com>
-Cc: "michal.simek@amd.com" <michal.simek@amd.com>, 
-	"ben-linux@fluff.org" <ben-linux@fluff.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
-	"Guntupalli, Manikanta" <manikanta.guntupalli@amd.com>
-Subject: Re: [PATCH v2 1/2] i2c: xiic: Wait for TX empty to avoid missed TX
- NAKs
-Message-ID: <4x5gqlah6dfpbn2ih2gynrfdgxx7pkqyfcd7t3cle62zhyuexk@vhsdz3njvneh>
-References: <20231121180855.1278717-1-robert.hancock@calian.com>
- <20231121180855.1278717-2-robert.hancock@calian.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qr4uDn76WhpWzTbuSbRu6+e6Lzbb3Kmb4bfwadngylcN2SCsNQOuG3KceB1EtAO8qruddDnN1Pcw6jPWXDoHquX079IdrvFI246qKVfA5sdUD1fS9MXSKCddOXxyb7aeteZ+YA/u80biXfHKDA/7H07hnUuWGbxVQWwzbva5Ws0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RGIRZf7F; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726065511; x=1757601511;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Ldou9neFantEFPxbcntEHkUQuwTXsLxrT82B9jmiQRQ=;
+  b=RGIRZf7FPJsRGYt8y7hEW1mAzCejgfu2O1gpp0gmBZBul8JWGkyy+4mo
+   uzUkWTtiymrn409vxKXhXXxBcdtbHoHB2OL9IliGyAu9W3gvA7yq1AbyL
+   7MLghI9dFlduivQ5uQMJsZtI0cWZuiNwxbmzLPe7Tn50I7o1hqCstNikR
+   8RlqULT/Bu8hUgJ8bVAWJQYLMurM5zLYjg/eUBMKzFn9cp0K0o1HuDz9x
+   EDdSd1CkYTJXec6nku8qt1XqLndpecx6ZJpLXxrYHcMv5xEFIBQfzV+gG
+   Sn8e+OhGn8GdPhPFV51dTtJhm3B8oTNGDTmqjA4YCyWQgRM11YpTNFYGU
+   A==;
+X-CSE-ConnectionGUID: b/rtNYkoSWmNcJWfh2wRrg==
+X-CSE-MsgGUID: zYsPhbyvScq57/IJsLAtOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="13471813"
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="13471813"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 07:38:31 -0700
+X-CSE-ConnectionGUID: 7GtiYkmyQSWRX5R/5DaXQg==
+X-CSE-MsgGUID: 163BAyl5TAGhVuMw3BSEKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="67230388"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 07:38:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1soOUB-00000007aR0-3IeT;
+	Wed, 11 Sep 2024 17:38:23 +0300
+Date: Wed, 11 Sep 2024 17:38:23 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Doug Anderson <dianders@chromium.org>
+Cc: Chen-Yu Tsai <wenst@chromium.org>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v6 09/12] i2c: of-prober: Add regulator support
+Message-ID: <ZuGrX67LzMe9S6ce@smile.fi.intel.com>
+References: <20240904090016.2841572-1-wenst@chromium.org>
+ <20240904090016.2841572-10-wenst@chromium.org>
+ <CAD=FV=UGOz3Xzg7reJKP=tA1LqTxszv5w-CL9krmoXQtXdJLaQ@mail.gmail.com>
+ <CAGXv+5F27K76t=ht5v75jKsNF-J+C0r5+m=czHz6PtV3t5DxcQ@mail.gmail.com>
+ <CAD=FV=XVrAdQN8p9QJtt3Ah_YQAG7Y-D4wDx8_+qb1EGN7+Uig@mail.gmail.com>
+ <CAGXv+5HO=POHNL_tQHCsy+8=a0gPLMDVHcWMguferahVU+BnZA@mail.gmail.com>
+ <CAD=FV=U2yDGv74GQWRQuHN9sjdY5iThqpH-br-jYXMkV1cujEg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231121180855.1278717-2-robert.hancock@calian.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=U2yDGv74GQWRQuHN9sjdY5iThqpH-br-jYXMkV1cujEg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Robert,
+On Tue, Sep 10, 2024 at 05:30:07PM -0700, Doug Anderson wrote:
+> On Thu, Sep 5, 2024 at 8:45 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
 
-For some reason this patch and the next was set in patchwork as
-"Changes requested" and did not appear in the list of things to
-review.
+...
 
-On Tue, Nov 21, 2023 at 06:11:16PM GMT, Robert Hancock wrote:
-> Frequently an I2C write will be followed by a read, such as a register
-> address write followed by a read of the register value. In this driver,
-> when the TX FIFO half empty interrupt was raised and it was determined
-> that there was enough space in the TX FIFO to send the following read
-> command, it would do so without waiting for the TX FIFO to actually
-> empty.
+> > At least for the stuff that we have (touchscreens and trackpads) such
+> > registers typically don't exist, unless it's an HID-over-I2C device,
+> > in which case there's the standard HID descriptor at some address.
+> > But, yeah, reading the HID descriptor was the use case I had in mind.
+> >
+> > At least for one Chromebooks it's a bit more tricky because that one
+> > HID-over-I2C component shares the same address as a non-HID one. We
+> > currently have different SKU IDs and thus different device trees for
+> > them, but we could make the prober work with this. It just has be able
+> > to tell if the component it's currently probing needs the special
+> > prober and is it responding correctly. This bit I need to think about.
 > 
-> Unfortunately it appears that in some cases this can result in a NAK
-> that was raised by the target device on the write, such as due to an
-> unsupported register address, being ignored and the subsequent read
-> being done anyway. This can potentially put the I2C bus into an
-> invalid state and/or result in invalid read data being processed.
-> 
-> To avoid this, once a message has been fully written to the TX FIFO,
-> wait for the TX FIFO empty interrupt before moving on to the next
-> message, to ensure NAKs are handled properly.
-> 
-> Fixes: e1d5b6598cdc ("i2c: Add support for Xilinx XPS IIC Bus Interface")
-> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-> ---
->  drivers/i2c/busses/i2c-xiic.c | 19 +++++++++----------
->  1 file changed, 9 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-> index 71391b590ada..fd623e8ad08a 100644
-> --- a/drivers/i2c/busses/i2c-xiic.c
-> +++ b/drivers/i2c/busses/i2c-xiic.c
-> @@ -772,14 +772,17 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
->  			goto out;
->  		}
->  
-> -		xiic_fill_tx_fifo(i2c);
-> -
-> -		/* current message sent and there is space in the fifo */
-> -		if (!xiic_tx_space(i2c) && xiic_tx_fifo_space(i2c) >= 2) {
-> +		if (xiic_tx_space(i2c)) {
-> +			xiic_fill_tx_fifo(i2c);
-> +		} else {
-> +			/* current message fully written */
->  			dev_dbg(i2c->adap.dev.parent,
->  				"%s end of message sent, nmsgs: %d\n",
->  				__func__, i2c->nmsgs);
-> -			if (i2c->nmsgs > 1) {
-> +			/* Don't move onto the next message until the TX FIFO empties,
-> +			 * to ensure that a NAK is not missed.
-> +			 */
-> +			if (i2c->nmsgs > 1 && (pend & XIIC_INTR_TX_EMPTY_MASK)) {
+> I guess Mark Brown also thought that there wouldn't be some magic
+> register, but my gut still tells me that most i2c devices have some
+> way to confirm that they are what you expect even if it's not an
+> official "vendor" or "version" register. Some type of predictable
+> register at a predictable location that you could use, at least if you
+> knew all of the options that someone might stuff.
 
-can "pend" be both XIIC_INTR_TX_EMPTY_MASK and
-XIIC_INTR_TX_HALF_MASK?
+"most" is way too optimistic to say, I believe that not even close to majority
+of I²C target devices they are not reliably discoverable.
 
-Andi
+That's the downside of non-discoverable busses like I²C. Maybe I³C has
+a mechanism for that, but I am not an expert, just wondering.
 
->  				i2c->nmsgs--;
->  				i2c->tx_msg++;
->  				xfer_more = 1;
-> @@ -790,11 +793,7 @@ static irqreturn_t xiic_process(int irq, void *dev_id)
->  					"%s Got TX IRQ but no more to do...\n",
->  					__func__);
->  			}
-> -		} else if (!xiic_tx_space(i2c) && (i2c->nmsgs == 1))
-> -			/* current frame is sent and is last,
-> -			 * make sure to disable tx half
-> -			 */
-> -			xiic_irq_dis(i2c, XIIC_INTR_TX_HALF_MASK);
-> +		}
->  	}
->  
->  	if (pend & XIIC_INTR_BNB_MASK) {
-> -- 
-> 2.42.0
+> For instance, in elan trackpads you can see elan_i2c_get_product_id().
+> That just reads a location (ETP_I2C_UNIQUEID_CMD = 0x0101) that could
+> theoretically be used to figure out (maybe in conjunction with other
+> registers) that it's an elan trackpad instead of an i2c-hid one. You'd
+> have to (of course) confirm that an i2c-hid device wouldn't somehow
+> return back data from this read that made it look like an elan
+> trackpad, but it feels like there ought to be some way to figure it
+> out with a few i2c register reads.
 > 
+> ...that being said, I guess my original assertion that you might be
+> able to figure out with a simple register read was naive and you'd
+> actually need a function (maybe as a callback) to figure this out.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
