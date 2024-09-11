@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-6575-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6580-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DF5B975781
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 17:49:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A9AC97579D
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 17:53:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCEB81F253C5
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 15:49:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2D74B28738
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 15:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67E0E1AED30;
-	Wed, 11 Sep 2024 15:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85C3E1B372E;
+	Wed, 11 Sep 2024 15:48:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fo8EF4r+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V1U5JtNb"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C948C1AE84D;
-	Wed, 11 Sep 2024 15:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF271AE872;
+	Wed, 11 Sep 2024 15:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726069712; cv=none; b=nLlfLRQiLJqazjQ0CFclRyz68Msl8eGjzH2okpCLsZhoHqS+ZBfpCXo2st3VTju9+jzQBVzInPK8T6Kkxo8HYVVt3PlrRYI/Mu4XEAYjGCy1kTs4D8nBhZPSSNb0dhX/0rLgWJxO8KE3KnUap6JDOqeNcUroeIzYTcUutdpJ0Sc=
+	t=1726069715; cv=none; b=LWxklE4knmx/lzmfxQvKsaDopDsw3vQx+n+z7lGszgd34gIfbSML04T2yOD2TGJZfBUGr94XAkVBarUoR7tkj/B3UdSueAK/mu+QR9QCl73NiR8PD7BL15uoRkS6hJvtrPVZDmIJtFBn2+/fQ4FiUyvQHGc08SQ2rXUGU4WpoLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726069712; c=relaxed/simple;
-	bh=W6pfDkfO7pk7KbhbI/uXFzMf9YUDqd9I+u21ldL50+Y=;
+	s=arc-20240116; t=1726069715; c=relaxed/simple;
+	bh=3D9BbQm0Q0Hk/HBpwjTL0a2bZYqY7RF6LaNA4j8CN0I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dA0/nJhXyxQ4crL+rd3tg6D89UxDCcjxhHkpX/Z5Z8kOaz+5W078Yzga52ckrYaKOKn/IIsTNCqA+/CkbpETNj+vn33yLNfN1AoX3oZLIKCwFeqMLCPw10NdiINNLfSIeKvcqqwKl9VkU/phHOSVYGsAQQq1hwlxpbjNBsm03lA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fo8EF4r+; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=Jau6JKTAjqLB6cPniK52PptxxXkypfkS+fv66w149LSO+3LjWH0HGRaTg/6UqSuOrVPbYoFNZdC5WcaHjrEN8sJ7Nf2f7wpR/8qrW5OEw1+PA3qS5vVU2HkTANuOQqNlzy3+jCmZoFEKU3ZCPM5DkRLKdeuSHyD3p+4jOsDls2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V1U5JtNb; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726069711; x=1757605711;
+  t=1726069714; x=1757605714;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=W6pfDkfO7pk7KbhbI/uXFzMf9YUDqd9I+u21ldL50+Y=;
-  b=fo8EF4r+bLbF7oiSune6iDi0RbUfCr1XXr+4udDQv1LvEFJX/tc2mwcb
-   C3DJrQk1YuBBUE7+Pe21d0t1/Gfi/Zxby4CVtK8TopcxDVr9ykem33R1A
-   yleaS5zlVoG7/o228lhEniYukVl6/OSw/nPiZ9Z4T/aHosu2/Q6xTkdEa
-   rwittgWXz7Hs/mfvZsPd/HLcxF+kLurP0gVBFpz+vsQRg8FeDWmpJwsoN
-   A2rYyvAqBG6cej46/1JCwHij27pjiB+fku33iG8kWggULVaweXLGlUyS1
-   qInCV1pEwdoTZ+RekoKhugC0l6cuSWK7d7+ifgLEzlG2e3KM9B9A0Do+K
-   g==;
-X-CSE-ConnectionGUID: JO3/BQnNRW6/L2CCYP/P3w==
-X-CSE-MsgGUID: 51Bm/tZMRCOr/SnmPt2ZVQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="24701839"
+  bh=3D9BbQm0Q0Hk/HBpwjTL0a2bZYqY7RF6LaNA4j8CN0I=;
+  b=V1U5JtNbPGkIs9i4mEf3bkwG2MQ73CTersmK6eZffpfk25xcssKpKgBr
+   ymSkyqwO5/Wd28iL0zlYA0v6iXNwedf2R0T2U9R8arSRpLEjp5j1/fJhy
+   +ec5XqTT+jzjiBNtpYgnUD0ORFlic/5/a4GDRatpPfn86tEN9muNc1ybz
+   U2I7i2ceVmeIeV4tqV7ayiRKS+A156V69BSAXyDs920JTxGtEYDpvcnKQ
+   eLAiPB9Ore8X09YG5b/8Pvm2StIR1ODQD/dyyekASXf8+beuPCoJ+/u0m
+   2VrzXvZvmbS6L7gl4Y3UeiMO5304xW/5Mr0vj/Is3pfN3kfBgr/2pv3ht
+   Q==;
+X-CSE-ConnectionGUID: ltDU6JOaTDiApxHQ+rp+/w==
+X-CSE-MsgGUID: 33ORBX76T1WwrBgSGAxepQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="24701852"
 X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
-   d="scan'208";a="24701839"
+   d="scan'208";a="24701852"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
   by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 08:48:26 -0700
-X-CSE-ConnectionGUID: YwGOIiARTyKPs2ty5PHSgA==
-X-CSE-MsgGUID: Z6UaAWAdRWea3TNdSaEApA==
+X-CSE-ConnectionGUID: 3ucPdmHlTyiXxveHpE2h9Q==
+X-CSE-MsgGUID: uMHDS7ACTBK1MUN/mBYmdQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
-   d="scan'208";a="72388562"
+   d="scan'208";a="72388565"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orviesa004.jf.intel.com with ESMTP; 11 Sep 2024 08:48:25 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 9987C580; Wed, 11 Sep 2024 18:48:21 +0300 (EEST)
+	id 9F30C575; Wed, 11 Sep 2024 18:48:21 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Jean Delvare <jdelvare@suse.com>,
 	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PATCH v1 07/12] i2c: isch: Utilize temporary variable to hold device pointer
-Date: Wed, 11 Sep 2024 18:39:20 +0300
-Message-ID: <20240911154820.2846187-8-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 08/12] i2c: isch: Use read_poll_timeout()
+Date: Wed, 11 Sep 2024 18:39:21 +0300
+Message-ID: <20240911154820.2846187-9-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 In-Reply-To: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
 References: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
@@ -80,66 +80,75 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce a temporary variable to hold a device pointer.
-It can be utilized in the ->probe() and save a bit of LoCs.
-To make it consistent, rename currently used dev to pdev.
-
-While at it, convert the only error message to dev_err_probe().
+Simplify the code by using read_poll_timeout().
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-isch.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/i2c/busses/i2c-isch.c | 20 ++++++--------------
+ 1 file changed, 6 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-isch.c b/drivers/i2c/busses/i2c-isch.c
-index 679fe3049299..bbcfa3218a81 100644
+index bbcfa3218a81..3a8cf7efb592 100644
 --- a/drivers/i2c/busses/i2c-isch.c
 +++ b/drivers/i2c/busses/i2c-isch.c
-@@ -270,27 +270,26 @@ static const struct i2c_algorithm smbus_algorithm = {
- 	.functionality	= sch_func,
- };
+@@ -17,9 +17,9 @@
+ #include <linux/container_of.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+-#include <linux/ioport.h>
+ #include <linux/i2c.h>
+-#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/ioport.h>
+ #include <linux/stddef.h>
+ #include <linux/string_choices.h>
+ #include <linux/types.h>
+@@ -34,9 +34,6 @@
+ #define SMBHSTDAT1	0x07
+ #define SMBBLKDAT	0x20
  
--static int smbus_sch_probe(struct platform_device *dev)
-+static int smbus_sch_probe(struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
- 	struct sch_i2c *priv;
- 	struct resource *res;
+-/* Other settings */
+-#define MAX_RETRIES	5000
+-
+ /* I2C constants */
+ #define SCH_QUICK		0x00
+ #define SCH_BYTE		0x01
+@@ -83,7 +80,6 @@ static int sch_transaction(struct i2c_adapter *adap)
+ 	struct sch_i2c *priv = container_of(adap, struct sch_i2c, adapter);
+ 	int temp;
+ 	int result = 0;
+-	int retries = 0;
  
--	priv = devm_kzalloc(&dev->dev, sizeof(*priv), GFP_KERNEL);
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
+ 	dev_dbg(&adap->dev,
+ 		"Transaction (pre): CNT=%02x, CMD=%02x, ADD=%02x, DAT0=%02x, DAT1=%02x\n",
+@@ -112,15 +108,11 @@ static int sch_transaction(struct i2c_adapter *adap)
+ 	temp |= 0x10;
+ 	sch_io_wr8(priv, SMBHSTCNT, temp);
  
--	res = platform_get_resource(dev, IORESOURCE_IO, 0);
-+	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
- 	if (!res)
- 		return -EBUSY;
- 
--	priv->smba = devm_ioport_map(&dev->dev, res->start, resource_size(res));
--	if (!priv->smba) {
--		dev_err(&dev->dev, "SMBus region %pR already in use!\n", res);
--		return -EBUSY;
--	}
-+	priv->smba = devm_ioport_map(dev, res->start, resource_size(res));
-+	if (!priv->smba)
-+		return dev_err_probe(dev, -EBUSY, "SMBus region %pR already in use!\n", res);
- 
- 	/* set up the sysfs linkage to our parent device */
--	priv->adapter.dev.parent = &dev->dev;
-+	priv->adapter.dev.parent = dev;
- 	priv->adapter.owner = THIS_MODULE,
- 	priv->adapter.class = I2C_CLASS_HWMON,
- 	priv->adapter.algo = &smbus_algorithm,
-@@ -298,7 +297,7 @@ static int smbus_sch_probe(struct platform_device *dev)
- 	snprintf(priv->adapter.name, sizeof(priv->adapter.name),
- 		"SMBus SCH adapter at %04x", res->start);
- 
--	return devm_i2c_add_adapter(&dev->dev, &priv->adapter);
-+	return devm_i2c_add_adapter(dev, &priv->adapter);
- }
- 
- static struct platform_driver smbus_sch_driver = {
+-	do {
+-		usleep_range(100, 200);
+-		temp = sch_io_rd8(priv, SMBHSTSTS) & 0x0f;
+-	} while ((temp & 0x08) && (retries++ < MAX_RETRIES));
+-
++	result = read_poll_timeout(sch_io_rd8, temp, !(temp & 0x08), 200, 500000, true,
++				   priv, SMBHSTSTS);
+ 	/* If the SMBus is still busy, we give up */
+-	if (retries > MAX_RETRIES) {
++	if (result) {
+ 		dev_err(&adap->dev, "SMBus Timeout!\n");
+-		result = -ETIMEDOUT;
+ 	} else if (temp & 0x04) {
+ 		result = -EIO;
+ 		dev_dbg(&adap->dev, "Bus collision! SMBus may be locked until next hard reset. (sorry!)\n");
+@@ -130,7 +122,7 @@ static int sch_transaction(struct i2c_adapter *adap)
+ 		dev_err(&adap->dev, "Error: no response!\n");
+ 	} else if (temp & 0x01) {
+ 		dev_dbg(&adap->dev, "Post complete!\n");
+-		sch_io_wr8(priv, SMBHSTSTS, temp);
++		sch_io_wr8(priv, SMBHSTSTS, temp & 0x0f);
+ 		temp = sch_io_rd8(priv, SMBHSTSTS) & 0x07;
+ 		if (temp & 0x06) {
+ 			/* Completion clear failed */
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
