@@ -1,59 +1,78 @@
-Return-Path: <linux-i2c+bounces-6586-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6587-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7648E9757C2
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 17:59:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68CCF9757F2
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 18:07:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37F5D28CE7B
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 15:59:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 120AD1F23B2C
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 16:07:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 393A31ABEDF;
-	Wed, 11 Sep 2024 15:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76F941AAE01;
+	Wed, 11 Sep 2024 16:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tleheoHl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fUPYnjGQ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7128187336;
-	Wed, 11 Sep 2024 15:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0987224CC;
+	Wed, 11 Sep 2024 16:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726070344; cv=none; b=s5McFSnPw59igGHrb1kQixTEL7EwfkL4frJnFFMHdXeiFUad3VCPbfOhmP1KLpm56fKZVOFvHWv2tnW2RzAxZ5AxbShV9Nana1s8wV21UVb21hWa0DW9ZYgxzVy0I2ij4BCXZMtDC07+4YXLcltfCNK+iZ0UtFads+Vbf00ZnVs=
+	t=1726070827; cv=none; b=rIHBjFLnIDxzkIT+BViNAjLGpVoRMv9BCclyqJtjMGZqU8M1Kdlu7jiwBRa2LLC1tNO+scucNdOVH9onwqh5/G3+ppFykZG8BvWnS6bRhHDd8sva9WwpTntLxrEY6+hWteLPhzvyz5wSZPEuSnIgbTgWp/r/oYXI2zuPYWT9z0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726070344; c=relaxed/simple;
-	bh=Mu0KKoCsaT6sNUuTlrDEprXR1UN7pQSV8Yy+de930to=;
+	s=arc-20240116; t=1726070827; c=relaxed/simple;
+	bh=woCqzjgKPLuQc/CyCNxI48JyV25/iWpRGAW6/RK+8z8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gCpNmyxaGPnqjHZzmQ2U7SnolRiv00IB4hlRWS7zBLUCkIJ1NxUzWCb4aAye82p9fYhNSrggDUAuVgUeRoOSV2JlUCLxtHVZBCKg7f607fad1iK9asWDxLTxLbrqkRSOtqne50h1ukEy7SH3PjftuGtsJX19ZsLUKe638VyPDTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tleheoHl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE482C4CEC0;
-	Wed, 11 Sep 2024 15:59:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726070343;
-	bh=Mu0KKoCsaT6sNUuTlrDEprXR1UN7pQSV8Yy+de930to=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tleheoHlBWzLEDtaGqvPrvGTouLXocHZ/ahZ4s2A8HQSGtQgD7xYbZIiyHkxrsu23
-	 pcpMm0jDO9ZlztkrxO45UbE7+YjucvB0BPEMuDQ/qiiAei6+qmfRBtB/1wnvW7M8VB
-	 b2OTF58LmfJfO61XN0n6rEtHtDjpRQyqNhomj7EVFdF+O5nx5f+RKFLhFPIUl6pny2
-	 uSm42+WaDJCzYRKZD3/yIv4R2mTrPWTjUmFU6dAOfysTwgzt/06UuXRApuXsXYtHqA
-	 dySEQXc5U+AcnXYXtCSz7xhwN+NTqG3eGr6qKDW3csMnq2/VrYZ8PqHWY87ppSTN3G
-	 X7tMMolBY/I9A==
-Date: Wed, 11 Sep 2024 17:58:59 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Carlos Song <carlos.song@nxp.com>
-Cc: Aisheng Dong <aisheng.dong@nxp.com>, 
-	"shawnguo@kernel.org" <shawnguo@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>, 
-	"kernel@pengutronix.de" <kernel@pengutronix.de>, "festevam@gmail.com" <festevam@gmail.com>, 
-	Frank Li <frank.li@nxp.com>, "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
-	"imx@lists.linux.dev" <imx@lists.linux.dev>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3] i2c: imx-lpi2c: add target mode support
-Message-ID: <gfh4theygqzq4qz2ez2hdba6twtbommna7fgsk5w3bx2drgsqw@l4xj7qm67ihq>
-References: <20240911150537.192570-1-carlos.song@nxp.com>
- <VI1PR04MB50055F0397031B6518E49751E89B2@VI1PR04MB5005.eurprd04.prod.outlook.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kQ/MFyom2J08kNxs9hUcGVNI7lbjfjorn7b2u/yZU6UWAqoyg4oWmBuyd0yPObtNp2qvnANb2J3YwXBARcvZc3RX6EQVo/8LZFGUHIl3Bk+W/e+IFaAbULevCm0Y7ObggYamethelDBFaSGxE2RbHjSlmV9QWcCVyMH0DBZP+Ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fUPYnjGQ; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726070826; x=1757606826;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=woCqzjgKPLuQc/CyCNxI48JyV25/iWpRGAW6/RK+8z8=;
+  b=fUPYnjGQ78jNuArKpDZD/wHZqnNjTV0UYqwIrZsLBV3U2bmWrqLmVYBO
+   t9nW/qdrUohXGkPLxGMe6wX1o2+9UvGVFAJOdygl0t9Sf1WrXAPwn5+Z9
+   ji4oKUBXnxlUDKWCIKQSZbzMcxDb9eJaGft7D6G+ko2VoRTN/fcIURo7R
+   7Iw/X54Mtl8I/knFNCfMTpMCy5E+ExmFad0FaUI8gp3y/YkSpThXrUdPB
+   prPT4KLmBYpj1zv0bcDS0DqJqequRaUkO/yhtumzbTOGtAMl/FeNlxZdM
+   16hzkFvFtVq4FsS9TecwhFvbFnGX6argonKzAsVwSpKmiFJr1AVoQImen
+   w==;
+X-CSE-ConnectionGUID: PQRRZ5wNT/2aSELj1JKr+g==
+X-CSE-MsgGUID: r/wUQuMLThSwrtRpT3vERQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="42397471"
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="42397471"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 09:06:58 -0700
+X-CSE-ConnectionGUID: JlOIlOL8QZGlOchz6RNNKg==
+X-CSE-MsgGUID: 53k3lsP+T6KA8Wv5Fuh1zA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="71795153"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 09:06:40 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1soPrZ-00000007cBD-46zZ;
+	Wed, 11 Sep 2024 19:06:37 +0300
+Date: Wed, 11 Sep 2024 19:06:37 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jesper Juhl <jesperjuhl76@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v1 11/12] i2c: isch: Prefer to use octal permission
+Message-ID: <ZuHADXmd5vrWUsNN@smile.fi.intel.com>
+References: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
+ <20240911154820.2846187-12-andriy.shevchenko@linux.intel.com>
+ <CAHaCkmd_HWCgyfiAV56VgENgMaS3kG9cz5CPrUzyiVoy0y1oBg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,31 +81,30 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <VI1PR04MB50055F0397031B6518E49751E89B2@VI1PR04MB5005.eurprd04.prod.outlook.com>
+In-Reply-To: <CAHaCkmd_HWCgyfiAV56VgENgMaS3kG9cz5CPrUzyiVoy0y1oBg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Carlos,
+On Wed, Sep 11, 2024 at 05:53:44PM +0200, Jesper Juhl wrote:
+> Personally I find this to be *less* readable, but maybe that's just me.
 
-On Wed, Sep 11, 2024 at 03:07:42PM GMT, Carlos Song wrote:
-> > LPI2C support master controller and target controller enabled simultaneously.
-> > Both controllers share same SDA/SCL lines and interrupt source but has
-> > separate control and status registers.
-> > Even if target mode is enabled, LPI2C can still work normally as master
-> > controller at the same time.
-> > 
-> > This patch supports basic target data read/write operations in 7-bit target
-> > address. LPI2C target mode can be enabled by using I2C slave backend. I2C
-> > slave backend behave like a standard I2C client. For simple use and test, Linux
-> > I2C slave EEPROM backend can be used.
-> > 
-> 
-> Hi, Andi
-> 
-> Just now I found I still have work to do! Before I notice to need to enrich commit log only.
-> Oh..It's a little embarrassing. Sorry for missing other comment. I will send V4 then finish the rest:).
+It's just you :-)
 
-no problem, no need to be embarrassed :-)
+checkpatch should complain nowadays about non-octal permissions.
+It is documented here Documentation/dev-tools/checkpatch.rst.
+IIRC it's added after Linus' rant on them.
 
-Take your time!
+But nonetheless thanks for the review!
 
-Andi
+> On Wed, 11 Sept 2024 at 17:51, Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > Octal permissions are preferred over the symbolics ones
+> > for readbility. This ceases warning message pointed by checkpatch.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
