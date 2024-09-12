@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-6645-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6643-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7859997708A
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 20:21:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C05497707D
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 20:21:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04C08B239AA
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 18:21:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEB591F2580D
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 18:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BE41C2438;
-	Thu, 12 Sep 2024 18:20:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DFC81C231A;
+	Thu, 12 Sep 2024 18:20:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nxyh3iQB"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jlJl3F6K"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C491C233E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5081C0DFD;
 	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726165217; cv=none; b=dhtqV6QxFMSZYoNpT3QfOrFK5Yqrz/XRMHKwKB8GAKH7bYVbIHle+mX3Xa3UJ7iBK0SW5rOu/Va0G+UPOv5E3Ig/gBqCzzwnkotkJhdwoqt9tNW5oIy+kPZsdiqCJtJIL6ZtaCJcPVBHLKnKfP+WU4N2NnGhox26cpL9S2MrVFk=
+	t=1726165215; cv=none; b=Z+URqS+C5YVIUh3366Jr4L+LATyivZ64qh3jzPIN7JxTby2t16uOQM7dkqIce5eoP3JLSZ6gKLZZZ6pJHGAbPKwyfv/t+IZ+oEwRX5EStQ0jJsDMskjs/tOuAGMjwHzdzrWNTy0EDGuxOi5ekRfVZ2L2eacifEkoO3vy7Fw9n1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726165217; c=relaxed/simple;
-	bh=XLB5gYmYmYt1/pzwpQI2EzPtJ4lJYhpSRMjF4adIEI0=;
+	s=arc-20240116; t=1726165215; c=relaxed/simple;
+	bh=ma0M6+PSeSs6NrF5GY9lsajWNo/5Y0T4538wWHpKmFY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J+/LzAglWuw7/kdQ9Fcm3l56N647DT45zgQ+pqIEvUOaO/DxcYp+biEMQNc6fkROVaERycndTZwXZcSKxFoc6RP4MTFg8faqTUAlDxIPbFdBRbmIRJ+RVFmKax+sypavkD3UfXaOhG3m7COspOx49g5f7Jn3uxTVBPV3qXrGUp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nxyh3iQB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 728C1C4CEEB;
+	 In-Reply-To:To:Cc; b=mTLnQeDTV/Um9x773kn/uAD71r6UpqLuhOGiTTXV7W5CLS6kHAEWk9QVNJOW/UGUPab/MGB86LZAIQJc3EEfiMX0U0+VlfkAUUf4AEcd+s978mtiNof7bx0irxos+mbjAB03Pqut5HPyMSpNA3IBbkTtGJjF/lahCf4lwusubRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jlJl3F6K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 99D4EC4CEF3;
 	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1726165215;
-	bh=XLB5gYmYmYt1/pzwpQI2EzPtJ4lJYhpSRMjF4adIEI0=;
+	bh=ma0M6+PSeSs6NrF5GY9lsajWNo/5Y0T4538wWHpKmFY=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:Reply-To:
 	 From;
-	b=nxyh3iQBMDqitWf0A2v06aU5QKuSIbEwzxnTTimC7D3X1BkWubdsQ4q8jVbEryGbi
-	 rUBWqb+TkokzJfPJNkXheYGOrYsEtyo0lg60+lAeo3Qa8TPHq5WCp2YhLe4NLN4YFb
-	 bxKtX67dDWamAtMecKA6XNCnyEY69ectATX+f1V6xPH/GwffFNFWEAn988OPKYYL5z
-	 0QYNDJNYF42W5C6f839u//EGx84uoVXGzR9mXPZ5NTMeqql4sptMZR/dej82135fqT
-	 kWR1BO97MTgLx2nzSo66CRRKvWH22E+0cvGMdmTnWrUrZacvBRTIvRp9P1mUgl2ZFD
-	 8eBg8TV/VJ/iA==
+	b=jlJl3F6KAOfncNXb89pBFIh+3EXjEBExntUue6uMKDp8+emjnr1DSPP7VSdCqt+k0
+	 noOCGb5bUdwLKHGrMuWGLNwUl2DtxIbiD63npZ6JnZ8CF0F4O4rTIBXON6VvtBJLe0
+	 MrZ2luo43vHbM0TgSvl+pqRW/0NATzTRfII24bnEd5lwpSuDosOWfkL5wuiBR7inV2
+	 OTBO4xOP3PGC4S8yCKsemqPJxtOOXWnVOwtyrh1cXSbMMGlVgEWPgn7IV+pWMPc5cw
+	 RQKGGAughbqKp7vh+0A6Df4oNw/563rF/UbOZVV3F9DrYp0NkzbfTujYIccb4t4Xgg
+	 9UhcDt1IPSU9A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B9BEEE249;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C639EEE246;
 	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 From: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>
-Date: Thu, 12 Sep 2024 19:24:53 +0100
-Subject: [PATCH 08/21] dt-bindings: clock: adi,sc5xx-clocks: add bindings
+Date: Thu, 12 Sep 2024 19:24:54 +0100
+Subject: [PATCH 09/21] gpio: add driver for ADI ADSP-SC5xx platform
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240912-test-v1-8-458fa57c8ccf@analog.com>
+Message-Id: <20240912-test-v1-9-458fa57c8ccf@analog.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -80,11 +80,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 X-Mailer: b4 0.15-dev-7be4f
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=2454;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=6581;
  i=arturs.artamonovs@analog.com; s=20240909; h=from:subject:message-id;
- bh=FK1wS84c2c1JDb4uWuVca0i/beOgHv9nSZqxSxH0SWg=;
- b=w9Z7BRtwc4qeUvwgaNEz4dzqKZcH31enCAS4yvArHHPswdjADO8AxrRW0gyDV2QCF3wcyNrPw
- j4K3L4sgrtNCmK2g91XXJ+PsJqO7i2uu1EE2pvYlXMzGPgxvJ1TDhsJ
+ bh=sIIGNtLwPRf3aETR4KIKQxLT7TsNXZDYorDVrxz6kPU=;
+ b=CuyIITaHzPiP638ncfNKDHNkpBfqHvmmcTvXrLK2YXfWUbPCGduwTVFTMgybu65hKq1KAP9Zl
+ N73JQEXbShnCT5+hudPmH2qYIJ2d4MFvfvtIe3KNW39sM8vDeUDcuUV
 X-Developer-Key: i=arturs.artamonovs@analog.com; a=ed25519;
  pk=UXODIid/MrmBXvqkX4PeEfetDaNAw9xKMINHIc5oZCk=
 X-Endpoint-Received: by B4 Relay for arturs.artamonovs@analog.com/20240909
@@ -94,7 +94,9 @@ Reply-To: arturs.artamonovs@analog.com
 
 From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 
-Add ADSP-SC5xx clock bindings.
+Add ADSP-SC5xx GPIO driver.
+- Support all GPIO ports
+- Each gpio support seperate PINT interrupt controller
 
 Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
 Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
@@ -102,80 +104,194 @@ Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 ---
- .../bindings/clock/adi,sc5xx-clocks.yaml           | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ drivers/gpio/Kconfig              |   8 +++
+ drivers/gpio/Makefile             |   1 +
+ drivers/gpio/gpio-adi-adsp-port.c | 145 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 154 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/adi,sc5xx-clocks.yaml b/Documentation/devicetree/bindings/clock/adi,sc5xx-clocks.yaml
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 58f43bcced7c1f29fad5960771817f500ef67ce1..b02693f5b4cec95a59f19aa1bacf7ed72236865a 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -147,6 +147,14 @@ config GPIO_74XX_MMIO
+ 	    8 bits:	74244 (Input), 74273 (Output)
+ 	    16 bits:	741624 (Input), 7416374 (Output)
+ 
++config GPIO_ADI_ADSP_PORT
++	bool "ADI ADSP PORT GPIO driver"
++	depends on OF_GPIO
++	select GPIO_GENERIC
++	help
++	  Say Y to enable the ADSP PORT-based GPIO driver for Analog Devices
++	  ADSP chips.
++
+ config GPIO_ALTERA
+ 	tristate "Altera GPIO"
+ 	depends on OF_GPIO
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 64dd6d9d730d5a22564821df71375113e31fe057..fb02c7807a674c8a38d1128e6a25bb7c7f1f4aab 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -24,6 +24,7 @@ obj-$(CONFIG_GPIO_104_IDI_48)		+= gpio-104-idi-48.o
+ obj-$(CONFIG_GPIO_104_IDIO_16)		+= gpio-104-idio-16.o
+ obj-$(CONFIG_GPIO_74X164)		+= gpio-74x164.o
+ obj-$(CONFIG_GPIO_74XX_MMIO)		+= gpio-74xx-mmio.o
++obj-$(CONFIG_GPIO_ADI_ADSP_PORT)	+= gpio-adi-adsp-port.o
+ obj-$(CONFIG_GPIO_ADNP)			+= gpio-adnp.o
+ obj-$(CONFIG_GPIO_ADP5520)		+= gpio-adp5520.o
+ obj-$(CONFIG_GPIO_AGGREGATOR)		+= gpio-aggregator.o
+diff --git a/drivers/gpio/gpio-adi-adsp-port.c b/drivers/gpio/gpio-adi-adsp-port.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..a092ebdefdcf89a635cdcf1073921efd28a38386
+index 0000000000000000000000000000000000000000..a7a1867495bbdd121cda9b99991865a035dfa117
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/adi,sc5xx-clocks.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/adi,sc5xx-clocks.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/gpio/gpio-adi-adsp-port.c
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * ADSP PORT gpio driver
++ *
++ * (C) Copyright 2022-2024 - Analog Devices, Inc.
++ */
 +
-+title: Clock Tree Drivers for Analog Devices ADSP-SC5XX Processors
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/soc/adi/adsp-gpio-port.h>
++#include "gpiolib.h"
 +
-+maintainers:
-+  - Arturs Artamonovs <arturs.artamonovs@analog.com>
-+  - Utsav Agarwal <Utsav.Agarwal@analog.com>
++static int adsp_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
++{
++	struct adsp_gpio_port *port = to_adsp_gpio_port(chip);
 +
-+description: |
-+  These drivers read in the processors CDU (clock distribution unit)
-+  and CGU (clock generation unit) values to determine various clock
-+  rates
++	__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DIR_CLEAR);
++	__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_INEN_SET);
++	return 0;
++}
 +
-+properties:
-+  compatible:
-+    enum:
-+      - adi,sc598-clocks # 64-Bit SC598 processor
++static int adsp_gpio_direction_output(struct gpio_chip *chip, unsigned int offset,
++	int value)
++{
++	struct adsp_gpio_port *port = to_adsp_gpio_port(chip);
 +
-+  '#clock-cells':
-+    const: 1
++	/*
++	 * For open drain ports, they've already been configured by pinctrl and
++	 * we should not modify their output characteristics
++	 */
++	if (port->open_drain & BIT(offset))
++		return 0;
 +
-+  reg:
-+    minItems: 3
-+    maxItems: 4
++	__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_INEN_CLEAR);
 +
-+  clocks:
-+    description:
-+      Specifies the CLKIN0 and CLKIN1 reference clock(s) from which the
-+      output frequencies are derived via CDU+CGU
-+    minItems: 2
-+    maxItems: 2
++	if (value)
++		__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DATA_SET);
++	else
++		__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DATA_CLEAR);
 +
-+  clock-names:
-+    description:
-+      String reference names for CLKIN0 and CLKIN1
-+    minItems: 2
-+    maxItems: 2
++	__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DIR_SET);
++	return 0;
++}
 +
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - '#clock-cells'
-+  - clock-names
++static void adsp_gpio_set_value(struct gpio_chip *chip, unsigned int offset, int value)
++{
++	struct adsp_gpio_port *port = to_adsp_gpio_port(chip);
 +
-+additionalProperties: false
++	/*
++	 * For open drain ports, set as input if driving a 1, set as output
++	 * if driving a 0
++	 */
++	if (port->open_drain & BIT(offset)) {
++		if (value) {
++			__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DIR_CLEAR);
++			__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_INEN_SET);
++		} else {
++			__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_INEN_CLEAR);
++			__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DATA_CLEAR);
++			__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DIR_SET);
++		}
++	} else {
++		if (value)
++			__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DATA_SET);
++		else
++			__adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_DATA_CLEAR);
++	}
++}
 +
-+examples:
-+  - |
-+    clk3: clocks@3108d000 {
-+        compatible = "adi,sc598-clocks";
-+        reg = <0x3108d000 0x1000>,
-+              <0x3108e000 0x1000>,
-+              <0x3108f000 0x1000>,
-+              <0x310a9000 0x1000>;
-+        #clock-cells = <1>;
-+        clocks = <&sys_clkin0>, <&sys_clkin1>;
-+        clock-names = "sys_clkin0", "sys_clkin1";
-+        status = "okay";
-+    };
++static int adsp_gpio_get_value(struct gpio_chip *chip, unsigned int offset)
++{
++	struct adsp_gpio_port *port = to_adsp_gpio_port(chip);
 +
++	return !!(__adsp_gpio_readw(port, ADSP_PORT_REG_DATA) & BIT(offset));
++}
++
++static int adsp_gpio_to_irq(struct gpio_chip *chip, unsigned int offset)
++{
++	struct adsp_gpio_port *port = to_adsp_gpio_port(chip);
++	irq_hw_number_t irq = offset + port->irq_offset;
++	int map = irq_find_mapping(port->irq_domain, irq);
++
++	if (map)
++		return map;
++
++	return irq_create_mapping(port->irq_domain, irq);
++}
++
++static int adsp_gpio_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct adsp_gpio_port *gpio;
++	int ret;
++
++	gpio = devm_kzalloc(dev, sizeof(*gpio), GFP_KERNEL);
++	if (!gpio)
++		return -ENOMEM;
++
++	gpio->regs = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(gpio->regs))
++		return PTR_ERR(gpio->regs);
++
++	gpio->dev = dev;
++
++	ret = adsp_attach_pint_to_gpio(gpio);
++	if  (ret)
++		dev_err_probe(gpio->dev, ret, "error attaching interupt to gpio pin\n");
++
++	spin_lock_init(&gpio->lock);
++
++	gpio->gpio.label = "adsp-gpio";
++	gpio->gpio.direction_input = adsp_gpio_direction_input;
++	gpio->gpio.direction_output = adsp_gpio_direction_output;
++	gpio->gpio.get = adsp_gpio_get_value;
++	gpio->gpio.set = adsp_gpio_set_value;
++	gpio->gpio.to_irq = adsp_gpio_to_irq;
++	gpio->gpio.request = gpiochip_generic_request;
++	gpio->gpio.free = gpiochip_generic_free;
++	gpio->gpio.ngpio = ADSP_PORT_NGPIO;
++	gpio->gpio.parent = dev;
++	gpio->gpio.base = -1;
++	return devm_gpiochip_add_data(dev, &gpio->gpio, gpio);
++}
++
++static const struct of_device_id adsp_gpio_of_match[] = {
++	{ .compatible = "adi,adsp-port-gpio", },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, adsp_gpio_of_match);
++
++static struct platform_driver adsp_gpio_driver = {
++	.driver = {
++		.name = "adsp-port-gpio",
++		.of_match_table = adsp_gpio_of_match,
++	},
++	.probe = adsp_gpio_probe,
++};
++
++module_platform_driver(adsp_gpio_driver);
++
++MODULE_AUTHOR("Greg Malysa <greg.malysa@timesys.com>");
++MODULE_DESCRIPTION("Analog Devices GPIO driver");
++MODULE_LICENSE("GPL v2");
+\ No newline at end of file
 
 -- 
 2.25.1
