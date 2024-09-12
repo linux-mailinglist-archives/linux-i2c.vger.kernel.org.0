@@ -1,132 +1,112 @@
-Return-Path: <linux-i2c+bounces-6607-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6608-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87E66976195
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 08:35:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8F119762B1
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 09:29:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FBB0282EE4
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 06:35:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C7A71F24854
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 07:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D01189530;
-	Thu, 12 Sep 2024 06:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA0A18C92D;
+	Thu, 12 Sep 2024 07:29:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="BTh6mtRk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UbmHp4q5"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F408D188918
-	for <linux-i2c@vger.kernel.org>; Thu, 12 Sep 2024 06:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365A8126BFC;
+	Thu, 12 Sep 2024 07:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726122932; cv=none; b=eefjj5/S2sS3XjU/A769qMRt7vAwXVsZm0OYAKTTgqF6j2UtImPWBgbCw8KZ2X8UJZMNR3Do7gJfbBmghmf83xVh42sWYKLjjoQe3vQcpffES0AU4xR04Gk+eB0AX+UGwNt13k/nuAjXdUgPTxoGIhvJokt4kFFvAGUHX6BfzCM=
+	t=1726126183; cv=none; b=eP3+ngyyV+I2XOwnL++cO2AV4splJCDs+k8rhquMW21KusC2jEIz6qm4wMHjvIYRn6VtV++/9a2+GbMttIl1F1IYGf3Kl1gwJ9MFrP2Gvx62b5n+iMpcrhDfk81tkTqhZprY8/exZj5aDmzQzoUFST7Xym9JPlqBaPBcos/Re5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726122932; c=relaxed/simple;
-	bh=mnGy8JwASG+Hv1/zsbYu6HTZgvX1VjQ5xqqUFng7TJY=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V0IvzPe1IxzF9UXxSvu1QrLJEMjJIbthKMHtmVtbXp0QJYtJj98O2ytjHlw3FbH6Zrl03k7FHAlbDDFayrrARtJ4UQJDEALFyiyVQAff1z+ZAltFX6QBcq4Rcp9zGfPyB+NZPiNGpLf4JEiF8MrJn5YvM2BTNUECksH20ZjVj0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=BTh6mtRk; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=vSVN
-	PCbeHNknNrnOe/NI4LVWOEozOzy9ZmVugjqJsBU=; b=BTh6mtRkTVS2K1ahhUEt
-	3pAe7GhdN0gnJEe/+9lC4FK5+AHrax/AR3MpYkR3DXLBKJT9tuGjpUgpym20QxQQ
-	vx8ZkVE7KLrIiUdwbDofzuxCPyox/vXwDWVQSdEn2o/HBlV12/cT/Vq96QQhTrZG
-	yBgKZ+2h9A9VQaYgmebRAEX/VSwkv1OeqGcDfoP87MTi9CIhnKRTG9ESbyakj0rg
-	SCjuo1QxBYd8T4x3AvOZv0Qha1OKI9FZTolZLGN5OeF9BF9riYgvu+OnZu08956E
-	Cqx+kV0cvUq0Sa5mXsLmze83imis2JHlNqtIu4hY3EVfJrx4Iu2YP0/hVdObAhcQ
-	gg==
-Received: (qmail 788387 invoked from network); 12 Sep 2024 08:35:19 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Sep 2024 08:35:19 +0200
-X-UD-Smtp-Session: l3s3148p1@qlprT+Yh8pRQT+F6
-Date: Thu, 12 Sep 2024 08:35:18 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Rob Herring <robh@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree-spec@vger.kernel.org
-Subject: Re: [PATCH dt-schema] schemas: i2c: add optional GPIO binding for
- SMBALERT# line
-Message-ID: <ZuKLpilWKCS5k7Kx@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Rob Herring <robh@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree-spec@vger.kernel.org
-References: <20240909105835.28531-1-wsa+renesas@sang-engineering.com>
- <CAL_JsqLui9=K_LdAoEAibxRo30_2ahdGXhCW50ow8rcqCp6jZA@mail.gmail.com>
- <CAMuHMdWGtuAuQ3M3HonY8zfODTTz_izV6g9555iwuPLSY+P9_g@mail.gmail.com>
- <CAL_Jsq+cFb56e5WvipL1nR-0TDz+v6vnFDvz9F9JbXinxkEt1Q@mail.gmail.com>
- <Zt_3WtlRP_5wt4PN@shikoro>
+	s=arc-20240116; t=1726126183; c=relaxed/simple;
+	bh=uVoySAa/5Xi8uQ8WEJx1H/S17eNfwgwkO5RN1y7SltA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fXI1gS0HVSeb9yIHLlqff+7aJOkzVzmw5HqH13C6EeT1ARMU7PwG+xPrS0AgFtnf/YFWVcW1PXXw/MDjs3orMqxPF2c9VB2PPJCGZfHm39mTV+Vh/rJBkPJKXefOQTziH9sSVY9SARil8sq5L+eHGT6nSLI/lERp9r7udHezsrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UbmHp4q5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F4C1C4CEC3;
+	Thu, 12 Sep 2024 07:29:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726126182;
+	bh=uVoySAa/5Xi8uQ8WEJx1H/S17eNfwgwkO5RN1y7SltA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UbmHp4q5dKw9fxiuTCmhHT/b0QbyuKjde27+Q9UfoZjhhwSD+6scXxxJ0oFBs/CJN
+	 RVHYxv9NMea3dUIUfg4YK619c0D+MtmH/hYMZYN/GLAHOMs1zkBwHEtkaObV/hryPV
+	 JTGj21Xrpd3QoLoSSOyAGDwdSaFx9r4ll0lpahlrXAE91Of6GKqKhk8+V+ux5U2fAO
+	 YKjUe494jrRuLjOguw5cgvcTYkEh9vE+SQgA2JrdfrL0H5bdADKntAkAybPAqVjWDJ
+	 zGbN8jPXnZUSd5DnJuBogZlE7ru+xph29cflTAZAihVpiGbaGgyhI6qedeYY/JInoa
+	 k8hMOpZNBYbUg==
+Date: Thu, 12 Sep 2024 09:29:38 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v1 08/12] i2c: isch: Use read_poll_timeout()
+Message-ID: <pwvhzkxeniutopyxczvimkau3elchfy5x32cimlqwjnmqjzv42@zpojd2lxs3o4>
+References: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
+ <20240911154820.2846187-9-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/k0KcEJ6kMjctRzk"
-Content-Disposition: inline
-In-Reply-To: <Zt_3WtlRP_5wt4PN@shikoro>
-
-
---/k0KcEJ6kMjctRzk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240911154820.2846187-9-andriy.shevchenko@linux.intel.com>
 
+Hi Andy,
 
-> I had this originally in my RFC[1]. I got convinced by Geert's arguments
-> because the DT snippet in the board DTS looked kinda ugly. The board
-> needs to override the DTSI of the SoC to replace "interrupts" with
-> "interrupts-extended":
->=20
-> =3D=3D=3D
->=20
->  &i2c3	{
->  	pinctrl-0 =3D <&i2c3_pins>;
->  	pinctrl-names =3D "i2c-pwr";
-> +
-> +	/delete-property/ interrupts;
-> +	interrupts-extended =3D <&gic GIC_SPI 290 IRQ_TYPE_LEVEL_HIGH>, <&gpio1=
- 26 IRQ_TYPE_EDGE_FALLING>;
-> +	interrupt-names =3D "main", "smbus_alert";
-> +
-> +	smbus;
->  };
->=20
-> =3D=3D=3D
+...
 
-I guess my questions here are: is this proper? Is there a better way to
-describe it? Is using interrupts still the way to go?
+> @@ -83,7 +80,6 @@ static int sch_transaction(struct i2c_adapter *adap)
+>  	struct sch_i2c *priv = container_of(adap, struct sch_i2c, adapter);
+>  	int temp;
+>  	int result = 0;
+> -	int retries = 0;
+>  
+>  	dev_dbg(&adap->dev,
+>  		"Transaction (pre): CNT=%02x, CMD=%02x, ADD=%02x, DAT0=%02x, DAT1=%02x\n",
+> @@ -112,15 +108,11 @@ static int sch_transaction(struct i2c_adapter *adap)
+>  	temp |= 0x10;
+>  	sch_io_wr8(priv, SMBHSTCNT, temp);
+>  
+> -	do {
+> -		usleep_range(100, 200);
+> -		temp = sch_io_rd8(priv, SMBHSTSTS) & 0x0f;
+> -	} while ((temp & 0x08) && (retries++ < MAX_RETRIES));
+> -
+> +	result = read_poll_timeout(sch_io_rd8, temp, !(temp & 0x08), 200, 500000, true,
+> +				   priv, SMBHSTSTS);
+>  	/* If the SMBus is still busy, we give up */
+> -	if (retries > MAX_RETRIES) {
+> +	if (result) {
+>  		dev_err(&adap->dev, "SMBus Timeout!\n");
+> -		result = -ETIMEDOUT;
+>  	} else if (temp & 0x04) {
+>  		result = -EIO;
+>  		dev_dbg(&adap->dev, "Bus collision! SMBus may be locked until next hard reset. (sorry!)\n");
+> @@ -130,7 +122,7 @@ static int sch_transaction(struct i2c_adapter *adap)
+>  		dev_err(&adap->dev, "Error: no response!\n");
+>  	} else if (temp & 0x01) {
+>  		dev_dbg(&adap->dev, "Post complete!\n");
+> -		sch_io_wr8(priv, SMBHSTSTS, temp);
+> +		sch_io_wr8(priv, SMBHSTSTS, temp & 0x0f);
 
-Thanks for the guidance and happy hacking!
+there is still a dev_dbg() using temp. To be on the safe side, do
+we want to do a "temp &= 0x0f" after the read_poll_timeout?
 
+Andi
 
---/k0KcEJ6kMjctRzk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbii6YACgkQFA3kzBSg
-KbbZrQ/+ISHD3cqlO+60QfhsSyi6JOsnODJcQ0GXCMH42/CvwgF9zV8/DiDIZO+H
-qvaGq6Czm+OTUp7HkY3FYsS5udF6XcQuZwfeAs70TkP8QAv9zW5HDFgzzfgazeWb
-L20ycT1KF/ANUE9yJGGXV72dKaooMw0i03FZ/IjuJNX0J3yHCtgcbbXtme4XKq4D
-6wI7peiNLg+uHhK57utE0A4yMsih9rm0ouPzwPjDn8yQhekn7B8jye/ICqAd9uKe
-lpMNzJAksPoKu1CGOvML95b5TebachZSKLxzLC28THQ3SdbZ+B0AUYXcB4T+QDBH
-/K1PxCte6BVl4/ed6tLaGJlDZ5lDYwYZDLqpSVAu1EnGKpYSvwS7Tv08hoT3yjig
-7aXe0Txk0eE1w9Q15gfpedlh0uhp5Er5O/wi3WAdQALZ/zXQxQvqa2vro7aCJwz8
-GiMjeJM1dbCLXRopUcWcpP2fM1Bh5YlM+MIHz8FpbY7IsJ8Al94USP5oIVl1pZ/X
-WRPYRhCBg4ee8BZ60TQSoACjx8MilKtoSPviMqb/sKwAKsms83YGjJiNs+9uVpE5
-iKdR/+95ovcqNnj1Y79fknAaSi6FLItcnIxtdDiNNJMdF/PsnheViZhGjGLiWSzq
-adL59XnrU9Bvu86iHBKRnXWnLjYdnZf0OVNAK9FhPUP/gelclN0=
-=JKkW
------END PGP SIGNATURE-----
-
---/k0KcEJ6kMjctRzk--
+>  		temp = sch_io_rd8(priv, SMBHSTSTS) & 0x07;
+>  		if (temp & 0x06) {
+>  			/* Completion clear failed */
+> -- 
+> 2.43.0.rc1.1336.g36b5255a03ac
+> 
 
