@@ -1,103 +1,95 @@
-Return-Path: <linux-i2c+bounces-6615-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6616-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 723E0976950
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 14:42:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 222B2976964
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 14:45:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE480B21095
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 12:42:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4AEE285D4C
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 12:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF2C1A3AAF;
-	Thu, 12 Sep 2024 12:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EA2A1A704B;
+	Thu, 12 Sep 2024 12:45:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uUecJTXO";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RxdfoKui";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uUecJTXO";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RxdfoKui"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="qiSsE8CM";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="YWt7QByZ";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="qiSsE8CM";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="YWt7QByZ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9351C1A304C
-	for <linux-i2c@vger.kernel.org>; Thu, 12 Sep 2024 12:42:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4211A4E8C
+	for <linux-i2c@vger.kernel.org>; Thu, 12 Sep 2024 12:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726144945; cv=none; b=AjeU6UCcS+CYnQg3LWjv8tAK4hmFpyQxvJzV6k7Sm8L2BR7kFanvuUvYEVuwUQ9p3EMbcGiOwqh11qFzB64wHirvcruLiBjAUVZIn7Z100zNjrkDJROX7hdzp5lTcMLStvBBwrIIwLtkvYA0uvcKlj1EXxV8kUMJ3Y5FZjYmZYY=
+	t=1726145109; cv=none; b=LX78Lp0/YG0CJ6EegkR8vy2CCL+AglQwXTUOiIAM0SK3yOSvwDJ1wIdlYYE/pF8KswPJL/xzi90UAudgyfWq25NcLhQWIznEXdHVQCq6HJUX0iIRUyCiF7wZsdjSO0JlcFT/cK7/EvFlbSaz4DFlWZz2a3DWJIqTKa8l8PjPAbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726144945; c=relaxed/simple;
-	bh=GGUBcvztPyZoge/Yc5oF9sIvpupfiWlgt43rI11emvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MJxbcal38C9qIcjgGtWB3Qe4MFSbC07jPTdb50FcUoQZ6mjlo8XfcJ7Bd3UcqUuECKv+N9MlLQzAPQp0OQTVFQOTp0DConxT8uk4LWPuQ0ts+YjojlMDLElI6lXd/9fCZ8EoWbrG7UTCUBXExuiY+SDNjgxhbuK+IRihL6yhJoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uUecJTXO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RxdfoKui; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uUecJTXO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RxdfoKui; arc=none smtp.client-ip=195.135.223.130
+	s=arc-20240116; t=1726145109; c=relaxed/simple;
+	bh=k9cFfu1epHSLUN5Gg66txgn3nRUco6mkMnxYWmqZ+6o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=b49Ko48zmNH0uvquV7QCD7Md3JViSqfVyI6bL3zztnobe5k7AlWn8jSXZDSoR5esiOQh8XTXPtmasWDwgmPc0CMCEbCYaJgZaWJkX4Hb0PD+f8N+f4divHJRDBr3ZxDN9sFNgx/x0rgo0+FUBCYDzbvbyg4EHgIuanEHFYpJSW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=qiSsE8CM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=YWt7QByZ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=qiSsE8CM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=YWt7QByZ; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B886D21B0F;
-	Thu, 12 Sep 2024 12:42:21 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id C5BB921B17;
+	Thu, 12 Sep 2024 12:45:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1726144941; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1726145105; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RQyWHbagZKYBD06j3AXEKnS5Rr/ZdbhBmaRd53ENaOg=;
-	b=uUecJTXOS930egRB42pi01mBxjQ90BMuQkaRC1rh/xkNFcIdnBqQbrko13JWQQdH94e1rs
-	ZuZ/HxAxAyGCzSSbhpuFkNqhoOkrsmZVA/ULDtGlGU4iXSGD3hWuI6KMoqzz7a8swv9k45
-	48U1E5MXIvgZLiE52xlBJnN8Rxi53L0=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=36wkEHdHobgoEC2Da66uDCMFQBWKu7mArVg4pTmWiUQ=;
+	b=qiSsE8CMzcmqlnwqejq+vnkRqb1XPAjAYxTCMsCNnTIwyUGmllb0p/3c233sfAOWbu4Nhc
+	GWaLk7/8hLluyUNNnxlCzuL/1lCYOECE0gMJWxwVeZq42T3pSs7aKUPYxdG9FSy4hMRg/l
+	C2tpNivexLxs7ZpL51NMWsWX7ItLWms=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1726144941;
+	s=susede2_ed25519; t=1726145105;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RQyWHbagZKYBD06j3AXEKnS5Rr/ZdbhBmaRd53ENaOg=;
-	b=RxdfoKuiCGRxMb8e/EPEKgmf1BUTxr4mf2WKuz67b13RPnJAxq6sd7zAgbgMZ4JD0c3Uo5
-	fF3jnyWbQGaGsRBw==
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=36wkEHdHobgoEC2Da66uDCMFQBWKu7mArVg4pTmWiUQ=;
+	b=YWt7QByZ78HJu/4xPozbaKf0w+7XvhhbIREUK5Bw2oSqxWIDBR806teGMyYfelu5HsPiyL
+	mEUjEP95/AXTsOCQ==
 Authentication-Results: smtp-out1.suse.de;
-	none
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=qiSsE8CM;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=YWt7QByZ
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1726144941; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1726145105; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RQyWHbagZKYBD06j3AXEKnS5Rr/ZdbhBmaRd53ENaOg=;
-	b=uUecJTXOS930egRB42pi01mBxjQ90BMuQkaRC1rh/xkNFcIdnBqQbrko13JWQQdH94e1rs
-	ZuZ/HxAxAyGCzSSbhpuFkNqhoOkrsmZVA/ULDtGlGU4iXSGD3hWuI6KMoqzz7a8swv9k45
-	48U1E5MXIvgZLiE52xlBJnN8Rxi53L0=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=36wkEHdHobgoEC2Da66uDCMFQBWKu7mArVg4pTmWiUQ=;
+	b=qiSsE8CMzcmqlnwqejq+vnkRqb1XPAjAYxTCMsCNnTIwyUGmllb0p/3c233sfAOWbu4Nhc
+	GWaLk7/8hLluyUNNnxlCzuL/1lCYOECE0gMJWxwVeZq42T3pSs7aKUPYxdG9FSy4hMRg/l
+	C2tpNivexLxs7ZpL51NMWsWX7ItLWms=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1726144941;
+	s=susede2_ed25519; t=1726145105;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RQyWHbagZKYBD06j3AXEKnS5Rr/ZdbhBmaRd53ENaOg=;
-	b=RxdfoKuiCGRxMb8e/EPEKgmf1BUTxr4mf2WKuz67b13RPnJAxq6sd7zAgbgMZ4JD0c3Uo5
-	fF3jnyWbQGaGsRBw==
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=36wkEHdHobgoEC2Da66uDCMFQBWKu7mArVg4pTmWiUQ=;
+	b=YWt7QByZ78HJu/4xPozbaKf0w+7XvhhbIREUK5Bw2oSqxWIDBR806teGMyYfelu5HsPiyL
+	mEUjEP95/AXTsOCQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9397F13AD8;
-	Thu, 12 Sep 2024 12:42:21 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A151813AD8;
+	Thu, 12 Sep 2024 12:45:05 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id UUr/Ia3h4mZHYAAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Thu, 12 Sep 2024 12:42:21 +0000
-Date: Thu, 12 Sep 2024 14:42:19 +0200
+	id dslyJVHi4mZFYQAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Thu, 12 Sep 2024 12:45:05 +0000
+Date: Thu, 12 Sep 2024 14:45:04 +0200
 From: Jean Delvare <jdelvare@suse.de>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org
-Subject: Re: [PATCH i2c-tools v2] README: ask for DCO in contributions
-Message-ID: <20240912144219.3b1b4089@endymion.delvare>
-In-Reply-To: <Zrzy2zW8zXTGyphQ@shikoro>
-References: <20240807112835.14346-1-wsa+renesas@sang-engineering.com>
-	<20240808112746.42fa8590@endymion.delvare>
-	<Zrzy2zW8zXTGyphQ@shikoro>
+To: Linux I2C <linux-i2c@vger.kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2] i2ctransfer: Drop redundant variable arg_idx
+Message-ID: <20240912144504.278d302b@endymion.delvare>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
@@ -108,52 +100,108 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: C5BB921B17
 X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
+X-Spamd-Result: default: False [-4.51 / 50.00];
 	BAYES_HAM(-3.00)[99.99%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	TAGGED_RCPT(0.00)[renesas];
 	ARC_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	HAS_ORG_HEADER(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[renesas];
+	DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
 	RCPT_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[];
 	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	FROM_EQ_ENVFROM(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -4.30
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	TO_DN_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.51
 X-Spam-Flag: NO
 
-Hi Wolfram,
+arg_idx has the same meaning as getopt's optind global variable, so
+drop the former and use the latter. Once getopt() is done parsing the
+options, there should be no problem using it for ourselves.
 
-On Wed, 14 Aug 2024 20:09:31 +0200, Wolfram Sang wrote:
-> > > the 'i2ctransfer' improvements I just sent out, I think we could aim for
-> > > a 4.4 release soon, or? It's been 3 years and the updates are small but
-> > > still neat, I think.  
-> > 
-> > OK!  
-> 
-> I just pushed the 3 commits I had pending for 4.4. From my side, we are
-> ready to go. Do you still have something to be included for 4.4.?
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+---
+Changes since v1:
+ * Rebased to make it apply again.
+ * Fixed typo in my SOB.
 
-Well there's one pending patch which I posted to the linux-i2c list in
-May 2022 but never got feedback:
+ tools/i2ctransfer.c |   15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-https://marc.info/?l=linux-i2c&m=165338543312881&w=2
+--- i2c-tools.orig/tools/i2ctransfer.c
++++ i2c-tools/tools/i2ctransfer.c
+@@ -143,7 +143,7 @@ static int confirm(const char *filename,
+ int main(int argc, char *argv[])
+ {
+ 	char filename[20];
+-	int i2cbus, address = -1, file, opt, arg_idx, nmsgs = 0, nmsgs_sent, i;
++	int i2cbus, address = -1, file, opt, nmsgs = 0, nmsgs_sent, i;
+ 	int force = 0, yes = 0, version = 0, verbose = 0, all_addrs = 0, binary = 0;
+ 	struct i2c_msg msgs[I2C_RDRW_IOCTL_MAX_MSGS];
+ 	enum parse_state state = PARSE_GET_DESC;
+@@ -173,13 +173,12 @@ int main(int argc, char *argv[])
+ 		exit(0);
+ 	}
+ 
+-	arg_idx = optind;
+-	if (arg_idx == argc) {
++	if (optind == argc) {
+ 		help();
+ 		exit(1);
+ 	}
+ 
+-	i2cbus = lookup_i2c_bus(argv[arg_idx++]);
++	i2cbus = lookup_i2c_bus(argv[optind++]);
+ 	if (i2cbus < 0)
+ 		exit(1);
+ 
+@@ -187,8 +186,8 @@ int main(int argc, char *argv[])
+ 	if (file < 0 || check_funcs(file))
+ 		exit(1);
+ 
+-	while (arg_idx < argc) {
+-		char *arg_ptr = argv[arg_idx];
++	while (optind < argc) {
++		char *arg_ptr = argv[optind];
+ 		unsigned long len, raw_data;
+ 		__u16 flags;
+ 		__u8 data, *buf;
+@@ -323,7 +322,7 @@ int main(int argc, char *argv[])
+ 			goto err_out;
+ 		}
+ 
+-		arg_idx++;
++		optind++;
+ 	}
+ 
+ 	if (state != PARSE_GET_DESC || nmsgs == 0) {
+@@ -361,7 +360,7 @@ int main(int argc, char *argv[])
+ 	exit(0);
+ 
+  err_out_with_arg:
+-	fprintf(stderr, "Error: faulty argument is '%s'\n", argv[arg_idx]);
++	fprintf(stderr, "Error: faulty argument is '%s'\n", argv[optind]);
+  err_out:
+ 	close(file);
+ 
 
-There were some changes meanwhile so it must be updated to apply again,
-but this is trivial to do. I'll post the updated version, it would be
-great if you can test it and we can include it in version 4.4.
 
-Thanks,
 -- 
 Jean Delvare
 SUSE L3 Support
