@@ -1,110 +1,129 @@
-Return-Path: <linux-i2c+bounces-6598-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6599-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5CF1975C96
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 23:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 396F0975E68
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 03:18:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFBF82859E2
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Sep 2024 21:36:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01586285114
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 01:18:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F084152532;
-	Wed, 11 Sep 2024 21:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bhuX+uvI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53601D545;
+	Thu, 12 Sep 2024 01:18:01 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mail03.siengine.com (mail03.siengine.com [43.240.192.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD0214389F;
-	Wed, 11 Sep 2024 21:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A042E3EB;
+	Thu, 12 Sep 2024 01:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.240.192.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726090582; cv=none; b=ZqoCoYVvY61QmewX5ZsIaw68ly2hKQ5iXu3wwdN22OAoJPci8Pu3TkuFSD85e4acc+fChq7XdLrJ4jE7VW4VFas9q2nJL6V1s7OxeUpFkj3AIIUnsWHDV8yqs6KbJf4GFfkI8nSrl8MRGjDXiF1HT2NSI6hMkw9QZRY97arORjU=
+	t=1726103881; cv=none; b=uJ/2nM8/P/YCHGTDvfEJoQGX7TOqusBrUUEqhcNCrYzv46lF1jxCk2PXSebBiY4fw4uHLz5ZLMFK9Ea3HPfg0TMK7AQ6ArxwIFKWZBofmKTB+UbhyzpZ8xkHKniUBm2v6W+wOF45gxR14boFE+243bY7ivb7AkeWDBPGwBijSyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726090582; c=relaxed/simple;
-	bh=Yk8c5C0p1nUSjhTjdc11LraEH8etKz4Q/gIg70xKV0E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MHsH814jP13Yh6sAB7+GDaM4AcDXe+jsJ3nWWLn/k175qpmJrsyFO19/8gkwnViaQ3Pr7ihs9fSw3q2hvvCwfPacqQzWFuOxSTR5YyPDqjGWHB0ZMJV0G8n8xKe+vndGEFGtEtsPydXiKbICNnpvUqpK96urQLXXswW/v8jyeMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bhuX+uvI; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726090581; x=1757626581;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Yk8c5C0p1nUSjhTjdc11LraEH8etKz4Q/gIg70xKV0E=;
-  b=bhuX+uvIVorl4ftruu33LAvpGX3eJAImMxd1iV0HSsAH6Ca1l/vMUEqm
-   uHsiPUOXB54kr11JyqyhghvKfffZVrz0EyhDNj3VZgPyZpYIyDhCQwknR
-   +ZJ0jts1ySM8wBG8aXEcfHHXEfDzwD3obR4Vaca6ZzALAX+2AbIp/hF4D
-   Odflnmprj5KpG23THufT+B4GI7pTkXfM9IVfrgaFPgvZRrQaXu5LrbUQV
-   lHjlGBKAyMNjVKx7+RuqXvMPKRAEq8C6DeJE+7ZdMOR+NCGNokImijKY6
-   nQCjvlYnv4ujKDZJfx+XSCpm32Hiww1Mywf9yEeKWKAAg9QUWQv29mW/B
-   Q==;
-X-CSE-ConnectionGUID: lsPWWygPRJyo8bXz8t9R5g==
-X-CSE-MsgGUID: CMThUmrITtmmV08lkP4nZA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="24852618"
-X-IronPort-AV: E=Sophos;i="6.10,221,1719903600"; 
-   d="scan'208";a="24852618"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 14:36:20 -0700
-X-CSE-ConnectionGUID: CzqDVDDXR/uTcLIBiWH4WA==
-X-CSE-MsgGUID: WTy+GWdWRrmgUrts67WT9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,221,1719903600"; 
-   d="scan'208";a="67328454"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 14:36:19 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1soV0a-00000007jYM-46gT;
-	Thu, 12 Sep 2024 00:36:16 +0300
-Date: Thu, 12 Sep 2024 00:36:16 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v1 01/12] i2c: isch: Add missed 'else'
-Message-ID: <ZuINULKQ0-fXyrF9@smile.fi.intel.com>
-References: <20240911154820.2846187-1-andriy.shevchenko@linux.intel.com>
- <20240911154820.2846187-2-andriy.shevchenko@linux.intel.com>
- <ow7ym7aobu5qukkwvds3dtt5qy65jp5ltzirtzhwr5aef3rxd3@6xceyxzy5orc>
+	s=arc-20240116; t=1726103881; c=relaxed/simple;
+	bh=i1ejyxt5d3OQ5H0dIINkfbDNH7V+lEU49m2JmIKFnAw=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=bybHg7xFMuiw+bvJkQi0orFN50Ejn9xyUMowftpTOsnX63dgvIeK9ldseztf3mrZ5XVJWpOMtKgVVmVYV8WolRhRqfnJLyynGyUYQwmRtdhxwJwfAkuaWKwKxCBRnODrl+RdSBjWSH3PMY5FFRJNSRyCq5fLdt+hPSyhFvce7gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com; spf=pass smtp.mailfrom=siengine.com; arc=none smtp.client-ip=43.240.192.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siengine.com
+Received: from dsgsiengine01.siengine.com ([10.8.1.61])
+	by mail03.siengine.com with ESMTPS id 48C1H9WF065468
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Thu, 12 Sep 2024 09:17:09 +0800 (+08)
+	(envelope-from kimriver.liu@siengine.com)
+Received: from SEEXMB03-2019.siengine.com (SEEXMB03-2019.siengine.com [10.8.1.33])
+	by dsgsiengine01.siengine.com (SkyGuard) with ESMTPS id 4X400N0xpCz7ZMtV;
+	Thu, 12 Sep 2024 09:17:08 +0800 (CST)
+Received: from SEEXMB05-2019.siengine.com (10.8.1.153) by
+ SEEXMB03-2019.siengine.com (10.8.1.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1544.11; Thu, 12 Sep 2024 09:17:08 +0800
+Received: from SEEXMB03-2019.siengine.com (10.8.1.33) by
+ SEEXMB05-2019.siengine.com (10.8.1.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1544.9; Thu, 12 Sep 2024 09:17:08 +0800
+Received: from SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe]) by
+ SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe%16]) with mapi id
+ 15.02.1544.011; Thu, 12 Sep 2024 09:17:08 +0800
+From: =?gb2312?B?TGl1IEtpbXJpdmVyL8H1vfC60w==?= <kimriver.liu@siengine.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "jsd@semihalf.com" <jsd@semihalf.com>,
+        "andi.shyti@kernel.org"
+	<andi.shyti@kernel.org>,
+        "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v9] i2c: designware: fix controller is holding SCL low
+ while ENABLE bit is disabled
+Thread-Topic: [PATCH v9] i2c: designware: fix controller is holding SCL low
+ while ENABLE bit is disabled
+Thread-Index: AQHbBCZ5inqGZkJh9EaW81yTfE/+vrJSI/eAgAACKwCAATDBgA==
+Date: Thu, 12 Sep 2024 01:17:08 +0000
+Message-ID: <8115db78c21b4fb587be1dcfcbfd8d4d@siengine.com>
+References: <69401183add8f79ee98b84c91983204df753a3e6.1726043461.git.kimriver.liu@siengine.com>
+ <ZuGs8Vbd9zYuNo_U@smile.fi.intel.com> <ZuGuwhPvxbY5OqNg@smile.fi.intel.com>
+In-Reply-To: <ZuGuwhPvxbY5OqNg@smile.fi.intel.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ow7ym7aobu5qukkwvds3dtt5qy65jp5ltzirtzhwr5aef3rxd3@6xceyxzy5orc>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-DKIM-Results: [10.8.1.61]; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:mail03.siengine.com 48C1H9WF065468
 
-On Wed, Sep 11, 2024 at 11:35:01PM +0200, Andi Shyti wrote:
-> Hi Andy,
-> 
-> On Wed, Sep 11, 2024 at 06:39:14PM GMT, Andy Shevchenko wrote:
-> > In accordance with the existing comment and code analysis
-> > it is quite likely that there is a missed 'else' when adapter
-> > times out. Add it.
-> 
-> Good catch! Very likely this was an oversight.
-> 
-> > Fixes: 5bc1200852c3 ("i2c: Add Intel SCH SMBus support")
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> I merged just this patch to i2c/i2c-host-fixes.
-> 
-> I will take the rest of the series after the merge window.
-
-Fine with me, thanks!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+SGkgQW5keQ0KDQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IEFuZHkgU2hl
+dmNoZW5rbyA8YW5kcml5LnNoZXZjaGVua29AbGludXguaW50ZWwuY29tPiANCj5TZW50OiAyMDI0
+xOo51MIxMcjVIDIyOjUzDQo+VG86IExpdSBLaW1yaXZlci/B9b3wutMgPGtpbXJpdmVyLmxpdUBz
+aWVuZ2luZS5jb20+DQo+Q2M6IGphcmtrby5uaWt1bGFAbGludXguaW50ZWwuY29tOyBtaWthLndl
+c3RlcmJlcmdAbGludXguaW50ZWwuY29tOyBqc2RAc2VtaWhhbGYuY29tOyBhbmRpLnNoeXRpQGtl
+cm5lbC5vcmc7IGxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
+cm5lbC5vcmcNCj5TdWJqZWN0OiBSZTogW1BBVENIIHY5XSBpMmM6IGRlc2lnbndhcmU6IGZpeCBj
+b250cm9sbGVyIGlzIGhvbGRpbmcgU0NMIGxvdyB3aGlsZSBFTkFCTEUgYml0IGlzIGRpc2FibGVk
+DQoNCj5PbiBXZWQsIFNlcCAxMSwgMjAyNCBhdCAwNTo0NTowNVBNICswMzAwLCBBbmR5IFNoZXZj
+aGVua28gd3JvdGU6DQo+PiBPbiBXZWQsIFNlcCAxMSwgMjAyNCBhdCAwNDozOTo0NVBNICswODAw
+LCBLaW1yaXZlciBMaXUgd3JvdGU6DQoNCj5GV0lXLCBiZWxvdyBhcmUgdGhlIGZpeGVzDQo+DQo+
+Li4uDQo+DQo+PiA+ICsvKg0KPj4gPiArICogVGhpcyBmdW5jdGlvbnMgd2FpdHMgY29udHJvbGxl
+ciBpZGxpbmcgYmVmb3JlIGRpc2FibGluZyBJMkMNCj4+ID4gKyAqIFdoZW4gdGhlIGNvbnRyb2xs
+ZXIgaXMgbm90IGluIHRoZSBJRExFIHN0YXRlLA0KPj4gPiArICogTVNUX0FDVElWSVRZIGJpdCAo
+SUNfU1RBVFVTWzVdKSBpcyBzZXQuDQo+PiA+ICsgKiBWYWx1ZXM6DQo+PiA+ICsgKiAweDEgKEFD
+VElWRSk6IENvbnRyb2xsZXIgbm90IGlkbGUNCj4+ID4gKyAqIDB4MCAoSURMRSk6IENvbnRyb2xs
+ZXIgaXMgaWRsZQ0KPj4gPiArICogVGhlIGZ1bmN0aW9uIGlzIGNhbGxlZCBhZnRlciByZXR1cm5p
+bmcgdGhlIGVuZCBvZiB0aGUgY3VycmVudCB0cmFuc2Zlcg0KPj4gPiArICogUmV0dXJuczoNCj4+
+IA0KPj4gPiArICogUmV0dXJuIDAgYXMgY29udHJvbGxlciBJRExFDQo+PiA+ICsgKiBSZXR1cm4g
+YSBuZWdhdGl2ZSBlcnJubyBhcyBjb250cm9sbGVyIEFDVElWRQ0KPg0KPiAqIEZhbHNlIHdoZW4g
+Y29udHJvbGxlciBpcyBpbiBJRExFIHN0YXRlLg0KPiAqIFRydWUgd2hlbiBjb250cm9sbGVyIGlz
+IGluIEFDVElWRSBzdGF0ZS4NCj4NCj4+IEJ1dCB3aHkgbm9uLWJvb2xlYW4gYWdhaW4/DQo+PiAN
+Cj4+ID4gKyAqLw0KPj4gPiArc3RhdGljIGludCBpMmNfZHdfaXNfY29udHJvbGxlcl9hY3RpdmUo
+c3RydWN0IGR3X2kyY19kZXYgKmRldikNCj4NCj5zdGF0aWMgYm9vbCBpMmNfZHdfaXNfY29udHJv
+bGxlcl9hY3RpdmUoc3RydWN0IGR3X2kyY19kZXYgKmRldikNCj4NCj4+ID4gK3sNCj4+ID4gKwl1
+MzIgc3RhdHVzOw0KPj4gPiArDQo+PiA+ICsJcmVnbWFwX3JlYWQoZGV2LT5tYXAsIERXX0lDX1NU
+QVRVUywgJnN0YXR1cyk7DQo+PiA+ICsJaWYgKCEoc3RhdHVzICYgRFdfSUNfU1RBVFVTX01BU1RF
+Ul9BQ1RJVklUWSkpDQo+PiA+ICsJCXJldHVybiAwOw0KPg0KPgkJcmV0dXJuIGZhbHNlOw0KPg0K
+Pj4gPiArCXJldHVybiByZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQoZGV2LT5tYXAsIERXX0lDX1NU
+QVRVUywgc3RhdHVzLA0KPj4gPiArCQkJIShzdGF0dXMgJiBEV19JQ19TVEFUVVNfTUFTVEVSX0FD
+VElWSVRZKSwNCj4+ID4gKwkJCTExMDAsIDIwMDAwKTsNCj4NCj4JCQkxMTAwLCAyMDAwMCkgIT0g
+MDsNCj4NCj5BbHRlcm5hdGl2ZWx5DQo+DQo+CWludCByZXQ7DQo+CS4uLg0KPg0KPglyZXQgPSBy
+ZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQoZGV2LT5tYXAsIERXX0lDX1NUQVRVUywgc3RhdHVzLA0K
+PgkJCQkgICAgICAgIShzdGF0dXMgJiBEV19JQ19TVEFUVVNfTUFTVEVSX0FDVElWSVRZKSwNCj4J
+CQkJICAgICAgIDExMDAsIDIwMDAwKTsNCj4JaWYgKHJldCkNCj4JCXJldHVybiB0cnVlOw0KPg0K
+PglyZXR1cm4gZmFsc2U7DQo+DQo+IChBbHNvIG1pbmQgaW5kZW50YXRpb24gaW4gX3JlYWRfcG9s
+bF90aW1lb3V0KCkgbGluZXMuKQ0KPg0KPj4gPiArfQ0KDQpTb3JyeS4NClRoYW5rcyBmb3IgeW91
+ciBzdWdnZXN0aW9ucyBhbmQgc2NoZW1lLCBJIHdpbGwgdXBkYXRlIGluIHBhdGNoIHYxMCB0b2Rh
+eS4NCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQpCZXN0IFJl
+Z2FyZHMNCktpbXJpdmVyIExpdQ0KDQo=
 
