@@ -1,128 +1,160 @@
-Return-Path: <linux-i2c+bounces-6614-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6615-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F38D99766DC
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 12:46:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 723E0976950
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 14:42:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BA461F23407
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 10:46:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE480B21095
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 12:42:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A64B18DF92;
-	Thu, 12 Sep 2024 10:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF2C1A3AAF;
+	Thu, 12 Sep 2024 12:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GFPZnych"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uUecJTXO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RxdfoKui";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uUecJTXO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="RxdfoKui"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE28185B52
-	for <linux-i2c@vger.kernel.org>; Thu, 12 Sep 2024 10:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9351C1A304C
+	for <linux-i2c@vger.kernel.org>; Thu, 12 Sep 2024 12:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726137998; cv=none; b=O5vdISFJCTSCH2ZDSbyDrATGh7qO1cOYe0Kjw7/odTxBvUcEDO8GhIIh1LniFOgOvcJ8VmnLL5NuEGo6c7Q9SwxUpfsEb/rr5khU3vtvTX8KS8jYtt8jo96X81lXRjDk7ejOezDA3x+YZKnT7kWh9UO+bQ+dDm7fNLgjXUZQiKo=
+	t=1726144945; cv=none; b=AjeU6UCcS+CYnQg3LWjv8tAK4hmFpyQxvJzV6k7Sm8L2BR7kFanvuUvYEVuwUQ9p3EMbcGiOwqh11qFzB64wHirvcruLiBjAUVZIn7Z100zNjrkDJROX7hdzp5lTcMLStvBBwrIIwLtkvYA0uvcKlj1EXxV8kUMJ3Y5FZjYmZYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726137998; c=relaxed/simple;
-	bh=WO8gkkgWXybRtxCWF5HutQJX9bK21wpal+uxu9KD3YI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=g++Sc+K6NBpeVNDV3aNfcd5OhFU9JdYYNZC1vxrPkRV9NB73pgdTHuso3uYp31ltQXWXzYuGKhD4/Ys481KxNGvesNe4LY7V5s6RR4Kd3TzKgNWOse8reB2JGHBxBEL3MZqLa7Qmo6Na/q5wogi4y2qpkCgaxZJjJv66wMNHbKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GFPZnych; arc=none smtp.client-ip=209.85.221.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-3756212a589so598736f8f.2
-        for <linux-i2c@vger.kernel.org>; Thu, 12 Sep 2024 03:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726137995; x=1726742795; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=s4vDbSmUq4BkHSfWXq0yaMWGfTgb44jekAkFpPtGTCU=;
-        b=GFPZnychdDLwYUWERm8j/ixvq52nDh5EUH0yeeOOqlPpZBMd7EjGjIz8DsvJ0NnAtS
-         utkO2I6Gcj5eOpRDje5MUV/07+F8KtIVfjX/+QihnTpOiiW2STpwwen4/lTlyQqOYKK5
-         FGh0RI10I10y7HZDWK5NuA2T+/S9L7V7jLjDtNgs66qj4LydeyT89JI9DkS1H4Bjjvdc
-         PDj8GFP1Qgc6xI8lDgdm0kf7hUVfFm9S0p8RO6paERyCw4HgCnGTi/PWXkdLQjNK+P7Q
-         waLkQc2WAamAwBA9ULQMFSARq38ET5vs2i8jePtaaB2pt/9dMMBIPqVNlBonW5XwkKb4
-         xB5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726137995; x=1726742795;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s4vDbSmUq4BkHSfWXq0yaMWGfTgb44jekAkFpPtGTCU=;
-        b=rJQQpWepm+4heBB5PxJhzFvGk2pizyfQKg3sNrKIAx/XwvX7EVylcXjttEXauwvg63
-         DcMd6OLtyBT6GfagFrdOaAgDSVhfKvZjBoEw8vuJdoBXWbvyii0YfgRsOaVC0EJG3FG8
-         14AOvqVjoJq0VlYT3hPXsupRujtQh5bEqJGo3UWHnNGkZkntSvttM0WtlJi62pnGyp/J
-         pEvXaTWxHOwwFlXxXmnurRdVfFGFe2Cfu7lll/fiavFq5+4dwdmu+WhSVPeyzc+r9xIZ
-         eI0DoyiGvo7jnWvaPeegPyfKksfMlfZLB/H+QAumfLWGQ2grEvz2PLYpdeSLhrb0nXsk
-         P6lg==
-X-Gm-Message-State: AOJu0YyfoHCfGqcqY5G+GmFj7VIGqU/TgaOKFN9dx1LBJ5RukihQLWQ5
-	awpCloeQRPie8pbAES3GTzckjMZHAtSrL7IsSN2Z7KmuDIAWv9h/YyWWmjsK6NWTgbug5w8I2ZG
-	1ODxtKzMYULRw3Ukg04tm+vYUmWm/XXywclJJxdlpA/Fo4+aaVUaOLF1iZCwfwtOgDW1iWOV8SS
-	omW2tQG61ybwEhJzmdYNetWYl9ww==
-X-Google-Smtp-Source: AGHT+IEbQiXno9L7v1wd6SJNAajDejL+LmtDZTYHoM9M52NO8OCOAW0BceeQ8XEEnkiC75ijxU58K4Vj
-X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a5d:6083:0:b0:374:c563:c2ed with SMTP id
- ffacd0b85a97d-378c2d00110mr2913f8f.5.1726137994973; Thu, 12 Sep 2024 03:46:34
- -0700 (PDT)
-Date: Thu, 12 Sep 2024 12:46:31 +0200
+	s=arc-20240116; t=1726144945; c=relaxed/simple;
+	bh=GGUBcvztPyZoge/Yc5oF9sIvpupfiWlgt43rI11emvQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MJxbcal38C9qIcjgGtWB3Qe4MFSbC07jPTdb50FcUoQZ6mjlo8XfcJ7Bd3UcqUuECKv+N9MlLQzAPQp0OQTVFQOTp0DConxT8uk4LWPuQ0ts+YjojlMDLElI6lXd/9fCZ8EoWbrG7UTCUBXExuiY+SDNjgxhbuK+IRihL6yhJoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uUecJTXO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RxdfoKui; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uUecJTXO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=RxdfoKui; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id B886D21B0F;
+	Thu, 12 Sep 2024 12:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1726144941; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RQyWHbagZKYBD06j3AXEKnS5Rr/ZdbhBmaRd53ENaOg=;
+	b=uUecJTXOS930egRB42pi01mBxjQ90BMuQkaRC1rh/xkNFcIdnBqQbrko13JWQQdH94e1rs
+	ZuZ/HxAxAyGCzSSbhpuFkNqhoOkrsmZVA/ULDtGlGU4iXSGD3hWuI6KMoqzz7a8swv9k45
+	48U1E5MXIvgZLiE52xlBJnN8Rxi53L0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1726144941;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RQyWHbagZKYBD06j3AXEKnS5Rr/ZdbhBmaRd53ENaOg=;
+	b=RxdfoKuiCGRxMb8e/EPEKgmf1BUTxr4mf2WKuz67b13RPnJAxq6sd7zAgbgMZ4JD0c3Uo5
+	fF3jnyWbQGaGsRBw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1726144941; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RQyWHbagZKYBD06j3AXEKnS5Rr/ZdbhBmaRd53ENaOg=;
+	b=uUecJTXOS930egRB42pi01mBxjQ90BMuQkaRC1rh/xkNFcIdnBqQbrko13JWQQdH94e1rs
+	ZuZ/HxAxAyGCzSSbhpuFkNqhoOkrsmZVA/ULDtGlGU4iXSGD3hWuI6KMoqzz7a8swv9k45
+	48U1E5MXIvgZLiE52xlBJnN8Rxi53L0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1726144941;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RQyWHbagZKYBD06j3AXEKnS5Rr/ZdbhBmaRd53ENaOg=;
+	b=RxdfoKuiCGRxMb8e/EPEKgmf1BUTxr4mf2WKuz67b13RPnJAxq6sd7zAgbgMZ4JD0c3Uo5
+	fF3jnyWbQGaGsRBw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9397F13AD8;
+	Thu, 12 Sep 2024 12:42:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id UUr/Ia3h4mZHYAAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Thu, 12 Sep 2024 12:42:21 +0000
+Date: Thu, 12 Sep 2024 14:42:19 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org
+Subject: Re: [PATCH i2c-tools v2] README: ask for DCO in contributions
+Message-ID: <20240912144219.3b1b4089@endymion.delvare>
+In-Reply-To: <Zrzy2zW8zXTGyphQ@shikoro>
+References: <20240807112835.14346-1-wsa+renesas@sang-engineering.com>
+	<20240808112746.42fa8590@endymion.delvare>
+	<Zrzy2zW8zXTGyphQ@shikoro>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1496; i=ardb@kernel.org;
- h=from:subject; bh=eAYbRaFGiFbTpDXwm1BvK/t4IwnqUkhxsfQgcCU+BjI=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe3RsfagSfaO89w/suVM5zrI3WF8I+/nu+zEnT8eH2Vbv
- FP+S/WvjlIWBjEOBlkxRRaB2X/f7Tw9UarWeZYszBxWJpAhDFycAjCRnCSGPzzyOx+Lpzd8fdB4
- 3PbSugv7w/f+KVtXHriJcW6ssRvLcl6G3yybJHiftv198NZy+juDewqi8j4elWq/tCUv8JfttLn 6mA0A
-X-Mailer: git-send-email 2.46.0.662.g92d0881bb0-goog
-Message-ID: <20240912104630.1868285-2-ardb+git@google.com>
-Subject: [PATCH] i2c/synquacer: Deal with optional PCLK correctly
-From: Ard Biesheuvel <ardb+git@google.com>
-To: linux-i2c@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>, stable@vger.kernel.org, 
-	Andi Shyti <andi.shyti@kernel.org>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_RCPT(0.00)[renesas];
+	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -4.30
+X-Spam-Flag: NO
 
-From: Ard Biesheuvel <ardb@kernel.org>
+Hi Wolfram,
 
-ACPI boot does not provide clocks and regulators, but instead, provides
-the PCLK rate directly, and enables the clock in firmware. So deal
-gracefully with this.
+On Wed, 14 Aug 2024 20:09:31 +0200, Wolfram Sang wrote:
+> > > the 'i2ctransfer' improvements I just sent out, I think we could aim for
+> > > a 4.4 release soon, or? It's been 3 years and the updates are small but
+> > > still neat, I think.  
+> > 
+> > OK!  
+> 
+> I just pushed the 3 commits I had pending for 4.4. From my side, we are
+> ready to go. Do you still have something to be included for 4.4.?
 
-Fixes: 55750148e559 ("i2c: synquacer: Fix an error handling path in synquacer_i2c_probe()")
-Cc: <stable@vger.kernel.org>
-Cc: Andi Shyti <andi.shyti@kernel.org>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
-https://lore.kernel.org/all/CAMj1kXFH+zB_YuUS+vaEpguhuVGLYbQw55VNDCxnBfSPe6b-nw@mail.gmail.com/T/#u
+Well there's one pending patch which I posted to the linux-i2c list in
+May 2022 but never got feedback:
 
- drivers/i2c/busses/i2c-synquacer.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+https://marc.info/?l=linux-i2c&m=165338543312881&w=2
 
-diff --git a/drivers/i2c/busses/i2c-synquacer.c b/drivers/i2c/busses/i2c-synquacer.c
-index 4eccbcd0fbfc..bbb9062669e4 100644
---- a/drivers/i2c/busses/i2c-synquacer.c
-+++ b/drivers/i2c/busses/i2c-synquacer.c
-@@ -550,12 +550,13 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
- 	device_property_read_u32(&pdev->dev, "socionext,pclk-rate",
- 				 &i2c->pclkrate);
- 
--	pclk = devm_clk_get_enabled(&pdev->dev, "pclk");
-+	pclk = devm_clk_get_optional_enabled(&pdev->dev, "pclk");
- 	if (IS_ERR(pclk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(pclk),
- 				     "failed to get and enable clock\n");
- 
--	i2c->pclkrate = clk_get_rate(pclk);
-+	if (pclk)
-+		i2c->pclkrate = clk_get_rate(pclk);
- 
- 	if (i2c->pclkrate < SYNQUACER_I2C_MIN_CLK_RATE ||
- 	    i2c->pclkrate > SYNQUACER_I2C_MAX_CLK_RATE)
+There were some changes meanwhile so it must be updated to apply again,
+but this is trivial to do. I'll post the updated version, it would be
+great if you can test it and we can include it in version 4.4.
+
+Thanks,
 -- 
-2.46.0.662.g92d0881bb0-goog
-
+Jean Delvare
+SUSE L3 Support
 
