@@ -1,90 +1,105 @@
-Return-Path: <linux-i2c+bounces-6612-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6613-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08BB097663B
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 12:02:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A459697669F
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 12:23:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDF5A28527C
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 10:02:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F2AF1F2227A
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 10:23:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C6C119E963;
-	Thu, 12 Sep 2024 10:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DA8A19EEB7;
+	Thu, 12 Sep 2024 10:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pkao1/pM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gEUpaAfW"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74BB136328;
-	Thu, 12 Sep 2024 10:02:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0882A187552;
+	Thu, 12 Sep 2024 10:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726135328; cv=none; b=qSy1dM8FAw0VLsJB/P2YOzgEiEgqd8ANuk7fsNMPO4nCR6H8/cG2zJELnbI16BDEx0lMcqn8MoZMuMQY1hNblnHHPHTRMhGuCoR1k6dXVdnP/Mi+P/bt0NdFuP3iNB92tIWS0NHsIuNubUtbCHTcwBBWT8whr8apOJT1BnNMIC0=
+	t=1726136585; cv=none; b=KAtHFO2YsM1NBtDy+E81Xym0CHQ6FHGVh7mC0VqijObff6HrdL2f7+h46OIyVLbWDd8DkyxsZYrwmJiPdgnmNvyPSoiDYYordESMnIE8YWsDDaINTe83buKUmbMVMEHha4YZom6s2xyg8T1QvaKJNaa5Gx/0QB3+oAX4wzTYSls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726135328; c=relaxed/simple;
-	bh=2AmhqDEMZCRF60IhqOsscYYo0UoqtMMlj7QiuCR9y+Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MrbsO4QS5aF0XxYGfz+xpbyvhueP0dz98t0T4i2nXktCu6Pe9f20dSCTpsGgAKBvECo0kjVNIWi+TvSt/eLFuXXS4bQ42bPg94IjG/BgDSqhar/LhfkswqZDy9DGFzv1B7j+wb0bSxxoVkDzLesmOJQ6cmmUkMNiy3w8lZK5iWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pkao1/pM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC72DC4CEC3;
-	Thu, 12 Sep 2024 10:02:07 +0000 (UTC)
+	s=arc-20240116; t=1726136585; c=relaxed/simple;
+	bh=eAib8kqTn24Z6ArFmJ7JIiLd9ZzbtiIGu7pAuQWyrlk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=anhq5k+WhbJzdZ2VMI2sRRVOlSWtzxAGZjjvjh6BfpMw7v0HUoDV8JqsC6A/ShLTOcf4lcBYeUI69MCQCTn7HF9zjabUW5K4ipcaDEa7qjXg93w/7pda09BOtVPbz4YqnNwLipHWHRiuCzZaYBUOEL3rDFmWJxbVf4ufFMyZP7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gEUpaAfW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B60FC4CECC;
+	Thu, 12 Sep 2024 10:23:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726135328;
-	bh=2AmhqDEMZCRF60IhqOsscYYo0UoqtMMlj7QiuCR9y+Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pkao1/pMhI+cqDVQQ43SIJrL0fGIbZkOI66ioVqWMrUgIMZdRCFm38+nLDyZ94okW
-	 ktKlKH7jofybXjzDujzXY2Ru0Xm9eokqTtv4rdRkkgL7+fqOmdByligHh4GcZkERjm
-	 L21gD7xEoGUhLZyNd/F/V8p5UVTNn0BFA3WRYGGB/GeLkpx+fDpYEKyUznUG7sbyWE
-	 CXvcVf5jZsNzpZohOKzodGvILZg/uvInQOEyJbMHYimdXuevys1Y2SORnYKlsBJJhV
-	 yKfX1fCQ8xPqlg2W6EUXYz+wVM5B1oYqlXucPGJhfZg+IWj1wvaOIVUlRrfqh7+GhH
-	 hGvqoaR0r2U/A==
-Date: Thu, 12 Sep 2024 12:02:04 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: konrad.dybcio@linaro.org, andersson@kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	quic_vdadhani@quicinc.com, vkoul@kernel.org
-Subject: Re: [PATCH] i2c: i2c-qcom-geni: Serve transfer during early resume
- stage
-Message-ID: <uib7it3noxnkekza4p4ngf5w677fizrb7j5ov7ekos2vinge5x@sh24m63gmkrr>
-References: <20240402102741.128424-1-quic_msavaliy@quicinc.com>
+	s=k20201202; t=1726136584;
+	bh=eAib8kqTn24Z6ArFmJ7JIiLd9ZzbtiIGu7pAuQWyrlk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gEUpaAfWWShrDauhVGeX7LZIHj3TpkkULAydo7jq560vI7tvSbsVtiMSzGusU6HYA
+	 gIjWm2vjCI7OnEe1TUrmNBCc9SUyx2Z6y5RXvUeZ47glvKqpEPHBA9MWG8bjOX53Zk
+	 sNb5vLB1MsxRk+yAaWS3d3gq838UWKE4MWwKksz62pK5611mId7h0aeSmUqJe/2caz
+	 I164uISGbVQgqXk0DaXG5RctL6XgteoKyB2VqwFgksNyOP0ZaLMYX3IWDWg29PhhRW
+	 QnhpNinBLTu+GDyHTVapM3PRgXRDH3iI9ty6wLiX5wg0m8VJBxn9JojcAs9ctyo0E9
+	 9Co+Nmm5U6lsg==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5365c060f47so904721e87.2;
+        Thu, 12 Sep 2024 03:23:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVklkkpTm6Lbce7u3ohvrAEGsLNy6dheUIlFbKJ+9ALh7cftnzjdutOt1v0AsVTaeNnKjgiXJJ2QoVxiL1fxNg=@vger.kernel.org, AJvYcCX0nJO7j+y2NDAHWIMQmd3z8GaBzFlqWO7X9taPgfKbIm3RE9aeGQjJlM1l88+bMXtiR+GGKMz+uooO@vger.kernel.org, AJvYcCXcXvQnnAPqHCTrgHgb0dAFwRbn7Mq3VZ+ojKsrpkXv/UNMGC2Z7LuaqaUk/I0tCgv5I3kjcsa/HlgAQGRE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLxDjMLNVUEeIZvHA8cj1m0xBxXodo3XtLb9GNETgHDGz3HOU/
+	GX+zDh4uDvo2SonKQJ99Li6MyAdMWyE8SHzKWGKsRQ/0RPY0L8Z+fv7mz23r+48lq9Fxg5FqMLL
+	VJoHWpUh+hCNvV1QY4TAttYJNNs4=
+X-Google-Smtp-Source: AGHT+IFh1pfkWT1DFyZt9UtketjYZWfTJfgUijZmiN2juUQU2soaBAAMakKGvUeJpkVa1WzQveeA41sPsA3f4d8JBJY=
+X-Received: by 2002:a05:6512:3e02:b0:535:683c:cc67 with SMTP id
+ 2adb3069b0e04-53678fc1842mr1424531e87.14.1726136582876; Thu, 12 Sep 2024
+ 03:23:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240402102741.128424-1-quic_msavaliy@quicinc.com>
+References: <a0fdf90803ab44508aa07f9190af5e00272231df.1704545258.git.christophe.jaillet@wanadoo.fr>
+ <z5qdyk2onwohenaclbflb7jlfn3wadafjpxsxzpvkmax75mpvg@vhhasuuutjzh>
+In-Reply-To: <z5qdyk2onwohenaclbflb7jlfn3wadafjpxsxzpvkmax75mpvg@vhhasuuutjzh>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 12 Sep 2024 12:22:51 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFH+zB_YuUS+vaEpguhuVGLYbQw55VNDCxnBfSPe6b-nw@mail.gmail.com>
+Message-ID: <CAMj1kXFH+zB_YuUS+vaEpguhuVGLYbQw55VNDCxnBfSPe6b-nw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] i2c: synquacer: Fix an error handling path in synquacer_i2c_probe()
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Andy Shevchenko <andy.shevchenko@gmail.com>, Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org, 
+	kernel-janitors@vger.kernel.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Mukesh,
+On Mon, 6 May 2024 at 11:03, Andi Shyti <andi.shyti@kernel.org> wrote:
+>
+> Hi Christophe,
+>
+> On Sat, Jan 06, 2024 at 01:48:24PM +0100, Christophe JAILLET wrote:
+> > If an error occurs after the clk_prepare_enable() call, it should be undone
+> > by a corresponding clk_disable_unprepare() call, as already done in the
+> > remove() function.
+> >
+> > As devm_clk_get() is used, we can switch to devm_clk_get_enabled() to
+> > handle it automatically and fix the probe.
+> >
+> > Update the remove() function accordingly and remove the now useless
+> > clk_disable_unprepare() call.
+> >
+> > Fixes: 0d676a6c4390 ("i2c: add support for Socionext SynQuacer I2C controller")
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>
+> Applied to i2c/i2c-host-fixes.
+>
 
-Is this patch still needed? Can anyone active in the Qualcomm
-drivers take a look?
+These patches should be reverted: ACPI boot on SynQuacer based systems
+now fails with
 
-On Tue, Apr 02, 2024 at 03:57:41PM GMT, Mukesh Kumar Savaliya wrote:
-> pm_runtime_get_sync() function fails during PM early resume and returning
-> -EACCES because runtime PM for the device is disabled at the early stage
-> causing i2c transfer to fail. Make changes to serve transfer with force
-> resume.
-> 
-> 1. Register interrupt with IRQF_EARLY_RESUME and IRQF_NO_SUSPEND flags
->    to avoid timeout of transfer when IRQ is not enabled during early stage.
-> 2. Do force resume if pm_runtime_get_sync() is failing after system
->    suspend when runtime PM is not enabled.
-> 3. Increment power usage count after forced resume to balance
->    it against regular runtime suspend.
-> 
-> Co-developed-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+[    6.206022] synquacer_i2c SCX0003:00: error -ENOENT: failed to get
+and enable clock
+[    6.235762] synquacer_i2c SCX0003:00: probe with driver
+synquacer_i2c failed with error -2
 
-Should this be considered a fix?
-
-Thanks,
-Andi
+as in this case, there is no clock to enable, and the clock rate is
+specified in the PRP0001 device node.
 
