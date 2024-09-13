@@ -1,200 +1,179 @@
-Return-Path: <linux-i2c+bounces-6658-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6659-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C61AB97734D
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 23:04:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47D3497767A
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 03:42:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C01E28390C
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Sep 2024 21:04:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE8F7286179
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 01:42:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6DF1C233C;
-	Thu, 12 Sep 2024 21:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NBE3GJ3P"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BCD4BA2D;
+	Fri, 13 Sep 2024 01:42:31 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail03.siengine.com (mail03.siengine.com [43.240.192.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF0C19E96A;
-	Thu, 12 Sep 2024 21:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D57B672
+	for <linux-i2c@vger.kernel.org>; Fri, 13 Sep 2024 01:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.240.192.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726175070; cv=none; b=TGzopXf01w3OnGw3g6ykfg/KEhvEyOek6jkZY9BRCM9Fz09VL/J904vGJZuNcTtJSRNkS7+Koqx6gBpqzRa8sRSZLF2HLUBbYRP6E1pUeDFxc5UzvTcVAybFR6S8nAtticEHUjv76ZX7+48j0gIu9Q00HwWe3vIbcZlh/dCP9z4=
+	t=1726191750; cv=none; b=oGE+zLUK4+sKlI4PdztIibnlWOHL0a7PeSZIGXMX9ooX2j8qAcktdyku7U/EAWilsk+AWrHtot055xcDerPxO94cDapggzoYlLgDdwivFRawKPcaTkN0EgPABc0zeGyoiT1mqBGeN0FkR/Z8BSYfgEOwzcHe44PcTH3ihPfdiRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726175070; c=relaxed/simple;
-	bh=cRVDHFSUybvmScJCn1XhuLmNJDXhvWTEUpsVyK4kqyE=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=klOTr7sHLK7mrzq9nMpi7sQgDrertFGXpvq+WjgTCnglek/bCSnrW9/JPz7q2C6Hs2B11n4tTSrocycTqIdbRFsFCVVPjXPyR08qKvElPzT0GUuX4syvTGtORZeaihGWz+DDjrW46qra+FfSmkf+Hv9M2jDzqhj/IRFex1dYzUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NBE3GJ3P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7AE8C4CEC5;
-	Thu, 12 Sep 2024 21:04:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726175070;
-	bh=cRVDHFSUybvmScJCn1XhuLmNJDXhvWTEUpsVyK4kqyE=;
-	h=Date:From:To:List-Id:Cc:In-Reply-To:References:Subject:From;
-	b=NBE3GJ3P+HfVh5nFD9mdRfCBIGbePIgWdRB7oE2lRaRaVXEuY7PRweuhReFfKt8xg
-	 UZXLR078rKhPxeQhm8wYy064LRPany8U6zTjOeBgmXfPZ58hZ8q01bQyhtJa2Qbf5y
-	 c+0E5yyvv/ZtqfB1JOzQqXxSa7egdKvEnotfotu2pc4xNYo35uc2ZTgsz8niHpHR3e
-	 YjQmT3ERZWLxYKzwZGzkLJwkdEvGiJt5ei1Kgae++5KSGy6FR4nDsgJq7s+ELvHhcW
-	 PV6XdZ0V48nEUDH5yql/1gzBFourFYB3Dl8NYp6r+O+ki5IUxY/ZxRtvo7m5/OEaeI
-	 +6UlbPhf6UgWw==
-Date: Thu, 12 Sep 2024 16:04:28 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1726191750; c=relaxed/simple;
+	bh=gAvmkDRuJce7nI0PJsDZRjNGaiQYVFEP/ujm3GKyjzA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=spSynsINSlmF51WH5wMQXX5jTil8syPPyOfYrOf7kLJEC0cZLQcMtWajyhhKeVEexQT2rYY0RsnBCqL1rExPCBsCkNerpjMDcWsty2UT+dRCKcK4ruwS2bL0Ychx72IYuG3vZmn2XXeE2GduWQcV44ux+syEzFFT8yWfJjqTygU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com; spf=pass smtp.mailfrom=siengine.com; arc=none smtp.client-ip=43.240.192.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siengine.com
+Received: from dsgsiengine01.siengine.com ([10.8.1.61])
+	by mail03.siengine.com with ESMTPS id 48D1gCL6061266
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 13 Sep 2024 09:42:12 +0800 (+08)
+	(envelope-from kimriver.liu@siengine.com)
+Received: from SEEXMB03-2019.siengine.com (SEEXMB03-2019.siengine.com [10.8.1.33])
+	by dsgsiengine01.siengine.com (SkyGuard) with ESMTPS id 4X4cVq3ZtVz7ZMt2;
+	Fri, 13 Sep 2024 09:42:11 +0800 (CST)
+Received: from SEEXMB05-2019.siengine.com (10.8.1.153) by
+ SEEXMB03-2019.siengine.com (10.8.1.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1544.11; Fri, 13 Sep 2024 09:42:12 +0800
+Received: from SEEXMB03-2019.siengine.com (10.8.1.33) by
+ SEEXMB05-2019.siengine.com (10.8.1.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1544.9; Fri, 13 Sep 2024 09:42:09 +0800
+Received: from SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe]) by
+ SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe%16]) with mapi id
+ 15.02.1544.011; Fri, 13 Sep 2024 09:42:09 +0800
+From: =?gb2312?B?TGl1IEtpbXJpdmVyL8H1vfC60w==?= <kimriver.liu@siengine.com>
+To: Andi Shyti <andi.shyti@kernel.org>,
+        Andy Shevchenko
+	<andy.shevchenko@gmail.com>
+CC: "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
+        "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "jsd@semihalf.com" <jsd@semihalf.com>,
+        "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v10] i2c: designware: fix controller is holding SCL low
+ while ENABLE bit is disabled
+Thread-Topic: [PATCH v10] i2c: designware: fix controller is holding SCL low
+ while ENABLE bit is disabled
+Thread-Index: AQHbBNrkUD+mO8YM70mPDsgqfnC1TLJUWit3gACL0iA=
+Date: Fri, 13 Sep 2024 01:42:09 +0000
+Message-ID: <c3e590cc3db74234ac7a766babd46344@siengine.com>
+References: <cd5f6b0a57adf6fdff7bf3c24cb319bf778d61d6.1726121009.git.kimriver.liu@siengine.com>
+ <ZuMJoHWLU1FIznZR@surfacebook.localdomain>
+ <fpa7ufcpazewftgeoj72t3m7jumddvt23dzmqpr4znqx663yl7@4vckpbls2iyy>
+In-Reply-To: <fpa7ufcpazewftgeoj72t3m7jumddvt23dzmqpr4znqx663yl7@4vckpbls2iyy>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Arturs Artamonovs <arturs.artamonovs@analog.com>
-Cc: Olof Johansson <olof@lixom.net>, devicetree@vger.kernel.org, 
- Jiri Slaby <jirislaby@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Thomas Gleixner <tglx@linutronix.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, soc@kernel.org, 
- linux-clk@vger.kernel.org, linux-serial@vger.kernel.org, 
- Andi Shyti <andi.shyti@kernel.org>, 
- Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
- linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
- Greg Malysa <greg.malysa@timesys.com>, Will Deacon <will@kernel.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Nathan Barrett-Morrison <nathan.morrison@timesys.com>, 
- Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
- Utsav Agarwal <Utsav.Agarwal@analog.com>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, adsp-linux@analog.com, 
- Conor Dooley <conor+dt@kernel.org>, linux-gpio@vger.kernel.org, 
- Stephen Boyd <sboyd@kernel.org>
-In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
-References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
-Message-Id: <172617500940.774816.11284671975335527090.robh@kernel.org>
-Subject: Re: [PATCH 00/21] Adding support of ADI ARMv8 ADSP-SC598 SoC.
+X-DKIM-Results: [10.8.1.61]; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:mail03.siengine.com 48D1gCL6061266
 
-
-On Thu, 12 Sep 2024 19:24:45 +0100, Arturs Artamonovs wrote:
-> This set of patches based on ADI fork of Linux Kerenl that support family of ADSP-SC5xx
-> SoC's and used by customers for some time . Patch series contains minimal set
-> of changes to add ADSP-SC598 support to upstream kernel. This series include
-> UART,I2C,IRQCHIP,RCU drivers and device-tree to be able boot on EV-SC598-SOM
-> board into serial shell and able to reset the board. Current SOM board
-> requires I2C expander to enable UART output.
-> 
-> UART,I2C and PINCTRL drivers are based on old Blackfin drivers with
-> ADSP-SC5xx related bug fixes and improvments.
-> 
-> Signed-off-by: Arturs Artamonovs <arturs.artamonovs@analog.com>
-> ---
-> Arturs Artamonovs (21):
->       arm64: Add ADI ADSP-SC598 SoC
->       reset: Add driver for ADI ADSP-SC5xx reset controller
->       dt-bindigs: arm64: adi,sc598 bindings
->       dt-bindings: arm64: adi,sc598: Add ADSP-SC598 SoC bindings
->       clock:Add driver for ADI ADSP-SC5xx PLL
->       include: dt-binding: clock: add adi clock header file
->       clock: Add driver for ADI ADSP-SC5xx clock
->       dt-bindings: clock: adi,sc5xx-clocks: add bindings
->       gpio: add driver for ADI ADSP-SC5xx platform
->       dt-bindings: gpio: adi,adsp-port-gpio: add bindings
->       irqchip: Add irqchip for ADI ADSP-SC5xx platform
->       dt-bindings: irqchip: adi,adsp-pint: add binding
->       pinctrl: Add drivers for ADI ADSP-SC5xx platform
->       dt-bindings: pinctrl: adi,adsp-pinctrl: add bindings
->       i2c: Add driver for ADI ADSP-SC5xx platforms
->       dt-bindings: i2c: add i2c/twi driver documentation
->       serial: adi,uart: Add driver for ADI ADSP-SC5xx
->       dt-bindings: serial: adi,uart4: add adi,uart4 driver documentation
->       arm64: dts: adi: sc598: add device tree
->       arm64: defconfig: sc598 add minimal changes
->       MAINTAINERS: add adi sc5xx maintainers
-> 
->  .../devicetree/bindings/arm/analog/adi,sc5xx.yaml  |   24 +
->  .../bindings/clock/adi,sc5xx-clocks.yaml           |   65 ++
->  .../bindings/gpio/adi,adsp-port-gpio.yaml          |   69 ++
->  Documentation/devicetree/bindings/i2c/adi,twi.yaml |   71 ++
->  .../interrupt-controller/adi,adsp-pint.yaml        |   51 +
->  .../bindings/pinctrl/adi,adsp-pinctrl.yaml         |   83 ++
->  .../devicetree/bindings/serial/adi,uart.yaml       |   85 ++
->  .../bindings/soc/adi/adi,reset-controller.yaml     |   38 +
->  MAINTAINERS                                        |   22 +
->  arch/arm64/Kconfig.platforms                       |   13 +
->  arch/arm64/boot/dts/Makefile                       |    1 +
->  arch/arm64/boot/dts/adi/Makefile                   |    2 +
->  arch/arm64/boot/dts/adi/sc598-som-ezkit.dts        |   14 +
->  arch/arm64/boot/dts/adi/sc598-som.dtsi             |   58 ++
->  arch/arm64/boot/dts/adi/sc59x-64.dtsi              |  367 +++++++
->  arch/arm64/configs/defconfig                       |    6 +
->  drivers/clk/Kconfig                                |    9 +
->  drivers/clk/Makefile                               |    1 +
->  drivers/clk/adi/Makefile                           |    4 +
->  drivers/clk/adi/clk-adi-pll.c                      |  151 +++
->  drivers/clk/adi/clk-adi-sc598.c                    |  329 ++++++
->  drivers/clk/adi/clk.h                              |   99 ++
->  drivers/gpio/Kconfig                               |    8 +
->  drivers/gpio/Makefile                              |    1 +
->  drivers/gpio/gpio-adi-adsp-port.c                  |  145 +++
->  drivers/i2c/busses/Kconfig                         |   17 +
->  drivers/i2c/busses/Makefile                        |    1 +
->  drivers/i2c/busses/i2c-adi-twi.c                   |  940 ++++++++++++++++++
->  drivers/irqchip/Kconfig                            |    9 +
->  drivers/irqchip/Makefile                           |    2 +
->  drivers/irqchip/irq-adi-adsp.c                     |  310 ++++++
->  drivers/pinctrl/Kconfig                            |   12 +
->  drivers/pinctrl/Makefile                           |    1 +
->  drivers/pinctrl/pinctrl-adsp.c                     |  919 +++++++++++++++++
->  drivers/reset/Makefile                             |    1 +
->  drivers/soc/Makefile                               |    1 +
->  drivers/soc/adi/Makefile                           |    5 +
->  drivers/soc/adi/system.c                           |  257 +++++
->  drivers/tty/serial/Kconfig                         |   19 +-
->  drivers/tty/serial/Makefile                        |    1 +
->  drivers/tty/serial/adi_uart.c                      | 1045 ++++++++++++++++++++
->  include/dt-bindings/clock/adi-sc5xx-clock.h        |   93 ++
->  include/dt-bindings/pinctrl/adi-adsp.h             |   19 +
->  include/linux/soc/adi/adsp-gpio-port.h             |   85 ++
->  include/linux/soc/adi/cpu.h                        |  107 ++
->  include/linux/soc/adi/rcu.h                        |   55 ++
->  include/linux/soc/adi/sc59x.h                      |  147 +++
->  include/linux/soc/adi/system_config.h              |   65 ++
->  include/uapi/linux/serial_core.h                   |    3 +
->  49 files changed, 5829 insertions(+), 1 deletion(-)
-> ---
-> base-commit: da3ea35007d0af457a0afc87e84fddaebc4e0b63
-> change-id: 20240909-test-8ec5f76fe6d2
-> 
-> Best regards,
-> --
-> Arturs Artamonovs <arturs.artamonovs@analog.com>
-> 
-> 
-> 
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y adi/sc598-som-ezkit.dtb' for 20240912-test-v1-0-458fa57c8ccf@analog.com:
-
-arch/arm64/boot/dts/adi/sc598-som-ezkit.dtb: /scb-bus/sec@31089000: failed to match any schema with compatible: ['adi,system-event-controller']
-
-
-
-
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQW5kaSBTaHl0aSA8YW5k
+aS5zaHl0aUBrZXJuZWwub3JnPiANCj4gU2VudDogMjAyNMTqOdTCMTPI1SAwOjM2DQo+IFRvOiBB
+bmR5IFNoZXZjaGVua28gPGFuZHkuc2hldmNoZW5rb0BnbWFpbC5jb20+DQo+IENjOiBMaXUgS2lt
+cml2ZXIvwfW98LrTIDxraW1yaXZlci5saXVAc2llbmdpbmUuY29tPjsgamFya2tvLm5pa3VsYUBs
+aW51eC5pbnRlbC5jb207IGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmludGVsLmNvbTsgbWlrYS53
+ZXN0ZXJiZXJnQGxpbnV4LmludGVsLmNvbTsganNkQHNlbWloYWxmLmNvbTsgbGludXgtaTJjQHZn
+ZXIua2VybmVsLm9yZzsgbGludXgtPiBrZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6
+IFJlOiBbUEFUQ0ggdjEwXSBpMmM6IGRlc2lnbndhcmU6IGZpeCBjb250cm9sbGVyIGlzIGhvbGRp
+bmcgU0NMIGxvdyB3aGlsZSBFTkFCTEUgYml0IGlzIGRpc2FibGVkDQoNCj4gT24gVGh1LCBTZXAg
+MTIsIDIwMjQgYXQgMDY6MzI6NDhQTSBHTVQsIEFuZHkgU2hldmNoZW5rbyB3cm90ZToNCj4gPiBU
+aHUsIFNlcCAxMiwgMjAyNCBhdCAwMjoxMToxMlBNICswODAwLCBLaW1yaXZlciBMaXUga2lyam9p
+dHRpOg0KPiA+ID4gSXQgd2FzIG9ic2VydmVkIHRoYXQgaXNzdWluZyBBQk9SVCBiaXQgKElDX0VO
+QUJMRVsxXSkgd2lsbCBub3Qgd29yayANCj4gPiA+IHdoZW4gSUNfRU5BQkxFIGlzIGFscmVhZHkg
+ZGlzYWJsZWQuDQo+ID4gPiANCj4gPiA+IENoZWNrIGlmIEVOQUJMRSBiaXQgKElDX0VOQUJMRVsw
+XSkgaXMgZGlzYWJsZWQgd2hlbiB0aGUgY29udHJvbGxlciANCj4gPiA+IGlzIGhvbGRpbmcgU0NM
+IGxvdy4gSWYgRU5BQkxFIGJpdCBpcyBkaXNhYmxlZCwgdGhlIHNvZnR3YXJlIG5lZWQNCg0KPiAv
+bmVlZC9uZWVkcy8NCg0KPiA+ID4gdG8gZW5hYmxlIGl0IGJlZm9yZSB0cnlpbmcgdG8gaXNzdWUg
+QUJPUlQgYml0LiBvdGhlcndpc2UsDQoNCj4gL0FCT1JUL3RoZSBBQk9SVC8NCg0KPiA+ID4gdGhl
+IGNvbnRyb2xsZXIgaWdub3JlcyBhbnkgd3JpdGUgdG8gQUJPUlQgYml0Lg0KPj4gID4gDQo+PiAg
+PiBUaGVzZSBrZXJuZWwgbG9ncyBzaG93IHVwIHdoZW5ldmVyIGFuIEkyQyB0cmFuc2FjdGlvbiBp
+cyBhdHRlbXB0ZWQgDQo+PiAgPiBhZnRlciB0aGlzIGZhaWx1cmUuDQo+PiAgPiBpMmNfZGVzaWdu
+d2FyZSBlOTVlMDAwMC5pMmM6IHRpbWVvdXQgd2FpdGluZyBmb3IgYnVzIHJlYWR5IA0KPj4gID4g
+aTJjX2Rlc2lnbndhcmUgZTk1ZTAwMDAuaTJjOiB0aW1lb3V0IGluIGRpc2FibGluZyBhZGFwdGVy
+DQo+ID4gDQo+PiAgPiBUaGUgcGF0Y2ggY2FuIGJlIGZpeCB0aGUgY29udHJvbGxlciBjYW5ub3Qg
+YmUgZGlzYWJsZWQgd2hpbGUgU0NMIGlzIA0KPj4gID4gaGVsZCBsb3cgaW4gRU5BQkxFIGJpdCBp
+cyBhbHJlYWR5IGRpc2FibGVkLg0KPj4gIA0KPiA+IFRoZXJlIGFyZSBFbmdsaXNoIHdvcmRzIGJ1
+dCBhIGNvbXBsZXRlIG5vbnNlbnNlIHRvZ2V0aGVyLg0KDQo+IFdlIGNvdWxkIHJld29yZCB0aGlz
+IHRvOg0KDQo+IFRoZSBwYXRjaCBmaXhlcyB0aGUgaXNzdWUgd2hlcmUgdGhlIGNvbnRyb2xsZXIg
+Y2Fubm90IGJlIGRpc2FibGVkIHdoaWxlIFNDTCBpcyBoZWxkIGxvdyBpZiB0aGUgRU5BQkxFIGJp
+dCBpcyBhbHJlYWR5IGRpc2FibGVkLg0KDQo+ID4gICBGaXggdGhlIGNvbmRpdGlvbiB3aGVuIGNv
+bnRyb2xsZXIgY2Fubm90IGJlIGRpc2FibGVkIHdoaWxlIFNDTA0KDQo+IC93aGVuL3doZXJlLw0K
+DQo+ID4gICBpcyBoZWxkIGxvdyBhbmQgRU5BQkxFIGJpdCBpcyBhbHJlYWR5IGRpc2FibGVkLg0K
+DQo+IC9FTkFCTEUvdGhlIEVOQUJMRS8NCg0KPiBJZiB5b3UgYWdyZWUgd2l0aCB0aGUgY2hhbmdl
+cywgSSBjYW4gYXBwbHkgdGhlbSBiZWZvcmUgbWVyZ2luZy4NCg0KPiA+IA0KPiA+IFJldmlld2Vk
+LWJ5OiBBbmR5IFNoZXZjaGVua28gPGFuZHlAa2VybmVsLm9yZz4NCg0KPiBUaGFua3MgYSBsb3Qs
+IEFuZHkhIEkgcmVhbGx5IGFwcHJlY2lhdGUgeW91ciByZXZpZXdzIQ0KDQo+ID4gLi4uDQo+ID4g
+DQo+ID4gPiArCQlpZiAoIShlbmFibGUgJiBEV19JQ19FTkFCTEVfRU5BQkxFKSkgew0KPiA+ID4g
+KwkJCXJlZ21hcF93cml0ZShkZXYtPm1hcCwgRFdfSUNfRU5BQkxFLCBEV19JQ19FTkFCTEVfRU5B
+QkxFKTsNCj4gPiA+ICsJCQkvKg0KPj4gPiArCQkJICogV2FpdCAxMCB0aW1lcyB0aGUgc2lnbmFs
+aW5nIHBlcmlvZCBvZiB0aGUgaGlnaGVzdCBJMkMNCj4+ID4gKwkJCSAqIHRyYW5zZmVyIHN1cHBv
+cnRlZCBieSB0aGUgZHJpdmVyIChmb3IgNDAwS0h6IHRoaXMgaXMNCj4gPiA+ICsJCQkgKiAyNXVz
+KSB0byBlbnN1cmUgdGhlIEkyQyBFTkFCTEUgYml0IGlzIGFscmVhZHkgc2V0DQo+ID4gPiArCQkJ
+ICogYXMgZGVzY3JpYmVkIGluIHRoZSBEZXNpZ25XYXJlIEkyQyBkYXRhYm9vay4NCj4gPiA+ICsJ
+CQkgKi8NCj4gPiA+ICsJCQlmc2xlZXAoRElWX1JPVU5EX0NMT1NFU1RfVUxMKDEwICogTUlDUk8s
+IHQtPmJ1c19mcmVxX2h6KSk7DQo+ID4gDQo+ID4gPiArCQkJLyogS2VlcCBFTkFCTEUgYml0IGlz
+IGFscmVhZHkgc2V0IGJlZm9yZSBTZXR0aW5nIEFCT1JULiovDQo+PiAgDQo+PiAgCQkJLyogU2V0
+IEVOQUJMRSBiaXQgYmVmb3JlIHNldHRpbmcgQUJPUlQgKi8NCj4+ICANCj4+ICANCj4+ID4gKwkJ
+CWVuYWJsZSB8PSBEV19JQ19FTkFCTEVfRU5BQkxFOw0KPj4gPiArCQl9DQo+ID4gDQo+Pg0KPiA+
+IA0KPiA+ID4gKy8qDQo+ID4gPiArICogVGhpcyBmdW5jdGlvbnMgd2FpdHMgY29udHJvbGxlciBp
+ZGxpbmcgYmVmb3JlIGRpc2FibGluZyBJMkMNCj4gPiANCj4gPiBzL2Z1bmN0aW9ucy9mdW5jdGlv
+bi8NCg0KPiBJIGNhbiBmaXggaXQgYmVmb3JlIG1lcmdpbmcuDQoNCk9Lo6xJIGFncmVlIHdpdGgg
+eW91ciBmaXhpbmcgaXQgYmVmb3JlIG1lcmdpbmcuIFRoYW5rcyBmb3IgeW91ciByZXZpZXchDQoN
+Cj4gPiA+ICsgKiBXaGVuIHRoZSBjb250cm9sbGVyIGlzIG5vdCBpbiB0aGUgSURMRSBzdGF0ZSwN
+Cj4gPiA+ICsgKiBNU1RfQUNUSVZJVFkgYml0IChJQ19TVEFUVVNbNV0pIGlzIHNldC4NCj4gPiA+
+ICsgKiBWYWx1ZXM6DQo+ID4gPiArICogMHgxIChBQ1RJVkUpOiBDb250cm9sbGVyIG5vdCBpZGxl
+DQo+PiAgPiArICogMHgwIChJRExFKTogQ29udHJvbGxlciBpcyBpZGxlDQo+PiAgPiArICogVGhl
+IGZ1bmN0aW9uIGlzIGNhbGxlZCBhZnRlciByZXR1cm5pbmcgdGhlIGVuZCBvZiB0aGUgY3VycmVu
+dCANCj4+ICA+ICt0cmFuc2Zlcg0KPj4gID4gKyAqIFJldHVybnM6DQo+ID4gPiArICogRmFsc2Ug
+d2hlbiBjb250cm9sbGVyIGlzIGluIElETEUgc3RhdGUuDQo+PiAgPiArICogVHJ1ZSB3aGVuIGNv
+bnRyb2xsZXIgaXMgaW4gQUNUSVZFIHN0YXRlLg0KPiA+ID4gKyAqLw0KPiA+ID4gK3N0YXRpYyBi
+b29sIGkyY19kd19pc19jb250cm9sbGVyX2FjdGl2ZShzdHJ1Y3QgZHdfaTJjX2RldiAqZGV2KSB7
+DQo+ID4gPiArCXUzMiBzdGF0dXM7DQo+ID4gPiArDQo+PiAgPiArCXJlZ21hcF9yZWFkKGRldi0+
+bWFwLCBEV19JQ19TVEFUVVMsICZzdGF0dXMpOw0KPiA+ID4gKwlpZiAoIShzdGF0dXMgJiBEV19J
+Q19TVEFUVVNfTUFTVEVSX0FDVElWSVRZKSkNCj4gPiA+ICsJCXJldHVybiBmYWxzZTsNCj4+ICA+
+ICsNCj4+ICA+ICsJcmV0dXJuIHJlZ21hcF9yZWFkX3BvbGxfdGltZW91dChkZXYtPm1hcCwgRFdf
+SUNfU1RBVFVTLCBzdGF0dXMsDQo+PiAgPiArCQkJCSAgICAgICAhKHN0YXR1cyAmIERXX0lDX1NU
+QVRVU19NQVNURVJfQUNUSVZJVFkpLA0KPj4gID4gKwkJCQkJMTEwMCwgMjAwMDApICE9IDA7DQo+
+ID4gDQo+ID4gCXJldHVybiByZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQoZGV2LT5tYXAsIERXX0lD
+X1NUQVRVUywgc3RhdHVzLA0KPj4gIAkJCQkJIShzdGF0dXMgJiBEV19JQ19TVEFUVVNfTUFTVEVS
+X0FDVElWSVRZKSwNCj4gPiAJCQkJCTExMDAsIDIwMDAwKSAhPSAwOw0KPiANCj4gPiAoaW4gdGhl
+IHNlY29uZCBsaW5lIHJlcGxhY2VkIDcgc3BhY2VzIGJ5IGEgc2luZ2xlIFRBQiB0byBmaXggdGhl
+IA0KPj4gIGluZGVudGF0aW9uKQ0KDQo+IEkgY2FuIGZpeCBpdCBiZWZvcmUgbWVyZ2luZy4NCg0K
+PiBLaW1yaXZlciwgaWYgeW91IGFncmVlLCBpIGNhbiBtZXJnZSB0aGlzIGFuZCBxdWV1ZSBpdCBm
+b3IgdGhlIG5leHQgd2VlaydzIGZpeGVzIG1lcmdlIHJlcXVlc3QuDQo+QW5kaQ0KDQogT0ujrEkg
+YWdyZWUuIA0KICBEbyBJIHN0aWxsIG5lZWQgdG8gdXBkYXRlIHRvIHBhdGNoIFYxMT8gT3IgeW91
+IGZpeCBpdCBiZWZvcmUgbWVyZ2luZw0KDQogVGhhbmtzIGZvciB0YWtpbmcgdGhlIHRpbWUgdG8g
+cmV2aWV3IHRoZSBwYXRjaCwgIEkgaGF2ZSBsZWFybmVkIGEgbG90IG9mIGtub3dsZWRnZSAuDQoN
+Cj4gPiArfQ0KPiANCj4gLi4uDQo+IA0KPiA+ICsJLyoNCj4gPiArCSAqIFRoaXMgaGFwcGVucyBy
+YXJlbHkgKH4xOjUwMCkgYW5kIGlzIGhhcmQgdG8gcmVwcm9kdWNlLiBEZWJ1ZyB0cmFjZQ0KPiA+
+ICsJICogc2hvd2VkIHRoYXQgSUNfU1RBVFVTIGhhZCB2YWx1ZSBvZiAweDIzIHdoZW4gU1RPUF9E
+RVQgb2NjdXJyZWQsDQo+ID4gKwkgKiBpZiBkaXNhYmxlIElDX0VOQUJMRS5FTkFCTEUgaW1tZWRp
+YXRlbHkgdGhhdCBjYW4gcmVzdWx0IGluDQo+ID4gKwkgKiBJQ19SQVdfSU5UUl9TVEFULk1BU1RF
+Ul9PTl9IT0xEIGhvbGRpbmcgU0NMIGxvdy4gQ2hlY2sgaWYNCj4gPiArCSAqIGNvbnRyb2xsZXIg
+aXMgc3RpbGwgQUNUSVZFIGJlZm9yZSBkaXNhYmxpbmcgSTJDLg0KPiA+ICsJICovDQo+ID4gKwlp
+ZiAoaTJjX2R3X2lzX2NvbnRyb2xsZXJfYWN0aXZlKGRldikpDQo+ID4gKwkJZGV2X2VycihkZXYt
+PmRldiwgImNvbnRyb2xsZXIgYWN0aXZlXG4iKTsNCj4gDQo+IC0tDQo+IFdpdGggQmVzdCBSZWdh
+cmRzLA0KPiBBbmR5IFNoZXZjaGVua28NCj4gDQo+IA0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0NCkJlc3QgUmVnYXJkcw0KS2ltcml2ZXIgTGl1DQo=
 
