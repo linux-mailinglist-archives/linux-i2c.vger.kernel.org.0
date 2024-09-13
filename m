@@ -1,231 +1,142 @@
-Return-Path: <linux-i2c+bounces-6722-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6723-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E926978336
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 17:02:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFFB69786FA
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 19:39:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD551B21C14
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 15:02:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E64481C241F1
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 17:39:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA0402EB02;
-	Fri, 13 Sep 2024 15:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534C51C14;
+	Fri, 13 Sep 2024 17:39:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="sxv+nCCE";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="WJFebE8q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aw5Poujn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE4829CF0;
-	Fri, 13 Sep 2024 15:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726239734; cv=pass; b=efRJ+5m03JJ39BIrcq1Im4HYqjcS5ZPwCZlCqrg6QlwJkN4+1JW+WOaTuy80t8TZOUysqFR1IUo/5lhFSvFPI3fix3asq9lKZsnEodyVpR4DJfLc/sqeRYlMveKtN+dJiqs4r/Lq70OHyS5WaASIKtW9xRcUGJ4fAYU96YMATv4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726239734; c=relaxed/simple;
-	bh=e57zcWQSVSgo6cEBNGs+KUbvp+KYXNF6edtF2NSWF7I=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=YQyZTx9xAr6CdOZBLCKSunosAMwUzFYDWTnoXCxEfLtuOnyOGBJnAwfZ+NyJfXklzeYL+wa4RXW3tWbsj6OIn13t5vP/uYHYYGb15GCEPYPknAzglsoj31Jfv1Q8qR+jkjyoXI6pnzTWSpeGAGX6nlIbTc4OLATl8B0jyorIuJM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=sxv+nCCE; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=WJFebE8q; arc=pass smtp.client-ip=85.215.255.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1726239714; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=OF27jDUSeIFFiPY477XiPvqb58kj8KGspHFAy8Khlq+H0+VMR+4zM60zfvZkyM7zAK
-    zKSb7HuppM6sMek2V/Ft33d0A5M/ljOz3gYavFULS2+CG7H6G6C+34Bt42pceuW5SEgh
-    6Fsj+t3muWG42XqMf5BXN/TAVmUlQMrblSAj/Dvc+b0isZsmjWOzoRo9Y/h3yC3F1s3W
-    N4yBopMujLW1/Td5WBcdBMcO+BkQ2WQrn0xX2OLE3XtvAmzkYvfsuXZbsRUM1u6/gmir
-    6KEMwJ54X7YCy0kXjTDEiTFwDzzHTG7ptaxFTrhNzp8rN0PC7UMRHZc4yTp/ZtZbEhvn
-    /u1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1726239714;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=pWUZCvtRrFmZUWsXHM9GvLPUeTaoAVROQZxyilr4N7o=;
-    b=ROiWCEGWGC7IUHTf8AUTquF5wxUZn3DcMWoqSMzz5rx9nle6U5sJpUxTahStB1z42V
-    odXj2v0wOrL8fCmlwFxU0tcnHa/xCBqonOhrZ8Jzx0lzkCdGtG2K1TYKRxBUHtc20FeH
-    NhAU4yVwttF6VKCXLeb2JPwhkah6SwZfLx0rb/BxgHw5aOb/kzSfWwGxbcxib90JYI/V
-    Y0KEn5+EoXTGPC3nJs5kuCW8uIwbrTBP//j4Hm5qzpCxqih3Bil/kyTQcmTVFdTGhaV7
-    8FSn14OoKmXlL0wbKacxTa343mgedUMOaw8r5xQJ7PZfA+NNXA09Kae/2nYHzBTjHwa4
-    x75Q==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1726239714;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=pWUZCvtRrFmZUWsXHM9GvLPUeTaoAVROQZxyilr4N7o=;
-    b=sxv+nCCE9wVoztWLZqNVrZp+cvm0lB04OykWNaUQTUXVlZjxoXtRgboMIAiWbDBzva
-    KiCW+LC1RTZTvNuHF3AvqyXkfUd4ln1CnZ7nMNeoeEDnR7lF510gLXJGEyrJVSAH8aLx
-    We5cyzYKsfHNveL9IR6SdmQx/d62ynGZaZgkfAuVsXO7AEN8UKIGhJ8NburfFoOerQVo
-    gBYk183jVNfpLzgJY6AG1cv3ZgDoDiV3Q3SIMgWHsew1y+1pj23B4W0yPONu0SP+mv7w
-    0/594crKg0cjWvAScVASUwNUopqTkz2smiwgjuxD3dfMamQWHB79lpA96mHfB1AZ5xzp
-    xGLg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1726239714;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=pWUZCvtRrFmZUWsXHM9GvLPUeTaoAVROQZxyilr4N7o=;
-    b=WJFebE8qQPzuvsAnpczhTrm2zT2XFBBkAlFBgUkullST85l8IO0jb7pV1zVE+sg28Y
-    NAmMlJk69BttJZygj9BQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yfjAZ"
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 51.2.3 DYNA|AUTH)
-    with ESMTPSA id Q984c208DF1rA1B
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Fri, 13 Sep 2024 17:01:53 +0200 (CEST)
-Content-Type: text/plain;
-	charset=us-ascii
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1055482D66;
+	Fri, 13 Sep 2024 17:39:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726249149; cv=none; b=W+idzIuCbrTyR0+DysdVOOERn7BuRIRQsu6SeM2hewzFmubuYoTLhquNgnvidoIYzZSgR/XqVw/NudQCBBDHGPja+IB02gRqNU8ckh1eqUMPl0I/uJW9Y97RZZqbF/h9tRq7rrc3fL9O03tqz07KOIBfR8XEdb+nZ6URJ4hrMQs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726249149; c=relaxed/simple;
+	bh=vqVpW7A+bwSz58QzHm+Dfdp0okxgkZaHCuIoxx/jJGw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OJwtX5UW+r/Wv+jHvoP/Fq48Ps/+nEvWHgcaeZbmhLStXfm49OTJZWHyF9btsaNm9b2yC+lpd4uPxx/uKBOCp8cJBcFArezwOE6hqy9fx/Kht7hwJBD0ySK0+MNkt/A9ZLskG3q5va1O9xUBaWLDXO3dEPh82h463mol02F855E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aw5Poujn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50117C4CEC0;
+	Fri, 13 Sep 2024 17:39:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726249148;
+	bh=vqVpW7A+bwSz58QzHm+Dfdp0okxgkZaHCuIoxx/jJGw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aw5PoujnA+cqBrHWQkDFPDq8loitqjEpCG7JdP2i1jLWIbb0wH75ymHC7GjDeT3lg
+	 p6CmZ+Ya/6SuY+8i0/rFvc1aI9qHK00sUgcR8RxqiOV1KBUFtPKne5hVDy/hByUtwM
+	 kOlfiW2meamiCXNQwGA2HvBaQgS1GsKP+csBRLtb1rF8Z3/l5tsNDONHGtOFPfaE4H
+	 FlRG6sHKyxjfmMBwLt70iLOSP7bn3vr8bEFYQyeOaE9Q9MOWXcNq8oBmdFGfPBHIbn
+	 E3RgGhuR4Hqyd3/nlxCnGWTaDLMcglhZgg4fKYTu8RygiFJfaroxuqcpqOX0kEl/5w
+	 /WsCykNIQm9Ew==
+Date: Fri, 13 Sep 2024 18:39:05 +0100
+From: Conor Dooley <conor@kernel.org>
+To: "Wojciech Siudy (Nokia)" <wojciech.siudy@nokia.com>
+Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
+	"laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: i2c: pca954x: Add timeout reset
+ property
+Message-ID: <20240913-ensure-blot-8f7b55ef4298@spud>
+References: <DB6PR07MB3509DBD6C72832E8ABE7FA539D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51\))
-Subject: Re: [PATCH v2] i2c: omap: Fix standard mode false ACK readings
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20240913153251.48ffafbd@akair>
-Date: Fri, 13 Sep 2024 17:01:42 +0200
-Cc: Reid Tonking <reidt@ti.com>,
- Tony Lindgren <tony@atomide.com>,
- "Raghavendra, Vignesh" <vigneshr@ti.com>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>,
- Linux-OMAP <linux-omap@vger.kernel.org>,
- linux-i2c@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="hV1P1AUcJ6L7Fl+r"
+Content-Disposition: inline
+In-Reply-To: <DB6PR07MB3509DBD6C72832E8ABE7FA539D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
+
+
+--hV1P1AUcJ6L7Fl+r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <68865E6A-FBA3-4947-9761-9FD3DC957D0E@goldelico.com>
-References: <20230426194956.689756-1-reidt@ti.com>
- <445b3cbf-ffbc-6f77-47db-c30fc599e88f@ti.com>
- <20230428074330.GJ14287@atomide.com>
- <20230428183037.wbhds54dz5l4v5xa@reidt-t5600.dhcp.ti.com>
- <664241E0-8D6B-4783-997B-2D8510ADAEA3@goldelico.com>
- <20240913140934.29bb542b@akair>
- <0903DB3E-1A44-44BB-87DC-01C65B97AE4E@goldelico.com>
- <20240913153251.48ffafbd@akair>
-To: Andreas Kemnade <andreas@kemnade.info>
-X-Mailer: Apple Mail (2.3776.700.51)
 
-Hi Andreas,
-
-> Am 13.09.2024 um 15:32 schrieb Andreas Kemnade <andreas@kemnade.info>:
+On Fri, Sep 13, 2024 at 10:37:30AM +0000, Wojciech Siudy (Nokia) wrote:
+> From: Wojciech Siudy <wojciech.siudy@nokia.com>
 >=20
->>> I had a patch to disable 1Ghz on that
->>> device in my tree. Do you have anything strange in your
->>> tree? =20
->>=20
->> No, and the omap3 is running with 800 MHz only.
->>=20
-> So you have a patch disabling 1Ghz OPP in there?
-
-I think the speed is binned to be 800 MHz only. So the OPP is ignored.
-
-> The error messages
-> look like things I got when 1Ghz was enabled, so better double check.
-
-Well, it turns out to be difficult to check since with 6.11-rc7
-cpufreq-info seems to be broken... I have not yet installed the fixed =
-4.19.283 again.
-
-But indeed I have found a potential issue. We have a patch [1] for the =
-gta04a5 (only) that adds
-
-&cpu0_opp_table {
-	/* is unreliable on gta04a5 - enable by echo 1 =
->/sys/devices/system/cpu/cpufreq/boost */
-	opp1g-1000000000 {
-		turbo-mode;
-	};
-};
-
-so that 1 GHz must be explicitly enabled by user-space.
-
-But some time ago the 1GHz node was apparently renamed to opp-1000000000 =
-(5821d766932cc8)
-and this patch was not adjusted.
-
-After fixing it I can ask again for cpufreq-info and the 1GHz OPP is not =
-activated:
-
-root@letux:~# cpufreq-info=20
-cpufrequtils 008: cpufreq-info (C) Dominik Brodowski 2004-2009
-Report errors and bugs to cpufreq@vger.kernel.org, please.
-analyzing CPU 0:
-  driver: cpufreq-dt
-  CPUs which run at the same hardware frequency: 0
-  CPUs which need to have their frequency coordinated by software: 0
-  maximum transition latency: 300 us.
-  hardware limits: 300 MHz - 800 MHz
-  available frequency steps: 300 MHz, 600 MHz, 800 MHz
-  available cpufreq governors: conservative, ondemand, userspace, =
-powersave, performance
-  current policy: frequency should be within 300 MHz and 800 MHz.
-                  The governor "ondemand" may decide which speed to use
-                  within this range.
-  current CPU frequency is 800 MHz (asserted by call to hardware).
-  cpufreq stats: 300 MHz:37.38%, 600 MHz:10.11%, 800 MHz:52.51%, 1000 =
-MHz:0.00%  (1740)
-root@letux:~#=20
-
-Anyways, this bug was introduced some months after this i2c patch we
-are discussing here. So i2c broke first before the 800MHz limitation was =
-accidentially
-removed. Therefore I am quite sure that the failing 4.19.283 did run at =
-800 MHz.
-
-And in the v4.19.282 and v4.19.283 based kernels we have simply =
-commented out the 1GHz
-option (since 2018) or there is no 1GHz OPP at all.
-
-Thanks for the hint to take a second and closer look at it, but it =
-doesn't seem to
-be a factor here.
-
-> if it is letux, then there is e.g. the interrupt reversal in there.
-> Maybe it unveils some problem which should be fixed, maybe it is
-> harmful, it was never well reviewed...
-
-I know what you refer to but I could not find it any more. But I may not =
-have
-searched correctly.
-
+> For cases when the mux shares reset line with other chips we cannot
+> use it when channel selection or deselection times out, because it
+> could break them without proper init/probe.
 >=20
->> I haven't tested on another board but the bug is very reproducible
->> and I was able to bisect it to this patch, which makes the =
-difference.
->>=20
-> the error messages, esp. regarding rcu do not look so related to this.
-> Maybe having this patch or not triggers some other bug. Maybe we =
-trigger
-> some race conditions. Or i2c error checking regarding OPP setting...
-
-That is what I suspect as well. I2C is used to switch the twl4030 for =
-different OPPs...
-
+> Signed-off-by: Wojciech Siudy <wojciech.siudy@nokia.com>
+> ---
+>  .../devicetree/bindings/i2c/i2c-mux-pca954x.yaml          | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >=20
->> So there may be boards which happily run with the patch and some
->> don't. Maybe a race condition with hardware.
->>=20
-> I am not ruling out that this patch has nasty side effects but I think
-> there is more in the game.
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b=
+/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> index 9aa0585200c9..872be72da965 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> @@ -63,6 +63,12 @@ properties:
+>        necessary for example, if there are several multiplexers on the bu=
+s and
+>        the devices behind them use same I2C addresses.
+> =20
+> +  i2c-mux-timeout-reset:
+> +    type: boolean
+> +    description: Sends reset pulse if channel selection or deselection t=
+imes
+> +      out. Works only if reset GPIO provided. Do not use if other chips =
+share
+> +      the same reset line.
 
-Yes, that is why I think just reverting this patch may only hide a
-symptom and does not solve it.
+Why is a dedicated property required for this? Why is it not sufficient to
+attempt an exclusive request of the reset line, and always perform a
+reset if selection or deselection times out?
 
-But it may as well have introduced a bug as Tony apparently was thinking
-of when asking.
+Rather than "Works only if reset GPIO provided", enforce this with a
+dependency.
 
-BR and thanks,
-Nikolaus
+Thanks,
+Conor.
 
-[1]: =
-https://git.goldelico.com/?p=3Dletux-kernel.git;a=3Dcommit;h=3De824f0c9513=
-cf1d57eba0c9a2ce5fe264fafc8d5=
+> +
+>    idle-state:
+>      description: if present, overrides i2c-mux-idle-disconnect
+>      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+> @@ -146,6 +152,8 @@ examples:
+>              interrupt-parent =3D <&ipic>;
+>              interrupts =3D <17 IRQ_TYPE_LEVEL_LOW>;
+>              interrupt-controller;
+> +            i2c-mux-idle-disconnect;
+> +            i2c-mux-timeout-reset;
+>              #interrupt-cells =3D <2>;
+> =20
+>              i2c@2 {
+> --=20
+> 2.34.1
+>=20
+>=20
+
+--hV1P1AUcJ6L7Fl+r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuR4uQAKCRB4tDGHoIJi
+0oYyAP9lG+j6Y/QSd3T0d4rl4XWK9A4Ca7Pa6g66du7UR/sSCAEAl80Kcvh9Z7Bd
+XE6U9iAcWXrZdo65AjVavRX1ELAK1A4=
+=9puo
+-----END PGP SIGNATURE-----
+
+--hV1P1AUcJ6L7Fl+r--
 
