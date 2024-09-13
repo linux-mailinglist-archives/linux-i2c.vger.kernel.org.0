@@ -1,57 +1,57 @@
-Return-Path: <linux-i2c+bounces-6723-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6724-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFFB69786FA
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 19:39:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68B8397873C
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 19:53:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E64481C241F1
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 17:39:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DA971F2143C
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 17:53:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534C51C14;
-	Fri, 13 Sep 2024 17:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA94484A57;
+	Fri, 13 Sep 2024 17:53:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aw5Poujn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dgMo7YC2"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1055482D66;
-	Fri, 13 Sep 2024 17:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D058F6A;
+	Fri, 13 Sep 2024 17:53:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726249149; cv=none; b=W+idzIuCbrTyR0+DysdVOOERn7BuRIRQsu6SeM2hewzFmubuYoTLhquNgnvidoIYzZSgR/XqVw/NudQCBBDHGPja+IB02gRqNU8ckh1eqUMPl0I/uJW9Y97RZZqbF/h9tRq7rrc3fL9O03tqz07KOIBfR8XEdb+nZ6URJ4hrMQs=
+	t=1726250025; cv=none; b=aKg4GwIDEo/BRsxa2d/La8D/9FNF3KMQ71QOuKaLZPKVtQPkpnpE380xVralv2wQmO99bY2ttFgm7yBl6SDVDo1MqR7YKTS6RzXtug8t5P6lwLZavzVTO8NQGow+fnx+hM8R2qV/8CMbU4BranOb3hsVbFTFl/iqwRZrlhLUWrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726249149; c=relaxed/simple;
-	bh=vqVpW7A+bwSz58QzHm+Dfdp0okxgkZaHCuIoxx/jJGw=;
+	s=arc-20240116; t=1726250025; c=relaxed/simple;
+	bh=dF4UvyQtVTZgCLe2Wz+2rrKiqMSg3aXnfOSK2lhFzLo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OJwtX5UW+r/Wv+jHvoP/Fq48Ps/+nEvWHgcaeZbmhLStXfm49OTJZWHyF9btsaNm9b2yC+lpd4uPxx/uKBOCp8cJBcFArezwOE6hqy9fx/Kht7hwJBD0ySK0+MNkt/A9ZLskG3q5va1O9xUBaWLDXO3dEPh82h463mol02F855E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aw5Poujn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50117C4CEC0;
-	Fri, 13 Sep 2024 17:39:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=NhO104YRmfw6PAd1z4LPdD8P/XnZRA1yMFkUvYPRi6f5fVNkL0i6Oz2Ycah0xe5nwsPda8GKJZYk+MQSi0goMW5sNSBg2IuzIZJe3bX+UA2pf1D4xUGQc8nyY13alc9k2O608QUt8cvnpiYb0knse9/7kjS+6OthTCZfFV0CApo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dgMo7YC2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6911C4CEC0;
+	Fri, 13 Sep 2024 17:53:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726249148;
-	bh=vqVpW7A+bwSz58QzHm+Dfdp0okxgkZaHCuIoxx/jJGw=;
+	s=k20201202; t=1726250025;
+	bh=dF4UvyQtVTZgCLe2Wz+2rrKiqMSg3aXnfOSK2lhFzLo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aw5PoujnA+cqBrHWQkDFPDq8loitqjEpCG7JdP2i1jLWIbb0wH75ymHC7GjDeT3lg
-	 p6CmZ+Ya/6SuY+8i0/rFvc1aI9qHK00sUgcR8RxqiOV1KBUFtPKne5hVDy/hByUtwM
-	 kOlfiW2meamiCXNQwGA2HvBaQgS1GsKP+csBRLtb1rF8Z3/l5tsNDONHGtOFPfaE4H
-	 FlRG6sHKyxjfmMBwLt70iLOSP7bn3vr8bEFYQyeOaE9Q9MOWXcNq8oBmdFGfPBHIbn
-	 E3RgGhuR4Hqyd3/nlxCnGWTaDLMcglhZgg4fKYTu8RygiFJfaroxuqcpqOX0kEl/5w
-	 /WsCykNIQm9Ew==
-Date: Fri, 13 Sep 2024 18:39:05 +0100
+	b=dgMo7YC2ckDMwBZsN3oddaGz9KR+HcOXi8HK3oNr1dxTF1SGa6aW+xoKdJ2k8Gkid
+	 Dq80SdmiO2UtCC9QVDjmGPGdkajjvU2MPNUhB6Wj3o9owrc1GjskuzEY+sAeXwjk7A
+	 sxEIWE7Id/hVdchsuME6TJSrVlYm55gBViZhhtwGlJ64x9lyON5rnjfdKz8gvd184L
+	 gGrw5KB3RppdTPQQ0SuOIEi5EDhZuZmIfEo7Vru39ZqrmELuhQ+NFbzBPzvfIFu8wZ
+	 Y6p5sEWniX9ar8pP8nA8Rau94TiKoDEMOICTtFhXLRzrvPx5jyCkX3axfQvCUaJsgV
+	 dTs+eJ+LsH7PQ==
+Date: Fri, 13 Sep 2024 18:53:41 +0100
 From: Conor Dooley <conor@kernel.org>
 To: "Wojciech Siudy (Nokia)" <wojciech.siudy@nokia.com>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
 	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
 	Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
 	"laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: i2c: pca954x: Add timeout reset
- property
-Message-ID: <20240913-ensure-blot-8f7b55ef4298@spud>
-References: <DB6PR07MB3509DBD6C72832E8ABE7FA539D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
+Subject: Re: [PATCH v4 0/2] pca954x: Add DT bindings and driver changes for
+ reset after timeout
+Message-ID: <20240913-retaining-require-59ff15d696e9@spud>
+References: <DB6PR07MB3509B9378807A7968E272D959D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,84 +59,54 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="hV1P1AUcJ6L7Fl+r"
+	protocol="application/pgp-signature"; boundary="lzmOt9CzUvTyDX9b"
 Content-Disposition: inline
-In-Reply-To: <DB6PR07MB3509DBD6C72832E8ABE7FA539D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
+In-Reply-To: <DB6PR07MB3509B9378807A7968E272D959D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
 
 
---hV1P1AUcJ6L7Fl+r
+--lzmOt9CzUvTyDX9b
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 13, 2024 at 10:37:30AM +0000, Wojciech Siudy (Nokia) wrote:
+On Fri, Sep 13, 2024 at 10:36:43AM +0000, Wojciech Siudy (Nokia) wrote:
 > From: Wojciech Siudy <wojciech.siudy@nokia.com>
 >=20
-> For cases when the mux shares reset line with other chips we cannot
-> use it when channel selection or deselection times out, because it
-> could break them without proper init/probe.
+> The pca954x mux might not respond under certain cicumstances, like device=
+ behind
+> it holding SDA after recovery loop or some internal issue in mux itself. =
+Those
+> situations are indicated by ETIMEDOUT returned from I2C transaction attem=
+pting
+> selecting or deselecting the channel. According to device documentation t=
+he
+> reset pulse restores I2C subsystem of the mux and deselects the channel.
 >=20
-> Signed-off-by: Wojciech Siudy <wojciech.siudy@nokia.com>
-> ---
->  .../devicetree/bindings/i2c/i2c-mux-pca954x.yaml          | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Since the mux switches using transistors, the failure of line behind mux =
+that
+> is currently conneted prevents sending commands to mux itself, so externa=
+l reset
+> signal is required.=20
 >=20
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b=
-/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 9aa0585200c9..872be72da965 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -63,6 +63,12 @@ properties:
->        necessary for example, if there are several multiplexers on the bu=
-s and
->        the devices behind them use same I2C addresses.
-> =20
-> +  i2c-mux-timeout-reset:
-> +    type: boolean
-> +    description: Sends reset pulse if channel selection or deselection t=
-imes
-> +      out. Works only if reset GPIO provided. Do not use if other chips =
-share
-> +      the same reset line.
+> The following series of patches implements the reset functionality if it =
+was
+> selected in devicetree, beceuse the reset line might not be dedivated in =
+some
+> applications and such reset pulse would break other chips.
 
-Why is a dedicated property required for this? Why is it not sufficient to
-attempt an exclusive request of the reset line, and always perform a
-reset if selection or deselection times out?
+FYI, something went a bit wrong with this series, and it has not been
+threaded correctly. How did you send it?
 
-Rather than "Works only if reset GPIO provided", enforce this with a
-dependency.
-
-Thanks,
-Conor.
-
-> +
->    idle-state:
->      description: if present, overrides i2c-mux-idle-disconnect
->      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
-> @@ -146,6 +152,8 @@ examples:
->              interrupt-parent =3D <&ipic>;
->              interrupts =3D <17 IRQ_TYPE_LEVEL_LOW>;
->              interrupt-controller;
-> +            i2c-mux-idle-disconnect;
-> +            i2c-mux-timeout-reset;
->              #interrupt-cells =3D <2>;
-> =20
->              i2c@2 {
-> --=20
-> 2.34.1
->=20
->=20
-
---hV1P1AUcJ6L7Fl+r
+--lzmOt9CzUvTyDX9b
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuR4uQAKCRB4tDGHoIJi
-0oYyAP9lG+j6Y/QSd3T0d4rl4XWK9A4Ca7Pa6g66du7UR/sSCAEAl80Kcvh9Z7Bd
-XE6U9iAcWXrZdo65AjVavRX1ELAK1A4=
-=9puo
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuR8JQAKCRB4tDGHoIJi
+0qTxAQDbx1zjAQv/JN4Izv5B70lr4crUplxACCkqRG1gud1MeQEAjE2GTx90mYoZ
+CAGT2YZ9m5GmcooJKoRcKROtgL4tAQE=
+=wwuu
 -----END PGP SIGNATURE-----
 
---hV1P1AUcJ6L7Fl+r--
+--lzmOt9CzUvTyDX9b--
 
