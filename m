@@ -1,153 +1,154 @@
-Return-Path: <linux-i2c+bounces-6672-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6673-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86EAA9779DB
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 09:41:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02985977A3F
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 09:48:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 311851F27061
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 07:41:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EF58B25522
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 07:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2370E1B9847;
-	Fri, 13 Sep 2024 07:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E2531BF331;
+	Fri, 13 Sep 2024 07:44:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYBkklt+"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="jja0CkoH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="t2TimrG1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF371BBBE7;
-	Fri, 13 Sep 2024 07:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24961BE87A;
+	Fri, 13 Sep 2024 07:44:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726213290; cv=none; b=I3Xo8f7ZnSM/QtDuPuRt2/ETJceC5PexKiw7SMj0s+IOijf0EdQPcsGUHTVL9n0g56cTVKaPu62k/QP+0+IZBhXNPZ4J6XxkQSmCrmJvpmizkpZ0dw+iUWiDV2ayIwl94fuXvXzriYfOI2cS0/94l2XNTFlLq6y/0jczbOXvcNw=
+	t=1726213473; cv=none; b=O+gCyfkIieIgkP8EYKlHT4pLZXL3qzHKbDRYqJi8Xq/VhYEWviiM5P9xSyOm3mqhpzqDjplOyF+HRptN0wqrWO16qHvte2Eb/7cBdzLsfh0sb3MpwM8KXp763gUxS/2fXx3+domem7Hp1tUHk1b0JJy3uIc5yJaG2uLILCCOgbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726213290; c=relaxed/simple;
-	bh=zeg2qkt/gbPvOI1XbrcEwUkJJMigRg4I2dr171V1oVU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mHm0N7zPCzMvjwC2o8+YeIsZVy+IWCrrkuQXUx8hffNMrhhd8ijmM+lXz5H1rmcMhJecj3kSvjdhlP9/gZ2lbLmZ0oScqvYZVFPd4KMNV0q9PhawjuKJw3FqEUcVfgVNmsbkq1WFJkQJTVRVXPKefWSU7Z2FRqvxiqX40QV7i7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYBkklt+; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5356aa9a0afso978951e87.2;
-        Fri, 13 Sep 2024 00:41:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726213287; x=1726818087; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8aqKHDGgT/Avl1l2iiu1IVAS8Az57Nt5afFHheXxbWg=;
-        b=XYBkklt++RqmUoNGDWOUP6SVHMaHn0wgm3tKpPAZMMYYBCqU84wju5gSYLYsuUHDOj
-         c2biJWBvDkyDLl8mk4TtSUiuNa2aAvhhCGdBcB0NetyIth31ePwVJyCybo6T3qgtgX7A
-         KnAg68Nixf9BNiiaVgcNHFFYG7AL+v89cB/00LnnhCApcbPCqQtBIf65pzBDCzwJE8HZ
-         3dj370yEcH4ra5Jeq36Nj1fftdfZJs4a/kxBkBQbUvCIhjAVpZ5C0a+nI9IWkDAj1CM0
-         6B9ZCdEFkxsVkJngu2CmraOH1aQQR1hlCv+r8m1dzJxXf7luwz06kWEbUv9YOcKhDdSJ
-         H0FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726213287; x=1726818087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8aqKHDGgT/Avl1l2iiu1IVAS8Az57Nt5afFHheXxbWg=;
-        b=ZgHB3NCo6yr6sxQZyto3HMBHT9/4xoZEpCDJaAObnRQpmY4K+DyzePjz2Wlf49ALp0
-         3X9eguTWdwq76yRfTpw58zOQFl6YMo0nQB+cHAs8oScHxTd5YrwvN4v0rVIFwu6U+peB
-         V5NLWYgRycPeWAUU3qf9cpAVtpuqrJ4Fw/LFaFKNJYFWrLxHWJWw6ZN83LWTfjwuLlJ8
-         GkMpuxGImk+aOhqj04ZYC0ODy+Wyf3b3PJD4CxpUEYkYLWboMleqHUyVWjvg6JqiIQry
-         YXQLl5Eswk/z6NjN6jORd35XhfND88f9rogjJKRQz8GDQv38otgG8tcZ2H6cZ7552GWg
-         qmqg==
-X-Forwarded-Encrypted: i=1; AJvYcCWHDKNz/BRhBp2MMMAuUp2SZ4pzN69yeGvfnXKYUd23qY0wIbHWmiGDjtl0nmlNyJ5P4pNdkh3U93otEBdZ@vger.kernel.org, AJvYcCXg/slqoe0oh5xqy9z/MCkNAY2nOaSUtkv/kxfzGR0FTevUZXSuPYaqafIcUyRkLq6JR+ik0t2V0Us=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygqMg8EaR0vIcNR3ia+21I5ZYZJl92liCJkKW2ykDbgheTwvtv
-	+8Hmk9U2G/DLSFsqe3qZrfBAIb7QDcXXj15nK3kg7dfj7S5BOIUC+jaOrPYUrrxPSstnOFL2GJx
-	MAGX9t1xwgOug/P1RGR2KnApwurfxreQ0SYM=
-X-Google-Smtp-Source: AGHT+IESt59jRpVTS7hGAYllFP7xe2ESqy6lFpk8iaKA1m8Mhdj1PjseowShMAkgsqkdtMWbybjcUcWnENFtXBYfups=
-X-Received: by 2002:a05:6512:1581:b0:533:4497:9f29 with SMTP id
- 2adb3069b0e04-5367fee953cmr1429735e87.31.1726213286955; Fri, 13 Sep 2024
- 00:41:26 -0700 (PDT)
+	s=arc-20240116; t=1726213473; c=relaxed/simple;
+	bh=nBX5Ld1z1bmIkJx+NXFUOrdrC8aPexOJWUJML02Vlro=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=aOJUDC/xeE7T9jGg5/tRTZgtCcXGtYoSNCulNq3icFlRjaeclcBPhUngTe5gxrF+OjrxEs94a5tCeYHesvbUahr5reQeev+dD8i0kQU09kd4Yv1Q6HNw1yH6LPMRV9bEd0rRDjAjK+LNPBye0KQRD04cl+e0m+544hr7E2nW+DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=jja0CkoH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=t2TimrG1; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfout.phl.internal (Postfix) with ESMTP id C62DA1380255;
+	Fri, 13 Sep 2024 03:44:29 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Fri, 13 Sep 2024 03:44:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1726213469;
+	 x=1726299869; bh=ASky3zL5oAIAgoydVci+Abhny5EjFe7NPYg23iemIz8=; b=
+	jja0CkoHIwYg/WFYPr8JqvpOrpbMBjNKkG03+ZaTTeK+V6Zw2G05ORgewsdzdXza
+	a62zQwPMCkkwYWNs3mxivs58DILf3138AWDsWyGni/RJ6zTn41+PU5A4ZjrdHOJA
+	tIYhqAjxSHkuZouOplEBvfTMohyqcl0i0qFcg5ANry/9Ju7b6ckSU4T0DhnLHd7M
+	amtnT8LVTW4qB1w29ahTpapkcFn1yFwpntLVPicCOSs3nL/wNmEeBQoDQqX0sIEu
+	GYmNszbF3H3CzHCW5gbyl6U6qCQQP7T32x6ISZ0jCu2WmqejaFOxt45D5mCtECxC
+	uqDQOshrZ5IXYOG8debgMw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726213469; x=
+	1726299869; bh=ASky3zL5oAIAgoydVci+Abhny5EjFe7NPYg23iemIz8=; b=t
+	2TimrG1l6Jbf6mjZaxLtdIvy+FAnkwAWYJPYA7IduEzGgIKclFSBh2o0riXXWEQo
+	Qpyj9Ko04bHno2ERBTZn9NMCV0F0xM4atYWWf4L0ZODJzamI9EA9ZkAIC+jwXJw3
+	WuyBHjZrYL4n0L91yiUPQ3L+zdz7CbXayns5CdcRuiHTn702eWUe15KYvZ+OARNR
+	t3flrzzbv1/LbWXjNZYjMtmAKnQWU92aWVcLuxxsQYNY/DIbQhyMFWeFJuws/GCy
+	VZqatv1ov697TKmUv0tJBsRxhj0ByuHcmW0x3bSvLoy/8uPx5Y9pJk3/HB8n362E
+	2U9VVtgbuJhD2ae30DgZw==
+X-ME-Sender: <xms:Xe3jZm2-G4Eem-Sjx6NQrDVGy9hu9K_mMLpAblSydd1HhvYi6DadGA>
+    <xme:Xe3jZpEeWEC5BW7Do3jTk4eCqT0yYMY6YwSbffNgRA7ftXlTmeFFOuCeBBdajm2iV
+    BOJJb8pcYO-PO8Iy98>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejiedggeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdek
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehuthhsrghvrdgrghgrrhifrghlse
+    grnhgrlhhoghdrtghomhdprhgtphhtthhopegrughsphdqlhhinhhugiesrghnrghlohhg
+    rdgtohhmpdhrtghpthhtoheprghrthhurhhsrdgrrhhtrghmohhnohhvshesrghnrghloh
+    hgrdgtohhmpdhrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtgho
+    mhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhmpdhrtg
+    hpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtthhopegrnhguihdrshhhhiht
+    iheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehjihhrihhslhgrsgihsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:Xe3jZu6hB3Tc2ik6R4PD3w7pPZv7KtTe6D6QZHGYlY86boQ_Daz5zw>
+    <xmx:Xe3jZn0yBzN0vM5i20JnHlqeE1cET1S76lTGOkDwn0wVerFT4E0K2g>
+    <xmx:Xe3jZpGR7F4yN6pb_j9FskEIkM1F_sEpznEpBmD7cWeYHMeRjDI_QA>
+    <xmx:Xe3jZg_dFGZa6gWqm8TidYslENoXR1BmbkSMax2J1_DMyuM2OnKRSA>
+    <xmx:Xe3jZlW9bWHUqzZRZWmH1PcsQVGZojKRcePhKcvM5oELpG0h1V8ivvzR>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 24D01222006F; Fri, 13 Sep 2024 03:44:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4ebc4e8882a52620cbca30f1bf25650cbc3723fb.1726197817.git.kimriver.liu@siengine.com>
-In-Reply-To: <4ebc4e8882a52620cbca30f1bf25650cbc3723fb.1726197817.git.kimriver.liu@siengine.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 13 Sep 2024 10:40:50 +0300
-Message-ID: <CAHp75Vdbr5sJejwfkxYrgkdNMMZV+D5w1mipTxz=R+EkEUrA0w@mail.gmail.com>
-Subject: Re: [PATCH v11] i2c: designware: fix controller is holding SCL low
- while ENABLE bit is disabled
-To: Kimriver Liu <kimriver.liu@siengine.com>
-Cc: jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com, 
-	mika.westerberg@linux.intel.com, jsd@semihalf.com, andi.shyti@kernel.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date: Fri, 13 Sep 2024 07:44:08 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: arturs.artamonovs@analog.com, "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>, "Greg Malysa" <greg.malysa@timesys.com>,
+ "Philipp Zabel" <p.zabel@pengutronix.de>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Utsav Agarwal" <Utsav.Agarwal@analog.com>,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Andi Shyti" <andi.shyti@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Jiri Slaby" <jirislaby@kernel.org>, "Olof Johansson" <olof@lixom.net>,
+ soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+ adsp-linux@analog.com,
+ "Nathan Barrett-Morrison" <nathan.morrison@timesys.com>
+Message-Id: <117b76ac-97b2-4201-86b2-b48b063bac35@app.fastmail.com>
+In-Reply-To: <20240912-test-v1-20-458fa57c8ccf@analog.com>
+References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
+ <20240912-test-v1-20-458fa57c8ccf@analog.com>
+Subject: Re: [PATCH 20/21] arm64: defconfig: sc598 add minimal changes
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 13, 2024 at 6:35=E2=80=AFAM Kimriver Liu <kimriver.liu@siengine=
-.com> wrote:
+On Thu, Sep 12, 2024, at 18:25, Arturs Artamonovs via B4 Relay wrote:
+> From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 >
-> It was observed that issuing the ABORT bit (IC_ENABLE[1]) will not
-> work when IC_ENABLE is already disabled.
+> Add ADSP-SC598 defconfig
 >
-> Check if the ENABLE bit (IC_ENABLE[0]) is disabled when the controller
-> is holding SCL low. If the ENABLE bit is disabled, the software needs
-> to enable it before trying to issue the ABORT bit. otherwise,
-> the controller ignores any write to ABORT bit.
->
-> These kernel logs show up whenever an I2C transaction is
-> attempted after this failure.
-> i2c_designware e95e0000.i2c: timeout waiting for bus ready
-> i2c_designware e95e0000.i2c: timeout in disabling adapter
->
-> The patch fixes the issue where the controller cannot be disabled
-> while SCL is held low if the ENABLE bit is already disabled.
+> @@ -513,6 +515,7 @@ CONFIG_TCG_TIS_I2C_CR50=m
+>  CONFIG_TCG_TIS_I2C_INFINEON=y
+>  CONFIG_I2C_CHARDEV=y
+>  CONFIG_I2C_MUX=y
+> +CONFIG_I2C_ADI_TWI=y
+>  CONFIG_I2C_MUX_PCA954x=y
+>  CONFIG_I2C_BCM2835=m
+>  CONFIG_I2C_CADENCE=m
+> @@ -539,6 +542,7 @@ CONFIG_I2C_UNIPHIER_F=y
+>  CONFIG_I2C_RCAR=y
+>  CONFIG_I2C_CROS_EC_TUNNEL=y
+>  CONFIG_SPI=y
+> +CONFIG_SPI_ADI=y
+>  CONFIG_SPI_ARMADA_3700=y
+>  CONFIG_SPI_BCM2835=m
+>  CONFIG_SPI_BCM2835AUX=m
 
-...
+These are usually not required for booting and should be
+made loadable modules if possible.
 
-> +                       /*Set ENABLE bit before setting ABORT*/
-
-Missing spaces
-
-...
-
-> +/*
-> + * This function waits controller idling before disabling I2C
-
-waits for controller
-
-> + * When the controller is not in the IDLE state,
-> + * MST_ACTIVITY bit (IC_STATUS[5]) is set.
-> + * Values:
-> + * 0x1 (ACTIVE): Controller not idle
-> + * 0x0 (IDLE): Controller is idle
-> + * The function is called after returning the end of the current transfe=
-r
-> + * Returns:
-
-> + * False when controller is in IDLE state.
-> + * True when controller is in ACTIVE state.
-
-Yeah, I know that this is a copy of what I suggested, but if we going
-to amend, these should be with definite article
-
- * False when the controller is in the IDLE state.
- * True when the controller is in the ACTIVE state.
-
-> + */
-
-...
-
-> +       return regmap_read_poll_timeout(dev->map, DW_IC_STATUS, status,
-> +                                      !(status & DW_IC_STATUS_MASTER_ACT=
-IVITY),
-> +                                      1100, 20000) !=3D 0;
-
-You broke the indentation again.
-
---=20
-With Best Regards,
-Andy Shevchenko
+      Arnd
 
