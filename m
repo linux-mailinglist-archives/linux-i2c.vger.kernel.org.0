@@ -1,71 +1,70 @@
-Return-Path: <linux-i2c+bounces-6665-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6666-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAA2C9778F7
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 08:50:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AFB99778FB
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 08:51:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78DBA1F26188
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 06:50:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2168F2884AA
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 06:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F8781891D4;
-	Fri, 13 Sep 2024 06:50:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CAF41B9822;
+	Fri, 13 Sep 2024 06:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="G8egewWL"
+	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="Rczl38sz"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2055.outbound.protection.outlook.com [40.107.20.55])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2064.outbound.protection.outlook.com [40.107.22.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7F9143C40;
-	Fri, 13 Sep 2024 06:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD7D143C40;
+	Fri, 13 Sep 2024 06:51:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.64
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726210213; cv=fail; b=ZI/sAYQssvyzDDmmWHTAuAJaT8w5CClkf6D2ruRFTDWptxIlzFy2IALK/wIyIwpquTAejZGlrE5/SjW1k1HKHHXpLFE/QmQc84sBt872kkjKPW1Lye0IlR3ik9Gpo9pywsvCncRMprIl69HNzYls4bf1tZY2qc5EwAEbTYHoEsk=
+	t=1726210281; cv=fail; b=q9aaQDq2aaPUB8dS/4qVbLOvbX06K8W4Zqt9mq7NPQdbPDfRoM1McIAKXCZKB7/7GAo91mfkqkTb8d0sCCmnGfxmlVImGdRW3p5krQO6yRp7GvuNWl2V6l9WckwokMonQ8HCx4McnKXCw0cxHCX9oIJa0qFiqiDQfUM5JnMk9O0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726210213; c=relaxed/simple;
-	bh=ERBr0vLc1hK/tbiacYuQzwV1sOtdrDN+rSQ3A0oMbDg=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=d9BBkQ81Co5SknePd8XZpqp751y9OOGdn1ExH2tJnYzbB6+eT5mJCVg8w535lghn30CqTD7b7m9IhFDBt0iC9isQ2NRuSFg77DZVH4OUBiT3NW7J99PCnbv1Kx1YLoCvn/UCvaiHL2k1wfLbXbyw6PNxy/rqGUG7Wg6CNqz/TzY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=G8egewWL; arc=fail smtp.client-ip=40.107.20.55
+	s=arc-20240116; t=1726210281; c=relaxed/simple;
+	bh=XijObxYKpViX/FYJIkOJQgsO6XAgOLcvV6WB+2B2j7Y=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=rFo2YFptrpnmiGp+eg58jWVu7DpDjbOZUBiA3Dw+TJFGI5qisMWjcbKcn4hzRMgP5LZS5MS4XMFFfd1QqLVzqL9E0luYokSt4cyWV1CoVLGyFaN68UHrSW77bpjmsJJHa4c1GmHEdD1QddTnBHKqyrMzU+KYAEnbBdrg5dwjan8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=Rczl38sz; arc=fail smtp.client-ip=40.107.22.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uLSZP9zV7QOAtEa/o+/a0ilDvDjNxU23yK8Zg3PXZhb9zMDKcWqfpoG6PMJpguCrHLp99r5RoEq1laGAgKR/XO2SypkQZMpQvMm1c6Ci2892tet1usVoCron08F2NdObkSlm+M84JB+88GyHwfItnhB1O7E57HRM+Lkn/6zBGItYCFDhp9aZCKo925QDLqBo93cD83kugHQzZMvVLO88L3zVg8Ot/sDtbO6i3AknWLm4Zdwor2xeoNOdoSrybcOsrMCHs0Z+CSDCd2HRgXZYJq1vlR1Ryb87EvWEVlRTr0a2jlJg3hbI/mxHywWSQJGsOYGSUaCriZOni1RJ+yAwCw==
+ b=IFfQmkj5KFRshuogHxwMTHnhGh/wo7Rhwd6JlgIv4COlF54LZOqo9TgAXbdxq3ovVGFv3pHsomZSYW9ZcU/7o/UsX/5KZrUKp68oFYRXZUIkXqtvIAWHN+o5BLS0xELl0OGzg//bmw7edcLo96Qz0QR42dpfSIjZVLJEmBtLCQADuuDxdhwmkOLsCGp78Dl4nfU/wwwxwHzP8dDQ9F7uBgGNQ53fjflmxhBx1R2oaxWPOyqQY6BjO+ibHfQqpBl7SkyRC+OO7VqDwTHkvvs2sgrnS7jNh047UHvOdGQlOWrAoZj10QoHKr/d3yF5+pRTbkOVwhsLHHKZokRgr93Ccg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=js5aXiJxNBYAn7z9NDXDWNmK5mP5evUn/qxY4Fvegaw=;
- b=cbyy/uJ0IflJ1UPd3f/joAGoYeb1OGtqxMyp4bIcPt+Jh6ZRaV/R2lTofFZQ3pQ/lNhvuRnwQxJqF0Rvxbzy+wsvVv7tqQagQdtQGUQXbWJV0ZhwaZlKLOTVq3KTR6OYHFxZbOU8v2BPDWg8Wkwk+bbIaq9ftvQj2ICnWJrEjrDMVaLlBH2brU64tdx2VOu0eYmGe3O52NRhQ4Lk9r3CD/Efij+J6Qb47X6XuvdEQIPK/5LNt5svviaJfUsGQcQ5yJRExIx6rC20Vek6qiFgN6f6gB5HNb/48JlXFkM3/WG3fmumE3v2DYqZ4uzIn1/SNilOsIvqAep8Q/uccGReJw==
+ bh=4muBqgwpc+a4z5zH5aZ38iY0RdBI2H3bvcBnTChOaIk=;
+ b=A+U2B09Rch/LH1jbGJrSSppqOWyPsN6oQQ7SWpoR8kLwBU4NvmKNPZpTHDLO3Xqbd6bVvs8Gvj/XXJH/ty7e1Z7ccr3jm0n1/vW+LAgPIAf6sP68FlQMapd5eh/71wOecME1S332aiqZR34x5QAKFs1ykuKKiUKD7pwX6WA06iyKDSwlmrUF/3eRQf0A/DfSHWx8zXFLpWUperKpxLtUWG7iPER9L9qV++oYv9gX941VYFvq6kyFeEoowKOjBhMZlMx2R9VnX//DLyjmYZm8ZFhDZkp24zWsS8PZv2VWu/D4iPOMVaTdeszRF0xoW9g/ruYCk281NCylY4cECQscjw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
  dkim=pass header.d=nokia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=js5aXiJxNBYAn7z9NDXDWNmK5mP5evUn/qxY4Fvegaw=;
- b=G8egewWLT3Nb0X3HdwM+0scyz9Sjo0o2xZf3+0LIvE+wdx3FZaGFxp66T1OGjP4BUi2NoFCdkdyaC/uiq+K6L3ICqJ3QI2caz3Sn0FksIf902NJ0VDh7hyfyCbgIhnk8UVLyrh2oUNEh9ZjgqB/QdjJJNVeTyEtEk9r3PuJTU2cJG3FEjOa0ZLUT/YJfj/fyS458qqI1UcJkMTaoQZGrsxjMiYAxCFysT8GlKWZVLI2CUIB/RRGOdAP9elfjAM+5Kt7iEWDMPNE+xan3PwGALqp8WxTW5M7cEu+cZ2PMqms8OyzukKvcd8OWBvzG6GToezq2k4Vpe2pnk3TmS3ak/g==
+ bh=4muBqgwpc+a4z5zH5aZ38iY0RdBI2H3bvcBnTChOaIk=;
+ b=Rczl38szBE4sOeEadEsxNoqsI4ppxSF8NLOG0N2jiKesqecUSE6rUfqXVfnUHsctG2UE/2PF/uTQftzzbtBfWy3Zu6cwR41deAdr7TVJ+Lg9HscoTNLw8bmDaQsSGcAX4sLerSYqz++vabJJHlu+Dbp4SYC09j5YIIfyQx0npEZ3oje4NYEwbuwF1IBzZy/dG2DlQgZw+tefsjn+MInwtiLM3K05fIp01nIwwZaICd3C+lsehk0UelkQhi10EaqeC8U4hAdB+9yMstMDva5yNcfoEybuY6ZTh8nk6+4D7pm/g9LEHr6U+Amm8vzXCYDNUFc354x9LbqnFszNDm6vVg==
 Received: from DB6PR07MB3509.eurprd07.prod.outlook.com (2603:10a6:6:21::16) by
  PA4PR07MB8389.eurprd07.prod.outlook.com (2603:10a6:102:2a0::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.19; Fri, 13 Sep
- 2024 06:50:08 +0000
+ 2024 06:51:17 +0000
 Received: from DB6PR07MB3509.eurprd07.prod.outlook.com
  ([fe80::5484:a966:1322:f78b]) by DB6PR07MB3509.eurprd07.prod.outlook.com
  ([fe80::5484:a966:1322:f78b%6]) with mapi id 15.20.7962.017; Fri, 13 Sep 2024
- 06:50:08 +0000
+ 06:51:16 +0000
 From: "Wojciech Siudy (Nokia)" <wojciech.siudy@nokia.com>
 To: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
 	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 CC: Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
 	"laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH v3 1/2] dt-bindings: i2c: pca954x: Add timeout reset property
-Thread-Topic: [PATCH v3 1/2] dt-bindings: i2c: pca954x: Add timeout reset
- property
-Thread-Index: AQHbBajz1wdACRqEV06/8jXM7GSbPQ==
-Date: Fri, 13 Sep 2024 06:50:08 +0000
+Subject: [PATCH v3 2/2] pca954x: Reset if channel select fails
+Thread-Topic: [PATCH v3 2/2] pca954x: Reset if channel select fails
+Thread-Index: AQHbBakvQJCOfWHDv0+K266wlnTGWw==
+Date: Fri, 13 Sep 2024 06:51:16 +0000
 Message-ID:
- <DB6PR07MB35098D673A8DD04E56D9305D9D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
+ <DB6PR07MB35097CC094E6995B2F66A17A9D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
 Accept-Language: pl-PL, en-US
 Content-Language: pl-PL
 X-MS-Has-Attach:
@@ -75,67 +74,67 @@ authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nokia.com;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: DB6PR07MB3509:EE_|PA4PR07MB8389:EE_
-x-ms-office365-filtering-correlation-id: 8035b477-1242-4153-ac05-08dcd3c04ea0
+x-ms-office365-filtering-correlation-id: d906e9f5-e771-4830-a434-08dcd3c0775a
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
 x-microsoft-antispam-message-info:
- =?iso-8859-2?Q?lPU9q7kkDEk6/dJbRmcwpzhZYRQSW7jkRf30o7NsAkCsEKYYLjyydGZems?=
- =?iso-8859-2?Q?dMPaGkhZH6zCarFpR6TGA9WFnavREHxefVPGTHzi8Pn1eQ1yIJ4Sjqr2JI?=
- =?iso-8859-2?Q?5CS3lyKNBHLnFUkcfJ8suEd1a68/NanYjnZAfzD4k/10hx0mz14kXHJFCt?=
- =?iso-8859-2?Q?fCq91IMtBf20ZrTnTuz6mml7NW6YETBdf9YaD8u4+JhRB/TRNWF1/iDift?=
- =?iso-8859-2?Q?PZZIeObz96fw/SsorRWaGuwCwPyfkN6swD0riYi5msmsUXdvNcZVnA8dEr?=
- =?iso-8859-2?Q?bbJ6TpfO3qvoN4hj2zOcI5gU0D7QXUEYNHRYmP6WnY8JtmsgHQkUkg6P83?=
- =?iso-8859-2?Q?NLJqdVWiTw/X7GZ301bR4QqtQ2VRItOW/q3dLls8/KJulnXdKXDOQKIIka?=
- =?iso-8859-2?Q?Z93qy2FSwCdsnvsixrMRZQKHtIkBscyi/vIDGPFJ6Mwo6pQP1O0KcSeUsF?=
- =?iso-8859-2?Q?a73nSSmYIQosQmByKXFoEh1qwX5ObKlnQskyeoKi4YzMbRKrgpGrzZ35D/?=
- =?iso-8859-2?Q?w/itDHy0XpGaQpFPkREnq928Daft2D0VOegkrEjFNm9lz00XYkBHvO3Olt?=
- =?iso-8859-2?Q?2U6TPN1D/UrVZBe3qbiQ+SoVh6Jz3jFTzfbPlVxU9fezJmeuh1w/M6ueJk?=
- =?iso-8859-2?Q?4g3QKIgzIKKNJ79xV0yOG6uUmDa/cfWOUw5WUnv2kpgSMDQq9R/SXzuRpx?=
- =?iso-8859-2?Q?MmAffEfCPAdwyG51nwOHa5SvG30sU8vFF40K5bqYJRv53OKYsISfGrrg21?=
- =?iso-8859-2?Q?0iWgKC4JjPgELmzjNTEXQqg2V5g2vZVlKuaZj54EoarjYh3XxMIv2ObUXy?=
- =?iso-8859-2?Q?+R52LLUgK0mMhqN948QLyQ+xAPlccZhRbDc6dNto8Tm6rxSAC1eLFsyFnz?=
- =?iso-8859-2?Q?NH2J5vAOrPXwEQWvS3p4W2Mcr7KPEVcz48btav1EEdfVFiBMIgS/fpNoyw?=
- =?iso-8859-2?Q?OQ9xHtS3HprY0TPwtPj7eVyUEKjGNX38oE4jQ9cS4m1rr5cIBIxMsvjz8x?=
- =?iso-8859-2?Q?bHTzuTBkk/BSt6fzT3bcrCqUnVl8ji/NHA0wR45/8CAtpWMBuWXFz/Gu6U?=
- =?iso-8859-2?Q?QPZxN2rbK9D3s9Xk7bpBR32Jx8K4Y3apE8sF/yzbg/Fvc2sqCMgak5q7ch?=
- =?iso-8859-2?Q?TVj/BQ7M6PXEWD+n+JqWt9I3mks2knxquBWeGEbzT1nW2M0BDyvfaX4rdU?=
- =?iso-8859-2?Q?tLuQg+Gmf4b9+NFDN3m/J3HnfxZWTZPfQevctkHeYEsuFaTZn73iq22GR1?=
- =?iso-8859-2?Q?MfnKJ2vVMFmWZHmb9RazWHk9uQZcbkADQZY0gMVfCqoeIfYMrq6EPVZTEU?=
- =?iso-8859-2?Q?CC1gV/o2iYr1+H0cGecN6axYRzL5l33AC/5hG5Kv4CAn//PaKyJKsjX0hn?=
- =?iso-8859-2?Q?IdDPiXXv7GE8yioZuIU9phmaFpfGOLew=3D=3D?=
+ =?iso-8859-2?Q?ba8Gj28x0Xsv8f1QVV4CIYXi1xgz29xvUw5BE/la+6+x2aRHpTDsI6ET9C?=
+ =?iso-8859-2?Q?ScYlSD0FyOz7jEUISB1N2CzHUp+ZUdnPODydGFFr1y2pxK28O3n+QaORN2?=
+ =?iso-8859-2?Q?aLX5I5RA0pQHWwA4wnyHztFoyC4geMlItlSFS86Vo7VHHtkpBpxVUqPjvO?=
+ =?iso-8859-2?Q?QigZmprzGqePn49UVymB7bMQwwBCABCkEfD9GEJoFOIN8le40M6e0ANvow?=
+ =?iso-8859-2?Q?y7br01HUP2GuU+RN/vzSSPnRreOE44zwVjHnlBwsbqOqj59NbmGRWEmah8?=
+ =?iso-8859-2?Q?7+5lcVtrLjqxWkGvLPtaW4tC/jlh8bhLLuIkruLDn0YOY6rL5QjAUroiCW?=
+ =?iso-8859-2?Q?pHZlH8bABppPoxKCMkqcxLuAUCOYXSDYi3gqgZap0aFgoSYtC8+Q2AbUTA?=
+ =?iso-8859-2?Q?SEY1OQRVbOmwaIywdRYOP6S1Cpo7drcXiOm7I6vvpSl+1/a1xI3KnXcNo8?=
+ =?iso-8859-2?Q?keO+G8F+fetjA36woaFEHYlkZE8X2pdMsuFp+IeWGLtvn8b3LNmKFWTk4g?=
+ =?iso-8859-2?Q?s96iWvsJDvZqH54KIcr9tA7BAIuoqA/WsnlYHbuWHqAkdpYYYAkLLCsVYi?=
+ =?iso-8859-2?Q?9Zixoa0/ocnmqDAUChz0/0q4JzXy2XiEEM2PGTBaGTyJuNJSq/Cgkxxy9t?=
+ =?iso-8859-2?Q?ojVtvE4Ebw/g/UnsgZsPx4GhqykYPkUti2/GzElKGzgChzNSrXc1ltPoon?=
+ =?iso-8859-2?Q?7qD2OJZLsm2/2DPxuN3io3+w8xEBAKq7RvTmwk4VFad+hXn/E/zDXh3U3e?=
+ =?iso-8859-2?Q?A8gcKYQDD8InJZX8BabZOVqo7KxBlmKYAxigqV+UfwLYOHwzX8PpaM64qh?=
+ =?iso-8859-2?Q?O3B2rYVoWMclnKoUMvgHn0I1R8XeQGitwKiJFIuH/0+ImbTFA2iPOp+yPL?=
+ =?iso-8859-2?Q?R8w9bpQApJd55HnDuSoFdQYCGIZ+ePEfJZoIG7pZ7XI8A6RKqvwkrT5ePH?=
+ =?iso-8859-2?Q?kO0aaAQqtNKVSD4m19SnzEXfVX45JTG6yJwXVsZYE3Rige0EYz62Sirhdu?=
+ =?iso-8859-2?Q?vEyXZhtdctcTT78YLmWor6x5tXYFDJqQcMOJPTCt1M/68z8QCaLysS3N3G?=
+ =?iso-8859-2?Q?huu1CHHZXlm6/BGdBILYC+XApSq8k5Px79uuxNWC26L2OkBKVoo/MxR2Qb?=
+ =?iso-8859-2?Q?WorvjDTNxbf7nM0977wMJcpBI4CKJezhs+vEK9Vpm5V3QR9C62RtrqJu48?=
+ =?iso-8859-2?Q?7LCXPI0E2LfArDTBrsCs9f7jmPXLe0SaKxIOesPdznkAwaEE2rPo9XfGTs?=
+ =?iso-8859-2?Q?XNzfSx2ham9Ip0VNhKmTNG761WczPj4E6vsX/GKSIwt70/34wuq4/h15k8?=
+ =?iso-8859-2?Q?UHuPyjCJK28wUq0KMqLd8dAl9caUj1KlC7vYRAoyS7ot+cux4raLN1q6ed?=
+ =?iso-8859-2?Q?CmFUNLIEYZFBcpIbzr9qbloAUAxZN+jA=3D=3D?=
 x-forefront-antispam-report:
  CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR07MB3509.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-2?Q?PBY9n0lE1UksRFEosmg+lHmMxSct+Ekb3w4m4yO4dRct3rQPJ+0A2AJE0P?=
- =?iso-8859-2?Q?+f0uMofDachi//2uJkoyysQrYVyQzJ8FFYkqJyoMnakn1AfR8xTrKs0kh8?=
- =?iso-8859-2?Q?exrw3PA+9F16w4n5APbJ6KBNnK8/Oe86JKGb2sjlJ7ns1HktjTHwOryHWp?=
- =?iso-8859-2?Q?5fFMaQhUek8gRIsXszcqizg6QOd4x76rSQC+PbE8mKUitDfUol6X8LDOEL?=
- =?iso-8859-2?Q?OlQGGdfgQtKfJA+Z5SOWJIBkq3wWUpUuucJZ1SraRHfPOqRCybMshGQpv3?=
- =?iso-8859-2?Q?1kC1/OjUT5p8wlZULWH7oSWMXL13VGnXm/cWhBwrv+sMxlCZTixAW1Anit?=
- =?iso-8859-2?Q?HktmFPLcdnAJPzV45zbcaaXQSWCweQuCZpoV5ACJUJgBWOqIdejRagNcfH?=
- =?iso-8859-2?Q?lhJIv5ZFYmINFVtJkAuNJDArNs0t8epTRRgMxnbtWV+KInyBNXPvKn23qb?=
- =?iso-8859-2?Q?agPUBuug+zn24ICdVGs5wb+z1XQGsRJfsUKCdwNfIRQDvZzEgHQS32y5rv?=
- =?iso-8859-2?Q?8jFxSpxGHYhcwMRkIA7cItFuIit/ZeImsTKBO7coRW8BqLLp3q8+w5zi1g?=
- =?iso-8859-2?Q?5/KD5s1HvgmqJPezi9riShYORMoeEJWZgoSGFHOc1vfIOE5GJBQBoPsxYH?=
- =?iso-8859-2?Q?76CQh4ct3/DBkWGZQvjhl/QMCnW7bW1tlvb+0mrcx3NVZ5vBP3JmCdR/C3?=
- =?iso-8859-2?Q?pmyCGmMWJy0fROK75mprw2NMGjTtiyNMzJ2pBi9QvIBFhKVy/xyHA4zGXA?=
- =?iso-8859-2?Q?mqUQdn0XzHomIThBwk3I++l9XPt3C/DCGbxmQBPwykhOg7FKN5uNLHV/Us?=
- =?iso-8859-2?Q?D2pZ2CBIaqghoJj+PoO1cR1Uh9NwKCxlP8npx1CpdVWk1cSaEn1cpxLcbN?=
- =?iso-8859-2?Q?ZQlrJBe10rMUUc80ADel54BrHBYOpfkOPqJTkKYK+2sLdmAeuU1Pt5MSUU?=
- =?iso-8859-2?Q?EU3SDgt9Kw3oyMZosDUC+vdCu+af2/BqMk9FhaXAzrf8uZO19p2+XcQH9V?=
- =?iso-8859-2?Q?ByBijdBYH8L6rxeS7q1gaVJ1Jw76loY+nURF6ellcRu//Tsi9tR8z30zSn?=
- =?iso-8859-2?Q?m0xV7fg0gq4hia4VrUTQnQjTlZUhcQNc9VIVWXyMP1/rGHy79m0vACW5SE?=
- =?iso-8859-2?Q?h5XJoB3YF7u8CZPhfClsHbw95wgqbAqNxiZQzBK22BadVb80nW3tqa3Spz?=
- =?iso-8859-2?Q?pL+kVPyVAfPqJg1gzQeyQkspjMxME12rjSTnS1/0a+v/0y63jsppmPqKQM?=
- =?iso-8859-2?Q?tZ9ihI3huhKOfQ0TUbG0j5QFKzhI8b+61AYTRWvpqkzRqdA3xZXmZv6kuO?=
- =?iso-8859-2?Q?cG3sEdOz66jNLCJjQFKGrSA/IDGDqjkpnlJuVLXqm3FphSNP9LIund+lwt?=
- =?iso-8859-2?Q?hLSldwhhbj4/hXhf4Pj6lu/A6AJHaHseUWoTFUcu5lSn3kENf4+P6iYfWr?=
- =?iso-8859-2?Q?j79HigmCwM64viYjSE9a4PdEzwxqzTMfe8dS8nZ2Z0gJxSPkP6kCUf2K/q?=
- =?iso-8859-2?Q?JKAp0xF7/RFYMy5LxqfZvjRpeVjXSAKY7HifhaP2tta2YeS78PxvqozQeP?=
- =?iso-8859-2?Q?r4VmO1m/SueCaoQn0RypRrB6FDiU2p0pY+2qL2eVAvvrn1WQj4UoGZ4hYc?=
- =?iso-8859-2?Q?UN7s+G4x5GuNzzEUtoloVIICjmxNIgvoBU?=
+ =?iso-8859-2?Q?tPCv5iEqtPOGtVHIl12E1usZKa4nFjX7fMxwvAFUG757k/91TLfEu/xFmz?=
+ =?iso-8859-2?Q?GkiitfFeRb6MMIgwqVh/V4V5+nt+wr1SifMGqKBfqmd4//1QZK7DrOE1aN?=
+ =?iso-8859-2?Q?+hpBMvISBigJQ9ir1wSl4OHvg9Yr8WJw+dG64zghDK/QOuE+q+xeV9WxYc?=
+ =?iso-8859-2?Q?lDCmrwxoItoiqyoCjPSQfbM6qVMWrCoOg7+fj5D2vTvEbbtbviT4ijiYk5?=
+ =?iso-8859-2?Q?wYLRYq1Gvm7ul9bDKZx8LH5HlGFlzyKr1BjCXsfi4Q68BSnit/aJ/0KZX8?=
+ =?iso-8859-2?Q?TMCItAunzWEOovgByk2pyEahUJmPm3/kyKzRNsL8pfSuCraVL24mQIK40o?=
+ =?iso-8859-2?Q?HrFjxv53yr/SKX7RE0y0OJpV9Mhbmw5vf/HBJgHh//N9eHQsi96fBheQKR?=
+ =?iso-8859-2?Q?vujI6tMTdsDgmi5lFxBJCK+9YE4Ne4pc17evUw+uNjst+pqtiJNZ8/D9Pf?=
+ =?iso-8859-2?Q?PAYzz1iAGO5vNFtQMz+Ajx6eFVNJqZLakBVB5/WO4xN1aqxU/7tSXem3M5?=
+ =?iso-8859-2?Q?6hOjTBVoa2LEo9TYPXtUWy6bDLRvM+QB77BAmMddAmO2lVF4eSQs2sdZUU?=
+ =?iso-8859-2?Q?G8LWEBwNIzqeMKDahHgblqqiiBjjLtfJoSwQM8cxbg1v8x8XICH2i8pLQ6?=
+ =?iso-8859-2?Q?hQSfdIFdFL34stVnb62/du+Cg5LdN5aELVxMAYXY9stBKwIbxGFUwD9zvi?=
+ =?iso-8859-2?Q?THqh4J+41Lya16AQPeVFi9jcMVBxPm3EYxaxxBp7CY1wPGv0TeUdIr1v4X?=
+ =?iso-8859-2?Q?bBVrlH/SwY7nJXomZF+G3Lq15lHJi3wTI6XJZTgWf4hp/aQdcZiLUDTTds?=
+ =?iso-8859-2?Q?I8lnK1qRYKl6N6unnJSOHtCSwP1yT7ul5MNm/ZZiO75UdKtLo7Kn+sbXCP?=
+ =?iso-8859-2?Q?adpuJGtsn0h6UU/uLk43yRmlOTiNZyiV2ebeGO9aP+ybkJLGXOxn5AQKw3?=
+ =?iso-8859-2?Q?UniuSNyf8TR8EKgW8dG3Pmy0VBswVsTjt2jq4iDyqdFtSIG02d08GaM/A9?=
+ =?iso-8859-2?Q?hDgokmejsrLCUWXu18lZ66YkOJ6j2FjQqbCRBp4ZTSIfa++T2evP4cmRsV?=
+ =?iso-8859-2?Q?tMjHsdhTqu3eV9Zy2eNkqkNDFsyiTVRL+QhkTk2K/qtojn8iDr6bwxyKsz?=
+ =?iso-8859-2?Q?bKhR4wzSlowjzc9Im5LSZm1vAhHv4yOieIdAeFyPPsig9CnbHzyDCPi9ja?=
+ =?iso-8859-2?Q?F9tBJrBe/MALKTYtRKFUIWj9/5TUau0gn16ZEEBK0ziP7DBWJe4pIAvEgt?=
+ =?iso-8859-2?Q?xf5+sYVR8+ExLvSTHmROL1HTaXDSUpvZoA7260+2KRf67zibL2AnDDyKPz?=
+ =?iso-8859-2?Q?YDIjdz15dh86weIrOJQ3uBo1pD2Q4ZwvNFah6vkYY1WhVOK43K6yDPH7ZR?=
+ =?iso-8859-2?Q?i6PZz3qrr43wovhF00ehd4PuQFxWaO0Yi8Oe5q7XY/teopjkD3SmylN3zg?=
+ =?iso-8859-2?Q?FJiS67SwQRvkd+MM4VejjW2KSKag4v+KkCwyltwEZSvY9DOcTGJV/ZtPA4?=
+ =?iso-8859-2?Q?69fR8oix05r2DVLQrOr9iWbTb4IBDtUiQ54TcDNxSL3gQJJT1CvKBcF0kx?=
+ =?iso-8859-2?Q?5i7B1kW+X3kbqMJ1KfZdB8XZd2LAeZHWjK0dmxI8ezt14gJAffewgz9kPF?=
+ =?iso-8859-2?Q?sSmUx0lmdRUMT7pQsQ1LW0Q/aiBMbdlTAm?=
 Content-Type: text/plain; charset="iso-8859-2"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -147,56 +146,154 @@ MIME-Version: 1.0
 X-OriginatorOrg: nokia.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DB6PR07MB3509.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8035b477-1242-4153-ac05-08dcd3c04ea0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2024 06:50:08.5741
+X-MS-Exchange-CrossTenant-Network-Message-Id: d906e9f5-e771-4830-a434-08dcd3c0775a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2024 06:51:16.8831
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qWy1Q61Sx3Le1aC0dks/s+WQ14DI0q+CNLkm1Wx0mkLsoaKcg5L0SQaskyrzB4Jd9K+gOF2mfwY9FEp770XhWlrNdg9OVOndxayAtCpJqU8=
+X-MS-Exchange-CrossTenant-userprincipalname: mIcARrNaB1MpFpN+9lOz0A/NGJallFc66C2EpF3MDaW3FQ/ntkD5yoN9MmTcSb3r+La41t31Xcz7Zx0YDP7uPze8G+xa8CRVNLOtnBrCLjo=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR07MB8389
 
 From: Wojciech Siudy <wojciech.siudy@nokia.com>=0A=
 =0A=
-For cases when the mux shares reset line with other chips we cannot=0A=
-use it when channel selection or deselection times out, because it=0A=
-could break them without proper init/probe.=0A=
+If the channel selection or deselection times out, it indicates=0A=
+a failure in the mux's I2C subsystem. Without sending a reset pulse,=0A=
+a power-on-reset of the entire device would be required to restore=0A=
+communication.=0A=
+=0A=
+The datasheet specifies a minimum hold time of 4 ns for the reset=0A=
+pulse, but due to the path's capacitance and the mux having its own=0A=
+clock, it is recommended to extend this to approximately 1 us.=0A=
+=0A=
+This option can be enabled using the i2c-mux-timeout-reset property=0A=
+in the device tree and should only be used if the reset line is not=0A=
+shared with other devices.=0A=
 =0A=
 Signed-off-by: Wojciech Siudy <wojciech.siudy@nokia.com>=0A=
 ---=0A=
- .../devicetree/bindings/i2c/i2c-mux-pca954x.yaml          | 8 ++++++++=0A=
- 1 file changed, 8 insertions(+)=0A=
+Changelog:=0A=
+v2:=0A=
+  * Removed mail header from the commit log=0A=
+  * Decreased reset pulse hold time from 10 to 1 ms=0A=
+v3:=0A=
+  * Make this functionality enabled by appropriate property in=0A=
+    devicetree=0A=
+---=0A=
+ drivers/i2c/muxes/i2c-mux-pca954x.c | 48 ++++++++++++++++++++++-------=0A=
+ 1 file changed, 37 insertions(+), 11 deletions(-)=0A=
 =0A=
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/D=
-ocumentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml=0A=
-index 9aa0585200c9..872be72da965 100644=0A=
---- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml=0A=
-+++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml=0A=
-@@ -63,6 +63,12 @@ properties:=0A=
-       necessary for example, if there are several multiplexers on the bus =
-and=0A=
-       the devices behind them use same I2C addresses.=0A=
+diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mu=
+x-pca954x.c=0A=
+index 6f84018258c4..c9ac0f9c9408 100644=0A=
+--- a/drivers/i2c/muxes/i2c-mux-pca954x.c=0A=
++++ b/drivers/i2c/muxes/i2c-mux-pca954x.c=0A=
+@@ -110,6 +110,7 @@ struct pca954x {=0A=
+ 	u8 last_chan;		/* last register value */=0A=
+ 	/* MUX_IDLE_AS_IS, MUX_IDLE_DISCONNECT or >=3D 0 for channel */=0A=
+ 	s32 idle_state;=0A=
++	u8 timeout_reset;=0A=
  =0A=
-+  i2c-mux-timeout-reset:=0A=
-+    type: boolean=0A=
-+    description: Sends reset pulse if channel selection or deselection tim=
-es=0A=
-+      out. Works only if reset GPIO provided. Do not use if other chips sh=
-are=0A=
-+      the same reset line.=0A=
+ 	struct i2c_client *client;=0A=
+ =0A=
+@@ -316,6 +317,30 @@ static u8 pca954x_regval(struct pca954x *data, u8 chan=
+)=0A=
+ 		return 1 << chan;=0A=
+ }=0A=
+ =0A=
++static void pca954x_reset_deassert(struct pca954x *data)=0A=
++{=0A=
++	if (data->reset_cont)=0A=
++		reset_control_deassert(data->reset_cont);=0A=
++	else=0A=
++		gpiod_set_value_cansleep(data->reset_gpio, 0);=0A=
++}=0A=
 +=0A=
-   idle-state:=0A=
-     description: if present, overrides i2c-mux-idle-disconnect=0A=
-     $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state=0A=
-@@ -146,6 +152,8 @@ examples:=0A=
-             interrupt-parent =3D <&ipic>;=0A=
-             interrupts =3D <17 IRQ_TYPE_LEVEL_LOW>;=0A=
-             interrupt-controller;=0A=
-+            i2c-mux-idle-disconnect;=0A=
-+            i2c-mux-timeout-reset;=0A=
-             #interrupt-cells =3D <2>;=0A=
++static void pca954x_reset_assert(struct pca954x *data)=0A=
++{=0A=
++	if (data->reset_cont)=0A=
++		reset_control_assert(data->reset_cont);=0A=
++	else=0A=
++		gpiod_set_value_cansleep(data->reset_gpio, 1);=0A=
++}=0A=
++=0A=
++static void pca954x_reset_mux(struct pca954x *data)=0A=
++{=0A=
++	dev_warn(&data->client->dev, "resetting the device\n");=0A=
++	pca954x_reset_assert(data);=0A=
++	udelay(1);=0A=
++	pca954x_reset_deassert(data);=0A=
++}=0A=
++=0A=
+ static int pca954x_select_chan(struct i2c_mux_core *muxc, u32 chan)=0A=
+ {=0A=
+ 	struct pca954x *data =3D i2c_mux_priv(muxc);=0A=
+@@ -329,6 +354,8 @@ static int pca954x_select_chan(struct i2c_mux_core *mux=
+c, u32 chan)=0A=
+ 		ret =3D pca954x_reg_write(muxc->parent, client, regval);=0A=
+ 		data->last_chan =3D ret < 0 ? 0 : regval;=0A=
+ 	}=0A=
++	if (ret =3D=3D -ETIMEDOUT && (data->reset_cont || data->reset_gpio))=0A=
++		pca954x_reset_mux(data);=0A=
  =0A=
-             i2c@2 {=0A=
+ 	return ret;=0A=
+ }=0A=
+@@ -338,6 +365,7 @@ static int pca954x_deselect_mux(struct i2c_mux_core *mu=
+xc, u32 chan)=0A=
+ 	struct pca954x *data =3D i2c_mux_priv(muxc);=0A=
+ 	struct i2c_client *client =3D data->client;=0A=
+ 	s32 idle_state;=0A=
++	int ret =3D 0;=0A=
+ =0A=
+ 	idle_state =3D READ_ONCE(data->idle_state);=0A=
+ 	if (idle_state >=3D 0)=0A=
+@@ -347,13 +375,14 @@ static int pca954x_deselect_mux(struct i2c_mux_core *=
+muxc, u32 chan)=0A=
+ 	if (idle_state =3D=3D MUX_IDLE_DISCONNECT) {=0A=
+ 		/* Deselect active channel */=0A=
+ 		data->last_chan =3D 0;=0A=
+-		return pca954x_reg_write(muxc->parent, client,=0A=
+-					 data->last_chan);=0A=
++		ret =3D pca954x_reg_write(muxc->parent, client, data->last_chan);=0A=
++		if (ret =3D=3D -ETIMEDOUT && (data->reset_cont || data->reset_gpio))=0A=
++			pca954x_reset_mux(data);=0A=
+ 	}=0A=
+ =0A=
+ 	/* otherwise leave as-is */=0A=
+ =0A=
+-	return 0;=0A=
++	return ret;=0A=
+ }=0A=
+ =0A=
+ static ssize_t idle_state_show(struct device *dev,=0A=
+@@ -543,14 +572,6 @@ static int pca954x_get_reset(struct device *dev, struc=
+t pca954x *data)=0A=
+ 	return 0;=0A=
+ }=0A=
+ =0A=
+-static void pca954x_reset_deassert(struct pca954x *data)=0A=
+-{=0A=
+-	if (data->reset_cont)=0A=
+-		reset_control_deassert(data->reset_cont);=0A=
+-	else=0A=
+-		gpiod_set_value_cansleep(data->reset_gpio, 0);=0A=
+-}=0A=
+-=0A=
+ /*=0A=
+  * I2C init/probing/exit functions=0A=
+  */=0A=
+@@ -625,6 +646,11 @@ static int pca954x_probe(struct i2c_client *client)=0A=
+ 			data->idle_state =3D MUX_IDLE_DISCONNECT;=0A=
+ 	}=0A=
+ =0A=
++	if (device_property_read_bool(dev, "i2c-mux-timeout-reset"))=0A=
++		data->timeout_reset =3D 1;=0A=
++	else=0A=
++		data->timeout_reset =3D 0;=0A=
++=0A=
+ 	/*=0A=
+ 	 * Write the mux register at addr to verify=0A=
+ 	 * that the mux is in fact present. This also=0A=
 -- =0A=
-2.34.1=
+2.34.1=0A=
 
