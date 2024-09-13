@@ -1,70 +1,70 @@
-Return-Path: <linux-i2c+bounces-6669-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6670-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48DBC97799F
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 09:28:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFB719779C7
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 09:36:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81FB31C238F8
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 07:28:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 436CE1F23779
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 07:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96251BC097;
-	Fri, 13 Sep 2024 07:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C34D1BC9E8;
+	Fri, 13 Sep 2024 07:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="CTPu/Gyc";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EYjrH28R"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="mQXEeYxD";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NPXTN6mG"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDEE15575F;
-	Fri, 13 Sep 2024 07:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADEC77107;
+	Fri, 13 Sep 2024 07:35:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726212513; cv=none; b=tEpTWJWmFgzeI1/4pk7dWuJoytYr27a2elW0oPgN3KZMGG0yADjckXjIQqRkrZe2Vo/sKXRXTIFSPfAhTZBkLnSLl40tt7j+S8vFNfTLwmh7R8ZpC9SM/HnrBBC3kaYBcfhawUJPQygK5v/B2sqieqH9ZMxrwDRCcM/qJVGsTCU=
+	t=1726212957; cv=none; b=caEuFNy/bdKcuunjdh9mflLK8NwVocRJ6PjdEv9CFvlDxBrOogYkCRChxnTwIAbAsBvq0L+rMKOaQm9xgtvJW0LBZBso3kyN/jnWQ/kBUZvZmiMOLXQqGExSLa8cZ6QjRkkKqlaybKD6W/Tk2MSjj8sNGurtfQK59j9FXuNGfsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726212513; c=relaxed/simple;
-	bh=bo7UzmEu33RPSGpk7E1ZUKxCfkE058dFXgDOOX0554c=;
+	s=arc-20240116; t=1726212957; c=relaxed/simple;
+	bh=vw3Wk39/2LGrnA3c7ll9JoJEwGZwwZJ02e3xBkNnQLM=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Al6+P47lLYUFCzE71Uvd8EYkyf12rJ69q54L7ou+YlmC6G5D9qTsW1NnNlbLyZFcloprq9fiFlcwdmJjo5joqReIYJjssvWjVSBiatHf2Ybm2w4PrzfZWhx+Rdf350OezmuP/OEdQD/czM2eGiUobhz2cv0qwvSnUU4fHdmgi3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=CTPu/Gyc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EYjrH28R; arc=none smtp.client-ip=103.168.172.149
+	 Subject:Content-Type; b=VkiLDM4YttK9T230ycmSxiBDmtNjyAihz3UORebCgHKAXPvyo67BNyUY/mT7c2DnOOLbspj5DN6lALy9oTUup8d+UQ/LRtY4bsC0awes+IfRVIjrz0BQx9mjE+7Xh+/ASJDd9CnMrHmA+qOdygJN9cSpkcCiFjC3tL6Mvku1Wx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=mQXEeYxD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NPXTN6mG; arc=none smtp.client-ip=103.168.172.149
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id DC9F5138060B;
-	Fri, 13 Sep 2024 03:28:29 -0400 (EDT)
+	by mailfout.phl.internal (Postfix) with ESMTP id E93A913805FC;
+	Fri, 13 Sep 2024 03:35:54 -0400 (EDT)
 Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 13 Sep 2024 03:28:29 -0400
+  by phl-compute-10.internal (MEProxy); Fri, 13 Sep 2024 03:35:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1726212509;
-	 x=1726298909; bh=gkjYi8FXCiBhaSisYFv8UtmUsJkYhgRGdyGnqOCGvdY=; b=
-	CTPu/GycIFzbmXtnzJrVKNNZrxCACzXb7WNGY6FaduAxirUQiOVKpjHifBDWOIvC
-	W+I9RWJtdaAhsvh6PwgrMTOLJQDjF++fMoo3c5LWWmB8Y9L3M3IwAv4Cjn6iQPV9
-	Xt7V22MXuZYEG+fTQBMlMZvHrzifm4q5BbeNziTBDCi2afF55HsdFTk9SxMbFxmo
-	nW+0F9qB7pBh0sJ3JHcHvWxvFibk4WWwYHVMJezurTVJl2/f/uP1E1a5+0H4cqgR
-	+ghv6s8sJXkGAFV6NZkmchJQXW+S5526ol7BHpptCWXTwmNhNomv5w9YOQgSu8yU
-	Czsx4LLlbigqOcXK8mV8NA==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1726212954;
+	 x=1726299354; bh=NGR5qqH9BPt1jFdj+yIMRlQVEYpFagFg+5zP2bRkTnQ=; b=
+	mQXEeYxDf/GtHBQszb6qw4r5IV0XefG8dumxARrXOIekoQ0xJ1TYVpIaaR6h9WMH
+	1+oP77fOJJrUMojiWTvxnWupW14Wx6EDR/W/1QzHQsDqTsLk+INT9xSoBKSJYn4h
+	/ZMgTdfIBZZ4gq2goKoI226kdBO0sm+SIrX+jAdVjoBTf7x/h2kJ/m5UFdOwLKo2
+	rn3iun8TP5APG/1FU0+7Mde6lYbSlPyA0mmFHTvWArjMx0yknUDjQZHUVzVPNBfY
+	cWwBF6mihz0ZqVALfNACOyOU0olNNoVNIsjH9QHpkY27QvOwc2pD2EvpBKiR1MGm
+	t9u3whrugopy8Bf1SeL0ZA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726212509; x=
-	1726298909; bh=gkjYi8FXCiBhaSisYFv8UtmUsJkYhgRGdyGnqOCGvdY=; b=E
-	YjrH28Rkic103YY8rhbL3GA7pd5qfKMeJbXUXuPUIYKcoz08z3TQUmwuY8Vh6mT7
-	KznkKOlerDEPRI2PEb8H8yGgq9vCmyC2QhbiqVU9bP2Xc8FKctff71yalaOhxgrO
-	9m8MicZnWT92oM9Ryo1yUzRJm94hbKzey7fV0X6gekYzqgwFoZr4aiyXNwxEVkio
-	0kim03o0BgKKiqP9lrWEunfANjozFMUO3420Iy/fduzOWH/dVpwRFqBBWeejS1gC
-	xLZNMoqSWixx2bseYpxOzfg6LE6OD4noYGXwnlH8133hbNCNDel8cmLSud1YGnqb
-	YLP5/GoDVFScwznCNC+aw==
-X-ME-Sender: <xms:nenjZhIUa9Mb8aMv_eTEJ4zj1xraHo22egim8XcSntPxeH3NU_Pnvw>
-    <xme:nenjZtLTLZ3YVzIqd7_YkpoI4Q5akg9JaHIShEdi_vepXMhxCHzuiCzyJW-TBpPiV
-    pFkIdf2s0khgoWKIKU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejiedggedtucetufdoteggodetrfdotf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726212954; x=
+	1726299354; bh=NGR5qqH9BPt1jFdj+yIMRlQVEYpFagFg+5zP2bRkTnQ=; b=N
+	PXTN6mGjaX0AkN834hN0TRaL3yuuFmcvUNjWUvLlSqfpVwU8kbQIAQUNR4M7lOXn
+	bZ5lYdFKdkWc0Q99Vi/5g1EefWq9z9zAx38kvsdavfp9HlKxch3+ui2/bHUY0c8U
+	jJFS2iqpFNBLQbAw0cSS1lOeknWAvzhJOfhpTDIZtmZQwDWAIX4cHlPkRrqazxx7
+	aiPGCCbFlqBE2hgCB2jTUO4liCwtcFFy6HfDk0NvDXb7UcQdmweNX5tfbD2/LqHX
+	r6Nef8AGrrZkoJ2fQhAAaYpy/BT5f8DETY6GdlBUp6NCsroP6TPY54/D1F50Qe74
+	LjzhrmWSH1HNvdFmwL6Tw==
+X-ME-Sender: <xms:WevjZiToxK0Zky-LW7IDM3yMRfKx6PwD_D9TX50dCbGeBlSf_kpoxQ>
+    <xme:WevjZnxLjWZMywpFVerfpy9dASIQuRkje_cGAcA4DYcQmVuHP-AoOMh2UI_AXJYP2
+    IfJ3g0hiFOix2IA7EQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejiedggedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
     htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
@@ -80,14 +80,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejiedggedtucetufdoteggod
     hpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtthhopegrnhguihdrshhhhiht
     iheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlh
     drohhrghdprhgtphhtthhopehjihhrihhslhgrsgihsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:nenjZps0ynErGzzUjLiGcSsfCBSXShNQz9o6pNFoxlG4zimiCb0U5A>
-    <xmx:nenjZiYUI0zTvV0Sq-5uMR18ob41fi9LDz6HnClHjrcOsbAWS-vzbg>
-    <xmx:nenjZoZ8VbLHQ5npyX6xCKiuCCuh_eyofyUBhSwYoeBJzY4rx3JqEw>
-    <xmx:nenjZmAFtTyzs_B6VO_q8e85qvWrSZ5Uz6-XiKjILsQLF2udcu_x7Q>
-    <xmx:nenjZiZiRUjI1fAVP3Iq3XHoXZ6nVaE3TH5ydrPbeQ1mcs2iAWNdkzzX>
+X-ME-Proxy: <xmx:WuvjZv3jqrFxtR7IVXCO1LeS21ubrmL3J-uCjlo7Nhg6WMp4EEG3eA>
+    <xmx:WuvjZuDMtwZ9awswkTprGlxtGT77KbS205zBdYr_GLawW8xzjsbIFQ>
+    <xmx:WuvjZrg_F1nYychiEBFpSDKNksQo--brPC1En3JVWjOY9pDuvd_i8g>
+    <xmx:WuvjZqoNrKCkFzUn6pa_j3A4HvtGyrdwdfJw2Krw-XVaFwlqU76PWA>
+    <xmx:WuvjZnBX6AQqdISbT2oOrAdgXC7M5yU1TU5PvhCaNLNv9uT24r4_iXme>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 478BD222006F; Fri, 13 Sep 2024 03:28:29 -0400 (EDT)
+	id D76B7222006F; Fri, 13 Sep 2024 03:35:53 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -95,7 +95,7 @@ List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 13 Sep 2024 07:27:59 +0000
+Date: Fri, 13 Sep 2024 07:35:33 +0000
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: arturs.artamonovs@analog.com, "Catalin Marinas" <catalin.marinas@arm.com>,
  "Will Deacon" <will@kernel.org>, "Greg Malysa" <greg.malysa@timesys.com>,
@@ -117,36 +117,42 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
  adsp-linux@analog.com,
  "Nathan Barrett-Morrison" <nathan.morrison@timesys.com>
-Message-Id: <4d883126-8675-4fb3-adff-f965c0de2ba3@app.fastmail.com>
-In-Reply-To: <20240912-test-v1-5-458fa57c8ccf@analog.com>
+Message-Id: <c9bda67d-ec94-48d7-b71f-de2b57b239d4@app.fastmail.com>
+In-Reply-To: <20240912-test-v1-6-458fa57c8ccf@analog.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
- <20240912-test-v1-5-458fa57c8ccf@analog.com>
-Subject: Re: [PATCH 05/21] clock:Add driver for ADI ADSP-SC5xx PLL
+ <20240912-test-v1-6-458fa57c8ccf@analog.com>
+Subject: Re: [PATCH 06/21] include: dt-binding: clock: add adi clock header file
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
 On Thu, Sep 12, 2024, at 18:24, Arturs Artamonovs via B4 Relay wrote:
 > From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 >
-> Implements clock tree, no dynamic pll rate change.
+> Add adi clock driver header file
 
-This could use a little more detail.
+Are you sure this is necessary? If the clk controller follows
+a logical structure, it's usually easier to identify individual
+clks by the way the hardware is laid out.
 
->  drivers/clk/adi/clk-adi-pll.c | 151 ++++++++++++++++++++++++++++++++++++++++++
->  drivers/clk/adi/clk.h         |  99 +++++++++++++++++++++++++++
->  2 files changed, 250 insertions(+)
-
-The header is only used in one file, to it's better to move all
-the contents into the driver itself.
-
-> +struct clk_sc5xx_cgu_pll *to_clk_sc5xx_cgu_pll(struct clk_hw *hw);
+> +#ifndef DT_BINDINGS_CLOCK_ADI_SC5XX_CLOCK_H
+> +#define DT_BINDINGS_CLOCK_ADI_SC5XX_CLOCK_H
 > +
-> +struct clk *sc5xx_cgu_pll(const char *name, const char *parent_name,
-> +	void __iomem *base, u8 shift, u8 width, u32 m_offset, spinlock_t 
-> *lock);
+> +#define ADSP_SC598_CLK_DUMMY 0
+> +#define ADSP_SC598_CLK_SYS_CLKIN0 1
+> +#define ADSP_SC598_CLK_SYS_CLKIN1 2
+> +#define ADSP_SC598_CLK_CGU0_PLL_IN 3
+> +#define ADSP_SC598_CLK_CGU0_VCO_OUT 4
 
-Do these need to be global symbols? It's generally better to make
-all functions 'static' unless they need to be called from another file.
+Unlike the DT compatible strings, these #defines don't have
+to be specific to a particular SoC, you could just reuse them
+for a family of chips even if they each use a slightly different
+subset. Maybe name them "ADSP_CLK_*" or "ADSP_SC5XX_CLK_*"?
 
-    Arnd
+> +#define ADSP_SC598_CLK_END 80
+
+This should not be part of the binding, in particular you
+probably want to be able to extend this in order to support
+additional chips.
+
+      Arnd
 
