@@ -1,90 +1,90 @@
-Return-Path: <linux-i2c+bounces-6739-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6740-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2894F978BEC
-	for <lists+linux-i2c@lfdr.de>; Sat, 14 Sep 2024 01:43:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F11F978BEE
+	for <lists+linux-i2c@lfdr.de>; Sat, 14 Sep 2024 01:43:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 918A0B2262B
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 23:43:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86EB9B26153
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 23:43:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94EB191F83;
-	Fri, 13 Sep 2024 23:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F018191F8F;
+	Fri, 13 Sep 2024 23:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ayTd/7fV"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PdRZeuZU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC84178362
-	for <linux-i2c@vger.kernel.org>; Fri, 13 Sep 2024 23:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E875E192586
+	for <linux-i2c@vger.kernel.org>; Fri, 13 Sep 2024 23:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726271001; cv=none; b=l6yi/EmuOv5QyfqFkLbecEp8OcYCip0RdZZktm4Ffwkxn/EXfonlGUoUt790UnMRKT+200u8W4pUga033RuZkaKhk2sxd689KI/a95qmOIecHynnRoXQIKY1ecIQyYz7Ww34FMme/oie5CLWc2uM6zDjb/9xKhR/tZ8N0Su4cVY=
+	t=1726271012; cv=none; b=h68h14IdJwvCbpKsloZu6nt26SOpLU4bQidFsPI4Z7aLlUByzg2xg54tiy/ETG5PLN7+H5Llksk/fcoiSJG6u2fFtOxf4CBUamqT3hFbu4J4b7c67jDjfjp2ZfMsFxZLJb62mOdj/MPRNGkJEF9Lbqybi0uWEP2yCzB/BVVQd/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726271001; c=relaxed/simple;
-	bh=p2By7YmnTSdxT4QuH8w6lXtDAJVp0dBpTIiwFRZ7eb8=;
+	s=arc-20240116; t=1726271012; c=relaxed/simple;
+	bh=0ahzFG2oNxj4NQXzKVIJir1WD7KoViMiBM80pX771gU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k4h2Qqtsx6nJ4/+ELLEnl4S4+5Q4ZxvOhL2V9fBJS0h3kWlzpBvbGoSRjSNibG7gro1Jw1OTMX08boGz5Zp4e3KiHLDYThoI2sPtcAN5S8Z90SzkLwD07XWjqEzHFtxCIGsyWzYaxmtmhEefZ8xMVlQl5gaweSK42nzH4wYpOoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ayTd/7fV; arc=none smtp.client-ip=209.85.160.177
+	 To:Cc:Content-Type; b=p67kVUTR0Qb+7Bg11yXGeaq5WuOFep5aZqQFeWZqQhm5fDd8rI4zy9MxFH8+y+Xu9Cm47Lty1ybJRnp4PhiP71h+WsrIlzn399qPZTy8JkHfnLIUWcwfgbwNIg1TrTGulxasKiAialxhzXhKpd+eNW5RNVZ/GWkk5BK0t4u0Prk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PdRZeuZU; arc=none smtp.client-ip=209.85.219.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4581f44b9b4so18464261cf.1
-        for <linux-i2c@vger.kernel.org>; Fri, 13 Sep 2024 16:43:19 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6c51d1df755so20575616d6.1
+        for <linux-i2c@vger.kernel.org>; Fri, 13 Sep 2024 16:43:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1726270997; x=1726875797; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1726271008; x=1726875808; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/Sb9UtIlLwG79dUWEaupctUHL7lQqw6cZ7frxycygKw=;
-        b=ayTd/7fV8Sl+ixtJw6GODWunXJMp0eAsV8LtWDIgZuDU3lteKPTWHs+Yw96WclyS5q
-         XfexBvAHfkBJaBxGdaAWvhxQYoObuf6CtyN9ZMASV7l7ifUjswTWExZycEbps2sGzQY8
-         3K0zR6Moz5rS0V49j0UetlF6zjyDKpDiOCjNM=
+        bh=EGpao8Kwq4txpjKiG0IecbBKjp+Vjjk+9Rmjd0MdGw0=;
+        b=PdRZeuZUaXb8/JLT5AzdOU/8azdjKYvmxqr20oMQio9Tfrgq9V1Hg9jmnT5OMzcpqp
+         pNpxrr7JXqu3blVdPlbVmqusweFgRFFKT7b4g8cI1L3WDNzEUBgiXCIR32kzEHMt4A53
+         zGbzyrk9wCS4i88iHCklokHUIcT8EO/XpCrfI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726270997; x=1726875797;
+        d=1e100.net; s=20230601; t=1726271008; x=1726875808;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/Sb9UtIlLwG79dUWEaupctUHL7lQqw6cZ7frxycygKw=;
-        b=UQnYI74gIMR8NezfE4DjP0dlv1bju15Yv6G4FQsZc4leSmJ33nQmd9ovqNDnXt98tO
-         ACkqmKeLou/LJiSiO5Ssg6qLpnPYFHDnxyMf7jwHM2DGFLYY0Pvwk7+9plFj2hiRA0bj
-         8nYSvlrS+AmmTxfPkB0d/kKZKh9C3SkeYQrGLQoGpdycPcEnCgXfi3BzDxQnZxD6KGHi
-         p31iKLKUJyaPcAZtNKR9Jh70nGQ9GkzuooIpZax4AowuC2yjxAETOFjjnZvMbCInurF2
-         jyoKBrv27lalwhpI+7sTxG3t3dS8mOfGx336PtANO1X1inWlZ0h6Tk085+kNmS/7ILQb
-         xnDg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGr0Cj/v+yM+SP7h2iLhJEJ/EpHC/wcMDo8etpV2pt/H5nclhjq+RI/n26xVzQqN7f8N7ymj7KQkI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ0prQ7cWHfI/u8p90TB9F2aOIMBAGIyosZ06E+NNTGlXeQ+5K
-	AQIOahel03QM8nQLdbnbTcXO9gEaeQdAOfx36CuqaxOu5lRabKX461JiU8LBGI6ko0O5oM0LyB0
+        bh=EGpao8Kwq4txpjKiG0IecbBKjp+Vjjk+9Rmjd0MdGw0=;
+        b=olGvlYcdttNCofuxSzuj/19FWQRMu3lRsnFvZhb2WFol6QvSNZ2me+rHmW6/2tsKRl
+         1kR2l682/9Um8mEmmLHYJFOAQVNWYUMf8D1+jDu9pPdLHswoh9lsykDINuT0k5vLEA2w
+         2P7YmNrvxcwTzrwd2lxRCY8ye7pPHfUOLkQ6A803iA3PVoFNqWjz4QIqxxSvQ0J/IUI1
+         zmCBg7SxZg2iYo6OfgesruHJJ/N1XFwheyxqJ7d1bU26lxiZCFMr+57XVNOQxWCXvczM
+         jRXIRtM6s/+WirzSfCP1i75MSx+gwQ666t9a6mDGASdyUUX+6pVbI7xjtl2BA0VCDYK1
+         nKuA==
+X-Forwarded-Encrypted: i=1; AJvYcCWvv+ogg0k//06CBZd/sFYXTZz1LWoeEZeDgLKhIeSRH9kCEnb5ABjRMWL1QOn3MAgu/Cfuzk4+6Vc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbR1LYdsaqAPe6QPiZaef6Uk1sOT2ss44KdknYhQVcJzOqNeg4
+	zQXqYFqvlnWGMOc+9SbwoGsg6TS6AOXUJnerw3MnaoT/csgpY4B0aJp2lbIVkI5jkNyixuFfPSw
 	=
-X-Google-Smtp-Source: AGHT+IGd3hjCwqhT8O0d3AMBoiqlBhjbY+qtnhNlrJ1YE3MpkYIQCQEoOyRB4WkHl0OWbkPPQb0Hzw==
-X-Received: by 2002:a05:622a:1898:b0:446:4c0f:ef03 with SMTP id d75a77b69052e-458602bf78fmr147054331cf.10.1726270997158;
-        Fri, 13 Sep 2024 16:43:17 -0700 (PDT)
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com. [209.85.219.54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-459aad0293asm1334691cf.74.2024.09.13.16.43.16
+X-Google-Smtp-Source: AGHT+IHbY/+/odRCcMzALOwy4BxhCL039Us/IQllo+1zKv0A+MJKtFi2pAwiFELEVj5b4ZwNiJvhnA==
+X-Received: by 2002:a05:6214:4519:b0:6b0:75bd:7fb with SMTP id 6a1803df08f44-6c573570bedmr138769366d6.40.1726271008557;
+        Fri, 13 Sep 2024 16:43:28 -0700 (PDT)
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com. [209.85.219.45])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c58c6422casm1347246d6.60.2024.09.13.16.43.23
         for <linux-i2c@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Sep 2024 16:43:16 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6c34dd6c21aso20127786d6.2
-        for <linux-i2c@vger.kernel.org>; Fri, 13 Sep 2024 16:43:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVx3p6aqAh+YGht4HkAfvhzvtXc1yfczkoCuobhDc+g0o9L97Hun8eTf2fMrGFYVtoSYxBof8AwXQU=@vger.kernel.org
-X-Received: by 2002:a05:6214:4489:b0:6c5:1121:ab9d with SMTP id
- 6a1803df08f44-6c573590a56mr132730356d6.49.1726270995740; Fri, 13 Sep 2024
- 16:43:15 -0700 (PDT)
+        Fri, 13 Sep 2024 16:43:24 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6c51d1df755so20574806d6.1
+        for <linux-i2c@vger.kernel.org>; Fri, 13 Sep 2024 16:43:23 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXA3pUCnQ4vKTwX+GUAj4qcS1xVVywN3CgO7N+q9UMld/1Lek89tpUeK9KI7pS5wkY/dfER/talNN4=@vger.kernel.org
+X-Received: by 2002:a05:6214:390a:b0:6bf:7d3c:a64d with SMTP id
+ 6a1803df08f44-6c573570b31mr113649466d6.32.1726271002581; Fri, 13 Sep 2024
+ 16:43:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240911072751.365361-1-wenst@chromium.org> <20240911072751.365361-7-wenst@chromium.org>
-In-Reply-To: <20240911072751.365361-7-wenst@chromium.org>
+References: <20240911072751.365361-1-wenst@chromium.org> <20240911072751.365361-8-wenst@chromium.org>
+In-Reply-To: <20240911072751.365361-8-wenst@chromium.org>
 From: Doug Anderson <dianders@chromium.org>
-Date: Fri, 13 Sep 2024 16:43:04 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Udc9aP7bSzTWP82zsaztRD2YnVNpSDA54FC0dKQ-Nz2A@mail.gmail.com>
-Message-ID: <CAD=FV=Udc9aP7bSzTWP82zsaztRD2YnVNpSDA54FC0dKQ-Nz2A@mail.gmail.com>
-Subject: Re: [PATCH v7 06/10] i2c: Introduce OF component probe function
+Date: Fri, 13 Sep 2024 16:43:10 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VL3nA8hwC8Ejy9T0ZWdYKxMjts8fgF7Y3CO507njOKkg@mail.gmail.com>
+Message-ID: <CAD=FV=VL3nA8hwC8Ejy9T0ZWdYKxMjts8fgF7Y3CO507njOKkg@mail.gmail.com>
+Subject: Re: [PATCH v7 07/10] i2c: of-prober: Add simple helpers for regulator support
 To: Chen-Yu Tsai <wenst@chromium.org>
 Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
 	Matthias Brugger <matthias.bgg@gmail.com>, 
@@ -104,217 +104,76 @@ Hi,
 On Wed, Sep 11, 2024 at 12:28=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> =
 wrote:
 >
-> Some devices are designed and manufactured with some components having
-> multiple drop-in replacement options. These components are often
-> connected to the mainboard via ribbon cables, having the same signals
-> and pin assignments across all options. These may include the display
-> panel and touchscreen on laptops and tablets, and the trackpad on
-> laptops. Sometimes which component option is used in a particular device
-> can be detected by some firmware provided identifier, other times that
-> information is not available, and the kernel has to try to probe each
-> device.
->
-> This change attempts to make the "probe each device" case cleaner. The
-> current approach is to have all options added and enabled in the device
-> tree. The kernel would then bind each device and run each driver's probe
-> function. This works, but has been broken before due to the introduction
-> of asynchronous probing, causing multiple instances requesting "shared"
-> resources, such as pinmuxes, GPIO pins, interrupt lines, at the same
-> time, with only one instance succeeding. Work arounds for these include
-> moving the pinmux to the parent I2C controller, using GPIO hogs or
-> pinmux settings to keep the GPIO pins in some fixed configuration, and
-> requesting the interrupt line very late. Such configurations can be seen
-> on the MT8183 Krane Chromebook tablets, and the Qualcomm sc8280xp-based
-> Lenovo Thinkpad 13S.
->
-> Instead of this delicate dance between drivers and device tree quirks,
-> this change introduces a simple I2C component probe. function For a
-
-s/probe. function/probe function./
-
-
-> +static int i2c_of_probe_enable_node(struct device *dev, struct device_no=
-de *node)
+> +static int i2c_of_probe_simple_enable_regulator(struct device *dev, stru=
+ct i2c_of_probe_simple_ctx *ctx)
 > +{
 > +       int ret;
 > +
-> +       dev_info(dev, "Enabling %pOF\n", node);
+> +       if (!ctx->supply)
+> +               return 0;
 > +
-> +       struct of_changeset *ocs __free(kfree) =3D kzalloc(sizeof(*ocs), =
-GFP_KERNEL);
-> +       if (!ocs)
-> +               return -ENOMEM;
+> +       dev_dbg(dev, "Enabling regulator supply \"%s\"\n", ctx->opts->sup=
+ply_name);
+> +
+> +       ret =3D regulator_enable(ctx->supply);
+> +       if (ret)
+> +               return ret;
+> +
+> +       msleep(ctx->opts->post_power_on_delay_ms);
 
-I guess the kernel lets you mix code and declarations now? I'm still
-used to all declarations being together but maybe I'm old school... I
-would have put the "dev_info" below the allocation...
+Presumably you want an "if (ctx->opts->post_power_on_delay_ms)" before
+the call to msleep() since it doesn't check that for you.
 
 
 > +/**
-> + * i2c_of_probe_component() - probe for devices of "type" on the same i2=
-c bus
+> + * i2c_of_probe_simple_enable - Enable resources for I2C OF prober simpl=
+e helpers
 > + * @dev: Pointer to the &struct device of the caller, only used for dev_=
-printk() messages.
-> + * @cfg: Pointer to the &struct i2c_of_probe_cfg containing callbacks an=
-d other options
-> + *       for the prober.
-> + * @ctx: Context data for callbacks.
+printk() messages
+> + * @data: Pointer to &struct i2c_of_probe_simple_ctx helper context.
 > + *
-> + * Probe for possible I2C components of the same "type" (&i2c_of_probe_c=
-fg->type)
-> + * on the same I2C bus that have their status marked as "fail".
-
-I may have missed it, but originally this was ones marked
-"fail-needs-probe", right? Now it tries all types of fail?
-
-
-> + * Assumes that across the entire device tree the only instances of node=
-s
-> + * prefixed with "type" are the ones that need handling for second sourc=
-e
-> + * components. In other words, if "type" is "touchscreen", then all devi=
-ce
-> + * nodes named "touchscreen*" are the ones that need probing. There cann=
-ot
-
-"touchscreen*" implies that it can have an arbitrary suffix. Can it?
-...or can it just have a unit address?
-
-
-> + * be another "touchscreen" node that is already enabled.
+> + * If a regulator supply was found, enable that regulator.
 > + *
-> + * Assumes that for each "type" of component, only one actually exists. =
-In
-> + * other words, only one matching and existing device will be enabled.
-> + *
-> + * Context: Process context only. Does non-atomic I2C transfers.
-> + *          Should only be used from a driver probe function, as the fun=
-ction
-> + *          can return -EPROBE_DEFER if the I2C adapter or other resourc=
-es
-> + *          are unavailable.
-> + * Return: 0 on success or no-op, error code otherwise.
-> + *         A no-op can happen when it seems like the device tree already
-> + *         has components of the type to be probed already enabled. This
-> + *         can happen when the device tree had not been updated to mark
-> + *         the status of the to-be-probed components as "fail". Or this
-> + *         function was already run with the same parameters and succeed=
-ed
-> + *         in enabling a component. The latter could happen if the user
-
-s/latter/later
-
-> + *         had multiple types of components to probe, and one of them do=
-wn
-> + *         the list caused a deferred probe. This is expected behavior.
+> + * Return: %0 on success or no-op, or a negative error number on failure=
+.
 > + */
-> +int i2c_of_probe_component(struct device *dev, const struct i2c_of_probe=
-_cfg *cfg, void *ctx)
+> +int i2c_of_probe_simple_enable(struct device *dev, void *data)
 > +{
-> +       const struct i2c_of_probe_ops *ops;
-> +       const char *type;
-> +       struct device_node *i2c_node;
-> +       struct i2c_adapter *i2c;
+> +       struct i2c_of_probe_simple_ctx *ctx =3D data;
 > +       int ret;
 > +
-> +       if (!cfg)
-> +               return -EINVAL;
-
-Drop extra check of "!cfg". In general kernel conventions don't check
-for NULL pointers passed by caller unless it's an expected case. You
-don't check for a NULL "dev" and you shouldn't need to check for a
-NULL "cfg". They are both simply required parameters.
-
-There are a few other places in the patch series where it feels like
-there are extra arg checks that aren't really needed...
-
-
-> +       ops =3D cfg->ops ?: &i2c_of_probe_dummy_ops;
-> +       type =3D cfg->type;
-> +
-> +       i2c_node =3D i2c_of_probe_get_i2c_node(dev, type);
-> +       if (IS_ERR(i2c_node))
-> +               return PTR_ERR(i2c_node);
-> +
-> +       for_each_child_of_node_with_prefix(i2c_node, node, type) {
-
-I wouldn't object to a comment before this for loop:
-
-/* If any devices of this type are already enabled then the function
-is a noop */
-
-...or it could be a helper function.
-
-
-> +               if (!of_device_is_available(node))
-> +                       continue;
-> +
-> +               /*
-> +                * Device tree has component already enabled. Either the
-> +                * device tree isn't supported or we already probed once.
-> +                */
-> +               ret =3D 0;
-> +               goto out_put_i2c_node;
-> +       }
-> +
-> +       i2c =3D of_get_i2c_adapter_by_node(i2c_node);
-> +       if (!i2c) {
-> +               ret =3D dev_err_probe(dev, -EPROBE_DEFER, "Couldn't get I=
-2C adapter\n");
-> +               goto out_put_i2c_node;
-> +       }
-> +
-> +       /* Grab resources */
-> +       ret =3D 0;
-> +       if (ops->get_resources)
-> +               ret =3D ops->get_resources(dev, i2c_node, ctx);
+> +       ret =3D i2c_of_probe_simple_enable_regulator(dev, ctx);
 > +       if (ret)
-> +               goto out_put_i2c_adapter;
+> +               return ret;
 > +
-> +       /* Enable resources */
-> +       if (ops->enable)
-> +               ret =3D ops->enable(dev, ctx);
-> +       if (ret)
-> +               goto out_release_resources;
+> +       return 0;
 
-I won't insist, but a part of me wonders whether we should just
-combine "get_resources" and "enable" and then combine "cleanup" and
-"free_resources_late". They are always paired one after another and
-I'm having a hard time seeing why they need to be separate. It's not
-like you'll ever get the resources and then enable/disable multiple
-times.
+Instead of the above, just:
 
+return i2c_of_probe_simple_enable_regulator(dev, ctx);
+
+I guess maybe you'd have to undo it in the next patch, but it does
+make this patch stand by itself better..
+
+Although I'd also say that if it were me I might just get rid of the
+helpers and inline the stuff. The helpers don't _really_ add too much.
+3 of the 4 callers are just simple wrappers of the helper and I don't
+think it would be terrible to inline the last one. I guess with the
+next patch when you add GPIOs it maybe makes more sense, but even then
+it feels like a stretch to me. Anyway, feel free to ignore if you
+want.
 
 > +/**
-> + * struct i2c_of_probe_ops - I2C OF component prober callbacks
+> + * DOC: I2C OF component prober simple helpers
 > + *
-> + * A set of callbacks to be used by i2c_of_probe_component().
-> + *
-> + * All callbacks are optional. Callbacks are called only once per run, a=
-nd are
-> + * used in the order they are defined in this structure.
-> + *
-> + * All callbacks that have return values shall return %0 on success,
-> + * or a negative error number on failure.
-> + *
-> + * The @dev parameter passed to the callbacks is the same as @dev passed=
- to
-> + * i2c_of_probe_component(). It should only be used for dev_printk() cal=
-ls
-> + * and nothing else, especially not managed device resource (devres) API=
-s.
-> + */
-> +struct i2c_of_probe_ops {
-> +       /** @get_resources: Retrieve resources for components. */
-> +       int (*get_resources)(struct device *dev, struct device_node *bus_=
-node, void *data);
-> +
-> +       /** @free_resources_early: Release exclusive resources prior to e=
-nabling component. */
-> +       void (*free_resources_early)(void *data);
+> + * Components such as trackpads are commonly connected to a devices base=
+board
+> + * with a 6-pin ribbon cable. That gives at most one voltage supply and =
+one
+> + * GPIO besides the I2C bus, interrupt pin, and common ground. Touchscre=
+ens,
 
-It would be good if the doc here mentioned what happened if no
-components were found and thus nothing was enabled. Is the function
-still called? It looks like "no" and "cleanup" is in charge of
-cleaning in this case. Feels like the docs need to be more explicit.
+Maybe speculate here that the GPIO is often an enable or reset line?
+Otherwise you leave the reader wondering what this mysterious GPIO is
+for.
 
