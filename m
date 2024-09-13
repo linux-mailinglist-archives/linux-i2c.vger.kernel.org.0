@@ -1,112 +1,113 @@
-Return-Path: <linux-i2c+bounces-6724-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6725-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68B8397873C
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 19:53:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D3A97878A
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 20:08:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DA971F2143C
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 17:53:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C6B6B23FFC
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 18:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA94484A57;
-	Fri, 13 Sep 2024 17:53:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91D3E136671;
+	Fri, 13 Sep 2024 18:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dgMo7YC2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hXb2J3SE"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D058F6A;
-	Fri, 13 Sep 2024 17:53:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F9012EBE7;
+	Fri, 13 Sep 2024 18:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726250025; cv=none; b=aKg4GwIDEo/BRsxa2d/La8D/9FNF3KMQ71QOuKaLZPKVtQPkpnpE380xVralv2wQmO99bY2ttFgm7yBl6SDVDo1MqR7YKTS6RzXtug8t5P6lwLZavzVTO8NQGow+fnx+hM8R2qV/8CMbU4BranOb3hsVbFTFl/iqwRZrlhLUWrw=
+	t=1726250889; cv=none; b=hHN//Xt9DKyggklxDXLI9nwyFp1KhweOwDfDXsYY1hE99vqiRoDMHVlYdCxtt1kEB/8cHlPISqMh+YjAksPsavvtsxrhmFOt4cFZzCnFQbT8TmdbrDGsIqkPJ+il/AMMU/tBljzch1JzCM1eEWvH0AA7A3qrxrUU2PnDeIcnM0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726250025; c=relaxed/simple;
-	bh=dF4UvyQtVTZgCLe2Wz+2rrKiqMSg3aXnfOSK2lhFzLo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NhO104YRmfw6PAd1z4LPdD8P/XnZRA1yMFkUvYPRi6f5fVNkL0i6Oz2Ycah0xe5nwsPda8GKJZYk+MQSi0goMW5sNSBg2IuzIZJe3bX+UA2pf1D4xUGQc8nyY13alc9k2O608QUt8cvnpiYb0knse9/7kjS+6OthTCZfFV0CApo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dgMo7YC2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6911C4CEC0;
-	Fri, 13 Sep 2024 17:53:43 +0000 (UTC)
+	s=arc-20240116; t=1726250889; c=relaxed/simple;
+	bh=pPgUGqSKrZW66jNavRtTicsXWsvkNovyg2p7zhV3gxU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=N6Q/OylH/aI8aNS53QIVRG2/P8fpOSTTQYye1QnOXKHbi3zvc6DTzR92vRmnz6W2zcdwe+dnalCq7s2GSUB4VRkVZ5yFeCfL7wVxJ6L4QjHbtKYDLSYuSLr6+Tc1MNzfGxs0iVSqYpUEXl8LyIArvHO4t0JNMYNJH425ZoWD7ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hXb2J3SE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDBCC4CEC0;
+	Fri, 13 Sep 2024 18:08:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726250025;
-	bh=dF4UvyQtVTZgCLe2Wz+2rrKiqMSg3aXnfOSK2lhFzLo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dgMo7YC2ckDMwBZsN3oddaGz9KR+HcOXi8HK3oNr1dxTF1SGa6aW+xoKdJ2k8Gkid
-	 Dq80SdmiO2UtCC9QVDjmGPGdkajjvU2MPNUhB6Wj3o9owrc1GjskuzEY+sAeXwjk7A
-	 sxEIWE7Id/hVdchsuME6TJSrVlYm55gBViZhhtwGlJ64x9lyON5rnjfdKz8gvd184L
-	 gGrw5KB3RppdTPQQ0SuOIEi5EDhZuZmIfEo7Vru39ZqrmELuhQ+NFbzBPzvfIFu8wZ
-	 Y6p5sEWniX9ar8pP8nA8Rau94TiKoDEMOICTtFhXLRzrvPx5jyCkX3axfQvCUaJsgV
-	 dTs+eJ+LsH7PQ==
-Date: Fri, 13 Sep 2024 18:53:41 +0100
-From: Conor Dooley <conor@kernel.org>
-To: "Wojciech Siudy (Nokia)" <wojciech.siudy@nokia.com>
-Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
-	"laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v4 0/2] pca954x: Add DT bindings and driver changes for
- reset after timeout
-Message-ID: <20240913-retaining-require-59ff15d696e9@spud>
-References: <DB6PR07MB3509B9378807A7968E272D959D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
+	s=k20201202; t=1726250888;
+	bh=pPgUGqSKrZW66jNavRtTicsXWsvkNovyg2p7zhV3gxU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=hXb2J3SEji2GtVifTGFvnzD6IPBGSigN4Pq0+Qz4KCrZpRyZJER0bFvZiFqkNGlFH
+	 liFpZ+z3VUqFs96uPNIgWgQDxYpjQaz6wByUyym8mWE5DsR4S5/k7Pdi50ROqReK+m
+	 iAkGKCPvYCGryPPCEE6JdPWMNoeehgfujSHPFUQkgSEon27SftSpnnTc2zK7xmS7hF
+	 BRcncDSkZY8EaGKsuY7F1TXiupacTBggo3YoEbboRMJwYrdYwixpeIlmI2aRCgTxbY
+	 FQS9XPonpVOJeUskn/fg8IYSAsIFPRqQB1By6iidMvEL19YlUcHnbZDsJ0qZsuGqg5
+	 k5D6Z4kpwDd2Q==
+From: Mark Brown <broonie@kernel.org>
+To: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>, 
+ Tzung-Bi Shih <tzungbi@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Chen-Yu Tsai <wenst@chromium.org>
+Cc: chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
+ Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ linux-i2c@vger.kernel.org
+In-Reply-To: <20240911072751.365361-1-wenst@chromium.org>
+References: <20240911072751.365361-1-wenst@chromium.org>
+Subject: Re: (subset) [PATCH v7 00/10] platform/chrome: Introduce DT
+ hardware prober
+Message-Id: <172625088498.70368.2332989625290315131.b4-ty@kernel.org>
+Date: Fri, 13 Sep 2024 19:08:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="lzmOt9CzUvTyDX9b"
-Content-Disposition: inline
-In-Reply-To: <DB6PR07MB3509B9378807A7968E272D959D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-99b12
 
+On Wed, 11 Sep 2024 15:27:38 +0800, Chen-Yu Tsai wrote:
+> This is v7 of my "of: Introduce hardware prober driver" [1] series.
+> v7 mainly refactors the code into a series of helpers. The scope of
+> supported components is also reduced to those with at most one regulator
+> supply and one GPIO pin. Also the helpers expect these to be named and
+> so the "bulk get" API changes have been dropped.
+> 
+> Also, a pull request to document the "fail-needs-probe" status has been
+> sent: https://github.com/devicetree-org/dt-schema/pull/141
+> 
+> [...]
 
---lzmOt9CzUvTyDX9b
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, Sep 13, 2024 at 10:36:43AM +0000, Wojciech Siudy (Nokia) wrote:
-> From: Wojciech Siudy <wojciech.siudy@nokia.com>
->=20
-> The pca954x mux might not respond under certain cicumstances, like device=
- behind
-> it holding SDA after recovery loop or some internal issue in mux itself. =
-Those
-> situations are indicated by ETIMEDOUT returned from I2C transaction attem=
-pting
-> selecting or deselecting the channel. According to device documentation t=
-he
-> reset pulse restores I2C subsystem of the mux and deselects the channel.
->=20
-> Since the mux switches using transistors, the failure of line behind mux =
-that
-> is currently conneted prevents sending commands to mux itself, so externa=
-l reset
-> signal is required.=20
->=20
-> The following series of patches implements the reset functionality if it =
-was
-> selected in devicetree, beceuse the reset line might not be dedivated in =
-some
-> applications and such reset pulse would break other chips.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-FYI, something went a bit wrong with this series, and it has not been
-threaded correctly. How did you send it?
+Thanks!
 
---lzmOt9CzUvTyDX9b
-Content-Type: application/pgp-signature; name="signature.asc"
+[03/10] regulator: Split up _regulator_get()
+        commit: 2a1de5678944147c2a41b6006127d2d0b618e83b
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuR8JQAKCRB4tDGHoIJi
-0qTxAQDbx1zjAQv/JN4Izv5B70lr4crUplxACCkqRG1gud1MeQEAjE2GTx90mYoZ
-CAGT2YZ9m5GmcooJKoRcKROtgL4tAQE=
-=wwuu
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---lzmOt9CzUvTyDX9b--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
