@@ -1,76 +1,54 @@
-Return-Path: <linux-i2c+bounces-6734-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6735-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CFDE978A1F
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 22:41:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98B34978B2B
+	for <lists+linux-i2c@lfdr.de>; Sat, 14 Sep 2024 00:05:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 402E21C22DEB
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 20:41:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30F58B237FB
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 22:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DCF01527A7;
-	Fri, 13 Sep 2024 20:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4069E158A2E;
+	Fri, 13 Sep 2024 22:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FEFRRqqw"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="arvHRFmC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D69C14D2B8;
-	Fri, 13 Sep 2024 20:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E537F460;
+	Fri, 13 Sep 2024 22:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726260090; cv=none; b=D3J8A4evhJuQhbO4MVg0yoVgOFecn+JWZUgjknmZAyIlzOzuaM9DShKm21YYSns0DRC5178ovNjLagY656MZEvvt9K7AvAYsGzqgIwpW3lD/TYzYwm4JupZVVlvJbzHSs8uLg3K/IaZ0CcTq00F4I0vhX6GYrFpgTsIT+CimEHo=
+	t=1726265104; cv=none; b=pqiWsTFcdlo/BPRgy5vh3edjMuqWDqH3Xxl/Qca3XlA9pwy0zawgh2WaosRiWutkwo7OlR4MHDAW8vn7p9KDvFzwcGX5LAvZSo/mhEg54vHMY6BQXkXEzhnxJbomMEU7VCJJKIe6R/WmHSMUkNKVOaGMQZQtLBVXAJkFtcDiEk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726260090; c=relaxed/simple;
-	bh=dxtHkHhZlIEtYto+4D7ABktR9JYb+fxPTDKaT0Bg+p4=;
+	s=arc-20240116; t=1726265104; c=relaxed/simple;
+	bh=uoYklACQWaRme2AnW5TDFXJiDAs01jBwIKeDSddSLj4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ubymY+v6xpJibfRB6uabDweFx1zIOsQgGcPfa26MEQkDVEi+bTUoMmnzpOWpRkD6kt2oN6H3ZwrwVahcPMzhk+01AJt0IXAT2SNfuUa/dNXUES1OZ4JaejTpDmvDgHUav9XL1yg/92JJfnbrXvqkcCS1+Rgutomt1cgwk1d7mDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FEFRRqqw; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726260089; x=1757796089;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dxtHkHhZlIEtYto+4D7ABktR9JYb+fxPTDKaT0Bg+p4=;
-  b=FEFRRqqw99XR1fzmldi4aE/2gu3SzpE0qsz5k/hYLIyAFWrjpaXundza
-   hbnkzWAOf8+KWaMxGV/IYDoiVdDZoWx8YPcnzpsdL2GuqNticiufOHPab
-   kGvs8nT6ib0055yzshaWCbt3fBzglVMWK7Qn8k364Byicte2uACnXtq08
-   1hj0r6K/Zy+qtYPO0KS/OZfmPsNb9isHmqJy9qDi1G55H8OCfuDPcM3fi
-   KQetAtGIoicyaIMmgsKBILdfnxOsa8DGHl8PDAyJOZiapWHhh6xEFUWjT
-   KPQJrDhwDWUqqYaB6VDtZG5I0SAHckhCM67xAJKxh5SqTxAJa1GrpMj4m
-   Q==;
-X-CSE-ConnectionGUID: rdGknI2rQSSfI6dODY7nVA==
-X-CSE-MsgGUID: 5/iOL3BETrO2GjKZojzLfg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="35848673"
-X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
-   d="scan'208";a="35848673"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 13:41:28 -0700
-X-CSE-ConnectionGUID: GVjA4IFURsadu4GOWs5ACw==
-X-CSE-MsgGUID: 1LTFprj9SQKpm0G8VRBwfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
-   d="scan'208";a="68966522"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 13 Sep 2024 13:41:21 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1spD6U-0006yI-2Y;
-	Fri, 13 Sep 2024 20:41:18 +0000
-Date: Sat, 14 Sep 2024 04:40:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=SAikdBicOjQTcZhyIwdlWj1j5Pf2d4vgmWc9eWWZPLoFeAvJYYnSUxTHnHWqwY3i5uzRb7DDyc3CGf2OXgz+29ckCun3tKLIM4MPtlhNvpvC43XWAfKd6G4eycvGQGOMXMNpeX7WzjJ7vpGlMhBD3g7X+T/DBJwj9j2RPQJjuBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=arvHRFmC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14778C4CEC0;
+	Fri, 13 Sep 2024 22:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726265103;
+	bh=uoYklACQWaRme2AnW5TDFXJiDAs01jBwIKeDSddSLj4=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=arvHRFmCRLGyj1dGWTUCFM9uS3AnwIr80VML4QpDGtqBBHNS/ZAkCyzeItBt5aAEE
+	 WFOiv+zGPfaOHC7/S7rTNy3kRytJwwgnXGw+Yy4PTfjyOka6//Z9ILZuUNsGFEsaxP
+	 0+n4nEBTbpP+1ZoZBDjGESYHc5h8bMpsCjfDM23RffnrYvoG7vWx3JFFVbl5GAhr5K
+	 lUkWUJdFzB0/2vR7oVGmrsn/P3QhVOntiPEtObEXZ7D8qNu2lflEMg8e5M7WsMa6dW
+	 t9+X2GfFe8L6sJ4hoCZRov+9UN/I6/fPMu5IJwYZU5VaulQCu2g7xGzsx78vW48vu9
+	 EMdif27JPZtDA==
+Date: Fri, 13 Sep 2024 17:05:02 -0500
+From: Rob Herring <robh@kernel.org>
+To: Arturs Artamonovs <arturs.artamonovs@analog.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
 	Greg Malysa <greg.malysa@timesys.com>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Utsav Agarwal <Utsav.Agarwal@analog.com>,
 	Michael Turquette <mturquette@baylibre.com>,
@@ -81,18 +59,16 @@ To: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.
 	Andi Shyti <andi.shyti@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>, soc@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
 	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	Arturs Artamonovs <arturs.artamonovs@analog.com>,
-	adsp-linux@analog.com,
+	linux-serial@vger.kernel.org, adsp-linux@analog.com,
 	Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Subject: Re: [PATCH 11/21] irqchip: Add irqchip for ADI ADSP-SC5xx platform
-Message-ID: <202409140451.t2a9fck6-lkp@intel.com>
-References: <20240912-test-v1-11-458fa57c8ccf@analog.com>
+Subject: Re: [PATCH 03/21] dt-bindigs: arm64: adi,sc598 bindings
+Message-ID: <20240913220502.GA878799-robh@kernel.org>
+References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
+ <20240912-test-v1-3-458fa57c8ccf@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -101,50 +77,84 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240912-test-v1-11-458fa57c8ccf@analog.com>
+In-Reply-To: <20240912-test-v1-3-458fa57c8ccf@analog.com>
 
-Hi Arturs,
+On Thu, Sep 12, 2024 at 07:24:48PM +0100, Arturs Artamonovs wrote:
+> Bindigs for ADI ADSP-SC5xx reset controller
 
-kernel test robot noticed the following build warnings:
+Typo. Here and the subject. Please write complete sentences.
 
-[auto build test WARNING on da3ea35007d0af457a0afc87e84fddaebc4e0b63]
+> 
+> Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
+> Co-developed-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
+> Signed-off-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
+> Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+> Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
+> Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
+> ---
+>  .../bindings/soc/adi/adi,reset-controller.yaml     | 38 ++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/adi/adi,reset-controller.yaml b/Documentation/devicetree/bindings/soc/adi/adi,reset-controller.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..7a6df1cfb709d818d5e3dbcd202938d6aaaaaa9b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/adi/adi,reset-controller.yaml
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/adi/adi,reset-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices Reset Controller for SC5XX processor family
+> +
+> +maintainers:
+> +  - Arturs Artamonovs <arturs.artamonovs@analog.com>
+> +  - Utsav Agarwal <Utsav.Agarwal@analog.com>
+> +
+> +description: |
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arturs-Artamonovs-via-B4-Relay/arm64-Add-ADI-ADSP-SC598-SoC/20240913-022308
-base:   da3ea35007d0af457a0afc87e84fddaebc4e0b63
-patch link:    https://lore.kernel.org/r/20240912-test-v1-11-458fa57c8ccf%40analog.com
-patch subject: [PATCH 11/21] irqchip: Add irqchip for ADI ADSP-SC5xx platform
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240914/202409140451.t2a9fck6-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409140451.t2a9fck6-lkp@intel.com/reproduce)
+Don't need '|'
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409140451.t2a9fck6-lkp@intel.com/
+> +  SHARC and ARM core reset control unit for starting/stopping/resetting
+> +  processors
 
-All warnings (new ones prefixed by >>):
+Complete sentences for top-level description.
 
->> drivers/irqchip/irq-adi-adsp.c:3: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * ADSP PINT PORT driver.
-   drivers/irqchip/irq-adi-adsp.c:51: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Each gpio device should be connected to one of the two valid pints with an
-   drivers/irqchip/irq-adi-adsp.c:152: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * This handles the GIC interrupt associated with this PINT being activated.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,reset-controller
 
+Too generic.
 
-vim +3 drivers/irqchip/irq-adi-adsp.c
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    rcu: rcu@3108c000 {
+> +      compatible = "adi,reset-controller";
+> +      reg = <0x3108c000 0x1000>;
+> +      status = "okay";
 
-   > 3	 * ADSP PINT PORT driver.
-     4	 *
-     5	 * The default mapping is used for all PINTs, refer to the HRM to identify
-     6	 * PORT mapping to PINTs. For example, PINT0 has PORT B (0-15) and PORT A
-     7	 * (16-31).
-     8	 *
-     9	 * Copyright (C) 2022-2024, Analog Devices, Inc.
-    10	 */
-    11	
+Don't need status in examples.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Shouldn't a reset controller use the reset binding (i.e. #reset-cells)?
+
+All you patches seem to have similar issues, so I'm not going to comment 
+on all of them. Please read the documentation in 
+Documentation/devicetree/bindings/. It doesn't seem like you have.
+
+Rob
 
