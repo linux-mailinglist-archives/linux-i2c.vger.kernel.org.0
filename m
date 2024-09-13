@@ -1,299 +1,194 @@
-Return-Path: <linux-i2c+bounces-6663-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6664-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D48149778CB
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 08:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DC2C9778F3
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 08:48:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93F64285645
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 06:25:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E67C2884E3
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 06:48:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589821AB6F7;
-	Fri, 13 Sep 2024 06:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CBA0187563;
+	Fri, 13 Sep 2024 06:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ivVazJUA"
+	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="h8akG+Ad"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2050.outbound.protection.outlook.com [40.107.236.50])
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2055.outbound.protection.outlook.com [40.107.103.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B391AB6CA
-	for <linux-i2c@vger.kernel.org>; Fri, 13 Sep 2024 06:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC89323D;
+	Fri, 13 Sep 2024 06:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.55
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726208708; cv=fail; b=K3uTAr5eMfQQF1hYXx+QUMn9N/qrsXKAsgLS31+7SJk/wdi2s1iNOatGQ3zENnap59EDn3tLW1z8H33mxQR/lMa4JbtQj2u89UstS+Bo2zLNtbjGgBqXyEkOarux07D2T5Js6yd7IREnyVdq3zotV27Yr8pusmGD5ZqQH7jC2GQ=
+	t=1726210104; cv=fail; b=kOEJ7rCqpGaxlpfbmFzUMz4rwexeW11ymJVrGbybP+uy0LH+1CNQyAHx0xmDBUQyPI60Lq4/FXYY1kUVx7A9yDNlgIpvy0hQtxtlDAhSGdL6f7B8ZhrsMndKCoCd9qReLd8jz30BFqGCwR9B9gl/cNfD0NNYywTxD2AvO64h218=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726208708; c=relaxed/simple;
-	bh=E/+Boy2gDH8felyA0VQWR934Y+2hWAnne0pem+Jw8TQ=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=BIIfZEIH1E+n/LThKTW1Xu7MotSHXbkqqpEVsl4aWTnjuwTDEfzqa24HiN4z4FB51CDzbND8UXNN09qa9+lwvuIQyysiPHH1sBMAtuGMsFCtDzjAjZVDuBdBwZ9h+keKKUyRHkWmjKzHLcEcYdKN7w9vBNe+sXOppIvONSXLWvE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ivVazJUA; arc=fail smtp.client-ip=40.107.236.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1726210104; c=relaxed/simple;
+	bh=8eYQWhGCaDHfUBlRj820Ux7EgHWS034hPCxdoRkeaaY=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=P+3WElGZrM2SPd+V99ghq8HlRx/Qo7DfkyJpK5zirpzLFPGJV8SjgAZTbu0OEajsVp6PH+56wgdFi1pUZGynfn9aiQ5ME78fpTWDUWhvh+PVNhkEtn1it72B4iN0jziygN+snOitPaazPqThOhj/rcgh/PuzerVwV6RMp1N/QHc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=h8akG+Ad; arc=fail smtp.client-ip=40.107.103.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SZTFBxjBCedMplo0RJT0HQe+B1dAE5E0od/lwoxR+owXVDf/SwR9yeiQ6QpCM1qIVJnL91r5+GjKE0xVjFFhIBaajwIb9hztQOn5HR3HFZQXm+o+GLM5lyZ/gKUhxLEyvs1YnEp/3yRmltzVgR1e6XlgTAEXIHUVgEK8n4aSRsMOnLzJJVdJtih0jyu6MsrbTz1SE3uw6AK6xceseVYv/DiFwPH4w2MJvOO/f9C8ntZWB5z/I+fDLq1Fiz44OfZNsuLgwecxYD7V1Wf2LPLTAwaU7plkqdFrMH8rDJee0FLqDP3qgdrd313paQzXos9y4xqB1YfPpITg9M77eZwufw==
+ b=QzS3GOGyLPHyrEAOeleJi1omVOl/dSZ7yRkTrxOvHPXWgfps2iAdsmZfmVasNN49mj2Jog0uKHBiUM3NTDj0TKmFhWmDkur9HBHQPlj8NypCRsDZA5tTe073XIoR67syO119+vssnviDViQXR0Lqsc7LEwsKS9HZW0ONwTsKMCSr/bFCJFhr1fInp/b1a4QDSxpBZZFNoc4iepaapyd9ubPsp413i5CwRCfOgYjhL6yClOSMSr92qj3KlLOG9zIpchgJ0ygcP/dfqwXhKtE9dkpSS6+4Lt+ic3uA5oJDCvVbNh7TnlExVVwgsLGlZoYFnYcNVsVPGLm1RxOdbB3DeA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n5CzI095M4BP3mWtp7GITXAD9C2HOQgRN1gv2U4fRzM=;
- b=uAdzed8J7CddYskGPaaw0/UrSmp1BDZGss40/fa3S5GAWj1gG4fWxc2DR5L034UCWGEPCGmCuUJ5leXEpPFk0TPuv5BVPC8osFwQdeJAUsfvh6MN0DEr0PKIGmRf96oeu5buZ5xDpP7jJVpAFytN3pUH0tWFuOwaiZwOeMFDe7mGbxRvEq3vH8Sb7V/gMwn7CRmghmCq7JDiS11nFj9RpaL2+AByFIBmq4JFmJVst4b2z9IOfAAaHcmRiX/c907vT9TqSmoDq8ZSczGuWH0m0gp44eQvGAhQSZ/SVnMN1rMnp1qWDapC2SGajLGQ/6iWbyQnio/QnrVmqSRxqfnlig==
+ bh=VQCqCwiM44PlU66e1oU6TRJPTnOkG4mzAGMviDKZ2fA=;
+ b=T6dsEVI7qswjXM1d1BaqDa1U6N9Sls0vtF8QV3se2x44e5eE7HIVTg7VBUV/RHqYLuGtwMGkaSVhORFb4jBrhbA/JAyNGxZRVNr4Jhb7J3mt2UpZ2Jprcr+zGgvuohJjiwnizBNVjgwjUs4UjRY6UM9rnIcfoo7wXIEUbLovi/XDjI0ZziqkiIywWfg/Ovvtf3Vos7Xmp38eej5S62/7SliFWjc0WQtT73sYBGyIWS41nksIiC2eXZDqmG4mnFYDyw7B9T2SjWw6zwoffqVQu9djZqfTzcp5gZXGNDjzMbzIhoHsIkS7/WnZ8EwxFPt2QqCW+S0c6V6+K/K5ho7syA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n5CzI095M4BP3mWtp7GITXAD9C2HOQgRN1gv2U4fRzM=;
- b=ivVazJUALyF8hV47aXD+yLYLSwBy092wusqKFO8VtBH2gWK8rMwL1qmYWyONk4kYt2UZ0BSJOmd0Ftr71jUpNrQiTH8rB27/7O4X/Bkm8rcAsGXEXwJchGkY3LWnBynX+FtJFhhuG6TEq3OZdDgZ/r6cGfTGjgzAG3gTttPe7F8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5176.namprd12.prod.outlook.com (2603:10b6:208:311::19)
- by LV8PR12MB9083.namprd12.prod.outlook.com (2603:10b6:408:18c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.24; Fri, 13 Sep
- 2024 06:25:03 +0000
-Received: from BL1PR12MB5176.namprd12.prod.outlook.com
- ([fe80::ed5b:dd2f:995a:bcf4]) by BL1PR12MB5176.namprd12.prod.outlook.com
- ([fe80::ed5b:dd2f:995a:bcf4%7]) with mapi id 15.20.7939.022; Fri, 13 Sep 2024
- 06:25:03 +0000
-Message-ID: <1830e424-c74d-44d4-8d36-2f2a86eba99b@amd.com>
-Date: Fri, 13 Sep 2024 11:54:55 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/8] i2c: piix4: Export i2c_piix4 driver functions as
- library
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
- Sanket.Goswami@amd.com
-References: <20240911115407.1090046-1-Shyam-sundar.S-k@amd.com>
- <20240911115407.1090046-4-Shyam-sundar.S-k@amd.com>
- <xog6iyhri64cml2p53ncja6lxpt256eqceru4jxi7ee4esnb2j@xrbmeheorofv>
-Content-Language: en-US
-From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-In-Reply-To: <xog6iyhri64cml2p53ncja6lxpt256eqceru4jxi7ee4esnb2j@xrbmeheorofv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MA1PR01CA0154.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:71::24) To BL1PR12MB5176.namprd12.prod.outlook.com
- (2603:10b6:208:311::19)
+ bh=VQCqCwiM44PlU66e1oU6TRJPTnOkG4mzAGMviDKZ2fA=;
+ b=h8akG+AdDBItKDsn13W+nTgOjpcnSr1gUIWQDY50iX0a9WYZa2hjVnjqJs08zoilBE66Oq0HKxMLYdvqbCu1fM8DIPkvbMS3uYtgZjtiIH1Q5ERJE/sDe5PftsrqJJS5QnLUmt/HaLcvceQmD0tuYTioxKI6mN2o1LFGEaZP5p7KKj9G3zr5kX682cWshsO+MgLXJyKAsSpG9+8nHVuVXsRuALPBOLjiMyBSORk02VyUu96KvSiQxgno/eny+nsPhpwWwogAIJZjaL7cI2BsxcFlzKIf/CvkDP0mLF1TfS/OZ/3JnE5JbIZoPzpunyisBbhoO3fmRNNgVS1OvgUhRA==
+Received: from DB6PR07MB3509.eurprd07.prod.outlook.com (2603:10a6:6:21::16) by
+ PR3PR07MB7049.eurprd07.prod.outlook.com (2603:10a6:102:7c::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7939.23; Fri, 13 Sep 2024 06:48:19 +0000
+Received: from DB6PR07MB3509.eurprd07.prod.outlook.com
+ ([fe80::5484:a966:1322:f78b]) by DB6PR07MB3509.eurprd07.prod.outlook.com
+ ([fe80::5484:a966:1322:f78b%6]) with mapi id 15.20.7962.017; Fri, 13 Sep 2024
+ 06:48:19 +0000
+From: "Wojciech Siudy (Nokia)" <wojciech.siudy@nokia.com>
+To: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+CC: "peda@axentia.se" <peda@axentia.se>, "andi.shyti@kernel.org"
+	<andi.shyti@kernel.org>, "laurent.pinchart@ideasonboard.com"
+	<laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 0/2] pca954x: Add DT bindings and driver changes for reset
+ after timeout
+Thread-Topic: [PATCH v3 0/2] pca954x: Add DT bindings and driver changes for
+ reset after timeout
+Thread-Index: AQHbBagDIAKDVzc8+0uhDm67jHcvJQ==
+Date: Fri, 13 Sep 2024 06:48:19 +0000
+Message-ID:
+ <DB6PR07MB35095EB1C81FC212D9A6D91B9D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
+Accept-Language: pl-PL, en-US
+Content-Language: pl-PL
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DB6PR07MB3509:EE_|PR3PR07MB7049:EE_
+x-ms-office365-filtering-correlation-id: d624f2e6-9208-4160-27d5-08dcd3c00d6d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?iso-8859-2?Q?Wsci6YmpUucgJUz0MtLftcGMcEIptRdQMoVgR5pc8iBlKA2/wIaSk2b8hk?=
+ =?iso-8859-2?Q?KtSnS80w2uUeAEn3kpWmJkWGZXGgIsQDOdPlEG0Ijil4HJ5w12k71sbASY?=
+ =?iso-8859-2?Q?3MU6UyNaaq30syqnhxIxWCLLQE0G+lkZA/YT4uby88W24OtZWU+f3WKQpR?=
+ =?iso-8859-2?Q?9zdGh7Tc6orrkbLr4V4BlwIPEm4lszRmNLTwiOtywXqCMt8Rmq6/qe4qz1?=
+ =?iso-8859-2?Q?+Aw+CTY6p7027nCM4uvA8kNzk+vvEKCha+DsYJkpuOnHz6H1jR9gR4nfSt?=
+ =?iso-8859-2?Q?Xi8fbFywcGLmjsC08JC6JUm+bWFcyCBVLcUQ/M2EnDY/SC10ofmzLMSUey?=
+ =?iso-8859-2?Q?s1b6j4o3eS3KhDS/GfQHtetMHw7tv2+7MoRT2NQUTIKcfuYwXTXyhkm0xV?=
+ =?iso-8859-2?Q?1vZ0WZgg8C23YXnKz+kZH/b8p0ppRWzL3YqWYr6G6idGtQj2Tn55jPKb2i?=
+ =?iso-8859-2?Q?yavxuQmD8jdZbz3s3nQ0jzGw3BR6N/EfZQ/qaiIcvMxnFyDLOnUit1/sFT?=
+ =?iso-8859-2?Q?+QZGPZsc28CCL4ImvO5Cl50UaPGXtbfPu97AMREJMEgI/rTkP9o154hl4D?=
+ =?iso-8859-2?Q?DKYj7rM42e/hm7XSf/ZGbWFvJAwv5mBtQeK0W5OpWhEELcVzBWXX7r75y9?=
+ =?iso-8859-2?Q?P1d7wjqriB772Sk+Rg+taycqKRPtCRcKyfX51jd6pTEVNDnmQxQc2/NxRx?=
+ =?iso-8859-2?Q?BOe2m2babGe/2b1FJvaKSAJnGm4Xqb9+8L/cKxo/AcADcU+sZp+h8DFWe0?=
+ =?iso-8859-2?Q?a+aaEgRDgVABnZs9DUzbWO3157r7d19ykY4sSAJAbDIpONjYpzkrBcbchF?=
+ =?iso-8859-2?Q?WawaC9sHYITuFbKWMEWVqCTX+/4nLUUHgi+stV1XOB7Fv7ymm9CTpBB8+p?=
+ =?iso-8859-2?Q?EWANTURO1h+tLS8mMh5KGpuhPfczIGQ0wMVJGm0ajrSygmhF0RrgeaBTiT?=
+ =?iso-8859-2?Q?3EbLy43eJJR52BbLKRQxwo6WJpul5x3cMYxQb9swZ7VLqZf21jwfP7APK3?=
+ =?iso-8859-2?Q?uUFA1rdMg3tuLVsA/pENkndBcNUK5DKPtGPBQzpBX3+Cye43J5PSOrHlPw?=
+ =?iso-8859-2?Q?Cbc+5jFkr24FoRrDBCKLIyhHDtOaiJcJvncoA5yxPZPAh1y7uNcHSjsgbp?=
+ =?iso-8859-2?Q?AEbIn2iFUmSmUL5kzy3Ji4yFvy+FYECZsCoxwcYHvzbYTuZf42UOIh/y8x?=
+ =?iso-8859-2?Q?ILI7ZzBeCRGv+WcoULKOCfcf3yyXtMRxznS2W1WnqI5Qrfb7zOVCy2ZyM+?=
+ =?iso-8859-2?Q?k15CD4enDpXxa1rcmDy/yBrGVTVc3K1atNE+Tvsp0J7eHMTvb3gjtFuJVA?=
+ =?iso-8859-2?Q?dXcw0KLQreHyVPxQaJLr3HnHylQojYgrJJJdruz1AkfaXFt4JwVr2p2Fz6?=
+ =?iso-8859-2?Q?hhARIQ2epzzYs+sT3HChG359Tpg+TKmw=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR07MB3509.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-2?Q?jqJOm7bXGrJb9Ikb8zBvW1CX0Vmau9caxUm9IzUGJ+vp+/Y1pzGPgaAiIE?=
+ =?iso-8859-2?Q?mlYUtioIQ4F3qlHFejkgmeRzJfmzjsn0mseh8KpXn1lPQN1wLH85JXwVXl?=
+ =?iso-8859-2?Q?NlGwTrFqFGQV1/0+97ZD8bOaSbgSWgkXffCawkACoGDivEG1dwP+Pb5cd8?=
+ =?iso-8859-2?Q?+1RwYyzvKyU3XE5XOOYOEycWPIqMxhcwmUWeVXYSzsXXk0wBsd1Q7xWTbF?=
+ =?iso-8859-2?Q?cnXic4ao9NjGl2nBdQ9WapQiMSNU9agbhRPe0R1Y9QBLF/NS5peBizxzhZ?=
+ =?iso-8859-2?Q?I6P+ymWNgHhziykSYp+PbNp6BP0fTz5qutkb0SBxa9QXnCrrzcqiHa4iiN?=
+ =?iso-8859-2?Q?ggdlWsC8SYZuEM2JS43+s+ctNo7J6oORDE5pomEpHRz7SvaXPNbF+G2CDl?=
+ =?iso-8859-2?Q?QMfmAsOPXFsl+PpkxsC8hQSoxNOxq6Ze6Qrjvsy4SRKUnkcNNn8l/la/rQ?=
+ =?iso-8859-2?Q?JW3YJNtJZDi8IsBnXOZKlLdD/NB8Xqjmn4Pp14VBs0Ot5EgPC5OUSz9DLV?=
+ =?iso-8859-2?Q?vtw2wbP/HiwZkglji0SP+jdkqxpxo/vRFpGytyUox9G1RFdv/bJAlApvp6?=
+ =?iso-8859-2?Q?DVTIYN0oesLX8YmEOvbzo48WoXa0iLYCq9iTPNOKnq9bdcUB3PkO0w+ayB?=
+ =?iso-8859-2?Q?vbCEoi/FZrJIAV/xSJeRwBCJafI9kPGzLVUbqqozRlTejLArcilRLVfYiG?=
+ =?iso-8859-2?Q?LSSpz/xZNMie9+JmxaLVjoFyecrtyCofQAtwHJlaxhpr5dgkPm7I8eW9PC?=
+ =?iso-8859-2?Q?t+d8zmayynk3SvUicZgYdC/FpBx2WyncBIYBF4mdWelH9edJCa5UB9Ffdv?=
+ =?iso-8859-2?Q?HkSFhMlhkGYNi2Y+D3A3EWRr+smHJJIOQA3EbRWr+ZXzQaoKoQ/9qBZOZe?=
+ =?iso-8859-2?Q?SpVuxOL0RR5z4ekbof4LYUHIkZZT2/kvMJhZM46hGgIMXj0cWWwbB4wkzD?=
+ =?iso-8859-2?Q?L/2JWi22IpaHIQjSQXbPKs552iXsChXlFZXUriwlDPZO/zRsZ8wcLA5MVV?=
+ =?iso-8859-2?Q?+ReAkaf+S3Ot0PWlbqjputm5Y5Rp57V4d/hY/oA5KgZXrI4DdBcnr1/Zra?=
+ =?iso-8859-2?Q?xXQzQ+sDUNrLMtzxbtZE6QMCSm3+t2Pe5bp6hZzslMV+GKCdaoRKkC/9JZ?=
+ =?iso-8859-2?Q?rvN3ad+CSmwN2IO3V62oe5gf4DZOXI3w4JX3LMPYgX4uXnltSzqrcXh3gf?=
+ =?iso-8859-2?Q?v5qcYOq2T/73J1NULTD7isGVcCSI180SYstKN/y2G9UukewwXV+G1hfnkS?=
+ =?iso-8859-2?Q?CqN0+HDw6Nm24GkKamXIzKHGqan+URGkKFZYTvlWfcGd1r2H4UHdErLVt2?=
+ =?iso-8859-2?Q?E8RJlecxGXykpv2wss4c6o0hwF1S5VHm78K6zM7+a0A6R2XFlGvT9jkgry?=
+ =?iso-8859-2?Q?h0mlye5UeQpYrQbBi9gHB/w+RUsok5sLAC3CnyJXnig6Jjk6Kq/Nsmi33Q?=
+ =?iso-8859-2?Q?QXxQzJasUz22X61y5x3Do95r46yPfsZApAgA2DbkHtobA3mKEYSGOtMlp+?=
+ =?iso-8859-2?Q?16yuSgsuw+G1cSDnZYGtYvOQKz7eS6hgBkt7/Fn0DrfImgiOvDi5Bz7p9o?=
+ =?iso-8859-2?Q?yFnLteYp8UITjZI6tRXk9OcfgZeGwo3zcW6v4PAcu/2Oj4obhxBM5TvxEc?=
+ =?iso-8859-2?Q?IKs/fW3xmhdx3hVpeT2k5RfBW35Wnlj6Uh?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5176:EE_|LV8PR12MB9083:EE_
-X-MS-Office365-Filtering-Correlation-Id: 483dd0b7-57c4-4b6f-bc36-08dcd3bccce0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?S3psLzlPcDNVQlpPTFh4MXRJYVZTSlpXTVYzN0F5OVlXa3BJbjgrekJYMW9m?=
- =?utf-8?B?Wnd3UHpTeXB2Z0VNTVcvUmYzaEQzV0tiY1YycjduRFR4ai9ISzExLzY0NVhW?=
- =?utf-8?B?bnZJWWV2OHJvRXN4V1NCbGpMN2kwSUlZNm5uSXRuQzFUYVltOGtLTGFwMGdx?=
- =?utf-8?B?Y1BocnRQK1dzMzd0VURPelRwQm1GYnBsSTR6OHpRdTBIaFBoQ3Y3RUdONFMx?=
- =?utf-8?B?ZFp6R3pTVVJGdWIxRWs2dDNsZ0FaekRReklib3B6QmdMWUVCNzRrRFpSQ25N?=
- =?utf-8?B?UkRIU1R4eVI4SWJSZHdhSDl6UlRBU0FPUzQxbGFCSmlBNGVsUjMyZDNPdjcy?=
- =?utf-8?B?MStWRDE1M01kbW11NkpjQXhZbDIvVUVidWhhcjd1bWFpWlN2bEd0TDBDM1E1?=
- =?utf-8?B?N2Z5bThiMnJreDRNZUpWSkV6cVNlWHlKYUFqQnE2NUtGWUlGQXhHYzJJWGNG?=
- =?utf-8?B?RlYyZ0Zac01SMXRkZGpCelE1YUhubmRWWk1lWHovZXl1NlpRWkVDWlVVZG1z?=
- =?utf-8?B?NXJoUW5VT3JBL1BBZkREaW5aK1JUbEg3OHB2VlloZmVTc3NsOGJydWJ5ZXVP?=
- =?utf-8?B?dlZHYlc2WkVpQnpSSlRzUXZ2NFY4elBKekJPNm1wNTcwM1BGODlVMUl5cHN1?=
- =?utf-8?B?ekZURWxmZm1UQmVsOWpSa2ladlFPUG5STVJrQkNUVUxxcFIyTTRFU0dXb05s?=
- =?utf-8?B?Sk4xdjZBTVp1b0JEV1ZXV0cvOE1kdWxMT3I4a3ZjeDZ5eEh3WHcrRkZXcC9Q?=
- =?utf-8?B?bnZKSHF3V1EvY0RxVTRyS3dodlN0cEZkZytYYUdEM09lYUo2SUR1ZzEwc0NY?=
- =?utf-8?B?ZE1vaEIvakEzTFNoQVd2WDlNZFJFdmVUSTU2SkJLY1ZNbzFmMDF6SUNGaC9X?=
- =?utf-8?B?eXRiSnNodmkwb0hQcGl4WFhCOXZIQkEyRXNERTBpSWQ3cCs5ZjVVblg2U21k?=
- =?utf-8?B?Wm93WEpLengwMno3SzRoOHNIRnEvRlRoUXJvT3A2eHNPN09CZ3RHc056SnJq?=
- =?utf-8?B?cEh0K3NOSEVJUFlCKyt3WG9EVzRoMXRGaTNwN2ZPYTcrc1RJSDVMcmJsTUNB?=
- =?utf-8?B?V1VuYmFEMDhxNDlVaGw0Y3hBM1A5M1NDT2Y3ZUsxTlladzhEZzUxZ29UVE9N?=
- =?utf-8?B?eDZXQ3BwZXk5R3N5SmcxamRuWkpuTFRwL29nZXUybFdmTkpKcThScTRoblFC?=
- =?utf-8?B?dlRvZHM1MnAwVjg4ZWRCamVZczZ0akxWWGsvTzQ1OTVxWitkbVg3MUMzL3Qw?=
- =?utf-8?B?dVI3eTRvcUlOY0JTanQwNy9jYWQvT2JxQXJjaFBWbWYyUlI5ekZJc3c0WE1F?=
- =?utf-8?B?YUVqem1NaGxVK3I0dGE0OFFaMVU0aU9UdElrRmFOL1JGZnEzMjFmU0NINWJQ?=
- =?utf-8?B?SHlFZlVLcWZXNHppaGtha042ZlJkeFBEbHVqa0ZLWmtCdDFrVlF1cXZtdXN6?=
- =?utf-8?B?YW5teDZEb0MwSGRvb1R3cyswUUlma1lGT2dubXVHRUdVb1EwbXFxdThsc05t?=
- =?utf-8?B?c1FFalYzRmZ5SXJRaWQ1Y1FFREplaWowL1B3ZWl6NlNDUTZ1blE2VzZYMGpB?=
- =?utf-8?B?ZklZU3Q2NTcyRDJwaFZtMjNTRzc5NENrMHVaNlpoVUd2Q1lqR1B6elJodnRG?=
- =?utf-8?B?aW5tZmIvY29wMnRvM0VOOWM1VmZVQlZsUW5YNWZJcUtTZVdyam43Z3FrSUdI?=
- =?utf-8?B?R1Ava1YyVytOeS9ObU01UjUzdThsNU9MVmowdldIS3UrbWNRNW5BS3dLZkRW?=
- =?utf-8?B?ZlR0Vi9ad2RrNVhjSkJXdFd1UnFwajFnRy9JbTZsMXQvSkM1a09SbVNBQVkx?=
- =?utf-8?B?MFN6VmRubnJxdDRPb0VwZz09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RDJhN2IwRTk1QVg0bU5GUC9ONWthVXgyMkR5SElRWVpkdnJSb1dXcmNYMzRB?=
- =?utf-8?B?cU4yRkM2bVJMOXhWZC8xUnpUTk5JenBsZ01WMlJuRWlNVFhGN29VQm9hM3NR?=
- =?utf-8?B?U0pjZWEyNTNSdk9kUEJtR0ZobDZDWkpRQktsSXlMV2pLYjhCV2lsS1RxNHRH?=
- =?utf-8?B?U203blVXcVh3OXpMUHNVNDdwM3pXNHNjQzFkRXpldmlDejJjMDgvaVRndlp2?=
- =?utf-8?B?OW5uM3VxOTRIcGJnM1BZdDh6cnl3S3N6alZJOGVpMWhQYlF3bDdIcXdleW51?=
- =?utf-8?B?ZlZJa29ZdmV5Q2RhbmtLL29uNlVPbHY5REltY2xZY2lpRE11UFg0MXQ2MW9j?=
- =?utf-8?B?UGdySDNxMCtUZ1lzd3JVeHk5emJLVEpEUUg3Y3doSHl4clBOTVBJWkpqcE9X?=
- =?utf-8?B?SS9uQXJTTjhVOWZGaEg3d1ZYVXB4U083KzhpNEU4U0JZaFM5MHpVdXdaZmR3?=
- =?utf-8?B?M3ppb2hJdmJZOGhKbXBPRGVLNVVwQ2NDTlFFVzlCMWlhMXRTRVRhSlJublBw?=
- =?utf-8?B?dkI0ckJtb0NrUjhocm9xN0NDelExbE8wMTVGM3N1K0VjYVR3ZnF4WHZIc21u?=
- =?utf-8?B?WkJzWUJmY0xuV1FxVTdHV0NwSXFsVG4wK3pmdUY4Rk1Xay9uVFpTZ3JIbytu?=
- =?utf-8?B?NzExQjF1K2t3Z2VHclE2MVlFMU5Ub292TnJZZGU4cTJHcDFBbkk3L0RaYnBI?=
- =?utf-8?B?S20rNTlyTm5EODZkTkZTY3dvRFJWRDVFRVVvbFdoVDNhNXB5aSt4b3BrRFRQ?=
- =?utf-8?B?alZPbmphY2t2SVhYOWplKytZSDYvTU1rOXl6eWMvMU9EeEZUQ29ZVi9xbk0x?=
- =?utf-8?B?VE0yZDFPQlVWVGJyQzA0RDc4QUVybEUvL1lBa3h1bzY2MUpKa2tuc2MyS0Ri?=
- =?utf-8?B?dVJVU1FZNitpenludlovYUJCcy80N3JNVlVxQjEyWm8zRjZTTmFxZ0pxYU95?=
- =?utf-8?B?SlBFdEw0b2lBc0kybFdRQktOWE81L0ZZallQd0JEWFg5cC9tODdYTHZPZzF0?=
- =?utf-8?B?dXZreU1mMGhaNlRFQnp1L3dYaUx4SWUyb2FRdXlFdk5mK2hmLzRDVGtmTVJ2?=
- =?utf-8?B?ZkxrU2xneUUxOXpVTXFNM2JzOStnUUppem5Ldkp6dkpZUFh1N3B3VE1tWVlK?=
- =?utf-8?B?WHY5cnVOQlRHMFJtRUpuOHkrVlRVbEptMElRRnhZSlZnYkptZmcweXJYdUQ5?=
- =?utf-8?B?a2REanpielpuclAvdUY2TFo5cGd1cGFSTnIwTXBBRjNpUW12MGhocytCUXp6?=
- =?utf-8?B?bExlWDNmUWN6UjlGWTRNRmt3TnpXTE1PVEFRQTZCeU1HTUluQzByU1ZtWHQ2?=
- =?utf-8?B?ajZlRGw3Ni83R0E3UTFybW1aZlhvelZlcno2blhOcjFnYXMxeTJpSElWK0Iw?=
- =?utf-8?B?WU1sUTZxdFV4WG15RUN6WXh4Ny92MytYUm42dE16eVNBV20xdmxPMjlrOXpL?=
- =?utf-8?B?RjdiaEQ5WjEyWFJuOUpGbDBlako0TVk5UkFCT2pQZW5KaWJ3Z0V2aEdueWFo?=
- =?utf-8?B?MDZWcTdidVVGbGIxYnJrZUlQdGc5UGVDR1RCOGJsRDRQUytLVHZVa3Q4dW5n?=
- =?utf-8?B?WE9CQkhFZENsc3R1NlR6bVZlUTM0dEpnRXpLb2Yxc0IrNEFPWEk3SGJRUGY0?=
- =?utf-8?B?U09WNmp6Q0JFUEFoMU5vVUwwTHdzSWlxSlk4ak40ZndBU3ZCMUgyTkpVdno5?=
- =?utf-8?B?YjVlSEtGb3ZNbTlPSFMxSW85d3hCVy9PTWpOcXMwd3QwMVY2dFNnN1BkdTJv?=
- =?utf-8?B?YkkvZFdZZmg5ZlpTbGVLZmo2cE1YQXlEamRqSjRJL1gwNmF5VEdrQXJRK3pK?=
- =?utf-8?B?ZXRkSzdFcElGKzdLcVAvb1BlT0NaK2RKenVTWDJjWFkrYUlwR1M4ZlFPeGxH?=
- =?utf-8?B?UStkK3B5MnZNMGZyWmRFUlBtTVc1ZmVrV05oUStSWWN2NEhDcWhybzdoL3lJ?=
- =?utf-8?B?aTg0SUFvK2pRT1pjSHQ2Sm04RG1Fc3o2RDBBUER3cEtmL3BxOS9UK2VXWVJp?=
- =?utf-8?B?ZDNrSDV2TnpXRlkweHVzb3RNTjlmMHVKc1V3NVo0b0dqaVJHdjdZTVI0cFU5?=
- =?utf-8?B?OGF3R01EcnlGSy9UYXhnaExpTVU4Tmt3R1NZaXY0N2xDaStqWU5YUm4wTUY2?=
- =?utf-8?Q?W03ufhaKKLkR0jr0YxmAAIgzs?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 483dd0b7-57c4-4b6f-bc36-08dcd3bccce0
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5176.namprd12.prod.outlook.com
+X-OriginatorOrg: nokia.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2024 06:25:02.9886
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR07MB3509.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d624f2e6-9208-4160-27d5-08dcd3c00d6d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2024 06:48:19.1685
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N/Gv+N/AOemUXCTpwJkdIJ1xCquFIYVu+hIw6qsPX+7vBZWAFNG0VDAfjYoR4mI9/889vi+MOhBik3rpOUN0IA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9083
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oUO5l5jrB3vhoP/DM+sNoZAsObKeyKdRR2n7Hp+uNUqYmMdALE2SUj9L5Ningj2mSK8aGLg38vfA0RBfbA2dN1CF9EH/0Zi41xON7E6m99o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR07MB7049
 
-Hi Andi,
-
-On 9/12/2024 13:10, Andi Shyti wrote:
-> Hi Shyam,
-> 
-> On Wed, Sep 11, 2024 at 05:24:02PM GMT, Shyam Sundar S K wrote:
->> Export the following i2c_piix4 driver functions as a library so that the
->> AMD ASF driver can utilize these core functionalities from the i2c_piix4
->> driver:
->>
->> - piix4_sb800_region_request(): Request access to a specific SMBus region
->> on the SB800 chipset.
->>
->> - piix4_sb800_region_release(): Release the previously requested SMBus
->> region on the SB800 chipset.
->>
->> - piix4_transaction(): Handle SMBus transactions between the SMBus
->> controller and connected devices.
->>
->> - piix4_sb800_port_sel(): Select the appropriate SMBus port on the SB800
->> chipset.
->>
->> By making these functions available as a library, enable the AMD ASF
->> driver to leverage the established mechanisms in the i2c_piix4 driver,
->> promoting code reuse and consistency across different drivers.
-> 
-> ...
-> 
->> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
->> index 2c2a466e2f85..174cce254e96 100644
->> --- a/drivers/i2c/busses/i2c-piix4.c
->> +++ b/drivers/i2c/busses/i2c-piix4.c
->> @@ -153,8 +153,7 @@ struct i2c_piix4_adapdata {
->>  	struct sb800_mmio_cfg mmio_cfg;
->>  };
->>  
->> -static int piix4_sb800_region_request(struct device *dev,
->> -				      struct sb800_mmio_cfg *mmio_cfg)
->> +int piix4_sb800_region_request(struct device *dev, struct sb800_mmio_cfg *mmio_cfg)
-> 
-> I’m not entirely happy with this change, or the others above. If
-> someone runs a git bisect, they would be confused by not seeing
-> this change described in the commit log.
-
-Can you elaborate a bit more on the expectation? The commit message
-has the details on the each of the functions that has to be exported.
-
-Can you please take a look at it again?
-
-> 
-> While it's true that the accepted line length is now 100
-> characters, the 80-character limit is still preferred (and
-> personally, I prefer 80, though that’s just my opinion).
-> 
-> This change doesn’t seem necessary, so please amend it along with
-> the others below in the next version.
-
-Ok. I will move to 80 char length.
-
-Thanks,
-Shyam
-
-> 
-> Thanks,
-> Andi
-> 
->>  {
->>  	if (mmio_cfg->use_mmio) {
->>  		void __iomem *addr;
->> @@ -192,9 +191,9 @@ static int piix4_sb800_region_request(struct device *dev,
->>  
->>  	return 0;
->>  }
->> +EXPORT_SYMBOL_GPL(piix4_sb800_region_request);
->>  
->> -static void piix4_sb800_region_release(struct device *dev,
->> -				       struct sb800_mmio_cfg *mmio_cfg)
->> +void piix4_sb800_region_release(struct device *dev, struct sb800_mmio_cfg *mmio_cfg)
->>  {
->>  	if (mmio_cfg->use_mmio) {
->>  		iounmap(mmio_cfg->addr);
->> @@ -205,6 +204,7 @@ static void piix4_sb800_region_release(struct device *dev,
->>  
->>  	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
->>  }
->> +EXPORT_SYMBOL_GPL(piix4_sb800_region_release);
->>  
->>  static bool piix4_sb800_use_mmio(struct pci_dev *PIIX4_dev)
->>  {
->> @@ -514,7 +514,7 @@ static int piix4_setup_aux(struct pci_dev *PIIX4_dev,
->>  	return piix4_smba;
->>  }
->>  
->> -static int piix4_transaction(struct i2c_adapter *piix4_adapter, unsigned short piix4_smba)
->> +int piix4_transaction(struct i2c_adapter *piix4_adapter, unsigned short piix4_smba)
->>  {
->>  	int temp;
->>  	int result = 0;
->> @@ -587,6 +587,7 @@ static int piix4_transaction(struct i2c_adapter *piix4_adapter, unsigned short p
->>  		inb_p(SMBHSTDAT1));
->>  	return result;
->>  }
->> +EXPORT_SYMBOL_GPL(piix4_transaction);
->>  
->>  /* Return negative errno on error. */
->>  static s32 piix4_access(struct i2c_adapter * adap, u16 addr,
->> @@ -740,7 +741,7 @@ static void piix4_imc_wakeup(void)
->>  	release_region(KERNCZ_IMC_IDX, 2);
->>  }
->>  
->> -static int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg)
->> +int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg)
->>  {
->>  	u8 smba_en_lo, val;
->>  
->> @@ -762,6 +763,7 @@ static int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg)
->>  
->>  	return (smba_en_lo & piix4_port_mask_sb800);
->>  }
->> +EXPORT_SYMBOL_GPL(piix4_sb800_port_sel);
->>  
->>  /*
->>   * Handles access to multiple SMBus ports on the SB800.
-> 
-> ...
+From: Wojciech Siudy <wojciech.siudy@nokia.com>=0A=
+=0A=
+The pca954x mux might not respond under certain cicumstances, like device b=
+ehind=0A=
+it holding SDA after recovery loop or some internal issue in mux itself. Th=
+ose=0A=
+situations are indicated by ETIMEDOUT returned from I2C transaction attempt=
+ing=0A=
+selecting or deselecting the channel. According to device documentation the=
+=0A=
+reset pulse restores I2C subsystem of the mux and deselects the channel.=0A=
+=0A=
+Since the mux switches using transistors, the failure of line behind mux th=
+at=0A=
+is currently conneted prevents sending commands to mux itself, so external =
+reset=0A=
+signal is required. =0A=
+=0A=
+The following series of patches implements the reset functionality if it wa=
+s=0A=
+selected in devicetree, beceuse the reset line might not be dedivated in so=
+me=0A=
+applications and such reset pulse would break other chips.=0A=
+=0A=
+Wojciech Siudy (2):=0A=
+  dt-bindings: i2c: pca954x: Add timeout reset property=0A=
+  pca954x: Reset if channel select fails=0A=
+=0A=
+ .../bindings/i2c/i2c-mux-pca954x.yaml         |  8 ++++=0A=
+ drivers/i2c/muxes/i2c-mux-pca954x.c           | 48 ++++++++++++++-----=0A=
+ 2 files changed, 45 insertions(+), 11 deletions(-)=0A=
+=0A=
+-- =0A=
+2.34.1=
 
