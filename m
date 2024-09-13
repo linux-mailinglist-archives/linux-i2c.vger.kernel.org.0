@@ -1,174 +1,343 @@
-Return-Path: <linux-i2c+bounces-6693-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6694-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35F84977D40
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 12:23:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BBA4977D49
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 12:25:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFE0C287E60
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 10:23:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF6F01F210B9
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 10:25:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5311D7E5C;
-	Fri, 13 Sep 2024 10:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F781D6DC6;
+	Fri, 13 Sep 2024 10:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="wz3R9JIO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eoVeK1mN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2080.outbound.protection.outlook.com [40.107.104.80])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA0E1D7E41;
-	Fri, 13 Sep 2024 10:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726223001; cv=fail; b=t/ekyER6fko12cQ+1jlxjUZJIjLuSFTFEhi3JaMH5xLmniGuMo3L6nMisQA5VbkNfZ2gqCa4wCL2eD0pnZMCBNBZDLfej1AGGbqkuarLq5VNJGjPvVa8jXR+iZ8riIZzY6dpoVQpGoiE3mg70Q1FmMv4k8QHE+Ux2dNIf/16b7A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726223001; c=relaxed/simple;
-	bh=UXodRyl32N1s6rcdn8T5P0Vsq5LsmPTv+nKK/Ktzr0Q=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=XkUOyxBxN0m7Ix+l+J1yBnM4PgL/eBpY7dyKqYhxKiZVY3NpLSae44FjPRRchJxWGgnLCG+zLX19/0fqLyjOS8t04VjGInj9uUnxLW38frBN8OGmi27oIE7JL3acYLJgF47bK8MVitE+r7LEAkZarUGIat8ERynmX8NFuDZoMyc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=wz3R9JIO; arc=fail smtp.client-ip=40.107.104.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UCRKaUUJ4HB8RTORJSjVCNIALIpHw3oSq81GNsgeUGq6WjtulyNduO2I4N/iJGDUyVA8JDd6LPPX9bIWqhYWeUG/j9GAePZBcfkktPK2GnmFliG33DtaDv45CT6/F+2DIN8S47R2bej1aFaN6sHKQer9f2qXWYGDagT8e9TKpT83s6f/GgHjEIGkBVtFzD0dsSFHTCsqYU329xy+bJkWOEukBmBKE3tcD1nvC/rLpf3KlwGUgSAWpaTm/jWfIWhJI7zgu56klpAmbkOPO00NMQzCh9WkWgRUjRouaorHP2BtC/OhuTTcPnxF2pxHah97qEYcAb3DCbsG5gGBE1w7zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UXodRyl32N1s6rcdn8T5P0Vsq5LsmPTv+nKK/Ktzr0Q=;
- b=nWfn3s3rg/+pH6Vsonq54jMr7FyFTBzr27CC/jSTV3z0B6f3GGVOGx19Jw0z7MZCQE3teS9mQ+rt//2LihfcAhqIPhDGi6jaWzg79Zwtqfr2wcH6ynVBejSHTPb0jtieSCtpnNur6lekmKSCDO+MPatExRa2fPimIjBrkL66UMXBQ4yAoZjNMinLxzKP+2LmhNZ3qLd1Pf95/NTyLQQwIeACtd7xrnJYld4tO9mi4IAVZlZ9W5N+TUdCMCVBaJFZLmgNCrhbk4ciVBj3bxpV7lrgycsM8Mp+9/mbvUkNI/OH61/lrfTf1YSShLONpCXocjFRH0Q3pIpDxEKRaAN+Eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UXodRyl32N1s6rcdn8T5P0Vsq5LsmPTv+nKK/Ktzr0Q=;
- b=wz3R9JIOqYJinx3EsaZcBGxpX6Q1DEp+nQNDLNLeNuL7Fd3ZgwhPp23oQW4KRfzwVwQi3Tjo/R9XO/TkWOhuZQTP9EYUMW5Q9+6mRIC8bsZ2Ku+6hWsLgX/jp4fJ7Hj2kLI/8hcBirlfgkZVcFDQfyhJ6ZigEx4E5FX8RF2uOAnqZv/OPKXh5a4lGsRmPyR/b+DU8uyuc7le3H4U/YVa8U3rNeepHwiO4TTnKS3CU7DscYwUnUA9BVHwhBKUgH1LnImimphao051VNO/V86mWRXnhWpQtLv3ikVvBZeljtJlE0ZqZiCevqjGojtfO31pIv2rNI1nGQTqL9Xf7324Ag==
-Received: from DB6PR07MB3509.eurprd07.prod.outlook.com (2603:10a6:6:21::16) by
- DUZPR07MB9763.eurprd07.prod.outlook.com (2603:10a6:10:4b0::21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7962.19; Fri, 13 Sep 2024 10:23:17 +0000
-Received: from DB6PR07MB3509.eurprd07.prod.outlook.com
- ([fe80::5484:a966:1322:f78b]) by DB6PR07MB3509.eurprd07.prod.outlook.com
- ([fe80::5484:a966:1322:f78b%6]) with mapi id 15.20.7962.017; Fri, 13 Sep 2024
- 10:23:17 +0000
-From: "Wojciech Siudy (Nokia)" <wojciech.siudy@nokia.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, Peter Rosin
-	<peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>
-Subject: Re: [PATCH v3 2/2] pca954x: Reset if channel select fails
-Thread-Topic: [PATCH v3 2/2] pca954x: Reset if channel select fails
-Thread-Index: AQHbBakvQJCOfWHDv0+K266wlnTGW7JVe14AgAAGjpU=
-Date: Fri, 13 Sep 2024 10:23:17 +0000
-Message-ID:
- <DB6PR07MB3509E45E975329EA62723F179D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
-References:
- <DB6PR07MB35097CC094E6995B2F66A17A9D652@DB6PR07MB3509.eurprd07.prod.outlook.com>
- <20240913095730.GD21327@pendragon.ideasonboard.com>
-In-Reply-To: <20240913095730.GD21327@pendragon.ideasonboard.com>
-Accept-Language: pl-PL, en-US
-Content-Language: pl-PL
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB6PR07MB3509:EE_|DUZPR07MB9763:EE_
-x-ms-office365-filtering-correlation-id: 3f47e91c-d768-43af-e507-08dcd3de151e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-2?Q?9lc1QgVmV2gJQJ0RTJ7AU8Yc2341SpEF6vBlTh80SEWYx51fe7M529I9Pt?=
- =?iso-8859-2?Q?RhQd86CsbVGVhZ0OfYFV4N8N10Y8mX3ShNOcOM8Wc97pfmGYoZ9HOlbSKB?=
- =?iso-8859-2?Q?OPjisYg3YWm2pGGh6bXuO9NWgnj/9eUdTjT/Tk4A8A99d4AYmtyiTRbhcT?=
- =?iso-8859-2?Q?hudsXw/+ijTUx4P1B/1cOomVPcDB9Lsw+01FxCDbL1pshHdNOaXGMtXqZs?=
- =?iso-8859-2?Q?W4idhvbJ4q7ei3a7VZtci0O537IT2OoNinKZJPnwWIBxZ+pK60vOitbkyE?=
- =?iso-8859-2?Q?nK3t5k6cXKfIb5lLJNuBSfaTfKI2tjm7JnHrZCPqmDo+XfMn7oM+/9U+Z5?=
- =?iso-8859-2?Q?2Fk+Vzn8gnZY363Ge1i9XxpvVwjLawqmpl1qLYPuHU+giYSM9GdZJHi8Wl?=
- =?iso-8859-2?Q?jnEuWWQU4eyj6pZ8rR+VcZxAbl9KgYXfXXf6tH6k6Y5meRzj9aMkFc5z9x?=
- =?iso-8859-2?Q?3pmGB8kRTGw4KvZtJHZrL9q55k9TKyj7Zo5TNm8RDdPBvrwMx03jTEICYT?=
- =?iso-8859-2?Q?EC0mHDtUPxmJZoX+ny9W5Jk0AbXh/a7/GhokoT+EvfgEgRPs2QoEP0LXWk?=
- =?iso-8859-2?Q?3/QpTsN3mUCbAvsOcrXnSmhgyK6s8FVzXn4CqpzIHuXl9sgnCBE/drLF/W?=
- =?iso-8859-2?Q?FDfzyIE0nyKQp9/9FsTXvQDC7UWBLeODDY5bKpH7Ng2dEOCVeypmkX3HHu?=
- =?iso-8859-2?Q?vxX8haROCWIwSm41UhVVvYAB/HBCkq/CI09t9CCto7JHhg7jqkcPuYByGA?=
- =?iso-8859-2?Q?c3wnQfr2gYJtvLgpLBqUcqk+trjap0a0RDOjWom+XBQlUqbKPWipMLK4vn?=
- =?iso-8859-2?Q?33VGDYtZS/rwaFN0sm/z0qMRMGrDEb96VADt/1HUYwflOPFmXmMnBrix4D?=
- =?iso-8859-2?Q?yxUFKZ06u/Wixu3ZnmIAlp4soZEvQ1QL7KYXCmY5dug+qX/5MypdNGAwMJ?=
- =?iso-8859-2?Q?Trs1Iq5kGt0Koe6A3sBon6O+Lc3gUzcTZk2CvBphzouOAjhWclYzb/DwQy?=
- =?iso-8859-2?Q?qD6KASwR4bYM7XtNLI9rlHo5FQBR4LW44JIFuNXWkDnnL6rjdS7ht1Bqof?=
- =?iso-8859-2?Q?0kVRBvz2sv5uodSwVrrLpdl61chH6aZo9aeHNmY2QdVcXuWn3B6xc7+0j/?=
- =?iso-8859-2?Q?hMQUVl5ce06EyWziJDC/LaK5ucof2FQqUB3U11YE6Ld4YkZjoBt9fulAhu?=
- =?iso-8859-2?Q?MLZ4cWhHrgiM5Qm4vAUTWSh1EZJC3n6t7IPrRBHS9WDUMvfqaNpe+W7FXM?=
- =?iso-8859-2?Q?5RYTx8rI7VbQFs6ZWa4UTgfbsx5aNTc4CyFoW4vEd/NupXCIzXEP2u8bAl?=
- =?iso-8859-2?Q?90QsjuiRhtQWQhAnTn6dB79441vTkaZMPgL6lTqk6bYGO/vBbrZe+5RJvm?=
- =?iso-8859-2?Q?t9KBWAyAcSDd6I/DLE5y75luinoYuLG5XwG/FvVIK3OP+4SZGMCr/0q6Xl?=
- =?iso-8859-2?Q?kiwnvpXRh/hP0fy8hOM+doiH5DVYCZtulK4biA=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR07MB3509.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-2?Q?6lS2IK2bM9N29LYD/mLdJVAwGTMOokMgCpIA9DWC3bCc9Xe9iVfKDFxtL2?=
- =?iso-8859-2?Q?zg9wkAqb19KbUJmwiTWLItsQvUHlc++sJ9eNB65awTX8Mw3sm+yDXSZ2tk?=
- =?iso-8859-2?Q?6g/SPwAJn6OrbPRpHY1VmUHmLA4fkvYczEI1v3PQ15DrUVAb8+zy+f03oQ?=
- =?iso-8859-2?Q?PJu3kUQWjzoGCmdMsBX4Byi14zqV97/bXEbLJbEtmYEansi+B6Bt7nY/98?=
- =?iso-8859-2?Q?wU6PhKdLCDkjTEdQLs5eBHw89EoyQrRl2MODZuHkI4Gt87vTNrLalhWpLI?=
- =?iso-8859-2?Q?CpyIfgBUawR5RShOMUTBRRyLj3+wiBnw+WC5AbGrRoZQkVcp2KAlKPBMPN?=
- =?iso-8859-2?Q?XoItOP5sT0/hq587YSaPlkwO6rTi9iftzyb7uesSRiHvJMVxdDZWrSiAYF?=
- =?iso-8859-2?Q?YyXUuPGkpRtSqVaOoIlpi2jYPyJHF6AGbnlKrOr0VJRCNsUFV0hLFytWvA?=
- =?iso-8859-2?Q?/JiKO6IekVj8WC0yqMEd2c0VwSa0tV7TGWKIYFCzi92PHidEq7dOCWQDPG?=
- =?iso-8859-2?Q?zACmE9QY0vFKXQwyQ5KZY7Y8g+PvviEFxhihv6lqQMhZ70I4JvcWmxr4Nm?=
- =?iso-8859-2?Q?2NkDGlpK0IEkJ1AD4WPPVkv8z5NUjEX4HKgfxOkCYNV57SA75bQfFd/lkg?=
- =?iso-8859-2?Q?kmAvRIOHeGnWxCCBRhxM9RsvYE81BmDXsXA8E6Z+xrLukAzc1ZD0JOoy1C?=
- =?iso-8859-2?Q?DP4PCuWQVOCUnlR8sw5OAK0kfL2r+xkyqJhJ+KfumOGhhWL5o9hq3fM8nF?=
- =?iso-8859-2?Q?7+NiAmm07Y7BMHrzPVWw5UsO0f0Jw2MqrPF+8lSoTRV/okxm4CGWIIqR46?=
- =?iso-8859-2?Q?fkmKvCzkuJwcMKmdssSZY6VkDGDWh4skWdBW+yFUBETQEUf2ei/UalKZHT?=
- =?iso-8859-2?Q?RDQ650wlPFlZtds00aLrrKBrZIzaVx17HZQlVcHs+/Yv2h+eJvv/92Mhvr?=
- =?iso-8859-2?Q?eJ00rvFsBEsm9ieWRsfLmdUuz2EvRCybwPvDoG2psdLSLOrTiov519v5yW?=
- =?iso-8859-2?Q?6+/UU/WH9YQRTOQpujld35vYW+jc/5o9Gt9EbsDERYuNVvpap2OHDIvgLd?=
- =?iso-8859-2?Q?Y0ZYaLwgH67SBB/sfLvb96o8wMVbPgXGrfOaj3lXpMA5DvCDzM7x9L7dxh?=
- =?iso-8859-2?Q?XQHOF4a5ZzLoosS7wze2Y2PX0viQpdfPfl8JB7fuAzuXk9FR99Alwbc5+l?=
- =?iso-8859-2?Q?Uh642pC4riY7zDSxeue+SN9GjhePEOZ6DeR4qFzORU/IZFdXoyFhQTafxL?=
- =?iso-8859-2?Q?W/4sVo7uUyZ7Tdh3zILSgOpPccftglPdgMoZnswPCysQ5Qg3xMeJK9qbE2?=
- =?iso-8859-2?Q?u0El4PJsCciBXQvOKZx7iu7uxPWs8M1xV6wtqU71u3J68srKA11Y/Cnrsg?=
- =?iso-8859-2?Q?5hN8NYRIkh9eyAnRR5enYSjutHaZc0+2eDXbpTegKSpshH73FxsJezAS1L?=
- =?iso-8859-2?Q?m5/LVD7aCe++s/3U/csLjD8I7YlXzc5zkrXPp1qV2rPk2NNz2Q/wyaxB4c?=
- =?iso-8859-2?Q?VovI1OvMhDLmYOeIco0kNvfKgrOE+W7InVgKHOJforr5ig4grWkKKDdGRT?=
- =?iso-8859-2?Q?C5p8tZ23CVQU17CZgEp+S8ZFzU3gayhlwsAeujSFwacbOX8gdPNH0KILbP?=
- =?iso-8859-2?Q?KaLYTD0FkAepXVkeUkWGE/+/JPfEEJMjz8?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E6918A6D6;
+	Fri, 13 Sep 2024 10:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726223135; cv=none; b=r2ehhg8ZUn0EPUggDdsq+M6KSpCplmls3/toiNwwDxi/Kqb5n2AyqXN2J7UXI50q6nrmqslX9Ec4fOizgj5j32rJ0A+8cE1r/gbB5/hPhK2hkFW20edvVulu1T5hl9S3jnU30CgUDSuH+WYfRkxrAfIk+ULGUXBI2iNlO6GIwaE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726223135; c=relaxed/simple;
+	bh=lt83t51ZsHqvSfIdV0RclKGYyXqJEVdfzYc8IAcGfMI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iJuYRag4IOTQV6HDNkvqE4KhunecyPNjA4kfIxtkW7B3LNtUb3/+rl+P0FFUymGaYRJik90dnorRic4hQup16VkuS4BAf5M2WgdRq1eekW6rLBLzPkkZx6ep6BXsf8JWqcUlR5Elr103N0Kd+lKloIq/tjJGFn7eRqWkMS5aTT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eoVeK1mN; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726223133; x=1757759133;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lt83t51ZsHqvSfIdV0RclKGYyXqJEVdfzYc8IAcGfMI=;
+  b=eoVeK1mNJRWc3z5aygMfzpErifduT3FGz7kiiZc5Gso3XaxJFKaHDWDX
+   yiAVPAAfzXkBd/RpCAoW1Rgywbk9nHOuYURdGQ0KwA08ddQlk+9q70ru9
+   tg/zcJ+i6+j5hh2EtoH/TBDo8+1m75bTe0iYg24BeNlM8Zt8vgujIgwxB
+   NuC+RkVsh4sP8GSKg0aGoU/1dNjFedLzgoveO7Lm1IfpTgILIjum1Z9F/
+   tayTqUL6GksR+m2v3QQg6shv8APqrNsVzHwK7BsGxhQ6TCpOpCHOlXGDq
+   2DtPSHvzWLFWni7ac7OdP1PI8XAfd2du+jUPr7CJgsCIQ2lpVONUjk/1P
+   w==;
+X-CSE-ConnectionGUID: kKkEeEF4RL6hf4UGBU3GGw==
+X-CSE-MsgGUID: r972oy+5T+ediUx/73mW1Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="25271729"
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="25271729"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 03:25:32 -0700
+X-CSE-ConnectionGUID: 8QVI6aEsTCe+hCX64HmrqQ==
+X-CSE-MsgGUID: EP8F7RfqRk6pAL0aOhSVoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="68096162"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 03:25:28 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sp3UT-00000008GAC-2BYS;
+	Fri, 13 Sep 2024 13:25:25 +0300
+Date: Fri, 13 Sep 2024 13:25:25 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v7 06/10] i2c: Introduce OF component probe function
+Message-ID: <ZuQTFTNTBLCziD05@smile.fi.intel.com>
+References: <20240911072751.365361-1-wenst@chromium.org>
+ <20240911072751.365361-7-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR07MB3509.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f47e91c-d768-43af-e507-08dcd3de151e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2024 10:23:17.0113
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0Ym4nvJd+mlTB7NLS+qKo3tVW2J5152hDasmmVLk6tN4Z2Rh4jGV9cipXFzPpr+pPCSTihv8LGE1ZF3Ma6c29FlGpoI8huyWRr69yHxSggw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR07MB9763
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240911072751.365361-7-wenst@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi!=0A=
-=0A=
-> timeout_reset is set but never used. Am I missing something?=0A=
-Unfortunately you are right, it should be in this line as additional condit=
-ion:=0A=
-if (ret =3D=3D -ETIMEDOUT && (data->reset_cont || data->reset_gpio))=0A=
-=0A=
-Please look forward for another patch.=0A=
-=0A=
-Regards,=0A=
-Wojciech=
+On Wed, Sep 11, 2024 at 03:27:44PM +0800, Chen-Yu Tsai wrote:
+> Some devices are designed and manufactured with some components having
+> multiple drop-in replacement options. These components are often
+> connected to the mainboard via ribbon cables, having the same signals
+> and pin assignments across all options. These may include the display
+> panel and touchscreen on laptops and tablets, and the trackpad on
+> laptops. Sometimes which component option is used in a particular device
+> can be detected by some firmware provided identifier, other times that
+> information is not available, and the kernel has to try to probe each
+> device.
+> 
+> This change attempts to make the "probe each device" case cleaner. The
+> current approach is to have all options added and enabled in the device
+> tree. The kernel would then bind each device and run each driver's probe
+> function. This works, but has been broken before due to the introduction
+> of asynchronous probing, causing multiple instances requesting "shared"
+> resources, such as pinmuxes, GPIO pins, interrupt lines, at the same
+> time, with only one instance succeeding. Work arounds for these include
+> moving the pinmux to the parent I2C controller, using GPIO hogs or
+> pinmux settings to keep the GPIO pins in some fixed configuration, and
+> requesting the interrupt line very late. Such configurations can be seen
+> on the MT8183 Krane Chromebook tablets, and the Qualcomm sc8280xp-based
+> Lenovo Thinkpad 13S.
+> 
+> Instead of this delicate dance between drivers and device tree quirks,
+> this change introduces a simple I2C component probe. function For a
+> given class of devices on the same I2C bus, it will go through all of
+> them, doing a simple I2C read transfer and see which one of them responds.
+> It will then enable the device that responds.
+> 
+> This requires some minor modifications in the existing device tree. The
+> status for all the device nodes for the component options must be set
+> to "failed-needs-probe". This makes it clear that some mechanism is
+> needed to enable one of them, and also prevents the prober and device
+> drivers running at the same time.
+
+...
+
+> +static int i2c_of_probe_enable_node(struct device *dev, struct device_node *node)
+> +{
+> +	int ret;
+
+> +	dev_info(dev, "Enabling %pOF\n", node);
+
+Is it important to be on INFO level?
+
+> +	struct of_changeset *ocs __free(kfree) = kzalloc(sizeof(*ocs), GFP_KERNEL);
+> +	if (!ocs)
+> +		return -ENOMEM;
+> +
+> +	of_changeset_init(ocs);
+> +	ret = of_changeset_update_prop_string(ocs, node, "status", "okay");
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = of_changeset_apply(ocs);
+> +	if (ret) {
+> +		/* ocs needs to be explicitly cleaned up before being freed. */
+> +		of_changeset_destroy(ocs);
+> +	} else {
+> +		/*
+> +		 * ocs is intentionally kept around as it needs to
+> +		 * exist as long as the change is applied.
+> +		 */
+> +		void *ptr __always_unused = no_free_ptr(ocs);
+> +	}
+> +
+> +	return ret;
+> +}
+
+...
+
+> +int i2c_of_probe_component(struct device *dev, const struct i2c_of_probe_cfg *cfg, void *ctx)
+> +{
+> +	const struct i2c_of_probe_ops *ops;
+> +	const char *type;
+> +	struct device_node *i2c_node;
+> +	struct i2c_adapter *i2c;
+> +	int ret;
+> +
+> +	if (!cfg)
+> +		return -EINVAL;
+> +
+> +	ops = cfg->ops ?: &i2c_of_probe_dummy_ops;
+> +	type = cfg->type;
+> +
+> +	i2c_node = i2c_of_probe_get_i2c_node(dev, type);
+
+
+	struct device_node *i2c_node __free(of_node_put) =
+		i2c_...;
+
+> +	if (IS_ERR(i2c_node))
+> +		return PTR_ERR(i2c_node);
+> +
+> +	for_each_child_of_node_with_prefix(i2c_node, node, type) {
+> +		if (!of_device_is_available(node))
+> +			continue;
+> +
+> +		/*
+> +		 * Device tree has component already enabled. Either the
+> +		 * device tree isn't supported or we already probed once.
+> +		 */
+> +		ret = 0;
+
+Shouldn't you drop reference count for "node"? (See also below)
+
+> +		goto out_put_i2c_node;
+> +	}
+> +
+> +	i2c = of_get_i2c_adapter_by_node(i2c_node);
+> +	if (!i2c) {
+> +		ret = dev_err_probe(dev, -EPROBE_DEFER, "Couldn't get I2C adapter\n");
+> +		goto out_put_i2c_node;
+> +	}
+> +
+> +	/* Grab resources */
+> +	ret = 0;
+> +	if (ops->get_resources)
+> +		ret = ops->get_resources(dev, i2c_node, ctx);
+> +	if (ret)
+> +		goto out_put_i2c_adapter;
+> +
+> +	/* Enable resources */
+> +	if (ops->enable)
+> +		ret = ops->enable(dev, ctx);
+> +	if (ret)
+> +		goto out_release_resources;
+> +
+> +	ret = 0;
+> +	for_each_child_of_node_with_prefix(i2c_node, node, type) {
+> +		union i2c_smbus_data data;
+> +		u32 addr;
+> +
+> +		if (of_property_read_u32(node, "reg", &addr))
+> +			continue;
+> +		if (i2c_smbus_xfer(i2c, addr, 0, I2C_SMBUS_READ, 0, I2C_SMBUS_BYTE, &data) < 0)
+> +			continue;
+> +
+> +		/* Found a device that is responding */
+> +		if (ops->free_resources_early)
+> +			ops->free_resources_early(ctx);
+> +		ret = i2c_of_probe_enable_node(dev, node);
+
+Hmm... Is "node" reference count left bumped up for a reason?
+
+> +		break;
+> +	}
+> +
+> +	if (ops->cleanup)
+> +		ops->cleanup(dev, ctx);
+> +out_release_resources:
+> +	if (ops->free_resources_late)
+> +		ops->free_resources_late(ctx);
+> +out_put_i2c_adapter:
+> +	i2c_put_adapter(i2c);
+> +out_put_i2c_node:
+> +	of_node_put(i2c_node);
+> +
+> +	return ret;
+> +}
+
+...
+
+> +/*
+> + * i2c-of-prober.h - definitions for the Linux I2C OF component prober
+
+Please avoid putting filenames inside files. In the possible future event of
+file renaming this may become a burden and sometimes even forgotten.
+
+> + * Copyright (C) 2024 Google LLC
+> + */
+> +
+> +#ifndef _LINUX_I2C_OF_PROBER_H
+> +#define _LINUX_I2C_OF_PROBER_H
+
+> +#if IS_ENABLED(CONFIG_OF_DYNAMIC)
+
+Do you really need to hide data types with this? Wouldn't be enough to hide
+APIs only?
+
+> +struct device;
+> +struct device_node;
+> +
+> +/**
+> + * struct i2c_of_probe_ops - I2C OF component prober callbacks
+> + *
+> + * A set of callbacks to be used by i2c_of_probe_component().
+> + *
+> + * All callbacks are optional. Callbacks are called only once per run, and are
+> + * used in the order they are defined in this structure.
+> + *
+> + * All callbacks that have return values shall return %0 on success,
+> + * or a negative error number on failure.
+> + *
+> + * The @dev parameter passed to the callbacks is the same as @dev passed to
+> + * i2c_of_probe_component(). It should only be used for dev_printk() calls
+> + * and nothing else, especially not managed device resource (devres) APIs.
+> + */
+> +struct i2c_of_probe_ops {
+> +	/** @get_resources: Retrieve resources for components. */
+> +	int (*get_resources)(struct device *dev, struct device_node *bus_node, void *data);
+> +
+> +	/** @free_resources_early: Release exclusive resources prior to enabling component. */
+> +	void (*free_resources_early)(void *data);
+> +
+> +	/**
+> +	 * @enable: Enable resources so that the components respond to probes.
+> +	 *
+> +	 * Resources should be reverted to their initial state before returning if this fails.
+> +	 */
+> +	int (*enable)(struct device *dev, void *data);
+> +
+> +	/**
+> +	 * @cleanup: Opposite of @enable to balance refcounts after probing.
+> +	 *
+> +	 * Can not operate on resources already freed in @free_resources_early.
+> +	 */
+> +	int (*cleanup)(struct device *dev, void *data);
+> +
+> +	/**
+> +	 * @free_resources_late: Release all resources, including those that would have
+> +	 *                       been released by @free_resources_early.
+> +	 */
+> +	void (*free_resources_late)(void *data);
+> +};
+> +
+> +/**
+> + * struct i2c_of_probe_cfg - I2C OF component prober configuration
+> + * @ops: Callbacks for the prober to use.
+> + * @type: A string to match the device node name prefix to probe for.
+> + */
+> +struct i2c_of_probe_cfg {
+> +	const struct i2c_of_probe_ops *ops;
+> +	const char *type;
+> +};
+> +
+> +int i2c_of_probe_component(struct device *dev, const struct i2c_of_probe_cfg *cfg, void *ctx);
+> +
+> +#endif /* IS_ENABLED(CONFIG_OF_DYNAMIC) */
+> +
+> +#endif /* _LINUX_I2C_OF_PROBER_H */
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
