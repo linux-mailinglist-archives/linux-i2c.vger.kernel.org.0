@@ -1,70 +1,70 @@
-Return-Path: <linux-i2c+bounces-6696-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6697-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FB01977D65
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 12:30:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8BC5977D96
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 12:35:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A1FB1C24A84
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 10:30:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E74C1C24A72
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Sep 2024 10:35:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 310B91DA0E3;
-	Fri, 13 Sep 2024 10:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 462771D9354;
+	Fri, 13 Sep 2024 10:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WI5xJa3G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZxEYC1Rr"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927921D86D4;
-	Fri, 13 Sep 2024 10:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741001DCB0C;
+	Fri, 13 Sep 2024 10:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726223355; cv=none; b=LRD9EBTDdmKkkWeZzEnYWAjmU5g4dlPlKnDhDFFqmFg2XuJrsr9KmbtQMAxO6rWvdiD6J7R34Ij1VpdyEjnSzTC4/4RMOEkYcbXspPPU1vl4QNrBPSH8oNOabrTVtKtIQv4NjKmbO5bT84P+g8hcZrhhfLEv6UqmSMZXcp3d5gE=
+	t=1726223429; cv=none; b=A1YK89OrXQ58F3GH3bOrJAxQHmfxfjRAfZ79zAZNT+87ToPfKbGjGXiF3iwRxphV88K9AT5JTmqdYVMqHp3iZK5XDQvm98VW4rXwCkDlQLKLW3Os9OzaKWrnbZpQBsci5s4TBp7N8c/DnhXD1Pr+rQeBvA9dbsHvF6qlL416bGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726223355; c=relaxed/simple;
-	bh=i6ULjdQFx3hSTUi2FClPl+Wv7jWBPBdc7fIJZO9A84g=;
+	s=arc-20240116; t=1726223429; c=relaxed/simple;
+	bh=oD+Qsgq58ocfiZiQ8YH8GER77w5w9FSuVLKbvSvLgRM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K3aSvwlVMEMc1SVuW21aP+EJ2fYe+AA+tjtgPWtGAndiKjH3EmBXdFlPW9eKoBWKzgsz+8AGDInnR60kM/wA0jPMM2YJsJtQAHBTGFQIGWygGTI/3S9MvHZvQzF45XgR93HlGJcY/VmSMqhvADWiQT8WauQXw0/LlYO4eiDiqQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WI5xJa3G; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=MqXwOrOiWoN5J5nbH//2Vb0qhg5wk+Sdt37Vs5n4PcM8rcBTwtD5UrSRayFGu5oNxjIQ2XgLvqyLpI1YW68ZWDt/eNbC2eiI189rDcHGbKwdsja1nWZuG4GJQcIv45Bjunqb8uG6CXF8sbOa9a/vMaQl/U4nDrGUTl0MLs8oVnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZxEYC1Rr; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726223354; x=1757759354;
+  t=1726223427; x=1757759427;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=i6ULjdQFx3hSTUi2FClPl+Wv7jWBPBdc7fIJZO9A84g=;
-  b=WI5xJa3GIm2KlkEQiwKe1gntB9pJOOrkxdt0yWV1xXnOnyHleR/Um+9w
-   W/ir2YY/biT9VD2VFwo9a/d8tQfWysyaOO6mWNIdM0sQr3qxv2kdDRABb
-   UqrU9zsaSTl4AUD44J0Ac+Gy919VzYFev8g1OaT46QxP2kpQ4KJ/D/Lrm
-   rREJAJ7WhtszC36OSuA1Lwz3QOrXhTgXTpoBDQqvOehO31Q8Y1xDNrT/r
-   qjv+mEK2J3/ncmBo5vqJlTBiknpiujFVIAe4DVmR7TAhwPS5ZFnyOR/II
-   QpuF+BbuD/bAlAQCBXf6NYxU03mN3I1TAMKe9tZHd8QovMB+/1VZXBE/m
-   A==;
-X-CSE-ConnectionGUID: sInzwkqYRrSQpWgtVf8hhQ==
-X-CSE-MsgGUID: jqWV+U2zQ9ScdxAvxHziog==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="25271986"
+  bh=oD+Qsgq58ocfiZiQ8YH8GER77w5w9FSuVLKbvSvLgRM=;
+  b=ZxEYC1Rr8DCBI+NUgX9L6cRmQzGGOfgmpq6/SY9SxvnBQUoKx2TATdqv
+   YRRuQZorpPTkC/+/TVZMWwxGfLsUOGe0os6Uh1FT554o54AHhlyZHnmkS
+   DLo7hDMdk4hAJO+5ihWt+nWCDmc66yISwViN4nN/pubtyBkUvwN4BRSkE
+   xpEwkq8I4WlAAFYsMd0DTIB/OfQC8750WSFU7Ymiv+hItnFXn1WrNLgIb
+   yVP5zMt5jiBXa73y6JtCT9nqBeZHU3OvAmzxJKfPf5UO7qnDHyhZfXixW
+   nxrXCd5gIPLoBjQO12CgQhsz9dgcPbdCxiUxwQhfYsoJI3j32cCFtzDrJ
+   Q==;
+X-CSE-ConnectionGUID: vcirwhjmQROsZB5/TSqBXw==
+X-CSE-MsgGUID: MW57keYASmC+pbAbNB6OZw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="25272099"
 X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
-   d="scan'208";a="25271986"
+   d="scan'208";a="25272099"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 03:29:13 -0700
-X-CSE-ConnectionGUID: +ctQAAoLTYehwwW77k+SjQ==
-X-CSE-MsgGUID: eaMqxQcmT3O+2Qu47QihrA==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 03:30:27 -0700
+X-CSE-ConnectionGUID: gaR+cvi6Sb+Gvch5XSFGcw==
+X-CSE-MsgGUID: df8w1pRzTNWUh5IXFaV8Kw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
-   d="scan'208";a="67978143"
+   d="scan'208";a="67978434"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 03:29:08 -0700
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 03:30:22 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sp3Y1-00000008GGM-1jvO;
-	Fri, 13 Sep 2024 13:29:05 +0300
-Date: Fri, 13 Sep 2024 13:29:05 +0300
+	id 1sp3ZE-00000008GHh-02wk;
+	Fri, 13 Sep 2024 13:30:20 +0300
+Date: Fri, 13 Sep 2024 13:30:19 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Tyrone Ting <warp5tw@gmail.com>
+To: warp5tw@gmail.com
 Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
 	venture@google.com, yuenn@google.com, benjaminfair@google.com,
 	andi.shyti@kernel.org, wsa@kernel.org, rand.sec96@gmail.com,
@@ -72,12 +72,11 @@ Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
 	Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
 	KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
 	openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Charles Boyer <Charles.Boyer@fii-usa.com>,
-	Vivekanand Veeracholan <vveerach@google.com>
-Subject: Re: [PATCH v3 6/6] i2c: npcm: Enable slave in eob interrupt
-Message-ID: <ZuQT8YfVetrkMotQ@smile.fi.intel.com>
-References: <20240913101532.16571-1-kfting@nuvoton.com>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/6] i2c: npcm: Bug fixes read/write operation,
+ checkpatch
+Message-ID: <ZuQUOw5Y2hZgGyFJ@smile.fi.intel.com>
+References: <20240913101445.16513-1-kfting@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -86,22 +85,30 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240913101532.16571-1-kfting@nuvoton.com>
+In-Reply-To: <20240913101445.16513-1-kfting@nuvoton.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Sep 13, 2024 at 06:15:32PM +0800, Tyrone Ting wrote:
-> From: Charles Boyer <Charles.Boyer@fii-usa.com>
+On Fri, Sep 13, 2024 at 06:14:40PM +0800, warp5tw@gmail.com wrote:
+> From: Tyrone Ting <kfting@nuvoton.com>
 > 
-> Nuvoton slave enable was in user space API call master_xfer, so it is
-> subject to delays from the OS scheduler. If the BMC is not enabled for
-> slave mode in time for master to send response, then it will NAK the
-> address match. Then the PLDM request timeout occurs.
+> This patchset includes the following fixes:
 > 
-> If the slave enable is moved to the EOB interrupt service routine, then
-> the BMC can be ready in slave mode by the time it needs to receive a
-> response.
+> - Enable the target functionality in the interrupt handling routine 
+>   when the i2c transfer is about to finish.
+> - Correct the read/write operation procedure.
+> - Introduce a software flag to handle the bus error (BER) condition
+>   which is not caused by the i2c transfer.
+> - Modify timeout calculation.
+> - Assign the client address earlier logically.
+> - Use an i2c frequency table for the frequency parameters assignment.
+> - Coding style fix.
+> 
+> The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
 
-Fixes tag?
+Somehow your 6th patch becomes independent from the email thread.
+(Initially I thought it was a separate fix)
+
+Please, check what's going on with email settings on your side.
 
 -- 
 With Best Regards,
