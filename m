@@ -1,73 +1,73 @@
-Return-Path: <linux-i2c+bounces-6751-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6752-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E026979633
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Sep 2024 11:47:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38942979646
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Sep 2024 12:09:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 739CDB21D57
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Sep 2024 09:47:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59B1D1C20EB7
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Sep 2024 10:09:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0120E1C3F1E;
-	Sun, 15 Sep 2024 09:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 601311C3F1E;
+	Sun, 15 Sep 2024 10:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J0Cf0rVm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hMfyMZvZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7ED946C;
-	Sun, 15 Sep 2024 09:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC6743AD9;
+	Sun, 15 Sep 2024 10:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726393618; cv=none; b=bllQKBjwjRISqqN8Y+Q08I3akHZH6anrUtquz67hN9VXiCzsiVmsXfoIBTeoTC2ex8qAyQVc5NFz+NSi6hegL1GQnpP+hGr9pt/2xODaabVFbTtz4Fhpa/i2hieU15OaXt0bs418nIeoqXSS2cgr3FwVaVdhqxWTz55UyA6Qitk=
+	t=1726394978; cv=none; b=awDmmaCOvdWxxw07+Nz2ou23Jb4IhSSEhXHB75/l4jr/d7wUdiMMS6ga1QA0hzNLDz5Od7AQej6NTUNUfEVOeWEYPgJ0jvjPggXW7kTalRi6pKD/TJPgtM/s1f111ZZX7auIraPllrt1nH/eHBfZMHLwWU2oubv+9BGgW2gx22w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726393618; c=relaxed/simple;
-	bh=2zO6QidvNsxqVUMyd2vfM3SZsN4IHGWxXREhRe7GB2Q=;
+	s=arc-20240116; t=1726394978; c=relaxed/simple;
+	bh=AiBwI9RHjL7pzSgnaY8FkwVq8dBhc8U8HPlIjMivQIA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nM4wQzKouuPD/1PYhfkAY/cDdROH5UMcyMoty9YXXoX3oKBLU3q1TEk8qoTc/SGHNjQte3WDh9KlAKsh8s98FEuRW/ClYWnUc88olbuUj65XD5xTa2i/whqY38LOBnOEQMDUDHTKypVpiLzx0bCGvmy8bxFd9ssmt330JRvVAPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J0Cf0rVm; arc=none smtp.client-ip=209.85.208.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=pNm9kaMjexPPmgkQjryWod4NdSKltHreGjH3W6oomhwFLu5pvf7Q/WYbS6zQNfYW5c5wpmwDvIhaIPAcfuaN/EWTJjyMm6gqoNqMLbqmQAnDmkvXwNXpVAXkESWcDg9f1IinGef136awxAe+4GoNeQNnr8mNfzsqRQqaBTEq9vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hMfyMZvZ; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2f75c0b78fbso37451861fa.1;
-        Sun, 15 Sep 2024 02:46:56 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5365b71a6bdso2465054e87.2;
+        Sun, 15 Sep 2024 03:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726393615; x=1726998415; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726394974; x=1726999774; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SEy2s6mdbEvETGfBs4ih+7MAVHb2th2MzF/jMUC7wo8=;
-        b=J0Cf0rVmNK0OYzM1VYsZAEsjFNpL9dWZUD/FpTWjz33kM9wJjivJByW8EIOoFpq6JD
-         nbceD33GGgrqfqPXsTIbsrFEthKaEHbljLa4hPvv8OeUq5x2lJEPd9gTC+PYuebZdo5h
-         8W2uaTflvKR8uUY4rsCNvFNDst1+06txTN16cVBUGoJalAoHG0R/+wsrZBCvmOfjBj+z
-         f+fxgY0ZKqZMVV7XxebYgI3oIgEFzmlU1sVL9BTaOPyUcMACtP4e+KYHrMsUPlrPaDDF
-         AmvnuAyJ5SUhs0c+er3Dyt8xXAMlqg130jWUPqn6pxds060/AVN/PqCTdWO2mDrMJ/sL
-         KvUQ==
+        bh=N/DaHEnUjrhvmfJyjNw/EJYlPiWPCk7haRRTEhJV3pU=;
+        b=hMfyMZvZwqqEm2epT4mdCdiyhtkN2ogEEdU81vO2bXr2J+lpTQb242YFLkdsz1e0dB
+         A6j015JqN9aScEWQeJAqo+M+VdDyMa91Msr9xyjQn2DmgFV+gHJnK0g/Rgu764VO2b5u
+         yGg36LOEiklEzvDGMJmNQVbPikqQLvoA3xY6L9nuO29e3JPE+d6ldIc1gw7N3iSnhOLX
+         kW2i5CUqG9jPZ8EkmZrJIamGEiuBVUpRb73uLZFfWRpTXUkeJa3GPH7TNwKIG5uvLXUB
+         hpZQFi9f2cbU0QVi9drjQI4BCX4s0XSPSkk/jjk9f2lVxKykipnpksM6Ht1ec6KeAWz0
+         iHpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726393615; x=1726998415;
+        d=1e100.net; s=20230601; t=1726394974; x=1726999774;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SEy2s6mdbEvETGfBs4ih+7MAVHb2th2MzF/jMUC7wo8=;
-        b=kiKC64S3+mWZEg7PO7kOcGV4M8fCQjYCbSTcePeiK7Hn9cT5PtFxBSteESJnFjLvuE
-         B7Drwwfmsj+YxwpwIJW8vkwYPsYTgZw7Bdwvb+1qhzTKPdfmH1lVPvDa+Z2FkCEaT6Y3
-         rt6zPMXc0QU/HujkiE2lfPHAYEb68RXvBJyW4pRwLOhlbSEsdyyHNHeD305g3SG2IpbD
-         XlFea0BWvzQ6efSnTWpVKKN3Zq6zdn2stSfvMhSOo1bOW5Oedp3q8+oxroMSBbhoZvwH
-         I4sLnFoeAW+dlnKlNdV8Yqm0lWFYgPP0sA69QNnN2n1CRpOSOgysAKqtpEYS5dKP1ex6
-         xOHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV81Zkbtve2VC5+tznxEiozCCQPU14CsqBDfd/9Siop9lxQbDxc9okLmABSBF4yxjIMNaN5r8NDbD8c@vger.kernel.org, AJvYcCVc1K39w6FHXEJIO52ki1yzADgI8hoa5GVeYmKENhL3ZWGVFa1LFfJgyST7wm+yQqxvF/97pVdT2fSttLOl@vger.kernel.org, AJvYcCWGk9JSTDfAI1lUruIeXaqvnvWNYKaPoiWlDQSlmPJGCc5E9ojfrskx6DNs0A+JI7REk92ATFmkpZO7@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxyOXvo99AAwHHd0rKoifkQN9cvjtA5S2L58Bu170cft6B0efU
-	pD9qg53A0qhx/HwbgLTEiTIfT+8ZqwYZMMDlRn1VuCI3D9ARTDH1
-X-Google-Smtp-Source: AGHT+IEEqRu62KpQRhPXfLbt6VDlSqGvXS4SEhyoRi7eANQzGYsSen3MDKGTeAvoXvpSJFNvO09jJA==
-X-Received: by 2002:a2e:9003:0:b0:2f5:806:5d00 with SMTP id 38308e7fff4ca-2f787f3b98bmr48952041fa.32.1726393613881;
-        Sun, 15 Sep 2024 02:46:53 -0700 (PDT)
+        bh=N/DaHEnUjrhvmfJyjNw/EJYlPiWPCk7haRRTEhJV3pU=;
+        b=fnGhdKtGAhI01afBnynlWZzgBJCM28QN2D2FBJeE64zy7j2ZBiR/Fy1VIBxkT4I1Je
+         cLDRQLHyls4ko8D6RZ3cPRAnYc7Jx0b5qHz+rRax+XU9J+R+tfQUsSAQI/tJLqpvBNqm
+         47x60cz2T1wFkBjgmjwvT6jti2hgPSZixTXMjjo+1/bb4eAD3Itt+Dv3D9HmkjgfnPwD
+         YI89dTWXkE1r51xeRIXroypm6S6GFk2efJdXH44S32NTAg+NkKjQ/1Momnua7MYiLaXx
+         ZYTM6PU6wtIaPLXk99L939f7iLqQNzL58Va2xoNjb+j50aj7FSjrlN4fBqj1dahhrccC
+         RKnA==
+X-Forwarded-Encrypted: i=1; AJvYcCVUoRsl6ZWN29dZJp9Soj7zg/krDmOmVKqWXFpbGM0P0jURJEtduJ/kbkFegR7DdmYMxhQn5tbG6PVmbONK@vger.kernel.org, AJvYcCWIh/UgDWLo2boX/qZyxQVm95yhuGDQMqMrHFH8hzlMXELgKsDGucsOVs5DE+i34EvVwjZIMAOatTcN@vger.kernel.org, AJvYcCX/qccsO2EebcD0ilTyN8LN11FSmHb1z27tOAFj3DarnNQpypgQ3bpLQH0jhmysYMlIcwwi7doyj/Jr@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLGzPi11SDqWD7aDBiFOzNPoz+KAUjoDcQ6EZJlMYSloTWJMcS
+	1J4T3WMRoiL2gHLDDhW96nALGJsHQMkTaIA51RPPVs0xuLjNAGh9
+X-Google-Smtp-Source: AGHT+IGaUky0E13On+sxK3FeW8LoYl+upTv1F/M3d5F2vr5G6OAHtvOyCkJgJ5xhe603775A/voLzw==
+X-Received: by 2002:a05:6512:3f06:b0:534:5453:ecda with SMTP id 2adb3069b0e04-5367fee2703mr4169678e87.23.1726394973484;
+        Sun, 15 Sep 2024 03:09:33 -0700 (PDT)
 Received: from localhost ([94.19.228.143])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f79d300851sm4873921fa.47.2024.09.15.02.46.53
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5368704c2c2sm513630e87.75.2024.09.15.03.09.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Sep 2024 02:46:53 -0700 (PDT)
-Date: Sun, 15 Sep 2024 12:46:52 +0300
+        Sun, 15 Sep 2024 03:09:32 -0700 (PDT)
+Date: Sun, 15 Sep 2024 13:09:32 +0300
 From: Andrey Skvortsov <andrej.skvortzov@gmail.com>
 To: Chen-Yu Tsai <wenst@chromium.org>
 Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
@@ -83,9 +83,8 @@ Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
 	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v7 08/10] i2c: of-prober: Add GPIO support to simple
- helpers
-Message-ID: <ZuatDOocfDumBzE_@skv.local>
+Subject: Re: [PATCH v7 06/10] i2c: Introduce OF component probe function
+Message-ID: <ZuayXMGMdEqSyvUl@skv.local>
 Mail-Followup-To: Andrey Skvortsov <andrej.skvortzov@gmail.com>,
 	Chen-Yu Tsai <wenst@chromium.org>, Rob Herring <robh@kernel.org>,
 	Saravana Kannan <saravanak@google.com>,
@@ -102,7 +101,7 @@ Mail-Followup-To: Andrey Skvortsov <andrej.skvortzov@gmail.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-i2c@vger.kernel.org
 References: <20240911072751.365361-1-wenst@chromium.org>
- <20240911072751.365361-9-wenst@chromium.org>
+ <20240911072751.365361-7-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -111,61 +110,50 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240911072751.365361-9-wenst@chromium.org>
-
-Hi,
+In-Reply-To: <20240911072751.365361-7-wenst@chromium.org>
 
 On 24-09-11 15:27, Chen-Yu Tsai wrote:
-> Add GPIO support to the simple helpers for the I2C OF component prober.
-> Components that the prober intends to probe likely require their
-> regulator supplies be enabled, and GPIOs be toggled to enable them or
-> bring them out of reset before they will respond to probe attempts.
-> Regulator supplies were handled in the previous patch.
+> Some devices are designed and manufactured with some components having
+> multiple drop-in replacement options. These components are often
+> connected to the mainboard via ribbon cables, having the same signals
+> and pin assignments across all options. These may include the display
+> panel and touchscreen on laptops and tablets, and the trackpad on
+> laptops. Sometimes which component option is used in a particular device
+> can be detected by some firmware provided identifier, other times that
+> information is not available, and the kernel has to try to probe each
+> device.
 > 
-> The assumption is that the same class of components to be probed are
-> always connected in the same fashion with the same regulator supply
-> and GPIO. The names may vary due to binding differences, but the
-> physical layout does not change.
+> This change attempts to make the "probe each device" case cleaner. The
+> current approach is to have all options added and enabled in the device
+> tree. The kernel would then bind each device and run each driver's probe
+> function. This works, but has been broken before due to the introduction
+> of asynchronous probing, causing multiple instances requesting "shared"
+> resources, such as pinmuxes, GPIO pins, interrupt lines, at the same
+> time, with only one instance succeeding. Work arounds for these include
+> moving the pinmux to the parent I2C controller, using GPIO hogs or
+> pinmux settings to keep the GPIO pins in some fixed configuration, and
+> requesting the interrupt line very late. Such configurations can be seen
+> on the MT8183 Krane Chromebook tablets, and the Qualcomm sc8280xp-based
+> Lenovo Thinkpad 13S.
 > 
-> This supports at most one GPIO pin. The user must specify the GPIO name,
-> the polarity, and the amount of time to wait after the GPIO is toggled.
-> Devices with more than one GPIO pin likely require specific power
-> sequencing beyond what generic code can easily support.
+> Instead of this delicate dance between drivers and device tree quirks,
+> this change introduces a simple I2C component probe. function For a
+> given class of devices on the same I2C bus, it will go through all of
+> them, doing a simple I2C read transfer and see which one of them responds.
+> It will then enable the device that responds.
+> 
+> This requires some minor modifications in the existing device tree. The
+> status for all the device nodes for the component options must be set
+> to "failed-needs-probe". This makes it clear that some mechanism is
+
+Wrong status name ("failed-needs-probe"), "fail-needs-probe". This is
+minor, but it confused me as I went through patchset first time, since
+there are different name in different patches.
+
+> needed to enable one of them, and also prevents the prober and device
+> drivers running at the same time.
 > 
 > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-
-> diff --git a/include/linux/i2c-of-prober.h b/include/linux/i2c-of-prober.h
-> index 541451fbf58d..c5e241163c94 100644
-> --- a/include/linux/i2c-of-prober.h
-> +++ b/include/linux/i2c-of-prober.h
-> @@ -83,6 +83,7 @@ int i2c_of_probe_component(struct device *dev, const struct i2c_of_probe_cfg *cf
->   *
->   * The following helpers are provided:
->   * * i2c_of_probe_simple_get_res()
-> + * * i2c_of_probe_simple_free_res_early()
->   * * i2c_of_probe_simple_free_res_late()
->   * * i2c_of_probe_simple_enable()
->   * * i2c_of_probe_simple_cleanup()
-> @@ -92,24 +93,33 @@ int i2c_of_probe_component(struct device *dev, const struct i2c_of_probe_cfg *cf
->   * struct i2c_of_probe_simple_opts - Options for simple I2C component prober callbacks
->   * @res_node_compatible: Compatible string of device node to retrieve resources from.
->   * @supply_name: Name of regulator supply.
-> + * @gpio_name: Name of GPIO.
->   * @post_power_on_delay_ms: Delay in ms after regulators are powered on. Passed to msleep().
-> + * @post_reset_deassert_delay_ms: Delay in ms after GPIOs are set. Passed to msleep().
-> + * @gpio_high_to_enable: %true if GPIO should be set to electrical high to enable component.
->   */
->  struct i2c_of_probe_simple_opts {
->  	const char *res_node_compatible;
->  	const char *supply_name;
-> +	const char *gpio_name;
->  	unsigned int post_power_on_delay_ms;
-> +	unsigned int post_reset_deassert_delay_ms;
-> +	bool gpio_high_to_enable;
-
-Missing '#include <linux/types.h>', otherwise compiler complains
-about unknown bool type, when 'i2c-of-prober.h' included without any
-previous includes.
 
 -- 
 Best regards,
