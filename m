@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6768-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6769-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B942979B9D
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 08:56:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F12CF979BA8
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 08:57:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E578D1F22C5D
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 06:56:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFF542829FE
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 06:57:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D365913698E;
-	Mon, 16 Sep 2024 06:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F5112CDBF;
+	Mon, 16 Sep 2024 06:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hxR6B8+j"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1lYcmDC"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E667FBD1;
-	Mon, 16 Sep 2024 06:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F393C482;
+	Mon, 16 Sep 2024 06:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726469789; cv=none; b=elJb3oczVJr4iN0RCBjbKxkt8BW0puV4H/dpLaNuP3F/a1Hhpe4eZ5S9k0rVGkAQjae8niiDkKWX3WVq+tRd/6cGPSNRHmAc0WBWmKjSrJK7W/Bj8t77ezr7o56O+QKl3y/vVzYyIQgD0fHnCjJLUswv85WiWmgKumLyoGN7QlU=
+	t=1726469851; cv=none; b=nUCrF8cWJ2g/cA8pIxTRD27UvNBDNV7CpaH0/ikJ0atRe25ao3z2Drqrur3LgEuRY1OEH+GplJREb2w+94OEbZEdzZLLggmVZdCnAGtiDBEtlyoOaJCbwEi/RFYgQ0tnhjPU5idKHR3EbW+D4wtTuaDpyXFsIFSIcpmzrS2Qb9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726469789; c=relaxed/simple;
-	bh=HeAhPvole8DH/+pRo29sxxCAqnQMXtgQNZIdjJ/TvvA=;
+	s=arc-20240116; t=1726469851; c=relaxed/simple;
+	bh=QO8JCAj/oT81flrv18JgLLbp8TNvFPmipGvWoXHoPUM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m87AjoR+Ng3wlBTldZY52GHFOpvMd8OOg6IpvYjhqaLMVvnlyDf/wMjYfR2D7e7s9Vi/dZzci25hDvfd0WTYc/WIBQ4OcwI3KQMsQ6/bC+1QsvNFIQFDrYZcPssVy06TcHBZtoAj1GcVv4/P+y/B0U4TnxhPMPZLdiaZBUP2SVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hxR6B8+j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7D87C4CEC4;
-	Mon, 16 Sep 2024 06:56:18 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ME4NYbbTDm2Bd459LvkXxkYordk5i9Jp4sVrTiXwmsPtqB56YbZweJjDgOi8L/VWDzlHwLUcUjGKQJk4eMFSKEHolyNAZh39tx8ATzeyEVCw9UPUTT/BBv3ZYDgJ3YERMNBdkAm5LOBResLCeJIxnF09R2slKaPIQiw7gHdjUjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V1lYcmDC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C765C4CEC4;
+	Mon, 16 Sep 2024 06:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726469789;
-	bh=HeAhPvole8DH/+pRo29sxxCAqnQMXtgQNZIdjJ/TvvA=;
+	s=k20201202; t=1726469849;
+	bh=QO8JCAj/oT81flrv18JgLLbp8TNvFPmipGvWoXHoPUM=;
 	h=Date:Subject:List-Id:To:Cc:References:From:In-Reply-To:From;
-	b=hxR6B8+jUPxwStGXSyGkvnGg1ubsZW8anAXEhjA9kiuR8qJtrJ0FjmkAWX78Yhdq/
-	 DaHXSzvkJgenqftZwF+CqfdviMuEVvjNS0zWGeMoqnJGr4XoUII31jApiin40x9W6/
-	 XGKoGYoTzazfWUgrjNWJp0oDyYa3p0OSfp582hHsytkbCPrOFtgzOivj2nsXNUFzTR
-	 jeN22e5h+lldOg1AHEEjNcaQW57mCyrX/ZCbBgAIFIIv2NYAgxMOOTncIn+L/oVabU
-	 YBIIjqJ2qZVbGZKONU3NI1aMYE7HLDtq8i5fHvIEmRrzaReCTThBb3pMMoMmJVTeq9
-	 8SrbW5PYOZg9A==
-Message-ID: <26b53051-0502-41dd-99f4-6d2cf2eb9920@kernel.org>
-Date: Mon, 16 Sep 2024 08:56:15 +0200
+	b=V1lYcmDC9TbGvGUHKfttnrGyYINQpDX42TS0YbVSj+bYUP3uFaN5lbaX6wQHwExzM
+	 r6/Vs7Opr+EbHLjpQkjaNlokaq6d3AQ01hogeVY32T23p/JeIc1cECKEcyt6qWndef
+	 wCVeceqcRkX9ngm/gghuJc86djaMMl6+l5eN6SoPawO0eBQX+NIDIDdPis8PIzvNNe
+	 fTLpDAWKAQw0+CEW1N6WBsWsfM77VPC7akSg9bb0TLBr8/doSFc9qK5cmKqIAgtq/G
+	 /19fUgpbn9KwDc7UH+tu/7TV9n6Kz6ra8Up/kWrxbOq+mYfnBey9TcY5c8aKWl0ol+
+	 T+xmA/Mfvjjiw==
+Message-ID: <aba4094d-a1a7-454f-bdaf-9f66108fbf24@kernel.org>
+Date: Mon, 16 Sep 2024 08:57:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/21] irqchip: Add irqchip for ADI ADSP-SC5xx platform
+Subject: Re: [PATCH 12/21] dt-bindings: irqchip: adi,adsp-pint: add binding
 To: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>,
  Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
  Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
@@ -69,9 +69,9 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-serial@vger.kernel.org, adsp-linux@analog.com,
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
- <20240912-test-v1-11-458fa57c8ccf@analog.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240912-test-v1-12-458fa57c8ccf@analog.com>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -115,183 +115,101 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240912-test-v1-11-458fa57c8ccf@analog.com>
+In-Reply-To: <20240912-test-v1-12-458fa57c8ccf@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/09/2024 20:24, Arturs Artamonovs via B4 Relay wrote:
 > From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 > 
-> Support seting extra indepdendent interrupt on pin activity.
-> 
+
+You must always run checkpatch. We cannot take empty commit msgs, for
+obvious reasons.
+
+A nit, subject: drop second/last, redundant "bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+
+Instead describe the hardware.
+
+
 > Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
 > Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 > Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 > ---
->  drivers/irqchip/Kconfig        |   9 ++
->  drivers/irqchip/Makefile       |   2 +
->  drivers/irqchip/irq-adi-adsp.c | 310 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 321 insertions(+)
+>  .../interrupt-controller/adi,adsp-pint.yaml        | 51 ++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 > 
-> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> index d078bdc48c38f13af9a129974f3b637dfee0e40f..1bc8f1bd45b3d2f69d2d0e6c8fa01b17b12ce241 100644
-> --- a/drivers/irqchip/Kconfig
-> +++ b/drivers/irqchip/Kconfig
-> @@ -91,6 +91,15 @@ config ALPINE_MSI
->  	select PCI_MSI
->  	select GENERIC_IRQ_CHIP
->  
-> +config ADI_ADSP_IRQ
-> +	bool "ADI PORT PINT Driver"
-
-What is "PORT"?
-What is "PINT"?
-> +	depends on OF
-> +	depends on (ARCH_SC59X_64 || ARCH_SC59X)
-
-Missing compile test.
-
-> +	select IRQ_DOMAIN
-> +	help
-> +	  Say Y to enable the PORT-based PINT interrupt controller for
-
-Expand acronyms here.
-
-> +	  Analog Devices ADSP devices.
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/adi,adsp-pint.yaml b/Documentation/devicetree/bindings/interrupt-controller/adi,adsp-pint.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..b5ecf0cf1d2ceb580f45467ffe1550ae3280d1a3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/adi,adsp-pint.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/adi,adsp-pint.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  config AL_FIC
->  	bool "Amazon's Annapurna Labs Fabric Interrupt Controller"
->  	depends on OF
-> diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-> index 15635812b2d6605a2dd3bb0e5fb3170ab2cb0f77..258a188676fd97e713f3cebe16e3d563add095f3 100644
-> --- a/drivers/irqchip/Makefile
-> +++ b/drivers/irqchip/Makefile
-> @@ -1,6 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-$(CONFIG_IRQCHIP)			+= irqchip.o
->  
+> +title: Analog Devices Port Pin Interrupt for SC5XX-family processors
 > +
+> +maintainers:
+> +  - Arturs Artamonovs <arturs.artamonovs@analog.com>
+> +  - Utsav Agarwal <Utsav.Agarwal@analog.com>
+> +
+> +description: |
+> +  Analog Devices Port Pin Interrupt driver for SC5XX-family processors
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,adsp-pint
 
-Why?
-
-> +obj-$(CONFIG_ADI_ADSP_IRQ)		+= irq-adi-adsp.o
->  obj-$(CONFIG_AL_FIC)			+= irq-al-fic.o
->  obj-$(CONFIG_ALPINE_MSI)		+= irq-alpine-msi.o
-
-...
-
+All previous comments apply.
 
 > +
-> +static int adsp_pint_irq_set_type(struct irq_data *d, unsigned int type)
-> +{
-> +	struct adsp_pint *pint = irq_data_get_irq_chip_data(d);
-> +	unsigned int pos = BIT(d->hwirq);
+> +  reg:
+> +    maxItems: 1
 > +
-> +	switch (type) {
-> +	case IRQ_TYPE_PROBE:
-> +		type = IRQ_TYPE_EDGE_BOTH;
-> +		fallthrough;
-> +	case IRQ_TYPE_EDGE_BOTH:
-> +		/* start by looking for rising edge */
-> +		writel(pos, pint->regs + ADSP_PINT_REG_INVERT_CLEAR);
-> +		writel(pos, pint->regs + ADSP_PINT_REG_EDGE_SET);
-> +		return 0;
+> +  interrupts:
+> +    maxItems: 1
 > +
-> +	case IRQ_TYPE_EDGE_FALLING:
-> +		writel(pos, pint->regs + ADSP_PINT_REG_INVERT_SET);
-> +		writel(pos, pint->regs + ADSP_PINT_REG_EDGE_SET);
-> +		return 0;
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
 > +
-> +	case IRQ_TYPE_EDGE_RISING:
-> +		writel(pos, pint->regs + ADSP_PINT_REG_INVERT_CLEAR);
-> +		writel(pos, pint->regs + ADSP_PINT_REG_EDGE_SET);
-> +		return 0;
+> +additionalProperties: false
 > +
-> +	case IRQ_TYPE_LEVEL_HIGH:
-> +		writel(pos, pint->regs + ADSP_PINT_REG_INVERT_CLEAR);
-> +		writel(pos, pint->regs + ADSP_PINT_REG_EDGE_CLEAR);
-> +		return 0;
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/adi-sc5xx-clock.h>
+
+Where do you user it?
+
 > +
-> +	case IRQ_TYPE_LEVEL_LOW:
-> +		writel(pos, pint->regs + ADSP_PINT_REG_INVERT_SET);
-> +		writel(pos, pint->regs + ADSP_PINT_REG_EDGE_CLEAR);
-> +		return 0;
-> +
-> +	default:
-> +		return -EINVAL;
-> +	}
+> +    pint0: pint@31005000 {
+> +      compatible = "adi,adsp-pint";
+> +      reg = <0x31005000 0xFF>;
+> +      interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
 > +
 
-Fix blank line issues everywhere.
+All previous comments apply.
 
-> +}
-> +
-> +static int adsp_pint_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct adsp_pint *pint;
-> +
-> +	pint = devm_kzalloc(dev, sizeof(*pint), GFP_KERNEL);
-> +	if (!pint)
-> +		return -ENOMEM;
-> +
-> +	pint->regs = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(pint->regs))
-> +		return PTR_ERR(pint->regs);
-> +
-> +	pint->chip.name = "adsp-pint";
-> +	pint->chip.irq_ack = adsp_pint_irq_ack;
-> +	pint->chip.irq_mask = adsp_pint_irq_mask;
-> +	pint->chip.irq_unmask = adsp_pint_irq_unmask;
-> +	pint->chip.irq_set_type = adsp_pint_irq_set_type;
-> +	// @todo potentially only SEC supports wake options, not gic
-> +
-> +	// @todo determine if we actually need a raw spinlock
-> +
-> +	pint->domain = irq_domain_add_linear(np, ADSP_PINT_IRQS,
-> +		&adsp_irq_domain_ops, pint);
-> +	if (!pint->domain) {
-> +		dev_err(dev, "Could not create irq domain\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	pint->irq = platform_get_irq(pdev, 0);
-> +	if (!pint->irq) {
-
-That's a bug, technically. Read the doc. Why -EINVAL is a valid interrupt?
-
-> +		dev_err(dev, "Could not find parent interrupt for port\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	irq_set_chained_handler_and_data(pint->irq, adsp_pint_irq_handler, pint);
-> +	platform_set_drvdata(pdev, pint);
-> +
-> +	return 0;
-> +}
-> +
-> +static void adsp_pint_remove(struct platform_device *pdev)
-> +{
-> +	struct adsp_pint *pint = platform_get_drvdata(pdev);
-> +
-> +	irq_set_chained_handler_and_data(pint->irq, NULL, NULL);
-> +	irq_domain_remove(pint->domain);
-> +}
-> +
-> +static const struct of_device_id adsp_pint_of_match[] = {
-> +	{ .compatible = "adi,adsp-pint" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, adsp_pint_of_match);
-> +
-> +static struct platform_driver adsp_pint_driver = {
-> +	.driver = {
-> +		.name = "adsp-port-pint",
-
-Bindings are always before the users.
+> +    pint1: pint@31005100 {
+> +      compatible = "adi,adsp-pint";
+> +      reg = <0x31005100 0xFF>;
+> +      interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+> +...
+> 
 
 Best regards,
 Krzysztof
