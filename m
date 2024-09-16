@@ -1,218 +1,108 @@
-Return-Path: <linux-i2c+bounces-6781-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6782-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AAC3979FCA
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 12:55:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2053D97A09B
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 13:58:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 452F8B20EE5
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 10:55:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A68181F24311
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 11:58:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0356234CC4;
-	Mon, 16 Sep 2024 10:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F37D15855D;
+	Mon, 16 Sep 2024 11:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZQCxSoPw"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAB11482FE;
-	Mon, 16 Sep 2024 10:55:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1818C15575B;
+	Mon, 16 Sep 2024 11:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726484131; cv=none; b=WhtCQTCNkntSrI8XUDczz6wGN/vwQOHeiniWB3ojz3i8dv4QchexoJcDid9eZ5oVul8jIpOm/KQKNP/wTbJ5pLbqaEc72IhbixJRUw+O40zTVKBJETZ4tZjXEzcZJqCdHjwvlooLbL2I9LZIFNV054/gIV9nKhColSj4E1ArK0M=
+	t=1726487907; cv=none; b=FbnFRhYdWG1Vvos1N3wFo3lBgVnB9ARcehIWGaBVW54HvCL3BF+1YY1+ti/T2TU7Z23xVjssMeS+mjepAGQ4+xESodY/sTqurPC6ZEsGDvJmzWTjs3m5IWnWeVu+lU+IqQyU6+fkItIW2q/Bw1foeTJgEZNxdhSszSwemGvzPyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726484131; c=relaxed/simple;
-	bh=zdVQq5K8PIZNGz15V1HeyVqfSmTTbaI0Lk4mbOZxYPI=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lGojVPYXLuAyWoGkEZvB3PRpnLHDHJtIFYY6ldokB5CWK0pXfzdBUEiktE0SJH2iXGnK5R+jinXZNqNZhZGGYT6iJsfLa4aUHl7kq5wXZl+ZUxmW1gsQel6Cuiyixn8harh5XSpz1twSdG5Dd1Vqz8b9s6OM5NZpNA6JSE7RKxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4X6hY03zmLz6K5lT;
-	Mon, 16 Sep 2024 18:51:16 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id E3D721400CB;
-	Mon, 16 Sep 2024 18:55:27 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 16 Sep
- 2024 12:55:27 +0200
-Date: Mon, 16 Sep 2024 11:55:25 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+	s=arc-20240116; t=1726487907; c=relaxed/simple;
+	bh=cn4qiSXIffztlhZkpuG7otltZwk8uS66Sy7HbKtKITY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fav5R4OE3FWKba35MjuRept/xXpFpn0BqBWPuDZ2I/eFLK3EVr0K3STxUeN4NLST0mgmcNC5NeNSbCGmxR9FbmWc14Ebh9QtjVSNnkFwZazcNh6AqPK+Ct1PaeULQThKCSSHxO/BRWYdkfe5S7EfkKCZMbyhKk+FCNv9ON18ruU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZQCxSoPw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69174C4CECC;
+	Mon, 16 Sep 2024 11:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726487906;
+	bh=cn4qiSXIffztlhZkpuG7otltZwk8uS66Sy7HbKtKITY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZQCxSoPwzQsKG9vFV91ERoFLhlTDq7/ciItIJn3/7T/auMZzWe99x4M2DxvU2hfM7
+	 m+M+WB1BIKrcMThag5k3saZwah2Y296itp1VeoQj+cwq+rrUkDFIzX/9SHjfJH1jkh
+	 zqv0eDWZFt5mR5iDL8fu+uxVUlIxrmEGAKH2K/bWCBeGkamCLGQijDbAxnQuvc20Gp
+	 ilCeWZ73lZfIRpJ1RubAywlyawWhlrjhSL7XvY9zl/52tQ7cJ3oQEvQnMIsMakrsso
+	 n/KS9LOtE9nAIh3ulDZoFWTKc2Zj417r+HnUfJ/kc8kp3KQpspTbGRkAJj40xZsaEb
+	 odvzrxBNp7hGg==
+Date: Mon, 16 Sep 2024 13:58:06 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: Chen-Yu Tsai <wenst@chromium.org>, Rob Herring <robh@kernel.org>, Saravana
- Kannan <saravanak@google.com>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram
- Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>, Tzung-Bi Shih
-	<tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>, Liam Girdwood
-	<lgirdwood@gmail.com>, <chrome-platform@lists.linux.dev>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-kernel@vger.kernel.org>, Douglas
- Anderson <dianders@chromium.org>, Johan Hovold <johan@kernel.org>, Jiri
- Kosina <jikos@kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v7 06/10] i2c: Introduce OF component probe function
-Message-ID: <20240916115525.000078a3@Huawei.com>
-In-Reply-To: <ZugKHrzs5BWoDr1c@smile.fi.intel.com>
-References: <20240911072751.365361-1-wenst@chromium.org>
-	<20240911072751.365361-7-wenst@chromium.org>
-	<ZuQTFTNTBLCziD05@smile.fi.intel.com>
-	<CAGXv+5HgkCZ=vdHGgvCW1U-nid=cQrVaxC+V+H2Gknf2pnTbYA@mail.gmail.com>
-	<ZugKHrzs5BWoDr1c@smile.fi.intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+Cc: kernel test robot <lkp@intel.com>, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v1 04/12] i2c: isch: Switch to memory mapped IO accessors
+Message-ID: <uikfb52qduifmhnlkc43tgvmw2ok67eclqpokyrkp7sftetz3v@bs64p6aga6s3>
+References: <20240911154820.2846187-5-andriy.shevchenko@linux.intel.com>
+ <202409141436.QFCDQrRF-lkp@intel.com>
+ <Zuf1UJ6K_8hL5x5U@smile.fi.intel.com>
+ <leoyop42s4qmaytvwhwhpgfwfrkpm2xxabskz645r337jdjfml@zg5ql73tqidk>
+ <ZugI2NCtaWKgcgh5@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZugI2NCtaWKgcgh5@smile.fi.intel.com>
 
-On Mon, 16 Sep 2024 13:36:14 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
-> On Sun, Sep 15, 2024 at 12:44:13PM +0200, Chen-Yu Tsai wrote:
-> > On Fri, Sep 13, 2024 at 12:25=E2=80=AFPM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote: =20
-> > > On Wed, Sep 11, 2024 at 03:27:44PM +0800, Chen-Yu Tsai wrote: =20
->=20
+On Mon, Sep 16, 2024 at 01:30:48PM GMT, Andy Shevchenko wrote:
+> On Mon, Sep 16, 2024 at 12:10:32PM +0200, Andi Shyti wrote:
+> > On Mon, Sep 16, 2024 at 12:07:28PM GMT, Andy Shevchenko wrote:
+> > > On Sat, Sep 14, 2024 at 02:56:19PM +0800, kernel test robot wrote:
+> 
 > ...
->=20
-> > > > +int i2c_of_probe_component(struct device *dev, const struct i2c_of=
-_probe_cfg *cfg, void *ctx)
-> > > > +{
-> > > > +     const struct i2c_of_probe_ops *ops;
-> > > > +     const char *type;
-> > > > +     struct device_node *i2c_node;
-> > > > +     struct i2c_adapter *i2c;
-> > > > +     int ret;
-> > > > +
-> > > > +     if (!cfg)
-> > > > +             return -EINVAL;
-> > > > +
-> > > > +     ops =3D cfg->ops ?: &i2c_of_probe_dummy_ops;
-> > > > +     type =3D cfg->type;
-> > > > +
-> > > > +     i2c_node =3D i2c_of_probe_get_i2c_node(dev, type); =20
-> > >
-> > >
-> > >         struct device_node *i2c_node __free(of_node_put) =3D
-> > >                 i2c_...; =20
-> >=20
-> > cleanup.h says to not mix the two styles (scoped vs goto). I was trying
-> > to follow that, though I realize now that with the scoped loops it
-> > probably doesn't help.
+> 
+> > > >    drivers/i2c/busses/i2c-isch.c: In function 'smbus_sch_probe':
+> > > > >> drivers/i2c/busses/i2c-isch.c:296:42: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+> > > >      296 |                 "SMBus SCH adapter at %04x", res->start);
+> > > >          |                                       ~~~^   ~~~~~~~~~~
+> > > >          |                                          |      |
+> > > >          |                                          |      resource_size_t {aka long long unsigned int}
+> > > >          |                                          unsigned int
+> > > >          |                                       %04llx
+> > > 
+> > > Yeah, this should be something like %pa, but the problem with that that it
+> > > always uses the same, fixed-width format with a prefix. We don't want this. But
+> > > to make sure we have proper specifier we need to introduce a temporary variable
+> > > and assign the resource start address to it and then use that variable in here.
+> > > I'll update this in v2 and send it after we have v6.12-rc1 is out.
+> > 
+> > Feel free to send it, I will apply it in i2c/i2c-host-for-6.12,
+> > that's where I'm collecting the next patches.
+> 
+> But I believe it's a material for v6.13, no?
 
-The problem pattern is (IIUC)
+yes, I gave it the wrong name :-)
+I renamed it now to i2c/i2c-host-for-6.13(*).
 
-	if (x)
-		goto bob;
+But it doesn't matter. It will become the next i2c/i2c-host after
+Linus has taken the actual for-6.12 patches into mainline.
 
-	struct device_node *i2c_node __free(of_node_put) =3D i2c_....
+> From the whole series the first patch is only a fix, the rest is pure
+> refactoring and cleanup.
 
+Yes, you can omit the first patch. It has already been sent in
+the fixes pull request.
 
-bob:
-	return ret;
+Andi
 
-
-So a goto that jumps over registration of a cleanup function.
-
-Jonathan
-
-> >=20
-> > I'll revert back to having __free().
-> >  =20
-> > > > +     if (IS_ERR(i2c_node))
-> > > > +             return PTR_ERR(i2c_node);
-> > > > +
-> > > > +     for_each_child_of_node_with_prefix(i2c_node, node, type) {
-> > > > +             if (!of_device_is_available(node))
-> > > > +                     continue;
-> > > > +
-> > > > +             /*
-> > > > +              * Device tree has component already enabled. Either =
-the
-> > > > +              * device tree isn't supported or we already probed o=
-nce.
-> > > > +              */
-> > > > +             ret =3D 0; =20
-> > >
-> > > Shouldn't you drop reference count for "node"? (See also below) =20
-> >=20
-> > This for-each loop the "scoped". It just doesn't have the prefix anymor=
-e.
-> > I believe you asked if the prefix could be dropped and then Rob agreed.=
- =20
->=20
-> Hmm... I have looked into the implementation and I haven't found the evid=
-ence
-> that this is anyhow scoped. Can you point out what I have missed?
->=20
-> > > > +             goto out_put_i2c_node;
-> > > > +     }
-> > > > +
-> > > > +     i2c =3D of_get_i2c_adapter_by_node(i2c_node);
-> > > > +     if (!i2c) {
-> > > > +             ret =3D dev_err_probe(dev, -EPROBE_DEFER, "Couldn't g=
-et I2C adapter\n");
-> > > > +             goto out_put_i2c_node;
-> > > > +     }
-> > > > +
-> > > > +     /* Grab resources */
-> > > > +     ret =3D 0;
-> > > > +     if (ops->get_resources)
-> > > > +             ret =3D ops->get_resources(dev, i2c_node, ctx);
-> > > > +     if (ret)
-> > > > +             goto out_put_i2c_adapter;
-> > > > +
-> > > > +     /* Enable resources */
-> > > > +     if (ops->enable)
-> > > > +             ret =3D ops->enable(dev, ctx);
-> > > > +     if (ret)
-> > > > +             goto out_release_resources;
-> > > > +
-> > > > +     ret =3D 0;
-> > > > +     for_each_child_of_node_with_prefix(i2c_node, node, type) {
-> > > > +             union i2c_smbus_data data;
-> > > > +             u32 addr;
-> > > > +
-> > > > +             if (of_property_read_u32(node, "reg", &addr))
-> > > > +                     continue;
-> > > > +             if (i2c_smbus_xfer(i2c, addr, 0, I2C_SMBUS_READ, 0, I=
-2C_SMBUS_BYTE, &data) < 0)
-> > > > +                     continue;
-> > > > +
-> > > > +             /* Found a device that is responding */
-> > > > +             if (ops->free_resources_early)
-> > > > +                     ops->free_resources_early(ctx);
-> > > > +             ret =3D i2c_of_probe_enable_node(dev, node); =20
-> > >
-> > > Hmm... Is "node" reference count left bumped up for a reason? =20
-> >=20
-> > Same as above. =20
->=20
-> Same as above.
->=20
-> > > > +             break;
-> > > > +     }
-> > > > +
-> > > > +     if (ops->cleanup)
-> > > > +             ops->cleanup(dev, ctx);
-> > > > +out_release_resources:
-> > > > +     if (ops->free_resources_late)
-> > > > +             ops->free_resources_late(ctx);
-> > > > +out_put_i2c_adapter:
-> > > > +     i2c_put_adapter(i2c);
-> > > > +out_put_i2c_node:
-> > > > +     of_node_put(i2c_node);
-> > > > +
-> > > > +     return ret;
-> > > > +} =20
->=20
-
+(*) https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git/log/?h=i2c/i2c-host-for-6.13
 
