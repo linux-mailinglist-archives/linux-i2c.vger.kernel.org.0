@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6772-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6773-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B941F979BD2
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 09:05:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46CAD979BDD
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 09:13:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D36651C22DF1
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 07:05:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AAE7282A87
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 07:13:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EFF012CD8B;
-	Mon, 16 Sep 2024 07:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58E613C8FF;
+	Mon, 16 Sep 2024 07:13:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mwBSzI0D"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tIVXUipk"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217271BDC8;
-	Mon, 16 Sep 2024 07:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D03612BF02;
+	Mon, 16 Sep 2024 07:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726470313; cv=none; b=iONgZcCsaprUD853DjC8/XS+Bi4MpfaRNRAwu5II2p87VIWiNEADaIAkBiVRmTKcux3g6fCKGrUw1gox/sVXG2b+QYGUY0BKscrcpn+mRTcAnRwypF+bP2+L+e9oL3ZJ6FPrfCj4b/AhR3TpMOMs1IrHrc6Y6bqwcmzu1EPkNHs=
+	t=1726470808; cv=none; b=osJGnBVk7Gzm3OitlUKNy3vj+Hpr1MO8K6aprIV8e6/REwSgCYUVFh3bKGFDIXM1Pp6oxptfEwBz4BNnNOM66xt+G/F+xPOQwk2PyCgk8VT1OMPago2EhD8TcTiENBo5vhPakh6Gicy0R9aTMSaga24L3Dc34X0Nt7JTMlTNRC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726470313; c=relaxed/simple;
-	bh=sLD8gZ+5WWCc3phVvhYizgaea8uaK6uzmMaR+dMCXkE=;
+	s=arc-20240116; t=1726470808; c=relaxed/simple;
+	bh=2a0pJBR14LWlAhQYOY88JR1dcJJ7eFFl68zpz6H3ptM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MU2kquo7/GVKa7vX1GTJf7auZRu6VETzujxUnFZC5IQ87CgcOWaf5r/hNY0fuHxqK6ilet2H+YIONOR8VPHc+ngf8TqnDtBUBTSqOtXzdGtvZ6Yfzn8lo4DFha5GV3V1tqj7PlJ5Fpb7BF/rjPMxL0OOTrTiiyZCxqqNALkeIvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mwBSzI0D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2676C4CEC4;
-	Mon, 16 Sep 2024 07:05:01 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=YiOD4exV8c6OJ95sJ4cuILnVOawxWiLHYBiN7b/CFZG9wCb4BXoveCceTVlxgRGrOgn/O5H8aQRy4X6+WcDL9f8ipgk6nkguEQ/U6EnC2BjuVXQs7sT7FvWzM0UEDYOXHtAtCgH5o5rSdjIYCgeHzaoln+CX9Apo/87KPraKBEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tIVXUipk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD29FC4CEC4;
+	Mon, 16 Sep 2024 07:13:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726470312;
-	bh=sLD8gZ+5WWCc3phVvhYizgaea8uaK6uzmMaR+dMCXkE=;
+	s=k20201202; t=1726470807;
+	bh=2a0pJBR14LWlAhQYOY88JR1dcJJ7eFFl68zpz6H3ptM=;
 	h=Date:Subject:List-Id:To:Cc:References:From:In-Reply-To:From;
-	b=mwBSzI0D6ZUIkr8DrIDPCCfCjRCpiZJBw2btBbHyuRdmqLbyDMtgz7DCVdzcZ9FOH
-	 RlOJP+HEeZVH5gilRboRXunGwt74vUL9OuPBcokIxJ7HOE7jGx+8xzCmLZIWKuJWfP
-	 7Tvx72HP8s+UF6NEWAoftHYpuNNXe8i5ZXcwo5wKVk8f9aYXMVZf6TexxK7Sb1zXtH
-	 IGc5ldHKyz1ggdFD6rxLws8tPp3IeUM4jm2AZYxF4J8qcvkENStq37m6Z40Iid1Mqx
-	 svaij4ieP0oLJKmjy+5bhnxS+94F+XvULFGbWnWnidb+aBgloYOx1VqhqXa8Xf4Bpi
-	 KQlr0wWpKgz5w==
-Message-ID: <19e3d0a1-02e3-44bf-ae42-cd090bfde471@kernel.org>
-Date: Mon, 16 Sep 2024 09:04:58 +0200
+	b=tIVXUipkjSS946n9IFKZDr7qxpXiEO8TmFKDEMFxxhox7mEIpqXQ94hkR8v+tse0C
+	 5mlk9MePKNgtSxsWdCkBYizq1ksD1Jpblu/QlYGzIpsPa5nVFcADXYVl9BJUKhzQ4w
+	 xo7GBem/3My7g0ooLu3514Xrpxe9JeqCCTeHrz9a4+93OsykOdNX0iQxMstY06+i0F
+	 Mrt9JlxP3WZXoPI+R0OTV0OwbSB4XsIU96T/8yj/0Ts0QKHfhpDx/MlbZ33RZqOUBS
+	 rtMAhB6XYuN/GIR5ZLr68/prT9uDMt7wJhSoKbnMd9Ed4+dkGWifVhxIs//IjiGk1j
+	 X8YVi7Ob3WT0Q==
+Message-ID: <ad7ac580-3593-4b44-b6c9-5c43b80b135e@kernel.org>
+Date: Mon, 16 Sep 2024 09:13:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 19/21] arm64: dts: adi: sc598: add device tree
+Subject: Re: [PATCH 15/21] i2c: Add driver for ADI ADSP-SC5xx platforms
 To: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>,
  Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
  Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
@@ -69,7 +69,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-serial@vger.kernel.org, adsp-linux@analog.com,
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
- <20240912-test-v1-19-458fa57c8ccf@analog.com>
+ <20240912-test-v1-15-458fa57c8ccf@analog.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,598 +115,266 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240912-test-v1-19-458fa57c8ccf@analog.com>
+In-Reply-To: <20240912-test-v1-15-458fa57c8ccf@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/09/2024 20:25, Arturs Artamonovs via B4 Relay wrote:
 > From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 > 
-> Add ADI SC598-EZKIT device tree.
-> Support UART console as output.
+> Add support for I2C on SC5xx
 > 
 > Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
-> Signed-off-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
 > Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 > Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
+
+As in all patches - chain looks wrong.
+
 > ---
->  arch/arm64/boot/dts/Makefile                |   1 +
->  arch/arm64/boot/dts/adi/Makefile            |   2 +
->  arch/arm64/boot/dts/adi/sc598-som-ezkit.dts |  14 ++
->  arch/arm64/boot/dts/adi/sc598-som.dtsi      |  58 +++++
->  arch/arm64/boot/dts/adi/sc59x-64.dtsi       | 367 ++++++++++++++++++++++++++++
->  5 files changed, 442 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-> index 21cd3a87f385309c3a655a67a3bee5f0abed7545..9b3996a8e01d8e7d264c44c075d7a50ee350ba44 100644
-> --- a/arch/arm64/boot/dts/Makefile
-> +++ b/arch/arm64/boot/dts/Makefile
-> @@ -1,5 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  subdir-y += actions
-> +subdir-y += adi
->  subdir-y += airoha
->  subdir-y += allwinner
->  subdir-y += altera
-> diff --git a/arch/arm64/boot/dts/adi/Makefile b/arch/arm64/boot/dts/adi/Makefile
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..1bf54bc97095e1ea3577953d379746fbc0ea02a9
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/adi/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_SC59X_64) += sc598-som-ezkit.dtb
-> diff --git a/arch/arm64/boot/dts/adi/sc598-som-ezkit.dts b/arch/arm64/boot/dts/adi/sc598-som-ezkit.dts
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..a8db6d5ea764f917faa6839d3d4f0b5217b927b8
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/adi/sc598-som-ezkit.dts
-> @@ -0,0 +1,14 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2021-2024 - Analog Devices Inc.
-> + * Author: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sc598-som.dtsi"
-> +
-> +/ {
-> +	model = "ADI 64-bit SC598 SOM EZ Kit";
-> +	compatible = "adi,sc598-som-ezkit", "adi,sc59x-64";
+>  drivers/i2c/busses/Kconfig       |  17 +
+>  drivers/i2c/busses/Makefile      |   1 +
+>  drivers/i2c/busses/i2c-adi-twi.c | 940 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 958 insertions(+)
 
-Where is adi,sc598-som-ezlite?
 
-> +};
-> diff --git a/arch/arm64/boot/dts/adi/sc598-som.dtsi b/arch/arm64/boot/dts/adi/sc598-som.dtsi
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..3b90f367db1a24de1e1dddc4db3c219736c5b90f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/adi/sc598-som.dtsi
-> @@ -0,0 +1,58 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2021-2024 - Analog Devices Inc.
-> + * Author: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/pinctrl/adi-adsp.h>
-> +#include "sc59x-64.dtsi"
-> +
-> +/ {
-> +	chosen {
-> +		stdout-path = &uart1;
-> +		bootargs = "earlycon=adi_uart,0x31003000 console=ttySC0,115200 mem=224M";
 
-Drop entire bootargs. Look how other SoCs do it, if you need port speed.
-
-> +	};
+> +static SIMPLE_DEV_PM_OPS(i2c_adi_twi_pm,
+> +			 i2c_adi_twi_suspend, i2c_adi_twi_resume);
+> +#define I2C_ADI_TWI_PM_OPS	(&i2c_adi_twi_pm)
+> +#else
+> +#define I2C_ADI_TWI_PM_OPS	NULL
+> +#endif
 > +
-> +	memory@90000000 {
-> +		device_type = "memory";
-> +		reg = <0x90000000 0x0e000000>;
-> +	};
-> +
-> +	memory@20040000 {
-> +		device_type = "memory";
-> +		reg = <0x20040000 0x40000>;
-> +	};
-> +
-> +	scb: scb-bus {
-
-What is this?
-
-> +		sec: sec@31089000 {
-
-And this?
-
-> +			adi,sharc-cores = <2>;
-> +		};
-> +	};
-
-Drop entire node.
-
-> +
-
-Fix redundant blank lines.
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-0 = <&uart0_default>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c1 {
-> +	status = "disabled";
-> +};
-> +
-> +&pinctrl0 {
-> +	uart0_default: uart0-default-pins {
-> +		pins {
-> +			pinmux = <ADI_ADSP_PINMUX('A', 6, ADI_ADSP_PINFUNC_ALT1)>,
-> +				 <ADI_ADSP_PINMUX('A', 7, ADI_ADSP_PINFUNC_ALT1)>;
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/adi/sc59x-64.dtsi b/arch/arm64/boot/dts/adi/sc59x-64.dtsi
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..4a9aa08b4acb0936c97e683562e05da063a4e193
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/adi/sc59x-64.dtsi
-> @@ -0,0 +1,367 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2021-2024 - Analog Devices Inc.
-> + * Author: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-> + */
-> +
-> +#include <dt-bindings/clock/adi-sc5xx-clock.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +/ {
-> +	model = "ADI 64-bit SC59X";
-> +	compatible = "adi,sc59x-64";
-> +
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +
-> +	chosen { };
+> +#ifdef CONFIG_OF
 
 Drop
 
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +		serial2 = &uart2;
-> +		serial3 = &uart3;
-> +	};
-
-
-Drop or move to board DTS. Not a property of the SoC.
-
-
-> +
-> +	cpus {
-> +		#address-cells = <0x2>;
-> +		#size-cells = <0x0>;
-> +
-> +		cpu0: cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a55";
-> +			reg = <0x0 0x0>;
-> +			enable-method = "spin-table";
-> +			cpu-release-addr = <0x0 0xdeadbeef>;
-> +			clocks = <&clk ADSP_SC598_CLK_ARM>, <&clk ADSP_SC598_CLK_DDR>;
-> +		};
-> +	};
-> +
-> +	pmu {
-
-Order nodes alphabetically. See DTS coding style.
-
-> +		compatible = "arm,armv8-pmuv3";
-> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-parent = <&gic>;
-> +	};
-> +
-> +	gic: interrupt-controller@31200000 {
-
-
-This cannot be outside of SoC. See writing-bindings and DTS coding style.
-
-> +		compatible = "arm,gic-v3";
-> +		#interrupt-cells = <3>;
-> +		interrupt-controller;
-> +		reg = <0x31200000 0x40000>, /* GIC Dist */
-> +		      <0x31240000 0x40000>; /* GICR */
-> +	};
-> +
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>, /* Physical Secure */
-> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>, /* Physical Non-Secure */
-> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>, /* Virtual */
-> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>; /* Hypervisor */
-> +	};
-> +
-> +	clocks {
-> +		sys_clkin0: oscillator@1 {
-
-There is no way you tested it. It's obvious W=1 warning.
-
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <25000000>;
-> +			clock-output-names = "sys_clkin0";
-> +		};
-> +
-> +		sys_clkin1: oscillator@2 {
-
-How are these properties of the SoC? Where are they located physically?
-See DTS coding style.
-
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <25000000>;
-> +			clock-output-names = "sys_clkin1";
-> +		};
-> +	};
-> +
-> +	clk: clocks@3108d000 {
-> +		compatible = "adi,sc598-clocks";
-> +		reg = <0x3108d000 0x1000>,
-> +		      <0x3108e000 0x1000>,
-> +		      <0x3108f000 0x1000>,
-> +		      <0x310a9000 0x1000>;
-> +		#clock-cells = <1>;
-> +		clocks = <&sys_clkin0>, <&sys_clkin1>;
-> +		clock-names = "sys_clkin0", "sys_clkin1";
-> +		status = "okay";
-
-Drop... everywhere.
-
-> +	};
-> +
-> +	scb: scb-bus {
-
-What is scb-bus?
-
-See DTS coding style or any other SoC. This is supposed to be just sco@
-with proper unit address.
-
-> +		compatible = "simple-bus";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		rcu: rcu@3108c000 {
-> +			compatible = "adi,reset-controller";
-> +			reg = <0x3108c000 0x1000>;
-> +			status = "okay";
-
-Oh...
-
-> +		};
-> +
-> +		sec: sec@31089000 {
-
-Random order of nodes? See DTS coding style.
-
-> +			compatible = "adi,system-event-controller";
-> +			reg = <0x31089000 0x1000>;
-> +			adi,rcu = <&rcu>;
-> +			status = "okay";
-> +		};
-> +
-> +		uart0: uart@31003000 {
-
-Never tested.
-
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check W=1` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
-> +			compatible = "adi,uart";
-> +			reg = <0x31003000 0x40>;
-> +			clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-> +			clock-names = "sclk0";
-> +			interrupt-parent = <&gic>;
-> +			interrupt-names = "tx", "rx", "status";
-> +			interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 139 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> +			adi,use-edbo;
-> +			status = "disabled";
-> +		};
-> +
-> +		uart1: uart@31003400 {
-> +			compatible = "adi,uart";
-> +			reg = <0x31003400 0x40>;
-> +			clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-> +			clock-names = "sclk0";
-> +			interrupt-parent = <&gic>;
-> +			interrupt-names = "tx", "rx", "status";
-> +			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
-> +			adi,use-edbo;
-> +			status = "disabled";
-> +		};
-> +
-> +		uart2: uart@31003800 {
-> +			compatible = "adi,uart";
-> +			reg = <0x31003800 0x40>;
-> +			clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-> +			clock-names = "sclk0";
-> +			interrupt-parent = <&gic>;
-> +			interrupt-names = "tx", "rx", "status";
-> +			interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
-> +			adi,use-edbo;
-> +			status = "disabled";
-> +		};
-> +
-> +		uart3: uart@31003c00 {
-> +			compatible = "adi,uart";
-> +			reg = <0x31003C00 0x40>;
-> +			clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-> +			clock-names = "sclk0";
-> +			interrupt-parent = <&gic>;
-> +			interrupt-names = "tx", "rx", "status";
-> +			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
-> +			adi,use-edbo;
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c0: twi@31001400 {
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-Completely wrong order of properties. Please follow DTS coding style.
-
-
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "adi,twi";
-
-You cannot have generic compatibles in the SoC.
-
-> +			reg = <0x31001400 0xFF>;
-
-I already commented on lower case hex.
-
-> +			interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH>;
-> +			clock-khz = <100>;
-> +			clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-> +			clock-names = "sclk0";
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c1: twi@31001500 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "adi,twi";
-> +			reg = <0x31001500 0xFF>;
-> +			interrupts = <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
-> +			clock-khz = <100>;
-> +			clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-> +			clock-names = "sclk0";
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c3: twi@31001000 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "adi,twi";
-> +			reg = <0x31001000 0xFF>;
-> +			interrupts = <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>;
-> +			clock-khz = <100>;
-> +			clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-> +			clock-names = "sclk0";
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c4: twi@31001100 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "adi,twi";
-> +			reg = <0x31001100 0xFF>;
-> +			interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>;
-> +			clock-khz = <100>;
-> +			clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-> +			clock-names = "sclk0";
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c5: twi@31001200 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "adi,twi";
-> +			reg = <0x31001200 0xFF>;
-> +			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
-> +			clock-khz = <100>;
-> +			clocks = <&clk ADSP_SC598_CLK_CGU0_SCLK0>;
-> +			clock-names = "sclk0";
-> +			status = "disabled";
-> +		};
-> +
-> +		pinctrl0: pinctrl@31004600 {
-> +			compatible = "adi,adsp-pinctrl";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			reg = <0x31004600 0x400>;
-> +			adi,port-sizes = <16 16 16 16 16 16 16 16 7>;
-> +		};
-> +
-> +		pint0: pint@31005000 {
-> +			compatible = "adi,adsp-pint";
-> +			reg = <0x31005000 0xFF>;
-> +			interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		pint1: pint@31005100 {
-> +			compatible = "adi,adsp-pint";
-> +			reg = <0x31005100 0xFF>;
-> +			interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		pint2: pint@31005200 {
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-> +			compatible = "adi,adsp-pint";
-> +			reg = <0x31005200 0xFF>;
-> +			interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		pint3: pint@31005300 {
-> +			compatible = "adi,adsp-pint";
-> +			reg = <0x31005300 0xFF>;
-> +			interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		pint4: pint@31005400 {
-> +			compatible = "adi,adsp-pint";
-> +			reg = <0x31005400 0xFF>;
-> +			interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		pint5: pint@31005500 {
-> +			compatible = "adi,adsp-pint";
-> +			reg = <0x31005500 0xFF>;
-> +			interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		pint6: pint@31005600 {
-> +			compatible = "adi,adsp-pint";
-> +			reg = <0x31005600 0xFF>;
-> +			interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		pint7: pint@31005700 {
-> +			compatible = "adi,adsp-pint";
-> +			reg = <0x31005700 0xFF>;
-> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-> +		};
-> +
-> +		gpa: gport@31004000 {
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-> +			compatible = "adi,adsp-port-gpio";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			reg = <0x31004000 0x7F>;
-> +			gpio-ranges = <&pinctrl0 0 0 16>;
-> +			adi,pint = <&pint0 1>;
-> +			status = "okay";
-> +		};
-> +
-> +		gpb: gport@31004080 {
-> +			compatible = "adi,adsp-port-gpio";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			reg = <0x31004080 0x7F>;
-> +			gpio-ranges = <&pinctrl0 0 16 16>;
-> +			adi,pint = <&pint0 0>;
-> +			status = "okay";
-> +		};
-> +
-> +		gpc: gport@31004100 {
-> +			compatible = "adi,adsp-port-gpio";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			reg = <0x31004100 0x7F>;
-> +			gpio-ranges = <&pinctrl0 0 32 16>;
-> +			adi,pint = <&pint2 1>;
-> +			status = "okay";
-> +		};
-> +
-> +		gpd: gport@31004180 {
-> +			compatible = "adi,adsp-port-gpio";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			reg = <0x31004180 0x7F>;
-> +			gpio-ranges = <&pinctrl0 0 48 16>;
-> +			adi,pint = <&pint2 0>;
-> +		};
-> +
-> +		gpe: gport@31004200 {
-> +			compatible = "adi,adsp-port-gpio";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			reg = <0x31004200 0x7F>;
-> +			gpio-ranges = <&pinctrl0 0 64 16>;
-> +			adi,pint = <&pint4 1>;
-> +		};
-> +
-> +		gpf: gport@31004280 {
-> +			compatible = "adi,adsp-port-gpio";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			reg = <0x31004280 0x7F>;
-> +			gpio-ranges = <&pinctrl0 0 80 16>;
-> +			adi,pint = <&pint4 0>;
-> +		};
-> +
-> +		gpg: gport@31004300 {
-> +			compatible = "adi,adsp-port-gpio";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			reg = <0x31004300 0x7F>;
-> +			gpio-ranges = <&pinctrl0 0 96 16>;
-> +			adi,pint = <&pint6 1>;
-> +		};
-> +
-> +		gph: gport@31004380 {
-> +			compatible = "adi,adsp-port-gpio";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			reg = <0x31004380 0x7F>;
-> +			gpio-ranges = <&pinctrl0 0 112 16>;
-> +			adi,pint = <&pint6 0>;
-> +		};
-> +
-> +		gpi: gport@31004400 {
-> +			compatible = "adi,adsp-port-gpio";
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			reg = <0x31004400 0x7F>;
-> +			gpio-ranges = <&pinctrl0 0 128 7>;
-> +			adi,pint = <&pint7 1>;
-> +		};
-> +
-
-All your patches have such sloppy blank lines here and there.
-
-> +	};
+> +static const struct of_device_id adi_twi_of_match[] = {
+> +	{
+> +		.compatible = "adi,twi",
+> +	},
+> +	{},
 > +};
+> +MODULE_DEVICE_TABLE(of, adi_twi_of_match);
+> +#endif
+> +
+> +static int i2c_adi_twi_probe(struct platform_device *pdev)
+> +{
+> +	struct adi_twi_iface *iface;
+> +	struct i2c_adapter *p_adap;
+> +	struct resource *res;
+> +	const struct of_device_id *match;
+> +	struct device_node *node = pdev->dev.of_node;
+> +	int rc;
+> +	unsigned int clkhilow;
+> +	u16 writeValue;
+> +
+> +	iface = devm_kzalloc(&pdev->dev, sizeof(*iface), GFP_KERNEL);
+> +	if (!iface)
+> +		return -ENOMEM;
+> +
+> +	spin_lock_init(&(iface->lock));
+> +
+> +	match = of_match_device(of_match_ptr(adi_twi_of_match), &pdev->dev);
+
+Drop of_mathc_ptr
+
+> +	if (match) {
+> +		if (of_property_read_u32(node, "clock-khz",
+
+Uh? I really do not get what is this.
+
+
+> +			&iface->twi_clk))
+
+Really odd alignment.
+
+> +			iface->twi_clk = 50;
+> +	} else
+> +		iface->twi_clk = CONFIG_I2C_ADI_TWI_CLK_KHZ;
+> +
+> +	iface->sclk = devm_clk_get(&pdev->dev, "sclk0");
+> +	if (IS_ERR(iface->sclk)) {
+> +		if (PTR_ERR(iface->sclk) != -EPROBE_DEFER)
+> +			dev_err(&pdev->dev, "Missing i2c clock\n");
+
+Eh... there is nowhere such code. Please work with upstream code, not
+downstream. When writing drivers take UPSTREAM driver as template.
+Whatever you have in downstream is not a good to send to us.
+
+Syntax is return dev_err_probe.
+
+> +		return PTR_ERR(iface->sclk);
+> +	}
+> +
+> +	/* Find and map our resources */
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (res == NULL) {
+> +		dev_err(&pdev->dev, "Cannot get IORESOURCE_MEM\n");
+> +		return -ENOENT;
+> +	}
+> +
+> +	iface->regs_base = devm_ioremap_resource(&pdev->dev, res);
+
+Combine these two calls with proper helper.
+
+> +	if (IS_ERR(iface->regs_base)) {
+> +		dev_err(&pdev->dev, "Cannot map IO\n");
+> +		return PTR_ERR(iface->regs_base);
+> +	}
+> +
+> +	iface->irq = platform_get_irq(pdev, 0);
+> +	if (iface->irq < 0) {
+
+Here you have correct, other patch has a bug. That makes me wonder about
+consistency of this code. There are several other hints that people
+wrote it with quite different coding style.
+
+> +		dev_err(&pdev->dev, "No IRQ specified\n");
+> +		return -ENOENT;
+
+No. return the error. Anyway, that's never a correct errno. Read
+description of this errno: no such file. This is not a file you are
+getting here.
+
+This comment applies to all your code.
+
+> +	}
+> +
+> +	p_adap = &iface->adap;
+> +	p_adap->nr = pdev->id;
+> +	strscpy(p_adap->name, pdev->name, sizeof(p_adap->name));
+> +	p_adap->algo = &adi_twi_algorithm;
+> +	p_adap->algo_data = iface;
+> +	p_adap->class = I2C_CLASS_DEPRECATED;
+> +	p_adap->dev.parent = &pdev->dev;
+> +	p_adap->dev.of_node = node;
+> +	p_adap->timeout = 5 * HZ;
+> +	p_adap->retries = 3;
+> +
+> +	rc = devm_request_irq(&pdev->dev, iface->irq, adi_twi_interrupt_entry,
+> +		0, pdev->name, iface);
+> +	if (rc) {
+> +		dev_err(&pdev->dev, "Can't get IRQ %d !\n", iface->irq);
+> +		rc = -ENODEV;
+
+???
+
+Sorry, this driver is in really poor shape.
+
+> +		goto out_error;
+> +	}
+> +
+> +	/* Set TWI internal clock as 10MHz */
+> +	clk_prepare_enable(iface->sclk);
+> +	if (rc) {
+> +		dev_err(&pdev->dev, "Could not enable sclk\n");
+> +		goto out_error;
+
+return
+
+> +	}
+> +
+> +	writeValue = ((clk_get_rate(iface->sclk) / 1000 / 1000 + 5) / 10) & 0x7F;
+
+No camelCase. Please follow Linux coding style.
+
+> +	iowrite16(writeValue, &iface->regs_base->control);
+> +
+> +	/*
+> +	 * We will not end up with a CLKDIV=0 because no one will specify
+> +	 * 20kHz SCL or less in Kconfig now. (5 * 1000 / 20 = 250)
+> +	 */
+> +	clkhilow = ((10 * 1000 / iface->twi_clk) + 1) / 2;
+> +
+> +	/* Set Twi interface clock as specified */
+> +	writeValue = (clkhilow << 8) | clkhilow;
+> +	iowrite16(writeValue, &iface->regs_base->clkdiv);
+> +
+> +	/* Enable TWI */
+> +	writeValue = ioread16(&iface->regs_base->control) | TWI_ENA;
+> +	iowrite16(writeValue, &iface->regs_base->control);
+> +
+> +	rc = i2c_add_numbered_adapter(p_adap);
+> +	if (rc < 0)
+> +		goto disable_clk;
+> +
+> +	platform_set_drvdata(pdev, iface);
+> +
+> +	dev_info(&pdev->dev, "ADI on-chip I2C TWI Controller, regs_base@%p\n",
+> +		iface->regs_base);
+
+Drop. Driver should be silent on success.
+
+> +
+> +	return 0;
+> +
+> +disable_clk:
+> +	clk_disable_unprepare(iface->sclk);
+
+devm_clk_get_enabled
+
+> +
+> +out_error:
+
+Drop
+
+> +	return rc;
+> +}
+> +
+> +static void i2c_adi_twi_remove(struct platform_device *pdev)
+> +{
+> +	struct adi_twi_iface *iface = platform_get_drvdata(pdev);
+> +
+> +	clk_disable_unprepare(iface->sclk);
+> +	i2c_del_adapter(&(iface->adap));
+> +}
+> +
+> +static struct platform_driver i2c_adi_twi_driver = {
+> +	.probe		= i2c_adi_twi_probe,
+> +	.remove		= i2c_adi_twi_remove,
+> +	.driver		= {
+> +		.name	= "i2c-adi-twi",
+> +		.pm	= I2C_ADI_TWI_PM_OPS,
+> +		.of_match_table = of_match_ptr(adi_twi_of_match),
+
+Drop of_match_ptr. None of your other code has it, right? This should
+make you wonder.
+
+> +	},
+> +};
+> +
+> +static int __init i2c_adi_twi_init(void)
+> +{
+> +	return platform_driver_register(&i2c_adi_twi_driver);
+> +}
+> +
+> +static void __exit i2c_adi_twi_exit(void)
+> +{
+> +	platform_driver_unregister(&i2c_adi_twi_driver);
+> +}
+> +
+> +subsys_initcall(i2c_adi_twi_init);
+
+No, i2c driver can be just module platform driver.
+
+> +module_exit(i2c_adi_twi_exit);
+> +
+> +MODULE_AUTHOR("Bryan Wu, Sonic Zhang");
+> +MODULE_DESCRIPTION("ADI on-chip I2C TWI Controller Driver");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:i2c-adi-twi");
+
+You should not need MODULE_ALIAS() in normal cases. If you need it,
+usually it means your device ID table is wrong (e.g. misses either
+entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
+for incomplete ID table.
+
+> \ No newline at end of file
+
+
 > 
 
 Best regards,
