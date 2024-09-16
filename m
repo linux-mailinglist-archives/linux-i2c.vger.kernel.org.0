@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6774-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6775-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D09A979D21
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 10:45:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93913979DCF
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 11:05:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAF05B21C8F
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 08:45:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8E6F1C229C6
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 09:05:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2260B13EFFB;
-	Mon, 16 Sep 2024 08:45:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81CB14831F;
+	Mon, 16 Sep 2024 09:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pqtI6mun"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cy2w1NgN"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0424F9DA;
-	Mon, 16 Sep 2024 08:45:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821AA5476B;
+	Mon, 16 Sep 2024 09:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726476340; cv=none; b=CUySSc+Q2SdoSbzwRNteLTBQQe+QtgpiPfeL8G2AU6+sQl5Czyg72ifQYRZBb348KVbNE1KlYqDMeU/Rfn1vxpSy97okqKW5KZgm24Thnt1oBDsdfZAVmNEeq3sIO+TNp5y7E+sgiqplp464andoK+r8/IuKO9mY86iAE44Et+g=
+	t=1726477527; cv=none; b=NuQlvtgjc7mzG5tVeUHrmKJBGTMtfO/PSZNvvYfiOnZ3FR34PbVZbnjZaVVr3ISwaDx5su1uSm8j9rlv0R4tnoxDZvFYKb+YjPD8Y8HV81MJhGjguxPYyFB6rTqaRiJekNYzKS9B6K1Yuu4PntM433O0JCvtdgU0a0d2EM7uleg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726476340; c=relaxed/simple;
-	bh=7ZtDFdk/VT72J39y+PwJRLp2A1IMoARp02IK9JEskBI=;
+	s=arc-20240116; t=1726477527; c=relaxed/simple;
+	bh=wBxUqQLLrwq59Zhb3C0KoQvKRZb8B40EpK018OhlRMQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h7YPmect0lZy7vccD+DmubvXaCciTYmAaTZMuZ8DixzFwf6oYwV1kG9+zMu0O5snY9vMpGhl65dLqphny5LkheyAajZm2dhdTQVCpW9pZyQM8zrHWQ8LjE3GKRsWS2BHjPTtsSdb0oXpkwXa5SSSJJ9Pq0LIegyCFqQgrPqN4ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pqtI6mun; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D11C4CEC4;
-	Mon, 16 Sep 2024 08:45:35 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=U4dyRh8hNXyNwB+1wrK0InIi5P94joO7dSKvIGf2I2lVKqbLcC4Gfzf9cPrL+opspAKJLFwJGx9G0Fmm9mMXT6JEQ1S35W59cu5NO1Rkcu+TGsc5oyhD93lT6k4lAslLerV2q1mV5jRoGdgzzCKxr4IFtKY9WaSNORmxTY/X7t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cy2w1NgN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4F3C4CEC4;
+	Mon, 16 Sep 2024 09:05:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726476340;
-	bh=7ZtDFdk/VT72J39y+PwJRLp2A1IMoARp02IK9JEskBI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pqtI6munYgqj3zBUUmEV+ausv/LlznH+BpGHW1EbH/YkvkaWYmKtMccgwEuC0ooyb
-	 DQtp1UYWjVCDogJMzKHO14wttdBfu1RIkRrtTXn2IacD0Vywg6hYIzUvz/Xy37t9iO
-	 xxaqpfyrUtpPxXJk9HQ3vZOUAaMobql2rTvO8iMkkZz2CzH+0XVxmpnslN8M3lttam
-	 MC8kZB8tu+gbH3PFQSHQ/IJcfaO1COhEH4+oUvMOX1VbrrABHKbfd15wD+Pm8+TNwK
-	 y2ysgmGAFZwaj3my4V2cGeAQD3GGow/qdJOp9hSiECVbVvMISsI7Ar4MM0WZ+pNPBi
-	 2NsHSfgNw/0vA==
-Message-ID: <9035e0e1-ea47-4f40-b0d1-38dc4d80acee@kernel.org>
-Date: Mon, 16 Sep 2024 10:45:32 +0200
+	s=k20201202; t=1726477526;
+	bh=wBxUqQLLrwq59Zhb3C0KoQvKRZb8B40EpK018OhlRMQ=;
+	h=Date:Subject:List-Id:To:Cc:References:From:In-Reply-To:From;
+	b=Cy2w1NgNyoRLL+7QPzvUnLAdrIN4k6r1jLnw5u+zWW1Bqhf9afydJkemaxo4zgASM
+	 i6yVpDpSNHtDEh4KesVe0tMbeH5EQaE0wxDvs+Xam0k7JXZOBFOjgGoaMnbpvU5uQ/
+	 0Us39SocfsYqG8PLeukXZKZ9qt1WSkZlsywwuV6GXMwCHZmpynUo8W696AQi5FSzKV
+	 SRG3C8DGM42pS1NSrCVtkgWF+Cb/8jfphx9iqL+TldnMK4tezDxPo+o7T2jgM1ZIxM
+	 fACLBDjfPWE1MakSShVw5iAefszB538u1Lvypxv8YwT3lR5Cf3uCx0o3Vlse8VCJ1Y
+	 C1Fn03Vo1x1Gw==
+Message-ID: <58e9506d-cb27-4808-bc73-422af4154fa1@kernel.org>
+Date: Mon, 16 Sep 2024 11:05:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,19 +50,25 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: pmbus: add ti tps25990
- documentation
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20240909-tps25990-v1-0-39b37e43e795@baylibre.com>
- <20240909-tps25990-v1-1-39b37e43e795@baylibre.com>
- <3efbzcys4762rhx2h2cbhqvi6dgik7pfrxcziccdko34pb5z54@joodcym6c3s4>
- <1jzfofsvmh.fsf@starbuckisacylon.baylibre.com>
+Subject: Re: [PATCH 00/21] Adding support of ADI ARMv8 ADSP-SC598 SoC.
+To: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Utsav Agarwal <Utsav.Agarwal@analog.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Thomas Gleixner <tglx@linutronix.de>,
+ Andi Shyti <andi.shyti@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-serial@vger.kernel.org, adsp-linux@analog.com,
+ Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,39 +114,44 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <1jzfofsvmh.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/09/2024 11:31, Jerome Brunet wrote:
->>> +
->>> +  interrupts:
->>> +    description: PMBUS SMB Alert Interrupt.
->>> +    maxItems: 1
->>> +
->>> +  regulators:
->>> +    type: object
->>> +    description:
->>> +      list of regulators provided by this controller.
->>
->> You have just one regulator, so drop "regulators" node and use directly
->> vout here.
+On 12/09/2024 20:24, Arturs Artamonovs via B4 Relay wrote:
+> This set of patches based on ADI fork of Linux Kerenl that support family of ADSP-SC5xx
+> SoC's and used by customers for some time . Patch series contains minimal set
+> of changes to add ADSP-SC598 support to upstream kernel. This series include
+> UART,I2C,IRQCHIP,RCU drivers and device-tree to be able boot on EV-SC598-SOM
+> board into serial shell and able to reset the board. Current SOM board
+> requires I2C expander to enable UART output.
 > 
-> Just took the example the other pmbus device and did the same for
-> consistency.
+> UART,I2C and PINCTRL drivers are based on old Blackfin drivers with
+> ADSP-SC5xx related bug fixes and improvments.
 > 
-> In that case, there other (possible) regulator called gpdac1 and gpdac2.
-> I haven't even tried to implement the support for those.
+> Signed-off-by: Arturs Artamonovs <arturs.artamonovs@analog.com>
+> ---
 
-Your binding should be complete. Does not matter whether you implemented
-it in drivers or not.
+For new platform, be sure you have 0 warnings:
+1. Please run standard kernel tools for static analysis, like
+coccinelle, smatch and sparse, and fix reported warnings.
 
-> 
-> Since it would not break old DTs to add that later, I thought it would be OK
-> to add them later. Should I add them now ?
+2. Also check for warnings when building with W=1. Most of these
+commands (checks or W=1 build) can build specific targets, like some
+directory, to narrow the scope to only your code. The code here looks
+like it needs a fix. Feel free to get in touch if the warning is not clear.
 
-This should be added now.
+3. Fix all compile test warning reported by LKP and check for common
+configs, regardless of reports.
 
+4. Please run `make dtbs_check W=1` (see
+Documentation/devicetree/bindings/writing-schema.rst or
+https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+for instructions).
+
+5. Please run scripts/checkpatch.pl and fix reported warnings. Then
+please run `scripts/checkpatch.pl --strict` and (probably) fix more
+warnings. Some warnings can be ignored, especially from --strict run.
 
 
 Best regards,
