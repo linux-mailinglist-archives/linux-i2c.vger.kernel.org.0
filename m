@@ -1,108 +1,111 @@
-Return-Path: <linux-i2c+bounces-6782-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6784-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2053D97A09B
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 13:58:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C734E97A0F6
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 14:02:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A68181F24311
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 11:58:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B364284A8E
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 12:02:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F37D15855D;
-	Mon, 16 Sep 2024 11:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F652155725;
+	Mon, 16 Sep 2024 12:02:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZQCxSoPw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nk0pZ6kd"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1818C15575B;
-	Mon, 16 Sep 2024 11:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85810145B0C;
+	Mon, 16 Sep 2024 12:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726487907; cv=none; b=FbnFRhYdWG1Vvos1N3wFo3lBgVnB9ARcehIWGaBVW54HvCL3BF+1YY1+ti/T2TU7Z23xVjssMeS+mjepAGQ4+xESodY/sTqurPC6ZEsGDvJmzWTjs3m5IWnWeVu+lU+IqQyU6+fkItIW2q/Bw1foeTJgEZNxdhSszSwemGvzPyU=
+	t=1726488166; cv=none; b=T1rqVEVQrbr5+0mKTGN3jQMJE1dq68sUy/Bs6jaCV5/kKpZFbYijZA/l5/ShWnxlcKqlvjwXjtWkQfaXQZ30iIwDjNuVI08I21OH1zAHlV7StCNyT2tO4BCAkIauHqVHp9NRLEGj5XJ/O2kVOxIsbuJk0KnZu7jH1fADTN0BO5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726487907; c=relaxed/simple;
-	bh=cn4qiSXIffztlhZkpuG7otltZwk8uS66Sy7HbKtKITY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fav5R4OE3FWKba35MjuRept/xXpFpn0BqBWPuDZ2I/eFLK3EVr0K3STxUeN4NLST0mgmcNC5NeNSbCGmxR9FbmWc14Ebh9QtjVSNnkFwZazcNh6AqPK+Ct1PaeULQThKCSSHxO/BRWYdkfe5S7EfkKCZMbyhKk+FCNv9ON18ruU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZQCxSoPw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69174C4CECC;
-	Mon, 16 Sep 2024 11:58:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726487906;
-	bh=cn4qiSXIffztlhZkpuG7otltZwk8uS66Sy7HbKtKITY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZQCxSoPwzQsKG9vFV91ERoFLhlTDq7/ciItIJn3/7T/auMZzWe99x4M2DxvU2hfM7
-	 m+M+WB1BIKrcMThag5k3saZwah2Y296itp1VeoQj+cwq+rrUkDFIzX/9SHjfJH1jkh
-	 zqv0eDWZFt5mR5iDL8fu+uxVUlIxrmEGAKH2K/bWCBeGkamCLGQijDbAxnQuvc20Gp
-	 ilCeWZ73lZfIRpJ1RubAywlyawWhlrjhSL7XvY9zl/52tQ7cJ3oQEvQnMIsMakrsso
-	 n/KS9LOtE9nAIh3ulDZoFWTKc2Zj417r+HnUfJ/kc8kp3KQpspTbGRkAJj40xZsaEb
-	 odvzrxBNp7hGg==
-Date: Mon, 16 Sep 2024 13:58:06 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: kernel test robot <lkp@intel.com>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v1 04/12] i2c: isch: Switch to memory mapped IO accessors
-Message-ID: <uikfb52qduifmhnlkc43tgvmw2ok67eclqpokyrkp7sftetz3v@bs64p6aga6s3>
-References: <20240911154820.2846187-5-andriy.shevchenko@linux.intel.com>
- <202409141436.QFCDQrRF-lkp@intel.com>
- <Zuf1UJ6K_8hL5x5U@smile.fi.intel.com>
- <leoyop42s4qmaytvwhwhpgfwfrkpm2xxabskz645r337jdjfml@zg5ql73tqidk>
- <ZugI2NCtaWKgcgh5@smile.fi.intel.com>
+	s=arc-20240116; t=1726488166; c=relaxed/simple;
+	bh=Y2lSt+eudlUwNyz9FeX7T1GcsSKRwJJXpwQOFA2Qpp8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kvRa86seN0ZUhQG4U+WmnDp2k1JBrbUiVpR2pnEcEfZ1pEwlqQVhWRnmzHaXZTMyTyCZ6eZONH3yl2+ALig0ScNzq+Uo3aCNd1f96aViUQXLl52iynleoxlonzldayycMBY4GD7+F80PT6Xhac4EbHBRdUICs0FcWSaXpXvKmaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nk0pZ6kd; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726488165; x=1758024165;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Y2lSt+eudlUwNyz9FeX7T1GcsSKRwJJXpwQOFA2Qpp8=;
+  b=Nk0pZ6kdIQ9BoIrchsSpa8gyuKY6SXyfC4JTMyrrhRBC4x569otdPTJ1
+   Sg6Y4GJ69tetq6UO/3xxmuPo1EStapxMP7OfQrUjaCMyzQm9RKPB5o0YC
+   mCA+o+6vRJyN7kwHBIyK/FO/yhuQE0k7Qgh4jHKkuWKsAYRCVAFkWTN3i
+   2MAdPUZAvWEDG0K5VJXfXdRf+q6C6uHW4N+YDVXO1BFsRqWDnZTXE3S3Q
+   pkfPUN/C3yZ058G6EEDemLPbM7xxPvGgwFcA/kQX1WnldFSEJMlwV1scG
+   Hv48pA0O+HU9Mkuy2kFXVWm66L6Q+vxVKYqxXo0YpHyjL50feCxnMnuXV
+   Q==;
+X-CSE-ConnectionGUID: 1q8rXOF7QZug5kcIFufx0w==
+X-CSE-MsgGUID: sTI5/IjLQX+TjcwXpF70MA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11196"; a="24842795"
+X-IronPort-AV: E=Sophos;i="6.10,233,1719903600"; 
+   d="scan'208";a="24842795"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 05:02:42 -0700
+X-CSE-ConnectionGUID: b48UdI+RQ/SeWSleeKpDBA==
+X-CSE-MsgGUID: lF/pWoZSQvqcdifGb54hCA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,233,1719903600"; 
+   d="scan'208";a="68540769"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 16 Sep 2024 05:02:39 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id A2AF9481; Mon, 16 Sep 2024 15:02:38 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 00/11] i2c: isch: Put the driver into shape
+Date: Mon, 16 Sep 2024 15:01:27 +0300
+Message-ID: <20240916120237.1385982-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZugI2NCtaWKgcgh5@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 16, 2024 at 01:30:48PM GMT, Andy Shevchenko wrote:
-> On Mon, Sep 16, 2024 at 12:10:32PM +0200, Andi Shyti wrote:
-> > On Mon, Sep 16, 2024 at 12:07:28PM GMT, Andy Shevchenko wrote:
-> > > On Sat, Sep 14, 2024 at 02:56:19PM +0800, kernel test robot wrote:
-> 
-> ...
-> 
-> > > >    drivers/i2c/busses/i2c-isch.c: In function 'smbus_sch_probe':
-> > > > >> drivers/i2c/busses/i2c-isch.c:296:42: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
-> > > >      296 |                 "SMBus SCH adapter at %04x", res->start);
-> > > >          |                                       ~~~^   ~~~~~~~~~~
-> > > >          |                                          |      |
-> > > >          |                                          |      resource_size_t {aka long long unsigned int}
-> > > >          |                                          unsigned int
-> > > >          |                                       %04llx
-> > > 
-> > > Yeah, this should be something like %pa, but the problem with that that it
-> > > always uses the same, fixed-width format with a prefix. We don't want this. But
-> > > to make sure we have proper specifier we need to introduce a temporary variable
-> > > and assign the resource start address to it and then use that variable in here.
-> > > I'll update this in v2 and send it after we have v6.12-rc1 is out.
-> > 
-> > Feel free to send it, I will apply it in i2c/i2c-host-for-6.12,
-> > that's where I'm collecting the next patches.
-> 
-> But I believe it's a material for v6.13, no?
+Driver code is quite outdated WRT modern in-kernel APIs and
+also has one non-critival bug.
 
-yes, I gave it the wrong name :-)
-I renamed it now to i2c/i2c-host-for-6.13(*).
+The series is to address the above. Has been tested on
+Minnowboard (Intel Tunnel Creek platform) with connected
+LM95245 HW monitor chip.
 
-But it doesn't matter. It will become the next i2c/i2c-host after
-Linus has taken the actual for-6.12 patches into mainline.
+v2:
+- dropped applied patch
+- fixed format specifier (LKP)
 
-> From the whole series the first patch is only a fix, the rest is pure
-> refactoring and cleanup.
+Andy Shevchenko (11):
+  i2c: isch: Pass pointer to struct i2c_adapter down
+  i2c: isch: Use string_choices API instead of ternary operator
+  i2c: isch: Switch to memory mapped IO accessors
+  i2c: isch: Use custom private data structure
+  i2c: isch: switch i2c registration to devm functions
+  i2c: isch: Utilize temporary variable to hold device pointer
+  i2c: isch: Use read_poll_timeout()
+  i2c: isch: Unify the name of the variable to hold an error code
+  i2c: isch: Don't use "proxy" headers
+  i2c: isch: Prefer to use octal permission
+  i2c: isch: Convert to kernel-doc
 
-Yes, you can omit the first patch. It has already been sent in
-the fixes pull request.
+ drivers/i2c/busses/i2c-isch.c | 321 +++++++++++++++++-----------------
+ 1 file changed, 164 insertions(+), 157 deletions(-)
 
-Andi
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
 
-(*) https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git/log/?h=i2c/i2c-host-for-6.13
 
