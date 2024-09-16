@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6762-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6763-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FC67979B54
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 08:45:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8127F979B5D
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 08:46:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 877781F23484
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 06:45:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B204C1C22991
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 06:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FDE44963C;
-	Mon, 16 Sep 2024 06:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7654E1CA;
+	Mon, 16 Sep 2024 06:46:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r6sltMgR"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MG7H5f0N"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3FBC125;
-	Mon, 16 Sep 2024 06:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE3779F0;
+	Mon, 16 Sep 2024 06:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726469130; cv=none; b=bLpeRxpESyys+wX7vAhjQJ7wv4U8/a2uklEk78OikUv+CRGagQbUHewVtMjysnaGtsaWP5eDp5G3zFpikbRIgwC9wsmlIULggNl8qdDjMAjZttYmm45LzYu/0jy2dTsrHIn1ktIyHozC9dqkBa8HTCj3TyuArC5o8QRkBKC+bMQ=
+	t=1726469194; cv=none; b=tRr2EIpucjoVj+PesnWhIuAf/lNiXdIXxT6GB65N6HxOfegLgnDwxtLNoSNtDMMVfBTJ14kc43fhpAmoYVKTrixW5L875uEiJZmZyuJzKGxed0svGBHynVgsNBMi5raz0TciPEVXrgRDhOEu5vamFk+UC9yuSGwzrIyVFVHDciI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726469130; c=relaxed/simple;
-	bh=7DM+Ov2/kRA3gd1/9xGIMENF6W/b0RWY2rLuI3u+crk=;
+	s=arc-20240116; t=1726469194; c=relaxed/simple;
+	bh=/L07eC3B+yBpgMIZPNblXmEf2JN0CsMruwyz0OSr0Jk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H5ZMMOXEu6fUeDOO16T7g0++ytN+hc1unZd1GMLbg7z0PvQy2UrqAaoJ1oYWFNf/i7QElRW6ZGd/UiTv0u2MXAO9Nq89GMerg428Mpl2llCLeoEiYM6ONQOQgyK8VNchpqR2AaJ4QFDpuSXamKqCp5oml9J2VVCSXYkAdYDtKO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r6sltMgR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E9EC4CECD;
-	Mon, 16 Sep 2024 06:45:20 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=DgshiAGl4+9rZE+6kyEAkxrDZzPq5J8Z45tEq2kFg3dCPk2ewq7fqRE243gCHd45EbA1yotkmXr5KRm3Kg17kDALqMc3aZNZdeAAFKygmKhainddkPboEy5SjQth5rGhq4cXtddYjZk4s3xR5dxnpz11Xa8P99hFS44q2vSUJgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MG7H5f0N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C17C4CEC5;
+	Mon, 16 Sep 2024 06:46:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726469129;
-	bh=7DM+Ov2/kRA3gd1/9xGIMENF6W/b0RWY2rLuI3u+crk=;
+	s=k20201202; t=1726469193;
+	bh=/L07eC3B+yBpgMIZPNblXmEf2JN0CsMruwyz0OSr0Jk=;
 	h=Date:Subject:List-Id:To:Cc:References:From:In-Reply-To:From;
-	b=r6sltMgRvPI+I1mKnDaWpMYk7jSIsBDzE+MOjwz4HouFlKs/2kEM8ByZeSknlJpqn
-	 a5ZNk2ve8PvE/CF0STNksoUlLmvc/yRpoDMkuzlqYw9HsZehzwSqYH8mcPfvB1mkJg
-	 3GztLlI7rgTXjs8yYBuHYLjHYBhToDsZL5bJazN4NhCD4VhctDpwdQH5LD2l+/+MKe
-	 ot7gyB2aUcnLr26dUXtrQtmNm4NIlvLWhS8qNGVI+BLeKOVaSm+sNE5odI3m/A5vzH
-	 AQlZlbn+IX3cBCjZw8RMZxI+Y4RIaw+j4Q3SKxJNUwjYIJ4AGVTpmATomnEGIxbY0E
-	 zznreorfRbQew==
-Message-ID: <7796208a-14cf-470e-8d95-bfdd6a1ec2b5@kernel.org>
-Date: Mon, 16 Sep 2024 08:45:18 +0200
+	b=MG7H5f0NWcXfxF9j4S6TDixS93eIPjddFDEqk2ajveMLGx59e+44HBSApxSSdRPzf
+	 /lG/BsWEnQy4aV69ygcZ9on82WXtMB0yiSGIMvBZj9EMA1649MAnMyu4aka86oQZXg
+	 2w2AYu9nryZuaUQyvYQwxTSA+YP8zIdFKD7hDEO+bVQ/b20taZ9UDfagNwEgUsZDuq
+	 5F/udHb1pUqHjUhmm7WJVo0g4u1uQ7P39I2rYjqwjTncfMaQZ4ik0H+zyWM8gJo7yI
+	 LlwcxPehZZXDy7n4audVHoG3G/WGW7X4z12lHuH7Wjs7L6FUrw44mJ5IY2iFmRQJAI
+	 6mrK1jRXFHamg==
+Message-ID: <768d8629-8020-4b9e-8246-2045f224830b@kernel.org>
+Date: Mon, 16 Sep 2024 08:46:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/21] dt-bindings: arm64: adi,sc598: Add ADSP-SC598 SoC
- bindings
+Subject: Re: [PATCH 05/21] clock:Add driver for ADI ADSP-SC5xx PLL
 To: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>,
  Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
  Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
@@ -70,7 +69,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-serial@vger.kernel.org, adsp-linux@analog.com,
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
- <20240912-test-v1-4-458fa57c8ccf@analog.com>
+ <20240912-test-v1-5-458fa57c8ccf@analog.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -116,68 +115,76 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240912-test-v1-4-458fa57c8ccf@analog.com>
+In-Reply-To: <20240912-test-v1-5-458fa57c8ccf@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/09/2024 20:24, Arturs Artamonovs via B4 Relay wrote:
 > From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 > 
-> add  SoC ADSP-SC5xx
+> Implements clock tree, no dynamic pll rate change.
 > 
 > Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
-> Signed-off-by: Utsav Agarwal <Utsav.Agarwal@analog.com>
 > Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 > Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 > ---
->  .../devicetree/bindings/arm/analog/adi,sc5xx.yaml  | 24 ++++++++++++++++++++++
+>  drivers/clk/adi/clk-adi-pll.c | 151 ++++++++++++++++++++++++++++++++++++++++++
+>  drivers/clk/adi/clk.h         |  99 +++++++++++++++++++++++++++
+>  2 files changed, 250 insertions(+)
 
-There is no arm64 prefix above. Fix subject.
 
-A nit, subject: drop second/last, redundant "bindings". The
-"dt-bindings" prefix is already stating that these are bindings.
-See also:
-https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+How do you even build this code? Never built, so never tested?
 
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/analog/adi,sc5xx.yaml b/Documentation/devicetree/bindings/arm/analog/adi,sc5xx.yaml
+> +struct clk *sc5xx_cgu_pll(const char *name, const char *parent_name,
+> +	void __iomem *base, u8 shift, u8 width, u32 m_offset,
+> +		spinlock_t *lock)
+> +{
+> +	struct clk_sc5xx_cgu_pll *pll;
+> +	struct clk *clk;
+> +	struct clk_init_data init;
+> +
+> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
+> +	if (!pll)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	init.name = name;
+> +	init.flags = CLK_SET_RATE_PARENT;
+> +	init.parent_names = &parent_name;
+> +	init.num_parents = 1;
+> +	init.ops = &clk_sc5xx_cgu_pll_ops;
+> +
+> +	pll->base = base;
+> +	pll->hw.init = &init;
+> +	pll->lock = lock;
+> +	pll->shift = shift;
+> +	pll->mask = GENMASK(width-1, 0) << shift;
+> +	pll->msel = pll->mask + 1;
+> +	pll->m_offset = m_offset;
+> +
+> +	clk = clk_register(NULL, &pll->hw);
+> +	if (IS_ERR(clk)) {
+> +		pr_err("%s: Failed to register, code %lu\n", __func__,
+> +			PTR_ERR(clk));
+> +	}
+> +
+> +	return clk;
+> +}
+> +
+> +MODULE_DESCRIPTION("Analog Devices CLock PLL driver");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Greg Malysa <greg.malysa@timesys.com>");
+> +
+
+Multiple patches have messy blank line handling...
+
+> diff --git a/drivers/clk/adi/clk.h b/drivers/clk/adi/clk.h
 > new file mode 100644
-> index 0000000000000000000000000000000000000000..fc37242b32b9ca9b82fd5b3e0288642e8c4fd9f0
+> index 0000000000000000000000000000000000000000..e17aa719c2170149a6a1a60dd4390a29f06e7296
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/analog/adi,sc5xx.yaml
-> @@ -0,0 +1,24 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/analog/adi,sc5xx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices SC59X 64-Bit ARM-based Processor Families
-> +
-> +maintainers:
-> +  - Arturs Artamonovs <arturs.artamonovs@analog.com>
-> +  - Utsav Agarwal <Utsav.Agarwal@analog.com>
-> +
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    description: SC59X 64-Bit Boards
-> +    items:
-> +      - enum:
-> +          - adi,sc598-som-ezkit                # Analog Devices SC598 EZKit
-> +          - adi,sc598-som-ezlite               # Analog Devices SC598 EZLite
-> +      - const: adi,sc59x-64
+> +++ b/drivers/clk/adi/clk.h
 
-sc59x is incorrect. Enum above says sc598. Define what is the SoC here.
-You cannot have compatible for families.
-
-> +
-> +additionalProperties: true
-> 
 
 Best regards,
 Krzysztof
