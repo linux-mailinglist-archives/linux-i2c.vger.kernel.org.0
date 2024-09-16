@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6766-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6767-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4281B979B89
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 08:50:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFBF0979B93
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 08:54:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 678B51C22D43
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 06:50:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E446E1C22E2B
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 06:54:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B493B13211F;
-	Mon, 16 Sep 2024 06:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CADBD83A18;
+	Mon, 16 Sep 2024 06:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9BU/6iE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2acxkRe"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D80E4D8BF;
-	Mon, 16 Sep 2024 06:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7034D8BF;
+	Mon, 16 Sep 2024 06:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726469440; cv=none; b=FHyvvuEUiAMeE1oCuB9DtgEsvL3Bd87DwvlLYXPMfY5ROzoaclPKTI2D6zpa9OAOVq0mEdnZC1Mo27Yl3xWitk1kWdw5fLl1c70pH/4/vlgnFrNPn+jPtaCA66T+FZujQ06BPVXab1rvCTdzJgE4RJnW6swEx/6q+JnwE23jEDE=
+	t=1726469643; cv=none; b=R+cgvr709rlzlTInyGGYYhC690JbXcyE+/tg1EuD+sD7khUZYCBudHQtmmd1OMoGI8AlzCHuBqAg01PWD//zhOgcZFug4Xpk8YRT8niWPHezz06r2BVKxvVpc+F6IJ2eH1xWduZ8UcrXFrZadxDvnz0h/2Fsoi3P5oshL6dhu/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726469440; c=relaxed/simple;
-	bh=x4zKM6dHXR4Yem4FMLNEqU3wDBCmOyQz0b+ZFXsjo+k=;
+	s=arc-20240116; t=1726469643; c=relaxed/simple;
+	bh=Ym8SnOPPYtdct9EYuPQmLlHuMevaWEgJBeKroh8cSYE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gcZBFKaUk48acX5+3bCC7ESQbnSm3OmJTBkWLUfZ+oLai6txjVe0nO2BWLjqlrVtHymikoUbpO/iV1JmhtZQ3GifKNg288zZrmdspOKfzflzauhaiHBng2+QeRNTGV64DGRdRaOEYbmSM1GQNoaaWVtm0eKnkdTPS3ag0Br5JRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9BU/6iE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA69C4CEC4;
-	Mon, 16 Sep 2024 06:50:30 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=UUwV5RosnBacusqsGlVC1gaQ9jXmEshgZW2YpdsGFuqtnfugrzNoDrb5X6jf/yyVJO/TTJGBPyrz/uJ5T+/7zhMKpr5leyfnYnU988l/im64HCHY75yqa4qQvmxE+/1Ku/6YGxkOPzscpnfYnvmxKB0Rcb+jBOBjoTz0eWvDajQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2acxkRe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19F3C4CEC4;
+	Mon, 16 Sep 2024 06:53:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726469439;
-	bh=x4zKM6dHXR4Yem4FMLNEqU3wDBCmOyQz0b+ZFXsjo+k=;
+	s=k20201202; t=1726469643;
+	bh=Ym8SnOPPYtdct9EYuPQmLlHuMevaWEgJBeKroh8cSYE=;
 	h=Date:Subject:List-Id:To:Cc:References:From:In-Reply-To:From;
-	b=Y9BU/6iEsuC3ZxlE3Z1jalrWB0NnAOsY7syK/TpdTw1Yqj/X1o+ZpyT5pGXykgMlv
-	 9xu2mfM8L9cVvgi9wAXp/Lr18n7pHaPKhP5IJqTX5MTAVA3f3KgoExLLoyD1Dg+b1B
-	 VkicFtyd1KNVM4XTf4bHBtulXXw75jyyAeaOZ0Vc6CGBksDyanFsiJqNfTQnW2HqW4
-	 0AyBNr2MlyC+fnew1zDIn0wU2Ci4/sP8vRAu9CVt8Ow1542DcuFIlahn/7677xe2ez
-	 nabclv+oSVqELZ5DH7+duWUrLhoSDOkf+YkDL2uooKxWDG017nVXz/Oq6FooV16OdS
-	 HzsuflNzuDfcw==
-Message-ID: <f2c6cc62-e063-4482-a516-c6aa78d205cc@kernel.org>
-Date: Mon, 16 Sep 2024 08:50:27 +0200
+	b=o2acxkRedE9XzRcX05nQA8ZeessscQMQ3XaEG7WsD+Z2lnBij8aMlgPe5S2sUY3op
+	 EeK7l1UNYsdJMBcebE5zuh7aOdF7qqbUB5aoF0iYRgkr+Nh8aIf/C9RgOCvjraGC/4
+	 P2iUx2OIs9j8thpxgH3ZtaK00fJui3ogzqVV1cuN64zTyRCDnMbuYrBUxBLVl1knUd
+	 p9MXhsm3zpVaQx4qkIZNrKCdTv04KjX4mTGyr3s7F7tpvWdbRKICF3/aQI74S72BwL
+	 RY9xbfPD61EUs1ugiryRaNmtmrsCsYKFW/wohvGj+9+37DtgkZZ5le1xlXzm7WktAI
+	 n9zrHoDZXCkyg==
+Message-ID: <b1e35953-da11-475a-ada5-794ee04624f7@kernel.org>
+Date: Mon, 16 Sep 2024 08:53:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/21] gpio: add driver for ADI ADSP-SC5xx platform
+Subject: Re: [PATCH 10/21] dt-bindings: gpio: adi,adsp-port-gpio: add bindings
 To: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>,
  Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
  Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
@@ -69,7 +69,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-serial@vger.kernel.org, adsp-linux@analog.com,
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
- <20240912-test-v1-9-458fa57c8ccf@analog.com>
+ <20240912-test-v1-10-458fa57c8ccf@analog.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,38 +115,138 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240912-test-v1-9-458fa57c8ccf@analog.com>
+In-Reply-To: <20240912-test-v1-10-458fa57c8ccf@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/09/2024 20:24, Arturs Artamonovs via B4 Relay wrote:
 > From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 > 
-> Add ADSP-SC5xx GPIO driver.
-> - Support all GPIO ports
-> - Each gpio support seperate PINT interrupt controller
+> Add ADSP-SC5xx GPIO driver bindings.
 > 
 > Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
 > Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 > Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 > Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
+> ---
+>  .../bindings/gpio/adi,adsp-port-gpio.yaml          | 69 ++++++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/adi,adsp-port-gpio.yaml b/Documentation/devicetree/bindings/gpio/adi,adsp-port-gpio.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..3d7899ce759193296ce787d09d742824277f37f8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/adi,adsp-port-gpio.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/adi,adsp-port-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices GPIO Port Driver for SC5XX-family processors
+> +
+> +maintainers:
+> +  - Arturs Artamonovs <arturs.artamonovs@analog.com>
+> +  - Utsav Agarwal <Utsav.Agarwal@analog.com>
+> +
+> +description: |
 
-Your SoB chain is odd. Author is Greg, but Greg is not the first person
-in the chain? And no final SoB? This is really odd and not correct. I am
-not sure what you even want to say here.
+Do not need '|' unless you need to preserve formatting.
 
-...
+All review comments apply to all your patches.
+
+> +  Analog Devices GPIO Port Driver for SC5XX-family processors
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,adsp-port-gpio
+
+No, this *must* be SoC-specific compatible. If you are unsure, just look
+at any other SoC (of course nothing ancient).
 
 > +
-> +module_platform_driver(adsp_gpio_driver);
+> +  gpio-controller: true
 > +
-> +MODULE_AUTHOR("Greg Malysa <greg.malysa@timesys.com>");
-> +MODULE_DESCRIPTION("Analog Devices GPIO driver");
-> +MODULE_LICENSE("GPL v2");
-> \ No newline at end of file
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  gpio-ranges:
+> +    description: Associated pinmux controller and the GPIO range values
 
-Please review all your patches before sending for such stuff.
+That's useless comment. Just true, or min/maxItems
+
+> +
+> +  adi,pint:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: Associated pin interrupt controller driver
+> +    items:
+> +      - items:
+> +          - description: phandle to pin interrupt controller driver
+> +          - description: interrupt value
+
+Hm? No, why would you put it here? And why this is not just interrupts
+property?
+
+> +
+> +  reg:
+> +    description: PORT GPIO control registers
+
+Reg goes after compatible
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+
+Look, here order is correct.
+
+> +  - "#gpio-cells"
+> +  - gpio-controller
+> +  - gpio-ranges
+> +  - adi,pint
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    gpa: gport@31004000 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+Drop unused label.
+
+
+> +      compatible = "adi,adsp-port-gpio";
+> +      gpio-controller;
+> +      #gpio-cells = <2>;
+> +      reg = <0x31004000 0x7F>;
+
+
+It is ALWAYS lowercase hex. This applies (just like all other comments)
+to all your DT-related code.
+
+> +      gpio-ranges = <&pinctrl0 0 0 16>;
+> +      adi,pint = <&pint0 1>;
+
+Just one example. Drop the one below.
+
+> +    };
+> +
+> +    gpb: gport@31004080 {
+> +      compatible = "adi,adsp-port-gpio";
+> +      gpio-controller;
+> +      #gpio-cells = <2>;
+> +      reg = <0x31004080 0x7F>;
+> +      gpio-ranges = <&pinctrl0 0 16 16>;
+> +      adi,pint = <&pint0 0>;
+> +    };
+> +...
+> 
 
 Best regards,
 Krzysztof
