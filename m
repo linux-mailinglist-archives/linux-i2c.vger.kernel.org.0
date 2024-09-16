@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6763-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6764-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8127F979B5D
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 08:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F2FFF979B63
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 08:47:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B204C1C22991
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 06:46:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2349F1C20CA0
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 06:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7654E1CA;
-	Mon, 16 Sep 2024 06:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFBE553376;
+	Mon, 16 Sep 2024 06:47:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MG7H5f0N"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iajKLxqA"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE3779F0;
-	Mon, 16 Sep 2024 06:46:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1481F5F6;
+	Mon, 16 Sep 2024 06:47:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726469194; cv=none; b=tRr2EIpucjoVj+PesnWhIuAf/lNiXdIXxT6GB65N6HxOfegLgnDwxtLNoSNtDMMVfBTJ14kc43fhpAmoYVKTrixW5L875uEiJZmZyuJzKGxed0svGBHynVgsNBMi5raz0TciPEVXrgRDhOEu5vamFk+UC9yuSGwzrIyVFVHDciI=
+	t=1726469266; cv=none; b=JdVo+o7lGQn4cYAT38fRgclNt8djbw2hxW+r4ilBNa8G04RRqRNmxucGJ5YRCfL07IflmD1LuCg7ocIfSeAz0MWwzroWl35bCs1Ik/Nxh4OI5ByRIXgOfXtMm1OfN4vVHxGo0Iqn5HrEsOgUxtJdtUp83ljpwyaB5pkP2ald3+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726469194; c=relaxed/simple;
-	bh=/L07eC3B+yBpgMIZPNblXmEf2JN0CsMruwyz0OSr0Jk=;
+	s=arc-20240116; t=1726469266; c=relaxed/simple;
+	bh=X+Df26JHczAuZOXyuIo4Gw81bNTKkhzqpqkGPSwKLpE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DgshiAGl4+9rZE+6kyEAkxrDZzPq5J8Z45tEq2kFg3dCPk2ewq7fqRE243gCHd45EbA1yotkmXr5KRm3Kg17kDALqMc3aZNZdeAAFKygmKhainddkPboEy5SjQth5rGhq4cXtddYjZk4s3xR5dxnpz11Xa8P99hFS44q2vSUJgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MG7H5f0N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C17C4CEC5;
-	Mon, 16 Sep 2024 06:46:24 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=QVSOZnrWoUmo6tj7nNn82kZ2IhGBMMtIncHdDVLO0o+v/Q7Z6hKlz4aHJy9+SAQwvju9+D0be8ko4E9j/02a6UCrlNuYC9sfbTi8jKIbXoUKXi9q+1b9bGICXwr1SrrOMT1iVEHD3gmSEjmRYMgmQHX+el8pPzODIIiwf6aLRMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iajKLxqA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B267EC4CEC4;
+	Mon, 16 Sep 2024 06:47:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726469193;
-	bh=/L07eC3B+yBpgMIZPNblXmEf2JN0CsMruwyz0OSr0Jk=;
+	s=k20201202; t=1726469265;
+	bh=X+Df26JHczAuZOXyuIo4Gw81bNTKkhzqpqkGPSwKLpE=;
 	h=Date:Subject:List-Id:To:Cc:References:From:In-Reply-To:From;
-	b=MG7H5f0NWcXfxF9j4S6TDixS93eIPjddFDEqk2ajveMLGx59e+44HBSApxSSdRPzf
-	 /lG/BsWEnQy4aV69ygcZ9on82WXtMB0yiSGIMvBZj9EMA1649MAnMyu4aka86oQZXg
-	 2w2AYu9nryZuaUQyvYQwxTSA+YP8zIdFKD7hDEO+bVQ/b20taZ9UDfagNwEgUsZDuq
-	 5F/udHb1pUqHjUhmm7WJVo0g4u1uQ7P39I2rYjqwjTncfMaQZ4ik0H+zyWM8gJo7yI
-	 LlwcxPehZZXDy7n4audVHoG3G/WGW7X4z12lHuH7Wjs7L6FUrw44mJ5IY2iFmRQJAI
-	 6mrK1jRXFHamg==
-Message-ID: <768d8629-8020-4b9e-8246-2045f224830b@kernel.org>
-Date: Mon, 16 Sep 2024 08:46:22 +0200
+	b=iajKLxqAJ3kAKVWntWkvz/7e94s6mbY87ErViZ8LKRzbYP9r5qo8GmVU6Vv0g2u8l
+	 2EyXX7CYc842v/9SNd6Rfw3gls/0JT5S8SUsL5h87gr8i0twHut+mjIjNj7n6lYsZ8
+	 OacEvHD/znRHRZjVZoT6SYHhioP1PN0H1z0POIiV9BHY7xYoqmX7m0pZ0Q9x2UfR0D
+	 SQdMxqjjQRTeJTS0FilPQnAJS8UnDCpWfBnNzGpH3FnhegRbnN/gcTaMctnbkUfq2d
+	 opBzCXDXZRpHBUt062LsKelBBeA5aZPlvqeR9fX//n8/hsQC+doxXnp7pmz9BppTSP
+	 OyT6BHL2PxQHw==
+Message-ID: <271128c9-cb32-499c-88ab-dcae588a1569@kernel.org>
+Date: Mon, 16 Sep 2024 08:47:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/21] clock:Add driver for ADI ADSP-SC5xx PLL
+Subject: Re: [PATCH 06/21] include: dt-binding: clock: add adi clock header
+ file
 To: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>,
  Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
  Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
@@ -69,7 +70,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-serial@vger.kernel.org, adsp-linux@analog.com,
  Nathan Barrett-Morrison <nathan.morrison@timesys.com>
 References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
- <20240912-test-v1-5-458fa57c8ccf@analog.com>
+ <20240912-test-v1-6-458fa57c8ccf@analog.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,14 +116,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240912-test-v1-5-458fa57c8ccf@analog.com>
+In-Reply-To: <20240912-test-v1-6-458fa57c8ccf@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/09/2024 20:24, Arturs Artamonovs via B4 Relay wrote:
 > From: Arturs Artamonovs <arturs.artamonovs@analog.com>
 > 
-> Implements clock tree, no dynamic pll rate change.
+> Add adi clock driver header file
+
+Useless on its own. This must be part of bindings patch.
+
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
+
 > 
 > Signed-off-by: Arturs Artamonovs <Arturs.Artamonovs@analog.com>
 > Co-developed-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
@@ -130,60 +140,112 @@ On 12/09/2024 20:24, Arturs Artamonovs via B4 Relay wrote:
 > Co-developed-by: Greg Malysa <greg.malysa@timesys.com>
 > Signed-off-by: Greg Malysa <greg.malysa@timesys.com>
 > ---
->  drivers/clk/adi/clk-adi-pll.c | 151 ++++++++++++++++++++++++++++++++++++++++++
->  drivers/clk/adi/clk.h         |  99 +++++++++++++++++++++++++++
->  2 files changed, 250 insertions(+)
-
-
-How do you even build this code? Never built, so never tested?
-
-> +struct clk *sc5xx_cgu_pll(const char *name, const char *parent_name,
-> +	void __iomem *base, u8 shift, u8 width, u32 m_offset,
-> +		spinlock_t *lock)
-> +{
-> +	struct clk_sc5xx_cgu_pll *pll;
-> +	struct clk *clk;
-> +	struct clk_init_data init;
-> +
-> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-> +	if (!pll)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	init.name = name;
-> +	init.flags = CLK_SET_RATE_PARENT;
-> +	init.parent_names = &parent_name;
-> +	init.num_parents = 1;
-> +	init.ops = &clk_sc5xx_cgu_pll_ops;
-> +
-> +	pll->base = base;
-> +	pll->hw.init = &init;
-> +	pll->lock = lock;
-> +	pll->shift = shift;
-> +	pll->mask = GENMASK(width-1, 0) << shift;
-> +	pll->msel = pll->mask + 1;
-> +	pll->m_offset = m_offset;
-> +
-> +	clk = clk_register(NULL, &pll->hw);
-> +	if (IS_ERR(clk)) {
-> +		pr_err("%s: Failed to register, code %lu\n", __func__,
-> +			PTR_ERR(clk));
-> +	}
-> +
-> +	return clk;
-> +}
-> +
-> +MODULE_DESCRIPTION("Analog Devices CLock PLL driver");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_AUTHOR("Greg Malysa <greg.malysa@timesys.com>");
-> +
-
-Multiple patches have messy blank line handling...
-
-> diff --git a/drivers/clk/adi/clk.h b/drivers/clk/adi/clk.h
+>  include/dt-bindings/clock/adi-sc5xx-clock.h | 93 +++++++++++++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+> 
+> diff --git a/include/dt-bindings/clock/adi-sc5xx-clock.h b/include/dt-bindings/clock/adi-sc5xx-clock.h
 > new file mode 100644
-> index 0000000000000000000000000000000000000000..e17aa719c2170149a6a1a60dd4390a29f06e7296
+> index 0000000000000000000000000000000000000000..723c11dc44f9741cff49dc2cb6c5232022abf00c
 > --- /dev/null
-> +++ b/drivers/clk/adi/clk.h
+> +++ b/include/dt-bindings/clock/adi-sc5xx-clock.h
+> @@ -0,0 +1,93 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * ADSP SC5xx clock device tree bindings
+> + *
+> + * Copyright 2022-2024 - Analog Devices Inc.
+> + */
+> +
+> +#ifndef DT_BINDINGS_CLOCK_ADI_SC5XX_CLOCK_H
+> +#define DT_BINDINGS_CLOCK_ADI_SC5XX_CLOCK_H
+> +
+> +#define ADSP_SC598_CLK_DUMMY 0
+> +#define ADSP_SC598_CLK_SYS_CLKIN0 1
+> +#define ADSP_SC598_CLK_SYS_CLKIN1 2
+> +#define ADSP_SC598_CLK_CGU0_PLL_IN 3
+> +#define ADSP_SC598_CLK_CGU0_VCO_OUT 4
+> +#define ADSP_SC598_CLK_CGU0_PLLCLK 5
+
+That's quite unreadable code. Indent after define name.
+
+
+> +#define ADSP_SC598_CLK_CGU1_IN 6
+> +#define ADSP_SC598_CLK_CGU1_PLL_IN 7
+> +#define ADSP_SC598_CLK_CGU1_VCO_OUT 8
+> +#define ADSP_SC598_CLK_CGU1_PLLCLK 9
+> +#define ADSP_SC598_CLK_CGU0_CDIV 10
+> +#define ADSP_SC598_CLK_CGU0_SYSCLK 11
+> +#define ADSP_SC598_CLK_CGU0_DDIV 12
+> +#define ADSP_SC598_CLK_CGU0_ODIV 13
+> +#define ADSP_SC598_CLK_CGU0_S0SELDIV 14
+> +#define ADSP_SC598_CLK_CGU0_S1SELDIV 15
+> +#define ADSP_SC598_CLK_CGU0_S1SELEXDIV 16
+> +#define ADSP_SC598_CLK_CGU0_S1SEL 17
+> +#define ADSP_SC598_CLK_CGU1_CDIV 18
+> +#define ADSP_SC598_CLK_CGU1_SYSCLK 19
+> +#define ADSP_SC598_CLK_CGU1_DDIV 20
+> +#define ADSP_SC598_CLK_CGU1_ODIV 21
+> +#define ADSP_SC598_CLK_CGU1_S0SELDIV 22
+> +#define ADSP_SC598_CLK_CGU1_S1SELDIV 23
+> +#define ADSP_SC598_CLK_CGU1_S0SELEXDIV 24
+> +#define ADSP_SC598_CLK_CGU1_S1SELEXDIV 25
+> +#define ADSP_SC598_CLK_CGU1_S0SEL 26
+> +#define ADSP_SC598_CLK_CGU1_S1SEL 27
+> +#define ADSP_SC598_CLK_CGU0_CCLK2 28
+> +#define ADSP_SC598_CLK_CGU0_CCLK0 29
+> +#define ADSP_SC598_CLK_CGU0_OCLK 30
+> +#define ADSP_SC598_CLK_CGU0_DCLK 31
+> +#define ADSP_SC598_CLK_CGU0_SCLK1 32
+> +#define ADSP_SC598_CLK_CGU0_SCLK0 33
+> +#define ADSP_SC598_CLK_CGU1_CCLK0 34
+> +#define ADSP_SC598_CLK_CGU1_OCLK 35
+> +#define ADSP_SC598_CLK_CGU1_DCLK 36
+> +#define ADSP_SC598_CLK_CGU1_SCLK1 37
+> +#define ADSP_SC598_CLK_CGU1_SCLK0 38
+> +#define ADSP_SC598_CLK_CGU1_CCLK2 39
+> +#define ADSP_SC598_CLK_DCLK0_HALF 40
+> +#define ADSP_SC598_CLK_DCLK1_HALF 41
+> +#define ADSP_SC598_CLK_CGU1_SCLK1_HALF 42
+> +#define ADSP_SC598_CLK_SHARC0_SEL 43
+> +#define ADSP_SC598_CLK_SHARC1_SEL 44
+> +#define ADSP_SC598_CLK_ARM_SEL 45
+> +#define ADSP_SC598_CLK_CDU_DDR_SEL 46
+> +#define ADSP_SC598_CLK_CAN_SEL 47
+> +#define ADSP_SC598_CLK_SPDIF_SEL 48
+> +#define ADSP_SC598_CLK_SPI_SEL 49
+> +#define ADSP_SC598_CLK_GIGE_SEL 50
+> +#define ADSP_SC598_CLK_LP_SEL 51
+> +#define ADSP_SC598_CLK_LP_DDR_SEL 52
+> +#define ADSP_SC598_CLK_OSPI_REFCLK_SEL 53
+> +#define ADSP_SC598_CLK_TRACE_SEL 54
+> +#define ADSP_SC598_CLK_EMMC_SEL 55
+> +#define ADSP_SC598_CLK_EMMC_TIMER_QMC_SEL 56
+> +#define ADSP_SC598_CLK_SHARC0 57
+> +#define ADSP_SC598_CLK_SHARC1 58
+> +#define ADSP_SC598_CLK_ARM 59
+> +#define ADSP_SC598_CLK_CDU_DDR 60
+> +#define ADSP_SC598_CLK_CAN 61
+> +#define ADSP_SC598_CLK_SPDIF 62
+> +#define ADSP_SC598_CLK_SPI 63
+> +#define ADSP_SC598_CLK_GIGE 64
+> +#define ADSP_SC598_CLK_LP 65
+> +#define ADSP_SC598_CLK_LP_DDR 66
+> +#define ADSP_SC598_CLK_OSPI_REFCLK 67
+> +#define ADSP_SC598_CLK_TRACE 68
+> +#define ADSP_SC598_CLK_EMMC 69
+> +#define ADSP_SC598_CLK_EMMC_TIMER_QMC 70
+> +#define ADSP_SC598_CLK_3PLL_PLL_IN 71
+> +#define ADSP_SC598_CLK_3PLL_VCO_OUT 72
+> +#define ADSP_SC598_CLK_3PLL_PLLCLK 73
+> +#define ADSP_SC598_CLK_3PLL_DDIV 74
+> +#define ADSP_SC598_CLK_DDR_SEL 75
+> +#define ADSP_SC598_CLK_DDR 76
+> +#define ADSP_SC598_CLK_CGU0_VCO_2_OUT 77
+> +#define ADSP_SC598_CLK_CGU1_VCO_2_OUT 78
+> +#define ADSP_SC598_CLK_3PLL_VCO_2_OUT 79
+> +#define ADSP_SC598_CLK_END 80
+
+Drop this one. Not a binding.
 
 
 Best regards,
