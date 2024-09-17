@@ -1,127 +1,109 @@
-Return-Path: <linux-i2c+bounces-6809-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6810-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E95E97A547
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 17:24:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C30FF97ABE8
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 09:15:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEB471C20EB0
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Sep 2024 15:24:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E27471C21D22
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 07:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93A7158DC8;
-	Mon, 16 Sep 2024 15:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6581D14F9EA;
+	Tue, 17 Sep 2024 07:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JNfbNhI2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mIpe/BXW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACDA158548;
-	Mon, 16 Sep 2024 15:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25ECB155A4E;
+	Tue, 17 Sep 2024 07:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726500245; cv=none; b=X+DBv2D4r3SVyHlEKyPEZHxa9T9gyB6ipeFrQbDTIR0AYzNADvzxAKaRAILLFWbJdoPNAxDtmegKN99XAPznJUUsM3sodmFcxzFUYbNyDEbRWyB3+L5EPnBiOkMdzRy1M5IAx42Hql7YrN5YN5fNV+W4wz6j3UwTdG/uHknGHB0=
+	t=1726557315; cv=none; b=K1TF9TlUJyFCEQCmDQ3IOMS/RK0oRVp/SaxrR2g70ekyRvL2bgi2UqZz5uTFp0aMvl0LQY+ABCZ5tNf+lQdKR7vdrB5Z1c/jXgdF8vNCT7W4QWJ3n2lWFjci3myC0Ou2NZcYYSfZbvHcyug+Fhi//WvcgUgAvVf03skJcAH+WHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726500245; c=relaxed/simple;
-	bh=X867kVY3mwLewmvWQEQaqmOpFkKVgamKi/gS36af2Uo=;
+	s=arc-20240116; t=1726557315; c=relaxed/simple;
+	bh=iAK8MsLA1QiXmV9M2V38LicGNCFvYTgbqWA5MBct58o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JfIH0Bl9PTVQCNDikw8Y8TU0/aIuqmvABkLL29hPbQsZYyNW1iDpxwKkP9TIccYct+vPOTofo9ZkeaNKqOUjewnP1uIV9PJHuWeHGoJy948M4SSNMxU3vhZGDn9vMXXSem9HZN3Ym5DSorLWEz12M3mlzr++iNL/jZy4NSQwkyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JNfbNhI2; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726500245; x=1758036245;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=X867kVY3mwLewmvWQEQaqmOpFkKVgamKi/gS36af2Uo=;
-  b=JNfbNhI2HkpFadDLnzdKVbwSlBa7Slf2zq8rmI9fwXSBjHiK2YG51mmw
-   pvViBjrVnsLcJUivx9zhWfUETbn3e9JKdbJw0xG3F4u9OgE9g0HaMqvLU
-   M8+rgFj8nddKxsJ/4Ee3DRM7DFl/VvT6deg/aA7u+n67Bp0rbJV8pnW+M
-   XbePNFVUFSvY39RkSog34RdW+OUdOZkAj8DEfrhdoyPQ6M+w3Jr77KbhF
-   jbm+LJ0VpmCmsjblAuwmKbVBtyLbsQGIsyQu+VQac52e/+1DT1RbraH9o
-   bvFE75EMkKQ3YZTlybtqfKttjdfSawsWCaB0tafzqkgOzfgxtm0B2AIq4
-   A==;
-X-CSE-ConnectionGUID: wQoCl39kQZS3hZeWKRMEJg==
-X-CSE-MsgGUID: zDxqU2xGRHChTWYzS0rgRA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="47839801"
-X-IronPort-AV: E=Sophos;i="6.10,233,1719903600"; 
-   d="scan'208";a="47839801"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 08:24:04 -0700
-X-CSE-ConnectionGUID: NHqN84/5RaOVIOHMXmdfhA==
-X-CSE-MsgGUID: NSzwDnfoTNWZlhN5umqf1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,233,1719903600"; 
-   d="scan'208";a="69380965"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 08:23:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sqDa0-00000009VQS-1MWw;
-	Mon, 16 Sep 2024 18:23:56 +0300
-Date: Mon, 16 Sep 2024 18:23:56 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Doug Anderson <dianders@chromium.org>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v7 09/10] platform/chrome: Introduce device tree hardware
- prober
-Message-ID: <ZuhNjHwwluF2wfoU@smile.fi.intel.com>
-References: <20240911072751.365361-1-wenst@chromium.org>
- <20240911072751.365361-10-wenst@chromium.org>
- <CAD=FV=WtVSQ5GX6H5CtxNPTdOAJVMj_xNRvG9siZB6_ePZr7CQ@mail.gmail.com>
- <CAGXv+5HRLHV2tDZxiqFRhz1p+_bhMzMXoJMBnhy-R=8C4hBjnQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BVZadkakwiiNxyV8yr/cXfjG/q18pdkTum7V1mMgb4+nW5ejNnjeGrHUwzLU3G7NTgWvCwglcgj0BNbJftgDlGoJjM+82NCQUOfGv0OclE+uWy1aGN1sFPvyx0qWkOiTHvB7NWXu06Ez6AuGebkih1rBFZRkNBTtaNSuGe3ly5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mIpe/BXW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC92C4CEC6;
+	Tue, 17 Sep 2024 07:15:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726557314;
+	bh=iAK8MsLA1QiXmV9M2V38LicGNCFvYTgbqWA5MBct58o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mIpe/BXWEsCv6Qx93p28fa4WMUqwHgLD1psF1sfpJwI2lX3I6sd1GB8AjRA4c6oGG
+	 UVywambhC9iYypPodVJSLuA4kzxPFjdpRhIQNK7vyQUgdJZ/XYOv/2DGvMvh1Wv/S5
+	 MESUQAis7HpFVcZNuBY/nThksUjbmmgtjwIJc4sNhmsQpzy5pQx3n1nJgDM4psD3PI
+	 PmUj1Blor0cm72JIiculAxikHELnjtOTuZNMism/LwMNkcG4HfXMr6BSqNoUWMQXK2
+	 NuM60xY7/rryNgXULROXrrMHIrK3xGYbupHj44ScpCSy+hJRrNAbjWiWKhMbeZ/lHw
+	 04s13s+YoCW4w==
+Date: Tue, 17 Sep 2024 09:15:08 +0200
+From: Bjorn Andersson <andersson@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, Jinjie Ruan <ruanjinjie@huawei.com>, 
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] i2c: qcom-geni: Keep comment why interrupts start
+ disabled
+Message-ID: <nkfcib5rofj3tpocfpfolgqspuohduxi6ch6ss6nwl3eymuqo3@ljj3ypfmj4us>
+References: <20240916121516.3102-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5HRLHV2tDZxiqFRhz1p+_bhMzMXoJMBnhy-R=8C4hBjnQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20240916121516.3102-2-wsa+renesas@sang-engineering.com>
 
-On Mon, Sep 16, 2024 at 04:58:51PM +0200, Chen-Yu Tsai wrote:
-> On Sat, Sep 14, 2024 at 1:43 AM Doug Anderson <dianders@chromium.org> wrote:
-> > On Wed, Sep 11, 2024 at 12:29 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
-
-...
-
-> > >  obj-$(CONFIG_CHROMEOS_LAPTOP)          += chromeos_laptop.o
-> > >  obj-$(CONFIG_CHROMEOS_PRIVACY_SCREEN)  += chromeos_privacy_screen.o
-> > >  obj-$(CONFIG_CHROMEOS_PSTORE)          += chromeos_pstore.o
-> > > +obj-$(CONFIG_CHROMEOS_OF_HW_PROBER)    += chromeos_of_hw_prober.o
-> >
-> > "o" sorts before "p" so "of" should sort before "privacy"?
-> >
-> > I guess it's not exactly all sorted, but this small section is. Since
-> > it's arbitrary you could preserve the existing sorting. :-P
+On Mon, Sep 16, 2024 at 02:15:17PM GMT, Wolfram Sang wrote:
+> The to-be-fixed commit rightfully reduced a race window, but also
+> removed a comment which is still helpful after the fix. Bring the
+> comment back.
 > 
-> To me it seemed more like they are just sorted in the order they were
-> added.
+> Fixes: e2c85d85a05f ("i2c: qcom-geni: Use IRQF_NO_AUTOEN flag in request_irq()")
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/i2c/busses/i2c-qcom-geni.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 4c9050a4d58e..03c05dcc2202 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -818,6 +818,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>  	init_completion(&gi2c->done);
+>  	spin_lock_init(&gi2c->lock);
+>  	platform_set_drvdata(pdev, gi2c);
+> +
+> +	/* Disable the interrupt so that the system can enter low-power mode */
 
-If we can make it more ordered I'm for it.
-
-Just my 2c.
-
--- 
-With Best Regards,
-Andy Shevchenko
+I'm uncertain about the correctness of this comment. Seems more likely
+that we're concerns about lingering interrupts from operation of the bus
+during boot.
 
 
+Perhaps I'm missing something obvious, or perhaps there's a need for
+reviewing the code written here under the documented premise?
+
+I think there's value in keeping the comment in the code, and then try
+to update it with a more detailed description.
+
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+
+Regards,
+Bjorn
+
+>  	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq, IRQF_NO_AUTOEN,
+>  			       dev_name(dev), gi2c);
+>  	if (ret) {
+> -- 
+> 2.45.2
+> 
+> 
 
