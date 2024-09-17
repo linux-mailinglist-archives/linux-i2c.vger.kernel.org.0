@@ -1,109 +1,167 @@
-Return-Path: <linux-i2c+bounces-6810-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6811-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C30FF97ABE8
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 09:15:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 319B697AC9B
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 10:09:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E27471C21D22
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 07:15:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62458B2955D
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 08:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6581D14F9EA;
-	Tue, 17 Sep 2024 07:15:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA915157488;
+	Tue, 17 Sep 2024 08:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mIpe/BXW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJyC6IcX"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25ECB155A4E;
-	Tue, 17 Sep 2024 07:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D531156C70;
+	Tue, 17 Sep 2024 08:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726557315; cv=none; b=K1TF9TlUJyFCEQCmDQ3IOMS/RK0oRVp/SaxrR2g70ekyRvL2bgi2UqZz5uTFp0aMvl0LQY+ABCZ5tNf+lQdKR7vdrB5Z1c/jXgdF8vNCT7W4QWJ3n2lWFjci3myC0Ou2NZcYYSfZbvHcyug+Fhi//WvcgUgAvVf03skJcAH+WHk=
+	t=1726560581; cv=none; b=M+2R+ROxGo41d9o6fTlPpJ0l7kRaQ3lswDE+m5r34AIWNPKIyUZnO3yHjTR9aXuqSx/tMDpMnvcH+H62rLCJC+i4gVQrv+LQhEGppqsWuQI+Q7BZ3EIrqnkDgWdRaoqmS3cK9JgM+owoJ5RzCalIQQXq/lHbUwolqGS4gPbXqXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726557315; c=relaxed/simple;
-	bh=iAK8MsLA1QiXmV9M2V38LicGNCFvYTgbqWA5MBct58o=;
+	s=arc-20240116; t=1726560581; c=relaxed/simple;
+	bh=6s7C8hobD3fIYgLx8J4qWFbmevZAmpnrWRmu1pRVBTA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BVZadkakwiiNxyV8yr/cXfjG/q18pdkTum7V1mMgb4+nW5ejNnjeGrHUwzLU3G7NTgWvCwglcgj0BNbJftgDlGoJjM+82NCQUOfGv0OclE+uWy1aGN1sFPvyx0qWkOiTHvB7NWXu06Ez6AuGebkih1rBFZRkNBTtaNSuGe3ly5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mIpe/BXW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC92C4CEC6;
-	Tue, 17 Sep 2024 07:15:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZQLQHRt1JY0BYvAGoy6RfgPrx3VeNWSv6iwCtFyPeJZoDvXuxuMPUOvqVXpCZjQI2ng1uVF0UTxw9ubKpH/lrYOPymTtv4VcCc5/ugSdGnMWrj2M6rl4b/xB+31gwIrpWOe0spg9IgRjUf/9oFFAYmr/fvSn5t6b6dIPDkz6d5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJyC6IcX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC3FC4CEC6;
+	Tue, 17 Sep 2024 08:09:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726557314;
-	bh=iAK8MsLA1QiXmV9M2V38LicGNCFvYTgbqWA5MBct58o=;
+	s=k20201202; t=1726560581;
+	bh=6s7C8hobD3fIYgLx8J4qWFbmevZAmpnrWRmu1pRVBTA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mIpe/BXWEsCv6Qx93p28fa4WMUqwHgLD1psF1sfpJwI2lX3I6sd1GB8AjRA4c6oGG
-	 UVywambhC9iYypPodVJSLuA4kzxPFjdpRhIQNK7vyQUgdJZ/XYOv/2DGvMvh1Wv/S5
-	 MESUQAis7HpFVcZNuBY/nThksUjbmmgtjwIJc4sNhmsQpzy5pQx3n1nJgDM4psD3PI
-	 PmUj1Blor0cm72JIiculAxikHELnjtOTuZNMism/LwMNkcG4HfXMr6BSqNoUWMQXK2
-	 NuM60xY7/rryNgXULROXrrMHIrK3xGYbupHj44ScpCSy+hJRrNAbjWiWKhMbeZ/lHw
-	 04s13s+YoCW4w==
-Date: Tue, 17 Sep 2024 09:15:08 +0200
-From: Bjorn Andersson <andersson@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, Jinjie Ruan <ruanjinjie@huawei.com>, 
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] i2c: qcom-geni: Keep comment why interrupts start
- disabled
-Message-ID: <nkfcib5rofj3tpocfpfolgqspuohduxi6ch6ss6nwl3eymuqo3@ljj3ypfmj4us>
-References: <20240916121516.3102-2-wsa+renesas@sang-engineering.com>
+	b=QJyC6IcX1sm/0OS30slFVeEI3bzrgd4GDjjVWXPqBLYfX0uzsSejy2qcQHJayBaS8
+	 YX1DqT+qmcpf35HK/oWtY5TlOJ52UMEKF2VQ6NXObGBkgQMlSwwfhuNiZBAzmvPjLG
+	 j1gq4V7p6FM1e8LOE1zkWcIlkX+3y2A4WQ+XZzJKekx6PYVH9RcUk2fctzNz4p71p7
+	 gQ8cQqg+69mcZsFUUiPqAbFeMEZ/c5c0ElNjPVJ9sjehSapBH7+IHTy52uB5xfhXVD
+	 m5YkGvA2F2nG8Rsss5+plnfOKd5KcymxJKqILz66iDLhIxnknfWGaL/vK3KFnQAZCV
+	 KLaJCTJ65l/2Q==
+Date: Tue, 17 Sep 2024 09:09:35 +0100
+From: Lee Jones <lee@kernel.org>
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com,
+	blake.vermeer@keysight.com
+Subject: Re: [PATCH 1/5] mfd: add Congatec Board Controller mfd driver
+Message-ID: <20240917080935.GC9955@google.com>
+References: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
+ <20240503-congatec-board-controller-v1-1-fec5236270e7@bootlin.com>
+ <20240822103858.GH6858@google.com>
+ <9f29d904-e7ba-40fb-b5d8-1efeddf6f148@bootlin.com>
+ <20240912141309.GC24460@google.com>
+ <618cb281-9fec-471f-9e3d-c7a471f75a7a@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240916121516.3102-2-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <618cb281-9fec-471f-9e3d-c7a471f75a7a@bootlin.com>
 
-On Mon, Sep 16, 2024 at 02:15:17PM GMT, Wolfram Sang wrote:
-> The to-be-fixed commit rightfully reduced a race window, but also
-> removed a comment which is still helpful after the fix. Bring the
-> comment back.
+On Fri, 13 Sep 2024, Thomas Richard wrote:
+
+> On 9/12/24 16:13, Lee Jones wrote:
+> > On Tue, 10 Sep 2024, Thomas Richard wrote:
+> > 
+> >> On 8/22/24 12:38, Lee Jones wrote:
+> >>> On Fri, 09 Aug 2024, Thomas Richard wrote:
+> >>>
+> >>>> Add core MFD driver for the Board Controller found on some Congatec SMARC
+> >>>> module. This Board Controller provides functions like watchdog, GPIO, and
+> >>>> I2C busses.
+> >>>>
+> >>>> This commit add support only for the conga-SA7 module.
+> >>>>
+> >>>> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+> >>>> ---
+> >>>>  drivers/mfd/Kconfig      |  12 ++
+> >>>>  drivers/mfd/Makefile     |   1 +
+> >>>>  drivers/mfd/cgbc-core.c  | 453 +++++++++++++++++++++++++++++++++++++++++++++++
+> >>>>  include/linux/mfd/cgbc.h |  44 +++++
+> >>>>  4 files changed, 510 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> >>>> index bc8be2e593b6..3e0530f30267 100644
+> >>>> --- a/drivers/mfd/Kconfig
+> >>>> +++ b/drivers/mfd/Kconfig
+> >>>> @@ -224,6 +224,18 @@ config MFD_AXP20X_RSB
+> >>>>  	  components like regulators or the PEK (Power Enable Key) under the
+> >>>>  	  corresponding menus.
+> >>>>  
+> >>>> +config MFD_CGBC
+> >>>> +	tristate "Congatec Board Controller"
+> >>>> +	select MFD_CORE
+> >>>> +	depends on X86
+> >>>> +	help
+> >>>> +	  This is the core driver of the Board Controller found on some Congatec
+> >>>> +	  SMARC modules. The Board Controller provides functions like watchdog,
+> >>>> +	  I2C busses, and GPIO controller.
+> >>>> +
+> >>>> +	  To compile this driver as a module, choose M here: the module will be
+> >>>> +	  called cgbc-core.
+> >>>> +
+> >>>>  config MFD_CROS_EC_DEV
+> >>>>  	tristate "ChromeOS Embedded Controller multifunction device"
+> >>>>  	select MFD_CORE
+> >>>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> >>>> index 02b651cd7535..d5da3fcd691c 100644
+> >>>> --- a/drivers/mfd/Makefile
+> >>>> +++ b/drivers/mfd/Makefile
+> >>>> @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_SM501)		+= sm501.o
+> >>>>  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
+> >>>>  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
+> >>>>  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
+> >>>> +obj-$(CONFIG_MFD_CGBC)		+= cgbc-core.o
+> >>>>  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
+> >>>>  obj-$(CONFIG_MFD_CS42L43)	+= cs42l43.o
+> >>>>  obj-$(CONFIG_MFD_CS42L43_I2C)	+= cs42l43-i2c.o
+> >>>> diff --git a/drivers/mfd/cgbc-core.c b/drivers/mfd/cgbc-core.c
+> >>>> new file mode 100644
+> >>>> index 000000000000..cca9b1170cc9
+> >>>> --- /dev/null
+> >>>> +++ b/drivers/mfd/cgbc-core.c
+> >>>> @@ -0,0 +1,453 @@
+> >>>> +// SPDX-License-Identifier: GPL-2.0-or-later
+> >>>> +/*
+> >>>> + * Congatec Board Controller MFD core driver.
+> >>>
+> >>> No such thing as an MFD.
+> >>
+> >> What should it be if it's not an MFD ?
+> > 
+> > You should be telling me this. :)
+> > 
+> > "Board Controller" according to the Kconfig entry.
+> > 
 > 
-> Fixes: e2c85d85a05f ("i2c: qcom-geni: Use IRQF_NO_AUTOEN flag in request_irq()")
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/i2c/busses/i2c-qcom-geni.c | 2 ++
->  1 file changed, 2 insertions(+)
+> This Congatec Board Controller is an external micro-controller that is
+> interfaced with the CPU through a eSPI bus.
+> This Board Controller provides multiple functions: an I2C controller, a
+> GPIO controller, a watchdog and other not yet implemented functions
+> (temp/voltage sensors, backlight).
 > 
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 4c9050a4d58e..03c05dcc2202 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -818,6 +818,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
->  	init_completion(&gi2c->done);
->  	spin_lock_init(&gi2c->lock);
->  	platform_set_drvdata(pdev, gi2c);
-> +
-> +	/* Disable the interrupt so that the system can enter low-power mode */
+> Therefore, the MFD subsystem is a very good fit, as it allows to have a
+> core driver that implements the communication with the external
+> micro-controller, and then individual drivers for each of the functions
+> offered by this Board Controller.
 
-I'm uncertain about the correctness of this comment. Seems more likely
-that we're concerns about lingering interrupts from operation of the bus
-during boot.
+Sorry for the ambiguity, that was not the point of the review comment.
 
+Please remove all mentions to MFD in the help/header text.
 
-Perhaps I'm missing something obvious, or perhaps there's a need for
-reviewing the code written here under the documented premise?
-
-I think there's value in keeping the comment in the code, and then try
-to update it with a more detailed description.
-
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-
-Regards,
-Bjorn
-
->  	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq, IRQF_NO_AUTOEN,
->  			       dev_name(dev), gi2c);
->  	if (ret) {
-> -- 
-> 2.45.2
-> 
-> 
+-- 
+Lee Jones [李琼斯]
 
