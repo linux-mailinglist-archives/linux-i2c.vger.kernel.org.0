@@ -1,195 +1,149 @@
-Return-Path: <linux-i2c+bounces-6823-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6824-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A262D97B03C
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 14:41:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAEE197B0C0
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 15:28:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7BB01C2199C
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 12:41:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35B161F241EA
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Sep 2024 13:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C591714C9;
-	Tue, 17 Sep 2024 12:41:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C05A1170A0B;
+	Tue, 17 Sep 2024 13:28:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="BdwosHhi"
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="tInRlTsU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49ED016FF37
-	for <linux-i2c@vger.kernel.org>; Tue, 17 Sep 2024 12:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB06A156883
+	for <linux-i2c@vger.kernel.org>; Tue, 17 Sep 2024 13:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726576903; cv=none; b=NqK7i1e9hXsc7xvgEWuN0fr/IhurYTp62F3szPbcKhvMKUbV06Vg3Knce1eaKP4q8wzo6FJF+7zUehJdEXvJc4djwXlGvftxglts1gJR8ODrtPMJh3m5fWiPnKsWLeBBaotaUNt6A/2xrG92wmUncGqOrcz+th11JjReWDHq5cU=
+	t=1726579716; cv=none; b=cRvtPo397j7afEANMXRNxpGp0FQKYvWNcfh7deQyWFzlACC8Sj1f25BghOlF48adRZS80TqJcOw0+LDW2U6q8exw1oNSE+BRPVojL5DIpBeWh2AzqUKmqb+aaR+VPhjfm2a+x48EI45na3UgrLN9Pvvdpi7sNDvxzUlEGiIOwOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726576903; c=relaxed/simple;
-	bh=ZJFRDeZ8soV10dD+MfPoyVRxBMFppyhwS9UoRQCw/jA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=poOiFl1xjUl+5D1gOsZ8GlQ+7FTSx6U3bWSy7t/H7sRf6Aq0KNazMb+n6WQXyhy6QSpTdl1z6cwi7RtqtW/q7KWVqI1F3SGe+mvkPJgcV7Gi9TYScWrkrmBD4vpNh9WIYNMrbKjBnQVv+ochcn2F1JgE93UljMYu+8wcy91ymrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=BdwosHhi; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53654e2ed93so6044156e87.0
-        for <linux-i2c@vger.kernel.org>; Tue, 17 Sep 2024 05:41:40 -0700 (PDT)
+	s=arc-20240116; t=1726579716; c=relaxed/simple;
+	bh=z/QlTYHj16cG15b0556RWiV9m/fJsfLUu7T9utUH3Mo=;
+	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
+	 Content-Type; b=ALz0LpdZ0kW7jYBAa57SPUy59dfPDRe6PPhlE8lXMa8uRZNhzIEsfTtIQ4bMPX6s/VpVPZJIKCRyoHwfTXxfLfUyZQXhjDshzd3FdpteatJ8DEr5z9Q7LHfvM73FRbCoQs9jzX7C/41eLE3rHJsAoeNCmHXbD09LSI+v4IWpmfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=tInRlTsU; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-718e56d7469so3403647b3a.0
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Sep 2024 06:28:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1726576899; x=1727181699; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CpWMPlfIX7YhBeWJyNbMe8FzyW4Hu7Wcs9fzjKwOIrA=;
-        b=BdwosHhiGfHGzwNkOzyC8LISD3LkgVMlTBqiczIfPz93/CmHgUmmI4C3Tx5B1IovPh
-         6gVGmuGUNQtxq7+r9c2meZ7tbQD8FnRKapb0gTA6GLT+WFC2gkRipjVlVpkJOyG4fHIJ
-         oMQbVyTqgbYI38/iiGlvdobQRGH75Iy7SDndg=
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1726579714; x=1727184514; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QSjVIhSmfJ0CyaIM/a3SSB+ZCJQA5N7E16cyTDPSeoc=;
+        b=tInRlTsUc8zkkekyHrwxTnE66V0D1bKJc0KcnjOolKj43ibAPgFxJSg2k8OgXEh4pi
+         HK02RvUQyw4w18kJ0/qoA8IjXslivxW3tmYZqOTSslxPPCfKRwnnMNtpuSFJZ9Ag7ar2
+         59VFe2RIGv034jUXS1GBsvLs/bZ1pKQ6fOfjPQEa9odwAhSe55DpVq+d2db7gD0hs7Ps
+         hq85D7Vnx5WAPUxdR9pP/S4XRJ6R4ltZBfoX2M5b43/kdkEojCuBIMIa8lmK1b3acg3P
+         X5gR1n5PEQGj42RqJ0/skCgNKqGTCweYdSJwI56NOsCd9UUsOtZJV4DC4aqj2MN6qvux
+         Mbdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726576899; x=1727181699;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CpWMPlfIX7YhBeWJyNbMe8FzyW4Hu7Wcs9fzjKwOIrA=;
-        b=uEHmuF3D+vYpYckc4v/J2FKHi4CCUT3ewUUQl1Oz58zDwoH2vLiiCPPlmM3WZez4jk
-         kknVk3qsKK+Om1F2fHegfKiTzuITlpdqhBUjDDRc7JC7qhQpeTnPhXWHmFb7wwlWIaDO
-         X+8YWqA4ZQIkQiobu1/zeS+bvftF1ndQee01aepzUEBL3NojWTP4gOgWwTUD6RkOaXev
-         luj73aqSb9AzTpabQNzz9bRC4c9PnI0WrUbsP3LIPaGYJ8OIhFelArQS+rXf/KaO7VvI
-         fpYr4wn1q13ZnPsjk8h9YG6E5W78SViN4f4+IoE4CBWjAnjciXi12myGepWLGB+mwcQW
-         CZ8A==
-X-Forwarded-Encrypted: i=1; AJvYcCXN0DcQJHaYBXYLU8b+ix6n7PQINtvTID+oWonHNEEffaKpQIXDFx58Tl3kobSYGgixj9VKNuf9x4M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOQhNoRaV2vHm4hu1JS9RADG8zI+40/k+10vtrT6xgeXVBK6FY
-	UI0cq77UDcDKllFGf0nh6tuaHxdQN20882djKnB5Jq+1v0/1qPL971NpsOc7WKdeZfVb1IR709+
-	ynV/25q6GtnRvCBj9+3OTx1Ai/BwZl9jdE0HF
-X-Google-Smtp-Source: AGHT+IFn3m+495dQ3DEAPrBhGOQnGwVGdz2fTnahxh2yXDyCOMPHxLysb0zN6DNlW9fowNODvzSDvoxEfUfwPvjJvLE=
-X-Received: by 2002:a05:6512:3f18:b0:52e:7542:f469 with SMTP id
- 2adb3069b0e04-53678f6143cmr9822670e87.0.1726576898996; Tue, 17 Sep 2024
- 05:41:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726579714; x=1727184514;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QSjVIhSmfJ0CyaIM/a3SSB+ZCJQA5N7E16cyTDPSeoc=;
+        b=woIRbUa9Yw4womXtwn24cJb2ltO30clu1rYV3fDtgg9hBJtXptG6b/zdVQoLgjDVfO
+         3fzBf6HeZ7CUuo90ws5p49N1XAR0yH+7D+8k5o9w4Zrr8gbdZj1aUkr5O6I3P5q+X0l7
+         4bPB19/HvGE7dUbTflmucMkDE60IWuXwwF47rCHhhqrVYyFNSc5Dg4SjNsUe5fx1L2YU
+         daa58mnv/QZk30IVe+BM/ETd6mRhNDyKL7ie4qIbpqEjIFsOFQCtrat9QezcXmg646L9
+         /XCUZVO5u7zHyyYcCf6Mm4pcUlNCX7SNth+/iikX3amkB+fPmKHcpXGmKOmKep1Q/ccI
+         zqGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVpznIBML1tyUAkovRsrYk0V+ouYZekEmh8LnS2LEO21ankt4uuSCREfybjAjxD+R4CIqe+nKQYQyM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyY5HzHYdQhoj/ePMVqUPdfodvocw81CVtXdMtPoiO80Tr1ywxP
+	ALnKheOjWHJgqOUsFD6kIA3FQbQ8e/CSFJvUiJUZkLYU6moZOt5xChOIhjdcaWLc1dW+rFl1gof
+	k8tXgkg==
+X-Google-Smtp-Source: AGHT+IEDqJbKpA6LAn7lxbzNxohHyNQyKe4VpZi839U/YbK8TEHIC3wtGjjJt3DVKNnGqc0aqDaaDA==
+X-Received: by 2002:a05:6a00:854:b0:718:d94b:4b with SMTP id d2e1a72fcca58-71936a2f634mr25905784b3a.6.1726579713896;
+        Tue, 17 Sep 2024 06:28:33 -0700 (PDT)
+Received: from localhost ([213.208.157.38])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944a9809esm5146960b3a.39.2024.09.17.06.28.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Sep 2024 06:28:33 -0700 (PDT)
+Date: Tue, 17 Sep 2024 06:28:33 -0700 (PDT)
+X-Google-Original-Date: Tue, 17 Sep 2024 06:28:26 PDT (-0700)
+Subject:     Re: [PATCH v2 5/7] RISC-V: configs: enable I2C_DESIGNWARE_CORE with I2C_DESIGNWARE_PLATFORM
+In-Reply-To: <20240903142506.3444628-6-heikki.krogerus@linux.intel.com>
+CC: andi.shyti@kernel.org, jarkko.nikula@linux.intel.com,
+  andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com, jsd@semihalf.com, linux-i2c@vger.kernel.org,
+  linux-kernel@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+  linux-riscv@lists.infradead.org
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: heikki.krogerus@linux.intel.com
+Message-ID: <mhng-c9a63485-1f83-48c6-8840-accd5f97d237@palmer-ri-x1c9>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240911072751.365361-1-wenst@chromium.org> <20240911072751.365361-9-wenst@chromium.org>
- <CAD=FV=XvPA0UC87fQ+RvFzPv9qRSEP6eQhT79JOx9Arj87i9Mg@mail.gmail.com>
-In-Reply-To: <CAD=FV=XvPA0UC87fQ+RvFzPv9qRSEP6eQhT79JOx9Arj87i9Mg@mail.gmail.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Tue, 17 Sep 2024 14:41:26 +0200
-Message-ID: <CAGXv+5EcxGfdzvarg8hmk1zR9X0s8KUzayQdxfWTrasEGpj=1g@mail.gmail.com>
-Subject: Re: [PATCH v7 08/10] i2c: of-prober: Add GPIO support to simple helpers
-To: Doug Anderson <dianders@chromium.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	Jiri Kosina <jikos@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, Sep 14, 2024 at 1:49=E2=80=AFAM Doug Anderson <dianders@chromium.or=
-g> wrote:
+On Tue, 03 Sep 2024 07:25:04 PDT (-0700), heikki.krogerus@linux.intel.com wrote:
+> The dependency handling of the Synopsys DesignWare I2C
+> adapter drivers is going to be changed so that the glue
+> drivers for the PCI and platform buses depend on
+> I2C_DESIGNWARE_CORE.
 >
-> Hi,
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: linux-riscv@lists.infradead.org
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  arch/riscv/configs/defconfig                   | 1 +
+>  arch/riscv/configs/nommu_k210_defconfig        | 1 +
+>  arch/riscv/configs/nommu_k210_sdcard_defconfig | 1 +
+>  3 files changed, 3 insertions(+)
 >
-> On Wed, Sep 11, 2024 at 12:29=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org=
-> wrote:
-> >
-> > +static int i2c_of_probe_simple_set_gpio(struct device *dev, struct i2c=
-_of_probe_simple_ctx *ctx)
-> > +{
-> > +       int ret;
-> > +
-> > +       if (!ctx->gpiod)
-> > +               return 0;
-> > +
-> > +       dev_dbg(dev, "Setting GPIO\n");
-> > +
-> > +       ret =3D gpiod_direction_output_raw(ctx->gpiod, ctx->opts->gpio_=
-high_to_enable ? 1 : 0);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       msleep(ctx->opts->post_reset_deassert_delay_ms);
->
-> Like in the previous patch, you need an "if
-> (ctx->opts->post_reset_deassert_delay_ms)" before the msleep().
+> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> index 0d678325444f..a644a798f602 100644
+> --- a/arch/riscv/configs/defconfig
+> +++ b/arch/riscv/configs/defconfig
+> @@ -157,6 +157,7 @@ CONFIG_HW_RANDOM_VIRTIO=y
+>  CONFIG_HW_RANDOM_JH7110=m
+>  CONFIG_I2C=y
+>  CONFIG_I2C_CHARDEV=m
+> +CONFIG_I2C_DESIGNWARE_CORE=y
+>  CONFIG_I2C_DESIGNWARE_PLATFORM=y
+>  CONFIG_I2C_MV64XXX=m
+>  CONFIG_I2C_RIIC=y
+> diff --git a/arch/riscv/configs/nommu_k210_defconfig b/arch/riscv/configs/nommu_k210_defconfig
+> index af9601da4643..87ff5a1233af 100644
+> --- a/arch/riscv/configs/nommu_k210_defconfig
+> +++ b/arch/riscv/configs/nommu_k210_defconfig
+> @@ -58,6 +58,7 @@ CONFIG_I2C=y
+>  # CONFIG_I2C_COMPAT is not set
+>  CONFIG_I2C_CHARDEV=y
+>  # CONFIG_I2C_HELPER_AUTO is not set
+> +CONFIG_I2C_DESIGNWARE_CORE=y
+>  CONFIG_I2C_DESIGNWARE_PLATFORM=y
+>  CONFIG_SPI=y
+>  # CONFIG_SPI_MEM is not set
+> diff --git a/arch/riscv/configs/nommu_k210_sdcard_defconfig b/arch/riscv/configs/nommu_k210_sdcard_defconfig
+> index dd460c649152..95cbd574f291 100644
+> --- a/arch/riscv/configs/nommu_k210_sdcard_defconfig
+> +++ b/arch/riscv/configs/nommu_k210_sdcard_defconfig
+> @@ -50,6 +50,7 @@ CONFIG_DEVTMPFS_MOUNT=y
+>  CONFIG_I2C=y
+>  CONFIG_I2C_CHARDEV=y
+>  # CONFIG_I2C_HELPER_AUTO is not set
+> +CONFIG_I2C_DESIGNWARE_CORE=y
+>  CONFIG_I2C_DESIGNWARE_PLATFORM=y
+>  CONFIG_SPI=y
+>  # CONFIG_SPI_MEM is not set
 
-Ack.
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-> > +static void i2c_of_probe_simple_disable_gpio(struct device *dev, struc=
-t i2c_of_probe_simple_ctx *ctx)
-> > +{
-> > +       if (!ctx->gpiod)
-> > +               return;
-> > +
-> > +       dev_dbg(dev, "Setting GPIO to input\n");
-> > +
-> > +       gpiod_direction_input(ctx->gpiod);
->
-> This is weird. Why set it to input?
-
-It seemed to me this would be more like the initial state, without knowing
-the actual initial state.
-
-> > @@ -347,6 +438,7 @@ int i2c_of_probe_simple_cleanup(struct device *dev,=
- void *data)
-> >  {
-> >         struct i2c_of_probe_simple_ctx *ctx =3D data;
-> >
-> > +       i2c_of_probe_simple_disable_gpio(dev, ctx);
->
-> Maybe add a comment before the GPIO call that it's a noop if we found
-> something and i2c_of_probe_simple_free_res_early() was already called?
-> Otherwise you need to read into the function to understand why this
-> doesn't crash if the early call was made. To me, that makes the
-> abstraction add confusion instead of simplifying things.
-
-Ack.
-
-> > @@ -92,24 +93,33 @@ int i2c_of_probe_component(struct device *dev, cons=
-t struct i2c_of_probe_cfg *cf
-> >   * struct i2c_of_probe_simple_opts - Options for simple I2C component =
-prober callbacks
-> >   * @res_node_compatible: Compatible string of device node to retrieve =
-resources from.
-> >   * @supply_name: Name of regulator supply.
-> > + * @gpio_name: Name of GPIO.
->
-> Talk about the fact that gpio_name can be NULL or an empty string and
-> that they mean different things.
-
-Ack.
-
-> >   * @post_power_on_delay_ms: Delay in ms after regulators are powered o=
-n. Passed to msleep().
-> > + * @post_reset_deassert_delay_ms: Delay in ms after GPIOs are set. Pas=
-sed to msleep().
-> > + * @gpio_high_to_enable: %true if GPIO should be set to electrical hig=
-h to enable component.
->
-> Now that you've added the GPIOs and more delays, the description of
-> this structure needs to list exactly what the power sequence your
-> simple functions assume.
-
-Ack.
-
-> I would also say: given that you're providing a parameter anyway and
-> you're giving the GPIO name, can you please move away from the "raw"
-> values and move to "logical" values?
-
-I disagree. When hardware engineers design for swappable components, they
-likely look at the electrical compatibility of them. In this case, an
-active-high "enable" pin is electrically compatible with an active-low
-"reset" pin. If we use the logical value here, then we would need more
-logic to know when the logical polarity has to be reversed.
-
-Note that this doesn't work for components that are electrically
-incompatible. But in that case a lot more board dependent code would be
-needed anyway.
-
-
-ChenYu
+(based on the rest of the thread I'm assuming you're taking these all 
+together, which seems saner to me)
 
