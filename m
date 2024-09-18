@@ -1,230 +1,301 @@
-Return-Path: <linux-i2c+bounces-6852-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6853-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 934A997BACB
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 12:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 53E8297BC12
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 14:21:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBF5AB22943
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 10:28:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A648AB21F53
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 12:21:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B1C11741C3;
-	Wed, 18 Sep 2024 10:28:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E764E188CA3;
+	Wed, 18 Sep 2024 12:20:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Elp282DG"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QMLdsj/m"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791EA1B5AA
-	for <linux-i2c@vger.kernel.org>; Wed, 18 Sep 2024 10:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726655304; cv=fail; b=RbxFwu2Mjy6fFeWnsa585FwjDTwimieR9HWKtao6cBSgANHkaD53R7R1AAlt2ETLBjS7RelgqNJa6aoImlTGgUCpAwDBgsP6Bf9uT2OhaikWSn+9HNoa8uNeex1wucIg6G+J2DdiY2/KhOG4sfEMWKtDdlIoL2cYK7a4ufR2JxY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726655304; c=relaxed/simple;
-	bh=V8jUXOipX2RuDvCn07lq64JBH58DekU4XeZ1JVQy75I=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=elOH+YcnhUO/K65UgmZJVvFVF8Z9BaWb8up9Yq2L8wk8ekmf8AWiyFwcUbX9Hhn88Ma9i2G2KpaoXcuJ7jqk7n+zisXcRTBYZT6LyraNc9I3QhJIMIIcpZ3tmoGlIXQ7cSpbDJ3jAiPCbWK0ZTVsg/q/MWC55aAdHFjFO2jAwEQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Elp282DG; arc=fail smtp.client-ip=40.107.243.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BKg55rURZ42/Fn/86qyMxT/pzeZVeK9ts2TBs99mPmtKhqaNcNfAbNiPcM6PtUjMigoXw/IEh67aKzibiPaiCAX81049K10fveBdZIaIGXHluEfUCWurXBegBdZ4grGcV6jNr+BycntiQ3ef4lHl7fyzwtAxCP+peBvoEITG08UL1ALlce34vJtJXQPholuyLZ7uEEEXEjae2HQ77s5ZZ1sp7njPzUzf6Z/IyqRs98fNVEGYeyB1mgtw1UX6OKGVYP+yyPmrDedzSlaPBPVBHrEaIXXM5Yl3HsQ6HcNSiC5kIX+CivNQ4loB66xfqyy30zqC3eKjWJ7j5G5cZex/6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JHOXQI2lLCyl/+8Ivqu9A0oSn5hI55cMDP92bmTspew=;
- b=qGoO3O20gUxaKgu5E7U2nNj2udI0ngJ/DcJRVqynUYNWRNRi9iXxs/cWmOSQhy3EHbvXc7fn1NaTTSYTtiyXeAlCay8J2H+FhoY0SZfLYrJd7aOp8WZteDIz5y+UZbzZPdxp3Ki/Fa1Os14vSuQfvkVIX3JbHoULvPGjLaxQ4zfqgWbck8Gh/XIPZf0UcP4IpDxRADR+i/BNp7G8iWAVYmtSNuY/8GQImulqPVY4Zp6HU0sS+WUAlnPY2t1zzWjml0Oz+5gP2RfiU4ZwutDk/SHfoiSPGQVX4SrXn+2OEJkA80zB2giAsw3YKPCf/u6mBh8xdgqzvaoOk7KVB1HY1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JHOXQI2lLCyl/+8Ivqu9A0oSn5hI55cMDP92bmTspew=;
- b=Elp282DGsaHcouDrNfEwOG7LI8OLoUuFDBHIzWgo8X21A3Uzy2KXxObLRYMPkRN4kWI3/sG3IdeEK8mHzqNApC5alaZHQSKmHXbaYA3TS0v7iZVl+PRQVTb8D0OkVuOahuKXzNBC5kDGeUNY/WNROCDHxRoW3K9Lv2bOv4TcECI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5176.namprd12.prod.outlook.com (2603:10b6:208:311::19)
- by SA1PR12MB8857.namprd12.prod.outlook.com (2603:10b6:806:38d::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.24; Wed, 18 Sep
- 2024 10:28:19 +0000
-Received: from BL1PR12MB5176.namprd12.prod.outlook.com
- ([fe80::ed5b:dd2f:995a:bcf4]) by BL1PR12MB5176.namprd12.prod.outlook.com
- ([fe80::ed5b:dd2f:995a:bcf4%3]) with mapi id 15.20.7982.012; Wed, 18 Sep 2024
- 10:28:19 +0000
-Message-ID: <027f723f-a276-4e63-8578-167d74e14d12@amd.com>
-Date: Wed, 18 Sep 2024 15:58:11 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 7/8] i2c: amd-asf: Clear remote IRR bit to get
- successive interrupt
-Content-Language: en-US
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
- linux-i2c@vger.kernel.org, Sanket.Goswami@amd.com, Patil.Reddy@amd.com
-References: <20240913121110.1611340-1-Shyam-sundar.S-k@amd.com>
- <20240913121110.1611340-8-Shyam-sundar.S-k@amd.com>
- <ZuSQVpIqM3yOSuf4@smile.fi.intel.com>
- <8e12b68c-0a90-413b-bf02-f8637629f2be@amd.com>
- <Zuqla7IMBr7wYs1Z@smile.fi.intel.com>
-From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-In-Reply-To: <Zuqla7IMBr7wYs1Z@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0106.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:27::21) To BL1PR12MB5176.namprd12.prod.outlook.com
- (2603:10b6:208:311::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846102E64B;
+	Wed, 18 Sep 2024 12:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726662052; cv=none; b=is0VPNqmLQtpNXknV006v/P7r9tMiwFM2OFeMDpzeLLM6UawtJHEs1e0IxTeig2+JkqdXVF4WTHsjmslVgQXePxRlkOGvZyDivwHjacN5RXXCQ+X9SibeSvMWPjXfYJjvzRJc4BAXs+gON4LHhLaQz4JsPExq/Yp1ccGR0lm59k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726662052; c=relaxed/simple;
+	bh=YReHkWzoW90cu/Ao3EPUTSj1YiN0NQwCGDLLvtaUMZs=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=ft5ItMqdCFft2m6IWAggx/D4HYkKk0eUOyyNyNX5/AtizBkKyjg7jNzbSYb0L6UYb4d9WTZTzklBD8s0hrki6tasVvtABrtQr4PkL0j5MOG1Q8GUlJWYrhjyOal6VXU1hT/+btEjEkE1E9+tEW870Vr6Im8nQjXZbROvoJtPayQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QMLdsj/m; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48I6lLrn002533;
+	Wed, 18 Sep 2024 12:20:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	y49ljK7hhswfxyQq8jRavd0/ztkz3NCyaDreEvf3yzY=; b=QMLdsj/muGPPF5rr
+	ygvoxHb3GnfgoBBW2eJK76zQE0q1EixKzCJN4rtLP1YARM7TBt/uxf55ETNHvmVe
+	+QBTzir+Eh3yex6V2Gdu9xO1/3JCGF+M3D+idrD5YFE8xlGOkalD41JO6zJ9Hjgd
+	YRvA2mhNj1Vqhs9gYGpM85reWsFAffO/BmMtun3UkQe5G+S6JmdsYYB8POimF0lc
+	THe7cylO0h3QmNATNQePjrhIPZ5/uoS3A5m70mu+mPdbR/lK3ql3ZD5j8AkqBukk
+	iJg+AjLD+z74cMdyOXPmt4iMOlfqczDUAFaO2gzH3Uew07Lp6jNXBv9yQ+hBp7CN
+	X7ubCg==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41n4hfhwbr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 18 Sep 2024 12:20:39 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48ICKcOx015988
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 18 Sep 2024 12:20:38 GMT
+Received: from [10.216.13.254] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 18 Sep
+ 2024 05:20:32 -0700
+Message-ID: <77ce3d16-9e56-4ed3-89bd-e4d26d88eae2@quicinc.com>
+Date: Wed, 18 Sep 2024 17:50:27 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5176:EE_|SA1PR12MB8857:EE_
-X-MS-Office365-Filtering-Correlation-Id: 608f5585-f10c-424d-18b9-08dcd7cc9d7a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WTR4dFh0c1VWOG5vUTg1cjZKcGxRS1dTaE5EYzZKV0F2dnhSYUFlZkk1WUcr?=
- =?utf-8?B?MW1wa0lIU1lBRHc5VjZGTmt6cDAxUjhsaUU4VGpMbTd4cDEvQU0xdkR4R0pi?=
- =?utf-8?B?Ry9XV0xuckxvdm5zSTVPNVNaRDJLd2hBa00xUWM3aFJOdVpPMWluamU4Q2JJ?=
- =?utf-8?B?ZkJZMFBrRURWSjRoZkJ2TGxZRHBGY2d1aVVZalN2d1IrZHZRMzc3cEpwQUZj?=
- =?utf-8?B?eTdudUVJWmpibkdUb0dmdk01OHdqNkNnNUE2cGFxbkZZY2pVU2hIaXJhM2JP?=
- =?utf-8?B?QmNCNW03YkhscFd4YnNvSzV1dG9zaVBpRmJlMzNxOHVueko5a0RvMVQ1Nk5o?=
- =?utf-8?B?WWpRa1pucXhYWVRuNjliYlo0ZUNUT3prTHRqcW9mSUFMMXZlcHZEMXNLekgr?=
- =?utf-8?B?d0t0ZFlhZGdZS2VsUWpLcGlBZ3gxUTFvYkY0SDR1S255ck9ZVXA3VjFRVFgr?=
- =?utf-8?B?Umhzc1ZWQnB2YzU2VDhqU0JKOHdWYjVXc0VjNmc5bVRaWjU4U1VDNzJhdGcv?=
- =?utf-8?B?N2pmNlFDOU9XVGhMSGpIbEQ3NW4xa2EwYXJYQi84RisxSTB2THpkYXc3R3d2?=
- =?utf-8?B?RXVURzZkRlVsNFQ0NzhaK2FPTWxoV0g1dkhhWGg0aDNpZkJuWlJ3Q212c2VY?=
- =?utf-8?B?aklVMVdtcE5TcldjMjhFdzlMSHNSTVg1RHF1cnlydkNNRU9KVDlQK013K2I3?=
- =?utf-8?B?UzFGTlQwanV1dkhHdFdkZmgzaitydmwvTWxJMVh2MG9Dd3pLMFcyZVJicTRJ?=
- =?utf-8?B?NzA4aW0zTkc2b1YxY0RUcXFCZE9wOUdCRllTVmJCTGZBeDd1ZFRaVElGMW85?=
- =?utf-8?B?dFBmeFBrQ1NZeG9SQ0xSSkNzcWhzbFhXc01XeVRZd2QwTXNGeEJnZEg1Um1E?=
- =?utf-8?B?N0ZNbHhMNmV1a1JqRFRsTXFyajcrQzU3VUJhOUZzYnIxbUJIMTFTRy95SGdE?=
- =?utf-8?B?Ryt4Ry81aC9lKzJmU2FHNkxXMjNqV3lWVlB1SFJ1SmhJTnBidC9FTmNoYUUv?=
- =?utf-8?B?WU9ScWgyOWlFdDBPU1p3MFlnY2ZpNjhtUUFGMzMrMjBKWFdRNDM0aXlCVTR3?=
- =?utf-8?B?S2YydGlSOGJjeHpXOG9yTWEvd2dEWFRKemhqK21hdzNlMEFDUDhPYWNrSmxP?=
- =?utf-8?B?aHllaVVrNTVvY25wZ0lmMk5lTWI0MGdSUHFDSWU2b3pkVnM1V2dESmtxamFv?=
- =?utf-8?B?NlAraVJJYVNaYnM1b20rZjJMNi95SnFDV3Q5N2hGNE1aQTVObVZKRnU3L2tY?=
- =?utf-8?B?b2dCbnVOYlRocXFjSUF4QWRjRDJlNnpCb2tVTjJaTE1NaGhkZEJhVkcyMXB0?=
- =?utf-8?B?aWpYSFdqUG9IaFhTSE9Ta1VmeDNkQmt0SklzSk0vTlFXNlFUbjhQWTJxODJa?=
- =?utf-8?B?TEJSRUFUWk1JNml0M3hQVVJsOThTTXM5Qm0wQ3Q4anh0RU13cWNDSEQ4U3dE?=
- =?utf-8?B?QUJ0T2F4Q2k3TFE0MVZaSDBiRG9mMG1rTDMyUmQ4OGNFVm9pYWRuTjA4RFJv?=
- =?utf-8?B?dDBZdmdJWHYwcmhHNHpJY3R2WXNFbDZ2bGMvSXhhNlJ3U0ZXRmZTQkNZN3Z2?=
- =?utf-8?B?S3YwQXBKR2lrMnBYeDRCVURiWVhUaVc4elkzdWRxTk5GTGt6c3ZoUlpIU2JJ?=
- =?utf-8?B?ak8xcnlnNVB5anZIaFpSMk1FUDJxWnhPUWcvOW05T1lkcTg5bWJHOWg1NmlJ?=
- =?utf-8?B?elQxMWt0NTNGMUtRc3dvWFo4amFQeXZVWm8ySkVKbkFSUHcrc2RuOVpubnJI?=
- =?utf-8?B?aG9mN3g1T0ZzQ1JqSEpKMGc3MUpiQVpNdEZuK1llai9reUEvaWRuZjIySmsx?=
- =?utf-8?B?aVpmTTYrS2VQMnFNZE11dz09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aGxQblhocVVsaVhvREljWXdRcURDQ2NRa3Z2L3BVb09mR0FnQ1Zya0tMeFNq?=
- =?utf-8?B?THgwU3N3OW83WUJvL2hHbnExejZZTGl2VWdZRXlCM1R2aDB1UERsY3MrdkVS?=
- =?utf-8?B?Ui9WSXYydStKTDljL3VlQTVkekRCUVJjdXBvL3VHeG03bGl1RzJjVTVVa1ZD?=
- =?utf-8?B?YTl3M0gvalYrYks1QnFpNStQVXNDb2hXTEpncmY2RGxYN3FSTWR6eVVZWU85?=
- =?utf-8?B?eEVUb0xtN0tGNGJvTFByNkY5dko5Yk1FRFBwaTZrWlUrUFNFZEZoVVlUL1E5?=
- =?utf-8?B?ZVVUZE12R1RhTG96WGZjOFVqRk1qWVJRS0cwZXlKTHJHQ1VKU0lDUUV3Q2Y1?=
- =?utf-8?B?UmpZZzZIelpsVUU2MjFYREJ2RXNWcjlmM3BWMUJhT21ReUdPM3N1UCsranZ1?=
- =?utf-8?B?YkZhWjJxRXZLUUtxRW04aEhHOGU1Z3VSQXZoL0NIV0o1K2tNdGlsZ21idWxD?=
- =?utf-8?B?V2dDM1F1cExHdUJ3WlNWK0ZOUS8yK1hIVWxBMjhsN0grTDE4SnhpTGF2UGVW?=
- =?utf-8?B?UWZGSGtTNWZuaUdPWXJhMWE1N1RjR3NibG9oRnpwUFZDYW82ZVhkWEpnY2JC?=
- =?utf-8?B?ZDlKNG0vQUszYlBMQ2FvSHNPOVJiN29tNTRTVWpveXR0eVlaSnlZNmJCZTUw?=
- =?utf-8?B?dG5WOVYybzc5WUNEN1lqOGhTTDdYQ3BYWG53QTZZMUxlL1R3bWpod003NER2?=
- =?utf-8?B?VkY3SEIyaTJkWWZhQmMzUFplWE16RlM5YzFYbnRDdGF1UGRsTlBYSUs4NkRs?=
- =?utf-8?B?MzBXdW9LQmtJRTBPOFZ6cDBsNXRHdFdpL0VUQ0JMME45YUo2V2MybS90YXpQ?=
- =?utf-8?B?YVZvbWNpMHByeUVqZXhYZFFPekRsY0pkVE40bzlUbWlOMXhtL3F1emNPZldJ?=
- =?utf-8?B?VjZDQVZ2U1dKM3pCUTUyeGZZcHVBZERBeGJUajhuVG1hSDZIalRoZXE2Z2xG?=
- =?utf-8?B?Nmwwa3Q3VE9TN3pmYzNqdXNZL1Q2SjF0VTVwRit2cWxWdkVob3ZJQVhWak5S?=
- =?utf-8?B?UmFudnFjRVBoUDJwMnA5OUlqZ25nYkdBWkg1ckVhbTE0L05kQ2hJYVZhU0Jx?=
- =?utf-8?B?N1VIYitsZ1AycHRYbFdKMFBleUFyeWd6RG5ERE93QVA5S2NjMW4xOWFkci80?=
- =?utf-8?B?YlY5NE40aVNYbEk2dTEzZ1BzaVQ2VWhmbzZFZnNsLzBrSExmbHFzcTBhV0hL?=
- =?utf-8?B?VHRYYXVLb0hOQjNVS3VyRWJjcHp5SUlESytab1E0M3BKcGRGc2R5bHlheTQ1?=
- =?utf-8?B?SEdiK2sraEZpTXVlZUNTL2NRREJpR1QyNFdWc0NQaFZUcGxOeHd5TWtlOWx0?=
- =?utf-8?B?MHNBS2pSTUNONXR3OUdzZnFLNDdWUGZlZDgyNmRDT0Vlamk2VStPcit3Q0x3?=
- =?utf-8?B?OGZuVnM2c0dpeTl6TGNEeU9tUVhqRFVkMm9MbU1DVkkzSmpqZ3RXYXZlTVRZ?=
- =?utf-8?B?citudXRZM3dCVytwRlJ2RmhFTFBIMzFFcnVRSGtRWitqZllEMDUzVDRydTg0?=
- =?utf-8?B?YmZNN2RzbDAzQmFKWElIdHZNWDZac1JMVUJuWUdJbEZ5bFFWZkxsY1poNUFK?=
- =?utf-8?B?Z0lVVTE2Rlk5NUE4bWU5WWVWQVZ0amNQRit3T2EwRkNZb3ZBT2hTOHhKMWZj?=
- =?utf-8?B?Yy9ZcklNdUJtQ1kwOEZRSmVwVnR6cytKWnZWVTNabElUV2MyR1ZiUldyWS9L?=
- =?utf-8?B?Q2VRQjBMWXBRcndtZmNiWTZpZHRkTStiN3NQQ05SVytDM284dTJobnpBUlk2?=
- =?utf-8?B?TjhRUGVXQTJHc2JzSUR3ZThVV0g3ZVZ2alVQOVhXaFkrMENKcVplMzQ4ZUhB?=
- =?utf-8?B?cnZqdVcrYUpEYk1qZi9NbkV6bzQyYXVCYnlYQkdVQVVmUmJaVTdCeDN4dFRi?=
- =?utf-8?B?WW1rQlg1ZlZSQSsxdk9wZjVTVHZJS2hkMVlsdGZpV3dPem4yK2NBcTUzL1ln?=
- =?utf-8?B?blJjRzZUTFh6Wnl4OWRRY0tYNnRkV05UQjgxSTFUUjN2M0I2b1lPbnMvek1S?=
- =?utf-8?B?NUYyaFZ1Um95TFlaUGFrT0xDb0FNNENBOGlqUkFoSEN4ZCtpeTBkUjhVeEFl?=
- =?utf-8?B?OWNrUGNiYnBDOExKNVpWdEJUMEtlVW5taklBYkt1aVBzMXhORitMY1c1aXNQ?=
- =?utf-8?Q?dKMRYp5zeEVjsAJR1/VZpZx7L?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 608f5585-f10c-424d-18b9-08dcd7cc9d7a
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2024 10:28:19.5960
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C9xL+Yh+KQHECzD9P4K0THB2N3y8DyxuXAXTghsWQCNZC7ImVRQ8GaY1GkFygcFVvali0ZzlXWzY40zQxxYpkw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8857
+User-Agent: Mozilla Thunderbird
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Subject: Re: [PATCH v2 4/4] i2c: i2c-qcom-geni: Enable i2c controller sharing
+ between two subsystems
+To: <neil.armstrong@linaro.org>, <konrad.dybcio@linaro.org>,
+        <andersson@kernel.org>, <andi.shyti@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <conor+dt@kernel.org>, <agross@kernel.org>,
+        <devicetree@vger.kernel.org>, <vkoul@kernel.org>, <linux@treblig.org>,
+        <dan.carpenter@linaro.org>, <Frank.Li@nxp.com>,
+        <konradybcio@kernel.org>
+CC: <quic_vdadhani@quicinc.com>
+References: <20240906191438.4104329-1-quic_msavaliy@quicinc.com>
+ <20240906191438.4104329-5-quic_msavaliy@quicinc.com>
+ <b3a5dd54-90ba-4d75-9650-efbff12cddeb@linaro.org>
+ <3bd27b6d-74b8-4f7b-b3eb-64682442bbda@quicinc.com>
+ <3dddd226-c726-434e-8828-c12f76a71752@linaro.org>
+ <687db538-1a41-4353-89fd-d1869d960a12@quicinc.com>
+ <ed0c3d9c-82d8-47db-938c-4e60e8ebed77@linaro.org>
+Content-Language: en-US
+In-Reply-To: <ed0c3d9c-82d8-47db-938c-4e60e8ebed77@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: udEkeV9OS7ClIy2BFO3gv_FICQsEvsUd
+X-Proofpoint-ORIG-GUID: udEkeV9OS7ClIy2BFO3gv_FICQsEvsUd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
+ impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409180080
 
+Thanks Neil for the review !
 
-
-On 9/18/2024 15:33, Andy Shevchenko wrote:
-> On Wed, Sep 18, 2024 at 12:01:19AM +0530, Shyam Sundar S K wrote:
->> On 9/14/2024 00:49, Andy Shevchenko wrote:
->>> On Fri, Sep 13, 2024 at 05:41:09PM +0530, Shyam Sundar S K wrote:
-> 
-> ...
-> 
->>>> +	eoi_addr = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>>> +	if (!eoi_addr)
->>>> +		return dev_err_probe(&pdev->dev, -EINVAL, "missing MEM resources\n");
->>>> +
->>>> +	asf_dev->eoi_base = devm_ioremap(&pdev->dev, eoi_addr->start, resource_size(eoi_addr));
->>>> +	if (!asf_dev->eoi_base)
->>>> +		return dev_err_probe(&pdev->dev, -EBUSY, "failed mapping IO region\n");
+On 9/10/2024 3:22 PM, neil.armstrong@linaro.org wrote:
+> On 10/09/2024 11:15, Mukesh Kumar Savaliya wrote:
+>> Hi Neil,
+>>
+>> On 9/9/2024 6:34 PM, neil.armstrong@linaro.org wrote:
+>>> On 09/09/2024 11:18, Mukesh Kumar Savaliya wrote:
+>>>> Hi Neil,
+>>>>
+>>>> On 9/9/2024 2:24 PM, neil.armstrong@linaro.org wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On 06/09/2024 21:14, Mukesh Kumar Savaliya wrote:
+>>>>>> Add support to share I2C SE by two Subsystems in a mutually 
+>>>>>> exclusive way.
+>>>>>> Use  "qcom,shared-se" flag in a particular i2c instance node ifthe
+>>>>>> usecase requires i2c controller to be shared.
+>>>>>>
+>>>>>> I2C driver just need to mark first_msg and last_msg flag to help 
+>>>>>> indicate
+>>>>>> GPI driver to  take lock and unlock TRE there by protecting from 
+>>>>>> concurrent
+>>>>>> access from other EE or Subsystem.
+>>>>>>
+>>>>>> gpi_create_i2c_tre() function at gpi.c will take care of adding 
+>>>>>> Lock and
+>>>>>> Unlock TRE for the respective transfer operations.
+>>>>>>
+>>>>>> Since the GPIOs are also shared for the i2c bus between two SS, do 
+>>>>>> not
+>>>>>> touch GPIO configuration during runtime suspend and only turn off the
+>>>>>> clocks. This will allow other SS to continue to transfer the data
+>>>>>> without any disturbance over the IO lines.
+>>>>>
+>>>>> This doesn't answer my question about what would be the behavior if 
+>>>>> one
+>>>>> use uses, for example, GPI DMA, and the Linux kernel FIFO mode or 
+>>>>> SE DMA ?
+>>>>>
+>>>> Shared usecase is not supported for non GSI mode (FIFO and DMA), it 
+>>>> should be static usecase. Dynamic sharing from two clients of two 
+>>>> subsystems is only for GSI mode. Hope this helps ?
 >>>
->>> Home grown copy of devm_platform_ioremap_resource().
->>
->> devm_platform_ioremap_resource() internally calls
->> devm_platform_get_and_ioremap_resource(), performing two main actions:
->>
->> It uses platform_get_resource().
->> It then calls devm_ioremap_resource().
->>
->> However, there's an issue.
->>
->> devm_ioremap_resource() invokes devm_request_mem_region() followed by
->> __devm_ioremap(). In this driver, the resource obtained via ASL might
->> not actually belong to the ASF device address space. Instead, it could
->> be within other IP blocks of the ASIC, which are crucial for
->> generating subsequent interrupts (the main focus of this patch). As a
->> result, devm_request_mem_region() fails, preventing __devm_ioremap()
->> from being executed.
->>
->> TL;DR, it’s more appropriate to call platform_get_resource() and
->> devm_ioremap() separately in this scenario.
+>>> Sure, this is why I proposed on v1 cover letter reply to add:
+>> Sure, i will add in cover letter and code check combining with 
+>> fifo_disable check.
+>>> ==============><=====================================================================
+>>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c 
+>>> b/drivers/i2c/busses/i2c-qcom-geni.c
+>>> index ee2e431601a6..a15825ea56de 100644
+>>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+>>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>>> @@ -885,7 +885,7 @@ static int geni_i2c_probe(struct platform_device 
+>>> *pdev)
+>>>           else
+>>>                   fifo_disable = readl_relaxed(gi2c->se.base + 
+>>> GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
+>>>
+>>> -       if (fifo_disable) {
+>>> +       if (gi2c->is_shared || fifo_disable) {
+>>   Should be ANDING logically, as we need to combine both check. Shared
+>>   usecase possible only for fifo_disable.
 > 
-> Okay, at bare minimum this must be commented in the code (like the above
-> summary). 
-
-Okay, I will leave a comment.
-
-> Ideally it should be done differently as the resource regions
-> should not be shared (it's an exceptional case and usually shows bad design
-> of the driver). If you can't really split, regmap APIs help with that
-> (and they also may provide an adequate serialisation to IO).
+> Could you elaborate on that ? GPI DMA is totally usable even if FIFO is 
+> enabled,
+> it's a decision took in the driver to _not_ use GPI when FIFO is enabled.
 > 
+Yes, Neil, you are right. Its actually reverse condition from HW 
+configuration.
 
-Unfortunately, this is the only way to get subsequent interrupts from
-the ASF IP block (based on the AMD ASF databook).
+if fifo_disable = true, then FIFO registers will not be accessible, 
+meaning its GPI mode only. And SW should decide use GPI DMA mode only.
 
-Thanks,
-Shyam
+if fifo_disable = false, it can still use GPI DMA/CPU_DMA. we need to 
+restrict from SW side.
+
+Provided above, i suggest to keep conditional check with ANDING.
+We want only GSI mode to be supported with shared SE. Because GSI mode 
+only has GPII channel allocated to each EE. if not, then it will be 
+misused between EEs and no way to prevent concurrency at HW level.(E.g. 
+we use lock/unlock in GSI mode)
+
+If so, hope you agree with the conditional check of ANDing both flags?
+> Neil
+> 
+>>
+>>   if(gi2c->is_shared && fifo_disable) {
+>>>                   /* FIFO is disabled, so we can only use GPI DMA */
+>>>                   gi2c->gpi_mode = true;
+>>>                   ret = setup_gpi_dma(gi2c);
+>>> ==============><=====================================================================
+>>>
+>>> Thanks,
+>>> Neil
+>>>
+>>>>> Because it seems to "fix" only the GPI DMA shared case.
+>>>>>
+>>>>> Neil
+>>>>>
+>>>>>>
+>>>>>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+>>>>>> ---
+>>>>>>   drivers/i2c/busses/i2c-qcom-geni.c | 29 
+>>>>>> ++++++++++++++++++++++-------
+>>>>>>   1 file changed, 22 insertions(+), 7 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c 
+>>>>>> b/drivers/i2c/busses/i2c-qcom-geni.c
+>>>>>> index eebb0cbb6ca4..ee2e431601a6 100644
+>>>>>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+>>>>>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>>>>>> @@ -1,5 +1,6 @@
+>>>>>>   // SPDX-License-Identifier: GPL-2.0
+>>>>>>   // Copyright (c) 2017-2018, The Linux Foundation. All rights 
+>>>>>> reserved.
+>>>>>> +// Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights 
+>>>>>> reserved.
+>>>>>>   #include <linux/acpi.h>
+>>>>>>   #include <linux/clk.h>
+>>>>>> @@ -99,6 +100,7 @@ struct geni_i2c_dev {
+>>>>>>       struct dma_chan *rx_c;
+>>>>>>       bool gpi_mode;
+>>>>>>       bool abort_done;
+>>>>>> +    bool is_shared;
+>>>>>>   };
+>>>>>>   struct geni_i2c_desc {
+>>>>>> @@ -602,6 +604,7 @@ static int geni_i2c_gpi_xfer(struct 
+>>>>>> geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
+>>>>>>       peripheral.clk_div = itr->clk_div;
+>>>>>>       peripheral.set_config = 1;
+>>>>>>       peripheral.multi_msg = false;
+>>>>>> +    peripheral.shared_se = gi2c->is_shared;
+>>>>>>       for (i = 0; i < num; i++) {
+>>>>>>           gi2c->cur =&msgs[i];
+>>>>>> @@ -612,6 +615,8 @@ static int geni_i2c_gpi_xfer(struct 
+>>>>>> geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
+>>>>>>           if (i < num -1)
+>>>>>>               peripheral.stretch = 1;
+>>>>>> +        peripheral.first_msg =(i == 0);
+>>>>>> +        peripheral.last_msg = (i == num - 1);
+>>>>>>           peripheral.addr = msgs[i].addr;
+>>>>>>           ret = geni_i2c_gpi(gi2c, &msgs[i], &config,
+>>>>>> @@ -631,8 +636,11 @@ static int geni_i2c_gpi_xfer(struct 
+>>>>>> geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
+>>>>>>           dma_async_issue_pending(gi2c->tx_c);
+>>>>>>           time_left =wait_for_completion_timeout(&gi2c->done, 
+>>>>>> XFER_TIMEOUT);
+>>>>>> -        if (!time_left)
+>>>>>> +        if (!time_left) {
+>>>>>> +            dev_err(gi2c->se.dev, "I2C timeout gpi flags:%d 
+>>>>>> addr:0x%x\n",
+>>>>>> +                        gi2c->cur->flags, gi2c->cur->addr);
+>>>>>>               gi2c->err = -ETIMEDOUT;
+>>>>>> +        }
+>>>>>>           if (gi2c->err) {
+>>>>>>               ret = gi2c->err;
+>>>>>> @@ -800,6 +808,11 @@ static int geni_i2c_probe(struct 
+>>>>>> platform_device *pdev)
+>>>>>>           gi2c->clk_freq_out = KHZ(100);
+>>>>>>       }
+>>>>>> +    if (of_property_read_bool(pdev->dev.of_node, 
+>>>>>> "qcom,shared-se")) {
+>>>>>> +        gi2c->is_shared = true;
+>>>>>> +        dev_dbg(&pdev->dev, "Shared SE Usecase\n");
+>>>>>> +    }
+>>>>>> +
+>>>>>>       if (has_acpi_companion(dev))
+>>>>>>           ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(dev));
+>>>>>> @@ -962,14 +975,16 @@ static int __maybe_unused 
+>>>>>> geni_i2c_runtime_suspend(struct device *dev)
+>>>>>>       struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
+>>>>>>       disable_irq(gi2c->irq);
+>>>>>> -    ret = geni_se_resources_off(&gi2c->se);
+>>>>>> -    if (ret) {
+>>>>>> -        enable_irq(gi2c->irq);
+>>>>>> -        return ret;
+>>>>>> -
+>>>>>> +    if (gi2c->is_shared) {
+>>>>>> +        geni_se_clks_off(&gi2c->se);
+>>>>>>       } else {
+>>>>>> -        gi2c->suspended = 1;
+>>>>>> +        ret = geni_se_resources_off(&gi2c->se);
+>>>>>> +        if (ret) {
+>>>>>> +            enable_irq(gi2c->irq);
+>>>>>> +            return ret;
+>>>>>> +        }
+>>>>>>       }
+>>>>>> +    gi2c->suspended = 1;
+>>>>>>       clk_disable_unprepare(gi2c->core_clk);
+>>>>>
+>>>>>
+>>>
+>>>
+> 
 
