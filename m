@@ -1,301 +1,152 @@
-Return-Path: <linux-i2c+bounces-6853-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6854-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53E8297BC12
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 14:21:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CC3597BDB0
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 16:08:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A648AB21F53
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 12:21:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4C0F1F2202D
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 14:08:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E764E188CA3;
-	Wed, 18 Sep 2024 12:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8040B18C010;
+	Wed, 18 Sep 2024 14:08:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QMLdsj/m"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WtKdYc+W"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846102E64B;
-	Wed, 18 Sep 2024 12:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EC818A6CD
+	for <linux-i2c@vger.kernel.org>; Wed, 18 Sep 2024 14:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726662052; cv=none; b=is0VPNqmLQtpNXknV006v/P7r9tMiwFM2OFeMDpzeLLM6UawtJHEs1e0IxTeig2+JkqdXVF4WTHsjmslVgQXePxRlkOGvZyDivwHjacN5RXXCQ+X9SibeSvMWPjXfYJjvzRJc4BAXs+gON4LHhLaQz4JsPExq/Yp1ccGR0lm59k=
+	t=1726668502; cv=none; b=s+4wy6fokIJhoN2IYgUC3WbSMXHCWQAbeI8uJRl+lb/4PkBStCwRqEKqWkPinBYs53GcUOWAAI9vy5+upD4fD9VT5ZOY/UrvOpj0YD/hgwcYCWh1rTcCWyNGB10f2cXqyG3I5AnTSR2JwLtVpudUzJ4kJXgkWWfsliSiAD0DgfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726662052; c=relaxed/simple;
-	bh=YReHkWzoW90cu/Ao3EPUTSj1YiN0NQwCGDLLvtaUMZs=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
-	 In-Reply-To:Content-Type; b=ft5ItMqdCFft2m6IWAggx/D4HYkKk0eUOyyNyNX5/AtizBkKyjg7jNzbSYb0L6UYb4d9WTZTzklBD8s0hrki6tasVvtABrtQr4PkL0j5MOG1Q8GUlJWYrhjyOal6VXU1hT/+btEjEkE1E9+tEW870Vr6Im8nQjXZbROvoJtPayQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QMLdsj/m; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48I6lLrn002533;
-	Wed, 18 Sep 2024 12:20:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	y49ljK7hhswfxyQq8jRavd0/ztkz3NCyaDreEvf3yzY=; b=QMLdsj/muGPPF5rr
-	ygvoxHb3GnfgoBBW2eJK76zQE0q1EixKzCJN4rtLP1YARM7TBt/uxf55ETNHvmVe
-	+QBTzir+Eh3yex6V2Gdu9xO1/3JCGF+M3D+idrD5YFE8xlGOkalD41JO6zJ9Hjgd
-	YRvA2mhNj1Vqhs9gYGpM85reWsFAffO/BmMtun3UkQe5G+S6JmdsYYB8POimF0lc
-	THe7cylO0h3QmNATNQePjrhIPZ5/uoS3A5m70mu+mPdbR/lK3ql3ZD5j8AkqBukk
-	iJg+AjLD+z74cMdyOXPmt4iMOlfqczDUAFaO2gzH3Uew07Lp6jNXBv9yQ+hBp7CN
-	X7ubCg==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41n4hfhwbr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Sep 2024 12:20:39 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48ICKcOx015988
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Sep 2024 12:20:38 GMT
-Received: from [10.216.13.254] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 18 Sep
- 2024 05:20:32 -0700
-Message-ID: <77ce3d16-9e56-4ed3-89bd-e4d26d88eae2@quicinc.com>
-Date: Wed, 18 Sep 2024 17:50:27 +0530
+	s=arc-20240116; t=1726668502; c=relaxed/simple;
+	bh=/jYztx90har0kjRV7ReQEcnHXO47DyTVTOFW0r97hHQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TS/mPrDqj/S7eEpPplRufHHSfgY6fC0zdtl87Bt9ZZCE4pyVwOtKmZZ9FEGKiPb3/zonAz631J+vBUXKVb59eBMMg1GAgLSyAhq2qoAkYCwAfoQUUCWRUoFk1hbe+1DV1QRSxRURuyqajMxFtN5hTYi834ksh5F525z0erDZPTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WtKdYc+W; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726668501; x=1758204501;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/jYztx90har0kjRV7ReQEcnHXO47DyTVTOFW0r97hHQ=;
+  b=WtKdYc+Wb5MG/cUw6Yri9rXu8je8JBEE+q84ILMBAnHIt1O06qnb/8Dx
+   VtOVXKSMs76pGUdsBhBVpHBv+oiDAVKR0WyoT+cF+15EVM6A6Zn+YYqjZ
+   /nG3fXvG8KWowCH9b9KBjGL2VZHKeo/lCJ9wl3qAhuS4HIXwCEoDSFCnm
+   wyINYFsY5GmWJzzcmP1cBzG5RyQZcTi9vn8z5KIMvGvSaDtUmk5SZk6CF
+   CKUWHVMyFbkNuBguqbiTmVrKKbbz6UCBOnGmCFii77lCtBOS8gztfcVxx
+   BcUEocjvyWEPc9RXbo6jcK2uZm5bbdvknSwp28sZR4QhSsMAOq6bNKWPL
+   g==;
+X-CSE-ConnectionGUID: nVpk4CZHQ2GzeY+8pTB+xg==
+X-CSE-MsgGUID: VzsPm6PjRruMrHcCHlDWyQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="36943418"
+X-IronPort-AV: E=Sophos;i="6.10,238,1719903600"; 
+   d="scan'208";a="36943418"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 07:05:30 -0700
+X-CSE-ConnectionGUID: 73M/YQQdT7SiVu/KA2UcPw==
+X-CSE-MsgGUID: M6WmdyoNRgKc8QMDSXZcoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,238,1719903600"; 
+   d="scan'208";a="69822235"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 07:05:24 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sqvJ4-0000000ACOh-17XV;
+	Wed, 18 Sep 2024 17:05:22 +0300
+Date: Wed, 18 Sep 2024 17:05:22 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c@vger.kernel.org, Sanket.Goswami@amd.com,
+	Patil.Reddy@amd.com
+Subject: Re: [PATCH v5 7/8] i2c: amd-asf: Clear remote IRR bit to get
+ successive interrupt
+Message-ID: <ZureIjs-7x6Hvl9g@smile.fi.intel.com>
+References: <20240913121110.1611340-1-Shyam-sundar.S-k@amd.com>
+ <20240913121110.1611340-8-Shyam-sundar.S-k@amd.com>
+ <ZuSQVpIqM3yOSuf4@smile.fi.intel.com>
+ <8e12b68c-0a90-413b-bf02-f8637629f2be@amd.com>
+ <Zuqla7IMBr7wYs1Z@smile.fi.intel.com>
+ <027f723f-a276-4e63-8578-167d74e14d12@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Subject: Re: [PATCH v2 4/4] i2c: i2c-qcom-geni: Enable i2c controller sharing
- between two subsystems
-To: <neil.armstrong@linaro.org>, <konrad.dybcio@linaro.org>,
-        <andersson@kernel.org>, <andi.shyti@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <conor+dt@kernel.org>, <agross@kernel.org>,
-        <devicetree@vger.kernel.org>, <vkoul@kernel.org>, <linux@treblig.org>,
-        <dan.carpenter@linaro.org>, <Frank.Li@nxp.com>,
-        <konradybcio@kernel.org>
-CC: <quic_vdadhani@quicinc.com>
-References: <20240906191438.4104329-1-quic_msavaliy@quicinc.com>
- <20240906191438.4104329-5-quic_msavaliy@quicinc.com>
- <b3a5dd54-90ba-4d75-9650-efbff12cddeb@linaro.org>
- <3bd27b6d-74b8-4f7b-b3eb-64682442bbda@quicinc.com>
- <3dddd226-c726-434e-8828-c12f76a71752@linaro.org>
- <687db538-1a41-4353-89fd-d1869d960a12@quicinc.com>
- <ed0c3d9c-82d8-47db-938c-4e60e8ebed77@linaro.org>
-Content-Language: en-US
-In-Reply-To: <ed0c3d9c-82d8-47db-938c-4e60e8ebed77@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: udEkeV9OS7ClIy2BFO3gv_FICQsEvsUd
-X-Proofpoint-ORIG-GUID: udEkeV9OS7ClIy2BFO3gv_FICQsEvsUd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409180080
+In-Reply-To: <027f723f-a276-4e63-8578-167d74e14d12@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Thanks Neil for the review !
+On Wed, Sep 18, 2024 at 03:58:11PM +0530, Shyam Sundar S K wrote:
+> On 9/18/2024 15:33, Andy Shevchenko wrote:
+> > On Wed, Sep 18, 2024 at 12:01:19AM +0530, Shyam Sundar S K wrote:
+> >> On 9/14/2024 00:49, Andy Shevchenko wrote:
+> >>> On Fri, Sep 13, 2024 at 05:41:09PM +0530, Shyam Sundar S K wrote:
 
-On 9/10/2024 3:22 PM, neil.armstrong@linaro.org wrote:
-> On 10/09/2024 11:15, Mukesh Kumar Savaliya wrote:
->> Hi Neil,
->>
->> On 9/9/2024 6:34 PM, neil.armstrong@linaro.org wrote:
->>> On 09/09/2024 11:18, Mukesh Kumar Savaliya wrote:
->>>> Hi Neil,
->>>>
->>>> On 9/9/2024 2:24 PM, neil.armstrong@linaro.org wrote:
->>>>> Hi,
->>>>>
->>>>> On 06/09/2024 21:14, Mukesh Kumar Savaliya wrote:
->>>>>> Add support to share I2C SE by two Subsystems in a mutually 
->>>>>> exclusive way.
->>>>>> Use  "qcom,shared-se" flag in a particular i2c instance node ifthe
->>>>>> usecase requires i2c controller to be shared.
->>>>>>
->>>>>> I2C driver just need to mark first_msg and last_msg flag to help 
->>>>>> indicate
->>>>>> GPI driver to  take lock and unlock TRE there by protecting from 
->>>>>> concurrent
->>>>>> access from other EE or Subsystem.
->>>>>>
->>>>>> gpi_create_i2c_tre() function at gpi.c will take care of adding 
->>>>>> Lock and
->>>>>> Unlock TRE for the respective transfer operations.
->>>>>>
->>>>>> Since the GPIOs are also shared for the i2c bus between two SS, do 
->>>>>> not
->>>>>> touch GPIO configuration during runtime suspend and only turn off the
->>>>>> clocks. This will allow other SS to continue to transfer the data
->>>>>> without any disturbance over the IO lines.
->>>>>
->>>>> This doesn't answer my question about what would be the behavior if 
->>>>> one
->>>>> use uses, for example, GPI DMA, and the Linux kernel FIFO mode or 
->>>>> SE DMA ?
->>>>>
->>>> Shared usecase is not supported for non GSI mode (FIFO and DMA), it 
->>>> should be static usecase. Dynamic sharing from two clients of two 
->>>> subsystems is only for GSI mode. Hope this helps ?
->>>
->>> Sure, this is why I proposed on v1 cover letter reply to add:
->> Sure, i will add in cover letter and code check combining with 
->> fifo_disable check.
->>> ==============><=====================================================================
->>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c 
->>> b/drivers/i2c/busses/i2c-qcom-geni.c
->>> index ee2e431601a6..a15825ea56de 100644
->>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->>> @@ -885,7 +885,7 @@ static int geni_i2c_probe(struct platform_device 
->>> *pdev)
->>>           else
->>>                   fifo_disable = readl_relaxed(gi2c->se.base + 
->>> GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
->>>
->>> -       if (fifo_disable) {
->>> +       if (gi2c->is_shared || fifo_disable) {
->>   Should be ANDING logically, as we need to combine both check. Shared
->>   usecase possible only for fifo_disable.
+...
+
+> >>>> +	eoi_addr = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> >>>> +	if (!eoi_addr)
+> >>>> +		return dev_err_probe(&pdev->dev, -EINVAL, "missing MEM resources\n");
+> >>>> +
+> >>>> +	asf_dev->eoi_base = devm_ioremap(&pdev->dev, eoi_addr->start, resource_size(eoi_addr));
+> >>>> +	if (!asf_dev->eoi_base)
+> >>>> +		return dev_err_probe(&pdev->dev, -EBUSY, "failed mapping IO region\n");
+> >>>
+> >>> Home grown copy of devm_platform_ioremap_resource().
+> >>
+> >> devm_platform_ioremap_resource() internally calls
+> >> devm_platform_get_and_ioremap_resource(), performing two main actions:
+> >>
+> >> It uses platform_get_resource().
+> >> It then calls devm_ioremap_resource().
+> >>
+> >> However, there's an issue.
+> >>
+> >> devm_ioremap_resource() invokes devm_request_mem_region() followed by
+> >> __devm_ioremap(). In this driver, the resource obtained via ASL might
+> >> not actually belong to the ASF device address space. Instead, it could
+> >> be within other IP blocks of the ASIC, which are crucial for
+> >> generating subsequent interrupts (the main focus of this patch). As a
+> >> result, devm_request_mem_region() fails, preventing __devm_ioremap()
+> >> from being executed.
+> >>
+> >> TL;DR, it’s more appropriate to call platform_get_resource() and
+> >> devm_ioremap() separately in this scenario.
+> > 
+> > Okay, at bare minimum this must be commented in the code (like the above
+> > summary). 
 > 
-> Could you elaborate on that ? GPI DMA is totally usable even if FIFO is 
-> enabled,
-> it's a decision took in the driver to _not_ use GPI when FIFO is enabled.
+> Okay, I will leave a comment.
 > 
-Yes, Neil, you are right. Its actually reverse condition from HW 
-configuration.
-
-if fifo_disable = true, then FIFO registers will not be accessible, 
-meaning its GPI mode only. And SW should decide use GPI DMA mode only.
-
-if fifo_disable = false, it can still use GPI DMA/CPU_DMA. we need to 
-restrict from SW side.
-
-Provided above, i suggest to keep conditional check with ANDING.
-We want only GSI mode to be supported with shared SE. Because GSI mode 
-only has GPII channel allocated to each EE. if not, then it will be 
-misused between EEs and no way to prevent concurrency at HW level.(E.g. 
-we use lock/unlock in GSI mode)
-
-If so, hope you agree with the conditional check of ANDing both flags?
-> Neil
+> > Ideally it should be done differently as the resource regions
+> > should not be shared (it's an exceptional case and usually shows bad design
+> > of the driver). If you can't really split, regmap APIs help with that
+> > (and they also may provide an adequate serialisation to IO).
 > 
->>
->>   if(gi2c->is_shared && fifo_disable) {
->>>                   /* FIFO is disabled, so we can only use GPI DMA */
->>>                   gi2c->gpi_mode = true;
->>>                   ret = setup_gpi_dma(gi2c);
->>> ==============><=====================================================================
->>>
->>> Thanks,
->>> Neil
->>>
->>>>> Because it seems to "fix" only the GPI DMA shared case.
->>>>>
->>>>> Neil
->>>>>
->>>>>>
->>>>>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->>>>>> ---
->>>>>>   drivers/i2c/busses/i2c-qcom-geni.c | 29 
->>>>>> ++++++++++++++++++++++-------
->>>>>>   1 file changed, 22 insertions(+), 7 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c 
->>>>>> b/drivers/i2c/busses/i2c-qcom-geni.c
->>>>>> index eebb0cbb6ca4..ee2e431601a6 100644
->>>>>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->>>>>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->>>>>> @@ -1,5 +1,6 @@
->>>>>>   // SPDX-License-Identifier: GPL-2.0
->>>>>>   // Copyright (c) 2017-2018, The Linux Foundation. All rights 
->>>>>> reserved.
->>>>>> +// Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights 
->>>>>> reserved.
->>>>>>   #include <linux/acpi.h>
->>>>>>   #include <linux/clk.h>
->>>>>> @@ -99,6 +100,7 @@ struct geni_i2c_dev {
->>>>>>       struct dma_chan *rx_c;
->>>>>>       bool gpi_mode;
->>>>>>       bool abort_done;
->>>>>> +    bool is_shared;
->>>>>>   };
->>>>>>   struct geni_i2c_desc {
->>>>>> @@ -602,6 +604,7 @@ static int geni_i2c_gpi_xfer(struct 
->>>>>> geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
->>>>>>       peripheral.clk_div = itr->clk_div;
->>>>>>       peripheral.set_config = 1;
->>>>>>       peripheral.multi_msg = false;
->>>>>> +    peripheral.shared_se = gi2c->is_shared;
->>>>>>       for (i = 0; i < num; i++) {
->>>>>>           gi2c->cur =&msgs[i];
->>>>>> @@ -612,6 +615,8 @@ static int geni_i2c_gpi_xfer(struct 
->>>>>> geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
->>>>>>           if (i < num -1)
->>>>>>               peripheral.stretch = 1;
->>>>>> +        peripheral.first_msg =(i == 0);
->>>>>> +        peripheral.last_msg = (i == num - 1);
->>>>>>           peripheral.addr = msgs[i].addr;
->>>>>>           ret = geni_i2c_gpi(gi2c, &msgs[i], &config,
->>>>>> @@ -631,8 +636,11 @@ static int geni_i2c_gpi_xfer(struct 
->>>>>> geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
->>>>>>           dma_async_issue_pending(gi2c->tx_c);
->>>>>>           time_left =wait_for_completion_timeout(&gi2c->done, 
->>>>>> XFER_TIMEOUT);
->>>>>> -        if (!time_left)
->>>>>> +        if (!time_left) {
->>>>>> +            dev_err(gi2c->se.dev, "I2C timeout gpi flags:%d 
->>>>>> addr:0x%x\n",
->>>>>> +                        gi2c->cur->flags, gi2c->cur->addr);
->>>>>>               gi2c->err = -ETIMEDOUT;
->>>>>> +        }
->>>>>>           if (gi2c->err) {
->>>>>>               ret = gi2c->err;
->>>>>> @@ -800,6 +808,11 @@ static int geni_i2c_probe(struct 
->>>>>> platform_device *pdev)
->>>>>>           gi2c->clk_freq_out = KHZ(100);
->>>>>>       }
->>>>>> +    if (of_property_read_bool(pdev->dev.of_node, 
->>>>>> "qcom,shared-se")) {
->>>>>> +        gi2c->is_shared = true;
->>>>>> +        dev_dbg(&pdev->dev, "Shared SE Usecase\n");
->>>>>> +    }
->>>>>> +
->>>>>>       if (has_acpi_companion(dev))
->>>>>>           ACPI_COMPANION_SET(&gi2c->adap.dev, ACPI_COMPANION(dev));
->>>>>> @@ -962,14 +975,16 @@ static int __maybe_unused 
->>>>>> geni_i2c_runtime_suspend(struct device *dev)
->>>>>>       struct geni_i2c_dev *gi2c = dev_get_drvdata(dev);
->>>>>>       disable_irq(gi2c->irq);
->>>>>> -    ret = geni_se_resources_off(&gi2c->se);
->>>>>> -    if (ret) {
->>>>>> -        enable_irq(gi2c->irq);
->>>>>> -        return ret;
->>>>>> -
->>>>>> +    if (gi2c->is_shared) {
->>>>>> +        geni_se_clks_off(&gi2c->se);
->>>>>>       } else {
->>>>>> -        gi2c->suspended = 1;
->>>>>> +        ret = geni_se_resources_off(&gi2c->se);
->>>>>> +        if (ret) {
->>>>>> +            enable_irq(gi2c->irq);
->>>>>> +            return ret;
->>>>>> +        }
->>>>>>       }
->>>>>> +    gi2c->suspended = 1;
->>>>>>       clk_disable_unprepare(gi2c->core_clk);
->>>>>
->>>>>
->>>
->>>
-> 
+> Unfortunately, this is the only way to get subsequent interrupts from
+> the ASF IP block (based on the AMD ASF databook).
+
+How is it related to the pure software concept of the assigning (exclusively)
+the resources? Again, if you need to share, switch over to use regmap APIs.
+See how I2C DesignWare driver does. It's also used as the part of complex
+hardware where the register windows may not be clearly split between drivers.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
