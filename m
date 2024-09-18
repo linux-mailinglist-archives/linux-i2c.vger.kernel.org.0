@@ -1,140 +1,225 @@
-Return-Path: <linux-i2c+bounces-6859-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6860-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A238997C0D4
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 22:36:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C2E397C0F4
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 22:43:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4BD0BB21F7A
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 20:36:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD7E71F227D9
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Sep 2024 20:43:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636741CB526;
-	Wed, 18 Sep 2024 20:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B6F71CB30A;
+	Wed, 18 Sep 2024 20:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ipDVaOhL"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="y/VEMZ7N"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159681CB518;
-	Wed, 18 Sep 2024 20:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF9D1CA6B3
+	for <linux-i2c@vger.kernel.org>; Wed, 18 Sep 2024 20:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726691782; cv=none; b=M3vPYL6VJybRYdWgwnmvKt7C2nL65j12OdargIo12mMi89vqM8CK2v90Hpkyf4P5cSom/LdA7WB/jJXj1S4hPk+vLyPuSKgSNXQCkyhDFTflGxSf+C0W5o3L5F++jR8KLiytmN39narwEtoYg3NMjNVND18p7j+fwX9WJn15u8E=
+	t=1726692192; cv=none; b=s3nrhvsBZU7y8XHJ558TRmXCVfwhu4fw6iqVsTz0n+cVhqDC78dde/q3WQ9mUbu4ZVEZ350ZHsa1h7CShSupqJGkhLnolYn4CS17SjSddgFq8rkCpChbFX2KXOBKgEww3vVhvam+gf4ezCzHvEZfIRPHviYvNImoePdM+Jg+KCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726691782; c=relaxed/simple;
-	bh=EgCYCV4YQKaoczQpbXvAZ23VpQV+ciVf9YulnDCegFw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rMe8RFszAu+QH6/W1UOjhDRsVJ+94IhH8BxChR47NT20IDaTwvov//ZAdERQUDpFxqKrmPaZKt/P2xHAu/z+R3u7zKxKQOHZ/qqE3qcPr5xrAl9uov1ZhsFrScLG6ghBqXsGjYsMTQ/VwHEgcVl3pf9bFnYIPaWP73twvBCUS8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ipDVaOhL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85D8C4AF0B;
-	Wed, 18 Sep 2024 20:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726691781;
-	bh=EgCYCV4YQKaoczQpbXvAZ23VpQV+ciVf9YulnDCegFw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ipDVaOhLfHJH+tCs1g83lZyNFgv04+MPQxEhF/JIvyyl80DIwxSnuDB+et1VhbThl
-	 BmRkRDgVrV32hbNvVJq6PUWPZDN8gWfBzEwg+KpfOUgT3/t6LQaT7uE8qmb1k1ca4D
-	 r3AYxI4g59Bm8vFiI+voehfZs2a9rQV+kauKAA3yN8sj/L6s+zFMDdcfZzTJBVWMuT
-	 M4NfepkIkMBwalwzZ5dV0KoBusbtqxMPttwYbdRd64Ngim7UrTp/upv0plDwV+6MHL
-	 /VPClCjTwq7CJWC9YhngfiXETilDVSn2Q9qwMUtMr3woRIL7I0QUfSI2Q5n7OEMrno
-	 TmPN5w2u217Lg==
-Date: Wed, 18 Sep 2024 22:36:17 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	tsbogend@alpha.franken.de, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 5/5] i2c: rtl9300: Add multiplexing support
-Message-ID: <2wmlmymzxhf7ytpngbqgubka43rd4ytiwcffvwgaaf6gubvenz@w5gwxarev3r6>
-References: <20240917232932.3641992-1-chris.packham@alliedtelesis.co.nz>
- <20240917232932.3641992-6-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1726692192; c=relaxed/simple;
+	bh=zSgVsNUK+bta9ZlSgv7i9IzM3GTyvCrN540E66rr2RQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=acNeNr4uQ3q6xOZRjeQRAm3k3cBNeJvHSfvEd64ehr4M1r196OFab7BSwP2zlCbWm9LKoRAzconkXkSbnlYG8u+m4zlJsOkz8KwHhA5NuOXPTUDQxNbr/VD9uxE4jG3KywuBFS9QhY2taNBhdN2xc6JgdzvZn9fYRHUXr0Xb+eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=y/VEMZ7N; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 335E82C031F;
+	Thu, 19 Sep 2024 08:43:08 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1726692188;
+	bh=WQcAVV9R5XwCwy1Gly1QNTDVEReUdXeXYtkwacCQRoY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=y/VEMZ7Ncq97BgHrXrXSBvy9tm8kFFrePFp46HTeWlCNkmB5F2SSmjubfboZVqGR3
+	 ZEBt0cpU10S+qJXH1R0/p8cWn/5JYuwCAPnOOUwYoKnyj5ofVtyS6LR5bSIavfnLfF
+	 4af6leYfR3b5BKw59nWxszaUx5juw+iNrATM1OFw/hM/UhiUHSaXLy5H0wCajaB7xL
+	 d+DD1b5hC1w2k7AwCKwQj3q6WAeLoyYfGW3jqZdYQZ7aCLdnRnnox9exV93q3A+m+E
+	 PlpSKIfaSZxJWNRooxtS4J4U41fv36o3V56vPqdHZD7IDVl+NAfod0sh6NBLm/BHaE
+	 16XBzN9mquJQw==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B66eb3b5c0000>; Thu, 19 Sep 2024 08:43:08 +1200
+Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 080F813ECCD;
+	Thu, 19 Sep 2024 08:43:08 +1200 (NZST)
+Message-ID: <4e3156a9-1b18-48a6-9aba-19c5d026c256@alliedtelesis.co.nz>
+Date: Thu, 19 Sep 2024 08:43:07 +1200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240917232932.3641992-6-chris.packham@alliedtelesis.co.nz>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/5] dt-bindings: i2c: Add RTL9300 I2C controller
+To: Rob Herring <robh@kernel.org>
+Cc: andi.shyti@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ tsbogend@alpha.franken.de, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org
+References: <20240917232932.3641992-1-chris.packham@alliedtelesis.co.nz>
+ <20240917232932.3641992-2-chris.packham@alliedtelesis.co.nz>
+ <20240918141409.GA1494676-robh@kernel.org>
+Content-Language: en-US
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20240918141409.GA1494676-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=Id0kWnqa c=1 sm=1 tr=0 ts=66eb3b5c a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=EaEq8P2WXUwA:10 a=gEfo2CItAAAA:8 a=1RYeprS4dyvIMdkUys4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=jN3ps_WhWjoppdTyGyg0:22 a=sptkURWiP4Gy88Gu7hUp:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-Hi Chris,
+Hi Rob,
 
-...
+On 19/09/24 02:14, Rob Herring wrote:
+> On Wed, Sep 18, 2024 at 11:29:28AM +1200, Chris Packham wrote:
+>> Add dtschema for the I2C controller on the RTL9300 SoC. The I2C
+>> controllers on this SoC are part of the "switch" block which is
+>> represented here as a syscon node. The SCL pins are dependent on the I2C
+>> controller (GPIO8 for the first controller, GPIO 17 for the second). The
+>> SDA pins can be assigned to either one of the I2C controllers (but not
+>> both).
+>>
+>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>> ---
+>>
+>> Notes:
+>>      This does hit generate the following dt_binding_check warning
+>>      
+>>      realtek,rtl9300-i2c.example.dts:22.19-30.13: Warning (unit_address_vs_reg): /example-0/switch@1b000000/i2c@36c: node has a unit name, but no reg or ranges property
+>>      
+>>      Which is totally correct. I haven't given this thing a reg property
+>>      because I'm using an offset from the parent syscon node. I'm also not
+>>      calling the first offset "offset" but I don't think that'd help.
+>>      
+>>      I looked at a couple of other examples of devices that are children of
+>>      syscon nodes (e.g. armada-ap806-thermal, ap806-cpu-clock) these do have
+>>      a reg property in the dts but as far as I can see from the code it's not
+>>      actually used, instead the register offsets are in the code looked up
+>>      from the driver data (in at least one-case the reg offset is for a
+>>      legacy usage).
+>>      
+>>      So I'm a little unsure what to do here. I can add a reg property and
+>>      update the driver to use that to get the offset for the first set of
+>>      registers (or just not use it). Or I could drop the @36c from the node
+>>      names but then I coudn't distinguish the two controllers without failing
+>>      the $nodename: requirement from i2c-controller.yaml.
+> Use 'reg'. Looks like you need 2 entries for it.
+>
+> Whether a driver of some OS decides to use it or not is irrelevant to
+> the binding.
 
-> -module_platform_driver(rtl9300_i2c_driver);
-> +static int rtl9300_i2c_select_chan(struct i2c_mux_core *muxc, u32 chan)
-> +{
-> +	struct i2c_adapter *adap = muxc->parent;
-> +	struct rtl9300_i2c *i2c = i2c_get_adapdata(adap);
-> +	int ret;
-> +
-> +	ret = rtl9300_i2c_config_io(i2c, chan);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
+OK thanks for that clarification.
 
-return "rtl9300_i2c_config_io()"?
+>>   .../bindings/i2c/realtek,rtl9300-i2c.yaml     | 73 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 ++
+>>   2 files changed, 79 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml b/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
+>> new file mode 100644
+>> index 000000000000..5b74a1986720
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
+>> @@ -0,0 +1,73 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/i2c/realtek,rtl9300-i2c.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Realtek RTL I2C Controller
+>> +
+>> +maintainers:
+>> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
+>> +
+>> +description: |
+> Don't need '|' if no formatting.
 
-> +}
+Ack
 
-...
+>> +  The RTL9300 SoC has two I2C controllers. Each of these has an SCL line (which
+>> +  if not-used for SCL can be a GPIO). There are 8 common SDA lines that can be
+>> +  assigned to either I2C controller.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: realtek,rtl9300-i2c
+>> +
+>> +  realtek,control-offset:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: Offset of the registers for this I2C controller
+>> +
+>> +  realtek,global-control-offset:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: Offset of the I2C global control register (common between
+>> +      controllers).
+>> +
+>> +  clock-frequency:
+>> +    enum: [ 100000, 400000 ]
+>> +
+>> +  realtek,sda-pin:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    minimum: 0
+> 0 is already the minimum.
+Ack
+>> +    maximum: 7
+>> +    description:
+>> +      SDA pin associated with this I2C controller.
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +required:
+>> +  - compatible
+>> +  - realtek,control-offset
+>> +  - realtek,global-control-offset
+>> +
+>> +examples:
+>> +  - |
+>> +    switch@1b000000 {
+>> +      compatible = "realtek,rtl9302c-switch", "syscon", "simple-mfd";
+>> +      reg = <0x1b000000 0x10000>;
+>> +
+>> +      i2c@36c {
+>> +        compatible = "realtek,rtl9300-i2c";
+>> +        realtek,control-offset = <0x36c>;
+>> +        realtek,global-control-offset = <0x384>;
+>> +        clock-frequency = <100000>;
+>> +        realtek,sda-pin = <2>;
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +      };
+>> +
+>> +      i2c@388 {
+>> +        compatible = "realtek,rtl9300-i2c";
+>> +        realtek,control-offset = <0x388>;
+>> +        realtek,global-control-offset = <0x384>;
+> Humm, normally we don't want the same address in multiple 'reg' entries.
+> Is this offset known to vary? It could just be hardcoded in the driver
+> or implicit from the compatible (different compatible is the usual way
+> to deal with differing register layouts).
 
-> +static int rtl9300_i2c_mux_probe_fw(struct rtl9300_i2c_chan *mux, struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct fwnode_handle *fwnode = dev_fwnode(dev);
-> +	struct device_node *np = dev->of_node;
-> +	struct device_node *adap_np;
-> +	struct i2c_adapter *adap = NULL;
-> +	struct fwnode_handle *child;
-> +	unsigned int *chans;
-> +	int i = 0;
-> +
-> +	if (!is_of_node(fwnode))
-> +		return -EOPNOTSUPP;
-> +
-> +	if (!np)
-> +		return -ENODEV;
-> +
-> +	adap_np = of_parse_phandle(np, "i2c-parent", 0);
-> +	if (!adap_np) {
-> +		dev_err(&pdev->dev, "Cannot parse i2c-parent\n");
-> +		return -ENODEV;
+It's one of those annoying registers that is sandwiched between the two 
+I2C controllers that affects both of them so you kind of need to use it 
+whether your using I2C1 or I2C2. For the RTL9300 it'll always be 0x384. 
+There is a RTL9310 that appears to have it at a different offset but I'm 
+not planning on adding support for that chip any time soon.
 
-return dev_err_probe(...)?
+If I switch to "reg" for the I2C controller registers as suggested above 
+I can just go with a hard coded register value in the driver for the 
+global control.
 
-> +	}
-> +	adap = of_find_i2c_adapter_by_node(adap_np);
-> +	of_node_put(adap_np);
-
-...
-
-> +static int __init rtl9300_i2c_init(void)
-> +{
-> +	return platform_register_drivers(drivers, ARRAY_SIZE(drivers));
-> +}
-> +module_init(rtl9300_i2c_init);
-> +
-> +static void __exit rtl9300_i2c_exit(void)
-> +{
-> +	platform_unregister_drivers(drivers, ARRAY_SIZE(drivers));
-> +}
-> +module_exit(rtl9300_i2c_exit);
-
-You could use module_platform_driver()
-
-Thanks,
-Andi
-
->  
->  MODULE_DESCRIPTION("RTL9300 I2C controller driver");
->  MODULE_LICENSE("GPL");
-> -- 
-> 2.46.1
-> 
 
