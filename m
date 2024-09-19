@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-6875-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6876-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0839397CD61
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Sep 2024 20:00:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ABE797CD63
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Sep 2024 20:00:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D4A41C224CF
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Sep 2024 18:00:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9BB5284D9F
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Sep 2024 18:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF1101A2841;
-	Thu, 19 Sep 2024 17:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8705F1CD2C;
+	Thu, 19 Sep 2024 18:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Uj/6abpf"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="S+MMfV3k"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2056.outbound.protection.outlook.com [40.107.95.56])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2073.outbound.protection.outlook.com [40.107.102.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16601A256B
-	for <linux-i2c@vger.kernel.org>; Thu, 19 Sep 2024 17:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA5E18A95C
+	for <linux-i2c@vger.kernel.org>; Thu, 19 Sep 2024 18:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.73
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726768796; cv=fail; b=K+VngT42LBsq7vZ6QCmTSlhJpN/yS/q1nr2wgEMkRvod8Wn/H5IWggP4tulA2GfDzroJcTVrpMJUYtabYd3NlrtOKBaMlqLDNFoynVQmd3eKyWzap/ttOIa0q6YyqDiWidSO0o7gn8Eqa8D200QbP9rl2RlaBy9L071RRp9tlkY=
+	t=1726768802; cv=fail; b=poDJxBUMax1/AJaG4L/fgZ4dUGfodTPQhZs0bo2PJqJrOsm98wFkeWCMDQyFquhVhMpTJYjitM/LIBWSnBZ5h7SFWap19NTAQpqAETYeOov5uF3ygV7R/DX/6ncbtTYHUIH6QpNwuRGxQqUtlcCsoYn8LAXdZMXtPXxUo8VWSfo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726768796; c=relaxed/simple;
-	bh=AbqbGHTxBBWPb45coJ21VgZHzHvv1NXcCxC4h4NcSlE=;
+	s=arc-20240116; t=1726768802; c=relaxed/simple;
+	bh=LkeheFs5KdsitRXb1TuPUJFAoDPGBNr2MPVtU8meuhs=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LAae+H17aa/bOOQFNifkDSCnVKb2c0XBvG7F+AGV/8gi4XGLfY4Lo78L94xyJqkFc51VSN676kLxsUzwcwBVbASdHKQOFOkurBdcxi2Gx1bM+dkRZnR7yS0PrP/jS3AktWATPvd/n5Gw11qRS6mKWiDCEWuvzhB/rqvSB2TLZ/4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Uj/6abpf; arc=fail smtp.client-ip=40.107.95.56
+	 MIME-Version:Content-Type; b=RdgEiTCXoENWLdb04Xd6zhDObJFUrWVpK/7FWHRO88GhHRNSOjhpTPtt/FWFaoo1WxXh/L8BWcPUATvCbDfW78EtlNK1xaZigkPpz+B3iM8uv53i9x0tgqHk5TDEuPUPRPlZ42HVMIqFeU7B7tczxQJ8mKM6hY/e1I/o7sSxY/w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=S+MMfV3k; arc=fail smtp.client-ip=40.107.102.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HPrk/iwTZNvEUlzZqCWyfrbeQfgS0ICDUl7OISsA4vA+ds2YxvSlgm1hIXrLkD7PSx3WPCFeJzdChgVQsTsprUcHZgpgZzLZLYKmllAmxGDEujUGyxeks/pmOcgchAgiAmCe97UDYwMetZcMbXyt0hxRBj1/xBjZXmBA5lbiLvP2e3u2DZUVSG4OcdhAUVVJbAkwVfm5awksaMobP81EfcPsWADTehRZRvAvWW5j25VWDuz23P1AIK44l5A5jc4xJOh18wL+k6dGZ8fwRgivRKlL1EuT0OnnpViQyuLwHvZgFDaETbUh3+/iFjGZi4jGWHaVcgEFUkswThWTAug2ww==
+ b=FcUEyvYmyNmZlhRS/zfko0GHKBq1pTL5N6IJkze9SHxo0KlOeak9QwtFXhG+P9o+Q6t9dnXypXn/wMCU0hQsTN35NFDxE73cQrZ7BxON7h+pyabWAhLWZpfE6B6XA5oqk1aqyl3SDlDenugQzhXMJk8bW/FBr5XjSpGfrvo9/0RLa0Ck/PuNPjXtiqq0qL+RH3tEm3L101UBI38mcPIFcKrYkSdAUfpcHAKA7oGx6T2iBKeFn/LSE4g0aKtJXJ00ko3ZdmPM6wTZwBFf7j0zAe3qV8euOD1x/TtUwTdJoroQGrCLki2tDTv0VpxKaxAtaKbmhVaqCo1ExMgcQXM+oQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AfVfsrSwyNCDxBQBPfZFmSrYrSPlZ9X6QPum9UGnWIA=;
- b=S/grxhLwFofi5oHfqm8BtIh9DEiZ+CeJBl9o5r4B3gvTFSX1AkK3ug4upZlEYPHuA3zqEIwxwQfZud66/opDaPr5H/+2gDPR5tBB5r9GdTVsdmRc/jTmpgRaKID6WDB/3c6hqrcP3v7WHUyLtPOpjBYEx+ljgYBUPBKQne/JHtqn6L+ZaFkNBQTiN8wibXBAcky0QK2mHc9jkAkHSRYq+dLRI6ZFwGuk2Eazs+dl0AQc//SzJ+GB3DF4DIxNIlsFJCDMoy0Dv8gAzT7m1JqHen5CwUezWN+KFzQ1+z28AV0fOXi6ru8fxwrKn8eJR9fwO0XFKrCOKvodQFlqEH4Vdw==
+ bh=w8gS6KPpU6UWzH4a6RdSfYPLGIhFezmBrdKGBAm1SRc=;
+ b=bVUKtqbxw1lHErlNBjiUXhZA83y/fMsNhFEPCMmHrakzrdw9QlF2lZy3ChmQwbHklbBTAY/dZCDn+e1xatlYqiEwrarOduZ4cCkIrTFwXUeaP/vBMDoBmXudW7PzGRkznf1yJ1GM7oUNhhSZLzn5FPPJoqAJ+I0SHWZhV9yYDf08vYB3JTainqWD4pEoLP5tyz2JY+Mragrt/KdNW8ylXTYqsnUpBC4FI7twQujZwGieKnM5iktRwdtwI+mMsjr/qRHH9sWs3IlJ4Ar3C1NCzMFcTKd0i41GLi8VbQiYz9elyFn9KcLx/Ba7ZFrStlPZDx2bv29VcqRge9Ufh5KLfg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AfVfsrSwyNCDxBQBPfZFmSrYrSPlZ9X6QPum9UGnWIA=;
- b=Uj/6abpfXO/Pyu5V6k6TCXofy7FN/WPiLhMFv4UC9sklKK4FXCeMxdma7aTm9ngyyXcTo8sbJ1SZvXkLdxk57OngIsUKj3FvTp201n9OmTfCJsTyZYFj6YpV3zX2kipYH6SIlGQuwHA4lq+DbCsaDrfSR7BkDZzSnDxknRnD/sw=
-Received: from SJ0PR03CA0276.namprd03.prod.outlook.com (2603:10b6:a03:39e::11)
- by CH2PR12MB4263.namprd12.prod.outlook.com (2603:10b6:610:a6::8) with
+ bh=w8gS6KPpU6UWzH4a6RdSfYPLGIhFezmBrdKGBAm1SRc=;
+ b=S+MMfV3kCF9mJ2bGf7yoto7M0+EdP49g/23JqDORkIbWjBF/qOZs6LRlWsE3PtYx7ZYYrAOwe5mniOv92CsqmeM1KirH3T2Hc82ORT/3kJpOu4LDnPlh4Izubf39b6kzKk70ZwZ6DYxGVZGi3Sz+CMsuYFfYFowtAv1JJ5bpiKQ=
+Received: from SJ0PR03CA0289.namprd03.prod.outlook.com (2603:10b6:a03:39e::24)
+ by IA0PR12MB7722.namprd12.prod.outlook.com (2603:10b6:208:432::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.16; Thu, 19 Sep
- 2024 17:59:51 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.21; Thu, 19 Sep
+ 2024 17:59:55 +0000
 Received: from CO1PEPF000066ED.namprd05.prod.outlook.com
- (2603:10b6:a03:39e:cafe::75) by SJ0PR03CA0276.outlook.office365.com
- (2603:10b6:a03:39e::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.25 via Frontend
- Transport; Thu, 19 Sep 2024 17:59:51 +0000
+ (2603:10b6:a03:39e:cafe::22) by SJ0PR03CA0289.outlook.office365.com
+ (2603:10b6:a03:39e::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.30 via Frontend
+ Transport; Thu, 19 Sep 2024 17:59:54 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -65,19 +65,19 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  CO1PEPF000066ED.mail.protection.outlook.com (10.167.249.10) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7918.13 via Frontend Transport; Thu, 19 Sep 2024 17:59:51 +0000
+ 15.20.7918.13 via Frontend Transport; Thu, 19 Sep 2024 17:59:54 +0000
 Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 19 Sep
- 2024 12:59:48 -0500
+ 2024 12:59:51 -0500
 From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
 CC: <linux-i2c@vger.kernel.org>, <Sanket.Goswami@amd.com>, Andy Shevchenko
 	<andriy.shevchenko@linux.intel.com>, <Patil.Reddy@amd.com>, Shyam Sundar S K
 	<Shyam-sundar.S-k@amd.com>
-Subject: [PATCH v6 2/8] i2c: piix4: Move i2c_piix4 macros and structures to common header
-Date: Thu, 19 Sep 2024 23:29:07 +0530
-Message-ID: <20240919175913.1895670-3-Shyam-sundar.S-k@amd.com>
+Subject: [PATCH v6 3/8] i2c: piix4: Export i2c_piix4 driver functions as library
+Date: Thu, 19 Sep 2024 23:29:08 +0530
+Message-ID: <20240919175913.1895670-4-Shyam-sundar.S-k@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240919175913.1895670-1-Shyam-sundar.S-k@amd.com>
 References: <20240919175913.1895670-1-Shyam-sundar.S-k@amd.com>
@@ -93,172 +93,167 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000066ED:EE_|CH2PR12MB4263:EE_
-X-MS-Office365-Filtering-Correlation-Id: 70f97281-850c-40cf-cf09-08dcd8d4dbe4
+X-MS-TrafficTypeDiagnostic: CO1PEPF000066ED:EE_|IA0PR12MB7722:EE_
+X-MS-Office365-Filtering-Correlation-Id: dcc1c201-6de9-48f9-900c-08dcd8d4ddec
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|376014;
+	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?GjsG51RYdEwh77RZ3SZbBh2TmnMPX+n0cbKw5C+HMjJzu+h6t93REDIWrz9T?=
- =?us-ascii?Q?TCVcypoC/pZtmc3pJwoqzJxhuJF9EH/hDqd+fj82yxA6Hq1gl3qxnLDkQtik?=
- =?us-ascii?Q?7AUiAK8lj0UXjxpzEl4GPINAIUCQsH3kb2a9F3zRyjboitGKJQ26gckw3vCi?=
- =?us-ascii?Q?fG59f7UIaoyvHbohQURfmOHPw3onwIRtp4YZkhHWTAnuevGVn5SImuwPU5My?=
- =?us-ascii?Q?CUDSW4oAJzT/69cwBbM0qQ1rLVgRPkTsG/ZgZrPKhTU0Q3kuxoLYDfjWe+G8?=
- =?us-ascii?Q?WkH0yOfKscDCeJ5nHyfch3lyrhgDX04LBG5b2Z4SN8D8ovaQ+GHn72R1Gq4X?=
- =?us-ascii?Q?Ncw+qPp/knkWF1iD3gWSVvA4l7JhhOa/apCCManIFazfSuwkfKTBk7Z5BlFc?=
- =?us-ascii?Q?o82wx4E71YfK+aR0Wsx84I/oH7LBzkEwIAfFDE2BFLtJBrsMhaKn+oqYidez?=
- =?us-ascii?Q?tQ7Zj6IbgeCQrqJJUeFp5D6efigVxVkHOmPr9QP9Ece3kV8a046VRlX8BSWi?=
- =?us-ascii?Q?evyLLYvrvXNWMIenG9x5hGUxyhTNe0HVAyzVWNWN8asVgxXI/scjK452pX2r?=
- =?us-ascii?Q?WybuNtrF6LRx5TzQicJoyg4JcLHebIMO6tTqEtxMrEmoXWasZPdqkJRWSvIY?=
- =?us-ascii?Q?Nebp7d8mkmp7LeJebnA/tLjkLFXrDhXMPywpQ6eaiTjdSfIqKa0B1USXlRcn?=
- =?us-ascii?Q?32R1aMsVBdiBDpgDurmiROZ5JnNtIgxWRG/PjbVKAThPI+5K6hoZrHBNbaJ1?=
- =?us-ascii?Q?adhh75qkfp0fiiy4TSSD7G637Qn6PAtyY4GqMgYxY6eHCUPVVD+yC7m8jdH9?=
- =?us-ascii?Q?996fY9wa1IyaBduugvbOXn6xy1xZ3K29EEMWJrbLhcsZwP3nR/Zpr/vdz4aY?=
- =?us-ascii?Q?E6UGEUJrouDTfyLLu58xKTYBax8/N4KXn67jIZUjb9z99a0DC2y+PYaCD2cC?=
- =?us-ascii?Q?MlMhqgdDgG3JM44qBPLuGChi+18oXNtItTVhcQd6UmYVw7PXBVCdtM7L6BnG?=
- =?us-ascii?Q?anSmJWsuWtHyg2N1cG9eUJWCzvR9/XYBgIt4iIrXyRc890zg1lfVcekf8Uab?=
- =?us-ascii?Q?vks5q+wTo1ZKgwc7mF+kl7ttpFerWZ3uHTJDtA8r5cyxkW5XTW0kWvEgrimw?=
- =?us-ascii?Q?RvsLiAfstOqoGpiU+4ca+2HO7K/HR23TGTJkicIcGKUJ+dobbDrVaZswqYga?=
- =?us-ascii?Q?TfhZWsoUirYfE0LAYO/EtjU2i8JqmFdZ4qFegRp5cyS7390rW4Bahbie8KLA?=
- =?us-ascii?Q?TMAvQiJBS4KZVGVS0+a7K+Bo9D+hkH/7goikZl638u6StePAn1bDol9+hFHH?=
- =?us-ascii?Q?BqOXW40hImIoNQPk0t9BAMytWa+bnuSygAreoKu3AuDMTo5yhgFVNfLnwaT2?=
- =?us-ascii?Q?29E1lUswhRxBNPmI/9ieu5cEOVyW4klEJJKHVb27EOqab2HOcQ2o1ZauLCPZ?=
- =?us-ascii?Q?ZlWaHvmoAA4IALRQRs0bGK1qKkefh6kS?=
+	=?us-ascii?Q?R4djdEgUTAvRQWPHRS5hS7hJHMHW0sfTZ7Ds57x05M96ajWatmSDyiROfytL?=
+ =?us-ascii?Q?uRYeXGopizlPip9Iqf9ZlWGVvZXY/6uh60UEc+LlqYjdawhnWypn3YTYwCbP?=
+ =?us-ascii?Q?BnZb8i3HQW5OFUoBcqqsk+0uCF/E0ZDENLAcz8JswvQNagCjQfL/8vnrmPtt?=
+ =?us-ascii?Q?ldQGvYEr6P4KEUr0mVycImz8tBZzQUiUQW5hOVSNrVo710lPYJpajAr2Pylu?=
+ =?us-ascii?Q?+tgpEu/srTuWgtg3pBXyrzyox7hV+Q/GqerRxrInH+1V0UmfYbTIsgsX+KG1?=
+ =?us-ascii?Q?vvonWbJN3n0af6qMcHFMMv+VqrUGCiwpVkEpsHOVl56LMrXrDuaJhtHSbsoQ?=
+ =?us-ascii?Q?IroIaFyZ9c6o2sgltFE99gaeyBgqdbLPVHnpOs5Y/vxdkf8wWDNsKjLcvSDl?=
+ =?us-ascii?Q?a5hMHL9AalOCpyTaVPgrpOOKJTNjM5jLddpd64+oE0ofJlkKS1DokYq3aHrL?=
+ =?us-ascii?Q?4gnkGKDpyrKSWNEkly1Dbn2PdHJvcnRO6fx/91g/wFVfcwwfxQ/7Q9JU8Ozh?=
+ =?us-ascii?Q?VFzSdMvSbZgwwYg0DYkkCEtdRiatWBKJCJz0AH5c39ADm7qvmUxEtKAP9APZ?=
+ =?us-ascii?Q?RP3/AUdnxWk0/wdQsPLpoc+A5O6DAGwwhEFgiB3MPb1b1/godE5Oxra8NHBh?=
+ =?us-ascii?Q?oTZ8B3IvsQlfbT4IbeIaJwwHMimTsrjcCRuEKstpGgrf5jTsjHmV2L60Zm/h?=
+ =?us-ascii?Q?VVdzaU7oXjlmyiU2PdDkejDCCCYCq5JhDMimaCrFcU8CIOLProLQNB5DdA71?=
+ =?us-ascii?Q?H/vZ5PLeWNZjBGFUpJ0hPFu7RCOgXfBGPFcfjUajAIDMEAPjP+wKb/FHX8h0?=
+ =?us-ascii?Q?QS95N58b+aMon+aIsZQEwgn73NnNi0zEippgqTy1L024aoCzNAxzmgFCrnUD?=
+ =?us-ascii?Q?XKqPcTPkP+lZSb48D3kTNeCGuoi+S4I8WQeupoN0olmIs+Cv0l3qJNNztBou?=
+ =?us-ascii?Q?9D7H+D/HTDz7zt3qWlK/n7OwXV1iiNjFwQqdbZziGVO5uc2CJ0e8lBePEY9T?=
+ =?us-ascii?Q?EN4QOu4T3AWQfG4MuVTtDvIpHZV5ggdeaI6fFS8fSLuPPh4hdgDCnO2Bb5zZ?=
+ =?us-ascii?Q?pqO3amOX3BZQqqK2UM4gl7+TOCVzKQKhksOwLDyKPm6jrztjTWhrHyAfK7hN?=
+ =?us-ascii?Q?Xg1GaD44ocQMJ86ViMgKpZSGEy5bo56PxLpJF5Uq1kcCBtPA9NPuzxg5cDwT?=
+ =?us-ascii?Q?GzllEwOBWQfWA/9upFNfcud1wDHmu17iLhI+g/fENcGCDsF+k59tu0NCPCc2?=
+ =?us-ascii?Q?IIqWsA4iN7XG674TMLRggGOkG3JAmyb1p5uCCfe5AB91qJXRVQJT6Lb72GtQ?=
+ =?us-ascii?Q?GIWsL4RRwFgGTBGfhV4R7jwqsTLQJuPtuaemv6AlG5m3wto+mmXszbbn2TXa?=
+ =?us-ascii?Q?UPlSrCsYySFBPQPBS9HSynGP0MzlaPs7PhhZLkO+wlwUveVDILK1agcNX3x8?=
+ =?us-ascii?Q?o6Cva6yRj5gTJ1P8S2nrGRmdGez07hzk?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2024 17:59:51.2077
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2024 17:59:54.6139
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70f97281-850c-40cf-cf09-08dcd8d4dbe4
+X-MS-Exchange-CrossTenant-Network-Message-Id: dcc1c201-6de9-48f9-900c-08dcd8d4ddec
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	CO1PEPF000066ED.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4263
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7722
 
-Add a separate header file to relocate the common code from the i2c_piix4
-driver, allowing the AMD ASF driver to utilize the same code.
+Export the following i2c_piix4 driver functions as a library so that the
+AMD ASF driver can utilize these core functionalities from the i2c_piix4
+driver:
 
-Update the MAINTAINERS file to include information about the new common
-header file.
+- piix4_sb800_region_request(): Request access to a specific SMBus region
+on the SB800 chipset.
+
+- piix4_sb800_region_release(): Release the previously requested SMBus
+region on the SB800 chipset.
+
+- piix4_transaction(): Handle SMBus transactions between the SMBus
+controller and connected devices.
+
+- piix4_sb800_port_sel(): Select the appropriate SMBus port on the SB800
+chipset.
+
+By making these functions available as a library, enable the AMD ASF
+driver to leverage the established mechanisms in the i2c_piix4 driver,
+promoting code reuse and consistency across different drivers.
 
 Co-developed-by: Sanket Goswami <Sanket.Goswami@amd.com>
 Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
 Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 ---
- MAINTAINERS                    |  2 +-
- drivers/i2c/busses/i2c-piix4.c | 21 +-----------------
- drivers/i2c/busses/i2c-piix4.h | 39 ++++++++++++++++++++++++++++++++++
- 3 files changed, 41 insertions(+), 21 deletions(-)
- create mode 100644 drivers/i2c/busses/i2c-piix4.h
+Note that the git diff view is presented in two separate lines in order to
+suppress the checkpatch.pl "CHECKS".
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9278c30ef1d5..815f46948c1b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10684,7 +10684,7 @@ F:	drivers/i2c/busses/i2c-i801.c
- F:	drivers/i2c/busses/i2c-isch.c
- F:	drivers/i2c/busses/i2c-nforce2-s4985.c
- F:	drivers/i2c/busses/i2c-nforce2.c
--F:	drivers/i2c/busses/i2c-piix4.c
-+F:	drivers/i2c/busses/i2c-piix4.*
- F:	drivers/i2c/busses/i2c-sis5595.c
- F:	drivers/i2c/busses/i2c-sis630.c
- F:	drivers/i2c/busses/i2c-sis96x.c
+ drivers/i2c/busses/i2c-piix4.c | 16 ++++++++++------
+ drivers/i2c/busses/i2c-piix4.h |  5 +++++
+ 2 files changed, 15 insertions(+), 6 deletions(-)
+
 diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-index 69b362db6d0c..4f070863a2cc 100644
+index 4f070863a2cc..c289edc0a6fa 100644
 --- a/drivers/i2c/busses/i2c-piix4.c
 +++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -35,20 +35,7 @@
- #include <linux/acpi.h>
- #include <linux/io.h>
- 
--
--/* PIIX4 SMBus address offsets */
--#define SMBHSTSTS	(0 + piix4_smba)
--#define SMBHSLVSTS	(1 + piix4_smba)
--#define SMBHSTCNT	(2 + piix4_smba)
--#define SMBHSTCMD	(3 + piix4_smba)
--#define SMBHSTADD	(4 + piix4_smba)
--#define SMBHSTDAT0	(5 + piix4_smba)
--#define SMBHSTDAT1	(6 + piix4_smba)
--#define SMBBLKDAT	(7 + piix4_smba)
--#define SMBSLVCNT	(8 + piix4_smba)
--#define SMBSHDWCMD	(9 + piix4_smba)
--#define SMBSLVEVT	(0xA + piix4_smba)
--#define SMBSLVDAT	(0xC + piix4_smba)
-+#include "i2c-piix4.h"
- 
- /* count for request_region */
- #define SMBIOSIZE	9
-@@ -70,7 +57,6 @@
- #define PIIX4_BYTE		0x04
- #define PIIX4_BYTE_DATA		0x08
- #define PIIX4_WORD_DATA		0x0C
--#define PIIX4_BLOCK_DATA	0x14
- 
- /* Multi-port constants */
- #define PIIX4_MAX_ADAPTERS	4
-@@ -160,11 +146,6 @@ static const char *piix4_main_port_names_sb800[PIIX4_MAX_ADAPTERS] = {
+@@ -156,8 +156,8 @@ struct i2c_piix4_adapdata {
+ 	struct sb800_mmio_cfg mmio_cfg;
  };
- static const char *piix4_aux_port_name_sb800 = " port 1";
  
--struct sb800_mmio_cfg {
--	void __iomem *addr;
--	bool use_mmio;
--};
--
- struct i2c_piix4_adapdata {
- 	unsigned short smba;
+-static int piix4_sb800_region_request(struct device *dev,
+-				      struct sb800_mmio_cfg *mmio_cfg)
++int piix4_sb800_region_request(struct device *dev,
++			       struct sb800_mmio_cfg *mmio_cfg)
+ {
+ 	if (mmio_cfg->use_mmio) {
+ 		void __iomem *addr;
+@@ -195,9 +195,10 @@ static int piix4_sb800_region_request(struct device *dev,
  
+ 	return 0;
+ }
++EXPORT_SYMBOL_NS_GPL(piix4_sb800_region_request, PIIX4_SMBUS);
+ 
+-static void piix4_sb800_region_release(struct device *dev,
+-				       struct sb800_mmio_cfg *mmio_cfg)
++void piix4_sb800_region_release(struct device *dev,
++				struct sb800_mmio_cfg *mmio_cfg)
+ {
+ 	if (mmio_cfg->use_mmio) {
+ 		iounmap(mmio_cfg->addr);
+@@ -208,6 +209,7 @@ static void piix4_sb800_region_release(struct device *dev,
+ 
+ 	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+ }
++EXPORT_SYMBOL_NS_GPL(piix4_sb800_region_release, PIIX4_SMBUS);
+ 
+ static bool piix4_sb800_use_mmio(struct pci_dev *PIIX4_dev)
+ {
+@@ -517,7 +519,7 @@ static int piix4_setup_aux(struct pci_dev *PIIX4_dev,
+ 	return piix4_smba;
+ }
+ 
+-static int piix4_transaction(struct i2c_adapter *piix4_adapter, unsigned short piix4_smba)
++int piix4_transaction(struct i2c_adapter *piix4_adapter, unsigned short piix4_smba)
+ {
+ 	int temp;
+ 	int result = 0;
+@@ -590,6 +592,7 @@ static int piix4_transaction(struct i2c_adapter *piix4_adapter, unsigned short p
+ 		inb_p(SMBHSTDAT1));
+ 	return result;
+ }
++EXPORT_SYMBOL_NS_GPL(piix4_transaction, PIIX4_SMBUS);
+ 
+ /* Return negative errno on error. */
+ static s32 piix4_access(struct i2c_adapter * adap, u16 addr,
+@@ -743,7 +746,7 @@ static void piix4_imc_wakeup(void)
+ 	release_region(KERNCZ_IMC_IDX, 2);
+ }
+ 
+-static int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg)
++int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg)
+ {
+ 	u8 smba_en_lo, val;
+ 
+@@ -765,6 +768,7 @@ static int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg)
+ 
+ 	return (smba_en_lo & piix4_port_mask_sb800);
+ }
++EXPORT_SYMBOL_NS_GPL(piix4_sb800_port_sel, PIIX4_SMBUS);
+ 
+ /*
+  * Handles access to multiple SMBus ports on the SB800.
 diff --git a/drivers/i2c/busses/i2c-piix4.h b/drivers/i2c/busses/i2c-piix4.h
-new file mode 100644
-index 000000000000..32da914109ba
---- /dev/null
+index 32da914109ba..36bc6ce82a27 100644
+--- a/drivers/i2c/busses/i2c-piix4.h
 +++ b/drivers/i2c/busses/i2c-piix4.h
-@@ -0,0 +1,39 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * PIIX4/SB800 SMBus Interfaces
-+ *
-+ * Copyright (c) 2024, Advanced Micro Devices, Inc.
-+ * All Rights Reserved.
-+ *
-+ * Authors: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-+ *	    Sanket Goswami <Sanket.Goswami@amd.com>
-+ */
+@@ -36,4 +36,9 @@ struct sb800_mmio_cfg {
+ 	bool use_mmio;
+ };
+ 
++int piix4_sb800_port_sel(u8 port, struct sb800_mmio_cfg *mmio_cfg);
++int piix4_transaction(struct i2c_adapter *piix4_adapter, unsigned short piix4_smba);
++int piix4_sb800_region_request(struct device *dev, struct sb800_mmio_cfg *mmio_cfg);
++void piix4_sb800_region_release(struct device *dev, struct sb800_mmio_cfg *mmio_cfg);
 +
-+#ifndef I2C_PIIX4_H
-+#define I2C_PIIX4_H
-+
-+#include <linux/types.h>
-+
-+/* PIIX4 SMBus address offsets */
-+#define SMBHSTSTS	(0x00 + piix4_smba)
-+#define SMBHSLVSTS	(0x01 + piix4_smba)
-+#define SMBHSTCNT	(0x02 + piix4_smba)
-+#define SMBHSTCMD	(0x03 + piix4_smba)
-+#define SMBHSTADD	(0x04 + piix4_smba)
-+#define SMBHSTDAT0	(0x05 + piix4_smba)
-+#define SMBHSTDAT1	(0x06 + piix4_smba)
-+#define SMBBLKDAT	(0x07 + piix4_smba)
-+#define SMBSLVCNT	(0x08 + piix4_smba)
-+#define SMBSHDWCMD	(0x09 + piix4_smba)
-+#define SMBSLVEVT	(0x0A + piix4_smba)
-+#define SMBSLVDAT	(0x0C + piix4_smba)
-+
-+/* PIIX4 constants */
-+#define PIIX4_BLOCK_DATA	0x14
-+
-+struct sb800_mmio_cfg {
-+	void __iomem *addr;
-+	bool use_mmio;
-+};
-+
-+#endif /* I2C_PIIX4_H */
+ #endif /* I2C_PIIX4_H */
 -- 
 2.25.1
 
