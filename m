@@ -1,146 +1,159 @@
-Return-Path: <linux-i2c+bounces-6890-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6891-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0219B97D3D1
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 11:41:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69B0397D412
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 12:18:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A11061F21B4D
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 09:41:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E3341C21013
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 10:18:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FABA757EA;
-	Fri, 20 Sep 2024 09:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 269D613D250;
+	Fri, 20 Sep 2024 10:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLV/YrV1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail03.siengine.com (mail03.siengine.com [43.240.192.165])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB531EA6F
-	for <linux-i2c@vger.kernel.org>; Fri, 20 Sep 2024 09:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.240.192.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515001BC49;
+	Fri, 20 Sep 2024 10:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726825294; cv=none; b=TiWJwTpKuVWYlV6SvFLA/nEVXyGI+iDFDEFLoM7O0ZZFKjYEHg+i362Nn0bBblV6XhWEJ9yUv6ftoIm5Q4EiVpPfAY0kVhHpofRmGxYWHQFu6PIj/6aSzW31qkPDPg8MuYOXjT/cd1jYiIaWJ6HOB5wsUjFQBYSkeeDqewuFlZo=
+	t=1726827509; cv=none; b=J3kFVILQCiCKV9wMQNjQgRk/NDzhSkognIKO3DCFkJJt7Nom8qUHWV1qDlRYI1JRxBVBQKu/A4dfsooBOGpsd7AC/k/g9yQ1wdCGQEjlJYfwpoYABOXZzygy+WGjAOzGkd7A/CvwDE4pAQW/lxu+0yT2so67YIIZGPsG8f9YA5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726825294; c=relaxed/simple;
-	bh=Oxlp3kFgnZ2io4E0Uy8G4L4nD5sMydeDVAI915eg+10=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=dRTdcVAgavuhqdsWsb+hFkcqvLBbwUAx0teMFAdLu8a1nFOE2tg4gT/+AF1ecZmU8Qd6gGx7t//fobAid3SHHQ21hM0lEMDQDcfoK06QZZ8Ng4xrWjEvHNYJCdS2yK4jmbXbZ4i93cvQtcNEn4/NOSphJAKE2hIK9x/Xp2plCA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com; spf=pass smtp.mailfrom=siengine.com; arc=none smtp.client-ip=43.240.192.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siengine.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siengine.com
-Received: from dsgsiengine01.siengine.com ([10.8.1.61])
-	by mail03.siengine.com with ESMTPS id 48K9fHj4012218
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Fri, 20 Sep 2024 17:41:17 +0800 (+08)
-	(envelope-from kimriver.liu@siengine.com)
-Received: from SEEXMB03-2019.siengine.com (SEEXMB03-2019.siengine.com [10.8.1.33])
-	by dsgsiengine01.siengine.com (SkyGuard) with ESMTPS id 4X96pN61jvz7ZMv2;
-	Fri, 20 Sep 2024 17:41:16 +0800 (CST)
-Received: from SEEXMB05-2019.siengine.com (10.8.1.153) by
- SEEXMB03-2019.siengine.com (10.8.1.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1544.11; Fri, 20 Sep 2024 17:41:15 +0800
-Received: from SEEXMB03-2019.siengine.com (10.8.1.33) by
- SEEXMB05-2019.siengine.com (10.8.1.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1544.9; Fri, 20 Sep 2024 17:41:14 +0800
-Received: from SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe]) by
- SEEXMB03-2019.siengine.com ([fe80::23e0:1bbb:3ec9:73fe%16]) with mapi id
- 15.02.1544.011; Fri, 20 Sep 2024 17:41:14 +0800
-From: =?gb2312?B?TGl1IEtpbXJpdmVyL8H1vfC60w==?= <kimriver.liu@siengine.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-CC: "jarkko.nikula@linux.intel.com" <jarkko.nikula@linux.intel.com>,
-        "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "jsd@semihalf.com" <jsd@semihalf.com>,
-        "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy@kernel.org>
-Subject: RE: [PATCH v11] i2c: designware: fix controller is holding SCL low
- while ENABLE bit is disabled
-Thread-Topic: [PATCH v11] i2c: designware: fix controller is holding SCL low
- while ENABLE bit is disabled
-Thread-Index: AQHbBY3Guj+rQp1Ui0uJhUssx5pO0bJf45mAgACQdhA=
-Date: Fri, 20 Sep 2024 09:41:14 +0000
-Message-ID: <c81956a4215a4ca587b9c4e541b0cb0d@siengine.com>
-References: <4ebc4e8882a52620cbca30f1bf25650cbc3723fb.1726197817.git.kimriver.liu@siengine.com>
- <hua4cnnstss2lw5ejau25ktdiujwz3m3ixawnfuz7havwsr7vc@i7jlayooy3ha>
-In-Reply-To: <hua4cnnstss2lw5ejau25ktdiujwz3m3ixawnfuz7havwsr7vc@i7jlayooy3ha>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1726827509; c=relaxed/simple;
+	bh=DY2WcN+lNOCjb8WsL0B52KYCADP8CcP7nEruXm5cFO8=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=oi7vP50tVBFPmhnJWtw1KPFCkGqfTD8xQcbu3Md6kBHEFzHl/NBmnovqarCucxqrSBhjhUM+793jXj1i9y9WPdVsuTqql6qlSw3uG55TAz2aB0+MGoaEgw8+41u6bW6DxUBxrYBuWxnIyCbDGcGk/fXy0dNE027K0xK6jmZZUNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLV/YrV1; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2db85775c43so1337215a91.0;
+        Fri, 20 Sep 2024 03:18:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726827507; x=1727432307; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qBcCIjRoxiVjgDZ5MgMhXd2EKuQeYew6JZXuK1tPsac=;
+        b=MLV/YrV1pyguWjC8fwAEj6lANJ+f9vbx4bJ/nUniNZK6U0SqYcx1J6zJeKl2sabuIX
+         Slt0xe6+Sa5IQgX1FjGIRF8gXoUEsI8pkMNHUlN/EPw6kmWGWrT3OOqjoAGZUzkTJ7va
+         XU7/ndx5nm7pyij303rDqYoe4zUaDoVbknuj4QJYLKWC8M0mr542R6yUV6649wiHsJzh
+         GG07o6UdywPC3mMxRC6SFFH+CNwHM3jrKbllZEUMnYC7Un97CB6jPxeIdrEqyP5TLdpw
+         V3/ycFSDax6RND/931TGpXnRNSgnmtT1OJq4cZRk3WqwAlxhdgfJtM06KG2b2mIRxqtm
+         a8Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726827508; x=1727432308;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qBcCIjRoxiVjgDZ5MgMhXd2EKuQeYew6JZXuK1tPsac=;
+        b=YeJ0IqBVKHNBMHHxiJtfUCvZ0A8wX94VynKQKqa00k4oLQVgDdlrRoOtjMHwinssID
+         IW18fERR1hh/J6nDFFu/a4i9T9dk82G0zpeGqsZZaGSJfTXJENU50plnluiUnqzAmees
+         SNeVvZy3gAc5tEUpg8b6yyJ+SPEYad167Sf/JfLW/ZSwjaoofY9Mj14mzy7QY5TXzr9F
+         +KsNrC4d00AKcNdliMME57l13crWsSw6fr/H8kkSSbnPssTRG7tARQi9MU+X1X85owRD
+         MztA85IwtYvlKSBklA9Gyv6+kfuAX4azmUokS4n7yZFK4953zi97S0N49xfOAUcDIorP
+         i3lQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZBecQw1zUyk6mnFWVWJPdj2Tu9kQAPy5bhgtf0DTPz8qS5uMha5vgJ73HVvvI1cRex86kQkizbQx10G0C@vger.kernel.org, AJvYcCXZuxMV/2RmhKSUVH3mF854harJwHjmh6eypuPKF8aRyukTf4bZb6jgQQFGenKXD/g4pJBsdf3MsLc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydibrfM0ncWayPT6FZ63GdeWEHsbx5Z5+4oMvj4RTXFQrQxKh3
+	wKfDltKiFEiaWM+r+B5iBu+GFjZbwREAAS2jq2fsRdtWWzqynm0=
+X-Google-Smtp-Source: AGHT+IFbP/eoSZq3hbpekXAbmM4GZBdYL25BhV5ix8BcXAh8aBgnpApziN0RHvvL0/JIKZRAtrQzmw==
+X-Received: by 2002:a17:90a:d906:b0:2d8:aa5d:5856 with SMTP id 98e67ed59e1d1-2dd7ed20097mr4122520a91.11.1726827507470;
+        Fri, 20 Sep 2024 03:18:27 -0700 (PDT)
+Received: from localhost (2001-b400-e35c-9cc2-447a-d760-d4f6-01f4.emome-ip6.hinet.net. [2001:b400:e35c:9cc2:447a:d760:d4f6:1f4])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dd6ef93b3asm3631278a91.54.2024.09.20.03.18.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 20 Sep 2024 03:18:26 -0700 (PDT)
+From: warp5tw@gmail.com
+X-Google-Original-From: kfting@nuvoton.com
+To: avifishman70@gmail.com,
+	tmaimon77@gmail.com,
+	tali.perry1@gmail.com,
+	venture@google.com,
+	yuenn@google.com,
+	benjaminfair@google.com,
+	andi.shyti@kernel.org,
+	andriy.shevchenko@linux.intel.com,
+	wsa@kernel.org,
+	rand.sec96@gmail.com,
+	wsa+renesas@sang-engineering.com,
+	warp5tw@gmail.com,
+	tali.perry@nuvoton.com,
+	Avi.Fishman@nuvoton.com,
+	tomer.maimon@nuvoton.com,
+	KWLIU@nuvoton.com,
+	JJLIU0@nuvoton.com,
+	kfting@nuvoton.com
+Cc: openbmc@lists.ozlabs.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/6] i2c: npcm: read/write operation, checkpatch
+Date: Fri, 20 Sep 2024 18:18:14 +0800
+Message-Id: <20240920101820.44850-1-kfting@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-DKIM-Results: [10.8.1.61]; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:mail03.siengine.com 48K9fHj4012218
 
-SEksIEFuZGkNCg0KPi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogQW5kaSBTaHl0
-aSA8YW5kaS5zaHl0aUBrZXJuZWwub3JnPiANCj5TZW50OiAyMDI0xOo51MIyMMjVIDE2OjUyDQo+
-VG86IExpdSBLaW1yaXZlci/B9b3wutMgPGtpbXJpdmVyLmxpdUBzaWVuZ2luZS5jb20+DQo+Q2M6
-IGphcmtrby5uaWt1bGFAbGludXguaW50ZWwuY29tOyBhbmRyaXkuc2hldmNoZW5rb0BsaW51eC5p
-bnRlbC5jb207IG1pa2Eud2VzdGVyYmVyZ0BsaW51eC5pbnRlbC5jb207IGpzZEBzZW1paGFsZi5j
-b207IGxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
-cmc7IEFuZHkgU2hldmNoZW5rbyA+PGFuZHlAa2VybmVsLm9yZz4NCj5TdWJqZWN0OiBSZTogW1BB
-VENIIHYxMV0gaTJjOiBkZXNpZ253YXJlOiBmaXggY29udHJvbGxlciBpcyBob2xkaW5nIFNDTCBs
-b3cgd2hpbGUgRU5BQkxFIGJpdCBpcyBkaXNhYmxlZA0KDQo+SGkgS2ltcml2ZXIsDQoNCj5PbiBG
-cmksIFNlcCAxMywgMjAyNCBhdCAxMTozMTo0NkFNIEdNVCwgS2ltcml2ZXIgTGl1IHdyb3RlOg0K
-Pj4gSXQgd2FzIG9ic2VydmVkIHRoYXQgaXNzdWluZyB0aGUgQUJPUlQgYml0IChJQ19FTkFCTEVb
-MV0pIHdpbGwgbm90DQo+PiB3b3JrIHdoZW4gSUNfRU5BQkxFIGlzIGFscmVhZHkgZGlzYWJsZWQu
-DQo+PiANCj4+IENoZWNrIGlmIHRoZSBFTkFCTEUgYml0IChJQ19FTkFCTEVbMF0pIGlzIGRpc2Fi
-bGVkIHdoZW4gdGhlIGNvbnRyb2xsZXINCj4+IGlzIGhvbGRpbmcgU0NMIGxvdy4gSWYgdGhlIEVO
-QUJMRSBiaXQgaXMgZGlzYWJsZWQsIHRoZSBzb2Z0d2FyZSBuZWVkcw0KPj4gdG8gZW5hYmxlIGl0
-IGJlZm9yZSB0cnlpbmcgdG8gaXNzdWUgdGhlIEFCT1JUIGJpdC4gb3RoZXJ3aXNlLA0KPj4gdGhl
-IGNvbnRyb2xsZXIgaWdub3JlcyBhbnkgd3JpdGUgdG8gQUJPUlQgYml0Lg0KPj4gDQo+PiBUaGVz
-ZSBrZXJuZWwgbG9ncyBzaG93IHVwIHdoZW5ldmVyIGFuIEkyQyB0cmFuc2FjdGlvbiBpcw0KPj4g
-YXR0ZW1wdGVkIGFmdGVyIHRoaXMgZmFpbHVyZS4NCj4+IGkyY19kZXNpZ253YXJlIGU5NWUwMDAw
-LmkyYzogdGltZW91dCB3YWl0aW5nIGZvciBidXMgcmVhZHkNCj4+IGkyY19kZXNpZ253YXJlIGU5
-NWUwMDAwLmkyYzogdGltZW91dCBpbiBkaXNhYmxpbmcgYWRhcHRlcg0KPj4gDQo+PiBUaGUgcGF0
-Y2ggZml4ZXMgdGhlIGlzc3VlIHdoZXJlIHRoZSBjb250cm9sbGVyIGNhbm5vdCBiZSBkaXNhYmxl
-ZA0KPj4gd2hpbGUgU0NMIGlzIGhlbGQgbG93IGlmIHRoZSBFTkFCTEUgYml0IGlzIGFscmVhZHkg
-ZGlzYWJsZWQuDQo+PiANCj4+IEZpeGVzOiAyNDA5MjA1YWNkM2MgKCJpMmM6IGRlc2lnbndhcmU6
-IGZpeCBfX2kyY19kd19kaXNhYmxlKCkgaW4gY2FzZSBtYXN0ZXIgaXMgaG9sZGluZyBTQ0wgbG93
-IikNCj4+IFNpZ25lZC1vZmYtYnk6IEtpbXJpdmVyIExpdSA8a2ltcml2ZXIubGl1QHNpZW5naW5l
-LmNvbT4NCj4+IFJldmlld2VkLWJ5OiBNaWthIFdlc3RlcmJlcmcgPG1pa2Eud2VzdGVyYmVyZ0Bs
-aW51eC5pbnRlbC5jb20+DQo+PiBBY2tlZC1ieTogSmFya2tvIE5pa3VsYSA8amFya2tvLm5pa3Vs
-YUBsaW51eC5pbnRlbC5jb20+DQo+PiBSZXZpZXdlZC1ieTogQW5keSBTaGV2Y2hlbmtvIDxhbmR5
-QGtlcm5lbC5vcmc+DQoNCj5JJ20gc29ycnkgZm9yIHRoZSBkZWxheSwgYnV0IEkgbmVlZGVkIHRv
-IHdhaXQgZm9yIHRoZSBwcmV2aW91cw0KPmJhdGNoIG9mIGZpeGVzIHRvIGJlIG1lcmdlZC4NCj4N
-Cj4gWy4uLl0NCj4NCj4+ICsvKg0KPj4gKyAqIFRoaXMgZnVuY3Rpb24gd2FpdHMgY29udHJvbGxl
-ciBpZGxpbmcgYmVmb3JlIGRpc2FibGluZyBJMkMNCj4+ICsgKiBXaGVuIHRoZSBjb250cm9sbGVy
-IGlzIG5vdCBpbiB0aGUgSURMRSBzdGF0ZSwNCj4+ICsgKiBNU1RfQUNUSVZJVFkgYml0IChJQ19T
-VEFUVVNbNV0pIGlzIHNldC4NCj4+ICsgKiBWYWx1ZXM6DQo+PiArICogMHgxIChBQ1RJVkUpOiBD
-b250cm9sbGVyIG5vdCBpZGxlDQo+PiArICogMHgwIChJRExFKTogQ29udHJvbGxlciBpcyBpZGxl
-DQo+PiArICogVGhlIGZ1bmN0aW9uIGlzIGNhbGxlZCBhZnRlciByZXR1cm5pbmcgdGhlIGVuZCBv
-ZiB0aGUgY3VycmVudCB0cmFuc2Zlcg0KPj4gKyAqIFJldHVybnM6DQo+PiArICogRmFsc2Ugd2hl
-biBjb250cm9sbGVyIGlzIGluIElETEUgc3RhdGUuDQo+PiArICogVHJ1ZSB3aGVuIGNvbnRyb2xs
-ZXIgaXMgaW4gQUNUSVZFIHN0YXRlLg0KPj4gKyAqLw0KDQo+SSB0b29rIHRoZSBsaWJlcnR5IG9m
-IG1ha2luZyBzb21lIHNtYWxsIGNoYW5nZXMgdG8gdGhlIGNvbW1lbnQ6DQoNCj4rLyoNCj4rICog
-VGhpcyBmdW5jdGlvbiB3YWl0cyBmb3IgdGhlIGNvbnRyb2xsZXIgdG8gYmUgaWRsZSBiZWZvcmUg
-ZGlzYWJsaW5nIEkyQw0KPisgKiBXaGVuIHRoZSBjb250cm9sbGVyIGlzIG5vdCBpbiB0aGUgSURM
-RSBzdGF0ZSwgdGhlIE1TVF9BQ1RJVklUWSBiaXQNCj4rICogKElDX1NUQVRVU1s1XSkgaXMgc2V0
-Lg0KPisgKg0KPisgKiBWYWx1ZXM6DQo+KyAqIDB4MSAoQUNUSVZFKTogQ29udHJvbGxlciBub3Qg
-aWRsZQ0KPisgKiAweDAgKElETEUpOiBDb250cm9sbGVyIGlzIGlkbGUNCj4rICoNCj4rICogVGhl
-IGZ1bmN0aW9uIGlzIGNhbGxlZCBhZnRlciBjb21wbGV0aW5nIHRoZSBjdXJyZW50IHRyYW5zZmVy
-Lg0KPisgKg0KPisgKiBSZXR1cm5zOg0KPisgKiBGYWxzZSB3aGVuIHRoZSBjb250cm9sbGVyIGlz
-IGluIHRoZSBJRExFIHN0YXRlLg0KPisgKiBUcnVlIHdoZW4gdGhlIGNvbnRyb2xsZXIgaXMgaW4g
-dGhlIEFDVElWRSBzdGF0ZS4NCj4rICovDQoNCj5mb3IgYW4gaW1wcm92ZWQgY2xhcml0eSBhbmQg
-YWRkcmVzcyBhIGZldyBncmFtbWF0aWNhbCBpc3N1ZXMuDQo+UGxlYXNlIHZlcmlmeSB0aGF0IGl0
-J3MgY29ycmVjdC4NCg0KPkkgbWVyZ2VkIHlvdXIgcGF0Y2ggdG8gaTJjL2kyYy1ob3N0LWZpeGVz
-IGFsb25nIHdpdGggdGhlIGxhdGVzdCANCj5jaGFuZ2VzIHByb3Bvc2VkIGJ5IEFuZHkuDQoNCj5U
-aGFua3MgZm9yIHlvdXIgd29yaywNCj5BbmRpDQoNCllvdXIgc21hbGwgY2hhbmdlcyBtYWtlIHRo
-ZSBjb21tZW50cyBjbGVhcmVyIGFuZCBtb3JlIHBlcmZlY3QuDQpUaGFua3MuDQotLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCkJlc3QgUmVnYXJkcw0KS2ltcml2ZXIg
-TGl1DQo=
+From: Tyrone Ting <kfting@nuvoton.com>
+
+This patchset includes the following fixes:
+
+- Enable the target functionality in the interrupt handling routine 
+  when the i2c transfer is about to finish.
+- Correct the read/write operation procedure.
+- Introduce a software flag to handle the bus error (BER) condition
+  which is not caused by the i2c transfer.
+- Modify timeout calculation.
+- Assign the client address earlier logically.
+- Use an i2c frequency table for the frequency parameters assignment.
+- Coding style fix.
+
+The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
+
+Addressed comments from:
+- Andy Shevchenko : https://lore.kernel.org/linux-i2c/ZuQUfCK7d7DuR9eH
+  @smile.fi.intel.com/
+- Andy Shevchenko : https://lore.kernel.org/linux-i2c/ZuQU2iIZwW4mAumo
+  @smile.fi.intel.com/
+- Andy Shevchenko : https://lore.kernel.org/linux-i2c/ZuQWYabomv_xyYyj
+  @smile.fi.intel.com/ 
+
+Changes since version 3:
+- Remove "Bug fixes" in the cover letter title.
+- Modify the term "function" to "func()" in the commit message and
+  code comments.
+- Correct the coding style.
+
+Changes since version 2:
+- Add more explanations in the commit message and code modification.
+- Use lower character names for declarations.
+- Remove Fixes tags in commits which are not to fix bugs.
+
+Changes since version 1:
+- Restore the npcm_i2caddr array length to fix the smatch warning.
+- Remove unused variables.
+- Handle the condition where scl_table_cnt reaches to the maximum value.
+- Fix the checkpatch warning.
+
+Charles Boyer (1):
+  i2c: npcm: Enable slave in eob interrupt
+
+Tyrone Ting (5):
+  i2c: npcm: correct the read/write operation procedure
+  i2c: npcm: use a software flag to indicate a BER condition
+  i2c: npcm: Modify timeout evaluation mechanism
+  i2c: npcm: Modify the client address assignment
+  i2c: npcm: use i2c frequency table
+
+ drivers/i2c/busses/i2c-npcm7xx.c | 425 +++++++++++++++++++++++--------
+ 1 file changed, 323 insertions(+), 102 deletions(-)
+
+
+base-commit: f56f4ba2fc1dbefd3242946f2fad35338a60e3bc
+-- 
+2.34.1
+
 
