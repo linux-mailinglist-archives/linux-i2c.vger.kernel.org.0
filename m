@@ -1,112 +1,95 @@
-Return-Path: <linux-i2c+bounces-6901-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6902-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 311CD97D6EF
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 16:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B6BC097D6F7
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 16:37:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB0A31F25554
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 14:33:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 692711F2364E
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 14:37:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4524117BB06;
-	Fri, 20 Sep 2024 14:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6829B17BB33;
+	Fri, 20 Sep 2024 14:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GmMCohQH"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="IM01aydt"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D08178396;
-	Fri, 20 Sep 2024 14:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27CC16FB6;
+	Fri, 20 Sep 2024 14:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726842788; cv=none; b=KG56bX3ELGzoarX9CNDX2grbBXbTJX5hY+5VWgg3mK8pE2G9YAPJSsffvYnlJMpdtaVlH/cesA7Bh8x0UT/aRb+MEzUZzH/xTbPH+Uv2LYzUCRyIoBmwltVtd9qMPbNzqdZXfvoV0d+L+QqKfTwmOkL+tvlceUDWtGeQGZrSVgs=
+	t=1726843016; cv=none; b=HeRyXRW1rfaJjoAW7anCHHGsXfKdFmZR/aSCb85kGyzCOM60gucXzxm97b1332FNHbQdse3dfs57WE8Km1HMVtOqSUjcqgbH95WPwib/B8+6iO30SP122YIhDEgACNZ7/uDSJuagZguJCqvApX/msgJ5VM/ezkGpB7l/GjhaMHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726842788; c=relaxed/simple;
-	bh=FmZ1iPfYLpvXQ9iWVPvde2w99WvWCFNwTvXH1ZHG+/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UzqEnCgBdEMcczaeWSkyE81jlUU/itrFR1XgDxgertZojPuZ/69cwW+YIoDaVo7tCbziKZ+KAXHeiquFZcZxFnFpy26NtHY3m4qb6p7XoFaeTIak5CJ5stVwi1qyKLc0hvMtJutRKSvKhfQdDpBRDIHpu7aTHx7i2juXIkUtiGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GmMCohQH; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726842787; x=1758378787;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FmZ1iPfYLpvXQ9iWVPvde2w99WvWCFNwTvXH1ZHG+/s=;
-  b=GmMCohQH8no8BCjmhg/odyRi82iH7gau16LIWcz6qnkvwFjpia/ovSAW
-   MNQStV2KEUbIXm/fFCRbLXX0xYlFpu++zq7XfrAkQTMom2rtSpYJl6RNl
-   AuM/bpfT7HAqDYZw5RSnINzyrH4InLElKqdtMZNoldkCcuMBa+45Qdbgv
-   BYZa4ma/d06vLhMWfR29OgVYWfs5NP4MM5vytrSC5hsvlZT4wv0pCd3yS
-   PzHTdsENT1NB0agcgXOkDA0z6PAwl2q0JKCmAsNAUM6mVIO+Vz+ZknKYu
-   Fr0mfTZyC5xV6dnOnH0mp/HRFGRFxWQQ625XmYbWy51fiR3BDY5EBqTp/
-   Q==;
-X-CSE-ConnectionGUID: Mc18WBIiSWWDAbJWnO/Cgw==
-X-CSE-MsgGUID: hzfXoMrETRKwXEDEOsXPOA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="29638678"
-X-IronPort-AV: E=Sophos;i="6.10,244,1719903600"; 
-   d="scan'208";a="29638678"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 07:33:06 -0700
-X-CSE-ConnectionGUID: VlqCpYX8QHyARjpiYlo3Pg==
-X-CSE-MsgGUID: eQh73CTxSP6P2ajTxgRzEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,244,1719903600"; 
-   d="scan'208";a="70198558"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 07:33:01 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sregs-0000000AwL1-2MqZ;
-	Fri, 20 Sep 2024 17:32:58 +0300
-Date: Fri, 20 Sep 2024 17:32:58 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: warp5tw@gmail.com
-Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-	venture@google.com, yuenn@google.com, benjaminfair@google.com,
-	andi.shyti@kernel.org, wsa@kernel.org, rand.sec96@gmail.com,
-	wsa+renesas@sang-engineering.com, tali.perry@nuvoton.com,
-	Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
-	KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
-	openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/6] i2c: npcm: Modify the client address assignment
-Message-ID: <Zu2HmkagbpMf_CNE@smile.fi.intel.com>
-References: <20240920101820.44850-1-kfting@nuvoton.com>
- <20240920101820.44850-5-kfting@nuvoton.com>
+	s=arc-20240116; t=1726843016; c=relaxed/simple;
+	bh=88CnwlllLn8RPyaeUAWKWxLIUfQHqZ9ykAnp4Fy+FPU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DR9BPGkEmBNpaX3yaVhFBKGjTcoOeBW0V38F5l36TTfW4+4O/vshIJpIo8wMfGQqado7se2oQDKMXYp3cO4TywcCqpNGlUADNQcC2PYop8lpnIJqvTl23I5xb+fyL39FlNN/yjABzdGwYNHbz1hPnj3I/5o21PZi5vRADA4sOMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=IM01aydt; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: c52ca3ea775d11ef8b96093e013ec31c-20240920
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=EWJ4udSgDoEgGrmmpQfYFCOlGYKVyE5VZGKmkzitpGE=;
+	b=IM01aydt9hh2yi+B65iFasFiqzUedV21ZZofGT5zPYvWPURdffxL/TRlSZqOAmOJuLpxlY00WZWzUx2Jr4rxhbh38T0T+G26BHSzqwymUIy7XEufvjSK0fbm0iuXk9rxs5YTyZsqiWDm3C401FAWiKIBborbVV4CMxBACs6s5Eg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:013842bc-5e5e-48de-969a-e74dcc702a36,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:d6d1ff17-b42d-49a6-94d2-a75fa0df01d2,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: c52ca3ea775d11ef8b96093e013ec31c-20240920
+Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw02.mediatek.com
+	(envelope-from <zoie.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 437195700; Fri, 20 Sep 2024 22:36:49 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 20 Sep 2024 22:36:48 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 20 Sep 2024 22:36:48 +0800
+From: zoie.lin <zoie.lin@mediatek.com>
+To: Qii Wang <qii.wang@mediatek.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	zoie.lin <zoie.lin@mediatek.com>
+Subject: [v1,0/1] i2c: mediatek: add runtime PM operations and bus regulator control
+Date: Fri, 20 Sep 2024 22:36:26 +0800
+Message-ID: <20240920143627.23811-1-zoie.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240920101820.44850-5-kfting@nuvoton.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
 
-On Fri, Sep 20, 2024 at 06:18:18PM +0800, warp5tw@gmail.com wrote:
-> From: Tyrone Ting <kfting@nuvoton.com>
-> 
-> From: Tyrone Ting <kfting@nuvoton.com>
+This series is based on linux-next, tag: next-20240919
 
-It seems all your mails have an issue.
+This series adds support for runtime PM operations and bus regulator control 
+in the MediaTek i2c driver. The changes include the implementation of runtime 
+PM operations and the integration of bus regulator control to manage bus power.
 
-> Store the client address earlier since it might get called in
-> the i2c_recover_bus logic flow at the early stage of the func()
-> npcm_i2c_master_xfer.
+zoie.lin (1):
+  i2c: mediatek: add runtime PM operations and bus regulator control
 
-You got my comment really wrong.
-
-func() in my example was to refer to _a_ function mentioned in the text.
-And IIRC I even posted the example, like: i2c_recover_bus().
+ drivers/i2c/busses/i2c-mt65xx.c | 72 ++++++++++++++++++++++++++++-----
+ 1 file changed, 61 insertions(+), 11 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.45.2
 
 
