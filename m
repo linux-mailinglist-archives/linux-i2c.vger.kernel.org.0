@@ -1,124 +1,116 @@
-Return-Path: <linux-i2c+bounces-6914-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6915-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC0B397D97A
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 19:59:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85B4797DAB9
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 Sep 2024 01:10:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A6E61C2159B
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 17:59:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 380431F224CA
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Sep 2024 23:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0DF17C216;
-	Fri, 20 Sep 2024 17:59:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7F5C18DF73;
+	Fri, 20 Sep 2024 23:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dDlF/mXX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLiGQUXK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21819376E9
-	for <linux-i2c@vger.kernel.org>; Fri, 20 Sep 2024 17:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628DE1C693;
+	Fri, 20 Sep 2024 23:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726855184; cv=none; b=T04V7JIHl8yP9dnLZodZ/d8gaovvYRQ0+j+0S9unHbITpY2pXu0CVK7n7THmD2UYEoKzl6oGznsQtS3qiUTKDt70Oq4jVDb8ceHjWiEy54hhNfVG2t1AAKkYi6ImgIgN++siAKpH88u/1fuJv+OKU+Bccf6vkyDZGhvVw8+36RE=
+	t=1726873841; cv=none; b=Lj+lLgprfhHTx8uiogrw6YnnYy5dn8Tfk34UJshU67RZ+sa6shI1zY1av3mqVRi0Ca3pHeh6/hGQosdrxPu/N4/3Lo9zk1+Qh2hmzwGAfXvfikVUX45JtT/LBUMDr1XBPKW7oVQ5Pb3/pCesxKUPbthv6+7WMPsuPpt8CGk8I9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726855184; c=relaxed/simple;
-	bh=TZ9rpp6bLIjpyKwb29yph2AXKB0G8Ri1F006OdL9PR4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d1WaEYFmZHMFvq4DmGCpJm+9Y7K3xTGCWHBjPzLxsWSBX9xar08EbmnPo8/1HCNHkVjZXALg61u4cLbws3/X8AZtxxOnrhIX1olx51ptElvtn2pdRwLAL8HdN8d25pClh5LfEDcaYgOsrnfkF8b+OCWyir5SqWJoK6zMxPLz75g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dDlF/mXX; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726855183; x=1758391183;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TZ9rpp6bLIjpyKwb29yph2AXKB0G8Ri1F006OdL9PR4=;
-  b=dDlF/mXXpnNQWipC6P1U8sTHkOY62gnPFgF1OPsLZYHuYlVxRI5iQNOm
-   VNGDzExJYmBN8x8aLhp5GUXAbdABEu66Z3m4xivGzJlHGH1M69OXSriG9
-   btm+SJQBIogmzP4mhXfsPFk2Inmg/g7zMx/KEnhLKWbz8E+9+np2cXchr
-   93fqkNFX6qgcwa9FxqVhIGTYuKxDhIw+pgnCcfWpzenmQtceDWmfCon5w
-   VlSW2PQzJzX4HFTGlXTWMPOcGEiN4/lATJk+jqO8rOng9KtRZlecYf5ta
-   qHxOjBQjZ+f2iZrGpWnAKSL7B/RhwN7uWaR4n99xJogzfZ4O7uBGFZCMh
-   g==;
-X-CSE-ConnectionGUID: 3oZ7+f1BS2K3NfJ6mszNLQ==
-X-CSE-MsgGUID: +EMFd07KT/G/IkqbWu3FSA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11201"; a="25992057"
-X-IronPort-AV: E=Sophos;i="6.10,244,1719903600"; 
-   d="scan'208";a="25992057"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 10:59:43 -0700
-X-CSE-ConnectionGUID: hnJe+H3GRBqxs5nVYUDAxw==
-X-CSE-MsgGUID: N+Kf9FJHTZeAXAT70nHtwA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,244,1719903600"; 
-   d="scan'208";a="70255879"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 10:59:41 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1srhus-0000000Azv2-18Hx;
-	Fri, 20 Sep 2024 20:59:38 +0300
-Date: Fri, 20 Sep 2024 20:59:38 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org, Sanket.Goswami@amd.com,
-	Patil.Reddy@amd.com
-Subject: Re: [PATCH v6 7/8] i2c: amd-asf: Clear remote IRR bit to get
- successive interrupt
-Message-ID: <Zu24CtPcdO_aINJk@smile.fi.intel.com>
-References: <20240919175913.1895670-1-Shyam-sundar.S-k@amd.com>
- <20240919175913.1895670-8-Shyam-sundar.S-k@amd.com>
+	s=arc-20240116; t=1726873841; c=relaxed/simple;
+	bh=dxdCDfIcHeRolZri5GdD4pfAYCc4d6GtMLMxCPUuxEE=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=sNh0OdFJHGnot5V1N1diyupUH6kswWp1j4MCiCIUjgl1ZQl+hoS186icraQpag3rsHdOq/oLx1Zc0z7vmymnD0wz9Xzw2UIsqjpgCSZAlAKxpDW6DEze5aw/0Flsddky46sS2rmkomj/y4TGCh6znF7hOa04YV+c4G7fagLGMe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLiGQUXK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3418C4CEC3;
+	Fri, 20 Sep 2024 23:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726873840;
+	bh=dxdCDfIcHeRolZri5GdD4pfAYCc4d6GtMLMxCPUuxEE=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=fLiGQUXKyaP9BlXGOCgM7taDdqE+NBVdXGEz81dgGFw/g0dHYW0+Ad24TOW2H9s+g
+	 RVmzQ46U3+6VOqwQiZrlCPr+biLpfcAmXO36poRXdvGsPnfbMQ0r9TQBxub8Sqq4Y5
+	 eoZMShYX2O8SZjp5pbBGszv0oPxSrooSxOjQ//ITD7D8q8GkXJwR22OhBWp8GISIy3
+	 ZDcPkyeHqWju+WTDQZUkH6dXZGcEJBxupC6mm2+HIYUpfddlA4p/AQQ823OLRcju+t
+	 ZIZpm7Ton4QzPZykPGOKRnIF9+mOGIxcwU13RmzBSwjUnKAdUeGtL++gvNW6Rc1FXS
+	 XUtWkevjCMKyQ==
+Date: Fri, 20 Sep 2024 18:10:39 -0500
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240919175913.1895670-8-Shyam-sundar.S-k@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: krzk+dt@kernel.org, tsbogend@alpha.franken.de, 
+ devicetree@vger.kernel.org, andi.shyti@kernel.org, 
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, conor+dt@kernel.org
+In-Reply-To: <20240920000930.1828086-2-chris.packham@alliedtelesis.co.nz>
+References: <20240920000930.1828086-1-chris.packham@alliedtelesis.co.nz>
+ <20240920000930.1828086-2-chris.packham@alliedtelesis.co.nz>
+Message-Id: <172687383994.9882.1653066305378740682.robh@kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: Add RTL9300 I2C controller
 
-On Thu, Sep 19, 2024 at 11:29:12PM +0530, Shyam Sundar S K wrote:
-> To ensure successive interrupts upon packet reception, it is necessary to
-> clear the remote IRR bit by writing the interrupt number to the EOI
-> register. The base address for this operation is provided by the BIOS and
-> retrieved by the driver by traversing the ASF object's namespace.
 
-...
+On Fri, 20 Sep 2024 12:09:28 +1200, Chris Packham wrote:
+> Add dtschema for the I2C controller on the RTL9300 SoC. The I2C
+> controllers on this SoC are part of the "switch" block which is
+> represented here as a syscon node. The SCL pins are dependent on the I2C
+> controller (GPIO8 for the first controller, GPIO 17 for the second). The
+> SDA pins can be assigned to either one of the I2C controllers (but not
+> both).
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v2:
+>     - Use reg property for controller registers
+>     - Remove global-control-offset (will be hard coded in driver)
+>     - Integrated the multiplexing function. Child nodes now represent the
+>       available SDA lines
+> 
+>  .../bindings/i2c/realtek,rtl9300-i2c.yaml     | 82 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++
+>  2 files changed, 88 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
+> 
 
-> +	/*
-> +	 * The resource obtained via ACPI might not belong to the ASF device address space. Instead,
-> +	 * it could be within other IP blocks of the ASIC, which are crucial for generating
-> +	 * subsequent interrupts. Therefore, we avoid using devm_platform_ioremap_resource() and
+My bot found errors running 'make dt_binding_check' on your patch:
 
-> +	 * instead use platform_get_resource() and devm_ioremap() separately to prevent any address
+yamllint warnings/errors:
 
-s/instead//
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.example.dtb: /example-0/switch@1b000000: failed to match any schema with compatible: ['realtek,rtl9302c-switch', 'syscon', 'simple-mfd']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.example.dtb: i2c@36c: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'clock-frequency' were unexpected)
+	from schema $id: http://devicetree.org/schemas/i2c/realtek,rtl9300-i2c.yaml#
 
-> +	 * space conflicts.
-> +	 */
-> +	eoi_addr = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!eoi_addr)
-> +		return dev_err_probe(&pdev->dev, -EINVAL, "missing MEM resources\n");
-> +
-> +	asf_dev->eoi_base = devm_ioremap(&pdev->dev, eoi_addr->start, resource_size(eoi_addr));
-> +	if (!asf_dev->eoi_base)
-> +		return dev_err_probe(&pdev->dev, -EBUSY, "failed mapping IO region\n");
+doc reference errors (make refcheckdocs):
 
-...
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240920000930.1828086-2-chris.packham@alliedtelesis.co.nz
 
-With the above change being applied,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
--- 
-With Best Regards,
-Andy Shevchenko
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
