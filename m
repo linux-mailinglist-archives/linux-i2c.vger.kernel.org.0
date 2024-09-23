@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-6931-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6932-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BC7B97E72C
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2024 10:05:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EB0697E72D
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2024 10:05:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F0CB1C21167
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2024 08:05:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87556B203DB
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2024 08:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6773C485;
-	Mon, 23 Sep 2024 08:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7197C4F215;
+	Mon, 23 Sep 2024 08:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wK0+9z/8"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3haUl3IZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2085.outbound.protection.outlook.com [40.107.236.85])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2068.outbound.protection.outlook.com [40.107.244.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEFA49630
-	for <linux-i2c@vger.kernel.org>; Mon, 23 Sep 2024 08:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.85
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE07C49630
+	for <linux-i2c@vger.kernel.org>; Mon, 23 Sep 2024 08:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.68
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727078744; cv=fail; b=Ug4F26bTT70H8M4h4mnWYRJNeveKxkCnWBqeTsYthqVT4HmlyCgsQ7uTx4M97OFS2vKZtDcmZllQEzV+yiyb0yWlqt4rqfDXbmsxFGInP3kg0SRgkbTZa1NaTlLTmlSACazl433sF1DvhC6IBOw//ucwOC2TgcI+oTPpQ8LMq7I=
+	t=1727078746; cv=fail; b=BIIOT4r3iATfPhGSGRUCtuIAV8cwwbU6Tr8xeuAwxqMWUgYNUW+AwLiPbHUC4az+R4IXOlU8LqcTkIOOQi7TNoQThQfL7XNCXvPg7CVZ/Uk9fGEXRk7+/QhdXOr/FbbPvkXFQrt4XvztcZPfSXMatFG2VNvKFYAYXVvoeU/GUFo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727078744; c=relaxed/simple;
-	bh=1TMxyjgBPESkBcUhIXg+cgdS2ERIxIkft0BsMuOXi9s=;
+	s=arc-20240116; t=1727078746; c=relaxed/simple;
+	bh=5Hugl5wpLdyyRGxsQhfI2qbkvTf4hOFMQ6+CBbOCjSs=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tUSo4p+Ea14htbutu0+FPJwFEBPs3izkjpIcV6z/RpOihTeauNtLBtRrf8MMOkuOLAWQzNtoRvLpd2IqMeavB8NjLrb+KPr4JUTE/WUkxIUa8yt1jFTujoxzMe6YNFWTG8YisaiKQpWraZH/e1E+SoPg7vMV9fQwOW/P18Asoc0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wK0+9z/8; arc=fail smtp.client-ip=40.107.236.85
+	 MIME-Version:Content-Type; b=GNe9KKJV1/x0Y2VRkTe3iXLRFBux0wNx43otGMJNaH1nSr3EgsNRyHUYgzmf2hOj7FHJRVPN2jqBfwXvg54p2b1KadOhu22qeJnEkr7O6ahzPmNriI+m263fsrHq7tU+5n0kIC0NP/QV6RtUckp/X4ll+y9zPIyM8qNnKtDnqDo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3haUl3IZ; arc=fail smtp.client-ip=40.107.244.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wxub39ni2YPLKQqw8hXw0vDs8lAd8rj1HGHgA/iOvd8S5ac3xPozmMTb8O8UPZCdRwQDEbYs6qNhS9N73Sp7ukhUILtG/E/yYGRQ4mL6EXhsJsHF6mKuSpsk+ffZCita59XnomgGvTDDaAOj6zINJlvD4rP/SBrIieoSZUkUsASpNGfQglrlcnRo/sbp1O8VqIvODN2MSzCyAbZXeTSH0GkuqvqKMT6JNJO8w7Y3UVcvNNL2SCsEuGQEfpBfDh2TWVul3EY1ftiQYqwEsl63KmmGYqLuVPQsbaUSTKcCestkMPM/83OcHH0P89fjZ0pbx74OwN2yvlaV8ivBlrln/w==
+ b=y5pAUas4uMBPHl0u3vNs0qdZ9xAQwO/SPt2KL1v5Fj8u8YH532NCASPEH/Nmf3lLw7VnPSGxR28/2LdnJORqIt6SMqgh7vG3kliLrCE8+C58/sb/FBFtlWkU4Aoja2WLLRTjD+XEjbXH3D94GKBwbaQUhlzWd8C3F985LIdWtregtrx/igPFKmQLGgEIN+8P3yqvyu/SBuYTbAE5OUCZCX+zYpLVjKCmeP0S7Tl3kGuRBTkJ/+2lZtahs5elsKHo0x2Z8fHLGN/SsrcpTNZMwy7/Fo2ubwnW8ChuaWNBnsL0oMQJ/3JoJ2JmFCnkZdtpMThFVfw3P+LvHZyeQsJxRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kJEhbhcqQubcqRymaQD/K6U1U2lww2KWETV3Clml4LI=;
- b=DdoDdrgpLAOqExdnIZlmwKVLzb+idpJNrditLwOl6iBCHp+VTiztBWU9owAVpdKz8clkq4PBPQhKRNC9mH3GOvIZJmvPGT+VmPGgi4+Eh21sOQZbH5m9c0A7qDv7V4oa4mryJsYekG2bcX8++2rqCIwPYKqIwQu5BDP/ocAcOJPopSHXw7NlnC/FeXluqGv0i1APCQMZf8g7yxnuumzZ4xuwGOgpZmFlls+ImmUlSvxoFfMtTvvNVe/gDrMwNwvTgmnrXe6um2rGLAoh6UsNlWLJgMWiJLVGdleqcj2xqjMoKKD4/QO5SoM68HU3Bnt8w3/OhN1qre00bFAXRwaSbw==
+ bh=coRMp6Uf9IJg9qAgO3Fmn7/PsVS9ybJStmyYhoOmcA4=;
+ b=P8vFmZqqdWF0Aoo4myH41pOhLstnZrEAq/Pu1hbp0QsVdHn5c3HEPvsOssPMNosA3Z5j/MTr98Idu31xl54W815M8IXGRXgN90Oz9zWAMfuO5aESQKuJJKiHncA3H9ffFiazKX+mPhzV+UIrA9+iMqcPhfZ5EqbrXuGjOvwLQurm6QxJDGWP0PlcUq74vHJCYj147b9LnBPteobfhohnx2eQ1JJrvxcTCw0pw4aTY4r2v+efOwWPdUQ3enCQGoAPWZaC6ZUM4CQ8q7lRI6EEhKtFSKzn5Qk4oQi2+XPlsPXtr2hKY9XG7RD4GS4jCt3HffflmEvbm28G2ahTABJeiw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kJEhbhcqQubcqRymaQD/K6U1U2lww2KWETV3Clml4LI=;
- b=wK0+9z/8ObpLlIu8wjxGvzh52g+RGQi5sulisglfmKGTkp5aVM8kZVM3ZIxST9g6mH7O0jQ2Bf0R9TFyUZlJ+igWNrhxQDFYbrBauVNu9Kbigk12wrI+aK9dsu2XSBXa3iK8XZkBW+vukMjMNBtuHRQncyFjIaRGys4gvmg2grw=
-Received: from SJ0PR03CA0379.namprd03.prod.outlook.com (2603:10b6:a03:3a1::24)
- by IA1PR12MB7712.namprd12.prod.outlook.com (2603:10b6:208:420::9) with
+ bh=coRMp6Uf9IJg9qAgO3Fmn7/PsVS9ybJStmyYhoOmcA4=;
+ b=3haUl3IZ8Q4dhwgrfjVZIrb5SDEivX0tSN+7h/2uddGiqHIn073pBKXTeIBf7CeVMQmzmuXd2xMXtiZR2lGmcdjkkt8fOBrzejQEqjaaiI2IR/PV5xlKUJ5SKt2xo3V4+w184S/gPES9qowEfEBoIE2kRDNgyfYi4bub6nKk4gQ=
+Received: from CH2PR03CA0029.namprd03.prod.outlook.com (2603:10b6:610:59::39)
+ by PH7PR12MB5831.namprd12.prod.outlook.com (2603:10b6:510:1d6::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.25; Mon, 23 Sep
- 2024 08:05:38 +0000
-Received: from SJ5PEPF000001F0.namprd05.prod.outlook.com
- (2603:10b6:a03:3a1:cafe::f0) by SJ0PR03CA0379.outlook.office365.com
- (2603:10b6:a03:3a1::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.29 via Frontend
- Transport; Mon, 23 Sep 2024 08:05:38 +0000
+ 2024 08:05:40 +0000
+Received: from CH2PEPF0000013D.namprd02.prod.outlook.com
+ (2603:10b6:610:59:cafe::b3) by CH2PR03CA0029.outlook.office365.com
+ (2603:10b6:610:59::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.30 via Frontend
+ Transport; Mon, 23 Sep 2024 08:05:40 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,21 +63,21 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SJ5PEPF000001F0.mail.protection.outlook.com (10.167.242.68) with Microsoft
+ CH2PEPF0000013D.mail.protection.outlook.com (10.167.244.69) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7918.13 via Frontend Transport; Mon, 23 Sep 2024 08:05:37 +0000
+ 15.20.7918.13 via Frontend Transport; Mon, 23 Sep 2024 08:05:40 +0000
 Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 23 Sep
- 2024 03:05:35 -0500
+ 2024 03:05:37 -0500
 From: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
 CC: <linux-i2c@vger.kernel.org>, <Sanket.Goswami@amd.com>, Andy Shevchenko
 	<andriy.shevchenko@linux.intel.com>, <Patil.Reddy@amd.com>, Shyam Sundar S K
 	<Shyam-sundar.S-k@amd.com>
-Subject: [PATCH v7 7/8] i2c: amd-asf: Clear remote IRR bit to get successive interrupt
-Date: Mon, 23 Sep 2024 13:34:00 +0530
-Message-ID: <20240923080401.2167310-8-Shyam-sundar.S-k@amd.com>
+Subject: [PATCH v7 8/8] MAINTAINERS: Add AMD ASF driver entry
+Date: Mon, 23 Sep 2024 13:34:01 +0530
+Message-ID: <20240923080401.2167310-9-Shyam-sundar.S-k@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240923080401.2167310-1-Shyam-sundar.S-k@amd.com>
 References: <20240923080401.2167310-1-Shyam-sundar.S-k@amd.com>
@@ -93,107 +93,76 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F0:EE_|IA1PR12MB7712:EE_
-X-MS-Office365-Filtering-Correlation-Id: 27e3c604-715b-4290-e607-08dcdba68275
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000013D:EE_|PH7PR12MB5831:EE_
+X-MS-Office365-Filtering-Correlation-Id: 485150e7-2546-4a9d-8097-08dcdba683ed
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|36860700013|82310400026;
+	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Lt7TuMRH15R8AeeqUCHf/saFjKQtONddpZbd9bFPYrDSLTHSF6MSa5/FflOt?=
- =?us-ascii?Q?wagjtKJsjNrd3RABhmnaMscT4cR+bBXFJP8U2TlRZcukYl0hTj9ICOxIPxXZ?=
- =?us-ascii?Q?JeRs0vAQDdYkcNRyUYm2M/B38fPp+xePi/ct5N6lHDhT+xwq81u8yFfsLDxg?=
- =?us-ascii?Q?RhaYUYFzlt+ENR/VtDONt/pzeQgUf+D8GtH4HuiZcMWkvkoWQ+UWdNZtQ/Xf?=
- =?us-ascii?Q?OP6iM2yEWiq1mIsq3iuCZ3lI99rdt/F3/zgFnzaS1LfRMSS7XBh3vMmgQchW?=
- =?us-ascii?Q?5lEYAtoK5r5uSY/Dl97VHKC+uM8CmVpKxQY0J9OuOvYspInIHqoum9CEXzuy?=
- =?us-ascii?Q?2xbqSYWM4g82yZ+yNPExJhdUxNNjlXEF8sxN0Y7NFGgcnK3peMqVkViHxTOZ?=
- =?us-ascii?Q?XGYZIC/pVhQAR/wQS53BeM0Tx+U31tWWcI6ZTVZp5BjTX24ZjquP+psO7DF4?=
- =?us-ascii?Q?+Dp06xzQMa1CwWAb2Uhf5bo+1jlI9tMPzs9AHJSFSEDiqqmF0XHFq5MwhI5e?=
- =?us-ascii?Q?qRBBGD0wZHw+AA2bRSdzqbwxUym5uxZpgWVkDJT2qbvQGCEmrvWs0mF1RS/h?=
- =?us-ascii?Q?/uDNNw7YPv5A0uuCij0+ub1k05kyR6Af0d9h968FvOYKh6FpnN3oFwCSwSt0?=
- =?us-ascii?Q?m0XUQ48DqLVaC96YWbbes+VNQi1H4wtrWkSqYHliRXJZoAFnFI3jmfA9RMWq?=
- =?us-ascii?Q?aaeqwlIdIFGdEYnWnJJZsI23S/F+4Ej+wS6/FUkJ0w43MrB1P/5R6vyzapHC?=
- =?us-ascii?Q?6DhVhM6tE16E5/x9l3s/3oyq79tBbDVcBjY/1SsCjUoIsY4a4qWx5tm4/57i?=
- =?us-ascii?Q?OtenHYCpT4Sw/b2KAU7sx8ue6dD7PGXtKQoGING/oPVG4b85LI9r6LfjMDDe?=
- =?us-ascii?Q?K3BQxcjznOC9JSdYxecQduWfSaKxIAoOY5XcvripusYiL3VlZwsKPvpGYATo?=
- =?us-ascii?Q?oGuH0V1zHi4LVpWeofSszyE8mAyAfYk3XH8PbhTnf9yQMJZD1Rbtqpx1V3rL?=
- =?us-ascii?Q?EcUxFNaULWns2yM1tFZVxf3YFJTozq5kQjBKK41juQ4qDirs8jW3lKHLPejp?=
- =?us-ascii?Q?m2VHl8tk3OLMTprvYyF0iVJ+RXjyQ8gcFrfft5gRIamTw0KAr02hE9yV0UI8?=
- =?us-ascii?Q?1uanqLx3yIiWXjMH5Hq+E9JiWvoTPnK7kDfl7rEgcMiasDYcoPYQtxnT04AN?=
- =?us-ascii?Q?XIsAPB3/Pz7SD8FzvHVeYpw3JEZZQK5dpnDRBlFoFOy5HTaMnaA4GbvRLEoH?=
- =?us-ascii?Q?Pi2p78zP8/Wx6B0avgvtuUlRUAEEF7sQjAIJbAGJPrRNHD3nkjM8mZLk+Ezy?=
- =?us-ascii?Q?honFLhJN/WFxdX0TZlqdqLluDnHi1nu1qt3CnaHkQ2Co7i9/Rc3K/KuodTZx?=
- =?us-ascii?Q?ZAmWs3yIDhZK+RFluT4ybxapVcoJoANuYMmYovvIRpVt4f6rsKUxF8BGF/07?=
- =?us-ascii?Q?+kCCaHxs4MxOsxH45aTsjzA+9WRFmgJ2?=
+	=?us-ascii?Q?nxEzpJJ0F7UnlfP3SrJnC0OyRcuP83P4qgX0Rz2uCNcTifLMa0af/rF/kmCc?=
+ =?us-ascii?Q?Xcq3rUh6tELD/7b2EzRU2BnT5etRdU+L79sree4YHsA2USvQf3WM6Pj1K7En?=
+ =?us-ascii?Q?iqza+pyedfX13jF9V+fz9CBk7GCFOgPpLPUpwBSGNZuB4t+Y9C6IUEGDvqhi?=
+ =?us-ascii?Q?2dPYBkPVcs50TNb/ZjJMi2kc7lEt6KBBFQPozFWfNEAlYGDj7f+eOrv8tyx3?=
+ =?us-ascii?Q?gelt718ixFcwbpHa0cm47pok73/B2pNlrzjQUihDTi0W2enoG/PvqqZlrCiu?=
+ =?us-ascii?Q?wUhk32JM9w2ckXiI5lz3uWHNBZYS6Wn1lBzr/rJJW+j/J1/53yiP1MR6Q+L/?=
+ =?us-ascii?Q?3YxLxpChbPU4QEaiVRGQ5SSN1Q8MTBfv+qyyRHSeu7S1jW9G68eWCmt4UGPs?=
+ =?us-ascii?Q?Ix5QsPqcZ9Gl9QKCJyzmqJRzfVni7jTdTJhqzKLeErD2lElcQGqr1jgGJ0wo?=
+ =?us-ascii?Q?lxc/PrHs9wjrizHwf2He5FcGypLp3dU31/S7lYTyodARjjnQrxGNBnuMIRJX?=
+ =?us-ascii?Q?YHgvabCfdosZj7d9eaHZSbikUtAKu60ORXQJCGe0uvQ1zqHMO6eVCNgkD5y2?=
+ =?us-ascii?Q?V9NZijFGyDL0OvDKYlNHfz9IzposEgRjNL5tl4CKEKyWg21UVmN1LHnrO9Cc?=
+ =?us-ascii?Q?XEGgfbaz1gyxw3CuEU4Z6rArLQmUTSBruY5Kr3CxQdzvUOKmH89vw/tuTtsp?=
+ =?us-ascii?Q?fridaxcRifc4EKuT9hQmmOYXMpiDbDkm5jC25+uh/KKUX4zXE7pZFGVQNCyt?=
+ =?us-ascii?Q?02skwx49WbWSTPvVf5sltYgaG0+cySlW9vfdBGSOuqKB0ShJtia0Qf1y+i37?=
+ =?us-ascii?Q?Qljf9hz3qA6l9l5DSl5NdQaZb8uY5eC8a3yg0f7cm02ENycJvRLQuI5S3vIU?=
+ =?us-ascii?Q?bJCppq4bo1oAePPLOaufD9eC3VsYJDDUNte2iWDisz6/NjteEwpVjx561Cc3?=
+ =?us-ascii?Q?8UOsvPrH4GL6IWphUJuNMYwQP9bCb7C2BpSihjQIEi/gUwuomQeyPD3SRJVP?=
+ =?us-ascii?Q?MEoh4IIDVVuP0ApJ03uIYNn/vtyvlUEa3qnP5LYKchSNFL6FLSA8IJvhuqs3?=
+ =?us-ascii?Q?lvH1A3JdkOyyyBLDBw2Bp318hIUSLXHtIFPqEhfrFE/X4gtVwPHYKZX5Fg6Z?=
+ =?us-ascii?Q?xysHpZzTRKLGTloujNq0GepHMifGK0ZqGER77HD4hbspaH7Y3MDqx4h83UfX?=
+ =?us-ascii?Q?3yW+Vd3K/en7Iyz3L8EWWqD2SIV2rEaSFZWH9Otn56rN5nGvfCKqHSRdivUR?=
+ =?us-ascii?Q?a3BEuPeN/wJsttWkNX1bAXUknFbiN3clMhSqrtymaI2rOLMUVmofEDB9hUK4?=
+ =?us-ascii?Q?uVI0IxhEfdDA81H4CPyPC/IctVQoE/io3WLcR3mom3kk/KCPYI3C4xQ4kjU6?=
+ =?us-ascii?Q?YyoaeiVxu7g8/PmNKGDO6XMhLCPJl4wR/xYP321MJT7lXDqt4NSFtXndUBLr?=
+ =?us-ascii?Q?rNVgliwkteLXSoHD1s42jZQbcQ9x5GBd?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2024 08:05:37.8024
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2024 08:05:40.3420
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27e3c604-715b-4290-e607-08dcdba68275
+X-MS-Exchange-CrossTenant-Network-Message-Id: 485150e7-2546-4a9d-8097-08dcdba683ed
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001F0.namprd05.prod.outlook.com
+	CH2PEPF0000013D.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7712
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5831
 
-To ensure successive interrupts upon packet reception, it is necessary to
-clear the remote IRR bit by writing the interrupt number to the EOI
-register. The base address for this operation is provided by the BIOS and
-retrieved by the driver by traversing the ASF object's namespace.
+Update the MAINTAINERS file with AMD ASF driver details.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Co-developed-by: Sanket Goswami <Sanket.Goswami@amd.com>
-Signed-off-by: Sanket Goswami <Sanket.Goswami@amd.com>
 Signed-off-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
 ---
- drivers/i2c/busses/i2c-amd-asf-plat.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-amd-asf-plat.c b/drivers/i2c/busses/i2c-amd-asf-plat.c
-index fa6db99a8fe5..3d15b1be8686 100644
---- a/drivers/i2c/busses/i2c-amd-asf-plat.c
-+++ b/drivers/i2c/busses/i2c-amd-asf-plat.c
-@@ -48,6 +48,7 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e1765d39ae75..69bc0bea0527 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1101,6 +1101,12 @@ L:	linux-i2c@vger.kernel.org
+ S:	Maintained
+ F:	drivers/i2c/busses/i2c-amd-mp2*
  
- struct amd_asf_dev {
- 	struct i2c_adapter adap;
-+	void __iomem *eoi_base;
- 	struct i2c_client *target;
- 	struct delayed_work work_buf;
- 	struct sb800_mmio_cfg mmio_cfg;
-@@ -299,6 +300,7 @@ static int amd_asf_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct amd_asf_dev *asf_dev;
-+	struct resource *eoi_addr;
- 	int ret, irq;
- 
- 	asf_dev = devm_kzalloc(dev, sizeof(*asf_dev), GFP_KERNEL);
-@@ -310,6 +312,21 @@ static int amd_asf_probe(struct platform_device *pdev)
- 	if (!asf_dev->port_addr)
- 		return dev_err_probe(dev, -EINVAL, "missing IO resources\n");
- 
-+	/*
-+	 * The resource obtained via ACPI might not belong to the ASF device address space. Instead,
-+	 * it could be within other IP blocks of the ASIC, which are crucial for generating
-+	 * subsequent interrupts. Therefore, we avoid using devm_platform_ioremap_resource() and
-+	 * use platform_get_resource() and devm_ioremap() separately to prevent any address space
-+	 * conflicts.
-+	 */
-+	eoi_addr = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!eoi_addr)
-+		return dev_err_probe(dev, -EINVAL, "missing MEM resources\n");
++AMD ASF I2C DRIVER
++M:	Shyam Sundar S K <shyam-sundar.s-k@amd.com>
++L:	linux-i2c@vger.kernel.org
++S:	Supported
++F:	drivers/i2c/busses/i2c-amd-asf-plat.c
 +
-+	asf_dev->eoi_base = devm_ioremap(dev, eoi_addr->start, resource_size(eoi_addr));
-+	if (!asf_dev->eoi_base)
-+		return dev_err_probe(dev, -EBUSY, "failed mapping IO region\n");
-+
- 	ret = devm_delayed_work_autocancel(dev, &asf_dev->work_buf, amd_asf_process_target);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to create work queue\n");
+ AMD PDS CORE DRIVER
+ M:	Shannon Nelson <shannon.nelson@amd.com>
+ M:	Brett Creeley <brett.creeley@amd.com>
 -- 
 2.25.1
 
