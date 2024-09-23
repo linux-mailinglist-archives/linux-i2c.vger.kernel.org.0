@@ -1,145 +1,96 @@
-Return-Path: <linux-i2c+bounces-6936-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6937-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6C0F97EC3F
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2024 15:27:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 551DA97EDD4
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2024 17:12:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 010141C21373
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2024 13:27:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 187CE281F74
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2024 15:12:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C1F199923;
-	Mon, 23 Sep 2024 13:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1857C19EEC4;
+	Mon, 23 Sep 2024 15:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SR3iuK9e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qVXxiMb4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EAD1993AF
-	for <linux-i2c@vger.kernel.org>; Mon, 23 Sep 2024 13:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C761219C571;
+	Mon, 23 Sep 2024 15:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727098051; cv=none; b=IL7tKf7CICNZW0haBoeT+o9GTOEqDo33DqxBAVi7ih7Sai4nZbx1IcNimvXaxQG+CWo/eIKzyThlg0JIhtm3nNThzatdOzaHfXnbuy0xY9UguSXRiQcgain9T52ukyUBYDA3O/a+T5ugPEzJERlPDayDFf9zk+9YO6//KivUMYE=
+	t=1727104213; cv=none; b=oX/Z4U9wIBKHKrkZcKk9QwjHT6KQ3lJwLwd9RGi9HeP4QSXoZnkJgy7tC++C9vOh1flqOaMICvP+7BWwZm79ssNR63+hyJyrJWsrKa00pgrLT28XIHOjIH10W77Wp7PFoRZ2zwIfO3lODKkCWbarr0a+P7nEnH5PqX2HMBIbwOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727098051; c=relaxed/simple;
-	bh=+5pcO+hrF1QvYpDg+nE9KUEvfj5GUl67+TrRo2XUMaQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gQc4rbgsiyoNLKGEEYQtAoWDPaCA+exPDihWPtDcJQjg1Lk6gNH5qLfAc282fmdlW2rWeoUl9qS4XaiU1kWK3nRURx0z1BRbj33Rg2pFdUAHOz/8Z9u9ddPmjSDdKbtjzfGB8nYNJihe/NWmFOw1aqzZoLo5W9hgN1KZZyafBJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SR3iuK9e; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727098049; x=1758634049;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+5pcO+hrF1QvYpDg+nE9KUEvfj5GUl67+TrRo2XUMaQ=;
-  b=SR3iuK9ebferXAb/592hDPA8fzDeaVCGxA+1Mw6MM3HGUx5R9k89lw4E
-   JaN8MrESYv25y9ToSaGI/8RXIHgesMbkOlzWi84Bd3NNBKHcUolv9Aps9
-   DaCWoJSUOCLxy/2CaNbENTv/dug2gb1ju72sR6EMLbmbl25bttie/6UrW
-   RiAoa5+EaJ2r6dcFiCPvIAL9ygMd4NmDGqeyh87y2Q+REik+um2A3x+OA
-   AP7BDR/Kj+Up1+47jEPzBdEJEQ8Hk0dp5S4cEWGRj/3YlU+pwouc1R7GS
-   ZCX7F8sdGyITYtWhAF17jeMar/CSlQLCR8weNC0jKWKdEsLm3x0N/Bpjd
-   w==;
-X-CSE-ConnectionGUID: VtM9L6t9T3uwuJQrZC6qMg==
-X-CSE-MsgGUID: YGnwzyvATjajQoPNU/MzvQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11204"; a="26199038"
-X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
-   d="scan'208";a="26199038"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2024 06:27:28 -0700
-X-CSE-ConnectionGUID: KtgeLkdARLe8LW77p5uRoA==
-X-CSE-MsgGUID: 72qgC2h6S82vBdKQY3Sxsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,251,1719903600"; 
-   d="scan'208";a="75178752"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.57])
-  by fmviesa003.fm.intel.com with ESMTP; 23 Sep 2024 06:27:27 -0700
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To: linux-i2c@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH] i2c: i801: Add support for Intel Panther Lake
-Date: Mon, 23 Sep 2024 16:27:19 +0300
-Message-ID: <20240923132719.252770-1-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1727104213; c=relaxed/simple;
+	bh=7IbJ9X8jlsiu83Vo3Odh/vec0KfgUjxs76ByJvX40F0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uJ5GF3IP9d2SEmg1MQ20y4BA45IaGozvilPN82AE4t1l4G2tptirkOeSde/ojZu0Yvq8LArjhGPvYXLmJlvz14LjYAgmdFyatjWXEV9UUQscznMINr7BAx/EQjWsdMlmsYPpoZe2ljlCkRie56oyH3pcMiq31oRjDkXO7TbkJuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qVXxiMb4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 477F6C4CEC4;
+	Mon, 23 Sep 2024 15:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727104213;
+	bh=7IbJ9X8jlsiu83Vo3Odh/vec0KfgUjxs76ByJvX40F0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qVXxiMb4PaRjS1l3/arjX2jOfUWEN2yIU5IiQouFhj0pjgCFbCBRiG9CfSbb4IDjr
+	 GFmMxv8c/gV9aC9cppDOvOL+OGJUC8G/pqABMdFsvRL14Z2Fqn6ucUxzn1q9wNEVL+
+	 ccZs0OTG7vh3Cg/X2H3aGq+qF+5OAi4q2rmSVQgyOmeq28f1tONPI9NFHvRVx/jSCJ
+	 XHapbysHMqF1BKhPeeAXxcyuVWFThQAXhsOpnZNF52sq9tRIIP/y7FElZJFAT5+aeo
+	 FE/nZ1gdCtv3Mw1BhkbyC/vuV2tHMIOPSOOHYL1SINJnddpijqvv82dFaKQxxbeccp
+	 Z/zJHjMxi7L6g==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5366fd6fdf1so368225e87.0;
+        Mon, 23 Sep 2024 08:10:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVX1+t7wFcUubNN8jGDVLR4Hr0aFzMZ5ixL8cVPEg7GKtEjvfm6QDTMsMunVpO0iTStQv+vWM3uvXo=@vger.kernel.org, AJvYcCXnbpxgCGmX3TZQafWyJ/Ycpt0uqnA3IyCVi3ER4lQDO4CGlemkgGjj64KlnPo1OcKuJridnVvB@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMgOrzJeJ5ZBMUGL0ARXTjeYB/s+5EO8+ovdJTAHYDXpepm1QS
+	ofs745rJPsiLD078VjS4DFEHs7BSjFLVp8GKR3d3jc+79/vWygFsdzsKQFuabSANnCnNWbsJ65h
+	G320cDZNmXihtKk3dZ0pXXPcC7Fw=
+X-Google-Smtp-Source: AGHT+IE5neW3typpBkpgHcLxCN0BxMOXymMuWGOe6oO7KDaWQjK5Q5O+mCotgtKvyqMfcG0mUBs4dVla8CkNi9nEcuc=
+X-Received: by 2002:a05:6512:b29:b0:530:ab86:3 with SMTP id
+ 2adb3069b0e04-536acf6b6b0mr5581347e87.1.1727104211668; Mon, 23 Sep 2024
+ 08:10:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240912104630.1868285-2-ardb+git@google.com> <dmwsrw6mwt3zsksxxb35qokhtf3setobeybhd34w52typxx4ld@zbjvamsqwfxt>
+In-Reply-To: <dmwsrw6mwt3zsksxxb35qokhtf3setobeybhd34w52typxx4ld@zbjvamsqwfxt>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 23 Sep 2024 17:10:00 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFiYC_h_qmnOf0Vp76-hvfKcG8Z62tx-bhTKB2mj2ULaA@mail.gmail.com>
+Message-ID: <CAMj1kXFiYC_h_qmnOf0Vp76-hvfKcG8Z62tx-bhTKB2mj2ULaA@mail.gmail.com>
+Subject: Re: [PATCH] i2c/synquacer: Deal with optional PCLK correctly
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-i2c@vger.kernel.org, stable@vger.kernel.org, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
 
-Add SMBus PCI IDs on Intel Panther Lake-P and -U.
+On Fri, 20 Sept 2024 at 11:03, Andi Shyti <andi.shyti@kernel.org> wrote:
+>
+> Hi Ard,
+>
+> On Thu, Sep 12, 2024 at 12:46:31PM GMT, Ard Biesheuvel wrote:
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > ACPI boot does not provide clocks and regulators, but instead, provides
+> > the PCLK rate directly, and enables the clock in firmware. So deal
+> > gracefully with this.
+> >
+> > Fixes: 55750148e559 ("i2c: synquacer: Fix an error handling path in synquacer_i2c_probe()")
+> > Cc: <stable@vger.kernel.org>
+> > Cc: Andi Shyti <andi.shyti@kernel.org>
+> > Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+>
+> I'm sorry for the delay, but I needed to wait for the previous
+> batch of fixes to be merged.
+>
+> Merged to i2c/i2c-host-next.
+>
 
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
- Documentation/i2c/busses/i2c-i801.rst | 1 +
- drivers/i2c/busses/Kconfig            | 1 +
- drivers/i2c/busses/i2c-i801.c         | 6 ++++++
- 3 files changed, 8 insertions(+)
-
-diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
-index c840b597912c..47e8ac5b7099 100644
---- a/Documentation/i2c/busses/i2c-i801.rst
-+++ b/Documentation/i2c/busses/i2c-i801.rst
-@@ -49,6 +49,7 @@ Supported adapters:
-   * Intel Meteor Lake (SOC and PCH)
-   * Intel Birch Stream (SOC)
-   * Intel Arrow Lake (SOC)
-+  * Intel Panther Lake (SOC)
- 
-    Datasheets: Publicly available at the Intel website
- 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index a22f9125322a..e14281aed1ac 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -160,6 +160,7 @@ config I2C_I801
- 	    Meteor Lake (SOC and PCH)
- 	    Birch Stream (SOC)
- 	    Arrow Lake (SOC)
-+	    Panther Lake (SOC)
- 
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-i801.
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 328c0dab6b14..9c3a6c1fd3dc 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -81,6 +81,8 @@
-  * Meteor Lake PCH-S (PCH)	0x7f23	32	hard	yes	yes	yes
-  * Birch Stream (SOC)		0x5796	32	hard	yes	yes	yes
-  * Arrow Lake-H (SOC)		0x7722	32	hard	yes	yes	yes
-+ * Panther Lake-H (SOC)		0xe322	32	hard	yes	yes	yes
-+ * Panther Lake-P (SOC)		0xe422	32	hard	yes	yes	yes
-  *
-  * Features supported by this driver:
-  * Software PEC				no
-@@ -261,6 +263,8 @@
- #define PCI_DEVICE_ID_INTEL_CANNONLAKE_H_SMBUS		0xa323
- #define PCI_DEVICE_ID_INTEL_COMETLAKE_V_SMBUS		0xa3a3
- #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_SOC_S_SMBUS	0xae22
-+#define PCI_DEVICE_ID_INTEL_PANTHER_LAKE_H_SMBUS	0xe322
-+#define PCI_DEVICE_ID_INTEL_PANTHER_LAKE_P_SMBUS	0xe422
- 
- struct i801_mux_config {
- 	char *gpio_chip;
-@@ -1055,6 +1059,8 @@ static const struct pci_device_id i801_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_PCH_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ PCI_DEVICE_DATA(INTEL, BIRCH_STREAM_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ PCI_DEVICE_DATA(INTEL, ARROW_LAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
-+	{ PCI_DEVICE_DATA(INTEL, PANTHER_LAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
-+	{ PCI_DEVICE_DATA(INTEL, PANTHER_LAKE_P_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ 0, }
- };
- 
--- 
-2.45.2
-
+Thanks. No need to treat it with urgency on my behalf.
 
