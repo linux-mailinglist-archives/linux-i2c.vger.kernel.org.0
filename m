@@ -1,136 +1,135 @@
-Return-Path: <linux-i2c+bounces-6945-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6949-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 452A7983A0A
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 01:10:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5410983D58
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 08:50:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39ECF2832BD
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Sep 2024 23:02:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EFF51F23EF3
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 06:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55AA512C49B;
-	Mon, 23 Sep 2024 23:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D34075A79B;
+	Tue, 24 Sep 2024 06:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="y8+j2qGo"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VOU1qraA"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF22B126BF0
-	for <linux-i2c@vger.kernel.org>; Mon, 23 Sep 2024 23:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE471B85FA;
+	Tue, 24 Sep 2024 06:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727132559; cv=none; b=WrfqqpS32VB3AxOwMbVZLqFspAcQWcLUjyMfvZZEGlnYB2Ddw1ybQQWwTZEPzCnl7a2+K2RA5UwWy6pIWr4W+2XiiY18PZo7Xd/z31KGh/E+DluwpHEf0QbJylWTl8o36NF05Ib0ISUwKdMneflcOMOD1sov30nrd7FnNv/fhBg=
+	t=1727160648; cv=none; b=sQ7ZB43ZK2TnbRSl+v/lvyzNudYzckHs2IOA4qDo/SqBo+bxlHp2OJmU95zqNiaXYZampqEcXz42WgSu2dTkqPRdPvv2makDaSdmuoYMMgSR+GGufIjRNu8d2p7hqQwYSU/9lA0ihKMaCQ81HC4Wogp5AI3VUL/MnhDbwAPDXSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727132559; c=relaxed/simple;
-	bh=kb+FOPL0rVZM1kDeaqCOMHkMt+9wNGouZDUALNbJokk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q9L0OzlF43Be8AklPwqzUFJs4pcbY4F0ARVrYX0iquGaKOmP9t217rCSzmb7j6F+ebeLgNdH85J3PTJyetQ9IxPaILPfkr1++WCqNJb6SDbg4E5A/YLskhfRGoroSqOZTEkdaysXonQk3be1KJFk0uW0I+9LdFu4Yowz1P2IcE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=y8+j2qGo; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DCC502C0613;
-	Tue, 24 Sep 2024 11:02:34 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1727132554;
-	bh=ssv1KJPv6dWn/2WAVO6iLtBa790Hqw+lnh3qp5W5NL8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=y8+j2qGoXf8ulvwRtRgivHf3XUNFQ5nvx69ThhXGcT/JAFRJ6tF5ZgnJ3VgRgUJGl
-	 qWFlkzVm5BR7BQaw4vCFuwG2NcWgd8XyrIIy1BNBhh6nql7Achzy+X5KM8bm4BoIxn
-	 Ub672rlvtKH/LdOZs+TrDkIcI12rwSkusc5uvoz5zka/mB1gxb17p19Bl8gA3ez1m0
-	 Px6TsCQAmHTTG6fuRv7Sxh7U4IpNa1dn7YRn7knRHSWpx7UUv0r5ZrLkWQedFO5OVG
-	 +oU6FSDeLOFTNB9NVyMZKULDYsDgk/MUNhcZF8YMIPEUTGsfa5oCbohSkRwUGI7zo/
-	 ClOWuhC1uTWug==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B66f1f38a0003>; Tue, 24 Sep 2024 11:02:34 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 9DCCD13EE36;
-	Tue, 24 Sep 2024 11:02:34 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 9A4FE28044A; Tue, 24 Sep 2024 11:02:34 +1200 (NZST)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: andi.shyti@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	tsbogend@alpha.franken.de
-Cc: linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v3 3/3] mips: dts: realtek: Add I2C controllers
-Date: Tue, 24 Sep 2024 11:02:30 +1200
-Message-ID: <20240923230230.3001657-4-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.46.1
-In-Reply-To: <20240923230230.3001657-1-chris.packham@alliedtelesis.co.nz>
-References: <20240923230230.3001657-1-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1727160648; c=relaxed/simple;
+	bh=tWofrc5xVHCQ/I19ABq8XnJLeDIn0tc0/92bJU+yU5s=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MfUtlnY3arnCLgjURwhO6vZ37SGKVRXuCuMQcMcaqjxY32zZ5ORKS3IBc/KJv2QBUJZMPJ3smAbRRdq8MQCeKrQMD0jI80VSNKSi0+a+yNfu2k6kU7SHLVrsUZLRiMHXMVAHhJKpA/AG9MqrJmi/0TveA+H+iaJ2yqzuT9keQ/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VOU1qraA; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48NJY5eo032019;
+	Tue, 24 Sep 2024 06:50:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=Jy8n0AXAXsvpmfm4lUag73
+	aDe0oaTe2SqKumv3ksNH0=; b=VOU1qraAM+ATKV/MgOgwbE5x1EUnzZXudhtYaL
+	ynbLiNl8BoYoD7SRus3Erd4nUyNqHtkdpPp/ooRlWGEseZcnFZ4/+0+fD9iN+yh2
+	zYa02Ljxb2dS6UA8VtOOhyGRxyNH3qnq0N1N72sYIwNjwNPV596m3jmWjJOXnq/S
+	9GzrnZz2O75upr6ysPwA5uZNbrED35AoMhtEX+xxU4wBAS8JSDL0bk8iUbx7J3D3
+	tGDjEWJtLGhEQS3Fg37UutZ2nrb012Ts/0RWHAlgbzCqoyA0zRPQHJHdNfX5KDIK
+	ppp+6TWS+UujkdFp3DuLCp0gO+2QVxXL2+BrPsCLMAs1355g==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41sn3s7a3m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Sep 2024 06:50:44 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48O6oh7X020917
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Sep 2024 06:50:43 GMT
+Received: from hu-mmanikan-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 23 Sep 2024 23:50:40 -0700
+From: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+To: <andi.shyti@kernel.org>, <quic_mmanikan@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC: <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
+Subject: [PATCH 1/1] i2c: qcom-geni: add 32MHz I2C SE clock support for IPQ5424
+Date: Tue, 24 Sep 2024 12:20:20 +0530
+Message-ID: <20240924065020.2009975-1-quic_mmanikan@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=Id0kWnqa c=1 sm=1 tr=0 ts=66f1f38a a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=EaEq8P2WXUwA:10 a=fm45MGwkAfgIEXGqLe4A:9 a=3ZKOabzyN94A:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 75rfzgEOEziYocWEoaNdA-pGPmIhLAlA
+X-Proofpoint-ORIG-GUID: 75rfzgEOEziYocWEoaNdA-pGPmIhLAlA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ mlxscore=0 impostorscore=0 spamscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 clxscore=1011
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409240046
 
-Add the I2C controllers that are part of the RTL9300 SoC.
+The IPQ5424 I2C SE clock operates at a frequency of 32MHz. Since the
+existing map table is based on 19.2MHz, this patch incorporate the
+clock map table to derive the SCL clock from the 32MHz SE clock.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 ---
+ drivers/i2c/busses/i2c-qcom-geni.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Notes:
-    Changes in v2:
-    - Use reg property
-
- arch/mips/boot/dts/realtek/rtl930x.dtsi | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts=
-/realtek/rtl930x.dtsi
-index cf1b38b6c353..cc43025cd46c 100644
---- a/arch/mips/boot/dts/realtek/rtl930x.dtsi
-+++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-@@ -33,12 +33,30 @@ lx_clk: clock-175mhz {
- 	switch0: switch@1b000000 {
- 		compatible =3D "realtek,rtl9302c-switch", "syscon", "simple-mfd";
- 		reg =3D <0x1b000000 0x10000>;
-+		#address-cells =3D <1>;
-+		#size-cells =3D <1>;
-=20
- 		reboot {
- 			compatible =3D "syscon-reboot";
- 			offset =3D <0x0c>;
- 			value =3D <0x01>;
- 		};
-+
-+		i2c0: i2c@36c {
-+			compatible =3D "realtek,rtl9300-i2c";
-+			reg =3D <0x36c 0x14>;
-+			status =3D "disabled";
-+			#address-cells =3D <1>;
-+			#size-cells =3D <0>;
-+		};
-+
-+		i2c1: i2c@388 {
-+			compatible =3D "realtek,rtl9300-i2c";
-+			reg =3D <0x388 0x14>;
-+			status =3D "disabled";
-+			#address-cells =3D <1>;
-+			#size-cells =3D <0>;
-+		};
- 	};
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index 212336f724a6..bbd9ecf09f4b 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -71,6 +71,7 @@ enum geni_i2c_err_code {
+ 
+ #define I2C_AUTO_SUSPEND_DELAY	250
+ #define KHZ(freq)		(1000 * freq)
++#define MHZ(freq)		(1000000 * freq)
+ #define PACKING_BYTES_PW	4
+ 
+ #define ABORT_TIMEOUT		HZ
+@@ -152,11 +153,21 @@ static const struct geni_i2c_clk_fld geni_i2c_clk_map[] = {
+ 	{KHZ(1000), 1, 3,  9, 18},
  };
-=20
---=20
-2.46.1
+ 
++/* source_clock = 32 MHz */
++static const struct geni_i2c_clk_fld geni_i2c_clk_map_32M[] = {
++	{KHZ(100), 7, 14, 18, 40},
++	{KHZ(400), 4,  3, 11, 20},
++	{KHZ(1000), 4, 3,  6, 15},
++};
++
+ static int geni_i2c_clk_map_idx(struct geni_i2c_dev *gi2c)
+ {
+ 	int i;
+ 	const struct geni_i2c_clk_fld *itr = geni_i2c_clk_map;
+ 
++	if (clk_get_rate(gi2c->se.clk) == MHZ(32))
++		itr = geni_i2c_clk_map_32M;
++
+ 	for (i = 0; i < ARRAY_SIZE(geni_i2c_clk_map); i++, itr++) {
+ 		if (itr->clk_freq_out == gi2c->clk_freq_out) {
+ 			gi2c->clk_fld = itr;
+-- 
+2.34.1
 
 
