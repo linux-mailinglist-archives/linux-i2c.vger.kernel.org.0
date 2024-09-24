@@ -1,48 +1,55 @@
-Return-Path: <linux-i2c+bounces-6950-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6951-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86CB1983FC5
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 09:58:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6A039840AF
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 10:39:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43060284554
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 07:58:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 512312859BF
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 08:39:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 513171494AB;
-	Tue, 24 Sep 2024 07:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C14FF14EC60;
+	Tue, 24 Sep 2024 08:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i2etuIi9"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ex3wrTgz"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025931B85E7;
-	Tue, 24 Sep 2024 07:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C1C14D6F7;
+	Tue, 24 Sep 2024 08:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727164715; cv=none; b=LYh771e/K7o60lgRTtNFfs1g4bi8dmIMKzhjocJevyYbW1yQxQShnx40ISbuw2wURRcJhrI+8QNTUAdZMCUECVaUntO1mlxq88FvTXygYoCCPrFWOHVktE/N9g38L8YrpLhjvcH3UdjBkrXGJS8ppGalZbhSi8SGwXNAmGcviSY=
+	t=1727167155; cv=none; b=hGU+JfWnbqRwJPUYMl4uWdHL/YU0hsTaNNzBYHaK7fJiJPVZkxepdqtHM/lbfhL4Qjm5f3LXcZ0l9Z0Hm3ZdOTItixPs+Cr4uYJe2a0WdF0hgN/6oEV6+Bn/GZfn9J+uuSJBqB4A8Yx+a4hbejYby46yx+HFpT9SG74+Up4rzfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727164715; c=relaxed/simple;
-	bh=YZweGbLvQ86kElEW+MFo0mV9Gf/M/IeYsg6iu18HBVY=;
+	s=arc-20240116; t=1727167155; c=relaxed/simple;
+	bh=rF2hSvRoH7iIqmTjIrJJBZHPbGoS+9IepCXUIvhaqDA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ByDBahtpseO92jy74rk5jZ5KY04YxjjfTZWd4ZnFC8vezyPqTZJugs/Gu4NBuI6L8ESpppCkKYw/1Cof6S48UoZUZJhc86KrevF1nNJuMDF1fKXkebFU9CCmzL/Ta866clGJ4a36K6DbRYM3u4lAc38uW/c718n3gg2YmIrZU+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i2etuIi9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD3B4C4CEC5;
-	Tue, 24 Sep 2024 07:58:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727164714;
-	bh=YZweGbLvQ86kElEW+MFo0mV9Gf/M/IeYsg6iu18HBVY=;
+	 In-Reply-To:Content-Type; b=nHN7mCxV+ZOAwDnADhIxEYvp4zgLVsP4WqjD0C6ZFnEkDcKeXkPb7tf21ArSz/IEbhGO92T407iO8IE8E1DJMYsRY+3/Sfe+ygpcWYAFNY6wOQVfUK+KQRgDauXTj2iBdbWrFHLfgb1Qz0MHgQmmeu1JX4jOHTinlvCORRXruT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ex3wrTgz; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1727167144;
+	bh=rF2hSvRoH7iIqmTjIrJJBZHPbGoS+9IepCXUIvhaqDA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=i2etuIi9XYJUvraJKfHPkd4pTh8ep3ha+udKLQVadxzGzOvIiW2Hm9MqXlGCcxcRI
-	 Yf2YQ1i+WH+qZYHSG7NMQuKzyFp9ty32j58SsV02BpwruyPjZvWhR3KBrAvwPWOSNv
-	 XiFiAk314UQuy2qA+yDq9EamGuWEd0n14PU/8Z9Ob83E1amJxwsj/3BlH5W7fZsraz
-	 ATi1C2IaJgkJwH3Rur+iOQZInSDW8cZLrIStZfGfBermlmqiG3jSuKeeRdT2FVIPt9
-	 dPfFxwTeoKZpubdBSnUu/VNE4SmLsG6fm5Ie2j9lLtavnb6+J1eze3EO/yWXsC/Hdl
-	 2wE9A9/oahkFg==
-Message-ID: <e5954cb6-7889-40c4-82b0-6df95d09d54a@kernel.org>
-Date: Tue, 24 Sep 2024 09:58:28 +0200
+	b=ex3wrTgzUqRZpy/PtVqb9ldugnriMbN9ON1rq0Pq8yX2ssvtIGOCB1ZHH5AzxAIpr
+	 oG2dKkORcA7S/CbRsWQo8OH9u8n13l29EslszFJZeaXyuqZ1bg+1xZCiAHPkwU5ZAg
+	 rLsjEE0/sPU6D4osnIZrfCDZ2ze7PBQbSJMuYIU+RUYsBBhmFhGiN24kGoV+uvrToh
+	 3YbCO5aG1jRvqP8IkKlHs/A6thpsiN4chBRbOJFx0fDqRCwH8OfuZrhvHYfmyKJrla
+	 UfOfquZBvhIHUaWG0DE5gmHI2WTZoC8qqCsT+3lkC7vGKrCxBvHY9UTwDZcbi53AGF
+	 LIwW4hjW6A5PA==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1154D17E1067;
+	Tue, 24 Sep 2024 10:39:04 +0200 (CEST)
+Message-ID: <33dc7f60-4364-4d7a-a66b-4bd881b41675@collabora.com>
+Date: Tue, 24 Sep 2024 10:39:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,186 +57,258 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: Add RTL9300 I2C controller
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-References: <20240920000930.1828086-1-chris.packham@alliedtelesis.co.nz>
- <20240920000930.1828086-2-chris.packham@alliedtelesis.co.nz>
- <6hlfdtbdf7yhkaoiuglhk4gksgzpahewzjf4cseedon7x2tx3s@m6c23rqxwkyu>
- <ab5c995c-b7b6-4435-9f6e-8b0e37add2e9@alliedtelesis.co.nz>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [v1,1/1] i2c: mediatek: add runtime PM operations and bus
+ regulator control
+To: "zoie.lin" <zoie.lin@mediatek.com>, Qii Wang <qii.wang@mediatek.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Project_Global_Chrome_Upstream_Group@mediatek.com,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20240920143627.23811-1-zoie.lin@mediatek.com>
+ <20240920143627.23811-2-zoie.lin@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <ab5c995c-b7b6-4435-9f6e-8b0e37add2e9@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20240920143627.23811-2-zoie.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 23/09/2024 23:09, Chris Packham wrote:
-> Hi Krzyzstof,
+Il 20/09/24 16:36, zoie.lin ha scritto:
+> This commit introduces support for runtime PM operations in
+> the I2C driver, enabling runtime suspend and resume functionality.
 > 
-> On 23/09/24 08:25, Krzysztof Kozlowski wrote:
->> On Fri, Sep 20, 2024 at 12:09:28PM +1200, Chris Packham wrote:
->>> Add dtschema for the I2C controller on the RTL9300 SoC. The I2C
->>> controllers on this SoC are part of the "switch" block which is
->>> represented here as a syscon node. The SCL pins are dependent on the I2C
->>> controller (GPIO8 for the first controller, GPIO 17 for the second). The
->>> SDA pins can be assigned to either one of the I2C controllers (but not
->>> both).
->>>
->>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->>> ---
->>>
->>> Notes:
->>>      Changes in v2:
->>>      - Use reg property for controller registers
->>>      - Remove global-control-offset (will be hard coded in driver)
->>>      - Integrated the multiplexing function. Child nodes now represent the
->>>        available SDA lines
->>>
->>>   .../bindings/i2c/realtek,rtl9300-i2c.yaml     | 82 +++++++++++++++++++
->>>   MAINTAINERS                                   |  6 ++
->>>   2 files changed, 88 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml b/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
->>> new file mode 100644
->>> index 000000000000..e8c37239b299
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
->>> @@ -0,0 +1,82 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://scanmail.trustwave.com/?c=20988&d=2_3w5qdKawcvw7Bv6K3mA_v4JF1rlxddN3AhCekStg&u=http%3a%2f%2fdevicetree%2eorg%2fschemas%2fi2c%2frealtek%2crtl9300-i2c%2eyaml%23
->>> +$schema: http://scanmail.trustwave.com/?c=20988&d=2_3w5qdKawcvw7Bv6K3mA_v4JF1rlxddNyJxDbgXsw&u=http%3a%2f%2fdevicetree%2eorg%2fmeta-schemas%2fcore%2eyaml%23
->>> +
->>> +title: Realtek RTL I2C Controller
->>> +
->>> +maintainers:
->>> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
->>> +
->>> +description:
->>> +  The RTL9300 SoC has two I2C controllers. Each of these has an SCL line (which
->>> +  if not-used for SCL can be a GPIO). There are 8 common SDA lines that can be
->>> +  assigned to either I2C controller.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: realtek,rtl9300-i2c
->>> +
->>> +  reg:
->>> +    description: Register offset and size this I2C controller.
->>> +
->>> +patternProperties:
->>> +  '^i2c@[0-7]$':
->>> +    $ref: /schemas/i2c/i2c-controller.yaml
->>> +    unevaluatedProperties: false
->>> +
->>> +    properties:
->>> +      reg:
->>> +        description: The SDA pin associated with the I2C bus.
->>> +        maxItems: 1
->>> +
->>> +    required:
->>> +      - reg
->>> +
->>> +unevaluatedProperties: false
->> This goes after "required:" block.
-> Ack.
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +
->>> +examples:
->>> +  - |
->>> +    switch@1b000000 {
->>> +      compatible = "realtek,rtl9302c-switch", "syscon", "simple-mfd";
->> Drop... or put entire example in the parent device node.
+> Although in the most platforms, the bus power of i2c are always
+> on, some platforms disable the i2c bus power in order to meet
+> low power request.
 > 
-> OK I'll drop it.
+> This implementation includes bus regulator control to facilitate
+> proper handling of the bus power based on platform requirements.
 > 
->>
->>> +      reg = <0x1b000000 0x10000>;
->>> +      #address-cells = <1>;
->>> +      #size-cells = <1>;
->>> +
->>> +      i2c@36c {
->>> +        compatible = "realtek,rtl9300-i2c";
->> Parent is 9302c, but this is 9300?
-> 
-> The RTL9302C is one of a series of switch chips with integrated CPUs. 
-> There is also the RTL9301, RTL9302B and RTL9303 (there my be others but 
-> those are the 4 I know about). The differences are all around the switch 
-> port/SERDES. The documentation uses "RTL9300" when referring to things 
-> common across the family. There's even an app note titled 
-> "RTL9300_I2C_Application_Note_V1.1(83)". So I'd really like to use 
-> "rtl9300" when talking about the SoC peripherals but use the specific 
-> chip compatible when talking about the Ethernet switch or the overall 
-> chip. I'm also tempted to add the other variants to my other in-flight 
-> patch series.
+> Signed-off-by: zoie.lin <zoie.lin@mediatek.com>
 
-Using family variant alone is in general not accepted. You need SoC
-specific compatible in the front.
+Hello Zoie,
 
+Your name does not technically have any "." inside, so please fix it
+so that it reads `Zoie Lin <zoie.lin@mediatek.com>`.
+
+Moreover, this implementation can be improved. Check below:
+
+You missed pm_runtime_status_suspended() checks in suspend/resume callbacks
+and, if the bus wasn't already runtime suspended when reaching suspend(), that
+will not get the bus regulators powered off when suspending; analogously, if
+the device was runtime suspended, the regulators and clocks will stay on when
+resuming from system sleep until first usage.
+
+So add the checks:
+
+static int mtk_i2c_suspend_noirq(struct device *dev)
+{
+	struct mtk_i2c *i2c = dev_get_drvdata(dev);
+
+	i2c_mark_adapter_suspended(&i2c->adap);
+
+	if (!pm_runtime_status_suspended(dev))
+		mtk_i2c_runtime_suspend(dev);
+
+	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+	return 0;
+}
+
+static int mtk_i2c_resume_noirq(struct device *dev)
+{
+	int ret;
+	struct mtk_i2c *i2c = dev_get_drvdata(dev);
+
+	ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+	if (ret) {
+		dev_err(dev, "clock enable failed!\n");
+		return ret;
+	}
+
+	mtk_i2c_init_hw(i2c);
+
+	if (pm_runtime_status_suspended(dev))
+		ret = mtk_i2c_runtime_suspend(dev);
+
+	i2c_mark_adapter_resumed(&i2c->adap);
+
+	return 0;
+}
+
+> ---
+>   drivers/i2c/busses/i2c-mt65xx.c | 72 ++++++++++++++++++++++++++++-----
+>   1 file changed, 61 insertions(+), 11 deletions(-)
 > 
-> "realtek,rtl9300-i2c" also happens to be what openwrt is using, but I'm 
-> not sure that that helps my argument as the binding is now quite different.
+> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+> index e0ba653dec2d..aae0189ba210 100644
+> --- a/drivers/i2c/busses/i2c-mt65xx.c
+> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> @@ -21,6 +21,7 @@
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+>   #include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+>   #include <linux/scatterlist.h>
+>   #include <linux/sched.h>
+>   #include <linux/slab.h>
+> @@ -1245,8 +1246,8 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+>   	int left_num = num;
+>   	struct mtk_i2c *i2c = i2c_get_adapdata(adap);
+>   
+> -	ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+> -	if (ret)
+> +	ret = pm_runtime_get_sync(i2c->dev);
 
-Does not matter. They could be using
-"realtek,we-like-to-use-whatever-we-invented-soc", but that does not
-mean we should accept it.
+ret = pm_runtime_resume_and_get(i2c->dev);
 
-Best regards,
-Krzysztof
+> +	if (ret < 0)
+>   		return ret;
+>   
+>   	i2c->auto_restart = i2c->dev_comp->auto_restart;
+> @@ -1299,7 +1300,9 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
+>   	ret = num;
+>   
+>   err_exit:
+> -	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+> +	pm_runtime_mark_last_busy(i2c->dev);
+> +	pm_runtime_put_autosuspend(i2c->dev);
+> +
+>   	return ret;
+>   }
+>   
+> @@ -1370,6 +1373,41 @@ static int mtk_i2c_parse_dt(struct device_node *np, struct mtk_i2c *i2c)
+>   	return 0;
+>   }
+>   
+> +static int mtk_i2c_runtime_suspend(struct device *dev)
+> +{
+> +	struct mtk_i2c *i2c = dev_get_drvdata(dev);
+> +
+> +	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+> +	if (i2c->adap.bus_regulator)
+> +		regulator_disable(i2c->adap.bus_regulator);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_i2c_runtime_resume(struct device *dev)
+> +{
+> +	int ret = 0;
+> +	struct mtk_i2c *i2c = dev_get_drvdata(dev);
+
+struct mtk_i2c *i2c = dev_get_drvdata(dev);
+int ret;
+
+> +
+> +	if (i2c->adap.bus_regulator) {
+> +		ret = regulator_enable(i2c->adap.bus_regulator);
+> +		if (ret < 0) {
+
+`ret` can't be > 0. `if (ret) {` is enough.
+
+> +			dev_err(dev, "enable regulator failed!\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+> +	if (ret < 0) {
+
+if (ret) {
+
+> +		dev_err(dev, "clock enable failed!\n");
+
+This print is unnecessary.
+
+> +		if (i2c->adap.bus_regulator)
+> +			regulator_disable(i2c->adap.bus_regulator);
+> +		return ret;
+> +	}
+> +
+> +	return ret;
+
+return 0;
+
+> +}
+> +
+>   static int mtk_i2c_probe(struct platform_device *pdev)
+>   {
+>   	int ret = 0;
+> @@ -1472,13 +1510,19 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+>   		}
+>   	}
+>   
+> -	ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+> +	ret = clk_bulk_prepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>   	if (ret) {
+> -		dev_err(&pdev->dev, "clock enable failed!\n");
+> +		dev_err(&pdev->dev, "clk_bulk_prepare failed\n");
+
+This print is anyway redundant, as clk_bulk_prepare() already prints upon failures,
+so you can as well simply remove it instead of changing it.
+
+>   		return ret;
+>   	}
+> +
+> +	platform_set_drvdata(pdev, i2c);
+> +
+> +	ret = mtk_i2c_runtime_resume(i2c->dev);
+> +	if (ret < 0)
+> +		goto err_clk_bulk_unprepare;
+>   	mtk_i2c_init_hw(i2c);
+> -	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+> +	mtk_i2c_runtime_suspend(i2c->dev);
+>   
+>   	ret = devm_request_irq(&pdev->dev, irq, mtk_i2c_irq,
+>   			       IRQF_NO_SUSPEND | IRQF_TRIGGER_NONE,
+> @@ -1486,19 +1530,22 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+>   	if (ret < 0) {
+>   		dev_err(&pdev->dev,
+>   			"Request I2C IRQ %d fail\n", irq);
+> -		goto err_bulk_unprepare;
+> +		goto err_clk_bulk_unprepare;
+>   	}
+> +	pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
+
+One full second as autosuspend delay? Can this be shortened to 500? 250?
+
+How was the one second wait chosen?
+
+How much time does mtk_i2c_runtime_resume() take to resume the bus?
+
+> +	pm_runtime_use_autosuspend(&pdev->dev);
+> +	pm_runtime_enable(&pdev->dev);
+>   
+>   	i2c_set_adapdata(&i2c->adap, i2c);
+>   	ret = i2c_add_adapter(&i2c->adap);
+>   	if (ret)
+> -		goto err_bulk_unprepare;
+> -
+> -	platform_set_drvdata(pdev, i2c);
+> +		goto err_pm_runtime_disable;
+>   
+>   	return 0;
+>   
+> -err_bulk_unprepare:
+> +err_pm_runtime_disable:
+> +	pm_runtime_disable(&pdev->dev);
+> +err_clk_bulk_unprepare:
+>   	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>   
+>   	return ret;
+> @@ -1510,6 +1557,7 @@ static void mtk_i2c_remove(struct platform_device *pdev)
+>   
+>   	i2c_del_adapter(&i2c->adap);
+>   
+> +	pm_runtime_disable(&pdev->dev);
+
+pm_runtime_set_suspended(&pdev->dev);
+
+>   	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>   }
+>   
+
+Regards,
+Angelo
+
 
 
