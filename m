@@ -1,135 +1,86 @@
-Return-Path: <linux-i2c+bounces-6954-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6955-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E549984127
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 10:55:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF00C984241
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 11:34:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC0EC1F23735
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 08:55:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82A7A282D77
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Sep 2024 09:34:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44EA61547F3;
-	Tue, 24 Sep 2024 08:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HoqrjFIK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C04928370;
+	Tue, 24 Sep 2024 09:34:24 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D57450EE;
-	Tue, 24 Sep 2024 08:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4AA81ACA
+	for <linux-i2c@vger.kernel.org>; Tue, 24 Sep 2024 09:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727168125; cv=none; b=MiypQtNyvlX2UpRDmnmF6pR7Y0TQ31fQ4L7Th0csvQ5DjsBzn+olsqV1dDSf/9mrF4GSlbicVfINubEJ2SpIEyIBXLn8zH+vSXgZkZXfONDrB1mnJgM8RlA4c/In2+d3gJojqYbsqm3ovsE9DOHbwpwuCvj0rJjjhFUjKXctp/U=
+	t=1727170463; cv=none; b=b1++qibnf5NsJKRlfMUMeuE/Y4D/unGm2165nfRyoPoRLusDq5dNokoqLn6n2ym4QxPAXWu+ozTTWfU2/m/IB1t/UOmd3PUq5l1nqw+oE/QiS4AFFg736j4G9BngmmIu1MNfvsQPoqKgmjYsBjd9TL/m7X0/cnKGztntNEu/Gs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727168125; c=relaxed/simple;
-	bh=AF/TqDJ7nws4BZEm50+7bH9O/iYwDovQhJ+Sea3Kl4Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bglByXV3VmRW3LnmbkR23jfR/kOrb5DZQX+CboyjYAx23iXaeQQpYM5OkwhF9JP11yfjLD2+B7iSvO944kAw5AJsyUhmVtwiul25SnJTgCora/SA/ZHRLihUwdJMqtJetqSH0jXsrgreG5DSa+pFhZqcsc7YEg/L5D42u1MQBSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HoqrjFIK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B6FC4CEC4;
-	Tue, 24 Sep 2024 08:55:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727168124;
-	bh=AF/TqDJ7nws4BZEm50+7bH9O/iYwDovQhJ+Sea3Kl4Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HoqrjFIKDwwx2wreLl6lJ5v0PMjXZUsVuVQBrrQPqZi1mcfS80QdM82bRx51EMh50
-	 yi+nenkv0GVHrfQqSSgHMUnWXDkl6/EAK21GXOQJbKgvOi6o3sLrnto1deZPNDceWx
-	 3EcLktQEF2wOJBBoPwECgzAtklEIlgY+DS9S1i/bVyklEomd9BOCPJlk3M6e6e0U/X
-	 bgSZLKYVTBPviWP3fVZwejVNeq52xr2YgZl8rssZnK5eKftEnf/SbSe5gsl6NjjhJD
-	 rEmkI3gtLYJ9TqkDbN9BBN6zWrZpZZkhLhl5AlCaYanrVGpByIJgrXkZr12Bri2wEG
-	 lXM8peOC84Q6w==
-Date: Tue, 24 Sep 2024 10:55:20 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, tsbogend@alpha.franken.de, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: i2c: Add RTL9300 I2C controller
-Message-ID: <uxv5kzjo5btypvca5vh27i7xkajyqvbqtkys7xcmfz5ltmwezv@fgrlz4yzznri>
-References: <20240923230230.3001657-1-chris.packham@alliedtelesis.co.nz>
- <20240923230230.3001657-2-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1727170463; c=relaxed/simple;
+	bh=CARFp6th4DbUiUuXwF6L9Sn0d4QvR0it2mvCHoANL24=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aIrsTXnETrdAXlFTAjPVAJ9YaymzUgvYjim6yWLd/wQLL0ZTPUqCvZABlZs5HKlWceSxnsnDPFmkcGYjV/bDLFLXJt0EavJbKKA9YD/p6eRHxr9l2u85rzTUcjKyn+sDkWfDk5TzMhgJ3CwElT/qayIstKP9gQvzzwPlswNmM5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([84.195.187.55])
+	by laurent.telenet-ops.be with cmsmtp
+	id G9aL2D0071C8whw019aLnn; Tue, 24 Sep 2024 11:34:20 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1st1w0-000Shr-1q;
+	Tue, 24 Sep 2024 11:34:20 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1st1w3-0015Xd-Ui;
+	Tue, 24 Sep 2024 11:34:19 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Gerhard Engleder <eg@keba.com>
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] i2c: I2C_KEBA should depend on KEBA_CP500
+Date: Tue, 24 Sep 2024 11:34:18 +0200
+Message-Id: <39a6ce50b152c8e435c78825ab56aa714b54fce8.1727170404.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240923230230.3001657-2-chris.packham@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 24, 2024 at 11:02:28AM +1200, Chris Packham wrote:
-> Add dtschema for the I2C controller on the RTL9300 SoC. The I2C
-> controllers on this SoC are part of the "switch" block which is
-> represented here as a syscon node. The SCL pins are dependent on the I2C
-> controller (GPIO8 for the first controller, GPIO 17 for the second). The
-> SDA pins can be assigned to either one of the I2C controllers (but not
-> both).
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v3:
->     - Remove parent node in example
->     - put unevaluatedProperties after required
->     - Add #address-cells and #size-cells
->     
->     Changes in v2:
->     - Use reg property for controller registers
->     - Remove global-control-offset (will be hard coded in driver)
->     - Integrated the multiplexing function. Child nodes now represent the
->       available SDA lines
-> 
->  .../bindings/i2c/realtek,rtl9300-i2c.yaml     | 80 +++++++++++++++++++
->  MAINTAINERS                                   |  6 ++
->  2 files changed, 86 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml b/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
-> new file mode 100644
-> index 000000000000..979ec22e81f1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/realtek,rtl9300-i2c.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/realtek,rtl9300-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Realtek RTL I2C Controller
-> +
-> +maintainers:
-> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
-> +
-> +description:
-> +  The RTL9300 SoC has two I2C controllers. Each of these has an SCL line (which
+The KEBA I2C controller is only present on KEBA PLC devices.  Hence add
+a dependency on KEBA_CP500, to prevent asking the user about this driver
+when configuring a kernel without KEBA CP500 system FPGA support.
 
-This is confusing. It took me some minutes to understand that two I2Cs
-in the example do not match what you wrote here. I got there only because
-of your DTS. Your patchsets - sent separately and describing problem
-incompletely - do not help.
+Fixes: c7e08c816cd2fdf8 ("i2c: keba: Add KEBA I2C controller support")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/i2c/busses/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-This is the binding for I2C, not for RTL9300 SoC.
-
-> +  if not-used for SCL can be a GPIO). There are 8 common SDA lines that can be
-> +  assigned to either I2C controller.
-> +
-> +properties:
-> +  compatible:
-> +    const: realtek,rtl9300-i2c
-> +
-> +  reg:
-> +    description: Register offset and size this I2C controller.
-
-Nope, your reboot mode does not have reg. Either fix reboot mode driver
-or this. Preferably reboot mode.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 0ea437c76167ad2d..229b8166ccc03803 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -782,6 +782,7 @@ config I2C_JZ4780
+ config I2C_KEBA
+ 	tristate "KEBA I2C controller support"
+ 	depends on HAS_IOMEM
++	depends on KEBA_CP500 || COMPILE_TEST
+ 	select AUXILIARY_BUS
+ 	help
+ 	  This driver supports the I2C controller found in KEBA system FPGA
+-- 
+2.34.1
 
 
