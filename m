@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-6985-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6986-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FFF3985801
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 13:32:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E224985803
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 13:33:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95D6FB2092E
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 11:32:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E9DF1F2177D
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 11:33:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B984914B07E;
-	Wed, 25 Sep 2024 11:32:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D1B14B07E;
+	Wed, 25 Sep 2024 11:33:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AkCYJK1+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jUPnR97Q"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D18137775;
-	Wed, 25 Sep 2024 11:32:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CD3137775;
+	Wed, 25 Sep 2024 11:33:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727263966; cv=none; b=o3UnXwbNHGv8VToYFaCAeNGWhQQF3P6iwCbR+wIXx2VK3VOI0JpPwiFN0ZE+8QITSH/NsAlGHVPdMBmZZ8hSlmzJNEiPSvtfez0EPXpTlzFN0lLjGPG8YeSOiFbRst4O0e8W/ooy1B4sbkPT8VMZhFry+k9WEFDGEYTIP2uOgEg=
+	t=1727264013; cv=none; b=lVXWjFnLXWV7SWYcRL05Zx5mdKDdTcQxw5EJMxrv29VAvVPd4VW+EK6qbLKBddFhztmYBEDKBFxXRbwu4fabC0B10iSX1eusodhH93iicU11rigsbjXm/UzBynYubJ3p2pffhMmb3UVSFen46/15MbIdZxoPAS4l7/+MSkga6pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727263966; c=relaxed/simple;
-	bh=yjqXEyqaUHjKbE/DCFjplucileIRbiZ/r5DPWpKujxA=;
+	s=arc-20240116; t=1727264013; c=relaxed/simple;
+	bh=yuQBwKf58O/LU7Yg6WkwSfVNVzlAqoh6XYcl2Fjkh8w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fQGwY9nGRHL29VtL6td9oQmmeMV040rb6YtlPPU/kpmh2gi0QuKKDV/lMinBO2GAzR7haAm1EfYxNdPeHMZ9+/BrMdhYerzy/tEykXcPNWJmh6Xu2VYVzmxykmQi71rDIRpqylmTz7x7TJFd61Vs0HPipoTOt2nw8ZoOJwguCno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AkCYJK1+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2872C4CEC3;
-	Wed, 25 Sep 2024 11:32:42 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=RbKQO3Mm4gCZbGaY+f/kRGhCXYsJEL1qMFXn2f+TNvCAlOwhES37u7Aze8nN6ITX5EwTx5Y9oZKGPIMF2CQE0MFV6UeWRjJs1u4MK2W0/OWSR+BbzZM+nbQW8e1y5lQv58UGU6JtCvHBBDj0SRp5ERY/2Ur5cYG8+jGbrLCZYu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jUPnR97Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFF6C4CEC3;
+	Wed, 25 Sep 2024 11:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727263965;
-	bh=yjqXEyqaUHjKbE/DCFjplucileIRbiZ/r5DPWpKujxA=;
+	s=k20201202; t=1727264013;
+	bh=yuQBwKf58O/LU7Yg6WkwSfVNVzlAqoh6XYcl2Fjkh8w=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AkCYJK1+Hy5JbnRxYFvKoVOJ/so2a01jlUtM+cALu4pXTGRYJX3c7glUvfW47lHF+
-	 dGoc8ICaoOGLrzdH6rKy+5AOR55V+KMfm0qeJRCK1zwstDiGGx7pLjjUnl6l6cOnZx
-	 8NzE38mA6djaxqq4pIIHk+Vu66qgdN0ngkYQ2CIAqF/vbdoKNYI60BFjZ+oToPvlAD
-	 r5Ct/zBR17RHhVG0NdyvecPcYZjyrPXoLGb/DTNr0sblt4jB4KBQnwX93R8zRVzHw+
-	 4tYC4Jg50OqL1svGarkAPDD4O0WV30B3d6RsYdnCoVTnKsNBPH+UDdMGLnQynKV5a+
-	 wh+NxgVv0NqiA==
-Message-ID: <1e570a30-af84-4ec3-9e3d-3f358b29c0ff@kernel.org>
-Date: Wed, 25 Sep 2024 13:32:39 +0200
+	b=jUPnR97QKQoO2KjYrNX0rigBye4hnJHxQwe+pEBoAQB1JTaiTWY3wYQknmpkuCDxv
+	 mToqW+PitHbaKIz6ZkhkO2uPHf+IDFaTLXdHsPCc9OcDA17+n8C2s/J5yKcKM9CgLJ
+	 pt02Lv+a7SbLMz71ZSKDD2OEra1Q71807GjmBiewP+qIuvZfZCG+Wiyk0gon+8GgOI
+	 va5ljzSlivhQu6Fell/ATaID6tw8R/MPo0LpFgd3/8BDjCEnRx7GeK342KXUXcGjhp
+	 wkZtW3dn7v2deeK73OXKygL3fSryie1JABJmRT0QvBoxR4rSwLNQX3g+6kGBo1hubK
+	 LqROZA+tDEybg==
+Message-ID: <eceb7e42-6677-4d04-8c48-34734a5bf276@kernel.org>
+Date: Wed, 25 Sep 2024 13:33:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dt-bindings: i2c: snps,designware-i2c: add
- bus-loading and clk-freq-optimized
+Subject: Re: [PATCH 1/2] i2c: designware: determine HS tHIGH and tLOW based on
+ HW paramters
 To: Michael Wu <michael.wu@kneron.us>,
  Jarkko Nikula <jarkko.nikula@linux.intel.com>,
  Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -60,7 +60,7 @@ To: Michael Wu <michael.wu@kneron.us>,
 Cc: Andi Shyti <andi.shyti@kernel.org>, Morgan Chang
  <morgan.chang@kneron.us>, linux-kernel@vger.kernel.org
 References: <20240925080432.186408-1-michael.wu@kneron.us>
- <20240925080432.186408-3-michael.wu@kneron.us>
+ <20240925080432.186408-2-michael.wu@kneron.us>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,87 +106,68 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240925080432.186408-3-michael.wu@kneron.us>
+In-Reply-To: <20240925080432.186408-2-michael.wu@kneron.us>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/09/2024 10:04, Michael Wu wrote:
-> Since there are no registers controlling the hardware parameters
-> IC_CAP_LOADING and IC_CLK_FREQ_OPTIMIZATION, their values can only be
-> noted in the device tree.
+> In commit 35eba185fd1a ("i2c: designware: Calculate SCL timing
+> parameter for High Speed Mode") hs_hcnt and hs_hcnt are computed based on
+> fixed tHIGH = 160 and tLOW = 320. However, this fixed values only applies
+> to the set of conditions of IC_CAP_LOADING = 400pF and
+> IC_FREQ_OPTIMIZATION = 1. Outside of this conditions set, if this fixed
+> values are still used, the calculated HCNT and LCNT will make the SCL
+> frequency unabled to reach 3.4 MHz.
 > 
-> "bus-loading" is used to declare the value of IC_CAP_LOADING, and
-> "clk-freq-optimized" is used to declare IC_CLK_FREQ_OPTIMIZATION = 1.
+> If hs_hcnt and hs_lcnt are calculated based on fixed tHIGH = 160 and
+> tLOW = 320, SCL frequency may not reach 3.4 MHz when IC_CAP_LOADING is not
+> 400pF or IC_FREQ_OPTIMIZATION is not 1.
+> 
+> Section 3.15.4.5 in DesignWare DW_apb_i2c Databook v2.03 says when
+> IC_CLK_FREQ_OPTIMIZATION = 0,
+> 
+>     MIN_SCL_HIGHtime = 60 ns for 3.4 Mbps, bus loading = 100pF
+> 		     = 120 ns for 3,4 Mbps, bus loading = 400pF
+>     MIN_SCL_LOWtime = 160 ns for 3.4 Mbps, bus loading = 100pF
+> 		    = 320 ns for 3.4 Mbps, bus loading = 400pF
+> 
+> and section 3.15.4.6 says when IC_CLK_FREQ_OPTIMIZATION = 1,
+> 
+>     MIN_SCL_HIGHtime = 60 ns for 3.4 Mbps, bus loading = 100pF
+> 		     = 160 ns for 3.4 Mbps, bus loading = 400pF
+>     MIN_SCL_LOWtime = 120 ns for 3.4 Mbps, bus loading = 100pF
+> 		    = 320 ns for 3.4 Mbps, bus loading = 400pF
+> 
+> In order to calculate more accurate hs_hcnt and hs_lcnt, two hardware
+> parameters IC_CAP_LOADING and IC_CLK_FREQ_OPTIMIZATION must be
+> considered together.
 > 
 > Signed-off-by: Michael Wu <michael.wu@kneron.us>
-
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
-
 > ---
->  .../bindings/i2c/snps,designware-i2c.yaml     | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+>  drivers/i2c/busses/i2c-designware-common.c  | 16 ++++++++++++++
+>  drivers/i2c/busses/i2c-designware-core.h    |  8 +++++++
+>  drivers/i2c/busses/i2c-designware-master.c  | 24 +++++++++++++++++++--
+>  drivers/i2c/busses/i2c-designware-platdrv.c |  2 ++
+>  4 files changed, 48 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> index 60035a787e5c..f954f5014a00 100644
-> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-> @@ -87,6 +87,16 @@ properties:
->        This value is used to compute the tHIGH period.
->      default: 300
+> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+> index e8a688d04aee..f0a7d0ce6fd6 100644
+> --- a/drivers/i2c/busses/i2c-designware-common.c
+> +++ b/drivers/i2c/busses/i2c-designware-common.c
+> @@ -332,6 +332,22 @@ void i2c_dw_adjust_bus_speed(struct dw_i2c_dev *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(i2c_dw_adjust_bus_speed);
 >  
-> +  bus-loading:
-> +    description: |
-> +      This property should be 100 or 400 for high speed mode.
-> +      This value is used to compute the tHIGH period and the tLOW period.
-
-How? This wasn't ever tested obviously... Missing units in property name
-(or ref but units are preferred).
-
-> +    default: 100
+> +void i2c_dw_parse_of(struct dw_i2c_dev *dev)
+> +{
+> +	int ret;
 > +
-> +  clk_freq_optimized:
+> +	ret = device_property_read_u32(dev->dev, "bus-loading",
 
-No underscores.
+Generic properties should be described in generic schema. Where is this
+one defined?
 
-> +    description: |
-> +      Thie property is used to declare whether the internal latency is reduced.
-
-Your descriptions don't tell me much. Drop redundant parts "This
-property" and instead describe the hardware aspect of this property.
-
-
-> +
->    dmas:
->      items:
->        - description: TX DMA Channel
-> @@ -146,4 +156,13 @@ examples:
->        interrupts = <8>;
->        clocks = <&ahb_clk>;
->      };
-> +  - |
-> +    i2c@ce500000 {
-
-No, no need.
-
-
+Also, bindings come before users.
 
 Best regards,
 Krzysztof
