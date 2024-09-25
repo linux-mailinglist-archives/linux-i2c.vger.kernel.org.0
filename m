@@ -1,65 +1,65 @@
-Return-Path: <linux-i2c+bounces-6990-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6988-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C21CD98604A
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 16:19:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C4879860C4
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 16:32:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D112283DA5
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 14:19:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65DE0B31275
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 14:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461EB1A0BC9;
-	Wed, 25 Sep 2024 12:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5291A0700;
+	Wed, 25 Sep 2024 12:49:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J5iPk8ab"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BdbbLujJ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692231A01D5;
-	Wed, 25 Sep 2024 12:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C6419F473;
+	Wed, 25 Sep 2024 12:49:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727268568; cv=none; b=ip004Ln5roJ4KWGL0rtgVwS4XadMeo9o8xiyPAgA9RMTQbGIU9pDEpWWQmRri86U9VeRhvvFR/SHKbtqAnqASNY5wgQVva/GOF3NjIoHf2AaO3yYW27wnnz4waU6SiMjKZ7wD8S4fdOo/0A+EMmlqrY8XXNBV9D51LHUGCyo/GQ=
+	t=1727268566; cv=none; b=r/450xEX25wDVmcrlz4qQ3trlAygQNwKrt4c9sm3UifdJZF6mQNVJ++ZkJ8U4FFDmM9yJChRwijjCYbOKhMxIa4Dqr+bulLS42DD0QOsvbft5e3GAzU6GeRFS1HMeFgHckAAsRY+F2QRjffdhIERZPC6cfPXKnT/oSp5vaBZOGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727268568; c=relaxed/simple;
-	bh=/TXpA607vG0oOI0BpN5eHgQcE45esS5ompfrTwKMzrc=;
+	s=arc-20240116; t=1727268566; c=relaxed/simple;
+	bh=70t3hLSLDlpykDIVy85aCrxgzN++uWo5vy1Vhc0fPPo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lnzb4y43cBuu0dv5JUUg43iJ9uqlvtdhMU+PD9h9L5pGxC3YKGOizsTY5JGgr8WcTDneklk98UMeXil2SThmbczK6Oq5tbb6MoDeixkuf/U8HsnkKDviHlHNBE7YE7IASlC/ua1l4rlaUKSt2Ba0U1KyzzterfzcGRWV2R8dy6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J5iPk8ab; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version; b=OgW+bR7bJ3RKx8TRViidb3/eCF9F2T5WoXq2aWQ59hrQKbcLsv1p9B3KhNRA9iOk0HH/eWVbq+n74tn3L7YFn5R4tufvhhWyZsAjyZM99yhWoKuK2OyXLN2zUVMDOWYu5Uorg+ZOdd+duASj1RIraQ6i+Skg0QW4zs6CptJklDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BdbbLujJ; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727268566; x=1758804566;
+  t=1727268564; x=1758804564;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/TXpA607vG0oOI0BpN5eHgQcE45esS5ompfrTwKMzrc=;
-  b=J5iPk8abM6N3oiaHz4wj4n54XA14SN3Rul6wCPksiNun+k2ALBeoA5pl
-   Ttqve/39K0rVx3l5Wai7ZydI5qAGJo4PN2oH/Rp68S2xfWNiMo7CflpMZ
-   scZvD+nwRXA5JaWShPlrg8u+bIjs23r4w8A68TiMy6deorKJZqU2MBfWz
-   PBidNIVqI/oL77FmV9WDNxvA7lPrmdl1sq5gMazVxbx24C1o6KrBKV9Mg
-   qnojF+Nz3EXMWzvDXed3AXEB3qxacfCn9Ocl+CASoQONpgivAaL+qtUgl
-   xnJcMa2g1IktFQaQwymY0inxlRfakoCouSMc6SUagMRqQT39dPm+ZrHMd
+  bh=70t3hLSLDlpykDIVy85aCrxgzN++uWo5vy1Vhc0fPPo=;
+  b=BdbbLujJlb6DrJ+bKIxkhexYiY4wVlTuPFib+ZOvjipTFmuQ9sPDqpO+
+   EQ/nnqn/hNJgoObR/IdKg9uN2yDGsAeBWcwXJGkpptmxzpEuSP8HyCvWl
+   Sdw7uk+pyzEQ03ZXU8+gZFO0CX5ISPpeJzKiy8c68gOWdS+dZ2YISzwHL
+   DGZjkjqarcMW7KfPZZxDebR0uOCEfbFYb+o66HrpqsrB2exo2oObmOu+b
+   QNr9GuL6BPiV+QabvvsH7hgnN8NKvkS55HucGWyHex2IHjp1x1/gThN7O
+   eAiVdMGhetatTXGznvj8H7el4vPEnZcLh2jh4hgcPjHAnv+/4dP6SP1ik
    Q==;
-X-CSE-ConnectionGUID: 7hANOwzlQ1a141ONwXeDnQ==
-X-CSE-MsgGUID: u81u/Dg7R5uvhoS8YJn7GA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="36878379"
+X-CSE-ConnectionGUID: bFKwU6pSR5+cHXtOSQ239w==
+X-CSE-MsgGUID: PJ5TXRIGRqymRbT97h3vzQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="36878358"
 X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="36878379"
+   d="scan'208";a="36878358"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 05:49:22 -0700
-X-CSE-ConnectionGUID: mioT3FTNSBWk2IqOmgXuvw==
-X-CSE-MsgGUID: G7N+hhHMR0GQvA3dcvmbbQ==
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 05:49:21 -0700
+X-CSE-ConnectionGUID: MgqSQzG7R0ObNZLcggW1YQ==
+X-CSE-MsgGUID: ORXjVviiTdmoZMTejZyO8w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="72577341"
+   d="scan'208";a="72577339"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa008.jf.intel.com with ESMTP; 25 Sep 2024 05:49:19 -0700
+  by orviesa008.jf.intel.com with ESMTP; 25 Sep 2024 05:49:18 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id AD3F160C; Wed, 25 Sep 2024 15:49:17 +0300 (EEST)
+	id B9982613; Wed, 25 Sep 2024 15:49:17 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Mario Limonciello <mario.limonciello@amd.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -73,9 +73,9 @@ Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
 	Narasimhan.V@amd.com,
 	Borislav Petkov <bp@alien8.de>,
 	Kim Phillips <kim.phillips@amd.com>
-Subject: [PATCH v1 3/5] i2c: designware: Remove 'cond' from i2c_dw_scl_hcnt()
-Date: Wed, 25 Sep 2024 15:44:21 +0300
-Message-ID: <20240925124916.976173-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 4/5] i2c: designware: Use sda_hold_time variable name everywhere
+Date: Wed, 25 Sep 2024 15:44:22 +0300
+Message-ID: <20240925124916.976173-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 In-Reply-To: <20240925124916.976173-1-andriy.shevchenko@linux.intel.com>
 References: <20240925124916.976173-1-andriy.shevchenko@linux.intel.com>
@@ -87,141 +87,63 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The 'cond' parameter is not being used (always default, hence drop it
-and hence make it consistent with i2c_dw_scl_lcnt().
+Currently the PCI glue driver uses sda_hold variable name, while
+the rest of the driver use sda_hold_time. This makes things harder
+to grep. Use sda_hold_time variable name everywhere.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-designware-common.c | 52 +++++++---------------
- drivers/i2c/busses/i2c-designware-core.h   |  2 +-
- drivers/i2c/busses/i2c-designware-master.c |  4 --
- 3 files changed, 16 insertions(+), 42 deletions(-)
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index 84ca53ee3317..9c6166f463a2 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -407,47 +407,26 @@ static u32 i2c_dw_read_scl_reg(struct dw_i2c_dev *dev, u32 reg)
- }
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 433cb285d3b2..38265c3dc454 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -51,7 +51,7 @@ struct dw_scl_sda_cfg {
+ 	u16 fs_hcnt;
+ 	u16 ss_lcnt;
+ 	u16 fs_lcnt;
+-	u32 sda_hold;
++	u32 sda_hold_time;
+ };
  
- u32 i2c_dw_scl_hcnt(struct dw_i2c_dev *dev, unsigned int reg, u32 ic_clk,
--		    u32 tSYMBOL, u32 tf, int cond, int offset)
-+		    u32 tSYMBOL, u32 tf, int offset)
- {
- 	if (!ic_clk)
- 		return i2c_dw_read_scl_reg(dev, reg);
+ struct dw_pci_controller {
+@@ -76,7 +76,7 @@ static struct dw_scl_sda_cfg byt_config = {
+ 	.fs_hcnt = 0x55,
+ 	.ss_lcnt = 0x200,
+ 	.fs_lcnt = 0x99,
+-	.sda_hold = 0x6,
++	.sda_hold_time = 0x6,
+ };
  
- 	/*
--	 * DesignWare I2C core doesn't seem to have solid strategy to meet
--	 * the tHD;STA timing spec.  Configuring _HCNT based on tHIGH spec
--	 * will result in violation of the tHD;STA spec.
-+	 * Conditional expression:
-+	 *
-+	 *   IC_[FS]S_SCL_HCNT + 3 >= IC_CLK * (tHD;STA + tf)
-+	 *
-+	 * This is just experimental rule; the tHD;STA period turned
-+	 * out to be proportinal to (_HCNT + 3).  With this setting,
-+	 * we could meet both tHIGH and tHD;STA timing specs.
-+	 *
-+	 * If unsure, you'd better to take this alternative.
-+	 *
-+	 * The reason why we need to take into account "tf" here,
-+	 * is the same as described in i2c_dw_scl_lcnt().
- 	 */
--	if (cond)
--		/*
--		 * Conditional expression:
--		 *
--		 *   IC_[FS]S_SCL_HCNT + (1+4+3) >= IC_CLK * tHIGH
--		 *
--		 * This is based on the DW manuals, and represents an ideal
--		 * configuration.  The resulting I2C bus speed will be
--		 * faster than any of the others.
--		 *
--		 * If your hardware is free from tHD;STA issue, try this one.
--		 */
--		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * tSYMBOL, MICRO) -
--		       8 + offset;
--	else
--		/*
--		 * Conditional expression:
--		 *
--		 *   IC_[FS]S_SCL_HCNT + 3 >= IC_CLK * (tHD;STA + tf)
--		 *
--		 * This is just experimental rule; the tHD;STA period turned
--		 * out to be proportinal to (_HCNT + 3).  With this setting,
--		 * we could meet both tHIGH and tHD;STA timing specs.
--		 *
--		 * If unsure, you'd better to take this alternative.
--		 *
--		 * The reason why we need to take into account "tf" here,
--		 * is the same as described in i2c_dw_scl_lcnt().
--		 */
--		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf), MICRO) -
--		       3 + offset;
-+	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf), MICRO) - 3 + offset;
- }
+ /* Haswell HCNT/LCNT/SDA hold time */
+@@ -85,14 +85,14 @@ static struct dw_scl_sda_cfg hsw_config = {
+ 	.fs_hcnt = 0x48,
+ 	.ss_lcnt = 0x01fb,
+ 	.fs_lcnt = 0xa0,
+-	.sda_hold = 0x9,
++	.sda_hold_time = 0x9,
+ };
  
- u32 i2c_dw_scl_lcnt(struct dw_i2c_dev *dev, unsigned int reg, u32 ic_clk,
-@@ -467,8 +446,7 @@ u32 i2c_dw_scl_lcnt(struct dw_i2c_dev *dev, unsigned int reg, u32 ic_clk,
- 	 * account the fall time of SCL signal (tf).  Default tf value
- 	 * should be 0.3 us, for safety.
- 	 */
--	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tLOW + tf), MICRO) -
--	       1 + offset;
-+	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tLOW + tf), MICRO) - 1 + offset;
- }
+ /* NAVI-AMD HCNT/LCNT/SDA hold time */
+ static struct dw_scl_sda_cfg navi_amd_config = {
+ 	.ss_hcnt = 0x1ae,
+ 	.ss_lcnt = 0x23a,
+-	.sda_hold = 0x9,
++	.sda_hold_time = 0x9,
+ };
  
- int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev)
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 8e8854ec9882..067ed5bcec08 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -328,7 +328,7 @@ struct i2c_dw_semaphore_callbacks {
+ static u32 mfld_get_clk_rate_khz(struct dw_i2c_dev *dev)
+@@ -264,7 +264,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
+ 		dev->fs_hcnt = cfg->fs_hcnt;
+ 		dev->ss_lcnt = cfg->ss_lcnt;
+ 		dev->fs_lcnt = cfg->fs_lcnt;
+-		dev->sda_hold_time = cfg->sda_hold;
++		dev->sda_hold_time = cfg->sda_hold_time;
+ 	}
  
- int i2c_dw_init_regmap(struct dw_i2c_dev *dev);
- u32 i2c_dw_scl_hcnt(struct dw_i2c_dev *dev, unsigned int reg, u32 ic_clk,
--		    u32 tSYMBOL, u32 tf, int cond, int offset);
-+		    u32 tSYMBOL, u32 tf, int offset);
- u32 i2c_dw_scl_lcnt(struct dw_i2c_dev *dev, unsigned int reg, u32 ic_clk,
- 		    u32 tLOW, u32 tf, int offset);
- int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev);
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index e8ac9a7bf0b3..09e72ead51ee 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -71,7 +71,6 @@ static int i2c_dw_set_timings_master(struct dw_i2c_dev *dev)
- 					ic_clk,
- 					4000,	/* tHD;STA = tHIGH = 4.0 us */
- 					sda_falling_time,
--					0,	/* 0: DW default, 1: Ideal */
- 					0);	/* No offset */
- 		dev->ss_lcnt =
- 			i2c_dw_scl_lcnt(dev,
-@@ -105,7 +104,6 @@ static int i2c_dw_set_timings_master(struct dw_i2c_dev *dev)
- 						ic_clk,
- 						260,	/* tHIGH = 260 ns */
- 						sda_falling_time,
--						0,	/* DW default */
- 						0);	/* No offset */
- 			dev->fs_lcnt =
- 				i2c_dw_scl_lcnt(dev,
-@@ -129,7 +127,6 @@ static int i2c_dw_set_timings_master(struct dw_i2c_dev *dev)
- 					ic_clk,
- 					600,	/* tHD;STA = tHIGH = 0.6 us */
- 					sda_falling_time,
--					0,	/* 0: DW default, 1: Ideal */
- 					0);	/* No offset */
- 		dev->fs_lcnt =
- 			i2c_dw_scl_lcnt(dev,
-@@ -161,7 +158,6 @@ static int i2c_dw_set_timings_master(struct dw_i2c_dev *dev)
- 						ic_clk,
- 						160,	/* tHIGH = 160 ns */
- 						sda_falling_time,
--						0,	/* DW default */
- 						0);	/* No offset */
- 			dev->hs_lcnt =
- 				i2c_dw_scl_lcnt(dev,
+ 	adap = &dev->adapter;
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
