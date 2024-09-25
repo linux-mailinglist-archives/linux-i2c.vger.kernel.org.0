@@ -1,107 +1,194 @@
-Return-Path: <linux-i2c+bounces-6984-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-6985-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C690498578E
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 13:03:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FFF3985801
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 13:32:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8237E285CFA
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 11:03:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95D6FB2092E
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Sep 2024 11:32:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340EA84A5E;
-	Wed, 25 Sep 2024 11:02:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B984914B07E;
+	Wed, 25 Sep 2024 11:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="av3Ib9sN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AkCYJK1+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C68F146A6C;
-	Wed, 25 Sep 2024 11:02:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D18137775;
+	Wed, 25 Sep 2024 11:32:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727262169; cv=none; b=dnKVt7pBhWEd/vQBQiUFB6LFYG6/MaMpgnpobFIpLVnrHGlb5X8dr4WNZF+yy8jogn7ofaeQNUWCODGK05gamxhboNexrMWBYtJGhvat2VtLFhzzzEc3j+ksIm0Tji1sgnwPM/TFfgHQXklB1CJoszPnJKmdJSWFjNj2b5zoSPE=
+	t=1727263966; cv=none; b=o3UnXwbNHGv8VToYFaCAeNGWhQQF3P6iwCbR+wIXx2VK3VOI0JpPwiFN0ZE+8QITSH/NsAlGHVPdMBmZZ8hSlmzJNEiPSvtfez0EPXpTlzFN0lLjGPG8YeSOiFbRst4O0e8W/ooy1B4sbkPT8VMZhFry+k9WEFDGEYTIP2uOgEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727262169; c=relaxed/simple;
-	bh=AGkxZ4+RPiVbG8XUbzlVkl/C3M3VGZFa5bDwBrgJwI4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cv7ELn3hs0gGmokgclyrgVv8QrPuRUr0kIB0Or58uKe3T9lpoclUuqCIyRD08aZHuMiza8gShEM4g6tqXqm/VJsA226UxlFNp2GWSvbvbcEXlghbcrtq+54Y/W8gRk/veFNDkkkS/M+LA22HLqCZVQIRHXy1e610fMp0K3stxaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=av3Ib9sN; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727262168; x=1758798168;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AGkxZ4+RPiVbG8XUbzlVkl/C3M3VGZFa5bDwBrgJwI4=;
-  b=av3Ib9sNgclIqvWkqm+zPjEIgWlPrhwOieKc+SJ6lUyH9QL07l8t7umm
-   CjKWkQtNpd9MSF2XgeDcc9XY81Mrfco+eL1GkbJmYm7QqlCdMwZyDRBbD
-   99ujnOUcQJzz+TpH84fmZnBCQ/L9N5ma7PyU41+gXhmD0CVs37YvXzsPs
-   N0uc4XdtaJNuGKFABrKHCUCRfeNBBTAv/DvK8JO8mfqdn6+Qpr08GyVhW
-   EPFPCiGtrQMgnBeb8kvmVQPp18IYlQterJiQdw1Bb2VkD8DqXhWj+zV1t
-   Dw6tYoOvgvvhAqpW07bgosYHwoKIM3+/Ezpof+H0blTFlMB41TZN1y0Ex
-   w==;
-X-CSE-ConnectionGUID: OVppctxGRNG2GHJcC88BuA==
-X-CSE-MsgGUID: yi32lGMcQEGqVA0GfxQfXQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="30188065"
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="30188065"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 04:02:46 -0700
-X-CSE-ConnectionGUID: 6tg8C9HUTNe9UILVaBJsaQ==
-X-CSE-MsgGUID: 7T2rfJnWQH2sMH8Wb7N/ag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="72189463"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 04:02:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1stPn7-0000000Cmz4-0Tn4;
-	Wed, 25 Sep 2024 14:02:41 +0300
-Date: Wed, 25 Sep 2024 14:02:40 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc: Michael Wu <michael.wu@kneron.us>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Morgan Chang <morgan.chang@kneron.us>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] i2c: designware: determine HS tHIGH and tLOW based
- on HW paramters
-Message-ID: <ZvPt0NLoTJJwwjmA@smile.fi.intel.com>
-References: <20240925080432.186408-1-michael.wu@kneron.us>
- <20240925080432.186408-2-michael.wu@kneron.us>
- <90f64539-3092-4d3b-bdf2-c6af51e32fdc@linux.intel.com>
+	s=arc-20240116; t=1727263966; c=relaxed/simple;
+	bh=yjqXEyqaUHjKbE/DCFjplucileIRbiZ/r5DPWpKujxA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fQGwY9nGRHL29VtL6td9oQmmeMV040rb6YtlPPU/kpmh2gi0QuKKDV/lMinBO2GAzR7haAm1EfYxNdPeHMZ9+/BrMdhYerzy/tEykXcPNWJmh6Xu2VYVzmxykmQi71rDIRpqylmTz7x7TJFd61Vs0HPipoTOt2nw8ZoOJwguCno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AkCYJK1+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2872C4CEC3;
+	Wed, 25 Sep 2024 11:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727263965;
+	bh=yjqXEyqaUHjKbE/DCFjplucileIRbiZ/r5DPWpKujxA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AkCYJK1+Hy5JbnRxYFvKoVOJ/so2a01jlUtM+cALu4pXTGRYJX3c7glUvfW47lHF+
+	 dGoc8ICaoOGLrzdH6rKy+5AOR55V+KMfm0qeJRCK1zwstDiGGx7pLjjUnl6l6cOnZx
+	 8NzE38mA6djaxqq4pIIHk+Vu66qgdN0ngkYQ2CIAqF/vbdoKNYI60BFjZ+oToPvlAD
+	 r5Ct/zBR17RHhVG0NdyvecPcYZjyrPXoLGb/DTNr0sblt4jB4KBQnwX93R8zRVzHw+
+	 4tYC4Jg50OqL1svGarkAPDD4O0WV30B3d6RsYdnCoVTnKsNBPH+UDdMGLnQynKV5a+
+	 wh+NxgVv0NqiA==
+Message-ID: <1e570a30-af84-4ec3-9e3d-3f358b29c0ff@kernel.org>
+Date: Wed, 25 Sep 2024 13:32:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <90f64539-3092-4d3b-bdf2-c6af51e32fdc@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] dt-bindings: i2c: snps,designware-i2c: add
+ bus-loading and clk-freq-optimized
+To: Michael Wu <michael.wu@kneron.us>,
+ Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org
+Cc: Andi Shyti <andi.shyti@kernel.org>, Morgan Chang
+ <morgan.chang@kneron.us>, linux-kernel@vger.kernel.org
+References: <20240925080432.186408-1-michael.wu@kneron.us>
+ <20240925080432.186408-3-michael.wu@kneron.us>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240925080432.186408-3-michael.wu@kneron.us>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 25, 2024 at 01:58:27PM +0300, Jarkko Nikula wrote:
-> On 9/25/24 11:04 AM, Michael Wu wrote:
+On 25/09/2024 10:04, Michael Wu wrote:
+> Since there are no registers controlling the hardware parameters
+> IC_CAP_LOADING and IC_CLK_FREQ_OPTIMIZATION, their values can only be
+> noted in the device tree.
+> 
+> "bus-loading" is used to declare the value of IC_CAP_LOADING, and
+> "clk-freq-optimized" is used to declare IC_CLK_FREQ_OPTIMIZATION = 1.
+> 
+> Signed-off-by: Michael Wu <michael.wu@kneron.us>
 
-...
+<form letter>
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC. It might happen, that command when run on an older
+kernel, gives you outdated entries. Therefore please be sure you base
+your patches on recent Linux kernel.
 
-> Also i2c_dw_parse_of() sounds too generic and may lead to think all and only
-> device tree related parameters are parsed here.
+Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+people, so fix your workflow. Tools might also fail if you work on some
+ancient tree (don't, instead use mainline) or work on fork of kernel
+(don't, instead use mainline). Just use b4 and everything should be
+fine, although remember about `b4 prep --auto-to-cc` if you added new
+patches to the patchset.
 
-We already have a common (designware specific) function for this. the parsing
-should be done as the part of that existing function. I.o.w. the existing just
-needs to be extended for these two new properties.
+You missed at least devicetree list (maybe more), so this won't be
+tested by automated tooling. Performing review on untested code might be
+a waste of time.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Please kindly resend and include all necessary To/Cc entries.
+</form letter>
 
+> ---
+>  .../bindings/i2c/snps,designware-i2c.yaml     | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> index 60035a787e5c..f954f5014a00 100644
+> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> @@ -87,6 +87,16 @@ properties:
+>        This value is used to compute the tHIGH period.
+>      default: 300
+>  
+> +  bus-loading:
+> +    description: |
+> +      This property should be 100 or 400 for high speed mode.
+> +      This value is used to compute the tHIGH period and the tLOW period.
+
+How? This wasn't ever tested obviously... Missing units in property name
+(or ref but units are preferred).
+
+> +    default: 100
+> +
+> +  clk_freq_optimized:
+
+No underscores.
+
+> +    description: |
+> +      Thie property is used to declare whether the internal latency is reduced.
+
+Your descriptions don't tell me much. Drop redundant parts "This
+property" and instead describe the hardware aspect of this property.
+
+
+> +
+>    dmas:
+>      items:
+>        - description: TX DMA Channel
+> @@ -146,4 +156,13 @@ examples:
+>        interrupts = <8>;
+>        clocks = <&ahb_clk>;
+>      };
+> +  - |
+> +    i2c@ce500000 {
+
+No, no need.
+
+
+
+Best regards,
+Krzysztof
 
 
