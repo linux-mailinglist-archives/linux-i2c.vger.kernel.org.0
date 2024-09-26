@@ -1,88 +1,78 @@
-Return-Path: <linux-i2c+bounces-7033-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7034-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A041098764C
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 17:14:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C76B59879F7
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 22:04:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7247B28246
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 15:14:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89ED4B23F3D
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 20:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E53E314A615;
-	Thu, 26 Sep 2024 15:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45AA317C203;
+	Thu, 26 Sep 2024 20:03:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nV3t44+6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HeakYZDm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D08B84E1C;
-	Thu, 26 Sep 2024 15:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2157156F20;
+	Thu, 26 Sep 2024 20:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727363665; cv=none; b=QojsTmRKz6CcCIYqrwTMNkktEoCReAPFofFGCbd29PZ3NHfIm/4S6A0I5BqiZg10L+SKk+nvmbMHEmZvjfV+Ttk/aKNw8uWmwZp907QKhqjEl4mjrVi+YXjaG9McHWWTScYmttQJALp3Q0gsk6aRzZPIGYKl6wkKPxjiewss5v8=
+	t=1727381037; cv=none; b=kyBkAK3MvgSoic0odbkz4kbl6NZm+zDAm7LhBjcSNMCLTlSu15A59pCvvtmt8Jofa+Mh5p3hA4zoHC48PSABbN/NinmYPUO9F1JhocpKfQRet075Q4tIeHX0tpaoRWCT2UbThYOMmETwqQNYfE5E0UlnU0DvXlvN1QywYcI1xc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727363665; c=relaxed/simple;
-	bh=K4Ck3/3H7GUOTDxuXeFb1Uy+98T6H3v+HFtsZoxtqQw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MBWu6XRC+tvuOAL7voU7B9SsoARPlqNzNbdqL06D9YPJbP+9T4BfY6hDFrXDU3X5T7ZxAHXwZxPmhjDK3GtKlmoHBnhaI/7JzBks39xo4Y5jmRFzbxG74MymH5EdhqGBSBJiJhgFixF5IHdNBBX9zeemGrdm4VJxl/BOFyiLLUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=nV3t44+6; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Hi5iQ
-	TtGMlHc6GO5z4LjPJGmuS455m+Uc6ctvW1h9hI=; b=nV3t44+6qqOHUlhbLkbj7
-	gwOHg1T1vPqjLGc0HBaX+PpbrbkjiujiTPGFPOMZ6LsOv0NiXzft6912VxxHxVOw
-	T0dQS2dT/IIlsz7/kk10jv3QLB9ngIiUbmG8l22zKwLpudF0RZ/2wIPFlZ+UpPJX
-	Es+5XdLifdHCSUVRl7imv0=
-Received: from iZbp1asjb3cy8ks0srf007Z.. (unknown [120.26.85.94])
-	by gzga-smtp-mta-g2-0 (Coremail) with SMTP id _____wAX+h0wevVmIl2GGA--.31714S2;
-	Thu, 26 Sep 2024 23:13:53 +0800 (CST)
-From: Qianqiang Liu <qianqiang.liu@163.com>
-To: andi.shyti@kernel.org
-Cc: shyam-sundar.s-k@amd.com,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qianqiang Liu <qianqiang.liu@163.com>
-Subject: [PATCH] i2c: amd-asf: Fix uninitialized variables issue in amd_asf_process_target
-Date: Thu, 26 Sep 2024 23:13:48 +0800
-Message-Id: <20240926151348.71206-1-qianqiang.liu@163.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1727381037; c=relaxed/simple;
+	bh=SRbbCwWk0XCJVj+eh5xq+wMOueKNQS1EHtqrXCZWAFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lm4MR/xHPDEAS31SFfCYbVpdJXnsHETczrsDWknqFymM/30wT9q87OGNqd/Bqw1fYX+WxDqgAVMY3C3QOffg7zhUaeKSLEoWLBt45UgwI1RXk/T151w8s0lB4APTi/S4/EruTsc/a0kOJ1HS7zJU0KpjCVyXKNjBijg9OliaMa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HeakYZDm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25652C4CEC5;
+	Thu, 26 Sep 2024 20:03:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727381036;
+	bh=SRbbCwWk0XCJVj+eh5xq+wMOueKNQS1EHtqrXCZWAFU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HeakYZDme5smhLbMikn3bCRxPOhIqv3qQqVu46y2BJfgIsXsCsR2WjFu6fxhuQuw8
+	 rxwR9WFZXF7a6emuBRjJaqdysyh93ar1pjlO0z5oZHtRqyf6LHvMOXo4rFzR9d3a9K
+	 Bavlz37xWQKbEru+bNo3TcK3BYq+UBeLlNh6Kxyt01RZMbDpdmHpPGpDuci9lLLZkb
+	 LHN7qWCfhY4fzLZL2rftxR9LEsyNSiZf8Wd12fPzjO8t3iEM1Vi9nhRrCgAoOmQhup
+	 +G227w06W0pEz3qBXF3p8SBfy+oyJ6oj1yFyMwry2gRhDIPLs0bTFpARoVsY3zv5v+
+	 SWKlhmWgGplew==
+Date: Thu, 26 Sep 2024 22:03:53 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>, 
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Narasimhan.V@amd.com, Borislav Petkov <bp@alien8.de>, 
+	Kim Phillips <kim.phillips@amd.com>
+Subject: Re: [PATCH v1 0/5] i2c: designware: Cleanups (part 4)
+Message-ID: <ny74rren7njqenqnbaaviknvhaw5aev4a4x3w2kwqtuxg24qul@5btnsxohtoky>
+References: <20240925124916.976173-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAX+h0wevVmIl2GGA--.31714S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7XF1ktw1kXFykuF1rKF4rKrg_yoW3ZFcEk3
-	Z5Wa17Wrs0krn5Xr1YqFs8ZrW0gr1qgr1xu3WFyFW5CryY9w4xWFyqv3s3ArsrWrsrKF1a
-	9w1UWF4xCFsxCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbUKs5UUUUU==
-X-CM-SenderInfo: xtld01pldqwhxolxqiywtou0bp/1tbiLx1mamb1VC9cDgADsH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240925124916.976173-1-andriy.shevchenko@linux.intel.com>
 
-The len variable is not initialized, which may cause the for loop to
-behave unexpectedly.
+Hi Andy,
 
-Signed-off-by: Qianqiang Liu <qianqiang.liu@163.com>
----
- drivers/i2c/busses/i2c-amd-asf-plat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Andy Shevchenko (5):
+>   i2c: designware: Use temporary variable for struct device
+>   i2c: designware: Get rid of redundant 'else'
+>   i2c: designware: Remove 'cond' from i2c_dw_scl_hcnt()
+>   i2c: designware: Use sda_hold_time variable name everywhere
+>   i2c: designware: Fix spelling and other issues in the comments
 
-diff --git a/drivers/i2c/busses/i2c-amd-asf-plat.c b/drivers/i2c/busses/i2c-amd-asf-plat.c
-index 47e0c90341aed..ba47df5370c72 100644
---- a/drivers/i2c/busses/i2c-amd-asf-plat.c
-+++ b/drivers/i2c/busses/i2c-amd-asf-plat.c
-@@ -61,7 +61,7 @@ static void amd_asf_process_target(struct work_struct *work)
- 	unsigned short piix4_smba = dev->port_addr->start;
- 	u8 data[ASF_BLOCK_MAX_BYTES];
- 	u8 bank, reg, cmd;
--	u8 len, idx, val;
-+	u8 len = 0, idx, val;
- 
- 	/* Read target status register */
- 	reg = inb_p(ASFSLVSTA);
--- 
-2.39.5
+merged to i2c/i2c-host.
 
+Thanks,
+Andi
 
