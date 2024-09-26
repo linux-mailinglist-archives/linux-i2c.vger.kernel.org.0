@@ -1,117 +1,129 @@
-Return-Path: <linux-i2c+bounces-7021-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7022-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67B96986DF3
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 09:46:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBCF6986E05
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 09:47:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 047A11F22CD8
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 07:46:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5732CB2230E
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 07:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC788192B76;
-	Thu, 26 Sep 2024 07:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D903118E779;
+	Thu, 26 Sep 2024 07:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZ3qH6lF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XdPvXN3a"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E79518FDA6;
-	Thu, 26 Sep 2024 07:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A4D14F10E;
+	Thu, 26 Sep 2024 07:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727336760; cv=none; b=gOAd82Vik6vF4r+yQjl9xDV8L1IvtDjnYgTy6TDziMGbDlLIytdp98Nj7656UuSMde+4axN6RYkGbwBJyXYPi7r1n+E4MqyQBl7uL4XEq0Aq6EMmJoGy7AAMFauT5elBHyV76BS25FAr8bn200vicf2FQGGVobIhSCbrzTuum9Q=
+	t=1727336859; cv=none; b=ZI98qM1e6tAnv7412P9TJLIm0zaI61c0nSF1JAhzRXh0ndyHnga8seRkSxrX5mSshGfmlGvVlJKLKlQDdKXQ0k2iw5iltziDsSvlAuVQeeKbsziA3blZEvOkK7jdrIJ1YG/viHlNRoIfAYtgbjqIgr9kGGS6cpzURnLQL/EqqZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727336760; c=relaxed/simple;
-	bh=7BD1DRr3dEN2fGhGJbApcotfC5pMbfC3fKHmayjAYZg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hsykh9SpwZiX3N8emBQQjoHgZx4ranucr5zN4oJrpZi+5RWFx0lrhiScLWrIa+jrMKOCcyelg1hZLg+Ho8anGA+9yUk5tH2xtufcv2fh3bIsSw1Im4Vg32z3CcjOi9oIUpPtAZbPY7E2J5tgPt5gI2CllX6VEq9mpwLlaQkQ+ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZ3qH6lF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A36C4CEC5;
-	Thu, 26 Sep 2024 07:45:57 +0000 (UTC)
+	s=arc-20240116; t=1727336859; c=relaxed/simple;
+	bh=Y3HhTt8MHY+5GRnCjQ0FSWWnve07KF0c/uMMGYJBAwE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lzcZM0h+Wq6iy5fAbGZDOB74XKFeZYohisVkhhMnp2zVSCGpK5hZMkKGT8F8AtRr5nIXJdDmPHM7rcu061/qDsRWvuNXoGhpzxZlGO2nLugoW/M1kE8okhnj+jEwBJIc1IrUyXyTn5hxQ9IFyDe4B4AusU7OK8zYZHPg4jX9oCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XdPvXN3a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D711AC4CEC5;
+	Thu, 26 Sep 2024 07:47:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727336760;
-	bh=7BD1DRr3dEN2fGhGJbApcotfC5pMbfC3fKHmayjAYZg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hZ3qH6lFGWX+ox7NsmVd37/9/mBj4ZChRc31dgUtUJpQ9cOMVHHDWAv1EJMJKvCGA
-	 PI6LFetip+CDnDhD1g8ElvbTT9m1Oed8StSxqnpwtfqE3npWgLDq3j9KhTMLsZbv7f
-	 zRHLSLP8sh7zc8rZPmAGYYqCNkkb30o0fd6XRtJutHYml/x0IjZXmrFV6lxrI+Dbz3
-	 sm5fktsJXNJyTik5UXwlyQPHVxANx8ZLZPHaIWW7zuJdj8lOBhoWyMYscRO9X0AnJr
-	 EXyfZSFqNdN9If/UCewJsPl1x+xgixAlckwwEQ6UElL+374FLYmLJob+qpsc/ENc6s
-	 C5fMZWHZt2vGA==
-Date: Thu, 26 Sep 2024 08:45:54 +0100
-From: Lee Jones <lee@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
- peripherals
-Message-ID: <20240926074554.GH7545@google.com>
-References: <20240925215847.3594898-1-chris.packham@alliedtelesis.co.nz>
- <20240925215847.3594898-4-chris.packham@alliedtelesis.co.nz>
- <4pxungrwkjusdalmjbwvqcpjwmbsb7hw4452zqlto6sq54vfa6@psz3gge4uwy7>
+	s=k20201202; t=1727336859;
+	bh=Y3HhTt8MHY+5GRnCjQ0FSWWnve07KF0c/uMMGYJBAwE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=XdPvXN3aI0ukKXaRu8pt57S1AT0j43qW2QiHg2UX+OmCWIHpXMmWvfprtD6/CN8HF
+	 aNQZMyoNFAKr54I6ZOH4FX4obNfla38QnzvpqNBqkz1StE3t7MI9eE7In/wVu42QbS
+	 aZjLVDqwyPzvRTCu0WSLFbbh2iEAurFM0yMoEJNy04fwzmGC229LNU1i/mXePQzeEu
+	 N43uevfHFIbwQo5EOMYEUsS7Re3lEPv3a8bJUoqUo7iiLClJGjIxG68YMFJk0wDkcH
+	 pis+WLAMiQErzpCtIpdPsBJH4Ro6N7hyjER+qgdFr0q/uoOonqXkMrc2hXKcWFeA0t
+	 c6lGper0ph7og==
+Message-ID: <0a35a1a0-c522-47f9-94a5-1079ac3ff0af@kernel.org>
+Date: Thu, 26 Sep 2024 09:47:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4pxungrwkjusdalmjbwvqcpjwmbsb7hw4452zqlto6sq54vfa6@psz3gge4uwy7>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
+ peripherals
+To: Lee Jones <lee@kernel.org>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, andi.shyti@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
+ tsbogend@alpha.franken.de, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20240925215847.3594898-1-chris.packham@alliedtelesis.co.nz>
+ <20240925215847.3594898-4-chris.packham@alliedtelesis.co.nz>
+ <4pxungrwkjusdalmjbwvqcpjwmbsb7hw4452zqlto6sq54vfa6@psz3gge4uwy7>
+ <20240926074554.GH7545@google.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240926074554.GH7545@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Intentional top-post.
-
-These replies all came in without the original mail.
-
-Does anyone have any idea why that would have been?
-
-On Thu, 26 Sep 2024, Krzysztof Kozlowski wrote:
-
-> On Thu, Sep 26, 2024 at 09:58:44AM +1200, Chris Packham wrote:
-> > Add device tree schema for the Realtek RTL9300 switches. The RTL9300
-> > family is made up of the RTL9301, RTL9302B, RTL9302C and RTL9303. These
-> > have the same SoC differ in the Ethernet switch/SERDES arrangement.
-> > 
-> > Currently the only supported features are the syscon-reboot and i2c
-> > controllers. The syscon-reboot is needed to be able to reboot the board.
-> > The I2C controllers are slightly unusual because they each own an SCL
-> > pin (GPIO8 for the first controller, GPIO 17 for the second) but have 8
-> > common SDA pins which can be assigned to either controller (but not
-> > both).
-> > 
-> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > ---
-> > 
-> > Notes:
-> >     Changes in v5:
-> >       I've combined the two series I had in flight so this is the
-> >       combination of adding the switch syscon, the reboot and i2c. It makes
-> >       the changelog a bit meaningless so I've dropped the earlier
-> >       commentary.
-> >     
-> >       As requested I've put a more complete example in the main
-> >       rtl9300-switch.yaml.
-> >     
-> >       I've kept rtl9300-i2c.yaml separate for now but link to it with a $ref
-> >       from rtl9300-switch.yaml to reduce clutter. The example in
-> >       rtl9300-i2c.yaml is technically duplicating part of the example from
-> >       rtl9300-switch.yaml but I feel it's nice to be able to see the example
-> >       next to where the properties are defined.
+On 26/09/2024 09:45, Lee Jones wrote:
+> Intentional top-post.
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> These replies all came in without the original mail.
 > 
-> Best regards,
-> Krzysztof
-> 
+> Does anyone have any idea why that would have been?
 
--- 
-Lee Jones [李琼斯]
+Spam folder?
+
+Lists got them:
+https://lore.kernel.org/all/20240925215847.3594898-4-chris.packham@alliedtelesis.co.nz/
+
+Best regards,
+Krzysztof
+
 
