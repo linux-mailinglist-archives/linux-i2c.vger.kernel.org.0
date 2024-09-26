@@ -1,37 +1,37 @@
-Return-Path: <linux-i2c+bounces-7010-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7008-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DEFC986B95
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 05:57:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FB48986B91
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 05:57:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 537D71C21CE7
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 03:57:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7DA7DB222E2
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 03:57:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8312317B4FA;
-	Thu, 26 Sep 2024 03:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2818D178CDF;
+	Thu, 26 Sep 2024 03:57:15 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-m25469.xmail.ntesmail.com (mail-m25469.xmail.ntesmail.com [103.129.254.69])
+Received: from mail-m1022.netease.com (mail-m1022.netease.com [154.81.10.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6061741C6;
-	Thu, 26 Sep 2024 03:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.129.254.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7354C1741C6;
+	Thu, 26 Sep 2024 03:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=154.81.10.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727323042; cv=none; b=HHmN5HGwybN4y/ejSbN4eTVc5hQfRZnNRhqecaQ37Thycvnyuw32mdao5b+4Scij6pgsHQhc3VfiLdKzOLPwN3t8Cf/8BSdpkLQtrFPrS7bjhB2Q8dA9tWP7SQIjTKJwb2lSu7xpyg3+K2pcPaLCM4GNlpyVJTvrZnNwGsp3VRk=
+	t=1727323035; cv=none; b=Jr6sULFsHuv0lBwv+HTxsQTmfQMji2YkJBK7syXzjJUOOZP0D3x4I/5ixNhU3vzMBfu33elth5Z64PRUrNn5f8jvat5qqrEFyuib0OSXXWgoEt0Shm91GsEtuzPLFYFk3scljFg2upUrg4QcyrDWCDIxXif5/iAnM4y9tZ4FkAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727323042; c=relaxed/simple;
-	bh=V0JFYi9U6QidxdrHMIZRS6VMouX3/XuddqONInh2HC4=;
+	s=arc-20240116; t=1727323035; c=relaxed/simple;
+	bh=lGzGYKaNhOj4/1M392XejlF2uzhN3Bs/lRqcgzJJLYE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WWQ7OmYv1C7JsYa42m+LAUXHeBpYK3u6cD7FLcYiCVpk6GJYq5L5k6RLpDKPi9J5wtYmhsPX1P2AAsJH/QkFux2ytHbKDkjrhM9Rcz+sjeQXqQxBLRLmuaJ5jrTgIP0LL/To7gQ2PULS+40PoDUdPWyPxEdnwSSEFzWx+q8yHFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hj-micro.com; spf=pass smtp.mailfrom=hj-micro.com; arc=none smtp.client-ip=103.129.254.69
+	 MIME-Version; b=BphCwq5RRcHPDgNH+n3h8hNfqBPJUbV/udjFNRHAJady6F7JjwpKuWsFHrIQFdXUc7tFEi4CT1fjYMu6dnqN+Tw9+ZW6Y/AsV+0SgLTMTQLSI2y3EHVaNFG7jCVxwIzOY8Z7/+Ee+NDlSNLWblyUMS1qmeEU9Q3OBMMhcrtQ0+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hj-micro.com; spf=pass smtp.mailfrom=hj-micro.com; arc=none smtp.client-ip=154.81.10.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hj-micro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hj-micro.com
 Received: from KP920.lan (unknown [101.71.201.83])
-	by smtp.qiye.163.com (Hmail) with ESMTPA id 61E921A02B7;
-	Thu, 26 Sep 2024 10:40:35 +0800 (CST)
+	by smtp.qiye.163.com (Hmail) with ESMTPA id A94591A02B6;
+	Thu, 26 Sep 2024 10:40:36 +0800 (CST)
 From: "hunter.yu" <hunter.yu@hj-micro.com>
 To: andriy.shevchenko@linux.intel.com,
 	jarkko.nikula@linux.intel.com,
@@ -44,9 +44,9 @@ Cc: linux-acpi@vger.kernel.org,
 	andy.xu@hj-micro.com,
 	peter.du@hj-micro.com,
 	hunter.yu@hj-micro.com
-Subject: [PATCH v2 1/2] ACPI: APD: Add clock frequency for HJMC01 I2C controller
-Date: Thu, 26 Sep 2024 10:40:05 +0800
-Message-ID: <20240926024026.2539-2-hunter.yu@hj-micro.com>
+Subject: [PATCH v2 2/2] i2c: designware: Add a new ACPI HID for HJMC01 I2C controller
+Date: Thu, 26 Sep 2024 10:40:06 +0800
+Message-ID: <20240926024026.2539-3-hunter.yu@hj-micro.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20240926024026.2539-1-hunter.yu@hj-micro.com>
 References: <20240926024026.2539-1-hunter.yu@hj-micro.com>
@@ -58,47 +58,34 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaSU0dVh9DTUsZTEpDGUtJH1YVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlKS0pVTEpVSUtKVUNIWVdZFhoPEhUdFFlBWU9LSFVKS0lPT09LVUpLS1
-	VLWQY+
-X-HM-Tid: 0a922c33a7fc03abkunm61e921a02b7
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZSElDVklOH05IHxhOSU0eGFYVFAkWGhdVEwETFh
+	oSFyQUDg9ZV1kYEgtZQVlKS0pVTEpVSUtKVUNIWVdZFhoPEhUdFFlBWU9LSFVKS0lPT09IVUpLS1
+	VKQktLWQY+
+X-HM-Tid: 0a922c33ad0303abkunma94591a02b6
 X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6KxA6Azo*NTIfOjMeOUwWCEoh
-	Tg4KFEtVSlVKTElMSEpDT0hNTUpKVTMWGhIXVRMOFQ8eCVUCDjsTEVYWEhgJFFUYFBZFWVdZEgtZ
-	QVlKS0pVTEpVSUtKVUNIWVdZCAFZQUlIS0M3Bg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MQw6NRw6CTIvCDM5OU09CFFL
+	MyIaCzJVSlVKTElMSEpDT0hMQ0tCVTMWGhIXVRMOFQ8eCVUCDjsTEVYWEhgJFFUYFBZFWVdZEgtZ
+	QVlKS0pVTEpVSUtKVUNIWVdZCAFZQUpCQko3Bg++
 
-I2C clock frequency for HJMC01 is 200M, define a new ACPI
-HID for it.
+Define a new ACPI HID for HJMC01
 
 Signed-off-by: hunter.yu <hunter.yu@hj-micro.com>
 ---
- drivers/acpi/acpi_apd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
-index 800f97868448..229e80a19664 100644
---- a/drivers/acpi/acpi_apd.c
-+++ b/drivers/acpi/acpi_apd.c
-@@ -181,6 +181,11 @@ static const struct apd_device_desc hip08_spi_desc = {
- 	.setup = acpi_apd_setup,
- 	.fixed_clk_rate = 250000000,
- };
-+
-+static const struct apd_device_desc hjmc_i2c_desc = {
-+	.setup = acpi_apd_setup,
-+	.fixed_clk_rate = 200000000,
-+};
- #endif /* CONFIG_ARM64 */
- 
- #endif
-@@ -251,6 +256,7 @@ static const struct acpi_device_id acpi_apd_device_ids[] = {
- 	{ "HISI02A2", APD_ADDR(hip08_i2c_desc) },
- 	{ "HISI02A3", APD_ADDR(hip08_lite_i2c_desc) },
- 	{ "HISI0173", APD_ADDR(hip08_spi_desc) },
-+	{ "HJMC3001", APD_ADDR(hjmc_i2c_desc) },
- 	{ "NXP0001", APD_ADDR(nxp_i2c_desc) },
- #endif
- 	{ }
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 2d0c7348e491..701506e92380 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -354,6 +354,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
+ 	{ "HISI02A1", 0 },
+ 	{ "HISI02A2", 0 },
+ 	{ "HISI02A3", 0 },
++	{ "HJMC3001", 0 },
+ 	{ "HYGO0010", ACCESS_INTR_MASK },
+ 	{ "INT33C2", 0 },
+ 	{ "INT33C3", 0 },
 -- 
 2.43.5
 
