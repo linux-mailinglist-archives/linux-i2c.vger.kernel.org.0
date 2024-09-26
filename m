@@ -1,58 +1,57 @@
-Return-Path: <linux-i2c+bounces-7015-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7016-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE693986C91
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 08:35:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11980986C96
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 08:35:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D715A1C2495A
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 06:35:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBD41286D90
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Sep 2024 06:35:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 153C6188731;
-	Thu, 26 Sep 2024 06:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6033C188CA5;
+	Thu, 26 Sep 2024 06:35:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DURab5bT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZEC1ENjN"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31271D5AB1;
-	Thu, 26 Sep 2024 06:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E9A187FF9;
+	Thu, 26 Sep 2024 06:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727332495; cv=none; b=M9B2isKsuzKa//uSFDW8LLwIXUeFRGQqY9a5D7xKs2NBEXR9CBQwHvjSK9h6DBkiT450BvdZI7FHQNqElVsyJ0ChIbwUN5m2g6TaisSKI1pKdmZFMt/w20uAGepYXMKyAEpp7saZQDBRryQTP5RKMNQRfG+IkD6zCF1GXXYEj4E=
+	t=1727332523; cv=none; b=hNUw23sUhXFm5WJ4/50hNp42H6LA+FMNW8f4aJmFghsrTucihrY9wsr5ElqKkWS0bYGfsHQpeSRnY8fkzwolWKo/3NaYFjIpC85qhRZRORcK62hzCOxDNYRWGpENQ9BvA6ECj0ChUm5+cY8+kv1h/rHd3f+7qbd9LJFi0nvIQ2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727332495; c=relaxed/simple;
-	bh=S2S77/Fm8eGJ8tkVfDio09uTr+wfrhI7si5WI+gC/d4=;
+	s=arc-20240116; t=1727332523; c=relaxed/simple;
+	bh=PO/6Zp84ZuCm40Dgw5tmnLIU2ZUwmTGgZe6kZUgcJvo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MD2TMVF4dMxdO4X3USTAU9mcFrzMSCHCP1UCG73QsCr8SF+BY/+nW5VcKHBK4dnkRB/awE/PRlK0EatYiO4xPmP3X5CKyNebZKPvCM6AotjmZ3Lt0syGiGH25pF+EPhK33wlAYh8RXnFsJN1mYlkTLVvb1QelnvPErjQOMuNgnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DURab5bT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85747C4CEC5;
-	Thu, 26 Sep 2024 06:34:54 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hPOtylYK7qDDgSe3g33C+yqQuHFXZCpGXU8X1zR017WxFhexeVhIsisPVE3sBCkqfYy+fjurdXbGn1NIwJHRYIdMN6vUTwVOymv9YLLHkDcEdsJfTj3ZCdUEtMStX2OQLKkHshl1cpoXcXpxHSVp4QL/oBYUX6vNzQwNxwz1WU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZEC1ENjN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D669FC4CEC9;
+	Thu, 26 Sep 2024 06:35:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727332495;
-	bh=S2S77/Fm8eGJ8tkVfDio09uTr+wfrhI7si5WI+gC/d4=;
+	s=k20201202; t=1727332522;
+	bh=PO/6Zp84ZuCm40Dgw5tmnLIU2ZUwmTGgZe6kZUgcJvo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DURab5bT9wbWK+IIgbbS5o3ZzSX92MHyNb2mGeVJN65cUkLZiLT5SsoLvtTFmnYrL
-	 XkPXTnyh16M+FYGnK3c99UCBv8imHe0FInyZs8Ta7Nbgz1EXUNPpqyaKr6DcJ815ys
-	 5GNb2zQ3B8GzR0Mo5ZgamKqfYSf73npk4w4MARepjFJTRRUEtQLpsvBg0ZkhB1p3RO
-	 4S0OWRah9AL60qEmlQngQJlQG28xnouhfvqtrk78HyUfOgTEGPtnAP/mvpHxDDriRS
-	 /vNm7Bnd2IQjqlkxko6qgtOYDXyusuRy5b8a46l10/VPs+E52GH4CI3sl2SzsDrLcx
-	 xXfYBI+fX1SgA==
-Date: Thu, 26 Sep 2024 08:34:52 +0200
+	b=ZEC1ENjNU3SZucMSURgGfeod9h6gDfGCzxJZB2VbU56d1HVsohKyBBkELLnGd5aj+
+	 Gy++4kWgct4364IIikLuJv8pqdmJyJ9OF838RvWbYK4eVOP0mQ/LLLRkoiLcAKJ1cf
+	 jKHcwQto9J6MiJQa8kSPahAsWe9e2+VB+BNqRhLm2ZESov1JOfOintWGfyI4/afOQJ
+	 e46amhCByRraN5R2PS4CA/ImatMXlFeJXOT63hRLLXqtjtMs9Cd482/Kos0dXWB0vO
+	 H+RKsMnu0TPnoTh1FY3eA8xQ3oXEeL1sqa7rlYS6ObjO9nopS/Kcs998RO5pGF+VPn
+	 yErexTZvQchow==
+Date: Thu, 26 Sep 2024 08:35:19 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
 	conor+dt@kernel.org, lee@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de, 
 	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 1/6] dt-bindings: reset: syscon-reboot: Add reg
- property
-Message-ID: <7q5kwjudw2a3aow7sl4epf733j546z2cse6rviwt77o3wq24bt@vwyeahynhutf>
+Subject: Re: [PATCH v5 2/6] power: reset: syscon-reboot: Accept reg property
+Message-ID: <orfv5lx2qxemqzwed6p5hgt6rkiolhin76gzvc5syvgffiphtw@ab56xup3c4df>
 References: <20240925215847.3594898-1-chris.packham@alliedtelesis.co.nz>
- <20240925215847.3594898-2-chris.packham@alliedtelesis.co.nz>
+ <20240925215847.3594898-3-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -61,20 +60,21 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240925215847.3594898-2-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20240925215847.3594898-3-chris.packham@alliedtelesis.co.nz>
 
-On Thu, Sep 26, 2024 at 09:58:42AM +1200, Chris Packham wrote:
-> The syscon-reboot binding used 'offset' for historical reasons. Having a
-> reg property is appropriate when these nodes are children of a MMIO bus.
-> Add a reg property and modify the constraints so that one of 'reg' or
-> 'offset' is expected.
+On Thu, Sep 26, 2024 at 09:58:43AM +1200, Chris Packham wrote:
+> For historical reasons syscon-reboot has used an 'offset' property. As a
+> child on a MMIO bus having a 'reg' property is more appropriate. Accept
+> 'reg' as an alternative to 'offset'.
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
 > 
 > Notes:
 >     Changes in v5:
->     - New, suggested by Krzysztof
+>     - New, making the driver accept the updated binding
+
+Thanks for doing this.
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
