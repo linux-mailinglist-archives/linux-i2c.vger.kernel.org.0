@@ -1,119 +1,178 @@
-Return-Path: <linux-i2c+bounces-7050-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7051-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D50B988146
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 11:25:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08B809881A0
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 11:46:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 738941C21A70
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 09:24:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7866EB2616A
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 09:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52DF61BA89D;
-	Fri, 27 Sep 2024 09:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E1AA1BBBEC;
+	Fri, 27 Sep 2024 09:44:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oMUAkxCS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XXOK0aGP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3F616D9B8;
-	Fri, 27 Sep 2024 09:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368E01BC066;
+	Fri, 27 Sep 2024 09:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727429092; cv=none; b=IqXhLaehsUajQlpFMEQOoRJ9E5JCqR8QuT1x6JEeGHUzxakXdzXuoA+lUI7OIMRbn4hkRikkudIoNZRj1hywF7oMjtz6nn9fIPcLp5cdroTPwljG84XK+N0vPqteFf2CpNoU4qZph664TSW+7ZwCkkf0Xa+RVCh4F40Ac0JFAIA=
+	t=1727430264; cv=none; b=Nif8vGziZey9CSfv+g8cjwWnbiy/INiq4hd6/+aGM+M88R89reN0yBSIO/rLfgtWYoMqFnT7QUEkpkYemD881TcESCfthNc4i7MbqPeGUUQOi53+aC5ZaRSKXvE2NUqqsAgFtsOHTKhGWF8nsdWbZU4izlfBZSHEfg+c5sTINxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727429092; c=relaxed/simple;
-	bh=prAV8NCYOXfLCw33iIj+Y+TwoCH1xT9xCcNBQqqbOkc=;
+	s=arc-20240116; t=1727430264; c=relaxed/simple;
+	bh=n/bltVhnYzxNYiNE4PxbxGOVMK5htlf883JwUC9dahs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lHD7vVQooNA+dqYIm9KgdszjLmLncj9tjHU5KfG2UqobjEmKyHm0NHsMB/uiHLqFOxgAQPjq4sr5DgyfO/2hbzb2rhStfEeNCKjfYGn0KBD0YD+iFYomjdeSPL+G7ZnPamHHemewPz2PGlPPCzoPHw5kQKNt59lWOoHBh9XmX/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oMUAkxCS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBE2C4CEC4;
-	Fri, 27 Sep 2024 09:24:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727429091;
-	bh=prAV8NCYOXfLCw33iIj+Y+TwoCH1xT9xCcNBQqqbOkc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oMUAkxCSLaU9i4prSJ7nT57Jkiga3+cl+WYzt/9EmzVRfFWc2aE/UT5XJ5ngNGcKp
-	 1YX7SyjNVQjn89/i6aX/nBi8tBWDkEMVtuCT6OIQlm26DiszXybLfImFi6l8a0M3C0
-	 BaPEHOg6UK2vLtbfGXeOTvPiVx+4GrRE1Iqia02nDfyx3fPUkSnmiHkau3q5YH+xr0
-	 7USfHSngAvUNm+IVnyYaYNNvG+HxNXLCdo6TnYYqi9vAlSqcxeEjfaCAt4rtvHkRKC
-	 W+0bitPV2wB66aVbctVsn2vY+9AR2QEttgTvaNH3IjA0yjs7x9LK7qGCjl9ccUmnHe
-	 Odxn+Yex3Pc2g==
-Date: Fri, 27 Sep 2024 11:24:48 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org, 
-	linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, conor+dt@kernel.org, agross@kernel.org, 
-	devicetree@vger.kernel.org, vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org, 
-	Frank.Li@nxp.com, konradybcio@kernel.org, bryan.odonoghue@linaro.org, 
-	krzk+dt@kernel.org, robh@kernel.org
-Subject: Re: [PATCH v3 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
- flag
-Message-ID: <we3wmw6e25y6e4443ndrduurwvkkpvuw7ozrizuys6pwxppwfy@2uq7uda4evhd>
-References: <20240927063108.2773304-1-quic_msavaliy@quicinc.com>
- <20240927063108.2773304-2-quic_msavaliy@quicinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RQcCu7jmHhuHEadsRhQiCYQ9Vr3pHrRFvBpNJ0oLUp4E7H6RPCi8tm/SlrwmK1l2Rprj6omhh67/HOQYSLokxQqDA4pq9pKFPrVBFkLKDScqxzKFxTVZGZ+uNrTgTYSAw5L1Ac9fKYXhr1jLmZddct7ngEcnTivZdHq6YiDGTsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XXOK0aGP; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727430262; x=1758966262;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n/bltVhnYzxNYiNE4PxbxGOVMK5htlf883JwUC9dahs=;
+  b=XXOK0aGPjK3KGxO3viW+tFrhysvwkqJXPKKyZYLIO0HCS+x3XICxTpaf
+   NQ9Ov3fcgA7H8FLcrwaw0emhVAb+d0Yj5nS+jixomcg61WvlpAWYH6USD
+   HYoDCAt+B8LWRjWCYzgS048z9RjRg0rhCRFAj78Q6IoLKxxH37DyBV+hg
+   0xLZq0s2d1yRhvMMWfZeplEhTPYdMkBLXtInXrg7P7wsMjQ7oF1zq5q49
+   ZeV2LqfBW1FzSQqroxkrZBIPbl3dT5m/fI+QsOUHEyAuEVO5lUnP6AFG1
+   lK4dtdcFXTDSOZ77NkV7Y/jHZuZGaSbYfUFQ+Mr925WpQph4xOl76uPfz
+   Q==;
+X-CSE-ConnectionGUID: KjpAhFJ+SXKW39n6pAchjA==
+X-CSE-MsgGUID: Wmx6Tf4wTKaMui5G6pGezQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11207"; a="51984046"
+X-IronPort-AV: E=Sophos;i="6.11,158,1725346800"; 
+   d="scan'208";a="51984046"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 02:44:21 -0700
+X-CSE-ConnectionGUID: JrghRUXCShqSfvO3s9n4NA==
+X-CSE-MsgGUID: hRP4172ySS6/WR2zK0n4sg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,158,1725346800"; 
+   d="scan'208";a="76997208"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 02:44:18 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1su7WJ-0000000DWWK-45nm;
+	Fri, 27 Sep 2024 12:44:15 +0300
+Date: Fri, 27 Sep 2024 12:44:15 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Michael Wu <michael.wu@kneron.us>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Morgan Chang <morgan.chang@kneron.us>, mvp.kutali@gmail.com
+Subject: Re: [PATCH v2 2/2] i2c: dwsignware: determine HS tHIGH and tLOW
+ based on HW parameters
+Message-ID: <ZvZ-b_JRVnsh9o_8@smile.fi.intel.com>
+References: <20240927042230.277144-1-michael.wu@kneron.us>
+ <20240927042230.277144-3-michael.wu@kneron.us>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240927063108.2773304-2-quic_msavaliy@quicinc.com>
+In-Reply-To: <20240927042230.277144-3-michael.wu@kneron.us>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Sep 27, 2024 at 12:01:05PM +0530, Mukesh Kumar Savaliya wrote:
-> Adds qcom,shared-se flag usage. Use this when particular I2C serial
-> controller needs to be shared between two subsystems.
+On Fri, Sep 27, 2024 at 12:22:17PM +0800, Michael Wu wrote:
+> In commit 35eba185fd1a ("i2c: designware: Calculate SCL timing parameter
+> for High Speed Mode") hs_hcnt and hs_lcnt are calculated based on fixed
+> tHIGH = 160 and tLOW = 120. However, the set of these fixed values only
+> applies to the combination of hardware parameters IC_CAP_LOADING = 400pF
+> and IC_CLK_FREQ_OPTIMIZATION = 1. Outside of this combination, if these
+> fixed tHIGH = 160 and tLOW = 120 are still used, the calculated hs_hcnt
+> and hs_lcnt may not be small enough, making it impossible for the SCL
+> frequency to reach 3.4 MHz.
 > 
-> SE = Serial Engine, meant for I2C controller here.
-> TRE = Transfer Ring Element, refers to Queued Descriptor.
-> SS = Subsystems (APPS processor, Modem, TZ, ADSP etc).
+> Section 3.15.4.5 in DesignWare DW_apb_i2b Databook v2.03 says that when
+> IC_CLK_FREQ_OPTIMIZATION = 0,
 > 
-> Example :
-> Two clients from different SS can share an I2C SE for same slave device
-> OR their owned slave devices.
-> Assume I2C Slave EEPROM device connected with I2C controller.
-> Each client from ADSP SS and APPS Linux SS can perform i2c transactions.
-> This gets serialized by lock TRE + DMA Transfers + Unlock TRE at HW level.
+>     MIN_SCL_HIGHtime = 60 ns for 3.4 Mbps, bus loading = 100pF
+> 		     = 120 ns for 3.4 Mbps, bus loading = 400pF
+>     MIN_SCL_LOWtime = 160 ns for 3.4 Mbps, bus loading = 100pF
+> 		    = 320 ns for 3.4 Mbps, bus loading = 400pF
 > 
-> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+> and section 3.15.4.6 says that when IC_CLK_FREQ_OPTIMIZATION = 1,
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> index 9f66a3bb1f80..3b9b20a0edff 100644
-> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> @@ -60,6 +60,10 @@ properties:
->    power-domains:
->      maxItems: 1
+>     MIN_SCL_HIGHtime = 60 ns for 3.4 Mbps, bus loading = 100pF
+> 		     = 160 ns for 3.4 Mbps, bus loading = 400pF
+>     MIN_SCL_LOWtime = 120 ns for 3.4 Mbps, bus loading = 100pF
+> 		    = 320 ns for 3.4 Mbps, bus loading = 400pF
+> 
+> In order to calculate more accurate hs_hcnt amd hs_lcnt, two hardware
+> parameters IC_CAP_LOADING and IC_CLK_FREQ_OPTIMIZATION must be
+> considered together.
+
+...
+
+> +static void i2c_dw_fw_parse_hw_params(struct dw_i2c_dev *dev)
+
+Separate function is an overkill. Just inline its contents...
+
+...
+
+> +	ret = device_property_read_u32(device, "bus-capacitance-pf", &dev->bus_capacitance_pf);
+> +	if (ret || dev->bus_capacitance_pf < 400)
+> +		dev->bus_capacitance_pf = 100;
+> +	else
+> +		dev->bus_capacitance_pf = 400;
+> +
+> +	dev->clk_freq_optimized = device_property_read_bool(device, "clk-freq-optimized");
+
+...
+
+>  	i2c_parse_fw_timings(device, t, false);
 >  
-> +  qcom,shared-se:
-> +    description: True if I2C needs to be shared between two or more subsystems(SS).
+> +	i2c_dw_fw_parse_hw_params(dev);
 
-The "SS" and subsystem should be explained in the binding. Please do not
-use some qcom-specific abbreviations here, but explain exactly, e.g.
-processors like application processor and DSP.
+...here.
 
-"se" is also not explained in the binding - please open it and look for
-such explanation.
+>  	i2c_dw_adjust_bus_speed(dev);
 
-This all should be rephrased to make it clear... We talked about this
-and I do not see much of improvements except commit msg, so we are
-making circles. I don't know, get someone internally to help you in
-upstreaming this.
+...
 
-Is sharing of IP blocks going to be also for other devices? If yes, then
-this should be one property for all Qualcomm devices. If not, then be
-sure that this is the case because I will bring it up if you come with
-one more solution for something else.
+> + * @bus_capacitance_pf: bus capacitance in picofarad
 
-Best regards,
-Krzysztof
+picofarads
+
+...
+
+> +			u32 t_high, t_low;
+> +
+> +			if (dev->bus_capacitance_pf == 400) {
+> +				t_high = dev->clk_freq_optimized ? 160 : 120;
+> +				t_low = 320;
+> +			} else {
+
+Yeah, this has no protection against wrong values in the DT/ACPI.
+So, perhaps
+
+			} else if (...) {
+
+and assign defaults or bail out with an error?
+
+> +				t_high = 60;
+> +				t_low = dev->clk_freq_optimized ? 120 : 160;
+> +			}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
