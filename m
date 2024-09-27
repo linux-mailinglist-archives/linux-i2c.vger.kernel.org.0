@@ -1,82 +1,81 @@
-Return-Path: <linux-i2c+bounces-7060-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7061-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EF6D98865A
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 15:37:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE09B988667
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 15:41:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF0B2B2169A
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 13:37:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7611A1F23C0F
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 13:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 729C418C03D;
-	Fri, 27 Sep 2024 13:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7D219ABD4;
+	Fri, 27 Sep 2024 13:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GxFDqsb7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mohr5Vpl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DAA282FA
-	for <linux-i2c@vger.kernel.org>; Fri, 27 Sep 2024 13:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4536619AA5D;
+	Fri, 27 Sep 2024 13:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727444268; cv=none; b=qHk+39tIlFzoLuFYwVjGKbXm+BhEU8SWBUiJknvtwiQ5QF2UxoTgYwYLWi/m5hpdAbLW2vOOmtnUM2ROB98wAWdI9hwHA6Ij8deYuZwnMtJ2hSM69iIVXcfyZ3G5F/jOLmgFLNPT+oG8bR5RvsxrIOSsNLMsxHdR2EANgeYjaDQ=
+	t=1727444493; cv=none; b=sifDgNWUs0ir+kM0RKNI5MhUIj8kdeUoialMzQuJJmZsdeb9bYajTgIxF6+ndkne5AjIlXEuI1KYRYtobCHOmvpycKsEFTYAuC88mzHjSgqFKNeMo6hOlU6mx++abNkRizuI6f4xz4HRaHmC9FJ0JYYiBzS0juWqA57AzVdADiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727444268; c=relaxed/simple;
-	bh=8+XrPKqnUh52/WEs6iih8orIABMrXolWdtJgG75l2U4=;
+	s=arc-20240116; t=1727444493; c=relaxed/simple;
+	bh=YWJgIOGhBxScyu3P5vF/TXVdwAQ44I0GxFG1b8KDCbo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F7Sz7WG08hNqmjBfL+KVCUJbSb8j5FuRogUxt84F+RCNJqOYn9Ub9IFPtQ/YgsqL3dlm1nezt/jmfbu1uFFkAPd00qZ3jLBcSZso+n973ECkHRhv7GWmotsJaNv2LmtoE6Qc80EIgBo4z20dTHthPnl0fCpsA/sz+Mfe6sM7FYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GxFDqsb7; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2f77fe7ccc4so25014981fa.2
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Sep 2024 06:37:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727444265; x=1728049065; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HTH6ZrGkkYMdX3NtmPgD5++jH73M4Mz7K2Vca6gurDE=;
-        b=GxFDqsb7E7AHG9p0HrirzKJCKN8zlNeJtZSmscHi5QdglvtPV392kfRH795vs4pJaQ
-         sXPfsGhU8UtuuY+mHAjvCL70c+y/IVTLAdUHosFiHs6trB3cKXQyMx5ITR7VVzYQUMst
-         bqdom+Pfqvgicsk6ft2qukqWXMOYz60XWigOClL1BoPZAbR4MT5qiW4ids94i06IMUBn
-         1q1fmGXqPeGUBHigmd3T5J0emLbFxZrBN1VPY0FJWt/MGFBXFbXvdEicTZtuhAKOGqmj
-         iRpu+2XG8kKzFVk9IarqYBjn4m8sJJnbS/Bes3qiWqbh3+PjlH5eYF2TMr6EJTRfOb5H
-         iqxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727444265; x=1728049065;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HTH6ZrGkkYMdX3NtmPgD5++jH73M4Mz7K2Vca6gurDE=;
-        b=m5G0F+JiIHypIlbKD0MbeHkX2Y2ygD1POypQ3TnFy1HGLlDa7JdIwucUuw6g7v/hj1
-         EOtd6ly/tDi0+e21LpK3Nndbq69ZNvzRsP/nsSuR6frDezjJsy7lyWIANc6X5+jwveAG
-         f2tYU/iB+dF6H9a5N11N9AEwnQZXkfi7797WFJ81u6V4o7N3Y1fiBKlNdsB6eq0gi0fJ
-         jJM8RrxzfM9/CL+N4pxYpXgYZdaqIccY3SepfSY71B6Ja8TX9uktmWX07eD90Yvij7xs
-         SIwA6iSmtgT5ZpfLqC4YfAWgwlnO2uXU8iUC102Yvq/0xVIZozJ4bzTM012noHAKchqP
-         HAbg==
-X-Forwarded-Encrypted: i=1; AJvYcCXBm80tAHL5YpXOCVVfo49J6zse3ULg05QXmEh2DYOSI9BbW95Vm+gL7xUcSzGmvnxvPm8vrlsovlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0NNS30fRWA4dRRKNDNIuqgZWJPuTwA0dqTrzUcZB0bOZURSbx
-	pfgTKV2eoTriYWl4KyorWngz/UXD2QG+4ZfvVwK63bhi4kP1ZJpGHQaKElCd4CM=
-X-Google-Smtp-Source: AGHT+IEUIoPYdTceER1rVfUCySlMutIai3Lqj3bSsJ9h+h/0Pde7BjN6J15KYzNhMNUKFuRKodedsg==
-X-Received: by 2002:a05:651c:1508:b0:2f9:d327:c7d2 with SMTP id 38308e7fff4ca-2f9d3e6ab01mr20849791fa.27.1727444264807;
-        Fri, 27 Sep 2024 06:37:44 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cd5764c50sm2491326f8f.112.2024.09.27.06.37.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2024 06:37:44 -0700 (PDT)
-Date: Fri, 27 Sep 2024 16:37:39 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Qianqiang Liu <qianqiang.liu@163.com>
-Cc: andi.shyti@kernel.org, shyam-sundar.s-k@amd.com,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: amd-asf: Fix uninitialized variables issue in
- amd_asf_process_target
-Message-ID: <f5335fe6-ac72-4223-8acb-5be3e9c89cf8@stanley.mountain>
-References: <20240926151348.71206-1-qianqiang.liu@163.com>
- <cc527d62-7d0b-42f8-b14c-6448d3665989@stanley.mountain>
- <Zva0dBAZWpd1e4as@iZbp1asjb3cy8ks0srf007Z>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QUZysEOwxdExuuUYyZrDTll5Jp/teHq2QvHhuwqdtYgUGpnzcYrzi7bx+rXV4Htip6l6TCSYKNQxkW+1PZcuP29sgUIZue1QQVw0X72QYZnBHY9iYuqXIs0kdTBYpUon/qAaFivRgb30+HFSKyAf2xbggOCEOk6yiAwKZPTUJrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mohr5Vpl; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727444491; x=1758980491;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YWJgIOGhBxScyu3P5vF/TXVdwAQ44I0GxFG1b8KDCbo=;
+  b=Mohr5VplHKAzl3TLhtmnx7+jZdUnQsazMN5xW5Ptpy9D4EmLgmXnHrTM
+   XIE1jL9CtAEr95sZQ/+Emf/KEs+/qjMhCQdBBRY3l07jwsZKtlDTvp13+
+   l0adHesw9Q+R2lXmhNw7IcNAtkynThgotL3ULewrH3rhbgmlAxDGoqCiA
+   wC8DhiP+TW5tGLAHf1satALj9Kp9YknTGHOt4WViYsxHMOZioxNJYwu6B
+   ANbc/BNrwmzI6xMNWeHo6EsmsUxojVzfUyRiKPmV6L/TkzNZ6a9xNzRu2
+   QbrRf7Hgo2tq7BkFAI4zMBaefOixwm4M+oqMmwHtcuvbyrmx+hmRa+stZ
+   A==;
+X-CSE-ConnectionGUID: tRaMddGXQqWG81kYTIu/5A==
+X-CSE-MsgGUID: F+fKVm5qSIyplM+JvId+Sw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11207"; a="26761820"
+X-IronPort-AV: E=Sophos;i="6.11,158,1725346800"; 
+   d="scan'208";a="26761820"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 06:41:27 -0700
+X-CSE-ConnectionGUID: CoHiEqGcRie6yKf5wFbsTw==
+X-CSE-MsgGUID: YuN0b83TSsmqpKujZ6spkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,158,1725346800"; 
+   d="scan'208";a="77323694"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 27 Sep 2024 06:41:24 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1suBDm-000MBZ-07;
+	Fri, 27 Sep 2024 13:41:22 +0000
+Date: Fri, 27 Sep 2024 21:41:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Wu <michael.wu@kneron.us>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Andi Shyti <andi.shyti@kernel.org>,
+	Morgan Chang <morgan.chang@kneron.us>, linux-kernel@vger.kernel.org,
+	Michael Wu <michael.wu@kneron.us>
+Subject: Re: [PATCH 1/2] i2c: designware: determine HS tHIGH and tLOW based
+ on HW paramters
+Message-ID: <202409272122.Lw9sP2il-lkp@intel.com>
+References: <20240925080432.186408-2-michael.wu@kneron.us>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -85,21 +84,36 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zva0dBAZWpd1e4as@iZbp1asjb3cy8ks0srf007Z>
+In-Reply-To: <20240925080432.186408-2-michael.wu@kneron.us>
 
-On Fri, Sep 27, 2024 at 09:34:44PM +0800, Qianqiang Liu wrote:
-> The len variable is not initialized, which may cause the for loop to
-> behave unexpectedly.
-> 
-> Fixes: 20c3cc299218 ("i2c: amd-asf: Add routine to handle the ASF slave process")
-> Signed-off-by: Qianqiang Liu <qianqiang.liu@163.com>
-> ---
+Hi Michael,
 
-Thanks!
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
+[auto build test ERROR on v6.11]
+[cannot apply to andi-shyti/i2c/i2c-host linus/master next-20240927]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-regards,
-dan carpenter
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Wu/i2c-designware-determine-HS-tHIGH-and-tLOW-based-on-HW-paramters/20240925-160823
+base:   v6.11
+patch link:    https://lore.kernel.org/r/20240925080432.186408-2-michael.wu%40kneron.us
+patch subject: [PATCH 1/2] i2c: designware: determine HS tHIGH and tLOW based on HW paramters
+config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20240927/202409272122.Lw9sP2il-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240927/202409272122.Lw9sP2il-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409272122.Lw9sP2il-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "i2c_dw_parse_of" [drivers/i2c/busses/i2c-designware-platform.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
