@@ -1,83 +1,83 @@
-Return-Path: <linux-i2c+bounces-7038-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7039-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B681987CCB
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 04:01:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 656DF987CD1
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 04:04:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE2C8284CE7
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 02:01:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 965861C229C0
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 02:04:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91352249F5;
-	Fri, 27 Sep 2024 02:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78EAE28DCB;
+	Fri, 27 Sep 2024 02:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V/lKUYEl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gYsVtjV3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B5E290F;
-	Fri, 27 Sep 2024 02:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF4B290F;
+	Fri, 27 Sep 2024 02:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727402511; cv=none; b=DPTw8whlGfCVvfgpy7u4RPVjnguhQWTQ/D0uRVY3K02RAfx63g0gjaL+EkE1xRvbMPmKLpfkGJR43tQ0pm7KbGUgmLP4R9tUiaaE/dRIUNBDVTJ27305HT/N6KucRH7vvgehHfD7UUDJPbgU/5bghuqKbKHn4NmnpUPcq8EjGEo=
+	t=1727402638; cv=none; b=uzQM6ugRmGNnrFkA52bJgO5qq78ZnC/dH/Oqst6eUXlcFE6wvO9YZyW5fTrQdsEpty559H2zv8vj3rrchgICuiaO6V4ciwSLulT03I57LBsa9vD4w2NWDpz7Kkafa7EuwV35OtYi4dgyCibOLhvahni1WjAixZjrjp1CeSvI/xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727402511; c=relaxed/simple;
-	bh=PY7ysE5TaL+rWDsnEUoyV4eZVnhDLgDtILseSmL7Dgc=;
+	s=arc-20240116; t=1727402638; c=relaxed/simple;
+	bh=U54MpCtMI0X1xEVoU5TTP8tzTsrnqN22AKSkJYCOjgA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iwqPs/KuGZ3ieXEpUSpYJtwKbymaVMuOo6zELojp82fXZDFTEaaNXfkRvwyMdjIjTr4BclDydxKBQ53CgpI6wNnBzPjqOFXZT4cUTY4UE5gma0XzzfbIFjSLw11iDTRKjExq79guwnkqm/zwD+LNOyzWyVko8qaGqcERou1qXTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V/lKUYEl; arc=none smtp.client-ip=209.85.218.44
+	 To:Cc:Content-Type; b=buymz0o38V4LynHdsHo4xNtdcyqEQ9eNS4reDpjvIcmGVeaDh/3uVtGOLZDVrtUNhM6s5pwSHTT/HU+RlMDnOfJDFFjM8zAXqNpaS9M/s7F+6FsxjtueM+LuyP+CJq27I22evCfFLKYIuxbM6U8lYZtZwV15CjJu150M7xOpWzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gYsVtjV3; arc=none smtp.client-ip=209.85.166.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a8a7596b7dfso105885766b.0;
-        Thu, 26 Sep 2024 19:01:49 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-82d24e18dfcso69611139f.3;
+        Thu, 26 Sep 2024 19:03:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727402508; x=1728007308; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727402636; x=1728007436; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rkTECjsLGOP17IwUdNFjlpHyC8AHloYdla7ykRMJQA0=;
-        b=V/lKUYEluawQLDgZxjWQ+LzDqeHKo/Ho/4lK9flQt5bL/mBV8Gq+7sV7kG+9XfKcP9
-         EtwPvzCwxVaXPlTU6D2UMgWY7cAtPCoK4hRhJ986iIQNE4FulHrHoI7izeNiGeLBN3Ia
-         XOo88i+IAfx470rvbSkfI8Xf4nmxfjNor0+CmfAY8sjYLqJRmu5HWQ42XZLYNp74ZozM
-         zV5w+v/0I8ED0hESNMzGGPg5JfG8GF4tpZQ6ioL3XDeRWa3IkxafzD9Chc0QXSxU+bD0
-         6rN4nc2X98SVyWg1koZazfyViDMwmRSfeTal/4tMFQ42yzAmgXfrtpkz1ikljUFCsdev
-         M7UQ==
+        bh=+Jh6r0BOOneL+0+uXM+raqfA4bRD3EJOioSx3dRRd20=;
+        b=gYsVtjV3o+c3c9WX6Eh5Ynks3/Lxbc6GBPY25WZPZMKIiKFckqIbYEmWK8GdTfBBsN
+         FPa2yVlWCWyoIMwfCq0CWJCs9t461zvEbJ+JNvxCffnx94HqbPdOVIdcqH8uEW49a13L
+         mtLdLXfArkIDe4Pr+vJCYjB3gdJkLKDMLBoC6TZroaSvYqSsicHUCmdqHfxlOxRQcLrE
+         XEjtsW+siaJxrrhNNTe/MDHgp3UqDUtKpjNKR5wULpznXOLOyhRKc9h/2Lim10g6rRn8
+         OlGL2kAEn17POHoAHDa6sHKzdsZh4rBI+HPcB5fnIdgfsZOlB/tCn7uHv8cbyM2zZEa8
+         nhkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727402508; x=1728007308;
+        d=1e100.net; s=20230601; t=1727402636; x=1728007436;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rkTECjsLGOP17IwUdNFjlpHyC8AHloYdla7ykRMJQA0=;
-        b=akv727SdC+fZCDCsQOGGsW/7raZwsZ2vFEh5wy0lR/XiqFx1CJbCPYuNN6i5KzaC7u
-         eDL2BtNYCFz0/N3hqmpwOHdE6KdLA90v/N5UN7YGN3H3vOLz999g4jy4dUaMaltyeYUK
-         MNeEk92l6CQZja1isPDBs/YgFzzkfCwrE4DsBoaldIK8PSgD3y+mLZbycSn4vX68Q8v2
-         2E3iDScSuMRJ8CxmhEzvW/vyiYLBVno6E62KnZALf93909lE22VMnjPiFsH/8jgV56eO
-         CHZOIM4sD8MPj+JNiGcu7JVV3F/GPjYXi7NoBCPxLIRzg10403FsEbgtz2ZS/uvk3DbL
-         TdqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWke3sc6clzEF/SabLtG/p4PVI3LTu3j+THlZVUGTSYxb3qe04PzDErcLG0/wTyNkNWMKxqUfeiRF3DH+2y@vger.kernel.org, AJvYcCXeBjaLCuE7n+/ky7IwhLl31HcUZe9LUFyb/oqyYLFUtYmbnyY5BekGEm5bOWxiZwkZ7RtB5e/vd+8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzdYLPFG6OnfHDymCYIVdCqGCRNn8FwOAC2ifrXPPgecCuCfnK
-	tGg4mIQkP0rWvLowXYvT3oq/zBOEq9meY559ui11DdkNgoD+vpavcfoytr6o8++W62GIKA6ayKl
-	dasaH0wh53dSEQE9pBWnlyrjeEA==
-X-Google-Smtp-Source: AGHT+IEZoctL8CVImNJMZdfqDrbfmGmv0+KZg1Q9jtDnJdIOA4H9s6GPic5UlvyL1JjK5tLPN+4Y+w5mAOimJVKqtg8=
-X-Received: by 2002:a17:907:d1a:b0:a8d:592d:f56 with SMTP id
- a640c23a62f3a-a93b167a9ffmr512809166b.31.1727402507806; Thu, 26 Sep 2024
- 19:01:47 -0700 (PDT)
+        bh=+Jh6r0BOOneL+0+uXM+raqfA4bRD3EJOioSx3dRRd20=;
+        b=iXQ1Y8bg6NGtoM4OYJl090DLLbnZvaP6ZM1bQ5gK1MLQbAywfgmPm8+HcSDA3cjh29
+         Rb8JpJ/cHZ85c2WnxSzFMpcchMWqf6hGhT395v6Y3uj7LBJtMAGH+e3Uforu86IfiSrE
+         g4gu0eFHml+XKEFDNntSa3/w4AY5RZLLlKoSwufnMzIeIcVwng4DrktzIj1sv8mJyEBj
+         2f9OAm19zZIe6rrYgmx0h0iDvsSTVhq6boE82Z9JKobgtZzv8N4uyUk/iq1OGvY37P5P
+         pOgWCqXeTGYt5IMOR6lPzPv/5Y/kWVkMJPH3aQ9+6stXtliCU5J14lOfS0rjn0PNtwp0
+         1SzA==
+X-Forwarded-Encrypted: i=1; AJvYcCVUnHRy7AQl3vjbTgqWOwwn/rh+SiHdQz/jEV2c6BMSZNNmPdkZC3t2HX/eipXtxqRUXSFO/B9Wl4gYQYOr@vger.kernel.org, AJvYcCXOGLkAkFcTtOl6EOH3vlQatwDZ22+gR0JcmquC9bb32CSR0YFLzn3n5A4O6TtBQ1F8COXKDdk80uA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzivDtAOj8VY1qRSd3UTpkV4urakYWyr56mPqBlXf+O3cJwUsuH
+	eZ2O+nRf6253hmsuvvyMnSOU2soDbIziZI62ZQFKnrAXMA7pxyBXaU2XCjnX/xRps/u+1T6cD+e
+	kG6Kk7ROPOUSs3dMBOzrtu7IG/A==
+X-Google-Smtp-Source: AGHT+IFU/HiFTzaHHaNmdW5DFz3sLC3XjW0Ap8eMqLs0Mmx/9EAtSI7Jx44H3OOpWGoXkIL0krrAP/BNe96Mye39TWw=
+X-Received: by 2002:a05:6602:2c92:b0:82a:a403:f0df with SMTP id
+ ca18e2360f4ac-8349318bdadmr162621939f.2.1727402635762; Thu, 26 Sep 2024
+ 19:03:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240920101820.44850-1-kfting@nuvoton.com> <20240920101820.44850-3-kfting@nuvoton.com>
- <5mxsciw6443k5rlpymrs7addvme53f5v3zuj5u7tvlggfeirik@dy2bvyz2lyue>
-In-Reply-To: <5mxsciw6443k5rlpymrs7addvme53f5v3zuj5u7tvlggfeirik@dy2bvyz2lyue>
+References: <20240920101820.44850-1-kfting@nuvoton.com> <20240920101820.44850-4-kfting@nuvoton.com>
+ <z4g5alkk3cug7v5bsmrmzspgvo4hhu2ebtykht72ewwhsqxqgq@kg2tlpvz3ctp>
+In-Reply-To: <z4g5alkk3cug7v5bsmrmzspgvo4hhu2ebtykht72ewwhsqxqgq@kg2tlpvz3ctp>
 From: Tyrone Ting <warp5tw@gmail.com>
-Date: Fri, 27 Sep 2024 10:01:36 +0800
-Message-ID: <CACD3sJZuy_6e8hgY9_+gJpHFpOZx_KY=hAb9CY0PtqYP=FMhMQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] i2c: npcm: use a software flag to indicate a BER condition
+Date: Fri, 27 Sep 2024 10:03:42 +0800
+Message-ID: <CACD3sJZ8zSSO9kE30qAAYFf-qw+LQ3RRUbPgqnWO_BsxFV2fOw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] i2c: npcm: Modify timeout evaluation mechanism
 To: Andi Shyti <andi.shyti@kernel.org>
 Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, 
 	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
@@ -93,119 +93,90 @@ Hi Andi:
 
 Thank you for your feedback.
 
+Your comments will be addressed.
+
 Andi Shyti <andi.shyti@kernel.org> =E6=96=BC 2024=E5=B9=B49=E6=9C=8826=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=884:22=E5=AF=AB=E9=81=93=EF=BC=9A
+=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=884:24=E5=AF=AB=E9=81=93=EF=BC=9A
 >
 > Hi Tyrone,
 >
-> patch looks good, but...
+> ...
 >
-> On Fri, Sep 20, 2024 at 06:18:16PM GMT, warp5tw@gmail.com wrote:
-> > From: Tyrone Ting <kfting@nuvoton.com>
-> >
-> > From: Tyrone Ting <kfting@nuvoton.com>
-> >
-> > If not clearing the BB (bus busy) condition in the BER (bus error)
-> > interrupt, the driver causes a timeout and hence the i2c core
-> > doesn't do the i2c transfer retry but returns the driver's return
-> > value to the upper layer instead.
-> >
-> > Clear the BB condition in the BER interrupt and a software flag is
-> > used. The driver does an i2c recovery without causing the timeout
-> > if the flag is set.
-> >
-> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> > Reviewed-by: Tali Perry <tali.perry1@gmail.com>
-> > ---
-> >  drivers/i2c/busses/i2c-npcm7xx.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
 > > diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-=
 npcm7xx.c
-> > index 2b76dbfba438..2d034503d8bc 100644
+> > index 2d034503d8bc..68f3d47323ab 100644
 > > --- a/drivers/i2c/busses/i2c-npcm7xx.c
 > > +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> > @@ -334,6 +334,7 @@ struct npcm_i2c {
-> >       u64 nack_cnt;
-> >       u64 timeout_cnt;
-> >       u64 tx_complete_cnt;
-> > +     bool ber_state;
->
-> I need some comment here, what is this ber state? You described
-> it in the commit log, but people won't be browsing much of the
-> commit log rather than the code itself.
->
-> You could perhaps mention the meaning as:
->
->         bool ber_state; /* brief description */
->
-
-Understood. I'll add some descriptions.
-
-> and...
->
-> >  };
-> >
-> >  static inline void npcm_i2c_select_bank(struct npcm_i2c *bus,
-> > @@ -1521,6 +1522,7 @@ static void npcm_i2c_irq_handle_ber(struct npcm_i=
-2c *bus)
-> >       if (npcm_i2c_is_master(bus)) {
-> >               npcm_i2c_master_abort(bus);
-> >       } else {
-> > +             bus->ber_state =3D true;
-> >               npcm_i2c_clear_master_status(bus);
-> >
-> >               /* Clear BB (BUS BUSY) bit */
-> > @@ -1699,6 +1701,7 @@ static int npcm_i2c_recovery_tgclk(struct i2c_ada=
-pter *_adap)
-> >               dev_dbg(bus->dev, "bus%d-0x%x recovery skipped, bus not s=
-tuck",
-> >                       bus->num, bus->dest_addr);
-> >               npcm_i2c_reset(bus);
-> > +             bus->ber_state =3D false;
-> >               return 0;
+> > @@ -2132,19 +2132,12 @@ static int npcm_i2c_master_xfer(struct i2c_adap=
+ter *adap, struct i2c_msg *msgs,
+> >               }
 > >       }
 > >
-> > @@ -1763,6 +1766,7 @@ static int npcm_i2c_recovery_tgclk(struct i2c_ada=
-pter *_adap)
-> >               if (bus->rec_succ_cnt < ULLONG_MAX)
-> >                       bus->rec_succ_cnt++;
+> > -     /*
+> > -      * Adaptive TimeOut: estimated time in usec + 100% margin:
+> > -      * 2: double the timeout for clock stretching case
+> > -      * 9: bits per transaction (including the ack/nack)
+> > -      */
+> > -     timeout_usec =3D (2 * 9 * USEC_PER_SEC / bus->bus_freq) * (2 + nr=
+ead + nwrite);
+> > -     timeout =3D max_t(unsigned long, bus->adap.timeout, usecs_to_jiff=
+ies(timeout_usec));
+> >       if (nwrite >=3D 32 * 1024 || nread >=3D 32 * 1024) {
+> >               dev_err(bus->dev, "i2c%d buffer too big\n", bus->num);
+> >               return -EINVAL;
 > >       }
-> > +     bus->ber_state =3D false;
-> >       return status;
-> >  }
 > >
-> > @@ -2158,7 +2162,7 @@ static int npcm_i2c_master_xfer(struct i2c_adapte=
-r *adap, struct i2c_msg *msgs,
+> > -     time_left =3D jiffies + timeout + 1;
+> > +     time_left =3D jiffies + bus->adap.timeout / bus->adap.retries + 1=
+;
+> >       do {
+> >               /*
+> >                * we must clear slave address immediately when the bus i=
+s not
+> > @@ -2183,6 +2176,14 @@ static int npcm_i2c_master_xfer(struct i2c_adapt=
+er *adap, struct i2c_msg *msgs,
+> >       if (npcm_i2c_master_start_xmit(bus, slave_addr, nwrite, nread,
+> >                                      write_data, read_data, read_PEC,
+> >                                      read_block)) {
+> > +             /*
+> > +              * Adaptive TimeOut: estimated time in usec + 100% margin=
+:
+> > +              * 2: double the timeout for clock stretching case
+> > +              * 9: bits per transaction (including the ack/nack)
+> > +              */
+> > +             timeout_usec =3D (2 * 9 * USEC_PER_SEC / bus->bus_freq) *=
+ (2 + nread + nwrite);
+> > +             timeout =3D max_t(unsigned long, bus->adap.timeout / bus-=
+>adap.retries,
+> > +                             usecs_to_jiffies(timeout_usec));
+> >               time_left =3D wait_for_completion_timeout(&bus->cmd_compl=
+ete,
+> >                                                       timeout);
 > >
-> >       } while (time_is_after_jiffies(time_left) && bus_busy);
-> >
-> > -     if (bus_busy) {
-> > +     if (bus_busy || bus->ber_state) {
+> > @@ -2308,7 +2309,7 @@ static int npcm_i2c_probe_bus(struct platform_dev=
+ice *pdev)
+> >       adap =3D &bus->adap;
+> >       adap->owner =3D THIS_MODULE;
+> >       adap->retries =3D 3;
+> > -     adap->timeout =3D msecs_to_jiffies(35);
+> > +     adap->timeout =3D 2 * HZ;
 >
-> /*
->  * Check the BER (bus error) state, if it's true means that blah
->  * blah blah, while when it's false blah blah blah and we should
->  * or should not do blah blah blah
->  */
-> if (bus_busy || bus->ber_state) {
->         ...
-> }
+> Same here, I need some good description of why timeout is set to
+> 2 seconds. If the datasheet says 35ms, I do not exclude that
+> someone in the future will send a patch saying "we don't need to
+> wait 2 seconds, wait 35ms as per datasheet".
 >
-
-Understood. Your comments will be addressed.
-
 > Thanks,
 > Andi
 >
-> >               iowrite8(NPCM_I2CCST_BB, bus->reg + NPCM_I2CCST);
-> >               npcm_i2c_reset(bus);
-> >               i2c_recover_bus(adap);
+> >       adap->algo =3D &npcm_i2c_algo;
+> >       adap->quirks =3D &npcm_i2c_quirks;
+> >       adap->algo_data =3D bus;
 > > --
 > > 2.34.1
 > >
 
-Thank you.
+Have a nice day.
 
 Regards,
 Tyrone
