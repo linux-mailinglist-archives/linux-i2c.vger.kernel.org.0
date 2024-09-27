@@ -1,74 +1,55 @@
-Return-Path: <linux-i2c+bounces-7063-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7064-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C98798887A
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 17:45:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 997C29888A3
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 18:01:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0ED8282D5A
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 15:45:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A44B21C21176
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 16:01:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6021C172F;
-	Fri, 27 Sep 2024 15:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0E711487C8;
+	Fri, 27 Sep 2024 16:01:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nXeJm1nF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cR/6kEjj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0806C13A27E;
-	Fri, 27 Sep 2024 15:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6C3200A3;
+	Fri, 27 Sep 2024 16:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727451912; cv=none; b=Q+7nEaatssTGIcT+essQ7/hKS8jtYvfzfaeYmxMnrQD9ZZBDCMxV7HA0pyALTrSZKcyD45ws/K/cqZ0hGIPPOiHCSgC5vF9QL3NfQaLCsKKVfwAU4H+Qm4S4NW2TxMxZIbjkBr4qQyaKJw+Q4MBhyx2nhqs7UKdqCPkK9sxTbW8=
+	t=1727452878; cv=none; b=QnojTfcgbidd+V1RwWfScZmknFftrliOWq4PAB6aQIlddYUjjKTRIKq0odK8bAXMYhCi3aQd14asIUlzZrrxI/eHTwlDCbx4ZVPkIgGYo3fQ6j3zmzJlB4qQmzqHBC3Fr0qvs31N1mtVQjgIfiK143wagBXRqaQMj5rTpED5r9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727451912; c=relaxed/simple;
-	bh=SSsVxrLU3Pis+OTeEMtEhV8WM8q9d22wDjApC2JZH7A=;
+	s=arc-20240116; t=1727452878; c=relaxed/simple;
+	bh=GpIvd9hipSTskI1lT7iREGb8R5ac9xwK+hYxlfG8v0s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U+bwZWVJs1ZUDjJeY8mQfTiGWODKZ3O8P4Z/ZIYnWDSn6ahwZYql2gw5woKxZ2Oq2g/gvcbCITGE75ok3lZLqqz2gNaP3x5SqTPEnHu0nOiVLK1IHh+CRTMVlvae07uF9fQwAjvIKUimU/4UnhI6va9LP/Rsvh9zpsGYhwNRZl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nXeJm1nF; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727451911; x=1758987911;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SSsVxrLU3Pis+OTeEMtEhV8WM8q9d22wDjApC2JZH7A=;
-  b=nXeJm1nFfOVPWrGhZr8aWN4dFc7W3IrcLCrDCKBDRebF4Abaagmmz5j3
-   IgvSs0RXTZrMLK9iwNqLcLgL8sNotshTgkPOe4PbPAf0BGLt30URxm7px
-   KvBFUFh4zRVUcEP+ABAAKClK+/YWtay5Gc/T5JHYu/a69YYW7v6OnfUrA
-   0s3KmdMcEs9Z6v0eNuGAY0gvmao/vcjhsODClvhpmCT6Tr3C/2ZFAjnUG
-   kGbC2ASIYgEohhhyvXT6PdnTVgVXi2K2oAbKSPg2QkSdfRApY+SP6DE/7
-   6xxFbYNce/cUSBlHg05C4RM7jDBRFpdBKjCdrnO+HTppWOegx8Bh8VK4x
-   Q==;
-X-CSE-ConnectionGUID: RsSAabRYRNmdjarxKmBbbw==
-X-CSE-MsgGUID: afu+NoIJTP2rSdKsjObx4A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="49127540"
-X-IronPort-AV: E=Sophos;i="6.11,159,1725346800"; 
-   d="scan'208";a="49127540"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 08:45:09 -0700
-X-CSE-ConnectionGUID: v6pwkCoWT26fhaC+l2LbaQ==
-X-CSE-MsgGUID: RXhXG783Sk+Jd0tNY9ukUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,159,1725346800"; 
-   d="scan'208";a="72992038"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa007.jf.intel.com with ESMTP; 27 Sep 2024 08:45:08 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id EE52330D; Fri, 27 Sep 2024 18:45:06 +0300 (EEST)
-Date: Fri, 27 Sep 2024 18:45:06 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=M5svGAyPDg5zsSG93p5WbQy/6Btbw9sSasNCvPnuC/9+WqGFaKJOLu1ocNTliYuR/xaKJRkMsSk8w77zsTwg9G5/zDdK6xx6z4PC/vStK+TsYyzx+8pqDXSGiXIlNY0u+213gHbtsJ0EbP+4vucBjm4Q6hK+5D30LdFG848IDLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cR/6kEjj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E74C4CEC4;
+	Fri, 27 Sep 2024 16:01:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727452878;
+	bh=GpIvd9hipSTskI1lT7iREGb8R5ac9xwK+hYxlfG8v0s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cR/6kEjjE0xM+1i27pUcTVCQaDDefN4LgoqyMFQEBKRKCfeVH1xS8SoQkHXIBmaca
+	 dUlEuD3RpahDRdN+r2E6/aDwId8TMJq4lBN+RF3uvUXbeRQ563WZauOEuNo6ciFIGj
+	 0LpiUkA32dkPjG4L0HkkZee299bcpXp2da1/s8bb0v1uk/qDCLKReiJHnkejjkvMLf
+	 yMdT9PLMHiCTxMXITG0TyjcT+9T2fFO1nb0mZOigE9NeUEPiLd7Ymgb//6EC3a4gpX
+	 d2nIkmzUwiLeKRn4XnhwimE3AMAbS+po3V7fxFbnUclrVuZXkPaIXD/h4PpjxHIoLu
+	 LweXTMHZ+48xg==
+Date: Fri, 27 Sep 2024 18:01:14 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-i2c <linux-i2c@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
 Subject: Re: [GIT PULL] i2c-host-fixes for v6.12-rc1
-Message-ID: <ZvbTAl5uYbMcVI6m@black.fi.intel.com>
+Message-ID: <fvyjsdwpqo7vnx7acs63hp7dwx6avxouvxkcynov5c6dgmwji6@ob6j7haixn4z>
 References: <auogjhzhbs2w45ptdkl5ceyxsm7apyfi5wmfv3iwuzfh47pl6f@4nnrnpqqlum2>
+ <ZvbTAl5uYbMcVI6m@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,40 +58,47 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <auogjhzhbs2w45ptdkl5ceyxsm7apyfi5wmfv3iwuzfh47pl6f@4nnrnpqqlum2>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <ZvbTAl5uYbMcVI6m@black.fi.intel.com>
 
-On Fri, Sep 27, 2024 at 12:09:36PM +0200, Andi Shyti wrote:
+Hi Andy,
 
-...
-
-> ----------------------------------------------------------------
-> The DesignWare driver now has the correct ENABLE-ABORT sequence,
-> ensuring ABORT can always be sent when needed.
+On Fri, Sep 27, 2024 at 06:45:06PM GMT, Andy Shevchenko wrote:
+> On Fri, Sep 27, 2024 at 12:09:36PM +0200, Andi Shyti wrote:
 > 
-> In the SynQuacer controller we now check for PCLK as an optional
-> clock, allowing ACPI to directly provide the clock rate.
+> ...
 > 
-> The recent KEBA driver required a dependency fix in Kconfig.
+> > ----------------------------------------------------------------
+> > The DesignWare driver now has the correct ENABLE-ABORT sequence,
+> > ensuring ABORT can always be sent when needed.
+> > 
+> > In the SynQuacer controller we now check for PCLK as an optional
+> > clock, allowing ACPI to directly provide the clock rate.
+> > 
+> > The recent KEBA driver required a dependency fix in Kconfig.
+> > 
+> > The XIIC driver now has a corrected power suspend sequence.
 > 
-> The XIIC driver now has a corrected power suspend sequence.
+> While tag message looks nice here, I think it still has to follow the
+> same (as in the commit message) pattern, i.e.
+> 
+> $SUMMARY
+> ...blank line...
+> $DESCRIPTION
+> 
+> Why? Because the Web representation of the message looks weird on the
+> Web. Compare
+> https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/intel.git/tag/?h=intel-pinctrl-v6.12-1
+> and yours
+> https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git/tag/?h=i2c-host-fixes-6.12-rc1
 
-While tag message looks nice here, I think it still has to follow the
-same (as in the commit message) pattern, i.e.
+I've been looking at many git tag descriptions and I haven't seen
+a rule being enforced as it is for the commits.
 
-$SUMMARY
-...blank line...
-$DESCRIPTION
+In any case, thanks a lot for looking into my tag description, I
+can defeinitely adopt your way.
 
-Why? Because the Web representation of the message looks weird on the
-Web. Compare
-https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/intel.git/tag/?h=intel-pinctrl-v6.12-1
-and yours
-https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git/tag/?h=i2c-host-fixes-6.12-rc1
+I will resend this pull request with a proper formatting.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Andi
 
