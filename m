@@ -1,124 +1,115 @@
-Return-Path: <linux-i2c+bounces-7052-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7053-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54846988220
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 12:01:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB45798823B
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 12:09:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C212AB20C70
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 10:01:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7797282EFD
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 10:09:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2411A1BBBEF;
-	Fri, 27 Sep 2024 10:01:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907BC1BC063;
+	Fri, 27 Sep 2024 10:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D82GEd8y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QqCHPbc0"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C842217C232;
-	Fri, 27 Sep 2024 10:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483F917C232;
+	Fri, 27 Sep 2024 10:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727431297; cv=none; b=RBCsD+qkSiYgf797xW6/MvF6tXKeOUfAVDANduV43IgTSHhfTc5MBPVPG5t0Y+7eCwUgLRx7FcDjULL2PxVEswrE2mN+3ehdmt8r0GGcOPsqziL9WNpmOAo+CTVxLN0+JIrD/cak4XjffxUcv0/CTO4y71Vyvbzi/m4S3TW0KNE=
+	t=1727431781; cv=none; b=bIDzcb0hWnxdMcxitCyOHLmMd4qpVsFQKc5BKe1zDe/KEijM65100QF/oAW1ZMADaiCKLOL0NksBFKETjPgxBNN6RlKBKx1vJ1pn4h0wZxBHha3c8CxT+dlNz11JKEQNFkB0XcVeOV+uEYCpdrjT4PbIi5fB6jLWiAzHtiri2U8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727431297; c=relaxed/simple;
-	bh=CDBixAICxzs+mU9T2I8esFJWwZz2NZGhx08sz+Ugl+k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=YQFs9X2WcOxucHaQlWigHz03iPnbosnGG3NcgsTOyOn8owrAFKVnvOpe+d1zJA22fjwL6AE7pUcl0SqJJak0efkK2m6f2JVkF4dCnOasMW1HAsxa/Tb4qNT2sFpw/uEMvSpErPfYWw10Iio/464jzm95OV+fiYqbnCv/5058tf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D82GEd8y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFF93C4CEC4;
-	Fri, 27 Sep 2024 10:01:31 +0000 (UTC)
+	s=arc-20240116; t=1727431781; c=relaxed/simple;
+	bh=aOI1znHzlcS3KjD1jj6wA2LPTGwM80fPp/V7uRtFpLE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=F3Bt38IjHm4QrHgTDsg5ATBlrABkP7YEgCxuBzzIkydffIAtd9SyMrF9HySExl6kxQS2+T9RJIPAeB+1PqMQ8gVClBZyYAYPmlxTUOQFhX5G9/dssZYzsNjxTe4VOHRNY3IMWS6giqXG7BLQuwIPD8uTAm5w/cxOh2dBjuMwiXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QqCHPbc0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B929C4CECD;
+	Fri, 27 Sep 2024 10:09:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727431297;
-	bh=CDBixAICxzs+mU9T2I8esFJWwZz2NZGhx08sz+Ugl+k=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=D82GEd8ydABwB5sHV0+9Yvf+kS/ItpINtHzofY7clRrjKKQzEdWFfVCyKKzav5u5o
-	 /pHrU7K5093Erj+apO1451VBUa//bp1puZdfMEp0FAQDDbuv2He59MLXjjcxxMAQpE
-	 O9/8+ANE0wtoNXe9IDMeYfeQrU3UvlEApyOUZv2yVBWAzn0wXn79KVlprenc30i1ZS
-	 QXcJ2Opx3bhrR5mjl0WmcZ26pKawoM3P4cOnKN0oy/sX4AyDaMlGoO99tB1c4rA8Ll
-	 2+LlxzTs67aoquIqv06ciAmyHZmZahze8hvdAD5ra2VHNytdR0y0Sg4A2H1lVujT2e
-	 EbFgEMfDAojTw==
-Message-ID: <34dc6392-e90c-4512-b5d7-10247a3c0f29@kernel.org>
-Date: Fri, 27 Sep 2024 12:01:29 +0200
+	s=k20201202; t=1727431780;
+	bh=aOI1znHzlcS3KjD1jj6wA2LPTGwM80fPp/V7uRtFpLE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=QqCHPbc0n6miRgNFWuO1nS+0pKCg0UgDJ4Xb/AmC+/K1NS1bcCT2sbamiMoDNKMIg
+	 0EloshYiwzcd7Ie/Hhl0cdblbi1O5+SSEgmWYgl9/U5w/F24318klaZJoeLZgBsPqU
+	 ylfZ+ortu8eRH6gbfysPLxH8e56XkTuOhy4/luySaO9nwM72wWerC37tU5KMDb3Yvg
+	 RECnJhS4h4MEkBNNHLlQUUgOkWmXPziyWB55buy2DAGbY7HQI0YDHwQlu+wipTjrcn
+	 cpJnGbp+zL1p7Pup+uu/Vgr5FxnPT/QNhqVpYTKZkm6zrdrAXnF+3d6XmFMWey2Ta1
+	 d4DmAae4ZyzOg==
+Date: Fri, 27 Sep 2024 12:09:36 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
+	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Subject: [GIT PULL] i2c-host-fixes for v6.12-rc1
+Message-ID: <auogjhzhbs2w45ptdkl5ceyxsm7apyfi5wmfv3iwuzfh47pl6f@4nnrnpqqlum2>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
- flag
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
- konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
- linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
- vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
- Frank.Li@nxp.com, konradybcio@kernel.org, bryan.odonoghue@linaro.org,
- krzk+dt@kernel.org, robh@kernel.org
-References: <20240927063108.2773304-1-quic_msavaliy@quicinc.com>
- <20240927063108.2773304-2-quic_msavaliy@quicinc.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240927063108.2773304-2-quic_msavaliy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On 27/09/2024 08:31, Mukesh Kumar Savaliya wrote:
-> Adds qcom,shared-se flag usage. Use this when particular I2C serial
-> controller needs to be shared between two subsystems.
-> 
+Hi Wolfram,
 
-Also, fix the typo in subject prefix. It is dt-bindings.
+Here’s the first pull request for the new 6.12 cycle. I hope
+the tag description is good this time.
 
-Best regards,
-Krzysztof
+My i2c/i2c-host-fixes branch is based on Linus's merge commit
+of the i2c stable patches.
 
+I wish you a great weekend!
+Andi
+
+The following changes since commit 4e2c9cd7dce6c7480f236c3ead196ff4e92ed597:
+
+  Merge tag 'i2c-for-6.12-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux (2024-09-23 14:34:19 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-fixes-6.12-rc1
+
+for you to fetch changes up to 0c8d604dea437b69a861479b413d629bc9b3da70:
+
+  i2c: xiic: Fix pm_runtime_set_suspended() with runtime pm enabled (2024-09-27 11:48:21 +0200)
+
+----------------------------------------------------------------
+The DesignWare driver now has the correct ENABLE-ABORT sequence,
+ensuring ABORT can always be sent when needed.
+
+In the SynQuacer controller we now check for PCLK as an optional
+clock, allowing ACPI to directly provide the clock rate.
+
+The recent KEBA driver required a dependency fix in Kconfig.
+
+The XIIC driver now has a corrected power suspend sequence.
+
+----------------------------------------------------------------
+Ard Biesheuvel (1):
+      i2c: synquacer: Deal with optional PCLK correctly
+
+Geert Uytterhoeven (1):
+      i2c: keba: I2C_KEBA should depend on KEBA_CP500
+
+Jinjie Ruan (1):
+      i2c: xiic: Fix pm_runtime_set_suspended() with runtime pm enabled
+
+Kimriver Liu (1):
+      i2c: designware: fix controller is holding SCL low while ENABLE bit is disabled
+
+ drivers/i2c/busses/Kconfig                 |  1 +
+ drivers/i2c/busses/i2c-designware-common.c | 14 ++++++++++++++
+ drivers/i2c/busses/i2c-designware-core.h   |  1 +
+ drivers/i2c/busses/i2c-designware-master.c | 38 ++++++++++++++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-synquacer.c         |  5 +++--
+ drivers/i2c/busses/i2c-xiic.c              |  2 +-
+ 6 files changed, 58 insertions(+), 3 deletions(-)
 
