@@ -1,103 +1,127 @@
-Return-Path: <linux-i2c+bounces-7054-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7055-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4481E98828B
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 12:32:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1FAC98832A
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 13:20:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECCEB28252A
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 10:32:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9AE4DB25681
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 11:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C7D189BBF;
-	Fri, 27 Sep 2024 10:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76825189904;
+	Fri, 27 Sep 2024 11:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Og4wUFVZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eM7PUCIE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F123F18951F
-	for <linux-i2c@vger.kernel.org>; Fri, 27 Sep 2024 10:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F211184545;
+	Fri, 27 Sep 2024 11:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727433142; cv=none; b=nNTvOarefEDynl38oqkoH8xeq+nDP4jWVwA+bfrCac3BKZdCKbJH75H/rdlNmNmv02sFTVR6jlSTQ0TWdNR+aQa6aWj+q49IJPP+/4V560nHEYmPsmQlmpQlwPpz5mxFEZHbTGNNEHaejQ2Q6XKHJUUL5Pz2cYDFjvPFdee85co=
+	t=1727436048; cv=none; b=aJKNHfkv4Jfcv5dKpM34Ty1Pr6WLy9TKFdJrOvPyYrGP5n3VsNhM1m6rSXKzUGe/5+Id+yLvpo8xXE/G6q0mwNhAJQ1L7FfNZZSieNwbvC3GEWGFTkt2/RtOFv0DaCwkjN3P3u6MNjjrmoToKmGC31i7iTpRZQBYeZQw6wc/I6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727433142; c=relaxed/simple;
-	bh=/5SZIcto7qgN2Tfj4OlkP3fsvngusO4epQHLOlVZsmE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Olk0ewYBo6w3jFsRet6nacAbXOpVstuTEOXk4oVS0A4XzBxkb4NRzdu7fCT9m8Uju/Xn7meWGV+pNcrM+RUcjjrWGuOXd5PRYgXLySKfezIr5618ITUheCXy5pGd+pI5SGySwt4vqYXWZ9SHvFfU7BrndkzGxbaWIgKP0pkIxKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Og4wUFVZ; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-42cb0f28bfbso16512075e9.1
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Sep 2024 03:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727433139; x=1728037939; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DdmvFk1zGQs2rFnRAdCqQIY/+ci6VPOq7UoKUH/vbeg=;
-        b=Og4wUFVZNllH5Db63/5av3S0zilMHYv3uu3ObcjPZGuHxz957gvS3osillpFG+4G38
-         NOim85FF9bTuocb3ARVETffDp9OLlBEXgPzovqgobgwHA4KaYBK6Me53wmwgT3ryCoFb
-         gPK1dcy/HzhtSGAzLIPJjztal4/3d6FtjUwt0QB5wQifTBNdjL82Jj5ftlUniwblgS1m
-         2SxP1hJeUZ/IjkhWiaV09m4yEJoczg76b93V6XCQTbJRg3MOmrScIXYw5ZrxIPAiGjPz
-         vyZGW+YPYp1cnJOjn4+uoC4TId28DLNtvdczh3QJy2BQUxVaPdNVXZx09JpbXMSlOrpw
-         8gJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727433139; x=1728037939;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DdmvFk1zGQs2rFnRAdCqQIY/+ci6VPOq7UoKUH/vbeg=;
-        b=e/KVuuesX8T9vGfUAlvcC+1kEeGQg05S3G2Y8d0c+2NI+ecHjWSQBm0gQxHHAmK9Gu
-         3oo0snortds2AopxMNUwWDQd7y5zB+/g/SKTkRwui/YvRcKKO4vapgamKgT7bIGSSQjH
-         Zil9+xJBiQblRxnpqjKFXQRFKlbMKg1nujuW6rJiHyLABW0YsEELCo1xk0YK0tlLJqlP
-         Wsn3UUukqTaLoBrnFhJX0SpZb0cDRmq5CNhunnN7WVRMGEcHSBAxveq8ziCUWItkHMUn
-         2dKq+9KajEXb6/gaYXhTtu7gliJpkkMbDD+QtLvoIiQ8StXd6tDTv8jBgp/xjZKL6quj
-         Xqfg==
-X-Forwarded-Encrypted: i=1; AJvYcCX2i86pAGr78Iob8MQu5uF2IaektaBgH+5cEpYpNVBR/lzYVjQehP/W8jJKQmcJ1wzIkl9gdyB2R8s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMlKM+ZAPQND3T6aS0oHFAHV9txIHA96CTVSUw1hsp/yvLxccl
-	nr+R1oaRp/8WHpJhi4b3XBTzVKbNMe2Ac8VxnosqUdpYdzDcMNxDHEoIiIvzL09BuCrr/X+SAAH
-	P
-X-Google-Smtp-Source: AGHT+IEI5zaCi7IffgRkiXlGP/nEaiUxN6UmQFK7bvc31AyVqNBtOMrQp2GsXDb0ukk39MwDBlTJzg==
-X-Received: by 2002:a05:600c:350f:b0:42c:b037:5f9d with SMTP id 5b1f17b1804b1-42f58409dccmr16523645e9.3.1727433139311;
-        Fri, 27 Sep 2024 03:32:19 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f57e2fe7dsm21657055e9.46.2024.09.27.03.32.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2024 03:32:18 -0700 (PDT)
-Date: Fri, 27 Sep 2024 13:32:14 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Qianqiang Liu <qianqiang.liu@163.com>
-Cc: andi.shyti@kernel.org, shyam-sundar.s-k@amd.com,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: amd-asf: Fix uninitialized variables issue in
- amd_asf_process_target
-Message-ID: <cc527d62-7d0b-42f8-b14c-6448d3665989@stanley.mountain>
-References: <20240926151348.71206-1-qianqiang.liu@163.com>
+	s=arc-20240116; t=1727436048; c=relaxed/simple;
+	bh=sgKeHbNcpyAKUI1elNkL0fBx61mN0MG6AdCqqDPHUhg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fkXOnDmVWVW9jo03m6X082Rxdg/9nFzl/w0Vca5qxoKBM1ZPtJV44tr3yJq3XPi4h3ChWRz33cGh5iAQ7edBbBe7AQekJb4v7gY+aKbkc5gWrQbBC5lJxv+jOnTBDUyytwlLFfN9AtFbHi1JjSAVwq3VxI2b9rF7P86uKNzRGLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eM7PUCIE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E41B0C4CEC6;
+	Fri, 27 Sep 2024 11:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727436047;
+	bh=sgKeHbNcpyAKUI1elNkL0fBx61mN0MG6AdCqqDPHUhg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eM7PUCIE0o5jmZ6JFjW6Os52mWUpc6DYgeYMS5Pm9RplNaYH/El31hmeme+uzkmc7
+	 dO2OinJr0fV3ZS3iFwrjFoNg/CagSlMqVNU8sHUUe2FS9eBjZCkXM87wmR+gWTm9Ua
+	 zf+tZI2VrfqQQA16ivNttQa8RFmIjSvbFxGuAgJkfH05m7t+BAS7Rdb8gO4EiFontC
+	 UTcN0o4uBXOzqz0oTLAB+Qu9Tzwr6VEGNfeSqcNs5h3+dGYBG3hhG0np0ftQhrobAB
+	 YiXvPUZj+Fe0eWaG5wPd2gAUCO/hvjDRXjcMTyqMrMFK1cmNvZleD4gELJj9FW+rrY
+	 WCAo3a5ecYwow==
+Message-ID: <320e0685-3dae-42a7-a387-75f6f52f4090@kernel.org>
+Date: Fri, 27 Sep 2024 13:20:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240926151348.71206-1-qianqiang.liu@163.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
+ flag
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
+ linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+ conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
+ vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
+ Frank.Li@nxp.com, konradybcio@kernel.org, bryan.odonoghue@linaro.org,
+ krzk+dt@kernel.org, robh@kernel.org
+References: <20240927063108.2773304-1-quic_msavaliy@quicinc.com>
+ <20240927063108.2773304-2-quic_msavaliy@quicinc.com>
+ <we3wmw6e25y6e4443ndrduurwvkkpvuw7ozrizuys6pwxppwfy@2uq7uda4evhd>
+Content-Language: en-US
+From: Konrad Dybcio <konradybcio@kernel.org>
+In-Reply-To: <we3wmw6e25y6e4443ndrduurwvkkpvuw7ozrizuys6pwxppwfy@2uq7uda4evhd>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 26, 2024 at 11:13:48PM +0800, Qianqiang Liu wrote:
-> The len variable is not initialized, which may cause the for loop to
-> behave unexpectedly.
+On 27.09.2024 11:24 AM, Krzysztof Kozlowski wrote:
+> On Fri, Sep 27, 2024 at 12:01:05PM +0530, Mukesh Kumar Savaliya wrote:
+>> Adds qcom,shared-se flag usage. Use this when particular I2C serial
+>> controller needs to be shared between two subsystems.
+>>
+>> SE = Serial Engine, meant for I2C controller here.
+>> TRE = Transfer Ring Element, refers to Queued Descriptor.
+>> SS = Subsystems (APPS processor, Modem, TZ, ADSP etc).
+>>
+>> Example :
+>> Two clients from different SS can share an I2C SE for same slave device
+>> OR their owned slave devices.
+>> Assume I2C Slave EEPROM device connected with I2C controller.
+>> Each client from ADSP SS and APPS Linux SS can perform i2c transactions.
+>> This gets serialized by lock TRE + DMA Transfers + Unlock TRE at HW level.
+>>
+>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+>> ---
+>>  Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>> index 9f66a3bb1f80..3b9b20a0edff 100644
+>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>> @@ -60,6 +60,10 @@ properties:
+>>    power-domains:
+>>      maxItems: 1
+>>  
+>> +  qcom,shared-se:
+>> +    description: True if I2C needs to be shared between two or more subsystems(SS).
 > 
-> Signed-off-by: Qianqiang Liu <qianqiang.liu@163.com>
+> The "SS" and subsystem should be explained in the binding. Please do not
+> use some qcom-specific abbreviations here, but explain exactly, e.g.
+> processors like application processor and DSP.
+> 
+> "se" is also not explained in the binding - please open it and look for
+> such explanation.
+> 
+> This all should be rephrased to make it clear... We talked about this
+> and I do not see much of improvements except commit msg, so we are
+> making circles. I don't know, get someone internally to help you in
+> upstreaming this.
+> 
+> Is sharing of IP blocks going to be also for other devices? If yes, then
+> this should be one property for all Qualcomm devices. If not, then be
+> sure that this is the case because I will bring it up if you come with
+> one more solution for something else.
 
-You forgot the Fixes tag.
+As far as I understand, everything that's not protocol-specific (in
+this case it would be I2C tunables etc.) is common across all
+protocols supported by the serial engine.
 
-Fixes: 20c3cc299218 ("i2c: amd-asf: Add routine to handle the ASF slave process")
-
-regards,
-dan carpenter
-
-
+Konrad
 
