@@ -1,183 +1,196 @@
-Return-Path: <linux-i2c+bounces-7039-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7040-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 656DF987CD1
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 04:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF488987DD7
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 07:25:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 965861C229C0
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 02:04:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8FCF1C2281E
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Sep 2024 05:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78EAE28DCB;
-	Fri, 27 Sep 2024 02:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF799175D54;
+	Fri, 27 Sep 2024 05:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gYsVtjV3"
+	dkim=pass (1024-bit key) header.d=kneron.us header.i=@kneron.us header.b="A1W56Db9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2094.outbound.protection.outlook.com [40.107.237.94])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF4B290F;
-	Fri, 27 Sep 2024 02:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727402638; cv=none; b=uzQM6ugRmGNnrFkA52bJgO5qq78ZnC/dH/Oqst6eUXlcFE6wvO9YZyW5fTrQdsEpty559H2zv8vj3rrchgICuiaO6V4ciwSLulT03I57LBsa9vD4w2NWDpz7Kkafa7EuwV35OtYi4dgyCibOLhvahni1WjAixZjrjp1CeSvI/xg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727402638; c=relaxed/simple;
-	bh=U54MpCtMI0X1xEVoU5TTP8tzTsrnqN22AKSkJYCOjgA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=buymz0o38V4LynHdsHo4xNtdcyqEQ9eNS4reDpjvIcmGVeaDh/3uVtGOLZDVrtUNhM6s5pwSHTT/HU+RlMDnOfJDFFjM8zAXqNpaS9M/s7F+6FsxjtueM+LuyP+CJq27I22evCfFLKYIuxbM6U8lYZtZwV15CjJu150M7xOpWzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gYsVtjV3; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-82d24e18dfcso69611139f.3;
-        Thu, 26 Sep 2024 19:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727402636; x=1728007436; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Jh6r0BOOneL+0+uXM+raqfA4bRD3EJOioSx3dRRd20=;
-        b=gYsVtjV3o+c3c9WX6Eh5Ynks3/Lxbc6GBPY25WZPZMKIiKFckqIbYEmWK8GdTfBBsN
-         FPa2yVlWCWyoIMwfCq0CWJCs9t461zvEbJ+JNvxCffnx94HqbPdOVIdcqH8uEW49a13L
-         mtLdLXfArkIDe4Pr+vJCYjB3gdJkLKDMLBoC6TZroaSvYqSsicHUCmdqHfxlOxRQcLrE
-         XEjtsW+siaJxrrhNNTe/MDHgp3UqDUtKpjNKR5wULpznXOLOyhRKc9h/2Lim10g6rRn8
-         OlGL2kAEn17POHoAHDa6sHKzdsZh4rBI+HPcB5fnIdgfsZOlB/tCn7uHv8cbyM2zZEa8
-         nhkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727402636; x=1728007436;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Jh6r0BOOneL+0+uXM+raqfA4bRD3EJOioSx3dRRd20=;
-        b=iXQ1Y8bg6NGtoM4OYJl090DLLbnZvaP6ZM1bQ5gK1MLQbAywfgmPm8+HcSDA3cjh29
-         Rb8JpJ/cHZ85c2WnxSzFMpcchMWqf6hGhT395v6Y3uj7LBJtMAGH+e3Uforu86IfiSrE
-         g4gu0eFHml+XKEFDNntSa3/w4AY5RZLLlKoSwufnMzIeIcVwng4DrktzIj1sv8mJyEBj
-         2f9OAm19zZIe6rrYgmx0h0iDvsSTVhq6boE82Z9JKobgtZzv8N4uyUk/iq1OGvY37P5P
-         pOgWCqXeTGYt5IMOR6lPzPv/5Y/kWVkMJPH3aQ9+6stXtliCU5J14lOfS0rjn0PNtwp0
-         1SzA==
-X-Forwarded-Encrypted: i=1; AJvYcCVUnHRy7AQl3vjbTgqWOwwn/rh+SiHdQz/jEV2c6BMSZNNmPdkZC3t2HX/eipXtxqRUXSFO/B9Wl4gYQYOr@vger.kernel.org, AJvYcCXOGLkAkFcTtOl6EOH3vlQatwDZ22+gR0JcmquC9bb32CSR0YFLzn3n5A4O6TtBQ1F8COXKDdk80uA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzivDtAOj8VY1qRSd3UTpkV4urakYWyr56mPqBlXf+O3cJwUsuH
-	eZ2O+nRf6253hmsuvvyMnSOU2soDbIziZI62ZQFKnrAXMA7pxyBXaU2XCjnX/xRps/u+1T6cD+e
-	kG6Kk7ROPOUSs3dMBOzrtu7IG/A==
-X-Google-Smtp-Source: AGHT+IFU/HiFTzaHHaNmdW5DFz3sLC3XjW0Ap8eMqLs0Mmx/9EAtSI7Jx44H3OOpWGoXkIL0krrAP/BNe96Mye39TWw=
-X-Received: by 2002:a05:6602:2c92:b0:82a:a403:f0df with SMTP id
- ca18e2360f4ac-8349318bdadmr162621939f.2.1727402635762; Thu, 26 Sep 2024
- 19:03:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D22170836;
+	Fri, 27 Sep 2024 05:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.94
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727414711; cv=fail; b=qEdbdkKuxnRNVrCMd/RsB0DxQajNLNUo4RDOOGlh15aklsf51/JPFO3GG8mm/znQ2cdok4su4ydrXXGIwmIQMhXOg2/sCtCZnaHKTFumSuA6zfsa3kicps4WGHJztjt2vGAZIkjKaCujNij22L8StC346jd+wbjlenhm86v2gWI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727414711; c=relaxed/simple;
+	bh=5ekITy4Ofip2Xj/exR4ZlKCvGt8huJq6VWCdGxO1MfU=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=BdmFqal+d57KPM4E1CdRp0PsJX6tn0YBjpCUK+Bat645WdjTG216kH9xY5EiXVzvJ33BLn0xhA8UxlvY53UAzRY8pgiiAfLg6NRWiYwYsWgEJksAzTBCMSC/5CIXrFhqQSKXenr2hzMUMSfyGWL5wBcpfBqUu+peXln5uT76fps=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kneron.us; spf=pass smtp.mailfrom=kneron.us; dkim=pass (1024-bit key) header.d=kneron.us header.i=@kneron.us header.b=A1W56Db9; arc=fail smtp.client-ip=40.107.237.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kneron.us
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kneron.us
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GAjkQoeQ5mG73uNjDWpF75Po2U9FIqyWCEoHXcFNC3eofNJqyqNd2IXnKU77d2KBra4GSbqH5V0lK5nxoHFICAHiW7MCBvG9W5Os6a0CMk2pZS/a/e14cmcAXjjFTBBjbBNmBT37FnvEeSKzvLOlR4X3KlofV2xHRJI60BUP/tyzPBEJp+TvZ37wjS7KreHYKbn9E4mFVf8nG4mdziu0pSICxDQ80q+Cs5coWgROUDIWgucUBO7uADVZNvIXXjE8jDHbPLReub2DnCHm9rpAp1Ivs/RUHRd3o0QZ7NMJdY5JCxeRKc9sGtr7wiLg8FoOSTMyWrpDcctwe91jNAQxJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HBT8G3MnDtY3w5AoGkKsYicm6VAsPn+OT8Ddcnky3Wo=;
+ b=nM4A07MLa2lrJsMCa/ysfR2YqLqh1xD5DANpAQ8sehCSaVsd2gOUJ72zsuggt26MgjqU42/6uT+cXJUMYU1i/f5F9c3+wzI6s49hsL0ZNPR6JGdWWO82WGvCuHIC6G2XO33T1demiVtmIEs438FwqCcsIKiGclh6A9CuM3eKYtqSlKweOyXgbbfReREBsTZ8e4A2kyc+jB+LeqaqLdCYeOMKs32maANglf4lR9pMhWEuJI1H7kLp6gIz+sIec8CvLE9lG9oNA9vRFvSm9r50aYdHhuuNNbLvB9NHnU+2EnQ9ueipFPfzI8g9IQZCbxS6yL3uqFVb0PbhhYh+Z4Ev+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kneron.us; dmarc=pass action=none header.from=kneron.us;
+ dkim=pass header.d=kneron.us; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kneron.us;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HBT8G3MnDtY3w5AoGkKsYicm6VAsPn+OT8Ddcnky3Wo=;
+ b=A1W56Db9EpQPEHUQHeZ9I5TnA5d+ywlmfV8Inz0RmoDfxaQ4XZsxfQNA18WpGed+i7ciz3esCDbvOVco+DVvZ7yWnKwTYkN/P7HUzTUjrb6A8EhHbjZNY7RHa4bP7NV2LMn4bOjRA4HRDe+UtQi0JlhsjT+VhkMOSOHH32XZ+/w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kneron.us;
+Received: from IA1PR14MB6224.namprd14.prod.outlook.com (2603:10b6:208:42b::6)
+ by DM4PR14MB5526.namprd14.prod.outlook.com (2603:10b6:8:bf::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.28; Fri, 27 Sep
+ 2024 05:25:05 +0000
+Received: from IA1PR14MB6224.namprd14.prod.outlook.com
+ ([fe80::c527:653c:698d:3d94]) by IA1PR14MB6224.namprd14.prod.outlook.com
+ ([fe80::c527:653c:698d:3d94%3]) with mapi id 15.20.8005.021; Fri, 27 Sep 2024
+ 05:25:05 +0000
+From: Michael Wu <michael.wu@kneron.us>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Morgan Chang <morgan.chang@kneron.us>,
+	mvp.kutali@gmail.com,
+	Michael Wu <michael.wu@kneron.us>
+Subject: [PATCH v2 0/2] Compute HS HCNT and LCNT based on HW parameters
+Date: Fri, 27 Sep 2024 12:22:15 +0800
+Message-ID: <20240927042230.277144-1-michael.wu@kneron.us>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYAPR01CA0148.jpnprd01.prod.outlook.com
+ (2603:1096:404:7e::16) To IA1PR14MB6224.namprd14.prod.outlook.com
+ (2603:10b6:208:42b::6)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240920101820.44850-1-kfting@nuvoton.com> <20240920101820.44850-4-kfting@nuvoton.com>
- <z4g5alkk3cug7v5bsmrmzspgvo4hhu2ebtykht72ewwhsqxqgq@kg2tlpvz3ctp>
-In-Reply-To: <z4g5alkk3cug7v5bsmrmzspgvo4hhu2ebtykht72ewwhsqxqgq@kg2tlpvz3ctp>
-From: Tyrone Ting <warp5tw@gmail.com>
-Date: Fri, 27 Sep 2024 10:03:42 +0800
-Message-ID: <CACD3sJZ8zSSO9kE30qAAYFf-qw+LQ3RRUbPgqnWO_BsxFV2fOw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/6] i2c: npcm: Modify timeout evaluation mechanism
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, 
-	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
-	andriy.shevchenko@linux.intel.com, wsa@kernel.org, rand.sec96@gmail.com, 
-	wsa+renesas@sang-engineering.com, tali.perry@nuvoton.com, 
-	Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, 
-	JJLIU0@nuvoton.com, kfting@nuvoton.com, openbmc@lists.ozlabs.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR14MB6224:EE_|DM4PR14MB5526:EE_
+X-MS-Office365-Filtering-Correlation-Id: e925a85f-3cb8-4603-3f46-08dcdeb4be4b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|52116014|376014|7416014|1800799024|80162021|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?dJ2USWWj7oNg7iuCYdqEh2bWw84+xjG0Cc/yGWvkmnVrdVYnf+ZfhRGEYlLJ?=
+ =?us-ascii?Q?Z0cP78ij0gUn5jyWJIhG3sxv8B8EBFu9zn0Jf9ZQogcCoWGuX/EZzSbhjTK8?=
+ =?us-ascii?Q?V55RwjYYqLEGd1fkHvVF1kuEng66X8QQAxi14JlMBBkpmC0y6BsR1celxGKa?=
+ =?us-ascii?Q?TP7ssrH31YrCUYww1PQqpRtwo/0hGfcAoDiIv7i6V8VdRjKYASkODTb+x/L6?=
+ =?us-ascii?Q?J+n3J4shO+UQLF7P3EHW4UgpVXFMJ1vYbfFJlRwEXe5ZTkMa0Z8h0aC06KB6?=
+ =?us-ascii?Q?ir61yTcrH7iLw7rEl+kSsdnqcJoqvQs6RNLxoY0+70uISBgMvI0Mem9qKe56?=
+ =?us-ascii?Q?AA+gx2yza/1Wotm2/gQIy1G08JFAEDjqD9szkYHANX//jsHsTNemCREg2v4R?=
+ =?us-ascii?Q?XjwUrazO+QlipY5Jw6VLRoegj6h4uCfJt1N6jwxjSB35DUJ3SBCZFYKH4hdA?=
+ =?us-ascii?Q?nGako9d/khotUr9kXsoQxBu2vwfET8gW49RRJPPBI81WRAJIu3euI6Kb3wm+?=
+ =?us-ascii?Q?kwd6d4xjCGA3qBTPusaWVuu9dVyeZoLwsAxN1YSaaVqNODP5GTFatVb4FoAT?=
+ =?us-ascii?Q?kG6EEsPYkZL4/z4AQpzUca9p+T7kHLt4JWCOQCafJfoN6DxgnoeStnJJiaP9?=
+ =?us-ascii?Q?68uu1OQ6+Wg6BtIA0BTACPGPvyE/IeIDAH9wCx8rtrH7q1AqcHozn+gPq+eq?=
+ =?us-ascii?Q?BNwVUXh59Yi9NYN+xf04RdYeA2O8YRWZxxNCEwAnvKbmnJTMVfnN9tWqdR/j?=
+ =?us-ascii?Q?lT+KDBlfaNntYl831dnAFAHEM0Eiui38KK6ALQwnhbcsf4ddkJtYa2mUjOfN?=
+ =?us-ascii?Q?rMhvVQOid/p/j2bofIVrTvDa/0kMBRt9ihvZFcIh1G6IrSnWqDyMPWZxSI0h?=
+ =?us-ascii?Q?SXWAn3v7rbP/T0OL+dmzKYxL2nusQjz0qTmtoNjxGTG+hKubDM298/14uRUg?=
+ =?us-ascii?Q?ppquoWFWQHzxJdsgPJ3HnrNzMtO3+CiexhhEpU/u7cHw8vBp+NiWziSI9w6f?=
+ =?us-ascii?Q?MwpDuyvY6vx8xUfhoSJS7EdQCYOHWI7GQpUcmMDv6sd2SsmKsj7THWL2KThL?=
+ =?us-ascii?Q?k6axMRVQ46tDtXUKD+4icVhiH9RU47DGEx//+6KrOjO8cUpDwK/xBxTq0X7r?=
+ =?us-ascii?Q?PgZMetkChNVoyiTgz7G04DyKc2uEY3t4D1lYVV5o3d/KKPULiBH4B0SuTK0S?=
+ =?us-ascii?Q?xazUOw6jf1lWFEcXXEAMefzXF0dpC5luNH8zqfz0ILbnvtBtMP6HUfzR9DZ9?=
+ =?us-ascii?Q?QMKuu3efeJCDzq2Ssjop7vz5XiVF3lv4HuLWyk2VlT/xCexqL+vzyF1Sld+6?=
+ =?us-ascii?Q?hrnpJB0MV3jOig0d8v0Qow8O58j8oHIm6C3IH47YBNILcJ1eqDOYl9WFewF2?=
+ =?us-ascii?Q?2JrQEEJ5PJECOGhJ4il42rq71VMMnAXNO5+5vkxHl1/k6iMDz1DbVXDVo2SW?=
+ =?us-ascii?Q?1OiIaDqSRmR9l+Fq2+VGjcO1VdPn7NhN?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR14MB6224.namprd14.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(376014)(7416014)(1800799024)(80162021)(921020)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?nADPzshrJ51TyweAGtv4PC7r2eE5uTIJMjzYLlyoPMlXIsQsWd7XR2/M5c0T?=
+ =?us-ascii?Q?i59kRbvqWuiEAR0BTdkbvvUkf4awQfs037XuLXLxUJ29wYtvpBe6brci54E1?=
+ =?us-ascii?Q?cWPgX9ArXPVDQNA9dE1RKUvp0YVM/DcxcXFzIALJuzzoSIz0SZYa7g3bkKxI?=
+ =?us-ascii?Q?0BWo5juaQEYBIAXs7Yu+92TpwdPTaO2B5oqj4STgT+5Ni7jqxexezmPOYw7p?=
+ =?us-ascii?Q?thnncyw65dRS2BeqyQlZ2Mjd8r2aIlXoJO4aMnx4Mcq8Th6tXaiv6p3fcwFN?=
+ =?us-ascii?Q?NjPBxs5/zsMuqwkQ41CMNmN0BbXoma998lougFgeZI5r/zbEVRRjOdeEHqoS?=
+ =?us-ascii?Q?n84nd4ztZY8ak5sjy/o2Dxl0LoCCLuGc2XIZx8tuJNw/Y7kSUz1IF0E8hfc+?=
+ =?us-ascii?Q?NxvVOeY/KBExvKL/6x7QgRKucF4MfPIsQ3SuC1Ds6fGivW7Rwq1MseNnX1/Q?=
+ =?us-ascii?Q?ApHQCDPEFSR2KeppHbmAgcfaQuuY4h588pswqx8lu9DIJu9YZ4NQFXjewM8o?=
+ =?us-ascii?Q?k4vQGUhVKSdJ5DhuF1Pto/OUWZydmzOVlLekukP6whB1Wvv+2f/szdgB9l2P?=
+ =?us-ascii?Q?lTmm5tStRsPWImzcHNzmzcpToZs+WTDSwpzdt68tupiNHLRwzEM5p45lWdLn?=
+ =?us-ascii?Q?yu6cWgBDxTAZo5wt4zEWZwkRlueu2mh+Q3pNh44z/zk8AugHlwP2CXSLv6gk?=
+ =?us-ascii?Q?knQCQkL3hveIXHzv9EL0+3FqRC+j7dEDt4oapFcXSBO9Xu1KDuJGbGVPadGK?=
+ =?us-ascii?Q?OKAg7UzSjq9CJbKwkoxxmXBTZMQedCNmPXReEaFVxfGMieujrAv4LqyqWxel?=
+ =?us-ascii?Q?arf/ShMe5Hs4aLuLrSaPKmxr6mS3gnossA0FosvwB6HaxhBk3PowyD6M8jlX?=
+ =?us-ascii?Q?6xIbpAVQsds23RPjwq5P2gtp6dOVKvia4pTInGVh2ou9Mh/NZ6sqRwbdwPdL?=
+ =?us-ascii?Q?ZEt7LSRTyGtMhyuvrnV34r7tkp6k1wi3QwN1qArobEX7axkPBu2+0fU4HTLm?=
+ =?us-ascii?Q?TzwWwfy/u5fIqSEiX2D4HJ1tiDnF76fXtIcuClmnC9w0M5ME/x27cqQQzPXU?=
+ =?us-ascii?Q?Maq/rosfRK0PjwlIn4UP+3O+ePsqYNxrwWDiW06T9P+hf1RWwFJeYqtgjAjZ?=
+ =?us-ascii?Q?XQpKn7WmCtueXWJo5gGY5IiiL5IHwioxqOtZqk7aQbjcAL5Gi8lzbgcsiGDt?=
+ =?us-ascii?Q?7VZNDkfKa7XWPUwuw3A8Ms6q2yqt0/ax78WpONQQbxk/e+7wzBHrn0K3HwqC?=
+ =?us-ascii?Q?s6XEq/h+LbsModUtX829PF+P3yfcSAxBz3OGYMuVQ/LT7YScuBgLLEArM7pA?=
+ =?us-ascii?Q?n0fPq6y8ZR54YOM3kd3Td+Ipqm/DLhBVoqYBLv36D2yNHtGMJ4UhM3RZM34L?=
+ =?us-ascii?Q?LwrYeDyntmEK90UYSy9sgYfy4pelDhpNk5kPjuvBtaBxLNVFjXAW08LppPI7?=
+ =?us-ascii?Q?tu3N6qWC+X7wj9EPA9CA3UN7hlMo1igU2SKUTfIseucNByIk5Z3Etfoc1pmI?=
+ =?us-ascii?Q?n3rMz3M2YFMN9EUY+2AE9O2wbT82oizykTBuC/a8cm3y8zlhpbDc+paZ78Ub?=
+ =?us-ascii?Q?ylntxYP25sXye+DcRQdGbZu/BOmXLzejQBnbFdMq?=
+X-OriginatorOrg: kneron.us
+X-MS-Exchange-CrossTenant-Network-Message-Id: e925a85f-3cb8-4603-3f46-08dcdeb4be4b
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR14MB6224.namprd14.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2024 05:25:05.2907
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f92b0f4b-650a-4d8a-bae3-0e64697d65f2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5BLCvEYBmAOsw/LsaG/ztCuBDLTLvbuSsttv2Q7p4jpPSUYQmvYZCXur1DzPlVFCwCroQI2ua2SlYIaD4xW3ug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR14MB5526
 
-Hi Andi:
+In commit 35eba185fd1a ("i2c: designware: Calculate SCL timing parameters for
+High Speed Mode") hs_hcnt and hs_lcnt are computed based on fixed tHIGH = 160
+and tLOW = 320. However, the set of these fixed values only applies to the
+combination of hardware parameters "IC_CAP_LOADING = 400pF" and
+"IC_FREQ_OPTIMIZATION = 1". Outside of this combination, SCL frequency may not
+reach 3.4 MHz if hs_hcnt and hs_lcnt are both computed using these two fixed
+values.
 
-Thank you for your feedback.
+Since there are no any registers controlling these two hardware parameters,
+their values can only be declared through the device tree.
 
-Your comments will be addressed.
+v2:
+- provide more hardware information in dt-bindings
+- rename "bus-loading" to "bus-capacitance-pf"
+- call new i2c_dw_fw_parse_hw_params() in i2c_dw_fw_parse_and_configure() to
+  parse hardware parameters from the device tree.
 
-Andi Shyti <andi.shyti@kernel.org> =E6=96=BC 2024=E5=B9=B49=E6=9C=8826=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=884:24=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Hi Tyrone,
->
-> ...
->
-> > diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-=
-npcm7xx.c
-> > index 2d034503d8bc..68f3d47323ab 100644
-> > --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> > +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> > @@ -2132,19 +2132,12 @@ static int npcm_i2c_master_xfer(struct i2c_adap=
-ter *adap, struct i2c_msg *msgs,
-> >               }
-> >       }
-> >
-> > -     /*
-> > -      * Adaptive TimeOut: estimated time in usec + 100% margin:
-> > -      * 2: double the timeout for clock stretching case
-> > -      * 9: bits per transaction (including the ack/nack)
-> > -      */
-> > -     timeout_usec =3D (2 * 9 * USEC_PER_SEC / bus->bus_freq) * (2 + nr=
-ead + nwrite);
-> > -     timeout =3D max_t(unsigned long, bus->adap.timeout, usecs_to_jiff=
-ies(timeout_usec));
-> >       if (nwrite >=3D 32 * 1024 || nread >=3D 32 * 1024) {
-> >               dev_err(bus->dev, "i2c%d buffer too big\n", bus->num);
-> >               return -EINVAL;
-> >       }
-> >
-> > -     time_left =3D jiffies + timeout + 1;
-> > +     time_left =3D jiffies + bus->adap.timeout / bus->adap.retries + 1=
-;
-> >       do {
-> >               /*
-> >                * we must clear slave address immediately when the bus i=
-s not
-> > @@ -2183,6 +2176,14 @@ static int npcm_i2c_master_xfer(struct i2c_adapt=
-er *adap, struct i2c_msg *msgs,
-> >       if (npcm_i2c_master_start_xmit(bus, slave_addr, nwrite, nread,
-> >                                      write_data, read_data, read_PEC,
-> >                                      read_block)) {
-> > +             /*
-> > +              * Adaptive TimeOut: estimated time in usec + 100% margin=
-:
-> > +              * 2: double the timeout for clock stretching case
-> > +              * 9: bits per transaction (including the ack/nack)
-> > +              */
-> > +             timeout_usec =3D (2 * 9 * USEC_PER_SEC / bus->bus_freq) *=
- (2 + nread + nwrite);
-> > +             timeout =3D max_t(unsigned long, bus->adap.timeout / bus-=
->adap.retries,
-> > +                             usecs_to_jiffies(timeout_usec));
-> >               time_left =3D wait_for_completion_timeout(&bus->cmd_compl=
-ete,
-> >                                                       timeout);
-> >
-> > @@ -2308,7 +2309,7 @@ static int npcm_i2c_probe_bus(struct platform_dev=
-ice *pdev)
-> >       adap =3D &bus->adap;
-> >       adap->owner =3D THIS_MODULE;
-> >       adap->retries =3D 3;
-> > -     adap->timeout =3D msecs_to_jiffies(35);
-> > +     adap->timeout =3D 2 * HZ;
->
-> Same here, I need some good description of why timeout is set to
-> 2 seconds. If the datasheet says 35ms, I do not exclude that
-> someone in the future will send a patch saying "we don't need to
-> wait 2 seconds, wait 35ms as per datasheet".
->
-> Thanks,
-> Andi
->
-> >       adap->algo =3D &npcm_i2c_algo;
-> >       adap->quirks =3D &npcm_i2c_quirks;
-> >       adap->algo_data =3D bus;
-> > --
-> > 2.34.1
-> >
+Michael Wu (2):
+  dt-bindings: i2c: snps,designware-i2c: add bus-capacitance-pf and
+    clk-freq-optimized
+  i2c: dwsignware: determine HS tHIGH and tLOW based on HW parameters
 
-Have a nice day.
+ .../bindings/i2c/snps,designware-i2c.yaml        | 14 ++++++++++++++
+ drivers/i2c/busses/i2c-designware-common.c       | 16 ++++++++++++++++
+ drivers/i2c/busses/i2c-designware-core.h         |  6 ++++++
+ drivers/i2c/busses/i2c-designware-master.c       | 14 ++++++++++++--
+ 4 files changed, 48 insertions(+), 2 deletions(-)
 
-Regards,
-Tyrone
+-- 
+2.43.0
+
 
