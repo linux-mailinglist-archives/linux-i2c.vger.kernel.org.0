@@ -1,156 +1,120 @@
-Return-Path: <linux-i2c+bounces-7077-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7078-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0020E9893D4
-	for <lists+linux-i2c@lfdr.de>; Sun, 29 Sep 2024 10:44:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFE149893D7
+	for <lists+linux-i2c@lfdr.de>; Sun, 29 Sep 2024 10:46:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21D611C222B0
-	for <lists+linux-i2c@lfdr.de>; Sun, 29 Sep 2024 08:44:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 804411F210E9
+	for <lists+linux-i2c@lfdr.de>; Sun, 29 Sep 2024 08:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8322A13D606;
-	Sun, 29 Sep 2024 08:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90FC013CF9C;
+	Sun, 29 Sep 2024 08:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3hzBYOk"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="YhHz00tV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDEB13D28A;
-	Sun, 29 Sep 2024 08:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5301DAD2F;
+	Sun, 29 Sep 2024 08:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727599475; cv=none; b=uYaMwtziO1sYJlPQZZ/HiakWrmMWuuQmSYue+Atx6UC/DDuZIKU0oRLwCNtwGwNftF+74R5CZTIuLpMw/yJzseYGcP/TXGSyfldOGYcqP4zPiSPH6F/LlMu4zceRbPrXVlKmmZzjXg4o1h1myIeJiZ362JorJmS/CkBM2hRNE9U=
+	t=1727599592; cv=none; b=dAvUGxChAzn+pyNHoi56PRhFqhS+Iwsj+raep/ajN7wS3UMoBOoOGnfAAAuEB3Cwp3+IvkiIwvh0GRJThIwHVUTEYDb69JaWJY5vbMOpuF/wR1fb86QKzVMpFQEYyNtSCp40pm53E5O9YwPmIEDJUgLyQDZOD3Q7l3ZN4nRywaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727599475; c=relaxed/simple;
-	bh=1AA3bzisj6AuxlJtNNAx4S2dLOKZ0dWWhphc7AI7EjQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fBTMFSD0YtI+1P0dOU6PPU2zNNwzwCGCwdw+H2q01HmNyo72hOyOLWhpkZ4Sm6OU9stgmVQrDyTyVhqA/guKU7vRvOpy2NWq7oLXSO48fplbuEwXcPkpjoqSIam+n36TB2n0amAonx8xRVmldsovPzjd9mTFTWBSAHXxt6FvwvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3hzBYOk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C1EDC4CEC5;
-	Sun, 29 Sep 2024 08:44:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727599474;
-	bh=1AA3bzisj6AuxlJtNNAx4S2dLOKZ0dWWhphc7AI7EjQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=S3hzBYOk4YqddmvtCqujRj0E9lwf0oKN9CFRxi1eh2C13XIb6JLaNLoHgLmRWbOva
-	 LwTelOEsw/YrQevFjBFHrnQWYKgNnPNZFgnJjN4gbOmwMXRHIsojedO0+n8b9QFD4t
-	 K6VpBSY3M1bK/zQvKZIjxXMHxHJCvig97vxAerAvC56bQ2M2hZhRRQ+KHkp6PlbHVn
-	 k665DtxvUzqIjgw5jq5COOpoqgliTM96HwFVakUcSuRs6FG1XDHHcgXSITWBqcag8W
-	 trcrkF232vpvCbxll36rkZKgIb7D6bnptaQZ65UHxJjXGtZH30xe1uAi7rqR2JHcBh
-	 1YgfjQFD23AMA==
-Date: Sun, 29 Sep 2024 10:44:31 +0200
-From: Wolfram Sang <wsa@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PULL REQUEST] i2c-for-6.12-rc1-additional_fixes
-Message-ID: <ZvkTb8esQeCOCJ3j@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1727599592; c=relaxed/simple;
+	bh=JQQZ1rM9Oe/C+rmEPljFG0dfaFJamoG0QhwDFME6AkA=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=GnZWIB58N0WDpW97TZHrjCDX0UuDr5ALXzv5Ryl4r1vzHN0lTK7KMlynp19kTZiXfIeaSo1w7fD8VE5hMr8abEdZ31B+qzx16yYywPr7VtRUMp8BLK0x3C7th4BL2rcxoHni+98QdLAIe/WkBDoryCZZ8icYOUwMMCNj80Eu360=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=YhHz00tV; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1727599548; x=1728204348; i=markus.elfring@web.de;
+	bh=TFqeF6QIlkUpsuw2gD42mGoy6UZKPUpkQ/2SBkM3EzI=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=YhHz00tVaQC06z/vzROSJSVuNRdkJ/fKOiQ4FOkZPPDQMphlVn4y9B789LfOrhXB
+	 6sclHfEhdeVpdbsBVKhMvbaQo0myy1W/mxRLp4FuZiJI8kJDpr6tn5mpZh4pc3Kln
+	 5yWxJsyiKAf5QYDurVhKW8iD96FiokhCgA+KXE1aD/9Sjm2uLOKzCfUwxJYrBhI+M
+	 5z8qTNaNPCEX7E9Q6huypLPiw3cLDEt+UKMeXkwPwcnJS56FqnITSCZtiy95nuUxS
+	 7IYz83an7oY/6x2z6jjyupnSAdb6WVR6/+Zp10xU+CtsIVvdgLbW/m1dx7LJetzE7
+	 zZ2kdAYRy1u6qM8Kxw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.89.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mty5w-1s39Xc0q44-00tjts; Sun, 29
+ Sep 2024 10:45:48 +0200
+Message-ID: <096aebcd-778c-4160-b478-bb26025f3940@web.de>
+Date: Sun, 29 Sep 2024 10:45:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ixYYEIN7qsywhsyG"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ Andi Shyti <andi.shyti@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ =?UTF-8?Q?Thomas_Bogend=C3=B6rfer?= <tsbogend@alpha.franken.de>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v5 6/6] i2c: Add driver for the RTL9300 I2C controller
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:i91wv59hcq2k2nFHmBRcakpMnqNJexrSho8sKn3t1TQfhs1bkEY
+ U0msouL8ADNMLlyFjbiRTEZb5yHT4gFgylhdtxf32l12zE0L5TdsHTU/tSRbh6Z7tdiY/Mt
+ mjL69hnym7cP0IzKw1uZczzRMASdSjJ0ib6eMexIyn+kYYV5BCHu6z+3wJIk3fJ66cYaaXf
+ 4zHstsWnOAG95+8c6oDrw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:RjUmfED7P8M=;2Sd/hN3BTW3cL+opBdD5oxm2Mzr
+ aPAxf00/cX3tI1141DE9P4TO87bpEreoqY83ifwUqD+ts3+i+KhsMXwQvgAN9lTlta1l9O745
+ Oet2efTJMtWNpwxms458GXjW1Z2/06ZB1DjTz5lu8UwEztFK5xGui2XnxXDjKAvIw9ZXwiWJO
+ a0pdlAofX3DEKEnZdBRqr2P5lFBk8EyDYldtqhVfh3ijJlZnBsl1wzTKJ5Rk8vOAY1+JkqQ1Z
+ yT+ymyGUN6N1871odxtENslv3LXTVkaugGtRLEri8I5mQkCjcap8GdGLts1FAGVQB0oZ3W9MN
+ kdrtRJzQ9O09PdDnMyJmCnGFIG2SFHbTNUqQXfV4/twiN0SV9AAMXbD9hjKD2nf72LRCpQdws
+ Fr2FEC89QCkJdigtmBq9hDONp+LgDjoKsUGfJvx55esm02+5ci9bM5cS2AA0n5B4fO20VlbV2
+ ihYxvK3R2nbfmMhSQGL+y8qlSrOezYQYy2E+d5hgBIa3J/+9d6fwSjqPCoKmQTgzhFd7V2Y7C
+ jym/D95RmZEPYhySZnQXaBgXvuhyQRGSutDArg4lBpkCa+4wvCV/IXTCp+vNKybBIIZBHW99U
+ aL+oo8Pgb5Q409zEe8nVq9i72WB5a7tROYhMiNTs5iwPudks1+PnEpXJHBnWHnxSlRGZ6Bihd
+ OQxXl5lgIMjTtRdbrpGy2QYrJqkvSW5yVmoipWXm30TPUNbbqZk0L6VnCVx3IlAxXEpEtoIb4
+ 6UDcCTTkBP3XoJw2RcYJBc22soaaitJmLlRpG9sbsBzkyPCaBk5TTyDRh1ST7CQZBiWkEmTgM
+ VHwIWurAGaWfU1PGxvi3Z9Vg==
 
+=E2=80=A6
+> +++ b/drivers/i2c/busses/i2c-rtl9300.c
+> @@ -0,0 +1,422 @@
+=E2=80=A6
+> +static int rtl9300_i2c_smbus_xfer(struct i2c_adapter *adap, u16 addr, u=
+nsigned short flags,
+> +				  char read_write, u8 command, int size,
+> +				  union i2c_smbus_data *data)
+> +{
+=E2=80=A6
+> +	mutex_lock(&i2c->lock);
+> +	if (chan->sda_pin !=3D i2c->sda_pin) {
+=E2=80=A6
+> +out_unlock:
+> +	mutex_unlock(&i2c->lock);
+> +
+> +	return ret;
+> +}
+=E2=80=A6
 
---ixYYEIN7qsywhsyG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Under which circumstances would you become interested to apply a statement
+like =E2=80=9Cguard(mutex)(&i2c->lock);=E2=80=9D?
+https://elixir.bootlin.com/linux/v6.11/source/include/linux/mutex.h#L196
 
-The following changes since commit 075dbe9f6e3c21596c5245826a4ee1f1c1676eb8:
-
-  Merge tag 'soc-ep93xx-dt-6.12' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc (2024-09-26 12:00:25 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.12-rc1-additional_fixes
-
-for you to fetch changes up to 26de8614d83f1f1a0b0b0a300e3be40a95b9a340:
-
-  Merge tag 'i2c-host-fixes-6.12-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current (2024-09-27 18:57:38 +0200)
-
-----------------------------------------------------------------
-i2c-for-6.12-rc1-additional_fixes
-
-I2C host fixes for v6.12-rc1 (from Andi)
-
-The DesignWare driver now has the correct ENABLE-ABORT sequence,
-ensuring ABORT can always be sent when needed.
-
-In the SynQuacer controller we now check for PCLK as an optional
-clock, allowing ACPI to directly provide the clock rate.
-
-The recent KEBA driver required a dependency fix in Kconfig.
-
-The XIIC driver now has a corrected power suspend sequence.
-
-----------------------------------------------------------------
-Ard Biesheuvel (1):
-      i2c: synquacer: Deal with optional PCLK correctly
-
-Geert Uytterhoeven (1):
-      i2c: keba: I2C_KEBA should depend on KEBA_CP500
-
-Jinjie Ruan (1):
-      i2c: xiic: Fix pm_runtime_set_suspended() with runtime pm enabled
-
-Kimriver Liu (1):
-      i2c: designware: fix controller is holding SCL low while ENABLE bit is disabled
-
-Wolfram Sang (1):
-      Merge tag 'i2c-host-fixes-6.12-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      (Rev.) i2c: designware: fix controller is holding SCL low while ENABLE bit is disabled
-
-Gerhard Engleder (1):
-      (Rev.) i2c: keba: I2C_KEBA should depend on KEBA_CP500
-
-Mika Westerberg (1):
-      (Rev.) i2c: designware: fix controller is holding SCL low while ENABLE bit is disabled
-
- drivers/i2c/busses/Kconfig                 |  1 +
- drivers/i2c/busses/i2c-designware-common.c | 14 +++++++++++
- drivers/i2c/busses/i2c-designware-core.h   |  1 +
- drivers/i2c/busses/i2c-designware-master.c | 38 ++++++++++++++++++++++++++++++
- drivers/i2c/busses/i2c-synquacer.c         |  5 ++--
- drivers/i2c/busses/i2c-xiic.c              |  2 +-
- 6 files changed, 58 insertions(+), 3 deletions(-)
-
---ixYYEIN7qsywhsyG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmb5E24ACgkQFA3kzBSg
-KbYA2g//XMI9Rcw76mDDHyiXQ/e+h4j25fD5YKIsYPTIIpa1lbDP7j6ED4G/SPMb
-d28XWNFk5HWtEDi19jNDX1ldKPyc80FMKwB8GL3GkkxjFiwwnRebK13aTVm1elA5
-ELUXaYbqqwUZgPZPd6+5PP0iGRQWkj9CBoVmQ/IdDK5W01x8F+2usjdxQZxg/Zpi
-UECELMMK4W/WqQENuila7yYc7UOrfZjU5E+O+EUTu/tyXgjeIJKcC1tyH4vkCi8i
-BWS1MxdaFEvzhgtL1z5xpau/Jia+ptz2OGdtamCNkN2LfOvWuWaYltXg9jNCuHl2
-rcE86qacvDphiffo4dEsRbdjZ/qaIyUe2OfZ0HeDTAZycAe4USAipBaL0Dr8Bv9j
-JRlAj9hPQcWSttNw5CtXSDxo8GecELrEPJL593t6nWOCiOzxHEY4L4pNi/Tk30GK
-KXz4LgT7RIO1AAVp2GgTipltSuv/p1cZ8aDyMz8+eddTJTenz1xle15TK13S7DjZ
-TVwCviR0QGxQys769OhoUm0cjxbMFkPv8cJrMlXGgxYsJQR97JIX5/SNfOGc/qXT
-/JeaWP4pAP3ZupjExE3wGUdLKOvrdzbdUosvGQu2OsIX22pHyl/x/KGpPGhxb9Dc
-T++l6Evzf0FMSrRDT5joJXH/TIrMRR7trH2nnlC1j80Ot1Akvc8=
-=neJS
------END PGP SIGNATURE-----
-
---ixYYEIN7qsywhsyG--
+Regards,
+Markus
 
