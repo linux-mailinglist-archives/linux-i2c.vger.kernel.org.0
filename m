@@ -1,89 +1,60 @@
-Return-Path: <linux-i2c+bounces-7083-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7084-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8859E98987A
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Sep 2024 01:53:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7E8C989966
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Sep 2024 05:21:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B94E51C20DDA
-	for <lists+linux-i2c@lfdr.de>; Sun, 29 Sep 2024 23:53:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D740B220E0
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Sep 2024 03:21:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10A017F4FF;
-	Sun, 29 Sep 2024 23:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8753D96D;
+	Mon, 30 Sep 2024 03:20:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="br/MEAn5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SubN16GC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5898768E1;
-	Sun, 29 Sep 2024 23:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677BF39FF3;
+	Mon, 30 Sep 2024 03:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727653988; cv=none; b=osVSd4+VqzV8Aymh1aIiO452+0o7ysmrLYmIv0zHD56qiPGtWti1Wqs+/xekZ1PHjp8GkqoYEzzitucirT5rGoF0QN0Myu06Yg7MKQmJxkGlsLnFUUS5Ee0X8WiDsoQBK3VsDsO4dcNA0vjaFE2JTvxlVcyAMWMmrtT2PpOgZhg=
+	t=1727666450; cv=none; b=gYWbh7FhpLWZ5lsZCGqWKdl0/POitm5VMmP6/pjsDm8mldRRcT0Wwhyj22b2b8nOrPzmdiqiqFLA8yGnc1nfknAicd1IDyKToL/plaBXfbVQwSoFKvFEMFpREvfsvEB+xpdlA081P3qd3wMKNboccD8zcFiIUIin05rcFpC/V0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727653988; c=relaxed/simple;
-	bh=LB42RInykBDbIcPuYXGvyRJ1bRQqMsqZUC9Lm2Qioh0=;
+	s=arc-20240116; t=1727666450; c=relaxed/simple;
+	bh=pu+tBzgdU6YbOS8CSmAkmouW3UeVIsJa5ewszORsm80=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ksKgYZVn47RiaCg0IS+8KPs9nYwBtuYhUZRaovGCTDnpPLsj8RSUaFpEqttYxMQ8YJcMFHpG9/n6HUEd+ini/C3AIFbIJDNeNr1wf7X7Xhqu4oJccnW5C9+SrWZ4PO2cK21CQFIZ0GuEw2q4zTW+3BqOOW4yoGTtg6B5vNWw0To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=br/MEAn5; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2e0c7eaf159so2103463a91.1;
-        Sun, 29 Sep 2024 16:53:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727653986; x=1728258786; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cZj7rRCbSp5Le72reiEeyBZIYO4Rp1cDLd9uDCcf9yw=;
-        b=br/MEAn5WPbFW9BhX0lz1SkC6xv+Ol2x2Yvyp3fZFNr30if0t3AfvINhQSM+t+xMkI
-         T+ld+2W19st/68GqgioO18T9pfzu4AlEAfW4DJfeqANNabisge5jHXbyfPej7wh/J3jk
-         NlSFoWa8G9RQcW5cJ5MgeRrcLrhI7hDN1ylG5PecFR1AN1gWvXXzXMekJ9oIKJEYcgif
-         k/XWBlxvvzw1/0bH3XRkZekjplmiBXErcU1ZSS+woVO6+0Edao5Z2w/5/DOmt6tmr3pr
-         AeFS4qadnQmUT10tRnY2+GQrsr8nH+CtdPG+l16QW/newhYDUgWVauvoYvTYd9WZ1ydc
-         USpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727653986; x=1728258786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cZj7rRCbSp5Le72reiEeyBZIYO4Rp1cDLd9uDCcf9yw=;
-        b=ibxvLB5TDR7y1BujnQbXICrhlHk+h7SfZIlL9sqFZ/BrXtLOBkpz4RfvgWowPPJhLG
-         2ZVpKj5WjiMsHJuneAm8mvCQq8Rm4Tdr8P0oKdSvjzu4AFwslykeI+B8R6YTr6aVj7C/
-         7i3eE1s7CJggFS9sj3ej6orlfgXqqzk4xv0+1B647SGLTi3jd04uLpYYVtqfJyTpesuL
-         gmKeHt5gooMGneD0xHOAn9Iw1vXf88jvTETjwmAlCaXYC9ajrBMNZzfYLw7JHZK08l1y
-         pxjdvccHw6UAce0K0pPhBpwRUgEsMDAuHi/oSerpGd4prnWo9kZObktLLvtPZHW+NY4f
-         wkgg==
-X-Forwarded-Encrypted: i=1; AJvYcCVQBqKKYVH1g3QaS41Aa88rC8VK4ljv/jo8MX+by8ir7uvPYmPepbkwAPKxkhe2qxxEXlxMBc1GQzX/XaqB@vger.kernel.org, AJvYcCVdgYRtQxIFm2TgmersiDKML00daE305TIWUdG7gtdKvHvLbX1blna/gVSNHvvM59yhVYmVlnWsYvVH@vger.kernel.org, AJvYcCWYN7VHbSHinr4cRJPyFzE4ZWJRppEvWNjhwS1f4lzRdpXD4ndWwfSHeDlUxPRtEpEC8hdZVUr4gWfm@vger.kernel.org, AJvYcCXNvzbPpFre4tKiyPilz6DLy/rxunq5A9eH5S2wd70GtlHwSQ5yFeeXrqK0pFFATwfdK5N4C6sJku+dgyE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWuKdacwhMP5XNPWhLalsNPaiIoVK9dPTp6y+w9E2jAeNMIcP+
-	MUDrgn94fahiAaLd5metn8Tay4uPZfoaZhJWyUvSAWt0VQLQnClN
-X-Google-Smtp-Source: AGHT+IG9mOvJW4+CYn55cAUlBeq5AoaNchjydiS1B6g7Lp+N+fyK6WtLToJJyPNspzD3bpThL4wCdg==
-X-Received: by 2002:a17:90a:ad8b:b0:2e0:9236:5bb1 with SMTP id 98e67ed59e1d1-2e0b8ec017bmr12709284a91.30.1727653986182;
-        Sun, 29 Sep 2024 16:53:06 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e0b6e13d01sm6414300a91.42.2024.09.29.16.53.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Sep 2024 16:53:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 29 Sep 2024 16:53:04 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Farouk Bouabid <farouk.bouabid@cherry.de>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Quentin Schulz <quentin.schulz@cherry.de>,
-	Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>,
-	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v8 4/8] hwmon: (amc6821) add support for tsd,mule
-Message-ID: <a49f51e4-71d8-4a88-9827-51db67f208da@roeck-us.net>
-References: <20240906-dev-mule-i2c-mux-v8-0-dbd28a150e41@cherry.de>
- <20240906-dev-mule-i2c-mux-v8-4-dbd28a150e41@cherry.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=i63eL4VkwiHIOwDGOgjdqw9FaRdnkpqOuKCQIHs98CRPYzX0OgAS6thOW/dDtdpDaXyfYunSJtrbpP2iUOPvnSbI1Y2F5YSAAvy8rxh68c2ajMYZ4fyiYzVhYRoDPJNKy0hR8UA9EykTPihwzcSIo8NVvjKqbHHdDGOxyEA/0j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SubN16GC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DAE3C4CEC5;
+	Mon, 30 Sep 2024 03:20:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727666450;
+	bh=pu+tBzgdU6YbOS8CSmAkmouW3UeVIsJa5ewszORsm80=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SubN16GCl3Xwlpein6ssWhDm31R8tuOZVk//vK+VoZrbPn5lx32C7mlarcZ4GPsqX
+	 royB/EsgDk7RsMEqahQ1SJlbghTLTBPSuKkC0V3CLur/znKlhAcZztAWBnAzsCdFFx
+	 5ZsQZpUvKu6ItQMbgye9ckr00zx+5GcsZPI/Ae+cBPhPJP9JgbUVg/BbxxwJpJX/KH
+	 /iUKgPSEEXvWnrVNowzj9XWULfTdaCCYbgeTz3C2SGnj5NFzEhsBTU/rPiuxovTmwg
+	 j9Oycyt3r43dqBpiOd4gIwSQIJvEYbeTaoabxbGi/7ifzZeOAhF8QwC/je48y0hZCr
+	 qqt41YYkKvuvA==
+Date: Sun, 29 Sep 2024 22:20:46 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: konrad.dybcio@linaro.org, andi.shyti@kernel.org, 
+	linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, conor+dt@kernel.org, agross@kernel.org, 
+	devicetree@vger.kernel.org, vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org, 
+	Frank.Li@nxp.com, konradybcio@kernel.org, bryan.odonoghue@linaro.org, 
+	krzk+dt@kernel.org, robh@kernel.org
+Subject: Re: [PATCH v3 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
+ flag
+Message-ID: <anfqjd5rcslplfqannqqli2k2gnq2p4qsnkyrfgmavdpll7p42@c7o4tdouiav4>
+References: <20240927063108.2773304-1-quic_msavaliy@quicinc.com>
+ <20240927063108.2773304-2-quic_msavaliy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -92,24 +63,68 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240906-dev-mule-i2c-mux-v8-4-dbd28a150e41@cherry.de>
+In-Reply-To: <20240927063108.2773304-2-quic_msavaliy@quicinc.com>
 
-On Fri, Sep 06, 2024 at 05:54:15PM +0200, Farouk Bouabid wrote:
-> Theobroma Systems Mule is an MCU that emulates a set of I2C devices,
-> among which is an amc6821 and other devices that are reachable through
-> an I2C-mux.
+On Fri, Sep 27, 2024 at 12:01:05PM GMT, Mukesh Kumar Savaliya wrote:
+> Adds qcom,shared-se flag usage. Use this when particular I2C serial
+> controller needs to be shared between two subsystems.
 > 
-> The devices on the mux can be selected by writing the appropriate device
-> number to an I2C config register (amc6821: reg 0xff)
-> 
-> Implement "tsd,mule" compatible to instantiate the I2C-mux platform device
-> when probing the amc6821.
-> 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Farouk Bouabid <farouk.bouabid@cherry.de>
 
-Applied to hwmon-next.
+https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
 
-Thanks,
-Guenter
+> SE = Serial Engine, meant for I2C controller here.
+> TRE = Transfer Ring Element, refers to Queued Descriptor.
+> SS = Subsystems (APPS processor, Modem, TZ, ADSP etc).
+
+Expressing yourself in terms of abbreviations just makes the text harder
+to read. The dictionary is nice, but I don't see that it adds value to
+introduce these abbreviations with the reader.
+
+> 
+> Example :
+> Two clients from different SS can share an I2C SE for same slave device
+> OR their owned slave devices.
+> Assume I2C Slave EEPROM device connected with I2C controller.
+> Each client from ADSP SS and APPS Linux SS can perform i2c transactions.
+> This gets serialized by lock TRE + DMA Transfers + Unlock TRE at HW level.
+> 
+
+Don't describe your problem using a bullet-point list. You should be
+able to express it in a flowing English sentence/paragraph.
+
+> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> index 9f66a3bb1f80..3b9b20a0edff 100644
+> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> @@ -60,6 +60,10 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> +  qcom,shared-se:
+> +    description: True if I2C needs to be shared between two or more subsystems(SS).
+
+I see no value in establishing the "SS" abbreviation here, what would be
+useful is to write this sentence such that it establishes the "SE"
+abbreviation (to avoid having to expand the property).
+
+On the other hand, it's a boolean property in a serial-engine node, so
+I don't know if it's worth repeating "se" here. "qcom,is-shared" sounds
+like a better boolean in a se-node.
+
+Regards,
+Bjorn
+
+> +    type: boolean
+> +
+>    reg:
+>      maxItems: 1
+>  
+> -- 
+> 2.25.1
+> 
 
