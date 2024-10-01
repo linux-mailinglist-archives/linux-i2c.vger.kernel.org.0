@@ -1,186 +1,126 @@
-Return-Path: <linux-i2c+bounces-7147-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7148-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42E0698BD01
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 15:02:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7585B98BD26
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 15:14:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 753211C23507
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 13:02:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B0FE2826D4
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 13:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AF8D1E529;
-	Tue,  1 Oct 2024 13:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDA7F1C330B;
+	Tue,  1 Oct 2024 13:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iy7PxeSd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EFxVTCDi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3EF637;
-	Tue,  1 Oct 2024 13:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBECF1C2330;
+	Tue,  1 Oct 2024 13:14:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727787744; cv=none; b=cjdAUzyvyR/lryKBAffwmSq8VfBXBeaWhneDTgbqTHQqgAuL0wVBuXjzYvw3nv5pzEBFhANB95OeK8YGffId8BOQy59hr2PsNHLmW3TiHBgNcX4oi+rh1MDEovXqXDr0F3FxwuXL/J3TOg5127Fve1WfP5mwuye9oM2ftS8y0dU=
+	t=1727788469; cv=none; b=HeUKfK6QKGtpEAlXGboVL/Q2AMO8UTDAx25QaguGxM3B/+mZgwaicxNreCU0SjloMeSRH+qsnjHCODWJx5nQ0Iis65zvpDPAqW4Sh9L6z2O9RYIhr2CqvvtRh88yUm/2JfSUbYKBWW82Mzt6PrbtY9Is9nKpHxJO8/64nDFFPkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727787744; c=relaxed/simple;
-	bh=FDEYOUMz0b1sSCN0xc23akav2PoKwzLJxdk7hwEzxU8=;
+	s=arc-20240116; t=1727788469; c=relaxed/simple;
+	bh=PJNiEgbOR/XVTDdp1Jdns/xshRQMPHYvX91kndFUefY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qtnufzZZGAlJM8gXDRqWFJuTdROn7HNRRJg5mWuV7TAE5hfX77Blt6DgMFs0vlZFeiH/ddBEsrXcMrsTC4YmYz+LFiICaSseHtoLSlLg2lITW8NsZ/oY6rYWEGocgTkWrP69xGY57qnkUw6G5DBD1RYVnKW3id8PFwB25U8Kc60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iy7PxeSd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11976C4CEC6;
-	Tue,  1 Oct 2024 13:02:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727787743;
-	bh=FDEYOUMz0b1sSCN0xc23akav2PoKwzLJxdk7hwEzxU8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iy7PxeSdnMHlKHoI9tHuh58pt95nktXjk01kOfYQ7xcNBMLeRoZHoD332cpbz/oQ+
-	 Y03uWsisMVZRFmV0H+6bqNeFwBlMzZNYWYyz4Tawv+BQ7DEzTCUeCtQb+IarAnQ4to
-	 yDLM1ogWva9s/OxrXeZkAJyow5CoxV6c8JMx3VFoyRp9Jz9z4argFRfAx6Ak3FGN9x
-	 bnlGP61n/nMSMYRttZkxX1ImURAWZYBoTr01CATwRKX1TCbkl3UVfnRxrhouJXu+re
-	 iAyMoeyGniuud0rpapvN3WqrFaNHWFWCYMkjeWXTa7ZGKEoyUS3EOGTAzhmbfLDoxU
-	 7Y7XwaZsTphOQ==
-Date: Tue, 1 Oct 2024 14:02:18 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Wolfram Sang <wsa@kernel.org>, linux-riscv@lists.infradead.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=UAkkycPcIKR9sRhO3olGzZP80s6jecfZbc/GzvinaYW2ltQBcMCTSBno+cEQbyexuTRiclFVf6lmgwl86hAncz29i5eVICnpHsi+0xmWcZ76OUq4OtD77RSGgrGkAhirbHdibkjG/ik7OVwMx+4TKwdVHo7WnZhoKqbost87suA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EFxVTCDi; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727788468; x=1759324468;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PJNiEgbOR/XVTDdp1Jdns/xshRQMPHYvX91kndFUefY=;
+  b=EFxVTCDiclb5xlqPtCy7+oXALxVULCrnf2fc/x7wDHzijenwGoshGaEy
+   gMvNKGdAME8Jphft6mARigq/gXLguwoF/+v86pjNXmEqhcCz1HZT2FrLw
+   MbJekTMuLCeU2gtn0nvxIiA/8NOMPfTYIvDeTj3/4VQN1+uNjhuBXKt6V
+   O2yxtrX/hUnz77JqLWdoe82P4ZlYDhm7Ka7Tl07XEyPUPyjhcR5oJaJpL
+   rwgsk7wMcMruUGiR98YxxOMxfJzKvctoOtFth00QM/32CBy0z4K6rhco/
+   M2NN6cQ7qqHD9p09rlmzmpvHLQ58gTbWL9+Zswv79c7bLGxjca4Sc5MtM
+   Q==;
+X-CSE-ConnectionGUID: FhSBmmZNRSWxfF7S4VmguQ==
+X-CSE-MsgGUID: +wLA1H8+TPaQgFUQPZeOag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11212"; a="14541863"
+X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
+   d="scan'208";a="14541863"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 06:14:12 -0700
+X-CSE-ConnectionGUID: Ma3gRYy8Rg67o/OpEJBLmw==
+X-CSE-MsgGUID: Xj2342VOQI2bwAH8+7KC7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
+   d="scan'208";a="74459795"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 06:14:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1svchY-0000000FCZ5-03jr;
+	Tue, 01 Oct 2024 16:14:04 +0300
+Date: Tue, 1 Oct 2024 16:14:03 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Tyrone Ting <warp5tw@gmail.com>
+Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+	venture@google.com, yuenn@google.com, benjaminfair@google.com,
+	andi.shyti@kernel.org, wsa@kernel.org, rand.sec96@gmail.com,
+	wsa+renesas@sang-engineering.com, tali.perry@nuvoton.com,
+	Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
+	KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
+	openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] i2c: microchip-core: actually use repeated sends
-Message-ID: <20241001-boring-livestock-0158ccc3fa88@spud>
-References: <20240930-uneasy-dorsal-1acda9227b0d@spud>
- <jzkzcnd5rdprxpw734ppcr5ti23qkppfxs55nse36wcqxff7e3@4ea2lyl7feoo>
+Subject: Re: [PATCH v5 3/6] i2c: npcm: Modify timeout evaluation mechanism
+Message-ID: <Zvv1m3RT916dyYRC@smile.fi.intel.com>
+References: <20241001062855.6928-1-kfting@nuvoton.com>
+ <20241001062855.6928-4-kfting@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="ofQ4KTZDQjzQ4Z5h"
-Content-Disposition: inline
-In-Reply-To: <jzkzcnd5rdprxpw734ppcr5ti23qkppfxs55nse36wcqxff7e3@4ea2lyl7feoo>
-
-
---ofQ4KTZDQjzQ4Z5h
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241001062855.6928-4-kfting@nuvoton.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Oct 01, 2024 at 02:45:20PM +0200, Andi Shyti wrote:
-> Hi Conor,
->=20
-> On Mon, Sep 30, 2024 at 02:38:27PM GMT, Conor Dooley wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> >=20
-> > At present, where repeated sends are intended to be used, the
-> > i2c-microchip-core driver sends a stop followed by a start. Lots of i2c
-> > devices must not malfunction in the face of this behaviour, because the
-> > driver has operated like this for years! Try to keep track of whether or
-> > not a repeated send is required, and suppress sending a stop in these
-> > cases.
-> >=20
-> > Fixes: 64a6f1c4987e ("i2c: add support for microchip fpga i2c controlle=
-rs")
->=20
-> I don't think the Fixes tag is needed here if everything worked
-> until now, unless you got some other device that requires this
-> change and you need to explain it.
+On Tue, Oct 01, 2024 at 02:28:52PM +0800, Tyrone Ting wrote:
+> From: Tyrone Ting <kfting@nuvoton.com>
+> 
+> The users want to connect a lot of masters on the same bus.
+> This timeout is used to determine the time it takes to take bus ownership.
+> The transactions are very long, so waiting 35ms is not enough.
+> 
+> Increase the timeout and treat it as the total timeout, including retries.
+> The total timeout is 2 seconds now.
+> 
+> The i2c core layer will have chances to retry to call the i2c driver
+> transfer function if the i2c driver reports that the bus is busy and
+> returns EAGAIN.
 
-I think the fixes tag is accurate, because it only happened to work on
-the limited set of devices I and others tried. This patch came about cos
-I got reports of it being broken in 6.6
+-EAGAIN
 
-> If this is more an improvement (because it has worked), then we
-> shouldn't add the Fixes tag.
->=20
-> In any case, when patches are going to stable, we need to Cc
-> stable too.
->=20
-> Cc: <stable@vger.kernel.org> # v6.0+
->=20
-> (This is specified in the
-> Documentation/process/stable-kernel-rules.rst and I'm starting to
-> enforce it here).
+...
 
-Yah, some maintainers want to add the tags themselves, so got into a
-(bad?) habit of leaving them out. I can add it if there's a v2.
+> +		/*
+> +		 * Adaptive TimeOut: estimated time in usec + 100% margin:
+> +		 * 2: double the timeout for clock stretching case
+> +		 * 9: bits per transaction (including the ack/nack)
+> +		 */
+> +		timeout_usec = (2 * 9 * USEC_PER_SEC / bus->bus_freq) * (2 + nread + nwrite);
 
->=20
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->=20
-> ...
->=20
-> > +	/*
-> > +	 * If there's been an error, the isr needs to return control
-> > +	 * to the "main" part of the driver, so as not to keep sending
-> > +	 * messages once it completes and clears the SI bit.
-> > +	 */
-> > +	if (idev->msg_err) {
-> > +		complete(&idev->msg_complete);
-> > +		return;
-> > +	}
-> > +
-> > +	this_msg =3D (idev->msg_queue)++;
->=20
-> do we need parenthesis here?
+Side note (as I see it was in the original code), from physics
+point of view the USEC_PER_SEC here should be simply MICRO
+(as 1/Hz == s, and here it will be read as s^2 in the result),
+but if one finds the current more understandable, okay then.
 
-I suppose not, do you want a v2 if that's the only change?
+-- 
+With Best Regards,
+Andy Shevchenko
 
->=20
-> ...
->=20
-> > +	/*
-> > +	 * The isr controls the flow of a transfer, this info needs to be sav=
-ed
-> > +	 * to a location that it can access the queue information from.
-> > +	 */
-> > +	idev->restart_needed =3D false;
-> > +	idev->msg_queue =3D msgs;
-> > +	idev->total_num =3D num;
-> > +	idev->current_num =3D 0;
-> > +
-> > +	/*
-> > +	 * But the first entry to the isr is triggered by the start in this
-> > +	 * function, so the first message needs to be "dequeued".
-> > +	 */
-> > +	idev->addr =3D i2c_8bit_addr_from_msg(this_msg);
-> > +	idev->msg_len =3D this_msg->len;
-> > +	idev->buf =3D this_msg->buf;
-> > +	idev->msg_err =3D 0;
-> > +
-> > +	if (idev->total_num > 1) {
-> > +		struct i2c_msg *next_msg =3D msgs + 1;
-> > +
-> > +		idev->restart_needed =3D next_msg->flags & I2C_M_RD;
-> > +	}
-> > +
-> > +	idev->current_num++;
-> > +	idev->msg_queue++;
->=20
-> Can we initialize only once? This part is just adding extra code.
 
-I don't agree that it is extra code, I think it is clearer like this as
-I intentionally wrote it this way.
-
-> The rest looks good. I just need to know if Wolfram has some more
-> observations here.
->=20
-> Thanks,
-> Andi
-
---ofQ4KTZDQjzQ4Z5h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZvvy2gAKCRB4tDGHoIJi
-0owyAPwNPsSNLQz2fsZ0hPQ9cGl/6RpVQ71r0aGY6J/e82FtCgEA4mWug7Gd7DiL
-vFdzZiuzu//XelR28bmApIY34+l14AQ=
-=Z9Uz
------END PGP SIGNATURE-----
-
---ofQ4KTZDQjzQ4Z5h--
 
