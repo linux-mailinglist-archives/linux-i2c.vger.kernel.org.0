@@ -1,61 +1,65 @@
-Return-Path: <linux-i2c+bounces-7128-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7129-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 707BD98B73F
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 10:41:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAEED98B78F
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 10:51:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05C3BB249C9
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 08:41:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 522ED280C5B
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 08:51:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4115D19ABA4;
-	Tue,  1 Oct 2024 08:40:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDDE21991D2;
+	Tue,  1 Oct 2024 08:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="MbqYtV63"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="OR3KXQkE"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5111C199FD7
-	for <linux-i2c@vger.kernel.org>; Tue,  1 Oct 2024 08:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7831E4AF
+	for <linux-i2c@vger.kernel.org>; Tue,  1 Oct 2024 08:50:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727772051; cv=none; b=jgS49AslbvGwbHHNClcKWIcXo49NKaUkVueTHdX3arhkVMce0/glFttaVLomIligDeVIFapT2g0z1kaSQyaPJY3ZvSjw9KPgjF1qskWwMxORZoUVisXC3zHexNh7761RocV6Z3NAjVgFyYAKFbdCwG88HQRNrj2kUebSAiH7Vrc=
+	t=1727772661; cv=none; b=FdPO4ysLb2BXACWzXwV0hKUAFIMkEwLR0JZUnmH8n90qQAraWHc8Sk5chHBc280JJGx6sZvPiyNn3gIaUFJ8cNL3fb49rblwhhc3kHrgCyUC5chNr+LC1qvw8YRYngBr1mJiK/DG+7YKJzU6soayjAtn7Xbdo0zCMJ+Vd+DhnHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727772051; c=relaxed/simple;
-	bh=j4WMJo55ds4cvdDSMrIE//LyiNstl71gSiv0rxg9kXo=;
+	s=arc-20240116; t=1727772661; c=relaxed/simple;
+	bh=+mRURdgeA55eONnLbJP8OYsskYc6v/qhIFWyf/8NktA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AVB1V2B3i2TF2VL+BGwmm3csRUpzfXmV5XgDeiG3anDF7az66jMiM1cROwZ5Foc43u2E8MULTyOVRLH10hdB4lfQYHt758pkF30Y6F81A85aBxwyOp9inCQFRsE+ZBHFJsaI42M0F76qvjcuahTskCz4fISobdY7DZumbwnYVgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=MbqYtV63; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=YZ/SoSH1JkL5RXwp/364pZqUyHNid4ab0fLJLiVar275fk+iaT630h7d5jP0VySaKJZA5xMYf7IRwwgb0bWYQSpx1PZOGvdQVPFxTSJSHGcyuXL24tpoYieN9dEtwlVC2UbVhImj+Xr5mqL7cv1ojA1X+sfBG90RmcRvzdosgss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=OR3KXQkE; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=j4WM
-	Jo55ds4cvdDSMrIE//LyiNstl71gSiv0rxg9kXo=; b=MbqYtV63glAAND/KVemF
-	xoPZEPdb+fs+fa6VWVoSrEoBSAHLIjsHIbZwHrFGM1TzbgDM/YF3Bd1LX7BVuWIp
-	u5jXhWN9IiwVY/kx0p5299ZeHpq/8C440evvXd+kdDirhZ+7Jn1RPO6GgGF9R/DZ
-	yv4T/B3wVySAhnf+urH4Xnism8HZ8WOBOnyNyJpCGWEi1vTGhtjP6w0caD2b28Y5
-	MvkgI0GEIfSCSHnVU5yfR8Ggt387zYa4o+eLfpX0OutXRtfAhw8sr2tx5mChZFRa
-	Ay0y+iNsNoNs5lyeaJd0qKsRwU7OfH2nc7UD5rEQriLUP7a0QLOYbHPJX4wS4SA8
-	KA==
-Received: (qmail 2451667 invoked from network); 1 Oct 2024 10:40:42 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Oct 2024 10:40:42 +0200
-X-UD-Smtp-Session: l3s3148p1@kDLYRmYjFroujnuV
-Date: Tue, 1 Oct 2024 10:40:42 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=vRtU
+	e79gslQ6cPccbZ9Ag935/rQxMyhWN9cftpvLzgE=; b=OR3KXQkEafYTN8dtTzhw
+	eo4IVQbtLztezlazL+Fbpf2B55sRe9eJNlTKzkRoL8S5J1qlctseUvZic10t7KHp
+	QstYrQWVN3NVpx76UuQ5EZ1es6sRH/LMFI72nrkV4RTdQl6Z7bYE8dQXZjs8PgP6
+	jKruKRXoDdNHB4+GZl2V8wc6VImg4WUhQvzgOQQ7j5moabpVFBSKgbCrDxfeONU6
+	NdVKOHY7avxhoGaubYf863atQ2EYKRiZ57NMkUMLHnQTDWz3iFamGQYinTNURDqQ
+	rLt8rQGIhPydxyU7MxGamDhhuoG1RLCUcv0OAmBny28qCMI7uflA93I0UOOBxVnr
+	VQ==
+Received: (qmail 2454730 invoked from network); 1 Oct 2024 10:50:57 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Oct 2024 10:50:57 +0200
+X-UD-Smtp-Session: l3s3148p1@Sqp7a2YjTq4ujnuV
+Date: Tue, 1 Oct 2024 10:50:56 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: Switch back to struct platform_driver::remove()
-Message-ID: <Zvu1ijtQF30IScM5@shikoro>
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-i2c@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] i2c: microchip-core: actually use repeated sends
+Message-ID: <Zvu38H2Y-pRryFFQ@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
-	linux-i2c@vger.kernel.org
-References: <fde732497283c2a4b079731a84be583eafcdc781.1727537108.git.ukleinek@kernel.org>
+	Conor Dooley <conor@kernel.org>, linux-i2c@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20240930-uneasy-dorsal-1acda9227b0d@spud>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -63,70 +67,65 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="p2etycYN5IBc6QVS"
+	protocol="application/pgp-signature"; boundary="43zjrHNx5Tjwq6OP"
 Content-Disposition: inline
-In-Reply-To: <fde732497283c2a4b079731a84be583eafcdc781.1727537108.git.ukleinek@kernel.org>
+In-Reply-To: <20240930-uneasy-dorsal-1acda9227b0d@spud>
 
 
---p2etycYN5IBc6QVS
-Content-Type: text/plain; charset=utf-8
+--43zjrHNx5Tjwq6OP
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Sep 29, 2024 at 09:21:57AM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> return void") .remove() is (again) the right callback to implement for
-> platform drivers.
->=20
-> Convert all platform drivers below drivers/i2c to use .remove(), with
-> the eventual goal to drop struct platform_driver::remove_new(). As
-> .remove() and .remove_new() have the same prototypes, conversion is done
-> by just changing the structure member name in the driver initializer.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
-> ---
-> Hello,
->=20
-> given the simplicity of the individual changes I do this all in a single
-> patch. Please tell and I will happily split it.
+Hi Conor,
 
-I think one patch is perfect.
+> At present, where repeated sends are intended to be used, the
+> i2c-microchip-core driver sends a stop followed by a start. Lots of i2c
 
-> I based this on Fridays's next, feel free to drop changes that result in
-> a conflict when you come around to apply this. I'll care for the fallout
-> at a later time then. (Having said that, if you use b4 am -3 and git am
-> -3, there should be hardly any conflict.)
+Oh, this is wrong. Was this just overlooked or was maybe older hardware
+not able to generated correct repeated-starts?
 
-On rc1 and Andi's current i2c-host-next, this works without conflicts.
+> devices must not malfunction in the face of this behaviour, because the
+> driver has operated like this for years! Try to keep track of whether or
+> not a repeated send is required, and suppress sending a stop in these
+> cases.
 
-> Note I didn't Cc: all the individual driver maintainers to not trigger
-> sending limits and spam filters.
+? I don't get that argument. If the driver is expected to do a repeated
+start, it should do a repeated start. If it didn't, it was a bug and you
+were lucky that the targets could handle this. Because most controllers
+can do repeated starts correctly, we can also argue that this works for
+most targets for years. In the unlikely event that a target fails after
+converting this driver to proper repeated starts, the target is buggy
+and needs fixing. It would not work with the majority of other
+controllers this way.
 
-Perfect again IMO.
+I didn't look at the code but reading "keeping track whether rep start
+is required" looks wrong from a high level perspective. The driver
+should do repeated start when it should do repeated start.
 
-Andi, do you want to take it? This is a typical after-rc1-cleanup patch,
-so it should be applied soon for testing and send to Linus for rc2.
+All the best,
+
+   Wolfram
 
 
---p2etycYN5IBc6QVS
+--43zjrHNx5Tjwq6OP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmb7tYYACgkQFA3kzBSg
-KbaObRAAkCj9NN8fqLMb8Rrx3F1EzK7nRql2DzeffnlJdSg5ElN4hP4pOQ9aQuYP
-zfqQXrKttdkUBYkPNBDz9r0C5Z9wkxv+Vs1bo+kCvMTm3MMIHjoOGbw330mnfTZu
-q5W1nWrAMM5Bn594G97kHYxWm263V1rNyDYHtxi5AxK4cEptsQH0jKVK1eSeWF/y
-VdnndhCYm2wjM4Zo8U3534nY65XvAkTJwMeoEOw1aSsTbN3St2zghJthMDRpbLAL
-PEaZUlNtATI/HpaCMCP8wTYnuCEJ01fOnCm1urREG0FH23gun6vcFDhYmQngwIqT
-xo/SlusJwS6ClWyLRPXjQormaQFar/ZEki2iJErwzjA2HbmB8k3wMDOSSiiMpVVE
-6k+xO40s4Xy/0isKAsS3JYWoSqknEunwLgAkgwyrkQyXDn56gMtMw7+rpXfdsHi+
-Xabm6HeW62yXvlszLIXhc0Bv5ZdmUrYAyWyw7V8pw2IpQcxPR/4pZkzdl6mQFJmn
-A+JlDB6Wb3PkTBZUBRuNVLeTHqtFI8yuQl5K1pJ+B88SJmE18wW1yENbB/qFln7w
-OX39ONqf95u8bOrMxUHdW6EqchOqVp4GIi+4BT97xmzMZ5Zon+P4QrD78gjRL3uT
-nEuDWPCaLCRrAXRHBV6rDXbyUzRsNBg1POYQ3B1/RwDLUN/opY4=
-=1A5k
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmb7t/AACgkQFA3kzBSg
+KbbIhA//Ttljy7Uxhv02Sw0YdoqPUtZsFIR23KbjziR44RebbxLRbKt5L+IjUEe+
+Lz+UPgZE+IP7P1FzZacMYA/fMsosbS931LuTn9gWg0m7mIX5NDxfqTXH+SQvzxp3
+RkIiu59iswjYd6t0EXGnajGIxlf9c+Gclw8BMHZ34pDRZ5wtysySDWFhNa6E5Y5q
+rQtcLqUrG1VvzUy/sAh1elOVWGnpvDhnvBEWrnThyOshc09hkmFSTJo3IR5DRkic
+M7ewHZHZ28hpVipEfvC4BuLBUIE2jtvY4jvkcWKY+arkMOsq9AC6kETJv95RDLMW
+OrsgAxUUzPGPSL8BuEgS4e1Pltj1rWQyKR8808Lv+mP/W/MIZb4WJ+DU0TFuPgCz
+siP/DvATuqj+e5wnan6qwxHhk01Mm2jR8B65AiZHUeWZO9OphsbfJZsLr3htg+S5
+kiyrggrnxezIj9rZI1HpJ0MeYGEyRHnnO3oNL1yLoa2O1zNW74oUtBSPprnDjAaD
+lrJeDIf0tQ3demUg20KDQI6S4Y5Ua2mfptOnWSe5gXFVWbteYB9Foe387/mDtRYi
+lT2tElTdDJmTVEasg5t3cyuqpy6lUC0i+NBFhKkkvsLXHAIyZ9Uhfpzh+9eo7fDq
+Lj1I0/4a4UGEgPCZdgZNgVlTAZGMDoBVDEIfqt1uDRy5e6JKg7Y=
+=ORiE
 -----END PGP SIGNATURE-----
 
---p2etycYN5IBc6QVS--
+--43zjrHNx5Tjwq6OP--
 
