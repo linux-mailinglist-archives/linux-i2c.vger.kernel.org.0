@@ -1,62 +1,56 @@
-Return-Path: <linux-i2c+bounces-7112-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7113-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0BFB98B253
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 04:39:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C4D698B2A1
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 05:07:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CDF4282E33
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 02:39:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C22541F21C84
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 03:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B263A267;
-	Tue,  1 Oct 2024 02:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80B963399B;
+	Tue,  1 Oct 2024 03:07:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qXvIEiUl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VAM3nBIZ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272B2FC08;
-	Tue,  1 Oct 2024 02:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317B4BA37;
+	Tue,  1 Oct 2024 03:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727750381; cv=none; b=PRsYDLpr4UU0pdvsRgZOv6T5L+Kh2Az3gx8Mk+eRr9ZqJYVcN0MPnpCJ4T1XlFFpKNy3+yY+q2sqXBhaHtKUJxCDRXGjvYaPivgA6p4DJ466GvftVaxgqSe1CVji/4HvzUzhdMzQDZkOjNmxmsutQo7eZiPN20hFQgAl9FeaEE0=
+	t=1727752061; cv=none; b=fF4deUxSyw2Knlxf68kt6QAeVEml+Xxk/vqfUd6/cEs8DRhH9dS5An1hYvtMY4Wz6qodP5M4iIvnA6V36fT8WcwqRIyrdO6dxbLfPjboETCqTPvYG0EIYWUvtWN/CBfnhnIC9r0xY2a90dn2rLbxOMqi2Z44tSRLRRLGQxVlo+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727750381; c=relaxed/simple;
-	bh=cbiZIGp8Fe7TqrapbtTHE1aVZkZFl1EXlstBACj0Xgo=;
+	s=arc-20240116; t=1727752061; c=relaxed/simple;
+	bh=mNHPdRqg/4mwSqNhflir0XPmZIRI5Ne46CWR9Gy6bK0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ECM/twuaNRILJOi2Bp18NVzu5vj1tb0VdgJOgnQMzg494etSrwh0yhBHrnxFiaGoZNPW8XQ2CvrLaIYe5O3BB/ji6Z+UnW/NmM31rMnKKYMQ2/fxCr8zRQZKKteEySeFF19S+FbIen2GhQF80+7NqNvgGIg60CsN0TWiz83RHqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qXvIEiUl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E8BC4CEC7;
-	Tue,  1 Oct 2024 02:39:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YPAvxzVKonWPHmkNERRrXXXPMsy0EmA6rHtjM3nhXTO/IajhJzCP97h7ycpgkEkyaddJ11rBfRFO5j6M9HjStI8M8BMHwdIf25OKXH0n1VuuaQYyQsp4Aarshd7PRbcYYPfTB0O23djmom+Nby4t6B112eLNaBbWjUKGcS3/6xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VAM3nBIZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE0AC4CEC7;
+	Tue,  1 Oct 2024 03:07:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727750380;
-	bh=cbiZIGp8Fe7TqrapbtTHE1aVZkZFl1EXlstBACj0Xgo=;
+	s=k20201202; t=1727752059;
+	bh=mNHPdRqg/4mwSqNhflir0XPmZIRI5Ne46CWR9Gy6bK0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qXvIEiUl0Mz5VdMuPNvZxf3nlQ4iFEDprNhDtjpwrtm49TFnopemsvm4xv34CbMKA
-	 vvY+ky/Tu9Ob21Xx8NrbuyXJ5yxi4cqzYEwOKBFQ0sOgM8qPN70qbh31/eHcxNsUbP
-	 S9CeTYYHw9nawZXcqHeXV9ziQhEh6U/n5eeFXEZaKQMclqdZAjdq+EyItBmVn9z6LP
-	 /7qzINduC+YSArKb8mfWMUul1Uu0pVZNJx7qislRyITGIHHyHZZBie6nLpV4xsdKkC
-	 FTEcG0C/8p0OU2TMy49rCOavji+iP895AsYPnX5G/eoIGTKYuXWmCXlzzeZvq4a0d1
-	 awm85rl2gN16g==
-Date: Mon, 30 Sep 2024 21:39:36 -0500
+	b=VAM3nBIZ9hGwJAXAmUUv4/S47GAqFsZsW0xyCphyuGxL+23PnCByGOIiTauj/Umgv
+	 e+d36fLlgWRRTO4kDwdeG4L76UJ04SDRyBFh2IUkwiQrxFmW0RLwYgTkTWFK3Fbspl
+	 2w5DVifxqn+B/x0uo27vfMZ5EypALKfcyo9z5aqca4YEuOnbvSMPUKp6njgPrOMmFX
+	 W/Pt6Igvoe6eZV62cSLKX20QZpcY6ZjhRQ7UEWtIavMDCtG6J9AHAJmPBrdHr3H+9y
+	 3f3Z0JV7DtCKMi57595EKFn0vEYsEDN9E2AqRg8LmVFu9laF/nYuzSeOoKYIybpYtH
+	 AYOM0Fbm4RLNA==
+Date: Mon, 30 Sep 2024 22:07:36 -0500
 From: Bjorn Andersson <andersson@kernel.org>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, 
-	konrad.dybcio@linaro.org, andi.shyti@kernel.org, linux-arm-msm@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org, vkoul@kernel.org, 
-	linux@treblig.org, Frank.Li@nxp.com, konradybcio@kernel.org, 
-	bryan.odonoghue@linaro.org, krzk+dt@kernel.org, robh@kernel.org
-Subject: Re: [PATCH v3 4/4] i2c: i2c-qcom-geni: Enable i2c controller sharing
- between two subsystems
-Message-ID: <7eg2g2ykqccc74l6chkwlq54wcobzevqlzngkr3lnegv36pcsb@t3asip2mbmew>
-References: <20240927063108.2773304-1-quic_msavaliy@quicinc.com>
- <20240927063108.2773304-5-quic_msavaliy@quicinc.com>
- <lmo4jylfwt3wingdqb6zc6ew2537kqksuckfyd7vwuu4ufg5cr@ic2j7bv2r6e4>
- <42e0622d-0bb6-4850-bf5a-629996c702db@stanley.mountain>
+To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+Cc: andi.shyti@kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, quic_srichara@quicinc.com, 
+	quic_varada@quicinc.com
+Subject: Re: [PATCH v3 1/1] i2c: qcom-geni: Support systems with 32MHz serial
+ engine clock
+Message-ID: <72we2tesj5whmfgo3yc4mdta6lasu4v4ll74pmvysaxnwaf4tv@zqanlhy3jgsv>
+References: <20240930144709.1222766-1-quic_mmanikan@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,69 +59,95 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <42e0622d-0bb6-4850-bf5a-629996c702db@stanley.mountain>
+In-Reply-To: <20240930144709.1222766-1-quic_mmanikan@quicinc.com>
 
-On Mon, Sep 30, 2024 at 11:21:23AM GMT, Dan Carpenter wrote:
-> On Sun, Sep 29, 2024 at 10:46:37PM -0500, Bjorn Andersson wrote:
-> > > @@ -602,6 +603,7 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
-> > >  	peripheral.clk_div = itr->clk_div;
-> > >  	peripheral.set_config = 1;
-> > >  	peripheral.multi_msg = false;
-> > > +	peripheral.shared_se = gi2c->se.shared_geni_se;
-> > >  
-> > >  	for (i = 0; i < num; i++) {
-> > >  		gi2c->cur = &msgs[i];
-> > > @@ -612,6 +614,8 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
-> > >  		if (i < num - 1)
-> > >  			peripheral.stretch = 1;
-> > >  
-> > > +		peripheral.first_msg = (i == 0);
-> > > +		peripheral.last_msg = (i == num - 1);
-> > 
-> > There are multiple error paths in this loop, which would result in us
-> > never issuing the unlock TRE - effectively blocking other subsystems
-> > from accessing the serial engine until we perform our next access
-> > (assuming that APSS issuing a lock TRE when APSS already has the channel
-> > locked isn't a problem?)
-> > 
+On Mon, Sep 30, 2024 at 08:17:09PM GMT, Manikanta Mylavarapu wrote:
+> In existing socs, I2C serial engine is sourced from XO (19.2MHz).
+> Where as in IPQ5424, I2C serial engine is sourced from GPLL0 (32MHz).
 > 
-> Hi Bjorn,
+> The existing map table is based on 19.2MHz. This patch incorporates
+> the clock map table to derive the SCL clock from the 32MHz source
+> clock frequency.
 > 
-> I saw the words "error paths" and "unlock" and I thought there was maybe
-> something we could do here with static analysis.
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 
-Appreciate you picking up on those topics :)
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-> But I don't know what TRE or APSS mean.
+> ---
+> Changes in v3:
+> 	- Updated geni_i2c_clk_map_32mhz array values
+> 	- Added sentinel value to both 19.2MHz, 32MHz clk map arrays
+> 	- Updated loop termination condition based on sentinel value
 > 
-
-The "APSS" is "the application processor sub system", which is where
-we typically find Linux running. TRE is, if I understand correctly, a
-request on the DMA engine queue.
-
-> The one thing I do see is that this uses "one err" style error handling where
-> there is one err label and it calls dmaengine_terminate_sync(gi2c->rx_c)
-> regardless of whether or not geni_i2c_gpi() was called or failed/succeeded.
+>  drivers/i2c/busses/i2c-qcom-geni.c | 23 +++++++++++++++++++----
+>  1 file changed, 19 insertions(+), 4 deletions(-)
 > 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 212336f724a6..579c01686823 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/soc/qcom/geni-se.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/units.h>
+>  
+>  #define SE_I2C_TX_TRANS_LEN		0x26c
+>  #define SE_I2C_RX_TRANS_LEN		0x270
+> @@ -146,22 +147,36 @@ struct geni_i2c_clk_fld {
+>   * clk_freq_out = t / t_cycle
+>   * source_clock = 19.2 MHz
+>   */
+> -static const struct geni_i2c_clk_fld geni_i2c_clk_map[] = {
+> +static const struct geni_i2c_clk_fld geni_i2c_clk_map_19p2mhz[] = {
+>  	{KHZ(100), 7, 10, 11, 26},
+>  	{KHZ(400), 2,  5, 12, 24},
+>  	{KHZ(1000), 1, 3,  9, 18},
+> +	{},
 
-The scheme presented in this series injects a "LOCK" request before the
-DMA request marked first_msg, and an "UNLOCK" after the ones marked
-last_msg. This is needed because the controller is also concurrently by
-some DSP (or similar), so the LOCK/UNLOCK scheme forms mutual exclusion
-of the operations between the Linux and DSP systems.
+For future reference, the reason to leave a trailing ',' is so that one
+can add another line in the array without touching the previous last
+entry. This will of course never happen when that is a sentinel.
 
-I'm not sure if it's possible to tie the unlock operation to
-dmaengine_terminate_sync() in some way.
-
-Giving this some more thought, it feels like the current scheme serves
-the purpose of providing mutual exclusion both for the controller and
-to some degree for the device. But I'd like to understand why we can't
-inject the lock/unlock implicitly for each transfer...
+Unless Andi insist, I don't think it's worth resubmitting the patch for
+this, but now you know.
 
 Regards,
 Bjorn
 
-> regards,
-> dan carpenter
+> +};
+> +
+> +/* source_clock = 32 MHz */
+> +static const struct geni_i2c_clk_fld geni_i2c_clk_map_32mhz[] = {
+> +	{KHZ(100), 8, 14, 18, 40},
+> +	{KHZ(400), 4,  3, 11, 20},
+> +	{KHZ(1000), 2, 3,  6, 15},
+> +	{},
+>  };
+>  
+>  static int geni_i2c_clk_map_idx(struct geni_i2c_dev *gi2c)
+>  {
+> -	int i;
+> -	const struct geni_i2c_clk_fld *itr = geni_i2c_clk_map;
+> +	const struct geni_i2c_clk_fld *itr;
+> +
+> +	if (clk_get_rate(gi2c->se.clk) == 32 * HZ_PER_MHZ)
+> +		itr = geni_i2c_clk_map_32mhz;
+> +	else
+> +		itr = geni_i2c_clk_map_19p2mhz;
+>  
+> -	for (i = 0; i < ARRAY_SIZE(geni_i2c_clk_map); i++, itr++) {
+> +	while (itr->clk_freq_out != 0) {
+>  		if (itr->clk_freq_out == gi2c->clk_freq_out) {
+>  			gi2c->clk_fld = itr;
+>  			return 0;
+>  		}
+> +		itr++;
+>  	}
+>  	return -EINVAL;
+>  }
+> -- 
+> 2.34.1
+> 
 > 
 
