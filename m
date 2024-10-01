@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-7140-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7141-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E308498BB8E
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 13:54:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF3DF98BB92
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 13:54:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F8081C22131
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 11:54:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7277C283EED
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 11:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B261C2334;
-	Tue,  1 Oct 2024 11:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F9711C2430;
+	Tue,  1 Oct 2024 11:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="egqqN3U3"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LtQeucD+"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75FC1BFE0A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F301C1ABE;
 	Tue,  1 Oct 2024 11:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727783650; cv=none; b=gOvnVW4u/TfK/FTDux5nks/vAXgQkV5E59LbWpZ3UJ1DitJCRHoKmHl8+xV20bc2gQ5tM191BhqmdLa5MnwNfMTrpiS71km+Y7z+Evd0axxUtMu26lmu8+QpmuJcpcNWVdtOz51GyyaXLzMVRn1AIkSBKdaF9m7fgKUz4Kw/Q8M=
+	t=1727783651; cv=none; b=TSufoJgbublLBokFZXS1mUMmD3RqMV/9JuEHIq8S1zYzfryveJiIIxZZQ+WZKUd6pJmISdaCRJZZPVeOB5O/NcezSfLMOOWtpzHsHVS4RuGG8rwtmbA5hj9qPzZU9ocAAmibjrY8kV6OzgnXVtZdDyv/g4X73xMU+0IIF+AFNO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727783650; c=relaxed/simple;
-	bh=sAU0JGn4oxRcxUN2k2A15vqxMG5uAZf3+WlzGygjskg=;
+	s=arc-20240116; t=1727783651; c=relaxed/simple;
+	bh=KDqmb3ktuc9m5IAQTHG4aDFNrvdGw74h2nSbelVa4A8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oHrVGWIbyS5K0cm3Rrc+MqTGqLqY5l5IBqQBwisI5ONj62GlWO6l5eyhF8LT8PHGc0+pHmZgbHqParrGPeWi32e1kMSXS/EPmzJOprLf33oCPuCkdf6KOOL83CI9nXVrZqhfItdwqyx8PLpPeaoH1r6FWN9Ql2qs3FZNqf15/gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=egqqN3U3; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=ldUEBvXft8ws/rJ7omva/74U5DYKz28ikMd3BmP+kRZO0m4rk7dxxmiTULsGZ3iwWJn4LFaLwTYwjd+dXA9pX9flnWrWpQYOaSUYDZA6ywCNQkp6hYyVa7Jjm/9fdmWTMdg+fc8sijbPmHOMvu44lRX5pH4oV85taHwpZkMhjDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LtQeucD+; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B23E540007;
-	Tue,  1 Oct 2024 11:54:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4FA7D40006;
+	Tue,  1 Oct 2024 11:54:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
 	t=1727783646;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wg6aT0cToJYPBpB9g7QT6rvBfE/afokp+J651VeHAsA=;
-	b=egqqN3U3fH7ByO6xZqxfqeRUOpq1KDDq4KOLbJR0zB97ps/EGvv5xdnsYqZ1pAppMpF31x
-	8/tAwwhPccUJshWZGT/NWoOmjpl1cwUjwGhuAAz/4h4mr8tHNFf7GGR6dcF71tJUe9NcHk
-	3+YraVAxuJnLkpo1LzjkXXODgXzQ8vjFVEeR5Y89E0Ei3dAG5N5CrkE890inx20A3+8KEl
-	y9hfMW7XRaHb1FVceuNMIPlY3ofXbs/PRO86bJX8M89pmAptRpYEGsZtWsY768u24CuIbS
-	kh0OJ1NnQ6VHuzrZDzBN+2gI4Bd1atI9nOeLF9BQboCPCEpesrcGPMrF92uOnw==
+	bh=XCSDYGMQrc1XdlAUwurjNtgekrjkqYRs263mZ2xKJM0=;
+	b=LtQeucD+Y8FdwLQi65BzzKt/Vmwb8yxGFEajTQYqOfxTAjG9FTJjfK2w/GCWYc/5gNR6e1
+	JvZA0EfCCj17cWSw8wHZkbQ+nH/T2nuoH+CfzBVFtIHCpz3j80qWSBPcMYgD6dne1UrtSs
+	REEz4nMjpEYVhhXoH+98NSfDS9gBWmkx6PqoRsCpmuGZuLwrZFmU0xcDHZ2mwowhsi3vHA
+	r3oKfMBcXxNEKrE3RaF1opE0m2NJvLv5scfvbLRTOu92V0Ntyyh5WQyuDMf/EayIq/TMOf
+	odyL3jJhSo3O1SzaJI5TFzd5EOdkgQMvw0yWgNdnjWgtVuE1qwSK8Ba7MuVi1A==
 From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Tue, 01 Oct 2024 13:53:28 +0200
-Subject: [PATCH v3 2/5] gpio: Congatec Board Controller gpio driver
+Date: Tue, 01 Oct 2024 13:53:29 +0200
+Subject: [PATCH v3 3/5] i2c: Congatec Board Controller i2c bus driver
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241001-congatec-board-controller-v3-2-39ceceed5c47@bootlin.com>
+Message-Id: <20241001-congatec-board-controller-v3-3-39ceceed5c47@bootlin.com>
 References: <20241001-congatec-board-controller-v3-0-39ceceed5c47@bootlin.com>
 In-Reply-To: <20241001-congatec-board-controller-v3-0-39ceceed5c47@bootlin.com>
 To: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
@@ -70,254 +70,464 @@ Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
 X-Mailer: b4 0.14.1
 X-GND-Sasl: thomas.richard@bootlin.com
 
-Add gpio support for the Congatec Board Controller.
-This Board Controller has 14 GPIO pins.
+Add i2c support for the Congatec Board Controller.
 
-The driver is probed by the Congatec Board Controller MFD driver.
+The Board Controller has two i2c busses, a General Purpose bus and a Power
+Management bus.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Andi Shyti <andi.shyti@kernel.org>
 Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 ---
- drivers/gpio/Kconfig     |  10 +++
- drivers/gpio/Makefile    |   1 +
- drivers/gpio/gpio-cgbc.c | 196 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 207 insertions(+)
+ drivers/i2c/busses/Kconfig    |  10 ++
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-cgbc.c | 406 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 417 insertions(+)
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index d93cd4f722b4..29d037c6083b 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1287,6 +1287,16 @@ config GPIO_BD9571MWV
- 	  This driver can also be built as a module. If so, the module
- 	  will be called gpio-bd9571mwv.
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 6b3ba7e5723a..4977abcd7c46 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -535,6 +535,16 @@ config I2C_CBUS_GPIO
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called i2c-cbus-gpio.
  
-+config GPIO_CGBC
-+	tristate "Congatec Board Controller GPIO support"
++config I2C_CGBC
++	tristate "Congatec I2C Controller"
 +	depends on MFD_CGBC
 +	help
-+	  Select this option to enable GPIO support for the Congatec Board
++	  This driver supports the 2 I2C interfaces on the Congatec Board
 +	  Controller.
 +
-+	  This driver can also be built as a module. If so, the module will be
-+	  called gpio-cgbc.
++	  This driver can also be built as a module. If so, the module will
++	  be called i2c-cgbc.ko.
 +
- config GPIO_CROS_EC
- 	tristate "ChromeOS EC GPIO support"
- 	depends on CROS_EC
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 1429e8c0229b..3cdfa927ed98 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -45,6 +45,7 @@ obj-$(CONFIG_GPIO_BD9571MWV)		+= gpio-bd9571mwv.o
- obj-$(CONFIG_GPIO_BRCMSTB)		+= gpio-brcmstb.o
- obj-$(CONFIG_GPIO_BT8XX)		+= gpio-bt8xx.o
- obj-$(CONFIG_GPIO_CADENCE)		+= gpio-cadence.o
-+obj-$(CONFIG_GPIO_CGBC)			+= gpio-cgbc.o
- obj-$(CONFIG_GPIO_CLPS711X)		+= gpio-clps711x.o
- obj-$(CONFIG_GPIO_SNPS_CREG)		+= gpio-creg-snps.o
- obj-$(CONFIG_GPIO_CROS_EC)		+= gpio-cros-ec.o
-diff --git a/drivers/gpio/gpio-cgbc.c b/drivers/gpio/gpio-cgbc.c
+ config I2C_CPM
+ 	tristate "Freescale CPM1 or CPM2 (MPC8xx/826x)"
+ 	depends on CPM1 || CPM2
+diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+index ecc07c50f2a0..a6bcbf2febcf 100644
+--- a/drivers/i2c/busses/Makefile
++++ b/drivers/i2c/busses/Makefile
+@@ -50,6 +50,7 @@ obj-$(CONFIG_I2C_BCM2835)	+= i2c-bcm2835.o
+ obj-$(CONFIG_I2C_BCM_IPROC)	+= i2c-bcm-iproc.o
+ obj-$(CONFIG_I2C_CADENCE)	+= i2c-cadence.o
+ obj-$(CONFIG_I2C_CBUS_GPIO)	+= i2c-cbus-gpio.o
++obj-$(CONFIG_I2C_CGBC)		+= i2c-cgbc.o
+ obj-$(CONFIG_I2C_CPM)		+= i2c-cpm.o
+ obj-$(CONFIG_I2C_DAVINCI)	+= i2c-davinci.o
+ obj-$(CONFIG_I2C_DESIGNWARE_CORE)			+= i2c-designware-core.o
+diff --git a/drivers/i2c/busses/i2c-cgbc.c b/drivers/i2c/busses/i2c-cgbc.c
 new file mode 100644
-index 000000000000..9213faa11522
+index 000000000000..eba0b205de11
 --- /dev/null
-+++ b/drivers/gpio/gpio-cgbc.c
-@@ -0,0 +1,196 @@
++++ b/drivers/i2c/busses/i2c-cgbc.c
+@@ -0,0 +1,406 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Congatec Board Controller GPIO driver
++ * Congatec Board Controller I2C busses driver
 + *
 + * Copyright (C) 2024 Bootlin
 + * Author: Thomas Richard <thomas.richard@bootlin.com>
 + */
 +
-+#include <linux/gpio/driver.h>
++#include <linux/i2c.h>
++#include <linux/iopoll.h>
 +#include <linux/mfd/cgbc.h>
 +#include <linux/module.h>
-+#include <linux/mutex.h>
 +#include <linux/platform_device.h>
 +
-+#define CGBC_GPIO_NGPIO	14
++#define CGBC_I2C_PRIMARY_BUS_ID	0
++#define CGBC_I2C_PM_BUS_ID	4
 +
-+#define CGBC_GPIO_CMD_GET	0x64
-+#define CGBC_GPIO_CMD_SET	0x65
-+#define CGBC_GPIO_CMD_DIR_GET	0x66
-+#define CGBC_GPIO_CMD_DIR_SET	0x67
++#define CGBC_I2C_CMD_START	0x40
++#define CGBC_I2C_CMD_STAT	0x48
++#define CGBC_I2C_CMD_DATA	0x50
++#define CGBC_I2C_CMD_SPEED	0x58
 +
-+struct cgbc_gpio_data {
-+	struct gpio_chip	chip;
-+	struct cgbc_device_data	*cgbc;
-+	struct mutex lock;
++#define CGBC_I2C_STAT_IDL	0x00
++#define CGBC_I2C_STAT_DAT	0x01
++#define CGBC_I2C_STAT_BUSY	0x02
++
++#define CGBC_I2C_START	0x80
++#define CGBC_I2C_STOP	0x40
++
++#define CGBC_I2C_LAST_ACK  0x80    /* send ACK on last read byte */
++
++/*
++ * Reference code defines 1kHz as min freq and 6.1MHz as max freq.
++ * But in practice, the board controller limits the frequency to 1MHz, and the
++ * 1kHz is not functional (minimal working freq is 50kHz).
++ * So use these values as limits.
++ */
++#define CGBC_I2C_FREQ_MIN_HZ	50000	/* 50 kHz */
++#define CGBC_I2C_FREQ_MAX_HZ	1000000 /* 1 MHz */
++
++#define CGBC_I2C_FREQ_UNIT_1KHZ		0x40
++#define CGBC_I2C_FREQ_UNIT_10KHZ	0x80
++#define CGBC_I2C_FREQ_UNIT_100KHZ	0xC0
++
++#define CGBC_I2C_FREQ_UNIT_MASK		0xC0
++#define CGBC_I2C_FREQ_VALUE_MASK	0x3F
++
++#define CGBC_I2C_READ_MAX_LEN	31
++#define CGBC_I2C_WRITE_MAX_LEN	32
++
++#define CGBC_I2C_CMD_HEADER_SIZE	4
++#define CGBC_I2C_CMD_SIZE		(CGBC_I2C_CMD_HEADER_SIZE + CGBC_I2C_WRITE_MAX_LEN)
++
++enum cgbc_i2c_state {
++	CGBC_I2C_STATE_DONE = 0,
++	CGBC_I2C_STATE_INIT,
++	CGBC_I2C_STATE_START,
++	CGBC_I2C_STATE_READ,
++	CGBC_I2C_STATE_WRITE,
++	CGBC_I2C_STATE_ERROR,
 +};
 +
-+static int cgbc_gpio_cmd(struct cgbc_device_data *cgbc,
-+			 u8 cmd0, u8 cmd1, u8 cmd2, u8 *value)
++struct i2c_algo_cgbc_data {
++	u8		bus_id;
++	unsigned long	read_maxtime_us;
++};
++
++struct cgbc_i2c_data {
++	struct device		*dev;
++	struct cgbc_device_data *cgbc;
++	struct i2c_adapter      adap;
++	struct i2c_msg		*msg;
++	int			nmsgs;
++	int			pos;
++	enum cgbc_i2c_state	state;
++};
++
++struct cgbc_i2c_transfer {
++	u8 bus_id;
++	bool start;
++	bool stop;
++	bool last_ack;
++	u8 read;
++	u8 write;
++	u8 addr;
++	u8 data[CGBC_I2C_WRITE_MAX_LEN];
++};
++
++static u8 cgbc_i2c_freq_to_reg(unsigned int bus_frequency)
 +{
-+	u8 cmd[3] = {cmd0, cmd1, cmd2};
++	u8 reg;
 +
-+	return cgbc_command(cgbc, cmd, sizeof(cmd), value, 1, NULL);
-+}
-+
-+static int cgbc_gpio_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
-+	struct cgbc_device_data *cgbc = gpio->cgbc;
-+	int ret;
-+	u8 val;
-+
-+	scoped_guard(mutex, &gpio->lock)
-+		ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_GET, (offset > 7) ? 1 : 0, 0, &val);
-+
-+	offset %= 8;
-+
-+	if (ret)
-+		return ret;
++	if (bus_frequency <= 10000)
++		reg = CGBC_I2C_FREQ_UNIT_1KHZ | (bus_frequency / 1000);
++	else if (bus_frequency <= 100000)
++		reg = CGBC_I2C_FREQ_UNIT_10KHZ | (bus_frequency / 10000);
 +	else
-+		return (int)(val & (u8)BIT(offset));
++		reg = CGBC_I2C_FREQ_UNIT_100KHZ | (bus_frequency / 100000);
++
++	return reg;
 +}
 +
-+static void __cgbc_gpio_set(struct gpio_chip *chip,
-+			    unsigned int offset, int value)
++static unsigned int cgbc_i2c_reg_to_freq(u8 reg)
 +{
-+	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
-+	struct cgbc_device_data *cgbc = gpio->cgbc;
-+	u8 val;
-+	int ret;
++	unsigned int freq = reg & CGBC_I2C_FREQ_VALUE_MASK;
++	u8 unit = reg & CGBC_I2C_FREQ_UNIT_MASK;
 +
-+	ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_GET, (offset > 7) ? 1 : 0, 0, &val);
-+	if (ret)
-+		return;
-+
-+	if (value)
-+		val |= BIT(offset % 8);
++	if (unit == CGBC_I2C_FREQ_UNIT_100KHZ)
++		return freq * 100000;
++	else if (unit == CGBC_I2C_FREQ_UNIT_10KHZ)
++		return freq * 10000;
 +	else
-+		val &= ~(BIT(offset % 8));
-+
-+	cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_SET, (offset > 7) ? 1 : 0, val, &val);
++		return freq * 1000;
 +}
 +
-+static void cgbc_gpio_set(struct gpio_chip *chip,
-+			  unsigned int offset, int value)
++static int cgbc_i2c_get_status(struct i2c_adapter *adap)
 +{
-+	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
-+
-+	scoped_guard(mutex, &gpio->lock)
-+		__cgbc_gpio_set(chip, offset, value);
-+}
-+
-+static int cgbc_gpio_direction_set(struct gpio_chip *chip,
-+				   unsigned int offset, int direction)
-+{
-+	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
-+	struct cgbc_device_data *cgbc = gpio->cgbc;
++	struct i2c_algo_cgbc_data *algo_data = adap->algo_data;
++	struct cgbc_i2c_data *i2c = i2c_get_adapdata(adap);
++	struct cgbc_device_data *cgbc = i2c->cgbc;
++	u8 cmd = CGBC_I2C_CMD_STAT | algo_data->bus_id;
++	u8 status;
 +	int ret;
-+	u8 val;
 +
-+	ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_DIR_GET, (offset > 7) ? 1 : 0, 0, &val);
-+	if (ret)
-+		goto end;
-+
-+	if (direction == GPIO_LINE_DIRECTION_IN)
-+		val &= ~(BIT(offset % 8));
-+	else
-+		val |= BIT(offset % 8);
-+
-+	ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_DIR_SET, (offset > 7) ? 1 : 0, val, &val);
-+
-+end:
-+	return ret;
-+}
-+
-+static int cgbc_gpio_direction_input(struct gpio_chip *chip,
-+				     unsigned int offset)
-+{
-+	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
-+
-+	guard(mutex)(&gpio->lock);
-+	return cgbc_gpio_direction_set(chip, offset, GPIO_LINE_DIRECTION_IN);
-+}
-+
-+static int cgbc_gpio_direction_output(struct gpio_chip *chip,
-+				      unsigned int offset, int value)
-+{
-+	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
-+
-+	guard(mutex)(&gpio->lock);
-+
-+	__cgbc_gpio_set(chip, offset, value);
-+	return cgbc_gpio_direction_set(chip, offset, GPIO_LINE_DIRECTION_OUT);
-+}
-+
-+static int cgbc_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct cgbc_gpio_data *gpio = gpiochip_get_data(chip);
-+	struct cgbc_device_data *cgbc = gpio->cgbc;
-+	int ret;
-+	u8 val;
-+
-+	scoped_guard(mutex, &gpio->lock)
-+		ret = cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_DIR_GET, (offset > 7) ? 1 : 0, 0, &val);
-+
++	ret = cgbc_command(cgbc, &cmd, sizeof(cmd), NULL, 0, &status);
 +	if (ret)
 +		return ret;
 +
-+	if (val & BIT(offset % 8))
-+		return GPIO_LINE_DIRECTION_OUT;
-+	else
-+		return GPIO_LINE_DIRECTION_IN;
++	return status;
 +}
 +
-+static int cgbc_gpio_probe(struct platform_device *pdev)
++static int cgbc_i2c_set_frequency(struct i2c_adapter *adap,
++				  unsigned int bus_frequency)
 +{
-+	struct device *dev = &pdev->dev;
-+	struct cgbc_device_data *cgbc = dev_get_drvdata(dev->parent);
-+	struct cgbc_gpio_data *gpio;
-+	struct gpio_chip *chip;
++	struct i2c_algo_cgbc_data *algo_data = adap->algo_data;
++	struct cgbc_i2c_data *i2c = i2c_get_adapdata(adap);
++	struct cgbc_device_data *cgbc = i2c->cgbc;
++	u8 cmd[2], data;
 +	int ret;
 +
-+	gpio = devm_kzalloc(dev, sizeof(*gpio), GFP_KERNEL);
-+	if (!gpio)
-+		return -ENOMEM;
++	if (bus_frequency > CGBC_I2C_FREQ_MAX_HZ ||
++	    bus_frequency < CGBC_I2C_FREQ_MIN_HZ) {
++		dev_info(i2c->dev, "invalid frequency %u, using default\n", bus_frequency);
++		bus_frequency = I2C_MAX_STANDARD_MODE_FREQ;
++	}
 +
-+	gpio->cgbc = cgbc;
++	cmd[0] = CGBC_I2C_CMD_SPEED | algo_data->bus_id;
++	cmd[1] = cgbc_i2c_freq_to_reg(bus_frequency);
 +
-+	platform_set_drvdata(pdev, gpio);
-+
-+	chip = &gpio->chip;
-+	chip->label = dev_name(&pdev->dev);
-+	chip->owner = THIS_MODULE;
-+	chip->parent = dev;
-+	chip->base = -1;
-+	chip->direction_input = cgbc_gpio_direction_input;
-+	chip->direction_output = cgbc_gpio_direction_output;
-+	chip->get_direction = cgbc_gpio_get_direction;
-+	chip->get = cgbc_gpio_get;
-+	chip->set = cgbc_gpio_set;
-+	chip->ngpio = CGBC_GPIO_NGPIO;
-+
-+	ret = devm_mutex_init(dev, &gpio->lock);
++	ret = cgbc_command(cgbc, &cmd, sizeof(cmd), &data, 1, NULL);
 +	if (ret)
-+		return ret;
++		return dev_err_probe(i2c->dev, ret,
++				     "Failed to initialize I2C bus %s",
++				     adap->name);
 +
-+	ret = devm_gpiochip_add_data(dev, chip, gpio);
++	cmd[1] = 0x00;
++
++	ret = cgbc_command(cgbc, &cmd, sizeof(cmd), &data, 1, NULL);
 +	if (ret)
-+		return dev_err_probe(dev, ret, "Could not register GPIO chip\n");
++		return dev_err_probe(i2c->dev, ret,
++				     "Failed to get I2C bus frequency");
++
++	bus_frequency = cgbc_i2c_reg_to_freq(data);
++
++	dev_dbg(i2c->dev, "%s is running at %d Hz\n", adap->name, bus_frequency);
++
++	/*
++	 * The read_maxtime_us variable represents the maximum time to wait
++	 * for data during a read operation. The maximum amount of data that
++	 * can be read by a command is CGBC_I2C_READ_MAX_LEN.
++	 * Therefore, calculate the max time to properly size the timeout.
++	 */
++	algo_data->read_maxtime_us = (BITS_PER_BYTE + 1) * CGBC_I2C_READ_MAX_LEN
++		* USEC_PER_SEC / bus_frequency;
 +
 +	return 0;
 +}
 +
-+static struct platform_driver cgbc_gpio_driver = {
-+	.driver = {
-+		.name = "cgbc-gpio",
-+	},
-+	.probe	= cgbc_gpio_probe,
++static unsigned int cgbc_i2c_xfer_to_cmd(struct cgbc_i2c_transfer xfer, u8 *cmd)
++{
++	int i = 0;
++
++	cmd[i++] = CGBC_I2C_CMD_START | xfer.bus_id;
++
++	cmd[i] = (xfer.start) ? CGBC_I2C_START : 0x00;
++	if (xfer.stop)
++		cmd[i] |= CGBC_I2C_STOP;
++	cmd[i++] |= (xfer.start) ? xfer.write + 1 : xfer.write;
++
++	cmd[i++] = (xfer.last_ack) ? (xfer.read | CGBC_I2C_LAST_ACK) : xfer.read;
++
++	if (xfer.start)
++		cmd[i++] = xfer.addr;
++
++	if (xfer.write > 0)
++		memcpy(&cmd[i], &xfer.data, xfer.write);
++
++	return i + xfer.write;
++}
++
++static int cgbc_i2c_xfer_msg(struct i2c_adapter *adap)
++{
++	struct i2c_algo_cgbc_data *algo_data = adap->algo_data;
++	struct cgbc_i2c_data *i2c = i2c_get_adapdata(adap);
++	struct cgbc_device_data *cgbc = i2c->cgbc;
++	struct i2c_msg *msg = i2c->msg;
++	u8 cmd[CGBC_I2C_CMD_SIZE];
++	int ret, max_len, len, i;
++	unsigned int cmd_len;
++	u8 cmd_data;
++
++	struct cgbc_i2c_transfer xfer = {
++		.bus_id = algo_data->bus_id,
++		.addr = i2c_8bit_addr_from_msg(msg),
++	};
++
++	if (i2c->state == CGBC_I2C_STATE_DONE)
++		return 0;
++
++	ret = cgbc_i2c_get_status(adap);
++
++	if (ret == CGBC_I2C_STAT_BUSY)
++		return -EBUSY;
++	else if (ret < 0)
++		goto err;
++
++	if (i2c->state == CGBC_I2C_STATE_INIT ||
++	    (i2c->state == CGBC_I2C_STATE_WRITE && msg->flags & I2C_M_RD))
++		xfer.start = true;
++
++	i2c->state = (msg->flags & I2C_M_RD) ? CGBC_I2C_STATE_READ : CGBC_I2C_STATE_WRITE;
++
++	max_len = (i2c->state == CGBC_I2C_STATE_READ) ?
++		CGBC_I2C_READ_MAX_LEN : CGBC_I2C_WRITE_MAX_LEN;
++
++	if (msg->len - i2c->pos > max_len) {
++		len = max_len;
++	} else {
++		len = msg->len - i2c->pos;
++
++		if (i2c->nmsgs == 1)
++			xfer.stop = true;
++	}
++
++	if (i2c->state == CGBC_I2C_STATE_WRITE) {
++		xfer.write = len;
++		xfer.read = 0;
++
++		for (i = 0; i < len; i++)
++			xfer.data[i] = msg->buf[i2c->pos + i];
++
++		cmd_len = cgbc_i2c_xfer_to_cmd(xfer, &cmd[0]);
++
++		ret = cgbc_command(cgbc, &cmd, cmd_len, NULL, 0, NULL);
++		if (ret)
++			goto err;
++	} else if (i2c->state == CGBC_I2C_STATE_READ) {
++		xfer.write = 0;
++		xfer.read = len;
++
++		if (i2c->nmsgs > 1 || msg->len - i2c->pos > max_len)
++			xfer.read |= CGBC_I2C_LAST_ACK;
++
++		cmd_len = cgbc_i2c_xfer_to_cmd(xfer, &cmd[0]);
++		ret = cgbc_command(cgbc, &cmd, cmd_len, NULL, 0, NULL);
++		if (ret)
++			goto err;
++
++		ret = read_poll_timeout(cgbc_i2c_get_status, ret,
++					ret != CGBC_I2C_STAT_BUSY, 0,
++					2 * algo_data->read_maxtime_us, false, adap);
++		if (ret < 0)
++			goto err;
++
++		cmd_data = CGBC_I2C_CMD_DATA | algo_data->bus_id;
++		ret = cgbc_command(cgbc, &cmd_data, sizeof(cmd_data),
++				   msg->buf + i2c->pos, len, NULL);
++		if (ret)
++			goto err;
++	}
++
++	if (len == (msg->len - i2c->pos)) {
++		i2c->msg++;
++		i2c->nmsgs--;
++		i2c->pos = 0;
++	} else {
++		i2c->pos += len;
++	}
++
++	if (i2c->nmsgs == 0)
++		i2c->state = CGBC_I2C_STATE_DONE;
++
++	return 0;
++
++err:
++	i2c->state = CGBC_I2C_STATE_ERROR;
++	return ret;
++}
++
++static int cgbc_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
++			 int num)
++{
++	struct cgbc_i2c_data *i2c = i2c_get_adapdata(adap);
++	unsigned long timeout = jiffies + HZ;
++	int ret;
++
++	i2c->state = CGBC_I2C_STATE_INIT;
++	i2c->msg = msgs;
++	i2c->nmsgs = num;
++	i2c->pos = 0;
++
++	while (time_before(jiffies, timeout)) {
++		ret = cgbc_i2c_xfer_msg(adap);
++		if (i2c->state == CGBC_I2C_STATE_DONE)
++			return num;
++
++		if (i2c->state == CGBC_I2C_STATE_ERROR)
++			return ret;
++
++		if (ret == 0)
++			timeout = jiffies + HZ;
++	}
++
++	i2c->state = CGBC_I2C_STATE_ERROR;
++	return -ETIMEDOUT;
++}
++
++static u32 cgbc_i2c_func(struct i2c_adapter *adap)
++{
++	return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~(I2C_FUNC_SMBUS_QUICK));
++}
++
++static const struct i2c_algorithm cgbc_i2c_algorithm = {
++	.master_xfer	= cgbc_i2c_xfer,
++	.functionality	= cgbc_i2c_func,
 +};
 +
-+module_platform_driver(cgbc_gpio_driver);
++static struct i2c_algo_cgbc_data cgbc_i2c_algo_data[] = {
++	{ .bus_id = CGBC_I2C_PRIMARY_BUS_ID },
++	{ .bus_id = CGBC_I2C_PM_BUS_ID },
++};
 +
-+MODULE_DESCRIPTION("Congatec Board Controller GPIO Driver");
++static const struct i2c_adapter cgbc_i2c_adapter[] = {
++	{
++		.owner		= THIS_MODULE,
++		.name		= "Congatec General Purpose I2C adapter",
++		.class		= I2C_CLASS_DEPRECATED,
++		.algo		= &cgbc_i2c_algorithm,
++		.algo_data	= &cgbc_i2c_algo_data[0],
++		.nr		= -1,
++	},
++	{
++		.owner		= THIS_MODULE,
++		.name		= "Congatec Power Management I2C adapter",
++		.class		= I2C_CLASS_DEPRECATED,
++		.algo		= &cgbc_i2c_algorithm,
++		.algo_data	= &cgbc_i2c_algo_data[1],
++		.nr		= -1,
++	},
++};
++
++static int cgbc_i2c_probe(struct platform_device *pdev)
++{
++	struct cgbc_device_data *cgbc = dev_get_drvdata(pdev->dev.parent);
++	struct cgbc_i2c_data *i2c;
++	int ret;
++
++	i2c = devm_kzalloc(&pdev->dev, sizeof(*i2c), GFP_KERNEL);
++	if (!i2c)
++		return -ENOMEM;
++
++	i2c->cgbc = cgbc;
++	i2c->dev = &pdev->dev;
++	i2c->adap = cgbc_i2c_adapter[pdev->id];
++	i2c->adap.dev.parent = i2c->dev;
++	i2c_set_adapdata(&i2c->adap, i2c);
++	platform_set_drvdata(pdev, i2c);
++
++	ret = cgbc_i2c_set_frequency(&i2c->adap, I2C_MAX_STANDARD_MODE_FREQ);
++	if (ret)
++		return ret;
++
++	return i2c_add_numbered_adapter(&i2c->adap);
++}
++
++static void cgbc_i2c_remove(struct platform_device *pdev)
++{
++	struct cgbc_i2c_data *i2c = platform_get_drvdata(pdev);
++
++	i2c_del_adapter(&i2c->adap);
++}
++
++static struct platform_driver cgbc_i2c_driver = {
++	.driver = {
++		.name = "cgbc-i2c",
++	},
++	.probe		= cgbc_i2c_probe,
++	.remove_new	= cgbc_i2c_remove,
++};
++
++module_platform_driver(cgbc_i2c_driver);
++
++MODULE_DESCRIPTION("Congatec Board Controller I2C Driver");
 +MODULE_AUTHOR("Thomas Richard <thomas.richard@bootlin.com>");
 +MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:cgbc-gpio");
++MODULE_ALIAS("platform:cgbc_i2c");
 
 -- 
 2.39.5
