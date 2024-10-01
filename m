@@ -1,122 +1,90 @@
-Return-Path: <linux-i2c+bounces-7156-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7157-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1F7E98C7D1
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 23:58:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F5B398C927
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2024 01:10:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B340B22B0F
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 21:58:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 016C62885B8
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 23:10:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BEE01CEADE;
-	Tue,  1 Oct 2024 21:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B651D0F76;
+	Tue,  1 Oct 2024 23:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b="JMzEvdTk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpA5qeCo"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1308D199FCE
-	for <linux-i2c@vger.kernel.org>; Tue,  1 Oct 2024 21:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA491D0943;
+	Tue,  1 Oct 2024 23:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727819910; cv=none; b=mzS714PI2mjjZTjJj8qh86Il1NRA4XowqJU7HQZY059XNgV4FVLLCBEj2E+vrZBNxANc/CWjnEli4/gIRYcNWkhiL2L35rdAszjZYgolaDJGc2rXpqpIzEufDKxWJl9dRVutJQL/QR+W103JKgxeTz3XdooRn5VoWpBkBjXEx8s=
+	t=1727823946; cv=none; b=dFNlh28sCvJZ8GImvKwHiLrZWmYmPJBv98/V01Z21JoJXmMeMXhCAOnGdeOfE4+AoC8FHde6k9wp2vo4VREbXurkFGqOl1MIHHTe/QTEx2gf2aS4M6jIWnJ0Pa4vx/GCqzaWySYU/pCN/uAm/hsn9tApqpfX40pieDcz/5GIYJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727819910; c=relaxed/simple;
-	bh=90cj3MZQ2bSTZsUCDSDy7qQ6PfIFyQv5SQPEYusdK10=;
+	s=arc-20240116; t=1727823946; c=relaxed/simple;
+	bh=wpshmwB6VkHtdKwNBCKAevlj9A5uw8FmmNrgqjxZwlQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HctYPs4I4336IOo7nHgrSMe/ZgBy3jRYs7P08iN3ws0OWMio0eut8LNnkM8x6Rh6ZSj//1jPG2WD5Z+ow+1tVEBj1+OrDJkiaNQ50a/UfUq8STTj4Yuc8OZUEBeVAz7IiPao/ovN414fB69leAd5u12/vJMcXHBIrsWi46IbIDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=timesys.com; spf=pass smtp.mailfrom=timesys.com; dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b=JMzEvdTk; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=timesys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=timesys.com
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3a340f9dd8aso32860575ab.2
-        for <linux-i2c@vger.kernel.org>; Tue, 01 Oct 2024 14:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20230601.gappssmtp.com; s=20230601; t=1727819908; x=1728424708; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ypgub8lGo9uIxhP/Ts+gM6FIKRMUkTQXJvJ7axKC0No=;
-        b=JMzEvdTkiuOL6G6w2L0fd5fv+tB4gpLE9wv4xaqcPWTRSe2ZvJ6y6SvKbQTyfsh+Z/
-         ClpVxY2oKl7rx103MA//Y/LrTKwaey8VNOLZ7orVTwk090FR+Iscdbfv9E8KcUnj5YD1
-         tXdKvc4Rft1yaqoY8R6+uTjwKniGYefF3d/W7wXNgvzjpRmv3ZUwhgCWxGFWMqS3nyip
-         8QCjTu+vi6H8zjYn+lilaJy6293cgOY2ecaZvvBSIeNd5wrOTQdp7H50/HQ1b32w8UT+
-         e/R0cyKrmclnFfa7ziTfRUSEO7S7qaKsolXbYU/PpvLdP5wNy2sDemGQbypnumJThH3c
-         g4Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727819908; x=1728424708;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ypgub8lGo9uIxhP/Ts+gM6FIKRMUkTQXJvJ7axKC0No=;
-        b=RQnCAE6yrrx2RXuN7crdjbHl1EbIxSWDAqP3TF/cVcoTrv4s0+YmqFb23+8qBMJNig
-         EQGLOOy+hsbdv3U0uJiO9XWydrh/vcrgEXdDgICmD1drwIwTiAIVHZ4uaNTAxvlIzZuo
-         wVozQP0SbDVpCYYOAHPszb+yIrELHaiP4Cla70nND3yN33Gfgw+FIaEU01q8Gki9fNzI
-         eXIORi6ExI5/Tfu7p8uRb2EwWz+xnyCzPiA0lLFKLOoaRMb8L6Ca2tOZoACcbyXCOK/3
-         CMtQEMjdoWFMiS/uA31BycafDfW4jtbdlsUIudfnNQJQGgwNHO98ggHzzdjd10clxCpa
-         bdsA==
-X-Forwarded-Encrypted: i=1; AJvYcCUXkeP/RN7JzaRCIKBIdPskLAF+s/CgPsW5N5QhyHPPodD6TO9Hrcw9DDmBfMnr1SQb3Gksp8C5N9o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX/XxM97S4vlLRKKOkQ8Fc/y/oMRraB4xCoMNImIN6+6ju8Gem
-	vawAqTOVCAHXmmgt8grLBwKaGZ72MrEv4D1vGhI14Zp3Mx1reb4TuRkm1CNEsptjdjqKiNxJxs1
-	LxLBs5yEPgGX+uZtMtMTzJiL7Z3kvtgXN18M3
-X-Google-Smtp-Source: AGHT+IG8Mbwj1HalbNL61KqJPzFf+za9Ivu70OdRA7nBBfmVxjXJSGKtMf6v6sdYVH+UJ6WqSeqKg1y+vZZ3u8imlbI=
-X-Received: by 2002:a05:6e02:1c87:b0:3a0:a4ac:ee36 with SMTP id
- e9e14a558f8ab-3a365918466mr10985925ab.5.1727819908246; Tue, 01 Oct 2024
- 14:58:28 -0700 (PDT)
+	 To:Cc:Content-Type; b=jLV2hwohzZn2z/DJUrAgY7L2lMsh52d3nGBXL2YpjldQTdHKq5v3lornBOtRt8bzCRA9H6vWlNs8Osf3W57Z9wPvC7tzFb353zwzqet6n4YlaaE03E/7hK4GcaAswlohNM2SuY6jlEJhctHVV/DAq7+EPLzWCluGMCbqMg6T1SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YpA5qeCo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC7EC4CED1;
+	Tue,  1 Oct 2024 23:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727823945;
+	bh=wpshmwB6VkHtdKwNBCKAevlj9A5uw8FmmNrgqjxZwlQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YpA5qeCo7Bc8w/odgKCruYxtYJfbAWRy/E1OPyPYlMhiA7CfqHEd8HnKhEVWoW4Bw
+	 ATFGyIlXspCplDAasYSQ36j0ac56rilnS5dfg/Vy2KP7AKREi/EjHAPeNRw+WDtmyl
+	 /TjQ+pG3Izho2nndhZkFeTmC19mWdlOHbN3t7KhZeIR3dcwQbmr28/E/fXk27zvEMX
+	 85tz+7eIsLGCUoN8i3GZqs7e/dNuWIHF3BXrDcqBg98AOkEUQBu2I/x4LaEQuWmPFr
+	 wOwJFomcVana4TlTAZlUTLtXB3QNTIOPkSHhbBmaCQP7+FI0JI38mztV3qtQvV21lr
+	 qWAF1IBDgEQPw==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5398e33155fso4325835e87.3;
+        Tue, 01 Oct 2024 16:05:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVxshY436LZP8diTmHhuLtlCcMV6lULgSC8jbfufFqPWz03sKuCg4bJQRKzQQO9ViMt6BKrNATScbyj@vger.kernel.org, AJvYcCXmyVJx0YlzcDqtDTD5qMiAQYMTbzzW+hxqeJnuRZU0Km8+A4KfknwTlGsxH9Q+RNxzBkX+FxjnNSDoGWCAq+s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhCKslqGwv89YPOMXZJVFR3/TVo7HtvkrSKyzVHB0h9cuaGPvl
+	O7rRXpuohE3K4Ukl+4hPFADz78R7aJUjdRphyulyYaR+363fZGMVUm1W6Hze4I1bjT9JuPBubPp
+	A2g5LengY3hbR1Kz766M7EOmhlQ==
+X-Google-Smtp-Source: AGHT+IFH7ioAgfOMUhVPg1kRaVOz8AQm1o/RUZ35K6Vi2CVpKIgmSHbtXdTjF6RYMTSQac1N+p+l9V8yd/CMyrwUSg4=
+X-Received: by 2002:a05:6512:2399:b0:539:91b8:edb7 with SMTP id
+ 2adb3069b0e04-539a07a1d5amr619489e87.42.1727823943884; Tue, 01 Oct 2024
+ 16:05:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240912-test-v1-0-458fa57c8ccf@analog.com> <20240912-test-v1-9-458fa57c8ccf@analog.com>
- <CACRpkdZb6AhxB7XEtOsxV5_oa=c1h2+ZApLFsTS_MQs-cjLmsg@mail.gmail.com>
-In-Reply-To: <CACRpkdZb6AhxB7XEtOsxV5_oa=c1h2+ZApLFsTS_MQs-cjLmsg@mail.gmail.com>
-From: Greg Malysa <greg.malysa@timesys.com>
-Date: Tue, 1 Oct 2024 17:57:16 -0400
-Message-ID: <CAAjXUapu1DBqnk24ng0izU7opn67YxiwpGpFtqrBmqNgyCxRVA@mail.gmail.com>
-Subject: Re: [PATCH 09/21] gpio: add driver for ADI ADSP-SC5xx platform
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Utsav Agarwal <Utsav.Agarwal@analog.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Thomas Gleixner <tglx@linutronix.de>, 
-	Andi Shyti <andi.shyti@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-serial@vger.kernel.org, adsp-linux@analog.com, 
-	Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+References: <20240909105835.28531-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20240909105835.28531-1-wsa+renesas@sang-engineering.com>
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 1 Oct 2024 18:05:19 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLsX_QYuhEe30n6p36GdjXTPgWAzNNDAmxXb3j-mB=wQw@mail.gmail.com>
+Message-ID: <CAL_JsqLsX_QYuhEe30n6p36GdjXTPgWAzNNDAmxXb3j-mB=wQw@mail.gmail.com>
+Subject: Re: [PATCH dt-schema] schemas: i2c: add optional GPIO binding for
+ SMBALERT# line
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	devicetree-spec@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
-
-Thanks for the review.
-
-> > +       __adsp_gpio_writew(port, BIT(offset), ADSP_PORT_REG_INEN_SET);
+On Mon, Sep 9, 2024 at 5:58=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
 >
-> Interrupt enable in the direction function? No thanks, poke the
-> interrupt registers in your irqchip if you make one (you currently
-> do not) in this case I'd say just disable all interrupts in probe()
-> using something like writew(base + ADSP_PORT_REG_INEN_SET, 0xffff)
-> and be done with it.
+> Most I2C controllers do not have a dedicated pin for SMBus Alerts. Allow
+> them to define a GPIO as a side-channel.
 >
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  dtschema/schemas/i2c/i2c-controller.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-This will come up next time too so I wanted to mention that INEN here
-means "input enable." The PORT design has two registers for
-controlling pin direction, one to enable/disable output drivers (DIR)
-and one to enable input drivers (INEN) to be able to read the pin
-state from the gpio data register. If I recall the bare metal
-reference code toggled both but we can review if setting INEN for all
-pins and leaving it is acceptable as well to simplify things.
+I guess GPIO rather than interrupt is fine.
 
-Thanks,
-Greg
+Will apply it.
 
--- 
-Greg Malysa
-Timesys Corporation
+Rob
 
