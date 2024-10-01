@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-7122-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7123-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD7A498B4E1
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 08:49:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E41098B4EF
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 08:53:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BA1C284A1F
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 06:49:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A76B81F24EDD
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 06:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8347B1BBBCA;
-	Tue,  1 Oct 2024 06:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7031BC07E;
+	Tue,  1 Oct 2024 06:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PJ9pAEYj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jz376WV+"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBD463D;
-	Tue,  1 Oct 2024 06:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBFE2197512;
+	Tue,  1 Oct 2024 06:53:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727765391; cv=none; b=eH7pD2l2WyTLcNP3cexABV837QFlX7E/B2INSqwlZm4jPZC4i283IBaFnUMewSahXTv+LH636FfYOmOfhkqdcjkIQypvy93jQ1HMfdmpEuKp03FhOFA4PTxGDBnUqnyg1vAN3DqW0mnu868vmGA21mqmY5S31n93XueTVYoYa84=
+	t=1727765606; cv=none; b=TE0GBlE6lK5r7NgGY0tz6uvKpNzMb9vHRv+gHRbSEOE68kSZ4b+Abl35J/YR6q1tI2/vKtKnfzaRV0FbaTf6f/EnD1AJwpRJQqwHS/2v6h1pJ6rZ6xvSh506UJY4nRv/YOEJ5XI50xFlN93vNy/Xp0BCgVTl5b8b6EjJ2DPjU2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727765391; c=relaxed/simple;
-	bh=hJxsQeBzlT9J1ZZCXMzqlk5+K/OSKCOgXR5Pq8enzCg=;
+	s=arc-20240116; t=1727765606; c=relaxed/simple;
+	bh=VZfgeHlNgpnsp5oDv7gJMqtZCCTMhVTGVWZWAD3v15M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C/cV+49c5PbuVTPPs3o9FsHDH2Wyjyxm+Uloo37fcYmTxw5mn1QJN7nEnfDbb/w4GEyYXI7NFBApbNDyv4U6aEd1kruVX831zZTWocRQ5lXxVYVb4FhAe/gVwAD5GbyIjUzsaot41oeqyj8djxCaZSw8N/y4Xg1O+YCdDE8x4V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PJ9pAEYj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8778C4CEC6;
-	Tue,  1 Oct 2024 06:49:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=bxvq/8JljpTWt4l031lgbfRJUXZE1LKIhxnqg2LUT1ncPdHUijIFYCbtmmav5bh3TSvvquTVy4+AjQSu9Iv7ZLsZOITVPVxibh/mFlcT96LYndhOc2pRdN3btkzPZZV3fcjfA39KBGoIKwguqPhF8SIcv4hFFPK/ocu87+RVUhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jz376WV+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A567AC4CEC6;
+	Tue,  1 Oct 2024 06:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727765390;
-	bh=hJxsQeBzlT9J1ZZCXMzqlk5+K/OSKCOgXR5Pq8enzCg=;
+	s=k20201202; t=1727765605;
+	bh=VZfgeHlNgpnsp5oDv7gJMqtZCCTMhVTGVWZWAD3v15M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PJ9pAEYjP0yeL2duGkicfDDaKcSiOWLFRo0kQeCCZsBfDpO5QYNOqN1XPKF3KCe7H
-	 Ld28uY/KrLHRkmjsn+pOv3DynhWZVO3yTg2d5SC1p1K7YGs3zgQs7eOfVCaBY+WuOb
-	 qx+jRlfugMVTTsKBBp84qci5KcKjCaXzkCJbpCypvCrQwpqTrh+4DHHsYXfSuO8IUv
-	 63nHlgIJfYMZHVOxJ0GMmQaJ0niBcTAV7t0t9MFD/fM541tC1jmgqG1W+LXBT7sCFD
-	 v8f8mtbIfkStuMK9q8GSpEk/+h3Dj35h0zlMKhh8ru5VB4ILzyL9d+cMpyP4Y0P32F
-	 YJm3uH2xO9GqQ==
-Date: Tue, 1 Oct 2024 08:49:46 +0200
+	b=jz376WV+jghNY2y9lbb5AZDvufWKv0iZZRMvkdngTEIDKcxE0RjHYecPRwLwofbKX
+	 vF+MyIGUVM1ojD28ZrZ8kiGn3dg1u7gLo1cUJCXpmzIhY6ni80YQgwhjfp3h7JEj0H
+	 JAD37O9XgrBPbvDUSKLd8+krAIimdRS0r9R0KiZBJskSVlDwDLB2+nLr0yhy2ZTopI
+	 L/44uErhUB/oVu5IPEmJcqPJbBbOMAeMCkW3+olo6DotFdYoCjfGlcdyqYV3EMycDc
+	 bXKMrDHkxgKo1S0ubEhMIDsl5khoOv5+A3jCEsz9k8wOFIMTg1YQlwEIkJgtD1HZmQ
+	 //7b0FG9ZsPMg==
+Date: Tue, 1 Oct 2024 08:53:21 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Richard Acayan <mailingradian@gmail.com>
 Cc: Bjorn Andersson <andersson@kernel.org>, 
@@ -53,11 +53,10 @@ Cc: Bjorn Andersson <andersson@kernel.org>,
 	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org, linux-media@vger.kernel.org, 
 	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Subject: Re: [PATCH v5 2/7] dt-bindings: i2c: qcom-cci: Document SDM670
- compatible
-Message-ID: <esxsmaqmfeu7z32xl3x4fhhtafci7tltlr77nsfdgdnwdvgfrk@3espe3tfwqoq>
+Subject: Re: [PATCH v5 4/7] dt-bindings: media: camss: Add qcom,sdm670-camss
+Message-ID: <aleot5kegf5xvlvzmws6tmxcqxw3gnmxndclkb7rdzcxnmehel@varsfzbmiszm>
 References: <20241001023520.547271-9-mailingradian@gmail.com>
- <20241001023520.547271-11-mailingradian@gmail.com>
+ <20241001023520.547271-13-mailingradian@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,20 +65,114 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241001023520.547271-11-mailingradian@gmail.com>
+In-Reply-To: <20241001023520.547271-13-mailingradian@gmail.com>
 
-On Mon, Sep 30, 2024 at 10:35:23PM -0400, Richard Acayan wrote:
-> The CCI on the Snapdragon 670 is the interface for controlling camera
-> hardware over I2C. Add the compatible so it can be added to the SDM670
-> device tree.
+On Mon, Sep 30, 2024 at 10:35:25PM -0400, Richard Acayan wrote:
+> As found in the Pixel 3a, the Snapdragon 670 has a camera subsystem with
+> 3 CSIDs and 3 VFEs (including 1 VFE lite). Add this camera subsystem to
+> the bindings.
+> 
+> Adapted from SC8280XP camera subsystem.
 > 
 > Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 > ---
->  .../devicetree/bindings/i2c/qcom,i2c-cci.yaml | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+>  .../bindings/media/qcom,sdm670-camss.yaml     | 318 ++++++++++++++++++
+>  1 file changed, 318 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+> new file mode 100644
+> index 000000000000..06662460a25c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+> @@ -0,0 +1,318 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/qcom,sdm670-camss.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SDM670 Camera Subsystem (CAMSS)
+> +
+> +maintainers:
+> +  - Richard Acayan <mailingradian@gmail.com>
+> +
+> +description:
+> +  The CAMSS IP is a CSI decoder and ISP present on Qualcomm platforms.
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,sdm670-camss
+> +
+> +  reg:
+> +    maxItems: 9
+> +
+> +  reg-names:
+> +    items:
+> +      - const: csiphy0
+> +      - const: csiphy1
+> +      - const: csiphy2
+> +      - const: vfe0
+> +      - const: csid0
+> +      - const: vfe1
+> +      - const: csid1
+> +      - const: vfe_lite
+> +      - const: csid2
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Why this order is so different than all others? This is supposed to
+match other devices. Look at sdm845 for example.
+
+> +
+> +  clocks:
+> +    maxItems: 22
+> +
+> +  clock-names:
+> +    items:
+> +      - const: gcc_camera_ahb
+> +      - const: gcc_camera_axi
+> +      - const: soc_ahb
+> +      - const: camnoc_axi
+> +      - const: cpas_ahb
+> +      - const: csi0
+> +      - const: csi1
+> +      - const: csi2
+> +      - const: csiphy0
+> +      - const: csiphy0_timer
+> +      - const: csiphy1
+> +      - const: csiphy1_timer
+> +      - const: csiphy2
+> +      - const: csiphy2_timer
+> +      - const: vfe0_axi
+> +      - const: vfe0
+> +      - const: vfe0_cphy_rx
+> +      - const: vfe1_axi
+> +      - const: vfe1
+> +      - const: vfe1_cphy_rx
+> +      - const: vfe_lite
+> +      - const: vfe_lite_cphy_rx
+
+Same comment.
+
+> +
+> +  interrupts:
+> +    maxItems: 9
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: csid0
+> +      - const: csid1
+> +      - const: csid2
+> +      - const: csiphy0
+> +      - const: csiphy1
+> +      - const: csiphy2
+> +      - const: vfe0
+> +      - const: vfe1
+> +      - const: vfe_lite
+
+This one is ok.
+
+> +
+> +  iommus:
 
 Best regards,
 Krzysztof
