@@ -1,97 +1,151 @@
-Return-Path: <linux-i2c+bounces-7177-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7178-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D109998D1CC
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2024 12:59:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E038698D21D
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2024 13:20:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 770D2B25DB7
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2024 10:59:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97F641F217D8
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2024 11:20:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE0171E766B;
-	Wed,  2 Oct 2024 10:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3183F1E767D;
+	Wed,  2 Oct 2024 11:20:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vD/lUdq2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hQTvgQQN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD63D16F27E;
-	Wed,  2 Oct 2024 10:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9581E7646;
+	Wed,  2 Oct 2024 11:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727866659; cv=none; b=NXFur23X2yqXcwYcvjBjE4yzRaaU/TSvJ0b/BXzwXO+b9V05hcNDylsjl6GWVLo8L2tt/w1nwaZTE1kHx/av0nPTjWliOwg1Of67/2eIXEZnEkk1b7exhatWwhNnY/nQmnrYbO/02OXWlGUkJd0FcQyw4ocTIE8CfrOA4u965rY=
+	t=1727868025; cv=none; b=qALZvq21s3QGNr3P1s2iLY7KstAdY3H+UYXSXzg+ouKpnVxDssaSRbpk2dJraKIxKf6T9FfEMAjQRMOIadlJ4ZtV65+xrnh2mW4V4sNDqoaOR+ADb7PPtJqXDNztgsDDyKx7Ls+8b3aX1PsB1iiszcKSy3BJrc/QRPYGqngqCuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727866659; c=relaxed/simple;
-	bh=G9SzAobm3g3SnzbxhcME9zoZwNPjZJz7K1/jidFzhqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pyvutC0Rrh2kpAgkfkql9i4FWqABc48NVazb9i+Qvg4L1odmp0TzJgon8Xs+900LFwH5550n/XSibqDDpi2Tx6ZUi0FkjC90F0J8M56ZSDIXNA9Z4a0F/o1kLnuxOXVH/boiVkAHXThT9VmXrh8Ov9WJH/IY6D7v/3ci7WV3IQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vD/lUdq2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329DBC4CED5;
-	Wed,  2 Oct 2024 10:57:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727866659;
-	bh=G9SzAobm3g3SnzbxhcME9zoZwNPjZJz7K1/jidFzhqI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vD/lUdq24sGHEdnBRFaDi9TZZtKVnUgMUznjCvPD3HarWJY9kP0vZ7ZRUbAh9Qs0B
-	 3tAoTqcK3JyomRQdR6IaPAXZ1ycUUWwfKWzqmVf6OUXpDvkoVTOVMmt4sSuVTc6iia
-	 wxw3pjqwDO2KWsi08EHi2tOLaMh+jh2MWkUMUoTbpygeE2kqsLdD09i6Cl6yFtEtmK
-	 2AJNnTVsxNUMxUvEHbIvMAUBP7Jc+k+yNPO0KDE2X/lwwdwRqAN9nAKMc/0sIyb2yq
-	 0uwtVY5fjiMIX7vfp9k7OEbdrTz5+E3x7kS6dTFHwIV/W4VWcfPCuCJC7p34khLFQl
-	 QV9zcXS8o7s1w==
-Date: Wed, 2 Oct 2024 12:57:36 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fixup! i2c: Add driver for the RTL9300 I2C controller
-Message-ID: <rldg7q2je4alzn2qridg4ls5vakwioaphquog24jejwynmfd6z@2irqdiizethm>
-References: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
- <20240929200934.965955-1-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1727868025; c=relaxed/simple;
+	bh=PaCoDRTAmUihExuD6FtY8QmrsRVYjIS7AWfLLY7wlYA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MuhPq/WSaMWA1DfqkeqChWAdOqUmIaeNQtB95v+88M5ZDPTDT2oDH0vvtu5EZBZfuwImnVYxFPMmcJjf5kvLiF0G8dt8pX1ZIXMXodxo8lkNB8b4kPRbZybEfQ8m0lBxEdLu4RZJ37nlBZXuOzQVnCP6w7VxaCrteQKE174o/10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hQTvgQQN; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-42ca4e0299eso54001595e9.2;
+        Wed, 02 Oct 2024 04:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727868022; x=1728472822; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yQ6x4zObDyJ43omHbKWsYVs2kFPS4sw0rkU3gO4im2g=;
+        b=hQTvgQQN87S7oFpg49NNOA+SEEoaKtPdxJxckMF0qDAAw8+K6ku/qFK5aFS85gQHba
+         DBV5nKjzEAY1hxORyGTzuj8IDVe2cY8vWjw2Mnq7oPdgHCD2y8Gg2OaACqKfRMB3HPET
+         fmKzceb1Alk8LMxqeBZmngneYjB5ofk6Ru82QQp9cD8aePbetPBQBkytM7qSvmuADvB9
+         0dP0j2k6ZoYQUA56IuHJsSEza923K8xfLYS++lOMNJ+OSGheI0wCQlVs9Iqz4ZVtKPhc
+         jPSPQVKAXGneQuSuoeGT2iGRZ+Uy5ZisVKPjUcJmo41Oyht7ZVH/3ME5/QuqVdW/gXag
+         3ewg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727868022; x=1728472822;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yQ6x4zObDyJ43omHbKWsYVs2kFPS4sw0rkU3gO4im2g=;
+        b=aBWivmY62+4cSS+u0XP5WK1ne6v3NUJL7vFiuCP6edwotw/RNQ/VNb+iM1baAwrAYy
+         BRRYh+V0Otgv/xwx8tiq0P9gNQxYrYZ0dvysVwpfhaU5H4UhrFrKgN1Y3MUgE8RVaWmS
+         cLSmPWp2IdZYypIV79ccPMUmnItjzmL+PhLdW9kQYaeEfcVGNzT5K1x/wOq+rARnbpiZ
+         84W6+64CS00sO/7ALNgheHgxc0O3wIkH2yJyCPk5boTqwfCpQhQPdVj0G5qBAdqAFM0+
+         9YdC8a+p9yTCy3P9JNgd6YqZS7MK6cETaZcgmaTfpc9JQv371FM+4Ib8M6pv6yihAZ4P
+         1kYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVd4qzdbndqh0PWtxUgU4OTOadx7pNn0DNYDgsehqmPJWqxlya/5ypmCHxfbk5tMGk3dvxyA9YEDmLOPTA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpV1Puw1bqHolUx4VkT2GfcHGbB/wnEXYkU9to6KAqGHf9idzt
+	3tYUCeb4VwYAZCGIwzklrHiptDAhgBG5CvSHaQZLdaqPXf2Dmi5m
+X-Google-Smtp-Source: AGHT+IFr/46f/cbDZz1FoAo51AuLN5PJHXEunpu05Lqv3Z5yVZrxyifxONPvmsJa38GK+xLCRjfi4w==
+X-Received: by 2002:a05:600c:511d:b0:42c:a72a:e8f4 with SMTP id 5b1f17b1804b1-42f777b798bmr21423495e9.14.1727868021592;
+        Wed, 02 Oct 2024 04:20:21 -0700 (PDT)
+Received: from eichest-laptop.corp.toradex.com (31-10-206-125.static.upc.ch. [31.10.206.125])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f771a1209sm23530685e9.0.2024.10.02.04.20.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Oct 2024 04:20:21 -0700 (PDT)
+From: Stefan Eichenberger <eichest@gmail.com>
+To: o.rempel@pengutronix.de,
+	kernel@pengutronix.de,
+	andi.shyti@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	festevam@gmail.com,
+	Frank.Li@nxp.com
+Cc: linux-i2c@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	francesco.dolcini@toradex.com
+Subject: [PATCH v4 0/4] i2c: imx: prevent rescheduling in non-dma mode
+Date: Wed,  2 Oct 2024 13:19:38 +0200
+Message-ID: <20241002112020.23913-1-eichest@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240929200934.965955-1-chris.packham@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
 
-Hi Chris,
+While running tests on an i.MX8M Mini connected to a TI ADS1015 ADC, we
+found that the ADC would stop responding to i2c requests because it
+would timeout after the bus was idle for 25ms. This timeout could be
+traced back to the rescheduling events in the i2c-imx driver. The
+problem is that if the system is under heavy load, the schedule call and
+the wait_event_timeout may be rescheduled too late to reach the 25ms
+timeout. The same problem may occur with other SMBus devices. Therefore,
+this patchset removes the scheduling calls for non-DMA mode by handling
+the interrupt events directly in the ISR instead of scheduling a task to
+handle the events.
 
-On Mon, Sep 30, 2024 at 09:09:34AM GMT, Chris Packham wrote:
-> Hi Andi,
-> 
-> This is a fixup for the spare complaint from the kernel test robot
-> https://lore.kernel.org/lkml/202409291025.P4M4O1F2-lkp@intel.com/#t
-> 
-> Not sure if you want to fold this into what is already in
-> andi-shyti/i2c/i2c-host or if you want me to send it as a new patch.
+This patch will introduce some bigger changes because the logic for
+handling events in the ISR had to be rewritten. Therefore we have tested
+the following combinations:
+- i.MX8M Mini with dma
+- i.MX8M Mini without dma
+- i.MX8M Plus with dma
+- i.MX8M Plus without dma
+- i.MX7D with dma
+- i.MX7D without dma
+- i.MX7D atomic mode
 
-no worries, I can take care of it.
+Because we do not have any devices that use the SMBus block transfer
+mode, we were not able to test it. 
 
-Andi
+The ideas are based on the RFC:
+https://lore.kernel.org/all/20240531142437.74831-1-eichest@gmail.com/
+However, the handling of events in the ISR is new, because further
+testing showed that it was not enough to simply remove the schedule
+call.
 
-> ---
->  drivers/i2c/busses/i2c-rtl9300.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-rtl9300.c b/drivers/i2c/busses/i2c-rtl9300.c
-> index ed9a45a9d803..f0bb0ede79ce 100644
-> --- a/drivers/i2c/busses/i2c-rtl9300.c
-> +++ b/drivers/i2c/busses/i2c-rtl9300.c
-> @@ -318,7 +318,7 @@ static const struct i2c_algorithm rtl9300_i2c_algo = {
->  	.functionality	= rtl9300_i2c_func,
->  };
->  
-> -struct i2c_adapter_quirks rtl9300_i2c_quirks = {
-> +static struct i2c_adapter_quirks rtl9300_i2c_quirks = {
->  	.flags		= I2C_AQ_NO_CLK_STRETCH,
->  	.max_read_len	= 16,
->  	.max_write_len	= 16,
-> -- 
-> 2.46.2
-> 
+Changes since v3:
+- Fixed style issues with checkpatch.pl --strict (Andi)
+- Add comments to explain the code (Andi)
+
+Changes since v2:
+- Add Acked-by tags from Oleksij
+- Renamed i2c_imx_start_read to i2c_imx_prepare_read
+- I did not add a Fixes tag because the issues from Flavio have a
+  different root cause and are not fixed by this patchset
+
+Changes since v1:
+- Add Reviewed-by tags from Frank
+- Add new patch to use readb_relaxed and writeb_relaxed (Frank)
+- Update commit message for patch 1 with some clarifications (Frank)
+
+Stefan Eichenberger (4):
+  i2c: imx: only poll for bus busy in multi master mode
+  i2c: imx: separate atomic, dma and non-dma use case
+  i2c: imx: use readb_relaxed and writeb_relaxed
+  i2c: imx: prevent rescheduling in non dma mode
+
+ drivers/i2c/busses/i2c-imx.c | 369 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 317 insertions(+), 52 deletions(-)
+
+-- 
+2.43.0
+
 
