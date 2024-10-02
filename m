@@ -1,90 +1,139 @@
-Return-Path: <linux-i2c+bounces-7157-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7158-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F5B398C927
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2024 01:10:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCAB198CCEE
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2024 08:08:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 016C62885B8
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Oct 2024 23:10:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1D5F1F22357
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2024 06:08:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B651D0F76;
-	Tue,  1 Oct 2024 23:05:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE098823DD;
+	Wed,  2 Oct 2024 06:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpA5qeCo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9d0BGw7"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA491D0943;
-	Tue,  1 Oct 2024 23:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9741C28F4;
+	Wed,  2 Oct 2024 06:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727823946; cv=none; b=dFNlh28sCvJZ8GImvKwHiLrZWmYmPJBv98/V01Z21JoJXmMeMXhCAOnGdeOfE4+AoC8FHde6k9wp2vo4VREbXurkFGqOl1MIHHTe/QTEx2gf2aS4M6jIWnJ0Pa4vx/GCqzaWySYU/pCN/uAm/hsn9tApqpfX40pieDcz/5GIYJs=
+	t=1727849326; cv=none; b=NPJNfeQp6nYHuRHwF6PZnFP6c45g4RH4asv+l7cx8uEUC48vS3+JlKfM1BGfd25cf+vVyFrn3PfeMWRa0NJVMJ0HQeIuVZjGPHTm0cJjROG2b8A8/9eL9aozLPnNg8F4aP1PK9sjXTKFCRWTS7jI9rFHJkNozWLAu4JyjsVvtjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727823946; c=relaxed/simple;
-	bh=wpshmwB6VkHtdKwNBCKAevlj9A5uw8FmmNrgqjxZwlQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jLV2hwohzZn2z/DJUrAgY7L2lMsh52d3nGBXL2YpjldQTdHKq5v3lornBOtRt8bzCRA9H6vWlNs8Osf3W57Z9wPvC7tzFb353zwzqet6n4YlaaE03E/7hK4GcaAswlohNM2SuY6jlEJhctHVV/DAq7+EPLzWCluGMCbqMg6T1SA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YpA5qeCo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC7EC4CED1;
-	Tue,  1 Oct 2024 23:05:45 +0000 (UTC)
+	s=arc-20240116; t=1727849326; c=relaxed/simple;
+	bh=oYooHsaM+39HQ9f/BVj0rXCGr4MDgTvb1QumxXJyDcU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AgGf/kSIAXPYpYeyWHs4/mnUJGTWmGw0oJCq0xABGdTWck4HeDkYwh9i/XH+SrNXjww1/aZU5dZGOyX4fi479TRKz4A8CpDfTJGq0M+KjtEIK5LUGqy8HO4k2QTh5+fcAqCfbURKDrh8H6/dYBiT6rVHsX2fA/S9VeCHS+3EzAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9d0BGw7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F124C4CEC5;
+	Wed,  2 Oct 2024 06:08:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727823945;
-	bh=wpshmwB6VkHtdKwNBCKAevlj9A5uw8FmmNrgqjxZwlQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YpA5qeCo7Bc8w/odgKCruYxtYJfbAWRy/E1OPyPYlMhiA7CfqHEd8HnKhEVWoW4Bw
-	 ATFGyIlXspCplDAasYSQ36j0ac56rilnS5dfg/Vy2KP7AKREi/EjHAPeNRw+WDtmyl
-	 /TjQ+pG3Izho2nndhZkFeTmC19mWdlOHbN3t7KhZeIR3dcwQbmr28/E/fXk27zvEMX
-	 85tz+7eIsLGCUoN8i3GZqs7e/dNuWIHF3BXrDcqBg98AOkEUQBu2I/x4LaEQuWmPFr
-	 wOwJFomcVana4TlTAZlUTLtXB3QNTIOPkSHhbBmaCQP7+FI0JI38mztV3qtQvV21lr
-	 qWAF1IBDgEQPw==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5398e33155fso4325835e87.3;
-        Tue, 01 Oct 2024 16:05:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVxshY436LZP8diTmHhuLtlCcMV6lULgSC8jbfufFqPWz03sKuCg4bJQRKzQQO9ViMt6BKrNATScbyj@vger.kernel.org, AJvYcCXmyVJx0YlzcDqtDTD5qMiAQYMTbzzW+hxqeJnuRZU0Km8+A4KfknwTlGsxH9Q+RNxzBkX+FxjnNSDoGWCAq+s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhCKslqGwv89YPOMXZJVFR3/TVo7HtvkrSKyzVHB0h9cuaGPvl
-	O7rRXpuohE3K4Ukl+4hPFADz78R7aJUjdRphyulyYaR+363fZGMVUm1W6Hze4I1bjT9JuPBubPp
-	A2g5LengY3hbR1Kz766M7EOmhlQ==
-X-Google-Smtp-Source: AGHT+IFH7ioAgfOMUhVPg1kRaVOz8AQm1o/RUZ35K6Vi2CVpKIgmSHbtXdTjF6RYMTSQac1N+p+l9V8yd/CMyrwUSg4=
-X-Received: by 2002:a05:6512:2399:b0:539:91b8:edb7 with SMTP id
- 2adb3069b0e04-539a07a1d5amr619489e87.42.1727823943884; Tue, 01 Oct 2024
- 16:05:43 -0700 (PDT)
+	s=k20201202; t=1727849326;
+	bh=oYooHsaM+39HQ9f/BVj0rXCGr4MDgTvb1QumxXJyDcU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n9d0BGw7FAIZQVWKdj/yJCzLVoTwCRTXeoQQgjz0GyRLJEDKT3VbPcOObOYPP2d+o
+	 PTjM5SPI5PWm9ikYtEl6EHQNK35iPJFOc70gPXn5Tamf7kGIyKIyIHwheLKkiHzQlh
+	 Fo8SIGEP9MBsiM1o0Sh51OM0Ia/H9J1VTIbmrHKHaL/aBPFmA7ePuAaz+hQCeH5o2d
+	 IF/qy9ox/L9qUSaf/ACfoY4v62tWg7IJuLUhwpSvDlwnSiWEXDRWIOdHIkLgcFJery
+	 g0tiBlY/RCq873dI/7+/Fif64CyOb0px2R+qwOfsHY9va4NawUDV0/IX9wyvB0mrzp
+	 IVenLLY0l3hnA==
+Date: Wed, 2 Oct 2024 08:08:42 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Michael Wu <michael.wu@kneron.us>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Morgan Chang <morgan.chang@kneron.us>, mvp.kutali@gmail.com
+Subject: Re: [PATCH v3 1/2] dt-bindings: i2c: snps,designware-i2c: declare
+ bus capacitance and clk freq optimized
+Message-ID: <cmm7l2kxu2wl55rmcoi3q43ieejnivi5rvjdy6j3wvj6qahse7@ocgi7nyju4je>
+References: <20241001082937.680372-1-michael.wu@kneron.us>
+ <20241001082937.680372-2-michael.wu@kneron.us>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240909105835.28531-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20240909105835.28531-1-wsa+renesas@sang-engineering.com>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 1 Oct 2024 18:05:19 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLsX_QYuhEe30n6p36GdjXTPgWAzNNDAmxXb3j-mB=wQw@mail.gmail.com>
-Message-ID: <CAL_JsqLsX_QYuhEe30n6p36GdjXTPgWAzNNDAmxXb3j-mB=wQw@mail.gmail.com>
-Subject: Re: [PATCH dt-schema] schemas: i2c: add optional GPIO binding for
- SMBALERT# line
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	devicetree-spec@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241001082937.680372-2-michael.wu@kneron.us>
 
-On Mon, Sep 9, 2024 at 5:58=E2=80=AFAM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> Most I2C controllers do not have a dedicated pin for SMBus Alerts. Allow
-> them to define a GPIO as a side-channel.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Tue, Oct 01, 2024 at 04:29:33PM +0800, Michael Wu wrote:
+> Since there are no registers controlling the hardware parameters
+> IC_CAP_LOADING and IC_CLK_FREQ_OPTIMIZATION, their values can only be
+> declared in the device tree.
+> 
+> snps,bus-capacitance-pf indicates the bus capacitance in picofarads (pF).
+> It affects the high and low pulse width of SCL line in high speed mode.
+> The legal values for this property are 100 and 400 only, and default
+> value is 100. This property corresponds to IC_CAP_LOADING.
+> 
+> snps,clk-freq-optimized indicates whether the hardware input clock
+> frequency is reduced by reducing the internal latency. This property
+> corresponds to IC_CLK_FREQ_OPTIMIZATION.
+> 
+> The driver can calculate hs_hcnt and hs_lcnt appropriate for the hardware
+> based on these two properties.
+> 
+> Signed-off-by: Michael Wu <michael.wu@kneron.us>
 > ---
->  dtschema/schemas/i2c/i2c-controller.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+>  .../bindings/i2c/snps,designware-i2c.yaml     | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> index 60035a787e5c..c373f3acd34b 100644
+> --- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
+> @@ -97,6 +97,21 @@ properties:
+>        - const: tx
+>        - const: rx
+>  
+> +  snps,bus-capacitance-pf:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: >
 
-I guess GPIO rather than interrupt is fine.
+I asked to drop |, so you replaced it with something else? So drop >...
+and then you are going to replace it with another one?
 
-Will apply it.
+That's not a cat and mouse.
 
-Rob
+> +      This property indicates the bus capacitance in picofarads (pF).
+> +      This value is used to compute the tHIGH and tLOW periods for high speed
+> +      mode.
+> +    default: 100
+
+I asked for some constraints here. min/maximum. I think you never
+replied to this.
+
+> +
+> +  snps,clk-freq-optimized:
+> +    description: >
+> +      This property indicates whether the hardware input clock frequency is
+> +      reduced by reducing the internal latency. This value is used to compute
+> +      the tHIGH and tLOW periods for high speed mode.
+> +    type: boolean
+> +
+>  unevaluatedProperties: false
+>  
+>  required:
+> @@ -146,4 +161,13 @@ examples:
+>        interrupts = <8>;
+>        clocks = <&ahb_clk>;
+>      };
+> +  - |
+> +    i2c@c5000000 {
+> +      compatible = "snps,designware-i2c";
+
+Extend EXISTING example. Not add new example.
+
+Best regards,
+Krzysztof
+
 
