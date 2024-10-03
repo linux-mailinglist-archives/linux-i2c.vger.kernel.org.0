@@ -1,57 +1,73 @@
-Return-Path: <linux-i2c+bounces-7196-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7197-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B50BE98E5DB
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Oct 2024 00:13:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3769198E890
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Oct 2024 04:58:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4072FB229A6
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Oct 2024 22:13:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F903B214B4
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Oct 2024 02:58:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF681991B0;
-	Wed,  2 Oct 2024 22:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF46E199B9;
+	Thu,  3 Oct 2024 02:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ba2RxyGr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eOhZuiKR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76ACC2F22;
-	Wed,  2 Oct 2024 22:13:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A03D17C9B;
+	Thu,  3 Oct 2024 02:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727907205; cv=none; b=L8GCyV40eXxkVyxA2aSspCh+d5L7ui3yh6MgaLaDl0ObAHZineF8OQm4qw+0RCR1YDeFjArafu65lOHzCBYSsQWcVGP+3505LB0WvEYhT7Cgk6BKGGA1GqDF8Uz1MgcQf6Xd5bVJFzCQBlJ6xK1Nk7nZhYFfAtDwkybOf/zJctE=
+	t=1727924319; cv=none; b=QtjrVxpz/QV/FqGgZst4EEakyrZOPfVOGLe1OUK/EZqGgoNTLz6/LPnfKstiy3S5MLwyJe9ndELboNgmxyXiIzd9gFGSag5NaTAz7hSb4Kjuo0BHORZgkOW9tStyUluuOMqU/cUUjJcUtP6QmKWDJCaM0BHd5pYARDwq7i1Uml4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727907205; c=relaxed/simple;
-	bh=6ntRtAZ1hx9oCjY4OB7h3RfLujrFmKJa8oTxAV+Hg+4=;
+	s=arc-20240116; t=1727924319; c=relaxed/simple;
+	bh=I3aSZcyp7no/dM2l37kssSMZlBSFsveKJJcOZS38XCE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SG70EGQkiltsw274DJ7X/+MyMBck42GGzpMW5Kot16OusnXrq4V4TDCLvnTxQGLb1mB7jYtnYZNDjSLZZ4wIQvh28mUVHzP4MAmC/ROsAAM3PlYLMglpMYJlJp5oDipM6wN1pcURjodpXR2ROajYRFuYe9DJGSD7BA9vBi6gK/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ba2RxyGr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88254C4CEC2;
-	Wed,  2 Oct 2024 22:13:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727907205;
-	bh=6ntRtAZ1hx9oCjY4OB7h3RfLujrFmKJa8oTxAV+Hg+4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ba2RxyGr+cKGE/cGgVZsAExlOK2wfdWoB2U/rTNNWJBJQ0L3OwX9ReVQ6g8ljOUyE
-	 SIeKTbWoCvx726B2aDKrrLOqHOSD6df0Laeg4co8ZLTpXa2btF8V9tX4D5hITMVTuk
-	 uuAfyqHdCpp067oCRJ0WNWk8JZbkblY2/M/a1/dK2PgcK8o0M0JT1AVWMpayG/HhZi
-	 Y0DFS8GMrdQvSEiPP2sNn0e1nfQNmnpdHj9iIjZ8UU4R999tWOLgaNhUUlkfOE3bms
-	 ALGcNq8OoPqBbiMdNHWhPcnrT6V4SVKgq3MHiGsmq1oktFbUVDssJZ0QQPnASIOKzs
-	 2Ca+iktf2ev5w==
-Date: Thu, 3 Oct 2024 00:13:21 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: "hunter.yu" <hunter.yu@hj-micro.com>
-Cc: andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com, 
-	lenb@kernel.org, rafael@kernel.org, jsd@semihalf.com, linux-acpi@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, andy.xu@hj-micro.com, peter.du@hj-micro.com
-Subject: Re: [PATCH v2 1/2] ACPI: APD: Add clock frequency for HJMC01 I2C
- controller
-Message-ID: <pmbvhdaz4qt57gxemuxoyb6xjrcmvusm2jzl5ps3o5ga52edo5@qabu6rcbdipp>
-References: <20240926024026.2539-1-hunter.yu@hj-micro.com>
- <20240926024026.2539-2-hunter.yu@hj-micro.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HpqKQihAaW0DCZ1cs2qdS5herFhd0zaixSnNvfkhAjDsSVejp68ndO6TjMxO+Jg4wtuSuptGbUAxI3oSVxxtrz87mg/dNzCKEbiKSQH0DAJ+wCn1HCnrAjPV9eyui35XByxIlMups3n/v9qaiHWk/0dquIZgfckPc+HkKHv0E5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eOhZuiKR; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727924317; x=1759460317;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I3aSZcyp7no/dM2l37kssSMZlBSFsveKJJcOZS38XCE=;
+  b=eOhZuiKR/B0+xC/JMHehNWmDZSRu7CMWfPILrn3nZv6R4+hGzk7VW4vh
+   nRzJEoZBli0oK4cSlY8WEBIgOS3nfTjKJZYhlvKTHI9O/tZF6O7l3MRN1
+   IuZN13Wb7HbyBAm+BOCTVTYLb3n9OlWTLGHNIQrLCoRw1SrDZv/wUHcYt
+   TG49pY+y6rqtOOnZ7eBtF9xG1AjCPPzJhSNKTmAnaShvP5PCGuT9C4TtZ
+   ne2PkvugocCo4z5+N+qCxlW1MSnlPAgpANfiRpfTwuG7xJpX/upNKTCqj
+   fD8EVQ/4uBjfjLkZ1+CWD4uSdTz9712Rlm99tYRhmf+MvE8Sbr3jRQobu
+   A==;
+X-CSE-ConnectionGUID: 70xWYwa4SKyymkhVOAKmWw==
+X-CSE-MsgGUID: xldh317+SviZ7QD17JrryQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="37774878"
+X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
+   d="scan'208";a="37774878"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 19:58:36 -0700
+X-CSE-ConnectionGUID: ArzwMTu0RomOSZbBNsQvew==
+X-CSE-MsgGUID: JZZLzfAORAiRhif/Pmgp/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
+   d="scan'208";a="79057195"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 19:58:35 -0700
+Date: Thu, 3 Oct 2024 05:58:31 +0300
+From: Raag Jadav <raag.jadav@intel.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+	andriy.shevchenko@linux.intel.com, jsd@semihalf.com,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] i2c: designware: constify abort_sources
+Message-ID: <Zv4IVy0AwopigElv@black.fi.intel.com>
+References: <20240122033108.31053-1-raag.jadav@intel.com>
+ <lny2lybbplbu6mugnldj7do2q3yazvr6l2tm4zxmck6vd2sofg@q536n225ap22>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,17 +76,24 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240926024026.2539-2-hunter.yu@hj-micro.com>
+In-Reply-To: <lny2lybbplbu6mugnldj7do2q3yazvr6l2tm4zxmck6vd2sofg@q536n225ap22>
 
-On Thu, Sep 26, 2024 at 10:40:05AM GMT, hunter.yu wrote:
-> I2C clock frequency for HJMC01 is 200M, define a new ACPI
-> HID for it.
+On Wed, Oct 02, 2024 at 11:18:34AM +0200, Andi Shyti wrote:
+> Hi Raag,
 > 
-> Signed-off-by: hunter.yu <hunter.yu@hj-micro.com>
+> On Mon, Jan 22, 2024 at 09:01:07AM GMT, Raag Jadav wrote:
+> > We never modify abort_sources, mark it as const.
+> > 
+> > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> 
+> we meet in a different context :-)
 
-Do you want your name to be hunter.yu or Hunter Yu? I prefer the
-second and if you browse the git log, you can see that everyone
-uses Name Surnmae.
+Small world :)
 
-Andi
+> Sorry I have missed this patch. I applied it to i2c/i2c-host. The
+> second patch was already sent here 21ac0359f72a90.
+
+Awesome.
+
+Raag
 
