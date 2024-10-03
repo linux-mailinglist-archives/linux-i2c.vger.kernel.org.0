@@ -1,119 +1,208 @@
-Return-Path: <linux-i2c+bounces-7200-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7201-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41E2598ECC2
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Oct 2024 12:16:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 684E498EDC6
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Oct 2024 13:16:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E6701C2213F
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Oct 2024 10:16:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C45F1C21E12
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Oct 2024 11:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8AB14B972;
-	Thu,  3 Oct 2024 10:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB5A15534D;
+	Thu,  3 Oct 2024 11:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="chbmN3cS"
+	dkim=pass (1024-bit key) header.d=kneron.us header.i=@kneron.us header.b="jGTJoyH/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2105.outbound.protection.outlook.com [40.107.100.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C96149E17;
-	Thu,  3 Oct 2024 10:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727950560; cv=none; b=B6qMU27gbCc+d5F7a7HBbG5evuM7otZtHcjuDapjUJzqNIYdgrlGiXtwfo9bAm1v+zRqDN4pieOMQtBTCJBueFPuo95ON0jfbrjXcdnsBKbrdMBzpbdcVQ1VRWBDfV6HoVWRkXyFeoMLqYxyRomuviBa2u/WyN7sAkFH9FS2I3Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727950560; c=relaxed/simple;
-	bh=qqEr/d7JEF3M3078b1QH5LAWJO35b+cVIAnjF94+Bxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RDDBY3+mdGLGp0ls0dL6MP0il9azs6B6mS0pFajsOo60pW8XFFnPtaoE8/mkpkcDxEzICa1fmLhDtE3wa/Avqq+Lk8p096zbCn3eOwZ9H9dZjjJaqKHqS35tzSa7ETO8rv4ZSgJ98lMkPwUmKcv95XbaW1wrXhgC/Hfl2DQbbYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=chbmN3cS; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727950559; x=1759486559;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qqEr/d7JEF3M3078b1QH5LAWJO35b+cVIAnjF94+Bxg=;
-  b=chbmN3cS6bcwkyO57yOVBGuu4aY+/98K135N/jshvHr6QKYp788skx+K
-   r5jncrXk2wBHKuFdT2m66TTITtOmVrVYnl30qyQ1inrwj9VIuTMMxdbNx
-   P1p7d6k2fVqXxd2rDZ7MpSkQcEfEQo2qz8eZFgyB96K6IkRcAAI5eGKx2
-   A9la9tvmNm+J2L+DticRrszpoPu4kH9KgT5yz0RSfFUhr0GAb9gJ0EJEh
-   /4qcBmvWpkDHpNay32QHEafmh5rISIq3D//3HUdebjVbgHoYLlYIqAYOx
-   hMrQyyo/2JaBOpwKPxT2iSS+VfhR9qUqlAcJf3o1oJvYtYgC/Xa6WF3Ag
-   A==;
-X-CSE-ConnectionGUID: cTd2I2vGSPu2sICHGxr3Pw==
-X-CSE-MsgGUID: wtS1hPyKRa6TTo6MrC3Z4Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="27316565"
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="27316565"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 03:15:58 -0700
-X-CSE-ConnectionGUID: scu9vYm7Q3m+jU3LjkymsQ==
-X-CSE-MsgGUID: DmjSEk4eQZq8E6Eebv1+Hg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="111764920"
-Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.154])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 03:15:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1swIsB-0000000G5Fu-02QF;
-	Thu, 03 Oct 2024 13:15:51 +0300
-Date: Thu, 3 Oct 2024 13:15:50 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Ryan Chen <ryan_chen@aspeedtech.com>
-Cc: "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
-	"benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-	"joel@jms.id.au" <joel@jms.id.au>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
-	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v14 0/3] Add ASPEED AST2600 I2Cv2 controller driver
-Message-ID: <Zv5u1gTK9yug7rbK@smile.fi.intel.com>
-References: <20241002070213.1165263-1-ryan_chen@aspeedtech.com>
- <Zv1aOedi9xl2mg9b@smile.fi.intel.com>
- <SI6PR06MB75359904E108D7D0CC89A329F2712@SI6PR06MB7535.apcprd06.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D155155308;
+	Thu,  3 Oct 2024 11:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.105
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727954157; cv=fail; b=hWCPDOxxwdFJn2rtnKq4RJTAwfK4yMXg8xPOgyqQh8hs3HKnOWqM2HXI42zm4Ux8EKsbi09L8O++GAUjixIx08tlPFtVrR4OOQSN6NxpPFWQ6SJe38p198At86td4mB8Lu587DfAG8Hcus4Q+FHLFW9rRMZ1bC8LFUdGwKLmwhQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727954157; c=relaxed/simple;
+	bh=d2vixa3g4WgxDsP8i9IYDyMsXanIjlNNOnLXzj8eLnc=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=c2nsfmnJjWgKR3YkhUBVtky6q2C/rx96XXXOJrRXbJZw6pso4e94RwWGVZR8NQeXbffOQE3iVPtZoCYVQ/tbPPLStN8uzDAkAO7r2402BlLfEloiz0Y3n3xAiCWs2qpPaqRYO5VkTyk01vwqXex+ZH+ue0m2pbH7ktxkCeZnhe0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kneron.us; spf=pass smtp.mailfrom=kneron.us; dkim=pass (1024-bit key) header.d=kneron.us header.i=@kneron.us header.b=jGTJoyH/; arc=fail smtp.client-ip=40.107.100.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kneron.us
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kneron.us
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=n14arojPfeobC3N0QWvyj9drG1bbmSP/1ZTcD0pONwk50E43vDmGynljKC2E9+kKTQBbBej8jccfJFwEvvnZHK1f+ZWsPNnJy6yvyR0oWg9pfSsHOATcPmNcdpSDq1sVoWUnjG6AP4t2l5mt43JOiH6Tpy0TxP0Hjndn7Oyx2cJSfZ3l5Mmsj6nf26Q89LWHcKxrJVKKIxXFinmrNqqsXYBQknKwVXlfsQBVJDj4tJCGowHAYkQQi+cCe3j8SlTtquCUOWylFTP3MpImkL0T4E8KzfDuQ/ipxOqCec2K4lk3qQ7kpfZ0IVlmVk8hlXmPwVHB6X62WvFbQxuTesNqWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fO/5pLSubMCFQ0r/Pps5HDHhhuaXuNTNlX8DAQzUcfo=;
+ b=wl73gOrwWOzpstvHYFLNMJmVWEFUVtW0apxv8HbeSarRNAqb7SaE+k1taKMlRw58JGTNZl8FNEVlCuzf/j3eNpJ2cNTy6szLRn6pHd8N9VJ5YueDAmCA5cVZSJWDaCcTbebAmFaPM5Za/4YI/nTs6BQ3n7n1EUcg7I67CA+hhttaeusPWeH+WlOR5ETbgqJXar5Z+gB3H4nHwaVxR3cOuG+tGzFAZoLiSxBx/7UIyHGm8mcC6/qQfjc9RZgsShX3QyPs8F9wlszf/nOis8CSJSxfY5QzAqolD+laBRThO/vGQFsn8J57VDjgR+RVs4Yq0dobz9rEARQ/BGRE6gfAgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kneron.us; dmarc=pass action=none header.from=kneron.us;
+ dkim=pass header.d=kneron.us; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kneron.us;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fO/5pLSubMCFQ0r/Pps5HDHhhuaXuNTNlX8DAQzUcfo=;
+ b=jGTJoyH/MO/n2n3ItuGJH9X4fH/8G54muxt8/81XR7g86MX4A6zZhBvxn/IZkpiR+SmVv0ZAOBAvPe44+7xbThu89b/arzRFiGyCQJWyz2M6QkdyxACLDdfz95v47FHCxb/0MGr7T4hnpybCUbzt1f7XxWbZZ3F1pfDpn8Bwd0A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kneron.us;
+Received: from IA1PR14MB6224.namprd14.prod.outlook.com (2603:10b6:208:42b::6)
+ by BL0PR14MB3714.namprd14.prod.outlook.com (2603:10b6:208:1ce::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.18; Thu, 3 Oct
+ 2024 11:15:53 +0000
+Received: from IA1PR14MB6224.namprd14.prod.outlook.com
+ ([fe80::c527:653c:698d:3d94]) by IA1PR14MB6224.namprd14.prod.outlook.com
+ ([fe80::c527:653c:698d:3d94%3]) with mapi id 15.20.8026.016; Thu, 3 Oct 2024
+ 11:15:53 +0000
+From: Michael Wu <michael.wu@kneron.us>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Morgan Chang <morgan.chang@kneron.us>,
+	mvp.kutali@gmail.com,
+	Michael Wu <michael.wu@kneron.us>
+Subject: [PATCH v4 0/2] Compute HS HCNT and LCNT based on HW parameters
+Date: Thu,  3 Oct 2024 19:15:22 +0800
+Message-ID: <20241003111525.779410-1-michael.wu@kneron.us>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TP0P295CA0055.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:910:3::11) To IA1PR14MB6224.namprd14.prod.outlook.com
+ (2603:10b6:208:42b::6)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SI6PR06MB75359904E108D7D0CC89A329F2712@SI6PR06MB7535.apcprd06.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR14MB6224:EE_|BL0PR14MB3714:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5e08e8de-5968-4fb9-1861-08dce39cbe55
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|52116014|7416014|376014|1800799024|921020|80162021|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?eiJdGX74407ZRYDz0ypnPflvkhGczxfQDLY+lMoR5A2z9+gLTYKSwVgAFj+r?=
+ =?us-ascii?Q?+Qs1fvWML3BJsFDA1lHSiK0ADIEyGSt3aHH4eTyTXERyGGxeFmSIAtK5Amiq?=
+ =?us-ascii?Q?6KehzHeDCR4rH1fcQINXzO3Ws0AEHIrlsw8QvTWaQRf12q7L9PCK0T6KRVzI?=
+ =?us-ascii?Q?s4687PkxU/kyn2Ti6mEJE8tuHuTSdMXFrnwlHuXWZUxRdw4QPXEcKRD5Ok+V?=
+ =?us-ascii?Q?WmdGZQKBRXw1Q8TQmggl6VXM+UWeXbDQaaHh4qNmPFFz+AJE+YQhUndt9H2c?=
+ =?us-ascii?Q?RsiUwzNfLYvdSO2hXkxaSMcq/rsLRtetKbiwsE70hIVKUJ+u4GgRKolYxS+T?=
+ =?us-ascii?Q?gP7jRIpws2/oPCKSGv8cDpZSa28ZL84nvnPBSuIQyC8S6Ff0Gez4RhHXG4An?=
+ =?us-ascii?Q?u1LKbOYG7JdvJZ4TSQDFfGPZ0jlRUpykbaHeM53yoIlOicyR+lG5aRQ/a9va?=
+ =?us-ascii?Q?oduB3u4cD3iS9TR4qXyZ1mONn8/Nh7ijXs66HbrHzoGG1yvrRWNVW2nBNzzS?=
+ =?us-ascii?Q?HuK5fbgR0pUykowrgUly4lqGvyaizuU40iZzumd+9yXki3Q3/Ah9luFAWWJF?=
+ =?us-ascii?Q?nmUi3d10ZfYW3ZQnhI/1ZjXvxCDK92wUiCyVO51WEZNP/nz6a70SbD1p0FRo?=
+ =?us-ascii?Q?PvUpEU1bBA4nH/gbE9PEGyw7hAp+mBYv/ASmQkiKAuTBWKmGRtYCl9v1ZvZO?=
+ =?us-ascii?Q?F18YY20sC6yI+Dg9dTBtPbPQpjo+o/4eCQ4rLRxa1MEWWOXWUE7wyNyZiYsf?=
+ =?us-ascii?Q?MstgXdXHUywbz+HSTbIR28OObuOIGP+L+7yBcKM3gvKqm55mgJha0eF+AwzP?=
+ =?us-ascii?Q?q8GpuQ9xXPR8rAuxWHOpo1856EW4CC3h5aBxt1X39H4QjrT92N1/ErcTcV4V?=
+ =?us-ascii?Q?4QPAe/EaESgvw1mlFvtoPshUyYiaK7msuLRqaOaobOHnzoKcEJPWtPdVQPbZ?=
+ =?us-ascii?Q?+h8f4lIMzR873otuk8W0dEtDrpM5aGDlJwh6kwKQ6fPEj/FEAZfYjDdfVHJ4?=
+ =?us-ascii?Q?hVte0pek35uPyfcZHic1Thyub42pLCx+4o2k/JAOZe7nOt/MvalX+tyQ6oYz?=
+ =?us-ascii?Q?Kg/D3OtSBqtiN/KvdmVIhQ1QdOaJ/WwbqJzqk9eZreR+Xfu1E/t6u8PLRRWt?=
+ =?us-ascii?Q?zB80zLmtSdt8fI27C1Hyjc1KORGmf/ZlInwGivIaV2S4By9nQ4rv/VTWn96m?=
+ =?us-ascii?Q?m3JEhQzhn1896cXOtIo7hmcvTJJO9evNVRHEVlchUzKRqWISYBNArMlGCzVZ?=
+ =?us-ascii?Q?J5Iky7P14XTQUtTaTbUhLSxLichN3xQnqJGO+sBxZ+pmZY9NseiYC4rUKLXQ?=
+ =?us-ascii?Q?sHuBo7qq/wycP7L8rwo2223T1ymT4BU/hAlbCAix9AzRCTZAy6Wb7P6MO0z7?=
+ =?us-ascii?Q?gEsItQUEMVayptxJpxGh4auC5da+?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR14MB6224.namprd14.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(7416014)(376014)(1800799024)(921020)(80162021)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?FflTyRYBmeH6NRjnkvm6zdh63SnH2dGnKlEf8SZCXIN/zCw/OabvLDaHGts4?=
+ =?us-ascii?Q?rD3JR0YmuQXbB2+OppuQtAzeG93mw1JVKZaD1UooI8sBC0Vl2x7ZMvCc/XLj?=
+ =?us-ascii?Q?VMfOdz38owLbFpzoIOF7oC00FVCxWS8MbcdgYkMUwzPAvDxhryKcYNyBO49d?=
+ =?us-ascii?Q?kx6bRDUYLsKgxbq96loy7hmaGFdkjC6mQBbEbrgzK6SUkyVhkqqDHGQ8WXvi?=
+ =?us-ascii?Q?65xJtX/TwWSpfLfj7AQO3vZ6+PrWRjPy+maWzGZVaeLLBJO61Gt7Re/LsJTx?=
+ =?us-ascii?Q?Braln5TdDGqUWS7E9yV1ywN+ckzYCNgRKaBB4ApFzkCVcv02elh9qhZA2801?=
+ =?us-ascii?Q?h7wTzNkD/TZ0lYHpCqQl7JyQu2XOlDjCRkWG5jhSv9GF45okxFu54RrxDloX?=
+ =?us-ascii?Q?v/5rFuArgwCO+NkF4mWz++BGQteit55rysx+SxRqJTkvxmsqLEp1eVa92Qky?=
+ =?us-ascii?Q?cfls6/1eQY5kArqLT9FXwemvtHcx5GC0yjNEw2+Vfe7Yf7NdfOMqjGBVgvt/?=
+ =?us-ascii?Q?Ew/A7h5KwTveO1GzpvMskszeICoDKjaqt6dJi9sp7xZ7gjbW9aOd+wWf8Kf/?=
+ =?us-ascii?Q?lXu3turbyOrJp0kovYvceujjyNASzQtBKnvvG/X6tY/wHwupkAQP+gWWESRW?=
+ =?us-ascii?Q?cze7oJMYWT2rq/s3L3kGMaXuhfxcUpICYV9OH1ZSQ2t/TOCjeqzaL2PGGqU6?=
+ =?us-ascii?Q?fEI5P1kCQCJ/KcHMQecNSdz/6O4A4As/mX5FUvc2KESqA7cusVPWZBk7InW9?=
+ =?us-ascii?Q?uHUQ63SOOMpEbczfXODvJttbbJEQkem6XHgviTAxZrQRBnASBzvPLX4D9r/N?=
+ =?us-ascii?Q?J9CcTh1bRe4kMhOrRtBeAfZOYs3n9/GLBvIcprkPxN3nT7AKQMU+vbOyjmr8?=
+ =?us-ascii?Q?dznF6BaF8Ugruwq1UH90GZXohLIRSBYeo7Tc3qUYehCzDwMn+XfEUHRg/kvO?=
+ =?us-ascii?Q?K9QbGYXh2Aa0Hchnb6z1h+M970N1gFm5jvThVXSl/V2OFOFw/KBTIvBOos1Z?=
+ =?us-ascii?Q?WpeuZMGdSOMS758Tdi/CrgGmEbFg1gx8aUgUdTlyXfEgj2qWHqQ3tZrT0Owy?=
+ =?us-ascii?Q?PSAZO9Sd3zbK1rCF8G1agRlQ6YWGevxnC/fVOlzWWUKhjrCQC4DsQmR0VfKV?=
+ =?us-ascii?Q?vC/wGaOo4YFjbHBqkkRxE9Jq+h49Gc6eKss+ttlSf4WzwoNf/64MhGFJJU/w?=
+ =?us-ascii?Q?zkc8Y+MzMU/zXliJopoCMIVwv8/+yqm9KXdjvJALuq1HSHMa8TZ6WeQGOMMY?=
+ =?us-ascii?Q?CmOiVRCye4WT435fe5LofY0fnbDThRWv9iGpO0BasB+zegKELnZcUOyYVnwG?=
+ =?us-ascii?Q?yQL8AVz/okj2ZlT+cOu699Y8dD19OKJhX1OL+fJ0qV96QLtW0kLDYo9CtYzK?=
+ =?us-ascii?Q?xJSDW37si4+LKnkj7kPZaVcRAfGhwTRsytSpMCr2RKvciS3QsK1eStKWwDyT?=
+ =?us-ascii?Q?UhnCFT8tvo6eHtGK2W5HuQUZk1NKtxYRF/jF4CMXPQXVhr01jXoxM8aUdfaq?=
+ =?us-ascii?Q?ijElj3aUFqE00aSid+vMerbjOCg1JkQQDu9/n1LEruwno7ZYCLps0czUkovb?=
+ =?us-ascii?Q?lhyuxEs8lNIT1WtqIdE7fdzgz6MTGwjGTDShPWHT?=
+X-OriginatorOrg: kneron.us
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e08e8de-5968-4fb9-1861-08dce39cbe55
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR14MB6224.namprd14.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2024 11:15:53.0296
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f92b0f4b-650a-4d8a-bae3-0e64697d65f2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VTJfWuahdMUCOpneR7bkwY4Ljdj+AGXLIS66JvvoNa6m0c/66ya5M14pN12tiwv6L6DuP12rfQsy2DADhdYMMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR14MB3714
 
-On Thu, Oct 03, 2024 at 03:41:57AM +0000, Ryan Chen wrote:
-> > On Wed, Oct 02, 2024 at 03:02:10PM +0800, Ryan Chen wrote:
+In commit 35eba185fd1a ("i2c: designware: Calculate SCL timing parameter
+for High Speed Mode") the SCL high period count and low period count for
+high speed mode are calculated based on fixed tHIGH = 160 and tLOW = 120.
+However, the set of two fixed values is only applicable to the combination
+of hardware parameters IC_CAP_LOADING is 400 and IC_CLK_FREQ_OPTIMIZATION
+is true. Outside of this combination, the SCL frequency may not reach
+3.4 MHz because the fixed tHIGH and tLOW are not small enough.
 
-...
+Since there are no any registers controlling these two hardware parameters,
+their values can only be declared through the device tree.
 
-> > Is it possible to switch to new terminology wherever it's possible?
-> > I.e. master --> controller, slave --> target. See, for example, f872d28500bd
-> > ("i2c: uniphier-f: reword according to newest specification").
-> > 
-> Just for cover latter? Or I should modify for each patches commit message?
-> Or entire i2c driver statement need switch to target?
+v4:
+- yaml: re-formatting two properties' description
+- yaml: enumeriate bus-capacitance-pf
+- yaml: extand an existing example
+- driver: modify the commit description
+- driver: rename "bus-capacitance-pf" to "bus-capacitance-pF"
 
-I believe everywhere, where it applies: driver code, comments, documentation,
-commit messages...
+v3:
+- add vendor prefix on new property name
+- read new properties in i2c_dw_fw_parse_and_configure() directly
+- in i2c_dw_set_timings_master() check dev->bus_capacitance_pf and then decide
+  t_high and t_low
+
+v2:
+- provide more hardware information in dt-bindings
+- rename "bus-loading" to "bus-capacitance-pf"
+- call new i2c_dw_fw_parse_hw_params() in i2c_dw_fw_parse_and_configure() to
+  parse hardware parameters from the device tree.
+
+Michael Wu (2):
+  dt-bindings: i2c: snps,designware-i2c: declare bus capacitance and clk
+    freq optimized
+  i2c: dwsignware: determine HS tHIGH and tLOW based on HW parameters
+
+ .../bindings/i2c/snps,designware-i2c.yaml     | 18 +++++++++++++++
+ drivers/i2c/busses/i2c-designware-common.c    |  5 ++++
+ drivers/i2c/busses/i2c-designware-core.h      |  6 +++++
+ drivers/i2c/busses/i2c-designware-master.c    | 23 +++++++++++++++++--
+ 4 files changed, 50 insertions(+), 2 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0
 
 
