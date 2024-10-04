@@ -1,119 +1,115 @@
-Return-Path: <linux-i2c+bounces-7227-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7228-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF6D1990FB0
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 22:06:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E9C990FFE
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 22:15:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B9B2B3224D
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 19:48:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 006A11F26588
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 20:15:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED71F1E22E2;
-	Fri,  4 Oct 2024 18:32:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6961E04A8;
+	Fri,  4 Oct 2024 19:44:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xc7W5WeR"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="BN88Dd13"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA44622F8F1;
-	Fri,  4 Oct 2024 18:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1A71DF72A
+	for <linux-i2c@vger.kernel.org>; Fri,  4 Oct 2024 19:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728066727; cv=none; b=ehve8fNsEh3cdsSZ2g8J2zBFa5JCTqpdDtHjeTXTye8nhhGtbkjd9K9d0X3n0DcvwZWV2C947/iwdq3D3jd/uvNIcmRoEG8xCtKceJvtNeLMOrVPy0yXMdGIxEZ+J7p6tLD0u45QFXP2yMYPa45PcIMIzV4qwvY3G1tJvGgaSDE=
+	t=1728071053; cv=none; b=ll/xZTF+g2w4oI8cRzvaPb0bGyN2p7QFzcQ9cg6pWmAUJO2UUagHNZhwvwYMKkGnl1r9cXZo4eZfVm1u8HElAg97/8jZ7aY/27UQ0NQpNzi6DSSCuSeItBDKOdN1YxwveAw1+jZZkImLJRLS0Qs/9juFGS1LbfEs+tEcpAqS6WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728066727; c=relaxed/simple;
-	bh=skvcep9sdYZskInQv2BaNUbnAo9npNt0KtzP7o9x470=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fE/yxyw6qcZH+o8JiFe3O488Q0RvlL6fd3xhyKgVeP9fURJSg1UxLafkxPXrq+XNcVPM4EnnKJyVEN0/05dCDdhM15jrYa/SMYWhCKTSqRDcyL6UcSiqhKpvhLMOXooep2fvrEYNnW0pbJ7QDLXmnGmRSRNCSCtRGzt/N7yNIWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xc7W5WeR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 545E4C4CEC6;
-	Fri,  4 Oct 2024 18:32:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728066727;
-	bh=skvcep9sdYZskInQv2BaNUbnAo9npNt0KtzP7o9x470=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Xc7W5WeRP8PeSP4tdwQLIsivANMw/IzaMDf8UhPR5UfyuHUpgOY9LsaVYkCuqn/LF
-	 SEOmln73vH3QJurYEJhnnQrYV8Vtvxb5L8DGi6SoPVss8Po7VmAnM9mWscYQJiQI+i
-	 GBjILC7BcnFtWVhO+L/Q/DqDfGxFUqyUEIgeRfYqwE1zA0AHrxY90Vwxg0R5NMBsD6
-	 M+Q10wCjPZW3a4oq5a4bJUvk92aDCp/md+cph6SQl2qTfeeVLseu6g3xyaTcPCbNgZ
-	 fbRUc9CcwHM41ibRlnPGDM/tysvlm8Plj5xSbbuVUfQP67GJMh3SBOO6nbMv1oUOyq
-	 5pS9jw5il0ttg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	s=arc-20240116; t=1728071053; c=relaxed/simple;
+	bh=TrYVJfjyHQHRAQzKoL0ASI8joiGlm8dDP5uYge0bOwI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G29kZGMQiJp2dIO/y763VUncIAZjiOBZE+OAJY9+CqHTVHeffaQfFdK0733T6bwGt4/NyXpuXfZ8eoXUGbhjRCDzRPLjQiHvTl9RUIBnmfae604GcgacQdLSntUjg5z4jnAMoH9za/B0IWqRBba9Z6dWk6QaHGtHiTNMYjUZHck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=BN88Dd13; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=EamE
+	PJoZ9YuXjphhH8JC5qAA0fvN4OcCtfbUgSHwD1g=; b=BN88Dd13rdKlQ43saRv/
+	m382/GoUYy6v4b6EYVVU3Zi6o26jx7o1+Fl13Mi77phyEF5pax1yQ2IM8esXKYC0
+	SNaiAYRI7zVFzGZ87tZ8RoZx2m5SUoIiOeSdGA1oqJSF0306/06cYquuEAC8PCNq
+	nJW/Agk9l/kX6BFJIRahhE80tCNrvryB5elYXRtI85XX3l30KFHz0SvbCc66/NcY
+	cVJyNN9JxLiDGKeWQ1Nm8CsJDt6eWFjlL2zxtkj5c1GFiaFu1U2Qb+6pMu0mzhUk
+	sVgOohXK72jJBBtqA4r8GEmTWQDFhYdJLR6cT8O4EBfOdJ+8y32fOUczEVzuDJce
+	sQ==
+Received: (qmail 3542989 invoked from network); 4 Oct 2024 21:44:06 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Oct 2024 21:44:06 +0200
+X-UD-Smtp-Session: l3s3148p1@9yzc5KsjAK5QvCeD
+Date: Fri, 4 Oct 2024 21:44:05 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>
+Subject: Re: [GIT PULL] i2c-host-fixes for v6.12-rc2
+Message-ID: <ZwBFhR9WVhuwhdM1@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	jdelvare@suse.com,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 10/16] i2c: i801: Use a different adapter-name for IDF adapters
-Date: Fri,  4 Oct 2024 14:31:37 -0400
-Message-ID: <20241004183150.3676355-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241004183150.3676355-1-sashal@kernel.org>
-References: <20241004183150.3676355-1-sashal@kernel.org>
+	linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>
+References: <jtzq4rriyqzerfbxcb2hojrrmdj3cenooijz37u7ejh7twawfo@zussiajim3rt>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.322
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xLGFq0V9Gp16vUw6"
+Content-Disposition: inline
+In-Reply-To: <jtzq4rriyqzerfbxcb2hojrrmdj3cenooijz37u7ejh7twawfo@zussiajim3rt>
 
-From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 43457ada98c824f310adb7bd96bd5f2fcd9a3279 ]
+--xLGFq0V9Gp16vUw6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On chipsets with a second 'Integrated Device Function' SMBus controller use
-a different adapter-name for the second IDF adapter.
+> The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758e=
+dc:
+>=20
+>   Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags=
+/i2c-host-fixes-6.12-rc2
+>=20
+> for you to fetch changes up to 048bbbdbf85e5e00258dfb12f5e368f908801d7b:
+>=20
+>   i2c: stm32f7: Do not prepare/unprepare clock during runtime suspend/res=
+ume (2024-10-01 16:39:00 +0200)
 
-This allows platform glue code which is looking for the primary i801
-adapter to manually instantiate i2c_clients on to differentiate
-between the 2.
+Thanks, pulled!
 
-This allows such code to find the primary i801 adapter by name, without
-needing to duplicate the PCI-ids to feature-flags mapping from i2c-i801.c.
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-i801.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+--xLGFq0V9Gp16vUw6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index c1e2539b79502..b552f8d62fa2f 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1674,8 +1674,15 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 
- 	i801_add_tco(priv);
- 
-+	/*
-+	 * adapter.name is used by platform code to find the main I801 adapter
-+	 * to instantiante i2c_clients, do not change.
-+	 */
- 	snprintf(priv->adapter.name, sizeof(priv->adapter.name),
--		"SMBus I801 adapter at %04lx", priv->smba);
-+		 "SMBus %s adapter at %04lx",
-+		 (priv->features & FEATURE_IDF) ? "I801 IDF" : "I801",
-+		 priv->smba);
-+
- 	err = i2c_add_adapter(&priv->adapter);
- 	if (err) {
- 		platform_device_unregister(priv->tco_pdev);
--- 
-2.43.0
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcARYEACgkQFA3kzBSg
+KbbIGBAAj9j3BvUz1RiiFa2MAwYpAdV1FgMH2KwCBn8kdF3n89ufb+JyEqQ1+BvI
+NBYdbolAXqq9AqFyTSHrb/k1Y6IfW72vrsXmR6+0Tj9NWqLEaKh/TA1ybwLEC17j
+knReybo57SJtdS6Uy6tNy7jcUgkW3tFJtSnOPGBG0LAiJOC4PNAqLna5pxGl5GXy
+RV7J7+c5EaowncmVcE4ORJhOS8XVMQLTWUX3SlNWDRt+HiZ5P2xa199SvPZOF5P1
+5rIgAFssMGLZRJ+4LVpJkTF0mr3aHhgitGaQDW1nJ4de0oYl+PMU0CYmLw9+bb1/
+I9bmguwqizVHLHwkoPVsifUHBWWzOtMF8z0BVCuPWxGTLtz9BmNsVR/gA30trBBJ
+8hk9miKpnloSmPO7D8Z80YrH/gjh0fUDJLOJQxOQkomDRoHBO6mhiIQpn1DkYWyP
+ZmjbgEmtJAK4X7VNiAMdtOOYxcXU+RqD4ibIhN6KhRXS7dvgn5kJ//6R82vqJigz
+AgpCtXvsPtyxEInBatXxdns03fQF/UhSBAr6rBUL91yx4ghISRnHqNMXHDDb24z6
+MbIjEAC9oP9l0sUp5VOGCH9vkVijWkamD0ov8KlrtFXgf8u3XmOaz5oihIPeNQm6
+qiNfrZp2vXdspuN5iqi7cnjnoVruVe8E+FVG6AjSWb7aGc5QwfI=
+=gONl
+-----END PGP SIGNATURE-----
+
+--xLGFq0V9Gp16vUw6--
 
