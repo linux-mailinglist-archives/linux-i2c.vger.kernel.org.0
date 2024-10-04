@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-7225-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7226-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DBF5990E97
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 21:38:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F3C8990EE1
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 21:44:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0F9D1F22DA5
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 19:38:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AD731C220B3
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 19:44:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 620C71DF98F;
-	Fri,  4 Oct 2024 18:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5187C22CAFF;
+	Fri,  4 Oct 2024 18:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUKY2H5p"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TPv9+vee"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5102281F7;
-	Fri,  4 Oct 2024 18:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2CC22CAF8;
+	Fri,  4 Oct 2024 18:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728066635; cv=none; b=G7RaEGB0m8OY9u+ocS7bJzPfJmb6U2rFzVOLpvHyrnh8E1KM6S/qPSrspSk2Yld0QgsXfL07v1/FYbexalXyAjKH1+DHruOU90fI4u+rDZNuvFWQZ1Ku2AGW7wtDBEduNyL4fG4p1TJlckYp81uhLiXvSMA39SrlcLMLCmehwKA=
+	t=1728066688; cv=none; b=BtQj+HExj3LXbT1mhXsaRqHkEetaBHQ92Qz8zG2Xskz8gDh8LOm0Frf6E/+RHAiJgERdYhGDtb9J/qsBbZ2nZjeQ/Ng5qJQskDWWN30MpZxalCN+0ZlJZ5lg82zw79VQrnM0QOlbUwDkhP50Z3GgSiPN8Wp6yTKk77F/oAAu1V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728066635; c=relaxed/simple;
-	bh=EbEDNMe/ud2NSQzYnDYrrl5nw2Ikp6ze+E7G5ly5UlI=;
+	s=arc-20240116; t=1728066688; c=relaxed/simple;
+	bh=8v+rZuHdjM11xy9pyUCp6uop838dCMz8Ck3kgy9mPtA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nVHt3v+8DAwwVHRp5i3XRf+MehKSCjknLquPJk3hEbO5Tux8/rugFYAMJ8bIpQC5SEdsEdn6CtIPBH9QO1O/VjzmSy8EcuLDOgOmHaQ0BtEWFLx8HeujTzlV0oKZiy3TgftBXRLe7CQTozpmuNYnb04buO8mmEIJQll42mf7mvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUKY2H5p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E948C4CECC;
-	Fri,  4 Oct 2024 18:30:33 +0000 (UTC)
+	 MIME-Version:Content-Type; b=XekTvwQykRp/CPJihIlGdvUGGTln605clVmOwlZEwb4Nv0q1rsJ0QmLF4IcL0ACLx068T25T6stJ9v247VZ4CvPVqdG70E8MsEN2qXnz5Zz0MlU3Tp5kpaH271ByJaGzUwq9gM7OoVI8gVkwqg70PKYMP/bBGHxcefXHWnhwuQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TPv9+vee; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B56C4CECC;
+	Fri,  4 Oct 2024 18:31:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728066634;
-	bh=EbEDNMe/ud2NSQzYnDYrrl5nw2Ikp6ze+E7G5ly5UlI=;
+	s=k20201202; t=1728066687;
+	bh=8v+rZuHdjM11xy9pyUCp6uop838dCMz8Ck3kgy9mPtA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AUKY2H5pZMq8ym7kTajOWgWbdLJRqE/LJcqqxotm8oZrAL6khu6Q6BWU0WekaN2KJ
-	 K+MMyD9/Ox1fYI9NaIvskDZ5IgC9C/Y5ax5EV4mj+bmSFtklpKRzkq0qUFK5OXnskb
-	 OXLbYD4mGU0aL/ERHChkuXwZj/QsbGjtXaP9fKQxaGt09pl8w0OEzFr6EMqs5Z8wTI
-	 Ws0gXLUGTPhP4tjmfOtqUZHpMnR6MAFxn6KkUJx1kGVvRa3G5mxY3EBnrEe0gYmtwX
-	 jE0iO7ZuemfVHrZiA3DSbtND7cveGiDzLJrC2KMt83Wf1fa6uGATcwqguPns7fsIHC
-	 480ZUn1LkcviQ==
+	b=TPv9+veeAuDSGfMyRgNTxYxTpSvOD+f/g43Ca1Aia+SgOWRXGFYE4h2NroHuFav/K
+	 FbgZXAgSdJndnztKq3ownYugg3RW2N7Zowrm91TXaxt13KgTJJGF1NOlBl8RxTEY8H
+	 dS/esMq0bM0QQSqvmzbYrb+7iyGwgsUjpzjNamTowzS6sk6DzV5sFkMNdO7HRuk9Tl
+	 bdWpmL6OWFLZ36LlREtwXw0ZlWzCN6duvACuJQh2zXdzubuQt6hRQJvdruloqDyhMM
+	 wICktotxoDIET0Z7EhJR3/Vk/g1wpv54z0j5OeMI3igcudComNPrtZ6sR56VhfH294
+	 swrtlDjWNzVHA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,12 +51,12 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Sasha Levin <sashal@kernel.org>,
 	jdelvare@suse.com,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 15/26] i2c: i801: Use a different adapter-name for IDF adapters
-Date: Fri,  4 Oct 2024 14:29:41 -0400
-Message-ID: <20241004183005.3675332-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 12/21] i2c: i801: Use a different adapter-name for IDF adapters
+Date: Fri,  4 Oct 2024 14:30:47 -0400
+Message-ID: <20241004183105.3675901-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241004183005.3675332-1-sashal@kernel.org>
-References: <20241004183005.3675332-1-sashal@kernel.org>
+In-Reply-To: <20241004183105.3675901-1-sashal@kernel.org>
+References: <20241004183105.3675901-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,7 +66,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.226
+X-stable-base: Linux 5.4.284
 Content-Transfer-Encoding: 8bit
 
 From: Hans de Goede <hdegoede@redhat.com>
@@ -93,10 +93,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 4baa9bce02b67..3d5ef84482b25 100644
+index 2c077ffcee607..6b960cbd045bc 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1895,8 +1895,15 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+@@ -1861,8 +1861,15 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
  
  	i801_add_tco(priv);
  
