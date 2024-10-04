@@ -1,129 +1,117 @@
-Return-Path: <linux-i2c+bounces-7210-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7211-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6B4B98F04D
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Oct 2024 15:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 29B7698FC00
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 03:45:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 353C7B234C4
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Oct 2024 13:25:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADE02B21706
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Oct 2024 01:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67AA219C548;
-	Thu,  3 Oct 2024 13:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD3C367;
+	Fri,  4 Oct 2024 01:45:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EHRfYWIZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K4DnvG0y"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE6B1E495;
-	Thu,  3 Oct 2024 13:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5521757D;
+	Fri,  4 Oct 2024 01:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727961929; cv=none; b=VtF2VLlNmH6ixCi5fD0e3M+SkpUOFQdy7w+d2cRBG8LJAqPZpHETkgS4e2vd4Yuc74N/tA1zxkC9BxyERoRMj67iTiAh6XpFQgFWwMsOm6F8f3hLkY0Is8TCLIuHQY95jq0Kn1GXpZO3SYchB+jRVFHqLuVOTjQWP0cO3IQYHFs=
+	t=1728006309; cv=none; b=kjiYQbW4YYWsTD9uRwzkNgbXapsV109u2s1A7ti6qA2QeDf1HoiQrzHStwGkHSwfqQhdMBQieuVuLQK7i2sqLYDDTRc2T5U17j53uEDW8G6+1fcDcvyqvqcF0xByg7weeJrIfFM/0scqCnNMIBIkn2RfiNEfsB87Z60msz2Fbyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727961929; c=relaxed/simple;
-	bh=Oa56rIUaeLjFq1VHjsI+dp6b+Tvj2zTap1OM5Pz6ptg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KKit/H64dUKGegLorEpPaGert+r6kwIJ+9364BMc4pd6yHsy4noRtrK1Z7c4o/1t5u35/LMd9pPlf1jPRzohjMdE7xkpNBbYYOfgQ2P+Jd55Wq5q1tMISTd5zCxzjJzvrNMMyrfzQI66/adMiH7LngJPoxtfcCE5QadOhZZC3sI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EHRfYWIZ; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727961928; x=1759497928;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Oa56rIUaeLjFq1VHjsI+dp6b+Tvj2zTap1OM5Pz6ptg=;
-  b=EHRfYWIZm0OR4bPAA6BZRl/W3t+kSvFHwT4BItMSEs9H0QG2aM6cKv5W
-   PtCBtCgkEC62xX6ZGe8MhtsS2Fp4I+4sPUptOpDPpa4a0Bb+3Or2ziAj9
-   PUT6UtyvAfa7T94nk7j9o0aY0j8BYLssR1Iad3fYZ2qkLwgE7lQ2DyIzn
-   8BV82+BXUXYFDapWarIuYVphYATXZj42c/sYnzv9rMs7u9Tcj9Nr4ougQ
-   Pggb1PlhSYTC0GyWxp0mO3ZqRf9v+Us3QrhFURrgKnduA2xiDEFPs666r
-   XfYnrVrRao5aV669LYhQ1i/PPV0G1bU5k8rWxfL9JDRGXPR2S8AZJAIy9
-   A==;
-X-CSE-ConnectionGUID: sVc3AmXAR4mobrETS79WoA==
-X-CSE-MsgGUID: B3yz+5isSy6GPQnHUSLEJw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="38536535"
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="38536535"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 06:25:27 -0700
-X-CSE-ConnectionGUID: uk7ldAy2SbezZ/HjINkDzA==
-X-CSE-MsgGUID: Dz4kaYXhTW2KnGnMI8wWOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="105177990"
-Received: from mylly.fi.intel.com (HELO [10.237.72.156]) ([10.237.72.156])
-  by orviesa002.jf.intel.com with ESMTP; 03 Oct 2024 06:25:24 -0700
-Message-ID: <727b4614-5010-4ae5-8890-11b12c362048@linux.intel.com>
-Date: Thu, 3 Oct 2024 16:25:23 +0300
+	s=arc-20240116; t=1728006309; c=relaxed/simple;
+	bh=bhWpw/q+/0aDuo4hZ4IKGKOW9jc1RJXLxqpsmWbQoSg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Hi6yFZjryaWZ7TXw5qVpEKBpF7RPL84v5cq/CywTYWmR+1P8qbrFMN4JrAi6jglBtN/J/sP1/9X3wUrX3qAuQJMMS35spO1uqKtP7s91utWEBekr25mN8inPdwOchzdskZJBqAfEZ8cYh3XlJPAv1zbPcY6EtjFcxM5zqKbd3ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K4DnvG0y; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c5bca6603aso1930605a12.1;
+        Thu, 03 Oct 2024 18:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728006306; x=1728611106; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dRI2Il62UAfyDHeebNL7M6bB8VH+L673JhKSjWxVXHw=;
+        b=K4DnvG0yCItdMUQhF0fhGscgM05rK+1s9yGrozrYq34eCpI/NtBY/TIzK7+K5PRRaw
+         6Nif4hnStK23FEA+dDiOJCJlgGSLJOde+pCmoNX0akz+YGUcgu21OJetAUZBr3568ISU
+         BvWYINcOpoWpMd2MBsfFnHMbznRWH71IwX95enTgCw5vAMQW1vhTAq33ZzKRK13AjRji
+         Q25V7Wmz/bMbnF+qinc7q0LzrjILOJHglJJ+JbSCAOgcagKDJnqkrhAN8JBxAY5Mfed/
+         rjUrvL/m/ro8C1e/09vpcBahoRx1P62j5gG+8Tjvwhrfx7gb/Hg7Q0GGkJ1JM9RNsCqC
+         rDEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728006306; x=1728611106;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dRI2Il62UAfyDHeebNL7M6bB8VH+L673JhKSjWxVXHw=;
+        b=VblfdZmClc7pxU2fwJRB6c0VtbxZV3avjC3XO/s12tqzfSmhbwapIM3pRukD/vaAR+
+         /SSsUFks81BHIS9y1YXkLoe64LwGfVzVmfi5InUCwUZkFLNhRVcZm22cJGZYJezUP21T
+         XNrq7AvxKCBZvaZPeI0yKt4GChNKEuGQakgwjA4mP9DyX72nOHo4adhgsFvqUYpv+YWz
+         jxQaSZCWK95ZF76WfaeD+inzIdqSvuFfFQHXUuN8A8vzDi6zGuVAle/PGgAg42xMInLD
+         ZiTT29pAMWeBJlq/IMUJkIgnwIeaMV9bEMDjDW22byyCyL2uNr401a2FDf+0w9VNcAJb
+         77qQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUbjAcvhHq79wO9HGmP1GHrHYpf9agTRhQ+QA5rG41v55zYUec4TWnfnwhMS1orqfQJ/F5gTrPrHshLj8Ky@vger.kernel.org, AJvYcCVZ4PI4OdbA3i224uB66n3mFJisupTyTOsEZXMoSWoHR50/xZZCERN8Q74ZKRRphMMTGv46R/CB7aY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwV19afJTrzCykhUGt1UlG/XSOL56Qz96XPx4oK5DA4+9jx0yrI
+	t3G3fOBM3QV+Uf5aIXvKpRbDe/25UHyyotJaR5oE4VPbR7zaC0Lqy8OVAwiuB/FX95c51dTIKYv
+	PrRYBMPhsNZk3SKuqlQAen3uUpg==
+X-Google-Smtp-Source: AGHT+IFSm2nBg9gUUpBfHWVXeRjIe0yYzQSwipt/YKlvygbTx8qK062Iy8NDRPf5361rguU97G4YSoWKWU9ShduSQ0c=
+X-Received: by 2002:a17:907:e2ea:b0:a8d:5f69:c854 with SMTP id
+ a640c23a62f3a-a991bd44726mr89559966b.24.1728006305584; Thu, 03 Oct 2024
+ 18:45:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] i2c: dwsignware: determine HS tHIGH and tLOW based
- on HW parameters
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Michael Wu <michael.wu@kneron.us>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Mika Westerberg <mika.westerberg@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Morgan Chang <morgan.chang@kneron.us>, mvp.kutali@gmail.com
-References: <20241003111525.779410-1-michael.wu@kneron.us>
- <20241003111525.779410-3-michael.wu@kneron.us>
- <Zv6C8Zj4NabZf_PM@smile.fi.intel.com>
-Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <Zv6C8Zj4NabZf_PM@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241001062855.6928-1-kfting@nuvoton.com> <k5ifxaqtm76aorvxur6kl7j3pnfc7qmvua7mq64pobg3tiabvu@h2ygjs7ieidh>
+In-Reply-To: <k5ifxaqtm76aorvxur6kl7j3pnfc7qmvua7mq64pobg3tiabvu@h2ygjs7ieidh>
+From: Tyrone Ting <warp5tw@gmail.com>
+Date: Fri, 4 Oct 2024 09:44:54 +0800
+Message-ID: <CACD3sJZEqt0i6nz2gwQOwVADTaJtTc9MTQqAUFcP1kwOWWyQTg@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] i2c: npcm: read/write operation, checkpatch
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, 
+	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
+	andriy.shevchenko@linux.intel.com, wsa@kernel.org, rand.sec96@gmail.com, 
+	wsa+renesas@sang-engineering.com, tali.perry@nuvoton.com, 
+	Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, 
+	JJLIU0@nuvoton.com, kfting@nuvoton.com, openbmc@lists.ozlabs.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/3/24 2:41 PM, Andy Shevchenko wrote:
-> On Thu, Oct 03, 2024 at 07:15:24PM +0800, Michael Wu wrote:
->> In commit 35eba185fd1a ("i2c: designware: Calculate SCL timing parameter
->> for High Speed Mode") the SCL high period count and low period count for
->> high speed mode are calculated based on fixed tHIGH = 160 and tLOW = 120.
->> However, the set of two fixed values is only applicable to the combination
->> of hardware parameters IC_CAP_LOADING is 400 and IC_CLK_FREQ_OPTIMIZATION
->> is true. Outside of this combination, the SCL frequency may not reach
->> 3.4 MHz because the fixed tHIGH and tLOW are not small enough.
->>
->> If IC_CAP_LOADING is 400, it means the bus capacitance is 400pF;
->> Otherwise, 100 pF. If IC_CLK_FREQ_OPTIMIZATION is true, it means that the
->> hardware reduces its internal clock frequency by reducing the internal
->> latency required to generate the high period and low period of the SCL line.
->>
->> Section 3.15.4.5 in DesignWare DW_apb_i2b Databook v2.03 says that when
->> IC_CLK_FREQ_OPTIMIZATION = 0,
->>
->>      MIN_SCL_HIGHtime = 60 ns for 3.4 Mbps, bus loading = 100pF
->> 		     = 120 ns for 3.4 Mbps, bus loading = 400pF
->>      MIN_SCL_LOWtime = 160 ns for 3.4 Mbps, bus loading = 100pF
->> 		    = 320 ns for 3.4 Mbps, bus loading = 400pF
->>
->> and section 3.15.4.6 says that when IC_CLK_FREQ_OPTIMIZATION = 1,
->>
->>      MIN_SCL_HIGHtime = 60 ns for 3.4 Mbps, bus loading = 100pF
->> 		     = 160 ns for 3.4 Mbps, bus loading = 400pF
->>      MIN_SCL_LOWtime = 120 ns for 3.4 Mbps, bus loading = 100pF
->> 		    = 320 ns for 3.4 Mbps, bus loading = 400pF
->>
->> In order to calculate more accurate SCL high period count and low period
->> count for high speed mode, two hardware parameters IC_CAP_LOADING and
->> IC_CLK_FREQ_OPTIMIZATION must be considered together. Since there're no
->> registers controlliing these these two hardware parameters, users can
->> declare them in the device tree so that the driver can obtain them.
-> 
-> As long as DT schema (new properties) is accepted, this LGTM now,
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Hi Andi:
+
+Thank you for your support.
+
+Andi Shyti <andi.shyti@kernel.org> =E6=96=BC 2024=E5=B9=B410=E6=9C=882=E6=
+=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=884:34=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Hi Tyrone,
+>
+> > Tyrone Ting (5):
+> >   i2c: npcm: correct the read/write operation procedure
+> >   i2c: npcm: use a software flag to indicate a BER condition
+>
+> I merged just these two patches to i2c/i2c-host.
+>
+> Thanks,
+> Andi
+>
+> >   i2c: npcm: Modify timeout evaluation mechanism
+> >   i2c: npcm: Modify the client address assignment
+> >   i2c: npcm: use i2c frequency table
+
+Have a nice day.
+
+Regards,
+Tyrone
 
