@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-7230-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7231-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDC2A991518
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Oct 2024 09:37:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4486A9915A1
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Oct 2024 12:01:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E17BA1C21E12
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Oct 2024 07:37:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CD6C1C21293
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Oct 2024 10:01:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1CE713C8E8;
-	Sat,  5 Oct 2024 07:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14909145B10;
+	Sat,  5 Oct 2024 10:01:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i9627oLe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eTREWfp8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F208113B5B4;
-	Sat,  5 Oct 2024 07:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435A912E1CD;
+	Sat,  5 Oct 2024 10:01:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728113828; cv=none; b=PUJniP3JM65XYtrJe8SU0K7PQFqLq07Yw+uRyTbp2o5Ja2osU3hdnGBBNmQTl/HqydRqFj9xVQliNU75V7RSLywL1FoUEOVGnfgkW8OMVM6C765YrsVTBZeIWxC+dOuGOm0nEY8nmUq6domRYemIJH4fQy8/aHND+Oq8DKMqjgI=
+	t=1728122470; cv=none; b=nr6/8yK13Rd6QByL8qWZmbpwCvAUXJK5q8mWzhKNuKWU7ojMX3ZoTHiSgc1173AGf490t76Df3Q4tTDJguUWCEcxuzbVAzNRELKkksBXVlq6b4fxjZepGGpWtX0Drts3MLR3ZyIEHxxm4QcIIuN3FSH1D2UPDhd7o1O9gOqQqqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728113828; c=relaxed/simple;
-	bh=u6WMt7NaLIFTr5THXasDszPWd+K083tVONyzoKZD91Q=;
+	s=arc-20240116; t=1728122470; c=relaxed/simple;
+	bh=AS66JIPtXx2sZQ/smwiZJMTI3t0JMMag9/KeDzC1/38=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IWs+raw2FQUbGr7yoV3rpvdX6kAv283Iy9K5n/ndl/RDRWjixR9n0Z9eUsZeErWS7/PsCY3lotOGcUUfae9m7ny2YjozVFtLOMs7n4U1w0WO/xAvZLvH2E6eu3UZv/Pj0w43BuSBAMp/Erfy2mXLfxejNiBOyPGFM01f+5Isa0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i9627oLe; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=cb4qEtH2IuV1pdqMe6itXOkeG5ulbMts/rqa+9DrVZc2oYAb9HXkCphStg5bDviIp/h2xV+ranAcJTr/bK3wvutd2b8+zUAGqzAzKs0iSq6lqwgSoo6tedv66MLXrDzvDH5CouR6LXI8HBHp+FcLwg4lc8O0fzWjb2NrWECeHdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eTREWfp8; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728113827; x=1759649827;
+  t=1728122470; x=1759658470;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=u6WMt7NaLIFTr5THXasDszPWd+K083tVONyzoKZD91Q=;
-  b=i9627oLeAM1CpzjoP+Aij3KeD3AArECDUxp/wzpZbx94L8LT5neDBtRu
-   +kg04R91IV/e8IhizJCYAPIG5NgSAQTrVirsZ95xetEMDXFIPiIsYkFTk
-   0j4gohhaAu84TWLiWsBsgL+S7q4PZjKrDk3rQZy0FR4qhsOl+295nKJfY
-   M1QCktpjm+VA9YnUMoxkf3+utI6oys2Ojt620hXQ70CiLF/FqyPIuLM59
-   Hc7BJ9PSt3yaG+4WJoY72WPz0mzpnwkOtcbH7YAoDQbehFn+JWvuDMAh4
-   GKJZSxjd6ncRYB+EWuHRu4wXx3lK5DZpsKVKUcrVBl+deepMlqyAzpGD8
-   A==;
-X-CSE-ConnectionGUID: idA/LnU8Ry2z3bZoIylOZA==
-X-CSE-MsgGUID: EFiOd8qzTdqdNyd8NeWi4w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="31218606"
-X-IronPort-AV: E=Sophos;i="6.11,179,1725346800"; 
-   d="scan'208";a="31218606"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 00:37:06 -0700
-X-CSE-ConnectionGUID: v7tGEJ1EQsSmbuMbbEYZGg==
-X-CSE-MsgGUID: i2WP+xpVR8S+46CU4OAu8A==
+  bh=AS66JIPtXx2sZQ/smwiZJMTI3t0JMMag9/KeDzC1/38=;
+  b=eTREWfp8ffoJalNeTcPi7N+Vtc7naPckGIlksC8ce0GUaOu8VeDsEbS3
+   c7Dt3Zr3TdR+hvEKXzZK7L7FA5NGGLacqc1pvW+dCPrcvO//skOnOktil
+   7pe61WG/4o7qmjMkqptcdR0Y0RTYHZvs+uFqMdMPfMI0UfjwOPVM185dX
+   vbXDVFJ+x8gDzvNzGylNIdlAwP/U8vIvzkWG4jicGcqW4tmFmKjTgclhu
+   ugB5LxPwtYDT9Vmh2ng72J2tt/wpwOtxyk0fk/eC9uvrmTVgFS2akSIPv
+   n4uxqNf4XUAhG1H3q0tTuNpA29lwSOg88fJNjWbb21nWrfz1PK9NYftJT
+   Q==;
+X-CSE-ConnectionGUID: y8Ae4vbfTV2owCj1WHS8kg==
+X-CSE-MsgGUID: KA9Mv/Q2RHWi801Q0n5O0A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27426130"
+X-IronPort-AV: E=Sophos;i="6.11,180,1725346800"; 
+   d="scan'208";a="27426130"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 03:01:10 -0700
+X-CSE-ConnectionGUID: qc9AevAoQe6hbVVwa7kNtw==
+X-CSE-MsgGUID: gqkgz86BSNeOu8NTBwAbZw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,179,1725346800"; 
-   d="scan'208";a="79892116"
+X-IronPort-AV: E=Sophos;i="6.11,180,1725346800"; 
+   d="scan'208";a="105707403"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 05 Oct 2024 00:37:02 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 05 Oct 2024 03:01:05 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1swzLX-0002k8-2H;
-	Sat, 05 Oct 2024 07:36:59 +0000
-Date: Sat, 5 Oct 2024 15:36:16 +0800
+	id 1sx1ax-0002ps-0H;
+	Sat, 05 Oct 2024 10:01:03 +0000
+Date: Sat, 5 Oct 2024 18:00:52 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ryan Chen <ryan_chen@aspeedtech.com>, brendan.higgins@linux.dev,
 	benh@kernel.crashing.org, joel@jms.id.au, andi.shyti@kernel.org,
@@ -72,10 +72,10 @@ To: Ryan Chen <ryan_chen@aspeedtech.com>, brendan.higgins@linux.dev,
 	openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
 	linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: Re: [PATCH v14 2/3] i2c: aspeed: support AST2600 i2c new register
  mode driver
-Message-ID: <202410051547.vOL3qMOc-lkp@intel.com>
+Message-ID: <202410051759.bRIS387l-lkp@intel.com>
 References: <20241002070213.1165263-3-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -101,33 +101,30 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Chen/dt-bindings-i2c
 base:   v6.11
 patch link:    https://lore.kernel.org/r/20241002070213.1165263-3-ryan_chen%40aspeedtech.com
 patch subject: [PATCH v14 2/3] i2c: aspeed: support AST2600 i2c new register mode driver
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20241005/202410051547.vOL3qMOc-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410051547.vOL3qMOc-lkp@intel.com/reproduce)
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241005/202410051759.bRIS387l-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410051759.bRIS387l-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410051547.vOL3qMOc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410051759.bRIS387l-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/i2c/busses/i2c-ast2600.c: In function 'ast2600_i2c_setup_buff_tx':
->> drivers/i2c/busses/i2c-ast2600.c:437:41: error: implicit declaration of function 'get_unaligned_le16'; did you mean 'get_unalign_ctl'? [-Wimplicit-function-declaration]
+>> drivers/i2c/busses/i2c-ast2600.c:437:6: error: call to undeclared function 'get_unaligned_le16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
      437 |                                         get_unaligned_le16(&msg->buf[i2c_bus->master_xfer_cnt + i]);
-         |                                         ^~~~~~~~~~~~~~~~~~
-         |                                         get_unalign_ctl
->> drivers/i2c/busses/i2c-ast2600.c:441:41: error: implicit declaration of function 'get_unaligned_le24'; did you mean 'get_unalign_ctl'? [-Wimplicit-function-declaration]
+         |                                         ^
+>> drivers/i2c/busses/i2c-ast2600.c:441:6: error: call to undeclared function 'get_unaligned_le24'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
      441 |                                         get_unaligned_le24(&msg->buf[i2c_bus->master_xfer_cnt + i]);
-         |                                         ^~~~~~~~~~~~~~~~~~
-         |                                         get_unalign_ctl
->> drivers/i2c/busses/i2c-ast2600.c:445:41: error: implicit declaration of function 'get_unaligned_le32'; did you mean 'get_unalign_ctl'? [-Wimplicit-function-declaration]
+         |                                         ^
+>> drivers/i2c/busses/i2c-ast2600.c:445:6: error: call to undeclared function 'get_unaligned_le32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
      445 |                                         get_unaligned_le32(&msg->buf[i2c_bus->master_xfer_cnt + i]);
-         |                                         ^~~~~~~~~~~~~~~~~~
-         |                                         get_unalign_ctl
+         |                                         ^
+   3 errors generated.
 
 
-vim +437 drivers/i2c/busses/i2c-ast2600.c
+vim +/get_unaligned_le16 +437 drivers/i2c/busses/i2c-ast2600.c
 
    405	
    406	static int ast2600_i2c_setup_buff_tx(u32 cmd, struct ast2600_i2c_bus *i2c_bus)
