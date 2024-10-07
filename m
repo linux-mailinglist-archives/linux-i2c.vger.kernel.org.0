@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-7242-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7243-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 209A9993873
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Oct 2024 22:43:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B5D993879
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Oct 2024 22:44:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B6BD1F234E2
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Oct 2024 20:43:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D51F1C239B1
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Oct 2024 20:44:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB7D1DE3D6;
-	Mon,  7 Oct 2024 20:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC541DE4E9;
+	Mon,  7 Oct 2024 20:44:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XoKyYvaT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g22QbPV3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672B881727
-	for <linux-i2c@vger.kernel.org>; Mon,  7 Oct 2024 20:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DEA81727
+	for <linux-i2c@vger.kernel.org>; Mon,  7 Oct 2024 20:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728333833; cv=none; b=YawyqA6j+tQE2amWNozlcCDpVu3L6afsQP33ZThWmZTEpcupne3uyfqyvSVoIX5ysthdFHdPsqYR53JjFUxMmWTFsIeeCwrMQMYUtKEfEuZ+FED63zQnrVgrp7kFXUv4UCMrRajHE6dd7CwtedCvSsjLhj3LRgiinmtTO3kVbM4=
+	t=1728333876; cv=none; b=GOy98s5AZ5+f78HWR1x8kmzYrL6sOlewv0DU1xzSo3VTuCe0sXEWPqAaGXLadJGCx7T27DVjv9zahKo077TlnRT+e+nFGexIB3h5rE4+AuHxw9xRDh6Ao4CyGbjmf7ZqtQWhChXQR2I6tuIwliOXsn7fuzefLgTtJEMP6jSmrro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728333833; c=relaxed/simple;
-	bh=99gsGzqJJE1bjx67o2Zl7rDshU+G/GEb4EXbBWu7RRI=;
+	s=arc-20240116; t=1728333876; c=relaxed/simple;
+	bh=rxHL/GSi1Slyb63/jsDjVM/mi7sUWM6QjPgR11NbX60=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=k3LvSUe9b+5kFUfxS20OzuYkhnjw1KiyJcSH7FWeqxvqe37C4DyO77bMfnzWBjFa5lgNwxQ1LK9a9ObSorYXcY3osZFGpr93tMwm6aSCTtJcTt2Fiu33btPebTdNs+tuaSEspy0UbGkwPI+llQshL5TqoM1kxxRJPnbHyThPgXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XoKyYvaT; arc=none smtp.client-ip=209.85.218.46
+	 In-Reply-To:Content-Type; b=Oc4KIFMqh9jOQtSXy49WSGTuzPO5A7WsoITvPMFb58nOW07+Zvw+5CAQ1RbQw0bg7VwW5uBUhVUtY9FnUSzaD5oFuHQ2CmalY/aYD9fwZEgQAuwelcrkfb2KeMqI6H3UfIn5z/TUrGzHQ9gN2aXdn+LbBdK72dReAyRfWzlSEmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g22QbPV3; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a99422c796eso317115566b.3
-        for <linux-i2c@vger.kernel.org>; Mon, 07 Oct 2024 13:43:51 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5c42f406e29so6520073a12.2
+        for <linux-i2c@vger.kernel.org>; Mon, 07 Oct 2024 13:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728333830; x=1728938630; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728333873; x=1728938673; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=q9yv0HQnxP8/P85nI8nI0SNcC4yLuSSMH4gvNt5maV8=;
-        b=XoKyYvaTfhJAxdLIteUmQKxGwnA4eMDwLBvVbJdrrPKugDYzu53KO9RxxhiUMQN1pW
-         VWKVgSKEwwSZDt5ornRqMCuPWnJpWgbOw/qKmH28hWwmM4ArO08fXcGAAr30ZsIovs7v
-         zY9k4nfpmMEQC+BlQU2+o55IRJb+xgWQgDifq7kPTZkWJFPEtxHrGfSALZJrR1xJQu62
-         5PPQTyG3YzdKPFkPvL2y0fDDITKeJU0/mao2BeAT8ObiO25tlrKmFyk5Y83AOkUAU0nB
-         cQvlUr4smpFuWeapg5wMvbY5N5ehOFcjjzAo9OVSZ7WW/exMQIvGH9EdcY8Z1aXKwN3M
-         pNyA==
+        bh=3zLB0e6xuD8xqifL7PBE1zqB9Ybu7y5VLmKUW2TkKv0=;
+        b=g22QbPV3LI0WveIyhDxGe6AaPrrB19+o9O7j2efUDwCbWvc2ZF+8B41QN997UcesEn
+         JIwJ2YQHjmfXyNiBRc64zPWnDi7atFysMHO+EAy2jCNLHurPcSRq/MYD+4COUozQqC9R
+         9diQEYFWlUC5jg1jSxzhBnbQA12SPNK5y27Vxm0cjWoAiFjf2y8jVSq/trW2Rucy5+qH
+         M9ztoy8aZquVTTFQwwTaTOGMy3VINnXucUd6UNC9Uvna91o3UPxXomSbHyYiQ+L/5M2X
+         g/SLB7aRRiOJMj8I4f8VHwo8CPDEH7pCESyuvJUJxV4YgxjDhYff37MS5sgrbTq73ckg
+         SEFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728333830; x=1728938630;
+        d=1e100.net; s=20230601; t=1728333873; x=1728938673;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=q9yv0HQnxP8/P85nI8nI0SNcC4yLuSSMH4gvNt5maV8=;
-        b=i5YLQ+QpaHZ7mic99vXrOQf3IYIlwoJnYTuKKsAtqNUN5sAyd9ocgkzvt+kiPP7DI+
-         AbbFkAzDl+lMgDiJw9u0tdtSFKTWvlX1yXA5htHQCDTR8+Mbsiw5wulElVRo6v97N1c9
-         Qq2XvcVe3Wq4uuiwsk8vu6u9XLaJT9s0++jHsuq5oj1qPLuwXd4T/O0V1XvIJHwDcC5D
-         PAXdsT9o2no6+whdUHpo4t/tUmhM1jlNGIxKpnqQsytMm8xp2P6v3G498cPxvxxIiK87
-         n/yRnCHskNDOCqSTGdJ5A6nb1RoZCVc6YJ023bpAEdLCz2r5BcHFk9L21DGBQLCm+7dJ
-         szlg==
-X-Gm-Message-State: AOJu0Yzl4Bt/YUAB4bGmFdV6SLk+pcfbSBHbJFD1DauYwHmzHhG7C8XD
-	V4GUaxiXNb8RIFw+T3O0V585jeqiDqLV7YoOpXKlDVDc1/he/V7M
-X-Google-Smtp-Source: AGHT+IHczTtwESljpij9yrDdRNJpWlPrQ2uRJhCQH4xFEbptkJ/tpcSJciQ464I/0I/HnAJkHZWK/Q==
-X-Received: by 2002:a17:906:7956:b0:a99:463c:ea55 with SMTP id a640c23a62f3a-a99463cebe2mr745045866b.24.1728333829239;
-        Mon, 07 Oct 2024 13:43:49 -0700 (PDT)
+        bh=3zLB0e6xuD8xqifL7PBE1zqB9Ybu7y5VLmKUW2TkKv0=;
+        b=kujiDs2O0lMrWebt8/8awdVNVN3SSAMXGFAJnwxJxaDddREuCZ55tDCCQTnoz4cjVa
+         WUqUmxE7e053+veWe52nDm+uC6Ih3EvLKZMr8VBX3s6W6SHyCbgkrhvgAeJG/Cu2g4ii
+         2ffXLn7TUs5Q9U1jKwweyJ98LvBOI4v5D3p+qzVGPQrQJhZlsUPdDV+7mAOLFR5nsH7e
+         chof57+pQwoRQLipUo0anM8aFUHKreo8j2tIfYM87hnE2q9tziF88jW4ub/gJkYokNbw
+         FYvVU/3zypxbQNXfJ4xmMhvyt0vBjlx1G7/IANLi+L0I686/AgtLYNJaAN+cPkts76cx
+         uH/g==
+X-Gm-Message-State: AOJu0YwqL4/wjBon05FP/dQAsFGRwZcDMqFLtTBPQ/1NBeA8a7yD4VU9
+	1PUlllqTf05CauJN/+v+Sw+1VClScfc+Y9kd92L+3GKlGSsDOmrDmPUfug==
+X-Google-Smtp-Source: AGHT+IHm0LXTIaxudycLhWlJkZkdFbZ0d0JjXT9WyKfadNeZ0E24Ci4ipBSZVo12pKDQ4V68K8FHWA==
+X-Received: by 2002:a17:907:96aa:b0:a99:497f:317 with SMTP id a640c23a62f3a-a99497f0634mr756077866b.62.1728333872157;
+        Mon, 07 Oct 2024 13:44:32 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:a12d:4f00:a884:c611:9e1:3345? (dynamic-2a02-3100-a12d-4f00-a884-c611-09e1-3345.310.pool.telefonica.de. [2a02:3100:a12d:4f00:a884:c611:9e1:3345])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a994254846dsm325534866b.131.2024.10.07.13.43.47
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a9940f613c2sm333201166b.4.2024.10.07.13.44.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Oct 2024 13:43:48 -0700 (PDT)
-Message-ID: <1aab1846-f5a4-4720-a11e-8afef36fd35d@gmail.com>
-Date: Mon, 7 Oct 2024 22:43:47 +0200
+        Mon, 07 Oct 2024 13:44:31 -0700 (PDT)
+Message-ID: <9b9e27b7-67f9-4343-8a61-3ff40e56b245@gmail.com>
+Date: Mon, 7 Oct 2024 22:44:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,7 +76,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 1/3] i2c: i801: Cosmetic improvements
+Subject: [PATCH 2/3] i2c: i801: Switch to iomapped register access
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
@@ -129,173 +129,493 @@ In-Reply-To: <10d7eca3-0a2d-4db4-8498-e5b28bbf9261@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-- Use pci_err et al instead of dev_err to simplify the code
-- use format %pr to print resource
+Switch to iomapped rgeister access as a prerequisite for adding
+support for MMIO register access.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 51 +++++++++++++++--------------------
- 1 file changed, 21 insertions(+), 30 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 147 +++++++++++++++++-----------------
+ 1 file changed, 73 insertions(+), 74 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 75dab01d4..2a2a0e3e7 100644
+index 2a2a0e3e7..4e1b1c825 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -412,16 +412,14 @@ static int i801_check_post(struct i801_priv *priv, int status)
+@@ -276,7 +276,7 @@ struct i801_mux_config {
+ 
+ struct i801_priv {
+ 	struct i2c_adapter adapter;
+-	unsigned long smba;
++	void __iomem *smba;
+ 	unsigned char original_hstcfg;
+ 	unsigned char original_hstcnt;
+ 	unsigned char original_slvcmd;
+@@ -339,7 +339,7 @@ MODULE_PARM_DESC(disable_features, "Disable selected driver features:\n"
+ 
+ static int i801_get_block_len(struct i801_priv *priv)
+ {
+-	u8 len = inb_p(SMBHSTDAT0(priv));
++	u8 len = ioread8(SMBHSTDAT0(priv));
+ 
+ 	if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
+ 		pci_err(priv->pci_dev, "Illegal SMBus block read size %u\n", len);
+@@ -356,9 +356,9 @@ static int i801_check_and_clear_pec_error(struct i801_priv *priv)
+ 	if (!(priv->features & FEATURE_SMBUS_PEC))
+ 		return 0;
+ 
+-	status = inb_p(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE;
++	status = ioread8(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE;
+ 	if (status) {
+-		outb_p(status, SMBAUXSTS(priv));
++		iowrite8(status, SMBAUXSTS(priv));
+ 		return -EBADMSG;
+ 	}
+ 
+@@ -371,7 +371,7 @@ static int i801_check_pre(struct i801_priv *priv)
+ {
+ 	int status, result;
+ 
+-	status = inb_p(SMBHSTSTS(priv));
++	status = ioread8(SMBHSTSTS(priv));
+ 	if (status & SMBHSTSTS_HOST_BUSY) {
+ 		pci_err(priv->pci_dev, "SMBus is busy, can't use it!\n");
+ 		return -EBUSY;
+@@ -380,7 +380,7 @@ static int i801_check_pre(struct i801_priv *priv)
+ 	status &= STATUS_FLAGS;
+ 	if (status) {
+ 		pci_dbg(priv->pci_dev, "Clearing status flags (%02x)\n", status);
+-		outb_p(status, SMBHSTSTS(priv));
++		iowrite8(status, SMBHSTSTS(priv));
+ 	}
+ 
+ 	/*
+@@ -406,12 +406,12 @@ static int i801_check_post(struct i801_priv *priv, int status)
+ 	 */
+ 	if (unlikely(status < 0)) {
+ 		/* try to stop the current command */
+-		outb_p(SMBHSTCNT_KILL, SMBHSTCNT(priv));
++		iowrite8(SMBHSTCNT_KILL, SMBHSTCNT(priv));
+ 		usleep_range(1000, 2000);
+-		outb_p(0, SMBHSTCNT(priv));
++		iowrite8(0, SMBHSTCNT(priv));
  
  		/* Check if it worked */
- 		status = inb_p(SMBHSTSTS(priv));
--		if ((status & SMBHSTSTS_HOST_BUSY) ||
--		    !(status & SMBHSTSTS_FAILED))
--			dev_dbg(&priv->pci_dev->dev,
--				"Failed terminating the transaction\n");
-+		if ((status & SMBHSTSTS_HOST_BUSY) || !(status & SMBHSTSTS_FAILED))
-+			pci_dbg(priv->pci_dev, "Failed terminating the transaction\n");
+-		status = inb_p(SMBHSTSTS(priv));
++		status = ioread8(SMBHSTSTS(priv));
+ 		if ((status & SMBHSTSTS_HOST_BUSY) || !(status & SMBHSTSTS_FAILED))
+ 			pci_dbg(priv->pci_dev, "Failed terminating the transaction\n");
  		return -ETIMEDOUT;
+@@ -461,7 +461,7 @@ static int i801_wait_intr(struct i801_priv *priv)
+ 
+ 	do {
+ 		usleep_range(250, 500);
+-		status = inb_p(SMBHSTSTS(priv));
++		status = ioread8(SMBHSTSTS(priv));
+ 		busy = status & SMBHSTSTS_HOST_BUSY;
+ 		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
+ 		if (!busy && status)
+@@ -479,7 +479,7 @@ static int i801_wait_byte_done(struct i801_priv *priv)
+ 
+ 	do {
+ 		usleep_range(250, 500);
+-		status = inb_p(SMBHSTSTS(priv));
++		status = ioread8(SMBHSTSTS(priv));
+ 		if (status & (STATUS_ERROR_FLAGS | SMBHSTSTS_BYTE_DONE))
+ 			return status & STATUS_ERROR_FLAGS;
+ 	} while (time_is_after_eq_jiffies(timeout));
+@@ -494,13 +494,13 @@ static int i801_transaction(struct i801_priv *priv, int xact)
+ 
+ 	if (priv->features & FEATURE_IRQ) {
+ 		reinit_completion(&priv->done);
+-		outb_p(xact | SMBHSTCNT_INTREN | SMBHSTCNT_START,
++		iowrite8(xact | SMBHSTCNT_INTREN | SMBHSTCNT_START,
+ 		       SMBHSTCNT(priv));
+ 		result = wait_for_completion_timeout(&priv->done, adap->timeout);
+ 		return result ? priv->status : -ETIMEDOUT;
  	}
  
- 	if (status & SMBHSTSTS_FAILED) {
- 		result = -EIO;
--		dev_err(&priv->pci_dev->dev, "Transaction failed\n");
-+		pci_err(priv->pci_dev, "Transaction failed\n");
- 	}
- 	if (status & SMBHSTSTS_DEV_ERR) {
- 		/*
-@@ -449,7 +447,7 @@ static int i801_check_post(struct i801_priv *priv, int status)
- 	}
- 	if (status & SMBHSTSTS_BUS_ERR) {
- 		result = -EAGAIN;
--		dev_dbg(&priv->pci_dev->dev, "Lost arbitration\n");
-+		pci_dbg(priv->pci_dev, "Lost arbitration\n");
+-	outb_p(xact | SMBHSTCNT_START, SMBHSTCNT(priv));
++	iowrite8(xact | SMBHSTCNT_START, SMBHSTCNT(priv));
+ 
+ 	return i801_wait_intr(priv);
+ }
+@@ -509,7 +509,7 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
+ 					   union i2c_smbus_data *data,
+ 					   char read_write, int command)
+ {
+-	int i, len, status, xact;
++	int len, status, xact;
+ 
+ 	switch (command) {
+ 	case I2C_SMBUS_BLOCK_PROC_CALL:
+@@ -523,14 +523,13 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
  	}
  
- 	return result;
-@@ -578,8 +576,7 @@ static void i801_isr_byte_done(struct i801_priv *priv)
+ 	/* Set block buffer mode */
+-	outb_p(inb_p(SMBAUXCTL(priv)) | SMBAUXCTL_E32B, SMBAUXCTL(priv));
++	iowrite8(ioread8(SMBAUXCTL(priv)) | SMBAUXCTL_E32B, SMBAUXCTL(priv));
+ 
+ 	if (read_write == I2C_SMBUS_WRITE) {
+ 		len = data->block[0];
+-		outb_p(len, SMBHSTDAT0(priv));
+-		inb_p(SMBHSTCNT(priv));	/* reset the data buffer index */
+-		for (i = 0; i < len; i++)
+-			outb_p(data->block[i+1], SMBBLKDAT(priv));
++		iowrite8(len, SMBHSTDAT0(priv));
++		ioread8(SMBHSTCNT(priv));	/* reset the data buffer index */
++		iowrite8_rep(SMBBLKDAT(priv), data->block + 1, len);
+ 	}
+ 
+ 	status = i801_transaction(priv, xact);
+@@ -546,12 +545,11 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
+ 		}
+ 
+ 		data->block[0] = len;
+-		inb_p(SMBHSTCNT(priv));	/* reset the data buffer index */
+-		for (i = 0; i < len; i++)
+-			data->block[i + 1] = inb_p(SMBBLKDAT(priv));
++		ioread8(SMBHSTCNT(priv));	/* reset the data buffer index */
++		ioread8_rep(SMBBLKDAT(priv), data->block + 1, len);
+ 	}
+ out:
+-	outb_p(inb_p(SMBAUXCTL(priv)) & ~SMBAUXCTL_E32B, SMBAUXCTL(priv));
++	iowrite8(ioread8(SMBAUXCTL(priv)) & ~SMBAUXCTL_E32B, SMBAUXCTL(priv));
+ 	return status;
+ }
+ 
+@@ -574,17 +572,17 @@ static void i801_isr_byte_done(struct i801_priv *priv)
+ 
+ 		/* Read next byte */
  		if (priv->count < priv->len)
- 			priv->data[priv->count++] = inb(SMBBLKDAT(priv));
+-			priv->data[priv->count++] = inb(SMBBLKDAT(priv));
++			priv->data[priv->count++] = ioread8(SMBBLKDAT(priv));
  		else
--			dev_dbg(&priv->pci_dev->dev,
--				"Discarding extra byte on block read\n");
-+			pci_dbg(priv->pci_dev, "Discarding extra byte on block read\n");
+ 			pci_dbg(priv->pci_dev, "Discarding extra byte on block read\n");
  
  		/* Set LAST_BYTE for last byte of read transaction */
  		if (priv->count == priv->len - 1)
-@@ -1271,7 +1268,7 @@ static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
+-			outb_p(priv->cmd | SMBHSTCNT_LAST_BYTE,
++			iowrite8(priv->cmd | SMBHSTCNT_LAST_BYTE,
+ 			       SMBHSTCNT(priv));
+ 	} else if (priv->count < priv->len - 1) {
+ 		/* Write next byte, except for IRQ after last byte */
+-		outb_p(priv->data[++priv->count], SMBBLKDAT(priv));
++		iowrite8(priv->data[++priv->count], SMBBLKDAT(priv));
  	}
- 
- 	if (i == ARRAY_SIZE(dell_lis3lv02d_devices)) {
--		dev_warn(&priv->pci_dev->dev,
-+		pci_warn(priv->pci_dev,
- 			 "Accelerometer lis3lv02d is present on SMBus but its"
- 			 " address is unknown, skipping registration\n");
- 		return;
-@@ -1562,7 +1559,7 @@ static void i801_add_tco(struct i801_priv *priv)
- 		priv->tco_pdev = i801_add_tco_spt(pci_dev, tco_res);
- 
- 	if (IS_ERR(priv->tco_pdev))
--		dev_warn(&pci_dev->dev, "failed to create iTCO device\n");
-+		pci_warn(pci_dev, "failed to create iTCO device\n");
  }
  
- #ifdef CONFIG_ACPI
-@@ -1591,8 +1588,8 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
- 	if (!priv->acpi_reserved && i801_acpi_is_smbus_ioport(priv, address)) {
- 		priv->acpi_reserved = true;
+@@ -592,7 +590,7 @@ static irqreturn_t i801_host_notify_isr(struct i801_priv *priv)
+ {
+ 	unsigned short addr;
  
--		dev_warn(&pdev->dev, "BIOS is accessing SMBus registers\n");
--		dev_warn(&pdev->dev, "Driver SMBus register access inhibited\n");
-+		pci_warn(pdev, "BIOS is accessing SMBus registers\n");
-+		pci_warn(pdev, "Driver SMBus register access inhibited\n");
+-	addr = inb_p(SMBNTFDADD(priv)) >> 1;
++	addr = ioread8(SMBNTFDADD(priv)) >> 1;
  
- 		/*
- 		 * BIOS is accessing the host controller so prevent it from
-@@ -1673,8 +1670,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	/* Disable features on user request */
- 	for (i = 0; i < ARRAY_SIZE(i801_feature_names); i++) {
- 		if (priv->features & disable_features & (1 << i))
--			dev_notice(&dev->dev, "%s disabled by user\n",
--				   i801_feature_names[i]);
-+			pci_notice(dev, "%s disabled by user\n", i801_feature_names[i]);
+ 	/*
+ 	 * With the tested platforms, reading SMBNTFDDAT (22 + (p)->smba)
+@@ -602,7 +600,7 @@ static irqreturn_t i801_host_notify_isr(struct i801_priv *priv)
+ 	i2c_handle_smbus_host_notify(&priv->adapter, addr);
+ 
+ 	/* clear Host Notify bit and return */
+-	outb_p(SMBSLVSTS_HST_NTFY_STS, SMBSLVSTS(priv));
++	iowrite8(SMBSLVSTS_HST_NTFY_STS, SMBSLVSTS(priv));
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -633,12 +631,12 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ 
+ 	if (priv->features & FEATURE_HOST_NOTIFY) {
+-		status = inb_p(SMBSLVSTS(priv));
++		status = ioread8(SMBSLVSTS(priv));
+ 		if (status & SMBSLVSTS_HST_NTFY_STS)
+ 			return i801_host_notify_isr(priv);
  	}
- 	priv->features &= ~disable_features;
  
-@@ -1684,8 +1680,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+-	status = inb_p(SMBHSTSTS(priv));
++	status = ioread8(SMBHSTSTS(priv));
+ 	if ((status & (SMBHSTSTS_BYTE_DONE | STATUS_ERROR_FLAGS)) == SMBHSTSTS_BYTE_DONE)
+ 		i801_isr_byte_done(priv);
  
- 	err = pcim_enable_device(dev);
- 	if (err) {
--		dev_err(&dev->dev, "Failed to enable SMBus PCI device (%d)\n",
--			err);
-+		pci_err(dev, "Failed to enable SMBus PCI device (%d)\n", err);
- 		return err;
+@@ -648,7 +646,7 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
+ 	 * so clear it always when the status is set.
+ 	 */
+ 	status &= STATUS_FLAGS | SMBHSTSTS_SMBALERT_STS;
+-	outb_p(status, SMBHSTSTS(priv));
++	iowrite8(status, SMBHSTSTS(priv));
+ 
+ 	status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
+ 	if (status) {
+@@ -680,8 +678,8 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 	len = data->block[0];
+ 
+ 	if (read_write == I2C_SMBUS_WRITE) {
+-		outb_p(len, SMBHSTDAT0(priv));
+-		outb_p(data->block[1], SMBBLKDAT(priv));
++		iowrite8(len, SMBHSTDAT0(priv));
++		iowrite8(data->block[1], SMBBLKDAT(priv));
  	}
+ 
+ 	if (command == I2C_SMBUS_I2C_BLOCK_DATA &&
+@@ -700,14 +698,14 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 		priv->data = &data->block[1];
+ 
+ 		reinit_completion(&priv->done);
+-		outb_p(priv->cmd | SMBHSTCNT_START, SMBHSTCNT(priv));
++		iowrite8(priv->cmd | SMBHSTCNT_START, SMBHSTCNT(priv));
+ 		result = wait_for_completion_timeout(&priv->done, adap->timeout);
+ 		return result ? priv->status : -ETIMEDOUT;
+ 	}
+ 
+ 	if (len == 1 && read_write == I2C_SMBUS_READ)
+ 		smbcmd |= SMBHSTCNT_LAST_BYTE;
+-	outb_p(smbcmd | SMBHSTCNT_START, SMBHSTCNT(priv));
++	iowrite8(smbcmd | SMBHSTCNT_START, SMBHSTCNT(priv));
+ 
+ 	for (i = 1; i <= len; i++) {
+ 		status = i801_wait_byte_done(priv);
+@@ -723,27 +721,27 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 			len = i801_get_block_len(priv);
+ 			if (len < 0) {
+ 				/* Recover */
+-				while (inb_p(SMBHSTSTS(priv)) &
++				while (ioread8(SMBHSTSTS(priv)) &
+ 				       SMBHSTSTS_HOST_BUSY)
+-					outb_p(SMBHSTSTS_BYTE_DONE,
++					iowrite8(SMBHSTSTS_BYTE_DONE,
+ 					       SMBHSTSTS(priv));
+-				outb_p(SMBHSTSTS_INTR, SMBHSTSTS(priv));
++				iowrite8(SMBHSTSTS_INTR, SMBHSTSTS(priv));
+ 				return -EPROTO;
+ 			}
+ 			data->block[0] = len;
+ 		}
+ 
+ 		if (read_write == I2C_SMBUS_READ) {
+-			data->block[i] = inb_p(SMBBLKDAT(priv));
++			data->block[i] = ioread8(SMBBLKDAT(priv));
+ 			if (i == len - 1)
+-				outb_p(smbcmd | SMBHSTCNT_LAST_BYTE, SMBHSTCNT(priv));
++				iowrite8(smbcmd | SMBHSTCNT_LAST_BYTE, SMBHSTCNT(priv));
+ 		}
+ 
+ 		if (read_write == I2C_SMBUS_WRITE && i+1 <= len)
+-			outb_p(data->block[i+1], SMBBLKDAT(priv));
++			iowrite8(data->block[i+1], SMBBLKDAT(priv));
+ 
+ 		/* signals SMBBLKDAT ready */
+-		outb_p(SMBHSTSTS_BYTE_DONE, SMBHSTSTS(priv));
++		iowrite8(SMBHSTSTS_BYTE_DONE, SMBHSTSTS(priv));
+ 	}
+ 
+ 	return i801_wait_intr(priv);
+@@ -751,7 +749,7 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 
+ static void i801_set_hstadd(struct i801_priv *priv, u8 addr, char read_write)
+ {
+-	outb_p((addr << 1) | (read_write & 0x01), SMBHSTADD(priv));
++	iowrite8((addr << 1) | (read_write & 0x01), SMBHSTADD(priv));
+ }
+ 
+ /* Single value transaction function */
+@@ -768,30 +766,30 @@ static int i801_simple_transaction(struct i801_priv *priv, union i2c_smbus_data
+ 	case I2C_SMBUS_BYTE:
+ 		i801_set_hstadd(priv, addr, read_write);
+ 		if (read_write == I2C_SMBUS_WRITE)
+-			outb_p(hstcmd, SMBHSTCMD(priv));
++			iowrite8(hstcmd, SMBHSTCMD(priv));
+ 		xact = I801_BYTE;
+ 		break;
+ 	case I2C_SMBUS_BYTE_DATA:
+ 		i801_set_hstadd(priv, addr, read_write);
+ 		if (read_write == I2C_SMBUS_WRITE)
+-			outb_p(data->byte, SMBHSTDAT0(priv));
+-		outb_p(hstcmd, SMBHSTCMD(priv));
++			iowrite8(data->byte, SMBHSTDAT0(priv));
++		iowrite8(hstcmd, SMBHSTCMD(priv));
+ 		xact = I801_BYTE_DATA;
+ 		break;
+ 	case I2C_SMBUS_WORD_DATA:
+ 		i801_set_hstadd(priv, addr, read_write);
+ 		if (read_write == I2C_SMBUS_WRITE) {
+-			outb_p(data->word & 0xff, SMBHSTDAT0(priv));
+-			outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
++			iowrite8(data->word & 0xff, SMBHSTDAT0(priv));
++			iowrite8((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
+ 		}
+-		outb_p(hstcmd, SMBHSTCMD(priv));
++		iowrite8(hstcmd, SMBHSTCMD(priv));
+ 		xact = I801_WORD_DATA;
+ 		break;
+ 	case I2C_SMBUS_PROC_CALL:
+ 		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
+-		outb_p(data->word & 0xff, SMBHSTDAT0(priv));
+-		outb_p((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
+-		outb_p(hstcmd, SMBHSTCMD(priv));
++		iowrite8(data->word & 0xff, SMBHSTDAT0(priv));
++		iowrite8((data->word & 0xff00) >> 8, SMBHSTDAT1(priv));
++		iowrite8(hstcmd, SMBHSTCMD(priv));
+ 		read_write = I2C_SMBUS_READ;
+ 		xact = I801_PROC_CALL;
+ 		break;
+@@ -807,12 +805,12 @@ static int i801_simple_transaction(struct i801_priv *priv, union i2c_smbus_data
+ 	switch (command) {
+ 	case I2C_SMBUS_BYTE:
+ 	case I2C_SMBUS_BYTE_DATA:
+-		data->byte = inb_p(SMBHSTDAT0(priv));
++		data->byte = ioread8(SMBHSTDAT0(priv));
+ 		break;
+ 	case I2C_SMBUS_WORD_DATA:
+ 	case I2C_SMBUS_PROC_CALL:
+-		data->word = inb_p(SMBHSTDAT0(priv)) +
+-			     (inb_p(SMBHSTDAT1(priv)) << 8);
++		data->word = ioread8(SMBHSTDAT0(priv)) +
++			     (ioread8(SMBHSTDAT1(priv)) << 8);
+ 		break;
+ 	}
+ 
+@@ -833,7 +831,7 @@ static int i801_smbus_block_transaction(struct i801_priv *priv, union i2c_smbus_
+ 		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
+ 	else
+ 		i801_set_hstadd(priv, addr, read_write);
+-	outb_p(hstcmd, SMBHSTCMD(priv));
++	iowrite8(hstcmd, SMBHSTCMD(priv));
+ 
+ 	if (priv->features & FEATURE_BLOCK_BUFFER)
+ 		return i801_block_transaction_by_block(priv, data, read_write, command);
+@@ -859,9 +857,9 @@ static int i801_i2c_block_transaction(struct i801_priv *priv, union i2c_smbus_da
+ 
+ 	/* NB: page 240 of ICH5 datasheet shows that DATA1 is the cmd field when reading */
+ 	if (read_write == I2C_SMBUS_READ)
+-		outb_p(hstcmd, SMBHSTDAT1(priv));
++		iowrite8(hstcmd, SMBHSTDAT1(priv));
+ 	else
+-		outb_p(hstcmd, SMBHSTCMD(priv));
++		iowrite8(hstcmd, SMBHSTCMD(priv));
+ 
+ 	if (read_write == I2C_SMBUS_WRITE) {
+ 		/* set I2C_EN bit in configuration register */
+@@ -904,9 +902,9 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+ 		&& size != I2C_SMBUS_I2C_BLOCK_DATA;
+ 
+ 	if (hwpec)	/* enable/disable hardware PEC */
+-		outb_p(inb_p(SMBAUXCTL(priv)) | SMBAUXCTL_CRC, SMBAUXCTL(priv));
++		iowrite8(ioread8(SMBAUXCTL(priv)) | SMBAUXCTL_CRC, SMBAUXCTL(priv));
+ 	else
+-		outb_p(inb_p(SMBAUXCTL(priv)) & (~SMBAUXCTL_CRC),
++		iowrite8(ioread8(SMBAUXCTL(priv)) & (~SMBAUXCTL_CRC),
+ 		       SMBAUXCTL(priv));
+ 
+ 	if (size == I2C_SMBUS_BLOCK_DATA || size == I2C_SMBUS_BLOCK_PROC_CALL)
+@@ -922,13 +920,13 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+ 	 * time, so we forcibly disable it after every transaction.
+ 	 */
+ 	if (hwpec)
+-		outb_p(inb_p(SMBAUXCTL(priv)) & ~SMBAUXCTL_CRC, SMBAUXCTL(priv));
++		iowrite8(ioread8(SMBAUXCTL(priv)) & ~SMBAUXCTL_CRC, SMBAUXCTL(priv));
+ out:
+ 	/*
+ 	 * Unlock the SMBus device for use by BIOS/ACPI,
+ 	 * and clear status flags if not done already.
+ 	 */
+-	outb_p(SMBHSTSTS_INUSE_STS | STATUS_FLAGS, SMBHSTSTS(priv));
++	iowrite8(SMBHSTSTS_INUSE_STS | STATUS_FLAGS, SMBHSTSTS(priv));
+ 
+ 	pm_runtime_mark_last_busy(&priv->pci_dev->dev);
+ 	pm_runtime_put_autosuspend(&priv->pci_dev->dev);
+@@ -965,11 +963,11 @@ static void i801_enable_host_notify(struct i2c_adapter *adapter)
+ 	 * from the SMB_ALERT signal because the driver does not support
+ 	 * SMBus Alert.
+ 	 */
+-	outb_p(SMBSLVCMD_HST_NTFY_INTREN | SMBSLVCMD_SMBALERT_DISABLE |
++	iowrite8(SMBSLVCMD_HST_NTFY_INTREN | SMBSLVCMD_SMBALERT_DISABLE |
+ 	       priv->original_slvcmd, SMBSLVCMD(priv));
+ 
+ 	/* clear Host Notify bit to allow a new notification */
+-	outb_p(SMBSLVSTS_HST_NTFY_STS, SMBSLVSTS(priv));
++	iowrite8(SMBSLVSTS_HST_NTFY_STS, SMBSLVSTS(priv));
+ }
+ 
+ static void i801_disable_host_notify(struct i801_priv *priv)
+@@ -977,7 +975,7 @@ static void i801_disable_host_notify(struct i801_priv *priv)
+ 	if (!(priv->features & FEATURE_HOST_NOTIFY))
+ 		return;
+ 
+-	outb_p(priv->original_slvcmd, SMBSLVCMD(priv));
++	iowrite8(priv->original_slvcmd, SMBSLVCMD(priv));
+ }
+ 
+ static const struct i2c_algorithm smbus_algorithm = {
+@@ -1566,7 +1564,7 @@ static void i801_add_tco(struct i801_priv *priv)
+ static bool i801_acpi_is_smbus_ioport(const struct i801_priv *priv,
+ 				      acpi_physical_address address)
+ {
+-	return address >= priv->smba &&
++	return address >= pci_resource_start(priv->pci_dev, SMBBAR) &&
+ 	       address <= pci_resource_end(priv->pci_dev, SMBBAR);
+ }
+ 
+@@ -1643,7 +1641,7 @@ static void i801_setup_hstcfg(struct i801_priv *priv)
+ 
+ static void i801_restore_regs(struct i801_priv *priv)
+ {
+-	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
++	iowrite8(priv->original_hstcnt, SMBHSTCNT(priv));
+ 	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, priv->original_hstcfg);
+ }
+ 
+@@ -1686,8 +1684,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
  	pcim_pin_device(dev);
-@@ -1693,8 +1688,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 
  	/* Determine the address of the SMBus area */
- 	priv->smba = pci_resource_start(dev, SMBBAR);
- 	if (!priv->smba) {
--		dev_err(&dev->dev,
--			"SMBus base address uninitialized, upgrade BIOS\n");
-+		pci_err(dev, "SMBus base address uninitialized, upgrade BIOS\n");
+-	priv->smba = pci_resource_start(dev, SMBBAR);
+-	if (!priv->smba) {
++	if (!pci_resource_start(dev, SMBBAR)) {
+ 		pci_err(dev, "SMBus base address uninitialized, upgrade BIOS\n");
  		return -ENODEV;
  	}
- 
-@@ -1703,26 +1697,24 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 
- 	err = pcim_iomap_regions(dev, 1 << SMBBAR, DRV_NAME);
- 	if (err) {
--		dev_err(&dev->dev,
--			"Failed to request SMBus region 0x%lx-0x%Lx\n",
--			priv->smba,
--			(unsigned long long)pci_resource_end(dev, SMBBAR));
-+		pci_err(dev, "Failed to request SMBus region %pr\n",
-+			pci_resource_n(dev, SMBBAR));
- 		i801_acpi_remove(priv);
+@@ -1703,6 +1700,8 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
  		return err;
  	}
  
--	pci_read_config_byte(priv->pci_dev, SMBHSTCFG, &priv->original_hstcfg);
-+	pci_read_config_byte(dev, SMBHSTCFG, &priv->original_hstcfg);
++	priv->smba = pcim_iomap_table(dev)[SMBBAR];
++
+ 	pci_read_config_byte(dev, SMBHSTCFG, &priv->original_hstcfg);
  	i801_setup_hstcfg(priv);
  	if (!(priv->original_hstcfg & SMBHSTCFG_HST_EN))
--		dev_info(&dev->dev, "Enabling SMBus device\n");
-+		pci_info(dev, "Enabling SMBus device\n");
- 
- 	if (priv->original_hstcfg & SMBHSTCFG_SMB_SMI_EN) {
--		dev_dbg(&dev->dev, "SMBus using interrupt SMI#\n");
-+		pci_dbg(dev, "SMBus using interrupt SMI#\n");
- 		/* Disable SMBus interrupt feature if SMBus using SMI# */
- 		priv->features &= ~FEATURE_IRQ;
- 	}
- 	if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
--		dev_info(&dev->dev, "SPD Write Disable is set\n");
-+		pci_info(dev, "SPD Write Disable is set\n");
+@@ -1718,7 +1717,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
  
  	/* Clear special mode bits */
  	if (priv->features & (FEATURE_SMBUS_PEC | FEATURE_BLOCK_BUFFER))
-@@ -1741,7 +1733,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		/* Complain if an interrupt is already pending */
- 		pci_read_config_word(priv->pci_dev, PCI_STATUS, &pcists);
- 		if (pcists & PCI_STATUS_INTERRUPT)
--			dev_warn(&dev->dev, "An interrupt is pending!\n");
-+			pci_warn(dev, "An interrupt is pending!\n");
- 	}
+-		outb_p(inb_p(SMBAUXCTL(priv)) &
++		iowrite8(ioread8(SMBAUXCTL(priv)) &
+ 		       ~(SMBAUXCTL_CRC | SMBAUXCTL_E32B), SMBAUXCTL(priv));
  
- 	if (priv->features & FEATURE_IRQ) {
-@@ -1750,12 +1742,11 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		err = devm_request_irq(&dev->dev, dev->irq, i801_isr,
- 				       IRQF_SHARED, DRV_NAME, priv);
- 		if (err) {
--			dev_err(&dev->dev, "Failed to allocate irq %d: %d\n",
--				dev->irq, err);
-+			pci_err(dev, "Failed to allocate irq %d: %d\n", dev->irq, err);
- 			priv->features &= ~FEATURE_IRQ;
- 		}
- 	}
--	dev_info(&dev->dev, "SMBus using %s\n",
-+	pci_info(dev, "SMBus using %s\n",
- 		 priv->features & FEATURE_IRQ ? "PCI interrupt" : "polling");
+ 	/* Default timeout in interrupt mode: 200 ms */
+@@ -1754,9 +1753,9 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 		priv->features &= ~FEATURE_HOST_NOTIFY;
  
- 	/* Host notification uses an interrupt */
+ 	/* Remember original Interrupt and Host Notify settings */
+-	priv->original_hstcnt = inb_p(SMBHSTCNT(priv)) & ~SMBHSTCNT_KILL;
++	priv->original_hstcnt = ioread8(SMBHSTCNT(priv)) & ~SMBHSTCNT_KILL;
+ 	if (priv->features & FEATURE_HOST_NOTIFY)
+-		priv->original_slvcmd = inb_p(SMBSLVCMD(priv));
++		priv->original_slvcmd = ioread8(SMBSLVCMD(priv));
+ 
+ 	i801_add_tco(priv);
+ 
+@@ -1765,9 +1764,9 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	 * to instantiante i2c_clients, do not change.
+ 	 */
+ 	snprintf(priv->adapter.name, sizeof(priv->adapter.name),
+-		 "SMBus %s adapter at %04lx",
++		 "SMBus %s adapter at %s",
+ 		 (priv->features & FEATURE_IDF) ? "I801 IDF" : "I801",
+-		 priv->smba);
++		 pci_name(dev));
+ 
+ 	err = i2c_add_adapter(&priv->adapter);
+ 	if (err) {
 -- 
 2.46.2
 
