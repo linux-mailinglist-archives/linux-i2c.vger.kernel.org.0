@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-7270-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7271-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0377994576
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 12:30:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D4CD99457A
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 12:31:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C0A9B24C67
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 10:30:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CA9A1F2300A
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 10:31:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C956A1D12EA;
-	Tue,  8 Oct 2024 10:29:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25261D2F7C;
+	Tue,  8 Oct 2024 10:29:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FQ20dmeg"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ldUoZrFe"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF6D1C1AC8;
-	Tue,  8 Oct 2024 10:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57503192B6F;
+	Tue,  8 Oct 2024 10:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728383394; cv=none; b=bNofcTbYoJGLzckvNDGlmb2jc/BLIcCnwMK5/3rSBNcv76RKMReAlwDMTpNDPjwBV3mTrBZKkFWQolGtiEdRo9O5LXMoqvtNqoJ9Q5gDxnkzfSk4iyGAuFJ+BfZocTNqRueikvlvoPmfzRi+rDju75qamKbGWF4Uw5LIFUz8X4Y=
+	t=1728383395; cv=none; b=LwePZwJwDovqoXc7RqJzLmHBiRPsWqCE3s6BDxYQ0/q/4Mqq3+IIPhN8jcjurh4L8gUSmTzSL8nptOf2gJmZbA3ll3QXBLNc8AVPaaCd07Kf+QwLjyVdLKaj2wlCXWpT9qNpF70cqpXBBUS7tr0b2w9u/MyXTekZ1Y55gKFNUJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728383394; c=relaxed/simple;
-	bh=y3LwqzHX4doFctWjHni3R1gTVhO6JdJs+4DCQXhXLW0=;
+	s=arc-20240116; t=1728383395; c=relaxed/simple;
+	bh=5a0Oxf7lFMAgi2SILZFtB1/bra4shl5qEpwMA/a01jk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VQ7wGaOu33agOAKBB61Tb8JhhF41glMtXZ8XHxdPVEaAe+OVQyFfN7RkZxDTh+8705df+VuEGayfdEfxx4649jXjcHwQw/gu3VJaQquVCmV4rYekJpZUaBmgvJhmHBgbz985laD9R3cywTdi9tfRfniKnRbcC/oB+92tZO+BZfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FQ20dmeg; arc=none smtp.client-ip=217.70.183.196
+	 In-Reply-To:To:Cc; b=LH7WRCyjmmIXzj8Hd8dtH1yehfa/xys6R5sAeZFR1PdD28qk96C6DA/5ziFeW3J2MQkF+zI5U/9gEPs2bqYSj54MEc8SYVmxp3rNYO+A+iJhF6zPt2VSfe5iQCMCAmi9HPCwoRvUaXZq3GDLdO3Zt8u8AsEXA7iej4yb0GyATbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ldUoZrFe; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 97BC6E000F;
-	Tue,  8 Oct 2024 10:29:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 45EEEE000D;
+	Tue,  8 Oct 2024 10:29:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
 	t=1728383385;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hk/cnPLhu0UgkHduMRy01DxcYt4eJaBLwDUFI+yCrVI=;
-	b=FQ20dmegjSaQ0cuGROfvuBqxrPgvwwm998u4x+bVCjBMgeqNYmJnkSiNB5AHzWRJ5P3l5v
-	hIZ3ZAfjPUbgOgo3pPuNUsNFejFjXrMu2e3/9Uqa3vEwpCwP/qqDhwm09GGv/HSd4QMx41
-	enUmKl1d3JAhTQAp5MPH/XNj+rxWXEijbb+lBuwajx87d7N1K4P87q/BuGIPtCFJCRApUq
-	qTfe4Y5nUy6QU+8Mfq+DY2TVJA2rwAlHiDZiYEaymf8FSQWOPyh4SWjLYzAPTP3I5BXpKW
-	87kOhmghC+M1gfbAprfzj5kph1ctzGChnTzU/MzZn07MaQqfcl7Z6zdjvcFJ0A==
+	bh=ANQX8H7crnEHXkyTrpbWnxCPQMuaKFHhdRyusFeiLjE=;
+	b=ldUoZrFei8MWb9I7J39PmFVdEQubxARTCjr9daNCIvTUXc18GUm0WZnEr1qCPG83UXGMmY
+	mNdWfc64N3H57bgBsq+hCv/AjRPAZsAJiVggLUfoOSRBTRzrxDuFDIihgfXWKfSp+lS7FQ
+	+lPc3Pyiib3wGbUZGgpvRIawbvt/ZFYkq3VhJ5Hgqu+fQFijIB3BiE+ywpgoS0CVw5PuTX
+	3x5t1lS3SvY8ECgJkfDmpZr7tBJSexZmo2wIORGMVEfASUWuegIHlqEzZmPQ4Ry30II2Qw
+	hZnlJ5o6sGI8ggVF8jT2K6sC6p9olLZAcbvsont0B/4jDwm0ojcFIApuG21JjQ==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Tue, 08 Oct 2024 12:29:42 +0200
-Subject: [PATCH 3/4] i2c: nomadik: fix BRCR computation
+Date: Tue, 08 Oct 2024 12:29:43 +0200
+Subject: [PATCH 4/4] i2c: nomadik: support >=1MHz speed modes
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241008-mbly-i2c-v1-3-a06c1317a2f7@bootlin.com>
+Message-Id: <20241008-mbly-i2c-v1-4-a06c1317a2f7@bootlin.com>
 References: <20241008-mbly-i2c-v1-0-a06c1317a2f7@bootlin.com>
 In-Reply-To: <20241008-mbly-i2c-v1-0-a06c1317a2f7@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -73,70 +73,103 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Current BRCR computation is:
+ - BRCR value must go into the BRCR1 field when in high-speed mode.
+   It goes into BRCR2 otherwise.
 
-    brcr = floor(i2cclk / (clkfreq * div))
+ - Remove fallback to standard mode if priv->sm > I2C_FREQ_MODE_FAST.
 
-With brcr: "baud rate counter", an internal clock divider,
- and i2cclk: input clock rate (24MHz, 38.4MHz or 48MHz),
- and clkfreq: desired bus rate,
- and div: speed-mode dependent divider (2 for standard, 3 otherwise).
+ - Set SM properly in probe; previously it only checked STANDARD versus
+   FAST. Now we set STANDARD, FAST, FAST_PLUS or HIGH_SPEED.
 
-Assume i2cclk=48MHz, clkfreq=3.4MHz, div=3,
-  then brcr = floor(48MHz / (3.4MHz * 3)) = 4
-   and resulting bus rate = 48MHz / (4 * 3) = 4MHz
-
-Assume i2cclk=38.4MHz, clkfreq=1.0MHz, div=3,
-  then brcr = floor(38.4MHz / (1.0MHz * 3)) = 12
-   and resulting bus rate = 38.4MHz / (12 * 3) = 1066kHz
-
-The current computation means we always pick the smallest divider that
-gives a bus rate above target. We should instead pick the largest
-divider that gives a bus rate below target, using:
-
-    brcr = floor(i2cclk / (clkfreq * div)) + 1
-
-If we redo the above examples:
-
-Assume i2cclk=48MHz, clkfreq=3.4MHz, div=3,
-  then brcr = floor(48MHz / (3.4MHz * 3)) + 1 = 5
-   and resulting bus rate = 48MHz / (5 * 3) = 3.2MHz
-
-Assume i2cclk=38.4MHz, clkfreq=1.0MHz, div=3,
-  then brcr = floor(38.4MHz / (1.0MHz * 3)) + 1 = 13
-   and resulting bus rate = 38.4MHz / (13 * 3) = 985kHz
-
-This is much less of an issue with slower bus rates (ie those currently
-supported), because the gap from one divider to the next is much
-smaller. It however keeps us from always using bus rates superior to
-the target.
-
-This fix is required for later on supporting faster bus rates:
-I2C_FREQ_MODE_FAST_PLUS (1MHz) and I2C_FREQ_MODE_HIGH_SPEED (3.4MHz).
+ - Remove all comment sections saying we only support low-speeds.
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/i2c/busses/i2c-nomadik.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-nomadik.c | 40 ++++++++++++++++------------------------
+ 1 file changed, 16 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-nomadik.c b/drivers/i2c/busses/i2c-nomadik.c
-index ea511d3a58073eaedb63850026e05b59427a69c6..68ce39352d67477fa22424e2dc0f8d1741498cd1 100644
+index 68ce39352d67477fa22424e2dc0f8d1741498cd1..82571983bbca5ebcd8a689d4d717ea96eb3d2ad2 100644
 --- a/drivers/i2c/busses/i2c-nomadik.c
 +++ b/drivers/i2c/busses/i2c-nomadik.c
-@@ -453,9 +453,12 @@ static void setup_i2c_controller(struct nmk_i2c_dev *priv)
- 	 * operation, and the other is for std, fast mode, fast mode
- 	 * plus operation. Currently we do not supprt high speed mode
- 	 * so set brcr1 to 0.
-+	 *
-+	 * BRCR is a clock divider amount. Pick highest value that
-+	 * leads to rate strictly below target.
+@@ -396,7 +396,7 @@ static u32 load_i2c_mcr_reg(struct nmk_i2c_dev *priv, u16 flags)
+  */
+ static void setup_i2c_controller(struct nmk_i2c_dev *priv)
+ {
+-	u32 brcr1, brcr2;
++	u32 brcr;
+ 	u32 i2c_clk, div;
+ 	u32 ns;
+ 	u16 slsu;
+@@ -443,7 +443,7 @@ static void setup_i2c_controller(struct nmk_i2c_dev *priv)
+ 	/*
+ 	 * The spec says, in case of std. mode the divider is
+ 	 * 2 whereas it is 3 for fast and fastplus mode of
+-	 * operation. TODO - high speed support.
++	 * operation.
  	 */
- 	brcr1 = FIELD_PREP(I2C_BRCR_BRCNT1, 0);
--	brcr2 = FIELD_PREP(I2C_BRCR_BRCNT2, i2c_clk / (priv->clk_freq * div));
-+	brcr2 = FIELD_PREP(I2C_BRCR_BRCNT2, i2c_clk / (priv->clk_freq * div) + 1);
+ 	div = (priv->clk_freq > I2C_MAX_STANDARD_MODE_FREQ) ? 3 : 2;
+ 
+@@ -451,33 +451,22 @@ static void setup_i2c_controller(struct nmk_i2c_dev *priv)
+ 	 * generate the mask for baud rate counters. The controller
+ 	 * has two baud rate counters. One is used for High speed
+ 	 * operation, and the other is for std, fast mode, fast mode
+-	 * plus operation. Currently we do not supprt high speed mode
+-	 * so set brcr1 to 0.
++	 * plus operation.
+ 	 *
+ 	 * BRCR is a clock divider amount. Pick highest value that
+ 	 * leads to rate strictly below target.
+ 	 */
+-	brcr1 = FIELD_PREP(I2C_BRCR_BRCNT1, 0);
+-	brcr2 = FIELD_PREP(I2C_BRCR_BRCNT2, i2c_clk / (priv->clk_freq * div) + 1);
++	brcr = i2c_clk / (priv->clk_freq * div) + 1;
++
++	if (priv->sm == I2C_FREQ_MODE_HIGH_SPEED)
++		brcr = FIELD_PREP(I2C_BRCR_BRCNT1, brcr);
++	else
++		brcr = FIELD_PREP(I2C_BRCR_BRCNT2, brcr);
  
  	/* set the baud rate counter register */
- 	writel((brcr1 | brcr2), priv->virtbase + I2C_BRCR);
+-	writel((brcr1 | brcr2), priv->virtbase + I2C_BRCR);
++	writel(brcr, priv->virtbase + I2C_BRCR);
+ 
+-	/*
+-	 * set the speed mode. Currently we support
+-	 * only standard and fast mode of operation
+-	 * TODO - support for fast mode plus (up to 1Mb/s)
+-	 * and high speed (up to 3.4 Mb/s)
+-	 */
+-	if (priv->sm > I2C_FREQ_MODE_FAST) {
+-		dev_err(&priv->adev->dev,
+-			"do not support this mode defaulting to std. mode\n");
+-		brcr2 = FIELD_PREP(I2C_BRCR_BRCNT2,
+-				   i2c_clk / (I2C_MAX_STANDARD_MODE_FREQ * 2));
+-		writel((brcr1 | brcr2), priv->virtbase + I2C_BRCR);
+-		writel(FIELD_PREP(I2C_CR_SM, I2C_FREQ_MODE_STANDARD),
+-		       priv->virtbase + I2C_CR);
+-	}
++	/* set the speed mode */
+ 	writel(FIELD_PREP(I2C_CR_SM, priv->sm), priv->virtbase + I2C_CR);
+ 
+ 	/* set the Tx and Rx FIFO threshold */
+@@ -1018,11 +1007,14 @@ static void nmk_i2c_of_probe(struct device_node *np,
+ 	if (of_property_read_u32(np, "clock-frequency", &priv->clk_freq))
+ 		priv->clk_freq = I2C_MAX_STANDARD_MODE_FREQ;
+ 
+-	/* This driver only supports 'standard' and 'fast' modes of operation. */
+ 	if (priv->clk_freq <= I2C_MAX_STANDARD_MODE_FREQ)
+ 		priv->sm = I2C_FREQ_MODE_STANDARD;
+-	else
++	else if (priv->clk_freq <= I2C_MAX_FAST_MODE_FREQ)
+ 		priv->sm = I2C_FREQ_MODE_FAST;
++	else if (priv->clk_freq <= I2C_MAX_FAST_MODE_PLUS_FREQ)
++		priv->sm = I2C_FREQ_MODE_FAST_PLUS;
++	else
++		priv->sm = I2C_FREQ_MODE_HIGH_SPEED;
+ 	priv->tft = 1; /* Tx FIFO threshold */
+ 	priv->rft = 8; /* Rx FIFO threshold */
+ 
 
 -- 
 2.46.2
