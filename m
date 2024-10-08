@@ -1,80 +1,68 @@
-Return-Path: <linux-i2c+bounces-7261-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7262-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69BEF9942DA
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 10:54:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F18219942F0
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 10:56:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F69A1F2711D
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 08:54:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FCFE1C240CE
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 08:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A8D41E22E8;
-	Tue,  8 Oct 2024 08:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD3D17C7C9;
+	Tue,  8 Oct 2024 08:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WhE/G/Db"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="R7usSuq4"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B1D1E22E1
-	for <linux-i2c@vger.kernel.org>; Tue,  8 Oct 2024 08:34:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A37217BEAC
+	for <linux-i2c@vger.kernel.org>; Tue,  8 Oct 2024 08:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728376494; cv=none; b=ZHeB8DcT4AsHxTvSSL0Ev1b1UM5mZspte25zZqJAXqqPANt1n9gRJZec4wNLRUJNbdgHd6f0VAkC1NcWqXlFCsRNaCuunCbZHxbTlqm7k/kLYxQUx0EB5TzalEF2OYX94ZMFPnGONPWqPr6dU/J6cAPFve+VV8SS7/ny9cVxwHM=
+	t=1728376998; cv=none; b=SWF8KL7+Ymx22iuTNBB1A/q317vGTLMt9xyU/FXCGD+utUPvt44oumqMbB6sv3mgQ43lcBcx182IbkcNap3mx1zVaXg1itbPYEXN+0UJVmNen8tRMCDJ+lU3MTo47hiHU/1o2rNxefhIDuC97fuPIu3PFSrRAomE3VRBt02uARM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728376494; c=relaxed/simple;
-	bh=yi4Ed56vIcvtnLM7JqyGr/ImxZkDc5h+XhLmAzx4MIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VOshTMOkKdxQD/s3qFDTqAybyS3K1qxInCCbAebrawFGtMXNBrMNbihwVi9QaA3qrPdIBeh7LK/6MbklRpdTovCXGaUn8V6KEyf26txIXU2Tm5F1jSTIW9QnX3Ecjurzu0a5p7/G4xzd62E3/dpQ20oOEW1Cm7I+N+MCyosvcrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WhE/G/Db; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1728376998; c=relaxed/simple;
+	bh=dsOaWUvgT64VC2VdT0gWtnv9bNDd0zd2Ft7vQVv1hAE=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e5A0Qnk70J+4cFBWOqDBpznxboEuxJnyJR2B5yb/mBpI/QEf8VUZzwLGteJPLqE7SSelLOCX1XxthvV6EQErFnFAS477HL180AO90JrJCHrSqJhl9HFyo7UlwZVCQZQDNJfHwIy6JVOC0o0Vanup+GJkjf4CT7u7W+8VK0Ne4FY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=R7usSuq4; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=yi4E
-	d56vIcvtnLM7JqyGr/ImxZkDc5h+XhLmAzx4MIw=; b=WhE/G/DbgeUftYkCEnQi
-	TKiNmL4O8mJXVZGvVaiuxr2/Uuf+VnqQxjkFrl83lLwFQxOgpMaPVihqQQP9EnjQ
-	dIvEhlY3XzytQGlC7HUjB+rJPNUUaVNqNEAFMmu3RCbIHBGS/aJikbNqKuoYncTa
-	HWKmjBS7QXILHji8waVqo4Gfameve/bjUR8OZjfJ61xt5qQilme9R9mntWnpmVE6
-	vI/DbcOiNyMYzTxRGso7HQtTPALxrXPSxb0LKFjJIGSMhdCJ3OEBcf6SjBEfzx0q
-	xleKrYav5uunbP1dwomEPHueCWbUnYk2Hq3ZkmDA5X/S0ZeqJIqe1B8hi3Maegtt
-	FQ==
-Received: (qmail 402745 invoked from network); 8 Oct 2024 10:34:50 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Oct 2024 10:34:50 +0200
-X-UD-Smtp-Session: l3s3148p1@1sW4AvMjXyttKPHJ
-Date: Tue, 8 Oct 2024 10:34:49 +0200
+	sang-engineering.com; h=date:from:to:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=dsOa
+	WUvgT64VC2VdT0gWtnv9bNDd0zd2Ft7vQVv1hAE=; b=R7usSuq402Sx9DR5cx8V
+	xDD3rScwHft2WIQGSYs0/jkHmuSmJuDIv6qjofWsAQss9jgFvuOGgjoVp+3CyzQc
+	fkMiqoGKENTh1p/5sOkNUoZzny3vZ8Jt1QZE9VzLIB7GoxQ1PmhLLYPhEvKxK1Ec
+	SQu2i77P8JbuacfSw+5Uk6eSx3Efo6nVA5U+QYyY3KBDpQ27H/hYCWfi5HK5UcV+
+	ujTEXFNUzTCphtiHrcgz97D09BdAJ00kLrVZjycR38JLVfji5xoX1dKZYPo/ko2J
+	VOe7PVxZoTZST2PKmFkiVRrG6NEliHGyjosT8cvNCVMR8cyiSVr5SVJiop8Abpje
+	kQ==
+Received: (qmail 405193 invoked from network); 8 Oct 2024 10:43:14 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Oct 2024 10:43:14 +0200
+X-UD-Smtp-Session: l3s3148p1@zDbDIPMjwkZtKPHJ
+Date: Tue, 8 Oct 2024 10:43:13 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>
-Subject: Re: [PATCH v8 3/8] i2c: core: Remove extra space in Makefile
-Message-ID: <ZwTuqX301BqAltze@shikoro>
+To: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	linux-sound@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] i2c: Replace lists of special clients with
+ flagging of such clients
+Message-ID: <ZwTwoQLAU9emhn13@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Chen-Yu Tsai <wenst@chromium.org>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>
-References: <20241008073430.3992087-1-wenst@chromium.org>
- <20241008073430.3992087-4-wenst@chromium.org>
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Wolfram Sang <wsa@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	linux-sound@vger.kernel.org
+References: <3982b2a6-975e-40d2-bf02-2155e5c36c14@gmail.com>
+ <ZtQ0KMWUk9iAUCCl@shikoro>
+ <18306ded-6451-4880-9f74-6bceb0f26dea@gmail.com>
+ <ZvqEhntonE9qWnPF@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -82,48 +70,40 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gFj6OJQYOOPFj8BE"
+	protocol="application/pgp-signature"; boundary="9FUcZpkfTPPUAaWS"
 Content-Disposition: inline
-In-Reply-To: <20241008073430.3992087-4-wenst@chromium.org>
+In-Reply-To: <ZvqEhntonE9qWnPF@shikoro>
 
 
---gFj6OJQYOOPFj8BE
+--9FUcZpkfTPPUAaWS
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Oct 08, 2024 at 03:34:22PM +0800, Chen-Yu Tsai wrote:
-> Some lines in the Makefile have a space before tabs. Remove those.
->=20
-> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Closes: https://lore.kernel.org/all/ZsdE0PxKnGRjzChl@smile.fi.intel.com/
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-
-Applied to for-next, so you don't need to carry this patch anymore.
-Thanks!
 
 
---gFj6OJQYOOPFj8BE
+> Yes, hopefully this week.
+
+Reviewing and testing now. What tests did you run?
+
+
+--9FUcZpkfTPPUAaWS
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcE7qkACgkQFA3kzBSg
-KbYVTBAAnj3lYy0aHno8B+L4r4eegNvIoB88vkx4UB6TEssgEW4AB2kf+uAlTXfW
-2cFXhFaPicKEc/DDqmhTTW430UIG27jxpQD6BC1tyapPQ6dChS9t6gCcElhWNTvb
-sjCDblb1zor2vGYN+2f+BJPlaFDO20ZnMi9sbP5mlkkEEsTgJIwr2+DFmpWuMY5w
-NCUbXbtEkPUBn5u49YJH0RgVsBW1hsiezALs1AxEQ26G7/cXVm6u6IvH7zbgnWE9
-0DZKs3DdDxO9mV+ilW43Rm/Lx3s9n5Yy1aOZnkWVX0ddLfZZMR4iKbU5By4w+2uM
-5i5uGSIialjycmGSthXpTNawcJfB89rClHpaKYsZCuursUxf5EQtc2MYDOud/bZN
-rDz47+boX/yUhMV4FnlVsh+rfJaq5WmcbEd33ICh6CT/fc7T8uKIHF+vIsToTg+s
-nx4IqNZ4VJc/6B/er9RLADWJKL2BrKYluECw6jlX1yZHWEka+UvVPlSQmcRxPt7N
-fla7gKTB1jZj6vhS1GW5mtSJbQByt+AUbt1dtu9rWFvpsR/gda2MEqbzp62nAV8b
-gy4teVjjlJAqKZ5zeQs7MDDszKlCXgv3k1YxsKBSOj6R7/WytM1TpO46BKUCXSZv
-//MT9B3Mt7LFR+wFkv+5F4mazO1jkhGdS7wjUz9nk0QGqetl7HM=
-=Xawz
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcE8KEACgkQFA3kzBSg
+KbbV7A//Us4MxYoeTCPW4rnYln7FBJi3+FjQAeE9PfPTP7J6vq3L4r7ZWI+t16JM
+JU5TtskHaaAGovgVtEplCikd8U05nasqR7B9QwEuexBJLFmckQIhvz04qyE2VZzi
+LG9ZpT4AxpX3u4RBZNSvwvrC7nFPjwv8krDnyH67MVdTa6HQU7kil5EEx7+PZz0M
+g8YH7kJUl64xCuUjWvztMezYzRm0DTGnILmgQ0mDJva7kdgRmSu3xYBb3CotY+st
+AtcL1rePErNbwmUpJdVCuCE3s2tox+TffQo51JdD+yc3E3TiC7byCNPria9XjIkb
+pa9iVa+047SvZS3xhPRDwjyqvRSBMitBctNzwlrZToZIbeWosTOexMSg90WmeqhI
+ryzdfZWN9RoG9Wilo3Yh9jFLx7rjwK+ojWVtj4MnSClzneVsFFpbTsGwzNqB0wmx
+6n4vdn7/Gz+LKpPCakUsS84BLX6gUOw6+B81rx9tIadU5MNIBMadGrVD9/w/bkKd
+bLNN1d97iJa8YCAvXWJlYKpTJeBF1RxZqP5A0m00i5tqIQkMZeDHFOUruht+tZLS
+lfF5HVyzkSanfeQl6ScEwqJj7s63T2a7M2aiC9p1v03z5O2foFVfJCH2jOlp73sc
+eAKpuO3hyilRF3qqi87Qg5eJkCBEmkEX+gAqbfqQwLCAtW4bnTM=
+=T5Vt
 -----END PGP SIGNATURE-----
 
---gFj6OJQYOOPFj8BE--
+--9FUcZpkfTPPUAaWS--
 
