@@ -1,58 +1,80 @@
-Return-Path: <linux-i2c+bounces-7260-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7261-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 210929942B9
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 10:51:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69BEF9942DA
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 10:54:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 507391C20E22
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 08:51:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F69A1F2711D
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 08:54:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 148C01E009D;
-	Tue,  8 Oct 2024 08:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A8D41E22E8;
+	Tue,  8 Oct 2024 08:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Z78DEJJP"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WhE/G/Db"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4661E0485
-	for <linux-i2c@vger.kernel.org>; Tue,  8 Oct 2024 08:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B1D1E22E1
+	for <linux-i2c@vger.kernel.org>; Tue,  8 Oct 2024 08:34:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728375956; cv=none; b=IPSJXJjYFml7vLNNoeJ9Bq92uRnDUZZ1rPJwMWha2/1nVMvPdimk9pSGuKRZ5asvlxMoxCMaZKJYuDYNsrYlI7Za+SJasZcxRO73xSFzdFmm9aogbsnjjozZhxde619qGDLbPtgwSvOKNIrnNDiMJwp6RnbnOJYWsWuSMnBbVfw=
+	t=1728376494; cv=none; b=ZHeB8DcT4AsHxTvSSL0Ev1b1UM5mZspte25zZqJAXqqPANt1n9gRJZec4wNLRUJNbdgHd6f0VAkC1NcWqXlFCsRNaCuunCbZHxbTlqm7k/kLYxQUx0EB5TzalEF2OYX94ZMFPnGONPWqPr6dU/J6cAPFve+VV8SS7/ny9cVxwHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728375956; c=relaxed/simple;
-	bh=uOmKQ7nUzDGkx7pfIi6OXG6RrYigBkVLaKWzecRpq4M=;
+	s=arc-20240116; t=1728376494; c=relaxed/simple;
+	bh=yi4Ed56vIcvtnLM7JqyGr/ImxZkDc5h+XhLmAzx4MIw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fxqI8W3+S3K9rEfS1s2EVf7oZ/pb6CTnNB5gN6pdczkIWNYchDCJIqxtvWaC/OF3WiKgssHJv5QRS79sHRU0xgQJjVzixiklAfXBe3jmSLtyPaKvYF+/0LZQZcvsOVzBdSyx/5CDHQUvG0gDaH0KLCofDnOcOuVdU6vm9yW5Byg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Z78DEJJP; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=VOshTMOkKdxQD/s3qFDTqAybyS3K1qxInCCbAebrawFGtMXNBrMNbihwVi9QaA3qrPdIBeh7LK/6MbklRpdTovCXGaUn8V6KEyf26txIXU2Tm5F1jSTIW9QnX3Ecjurzu0a5p7/G4xzd62E3/dpQ20oOEW1Cm7I+N+MCyosvcrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WhE/G/Db; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=uOmK
-	Q7nUzDGkx7pfIi6OXG6RrYigBkVLaKWzecRpq4M=; b=Z78DEJJPb2nCXXXnAM7c
-	TO9CbEzDuRMnZRrkFvW2UtczkJlfuue1gIr6AMdEiEhnOeT5nhE0wHSfnsTRcXtC
-	1+QElCUfxT4vdavOlaCJMRAUPWGlHiGSXNU9/kiJ1ydoXc5Zt0zYQSNtIpzY2AVE
-	we/YL2JeZ1xFF/Sp+atQ1K4Mp0D2nyldcS5Fnqrp4E11fsG2b6WI4EXeUQcjkTOh
-	EnqOAxcw3zfMOb2cm4dwm6cSMsqxnz3NYWqNNyGPgECksuvM0pzDB6hpEwIVQPI2
-	Kt9HrAXDAyFDqz59rRQCwl6WBHyMyukDd71CXEOLPPuHSTXTsxSS0OpOjPuZ6hxU
-	GQ==
-Received: (qmail 400174 invoked from network); 8 Oct 2024 10:25:52 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Oct 2024 10:25:52 +0200
-X-UD-Smtp-Session: l3s3148p1@M+yj4vIjWHNtKPHJ
-Date: Tue, 8 Oct 2024 10:25:51 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=yi4E
+	d56vIcvtnLM7JqyGr/ImxZkDc5h+XhLmAzx4MIw=; b=WhE/G/DbgeUftYkCEnQi
+	TKiNmL4O8mJXVZGvVaiuxr2/Uuf+VnqQxjkFrl83lLwFQxOgpMaPVihqQQP9EnjQ
+	dIvEhlY3XzytQGlC7HUjB+rJPNUUaVNqNEAFMmu3RCbIHBGS/aJikbNqKuoYncTa
+	HWKmjBS7QXILHji8waVqo4Gfameve/bjUR8OZjfJ61xt5qQilme9R9mntWnpmVE6
+	vI/DbcOiNyMYzTxRGso7HQtTPALxrXPSxb0LKFjJIGSMhdCJ3OEBcf6SjBEfzx0q
+	xleKrYav5uunbP1dwomEPHueCWbUnYk2Hq3ZkmDA5X/S0ZeqJIqe1B8hi3Maegtt
+	FQ==
+Received: (qmail 402745 invoked from network); 8 Oct 2024 10:34:50 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Oct 2024 10:34:50 +0200
+X-UD-Smtp-Session: l3s3148p1@1sW4AvMjXyttKPHJ
+Date: Tue, 8 Oct 2024 10:34:49 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: support gpio-binding for SMBAlerts
-Message-ID: <ZwTsj_GG6F1UZL6t@shikoro>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v8 3/8] i2c: core: Remove extra space in Makefile
+Message-ID: <ZwTuqX301BqAltze@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20240909110430.28665-2-wsa+renesas@sang-engineering.com>
+	Chen-Yu Tsai <wenst@chromium.org>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>
+References: <20241008073430.3992087-1-wenst@chromium.org>
+ <20241008073430.3992087-4-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,44 +82,48 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9NVCBK0mdUb9gLPa"
+	protocol="application/pgp-signature"; boundary="gFj6OJQYOOPFj8BE"
 Content-Disposition: inline
-In-Reply-To: <20240909110430.28665-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20241008073430.3992087-4-wenst@chromium.org>
 
 
---9NVCBK0mdUb9gLPa
+--gFj6OJQYOOPFj8BE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 09, 2024 at 01:02:56PM +0200, Wolfram Sang wrote:
-> Most I2C controllers do not have a dedicated pin for SMBus Alerts. Allow
-> them to define a GPIO as a side-channel.
+On Tue, Oct 08, 2024 at 03:34:22PM +0800, Chen-Yu Tsai wrote:
+> Some lines in the Makefile have a space before tabs. Remove those.
 >=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Closes: https://lore.kernel.org/all/ZsdE0PxKnGRjzChl@smile.fi.intel.com/
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
-DT-Schema dependency is upstream now. So, applied to for-next.
+Applied to for-next, so you don't need to carry this patch anymore.
+Thanks!
 
 
---9NVCBK0mdUb9gLPa
+--gFj6OJQYOOPFj8BE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcE7I8ACgkQFA3kzBSg
-KbYRtQ/+OYw8JWfZCgsHHmmSFfMKb7cC6+wdF2ZIGbe12D0Z81Dl0XWWW2NnafEC
-g3BdcllaexiZMEroJM09K3bzb29Hz+MKi5L6xA9kqONL5e8X9qunPu3fWs3fiWqZ
-2TRPxPwmBWSVh/0gnWbAKpfqIWHhpTEYLBsxL2eDut6xw1JXjfVhcRKjo4P5dfP/
-en6ZPgdyqLBaz/jE/zNPurVUeRRWDyzAO7bE1QYaIkS/iuWTcJJlZPCrwFQjwrKF
-GlOMO6GjHQHPtCdlBl+xtkwRYugFSjTuB8QVCLYkTBTh4xjtZufI5NqulDymGzpc
-VXnNiEQN5Psh4aOXTPdZ+yG4h/iS4JsCaotRcqlCY0Qtle/M8tWLrl+eKU04er4T
-31R9uCmSZjQxBn8m1QiGbGCC0Reiktw2KeM7M9jfNQ4nfev642MrgaN0mDVWDMcx
-vv7oWTq9vxFB7qyhjv0zlpZm4i4DG3RChrNZabU4sS/xZNlvOAv300Um2q3dP5N6
-loJSSpjTXxTOVCyI+V1jiwve/mibP414YoNkWs9fJKz6xT8XEEHkUTnbn+4MUwEz
-74zWKR5KIzTSApzriab0Xr8YHufHWUJNfTqdwouwBehc877Uy0Tdd2wE4lbAynXh
-elu4dQO8RfghcKbNyHU5AGaxYG8r91krjld8qr+h14o9KeNHQOo=
-=OosC
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcE7qkACgkQFA3kzBSg
+KbYVTBAAnj3lYy0aHno8B+L4r4eegNvIoB88vkx4UB6TEssgEW4AB2kf+uAlTXfW
+2cFXhFaPicKEc/DDqmhTTW430UIG27jxpQD6BC1tyapPQ6dChS9t6gCcElhWNTvb
+sjCDblb1zor2vGYN+2f+BJPlaFDO20ZnMi9sbP5mlkkEEsTgJIwr2+DFmpWuMY5w
+NCUbXbtEkPUBn5u49YJH0RgVsBW1hsiezALs1AxEQ26G7/cXVm6u6IvH7zbgnWE9
+0DZKs3DdDxO9mV+ilW43Rm/Lx3s9n5Yy1aOZnkWVX0ddLfZZMR4iKbU5By4w+2uM
+5i5uGSIialjycmGSthXpTNawcJfB89rClHpaKYsZCuursUxf5EQtc2MYDOud/bZN
+rDz47+boX/yUhMV4FnlVsh+rfJaq5WmcbEd33ICh6CT/fc7T8uKIHF+vIsToTg+s
+nx4IqNZ4VJc/6B/er9RLADWJKL2BrKYluECw6jlX1yZHWEka+UvVPlSQmcRxPt7N
+fla7gKTB1jZj6vhS1GW5mtSJbQByt+AUbt1dtu9rWFvpsR/gda2MEqbzp62nAV8b
+gy4teVjjlJAqKZ5zeQs7MDDszKlCXgv3k1YxsKBSOj6R7/WytM1TpO46BKUCXSZv
+//MT9B3Mt7LFR+wFkv+5F4mazO1jkhGdS7wjUz9nk0QGqetl7HM=
+=Xawz
 -----END PGP SIGNATURE-----
 
---9NVCBK0mdUb9gLPa--
+--gFj6OJQYOOPFj8BE--
 
