@@ -1,449 +1,355 @@
-Return-Path: <linux-i2c+bounces-7249-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7250-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30FFF993F93
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 09:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EBEB9940DA
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 10:15:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 488DD1F22548
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 07:35:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 341351F271BB
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Oct 2024 08:15:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28A61EF943;
-	Tue,  8 Oct 2024 06:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F721925B1;
+	Tue,  8 Oct 2024 07:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="EYNrNHTR"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FkTOh8Oa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2041.outbound.protection.outlook.com [40.107.22.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4340C1CFEC2;
-	Tue,  8 Oct 2024 06:58:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728370692; cv=fail; b=rVG9Jj0P1O9XgGttcBDo5f+S1hN/ysDu5c8Qp8KlFxOgDcqLAa86pvF8hAk0qwoBy7ZuyhfwsSbhWzValL+UkOpb2Teo/CSS/u+nBqSq2ZnxsTIT9EjU71hde2BHKgjqcXyTtJc1rD9hP+UQdcW7v5TVOAd/Qc4FqMXgKsbTq78=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728370692; c=relaxed/simple;
-	bh=zufWxaTRBO/aN6eERcrUCR9RTAN9FV+9V9q0xcux6tw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ZvyoIyxGW0BWYABXdzUBIKoV464iEbD77WHNnC4Cvw4q1UYiMGmjNe6k55KMhzRIoYRzuxFPpWuSf8OQACpFQaPmYDwA76AMi0xgqJ3NLiA1fCB1PH13TPb1Z/nIR52vmwfkyaFd2P0O7/CAgv1PUsTWjEbYNRAl3IY77AXHzT4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=EYNrNHTR; arc=fail smtp.client-ip=40.107.22.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Px5on4hbKlHPEr5umN9ZRnbrZOIfV2SwWVWqfZn2v83d5j5YIUQGU6wZzpDfPi1vT+UNANTg+0/PZuNKFuvQic90KsXSc/wkdVetYnXK8u1YsJqMcyf8YNLi39KtLWw8yHxrdH/62EXiMuBh3PF7IplWtuhGaiR3zosQHXwbfLmNW+v+oXo/PhCwJIbCSlO0Ud0NEmKBsHkeTEvGBJGJ2hYAmsf0nV60xyXi4B+n2I0wn279pVnA9HlBelCOxJBkQlgkzUVvm8aFkdYTRkg+XRGqMSFJxSIcaFJrbZ89VfRXlBKz0CFo80qpNDwCyf33UYJQljQ5Cwdts6djHKzcTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uXCzY5zTCJ/jsisG9Yt84ToF6vZk5JLXlw1iq0MPpI4=;
- b=acWEiuZiBuPlEBmme3XSocPrQ1/xrNaAsbNGxDpEs1Ry3qRUMTJXPJk/0/QgjDZZmuemdRc+WpFq1HfcRggRBGrs7xgSWFzl70swG9ZZ3aIod9/jiq88Zj9OA8telubZi/+/7MadmBVPuogCOVLYZR0c72cnr10fl5B7w4zJByWsMyvCvdnKdGhjnJseeRRCythZOncXjDCQB5XjqwmMKjnKpLe4rREz8lApI2Or3hVYqgfH8I/61p9igD6t/4ZUVrzYbb/8D4/J/vwtzXmsmyE0isnInacc8pzyFVJdvl8HgkvOZbVZzhWF6DfFwkTQPNKGcRXIR+dTOxqQ4IqTTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uXCzY5zTCJ/jsisG9Yt84ToF6vZk5JLXlw1iq0MPpI4=;
- b=EYNrNHTRhZdFsY9EvJNRpvZZCF12hS2L85mAnrQD8lJWiVn0TpHxnGN6lzHEAOT51zmaSe2IIQYfGOQCtSEEND+K+05wa09Os44uNpZdQaNeWcj/Eihcl39o/qGo0p1EUcENHrBfm6VRTXJot0oEiv8sWoqjkut4vIntxkDjxwNeh1PiOWQeVUL+GURHLvGO6hFEA/oQvDt2el+z2BqcR0sIj1xZmp1Q/mqE7BE31ArKyXNZWTpHXXPhfpCm8vXSgzYjlqNrHJojioYbDl5OWVaYok1pvmzjylr7uU2vUP9wutOfB/SFuwHB9Z7tJeURcC5wO/v3pcg1zh6/Nuelpg==
-Received: from AM0PR0402MB3937.eurprd04.prod.outlook.com (2603:10a6:208:5::22)
- by PA4PR04MB9462.eurprd04.prod.outlook.com (2603:10a6:102:2aa::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.22; Tue, 8 Oct
- 2024 06:58:07 +0000
-Received: from AM0PR0402MB3937.eurprd04.prod.outlook.com
- ([fe80::4e37:f56b:8a3e:bff0]) by AM0PR0402MB3937.eurprd04.prod.outlook.com
- ([fe80::4e37:f56b:8a3e:bff0%4]) with mapi id 15.20.8026.019; Tue, 8 Oct 2024
- 06:58:07 +0000
-From: Carlos Song <carlos.song@nxp.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-CC: Aisheng Dong <aisheng.dong@nxp.com>, "shawnguo@kernel.org"
-	<shawnguo@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>, "festevam@gmail.com"
-	<festevam@gmail.com>, Frank Li <frank.li@nxp.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V4] i2c: imx-lpi2c: add target mode support
-Thread-Topic: [PATCH V4] i2c: imx-lpi2c: add target mode support
-Thread-Index: AQHbGU9tvUeaCfFK5UyZ9XMS7JnpJA==
-Date: Tue, 8 Oct 2024 06:58:06 +0000
-Message-ID:
- <AM0PR0402MB3937BD3C11B8D9A39E35BBADE87E2@AM0PR0402MB3937.eurprd04.prod.outlook.com>
-References: <20240912082413.435267-1-carlos.song@nxp.com>
- <evfhjmeblrucqta2jb74jwul7evqt25tbsxp46xrghytbr645d@t6rvyuriruax>
-In-Reply-To: <evfhjmeblrucqta2jb74jwul7evqt25tbsxp46xrghytbr645d@t6rvyuriruax>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR0402MB3937:EE_|PA4PR04MB9462:EE_
-x-ms-office365-filtering-correlation-id: c70717ec-4ab9-4635-e07d-08dce766902a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?obnw3/GdEQeitB/B2ZVR90sg5VcJ33USAq19g8T0uR3AhtwjmQKKukK/lh4j?=
- =?us-ascii?Q?+5vUmMal0z0S5CvDOmnCZpYrmvAVXeJFeMDkCgWE7hfxFHlj7YCWWQMjz3ge?=
- =?us-ascii?Q?JN6vigDtrRruxPwUoUmIk7bqNMB8KYD8b4maDKpg77Xub34IhUusMf6SKAV6?=
- =?us-ascii?Q?FiDwQLBF8UuadN/MjQtnh9LgG86qUG2U5a9bkRfnwRSDoKXrdM63luTNU7LI?=
- =?us-ascii?Q?DzDvftzaqrbYx71oTUjJx5FJu0JSx/SugCqxEO3mBw+dDMY1+fcAF80XYvED?=
- =?us-ascii?Q?Tvfpr5CD+xJk++/Ts94xIrIQciwUT0yY+8Pdmo08aw/RyDL7M+YPJHsU8PX1?=
- =?us-ascii?Q?Ztk+DxnqAmtdQoWS0MFGja/MVftH2ErCpNU4e1/6pcsribpIgyGyqZAKC71I?=
- =?us-ascii?Q?jp9sPa1o5/OrCFGRlBClrHN5ruhB59l95HU3dEHsJ5h9mhp/dVSjiNJOmG7v?=
- =?us-ascii?Q?cgTEhZBd6DCzTikPRxgOitjBs+p2d6d9oABm1PYGYTRL5aM1hzqLDDx4nnJ1?=
- =?us-ascii?Q?me5Asc+pBq6ahATUBdHR96ZV3vSyVMbgGE21veTZ4/3Rfv7B3rpbPExTf/wb?=
- =?us-ascii?Q?VbuU9q63chCcKdwqvpKIEsyPDVGjfiV2U9dSipGGGay0O9U7QIgz28sasZej?=
- =?us-ascii?Q?krwuJkvVvfHIrsqvSbULAne/PeZ/Dzz4tjApXica873Gm3anjsj9wzVeW8mA?=
- =?us-ascii?Q?2ysK3f+YHqt2YwYUmi1VVIVHyge0u0bId/PUnKmJQiYqQtPaOyIeHStOjshk?=
- =?us-ascii?Q?Eeh5mtIhHMP7N4iX0qEoLH02qNQTHmA1v2NXWVFTw9PrsyXXX4vJCuEOF1rW?=
- =?us-ascii?Q?YqlQfCbCDsF4fjM3lWR8izBBogSKnfbO+tWbiNNQOQn3K7r2280zF7fnmbCX?=
- =?us-ascii?Q?6KyM1P6vjM5T0wwFVhbuXKlSynSW7Xjw0fZ4PEX4C473YSesI/rJsHKUJIZy?=
- =?us-ascii?Q?2oOQhlih5WGiW93g6ZSTZf4gxKNBV67AvgdVgjH8jCHThaAw54RPiMpJUVtj?=
- =?us-ascii?Q?IRLV5PNBoVfnjRv8Hnn8uFgurTYVWvWkv+irDGv6MybJWmpxQz9/FoAavNGq?=
- =?us-ascii?Q?+wHc53TdiZfLvrZPKfID5XW1szNXxqGdOLAoT3VluQWaz/3vxB/T8w0zIuka?=
- =?us-ascii?Q?unUpTnMHGg78ylxKQnRzvGTWMGlNt2F3EfMV2+EpH2ZpaMqGADbozUpWCirA?=
- =?us-ascii?Q?ChF16Hm31mRq2NNY3nz5jSUbTzT9xyZo4EPDWbrXaNlO95R5WWxjKkJdC81v?=
- =?us-ascii?Q?YtUURUat+ywFlxZy8ssXPjNab0oTdi32u5diApppNM95RVOTyZjAinackzcG?=
- =?us-ascii?Q?cXDiluEohD1sNLEgT1aylMZFLkE+0XHILdQGcAhn7y132Q=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3937.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?plGiAZaeYlRRrVVJEutNDfNcuJ3dM2Vz2ydRuCMi/H+Fq1ncKBaj4xoH+NLY?=
- =?us-ascii?Q?9QLxJ13HRqJol356i8R5bl1HtiCDW4qFZFzmramA+I+DShDd4oH5PcWKgnv2?=
- =?us-ascii?Q?XX9Sdk/q8HQdKoRXPGcdYuc423ZCGOivM9QwfZBn2iLOYc+TNK8oxSz6qFMU?=
- =?us-ascii?Q?wElf1iNjsSUVJYb8zuegzE9M2fg1fKhsPign+FUmAuGyp1ifvUMphms3OlKQ?=
- =?us-ascii?Q?Iu2XsUiZoi4IWP7r3XkuuGmhF9wF64neDJt4YphluznpW5wHebm4UZSM7yPX?=
- =?us-ascii?Q?lL8rUgpIM/Au/baUorkKYZmYVTQsVGxhdlAyX+hKv4wFBTCZ6HrKDJ89JBlj?=
- =?us-ascii?Q?xKWN/lV4kNVoV/P8rQawlY6DIEwOoi2evMbTkFaP6lLtZE2YAs9rzOTWKDZM?=
- =?us-ascii?Q?XseapnsqelqL5zr2/O4ctYOZmdhYLzjOZGRYcUI0AQok3ykPfwk+TJn2DNF8?=
- =?us-ascii?Q?GmPXRh3nBN3RJXGPf8kx4bOcOO02CwUNYIqcnrRVm+uY6Tye086pRP0upstX?=
- =?us-ascii?Q?0Eo2OX2TaHb0Tqd795GYg88s1vXEWJx0tDqpndJ29Jpf8r28fBXj+umAXh6y?=
- =?us-ascii?Q?vA/X26E9Cqz0CezdNzf6kP1gf3viH7+3SNFE4i8F/YY/E64dGe7ObQ1ORG2X?=
- =?us-ascii?Q?1Drth0R1jse74SqD/Ft9NsrNRYKztNr/HVaNFUO3JJlF2JEXHiQmqOceqYBI?=
- =?us-ascii?Q?5joTy+vUT+rQBpsVq/lhOrAkaCfU/rjs6sK7kxS/DzwaDXnlZOl2V3YyxCtd?=
- =?us-ascii?Q?VE4O5JVYThOAXVkivwankkuGQu0t+xjxsKSskVNZje/U24cDp3gsktQP8QYu?=
- =?us-ascii?Q?jD8vinJtZHq3+8HaFcx5IT08GSk+bx094iVIRryhzf827mPGBKMZ+oXyZv49?=
- =?us-ascii?Q?SymtfBJ8H8pvZ6RmwGNmC9Moo6VwM4eicoOmqT1xRmOcl6GOsfOL/weJ+htc?=
- =?us-ascii?Q?k+sHxLsL4YJDNHREl07INkpAcc331mZb7mWq10Nd+FeYVvflnBY2D+dA+CeF?=
- =?us-ascii?Q?MwhiM9j2KCKJpaExqq4QHdAdTta0vBRKYLiUNfH6pSDQVV8OAWVSdQp9IKZ6?=
- =?us-ascii?Q?4EWrgfsqZ1UBjUIkyhclHEh+aCiSjeqndL2C5TWTOBbJOcDIbQLurUCKnu+z?=
- =?us-ascii?Q?qRz69zO1KpVjFB0DYM+Vly3Rf14oh67Zv32VOV9J6j5pKWc6bLA5MqQwae51?=
- =?us-ascii?Q?uK0E3XeuafOi74GIwFt6jZ3PXlQCZ3zN31yIcN/i/H4rarI1D0ZZBXpswjBM?=
- =?us-ascii?Q?D7ihavsF6TiKw4juK4fp7iFOBWE4IMyllYQs9ZGjPD5qTbIRVwcNrOnUCWV9?=
- =?us-ascii?Q?BAhXQwdXPkN07dNLVQgV9kypOadgKvKmNk1DZG2hfCYAcTBf6ctAcM/crOJD?=
- =?us-ascii?Q?p1JgFrEbpPd/MiCW1dukXQSrlXGh4aSBHM4+JS5yIBFjADeARRDD76xctIv8?=
- =?us-ascii?Q?y4AQBeJ0kGhdCDkdND+SHdsrBotx6R3Xwlx80P0b4Alo7JuogNJbKpJ8xuyF?=
- =?us-ascii?Q?cxuWJeTSBMVhdO34LOT7jPqV8t+RW+CPeGk5Y3wtLnzpjPyXEMPQj12gXvMw?=
- =?us-ascii?Q?P1Gsbk2a348yifgdLq4PJa+kufWNgC5HFTMgVtYl?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B499C770FE
+	for <linux-i2c@vger.kernel.org>; Tue,  8 Oct 2024 07:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728372898; cv=none; b=XJGf3KeJa5/YlQawY6M0wcse5nqzWFUSKi31oOVqPwKXEluqET07BnBBqgXPjn6sEorMUFN+Wspz9MwQbRp06xV2CB9WSAGnbPDttnximvnmL84IBE/MnKmhiwYHSUZJrqub+saVSoOEEX7yN3a9sMTVh23G2LepkSfHI7m6LRU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728372898; c=relaxed/simple;
+	bh=abkj8J/cd/YrL9xVsq65KCJ+4jdcEgOC8IhHj1wq5TM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CsTsrzsoIOsghx2b7821Bs5s8euzWPGcJUPSzYn6j/tyTLr7HS2hpP9vfIIdV8tcoeuif6hJzcR2sDHauC2MlvOXB5thBQU/KSpsPikfPGCYsOE+MA9baTpuiv28txR2KvslPjAuAu3lO4jXC1quRPw2OExxpeZahFTxggD++A8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FkTOh8Oa; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7db54269325so4355385a12.2
+        for <linux-i2c@vger.kernel.org>; Tue, 08 Oct 2024 00:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1728372896; x=1728977696; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u6nHUKBuE+voOY32aZewsgutm6Y+KsLTlhpOoXvIMf0=;
+        b=FkTOh8Oawwk9fZcx0qKP90HK8jCNsut/D4K7BVQUmcodZOUnED9vE+9zqN7YyLJhXg
+         EPRebSFb8eRv68G2y2oKuQf6ti84X6+2d/he7XO13vVkFQWkkW1UgbMPMO4cMLaxkODO
+         Sp32UwrNVTqBtc5Ync3bhLtEeY0JGE2kfS1oM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728372896; x=1728977696;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u6nHUKBuE+voOY32aZewsgutm6Y+KsLTlhpOoXvIMf0=;
+        b=b+zgW+zgYPnV/KTxylJKIAuFOP1YW2nZbv2asfcaWh4dg3bbSNkUyhkCa2t5VBigSs
+         2F/SgG4G4E69+lk/j/OqYIoCQkARij12uv7vDZ4ApbFFEux8fcAqmy0miDvywCAq/uEL
+         RJjcp30v7rp9vCAyUwej51duBBqupBh/2AbpgfWjpW2L4R+r0DXr5VLI9Dx8b5x+wvaE
+         K3TwZbeZqK9la6BYr2hfWb1jmq99kVJm1qi1RfZ5hUME7brBzVHX/LL99nFBbKeTo5vr
+         mvH6LmaUlh3RaEwjNFEZskcEL6rG4uBCzKZ7gHcfcQWN5lfxqhfwNVu45Ybl97JZ6M7T
+         iS9w==
+X-Forwarded-Encrypted: i=1; AJvYcCURNJMiknlCNKttdSJlyq5TGS3L/PvzBVCAhIbp2np8huBbLw0790jIETLdVuB4eTXhU2zyKe4609s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+7CGb/M9on5msIDvJAnBcsRT4b5Q6D5a17Wb0Avjz5uyTzkp1
+	qq3Pv3BBeDACsU/pW4PGYorBNMvQXXL1UTFLZ+vNsV88uMmZLWk9XKgc/awMhg==
+X-Google-Smtp-Source: AGHT+IFr3DRuBViT/C80lNG8373cU4bgJJTs9BU1ot+zNY7t92dBMozwgyrX3MFCG4TiliIkIUEfUA==
+X-Received: by 2002:a17:902:ea0f:b0:20b:a431:8f17 with SMTP id d9443c01a7336-20bff1c4055mr263290245ad.58.1728372896043;
+        Tue, 08 Oct 2024 00:34:56 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:10df:d27e:8d4b:6740])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c13939bd7sm50121175ad.120.2024.10.08.00.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2024 00:34:55 -0700 (PDT)
+From: Chen-Yu Tsai <wenst@chromium.org>
+To: Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Chen-Yu Tsai <wenst@chromium.org>,
+	chrome-platform@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH v8 0/8] platform/chrome: Introduce DT hardware prober
+Date: Tue,  8 Oct 2024 15:34:19 +0800
+Message-ID: <20241008073430.3992087-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.47.0.rc0.187.ge670bccf7e-goog
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3937.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c70717ec-4ab9-4635-e07d-08dce766902a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Oct 2024 06:58:07.0657
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2lWIUWoOpO+C3GgMFBCscVoQ2KJxYFbppQwvTJKBcCtNDOzzNoY+dHWCK+X5fVmOSnZUb14RpStjCPeQZcWROQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9462
+Content-Transfer-Encoding: 8bit
 
-> Hi Carlos,
->=20
-> On Thu, Sep 12, 2024 at 04:24:13PM GMT, carlos.song@nxp.com wrote:
-> > From: Carlos Song <carlos.song@nxp.com>
-> >
-> > LPI2C support master controller and target controller enabled
-> > simultaneously. Both controllers share same SDA/SCL lines and
->=20
-> /same/the same/
->=20
-> > interrupt source but has separate control and status registers.
->=20
-> /separate/a separate/
->=20
-> > Even if target mode is enabled, LPI2C can still work normally as
-> > master controller at the same time.
->=20
-> It's not what happens in the irq handler, though (I left a comment in irq
-> handler).
->
-> > This patch supports basic target data read/write operations in 7-bit
-> > target address. LPI2C target mode can be enabled by using I2C slave
-> > backend. I2C slave backend behave like a standard I2C
->=20
-> /behave/behaves/
->=20
-> > client. For simple use and test, Linux I2C slave EEPROM backend can be
-> > used.
-> >
-> > Signed-off-by: Carlos Song <carlos.song@nxp.com>
->=20
-> ...
->=20
-> > +static irqreturn_t lpi2c_imx_isr(int irq, void *dev_id) {
-> > +     struct lpi2c_imx_struct *lpi2c_imx =3D dev_id;
-> > +
-> > +     if (lpi2c_imx->target) {
-> > +             u32 scr =3D readl(lpi2c_imx->base + LPI2C_SCR);
-> > +             u32 ssr =3D readl(lpi2c_imx->base + LPI2C_SSR);
-> > +             u32 sier_filter =3D ssr & readl(lpi2c_imx->base +
-> > + LPI2C_SIER);
-> > +
-> > +             /* Target is enabled and trigger irq then enter target
-> > + irq handler */
->=20
-> This sentence is a bit hard to understand, how about:
->=20
->                 /*
->                  * The target is enabled and an interrupt has
->                  * been triggered. Enter the target's irq handler.
->                  */
->=20
-> > +             if ((scr & SCR_SEN) && sier_filter)
-> > +                     return lpi2c_imx_target_isr(lpi2c_imx, ssr,
-> > + sier_filter);
->=20
-> Can't the interrupt be generated by the master if lpi2c_imx->target is as=
-signed?
->=20
-> In the git log you are describing a different behavior.
->=20
-Hi, Andi,
+Hi everyone,
 
-Thanks for your suggestion.
+This is v8 of my "of: Introduce hardware prober driver" series.
+v8 mainly reduced the number of callbacks as Doug suggested, and
+addressed all the review comments. The trackpad probing was converted
+to use the simple helpers, however in practice it still behaves like
+the dumb probing, since the regulator supply is marked as always on
+in the DT, and the delay is set to 0 to preserve present behavior.
 
-In fact, if lpi2c_imx->target is assigned, master still can generate the in=
-terrupt and will also can enter
-master's irq handler.
+Changes since v7:
+- Link to v7:
+  https://lore.kernel.org/all/20240911072751.365361-1-wenst@chromium.org/
+- Patch 2 "of: base: Add for_each_child_of_node_with_prefix()"
+  - Collected Rob's Reviewed-by
+- Patch 3 "i2c: core: Remove extra space in Makefile"
+  - Collected Andi's Reviewed-by
+- Patch 4 "i2c: Introduce OF component probe function"
+  - Dropped log level of "enabling component" to debug
+  - Dropped file name from header file
+  - Reverted to __free() cleanup for i2c bus node
+  - Corrected "failed-needs-probe" to "fail-needs-probe" in commit message
+  - Fixed incorrectly positioned period ('.') in commit message
+  - Expanded description of i2c_of_probe_component()
+  - Expanded comment explaining check for "available" devices to note that
+    if such a device is found then the i2c probe function becomes a no-op
+  - Simplified check for "available" devices for-each loop
+  - Expanded description of @free_resources_early callback to explicitly
+    state that it is not called if no working components are found
+  - Dropped !cfg check
+  - Replaced "fail" with "fail-needs-probe" in i2c_of_probe_component()
+    kernel doc
+  - Combined callbacks (.get_resources with .enable; .cleanup with
+    .free_resources_late); .free_resources_early renamed to .cleanup_early
+- Patch 5 "i2c: of-prober: Add simple helpers for regulator support"
+  - Reworded comment in i2c_of_probe_simple_get_supply() as suggested
+    (Andy)
+  - Dropped mention of time unit in struct i2c_of_probe_simple_opts
+    kernel doc (Andy)
+  - Added mention of common GPIO line usages ("enable" or "reset") in I2C
+    OF component prober kernel doc (Doug)
+  - Added check for non-zero delay before msleep() (Doug)
+  - Combined callback helpers (.get_resources with .enable; .cleanup with
+    .free_resources_late)
+- Patch 6 "i2c: of-prober: Add GPIO support to simple helpers"
+  - Dropped mention of time unit in struct i2c_of_probe_simple_opts
+    kernel doc (Andy)
+  - Added check for non-zero delay before msleep() (Doug)
+  - Simplified GPIO name check and reverse conditional branches (Andy)
+  - Added description about the supported power sequence
+  - Switched GPIO usage to logical levels (Doug)
+    - Changed some variable names and comments to fit
+  - Added description of power sequence to struct i2c_of_probe_simple_opts
+    (Doug)
+  - Added comment saying i2c_of_probe_simple_put_gpiod() might be no-op
+    (Doug)
+  - Combined callbacks (.get_resources with .enable; .cleanup with
+    .free_resources_late); renamed i2c_of_probe_simple_free_res_early() to
+    i2c_of_probe_simple_cleanup_early()
+- Patch 7 "platform/chrome: Introduce device tree hardware prober"
+  - Corrected Makefile item order
+  - Replaced "failed-needs-probe" with "fail-needs-probe" in commit message
+  - Added include of "linux/of.h" for of_machine_is_compatible()
+  - Switched to simple probe helpers for trackpads on Hana
+- Patch 8 "arm64: dts: mediatek: mt8173-elm-hana: Mark touchscreens and
+	   trackpads as fail"
+  - Mark touchscreen@40 as "fail-needs-probe" as well
 
-Because LPI2C has independent slave register group and master register grou=
-p.
-SCR register is slave control register, SSR register is slave status regist=
-er and SIER register is slave interrupt enable register.
-So Even if target is assigned, and if the interrupt is triggered by master,=
- this judgment will NOT hit:
-		if ((scr & SCR_SEN) && sier_filter)
-			return lpi2c_imx_target_isr(lpi2c_imx, ssr, sier_filter);
+The older changelog entries have been moved to the bottom of the cover
+letter.
 
-so logic will keep going then enter the lpi2c_imx_master_isr().
 
-Over all, when lpi2c_imx->target is assigned, either enter the master handl=
-er or the target handler.
-When lpi2c_imx->target is not assigned, only enter the master handler.
+For the I2C component (touchscreens and trackpads) case from the
+original series, the hardware prober driver finds the particular
+class of device in the device tree, gets its parent I2C adapter,
+and tries to initiate a simple I2C read for each device under that
+I2C bus. When it finds one that responds, it considers that one
+present, marks it as "okay", and returns, letting the driver core
+actually probe the device.
 
-Maybe my commit log "master mode and target mode can work at the same time"=
- is misleading.
-I will change to "Both master mode and target mode can be enabled".
+This works fine in most cases since these components are connected
+via a ribbon cable and always have the same resources. The prober
+will also grab these resources and enable them.
 
-Do I understand you correctly? If I do. Please tell me I will send V5 patch=
- for other fixes.
+The other case, selecting a display panel to use based on the SKU ID
+from the firmware, hit a bit of an issue with fixing the OF graph.
+It has been left out since v3.
 
-Carlos
-> > +     }
-> > +
-> > +     /* Otherwise triggered by master then handle irq in master
-> > + handler */
->=20
-> Otherwise the interrupt has been triggered by the master. Enter the maste=
-r's
-> irq handler.
->=20
-> > +     return lpi2c_imx_master_isr(lpi2c_imx); }
-> > +
-> > +static void lpi2c_imx_target_init(struct lpi2c_imx_struct *lpi2c_imx)
-> > +{
-> > +     u32 temp;
-> > +
-> > +     /* reset target module */
-> > +     writel(SCR_RST, lpi2c_imx->base + LPI2C_SCR);
-> > +     writel(0, lpi2c_imx->base + LPI2C_SCR);
-> > +
-> > +     /* Set target addr */
->=20
-> /addr/address/
->=20
-> > +     writel((lpi2c_imx->target->addr << 1), lpi2c_imx->base +
-> > + LPI2C_SAMR);
-> > +
-> > +     writel(SCFGR1_RXSTALL | SCFGR1_TXDSTALL, lpi2c_imx->base +
-> > + LPI2C_SCFGR1);
-> > +
-> > +     /*
-> > +      * set SCFGR2: FILTSDA, FILTSCL and CLKHOLD
-> > +      *
-> > +      * FILTSCL/FILTSDA can eliminate signal skew. It should generally=
- be
-> > +      * set to the same value and should be set >=3D 50ns.
-> > +      *
-> > +      * CLKHOLD is only used when clock stretching is enabled, but it =
-will
-> > +      * extend the clock stretching to ensure there is an additional d=
-elay
-> > +      * between the target driving SDA and the target releasing the SC=
-L
-> pin.
-> > +      *
-> > +      * CLKHOLD setting is crucial for lpi2c target. When master read =
-data
-> > +      * from target, if there is a delay caused by cpu idle, excessive=
- load,
-> > +      * or other delays between two bytes in one message transmission.=
- so
-> it
-> > +      * will cause a short interval time between the driving SDA
-> > + signal and
->=20
-> /transmission. so it will/transmittion, it will/
->=20
-> > +      * releasing SCL signal. Lpi2c master will mistakenly think it
-> > + is a stop
->=20
-> /Lpi2c/The lpi2c/
->=20
-> > +      * signal resulting in an arbitration failure. This issue can be =
-avoided
-> > +      * by setting CLKHOLD.
-> > +      *
-> > +      * In order to ensure lpi2c function normally when the lpi2c spee=
-d is as
-> > +      * low as 100kHz, CLKHOLD should be set 3 and it is also
-> > + compatible with
->=20
-> /3/to 3/
->=20
-> > +      * higher clock frequency like 400kHz and 1MHz.
-> > +      */
-> > +     temp =3D SCFGR2_FILTSDA(2) | SCFGR2_FILTSCL(2) |
-> SCFGR2_CLKHOLD(3);
-> > +     writel(temp, lpi2c_imx->base + LPI2C_SCFGR2);
-> > +
-> > +     /*
-> > +      * Enable module:
-> > +      * SCR_FILTEN can enable digital filter and output delay counter =
-for
-> LPI2C
-> > +      * target mode. So SCR_FILTEN need be asserted when enable
-> SDA/SCL FILTER
-> > +      * and CLKHOLD.
-> > +      */
-> > +     writel(SCR_SEN | SCR_FILTEN, lpi2c_imx->base + LPI2C_SCR);
-> > +
-> > +     /* Enable interrupt from i2c module */
-> > +     writel(SLAVE_INT_FLAG, lpi2c_imx->base + LPI2C_SIER); }
-> > +
-> > +static int lpi2c_imx_reg_target(struct i2c_client *client)
->=20
-> lpi2c_imx_register_target as a name is a bit better, in my opinion
->=20
-> > +{
-> > +     struct lpi2c_imx_struct *lpi2c_imx =3D
-> i2c_get_adapdata(client->adapter);
-> > +     int ret;
-> > +
-> > +     if (lpi2c_imx->target)
-> > +             return -EBUSY;
-> > +
-> > +     lpi2c_imx->target =3D client;
-> > +
-> > +     ret =3D pm_runtime_resume_and_get(lpi2c_imx->adapter.dev.parent);
-> > +     if (ret < 0) {
-> > +             dev_err(&lpi2c_imx->adapter.dev, "failed to resume i2c
-> controller");
-> > +             return ret;
-> > +     }
-> > +
-> > +     lpi2c_imx_target_init(lpi2c_imx);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int lpi2c_imx_unreg_target(struct i2c_client *client)
->=20
-> lpi2c_imx_unregister_target sounds better to me.
->=20
-> > +{
-> > +     struct lpi2c_imx_struct *lpi2c_imx =3D
-> i2c_get_adapdata(client->adapter);
-> > +     int ret;
-> > +
-> > +     if (!lpi2c_imx->target)
-> > +             return -EINVAL;
-> > +
->=20
-> ...
->=20
-> > +static int lpi2c_suspend_noirq(struct device *dev) {
-> > +     int ret;
-> > +
-> > +     ret =3D pm_runtime_force_suspend(dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     return 0;
->=20
-> This function can simply be:
->=20
->    static int lpi2c_suspend_noirq(struct device *dev)
->    {
->         return pm_runtime_force_suspend(dev);
->    }
->=20
-> but I'm not strong for it, your choice.
->=20
-> > +}
-> > +
-> > +static int lpi2c_resume_noirq(struct device *dev) {
-> > +     struct lpi2c_imx_struct *lpi2c_imx =3D dev_get_drvdata(dev);
-> > +     int ret;
-> > +
-> > +     ret =3D pm_runtime_force_resume(dev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /*
-> > +      * If i2c module powered down in system suspend, register
-> > +      * value will lose. So reinit target when system resume.
-> > +      */
->=20
-> Can we re-write this to something like:
->=20
->         /*
->          * If the I2C module powers down during system suspend,
->          * the register values will be lost. Therefore, reinitialize
->          * the target when the system resumes.
->          */
->=20
-> Thanks,
-> Andi
->=20
-> > +     if (lpi2c_imx->target)
-> > +             lpi2c_imx_target_init(lpi2c_imx);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  static const struct dev_pm_ops lpi2c_pm_ops =3D {
-> > -     SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-> > -                                   pm_runtime_force_resume)
-> > +     SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(lpi2c_suspend_noirq,
-> > +                                   lpi2c_resume_noirq)
-> >       SET_RUNTIME_PM_OPS(lpi2c_runtime_suspend,
-> >                          lpi2c_runtime_resume, NULL)  };
-> > --
-> > 2.34.1
-> >
+Patch 1 adds of_changeset_update_prop_string(), as requested by Rob.
+
+Patch 2 adds for_each_child_of_node_with_prefix(), as suggested by Andy.
+
+Patch 3 cleans up some extra spaces in the i2c core Makefile
+
+Patch 4 implements probing the I2C bus for presence of components as
+a hookable helper function in the I2C core.
+
+Patch 5 implements regulator supply support as a set of simple helpers
+for the I2C component prober.
+
+Patch 6 implements GPIO support for the I2C component prober simple
+helpers.
+
+Patch 7 adds a ChromeOS specific DT hardware prober. This initial
+version targets the Hana Chromebooks, probing its I2C trackpads and
+touchscreens.
+
+Patch 8 modifies the Hana device tree and marks the touchscreens
+and trackpads as "fail-needs-probe", ready for the driver to probe.
+
+
+The regulator parts were merged separately with an immutable tag [1]. Rob
+already gave his Reviewed-by for the OF bits, and I assume he is OK with
+them going through a different branch. So I believe it is fine for
+Wolfram to take all the patch except the last one through the I2C tree.
+The last DTS patch can be merged through the MediaTek tree once the
+driver bits land.
+
+
+Thanks
+ChenYu
+
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git/tag/?h=regulator-of-get-optional
+
+Changes since v6:
+- Link to v6:
+  https://lore.kernel.org/all/20240904090016.2841572-1-wenst@chromium.org/
+- Dropped patch "gpiolib: Add gpio_property_name_length()"
+  No longer needed
+- Dropped patch "regulator: Move OF-specific regulator lookup code to of_regulator.c"
+  Already merged
+- Patch 2 "of: base: Add for_each_child_of_node_with_prefix()"
+  - Changed helper name to "for_each_child_of_node_with_prefix()"
+- Patch 4 "regulator: Add of_regulator_get_optional() for pure DT regulator lookup"
+  - Was "regulator: Do pure DT regulator lookup in of_regulator_bulk_get_all()"
+  - Changed reference [1] to Link: tag
+  - Rebased on top of commit 401d078eaf2e ("regulator: of: Refactor
+    of_get_*regulator() to decrease indentation")
+  - Exported of_regulator_get_optional()
+  - Changed commit message to focus on "of_regulator_get_optional()"
+  - Dropped change to of_regulator_bulk_get_all()
+- Patch 5 "i2c: core: Remove extra space in Makefile"
+  - Collected Andy's Reviewed-by
+- Patch 6 "i2c: Introduce OF component probe function"
+  - Correctly replaced for_each_child_of_node_scoped() with
+    for_each_child_of_node_with_prefix()
+  - Added namespace for exported symbols
+  - Made the probe function a framework with hooks
+  - Split out a new header file
+  - Added MAINTAINERS entry
+  - Reworded kernel-doc
+  - Dropped usage of __free from i2c_of_probe_component() since error
+    path cleanup is needed anyway
+- Patch 7 "i2c: of-prober: Add simple helpers for regulator support"
+  - Moved change of of_get_next_child_scoped() to
+    of_get_next_child_with_prefix() to previous patch
+  - Restructured into helpers for the I2C OF component prober
+  - Reduced to only handle one regulator
+  - Commit message updated
+- Patch 8 "i2c: of-prober: Add GPIO support to simple helpers"
+  - Restructured into helpers for the I2C OF component prober
+  - Reduced to only handle one GPIO
+  - Set GPIO to input on (failure) cleanup
+  - Updated commit message
+- Patch 9 "platform/chrome: Introduce device tree hardware prober"
+  - Adapted to new I2C OF prober interface
+  - Collected Acked-by tag
+
+Changes since v5:
+- Link to v5:
+  https://lore.kernel.org/all/20240822092006.3134096-1-wenst@chromium.org/
+- Patch 1 "of: dynamic: Add of_changeset_update_prop_string"
+  - Collected Rob's reviewed-by
+- Patch 2 "of: base: Add for_each_child_of_node_with_prefix_scoped()"
+  - New patch
+- Patch 3 "regulator: Move OF-specific regulator lookup code to of_regulator.c"
+  - Fix kerneldoc format of of_regulator_dev_lookup()
+  - Fix stub compile error for !CONFIG_OF in drivers/regulator/internal.h
+- Patch 4 "regulator: Split up _regulator_get()"
+  - Fixed kerneldoc "Return" section format for _regulator_get_common()
+  - Slightly reworded return value description
+- Patch 5 "regulator: Do pure DT regulator lookup in of_regulator_bulk_get_all()"
+  - Used "dev_of_node(dev)" instead of "dev->of_node"
+  - Replaced "dev_printk" with "dev_printk()" in kerneldoc mentions
+  - Fixed kerneldoc "Return" section format for of_regulator_get_optional()
+  - Fix @np parameter name in of_regulator_dev_lookup() kerneldoc
+- Patch 6 "gpiolib: Add gpio_property_name_length()"
+  - Changed function name to "gpio_get_property_name_length()"
+  - Changed argument name to "propname"
+  - Clarified return value for "*-<GPIO suffix>" case
+  - Reworked according to Andy's suggestion
+  - Added stub function
+- Patch 7 "i2c: core: Remove extra space in Makefile"
+  - New patch
+- Patch 8 "i2c: Introduce OF component probe function"
+  - Fixed indent in Makefile
+  - Split regulator and GPIO TODO items
+  - Reversed final conditional in i2c_of_probe_enable_node()
+- Patch 9 "i2c: of-prober: Add regulator support"
+  - Split of_regulator_bulk_get_all() return value check and explain
+    "ret == 0" case
+  - Switched to of_get_next_child_with_prefix_scoped() where applicable
+  - Used krealloc_array() instead of directly calculating size
+  - copy whole regulator array in one memcpy() call
+  - Drop "0" from struct zeroing initializer
+  - Split out regulator helper from i2c_of_probe_enable_res() to keep
+    code cleaner when combined with the next patch
+  - Added options for customizing power sequencing delay
+  - Rename i2c_of_probe_get_regulator() to i2c_of_probe_get_regulators()
+  - Add i2c_of_probe_free_regulator() helper
+- Patch 10 "i2c: of-prober: Add GPIO support"
+  - Renamed "con" to "propname" in i2c_of_probe_get_gpiod()
+  - Copy string first and check return value of strscpy() for overflow in
+    i2c_of_probe_get_gpiod()
+  - Add parenthesis around "enable" and "reset" GPIO names in comments
+  - Split resource count debug message into two separate lines
+  - Split out GPIO helper from i2c_of_probe_enable_res() to keep code
+    cleaner following the previous patch
+  - Adopted options for customizing power sequencing delay following
+    previous patch
+- Patch 11 "platform/chrome: Introduce device tree hardware prober"
+  - Adapt to new i2c_of_probe_component() parameters
+- Patch 12 "arm64: dts: mediatek: mt8173-elm-hana: Mark touchscreens and
+	    trackpads as fail"
+  - None
+
+See v5 cover letter for previous change logs.
+
+Chen-Yu Tsai (8):
+  of: dynamic: Add of_changeset_update_prop_string
+  of: base: Add for_each_child_of_node_with_prefix()
+  i2c: core: Remove extra space in Makefile
+  i2c: Introduce OF component probe function
+  i2c: of-prober: Add simple helpers for regulator support
+  i2c: of-prober: Add GPIO support to simple helpers
+  platform/chrome: Introduce device tree hardware prober
+  arm64: dts: mediatek: mt8173-elm-hana: Mark touchscreens and trackpads
+    as fail
+
+ MAINTAINERS                                   |   8 +
+ .../boot/dts/mediatek/mt8173-elm-hana.dtsi    |  14 +
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi  |   4 +-
+ drivers/i2c/Makefile                          |   7 +-
+ drivers/i2c/i2c-core-of-prober.c              | 412 ++++++++++++++++++
+ drivers/of/base.c                             |  35 ++
+ drivers/of/dynamic.c                          |  44 ++
+ drivers/platform/chrome/Kconfig               |  11 +
+ drivers/platform/chrome/Makefile              |   1 +
+ .../platform/chrome/chromeos_of_hw_prober.c   | 140 ++++++
+ include/linux/i2c-of-prober.h                 | 134 ++++++
+ include/linux/of.h                            |  13 +
+ 12 files changed, 818 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/i2c/i2c-core-of-prober.c
+ create mode 100644 drivers/platform/chrome/chromeos_of_hw_prober.c
+ create mode 100644 include/linux/i2c-of-prober.h
+
+-- 
+2.47.0.rc0.187.ge670bccf7e-goog
+
 
