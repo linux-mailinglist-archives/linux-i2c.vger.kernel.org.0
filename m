@@ -1,53 +1,60 @@
-Return-Path: <linux-i2c+bounces-7310-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7311-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CB2C996D12
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2024 16:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C49B99703B
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2024 18:01:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F041281CCC
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2024 14:02:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA515285730
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2024 16:01:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62CF01A254F;
-	Wed,  9 Oct 2024 14:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412181AD9ED;
+	Wed,  9 Oct 2024 15:35:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="V9WBB2Io"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ubTSdqyG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AE819AD86;
-	Wed,  9 Oct 2024 14:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF1E1925A0;
+	Wed,  9 Oct 2024 15:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728482475; cv=none; b=JTTBLjxbMIxFricqxvyxdUvWezM2GEG0dcLtaRpIiOmSjbgbNYsM4TkPXws1s6DfZipYdyaLhJEvROnW1xekr/d8JdNGlfjlZYa42X2w+xG9bZ2I3LzP7Pj0mJ5Kh9CSzg6nxbwAfs4LC8WQirRdPZPS77LBjR3QjsJzwjLADkg=
+	t=1728488131; cv=none; b=PnXAxWMc0BvykK9tz0d5OLbt6ozKyAEyZU+Jq3kKhqdfT1ayNgSVobSl0H5eUSz9hulfA2Z3H+DfGkhlJr5fQo6tOZ93mD1EUnkhU52xPX4THyTb9P8IrNIB7yA0Jv5yw4NvjU7xxoOP2KWJCvUda4hTdu98Nut+ucvWcEnK3SE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728482475; c=relaxed/simple;
-	bh=9kaHINEv4/7SSdXuzvpM/8FbTviCbgIiOfx2HjQC/Us=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RyZtXFAnToN2E1L9nk/Yy4l9T2vAbygG9/ra/A83lSExhMYINcYh6V0gsXqlkumQATa0dgxb7l9p/fsxJwr5j8SwXsbaTHI3jr+sJhx+oqy59pmDO7MyYEcV+Av1/OxLVO142KZC99b0l+ZF5eSRuYatlvZ4q9ItCxEE8OqQs5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=V9WBB2Io; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E36B1BF20F;
-	Wed,  9 Oct 2024 14:01:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728482471;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KN4a14PZ8SWOObiK/DnNIgNJ+gCkWYqBAi+54cWiank=;
-	b=V9WBB2Io+6zw/6SSxWaygTW2qxD+pr0kCkqPuKUogz+niFRH/WqurvOvsNdkgvY+v9WG++
-	7quuOThLEQrCPzWM8Ot/8Psm8WFsex3ibZ0F+KTBbJqVY6NIW1zVhQ1GOEmiZkYdkyyKtX
-	0FGJwbqLQqLcXO7LFQdM1PKyQj8aBwhI7bs8FaW4wprwJlp9d4/OQvaVQnN0kRbNHWYMvk
-	l1vxqOQxE4OBHnrNR1Sp8ON8mOLGnVWKtQO1zO0/iCnT9anaXAn+RmNRQ97nNr2LoE53os
-	TnBMJ3AF0UVw3zmaJb08+DptPEPfKb+2nR0sh8WHXaG3h2oD1nzFtrzSjdnw6Q==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Wed, 09 Oct 2024 16:01:12 +0200
-Subject: [PATCH v3 6/6] i2c: nomadik: support >=1MHz speed modes
+	s=arc-20240116; t=1728488131; c=relaxed/simple;
+	bh=3YKf4wKe97IZuGPzRWJvZsU/s9xM8HMmlYnkvbFJI0Q=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=EwT32akgyE6666Cbf1n8HnyJu2rZKiActY0Crd0pX0Mdhwu8FkH6WQRkSE4ZiO2pJCdboxhhcLEdT4Bmbhe6063l05AQQ1m+/N44W2Ml6K2Nf1R6bSDw1ZPCVERvmI0TOsl7cfiDPshhdMjyXa7g6V03pz32yrItXPxXRVxRhDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ubTSdqyG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D880BC4CEC3;
+	Wed,  9 Oct 2024 15:35:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728488130;
+	bh=3YKf4wKe97IZuGPzRWJvZsU/s9xM8HMmlYnkvbFJI0Q=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=ubTSdqyGo6z5z/ZicbAqro0XaI2uqoDHton7yrxCOJ5efww9Qgvg3PPesV7zgkmPv
+	 BazLs0C6im+4Lygt+FLdjJEcFrqDJFFd5UKlLdh3qoaqGRBhL5E1QpC2COaKprk6Wu
+	 S9kyamdWcuY0PHosV+KOpuDDxDvoa6lhCo43RvULn5bn+cSc7Mq8xjDo701cXJ+gLq
+	 EoEHYn4YCDPWLvTH1fcsQz33nZuEjTPhPl+GscVEYNhHhr58apExEIeA9L2VYaaRRl
+	 QLkVYBrMnTOia9LBc26h0cj3oNqZRYBPs8Jemy7Bvf3PNshornxsm8zaT9W6IBkSG3
+	 TdSmAq+4cw8uw==
+From: Lee Jones <lee@kernel.org>
+To: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Thomas Richard <thomas.richard@bootlin.com>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com
+In-Reply-To: <20241001-congatec-board-controller-v3-0-39ceceed5c47@bootlin.com>
+References: <20241001-congatec-board-controller-v3-0-39ceceed5c47@bootlin.com>
+Subject: Re: [PATCH v3 0/5] Congatec Board Controller drivers
+Message-Id: <172848812261.638400.481811844035668418.b4-ty@kernel.org>
+Date: Wed, 09 Oct 2024 16:35:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,124 +63,33 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241009-mbly-i2c-v3-6-e7fd13bcf1c4@bootlin.com>
-References: <20241009-mbly-i2c-v3-0-e7fd13bcf1c4@bootlin.com>
-In-Reply-To: <20241009-mbly-i2c-v3-0-e7fd13bcf1c4@bootlin.com>
-To: Linus Walleij <linus.walleij@linaro.org>, 
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: theo.lebrun@bootlin.com
+X-Mailer: b4 0.13.0
 
- - BRCR value must go into the BRCR1 field when in high-speed mode.
-   It goes into BRCR2 otherwise.
+On Tue, 01 Oct 2024 13:53:26 +0200, Thomas Richard wrote:
+> This is the third iteration of the Congatec Board Controller series.
+> 
+> There are only few changes for the GPIO driver (commit message, Kconfig,
+> remove useless cast).
+> I also rebased the series on Linux v6.12-rc1.
+> 
+> Best Regards,
+> 
+> [...]
 
- - Remove fallback to standard mode if priv->sm > I2C_FREQ_MODE_FAST.
+Applied, thanks!
 
- - Set SM properly in probe; previously it only checked STANDARD versus
-   FAST. Now we set STANDARD, FAST, FAST_PLUS or HIGH_SPEED.
+[1/5] mfd: add Congatec Board Controller mfd driver
+      commit: 6f1067cfbee72b04fc42234f7f1588f838cec0b6
+[2/5] gpio: Congatec Board Controller gpio driver
+      commit: 4342bf63b64b09561f4ad1537de2e1a971cfb197
+[3/5] i2c: Congatec Board Controller i2c bus driver
+      commit: 6894f640b8f3f48700ccc828419ba60704f5a405
+[4/5] watchdog: Congatec Board Controller watchdog timer driver
+      commit: 6f264047869e9683520ff8f7c235c07c1ca989d6
+[5/5] MAINTAINERS: Add entry for Congatec Board Controller
+      commit: 590bcce85e014a2e16afe910bc6a20b4c1b2b374
 
- - Remove all comment sections saying we only support low-speeds.
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- drivers/i2c/busses/i2c-nomadik.c | 40 ++++++++++++++++------------------------
- 1 file changed, 16 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-nomadik.c b/drivers/i2c/busses/i2c-nomadik.c
-index 90e3390cd66de5b3aa47d94de7fb30e1d67ac70e..efb33802804fdde82fe6d38d4f89d0b898f1667e 100644
---- a/drivers/i2c/busses/i2c-nomadik.c
-+++ b/drivers/i2c/busses/i2c-nomadik.c
-@@ -397,7 +397,7 @@ static u32 load_i2c_mcr_reg(struct nmk_i2c_dev *priv, u16 flags)
-  */
- static void setup_i2c_controller(struct nmk_i2c_dev *priv)
- {
--	u32 brcr1, brcr2;
-+	u32 brcr;
- 	u32 i2c_clk, div;
- 	u32 ns;
- 	u16 slsu;
-@@ -444,7 +444,7 @@ static void setup_i2c_controller(struct nmk_i2c_dev *priv)
- 	/*
- 	 * The spec says, in case of std. mode the divider is
- 	 * 2 whereas it is 3 for fast and fastplus mode of
--	 * operation. TODO - high speed support.
-+	 * operation.
- 	 */
- 	div = (priv->clk_freq > I2C_MAX_STANDARD_MODE_FREQ) ? 3 : 2;
- 
-@@ -452,34 +452,23 @@ static void setup_i2c_controller(struct nmk_i2c_dev *priv)
- 	 * generate the mask for baud rate counters. The controller
- 	 * has two baud rate counters. One is used for High speed
- 	 * operation, and the other is for std, fast mode, fast mode
--	 * plus operation. Currently we do not supprt high speed mode
--	 * so set brcr1 to 0.
-+	 * plus operation.
- 	 *
- 	 * BRCR is a clock divider amount. Pick highest value that
- 	 * leads to rate strictly below target. Eg when asking for
- 	 * 400kHz you want a bus rate <=400kHz (and not >=400kHz).
- 	 */
--	brcr1 = FIELD_PREP(I2C_BRCR_BRCNT1, 0);
--	brcr2 = FIELD_PREP(I2C_BRCR_BRCNT2, DIV_ROUND_UP(i2c_clk, priv->clk_freq * div));
-+	brcr = DIV_ROUND_UP(i2c_clk, priv->clk_freq * div);
-+
-+	if (priv->sm == I2C_FREQ_MODE_HIGH_SPEED)
-+		brcr = FIELD_PREP(I2C_BRCR_BRCNT1, brcr);
-+	else
-+		brcr = FIELD_PREP(I2C_BRCR_BRCNT2, brcr);
- 
- 	/* set the baud rate counter register */
--	writel((brcr1 | brcr2), priv->virtbase + I2C_BRCR);
-+	writel(brcr, priv->virtbase + I2C_BRCR);
- 
--	/*
--	 * set the speed mode. Currently we support
--	 * only standard and fast mode of operation
--	 * TODO - support for fast mode plus (up to 1Mb/s)
--	 * and high speed (up to 3.4 Mb/s)
--	 */
--	if (priv->sm > I2C_FREQ_MODE_FAST) {
--		dev_err(&priv->adev->dev,
--			"do not support this mode defaulting to std. mode\n");
--		brcr2 = FIELD_PREP(I2C_BRCR_BRCNT2,
--				   i2c_clk / (I2C_MAX_STANDARD_MODE_FREQ * 2));
--		writel((brcr1 | brcr2), priv->virtbase + I2C_BRCR);
--		writel(FIELD_PREP(I2C_CR_SM, I2C_FREQ_MODE_STANDARD),
--		       priv->virtbase + I2C_CR);
--	}
-+	/* set the speed mode */
- 	writel(FIELD_PREP(I2C_CR_SM, priv->sm), priv->virtbase + I2C_CR);
- 
- 	/* set the Tx and Rx FIFO threshold */
-@@ -1020,11 +1009,14 @@ static void nmk_i2c_of_probe(struct device_node *np,
- 	if (of_property_read_u32(np, "clock-frequency", &priv->clk_freq))
- 		priv->clk_freq = I2C_MAX_STANDARD_MODE_FREQ;
- 
--	/* This driver only supports 'standard' and 'fast' modes of operation. */
- 	if (priv->clk_freq <= I2C_MAX_STANDARD_MODE_FREQ)
- 		priv->sm = I2C_FREQ_MODE_STANDARD;
--	else
-+	else if (priv->clk_freq <= I2C_MAX_FAST_MODE_FREQ)
- 		priv->sm = I2C_FREQ_MODE_FAST;
-+	else if (priv->clk_freq <= I2C_MAX_FAST_MODE_PLUS_FREQ)
-+		priv->sm = I2C_FREQ_MODE_FAST_PLUS;
-+	else
-+		priv->sm = I2C_FREQ_MODE_HIGH_SPEED;
- 	priv->tft = 1; /* Tx FIFO threshold */
- 	priv->rft = 8; /* Rx FIFO threshold */
- 
-
--- 
-2.46.2
+--
+Lee Jones [李琼斯]
 
 
