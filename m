@@ -1,159 +1,153 @@
-Return-Path: <linux-i2c+bounces-7303-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7305-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33506996C3E
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2024 15:35:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C56C996CFE
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2024 16:01:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 653591C20915
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2024 13:35:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A34DB1F2464A
+	for <lists+linux-i2c@lfdr.de>; Wed,  9 Oct 2024 14:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE8519A298;
-	Wed,  9 Oct 2024 13:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D3C2199FB5;
+	Wed,  9 Oct 2024 14:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UxVfI2im"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cSmlJlHI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CEC5199FAC;
-	Wed,  9 Oct 2024 13:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3A018BBAE;
+	Wed,  9 Oct 2024 14:01:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728480892; cv=none; b=pzZ7NTkR5h8r20ylQ9kI9fHKHKFCUP1bx9unXjnoJwwG+cioU5TIjhhh+PcIBy9B4hqrEdVt7GbGWAgwuQ/cSaxx/NM9KfkkbdW16BiDYh2zEOMNeEObP6u+8mo+ob6nK7VPyHEyQBMDG+a0fyuZ45DSymrwQr0Ao6EImCWsxC8=
+	t=1728482472; cv=none; b=pU0hIwRJReqVvjdtBdo2E578pnWornDSBlsQmyxjG0V+NYmYguV9D5k/asxgg0f+wBIAB4b808k4q+D/+066xGYiUWp5I9I3r/Wnl2gI8ZFjWbbxrYVlHZros+LILjjjFfn1J3RDcZVreofYQNxVXZj/ckCKjl0G/X4SAEnQ8uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728480892; c=relaxed/simple;
-	bh=/ZTDffNFDZKxF0g3qi5U9UZvxfincxZ36E4W2KgCM5A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=ORp4R5oK/2tgxrAAGuuyXkK9uujkI7P8AkLcXhrB0byjWXmDmvZ9k0N71vTO4j6enMOoIGjJ66xnZ4W1ylSLFjctCdRK77CxqO6Ijg9ypUa9sH73x8ooUYXpsxPhJgcrL0/rDMNmJCl9RZ26IbkYX+EjjFPIblbuVrUaVujiwO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UxVfI2im; arc=none smtp.client-ip=217.70.183.199
+	s=arc-20240116; t=1728482472; c=relaxed/simple;
+	bh=sgqYjYWWrUjFuJvmE74MP0NEEMmc6GWxYEJNsz+2ICQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FncVZYte+sthxP2o0YZH14gXUwTYEiCApgsWf/AEFRokH+s4E9YUdM3FGXRTc1cqCL+N5RywRJX+teQdqhVnfpXUIegg+wP8zMrKaSkzzqqzlrKgpWiCBSs3NKn16Mpqn7BBP5jryW7iRj3Ay0BGgNTOFfgtBOrrDf345hUIAAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cSmlJlHI; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 22F3CFF80B;
-	Wed,  9 Oct 2024 13:34:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D7D71BF20A;
+	Wed,  9 Oct 2024 14:01:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728480888;
+	t=1728482467;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F0MBrQbOMuGChrtybxaDhn3GkZqM1N0vWTYl1Zb6rdQ=;
-	b=UxVfI2imCfvFG2o3d/gCVGRp4YiBJ1/zSytR9U9hdzsUs5s9Tv7kE+Y4EFzomrXLD2rR2/
-	AqmEvPUznit5LZzXQ2zYw6vlUHJhACH6D5+Xq4AJN3JzpiwofVjJs0wZ/PRiFQEIMBAExH
-	+q5qik0dpm2w2EOgoQrK7qx7DQWjWS1UAyN7tCdLBikaoksD1XAsr3gdgONASQITHJ9DsU
-	IGX97Uy+iVGNAPzSZoNoKo/qfj5KgO6ZMA/l+NpwTHVd3GvUro2+bTdzYaEXiETLbCORhN
-	FN3Bc3UtAqfhZvb+qQAfJdb8W7AMB5/qcsbPKrwpCYINIxtx1iuw4lydId74mA==
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=meMdgwASJTSVQgcqYdIohoxaA+Loney7M/QLmYnOhZs=;
+	b=cSmlJlHILjk/s2eeKZUUNwUfWBXw1ZL0a6VKOIxXTRh3Bw5nBRk7D4K+cqQjBj6AeIirK+
+	LZQtEc0QnZdmFLdgimtgY7+PoC//8GBays7Czyq4NeoAeYSIzWrDo9RJDY+mQ1cN/8oiti
+	bjbfxZEi9LPblK11/kUe5Pz3d2bt3etFtCyqB9IIt2G5Ol/sJqXSzg2CSutkOwDnnXkF7q
+	LPFIWBNQVVJTgPB9M8KKvHf9RdYpCUWKptPWXp8sKbAWScIVEUa5WgaVaRJFWMO8rGEQL8
+	vyyBEuKPQNFEOliZ3wGSWFT0+n/PFVxevlBpxGwKL6TNPQJKf8trtJeJiF7t1w==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v3 0/6] i2c: nomadik: support >=1MHz & Mobileye EyeQ6H
+ platform
+Date: Wed, 09 Oct 2024 16:01:06 +0200
+Message-Id: <20241009-mbly-i2c-v3-0-e7fd13bcf1c4@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 09 Oct 2024 15:34:47 +0200
-Message-Id: <D4RBC5VO5DLQ.PATCQSM33ORM@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v2 5/6] i2c: nomadik: fix BRCR computation
-Cc: "Andi Shyti" <andi.shyti@kernel.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
- <conor+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, =?utf-8?q?Gr=C3=A9gory_Clement?=
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Linus Walleij"
- <linus.walleij@linaro.org>
-X-Mailer: aerc 0.18.2-0-ge037c095a049
-References: <20241009-mbly-i2c-v2-0-ac9230a8dac5@bootlin.com>
- <20241009-mbly-i2c-v2-5-ac9230a8dac5@bootlin.com>
- <CACRpkdZyyFR1niN+w_t43uE0XASKMzkUHGHuHWdj_VXCKLTR-g@mail.gmail.com>
- <D4RB9IS3O0L1.2G9E2688BL4PZ@bootlin.com>
-In-Reply-To: <D4RB9IS3O0L1.2G9E2688BL4PZ@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKKMBmcC/1WMwQ6CMBAFf4X0bM12QUo9+R/GQylFNgFqWtJIC
+ P9uITHicV7ezMKC9WQDu2YL8zZSIDcmyE8ZM50en5ZTk5ghYCEAJB/qfuaEhmMpjWqKCmsFLN1
+ f3rb03lP3R+KOwuT8vJej2NZvpPpFouDANZRG5EJqbOWtdm7qaTwbN7AtE/GoqoOKm2oU5qCrR
+ pvLv7qu6wfMVucp3QAAAA==
+X-Change-ID: 20241007-mbly-i2c-267c9d482b90
+To: Linus Walleij <linus.walleij@linaro.org>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.14.2
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Wed Oct 9, 2024 at 3:31 PM CEST, Th=C3=A9o Lebrun wrote:
-> On Wed Oct 9, 2024 at 1:34 PM CEST, Linus Walleij wrote:
-> > On Wed, Oct 9, 2024 at 12:23=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@b=
-ootlin.com> wrote:
-> > > --- a/drivers/i2c/busses/i2c-nomadik.c
-> > > +++ b/drivers/i2c/busses/i2c-nomadik.c
-> > > @@ -454,9 +454,12 @@ static void setup_i2c_controller(struct nmk_i2c_=
-dev *priv)
-> > >          * operation, and the other is for std, fast mode, fast mode
-> > >          * plus operation. Currently we do not supprt high speed mode
-> > >          * so set brcr1 to 0.
-> > > +        *
-> > > +        * BRCR is a clock divider amount. Pick highest value that
-> > > +        * leads to rate strictly below target.
-> > >          */
-> >
-> > You could push in some more details from the commit message here so it'=
-s not
-> > so terse.
->
-> Most of the details from the commit message come from behavior changes:
-> what was done previously versus what is the new behavior we implement.
->
-> Having a clock divider picking the bus rate that is below the target
-> speed rather than above sounds rather intuitive. Eg when you ask for
-> 400kHz you want <=3D400kHz, not >=3D400kHz.
->
-> I'll add that last sentence "Eg when you ask for 400kHz you want a bus
-> rate <=3D400kHz (and not >=3D400kHz)". It is straight forward and easy to
-> understand.
->
-> > >         brcr1 =3D FIELD_PREP(I2C_BRCR_BRCNT1, 0);
-> > > -       brcr2 =3D FIELD_PREP(I2C_BRCR_BRCNT2, i2c_clk / (priv->clk_fr=
-eq * div));
-> > > +       brcr2 =3D FIELD_PREP(I2C_BRCR_BRCNT2, i2c_clk / (priv->clk_fr=
-eq * div) + 1);
-> >
-> > Doesn't the last part correspond to something like
-> > #include <linux/math.h>
-> > u64 scaler =3D DIV_ROUND_DOWN_ULL(i2c_clk, (priv->clk_freq * div));
-> > brcr2 =3D FIELD_PREP(I2C_BRCR_BRCNT2, (u32)scaler);
-> >
-> > Certianly one of the in-kernel division helpers like DIV_ROUND_DOWN
-> > round_up() etc are better to use IMO, but I might not be understanding =
-the
-> > fine details of the math here.
->
-> Indeed what we want is:
-> 	DIV_ROUND_DOWN(i2c_clk, priv->clk_freq * div)
+Hi,
 
-s/DIV_ROUND_DOWN/DIV_ROUND_UP/
-(sorry for the confusion)
+Three patches are about adding Mobileye EyeQ6H support to the Nomadik
+I2C controller driver, in the same vein as was done a few months ago
+for EyeQ5.
+ - dt-bindings:
+    - [PATCH 1/6]: add new compatible.
+ - driver:
+    - [PATCH 3/6]: we switch from using a match table, before adding the
+      new EyeQ6H compatible.
+    - [PATCH 4/6]: adding EyeQ6H is only about creating a new match
+      table entry thanks to the previous patch; we reuse
+      the .has_32b_bus flag created for EyeQ5.
 
->
-> I see no reason to use DIV_ROUND_DOWN_ULL(). It would be useful if
+Three patches are about supporting higher speeds (fast-plus and
+high-speed).
+ - dt-bindings:
+    - [PATCH 2/6]: fix them, they indicated only a max of 400kHz.
+ - driver:
+    - [PATCH 5/6]: fix computation of the bus rate clock divider (BRCR).
+      For a bus rate of 400kHz, it would pick >400kHz. Now pick <400kHz.
+    - [PATCH 6/6]: support high SM (speed-mode) values.
+      This is not much work.
 
-s/DIV_ROUND_DOWN_ULL/DIV_ROUND_UP_ULL/
+It works on EyeQ6H HW just fine. 1MHz has been tested but not 3.4MHz
+because HW doesn't support it. The theory is there, and BRCR
+computation has been checked to be valid with 3.4MHz clocks.
 
-> 	i2c_clk + (priv->clk_freq * div)
-> had a chance to overflow.
->
-> Worst case is:
-> 	3_400_000 + (48_000_000 * 3) =3D 147_400_000
->
-> Will send v3 straight away as this is a significant change,
-> thanks Linus!
->
-> --
-> Th=C3=A9o Lebrun, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+DTS patches targeting EyeQ5 & EyeQ6H devicetrees are not provided
+because they depend on the platform's clock series [0].
 
+Have a nice day,
+Théo
 
-Regards,
+[0]: https://lore.kernel.org/lkml/20241007-mbly-clk-v5-0-e9d8994269cb@bootlin.com/
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Changes in v3:
+- [PATCH 5/6] "i2c: nomadik: fix BRCR computation":
+  - Use DIV_ROUND_UP() for BRCR calculation.
+  - Improve code comment.
+  - Add small note in commit message about DIV_ROUND_UP() usage.
+- For all patches but [PATCH 5/6], apply Reviewed-by: Linus Walleij.
+- Link to v2: https://lore.kernel.org/r/20241009-mbly-i2c-v2-0-ac9230a8dac5@bootlin.com
+
+Changes in v2:
+- dt-bindings: change `clock-frequency: maximum` from 400kHz to 3.4MHz
+  in a separate patch.
+- dt-bindings: use enum to list compatibles.
+- Switch away from of_device_is_compatible() in probe. Use a match table
+  with flags inside .data, using of_match_device() from probe.
+  This is done as a separate commit before adding EyeQ6H support.
+- Link to v1: https://lore.kernel.org/r/20241008-mbly-i2c-v1-0-a06c1317a2f7@bootlin.com
+
+---
+Théo Lebrun (6):
+      dt-bindings: i2c: nomadik: add mobileye,eyeq6h-i2c bindings
+      dt-bindings: i2c: nomadik: support 400kHz < clock-frequency <= 3.4MHz
+      i2c: nomadik: switch from of_device_is_compatible() to of_match_device()
+      i2c: nomadik: support Mobileye EyeQ6H I2C controller
+      i2c: nomadik: fix BRCR computation
+      i2c: nomadik: support >=1MHz speed modes
+
+ .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    | 13 ++--
+ drivers/i2c/busses/i2c-nomadik.c                   | 89 +++++++++++++---------
+ 2 files changed, 61 insertions(+), 41 deletions(-)
+---
+base-commit: 6f1cfa7816af8b3286140f1b0476200d5e914eb9
+change-id: 20241007-mbly-i2c-267c9d482b90
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
 
 
