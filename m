@@ -1,275 +1,266 @@
-Return-Path: <linux-i2c+bounces-7326-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7327-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDEA4998DCC
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Oct 2024 18:49:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DD9E9997D2
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Oct 2024 02:31:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E3C4B2710B
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Oct 2024 16:25:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48C44285295
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Oct 2024 00:31:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451FE1CDFC2;
-	Thu, 10 Oct 2024 16:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A14471F5FA;
+	Fri, 11 Oct 2024 00:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="P28AFl/Y"
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="DF7blf89"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2074.outbound.protection.outlook.com [40.107.92.74])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2123.outbound.protection.outlook.com [40.107.215.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB6B1CBEB9;
-	Thu, 10 Oct 2024 16:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE80F9D4;
+	Fri, 11 Oct 2024 00:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.123
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728577523; cv=fail; b=I/ywoHjTJ1BQOzFfJLgGDCXQfznkgJooTww8/Yz3g0Gwe49+3dgmwjkk2MYoSEyR9KSylyDmncRykbWE5GALQfbLllqi5KFRRp97pieH8SkbjBSt0bPQ4+5dE/JpNIhj+okCKpK97ErRr2CKfs7nP8DIpd0jnnT7cZ/CAONnI1c=
+	t=1728605801; cv=fail; b=EmkRGbHob/n//Pw2lQbp3qFgXrRw0jOrK/Ey5awdSNa6BG6Dx0+eAOjt8CWtxR7NemaOGkGbKY2jYcjON1uVIhlADgrAgUnferbIKZtep3wSQf3hGq68efXTCTMLXUDbc4mAyE1HqoDGCWqxRtvpMb8qtp34gSVr1ZhVFMoweCM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728577523; c=relaxed/simple;
-	bh=S4tVmweDF5lQLlFiqwpaklKiBzDpgpPTqQcCZ9QXnO0=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=RwH8+y8N40XG4ta5DcB8r3XKX7LdQ82sKczYXhdfkiL4+JrbVZcap5CCQvCxjMDSFMCxIOGcw8jI0aUKNIX2kyYtPRO02wPkpC0DO7bc3cIUG32gMwVzMXj4DRuwVr8yyZhg90kQEdnsVR9dnj5v3CZQNFQUSxPO78SXzbkkXps=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=P28AFl/Y; arc=fail smtp.client-ip=40.107.92.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1728605801; c=relaxed/simple;
+	bh=Q1ZMOYgb3qL+3dnM4bOBehuqPni95ulExzBsekwQ5KI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=lEAkp2jCgTNxb0x4sDQkjHnCQFuhFqhwkvipKU2WxzNJ0a6wO9Tn05+YQUGDVGmk3NjDqfsHkbEJEISDZNWkmUuCWaFGNDYrMxOYJAXFHSZMfo+7blC6LEHn0OjdBNzLNiGjb5H10bK5FthYwrUD1OwcC5JDM2i6olMePKZd37k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=DF7blf89; arc=fail smtp.client-ip=40.107.215.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EjrIU0zy4kfatcYdQzlbM4eS+PIgxDkZ6LzsMB5UH+V+S1BT68b2zpai21BGwBbvdRDJj70CwIufdJqx9rtCeRpa9LEWO0A2czTm8Nu1MG7qSwneqNVmpiuL0JxT0eGuu96cYDoRIpd2q5ss7fXoWq7bHeciGKMWokDbddCH4/gPsutWIh9XznYjOIPPVAqx+QE/vG1+TU7xFxdh3KcOhEbJAqW4KPncRcha/DFY6O8en5DaEhhAdL65r71OFjzaviYiNmn7d8teodzwo4EBc8VlmWAL5PGCRNGAealeXO23xRqggauVdKeeivPr+Xgjxomp/e7LXEytLOmaKtQFWw==
+ b=VhUiE96iz6F0gJR7tzYpC5v4TPOThaDbzoyQoXLMIx9IhBX1ZMe8jCZ+vcjqqg6jCbkdxo6MsUQ1WL00IRTmWJ+FGeGo2PSNuVTheE0EtNl/c9FoXafprsAUERQLAzJg1rDjLURcLmBRZEHFL876MR9I/Igyu7obea35BRVzZSirOEoR+OLq+sMs+olynlDxgM7RSWPwt3W6xKS9YmWQKojLJLl2qDOv7VsaXW99/+uFud9DkSdV4iTZqLtO0LYsT9GkRSdqay+CZj/K6CfgLuzrTlW7aBw9gPWHeRLH274c40OQxKIv7qbAB79s0HTv3wv7rpl62PMAANqIPW+cpw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zlg4cMC8wI6mM+IBED67GFgducUrFwgohlolzCWLYLI=;
- b=zEJWVRmLiLmCg20hXEpvyibefAOP6hWH6xYtipyZZTxIaeQ/qcdczyQlO2ksJvOwFt1hnvIXuLWiw6JhiCZuQ1h/Ozq4dLjQMqMzTsVuqjUnEIEWYDPDB503/QPhM3ac0PmjWY4jwp2A61CtVf1o2csVZbZP++VYoZgcWXTcB/JgQmkQ2icjUpE8sQO8KXAZe3lDA5WRSW+n7QCJPX4ysYSXXOZdrwRYSQ+iWenIbO+VGq4wpr+LNJKmtLoEy8F/f23CUlDR1oUMhWqqrUJh6/AMo3ynbkGa/xnE2u/OOW0R8hT02+BGTQ5bkLQiKKmUxgZijvAklhpIpJ3GLJn1Gg==
+ bh=g5imh3T1d2xxKLDQ+pGi55lB+8yM3eFDgx9UGLUl4vA=;
+ b=pW4RfJj4+QKdwKTVuGP1ZWpeFCDvnSOxSPlLJn4N1MjQJWpfOofZ3A23gNZ06gba/QhlaAuobVQkp2f4TSdH11olsknmv/T1ThzRMUZw3v0YP6GaL2zVOliK/780PAnyO4Gnqg41VaWClZXIXKez77btVebBeN+ylxCG4SerFzSA85T1zOKHmCTzWVwfm/wnJatwc/yAlVI2H3ttswHfpIyeK8ChIq8e0/mQGNa5WUrLNJH3pN0Wod26jDfq/TCmjlL5oGiEghGDOB3vC4l/hvRzZNxh1KMIcLwUjFH5aoAS4hVpvAG668G9xqSqWlBeKu/LenqbFB75KQp+soQBrg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zlg4cMC8wI6mM+IBED67GFgducUrFwgohlolzCWLYLI=;
- b=P28AFl/Ys2O+zc4m2AT01Z5ojgpsEWArK5p//sWKOsJY25Jo869Xgbhl61iQct54y0fz9oPQoizZs6XFwIQgtvNtCVQ8txFlB5aNOA1mzaWreoOzKLendj1zKl/Scxo46x+gvGdKcEUT3EQKbCtaR7MsVIUaJXfik2VMcj8f9N0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by BL1PR12MB5924.namprd12.prod.outlook.com (2603:10b6:208:39b::15) with
+ bh=g5imh3T1d2xxKLDQ+pGi55lB+8yM3eFDgx9UGLUl4vA=;
+ b=DF7blf89hG8G4cmICPU2ta2AnfH+ZPeVxwYbu9OefXWgv2DbH0aydH4n5LUZNYPSJIahCsP20mn91Lyhh2qSn3hmrwy+ph0puLbchmJpWRslwBFIdr7/+CYqTCGo5b3FCTr8B5PfoFEhMUJVwDur5Jq6iMTaqEy7AyeLmoCtYKUbZJCtoJMlmD73jhWSoV+l86Ymd3WF8h9TA35mrRDJerVSlZgSRw0e/n3vOKQ5KX9FwXki/68bAVF6wqfYDeaT5ffeJhMMHeeJ4tAXjvUM8zPv5PLCBxz33C/Ed/iCUgU8AvBDhpXm+Wlvuq6qf2w/6dyQTlAh+Y8cfiNNmngKZg==
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
+ by JH0PR06MB6583.apcprd06.prod.outlook.com (2603:1096:990:32::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.18; Thu, 10 Oct
- 2024 16:25:17 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%6]) with mapi id 15.20.8048.017; Thu, 10 Oct 2024
- 16:25:17 +0000
-Message-ID: <3409c03e-35fb-428a-9784-0069b63a83bb@amd.com>
-Date: Thu, 10 Oct 2024 11:25:14 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: Wrong piix4_smbus address / slow trackpoint on Thinkpad P14s gen
- 2 (AMD)
-To: =?UTF-8?Q?Miroslav_Bend=C3=ADk?= <miroslav.bendik@gmail.com>,
- linux-i2c@vger.kernel.org, linux-input@vger.kernel.org
-Cc: Andrew Duggan <aduggan@synaptics.com>,
- Benjamin Tissoires <btissoir@redhat.com>, Hans de Goede
- <hdegoede@redhat.com>, Wolfram Sang <wsa@kernel.org>,
- Andrea Ippolito <andrea.ippo@gmail.com>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-References: <CAPoEpV0ZSidL6aMXvB6LN1uS-3CUHS4ggT8RwFgmkzzCiYJ-XQ@mail.gmail.com>
- <5105b392-dee9-85fb-eeba-75c7c951d295@gmail.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <5105b392-dee9-85fb-eeba-75c7c951d295@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA0PR13CA0018.namprd13.prod.outlook.com
- (2603:10b6:806:130::23) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.18; Fri, 11 Oct
+ 2024 00:16:32 +0000
+Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
+ ([fe80::9f51:f68d:b2db:da11%4]) with mapi id 15.20.8048.013; Fri, 11 Oct 2024
+ 00:16:31 +0000
+From: Ryan Chen <ryan_chen@aspeedtech.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, kernel test robot
+	<lkp@intel.com>
+CC: "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
+	"benh@kernel.crashing.org" <benh@kernel.crashing.org>, "joel@jms.id.au"
+	<joel@jms.id.au>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "oe-kbuild-all@lists.linux.dev"
+	<oe-kbuild-all@lists.linux.dev>
+Subject: RE: [PATCH v14 2/3] i2c: aspeed: support AST2600 i2c new register
+ mode driver
+Thread-Topic: [PATCH v14 2/3] i2c: aspeed: support AST2600 i2c new register
+ mode driver
+Thread-Index: AQHbFJkJzKJZDwNsK0+qSVrw+hYpbbJ3yVMAgAhBWoCAALFpQA==
+Date: Fri, 11 Oct 2024 00:16:31 +0000
+Message-ID:
+ <OS8PR06MB75413D9CD40FC095B1B9FB67F2792@OS8PR06MB7541.apcprd06.prod.outlook.com>
+References: <20241002070213.1165263-3-ryan_chen@aspeedtech.com>
+ <202410051547.vOL3qMOc-lkp@intel.com> <ZwfZP0LeqKobdbgK@smile.fi.intel.com>
+In-Reply-To: <ZwfZP0LeqKobdbgK@smile.fi.intel.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|JH0PR06MB6583:EE_
+x-ms-office365-filtering-correlation-id: 35405455-33b5-4034-510e-08dce989f57d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|366016|7416014|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?RIaHB6XbTtTRAdvdPD/+Ijupn37OZyZiNFe2IS38A6slb8P74d23vtpHBBDH?=
+ =?us-ascii?Q?t0kMSumDO1x5atQ25UWXU6iLG4fmCxc78n43Q4H2LD+DJVyseMuWREAWZ/Xe?=
+ =?us-ascii?Q?AGDVY5SIjr9o6FkcqW3kTb77v6jpaSVkxSM7EGn8MGkCUCVrS/C+cilapV0S?=
+ =?us-ascii?Q?kZXpoaDz5WcHLiO3SrycsqT3bVBeCrZkJ2x09wsuIvcfk+9XGfjgVBlUTPMr?=
+ =?us-ascii?Q?D8vlT++Z/E6C/yiASu1E7y/Dh3HU4qkIpwtxlMGzJXVf7M4XTE8MPskx9HyM?=
+ =?us-ascii?Q?J7xKUGJsISXiAPpDwsLm8/+6xLPydjcM0jpIScGBozdnU+3EYgR3nVLiFfa+?=
+ =?us-ascii?Q?GX3P4Fs1qGMrdb5k6G/HgB9rITGdTeECI1bCn3MhKyO1c9MeSef8VrvosjDE?=
+ =?us-ascii?Q?zCI6BUmfKb9C56/HecBZOJJZDsBLmJKgqPanfzxukOg/qtYH76iSoH7cMxFQ?=
+ =?us-ascii?Q?b3Ul94gxK7EWumvZKF5emgabASLU627cDJYpZre2dWWSrRWYvHC3Nt6xGPoK?=
+ =?us-ascii?Q?HV/kat4I2EjLbWbOXgrOkK0aWVR0fUX6prEuUdRX2Zohncyz2eiInLaXvqcO?=
+ =?us-ascii?Q?DhCdvVWQjHxsGHZgOeBRSy0KUaTmLzySfl4G6BtdHrddmX+CHi4TYlR10WdB?=
+ =?us-ascii?Q?edRHEzhFJNfL6kEyHzbHCbYs3sGF+/Y9spfWJ4ywWL0hKbgCmZ10aetwhUEE?=
+ =?us-ascii?Q?Kl6AXolYntYbDXU9vteHDHRl290MAys+I6nMuLEE5qZhnzaZmqvC6DDH//4B?=
+ =?us-ascii?Q?Fjvo8lZ0N2ANIR37RvXAbV14tWZtGkWDZtKywyxcHEgR8zDFDab11B0Dk98G?=
+ =?us-ascii?Q?StJZiCMScB9ZlebcuFVy+ShMLuu/SjaturgvCU2bXmtABRIHFixWQGx9sxIp?=
+ =?us-ascii?Q?Z6mu2qv5YmD0u0KvBHtLgFlN+TdrXl3Ns9UZEZt8Xv6kG9SmzFJ+CsKmUhEx?=
+ =?us-ascii?Q?q2lzrFNWcdT3G7w+cfJ0Qf34ibmNFCZKCFQ2V7r6gLnVX6ZjyOKHo95nlaAA?=
+ =?us-ascii?Q?TPsZFCkeoopdq9f7FKJSYhx2sO/KlyEv9nsNXuCkmMX2Z69CCgnXKFyEYonp?=
+ =?us-ascii?Q?1srVFftsvc84iTjlhraQXwNKmK/9t1gHzVM58BpRn2l2fzynOSoE87Eg+i7J?=
+ =?us-ascii?Q?wW2728WBBt2CjuuCjiNb5+8zFbvZtaphDP6D075b08EVkfuVSzePC48TqG5y?=
+ =?us-ascii?Q?olbXnAREp/OgZc7x9fY7MTS0UL7GZAhNhdU1V62UULK0pIeLGL/6aSkMchK3?=
+ =?us-ascii?Q?K0gVk254bJcp8hD0jjPnwZQVWozsrTsvqRxmgG8dOA=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(1800799024)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?kyt8/Ltr37BoWVoekmi6nxySX9I7EGUUD0ffTWHgW6g9uupeg0zmNbGxsQ/A?=
+ =?us-ascii?Q?NXd1oNkdnhWJUNsHQ8UK2vFHsE273Ff07zzddnecT82wx/FEbFyqSjBQzR5y?=
+ =?us-ascii?Q?7j3fidd/5DSxXeXfdi1sBFDth1fea6prsBwjXhnlOy0BmHCuzSkwvSG9DmzV?=
+ =?us-ascii?Q?MdP74xkMBHDJhIHzsn5mN27hZvueiO23Kr1KKFX1CVoGVNymwoe4Fp3CtRv/?=
+ =?us-ascii?Q?x9w21lkeNprlCyGi7V2M2OjeBNaQb70UdUW4qryjdeDJS0my8Kh172RcIzXk?=
+ =?us-ascii?Q?CWtDEhedDsRdBrGBdotuRpMjS8mV80CTRUli3w1lnzy4b3MBnTHbcV49qeIc?=
+ =?us-ascii?Q?y32/cdWjUZ5y8z3PRlnWSzQRKQBqsniMARWuoBVtkU7/p/vGY+rpqt6bsbVN?=
+ =?us-ascii?Q?9MmgLK+CpRtC2/KFOChTze1tPlIpyqVTc1/snngY96Ga/bo6CKP2T9ylQ1Gj?=
+ =?us-ascii?Q?WKPVTBZEH+JiONLnHjnXjEiZLIYH0oissGMf8dZsASK9qO0sGsAfB3j4xqlT?=
+ =?us-ascii?Q?lFDpoySWcOl3t1rnI72vlk+BojZroBncmWbDvLpiCTHKrZNpZ1ssqWmQou8R?=
+ =?us-ascii?Q?94YBP+QXXPrbFrSRR9aS4EzCLDAKHZRdjPMpONf3mtoZTK72WTqypX6LPIOt?=
+ =?us-ascii?Q?Sa9gddKrJDuhYQml7el4jL5QALq4ac0Q3MRdnbZ/o0L0aBsAY7bRu0NX164E?=
+ =?us-ascii?Q?pDoJBMs/Wj2GSqy9AcyiPg3OVyrpMlyAkHR36OF5yAgRUwuKJSnQyfTkalEZ?=
+ =?us-ascii?Q?h6eoTEvRE77oZUKcwi34TCvalNBtFUSen+SJeZ0g2p+pBIfAJSt/QXxc2Mu3?=
+ =?us-ascii?Q?Bn+lRPmb81iHa76ju2Dt33isY+2PCQmYKZ5tEtDA8zLvyWy9jhS2Bs28mSMh?=
+ =?us-ascii?Q?zh3tRYutgTkUwD2QpRT7VhJ8CeiDYG56+LnNr5KiDf5oAjOr1ca3MlOAmhez?=
+ =?us-ascii?Q?htlkkwCjd3xOJOUWb6bDIPp2n2Qm4/hGhUIm3YpkeThWL0J+d1rgT8sm/dXJ?=
+ =?us-ascii?Q?BV28WNPcVZPmQBx8iva2UVuQG/JDEwL3PLzSIX5XFTZtf2rY02lJWmBfAqnV?=
+ =?us-ascii?Q?OuDXY6/MAeSdRypPwNrhkjXsJXkRH7HFNKpT8+m68oXPuPMSM9dxORXxTrEB?=
+ =?us-ascii?Q?VGhV38P2o+qLv7Kggjiu1jWAOmliTYw35aaH9Xfhnnu0Etq/z3xNrmK/sg0I?=
+ =?us-ascii?Q?HWYstza3hrMjT+vyqGNn1SKFnk/vPJtu/pEux9YNxcLjhjY7IgudjPHcjR6s?=
+ =?us-ascii?Q?F5yt3Uucq/idIL+zBcYFL7Jn/35WuAUG5OYbN07HfQHKmlS4rcps0S0Yjvp8?=
+ =?us-ascii?Q?zkZFRa4IpEgjYaitPPPgT3kYZvU0OAd+MKbrcWwtKoR4f9mpof3OixEe22ks?=
+ =?us-ascii?Q?qF1waJoqlV58gveNT6bX2TpUt/L16lCEoSXjbAUvER0qOB5o8nG8GS+0lhDv?=
+ =?us-ascii?Q?/MYCTTWPrR3EcX32avhhV3oG8en4Qr3x8vLOeYILrx309eRr96gV5PWi1c51?=
+ =?us-ascii?Q?n8JRItEKc9dvyzbRAiiJ38Vyy7g/Ao+5lmmLkItaj7Hrin1gRLhGMxIxh+QO?=
+ =?us-ascii?Q?N/A/etaGplfepYcqTloaHxx+lLE7HtFd3MnUXw1C?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|BL1PR12MB5924:EE_
-X-MS-Office365-Filtering-Correlation-Id: dc137c7c-1b91-4908-4769-08dce94820a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?c3VRL2p4ZU9iMHphNmxDaFJEOU0xZ0JRaXR4RFF3M1BkMmpTQjNOdEdETUZI?=
- =?utf-8?B?dlBHaCtvSllnRkFIdXAva3lwYzNyUnBhUFQ5YUNNRWpIYmJjTEF3ZWdIb0Nk?=
- =?utf-8?B?Wm1nM2tYbkMyRzNxaWNXN0RGM1hjQ3FvdThOMThTV3BUazhPWmJVY2gxVWhz?=
- =?utf-8?B?TkUvZlNSU2pkNmUxc3RLbzNpemFrR1gxdjlaMXR0a204SjB0VHpNckZLZGpl?=
- =?utf-8?B?TFJxNFNsbWdTVjd5L2VlaHhJbi9sNWxnYVM1ZENhUkhzNTJyYkg0N3dkTmps?=
- =?utf-8?B?V1lwUnJnWjFWZ1ZNM0pmS0FVQnRMaUhiWG1Ud1hjdFh4bTB3alBWOUhxK2ZQ?=
- =?utf-8?B?cmJZaDdFcWNuaU1jS2JhbmdXN2phaHJpaVQ3WFZTdTVUbk16R2J2bVA0ay9Q?=
- =?utf-8?B?WFZrRmI4Y3hjWXMxNGZWUVhHQmJMYU4vWHhQbmVUbFpOUU1GYUIrOStjNDNo?=
- =?utf-8?B?RnRpVU5KaU54M0FkUG1PMk5aa0RQUFphdXVwTFFMbTRvWFNwWWNZNjA1cmpw?=
- =?utf-8?B?b21rc29mVXVaVDJzbTdKMXp1NVJkaTlBL3hROWZEV3MrbVJCODdOaElzVzZh?=
- =?utf-8?B?emJmR2d2NmRJVDJLaENMeGN1VUw0SVFRWlN6ZHlvTjlzbmFoL3p2c2RqL3I4?=
- =?utf-8?B?WXNhYmI4U2duYm9JUTRQdzI1ZTQxN1p0UmY4QkZCMWYwTGNRenRZdFVCYWxj?=
- =?utf-8?B?OFUvaXF0YmtaL2lwNElNVTBsVGgxWTA5RVcwTWM2WHRsc01YTzA5NENoMGhH?=
- =?utf-8?B?YmdoZEpFd1dNU25VcVpCYldQYXdQYmVyR2NjYzNzaWhva0NaYlpDWXFwbnZh?=
- =?utf-8?B?NVc2ajJ2ZGEwamNDbk5oeVpSZTdoNWNSYTdVUmk0ZmNsWDI0MW5wQnc4aHZh?=
- =?utf-8?B?SzhJaVl5SzFveXNnTkRucGJPNGg3L2dDMC9RcjFqbkQwVkNPSlZLbThvUHhP?=
- =?utf-8?B?blVzaFdsVXBUWlc1MHNhRTZpQ0kwU2FlZXZRbEF5REljSm83ZE5CYWN5OS9a?=
- =?utf-8?B?OElDTkJTZUl6ZlN4Yndpc3pldTBkWmltc1FJVTh4NGRVVDB1Q2Y0NzJPYnc3?=
- =?utf-8?B?Z3M3bFhIcW5ueS9IalRPaXJyLzNETjFXemowSk5PTjBqWHhEOFgwTkpqSnNM?=
- =?utf-8?B?NEJrZjdHWGF4dFpqeTEwaHdRbll3ZkVmVzVkWDU3ZVdFc01lUmdrV1RDSi9H?=
- =?utf-8?B?K3o1Z0lDMWpCRVJwK0Vxb1ByTkNlZnU4MDBReXMxTkFIYit5dTBLbzdVVkRD?=
- =?utf-8?B?NXdRUzk4VC9Kbzg5UG5rS2J4Rmo4MWhGNldPS3pQWTlIOU54b3lLTzI0R015?=
- =?utf-8?B?QVNFbzM5SHhSK1ovMGdMQmd1U1J0aDRoaFRYdVlGRjlqdFpTVGVnZmVQUHdn?=
- =?utf-8?B?S0ZRMUs2bTRKR0loV2xUK3gzSTFPRTJZeXVxWVc5OGl2OTJSekErNzFMNUF4?=
- =?utf-8?B?WWpRWTRBNnNTSlFmLzdBREhMRVZmUHhucTl4c0EycGN0aWQyNFkvbFZrTTZw?=
- =?utf-8?B?NG9aWnpvcVlaRlpITkJiMzhvKzBmL3ZJV0ZjK05tUEYyelFDc21ldEg0ZkJY?=
- =?utf-8?B?WFBqdkkvbStPOXBsaXdyeFZqZVJST1JxMmlnUGhMNmFrTTJES0pFRk5Hdm53?=
- =?utf-8?Q?juW1HUBbeOkwaH2s79aMqYZufV73I13DuDW2M2IpX94A=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZTh2dXJrcGVjT1dRMWprOWljNUZ3Q29JcU0xTGlqNGYrejZkaDlISG9zb0FT?=
- =?utf-8?B?MERPR0VZaGp0NC9zM3B2Z25oSGFlWDZ2VG01eXhPVGVCQkJLZWNoVjZweXFV?=
- =?utf-8?B?MTNMakNmbEhSQTZEeFNSc3JGOHV2dG10ZHZaZm9BZEJHUmpqbUEvZFBPZW1i?=
- =?utf-8?B?TkdYd1phdFhrNWs2YXowd3Q5VlJTSkdXalY1UHExcDNieGpHQytOdFFiaFZn?=
- =?utf-8?B?eVQvMnJSVTVqMWZXZE1GWVFVTnJuZHpydVBXVlBobVM1dmMwNUFrWFJJVzB3?=
- =?utf-8?B?YUEzM2lLejlQdXhhcmRLd1pCWjBwN04xdmpBK214RHk4bzBjc1RTYng5UmNq?=
- =?utf-8?B?ZDZ4MC84REx5Zk9kQ09sblNITzkybTB3L2JTMWducWNzT0JaMHVsTkZ2RHgw?=
- =?utf-8?B?MFROY3lJQUNld0tQZkgwcFJMODJxK3BrbWo5ckQ2UUlWSDd0cERmNnIxZ3py?=
- =?utf-8?B?d1grb0FGL1RmRFBkcTFIdFQzY1Rjd2pWTTFhN1ozR3lWTHp2eXJhSFZJRk04?=
- =?utf-8?B?eU1ISXJsVzBRTVMvc2NmYzRGUll2VjloaVppVGRGUkVGYndjWUVoMkF3OEpl?=
- =?utf-8?B?THdDbjIzQm05cWFEUUFCbjRhamthSEhpdXgvdkFZNmZGTEVTOWludVNjYlJm?=
- =?utf-8?B?NXRIV1NNZzlkNGlYTXFmcWQ0N2V4ZFFOeDFFVWJUSmQ4K2I2dmhVaVgxbmlh?=
- =?utf-8?B?OXhVZ2diQURiTlJQTVFEMjdMczZEQ2lmMjlQVWtNY0NNQndwVzdmNDJEbUo2?=
- =?utf-8?B?ZkhnTVAvZmNyWFdGa3hwYmE4ZExNTkVyT3B6akd6ckxoNm9IK3RKdHVPekpD?=
- =?utf-8?B?Q0kySFZ6aXRKTmZkWkROdU1iUWtmR21RaFNJV3Y2QVNsU0p5aFVWQ214RW5V?=
- =?utf-8?B?WVFwMnVHUkVnbGZkVmtSeklMRWE3K1AvUU5PQmZSY3NxYzZtKzBBNm9ldDdQ?=
- =?utf-8?B?TlBpcU5hVVRURHJHcHkwQzZIVk9udXdxQ2g0cGhhNVJZazFOaUMrSFV3Mloz?=
- =?utf-8?B?bjVOWUZpbTErRlFib0t5Mm5XaUtVZGNhRThFYkZoUFh2Mjh3aGpLTUJLdXN0?=
- =?utf-8?B?b3dIZGVRUEpiUG81Mkg5RUxJbGpKaEJad3h2UjJkcUlMRUlLNmJFUEhUdDNF?=
- =?utf-8?B?UEhoY2pjZkp3ajZTQzZOaFh6aXkrOGVUU0U1d2tDZWlGa3dveXc2cFR5QXdX?=
- =?utf-8?B?UE41VVhkUHdvM0MyWHZGTk5VR3BPbVdwT295WHo3UXNMSEF1WEd3WUtiS0Zm?=
- =?utf-8?B?NmZWc0lVdkIvZUJveHZvbjBJYktZMmZhT3ppSUsvb0o0SW5tRi9TOHJtMi9N?=
- =?utf-8?B?ejBFQXZZQ0Y0STN1bXhEMmRVRGhBZXVzeDE4UWZab3JwWjlXYjQrSGd5anRB?=
- =?utf-8?B?enE1TE5EWDczR1NZS1VZZjNaaVdmVTVCZFhNZXhRUi90WUp4SnM1cWN6NkRv?=
- =?utf-8?B?cFRlMkZ5RjFQa2ozYiswRVQ4akFCd0NZcFpkSGE3enNxQTY3aDJsdkZ5cm1v?=
- =?utf-8?B?OUY4THhXNlZQWnJkbDRHVkczbkZBNlpqcXU0V3BuaytHRllUTjl5ZFR1eVVB?=
- =?utf-8?B?L0dkZHZMWGN4S3RoUmFiOGoyY0VJSmhJMjFRemFnZUE5blNudGdnTFhFYmRh?=
- =?utf-8?B?SUNmaDFXc2doN3NhcDZPakZQY0FuZVhvdERLZVJtdWpNNXlvaHlnTHFQUzRV?=
- =?utf-8?B?ZFllVEs2ZlM4d0U1UjlZWkxaQzVLTzFoOXNRWkdMTFhadFMyMzAvWTNJL2NT?=
- =?utf-8?B?VVUyQ0F1Y3FlQzlYcFRMMmxMaElabm5WODhaSFlRL1NCWWRPOVVDSmlLY2tq?=
- =?utf-8?B?MWhVM2RzekxGQ3pCa3lRN1gzeDJnWmJyQklSdWpiNFhoMmpJWTc2YWFYZ1JT?=
- =?utf-8?B?UmlRM0IrY2p2QU9CSEY4SVAzUHV2bTJNODhHdjhoNVJPRVBJWWpEYzZ0TFNP?=
- =?utf-8?B?VG4xZ3hnUklPV2paTGNmUk80Sm1iWnZyZlA0cmhGaGlKUzBwbTJWajNjWGVB?=
- =?utf-8?B?S0Rpb2hoQ0pkM0dzMHcraEpXdmhuVTNZR2laZldtbmI3TEg2ZVZGcDNubmlT?=
- =?utf-8?B?R2IxaU9OeTlIeURWNmNDMXdiK0VyRjVXYWI2WWswdjdOaFl5YmQ4U2k1TWVj?=
- =?utf-8?Q?ioPPSn//1NudFvjW19MtbufBj?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc137c7c-1b91-4908-4769-08dce94820a1
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-OriginatorOrg: aspeedtech.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2024 16:25:17.6446
+X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35405455-33b5-4034-510e-08dce989f57d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2024 00:16:31.7653
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X45e44XmWf7FeLUZmmFHQYUv56pnbGAtjow2SREz7BKV0ah25mSfuiXGKtb4HvM3Z1uaRB4TbLCPXHU7Uetf5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5924
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oavvTMlVbGg2EJzV1j5XJx+l6nq6yZPRJBDFinekplVYjqXdb7FpkEL9GwO/LFQ3W4m8aZAFV+7wC1ccGJNGre4hY5d2bjm/HQbUa8H9Bvw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR06MB6583
 
-On 2/12/2022 11:42, Miroslav Bendík wrote:
-> Hello,
-> i think, that SMBus works now pretty good and last problem is screaming 
-> interrupt from synaptics (1000 irq/s). I need little help to solve this 
-> problem.
-> 
-> Little summary first:
-> 
-> On this thinkpad is synaptics trackpoint/touchpad connected to PIIX4. To 
-> enable RMI4 mode, SMBus driver should support host notify protocol. I 
-> have added support of host notify and replaced active waiting 
-> transaction with completer + interrupt. Driver is now pretty stable and 
-> works way better, than old implementation. For example i2c-detect shows 
-> real devices (previous transaction code showed all addresses from 0x1c 
-> as active). Patch on following link is still hack, has hardcoded IRQ and 
-> supports host notifications and interrupts only on auxiliary port. I can 
-> implement other ports later.
-> 
-> Patch: https://lore.kernel.org/all/c9b0b147-2907- 
-> ff41-4f13-464b3b891c50@wisdomtech.sk/
-> This patch includes PM register access using MMIO: https:// 
-> lore.kernel.org/all/20210715221828.244536-1-Terry.Bowman@amd.com/
-> 
-> Now i can load psmouse synaptics_intertouch=1 and everything works 
-> great, but it uses 5% CPU and interrupt is called 1000/s. I have changed 
-> interrupt from rising edge to active low (it's PCIE, PCIE has active 
-> low) and i have many times checked if all interrupt bits are cleared in 
-> interrupt request. Yes, they are always cleared. Interrupts are 
-> generated only after first touch if i have compiled only F12. If i 
-> compile F03, then interrupts are generated immediately after load of 
-> psmouse. After unload, interrupts are not generated (i2c-piix4 still 
-> loaded).
-> 
-> On this machine I2C is accessible using GPIO 19(SCL), 20(SDA). Using 
-> kernel thread with RT priority on isolated core i have tried to record 
-> pin values on GPIO pins. Latency is too high to record all transferred 
-> data. Some state changes are lost (approximately 1/50 bits). Not too low 
-> to read reliably all data, but good enough to see what happens at bus 
-> level. Here is recorded file: https://mireq.linuxos.sk/kernel/ 
-> thinkpad_p14s/i2c_scl_sda.xz.
-> 
-> Every byte is sample, first bit is SCL, second SDA. Sample rate is cca 
-> 500 000 Hz, but often drops under 100 000 (lost bit).
-> 
-> On this screenshot is typical activity on bus: https://mireq.linuxos.sk/ 
-> kernel/thinkpad_p14s/i2c_1.png (pulseview with imported raw file)
-> 
-> Zoom to two packet is here: https://mireq.linuxos.sk/kernel/ 
-> thinkpad_p14s/i2c_2.png
-> 
-> First packet is SMBus host notify. Address 0x08 is SMBus host address 
-> and 0x58 is address of synaptics (0x2c << 1). Second packet is reading 
-> of interrupt status registers. Data 02 is length of interrupt status 
-> register (9 bits) and last 2 bytes are zero (idle, when moving cursor, 
-> then interrupt status register contains one bit set).
-> 
-> Zoomed out: https://mireq.linuxos.sk/kernel/thinkpad_p14s/i2c_3.png
-> 
-> Before transaction SMBus slave state machine is disabled and after 
-> transaction enabled. If notification is received when state machine is 
-> disabled, then device writes only address and don't get response. If 
-> driver runs with always enabled slave state machine, then output will 
-> contain only notify + read interrupt status pairs and no separate 
-> addresses, but with this mode bus collisions occur more often.
-> 
-> Here is dmesg output: https://pastebin.com/RdDYHJn0
-> 
-> Cursor is moved until 2862.8, then i have not touched trackpoint.
-> 
-> Idle device don't produce bus collisions. Moving cursor produces 
-> collisions, but sample rate is stable 100Hz, which is way better, than 
-> <40 Hz with PS/2 mode. I don't know how to solve collisions. Maybe they 
-> are related to not silenced host notifications.
-> 
-> If i were to be optimistic, then i would say that clearing interrupt 
-> vector will solve all problems. According old RMI4 documentation, 
-> reading from interrupt status register should clear interrupts (status 
-> register is cleared), but this don't prevent device form sending host 
-> notifications. Maybe exists new way to disable interrupts. I don't know, 
-> i have no access to current documentation.
-> 
-> My device has this signature:
-> Synaptics, product: TM3471-030, fw id: 3418235
-> 
-> Any help welcome.
-> 
+> Subject: Re: [PATCH v14 2/3] i2c: aspeed: support AST2600 i2c new registe=
+r
+> mode driver
+>=20
+> On Sat, Oct 05, 2024 at 03:36:16PM +0800, kernel test robot wrote:
+> > Hi Ryan,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on v6.11]
+> > [cannot apply to andi-shyti/i2c/i2c-host v6.12-rc1 linus/master
+> > next-20241004] [If your patch is applied to the wrong git tree, kindly =
+drop us
+> a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:
+> https://github.com/intel-lab-lkp/linux/commits/Ryan-Chen/dt-bindings-i2c-=
+as
+> peed-support-for-AST2600-i2cv2/20241002-150410
+> > base:   v6.11
+> > patch link:
+> https://lore.kernel.org/r/20241002070213.1165263-3-ryan_chen%40aspeedt
+> ech.com
+> > patch subject: [PATCH v14 2/3] i2c: aspeed: support AST2600 i2c new
+> > register mode driver
+> > config: sh-allmodconfig
+> >
+> (https://download.01.org/0day-ci/archive/20241005/202410051547.vOL3qM
+> O
+> > c-lkp@intel.com/config)
+> > compiler: sh4-linux-gcc (GCC) 14.1.0
+> > reproduce (this is a W=3D1 build):
+> >
+> (https://download.01.org/0day-ci/archive/20241005/202410051547.vOL3qM
+> O
+> > c-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new
+> > version of the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes:
+> > | https://lore.kernel.org/oe-kbuild-all/202410051547.vOL3qMOc-lkp@inte
+> > | l.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    drivers/i2c/busses/i2c-ast2600.c: In function
+> 'ast2600_i2c_setup_buff_tx':
+> > >> drivers/i2c/busses/i2c-ast2600.c:437:41: error: implicit
+> > >> declaration of function 'get_unaligned_le16'; did you mean
+> > >> 'get_unalign_ctl'? [-Wimplicit-function-declaration]
+> >      437 |
+> get_unaligned_le16(&msg->buf[i2c_bus->master_xfer_cnt + i]);
+> >          |
+> ^~~~~~~~~~~~~~~~~~
+> >          |
+> get_unalign_ctl
+> > >> drivers/i2c/busses/i2c-ast2600.c:441:41: error: implicit
+> > >> declaration of function 'get_unaligned_le24'; did you mean
+> > >> 'get_unalign_ctl'? [-Wimplicit-function-declaration]
+> >      441 |
+> get_unaligned_le24(&msg->buf[i2c_bus->master_xfer_cnt + i]);
+> >          |
+> ^~~~~~~~~~~~~~~~~~
+> >          |
+> get_unalign_ctl
+> > >> drivers/i2c/busses/i2c-ast2600.c:445:41: error: implicit
+> > >> declaration of function 'get_unaligned_le32'; did you mean
+> > >> 'get_unalign_ctl'? [-Wimplicit-function-declaration]
+> >      445 |
+> get_unaligned_le32(&msg->buf[i2c_bus->master_xfer_cnt + i]);
+> >          |
+> ^~~~~~~~~~~~~~~~~~
+> >          |
+> get_unalign_ctl
+>=20
+> You need to add
+>=20
+> #include <asm/unaligned.h>
+>=20
+> _after_ other #include <linux/*.h> in the code.
+>=20
+Thanks, I had modify update in v15 submit.
+https://patchwork.ozlabs.org/project/linux-aspeed/patch/20241007035235.2254=
+138-3-ryan_chen@aspeedtech.com/
+> --
+> With Best Regards,
+> Andy Shevchenko
+>=20
 
-Sorry to bump such an old thread, but AFAIK you never came up with a 
-good solution here.  I did want to point out that there was a very 
-recent submission by Shyam (CC'ed) [1] that adds an ASF driver (which is 
-an extension to PIIX4).  By default it's going to bind to an ACPI ID 
-that isn't present on your system (present on newer systems only) but 
-the hardware for ASF /should/ be present even on yours.
-
-So I was going to suggest if you still are interested in this to play 
-with that series and come up with a way to force using ASF (perhaps by a 
-DMI match for your system) and see how that goes.
-
-[1] 
-https://lore.kernel.org/all/20240923080401.2167310-1-Shyam-sundar.S-k@amd.com/
 
