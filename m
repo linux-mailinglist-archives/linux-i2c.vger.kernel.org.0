@@ -1,112 +1,156 @@
-Return-Path: <linux-i2c+bounces-7334-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7335-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFDD9999D98
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Oct 2024 09:13:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C86F6999F40
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Oct 2024 10:45:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E13C51C2039C
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Oct 2024 07:13:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C8191F25967
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Oct 2024 08:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6AF0209F5F;
-	Fri, 11 Oct 2024 07:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D75282FB;
+	Fri, 11 Oct 2024 08:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YUDnsuGB"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rz9ojxx/";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CF5EA1N6";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QhxuaHYr";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mJoPdDnW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38515209F56
-	for <linux-i2c@vger.kernel.org>; Fri, 11 Oct 2024 07:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8287C1CB301
+	for <linux-i2c@vger.kernel.org>; Fri, 11 Oct 2024 08:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728630779; cv=none; b=ZwZ/YWnovKA0fNfSRC2Kj1J9fXMkPtFlEPhbisH4jJztp4EWQlUtuxgFni0QO+Zp3IVWzoC4UIpBDEysnhK/fyVcrhoC1gW5diTHT5IfacN8ce3w1HgYIS25Ibtk7WYqh/7Im5QHzbPXih1VXP/psnnKW1aEh7uxXtM0riZ9QPk=
+	t=1728636322; cv=none; b=TtfeXVwHWqKCgyW4AmK8xvK4fT8nfh77Yr5gchXEhH1LihnH9c+2l4hk5DIv8RUF8dpztnJwY+fL3UcNwt9Oi3q1Mvyu+l7bB/sugQ3IrakOBUFeLTMPuxFrLLoIYF/OlB6iWAPIRW2N5lybYGR5Jfh9dMDvEksGFVE56H7zk2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728630779; c=relaxed/simple;
-	bh=1CDFQ+4yDEcEQM5+7/TmIfK4WyHlkWsOLf+wxAIOSNM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fHityQcuyFDY51M08+cJorHrr62uxM8s0WuXf/RtW+AkRlJ+Nw36+uOUxaczfrJrPVi6kNGiX6dPybEtR4SYo/HYqJMLbBsrR3COASrVbXjARCQ1QwReff5WyTe2+qxhfF3AT2hbetyZrWK2II+z9DWOQU/5iaDl7C9RYXjpJ2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YUDnsuGB; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=1CDF
-	Q+4yDEcEQM5+7/TmIfK4WyHlkWsOLf+wxAIOSNM=; b=YUDnsuGBdykYYK8tC07+
-	v+pNcCTXhx2LOe2N+OASZpaSrmOwwUFcXEvnNdiy8RIKQfGfz4EjOd4GMmkZIMH1
-	2/GG7eW++hqHVOd7SrkjbCshCX4agVWoPMQrtcwsDVafgPCmiFj1LSNEu9N6oPv8
-	SCuLiUseESwTTtrBloQRKwJxw2wmzZIVHDOW8LRnWdr4h76Kbco4i6QlKCoGFaTd
-	na1fyWqcJRmwbuovOaUMMisVtQgcSnEEQVXjdm7e/dfPJ4f2IrElqMF1QPUK2VZy
-	ERuhpYPw6r3Dif0TOi8/P3PQefYbHy+50FE1RENxmL7RFsm6/JUz9AuPUf86LYI3
-	fg==
-Received: (qmail 1422641 invoked from network); 11 Oct 2024 09:12:46 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Oct 2024 09:12:46 +0200
-X-UD-Smtp-Session: l3s3148p1@U5zANi4kPq0ujnvF
-Date: Fri, 11 Oct 2024 09:12:45 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wentong Wu <wentong.wu@intel.com>, linux-i2c@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 1/1] MAINTAINERS: Add an entry for the LJCA drivers
-Message-ID: <ZwjP7d-mnLqnGGzW@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Wentong Wu <wentong.wu@intel.com>, linux-i2c@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20241011070414.3124-1-sakari.ailus@linux.intel.com>
+	s=arc-20240116; t=1728636322; c=relaxed/simple;
+	bh=x/pI0xykGkHsRLeMZGWlU1gKfP5c4B6C/LSY6UQmxJE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TiciYq7CunTyf4NH2p8AapAvKd7esPOGkIQB2fz0jusKlIa2ElECMhGBDYKYVbUB6+W6zGejxqAp4IO55YiNJqv4iGgH50D5AOSgGWY66R7Z2MgHTkqxOrtnnf9M1ou/aKLgMeUM6zRe+7bWazLYmz7gcPPn4+D16jjbTlRxrF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rz9ojxx/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CF5EA1N6; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QhxuaHYr; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mJoPdDnW; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id EBE5C1FC0D;
+	Fri, 11 Oct 2024 08:45:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1728636313; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ncom/uX4AroWeeiq/3U+wxTQq0SGL4x1wdyhtSqdh4Y=;
+	b=rz9ojxx/zhL7MPUyDTJCyqJuwvi11GpXExsARs3Axx7zIUWu+UBlOSY5u9doKNg+2oI8mU
+	CisrQe1JNQ3n4x8JBOQ39/mkZN5rGzOVPHrOZ/vl3zr5SgchqJbdwtV0bZuJkWAg6jlOAs
+	3zChaX1Slu46zdaUWIZMEULzz94VB0Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1728636313;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ncom/uX4AroWeeiq/3U+wxTQq0SGL4x1wdyhtSqdh4Y=;
+	b=CF5EA1N6B7L4jQUUOCorHz319xu353qHfUYI13lfMi0USfi0XlRam4rv9EsYJQxglYqnL3
+	biy6PGQKj1s9GnBg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=QhxuaHYr;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=mJoPdDnW
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1728636312; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ncom/uX4AroWeeiq/3U+wxTQq0SGL4x1wdyhtSqdh4Y=;
+	b=QhxuaHYrTtyBhUndofG374iClxtBLISV/coU7mgwwouOXaTB+G/m+CawmX2R3jzZoz9MfC
+	7S9vxdbzvWXcKEQXIRMPJSOQYZQ7oWJac/hUrPa99ZreYHth9mp4VWCEbyUcxQGXpiLwsj
+	QS0ymhTT0jbjOHaN7aMmh2ZOzfOyFvE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1728636312;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ncom/uX4AroWeeiq/3U+wxTQq0SGL4x1wdyhtSqdh4Y=;
+	b=mJoPdDnWY2gwUYmJfA52A1/rE08Vbgen8zaBDBk7yC3XSe4sLSjyCwlzMRRqohH3UoumFJ
+	KdPYsKw5VNRDnDBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B2024136E0;
+	Fri, 11 Oct 2024 08:45:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id H913KZjlCGduIQAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Fri, 11 Oct 2024 08:45:12 +0000
+Date: Fri, 11 Oct 2024 10:45:08 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Linux I2C <linux-i2c@vger.kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: i2c-tools 4.4 has been released
+Message-ID: <20241011104508.3d0a8a6d@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2EqYX9+itaK4CePP"
-Content-Disposition: inline
-In-Reply-To: <20241011070414.3124-1-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: EBE5C1FC0D
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.44 / 50.00];
+	BAYES_HAM(-2.93)[99.70%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	HAS_ORG_HEADER(0.00)[];
+	TO_DN_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TAGGED_RCPT(0.00)[renesas];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.44
+X-Spam-Flag: NO
 
+Hi all,
 
---2EqYX9+itaK4CePP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+A new version of i2c-tools was tagged and released yesterday. You can
+download i2c-tools 4.4 at the usual place:
+https://www.kernel.org/pub/software/utils/i2c-tools/
 
-On Fri, Oct 11, 2024 at 10:04:14AM +0300, Sakari Ailus wrote:
-> Add a MAINTAINERS entry for the Intel La Jolla Cove Adapter (LJCA) set of
-> drivers.
->=20
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+It includes over three years worth of fixes and improvements. Changes
+are as follows:
+  * tools: Use getopt
+           Implement and document option -h
+  * eeprog: Use force option when data comes from a pipe
+  * i2cdetect: Display more functionality bits with option -F
+  * i2cdump: Remove support for SMBus block mode
+  * i2cget: Document SMBus block mode
+  * i2ctransfer: Sort command line options and add to help text
+                 Add an option to print binary data
+                 Drop redundant variable arg_idx
+  * py-smbus: Install in the defined prefix
+              Use setuptools instead of distutils
 
-Cool, thank you!
-
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-
---2EqYX9+itaK4CePP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcIz+oACgkQFA3kzBSg
-KbZNXA/9FNyBvS6d+apUu6Cz84782t8SJtd3F7RE3fp3jvP1oDurjRh6+27IZm36
-PqihjdeVgkexmpqPMN6UDI0ib2ihg8jF91qZ5ZeM7tRLv+vs5l6zW7iafSN2rqyZ
-UGrca3dy68DPFrKiSmUxklSL0NKbQMZP1yxDVFMRjP4AjfUIJLrRL9dtfjN6csue
-roZgRnp/OC97APENS5GPmU8whGG89JkZbXf2UZt1pyA4SMHYw1tR7umUzLigiebC
-nAcfEE/I2UpOTlx8u9YzuirHL8HJKXQy624Ja1wFs9uISAU5uu5MJnQLJWMfLNEk
-SpA6vij1dYc3kOQB4iKveIwrwLZiKFht4nYD9AcYtG+7W4AuMUPzy/pPeGFZ4EK3
-nRsYSx0Q2CouKOspoCHhCJA547JlqrewrM3PF3asEaSx0Y++XfNk0mh2qb6IywRj
-ss2B+HRo6CJmYflwDjDRkTCvuuh+0+MatsfPpmvp8h/2X1JrYOc1G90KRdTHLFAt
-gYHPhfxuPj96G59feSaLBUz0p4fGABzTKqbNbT3qFi1bIqITSDT4e5hM9Q4lx0Vm
-ikUAt8MQg2ev1huHN83wkccmcJJGDRFtxOKrcORw4D6V6VDNweUp9acjFC3EWMys
-r0Yw1Z8cSSXXDjZpMbi//pndlX0RQhz6KrL7MPvuygQqeqic0lI=
-=pgj3
------END PGP SIGNATURE-----
-
---2EqYX9+itaK4CePP--
+-- 
+Jean Delvare
+SUSE L3 Support
 
