@@ -1,79 +1,79 @@
-Return-Path: <linux-i2c+bounces-7348-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7349-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 929B999B9A6
-	for <lists+linux-i2c@lfdr.de>; Sun, 13 Oct 2024 15:42:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAFBF99B9B3
+	for <lists+linux-i2c@lfdr.de>; Sun, 13 Oct 2024 16:24:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EAA1281C6A
-	for <lists+linux-i2c@lfdr.de>; Sun, 13 Oct 2024 13:42:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 301A81F216A4
+	for <lists+linux-i2c@lfdr.de>; Sun, 13 Oct 2024 14:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F20140E30;
-	Sun, 13 Oct 2024 13:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17270231CA8;
+	Sun, 13 Oct 2024 14:23:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vwdl2COu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ChJ2lPfz"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B428231CA8;
-	Sun, 13 Oct 2024 13:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3457C13D53F;
+	Sun, 13 Oct 2024 14:23:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728826975; cv=none; b=XVzDJ+6yZhNyzVVdP5JjjAB95y2hr1GB2Rs+fu1CVPSiMYeB3CffHebOMQkPHXLOpRV2FUs2iYGGrbq9Sfi4KXvisAeoVfWCtv23l21OGVu7HbYf1pmHBKdu6H9l+Cx4yCfP1UMp8PAgswkaYkGmktr2Zy8ePdJjb7Zr4WSAfwY=
+	t=1728829434; cv=none; b=qRdu7sGHSIn1uDOzxBpAlKrALYNPUR2YAWiaU99FbIDfNf0D/uCb5U5FpEXF1e1lLd/Yj6CUY/menkoOVhTygLXUyqF2aKgHgmCFJw7gI6Ioz2EqZTCYvG5khvdXIX67vnEm5vLjhJEUscqFvjSC/tcQ255vxUf2ihmMLgs3f9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728826975; c=relaxed/simple;
-	bh=XS5iblfw1egF4iIUL7nQOMVI6cY6Z0WNfAVeAajuod0=;
+	s=arc-20240116; t=1728829434; c=relaxed/simple;
+	bh=FKCht3dlIzVrM2kuflkGByOh0ou/oMsNfmAqIRIHkC4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tPNgNwpNyLg4dpkjPCnD6lDGgWnGWp7K3W0Ehho6aQVk7lPeY1PPgEAhxcLP6O17xbKzWovQgTOyIvXVgEUqWN1e9iCl9hrFielez/sC7l1NT5FiWZ6wwgKaDGYLtGk0VKUM+ByMRSLlTbEsgWRqXWlaJZWBR+3fxKqMpr5j8TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vwdl2COu; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=kxw7Rpo9GHJfZaTtYBYxlXI4oHjhRwIwHytoZmr0Ea8fcJl/52uphMp6nlIxU4r1t8AlNrZGH3JjqBAZho02WkaklhS8nBxPnux+YIynp7ie7LpuqaNQ6lnjm+ZcTmviIGQ+cNucCFusuEGtJt9qlswMndRavWoAHNxgfy3FkuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ChJ2lPfz; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728826972; x=1760362972;
+  t=1728829433; x=1760365433;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XS5iblfw1egF4iIUL7nQOMVI6cY6Z0WNfAVeAajuod0=;
-  b=Vwdl2COuTzKHuyPJhHn37kcS2gBYz0AtDjKfjwpA4Om1q5ImeVrHPYjr
-   HFRil4GRHeqP6t6JODpfDUR+axdQpCPTrO/ZW5vr5/gT2fXBNemUpXqd1
-   BafEYqf+rDwAx1/qu6vSDG2E0gGpICd0unkxL2VhBeI20n0W80kY0/6K7
-   O4Mv9vqW3mNSmH7epaKLwGbVvn8TNvPLV8ri6EWqWt3Cv1JNgER+yr38U
-   UJf4nrkkrz7c2h4+jRsTutyuB5/OfVeMu1v+crc9HSoxz5LH2/A4k7nUP
-   PYjn2+8EflZ1Ivt9f3v2wf66Fm5Oi+gPEjeXKbX/OeMvk/uAPrSOTZkCd
-   Q==;
-X-CSE-ConnectionGUID: ZDIhcbMPTKKYuH9TPVJpQw==
-X-CSE-MsgGUID: 6MnT2weFTYqi5O2CDPVH+Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11224"; a="27663435"
-X-IronPort-AV: E=Sophos;i="6.11,200,1725346800"; 
-   d="scan'208";a="27663435"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2024 06:42:51 -0700
-X-CSE-ConnectionGUID: LXyp+TOFRHqudCYB3U6i2w==
-X-CSE-MsgGUID: lCrNGTVASvK6mJLG8hKoYg==
+  bh=FKCht3dlIzVrM2kuflkGByOh0ou/oMsNfmAqIRIHkC4=;
+  b=ChJ2lPfzw7eW8uB/pt1+X1tcj0sfVaB1zecHaau5DgHhD9qGaFl55Gzn
+   2LSSRhF09HvXzE9pojsYNjjtlyaflTfOW28SG8dRZ8tZ/YFRarMNyZ/Vc
+   wexIXpxd6PKnLT/DykO95pk/tGbEI84gOusjpJHK2qrHiwHSaOQ5JHGu+
+   2DlMEq8jtBwr/ptwglmj2Y/++mCCRYcn/Ggu4XQmdSRKVBmvyculKGWae
+   wv65TWa8oTEUJUcTdXXdROXzilNah/WVKrJbtlOPh8LRZCPP7zosxzR8h
+   hAMzNOIM0bbuLwArc+KU2jBpdPYjOPkng9ZjGWMD5Xb3dXYjyGD3Z1hAq
+   g==;
+X-CSE-ConnectionGUID: N6lJw55wROuoLE7x2vYmRQ==
+X-CSE-MsgGUID: ek68X4GBRi+JdvgCKVQInQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28274912"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28274912"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2024 07:23:52 -0700
+X-CSE-ConnectionGUID: noKSmy2fRBmO3TKwbbGiZg==
+X-CSE-MsgGUID: re0+LHujTWymZkHp7H5rAQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,200,1725346800"; 
-   d="scan'208";a="81333291"
+X-IronPort-AV: E=Sophos;i="6.11,201,1725346800"; 
+   d="scan'208";a="77260600"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 13 Oct 2024 06:42:48 -0700
+  by orviesa010.jf.intel.com with ESMTP; 13 Oct 2024 07:23:50 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1szyru-000EOh-2N;
-	Sun, 13 Oct 2024 13:42:46 +0000
-Date: Sun, 13 Oct 2024 21:41:54 +0800
+	id 1szzVb-000EPz-2P;
+	Sun, 13 Oct 2024 14:23:47 +0000
+Date: Sun, 13 Oct 2024 22:23:32 +0800
 From: kernel test robot <lkp@intel.com>
 To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
 	andi.shyti@kernel.org, quic_bjorande@quicinc.com,
 	--cc=linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
 	quic_vdadhani@quicinc.com, vkoul@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+Cc: oe-kbuild-all@lists.linux.dev,
 	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
 Subject: Re: [PATCH v2] i2c: i2c-qcom-geni: Serve transfer during early
  resume stage
-Message-ID: <202410132130.a2tOwnm4-lkp@intel.com>
+Message-ID: <202410132233.P25W2vKq-lkp@intel.com>
 References: <20241011121757.2267336-1-quic_msavaliy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -100,36 +100,30 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Kumar-Savaliya/i2c
 base:   v6.12-rc2
 patch link:    https://lore.kernel.org/r/20241011121757.2267336-1-quic_msavaliy%40quicinc.com
 patch subject: [PATCH v2] i2c: i2c-qcom-geni: Serve transfer during early resume stage
-config: i386-buildonly-randconfig-001-20241013 (https://download.01.org/0day-ci/archive/20241013/202410132130.a2tOwnm4-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410132130.a2tOwnm4-lkp@intel.com/reproduce)
+config: arc-randconfig-001-20241013 (https://download.01.org/0day-ci/archive/20241013/202410132233.P25W2vKq-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410132233.P25W2vKq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410132130.a2tOwnm4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410132233.P25W2vKq-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-qcom-geni.c:711:28: error: no member named 'usage_count' in 'struct dev_pm_info'
+   In file included from include/linux/device.h:15,
+                    from include/linux/acpi.h:14,
+                    from drivers/i2c/busses/i2c-qcom-geni.c:4:
+   drivers/i2c/busses/i2c-qcom-geni.c: In function 'geni_i2c_xfer':
+>> drivers/i2c/busses/i2c-qcom-geni.c:711:48: error: 'struct dev_pm_info' has no member named 'usage_count'
      711 |                         atomic_read(&dev->power.usage_count));
-         |                                      ~~~~~~~~~~ ^
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                              ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
-     274 |                            dev, fmt, ##__VA_ARGS__)
-         |                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
-     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
-     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
-     224 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   1 error generated.
+         |                                                ^
+   include/linux/dev_printk.h:129:48: note: in definition of macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                                ^~~~~~~~~~~
+   drivers/i2c/busses/i2c-qcom-geni.c:710:17: note: in expansion of macro 'dev_dbg'
+     710 |                 dev_dbg(dev, "Runtime PM is disabled hence force resume, pm_usage_count: %d\n",
+         |                 ^~~~~~~
 
 
 vim +711 drivers/i2c/busses/i2c-qcom-geni.c
