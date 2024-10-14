@@ -1,148 +1,159 @@
-Return-Path: <linux-i2c+bounces-7361-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7362-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF5CD99C8CC
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Oct 2024 13:25:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97B0E99CB69
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Oct 2024 15:18:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A3911F21D82
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Oct 2024 11:25:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C95231C227CB
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Oct 2024 13:18:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A06941581EE;
-	Mon, 14 Oct 2024 11:25:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7037A1E4AD;
+	Mon, 14 Oct 2024 13:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bMb0FBKm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MYFOZXY2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AC915350B;
-	Mon, 14 Oct 2024 11:25:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5484A3E;
+	Mon, 14 Oct 2024 13:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728905136; cv=none; b=KIJe25Wzej0Xlnt0CobX0lYOEHDXmjV30eV20vUGfI1vU5N5J9BqaXpiSFAk7u793sNcfGgZODMWBllH1LQjULNRkzt7kuAj3s0yNPGOjLjLDLqO0Nzq5npapAc+dzCAPVSd7mtxfDqkYrpCp5tGNEbQDeKkqvBBJjkrkJvkcUQ=
+	t=1728911800; cv=none; b=OL2zbXcV3LUm9+VPMs5/APFqOwi1FbPtFHzo44xMX3v5WsqjDVgneCYuWa1SyqUvJM1wQR8kua7cjzBWauALwte93+Nscv3j2Zeqr1XD1BZo4qSFhGBSuLyeJCFQsG0uD9AkgGDQ0bxiUcDyvcHkl5eB6ZymnuyYjUZBX+3va+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728905136; c=relaxed/simple;
-	bh=SLqJFOsn5q2qjbckf2ljncx5lrxLVkzu1xfzSt7sS5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EzcKioPSYdZlfQZ0p3/ZYPEmvNM7CENFcdZBuVbk/DODY9B6PClEhALQvWbFMFFl8Sqp2zQ3gNtEyMvIdQu88YhDscNhPJ7Ti4Ci+ORVFlG3BdS0AEbd1sdNXe8RDztHw5Kd46wZn8MKkw+dnK6kbs6BapzXTjaUil3apa1Tz4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bMb0FBKm; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728905135; x=1760441135;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=SLqJFOsn5q2qjbckf2ljncx5lrxLVkzu1xfzSt7sS5w=;
-  b=bMb0FBKmECzSEsP6Q9dmlqRyieWfBKheOSXiKZGzSMCApNjoIyllFS3I
-   JfgsbLma9/FbLXYUPR0vX3ERNQYjYS5UybYvT3vfRctcz90vuzYiNZCH3
-   jJfkhoItEIzjhKpUSbMzmog8WDssUeWd789B3u3ZEFb5xZRqVCM42MYHD
-   1fTmv2tO1S8isj5ouf579w6KO/mGM2O2ZTq9miJEjhJaO1+6jR52TFLvU
-   EnV0Z4OCCP3wWQpCRiEDLzMa83EiX09AFGJoN7p32aIA4sH3O6JlvQHsM
-   ZnkQ0WMO6TMLRgsmVPFBzaYk+OlXFFWP87xhgl3YGyR2dab9mMeK7iimM
-   w==;
-X-CSE-ConnectionGUID: ItiP64g0QQmkKPnql+XhHg==
-X-CSE-MsgGUID: +eeLnZEuQIq0dlD6f1tWWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11224"; a="32165961"
-X-IronPort-AV: E=Sophos;i="6.11,202,1725346800"; 
-   d="scan'208";a="32165961"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 04:25:34 -0700
-X-CSE-ConnectionGUID: yYETopAaQiGK1J/Khy5GJw==
-X-CSE-MsgGUID: 7exEHq4kQwagftdiOKZAgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,202,1725346800"; 
-   d="scan'208";a="82116585"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 04:25:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t0JCZ-00000002sYA-2ZwM;
-	Mon, 14 Oct 2024 14:25:27 +0300
-Date: Mon, 14 Oct 2024 14:25:27 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v8 7/8] platform/chrome: Introduce device tree hardware
- prober
-Message-ID: <Zwz_p3o1PJF6sl2Y@smile.fi.intel.com>
-References: <20241008073430.3992087-1-wenst@chromium.org>
- <20241008073430.3992087-8-wenst@chromium.org>
- <Zwfy6ER6sbr_QxsY@smile.fi.intel.com>
- <CAGXv+5FAhZQR+Tah_6Qxp4O7=x2RawfWuMh29_FT4mGQGQF84w@mail.gmail.com>
+	s=arc-20240116; t=1728911800; c=relaxed/simple;
+	bh=qe08cPMfzQajnQupPuyS8gl/j/iYhFZGr01Yq9ms1Ow=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CNqK5VBDDGGp/Ct8zoKmSOM2jfv5YEPQxZEnu/fJfTh7O/VtjkotoW1kEAbSt8/kfFfVp0KX6oD8h7FLnIou+vcKfwlZexGT7GXO1VwoP25qeuMZ7DpFEU1hgQq1ghbazhi2zGN78vvgnRgskITdbgtA1Va0lEMfOTjPpis05oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MYFOZXY2; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-431291b27f1so17660635e9.0;
+        Mon, 14 Oct 2024 06:16:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728911797; x=1729516597; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qiu63abS+lcmc+QEZqAra0R6AmKde2YbO88Y6AxKGhw=;
+        b=MYFOZXY2ttXV+EtzqOwZ+rN2DEfJ+J38LTgTjx/r+3c9ywGp7fT+cXe9p2q1xsSdhI
+         SYvkwPIQrdJZc0cW1OGtG1lIlY+hKjIVdI8KZwPFgaK9g5UIt6PV9KBCB8n5qNyiX998
+         gWstbJcjixviwgg8kUhE37Rky98hSM2kVulbarur0gKrpI0H6240scNuX8K/NHaA3P6b
+         7aYOMwwEY9N3Rbme+fA3NTWtwXc9erouIIFjBBPO6xD8O38p6cYm5VUjREVVPyvTuqTs
+         /gC5f2c88xvLyrLweZGDdV3UQ8aoyDR1aHJF1vMyntclhM9vk8XxGKy2Okl6ZXFDHu4w
+         ygig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728911797; x=1729516597;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qiu63abS+lcmc+QEZqAra0R6AmKde2YbO88Y6AxKGhw=;
+        b=CPu3191X46ewCnFokkJ5I5yM8tAPZ527qfnFOZAYYGBgT6AajQ3ESMDNI4zRmSynm3
+         nSgomtC+q2ZqjozZ4r8AE9YBtzIvW7aUkWs7GHX3Lr2eMjQSjsZLpErrowrmucwQtb7p
+         wYC+2uOtJ5/PAMy90TAhLnXWxvMU6gvr6rUIEey7cRSrOFim390+dvJtDpQJITVHiI4S
+         7VzInZuPUkwjJoIjuvG/YpxHHJalpziDoJ5z04DhCFYnrinmrsQGIjoQOdfDJVPYj3tt
+         ErLFoNKIUlpuJd+thwqjwB0KJukXHdxhTR6XIx36knGfIOs5LWKEEerkdv3ZYUVt9F4J
+         DUEA==
+X-Forwarded-Encrypted: i=1; AJvYcCWsTku47vul9a+BEdmRFNiK8PdDUVQPnPl5CBI1joHpTtHegswTmopQSxsDx5mCaw41ICsxQ2NRJOuIgU0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/NDF1IpuHO5vsDCUctnNn+nxNTCkBG71c97PXNbeoMfF1HgxB
+	hRGB65g1preXVlWnAEojtjxUNQJfsF373Ab/t1XbZhJ9tYiD23AF
+X-Google-Smtp-Source: AGHT+IFcCp01a+hQ3E59skIEwWoYCKjNqEuIfGS+TTlAmsmQTY97kQB30zIN0dZ9uu9D+NYoMH5lpg==
+X-Received: by 2002:a05:600c:1d0e:b0:42c:c080:7954 with SMTP id 5b1f17b1804b1-4311df55bc4mr96397855e9.30.1728911796745;
+        Mon, 14 Oct 2024 06:16:36 -0700 (PDT)
+Received: from eichest-laptop.lan ([2a02:168:af72:0:d130:f8ef:c6c1:55ee])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-430d748d42fsm153420425e9.43.2024.10.14.06.16.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 06:16:36 -0700 (PDT)
+From: Stefan Eichenberger <eichest@gmail.com>
+To: o.rempel@pengutronix.de,
+	kernel@pengutronix.de,
+	andi.shyti@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	festevam@gmail.com,
+	francesco.dolcini@toradex.com,
+	l.stach@pengutronix.de,
+	arnd@arndb.de,
+	Frank.Li@nxp.com
+Cc: linux-i2c@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/3] i2c: imx: prevent rescheduling in non-dma mode
+Date: Mon, 14 Oct 2024 15:15:11 +0200
+Message-ID: <20241014131635.205489-1-eichest@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5FAhZQR+Tah_6Qxp4O7=x2RawfWuMh29_FT4mGQGQF84w@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Oct 14, 2024 at 03:04:44PM +0800, Chen-Yu Tsai wrote:
-> On Thu, Oct 10, 2024 at 11:29 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Tue, Oct 08, 2024 at 03:34:26PM +0800, Chen-Yu Tsai wrote:
+While running tests on an i.MX8M Mini connected to a TI ADS1015 ADC, we
+found that the ADC would stop responding to i2c requests because it
+would timeout after the bus was idle for 25ms. This timeout could be
+traced back to the rescheduling events in the i2c-imx driver. The
+problem is that if the system is under heavy load, the schedule call and
+the wait_event_timeout may be rescheduled too late to reach the 25ms
+timeout. The same problem may occur with other SMBus devices. Therefore,
+this patchset removes the scheduling calls for non-DMA mode by handling
+the interrupt events directly in the ISR instead of scheduling a task to
+handle the events.
 
-...
+This patch will introduce some bigger changes because the logic for
+handling events in the ISR had to be rewritten. Therefore we have tested
+the following combinations:
+- i.MX8M Mini with dma
+- i.MX8M Mini without dma
+- i.MX8M Plus with dma
+- i.MX8M Plus without dma
+- i.MX7D with dma
+- i.MX7D without dma
+- i.MX7D atomic mode
 
-> > > +static const struct chromeos_i2c_probe_data chromeos_i2c_probe_hana_trackpad = {
-> > > +     .cfg = &chromeos_i2c_probe_simple_trackpad_cfg,
-> >
-> >         .cfg = DEFINE_I2C_OF_PROBE_CFG(trackpad, i2c_of_probe_simple_ops),
-> >
-> > Or even
-> >
-> > #define DEFINE_I2C_OF_PROBE_CFG_SIMPLE(_type_)                  \
-> >         DEFINE_I2C_OF_PROBE_CFG(type, &i2c_of_probe_simple_ops)
-> >
-> > > +     .opts = &(const struct i2c_of_probe_simple_opts) {
-> >
-> > Perhaps also DEFINE_xxx for this compound literal?
-> 
-> I think it's better to leave this one as is.
+Because we do not have any devices that use the SMBus block transfer
+mode, we were not able to test it. 
 
-Using a compound literal like this questions the entire approach.
-Why you can't you drop it and use the static initializers?
+The ideas are based on the RFC:
+https://lore.kernel.org/all/20240531142437.74831-1-eichest@gmail.com/
+However, the handling of events in the ISR is new, because further
+testing showed that it was not enough to simply remove the schedule
+call.
 
-> Not every entry will
-> use the same combination of parameters. And having the entry spelled
-> out like this makes it easier to read which value is for what
-> parameter, instead of having to go up to the macro definition.
-> 
-> For comparison, this entry uses just two of the parameters, while for
-> another platform I'm working on the full set of parameters is needed.
-> 
-> > > +             .res_node_compatible = "elan,ekth3000",
-> > > +             .supply_name = "vcc",
-> > > +             /*
-> > > +              * ELAN trackpad needs 2 ms for H/W init and 100 ms for F/W init.
-> > > +              * Synaptics trackpad needs 100 ms.
-> > > +              * However, the regulator is set to "always-on", presumably to
-> > > +              * avoid this delay. The ELAN driver is also missing delays.
-> > > +              */
-> > > +             .post_power_on_delay_ms = 0,
-> > > +     }
-> > > +};
+Changes since v4:
+- Drop patch 3 use relaxed readb and writeb (Arnd)
+- Make multi master default again and use simple-master as property (Lucas)
+- Print a debug message instead of an error if read and write fails. An
+  error message would spam the kernel log when using i2cdetect -r -y 0.
+- Fix error message in read (read instead of write)
+
+Changes since v3:
+- Fixed style issues with checkpatch.pl --strict (Andi)
+- Add comments to explain the code (Andi)
+
+Changes since v2:
+- Add Acked-by tags from Oleksij
+- Renamed i2c_imx_start_read to i2c_imx_prepare_read
+- I did not add a Fixes tag because the issues from Flavio have a
+  different root cause and are not fixed by this patchset
+
+Changes since v1:
+- Add Reviewed-by tags from Frank
+- Add new patch to use readb_relaxed and writeb_relaxed (Frank)
+- Update commit message for patch 1 with some clarifications (Frank)
+
+Stefan Eichenberger (3):
+  i2c: imx: do not poll for bus busy in single master mode
+  i2c: imx: separate atomic, dma and non-dma use case
+  i2c: imx: prevent rescheduling in non dma mode
+
+ drivers/i2c/busses/i2c-imx.c | 370 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 320 insertions(+), 50 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0
 
 
