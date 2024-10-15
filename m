@@ -1,162 +1,192 @@
-Return-Path: <linux-i2c+bounces-7373-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7374-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B62999DE71
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 08:33:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00D2399DFAE
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 09:51:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A97B284665
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 06:33:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 242C51C219B1
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 07:51:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E33FF189F2D;
-	Tue, 15 Oct 2024 06:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC5E189BBF;
+	Tue, 15 Oct 2024 07:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QSulWA69"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MVl8ECzQ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26524165F16
-	for <linux-i2c@vger.kernel.org>; Tue, 15 Oct 2024 06:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D6018A6D9
+	for <linux-i2c@vger.kernel.org>; Tue, 15 Oct 2024 07:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728973989; cv=none; b=IPxeC6k1KUY5q7AmJZOeTdU9XQ/vPLW8FM60ap9LgGgsvJM2ikN03tsuCFQu/lMcnwgJj5TxMdIWmvppuZzRVysq/jattul96eGxapHQHNfOpz96NORLijk5xUwiIEdKzPuhvpCpSBEjt5ilsNmQa+76V4Bgi/8zMFsA7TJmXqg=
+	t=1728978689; cv=none; b=V0WL/F+DcgED3AFG8zxSy+aWXDJPWTvRV0O9RhzB+s7AiKOasuA5sca9wl3Bqa/bx5MFHosEjpur8V0YiWFP1BIJlkRLXHIxKAe4M99xxCfoYZW2Mesfhyw8+eGZhS/nOWJWiNBW/j2Jf/jZiA+6rt4vVamJdpjDcOkz+oYUQUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728973989; c=relaxed/simple;
-	bh=ajcr+KVWs/DtWqF1gsWdMOYVHLRYdSzAIdmxuUdyUdQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LoLHe0BHHxvivfFrFNLB6YEtWVhKezxGLC9LW/bbtUdrZnaZO7qgFnHIiTv58fPI7MP9YZvOgtUXRmnQkAii2s02MIN6r2Im/MAyE5e7O3v1EgiEy2ksIihsh7+OeW/9elWpJfQBmMiqEusp05r0ie1Ycpiv48eICYLnP+9q3mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QSulWA69; arc=none smtp.client-ip=209.85.167.41
+	s=arc-20240116; t=1728978689; c=relaxed/simple;
+	bh=hfK2U/GrNYgsYtl8NtSXyFYbjdCtuYMGCNrIn/wLtiA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=avi/quSzBSW8uPLye7IMhN88PozyPFlGZqE1NEqjE7cYEY4ctWV73hzHI0gUwfU/QYlLb4Am/i432+O6tUk9kH4oXLb/ys5tAoORVMa/TxiE9vPQopBzA9bNAx36D2apLIZDVZIzo8dNMAGbZ4cAaSn8XD+C6Oh+LbR1bb7wqDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=MVl8ECzQ; arc=none smtp.client-ip=209.85.210.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-539e7e73740so2087391e87.3
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Oct 2024 23:33:07 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7093997dffdso1390577a34.2
+        for <linux-i2c@vger.kernel.org>; Tue, 15 Oct 2024 00:51:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1728973986; x=1729578786; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LSQe+OWkJptNhalICgZHHnWYpzgrAnYhHgBYOyd2y2A=;
-        b=QSulWA69imZpBxSB7twecK+I/3UCL5stUsEn22tLRtV/yOJugi9yoNoaxCSk1j4vgD
-         KoeH//1D9yJeSIwlcyddNpwX/sBCGCKjkhed0nJEcgkKjGPoD2buSZV3aarH0DvhZds/
-         wttqzeGcMJQzmJ3sPedSiyOx2gVBHsrL5xAJ4=
+        d=chromium.org; s=google; t=1728978686; x=1729583486; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aaW2sa/1ZxtztZoldWmZYhD7VcMhjqCGkrdW4rioaxc=;
+        b=MVl8ECzQEa1tbVUH82ZXxYOzRXBKBVViNbkl33XR62SUk+oPRJwWsnS0CpQ5GANxcq
+         +1xZ9x18Lwk/Je+gYTvKMr3gSyJsS5pXnL8SHe9NtnD3ZWCbH+LjHG4fCTlE8+q+dBFE
+         CCTE2PtyFTI6JlPOVgri+SL9Ld3tGnyB4hEG8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728973986; x=1729578786;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LSQe+OWkJptNhalICgZHHnWYpzgrAnYhHgBYOyd2y2A=;
-        b=nZNilir9QCwZmSxQojwt2rBBjtzLFR7oB9HQF4haAam0oe+sLQC2+JsH582D8kn85m
-         E+mmRN7jHVVckrpEbhKewHJYVsZNSIFZREfrvDeBqrKNuChi24IUc66vv1692CjAjSGi
-         fYKPSQiDkcA7P6pAZ8mH+ALqdy/ggYVHGQX0ryJGD6PwW/R88YpeviUrNiwc7zq6KGnu
-         iEwNzVFa5ttV1e2EMPI+M4mHcON7eUKAz6Xme74BNuwWS040WJv10KHJlu/lGVrmaco7
-         GgG/vc5n+NQyN/tSJDoJrNRVG6POAuA9e4jTtiG4Mm8PkRjVGcK44uyl/aRbehxEGRJy
-         +U0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXUr8v3wxMpu3uMqkqqgQLFg1AzHng7QvaPso+mkPjiHIJcNnptddldc0EYGzIH4SgspYwC9A3eVGw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/tg/Yj2mRa5L7GsN0+sFKUyYyvQd3PmG1QVSgtJxdu2ccbgtX
-	UO4k9jQyufvIkf1hzmrcGLrAgZhUlg6pwZFM2uYg05DmI87/j/Jp6f8NVqNmQ/+Oszq7d2wyAZp
-	TwTsyzUnEAW/DPfWGpE6OHs7Ov8pGAQuKnk2+
-X-Google-Smtp-Source: AGHT+IEi5VM5BInri+Xle/NpCFhUkRIBDd77CTdk9H6/daGndiGJT4jSou7J34vtaK0aKDEUC8sIsGSEXiAysfqU1+Q=
-X-Received: by 2002:a05:6512:2396:b0:539:eb82:d453 with SMTP id
- 2adb3069b0e04-539eb82d67dmr3760676e87.39.1728973986262; Mon, 14 Oct 2024
- 23:33:06 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728978686; x=1729583486;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aaW2sa/1ZxtztZoldWmZYhD7VcMhjqCGkrdW4rioaxc=;
+        b=PQ+qyrO24y3BRxRkVgv6NcVwkK7RMJCsdB8vOV9dSvliezzNX9Bi4MLfV8Kr0XpLIK
+         f6OA0RoX+DsejFbWXk7omE8ilJdMvigEttbdV5r9vRik8P68UzN7DTRdkpT1OH66mZNR
+         9mgKBqTe+qDS99Rpz8SEUPfA+ns/YYt8hnh7nYyORw5f0vduGngcWjrijKZ0Tm3JRps3
+         IAnwU2sdZG0ZSoQWi951xeqtDjDu6mMf/4yu72MqnDCrJcXxF6n1+6F/z31XLYhBcqSR
+         Y5Dvq7Z564xdxq9zhU5nv+By+pTVp9l6MPG+AOm8mju8bGTTmxi8cF+VQWJzEQZfpAhr
+         QFDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5Oa9Z5z6SUT6+rtblXsFYD98btCf0lchKuqg6HkZ1IlmzI0MHqBMampFSmC9dLqAYwxCm6uJ8Wlo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRbyZV6Qp/rp6N5Qn0t0COEx5tkwhO586qA+/DwzIFACWOwptT
+	o0QOwVB5Q2fQt2W9BkCHwYu38KM5XmTcGvzme8l6Ts5Lwq2HImZQs5fLBNQIcA==
+X-Google-Smtp-Source: AGHT+IEfvWKZ1jcEyU30hF3ZW6BxaiMzf1hjuhVYl88Vngg8HNiMsojaXq2qzSwNVqU01VmSdulBrA==
+X-Received: by 2002:a05:6358:52c5:b0:1b5:a38c:11d1 with SMTP id e5c5f4694b2df-1c32bc8c0f9mr537792955d.26.1728978685952;
+        Tue, 15 Oct 2024 00:51:25 -0700 (PDT)
+Received: from google.com ([2401:fa00:1:10:f99b:9883:3b88:182a])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ea9c713432sm730557a12.83.2024.10.15.00.51.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2024 00:51:25 -0700 (PDT)
+Date: Tue, 15 Oct 2024 15:51:21 +0800
+From: Chen-Yu Tsai <wenst@chromium.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v8 7/8] platform/chrome: Introduce device tree hardware
+ prober
+Message-ID: <20241015075121.GA292890@google.com>
+References: <20241008073430.3992087-1-wenst@chromium.org>
+ <20241008073430.3992087-8-wenst@chromium.org>
+ <Zwfy6ER6sbr_QxsY@smile.fi.intel.com>
+ <CAGXv+5FAhZQR+Tah_6Qxp4O7=x2RawfWuMh29_FT4mGQGQF84w@mail.gmail.com>
+ <Zwz_p3o1PJF6sl2Y@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008073430.3992087-1-wenst@chromium.org> <20241008073430.3992087-8-wenst@chromium.org>
- <Zwfy6ER6sbr_QxsY@smile.fi.intel.com> <ZwfzhsvlPrxMi61j@smile.fi.intel.com>
- <CAGXv+5ED7j49ndT7BaESW8ZL7_mjVUJLM_FWma8Lwkg+Uh3saw@mail.gmail.com> <Zwz_Kl7SwfL0ZaAZ@smile.fi.intel.com>
-In-Reply-To: <Zwz_Kl7SwfL0ZaAZ@smile.fi.intel.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Tue, 15 Oct 2024 14:32:54 +0800
-Message-ID: <CAGXv+5H0Yvt1cwPOim-quT3C+=s9NapnryJhNxs_QW=DAyAycQ@mail.gmail.com>
-Subject: Re: [PATCH v8 7/8] platform/chrome: Introduce device tree hardware prober
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Zwz_p3o1PJF6sl2Y@smile.fi.intel.com>
 
-On Mon, Oct 14, 2024 at 7:23=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Oct 14, 2024 at 12:56:20PM +0800, Chen-Yu Tsai wrote:
-> > On Thu, Oct 10, 2024 at 11:32=E2=80=AFPM Andy Shevchenko
+On Mon, Oct 14, 2024 at 02:25:27PM +0300, Andy Shevchenko wrote:
+> On Mon, Oct 14, 2024 at 03:04:44PM +0800, Chen-Yu Tsai wrote:
+> > On Thu, Oct 10, 2024 at 11:29 PM Andy Shevchenko
 > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Thu, Oct 10, 2024 at 06:29:44PM +0300, Andy Shevchenko wrote:
-> > > > On Tue, Oct 08, 2024 at 03:34:26PM +0800, Chen-Yu Tsai wrote:
->
+> > > On Tue, Oct 08, 2024 at 03:34:26PM +0800, Chen-Yu Tsai wrote:
+> 
 > ...
->
-> > > > > +   .cfg =3D &chromeos_i2c_probe_simple_trackpad_cfg,
-> > > >
-> > > >       .cfg =3D DEFINE_I2C_OF_PROBE_CFG(trackpad, i2c_of_probe_simpl=
-e_ops),
-> > > >
-> > > > Or even
-> > > >
-> > > > #define DEFINE_I2C_OF_PROBE_CFG_SIMPLE(_type_)                     =
-   \
-> > > >       DEFINE_I2C_OF_PROBE_CFG(type, &i2c_of_probe_simple_ops)
-> >
-> > I'm not inclined on using compound literals here. "simple X cfg" will
-> > likely get shared between multiple |chromeos_i2c_probe_data| entries,
-> > and AFAIK the toolchain can't merge them. So we would end up with one
-> > compound literal per entry, even if their contents are the same.
->
-> I'm not sure I follow, you are using compound literal _already_.
-> How does my proposal change that?
-
-I'm using it where it makes sense, i.e. where the embedded variable
-is not going to be shared with other instances.
-
-For the dumb probers, there's only going to be one instance per "type".
-
-For the simple probers, the config part is still one instance per "type",
-but the parameters are board and component specific. There will be
-multiple instances. Hence the config part can be shared, while the
-parameters likely won't be.
-
-> > > With that also looking at the above
+> 
+> > > > +static const struct chromeos_i2c_probe_data chromeos_i2c_probe_hana_trackpad = {
+> > > > +     .cfg = &chromeos_i2c_probe_simple_trackpad_cfg,
 > > >
-> > > #define DEFINE_I2C_OF_PROBE_CFG_NONE(_type_)                         =
-   \
-> > >         DEFINE_I2C_OF_PROBE_CFG(type, NULL)
-> >
-> > For the "dumb" case it makes sense though, since it would be one instan=
-ce
-> > per type. But we could go further and just wrap the whole
-> > |chromeos_i2c_probe_data| declaration.
->
-> Maybe it's too far from now...
+> > >         .cfg = DEFINE_I2C_OF_PROBE_CFG(trackpad, i2c_of_probe_simple_ops),
+> > >
+> > > Or even
+> > >
+> > > #define DEFINE_I2C_OF_PROBE_CFG_SIMPLE(_type_)                  \
+> > >         DEFINE_I2C_OF_PROBE_CFG(type, &i2c_of_probe_simple_ops)
+> > >
+> > > > +     .opts = &(const struct i2c_of_probe_simple_opts) {
+> > >
+> > > Perhaps also DEFINE_xxx for this compound literal?
+> > 
+> > I think it's better to leave this one as is.
+> 
+> Using a compound literal like this questions the entire approach.
 
-This is what I have:
+I don't follow. It's a valid use.
 
-#define DEFINE_CHROMEOS_I2C_PROBE_DATA_DUMB(_type)
-                        \
-       static const struct chromeos_i2c_probe_data
-chromeos_i2c_probe_dumb_ ## _type =3D {       \
-               .cfg =3D &(const struct i2c_of_probe_cfg) {
-                        \
-                       .type =3D #_type,
-                        \
-               },
-                        \
-};
+> Why you can't you drop it and use the static initializers?
 
-DEFINE_CHROMEOS_I2C_PROBE_DATA_DUMB(touchscreen);
+Did you mean split that part out as a separate variable:
+
+	static const struct i2c_of_probe_simple_opts
+	chromeos_i2c_probe_voltorb_tch_opts = {
+		.res_node_compatible = "elan,ekth6915",
+		.supply_name = "vcc33",
+		.gpio_name = "reset",
+		.post_power_on_delay_ms = 1,
+		.post_gpio_config_delay_ms = 300,
+		.gpio_assert_to_enable = true,
+	};
+
+	static const struct chromeos_i2c_probe_data
+	chromeos_i2c_probe_voltorb_touchscreen = {
+		.cfg = &chromeos_i2c_probe_simple_touchscreen_cfg,
+		.opts = &chromeos_i2c_probe_voltorb_tch_opts,
+	};
+
+Instead of the following, which is slightly shorter, and gets rid of one
+explicit symbol name:
+
+	static const struct chromeos_i2c_probe_data
+	chromeos_i2c_probe_voltorb_touchscreen = {
+		.cfg = &chromeos_i2c_probe_simple_touchscreen_cfg,
+		.opts = &(const struct i2c_of_probe_simple_opts) {
+			.res_node_compatible = "elan,ekth6915",
+			.supply_name = "vcc33",
+			.gpio_name = "reset",
+			.post_power_on_delay_ms = 1,
+			.post_gpio_config_delay_ms = 300,
+			.gpio_assert_to_enable = true,
+		},
+	};
+
 
 
 ChenYu
+
+> > Not every entry will
+> > use the same combination of parameters. And having the entry spelled
+> > out like this makes it easier to read which value is for what
+> > parameter, instead of having to go up to the macro definition.
+> > 
+> > For comparison, this entry uses just two of the parameters, while for
+> > another platform I'm working on the full set of parameters is needed.
+> > 
+> > > > +             .res_node_compatible = "elan,ekth3000",
+> > > > +             .supply_name = "vcc",
+> > > > +             /*
+> > > > +              * ELAN trackpad needs 2 ms for H/W init and 100 ms for F/W init.
+> > > > +              * Synaptics trackpad needs 100 ms.
+> > > > +              * However, the regulator is set to "always-on", presumably to
+> > > > +              * avoid this delay. The ELAN driver is also missing delays.
+> > > > +              */
+> > > > +             .post_power_on_delay_ms = 0,
+> > > > +     }
+> > > > +};
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
 
