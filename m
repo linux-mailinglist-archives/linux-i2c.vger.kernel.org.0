@@ -1,133 +1,214 @@
-Return-Path: <linux-i2c+bounces-7369-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7370-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B36D99D93C
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Oct 2024 23:37:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1766B99DD76
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 07:22:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 855641C21C0D
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Oct 2024 21:37:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF7A1283846
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 05:22:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AC8F1D2B34;
-	Mon, 14 Oct 2024 21:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD31175D3E;
+	Tue, 15 Oct 2024 05:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r2tK3ENy"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Lewbo6iy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CA913BC02
-	for <linux-i2c@vger.kernel.org>; Mon, 14 Oct 2024 21:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55527175D50
+	for <linux-i2c@vger.kernel.org>; Tue, 15 Oct 2024 05:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728941816; cv=none; b=YR216N0mUEZ8AcDHaYTiEHyE43ehjzjJdNqW1NAxH9HDovslNBJXwZJUuKgTx1WZgjyhiIbWw1AbCIR9ZpnFO8MSACakgWCEEaRmEv4LeIritiNZoFYkJvvmvjiprEFCOLRCFzJgBdiiyr1bKr8spJNg2h+Vb/cnMewTHKThd5c=
+	t=1728969750; cv=none; b=n5YL7EvuLy4RkRMzCMhXk13c9W5HL9bdEdYUXgHnZo6J9/6z7LAADYBWGsxavIoidOYLnqzCHH2UUlMVQMm0wk2KXL40bG3Lwub3/oOZrQV245c4spRXlNsQPuFxDBTLMmDxR2E2y8Z5SbTafK5sRoxRuBCvQ8556CHTC3yly7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728941816; c=relaxed/simple;
-	bh=k4SFlVjh+uR65uwdgKDRqHhs8xqLl0Ct7TG7dQW52lw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=LbztxwnBsqKv0j6hgzI8XLxFXFo/zAXjc0fVdD3mDq6ocl/7EQXYTTfB6pp7+WqVo6FPWRlSVC0VBS8qVVmljWIfkfRHaUpmZY946TwiAGNaQMfsBG6zACY5K7SPQId9k7wkh4Zmrf+hm3ttTLgJLl64ndtiaoNyN77VRzv/udk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r2tK3ENy; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c9693dc739so3002083a12.3
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Oct 2024 14:36:53 -0700 (PDT)
+	s=arc-20240116; t=1728969750; c=relaxed/simple;
+	bh=QroOQcxlNuix6nORrJFaZjYUpe/qnnT7RocqztaVH6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PSKs7U/MzKK6WH09fkuEzq5ExSM+Is8MRhencDHnJo7hnfo9GGC9ixKzGts+ibc1bmZyXKN+kgtslw2LQ4xAJL+cUqfXefa7lXRiXzst40ipel3mow7IBSCR43+mdUi/MN2c7H+sfkXwDPIE1CzHjQtJMcUBtZnHRshQS8zTvQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Lewbo6iy; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-539f53973fdso1402041e87.1
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Oct 2024 22:22:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728941812; x=1729546612; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aS5oHRHtEas82fi6dLQvcPoGTT6ij1fnB8J0TcYqkvo=;
-        b=r2tK3ENyMKvhrCAi7B1+Nfz/vQgmfUumEGaeN64F7XDwtJdB1HlrbmkFbY55dup8lE
-         E2dSqcbaVhJkNM5X8aJdgcQzUn3MST+uryw3S/Cqsh59egA1iVcGYsLH2ftMPsKYHELY
-         f77S1/zYmf/Bkfet+eQuvx5FDvh1/mCy+kzXWlnIb8RKQqnlSoLjIC0Nz9UBkMHCX8eb
-         BFDDBzQ6EMldAAzRYnJC5ylqzonKLkQHYbPlLBntZE3RBFiu4mzFglwJtlm9XCMb0kuN
-         hNK15wK+5GoyUPXByKgdGyRBQ7SD/TqrSFeaAX7EeLI78LzVnFnqo2R4cMX57VdopjBO
-         uhFw==
+        d=chromium.org; s=google; t=1728969745; x=1729574545; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2amfIbZSfwwrInuc60WPLo9Bq9qEZCLpcMAyCEJ6kmU=;
+        b=Lewbo6iyk4u7kTWaOVRnQzCOQ7wTbOt0UUNEGRHEgwFn2JIcj20DaQNjgK685JjrUc
+         1NF3gAOSlzR5FzQEH3t0RMRDwQzfV+lk+Rn7Qu7HTvCEX+ObgwyYLk0vPRh96E7XPq73
+         p1wcd0OI6qd28wQX3RD/Sc6lGtNKlqXqE5lDw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728941812; x=1729546612;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aS5oHRHtEas82fi6dLQvcPoGTT6ij1fnB8J0TcYqkvo=;
-        b=J3oPGvqMfxha2rkltHmJr+GaUOLGl9Bvd78wNEGYdSSbY/0IgaG76cWt6Z4jri7qyH
-         JYs6akK7GXwcIpLPpEcH3W3Ph/N5GPxf9pBA36vg4IIJBpsVxB20uWfL52LyaL99LSag
-         IYh+2Ayode+aDJKNV/+Hi64Xdf22XOXtURe+6IQCL/QaEK+tML5yF8Q1obzf828z0/SB
-         oLOIwx+k59keUrUv0zMG/x9bg3FqgBlGSY+NDT1pGVyH4jP/HF5BE61onMDc/OVhe+b7
-         dTAVEYfxjflslRDILNWlyFdA/wqWBM4RLS2rNrxIt5z7CaBQRiMs3K+lW0jzcAhmgEy8
-         NB5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVOUuRrjtbSOmv3LtDAUFed0U0YuzUyOA5fTOCw/kbaLURZo3zYYIyWpwIWgqZhPBquP+CC2WqJ/gU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgRZFCzu4fnD5IrhU72QpXtW9JV5SQ8uac4bySqVcj4RMJQfeq
-	go41yA5fwgv6CqkiieelgirIBpwIjOjwLVMzOSvmHbWT5iLGwhT4Qyq+0ZMYxSk=
-X-Google-Smtp-Source: AGHT+IGMbzqVMCN4nXkCJp0ZbA/DVg+/3LgMvva+vLk+OtvbPDG71diTtg6++8GyVXSdB/0w22sZkw==
-X-Received: by 2002:a17:907:e2d0:b0:a7a:aa35:408c with SMTP id a640c23a62f3a-a99e39e4fbbmr856093066b.8.1728941811683;
-        Mon, 14 Oct 2024 14:36:51 -0700 (PDT)
-Received: from [192.168.0.40] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a06169946sm260451066b.204.2024.10.14.14.36.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Oct 2024 14:36:51 -0700 (PDT)
-Message-ID: <6a060f86-82af-4d39-9ab8-a377650e6bf3@linaro.org>
-Date: Mon, 14 Oct 2024 22:36:50 +0100
+        d=1e100.net; s=20230601; t=1728969745; x=1729574545;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2amfIbZSfwwrInuc60WPLo9Bq9qEZCLpcMAyCEJ6kmU=;
+        b=FGlQcRZ155F037L1qDNq9HbtG4zFzRR1vmOf5vw55ld9GQMr88Z227RTtfk9DSJ9yF
+         Gds7zJ88Gtzvcxxd9UAcnnMLO5YUVuZ1gpmFU8KeL29dP+0UK0Hd3yQbaiAOG1bBUW2n
+         TDp9bF2EDEx+4/TOdx3+yb4A6YJkFQgc2/ZmdOK4cmFHemdf1kol8L/lZiSmkCHYgjqs
+         I3dln4tC2EoH31+4uEHs0FjX1O1wfMn2Mi2o0YhG6b3VcYfsDYnYAGGtwdLgUwDLdj+5
+         TR9U8bPnj7d2jNHV+zBHI2OjJePtnI9qg5eZqXHFMvLT3dPD9UKC8Oq/5YNztmMSQ5s0
+         FRCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUALs8g8fBlpeLIBjeYTIzDo/hmqTle3pEMVzM1zaZh/thtkb2+9hBFuI3It7YJryg1nopVST3j+VM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywih7WBHaXuZ/bCKfbEKUsJb0m1l3HQzc1j+vEctuBSCpiBvXy4
+	VFthTJqW7Fl3QrdHNgYGZwkHPIUKTOSt/YDTArM+rNHmS/3Klswy20MuR5zT6/g2J2rq5FMf9uZ
+	hV6IqfKzzEZm26/R5ehWVu9qKzKE7qrMA4c9U
+X-Google-Smtp-Source: AGHT+IGnCYIKC4fxrTKf7KXrK4wtSw6kzD/gty96rpQnFBMMz91hHJcgXAFaBjG2JNXIFl/CWbfvb9I+Di9bhTdNMZc=
+X-Received: by 2002:ac2:4f0a:0:b0:539:e263:331c with SMTP id
+ 2adb3069b0e04-539e26334a7mr4023423e87.17.1728969744956; Mon, 14 Oct 2024
+ 22:22:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] i2c: i2c-qcom-geni: Enable i2c controller sharing
- between two subsystems
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
- konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
- linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
- vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
- Frank.Li@nxp.com, konradybcio@kernel.org, krzk+dt@kernel.org, robh@kernel.org
-References: <20240927063108.2773304-1-quic_msavaliy@quicinc.com>
- <20240927063108.2773304-5-quic_msavaliy@quicinc.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20240927063108.2773304-5-quic_msavaliy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241008073430.3992087-1-wenst@chromium.org> <20241008073430.3992087-5-wenst@chromium.org>
+ <ZwfvuA2WhD_0P3gL@smile.fi.intel.com> <CAGXv+5Hm62hFsF27B-cEWTJ_AKrhcfCPaqR7BxmpwnjABzwHTQ@mail.gmail.com>
+ <Zwz9djqb0Q6Ujmo_@smile.fi.intel.com>
+In-Reply-To: <Zwz9djqb0Q6Ujmo_@smile.fi.intel.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Tue, 15 Oct 2024 13:22:13 +0800
+Message-ID: <CAGXv+5EGq=OAymON-wj0OzQjK1VxRzdvgJgbHxaYPKP_pmTN2A@mail.gmail.com>
+Subject: Re: [PATCH v8 4/8] i2c: Introduce OF component probe function
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
+	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
+	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Douglas Anderson <dianders@chromium.org>, 
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 27/09/2024 07:31, Mukesh Kumar Savaliya wrote:
-> Add support to share I2C SE by two Subsystems in a mutually exclusive way.
+On Mon, Oct 14, 2024 at 7:16=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Oct 14, 2024 at 11:53:47AM +0800, Chen-Yu Tsai wrote:
+> > On Thu, Oct 10, 2024 at 11:16=E2=80=AFPM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Tue, Oct 08, 2024 at 03:34:23PM +0800, Chen-Yu Tsai wrote:
+>
+> ...
+>
+> > > Fresh reading of the commit message make me think why the firmware or
+> > > bootloader on such a device can't form a dynamic OF (overlay?) to ful=
+fill
+> > > the need?
+> >
+> > The firmware / bootloader on existing devices are practically not upgra=
+dable.
+> > On the other hand, the kernel is very easy to upgrade or swap out.
+> >
+> > For said shipped devices, there is also nothing to key the detection
+> > off of besides actually powering things up and doing I2C transfers,
+> > which takes time that the firmware has little to spare. We (ChromeOS)
+> > require that the bootloader jump into the kernel within 1 second of
+> > power on. That includes DRAM calibration, whatever essential hardware
+> > initialization, and loading and uncompressing the kernel. Anything
+> > non-essential that can be done in the kernel is going to get deferred
+> > to the kernel.
+> >
+> > Also, due to project timelines oftentimes the devices are shipped with =
+a
+> > downstream kernel with downstream device trees. We don't want to tie th=
+e
+> > firmware too tightly to the device tree in case the downstream stuff ge=
+ts
+> > reworked when upstreamed.
+>
+> Okay, I was always under impression that DT has at least one nice feature=
+ in
+> comparison with ACPI that it can be replaced / updated in much quicker /
+> independent manner. What you are telling seems like the same issue that
 
-As I read this the question jumps out "what is a subsystem" - in Linux 
-speak subsystem is say a bus or a memory management method but, here 
-what you really mean if I've understood the intent of this series is to 
-share the serial engine between two different bus-masters or perhaps a 
-better description is "system agent".
+That depends on which camp one is in. Some folks advocate for shipping the
+DT with the firmware. In that case you are limited by how easy the firmware
+is to upgrade. Or they would leave an option for the firmware to load a
+newer DT from disk.
 
-Please make that delination clear - its not two Linux subsystems but two 
-different Qcom SoC bus masters right ?
+The other camp is shipping the DT with the kernel image, which ChromeOS and
+some Linux distros do.  Then the DT is as easy to upgrade as the kernel.
+Opponents would argue that the DT is a hardware description and should
+be separate from the kernel. However as with all hardware bringup
+development, one can't really describe something that hasn't been
+developed and gone through review.
 
-For example the APSS - Application Specific Sub Subsystem - where Linux 
-runs and say cDSP - the compute DSP on qcom SoCs.
+However here I am specifically talking about the firmware _code_ being tied
+to the DT. To implement the probing feature in firmware, one needs to eithe=
+r
+add a lot more code about what devices the system might have, or implement
+the equivalent of this series in firmware, or something in between. This
+is a lot of code that depends on the structure of the DT it was developed
+against, which most likely was downstream at that point.
 
-I'd rename this patch to make that clear - because "between two 
-subsystems" if you aren't intimately versed in qcom's architecture 
-suggests that a Linux i2c and spi driver are somehow muxing pins ..
+Say someone screwed up some DT structure downstream at the time of release,
+such as the node name or address prefix, and that was fixed upstream. The
+new upstream DT no longer has the structure the firmware is expecting, and
+the firmware might not be able to handle it anymore, resulting in some
+peripheral no longer getting probed or enabled. And you don't have a way
+to upgrade the firmware to fix this.
 
-Really this is a type of AMP - asymmetric multi processing.
+> ACPI-based platforms have. However, there they usually put all possible d=
+evices
+> into DSDT and firmware enables them via run-time (ACPI) variables. Are yo=
+u
+> trying to implement something similar here?
 
-"i2c: i2c-qcom-geni: Enable i2c controller sharing between two different 
-bus masters"
+Yes, that sounds similar. However for us the DT is tied to the kernel, not
+the firmware, i.e. not provided by the firmware. There's also no UEFI in
+our case.
 
-And I'd mention in the commit log specific examples - APSS yes we get 
-but what is the other system agent in your use-case ?
+> ...
+>
+> > > Another question is that we have the autoprobing mechanism for I2C fo=
+r ages,
+> > > why that one can't be (re-)used / extended to cover these cases?
+> >
+> > I haven't looked into it very much, but a quick read of
+> > Documentation/i2c/instantiating-devices.rst suggests that it's solving
+> > a different problem?
+> >
+> > In our case, we know that it is just one of a handful of possible
+> > devices that we already described in the device tree. We don't need
+> > to probe the full address range nor the full range of drivers. We
+> > already have a hacky workaround in place, but that mangles the
+> > device tree in a way that doesn't really match the hardware.
+> >
+> > The components that we are handling don't seem to have any hardware
+> > ID register, nor do their drivers implement the .detect() callback.
+> > There's also power sequencing (regulator and GPIO lines) and interrupt
+> > lines from the device tree that need to be handled, something that is
+> > missing in the autoprobe path.
+> >
+> > Based on the above I don't think the existing autoprobe is a good fit.
+> > Trying to shoehorn it in is likely going to be a mess.
+> >
+> > Doug's original cover letter describes the problem in more detail,
+> > including why we think this should be done in the kernel, not the
+> > firmware:
+> > https://lore.kernel.org/all/20230921102420.RFC.1.I9dddd99ccdca175e3ceb1=
+b9fa1827df0928c5101@changeid/
+>
+> Perhaps it needs to be summarised to cover at least this question along w=
+ith
+> the above?
 
-A DSP ? Some other processor in the SoC ?
+For the first question, it boils down to we think that the firmware should
+be simple and do as little as possible. It also should not be tied to a
+specific DT, so editing or fixing up the DT in firmware is something we
+avoid. The firmware can do overlays if they are provided, however in this
+particular case, the identifiers used by the bootloader don't cover the
+variations of the I2C-based second source components.
 
-Anyway highlight one use-case for this AMP case, please.
+For why autoprobing isn't a good fit, I believe my answer above covers it.
 
----
-bod
-
-
-
-
+ChenYu
 
