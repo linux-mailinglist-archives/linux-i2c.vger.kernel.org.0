@@ -1,81 +1,81 @@
-Return-Path: <linux-i2c+bounces-7372-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7373-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F8AE99DD8B
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 07:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B62999DE71
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 08:33:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C65828371E
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 05:35:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A97B284665
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 06:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A261684A1;
-	Tue, 15 Oct 2024 05:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E33FF189F2D;
+	Tue, 15 Oct 2024 06:33:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fqqI43QN"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QSulWA69"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD6D170828
-	for <linux-i2c@vger.kernel.org>; Tue, 15 Oct 2024 05:35:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26524165F16
+	for <linux-i2c@vger.kernel.org>; Tue, 15 Oct 2024 06:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728970507; cv=none; b=LjS8ogIeHSPGqTKHpyyIKo5nL55+K08yqmomUM3lzFBiw+ISTCD5ge2gHfeQW2yc6PVRpSvX3wdC3iTGybm8R2Y9ys1hLRXhi1XRcZZDM4qtCJW/YGBKqtY5+hyDl/hWyeLOZz4cCDDeXL+pic5E7Zzs3DJHIKFoO75pN+AqeCM=
+	t=1728973989; cv=none; b=IPxeC6k1KUY5q7AmJZOeTdU9XQ/vPLW8FM60ap9LgGgsvJM2ikN03tsuCFQu/lMcnwgJj5TxMdIWmvppuZzRVysq/jattul96eGxapHQHNfOpz96NORLijk5xUwiIEdKzPuhvpCpSBEjt5ilsNmQa+76V4Bgi/8zMFsA7TJmXqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728970507; c=relaxed/simple;
-	bh=JR6gZ2MYyBQRhGGMVIzq353IT1yqvpAlneMgFsqBvhU=;
+	s=arc-20240116; t=1728973989; c=relaxed/simple;
+	bh=ajcr+KVWs/DtWqF1gsWdMOYVHLRYdSzAIdmxuUdyUdQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NpdJk5bIsy8GbVmD3FTZwa+QKO6VeACPuEcwibAd7QW7EiTBUazw5IiYyE9O5uZXjtQdg/ak74nZ7Zq9RrrmMurofOkJyw/McNE+DQ6nvb+EedN5QsuwVucJtibcYVuOhpek28OQtHMzPZrLTn81fF2IBv1D0tAF2jufzcZ7JNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fqqI43QN; arc=none smtp.client-ip=209.85.167.49
+	 To:Cc:Content-Type; b=LoLHe0BHHxvivfFrFNLB6YEtWVhKezxGLC9LW/bbtUdrZnaZO7qgFnHIiTv58fPI7MP9YZvOgtUXRmnQkAii2s02MIN6r2Im/MAyE5e7O3v1EgiEy2ksIihsh7+OeW/9elWpJfQBmMiqEusp05r0ie1Ycpiv48eICYLnP+9q3mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QSulWA69; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-539ebb5a20aso2347078e87.2
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Oct 2024 22:35:04 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-539e7e73740so2087391e87.3
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Oct 2024 23:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1728970503; x=1729575303; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1728973986; x=1729578786; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2HWrH+K7cTgTjTPYZ+dL7fGmCBNocSiDK/Hn2JY2vEs=;
-        b=fqqI43QNkB+bJpOjwnY8O0LZdEmGzSYuVG+oUajBkNI19xNVzxaF4A5pGBDvsp22Dp
-         BNdSOvhl1OE1mqcug0JrlBYvF+dtgplaJckilfupNJGH+05Uptj67GNow7t9tXsLmbfO
-         9bbqsnFPZ2htEJODKmaCx0JPvqdoY9vHBvvYk=
+        bh=LSQe+OWkJptNhalICgZHHnWYpzgrAnYhHgBYOyd2y2A=;
+        b=QSulWA69imZpBxSB7twecK+I/3UCL5stUsEn22tLRtV/yOJugi9yoNoaxCSk1j4vgD
+         KoeH//1D9yJeSIwlcyddNpwX/sBCGCKjkhed0nJEcgkKjGPoD2buSZV3aarH0DvhZds/
+         wttqzeGcMJQzmJ3sPedSiyOx2gVBHsrL5xAJ4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728970503; x=1729575303;
+        d=1e100.net; s=20230601; t=1728973986; x=1729578786;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2HWrH+K7cTgTjTPYZ+dL7fGmCBNocSiDK/Hn2JY2vEs=;
-        b=E/Y9FmIQqs4Z+08uBcFm1+a51pBwtP6FmYHB0i6uU+aW4ZoPMweQ8GTMCxu5jaT0c8
-         7BngQprvgL6UuRz0tuv3R4VuRvHlpLSR6aHZb8yPWRY54ug+dZ9f96UcvieETdgD16t2
-         ez0ujOz48S2+9gHiLtfXLTh9RsGMOon/tZdnItIc/eGSBw7XNcD8FQfLyUbtL9ZLHWIc
-         j1IRtkcaL78FIN2mgtRnIPz4CuuNp4cc0t+Cr9cQCeVIs3Uc8PUXKOLXhHlUX5hB6mNi
-         +IJsLy/hro207miEUmN5Fo5xSzPgsocJs9BdWjuu8mM0iaJ0pxn4DsAgcgHNZZUChqOz
-         KgpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ8nRkG5dzRXputJJpmUb1/zC7ad0kDQhem9wdIK21Bu3cEd2+5hzJksu64Yfq85WvZ/l2T6UbA8I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdjAdNewNyJ5zjWS3x3aqBCM7DS2xHkEx+WDc8Q1BoJxMXeIQO
-	XQiokpyqD4MwlzmYfmMia2FZ7st5RJAHuwl4O+nUutoJ29P+EqfuJ83x8+ZklnrmvPmUlrnvJgV
-	b9X1/btb4E2blunhjbK3kWaTW/FR+3z+OpsZr
-X-Google-Smtp-Source: AGHT+IE/CwxLRzqmXVYjkMDrcTm2+DQg9NcGd7Zyw9exDfJ8teYEZF+svaLAA8rUa5571DxzVoiZK6455ROycmYsGCQ=
-X-Received: by 2002:a05:6512:1598:b0:539:9155:e8d4 with SMTP id
- 2adb3069b0e04-539e54d77ecmr4621333e87.8.1728970503111; Mon, 14 Oct 2024
- 22:35:03 -0700 (PDT)
+        bh=LSQe+OWkJptNhalICgZHHnWYpzgrAnYhHgBYOyd2y2A=;
+        b=nZNilir9QCwZmSxQojwt2rBBjtzLFR7oB9HQF4haAam0oe+sLQC2+JsH582D8kn85m
+         E+mmRN7jHVVckrpEbhKewHJYVsZNSIFZREfrvDeBqrKNuChi24IUc66vv1692CjAjSGi
+         fYKPSQiDkcA7P6pAZ8mH+ALqdy/ggYVHGQX0ryJGD6PwW/R88YpeviUrNiwc7zq6KGnu
+         iEwNzVFa5ttV1e2EMPI+M4mHcON7eUKAz6Xme74BNuwWS040WJv10KHJlu/lGVrmaco7
+         GgG/vc5n+NQyN/tSJDoJrNRVG6POAuA9e4jTtiG4Mm8PkRjVGcK44uyl/aRbehxEGRJy
+         +U0w==
+X-Forwarded-Encrypted: i=1; AJvYcCXUr8v3wxMpu3uMqkqqgQLFg1AzHng7QvaPso+mkPjiHIJcNnptddldc0EYGzIH4SgspYwC9A3eVGw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/tg/Yj2mRa5L7GsN0+sFKUyYyvQd3PmG1QVSgtJxdu2ccbgtX
+	UO4k9jQyufvIkf1hzmrcGLrAgZhUlg6pwZFM2uYg05DmI87/j/Jp6f8NVqNmQ/+Oszq7d2wyAZp
+	TwTsyzUnEAW/DPfWGpE6OHs7Ov8pGAQuKnk2+
+X-Google-Smtp-Source: AGHT+IEi5VM5BInri+Xle/NpCFhUkRIBDd77CTdk9H6/daGndiGJT4jSou7J34vtaK0aKDEUC8sIsGSEXiAysfqU1+Q=
+X-Received: by 2002:a05:6512:2396:b0:539:eb82:d453 with SMTP id
+ 2adb3069b0e04-539eb82d67dmr3760676e87.39.1728973986262; Mon, 14 Oct 2024
+ 23:33:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008073430.3992087-1-wenst@chromium.org> <20241008073430.3992087-7-wenst@chromium.org>
- <Zwfwv-O9ln-PVMdc@smile.fi.intel.com> <CAGXv+5F=5f4R5AExANxOwgTL6_VbpHdNKKhHnzy_PDcxtcFoEQ@mail.gmail.com>
- <Zwz-benEP4PHbRb2@smile.fi.intel.com>
-In-Reply-To: <Zwz-benEP4PHbRb2@smile.fi.intel.com>
+References: <20241008073430.3992087-1-wenst@chromium.org> <20241008073430.3992087-8-wenst@chromium.org>
+ <Zwfy6ER6sbr_QxsY@smile.fi.intel.com> <ZwfzhsvlPrxMi61j@smile.fi.intel.com>
+ <CAGXv+5ED7j49ndT7BaESW8ZL7_mjVUJLM_FWma8Lwkg+Uh3saw@mail.gmail.com> <Zwz_Kl7SwfL0ZaAZ@smile.fi.intel.com>
+In-Reply-To: <Zwz_Kl7SwfL0ZaAZ@smile.fi.intel.com>
 From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Tue, 15 Oct 2024 13:34:52 +0800
-Message-ID: <CAGXv+5HtDqf9MbGc53axP276fFA6riM85+Sa7nXHPvZcCb5-Pg@mail.gmail.com>
-Subject: Re: [PATCH v8 6/8] i2c: of-prober: Add GPIO support to simple helpers
+Date: Tue, 15 Oct 2024 14:32:54 +0800
+Message-ID: <CAGXv+5H0Yvt1cwPOim-quT3C+=s9NapnryJhNxs_QW=DAyAycQ@mail.gmail.com>
+Subject: Re: [PATCH v8 7/8] platform/chrome: Introduce device tree hardware prober
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
 	Matthias Brugger <matthias.bgg@gmail.com>, 
@@ -88,96 +88,75 @@ Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 14, 2024 at 7:20=E2=80=AFPM Andy Shevchenko
+On Mon, Oct 14, 2024 at 7:23=E2=80=AFPM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Mon, Oct 14, 2024 at 12:06:16PM +0800, Chen-Yu Tsai wrote:
-> > On Thu, Oct 10, 2024 at 11:20=E2=80=AFPM Andy Shevchenko
+> On Mon, Oct 14, 2024 at 12:56:20PM +0800, Chen-Yu Tsai wrote:
+> > On Thu, Oct 10, 2024 at 11:32=E2=80=AFPM Andy Shevchenko
 > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Tue, Oct 08, 2024 at 03:34:25PM +0800, Chen-Yu Tsai wrote:
-> > > > Add GPIO support to the simple helpers for the I2C OF component pro=
-ber.
-> > > > Components that the prober intends to probe likely require their
-> > > > regulator supplies be enabled, and GPIOs be toggled to enable them =
-or
-> > > > bring them out of reset before they will respond to probe attempts.
-> > > > Regulator supplies were handled in the previous patch.
-> > > >
-> > > > The assumption is that the same class of components to be probed ar=
-e
-> > > > always connected in the same fashion with the same regulator supply
-> > > > and GPIO. The names may vary due to binding differences, but the
-> > > > physical layout does not change.
-> > > >
-> > > > This supports at most one GPIO pin. The user must specify the GPIO =
-name,
-> > > > the polarity, and the amount of time to wait after the GPIO is togg=
-led.
-> > > > Devices with more than one GPIO pin likely require specific power
-> > > > sequencing beyond what generic code can easily support.
+> > > On Thu, Oct 10, 2024 at 06:29:44PM +0300, Andy Shevchenko wrote:
+> > > > On Tue, Oct 08, 2024 at 03:34:26PM +0800, Chen-Yu Tsai wrote:
 >
 > ...
 >
-> > > > +     /* An empty string signals an unnamed GPIO */
-> > > > +     if (!ctx->opts->gpio_name[0])
-> > > > +             con_id =3D NULL;
-> > > > +     else
-> > > > +             con_id =3D ctx->opts->gpio_name;
-> > >
-> > > Can it use positive conditional?
-> > >
-> > >         if (ctx->opts->gpio_name[0])
-> > >                 con_id =3D ctx->opts->gpio_name;
-> > >         else
-> > >                 con_id =3D NULL;
+> > > > > +   .cfg =3D &chromeos_i2c_probe_simple_trackpad_cfg,
+> > > >
+> > > >       .cfg =3D DEFINE_I2C_OF_PROBE_CFG(trackpad, i2c_of_probe_simpl=
+e_ops),
+> > > >
+> > > > Or even
+> > > >
+> > > > #define DEFINE_I2C_OF_PROBE_CFG_SIMPLE(_type_)                     =
+   \
+> > > >       DEFINE_I2C_OF_PROBE_CFG(type, &i2c_of_probe_simple_ops)
 > >
-> > You suggested writing it this way in your reply to v7. Please pick one.
+> > I'm not inclined on using compound literals here. "simple X cfg" will
+> > likely get shared between multiple |chromeos_i2c_probe_data| entries,
+> > and AFAIK the toolchain can't merge them. So we would end up with one
+> > compound literal per entry, even if their contents are the same.
 >
-> Oh, whatever you will finish with then, sorry for the noise.
->
-> ...
->
-> > > > +static void i2c_of_probe_simple_disable_gpio(struct device *dev, s=
-truct i2c_of_probe_simple_ctx *ctx)
-> > > > +{
-> > > > +     if (!ctx->gpiod)
-> > > > +             return;
-> > >
-> > > Do you need this check for the future patches?
-> >
-> > Not sure I follow. The check is needed because this function is called
-> > in i2c_of_probe_simple_cleanup(), but the GPIO could have been released
-> > earlier in i2c_of_probe_simple_cleanup_early(), and that makes this
-> > function a no-op.
->
-> Do you have a known race condition then? This is bad. You shouldn't rely =
-on
-> the sequence of events here, or the serialisation has to be added.
->
-> > The helpers for the release side are quite short, but the ones on the
-> > request side wrap some conditional and error handling. I think it's
-> > better to keep it symmetric?
->
-> Yes, but why do you need the above check, I didn't still get...
-> I.o.w. you think that there is a gap in time that (if no check) the GPIO
-> descriptor might be changed? But then how does it affect anyway the possi=
-bility
-> that it becomes not NULL even with the current code.
+> I'm not sure I follow, you are using compound literal _already_.
+> How does my proposal change that?
 
-The opposite actually. Either it is always NULL, or it was initially valid,
-but the early cleanup function released it and thus it became NULL by the
-time this function gets called.
+I'm using it where it makes sense, i.e. where the embedded variable
+is not going to be shared with other instances.
+
+For the dumb probers, there's only going to be one instance per "type".
+
+For the simple probers, the config part is still one instance per "type",
+but the parameters are board and component specific. There will be
+multiple instances. Hence the config part can be shared, while the
+parameters likely won't be.
+
+> > > With that also looking at the above
+> > >
+> > > #define DEFINE_I2C_OF_PROBE_CFG_NONE(_type_)                         =
+   \
+> > >         DEFINE_I2C_OF_PROBE_CFG(type, NULL)
+> >
+> > For the "dumb" case it makes sense though, since it would be one instan=
+ce
+> > per type. But we could go further and just wrap the whole
+> > |chromeos_i2c_probe_data| declaration.
+>
+> Maybe it's too far from now...
+
+This is what I have:
+
+#define DEFINE_CHROMEOS_I2C_PROBE_DATA_DUMB(_type)
+                        \
+       static const struct chromeos_i2c_probe_data
+chromeos_i2c_probe_dumb_ ## _type =3D {       \
+               .cfg =3D &(const struct i2c_of_probe_cfg) {
+                        \
+                       .type =3D #_type,
+                        \
+               },
+                        \
+};
+
+DEFINE_CHROMEOS_I2C_PROBE_DATA_DUMB(touchscreen);
+
 
 ChenYu
-
-> > > > +     /* Ignore error if GPIO is not in output direction */
-> > > > +     gpiod_set_value(ctx->gpiod, !ctx->opts->gpio_assert_to_enable=
-);
-> > > > +}
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
 
