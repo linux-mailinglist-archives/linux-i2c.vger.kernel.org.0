@@ -1,116 +1,130 @@
-Return-Path: <linux-i2c+bounces-7406-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7409-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC7C399F4C8
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 20:04:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF26F99FBDE
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Oct 2024 01:00:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A1281C2222C
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 18:04:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A12AB2340F
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 23:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E77C61F76D9;
-	Tue, 15 Oct 2024 18:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE041D63F5;
+	Tue, 15 Oct 2024 22:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c9s6aWqE"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="FLPpWC5o"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E16428691;
-	Tue, 15 Oct 2024 18:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6781D63EB
+	for <linux-i2c@vger.kernel.org>; Tue, 15 Oct 2024 22:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729015460; cv=none; b=rYA5XawIENX2Vin+NulNXlToV1LGffI5/q1HV1DbTZVQQSFbBEXAIFMvRNjlXJ8cT0ML2vHf0Zz054S8+UG6jgM+KauXHNBveG/xfTpyd4shRqIN4dfDU0o3k67HwLjebZSy0cTfp0UUDNxooqUSXLPQCa/lRm7dH9gIHaSiYl4=
+	t=1729033197; cv=none; b=RDxRPiam0bKRLEfqQwKlgiMhXJqZTZDS3BvP7X0ZQ4feIESEyIo9ppA9yAdfVEVA+lnOLcUObCGCWccRUsYflbz5EFN4ictmyxoTUNWTbL68o6fkhsH4GJddhVEk+tADFrCDxrECv+0yFNnp2Zck3FL978G+UAkq/iP3t6flJp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729015460; c=relaxed/simple;
-	bh=6d/cMzHxJYfxTVbJFM7CFUuaoh2hWWe4To4Wt5P9CNI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uuEk7Sr3ZTYJFVd0LqwKOQE+pdgyuVGFyZn3GGGaG6nqC/pZxoRDIO9Nb+ieTQux31MhBkrqbURII+Vm25DTgZPG0qUCS27BagvBLiS+moWpq09Z2cXov9rrryZil49Q7tsXq7tmopHHnqGjPj5nFK8h8AhkeURNgw5zQPPykj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c9s6aWqE; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729015459; x=1760551459;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=6d/cMzHxJYfxTVbJFM7CFUuaoh2hWWe4To4Wt5P9CNI=;
-  b=c9s6aWqEAlCFpu/IF6U2Q5QKAhENo4Uq74P1be3Bd0QzTxxEDOGROGfP
-   uzai7G7vKXnTqgijRgdjjC2m31zzR8JGQUh95Om/bJfwZGOyvMhvdyqfB
-   E1L+oKeCjSlMLDXaYXuFiH5ie9cHTZ7W648B21AwkHkyTEki/OapakFMW
-   JZV8CluTFljsvPwECSqql2CwJcBhPFw4xkVvqnzx6TFTEZVO1sZ0dnkVz
-   G7cL8RQn5WRZVNkwvioQ3cZKzoPVmxkKLKVcx7h3Cqai0vLA7QVPcYuFP
-   3LLYQ6vR+O1c4T/pMhnQTFmjIjBICdgzhgqMFUY/HZCdgUv+ElzERB8Ov
-   g==;
-X-CSE-ConnectionGUID: SN4KkAtkRKCoDh7BXIE+pg==
-X-CSE-MsgGUID: 7h/xyCwFQmuxUQwjHYVoJA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="16049546"
-X-IronPort-AV: E=Sophos;i="6.11,205,1725346800"; 
-   d="scan'208";a="16049546"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 11:04:16 -0700
-X-CSE-ConnectionGUID: is6Ub5LHStGlZsxZl094aw==
-X-CSE-MsgGUID: kLe7S2OPTkeUNN/dAT6Xxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,205,1725346800"; 
-   d="scan'208";a="78318785"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 11:04:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t0ltx-00000003Tfo-2pDg;
-	Tue, 15 Oct 2024 21:04:09 +0300
-Date: Tue, 15 Oct 2024 21:04:09 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Doug Anderson <dianders@chromium.org>
-Cc: Chen-Yu Tsai <wenst@chromium.org>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v8 5/8] i2c: of-prober: Add simple helpers for regulator
- support
-Message-ID: <Zw6umeIp3l-pfMSb@smile.fi.intel.com>
-References: <20241008073430.3992087-1-wenst@chromium.org>
- <20241008073430.3992087-6-wenst@chromium.org>
- <CAD=FV=Vs2bekyqBN_Lro_u32Dg9WM-bjDZr_tx-KyYH_toabVg@mail.gmail.com>
+	s=arc-20240116; t=1729033197; c=relaxed/simple;
+	bh=AUq+DRuI2P8P4NGN1Z3bUH0LrDdXYBWBFbLpZVuzyOE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KPlL3cJXlJBmT4fqd+VnVKeCFgFXmnAg2tQX7hyK+pvtEnDYvNpCrnHzegyXr6f30dSOphlB4l+tZ86Pc950rETR60EXRxxl2l7uu4tCaVvYK+48MB0o1NMehGc5CDmuzjFLTzppV/M4FgcwMgi9bEKdnl/G6GcxKurlRAxw3Yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=FLPpWC5o; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 969592C038E;
+	Wed, 16 Oct 2024 11:59:52 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1729033192;
+	bh=l07QL1OSHu0TgCuTqR1/PJIa1Ihp52ojcHC70VFVMJU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=FLPpWC5o1gn7Fm4HjNPQg5Swb4J5bdX9yDCwysNKqfxRE+QX/S7otfUbqVpr5IKvj
+	 BTZG2kHYIm6EpqEoZ5XGMnFeqLrAY+dX4yiqPONIJ7RsPvh1+TXa7YmMkmJ+5LfGZe
+	 xcv5PjJEvVi0vVwcnAB7mgIn7c0enORF8QiSrOyjViW1WBywSkTgwmpEq8t/CghUjU
+	 jCtkLWuGS3T9/W3tNbJ4qY/2wGlLU1plFyjQ6HwCidmi64zu9Ux+QZijLwaRaMYxGr
+	 bGsv23U2cJKDuqTeL8uPjvVzYdQppUAP+8QTOl8p/E/cy0pIJWUv9AHRJ0GYFThDX9
+	 jheUczXP9qUVg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B670ef3e80000>; Wed, 16 Oct 2024 11:59:52 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 3B07013ED7B;
+	Wed, 16 Oct 2024 11:59:52 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id 351802820D4; Wed, 16 Oct 2024 11:59:52 +1300 (NZDT)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	lee@kernel.org,
+	sre@kernel.org,
+	tsbogend@alpha.franken.de,
+	markus.stockhausen@gmx.de
+Cc: linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v6 0/6] RTL9300 support for reboot and i2c
+Date: Wed, 16 Oct 2024 11:59:42 +1300
+Message-ID: <20241015225948.3971924-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=Vs2bekyqBN_Lro_u32Dg9WM-bjDZr_tx-KyYH_toabVg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=670ef3e8 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=DAUX931o1VcA:10 a=bFzpBXSQfSLquZs-7NAA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Tue, Oct 15, 2024 at 10:58:41AM -0700, Doug Anderson wrote:
-> On Tue, Oct 8, 2024 at 12:35 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
-> >
-> > +/**
-> > + * i2c_of_probe_simple_cleanup - Clean up and release resources for I2C OF prober simple helpers
-> > + * @dev: Pointer to the &struct device of the caller, only used for dev_printk() messages
-> > + * @data: Pointer to &struct i2c_of_probe_simple_ctx helper context.
-> > + *
-> > + * * If a regulator supply was found, disable that regulator and release it.
-> 
-> nit: was the double "*" starting the line above intentional?
+As requested I've combined my two series into a single one to provide som=
+e
+better context for reviewers. I'm not sure which trees the patches should=
+ go in
+via. The first two are reasonably independent and could go in via linux-p=
+m. I
+guess technically the last one could go via linux-i2c but it needs the an=
+d the
+bindings/dts updates which would probably make sense to come via linux-mi=
+ps.
 
-I think so. This is documented in the kernel doc syntax. This gives proper
-lists in the rendered document.
+--
+2.46.1
 
--- 
-With Best Regards,
-Andy Shevchenko
+Chris Packham (6):
+  dt-bindings: reset: syscon-reboot: Add reg property
+  power: reset: syscon-reboot: Accept reg property
+  dt-bindings: mfd: Add Realtek RTL9300 switch peripherals
+  mips: dts: realtek: Add syscon-reboot node
+  mips: dts: realtek: Add I2C controllers
+  i2c: Add driver for the RTL9300 I2C controller
 
+ .../bindings/i2c/realtek,rtl9301-i2c.yaml     |  99 ++++
+ .../bindings/mfd/realtek,rtl9301-switch.yaml  | 114 +++++
+ .../bindings/power/reset/syscon-reboot.yaml   |  11 +-
+ MAINTAINERS                                   |   7 +
+ .../cameo-rtl9302c-2x-rtl8224-2xge.dts        |   2 +-
+ arch/mips/boot/dts/realtek/rtl9302c.dtsi      |  15 +
+ arch/mips/boot/dts/realtek/rtl930x.dtsi       |  29 ++
+ drivers/i2c/busses/Kconfig                    |  10 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-rtl9300.c              | 425 ++++++++++++++++++
+ drivers/power/reset/syscon-reboot.c           |   3 +-
+ 11 files changed, 713 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/realtek,rtl9301=
+-i2c.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/realtek,rtl9301=
+-switch.yaml
+ create mode 100644 arch/mips/boot/dts/realtek/rtl9302c.dtsi
+ create mode 100644 drivers/i2c/busses/i2c-rtl9300.c
+
+--=20
+2.47.0
 
 
