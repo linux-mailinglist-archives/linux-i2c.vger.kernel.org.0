@@ -1,104 +1,184 @@
-Return-Path: <linux-i2c+bounces-7382-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7383-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98EC799E2AF
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 11:23:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EC1A99E56D
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 13:19:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E03928332D
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 09:23:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 748A11F21C38
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Oct 2024 11:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B14F1DAC99;
-	Tue, 15 Oct 2024 09:22:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51CDE1ADFFD;
+	Tue, 15 Oct 2024 11:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p/S1t6+c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UN9vmwAr"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315441BE854;
-	Tue, 15 Oct 2024 09:22:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2121A76CE;
+	Tue, 15 Oct 2024 11:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728984174; cv=none; b=OspEIQycrF8Rzui3FQnzer6uu7xzrgtOPoya40Ko8aUrDWSnPyk3KhUN5kiQLBPGmRTa9GrMRHfc5ZCR8sdXsYCxkuPzVQ5Y3KmTeViavAtA3+vyHx/5Z3C/Y71hwVLp3XqVFd6TeXczxA5U85t4HScFGUFwAuzLEhRIJR6izlU=
+	t=1728991182; cv=none; b=tGZbyNpQVmXr20UIsMh0Qb2lC3obPvGGMoLD1OF3ISuax/8UpsjZF23+StXlMDypdPcdJs7nf728ieTK0idvm96MOLlHjaEzYgV+b+1A+kyqvhwwawI78VU7li1VoCMlFK8sC9wo1sb9KItPnzmVtubO6C900J5+i4TKfBtuzB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728984174; c=relaxed/simple;
-	bh=r04DrGUblCxTqcvpoGYuNbCdz9Gp8tFVnjTZHiP25To=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=Zit6HXXzHX4SCWKSgcwaFNNu2q6iCyhfaow2wBb4gYXZWLIDznz9DibO5maWXzQZhkUCS07/4v9mDk3gGlcKuD9rnYGqhQcxdCytm3MQfnTAbJxJlbls0gYdMnZbV2xeeOu95xq+zoP9ZD8DH8T8NPVopeZwRj8zQA66M9pLgIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p/S1t6+c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E78C4CEC6;
-	Tue, 15 Oct 2024 09:22:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728984173;
-	bh=r04DrGUblCxTqcvpoGYuNbCdz9Gp8tFVnjTZHiP25To=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=p/S1t6+c6YqwwV1HdnIvFwqHOZaxBk9zRc9c4GQw8aWo+mFTYIrQduwp8/PNugdOo
-	 6GG8vnQD1DpgUc4DF9UZsPLxtSi8NaQcSo9oKpypOD4d8WKAZyNLKdshdhuSsXWy5I
-	 9M5cQ9HJEkxlb5nyoc1Ljzrs9v22x87UQNx/MrOtx42M8UBNQrQhDf2APVnSZpW9n7
-	 5Byo9892kuD5OI4QHiwUwtgMMqt29bkH7+ko/T26e/eRAul0rBf+ncCAG2ATJ/DS/u
-	 LWXQj4jWpEp5H1PHq2jtPbswIK1Rn4gvhXw7fY+gQxBULGgbOX6WU1oZGVkTky01x2
-	 0rZ1Hy2MQIfJA==
-Date: Tue, 15 Oct 2024 04:22:51 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1728991182; c=relaxed/simple;
+	bh=nHnbY3Qf1d9Iv/MtYL8kyklNX27QMs4I/0vg9sFyQ/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EArpjX87H50K0z1vyTC7cucbOrPO3bIk1jbyxs0yB6zgk6RL+agIkzW1exm/MDxbatXXh/TxbO90xEGRvdctrC05adBXNL0jj7pdLNydIP6sEQOIVWVVNNEzuqcsmvsMZdVJyfJzyitZ1k6/GjWOxqbqh0MHBijJHsI4u1EcJ4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UN9vmwAr; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728991180; x=1760527180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=nHnbY3Qf1d9Iv/MtYL8kyklNX27QMs4I/0vg9sFyQ/k=;
+  b=UN9vmwAra4mwmNqKvFOfezL812wJ0753XK0SrYLwjXg7z5Yd9t0CKNjy
+   P3mItgc8EAQVLtC3K2vqfW6q8jKB1xgOy3vln+iCbQHw18swH/MU4hBGu
+   LpnKY0gBibiIAwucp8N9W/7wggsZy+a3XUJMIovrvvieXbLwGoQj5pLNU
+   GftyP6a6Wz/dTP1cTp2MLWrajoiemcFwbv6LhwZUdMx7+lgvuyMFi8FVU
+   CmGSaAVOeCSYIZY9o2zCEB+dBYm4t7dTuOfcj6WS38fb/0xr720IzRgGc
+   HU9Fk+qaBLvOyjQySoXrMe9wbSbXgJcSjFA6+a9ZP58LaQq7sVgyNRsIF
+   Q==;
+X-CSE-ConnectionGUID: Xd8Bk5xKT82CQUX5e4uCxQ==
+X-CSE-MsgGUID: ZUuvhse5Qxyfcv8kol+Hhg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="32297430"
+X-IronPort-AV: E=Sophos;i="6.11,204,1725346800"; 
+   d="scan'208";a="32297430"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 04:19:39 -0700
+X-CSE-ConnectionGUID: R9uydBfYRYeW71Emay4xrQ==
+X-CSE-MsgGUID: UZheSprSSyqQfzcSvzXGnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,204,1725346800"; 
+   d="scan'208";a="78047063"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 04:19:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1t0faO-00000003FMY-2Ug5;
+	Tue, 15 Oct 2024 14:19:32 +0300
+Date: Tue, 15 Oct 2024 14:19:32 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v8 6/8] i2c: of-prober: Add GPIO support to simple helpers
+Message-ID: <Zw5PxMOrF8Ape3if@smile.fi.intel.com>
+References: <20241008073430.3992087-1-wenst@chromium.org>
+ <20241008073430.3992087-7-wenst@chromium.org>
+ <Zwfwv-O9ln-PVMdc@smile.fi.intel.com>
+ <CAGXv+5F=5f4R5AExANxOwgTL6_VbpHdNKKhHnzy_PDcxtcFoEQ@mail.gmail.com>
+ <Zwz-benEP4PHbRb2@smile.fi.intel.com>
+ <CAGXv+5EwSZFoE-Uzb5x1QfknkVfd64Z_uzR0YcvZ_pR9ktGUBA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Troy Mitchell <troymitchell988@gmail.com>
-Cc: krzk+dt@kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-i2c@vger.kernel.org, 
- andi.shyti@kernel.org, conor+dt@kernel.org
-In-Reply-To: <20241015075134.1449458-2-TroyMitchell988@gmail.com>
-References: <20241015075134.1449458-1-TroyMitchell988@gmail.com>
- <20241015075134.1449458-2-TroyMitchell988@gmail.com>
-Message-Id: <172898417189.3869826.12293740881092237390.robh@kernel.org>
-Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: spacemit: add support for K1
- SoC
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGXv+5EwSZFoE-Uzb5x1QfknkVfd64Z_uzR0YcvZ_pR9ktGUBA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
+On Tue, Oct 15, 2024 at 01:31:40PM +0800, Chen-Yu Tsai wrote:
+> On Mon, Oct 14, 2024 at 7:20 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Mon, Oct 14, 2024 at 12:06:16PM +0800, Chen-Yu Tsai wrote:
+> > > On Thu, Oct 10, 2024 at 11:20 PM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > On Tue, Oct 08, 2024 at 03:34:25PM +0800, Chen-Yu Tsai wrote:
 
-On Tue, 15 Oct 2024 15:51:33 +0800, Troy Mitchell wrote:
-> The i2c of K1 supports fast-speed-mode and high-speed-mode,
-> and supports FIFO transmission.
+...
+
+> > > > > +static void i2c_of_probe_simple_disable_gpio(struct device *dev, struct i2c_of_probe_simple_ctx *ctx)
+> > > > > +{
+> > > > > +     if (!ctx->gpiod)
+> > > > > +             return;
+> > > >
+> > > > Do you need this check for the future patches?
+> > >
+> > > Not sure I follow. The check is needed because this function is called
+> > > in i2c_of_probe_simple_cleanup(), but the GPIO could have been released
+> > > earlier in i2c_of_probe_simple_cleanup_early(), and that makes this
+> > > function a no-op.
+> >
+> > Do you have a known race condition then? This is bad. You shouldn't rely on
+> > the sequence of events here, or the serialisation has to be added.
 > 
-> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
-> ---
->  .../bindings/i2c/spacemit,k1-i2c.yaml         | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
+> No there isn't. Explanation below.
 > 
+> > > The helpers for the release side are quite short, but the ones on the
+> > > request side wrap some conditional and error handling. I think it's
+> > > better to keep it symmetric?
+> >
+> > Yes, but why do you need the above check, I didn't still get...
+> > I.o.w. you think that there is a gap in time that (if no check) the GPIO
+> > descriptor might be changed? But then how does it affect anyway the possibility
+> > that it becomes not NULL even with the current code.
+> 
+> There are two codes paths, either
+> 
+>     a) successfully finding a device and enabling it, or
+>     b) exhausting all options and not finding a device, because it was
+>        optional or it is malfunctioning.
+> 
+> After either code path, this cleanup function is called.
+> 
+> In path (a), the GPIO descriptor is released prior to enabling the device,
+> because the descriptor is an exclusive resource, and as soon as the device
+> is enabled, its corresponding driver may probe and request the same GPIO,
+> and would fail if it was not released.
+> 
+> In path (b), nothing was enabled, and the GPIO descriptor was not released
+> early.
+> 
+> The cleanup function here accounts for both cases, hence the check.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Yes, but the very same check is inside gpiod_set_value(). I'm still puzzled
+about the duplication. Maybe I'm missing something...
 
-yamllint warnings/errors:
+> A step-by-step description might be clearer:
+> 
+> 1. i2c_of_probe_simple_enable()
+>    ...
+>    1a. i2c_of_probe_simple_get_supply()
+>    1b. i2c_of_probe_simple_get_gpiod()
+>    1c. i2c_of_probe_simple_enable_regulator()
+>    1d. i2c_of_probe_simple_set_gpio()
+> 
+> 2. Loop through potential component options and probe; if one is found:
+>    2a. i2c_of_probe_simple_cleanup_early()
+>        2a-i. i2c_of_probe_simple_put_gpiod
+>    2b. Enable device and driver's probe() gets called
+> 
+> 3. i2c_of_probe_simple_cleanup()
+>    3a. i2c_of_probe_simple_disable_gpio()
+>    3b. i2c_of_probe_simple_put_gpiod()
+>    3c. i2c_of_probe_simple_disable_regulator()
+>    3d. i2c_of_probe_simple_put_supply()
+> 
+> > > > > +     /* Ignore error if GPIO is not in output direction */
+> > > > > +     gpiod_set_value(ctx->gpiod, !ctx->opts->gpio_assert_to_enable);
+> > > > > +}
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.example.dtb: i2c@d4010800: reg: [[0, 3556837376], [0, 56]] is too long
-	from schema $id: http://devicetree.org/schemas/i2c/spacemit,k1-i2c.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.example.dtb: i2c@d4010800: Unevaluated properties are not allowed ('reg' was unexpected)
-	from schema $id: http://devicetree.org/schemas/i2c/spacemit,k1-i2c.yaml#
+-- 
+With Best Regards,
+Andy Shevchenko
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241015075134.1449458-2-TroyMitchell988@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
 
