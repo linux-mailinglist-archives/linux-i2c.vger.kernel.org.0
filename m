@@ -1,130 +1,133 @@
-Return-Path: <linux-i2c+bounces-7428-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7429-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BA059A076C
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Oct 2024 12:31:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F360F9A0CD1
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Oct 2024 16:36:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48C711F27971
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Oct 2024 10:31:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92A33B2128A
+	for <lists+linux-i2c@lfdr.de>; Wed, 16 Oct 2024 14:36:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3BDE205E0F;
-	Wed, 16 Oct 2024 10:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA2DE20CCCF;
+	Wed, 16 Oct 2024 14:35:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MveEge+1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="doT98/NT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3650F207A1E;
-	Wed, 16 Oct 2024 10:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F4520C039;
+	Wed, 16 Oct 2024 14:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729074586; cv=none; b=cCg0nzF4p04Yw59Fqf3ZxNhLO8VUYoJvxcqYIr2oGpDyE/5Aww2lcL4Lw4+uV2L9hsCC7MFD2MUq/VHjHOeNXkiIX9T7EAMP9KjUN4fiyQyJj6NhLjHQQdz6YZeIBhsApbGqZSmBC0Q00BHNb4kAHH3y2hj1L/Sr2+I9MgAXjcA=
+	t=1729089355; cv=none; b=HGDwKf507ahMIdCEET55Oo+ofu9rzbrirdfwo1KfBE0zOcMRd98etbhV4QkKzSBFRFq9gTEHqWAPLG+F96YqalJXPQYOOYcI17mIpJJaSix4TR2EhsyL5BRx9DUPxoy8qxgFN8WoBezD8AwVswVbb5dBrmkQOLhTNcJjFpewy3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729074586; c=relaxed/simple;
-	bh=/I9NuBzwS0z/PzxTR4AlnYAU0plH7o11dVm/FJnJcMY=;
+	s=arc-20240116; t=1729089355; c=relaxed/simple;
+	bh=NXK/fPhGl4mqtfjEA+PZpwSNsIwN2iaBtslPz058mG4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PBy3MGU/GfjmIpzvEikYlMgzZ6YHj4ij5veVBn85GG1uLpdXq6E4GzpqBJNfAFlWMwemnep9h6IW9r/xThuhPrkoCuMrtnSN38hIFesFPKLjsERx/lGoBb5l5ilyEwZNYlg16inks3wjhMvBpYdWlQyt26IcfAttGRb2+0UflN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MveEge+1; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729074585; x=1760610585;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/I9NuBzwS0z/PzxTR4AlnYAU0plH7o11dVm/FJnJcMY=;
-  b=MveEge+1E6krLFQPenA5aFvAlcZDrhamJXubzsIhPiEt9ryXQaQ83tZW
-   ILy3+wLLxRD76Gg2hIh/6x+9UaPXsyhIRINC+Ngp5aOfKIcNcqOJWe7Oi
-   7cC8aAJwqRP5aUtKjLe2dQ+A44Q3tSoHzb7jFaQEpiNoHVonHTpaS0PaH
-   XR8vs5SiuYbcPdVAmM0lyKaci0Vq93yOKSVDCImA4ZPxSellTRg3YeKFa
-   PBgQYpJ1B+29fSmG2ew6k0XHidah2cNRXev/9rzcmgySE8u+Y6bu6id3Y
-   arNAQVe86hHGMlcm7ZMMb4uWQOe7t+0N+ZhheZZqxtu3RGbdfp1/Ok0Dz
-   g==;
-X-CSE-ConnectionGUID: vjZCacEfTbWfYDL4Uz68lA==
-X-CSE-MsgGUID: MJNLHGSgTOSdJF1rZw1vhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="31380237"
-X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
-   d="scan'208";a="31380237"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 03:29:44 -0700
-X-CSE-ConnectionGUID: TYPotaPhQ9idPd4HWmjtZg==
-X-CSE-MsgGUID: 78XPk2XQRJyYgT1Pni6Yzw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
-   d="scan'208";a="82148971"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 03:29:40 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t11He-00000003imA-05Ek;
-	Wed, 16 Oct 2024 13:29:38 +0300
-Date: Wed, 16 Oct 2024 13:29:37 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Doug Anderson <dianders@chromium.org>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v8 4/8] i2c: Introduce OF component probe function
-Message-ID: <Zw-VkQ3di5nFHiXB@smile.fi.intel.com>
-References: <20241008073430.3992087-1-wenst@chromium.org>
- <20241008073430.3992087-5-wenst@chromium.org>
- <CAD=FV=WRSjk3U9Kau0wqkgv3KB=9jM6wCM9Gs-WxWai35sfxTg@mail.gmail.com>
- <CAGXv+5FW0UTjR_ZiqZ8VEOQkBemt54omtJe_aTj3jvScC-LuMw@mail.gmail.com>
- <CAGXv+5GHDt3_Td8B441xv=-G1=LBfSXp8_sQ4XRRPX1f4VyTMQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jP8Hlr8GdAMTVVSg/C/DhFKM70Yw7zxl6Y9AorDO0E32W/ngGylxiNg6FJdBYVUABW5W1fP8XoJQnVv5yF0geB16nJtuPrSf9LQ45PgP8DRSLOOQGQ4+9ppPsQyWojvafFlqDNp5k1fINqdQX91EcdtNR+6LaU5AzgRddzU9Oas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=doT98/NT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50854C4CEC5;
+	Wed, 16 Oct 2024 14:35:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729089354;
+	bh=NXK/fPhGl4mqtfjEA+PZpwSNsIwN2iaBtslPz058mG4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=doT98/NT4FM40wYqR+SAm4CK3i00eE0ELNQ2AAFfLrDWK15sN8WmePaZVqR1S8G+j
+	 f/wMm2JKvoAX1cNiI0SVJyVRDEw9N7C4ZyZR3sXHYxmFbcZZoZZ4ggESnvaMDP3m+n
+	 aZs3c/6MfoMmv7cY/AhJ6GBa9B7VFynlW2FBe5HdJU2Y509EyQ7TFYzSX1BBiyVDMd
+	 yIPUARKazo11AoVwVfGg5nfeOtRqbU/UM+3t9IoqUcg9J1ywBE7XTXz+/bA5f61Koj
+	 psv6t/QnwXD4pMnPISVPDLyxbHEIaAVEYqLekUPdyyTejmdHulsiUBlHGGI5tskbEs
+	 ddma1Se1F5KQg==
+Date: Wed, 16 Oct 2024 09:35:59 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>, 
+	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, 
+	cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com
+Subject: Re: [PATCH v1 2/5] arm64: dts: qcom: Add support for configuring
+ channel TRE size
+Message-ID: <7e7ksit5ptjrcnct66v75mbxuabnzzloungockdal2dl2y6nn5@ge4mrsjmd746>
+References: <20241015120750.21217-1-quic_jseerapu@quicinc.com>
+ <20241015120750.21217-3-quic_jseerapu@quicinc.com>
+ <78a1c5c8-53c8-4144-b311-c34b155ca27c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5GHDt3_Td8B441xv=-G1=LBfSXp8_sQ4XRRPX1f4VyTMQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <78a1c5c8-53c8-4144-b311-c34b155ca27c@kernel.org>
 
-On Wed, Oct 16, 2024 at 05:28:05PM +0800, Chen-Yu Tsai wrote:
-> On Wed, Oct 16, 2024 at 3:01 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
-> > On Wed, Oct 16, 2024 at 1:58 AM Doug Anderson <dianders@chromium.org> wrote:
-> > > On Tue, Oct 8, 2024 at 12:35 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
-
-...
-
-> > > ...which means it'll call of_node_put() to free "i2c_node" when it
-> > > goes out of scope. of_node_put() handles NULL pointers but _not_ ERR
-> > > pointers. So I think that if you get an error back and then return via
-> > > the PTR_ERR(i2c_node) then it'll crash because it will try to free an
-> > > ERR pointer. Did I get that right? Presumably you need to instead do:
-> > >
-> > >   return PTR_ERR(no_free_ptr(i2c_node));
-> > >
-> > > ...or change of_node_put() to be a noop for error pointers?
-> >
-> > Good catch! As Andy suggested, it should be updated to handle both.
-> > I'll add a patch for this.
+On Tue, Oct 15, 2024 at 03:33:00PM GMT, Krzysztof Kozlowski wrote:
+> On 15/10/2024 14:07, Jyothi Kumar Seerapu wrote:
+> > When high performance with multiple i2c messages in a single transfer
+> > is required, employ Block Event Interrupt (BEI) to trigger interrupts
+> > after specific messages transfer and the last message transfer,
+> > thereby reducing interrupts.
+> > For each i2c message transfer, a series of Transfer Request Elements(TREs)
+> > must be programmed, including config tre for frequency configuration,
+> > go tre for holding i2c address and dma tre for holding dma buffer address,
+> > length as per the hardware programming guide. For transfer using BEI,
+> > multiple I2C messages may necessitate the preparation of config, go,
+> > and tx DMA TREs. However, a channel TRE size of 64 is often insufficient,
+> > potentially leading to failures due to inadequate memory space.
+> > 
+> > Adjust the channel TRE size through the device tree.
+> > The default size is 64, but clients can modify this value based on
+> > their heigher channel TRE size requirements.
+> > 
+> > Signed-off-by: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sc7280.dtsi | 132 +++++++++++++--------------
+> >  1 file changed, 66 insertions(+), 66 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > index 3d8410683402..c7c0e15ff9d3 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > @@ -1064,7 +1064,7 @@
+> >  		};
+> >  
+> >  		gpi_dma0: dma-controller@900000 {
+> > -			#dma-cells = <3>;
+> > +			#dma-cells = <4>;
+> >  			compatible = "qcom,sc7280-gpi-dma", "qcom,sm6350-gpi-dma";
+> >  			reg = <0 0x00900000 0 0x60000>;
+> >  			interrupts = <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>,
+> > @@ -1114,8 +1114,8 @@
+> >  							"qup-memory";
+> >  				power-domains = <&rpmhpd SC7280_CX>;
+> >  				required-opps = <&rpmhpd_opp_low_svs>;
+> > -				dmas = <&gpi_dma0 0 0 QCOM_GPI_I2C>,
+> > -				       <&gpi_dma0 1 0 QCOM_GPI_I2C>;
+> > +				dmas = <&gpi_dma0 0 0 QCOM_GPI_I2C 64>,
+> > +				       <&gpi_dma0 1 0 QCOM_GPI_I2C 64>;
 > 
-> On second thought, it might be better to change i2c_of_probe_get_i2c_node()
-> to return NULL on errors. That seems to be what most functions do. I only
-> found a handful of exceptions.
+> So everywhere is 64, thus this is fixed. Deduce it from the compatible
+> 
 
-It seems that OF has been written in the assumption that device node pointer
-is never an error pointer. So, probably fixing your function is the best
-approach right now.
+If I understand correctly, it's a software tunable property, used to
+balance how many TRE elements that should be preallocated.
 
--- 
-With Best Regards,
-Andy Shevchenko
+If so, it would not be a property of the hardware/compatible, but rather
+a result of profiling and a balance between memory "waste" and
+performance.
 
+Regards,
+Bjorn
 
+> Best regards,
+> Krzysztof
+> 
 
