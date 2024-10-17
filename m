@@ -1,58 +1,82 @@
-Return-Path: <linux-i2c+bounces-7445-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7446-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2F7C9A1C12
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 09:56:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC6809A1E41
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 11:26:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 873F3289682
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 07:56:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C910E1C26DD0
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 09:26:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A841D07B2;
-	Thu, 17 Oct 2024 07:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 111091D958E;
+	Thu, 17 Oct 2024 09:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jdA4yceQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PUtzLwAa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6B11CFEC2;
-	Thu, 17 Oct 2024 07:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED861D6DB6;
+	Thu, 17 Oct 2024 09:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729151813; cv=none; b=rP6GksLSkrEZHolIbt7gtq3+lcUCz3iNFNSwGwwu5o2YykQu6jNFAY01o7eQi04ruDrS5yVGEMrhicE1JhkshgfUkcdOEMx2gxxTtqyx6CMMM/VHGLNj9xGCZDKYyysUx+uMbDgyjiFx1l5VZyzPfSYebTh7oxpYmVcNFfEW1Ww=
+	t=1729157187; cv=none; b=ozbfsLr8A7eirQg5xB4LWGP+kTW79J9DdgizGUfxowKn3R9E1FPPuzHzsacZRESIh31MCFfDpin/phYRHTYdf9fs57NwfDiO2Nod5fVlWr1VQBe9106RWx0K7LSncOVoWv3IUjGoSusmW8GmM4bAnV0qG5Qk9D5ovZJVo3J8s24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729151813; c=relaxed/simple;
-	bh=KHj182ceY1l+tWN+yPMGSpqPxinzby8wZiaWb6NY2n8=;
+	s=arc-20240116; t=1729157187; c=relaxed/simple;
+	bh=i/ffviO7W8leGXGgrXNxf9k3L3x8y4ClbupGs16ztO8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Oll3KDEy/kIfvSDdawZFFBG3Kd4xjBtVq069DVJHt5Qm6857QLjy/K9Ph4Bm1yXc6BkrFYxV86HpcAaVOcPMrGYXYCP73oIxupkQrImkDiVbU2RfC1v1+yFwcjvbvGP5MriNOn840os8zNZzlBmLjpEmFFKkcCdtSwvJv5TPIJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jdA4yceQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D8A6C4CEC3;
-	Thu, 17 Oct 2024 07:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729151813;
-	bh=KHj182ceY1l+tWN+yPMGSpqPxinzby8wZiaWb6NY2n8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jdA4yceQ7A32VhcQ3hbmjeOzriFjb3hcgTaN5EYow5ZEp4MelTgM5ZBEFmtgj8tu9
-	 AI8BDCBld/MbHK2FQaf+lJA7yPwV2pVgYoTu9pFSGtfI5QyWlJb2BH7tOPv9EbTrdC
-	 Iij8p9deJgXxsXw4WNdseQBZQjXo7GNEhVGd4hPof9oZeDW434BhFAzYTZwD6Xb3dQ
-	 Dg5/HXailnbgXK9VbBpsO7zLJPvCX4jcuRnmjchLEOGP+qdVYs82/BlAMMSJSTn9CV
-	 MqgS/YBSyXtGw0sry3fOLtx6z7wSi48aJLatHOom9e3pCzyVrWCIOW18UhmHVe0y0K
-	 gwmd6w+AFtsHg==
-Date: Thu, 17 Oct 2024 09:56:49 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, lee@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de, 
-	markus.stockhausen@gmx.de, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v7 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
- peripherals
-Message-ID: <qftyzxnlvfyhdavhrivuef7o4den7yhjjy54eps5mngtce5iva@jq4wuhf4v4xw>
-References: <20241017001653.178399-1-chris.packham@alliedtelesis.co.nz>
- <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JbnhP5q6Qci7qJhY8ogi2OcrJwSYKBfUyn/LUIvkuiiL9N8ox/Pj3l6DjGndzKmu+cYIYlPY/GvBl8S5onCmlPtK8v9+V182TYSYGwcjanhY/fLb5HUaE+vinfFmtdn5VD98KzkJqw5I2p1FA5za0STy/hW4DmqbuyYrNE+u2nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PUtzLwAa; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729157184; x=1760693184;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=i/ffviO7W8leGXGgrXNxf9k3L3x8y4ClbupGs16ztO8=;
+  b=PUtzLwAa5aLvntApHkACTUPzs7fJZUF4FiZwr2J9j4ykG1kdvKIGinAz
+   XCQi1XkBtIWL0HVnSIO5Mq6L7tK8nVeFniTNFTK4dSYP3nycYow/hCYzt
+   2JnW5iXZlidPjjQ8KCPu2hdfwUTQm/2G/MNvlSIbvL+FYIwDn/8nSonKS
+   wZWtXrRfGDkjRr49KvYsk1TqM0zoKEUNBcpFZB/+9T0dl51tXAxAu0k8A
+   cG9Hz9yrAhBDQUwvfI6R+XeDEVVUOfQ3byLeroLbdXmsmZu+5G7PoMHQR
+   uUHs1J+nUxrfpe2IqEaZTdBprR4Nv6cLMzPe1NhJZeynVvzPv9b2vgMkQ
+   Q==;
+X-CSE-ConnectionGUID: x/e8r/DoQTuerx18r+OB4Q==
+X-CSE-MsgGUID: xMoG75oaSBmcoKUOfcRKvw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="28766604"
+X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
+   d="scan'208";a="28766604"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 02:26:23 -0700
+X-CSE-ConnectionGUID: 53/tnFdwQxmkNhY2IfqlsQ==
+X-CSE-MsgGUID: SRls1vKkSyi+f7gLHIoewQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
+   d="scan'208";a="83046634"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 02:26:21 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1t1Mlu-0000000441r-2eU3;
+	Thu, 17 Oct 2024 12:26:18 +0300
+Date: Thu, 17 Oct 2024 12:26:18 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+	"hunter.yu" <hunter.yu@hj-micro.com>, jarkko.nikula@linux.intel.com,
+	lenb@kernel.org, jsd@semihalf.com, linux-acpi@vger.kernel.org,
+	linux-i2c@vger.kernel.org, andy.xu@hj-micro.com,
+	peter.du@hj-micro.com
+Subject: Re: [PATCH v2 1/2] ACPI: APD: Add clock frequency for HJMC01 I2C
+ controller
+Message-ID: <ZxDYOrAJEddtPrWv@smile.fi.intel.com>
+References: <20240926024026.2539-1-hunter.yu@hj-micro.com>
+ <20240926024026.2539-2-hunter.yu@hj-micro.com>
+ <pmbvhdaz4qt57gxemuxoyb6xjrcmvusm2jzl5ps3o5ga52edo5@qabu6rcbdipp>
+ <CAJZ5v0gSyMYerPqH9LOA77EWdBEOL7kHrc1+P1R=8Epn77gfNw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -61,33 +85,32 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gSyMYerPqH9LOA77EWdBEOL7kHrc1+P1R=8Epn77gfNw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Oct 17, 2024 at 01:16:50PM +1300, Chris Packham wrote:
-> Add device tree schema for the Realtek RTL9300 switches. The RTL9300
-> family is made up of the RTL9301, RTL9302B, RTL9302C and RTL9303. These
-> have the same SoC differ in the Ethernet switch/SERDES arrangement.
+On Wed, Oct 16, 2024 at 10:45:26PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Oct 3, 2024 at 12:13 AM Andi Shyti <andi.shyti@kernel.org> wrote:
+> > On Thu, Sep 26, 2024 at 10:40:05AM GMT, hunter.yu wrote:
+> > > I2C clock frequency for HJMC01 is 200M, define a new ACPI
+> > > HID for it.
+> > >
+> > > Signed-off-by: hunter.yu <hunter.yu@hj-micro.com>
+> >
+> > Do you want your name to be hunter.yu or Hunter Yu? I prefer the
+> > second and if you browse the git log, you can see that everyone
+> > uses Name Surname.
 > 
-> Currently the only supported features are the syscon-reboot and i2c
-> controllers. The syscon-reboot is needed to be able to reboot the board.
-> The I2C controllers are slightly unusual because they each own an SCL
-> pin (GPIO8 for the first controller, GPIO 17 for the second) but have 8
-> common SDA pins which can be assigned to either controller (but not
-> both).
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v7:
->     - Set additionalProperties: false
->     - Remove extraneous examples from i2c binding
+> It must be a real name as per submitting-patches.rst
 
-Thanks for the changes!
+Hasn't this been relaxed last year by the d4563201f33a ("Documentation:
+simplify and clarify DCO contribution example language")?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> The S-o-b is meaningless otherwise.
 
-Best regards,
-Krzysztof
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
