@@ -1,108 +1,127 @@
-Return-Path: <linux-i2c+bounces-7459-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7460-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 941D99A2043
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 12:46:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C3819A2C5A
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 20:42:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AC581F232F9
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 10:46:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 406521C21761
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 18:42:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4700E1D89E2;
-	Thu, 17 Oct 2024 10:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED0A20103D;
+	Thu, 17 Oct 2024 18:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZSozq5F"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="EAvhQUkC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CC713B298;
-	Thu, 17 Oct 2024 10:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A40618133F;
+	Thu, 17 Oct 2024 18:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729161983; cv=none; b=XhaQpRkOt+VmxNqwOqI5Jms1Yctn5KnFfOMnVU3lAR3bqqmuIIMAO5HsJHblS+LdiCb+bTAxl/DMR0zayC71K2ajHOM+5LrM2kuYf1nDbmwsd2r80tGQ5QtQyl58b2B4gGeR8H59vNgGk2pGLiG1WepEGPL1i8eXxCQNaXp18bM=
+	t=1729190538; cv=none; b=BSfNPUboxK/kCfIxSM/kkWHcF4/Cess2p81lqqW96vEkF17IhJBxULlEGpF3PkE42FBQEIyCxVhOOcXj91SQNCkoOV4UJjLsOMoJ5tyC3mL0FxEKPOmLnh3f3pr6dJlg/g1ZG+x0T1IY8a+N4bp5j/a6rFoaQtt9+9GUsuUrRE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729161983; c=relaxed/simple;
-	bh=bZPJ2TQJRvI/rTDGuSdNPro0wJfhREl8Me3tovFDsFs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VM5lBK7Slhlfv7TfUJVXJ6es8GeKlZiF7JYWMudloQqg/sOR3CvLSpjfpAjv+UlIUtmr6T7taXFACWGh94Nl8is4UuILuBpXmoAFckYiuJF50YcyrP9ymoa2fdopEAkIfLdV0VsKHRy9u/DTKfNN0eoBl7/QKxZ2+7feNMbNF+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZSozq5F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 922F4C4AF0B;
-	Thu, 17 Oct 2024 10:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729161982;
-	bh=bZPJ2TQJRvI/rTDGuSdNPro0wJfhREl8Me3tovFDsFs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SZSozq5FFmsYUsiJgVzrmKBjQwG2mevKywTkAiBLpLMt5CP7iuG15LYT4IiI4RKQZ
-	 EODlY7Km7nC300OQ75iiOEtNjcsXMkyOP1toWIj7TNlqJasQCZv48eRepUBlLf45Bi
-	 6xB1TNmX/hunVaYZ+N2VoeIsBCD6c1mwTBFIXh2uR97u5RW8WNpLtsjszc3YC9P64y
-	 TJsspyEuhcijN7IO763J/0lEvXcMC9/f7vc1YUAhGXfDyyAD+MlDhWg1hkfj/hEH25
-	 Bmaji9lZydR4yR+yF8PfeLmEw9XywnfyDOTgAdH65o0caGbpWyLsbE/D8+/po+7jq9
-	 k/Vjoa5eASVFg==
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-71806621d42so349202a34.3;
-        Thu, 17 Oct 2024 03:46:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVvvUGN+gD4xHnBDlEKYDHEtQZL4gMVWN0KO1kYDOSF990Z5J9Lx0FWI6V29EwZIuDAFM2CV161MWhd@vger.kernel.org, AJvYcCXc9IHoU5DIXEz0J1QB+hrIA/DbAncv1MHmGKW5iKoWksWxv7/FAfjEdhIsJEGf1umlfax75/W3tV9p@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLSgEPZq8omMvDD1RKwKp2m1PGO8/+cTOCVCgmwoxacLTajgRd
-	YAmVVDn6ppZNe8eqE3Cu09GV6HASVzcZc/Vi5l2z+foS7mlo/We+l+L/Gf6MgPnvx7/J2p41BL9
-	MMPEU/bVv3FZJMxgJxgueIXGHCO0=
-X-Google-Smtp-Source: AGHT+IGCmePH43EfNjSP4w7Mf8Q9b2+QIP+RRkowv9s+4lEBMM9YbAQObdd9N2R0b3CxjlHwnDqQejKAevdid/YSVek=
-X-Received: by 2002:a05:6871:e49:b0:288:a953:a5c7 with SMTP id
- 586e51a60fabf-288a954e365mr8688345fac.14.1729161981927; Thu, 17 Oct 2024
- 03:46:21 -0700 (PDT)
+	s=arc-20240116; t=1729190538; c=relaxed/simple;
+	bh=7kfG4WB6D3uozcfZ/sZuNMDvfoiOu+DKiplbNuRJ91k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lIR1sa2B5QNkcftF0e/+eCDFWXYKvUXIppSOePuK07BK4Ub0+uLJZNs+MpHs9TUy7CNyY23mOMnT/Mu2+iTYg6CdFPUtHX4l89Fg1sbnfM00OsfH1oFaU3tbsApHQhF3mOjc9RwgHnAxY7py2oZbwQHapCPYbGkWbv0CrK3g2ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=EAvhQUkC; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	(Authenticated sender: marex@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id 6CC6A88D5B;
+	Thu, 17 Oct 2024 20:42:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1729190530;
+	bh=XAphFOkiYS07BlQDtmZ6qa+YhaWjPlC8eH25+ZVOX4k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EAvhQUkCx13IjE0a06fOVjd8blAyJMOGDEv/theN/1hvHTW5eEIyLcfXvO5EPngDp
+	 rXxPjvbWC56hUdBRzdwX+49kmkWhIjMEEjfGupW2T9fC5eLPuFSjEnRMd1185BtF8r
+	 rVwh+IZ6B4MgiY6VP1BWvgzMzJ+xbvnLOD5PLmZUKtD+zo/XSmXA1jLo8CyseuEyYH
+	 F3lOFtC4U8KATd8GxYCD72Lj51VtQQOI68lXrCWeNO2y3CWF8qbtoB777B2ya2Q5zb
+	 HNZ32n1dVX7DSQD7QWHwSuBrvT7oXLKYNlk75Q6e/MCskZmzLM0CCY/8tk/2foIoz2
+	 3GQN8b6aLSnbQ==
+From: Marek Vasut <marex@denx.de>
+To: linux-i2c@vger.kernel.org
+Cc: Marek Vasut <marex@denx.de>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	devicetree@vger.kernel.org,
+	kernel@dh-electronics.com
+Subject: [PATCH 1/2] dt-bindings: at24: add ST M24256E Additional Write lockable page support
+Date: Thu, 17 Oct 2024 20:41:25 +0200
+Message-ID: <20241017184152.128395-1-marex@denx.de>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240926024026.2539-1-hunter.yu@hj-micro.com> <20240926024026.2539-2-hunter.yu@hj-micro.com>
- <pmbvhdaz4qt57gxemuxoyb6xjrcmvusm2jzl5ps3o5ga52edo5@qabu6rcbdipp>
- <CAJZ5v0gSyMYerPqH9LOA77EWdBEOL7kHrc1+P1R=8Epn77gfNw@mail.gmail.com>
- <ZxDYOrAJEddtPrWv@smile.fi.intel.com> <ZxDY1ljxXkO7pFnl@smile.fi.intel.com>
-In-Reply-To: <ZxDY1ljxXkO7pFnl@smile.fi.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 17 Oct 2024 12:46:09 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hOzgazA0GQzRkGuzH9k3mrckvMeLBencQrMob_+o4FXQ@mail.gmail.com>
-Message-ID: <CAJZ5v0hOzgazA0GQzRkGuzH9k3mrckvMeLBencQrMob_+o4FXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] ACPI: APD: Add clock frequency for HJMC01 I2C controller
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	"hunter.yu" <hunter.yu@hj-micro.com>, jarkko.nikula@linux.intel.com, lenb@kernel.org, 
-	jsd@semihalf.com, linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	andy.xu@hj-micro.com, peter.du@hj-micro.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-On Thu, Oct 17, 2024 at 11:29=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Oct 17, 2024 at 12:26:18PM +0300, Andy Shevchenko wrote:
-> > On Wed, Oct 16, 2024 at 10:45:26PM +0200, Rafael J. Wysocki wrote:
-> > > On Thu, Oct 3, 2024 at 12:13=E2=80=AFAM Andi Shyti <andi.shyti@kernel=
-.org> wrote:
-> > > > On Thu, Sep 26, 2024 at 10:40:05AM GMT, hunter.yu wrote:
-> > > > > I2C clock frequency for HJMC01 is 200M, define a new ACPI
-> > > > > HID for it.
-> > > > >
-> > > > > Signed-off-by: hunter.yu <hunter.yu@hj-micro.com>
-> > > >
-> > > > Do you want your name to be hunter.yu or Hunter Yu? I prefer the
-> > > > second and if you browse the git log, you can see that everyone
-> > > > uses Name Surname.
-> > >
-> > > It must be a real name as per submitting-patches.rst
-> >
-> > Hasn't this been relaxed last year by the d4563201f33a ("Documentation:
-> > simplify and clarify DCO contribution example language")?
->
-> Note, I do not imply that the existing variant in this patch is ideal, I =
-also,
-> as Andi, prefer the proper spellings on the "name" parts.
+The ST M24256E behaves as a regular M24C256, except for the E variant
+which uses up another I2C address for Additional Write lockable page.
+This page is 64 Bytes long and can contain additional data. Add entry
+for it, so users can describe that page in DT. Note that users still
+have to describe the main M24C256 area separately as that is on separate
+I2C address from this page.
 
-Good.
+Unlike M24C32-D and M24C64-D, this part is specifically ST and does not
+have any comparable M24* counterparts from other vendors, hence the st,
+vendor prefix. Furthermore, the part name is M24256E without C between
+the 24 and 256, this is not a typo. Finally, there is M24C256-D part,
+which does contain 32 Bytes long Additional Write lockable page, which
+is a different part and not supported by this patch.
 
-Now, the way I understand the "known identity" part of the document is
-that a misspelled name is not sufficient.
+Datasheet: https://www.st.com/resource/en/datasheet/m24256e-f.pdf
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: kernel@dh-electronics.com
+Cc: linux-i2c@vger.kernel.org
+---
+ Documentation/devicetree/bindings/eeprom/at24.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+index b6239ec3512b3..590ba0ef5fa26 100644
+--- a/Documentation/devicetree/bindings/eeprom/at24.yaml
++++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+@@ -141,6 +141,8 @@ properties:
+           - const: microchip,24aa025e48
+       - items:
+           - const: microchip,24aa025e64
++      - items:
++          - const: st,24256e-wl
+       - pattern: '^atmel,24c(32|64)d-wl$' # Actual vendor is st
+ 
+   label:
+-- 
+2.45.2
+
 
