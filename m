@@ -1,143 +1,108 @@
-Return-Path: <linux-i2c+bounces-7458-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7459-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34F539A1F41
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 12:00:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 941D99A2043
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 12:46:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F5881C266DC
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 10:00:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AC581F232F9
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 10:46:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFC071D8E0D;
-	Thu, 17 Oct 2024 10:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4700E1D89E2;
+	Thu, 17 Oct 2024 10:46:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9z1zxcR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZSozq5F"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8161CCB44;
-	Thu, 17 Oct 2024 10:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CC713B298;
+	Thu, 17 Oct 2024 10:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729159243; cv=none; b=Inpj+nyTEdoENEBFD4ZdhtgwegSjA9BtWpx39KQUeA9wSL6DryxIZH5x6BX552e25JQXwucQS2+FadeK79LT1rm0GamtoGWbLSjjiYSuP17YIzCa3/kl5LGZks0dcinWaQExOzPxGKepqmHAUGVrqQt9UHFnLu8cHwwbI73D3uU=
+	t=1729161983; cv=none; b=XhaQpRkOt+VmxNqwOqI5Jms1Yctn5KnFfOMnVU3lAR3bqqmuIIMAO5HsJHblS+LdiCb+bTAxl/DMR0zayC71K2ajHOM+5LrM2kuYf1nDbmwsd2r80tGQ5QtQyl58b2B4gGeR8H59vNgGk2pGLiG1WepEGPL1i8eXxCQNaXp18bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729159243; c=relaxed/simple;
-	bh=j6dtf+1nsGntL6BOPrfU67/30TxswPd84Ugr4PzJXJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cAtwjLZSAsRGnPhSSoeDWQx6VJQ8SggWS0AUzf6xi8xFI5jeAZwxKrzk5RBE+lVy1yxPCh3ONwAJGYd64NbdcqVfP+RSsGBY32HHhbE4xX+6DylQ+wZTQNdU2Gjv98pmSC2nzoFTRPHSlIH0MlYTywLKGQs1hX3B2R319cduAag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9z1zxcR; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729159240; x=1760695240;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j6dtf+1nsGntL6BOPrfU67/30TxswPd84Ugr4PzJXJU=;
-  b=M9z1zxcRY7dhIoPI2MlZ2ffFJpmZ/GGXyAuoqpE3taxzWprC6PEEmZtD
-   BzCtZUlmk55RxGOr0hkKb47gwLa7C8b4CaYatdbNUrF9IvCyfsL7MNs+j
-   gL5n3THdElHld/V2Z2lkymvmjxgF5hXcR88fRjJOyLL3+BcqmF+mMgtgT
-   JrU28Ay9dJQowEbdYUbmwhgUNqxRgExdsb6Cuj0E8Fz2R8UCN7uQPXXpn
-   UpYSBKmheywqX72ExY3dHf4PAenIu8bYufSy87coMsZFnBKQOcgc6DypN
-   EhebX6Z0hzH2Z0LcDx3W0uJh3bhPc4m2SP2/2xbQNCSR7FuwvU0lBMfUi
-   Q==;
-X-CSE-ConnectionGUID: X22PaXytRlefobwfjkC/HA==
-X-CSE-MsgGUID: 9eJN3cUQQQaRl6WnEbBE7Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="28845177"
-X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="28845177"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 03:00:39 -0700
-X-CSE-ConnectionGUID: Vd/xbfNLREKHhrzvo/Ki8A==
-X-CSE-MsgGUID: pH7o0+e9SXWfNTmMB00Ypw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="109247908"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 03:00:35 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t1NJ2-000000044ml-3TYc;
-	Thu, 17 Oct 2024 13:00:32 +0300
-Date: Thu, 17 Oct 2024 13:00:32 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, chrome-platform@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v9 0/7] platform/chrome: Introduce DT hardware prober
-Message-ID: <ZxDgQISmr_gn_aDF@smile.fi.intel.com>
-References: <20241017094222.1014936-1-wenst@chromium.org>
+	s=arc-20240116; t=1729161983; c=relaxed/simple;
+	bh=bZPJ2TQJRvI/rTDGuSdNPro0wJfhREl8Me3tovFDsFs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VM5lBK7Slhlfv7TfUJVXJ6es8GeKlZiF7JYWMudloQqg/sOR3CvLSpjfpAjv+UlIUtmr6T7taXFACWGh94Nl8is4UuILuBpXmoAFckYiuJF50YcyrP9ymoa2fdopEAkIfLdV0VsKHRy9u/DTKfNN0eoBl7/QKxZ2+7feNMbNF+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZSozq5F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 922F4C4AF0B;
+	Thu, 17 Oct 2024 10:46:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729161982;
+	bh=bZPJ2TQJRvI/rTDGuSdNPro0wJfhREl8Me3tovFDsFs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SZSozq5FFmsYUsiJgVzrmKBjQwG2mevKywTkAiBLpLMt5CP7iuG15LYT4IiI4RKQZ
+	 EODlY7Km7nC300OQ75iiOEtNjcsXMkyOP1toWIj7TNlqJasQCZv48eRepUBlLf45Bi
+	 6xB1TNmX/hunVaYZ+N2VoeIsBCD6c1mwTBFIXh2uR97u5RW8WNpLtsjszc3YC9P64y
+	 TJsspyEuhcijN7IO763J/0lEvXcMC9/f7vc1YUAhGXfDyyAD+MlDhWg1hkfj/hEH25
+	 Bmaji9lZydR4yR+yF8PfeLmEw9XywnfyDOTgAdH65o0caGbpWyLsbE/D8+/po+7jq9
+	 k/Vjoa5eASVFg==
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-71806621d42so349202a34.3;
+        Thu, 17 Oct 2024 03:46:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVvvUGN+gD4xHnBDlEKYDHEtQZL4gMVWN0KO1kYDOSF990Z5J9Lx0FWI6V29EwZIuDAFM2CV161MWhd@vger.kernel.org, AJvYcCXc9IHoU5DIXEz0J1QB+hrIA/DbAncv1MHmGKW5iKoWksWxv7/FAfjEdhIsJEGf1umlfax75/W3tV9p@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLSgEPZq8omMvDD1RKwKp2m1PGO8/+cTOCVCgmwoxacLTajgRd
+	YAmVVDn6ppZNe8eqE3Cu09GV6HASVzcZc/Vi5l2z+foS7mlo/We+l+L/Gf6MgPnvx7/J2p41BL9
+	MMPEU/bVv3FZJMxgJxgueIXGHCO0=
+X-Google-Smtp-Source: AGHT+IGCmePH43EfNjSP4w7Mf8Q9b2+QIP+RRkowv9s+4lEBMM9YbAQObdd9N2R0b3CxjlHwnDqQejKAevdid/YSVek=
+X-Received: by 2002:a05:6871:e49:b0:288:a953:a5c7 with SMTP id
+ 586e51a60fabf-288a954e365mr8688345fac.14.1729161981927; Thu, 17 Oct 2024
+ 03:46:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241017094222.1014936-1-wenst@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240926024026.2539-1-hunter.yu@hj-micro.com> <20240926024026.2539-2-hunter.yu@hj-micro.com>
+ <pmbvhdaz4qt57gxemuxoyb6xjrcmvusm2jzl5ps3o5ga52edo5@qabu6rcbdipp>
+ <CAJZ5v0gSyMYerPqH9LOA77EWdBEOL7kHrc1+P1R=8Epn77gfNw@mail.gmail.com>
+ <ZxDYOrAJEddtPrWv@smile.fi.intel.com> <ZxDY1ljxXkO7pFnl@smile.fi.intel.com>
+In-Reply-To: <ZxDY1ljxXkO7pFnl@smile.fi.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 17 Oct 2024 12:46:09 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hOzgazA0GQzRkGuzH9k3mrckvMeLBencQrMob_+o4FXQ@mail.gmail.com>
+Message-ID: <CAJZ5v0hOzgazA0GQzRkGuzH9k3mrckvMeLBencQrMob_+o4FXQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] ACPI: APD: Add clock frequency for HJMC01 I2C controller
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	"hunter.yu" <hunter.yu@hj-micro.com>, jarkko.nikula@linux.intel.com, lenb@kernel.org, 
+	jsd@semihalf.com, linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	andy.xu@hj-micro.com, peter.du@hj-micro.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 17, 2024 at 05:34:35PM +0800, Chen-Yu Tsai wrote:
+On Thu, Oct 17, 2024 at 11:29=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Oct 17, 2024 at 12:26:18PM +0300, Andy Shevchenko wrote:
+> > On Wed, Oct 16, 2024 at 10:45:26PM +0200, Rafael J. Wysocki wrote:
+> > > On Thu, Oct 3, 2024 at 12:13=E2=80=AFAM Andi Shyti <andi.shyti@kernel=
+.org> wrote:
+> > > > On Thu, Sep 26, 2024 at 10:40:05AM GMT, hunter.yu wrote:
+> > > > > I2C clock frequency for HJMC01 is 200M, define a new ACPI
+> > > > > HID for it.
+> > > > >
+> > > > > Signed-off-by: hunter.yu <hunter.yu@hj-micro.com>
+> > > >
+> > > > Do you want your name to be hunter.yu or Hunter Yu? I prefer the
+> > > > second and if you browse the git log, you can see that everyone
+> > > > uses Name Surname.
+> > >
+> > > It must be a real name as per submitting-patches.rst
+> >
+> > Hasn't this been relaxed last year by the d4563201f33a ("Documentation:
+> > simplify and clarify DCO contribution example language")?
+>
+> Note, I do not imply that the existing variant in this patch is ideal, I =
+also,
+> as Andi, prefer the proper spellings on the "name" parts.
 
-> For the I2C component (touchscreens and trackpads) case from the
-> original series, the hardware prober driver finds the particular
-> class of device in the device tree, gets its parent I2C adapter,
-> and tries to initiate a simple I2C read for each device under that
-> I2C bus. When it finds one that responds, it considers that one
-> present, marks it as "okay", and returns, letting the driver core
-> actually probe the device.
-> 
-> This works fine in most cases since these components are connected
-> via a ribbon cable and always have the same resources. The prober
-> will also grab these resources and enable them.
-> 
-> The other case, selecting a display panel to use based on the SKU ID
-> from the firmware, hit a bit of an issue with fixing the OF graph.
-> It has been left out since v3.
-> 
-> Patch 1 adds of_changeset_update_prop_string(), as requested by Rob.
-> 
-> Patch 2 adds for_each_child_of_node_with_prefix(), as suggested by Andy.
+Good.
 
-> Patch 3 implements probing the I2C bus for presence of components as
-> a hookable helper function in the I2C core.
-> 
-> Patch 4 implements regulator supply support as a set of simple helpers
-> for the I2C component prober.
-> 
-> Patch 5 implements GPIO support for the I2C component prober simple
-> helpers.
-
-Not that I am really a fan of the idea, but I have nothing to counter propose.
-Also my big concern about random msleep() calls seems to be addressed in a way
-that it's now a caller's problem to supply the (correct) one.
-
-Hence FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-for patches 3,4, and 5.
-
-> Patch 6 adds a ChromeOS specific DT hardware prober. This initial
-> version targets the Hana Chromebooks, probing its I2C trackpads and
-> touchscreens.
-> 
-> Patch 7 modifies the Hana device tree and marks the touchscreens
-> and trackpads as "fail-needs-probe", ready for the driver to probe.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Now, the way I understand the "known identity" part of the document is
+that a misspelled name is not sufficient.
 
