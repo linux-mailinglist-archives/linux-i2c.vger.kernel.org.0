@@ -1,51 +1,52 @@
-Return-Path: <linux-i2c+bounces-7460-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7461-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C3819A2C5A
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 20:42:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29D469A2C5D
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 20:42:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 406521C21761
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 18:42:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 639C71C21642
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 18:42:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED0A20103D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D1118133F;
 	Thu, 17 Oct 2024 18:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="EAvhQUkC"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="tLT8mLdc"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A40618133F;
-	Thu, 17 Oct 2024 18:42:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44EED1FDF9A;
+	Thu, 17 Oct 2024 18:42:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729190538; cv=none; b=BSfNPUboxK/kCfIxSM/kkWHcF4/Cess2p81lqqW96vEkF17IhJBxULlEGpF3PkE42FBQEIyCxVhOOcXj91SQNCkoOV4UJjLsOMoJ5tyC3mL0FxEKPOmLnh3f3pr6dJlg/g1ZG+x0T1IY8a+N4bp5j/a6rFoaQtt9+9GUsuUrRE8=
+	t=1729190538; cv=none; b=cAWzlythBNONL4sx2QRbVSbVVNH4UFfP47kAb4o6BqqQBnP6XMOMu64iQlPT8zFjTlM/WcDfCdTsrnlPNok5lyYSj9tjVPno6gv4d4pzAZfUHOPRY04io1FkTbKBsOnFGU5VGfMFBV9QmTDiBLfUAXs5ayWg2uaRt3lm3aur8vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729190538; c=relaxed/simple;
-	bh=7kfG4WB6D3uozcfZ/sZuNMDvfoiOu+DKiplbNuRJ91k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lIR1sa2B5QNkcftF0e/+eCDFWXYKvUXIppSOePuK07BK4Ub0+uLJZNs+MpHs9TUy7CNyY23mOMnT/Mu2+iTYg6CdFPUtHX4l89Fg1sbnfM00OsfH1oFaU3tbsApHQhF3mOjc9RwgHnAxY7py2oZbwQHapCPYbGkWbv0CrK3g2ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=EAvhQUkC; arc=none smtp.client-ip=85.214.62.61
+	bh=GXZfrRTXT9LrrAjevCYm2C81k35PY0aGEBqJy7gL/Xw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sPKd8fXLHheiW9c5yqHYfzUWL1NLxDwVUcLYNf1LX7s4X3p5p39l1PBeYVL6zN+Fx1e0QZd+8pSOIKZk+U1URB+0KsH3RhwxpqvoDpzHYryUpgBNUAzqXJJ3nWqEoiMs01TS4P+JRhssJUv0Itib9GfOkXKFw4p5RegzHQAEii0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=tLT8mLdc; arc=none smtp.client-ip=85.214.62.61
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
 Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
 	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 6CC6A88D5B;
-	Thu, 17 Oct 2024 20:42:10 +0200 (CEST)
+	by phobos.denx.de (Postfix) with ESMTPSA id 0CE0B88FBA;
+	Thu, 17 Oct 2024 20:42:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1729190530;
-	bh=XAphFOkiYS07BlQDtmZ6qa+YhaWjPlC8eH25+ZVOX4k=;
-	h=From:To:Cc:Subject:Date:From;
-	b=EAvhQUkCx13IjE0a06fOVjd8blAyJMOGDEv/theN/1hvHTW5eEIyLcfXvO5EPngDp
-	 rXxPjvbWC56hUdBRzdwX+49kmkWhIjMEEjfGupW2T9fC5eLPuFSjEnRMd1185BtF8r
-	 rVwh+IZ6B4MgiY6VP1BWvgzMzJ+xbvnLOD5PLmZUKtD+zo/XSmXA1jLo8CyseuEyYH
-	 F3lOFtC4U8KATd8GxYCD72Lj51VtQQOI68lXrCWeNO2y3CWF8qbtoB777B2ya2Q5zb
-	 HNZ32n1dVX7DSQD7QWHwSuBrvT7oXLKYNlk75Q6e/MCskZmzLM0CCY/8tk/2foIoz2
-	 3GQN8b6aLSnbQ==
+	s=phobos-20191101; t=1729190531;
+	bh=cAmNngeOSAv5WfCygbk0KTKNcyQTmYx4zKXtpklGhNY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=tLT8mLdcP7L18Rc4jR9XL1JIImQIbEwcHhkUh5fCiMDq+Pa15LpoMzaNhcUqKJzcw
+	 ZQafj0gM+dUURIVfrIIiIA+EiyZ6TuOkrJXYBD7hcrk2+tc1Lf+orFVyC/bA7U+Z38
+	 /SfJxuDiOPfdfAu0X64nmijD/Ln/5bXIKZq/NJklBGvVBsrcPu3qoNDduEX5q5Hjqt
+	 vWhg7KcbQqKfVOPBgwQMKL8S4JSYlUGTIfT/Ii8iNzswjJ+H/d46SibdPaUh91ksYI
+	 z5iQpSs24QMYWIanfqMuXuVn0g7w4J59csVMSZhmAd6STE60wP0hp+uFcRxYgrMo6O
+	 PKAN/PNrIRDsA==
 From: Marek Vasut <marex@denx.de>
 To: linux-i2c@vger.kernel.org
 Cc: Marek Vasut <marex@denx.de>,
@@ -60,10 +61,12 @@ Cc: Marek Vasut <marex@denx.de>,
 	Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org,
 	kernel@dh-electronics.com
-Subject: [PATCH 1/2] dt-bindings: at24: add ST M24256E Additional Write lockable page support
-Date: Thu, 17 Oct 2024 20:41:25 +0200
-Message-ID: <20241017184152.128395-1-marex@denx.de>
+Subject: [PATCH 2/2] eeprom: at24: add ST M24256E Additional Write lockable page support
+Date: Thu, 17 Oct 2024 20:41:26 +0200
+Message-ID: <20241017184152.128395-2-marex@denx.de>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241017184152.128395-1-marex@denx.de>
+References: <20241017184152.128395-1-marex@denx.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -105,22 +108,38 @@ Cc: devicetree@vger.kernel.org
 Cc: kernel@dh-electronics.com
 Cc: linux-i2c@vger.kernel.org
 ---
- Documentation/devicetree/bindings/eeprom/at24.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/misc/eeprom/at24.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-index b6239ec3512b3..590ba0ef5fa26 100644
---- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-+++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-@@ -141,6 +141,8 @@ properties:
-           - const: microchip,24aa025e48
-       - items:
-           - const: microchip,24aa025e64
-+      - items:
-+          - const: st,24256e-wl
-       - pattern: '^atmel,24c(32|64)d-wl$' # Actual vendor is st
- 
-   label:
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index ca872e3465ed9..0a7c7f29406c7 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -207,6 +207,8 @@ AT24_CHIP_DATA(at24_data_24cs64, 16,
+ 	AT24_FLAG_ADDR16 | AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+ AT24_CHIP_DATA(at24_data_24c128, 131072 / 8, AT24_FLAG_ADDR16);
+ AT24_CHIP_DATA(at24_data_24c256, 262144 / 8, AT24_FLAG_ADDR16);
++/* M24256E Additional Write lockable page (M24256E-F order codes) */
++AT24_CHIP_DATA(at24_data_24256e_wlp, 64, AT24_FLAG_ADDR16);
+ AT24_CHIP_DATA(at24_data_24c512, 524288 / 8, AT24_FLAG_ADDR16);
+ AT24_CHIP_DATA(at24_data_24c1024, 1048576 / 8, AT24_FLAG_ADDR16);
+ AT24_CHIP_DATA_BS(at24_data_24c1025, 1048576 / 8, AT24_FLAG_ADDR16, 2);
+@@ -240,6 +242,7 @@ static const struct i2c_device_id at24_ids[] = {
+ 	{ "24cs64",	(kernel_ulong_t)&at24_data_24cs64 },
+ 	{ "24c128",	(kernel_ulong_t)&at24_data_24c128 },
+ 	{ "24c256",	(kernel_ulong_t)&at24_data_24c256 },
++	{ "24256e-wl",	(kernel_ulong_t)&at24_data_24256e_wlp },
+ 	{ "24c512",	(kernel_ulong_t)&at24_data_24c512 },
+ 	{ "24c1024",	(kernel_ulong_t)&at24_data_24c1024 },
+ 	{ "24c1025",	(kernel_ulong_t)&at24_data_24c1025 },
+@@ -278,6 +281,7 @@ static const struct of_device_id __maybe_unused at24_of_match[] = {
+ 	{ .compatible = "atmel,24c2048",	.data = &at24_data_24c2048 },
+ 	{ .compatible = "microchip,24aa025e48",	.data = &at24_data_24aa025e48 },
+ 	{ .compatible = "microchip,24aa025e64",	.data = &at24_data_24aa025e64 },
++	{ .compatible = "st,24256e-wl",		.data = &at24_data_24256e_wlp },
+ 	{ /* END OF LIST */ },
+ };
+ MODULE_DEVICE_TABLE(of, at24_of_match);
 -- 
 2.45.2
 
