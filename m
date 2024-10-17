@@ -1,121 +1,126 @@
-Return-Path: <linux-i2c+bounces-7447-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7448-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 095469A1E67
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 11:30:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 412F39A1E75
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 11:33:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3C271F272E3
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 09:30:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 049C6284911
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Oct 2024 09:33:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C2A1D90AC;
-	Thu, 17 Oct 2024 09:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D831D8E0F;
+	Thu, 17 Oct 2024 09:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HfPj46Zc"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wrHOcOFd"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58861D432D;
-	Thu, 17 Oct 2024 09:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20F914E2FD;
+	Thu, 17 Oct 2024 09:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729157398; cv=none; b=DxaMYo8UeOTJDDmyX8pbM1/nxJndd5PWRPcAw6b1eWj+iG2xnj+hgexRMiSJ4LLwrzlcbNQtEaaUjL5eqAzro2b/W7cpc1B8E8a44Qj4Zsq0O/ObuUEkWEbHOW/XuVdmQEy5T8h6E5HFNF5rIJ8cKl9XRAAN8iiTyhJOh2z1PJo=
+	t=1729157583; cv=none; b=DhI5ewrDaWIx2RH0dDjf5OA0sk4YwakrBsmbqyrm6VdMactlFDe2G2zVRS+ZErJ+zxfxKMA1x9v29N9G7fkKIOFSB5VzGTPV3hHk7J8yTVeiZUWCtcxCftufpC46Qx5yGThw/BJUkNgqpYnS+ubjYnP1+YCAkr8b7yTK93N6kCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729157398; c=relaxed/simple;
-	bh=g0rJpngEYKJ2UIwYT7URmdbzYNXEAze2/RC47InKg+M=;
+	s=arc-20240116; t=1729157583; c=relaxed/simple;
+	bh=D6/Jvo3xqgUbUh/A+cETPsA/qFf9R6GI4grfqu5dVJE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SX/GqIZ5vmXttmDUcZFmZFEBZncYLYJS4+4XgL66yOaOcchQ2c4hLbbXRoyvyJ9nHWJE64UCWOXR14L6y2FsV4Q1VaYA4UJib/HZueMUqmFHbYv2H0q9ef1CpuZ48FvYp8dfvIvCEdV/Wf44me5YkdaaUylnXRSQ4/b4150rEhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HfPj46Zc; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729157395; x=1760693395;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=g0rJpngEYKJ2UIwYT7URmdbzYNXEAze2/RC47InKg+M=;
-  b=HfPj46Zcpu3lBCE0XR3t5b7TFBOCDRFF/dMOulZ9RX2GPGvGBel8R24A
-   LKGK6xtfKCYuHWbxld+vYlWw0RYoVSj53lbATuHdS2nPRjmxtiXqx+P92
-   WgHvuqcEo8re67S6befYWWtq+8k60EewKVqDQCboCindCWXHjfuBTs9gs
-   Q6MTM9Vy5mKgs1WKRmQgw2lyWz+s4TOXSkUfahgCK6R/2uHjIQocZVrPL
-   JLO7bxIlrLmHlrB9G7AAqX+z5GVYyTsjs1h5qkC/AIEzUsU9qG2kd+rPE
-   1K0g3XdwEr0IiKGZTXmZCRRaz3c18t1n+yZqV+3gXCfsWj5+hN2c0jIXh
-   w==;
-X-CSE-ConnectionGUID: BxDAeh3+Tf6bMsyZS8mYYA==
-X-CSE-MsgGUID: J/U2t9QtTj6qtXtOj53JEA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="28105626"
-X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="28105626"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 02:29:00 -0700
-X-CSE-ConnectionGUID: pfQF2fvwSVGYhNRubhXAzQ==
-X-CSE-MsgGUID: W9sygzwiS/m+CA0FRFsmug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="115927375"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 02:28:57 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t1MoQ-0000000444y-1VbQ;
-	Thu, 17 Oct 2024 12:28:54 +0300
-Date: Thu, 17 Oct 2024 12:28:54 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Andi Shyti <andi.shyti@kernel.org>,
-	"hunter.yu" <hunter.yu@hj-micro.com>, jarkko.nikula@linux.intel.com,
-	lenb@kernel.org, jsd@semihalf.com, linux-acpi@vger.kernel.org,
-	linux-i2c@vger.kernel.org, andy.xu@hj-micro.com,
-	peter.du@hj-micro.com
-Subject: Re: [PATCH v2 1/2] ACPI: APD: Add clock frequency for HJMC01 I2C
- controller
-Message-ID: <ZxDY1ljxXkO7pFnl@smile.fi.intel.com>
-References: <20240926024026.2539-1-hunter.yu@hj-micro.com>
- <20240926024026.2539-2-hunter.yu@hj-micro.com>
- <pmbvhdaz4qt57gxemuxoyb6xjrcmvusm2jzl5ps3o5ga52edo5@qabu6rcbdipp>
- <CAJZ5v0gSyMYerPqH9LOA77EWdBEOL7kHrc1+P1R=8Epn77gfNw@mail.gmail.com>
- <ZxDYOrAJEddtPrWv@smile.fi.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JQa70lmPXm7l+3z3YAsvhaQ13SV2RV6uLIwJDX+BU6QIa5okG81Bc7Xrn2o+k/LJ9s2ityYYB4UtdJ5LObiAv3CjeTA99e2zlU49wK18k86EGjgUv53NnjY8COAGnQCDo+lWlf8v9H4DB1f27PNo8TkKPv7Nd7lli8rbl5Hv/Fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wrHOcOFd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE90EC4CEC3;
+	Thu, 17 Oct 2024 09:33:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1729157582;
+	bh=D6/Jvo3xqgUbUh/A+cETPsA/qFf9R6GI4grfqu5dVJE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wrHOcOFd1aAJ6t66tLGavzqOI+l+gFcoEWQEHNBeqx80GuHXLuj1VTeHJmwistmqJ
+	 e3HYagSnZR7FwSiJqxzup7thIbj6pghiu2Yj4Ldc6e1pMqn4MMhK4yVwNJUUXpWjw5
+	 AlTnBp697MjES/YCUTvRFtEowSOHUM3ojO+mGQaE=
+Date: Thu, 17 Oct 2024 11:32:59 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev,
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+	jonathanh@nvidia.com, f.fainelli@gmail.com,
+	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+	conor@kernel.org, allen.lkml@gmail.com, broonie@kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH 5.10 000/518] 5.10.227-rc1 review
+Message-ID: <2024101747-undivided-uselessly-0d44@gregkh>
+References: <20241015123916.821186887@linuxfoundation.org>
+ <CA+G9fYuZun789CY2rZ6WqxzdFswDYCf_fMpT9d-4M0bzJfJrhw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZxDYOrAJEddtPrWv@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CA+G9fYuZun789CY2rZ6WqxzdFswDYCf_fMpT9d-4M0bzJfJrhw@mail.gmail.com>
 
-On Thu, Oct 17, 2024 at 12:26:18PM +0300, Andy Shevchenko wrote:
-> On Wed, Oct 16, 2024 at 10:45:26PM +0200, Rafael J. Wysocki wrote:
-> > On Thu, Oct 3, 2024 at 12:13 AM Andi Shyti <andi.shyti@kernel.org> wrote:
-> > > On Thu, Sep 26, 2024 at 10:40:05AM GMT, hunter.yu wrote:
-> > > > I2C clock frequency for HJMC01 is 200M, define a new ACPI
-> > > > HID for it.
-> > > >
-> > > > Signed-off-by: hunter.yu <hunter.yu@hj-micro.com>
-> > >
-> > > Do you want your name to be hunter.yu or Hunter Yu? I prefer the
-> > > second and if you browse the git log, you can see that everyone
-> > > uses Name Surname.
-> > 
-> > It must be a real name as per submitting-patches.rst
+On Tue, Oct 15, 2024 at 07:22:46PM +0530, Naresh Kamboju wrote:
+> On Tue, 15 Oct 2024 at 18:25, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.10.227 release.
+> > There are 518 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 17 Oct 2024 12:37:45 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.227-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> Hasn't this been relaxed last year by the d4563201f33a ("Documentation:
-> simplify and clarify DCO contribution example language")?
+> A larger set of clang-19 builds failed on arm, i386 and x86 due to
+> following stable-rc linux-5.10.y.
+> 
+> And gcc-13 and gcc-12 builds passed.
+> 
+> List of build regressions,
+> * arm, build
+>   - clang-19-at91_dt_defconfig
+>   - clang-19-axm55xx_defconfig
+>   - clang-19-bcm2835_defconfig
+>   - clang-19-clps711x_defconfig
+>   - clang-19-davinci_all_defconfig
+>   - clang-19-defconfig
+> ...
+> 
+> * x86_64, build
+>   - clang-19-lkftconfig
+>   - clang-19-lkftconfig-kcsan
+>   - clang-19-lkftconfig-no-kselftest-frag
+>   - clang-19-x86_64_defconfig
+>   - clang-nightly-lkftconfig-kselftest
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> The bisect points to,
+>   da1084f5722a9a46bdcadc09429dc4b56ac31de4
+>   i2c: Add i2c_get_match_data()
+>     [ Upstream commit 564d73c4d9201526bd976b9379d2aaf1a7133e84 ]
 
-Note, I do not imply that the existing variant in this patch is ideal, I also,
-as Andi, prefer the proper spellings on the "name" parts.
+Thanks, commit aade55c86033 ("device property: Add const qualifier to
+device_get_match_data() parameter") was missing, I've queued that up
+now.
 
-> > The S-o-b is meaningless otherwise.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
 
