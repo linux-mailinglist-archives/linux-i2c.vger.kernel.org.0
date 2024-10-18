@@ -1,77 +1,51 @@
-Return-Path: <linux-i2c+bounces-7466-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7467-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B14C79A3258
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Oct 2024 03:59:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FBD99A3383
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Oct 2024 05:49:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7539C285311
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Oct 2024 01:59:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FEE41F24563
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Oct 2024 03:49:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9004413D531;
-	Fri, 18 Oct 2024 01:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="sFxZPRUb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9533115EFA1;
+	Fri, 18 Oct 2024 03:49:40 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B68C13AA27;
-	Fri, 18 Oct 2024 01:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.139.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123CE20E31D;
+	Fri, 18 Oct 2024 03:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729216728; cv=none; b=a0l0Viitm8PwVL1AQgfD0VK6OCEEysYpC66LsAeaSbIcCDDE3mzvQb/R32sFEeaeH61KYo5OeASl7KmG3vmVqI5AoDxKCDxNDDC/mPiHFLdANjAfvvGB2wSXrMgkVEKZDF1fwjVYFiE9CbKxTWhvNl7I/gelb6J8hJtiYdlKEnU=
+	t=1729223380; cv=none; b=i2iMLA0RxQl7Jwn6QTLsQQzMC/9NVQ9LJc9bsXFkp369MVgpCOp2qT9hD2lGLl98Q5S22h3TwTa54ZV/PemrzMU3jYaUsZHlDT3hMrWiSQsKYZ7zg1FJsour8jzAOOvS/NwS4MOQTjKYWgjyjjWFSljlMP15Rcvk516Qmqif2t0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729216728; c=relaxed/simple;
-	bh=3VKVxlQn4222drRfHlL4MQZPDF/tpVIgsAbP/Nb4Wus=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=k0XcwGPJ/Eu+kfDG8MUD0lR3QRWt9tT5F/fP3ORMYBxHGwVNecTa36ddmwq04DoeCySgaXjZtf9u9JIPTvuEraAzdbWrTVywO9ldg0R3rH4IV9+wZQ96jwnAf7Qxz5Yhgn8oqiC2e4nz0rKgO7143EvZkHM57kFYyC0uo4CQeuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=sFxZPRUb; arc=none smtp.client-ip=68.232.139.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1729216727; x=1760752727;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3VKVxlQn4222drRfHlL4MQZPDF/tpVIgsAbP/Nb4Wus=;
-  b=sFxZPRUb1sDLcB+NCGejixQeJwLFGHSk0gwrHHsXvDBi+q6gA/+Eyz5T
-   1VlvZVfsEQTbplstCK+n2lUmuS4N/DzPCo9o2FC+5SCghCm95j0JOhyFk
-   S8KV2wJVsqOGyLWmWbIcuSZM9R8GsFxmfo+mPBsCKPlmDB/Orwq7LYcgt
-   oBDoSjl2JWBmZiuBIO0osHEijXUhpYypIMSi6HCLIkIy8LsXF4bsokgEx
-   VVXcafjmaBVZe1WIzzgf+3SkqXD203qm6veWe9l1MFBwVgLaKgu062q2d
-   8ZNLl4rACGesD8aMs6YXpHo8uwNbF/FjssKAx/uB4Wfx04WcGg4b/5cXK
-   A==;
-X-CSE-ConnectionGUID: eDyda2KRTwW8SIQfcEZmLw==
-X-CSE-MsgGUID: d78Q1tnKTGKVpUZOkFLWQA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="176343305"
-X-IronPort-AV: E=Sophos;i="6.11,212,1725289200"; 
-   d="scan'208";a="176343305"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 10:58:39 +0900
-Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
-	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 4B2A3D6473;
-	Fri, 18 Oct 2024 10:58:36 +0900 (JST)
-Received: from oym-om1.fujitsu.com (oym-om1.o.css.fujitsu.com [10.85.58.161])
-	by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id ECF6AD8BB1;
-	Fri, 18 Oct 2024 10:58:33 +0900 (JST)
-Received: from sm-x86-mem01.ssoft.mng.com (sm-x86-stp01.soft.fujitsu.com [10.124.178.20])
-	by oym-om1.fujitsu.com (Postfix) with ESMTP id C0F0040072DBA;
-	Fri, 18 Oct 2024 10:58:33 +0900 (JST)
-From: Yoshihiro Furudera <fj5100bi@fujitsu.com>
-To: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yoshihiro Furudera <fj5100bi@fujitsu.com>
-Subject: [PATCH] i2c: designware: Add ACPI HID for DWAPB I2C controller on Fujitsu MONAKA
-Date: Fri, 18 Oct 2024 01:58:26 +0000
-Message-Id: <20241018015826.2925075-1-fj5100bi@fujitsu.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1729223380; c=relaxed/simple;
+	bh=tzFav4/qDoi0lVANe0ulqjdJ+7qcJQHUIYkPIJ3kLlw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ht6jpQRejprTHuEBoPCwKDUb+3Mj1jNcz4nSGVnWIVlPNDJMnlMHfr+4qj+YpybL5FWclfkjANNft9MY//fCEKmVgVewLz1UIfnMRlsUZDuSEs94iO37KdVFxuZY4u07FNrEWjEEYUpm3Js/xYraEA3lFupxOqcI8O/9WVzvNTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Fri, 18 Oct
+ 2024 11:49:19 +0800
+Received: from mail.aspeedtech.com (192.168.10.10) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
+ Transport; Fri, 18 Oct 2024 11:49:19 +0800
+From: Tommy Huang <tommy_huang@aspeedtech.com>
+To: <brendanhiggins@google.com>, <benh@kernel.crashing.org>, <joel@jms.id.au>,
+	<andi.shyti@kernel.org>
+CC: <linux-i2c@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+	<BMC-SW@aspeedtech.com>
+Subject: [PATCH] i2c: aspeed: Consider i2c reset for muti-master case
+Date: Fri, 18 Oct 2024 11:49:19 +0800
+Message-ID: <20241018034919.974025-1-tommy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -79,28 +53,47 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
+Content-Type: text/plain
 
-This patch enables DWAPB I2C controller support on Fujitsu MONAKA.
+In the original code, the device reset would not be triggered
+when the driver is set to multi-master and bus is free.
+It needs to be considered with multi-master condition.
 
-Signed-off-by: Yoshihiro Furudera <fj5100bi@fujitsu.com>
+Fixes: <f327c686d3ba> ("i2c: aspeed: Reset the i2c controller when timeout occurs")
+
+Signed-off-by: Tommy Huang <tommy_huang@aspeedtech.com>
 ---
- drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/i2c/busses/i2c-aspeed.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 2d0c7348e491..c04af315a4f9 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -351,6 +351,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
- 	{ "AMDI0019", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
- 	{ "AMDI0510", 0 },
- 	{ "APMC0D0F", 0 },
-+	{ "FUJI200B", 0 },
- 	{ "HISI02A1", 0 },
- 	{ "HISI02A2", 0 },
- 	{ "HISI02A3", 0 },
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index cc5a26637fd5..7639ae3ace67 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -716,14 +716,15 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
+ 	if (time_left == 0) {
+ 		/*
+ 		 * In a multi-master setup, if a timeout occurs, attempt
+-		 * recovery. But if the bus is idle, we still need to reset the
+-		 * i2c controller to clear the remaining interrupts.
++		 * recovery device. But if the bus is idle,
++		 * we still need to reset the i2c controller to clear
++		 * the remaining interrupts or reset device abnormal condition.
+ 		 */
+-		if (bus->multi_master &&
+-		    (readl(bus->base + ASPEED_I2C_CMD_REG) &
+-		     ASPEED_I2CD_BUS_BUSY_STS))
+-			aspeed_i2c_recover_bus(bus);
+-		else
++		if ((readl(bus->base + ASPEED_I2C_CMD_REG) &
++			ASPEED_I2CD_BUS_BUSY_STS)){
++			if (bus->multi_master)
++				aspeed_i2c_recover_bus(bus);
++		} else
+ 			aspeed_i2c_reset(bus);
+ 
+ 		/*
 -- 
-2.34.1
+2.25.1
 
 
