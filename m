@@ -1,96 +1,169 @@
-Return-Path: <linux-i2c+bounces-7483-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7484-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EAA79A5285
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Oct 2024 07:03:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6FF99A5A4B
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2024 08:27:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F3D6283B08
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Oct 2024 05:02:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E43941C20F40
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2024 06:27:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84FC24C7D;
-	Sun, 20 Oct 2024 05:02:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1DA21CF291;
+	Mon, 21 Oct 2024 06:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="i+35v878"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XyflKhhh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654F4CA6F;
-	Sun, 20 Oct 2024 05:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBE419415E;
+	Mon, 21 Oct 2024 06:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729400578; cv=none; b=celVgVZ9bYMOvvKKpK1ip28C9jI2myh2XzEL3rG8mp2vXY0NUeEUXDAmXtBQ7bQSI5xSw0H9oGoWF83WupEQtTdCcW11ZcwB2m4u1on0xrTFmTw05FC5Q10/CYm6fn5xQf4x/T3r68O0wxD7cYdtU2pCKts2Iu0tTslDe2YybPk=
+	t=1729492060; cv=none; b=eK9DSWWnYbdchFnK77L9kyWaNlnyW4GUipVjwgmXMiqeXqXP4drcIhhIvutBdvd7rfybo63cilI49T4tpucbEqVcWRFcNtSaFxFejyt5mHYyqvFBEqP7MMLFfhn4r1+YX3KFKP3YAeiynVhpL7faI6oMNqi8be82CZDulvErIKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729400578; c=relaxed/simple;
-	bh=bFkmHsub+ArssEkk1ccVXWxK8F7Fdp9v2gDg2fRo8DQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AZ9UjaKwb1g3nxj5NsLBxLyifR6Qt0yxE54igCFqle2cZkl1ChmZq3rbwnCd6vF7U7Q3p7XDrfvVapelU5QVGwczM12OXgBA+AgfFp2HRN9Y2ViHeLGHmYo4YAP2KIK2iJk8QMGy5sfHMUGUSj0m5HvcxMmzP6hohuWjbyJWlJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=i+35v878; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id B770A88E6B;
-	Sun, 20 Oct 2024 07:02:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1729400568;
-	bh=5Q9nlovKw/kqDdAjsD1yRTKyXSebN/44IKLBJF5kyQ8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=i+35v878Xu/4TdTm/oiKRAZd4MJBhgHkvn1tzeEkYsCKJKtV7GLNe569Pax5sUT1F
-	 629KudQB+JgVippnFs60c1+PZksZocE4oPWMf09f9bEVPO9yPM9VisQD+Wk2n8qCNv
-	 GVtEN2USnfvpOvPhzUqjW7Cnq4pjrv3jEIRTE/cvijIT8+uZEUubFqAUi+Ayy+/c9T
-	 AgI7ttENR0EYUfdMFIo7xD7KexxMpdrko6sWgd17RD3F5fpo/ockgsUosNr9eUqNXg
-	 tcrP95hahD2ooADhWg9WRgoDvsnAAGw0o5x3MeKxA/Twrz59KPHWkNZvloiX63wwVW
-	 3HDUnGKQtk+0w==
-Message-ID: <3aa9e2f4-b1ad-46bf-a8c3-0d57cd3a7075@denx.de>
-Date: Sun, 20 Oct 2024 06:29:13 +0200
+	s=arc-20240116; t=1729492060; c=relaxed/simple;
+	bh=I4Z2GVo7dzKhtMIspZuk0y8cpnMFZZ0OvJLpnwrppFY=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=WfFD8LdoilECUGkb37Z9crxdklWK1xtSgrIZwyeXgsLcfq5t84T/k5vpA2m97aDyXQcK92XfXw82gEts3b7AtLjeXHDPMdae+hevkZlio4dz7g4F0n2Uro1FDJgP4ISLyKzDDRDZxeN2A6TZY+Omvie5ByHWlZNhVCLMNmtQf64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XyflKhhh; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20c805a0753so34258525ad.0;
+        Sun, 20 Oct 2024 23:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729492058; x=1730096858; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s56c+/LO6NBVWgMpiwpkhSioI6B4YvZqh4mtUGgHfdc=;
+        b=XyflKhhhIOkyC5VpaQWK7xvTld5Vtcfwj8anHjOqk0HQUO0qLhpZCuJ2cVcM/6xbU2
+         1IuA/zC3xwY/+KRBQQtXnUhz2OnTxQ61MOWPQNz7NLnaXpFXCIJvIzcGFdhOWQPLH/oj
+         tb8nuSbcNbWVOZmXktkuhNZLifUghPhoZOu8w5P34ik/rlAl3qr94zzsTGDFujL0spYQ
+         29QrT/SiF/XcrPkergxyvUMa2w/+UvilCw47Cad6pvz27DK/udw5r9LpJ2in1WerJVj7
+         gEgwn8jxVbY9/JrmOKR38w8W8mZ5CpxLsMnwM0QwH/7w5C8L1a4ob1LOTr94mvTeKhml
+         ip1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729492058; x=1730096858;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s56c+/LO6NBVWgMpiwpkhSioI6B4YvZqh4mtUGgHfdc=;
+        b=n41oBhjjxFUdyHU7M7PDdp+wmBwMdxDe3z9tqhQ7c6M+KZks0Wh8UirEpSPcs0DyiV
+         QMm8y5uci9TBIgkKExsURDQUMgi2whDUsWzWzDiO06lfCLqQF43feTpiaoAbj2CDyun6
+         jami7grHdjKHNVN4C/sF+uKgcE51BNO7keWxdXiTqtJGPS8Qp0wfdkWtQAcpZLe6zAAO
+         vb/W5PjqrNQP/NvBoEcZ7QnQCFVLIjCxn5lV6I/r1oyYgdiru3Sd0BsnIgt3cCSiPek7
+         LFbNpJGPp44ZKRXfytCooVj1mYUFp6dLKEZhS6MnVIWwHsggEyxktPWOdEroM0UeZ1LB
+         XIvw==
+X-Forwarded-Encrypted: i=1; AJvYcCU+C/EYCkItKyQOPgibj0JPDpUQH5r+Mw5Zl+WtlheyFAha4nD1TuA6XaitV1wgZ/h8TR3zEZjKli4=@vger.kernel.org, AJvYcCUqB6z6ELAYGovDlxt3hhpLUS/gl//QLKeujQKcNMTNC0jRH8313I4UDrPLpti95NOfEUl5v9X5yiCMojMh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFKZu+ApEvzUnk845e1PTa1tOSyl/TfPDgWTQ5igMzGhEWh+u/
+	116o4AJjjAfoKpe+56oeak4DPYUkYGSy3mi9BxEIqy2vTFA9W4ebbYRcYSU=
+X-Google-Smtp-Source: AGHT+IGG/B7+Tn5iB7renUdnGDg7/rv1JOu3+Pd4cAaEkQR1SOfQ7EInkZJFb3oU73e0M7B7NsaYmQ==
+X-Received: by 2002:a05:6a21:6b0b:b0:1d9:ae4:91ef with SMTP id adf61e73a8af0-1d92c5087b3mr14838800637.22.1729492057856;
+        Sun, 20 Oct 2024 23:27:37 -0700 (PDT)
+Received: from localhost (2001-b400-e38e-c9a7-dd38-775c-4093-c057.emome-ip6.hinet.net. [2001:b400:e38e:c9a7:dd38:775c:4093:c057])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e5ad3677b2sm2700255a91.20.2024.10.20.23.27.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 20 Oct 2024 23:27:37 -0700 (PDT)
+From: Tyrone Ting <warp5tw@gmail.com>
+X-Google-Original-From: Tyrone Ting <kfting@nuvoton.com>
+To: avifishman70@gmail.com,
+	tmaimon77@gmail.com,
+	tali.perry1@gmail.com,
+	venture@google.com,
+	yuenn@google.com,
+	benjaminfair@google.com,
+	andi.shyti@kernel.org,
+	andriy.shevchenko@linux.intel.com,
+	wsa@kernel.org,
+	rand.sec96@gmail.com,
+	wsa+renesas@sang-engineering.com,
+	warp5tw@gmail.com,
+	tali.perry@nuvoton.com,
+	Avi.Fishman@nuvoton.com,
+	tomer.maimon@nuvoton.com,
+	KWLIU@nuvoton.com,
+	JJLIU0@nuvoton.com,
+	kfting@nuvoton.com
+Cc: openbmc@lists.ozlabs.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/4] i2c: npcm: read/write operation, checkpatch
+Date: Mon, 21 Oct 2024 14:27:28 +0800
+Message-Id: <20241021062732.5592-1-kfting@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: at24: add ST M24256E Additional Write
- lockable page support
-To: Rob Herring <robh@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
- Alexander Stein <alexander.stein@ew.tq-group.com>,
- Arnd Bergmann <arnd@arndb.de>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Christoph Niedermaier <cniedermaier@dh-electronics.com>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org,
- kernel@dh-electronics.com
-References: <20241017184152.128395-1-marex@denx.de>
- <20241018132754.GA54765-robh@kernel.org>
-Content-Language: en-US
-From: Marek Vasut <marex@denx.de>
-In-Reply-To: <20241018132754.GA54765-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
 
-On 10/18/24 3:27 PM, Rob Herring wrote:
-> On Thu, Oct 17, 2024 at 08:41:25PM +0200, Marek Vasut wrote:
->> The ST M24256E behaves as a regular M24C256, except for the E variant
->> which uses up another I2C address for Additional Write lockable page.
->> This page is 64 Bytes long and can contain additional data. Add entry
->> for it, so users can describe that page in DT. Note that users still
->> have to describe the main M24C256 area separately as that is on separate
->> I2C address from this page.
-> 
-> I think this should be modelled as 1 node having 2 addresses, not 2
-> nodes.
-We had the exact same discussion regarding M24C32D, see:
+This patchset includes the following fixes:
 
-https://lore.kernel.org/all/CAMRc=MdTu1gagX-L4_cHmN9aUCoKhN-b5i7yEeszKSdr+BuROg@mail.gmail.com/
+- Enable the target functionality in the interrupt handling routine 
+  when the i2c transfer is about to finish.
+- Correct the read/write operation procedure.
+- Introduce a software flag to handle the bus error (BER) condition
+  which is not caused by the i2c transfer.
+- Modify timeout calculation.
+- Assign the client address earlier logically.
+- Use an i2c frequency table for the frequency parameters assignment.
+- Coding style fix.
+
+The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
+
+Addressed comments from:
+- Andy Shevchenko : https://lore.kernel.org/lkml/ZwkFWVC3_5xr6OQW
+  @smile.fi.intel.com/
+- Andy Shevchenko : https://lore.kernel.org/lkml/ZwkFwABviY8ClyUo
+  @smile.fi.intel.com/
+
+Changes since version 6:
+- Modify code comments.
+- Remove redundant code check.
+- Remove i2c address mask.
+
+Changes since version 5:
+- Correct "EAGAIN" to "-EAGAIN" in the commit message.
+- Configure the bus->dest_addr by calling i2c_8bit_addr_from_msg()
+  and remove the I2C_M_RD flag when calling i2c_recover_bus().
+- Fix the commit message which meets a too small wrapping limit.
+
+Changes since version 4:
+- Add more description for the codes.
+- Modify the term "function" to "function()" in the commit message
+and code comments.
+
+Changes since version 3:
+- Remove "Bug fixes" in the cover letter title.
+- Modify the term "function" to "func()" in the commit message and
+  code comments.
+- Correct the coding style.
+
+Changes since version 2:
+- Add more explanations in the commit message and code modification.
+- Use lower character names for declarations.
+- Remove Fixes tags in commits which are not to fix bugs.
+
+Changes since version 1:
+- Restore the npcm_i2caddr array length to fix the smatch warning.
+- Remove unused variables.
+- Handle the condition where scl_table_cnt reaches to the maximum value.
+- Fix the checkpatch warning.
+
+Charles Boyer (1):
+  i2c: npcm: Enable slave in eob interrupt
+
+Tyrone Ting (3):
+  i2c: npcm: Modify timeout evaluation mechanism
+  i2c: npcm: Modify the client address assignment
+  i2c: npcm: use i2c frequency table
+
+ drivers/i2c/busses/i2c-npcm7xx.c | 424 ++++++++++++++++++++++++-------
+ 1 file changed, 328 insertions(+), 96 deletions(-)
+
+
+base-commit: 663bff1ddfe4ecbba3bcf4a74646bb388b1ad5b2
+-- 
+2.34.1
+
 
