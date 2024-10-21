@@ -1,137 +1,96 @@
-Return-Path: <linux-i2c+bounces-7494-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7495-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D2909A66FC
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2024 13:49:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 096289A7215
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2024 20:14:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0944B25FD4
-	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2024 11:49:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81145B24C58
+	for <lists+linux-i2c@lfdr.de>; Mon, 21 Oct 2024 18:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AF341E7C16;
-	Mon, 21 Oct 2024 11:49:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D171F8EEC;
+	Mon, 21 Oct 2024 18:14:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="X5U62lAj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lKU136QW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F667581A;
-	Mon, 21 Oct 2024 11:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965601991DB;
+	Mon, 21 Oct 2024 18:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729511370; cv=none; b=sOWz4kbIkVy8sQRkpVxKquDc4CF0EGFo2FOthRuIxtgpEm90//ekgtLYr9NaBOLuls2AhVAwRy45GK3g1mdR32r0RREvYsWToiENCmEANxF+h5f49gBQ7msUtFwb+N7+AETzTStri5drWj2Gu26A+2E0med3Ec6uWUj5T5fMNTY=
+	t=1729534457; cv=none; b=RlEtSP7XPjnjIDuVy+lcGNh49XZnwwv/53mCEnzfBPNewLBMbozzeu6KZTgBivFvuwJJnP7kUvyktzbuaanWXPXIG6bRiCEKvz5VCX180No213+mDY55zM0GN9utS2pZca4Np/hQb7237ueQmdI76FxegNcvIs5NtJtSgbJR1rM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729511370; c=relaxed/simple;
-	bh=uyNblGNDjcEEEdZiYPjjBd4JM1pjG241newOSWQDLFE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qcOJlLKXaEfwX9iUm0J6mkR1f6H0UnIRFwc/6UesOsjNHDZiRntrFEn7WU3IY/ZFUeEh26zDl9BuNwaQi+w4JXhd5kPV9iomkvpcsTF0Crf76BJwt9XkCLnNh3HbPAQftvjTUHm1HMsDMIT6cmK2agu45CGaGtxCnduksu7zU9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=X5U62lAj; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1729511366;
-	bh=ynpv70LgynLfXwRzZBGijnfOVKcOlHyDivF6n67p/a0=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=X5U62lAjpHb52sbnM+thpFoqHhHFqlG9am9kjKDaxlO+/ehGQolqSyXJOI3Az3xQI
-	 sFWWxe+8i4h0FwU0H14eXpD2cpx4gX7SmSNe5c/S0VQzAs7T4p4WA1fLpCNQ2xww2d
-	 M9DFsjeGwTH0ETddbtUE6qNxAzXvxchl2KFKk2LIjtBtKStHsQRB6QkQVHkOp/Nyf1
-	 PBlXVBBjLqqr/h05iPP8lbAEKOJq8ese96ov4FOSUgLaTNgut+Ng5rYZUghs9fFgrd
-	 +g1D4GOWbL3c8RCeNXOLwg7XhOTxGMGYiOg20RbxheS0+B/MgxkmirdJTcVClOTlRO
-	 v369jtIGiTipA==
-Received: from [192.168.68.112] (58-7-152-218.dyn.iinet.net.au [58.7.152.218])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id E91DC684AD;
-	Mon, 21 Oct 2024 19:49:22 +0800 (AWST)
-Message-ID: <e06a0db538bf62d4aeb7352ecc81a3a679fb9eec.camel@codeconstruct.com.au>
-Subject: Re: [PATCH] i2c: aspeed: Consider i2c reset for muti-master case
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Tommy Huang <tommy_huang@aspeedtech.com>, brendanhiggins@google.com, 
-	benh@kernel.crashing.org, joel@jms.id.au, andi.shyti@kernel.org
-Cc: BMC-SW@aspeedtech.com, linux-aspeed@lists.ozlabs.org, 
- openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org,  linux-i2c@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Date: Mon, 21 Oct 2024 22:19:22 +1030
-In-Reply-To: <20241018034919.974025-1-tommy_huang@aspeedtech.com>
-References: <20241018034919.974025-1-tommy_huang@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1729534457; c=relaxed/simple;
+	bh=6mdzQzHRWIZ7e/NGbWzVAFm3R4ztY9x43onKwrhnKgM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HtGV8n/UUYMi5LxSjeSJBAo1fdprpE9GnvgIb7aFyuhfDFRYmVs5uwEdzuz64GGUOBtTPc9EBilfFrlXn0qfGsqmrU8k0OzSWS7gJe/bXYgJy+XXIlLInWExbKQlciTs/DhzQK+VMukFFQgyX3bBbroUGqBmUdSb/LsWOo4w03o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lKU136QW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECBAC4CEC3;
+	Mon, 21 Oct 2024 18:14:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729534454;
+	bh=6mdzQzHRWIZ7e/NGbWzVAFm3R4ztY9x43onKwrhnKgM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lKU136QW4s9amLSb5SPHuIHW8ZnFGAQjoIKpw3dOntSCZI0l2kZ+wbIiNAQApDyh9
+	 /yZZamRWx61MByztKcNjczZpysskr77E+PExVakVIClqJXTGShyEzXTmuoH/HKC7pb
+	 yonOTns4UoaqXel3Xf+h/cgh1o4lDwUJyaYJNi65PV65MxsG1J2JjShGvstU881Px1
+	 +fGW9Z4fA6NAa/wkOTTdP6qcu6QlcuFqyR6FsQH+MhU8/4iBwx+r+zyN54ngfsMcz5
+	 H8C0pq8syCfZV75wVrLf9A/sMP+aIDfj2XJQ8zqSpJGrqq7Bter1qsQC+gl3WJcKBt
+	 Qt6Z+fRFbfIRQ==
+Date: Mon, 21 Oct 2024 13:14:13 -0500
+From: Rob Herring <robh@kernel.org>
+To: Marek Vasut <marex@denx.de>
+Cc: linux-i2c@vger.kernel.org,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	devicetree@vger.kernel.org, kernel@dh-electronics.com
+Subject: Re: [PATCH 1/2] dt-bindings: at24: add ST M24256E Additional Write
+ lockable page support
+Message-ID: <20241021181413.GA816269-robh@kernel.org>
+References: <20241017184152.128395-1-marex@denx.de>
+ <20241018132754.GA54765-robh@kernel.org>
+ <3aa9e2f4-b1ad-46bf-a8c3-0d57cd3a7075@denx.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3aa9e2f4-b1ad-46bf-a8c3-0d57cd3a7075@denx.de>
 
-Hi Tommy,
+On Sun, Oct 20, 2024 at 06:29:13AM +0200, Marek Vasut wrote:
+> On 10/18/24 3:27 PM, Rob Herring wrote:
+> > On Thu, Oct 17, 2024 at 08:41:25PM +0200, Marek Vasut wrote:
+> > > The ST M24256E behaves as a regular M24C256, except for the E variant
+> > > which uses up another I2C address for Additional Write lockable page.
+> > > This page is 64 Bytes long and can contain additional data. Add entry
+> > > for it, so users can describe that page in DT. Note that users still
+> > > have to describe the main M24C256 area separately as that is on separate
+> > > I2C address from this page.
+> > 
+> > I think this should be modelled as 1 node having 2 addresses, not 2
+> > nodes.
+> We had the exact same discussion regarding M24C32D, see:
+> 
+> https://lore.kernel.org/all/CAMRc=MdTu1gagX-L4_cHmN9aUCoKhN-b5i7yEeszKSdr+BuROg@mail.gmail.com/
 
-On Fri, 2024-10-18 at 11:49 +0800, Tommy Huang wrote:
-> In the original code, the device reset would not be triggered
-> when the driver is set to multi-master and bus is free.
+Seems like kernel implementation details dictating the binding to me. 
+Won't be a problem until there are shared resources on "both" devices.
 
-That's not how I read the existing code. As it stands, if it's multi-
-master and busy we do the recovery, however, if it's multi-master and
-free, or busy but not multi-master, or free and not multi-master, then
-we do the reset.
+I guess since it is inline with what we already have:
 
-> It needs to be considered with multi-master condition.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Is there a specific circumstance you've found that's problematic? Can
-you provide some more details about that scenario?
-
->=20
-> Fixes: <f327c686d3ba> ("i2c: aspeed: Reset the i2c controller when timeou=
-t occurs")
->=20
-> Signed-off-by: Tommy Huang <tommy_huang@aspeedtech.com>
-> ---
->  drivers/i2c/busses/i2c-aspeed.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-asp=
-eed.c
-> index cc5a26637fd5..7639ae3ace67 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -716,14 +716,15 @@ static int aspeed_i2c_master_xfer(struct i2c_adapte=
-r *adap,
->  	if (time_left =3D=3D 0) {
->  		/*
->  		 * In a multi-master setup, if a timeout occurs, attempt
-> -		 * recovery. But if the bus is idle, we still need to reset the
-> -		 * i2c controller to clear the remaining interrupts.
-> +		 * recovery device. But if the bus is idle,
-> +		 * we still need to reset the i2c controller to clear
-> +		 * the remaining interrupts or reset device abnormal condition.
->  		 */
-> -		if (bus->multi_master &&
-> -		    (readl(bus->base + ASPEED_I2C_CMD_REG) &
-> -		     ASPEED_I2CD_BUS_BUSY_STS))
-> -			aspeed_i2c_recover_bus(bus);
-> -		else
-> +		if ((readl(bus->base + ASPEED_I2C_CMD_REG) &
-> +			ASPEED_I2CD_BUS_BUSY_STS)){
-> +			if (bus->multi_master)
-> +				aspeed_i2c_recover_bus(bus);
-
-The change doesn't seem match the commit message. In this case you've
-punched a hole - if the bus is busy but _not_ multi-master, we neither
-do the reset _nor_ the recovery.
-
-Which is what you intended? The implementation? Or the prose
-description?
-
-Now, back to the implementation, punching this hole seems reasonable on
-the surface, but I guess we need to keep in mind that time_left has
-also expired...
-
-> +		} else
->  			aspeed_i2c_reset(bus);
-> =20
->  		/*
-
-Andrew
 
