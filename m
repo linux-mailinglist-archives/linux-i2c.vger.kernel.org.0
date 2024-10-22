@@ -1,102 +1,159 @@
-Return-Path: <linux-i2c+bounces-7504-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7505-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E6249AA14B
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 13:44:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45AB19AA1B2
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 14:05:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D75F1C23622
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 11:44:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01BDA28371A
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 12:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27AC919C54C;
-	Tue, 22 Oct 2024 11:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B08E19D075;
+	Tue, 22 Oct 2024 12:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="w3pkMXVB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="opJmI1l8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571FA19ABB3
-	for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2024 11:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E383919AA53
+	for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2024 12:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729597440; cv=none; b=C1Bq8l1uGBQbYpMSBsnYwfSnfUHGE8zWNk9V+YQ1Mb7Q1jspk545rj3sWzz4Af1qdF6xmo5JG8OHx1t0phKWnTQVtkcBeTFYwJxjsR6b1xP8QgntvaVPucF5yz8YtJR6H1QmqhZt24Tfuen1mKDhvOTaGy8vXLyc5Sto12Ax6Cw=
+	t=1729598732; cv=none; b=nf9/ekG2LgGeKMsacDjMUsIiC4G6sY4U+9Iu4s3mA0mhiIOy2b502hADClXRWNDFer0BFwpvR0gp7cFsRsyNHkjnYjY/+FADwjHqsGew/TrMBQXoUe23mdptzmvZ+ZL1MYicgkxD7zvNDnTzC7w20rsnugtgi/h7+KZI6j7Zk1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729597440; c=relaxed/simple;
-	bh=eBU03LmBOctVGp3oQT568nIvHtsc4hRjT+IESSBuhGY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O6rj9IIoh34Fa8rPE7wA+269DeszI+NH1oFv8Ri01uBMxc90DS1tJ32qOK4S/V+MJYATasbOwznfrKk5iFC+qshgf9WcmNqZ9hPKo8x/hau3HpaKvqwT1HRTU6BWFYLvHziKc6v0GMw1x3/5Mtx0i4uv/abuUXIJ/b+EibNsoRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=w3pkMXVB; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2fb57f97d75so49657521fa.2
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2024 04:43:59 -0700 (PDT)
+	s=arc-20240116; t=1729598732; c=relaxed/simple;
+	bh=xAa35UEgyalTFRei9YaqIbZpH4Vbt4ugEAjxJ/AXAGU=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=r48X/hUsC+a8hlzWDEx64GIjK1JzO5dnHZKDR8jGnXeZJfYhawYkLr6EnossL2d4oPiNg1CPViqGQ35eLXLxVjeJF95uSOeDI9LmGxGeQCRv45K5lf2gV+8Rfk6whaoSZxMbo8NUFa4SFojxd9Zztt0WoRlppsb9nOpBXxeOo3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=opJmI1l8; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4315abed18aso51784215e9.2
+        for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2024 05:05:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1729597437; x=1730202237; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eBU03LmBOctVGp3oQT568nIvHtsc4hRjT+IESSBuhGY=;
-        b=w3pkMXVBMOj8FFJsS1BfBAs6LPmi6Z5zx9/+7Td3p8ahd7GgOnAD6ftGnQRAryDK/x
-         qKPAHLFHJzNpIBNGPPYNWqObSKIpYbBC4zkP/xWgmN3/KESuEiMxE+cZOc1rcw9lzNCV
-         YdvC5mfrrpINcgRLf2cx6lzCoU6E2ZYNqjqiQF6TfTMEC0yQyQzx34sK3oyHvgC8bLF6
-         tNBxRRq+57pviehJChEmgAzAjM+z2NE9RvtcAEWCvLDGZH71CJRB2wAqLQQMsPN9PpBX
-         EuIh4EJPnc3KzCGZdq56LrtsTvLEwrWZGq5QYcdCqwtDfrxFW4sgBaCMZ4lbsEEFry5/
-         z8dQ==
+        d=linaro.org; s=google; t=1729598728; x=1730203528; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d+rXM8YoCxSlmKFLltL+X2lgjTLpMqtyIwjJXBbz9u8=;
+        b=opJmI1l8JCSPoha6axU22ENcj/I9GLB8GQR2xF35QQ6hI4tAbCBi3DTbN+WXG2PQMg
+         nkmwcuv89hwFZTRUspKdKlDPgA49v/ktEw+40EUK/sgi+7votArWLJIXqP9gOZeI6VUa
+         fidgjQhbfXSy6tYc22fHfd2zJ6xgD3+TcY9P8DcUkEm37qGCyBhwdViegL2yWkX4jg1S
+         28k/Fs2qLDvjbtsRElaz4Qldgay1jXyDwSfoeq7FhjAv/SKuhGzUBaaBv+o3FPpfuQlA
+         wgh+isG3Hpo+jNqStsFOVti3swwr51w2RdhD1mFR7J3BmJNQ+A3jqnPnByujjS7AHkTV
+         EP4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729597437; x=1730202237;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eBU03LmBOctVGp3oQT568nIvHtsc4hRjT+IESSBuhGY=;
-        b=aVsx7jZusdHO6g0ZvpsT6LSUmWOFpNJmKPxpZBe8nlLS3schnSP2PFVnA1KL63mM7d
-         JPbxjnT0cDYTcDC/IhoVYeC+0oHv4Wa+I2EFphzoPs1YQvWhSDhr/a8a0HLTD5IqQuZC
-         PkpPds0iU1xI0vXFXcELgNnk3GrbPBWSZfuq4yNOmVdr7x0m4y/pO3yqXyvdcbKzr69M
-         HxikcDeFQG4xX9msQMgvngCyA/YZh1AM98kuDo3y/AzK9/dDyRggmrc469Lk22UTw35Y
-         IYfLxnSKqyFqPCuIb6L1WaHq5xa5viVW2s/k512h8UacKDiFc9X8oM99dyj/fbDaq9uG
-         9gsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXjSNF14ekMwHl94IfE4fnVm585pNEp6zDS/FMFrZxEfH2OZobC5o7sdS5eLZjfne4NoAFpzMtDRuo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOZKr4qOwYI53f1TcK9DIBCSK2SzBzEemw+YLpwJq2T9QkEwK7
-	t7RsTe/tMuklLrRQc34CdLzc/xs+O35lECLMc+VqidjgcjnTiM5wUKzR0ttDbtpu0JuJdHuMBhA
-	Obd7lCRela6gp1zhE7R8/j9K/DI30cyGqfnNgkQ==
-X-Google-Smtp-Source: AGHT+IHv0JU0J9PGLy6ffpUD6D75+O0gIi950/5GHBOoWR6xI0HvKP8Mmi0qw9gOuB95udIKzZNZU/BQNe7LaDl6Z0M=
-X-Received: by 2002:a05:6512:b01:b0:539:e776:71f2 with SMTP id
- 2adb3069b0e04-53a154d04a7mr7743012e87.52.1729597437395; Tue, 22 Oct 2024
- 04:43:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729598728; x=1730203528;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=d+rXM8YoCxSlmKFLltL+X2lgjTLpMqtyIwjJXBbz9u8=;
+        b=UAWOTr+pK5SMf+0Ur3O9sgUTW2n3zHoqCw5bkjCXcdtI7QOVL+pl4t71a4Vvz5DhnH
+         E0mwf29YYkzb2W2r7ZDcQT8+HKMeWOwer/HRzAcxhQXuWItiYQNLxLuBby3BoSSuhXY2
+         YF+kMv3UbDC91oFpwg4NKRtk/vQZXXJwJspKXX3QU4IIvs5wZkoGMdvxmPeklTV1Obo3
+         oeg5nhaU1FjTVFRUpqrfzOzIrSwH8N/jzOZxjfj5w9rRvsofoKuQ7UklkXct6KqCQe2U
+         OKQCKum3GK6f6XBgo/GjwyeCx9/jUfw4GaQauG50V948jwgfk5JeboQncwRPS1VocEmN
+         sotA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2CRWrMbSYd2hC2ZI6URxRIZd2J0qRMO82mwbUJFymiz1ER60RIlFQ9QoBACNCMH66gQrCw5PsWJM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHhauLR19RUa/05R07kucVw6gKdRbeU0C3GYLSk2FRNK/pDCeC
+	00MU3D/5telkL4v5nB4Y9gVpl3uSqWnWoApiNeb4I2NGNNCCcVxwK5cg3EAQlXE=
+X-Google-Smtp-Source: AGHT+IGOriYXOUTnFe0hK1xqAhG0+iTqWnSOGWteduSyNyhKdpHlOzUZIu4+hZqVlkKxd/tYNb98/g==
+X-Received: by 2002:a05:600c:4e12:b0:431:4f29:9542 with SMTP id 5b1f17b1804b1-431616332a7mr122094945e9.6.1729598728173;
+        Tue, 22 Oct 2024 05:05:28 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:43af:403f:2c26:9ea7? ([2a01:e0a:982:cbb0:43af:403f:2c26:9ea7])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a477d9sm6494001f8f.26.2024.10.22.05.05.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Oct 2024 05:05:27 -0700 (PDT)
+Message-ID: <55ecee09-196a-4c7a-b7cf-61c19737735b@linaro.org>
+Date: Tue, 22 Oct 2024 14:05:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008160947.81045-1-brgl@bgdev.pl>
-In-Reply-To: <20241008160947.81045-1-brgl@bgdev.pl>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 22 Oct 2024 13:43:45 +0200
-Message-ID: <CAMRc=McL8DzSeiYm2C6f8NeyGFtZ6FZ2rycx8y2OrenNCEH7hQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+From: neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
 Subject: Re: [PATCH] i2c: qup: use generic device property accessors
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20241008160947.81045-1-brgl@bgdev.pl>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20241008160947.81045-1-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 8, 2024 at 6:09=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
-wrote:
->
+On 08/10/2024 18:09, Bartosz Golaszewski wrote:
 > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
+> 
 > There's no reason for this driver to use OF-specific property helpers.
 > Drop the last one in favor of the generic variant and no longer include
 > of.h.
->
+> 
 > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > ---
+>   drivers/i2c/busses/i2c-qup.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
+> index 86ec391616b0..da20b4487c9a 100644
+> --- a/drivers/i2c/busses/i2c-qup.c
+> +++ b/drivers/i2c/busses/i2c-qup.c
+> @@ -17,9 +17,9 @@
+>   #include <linux/interrupt.h>
+>   #include <linux/io.h>
+>   #include <linux/module.h>
+> -#include <linux/of.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/pm_runtime.h>
+> +#include <linux/property.h>
+>   #include <linux/scatterlist.h>
+>   
+>   /* QUP Registers */
+> @@ -1683,7 +1683,7 @@ static int qup_i2c_probe(struct platform_device *pdev)
+>   		}
+>   	}
+>   
+> -	if (of_device_is_compatible(pdev->dev.of_node, "qcom,i2c-qup-v1.1.1")) {
+> +	if (device_is_compatible(&pdev->dev, "qcom,i2c-qup-v1.1.1")) {
+>   		qup->adap.algo = &qup_i2c_algo;
+>   		qup->adap.quirks = &qup_i2c_quirks;
+>   		is_qup_v1 = true;
 
-It's been two weeks. Ping?
+LGTM
 
-Bart
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
