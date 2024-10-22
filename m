@@ -1,118 +1,118 @@
-Return-Path: <linux-i2c+bounces-7506-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7507-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9D179AA2CD
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 15:13:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 911669AB664
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 21:05:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 770CB1F237DA
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 13:13:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B72B51C230B8
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 19:05:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A99E19DF52;
-	Tue, 22 Oct 2024 13:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19CAE1C9B9F;
+	Tue, 22 Oct 2024 19:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CLs1jkTi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PujlgmID"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD9C1E495;
-	Tue, 22 Oct 2024 13:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E2FB12F5B3;
+	Tue, 22 Oct 2024 19:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729602784; cv=none; b=KCKehWQa5Dn7QIDZ3v48pTZTA22BvvXD6TB+r1FoHv6MKRwU3JI/4ao/6q0yWigBXDTxWHjSTEyp4cvexPq6EtLlwjgsZMh3uY17nTm+1CibNEzAA36BRMUCszvOeD+HDFmzbY4rdUdpKUo1BvYupQDQVNWoHFwAMEPKektyQ9w=
+	t=1729623935; cv=none; b=nawlyLTjv7G4zGF7lKE9AMVDTFVAtQ1xjbUsCQ1nTh5UEB5zBDDnFZL+JNbFg2rtH1+dxBxDcWWELRkyPTEDQLknrvqlFkznrzNYnoQ74YTrPooejWXfUpVnCMpfsYyQgZ9EGmk9NK69Er+b+7WEUv1TyyawHqB8vfBZLkmSpLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729602784; c=relaxed/simple;
-	bh=DZpeEzwsFRRajSicQ/TntycHhyRS3RMldLFiEs9zmdw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y3WRKG5M4HdnD50oALaQ1vXMsiEtY+TGHWtTw82EfbO3y7DgXYT/5wi8mox+zFReoUdIj/ijJ5yhAW8Gbe5euFwkTnRDb5I8MyzgU89UXtS7PWZZ4Q7L+sjueDLkbMwxb9rCa0hF3opDnBwPAfGUyKG9DhukteUP4T55UdusIw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CLs1jkTi; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729602784; x=1761138784;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DZpeEzwsFRRajSicQ/TntycHhyRS3RMldLFiEs9zmdw=;
-  b=CLs1jkTiWK+a8a7yIybgOjMowIRJ6JCo7CiHfpCS4PrpLjMwMxj2KWiw
-   SPcLjcLIEX9nnmPtI7zmyRLo6pWPcxrc+mHwPb2xbmZ4oF96LRVk5QvTq
-   6Ukm+iPeOJjH/2PvBzMqrwfSjDFhKt/DLAU39DIWNZlpAW5lKATHUvIgH
-   EDH3eB0499bJ2jY4i7mZIGy2hauPxOk2K9Wk6aVA95e1CXguyW2neafAU
-   nwpJfO/UwfErAFgfFDFpeLxd3LFpzVay3K//Et05mntnD3Mm2jjb5EhYJ
-   WBqZayXP9i0fpPdX5IX2xSdCyES6SVzj2uQK8PHlTj+usT90D60iKXApq
-   A==;
-X-CSE-ConnectionGUID: 5F0nZs4TS0iOVktaSP2JMg==
-X-CSE-MsgGUID: gAqWpCv3QXWKKrtbSbc28g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="29342889"
-X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="29342889"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 06:13:03 -0700
-X-CSE-ConnectionGUID: 0xhNZ4n0T+Cg1nqx14XbUg==
-X-CSE-MsgGUID: YzLaLbFYTr+Iq6hUfIlHgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="79806805"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 06:13:00 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t3Egz-00000005r4j-3Qe1;
-	Tue, 22 Oct 2024 16:12:57 +0300
-Date: Tue, 22 Oct 2024 16:12:57 +0300
-From: 'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
-To: "Yoshihiro Furudera (Fujitsu)" <fj5100bi@fujitsu.com>
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: designware: Add ACPI HID for DWAPB I2C controller
- on Fujitsu MONAKA
-Message-ID: <Zxek2SsrFg-XnHWP@smile.fi.intel.com>
-References: <20241018015826.2925075-1-fj5100bi@fujitsu.com>
- <ZxJXj3holsMIdnC2@smile.fi.intel.com>
- <OS3PR01MB6903FEFE0404D809D62D4628D4432@OS3PR01MB6903.jpnprd01.prod.outlook.com>
- <ZxYQDSCpo8n4g3jM@smile.fi.intel.com>
- <OS3PR01MB6903405361060650429FAC2AD44C2@OS3PR01MB6903.jpnprd01.prod.outlook.com>
+	s=arc-20240116; t=1729623935; c=relaxed/simple;
+	bh=Qm1SvuTouZbA1KB/4nlKtjP9hezckri+4YLCg3jq9os=;
+	h=From:Message-ID:Subject:To:Cc:Date:Content-Type:MIME-Version; b=s6h/BMn1XpANPuaIe/pmgLe9l06v/+oIeKTRVpmu5cJ14P+QQvHHI+wlYgwKldMckra6e7YMR62viZ68EAd2XW9ll0F7gQ+jtuRwPw8fGHpcqm0cJumaaBsozqgAjO16+fFKLUiYRCe6fAwxoHS+8Wsz0lfZY7ZGo1SGcPzTRRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PujlgmID; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5cb6704ff6bso3836718a12.3;
+        Tue, 22 Oct 2024 12:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729623932; x=1730228732; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to
+         :subject:message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZhqvAiUNzRvD/II9xf+29SDbuvoVtnnw6tqLR/pkTds=;
+        b=PujlgmID+qNlejnmDipGTdFWPPdbEvUIGj5EkgaRoGz/Xcl/0rXuHVeYZBgaY9n6mU
+         YA/NZHUiIRMfjNyRNXDLrBJQCiUMt/UMKpaK/aDWl14/DMMEWoFXUPRibLRSl/g33Ik0
+         b3mj2CoOLZUI8UAc7iYivhkelSvvukddrSZLwz0hlbkBu+/H/GdYlh66y0fTIJmx5Y3i
+         V6b/UnABnqX83XzCmgDc60diAMTn+jL91DiaM6ogorw5H576fv5EnVPnsWzko1RHFghM
+         7hPWtRc293QjfMZgcg/ugYkQfIY38gVWDUhMMR1DiESXHf4dkJeXTXafRO1XccJkaPLh
+         jE0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729623932; x=1730228732;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to
+         :subject:message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZhqvAiUNzRvD/II9xf+29SDbuvoVtnnw6tqLR/pkTds=;
+        b=Wqk8pOVGvQ9knNTDCUl3drP0kfZZdssy1trq+0b27KJWzOeYov1W9WklGje5fbJuab
+         Mmyu0W1n5rA3uZc1AGauFR3lR3cuTSypNVEryFf1wMW6/mJdcUpYU+krIUyjuDBlTsnI
+         I5WoMlUaeX+Ntadn2JsURHU34GOcoZRQHA/4MWLke+TeeNhAzokv9EGPmXf12UYIYRdV
+         Bu0chh/cxRZawcj4m6jOi29ddqaTuSZEDY5tH/TaEEUiGm8Fj0opxYPifbjaYsKeyQZv
+         NWmX6jOlPSXCcSDJxpzfIo6+MxNHb2TzgAjme74PTAkX5SBA3n8RRsN9CD8ThhA2wWhl
+         POjA==
+X-Forwarded-Encrypted: i=1; AJvYcCUElgqXm6O/McHCyZmZI6dpHSdxprV6dioWMxht8Qg+iXIEVdVoyW0tst5I/BI0j7ETV0cq7nh944hdq7c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGMmHXTEntURqzDvkfYOFFZnsdqXjSyzvK+MhiRksOQAJLNw9R
+	xZuamV/dOt8bXM5ZT1RKMLvomkZ5IeEu7UM5W1mPC6DsBZwPcDSoqkW2u6wGV6M=
+X-Google-Smtp-Source: AGHT+IH0pP0hFsoTKZFqbEN8x96yfyEgQthSaETYnYFhe1pd0unWakC2Bw22cpPgheXkL3NQBzq96w==
+X-Received: by 2002:a05:6402:35ce:b0:5c3:cc7d:c29d with SMTP id 4fb4d7f45d1cf-5cb8ae6dd6fmr193292a12.6.1729623932329;
+        Tue, 22 Oct 2024 12:05:32 -0700 (PDT)
+Received: from [10.0.2.15] (23-152-178-143.ftth.glasoperator.nl. [143.178.152.23])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cb66a654fesm3458886a12.36.2024.10.22.12.05.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Oct 2024 12:05:32 -0700 (PDT)
+From: Liam Zuiderhoek <zuiderhoekl@gmail.com>
+X-Google-Original-From: Liam Zuiderhoek <Zuiderhoekl@gmail.com>
+Message-ID: <3e28ba0a5733593d28f34515e13a9e61d1ffd01d.camel@gmail.com>
+Subject: [PATCH] i2c: i2c-core-smbus: fixed a whitespace style issue
+To: wsa+renesas@sang-engineering.com
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 22 Oct 2024 21:05:30 +0200
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OS3PR01MB6903405361060650429FAC2AD44C2@OS3PR01MB6903.jpnprd01.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Oct 22, 2024 at 01:14:18AM +0000, Yoshihiro Furudera (Fujitsu) wrote:
-> > On Mon, Oct 21, 2024 at 07:22:55AM +0000, Yoshihiro Furudera (Fujitsu) wrote:
-> > > > On Fri, Oct 18, 2024 at 01:58:26AM +0000, Yoshihiro Furudera wrote:
+From 214adebf7cf37be941f208124fac9ea6bec0f1d2 Mon Sep 17 00:00:00 2001
+From: Liam Zuiderhoek <zuiderhoekl@gmail.com>
+Date: Tue, 22 Oct 2024 20:46:59 +0200
+Subject: [PATCH] i2c: i2c-core-smbus: fixed a whitespace style issue
 
-...
+Fixing a coding style issue.
 
-> >      Device (SMB0)
-> >      {
-> >          ...
-> >      }
+Signed-off-by: Liam Zuiderhoek <zuiderhoekl@gmail.com>
+---
+ drivers/i2c/i2c-core-smbus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Hmm... Why Device object is called SMB0, are you sure it's the correct one?
-> 
-> We considered the string to be the most concise
-> representation of SMBus HC#0, given the general
-> constraint that object names should ideally be
-> four characters or less. We understood that,
-> unlike HID, SMBus object names are vendor-specific.
-
-But this all about UART! How is it related to SMBus?
-
--- 
-With Best Regards,
-Andy Shevchenko
+diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-
+smbus.c
+index e3b96fc53b5c..6829def15933 100644
+--- a/drivers/i2c/i2c-core-smbus.c
++++ b/drivers/i2c/i2c-core-smbus.c
+@@ -122,7 +122,7 @@ EXPORT_SYMBOL(i2c_smbus_read_byte);
+ s32 i2c_smbus_write_byte(const struct i2c_client *client, u8 value)
+ {
+ 	return i2c_smbus_xfer(client->adapter, client->addr, client-
+>flags,
+-	                      I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE,
+NULL);
++				I2C_SMBUS_WRITE, value,
+I2C_SMBUS_BYTE, NULL);
+ }
+ EXPORT_SYMBOL(i2c_smbus_write_byte);
+=20
+--=20
+2.43.0
 
 
 
