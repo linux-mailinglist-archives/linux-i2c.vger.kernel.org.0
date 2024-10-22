@@ -1,122 +1,123 @@
-Return-Path: <linux-i2c+bounces-7499-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7500-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE5349A9AA5
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 09:14:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 140139A9AB0
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 09:15:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D489B22680
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 07:14:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A5D21C22122
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Oct 2024 07:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39331487FE;
-	Tue, 22 Oct 2024 07:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 048CD1494BF;
+	Tue, 22 Oct 2024 07:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="ITBx2/Io"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="JXizB/Oa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D101487D1
-	for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2024 07:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E7E13D882
+	for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2024 07:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729581243; cv=none; b=QUDzVYsd9Y9XIPem8/Ykd5UkdeCASkZpN7cdq8+8G3ATZMvfSfnzxi5Kw7HTiWBNhKht2YOhWym6I2RSHgFD1ouWKFNM9HT7gkv8mxaNdMPMN4ILy5BP2p3qsAHG/IoneZL/8jDyIJ2BlLvGl05q+2MFqtRTTme9AxGRDDeXukQ=
+	t=1729581312; cv=none; b=JY2m+yZ0MVa0Gh1dOjiQ3aUsellp0fe1MF+e8SnAsdEdJNkxc1dSW/lPiyokbI8Ow5zgVvNyq1lnTvmR/XJ/TwfNNcO0n98GYSJyfag5KeDjjUk4BRw3xDf+CPuapAOsagk6yk5jlSxAxaZovYQjV+iL3inFpVExy9N9mpkKIdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729581243; c=relaxed/simple;
-	bh=rg6eNn4n7KKuhoN847xjNM4A6AinYmC7pL0O7ui5KnA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PHHeB93Cxw8+vGGxDXiYRJYiU/NC+tUFzRHVcUZ86SqQqrjAB8DG6EF0+THo+FR+K/C3ZOzxlc3dPNjIkxokE0An3RhmhCE+yqYfE5PDM4pcTmpHdx2dh0FlzDOicYDAXNaVqQIfMY2ZBu/razlbT0QrhAzXAB8OjeXqFEY9QBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=ITBx2/Io; arc=none smtp.client-ip=209.85.128.51
+	s=arc-20240116; t=1729581312; c=relaxed/simple;
+	bh=BSr61Lbih3ztfBNq+FD5PNATN96oqcq+F4opEl7+bbc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HWhkC/T0uvp2jX4S58Qa2QbkDmZ7g+kC0YkBSWQI/s3taIbF1l0cgLtZK4Tq/Z4lKl9QhzoNQ3tGwz0Ld0ueFeYLgbe829EpKsOwKz4vzq0WpyaKkNr3hvODJzsae94gijkkwU+0mo2Le2qiuZ3C2f4Tcoyq272itIi63uFfsr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=JXizB/Oa; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43158625112so51968805e9.3
-        for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2024 00:14:01 -0700 (PDT)
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2e2e87153a3so3553053a91.3
+        for <linux-i2c@vger.kernel.org>; Tue, 22 Oct 2024 00:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1729581239; x=1730186039; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1729581310; x=1730186110; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2DpZoo6yO9Hfgv4N61HzJjjkVfEBeub6eC9TjyXKIOI=;
-        b=ITBx2/Io9mEbD6WDkZTeUX4+aOAYx5BvH/ETO2pCP5rRkHEt6p2oSU7wbMlXbtkkna
-         iFWXmA0SuYpEXQwW4NG2NAmzVf03qkXG/qtXZmwVKPLi9fjtRTzhTL684zUHDhk+H0H9
-         wRrcTZIKv2XDXNMWJJ1KTepFET/hRe10uEWAOYB49lMtbPYG2N0K3o0wLNwU7/LWqBxy
-         2a9U3zbceCPt9WlsoPoOACu5OlpB6mYtAoShwTImMzh6KhEPSTxD/+BDG40ezFPxBFFx
-         GrsaUiNY56iAR9ePNs1O/mqHqkxYmn623zDTY2ghPTrCKJfcQLV4LmSnfy3KHW6dtg8J
-         Ib0g==
+        bh=8X/XecV8UTvLcsQtQg+izcVYgmrEzD6FxMWHenqkUbc=;
+        b=JXizB/Oapjz8DjCwhKGOC1r2dT5u5jbHbGBf74KjOfz5tBxyrzYkiuGs21wiFwJmQh
+         eJidGccj0+uRaYw4Uwead5UNCeeKCjTtGOnHty1p27gCqrJZIFKqw09FJDXKLUmDpGFx
+         QVI6696HFO+/sjZf/LN26B+ULbqKHpjKseOi2xXVn7IyKr6LPLsoWQLHnlndNBNHWWyZ
+         sS3abklPmPRI0xH6t3YmTmu5FunQi3XTmM4uXbpB80uVjPy+mNSn06+fhF+NfzonEdNb
+         0BC8Qr5w78TUnX0kPBgWKEF7EAFH2OcQ51OLsyOKSuRcvRSXN3ZcixQQOUi9VT0hbWK8
+         K10w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729581239; x=1730186039;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1729581310; x=1730186110;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2DpZoo6yO9Hfgv4N61HzJjjkVfEBeub6eC9TjyXKIOI=;
-        b=HDau4nbkUcXNUV61psWHVi64MzExJGOnHUZLO4VEoGQdhir5zsBM/nWzi3ZELZvf+U
-         bWfH0mHJW8xNPVW+DTS0H8JtFtsZfv6l0FB6sSlxPw0SN6QieJgPT7IqoWDCX7jAtBR0
-         NptzmnLAOuI9D95on9bhivl4iEPdJy66jVhMCmcOysiKyscJ43mV3BU3/ShrW4/Upggh
-         YskbJ7v5CvnDzKyjtZHTS1sVkh2/fNcBCuaOBNP99/cH8sY9KaZ9ia6Ixe7XTpblOah0
-         2AkVX8NyNT1VsW7MbIwOLiz30Dm0rLybFfjHDNQf4bpDKMRSatNaeAvpAmjqOONKl9Kl
-         KeDg==
-X-Gm-Message-State: AOJu0YweQXHBbDuA0A3o7olgeXnxOJNYktPwT/jGnh3l5sz6RCqfwh6R
-	SzvFFOTQZaFJkdWu2RNbl58u/bE/3MkpUqSKg9u5Y1T05bjEt0GXJsuLwZDUuxQKjPlXkaTatfA
-	c
-X-Google-Smtp-Source: AGHT+IF7poMWB5wXDFbQZpRfCv/lvFJvmJjWztGtzS5HoWO0iyjQWrSGbADDmRVBaQjNId/3pravTQ==
-X-Received: by 2002:a05:600c:3553:b0:42b:af5a:109 with SMTP id 5b1f17b1804b1-431616a3c1bmr112210255e9.24.1729581237606;
-        Tue, 22 Oct 2024 00:13:57 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:9c8b:c7e5:66f5:b8f1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a4ae36sm5955801f8f.43.2024.10.22.00.13.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2024 00:13:55 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: linux-i2c@vger.kernel.org,
-	Marek Vasut <marex@denx.de>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	devicetree@vger.kernel.org,
-	kernel@dh-electronics.com
-Subject: Re: [PATCH 1/2] dt-bindings: at24: add ST M24256E Additional Write lockable page support
-Date: Tue, 22 Oct 2024 09:13:52 +0200
-Message-ID: <172958121344.18422.8336462727519958263.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241017184152.128395-1-marex@denx.de>
-References: <20241017184152.128395-1-marex@denx.de>
+        bh=8X/XecV8UTvLcsQtQg+izcVYgmrEzD6FxMWHenqkUbc=;
+        b=QuuvrWQf6LfERkFMBnMyun6Shem1sikI8nM9EVcezb4fkuKhWHOCSVnbZ4ta2WqeVT
+         BwaDVB1Khx3Ll+vqm/CF2zLvwZ9nJFof9xPhrlnceq9OrU7iGAo/lT2lCIBu6jY2tDWj
+         5PuKo2PqcPYdIlTzt8KjNkKRPLi5rUPswAapTRw+dYkTcNF2vcCLMmLdzEtsEYEVigkp
+         q8AjvXJCUnO1YGYEu/s/DFZXOCKrXB6bVFmW2SGNBzdLSaRfYMJ10wP3KCSfTfJU7XJN
+         LIuf4yLyF1WJnx3L+YgbwWOEmU3qll5Rx/Db9CgeJZlOSSirVSnQBYlbFX1PmmmIAkO7
+         zcqQ==
+X-Gm-Message-State: AOJu0YwadPo06ntYju1CZBi3MI4hx75j/irMHg1mTDtBecO7StVLSwJo
+	Ui162KaXgyfXwe5i2wHdVT/lyUgo/UZ1dm7UUgbmhVDviOJbYdjoCtKRXIL1K0N/d/lWPvh1LZX
+	pL0FknaBGHQTCABiRySkbMUGDh4YSTnubllo8wHheoQFCpVAT
+X-Google-Smtp-Source: AGHT+IETunMDbq6jv35brOropUyt9fQGFH9KIMjjSe9mCTtFlBliffDFK8upTQ90ANTyKXCv/Oq4z92IBocn/iSsDW0=
+X-Received: by 2002:a17:90b:1807:b0:2e2:bb22:eb59 with SMTP id
+ 98e67ed59e1d1-2e561a2791amr13451564a91.41.1729581310048; Tue, 22 Oct 2024
+ 00:15:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20241017184152.128395-1-marex@denx.de> <172958121344.18422.8336462727519958263.b4-ty@linaro.org>
+In-Reply-To: <172958121344.18422.8336462727519958263.b4-ty@linaro.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Tue, 22 Oct 2024 09:14:55 +0200
+Message-ID: <CAMRc=MdOfQhvRVyXUirZV3V+yWMLbUyXwhrx9Qb9tA6_h0h1wg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: at24: add ST M24256E Additional Write
+ lockable page support
+To: linux-i2c@vger.kernel.org, Marek Vasut <marex@denx.de>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Alexander Stein <alexander.stein@ew.tq-group.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Christoph Niedermaier <cniedermaier@dh-electronics.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, kernel@dh-electronics.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Tue, Oct 22, 2024 at 9:13=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
+>
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+>
+> On Thu, 17 Oct 2024 20:41:25 +0200, Marek Vasut wrote:
+> > The ST M24256E behaves as a regular M24C256, except for the E variant
+> > which uses up another I2C address for Additional Write lockable page.
+> > This page is 64 Bytes long and can contain additional data. Add entry
+> > for it, so users can describe that page in DT. Note that users still
+> > have to describe the main M24C256 area separately as that is on separat=
+e
+> > I2C address from this page.
+> >
+> > [...]
+>
+> Applied, thanks!
+>
+> [1/2] dt-bindings: at24: add ST M24256E Additional Write lockable page su=
+pport
+>       (no commit info)
+> [2/2] eeprom: at24: add ST M24256E Additional Write lockable page support
+>       (no commit info)
+>
 
+No worries about the "no commit info" I was on a different branch when
+generating thankyou emails. Sorry.
 
-On Thu, 17 Oct 2024 20:41:25 +0200, Marek Vasut wrote:
-> The ST M24256E behaves as a regular M24C256, except for the E variant
-> which uses up another I2C address for Additional Write lockable page.
-> This page is 64 Bytes long and can contain additional data. Add entry
-> for it, so users can describe that page in DT. Note that users still
-> have to describe the main M24C256 area separately as that is on separate
-> I2C address from this page.
-> 
-> [...]
+Bart
 
-Applied, thanks!
-
-[1/2] dt-bindings: at24: add ST M24256E Additional Write lockable page support
-      (no commit info)
-[2/2] eeprom: at24: add ST M24256E Additional Write lockable page support
-      (no commit info)
-
-Best regards,
--- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Best regards,
+> --
+> Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
