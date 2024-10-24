@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-7525-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7526-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DDA49ADFEE
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 11:03:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F7D79ADFF6
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 11:03:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9DC1283829
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 09:03:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6051D1C22018
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 09:03:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED9F1CC8BB;
-	Thu, 24 Oct 2024 09:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41C561CF2A7;
+	Thu, 24 Oct 2024 09:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ACqV1n83"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LuxOkdag"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9C61CB9E3;
-	Thu, 24 Oct 2024 09:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9801B4F0C;
+	Thu, 24 Oct 2024 09:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729760422; cv=none; b=DqSl1+sat0Xq0YoT46j/hGqe9EaNbOoear+A/065Q90mEmSd9SEx8HsVVfIimVMTlenfa7B13PV3n68Y/h9ZctSOjaqRbcuFR3pSYgsPx1XzMNT7ZzsCQmVIlZ1xLBxYFYmsW7Rm9zQT9OEx995zHhMB/I2k6oEjLH6EszTfAlU=
+	t=1729760425; cv=none; b=ar8nnRevKma+NtfU/6QeJ10HmkibaV8kP5SgJamLPIZFRBEnGzfD33n6S480pSIf51cRwQPqGFaE3hG+gMQ7lfjyl76oL65HzV5bQd/GunsyaiP8qC7RusiFGaPhAhVof3G1Cz2zh87TWs6VGPeRLvQqJX9J7QEw2sgtYwJ37S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729760422; c=relaxed/simple;
-	bh=/icXWOgKtTqQkBjzhGxSpSk5O+DNM8LglkQd54dsAno=;
+	s=arc-20240116; t=1729760425; c=relaxed/simple;
+	bh=UnhLaJ0JL15jAgZ553cxcb3YFcwd+/F1Mzjh+QcL+pY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=idYcLmRNfzM4oxybFiLA6YNc5QGXvvya9tzJzwFk0CWcy0YxxX+nZ/ywLoxdOoVq19TuqMJfNq9GYgPfhkvWydyYZ8uzAcP8mu9xrr3D5JqWY2F4OVVsUTUY3n9tx0RhJZwl6lQzCaP8v/CBlXQ8QWNxeVDedRtzkq+G8ygSf68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ACqV1n83; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=WV9ycxlzd1wMtzBnIi0boAtDg6qCQ6ROMg7rzRNVp7NJGNoRdnZ/YCCf94zcJ4WcU4ALDcYvwC/Q6n/7fL+lyGxQsx4Plr18R+JWpw4yNIa9tPQsf36gzo6pKH+eVHuGqTqHMlXFoToWabtQ7RcFGcDiL0ugmTNUav6xrMzQb5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LuxOkdag; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20ce65c8e13so4394575ad.1;
-        Thu, 24 Oct 2024 02:00:19 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20c805a0753so5795665ad.0;
+        Thu, 24 Oct 2024 02:00:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729760419; x=1730365219; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729760422; x=1730365222; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I9IZudYcHUgSCXGjbVTD1FlqJ67XAgyb889HnrrbtzQ=;
-        b=ACqV1n83EcR1pK5fmfIFUNS/oSwfQa0lWLVJwT9AD2OkOTJii5urximrBcUzQxs5/2
-         vWUobPhwFKfZd5/DRuj+ir/NlMJyYJKG0RhvuSnsaqku9DPskg9Cc6Nrw7QFtEUwX7JT
-         TI4Ugo/zksqAw6JVm0mMFa5tr+/CBPB1ct+xIZ9sdGFblEPVDZpks3ft+5eFGBJ1kIvZ
-         5Nl76xBTLFhZaJj1txCf0ZClAR7zJFK0kIAXJSJOgOAX5Be7IlkxHUuaMa/rwSppeYgG
-         u/upN4yZKsXAJ6EQsQG5YCPbjLmBsz53Gl+2R7uUd2N6wrglJhlJNkvFXi6sdPs8dNrm
-         /Cig==
+        bh=KIbqZDJc8mnLl8JM1vRVacj6/HhHdNNqQLheCYEGuDY=;
+        b=LuxOkdagkHRp3pKiITdvYfrPEFLzl3Yv511gQTpOlXQxZsd4ekN+KkHylrZq9nfc8b
+         OVyEur/xo4jM5nqCuu04QyaD/4Sk8amLx/71/VX6GMbdZaj7cKuErfMKfbSp5qpUYdrA
+         7F1PY/12Advxg3KueXMXk3yJyIgXYiaZ7HIesgwgGgrBl7XAOmwYyhN0W/HrSDbwuPTu
+         MFaStE7DGf7D1oJfH/GKKZzlmiBZhcXPyJ52yD3aUy0pwSL1i2Sw9Tjr3JBY+cd7Spgx
+         AobYDdbdnmn1PsKuVcDrOGsSJh9HTDbj2yvz2RZHxhZL0reeyY4U4VhkbyLfnYQtPd9u
+         98dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729760419; x=1730365219;
+        d=1e100.net; s=20230601; t=1729760422; x=1730365222;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I9IZudYcHUgSCXGjbVTD1FlqJ67XAgyb889HnrrbtzQ=;
-        b=lb1GYx8wH7o3BaYM/HRmKdqnLILLMac0Ay+7YW9sK2pWSjENfbkrDSYNADp4X4aDp2
-         FmObgT/xuOkN7jUg/DtW7KWv71JBefEqNPJbDmqwhSLR1fvjIysqyYiP/TYCY7NEdhiv
-         G4dSZvnUIsCLj3PWuyYzNrASMIv9+oFTbBs+fjqZ9GmIz93oW39IYgv/C1vCkaY9X8Im
-         Kpi+GrhS1Tiwjg6nP8F2dLQvqWANr9ZSUsygUSH1/yTlizq5ngwLgjnm1GVVHHVfmsya
-         +pp9FRynTEhihpaZSMp5wLngXJijQuE5e8D7NpaU/GCEIrUrrN4sl5qf6jAW5Ly+3pr8
-         dhgA==
-X-Forwarded-Encrypted: i=1; AJvYcCU3tWnbEPLkCTDrfNIrwCTSzQ75L+EtVsTknObuzCZ4wIj/2opKNYZXQdhqX9gWmFD5xcktmMGt@vger.kernel.org, AJvYcCUc+gLb/eq5nfE5/Nqt4iO7McR4GN3Hgp5QApMXsq7MBpKClIbM2YJRBlgK4r/z9qM8nPicDTtPoRmR13E=@vger.kernel.org, AJvYcCUm0ShID4kJaYeuPZdgG0F8uJZPZApfjECRICnhNfHa1JiLT7aiqiRB6xNAQNmrXEooH7KyWqDOJ1E=@vger.kernel.org, AJvYcCVAOqnPyRX3rxQ/G//Ajy/iOU7OoYfM3y0I8KumohOll3K+yvgmmkrYVElKBN9fYe4H4eQ98hdD9gOoVQ==@vger.kernel.org, AJvYcCVYBH21SArDmCyTOe7ieE0EkKqU1Pex8pkfIOcstxNkdCj/D+rXgvFY8fjOGWuXq2mZ/SHb8/HGWc+E@vger.kernel.org, AJvYcCX2Cb/SfbU3yeqL35/PhXFafvJ9G6iKAp9Sgncj5ryLB1OnCniSYyQjZh13nuNtuILNf8oUfCGIpIYG@vger.kernel.org, AJvYcCXFoVF/jBotzLYSS/Il55h/WAU5yMc0cOrHszlL4dUp60iKVl9qMGUJ7xNW7KVNDm3EDml9wJL+pnr8@vger.kernel.org, AJvYcCXG+I5ySIcF4X/qe2vyw7JoG8M7XPSopHj+cGNtaa3gyA1uO55t0kC0SCxc5EJRMhQW1CIUTfWpM653@vger.kernel.org, AJvYcCXH44JQtZixkbRgUgqtLnjk0+kb2AZyPwf7OaAfoldxefFKCM5nvFwjuJEgMpa+3EJrsaQKpd0kTQ1CwjQ0fR8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwasvUfbTmblZbuYI0pLcvEZMVXb+RM8WC7IjYrOrNr80EjGWZg
-	V2FORxqRhGjb+YlwoE9jKLs/toEPRF7I7mzUqM0HA0ZZ4xIXfWkX
-X-Google-Smtp-Source: AGHT+IEofYiLx2/5wMR+sM1290hRfxy8vnOc+kD+ZzgBkjVwn9H+NbPR1DcIAyqiApHCWTBPsWel6A==
-X-Received: by 2002:a17:902:e74c:b0:20b:8109:2c90 with SMTP id d9443c01a7336-20fab2f5bb8mr57543295ad.61.1729760417186;
-        Thu, 24 Oct 2024 02:00:17 -0700 (PDT)
+        bh=KIbqZDJc8mnLl8JM1vRVacj6/HhHdNNqQLheCYEGuDY=;
+        b=omO28SLM5636f6Xzs/flbRIMh2M+FRVhxnK2cKsycOxBK8YjMS2hcwgJoRBPXsZhPe
+         6XvL8y1//kcueuktJpUhCJUWva+tfJrkbdyeTYiZECpFxrzVhN+9wA5I5oyVIVeVIeoU
+         8YX8wokJwK9DTmXkJOsWsvgpWggJEWvUdjWLykc4rkmRNnu7iEA5mxypEu2YrYmIW1Hr
+         uRSJsuqc3ww3XO0XaeE/DR4Wyh9NDavvnv3BsgvKgwRJq3rytXfdz90bJLulrcyw542O
+         gAl204MaASqvF7CGapEJAhOD22VaCUssjqdp7Y31otORnS/FkY5Do6WI+oNAFUh0zu9O
+         2plQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV3bEEEMKWCltExC3E297Dulzr/ymLTEcH+u1DOxRN3NWt9C3wA1k5v8PKVwMSeudz8YhGc5OXGvsma@vger.kernel.org, AJvYcCVgZnQa9MLM/gfo9xvUVckAKlcffOcFjsu4rLhSwhfybqrMXInNrwbGaFxkrthGxsLU3hXjb8keVEF1@vger.kernel.org, AJvYcCVvIf9gDogqm64/oj+3j7/asHCDSlvEJrOxpbZehr3uPBwzfPCS7/Q4oCTnJelSwZCpIlzAqOQRQIQo@vger.kernel.org, AJvYcCW9ybUoQ/v4+7G/zBE5vJpch5U2Rd0jsXehmM5MZSKCu5rKFqrhG9k6nS6ZzEF0fIYUDz2wh0oLdi0zMA==@vger.kernel.org, AJvYcCWKAfgIoSTPNAym5jKOHxguwqUWA2CLKP/a5w34FwvXVFiTxpdKzKA3D/xCU6it0+wALdURwc88@vger.kernel.org, AJvYcCWMZz1bzv1Z1b4l5RCKkITAJo5/SQ7O4EYns653miZURD7MnqSKjA/BrWT3IPenYcYVS9CC8grT7HLUlCnISEA=@vger.kernel.org, AJvYcCWUbn3bjchTVkLMPN9oiJW/QQ97Z5I8QgBaL4l8Yu/tXbBbkoMm27fAuyJParuz0kdqCxvKJpTLJcwY@vger.kernel.org, AJvYcCX5WLopbebuPQ+yRLHa6nWLK7bLA/ZH3cN0CAXHB3nFVPtaKqHIJG9nULGFnIwCNVRen94pIOqwUHU=@vger.kernel.org, AJvYcCX8gRq92AnAGh8JdjbcX8d9lUK2ywzne1QRRVmPLVCU4jfzoVUYGoxNOCKwY8GGi5MTcHRAni8DqvFVWcA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhX4OKri3L45Iq6OOHTDuMgOPmKopJVdLjgVHmos01f8Uhk836
+	rznVQu97KKScel9J/DqhB/fgbn6ifNEF/pQwPLsoNsfNMfBRXa+C
+X-Google-Smtp-Source: AGHT+IHfU5bGuzEbC6pA7wiKRq0B2bksWNaijYHyEsR3X33rOKlukYQey29WPzYg3brlpUWbKJ1bTQ==
+X-Received: by 2002:a17:902:fc4f:b0:20b:bad4:5b6e with SMTP id d9443c01a7336-20fb9aa038fmr15925915ad.38.1729760421780;
+        Thu, 24 Oct 2024 02:00:21 -0700 (PDT)
 Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0f6e89sm68503615ad.277.2024.10.24.02.00.12
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0f6e89sm68503615ad.277.2024.10.24.02.00.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 02:00:16 -0700 (PDT)
+        Thu, 24 Oct 2024 02:00:21 -0700 (PDT)
 From: Ming Yu <a0282524688@gmail.com>
 X-Google-Original-From: Ming Yu <tmyu0@nuvoton.com>
 To: tmyu0@nuvoton.com,
@@ -98,9 +98,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-iio@vger.kernel.org,
 	linux-pwm@vger.kernel.org,
 	linux-rtc@vger.kernel.org
-Subject: [PATCH v1 7/9] iio: adc: Add Nuvoton NCT6694 IIO support
-Date: Thu, 24 Oct 2024 16:59:20 +0800
-Message-Id: <20241024085922.133071-8-tmyu0@nuvoton.com>
+Subject: [PATCH v1 8/9] pwm: Add Nuvoton NCT6694 PWM support
+Date: Thu, 24 Oct 2024 16:59:21 +0800
+Message-Id: <20241024085922.133071-9-tmyu0@nuvoton.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241024085922.133071-1-tmyu0@nuvoton.com>
 References: <20241024085922.133071-1-tmyu0@nuvoton.com>
@@ -112,72 +112,72 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This driver supports IIO functionality for NCT6694 MFD device
+This driver supports PWM functionality for NCT6694 MFD device
 based on USB interface.
 
 Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
 ---
- MAINTAINERS                   |   1 +
- drivers/iio/adc/Kconfig       |  10 +
- drivers/iio/adc/Makefile      |   1 +
- drivers/iio/adc/nct6694_adc.c | 616 ++++++++++++++++++++++++++++++++++
- 4 files changed, 628 insertions(+)
- create mode 100644 drivers/iio/adc/nct6694_adc.c
+ MAINTAINERS               |   1 +
+ drivers/pwm/Kconfig       |  10 ++
+ drivers/pwm/Makefile      |   1 +
+ drivers/pwm/pwm-nct6694.c | 245 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 257 insertions(+)
+ create mode 100644 drivers/pwm/pwm-nct6694.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 2aa87ad84156..5c350eac187d 100644
+index 5c350eac187d..4d5a5eded3b9 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -16440,6 +16440,7 @@ L:	linux-kernel@vger.kernel.org
- S:	Supported
- F:	drivers/gpio/gpio-nct6694.c
- F:	drivers/hwmon/nct6694-hwmon.c
-+F:	drivers/iio/adc/nct6694_adc.c
+@@ -16444,6 +16444,7 @@ F:	drivers/iio/adc/nct6694_adc.c
  F:	drivers/i2c/busses/i2c-nct6694.c
  F:	drivers/mfd/nct6694.c
  F:	drivers/net/can/nct6694_canfd.c
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index 6c4e74420fd2..302511d166db 100644
---- a/drivers/iio/adc/Kconfig
-+++ b/drivers/iio/adc/Kconfig
-@@ -1018,6 +1018,16 @@ config NPCM_ADC
- 	  This driver can also be built as a module. If so, the module
- 	  will be called npcm_adc.
++F:	drivers/pwm/pwm-nct6694.c
+ F:	drivers/watchdog/nct6694_wdt.c
+ F:	include/linux/mfd/nct6694.h
  
-+config NCT6694_ADC
-+	tristate "Nuvoton NCT6694 ADC driver"
+diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+index 0915c1e7df16..00b5eb13f99d 100644
+--- a/drivers/pwm/Kconfig
++++ b/drivers/pwm/Kconfig
+@@ -471,6 +471,16 @@ config PWM_NTXEC
+ 	  controller found in certain e-book readers designed by the original
+ 	  design manufacturer Netronix.
+ 
++config PWM_NCT6694
++	tristate "Nuvoton NCT6694 PWM support"
 +	depends on MFD_NCT6694
 +	help
 +	If you say yes to this option, support will be included for Nuvoton
-+	NCT6694, a USB device to ADC.
++	NCT6694, a USB device to PWM controller.
 +
 +	This driver can also be built as a module. If so, the module
-+	will be called nct6694_adc.
++	will be called pwm-nct6694.
 +
- config PAC1921
- 	tristate "Microchip Technology PAC1921 driver"
- 	depends on I2C
-diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-index 7b91cd98c0e0..db419f77365c 100644
---- a/drivers/iio/adc/Makefile
-+++ b/drivers/iio/adc/Makefile
-@@ -92,6 +92,7 @@ obj-$(CONFIG_MP2629_ADC) += mp2629_adc.o
- obj-$(CONFIG_MXS_LRADC_ADC) += mxs-lradc-adc.o
- obj-$(CONFIG_NAU7802) += nau7802.o
- obj-$(CONFIG_NPCM_ADC) += npcm_adc.o
-+obj-$(CONFIG_NCT6694_ADC) += nct6694_adc.o
- obj-$(CONFIG_PAC1921) += pac1921.o
- obj-$(CONFIG_PAC1934) += pac1934.o
- obj-$(CONFIG_PALMAS_GPADC) += palmas_gpadc.o
-diff --git a/drivers/iio/adc/nct6694_adc.c b/drivers/iio/adc/nct6694_adc.c
+ config PWM_OMAP_DMTIMER
+ 	tristate "OMAP Dual-Mode Timer PWM support"
+ 	depends on OF
+diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
+index 9081e0c0e9e0..5c5602b79402 100644
+--- a/drivers/pwm/Makefile
++++ b/drivers/pwm/Makefile
+@@ -42,6 +42,7 @@ obj-$(CONFIG_PWM_MICROCHIP_CORE)	+= pwm-microchip-core.o
+ obj-$(CONFIG_PWM_MTK_DISP)	+= pwm-mtk-disp.o
+ obj-$(CONFIG_PWM_MXS)		+= pwm-mxs.o
+ obj-$(CONFIG_PWM_NTXEC)		+= pwm-ntxec.o
++obj-$(CONFIG_PWM_NCT6694)	+= pwm-nct6694.o
+ obj-$(CONFIG_PWM_OMAP_DMTIMER)	+= pwm-omap-dmtimer.o
+ obj-$(CONFIG_PWM_PCA9685)	+= pwm-pca9685.o
+ obj-$(CONFIG_PWM_PXA)		+= pwm-pxa.o
+diff --git a/drivers/pwm/pwm-nct6694.c b/drivers/pwm/pwm-nct6694.c
 new file mode 100644
-index 000000000000..de4cddc8addc
+index 000000000000..915a2ab50834
 --- /dev/null
-+++ b/drivers/iio/adc/nct6694_adc.c
-@@ -0,0 +1,616 @@
++++ b/drivers/pwm/pwm-nct6694.c
+@@ -0,0 +1,245 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Nuvoton NCT6694 IIO driver based on USB interface.
++ * Nuvoton NCT6694 PWM driver based on USB interface.
 + *
 + * Copyright (C) 2024 Nuvoton Technology Corp.
 + */
@@ -185,597 +185,226 @@ index 000000000000..de4cddc8addc
 +#include <linux/slab.h>
 +#include <linux/kernel.h>
 +#include <linux/module.h>
-+#include <linux/iio/iio.h>
++#include <linux/pwm.h>
 +#include <linux/platform_device.h>
 +#include <linux/mfd/nct6694.h>
 +
-+#define DRVNAME "nct6694-iio"
++#define DRVNAME "nct6694-pwm"
++
++#define NR_PWM	10
++#define MAX_PERIOD_NS	40000		/* PWM Maximum Frequency = 25kHz */
++#define PERIOD_NS_CONST	10200000	/* Period_ns to Freq_reg */
 +
 +/* Host interface */
-+#define REQUEST_RPT_MOD		0xFF
-+#define REQUEST_IIO_MOD		0x00
++#define REQUEST_RPT_MOD			0xFF
++#define REQUEST_HWMON_MOD		0x00
++#define REQUEST_PWM_MOD			0x01
 +
 +/* Report Channel */
-+#define IIO_VIN_STS(x)		(0x68 + (x))
-+#define IIO_TMP_STS(x)		(0x6A + (x))
-+#define IIO_TMP_STS_CH(x)		\
-+	({ typeof(x) x_ = x;		\
-+	   (x_ < 10) ? x_ : x_ + 6; })
++#define HWMON_PWM_IDX(x)		(0x70 + (x))
 +
-+/* Message Channel*/
++/* Message Channel -HWMON */
 +/* Command 00h */
-+#define REQUEST_IIO_CMD0_LEN	0x40
-+#define REQUEST_IIO_CMD0_OFFSET 0x0000	/* OFFSET = SEL|CMD */
-+#define IIO_VIN_EN(x)		(0x00 + (x))
-+#define IIO_TMP_EN(x)		(0x02 + (x))
-+/* Command 02h */
-+#define REQUEST_IIO_CMD2_LEN	0x90
-+#define REQUEST_IIO_CMD2_OFFSET 0x0002	/* OFFSET = SEL|CMD */
-+#define IIO_SMI_CTRL_IDX	0x00
-+#define IIO_VIN_LIMIT_IDX(x)	(0x10 + ((x) * 2))
-+#define IIO_TMP_LIMIT_IDX(x)	(0x30 + ((x) * 2))
-+#define IIO_CMD2_HYST_MASK	0x1F
-+/* Command 03h */
-+#define REQUEST_IIO_CMD3_LEN	0x08
-+#define REQUEST_IIO_CMD3_OFFSET 0x0003	/* OFFSET = SEL|CMD */
++#define REQUEST_HWMON_CMD0_LEN		0x40
++#define REQUEST_HWMON_CMD0_OFFSET	0x0000	/* OFFSET = SEL|CMD */
++#define HWMON_PWM_EN(x)			(0x06 + (x))
++#define HWMON_PWM_PP(x)			(0x08 + (x))
++#define HWMON_PWM_FREQ_IDX(x)		(0x30 + (x))
 +
-+struct nct6694_iio_data {
++/* Message Channel -FAN */
++/* Command 00h */
++#define REQUEST_PWM_CMD0_LEN		0x08
++#define REQUEST_PWM_CMD0_OFFSET		0x0000	/* OFFSET = SEL|CMD */
++#define PWM_CH_EN(x)			(x ? 0x00 : 0x01)
++/* Command 01h */
++#define REQUEST_PWM_CMD1_LEN		0x20
++#define REQUEST_PWM_CMD1_OFFSET		0x0001	/* OFFSET = SEL|CMD */
++#define PWM_MAL_EN(x)			(x ? 0x00 : 0x01)
++#define PWM_MAL_VAL(x)			(0x02 + (x))
++
++/*
++ *		Frequency <-> Period
++ * (10^9 * 255) / (25000 * Freq_reg) = Period_ns
++ *		10200000 / Freq_reg  = Period_ns
++ *
++ * | Freq_reg | Freq_Hz | Period_ns |
++ * |  1 (01h  |  98.039 |  10200000 |
++ * |  2 (02h) | 196.078 |   5100000 |
++ * |  3 (03h) | 294.117 |   3400000 |
++ * |		  ...		    |
++ * |		  ...		    |
++ * |		  ...		    |
++ * | 253 (FDh)| 24803.9 |  40316.20 |
++ * | 254 (FEh)| 24901.9 |  40157.48 |
++ * | 255 (FFh)|  25000  |    40000  |
++ *
++ */
++
++struct nct6694_pwm_data {
 +	struct nct6694 *nct6694;
-+
-+	/* Make sure read & write commands are consecutive */
-+	struct mutex iio_lock;
++	unsigned char hwmon_cmd0_buf[REQUEST_HWMON_CMD0_LEN];
++	unsigned char pwm_cmd0_buf[REQUEST_PWM_CMD0_LEN];
++	unsigned char pwm_cmd1_buf[REQUEST_PWM_CMD1_LEN];
 +};
 +
-+static const struct iio_event_spec nct6694_volt_events[] = {
-+	{
-+		.type = IIO_EV_TYPE_THRESH,
-+		.dir = IIO_EV_DIR_RISING,
-+		.mask_separate = BIT(IIO_EV_INFO_VALUE) |
-+				 BIT(IIO_EV_INFO_ENABLE),
-+	},
-+	{
-+		.type = IIO_EV_TYPE_THRESH,
-+		.dir = IIO_EV_DIR_FALLING,
-+		.mask_separate = BIT(IIO_EV_INFO_VALUE) |
-+				 BIT(IIO_EV_INFO_ENABLE),
-+	}
-+};
-+
-+static const struct iio_event_spec nct6694_temp_events[] = {
-+	{
-+		.type = IIO_EV_TYPE_THRESH,
-+		.dir = IIO_EV_DIR_RISING,
-+		.mask_separate = BIT(IIO_EV_INFO_VALUE) |
-+				 BIT(IIO_EV_INFO_ENABLE),
-+	}
-+};
-+
-+#define NCT6694_VOLTAGE_CHANNEL(num, addr) {			\
-+	.type = IIO_VOLTAGE,					\
-+	.indexed = 1,						\
-+	.channel = num,						\
-+	.address = addr,					\
-+	.info_mask_separate = BIT(IIO_CHAN_INFO_ENABLE) |	\
-+			      BIT(IIO_CHAN_INFO_PROCESSED),	\
-+	.event_spec = nct6694_volt_events,			\
-+	.num_event_specs = ARRAY_SIZE(nct6694_volt_events),	\
-+}
-+
-+#define NCT6694_TEMPERATURE_CHANNEL(num, addr) {		\
-+	.type = IIO_TEMP,					\
-+	.indexed = 1,						\
-+	.channel = num,						\
-+	.address = addr,					\
-+	.info_mask_separate = BIT(IIO_CHAN_INFO_ENABLE) |	\
-+			      BIT(IIO_CHAN_INFO_PROCESSED) |	\
-+			      BIT(IIO_CHAN_INFO_HYSTERESIS),	\
-+	.event_spec = nct6694_temp_events,			\
-+	.num_event_specs = ARRAY_SIZE(nct6694_temp_events),	\
-+}
-+
-+static const struct iio_chan_spec nct6694_iio_channels[] = {
-+	NCT6694_VOLTAGE_CHANNEL(0, 0x0),	/* VIN0 */
-+	NCT6694_VOLTAGE_CHANNEL(1, 0x1),	/* VIN1 */
-+	NCT6694_VOLTAGE_CHANNEL(2, 0x2),	/* VIN2 */
-+	NCT6694_VOLTAGE_CHANNEL(3, 0x3),	/* VIN3 */
-+	NCT6694_VOLTAGE_CHANNEL(4, 0x4),	/* VIN5 */
-+	NCT6694_VOLTAGE_CHANNEL(5, 0x5),	/* VIN6 */
-+	NCT6694_VOLTAGE_CHANNEL(6, 0x6),	/* VIN7 */
-+	NCT6694_VOLTAGE_CHANNEL(7, 0x7),	/* VIN14 */
-+	NCT6694_VOLTAGE_CHANNEL(8, 0x8),	/* VIN15 */
-+	NCT6694_VOLTAGE_CHANNEL(9, 0x9),	/* VIN16 */
-+	NCT6694_VOLTAGE_CHANNEL(10, 0xA),	/* VBAT */
-+	NCT6694_VOLTAGE_CHANNEL(11, 0xB),	/* VSB */
-+	NCT6694_VOLTAGE_CHANNEL(12, 0xC),	/* AVSB */
-+	NCT6694_VOLTAGE_CHANNEL(13, 0xD),	/* VCC */
-+	NCT6694_VOLTAGE_CHANNEL(14, 0xE),	/* VHIF */
-+	NCT6694_VOLTAGE_CHANNEL(15, 0xF),	/* VTT */
-+
-+	NCT6694_TEMPERATURE_CHANNEL(0, 0x10),	/* THR1 */
-+	NCT6694_TEMPERATURE_CHANNEL(1, 0x12),	/* THR2 */
-+	NCT6694_TEMPERATURE_CHANNEL(2, 0x14),	/* THR14 */
-+	NCT6694_TEMPERATURE_CHANNEL(3, 0x16),	/* THR15 */
-+	NCT6694_TEMPERATURE_CHANNEL(4, 0x18),	/* THR16 */
-+	NCT6694_TEMPERATURE_CHANNEL(5, 0x1A),	/* TDP0 */
-+	NCT6694_TEMPERATURE_CHANNEL(6, 0x1C),	/* TDP1 */
-+	NCT6694_TEMPERATURE_CHANNEL(7, 0x1E),	/* TDP2 */
-+	NCT6694_TEMPERATURE_CHANNEL(8, 0x20),	/* TDP3 */
-+	NCT6694_TEMPERATURE_CHANNEL(9, 0x22),	/* TDP4 */
-+
-+	NCT6694_TEMPERATURE_CHANNEL(10, 0x30),	/* DTIN0 */
-+	NCT6694_TEMPERATURE_CHANNEL(11, 0x32),	/* DTIN1 */
-+	NCT6694_TEMPERATURE_CHANNEL(12, 0x34),	/* DTIN2 */
-+	NCT6694_TEMPERATURE_CHANNEL(13, 0x36),	/* DTIN3 */
-+	NCT6694_TEMPERATURE_CHANNEL(14, 0x38),	/* DTIN4 */
-+	NCT6694_TEMPERATURE_CHANNEL(15, 0x3A),	/* DTIN5 */
-+	NCT6694_TEMPERATURE_CHANNEL(16, 0x3C),	/* DTIN6 */
-+	NCT6694_TEMPERATURE_CHANNEL(17, 0x3E),	/* DTIN7 */
-+	NCT6694_TEMPERATURE_CHANNEL(18, 0x40),	/* DTIN8 */
-+	NCT6694_TEMPERATURE_CHANNEL(19, 0x42),	/* DTIN9 */
-+	NCT6694_TEMPERATURE_CHANNEL(20, 0x44),	/* DTIN10 */
-+	NCT6694_TEMPERATURE_CHANNEL(21, 0x46),	/* DTIN11 */
-+	NCT6694_TEMPERATURE_CHANNEL(22, 0x48),	/* DTIN12 */
-+	NCT6694_TEMPERATURE_CHANNEL(23, 0x4A),	/* DTIN13 */
-+	NCT6694_TEMPERATURE_CHANNEL(24, 0x4C),	/* DTIN14 */
-+	NCT6694_TEMPERATURE_CHANNEL(25, 0x4E),	/* DTIN15 */
-+};
-+
-+static int nct6694_read_raw(struct iio_dev *indio_dev,
-+			    struct iio_chan_spec const *chan,
-+			    int *val, int *val2, long mask)
++static inline struct nct6694_pwm_data *to_nct6694_pwm_data(struct pwm_chip *chip)
 +{
-+	struct nct6694_iio_data *data = iio_priv(indio_dev);
-+	unsigned char buf[2], tmp_hyst, enable_idx;
-+	int ret;
-+
-+	if (chan->type != IIO_VOLTAGE && chan->type != IIO_TEMP)
-+		return -EOPNOTSUPP;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_ENABLE:
-+		switch (chan->type) {
-+		case IIO_VOLTAGE:
-+			enable_idx = IIO_VIN_EN(chan->channel / 8);
-+			break;
-+
-+		case IIO_TEMP:
-+			enable_idx = IIO_TMP_EN(chan->channel / 8);
-+			break;
-+
-+		default:
-+			return -EINVAL;
-+		}
-+		ret = nct6694_read_msg(data->nct6694, REQUEST_IIO_MOD,
-+				       REQUEST_IIO_CMD0_OFFSET,
-+				       REQUEST_IIO_CMD0_LEN, enable_idx,
-+				       1, buf);
-+		if (ret)
-+			return -EINVAL;
-+
-+		*val = buf[0] & BIT(chan->channel % 8) ? 1 : 0;
-+
-+		return IIO_VAL_INT;
-+
-+	case IIO_CHAN_INFO_PROCESSED:
-+		ret = nct6694_read_msg(data->nct6694, REQUEST_RPT_MOD,
-+				       chan->address, 2, 0, 2, buf);
-+		if (ret)
-+			return -EINVAL;
-+
-+		switch (chan->type) {
-+		case IIO_VOLTAGE:	/* in micro Voltage */
-+			*val = buf[0] * 16;
-+
-+			return IIO_VAL_INT;
-+
-+		case IIO_TEMP:	/* in milli degrees Celsius */
-+			*val = (signed char)buf[0] * 1000;
-+			*val += buf[1] & 0x80 ? 500 : 0;
-+			*val += buf[1] & 0x40 ? 250 : 0;
-+			*val += buf[1] & 0x20 ? 125 : 0;
-+
-+			return IIO_VAL_INT;
-+
-+		default:
-+			return -EINVAL;
-+		}
-+
-+	case IIO_CHAN_INFO_HYSTERESIS:
-+		ret = nct6694_read_msg(data->nct6694, REQUEST_IIO_MOD,
-+				       REQUEST_IIO_CMD2_OFFSET,
-+				       REQUEST_IIO_CMD2_LEN,
-+				       IIO_TMP_LIMIT_IDX(chan->channel),
-+				       2, buf);
-+		if (ret)
-+			return -EINVAL;
-+
-+		switch (chan->type) {
-+		case IIO_TEMP:	/* in milli degrees Celsius */
-+			tmp_hyst = buf[0] >> 5;
-+			*val = (buf[1] - tmp_hyst) * 1000;
-+
-+			return IIO_VAL_INT;
-+
-+		default:
-+			return -EINVAL;
-+		}
-+
-+	default:
-+		return -EINVAL;
-+	}
++	return pwmchip_get_drvdata(chip);
 +}
 +
-+static int nct6694_write_raw(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan,
-+			     int val, int val2, long mask)
++static int nct6694_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
 +{
-+	struct nct6694_iio_data *data = iio_priv(indio_dev);
-+	unsigned char enable_buf[REQUEST_IIO_CMD0_LEN] = {0};
-+	unsigned char buf[REQUEST_IIO_CMD2_LEN] = {0};
-+	unsigned char delta_hyst;
-+	int ret;
++	struct nct6694_pwm_data *data = to_nct6694_pwm_data(chip);
++	unsigned char ch_enable = data->pwm_cmd0_buf[PWM_CH_EN(pwm->hwpwm / 8)];
++	unsigned char mal_enable = data->pwm_cmd1_buf[PWM_MAL_EN(pwm->hwpwm / 8)];
++	bool ch_en = ch_enable & BIT(pwm->hwpwm % 8);
++	bool mal_en = mal_enable & BIT(pwm->hwpwm % 8);
 +
-+	if (chan->type != IIO_VOLTAGE && chan->type != IIO_TEMP)
-+		return -EOPNOTSUPP;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_ENABLE:
-+		mutex_lock(&data->iio_lock);
-+		ret = nct6694_read_msg(data->nct6694, REQUEST_IIO_MOD,
-+				       REQUEST_IIO_CMD0_OFFSET,
-+				       REQUEST_IIO_CMD0_LEN, 0,
-+				       REQUEST_IIO_CMD0_LEN,
-+				       enable_buf);
-+		if (ret)
-+			goto err;
-+
-+		switch (chan->type) {
-+		case IIO_VOLTAGE:
-+			if (val) {
-+				enable_buf[IIO_VIN_EN(chan->channel / 8)] |=
-+				BIT(chan->channel % 8);
-+			} else {
-+				enable_buf[IIO_VIN_EN(chan->channel / 8)] &=
-+				~BIT(chan->channel % 8);
-+			}
-+
-+			break;
-+
-+		case IIO_TEMP:
-+			if (val) {
-+				enable_buf[IIO_TMP_EN(chan->channel / 8)] |=
-+				BIT(chan->channel % 8);
-+			} else {
-+				enable_buf[IIO_TMP_EN(chan->channel / 8)] &=
-+				~BIT(chan->channel % 8);
-+			}
-+
-+			break;
-+
-+		default:
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+
-+		ret = nct6694_write_msg(data->nct6694, REQUEST_IIO_MOD,
-+					REQUEST_IIO_CMD0_OFFSET,
-+					REQUEST_IIO_CMD0_LEN, enable_buf);
-+		if (ret)
-+			goto err;
-+
-+		break;
-+
-+	case IIO_CHAN_INFO_HYSTERESIS:
-+		switch (chan->type) {
-+		case IIO_TEMP:
-+			mutex_lock(&data->iio_lock);
-+			ret = nct6694_read_msg(data->nct6694, REQUEST_IIO_MOD,
-+					       REQUEST_IIO_CMD2_OFFSET,
-+					       REQUEST_IIO_CMD2_LEN, 0,
-+					       REQUEST_IIO_CMD2_LEN, buf);
-+			if (ret)
-+				goto err;
-+
-+			delta_hyst = buf[IIO_TMP_LIMIT_IDX(chan->channel) + 1] - (u8)val;
-+			if (delta_hyst > 7) {
-+				pr_err("%s: The Hysteresis value must be less than 7!\n",
-+				       __func__);
-+				ret = -EINVAL;
-+				goto err;
-+			}
-+
-+			buf[IIO_TMP_LIMIT_IDX(chan->channel)] &= IIO_CMD2_HYST_MASK;
-+			buf[IIO_TMP_LIMIT_IDX(chan->channel)] |= (delta_hyst << 5);
-+			break;
-+
-+		default:
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+		ret = nct6694_write_msg(data->nct6694, REQUEST_IIO_MOD,
-+					REQUEST_IIO_CMD2_OFFSET,
-+					REQUEST_IIO_CMD2_LEN, buf);
-+		if (ret)
-+			goto err;
-+
-+		break;
-+
-+	default:
-+		ret = -EINVAL;
-+		goto err;
-+	}
-+
-+err:
-+	mutex_unlock(&data->iio_lock);
-+	return ret;
-+}
-+
-+static int nct6694_read_event_config(struct iio_dev *indio_dev,
-+				     const struct iio_chan_spec *chan,
-+				     enum iio_event_type type,
-+				     enum iio_event_direction dir)
-+{
-+	struct nct6694_iio_data *data = iio_priv(indio_dev);
-+	unsigned char buf, ch;
-+	int ret;
-+
-+	if (chan->type != IIO_VOLTAGE && chan->type != IIO_TEMP)
-+		return -EOPNOTSUPP;
-+
-+	switch (dir) {
-+	case IIO_EV_DIR_RISING:
-+		switch (chan->type) {
-+		case IIO_VOLTAGE:
-+			ret = nct6694_read_msg(data->nct6694, REQUEST_RPT_MOD,
-+					       IIO_VIN_STS(chan->channel / 8),
-+					       1, 0, 1, &buf);
-+			if (ret)
-+				return -EINVAL;
-+
-+			return !!(buf & BIT(chan->channel % 8));
-+
-+		case IIO_TEMP:
-+			ch = (u8)IIO_TMP_STS_CH(chan->channel);
-+
-+			ret = nct6694_read_msg(data->nct6694, REQUEST_RPT_MOD,
-+					       IIO_TMP_STS(ch / 8),
-+					       1, 0, 1, &buf);
-+			if (ret)
-+				return -EINVAL;
-+
-+			return !!(buf & BIT(ch % 8));
-+
-+		default:
-+			return -EINVAL;
-+		}
-+
-+	default:
++	if (!(ch_en && mal_en)) {
++		pr_err("%s: PWM(%d) is running in other mode!\n",
++		       __func__, pwm->hwpwm);
 +		return -EINVAL;
 +	}
 +
 +	return 0;
 +}
 +
-+static int nct6694_read_event_value(struct iio_dev *indio_dev,
-+				    const struct iio_chan_spec *chan,
-+				    enum iio_event_type type,
-+				    enum iio_event_direction dir,
-+				    enum iio_event_info info,
-+				    int *val, int *val2)
++static int nct6694_pwm_get_state(struct pwm_chip *chip,
++				 struct pwm_device *pwm,
++				 struct pwm_state *state)
 +{
-+	struct nct6694_iio_data *data = iio_priv(indio_dev);
-+	unsigned char buf[2];
++	struct nct6694_pwm_data *data = to_nct6694_pwm_data(chip);
++	unsigned char freq_reg, duty;
++
++	/* Get pwm device initial state */
++	state->enabled = true;
++
++	freq_reg = data->hwmon_cmd0_buf[HWMON_PWM_FREQ_IDX(pwm->hwpwm)];
++	state->period = PERIOD_NS_CONST / freq_reg;
++
++	duty = data->pwm_cmd1_buf[PWM_MAL_VAL(pwm->hwpwm)];
++	state->duty_cycle = duty * state->period / 0xFF;
++
++	return 0;
++}
++
++static int nct6694_pwm_apply(struct pwm_chip *chip,
++			     struct pwm_device *pwm,
++			     const struct pwm_state *state)
++{
++	struct nct6694_pwm_data *data = to_nct6694_pwm_data(chip);
++	unsigned char freq_reg, duty;
 +	int ret;
 +
-+	if (chan->type != IIO_VOLTAGE && chan->type != IIO_TEMP)
-+		return -EOPNOTSUPP;
-+
-+	switch (dir) {
-+	case IIO_EV_DIR_RISING:
-+		switch (chan->type) {
-+		case IIO_VOLTAGE:
-+			ret = nct6694_read_msg(data->nct6694, REQUEST_IIO_MOD,
-+					       REQUEST_IIO_CMD2_OFFSET,
-+					       REQUEST_IIO_CMD2_LEN,
-+					       IIO_VIN_LIMIT_IDX(chan->channel),
-+					       2, buf);
-+			if (ret)
-+				return -EINVAL;
-+
-+			*val = buf[0] * 16;
-+			return IIO_VAL_INT;
-+
-+		case IIO_TEMP:
-+			ret = nct6694_read_msg(data->nct6694, REQUEST_IIO_MOD,
-+					       REQUEST_IIO_CMD2_OFFSET,
-+					       REQUEST_IIO_CMD2_LEN,
-+					       IIO_TMP_LIMIT_IDX(chan->channel),
-+					       2, buf);
-+			if (ret)
-+				return -EINVAL;
-+
-+			*val = (signed char)buf[1] * 1000;
-+			return IIO_VAL_INT;
-+
-+		default:
-+			return -EINVAL;
-+		}
-+
-+	case IIO_EV_DIR_FALLING:
-+		switch (chan->type) {
-+		case IIO_VOLTAGE:
-+			ret = nct6694_read_msg(data->nct6694, REQUEST_IIO_MOD,
-+					       REQUEST_IIO_CMD2_OFFSET,
-+					       REQUEST_IIO_CMD2_LEN,
-+					       IIO_VIN_LIMIT_IDX(chan->channel),
-+					       2, buf);
-+			if (ret)
-+				return -EINVAL;
-+
-+			*val = buf[1] * 16;
-+			return IIO_VAL_INT;
-+
-+		default:
-+			return -EINVAL;
-+		}
-+
-+	default:
++	if (state->period < MAX_PERIOD_NS)
 +		return -EINVAL;
-+	}
-+}
 +
-+static int nct6694_write_event_value(struct iio_dev *indio_dev,
-+				     const struct iio_chan_spec *chan,
-+				     enum iio_event_type type,
-+				     enum iio_event_direction dir,
-+				     enum iio_event_info info,
-+				     int val, int val2)
-+{
-+	struct nct6694_iio_data *data = iio_priv(indio_dev);
-+	unsigned char buf[REQUEST_IIO_CMD2_LEN] = {0};
-+	int ret;
-+
-+	if (chan->type != IIO_VOLTAGE && chan->type != IIO_TEMP)
-+		return -EOPNOTSUPP;
-+
-+	mutex_lock(&data->iio_lock);
-+	ret = nct6694_read_msg(data->nct6694, REQUEST_IIO_MOD,
-+			       REQUEST_IIO_CMD2_OFFSET,
-+			       REQUEST_IIO_CMD2_LEN, 0,
-+			       REQUEST_IIO_CMD2_LEN, buf);
-+	if (ret)
-+		goto err;
-+
-+	switch (dir) {
-+	case IIO_EV_DIR_RISING:
-+		switch (chan->type) {
-+		case IIO_VOLTAGE:
-+			buf[IIO_VIN_LIMIT_IDX(chan->channel)] = (u8)val;
-+			break;
-+
-+		case IIO_TEMP:
-+			buf[IIO_TMP_LIMIT_IDX(chan->channel) + 1] = (s8)val;
-+			break;
-+
-+		default:
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+		break;
-+
-+	case IIO_EV_DIR_FALLING:
-+		switch (chan->type) {
-+		case IIO_VOLTAGE:
-+			buf[IIO_VIN_LIMIT_IDX(chan->channel) + 1] = (u8)val;
-+			break;
-+
-+		default:
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+		break;
-+
-+	default:
-+		ret = -EINVAL;
-+		goto err;
-+	}
-+
-+	ret = nct6694_write_msg(data->nct6694, REQUEST_IIO_MOD,
-+				REQUEST_IIO_CMD2_OFFSET,
-+				REQUEST_IIO_CMD2_LEN, buf);
-+	if (ret)
-+		goto err;
-+
-+err:
-+	mutex_unlock(&data->iio_lock);
-+	return ret;
-+}
-+
-+static const struct iio_info nct6694_iio_info = {
-+	.read_raw = nct6694_read_raw,
-+	.write_raw = nct6694_write_raw,
-+	.read_event_config = nct6694_read_event_config,
-+	.read_event_value = nct6694_read_event_value,
-+	.write_event_value = nct6694_write_event_value,
-+};
-+
-+static int nct6694_iio_init(struct nct6694_iio_data *data)
-+{
-+	unsigned char buf[REQUEST_IIO_CMD2_LEN] = {0};
-+	int ret;
-+
-+	/* Set VIN & TMP Real Time alarm mode */
-+	mutex_lock(&data->iio_lock);
-+	ret = nct6694_read_msg(data->nct6694, REQUEST_IIO_MOD,
-+			       REQUEST_IIO_CMD2_OFFSET,
-+			       REQUEST_IIO_CMD2_LEN, 0,
-+			       REQUEST_IIO_CMD2_LEN, buf);
-+	if (ret)
-+		goto err;
-+
-+	buf[IIO_SMI_CTRL_IDX] = 0x02;
-+	ret = nct6694_write_msg(data->nct6694, REQUEST_IIO_MOD,
-+				REQUEST_IIO_CMD2_OFFSET,
-+				REQUEST_IIO_CMD2_LEN, buf);
-+	if (ret)
-+		goto err;
-+
-+err:
-+	mutex_unlock(&data->iio_lock);
-+	return ret;
-+}
-+
-+static int nct6694_iio_probe(struct platform_device *pdev)
-+{
-+	struct iio_dev *indio_dev;
-+	struct nct6694_iio_data *data;
-+	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*data));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	data = iio_priv(indio_dev);
-+	data->nct6694 = nct6694;
-+	mutex_init(&data->iio_lock);
-+	platform_set_drvdata(pdev, data);
-+
-+	ret = nct6694_iio_init(data);
++	/* (10^9 * 255) / (25000 * Freq_reg) = Period_ns */
++	freq_reg = (unsigned char)(PERIOD_NS_CONST / state->period);
++	data->hwmon_cmd0_buf[HWMON_PWM_FREQ_IDX(pwm->hwpwm)] = freq_reg;
++	ret = nct6694_write_msg(data->nct6694, REQUEST_HWMON_MOD,
++				REQUEST_HWMON_CMD0_OFFSET,
++				REQUEST_HWMON_CMD0_LEN,
++				data->hwmon_cmd0_buf);
 +	if (ret)
 +		return -EIO;
 +
-+	indio_dev->name = pdev->name;
-+	indio_dev->channels = nct6694_iio_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(nct6694_iio_channels);
-+	indio_dev->info = &nct6694_iio_info;
-+	indio_dev->modes = INDIO_DIRECT_MODE;
++	/* Duty = duty * 0xFF */
++	duty = (unsigned char)(state->duty_cycle * 0xFF / state->period);
++	data->pwm_cmd1_buf[PWM_MAL_VAL(pwm->hwpwm)] = duty;
++	if (state->enabled)
++		data->pwm_cmd1_buf[PWM_MAL_EN(pwm->hwpwm / 8)] |= BIT(pwm->hwpwm  % 8);
++	else
++		data->pwm_cmd1_buf[PWM_MAL_EN(pwm->hwpwm / 8)] &= ~BIT(pwm->hwpwm  % 8);
++	ret = nct6694_write_msg(data->nct6694, REQUEST_PWM_MOD,
++				REQUEST_PWM_CMD1_OFFSET, REQUEST_PWM_CMD1_LEN,
++				data->pwm_cmd1_buf);
++	if (ret)
++		return -EIO;
 +
-+	/* Register iio device to IIO framework */
-+	ret = devm_iio_device_register(&pdev->dev, indio_dev);
++	return 0;
++}
++
++static const struct pwm_ops nct6694_pwm_ops = {
++	.request = nct6694_pwm_request,
++	.apply = nct6694_pwm_apply,
++	.get_state = nct6694_pwm_get_state,
++};
++
++static int nct6694_pwm_init(struct nct6694_pwm_data *data)
++{
++	struct nct6694 *nct6694 = data->nct6694;
++	int ret;
++
++	ret = nct6694_read_msg(nct6694, REQUEST_HWMON_MOD,
++			       REQUEST_HWMON_CMD0_OFFSET,
++			       REQUEST_HWMON_CMD0_LEN, 0,
++			       REQUEST_HWMON_CMD0_LEN,
++			       data->hwmon_cmd0_buf);
++	if (ret)
++		return ret;
++
++	ret = nct6694_read_msg(nct6694, REQUEST_PWM_MOD,
++			       REQUEST_PWM_CMD0_OFFSET,
++			       REQUEST_PWM_CMD0_LEN, 0,
++			       REQUEST_PWM_CMD0_LEN,
++			       data->pwm_cmd0_buf);
++	if (ret)
++		return ret;
++
++	ret = nct6694_read_msg(nct6694, REQUEST_PWM_MOD,
++			       REQUEST_PWM_CMD1_OFFSET,
++			       REQUEST_PWM_CMD1_LEN, 0,
++			       REQUEST_PWM_CMD1_LEN,
++			       data->pwm_cmd1_buf);
++	return ret;
++}
++
++static int nct6694_pwm_probe(struct platform_device *pdev)
++{
++	struct pwm_chip *chip;
++	struct nct6694_pwm_data *data;
++	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
++	int ret;
++
++	chip = devm_pwmchip_alloc(&pdev->dev, NR_PWM, sizeof(*data));
++	if (IS_ERR(chip))
++		return PTR_ERR(chip);
++
++	data = to_nct6694_pwm_data(chip);
++
++	data->nct6694 = nct6694;
++	chip->ops = &nct6694_pwm_ops;
++
++	ret = nct6694_pwm_init(data);
++	if (ret)
++		return -EIO;
++
++	/* Register pwm device to PWM framework */
++	ret = devm_pwmchip_add(&pdev->dev, chip);
 +	if (ret) {
-+		dev_err(&pdev->dev, "Failed to register iio device!\n");
++		dev_err(&pdev->dev, "Failed to register pwm device!\n");
 +		return ret;
 +	}
 +
 +	return 0;
 +}
 +
-+static struct platform_driver nct6694_iio_driver = {
++static struct platform_driver nct6694_pwm_driver = {
 +	.driver = {
 +		.name	= DRVNAME,
 +	},
-+	.probe		= nct6694_iio_probe,
++	.probe		= nct6694_pwm_probe,
 +};
 +
 +static int __init nct6694_init(void)
 +{
 +	int err;
 +
-+	err = platform_driver_register(&nct6694_iio_driver);
++	err = platform_driver_register(&nct6694_pwm_driver);
 +	if (!err) {
 +		if (err)
-+			platform_driver_unregister(&nct6694_iio_driver);
++			platform_driver_unregister(&nct6694_pwm_driver);
 +	}
 +
 +	return err;
@@ -784,11 +413,11 @@ index 000000000000..de4cddc8addc
 +
 +static void __exit nct6694_exit(void)
 +{
-+	platform_driver_unregister(&nct6694_iio_driver);
++	platform_driver_unregister(&nct6694_pwm_driver);
 +}
 +module_exit(nct6694_exit);
 +
-+MODULE_DESCRIPTION("USB-IIO driver for NCT6694");
++MODULE_DESCRIPTION("USB-PWM driver for NCT6694");
 +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
 +MODULE_LICENSE("GPL");
 -- 
