@@ -1,650 +1,571 @@
-Return-Path: <linux-i2c+bounces-7546-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7547-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 207629AE9B3
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 17:04:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FCC39AEA44
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 17:22:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EB221F213FE
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 15:04:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 429551C21AB9
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 15:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12BCE1E7C00;
-	Thu, 24 Oct 2024 15:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CbCeA7Wz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BDB1E32CF;
+	Thu, 24 Oct 2024 15:21:51 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC39254738;
-	Thu, 24 Oct 2024 15:03:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4815F1D86C0
+	for <linux-i2c@vger.kernel.org>; Thu, 24 Oct 2024 15:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729782238; cv=none; b=sS3NBd/6VYo5TjMaXtVvUTZqOGiq49oj7JUx3IKdAuKrzF5XhrVyZRW79oGagIfEqswR5h6sO7C5bgnDdg3BQKWRrtVKG/rdajOt5nGRXec5R+zcW0p0E29ed7O7LZyjrCaA1OnD0BnpjHQfl29Hn2Q8RCY5LrOQfX6/zg14p/0=
+	t=1729783311; cv=none; b=R0gvDC6zgQsT12zJnJVbFWc/UyyPGbLIjaHYmSjd/0G3RdK1fNgIN9bQiHIvmxjLTQOz5xYhE56IpfnMYV1UvZP+rtJI2+cx5lVySOXrwND7vcgF+68dynAIbPiOuagXTNjBrhrB0m8SHFSdgdbFwgOMbHFGl6VPFtYMUR2LapE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729782238; c=relaxed/simple;
-	bh=AFR67uRO4ON1aeO4OoBQTKMZ7NlLsb70Wnr86oYnQEA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mMhrEIe8BRSuQfZBOJiouJJd2CRoaMvi00KQXLS5cTkN9ZtSmsfVMe0wXhvEUD574za1uglhxxt7iqoIfgL6Lw/UDSBZq72sbz1N4PJPzOYwlZl126z7OWZ14I1rSRHJ3AgCzruCzlg6NBA4f9cUrUtY7zi7v7AyMsdoZg4Mpr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CbCeA7Wz; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-20cdb889222so8695065ad.3;
-        Thu, 24 Oct 2024 08:03:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729782235; x=1730387035; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=n/c8nEmNbYzBt8O2igObrBrgbQcGdVBDm4mf4glNv8A=;
-        b=CbCeA7Wzff2pvF62NlFbLTrG/bOjKk9nOUvIAfnZeRy9TAL5EIDf0eVPGpvdJlGKaf
-         mOm+kPEZhLV7f+aBjbpgv1P9bio7jntCorhm7N+JsLH5hbbWYOjeiV0x4Y0lMLSitbK2
-         BBSpogPKN69+z1h8gBEO5ggOxUJAwartu87OpEDKPK/y/THND61aSp9gJ0wrnqXOw6ka
-         XoQdkAhEG88Ge6tgNtIDH14S7GLWYvT9uSyIJ+FBk3pR5Zsd0XwyyoyS+yXDLxZd8o47
-         6+e9gC/5GG3U9X/qSlTu124TIBGVHTP+p9nfTwsO92q28627BslbT+om3ckh/6mSuCIT
-         ZMog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729782235; x=1730387035;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n/c8nEmNbYzBt8O2igObrBrgbQcGdVBDm4mf4glNv8A=;
-        b=WwndxQlaZg8Wnh9tR/sP74xG4/KKkqKAZ3mG34+36IUMT5p8Sq32VB7EhfbVYtKhNV
-         YgqiUIjUH8Z/UVaTpU9IcTh28zRPcwb5p8YKvfpzmWoRp9czIWmYbO9T2XHlCQx2Rqon
-         CsOEkOL/HP+oIDqJQ1eVtY/q4ERpXTBB0BlWkOxSJsqkeVElgsUSrsZwZeC+4meLT3SH
-         7zopMDTErnStYkISN0A2leWCJKqkkCDz8dVOzRsDy36SnyqpiSSsDZczw0WuV79ikgVJ
-         tnsNZH4HWur5KVTzAWETxlPCT0if6VeZ22H+mqEmpUyW7DzZq0xdoHNJg+nA5SOky8Zg
-         cBeg==
-X-Forwarded-Encrypted: i=1; AJvYcCUA8uet7qhCOeBnBWQShIXhN6bxNm68yTFOrbxkcZ7WWv0Jeo9dwNA2K+uLWH9GWzFq6mlRlN40FQQY@vger.kernel.org, AJvYcCUM6KFr3GW+arkJ+jG4GT4THj8AVUGt8H7CPYdbvybSOKNtkd5R0rTZLOgcakFxD8G48FA9XG2/j5K7@vger.kernel.org, AJvYcCUdBijR1G/5/pEmsCzE3xh9T55pqwO6DOjlRibHBlv4LJkEoHbfb6h5wpdETxYc7/sYf4IHXvvH1TQaGw==@vger.kernel.org, AJvYcCVOJ8BhT7uB4WFs/GT8lzhNYLo1HUIrQZkNreF0+fMRDmkiOnhfeT3YIokNdZ4rZ8IymNRuZ+nSwCAf@vger.kernel.org, AJvYcCVfhPaCKu0/hOEECLOGzEfbcwHTGWlUSJnDwe3MbdzeqPaSLe7/GglG/cFUl1Mi9bvKT8nowZBA03c=@vger.kernel.org, AJvYcCVr2eQVZSXJ72/Zp6lREeG/Q9Y7JE0fmb9ZGP6v7gGUdiI0q70xJiLlDNHMegeFJ7wesPLGWho7CS3SDoYr23Q=@vger.kernel.org, AJvYcCWgMIwnd8J+ZjwDrABLPMjdlPPKZcETY8tmTZyglBx7YEa+NHN9wc+L7U91gD7oqFPc2XVwPtla73PdR08=@vger.kernel.org, AJvYcCX5ugXj+DDIk7P+DSLp9vIcHCYgnrc2GGJHU4rQf5ucE1ZfhGb1sQnSNINdSggGqJEsF6zssW0j@vger.kernel.org, AJvYcCXYDfpEpD33y3P34ddEliFMUWZZMF6pbkldsnng+Tgi+RRD6+22Thy18jW6bjFn698uBakCbf/HRUNG@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNgRbLDytQK3anKhAbwgApZsT6xccUKzB0xkgbtppY50NaqWPy
-	VQas/Sxn8ITfaN4i5adNwdtbiRF0RIYWxuHohlb58Fj+WM1NtHWI
-X-Google-Smtp-Source: AGHT+IHt2wT8bNtscoXd2NwQnqYECClFYjU37or4IaIkyymMWQ0OmtHWHQYRhwsqsuvHQ0rpMeSZEg==
-X-Received: by 2002:a17:902:e847:b0:206:9a3f:15e5 with SMTP id d9443c01a7336-20fa9e783cfmr90646085ad.32.1729782234674;
-        Thu, 24 Oct 2024 08:03:54 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7eee710bsm73869215ad.15.2024.10.24.08.03.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2024 08:03:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ef306d61-0e47-4a77-b934-7d1c8ab817df@roeck-us.net>
-Date: Thu, 24 Oct 2024 08:03:51 -0700
+	s=arc-20240116; t=1729783311; c=relaxed/simple;
+	bh=xmURvGsSQUZFxfZ+RAjNnOSjIMdY2fZuT7tiMlghng8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V5L3kXcutjl9vnCRWFH+Oibek6LPIQM9POc08iTrDVAk08tlsgml5b6xq0tYbTed309VcpwyrTb5Wieu3Xv31fxPC1yCiWQR8zb6veoDDSNSKoxSrWN1zEEdj1BicLMrfYRALGgTc9qF5yaKG+o1OVwiJSKiSJKD/CCwU5VNyQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t3ze0-0004OZ-Mt; Thu, 24 Oct 2024 17:21:00 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t3zdy-000Dj9-12;
+	Thu, 24 Oct 2024 17:20:58 +0200
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id D3F2235DE43;
+	Thu, 24 Oct 2024 15:20:57 +0000 (UTC)
+Date: Thu, 24 Oct 2024 17:20:57 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
+References: <20241024085922.133071-1-tmyu0@nuvoton.com>
+ <20241024085922.133071-2-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 6/9] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, jdelvare@suse.com,
- jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org,
- alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-7-tmyu0@nuvoton.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241024085922.133071-7-tmyu0@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bc6t2hauttfjlfk7"
+Content-Disposition: inline
+In-Reply-To: <20241024085922.133071-2-tmyu0@nuvoton.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-On 10/24/24 01:59, Ming Yu wrote:
-> This driver supports Hardware monitor functionality for NCT6694 MFD
-> device based on USB interface.
-> 
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
->   MAINTAINERS                   |   1 +
->   drivers/hwmon/Kconfig         |  10 +
->   drivers/hwmon/Makefile        |   1 +
->   drivers/hwmon/nct6694-hwmon.c | 407 ++++++++++++++++++++++++++++++++++
->   4 files changed, 419 insertions(+)
->   create mode 100644 drivers/hwmon/nct6694-hwmon.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 63387c0d4ab6..2aa87ad84156 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16439,6 +16439,7 @@ M:	Ming Yu <tmyu0@nuvoton.com>
->   L:	linux-kernel@vger.kernel.org
->   S:	Supported
->   F:	drivers/gpio/gpio-nct6694.c
-> +F:	drivers/hwmon/nct6694-hwmon.c
->   F:	drivers/i2c/busses/i2c-nct6694.c
->   F:	drivers/mfd/nct6694.c
->   F:	drivers/net/can/nct6694_canfd.c
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 08a3c863f80a..740e4afe6582 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1625,6 +1625,16 @@ config SENSORS_NCT6683
->   	  This driver can also be built as a module. If so, the module
->   	  will be called nct6683.
->   
-> +config SENSORS_NCT6694
-> +	tristate "Nuvoton NCT6694 Hardware Monitor support"
-> +	depends on MFD_NCT6694
-> +	help
-> +	  Say Y here to support Nuvoton NCT6694 hardware monitoring
-> +	  functionality.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nct6694-hwmon.
-> +
->   config SENSORS_NCT6775_CORE
->   	tristate
->   	select REGMAP
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 9554d2fdcf7b..729961176d00 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -167,6 +167,7 @@ obj-$(CONFIG_SENSORS_MLXREG_FAN) += mlxreg-fan.o
->   obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
->   obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
->   obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
-> +obj-$(CONFIG_SENSORS_NCT6694)	+= nct6694-hwmon.o
->   obj-$(CONFIG_SENSORS_NCT6775_CORE) += nct6775-core.o
->   nct6775-objs			:= nct6775-platform.o
->   obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775.o
-> diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+
+--bc6t2hauttfjlfk7
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
+MIME-Version: 1.0
+
+On 24.10.2024 16:59:14, Ming Yu wrote:
+> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
+> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
+> PWM, and RTC.
+>=20
+> This driver implements USB device functionality and shares the
+> chip's peripherals as a child device.
+>=20
+> Each child device can use the USB functions nct6694_read_msg()
+> and nct6694_write_msg() to issue a command. They can also register
+> a handler function that will be called when the USB device receives
+> its interrupt pipe.
+
+[...]
+
+> diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
 > new file mode 100644
-> index 000000000000..7d7d22a650b0
+> index 000000000000..9838c7be0b98
 > --- /dev/null
-> +++ b/drivers/hwmon/nct6694-hwmon.c
-> @@ -0,0 +1,407 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +++ b/drivers/mfd/nct6694.c
+
+[...]
+
+> +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 offset, u16 le=
+ngth,
+> +		     u8 rd_idx, u8 rd_len, unsigned char *buf)
+
+why not make buf a void *?
+
+> +{
+> +	struct usb_device *udev =3D nct6694->udev;
+> +	unsigned char err_status;
+> +	int len, packet_len, tx_len, rx_len;
+> +	int i, ret;
+> +
+> +	mutex_lock(&nct6694->access_lock);
+> +
+> +	/* Send command packet to USB device */
+> +	nct6694->cmd_buffer[REQUEST_MOD_IDX] =3D mod;
+> +	nct6694->cmd_buffer[REQUEST_CMD_IDX] =3D offset & 0xFF;
+> +	nct6694->cmd_buffer[REQUEST_SEL_IDX] =3D (offset >> 8) & 0xFF;
+> +	nct6694->cmd_buffer[REQUEST_HCTRL_IDX] =3D HCTRL_GET;
+> +	nct6694->cmd_buffer[REQUEST_LEN_L_IDX] =3D length & 0xFF;
+> +	nct6694->cmd_buffer[REQUEST_LEN_H_IDX] =3D (length >> 8) & 0xFF;
+> +
+> +	ret =3D usb_bulk_msg(udev, usb_sndbulkpipe(udev, BULK_OUT_ENDPOINT),
+> +			   nct6694->cmd_buffer, CMD_PACKET_SZ, &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		goto err;
+> +
+> +	/* Receive response packet from USB device */
+> +	ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(udev, BULK_IN_ENDPOINT),
+> +			   nct6694->rx_buffer, CMD_PACKET_SZ, &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		goto err;
+> +
+> +	err_status =3D nct6694->rx_buffer[RESPONSE_STS_IDX];
+> +
+> +	/*
+> +	 * Segmented reception of messages that exceed the size of USB bulk
+> +	 * pipe packets.
+> +	 */
+
+The Linux USB stack can receive bulk messages longer than the max packet si=
+ze.
+
+> +	for (i =3D 0, len =3D length; len > 0; i++, len -=3D packet_len) {
+> +		if (len > nct6694->maxp)
+> +			packet_len =3D nct6694->maxp;
+> +		else
+> +			packet_len =3D len;
+> +
+> +		ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(udev, BULK_IN_ENDPOINT),
+> +				   nct6694->rx_buffer + nct6694->maxp * i,
+> +				   packet_len, &rx_len, nct6694->timeout);
+> +		if (ret)
+> +			goto err;
+> +	}
+> +
+> +	for (i =3D 0; i < rd_len; i++)
+> +		buf[i] =3D nct6694->rx_buffer[i + rd_idx];
+
+memcpy()?
+
+Or why don't you directly receive data into the provided buffer? Copying
+of the data doesn't make it faster.
+
+On the other hand, receiving directly into the target buffer means the
+target buffer must not live on the stack.
+
+> +
+> +	if (err_status) {
+> +		pr_debug("%s: MSG CH status =3D %2Xh\n", __func__, err_status);
+> +		ret =3D -EIO;
+> +	}
+> +
+> +err:
+> +	mutex_unlock(&nct6694->access_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(nct6694_read_msg);
+> +
+> +int nct6694_write_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
+> +		      u16 length, unsigned char *buf)
+> +{
+> +	struct usb_device *udev =3D nct6694->udev;
+> +	unsigned char err_status;
+> +	int len, packet_len, tx_len, rx_len;
+> +	int i, ret;
+> +
+> +	mutex_lock(&nct6694->access_lock);
+> +
+> +	/* Send command packet to USB device  */
+> +	nct6694->cmd_buffer[REQUEST_MOD_IDX] =3D mod;
+> +	nct6694->cmd_buffer[REQUEST_CMD_IDX] =3D offset & 0xFF;
+> +	nct6694->cmd_buffer[REQUEST_SEL_IDX] =3D (offset >> 8) & 0xFF;
+> +	nct6694->cmd_buffer[REQUEST_HCTRL_IDX] =3D HCTRL_SET;
+> +	nct6694->cmd_buffer[REQUEST_LEN_L_IDX] =3D length & 0xFF;
+> +	nct6694->cmd_buffer[REQUEST_LEN_H_IDX] =3D (length >> 8) & 0xFF;
+
+What about creating a struct that describes the cmd_buffer layout?
+
+> +
+> +	ret =3D usb_bulk_msg(udev, usb_sndbulkpipe(udev, BULK_OUT_ENDPOINT),
+> +			   nct6694->cmd_buffer, CMD_PACKET_SZ, &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		goto err;
+> +
+> +	/*
+> +	 * Segmented transmission of messages that exceed the size of USB bulk
+> +	 * pipe packets.
+> +	 */
+
+same as above
+
+> +	for (i =3D 0, len =3D length; len > 0; i++, len -=3D packet_len) {
+> +		if (len > nct6694->maxp)
+> +			packet_len =3D nct6694->maxp;
+> +		else
+> +			packet_len =3D len;
+> +
+> +		memcpy(nct6694->tx_buffer + nct6694->maxp * i,
+> +		       buf + nct6694->maxp * i, packet_len);
+> +
+> +		ret =3D usb_bulk_msg(udev, usb_sndbulkpipe(udev, BULK_OUT_ENDPOINT),
+> +				   nct6694->tx_buffer + nct6694->maxp * i,
+> +				   packet_len, &tx_len, nct6694->timeout);
+> +		if (ret)
+> +			goto err;
+> +	}
+> +
+> +	/* Receive response packet from USB device */
+> +	ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(udev, BULK_IN_ENDPOINT),
+> +			   nct6694->rx_buffer, CMD_PACKET_SZ, &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		goto err;
+> +
+> +	err_status =3D nct6694->rx_buffer[RESPONSE_STS_IDX];
+> +
+> +	/*
+> +	 * Segmented reception of messages that exceed the size of USB bulk
+> +	 * pipe packets.
+> +	 */
+
+same as above
+
+> +	for (i =3D 0, len =3D length; len > 0; i++, len -=3D packet_len) {
+> +		if (len > nct6694->maxp)
+> +			packet_len =3D nct6694->maxp;
+> +		else
+> +			packet_len =3D len;
+> +
+> +		ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(udev, BULK_IN_ENDPOINT),
+> +				   nct6694->rx_buffer + nct6694->maxp * i,
+> +				   packet_len, &rx_len, nct6694->timeout);
+> +		if (ret)
+> +			goto err;
+> +	}
+> +
+> +	memcpy(buf, nct6694->rx_buffer, length);
+
+why not rx into the destination buffer directly?
+
+> +
+> +	if (err_status) {
+> +		pr_debug("%s: MSG CH status =3D %2Xh\n", __func__, err_status);
+> +		ret =3D -EIO;
+> +	}
+> +
+> +err:
+> +	mutex_unlock(&nct6694->access_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(nct6694_write_msg);
+
+[...]
+
+> +static int nct6694_usb_probe(struct usb_interface *iface,
+> +			     const struct usb_device_id *id)
+> +{
+> +	struct usb_device *udev =3D interface_to_usbdev(iface);
+> +	struct device *dev =3D &udev->dev;
+> +	struct usb_host_interface *interface;
+> +	struct usb_endpoint_descriptor *int_endpoint;
+> +	struct nct6694 *nct6694;
+> +	int pipe, maxp, bulk_pipe;
+> +	int ret =3D EINVAL;
+> +
+> +	interface =3D iface->cur_altsetting;
+> +	/* Binding interface class : 0xFF */
+> +	if (interface->desc.bInterfaceClass !=3D USB_CLASS_VENDOR_SPEC ||
+> +	    interface->desc.bInterfaceSubClass !=3D 0x00 ||
+> +	    interface->desc.bInterfaceProtocol !=3D 0x00)
+> +		return -ENODEV;
+> +
+> +	int_endpoint =3D &interface->endpoint[0].desc;
+> +	if (!usb_endpoint_is_int_in(int_endpoint))
+> +		return -ENODEV;
+> +
+> +	nct6694 =3D devm_kzalloc(&udev->dev, sizeof(*nct6694), GFP_KERNEL);
+> +	if (!nct6694)
+> +		return -ENOMEM;
+> +
+> +	pipe =3D usb_rcvintpipe(udev, INT_IN_ENDPOINT);
+> +	maxp =3D usb_maxpacket(udev, pipe);
+
+better move these 2 down to the usb_fill_int_urb().
+
+> +
+> +	nct6694->cmd_buffer =3D devm_kcalloc(dev, CMD_PACKET_SZ,
+> +					   sizeof(unsigned char), GFP_KERNEL);
+> +	if (!nct6694->cmd_buffer)
+> +		return -ENOMEM;
+> +	nct6694->rx_buffer =3D devm_kcalloc(dev, MAX_PACKET_SZ,
+> +					  sizeof(unsigned char), GFP_KERNEL);
+> +	if (!nct6694->rx_buffer)
+> +		return -ENOMEM;
+> +	nct6694->tx_buffer =3D devm_kcalloc(dev, MAX_PACKET_SZ,
+> +					  sizeof(unsigned char), GFP_KERNEL);
+> +	if (!nct6694->tx_buffer)
+> +		return -ENOMEM;
+> +	nct6694->int_buffer =3D devm_kcalloc(dev, MAX_PACKET_SZ,
+> +					   sizeof(unsigned char), GFP_KERNEL);
+> +	if (!nct6694->int_buffer)
+> +		return -ENOMEM;
+> +
+> +	nct6694->int_in_urb =3D usb_alloc_urb(0, GFP_KERNEL);
+> +	if (!nct6694->int_in_urb) {
+> +		dev_err(&udev->dev, "Failed to allocate INT-in urb!\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	/* Bulk pipe maximum packet for each transaction */
+> +	bulk_pipe =3D usb_sndbulkpipe(udev, BULK_OUT_ENDPOINT);
+> +	nct6694->maxp =3D usb_maxpacket(udev, bulk_pipe);
+> +
+> +	mutex_init(&nct6694->access_lock);
+> +	nct6694->udev =3D udev;
+> +	nct6694->timeout =3D URB_TIMEOUT;	/* Wait until urb complete */
+> +
+> +	INIT_LIST_HEAD(&nct6694->handler_list);
+> +	spin_lock_init(&nct6694->lock);
+> +
+> +	usb_fill_int_urb(nct6694->int_in_urb, udev, pipe,
+> +			 nct6694->int_buffer, maxp, usb_int_callback,
+> +			 nct6694, int_endpoint->bInterval);
+> +	ret =3D usb_submit_urb(nct6694->int_in_urb, GFP_KERNEL);
+> +	if (ret)
+> +		goto err_urb;
+> +
+> +	dev_set_drvdata(&udev->dev, nct6694);
+> +	usb_set_intfdata(iface, nct6694);
+> +
+> +	ret =3D mfd_add_hotplug_devices(&udev->dev, nct6694_dev,
+> +				      ARRAY_SIZE(nct6694_dev));
+> +	if (ret) {
+> +		dev_err(&udev->dev, "Failed to add mfd's child device\n");
+> +		goto err_mfd;
+> +	}
+> +
+> +	nct6694->async_workqueue =3D alloc_ordered_workqueue("asyn_workqueue", =
+0);
+
+Where is the async_workqueue used?
+
+> +
+> +	dev_info(&udev->dev, "Probed device: (%04X:%04X)\n",
+> +		 id->idVendor, id->idProduct);
+> +	return 0;
+> +
+> +err_mfd:
+> +	usb_kill_urb(nct6694->int_in_urb);
+> +err_urb:
+> +	usb_free_urb(nct6694->int_in_urb);
+> +	return ret;
+> +}
+> +
+> +static void nct6694_usb_disconnect(struct usb_interface *iface)
+> +{
+> +	struct usb_device *udev =3D interface_to_usbdev(iface);
+> +	struct nct6694 *nct6694 =3D usb_get_intfdata(iface);
+> +
+> +	mfd_remove_devices(&udev->dev);
+> +	flush_workqueue(nct6694->async_workqueue);
+> +	destroy_workqueue(nct6694->async_workqueue);
+> +	usb_set_intfdata(iface, NULL);
+
+I think this is not needed.
+
+> +	usb_kill_urb(nct6694->int_in_urb);
+> +	usb_free_urb(nct6694->int_in_urb);
+> +}
+> +
+> +static const struct usb_device_id nct6694_ids[] =3D {
+> +	{ USB_DEVICE(NCT6694_VENDOR_ID, NCT6694_PRODUCT_ID)},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(usb, nct6694_ids);
+> +
+> +static struct usb_driver nct6694_usb_driver =3D {
+> +	.name	=3D DRVNAME,
+> +	.id_table =3D nct6694_ids,
+> +	.probe =3D nct6694_usb_probe,
+> +	.disconnect =3D nct6694_usb_disconnect,
+> +};
+> +
+> +module_usb_driver(nct6694_usb_driver);
+> +
+> +MODULE_DESCRIPTION("USB-MFD driver for NCT6694");
+> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+> new file mode 100644
+> index 000000000000..0797564363be
+> --- /dev/null
+> +++ b/include/linux/mfd/nct6694.h
+> @@ -0,0 +1,168 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
-> + * Nuvoton NCT6694 HWMON driver based on USB interface.
+> + * Nuvoton NCT6694 USB transaction and data structure.
 > + *
 > + * Copyright (C) 2024 Nuvoton Technology Corp.
 > + */
 > +
-> +#include <linux/slab.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/mfd/nct6694.h>
+> +#ifndef __MFD_NCT6694_H
+> +#define __MFD_NCT6694_H
 > +
-> +#define DRVNAME "nct6694-hwmon"
+> +#define NCT6694_DEV_GPIO		"nct6694-gpio"
+> +#define NCT6694_DEV_I2C			"nct6694-i2c"
+> +#define NCT6694_DEV_CAN			"nct6694-can"
+> +#define NCT6694_DEV_WDT			"nct6694-wdt"
+> +#define NCT6694_DEV_IIO			"nct6694-iio"
+> +#define NCT6694_DEV_HWMON		"nct6694-hwmon"
+> +#define NCT6694_DEV_PWM			"nct6694-pwm"
+> +#define NCT6694_DEV_RTC			"nct6694-rtc"
 > +
-> +/* Host interface */
-> +#define REQUEST_RPT_MOD			0xFF
-> +#define REQUEST_HWMON_MOD		0x00
+> +#define NCT6694_VENDOR_ID		0x0416
+> +#define NCT6694_PRODUCT_ID		0x200B
+> +#define INT_IN_ENDPOINT			0x81
+> +#define BULK_IN_ENDPOINT		0x82
+
+In Linux we don't add the 0x80 for IN endpoint, the framework does this
+for you.
+
+> +#define BULK_OUT_ENDPOINT		0x03
+> +#define MAX_PACKET_SZ			0x100
 > +
-> +/* Report Channel */
-> +#define HWMON_FIN_IDX(x)		(0x50 + ((x) * 2))
-> +#define HWMON_FIN_STS(x)		(0x6E + (x))
-> +#define HWMON_PWM_IDX(x)		(0x70 + (x))
+> +#define CMD_PACKET_SZ			0x8
+> +#define HCTRL_SET			0x40
+> +#define HCTRL_GET			0x80
 > +
-> +/* Message Channel*/
-> +/* Command 00h */
-> +#define REQUEST_HWMON_CMD0_LEN		0x40
-> +#define REQUEST_HWMON_CMD0_OFFSET	0x0000	/* OFFSET = SEL|CMD */
-> +#define HWMON_FIN_EN(x)			(0x04 + (x))
-> +#define HWMON_PWM_FREQ_IDX(x)		(0x30 + (x))
-> +/* Command 02h */
-> +#define REQUEST_HWMON_CMD2_LEN		0x90
-> +#define REQUEST_HWMON_CMD2_OFFSET	0x0002	/* OFFSET = SEL|CMD */
-> +#define HWMON_SMI_CTRL_IDX		0x00
-> +#define HWMON_FIN_LIMIT_IDX(x)		(0x70 + ((x) * 2))
-> +#define HWMON_CMD2_HYST_MASK		0x1F
-> +/* Command 03h */
-> +#define REQUEST_HWMON_CMD3_LEN		0x08
-> +#define REQUEST_HWMON_CMD3_OFFSET	0x0003	/* OFFSET = SEL|CMD */
+> +#define REQUEST_MOD_IDX			0x01
+> +#define REQUEST_CMD_IDX			0x02
+> +#define REQUEST_SEL_IDX			0x03
+> +#define REQUEST_HCTRL_IDX		0x04
+> +#define REQUEST_LEN_L_IDX		0x06
+> +#define REQUEST_LEN_H_IDX		0x07
 > +
-> +struct nct6694_hwmon_data {
-> +	struct nct6694 *nct6694;
+> +#define RESPONSE_STS_IDX		0x01
 > +
-> +	/* Make sure read & write commands are consecutive */
-> +	struct mutex hwmon_lock;
+> +#define INT_IN_IRQ_IDX			0x00
+> +#define GPIO_IRQ_STATUS			BIT(0)
+> +#define CAN_IRQ_STATUS			BIT(2)
+> +#define RTC_IRQ_STATUS			BIT(3)
+> +
+> +#define URB_TIMEOUT			1000
+> +
+> +/*
+> + * struct nct6694 - Nuvoton NCT6694 structure
+> + *
+> + * @udev: Pointer to the USB device
+> + * @int_in_urb: Interrupt pipe urb
+> + * @access_lock: USB transaction lock
+> + * @handler_list: List of registered handlers
+> + * @async_workqueue: Workqueue of processing asynchronous work
+> + * @tx_buffer: USB write message buffer
+> + * @rx_buffer: USB read message buffer
+> + * @cmd_buffer: USB send command message buffer
+> + * @int_buffer: USB receive interrupt message buffer
+> + * @lock: Handlers lock
+> + * @timeout: URB timeout
+> + * @maxp: Maximum packet of bulk pipe
+> + */
+> +struct nct6694 {
+> +	struct usb_device *udev;
+> +	struct urb *int_in_urb;
+> +	struct list_head handler_list;
+> +	struct workqueue_struct *async_workqueue;
+> +
+> +	/* Make sure that every USB transaction is not interrupted */
+> +	struct mutex access_lock;
+> +
+> +	unsigned char *tx_buffer;
+> +	unsigned char *rx_buffer;
+> +	unsigned char *cmd_buffer;
+> +	unsigned char *int_buffer;
+> +
+> +	/* Prevent races within handlers */
+> +	spinlock_t lock;
+> +
+> +	/* time in msec to wait for the urb to the complete */
+> +	long timeout;
+> +
+> +	/* Bulk pipe maximum packet for each transaction */
+> +	int maxp;
 > +};
 > +
-> +#define NCT6694_HWMON_FAN_CONFIG (HWMON_F_ENABLE | HWMON_F_INPUT | \
-> +				  HWMON_F_MIN | HWMON_F_MIN_ALARM)
-> +#define NCT6694_HWMON_PWM_CONFIG (HWMON_PWM_INPUT | HWMON_PWM_FREQ)
-> +
-> +static const struct hwmon_channel_info *nct6694_info[] = {
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   NCT6694_HWMON_FAN_CONFIG,	/* FIN0 */
-> +			   NCT6694_HWMON_FAN_CONFIG,	/* FIN1 */
-> +			   NCT6694_HWMON_FAN_CONFIG,	/* FIN2 */
-> +			   NCT6694_HWMON_FAN_CONFIG,	/* FIN3 */
-> +			   NCT6694_HWMON_FAN_CONFIG,	/* FIN4 */
-> +			   NCT6694_HWMON_FAN_CONFIG,	/* FIN5 */
-> +			   NCT6694_HWMON_FAN_CONFIG,	/* FIN6 */
-> +			   NCT6694_HWMON_FAN_CONFIG,	/* FIN7 */
-> +			   NCT6694_HWMON_FAN_CONFIG,	/* FIN8 */
-> +			   NCT6694_HWMON_FAN_CONFIG),	/* FIN9 */
-> +
-> +	HWMON_CHANNEL_INFO(pwm,
-> +			   NCT6694_HWMON_PWM_CONFIG,	/* PWM0 */
-> +			   NCT6694_HWMON_PWM_CONFIG,	/* PWM1 */
-> +			   NCT6694_HWMON_PWM_CONFIG,	/* PWM2 */
-> +			   NCT6694_HWMON_PWM_CONFIG,	/* PWM3 */
-> +			   NCT6694_HWMON_PWM_CONFIG,	/* PWM4 */
-> +			   NCT6694_HWMON_PWM_CONFIG,	/* PWM5 */
-> +			   NCT6694_HWMON_PWM_CONFIG,	/* PWM6 */
-> +			   NCT6694_HWMON_PWM_CONFIG,	/* PWM7 */
-> +			   NCT6694_HWMON_PWM_CONFIG,	/* PWM8 */
-> +			   NCT6694_HWMON_PWM_CONFIG),	/* PWM9 */
-> +	NULL
+> +/*
+> + * struct nct6694_handler_entry - Stores the interrupt handling informat=
+ion
+> + * for each registered peripheral
+> + *
+> + * @irq_bit: The bit in irq_status[INT_IN_IRQ_IDX] representing interrupt
+                    ^^^
+
+I think this comment could be more precise, you can emphasize, that it's
+not the bit number but the bit mask.=20
+
+> + * @handler: Function pointer to the interrupt handler of the peripheral
+> + * @private_data: Private data specific to the peripheral driver
+> + * @list: Node used to link to the handler_list
+> + */
+> +struct nct6694_handler_entry {
+> +	int irq_bit;
+
+the int_status you compare against in the IRQ callback ist a unsigned
+char. Better make all a u8.
+
+> +	void (*handler)(void *private_data);
+> +	void *private_data;
+> +	struct list_head list;
 > +};
-> +
-> +static int nct6694_fan_read(struct device *dev, u32 attr, int channel,
-> +			    long *val)
-> +{
-> +	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-> +	unsigned char buf[2];
-> +	int ret;
-> +
-> +	switch (attr) {
-> +	case hwmon_fan_enable:
-> +		ret = nct6694_read_msg(data->nct6694, REQUEST_HWMON_MOD,
-> +				       REQUEST_HWMON_CMD0_OFFSET,
-> +				       REQUEST_HWMON_CMD0_LEN,
-> +				       HWMON_FIN_EN(channel / 8),
-> +				       1, buf);
-> +		if (ret)
-> +			return -EINVAL;
 
-Do not overwrite error return values.
+regards,
+Marc
 
-> +
-> +		*val = buf[0] & BIT(channel % 8) ? 1 : 0;
-> +
-> +		break;
-> +
-> +	case hwmon_fan_input:
-> +		ret = nct6694_read_msg(data->nct6694, REQUEST_RPT_MOD,
-> +				       HWMON_FIN_IDX(channel), 2, 0,
-> +				       2, buf);
-> +		if (ret)
-> +			return -EINVAL;
-> +
-> +		*val = (buf[1] | (buf[0] << 8)) & 0xFFFF;
-> +
-> +		break;
-> +
-> +	case hwmon_fan_min:
-> +		ret = nct6694_read_msg(data->nct6694, REQUEST_HWMON_MOD,
-> +				       REQUEST_HWMON_CMD2_OFFSET,
-> +				       REQUEST_HWMON_CMD2_LEN,
-> +				       HWMON_FIN_LIMIT_IDX(channel),
-> +				       2, buf);
-> +		if (ret)
-> +			return -EINVAL;
-> +
-> +		*val = (buf[1] | (buf[0] << 8)) & 0xFFFF;
-> +
-> +		break;
-> +
-> +	case hwmon_fan_min_alarm:
-> +		ret = nct6694_read_msg(data->nct6694, REQUEST_RPT_MOD,
-> +				       HWMON_FIN_STS(channel / 8),
-> +				       1, 0, 1, buf);
-> +		if (ret)
-> +			return -EINVAL;
-> +
-> +		*val = buf[0] & BIT(channel % 8);
-> +
-> +		break;
-> +
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int nct6694_pwm_read(struct device *dev, u32 attr, int channel,
-> +			    long *val)
-> +{
-> +	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-> +	unsigned char buf;
-> +	int ret;
-> +
-> +	switch (attr) {
-> +	case hwmon_pwm_input:
-> +		ret = nct6694_read_msg(data->nct6694, REQUEST_RPT_MOD,
-> +				       HWMON_PWM_IDX(channel),
-> +				       1, 0, 1, &buf);
-> +		if (ret)
-> +			return -EINVAL;
-> +
-> +		*val = buf;
-> +
-> +		break;
-> +	case hwmon_pwm_freq:
-> +		ret = nct6694_read_msg(data->nct6694, REQUEST_HWMON_MOD,
-> +				       REQUEST_HWMON_CMD0_OFFSET,
-> +				       REQUEST_HWMON_CMD0_LEN,
-> +				       HWMON_PWM_FREQ_IDX(channel),
-> +				       1, &buf);
-> +		if (ret)
-> +			return -EINVAL;
-> +
-> +		*val = buf * 25000 / 255;
-> +
-> +		break;
-> +
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int nct6694_fan_write(struct device *dev, u32 attr, int channel,
-> +			     long val)
-> +{
-> +	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-> +	unsigned char enable_buf[REQUEST_HWMON_CMD0_LEN] = {0};
-> +	unsigned char buf[REQUEST_HWMON_CMD2_LEN] = {0};
-> +	u16 fan_val = (u16)val;
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-This is wrong. It will result in overflows/underflows if out of range
-values are provided, and the driver should not write 0 if the user
-writes 65536. You need to use clamp_val() instead. For values with
-well defined range (specifically hwmon_fan_enable) you need to validate
-the parameter, not just take it as boolean.
+--bc6t2hauttfjlfk7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +	int ret;
-> +
-> +	switch (attr) {
-> +	case hwmon_fan_enable:
-> +		mutex_lock(&data->hwmon_lock);
-> +		ret = nct6694_read_msg(data->nct6694, REQUEST_HWMON_MOD,
-> +				       REQUEST_HWMON_CMD0_OFFSET,
-> +				       REQUEST_HWMON_CMD0_LEN, 0,
-> +				       REQUEST_HWMON_CMD0_LEN,
-> +				       enable_buf);
-> +		if (ret)
-> +			goto err;
-> +
-> +		if (val)
-> +			enable_buf[HWMON_FIN_EN(channel / 8)] |= BIT(channel % 8);
-> +		else
-> +			enable_buf[HWMON_FIN_EN(channel / 8)] &= ~BIT(channel % 8);
-> +
-> +		ret = nct6694_write_msg(data->nct6694, REQUEST_HWMON_MOD,
-> +					REQUEST_HWMON_CMD0_OFFSET,
-> +					REQUEST_HWMON_CMD0_LEN, enable_buf);
-> +		if (ret)
-> +			goto err;
-> +
-> +		break;
-> +
-> +	case hwmon_fan_min:
-> +		mutex_lock(&data->hwmon_lock);
-> +		ret = nct6694_read_msg(data->nct6694, REQUEST_HWMON_MOD,
-> +				       REQUEST_HWMON_CMD2_OFFSET,
-> +				       REQUEST_HWMON_CMD2_LEN, 0,
-> +				       REQUEST_HWMON_CMD2_LEN, buf);
-> +		if (ret)
-> +			goto err;
-> +
-> +		buf[HWMON_FIN_LIMIT_IDX(channel)] = (u8)((fan_val >> 8) & 0xFF);
-> +		buf[HWMON_FIN_LIMIT_IDX(channel) + 1] = (u8)(fan_val & 0xFF);
-> +		ret = nct6694_write_msg(data->nct6694, REQUEST_HWMON_MOD,
-> +					REQUEST_HWMON_CMD2_OFFSET,
-> +					REQUEST_HWMON_CMD2_LEN, buf);
-> +		if (ret)
-> +			goto err;
-> +
-> +		break;
+-----BEGIN PGP SIGNATURE-----
 
-The error handler goto and the break accomplish exactly the same,
-thus the conditional goto is pointless.
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaZdYACgkQKDiiPnot
+vG8hTQf9GGzEvj1IT8hi7Dc2LklLz1DRfZZtySo3heWjBKwZGfg8OeS8aD4Xamc+
+UZ+Nv9UCpXYl9wnt0c8VBzKNz1Y495JYia9N3BcKurHsqhKHVxXcg2MlTkIT6b95
++gZDXceiP2tOtc7nPhC+h625Qcpiz92AZvChQzmxMuJqqEvlYx95yZ/+xXbeWRdy
+8Kad8joA0KJ2wNWS9DgGRJFiOKbTzw0KqSeCE8xH0k1kSWQJ3QRk5qqvcEuz/v9z
+QVBYRhqVCudi6Kyt2baqPuHUTSL/Qgqyxr52VjwzppW5kWJsVXHXb88xkYBiormM
+RqiOLe/MKN0fDDG2vvLZTB9ERYqXyw==
+=f7L1
+-----END PGP SIGNATURE-----
 
-> +
-> +	default:
-> +		ret = -EOPNOTSUPP;
-> +		goto err;
-
-As mentioned in my other reply, the lock is not acquired here,
-causing an unbalanced unlock.
-
-> +	}
-> +
-> +err:
-> +	mutex_unlock(&data->hwmon_lock);
-> +	return ret;
-> +}
-> +
-> +static int nct6694_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	switch (type) {
-> +	case hwmon_fan:	/* in RPM */
-> +		return nct6694_fan_read(dev, attr, channel, val);
-> +
-> +	case hwmon_pwm:	/* in value 0~255 */
-> +		return nct6694_pwm_read(dev, attr, channel, val);
-> +
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-
-Unnecessary return statement. Also seen elsewhere.
-
-> +}
-> +
-> +static int nct6694_write(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, long val)
-> +{
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		return nct6694_fan_write(dev, attr, channel, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t nct6694_is_visible(const void *data, enum hwmon_sensor_types type,
-> +				  u32 attr, int channel)
-> +{
-> +	switch (type) {
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_enable:
-> +		case hwmon_fan_min:
-> +			return 0644;
-> +
-> +		case hwmon_fan_input:
-> +		case hwmon_fan_min_alarm:
-> +			return 0444;
-> +
-> +		default:
-> +			return 0;
-> +		}
-> +
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_input:
-> +		case hwmon_pwm_freq:
-> +			return 0444;
-> +		default:
-> +			return 0;
-> +		}
-> +
-> +	default:
-> +		return 0;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops nct6694_hwmon_ops = {
-> +	.is_visible = nct6694_is_visible,
-> +	.read = nct6694_read,
-> +	.write = nct6694_write,
-> +};
-> +
-> +static const struct hwmon_chip_info nct6694_chip_info = {
-> +	.ops = &nct6694_hwmon_ops,
-> +	.info = nct6694_info,
-> +};
-> +
-> +static int nct6694_hwmon_init(struct nct6694_hwmon_data *data)
-> +{
-> +	unsigned char buf[REQUEST_HWMON_CMD2_LEN] = {0};
-> +	int ret;
-> +
-> +	/* Set Fan input Real Time alarm mode */
-> +	mutex_lock(&data->hwmon_lock);
-
-Pointless lock (this is init code)
-
-> +	ret = nct6694_read_msg(data->nct6694, REQUEST_HWMON_MOD,
-> +			       REQUEST_HWMON_CMD2_OFFSET,
-> +			       REQUEST_HWMON_CMD2_LEN, 0,
-> +			       REQUEST_HWMON_CMD2_LEN, buf);
-> +	if (ret)
-> +		goto err;
-> +
-> +	buf[HWMON_SMI_CTRL_IDX] = 0x02;
-> +
-> +	ret = nct6694_write_msg(data->nct6694, REQUEST_HWMON_MOD,
-> +				REQUEST_HWMON_CMD2_OFFSET,
-> +				REQUEST_HWMON_CMD2_LEN, buf);
-> +	if (ret)
-> +		goto err;
-> +
-> +err:
-> +	mutex_unlock(&data->hwmon_lock);
-> +	return ret;
-> +}
-> +
-> +static int nct6694_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct nct6694_hwmon_data *data;
-> +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->nct6694 = nct6694;
-> +	mutex_init(&data->hwmon_lock);
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	ret = nct6694_hwmon_init(data);
-> +	if (ret)
-> +		return -EIO;
-
-Again, do not overwrite error codes.
-
-> +
-> +	/* Register hwmon device to HWMON framework */
-> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
-> +							 "nct6694", data,
-> +							 &nct6694_chip_info,
-> +							 NULL);
-> +	if (IS_ERR(hwmon_dev)) {
-> +		dev_err(&pdev->dev, "%s: Failed to register hwmon device!\n",
-> +			__func__);
-
-Use dev_err_probe(), and the function name is pointless.
-
-> +		return PTR_ERR(hwmon_dev);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver nct6694_hwmon_driver = {
-> +	.driver = {
-> +		.name	= DRVNAME,
-> +	},
-> +	.probe		= nct6694_hwmon_probe,
-> +};
-> +
-> +static int __init nct6694_init(void)
-> +{
-> +	int err;
-> +
-> +	err = platform_driver_register(&nct6694_hwmon_driver);
-> +	if (!err) {
-> +		if (err)
-
-Seriously ? Read this code again. It is never reached (and pointless).
-
-> +			platform_driver_unregister(&nct6694_hwmon_driver);
-> +	}
-> +
-> +	return err;
-> +}
-> +subsys_initcall(nct6694_init);
-> +
-> +static void __exit nct6694_exit(void)
-> +{
-> +	platform_driver_unregister(&nct6694_hwmon_driver);
-> +}
-> +module_exit(nct6694_exit);
-> +
-> +MODULE_DESCRIPTION("USB-HWMON driver for NCT6694");
-> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-> +MODULE_LICENSE("GPL");
-
+--bc6t2hauttfjlfk7--
 
