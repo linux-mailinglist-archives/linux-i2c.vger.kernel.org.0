@@ -1,285 +1,182 @@
-Return-Path: <linux-i2c+bounces-7528-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7529-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DA179AE038
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 11:12:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C1009AE066
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 11:18:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E8A21C220EA
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 09:12:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFB261F2216D
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 09:18:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5A811B21A6;
-	Thu, 24 Oct 2024 09:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA9A1AC8B9;
+	Thu, 24 Oct 2024 09:18:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b="Vcm/ba10"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2070.outbound.protection.outlook.com [40.107.21.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8192B1A76CE
-	for <linux-i2c@vger.kernel.org>; Thu, 24 Oct 2024 09:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729761164; cv=none; b=P750Ho532WUf+8Yr5xSbxmnozzJcThM5dEUD6D3o4bEUwiiIOMtaXNZ9gBp5grzs8Xg8W5t/ozfRnf7Q+azYb37MpmZIu3OpjqF6Wu9NJteyvWmDpw5MxRLk3Xb4/3uTbWfN3UFX3KwuBK3CD//26fxjjPXjNtvI9+JIoRmnAYs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729761164; c=relaxed/simple;
-	bh=qOFmV9WZ9sh/+C3fpLshCL2Kht2BK/C1cpKcjRH+csw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mg/5/scJD6ogqYb1WxRMAMNgvhOW/YnBXt71kZ7AY9ytJ8vwZq8UVJ6qvLAxNts0R340ZB37Vf3umk+VUfm5U5br0Om47MkhtuvKTNvXJ9ee19Rqfl3nt6cUP0IXdD25roOOUa5t/O2alLXQ05kYH97RX0k20SlymW2KmOUK+lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3tsw-0002gF-W9; Thu, 24 Oct 2024 11:12:03 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3tsu-000AhL-0y;
-	Thu, 24 Oct 2024 11:12:00 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 275DB35D8E6;
-	Thu, 24 Oct 2024 09:03:43 +0000 (UTC)
-Date: Thu, 24 Oct 2024 11:03:42 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20241024-daffodil-raccoon-of-champagne-6f6f04-mkl@pengutronix.de>
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-2-tmyu0@nuvoton.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349DFA932;
+	Thu, 24 Oct 2024 09:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729761495; cv=fail; b=Rb2t6rsloiNjlC0A2OLxS/sSf3qL/G2OVc/7dm3uirvajnJ6CbFkQIeOJxr1TXEIKk16oWatUU4fWDl+a5I/esHG8OdYntKZbukC7XSA231yBX9+kTUuLJbOzQh7Cr9oF5Pdii9hiyKZQbaOtnG6nix6DT+WTREbAb39hCd9qUo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729761495; c=relaxed/simple;
+	bh=d49OjI1BzCbSTXG4uFvFAOczdWGcdBhC3x444jtEo2s=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Qm2tARwN42ru62ug/2i+HAnsAPmXdcYjI5wO+xm+V2phiPxZIt+pPXh+0xnMqwSsgQjKe9z+uVv0INInigL9vifgP9iYIXSIPkV4dDbxqD6vRTi17Vq6pAjCknEoZyoxRt38Wf6u5ZyVPu+tvyDb/dRVXtu4Iw5UPvjZ6FPUwrw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com; spf=fail smtp.mailfrom=nokia.com; dkim=pass (2048-bit key) header.d=nokia.com header.i=@nokia.com header.b=Vcm/ba10; arc=fail smtp.client-ip=40.107.21.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vdcDsFuQwVuMpVMOoI96V52rtaqcFQuN91J144owNOJQgw0O8NzgntTsFx/YMBgHnxYyYxW+RViQW2CgAQxwTLDuIrlmIihCSYBF+SV5PJJwRAVLRqfytAwumWmov9Or9AOqKMCS7HS47z8duXXAQrj6gQfr9DBWGXihX5y8z0fPF4ALSvAJ83m7A76e/stftlvpnYDwOtAoz+aKHdwzp4KHttRe+zQ/FAMA1t3BDOrLg3UHN4T7IG7ly+Dxuo0mlSdmwJ5tzCu3ETBeuOD8PQJ6ddh8VK6wqS2UjSdqSEvypf0fbvl5BuC7Vxb/e+26yfvhq52nW23Bk1/kax2WgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vWWfn+K8HrKNUocwr35yy052KRUhPm+osw8n0Q7daZ4=;
+ b=t/CXHhHT/UUMEGo2dDMtsPI/WYS8QsQE6KOBSLrodCaxeqVRV0suifMA4PVLttUXIT85wvVSYpRvfPqopWRdCKKeJgmpMBuQcJLShmSE/aLOiuSa8cjoQO3VEB+yg2cI9EEy4CkiRDUyz7kR0nif/FFPYXtXPLmSi3ZRHAzcIlxTmIYQMZJo6ogZh6wKXAuEltLi8wRqtdsIbzwNu4dWC/dzpER7Bh31KavzZKDP344WETVeOn36WvYE4jcsOG/dxBS77fjCiwnAFZshMSVlmKQujG9bF2pLZzEwVCk5vHYRAbVczjfnk746Z0wEVJDbQpO4dsX4xotsbkvr9LFNag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vWWfn+K8HrKNUocwr35yy052KRUhPm+osw8n0Q7daZ4=;
+ b=Vcm/ba10i3C0Aae40ftTvzk58TnuFJM5bzwIZf/rTbZg7JGg+tJptJ9J5RF2/Cu19X82KiYllsHbRwrQPnms9+fZdqlF0qFyjXTkVFUU9X1NJoZcJtXDe0oz/WDA3wyYgRhX6tzNNuMblKTOXe904o2qGRFmPfwBqN4pSehZEGMVHPDkAoflwFhx3U5okTRp/62k/AGYegJKQubWLOtLQXakawMN9uxj4lm9W1Z74jMPQDXtsFGNaHCgSW5SNwuQhwcNuC64hqJsFRRzBC6A5M0xk3rA96hY6rAkb6trx6qNX2e5/fEdX9tjbiMTMKM+CMq6HS7pk2B/hg/wfNM0yw==
+Received: from DB6PR07MB3509.eurprd07.prod.outlook.com (2603:10a6:6:21::16) by
+ PR3PR07MB6921.eurprd07.prod.outlook.com (2603:10a6:102:7b::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8093.18; Thu, 24 Oct 2024 09:18:08 +0000
+Received: from DB6PR07MB3509.eurprd07.prod.outlook.com
+ ([fe80::5484:a966:1322:f78b]) by DB6PR07MB3509.eurprd07.prod.outlook.com
+ ([fe80::5484:a966:1322:f78b%4]) with mapi id 15.20.8069.016; Thu, 24 Oct 2024
+ 09:18:08 +0000
+From: "Wojciech Siudy (Nokia)" <wojciech.siudy@nokia.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: Rob Herring <robh@kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "andi.shyti@kernel.org"
+	<andi.shyti@kernel.org>, "peda@axentia.se" <peda@axentia.se>
+Subject: Re: [PATCH v5 1/2] dt-bindings: i2c: pca954x: Add timeout reset
+ property
+Thread-Topic: [PATCH v5 1/2] dt-bindings: i2c: pca954x: Add timeout reset
+ property
+Thread-Index: AQHbJfWjzt742AQ7LkSiP80g2IfYGQ==
+Date: Thu, 24 Oct 2024 09:18:08 +0000
+Message-ID:
+ <DB6PR07MB3509F0612D61254728D49D279D4E2@DB6PR07MB3509.eurprd07.prod.outlook.com>
+References: <20241018100338.19420-1-wojciech.siudy@nokia.com>
+ <20241018100338.19420-2-wojciech.siudy@nokia.com>
+ <20241018135314.GA91900-robh@kernel.org>
+ <DB6PR07MB35091425FE5CBCD782B465A69D412@DB6PR07MB3509.eurprd07.prod.outlook.com>
+ <pkse4jc6muqwo4zrvb6auhcdv4zrt6zd5zmp4yea5usagw62o3@lgzwggtz4uv3>
+ <DB6PR07MB350922B1A1458EE3D7EB3F019D4E2@DB6PR07MB3509.eurprd07.prod.outlook.com>
+ <655e9afc-cfe9-4b52-8308-7ffe1011e6d5@kernel.org>
+In-Reply-To: <655e9afc-cfe9-4b52-8308-7ffe1011e6d5@kernel.org>
+Accept-Language: pl-PL, en-US
+Content-Language: pl-PL
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DB6PR07MB3509:EE_|PR3PR07MB6921:EE_
+x-ms-office365-filtering-correlation-id: fb18389d-3ce6-47fb-3ac7-08dcf40cc625
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?iso-8859-2?Q?aTfU6LgcMWxanY+m3dzwj63D/mV07+vN+lPcAIYyYaq3IN0xy1Hgv3tuze?=
+ =?iso-8859-2?Q?2THGRnxCXBJ21KGZwYYbYWS3FpX9jnBi9SBqBlVaGlWpL5Qc60RKgfYcqr?=
+ =?iso-8859-2?Q?LwxHKgd1c+9ogq0upPGY9+kOm3BsfJIAII58pLS8c+nbOW4clm728fZm1Z?=
+ =?iso-8859-2?Q?PTdK+vKKWcCHmfKbG5HwI3Uq35VHApV6xzprP57to6gcMSjWiBF/5Nx6Pv?=
+ =?iso-8859-2?Q?rFtOg1GF0J4sfNVGYujZ39SuAB2U0zY9ClR0vMTg+kdogy6HZOM2WtpG6S?=
+ =?iso-8859-2?Q?z+ohconQmhkX2n1OS67Pa3clA7QVU0Te/2653DOU9Fep9+L1RpeCsQFGdJ?=
+ =?iso-8859-2?Q?fuRZbkP6AAfoA1HI6500TqdG6Gblc7UsXQ6QwVxPRwPAiGTBvShA5C5Fi1?=
+ =?iso-8859-2?Q?UzetfnOCpBT0x0KC2FqaUosMsI6/xTimR7t8zbcczsU82ef6W0jkBkvXv+?=
+ =?iso-8859-2?Q?MLxKAE/SkeI8EhkZSUeyOZzNaLG11s1Z6xyf+cWjXGtwYaTdpDSUyL4dDk?=
+ =?iso-8859-2?Q?Mrf3NRDRd6grcoBRKdXv0iBseuswWy2MSNUanC4SFmLIjwE9JORNj5XgMD?=
+ =?iso-8859-2?Q?GNa136MbGbi25kHN5pddIukN/fp8hW5sqsmNbN/0quvRDmlgfkW1/d8fpU?=
+ =?iso-8859-2?Q?yuP4U3iQVjmtPG660wxDdgAbDAUAbgY5Uk8UbAKOJAgM/txqNR6WkcQIpM?=
+ =?iso-8859-2?Q?Fvnx5eSmU51s4R+Dq8ITDPHTo1CN/iImNdIRVPx+jeVvp3JqU3mgcctwEG?=
+ =?iso-8859-2?Q?JAhAdANEh3ochkLfvnMhDwIOsw+1A+ScEywQsVqfKRfSEI0KoygnHRe27K?=
+ =?iso-8859-2?Q?oYZGPUF5zg9dtP8Iz+xjrBLI0Lrxy66fna4O9lz/RkSfVwYlloF/1wnjtj?=
+ =?iso-8859-2?Q?cs5vVHVV5hzN9cAJgD0CsEN+DKv/o3+OSn4YeDv98OQS27rxkFl5tg6q/8?=
+ =?iso-8859-2?Q?kXkdPG5eErghKDqTqQNhEtQ6ivDAJWMkAtRg7CIUr9WB+P2o7WPyRihOpC?=
+ =?iso-8859-2?Q?hNDRNGrCue/SlODucPDjOBrz4YvUNVKvLoiBTXbXPZkvUBxxPdhhK8HiTZ?=
+ =?iso-8859-2?Q?7Qx5TRelN33Tct5fUXm1/5uabm5xlU73lrYIYN1xZMZVyQynRBe1fjrVAA?=
+ =?iso-8859-2?Q?phgJai0ROYkYhtTz2/GgEw//zvvuqpbHFNeDCc8B7emopWxZnIPwoOHF4L?=
+ =?iso-8859-2?Q?3+Us8sJ4Ch3puKlqeSu8P2W+S2XgCNgv40qy+s+gnlt0EZSPJ82wotSMFq?=
+ =?iso-8859-2?Q?BX5TbDAN/usK6bzd3Ddc+rE5oGLAVC22HejZWn8GkK2rIxG0XRIRiJGokb?=
+ =?iso-8859-2?Q?afvTa2nQP37bm0LmAwLg0a9ReVyuoxP//cJRi+yVAT2lx4TzqtlA45VXfi?=
+ =?iso-8859-2?Q?tkZHmQmdC8c8rH8bFLHWhNc+NvZ10TQn4aEQlEU7shvm4Y4xim3AM=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR07MB3509.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-2?Q?Q3PVKR24A9tePzqYIGUmRJjDUwltf8ChR89dMvYRoZt3NuWrtwyvrmimtY?=
+ =?iso-8859-2?Q?8npXH+akUt3xIypsjtG6d2Q8IA+RFLOg7dn3YVup/OYFcySvpYRID6A9xD?=
+ =?iso-8859-2?Q?E4wCpzLADfKtiz+Awtbpqqowp2zkTIIYlvXCSaBhwDahF8E5dS3bvdxm/K?=
+ =?iso-8859-2?Q?BR8ZcsZbHyx7+grCFQM+VTDnqcEHJhP0ZQmgoU4y27Bxr4JgcZIBE0RjWX?=
+ =?iso-8859-2?Q?LRhPZsZmQ1dXkc3QJmIzw98/dvH7/2BywiygHEQy6NSOHdDniRJojflckV?=
+ =?iso-8859-2?Q?r9VtmzqsM90udjoVl/TIsLRqNvcnYzGzJSH/vIEe0JKHn8NQnQ8RGImt5V?=
+ =?iso-8859-2?Q?ab8tN2Vb1j/BJiDclSi6JGtzo/86lsVOLz26+p6pIZAVPZLa8lHDZuRuyx?=
+ =?iso-8859-2?Q?TzcGEA+T8MBiMG3qFVyITR/y8U74wlVh/n484hCydZw6Ru1nIoGHsif9HC?=
+ =?iso-8859-2?Q?M5uzbusBY6yOa6/e8C4P3TGi7EgRSaEB95nz6utSW41DifF6542WuSlUEB?=
+ =?iso-8859-2?Q?tR/ZCvqecAecFAzsb8kCCZl9aMP9m0CWRdi2XpYS/dRx5Z5k39IA+tk403?=
+ =?iso-8859-2?Q?fLjuFrswmnwOUveNgP48/kJTKGq8ZVVcMMPh6Inv+E/Yy2MeaVc3gegpWi?=
+ =?iso-8859-2?Q?KpAb7sjYdRzl6Eng+nxrY0WBFpWQSf/PqDDs222a9RRMPJxmpfRXa9FY5d?=
+ =?iso-8859-2?Q?dlXjs+aJGSTFSIQwWGcR6DfMR+5qrqWnkd7LY6QmXlZnBlQfjaOQspswC4?=
+ =?iso-8859-2?Q?Jqx6u+NRGrrlNiPZ7a8s2RLeX0JwyVCyntWtsHr3s1pl/ID8T6XbMC88qf?=
+ =?iso-8859-2?Q?aUuYvk+g0yWNbUG4pGIT8Burkz5wyot32+czMVpzoECPYmQ91m2adMAFYw?=
+ =?iso-8859-2?Q?zAFW/IzEZWqHn5tLlZmURXBATbDlEgAkDeaWmZ4nQkCaAGuz7m464mSjfX?=
+ =?iso-8859-2?Q?SC1C3We0B05r0e4+Xw1ZXscmxbHIWsExqGMRsdA/KSZbewDn08RynNch65?=
+ =?iso-8859-2?Q?JRRo0pcidHN2le+9+BMBB297CGDIYj7hSAQI0dbkPMGZeigaTBkDpllwO+?=
+ =?iso-8859-2?Q?cSofHJVwRdeKg/RWNLImGCXXJThavRKtloRCzf4Z3U2vKPWxUFVHEDJYbg?=
+ =?iso-8859-2?Q?/9wZW8Np7gve4X9dg5vwpGVcty3fuzSqApUJQJBABNDUH1WX0z2x+NCWpX?=
+ =?iso-8859-2?Q?j4CAFg3CSQC8kHGRDWb9T4ETnHfKe6FkPBUbs+GHU9O+JLeGqN6AJfabTa?=
+ =?iso-8859-2?Q?3wlSVS+4VqX/p8CSN8tc+mAfNZNO5qqwgUfVT7vxqbEnA0MgxtUubZfXKJ?=
+ =?iso-8859-2?Q?Z7xyDOqrrIgBVDbu597+DB5Fk+3FiGGp/YTwp3Dg4umR/Mx4ydGhlz+k8y?=
+ =?iso-8859-2?Q?xoPtGUA7Lx00mHxux2ViQkO7MgnQu715KgpRPaj09IhRfmyhskY0t3hbUj?=
+ =?iso-8859-2?Q?WocH3u2oB1ZSLWYcB5wHisRLFk5TLsJgoB+zBbQ6D9pIsNLK/1diW0XQie?=
+ =?iso-8859-2?Q?E1Zoc0OOObxMkXWarO9org0geFoQn/jRI0N9OyIsq26WO/Gz9keEcl0mAb?=
+ =?iso-8859-2?Q?FKPxRBfneGTtTg+7JKWD09HIXJYjf8MKQKAlftBXS+F3V6T6t+Yw8iodb0?=
+ =?iso-8859-2?Q?mbW9hjVAcDju88WJcO6bCLrk1KYbiFAPAz?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dwvre6734ixnnoql"
-Content-Disposition: inline
-In-Reply-To: <20241024085922.133071-2-tmyu0@nuvoton.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR07MB3509.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb18389d-3ce6-47fb-3ac7-08dcf40cc625
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2024 09:18:08.0804
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wjkC5dVM0D7thOytTQd6fPLdcfJMssXDL8rY/92Ughv3ywKndQsSGnmpIHMbVtMxuzkQcqN7vp2xnGPhuXatS+wlm3oJ4qbyibC9GgSawdo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR07MB6921
 
-
---dwvre6734ixnnoql
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-MIME-Version: 1.0
-
-On 24.10.2024 16:59:14, Ming Yu wrote:
-> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> PWM, and RTC.
->=20
-> This driver implements USB device functionality and shares the
-> chip's peripherals as a child device.
->=20
-> Each child device can use the USB functions nct6694_read_msg()
-> and nct6694_write_msg() to issue a command. They can also register
-> a handler function that will be called when the USB device receives
-> its interrupt pipe.
->=20
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
->  MAINTAINERS                 |   7 +
->  drivers/mfd/Kconfig         |  10 +
->  drivers/mfd/Makefile        |   2 +
->  drivers/mfd/nct6694.c       | 394 ++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/nct6694.h | 168 +++++++++++++++
->  5 files changed, 581 insertions(+)
->  create mode 100644 drivers/mfd/nct6694.c
->  create mode 100644 include/linux/mfd/nct6694.h
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e9659a5a7fb3..30157ca95cf3 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16434,6 +16434,13 @@ F:	drivers/nubus/
->  F:	include/linux/nubus.h
->  F:	include/uapi/linux/nubus.h
-> =20
-> +NUVOTON NCT6694 MFD DRIVER
-> +M:	Ming Yu <tmyu0@nuvoton.com>
-> +L:	linux-kernel@vger.kernel.org
-> +S:	Supported
-> +F:	drivers/mfd/nct6694.c
-> +F:	include/linux/mfd/nct6694.h
-> +
->  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
->  M:	Antonino Daplas <adaplas@gmail.com>
->  L:	linux-fbdev@vger.kernel.org
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index f9325bcce1b9..da2600958697 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -546,6 +546,16 @@ config MFD_MX25_TSADC
->  	  i.MX25 processors. They consist of a conversion queue for general
->  	  purpose ADC and a queue for Touchscreens.
-> =20
-> +config MFD_NCT6694
-> +	tristate "Nuvoton NCT6694 support"
-> +	select MFD_CORE
-> +	depends on USB
-> +	help
-> +	  This adds support for Nuvoton USB device NCT6694 sharing peripherals
-> +	  This includes the USB devcie driver and core APIs.
-> +	  Additional drivers must be enabled in order to use the functionality
-> +	  of the device.
-> +
->  config MFD_HI6421_PMIC
->  	tristate "HiSilicon Hi6421 PMU/Codec IC"
->  	depends on OF
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 2a9f91e81af8..2cf816d67d03 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -116,6 +116,8 @@ obj-$(CONFIG_TWL6040_CORE)	+=3D twl6040.o
-> =20
->  obj-$(CONFIG_MFD_MX25_TSADC)	+=3D fsl-imx25-tsadc.o
-> =20
-> +obj-$(CONFIG_MFD_NCT6694)	+=3D nct6694.o
-> +
->  obj-$(CONFIG_MFD_MC13XXX)	+=3D mc13xxx-core.o
->  obj-$(CONFIG_MFD_MC13XXX_SPI)	+=3D mc13xxx-spi.o
->  obj-$(CONFIG_MFD_MC13XXX_I2C)	+=3D mc13xxx-i2c.o
-> diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
-> new file mode 100644
-> index 000000000000..9838c7be0b98
-> --- /dev/null
-> +++ b/drivers/mfd/nct6694.c
-> @@ -0,0 +1,394 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Nuvoton NCT6694 MFD driver based on USB interface.
-> + *
-> + * Copyright (C) 2024 Nuvoton Technology Corp.
-> + */
-> +
-> +#include <linux/io.h>
-> +#include <linux/usb.h>
-> +#include <linux/slab.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/nct6694.h>
-> +
-> +#define DRVNAME "nct6694-usb_mfd"
-> +
-> +#define MFD_DEV_SIMPLE(_name)		\
-> +{					\
-> +	.name =3D NCT6694_DEV_##_name,	\
-> +}					\
-> +
-> +#define MFD_DEV_WITH_ID(_name, _id)	\
-> +{					\
-> +	.name =3D NCT6694_DEV_##_name,	\
-> +	.id =3D _id,			\
-> +}
-> +
-> +/* MFD device resources */
-> +static const struct mfd_cell nct6694_dev[] =3D {
-> +	MFD_DEV_WITH_ID(GPIO, 0x0),
-> +	MFD_DEV_WITH_ID(GPIO, 0x1),
-> +	MFD_DEV_WITH_ID(GPIO, 0x2),
-> +	MFD_DEV_WITH_ID(GPIO, 0x3),
-> +	MFD_DEV_WITH_ID(GPIO, 0x4),
-> +	MFD_DEV_WITH_ID(GPIO, 0x5),
-> +	MFD_DEV_WITH_ID(GPIO, 0x6),
-> +	MFD_DEV_WITH_ID(GPIO, 0x7),
-> +	MFD_DEV_WITH_ID(GPIO, 0x8),
-> +	MFD_DEV_WITH_ID(GPIO, 0x9),
-> +	MFD_DEV_WITH_ID(GPIO, 0xA),
-> +	MFD_DEV_WITH_ID(GPIO, 0xB),
-> +	MFD_DEV_WITH_ID(GPIO, 0xC),
-> +	MFD_DEV_WITH_ID(GPIO, 0xD),
-> +	MFD_DEV_WITH_ID(GPIO, 0xE),
-> +	MFD_DEV_WITH_ID(GPIO, 0xF),
-> +
-> +	MFD_DEV_WITH_ID(I2C, 0x0),
-> +	MFD_DEV_WITH_ID(I2C, 0x1),
-> +	MFD_DEV_WITH_ID(I2C, 0x2),
-> +	MFD_DEV_WITH_ID(I2C, 0x3),
-> +	MFD_DEV_WITH_ID(I2C, 0x4),
-> +	MFD_DEV_WITH_ID(I2C, 0x5),
-> +
-> +	MFD_DEV_WITH_ID(CAN, 0x0),
-> +	MFD_DEV_WITH_ID(CAN, 0x1),
-> +
-> +	MFD_DEV_WITH_ID(WDT, 0x0),
-> +	MFD_DEV_WITH_ID(WDT, 0x1),
-> +
-> +	MFD_DEV_SIMPLE(IIO),
-> +	MFD_DEV_SIMPLE(HWMON),
-> +	MFD_DEV_SIMPLE(PWM),
-> +	MFD_DEV_SIMPLE(RTC),
-> +};
-> +
-> +int nct6694_register_handler(struct nct6694 *nct6694, int irq_bit,
-> +			     void (*handler)(void *), void *private_data)
-> +{
-> +	struct nct6694_handler_entry *entry;
-> +	unsigned long flags;
-> +
-> +	entry =3D kmalloc(sizeof(*entry), GFP_KERNEL);
-> +	if (!entry)
-> +		return -ENOMEM;
-> +
-> +	entry->irq_bit =3D irq_bit;
-> +	entry->handler =3D handler;
-> +	entry->private_data =3D private_data;
-> +
-> +	spin_lock_irqsave(&nct6694->lock, flags);
-> +	list_add_tail(&entry->list, &nct6694->handler_list);
-> +	spin_unlock_irqrestore(&nct6694->lock, flags);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(nct6694_register_handler);
-
-Where's the corresponding nct6694_free_handler() function?
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---dwvre6734ixnnoql
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaDWsACgkQKDiiPnot
-vG/14wgAgoWLTibZpUmoNvOo0qLLAlp/YFpDa4iS3anD0MVkcgJIJwOg6aHDIw+F
-qp749L7WL9qp+19SQjeSUvHyDgc3Eqv4PuQae5NMAcY+KFqQcItGBFkB2j2ewhn6
-JMI5tSpNKoqJUflio0P0nNHt7JRciyi6EBfiU5TvB0J2+9cf6qRHjknmIkrxROSD
-OMBmGK0e0Ki8TfOnhi8PQmLbv8RhoIe7/W6qHzTsOOPZ/66fjGqDcBUC6oi+Vw7f
-mOVr2zW2DJ7xr++nBsBsvCzM8YQ7NDzt3qfBIHS21WE04dOWyBQlj6n01LYL7mta
-+1F9tQnxpRonNQlU1mjXj6tMn2DjUw==
-=raiy
------END PGP SIGNATURE-----
-
---dwvre6734ixnnoql--
+> I suspect you are adding reset for some other device, not for the one her=
+e.=0A=
+No, I reset pac954x chip in pca954x driver.=0A=
+=0A=
+>  I suspect you place property in inappropriate binding=0A=
+Many boards provide reset-gpio for this very device, but it was=0A=
+used only to deassert the reset during initialization, so shared=0A=
+gpio line was not a problem until now. New binding is to=0A=
+reset later in runtime if necessary only if explicitly specified.=0A=
+=0A=
+Best regards,=0A=
+Wojciech=0A=
 
