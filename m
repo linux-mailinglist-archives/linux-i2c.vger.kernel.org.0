@@ -1,169 +1,179 @@
-Return-Path: <linux-i2c+bounces-7551-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7552-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 268059AEB7A
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 18:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE21C9AEF4C
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 20:11:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC8DF1F218E6
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 16:07:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E29B1F211E4
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 18:11:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF861F80A2;
-	Thu, 24 Oct 2024 16:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49EFF200CB0;
+	Thu, 24 Oct 2024 18:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nonI6kIS"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="wacLMw9N"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B24139578;
-	Thu, 24 Oct 2024 16:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09775200BB6
+	for <linux-i2c@vger.kernel.org>; Thu, 24 Oct 2024 18:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729786013; cv=none; b=lDrlsnqgRfJwczUDW+AnxO+99Bzc7Vtv8bbtWZVUV5f/QFVp9ufnOzI/A7lJi+1rgv4r7ZH+I3XC5XnMDRbKatJsWBtgS88F5Ba+CnTh1L3pHGERCd6mqqsWYeY9NIprA9CF+X3wTlaodIk3bmZCM1INt44tbOp5AnsZu1YcOdU=
+	t=1729793467; cv=none; b=HDwHv31B4PJuvW422kuCI6nFz/vxUrf3dbXT7nlM0FiO6ZMZD4qWjHyLPavuv38SkqPJWeOt7MbpTxBFWCEEroaGgon7OC8wgpoPu7CSXDl4AT5T5zEYt0dJWHbuu2qjyoUzhxrL27zorYb3S93ukEP79RkGal2knUDHV/PrbOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729786013; c=relaxed/simple;
-	bh=/kwiBkUdrwk/ft8X37mw8OAYaR+w559zlg+w6Nu5+Yw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aqp5+/Dlt/jXJMjcN2AGuqh9r8pPp/fpM/aROMXjE8iSyzGJLiZX6t0MDfc0S+p6ZIPc+6uXqN3paZCh6ufhyqWzF+qRulxZRd1mCBCY5/9xpr3mBRiEZ23pTBzAP49+XL+evjJ4h2BxdgMuxQ41mZsRU5UjaK7qj4hJH3pk7f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nonI6kIS; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20c714cd9c8so10330225ad.0;
-        Thu, 24 Oct 2024 09:06:51 -0700 (PDT)
+	s=arc-20240116; t=1729793467; c=relaxed/simple;
+	bh=wuUDrWGldoGzLKmEDKRB+N+oojKVOt07T8M5dyrnk6A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ayG3CaPly6s6KkMrj9gPS50AKQ2fff/o5IBl+aNbvG6e4PQPrW7WpkusvmBJ34hjNZ4cyEW6KdITn++CkZK5D25EBHi3kEz2UmvBxpE0f084eHqnVn4BlcbKQYIl/L1bYTVUJ/mePkjdCCBUxs9eCKE9KxYft6YRaC8475AS+vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=wacLMw9N; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37f52925fc8so835693f8f.1
+        for <linux-i2c@vger.kernel.org>; Thu, 24 Oct 2024 11:11:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729786011; x=1730390811; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RMpYMGB8pLXbWeaijOZtSy80NUgHC2RS6rF8BuCiCr0=;
-        b=nonI6kIS6pn3+C8nAn4mWFqxhLaUrTzJkuID9j4xUo6IzTxJLylJeUuc/OYioeoIHC
-         A2VNVbVVMX7DEA1oF0i1OmV4sEeOl9v3Lq8L+Dl75a2RqaNOy2bkt8m4fPyd0ah9qLJA
-         ZB4VpjFMc/YUeUy39hh+bkrHBZmjmVyOqJQ01aiXI+ytHnZZV3LPpXTCXfWYjhPpETeE
-         SPidtFfVrzCez2XUqVpw7p9f7QtohfdGLm8GzvQZNqzvkhbzT8l92gcmVQ1+nJa1NwnL
-         WXNGmKO8SvExzW2yhk7FeHze7Waw5Az99NiMg3LDyqrCZ5AWn9HB8gtgEyOVEU5areJ2
-         gmBw==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729793462; x=1730398262; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IqU0yvR44kyPrUFOs9XxlTbM2CjS1kPGGNa549pruJ0=;
+        b=wacLMw9NLwTcPf6/cMlDcibqMP48rL2Yw0wzUZDO12oQuFM3AFIZrJTRl9DUT4n5Xw
+         ZIIgpkB70prKYJMA7U69FQ8irLUo5Gvy9MocCI0utufLYs5OSCYdByt5VapHouVF8PQ/
+         zaVWWmyMLql7Dua8uM2sT5fDzLpa8Bnt3Y3HZySOS+IsFOw4GEyd1QlVe3M2Q00bTsko
+         TvRh5kBOD6nFipU5n2evTNT9AA/IkMUDe53yO3jV65YtWSTrZsSanIAs7aZ54xndGI+I
+         Gzw1l26Y/b7BK5I2hsHuhFuTvi8FmzcF2HmNOHPZqW+jztoemTmtG6cAyWKR+JaRY1Yr
+         ZVOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729786011; x=1730390811;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RMpYMGB8pLXbWeaijOZtSy80NUgHC2RS6rF8BuCiCr0=;
-        b=aRIlzxe6FZgX1TwE2ca86ptMlmlaqg6RZvZHBGLkYvUlH4X8UJK/E5uLYX5IpUlCag
-         Hw+jRJnCtXaBkTig10vNB3bqP5j0A3bqMMgdkKWwbLSUZfbm8LGcSNUP5L4TXqb/QJLz
-         enO13rk/xYyjCICFvuqqOFjNClNNxiKyqhTULZgN7XRIMeNubhGn8EPHIpgnMmzKm+dU
-         xKV5Se++Hdp9AWje0sJ5JSU1a85NKqn4qe03gWUL1kDZBwLosQyWVwt/ImgVv7kBUD2X
-         BYWN7xLHTddS81g72pRurD7aknUxNXt7mkQnY5mnACuGzad+ydk2NxjlNqQaJviS36LK
-         IcvA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHeI+XNMNWUxjPJb9BBNSl/K3ChNyEz8vlMIGHC3Uae7nGPdr2K3tserNgucAtA71dsOGI4tQYI+I=@vger.kernel.org, AJvYcCVNPjDzmMR+M/bmGApuoZbvxsYlhWDNRCWMIEcB5UXJvIrwE6NcqzxaVSDSMWbcOoFmgSMOpOlgju6c@vger.kernel.org, AJvYcCVy219ZuJoBza1OTSteR86OIwVMh6jkJ52tQH05TGm9uWZc7v/t3xtWGey3jkADevhwweIuLGMKrxhOCg==@vger.kernel.org, AJvYcCW1QVbur8twbHD+mXpxb/mRnRMdQmiJ00TGhONVhomqCRgjqFT1ugQ7j2uUKwQni/yPfUzdRLMmNStr@vger.kernel.org, AJvYcCW4v6sfGOkp03uiq/s3WcWJPxuxAszIDTqQeCEKVX2w9avjldvWnY/ZH3CtlzyQkbpv75fYbm8J@vger.kernel.org, AJvYcCWB62CW1uTIbf1wPNVoQnutOOevdxdEFykD9vM6lROCeqCiZmhCGj2YGSjuAgJ+uyHlklTfH/LlOKfO@vger.kernel.org, AJvYcCWwu8+YKT1HurfZiIV+cGHwd7ZtUnckbB+Hn5x3N05a8BaXbNT8pZjWsPZVQTpSGRJ3S0aA2jeIzJwFuE8zFBo=@vger.kernel.org, AJvYcCX0hHn0La0OjwBOjXvlo9osZ/Qa7fCUy0AhCWFRWuoSg/YpLUapUDV6olDSlI3NfJxuzuLXqtDhhTLY/s4=@vger.kernel.org, AJvYcCXBHs4zfEzsLgIpw6P9w+Bmw8QvHWvLhKQkEQUn8j5tdtxIT0CFiU+OWWQS+HZsIeZFmgh9OTMpIZXx@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzihd3vDCKoB6N80ej+sq9qTMJygJLTL6Qrobgx26J+Nkvt3USo
-	/M4PDR4gGDOBcJDxZIr2QOFEzPoSXR2scp5Qcl1yME/TUyqayaLL
-X-Google-Smtp-Source: AGHT+IFVaoS0y1PnVxdLbIxOvUdsHIL8kzqzLHIcf0Zoa5OMyMBmDSTAU8jwn0PXfyPZekS3A5U/2w==
-X-Received: by 2002:a17:902:ea08:b0:20e:55b0:3607 with SMTP id d9443c01a7336-20fa9deaa86mr94235495ad.2.1729786010468;
-        Thu, 24 Oct 2024 09:06:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7eeecf1csm74256945ad.17.2024.10.24.09.06.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2024 09:06:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <daab0b5d-8877-46ce-8ffb-0602164be5ca@roeck-us.net>
-Date: Thu, 24 Oct 2024 09:06:46 -0700
+        d=1e100.net; s=20230601; t=1729793462; x=1730398262;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IqU0yvR44kyPrUFOs9XxlTbM2CjS1kPGGNa549pruJ0=;
+        b=Vh605sR3AWz27jEvIG/pa5QN/7lzD7ouaaYUUtcMIK7OP0Dos0APv1YlpDY4toqRrO
+         C+Z2H/RFZFc1GagRkvxBypDPjZ4dhkpP5tT69o7Cn9Chx5Md0SZCyMzBKu55R6VVFm1h
+         +JXrQXdXrI5d53CMgjG2MN7ITStSRs2anW2LOsdk75SK2/zoFr4iXVUE8fjiITiUPKbH
+         C3b3OEDy+kQx6rx+LeEL6oh8lKT5w5q4rFWGtMa0dBN0oFAqP9kNqPLFRzoFAZ++z41h
+         1Mcma6vuRZEksmuARJFoHeIvsObc9E1agrkPMjhBP95IS/7GL1op/BcmasTtMxz1UvYn
+         H1uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWX9x2YE4qBVe9bsK6pfZzeZoeCBJDu5FJyHFlgsCCoM2bUqYGpthizHSJWIArDkKAyGsVFTjjEpfE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlKyf05fByTZuhN9lJvHD6BLH0F9W2IZqxJ66Au3eSFiUwUSwZ
+	nu8GNAOx2lzI8VQpFz/2v1zF5gz+1KE9clg4FbjU0sPUCah+CQ4colTATOafJCM=
+X-Google-Smtp-Source: AGHT+IFHTyuVsCBfNROuxNLrz1m+g63n0f5uKNpwbhVb79Q5e4mIsRTsMpKrKaJPjPSMD95PJpY3+A==
+X-Received: by 2002:a5d:4f83:0:b0:37d:5046:571 with SMTP id ffacd0b85a97d-37efcf10dd8mr4687694f8f.22.1729793462147;
+        Thu, 24 Oct 2024 11:11:02 -0700 (PDT)
+Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:c04c:f30a:b45c:dbb])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43186c0f248sm52551275e9.37.2024.10.24.11.11.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 11:11:01 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH v3 0/6] hwmon: pmbus: add tps25990 efuse support
+Date: Thu, 24 Oct 2024 20:10:34 +0200
+Message-Id: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 5/9] watchdog: Add Nuvoton NCT6694 WDT support
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, jdelvare@suse.com,
- jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org,
- alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-6-tmyu0@nuvoton.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241024085922.133071-6-tmyu0@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJqNGmcC/22Py2rDMBBFf8VoXRVZb3nV/yhd6DFyBImdSoppC
+ Pn3ThJoQ+nyCp3DmQtpUAs0Mg0XUmErrawLDvEykLjzywy0JNyEMy6ZY472Y+PKOUaFjCzmzAM
+ wTfD7sUIuX3fV+wfuXWl9ree7eRtvr/9ItpGiyQVhQAowTr0Ff96XUOE1rgdy82z8ieXsieXIZ
+ gGIR1CjEX/Y6yOqwucJz+qPst+rpuFHWWE+7T3W0jIva4VEk++eGgvGW6U0pk2Ygb7gG1C0H0q
+ fBjXqlEKGbISOVgqrtWeBp6CUi2BdkCyCMBZTrt/xnE06aQEAAA==
+X-Change-ID: 20240909-tps25990-34c0cff2be06
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Patrick Rudolph <patrick.rudolph@9elements.com>, 
+ Naresh Solanki <naresh.solanki@9elements.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>, 
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>, 
+ Vaishnav Achath <vaishnav.a@ti.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3011; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=wuUDrWGldoGzLKmEDKRB+N+oojKVOt07T8M5dyrnk6A=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnGo2uqLyLH6b8a+08Lm5MTRQl2OMVrjsX1pGku
+ PCvopCiPZeJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZxqNrgAKCRDm/A8cN/La
+ hYJ1D/4hcgp6yuUvwxrHxbwvSEe4PKEWna4DpzjRu9DXprZcMDnPviwD2pKOrmS2H9tOOIqcwNP
+ 1PxdGl9FUuK6XYFzRzJcF5rg7YZjdK6Z/FHz3i9bs1DB5AdwHFk70oOK+WVtm6X1MBuYZno+Msg
+ pKuOFg0qHXyeV9IOo5i84+qLXqDhWLFCNHUd/NfE1n1thnQwWAIsJ5wjn3EwoHA47T+su3HsXhe
+ +0CioVEFXMYgoSgr3sU0Cr4QAk5n+ZuHAa9eETvbIUn74KCblHSRzVPd1GR0HboKXxrpDR9zrTA
+ MyYpcAxYmB9DSw4NAfYbfX/vjN6kfZNoDRCNFOQF0yciPILVPLRIn1n6YdayWoVRTzARJ47uCX2
+ 2KWMwVZvu8LuKCfdW5ALIC1VuGVEqNKJKWXiwvQIla5o2u3cbt3YFxN8RDPV2liksxuOJM80OuB
+ Nz5hBI+ApC+eK4gJw6vhaAWuYjnovGo3CpmkR9Zt7kEqW07U+3lZF3oWAzImMNoEAf0B44KPo6z
+ ZdfJwgaO0abAXzY4nMzLM68AXlauujpvAoUR6EEWEy82xhbisoR9Byb9/+9w1+/q09SUK6ticuk
+ ID59EcGjNxIU5v7sun+7YmZ2apL255cJjWohULxpUBQckVbaZoFXy1shivpYTbOGLareUrDfbIG
+ qoA0ERK/u9/3ISQ==
+X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
+ fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-On 10/24/24 01:59, Ming Yu wrote:
-> This driver supports Watchdog timer functionality for NCT6694 MFD
-> device based on USB interface.
-> 
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
-[ ... ]
+This patchset adds initial support for the Texas Instruments TPS25990
+eFuse. The TPS25990 is an integrated, high-current circuit protection and
+power management device. TPS25895 may be stacked on the TPS25990 for
+higher currents.
 
-> +
-> +static int nct6694_wdt_start(struct watchdog_device *wdev)
-> +{
-> +	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
-> +
-> +	pr_debug("%s: WDT(%d) Start\n", __func__, data->wdev_idx);
-> +
-> +	return 0;
-> +}
-> +
+This patchset provides basic telemetry support for the device.
+On boot, the device is write protected. Limits can be changed in sysfs
+if the write protection is removed using the introduced pmbus parameter.
 
-That doesn't make sense. How is the watchdog started if not here ?
-Something is conceptually wrong.
+Limits will be restored to the default value device on startup, unless
+saved to NVM. Writing the NVM is not supported by the driver at the moment.
 
-Guenter
+As part of this series, PMBus regulator support is improved to better
+support write-protected devices.
+
+This patchset depends on the regulator patchset available here [1]
+
+[1]: https://lore.kernel.org/r/20241008-regulator-ignored-data-v2-0-d1251e0ee507@baylibre.com
+
+Changes in v3:
+- Grouped hwmon write protect patches from:
+  https://lore.kernel.org/r/20240920-pmbus-wp-v1-0-d679ef31c483@baylibre.com
+- Link to v2: https://lore.kernel.org/r/20240920-tps25990-v2-0-f3e39bce5173@baylibre.com
+
+Changes in v2:
+- Drop PGOOD command support
+- Use micro-ohms for rimon property and better handle range.
+- Adjust read/write callbacks to let PMBus core do the job by default
+- Drop history reset specific properties and remap to the generic ones
+- Drop debugfs write_protect property and remap to the generic register
+- Link to v1: https://lore.kernel.org/r/20240909-tps25990-v1-0-39b37e43e795@baylibre.com
+
+---
+Jerome Brunet (6):
+      hwmon: (pmbus/core) allow drivers to override WRITE_PROTECT
+      hwmon: (pmbus/core) improve handling of write protected regulators
+      hwmon: (pmbus/core) add wp module param
+      hwmon: (pmbus/core) clear faults after setting smbalert mask
+      dt-bindings: hwmon: pmbus: add ti tps25990 support
+      hwmon: (pmbus/tps25990): add initial support
+
+ Documentation/admin-guide/kernel-parameters.txt    |   4 +
+ .../bindings/hwmon/pmbus/ti,tps25990.yaml          |  83 ++++
+ Documentation/hwmon/index.rst                      |   1 +
+ Documentation/hwmon/tps25990.rst                   | 148 +++++++
+ drivers/hwmon/pmbus/Kconfig                        |  17 +
+ drivers/hwmon/pmbus/Makefile                       |   1 +
+ drivers/hwmon/pmbus/pmbus.h                        |   4 +
+ drivers/hwmon/pmbus/pmbus_core.c                   |  90 ++++-
+ drivers/hwmon/pmbus/tps25990.c                     | 427 +++++++++++++++++++++
+ include/linux/pmbus.h                              |  14 +
+ 10 files changed, 780 insertions(+), 9 deletions(-)
+---
+base-commit: 516ddbfef736c843866a0b2db559ce89b40ce378
+change-id: 20240909-tps25990-34c0cff2be06
+prerequisite-change-id: 20240920-regulator-ignored-data-78e7a855643e:v2
+prerequisite-patch-id: 468882ab023813ffe8a7eeb210d05b5177a1954a
+prerequisite-patch-id: 2d88eb941437003c6ba1cebb09a352a65b94f358
+prerequisite-patch-id: e64c06b721cda2e3c41a670251335d8a2a66a236
+
+Best regards,
+-- 
+Jerome
 
 
