@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-7526-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7527-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F7D79ADFF6
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 11:03:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1693A9AE003
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 11:04:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6051D1C22018
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 09:03:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F5011F23455
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Oct 2024 09:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41C561CF2A7;
-	Thu, 24 Oct 2024 09:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5341C1D1745;
+	Thu, 24 Oct 2024 09:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LuxOkdag"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QQ/GYbx/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9801B4F0C;
-	Thu, 24 Oct 2024 09:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BAA21B4F3D;
+	Thu, 24 Oct 2024 09:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729760425; cv=none; b=ar8nnRevKma+NtfU/6QeJ10HmkibaV8kP5SgJamLPIZFRBEnGzfD33n6S480pSIf51cRwQPqGFaE3hG+gMQ7lfjyl76oL65HzV5bQd/GunsyaiP8qC7RusiFGaPhAhVof3G1Cz2zh87TWs6VGPeRLvQqJX9J7QEw2sgtYwJ37S0=
+	t=1729760430; cv=none; b=s1bOx/kZGksIEQcRXgKyeJpgbID15fFhMpI38qx59dzfNo36UT7T1/Wp0YdT35A5BI7hOK2tb+hNbKfNoLm88koSXL8u7sL3s/R1bRyrmxoNTEo226/q94U2bPH7s2xdGNnZeq9ZA70rX0t87Yvu0iXubyxOTWr1qoq/1VMpK4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729760425; c=relaxed/simple;
-	bh=UnhLaJ0JL15jAgZ553cxcb3YFcwd+/F1Mzjh+QcL+pY=;
+	s=arc-20240116; t=1729760430; c=relaxed/simple;
+	bh=zHqxB7fmBbca/3/uhh+sdA/oXZ4DFNAbHKvHPJIehv8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WV9ycxlzd1wMtzBnIi0boAtDg6qCQ6ROMg7rzRNVp7NJGNoRdnZ/YCCf94zcJ4WcU4ALDcYvwC/Q6n/7fL+lyGxQsx4Plr18R+JWpw4yNIa9tPQsf36gzo6pKH+eVHuGqTqHMlXFoToWabtQ7RcFGcDiL0ugmTNUav6xrMzQb5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LuxOkdag; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=RTB+C4BkwYiieCXfzgGilFj6Ns9L1GXMj4UWLrVtQ+4IvFnVnuibWgNYPPtVqPR/zpIzFhUTg+66OCq3Ey+wh3e7YadJSuMHbOEe4hhYfYgaGh7X+ivKb0zySrkFTQTMFciHiTLF/V+TLULF9JtZE+RI3ZVfBea49a5YgKRzoS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QQ/GYbx/; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20c805a0753so5795665ad.0;
-        Thu, 24 Oct 2024 02:00:22 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20c803787abso5231765ad.0;
+        Thu, 24 Oct 2024 02:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729760422; x=1730365222; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729760426; x=1730365226; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KIbqZDJc8mnLl8JM1vRVacj6/HhHdNNqQLheCYEGuDY=;
-        b=LuxOkdagkHRp3pKiITdvYfrPEFLzl3Yv511gQTpOlXQxZsd4ekN+KkHylrZq9nfc8b
-         OVyEur/xo4jM5nqCuu04QyaD/4Sk8amLx/71/VX6GMbdZaj7cKuErfMKfbSp5qpUYdrA
-         7F1PY/12Advxg3KueXMXk3yJyIgXYiaZ7HIesgwgGgrBl7XAOmwYyhN0W/HrSDbwuPTu
-         MFaStE7DGf7D1oJfH/GKKZzlmiBZhcXPyJ52yD3aUy0pwSL1i2Sw9Tjr3JBY+cd7Spgx
-         AobYDdbdnmn1PsKuVcDrOGsSJh9HTDbj2yvz2RZHxhZL0reeyY4U4VhkbyLfnYQtPd9u
-         98dg==
+        bh=2CuRkBznOtCHHxZzKq/9IVvhKUdKupfyQysLLGavF5I=;
+        b=QQ/GYbx/LpvR2YILsaPm1l/27LhUV7S1qpVXU1vBdrX/89haRzJglwvTQ3ndYT5Ogf
+         NVLuR7n3u0vU7Bvd8ZXMDf+tWlld+DslD4hTCZL7vQ65T/TOQbbhinPIsAI4aHVSfJIK
+         26oOCWWesnt881t3OKVuH+9J9ysptsePMgZJ8t48NNlZjJhqIO6Z6ITK6qZAHw7avedC
+         5tNK4wooVGVFb4WPPE24UqbCK3ikz+Aga9C5aL855aEUzAPTF/eBW8SUNa6gIhrXlig/
+         37L9wbhgK5uoW9HLSp8SRciPTDgmp+VF2+RUK5OdPgnTH705mkclEH1mbMeb4wuT+PwH
+         gf5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729760422; x=1730365222;
+        d=1e100.net; s=20230601; t=1729760426; x=1730365226;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KIbqZDJc8mnLl8JM1vRVacj6/HhHdNNqQLheCYEGuDY=;
-        b=omO28SLM5636f6Xzs/flbRIMh2M+FRVhxnK2cKsycOxBK8YjMS2hcwgJoRBPXsZhPe
-         6XvL8y1//kcueuktJpUhCJUWva+tfJrkbdyeTYiZECpFxrzVhN+9wA5I5oyVIVeVIeoU
-         8YX8wokJwK9DTmXkJOsWsvgpWggJEWvUdjWLykc4rkmRNnu7iEA5mxypEu2YrYmIW1Hr
-         uRSJsuqc3ww3XO0XaeE/DR4Wyh9NDavvnv3BsgvKgwRJq3rytXfdz90bJLulrcyw542O
-         gAl204MaASqvF7CGapEJAhOD22VaCUssjqdp7Y31otORnS/FkY5Do6WI+oNAFUh0zu9O
-         2plQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV3bEEEMKWCltExC3E297Dulzr/ymLTEcH+u1DOxRN3NWt9C3wA1k5v8PKVwMSeudz8YhGc5OXGvsma@vger.kernel.org, AJvYcCVgZnQa9MLM/gfo9xvUVckAKlcffOcFjsu4rLhSwhfybqrMXInNrwbGaFxkrthGxsLU3hXjb8keVEF1@vger.kernel.org, AJvYcCVvIf9gDogqm64/oj+3j7/asHCDSlvEJrOxpbZehr3uPBwzfPCS7/Q4oCTnJelSwZCpIlzAqOQRQIQo@vger.kernel.org, AJvYcCW9ybUoQ/v4+7G/zBE5vJpch5U2Rd0jsXehmM5MZSKCu5rKFqrhG9k6nS6ZzEF0fIYUDz2wh0oLdi0zMA==@vger.kernel.org, AJvYcCWKAfgIoSTPNAym5jKOHxguwqUWA2CLKP/a5w34FwvXVFiTxpdKzKA3D/xCU6it0+wALdURwc88@vger.kernel.org, AJvYcCWMZz1bzv1Z1b4l5RCKkITAJo5/SQ7O4EYns653miZURD7MnqSKjA/BrWT3IPenYcYVS9CC8grT7HLUlCnISEA=@vger.kernel.org, AJvYcCWUbn3bjchTVkLMPN9oiJW/QQ97Z5I8QgBaL4l8Yu/tXbBbkoMm27fAuyJParuz0kdqCxvKJpTLJcwY@vger.kernel.org, AJvYcCX5WLopbebuPQ+yRLHa6nWLK7bLA/ZH3cN0CAXHB3nFVPtaKqHIJG9nULGFnIwCNVRen94pIOqwUHU=@vger.kernel.org, AJvYcCX8gRq92AnAGh8JdjbcX8d9lUK2ywzne1QRRVmPLVCU4jfzoVUYGoxNOCKwY8GGi5MTcHRAni8DqvFVWcA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhX4OKri3L45Iq6OOHTDuMgOPmKopJVdLjgVHmos01f8Uhk836
-	rznVQu97KKScel9J/DqhB/fgbn6ifNEF/pQwPLsoNsfNMfBRXa+C
-X-Google-Smtp-Source: AGHT+IHfU5bGuzEbC6pA7wiKRq0B2bksWNaijYHyEsR3X33rOKlukYQey29WPzYg3brlpUWbKJ1bTQ==
-X-Received: by 2002:a17:902:fc4f:b0:20b:bad4:5b6e with SMTP id d9443c01a7336-20fb9aa038fmr15925915ad.38.1729760421780;
-        Thu, 24 Oct 2024 02:00:21 -0700 (PDT)
+        bh=2CuRkBznOtCHHxZzKq/9IVvhKUdKupfyQysLLGavF5I=;
+        b=WmUc+HLGx9xARK+9B67p0zdcxgWULViQ0cPVGp2YcpQoFVrxXDcjyCAhz/qmKwdMth
+         vkZZJmePz3yEG9jYcHPIIx50H1HjinF8zNOvbPLP/0wfUOfsKcxDgTOKNYBQu47o7f8R
+         IUJvdEwXxn+WnQV4jbCg8fC2/cCj0EwcF3c9XgltBlxNMb5NkZABX+QwLBSqOkgmv+RW
+         whscymiXRpA0xGR2cQ+2T/N0Ccozk0ARjwZsK7a/WNmvYvXEF9lVLUbRKZiTp6g9nJpe
+         wTH8SmZxavk1/jjolsjbuEYCmU2zm8jjMPgdvx0ydQonbwuiCWIxZq5MsK0g5vJk+jmt
+         07iw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYkrI2vWdEpkslXiibV8LEOcm+UQcJD7OPqyP1PdQzQ6AhwhB/5ML59rETsruEI/ANU7BUsh9pnPLTNQk=@vger.kernel.org, AJvYcCUr/1TxJsLY8TW4lSCDtZtAqHKsExqyo4eArlxiI95EnjP7usu174BylDwIUADaOZDmulbV6Z+gWfyw@vger.kernel.org, AJvYcCVJgaKxK+ztTI1y0wVvFwkKYs7EzDkWATEfqALeVFYa+sOPMywKxSxc7dtVUl7IlrnAtOzhAJx+3WQ=@vger.kernel.org, AJvYcCW0R+ViVymcTLMMPkMkEc+EBVwd5vdI5VLlmwEmbeIL+9gEyXnxPAx9Ra/xmgJ8JwVzIhFLfftRFRKs@vger.kernel.org, AJvYcCW5ECR+3VGn31TGzaBYTjiZCsX5IZ/gxUu7yCjE90LhdsLgWgd2wK80PiVPQ1iEMTolXAIVaMpCkJjRYw==@vger.kernel.org, AJvYcCXHYYybyBn3XGjkQHzt27f9lPKBTPiM9Rsn0s7gkt9ZrpnZlmcSf+5NxC9xtMISDcf0+t6yq6tj31OfO2zFhoo=@vger.kernel.org, AJvYcCXZpcVHMZlUnMukbga0AknJKy7Adjyf+x8uwOeZwy7xZ0Acd62KKN7Gop3dFJ9iUddT94Ickx5A@vger.kernel.org, AJvYcCXdxS/awQtq+l04UvK80Sdiy8zrjwNcpO0sZ7eVdHVTbWHTPodFdF3tQAX7a6A16TCPQtsA0OtF1wVI@vger.kernel.org, AJvYcCXoMQKQM9CW6X763/IoGP72AkJUlEY/2wiI8sfwsttn3tjskzjxpVOHhHKCN++Y9KPq5hg3QX2fotbL@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4355rbf59QBq6iPAfbp6HCk1GOphbGGx2JCbsRvjQKF2oFRMw
+	2+c6aUtNhY+nXAj4V0IuILJ5kFa59jq8MlyAwRjbLMHCNEF8W6wo
+X-Google-Smtp-Source: AGHT+IGm0bfEw6JC+/h3k0ziqfQnO701FaANVWXMniBwl81s116rE2DFv9I4iE6IYfeiqIdcjDUCGg==
+X-Received: by 2002:a17:903:32ce:b0:20c:5990:897c with SMTP id d9443c01a7336-20fb8a5b3c2mr20278635ad.27.1729760426485;
+        Thu, 24 Oct 2024 02:00:26 -0700 (PDT)
 Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0f6e89sm68503615ad.277.2024.10.24.02.00.17
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0f6e89sm68503615ad.277.2024.10.24.02.00.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 02:00:21 -0700 (PDT)
+        Thu, 24 Oct 2024 02:00:26 -0700 (PDT)
 From: Ming Yu <a0282524688@gmail.com>
 X-Google-Original-From: Ming Yu <tmyu0@nuvoton.com>
 To: tmyu0@nuvoton.com,
@@ -98,9 +98,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-iio@vger.kernel.org,
 	linux-pwm@vger.kernel.org,
 	linux-rtc@vger.kernel.org
-Subject: [PATCH v1 8/9] pwm: Add Nuvoton NCT6694 PWM support
-Date: Thu, 24 Oct 2024 16:59:21 +0800
-Message-Id: <20241024085922.133071-9-tmyu0@nuvoton.com>
+Subject: [PATCH v1 9/9] rtc: Add Nuvoton NCT6694 RTC support
+Date: Thu, 24 Oct 2024 16:59:22 +0800
+Message-Id: <20241024085922.133071-10-tmyu0@nuvoton.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241024085922.133071-1-tmyu0@nuvoton.com>
 References: <20241024085922.133071-1-tmyu0@nuvoton.com>
@@ -112,72 +112,72 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This driver supports PWM functionality for NCT6694 MFD device
+This driver supports RTC functionality for NCT6694 MFD device
 based on USB interface.
 
 Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
 ---
  MAINTAINERS               |   1 +
- drivers/pwm/Kconfig       |  10 ++
- drivers/pwm/Makefile      |   1 +
- drivers/pwm/pwm-nct6694.c | 245 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 257 insertions(+)
- create mode 100644 drivers/pwm/pwm-nct6694.c
+ drivers/rtc/Kconfig       |  10 ++
+ drivers/rtc/Makefile      |   1 +
+ drivers/rtc/rtc-nct6694.c | 276 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 288 insertions(+)
+ create mode 100644 drivers/rtc/rtc-nct6694.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 5c350eac187d..4d5a5eded3b9 100644
+index 4d5a5eded3b9..8de90bda8b5e 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -16444,6 +16444,7 @@ F:	drivers/iio/adc/nct6694_adc.c
- F:	drivers/i2c/busses/i2c-nct6694.c
+@@ -16445,6 +16445,7 @@ F:	drivers/i2c/busses/i2c-nct6694.c
  F:	drivers/mfd/nct6694.c
  F:	drivers/net/can/nct6694_canfd.c
-+F:	drivers/pwm/pwm-nct6694.c
+ F:	drivers/pwm/pwm-nct6694.c
++F:	drivers/rtc/rtc-nct6694.c
  F:	drivers/watchdog/nct6694_wdt.c
  F:	include/linux/mfd/nct6694.h
  
-diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-index 0915c1e7df16..00b5eb13f99d 100644
---- a/drivers/pwm/Kconfig
-+++ b/drivers/pwm/Kconfig
-@@ -471,6 +471,16 @@ config PWM_NTXEC
- 	  controller found in certain e-book readers designed by the original
- 	  design manufacturer Netronix.
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 66eb1122248b..240c496d95f7 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -406,6 +406,16 @@ config RTC_DRV_NCT3018Y
+ 	   This driver can also be built as a module, if so, the module will be
+ 	   called "rtc-nct3018y".
  
-+config PWM_NCT6694
-+	tristate "Nuvoton NCT6694 PWM support"
++config RTC_DRV_NCT6694
++	tristate "Nuvoton NCT6694 RTC support"
 +	depends on MFD_NCT6694
 +	help
 +	If you say yes to this option, support will be included for Nuvoton
-+	NCT6694, a USB device to PWM controller.
++	NCT6694, a USB device to RTC.
 +
 +	This driver can also be built as a module. If so, the module
-+	will be called pwm-nct6694.
++	will be called rtc-nct6694.
 +
- config PWM_OMAP_DMTIMER
- 	tristate "OMAP Dual-Mode Timer PWM support"
- 	depends on OF
-diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-index 9081e0c0e9e0..5c5602b79402 100644
---- a/drivers/pwm/Makefile
-+++ b/drivers/pwm/Makefile
-@@ -42,6 +42,7 @@ obj-$(CONFIG_PWM_MICROCHIP_CORE)	+= pwm-microchip-core.o
- obj-$(CONFIG_PWM_MTK_DISP)	+= pwm-mtk-disp.o
- obj-$(CONFIG_PWM_MXS)		+= pwm-mxs.o
- obj-$(CONFIG_PWM_NTXEC)		+= pwm-ntxec.o
-+obj-$(CONFIG_PWM_NCT6694)	+= pwm-nct6694.o
- obj-$(CONFIG_PWM_OMAP_DMTIMER)	+= pwm-omap-dmtimer.o
- obj-$(CONFIG_PWM_PCA9685)	+= pwm-pca9685.o
- obj-$(CONFIG_PWM_PXA)		+= pwm-pxa.o
-diff --git a/drivers/pwm/pwm-nct6694.c b/drivers/pwm/pwm-nct6694.c
+ config RTC_DRV_RK808
+ 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
+ 	depends on MFD_RK8XX
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index f62340ecc534..64443d26bb5b 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -116,6 +116,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
+ obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
+ obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
+ obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
++obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
+ obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
+ obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
+ obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
+diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
 new file mode 100644
-index 000000000000..915a2ab50834
+index 000000000000..622bb9fbe6f6
 --- /dev/null
-+++ b/drivers/pwm/pwm-nct6694.c
-@@ -0,0 +1,245 @@
++++ b/drivers/rtc/rtc-nct6694.c
+@@ -0,0 +1,276 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Nuvoton NCT6694 PWM driver based on USB interface.
++ * Nuvoton NCT6694 RTC driver based on USB interface.
 + *
 + * Copyright (C) 2024 Nuvoton Technology Corp.
 + */
@@ -185,226 +185,257 @@ index 000000000000..915a2ab50834
 +#include <linux/slab.h>
 +#include <linux/kernel.h>
 +#include <linux/module.h>
-+#include <linux/pwm.h>
++#include <linux/rtc.h>
++#include <linux/bcd.h>
 +#include <linux/platform_device.h>
 +#include <linux/mfd/nct6694.h>
 +
-+#define DRVNAME "nct6694-pwm"
-+
-+#define NR_PWM	10
-+#define MAX_PERIOD_NS	40000		/* PWM Maximum Frequency = 25kHz */
-+#define PERIOD_NS_CONST	10200000	/* Period_ns to Freq_reg */
++#define DRVNAME "nct6694-rtc"
 +
 +/* Host interface */
-+#define REQUEST_RPT_MOD			0xFF
-+#define REQUEST_HWMON_MOD		0x00
-+#define REQUEST_PWM_MOD			0x01
++#define REQUEST_RTC_MOD		0x08
 +
-+/* Report Channel */
-+#define HWMON_PWM_IDX(x)		(0x70 + (x))
-+
-+/* Message Channel -HWMON */
++/* Message Channel */
 +/* Command 00h */
-+#define REQUEST_HWMON_CMD0_LEN		0x40
-+#define REQUEST_HWMON_CMD0_OFFSET	0x0000	/* OFFSET = SEL|CMD */
-+#define HWMON_PWM_EN(x)			(0x06 + (x))
-+#define HWMON_PWM_PP(x)			(0x08 + (x))
-+#define HWMON_PWM_FREQ_IDX(x)		(0x30 + (x))
-+
-+/* Message Channel -FAN */
-+/* Command 00h */
-+#define REQUEST_PWM_CMD0_LEN		0x08
-+#define REQUEST_PWM_CMD0_OFFSET		0x0000	/* OFFSET = SEL|CMD */
-+#define PWM_CH_EN(x)			(x ? 0x00 : 0x01)
++#define REQUEST_RTC_CMD0_LEN	0x07
++#define REQUEST_RTC_CMD0_OFFSET	0x0000	/* OFFSET = SEL|CMD */
++#define RTC_SEC_IDX		0x00
++#define RTC_MIN_IDX		0x01
++#define RTC_HOUR_IDX		0x02
++#define RTC_WEEK_IDX		0x03
++#define RTC_DAY_IDX		0x04
++#define RTC_MONTH_IDX		0x05
++#define RTC_YEAR_IDX		0x06
 +/* Command 01h */
-+#define REQUEST_PWM_CMD1_LEN		0x20
-+#define REQUEST_PWM_CMD1_OFFSET		0x0001	/* OFFSET = SEL|CMD */
-+#define PWM_MAL_EN(x)			(x ? 0x00 : 0x01)
-+#define PWM_MAL_VAL(x)			(0x02 + (x))
++#define REQUEST_RTC_CMD1_LEN	0x05
++#define REQUEST_RTC_CMD1_OFFSET	0x0001	/* OFFSET = SEL|CMD */
++#define RTC_ALRM_EN_IDX		0x03
++#define RTC_ALRM_PEND_IDX	0x04
++/* Command 02h */
++#define REQUEST_RTC_CMD2_LEN	0x02
++#define REQUEST_RTC_CMD2_OFFSET	0x0002	/* OFFSET = SEL|CMD */
++#define RTC_IRQ_EN_IDX		0x00
++#define RTC_IRQ_PEND_IDX	0x01
 +
-+/*
-+ *		Frequency <-> Period
-+ * (10^9 * 255) / (25000 * Freq_reg) = Period_ns
-+ *		10200000 / Freq_reg  = Period_ns
-+ *
-+ * | Freq_reg | Freq_Hz | Period_ns |
-+ * |  1 (01h  |  98.039 |  10200000 |
-+ * |  2 (02h) | 196.078 |   5100000 |
-+ * |  3 (03h) | 294.117 |   3400000 |
-+ * |		  ...		    |
-+ * |		  ...		    |
-+ * |		  ...		    |
-+ * | 253 (FDh)| 24803.9 |  40316.20 |
-+ * | 254 (FEh)| 24901.9 |  40157.48 |
-+ * | 255 (FFh)|  25000  |    40000  |
-+ *
-+ */
++#define RTC_IRQ_EN		(BIT(0) | BIT(5))
++#define RTC_IRQ_INT_EN		BIT(0)	/* Transmit a USB INT-in when RTC alarm */
++#define RTC_IRQ_GPO_EN		BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
++#define RTC_IRQ_STS		BIT(0)	/* Write 1 clear IRQ status */
 +
-+struct nct6694_pwm_data {
++struct nct6694_rtc_data {
 +	struct nct6694 *nct6694;
-+	unsigned char hwmon_cmd0_buf[REQUEST_HWMON_CMD0_LEN];
-+	unsigned char pwm_cmd0_buf[REQUEST_PWM_CMD0_LEN];
-+	unsigned char pwm_cmd1_buf[REQUEST_PWM_CMD1_LEN];
++	struct rtc_device *rtc;
++	struct work_struct alarm_work;
 +};
 +
-+static inline struct nct6694_pwm_data *to_nct6694_pwm_data(struct pwm_chip *chip)
++static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
 +{
-+	return pwmchip_get_drvdata(chip);
-+}
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	unsigned char buf[REQUEST_RTC_CMD0_LEN];
++	int ret;
 +
-+static int nct6694_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
-+{
-+	struct nct6694_pwm_data *data = to_nct6694_pwm_data(chip);
-+	unsigned char ch_enable = data->pwm_cmd0_buf[PWM_CH_EN(pwm->hwpwm / 8)];
-+	unsigned char mal_enable = data->pwm_cmd1_buf[PWM_MAL_EN(pwm->hwpwm / 8)];
-+	bool ch_en = ch_enable & BIT(pwm->hwpwm % 8);
-+	bool mal_en = mal_enable & BIT(pwm->hwpwm % 8);
-+
-+	if (!(ch_en && mal_en)) {
-+		pr_err("%s: PWM(%d) is running in other mode!\n",
-+		       __func__, pwm->hwpwm);
-+		return -EINVAL;
++	ret = nct6694_read_msg(data->nct6694, REQUEST_RTC_MOD,
++			       REQUEST_RTC_CMD0_OFFSET, REQUEST_RTC_CMD0_LEN,
++			       0, REQUEST_RTC_CMD0_LEN, buf);
++	if (ret) {
++		pr_err("%s: Failed to get rtc device!\n", __func__);
++		return -EIO;
 +	}
 +
-+	return 0;
-+}
++	tm->tm_sec = bcd2bin(buf[RTC_SEC_IDX]);		/* tm_sec expect 0 ~ 59 */
++	tm->tm_min = bcd2bin(buf[RTC_MIN_IDX]);		/* tm_min expect 0 ~ 59 */
++	tm->tm_hour = bcd2bin(buf[RTC_HOUR_IDX]);	/* tm_hour expect 0 ~ 23 */
++	tm->tm_wday = bcd2bin(buf[RTC_WEEK_IDX]) - 1;	/* tm_wday expect 0 ~ 6 */
++	tm->tm_mday = bcd2bin(buf[RTC_DAY_IDX]);	/* tm_mday expect 1 ~ 31 */
++	tm->tm_mon = bcd2bin(buf[RTC_MONTH_IDX]) - 1;	/* tm_month expect 0 ~ 11 */
++	tm->tm_year = bcd2bin(buf[RTC_YEAR_IDX]) + 100;	/* tm_year expect since 1900 */
 +
-+static int nct6694_pwm_get_state(struct pwm_chip *chip,
-+				 struct pwm_device *pwm,
-+				 struct pwm_state *state)
-+{
-+	struct nct6694_pwm_data *data = to_nct6694_pwm_data(chip);
-+	unsigned char freq_reg, duty;
-+
-+	/* Get pwm device initial state */
-+	state->enabled = true;
-+
-+	freq_reg = data->hwmon_cmd0_buf[HWMON_PWM_FREQ_IDX(pwm->hwpwm)];
-+	state->period = PERIOD_NS_CONST / freq_reg;
-+
-+	duty = data->pwm_cmd1_buf[PWM_MAL_VAL(pwm->hwpwm)];
-+	state->duty_cycle = duty * state->period / 0xFF;
-+
-+	return 0;
-+}
-+
-+static int nct6694_pwm_apply(struct pwm_chip *chip,
-+			     struct pwm_device *pwm,
-+			     const struct pwm_state *state)
-+{
-+	struct nct6694_pwm_data *data = to_nct6694_pwm_data(chip);
-+	unsigned char freq_reg, duty;
-+	int ret;
-+
-+	if (state->period < MAX_PERIOD_NS)
-+		return -EINVAL;
-+
-+	/* (10^9 * 255) / (25000 * Freq_reg) = Period_ns */
-+	freq_reg = (unsigned char)(PERIOD_NS_CONST / state->period);
-+	data->hwmon_cmd0_buf[HWMON_PWM_FREQ_IDX(pwm->hwpwm)] = freq_reg;
-+	ret = nct6694_write_msg(data->nct6694, REQUEST_HWMON_MOD,
-+				REQUEST_HWMON_CMD0_OFFSET,
-+				REQUEST_HWMON_CMD0_LEN,
-+				data->hwmon_cmd0_buf);
-+	if (ret)
-+		return -EIO;
-+
-+	/* Duty = duty * 0xFF */
-+	duty = (unsigned char)(state->duty_cycle * 0xFF / state->period);
-+	data->pwm_cmd1_buf[PWM_MAL_VAL(pwm->hwpwm)] = duty;
-+	if (state->enabled)
-+		data->pwm_cmd1_buf[PWM_MAL_EN(pwm->hwpwm / 8)] |= BIT(pwm->hwpwm  % 8);
-+	else
-+		data->pwm_cmd1_buf[PWM_MAL_EN(pwm->hwpwm / 8)] &= ~BIT(pwm->hwpwm  % 8);
-+	ret = nct6694_write_msg(data->nct6694, REQUEST_PWM_MOD,
-+				REQUEST_PWM_CMD1_OFFSET, REQUEST_PWM_CMD1_LEN,
-+				data->pwm_cmd1_buf);
-+	if (ret)
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+static const struct pwm_ops nct6694_pwm_ops = {
-+	.request = nct6694_pwm_request,
-+	.apply = nct6694_pwm_apply,
-+	.get_state = nct6694_pwm_get_state,
-+};
-+
-+static int nct6694_pwm_init(struct nct6694_pwm_data *data)
-+{
-+	struct nct6694 *nct6694 = data->nct6694;
-+	int ret;
-+
-+	ret = nct6694_read_msg(nct6694, REQUEST_HWMON_MOD,
-+			       REQUEST_HWMON_CMD0_OFFSET,
-+			       REQUEST_HWMON_CMD0_LEN, 0,
-+			       REQUEST_HWMON_CMD0_LEN,
-+			       data->hwmon_cmd0_buf);
-+	if (ret)
-+		return ret;
-+
-+	ret = nct6694_read_msg(nct6694, REQUEST_PWM_MOD,
-+			       REQUEST_PWM_CMD0_OFFSET,
-+			       REQUEST_PWM_CMD0_LEN, 0,
-+			       REQUEST_PWM_CMD0_LEN,
-+			       data->pwm_cmd0_buf);
-+	if (ret)
-+		return ret;
-+
-+	ret = nct6694_read_msg(nct6694, REQUEST_PWM_MOD,
-+			       REQUEST_PWM_CMD1_OFFSET,
-+			       REQUEST_PWM_CMD1_LEN, 0,
-+			       REQUEST_PWM_CMD1_LEN,
-+			       data->pwm_cmd1_buf);
 +	return ret;
 +}
 +
-+static int nct6694_pwm_probe(struct platform_device *pdev)
++static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
 +{
-+	struct pwm_chip *chip;
-+	struct nct6694_pwm_data *data;
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	unsigned char buf[REQUEST_RTC_CMD0_LEN];
++	int ret;
++
++	buf[RTC_SEC_IDX] = bin2bcd(tm->tm_sec);
++	buf[RTC_MIN_IDX] = bin2bcd(tm->tm_min);
++	buf[RTC_HOUR_IDX] = bin2bcd(tm->tm_hour);
++	buf[RTC_WEEK_IDX] = bin2bcd(tm->tm_wday + 1);
++	buf[RTC_DAY_IDX] = bin2bcd(tm->tm_mday);
++	buf[RTC_MONTH_IDX] = bin2bcd(tm->tm_mon + 1);
++	buf[RTC_YEAR_IDX] = bin2bcd(tm->tm_year - 100);
++
++	ret = nct6694_write_msg(data->nct6694, REQUEST_RTC_MOD,
++				REQUEST_RTC_CMD0_OFFSET, REQUEST_RTC_CMD0_LEN,
++				buf);
++	if (ret) {
++		pr_err("%s: Failed to set rtc device!\n", __func__);
++		return -EIO;
++	}
++
++	return ret;
++}
++
++static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	unsigned char buf[REQUEST_RTC_CMD1_LEN];
++	int ret;
++
++	ret = nct6694_read_msg(data->nct6694, REQUEST_RTC_MOD,
++			       REQUEST_RTC_CMD1_OFFSET, REQUEST_RTC_CMD1_LEN,
++			       0, REQUEST_RTC_CMD1_LEN, buf);
++	if (ret) {
++		pr_err("%s: Failed to get rtc device!\n", __func__);
++		return -EIO;
++	}
++
++	alrm->time.tm_sec = bcd2bin(buf[RTC_SEC_IDX]);
++	alrm->time.tm_min = bcd2bin(buf[RTC_MIN_IDX]);
++	alrm->time.tm_hour = bcd2bin(buf[RTC_HOUR_IDX]);
++
++	alrm->enabled = buf[RTC_ALRM_EN_IDX];
++	alrm->pending = buf[RTC_ALRM_PEND_IDX];
++
++	return ret;
++}
++
++static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	unsigned char buf[REQUEST_RTC_CMD1_LEN];
++	int ret;
++
++	buf[RTC_SEC_IDX] = bin2bcd(alrm->time.tm_sec);
++	buf[RTC_MIN_IDX] = bin2bcd(alrm->time.tm_min);
++	buf[RTC_HOUR_IDX] = bin2bcd(alrm->time.tm_hour);
++	buf[RTC_ALRM_EN_IDX] = alrm->enabled ? RTC_IRQ_EN : 0;
++	buf[RTC_ALRM_PEND_IDX] = 0;
++
++	ret = nct6694_write_msg(data->nct6694, REQUEST_RTC_MOD,
++				REQUEST_RTC_CMD1_OFFSET, REQUEST_RTC_CMD1_LEN,
++				buf);
++	if (ret) {
++		pr_err("%s: Failed to set rtc device!\n", __func__);
++		return -EIO;
++	}
++
++	return ret;
++}
++
++static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
++{
++	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
++	unsigned char buf[REQUEST_RTC_CMD2_LEN] = {0};
++	int ret;
++
++	if (enabled)
++		buf[RTC_IRQ_EN_IDX] |= RTC_IRQ_EN;
++	else
++		buf[RTC_IRQ_EN_IDX] &= ~RTC_IRQ_EN;
++
++	ret = nct6694_write_msg(data->nct6694, REQUEST_RTC_MOD,
++				REQUEST_RTC_CMD2_OFFSET, REQUEST_RTC_CMD2_LEN,
++				buf);
++	if (ret) {
++		pr_err("%s: Failed to set rtc device!\n", __func__);
++		return -EIO;
++	}
++
++	return ret;
++}
++
++static const struct rtc_class_ops nct6694_rtc_ops = {
++	.read_time = nct6694_rtc_read_time,
++	.set_time = nct6694_rtc_set_time,
++	.read_alarm = nct6694_rtc_read_alarm,
++	.set_alarm = nct6694_rtc_set_alarm,
++	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
++};
++
++static void nct6694_rtc_alarm(struct work_struct *work)
++{
++	struct nct6694_rtc_data *data;
++	unsigned char buf[REQUEST_RTC_CMD2_LEN] = {0};
++
++	data = container_of(work, struct nct6694_rtc_data, alarm_work);
++
++	pr_info("%s: Got RTC alarm!\n", __func__);
++	buf[RTC_IRQ_EN_IDX] = RTC_IRQ_EN;
++	buf[RTC_IRQ_PEND_IDX] = RTC_IRQ_STS;
++	nct6694_write_msg(data->nct6694, REQUEST_RTC_MOD,
++			  REQUEST_RTC_CMD2_OFFSET,
++			  REQUEST_RTC_CMD2_LEN, buf);
++}
++
++static void nct6694_rtc_handler(void *private_data)
++{
++	struct nct6694_rtc_data *data = private_data;
++	struct nct6694 *nct6694 = data->nct6694;
++
++	queue_work(nct6694->async_workqueue, &data->alarm_work);
++}
++
++static int nct6694_rtc_probe(struct platform_device *pdev)
++{
++	struct nct6694_rtc_data *data;
 +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
 +	int ret;
 +
-+	chip = devm_pwmchip_alloc(&pdev->dev, NR_PWM, sizeof(*data));
-+	if (IS_ERR(chip))
-+		return PTR_ERR(chip);
++	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
 +
-+	data = to_nct6694_pwm_data(chip);
++	data->rtc = devm_rtc_allocate_device(&pdev->dev);
++	if (IS_ERR(data->rtc))
++		return PTR_ERR(data->rtc);
 +
 +	data->nct6694 = nct6694;
-+	chip->ops = &nct6694_pwm_ops;
++	data->rtc->ops = &nct6694_rtc_ops;
++	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
++	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
 +
-+	ret = nct6694_pwm_init(data);
-+	if (ret)
-+		return -EIO;
++	INIT_WORK(&data->alarm_work, nct6694_rtc_alarm);
 +
-+	/* Register pwm device to PWM framework */
-+	ret = devm_pwmchip_add(&pdev->dev, chip);
++	ret = nct6694_register_handler(nct6694, RTC_IRQ_STATUS,
++				       nct6694_rtc_handler, data);
 +	if (ret) {
-+		dev_err(&pdev->dev, "Failed to register pwm device!\n");
++		dev_err(&pdev->dev, "%s:  Failed to register handler: %pe\n",
++			__func__, ERR_PTR(ret));
++		return ret;
++	}
++
++	device_set_wakeup_capable(&pdev->dev, 1);
++
++	platform_set_drvdata(pdev, data);
++
++	/* Register rtc device to RTC framework */
++	ret = devm_rtc_register_device(data->rtc);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to register rtc device!\n");
 +		return ret;
 +	}
 +
 +	return 0;
 +}
 +
-+static struct platform_driver nct6694_pwm_driver = {
++static struct platform_driver nct6694_rtc_driver = {
 +	.driver = {
 +		.name	= DRVNAME,
 +	},
-+	.probe		= nct6694_pwm_probe,
++	.probe		= nct6694_rtc_probe,
 +};
 +
 +static int __init nct6694_init(void)
 +{
 +	int err;
 +
-+	err = platform_driver_register(&nct6694_pwm_driver);
++	err = platform_driver_register(&nct6694_rtc_driver);
 +	if (!err) {
 +		if (err)
-+			platform_driver_unregister(&nct6694_pwm_driver);
++			platform_driver_unregister(&nct6694_rtc_driver);
 +	}
 +
 +	return err;
@@ -413,11 +444,11 @@ index 000000000000..915a2ab50834
 +
 +static void __exit nct6694_exit(void)
 +{
-+	platform_driver_unregister(&nct6694_pwm_driver);
++	platform_driver_unregister(&nct6694_rtc_driver);
 +}
 +module_exit(nct6694_exit);
 +
-+MODULE_DESCRIPTION("USB-PWM driver for NCT6694");
++MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
 +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
 +MODULE_LICENSE("GPL");
 -- 
