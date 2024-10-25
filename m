@@ -1,218 +1,123 @@
-Return-Path: <linux-i2c+bounces-7577-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7578-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D6199AFFAB
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Oct 2024 12:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB5E89AFFF8
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Oct 2024 12:22:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFCD31F23E48
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Oct 2024 10:10:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69A461F21A93
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Oct 2024 10:22:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BAC20124B;
-	Fri, 25 Oct 2024 10:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614D31DE2C2;
+	Fri, 25 Oct 2024 10:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B+BNIVoM"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0029D1FF7AB
-	for <linux-i2c@vger.kernel.org>; Fri, 25 Oct 2024 10:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C591E1A39;
+	Fri, 25 Oct 2024 10:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729850931; cv=none; b=gJ3Td6IgNe2NsW9iAqOtNWZhsS8CGS/0gP5W8oKVvjORd6dPMNAQH/7jK3C7fenEO2Efb2VqRe/LBUrIOq7WQA3HEJ1YoN+yz4/0RJ9BniaH99WkDmYtr3s63nCX/eFDYTNlg2LoX99HdhLb83dVvo7bf8aw1YDwoZL87n51zu8=
+	t=1729851741; cv=none; b=fqmYeKruNN3W30eUzUgUW6EMjKWZXh/nYQUinoOP4FNvyGkCxtedRC3KhiICy9Y3IjIrD9MF7nA6XNXlwdWQrPfDb7Lwj61N81xYBa6MV+9ZmKwA5RNBwlA6cvWaEBSA3m2P3PERzMS8P32vqytBZ4KXRHZN5j3w8x42FwcZ50w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729850931; c=relaxed/simple;
-	bh=Id4jYVicQwF482cby8uyMk+tHNJ5kEp195Hkx8X8c+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O8URIGQ6zG4z3QDlFQ5TZkiQk1pq0xXrUQsQGkQPA0cvdDcMW4dujZSgFr7a5eED4uKIn0EQs5uq0PoLWasuWT7u7NUvGc7zhESzwJFX7VIsTRnfYW34nMdYgjH7FKx9rD5hMnkcULWSMHTuwzybxLb9WZxa+Pyncbl/ELsmuB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t4HEv-0001dh-7U; Fri, 25 Oct 2024 12:08:17 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t4HEs-000LQz-1i;
-	Fri, 25 Oct 2024 12:08:14 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 0F74735E930;
-	Fri, 25 Oct 2024 10:08:13 +0000 (UTC)
-Date: Fri, 25 Oct 2024 12:08:13 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de>
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-2-tmyu0@nuvoton.com>
- <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
- <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
+	s=arc-20240116; t=1729851741; c=relaxed/simple;
+	bh=Ri04p8c+74JpkpWGBKlQF7nqMg26O2ywe4tODvk0CsQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gb5NNCCPBP9EW+bGUbkztPZq2jwb/M13KsPKATvk0Eq2TOtPR6kJKsxqWVHqxJ1OTaVo7////Sr+WdoF504u0E47vCWXvBna1aN3gC1TH17XN9r+d6zkhzN6bpUHZlk4+scAXBpvPlmfZOO0UTF9bXhxSIo0hb5T+HQFgEcYSMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B+BNIVoM; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e29327636f3so2143650276.2;
+        Fri, 25 Oct 2024 03:22:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729851736; x=1730456536; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=egxANw4xcQVXGYyfOo/xqAjD9VUPgC2DhCZVR2sLk5E=;
+        b=B+BNIVoMDrUbvrEJHzntyK//m9K5V8sFF+T6s5fdVSiB2BXi0eYiaTEP/lfip+5pZV
+         9NS/JoiKvuJtK63dUIFBgTybQFiDHG4jzz6M8cqFhb6DkOogy3pI5zca4Cuk2rKZFXkk
+         hjt2Fw58O4UA3fE3MGcKaomVeAwaSCUOgY2b13oiVyv1mi5fyIJkPqY4MC6cxK2xAdad
+         VLfK4EAj7h0o4M4qU7wW03aGvtMojLk8Mo7bgZfdZPe3OUY6H5WdBQ7o7R9Wh08LzdPq
+         FW2FH6dK2e1Cy8SdC5DRNPpfNU/JjrIZzdBm2jFJq/U991rSmX9h2bDM4nTvu6EmLQTk
+         wxHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729851736; x=1730456536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=egxANw4xcQVXGYyfOo/xqAjD9VUPgC2DhCZVR2sLk5E=;
+        b=XmS4Sn0q1B88vP/SIKZiy3TvLVJ9cZVww6AhbNuRDz2UkyNXMkAqgPJT4Nd8unMFco
+         DaUSsuq7zX53pPJbxM4ugnqtq5I2dEC+ikQKytvYyf4wF3Onx49H8m6XMd4tGHARIMZk
+         UaTGr+9oF/eucnUi3WY0vHrCTBJhNUu03fNAZcksmXs6EV/ZERQjOwVcE/0PpEp5sFZ3
+         bAUVN95vMjvIqSmPFxfDzCh9ZmFRi3YlfY6WWZnYPC2+2jjYSpdV9au55drpy9g2cXbq
+         VbPC+M6yeZn/y2JQfm7S4ogix28T5YtxFtREFlqbPokxuqDjUeHj6UpH8/TH3VZ20ona
+         fWcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAVvpyUJAK9sAUGISlaOUpKeYPiLSgZQHxFmqEc8WjXxnJLXUhDmt2LvLHEvTkydJTMkxf+3zB45h+mtcYKrU=@vger.kernel.org, AJvYcCUhCZMmpJ+mTIxYn/lm2dChbUoEW9S0kFKDiBS3eENIr8AsYw+0psv3fJyevefx1UXfZnrYYFoR@vger.kernel.org, AJvYcCUnI5NAvF2RZHRs/NL3oEwPgZ/6ri12vPu+SaQcuS31Pyz66KMwoW1mgCJgCX5oN2vPGlU8uZTh4FrViw==@vger.kernel.org, AJvYcCVCFHTk8aHBPPcNENjaTsaJHxlFJs8v3Kjn8XdaK5kb5Sw/xtW9V4ausQpCWa6hCsblchPVsvvjb7qv@vger.kernel.org, AJvYcCVbroW+gJhkIVJYhheLaA2rqgZ939shILVF16IIqNasSzkAi1aNOTTAN9/Qfe381eYDgwFaSb6mFz3L3ov+@vger.kernel.org, AJvYcCVsMdKjh4GiqMjEf+EmS8eK/jpPNkoA6clYj0hTkhiNTWbz6hLdLmxOponfJHbs7q6m84J5r1t4GVjgT0Q=@vger.kernel.org, AJvYcCWNzNvwSPkD5ENYWG2KVdKUAzafnYgvxPne3Oi8t4rD5jdU8ezfNFasvcock7KH2XRi3ap2nqqJnAUr@vger.kernel.org, AJvYcCWmmbIhCzF2MPw2I8RxR5Rxp0dXce3cMOg3TKR8FRZ9Egw8gYRinHj0VKsTzsfqPPp6TiD9l+t+75J6@vger.kernel.org, AJvYcCXUpDyHKDrkfU8V8hFRmJpR9niEJyhjuO20hsEyXGtS263+KOBycN7aEuNe8wgP74fS9miRlzNVWvfs@vger.kernel.org, AJvYcCXxFkj+R9hKa3aK+QAiM1hJ29hnqkiF
+ tHxX8NyD3WSlCk9+QE9DNZIpCqrl+XblNloq+wGXKvCzfK0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUPO9O2HPZKf/8NpXaq5S5rSd7DD46cyAxfsPiTNiKYyrNsrPw
+	Anda1z3ihNio5lBwZpskmailqGulsk9KLDFuWMJOanU9Vaug7LpKSj91qz05U1QxgspKLuMvrvh
+	CfXxoKlbLg30isMeDHTcU7TH63pI=
+X-Google-Smtp-Source: AGHT+IH3v4SaWhNp1hwnLppS3UubIZYZaKnW18HDGieOhvA/WGJAvZk7jOM/do8hyF9713Ote/QjLu+G3CqO76kawwc=
+X-Received: by 2002:a05:6902:150f:b0:e2b:9ae5:5bf7 with SMTP id
+ 3f1490d57ef6-e2e3a634fd9mr10615558276.19.1729851736203; Fri, 25 Oct 2024
+ 03:22:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4f2xpxewuk3idolr"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-
-
---4f2xpxewuk3idolr
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-2-tmyu0@nuvoton.com>
+ <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
+ <20241024-pumpkin-parrot-of-excellence-299c57-mkl@pengutronix.de>
+ <CAOoeyxXX2fpHVJ8urLmy+pBjH1aRdYu6qrtwOmwUxTUyQq30DA@mail.gmail.com>
+ <20241025-sexy-fanatic-snail-a1d2e7-mkl@pengutronix.de> <20241025-dark-efficient-bird-6b09b9-mkl@pengutronix.de>
+In-Reply-To: <20241025-dark-efficient-bird-6b09b9-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 25 Oct 2024 18:22:05 +0800
+Message-ID: <CAOoeyxWC9Yd_mJhMFcHxtwW7d7oOVsSsNCb9wejj95RiiVQY=g@mail.gmail.com>
 Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-MIME-Version: 1.0
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25.10.2024 16:08:10, Ming Yu wrote:
-> > > +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 offset, u1=
-6 length,
-> > > +                  u8 rd_idx, u8 rd_len, unsigned char *buf)
+Got it! I'll make the change in the next patch.
+
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8825=
+=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:02=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On 25.10.2024 10:35:35, Marc Kleine-Budde wrote:
+> > > Excuse me, I'm a bit confused. Is there anything I need to
+> > > improve on?
 > >
-> > why not make buf a void *?
->=20
-> [Ming] I'll change the type in the next patch.
->=20
+> > It looks racy to _first_ add the devices and _then_ the workqueue.
 > >
-> > > +{
-> > > +     struct usb_device *udev =3D nct6694->udev;
-> > > +     unsigned char err_status;
-> > > +     int len, packet_len, tx_len, rx_len;
-> > > +     int i, ret;
-> > > +
-> > > +     mutex_lock(&nct6694->access_lock);
-> > > +
-> > > +     /* Send command packet to USB device */
-> > > +     nct6694->cmd_buffer[REQUEST_MOD_IDX] =3D mod;
-> > > +     nct6694->cmd_buffer[REQUEST_CMD_IDX] =3D offset & 0xFF;
-> > > +     nct6694->cmd_buffer[REQUEST_SEL_IDX] =3D (offset >> 8) & 0xFF;
-> > > +     nct6694->cmd_buffer[REQUEST_HCTRL_IDX] =3D HCTRL_GET;
-> > > +     nct6694->cmd_buffer[REQUEST_LEN_L_IDX] =3D length & 0xFF;
-> > > +     nct6694->cmd_buffer[REQUEST_LEN_H_IDX] =3D (length >> 8) & 0xFF;
-> > > +
-> > > +     ret =3D usb_bulk_msg(udev, usb_sndbulkpipe(udev, BULK_OUT_ENDPO=
-INT),
-> > > +                        nct6694->cmd_buffer, CMD_PACKET_SZ, &tx_len,
-> > > +                        nct6694->timeout);
-> > > +     if (ret)
-> > > +             goto err;
-> > > +
-> > > +     /* Receive response packet from USB device */
-> > > +     ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(udev, BULK_IN_ENDPOI=
-NT),
-> > > +                        nct6694->rx_buffer, CMD_PACKET_SZ, &rx_len,
-> > > +                        nct6694->timeout);
-> > > +     if (ret)
-> > > +             goto err;
-> > > +
-> > > +     err_status =3D nct6694->rx_buffer[RESPONSE_STS_IDX];
-> > > +
-> > > +     /*
-> > > +      * Segmented reception of messages that exceed the size of USB =
-bulk
-> > > +      * pipe packets.
-> > > +      */
-> >
-> > The Linux USB stack can receive bulk messages longer than the max packe=
-t size.
->=20
-> [Ming] Since NCT6694's bulk pipe endpoint size is 128 bytes for this MFD =
-device.
-> The core will divide packet 256 bytes for high speed USB device, but
-> it is exceeds
-> the hardware limitation, so I am dividing it manually.
-
-You say the endpoint descriptor is correctly reporting it's max packet
-size of 128, but the Linux USB will send packets of 256 bytes?
-
->=20
-> >
-> > > +     for (i =3D 0, len =3D length; len > 0; i++, len -=3D packet_len=
-) {
-> > > +             if (len > nct6694->maxp)
-> > > +                     packet_len =3D nct6694->maxp;
-> > > +             else
-> > > +                     packet_len =3D len;
-> > > +
-> > > +             ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(udev, BULK_I=
-N_ENDPOINT),
-> > > +                                nct6694->rx_buffer + nct6694->maxp *=
- i,
-> > > +                                packet_len, &rx_len, nct6694->timeou=
-t);
-> > > +             if (ret)
-> > > +                     goto err;
-> > > +     }
-> > > +
-> > > +     for (i =3D 0; i < rd_len; i++)
-> > > +             buf[i] =3D nct6694->rx_buffer[i + rd_idx];
-> >
-> > memcpy()?
-> >
-> > Or why don't you directly receive data into the provided buffer? Copying
-> > of the data doesn't make it faster.
-> >
-> > On the other hand, receiving directly into the target buffer means the
-> > target buffer must not live on the stack.
->=20
-> [Ming] Okay! I'll change it to memcpy().
-
-fine!
-
-> This is my perspective: the data is uniformly received by the rx_bffer he=
-ld
-> by the MFD device. does it need to be changed?
-
-My question is: Why do you first receive into the nct6694->rx_buffer and
-then memcpy() to the buffer provided by the caller, why don't you
-directly receive into the memory provided by the caller?
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---4f2xpxewuk3idolr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcbbgoACgkQKDiiPnot
-vG/Pugf+ObTDE98nVEGp4EcyqhJyQBDA7uMVUaRKfRJjRU3lME9NUAKlI+hFGnJD
-mTOltVrzgv6BxOzCoXZbJyD3STCRKGW6BX3ZGrdHIWQE35gPkjCBOxLjFX43Au+F
-ETIi+NIRxYShZK+4zefxtrHZRzbs8jD2qNzWLunIZiPTNKQQHIFFEcbZBTIDMBNL
-3Vnnp8PYRUAidFfE6TbOst7NN8pO+a0f3sSBWMUxCMkAuPdLw2n/vIDc4IRXFF6A
-aMorZ2+E0L3J9XP4gTpGzT4/qddFfKghSfustNU+x51YHxzYaT76TSF5nnnol5UY
-mwp/qtRNUwo6A7boZWYDPeVhxEtrYA==
-=RKzJ
------END PGP SIGNATURE-----
-
---4f2xpxewuk3idolr--
+> > So the obvious solution is to allocate the worklist first and then add
+>                                              workqueue
+> > the devices.
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
