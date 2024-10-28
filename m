@@ -1,63 +1,63 @@
-Return-Path: <linux-i2c+bounces-7614-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7615-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECFCE9B2482
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 06:42:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AE199B24AB
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 06:51:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 42518B216BD
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 05:42:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F06C8281857
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 05:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 911FE18DF68;
-	Mon, 28 Oct 2024 05:38:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3650718DF77;
+	Mon, 28 Oct 2024 05:51:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Ok+qH6RR"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Y5PhFGdk"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE9A18CC12;
-	Mon, 28 Oct 2024 05:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE58A18C92D;
+	Mon, 28 Oct 2024 05:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730093933; cv=none; b=sFLv7BpgGB5o5t+hB3Ivt+WwWZZkfzJty+TZ58qGVtauwC4qWodlUwYN596/bFS/gyIYWA5BDoJVe17ORq/aq+OcmDRuzyna5xNogCT0AnycbhCh0/MwUnJOm5LK8pNXYVNRGanydNH/ynLlYvGuIRJ7KDUoQNUMJ5vFlGaTdag=
+	t=1730094672; cv=none; b=SDAQJfAgIzkf/38dan6E6qLGmKiX1LjseFZ27QQgGIPEA2YfosUoJXknFv8+GZd1aBw/xvb/vgeeO0pgGHua7r0SiY1W1NVvvz2SDuVzdbZhzOf5fd6/O4qdedYqbfH4mdo9lxbCpt0G2Nlx0RPaycsnAOchLe8LW20Lt75Budw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730093933; c=relaxed/simple;
-	bh=qLMvPy+Nw5sKuFqE+sCRJhSojBVTpz2zna/H5M/LTKY=;
+	s=arc-20240116; t=1730094672; c=relaxed/simple;
+	bh=1T0Tr9mZQEGQqImwT6yGFd02N18Tv3ShbpHI+DOXh6w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=BW+QPcKLGmuQNELdDNMP6FQWyqpUwRwBGcK8ctnO1TN5uRbD3Sk4PWiI2WUo5ZZKgO38D0guwAmAhH9ql9yoxONu8yidTv6N5V0cYMWr3ixlvi+UzjXUtHpLoI6WqhCryJ6ODlV5jjzjrnI3HTIUDtunPpI/75y6AnbuXlzDspc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Ok+qH6RR; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=fuBAclkOVSITgXVBKNuMN2J2Dv4qL+eKj2xUAh98H420BiDedDxMOlvyZxQcL85fqYxW4teGhyyMT5vBH9FIYxzCdL4O9OZ7r68JUwppx9SV/dQICyjfYvD0DsSfMQFelTT+wwF3+qK1G2Ue1mYIFJmli26ytVw3KBZVne40cfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Y5PhFGdk; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49S0ZGqP025601;
-	Mon, 28 Oct 2024 05:38:43 GMT
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49RMr3js008480;
+	Mon, 28 Oct 2024 05:51:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	DcGdkGJJ/AET7TDbqFvnfBOmocqE8x2uSTBFT46DlCA=; b=Ok+qH6RRbSjFCZCQ
-	QJ1q9JpS9ptRW+LhIILyKDG6pjsgxee0rh9p1mdmQF7p9MQzSduyiSarWktEG+VG
-	2qqQGQBHvuVZjdDpbte3o/OxjgQsi9w4gJXHlGjXaCWvNk6M6NYW6SNqAEzZe/5c
-	goXVe2KSNwPPpPMM5qS8rkwglTAI1DZWSk3TcOirHBjAJds5UCQkwuSTJX4R1MZW
-	0J6CUlcH4xbAx8cpW36bEhZNGWCXgDrGVxdmHpNt9Ee5jkp/cLNxjjrKvMRMXTkM
-	SmdPqLowW9tWUb3aiaUJhuhISRsrFRFK/IRGYPJ2gUgsgawU+6al1vgK+MAPHi6d
-	WCPtOQ==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42grgubrcq-1
+	3G2BDM3URpd2ddqyA/ruuzoqDHBYGIvb5Qk/rkeCHkw=; b=Y5PhFGdkkw52PswR
+	o2mJHdicYY6vgg/HkAClzfv/lXT9TJQ/mBZv1dyLdNDwqcw5fyf2bDRh/4mnNL/V
+	X4s/TlighKM5YHA1KMzuWfcGQ3onod4JmPepz9WXUpqwMAmqZVkAL+BZTVHyQJT1
+	1JsqxR787FIaVuElcxx6ClqZE7ar65bgSBgm+Ma8Hdg4MGz69NZ2fpY985VjOAPE
+	hLpl/KYxP/mMACPww+QG/AupP2sfxssSJ+wReoVvAScDMUgryz1x+xcJOXHPhwDK
+	68sZRyNTvsBS+RAKkuCMFnVBxKJqqMYvvYYDQ7804Pb89bEQW7QWdjPmYW8UIhvH
+	C78zJw==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42gqrgksf8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Oct 2024 05:38:43 +0000 (GMT)
+	Mon, 28 Oct 2024 05:51:00 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49S5cg5i029162
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49S5oxju027661
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Oct 2024 05:38:42 GMT
+	Mon, 28 Oct 2024 05:50:59 GMT
 Received: from [10.217.219.62] (10.80.80.8) by nasanex01b.na.qualcomm.com
  (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 27 Oct
- 2024 22:38:36 -0700
-Message-ID: <81531046-dc36-4b8a-9b2e-3c917d9632ee@quicinc.com>
-Date: Mon, 28 Oct 2024 11:08:33 +0530
+ 2024 22:50:53 -0700
+Message-ID: <0051c8b8-f7dc-4da1-8c9a-8d8c07db5d31@quicinc.com>
+Date: Mon, 28 Oct 2024 11:20:50 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,8 +67,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v1 1/5] dt-bindings: dmaengine: qcom: gpi: Add additional
  arg to dma-cell property
-To: Rob Herring <robh@kernel.org>
-CC: Vinod Koul <vkoul@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+To: Vinod Koul <vkoul@kernel.org>
+CC: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konradybcio@kernel.org>,
@@ -83,32 +83,31 @@ CC: Vinod Koul <vkoul@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
         <linaro-mm-sig@lists.linaro.org>, <quic_msavaliy@quicinc.com>,
         <quic_vtanuku@quicinc.com>
 References: <20241015120750.21217-1-quic_jseerapu@quicinc.com>
- <20241015120750.21217-2-quic_jseerapu@quicinc.com>
- <20241015140108.GA620512-robh@kernel.org>
+ <20241015120750.21217-2-quic_jseerapu@quicinc.com> <Zw9HHRyvfd66Qn4a@vaman>
 Content-Language: en-US
 From: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
-In-Reply-To: <20241015140108.GA620512-robh@kernel.org>
+In-Reply-To: <Zw9HHRyvfd66Qn4a@vaman>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: mXmiI0bX_qo6pghMJMtRfyBFNtVPgxTS
-X-Proofpoint-GUID: mXmiI0bX_qo6pghMJMtRfyBFNtVPgxTS
+X-Proofpoint-ORIG-GUID: a5NXBK4gM358xuIV7LZTtlc8kglh-J7H
+X-Proofpoint-GUID: a5NXBK4gM358xuIV7LZTtlc8kglh-J7H
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- lowpriorityscore=0 adultscore=0 mlxscore=0 bulkscore=0 suspectscore=0
- phishscore=0 spamscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2410280046
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 suspectscore=0 spamscore=0 mlxscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=999 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410280048
 
 
 
-On 10/15/2024 7:31 PM, Rob Herring wrote:
-> On Tue, Oct 15, 2024 at 05:37:46PM +0530, Jyothi Kumar Seerapu wrote:
+On 10/16/2024 10:24 AM, Vinod Koul wrote:
+> On 15-10-24, 17:37, Jyothi Kumar Seerapu wrote:
 >> When high performance with multiple i2c messages in a single transfer
 >> is required, employ Block Event Interrupt (BEI) to trigger interrupts
 >> after specific messages transfer and the last message transfer,
@@ -123,11 +122,6 @@ On 10/15/2024 7:31 PM, Rob Herring wrote:
 >> potentially leading to failures due to inadequate memory space.
 >>
 >> Add additional argument to dma-cell property for channel TRE size.
-> 
-> No such property 'dma-cell'
-
-Thanks for pointing it out, yeah it should be 'dma-cells'.
-> 
 >> With this, adjust the channel TRE size via the device tree.
 >> The default size is 64, but clients can modify this value based on
 >> their specific requirements.
@@ -157,10 +151,16 @@ Thanks for pointing it out, yeah it should be 'dma-cells'.
 >>         - seid: serial id of the client as defined in the SoC documentation.
 >>         - client: type of the client as defined in dt-bindings/dma/qcom-gpi.h
 >> +      - channel-tre-size: size of the channel TRE (transfer ring element)
->>   
->>     iommus:
->>       maxItems: 1
->> -- 
->> 2.17.1
->>
+> 
+> This is a firmware /software property, why should this be in hardware
+> description?
+> 
+Hi, Yes, this is a software property and added as a 4th argument of 
+"dma-cells" for configuring channel tre size, so added the description 
+for dma-cells.
+In V2 patch, i reverted the changes and will handle with the default 
+channel tre size present in the GPI driver.
+
+Regards,
+JyothiKumar
 
