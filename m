@@ -1,150 +1,299 @@
-Return-Path: <linux-i2c+bounces-7626-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7627-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B93389B29C0
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 09:05:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66FD99B2A60
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 09:32:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CD9E283FD0
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 08:05:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E39A61F22499
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 08:32:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E071DDC06;
-	Mon, 28 Oct 2024 07:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46498192D64;
+	Mon, 28 Oct 2024 08:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P0xJh34m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gObW1FKn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14C6191F68;
-	Mon, 28 Oct 2024 07:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D945191F84;
+	Mon, 28 Oct 2024 08:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730102294; cv=none; b=a7rT8/CGdCxtGQbjIqQsTjAhj49VQVBPcGcVbw3uiYGpOqkoZMCBZT+RbUGOhkAbpriXKeVH4trOGv1eEG9/MLX9AmYKjIqM5rP0VlzPtF+pF70XRKmvJVeplsCipzmrWnOGPoLilSWSzDsq9pL9CrIF+MwIveOwmEoN03LsRt4=
+	t=1730104300; cv=none; b=o9vGYbLUyUpk531Pei+mLc/RW9PAYoiS/rBwUndffSQPvVFVxy4bctNjLT25lZsuun8YBMiZ6wU3YItXRvxO2c/EUYzsixOfnLe1zc0274OtC6fRN8qUY2nnZ/+JrnjfA4ie1qg2FGukXru/jMiECir+1HGuHxfvO22cX5JtKtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730102294; c=relaxed/simple;
-	bh=uziGmxV5MyzvUGsOOYFYYKEqqnkYMob1eAun868YcjA=;
+	s=arc-20240116; t=1730104300; c=relaxed/simple;
+	bh=SHaV7a8m2yz52E+nctbzbDnlDwcDJN29F+Nh6Cj9wQs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FbElWw9SQJL6yn/2YEybgGdn0cRigwCSDU07Sb27bmdD6G0teAwLE4Mn2siCTIIxVMwn5N3TA3AJk4gc8otXj0W3rtQSmiNf/ZS7PvViJ13yhtaEsNHyiRyAQej5hYZ6N//f+Eczi0O03Cb/AkSnrBV8bxL7KFC2w8qJ6VSn2X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P0xJh34m; arc=none smtp.client-ip=209.85.219.181
+	 To:Cc:Content-Type; b=i+mlMJKcq96R0YZpt7ia/q5WhwxjAtclR+17/AB4An9McDAwiNN46xM/Uejjm1gLNyr31U7KTVaJKQRDFTlVJc/DW0kuuejS6ZJrwRdkbxIXh1JiAzjFJVnaaa1Sd2kKCR8S2PqEvdgCyEhlYqMr1XxyA58LKRuyHDonXq24r8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gObW1FKn; arc=none smtp.client-ip=209.85.219.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e309d50f194so690032276.3;
-        Mon, 28 Oct 2024 00:58:12 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e2e444e355fso3664556276.1;
+        Mon, 28 Oct 2024 01:31:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730102291; x=1730707091; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730104296; x=1730709096; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3Y07gSTup1Q3PvRPgeyq3O+ZUa37sVejuXcRkYCy/Ek=;
-        b=P0xJh34mfK6ptjRNFhfJ7SsxCg3VBUu0d8/NXTaLgxZY/Jpxq4VxSWsB72JBvp29Vs
-         C9tDFCgASsCCBVC/V5gQSi5EVzOXCEd5M0Gei6A8bLcyMKLZS90946Tol2qGExE9/P2c
-         MXFjkdUrlFX05S7J65utmdgfI9jMSAcYaEzfDyxzU/fw7+hBBbHtwj+z4cS18FQ85oRU
-         anVsLIFPWS/MwF1NPgS8muT7awL9lvqh5W6tx0VWl+RiO1ptNCPJ6I6sVuOeO4N3Ac7m
-         v858v4HFtOSdEdrIPqwUVGIi13gzsVj55xtx15AAZTnWxXYOeGVhhxbQ+m1jTQav2XWR
-         96pQ==
+        bh=ZcY948jfGgx8uvT7sMECMiIeahovGQ0fYVq8akwUcN4=;
+        b=gObW1FKn7gVFSkWlYYBfJmYhu6fuB+D9CD/d5iJIoVeF16+Rm/HUQac7Qkg4ij7syP
+         L4UZrUpmkVOLcU10uBWm1g3lovmQIys7UumRJr4r4H138Du47MWefT3KHzMynaWw6Yc/
+         0dYouKkmP0LBOqiW1Qcl7p4z9n3yLc9VnEkd2IUYfJle9sBZ7SaxbTetS+/1NiA9oNGV
+         NyHnTuaajqOiJQqpnphjwf6B8oYMvYhKQGxEKIoWZ3cY+XNJaoMqg0ol6pPkSLDIXO4+
+         F3IhO3s0A+8o3SgZTJomu5tK9cTYDfrEvozbtrIFd3mlcMXH8xi5310c6E78cZ8M2VC2
+         NY6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730102291; x=1730707091;
+        d=1e100.net; s=20230601; t=1730104296; x=1730709096;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3Y07gSTup1Q3PvRPgeyq3O+ZUa37sVejuXcRkYCy/Ek=;
-        b=TWcZFbsT9J1LqKav6JCj9giD+ZhWxiyRi4wCkkczTSsbF1YRDvy49sxY+Q8ctpfm9v
-         DAjSZYPJl6Gqw+xXhZvMHrZcIWu13isnM1L5qg7zaW2MW+C8L31euc1Pe+xJ0bYToVaR
-         8bVenEnpwz53/TSwZL/qp4CR7q1X07EcvgJ5PAMtiJTECs6+rW7dtpQtTN0ZbE4K6h/q
-         hXMCcQ1vBGyzBpExhkaVMCDj6fgfW3pbEesSj979KBp5ILcS4ob3sOfDXiNxJkxPIUA0
-         c+OEVOxiTXtVkBppGHnEVBrDhMdvklKdRiJ+wR5des0/RqfxiRGmSNP1jCH56HYDMNeV
-         VOSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUDyMoiV3eqlWZIs2y3kCgsTIsYO0gOPhKp/9r8P1uMCmTJbxO3XJz2QSuf9e5uYeHicnh7TG8jSnE=@vger.kernel.org, AJvYcCUUZ0s2trpZKJgfwD7SQt6VwQevAqbS3762FKum3KnbRUu5cj79Q0Y09pJXsJ63+/ympJvp+dZlxE4B@vger.kernel.org, AJvYcCUl+MDfY70lzfIYE1nfDy16UH5vjKxWJcUzTqMq+j1R0+9q4bBn99N7KjwZn5bE7ZGsxcP7ibli9udY@vger.kernel.org, AJvYcCV1pz1B8jf2LBUf62xHP4xGn46YuYyncn4BDRvaGfk2yXks/1DzyzPZ/C6xMpcBwWGHtqzJbALSH1CA@vger.kernel.org, AJvYcCVCCqmsNjiBEtbWWgPJnMjK0L0R1I+J3DpZO81AY3/SERcGK3ch5FRTuuol5vnOvWMnfRyJrEMrmMB/CQ==@vger.kernel.org, AJvYcCVKdC/BYGkpRUB28QWaMBdTCdF7c+XoxwPl7fKnQs4h5/4h/OB3bp98zVds1qPVHRFLMyIE7naYK6IYWJ8=@vger.kernel.org, AJvYcCVQnimNup4YnsCbf94mMgGkQei366uGXMnBfDnfQUz/m08ImJFSV5qzYaRSCVqD+7Y6LHpMlsOat+ceOlEG@vger.kernel.org, AJvYcCX4bhuun/qoeGiJ/yadRtqy1EUHC2DrH7VjHnwHbpbSQbNwgjYE4GWDccA+9yCEy/Dt1TqRB4y3YMpO5P3qWds=@vger.kernel.org, AJvYcCXNCk2+XuqxRXjgC+qrseF85rryEEdq4EjJNo5dOjH88uYohHk/0+VO+hIeDc+NCTXOn7yGE46A@vger.kernel.org, AJvYcCXU1wOWO7LGV3v8SVJKF2159w3IMwb6
- CWqkWUftX5bA1AtFRWxayPFQXsBMA63X5DPTbcDOMYrWf3GI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7ErPoF+Dq4cetILAfKtFQFgAuDg2mvnyvMKvtH0SrRzcjFxio
-	IHmuFlYVp7VxKmM9dPRBid2TxnYPqC//I96Rd0CIlB3LesRm4Tvuh14VcqjAsiRjnIgNnKyx/dg
-	wd/ZIBcWS9rzc8xyA1lJm8qiq19g=
-X-Google-Smtp-Source: AGHT+IEeVtQ4Mfm3Sjq2wHpciFrbjjxIYOrYvh/FCiLn6Ydf+vcLIXndUA6BX71uJDQWSPs0eewq2L8QblxudajKPt8=
-X-Received: by 2002:a05:6902:2389:b0:e2e:467d:d54e with SMTP id
- 3f1490d57ef6-e3087a4a0f2mr5604930276.8.1730102291466; Mon, 28 Oct 2024
- 00:58:11 -0700 (PDT)
+        bh=ZcY948jfGgx8uvT7sMECMiIeahovGQ0fYVq8akwUcN4=;
+        b=So8rKw+xnR9Tv3sXBx677+557y+nalWwtOkIvn/6jnPUHEMBjeeJdxGZwu/2HKmWZ0
+         KrVQwP0mWlwlTg1Zd59qQsw83Wq1+ecq88A0eHBGNuMxe9PL6FzRh2wsCdZzVkMuKc3L
+         H+6RAfUdopLdpFHIC/KrSM4XPYqirNbB4BX3ZviqOk4oWznBB2lqu7PRhX4O1sRcBmem
+         iY8XApqRqPpxSiyzYLJ3jcMYhRjx5sIzDkKal624R31UdS3+z8n2irGiONNKrIS5AA3f
+         oXvd1SkQ8GWgRVJCeCBKcZ5xUp4pfm1NlY1N+392mKn724GujzZlODNfMLHneccHyBRl
+         n+ZA==
+X-Forwarded-Encrypted: i=1; AJvYcCU4IQo+2n7W6oyTsq+GBD/zOrurB0ozX/mOPiebsBeuR5nyBhN5CRyqQpPKAgIctcG9AA/xZziS+KzW@vger.kernel.org, AJvYcCUTWaDCtf7zE1CYL6dkUp2yRSqxSe/7zNR7LFE+hTV8cudcceEMaltWgKmpNL++X5p0tiAXdG2r+Nyz484=@vger.kernel.org, AJvYcCUeks932INjtR+EyYO3U5ddxEKrpbSRJOqS/dq5Wssd9SuGI9ZWie81ISfpBKp67eRE187Cc6S5nbSxuA==@vger.kernel.org, AJvYcCUhW7XKnj32CiOm3Kb1hIO8hi7fu/UFZxsYzlR65Fh5lbYu+/RDPgScfaH9X33GZCMHjYJy9Nk1@vger.kernel.org, AJvYcCV2pqpLT3bd0QS/DRlOhVlaQ7RdCMnhf2rFhuCSQ4FmT5f82MDKaAMzuml5KJ6MyPS+Anv7g0WYXzvY@vger.kernel.org, AJvYcCVj4uUHlOVgUN3cYJ8IrQJ4+1D0V/S5L8Gpx7CokN2qd8bGBTaXkHX7QzriNkHJ9K3eipKGf4i0OKRw@vger.kernel.org, AJvYcCVsNwKvCzw/9bBKegBex4duvgK9Xz3ZMkVeuEaJvAS7R1cSo2+pxTgKmLqWbF/jMgKz63UdrTXRbsw=@vger.kernel.org, AJvYcCWonxI+173RcA/of9X08tr3uwTwRY8jFEGm/qUICd/RUu87nnN0WLKd3W5uCbJUne8V+pamExJaHIW0Xljh@vger.kernel.org, AJvYcCWsmoGtEc/Tkor++bbhwNl5D3ygkrZPDTOKNX47WucbTzIg9yu6Q/Rf7tmDnSB7hvtCo71rF72ZiYjU@vger.kernel.org, AJvYcCXUTHqRjdCdc2NF0mHpXgWyP1y+f0Cilli7tFe1
+ 9Ff5gAFTXrnQzH2t8EplD3HsEVRVAowpkcjWEfK5qgXyteg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHJa3+3o39EE84881NRL9ebhN6mMgPq8uqHeJ8/BvX1roZuTGR
+	uj0/iDrHQ2+OBaeRrxZV5f3SZ0cxeJcP7ZQAoCPcs87Q7mjdWvxUacHesE3C8idM+XjK1girLyx
+	XG/a84XN1k0ysIozX34RFt9Lqaps=
+X-Google-Smtp-Source: AGHT+IHfwraBh0NJHVkb+HlEoXQBoeg+ynvlKolAIoDyidN1EgkxWY3yAqaQR4x8wGosSDNGXeaBP4zu0x6f9HQRy2Q=
+X-Received: by 2002:a05:6902:100b:b0:e28:e700:2821 with SMTP id
+ 3f1490d57ef6-e30875dd6ffmr4666457276.25.1730104296331; Mon, 28 Oct 2024
+ 01:31:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-7-tmyu0@nuvoton.com>
- <CAH-L+nPGGhgDFge0Ov4rX_7vUyLN8uu51cks80=kt38h22N7zQ@mail.gmail.com>
- <62ea5a91-816f-4600-bfec-8f70798051db@roeck-us.net> <CAOoeyxX=A5o5PhxpniPwPgMCBv1VwMstt=wXCxHiGPF59gm5wQ@mail.gmail.com>
- <817d24e1-6fdd-4ce2-9408-eccc94134559@roeck-us.net> <02f05807-77ae-4a3b-8170-93dd7520c719@roeck-us.net>
-In-Reply-To: <02f05807-77ae-4a3b-8170-93dd7520c719@roeck-us.net>
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-2-tmyu0@nuvoton.com>
+ <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
+ <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
+ <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de> <CAOoeyxUEf5vjqL67WjR-DbrhE0==2hqHLEyZ5XEBhEfMfQ5pag@mail.gmail.com>
+ <20241025-spirited-nocturnal-antelope-ce93dd-mkl@pengutronix.de>
+ <CAOoeyxW5QwPMGAYCWhQDtZwJJLG5xj9HXpL3-cduRSgF+4VHhg@mail.gmail.com> <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
+In-Reply-To: <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
 From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 28 Oct 2024 15:58:00 +0800
-Message-ID: <CAOoeyxX2Jk+76Cedu5_ZGgeRCPmT8Yhczmx7h+K-za7r2WS=Sw@mail.gmail.com>
-Subject: Re: [PATCH v1 6/9] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>, tmyu0@nuvoton.com, lee@kernel.org, 
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+Date: Mon, 28 Oct 2024 16:31:25 +0800
+Message-ID: <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
 	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, jdelvare@suse.com, jic23@kernel.org, lars@metafoo.de, 
-	ukleinek@kernel.org, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
 	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
 	linux-rtc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Dear Guenter,
-
-The original plan was to use the IIO driver to access the temperature
-and voltage sensors, and the HWMON driver to access the tachometers.
-However, since the device is a hot-plug USB device, as far as I know,
-IIO-HWMON is not applicable. I will merge the IIO driver part into the
-HWMON driver in the next patch.
-In  other words, the driver will be used to access TIN, VIN and FIN.
-
-Best regards
-Ming
-
-Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2024=E5=B9=B410=E6=9C=8826=E6=
-=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=8810:50=E5=AF=AB=E9=81=93=EF=BC=
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8828=
+=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=883:52=E5=AF=AB=E9=81=93=EF=BC=
 =9A
 >
-> On 10/25/24 08:44, Guenter Roeck wrote:
-> > On 10/25/24 08:22, Ming Yu wrote:
-> > [ ... ]
+> On 28.10.2024 15:33:08, Ming Yu wrote:
+> > Dear Marc,
 > >
-> >>>>> +static int nct6694_fan_write(struct device *dev, u32 attr, int cha=
-nnel,
-> >>>>> +                            long val)
-> >>>>> +{
-> >>>>> +       struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> >>>>> +       unsigned char enable_buf[REQUEST_HWMON_CMD0_LEN] =3D {0};
-> >>>> [Kalesh] Please try to maintain RCT order for variable declaration
-> >>>
-> >>> Ok, but that is already the case here ?
-> >>
-> >> [Ming] Is there anything that needs to be changed?
-> >>
+> > Thank you for your comments,
 > >
-> > I don't think so, If two lines have the same length, the order is up
-> > to the developer to decide.
+> > Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=
+=8825=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:24=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+> > >
+> > > On 25.10.2024 19:03:55, Ming Yu wrote:
+> > > > Oh! I'm sorry about that I confused the packet size.
+> > > > The NCT6694 bulk maximum packet size is 256 bytes,
+> > > > and USB High speed bulk maximum packet size is 512 bytes.
+> > > >
+> > > > Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=
+=9C=8825=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:08=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+> > > > >
+> > > > > On 25.10.2024 16:08:10, Ming Yu wrote:
+> > > > > > > > +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 =
+offset, u16 length,
+> > > > > > > > +                  u8 rd_idx, u8 rd_len, unsigned char *buf=
+)
+> > > > > > >
+> > > > > > > why not make buf a void *?
+> > > > > >
+> > > > > > [Ming] I'll change the type in the next patch.
+> > > > > >
+> > > > > > >
+> > > > > > > > +{
+> > > > > > > > +     struct usb_device *udev =3D nct6694->udev;
+> > > > > > > > +     unsigned char err_status;
+> > > > > > > > +     int len, packet_len, tx_len, rx_len;
+> > > > > > > > +     int i, ret;
+> > > > > > > > +
+> > > > > > > > +     mutex_lock(&nct6694->access_lock);
+> > > > > > > > +
+> > > > > > > > +     /* Send command packet to USB device */
+> > > > > > > > +     nct6694->cmd_buffer[REQUEST_MOD_IDX] =3D mod;
+> > > > > > > > +     nct6694->cmd_buffer[REQUEST_CMD_IDX] =3D offset & 0xF=
+F;
+> > > > > > > > +     nct6694->cmd_buffer[REQUEST_SEL_IDX] =3D (offset >> 8=
+) & 0xFF;
+> > > > > > > > +     nct6694->cmd_buffer[REQUEST_HCTRL_IDX] =3D HCTRL_GET;
+> > > > > > > > +     nct6694->cmd_buffer[REQUEST_LEN_L_IDX] =3D length & 0=
+xFF;
+> > > > > > > > +     nct6694->cmd_buffer[REQUEST_LEN_H_IDX] =3D (length >>=
+ 8) & 0xFF;
+> > > > > > > > +
+> > > > > > > > +     ret =3D usb_bulk_msg(udev, usb_sndbulkpipe(udev, BULK=
+_OUT_ENDPOINT),
+> > > > > > > > +                        nct6694->cmd_buffer, CMD_PACKET_SZ=
+, &tx_len,
+> > > > > > > > +                        nct6694->timeout);
+> > > > > > > > +     if (ret)
+> > > > > > > > +             goto err;
+> > > > > > > > +
+> > > > > > > > +     /* Receive response packet from USB device */
+> > > > > > > > +     ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(udev, BULK=
+_IN_ENDPOINT),
+> > > > > > > > +                        nct6694->rx_buffer, CMD_PACKET_SZ,=
+ &rx_len,
+> > > > > > > > +                        nct6694->timeout);
+> > > > > > > > +     if (ret)
+> > > > > > > > +             goto err;
+> > > > > > > > +
+> > > > > > > > +     err_status =3D nct6694->rx_buffer[RESPONSE_STS_IDX];
+> > > > > > > > +
+> > > > > > > > +     /*
+> > > > > > > > +      * Segmented reception of messages that exceed the si=
+ze of USB bulk
+> > > > > > > > +      * pipe packets.
+> > > > > > > > +      */
+> > > > > > >
+> > > > > > > The Linux USB stack can receive bulk messages longer than the=
+ max packet size.
+> > > > > >
+> > > > > > [Ming] Since NCT6694's bulk pipe endpoint size is 128 bytes for=
+ this MFD device.
+> > > > > > The core will divide packet 256 bytes for high speed USB device=
+, but
+> > > > > > it is exceeds
+> > > > > > the hardware limitation, so I am dividing it manually.
+> > > > >
+> > > > > You say the endpoint descriptor is correctly reporting it's max p=
+acket
+> > > > > size of 128, but the Linux USB will send packets of 256 bytes?
+> > > >
+> > > > [Ming] The endpoint descriptor is correctly reporting it's max pack=
+et
+> > > > size of 256, but the Linux USB may send more than 256 (max is 512)
+> > > > https://elixir.bootlin.com/linux/v6.11.5/source/drivers/usb/host/xh=
+ci-mem.c#L1446
+> > >
+> > > AFAIK according to the USB-2.0 spec the maximum packet size for
+> > > high-speed bulk transfers is fixed set to 512 bytes. Does this mean t=
+hat
+> > > your device is a non-compliant USB device?
 > >
-> > Question though is if the buffer needs to be initialized. You should dr=
-op
-> > the initialization if it is not necessary. In that case the second line
-> > would be shorter anyway, and the order question would not arise.
+> > We will reduce the endpoint size of other interfaces to ensure that MFD=
+ device
+> > meets the USB2.0 spec. In other words, I will remove the code for manua=
+l
+> > unpacking in the next patch.
+>
+> I was not talking about the driver, but your USB device. According to
+> the USB2.0 spec, the packet size is fixed to 512 for high-speed bulk
+> transfers. So your device must be able to handle 512 byte transfers or
+> it's a non-compliant USB device.
+
+I understand. Therefore, the USB device's firmware will be modified to supp=
+ort
+bulk pipe size of 512 bytes to comply with the USB 2.0 spec.
+
+>
+> > > > > > > > +     for (i =3D 0, len =3D length; len > 0; i++, len -=3D =
+packet_len) {
+> > > > > > > > +             if (len > nct6694->maxp)
+> > > > > > > > +                     packet_len =3D nct6694->maxp;
+> > > > > > > > +             else
+> > > > > > > > +                     packet_len =3D len;
+> > > > > > > > +
+> > > > > > > > +             ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(ud=
+ev, BULK_IN_ENDPOINT),
+> > > > > > > > +                                nct6694->rx_buffer + nct66=
+94->maxp * i,
+> > > > > > > > +                                packet_len, &rx_len, nct66=
+94->timeout);
+> > > > > > > > +             if (ret)
+> > > > > > > > +                     goto err;
+> > > > > > > > +     }
+> > > > > > > > +
+> > > > > > > > +     for (i =3D 0; i < rd_len; i++)
+> > > > > > > > +             buf[i] =3D nct6694->rx_buffer[i + rd_idx];
+> > > > > > >
+> > > > > > > memcpy()?
+> > > > > > >
+> > > > > > > Or why don't you directly receive data into the provided buff=
+er? Copying
+> > > > > > > of the data doesn't make it faster.
+> > > > > > >
+> > > > > > > On the other hand, receiving directly into the target buffer =
+means the
+> > > > > > > target buffer must not live on the stack.
+> > > > > >
+> > > > > > [Ming] Okay! I'll change it to memcpy().
+> > > > >
+> > > > > fine!
+> > > > >
+> > > > > > This is my perspective: the data is uniformly received by the r=
+x_bffer held
+> > > > > > by the MFD device. does it need to be changed?
+> > > > >
+> > > > > My question is: Why do you first receive into the nct6694->rx_buf=
+fer and
+> > > > > then memcpy() to the buffer provided by the caller, why don't you
+> > > > > directly receive into the memory provided by the caller?
+> > > >
+> > > > [Ming] Due to the bulk pipe maximum packet size limitation, I think=
+ consistently
+> > > > using the MFD'd dynamically allocated buffer to submit URBs will be=
+tter
+> > > > manage USB-related operations
+> > >
+> > > The non-compliant max packet size limitation is unrelated to the
+> > > question which RX or TX buffer to use.
 > >
+> > I think these two USB functions can be easily called using the buffer
+> > dynamically
+> > allocated by the MFD. However, if they transfer data directly to the
+> > target buffer,
+> > they must ensure that it is not located on the stack.
 >
-> Actually, I just noticed that you also submitted an IIO driver which
-> reports the same data again. If a chip has an IIO driver, there should
-> be no HWMON driver since the IIO -> HWMON bridge can then be used if
-> necessary. So please drop this driver.
+> You have a high coupling between the MFD driver and the individual
+> drivers anyways, so why not directly use the dynamically allocated
+> buffer provided by the caller and get rid of the memcpy()?
+
+Okay! I will provide a function to request and free buffer for child device=
+s,
+and update the caller's variables to use these two functions in the next pa=
+tch.
+
 >
-> Thanks,
-> Guenter
+> regards,
+> Marc
 >
->
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+Thanks,
+Ming
 
