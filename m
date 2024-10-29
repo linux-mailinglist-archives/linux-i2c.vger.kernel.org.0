@@ -1,247 +1,147 @@
-Return-Path: <linux-i2c+bounces-7642-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7643-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C4F09B412A
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 04:45:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E22F99B4284
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 07:44:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA15A1F228BB
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 03:45:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2F7A28396D
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 06:44:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E121FF7B7;
-	Tue, 29 Oct 2024 03:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABA5820125C;
+	Tue, 29 Oct 2024 06:44:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gtowu2h4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJalhDP0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC34282FB;
-	Tue, 29 Oct 2024 03:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EFB20124E;
+	Tue, 29 Oct 2024 06:44:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730173545; cv=none; b=cU7VKgyN9Tbvo4XaXV/Z9jcFkjBu/61ZvBF71HWbW2+z2ElSZ3zPizBqzwhtni4HG87khRIMTjkAyUyFtQJdsbMJpfzChO9VgjovyiioqkMgcRxaVn6Fpe/TLMcL0y+77SsK7jwMe2T1saPLDxsa2QKH/CK6Vov0kjv0pQ36C6Q=
+	t=1730184273; cv=none; b=KIdMJ5CWhVk6ce4Z+hTLB93qxMF9l/GSigTKCYnYEXmh1IaEU/jHuY88lON0bcqVXr8dFBRUYgQk39tyx8vqVmCnl/zyZY9Wef33zhIVzMuJwMUq/ajs4vhfVC74Dy2IrBRpNmZ3aWmWHgvCZsCb7TvCwSfVjVs3503IIOMNdZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730173545; c=relaxed/simple;
-	bh=XYnM6DX+CYxWd6ljUMrgeFtnN/QrAB98BtTRnD5Ohn8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MiR/hcCUb0gDngSvQhBeGQPD+IZPoTW4Xq9DDjwYwu9NUQ/h/AG4qCdlLjGD+UJyudlbaMZZztjdpOeXGBx1ieFPpGM11lRP5sRV+oQ2/vIgyo+dO1IgY+C0l60yFiqIj+cQuWjvkhEjAGd/PkrNe1JtXRx7Mn2cBi2dhZVHQnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gtowu2h4; arc=none smtp.client-ip=209.85.219.175
+	s=arc-20240116; t=1730184273; c=relaxed/simple;
+	bh=zNyJFWtpl2w8YCj4LHTYzFrIf//aYw+RjNS9MLbWR0Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=dhaYhnd4WEBC86hKuHAcmhsgBZFsaJj3T0QN15asUq1rPz8UhKPx/34B0gKHJy/a83Snb8j+dmyGgVHznkv3Wx7emeRzrJyuIbokwpsfCSSj3/LIPZz9ziXQdOXdXXhgyDmYayRB2IUQiFHMh2x6xAGnV7Ytas6fAQ9hsxc4lM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJalhDP0; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e2974743675so4472896276.1;
-        Mon, 28 Oct 2024 20:45:43 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a9a4031f69fso683266866b.0;
+        Mon, 28 Oct 2024 23:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730173542; x=1730778342; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T/CTs5K1y1Wb1h73no9mebagu5POeGng1N3JgW2OuRU=;
-        b=Gtowu2h4SGC7DktSemUBNe3r4C20PuuQUK1Gu13xI6e/FzBpc6IK+U5Xtv2IntjXSo
-         E/mdfhK58XXJ6Nmo511UJF8+qnTHJ3QvrtDdBQirngGPLaK4iv/qJx9re8QSbQ3XYhtt
-         W4Hm8gNlTjDjX3FZ7MxCSx4KJGQXa/hsQQpTuDwUN89K5E4Hi9QagrHiuifwTOTtI6gA
-         +b1QLEEATwH7r0iBWRsC+hHQyPqtchS6ycs94PG2YO3inqkwSVolknfWdGjfQduQbhZS
-         4qutj6pb2Gpa/EOuXiHiuEH4iPTSaH29O+HQflMy0BvcFUB0bYmsC10NCYE5SGNy3OWo
-         ifbA==
+        d=gmail.com; s=20230601; t=1730184270; x=1730789070; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=KF33I6LL0plBpfJCeQAFsiAalwkQ1koC+IV5jnwywDs=;
+        b=hJalhDP0ANsPY7tyh4SIro8IuMrl0KJl3LvujJ3SzB6+4F+jb+FrJ0sJs/LF0/EF9h
+         MHwz5xiWwilN/fM9u3aC3JFzLXEtc2clVAHysBYloGs5HZQiBHLg7z1C7u6XtxT2SCLt
+         XzjgWrROBHEuN4yaQpCg04LhvsHa2IX/IDpBTyPJiP1+GYmPDeoIJq2Voknjd923MIvn
+         4p80ecbYN1DO9kOqvOH6rwOeUUTChvbOpLnxpTuZ/tEK6Vlw8KIti5GcMwzgp+OVHukD
+         NQpCWixk8h4imbqqfQ5OAVszZZwZJAmvwjYMltPKeU1JtD+D6GTD7jZ1Ysfs22r7qgtH
+         TgUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730173542; x=1730778342;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T/CTs5K1y1Wb1h73no9mebagu5POeGng1N3JgW2OuRU=;
-        b=t5i8r6dSCwm8eh0UCn896urLAM+3epkSM9lcBqYB6b3P1aoI4KXVqFRjR1O/cqW2je
-         BMgH5cLTwqJ+cvnGbmwJBrrPWbpL0spBB2RAd5XZmbkyU7RKtpRIPTbQ2U3l9xbFl4KU
-         Gw253pZRTdsSQSMNQHMIR6hValDX6getVKGCKPMYFUz4UYS6I7u+RUe4+9Pl5nJuQTt4
-         ut/fjBngAFYXY4XD5OejU+3fbotvFmv6pJPMP8DXRpRNKcjC1oqiZ44/JW9tdO10l6Qt
-         Y5HVHmiouDUp7qhhJtgmO8cLpWpOinM/H5faPk7oR3yS4BRzk7JntSlAcyFjd2HxFU1A
-         ubdA==
-X-Forwarded-Encrypted: i=1; AJvYcCURcLGxst1+NU9cIT5bXYzfKvq1OhgGIkaKyW7Ri6MdUap5aSYEpgl7z8GnVuiNu0hp96JUC34I@vger.kernel.org, AJvYcCVLpI+LIcNFeJPFqtgZIQ2tsbWzTQ7YWsnaPoLNBB2vBBlnLNjri45qawrDzCh0urB8T24MSogosFlGCg==@vger.kernel.org, AJvYcCVXEz+IAHGrePm4MZiwdutlNHBRGkpnm5G1vcZWgRH68ka4v13M4aCe9iM5LepavSF4ciqqVSpVNG8=@vger.kernel.org, AJvYcCW0hbK0CU9DKLaZRoRV1/cDBjvrfeDOwlaiZZYpiSlQ3nTWMZvFG/nK28Iv3FTuiQxN8Du0nRVq9L3TQJaF@vger.kernel.org, AJvYcCWAPdNVkHsOdMKm82yQiPuJodMGvS9cLfznjib4cu/RpZoHf3DAXM4NfnVy8R9XPN80OWxKjQ5/lyGX/sGDzxU=@vger.kernel.org, AJvYcCWZkA/Ebsvrsm1nzQqmVI2QoA1ZLgpgTRitgXjN8jvi04UxfTJXUSdvJJZBI29dEHCW19EocshcjMsD@vger.kernel.org, AJvYcCWkG26bwOBYdHuWuIx/w2ArSIw3v87kU1Y4rlaRyWYjU2BOAb7kM0cLziyhhTStxp9nn8JjpB2oIZmG@vger.kernel.org, AJvYcCWuMZkQ6fiBJUd6dKzdOqopu9ee/4dLre2VnjOYGotjP8a2gaFhmngHb70e9lgWIL+Kf7t2PCK6twu8@vger.kernel.org, AJvYcCXQ9JdtvqAXoRNx/prs/2BJ1/R5lr+9AN9OJrqABJIqbhtaB8GOL7kBwuXkw12C7k2tW+FfHJPkHZTMyXg=@vger.kernel.org, AJvYcCXWHd0MgKNNBFnsAHuLjCoPlYuEUNEx
- lw2sttxwdG7itDJKcHe38WKblEkalUz8d8Ebu0alXzNU+97Y@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXuBDcQF97Vo9aOSBY2QbzEN1iEoyEskfpXMznDbVuFeJHiGq2
-	JIRFRrYrFA/4rwSxWfoURJb/LvIvvRHnE8HDCUl65E04W88xv3VvrwGjfWotcyiVg7ZrPX+Smna
-	jUxy+V7JjyNEx1npWxMvPC9R4Rek=
-X-Google-Smtp-Source: AGHT+IGfm8i1NTOjdK59ar/oHoMjiqsPSqbc0JD5K9R4kxYreI+daaN7dVKfGowPbsaVFEJzyIlEL4zXfN95OO4rnFY=
-X-Received: by 2002:a05:6902:12cc:b0:e28:faf8:5cd7 with SMTP id
- 3f1490d57ef6-e3087a6c107mr8166564276.15.1730173542428; Mon, 28 Oct 2024
- 20:45:42 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1730184270; x=1730789070;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KF33I6LL0plBpfJCeQAFsiAalwkQ1koC+IV5jnwywDs=;
+        b=Xmw3HIyjrozDAsuJWi8bZn1sDQI3XSo76CLQR1C6bcLQGkOxi7hUC/fqFzZc5u2PEX
+         JQstJPnURcVHHv+lT5pJibrRiqBsXmsJ9fiBmU4DRMDk1EYF0U8uD/Xup/HiYdwFpISg
+         +a2l0a7SwjyXvvF8mLH0YNfXSzVuIdPDcwvInEF79XNpcH5mn+e1QcICyWbBGJAu8XGw
+         X2dY5msyDvmJ8d6fB4IHRpkD7IsaJFSjLHK0jT2ENIrQs3OvMUThd+nfyZnjqa3hWQjt
+         1IKN9EtllNrNe3UEyUI0tEYI7vaYjJpjCUutidl8yZWZbDu8FgGY1UuS8gphlDwm4QIg
+         2LIg==
+X-Forwarded-Encrypted: i=1; AJvYcCVNXSJLZPGZFPX8aQKtcCT9SEhXhZ/BSIkRxh9j3axTsv1sWtFWbxlQ+XwUpkCu4YUmn0Agoey1SOgWg1s=@vger.kernel.org, AJvYcCWStaUSDVRbhD+bqgiEz7ZaJUHjavtu3wGafOnKk50ITjvOXUN0D6bJ/g+dGePItObZ72ACT9YiU7k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+qSPTDO/OTyd7fG9nCHhr9KOKBuw0QuAdE+YcpVUGSutX8gy8
+	7M7RH6NKdWl5HxCcyqSp7afguqoaVRmn3xbzSiMZFpu9WP+Bfuas
+X-Google-Smtp-Source: AGHT+IHh+j4+rxanFd7EZ6tBK88ErLDSNzAI21beWahCriBRRnGuBZFG5mjYR8dKloioBhaOfVL7NA==
+X-Received: by 2002:a17:907:7211:b0:a9a:ad8:fc56 with SMTP id a640c23a62f3a-a9de6167c81mr900404466b.44.1730184269538;
+        Mon, 28 Oct 2024 23:44:29 -0700 (PDT)
+Received: from ?IPV6:2a02:3100:a47b:200:b85f:7509:b335:fc6c? (dynamic-2a02-3100-a47b-0200-b85f-7509-b335-fc6c.310.pool.telefonica.de. [2a02:3100:a47b:200:b85f:7509:b335:fc6c])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a9b1dfbde87sm437490366b.23.2024.10.28.23.44.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Oct 2024 23:44:26 -0700 (PDT)
+Message-ID: <77d8326d-b8f7-46b0-b66e-3f53fee8db12@gmail.com>
+Date: Tue, 29 Oct 2024 07:44:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-2-tmyu0@nuvoton.com>
- <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
- <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
- <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de> <CAOoeyxUEf5vjqL67WjR-DbrhE0==2hqHLEyZ5XEBhEfMfQ5pag@mail.gmail.com>
- <20241025-spirited-nocturnal-antelope-ce93dd-mkl@pengutronix.de>
- <CAOoeyxW5QwPMGAYCWhQDtZwJJLG5xj9HXpL3-cduRSgF+4VHhg@mail.gmail.com>
- <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
- <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com> <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
-In-Reply-To: <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Tue, 29 Oct 2024 11:45:30 +0800
-Message-ID: <CAOoeyxWh1-=NVQdmNp5HBzf1YPo9tQdh=OzUUVFmvC-F7sCHWg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] i2c: Replace lists of special clients with
+ flagging of such clients
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Wolfram Sang <wsa@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ linux-sound@vger.kernel.org
+References: <3982b2a6-975e-40d2-bf02-2155e5c36c14@gmail.com>
+ <ZtQ0KMWUk9iAUCCl@shikoro> <18306ded-6451-4880-9f74-6bceb0f26dea@gmail.com>
+ <ZvqEhntonE9qWnPF@shikoro>
+Content-Language: en-US
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <ZvqEhntonE9qWnPF@shikoro>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8828=
-=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=8810:06=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> On 28.10.2024 16:31:25, Ming Yu wrote:
-> > > > > > > > > The Linux USB stack can receive bulk messages longer than=
- the max packet size.
-> > > > > > > >
-> > > > > > > > [Ming] Since NCT6694's bulk pipe endpoint size is 128 bytes=
- for this MFD device.
-> > > > > > > > The core will divide packet 256 bytes for high speed USB de=
-vice, but
-> > > > > > > > it is exceeds
-> > > > > > > > the hardware limitation, so I am dividing it manually.
-> > > > > > >
-> > > > > > > You say the endpoint descriptor is correctly reporting it's m=
-ax packet
-> > > > > > > size of 128, but the Linux USB will send packets of 256 bytes=
-?
-> > > > > >
-> > > > > > [Ming] The endpoint descriptor is correctly reporting it's max =
-packet
-> > > > > > size of 256, but the Linux USB may send more than 256 (max is 5=
-12)
-> > > > > > https://elixir.bootlin.com/linux/v6.11.5/source/drivers/usb/hos=
-t/xhci-mem.c#L1446
-> > > > >
-> > > > > AFAIK according to the USB-2.0 spec the maximum packet size for
-> > > > > high-speed bulk transfers is fixed set to 512 bytes. Does this me=
-an that
-> > > > > your device is a non-compliant USB device?
-> > > >
-> > > > We will reduce the endpoint size of other interfaces to ensure that=
- MFD device
-> > > > meets the USB2.0 spec. In other words, I will remove the code for m=
-anual
-> > > > unpacking in the next patch.
-> > >
-> > > I was not talking about the driver, but your USB device. According to
-> > > the USB2.0 spec, the packet size is fixed to 512 for high-speed bulk
-> > > transfers. So your device must be able to handle 512 byte transfers o=
-r
-> > > it's a non-compliant USB device.
-> >
-> > I understand. Therefore, the USB device's firmware will be modified to =
-support
-> > bulk pipe size of 512 bytes to comply with the USB 2.0 spec.
->
-> Then you don't need manual segmentation of bulk transfers anymore!
-
-Understood, thank you very much.
-
->
-> > > > > > > > > > +     for (i =3D 0, len =3D length; len > 0; i++, len -=
-=3D packet_len) {
-> > > > > > > > > > +             if (len > nct6694->maxp)
-> > > > > > > > > > +                     packet_len =3D nct6694->maxp;
-> > > > > > > > > > +             else
-> > > > > > > > > > +                     packet_len =3D len;
-> > > > > > > > > > +
-> > > > > > > > > > +             ret =3D usb_bulk_msg(udev, usb_rcvbulkpip=
-e(udev, BULK_IN_ENDPOINT),
-> > > > > > > > > > +                                nct6694->rx_buffer + n=
-ct6694->maxp * i,
-> > > > > > > > > > +                                packet_len, &rx_len, n=
-ct6694->timeout);
-> > > > > > > > > > +             if (ret)
-> > > > > > > > > > +                     goto err;
-> > > > > > > > > > +     }
-> > > > > > > > > > +
-> > > > > > > > > > +     for (i =3D 0; i < rd_len; i++)
-> > > > > > > > > > +             buf[i] =3D nct6694->rx_buffer[i + rd_idx]=
-;
-> > > > > > > > >
-> > > > > > > > > memcpy()?
-> > > > > > > > >
-> > > > > > > > > Or why don't you directly receive data into the provided =
-buffer? Copying
-> > > > > > > > > of the data doesn't make it faster.
-> > > > > > > > >
-> > > > > > > > > On the other hand, receiving directly into the target buf=
-fer means the
-> > > > > > > > > target buffer must not live on the stack.
-> > > > > > > >
-> > > > > > > > [Ming] Okay! I'll change it to memcpy().
-> > > > > > >
-> > > > > > > fine!
-> > > > > > >
-> > > > > > > > This is my perspective: the data is uniformly received by t=
-he rx_bffer held
-> > > > > > > > by the MFD device. does it need to be changed?
-> > > > > > >
-> > > > > > > My question is: Why do you first receive into the nct6694->rx=
-_buffer and
-> > > > > > > then memcpy() to the buffer provided by the caller, why don't=
- you
-> > > > > > > directly receive into the memory provided by the caller?
-> > > > > >
-> > > > > > [Ming] Due to the bulk pipe maximum packet size limitation, I t=
-hink consistently
-> > > > > > using the MFD'd dynamically allocated buffer to submit URBs wil=
-l better
-> > > > > > manage USB-related operations
-> > > > >
-> > > > > The non-compliant max packet size limitation is unrelated to the
-> > > > > question which RX or TX buffer to use.
-> > > >
-> > > > I think these two USB functions can be easily called using the buff=
-er
-> > > > dynamically
-> > > > allocated by the MFD. However, if they transfer data directly to th=
-e
-> > > > target buffer,
-> > > > they must ensure that it is not located on the stack.
-> > >
-> > > You have a high coupling between the MFD driver and the individual
-> > > drivers anyways, so why not directly use the dynamically allocated
-> > > buffer provided by the caller and get rid of the memcpy()?
-> >
-> > Okay! I will provide a function to request and free buffer for child de=
-vices,
-> > and update the caller's variables to use these two functions in the nex=
-t patch.
->
-> I don't see a need to provide dedicated function to allocate and free
-> the buffers. The caller can allocate them as part of their private data,
-> or allocate them during probe().
-
-Okay, so each child device may allocate a buffer like this during probe():
-priv->xmit_buf =3D devm_kcalloc(dev, MAX_PACKET_SZ, sizeof(unsigned char),
-GFP_KERNEL), right?
-
->
-> regards,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde          |
-> Embedded Linux                   | https://www.pengutronix.de |
-> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
-Thanks,
-Ming
+On 30.09.2024 12:59, Wolfram Sang wrote:
+> 
+>> Now that 6.12-rc1 is out: Are you going to push this to linux-next?
+> 
+> Yes, hopefully this week.
+> 
+Now we're at rc5. Is it still something for 6.13 or better postpone
+to have a full cycle in linux-next?
 
