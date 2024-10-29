@@ -1,144 +1,122 @@
-Return-Path: <linux-i2c+bounces-7636-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7637-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0BA29B39BB
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 19:54:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 696B49B3FDB
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 02:38:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5C48285229
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Oct 2024 18:54:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A747B21BEE
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 01:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171971DFE2B;
-	Mon, 28 Oct 2024 18:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001C680038;
+	Tue, 29 Oct 2024 01:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hVzHeTEN"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="y/uSos0b"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4873A268;
-	Mon, 28 Oct 2024 18:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7078F507;
+	Tue, 29 Oct 2024 01:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730141668; cv=none; b=aoArrMviq3n86DrfCQCc8u6D0HU7vb200fbMll+miLf1njisWVrUCst3REJIDijDfr2PRVaKBswnUkiDVucoIgUQLFU8OhLtpA2T3B8pCDpevh8m/bhZznnTcgO66I1rnElLY3FZrlT/nLh8KibZHMljSdQs5tWUJRypr+KAWto=
+	t=1730165898; cv=none; b=Op+QyKtOd/osDtkcJpsZtTKFvyB00ZVrOogwvShmzFsi5S9D5vCab6rPeMFsJaTKlnX/k2/Axw5M8dweCPabHovST8cjgyYeyr2hWJrqDUPi9JV8eo/AyBLzbcfmIUwv266JCcDUIAQKaw+5FD4Bs3YjKixZ9d7qc4EzxXDAxwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730141668; c=relaxed/simple;
-	bh=ANCSbHqyxuvgp0nFgUZB2RvRiM1hWXf/XbsXVH8Nu0w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hdFLplWPAyc69aNByuijthAxKBbbriIRvMajr6iPquUlyH+e3JN4sZJYKG1aD5fJDYXdAC/UsJkL4cAkTp0RshUSr53MQ6w1kHKoP9KvzRQpYNSoXnOuuVaseliKh96BbDETHt3z06e8Wvr8maJhSnKW/E0gMpc3MgDzedUVxjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hVzHeTEN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEACEC4CEC3;
-	Mon, 28 Oct 2024 18:54:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730141667;
-	bh=ANCSbHqyxuvgp0nFgUZB2RvRiM1hWXf/XbsXVH8Nu0w=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=hVzHeTENHMRNzDW3+KoT1ZR10ZxgtOU2dYGXd9+qjI7sGIXekTjlWGJ3QlHZpX333
-	 m5sd7l4u3A6e4KsRDqXzjwzflDfK0/to5CzePmJNw4VOulXUgz9OISBalHm75SzJYO
-	 9VQ2dh+2YTTwiEwGP3zjFwzsZr84qNKDKS8dEx2zk2hdGydSIFNV0bsk76zSFWm8HV
-	 pflgGv5/4GIwx2OwzHndpsshfKrVQ+i6eN1rnbb1+LSY8T8i55MEV5NyHWYd1vuDCv
-	 bPwfRWdxS5sWjeLr/TZXMjbDddRjGTSgXtmFrmInNeUP2sitIPfdswQQvnyl2lPWU3
-	 QzxqydZz+LTOQ==
-Date: Mon, 28 Oct 2024 18:54:14 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Kalesh Anakkur Purayil
- <kalesh-anakkur.purayil@broadcom.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, jdelvare@suse.com,
- lars@metafoo.de, ukleinek@kernel.org, alexandre.belloni@bootlin.com,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 6/9] hwmon: Add Nuvoton NCT6694 HWMON support
-Message-ID: <20241028185414.65456203@jic23-huawei>
-In-Reply-To: <CAOoeyxX2Jk+76Cedu5_ZGgeRCPmT8Yhczmx7h+K-za7r2WS=Sw@mail.gmail.com>
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
-	<20241024085922.133071-7-tmyu0@nuvoton.com>
-	<CAH-L+nPGGhgDFge0Ov4rX_7vUyLN8uu51cks80=kt38h22N7zQ@mail.gmail.com>
-	<62ea5a91-816f-4600-bfec-8f70798051db@roeck-us.net>
-	<CAOoeyxX=A5o5PhxpniPwPgMCBv1VwMstt=wXCxHiGPF59gm5wQ@mail.gmail.com>
-	<817d24e1-6fdd-4ce2-9408-eccc94134559@roeck-us.net>
-	<02f05807-77ae-4a3b-8170-93dd7520c719@roeck-us.net>
-	<CAOoeyxX2Jk+76Cedu5_ZGgeRCPmT8Yhczmx7h+K-za7r2WS=Sw@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1730165898; c=relaxed/simple;
+	bh=ZfgDtqjTJM7obDP0PVtyUkoytuC1DCtPqoiOxJo3YAU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=U3eEHQt3wF0sEtSmMf/U7Ur4/L3Cy77bkkfiR3qVBSipjob4/r1niGDbuKVhC0Szmo/PQQDx2jxX46mV/k4mj2WbSbiq5R55t+W4bhHBn9Q72ZmPGvNkoyhiwc98fcWrFj2tamoKY6YhD2rpRsoj7drCGw+YwGIgTOiVVWhDYu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=y/uSos0b; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49SMhOl8027753;
+	Mon, 28 Oct 2024 21:37:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=z0VtlkEwdCs5fd8WORv1aiQ5gs1
+	jtMK386ByPpjQQTo=; b=y/uSos0b3+aGS9W/hTmr85jdydIdgPHuutqCHoHVqfu
+	CtJW0nuKtvWjv072DTAsOY/HWa++HVb/DcHSdAm22ktKCjGxbLKjgdQmOftt6h9H
+	cpEDuL31MqRWfGMio8PS8dz0Dvx3UtV2cMonaWnmXnBxw0zG0p9UutgwDks4uMba
+	LDTrxytvjMTz6RODOnbg3KSt1SoaJXPQV2kE9dFiEpriQs8i2DAQOA9YCtQQ0PlR
+	aiXftUreKTXBMIDWEOnrfhdfwgTZYHT/SC+lMKVogHYPftdPOBhKzf2J+UbDT21b
+	XHW3gpBXH43FF1eFUELOWgTrrR+wx3pvtEX3OtGvOaQ==
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 42gt92ukhv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Oct 2024 21:37:58 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 49T1bvD7018872
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 28 Oct 2024 21:37:57 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 28 Oct
+ 2024 21:37:57 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 28 Oct 2024 21:37:57 -0400
+Received: from MTINACO-L03.ad.analog.com (MTINACO-L03.ad.analog.com [10.117.223.14])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 49T1bgJO031384;
+	Mon, 28 Oct 2024 21:37:44 -0400
+From: Mariel Tinaco <Mariel.Tinaco@analog.com>
+To: <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare
+	<jdelvare@suse.com>,
+        Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+        Jonathan
+ Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Frank Li <Frank.Li@nxp.com>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring
+	<robh@kernel.org>
+Subject: [PATCH 0/3] add support for LTC7841 boost controller
+Date: Tue, 29 Oct 2024 09:37:31 +0800
+Message-ID: <20241029013734.293024-1-Mariel.Tinaco@analog.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: CCroGj3O9P6jWmPLOzpIRCQsNn_YmwLo
+X-Proofpoint-ORIG-GUID: CCroGj3O9P6jWmPLOzpIRCQsNn_YmwLo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ phishscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1011 adultscore=0
+ bulkscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2410290011
 
-On Mon, 28 Oct 2024 15:58:00 +0800
-Ming Yu <a0282524688@gmail.com> wrote:
+This series introduces support for LTC7841 boost controller. 
+The LTC7841 is similar to LTC7880, which is already supported
+under LTC2978. It has reduced PMBUS registers as that of the LTC7880,
+similar voltage range, and has only one channel. 
 
-> Dear Guenter,
->=20
-> The original plan was to use the IIO driver to access the temperature
-> and voltage sensors, and the HWMON driver to access the tachometers.
-> However, since the device is a hot-plug USB device, as far as I know,
-> IIO-HWMON is not applicable. I will merge the IIO driver part into the
-> HWMON driver in the next patch.
-> In  other words, the driver will be used to access TIN, VIN and FIN.
-See drivers/mfd/sun4i-gpadc.c
-for an example of an mfd using the iio-hwmon bridge.
+Mariel Tinaco (3):
+  dt-bindings: hwmon: ltc2978: add support for ltc7841
+  hwmon: (pmbus/ltc7841) add support for LTC7841 - docs
+  hwmon: (pmbus/ltc2978) add support for ltc7841
 
-Jonathan
+ .../bindings/hwmon/lltc,ltc2978.yaml          |  2 ++
+ Documentation/hwmon/ltc2978.rst               | 12 +++++++++++
+ drivers/hwmon/pmbus/Kconfig                   |  6 +++---
+ drivers/hwmon/pmbus/ltc2978.c                 | 20 +++++++++++++++++--
+ 4 files changed, 35 insertions(+), 5 deletions(-)
 
->=20
-> Best regards
-> Ming
->=20
-> Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2024=E5=B9=B410=E6=9C=8826=
-=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=8810:50=E5=AF=AB=E9=81=93=EF=
-=BC=9A
-> >
-> > On 10/25/24 08:44, Guenter Roeck wrote: =20
-> > > On 10/25/24 08:22, Ming Yu wrote:
-> > > [ ... ]
-> > > =20
-> > >>>>> +static int nct6694_fan_write(struct device *dev, u32 attr, int c=
-hannel,
-> > >>>>> +                            long val)
-> > >>>>> +{
-> > >>>>> +       struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> > >>>>> +       unsigned char enable_buf[REQUEST_HWMON_CMD0_LEN] =3D {0};=
- =20
-> > >>>> [Kalesh] Please try to maintain RCT order for variable declaration=
- =20
-> > >>>
-> > >>> Ok, but that is already the case here ? =20
-> > >>
-> > >> [Ming] Is there anything that needs to be changed?
-> > >> =20
-> > >
-> > > I don't think so, If two lines have the same length, the order is up
-> > > to the developer to decide.
-> > >
-> > > Question though is if the buffer needs to be initialized. You should =
-drop
-> > > the initialization if it is not necessary. In that case the second li=
-ne
-> > > would be shorter anyway, and the order question would not arise.
-> > > =20
-> >
-> > Actually, I just noticed that you also submitted an IIO driver which
-> > reports the same data again. If a chip has an IIO driver, there should
-> > be no HWMON driver since the IIO -> HWMON bridge can then be used if
-> > necessary. So please drop this driver.
-> >
-> > Thanks,
-> > Guenter
-> >
-> > =20
->=20
+
+base-commit: eabb03810194b75417b09cff8a526d26939736ac
+-- 
+2.34.1
 
 
