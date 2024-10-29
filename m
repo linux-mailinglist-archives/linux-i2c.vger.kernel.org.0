@@ -1,343 +1,194 @@
-Return-Path: <linux-i2c+bounces-7651-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7652-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B5149B4B45
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 14:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D9EF9B4BB2
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 15:04:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C504C1F24202
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 13:50:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 980F91F24286
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 14:04:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0479A206949;
-	Tue, 29 Oct 2024 13:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4FB206E7F;
+	Tue, 29 Oct 2024 14:04:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ACBLUqIv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ipb9Fkmu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0806E206056;
-	Tue, 29 Oct 2024 13:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CAE342A92;
+	Tue, 29 Oct 2024 14:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730209829; cv=none; b=OsHsejEiRO/ngxorlEW2n6nZxgnam2+4yVN7ArLYf9Wf9/v2GLuFkgDIFTgJoUCE0+0Dm/hzLgOgV0o+cSiteNb6D+zhDV2gA06bNb6yQkp0r4jGUg1igs7TXjlEc+hAcBs4jSbYhDbgnllJEe3FB2JE1a5LRbn1tI21xY4Ibco=
+	t=1730210657; cv=none; b=BxfH+8X55rKqhxSj5S4IwtTUJsINwIZCxs+g/yWuMdtKA5cfICXhh/T34fJYRTQfoMxsNrnu/yFCSOUmXPwD/Hm8ngt0W0ilkT2C4WUUuZDQcSh6pUIM+uxwHIjIBwbajOoGZ6c8GDtBdA1JfLMdf6j3rnvwHy76fXJvX3IQjh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730209829; c=relaxed/simple;
-	bh=G5Lw+FbqM7au682KXVrc4WENE/qBbvHLKc4qq77sEfw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bRD+eInEM7+g2AucrrhvzG7UlM1K//mQ3xBytuXn1RPljVQFiz63loN4giZknKgl2inc3IM7x8XIeJjv9fvonloXq5AXuWgckk2T7bXau8NM0RmmN3xf/a8DmzpHgsEOEIhdYIV0f0dMLQ275CPLqG+Lmntmuq930aqMHQFglc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ACBLUqIv; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730209824; x=1761745824;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G5Lw+FbqM7au682KXVrc4WENE/qBbvHLKc4qq77sEfw=;
-  b=ACBLUqIvYk1VTq/2P1yDpnsqlSyGYQweQIjoLAw9KeLM6Tf8N7DSQp82
-   C4Nz+hQsxfssgOrBDL94r1g+/Q9e/zmn1NPged2hQE8TYVabiRqF98U47
-   RCXQBATjXQzmSC+Z5y37TRQUgiq/NLfRCdMELBVgdBuh/0MTZZjn8ZYMv
-   BarMmHKINqe2nRVBA0MGUKZWoTJ77BAo56RUDJBuGknG2iq92Pj2BR8rn
-   27aqNSsyIYVQAsKWmobHZ+9Wvpv3Od0rqpJUeuBwNBraWzNZ+S+qmeToP
-   ax0E2LQiUmNpua+/KdK3p4cFl/y9G/8fK90T+bwm6wixU4/JYwctPek3s
-   Q==;
-X-CSE-ConnectionGUID: /vghNpB2S0qdjyCNRQN09w==
-X-CSE-MsgGUID: mEjLrAzETMOUyXhmbKWYzA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="33773967"
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="33773967"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:50:06 -0700
-X-CSE-ConnectionGUID: 4BQIEO7JSqOUynOWn5VCLg==
-X-CSE-MsgGUID: i3xMzVB2Q8W+C+U0bcf+6Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="82111374"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 29 Oct 2024 06:50:02 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5mbf-000dim-1H;
-	Tue, 29 Oct 2024 13:49:59 +0000
-Date: Tue, 29 Oct 2024 21:49:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jerome Brunet <jbrunet@baylibre.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-	Vaishnav Achath <vaishnav.a@ti.com>
-Subject: Re: [PATCH v3 6/6] hwmon: (pmbus/tps25990): add initial support
-Message-ID: <202410292137.CftTdTLk-lkp@intel.com>
-References: <20241024-tps25990-v3-6-b6a6e9d4b506@baylibre.com>
+	s=arc-20240116; t=1730210657; c=relaxed/simple;
+	bh=TvuNTL7SyBUr5XzYcYROeWUrQug9uWaIiBGaGzcweKg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kdSDSMCUuSwTJ8lCf/zz3DVrtyNcTa4Xozyk3amS/000KMauYanGI1ekPxGhqw6oUKnMRGGkTcKrv17NcZK/8L80znYgWJPBaY6byRkJqXxw5WKJhZsU3DEpo/ZZUCLqRgo6Kb0zQ3zy768fWRZH7dnJ4/QILeINd1b3dJ4df8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ipb9Fkmu; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e2b549799eso4128133a91.3;
+        Tue, 29 Oct 2024 07:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730210653; x=1730815453; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mbJq4aynNBIlp+QtSqztsSxSToGTnBQw+OLXV0uvZxU=;
+        b=ipb9FkmutTOgn282bIcDG29oteNuW9wGcbxGt/xeicxJEco2vxaXElZwNxmFC73UNW
+         uKK0rSMbmxRiXVVrtzJn4JK7im3uFJ7LlatPTvyE35HIuKT9CQ5SdQhevnGiOHMgabyh
+         m+m4vwOA8moI6wAG8t2DuOzCwbd/hkzW2CLuOmNyo18MDpBNd+AONot66yniemwGWtYd
+         qGIMfhLLo+vDYTzuqTSi1rcfESnOSPJYhjAtLSTaUdM89kFJfCn/n6eaL8d2TtDjnlBS
+         voMpLUtXNC5lOv22amGCjugJdqN1i6W+aKesa2veJWg50eZ9D7VhAMEKqfbsusua3z4K
+         lMww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730210653; x=1730815453;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mbJq4aynNBIlp+QtSqztsSxSToGTnBQw+OLXV0uvZxU=;
+        b=cGpXXg27KjzJRnBaiHNwbfl6XJVsl/CRf3MTDXy63uBTXlU7bqV5+FN8c92PATxa2N
+         mqfX1pzGh0n3x4MT/+ptDhHbxOZ56JueUU/2SMRr7Uws3dCh2gtgmTF1+EdKsbylIpaw
+         8w4eNGWI2QOm0iKD+hyLmiUDQJEZgZXr4WOjcQc4Ush38y0DiaWrrdF0USvRcahcog2C
+         rhbZg3g8oAhIOUC0tfpy6oo/awKzS16gIy8rvBniF3Y7qUg/4z6jVkIkyoc2YVKGO6CX
+         pkfJUNIPvJH7arS9MAbqOEX8DrxG2TNgCCmPlsKbrDcUQfjNxbcQLBHAWM68JJJFjWVd
+         Ovdg==
+X-Forwarded-Encrypted: i=1; AJvYcCUu5y3lU0lb5YiMgkedFYNySDg3xgHdlYoJcJWqPMjJotAksaOCbX6w+dB/LRpKJIHedWy5V5YddK/wbvA=@vger.kernel.org, AJvYcCUzS0dPrJLNOZlGxavBANJT7DU5Uo5PlgbrjZQMoIEWI97EK3e0LcjgaoOpmC5JkA24ojwR2te2Y6EK@vger.kernel.org, AJvYcCWlK1E1zvcr812AICdzuuEVXlzuwBMvRnE5MPTBjEPDUUh8FNWj9o7OH5XIja9BdMNDuMksJ9Hx5qjHXp9c@vger.kernel.org, AJvYcCX/OvLOZ/kikawvlSryyGKQOTDeIfYbf0sCZrrbbaELGJSqMWQzUS1UtKtOBnHFQANfVsLQilthWjsH@vger.kernel.org, AJvYcCXp1SFTTBkCtV4f35Xn/KO7Dh/jUv7Yg5OH2oFZO35sm/4ca7yf60RImAMnmo3Fc0eYVgtUtl1/3F6G@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmDgWahLEiumbBAnzOgSe0HVhSYs8vvPjygvuXrPuNGvzct7uo
+	YlxY8yQg6+9YvufkRsC0qnCt9NS/P+s0iex0AgZ/oX19AjBp2YxC
+X-Google-Smtp-Source: AGHT+IEb1muRy0bzGGld0pHfL8s4Rd+CUSYo+Pjgo2ZFtcvZbZa4DodmpxNdighfGVGCfMUGDSePAw==
+X-Received: by 2002:a17:90a:468c:b0:2e2:d3e9:eb33 with SMTP id 98e67ed59e1d1-2e8f106f579mr14573261a91.11.1730210653345;
+        Tue, 29 Oct 2024 07:04:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e77e4c08a4sm11477398a91.12.2024.10.29.07.04.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Oct 2024 07:04:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <85afa3f3-1e6b-4f05-87f4-24c3aa309b66@roeck-us.net>
+Date: Tue, 29 Oct 2024 07:04:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024-tps25990-v3-6-b6a6e9d4b506@baylibre.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: trivial-devices: add ltp8800
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Peter Yin <peteryin.openbmc@gmail.com>,
+ Noah Wang <noahwang.wang@outlook.com>, Marek Vasut <marex@denx.de>,
+ Lukas Wunner <lukas@wunner.de>
+References: <20241029130137.31284-1-cedricjustine.encarnacion@analog.com>
+ <20241029130137.31284-2-cedricjustine.encarnacion@analog.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241029130137.31284-2-cedricjustine.encarnacion@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Jerome,
+On 10/29/24 06:01, Cedric Encarnacion wrote:
+> Add Analog Devices LTP8800-1A, LTP8800-2, and LTP8800-4A DC/DC μModule
+> regulator.
+> 
+> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> ---
+>   Documentation/devicetree/bindings/trivial-devices.yaml | 6 ++++++
+>   MAINTAINERS                                            | 5 +++++
+>   2 files changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index bd784f6bb38b..efd959708c75 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -43,6 +43,12 @@ properties:
+>             - adi,adp5589
+>               # Analog Devices LT7182S Dual Channel 6A, 20V PolyPhase Step-Down Silent Switcher
+>             - adi,lt7182s
+> +            # Analog Devices LTP8800-1A 150A, 54V DC/DC μModule regulator
+> +          - adi,ltp8800-1a
+> +            # Analog Devices LTP8800-2 135A, 54V DC/DC μModule regulator
+> +          - adi,ltp8800-2
+> +            # Analog Devices LTP8800-4A 200A, 54V DC/DC μModule regulator
+> +          - adi,ltp8800-4a
 
-kernel test robot noticed the following build errors:
+I don't immediately see why this chip would warrant three entries instead of just
+"adi,ltp8800". Programming for all chips is the same. The only difference is
+the power rating.
 
-[auto build test ERROR on 516ddbfef736c843866a0b2db559ce89b40ce378]
+Guenter
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jerome-Brunet/hwmon-pmbus-core-allow-drivers-to-override-WRITE_PROTECT/20241025-021525
-base:   516ddbfef736c843866a0b2db559ce89b40ce378
-patch link:    https://lore.kernel.org/r/20241024-tps25990-v3-6-b6a6e9d4b506%40baylibre.com
-patch subject: [PATCH v3 6/6] hwmon: (pmbus/tps25990): add initial support
-config: i386-randconfig-061-20241029 (https://download.01.org/0day-ci/archive/20241029/202410292137.CftTdTLk-lkp@intel.com/config)
-compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241029/202410292137.CftTdTLk-lkp@intel.com/reproduce)
+>               # AMS iAQ-Core VOC Sensor
+>             - ams,iaq-core
+>               # Temperature monitoring of Astera Labs PT5161L PCIe retimer
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ca7e827da33e..a6abf7243b94 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13555,6 +13555,11 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/iio/light/liteon,ltr390.yaml
+>   F:	drivers/iio/light/ltr390.c
+>   
+> +LTP8800 HARDWARE MONITOR DRIVER
+> +M:	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Supported
+> +
+>   LYNX 28G SERDES PHY DRIVER
+>   M:	Ioana Ciornei <ioana.ciornei@nxp.com>
+>   L:	netdev@vger.kernel.org
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410292137.CftTdTLk-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/pmbus/tps25990.c:201:14: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     201 |                 ret = 1 << FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-         |                            ^
->> drivers/hwmon/pmbus/tps25990.c:260:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     260 |                                              FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-         |                                              ^
-   1 warning and 2 errors generated.
-
-
-vim +/FIELD_GET +201 drivers/hwmon/pmbus/tps25990.c
-
-    85	
-    86	static int tps25990_read_word_data(struct i2c_client *client,
-    87					   int page, int phase, int reg)
-    88	{
-    89		int ret;
-    90	
-    91		switch (reg) {
-    92		case PMBUS_VIRT_READ_VIN_MAX:
-    93			ret = pmbus_read_word_data(client, page, phase,
-    94						   TPS25990_READ_VIN_PEAK);
-    95			break;
-    96	
-    97		case PMBUS_VIRT_READ_VIN_MIN:
-    98			ret = pmbus_read_word_data(client, page, phase,
-    99						   TPS25990_READ_VIN_MIN);
-   100			break;
-   101	
-   102		case PMBUS_VIRT_READ_VIN_AVG:
-   103			ret = pmbus_read_word_data(client, page, phase,
-   104						   TPS25990_READ_VIN_AVG);
-   105			break;
-   106	
-   107		case PMBUS_VIRT_READ_VOUT_MIN:
-   108			ret = pmbus_read_word_data(client, page, phase,
-   109						   TPS25990_READ_VOUT_MIN);
-   110			break;
-   111	
-   112		case PMBUS_VIRT_READ_VOUT_AVG:
-   113			ret = pmbus_read_word_data(client, page, phase,
-   114						   TPS25990_READ_VOUT_AVG);
-   115			break;
-   116	
-   117		case PMBUS_VIRT_READ_IIN_AVG:
-   118			ret = pmbus_read_word_data(client, page, phase,
-   119						   TPS25990_READ_IIN_AVG);
-   120			break;
-   121	
-   122		case PMBUS_VIRT_READ_IIN_MAX:
-   123			return TPS25990_READ_IIN_PEAK;
-   124			ret = pmbus_read_word_data(client, page, phase,
-   125						   TPS25990_READ_IIN_PEAK);
-   126			break;
-   127	
-   128		case PMBUS_VIRT_READ_TEMP_AVG:
-   129			ret = pmbus_read_word_data(client, page, phase,
-   130						   TPS25990_READ_TEMP_AVG);
-   131			break;
-   132	
-   133		case PMBUS_VIRT_READ_TEMP_MAX:
-   134			ret = pmbus_read_word_data(client, page, phase,
-   135						   TPS25990_READ_TEMP_PEAK);
-   136			break;
-   137	
-   138		case PMBUS_VIRT_READ_PIN_AVG:
-   139			ret = pmbus_read_word_data(client, page, phase,
-   140						   TPS25990_READ_PIN_AVG);
-   141			break;
-   142	
-   143		case PMBUS_VIRT_READ_PIN_MAX:
-   144			ret = pmbus_read_word_data(client, page, phase,
-   145						   TPS25990_READ_PIN_PEAK);
-   146			break;
-   147	
-   148		case PMBUS_VIRT_READ_VMON:
-   149			ret = pmbus_read_word_data(client, page, phase,
-   150						   TPS25990_READ_VAUX);
-   151			break;
-   152	
-   153		case PMBUS_VIN_UV_WARN_LIMIT:
-   154		case PMBUS_VIN_UV_FAULT_LIMIT:
-   155		case PMBUS_VIN_OV_WARN_LIMIT:
-   156		case PMBUS_VOUT_UV_WARN_LIMIT:
-   157		case PMBUS_IIN_OC_WARN_LIMIT:
-   158		case PMBUS_OT_WARN_LIMIT:
-   159		case PMBUS_OT_FAULT_LIMIT:
-   160		case PMBUS_PIN_OP_WARN_LIMIT:
-   161			/*
-   162			 * These registers provide an 8 bits value instead of a
-   163			 * 10bits one. Just shifting twice the register value is
-   164			 * enough to make the sensor type conversion work, even
-   165			 * if the datasheet provides different m, b and R for
-   166			 * those.
-   167			 */
-   168			ret = pmbus_read_word_data(client, page, phase, reg);
-   169			if (ret < 0)
-   170				break;
-   171			ret <<= TPS25990_8B_SHIFT;
-   172			break;
-   173	
-   174		case PMBUS_VIN_OV_FAULT_LIMIT:
-   175			ret = pmbus_read_word_data(client, page, phase, reg);
-   176			if (ret < 0)
-   177				break;
-   178			ret = DIV_ROUND_CLOSEST(ret * TPS25990_VIN_OVF_NUM,
-   179						TPS25990_VIN_OVF_DIV);
-   180			ret += TPS25990_VIN_OVF_OFF;
-   181			break;
-   182	
-   183		case PMBUS_IIN_OC_FAULT_LIMIT:
-   184			/*
-   185			 * VIREF directly sets the over-current limit at which the eFuse
-   186			 * will turn the FET off and trigger a fault. Expose it through
-   187			 * this generic property instead of a manufacturer specific one.
-   188			 */
-   189			ret = pmbus_read_byte_data(client, page, TPS25990_VIREF);
-   190			if (ret < 0)
-   191				break;
-   192			ret = DIV_ROUND_CLOSEST(ret * TPS25990_IIN_OCF_NUM,
-   193						TPS25990_IIN_OCF_DIV);
-   194			ret += TPS25990_IIN_OCF_OFF;
-   195			break;
-   196	
-   197		case PMBUS_VIRT_SAMPLES:
-   198			ret = pmbus_read_byte_data(client, page, TPS25990_PK_MIN_AVG);
-   199			if (ret < 0)
-   200				break;
- > 201			ret = 1 << FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-   202			break;
-   203	
-   204		case PMBUS_VIRT_RESET_TEMP_HISTORY:
-   205		case PMBUS_VIRT_RESET_VIN_HISTORY:
-   206		case PMBUS_VIRT_RESET_IIN_HISTORY:
-   207		case PMBUS_VIRT_RESET_PIN_HISTORY:
-   208		case PMBUS_VIRT_RESET_VOUT_HISTORY:
-   209			ret = 0;
-   210			break;
-   211	
-   212		default:
-   213			ret = -ENODATA;
-   214			break;
-   215		}
-   216	
-   217		return ret;
-   218	}
-   219	
-   220	static int tps25990_write_word_data(struct i2c_client *client,
-   221					    int page, int reg, u16 value)
-   222	{
-   223		int ret;
-   224	
-   225		switch (reg) {
-   226		case PMBUS_VIN_UV_WARN_LIMIT:
-   227		case PMBUS_VIN_UV_FAULT_LIMIT:
-   228		case PMBUS_VIN_OV_WARN_LIMIT:
-   229		case PMBUS_VOUT_UV_WARN_LIMIT:
-   230		case PMBUS_IIN_OC_WARN_LIMIT:
-   231		case PMBUS_OT_WARN_LIMIT:
-   232		case PMBUS_OT_FAULT_LIMIT:
-   233		case PMBUS_PIN_OP_WARN_LIMIT:
-   234			value >>= TPS25990_8B_SHIFT;
-   235			value = clamp_val(value, 0, 0xff);
-   236			ret = pmbus_write_word_data(client, page, reg, value);
-   237			break;
-   238	
-   239		case PMBUS_VIN_OV_FAULT_LIMIT:
-   240			value -= TPS25990_VIN_OVF_OFF;
-   241			value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_VIN_OVF_DIV,
-   242						  TPS25990_VIN_OVF_NUM);
-   243			value = clamp_val(value, 0, 0xf);
-   244			ret = pmbus_write_word_data(client, page, reg, value);
-   245			break;
-   246	
-   247		case PMBUS_IIN_OC_FAULT_LIMIT:
-   248			value -= TPS25990_IIN_OCF_OFF;
-   249			value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_IIN_OCF_DIV,
-   250						TPS25990_IIN_OCF_NUM);
-   251			value = clamp_val(value, 0, 0x3f);
-   252			ret = pmbus_write_byte_data(client, page, TPS25990_VIREF, value);
-   253			break;
-   254	
-   255		case PMBUS_VIRT_SAMPLES:
-   256			value = clamp_val(value, 1, 1 << PK_MIN_AVG_AVG_CNT);
-   257			value = ilog2(value);
-   258			ret = pmbus_update_byte_data(client, page, TPS25990_PK_MIN_AVG,
-   259						     PK_MIN_AVG_AVG_CNT,
- > 260						     FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-   261			break;
-   262	
-   263		case PMBUS_VIRT_RESET_TEMP_HISTORY:
-   264		case PMBUS_VIRT_RESET_VIN_HISTORY:
-   265		case PMBUS_VIRT_RESET_IIN_HISTORY:
-   266		case PMBUS_VIRT_RESET_PIN_HISTORY:
-   267		case PMBUS_VIRT_RESET_VOUT_HISTORY:
-   268			/*
-   269			 * TPS25990 has history resets based on MIN/AVG/PEAK instead of per
-   270			 * sensor type. Exposing this quirk in hwmon is not desirable so
-   271			 * reset MIN, AVG and PEAK together. Even is there effectively only
-   272			 * one reset, which resets everything, expose the 5 entries so
-   273			 * userspace is not required map a sensor type to another to trigger
-   274			 * a reset
-   275			 */
-   276			ret = pmbus_update_byte_data(client, 0, TPS25990_PK_MIN_AVG,
-   277						     PK_MIN_AVG_RST_MASK,
-   278						     PK_MIN_AVG_RST_MASK);
-   279			break;
-   280	
-   281		default:
-   282			ret = -ENODATA;
-   283			break;
-   284		}
-   285	
-   286		return ret;
-   287	}
-   288	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
