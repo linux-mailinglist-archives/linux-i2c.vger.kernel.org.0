@@ -1,147 +1,151 @@
-Return-Path: <linux-i2c+bounces-7643-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7644-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E22F99B4284
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 07:44:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D9B79B43F4
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 09:15:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2F7A28396D
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 06:44:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0471E1F2360F
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Oct 2024 08:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABA5820125C;
-	Tue, 29 Oct 2024 06:44:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJalhDP0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E2731DFE2C;
+	Tue, 29 Oct 2024 08:15:34 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EFB20124E;
-	Tue, 29 Oct 2024 06:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154CF18A95A
+	for <linux-i2c@vger.kernel.org>; Tue, 29 Oct 2024 08:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730184273; cv=none; b=KIdMJ5CWhVk6ce4Z+hTLB93qxMF9l/GSigTKCYnYEXmh1IaEU/jHuY88lON0bcqVXr8dFBRUYgQk39tyx8vqVmCnl/zyZY9Wef33zhIVzMuJwMUq/ajs4vhfVC74Dy2IrBRpNmZ3aWmWHgvCZsCb7TvCwSfVjVs3503IIOMNdZw=
+	t=1730189734; cv=none; b=acfq+KHhx0FxTNefRXkupasTW5+tiQToXngO5KYs+crHvv7fjUjQ1Rgwrn23MqIYxRXqpXSX2IN8gvlZv7xaYW12jDFmIjj4vQ/WDkYiw2t2cL7LkZ4M/ITrdOBwQ7pQWV7pvqlJnG89DC05wJg/kjrX3JYo8HC3zvCyFuGEu4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730184273; c=relaxed/simple;
-	bh=zNyJFWtpl2w8YCj4LHTYzFrIf//aYw+RjNS9MLbWR0Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=dhaYhnd4WEBC86hKuHAcmhsgBZFsaJj3T0QN15asUq1rPz8UhKPx/34B0gKHJy/a83Snb8j+dmyGgVHznkv3Wx7emeRzrJyuIbokwpsfCSSj3/LIPZz9ziXQdOXdXXhgyDmYayRB2IUQiFHMh2x6xAGnV7Ytas6fAQ9hsxc4lM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJalhDP0; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a9a4031f69fso683266866b.0;
-        Mon, 28 Oct 2024 23:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730184270; x=1730789070; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=KF33I6LL0plBpfJCeQAFsiAalwkQ1koC+IV5jnwywDs=;
-        b=hJalhDP0ANsPY7tyh4SIro8IuMrl0KJl3LvujJ3SzB6+4F+jb+FrJ0sJs/LF0/EF9h
-         MHwz5xiWwilN/fM9u3aC3JFzLXEtc2clVAHysBYloGs5HZQiBHLg7z1C7u6XtxT2SCLt
-         XzjgWrROBHEuN4yaQpCg04LhvsHa2IX/IDpBTyPJiP1+GYmPDeoIJq2Voknjd923MIvn
-         4p80ecbYN1DO9kOqvOH6rwOeUUTChvbOpLnxpTuZ/tEK6Vlw8KIti5GcMwzgp+OVHukD
-         NQpCWixk8h4imbqqfQ5OAVszZZwZJAmvwjYMltPKeU1JtD+D6GTD7jZ1Ysfs22r7qgtH
-         TgUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730184270; x=1730789070;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KF33I6LL0plBpfJCeQAFsiAalwkQ1koC+IV5jnwywDs=;
-        b=Xmw3HIyjrozDAsuJWi8bZn1sDQI3XSo76CLQR1C6bcLQGkOxi7hUC/fqFzZc5u2PEX
-         JQstJPnURcVHHv+lT5pJibrRiqBsXmsJ9fiBmU4DRMDk1EYF0U8uD/Xup/HiYdwFpISg
-         +a2l0a7SwjyXvvF8mLH0YNfXSzVuIdPDcwvInEF79XNpcH5mn+e1QcICyWbBGJAu8XGw
-         X2dY5msyDvmJ8d6fB4IHRpkD7IsaJFSjLHK0jT2ENIrQs3OvMUThd+nfyZnjqa3hWQjt
-         1IKN9EtllNrNe3UEyUI0tEYI7vaYjJpjCUutidl8yZWZbDu8FgGY1UuS8gphlDwm4QIg
-         2LIg==
-X-Forwarded-Encrypted: i=1; AJvYcCVNXSJLZPGZFPX8aQKtcCT9SEhXhZ/BSIkRxh9j3axTsv1sWtFWbxlQ+XwUpkCu4YUmn0Agoey1SOgWg1s=@vger.kernel.org, AJvYcCWStaUSDVRbhD+bqgiEz7ZaJUHjavtu3wGafOnKk50ITjvOXUN0D6bJ/g+dGePItObZ72ACT9YiU7k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+qSPTDO/OTyd7fG9nCHhr9KOKBuw0QuAdE+YcpVUGSutX8gy8
-	7M7RH6NKdWl5HxCcyqSp7afguqoaVRmn3xbzSiMZFpu9WP+Bfuas
-X-Google-Smtp-Source: AGHT+IHh+j4+rxanFd7EZ6tBK88ErLDSNzAI21beWahCriBRRnGuBZFG5mjYR8dKloioBhaOfVL7NA==
-X-Received: by 2002:a17:907:7211:b0:a9a:ad8:fc56 with SMTP id a640c23a62f3a-a9de6167c81mr900404466b.44.1730184269538;
-        Mon, 28 Oct 2024 23:44:29 -0700 (PDT)
-Received: from ?IPV6:2a02:3100:a47b:200:b85f:7509:b335:fc6c? (dynamic-2a02-3100-a47b-0200-b85f-7509-b335-fc6c.310.pool.telefonica.de. [2a02:3100:a47b:200:b85f:7509:b335:fc6c])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a9b1dfbde87sm437490366b.23.2024.10.28.23.44.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Oct 2024 23:44:26 -0700 (PDT)
-Message-ID: <77d8326d-b8f7-46b0-b66e-3f53fee8db12@gmail.com>
-Date: Tue, 29 Oct 2024 07:44:26 +0100
+	s=arc-20240116; t=1730189734; c=relaxed/simple;
+	bh=YggC+Qxo+NVcOErzTUXjBABSyADwrdnokU2LGl0F+fs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=taYA0gQz5lhwg7S6g81fibkR9zdjFnJgo/+2Oa+Z8kwp9f9G10mZkt7PPQSazKYcfAfJwCui8IttzfBGDBbkfOaWKAhuUAyu1uNsuXD6FS0I8UCaohT9e6s/rqZvcbHB/6/3XRDCsI2QJts2GKOy3HvHrtVF1ubqF4sOyYmApjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t5hNJ-0006Vu-Og; Tue, 29 Oct 2024 09:14:49 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t5hNG-000zSr-0D;
+	Tue, 29 Oct 2024 09:14:46 +0100
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 885EA361330;
+	Tue, 29 Oct 2024 08:14:45 +0000 (UTC)
+Date: Tue, 29 Oct 2024 09:14:45 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20241029-fresh-dinosaur-of-penetration-d695ff-mkl@pengutronix.de>
+References: <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
+ <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
+ <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de>
+ <CAOoeyxUEf5vjqL67WjR-DbrhE0==2hqHLEyZ5XEBhEfMfQ5pag@mail.gmail.com>
+ <20241025-spirited-nocturnal-antelope-ce93dd-mkl@pengutronix.de>
+ <CAOoeyxW5QwPMGAYCWhQDtZwJJLG5xj9HXpL3-cduRSgF+4VHhg@mail.gmail.com>
+ <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
+ <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com>
+ <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
+ <CAOoeyxWh1-=NVQdmNp5HBzf1YPo9tQdh=OzUUVFmvC-F7sCHWg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] i2c: Replace lists of special clients with
- flagging of such clients
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Wolfram Sang <wsa@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- linux-sound@vger.kernel.org
-References: <3982b2a6-975e-40d2-bf02-2155e5c36c14@gmail.com>
- <ZtQ0KMWUk9iAUCCl@shikoro> <18306ded-6451-4880-9f74-6bceb0f26dea@gmail.com>
- <ZvqEhntonE9qWnPF@shikoro>
-Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <ZvqEhntonE9qWnPF@shikoro>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="l2xctpm5dxyfmd5l"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxWh1-=NVQdmNp5HBzf1YPo9tQdh=OzUUVFmvC-F7sCHWg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-On 30.09.2024 12:59, Wolfram Sang wrote:
-> 
->> Now that 6.12-rc1 is out: Are you going to push this to linux-next?
-> 
-> Yes, hopefully this week.
-> 
-Now we're at rc5. Is it still something for 6.13 or better postpone
-to have a full cycle in linux-next?
+
+--l2xctpm5dxyfmd5l
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
+MIME-Version: 1.0
+
+On 29.10.2024 11:45:30, Ming Yu wrote:
+> > > > You have a high coupling between the MFD driver and the individual
+> > > > drivers anyways, so why not directly use the dynamically allocated
+> > > > buffer provided by the caller and get rid of the memcpy()?
+> > >
+> > > Okay! I will provide a function to request and free buffer for child =
+devices,
+> > > and update the caller's variables to use these two functions in the n=
+ext patch.
+> >
+> > I don't see a need to provide dedicated function to allocate and free
+> > the buffers. The caller can allocate them as part of their private data,
+> > or allocate them during probe().
+>=20
+> Okay, so each child device may allocate a buffer like this during probe():
+> priv->xmit_buf =3D devm_kcalloc(dev, MAX_PACKET_SZ, sizeof(unsigned char),
+> GFP_KERNEL), right?
+
+basically yes, probably devm_kzalloc() or embed it into the priv struct
+directly with ____cacheline_aligned:
+
+| https://elixir.bootlin.com/linux/v6.11.5/source/drivers/net/can/spi/mcp25=
+1xfd/mcp251xfd.h#L498
+
+The size of the driver's RX and TX buffers depend on what they want to
+send and expect to receive. The next step would be to create structs the
+describe the RX and TX buffers for each driver. If you have a common
+header between each driver, create that first.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--l2xctpm5dxyfmd5l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcgmXIACgkQKDiiPnot
+vG+LsQf+O4zJwfuGycNIY6uZPaHVz1IAgaeC/v2Jtznp51yqr0WvDVOcdhOLHKtG
+8Rbd+lDgWhPK2WCiBnwj6fhpBzTIZSZHbVlIqX2668gYpCvRr4YTSydt1HYDNoHA
+/G2k1g8rCdtTWiynu5+P2CUdaolzZEdq+lOnCLoOkbWD1cDT/lMdHPYoyBLbLNZ8
+b7IbbBc1D6jVlBd9Om1Zn7Ev9cQQ9UGp9QY1fUWdv+KwJz76NCIMgGK93Hf5kDFy
+/5AIztMNibr+sFbwkZ7ypmag3icRiF750TOECdq0LEUPXM2eVXkQ+pIGkIcgXTQL
+p1zN+c2H8FwJZIvGgdCLxDQc2B+uLw==
+=2AiX
+-----END PGP SIGNATURE-----
+
+--l2xctpm5dxyfmd5l--
 
