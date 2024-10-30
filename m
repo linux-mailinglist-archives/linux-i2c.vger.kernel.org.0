@@ -1,136 +1,110 @@
-Return-Path: <linux-i2c+bounces-7667-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7668-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F7FF9B5FC8
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2024 11:13:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52A399B608B
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2024 11:54:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A9A0B21701
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2024 10:13:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0F8AB21053
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Oct 2024 10:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3441E25F0;
-	Wed, 30 Oct 2024 10:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1C7D1E3793;
+	Wed, 30 Oct 2024 10:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fKzAJtl6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C4D13CF82
-	for <linux-i2c@vger.kernel.org>; Wed, 30 Oct 2024 10:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867B4194151
+	for <linux-i2c@vger.kernel.org>; Wed, 30 Oct 2024 10:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730283202; cv=none; b=nnW9j7UrLpqgC0sfwPAvNudTMLlw9Eq8V3wYVs2iA+ndxZ7R6RLwtIbu4vQVJUMlrNJnPBSJBSd5piCGtb7yaoOud4EpBziEJ/YlqDOh0KxuSJPq29bRDXhFsuUO3LqHHSNc1OQng56DZ1z8iRJNVTW9jwt/6UYx/yX23hYIRg4=
+	t=1730285632; cv=none; b=SqmOXDmrk85emMk0bZQGqc8fljpXGo7Eh717S1EI8g3lFSFuRvs1TATJHacK6g52xUIPtXVZvj3IgSqHF4udLWlN9uEQ9uLZSx+x+nTQ2tA26Qe80PdqwoaAyPwp/uA5lnOlqoGxkFSrJNV4IWNZCtu30EvcQRCU7Y4fpBW6ysE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730283202; c=relaxed/simple;
-	bh=d5UJW7t9fo/lwYCkIPNEd46l8GiWAIsHzZ3+8jA04tU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PyTNc55JoaHDytupO2ITrUZPEBZLZ15Mr6+yLc3ebRj6MkK00q/1KbKN9tJWGNWV2nNgnEJUxDYDUUkh58bnThwLBoZU7L92Z/StILKoy/oxM/4f6RT4BzsN/UG7Oo14+NO90Of+pV58TJhfI3mI3DFmErQjEBz/M9aTdoUBgD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t65h1-0001bM-Mj; Wed, 30 Oct 2024 11:12:47 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t65gx-001B9S-3A;
-	Wed, 30 Oct 2024 11:12:44 +0100
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 837433622F0;
-	Wed, 30 Oct 2024 10:12:43 +0000 (UTC)
-Date: Wed, 30 Oct 2024 11:12:43 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 0/9] Add Nuvoton NCT6694 MFD devices
-Message-ID: <20241030-industrious-sidewinder-of-strength-efbe4a-mkl@pengutronix.de>
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024-eminent-dancing-narwhal-8f25dd-mkl@pengutronix.de>
- <CAOoeyxV4K=jR+tofeQtsMB7+smuu+Ghas5Tqfx4JvhuVK8dXrA@mail.gmail.com>
- <20241025-modest-hasty-angelfish-1e9193-mkl@pengutronix.de>
- <CAOoeyxU9VwsM=mRZy5AtjH=V3iSGQxkKw18qL+yeUxkh1OVHgQ@mail.gmail.com>
+	s=arc-20240116; t=1730285632; c=relaxed/simple;
+	bh=KDU1+7ZnVtYCy9gRBggHWB94leu6oxv4QpxSzLT4cLE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=USN2kzGB2GwtpVtjvrs+GnsZ0rK+wtrH4AFHsNGJrAR7DpCir6v48/BvagXH6VX/CjV6ESnghfzDsJCmfKUJygj423y7tJLM6KG23ameuFeLMzNUtP/DOwIlSTW0JhS11avLOu2wCMlXIFc4IuBerd5ElkAZgiBhfjnZHcjgjm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fKzAJtl6; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539e58878f2so748146e87.2
+        for <linux-i2c@vger.kernel.org>; Wed, 30 Oct 2024 03:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730285629; x=1730890429; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r90YpozeaoCUvndH8AD2U9m1kd09qNk8K+E3W0sjRsI=;
+        b=fKzAJtl6J7foWoUIsIvQiEkAdmIXIYogNITdAOzsdKRalaKg8QcSEofbFgZTF4gDz1
+         DaULU6TiYEOp8X8ymFBtmw5tuZTMg+AMRtCSJaux0CvJ0lHQQWSOzvKANluusK7Pk1or
+         h7Sqm8KbINxsUuMbBmGkO8AUNq0NuhAuuElsBFTLcF7p6vT93IE4fbF4OG/PYDyVJzcR
+         55CClvIw5RREEI+6dLW3zj/0g7+/QwW0CwNOW13VoyDENZcXoYJ15wRIyXmf8kcHlYBK
+         cGq0kKomn0BrnJQu/OpgKIhoTl8pSZowD6rTEEb9PkjTpdsRa0X7XqhnvIBEcmoyOfKk
+         4bww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730285629; x=1730890429;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r90YpozeaoCUvndH8AD2U9m1kd09qNk8K+E3W0sjRsI=;
+        b=Uiv+iUZEUXcsM+tsB/C/ikWT8OHkkhVXiHNjNfAbczA1AIdyFnWiI2DDZ+aem0gvZ9
+         bWED4pYHrTHQKWBGERE9J2/j8Yrtedb4Qtfb1q3BjC0mSx6NIUlN1BboFA1NGsNIxOzb
+         kOJ8369vzo3Fjg2vpkjnoyDCWLO9PJWvZ+vNdDHySNcavn/6kAtLUs3o74rpA5ARRosl
+         1DDbXG/OaTfonQdr0mgpQwNY0qYkWOUByNTKNKcGKEuvltUWUfaCIed30rXnQh539X28
+         lxFZWiwK5dGXc2qadYA1/rfbZksiLgjP7zqc5ygHdBKsgDlhpAwsvnNqVSuIwdmlqwTO
+         p1sg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/m2ReRMEevAngUOdoEHHKyTH8uA2bPsNqqHn18C3LMgz5G6kbdgCGoa0RP1W4Xhm3yaNMOSR+rgw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhSFaQQDvoX3sPZOLp7JcOR55edDNHAGZrPc3n+UxemC37eTxj
+	eazNNPV3bTSNQX1atAn3SPNeU1DXmEHw31C+OjRR6B5Vqxk5b9gVc7cix1KpomA=
+X-Google-Smtp-Source: AGHT+IGYv8fqW9j0td8pyKJ/XV0vhPCxGKBeN/I4HT71o3DsyGkxaEPZa0NHC4ebYcOXKS9xLYt3Bw==
+X-Received: by 2002:a05:6512:104e:b0:536:9efb:bb19 with SMTP id 2adb3069b0e04-53b348c8a1emr2185606e87.3.1730285628678;
+        Wed, 30 Oct 2024 03:53:48 -0700 (PDT)
+Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53bc0d7024asm215292e87.293.2024.10.30.03.53.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Oct 2024 03:53:47 -0700 (PDT)
+Message-ID: <f5003f25-6a00-42f8-a130-5ce3c8761674@linaro.org>
+Date: Wed, 30 Oct 2024 12:53:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="frl5xcswfbpqjn4v"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxU9VwsM=mRZy5AtjH=V3iSGQxkKw18qL+yeUxkh1OVHgQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 -next] i2c: qcom-cci: Remove the unused variable
+ cci_clk_rate
+Content-Language: en-US
+To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, loic.poulain@linaro.org
+Cc: rfoss@kernel.org, andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Abaci Robot <abaci@linux.alibaba.com>
+References: <20241029020931.42311-1-jiapeng.chong@linux.alibaba.com>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20241029020931.42311-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 10/29/24 04:09, Jiapeng Chong wrote:
+> Variable ret is not effectively used, so delete it.
 
---frl5xcswfbpqjn4v
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 0/9] Add Nuvoton NCT6694 MFD devices
-MIME-Version: 1.0
+Variable ret is not deleted, the commit message is misleading.
 
-On 30.10.2024 16:30:37, Ming Yu wrote:
-> I am trying to register interrupt controller for the MFD deivce.
-> I need to queue work to call handle_nested_irq() in the callback
-> of the interrupt pipe, right?
+> drivers/i2c/busses/i2c-qcom-cci.c:526:16: warning: variable ‘cci_clk_rate’ set but not used.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=11532
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-I think you can directly demux the IRQ from the interrupt endpoint
-callback. But handle_nested_irq() only works from threaded IRQ context,
-so you have to use something like generic_handle_domain_irq_safe().
+With the needed change to the commit message:
 
-Have a look for how to setup the IRQ domain:
+Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-| drivers/net/usb/lan78xx.c
-| drivers/net/usb/smsc95xx.c
-
-But the IRQ demux in the lan78xx only handles the PHY IRQ. The ksz
-driver does proper IRQ demux:
-
-| net/dsa/microchip/ksz_common.c
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---frl5xcswfbpqjn4v
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmciBpgACgkQKDiiPnot
-vG8nUQgAjlFmdH0l/1kIMmisd2Oil+MBaXTjGPuahpQda7WUz6pZi56UHxgat+ZF
-Hr/eYxOz73BjWGuXCp3FfL1Mqp5NY66h0ZYdjgItMGN/0Dic5naFg/RnfniUnSUE
-rPYn+MI4K/R/n+O7ZFzg6LTU5isPKsCfmJhD1M4WXpd/QRX7Jv5yo6qdtlfwYFM2
-sDX5CRR4iyfcdaM4kyF/JCfhlzYqDBEQG2tLdJfU8zlqm8SW+CNGLDs7uWOIguaA
-SINbHFo2E4UONkdEhDkgn4seDDr4ykSKfazN/YbvhimF3862GtEUbeK7R8l8SJN6
-r76RxQK4oMaCy7/ydWFpcaOqfWG4qA==
-=BTYV
------END PGP SIGNATURE-----
-
---frl5xcswfbpqjn4v--
+--
+Best wishes,
+Vladimir
 
