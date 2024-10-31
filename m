@@ -1,108 +1,100 @@
-Return-Path: <linux-i2c+bounces-7679-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7680-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E3889B79E0
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 12:41:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FE269B79E5
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 12:43:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 618B8284FEA
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 11:41:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B484B235EE
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 11:43:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890F919ADB0;
-	Thu, 31 Oct 2024 11:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A999E19ADB0;
+	Thu, 31 Oct 2024 11:43:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bhDZsBHP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M93cdLz9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C13A19AD48;
-	Thu, 31 Oct 2024 11:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C9319AD73;
+	Thu, 31 Oct 2024 11:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730374890; cv=none; b=g/9aI2nREngUHT7HRWBWzlkLvZvNlPuBuXIss5Id+xvjgeM9Ik6KVvdmygf1uF9aAdI2iM3h2Bk7NFUVkucxJXsohxjBNaa2uisJXoXD2rPlpnTmMK3bRS4ROGVipgGKkzPnOVNqFzG5YwA+ZruK3dHdme7MBvJz0oS+v5ht52I=
+	t=1730374999; cv=none; b=UeXoV45gcFOwXe2QP6XrKntVuWaWHk/a8LTdJhQOhxlIpeFPB92/aA9QrlcLNJQQi5eez2pRnAw2gxMEE6Ngp5tvrjK6Z44sxPW0oe1X/eclAbalLZXuCKnYXACp6oI9KaIWIMIFvxbszTUXG4gqm5E+Z5TqBwwzQG2RrpINGks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730374890; c=relaxed/simple;
-	bh=4qxINBYrqhRsnSoU5fBGCoMBvbFJVkEOPzAlUqBRcjo=;
+	s=arc-20240116; t=1730374999; c=relaxed/simple;
+	bh=RMovIEGpTKgmSrH7hPWEOJRKPhKfHSl2HvWl/56Ae0o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ENYhXAQzDmQc91gpKO/2YGYaF+uAQtqgdRt5D3HOsmrcA6GB51he3j5a8pJsxDr6NAepqjvhvNjaFRrE3VOUIp7npdcKaKkYDGfEMakBWpqA0QckhUtoHWoKMGoyjkzPzKvOzqpFTgeYvmItpHUtKFLzFriWyXPWkqn5Arwf2Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bhDZsBHP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F05EFC4AF11;
-	Thu, 31 Oct 2024 11:41:28 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=HxnWJfjRUfd6w9D1G2MAuN7uGtoe5oj6ONKsPtkGdutbnKPLBaUUZSPLjEwNgcf089+d9mBXc+/b0OsA12yDAGTtW2rsRLF9OT+4SBJU3+9qrbWyEznrmfCPrhRS9SgvD2aaSt/OrlACTpB9dRRJ8qQgE9B1/WsE0cPJNw5Rpbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M93cdLz9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC339C4CED0;
+	Thu, 31 Oct 2024 11:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730374889;
-	bh=4qxINBYrqhRsnSoU5fBGCoMBvbFJVkEOPzAlUqBRcjo=;
+	s=k20201202; t=1730374998;
+	bh=RMovIEGpTKgmSrH7hPWEOJRKPhKfHSl2HvWl/56Ae0o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bhDZsBHPysWc7FfvPbbnO1f4jvAefqTta5h3XXvSKyvP1Ul/R0e8g7E8vYmj8SWgS
-	 4lUK7K0UNIG8TYVhvGBhHHAtAMyBWlvg6+FZWbHgOTXDqm8huBa9TBasvng98KB5UO
-	 WNTrfVJ1nF1UpYe4ixMDBC9NFVjGam20R8C92VmvvA/FKZx589d0FJRiFm1y/TWQbF
-	 JrfGoo9WesTUlldDbGpZ3c9e+2jarZBQM8D7u0yf0r1kgmd9Dqdq0G4wlBha5fLnUv
-	 jm1NJ2W045ZyFxaEN/mtLeK+0bIBBN2tWPirHbuiyLVBe+Roy8dDsS9ct5lVl2zvSL
-	 Ji3klRuB4CL4A==
-Date: Thu, 31 Oct 2024 12:41:25 +0100
+	b=M93cdLz9+3NrhL8an7HQzBtA/qjMAzQQL1afNnMbp5qfNcNSVUoXORGdc+pBn4xUB
+	 oZHm+NL3IxgpKoIAArQuuwJ3TnolMQT+qmn+RRMnaGHxwyC+UH4QBolVXFn3uqWG64
+	 lGnt3TM5I+LKYubbu1cZgGv1/ensI+bERysq7BPDXk61ZOApR3x6eEehOTec+KlU+u
+	 Fg18mhY6MbgoBdLspraoW9aP6usXWQpK4rV80rFeCTTJ2nhZ527it1uHiiT24B+JB7
+	 C/a+rCMxyXZkRXsZfCiw5ofuHtykRICzgVpPM5NKpopFDk1PniRqinJ/w0hLU98YbB
+	 Ix7QvJ1NTYuFQ==
+Date: Thu, 31 Oct 2024 12:43:13 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
-	loic.poulain@linaro.org, rfoss@kernel.org, linux-i2c@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH v2 -next] i2c: qcom-cci: Remove the unused variable
- cci_clk_rate
-Message-ID: <7f5amyf7ljvtfjyksfe7cad25wu7qdg4e45mdite6bdxx63ge5@ov37ohc7qtai>
-References: <20241029020931.42311-1-jiapeng.chong@linux.alibaba.com>
- <rql2u5k3esavdmpdzgo4l4up4ir7yjpdzc3qlmsvjvqalqzvjc@xspprcohlout>
- <f06dea2e-893b-4de5-89a3-e25af56afb31@linaro.org>
+To: Troy Mitchell <troymitchell988@gmail.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 0/2] riscv: spacemit: add i2c support to K1 SoC
+Message-ID: <stpzkggfwseaqy6kbppiog4xfbpq4r2jwix2nvredbmmjqzbsi@wkllt4jlingv>
+References: <20241028053220.346283-1-TroyMitchell988@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f06dea2e-893b-4de5-89a3-e25af56afb31@linaro.org>
+In-Reply-To: <20241028053220.346283-1-TroyMitchell988@gmail.com>
 
-Hi Vladimir,
+Hi Tony,
 
-On Thu, Oct 31, 2024 at 01:13:24PM +0200, Vladimir Zapolskiy wrote:
-> Hi Andi,
+On Mon, Oct 28, 2024 at 01:32:18PM +0800, Troy Mitchell wrote:
+> Hi all,
 > 
-> On 10/31/24 12:44, Andi Shyti wrote:
-> > Hi Jiapeng,
-> > 
-> > On Tue, Oct 29, 2024 at 10:09:31AM +0800, Jiapeng Chong wrote:
-> > > Variable ret is not effectively used, so delete it.
-> > > 
-> > > drivers/i2c/busses/i2c-qcom-cci.c:526:16: warning: variable ‘cci_clk_rate’ set but not used.
-> > > 
-> > > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > > Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=11532
-> > > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> > 
-> > thanks for your patch! Applied to i2c/i2c-host
-> > 
-> > Thanks,
-> > Andi
-> > 
+> This patch implements I2C driver for the SpacemiT K1 SoC,
+> providing basic support for I2C read/write communication which
+> compatible with standard I2C bus specifications.
 > 
-> FWIW I've noticed that my Reviewed-by tag was added to the accepted change,
-> while it was the conditional one... Actually I don't know how to be aware
-> of such nuances, if only b4 tool is used, likely there is no way for it.
+> In this version, the driver defaults to use fast-speed-mode and
+> interrupts for transmission, and does not support DMA, high-speed mode, or FIFO.
+> 
+> The docs of I2C can be found here, in chapter 16.1 I2C [1]
+> 
+> Link: https://developer.spacemit.com/documentation?token=Rn9Kw3iFHirAMgkIpTAcV2Arnkf#part5 [1]
+> 
+> Troy Mitchell (2):
+>   dt-bindings: i2c: spacemit: add support for K1 SoC
+>   i2c: spacemit: add support for SpacemiT K1 SoC
 
-I thought the change that made your r-b conditional was the
-Fixes tag, right? That is added. Have I missed anything?
-
-(I noticed later the v3, but it's basically identical to the one
-I pushed).
-
-> Hopefully I'm not too picky with it.
-
-Absolutely not! Please, keep pinging me if you see anything I
-might have missed.
+As Krzysztof has asked, please do provide the changelog, it's
+important to track the progress of your series.
 
 Thanks,
 Andi
+
+>  .../bindings/i2c/spacemit,k1-i2c.yaml         |  51 ++
+>  drivers/i2c/busses/Kconfig                    |  18 +
+>  drivers/i2c/busses/Makefile                   |   1 +
+>  drivers/i2c/busses/i2c-k1.c                   | 658 ++++++++++++++++++
+>  4 files changed, 728 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
+>  create mode 100644 drivers/i2c/busses/i2c-k1.c
+> 
+> -- 
+> 2.34.1
+> 
 
