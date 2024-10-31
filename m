@@ -1,61 +1,59 @@
-Return-Path: <linux-i2c+bounces-7683-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7684-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6281F9B7A72
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 13:24:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D45349B7F07
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 16:51:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B1E2B2308C
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 12:24:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B0F7B22D05
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 15:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 260D819CC34;
-	Thu, 31 Oct 2024 12:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11411BCA02;
+	Thu, 31 Oct 2024 15:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="agU3snlv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AvQWtG5U"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBEE19CC08;
-	Thu, 31 Oct 2024 12:23:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED3F1BC9F3;
+	Thu, 31 Oct 2024 15:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730377431; cv=none; b=BoOrCVJqWZIKeG/mU6ajXb/ZRnwMdX1PTM3I3KkowkNCZpgYx8q2NNpVon1gQFJ//EYENiOyQX1RDFgIWd4maINZ8v2n03VZm9GAjLKMlgWmqhOjDwNtbk9NpvSN+Y1wHl9kziPPBfQLM7gw7138ExD7kByWcnW9LhHxMp7TZA0=
+	t=1730389738; cv=none; b=bkrrD43Hf9W2Yh19pzxvtbE4NyuAYDWx84YeJ1OZLFCLOvnpz72hsr0D01UItYrWk30IYQGh1L6HG3TOIvDiZSaNmlUxtujEftV6ZOwX7buRPeJ7sGoybvj9i7auHj4CavCPpQIxO7jMT0zmWJTLf0Rx9ZJksZyolGHkLnbZPXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730377431; c=relaxed/simple;
-	bh=dADoK+rRwsBwxgt5AIiHceJswYu86JTOLxIc0/c0PvU=;
+	s=arc-20240116; t=1730389738; c=relaxed/simple;
+	bh=ARsdt7q0eVUNvr7pYU7BYuIsTkSNZkoxY5yzKP07DrA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Omdu/GZmbnVOOduZIY1K4vJUaLwUazPlKXdYkPnTYUlzPgCvR1iBQKogY3giZ8D/lN7ten3///XXigZpz7WSyYxFjEQ/+ikUaIVM3lJ97RN8IXSSSMKl2vpt29XnBrbBnrPuHuwQD/kPEnV6MHpZfjTdGLBZDzJF7zB2koxHwZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=agU3snlv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FB3FC4E690;
-	Thu, 31 Oct 2024 12:23:50 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=n55jtHOJL+A7klZRoyonUHthIBCK0j79PE4YMCkThVkwy4RBjJN41eq5uq5t06cNJ2lq/MEyaO+5+jCP+6drM1VuzLJ/Sr/PIpandfKDxI0Tp6MelSZ29kRQtRcHza9Ahl+J0jIKijw/HIkdLgYyMwwR16uitqKuHKQb5BqFC5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AvQWtG5U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4477FC4CEEA;
+	Thu, 31 Oct 2024 15:48:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730377431;
-	bh=dADoK+rRwsBwxgt5AIiHceJswYu86JTOLxIc0/c0PvU=;
+	s=k20201202; t=1730389737;
+	bh=ARsdt7q0eVUNvr7pYU7BYuIsTkSNZkoxY5yzKP07DrA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=agU3snlv+qwGyOip3i1LoYpsf9DE7GWMD6JxwsADinyv4FIDj+y6zC5dhAXWTbk9c
-	 4ekVdggT4vRdbS8x4bawN/gBDxhpZbPY9wFYlkr3ZfUtPkamKtIk3i+8PdTpws06Jf
-	 +WOBXaYhp1SvaPwtiKi6n/flznsmgDGCwycBtCgIj05+VHXOMeoMU59tDSWNFyEIRt
-	 rHUi6KsDsWKD97lGalkZSbcwx0wvh1SZpCKgZeKAdr71hxV3POpcM6/CRDlr33GWM2
-	 kLcTbJ4B1UBs64VprCfE05hR+K8PwDs3sIUg52Fxmj6fG1yESHiS7LhBcOzd7QIoaY
-	 ZNHPt4lMBtrng==
-Date: Thu, 31 Oct 2024 13:23:46 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
-	loic.poulain@linaro.org, rfoss@kernel.org, linux-i2c@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH v2 -next] i2c: qcom-cci: Remove the unused variable
- cci_clk_rate
-Message-ID: <auvqypvayvlhzi6n6jp3r6swq4sik3jvcxxafvu67i2y3r337m@uy33er3gujk2>
-References: <20241029020931.42311-1-jiapeng.chong@linux.alibaba.com>
- <rql2u5k3esavdmpdzgo4l4up4ir7yjpdzc3qlmsvjvqalqzvjc@xspprcohlout>
- <f06dea2e-893b-4de5-89a3-e25af56afb31@linaro.org>
- <7f5amyf7ljvtfjyksfe7cad25wu7qdg4e45mdite6bdxx63ge5@ov37ohc7qtai>
- <e1c55403-55ee-4742-b7e6-8f0a4387ce9e@linaro.org>
+	b=AvQWtG5UkTOa5+HJMdxSSq4RUi208Z6bN2KLb8dXitDmTYs9efECVvdhUx/phKCto
+	 br4TfCUy86h5Crrc1uLNV2o6CHBobVB7ldPN6isVGpRWtsi7qmdXs72fMi7vpX4Noa
+	 liVwQj7bA+PYAxYVsTdVTCW3ELkF9hC4HfE/EUMgxm5OnBWH73Ys5mh2sLyi7vTRbi
+	 US6+yJaTpVnYj8aQaV5eXz5ifk9vmgXQLqbvu9TKJ4YJFp2K+1vJwNPMM9KnIA5uWb
+	 ZObXfhdm/Maz3hAB/Ka0xs6SQKVG32ys8+fq8w9f5jqnzP6CsGPKNuBhYC9BvAxYG0
+	 ajfzphlDCcrUQ==
+Date: Thu, 31 Oct 2024 15:48:52 +0000
+From: Lee Jones <lee@kernel.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de,
+	markus.stockhausen@gmx.de, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v7 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
+ peripherals
+Message-ID: <20241031154852.GI10824@google.com>
+References: <20241017001653.178399-1-chris.packham@alliedtelesis.co.nz>
+ <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,45 +63,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e1c55403-55ee-4742-b7e6-8f0a4387ce9e@linaro.org>
+In-Reply-To: <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
 
-Hi Vladimir,
+On Thu, 17 Oct 2024, Chris Packham wrote:
 
-On Thu, Oct 31, 2024 at 01:59:45PM +0200, Vladimir Zapolskiy wrote:
-> On 10/31/24 13:41, Andi Shyti wrote:
-> > On Thu, Oct 31, 2024 at 01:13:24PM +0200, Vladimir Zapolskiy wrote:
-> > > On 10/31/24 12:44, Andi Shyti wrote:
-> > > > On Tue, Oct 29, 2024 at 10:09:31AM +0800, Jiapeng Chong wrote:
-> > > > > Variable ret is not effectively used, so delete it.
-> > > > > 
-> > > > > drivers/i2c/busses/i2c-qcom-cci.c:526:16: warning: variable ‘cci_clk_rate’ set but not used.
-> > > > > 
-> > > > > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > > > > Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=11532
-> > > > > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> > > > 
-> > > > thanks for your patch! Applied to i2c/i2c-host
-> > > > 
-> > > > Thanks,
-> > > > Andi
-> > > > 
-> > > 
-> > > FWIW I've noticed that my Reviewed-by tag was added to the accepted change,
-> > > while it was the conditional one... Actually I don't know how to be aware
-> > > of such nuances, if only b4 tool is used, likely there is no way for it.
-> > 
-> > I thought the change that made your r-b conditional was the
-> > Fixes tag, right? That is added. Have I missed anything?
+> Add device tree schema for the Realtek RTL9300 switches. The RTL9300
+> family is made up of the RTL9301, RTL9302B, RTL9302C and RTL9303. These
+> have the same SoC differ in the Ethernet switch/SERDES arrangement.
 > 
-> ah, no, it was about the copy-pasted commit message, which mentions a much
-> more popular 'ret' local variable.
+> Currently the only supported features are the syscon-reboot and i2c
+> controllers. The syscon-reboot is needed to be able to reboot the board.
+> The I2C controllers are slightly unusual because they each own an SCL
+> pin (GPIO8 for the first controller, GPIO 17 for the second) but have 8
+> common SDA pins which can be assigned to either controller (but not
+> both).
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v7:
+>     - Set additionalProperties: false
+>     - Remove extraneous examples from i2c binding
+>     Changes in v6:
+>     - Drop wildcard compatible
+>     - Add specific compatibles for the 4 known SoC variants
+>     - For the i2c part of the binding accept realtek,rtl9301 as a fallback
+>       for the other compatibles
+>     - The overall switches will eventually differ because these will have
+>       different SERDES/port arrangements so they aren't getting the same
+>       fallback treatment
+>     Changes in v5:
+>       I've combined the two series I had in flight so this is the
+>       combination of adding the switch syscon, the reboot and i2c. It makes
+>       the changelog a bit meaningless so I've dropped the earlier
+>       commentary.
+>     
+>       As requested I've put a more complete example in the main
+>       rtl9300-switch.yaml.
+>     
+>       I've kept rtl9300-i2c.yaml separate for now but link to it with a $ref
+>       from rtl9300-switch.yaml to reduce clutter. The example in
+>       rtl9300-i2c.yaml is technically duplicating part of the example from
+>       rtl9300-switch.yaml but I feel it's nice to be able to see the example
+>       next to where the properties are defined.
+> 
+>  .../bindings/i2c/realtek,rtl9301-i2c.yaml     |  69 +++++++++++
+>  .../bindings/mfd/realtek,rtl9301-switch.yaml  | 114 ++++++++++++++++++
 
-oh yes, the new commit message says:
+Can you separate these out so I can apply the MFD part please?
 
-"Variable cci_clk_rate is not effectively used, so delete it."
-
-I'm sorry, I will fix it.
-
-Thanks,
-Andi
+-- 
+Lee Jones [李琼斯]
 
