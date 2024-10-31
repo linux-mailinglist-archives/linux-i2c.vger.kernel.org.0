@@ -1,118 +1,100 @@
-Return-Path: <linux-i2c+bounces-7684-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7685-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D45349B7F07
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 16:51:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E1ED9B7FBF
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 17:14:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B0F7B22D05
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 15:51:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35BA51F21AA2
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 16:14:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11411BCA02;
-	Thu, 31 Oct 2024 15:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2DBB1BC062;
+	Thu, 31 Oct 2024 16:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AvQWtG5U"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pVHehoUF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED3F1BC9F3;
-	Thu, 31 Oct 2024 15:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C180C1B6539;
+	Thu, 31 Oct 2024 16:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730389738; cv=none; b=bkrrD43Hf9W2Yh19pzxvtbE4NyuAYDWx84YeJ1OZLFCLOvnpz72hsr0D01UItYrWk30IYQGh1L6HG3TOIvDiZSaNmlUxtujEftV6ZOwX7buRPeJ7sGoybvj9i7auHj4CavCPpQIxO7jMT0zmWJTLf0Rx9ZJksZyolGHkLnbZPXc=
+	t=1730391252; cv=none; b=NVSQFjpI9laTsaML2NBYN4wJcizBbjbawTeq9G5qKayNKfyfPd6ljgz+9ivz5fBMvJ1aCAYegkrtUsU2vMXTp69SGjWog75gpCUl330n37pKHuK8IEUKRupfX6wKnbNNxcT8QEDEib6joT0WrUEumMXbqLutVxs+tLvscEGnQt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730389738; c=relaxed/simple;
-	bh=ARsdt7q0eVUNvr7pYU7BYuIsTkSNZkoxY5yzKP07DrA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n55jtHOJL+A7klZRoyonUHthIBCK0j79PE4YMCkThVkwy4RBjJN41eq5uq5t06cNJ2lq/MEyaO+5+jCP+6drM1VuzLJ/Sr/PIpandfKDxI0Tp6MelSZ29kRQtRcHza9Ahl+J0jIKijw/HIkdLgYyMwwR16uitqKuHKQb5BqFC5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AvQWtG5U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4477FC4CEEA;
-	Thu, 31 Oct 2024 15:48:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730389737;
-	bh=ARsdt7q0eVUNvr7pYU7BYuIsTkSNZkoxY5yzKP07DrA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AvQWtG5UkTOa5+HJMdxSSq4RUi208Z6bN2KLb8dXitDmTYs9efECVvdhUx/phKCto
-	 br4TfCUy86h5Crrc1uLNV2o6CHBobVB7ldPN6isVGpRWtsi7qmdXs72fMi7vpX4Noa
-	 liVwQj7bA+PYAxYVsTdVTCW3ELkF9hC4HfE/EUMgxm5OnBWH73Ys5mh2sLyi7vTRbi
-	 US6+yJaTpVnYj8aQaV5eXz5ifk9vmgXQLqbvu9TKJ4YJFp2K+1vJwNPMM9KnIA5uWb
-	 ZObXfhdm/Maz3hAB/Ka0xs6SQKVG32ys8+fq8w9f5jqnzP6CsGPKNuBhYC9BvAxYG0
-	 ajfzphlDCcrUQ==
-Date: Thu, 31 Oct 2024 15:48:52 +0000
-From: Lee Jones <lee@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de,
-	markus.stockhausen@gmx.de, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v7 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
- peripherals
-Message-ID: <20241031154852.GI10824@google.com>
-References: <20241017001653.178399-1-chris.packham@alliedtelesis.co.nz>
- <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1730391252; c=relaxed/simple;
+	bh=n0o+s3aiY3Bsw3fqfqelZWwzh9qVu/lo25kdUzlaTJI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=auBSdNUp02zvQEJPOBOjoW17exQiAsVdbF6przzJ2LBwCLuYxnOzof31MR4j9hV7+Gfz6dd/JhWRHGA+CUSBKhrWtGae96MpEekmKVmK4yDaM435N6F1QmcikobyzhxaLCY8VroBF6JDW17nz1diBQCeVYVnZOmg2sK1oIA0X9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pVHehoUF; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 23BFEC0006;
+	Thu, 31 Oct 2024 16:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1730391248;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=n0o+s3aiY3Bsw3fqfqelZWwzh9qVu/lo25kdUzlaTJI=;
+	b=pVHehoUF8pW4Qa2282JzDFtPU04KfzlzIxAbszb4P968e5MJa90O1zSyM+ikSZDVsVvLcE
+	RtyQsl9G9LymtJRvP1c1NLx+JsSRL/ALz3qfBWuinM4hZRDqWsnOWF6+57Mqf77U2JIXsF
+	nl52gOg46uHvXvw3VHK6UkMmjNZhVXsCGVc+4GlcKx8l97af1+PXPDSfnznH187Ll4GofN
+	jaO5j8DvGgyiAp6o5ns62uVWzkxjHc0Vudr8B5kDWY1DbCM1U9fAfIBUIsSw7+MZFhbPiU
+	VAbW7oGRhTcTfXSvt+3azmrUnExu7Rg80E3ZrNiZhH8GeipwyUcNX5I8RRgcYw==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 31 Oct 2024 17:14:06 +0100
+Message-Id: <D5A4I4MRPY8J.OBNCJBOHUTM5@bootlin.com>
+Cc: <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Vladimir
+ Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Linus Walleij"
+ <linus.walleij@linaro.org>, "Andi Shyti" <andi.shyti@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v3 0/6] i2c: nomadik: support >=1MHz & Mobileye EyeQ6H
+ platform
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20241009-mbly-i2c-v3-0-e7fd13bcf1c4@bootlin.com>
+In-Reply-To: <20241009-mbly-i2c-v3-0-e7fd13bcf1c4@bootlin.com>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Thu, 17 Oct 2024, Chris Packham wrote:
+Hi Andi,
 
-> Add device tree schema for the Realtek RTL9300 switches. The RTL9300
-> family is made up of the RTL9301, RTL9302B, RTL9302C and RTL9303. These
-> have the same SoC differ in the Ethernet switch/SERDES arrangement.
-> 
-> Currently the only supported features are the syscon-reboot and i2c
-> controllers. The syscon-reboot is needed to be able to reboot the board.
-> The I2C controllers are slightly unusual because they each own an SCL
-> pin (GPIO8 for the first controller, GPIO 17 for the second) but have 8
-> common SDA pins which can be assigned to either controller (but not
-> both).
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v7:
->     - Set additionalProperties: false
->     - Remove extraneous examples from i2c binding
->     Changes in v6:
->     - Drop wildcard compatible
->     - Add specific compatibles for the 4 known SoC variants
->     - For the i2c part of the binding accept realtek,rtl9301 as a fallback
->       for the other compatibles
->     - The overall switches will eventually differ because these will have
->       different SERDES/port arrangements so they aren't getting the same
->       fallback treatment
->     Changes in v5:
->       I've combined the two series I had in flight so this is the
->       combination of adding the switch syscon, the reboot and i2c. It makes
->       the changelog a bit meaningless so I've dropped the earlier
->       commentary.
->     
->       As requested I've put a more complete example in the main
->       rtl9300-switch.yaml.
->     
->       I've kept rtl9300-i2c.yaml separate for now but link to it with a $ref
->       from rtl9300-switch.yaml to reduce clutter. The example in
->       rtl9300-i2c.yaml is technically duplicating part of the example from
->       rtl9300-switch.yaml but I feel it's nice to be able to see the example
->       next to where the properties are defined.
-> 
->  .../bindings/i2c/realtek,rtl9301-i2c.yaml     |  69 +++++++++++
->  .../bindings/mfd/realtek,rtl9301-switch.yaml  | 114 ++++++++++++++++++
+On Wed Oct 9, 2024 at 4:01 PM CEST, Th=C3=A9o Lebrun wrote:
+> Three patches are about adding Mobileye EyeQ6H support to the Nomadik
+> I2C controller driver, in the same vein as was done a few months ago
+> for EyeQ5.
+[...]
+> Three patches are about supporting higher speeds (fast-plus and
+> high-speed).
 
-Can you separate these out so I can apply the MFD part please?
+I come in checking. What's your state of mind about that series?
 
--- 
-Lee Jones [李琼斯]
+Rob has given his Reviewed-By on both dt-bindings patches, and Linus
+gave his on all patches. I can send a new revision taking the three
+Reviewed-By trailers from this V3 if you like.
+
+Also, i2c-host-next is free of conflicts on Nomadik files.
+
+Thanks!
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
