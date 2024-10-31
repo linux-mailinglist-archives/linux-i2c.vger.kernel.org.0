@@ -1,143 +1,148 @@
-Return-Path: <linux-i2c+bounces-7686-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7687-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62BAF9B809A
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 17:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB3979B8288
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 19:23:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B22C9B21BD9
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 16:51:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 369DDB21FA5
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Oct 2024 18:23:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818B41BD51F;
-	Thu, 31 Oct 2024 16:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD6E1C9B9A;
+	Thu, 31 Oct 2024 18:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qYh75Y85"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UVoVVPG+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FCE1BD00C
-	for <linux-i2c@vger.kernel.org>; Thu, 31 Oct 2024 16:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128B61BCA05
+	for <linux-i2c@vger.kernel.org>; Thu, 31 Oct 2024 18:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730393482; cv=none; b=aI+24DbLL6hC4gh7rqjnEM9ekfS4LC2dFPQe1FFnYy/AP4mD0ldYumV6oPeDF8bEQFWSxLIxGlRC6mMHZbOOzgX/V7urTphIxD3KIuAdySVEKTOqfyg+y9TCYqkQaPFWa+eY/1BYjTcQUsWKB/SHvGjl81pFeuM15Qo3JKMC00M=
+	t=1730398994; cv=none; b=PNBJqhtbYYqfNwXIFlOl4AbzSHBzFI8icTYPsDmOjVsmWvtzGE7WT60G6nqTT7AAEr++CDtyiTQymLZeGu2USJqGHQJNMox72vDaUJwT458IqGuBbwziRSbyn60+HaBP+WyCGg1YEorK3++EqN/dnLE30Hes2FTWpck12zKsM5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730393482; c=relaxed/simple;
-	bh=9uF7kIftGSAOjKQHDNRn+MgvU0s5zXO+r+o+MTNjWUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YjdK6SX/0HqK0eGZYFsYmlQfKqXChwS1skStcSR7ANelBjyjUCTBGII3t2M7dPwPYlUPWdnjvUY+geOSUjBQzhqTDMr4o4h2pYai/8o+MnuVtI7fqm3E7/t5weNBIfbdW1hnwYqejA0B8XdEqJtl03lgEp5nm9GVtFdz94yyIpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qYh75Y85; arc=none smtp.client-ip=209.85.167.53
+	s=arc-20240116; t=1730398994; c=relaxed/simple;
+	bh=OB6s1nAC/DchLbBPGMjThIla6sAG/IuVlX/Cm9GqCag=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=piRqwpC8puNs+m+DdOL2qussEsvafIvbTc1UFIqbhLsz8/JCohzyNr6rFqOT5jtBlbgNtByVbU8c3q42WV0rzwRSXEjVilCYfimBdVae/yk2igD7eBQJjmbiS9y3WPDCTj6w4VI5tzZNGFgjuAtJ5GiG86AZSQXbxBQEEpMyJ/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UVoVVPG+; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539d9fffea1so1161523e87.2
-        for <linux-i2c@vger.kernel.org>; Thu, 31 Oct 2024 09:51:18 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6ea0b25695dso9933297b3.2
+        for <linux-i2c@vger.kernel.org>; Thu, 31 Oct 2024 11:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730393477; x=1730998277; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dElgT7L0zt3rmbay8fKLvEkV5UCNYIrNgV99r1etM3E=;
-        b=qYh75Y85eonpzxu4UAkQSF7s+KYM+FxzJ9A3o/U38is93EaDjndATj7N4T78KSFShE
-         7IFLENVQBB05evSPJFWWWRRXCza4WQfaCXoZjdXXaCk5ko6VSVC62CT2iXWpvTFinhym
-         6P56GXPjJ/Fi/X8fieY0CUEl2ic3StfpRgw0AV92+hQa5XaY9ujXubjtIJq90iJFd4fl
-         2v8Xbpg6dc8QuHVMXNeZl2x81Jzwlvi39nDAXMmKrA/KVE3l7RSIxSLP5zsSM0/jG8Wx
-         JcAZ0fj3LLx6uUHn9QWhcMAHw2RjLcLj9eVFfN0VA8T5YMTqDQclVhO6JE9Uj/W2cveH
-         5Udw==
+        d=linaro.org; s=google; t=1730398991; x=1731003791; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oyFaR/Nqjo7VFSddLUYVyYGruB0Du5lv6wuap1vCS68=;
+        b=UVoVVPG+630ZfSRCJv+YxjWY2+2aoZqSmG8qfgMiXpk937x5cqdaJgal8ZEBS6K0qJ
+         FR0J2ZrWbob9HPoxon9amFnBXIKKnxF2mVECfw/+sqZ/fCgg5wvL/FImuilBx3Xnle+p
+         Bel2ktwWBkED5DtYKpXxAQJxLYuEIsIa4Y/DzdejRw/fizU+EtKcspp27pWKn51omhZ9
+         7teG2YPeW7UxqNMyMJbBYlfNrri8Bv2mm4PbL1C0tpjI6SIsO5AgpCCC1yOFK0S/ft2X
+         YkYU8WFMJQ9xAd/H3RCp+gkPB9fcrhSEXdvb7F0JEd0YvW3KoBNW69NAl+k0xs3tKx2y
+         RRjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730393477; x=1730998277;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dElgT7L0zt3rmbay8fKLvEkV5UCNYIrNgV99r1etM3E=;
-        b=HyzjgyOOP3ZVQq7UoF+M7KgrTOYiNnB3Ho98b4+h8dgo5PfOZEVzFGBhV28dTiWxct
-         W5YR3u10BB2i89JbrJCACkSesJuCa821x7M2a1oarm3y85GTnACluceNBNvjdae+MGNi
-         w6cADPOS9l0Ivfnq+NW/TLZeLr5ZQaMeNgjaxddY0y3SBTsHBdkNPDI/1VIaOT73JISD
-         FNZOqNJj7sUT8zi0ZvLiSbyeI5Z5grXKZ9Pg7rn2CLx2BAV8Huig+MskX5ky3JEgf1qp
-         n71eqbbaN8DHsW5RkRW1yw7EaFYOE0B//HNWNjsDCHoozUl+dihfwrpfIUlQ/wS3/h4t
-         +ovg==
-X-Forwarded-Encrypted: i=1; AJvYcCUS2vxUUrsy+Ol+IuwVo7ttdrjSOyvbsyOutVh1YEg5nrYtWGtm9BU10y10ItJi82stx2Aeq98txmQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZdZTQqcEstKzAMn/jSpBvQLYmRgNAWtOhguZxOGkJJGUkNi1n
-	V7n+/1jmkl8wSP4TtKHoyoHC/h181mr7MPL48JBXkY1FXFNc7m7BAVzEb4s1egA=
-X-Google-Smtp-Source: AGHT+IFBdgNmYFRwHU2uHUqUBdL1py3yIhuOmcLZEkX5lLCzBxA/ASmXrl7QfGHc2PZxttejJESocA==
-X-Received: by 2002:a05:6512:3d05:b0:539:df2f:e115 with SMTP id 2adb3069b0e04-53b34909ffamr11186732e87.23.1730393477021;
-        Thu, 31 Oct 2024 09:51:17 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bcce60esm255270e87.124.2024.10.31.09.51.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2024 09:51:15 -0700 (PDT)
-Date: Thu, 31 Oct 2024 18:51:13 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc: loic.poulain@linaro.org, rfoss@kernel.org, andi.shyti@kernel.org, 
-	linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH v3 -next] i2c: qcom-cci: Remove the unused variable
- cci_clk_rate
-Message-ID: <jt5d3473zg34yhgykgqftlvk6fqekankuyjj57uxl56sqa3xvm@nvfv7kwtcwex>
-References: <20241031095339.76535-1-jiapeng.chong@linux.alibaba.com>
+        d=1e100.net; s=20230601; t=1730398991; x=1731003791;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oyFaR/Nqjo7VFSddLUYVyYGruB0Du5lv6wuap1vCS68=;
+        b=fzDZdds6ayozZx/lRoTb0ax4pQFTF9TXCPsM7Apbh69H2c22doV9PeDekvtobBLZf8
+         UILdzAIQ9ARqR8WUzdETEZmfnOgSL8Mqh8vaIMoR11uO8Ww2WM/AcbTGtotYRERYMLG2
+         SAv4phnJ/trzBmy9K/cAm7RANmsnLmRF4IqVcSNay/8auKx62o9QrXy8B+nETJiad29h
+         MfHPWUgq6C8J6LYRu1Q7GmCno4ryAVXBN7nZn+o4BZD6p/I4YtYDcWCVZ86/RIvzKh8E
+         95IF8VlC8abMhXX5GLxBb8I6ytjD5ryccyPUYI9OoETYtGtxqQbatYBDjsh8hTp+8mng
+         ESlA==
+X-Forwarded-Encrypted: i=1; AJvYcCXW9E0v1FLW0ZkGR1iwCwXBa3Zrm8xC3as5Jb/O/UfioFHSQ9oKlGl1jM04Qh5BVKtk+WQ4wP7RuQQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyChmPMAxgKMe+P2KABU2QIJMU8obnyIYfWAvhENcEt+WjG1nhd
+	RYOQgD159fe4t56vNMdU0PUtoj6qhWz9l18QRLaNAiaSsCFmi8pMZIlVbsjHL5yPpUV5bowDNdT
+	A4vUvuRTYf4TYPHgQQ7NtUAzJf47t71oXHyys5Q==
+X-Google-Smtp-Source: AGHT+IFq8R0CLiSKN/KyW3w8yrGdFcwHeCP7az6vUpHoYzraiFHMKDOSyj3hQcHE8V/hDNjDyyFp/YsnTwuwz+WSQKo=
+X-Received: by 2002:a05:690c:fc2:b0:6e2:a962:d7ec with SMTP id
+ 00721157ae682-6e9d88e8babmr217442787b3.6.1730398991054; Thu, 31 Oct 2024
+ 11:23:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241031095339.76535-1-jiapeng.chong@linux.alibaba.com>
+References: <20241030010723.3520941-1-quic_abhinavk@quicinc.com>
+In-Reply-To: <20241030010723.3520941-1-quic_abhinavk@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Thu, 31 Oct 2024 20:23:00 +0200
+Message-ID: <CAA8EJppKou84MZm0JS_4bPveMO2UxpMs5ejCoL7OMWd-umtDmQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] i2c: skip of_i2c_register_device() for invalid child nodes
+To: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, freedreno@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, robdclark@gmail.com, swboyd@chromium.org, 
+	airlied@gmail.com, quic_jesszhan@quicinc.com, lyude@redhat.com, 
+	simona@ffwll.ch, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Oct 31, 2024 at 05:53:39PM +0800, Jiapeng Chong wrote:
-> Variable cci_clk_rate is not effectively used, so delete it.
-> 
-> drivers/i2c/busses/i2c-qcom-cci.c:526:16: warning: variable ‘cci_clk_rate’ set but not used.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=11532
-> Fixes: 823dfb7bdb21 ("i2c: qcom-cci: Stop complaining about DT set clock rate")
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+On Wed, 30 Oct 2024 at 03:07, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>
+> of_i2c_register_devices() adds all child nodes of a given i2c bus
+> however in certain device trees of_alias_from_compatible() and
+> of_property_read_u32() can fail as the child nodes of the device
+> might not be valid i2c client devices. One such example is the
+> i2c aux device for the DRM MST toplogy manager which uses the
+> display controller device node to add the i2c adaptor [1] leading
+> to an error spam like below
+>
+> i2c i2c-20: of_i2c: register /soc@0/display-subsystem@ae00000/display-controller@ae01000/ports
+> i2c i2c-20: of_i2c: modalias failure on /soc@0/display-subsystem@ae00000/display-controller@ae01000/ports
+> i2c i2c-20: Failed to create I2C device for /soc@0/display-subsystem@ae00000/display-controller@ae01000/ports
+> i2c i2c-20: of_i2c: register /soc@0/display-subsystem@ae00000/display-controller@ae01000/opp-table
+> i2c i2c-20: of_i2c: invalid reg on /soc@0/display-subsystem@ae00000/display-controller@ae01000/opp-table
+> i2c i2c-20: Failed to create I2C device for /soc@0/display-subsystem@ae00000/display-controller@ae01000/opp-table
+>
+> Add protection against invalid child nodes before trying to register
+> i2c devices for all child nodes.
+>
+> [1] : https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/display/drm_dp_mst_topology.c#L5985
+>
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > ---
-> Changes in v3:
->   -Modify the commit message.
-
-Modify how?
-What was the reason for ignoring the R-B tag?
-
-> 
->  drivers/i2c/busses/i2c-qcom-cci.c | 9 ---------
->  1 file changed, 9 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index 5cc791b3b57d..a0ef43e99751 100644
-> --- a/drivers/i2c/busses/i2c-qcom-cci.c
-> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -523,7 +523,6 @@ static const struct dev_pm_ops qcom_cci_pm = {
->  static int cci_probe(struct platform_device *pdev)
+>  drivers/i2c/i2c-core-of.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index a6c407d36800..62a2603c3092 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -86,6 +86,8 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
 >  {
->  	struct device *dev = &pdev->dev;
-> -	unsigned long cci_clk_rate = 0;
->  	struct device_node *child;
->  	struct resource *r;
->  	struct cci *cci;
-> @@ -594,14 +593,6 @@ static int cci_probe(struct platform_device *pdev)
->  		return dev_err_probe(dev, -EINVAL, "not enough clocks in DT\n");
->  	cci->nclocks = ret;
->  
-> -	/* Retrieve CCI clock rate */
-> -	for (i = 0; i < cci->nclocks; i++) {
-> -		if (!strcmp(cci->clocks[i].id, "cci")) {
-> -			cci_clk_rate = clk_get_rate(cci->clocks[i].clk);
-> -			break;
-> -		}
-> -	}
-> -
->  	ret = cci_enable_clocks(cci);
->  	if (ret < 0)
->  		return ret;
-> -- 
-> 2.32.0.3.g01195cf9f
-> 
+>         struct device_node *bus, *node;
+>         struct i2c_client *client;
+> +       u32 addr;
+> +       char temp[16];
+>
+>         /* Only register child devices if the adapter has a node pointer set */
+>         if (!adap->dev.of_node)
+> @@ -101,6 +103,10 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
+>                 if (of_node_test_and_set_flag(node, OF_POPULATED))
+>                         continue;
+>
+> +               if (of_property_read_u32(node, "reg", &addr) ||
+> +                   of_alias_from_compatible(node, temp, sizeof(temp)))
+> +                       continue;
+
+I think just of_property_read_u32() should be enough to skip
+non-I2C-device children. If of_alias_from_compatible() fails, it is a
+legit error.
+
+> +
+>                 client = of_i2c_register_device(adap, node);
+>                 if (IS_ERR(client)) {
+>                         dev_err(&adap->dev,
+> --
+> 2.34.1
+>
+
 
 -- 
 With best wishes
