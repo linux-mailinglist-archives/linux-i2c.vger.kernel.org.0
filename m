@@ -1,104 +1,136 @@
-Return-Path: <linux-i2c+bounces-7722-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7723-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E1759B9357
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Nov 2024 15:34:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C42C9B936D
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Nov 2024 15:38:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 400241C21851
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Nov 2024 14:34:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB3881F2423B
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Nov 2024 14:38:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FFB1A7275;
-	Fri,  1 Nov 2024 14:34:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEB291AA7AA;
+	Fri,  1 Nov 2024 14:37:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MOewJ1zD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jTihCWM8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F1C1A3031;
-	Fri,  1 Nov 2024 14:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4BF1A0721;
+	Fri,  1 Nov 2024 14:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730471688; cv=none; b=A9vr7dtHcvPvGkeWVDwyok42JNVT/ATk6rosYxyshPpmvQdGkKNLV6jXLDGv6iUXId/65ByJuFPWaiQbEqLJ/qoo6+sWMITFZK3uj35/GEJyE0gwdo9bFXDxpk3wj51glOHbzwKCNpu/uIP2lUvYt4em41OasKZkI4uSd3AN7l4=
+	t=1730471859; cv=none; b=sF/iAWJ5PdyJppOEdhiitVLk4MvuH6zbD7wvSJk9jO0yWw8vHpUF/89gecyT4weWyjzuNKkzmd3KXikjlLS7oBHdR/ulXicTg3wp6xwMAFkfMqa22yKpDivrsRb+7lmo7n53088uNT1bMxwt6GaJFqX7LRjTjUCIrLVcj35uQbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730471688; c=relaxed/simple;
-	bh=9JG90zTfCUScvOFphL4kj3IYpWFe6ArLtspyxLtHdEE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=leNRitSYUmyBXpvMLppz/kkicw+40A4/q7ZFdDvCWSSobXFXip0NOdpr+rXPvTsrhyoZEfnBw7Y2B60EJNZsT8HNYArmHyFJezqSAbS/NJKtkSUWR+FcpywDSTOJu5mN/riLGd+bSJ21Tseu5Q9/pdXjvwILVzwYcKmfnSZTvZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MOewJ1zD; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-20c805a0753so19837275ad.0;
-        Fri, 01 Nov 2024 07:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730471686; x=1731076486; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bKpAeblCGAtzD68Yzc5Mj4f4qQtnm+utnPXApNTtIW8=;
-        b=MOewJ1zD+CFnVsJZoJbSBKW9BPP7LShD+Pfqo/AI4fugTfWT0kh6Ns/y4ya0sh+BcP
-         8b11NPtLH/5LWM2rzEDKC5z3BQlwZgCOiBWHXhbXdj2i7+18Cs6hHH723VQIYBFhqxNI
-         6FmAqpS6F8HAioBXFxMzsuwmnP0unhX55p5K+/pU7qN7pt5+HvgyzCkbbD1M3c+BzmH3
-         dg0XSYiSJsgcgz4+INQQSd3f8+fPjrBje/bXh+9LAVxUbgwmVRqbV6e2RDKGeBxAtV6G
-         1wQzG8Xd6GMUOpkXS8RjGRJ0ziHpTOavxGQuAzaLwRbVfgRz+rHOIfV3uFDgINhy8dHS
-         PNQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730471686; x=1731076486;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bKpAeblCGAtzD68Yzc5Mj4f4qQtnm+utnPXApNTtIW8=;
-        b=L5j2BKN8BHYgDDKTX2rYtdTDiQB7mi5eblbyG3rAygoSSvLtiFyNh7Ey2U74xev9mx
-         3/S4OjEWLl9RoT3Ewvumw76jc1BuX2/0I3Ba2VcJMKlwty3G4R1IrWLyYveT+MNcnfoR
-         HQ9QSJeLyo/douGFVqRcds0UZE5NCf4t2pF9oLhBC7P5YaRDyIr3Dd3QL5g6vuLP7xIe
-         vLyf/BWK8rNje84AGCTeut3SroztRVEXZOuFqaaq98nls6/dcpGnEHVaXAo+m+TPrbXF
-         1oR/48zaunjl6pbvtsnE85gpp6cw0Llp8LoqAZv/IsIe+71L08nEqofQwLBa06gX0Y8d
-         jFOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVtA5Bi7bkTwi2lBRxOEeofqqWXTbetjzmUgKkOfOUmsqiUM391XbGyFrRXoV+IlJq1zLKe0hGB5wXve4g=@vger.kernel.org, AJvYcCWUM2oHBQ/fmw0n/jx4MHlkjOIq2EKpLnyjSrW5xVseZ2qdAHwonUgqZvYXtklv75K7sSkfYzwzxf/6@vger.kernel.org, AJvYcCWnaTljKs3Jx+Gw8xhelI374UC/q6Z6sGM/NK6NYd/u4yVdAHpL+YWFR6ZA+LYys5rCPPkVJB2+HxTQ@vger.kernel.org, AJvYcCXtYni3iPTNi/O2grMXiFrdaSF+rS9Ab/06b936A4JFZJeMz5iirG/4T7dgQh0GFy8/fDUNuXffYfF6@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywjx59wzp/G7n3jB19IevRafXZJqEjEQSrTV1ef4R1x4ni+y96O
-	xsgonpknY8H9Vbuz7eBZe72cDuMR4Zksn3xNj5fz3REXQRHJKdv9
-X-Google-Smtp-Source: AGHT+IGRHx6rCZfHgC4R8udY/nsKG7MZ8p8qtIsO4JKh8tbvnjFVnQGxH4Yp2B9a4hr2TlKXrzLRGA==
-X-Received: by 2002:a17:903:245:b0:20b:fa34:7325 with SMTP id d9443c01a7336-210c6c40927mr332992905ad.43.1730471686178;
-        Fri, 01 Nov 2024 07:34:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057f73f0sm22052015ad.306.2024.11.01.07.34.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 07:34:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 1 Nov 2024 07:34:44 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Mariel Tinaco <Mariel.Tinaco@analog.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-	devicetree@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 2/3] hwmon: (pmbus/ltc7841) add support for LTC7841 - docs
-Message-ID: <a65cdff0-9267-409e-bd7e-418b060f4bfd@roeck-us.net>
-References: <20241029013734.293024-1-Mariel.Tinaco@analog.com>
- <20241029013734.293024-3-Mariel.Tinaco@analog.com>
+	s=arc-20240116; t=1730471859; c=relaxed/simple;
+	bh=dlU5NLdy23cZwEjdBEnyuFTr14SIABsSVeUaYha2fSE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nArgw6MbxgZTgPS2Ym7yuE0tNZjjAVTzfC3Pl8fYPu9g9anmx5dasuR6s2YebpAbY71vkiv+eVst9kRw3m9/VrrSSMtTYDfTuNo3dGtPZPA0w5lxR/2ju57mrtEuvI3C92ES1QdYmzwnOxewV5apSJjQj8HYWVR8Gw9JgqiamAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jTihCWM8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C607C4CECD;
+	Fri,  1 Nov 2024 14:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730471858;
+	bh=dlU5NLdy23cZwEjdBEnyuFTr14SIABsSVeUaYha2fSE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=jTihCWM84REZzKuwEfHAbVqWs8ysp/anL9vV9nq1XvK36xyoUJ/YOrkeOV72Vy9II
+	 VR/WiDN4jvUlYO84+Mk2G70smZhdja36BWmdGdQHH0gcVYnS6D/HWk/rJbOjWnYfyN
+	 M6JvRPHXB+5NjnE1BP8JCw/1ThUTsRX9nwoLkk7Uya8JKwBtzQuFJc5r9bqU+lTRfC
+	 aUifTXSROpIF97Nzax9Ldhqsc9t1PIfks/6FMBgD7uI9H8fD8uePh0p7of4B11wnys
+	 BON34t6sOxy3HxVR8gyu2boROLMBOiorQCh4sKlF78PFdJFhSMrXlKBbyKqugKUuvN
+	 TT0OZJcgqm/PA==
+Message-ID: <67aad19f-a512-4674-a8e3-5c6349c4edce@kernel.org>
+Date: Fri, 1 Nov 2024 15:37:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241029013734.293024-3-Mariel.Tinaco@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: spacemit: add support for K1 SoC
+To: Jesse T <mr.bossman075@gmail.com>
+Cc: Troy Mitchell <troymitchell988@gmail.com>, andi.shyti@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20241028053220.346283-1-TroyMitchell988@gmail.com>
+ <20241028053220.346283-2-TroyMitchell988@gmail.com>
+ <6zx3tqdc5bma2vutexwigzlir6nr6adp7arg4qwl5ieyd3avbu@5yyhv57ttwcl>
+ <dbeea869-54cd-43fe-9021-783d641f1278@gmail.com>
+ <ariqiukhztgziwwgaauqy6q3pghflnoeuwtag4izwkfmtvi2kh@gnlq4d7jsaw4>
+ <CAJFTR8T60Azb3refwAB9LALJthKxQz8E1ixZyEA0K=hXfNcUyg@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <CAJFTR8T60Azb3refwAB9LALJthKxQz8E1ixZyEA0K=hXfNcUyg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 29, 2024 at 09:37:33AM +0800, Mariel Tinaco wrote:
-> Add LTC7841 to compatible devices of LTC2978
+On 01/11/2024 15:29, Jesse T wrote:
+> On Fri, Nov 1, 2024 at 10:24 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>
+>> On Tue, Oct 29, 2024 at 04:36:00PM +0800, Troy Mitchell wrote:
+>>> On 2024/10/28 15:38, Krzysztof Kozlowski wrote:
+>>>> On Mon, Oct 28, 2024 at 01:32:19PM +0800, Troy Mitchell wrote:
+>>>>> The I2C of K1 supports fast-speed-mode and high-speed-mode,
+>>>>> and supports FIFO transmission.
+>>>>>
+>>>>> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
+>>>>> ---
 > 
-> Signed-off-by: Mariel Tinaco <Mariel.Tinaco@analog.com>
+> Change in v2:
+> - drop fifo-disable property
+> - unevaluatedProperties goes after required: block
+> - drop alias
 
-For my reference:
+b4 diff disagrees with you :/
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Best regards,
+Krzysztof
+
 
