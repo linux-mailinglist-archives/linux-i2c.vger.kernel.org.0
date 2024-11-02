@@ -1,325 +1,183 @@
-Return-Path: <linux-i2c+bounces-7741-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7742-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E02339B9B4A
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Nov 2024 00:52:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A0959B9C8D
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Nov 2024 04:48:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E5321C2118B
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Nov 2024 23:52:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D720B21C61
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Nov 2024 03:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFDD01D151F;
-	Fri,  1 Nov 2024 23:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0108145B18;
+	Sat,  2 Nov 2024 03:48:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EFhUtwN9"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="glGHEmHu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5D11CDA12;
-	Fri,  1 Nov 2024 23:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0E134CDD
+	for <linux-i2c@vger.kernel.org>; Sat,  2 Nov 2024 03:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730505130; cv=none; b=rRsQU8uw4uxiBxQoQc66NE37lGOOPSUmK9YBW6QCH3kNSNWCki3X4dvoHPUb/Vhe5m1pFYaR0e+pf069kSCLUyTqjhCNNOq9eDnoGePn5cZXhlZ55I9bgrGJEv1rNpMuoG8xpb5/juPhs/2pVdincFk1hvNwVIVZiByjP0C5bXs=
+	t=1730519310; cv=none; b=NotXqMK3EJ/jvOQbz/eYW0QoT0S92ik38pqB1wGAqS+knBAorSO9wFKVtH+Md2iyZ3CPqvt1mcAX4JwKkrjDiSP1+1ECLRPKfC84KZikOBZld0zEN8wluwBHFs9l2rLduKiso11CV83A4iYyCacowKw+hbJOP3USGSIxZXetHD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730505130; c=relaxed/simple;
-	bh=3XNzd47DzJF9Xy7WSn96z+8TAU5mZRVr9fN33iaAAxk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lx7uSnAEwfDMCRVwog4pchFWuNezpDBywsSEe8RKlCmhqmLMUqcBVxO3KR5Na0TJ6phjezzDXMrSNSSkQXIjIsMTQRRdh+QZt8afcYUyPqqr5s4CeC2FdI7zB2Tv86ZIrTfVMNJaUq8eMxXub//sJ9nD9mE7cg3cIrjWiq6lMoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EFhUtwN9; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730505128; x=1762041128;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3XNzd47DzJF9Xy7WSn96z+8TAU5mZRVr9fN33iaAAxk=;
-  b=EFhUtwN9QYgjEujnVlEIQ3O6s5FFsM/OhDoZ8FMlqkMp6QBCha/FrXE5
-   iuo1fOZn5MKn2uK7m4PelfSIki6e6cFlgzsLU5RPT6uzqR81k1v1r7rXa
-   Y16AE1O80pUYhIhftWfKzatKsAuNzXrtz6yqMjh5lpMq9WlTK+f9IqscI
-   5v1fr0HZe07jm4ugXIWGkgAmWTYmxRprlnjfWZhArwH3S54r9YJKcNgcM
-   YDwERSzLAkix9oCC73KwNW1EzmNhUSCRzXZfJsFZ3VBYPcvVI/HnGaqJa
-   O/vrV1TjIUeqhvG/fEe9S2ksZ1OkYhXxHVd/bKsZhjukHP+QJjNZwJE1U
-   Q==;
-X-CSE-ConnectionGUID: 1wUt/ZslQrarCVpGYYsCnA==
-X-CSE-MsgGUID: yFpuAhN5SyWxyKsd0Jvfgg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="52846554"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="52846554"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 16:52:07 -0700
-X-CSE-ConnectionGUID: 1tHeiE+aQBOIkvye/cKc7A==
-X-CSE-MsgGUID: CfEzt5v4Qfuq8zZgZY0/Dw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,251,1725346800"; 
-   d="scan'208";a="120574759"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 01 Nov 2024 16:52:06 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t71Qx-000iBN-0J;
-	Fri, 01 Nov 2024 23:52:03 +0000
-Date: Sat, 2 Nov 2024 07:51:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] i2c: busses: Use *-y instead of *-objs in Makefile
-Message-ID: <202411020703.U4QYsqjF-lkp@intel.com>
-References: <20241101131103.3679560-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1730519310; c=relaxed/simple;
+	bh=vP4zsOqNtMbKO2+jVJEXwJdYxLid9vzXb56DQWl1K9I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HdOoHx2yB1pv/s2JDS6cKsm0ovkwSxyzlkAdzNTPjIHVFyMSnNS1mjFdcTO1sq+TbXl/hQ75bxsbYGagv1TZ1Wz6vtyAXuyXdXUTpl3wU4PG7DhRwmWaiPyeYbWqMLnYUVWcEvIfm75+tVHslHUj5wj7OgRIUfPI9jm4SW5ATNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=glGHEmHu; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-83ab00438acso79631739f.0
+        for <linux-i2c@vger.kernel.org>; Fri, 01 Nov 2024 20:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1730519306; x=1731124106; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cFAxfJPYMHZcgM/IbSJdK8jCoxixwBpatcLPEMEnlyg=;
+        b=glGHEmHuBRHQ2w1lkMPygKEzcCZXom8snmPAObJGJ5Iobo59FC7HRyd8UQHrimEaJr
+         0mpZE4h6EJ0e7g/6YA0NQcXoYY1PcdKYWQiB7P1IvZzpozmqcylsjw+tSjtZWtjrkIlZ
+         loCNSltUi22qrUTACQRvDK4ceiDKzlNptknYNBA1VuprCwhMz6911rHwuoMHfhWL3tAq
+         U0vc+3fhnvLGI+oB/71Aw0YUJQ9XxlFjumfsPp3sv3SRgkJ8tp7H0TSI2UHN3EXcVtJI
+         McP8r+nP4nhmyy/jtPufH01wej5Xjs+gFp7Bz3LotSqFoniCLGhRPLupLP3T62Wzm5yX
+         b/9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730519306; x=1731124106;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cFAxfJPYMHZcgM/IbSJdK8jCoxixwBpatcLPEMEnlyg=;
+        b=R7Gohyn1gg9bfL9w89wClDLp2D3h5p3/dwwbzVYNbRCm60ZDd/cNHBzrCG+UXZxApx
+         hiZKzY8dpZAC0mp0btWAMm+e+74S2PO03n4vtxVDxDsuxJ5qp6rKvw4sj6UqF7m6b5hR
+         cblrhIiB8VPG5AfIV/qx5RLVWW2O9LLpal+xYWF75G+3punAu6AblTElKj2TTCYnKxaU
+         1yKXeRI0xtYA87WzbtyET/XL6DjlwjAiIMnhck7/juUlIpFl61CO+rZj+otGHp7clTLQ
+         suFUKEOmv6kpMItXUx2SDn+REM7VnVgpgHceqarOJLS9/SZlWq9BSeJ22MHa4wF+edpO
+         BceQ==
+X-Gm-Message-State: AOJu0Yxfj+gzyhUvOBc7ry69AbI17ZAhCmK4YJO921+4olnzs3RxCj//
+	IrOV9DecJuFlZL7YP6pM4LL8OfjRRzu6H8ocT6uxH0/xVJQmNXjT4p5o2xVNyJE=
+X-Google-Smtp-Source: AGHT+IEjX1mR0HcedUZXdXQVrMhUH8jXN4cBozN2zssjtGKah59T7pHiVZuQPT9WVqvySZ4MDCEgRw==
+X-Received: by 2002:a6b:7e44:0:b0:805:2048:a492 with SMTP id ca18e2360f4ac-83b7133cf86mr460121839f.6.1730519306354;
+        Fri, 01 Nov 2024 20:48:26 -0700 (PDT)
+Received: from [100.64.0.1] ([147.124.94.167])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83b67bb57a5sm108525239f.28.2024.11.01.20.48.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Nov 2024 20:48:25 -0700 (PDT)
+Message-ID: <846b4f2a-602e-431e-affc-0e995db5eee5@sifive.com>
+Date: Fri, 1 Nov 2024 22:48:24 -0500
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241101131103.3679560-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: spacemit: add support for K1 SoC
+To: Troy Mitchell <troymitchell988@gmail.com>, andi.shyti@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20241028053220.346283-1-TroyMitchell988@gmail.com>
+ <20241028053220.346283-2-TroyMitchell988@gmail.com>
+Content-Language: en-US
+From: Samuel Holland <samuel.holland@sifive.com>
+In-Reply-To: <20241028053220.346283-2-TroyMitchell988@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Andy,
+Hi Troy,
 
-kernel test robot noticed the following build errors:
+On 2024-10-28 12:32 AM, Troy Mitchell wrote:
+> The I2C of K1 supports fast-speed-mode and high-speed-mode,
+> and supports FIFO transmission.
+> 
+> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
+> ---
+>  .../bindings/i2c/spacemit,k1-i2c.yaml         | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
+> new file mode 100644
+> index 000000000000..57af66f494e7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/spacemit,k1-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: I2C controller embedded in SpacemiT's K1 SoC
+> +
+> +maintainers:
+> +  - Troy Mitchell <troymitchell988@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: spacemit,k1-i2c
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
 
-[auto build test ERROR on andi-shyti/i2c/i2c-host]
-[also build test ERROR on linus/master v6.12-rc5 next-20241101]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Looking at the K1 user manual (9.1.4.77 RCPU I2C0 CLOCK RESET CONTROL
+REGISTER(RCPU_I2C0_CLK_RST)), I see two clocks (pclk, fclk) and a reset, which
+looks to be standard across the peripherals in this SoC. Please be sure that the
+binding covers all resources needed to use this peripheral.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/i2c-busses-Use-y-instead-of-objs-in-Makefile/20241101-211148
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20241101131103.3679560-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/1] i2c: busses: Use *-y instead of *-objs in Makefile
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20241102/202411020703.U4QYsqjF-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411020703.U4QYsqjF-lkp@intel.com/reproduce)
+> +
+> +  clock-frequency:
+> +    description:
+> +      Desired I2C bus clock frequency in Hz. As only fast and high-speed
+> +      modes are supported by hardware, possible values are 100000 and 400000.
+> +    enum: [100000, 400000]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411020703.U4QYsqjF-lkp@intel.com/
+This looks wrong. In the manual I see:
 
-All errors (new ones prefixed by >>):
+* Supports standard-mode operation up to 100 Kbps
+* Supports fast-mode operation up to 400Kbps
+* Supports high-speed mode (HS mode) slave operation up to 3.4Mbps(High-speed
+I2C only)
+* Supports high-speed mode (HS mode) master operation up to 3.3 Mbps (High-speed
+I2C only)
 
-   drivers/i2c/busses/i2c-at91-slave.c: In function 'atmel_twi_interrupt_slave':
->> drivers/i2c/busses/i2c-at91-slave.c:28:44: error: 'struct at91_twi_dev' has no member named 'slave'
-      28 |                         i2c_slave_event(dev->slave,
-         |                                            ^~
-   drivers/i2c/busses/i2c-at91-slave.c:34:44: error: 'struct at91_twi_dev' has no member named 'slave'
-      34 |                         i2c_slave_event(dev->slave,
-         |                                            ^~
-   drivers/i2c/busses/i2c-at91-slave.c:44:36: error: 'struct at91_twi_dev' has no member named 'slave'
-      44 |                 i2c_slave_event(dev->slave, I2C_SLAVE_READ_PROCESSED, &value);
-         |                                    ^~
-   drivers/i2c/busses/i2c-at91-slave.c:51:36: error: 'struct at91_twi_dev' has no member named 'slave'
-      51 |                 i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED, &value);
-         |                                    ^~
-   drivers/i2c/busses/i2c-at91-slave.c:59:36: error: 'struct at91_twi_dev' has no member named 'slave'
-      59 |                 i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &value);
-         |                                    ^~
-   drivers/i2c/busses/i2c-at91-slave.c: In function 'at91_reg_slave':
-   drivers/i2c/busses/i2c-at91-slave.c:69:16: error: 'struct at91_twi_dev' has no member named 'slave'
-      69 |         if (dev->slave)
-         |                ^~
-   drivers/i2c/busses/i2c-at91-slave.c:78:12: error: 'struct at91_twi_dev' has no member named 'slave'
-      78 |         dev->slave = slave;
-         |            ^~
->> drivers/i2c/busses/i2c-at91-slave.c:79:14: error: 'struct at91_twi_dev' has no member named 'smr'; did you mean 'imr'?
-      79 |         dev->smr = AT91_TWI_SMR_SADR(slave->addr);
-         |              ^~~
-         |              imr
-   In file included from arch/m68k/include/asm/bug.h:32,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/m68k/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:79,
-                    from include/linux/spinlock.h:56,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:7,
-                    from include/linux/slab.h:16,
-                    from include/linux/resource_ext.h:11,
-                    from include/linux/acpi.h:13,
-                    from include/linux/i2c.h:13,
-                    from drivers/i2c/busses/i2c-at91-slave.c:9:
-   drivers/i2c/busses/i2c-at91-slave.c: In function 'at91_unreg_slave':
-   drivers/i2c/busses/i2c-at91-slave.c:93:21: error: 'struct at91_twi_dev' has no member named 'slave'
-      93 |         WARN_ON(!dev->slave);
-         |                     ^~
-   include/asm-generic/bug.h:123:32: note: in definition of macro 'WARN_ON'
-     123 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   drivers/i2c/busses/i2c-at91-slave.c:97:12: error: 'struct at91_twi_dev' has no member named 'slave'
-      97 |         dev->slave = NULL;
-         |            ^~
-   drivers/i2c/busses/i2c-at91-slave.c:98:14: error: 'struct at91_twi_dev' has no member named 'smr'; did you mean 'imr'?
-      98 |         dev->smr = 0;
-         |              ^~~
-         |              imr
-   drivers/i2c/busses/i2c-at91-slave.c: At top level:
->> drivers/i2c/busses/i2c-at91-slave.c:118:5: error: redefinition of 'at91_twi_probe_slave'
-     118 | int at91_twi_probe_slave(struct platform_device *pdev,
-         |     ^~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/i2c/busses/i2c-at91-slave.c:13:
-   drivers/i2c/busses/i2c-at91.h:185:19: note: previous definition of 'at91_twi_probe_slave' with type 'int(struct platform_device *, u32,  struct at91_twi_dev *)' {aka 'int(struct platform_device *, unsigned int,  struct at91_twi_dev *)'}
-     185 | static inline int at91_twi_probe_slave(struct platform_device *pdev,
-         |                   ^~~~~~~~~~~~~~~~~~~~
->> drivers/i2c/busses/i2c-at91-slave.c:135:6: error: redefinition of 'at91_init_twi_bus_slave'
-     135 | void at91_init_twi_bus_slave(struct at91_twi_dev *dev)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-at91.h:184:20: note: previous definition of 'at91_init_twi_bus_slave' with type 'void(struct at91_twi_dev *)'
-     184 | static inline void at91_init_twi_bus_slave(struct at91_twi_dev *dev) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-at91-slave.c: In function 'at91_init_twi_bus_slave':
-   drivers/i2c/busses/i2c-at91-slave.c:138:41: error: 'struct at91_twi_dev' has no member named 'smr'; did you mean 'imr'?
-     138 |         if (dev->slave_detected && dev->smr) {
-         |                                         ^~~
-         |                                         imr
-   drivers/i2c/busses/i2c-at91-slave.c:139:56: error: 'struct at91_twi_dev' has no member named 'smr'; did you mean 'imr'?
-     139 |                 at91_twi_write(dev, AT91_TWI_SMR, dev->smr);
-         |                                                        ^~~
-         |                                                        imr
+So even ignoring HS mode, 100 kHz and 400 kHz are only the maximums, not fixed
+frequencies.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+Regards,
+Samuel
 
+> +    default: 100000
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c@d4010800 {
+> +        compatible = "spacemit,k1-i2c";
+> +        reg = <0x0 0xd4010800 0x0 0x38>;
+> +        interrupt-parent = <&plic>;
+> +        interrupts = <36>;
+> +        clocks = <&ccu 90>;
+> +        clock-frequency = <100000>;
+> +    };
+> +
+> +...
 
-vim +28 drivers/i2c/busses/i2c-at91-slave.c
-
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   14  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   15  static irqreturn_t atmel_twi_interrupt_slave(int irq, void *dev_id)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   16  {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   17  	struct at91_twi_dev *dev = dev_id;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   18  	const unsigned status = at91_twi_read(dev, AT91_TWI_SR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   19  	const unsigned irqstatus = status & at91_twi_read(dev, AT91_TWI_IMR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   20  	u8 value;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   21  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   22  	if (!irqstatus)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   23  		return IRQ_NONE;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   24  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   25  	/* slave address has been detected on I2C bus */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   26  	if (irqstatus & AT91_TWI_SVACC) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   27  		if (status & AT91_TWI_SVREAD) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  @28  			i2c_slave_event(dev->slave,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   29  					I2C_SLAVE_READ_REQUESTED, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   30  			writeb_relaxed(value, dev->base + AT91_TWI_THR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   31  			at91_twi_write(dev, AT91_TWI_IER,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   32  				       AT91_TWI_TXRDY | AT91_TWI_EOSACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   33  		} else {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   34  			i2c_slave_event(dev->slave,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   35  					I2C_SLAVE_WRITE_REQUESTED, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   36  			at91_twi_write(dev, AT91_TWI_IER,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   37  				       AT91_TWI_RXRDY | AT91_TWI_EOSACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   38  		}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   39  		at91_twi_write(dev, AT91_TWI_IDR, AT91_TWI_SVACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   40  	}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   41  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   42  	/* byte transmitted to remote master */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   43  	if (irqstatus & AT91_TWI_TXRDY) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   44  		i2c_slave_event(dev->slave, I2C_SLAVE_READ_PROCESSED, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   45  		writeb_relaxed(value, dev->base + AT91_TWI_THR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   46  	}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   47  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   48  	/* byte received from remote master */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   49  	if (irqstatus & AT91_TWI_RXRDY) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   50  		value = readb_relaxed(dev->base + AT91_TWI_RHR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   51  		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   52  	}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   53  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   54  	/* master sent stop */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   55  	if (irqstatus & AT91_TWI_EOSACC) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   56  		at91_twi_write(dev, AT91_TWI_IDR,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   57  			       AT91_TWI_TXRDY | AT91_TWI_RXRDY | AT91_TWI_EOSACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   58  		at91_twi_write(dev, AT91_TWI_IER, AT91_TWI_SVACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   59  		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   60  	}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   61  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   62  	return IRQ_HANDLED;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   63  }
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   64  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   65  static int at91_reg_slave(struct i2c_client *slave)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   66  {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   67  	struct at91_twi_dev *dev = i2c_get_adapdata(slave->adapter);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   68  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  @69  	if (dev->slave)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   70  		return -EBUSY;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   71  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   72  	if (slave->flags & I2C_CLIENT_TEN)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   73  		return -EAFNOSUPPORT;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   74  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   75  	/* Make sure twi_clk doesn't get turned off! */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   76  	pm_runtime_get_sync(dev->dev);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   77  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   78  	dev->slave = slave;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  @79  	dev->smr = AT91_TWI_SMR_SADR(slave->addr);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   80  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   81  	at91_init_twi_bus(dev);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   82  	at91_twi_write(dev, AT91_TWI_IER, AT91_TWI_SVACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   83  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   84  	dev_info(dev->dev, "entered slave mode (ADR=%d)\n", slave->addr);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   85  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   86  	return 0;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   87  }
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   88  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   89  static int at91_unreg_slave(struct i2c_client *slave)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   90  {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   91  	struct at91_twi_dev *dev = i2c_get_adapdata(slave->adapter);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   92  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   93  	WARN_ON(!dev->slave);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   94  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   95  	dev_info(dev->dev, "leaving slave mode\n");
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   96  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  @97  	dev->slave = NULL;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   98  	dev->smr = 0;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22   99  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  100  	at91_init_twi_bus(dev);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  101  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  102  	pm_runtime_put(dev->dev);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  103  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  104  	return 0;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  105  }
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  106  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  107  static u32 at91_twi_func(struct i2c_adapter *adapter)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  108  {
-d6d5645e5fc123 Jean Delvare     2024-05-31  109  	return I2C_FUNC_SLAVE;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  110  }
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  111  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  112  static const struct i2c_algorithm at91_twi_algorithm_slave = {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  113  	.reg_slave	= at91_reg_slave,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  114  	.unreg_slave	= at91_unreg_slave,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  115  	.functionality	= at91_twi_func,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  116  };
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  117  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22 @118  int at91_twi_probe_slave(struct platform_device *pdev,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  119  			 u32 phy_addr, struct at91_twi_dev *dev)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  120  {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  121  	int rc;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  122  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  123  	rc = devm_request_irq(&pdev->dev, dev->irq, atmel_twi_interrupt_slave,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  124  			      0, dev_name(dev->dev), dev);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  125  	if (rc) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  126  		dev_err(dev->dev, "Cannot get irq %d: %d\n", dev->irq, rc);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  127  		return rc;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  128  	}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  129  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  130  	dev->adapter.algo = &at91_twi_algorithm_slave;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  131  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  132  	return 0;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  133  }
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  134  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22 @135  void at91_init_twi_bus_slave(struct at91_twi_dev *dev)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
