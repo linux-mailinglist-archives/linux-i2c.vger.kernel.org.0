@@ -1,48 +1,76 @@
-Return-Path: <linux-i2c+bounces-7761-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7762-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71B789BB841
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 15:48:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 807019BB892
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 16:08:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 356382823A7
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 14:48:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3E291C228B5
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 15:08:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4E31B6D1B;
-	Mon,  4 Nov 2024 14:48:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F83B1BBBFC;
+	Mon,  4 Nov 2024 15:08:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k2Fhd/oV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WBlbkZno"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8134C469D;
-	Mon,  4 Nov 2024 14:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8B82B9A2;
+	Mon,  4 Nov 2024 15:08:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730731704; cv=none; b=GmCA8ffh5mPWNYrZch84COeHCwTmm/Dh6M6VOC11ilhwwzzSMlTvyfeDxU+5yjCVqzcqhwivQGqVVZbzewgFPRUbKh2u05DQG7NXii9s3eHijiSB9veoBtrtnOIjem5wwKV7pH6XEi57cVzs62O1Ax5a2a+HzK+Vj+QZYF85HJw=
+	t=1730732891; cv=none; b=YathMAfJ+HAEr4Zn9U0sEs8qyhJdp9mPEV5U0yNKIJBAe8tgaL0uYDYYOSJGp5jlyyhhJO5T2T8GZF717l9UWX11Cda71vQyeB1CrhemA0RnEbXKPojTs1GREl15yv9ssobWThYV3lSgBiYO7jBN5mj2fxu9lfX1FCwMtqt2BSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730731704; c=relaxed/simple;
-	bh=f7SgoDZTxN1Ai2BJlj04ErLnyoJUnr6IKPRQk6VU2mw=;
+	s=arc-20240116; t=1730732891; c=relaxed/simple;
+	bh=IsoBeoOuXvcoft0v4lHIDZ8sMTlBJsV7lMY+XpcmlMQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bl6TOLxo6rZsJlGrYWOpHvAzvpKBklMH98P0Y5jsys2mzJSwoelV7NzyW5i4i8c77jTHeb98meBwaM8XfhRXUNVSdbp0f8/5gCvJ/arQI9HjQ4TNlVqcMpqEE98hjNOTW/uSextYUu+n6HtRG6wpfqDdfG76xG5ZSd8ueBo3q3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k2Fhd/oV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0256C4CECE;
-	Mon,  4 Nov 2024 14:48:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730731704;
-	bh=f7SgoDZTxN1Ai2BJlj04ErLnyoJUnr6IKPRQk6VU2mw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=k2Fhd/oVd79XKT5qNS1m5B3PqfnS9AhvirT3o/Oze++i6oQNSbIZHmE4q7F4KLnhP
-	 FX6fBOuflFDoUQZfQ4mTtHf8REmoeHGsxTnnjdJ8hIMVgH3IJmHjk8TQV2bmk5wrLL
-	 hTZgzbos5JjEGz7t5ryis5SQED+ZPXSygeTJG2C2+KlXiAZQ1SUsUI7TYk+Nnyzxsu
-	 om1rymDD3qRbWNXiAqwQbg3bmR1X33qlOlELKCzoFWEGwNbja4G9MCx0CKL78qENNz
-	 Y5ZPLI6Eu0Og5q0WRJLJ/2Q1YsBAiSUfiaq+GdaunW6eY8n7XIBizkxH+yWE5FfQOs
-	 gY9uqaS2OtniQ==
-Message-ID: <502b0b14-0e1f-4a59-85ad-7edeb9d3033d@kernel.org>
-Date: Mon, 4 Nov 2024 15:48:18 +0100
+	 In-Reply-To:Content-Type; b=Jte/2WosBEQRDglYNgJ64syM97RTp6z6H4OC6KM7iEc1ozhhlIGHGdqpUP9HE9OifzeWDEJGUsJFHIErnGR1fflonB7ojL0Lvvvk6QchA4IK76hAkQ2OQzPIRL+zT6iTqyekunPHd8lP8faIlE3Ms9Sj/PEpVP8+8cBCAIWh+RY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WBlbkZno; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21116b187c4so28593155ad.3;
+        Mon, 04 Nov 2024 07:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730732889; x=1731337689; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=DBB6jNpH4DxwaaTTUakWm0IRWPaKflm6p9RFhXcCmW0=;
+        b=WBlbkZnoVKp6iDPdrhg5FfAdWXo08J6ktItzytK7C6qR4PIe+feXU62XM0H91PybX9
+         9LaUiR2LCONoXuT/t3YsIhDeMjy9pR67RcI7BxQ55HAr/Lp2iL7A+8K4MzDoSNhmmWmq
+         xS2D6yAFQBztBHYiXONTtBglPx1KzyBI+NsARWLLycie/QVzSXl/R8z/MLC0JyL0Z6Bh
+         fMga8Shs+brvxO1MY1t3hha7WRCrGXGCFmAsHmakQk8H87IIXec+9+jAimjTk8aGp9CA
+         8p1GnE6cM8ee4upg22vD/GxcBG/Lc5ykTRlJEYx3RVcfsCKAFDH3o19XEvRWQebTwVOo
+         Nz4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730732889; x=1731337689;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DBB6jNpH4DxwaaTTUakWm0IRWPaKflm6p9RFhXcCmW0=;
+        b=DHC49YY3uy5FnW9+ztZF2P6uILegB3wN7C+oWBEioI1L+4RpFP4e/x6tZ1XyV0/DYn
+         oPqQuz5eb73xzuSLhzZXxnXXP0YyawMJ6g8qKo4BL7zpVOHo2N5/gYWkz31jIEl2vSuK
+         g3Z2Rw4BpdRu3K/8OCugt75ckpbCkCMsoUMWDhgMMCrctWNqwzJ952vqrZSBQj0T2Pe8
+         HnpZs5tHbCgc7qzu0vTVuaIOz1ipC/dDdEw1pUJiYrju9LfYX+2AgVxt6kai3hEWJ8HX
+         aVOCBwvQqKa3b464UtNf/quyjgtLqLiLhx9d4SVBdQgCMaJnvcIuIOzWDQcxOoeEu/0a
+         wJKw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGBRYdaZrgCdKtA3O1YNFXY7xNpBfEcOq8bE+5Oa8+zwnwjWrLKuWl0Vcg63vNX5IBM39q/KedRrrt6JsG@vger.kernel.org, AJvYcCWFro5CnVt8NdzkAskj+Tns+quUjiyeFrMc6hnYfnJldEThsBT4T8i6/OY/a85XK0BMKEthYRSW5Qpw@vger.kernel.org, AJvYcCWGIUtjefeVBIT64gWOtbC1tH8hbJX3M7En1Itt2KUdZW/6YlfZbKq7ptl0VU7wcSBpFGw0980JoGS8@vger.kernel.org, AJvYcCWfmptIG6Jm7vrAjkCde6qEcdTnq7i8X2VNsjlIrgwQ1ldHAI7duYEPdh0ZxLfB1mybqExbAK2PcuZa@vger.kernel.org, AJvYcCXKJBaoBaHsCArsExncFBGw9jHEUlCgoMr/0v16QntopvOh1CPu9Y4YVd1UqbdlORk2AyLlYJlFV9w6AmE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2dBgeV16AgzLW4FrxmGnxCEQJNGlEJaTeKc/s8ZmjlbBzdw/s
+	AibNJ/tJKSlAanCF2YEILMsZynTZYN5RaMnTiLCEVPBmaSe/ZVjC
+X-Google-Smtp-Source: AGHT+IG+OuQXOInv0hxhYMn5CM696EiVv8dRR1LoB+4lm8OEQdDhYosPpUxZEDavQa4HFPHpOSZbEA==
+X-Received: by 2002:a17:903:22c8:b0:20c:b090:c87 with SMTP id d9443c01a7336-2111af6b706mr183688035ad.29.1730732888510;
+        Mon, 04 Nov 2024 07:08:08 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057087dasm62416555ad.85.2024.11.04.07.08.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 07:08:07 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8af73d65-cc16-4219-892d-d49f0d5581e7@roeck-us.net>
+Date: Mon, 4 Nov 2024 07:08:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,90 +78,129 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: spacemit: add support for K1 SoC
-To: Troy Mitchell <troymitchell988@gmail.com>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20241028053220.346283-1-TroyMitchell988@gmail.com>
- <20241028053220.346283-2-TroyMitchell988@gmail.com>
- <6zx3tqdc5bma2vutexwigzlir6nr6adp7arg4qwl5ieyd3avbu@5yyhv57ttwcl>
- <dbeea869-54cd-43fe-9021-783d641f1278@gmail.com>
- <ariqiukhztgziwwgaauqy6q3pghflnoeuwtag4izwkfmtvi2kh@gnlq4d7jsaw4>
- <6cce463e-25cc-4a07-971f-6260347cb581@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v3 3/6] hwmon: (pmbus/core) add wp module param
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Patrick Rudolph <patrick.rudolph@9elements.com>,
+ Naresh Solanki <naresh.solanki@9elements.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
+ <20241024-tps25990-v3-3-b6a6e9d4b506@baylibre.com>
+ <47164712-876e-4bb8-a4fa-4b3d91f2554b@roeck-us.net>
+ <1jjzdj5qyy.fsf@starbuckisacylon.baylibre.com>
+ <fa79de78-aed9-4cd3-bff9-310f2b4a32c9@roeck-us.net>
+ <1jfro783na.fsf@starbuckisacylon.baylibre.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <6cce463e-25cc-4a07-971f-6260347cb581@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <1jfro783na.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 04/11/2024 14:01, Troy Mitchell wrote:
+On 11/4/24 06:39, Jerome Brunet wrote:
+> On Mon 04 Nov 2024 at 06:18, Guenter Roeck <linux@roeck-us.net> wrote:
 > 
-> On 2024/10/31 16:00, Krzysztof Kozlowski wrote:
->> On Tue, Oct 29, 2024 at 04:36:00PM +0800, Troy Mitchell wrote:
->>> On 2024/10/28 15:38, Krzysztof Kozlowski wrote:
->>>> On Mon, Oct 28, 2024 at 01:32:19PM +0800, Troy Mitchell wrote:
->>>>> The I2C of K1 supports fast-speed-mode and high-speed-mode,
->>>>> and supports FIFO transmission.
->>>>>
->>>>> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
->>>>> ---
-> Change in v2:
->  - Change the maxItems of reg from 1 to 2 in properties
+>> On 11/4/24 00:43, Jerome Brunet wrote:
+>>
+>>>>> +/*
+>>>>> + * PMBus write protect forced mode:
+>>>>> + * PMBus may come up with a variety of write protection configuration.
+>>>>> + * 'pmbus_wp' may be used if a particular write protection is necessary.
+>>>>> + * The ability to actually alter the protection may also depend on the chip
+>>>>> + * so the actual runtime write protection configuration may differ from
+>>>>> + * the requested one. pmbus_core currently support the following value:
+>>>>> + * - 0: write protection removed
+>>>>> + * - 1: write protection fully enabled, including OPERATION and VOUT_COMMAND
+>>>>> + *      registers. Chips essentially become read-only with this.
+>>>>
+>>>> Would it be desirable to also suppport the ability to set the output voltage
+>>>> but not limits (PB_WP_VOUT) ?
+>>> I was starting simple, it is doable sure.
+>>> It is not something I will be able to test on actual since does not
+>>> support that.
+>>> Do you want me to add "2: write protection enable execpt for
+>>> VOUT_COMMAND." ?
+>>>
+>>
+>> Please add it. I have a number of PMBus test boards and will be able to test it.
+>>
+>> Thee are three options, though. Per specification:
+> 
+> Any preference for the value mapped to each mode ? Using the one from
+> the spec does not seem practical (32768, 16384, 8192).
+> 
+> The bit number, maybe (7, 6, 5) ?
+> 
+> or just by order strongest locking ?
+> 
+>>
+>> 1000 0000 Disable all writes except to the WRITE_PROTECT command
+> 
+> 3
+> 
+>> 0100 0000 Disable all writes except to the WRITE_PROTECT, OPERATION and
+>>            PAGE commands
+> 
+> 2
+> 
+>> 0010 0000 Disable all writes except to the WRITE_PROTECT, OPERATION,
+>>            PAGE, ON_OFF_CONFIG and VOUT_COMMAND commands
+> 
+> 1 ?
+> 
 
-Why?
+Bit number does not make sense since those are just commands which happen
+to use individual bits. Also, module parameters should as much as possible
+be abstract and not reflect HW 1:1. Strongest locking as you suggested as
+second option makes more sense, since 0 means "no locking".
 
->  - Change 'i2c' to 'I2C' in the commit message.
->  - Drop fifo-disable property
->  - Drop alias in dts example
->  - Move `unevaluatedProperties` after `required:` block
-
-Rest look ok.
-
-Best regards,
-Krzysztof
+Thanks,
+Guenter
 
 
