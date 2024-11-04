@@ -1,63 +1,65 @@
-Return-Path: <linux-i2c+bounces-7750-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7751-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F0E39BB2B0
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 12:14:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40F939BB2D7
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 12:18:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E130B27CDF
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 11:14:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF9531F2119F
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 11:18:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E1811B6D0A;
-	Mon,  4 Nov 2024 10:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A611C0DED;
+	Mon,  4 Nov 2024 11:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Z5ODLVVm"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="eWxKHeCk"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388051B3725
-	for <linux-i2c@vger.kernel.org>; Mon,  4 Nov 2024 10:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7BE1C173F
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Nov 2024 11:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730717909; cv=none; b=Wq7tMU/RPAI+Qx9cnnaP8YtNzJF1kucJDEzK+QjOqifdaHaRSSRVNRXHWp9LxW510zQllw9OQdLyOgtPrONJvBk0dQNPU8Ez2Hoa3cjN0r4MxQ/L1zKtWS84lnY/qvtKh1Y8wQt7ZT2JYYuopylRQM/CW17jAVmCeQ34QT7HnqA=
+	t=1730718325; cv=none; b=d3oWY0+uKJVneibm3npCkiUm4kXuqIdlLBD+NZ+fTDxxR7OeFqKMpoGUERBv80P3RCWf3CBNmyLpxgOdpZlsNc08ACW/xmbf7CM59o5KVorpT1SKaWNoZ546pJGKJKsuJ+0aamkHF2o7hANlVk3ZWW22+Hv1VdnmYM90BoNGVfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730717909; c=relaxed/simple;
-	bh=MOCNCFVhwZnctVoR6vaLnygQlRkM3aZGnqKH9Vfc9tc=;
+	s=arc-20240116; t=1730718325; c=relaxed/simple;
+	bh=HLZTxuDKcTSWRhLOVogHEiv0xG+ZhmnkPGgVJfuIEcY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d7ZffGEAcXRonpYJQuGPCeLPFDC9nJeOXGNoIguUxTe18CkIMY4zIeULpCh0ssEZhR2jAK12nzxjdWfinrXJqhr+VN5vxwq4dYr0kudO6AK9Iyw8rXLJQn9+zgHn8dtlvKe8G3Ztw3LAOR4E/6YpgFyF2Gxm3EkYDWa3FqVXFd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Z5ODLVVm; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=EPk9fcAqG6pRfZsN3fpOJCM1zWAcMkVYWwrtlcx577VAVfVYqQh2+yGW5eOtM5kUqJaWPFp2MTkjK8G0NSYhvEGNfR8g/mdk6+MYtxGlBbnKWtNnxVgH11O8/f4BvrnJonNE6xJ4C1oVrHZJ6zXroq6ZEkAJdv/5Wr+1DVCw1EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=eWxKHeCk; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=RC9G
-	LskULpt+FKQVVMona9L1F+pGXF4JEza0YPJDJas=; b=Z5ODLVVme2ssjzuChvhq
-	v83/WyuwnOS5fGZfwt9m+4AHLiCq5x9mcUrQYNoaCFwctgwOWa2+zChNUxLyZ82C
-	uZs7+7eXcstG/uIy3Rz1G8HKzMmEaGTtLfmCjn5puplm2Q7J+sIZyb754i2bMPNY
-	D7EpSTIsDTCHqUMlB11hPNyAjZjqZ0WKb+6Gj8FFAa7yM1Av4nYS7j+xFJ7V8Vn2
-	+il/EkfZrZbMe3MmdKvw86UJs1p7PXLuCMFtkNtEA9TaVb7Xj+M25R4/HL9JfQqU
-	u2/zqf1LeOKi6t3FhY+ta6YcY8Nsxs3WTvUxxaRI1IvL2uFn9hYxPDAMP/OYu2ye
-	CA==
-Received: (qmail 355553 invoked from network); 4 Nov 2024 11:58:24 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Nov 2024 11:58:24 +0100
-X-UD-Smtp-Session: l3s3148p1@yGLlKRQmKzfVHA60
-Date: Mon, 4 Nov 2024 12:58:24 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=HLZT
+	xuDKcTSWRhLOVogHEiv0xG+ZhmnkPGgVJfuIEcY=; b=eWxKHeCkY77RR0Rqyu/g
+	YVfvBhckfgXoSLroHnNhsFuL3RAChbMy+i5fTMxjOr/7EHDSf4r+IsaxefXyf4Hn
+	ZCAbStdgemuwng4/jtCMZfPHBAQkjhHd38TpN4ij+JHD0WyTPa0sEgcemBku3XQ3
+	bcG8pbU6v3Jw6dCGHbeK/F51GfwMQ4CFoUOtthNxObNoFjNCpRJye1NJ4oadsD1m
+	CgUMFUJR2qeYshQKDHUUi7yurNQuYRtOopkGIN/4vteEga1c2zigD7EceyN6eZ+Q
+	lVGFX+6Nch4qLOqWP94VNpIZg9hP9wcQjchh7YAZU4oD4MQAb8ZD/FBMQDOawC6l
+	YQ==
+Received: (qmail 357771 invoked from network); 4 Nov 2024 12:05:21 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Nov 2024 12:05:21 +0100
+X-UD-Smtp-Session: l3s3148p1@nXu2QhQm3bbVHA60
+Date: Mon, 4 Nov 2024 13:05:20 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>,
-	Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [GIT PULL] i2c-host-fixes for v6.12-rc6
-Message-ID: <Zyio0JvARbWwoFoK@shikoro>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Chen-Yu Tsai <wenst@chromium.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] i2c: Use *-y instead of *-objs in Makefile
+Message-ID: <ZyiqcHFJFFnBYmTN@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>,
-	Yang Yingliang <yangyingliang@huawei.com>
-References: <nqnhd2eb26lxm4ho5czgkjgnvorugixpzyvbw7pmle24wdn56f@a63bfcrj52k6>
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Chen-Yu Tsai <wenst@chromium.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+References: <20241018150337.2182181-1-andriy.shevchenko@linux.intel.com>
+ <ZyTIf8l1ghcyzJUH@smile.fi.intel.com>
+ <ZyTNA34Y1BRxMhhn@shikoro>
+ <ZyTSZTcNU63F2GjY@smile.fi.intel.com>
+ <ZyTTs8gFx5r_N5Pi@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,48 +67,42 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PIHyO4L6O4yJnv4o"
+	protocol="application/pgp-signature"; boundary="GK1lTicwtQxLICc7"
 Content-Disposition: inline
-In-Reply-To: <nqnhd2eb26lxm4ho5czgkjgnvorugixpzyvbw7pmle24wdn56f@a63bfcrj52k6>
+In-Reply-To: <ZyTTs8gFx5r_N5Pi@smile.fi.intel.com>
 
 
---PIHyO4L6O4yJnv4o
+--GK1lTicwtQxLICc7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Andi,
 
-> I wish you a great weekend,
+> > Shouldn't be separated commit anyway?
 
-Thanks! I definately had one, was abroad.
+Can be argued.
 
-I have a comment about this PR and asked the question replying to the
-patch itself.
-
-Thanks,
-
-   Wolfram
+This patch applied to for-next, thanks!
 
 
---PIHyO4L6O4yJnv4o
+--GK1lTicwtQxLICc7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcoqNAACgkQFA3kzBSg
-Kbbk1BAAhUmcLmXzkKPWoVAw9AdDuHbsEKRoopfo9vD4GChbucvVMRwdXYJpUoEd
-QeYYssZXIdYlKRZjKAcfilcWB6TjUOXqy+veTIDeUbI5NrieEBUXd+1ghi5REJPz
-foF57/cLW9qzWkGBYsyx5qc/E86f+mwLWmFPnRPFzM1JMy+IYze+h0TxSxf/xX/7
-mT+FZph4BeIDIzttetxXJ4jzIPMZ7uMVsGfYqGcrso+IBdq5FAR0zNpSDDm0l+8q
-kJ8+5W67D5aBUQkMMWXDkaoPIUBaj8/8S2M3kTi0RekEfl1YG+klWZuii8xdTtTA
-KXbs2pKumREcB/1bdyn+G+BLCQIADxIJ/vwW57temLUU6UewekLlQSsN5LxY42UG
-ueETCm5fXpgj45/qUfEY6rXM0DhLfXNbYT6A4CTak3T2c9BambQ86BTR9TBwoZwB
-WH3MKaLX9UwFR+LWDXyetnXLM+gRHx/ZjL9dUWYlzsj5hUpD/pDLxaOJaLiwH/Fp
-Vs7cqRuJ57+/xaJ6n2NeHsincl8X9V8lasf1bRAS3qMrsW+EqtupI385O4ScIbqc
-toW35SCDipIfNnYc9AEipCZmpSpD/vFBdntvDpR447hygWXkQ1caEF8Wrm4sQcDw
-5rh5gAO3ybTd2HpeuZvlh0B/XddtnEahFULN9ZNdf77XDCXw1o0=
-=Y7F0
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcoqnAACgkQFA3kzBSg
+KbafSA/+LaGlv4SQ8VxzztX7srLwTaz5pikyI96vBH/j3GVKBLkCJo0+t/Os2noK
+OMRDHmP4DyL0TirE4RyNCniFRN4VZsd3lap7JKy5Q6U3Eu0sDA9Ft1xsbmlPjZ0C
+lnVyANnie6nNTlUkdLhJUaqGSyKUtiLLtLHgupuR9/twWJ7FYDEU7CVxF7tRVhGL
+8Vuz25dgfiHyYszJeLkah7BKmD+RmGk4Q4nkdBiMi2jMdsJ6KZxBi+ajLnHpfp58
+8ZaVjQ2cnZyqSe/it9uwJIU+wZyFAZ5l4XhYB9egvdXXB6cslqr2JV2Cavxd4m7u
+Rk5ljBxAd5QayCs18E1jajZOdua7ibPisqcezQtYTxsy5Nretbbrrgv1hTtts7xQ
+qGM9x8apurVXrPJax6pPRxfOaDJlWV0nBTeNRSwOu8T/yHhux+l9x5yUyEpCGTPj
+QKg/53BqcLk/DGWKxUyVx+jO05HpwLwmlJxAi6WgpMAPi9w9PYIwChAoN6NQPBBH
+h4Fv5YrDRTz6jbDFnpCDKVK7kTORVnKiJKH8mw1CrrGEFjww75iD6+9HfMdw/yTX
+dzK0i/tPVq/S3GGlqHliSPeCPFsTkUPvGGGpBKeQ3Kx47B2cBWdqjOUl3xuam8h8
+kJEGfvTt9Sd5KmuWmHUWsIkKJSAufPaLEJ/xHfbUVbKUwtor4yU=
+=320b
 -----END PGP SIGNATURE-----
 
---PIHyO4L6O4yJnv4o--
+--GK1lTicwtQxLICc7--
 
