@@ -1,108 +1,138 @@
-Return-Path: <linux-i2c+bounces-7752-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7753-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EBA89BB33D
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 12:28:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F699BB499
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 13:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF37A1F22CF7
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 11:28:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03D94B2218C
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 12:23:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A8A1C304B;
-	Mon,  4 Nov 2024 11:20:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A111B3928;
+	Mon,  4 Nov 2024 12:23:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n7VSrnfM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a+M3vrgj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBB51AC458;
-	Mon,  4 Nov 2024 11:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778D01B0F2B;
+	Mon,  4 Nov 2024 12:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730719238; cv=none; b=Rkdo7zIYIZcRImbfCZiKR8bBfJg345Acf9px6La5FNFRBMGaxtjrsdi/QkxAvuODC9qD/IWRtEh3K2pYebgWa7BtmzRjeP71vl0PzCrHcSWqnY91pb/WCmrCvw47K6+DHW9vNFQ7iKHkuhO99QzVCqRwPOOT5JPAxBGqZpEuOcw=
+	t=1730723013; cv=none; b=Ao8RuZw3LtPNFwQ8AHez5Xi+rSSE6HAI0UjYXQz98kUTDZDz9BYTEY4H/gyzo9UIEhVFtmnnGYpPGN0Z2qrCj9alKct3idGsb5M6Yo/DsBVvK4KXh6kkYFgSzDpTdAnKjNeRVoWXqwPCcqUtQB6iCkKKneTQvQ2GwvaF91uqGJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730719238; c=relaxed/simple;
-	bh=VKU/tb7DYOTetaqBJlKR839RYdQxIBWMEDaJYFJAMVc=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YqJ3Nso7ggjoeobeeanTPsjta8qPLBWJsHHAsVwBhTp4ePqx2uPIUybsCNIWoJHdQ52fbBCTZy1hP0a1cwy9kIHC+f0rAT4yZoDuF8/NZOffFCLIwp4DAyRTWn2+Pfct0+RSU0Bk9Qcap/9FZqeJven2XZsUZgFD/ITqlMbV7MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n7VSrnfM; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730719237; x=1762255237;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=VKU/tb7DYOTetaqBJlKR839RYdQxIBWMEDaJYFJAMVc=;
-  b=n7VSrnfMxQX9pHYF6qQyeDYQ4itdh4wnbgoWMAQxfJP8yDHG+OniVpwD
-   fEIwBHOggo79UZHdgR3D64u0zlb9x5mARliZwnnSEg6rf57tkdw4qDdy1
-   VyKEq8hkn1D9k7TxW/GNy8WILmdGXv542fv0ooKz/nu+l6xYBJRd1ZgAj
-   UnfmjYtJOoxN28h2e7+n9Q56Pmd04WcVx7KYbfOyDz5+uMA76Fwv5VcDa
-   8EwaYlVZvWIcmy8/V4rjV+zpi3aE9duy81NqN7ltRCwNw1q6lQVPBsfWw
-   aZL/KAFgWj5Zp9mZGKbgyHxiRtGv40HUCsxQLoim2yRwuF4b0CTGlnD+b
-   w==;
-X-CSE-ConnectionGUID: nneO+gDnQ7aK3vpLog1/YA==
-X-CSE-MsgGUID: ZwqAeuDFR1eezxR6132v4g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30264694"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30264694"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 03:20:36 -0800
-X-CSE-ConnectionGUID: vaZRDFczT9+pICghNuC+Vg==
-X-CSE-MsgGUID: bZE0rVAxTU6ytFwy3A6aZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="88199494"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 03:20:35 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t7v8K-0000000B26W-1Zfg;
-	Mon, 04 Nov 2024 13:20:32 +0200
-Date: Mon, 4 Nov 2024 13:20:32 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Chen-Yu Tsai <wenst@chromium.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] i2c: Use *-y instead of *-objs in Makefile
-Message-ID: <ZyiuAIgubo4oZ5dw@smile.fi.intel.com>
-References: <20241018150337.2182181-1-andriy.shevchenko@linux.intel.com>
- <ZyTIf8l1ghcyzJUH@smile.fi.intel.com>
- <ZyTNA34Y1BRxMhhn@shikoro>
- <ZyTSZTcNU63F2GjY@smile.fi.intel.com>
- <ZyTTs8gFx5r_N5Pi@smile.fi.intel.com>
- <ZyiqcHFJFFnBYmTN@shikoro>
+	s=arc-20240116; t=1730723013; c=relaxed/simple;
+	bh=ZFwj51A2gbZA7vJSStsy0TIypVjePjyNWxkZO2XfIEc=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=HKKM9EUxhkZaZD5ulikYBUaDW7wqdfV2C4GOt/prDF2+VC9BMnM0823YehLjSNlBr0tiibPXtoeLY2IClsLH0UohUxYLbLDTNui4mNstpOrKlTXqpmHph1Bd7WGfApAUXnoWT5Onw783kXeT52EpX2//LzfwXSaQqNWEPV2M2vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a+M3vrgj; arc=none smtp.client-ip=209.85.214.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-20ce5e3b116so31260885ad.1;
+        Mon, 04 Nov 2024 04:23:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730723011; x=1731327811; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fiCZNrw+g0MfYd+wHoshXkkg40DDzaFGOl5IzkgDf8E=;
+        b=a+M3vrgj3twLLQ4O/48ElZVQa8MFsoFKNwgdmouzjw/IZnDpJ4l8slZMTjbccF0RDM
+         fTh4sPUEG70nGnYUUoIUdVc3xz28wKTcxWG/evbf3L50HH5O/pI//QUfYVtYVj3Lorye
+         ZVuLBHnDTH7tGL0Q3YWAABB1IyJHU3EfAYKqZNxg/kpZvYcofKUtFktuCiM7pKH0xh7f
+         d09ExQWeFA7QabUimfSa0qr8crza48cRIevq0mGL1jAs+dTDstHMOqx8iljLLpv7aoFR
+         2FIaChyZZcHpodfptS4+P3ySKAXhcKzgmcTFIIhM5rwx/SY32eFwmL8khfpeT8UC3tDr
+         yOMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730723011; x=1731327811;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fiCZNrw+g0MfYd+wHoshXkkg40DDzaFGOl5IzkgDf8E=;
+        b=M3zP9FbE86Grha/JH+6AWxwRMuMgvvXfy2dBQAA72GnwWhYv963gZgt2EykxUlhe0R
+         KZ3gz/Az53qnVpS1e87jnriyEXi/hQklh0YpvIs2AbIAoeeHUMnPXddpTZqq/GHvJnO+
+         D1/r88PSEboka+EmUyzkjCre+wrXWRFEYQJbf6pkRCp7HSOlOAiaD05kYCiwR+ZXkoIN
+         FLpdt3ie+yWPjke3OMx9C/qI6j618/4ZZPWY32A5EThul+1flCfmaySXWaQ09OwIHsOl
+         3TcrebIfP0dG6o97gUJlFcdAFeS0oKNMUIO0NBWDZrJR7HtFwmYew8rGalIoCCjK1Z6f
+         os1g==
+X-Forwarded-Encrypted: i=1; AJvYcCVyLRfogmS87XCWKNDkVtzifRK2mrvCKY486hBvzP2JcrQ6dxAsWp4PW8IUhoqvUvi6cYioAWhthETR@vger.kernel.org, AJvYcCWDLVteqvozi9ZFBG6PJiAhvP9gDKWVa1pv1sBTOmVHpXGluomkejjN3QSeFssNaRmFunMUR0dyBgHDYkpQ@vger.kernel.org, AJvYcCXQPnbq5R/H1hkggU6f3U4QiNmMXZo1c81phIfSF3jgE6aEb25QJzBeqv4FTuf8M19hd9uwOFenRMNu@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4M0M0WCEQGifFJIeZni3pn3tAiMgwXGvLRTwe3J9zEH3Mg7wb
+	hJHlkrEet/Y88EqMkaNgNjHWwkdlgWiH3UgAcUelY45RLBs8xV+o
+X-Google-Smtp-Source: AGHT+IHLvWMCkXJUq+FJuMDRusJubVpqKeDmaeSEQmUKm01US5Q5+wIpwJg+l9Cfx8xC6auYaOIr6A==
+X-Received: by 2002:a17:903:2343:b0:210:e75e:4649 with SMTP id d9443c01a7336-2111af3fbfbmr177573405ad.17.1730723010690;
+        Mon, 04 Nov 2024 04:23:30 -0800 (PST)
+Received: from [127.0.0.1] ([2602:f919:106::1b8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057d3c3esm59811605ad.245.2024.11.04.04.23.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 04:23:30 -0800 (PST)
+Message-ID: <edfaccd7-ac96-47fc-a174-912c8aaf0f5e@gmail.com>
+Date: Mon, 4 Nov 2024 20:23:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZyiqcHFJFFnBYmTN@shikoro>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Cc: troymitchell988@gmail.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 0/2] riscv: spacemit: add i2c support to K1 SoC
+To: Andi Shyti <andi.shyti@kernel.org>
+References: <20241028053220.346283-1-TroyMitchell988@gmail.com>
+ <stpzkggfwseaqy6kbppiog4xfbpq4r2jwix2nvredbmmjqzbsi@wkllt4jlingv>
+Content-Language: en-US
+From: Troy Mitchell <troymitchell988@gmail.com>
+In-Reply-To: <stpzkggfwseaqy6kbppiog4xfbpq4r2jwix2nvredbmmjqzbsi@wkllt4jlingv>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 04, 2024 at 01:05:20PM +0200, Wolfram Sang wrote:
+On 2024/10/31 19:43, Andi Shyti wrote:
+> Hi Tony,
 > 
-> > > Shouldn't be separated commit anyway?
+> On Mon, Oct 28, 2024 at 01:32:18PM +0800, Troy Mitchell wrote:
+>> Hi all,
+>>
+>> This patch implements I2C driver for the SpacemiT K1 SoC,
+>> providing basic support for I2C read/write communication which
+>> compatible with standard I2C bus specifications.
+>>
+>> In this version, the driver defaults to use fast-speed-mode and
+>> interrupts for transmission, and does not support DMA, high-speed mode, or FIFO.
+>>
+>> The docs of I2C can be found here, in chapter 16.1 I2C [1]
+>>
+>> Link: https://developer.spacemit.com/documentation?token=Rn9Kw3iFHirAMgkIpTAcV2Arnkf#part5 [1]
+>>
+>> Troy Mitchell (2):
+>>   dt-bindings: i2c: spacemit: add support for K1 SoC
+>>   i2c: spacemit: add support for SpacemiT K1 SoC
 > 
-> Can be argued.
+> As Krzysztof has asked, please do provide the changelog, it's
+> important to track the progress of your series.
+I saw a compilation warning sent to me by the robot, and I've
+fixed the warning. Should I resend V2 with the changelog
+what I miss or send V3?
 
-I have an evidence for my side: LKP complained as my (thanks to be a separate)
-patch unveiled the issue in the Kconfig there. Meaning that required a new version
-of the change, while the core part is not affected anyhow.
-
-> This patch applied to for-next, thanks!
-
-Thank you!
+Thank for your response.
+> 
+> Thanks,
+> Andi
+> 
+>>  .../bindings/i2c/spacemit,k1-i2c.yaml         |  51 ++
+>>  drivers/i2c/busses/Kconfig                    |  18 +
+>>  drivers/i2c/busses/Makefile                   |   1 +
+>>  drivers/i2c/busses/i2c-k1.c                   | 658 ++++++++++++++++++
+>>  4 files changed, 728 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
+>>  create mode 100644 drivers/i2c/busses/i2c-k1.c
+>>
+>> -- 
+>> 2.34.1
+>>
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Troy Mitchell
 
