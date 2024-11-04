@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-7758-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7759-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B70759BB6F2
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 15:00:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDC579BB76F
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 15:19:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 766D72848D7
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 14:00:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E18DC1C23F4E
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 14:19:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4944F1442F6;
-	Mon,  4 Nov 2024 13:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE91D1B6D12;
+	Mon,  4 Nov 2024 14:18:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fm+a2Eyk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KwEHLner"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6881D1419A9;
-	Mon,  4 Nov 2024 13:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDDC18BB84;
+	Mon,  4 Nov 2024 14:18:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730728642; cv=none; b=gUSve94cocxRIY/7ZfBQ+qkPEQbhy0t0qiS3LK1pOzG813l0D9nqB0s97nht/Kw4BtkyOWIKYV9Eiqe7sWABkZrp6Urm16rCeyZ3C0yWXkXaJo15YpEMDHWOxZofYkUrdl0Zt0/PofNMcCNaxNA4sB+nU7uhlWVEV1mXLBsAVLQ=
+	t=1730729912; cv=none; b=cBYi0FvaafFFaWrxzFMffGseA0HuGGR/zLP0ZgR+4VhZqhwiFNA+9Z2TMd9AKxIU4g5Dxlh5V9HWAguSLWcTuwP58D4wy4MQK0IEr0rIrcmIquIlNIdHxMsaK+5Frk6tpJayS27Q2QEiCxAGA3YAZzIbbWGTEaeBj61bVxoAUnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730728642; c=relaxed/simple;
-	bh=m0f4VFrEcVOrYj5aWLUs3Rw2YFaDtOAggS3nvH063g0=;
+	s=arc-20240116; t=1730729912; c=relaxed/simple;
+	bh=/Chv4Lh3NM8TilLfeoC96pG13MDmYyVvZbe/UZppYDE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kGFSAo6UVWVuC+wasxYtjVJbpbmhovrZC0w2C53SEupfuHZflGBHieir7c2X5i9QAUdespy46CKRnCZqBc7bXFof4AXi/4fme2nQ0e+ktHOiTC3SfaHGKGk9LMtJwDtl0skjEPtar7swmxtfeDwuhA5bKjeWwxaImslGt5dhV2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fm+a2Eyk; arc=none smtp.client-ip=209.85.210.176
+	 In-Reply-To:Content-Type; b=CZMrEw2NDA/JTSZbpzPSjWSxAJTvQzBYQCo8XtwEsPHeHGPcFs15m6FY0Dk/L0ljD0KQbM8zXozF8eSgSirXKDCexFRv0dke7Ayg/eFxFAPHFEtP3ljTGk8aU6OYi09Vu62kaqMo+BKVz5nSTNBgRVowjKMKynN3ljAeh83XcQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KwEHLner; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-720d5ada03cso2939318b3a.1;
-        Mon, 04 Nov 2024 05:57:20 -0800 (PST)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-720d14c8dbfso2989620b3a.0;
+        Mon, 04 Nov 2024 06:18:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730728639; x=1731333439; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730729910; x=1731334710; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ieXOrRxIqJ7bVUdXB2d/xLhSWWicBwFVZ7YQZ8GPTs=;
-        b=Fm+a2EykiCqJhFGHI9tMXM3Ay0kk2ebSIN2t0dH9EDlKokokjd5LV3w8A8K4a/IB5z
-         ksR+B3aQboKd/VXJlhkfJXCMxNVMvRuq02QAXdxdE2+usAabPiffyk7MCviVndth2mSo
-         d1qwvveCJWcn4oinu9bFmZjTFPcl8C5AnpVdZNx6n96Hs7KSRWTr7jKoO8eqbacR+UuM
-         D2xxp0vftKXa9ypizYZ5hUAmc9obCNL0yEt44bSj+neB2WnRxE54a36RTT5NJOQmtUE0
-         9187CAyEmngOCb1DO9BnI9npnemx+Ez9bwbFkHe4mbeM/hI3n9b6nJaF+3p9a6i7iu0X
-         zztA==
+        bh=EomflUWH20cDIjIkMNoiRS0Ceod1M+LUF8r7f2ao0zk=;
+        b=KwEHLnerpQNKW2oOrfV5nLrsJDW5Aqh1Pmd0zzR1v9neK6Ga/Kofb2XhJwI00y8lyC
+         4zUxnur29T1BDR02vtBkk2E534C4gnz8Jpmqs40gzRFImstEx5H5t/Rb4J8W73LXPmFd
+         xCIlX0NEKk73UT3A+yaaNJtbvv35uy1uEbrGhz0YL7gSLCS/xYhs28w+yPDrYGYn33Bj
+         qcSa9OOrhzc0Yp3CQcPuQFL/Nwi9L7tcyXKxzI0WNgAD7qWpfsNM0pbLfrh/yOklwxQT
+         J0xlPLyBKCs2wNrCMc5BkrVRBU1QiVU74Aj75vG9n9wD5/Bbkc0w++5jHDiu8VgkFJ5G
+         HSOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730728639; x=1731333439;
+        d=1e100.net; s=20230601; t=1730729910; x=1731334710;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5ieXOrRxIqJ7bVUdXB2d/xLhSWWicBwFVZ7YQZ8GPTs=;
-        b=SiORIXLgnBMxIAjQy3P+poOXdpToNzBV2x7kXk1a2o3dlmqRFNPDIrxfibm63aUMcs
-         0pqEqMyxhXRH75Ngsr+g6lRNKYJfVI6UCDNWQsciMhGtP+M/nWwPUjFRqK77JnRG6n5A
-         skgxLaEk+n7pAtmFOZPNOVQVX1W10Uvv8XVQ+vnLrp37Gn8a08+VYiKEj5+VHeaCoLPp
-         yQCWmlgPA/+TrVWXr5FubEhc5nOvwF2xIJfFI3yj1IMBgfVpKeeVRvSadfzTZCp2tcxV
-         EwEtjrr4UK2+vKpiS1zEhzvda4rUg3mLQwa7v196CKmcaGZ/xrtJnx42sFDQnOAYDmEm
-         BAqA==
-X-Forwarded-Encrypted: i=1; AJvYcCU66B+ye6w8MbrbdktKmRh/vnTgJOgyQx/1C83F3vXyiOKA/mdpGtWB7og1B1vfu9S0OPFExf0RF4O3dl4=@vger.kernel.org, AJvYcCUWH8Ror2upF22VtH5Htie47n7qHWkyBh3neN5xwA9DRMiIFMEJMlh0zfmYQ9oO0u4njscotFdAJiEb@vger.kernel.org, AJvYcCUj3CQuBIjwSOX7Ct/17Lu+9JXmqKrQmbuF7qULYbiPHcPY59dztdiU1SclTqKVWtjn/YmegGQeBYGB@vger.kernel.org, AJvYcCV+LQpo8RQ1zNYXfFYQQbbh0E+YoWuwB21yPZhHWbZ/0lic/5I8xJ9oQDG6LAb8robB45J2zwqCIHTY2pv/@vger.kernel.org, AJvYcCWhbM4wzm9Fdz2i+pOORXPSM1EmFFTnuabsssD2d5/AHFPVkWVCe3MsANL97j+TwKJ71qVl0oPik9ks@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4psXp8SOvFP7UJxT67dBtGItZLQ+eUKniXo7DMm+piVIISwkY
-	osH3cfLFes0azNiCyTdBMk3mEakQHypH06/EV5K4PP9hb4br/Mx8
-X-Google-Smtp-Source: AGHT+IH81HbQrA3v1sF7j+/e52PtrsaBlbyWaew+ccwFsuoCafGrJH08GSAi3ETeqkfwdrkDfCcB1A==
-X-Received: by 2002:a05:6a20:d501:b0:1d9:21fb:d31f with SMTP id adf61e73a8af0-1db91e8047bmr23198450637.45.1730728639476;
-        Mon, 04 Nov 2024 05:57:19 -0800 (PST)
+        bh=EomflUWH20cDIjIkMNoiRS0Ceod1M+LUF8r7f2ao0zk=;
+        b=NaFtZQzwt1KdB026fU6V8E3XrI/zC/z5TxekhMHsM9ZwzNIWedaw6stAjdeeAebhzN
+         wuMYoJoDl7jy2w1nwVVm3eQXkGGB29GTX8XKRDfzAQrhTOG+eBBudqPgZX81Ryc26bPg
+         U3x/JW5OKuPuaTlsrINhCmJEUbAJbv+8Y9+H0im2a0l6lTLf1MV2FEzJB5mA7WjFZ8mj
+         vq1TynLhHRrt9edL8WH0JhPLAfn+9wdmZTLOPfBBTt5iLvVx7L9dQrq9UFio0i735G5y
+         ABF1gUKyROlBBT0qrWnyNbeXJFSf2bo1NrqvHsKOOhIA2ARRZfHr2r74XsFk11+TrMPk
+         aSZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUWwGK0GAyhBdBVEWD6aJZ5QrAkDGZ3kypEjFG+/UvMLOeRTEYrI1225KWwTnMkgjjnfAh/+DF6dIRQ@vger.kernel.org, AJvYcCVNKaEUgFzc1NBm60v58ZPPb05qUscHCOGgCsTOR1ZI6yobWz90zi4fpxsuKv5GRQR2X8SN2oFn3hlr@vger.kernel.org, AJvYcCW2YFbnui5aBCb9AIqY9fpLabb1QJxF/D3kAzLDYeivOpqbOqR/owbOCAGVz3s50rdJQt+AyrT5+SuY@vger.kernel.org, AJvYcCWL3wGBRElxN1z9pioKip+vI208Pwx7qR7ZMOAVVG4bKi1JaoaqUOAYEqTsrDh6+zScsdvysIsN/qJPJ4kh@vger.kernel.org, AJvYcCXABk/aW+QA0de9+IruNfZGglwDmb4G9L2vN0pCUot4IM3kfRx8cB7qTQJGb5/mfc/B1jwdCT+G1UxpT2Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGrzOysIaZWWb253zZXC4Twj65V9d/sIwlCrv3KG7+Yxy5gtOR
+	taD2EIfMQ89BfO86DjR1iMULeIh0bxaz9+OPcH1HhFXQ2TnkOVz+
+X-Google-Smtp-Source: AGHT+IHmq91h/VGwfTg2kZ1Kcbf1CrWhmg5nKQ49/4Fo5+DxsEeXL/Du1kVgg7Gc5MY+4+QwCXzX7A==
+X-Received: by 2002:a05:6a20:244c:b0:1db:e536:974b with SMTP id adf61e73a8af0-1dbe5369943mr2357337637.34.1730729909851;
+        Mon, 04 Nov 2024 06:18:29 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1b897csm7726281b3a.14.2024.11.04.05.57.17
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1ea68asm7420203b3a.47.2024.11.04.06.18.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2024 05:57:18 -0800 (PST)
+        Mon, 04 Nov 2024 06:18:28 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0d9f1a5a-aa1d-4e99-8df7-3deb08433dc1@roeck-us.net>
-Date: Mon, 4 Nov 2024 05:57:17 -0800
+Message-ID: <fa79de78-aed9-4cd3-bff9-310f2b4a32c9@roeck-us.net>
+Date: Mon, 4 Nov 2024 06:18:27 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -142,56 +142,44 @@ Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 11/4/24 00:43, Jerome Brunet wrote:
-> On Fri 01 Nov 2024 at 08:08, Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> On Thu, Oct 24, 2024 at 08:10:37PM +0200, Jerome Brunet wrote:
->>> Add a module parameter to force the write protection mode of pmbus chips.
->>>
->>> 2 protections modes are provided to start with:
->>> * 0: Remove the write protection if possible
->>> * 1: Enable full write protection if possible
->>>
->>> Of course, if the parameter is not provided, the default write protection
->>> status of the pmbus chips is left untouched.
->>>
->>> Suggested-by: Guenter Roeck <linux@roeck-us.net>
->>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
->>> ---
->>>   Documentation/admin-guide/kernel-parameters.txt |  4 ++
->>>   drivers/hwmon/pmbus/pmbus_core.c                | 74 ++++++++++++++++++-------
->>>   2 files changed, 59 insertions(+), 19 deletions(-)
->>>
->>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
->>> index 1518343bbe2237f1d577df5656339d6224b769be..aa79242fe0a9238f618182289f18563ed63cba1c 100644
->>> --- a/Documentation/admin-guide/kernel-parameters.txt
->>> +++ b/Documentation/admin-guide/kernel-parameters.txt
->>> @@ -4733,6 +4733,10 @@
->>>   			Format: { parport<nr> | timid | 0 }
->>>   			See also Documentation/admin-guide/parport.rst.
->>>   
->>> +	pmbus.wp=	[HW] PMBus Chips write protection forced mode
->>> +			Format: { 0 | 1 }
->>> +			See drivers/hwmon/pmbus/pmbus_core.c
->>> +
+
+>>> +/*
+>>> + * PMBus write protect forced mode:
+>>> + * PMBus may come up with a variety of write protection configuration.
+>>> + * 'pmbus_wp' may be used if a particular write protection is necessary.
+>>> + * The ability to actually alter the protection may also depend on the chip
+>>> + * so the actual runtime write protection configuration may differ from
+>>> + * the requested one. pmbus_core currently support the following value:
+>>> + * - 0: write protection removed
+>>> + * - 1: write protection fully enabled, including OPERATION and VOUT_COMMAND
+>>> + *      registers. Chips essentially become read-only with this.
 >>
->> I have always seen that file as applicable for core kernel parameters,
->> not for driver kernel parameters. I can not accept a global change like
->> this without guidance. Please explain why it is desirable to have this
->> parameter documented here and not in driver documentation.
+>> Would it be desirable to also suppport the ability to set the output voltage
+>> but not limits (PB_WP_VOUT) ?
 > 
-> No reason other than trying to document things the best I can.
-> Other subsystemw are documenting things in here too, I just did the same
+> I was starting simple, it is doable sure.
+> It is not something I will be able to test on actual since does not
+> support that.
 > 
-> See 'regulator_ignore_unused' for example.
+> Do you want me to add "2: write protection enable execpt for VOUT_COMMAND." ?
 > 
 
-Basic rule: You can find examples for everything in the kernel, including
-dell_smm_hwmon in the same file. That doesn't make it better. It only shows
-that I did not pay attention. Trying to add all the other 80+ module
-parameters of hwmon drivers, or all the 5,000+ module parameters from all
-drivers, into the same file would not scale well.
+Please add it. I have a number of PMBus test boards and will be able to test it.
 
-Please document the module parameter in Documentation/hwmon/pmbus-core.rst.
+Thee are three options, though. Per specification:
+
+1000 0000 Disable all writes except to the WRITE_PROTECT command
+0100 0000 Disable all writes except to the WRITE_PROTECT, OPERATION and
+           PAGE commands
+0010 0000 Disable all writes except to the WRITE_PROTECT, OPERATION,
+           PAGE, ON_OFF_CONFIG and VOUT_COMMAND commands
+
+The driver uses OPERATION and VOUT_COMMAND, so we should have options
+to disable them separately. It may be desirable, for example, to be able
+to turn on a regulator but not to change the voltages. Also, since
+full write protection also disables writes to the page register,
+the impact of full write protection on multi-page chips needs to be
+documented.
 
 Thanks,
 Guenter
