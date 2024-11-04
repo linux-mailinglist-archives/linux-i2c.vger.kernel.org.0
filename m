@@ -1,157 +1,122 @@
-Return-Path: <linux-i2c+bounces-7748-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7749-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CDC79BB157
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 11:40:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A95E59BB2A9
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 12:14:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 328CC1F212A0
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 10:40:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC20C1C216E7
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 11:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60321B394F;
-	Mon,  4 Nov 2024 10:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 851BA1C8788;
+	Mon,  4 Nov 2024 10:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JCpLU4iR"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="HzD1tjJl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F385F1B21BB;
-	Mon,  4 Nov 2024 10:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899251B4F1C
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Nov 2024 10:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730716780; cv=none; b=Cv/wbMHaiSwufHmeG7NWXQUxM92nzVza3XTaekIKI4kbj29Otf0q63mo52Oh1ioRvmrrHdSJ/nA8Vl+q/2+d0omEQwrXuWtxEQuishi/ZgYPw4fbu3fR7VSNhz5ePiO8U4jhRPB6qlvZjy499h1TsnpZ0HV0s8YF6brNITpkZOc=
+	t=1730717822; cv=none; b=DNY8+6Mfjov6snnnDZoQLNk55veCpq4jcwTeHsVHId0tlZ4PQM8QRr0/MsWtaboHNkuSZYxelLqWgGhECkTPUPnNRhv+uP/dk+MvPu7p92jccLYpAmyZewhHtFRkkFTGJqbn36N/NYktt3m1qPk5lCZrvVhtQvAfnwoGadQzwpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730716780; c=relaxed/simple;
-	bh=fBXzj1gE+DIjX126NLyVI6qZpeF/TV60Xeo+GRcG8dw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lIAxVSnJlQPztI6RMRYwxAmjgyTUGs5dsWb1UoJVwJi9tH44TL0B/9gB4oTfwikOLZsxvhKnzpJbgaT5830lgiPhy6EBhFEn+eulVTudFKXyQ2UNndFGVmOx8SfhzAz8mNPBnnKysM3mVs0ADolTFE7nMOhBuJHi9ieKzXHvreI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JCpLU4iR; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730716779; x=1762252779;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fBXzj1gE+DIjX126NLyVI6qZpeF/TV60Xeo+GRcG8dw=;
-  b=JCpLU4iRQBW0gOnQnm+9BoB7wAwtbO35Br4lvgLvHhD1Imeig5E3pafi
-   n5FqZ/NLQBsLrVQWZTgFu8Sd7uw9zwT/85WXhGtDHR9CbhdN4MllmQDVs
-   s3tVQ1ylgbajIsVwyNJPOmPuKRgL01UM8U3USBeRzxPs4qZW+qQstAIpV
-   OmJGxYV4c4knqd82YUmrIP+57yEdwWgRI4v2hinILyuQgT1uPrlUiBfFf
-   DVdzXRuNkq4CF0T2Cd86GF5iV64LOC5a6bD4ZEVIQqKec3/q+wIPMCv02
-   22H0x4YNsenWg8L8FuUDZoXqeMVpw6T1UO+Bebdbu49h0h4KRRNuLpkGv
-   g==;
-X-CSE-ConnectionGUID: tEJc9ze1ShaGpvb+T2KETQ==
-X-CSE-MsgGUID: VLN31vOtQiKAuS1/efkT8A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="34194931"
-X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="34194931"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 02:39:38 -0800
-X-CSE-ConnectionGUID: pjyZ02n3TEK0bbmyU/dEFw==
-X-CSE-MsgGUID: uZlUolr7SASwuURFFkGckQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="83291663"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa007.fm.intel.com with ESMTP; 04 Nov 2024 02:39:36 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 912811C4; Mon, 04 Nov 2024 12:39:35 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] i2c: busses: Use *-y instead of *-objs in Makefile
-Date: Mon,  4 Nov 2024 12:39:14 +0200
-Message-ID: <20241104103935.195988-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	s=arc-20240116; t=1730717822; c=relaxed/simple;
+	bh=yWd2KtmsOvojXVk5fIpWMGQ1X+wMVTzTRmdwOge/WAE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O/3DOrw4Jzv1th2g2OFm4GTGPsSMHn53vQllx7tRAnu1Yi6n+pe5O7xXD8fw4G4hV9xZ6oAw43ORvcFF6hspXUTGfbzIfrLpxh94cTnXRdW0MoivXAKIlkZbUu6b1+/4MeobvVqBFONq/E4ihqJr8GZUijnWZ9g+C3mrpiL26l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=HzD1tjJl; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=yWd2
+	KtmsOvojXVk5fIpWMGQ1X+wMVTzTRmdwOge/WAE=; b=HzD1tjJlAY9AHnkivBmx
+	bdHIBbcJBcU7zb/aP+OotwraynCrzJr5z7VYfdtEHxCsUzIlTxlXEKBrmoHDNzKV
+	P/gplYRkuErXppx5EkyNq1u09bHmPzNhGSje22AOhHialKA+/wN1oIeAhK35h+R4
+	9SmEdD+Q+XeFI98sthUsi6kpkcTDg3ysnRmAD0lPTcBzUoJtmutoqmEgDfK2mNnt
+	HT0eAR7ypXqgwHSwCxtHEv4J1iDdJZxYUyfGZJRfUO+pS9O+e8jrXVqggy7sA5ry
+	LyGTVjDFd0VruJttQRw97k/JBlYDchYabx4GoGlzW8KKaFqHJmS5a7W0hVQvTs+w
+	bw==
+Received: (qmail 354982 invoked from network); 4 Nov 2024 11:56:52 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Nov 2024 11:56:52 +0100
+X-UD-Smtp-Session: l3s3148p1@l9VnJBQmHaXVHA60
+Date: Mon, 4 Nov 2024 12:56:52 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Yang Yingliang <yangyingliang@huaweicloud.com>, peda@axentia.se,
+	farouk.bouabid@cherry.de, linux-i2c@vger.kernel.org,
+	yangyingliang@huawei.com, bobo.shaobowang@huawei.com
+Subject: Re: [PATCH] i2c: muxes: Fix return value check in
+ mule_i2c_mux_probe()
+Message-ID: <ZyiodI3tFe9xbLVv@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Yang Yingliang <yangyingliang@huaweicloud.com>, peda@axentia.se,
+	farouk.bouabid@cherry.de, linux-i2c@vger.kernel.org,
+	yangyingliang@huawei.com, bobo.shaobowang@huawei.com
+References: <20241026030942.1484-1-yangyingliang@huaweicloud.com>
+ <yq3ncphzoexlecxqqo5y4qhepc6u7sks4glb4n6jzlytynuylk@ndxwo3twzl3j>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="a31C6E1zCevL3HWC"
+Content-Disposition: inline
+In-Reply-To: <yq3ncphzoexlecxqqo5y4qhepc6u7sks4glb4n6jzlytynuylk@ndxwo3twzl3j>
 
-*-objs suffix is reserved rather for (user-space) host programs while
-usually *-y suffix is used for kernel drivers (although *-objs works
-for that purpose for now).
 
-Let's correct the old usages of *-objs in Makefiles.
+--a31C6E1zCevL3HWC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: I2C_AT91_SLAVE_EXPERIMENTAL has to be boolean (LKP)
- drivers/i2c/busses/Kconfig  |  4 ++--
- drivers/i2c/busses/Makefile | 12 +++++-------
- 2 files changed, 7 insertions(+), 9 deletions(-)
+On Thu, Oct 31, 2024 at 01:09:17PM +0100, Andi Shyti wrote:
+> Hi Yang,
+>=20
+> On Sat, Oct 26, 2024 at 11:09:42AM +0800, Yang Yingliang wrote:
+> > From: Yang Yingliang <yangyingliang@huawei.com>
+> >=20
+> > If dev_get_regmap() fails, it returns NULL pointer not ERR_PTR(),
+> > replace IS_ERR() with NULL pointer check, and return -ENODEV.
+> >=20
+> > Fixes: d0f8e97866bf ("i2c: muxes: add support for tsd,mule-i2c multiple=
+xer")
+> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>=20
+> merged to i2c/i2c-host-fixes.
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index bf79628a789d..20a8c88e854a 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -431,7 +431,7 @@ config I2C_AT91
- 	  are facing this situation, use the i2c-gpio driver.
- 
- config I2C_AT91_SLAVE_EXPERIMENTAL
--	tristate "Microchip AT91 I2C experimental slave mode"
-+	bool "Microchip AT91 I2C experimental slave mode"
- 	depends on I2C_AT91
- 	select I2C_SLAVE
- 	help
-@@ -440,7 +440,7 @@ config I2C_AT91_SLAVE_EXPERIMENTAL
- 	  been tested in a heavy way, help wanted.
- 	  There are known bugs:
- 	    - It can hang, on a SAMA5D4, after several transfers.
--	    - There are some mismtaches with a SAMA5D4 as slave and a SAMA5D2 as
-+	    - There are some mismatches with a SAMA5D4 as slave and a SAMA5D2 as
- 	    master.
- 
- config I2C_AU1550
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 613ec59502c8..bf2d76e055c5 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -39,10 +39,8 @@ obj-$(CONFIG_I2C_AMD_MP2)	+= i2c-amd-mp2-pci.o i2c-amd-mp2-plat.o
- obj-$(CONFIG_I2C_AMD_ASF)	+= i2c-amd-asf-plat.o
- obj-$(CONFIG_I2C_ASPEED)	+= i2c-aspeed.o
- obj-$(CONFIG_I2C_AT91)		+= i2c-at91.o
--i2c-at91-objs			:= i2c-at91-core.o i2c-at91-master.o
--ifeq ($(CONFIG_I2C_AT91_SLAVE_EXPERIMENTAL),y)
--	i2c-at91-objs		+= i2c-at91-slave.o
--endif
-+i2c-at91-y			:= i2c-at91-core.o i2c-at91-master.o
-+i2c-at91-$(CONFIG_I2C_AT91_SLAVE_EXPERIMENTAL)	+= i2c-at91-slave.o
- obj-$(CONFIG_I2C_AU1550)	+= i2c-au1550.o
- obj-$(CONFIG_I2C_AXXIA)		+= i2c-axxia.o
- obj-$(CONFIG_I2C_BCM2835)	+= i2c-bcm2835.o
-@@ -111,8 +109,8 @@ obj-$(CONFIG_I2C_SIMTEC)	+= i2c-simtec.o
- obj-$(CONFIG_I2C_SPRD)		+= i2c-sprd.o
- obj-$(CONFIG_I2C_ST)		+= i2c-st.o
- obj-$(CONFIG_I2C_STM32F4)	+= i2c-stm32f4.o
--i2c-stm32f7-drv-objs := i2c-stm32f7.o i2c-stm32.o
- obj-$(CONFIG_I2C_STM32F7)	+= i2c-stm32f7-drv.o
-+i2c-stm32f7-drv-y		:= i2c-stm32f7.o i2c-stm32.o
- obj-$(CONFIG_I2C_SUN6I_P2WI)	+= i2c-sun6i-p2wi.o
- obj-$(CONFIG_I2C_SYNQUACER)	+= i2c-synquacer.o
- obj-$(CONFIG_I2C_TEGRA)		+= i2c-tegra.o
-@@ -121,10 +119,10 @@ obj-$(CONFIG_I2C_UNIPHIER)	+= i2c-uniphier.o
- obj-$(CONFIG_I2C_UNIPHIER_F)	+= i2c-uniphier-f.o
- obj-$(CONFIG_I2C_VERSATILE)	+= i2c-versatile.o
- obj-$(CONFIG_I2C_WMT)		+= i2c-viai2c-wmt.o i2c-viai2c-common.o
--i2c-octeon-objs := i2c-octeon-core.o i2c-octeon-platdrv.o
- obj-$(CONFIG_I2C_OCTEON)	+= i2c-octeon.o
--i2c-thunderx-objs := i2c-octeon-core.o i2c-thunderx-pcidrv.o
-+i2c-octeon-y			:= i2c-octeon-core.o i2c-octeon-platdrv.o
- obj-$(CONFIG_I2C_THUNDERX)	+= i2c-thunderx.o
-+i2c-thunderx-y			:= i2c-octeon-core.o i2c-thunderx-pcidrv.o
- obj-$(CONFIG_I2C_XILINX)	+= i2c-xiic.o
- obj-$(CONFIG_I2C_XLP9XX)	+= i2c-xlp9xx.o
- obj-$(CONFIG_I2C_RCAR)		+= i2c-rcar.o
--- 
-2.43.0.rc1.1336.g36b5255a03ac
+I'd like an ack from Farouk here. In general, -ENODEV makes the driver
+core sliently fail (ok, we have a printout but still). But not getting
+the regmap sounds like a real error to me. I'd suggest -ENOENT or
+something. But maybe this mux is a special case, Farouk should know.
 
+
+--a31C6E1zCevL3HWC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcoqHAACgkQFA3kzBSg
+KbbSHA/+NPynOvVuI7E3F04ntBSC/6ndFlfQNEXaTxbddUSG+bWpMUizlB+kni+7
+B7R4TBa5cJbMvG7HoGRdJZdoVSWyHKJGRVFC7fNbFFU+jL1rVnnJgk4LlzbwvoH3
+bpGSSw+qshIUl5blru16mitlwPhkLhcFqXkJC9btvSSJ2FyF8ZagTU9ECK4p0cFl
++92ckhmIw+7mHEiZ2HX229FWc4FwqCCrGzLkMwlZ/pXSVE4knLCrjpOVi3OVFYEE
+ts08qyx/Uvfbyo1wWFKUghqFihU8d1Uj3q6FeQqEyU3Vv6piAQGihZ/yoQumHF4D
+OigACbCMBV7ogPpdW/Wcj9JrXw0TbIXDTGimd+b/EuYL54jDnxZ8Ky/cp4r2OJ64
+UPZw48B7pRl7LhzttIOQlh087gF2TJuYswv5Fj/z8tYE0Ev73wUliPWLgOqRMy7q
+r/D311mqPRljHYZgH8c5kXCoV8Dc6sRGcAsMWp0+M//Ko5EAoaEzF7dw5DEYb0Z1
+HkOLynFyzdM3w/tLdOBicJ7d5Uu0QAQowbPxYxn0mz9UIe55AW5IRpNm+xD4A6Yj
+ZhE4Ys0+vLOfhCjmStDbZklFgnpcGqYn763a4Fjhy0m4dMdToQxqJD082ChE2Ver
+MG8K5JkxeXCbd8as1MxkzYOtAB+UM7KaC1GWZ1ktVKwES92Upt4=
+=clsc
+-----END PGP SIGNATURE-----
+
+--a31C6E1zCevL3HWC--
 
