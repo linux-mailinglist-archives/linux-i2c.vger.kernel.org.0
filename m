@@ -1,183 +1,147 @@
-Return-Path: <linux-i2c+bounces-7742-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7743-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A0959B9C8D
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Nov 2024 04:48:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96AB39BAE0F
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 09:29:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D720B21C61
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Nov 2024 03:48:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F8D7B21DB4
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 08:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0108145B18;
-	Sat,  2 Nov 2024 03:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834711AAE2E;
+	Mon,  4 Nov 2024 08:28:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="glGHEmHu"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="x72OK5xn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0E134CDD
-	for <linux-i2c@vger.kernel.org>; Sat,  2 Nov 2024 03:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBBC19D086
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Nov 2024 08:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730519310; cv=none; b=NotXqMK3EJ/jvOQbz/eYW0QoT0S92ik38pqB1wGAqS+knBAorSO9wFKVtH+Md2iyZ3CPqvt1mcAX4JwKkrjDiSP1+1ECLRPKfC84KZikOBZld0zEN8wluwBHFs9l2rLduKiso11CV83A4iYyCacowKw+hbJOP3USGSIxZXetHD4=
+	t=1730708929; cv=none; b=B0NqmeDRUBLmk+fwY0JGU2TfLXIvnGTZIQevT9MObhGPzESz4WAjU1AN02QNUASftuq+zwxZQtY1CZDOE2jMvcjutHbcqeoPmolQRYJJrBAu7hc/wL6op07998zLgFVwk+v+nNprAtQGqicJEvFDsoU4kp554RnZgfC2JzfOy4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730519310; c=relaxed/simple;
-	bh=vP4zsOqNtMbKO2+jVJEXwJdYxLid9vzXb56DQWl1K9I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HdOoHx2yB1pv/s2JDS6cKsm0ovkwSxyzlkAdzNTPjIHVFyMSnNS1mjFdcTO1sq+TbXl/hQ75bxsbYGagv1TZ1Wz6vtyAXuyXdXUTpl3wU4PG7DhRwmWaiPyeYbWqMLnYUVWcEvIfm75+tVHslHUj5wj7OgRIUfPI9jm4SW5ATNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=glGHEmHu; arc=none smtp.client-ip=209.85.166.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-83ab00438acso79631739f.0
-        for <linux-i2c@vger.kernel.org>; Fri, 01 Nov 2024 20:48:27 -0700 (PDT)
+	s=arc-20240116; t=1730708929; c=relaxed/simple;
+	bh=EqmkgE4d1EEXvy/pDugSAzsTbmYi0+HKJ6jyxFzBlW4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kFdHZ3JyEOhLKcDqytnFhH5wCL2OpcqcasHZOriMXJSxY9Sz1zg5Fs/d+Z1yFbfgxa1fqulTojPBtTpzirJOwaBTfNz0zKvBSCRORU8uQY1PjovRSZr7hXlXS8t6w50AdxnS6OSOKPr4rXWYYu1RrHpOnp4KByuCToQTcbCibBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=x72OK5xn; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43169902057so30507895e9.0
+        for <linux-i2c@vger.kernel.org>; Mon, 04 Nov 2024 00:28:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1730519306; x=1731124106; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cFAxfJPYMHZcgM/IbSJdK8jCoxixwBpatcLPEMEnlyg=;
-        b=glGHEmHuBRHQ2w1lkMPygKEzcCZXom8snmPAObJGJ5Iobo59FC7HRyd8UQHrimEaJr
-         0mpZE4h6EJ0e7g/6YA0NQcXoYY1PcdKYWQiB7P1IvZzpozmqcylsjw+tSjtZWtjrkIlZ
-         loCNSltUi22qrUTACQRvDK4ceiDKzlNptknYNBA1VuprCwhMz6911rHwuoMHfhWL3tAq
-         U0vc+3fhnvLGI+oB/71Aw0YUJQ9XxlFjumfsPp3sv3SRgkJ8tp7H0TSI2UHN3EXcVtJI
-         McP8r+nP4nhmyy/jtPufH01wej5Xjs+gFp7Bz3LotSqFoniCLGhRPLupLP3T62Wzm5yX
-         b/9A==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730708925; x=1731313725; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iuww1TS1OQs3l9SRwzJ7P35d568foJ3WYH7zYhElvvU=;
+        b=x72OK5xnzt8xcWkdu6xV5VgCtuhWDba5wGQ4ni7HaEfPXvYc65vIY0g/FjESNuj81g
+         1Ao31LMHpmlXD0RuGPmwiwh/QsRmDb9LxXXTPbzSFbOK/8UrhHNCpkrP9dSex9jcnjR4
+         aYhpDiRbud1/nl+CKWkarzXTVqkiAtpIcpmVAoT0B2GGXLxurCokMHwVOUJ+qduETDTx
+         gA83rv6J+em2PrkvqYI2VFSIN2sSf3lTrij2EUFsbUc+4aqW9yPPv32JHTpNQJWZX94h
+         YRPRqr49CBYS1yn+FEGkRjQl8TxOT2Au4uZcSGkTxB0xzOAGMT9gd3L+hhGB+SzpFjYS
+         WDzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730519306; x=1731124106;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cFAxfJPYMHZcgM/IbSJdK8jCoxixwBpatcLPEMEnlyg=;
-        b=R7Gohyn1gg9bfL9w89wClDLp2D3h5p3/dwwbzVYNbRCm60ZDd/cNHBzrCG+UXZxApx
-         hiZKzY8dpZAC0mp0btWAMm+e+74S2PO03n4vtxVDxDsuxJ5qp6rKvw4sj6UqF7m6b5hR
-         cblrhIiB8VPG5AfIV/qx5RLVWW2O9LLpal+xYWF75G+3punAu6AblTElKj2TTCYnKxaU
-         1yKXeRI0xtYA87WzbtyET/XL6DjlwjAiIMnhck7/juUlIpFl61CO+rZj+otGHp7clTLQ
-         suFUKEOmv6kpMItXUx2SDn+REM7VnVgpgHceqarOJLS9/SZlWq9BSeJ22MHa4wF+edpO
-         BceQ==
-X-Gm-Message-State: AOJu0Yxfj+gzyhUvOBc7ry69AbI17ZAhCmK4YJO921+4olnzs3RxCj//
-	IrOV9DecJuFlZL7YP6pM4LL8OfjRRzu6H8ocT6uxH0/xVJQmNXjT4p5o2xVNyJE=
-X-Google-Smtp-Source: AGHT+IEjX1mR0HcedUZXdXQVrMhUH8jXN4cBozN2zssjtGKah59T7pHiVZuQPT9WVqvySZ4MDCEgRw==
-X-Received: by 2002:a6b:7e44:0:b0:805:2048:a492 with SMTP id ca18e2360f4ac-83b7133cf86mr460121839f.6.1730519306354;
-        Fri, 01 Nov 2024 20:48:26 -0700 (PDT)
-Received: from [100.64.0.1] ([147.124.94.167])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83b67bb57a5sm108525239f.28.2024.11.01.20.48.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Nov 2024 20:48:25 -0700 (PDT)
-Message-ID: <846b4f2a-602e-431e-affc-0e995db5eee5@sifive.com>
-Date: Fri, 1 Nov 2024 22:48:24 -0500
+        d=1e100.net; s=20230601; t=1730708925; x=1731313725;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iuww1TS1OQs3l9SRwzJ7P35d568foJ3WYH7zYhElvvU=;
+        b=TBtQdZrFqAZ5MPNJkGdN2A36+QshoONU3UNisLHXKmm3IcmK1CkAyazQdPQZl0ltv9
+         4mu1spfprK7r8OmScLPISQk3xvPqT3rLPM0nU+8TLgW6/4LP0un8eM28UBThDV6J2aTU
+         y3xlkKP5vwE48V/qyphfqpzfDgaYL4EtSn6hxXQ4H1VzyoJmWtWQpbFR/732ClZXKu+Q
+         wvHZ8nRU6PuyMmpVoSNt+leBw8vukG5e/kaz1vj6XsGdkscH0fz9id7v0uxoxdH5/hu0
+         ul7+xE9LpPmLxSuYqMAovmcBY5aPwQP5mC4a8ovPfiiE7gEwuspRgcwYtj7DPVpLYY/w
+         QzQA==
+X-Forwarded-Encrypted: i=1; AJvYcCUjkBjeenWloxvhaYLTbhz1Ea3rXFXYtKHxuGaxY5drvvDbqFFNVUCOORwBiXKDMTdgGUqxBMoNSW0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxt6BEbH27wDjGwaRQAUfiy7PPVm66q5c6z1ARSEFhxVJwUhzqA
+	Dw4TvCuwvReCN/wIsdtLhdIxrqTp5zn3MNOaHZB6LUCPprK8acLxOw/rhM9w5wQ=
+X-Google-Smtp-Source: AGHT+IH1WfaHxfpzCD8if1ibEm5hwL1R88iNPhaHc0ElvUyQHLLOZjwnM6Wwr2C8DTF0zlQaa7BhsQ==
+X-Received: by 2002:a5d:46d0:0:b0:37d:41cd:ba4e with SMTP id ffacd0b85a97d-381b710dab4mr11534469f8f.48.1730708924645;
+        Mon, 04 Nov 2024 00:28:44 -0800 (PST)
+Received: from localhost ([2a01:e0a:3c5:5fb1:3924:2486:a349:2c6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c10d40casm12550078f8f.27.2024.11.04.00.28.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2024 00:28:43 -0800 (PST)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>,  Jonathan Corbet <corbet@lwn.net>,
+  Patrick Rudolph <patrick.rudolph@9elements.com>,  Naresh Solanki
+ <naresh.solanki@9elements.com>,  Rob Herring <robh@kernel.org>,  Krzysztof
+ Kozlowski <krzk+dt@kernel.org>,  Conor Dooley <conor+dt@kernel.org>,
+  Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+  linux-hwmon@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-doc@vger.kernel.org,  devicetree@vger.kernel.org,
+  linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v3 4/6] hwmon: (pmbus/core) clear faults after setting
+ smbalert mask
+In-Reply-To: <fa3ccd3b-7dab-45b2-92ec-49400e39114c@roeck-us.net> (Guenter
+	Roeck's message of "Fri, 1 Nov 2024 08:10:27 -0700")
+References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
+	<20241024-tps25990-v3-4-b6a6e9d4b506@baylibre.com>
+	<fa3ccd3b-7dab-45b2-92ec-49400e39114c@roeck-us.net>
+Date: Mon, 04 Nov 2024 09:28:42 +0100
+Message-ID: <1jo72v5rnp.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: spacemit: add support for K1 SoC
-To: Troy Mitchell <troymitchell988@gmail.com>, andi.shyti@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20241028053220.346283-1-TroyMitchell988@gmail.com>
- <20241028053220.346283-2-TroyMitchell988@gmail.com>
-Content-Language: en-US
-From: Samuel Holland <samuel.holland@sifive.com>
-In-Reply-To: <20241028053220.346283-2-TroyMitchell988@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-Hi Troy,
+On Fri 01 Nov 2024 at 08:10, Guenter Roeck <linux@roeck-us.net> wrote:
 
-On 2024-10-28 12:32 AM, Troy Mitchell wrote:
-> The I2C of K1 supports fast-speed-mode and high-speed-mode,
-> and supports FIFO transmission.
-> 
-> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
-> ---
->  .../bindings/i2c/spacemit,k1-i2c.yaml         | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
-> new file mode 100644
-> index 000000000000..57af66f494e7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/spacemit,k1-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: I2C controller embedded in SpacemiT's K1 SoC
-> +
-> +maintainers:
-> +  - Troy Mitchell <troymitchell988@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: spacemit,k1-i2c
-> +
-> +  reg:
-> +    maxItems: 2
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
+> On Thu, Oct 24, 2024 at 08:10:38PM +0200, Jerome Brunet wrote:
+>> pmbus_write_smbalert_mask() ignores the errors if the chip can't set
+>> smbalert mask the standard way. It is not necessarily a problem for the irq
+>> support if the chip is otherwise properly setup but it may leave an
+>> uncleared fault behind.
+>> 
+>> pmbus_core will pick the fault on the next register_check(). The register
+>> check will fails regardless of the actual register support by the chip.
+>> 
+>> This leads to missing attributes or debugfs entries for chips that should
+>> provide them.
+>> 
+>> We cannot rely on register_check() as PMBUS_SMBALERT_MASK may be read-only.
+>> 
+>> Unconditionally clear the page fault after setting PMBUS_SMBALERT_MASK to
+>> avoid the problem.
+>> 
+>> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+>> Fixes: 221819ca4c36 ("hwmon: (pmbus/core) Add interrupt support")
+>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>> ---
+>>  drivers/hwmon/pmbus/pmbus_core.c | 7 ++++++-
+>>  1 file changed, 6 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>> index ce697ca03de01c0e5a352f8f6b72671137721868..a0a397d571caa1a6620ef095f9cf63d94e8bda1d 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>> @@ -3346,7 +3346,12 @@ static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+>>  
+>>  static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
+>>  {
+>> -	return _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+>> +	int ret;
+>> +
+>> +	ret = _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
+>> +	pmbus_clear_fault_page(client, -1);
+>
+> Why -1 and not page ?
 
-Looking at the K1 user manual (9.1.4.77 RCPU I2C0 CLOCK RESET CONTROL
-REGISTER(RCPU_I2C0_CLK_RST)), I see two clocks (pclk, fclk) and a reset, which
-looks to be standard across the peripherals in this SoC. Please be sure that the
-binding covers all resources needed to use this peripheral.
+The idea was to clear the fault on the page we are on, basically just skipping
+setting the page again.
 
-> +
-> +  clock-frequency:
-> +    description:
-> +      Desired I2C bus clock frequency in Hz. As only fast and high-speed
-> +      modes are supported by hardware, possible values are 100000 and 400000.
-> +    enum: [100000, 400000]
+I'll change to 'page'
 
-This looks wrong. In the manual I see:
+>
+> Guenter
 
-* Supports standard-mode operation up to 100 Kbps
-* Supports fast-mode operation up to 400Kbps
-* Supports high-speed mode (HS mode) slave operation up to 3.4Mbps(High-speed
-I2C only)
-* Supports high-speed mode (HS mode) master operation up to 3.3 Mbps (High-speed
-I2C only)
-
-So even ignoring HS mode, 100 kHz and 400 kHz are only the maximums, not fixed
-frequencies.
-
-Regards,
-Samuel
-
-> +    default: 100000
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c@d4010800 {
-> +        compatible = "spacemit,k1-i2c";
-> +        reg = <0x0 0xd4010800 0x0 0x38>;
-> +        interrupt-parent = <&plic>;
-> +        interrupts = <36>;
-> +        clocks = <&ccu 90>;
-> +        clock-frequency = <100000>;
-> +    };
-> +
-> +...
-
+-- 
+Jerome
 
