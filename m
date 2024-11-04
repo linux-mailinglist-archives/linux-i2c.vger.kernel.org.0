@@ -1,162 +1,139 @@
-Return-Path: <linux-i2c+bounces-7760-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7761-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BA329BB809
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 15:39:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71B789BB841
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 15:48:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DF891C24180
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 14:39:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 356382823A7
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 14:48:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 479911B4F0B;
-	Mon,  4 Nov 2024 14:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4E31B6D1B;
+	Mon,  4 Nov 2024 14:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="K+f7yHOq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k2Fhd/oV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBAEC1B0F2D
-	for <linux-i2c@vger.kernel.org>; Mon,  4 Nov 2024 14:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8134C469D;
+	Mon,  4 Nov 2024 14:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730731151; cv=none; b=uC7HUDO4Gt2KiZ+kTwj/PUN3qdvyD9NLQE1Mh2g74WxZGvhSoVZgTx7UlugkKjQNqsIcEYSZA4Dk4km2kEhUvffSQcRRWTOAtnlf4euXFpWHm+EcSbba8akO2lZgwGKChYBIU9+dRoWF256Cm924J53EQMxpK9gW7Otq7QPzhTk=
+	t=1730731704; cv=none; b=GmCA8ffh5mPWNYrZch84COeHCwTmm/Dh6M6VOC11ilhwwzzSMlTvyfeDxU+5yjCVqzcqhwivQGqVVZbzewgFPRUbKh2u05DQG7NXii9s3eHijiSB9veoBtrtnOIjem5wwKV7pH6XEi57cVzs62O1Ax5a2a+HzK+Vj+QZYF85HJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730731151; c=relaxed/simple;
-	bh=N9mNTgS7KydKjujfpo8o+RMYb3M2ubWeqVEZYIZNbvY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=hl7n/rEaiw5SOEoR07K+J2aJcuOIEQ0uTztvql2fFSgCZGy6CYGqMpQTwZs19jYxnvN6F5k3Vbuk5ISgjAWgcr/MLZ9siuh6Xa3X4OozTeVJv1Qusu4821gbXOYq2b27eaCV8MZwPbNtqZxSgKAlgKDLAvaEKULlDjqwCt8YvX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=K+f7yHOq; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4315baec69eso37138805e9.2
-        for <linux-i2c@vger.kernel.org>; Mon, 04 Nov 2024 06:39:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730731147; x=1731335947; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=V1xpNFk8hvdBrc0E2hQPlR3zKBSGiQuhict/6bGeGu0=;
-        b=K+f7yHOq5S1lh7AD2ez4PM4me8oYXnj5UNBnNruXUhJAPHo4e73cIN0RGxX1f03Xqb
-         ElACQYVew7z5byW2nH1Gd4c206wTqPvjvXXy5HHQ4BbmddfBYiWltjkvRfMzIwQNcJ3F
-         2189AQfn84FG2NvnBmWXPILW1rGvtL67Er/Ub/oawIXnBH7Ng/gys7iAtplvqHeDQWOF
-         2GwOClTK+pr97pzJcze3dXTYg8mxi/xj8A/rJ/5FQLF70y5CmzLx+6H+Ic/pNlndrDLG
-         c+Ys2MqHOW+ADAK0rexJK7BydnB3OdVCEQoO7vmEK4h9bAZO1X5rM9wXAFIYOWOLkKAc
-         zjvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730731147; x=1731335947;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V1xpNFk8hvdBrc0E2hQPlR3zKBSGiQuhict/6bGeGu0=;
-        b=PbgeLPpgl/G5e1up3YMIBp0gx9LuDZAPJ0ODWPIOhmCemFAY51WvNfL8E4cUo5LbWv
-         KKXA6Mkg2rXwcNrgNoAxKu1+QeLwvW6h5VE1dl5eN7tUrDIIRfzULhbi11jk5larJzFy
-         syB0pP+um32M3OEZAIVGkttQtw1ntU7l+K+6z38kBye8Elkp2Dhiif0LoiUN3dP9yVHl
-         QLAKeyLcyQ1l+X8jvkhjUwjb+o3lYxOnuxr/y5Ka0Ji5e57ruYdo0krqvQNXCkRUy5rc
-         89A9hwBBFXXvRfUxli4DXSpqgpBKc69VCKgHwa266bwKG+oYnwWlw2HfQfWpnCXi3dKM
-         arAA==
-X-Forwarded-Encrypted: i=1; AJvYcCWDlx9BeqprUWGgr5RH7DOOkNaW6wmTHto37DRAVJji+Nc+n98a5rq7w/3QU25Hu2Yy3TS1jCcozCo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/fRj63WGGgElaejhk4knxZ7bzHtbHTBMCM5Q4xxxgVq9nUPM/
-	2ffhl0186T90IQ0kw3veYBGCFMa3TtegIy2+Ai8A3sNrWrvnQ9TnQuDyO/3GUyE=
-X-Google-Smtp-Source: AGHT+IEkd7fCxmipKdK/jhPqqpXWWRduRKJdf1Fys48euGtYO2BQbNuoCcaPoeGNZkFLXLCk4YE8xA==
-X-Received: by 2002:a5d:5847:0:b0:37d:4d3f:51e9 with SMTP id ffacd0b85a97d-381c7aa451dmr10370065f8f.40.1730731147068;
-        Mon, 04 Nov 2024 06:39:07 -0800 (PST)
-Received: from localhost ([2a01:e0a:3c5:5fb1:4393:a9f:472d:9404])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c116abf3sm13387483f8f.101.2024.11.04.06.39.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 06:39:06 -0800 (PST)
-From: Jerome Brunet <jbrunet@baylibre.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>,  Jonathan Corbet <corbet@lwn.net>,
-  Patrick Rudolph <patrick.rudolph@9elements.com>,  Naresh Solanki
- <naresh.solanki@9elements.com>,  Rob Herring <robh@kernel.org>,  Krzysztof
- Kozlowski <krzk+dt@kernel.org>,  Conor Dooley <conor+dt@kernel.org>,
-  Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-  linux-hwmon@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-doc@vger.kernel.org,  devicetree@vger.kernel.org,
-  linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] hwmon: (pmbus/core) add wp module param
-In-Reply-To: <fa79de78-aed9-4cd3-bff9-310f2b4a32c9@roeck-us.net> (Guenter
-	Roeck's message of "Mon, 4 Nov 2024 06:18:27 -0800")
-References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
-	<20241024-tps25990-v3-3-b6a6e9d4b506@baylibre.com>
-	<47164712-876e-4bb8-a4fa-4b3d91f2554b@roeck-us.net>
-	<1jjzdj5qyy.fsf@starbuckisacylon.baylibre.com>
-	<fa79de78-aed9-4cd3-bff9-310f2b4a32c9@roeck-us.net>
-Date: Mon, 04 Nov 2024 15:39:05 +0100
-Message-ID: <1jfro783na.fsf@starbuckisacylon.baylibre.com>
+	s=arc-20240116; t=1730731704; c=relaxed/simple;
+	bh=f7SgoDZTxN1Ai2BJlj04ErLnyoJUnr6IKPRQk6VU2mw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bl6TOLxo6rZsJlGrYWOpHvAzvpKBklMH98P0Y5jsys2mzJSwoelV7NzyW5i4i8c77jTHeb98meBwaM8XfhRXUNVSdbp0f8/5gCvJ/arQI9HjQ4TNlVqcMpqEE98hjNOTW/uSextYUu+n6HtRG6wpfqDdfG76xG5ZSd8ueBo3q3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k2Fhd/oV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0256C4CECE;
+	Mon,  4 Nov 2024 14:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730731704;
+	bh=f7SgoDZTxN1Ai2BJlj04ErLnyoJUnr6IKPRQk6VU2mw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=k2Fhd/oVd79XKT5qNS1m5B3PqfnS9AhvirT3o/Oze++i6oQNSbIZHmE4q7F4KLnhP
+	 FX6fBOuflFDoUQZfQ4mTtHf8REmoeHGsxTnnjdJ8hIMVgH3IJmHjk8TQV2bmk5wrLL
+	 hTZgzbos5JjEGz7t5ryis5SQED+ZPXSygeTJG2C2+KlXiAZQ1SUsUI7TYk+Nnyzxsu
+	 om1rymDD3qRbWNXiAqwQbg3bmR1X33qlOlELKCzoFWEGwNbja4G9MCx0CKL78qENNz
+	 Y5ZPLI6Eu0Og5q0WRJLJ/2Q1YsBAiSUfiaq+GdaunW6eY8n7XIBizkxH+yWE5FfQOs
+	 gY9uqaS2OtniQ==
+Message-ID: <502b0b14-0e1f-4a59-85ad-7edeb9d3033d@kernel.org>
+Date: Mon, 4 Nov 2024 15:48:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: spacemit: add support for K1 SoC
+To: Troy Mitchell <troymitchell988@gmail.com>
+Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20241028053220.346283-1-TroyMitchell988@gmail.com>
+ <20241028053220.346283-2-TroyMitchell988@gmail.com>
+ <6zx3tqdc5bma2vutexwigzlir6nr6adp7arg4qwl5ieyd3avbu@5yyhv57ttwcl>
+ <dbeea869-54cd-43fe-9021-783d641f1278@gmail.com>
+ <ariqiukhztgziwwgaauqy6q3pghflnoeuwtag4izwkfmtvi2kh@gnlq4d7jsaw4>
+ <6cce463e-25cc-4a07-971f-6260347cb581@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <6cce463e-25cc-4a07-971f-6260347cb581@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon 04 Nov 2024 at 06:18, Guenter Roeck <linux@roeck-us.net> wrote:
+On 04/11/2024 14:01, Troy Mitchell wrote:
+> 
+> On 2024/10/31 16:00, Krzysztof Kozlowski wrote:
+>> On Tue, Oct 29, 2024 at 04:36:00PM +0800, Troy Mitchell wrote:
+>>> On 2024/10/28 15:38, Krzysztof Kozlowski wrote:
+>>>> On Mon, Oct 28, 2024 at 01:32:19PM +0800, Troy Mitchell wrote:
+>>>>> The I2C of K1 supports fast-speed-mode and high-speed-mode,
+>>>>> and supports FIFO transmission.
+>>>>>
+>>>>> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
+>>>>> ---
+> Change in v2:
+>  - Change the maxItems of reg from 1 to 2 in properties
 
-> On 11/4/24 00:43, Jerome Brunet wrote:
->
->>>> +/*
->>>> + * PMBus write protect forced mode:
->>>> + * PMBus may come up with a variety of write protection configuration.
->>>> + * 'pmbus_wp' may be used if a particular write protection is necessary.
->>>> + * The ability to actually alter the protection may also depend on the chip
->>>> + * so the actual runtime write protection configuration may differ from
->>>> + * the requested one. pmbus_core currently support the following value:
->>>> + * - 0: write protection removed
->>>> + * - 1: write protection fully enabled, including OPERATION and VOUT_COMMAND
->>>> + *      registers. Chips essentially become read-only with this.
->>>
->>> Would it be desirable to also suppport the ability to set the output voltage
->>> but not limits (PB_WP_VOUT) ?
->> I was starting simple, it is doable sure.
->> It is not something I will be able to test on actual since does not
->> support that.
->> Do you want me to add "2: write protection enable execpt for
->> VOUT_COMMAND." ?
->> 
->
-> Please add it. I have a number of PMBus test boards and will be able to test it.
->
-> Thee are three options, though. Per specification:
+Why?
 
-Any preference for the value mapped to each mode ? Using the one from
-the spec does not seem practical (32768, 16384, 8192).
+>  - Change 'i2c' to 'I2C' in the commit message.
+>  - Drop fifo-disable property
+>  - Drop alias in dts example
+>  - Move `unevaluatedProperties` after `required:` block
 
-The bit number, maybe (7, 6, 5) ?
+Rest look ok.
 
-or just by order strongest locking ?
+Best regards,
+Krzysztof
 
->
-> 1000 0000 Disable all writes except to the WRITE_PROTECT command
-
-3
-
-> 0100 0000 Disable all writes except to the WRITE_PROTECT, OPERATION and
->           PAGE commands
-
-2
-
-> 0010 0000 Disable all writes except to the WRITE_PROTECT, OPERATION,
->           PAGE, ON_OFF_CONFIG and VOUT_COMMAND commands
-
-1 ?
-
->
-> The driver uses OPERATION and VOUT_COMMAND, so we should have options
-> to disable them separately. It may be desirable, for example, to be able
-> to turn on a regulator but not to change the voltages. Also, since
-> full write protection also disables writes to the page register,
-> the impact of full write protection on multi-page chips needs to be
-> documented.
-
-Noted. I'll update the documentation.
-
->
-> Thanks,
-> Guenter
-
--- 
-Jerome
 
