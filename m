@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-7757-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7758-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8AE49BB6B4
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 14:51:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B70759BB6F2
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 15:00:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 451581F22EEB
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 13:51:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 766D72848D7
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Nov 2024 14:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A12DE84A35;
-	Mon,  4 Nov 2024 13:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4944F1442F6;
+	Mon,  4 Nov 2024 13:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eP4oibdr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fm+a2Eyk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9358170805;
-	Mon,  4 Nov 2024 13:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6881D1419A9;
+	Mon,  4 Nov 2024 13:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730728291; cv=none; b=dbXpktEvqr5gztR6BuKoNKA3I5UjzJdSKe9AyTpcLyaztXtJh0s18NqVUU67k1TreQfupfaRj/FwgrJvyC8+jvhf8EZ5OUX9NiqpOehXoua+27diAcbJwUVLlWv3dzPi1JLyrr3J229PLSZDMKG5vYevapCkZ1GQYsiwFn2qZ/E=
+	t=1730728642; cv=none; b=gUSve94cocxRIY/7ZfBQ+qkPEQbhy0t0qiS3LK1pOzG813l0D9nqB0s97nht/Kw4BtkyOWIKYV9Eiqe7sWABkZrp6Urm16rCeyZ3C0yWXkXaJo15YpEMDHWOxZofYkUrdl0Zt0/PofNMcCNaxNA4sB+nU7uhlWVEV1mXLBsAVLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730728291; c=relaxed/simple;
-	bh=1w2eRE72QIY6UPS8PbgUFDNBykn84o7fCfcWxqfb9Ng=;
+	s=arc-20240116; t=1730728642; c=relaxed/simple;
+	bh=m0f4VFrEcVOrYj5aWLUs3Rw2YFaDtOAggS3nvH063g0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FJ2AHASgZ16beLihUuhZmGIxmMjaeGMCteltDniUdDMsGTHhkZ4h/umyd6PNanZRcXnwOr/lqrPfdDxXg+UPgZTFRR1duwwzSfYpwpd/9FiESKtUyzTxZoFBcx1QNA+3ktDQOF+FXq+HSqfgJdoa6f7r6UwrlVqwTPFaplFazkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eP4oibdr; arc=none smtp.client-ip=209.85.210.171
+	 In-Reply-To:Content-Type; b=kGFSAo6UVWVuC+wasxYtjVJbpbmhovrZC0w2C53SEupfuHZflGBHieir7c2X5i9QAUdespy46CKRnCZqBc7bXFof4AXi/4fme2nQ0e+ktHOiTC3SfaHGKGk9LMtJwDtl0skjEPtar7swmxtfeDwuhA5bKjeWwxaImslGt5dhV2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fm+a2Eyk; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-71e953f4e7cso3315603b3a.3;
-        Mon, 04 Nov 2024 05:51:29 -0800 (PST)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-720d5ada03cso2939318b3a.1;
+        Mon, 04 Nov 2024 05:57:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730728289; x=1731333089; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730728639; x=1731333439; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RisdBhDozfhIAK5Mme80AcSFBcqV8wUI4AjA2PHwUtc=;
-        b=eP4oibdr+S4V+J/Yyb5+ZndTWPPnr3v9DkwJLzWgIYmG7gk/IxYQ0RdOjYY89C1mZQ
-         19fSqi6luHvak9YoKXfLIHOIVu2+2JbfseVuucCuxvmp+m5Wu2cJYfi79vaJ26tEKKgE
-         3hbaj9WqE/bLEBM4p3eWBvP/HrH5+xkDX6TrstUZrCBgRrcqNgOJ+24C2XU1OHY3c8UG
-         H304yM9QNq0vwWAamlwRtAyvYBN3R2BHHCq1yfWHsj6P8Z1/liuFmaV5meQjN6pa7qPE
-         u9MvCQ1Oxry2KDYIlj7gkN8Fs0vNAR3TtXNC2li89zwPSuJEzrLQAPc0CfDnJRGQQr75
-         YuYQ==
+        bh=5ieXOrRxIqJ7bVUdXB2d/xLhSWWicBwFVZ7YQZ8GPTs=;
+        b=Fm+a2EykiCqJhFGHI9tMXM3Ay0kk2ebSIN2t0dH9EDlKokokjd5LV3w8A8K4a/IB5z
+         ksR+B3aQboKd/VXJlhkfJXCMxNVMvRuq02QAXdxdE2+usAabPiffyk7MCviVndth2mSo
+         d1qwvveCJWcn4oinu9bFmZjTFPcl8C5AnpVdZNx6n96Hs7KSRWTr7jKoO8eqbacR+UuM
+         D2xxp0vftKXa9ypizYZ5hUAmc9obCNL0yEt44bSj+neB2WnRxE54a36RTT5NJOQmtUE0
+         9187CAyEmngOCb1DO9BnI9npnemx+Ez9bwbFkHe4mbeM/hI3n9b6nJaF+3p9a6i7iu0X
+         zztA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730728289; x=1731333089;
+        d=1e100.net; s=20230601; t=1730728639; x=1731333439;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RisdBhDozfhIAK5Mme80AcSFBcqV8wUI4AjA2PHwUtc=;
-        b=tr7lC2z5ltf+pGaCHDXoAa3iO11llgOu/TmN+GTiUAAGPDFoB5IpKdMlQdFg09Tmuu
-         bNGeGzIKDZsViQhSujLHaF31jEXkGFJBs/LpM7EnxTKXVOc7JPUhRhFjbJvG5xQcWnPJ
-         3cp9wiLr9iPZ5+gIJomPMwyJy/KvLHpTGUdmhOfJLCAbXx4dZWMwiyuC9TQ5nrEpGSXu
-         u8QneRU+Bi4/LeFUArt3KpFD5BJ4F/AYiPmGyctosjhcRwdB/n8Ity7Y+kWMY46ov7SK
-         J9A0jz6AUAugt+aDKUUihxL9vYDwK7mnsxvxOE/VKkHTiOggmqbAUO4tPTKkUYkYzrLI
-         oRlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIfZt/Gv58XMSKFW8QHG/GEisqNaXDrXD9WJZGUS/ky6D2SKIvta9rVPNZ3WeiBDaBeAACBz/jRg0aJb4=@vger.kernel.org, AJvYcCVTRBpt8sNAuBcaX1sb4azzO7kn5rfxYr3hDITlNFeU6HVKBIcgv+Dz+jgQQ6q8+2oz8Ll6+gyS4SeX@vger.kernel.org, AJvYcCWIi+BNZsxqyA8a2EjBhicLsb7D5TKS5R3dHXjRwQ3en6h7fF6wjwaGIO8h5C0CHqf8WFYrTJdWEu2l@vger.kernel.org, AJvYcCWx3AsyjxDBltN7oyqkf5gPOEKzKrvouw8Q+5yMosBgtdoLg2ogmbE+JFTUXyjniHnPe/rbbuIwekqUnZe6@vger.kernel.org, AJvYcCWxUg1YaeXcPl6BSYb+TW17Oi+0j7o2a6iAzMBz1tg/61UwqAeG7HOg+cTWkmSDAZx1QpSOGwCtSrDs@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGIIk7wdvWnCPmaU/Wr0Nv1n7FYF3fHAqQT4Wz7xMF/oHWzkvZ
-	v1uTGenBBx60YiICu5pjctIJx6QuMPVg/ytVFJWbEsxMvlSvkLlN
-X-Google-Smtp-Source: AGHT+IFT9MWN3Z5rfIFhSF9LIZsbbBcASg5951HhUUaBr+5y8PILt51QH8l3yj+ywBZD5Kub3Sm5ng==
-X-Received: by 2002:a05:6a00:14d3:b0:71d:fe64:e3fa with SMTP id d2e1a72fcca58-720c9990cc3mr18918463b3a.19.1730728288694;
-        Mon, 04 Nov 2024 05:51:28 -0800 (PST)
+        bh=5ieXOrRxIqJ7bVUdXB2d/xLhSWWicBwFVZ7YQZ8GPTs=;
+        b=SiORIXLgnBMxIAjQy3P+poOXdpToNzBV2x7kXk1a2o3dlmqRFNPDIrxfibm63aUMcs
+         0pqEqMyxhXRH75Ngsr+g6lRNKYJfVI6UCDNWQsciMhGtP+M/nWwPUjFRqK77JnRG6n5A
+         skgxLaEk+n7pAtmFOZPNOVQVX1W10Uvv8XVQ+vnLrp37Gn8a08+VYiKEj5+VHeaCoLPp
+         yQCWmlgPA/+TrVWXr5FubEhc5nOvwF2xIJfFI3yj1IMBgfVpKeeVRvSadfzTZCp2tcxV
+         EwEtjrr4UK2+vKpiS1zEhzvda4rUg3mLQwa7v196CKmcaGZ/xrtJnx42sFDQnOAYDmEm
+         BAqA==
+X-Forwarded-Encrypted: i=1; AJvYcCU66B+ye6w8MbrbdktKmRh/vnTgJOgyQx/1C83F3vXyiOKA/mdpGtWB7og1B1vfu9S0OPFExf0RF4O3dl4=@vger.kernel.org, AJvYcCUWH8Ror2upF22VtH5Htie47n7qHWkyBh3neN5xwA9DRMiIFMEJMlh0zfmYQ9oO0u4njscotFdAJiEb@vger.kernel.org, AJvYcCUj3CQuBIjwSOX7Ct/17Lu+9JXmqKrQmbuF7qULYbiPHcPY59dztdiU1SclTqKVWtjn/YmegGQeBYGB@vger.kernel.org, AJvYcCV+LQpo8RQ1zNYXfFYQQbbh0E+YoWuwB21yPZhHWbZ/0lic/5I8xJ9oQDG6LAb8robB45J2zwqCIHTY2pv/@vger.kernel.org, AJvYcCWhbM4wzm9Fdz2i+pOORXPSM1EmFFTnuabsssD2d5/AHFPVkWVCe3MsANL97j+TwKJ71qVl0oPik9ks@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4psXp8SOvFP7UJxT67dBtGItZLQ+eUKniXo7DMm+piVIISwkY
+	osH3cfLFes0azNiCyTdBMk3mEakQHypH06/EV5K4PP9hb4br/Mx8
+X-Google-Smtp-Source: AGHT+IH81HbQrA3v1sF7j+/e52PtrsaBlbyWaew+ccwFsuoCafGrJH08GSAi3ETeqkfwdrkDfCcB1A==
+X-Received: by 2002:a05:6a20:d501:b0:1d9:21fb:d31f with SMTP id adf61e73a8af0-1db91e8047bmr23198450637.45.1730728639476;
+        Mon, 04 Nov 2024 05:57:19 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1b91d3sm7397947b3a.38.2024.11.04.05.51.27
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1b897csm7726281b3a.14.2024.11.04.05.57.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2024 05:51:27 -0800 (PST)
+        Mon, 04 Nov 2024 05:57:18 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2a5c17c9-db8c-492d-87e7-c9872b2d5100@roeck-us.net>
-Date: Mon, 4 Nov 2024 05:51:26 -0800
+Message-ID: <0d9f1a5a-aa1d-4e99-8df7-3deb08433dc1@roeck-us.net>
+Date: Mon, 4 Nov 2024 05:57:17 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,8 +78,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/6] hwmon: (pmbus/core) clear faults after setting
- smbalert mask
+Subject: Re: [PATCH v3 3/6] hwmon: (pmbus/core) add wp module param
 To: Jerome Brunet <jbrunet@baylibre.com>
 Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
  Patrick Rudolph <patrick.rudolph@9elements.com>,
@@ -90,9 +89,9 @@ Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-i2c@vger.kernel.org
 References: <20241024-tps25990-v3-0-b6a6e9d4b506@baylibre.com>
- <20241024-tps25990-v3-4-b6a6e9d4b506@baylibre.com>
- <fa3ccd3b-7dab-45b2-92ec-49400e39114c@roeck-us.net>
- <1jo72v5rnp.fsf@starbuckisacylon.baylibre.com>
+ <20241024-tps25990-v3-3-b6a6e9d4b506@baylibre.com>
+ <47164712-876e-4bb8-a4fa-4b3d91f2554b@roeck-us.net>
+ <1jjzdj5qyy.fsf@starbuckisacylon.baylibre.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -138,59 +137,61 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <1jo72v5rnp.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <1jjzdj5qyy.fsf@starbuckisacylon.baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/4/24 00:28, Jerome Brunet wrote:
-> On Fri 01 Nov 2024 at 08:10, Guenter Roeck <linux@roeck-us.net> wrote:
+On 11/4/24 00:43, Jerome Brunet wrote:
+> On Fri 01 Nov 2024 at 08:08, Guenter Roeck <linux@roeck-us.net> wrote:
 > 
->> On Thu, Oct 24, 2024 at 08:10:38PM +0200, Jerome Brunet wrote:
->>> pmbus_write_smbalert_mask() ignores the errors if the chip can't set
->>> smbalert mask the standard way. It is not necessarily a problem for the irq
->>> support if the chip is otherwise properly setup but it may leave an
->>> uncleared fault behind.
+>> On Thu, Oct 24, 2024 at 08:10:37PM +0200, Jerome Brunet wrote:
+>>> Add a module parameter to force the write protection mode of pmbus chips.
 >>>
->>> pmbus_core will pick the fault on the next register_check(). The register
->>> check will fails regardless of the actual register support by the chip.
+>>> 2 protections modes are provided to start with:
+>>> * 0: Remove the write protection if possible
+>>> * 1: Enable full write protection if possible
 >>>
->>> This leads to missing attributes or debugfs entries for chips that should
->>> provide them.
->>>
->>> We cannot rely on register_check() as PMBUS_SMBALERT_MASK may be read-only.
->>>
->>> Unconditionally clear the page fault after setting PMBUS_SMBALERT_MASK to
->>> avoid the problem.
+>>> Of course, if the parameter is not provided, the default write protection
+>>> status of the pmbus chips is left untouched.
 >>>
 >>> Suggested-by: Guenter Roeck <linux@roeck-us.net>
->>> Fixes: 221819ca4c36 ("hwmon: (pmbus/core) Add interrupt support")
 >>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 >>> ---
->>>   drivers/hwmon/pmbus/pmbus_core.c | 7 ++++++-
->>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>>   Documentation/admin-guide/kernel-parameters.txt |  4 ++
+>>>   drivers/hwmon/pmbus/pmbus_core.c                | 74 ++++++++++++++++++-------
+>>>   2 files changed, 59 insertions(+), 19 deletions(-)
 >>>
->>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->>> index ce697ca03de01c0e5a352f8f6b72671137721868..a0a397d571caa1a6620ef095f9cf63d94e8bda1d 100644
->>> --- a/drivers/hwmon/pmbus/pmbus_core.c
->>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->>> @@ -3346,7 +3346,12 @@ static int pmbus_regulator_notify(struct pmbus_data *data, int page, int event)
+>>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>>> index 1518343bbe2237f1d577df5656339d6224b769be..aa79242fe0a9238f618182289f18563ed63cba1c 100644
+>>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>>> @@ -4733,6 +4733,10 @@
+>>>   			Format: { parport<nr> | timid | 0 }
+>>>   			See also Documentation/admin-guide/parport.rst.
 >>>   
->>>   static int pmbus_write_smbalert_mask(struct i2c_client *client, u8 page, u8 reg, u8 val)
->>>   {
->>> -	return _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
->>> +	int ret;
+>>> +	pmbus.wp=	[HW] PMBus Chips write protection forced mode
+>>> +			Format: { 0 | 1 }
+>>> +			See drivers/hwmon/pmbus/pmbus_core.c
 >>> +
->>> +	ret = _pmbus_write_word_data(client, page, PMBUS_SMBALERT_MASK, reg | (val << 8));
->>> +	pmbus_clear_fault_page(client, -1);
 >>
->> Why -1 and not page ?
+>> I have always seen that file as applicable for core kernel parameters,
+>> not for driver kernel parameters. I can not accept a global change like
+>> this without guidance. Please explain why it is desirable to have this
+>> parameter documented here and not in driver documentation.
 > 
-> The idea was to clear the fault on the page we are on, basically just skipping
-> setting the page again.
+> No reason other than trying to document things the best I can.
+> Other subsystemw are documenting things in here too, I just did the same
 > 
-> I'll change to 'page'
+> See 'regulator_ignore_unused' for example.
 > 
-Or just add a comment explaining the '-1'.
+
+Basic rule: You can find examples for everything in the kernel, including
+dell_smm_hwmon in the same file. That doesn't make it better. It only shows
+that I did not pay attention. Trying to add all the other 80+ module
+parameters of hwmon drivers, or all the 5,000+ module parameters from all
+drivers, into the same file would not scale well.
+
+Please document the module parameter in Documentation/hwmon/pmbus-core.rst.
 
 Thanks,
 Guenter
