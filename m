@@ -1,131 +1,224 @@
-Return-Path: <linux-i2c+bounces-7769-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7770-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 322A99BC263
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Nov 2024 02:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 85EB09BC2C7
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Nov 2024 02:53:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D768B1F22847
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Nov 2024 01:15:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17E501F224BE
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Nov 2024 01:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB36D1CF8B;
-	Tue,  5 Nov 2024 01:15:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3697F1EA6F;
+	Tue,  5 Nov 2024 01:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XG0Wh4ag"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lf3hTIEv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF4A1862A;
-	Tue,  5 Nov 2024 01:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45602179BD;
+	Tue,  5 Nov 2024 01:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730769302; cv=none; b=c19e2fYzLldm2qGHr+QB2PpHvXqDkJyDm3FApQydF7+aL1g2veyWj2ZCZ6r5sqh0eTb+/R31c79eVp77luHBg+fVlIkEE/ELuWSUJpwD71w5K0f19+E/FYW+TciP1E/4ke/PTUUTP95v7mw4J20K8xtZQK4b7m/3YDUyB7xwMSA=
+	t=1730771587; cv=none; b=hpdKk9PWxjfVfqZpsGYNTa0vVAN/7H6G4T+HAutN5aVhoUjF26GZ0z9lQQCs4ULIpHMD9rRVI+GGiRDMhs+ZMffTKwyqjnhRQbSWj9W+j8TLd1OPswLjrVMrR59Mt202mhUnG7Gks639x8cAEl1x3afzjarz7UHLUpnX1z3/i6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730769302; c=relaxed/simple;
-	bh=55po1Ly185ptJHFwAG7rk+MNxrM1YSdwN105ijD9dKg=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=MozENl3VuhZAXRmVrSxKdNcfSsjjYM8uYRmx1nwm6xTQNtKQ6klSHx9VPWT6jdsgNq/JWg/P91LLB2oBN6KPbMgNP+8fVUqBSPbVXiKQ3aNWdlmLQrtxfHeCNXLC6hEg2BYTZLPl4SJYOs1gWdITZ6qonCL7AzqWmhOzgKFRXLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XG0Wh4ag; arc=none smtp.client-ip=209.85.214.196
+	s=arc-20240116; t=1730771587; c=relaxed/simple;
+	bh=b3TaHhGEBsxCYF56Y/qge5KEW8LQCF7yxqdKwVtChhs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tYTTa2zaHa1bIGuAeTALqUcNhvafigWG1pBpPLPz9ImdMOiHXU4nnjHtXyAEdNeFe5HxqT8PUJk51Af9u3nXZ23glX0ttPPXOB60PSjBPVFgvVRMQ5SS7TFMMUrNbAjVWHIZHoa9Y3bbZWRtS3NuqTXWOh4GfzQkmP28/nTy9bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lf3hTIEv; arc=none smtp.client-ip=209.85.218.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-20c805a0753so45341975ad.0;
-        Mon, 04 Nov 2024 17:15:00 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a99f646ff1bso668723466b.2;
+        Mon, 04 Nov 2024 17:53:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730769300; x=1731374100; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DmSZDJ+VfbjL+FInE4jqatZi0P6NlfcMiliJP8Vq75k=;
-        b=XG0Wh4agfdzbTo61wpM3rUsvFH3uK912k2ESQLxsi86aU57qhnTvvo13qQx6pePX9Z
-         XEvfuOyGdtWYBn91sEc2/iSdCbifYGKy3LBrOSLrZU64PMObxlHJxJZMNJPKCTJbIvNd
-         f5cFVrTLZFzDR1njH5iVphe/BcNiMUlMcm5aJ9Iia5/crDNABGcxg9jhq0UiYJ1olRGl
-         mOTBKM1L+dTDSezO0iuzhnaoLAiGAJbwSYohyYYOxkWCS8pxFPiHoIBIMJE9JzFSOgBb
-         HQ1z1f5k5yqu/PsN1FACGbkZYDaTEqvHFoo6ugMdYn/ksv/kyAqk4UNbC7EZt2whkyPd
-         5Lmg==
+        d=gmail.com; s=20230601; t=1730771584; x=1731376384; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VIdb5nyjPQMMLtSpo3yTfiFAYqNS0d+cY2Xi5pY2LfY=;
+        b=Lf3hTIEvsEvYHMiIZKaNqKzQDEg/ac+3rv8sADjKLtH48HcnDkNp14ihwn1OkoIzYD
+         SlTLQn1gcyjsPNUGcUuTzYbl9lOSpnVsiRj1wl2SpQGGApZW/WnQfEFECpNR8X98HCCA
+         ex4rgneduFIgaeQR8Cpq2k9wV/GbcllSqu3vnouhLPED+deEq/bRdn5dbrq5UTOwab8n
+         A8ELIMi+74BZVMVfS58oRCk0o51HZwjav8Z+FW8LSFxwTut87CzWhvtAfDKNvAmVgO13
+         aaFob0XO0tfAlymE8mZNMSxHKltVDogmlu/APop8z5dtNU6up0xu+3MrUBM6qFU9Jhb3
+         VIdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730769300; x=1731374100;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DmSZDJ+VfbjL+FInE4jqatZi0P6NlfcMiliJP8Vq75k=;
-        b=FfWOE8WjnM4QHgMJrrG2+0yJmYIJdzUxfl6+Sf5+UmZ8WDdU4CEsr4HrgN6tkpf0XH
-         iQ8UDwYMKfa/gVhUbVw8EgCcIkT0aEfpNFZRi+v9oJnX+Ynk1LGo8UkxCrHGCncZVWqW
-         OMFpa08RZJU8mhpjn3iI2DWF2laNeFiBWOwa6XB37AApqP1eCzePPeiIYFKysMvNuTNA
-         G7cUvG6ufVAdNMCpc6RPIf7E/7rmWr+wps8lv2/ftw3LAjM+WjX2w1BmQaZXcWSjkXic
-         jjKdeXcUtFGWgB/rwm2H2OFDkRNyFTErVjqOFWkDXeKOoyQWTD4/I/P1RujoCRN4zy+X
-         HLlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWCXGoOp7R7/dyN6BgXNgxOFvF0Yv0vCvGIo742kwOjMH7eDb7SlVL7mXjo2B2/6b9wNE/Pcx+BHhCI@vger.kernel.org, AJvYcCWORlXVSj1WO9/+PxLQFjvO6QBsjvW3j71lSJ6BgBYkx1aKpGSAwRcoUiY8LtGVnL9H8iPvBcguTfuU@vger.kernel.org, AJvYcCWr0H1bFIJagVMsTQfK5XY8q1dXt1D7CYKr+gkKnjS9IuoJDyPUucaBI/WejdMrZ1tZXvlnwC6YxIXmioYN@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJKN97SORFcUv0t1OIv8VLgoht/xYarBBnQZbPX2g2eYftnVwZ
-	boBeyleeJrUkcY+KI+dpL1UdBmPYR4K/kGTRR4bOinONN7pNDZjF
-X-Google-Smtp-Source: AGHT+IFPlCW/2yJN4y81zz/dY+QI1q450fTiiDbolhkdNOOfXKhGNXtiKw133Yda+TQppPatOPznFA==
-X-Received: by 2002:a17:903:1108:b0:20c:e262:2580 with SMTP id d9443c01a7336-210c6c3ffb6mr408256265ad.44.1730769300267;
-        Mon, 04 Nov 2024 17:15:00 -0800 (PST)
-Received: from [127.0.0.1] ([2602:f919:106::1b8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057a2c23sm67083465ad.143.2024.11.04.17.14.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2024 17:14:59 -0800 (PST)
-Message-ID: <a08384bf-6747-4975-b025-f8fd3685fc30@gmail.com>
-Date: Tue, 5 Nov 2024 09:14:51 +0800
+        d=1e100.net; s=20230601; t=1730771584; x=1731376384;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VIdb5nyjPQMMLtSpo3yTfiFAYqNS0d+cY2Xi5pY2LfY=;
+        b=hpSWLGsG5w1UwCLdwfoP87gdbkosUzNtXL5DIuU+LfeixSMRahGIQc5gKi31gC4xEI
+         ap3/1cQ1srtF+QaRpsLASFbiIuXG6TPORX+Q3gVzJquVHbR7rpSOzxqvcEVvfLqWoaTG
+         N2eWwfQPmeY66Tg2zaEDS6TgoJqGJW8efkZa9ouE/8r83NK/1yeQEUx9louMgZv+6TXV
+         gnsqVMaQJWqLPggP951LHP9gIkstfELpHjYi9GP0HIiAQgXJ1d3tD9KlLg51L+bsloAC
+         sUEM0uS1nw2wPU9B1KrcOYd4c899/G5GA+T+Vggnbd2Ry7LOELdKqDgeKLUTKBJ6NeoS
+         IZWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUH5jKpWN7TI6eAHFfr+faPN7RQHHvzAEq3c3WTyU49rFsskwQQ78AHMru9vXG+CQeRAgWFllxx821p2X4W@vger.kernel.org, AJvYcCVw5WlGG/P2IOoeoiCw1YetTKZcClMbrucXaA8PVXNGsDQiJ3DJr9AqhLDtcdQFa+hcq2h1MMiVDMY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw09Huncd05bBS//qA41wKaEHe/4r2WoWdzTbeKRmvPjcSk7JK6
+	H4XNAuJpEDreRL09QyhtDUDoTR41SGDa2CSlrHuCoE6d+QhD9I7FgBGGa6EztgrKc8KD1CDb3Px
+	EkLIDQRPfKUp0QeAj6H1x//XEng==
+X-Google-Smtp-Source: AGHT+IHspJhT15caW/7rLneaz/8IbmEzTw+V8hoTRG1f9gwXEhSDWDC2CZBeah+K02DugV/yuKzB3d/9cAl1QjPyDTY=
+X-Received: by 2002:a17:906:dc91:b0:a9a:4f78:c3 with SMTP id
+ a640c23a62f3a-a9e3a5a0da3mr2162429366b.21.1730771583301; Mon, 04 Nov 2024
+ 17:53:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: troymitchell988@gmail.com, andi.shyti@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: spacemit: add support for K1 SoC
-To: Krzysztof Kozlowski <krzk@kernel.org>
-References: <20241028053220.346283-1-TroyMitchell988@gmail.com>
- <20241028053220.346283-2-TroyMitchell988@gmail.com>
- <6zx3tqdc5bma2vutexwigzlir6nr6adp7arg4qwl5ieyd3avbu@5yyhv57ttwcl>
- <dbeea869-54cd-43fe-9021-783d641f1278@gmail.com>
- <ariqiukhztgziwwgaauqy6q3pghflnoeuwtag4izwkfmtvi2kh@gnlq4d7jsaw4>
- <6cce463e-25cc-4a07-971f-6260347cb581@gmail.com>
- <502b0b14-0e1f-4a59-85ad-7edeb9d3033d@kernel.org>
-Content-Language: en-US
-From: Troy Mitchell <troymitchell988@gmail.com>
-In-Reply-To: <502b0b14-0e1f-4a59-85ad-7edeb9d3033d@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20241021062732.5592-1-kfting@nuvoton.com> <20241021062732.5592-3-kfting@nuvoton.com>
+ <kzsvr3jepoqjahn7n2jch5vrqim5eknylrasvsbjugfhzny46o@bemfk6knfmxi>
+ <CACD3sJbWKkBtyq-gnicASJvRnz_nGjVAyVgnreNV7RS+MLOWJw@mail.gmail.com> <CACD3sJbyrzfE0UfoeMhjTg-c1huZmykXLeQKDj-FO8er=awwDQ@mail.gmail.com>
+In-Reply-To: <CACD3sJbyrzfE0UfoeMhjTg-c1huZmykXLeQKDj-FO8er=awwDQ@mail.gmail.com>
+From: Tyrone Ting <warp5tw@gmail.com>
+Date: Tue, 5 Nov 2024 09:52:51 +0800
+Message-ID: <CACD3sJbC77doxo_mBmEVVMJfm2rX9bWAvT1cgeZ77aC60zG7WA@mail.gmail.com>
+Subject: Re: [PATCH v7 2/4] i2c: npcm: Modify the client address assignment
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, 
+	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
+	andriy.shevchenko@linux.intel.com, wsa@kernel.org, rand.sec96@gmail.com, 
+	wsa+renesas@sang-engineering.com, tali.perry@nuvoton.com, 
+	Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, 
+	JJLIU0@nuvoton.com, kfting@nuvoton.com, openbmc@lists.ozlabs.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Andi:
 
-On 2024/11/4 22:48, Krzysztof Kozlowski wrote:
-> On 04/11/2024 14:01, Troy Mitchell wrote:
->>
->> On 2024/10/31 16:00, Krzysztof Kozlowski wrote:
->>> On Tue, Oct 29, 2024 at 04:36:00PM +0800, Troy Mitchell wrote:
->>>> On 2024/10/28 15:38, Krzysztof Kozlowski wrote:
->>>>> On Mon, Oct 28, 2024 at 01:32:19PM +0800, Troy Mitchell wrote:
->>>>>> The I2C of K1 supports fast-speed-mode and high-speed-mode,
->>>>>> and supports FIFO transmission.
->>>>>>
->>>>>> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
->>>>>> ---
->> Change in v2:
->>  - Change the maxItems of reg from 1 to 2 in properties
-> 
-> Why?
-I need the address and size. In v1, I wrote it as 1, and I got the make
-dt_binding_check error.
-> 
->>  - Change 'i2c' to 'I2C' in the commit message.
->>  - Drop fifo-disable property
->>  - Drop alias in dts example
->>  - Move `unevaluatedProperties` after `required:` block
-> 
-> Rest look ok.
-> 
-> Best regards,
-> Krzysztof
-> 
+May I have your comments about my feedback on these patches?
 
--- 
-Troy Mitchell
+Tyrone Ting <warp5tw@gmail.com> =E6=96=BC 2024=E5=B9=B410=E6=9C=8829=E6=97=
+=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=884:50=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Hi Andi:
+>
+> Sorry to bother you.
+>
+> May I have your comments about my feedback on these patches?
+>
+> It'll be great to know if I need to prepare the next patch set for review=
+ing.
+>
+> Tyrone Ting <warp5tw@gmail.com> =E6=96=BC 2024=E5=B9=B410=E6=9C=8825=E6=
+=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=889:43=E5=AF=AB=E9=81=93=EF=BC=9A
+> >
+> > Hi Andi:
+> >
+> > Thank you for your comments.
+> >
+> > Andi Shyti <andi.shyti@kernel.org> =E6=96=BC 2024=E5=B9=B410=E6=9C=8824=
+=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=886:04=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> > >
+> > > Hi Tyrone,
+> > >
+> > > ...
+> > >
+> > > > +     /*
+> > > > +      * Previously, the 7-bit address was stored and being convert=
+ed to
+> > > > +      * the address of event in the following call to npcm_i2c_mas=
+ter_start_xmit().
+> > >
+> > > Do we care how it was done previously? I think this is not a
+> > > useful information as the code readers will se the code the way
+> > > it is now, not the way it was done "previously".
+> > >
+> >
+> > Yes, it's not a useful information anymore.
+> >
+> > > (there is a related comment at the end)
+> > >
+> > > > +      * Since there are cases that the i2c_recover_bus() gets call=
+ed at the
+> > > > +      * early stage of npcm_i2c_master_xfer(), the address of even=
+t is stored
+> > > > +      * and then used in the i2c_recover_bus().
+> > >
+> > > I could rephrase this sentence to something like:
+> > >
+> > > /*
+> > >  * Store the address early in a global position to ensure it is
+> > >  * accessible for a potential call to i2c_recover_bus().
+> > >  */
+> >
+> > Understood. Thank you for your help on this.
+> >
+> > >
+> > > > +      */
+> > > > +     bus->dest_addr =3D i2c_8bit_addr_from_msg(msg0);
+> > > > +
+> > > >       /*
+> > > >        * Check the BER (bus error) state, when ber_state is true, i=
+t means that the module
+> > > >        * detects the bus error which is caused by some factor like =
+that the electricity
+> > > > @@ -2165,6 +2175,15 @@ static int npcm_i2c_master_xfer(struct i2c_a=
+dapter *adap, struct i2c_msg *msgs,
+> > > >        * bus is busy.
+> > > >        */
+> > > >       if (bus_busy || bus->ber_state) {
+> > > > +             /*
+> > > > +              * Since the transfer might be a read operation, remo=
+ve the I2C_M_RD flag
+> > > > +              * from the bus->dest_addr for the i2c_recover_bus() =
+call later.
+> > > > +              *
+> > > > +              * The i2c_recover_bus() uses the address in a write =
+direction to recover
+> > > > +              * the i2c bus if some error condition occurs.
+> > > > +              */
+> > > > +             bus->dest_addr &=3D ~I2C_M_RD;
+> > > > +
+> > > >               iowrite8(NPCM_I2CCST_BB, bus->reg + NPCM_I2CCST);
+> > > >               npcm_i2c_reset(bus);
+> > > >               i2c_recover_bus(adap);
+> > > > @@ -2172,7 +2191,6 @@ static int npcm_i2c_master_xfer(struct i2c_ad=
+apter *adap, struct i2c_msg *msgs,
+> > > >       }
+> > > >
+> > > >       npcm_i2c_init_params(bus);
+> > > > -     bus->dest_addr =3D slave_addr;
+> > >
+> > > We can now get rid of slave_addr. It's just used in
+> > > npcm_i2c_master_start_xmit(). Right?
+> >
+> > Yes, slave_addr is just used as the link
+> > https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-np=
+cm7xx.c#L2182
+> > suggests with this patch.
+> >
+> > >
+> > > Andi
+> > >
+> > > >       bus->msgs =3D msgs;
+> > > >       bus->msgs_num =3D num;
+> > > >       bus->cmd_err =3D 0;
+> > > > --
+> > > > 2.34.1
+> > > >
+> >
+> > Thank you.
+> >
+> > Regards,
+> > Tyrone
+>
+> Have a nice day.
+>
+> Thank you.
+>
+> Regards,
+> Tyrone
+
+Thank you.
+
+Regards,
+Tyrone
 
