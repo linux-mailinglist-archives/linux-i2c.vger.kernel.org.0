@@ -1,109 +1,148 @@
-Return-Path: <linux-i2c+bounces-7847-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7848-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BEDD9BF2B7
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 17:08:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 284369BF2BF
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 17:08:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24A8AB25F01
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:08:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2D2B283B01
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:08:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723CA205AB7;
-	Wed,  6 Nov 2024 16:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4757F2064EB;
+	Wed,  6 Nov 2024 16:06:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WWX8h2xO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jMSU+/Qb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AE31DE8AE;
-	Wed,  6 Nov 2024 16:05:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7442204F7F;
+	Wed,  6 Nov 2024 16:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730909124; cv=none; b=rLSnmxsr74hiCzJfpFj5MuLX4/LJTU5VmP7DBZZqhb0EXX4zPvm7XzgEk0pmJMODhjSnbrlhA19AkQhqgQcixJpHs0w9TWjGuvo1ySN/2LtGjsLFB6+scomqB1os0dpKD3ZbYOgxTljWt1w1MCoUBiAySMOmMGVgaO2QsAwyZLI=
+	t=1730909169; cv=none; b=kmfDvNZl//oSECZXdIHa2QryWq02nJranMc0kPflKD82dLvz34/W1+VfmoIVYp6IuumHZXak4zRuVfnnjiTZbQBiExwFm7eJAkLt88F4tGKuHnzQz+m57Lk1hhEWzAvFcS67Y5pXAuvqdV45OSfPPIt1HT11UFfFW8/xSkYzs4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730909124; c=relaxed/simple;
-	bh=SuGuSheuI08iICd2YRupGe9J6gSR7uvopUoPsQ79pvw=;
+	s=arc-20240116; t=1730909169; c=relaxed/simple;
+	bh=owI1dOfUO3f36nslRIYvy0cGotXXjlEaH4q214cOC1c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bZLrhCxulH65KEFGwx/Z/q6b4Qcv2Gqh/gcejk+lhI+6QFfJyaer0onOGcoSIqe02bPj2ePYvZLPVSgaaMmWUKBkU7ZPqHs1dgS0VVbbfW2+CzlOUNVuxBUMKCcU+pklJM2ZBfGNlj/kzLzyTXg4n0KLHlqEM6t3ZbjNhiQB3f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WWX8h2xO; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-71e592d7f6eso5427027b3a.3;
-        Wed, 06 Nov 2024 08:05:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730909122; x=1731513922; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I9hh0Dyre/6OcliMKrPmVWCYWdORO1fnrFHP9Hk2a5A=;
-        b=WWX8h2xOjxSDu9T4nkM8iHs7Aldjltc6QdpEA0jq1WEZDv5mGOtV+d1WkDsbCVxtEq
-         fqsFNep5XuSCPtaTVYWFKixXT4+4IHW4tuA/Iv4NwAXy82wr0bpKkfcOGlJyirWP2R+P
-         w7evmIEJ3Q+8W4cgpmg/fEwqTeUHBB4a0sGEWd5IH171pdc6mXnoElOUDj1ZE4bCHmlP
-         nJuDgnoAHDz/xJqkbv65DKYGEy/fpgVO39iS++PX1t1kdPmPHse/YDsxpCu21tTkqsXJ
-         yUbr3ELZRk1mlYZJIS3mFSqsNQLJO9iNQ27vA4hG2P3DcIT08EXi3m1wBpqJH80EAhvX
-         Ty4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730909122; x=1731513922;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I9hh0Dyre/6OcliMKrPmVWCYWdORO1fnrFHP9Hk2a5A=;
-        b=Ybu1qZ98K94kvOIS1T2P2/zNzOzGQGVQJX35QBC0U/yY5pziK9tWJWdCwGIoBOo9ag
-         vcwQd9vF0Tp2WpUgd2n1xeVNJY8rFFJUYOBXBju5rnY7X5DqRTc8RU4hB7/b1+WVYhx+
-         ljJts8jpaMWpzsv97Ez6HUj5cWZPYSwwPlIJn3b1o9slwVFBlH3z0AD6KY3A8tNJcsEA
-         Vs+qDf452uFyK6TJYYRJB7iNJzLBp9wdDs32RzOBhWuvOfcfB74HLj1GADdjOChPnjr1
-         zY2qqaIRK9MVMwOfH8jrcp+7tPvlfhpXvvjhmgwzy90ZVVFTYsNrCPTq9OdfHv/E3TPM
-         RJUw==
-X-Forwarded-Encrypted: i=1; AJvYcCUhyqM3A0j3PyXeaMrY0N4D/XtqUDMeavWuk9DFkocxYSy0ZlMM5Zjcnme5D+11TV4bz9D6w44+6SBH@vger.kernel.org, AJvYcCVXC7cshCNT5jASooJ2Fce1A1AeCDDGPMcqyPsKI/E9F8CseNvIq20YNBLtO5jUxred03zwohRTiGgg@vger.kernel.org, AJvYcCWiNgY6HPpiSBPkDhIUYpbRXauyUtSaQNC2DgQsRXycjAQtJhe4yEftx/Yfz+heGJstn9DszwJoIX/4Popq@vger.kernel.org, AJvYcCX+bUVxPukM6aZWnX3nfKHPKxkp0h+9tT6vDdElNwA+DPakZFboUjkGEwDyFduZ5fpdQs7LWKAM5nFlukU=@vger.kernel.org, AJvYcCXQ12hFvrbXYZQcsCogkbeQIx2mJDdTktt1caHet9DghSwZWDYVwNkgkM2zG0R4h5kW4yIXYFNxHxI4@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUr5nNp0rSFC8FL9ZbNgYDjccLrsiK7mZzNqJ1XCJkGDeMUvgb
-	2vk10yoRWIfQCIbN0ps4omrOaeMeXpzFOz3JfgukdxOlbvvgKB7E
-X-Google-Smtp-Source: AGHT+IF1jct8OyG/Z5cfXNHGMCNw7qbVenSFYhbxJkZEVBq3kbHXTrvCB9AijCFQ6arovvx4YJyoLA==
-X-Received: by 2002:a05:6a00:cc9:b0:71e:6eb:786e with SMTP id d2e1a72fcca58-720c990b6ccmr27962762b3a.13.1730909122058;
-        Wed, 06 Nov 2024 08:05:22 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1ba033sm11801376b3a.34.2024.11.06.08.05.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 08:05:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 6 Nov 2024 08:05:20 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	Naresh Solanki <naresh.solanki@9elements.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=itgE/Dmi+TdxJOOH+/rPmwNymQGF9I8SaCls3ODL+MX7je7O1cwH/ol1cqEmTXqezyHH7LOILUMAw7WY/nUnK+ExFEeV5Erayx3fR09BoSZTvohja8i0zpsUXnqNyo/PC9iyaGUqi3FtPpD9hS9h9sy+7b6NtmOmEMKHcN2Dbpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jMSU+/Qb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D04BC4CEC6;
+	Wed,  6 Nov 2024 16:06:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730909168;
+	bh=owI1dOfUO3f36nslRIYvy0cGotXXjlEaH4q214cOC1c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jMSU+/QbU/pj0W2yPaEzZ3tlG2Nxxjl29ftjebUJg//CpoYZie8Olae8TK9Qszn8Z
+	 cBFQdSSVI2F9HBW69bVCf3gulyFw1/JnI4PGJiFAraRg/NwE3UuPqbVyTZFqnsHTV7
+	 hUhA5U8s3eAmPNvXiqbQc0GsYH4drW2XdH3efH83RccdkJ86g56FKloRxm/2tVKZZK
+	 sILpHcZZDuu+gi+ySE2Zg2e0kFdapC3Uw+CJLNAx23AtbAcUsyy+sgttGhWZqLgQZn
+	 rNuERN65MXOGQsNcadg2XoBvnd9wHHDRmPrNWNvQ2+Yv0rdTOyoOJj3rXy2Y8ho4iv
+	 UdR7+rlq0tk5Q==
+Date: Wed, 6 Nov 2024 16:06:02 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v4 6/7] dt-bindings: hwmon: pmbus: add ti tps25990 support
-Message-ID: <d083ef2b-28b8-4fdd-b023-096a0ce7ee4f@roeck-us.net>
-References: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
- <20241105-tps25990-v4-6-0e312ac70b62@baylibre.com>
+	Peter Yin <peteryin.openbmc@gmail.com>,
+	Noah Wang <noahwang.wang@outlook.com>, Marek Vasut <marex@denx.de>,
+	Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v2 1/2] dt-bindings: trivial-devices: add ltp8800
+Message-ID: <20241106-gatherer-glancing-495dbf9d86c7@spud>
+References: <20241106030918.24849-1-cedricjustine.encarnacion@analog.com>
+ <20241106030918.24849-2-cedricjustine.encarnacion@analog.com>
+ <8e4dc080-d779-4b06-8fd1-74784e06323a@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="g7f03nsiTMvmTYyW"
 Content-Disposition: inline
-In-Reply-To: <20241105-tps25990-v4-6-0e312ac70b62@baylibre.com>
+In-Reply-To: <8e4dc080-d779-4b06-8fd1-74784e06323a@roeck-us.net>
 
-On Tue, Nov 05, 2024 at 06:58:43PM +0100, Jerome Brunet wrote:
-> Add DT binding for the Texas Instruments TPS25990 eFuse
-> 
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 
-Applied.
+--g7f03nsiTMvmTYyW
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Guenter
+On Tue, Nov 05, 2024 at 08:34:01PM -0800, Guenter Roeck wrote:
+> On 11/5/24 19:09, Cedric Encarnacion wrote:
+> > Add Analog Devices LTP8800-1A, LTP8800-2, and LTP8800-4A DC/DC =CE=BCMo=
+dule
+> > regulator.
+
+A single compatible for 3 devices is highly suspect. What is
+different between these devices?
+
+> >=20
+> > Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> > ---
+> >   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+> >   MAINTAINERS                                            | 5 +++++
+> >   2 files changed, 7 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/D=
+ocumentation/devicetree/bindings/trivial-devices.yaml
+> > index 90a7c0a3dc48..72877d00b8dd 100644
+> > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> > @@ -43,6 +43,8 @@ properties:
+> >             - adi,adp5589
+> >               # Analog Devices LT7182S Dual Channel 6A, 20V PolyPhase S=
+tep-Down Silent Switcher
+> >             - adi,lt7182s
+> > +            # Analog Devices LTP8800-1A/-2/-4A 150A/135A/200A, 54V DC/=
+DC =CE=BCModule regulator
+> > +          - adi,ltp8800
+> >               # AMS iAQ-Core VOC Sensor
+> >             - ams,iaq-core
+> >               # Temperature monitoring of Astera Labs PT5161L PCIe reti=
+mer
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 7c357800519a..6ca691500fb7 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -13555,6 +13555,11 @@ S:	Maintained
+> >   F:	Documentation/devicetree/bindings/iio/light/liteon,ltr390.yaml
+> >   F:	drivers/iio/light/ltr390.c
+> > +LTP8800 HARDWARE MONITOR DRIVER
+> > +M:	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> > +L:	linux-hwmon@vger.kernel.org
+> > +S:	Supported
+> > +
+>=20
+> This entry doesn't make sense in this patch.
+>=20
+> Guenter
+>=20
+> >   LYNX 28G SERDES PHY DRIVER
+> >   M:	Ioana Ciornei <ioana.ciornei@nxp.com>
+> >   L:	netdev@vger.kernel.org
+>=20
+
+--g7f03nsiTMvmTYyW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZyuT6gAKCRB4tDGHoIJi
+0rjyAPwNU65BJtJsjvnjwbUO2RxFVge6HDRF720CkCn1W8byoAD/eVZZvsDtPJ5J
+eTiT6GnZMxq9T+7hd7gwM/r8/aBDfQM=
+=xBOT
+-----END PGP SIGNATURE-----
+
+--g7f03nsiTMvmTYyW--
 
