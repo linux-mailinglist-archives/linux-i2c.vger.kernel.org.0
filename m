@@ -1,255 +1,116 @@
-Return-Path: <linux-i2c+bounces-7840-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7841-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD5899BE7F4
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 13:19:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2C7F9BEC51
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 14:04:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D928284D60
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 12:19:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FE34B2567F
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 13:04:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B4CF1DF73C;
-	Wed,  6 Nov 2024 12:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6393C1FB893;
+	Wed,  6 Nov 2024 12:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="W69Xj793";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="ZurwsuFW"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="HrN2wRyS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D66E1DF743;
-	Wed,  6 Nov 2024 12:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.167
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730895560; cv=pass; b=bOb1/mZxdxTMs8oqhQoMMAmV3SGTH2OdDZaharFXmyQyu4QDc9KE6S2cLMneZqjcH6qzGKwSpkwah+SDfUk04QJLFqveuU5Gt/10CAWTLfGHK2BsKMGr2NoXMzvaO0+TVQqu4ephINDdV0aHRZT5TWE9XAXNY0wHO2ZNPfnYFKA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730895560; c=relaxed/simple;
-	bh=uRy+I3CBpyDWHjwues5F8KRUANg2fEKZn09uKCmuRx4=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=L9uPSZdxMCHQPDK46NqzrkS11eEEm4JC8gjkfEj3dNh0+hIRewgEfI8tY0uQNQpwL2w4cOC3V0U6JltF9/GVy/fOP18PHD2pcLLlvQM3cioJitmGmlRn7hU9QNpucTmlnYnMNKV0xiWhaczMPRPgxFghOzpmy5O8fPKAmEvM+aU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=W69Xj793; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=ZurwsuFW; arc=pass smtp.client-ip=81.169.146.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1730895375; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=sgJY40JL4aVVCCfxUbMqIfZubM20thWUJ4nTQWdcFn8dXq8tJCKK/mG0EHbGJbBAwF
-    GwOlmwybM2cFZMX47FX5CFjedLAOcsW2Sv132EbEsTVlzHGJjqydqbLmfKPPJkVwc3UL
-    S+5kt+OpI/rxdJemNCBmXZL3qTEDKgzpCcbPNOXdGq8ipIPG+EpR/0SFT+sBrIJq0UpH
-    DVxa2VbSkxDKcpPxFihPdUTKMoiCky7ujNk5bO5JsUGuWaUDKMjxHbjj48Vl/ycL17PU
-    odaEiuS8Dq1o0vgIHJNZpQMJNXADYcuxXZv2vTu46t3EEpeFv0YFM5hv5mfyrEJWvwrn
-    8Ifw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1730895375;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=LsJ7BJEHDgw/eaZsbXlIAlGFRyIQvHsBP3sr/XremiQ=;
-    b=aJi0Y7dkHlAfjS+Ng7Fa0zC1XmMm4qrmNjWrIFM/2xVBcVODfkX3XjBFs2qT9WkLOI
-    xIIFS98nbs7KI3nuOuZQ5VuRcCX/uWQ9ydrWakcbMN3qxu/QL3D8UBKJexxrbJU85sWI
-    I7YhOAXaKaPeciRLYtn3dIroruon0DkVj56pBccBFjBV7uopPhyq19IWrWdxCxjsD85w
-    XYyLaqGMGJt02Y/Mm01oDxjwlSOCOWxp4YdOCQP4k3sqEr3tcd6LAInQtRWTBjoVzPLB
-    yIZk7EzKAm+ES/U5XjpjbZ/lIAnpm2hrHAX18w6NtXgfNEajgElJT9ne4VK6eVpHgX9h
-    NjBw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1730895375;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=LsJ7BJEHDgw/eaZsbXlIAlGFRyIQvHsBP3sr/XremiQ=;
-    b=W69Xj793ECmgklfxqSM6JxIqVeDYM7zRLjGT3j3J/IiDe2IPOVoLnAAAIE2c97p+0v
-    ZzF48XNKirEE1/GvNQ1OlHnc1FVsLCcVVqbW+v+gqAD1z6htfw2mCW6qkKv9TyADFXsn
-    xhewkq0WcDWgwBSWrw/b4wdvKvbU9akFkW4Sdwd9q+1m9R0JdNW7NMoFlT7eMh50bXRO
-    bdXOPsu3ZMcQif5EfaiL0jm5XNuTAqoTn/8gNc7Bg4f/RUdeqJhNhthMx8kSDYEOILk1
-    KmhRL49di6TmlUQOSHWo4Knm9rbLn0+nB7uHP8PxNacNMSf0Z1sRVZmfqYqvV10xysQy
-    2OgA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1730895375;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=LsJ7BJEHDgw/eaZsbXlIAlGFRyIQvHsBP3sr/XremiQ=;
-    b=ZurwsuFWulXpqhfuJbfFI7LxZ9oeyzbDu3VI7cuOov4BAroFPlUr71wkY834CqaqTz
-    /Qz2O751yptmtjrVRECA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yeTkZ"
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 51.2.11 DYNA|AUTH)
-    with ESMTPSA id Qb7e400A6CGE4h6
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Wed, 6 Nov 2024 13:16:14 +0100 (CET)
-Content-Type: text/plain;
-	charset=us-ascii
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6B11FB891;
+	Wed,  6 Nov 2024 12:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730897667; cv=none; b=toGs6ElVm4VK7GxY78LAbQ/+2IooSScF90WCEWYKJEfaMMeEtSE2AX1q3QqWYdDanxzhmpO8VQUVc99MPL7sc7gfnZ/9Xvp6WUHBBFr97isvRB0Qkl9kXhbI13OYtk5/8aIVhMcIGRv5iX98zUFiQ0GN3N0VChoaDl0RM1qUe50=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730897667; c=relaxed/simple;
+	bh=lkxv6wMPzIk+Q2dOS9GMqa+Rkj5Q9zLdFls5XSUwg40=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HcWjcDGFVywtYIiyWzfppueaGmdJFi07UBivi9+19kFp/yamoOg4HrAWVIxMZLucQueSShwt0gOUN5mRlw0K7Z9CKwq383bXHB1LbyHxCE8GpEeJliDNcb7IWzUwUdIhnGrssmjMOqUyG9nP/r/vI4ZnCVe8NN8KFzaX/UVUa9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=HrN2wRyS; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 3891e7789c3e11efbd192953cf12861f-20241106
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=VNbbyybsVA/llgCiGv5B8aYzpYH2qcy9VUJy2qkKAvI=;
+	b=HrN2wRySArCax9B4WRxPC50Y0jYLn4tFx8FR9eemNVCTzDrsKEdWOaNGaMZOnBIF4BuIMVzXomXGficksnXh5rB1kCCF68MtFXW4C3nSuYckrlkhJdWKbg7bxaiqbEqnSAKGYUhd9r2xZSHwHbSUF7AzmMoADlYzEBccb+2Enpg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.42,REQID:890f13e5-24e3-4fdf-b398-faac3b039d95,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:b0fcdc3,CLOUDID:2f948122-a4fe-4046-b5be-d3379e31a9ef,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 3891e7789c3e11efbd192953cf12861f-20241106
+Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
+	(envelope-from <zoie.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1855440004; Wed, 06 Nov 2024 20:54:12 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 6 Nov 2024 20:54:09 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 6 Nov 2024 20:54:09 +0800
+From: Zoie Lin <zoie.lin@mediatek.com>
+To: Qii Wang <qii.wang@mediatek.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<teddy.chen@mediatek.com>, Zoie Lin <zoie.lin@mediatek.com>
+Subject: [v2,0/1] i2c: mediatek: add runtime PM operations and bus regulator control
+Date: Wed, 6 Nov 2024 20:52:11 +0800
+Message-ID: <20241106125212.27362-1-zoie.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.1\))
-Subject: Re: [PATCH v2] i2c: omap: Fix standard mode false ACK readings
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20241106102342.393abe25@akair>
-Date: Wed, 6 Nov 2024 13:16:00 +0100
-Cc: Tony Lindgren <tony@atomide.com>,
- "Raghavendra, Vignesh" <vigneshr@ti.com>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>,
- Linux-OMAP <linux-omap@vger.kernel.org>,
- linux-i2c@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <23103A2E-1BAF-4914-A580-2E118539AD00@goldelico.com>
-References: <20230426194956.689756-1-reidt@ti.com>
- <445b3cbf-ffbc-6f77-47db-c30fc599e88f@ti.com>
- <20230428074330.GJ14287@atomide.com>
- <20230428183037.wbhds54dz5l4v5xa@reidt-t5600.dhcp.ti.com>
- <664241E0-8D6B-4783-997B-2D8510ADAEA3@goldelico.com>
- <20241106102342.393abe25@akair>
-To: Andreas Kemnade <andreas@kemnade.info>,
- Reid Tonking <reidt@ti.com>
-X-Mailer: Apple Mail (2.3776.700.51.11.1)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--2.028600-8.000000
+X-TMASE-MatchedRID: jUWJaIY8sEkfbciQjfRltRC41kTKJMKFYoHH/gi0K9v8rSaNLblw6nWC
+	d6QvVzbeE1RLTRi8AtKQYj0iYjwwnf16VZJq9bHXM8XTtgUzttN9LQinZ4QefCP/VFuTOXUT3n8
+	eBZjGmUzkwjHXXC/4I8prJP8FBOIaQDrrEUSMSmZGNW3Yd29bnG18/yTfVZRoc/Od1SdTsJ9Xz+
+	9mseNN8R4L76ik4lwFRyQrl51F0DySbb/RKI1CTBxYxYG29kEALeu9/Cix+Fl0BNB20+SxH7f8m
+	JY57oZddJaBDYald1lvF9+X2GEIHA==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--2.028600-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	0CA8BD2969729531D72666269D686E64A92A1F7F1D4AD7EFAB7583DA1ADD897F2000:8
 
+This series is based on linux-next, tag: next-20241105
 
+Changes in v2:
+- author name modification
+- replacement of pm runtime API
+- removal of redundant error messages
+- return value adjustment
+- add runtime pm status check
 
-> Am 06.11.2024 um 10:23 schrieb Andreas Kemnade <andreas@kemnade.info>:
->=20
-> Am Wed, 11 Sep 2024 11:40:04 +0200
-> schrieb "H. Nikolaus Schaller" <hns@goldelico.com>:
->=20
->> Hi,
->>=20
->>> Am 28.04.2023 um 20:30 schrieb Reid Tonking <reidt@ti.com>:
->>>=20
->>> On 10:43-20230428, Tony Lindgren wrote: =20
->>>> * Raghavendra, Vignesh <vigneshr@ti.com> [230427 13:18]: =20
->>>>> On 4/27/2023 1:19 AM, Reid Tonking wrote: =20
->>>>>> Using standard mode, rare false ACK responses were appearing with
->>>>>> i2cdetect tool. This was happening due to NACK interrupt
->>>>>> triggering ISR thread before register access interrupt was
->>>>>> ready. Removing the NACK interrupt's ability to trigger ISR
->>>>>> thread lets register access ready interrupt do this instead. =20
->>>>=20
->>>> So is it safe to leave NACK interrupt unhandled until we get the
->>>> next interrupt, does the ARDY always trigger after hitting this?
->>>>=20
->>>> Regards,
->>>>=20
->>>> Tony =20
->>>=20
->>> Yep, the ARDY always gets set after a new command when register
->>> access is ready so there's no need for NACK interrupt to control
->>> this. =20
->>=20
->> I have tested one GTA04A5 board where this patch breaks boot on
->> v4.19.283 or v6.11-rc7 (where it was inherited from some earlier -rc
->> series).
->>=20
->> The device is either stuck with no signs of activity or reports RCU
->> stalls after a 20 second pause.
->>=20
-> Reproduced some problem here:
-> i2cset 1 0x69 0x14 0xb6 (reset command for gyro BMG160)
-> [  736.136108] omap_i2c 48072000.i2c: addr: 0x0069, len: 2, flags: =
-0x0,
-> stop: 1
-> [  736.136322] omap_i2c 48072000.i2c: IRQ (ISR =3D 0x0010)
-> either with this patch applied:
-> ... system mostly hangs, i2cset does not return.
-> with it reverted:
-> ... most times I see after this:
-> [  736.136505] omap_i2c 48072000.i2c: IRQ (ISR =3D 0x0002)
-> and i2cset says:
-> i2cset: write failed: Remote I/O error
->=20
-> ... sometimes:
-> omap_i2c 48072000.i2c: IRQ (ISR =3D 0x0004)
-> and i2cset is successful.
->=20
-> Other register writes seem to work reliably, just the reset command.
-> I had tested with bmg driver disabled earlier,
-> so it did not come to light.
+The delay before runtime_put_autosuspend() actually executes 
+mtk_i2c_runtime_suspend() depends on the frequency of I2C usage by the 
+devices attached to this bus. A 1000ms delay is a balanced value for 
+latency and power metrics based on the MTK platform.
 
-Indeed, I can confirm with your sequence (and bmg driver voluntarily
-disabled so that the effect just comes from the i2c bus & client chip).
+Zoie Lin (1):
+  i2c: mediatek: add runtime PM operations and bus regulator control
 
-1. echo blacklist bmg160_i2c >/etc/modprobe.d/test.conf
-2. reboot & login:
-3.=20
+ drivers/i2c/busses/i2c-mt65xx.c | 77 ++++++++++++++++++++++++++++-----
+ 1 file changed, 65 insertions(+), 12 deletions(-)
 
-Last login: Wed Nov  6 11:24:37 UTC 2024 on ttyO2
-root@letux:~# dmesg|fgrep bmg
-root@letux:~# i2cset -y 1 0x69 0x14 0xb6
-root@letux:~# i2cset -y 1 0x69 0x14 0xb6
-root@letux:~# i2cset -y 1 0x69 0x14 0xb6
-root@letux:~# i2cset -y 1 0x69 0x14 0xb6
---- hangs for some seconds ---
-[  109.664245] rcu: INFO: rcu_preempt self-detected stall on CPU
-[  109.670318] rcu:     0-...!: (2100 ticks this GP) =
-idle=3D7e74/1/0x40000004 softirq=3D9248/9248 fqs=3D0
-[  109.679260] rcu:     (t=3D2100 jiffies g=3D11389 q=3D33 ncpus=3D1)
-[  109.684753] rcu: rcu_preempt kthread timer wakeup didn't happen for =
-2099 jiffies! g11389 f0x0 RCU_GP_WAIT_FQS(5) ->state=3D0x402
-[  109.696685] rcu:     Possible timer handling issue on cpu=3D0 =
-timer-softirq=3D4004
-[  109.704010] rcu: rcu_preempt kthread starved for 2100 jiffies! g11389 =
-f0x0 RCU_GP_WAIT_FQS(5) ->state=3D0x402 ->cpu=3D0
-[  109.714935] rcu:     Unless rcu_preempt kthread gets sufficient CPU =
-time, OOM is now expected behavior.
-[  109.724517] rcu: RCU grace-period kthread stack dump:
-[  109.729797] task:rcu_preempt     state:I stack:0     pid:15    =
-tgid:15    ppid:2      flags:0x00000000
-[  109.739593] Call trace:=20
-[  109.739593]  __schedule from schedule+0x3c/0x64
-[  109.747039]  schedule from schedule_timeout+0xa8/0xd4
-[  109.752349]  schedule_timeout from rcu_gp_fqs_loop+0x148/0x370
-[  109.758514]  rcu_gp_fqs_loop from rcu_gp_kthread+0xec/0x124
-[  109.764373]  rcu_gp_kthread from kthread+0xfc/0x108
-[  109.769500]  kthread from ret_from_fork+0x14/0x28
-[  109.774444] Exception stack(0xf0041fb0 to 0xf0041ff8)
-[  109.779754] 1fa0:                                     00000000 =
-00000000 00000000 00000000
-[  109.788330] 1fc0: 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000 00000000
-[  109.796905] 1fe0: 00000000 00000000 00000000 00000000 00000013 =
-00000000
-[  109.803863] CPU: 0 UID: 0 PID: 3210 Comm: loginwindow Not tainted =
-6.12.0-rc6-letux+ #169
-[  109.803894] Hardware name: Generic OMAP36xx (Flattened Device Tree)
-[  109.803894] PC is at handle_softirqs+0x84/0x300
-[  109.803924] LR is at handle_softirqs+0x54/0x300
-[  109.803955] pc : [<c0133c3c>]    lr : [<c0133c0c>]    psr: 60070113
-[  109.803955] sp : f0001fa0  ip : 844ce392  fp : c0f02080
-[  109.803985] r10: f0651be0  r9 : c1008d28  r8 : f0651be8
-[  109.803985] r7 : c0f02d40  r6 : 00000200  r5 : c0e91600  r4 : =
-c0e91600
-[  109.803985] r3 : 2e70d000  r2 : 00000000  r1 : c0e91600  r0 : =
-c23cad00
-[  109.804016] Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  =
-Segment none
-[  109.804016] Control: 10c5387d  Table: 82b70019  DAC: 00000051
-[  109.804016] Call trace:=20
-[  109.804046]  handle_softirqs from __irq_exit_rcu+0x6c/0xb4
-[  109.804077]  __irq_exit_rcu from irq_exit+0x8/0x10
-[  109.804077]  irq_exit from call_with_stack+0x18/0x20
-[  109.804138]  call_with_stack from __irq_svc+0x98/0xcc
-[  109.804138] Exception stack(0xf0651b60 to 0xf0651ba8)
-[  109.804168] 1b60: c2c8f300 f0651ce0 c085aec0 c2c8f300 00000000 =
-00000019 00000000 00000000
-[  109.804168] 1b80: f0651be8 00000000 f0651be0 00000000 ffffffff =
-f0651bb0 c02ba850 c085aec0
-[  109.804199] 1ba0: a0070113 ffffffff
-[  109.804199]  __irq_svc from sock_poll+0x0/0xbc
-[  109.804229]  sock_poll from do_sys_poll+0x2a8/0x460
-[  109.804260]  do_sys_poll from sys_poll+0x74/0xe8
-[  109.804290]  sys_poll from ret_fast_syscall+0x0/0x54
-[  109.804290] Exception stack(0xf0651fa8 to 0xf0651ff0)
-[  109.804321] 1fa0:                   0000409b 00162f90 beeb07cc =
-00000001 ffffffff 00000000
-[  109.804321] 1fc0: 0000409b 00162f90 b61c3080 000000a8 00000000 =
-00162f9c 00163f90 beeb0874
-[  109.804351] 1fe0: 000000a8 beeb07a8 b6a83bd7 b6a057e6
-
+-- 
+2.45.2
 
 
