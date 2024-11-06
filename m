@@ -1,132 +1,111 @@
-Return-Path: <linux-i2c+bounces-7860-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7861-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 803719BF636
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 20:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EFA8F9BF797
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 20:51:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37BB21F21528
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 19:20:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A70D21F2314A
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 19:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C95420ADC2;
-	Wed,  6 Nov 2024 19:18:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6260D209F3C;
+	Wed,  6 Nov 2024 19:47:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cql7wZ3y"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="0rmALPBs"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408FF209694;
-	Wed,  6 Nov 2024 19:18:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97C820BB58
+	for <linux-i2c@vger.kernel.org>; Wed,  6 Nov 2024 19:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730920721; cv=none; b=CY9EZiRj0kp+pe87mgq6L/qqNXZtK9OtIL1tLeszRh1EVIFgwGGLTvqL0WuUI3bxGlfzNEGQ5oQ2Ht+x3/pfylgb4Sg0m2SQCxItYRRj5HWwkSbCnTGS9pN7UhNfaGE6jawcRMefxSUxjhNHs2u08bbCnAVMSToJeRtwbcDZseA=
+	t=1730922468; cv=none; b=U82FD6jNQzCU4bQ6BuBx7THWXsvtQnj98dCsFRgn2qqmASxP3T3p0HcROLmIiOd59f+GU2OvluT6B1hEAi7PpvCE7LpE+7e1hMoIN59/YT9hZrL4e9+x8XW5HFYY8wJiLkRN4K2GjTVxEn/r0E5aSQQlUFNZaQwrfAVkpmPVWS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730920721; c=relaxed/simple;
-	bh=PopP+TMYEu9u9Wtpj2ca/oZ+nG0S3JEZMtl8PKNU85c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lacDMb0usiUWu9pI0hn2a5yf4f8wONuw+HRD5/98i2CYm1LFfn6HKVyJCH+W8FehptKQEXRVWY4uDLfQPMmv/W60LGXc3Gt2/qO83C3asUmMqdT1qkAbvfQ3jrF54eWK0EDRCBQC1mPm4cOPv4+QeLDl//T7mf0eJveBjoH3uLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cql7wZ3y; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730920719; x=1762456719;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PopP+TMYEu9u9Wtpj2ca/oZ+nG0S3JEZMtl8PKNU85c=;
-  b=cql7wZ3y2h7UgEQE9jPpCmO7dkvbcedDbde5kCDqPModxKpZDszqWNdC
-   LaVPI9WpPmIh0eoTw08OxhWBYQTwofSWrjimUDVJzS0FLBXKYEFxyRDcE
-   8D1B1U7aYhCZ+WAjXcfbG0JYLs+3ZiGavqroCXlWtpEcCvWhT1lENS3Zv
-   6t1YoamTICFkda4HdugRQGwDDoVUzoQEUXLUH4zUkyo1/hJ142DMAiVZ0
-   CNb6xBd7t5f+qD8bkNf2ftBlTHhCekBnuzRnJ0fadUt93kc+3GidB06l9
-   OsnrtExjwzd7fOvou5MbAvMF2RqCQEOVqG77bJ4YBOS+DB2P0z6is75/t
-   A==;
-X-CSE-ConnectionGUID: 6pfU9YjSSuW4ADXO1LOgIQ==
-X-CSE-MsgGUID: +P91PUOmRq2+VMKhYdnFJA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="30961539"
-X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
-   d="scan'208";a="30961539"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 11:18:38 -0800
-X-CSE-ConnectionGUID: gWZquagcRye5wvJB1LztTQ==
-X-CSE-MsgGUID: gPFRrxvATH+CgSbzbOJ1Iw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
-   d="scan'208";a="89580837"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 06 Nov 2024 11:18:34 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t8lXz-000pKt-0k;
-	Wed, 06 Nov 2024 19:18:31 +0000
-Date: Thu, 7 Nov 2024 03:17:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Peter Yin <peteryin.openbmc@gmail.com>,
-	Noah Wang <noahwang.wang@outlook.com>, Marek Vasut <marex@denx.de>,
-	Lukas Wunner <lukas@wunner.de>,
-	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Subject: Re: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a,
- ltp8800-4a, and ltp8800-2
-Message-ID: <202411070253.p3aIhGGg-lkp@intel.com>
-References: <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
+	s=arc-20240116; t=1730922468; c=relaxed/simple;
+	bh=nfhOeOMNhx9ro9r5EU5bckyL1gdmm5pMCHqroYTsqXE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sxq/YwiX70jP8hdC4tynrNxmQ1hEDfvEEXZ6m8VCHKZb6Sh0VYD0jEVWWUDNLl+vE9TQSzL+c/rr6WAtU7Ld1qjK5KyVD/7PZaZENVFfHUrzYS+Sn6A8u4pEpshhWgNFA1GO91iozcdtoI7QdHPp+RDLAMdoyBpueTw+6/v+O2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=0rmALPBs; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A04BE2C01F6;
+	Thu,  7 Nov 2024 08:47:42 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1730922462;
+	bh=ScnBUtaeifvVVpugBAsbHCHfD79Y+oTex2Xsw6PXO/0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=0rmALPBsk3KpDQon2NIfxmI5YGmR8qtmfG47c6yl0Svgg53uDndquPoraimagPC+1
+	 MroiuHdN/1BN90MmoNhdcM87Qsozu4IkFUsY4Tc2qjljo7Y5mZDqz9hkTJkL43cp7I
+	 R8ab9gLvAgKpPBiWXxgAwxf/+l1EuhZRSSqSqf/5ZL161LtjNzAjnLj+p1vVGFXlIC
+	 QV5aLFBZ2nPlpZ/O48/GCcIcNtZwqPFlQGwRGBbcPEHUaARzQYGM/MIkimTkXEkiGD
+	 yOnahh76/7A0h06A1KW4adYKZGw4F69xegWjbgNQZDw5Rnb49aNyewHqf1pshCYGEO
+	 Mg6k4dh9WZ4Yg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B672bc7de0000>; Thu, 07 Nov 2024 08:47:42 +1300
+Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 73C5C13ED6B;
+	Thu,  7 Nov 2024 08:47:42 +1300 (NZDT)
+Message-ID: <d7ceaf59-8e39-4c76-9b9f-88746a22176d@alliedtelesis.co.nz>
+Date: Thu, 7 Nov 2024 08:47:42 +1300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
-
-Hi Cedric,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 30a984c0c9d8c631cc135280f83c441d50096b6d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-trivial-devices-add-ltp8800/20241106-111734
-base:   30a984c0c9d8c631cc135280f83c441d50096b6d
-patch link:    https://lore.kernel.org/r/20241106030918.24849-3-cedricjustine.encarnacion%40analog.com
-patch subject: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a, ltp8800-4a, and ltp8800-2
-config: x86_64-buildonly-randconfig-002-20241107 (https://download.01.org/0day-ci/archive/20241107/202411070253.p3aIhGGg-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411070253.p3aIhGGg-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411070253.p3aIhGGg-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/pmbus/ltp8800.c:12:36: warning: 'ltp8800_reg_desc' defined but not used [-Wunused-const-variable=]
-      12 | static const struct regulator_desc ltp8800_reg_desc[] = {
-         |                                    ^~~~~~~~~~~~~~~~
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v9 4/4] i2c: Add driver for the RTL9300 I2C controller
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ tsbogend@alpha.franken.de, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+References: <20241106001835.2725522-1-chris.packham@alliedtelesis.co.nz>
+ <20241106001835.2725522-5-chris.packham@alliedtelesis.co.nz>
+ <vn6t6qxqry2ay4tbvo3cb4rbjv53pnyl56vangul36vvvxibwp@q3pssbthesef>
+Content-Language: en-US
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <vn6t6qxqry2ay4tbvo3cb4rbjv53pnyl56vangul36vvvxibwp@q3pssbthesef>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=672bc7de a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=VlfZXiiP6vEA:10 a=62ntRvTiAAAA:8 a=jdP34snFAAAA:8 a=VwQbUJbxAAAA:8 a=ovCuDd3x2qG2uVDzZbIA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=pToNdpNmrtiFLRE6bQ9Z:22 a=jlphF6vWLdwq7oh3TaWq:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
 
-vim +/ltp8800_reg_desc +12 drivers/hwmon/pmbus/ltp8800.c
+On 6/11/24 22:57, Andi Shyti wrote:
+> Hi Chris,
+>
+> On Wed, Nov 06, 2024 at 01:18:35PM +1300, Chris Packham wrote:
+>> Add support for the I2C controller on the RTL9300 SoC. There are two I2C
+>> controllers in the RTL9300 that are part of the Ethernet switch register
+>> block. Each of these controllers owns a SCL pin (GPIO8 for the fiorst
+>> I2C controller, GPIO17 for the second). There are 8 possible SDA pins
+>> (GPIO9-16) that can be assigned to either I2C controller. This
+>> relationship is represented in the device tree with a child node for
+>> each SDA line in use.
+>>
+>> This is based on the openwrt implementation[1] but has been
+>> significantly modified
+>>
+>> [1] - https://scanmail.trustwave.com/?c=20988&d=pL2r5zHAPsW8d92uECdR2T8Eh4fYX_ZwrCyklfTCzQ&u=https%3a%2f%2fgit%2eopenwrt%2eorg%2f%3fp%3dopenwrt%2fopenwrt%2egit%3ba%3dblob%3bf%3dtarget%2flinux%2frealtek%2ffiles-5%2e15%2fdrivers%2fi2c%2fbusses%2fi2c-rtl9300%2ec
+>>
+>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> Thanks for following up with v9. I think nothing prevents us from
+> already merging this 4/4 patch, right?
+>
+ From my end yes it's all good to go. Lee's just applied the mfd binding.
 
-    11	
-  > 12	static const struct regulator_desc ltp8800_reg_desc[] = {
-    13		PMBUS_REGULATOR("vout", 0),
-    14	};
-    15	
+The only thing outstanding are the mips dts changes. I'll wait for a bit 
+and chase those up. Hopefully they can make it in the 6.13 window but 
+it's not the end of the world if they don't.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
