@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-7817-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7818-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 844A79BDDF4
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 05:31:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40D4E9BDDFC
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 05:34:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9011C1C2266E
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 04:31:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B85FB225A9
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 04:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA993176FA4;
-	Wed,  6 Nov 2024 04:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D1518FDBE;
+	Wed,  6 Nov 2024 04:34:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gVI4xOzQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bw+4AYHM"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A5776035;
-	Wed,  6 Nov 2024 04:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C7A16A943;
+	Wed,  6 Nov 2024 04:34:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730867511; cv=none; b=euABFfzFrCRZTSYpy4tYCOq2SYGv3aSeMK3YjieqJRV6QoMZITIUMAj+Jd4ktmkvoMlRahM4dxQaD2GMCQjYYLqwFVEfxX4HOycUaY0ym6dZDo+s4Ijmty39JKEML2mkcUd9kGL+nRaGiApkADIts2ADrlgltXY1HlMh9mMT7H0=
+	t=1730867647; cv=none; b=MQSF2M+ykAW3R+5Zk/rfK0y8iw05u0FYh6qnTCxyfXZxfqrbL4Apx2ndj7hGM1s8TlIFm4/btY6dFVnKU/aQgYHAlmZ0aEHUmfePfV1Q2TOlffQFyNBiDtDVfrroQd6rp4+9czb745dzYBX2vHahEgixWe6UKN3glDe0zPDwkoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730867511; c=relaxed/simple;
-	bh=BFBhWaVJ1NjTVIuUBgpSEuRZGb9akHwornbYVvqwOls=;
+	s=arc-20240116; t=1730867647; c=relaxed/simple;
+	bh=HheYRP+RgsWn9uNIev/5lyG8eqoOCfRT8hOdlJ3GEsw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SCpCdgi9fqqAkTWWhI3wxGxYuy1ECZoY6YRGPgVEtQXxdZzReZthCFihhGnkOf1ua5kD8mzli3RctA74vQQ1/s/wHuS1Ps5qdIYFK3DZtCJYsIonQT1lS9YDN66fCT3oaMhSgWWwMu1fJZZnvLk3KQDc5qpzjUWLtfQTtj0t8Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gVI4xOzQ; arc=none smtp.client-ip=209.85.216.46
+	 In-Reply-To:Content-Type; b=ffyb7yd5Ixvn4jJhY57D9fc2XP53cNJrtFWbufxcyLASy0qcWGeUflsv4L2YhPJuMoqOXcZL8I9Mzu0/remWy0ZQfdevPjcY1wCB5mRPB9SCl8TYzUWiSKh1NrszuR68CdYPP58PwQJmImxUE8plsPdeg8XoYWtxdCcpJ8WEHAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bw+4AYHM; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e2ad9825a7so4563873a91.0;
-        Tue, 05 Nov 2024 20:31:49 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e34a089cd3so4947564a91.3;
+        Tue, 05 Nov 2024 20:34:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730867509; x=1731472309; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730867645; x=1731472445; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=42QNibVxGN8majzaOkdnUDSaQ6NUZm9iELyp49h2R9Y=;
-        b=gVI4xOzQESCkymBEUJ0XXeZgjM86jNCrbBJEFZrw5S4sLyYIpEBf6ccDsiUr5deb/G
-         0uxvDn+Q3ZUl1nH5KzAnaNO4sv00OMqSrH/0q1WA+rVYIyJouAF/Zgmxel5SMpgPJztm
-         6ZIBNGlF3DXpWJv6uacokC4yv6mJQHWzvBjDAVUkydGLk94gy7TMXroe3UuV0FSYA2A+
-         B1/jjQHiHtijzmKunexDKBXBi3DO/bhNgeOhg/tnpK+qSBdz+n1jHGuWML2IAI1GClYU
-         Lp7cObvDO7fRIUvzNWXDSdvpK5kcUFMRtH/5qeOYmKd8d8ZLK0sacLKii2b3FF4iKQaT
-         sTBQ==
+        bh=87jVHtd1KnAMU7ICz51A+0/GbUj8xK29s4iCvFn6sec=;
+        b=Bw+4AYHMm7+G5e9X22Q+cdV/a047hd4qDpug6yD/Lyx3R98vGoAb4AmJnropMDERVt
+         3smkUkzo0n6GtW0q7LglkW4+imfo5eKCI7MkoBP2HZtu9xrb4zEHFymgkMKLzCMUVVtF
+         6Xo3c/N1a4M7xFR/zjxcs76XWKkhRPgudlj0IoJoyTO6qb89+h6SoQMferqj1p7PtZUY
+         4eW/TFoe0QVHrsXfHKhUdgqcZAmoDDEWzgf6P2YIzCWW0xU956OLz9xefhgG2Y1QF+T2
+         VIqdnIK9YylmGVoTmGZoxZt3XaJ85SqwT1d8FU2K+5J2lB9NJUm8E5iRBgZ3p0k0097w
+         ivTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730867509; x=1731472309;
+        d=1e100.net; s=20230601; t=1730867645; x=1731472445;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=42QNibVxGN8majzaOkdnUDSaQ6NUZm9iELyp49h2R9Y=;
-        b=f3o3xvpyf9I2Imy9JZtyWTUCPXDjsy4Vp7xELpWzOfsrdxyRUCgG2h4eOM/k0t5H/I
-         fMlx/9+1bP4jRgo58e1i5J0GOLO2PjqbmgXvkM2Ty+MeijvVNRZD1E7X13TDbEaUrkHJ
-         recW+0rrZr7bn7BGFaMTIwi/oEw4isQSKIyHehCOYmKwmNRyfPdQbCGsYa6ia6ZubKsv
-         pHAsAysjvmBbIfsVLUrVVoNL5MQh+7euJ60ePM/reWoH7w5nKYRI8qe1bQ012MvwcA/0
-         q1rjFS1kManfvDnf4dQCXAk8jwU8ZYtHw5J90XLJzRxA/tZf8krcoEHo/ly5fVPvJvMA
-         kz3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUohup/RpMWSO4wVXXz1QTzaybpOu5lYP4TQy7sZ6PxCNdvoBfVHBP0SEbzlXGRTSgl81v3Pzmdonl7@vger.kernel.org, AJvYcCWCZKzBpY5ipLewX/++sPH/EJ1x8HC1cv4vUx7N7DHE3e6d3HMt+eMy4OimKbBOg8M+AKS9wMpVS2BOPhk=@vger.kernel.org, AJvYcCWG/EcVlhXG46lH7dITW8vvvmZbL9GW6SS5/1PzxKahcaPadDrGRh1pc6lWFSu2jqMHy8HBf8zRKQ9O@vger.kernel.org, AJvYcCXVQK0jhXTI/TEqqLBZVuplvmcOcjPOGzCjl4r1irX87NBUJ4Xt88hX5OywCdI2WPXmuMYlqx7GOqau@vger.kernel.org, AJvYcCXojAn7GfhIylIpSSm0AyLsxHO/KVHx2hhTcbMgLisZcx6jzNBLbKVZdtaR4NMW9JVOIuOwad/b6TrAhQnb@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyAvEUpv0acMWCgtM+s1l3QD2meJqWm2j1vgI7VQTs5KyKyNX3
-	lGCG0mqnUjviKG1zumgxBK4xtc4n0hF/bNRJ/yuBmG5gR4nedU2o
-X-Google-Smtp-Source: AGHT+IHG6rXVDFwm4UcyLMcVXxwbRdXpaDtRZ7anYDuhGOjHa+Jxpgfj++Ls2RbGHfZqkr4a/1NHfQ==
-X-Received: by 2002:a17:90a:4e0a:b0:2cc:ef14:89e3 with SMTP id 98e67ed59e1d1-2e8f1071ca9mr41122947a91.15.1730867508805;
-        Tue, 05 Nov 2024 20:31:48 -0800 (PST)
+        bh=87jVHtd1KnAMU7ICz51A+0/GbUj8xK29s4iCvFn6sec=;
+        b=t2hFkOJr74d2A7Moc34oRiCyTuXDJOQsiy/sX53T7+TeHJXlQDPAV9ZxQk4yUKBIe5
+         uGG73mX2JxUQIMYp/1TtHlatlUJCYwBBJ2CA1a9X30ZMOhiyWGbGmAbcRI4mrWWWcHHr
+         zT4zlBKlxX1atEn49VRnwJoB0t3k4smh2BHiO7PQBVxOQRTZGJeedMNAXOsQ3r9HXsHU
+         itkbGcpjUK5jqg8yMr1dQxMPl6AGWgyJwJVpB90/pRo8HtVIOesSYTDCV1RVzUnG3+mP
+         KJA8VcaphBgaAkxGjolfvaitcsAogQQ5vG7yrLgyrnjvcaI5QB1q9UKPRq1E+1oY5hh8
+         AK/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUMrfI4Zl8lUKgtPwIbLfjLHVGAQ7Z9orsEE13ALr7hP+kzq6z8NkTVwmhE/UzwaCO4XNNHDLgd3faG+ygZ@vger.kernel.org, AJvYcCUVqNNVRY2Y2/TE5wWTq78U5eZcTuIXWLzUq3KeNkI+grorBFlfCDPGT9iKPpNGkZ2uoff+Ps1UUmY0z2k=@vger.kernel.org, AJvYcCVVX9MLTwJpmQnbDR8OrTlT8ShZ7xmWO6VgQ4cP5hC1Ah9RCl8QiY4hQDPvr4IFSBj7MI6j9p4XIJ3t@vger.kernel.org, AJvYcCVz0btiFBgQCJ0MqltaxAjUpruWu9519i3x60H+QWKMUWJCnnkAPvwFRiEKR3yD9RkMLOYUrl62mvVF@vger.kernel.org, AJvYcCXgPqMB//GjzjR0VXcFFMzsvReoB+MbiIsmIV/k79G+6xvHkxngl6W2bjy3jY97ZTNQgTXq9VExLSnG@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg4X1uOm1bVUZqg5v+YX5KK2334dc+HAvNlI0celmlNqUtcMPP
+	LkR4FqyEgDCnXnioRxZCS3X3Kq53ojdz5KPeXV6hUxHO4z9XEZgn
+X-Google-Smtp-Source: AGHT+IESFCvZDl/6c+yFKwLdqcJSIb4eE2eXBWbzf541CLu50KDraET1/2dT5FhwK79ymVWXadVEVw==
+X-Received: by 2002:a17:90a:f406:b0:2e0:d693:7884 with SMTP id 98e67ed59e1d1-2e8f0f55a2bmr42611639a91.5.1730867645184;
+        Tue, 05 Nov 2024 20:34:05 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e99a54eddesm427187a91.13.2024.11.05.20.31.47
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e99a4f97b2sm424422a91.8.2024.11.05.20.34.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Nov 2024 20:31:48 -0800 (PST)
+        Tue, 05 Nov 2024 20:34:04 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d016c2e5-2ebe-45cb-a62e-25f8b8d3a1b9@roeck-us.net>
-Date: Tue, 5 Nov 2024 20:31:46 -0800
+Message-ID: <8e4dc080-d779-4b06-8fd1-74784e06323a@roeck-us.net>
+Date: Tue, 5 Nov 2024 20:34:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,8 +78,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a,
- ltp8800-4a, and ltp8800-2
+Subject: Re: [PATCH v2 1/2] dt-bindings: trivial-devices: add ltp8800
 To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -91,7 +90,7 @@ Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
  Noah Wang <noahwang.wang@outlook.com>, Marek Vasut <marex@denx.de>,
  Lukas Wunner <lukas@wunner.de>
 References: <20241106030918.24849-1-cedricjustine.encarnacion@analog.com>
- <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
+ <20241106030918.24849-2-cedricjustine.encarnacion@analog.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -137,270 +136,53 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
+In-Reply-To: <20241106030918.24849-2-cedricjustine.encarnacion@analog.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 On 11/5/24 19:09, Cedric Encarnacion wrote:
-> LTP8800-1A 54V, 150A DC/DC µModule Regulator with PMBus Interface
-> LTP8800-4A 54V, 200A DC/DC µModule Regulator with PMBus Interface
-> LTP8800-2 54V, 135A DC/DC μModule Regulator with PMBus Interface
-> 
-> The LTP8800 is a family of step-down μModule regulators that provides
-> microprocessor core voltage from 54V power distribution architecture. It
-> features telemetry monitoring of input/output voltage, input current,
-> output power, and temperature over PMBus.
+> Add Analog Devices LTP8800-1A, LTP8800-2, and LTP8800-4A DC/DC μModule
+> regulator.
 > 
 > Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
 > ---
->   Documentation/hwmon/index.rst   |  1 +
->   Documentation/hwmon/ltp8800.rst | 91 +++++++++++++++++++++++++++++++++
->   MAINTAINERS                     |  2 +
->   drivers/hwmon/pmbus/Kconfig     | 18 +++++++
->   drivers/hwmon/pmbus/Makefile    |  1 +
->   drivers/hwmon/pmbus/ltp8800.c   | 63 +++++++++++++++++++++++
->   6 files changed, 176 insertions(+)
->   create mode 100644 Documentation/hwmon/ltp8800.rst
->   create mode 100644 drivers/hwmon/pmbus/ltp8800.c
+>   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>   MAINTAINERS                                            | 5 +++++
+>   2 files changed, 7 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 55f1111594b2..8e6799824859 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -136,6 +136,7 @@ Hardware Monitoring Kernel Drivers
->      ltc4261
->      ltc4282
->      ltc4286
-> +   ltp8800
->      max127
->      max15301
->      max16064
-> diff --git a/Documentation/hwmon/ltp8800.rst b/Documentation/hwmon/ltp8800.rst
-> new file mode 100644
-> index 000000000000..bbe1b4a7c827
-> --- /dev/null
-> +++ b/Documentation/hwmon/ltp8800.rst
-> @@ -0,0 +1,91 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver ltp8800
-> +=====================
-> +
-> +Supported chips:
-> +
-> +  * Analog Devices LTP8800-1A, LTP8800-2, LTP8800-4A
-> +
-> +    Prefix: 'ltp8800'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ltp8800-1a.pdf
-> +
-> +         https://www.analog.com/media/en/technical-documentation/data-sheets/ltp8800-2.pdf
-> +
-> +         https://www.analog.com/media/en/technical-documentation/data-sheets/ltp8800-4a.pdf
-> +
-> +Authors:
-> +    - Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +The LTP8800 is a family of step-down μModule regulators that provides
-> +microprocessor core voltage from 54V power distribution architecture. LTP8800
-> +features telemetry monitoring of input/output voltage, input current, output
-> +power, and temperature over PMBus.
-> +
-> +The driver is a client driver to the core PMBus driver. Please see
-> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not auto-detect devices. You will have to instantiate the
-> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-> +details.
-> +
-> +Platform data support
-> +---------------------
-> +
-> +The driver supports standard PMBus driver platform data. Please see
-> +Documentation/hwmon/pmbus.rst for details.
-> +
-> +Sysfs Attributes
-> +----------------
-> +
-> +======================= ===========================
-> +curr1_label		"iin"
-> +curr1_input		Measured input current
-> +curr1_crit		Critical maximum current
-> +curr1_crit_alarm	Current critical high alarm
-> +
-> +curr2_label		"iout1"
-> +curr2_input		Measured output current
-> +curr2_lcrit		Critical minimum current
-> +curr2_crit		Critical maximum current
-> +curr2_max		Maximum output current
-> +curr2_alarm		Current alarm
-> +
-> +in1_label		"vin"
-> +in1_input		Measured input voltage
-> +in1_lcrit		Critical minimum input voltage
-> +in1_lcrit_alarm		Input voltage critical low alarm
-> +in1_crit		Critical maximum input voltage
-> +in1_crit_alarm		Input voltage critical high alarm
-> +
-> +in2_label		"vout1"
-> +in2_input		Measured output voltage
-> +in2_lcrit		Critical minimum output voltage
-> +in2_lcrit_alarm		Output voltage critical low alarm
-> +in2_crit		Critical maximum output voltage
-> +in2_crit_alarm		Output voltage critical high alarm
-> +in2_max			Maximum output voltage
-> +in2_max_alarm		Output voltage high alarm
-> +in2_min			Minimum output voltage
-> +in2_min_alarm		Output voltage low alarm
-> +
-> +power1_label		"pout1"
-> +power1_input		Measured output power
-> +power1_crit		Critical maximum output power
-> +
-> +temp1_input		Measured temperature
-> +temp1_lcrit		Critical low temperature
-> +temp1_lcrit_alarm		Chip temperature critical low alarm
-> +temp1_crit		Critical high temperature
-> +temp1_crit_alarm		Chip temperature critical high alarm
-> +======================= ===========================
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 90a7c0a3dc48..72877d00b8dd 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -43,6 +43,8 @@ properties:
+>             - adi,adp5589
+>               # Analog Devices LT7182S Dual Channel 6A, 20V PolyPhase Step-Down Silent Switcher
+>             - adi,lt7182s
+> +            # Analog Devices LTP8800-1A/-2/-4A 150A/135A/200A, 54V DC/DC μModule regulator
+> +          - adi,ltp8800
+>               # AMS iAQ-Core VOC Sensor
+>             - ams,iaq-core
+>               # Temperature monitoring of Astera Labs PT5161L PCIe retimer
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6ca691500fb7..a5d1bd61fc2c 100644
+> index 7c357800519a..6ca691500fb7 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -13559,6 +13559,8 @@ LTP8800 HARDWARE MONITOR DRIVER
->   M:	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
->   L:	linux-hwmon@vger.kernel.org
->   S:	Supported
-> +F:	Documentation/hwmon/ltp8800.rst
-> +F:	drivers/hwmon/pmbus/ltp8800.c
+> @@ -13555,6 +13555,11 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/iio/light/liteon,ltr390.yaml
+>   F:	drivers/iio/light/ltr390.c
 >   
->   LYNX 28G SERDES PHY DRIVER
->   M:	Ioana Ciornei <ioana.ciornei@nxp.com>
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index f6d352841953..264c73275d86 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -247,6 +247,24 @@ config SENSORS_LTC4286
->   	  If you say yes here you get hardware monitoring support for Analog
->   	  Devices LTC4286.
->   
-> +config SENSORS_LTP8800
-> +	tristate "Analog Devices LTP8800 and compatibles"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Analog
-> +	  Devices LTP8800-1A, LTP8800-4A, and LTP8800-2.
+> +LTP8800 HARDWARE MONITOR DRIVER
+> +M:	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Supported
 > +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called ltp8800.
-> +
-> +config SENSORS_LTP8800_REGULATOR
-> +	bool "Regulator support for LTP8800 and compatibles"
-> +	depends on SENSORS_LTP8800 && REGULATOR
-> +	help
-> +	  If you say yes here you get regulator support for Analog Devices
-> +	  LTP8800-1A, LTP8800-4A, and LTP8800-2. LTP8800 is a family of DC/DC
-> +	  µModule regulators that can provide microprocessor power from 54V
-> +	  power distribution architecture.
-> +
->   config SENSORS_MAX15301
->   	tristate "Maxim MAX15301"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index d00bcc758b97..aa5bbdb4a806 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -26,6 +26,7 @@ obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
->   obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
->   obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
->   obj-$(CONFIG_SENSORS_LTC4286)	+= ltc4286.o
-> +obj-$(CONFIG_SENSORS_LTP8800)	+= ltp8800.o
->   obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
->   obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
->   obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
-> diff --git a/drivers/hwmon/pmbus/ltp8800.c b/drivers/hwmon/pmbus/ltp8800.c
-> new file mode 100644
-> index 000000000000..d57f8c058a89
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/ltp8800.c
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Hardware monitoring driver for Analog Devices LTP8800
-> + *
-> + * Copyright (C) 2024 Analog Devices, Inc.
-> + */
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include "pmbus.h"
-> +
-> +static const struct regulator_desc ltp8800_reg_desc[] = {
-> +	PMBUS_REGULATOR("vout", 0),
 
-Ah, sorry, I didn't realize this earlier. This needs to use "PMBUS_REGULATOR_ONE("vout")"
-since there is only a single regulator (which needs to be named "vout" and not "vout0").
+This entry doesn't make sense in this patch.
 
-Thanks,
 Guenter
 
-> +};
-> +
-> +static struct pmbus_driver_info ltp8800_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		   PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT |
-> +		   PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT |
-> +		   PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-> +		   PMBUS_HAVE_POUT,
-> +#if IS_ENABLED(CONFIG_SENSORS_LTP8800_REGULATOR)
-> +	.num_regulators = 1,
-> +	.reg_desc = ltp8800_reg_desc,
-> +#endif
-> +};
-> +
-> +static int ltp8800_probe(struct i2c_client *client)
-> +{
-> +	return pmbus_do_probe(client, &ltp8800_info);
-> +}
-> +
-> +static const struct i2c_device_id ltp8800_id[] = {
-> +	{"ltp8800", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, ltp8800_id);
-> +
-> +static const struct of_device_id ltp8800_of_match[] = {
-> +	{ .compatible = "adi,ltp8800"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, ltp8800_of_match);
-> +
-> +static struct i2c_driver ltp8800_driver = {
-> +	.driver = {
-> +		.name = "ltp8800",
-> +		.of_match_table = ltp8800_of_match,
-> +	},
-> +	.probe = ltp8800_probe,
-> +	.id_table = ltp8800_id,
-> +};
-> +module_i2c_driver(ltp8800_driver);
-> +
-> +MODULE_AUTHOR("Cedric Encarnacion <cedricjustine.encarnacion@analog.com>");
-> +MODULE_DESCRIPTION("Analog Devices LTP8800 HWMON PMBus Driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
+>   LYNX 28G SERDES PHY DRIVER
+>   M:	Ioana Ciornei <ioana.ciornei@nxp.com>
+>   L:	netdev@vger.kernel.org
 
 
