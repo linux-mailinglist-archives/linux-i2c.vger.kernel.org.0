@@ -1,177 +1,144 @@
-Return-Path: <linux-i2c+bounces-7857-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7858-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E26E9BF570
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 19:38:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17CE69BF583
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 19:45:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B21EE1C20D5F
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 18:38:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43DAB1C21968
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 18:45:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C0420822A;
-	Wed,  6 Nov 2024 18:38:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FDD1208233;
+	Wed,  6 Nov 2024 18:45:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnS+8Frn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bh7nRh21"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1296036D;
-	Wed,  6 Nov 2024 18:38:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14CF176AC8;
+	Wed,  6 Nov 2024 18:45:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730918312; cv=none; b=c0BP2I/fOK6lgFzrlwrh4MdapIlFglz41+pAU9e3NJQ/MHpWYIFgX/AwLPrN4j3u/5qxpb4EwIp56qdCZvIu9vYTje/Cy/8tEvAxwvsn2KEWk9Li1HNaF1Co8LEYyAPT38D/7+YaeZDz6ErLvO8ClYQtzC3Yr3tusc9leDMcNQM=
+	t=1730918739; cv=none; b=ZrEzjZ42fAKqOuA3TlNntLm2r2zjmvoAGATAVi/Y7cM3awTGyAIe1Sfl0lhT+abhecX/KeRj++c3fA09+w6DCCyB6wzG9zDLy9Ml5riXjRR1iAjsQHeVafg9ZII2YN55w4TA2SGojs/NkiAK99yoCDvIXfxHxXX6ShutwynZMho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730918312; c=relaxed/simple;
-	bh=iNjqtw0pAHcA/82Lxnh30HXCvnZDgw7kxbizRZooTmY=;
+	s=arc-20240116; t=1730918739; c=relaxed/simple;
+	bh=ts1jeFGgXcWV69i9NnWPLiE0tUfahZCCkXmefsTxWgY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YRiniclJTZwikmjCRPZ+7WJ4rPz4sPsVsL8Yjkc7YViI9aMwsYxXd3iP93CD1vhQtoGD7PnQBKsG4rMGg8CoTFotCBwbWSSkS0j/lbhO+p7sZoKkw0ftfHaW+XnE1/3vSDewi7jHuVmrkhEX8I6o4jaG9rAiCbdkio4fT1rErUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnS+8Frn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C74AC4CEC6;
-	Wed,  6 Nov 2024 18:38:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730918311;
-	bh=iNjqtw0pAHcA/82Lxnh30HXCvnZDgw7kxbizRZooTmY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cnS+8FrnLWJJ2opUVyPBBsjgQtapmYvo9CXHJrwQ6ClBmATA8NBU1+1meIPVuGifP
-	 o4MI6il9v70W8I3UZ7KUdt0PH2dsdxBP812ErrwkfJguLe/CqM4v14cJRjz23O7IbQ
-	 70Ym6E4EEZgge+o6UojP119niZLSEUgWlV8pPNBntqUfPyIhWGLsHelfsNPEC29jUM
-	 4z/susoC+LWH3mrY/pj7QnDwbMneRmn6xl8GeVyleFh3MkobWUm7BoN1pxWWZbCUDZ
-	 rY1BOCoJfGP6s1XArQW5mOPhObua4Vo+9W9bNFkbd4Mf66gGAoos2naNDmeonuj2bC
-	 fIrgfooryVZnw==
-Date: Wed, 6 Nov 2024 18:38:26 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=M7HVC/UEclp8FDILpTnXgNNRmnAXBEmn3B6IOmHd6dLgh8sdb0fWyo1Yvs3ymG5EEft3S58qgxkfeU4eereKWpGFn5FRv7b/+TFB4ZevhLoP5biTH6Wz7ejZFo2LIefVU3WKoBwGQKE0mopEhNpK/JuW57OVuSphQfY09n92S9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bh7nRh21; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730918738; x=1762454738;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ts1jeFGgXcWV69i9NnWPLiE0tUfahZCCkXmefsTxWgY=;
+  b=bh7nRh2170HNYGvim2MXS0Y38/7pgoqHo5PH1zBNbrzRITDQVod8/ApX
+   CpDguNMJJxskle7iiYhjdTGbsWVMiMts2r9pKWrRVfVXY7xWGXECf3mJc
+   MhxHdRsJzZ042Q4efMi77mgpcOCLZTeMrQ3bLoPqvF/x7VapiFbF7CIvr
+   T9k9jiN6hLRdBW9K5UClO2CTv+zx60ybrBcXmwWYPoZmLU3tXuSBD8DGY
+   8LGen66GUVqKhU2q1Iz/lst8UZ4JAX9PF5ZvaJDJBQKfBREkoOl97TAxv
+   ivOXC9nETLtGlqbehtbjhUFuNKs0vgld8GNdb2sRMlAP2Jb+ydAUVhf0e
+   g==;
+X-CSE-ConnectionGUID: gvXxRNgwTlmGQ1k00yHR3w==
+X-CSE-MsgGUID: B7Rvqnx6QS6CKZka/PtDew==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41835385"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="41835385"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 10:45:37 -0800
+X-CSE-ConnectionGUID: JXbIrWCESACS6phQ1AkCqQ==
+X-CSE-MsgGUID: D5jfgmkXRwyWfuvgMCl/oA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
+   d="scan'208";a="85516951"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 06 Nov 2024 10:45:32 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t8l21-000pIy-2k;
+	Wed, 06 Nov 2024 18:45:29 +0000
+Date: Thu, 7 Nov 2024 02:45:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
 	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
 	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Peter Yin <peteryin.openbmc@gmail.com>,
 	Noah Wang <noahwang.wang@outlook.com>, Marek Vasut <marex@denx.de>,
-	Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v2 1/2] dt-bindings: trivial-devices: add ltp8800
-Message-ID: <20241106-crate-antihero-bc7b66037640@spud>
-References: <20241106030918.24849-1-cedricjustine.encarnacion@analog.com>
- <20241106030918.24849-2-cedricjustine.encarnacion@analog.com>
- <8e4dc080-d779-4b06-8fd1-74784e06323a@roeck-us.net>
- <20241106-gatherer-glancing-495dbf9d86c7@spud>
- <20241106-overcast-yummy-9c6462ff2640@spud>
- <2b731ba8-1b6b-41eb-bae9-3403555506ef@roeck-us.net>
- <20241106-splurge-slaw-b4f1d33e4b09@spud>
- <f6e9cc1a-bdd7-4231-844e-2d8c5c3be50f@roeck-us.net>
+	Lukas Wunner <lukas@wunner.de>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+Subject: Re: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a,
+ ltp8800-4a, and ltp8800-2
+Message-ID: <202411070232.xrxV7tVx-lkp@intel.com>
+References: <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="DCvkbFZV2LWmvyWJ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f6e9cc1a-bdd7-4231-844e-2d8c5c3be50f@roeck-us.net>
+In-Reply-To: <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
+
+Hi Cedric,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 30a984c0c9d8c631cc135280f83c441d50096b6d]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-trivial-devices-add-ltp8800/20241106-111734
+base:   30a984c0c9d8c631cc135280f83c441d50096b6d
+patch link:    https://lore.kernel.org/r/20241106030918.24849-3-cedricjustine.encarnacion%40analog.com
+patch subject: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a, ltp8800-4a, and ltp8800-2
+config: x86_64-buildonly-randconfig-004-20241107 (https://download.01.org/0day-ci/archive/20241107/202411070232.xrxV7tVx-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411070232.xrxV7tVx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411070232.xrxV7tVx-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/hwmon/pmbus/ltp8800.c:7:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/pmbus/ltp8800.c:12:36: warning: unused variable 'ltp8800_reg_desc' [-Wunused-const-variable]
+      12 | static const struct regulator_desc ltp8800_reg_desc[] = {
+         |                                    ^~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
---DCvkbFZV2LWmvyWJ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +/ltp8800_reg_desc +12 drivers/hwmon/pmbus/ltp8800.c
 
-On Wed, Nov 06, 2024 at 10:19:19AM -0800, Guenter Roeck wrote:
-> On 11/6/24 08:54, Conor Dooley wrote:
-> > On Wed, Nov 06, 2024 at 08:43:54AM -0800, Guenter Roeck wrote:
-> > > On 11/6/24 08:11, Conor Dooley wrote:
-> > > > On Wed, Nov 06, 2024 at 04:06:02PM +0000, Conor Dooley wrote:
-> > > > > On Tue, Nov 05, 2024 at 08:34:01PM -0800, Guenter Roeck wrote:
-> > > > > > On 11/5/24 19:09, Cedric Encarnacion wrote:
-> > > > > > > Add Analog Devices LTP8800-1A, LTP8800-2, and LTP8800-4A DC/D=
-C =CE=BCModule
-> > > > > > > regulator.
-> > > > >=20
-> > > > > A single compatible for 3 devices is highly suspect. What is
-> > > > > different between these devices?
-> > > >=20
-> > > > Additionally, looking at one of the datasheets, this has several in=
-puts
-> > > > that could be controlled by a GPIO, a clock input and several supply
-> > > > inputs. It also has a regulator output. I don't think it is suitabl=
-e for
-> > > > trivial-devices.yaml.
-> > > >=20
-> > >=20
-> > > All PMBus devices are by definition regulators with input and output =
-voltages.
-> > > After all, PMBus stands for "Power Management Bus". Some of them are =
-listed
-> > > in trivial devices, some are not. Is that a general guidance, or in o=
-ther
-> > > words should I (we) automatically reject patches adding PMBus devices
-> > > to the trivial devices file ?
-> >=20
-> > Personally I like what Jonathan does for iio devices, where he requires
-> > input supplies to be documented, which in turns means they can't go into
-> > trivial-devices.yaml. I wanted to add an input supply option to
-> > trivial-devices.yaml but ?Rob? was not a fan.
->=20
-> I may be missing something, but doesn't every chip have an input supply ?
-> granted, PMBus chips often have more than one, but still ...
+    11	
+  > 12	static const struct regulator_desc ltp8800_reg_desc[] = {
+    13		PMBUS_REGULATOR("vout", 0),
+    14	};
+    15	
 
-Yeah, that's why I wanted to permit a supply in trivial-devices, because
-I bet 99% of devices in there have a supply. IIRC the problem was that
-there wasn't a good "generic" name for one. I don't think it was a "you
-cannot do this" but a "you need to come up with a name for that supply
-that works generically" and I couldn't.
-
-> > In this case it would need a dedicated binding to document the regulator
-> > child node and permit things like regulator-always-on or for any
-> > consumers of the regulator to exist. I suppose that probably applies to
-> > all pmbus bindings?
->=20
-> Yes. There may be a few exceptions, for example if a fan controller is
-> modeled as PMBus device, but that is rare. From a driver perspective,
-> exposing regulator nodes is optional, though.
->=20
-> > In this case, there seems to be an input "sync" clock that may need to
-> > be enabled, which is another nail in the coffin for
-> > trivial-devices.yaml.
->=20
-> I really don't know if it is a good idea to expose such data. That clock =
-can
-> be connected to ground. It is only necessary in power-sharing configurati=
-ons,
-> and requires all chips to use the same clock. I'd assume it to be a fixed=
- clock
-> in pretty much all circumstances. The frequency needs to be configured in=
-to
-> the chip, but that needs to be done during board manufacturing because it
-> determines the switching frequency. Writing wrong data into the chip may
-> render the board unusable or even destroy it (I destroyed several PMBus c=
-hips
-> myself while playing with such parameters on evaluation boards). Maybe th=
-ere
-> is some use case where changing the configuration is necessary, but I am =
-not
-> in favor of exposing it due to the risk involved.
-
-I figured it'd be fixed, but that doesn't mean it can't have an enable
-(or a supply of its own).
-
---DCvkbFZV2LWmvyWJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZyu3ogAKCRB4tDGHoIJi
-0j9JAPwMo0NQpNZfb0w4MKjX7rzR+jv1SbpMrhZEp2DPOHDTLgD+IfE6snEzPq1g
-zaCZZawKX21yxcT1emw1Rqy1Ab+oQg0=
-=qdES
------END PGP SIGNATURE-----
-
---DCvkbFZV2LWmvyWJ--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
