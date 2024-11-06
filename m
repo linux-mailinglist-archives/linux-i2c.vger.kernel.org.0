@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-7851-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7852-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF24D9BF352
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 17:35:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 400959BF37E
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 17:44:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60A931F22C94
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:35:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 577B11C22147
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6776F203706;
-	Wed,  6 Nov 2024 16:35:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0624205AC9;
+	Wed,  6 Nov 2024 16:43:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kxZDZc2H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kZManZ8S"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9353213C67C;
-	Wed,  6 Nov 2024 16:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C331D86E8;
+	Wed,  6 Nov 2024 16:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730910938; cv=none; b=aa3q/JPfWJcavQSKiBXNg+sCbIeJmOhoLzFsljfw+CXj8IDwBn5UBXDm1EzGmPmmGgD8bp1faVWEMh1Frf+GDzPYF+tqASDVDSofGA1uuG5XwOVMukPhRn0KrM8tSA+KoGYNcm+N+E523EzZGMABterg4j8ZoCC3a4DfDZPtjpw=
+	t=1730911439; cv=none; b=UMq4CjrtMNS8hsriUSdERCMtcRDPHfbcSU1GIoNFc85ys19G+0GDSBhPewR7xjIpUq1cGfaVYvsf1NRZcXuBoDHsw64HBPrCgmto0+YzctXSVYUxt0d1Z8RtptUdYdpbWCH8cYHu9TshZSLMrUQogZ5SP3F37i4vQwBxMiHFzok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730910938; c=relaxed/simple;
-	bh=+226borHsYkLvmzDZ3/K0biYVEW55zEhJxTZdfLCUwo=;
+	s=arc-20240116; t=1730911439; c=relaxed/simple;
+	bh=j4jGBR3Ung9FSoqSz2fDPnJ3iS++OPt8jcVIKcxxogA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n36ysqZpnlXSnDty2P+JU5XlxbOX/yMpo0opGgdz3SJhZofUGF3PzJ6mt27wZILt6dWf4FhXpYxvzNe9lHnVzcGFwjWTi57jwa0Qoli3wfi5Iz3CIiy5r3ouh+8tv8y4j8LO7921lsCVKdYYpEKDunMQ/i2GSyTmW74U7Oy6qwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kxZDZc2H; arc=none smtp.client-ip=209.85.210.181
+	 In-Reply-To:Content-Type; b=VTuaI9q/Oks9vY8Od1wjUOq0BAsmTq5Y5SreJVh+DFxz35/phuT7lJ+uIUzbaxSXPRhPmSMqkOovsJS5EygNgnN/lHcVk8hIAJ43muEdlghssRzPZc98qOu1+KlUX8QzoSiVb4ToeeLBfA+EYFiErcKCgT99xlTG2HL2bdusgnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kZManZ8S; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-71e7086c231so6058421b3a.0;
-        Wed, 06 Nov 2024 08:35:36 -0800 (PST)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-720be27db74so23956b3a.1;
+        Wed, 06 Nov 2024 08:43:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730910936; x=1731515736; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730911437; x=1731516237; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=EpMoaV2UEgpT1cQjTdLpUsE/ib9jltFkw/ONf3N7WVQ=;
-        b=kxZDZc2Hd8XGQeotrZb9qKUVKtSFob8q+vzBXDZ4the16JZ07awimudpJek4zRk4TK
-         YVb/QDqoHxqGVBP+aefkAqd5+pjTa1Nlw50/mPIKj6r0xoX8dgVxOHclX4k6TiCDJpHf
-         VD9SE7du4ah9ZxLlMdo4XC1RnajnKImqKC8ACxr1DtlRtYP9mGouq8SAadnZRWcPNuiM
-         qH+clwNNoylm1GHXy4AkuX2m0bBei49HwjGyxp8J076YUO0k++VV+qDR6TYQHQyRsrjH
-         dzRWtiaM0OtJmKIauJ8ws+AFlGhKj85FHku1fewz7inuZNy5GLVjlBW8x8FU2WbrPmR4
-         WOdw==
+        bh=9olawbYn7htf1Q9WNRGiGe7mdjgouMY6rNID+WumQL8=;
+        b=kZManZ8SsEvnEZlErJt4zR5gm2CpaHHWH6UVmHxTg5ERImzXhypruJ4ll3pIzTjqrh
+         uppWzLNnvq2lROFKUwwb04sC7BOQL8WgAOCuLO+9h1EbhA6JJ1VC8JNHQ7iRAE2tbTE8
+         VcY/jIpdZmSle5mRLXX5uty+40Aj12ffqu0hq+ZXjqd2d4hqIx8EIF03B1FeIM+FxUV5
+         5wVB+/Szl7q/mSpzysii5b7mlwKvUED9tBwqwoBCzy9pFDpKG9DS2KikAePyLx2iOZCl
+         PuGmYluvEw0YOxTwXKW9VbBLlbk5baLzbsNiM8MEPjWy0YnD7yE8EeTFD14F1AfAa6D2
+         F6VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730910936; x=1731515736;
+        d=1e100.net; s=20230601; t=1730911437; x=1731516237;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EpMoaV2UEgpT1cQjTdLpUsE/ib9jltFkw/ONf3N7WVQ=;
-        b=hZ0C1qsXl4bTQCh0J93rviXcpW684hW5hH0WpDSnVQ+GvDplrl5z7VqaVukVHwZot6
-         op1OygfnWIQItQXJlqjnkSbfaFdMru1H8M8l2xAJPwrf9Ecds/s7th1rvp10PvyYOBmc
-         NvB0Zh8YJIGtDGgu0zNahJnUnxO7c69coUycPw17031mscVbkxHa0TbgnrIDqOHYzWvh
-         zMCfsIkUNQa9EjQ9oVOxzlayrP4JBYlXQnk6WScYj92ky8AD+CQQohLoaWO+YAbm2KWF
-         ArvG8Up2HH6XYrv7emcJ6OV+8wbBiYwgLKxqmO+nqtCQoqu95BP7tcRr3ONbYItGWwWV
-         jtYw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnotacLAtAomSb1q7kf5gp+dkMVJdfqEJqlc/YLVhjoZ2ZXJFsK4Ti2wdzepJDV6vihV/2HMSmk5iu7FK4@vger.kernel.org, AJvYcCVbvfvZj0HqV8T5cLE4pRhk3A/Ukt/rKl3eHxC//XaQcrls+aH/zRWookGxhwNsiPtSIsDtruZzcs2xWJI=@vger.kernel.org, AJvYcCVmpvD7kL8mXf4gvJhoEyFmZn/EHuKOyfbqdD2AcSRun5zAjQZwflnLR6G8ZMbJ1IYDqvfIq7NQ7gJZ@vger.kernel.org, AJvYcCWbOVCBz8CblrUalgoX0oApQXwZJt7067f9MSOGZdGkojhSeN1N6H6SxZdjsI3QEZsZRwtsNsU/z+ir@vger.kernel.org, AJvYcCXHYqycBOsaIx6nbXUic4K1d2v1LQD+pQgoWNxRH6hxcxLww7w1EgsZydoOjOV5UgYo6Cb62X2/v+5v@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgR6aRM3nsJTAtcfEy2pF90qdV9c1vyW6nXA6U18f9h62wyZY9
-	2QHlfTiU/O0NQ7IGx8WOIyrsEVIafmqylCLsLtk30n1aUMhuDAJ8
-X-Google-Smtp-Source: AGHT+IHHKKge5OSKBhzIpKxm9NbgpPVXnRxIjk7i0bxop8MU5QW8qV55w57AqcIhgjFxkNVVq1iuGg==
-X-Received: by 2002:a05:6a00:23ca:b0:71e:6122:5919 with SMTP id d2e1a72fcca58-7206306ed56mr53099644b3a.20.1730910935859;
-        Wed, 06 Nov 2024 08:35:35 -0800 (PST)
+        bh=9olawbYn7htf1Q9WNRGiGe7mdjgouMY6rNID+WumQL8=;
+        b=paYQ9OkGMU26FY1vJOhRGepiex6SJ4FQoDGgbBzuT8EkJpzKfhdUKLqF7Ft8R2K8Nc
+         p1Wa25WFMbky7YIIKvSlwuSaSB23XyYd6iVWkxHGt+d0oHKW89r67oWHvH8gKzr1QGx/
+         F9ubZeuinJiw5HF3LJ+T+t6uIbKpe9yQbrQKZZR0t02COJuE02Q4w0zS3agPadbw0kuf
+         3MmA4eSBNLcoA//kc2cL8qEVydp4chZV3AoJ3lX85rmW6tRFSVH8Ct6oDSwJLjS1vo4V
+         Q+DoyyjtnjDBEAtwmnBkGHNntApI1foQ41BDlxA2dpG8GExa1Tq9I4Pp5TGv0God04jd
+         776w==
+X-Forwarded-Encrypted: i=1; AJvYcCUoVF3RR+C4t+n2ktCnUcNeMohLYee0PNeUskMHpPuuERyNi9QdoHNgknuSO0SNgQ2q88hsqmNEL7F/@vger.kernel.org, AJvYcCV9IkP77xL2liRnUlcFR8xLLkV4MgDG4oqayaL8GtoLuLHb6nM42Wc2l+RC9qUeebb4ezwjvK8QMJQz@vger.kernel.org, AJvYcCVk2f+PcYk8Dh9xmWBWL7N0kWKh0wvSiOLfDLPLYmoA8p50bQXmrFJmt+1qaPPE715OJVRF9PuS1RvkCt0x@vger.kernel.org, AJvYcCVu+KCSdyQbwmlq9HmA5wlV0B8r9Gs+ePyukW2e+mJeHabwKCsIpo9Yttl9SIYsQ9Jck7kZStGAz3gyk9I=@vger.kernel.org, AJvYcCXiGw4BQfp22LDinSVFLKPCJZn4N83A9hgCeaKeXIDGZ9ZVljgxfgljqF9hIvm9pGNAljBXTQ1Yihvg@vger.kernel.org
+X-Gm-Message-State: AOJu0Yym48zgU/Th/SGPa73c33kblZF1a1XpveUJQ01topVXTguiN4um
+	lTSk4IflCo5LupKV6rLO5BG9H7sV54MXwpGPcRvpcN9kO8JxR3vh
+X-Google-Smtp-Source: AGHT+IHeyxhAU+AaFeNKPaTYqQiv6WAIcMyVXX1JkvSgtHctOd1+31cBPtk5P5wYgnLaaWh1rmsdYA==
+X-Received: by 2002:a05:6a00:4b45:b0:71e:667c:8384 with SMTP id d2e1a72fcca58-723f7a279d5mr5160955b3a.9.1730911437314;
+        Wed, 06 Nov 2024 08:43:57 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1ba244sm12237398b3a.19.2024.11.06.08.35.34
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc2eb586sm12329636b3a.149.2024.11.06.08.43.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2024 08:35:35 -0800 (PST)
+        Wed, 06 Nov 2024 08:43:56 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2bdc5b60-2442-4291-a2f2-2e3802b7e982@roeck-us.net>
-Date: Wed, 6 Nov 2024 08:35:33 -0800
+Message-ID: <2b731ba8-1b6b-41eb-bae9-3403555506ef@roeck-us.net>
+Date: Wed, 6 Nov 2024 08:43:54 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -94,6 +94,7 @@ References: <20241106030918.24849-1-cedricjustine.encarnacion@analog.com>
  <20241106030918.24849-2-cedricjustine.encarnacion@analog.com>
  <8e4dc080-d779-4b06-8fd1-74784e06323a@roeck-us.net>
  <20241106-gatherer-glancing-495dbf9d86c7@spud>
+ <20241106-overcast-yummy-9c6462ff2640@spud>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -139,38 +140,31 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241106-gatherer-glancing-495dbf9d86c7@spud>
+In-Reply-To: <20241106-overcast-yummy-9c6462ff2640@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 11/6/24 08:06, Conor Dooley wrote:
-> On Tue, Nov 05, 2024 at 08:34:01PM -0800, Guenter Roeck wrote:
->> On 11/5/24 19:09, Cedric Encarnacion wrote:
->>> Add Analog Devices LTP8800-1A, LTP8800-2, and LTP8800-4A DC/DC μModule
->>> regulator.
+On 11/6/24 08:11, Conor Dooley wrote:
+> On Wed, Nov 06, 2024 at 04:06:02PM +0000, Conor Dooley wrote:
+>> On Tue, Nov 05, 2024 at 08:34:01PM -0800, Guenter Roeck wrote:
+>>> On 11/5/24 19:09, Cedric Encarnacion wrote:
+>>>> Add Analog Devices LTP8800-1A, LTP8800-2, and LTP8800-4A DC/DC μModule
+>>>> regulator.
+>>
+>> A single compatible for 3 devices is highly suspect. What is
+>> different between these devices?
 > 
-> A single compatible for 3 devices is highly suspect. What is
-> different between these devices?
+> Additionally, looking at one of the datasheets, this has several inputs
+> that could be controlled by a GPIO, a clock input and several supply
+> inputs. It also has a regulator output. I don't think it is suitable for
+> trivial-devices.yaml.
 > 
 
-The maximum supported current is different.
-
--2:  135A
--1A: 150A
--4A: 200A
-
-Programming is exactly the same, which is why I had asked the submitter to use
-a single compatible property. Sorry for that if it is inappropriate.
-
-Is there some guidance explaining when to use a single vs. multiple compatible
-properties for different chip variants ?
-
-Note that there are also LTP8803-1A which supports 160A, and LTP8802A-1B
-which supports 140A. Maybe there are more, but those are the ones I can find in
-public. I don't know if there is a difference from programming perspective compared
-to the LTP8800 chip variants; the datasheets are too vague to be sure. It would be
-useful to know if those chips should get separate compatible entries if programming
-is the same.
+All PMBus devices are by definition regulators with input and output voltages.
+After all, PMBus stands for "Power Management Bus". Some of them are listed
+in trivial devices, some are not. Is that a general guidance, or in other
+words should I (we) automatically reject patches adding PMBus devices
+to the trivial devices file ?
 
 Thanks,
 Guenter
