@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-7850-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7851-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC3D19BF2E9
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 17:12:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF24D9BF352
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 17:35:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AF101C219CD
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:12:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60A931F22C94
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:35:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 038C720126B;
-	Wed,  6 Nov 2024 16:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6776F203706;
+	Wed,  6 Nov 2024 16:35:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KlbaYnpk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kxZDZc2H"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3EF1DCB06;
-	Wed,  6 Nov 2024 16:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9353213C67C;
+	Wed,  6 Nov 2024 16:35:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730909529; cv=none; b=tizaWMBYG25V8XzkEA/8grsKlbs7b2UcRPcKFk3j4LGydcxCbWZPCuWqSXCDlin+lZpNutpduvHf3Ge1CCL4Qxpsz9njykXLpKSDHaHHU5zB5DWj4tJaB/nmyvKYwqOyDOXxmrHv4CY93BkNpl5mBs5V3OdDBu9aM8AinGvQRk4=
+	t=1730910938; cv=none; b=aa3q/JPfWJcavQSKiBXNg+sCbIeJmOhoLzFsljfw+CXj8IDwBn5UBXDm1EzGmPmmGgD8bp1faVWEMh1Frf+GDzPYF+tqASDVDSofGA1uuG5XwOVMukPhRn0KrM8tSA+KoGYNcm+N+E523EzZGMABterg4j8ZoCC3a4DfDZPtjpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730909529; c=relaxed/simple;
-	bh=T64uivFmO0jq+FDo7HOZZ9v1uoDiLucSFI2ULU1aKPY=;
+	s=arc-20240116; t=1730910938; c=relaxed/simple;
+	bh=+226borHsYkLvmzDZ3/K0biYVEW55zEhJxTZdfLCUwo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IbYM5OLst/N47UjlEAGiRYDHTHzEijm+WXlGgy0f9NoxYLBbc6g63QO7pQl2d+qiC/eb5RBjFXYTsSvdOBuBtzWPHS22xL5ioq9BGKJdRYeFizU91wec+wJIHrrNL2y2gpFYK1K2cfn3tkQJCUkfvMvMubv7yG9PcyT9TdofxY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KlbaYnpk; arc=none smtp.client-ip=209.85.210.178
+	 In-Reply-To:Content-Type; b=n36ysqZpnlXSnDty2P+JU5XlxbOX/yMpo0opGgdz3SJhZofUGF3PzJ6mt27wZILt6dWf4FhXpYxvzNe9lHnVzcGFwjWTi57jwa0Qoli3wfi5Iz3CIiy5r3ouh+8tv8y4j8LO7921lsCVKdYYpEKDunMQ/i2GSyTmW74U7Oy6qwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kxZDZc2H; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-720e94d36c8so993675b3a.1;
-        Wed, 06 Nov 2024 08:12:08 -0800 (PST)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-71e7086c231so6058421b3a.0;
+        Wed, 06 Nov 2024 08:35:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730909527; x=1731514327; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730910936; x=1731515736; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=tHpwmXx4MDMRV0xW4DkzvkGIJELOPIvIsNOeu6V8YT4=;
-        b=KlbaYnpk2UIJYLhaTJXfEZ0SHk7aaOg5qXEOyG8Xa6boU7zbyIAYdcmR9hnfLqFI+L
-         9WDFSYrh5BoBi8j/4kpaVU68xVMeluqNhLc3FM2jcpRWhMLXG2zuT9Jykt2ZcSisjbOY
-         IXu4RmH/8e/a0KitPk3K9giWNCV0LiwJHdiIjPjiV9/nHoXF2DfQiP8PbIXewHcJd3gX
-         2q5NrtQN1GFveWG3e+V1x5bdW4MxmuxmDM5j/P/733TcYOWGZSzzbtediXNaZoA1Th/z
-         tAPF6QdUpREoRJDKemuCV48ggJMwIGduVoD3BliQy/T1FKoh52y9wUbSd1B8VAYDbNOW
-         GQ+w==
+        bh=EpMoaV2UEgpT1cQjTdLpUsE/ib9jltFkw/ONf3N7WVQ=;
+        b=kxZDZc2Hd8XGQeotrZb9qKUVKtSFob8q+vzBXDZ4the16JZ07awimudpJek4zRk4TK
+         YVb/QDqoHxqGVBP+aefkAqd5+pjTa1Nlw50/mPIKj6r0xoX8dgVxOHclX4k6TiCDJpHf
+         VD9SE7du4ah9ZxLlMdo4XC1RnajnKImqKC8ACxr1DtlRtYP9mGouq8SAadnZRWcPNuiM
+         qH+clwNNoylm1GHXy4AkuX2m0bBei49HwjGyxp8J076YUO0k++VV+qDR6TYQHQyRsrjH
+         dzRWtiaM0OtJmKIauJ8ws+AFlGhKj85FHku1fewz7inuZNy5GLVjlBW8x8FU2WbrPmR4
+         WOdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730909527; x=1731514327;
+        d=1e100.net; s=20230601; t=1730910936; x=1731515736;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tHpwmXx4MDMRV0xW4DkzvkGIJELOPIvIsNOeu6V8YT4=;
-        b=YmR3NKeghXKcJADOcQrG49uYCpXmPdZL9DTj8d8cYwm90Kb5TX9wrrsz1/iWmTvobo
-         Lt4lxzwFR3zBX5N9stLBQ3M0JfgbdBWxlD+tMGm8poQUpY7f1eMnh9toZj7cE1VwYmcZ
-         LWgmkIUIxGXPgXZz6xGfTVgKwgQwCUz/22z51uTsMmb5J5QEpJtX6+SIPXHqAtzn1fGy
-         r3vRtyEXFg7AwEmwJgOdcy/jVw8cSkAczYd/hQXxeJuK+hCfxid0oIP1UznupXf4WdKi
-         fwc6pMRHp2tHOu5J8wKv5sKTvvrE4vIXBkEZ6ZWQzYqvYP6ddopPgMJTKniYH4lly1w2
-         wgbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVscFdb42pTeT5eYTcs3I1JIOkcR/88jtJYEZPSLgIvcD5y95TGPjUh/UzaVdmeuq5qwUqQ8bAmafLG9N3P@vger.kernel.org, AJvYcCWaVDskChxV5IU4r11/Y5Hin7sibbDsbgweZ3d/Z2GSuwaNsLU/qHkeCahpgtUZeMyHvJrzXdBh+N0P@vger.kernel.org, AJvYcCXPN+NWzq281G/bpUHlJTkxzQxmoh2NtXRdAgfH/8UmDnaGaOu+opjYUuINqVKuTHyNJq/SKoWVPgmk@vger.kernel.org, AJvYcCXxPJaRSgh1Upst+aPzuxZY2S40utDTe2Mh4y3P0ZAPZ1MoBrdi3itiHeMJmvZuJ2r4DRSQk8pxyqvJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyS+eFhbYJhV7gH2TBjTCFGIWtcO2J9LxwxEp/PnfxrE0QD6pF9
-	RFxc6zf3lenBZuYNLux5x4U91ffH7b124yfQgnPX4FWK9xYST9p2
-X-Google-Smtp-Source: AGHT+IFHLmQfctSyRYrOZ+ozC5XQjTVXRqG2HGnIAlN9FyyNV61ZC2srgMwwoH/91vVnfsK+F9cniA==
-X-Received: by 2002:a05:6a00:4f8e:b0:71e:4798:8753 with SMTP id d2e1a72fcca58-723f799883bmr5725514b3a.6.1730909527146;
-        Wed, 06 Nov 2024 08:12:07 -0800 (PST)
+        bh=EpMoaV2UEgpT1cQjTdLpUsE/ib9jltFkw/ONf3N7WVQ=;
+        b=hZ0C1qsXl4bTQCh0J93rviXcpW684hW5hH0WpDSnVQ+GvDplrl5z7VqaVukVHwZot6
+         op1OygfnWIQItQXJlqjnkSbfaFdMru1H8M8l2xAJPwrf9Ecds/s7th1rvp10PvyYOBmc
+         NvB0Zh8YJIGtDGgu0zNahJnUnxO7c69coUycPw17031mscVbkxHa0TbgnrIDqOHYzWvh
+         zMCfsIkUNQa9EjQ9oVOxzlayrP4JBYlXQnk6WScYj92ky8AD+CQQohLoaWO+YAbm2KWF
+         ArvG8Up2HH6XYrv7emcJ6OV+8wbBiYwgLKxqmO+nqtCQoqu95BP7tcRr3ONbYItGWwWV
+         jtYw==
+X-Forwarded-Encrypted: i=1; AJvYcCUnotacLAtAomSb1q7kf5gp+dkMVJdfqEJqlc/YLVhjoZ2ZXJFsK4Ti2wdzepJDV6vihV/2HMSmk5iu7FK4@vger.kernel.org, AJvYcCVbvfvZj0HqV8T5cLE4pRhk3A/Ukt/rKl3eHxC//XaQcrls+aH/zRWookGxhwNsiPtSIsDtruZzcs2xWJI=@vger.kernel.org, AJvYcCVmpvD7kL8mXf4gvJhoEyFmZn/EHuKOyfbqdD2AcSRun5zAjQZwflnLR6G8ZMbJ1IYDqvfIq7NQ7gJZ@vger.kernel.org, AJvYcCWbOVCBz8CblrUalgoX0oApQXwZJt7067f9MSOGZdGkojhSeN1N6H6SxZdjsI3QEZsZRwtsNsU/z+ir@vger.kernel.org, AJvYcCXHYqycBOsaIx6nbXUic4K1d2v1LQD+pQgoWNxRH6hxcxLww7w1EgsZydoOjOV5UgYo6Cb62X2/v+5v@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgR6aRM3nsJTAtcfEy2pF90qdV9c1vyW6nXA6U18f9h62wyZY9
+	2QHlfTiU/O0NQ7IGx8WOIyrsEVIafmqylCLsLtk30n1aUMhuDAJ8
+X-Google-Smtp-Source: AGHT+IHHKKge5OSKBhzIpKxm9NbgpPVXnRxIjk7i0bxop8MU5QW8qV55w57AqcIhgjFxkNVVq1iuGg==
+X-Received: by 2002:a05:6a00:23ca:b0:71e:6122:5919 with SMTP id d2e1a72fcca58-7206306ed56mr53099644b3a.20.1730910935859;
+        Wed, 06 Nov 2024 08:35:35 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc3152fesm11922289b3a.195.2024.11.06.08.12.05
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1ba244sm12237398b3a.19.2024.11.06.08.35.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2024 08:12:06 -0800 (PST)
+        Wed, 06 Nov 2024 08:35:35 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e88956d9-0dd1-4a38-8a91-8175223c87cc@roeck-us.net>
-Date: Wed, 6 Nov 2024 08:12:04 -0800
+Message-ID: <2bdc5b60-2442-4291-a2f2-2e3802b7e982@roeck-us.net>
+Date: Wed, 6 Nov 2024 08:35:33 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,19 +78,22 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/7] hwmon: pmbus: add tps25990 efuse support
-To: Jerome Brunet <jbrunet@baylibre.com>, Jean Delvare <jdelvare@suse.com>,
+Subject: Re: [PATCH v2 1/2] dt-bindings: trivial-devices: add ltp8800
+To: Conor Dooley <conor@kernel.org>
+Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
  Jonathan Corbet <corbet@lwn.net>,
- Patrick Rudolph <patrick.rudolph@9elements.com>,
- Naresh Solanki <naresh.solanki@9elements.com>, Rob Herring
+ Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, Rob Herring
  <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-i2c@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
- Vaishnav Achath <vaishnav.a@ti.com>
-References: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
+ Conor Dooley <conor+dt@kernel.org>, Peter Yin <peteryin.openbmc@gmail.com>,
+ Noah Wang <noahwang.wang@outlook.com>, Marek Vasut <marex@denx.de>,
+ Lukas Wunner <lukas@wunner.de>
+References: <20241106030918.24849-1-cedricjustine.encarnacion@analog.com>
+ <20241106030918.24849-2-cedricjustine.encarnacion@analog.com>
+ <8e4dc080-d779-4b06-8fd1-74784e06323a@roeck-us.net>
+ <20241106-gatherer-glancing-495dbf9d86c7@spud>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -136,37 +139,40 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
+In-Reply-To: <20241106-gatherer-glancing-495dbf9d86c7@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/5/24 09:58, Jerome Brunet wrote:
-> This patchset adds initial support for the Texas Instruments TPS25990
-> eFuse. The TPS25990 is an integrated, high-current circuit protection and
-> power management device. TPS25895 may be stacked on the TPS25990 for
-> higher currents.
+On 11/6/24 08:06, Conor Dooley wrote:
+> On Tue, Nov 05, 2024 at 08:34:01PM -0800, Guenter Roeck wrote:
+>> On 11/5/24 19:09, Cedric Encarnacion wrote:
+>>> Add Analog Devices LTP8800-1A, LTP8800-2, and LTP8800-4A DC/DC μModule
+>>> regulator.
 > 
-> This patchset provides basic telemetry support for the device.
-> On boot, the device is write protected. Limits can be changed in sysfs
-> if the write protection is removed using the introduced pmbus parameter.
-> 
-> Limits will be restored to the default value device on startup, unless
-> saved to NVM. Writing the NVM is not supported by the driver at the moment.
-> 
-> As part of this series, PMBus regulator support is improved to better
-> support write-protected devices.
-> 
-> Patch 3 depends on the regulator patchset available here [1].
-> This is a compilation dependency.
+> A single compatible for 3 devices is highly suspect. What is
+> different between these devices?
 > 
 
-Unfortunately this means that I can not apply this and the following patch
-until after the next commit window, which is unfortunate since patch 4
-does not logically depend on patch 3. That also means that I can not apply
-the last patch of the series since it depends on the ability to disable
-write protect. Those patches will have to wait until after the next commit
-window.
+The maximum supported current is different.
 
+-2:  135A
+-1A: 150A
+-4A: 200A
+
+Programming is exactly the same, which is why I had asked the submitter to use
+a single compatible property. Sorry for that if it is inappropriate.
+
+Is there some guidance explaining when to use a single vs. multiple compatible
+properties for different chip variants ?
+
+Note that there are also LTP8803-1A which supports 160A, and LTP8802A-1B
+which supports 140A. Maybe there are more, but those are the ones I can find in
+public. I don't know if there is a difference from programming perspective compared
+to the LTP8800 chip variants; the datasheets are too vague to be sure. It would be
+useful to know if those chips should get separate compatible entries if programming
+is the same.
+
+Thanks,
 Guenter
 
 
