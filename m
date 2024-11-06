@@ -1,99 +1,115 @@
-Return-Path: <linux-i2c+bounces-7862-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7863-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5EDE9BF977
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 23:51:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 579F19BF99A
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2024 00:01:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 136511C21217
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 22:51:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 093DF1F221B0
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 23:01:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E574120C493;
-	Wed,  6 Nov 2024 22:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A15E31DDC04;
+	Wed,  6 Nov 2024 23:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B8HolJVn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="poBQhvWM"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AB2645;
-	Wed,  6 Nov 2024 22:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5983213A244;
+	Wed,  6 Nov 2024 23:01:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730933467; cv=none; b=Y4TBWq93vjVsqIeSAoi81B6ylr9OtgFnxfxSKMjZvGOh/YHjXrh3tDgdrSmbmfEO7LUN+0VzqoI29hdFzBGWUgSBz68Z9IaYn9vef0l+K+aM9gAywC4peM0btEB7K2jui6RufJ4RQEcKvvaWSZ4+dJgrr7+Y9vsXuEhz5D+Fmcs=
+	t=1730934080; cv=none; b=L1TnUEsiqPGLyEJ1pzArCFRtOENCL3NGnEo8XLro1Ki4gIwhIloME2L9Ux3bauGO8BiXurdXI4ykWgXat+g1unERcDSZsJzd1ZQ9Gl9bwGFJaeKmwxyNS5Z+vpaArDCxH+Eg/uhfvht1910ZLgOqjEXOVsRrmOBu7F+tERvIhT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730933467; c=relaxed/simple;
-	bh=E/ODYE/ywA2Cf3WzILMrMNxcnC1oEYAE5QrdYiNFvK0=;
+	s=arc-20240116; t=1730934080; c=relaxed/simple;
+	bh=lsZM1OifQMR0Ewkk9yEiN0OytYyrRhK0WgUktu0fm2s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=StFTf4PKVOgTPFfH86LrUJ5fepbbiiH86QtcX0rylBs/irDm/1nA2/ncTSNpdUETMU53fAaDhC75+Pkwk3CwrCnMGg74vvcWQPBf5Xi+Qmg/6V7Ome9HBhbkXhm5F/CVOkpSr1PTGrfVFDV6EaLuIlrXyXWBCmJDwBhfzXJKDOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B8HolJVn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D13EC4CEC6;
-	Wed,  6 Nov 2024 22:51:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MS8jPAdXk5JY3c3N3G9fIFD9oKwwndcUVesDGPDYdo16A3pC6K9GScM1k+MOBBrwZMAtl07ibzxubVzdtxBbhRvy9MIzL25+HdM9EVCbeZJXbwIXpr/pWSdScRypXYik8qU5lESu9pbpcrXrFMY7aXesB0Cow89AmhN775ZKMN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=poBQhvWM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85BCCC4CEC6;
+	Wed,  6 Nov 2024 23:01:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730933467;
-	bh=E/ODYE/ywA2Cf3WzILMrMNxcnC1oEYAE5QrdYiNFvK0=;
+	s=k20201202; t=1730934077;
+	bh=lsZM1OifQMR0Ewkk9yEiN0OytYyrRhK0WgUktu0fm2s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B8HolJVncn6CKk+vzhFUCoI5ooliC6ctEQu0fiZC28MiF6+8PhBOlstDYZgUfohYS
-	 DjzliJZY+wT2MIlplkTTBCn9Yxxh/SHeEFGN3TMNvz3wWG4sqZZZdVK7WVOWv4H+JR
-	 ZHVdHELmaqzptLS1GMbXf4OMMXmSmXgloO1yL4/ojlblC1KXNPqd+a0QL2NOmQdZv/
-	 K+9/V2zBS60ADB23npqa+Tkf+40RnqkEM5J/OUoLCl/hsrpOlBmrWFQ1bo2rtH9fRV
-	 bqE7z5vO7D9XMxdNgIO+DNXjVUOQ8iipKXf0/AQBgEN02ZA0eoERybBPgDBKsnKd04
-	 nluYMgqGHQNHg==
-Date: Wed, 6 Nov 2024 23:51:01 +0100
+	b=poBQhvWMcBUshJScA6qi+VoJHKUku76KrYRKcZmXbwDWEI6cPLvtn2nbafsCAIfWB
+	 DuVj3zVc2G7Br0OzO5qRRqv/POtgTSYaYVvdwKPgdzzMHbq+mFw2UOso3RuatdyVtJ
+	 shgjV94yLZYvIusjXNG1HhfGJBN9CLyhXQ4gpii59YUJramoLURM7WlsZKO1P0Njd0
+	 K/xvVc2jxy1KVe6v7eDzmoYY+/OEglKrrzvDhLE+6sNpykrPv3P+UmuGOmZnLs65U7
+	 dyjL1VsLLV0yBAknZRA93bx1ZuBGu5itBLLZ9zfn8lW0tgZ/oHnaKDI4Z9rRbqouyF
+	 tdvSbC5m97xuQ==
+Date: Thu, 7 Nov 2024 00:01:12 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, tsbogend@alpha.franken.de, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v9 4/4] i2c: Add driver for the RTL9300 I2C controller
-Message-ID: <jwwh6m4z3xjqczn5tcf2jt7v4qhx6e6atvxyrxrauynfazzghn@cxy7ugncaesn>
-References: <20241106001835.2725522-1-chris.packham@alliedtelesis.co.nz>
- <20241106001835.2725522-5-chris.packham@alliedtelesis.co.nz>
- <vn6t6qxqry2ay4tbvo3cb4rbjv53pnyl56vangul36vvvxibwp@q3pssbthesef>
- <d7ceaf59-8e39-4c76-9b9f-88746a22176d@alliedtelesis.co.nz>
+To: Doug Anderson <dianders@chromium.org>
+Cc: Jiasheng Jiang <jiashengjiangcool@gmail.com>, 
+	rmk@dyn-67.arm.linux.org.uk, max.schwarz@online.de, david.wu@rock-chips.com, heiko@sntech.de, 
+	vz@mleia.com, wsa@kernel.org, manabian@gmail.com, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] i2c: rk3x: Add check for clk_enable()
+Message-ID: <fj2vssllh7zgl76a4jfakrcngcflwvqxzwwa2dhpkauli2u7wb@pz23fznmy25e>
+References: <20241105161820.32512-1-jiashengjiangcool@gmail.com>
+ <20241105161820.32512-3-jiashengjiangcool@gmail.com>
+ <CAD=FV=VzqKa=fo4KRw4FSpPcH4mVnt8jBMo=FMzsGkdGrXCfxg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d7ceaf59-8e39-4c76-9b9f-88746a22176d@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=VzqKa=fo4KRw4FSpPcH4mVnt8jBMo=FMzsGkdGrXCfxg@mail.gmail.com>
 
-Hi Chris,
+Hi Doug,
 
-On Thu, Nov 07, 2024 at 08:47:42AM +1300, Chris Packham wrote:
-> On 6/11/24 22:57, Andi Shyti wrote:
-> > On Wed, Nov 06, 2024 at 01:18:35PM +1300, Chris Packham wrote:
-> > > Add support for the I2C controller on the RTL9300 SoC. There are two I2C
-> > > controllers in the RTL9300 that are part of the Ethernet switch register
-> > > block. Each of these controllers owns a SCL pin (GPIO8 for the fiorst
-> > > I2C controller, GPIO17 for the second). There are 8 possible SDA pins
-> > > (GPIO9-16) that can be assigned to either I2C controller. This
-> > > relationship is represented in the device tree with a child node for
-> > > each SDA line in use.
-> > > 
-> > > This is based on the openwrt implementation[1] but has been
-> > > significantly modified
-> > > 
-> > > [1] - https://scanmail.trustwave.com/?c=20988&d=pL2r5zHAPsW8d92uECdR2T8Eh4fYX_ZwrCyklfTCzQ&u=https%3a%2f%2fgit%2eopenwrt%2eorg%2f%3fp%3dopenwrt%2fopenwrt%2egit%3ba%3dblob%3bf%3dtarget%2flinux%2frealtek%2ffiles-5%2e15%2fdrivers%2fi2c%2fbusses%2fi2c-rtl9300%2ec
-> > > 
-> > > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > > Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> > Thanks for following up with v9. I think nothing prevents us from
-> > already merging this 4/4 patch, right?
-> > 
-> From my end yes it's all good to go. Lee's just applied the mfd binding.
+On Tue, Nov 05, 2024 at 01:29:40PM -0800, Doug Anderson wrote:
+> On Tue, Nov 5, 2024 at 8:18 AM Jiasheng Jiang
+> > Add check for the return value of clk_enable() in order to catch the
+> > potential exception. Moreover, convert the return type of
+> > rk3x_i2c_adapt_div() into int and add the check.
+> >
+> > Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
+> > ---
+> > Changelog:
+> >
+> > v1 -> v2:
+> >
+> > 1. Remove the Fixes tag.
+> > 2. Use dev_err_probe to simplify error handling.
+> > ---
+> >  drivers/i2c/busses/i2c-rk3x.c | 51 +++++++++++++++++++++++++----------
+> >  1 file changed, 37 insertions(+), 14 deletions(-)
 > 
-> The only thing outstanding are the mips dts changes. I'll wait for a bit and
-> chase those up. Hopefully they can make it in the 6.13 window but it's not
-> the end of the world if they don't.
+> Wow, this is a whole lot of code to add to check for an error that
+> can't really happen as far as I'm aware. Turning on a clock is just
+> some MMIO writes and can't fail, right? Is this really worth it? Maybe
+> just wrap clk_enable() and spam an error to the logs if it fails? If
+> we ever see that error we can figure out what's going on and if
+> there's a sensible reason it could fail we could add the more complex
+> code.
 
-Cool, I just wanted to confirm. Applied to i2c/i2c-host.
+We've had this discussion several times. I'm of the school that
+if a function can return an error, that error should be checked.
+It's not spam, we do it everywhere.
 
-Thanks,
+On the other hand, there is another school, bigger than mine,
+that doesn't want such a check.
+
+I decided not to bother. If someone adds the check, I'm going to
+accept it. If someone doesn't add the check, I won't bother
+asking for it.
+
+Said that, MMIO reads and writes can fail: in other drivers I'm
+seeing bogus reads due to some firmware failures during device
+reset.
+
+I agree with you with the rest of the comments and thanks for
+checking this out.
+
 Andi
 
