@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-7844-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7845-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 585029BF252
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:57:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 614129BF257
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:58:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BE571C21C18
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 15:57:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21624284015
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 15:58:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA50204F74;
-	Wed,  6 Nov 2024 15:57:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4470204022;
+	Wed,  6 Nov 2024 15:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cJLxwqFK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzSL+JHt"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00C62038DA;
-	Wed,  6 Nov 2024 15:57:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F932EAE0;
+	Wed,  6 Nov 2024 15:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730908660; cv=none; b=jqIRBBM5paEHRa8Q9TrYTFBJezMIf5bbAbz+fJ0BLEjri+YH7gv6Nj2jlWdDU4VEtYB3+1oRDBLSNbhEGvtuPYfASnS1mnj+t0FF3uNymJRyxRpagGz5domr3YPo8iUDLPX0LyAI2/thp8F7yBogEU43Dx226cuwCnCHOwk+8Ig=
+	t=1730908714; cv=none; b=tY83StX1cFTJmVdb0OQuuJKWrw+cjgQaazZ4bzPWBoW823vQliwxnoHx9DgbkU8nAiJpVyBMCf0wImGqW++O026Xhl0CEufdhRkxkMBd8t+CQkXwxn97oui1Rf3487Kdsr6yozKFAlqM+9KaI7R6yUM3NJkZoCkouQe/tE0C1kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730908660; c=relaxed/simple;
-	bh=4yjgRkQZgHZKcliYPj1E9Ufomuv2mAshunnuZm5XMgY=;
+	s=arc-20240116; t=1730908714; c=relaxed/simple;
+	bh=HdoUy9fkRfHNMPI/Zqx1R8MVO28AwhfbFFuB5nPrHjU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ptNL4Y6faE+YPm3ei8XghoHLhL5G7jAR7oGJp3Yas1+UWV6RkYsIZNgH/Ovczy/jwvxMgL5V6vp9HS63JBQhjgUhbDJZIeDEQ3Y9Xr5gmcXiZoM23zDWJzyTzJvEVPtZPhJH029IfIeTSKi4Um1ukzGMjBJgz/Er826YPMAsSHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cJLxwqFK; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=BFLFzFDdF1Fs9GcgiMVD1MhpAP4fuaNcDnzjgnqQ9kfRZTHRAmCqHpmQP5lhMZEuAanvSqG5aDWyIfQoGOLm2rOMDnUPmQNSrRMzv1oTEt7vHLhYriJMZGsiSLl9lxB+BQBDNUnfRppr/vkhEtG8BSoYbbaE3eqEQY6lXoe3X3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LzSL+JHt; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20ca1b6a80aso72618495ad.2;
-        Wed, 06 Nov 2024 07:57:38 -0800 (PST)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e34a089cd3so5446494a91.3;
+        Wed, 06 Nov 2024 07:58:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730908658; x=1731513458; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730908712; x=1731513512; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qeexoxW0OuVyCzdaxuaC2uS39PI6PDQIATA6gVmSM8A=;
-        b=cJLxwqFKMiskDUJCH6uETDUeEH1R6/S5nj8dImK/pitt8FY+vrVIQfVWxXAXdiAt4S
-         wnrDC4pVNx3Dlf5t5er+yxwI2Bdi4H6Trt6up1DotypWU/LTmQzlKZEdAQYEfC7clNKn
-         vkNm9+fctvUr2rKgJnoSlj0P2F9CE9V3rIsb54ZWe0tDx0frmB1OhbYGTAsAKCaVLo2V
-         KMCoN9TY3QwSz5cFJHyBx/1HvzshStoqnPL5YOPmieCzadOqH5KKbh/WD/bPbCAKxkFv
-         qVf/+NeqJFe+5aVOhIm1acw7G6wMilQljT+/UShXeuv/m8eO1Drz93gPnSfjJ0+cBH+V
-         UrYA==
+        bh=XUAqFDp51+CluivEaChqcOcsJi1Yi3zAq5PND3VwOLs=;
+        b=LzSL+JHt9nR1sCsruX+0lGMDbHtvZ/7XbRnoqRAUZNQ0YG6pTPGK8xsjlJ/nKXsL3C
+         1zC7mF8bXW+zUyFjRKJ7HtchVWLaepzsMC4+Tuqp/wVvM+48SCfHMKlkMNvN9J2hGjMy
+         wsotIhRvmWdk/nEtuplvWLafBgR5xcVu2P0ZAu2zfsoWkX/SLBG2yvaIUU7DA9JxypJo
+         Ue+lrQ6q4nGtxBIlzcz4dvOdehvUBXG+rxj3kd0AEpEh+cKIgI/BfUd6cxgkSFM8BJ2C
+         M+WG4AICAhtDucRDw0xtVh+CCbC7BmOF/ZrGssGqlEmoZaRcmECxjOXce7Mdmr252GWm
+         0n/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730908658; x=1731513458;
+        d=1e100.net; s=20230601; t=1730908712; x=1731513512;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qeexoxW0OuVyCzdaxuaC2uS39PI6PDQIATA6gVmSM8A=;
-        b=T0tbc3XmZtpyaKufqqWBxi2VsR+TFz+D7VtFd2AcSi/vxWl+LoJESt+PJGKSV67wmd
-         AY1NLzSys7gbX6uwg8pUiJa1lhtDpwoWNmQL6NW4E1pBDIJ29Zd7KJEBrLgJSmckE6XV
-         JqNz+xNSIPnD1rO7PELSHiZJP51xvhC2KhPRfIvuPedKzhSqe6Ogqs9CBR5+hs3N0Fxw
-         lod3XfVaZt24bZre51Cb8vPBR7tAnnm3yAu6j1vm8YaM+ULoXEdZ45R+gqV6+GRVsQW0
-         CcQVl16VpPtaT/4ioRV9VGLtQhQsiDN4tQWKpI+SY16yjA5wE1j3q+NUsUVEiSi43Rnq
-         8HDg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxALiQxa8RjtIAF/e1ulXF8+TkEZ7nh2311wGpBPTjaB5HzDzd2UzTZ64gFDFr0HmHX2U2rVCQDt1YkID5@vger.kernel.org, AJvYcCVAtSSJc/4WeHUqw4NPXAg8Q38+NW4i3sEtLON/YIcQwHtQeMadbf0+Oerk0ymzbvWhxc5QBHHMobl7@vger.kernel.org, AJvYcCWmQSYDgiRjeZW0OTbvVcm0QlA0BDAJDMHCZrnxvpX7om7s9Dx/6dZcyGGwcjoEaYJY0ERvlG0bqnpL@vger.kernel.org, AJvYcCWzAuv0RoN2yVq8tNnNmvhwQC/f/jXNYg2v09Af3j1kB8wpGujjNKPkCjCL2Rj7s0j1CJPiildaOiFzWyE=@vger.kernel.org, AJvYcCXUN8zVKmXz08t15NpzPWLwtdUocYE2LDObiNhuTLWjI1bEu9rt1iVJ9EuPHl23t1f4NDlUgRSHGxQn@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQ9QXnEmLUvFaoPPwQY/SspUtf9dvjg9oYnYLWCdZpV9M3faXk
-	hPr+45RyMRdIhG7rAt9arhMUjVwYxZ3BzEypL09B3DbHzADw2KB6f1fHPA==
-X-Google-Smtp-Source: AGHT+IG7ihs+ud0gGzF7qPyVzpWAStK6eSCUhP/JN3OGpY5JAV3WfOI4iSuLENUKxL4Xd8Sp7nEZ2Q==
-X-Received: by 2002:a17:902:f78a:b0:20c:6bff:fcae with SMTP id d9443c01a7336-2111af1762bmr268484875ad.5.1730908657948;
-        Wed, 06 Nov 2024 07:57:37 -0800 (PST)
+        bh=XUAqFDp51+CluivEaChqcOcsJi1Yi3zAq5PND3VwOLs=;
+        b=BIKsaqda4pNQEQKaNlLirhNNJn742rJu7s50bhhaiqsmw4hBYHrys3LA2fST+MZESm
+         Mdd3CdH5hKVVTzwHah65PIQx3+9R/gBZPjM5JGLBv9jNt4UgdoTawVD9teG/mjZjhvoZ
+         Wgb+It4/CPhPfQeLyNN25qC/1J+2paMTBAL1HgavmnweKKr1u9ToBkGahx5vYJ34snZy
+         LlNxaycwzC31sTetbsc+36dC9IeKRfDI+F6JNJ8P9pLF3F39H9JRZEUrK1VcQoK6XWVb
+         b0u9HOKiQL7F+X87Fpn+mkoNONX4sFs3w5kJz54sRWp89EE1JqhZEW07uA5qA24wmTPV
+         9pGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVw+FT1VwfWF/TDVyzuxiKDIM43sLZLhGiuu/udRo/EI6/zth0ZU2bu1z7PGZb7XYGW/yJQ4hr2sg0RrSaR@vger.kernel.org, AJvYcCX76DJ7Xu2YsPZBFTjFDXZ4O2SoF9YLVd8r8DiUL8GiSke9DS/53XBLheB7+lBdau78g2nN4RtnfldWfkE=@vger.kernel.org, AJvYcCXXexhdO/JKw/Yl9ckOpoKIDyf7dUevHH4U1x5s/YbK/AVlQB57fhK6rTO1cML39EXiyuP42wMAhUIg@vger.kernel.org, AJvYcCXYKElhiDdWOIJpibC8D+rUplE6RmoFPz+ukTblap9ODyz4yZbpqtMHBeeebXnSh7nvsYFqnrDsN4CI@vger.kernel.org, AJvYcCXpk4uel+rHVBMtAcwQT1BXj8mI7PsfBEJoJk5jhX1TVW6LR5sPdLP/bv3t6zJtXGAQd9aDlPRXAff7@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlRTH91ppURDzn+v1vGg4cvvagySKph8OYj866PAFkc33+WAhK
+	IPnKrV5fMt4jXKt5KOvgmllfHjgAk7pDd4UDJDupIlE16atv4CFs
+X-Google-Smtp-Source: AGHT+IGg5WQMsEr9pnJxspcf4pALiyC/ozBfwqFSU5i1wYsgWEJ/S94GrDgJEKjrQof/TQOVShKsxw==
+X-Received: by 2002:a17:90a:43c3:b0:2e2:c9c1:aacf with SMTP id 98e67ed59e1d1-2e8f10a7276mr43122388a91.29.1730908712314;
+        Wed, 06 Nov 2024 07:58:32 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2110570815bsm97544365ad.91.2024.11.06.07.57.37
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e99a5a2f95sm1668475a91.34.2024.11.06.07.58.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 07:57:37 -0800 (PST)
+        Wed, 06 Nov 2024 07:58:31 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 6 Nov 2024 07:57:36 -0800
+Date: Wed, 6 Nov 2024 07:58:30 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Jerome Brunet <jbrunet@baylibre.com>
 Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
@@ -81,11 +81,11 @@ Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 1/7] hwmon: (pmbus) add documentation for existing
- flags
-Message-ID: <34f29ad5-4c31-4091-ad59-fa229ccd78bc@roeck-us.net>
+Subject: Re: [PATCH v4 2/7] hwmon: (pmbus/core) allow drivers to override
+ WRITE_PROTECT
+Message-ID: <36a1a209-18dc-4cb5-b2ef-80045eb306bc@roeck-us.net>
 References: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
- <20241105-tps25990-v4-1-0e312ac70b62@baylibre.com>
+ <20241105-tps25990-v4-2-0e312ac70b62@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -94,17 +94,17 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241105-tps25990-v4-1-0e312ac70b62@baylibre.com>
+In-Reply-To: <20241105-tps25990-v4-2-0e312ac70b62@baylibre.com>
 
-On Tue, Nov 05, 2024 at 06:58:38PM +0100, Jerome Brunet wrote:
-> PMBUS_NO_WRITE_PROTECT and PMBUS_USE_COEFFICIENTS_CMD flags have been added
-> to pmbus, but the corresponding documentation was not updated.
-> 
-> Update the documentation before adding new flags
+On Tue, Nov 05, 2024 at 06:58:39PM +0100, Jerome Brunet wrote:
+> Use _pmbus_read_byte_data() rather than calling smbus directly to check
+> the write protection status. This give a chance to device implementing
+> write protection differently to report back on the actual write protection
+> status.
 > 
 > Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 
-Applied.
+Applied,
 
 Thanks,
 Guenter
