@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-7845-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7846-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 614129BF257
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE5C99BF282
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 17:04:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21624284015
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 15:58:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 931E52852F7
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Nov 2024 16:04:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4470204022;
-	Wed,  6 Nov 2024 15:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60476207A0E;
+	Wed,  6 Nov 2024 16:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzSL+JHt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QHHnBIlT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F932EAE0;
-	Wed,  6 Nov 2024 15:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FDF2064F3;
+	Wed,  6 Nov 2024 16:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730908714; cv=none; b=tY83StX1cFTJmVdb0OQuuJKWrw+cjgQaazZ4bzPWBoW823vQliwxnoHx9DgbkU8nAiJpVyBMCf0wImGqW++O026Xhl0CEufdhRkxkMBd8t+CQkXwxn97oui1Rf3487Kdsr6yozKFAlqM+9KaI7R6yUM3NJkZoCkouQe/tE0C1kI=
+	t=1730909014; cv=none; b=loNXQEwgs8jFUpAjdGddldY4BvY7HJYYa794iirQVfPNtTZ1GXcLefkX6tZDmsU18b+lG+wm4vjTyCA4mxGMU3wMhCokPDzZcEfBeHyPo4U3QHE9L2fRis7R7U0gHgVWropBI1aIKSuDZXf35wlJsZ5dc2J9EzlskAxSub4F6DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730908714; c=relaxed/simple;
-	bh=HdoUy9fkRfHNMPI/Zqx1R8MVO28AwhfbFFuB5nPrHjU=;
+	s=arc-20240116; t=1730909014; c=relaxed/simple;
+	bh=eYa9wlnu9E3P2y1lCWwcPAwQK8qAERsjwqOa/z4hWc4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BFLFzFDdF1Fs9GcgiMVD1MhpAP4fuaNcDnzjgnqQ9kfRZTHRAmCqHpmQP5lhMZEuAanvSqG5aDWyIfQoGOLm2rOMDnUPmQNSrRMzv1oTEt7vHLhYriJMZGsiSLl9lxB+BQBDNUnfRppr/vkhEtG8BSoYbbaE3eqEQY6lXoe3X3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LzSL+JHt; arc=none smtp.client-ip=209.85.216.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=tEZ/guxHexr2G2WS4b2K1fM4lpVmrsl7XETLOm4Y9XfX+2TZi8N2idLnEef0C2xgEshdqHji66b7Ebt0rSsLUKMV+5YVNJ/INKPcA1tH5I19ZQu2KWvtTtP4WcXcbKyh7APc7+rv11pWV3hG/U7Yg+LlttA0KSm8JgzHRplE7mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QHHnBIlT; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e34a089cd3so5446494a91.3;
-        Wed, 06 Nov 2024 07:58:32 -0800 (PST)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2110a622d76so53008775ad.3;
+        Wed, 06 Nov 2024 08:03:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730908712; x=1731513512; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730909011; x=1731513811; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XUAqFDp51+CluivEaChqcOcsJi1Yi3zAq5PND3VwOLs=;
-        b=LzSL+JHt9nR1sCsruX+0lGMDbHtvZ/7XbRnoqRAUZNQ0YG6pTPGK8xsjlJ/nKXsL3C
-         1zC7mF8bXW+zUyFjRKJ7HtchVWLaepzsMC4+Tuqp/wVvM+48SCfHMKlkMNvN9J2hGjMy
-         wsotIhRvmWdk/nEtuplvWLafBgR5xcVu2P0ZAu2zfsoWkX/SLBG2yvaIUU7DA9JxypJo
-         Ue+lrQ6q4nGtxBIlzcz4dvOdehvUBXG+rxj3kd0AEpEh+cKIgI/BfUd6cxgkSFM8BJ2C
-         M+WG4AICAhtDucRDw0xtVh+CCbC7BmOF/ZrGssGqlEmoZaRcmECxjOXce7Mdmr252GWm
-         0n/A==
+        bh=ZNocM+WdbV87f0ucaFRRKZx/lGWrptiPjNjZfE8UDfY=;
+        b=QHHnBIlTTdxUri1LN2nFWB1u8sT05bUs4n4T+IsT9Fhhqo+n2Wxh82bMfl30cCb267
+         U+TIxHSrgZlnGdi+qjfKti8hbnjHhBDI9IhQVJ64kh0eeAL8uV16MhjJngr2WT3VdzQK
+         nSEQJlC9yCUEREXCMLom6GIjps6iE3cS8m2u1gFwwu94MVaV5joV6UsFKmOWmYUjJS/F
+         I+fQxO5o5QBncQ6tE0lD6T/Ko1vQ4wF1hGign4yX3zaBINrjuMR/Q94LZWrRupqkeS3t
+         bBDVY2uW2j2xSFR5Y7E33242YjvnJ+FbJnGw5RN1r/RFUA4FGqDBqYZrhAEgqp8tkwqa
+         RaUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730908712; x=1731513512;
+        d=1e100.net; s=20230601; t=1730909011; x=1731513811;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XUAqFDp51+CluivEaChqcOcsJi1Yi3zAq5PND3VwOLs=;
-        b=BIKsaqda4pNQEQKaNlLirhNNJn742rJu7s50bhhaiqsmw4hBYHrys3LA2fST+MZESm
-         Mdd3CdH5hKVVTzwHah65PIQx3+9R/gBZPjM5JGLBv9jNt4UgdoTawVD9teG/mjZjhvoZ
-         Wgb+It4/CPhPfQeLyNN25qC/1J+2paMTBAL1HgavmnweKKr1u9ToBkGahx5vYJ34snZy
-         LlNxaycwzC31sTetbsc+36dC9IeKRfDI+F6JNJ8P9pLF3F39H9JRZEUrK1VcQoK6XWVb
-         b0u9HOKiQL7F+X87Fpn+mkoNONX4sFs3w5kJz54sRWp89EE1JqhZEW07uA5qA24wmTPV
-         9pGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVw+FT1VwfWF/TDVyzuxiKDIM43sLZLhGiuu/udRo/EI6/zth0ZU2bu1z7PGZb7XYGW/yJQ4hr2sg0RrSaR@vger.kernel.org, AJvYcCX76DJ7Xu2YsPZBFTjFDXZ4O2SoF9YLVd8r8DiUL8GiSke9DS/53XBLheB7+lBdau78g2nN4RtnfldWfkE=@vger.kernel.org, AJvYcCXXexhdO/JKw/Yl9ckOpoKIDyf7dUevHH4U1x5s/YbK/AVlQB57fhK6rTO1cML39EXiyuP42wMAhUIg@vger.kernel.org, AJvYcCXYKElhiDdWOIJpibC8D+rUplE6RmoFPz+ukTblap9ODyz4yZbpqtMHBeeebXnSh7nvsYFqnrDsN4CI@vger.kernel.org, AJvYcCXpk4uel+rHVBMtAcwQT1BXj8mI7PsfBEJoJk5jhX1TVW6LR5sPdLP/bv3t6zJtXGAQd9aDlPRXAff7@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlRTH91ppURDzn+v1vGg4cvvagySKph8OYj866PAFkc33+WAhK
-	IPnKrV5fMt4jXKt5KOvgmllfHjgAk7pDd4UDJDupIlE16atv4CFs
-X-Google-Smtp-Source: AGHT+IGg5WQMsEr9pnJxspcf4pALiyC/ozBfwqFSU5i1wYsgWEJ/S94GrDgJEKjrQof/TQOVShKsxw==
-X-Received: by 2002:a17:90a:43c3:b0:2e2:c9c1:aacf with SMTP id 98e67ed59e1d1-2e8f10a7276mr43122388a91.29.1730908712314;
-        Wed, 06 Nov 2024 07:58:32 -0800 (PST)
+        bh=ZNocM+WdbV87f0ucaFRRKZx/lGWrptiPjNjZfE8UDfY=;
+        b=imWXyZnKjVewDkgnCujhcMxKRhDfi79wXL18y9ai+mL+QXt569bKZQu557xKx8eyXV
+         aQyAAJiDAvdcLIwCmNd/QGQNhtjVzCEWZGBmtdh9RM6BcN2I+fDAIo1KKGqZLEAYORg+
+         d5saYE+fGKCy0h6DCk4d0hRbkPkz0HrdCLMxDNaGmquoHVd94PIQUrkOBKLBGes2HTmE
+         TgCpioqM37cyErbiUhjtQ079cNyUVvIdOm6WvlI0B2t0xVTfCjXObO2Ay/Y9OCuimIxd
+         MvwZyXz16lI+JJnd6bBODgudcSG9EU6xaJRYKtsXn1ayoj/E8qYRK8TWdmWu5L/sPVtR
+         KqwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUG8jfpNLiELropoReaAi5funYiFC48dsuEBgF7hRDztAabHV1/OqkbQSLa7FBWnE051rvWxXWILMqh@vger.kernel.org, AJvYcCUu3zh77npibqT7XMHZ0ETBoMz+lVHyOxpbvVcegOFYheYAqY1EfBMIHf4+QmbhlYJBrKJQsDser74j@vger.kernel.org, AJvYcCVoYc0ah9RmxTxu9kxNEZHVZsF1X58RF5qtKQCRVqv3c6Kz1dGEVIggW/mRAdm+qv0DOT+1fo5mRXRY@vger.kernel.org, AJvYcCWkwogD2YYlwpoEvBxMNHYv0nlLsY2b0JVhak0Y5dHUxr+4nssSyMBWRwHqsWuLM3i8+XV+yttTR5QDcRRH@vger.kernel.org, AJvYcCX1DaVTx1cb8IpgMv2aFU4DQ9tZDJeweJcsOWXr9wDhVMItmb4XJOnwwFh9ZAe/lFZpAG3PeyPiyk9c03g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYQVPuuuLFulTTnNbFJGOdT2vEYYce7F+uaNp/cqiSiRlz2HH8
+	oZOAiYxmftcr7xbYzAJYN0K7HZNk3+bniUcSl6sG3QRJ2By3u9iV
+X-Google-Smtp-Source: AGHT+IFhRVrWIpPInnku4WjWMhMV/MtkoROR+ZMVi9n99hUzxhu1sEQlSsIAG0pSadilzV6mPYRygA==
+X-Received: by 2002:a17:902:da91:b0:20c:82ea:41bd with SMTP id d9443c01a7336-210c68d4349mr539228785ad.18.1730909010905;
+        Wed, 06 Nov 2024 08:03:30 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e99a5a2f95sm1668475a91.34.2024.11.06.07.58.31
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e99a541cfbsm1699958a91.18.2024.11.06.08.03.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 07:58:31 -0800 (PST)
+        Wed, 06 Nov 2024 08:03:30 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 6 Nov 2024 07:58:30 -0800
+Date: Wed, 6 Nov 2024 08:03:29 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Jerome Brunet <jbrunet@baylibre.com>
 Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
@@ -81,11 +81,11 @@ Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 2/7] hwmon: (pmbus/core) allow drivers to override
- WRITE_PROTECT
-Message-ID: <36a1a209-18dc-4cb5-b2ef-80045eb306bc@roeck-us.net>
+Subject: Re: [PATCH v4 5/7] hwmon: (pmbus/core) clear faults after setting
+ smbalert mask
+Message-ID: <ec18ced0-c113-4925-8096-3f776f0f11d9@roeck-us.net>
 References: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
- <20241105-tps25990-v4-2-0e312ac70b62@baylibre.com>
+ <20241105-tps25990-v4-5-0e312ac70b62@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -94,17 +94,30 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241105-tps25990-v4-2-0e312ac70b62@baylibre.com>
+In-Reply-To: <20241105-tps25990-v4-5-0e312ac70b62@baylibre.com>
 
-On Tue, Nov 05, 2024 at 06:58:39PM +0100, Jerome Brunet wrote:
-> Use _pmbus_read_byte_data() rather than calling smbus directly to check
-> the write protection status. This give a chance to device implementing
-> write protection differently to report back on the actual write protection
-> status.
+On Tue, Nov 05, 2024 at 06:58:42PM +0100, Jerome Brunet wrote:
+> pmbus_write_smbalert_mask() ignores the errors if the chip can't set
+> smbalert mask the standard way. It is not necessarily a problem for the irq
+> support if the chip is otherwise properly setup but it may leave an
+> uncleared fault behind.
 > 
+> pmbus_core will pick the fault on the next register_check(). The register
+> check will fails regardless of the actual register support by the chip.
+> 
+> This leads to missing attributes or debugfs entries for chips that should
+> provide them.
+> 
+> We cannot rely on register_check() as PMBUS_SMBALERT_MASK may be read-only.
+> 
+> Unconditionally clear the page fault after setting PMBUS_SMBALERT_MASK to
+> avoid the problem.
+> 
+> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+> Fixes: 221819ca4c36 ("hwmon: (pmbus/core) Add interrupt support")
 > Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 
-Applied,
+Applied.
 
 Thanks,
 Guenter
