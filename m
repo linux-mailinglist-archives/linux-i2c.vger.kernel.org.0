@@ -1,73 +1,76 @@
-Return-Path: <linux-i2c+bounces-7865-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7866-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAD6F9BFAC3
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2024 01:30:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8F8D9BFBE7
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2024 02:45:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BC891F22996
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2024 00:30:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BBC71C21EB5
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2024 01:45:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063AA610C;
-	Thu,  7 Nov 2024 00:30:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB0028684;
+	Thu,  7 Nov 2024 01:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="QkA/XWXt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2Ls9NQf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8075F1372
-	for <linux-i2c@vger.kernel.org>; Thu,  7 Nov 2024 00:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5724117C79;
+	Thu,  7 Nov 2024 01:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730939402; cv=none; b=AcU1LO8vDRJt2HaABL4eJWSK1pbb1UAyuDASYn691xSxdc38uDZBJo53vxoW9HQ4E+h6ARM9eqnUSsyoakEHf42u/Qi5niYG/Y/p1jsQbs9zCyvykKG3Q0iPMiGS9ehb3lxA+h46fXk79SIX8+t+ZlBSbkC/G911+wAGfwH0nU0=
+	t=1730943928; cv=none; b=tQsDWAnKhZNDVgXVvnAso4+JiMJfo1qfuvLzl8VGVvU0WScaAhXgPAl70GN6dtEJGAxro65HayoUcPhoLIPkfSdTD+lF110UwOTtaqg3VIleFx5IZxSRetqqpTKx6/rYbSxhchgjHR3WyhfsVTuMI/0m2pQCoCARGTZksd+zN68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730939402; c=relaxed/simple;
-	bh=McX3HCdht9EKGC5tsGAU7Hm6qKwhCcuRe91FXqG4oNk=;
+	s=arc-20240116; t=1730943928; c=relaxed/simple;
+	bh=RP9Kl3tnmn4fuc7dablnD70S71aiWfXucgn/B4KquYU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CiiArPeFa9WfKqQOlaNeRQQAxqtCX+ozT8rm3c74koeOeJlJf37CcXOrpr9tcgF1f/jJ1m7CwffYKPe1zYX17xFUZ0drT2XJSDWP8onRetM4KHhSa2V0Pvran2bU0i+rFdREBl0mfiUmix9Mwymlytm9fQw+By/ojEcT0YoE6jY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=QkA/XWXt; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-82cd93a6617so14742939f.3
-        for <linux-i2c@vger.kernel.org>; Wed, 06 Nov 2024 16:29:59 -0800 (PST)
+	 In-Reply-To:Content-Type; b=VF00vQJ52AQINbVGpw3nuSo3ADGGxlLzjDmrAtuWEppnSv7WWjgGZB9uIZLv2FdDcWPV1QBX1uZshhvhsblsMjHk127AliSJma7Xp1JPFRokYWEwFFV9CCRhmDSzhoLYMgc7bkSkU4H37HzevrTK/awDM3JNRQC8jVcYb5bTxQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2Ls9NQf; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20ca388d242so4861885ad.2;
+        Wed, 06 Nov 2024 17:45:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1730939398; x=1731544198; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E3Z19IHRqfxS578Ys483rX+/hvz8ULIan1ekFWOQaVI=;
-        b=QkA/XWXtzwhXM/h+5lapcBkGyUj1Kd9xDAp82yQFgBUobK68GRWbXcnq/AZ339PJDU
-         PDL0Qn7mPltsobBMfNjvWi+MG5x+69o+dTcDKLn91WC7YbE83+8YXrrHygy1PR5tmPY7
-         aTKA7GNAs9wOe6sZyh8CAR6T5oNk2GJi5yNO52fqXmZLwRHIncecKl13x9nkjE1j+Mmg
-         3DELnIFwr/JPIanV22FO0SvlJoTKFgvfOMFUkC5i2wAjc10GEO7nWKuLm5ZiFFLLuflY
-         4nLMeIKuOgZs1WfV+oXQE+lW3St149+95mlfIunw7jpVP0Sda4KmWUoqgjXO0TQk6r4E
-         oi7A==
+        d=gmail.com; s=20230601; t=1730943926; x=1731548726; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=+p00YxKOs0bInMvcyB+P7dOZL1X8Zq2IMwA0EcrWBUw=;
+        b=D2Ls9NQfFPK/gmgBoUB4wmYzTV209xgr5TfgKu1n8zcuB/PoNqrUfznuPlRDqjSYba
+         BS3CWkgyVIC4dCRS+lJ0E7E4tHV1lMXSRAg9fMl0Jv4Q0ow7/IkEur08X0oF8yWNsedp
+         QuD3nGKyUAEI0Zq1/UVYcpymNpt8TZeQC8QoMmoulDK0Vxbm9ip9a1RIVhYeywVufR52
+         rEh4uOMIsaxXsF/A6vcnfn5Ee7MlERLS9fOlSAL40Ix1pyaUrlzUg9xv4jm4wMxPh0un
+         ENLAVdYNVqAO5Uj9QOM8RbCfynpW98raFd/d8+EvvQhvXBwUnsGIK8JIdeytZDBD1jnL
+         gz5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730939398; x=1731544198;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E3Z19IHRqfxS578Ys483rX+/hvz8ULIan1ekFWOQaVI=;
-        b=B+qvKYJM6iX2Hb/ejMqXsBMDt7w2FCABujlTzzRb2rXfKbFg6+NKOuvdEkbpZdVnWV
-         gzWBpFNMuGzCfprBHnB4QVCsh0cS0psih+19HyNt5/il2T42r0ZKT8r0kHL9UX4+a2cx
-         rEPY6EhkxX0/T8OmfHnofDjFFS+tu4fnOJyUlmkr54eXb2LH17ehI8XoHSxE1dvtlujV
-         UQg25ibzaB+yo1btoodZfodp5oFhK+pudZZZJ9WABZmwqmmmyod2/NH2/uZZJdzZpBUw
-         8RwJtnXAXKEZOPN1jYUO0HSfJD3ZnfxEum4EpefhjumgqbZFfVN9cXUjFqW4Rfkb7Gg7
-         AHQA==
-X-Gm-Message-State: AOJu0Ywtwq2S0rzV8Jw0s+Wg7LwnJ35iAECF5RTNrJVwMOFvcT4aA0X6
-	LXO706vh+g0HyselJDJXDYHxyjTK4y3gvwGzoY0qhxsBS8D94HbzzdRCcMwH4PE=
-X-Google-Smtp-Source: AGHT+IEHbvezWSNRUJM0X1HoonUf45bTn5xrbNazcCjs5Xe/xtZ22FiANoIgp4EDA+vYIihd3QT+SA==
-X-Received: by 2002:a05:6602:3413:b0:83a:b235:2d74 with SMTP id ca18e2360f4ac-83b1c40d531mr4199202539f.7.1730939398525;
-        Wed, 06 Nov 2024 16:29:58 -0800 (PST)
-Received: from [100.64.0.1] ([147.124.94.167])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4de5f8d0ba8sm64230173.110.2024.11.06.16.29.57
+        d=1e100.net; s=20230601; t=1730943926; x=1731548726;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+p00YxKOs0bInMvcyB+P7dOZL1X8Zq2IMwA0EcrWBUw=;
+        b=Egov6rYMIb+hsCs0gMkOqk4Ke9W9Lh2ctg8SIcwhPI7Aw5cXcbKDcEhv37KNrXRs1w
+         hBxLBHvj0Cny0MZT9rhrZ1tiYCVqdqkm/Hb7DxtxJCv+YEVTEdaRVpMkFyjtepizUhyM
+         dyvK97Z9bWLF3lXvhFRdMbCYkrsVFy4u4ctH5khFUrXI62hL5Gk+cI6dB8DW2zBBSHOc
+         qVI2eYB3U31rZZEI5uumMI+FIE5MiyrJtzIdTtWXMwgpHXaK9zky0R0bZyiaXu4gmQBG
+         Lg35GqYSX0hwXWcWQE8j6bj6RL0E4pWuV7qz6FwZBcDZeZuX/h7LFJtf7zWxwnFePhU0
+         Xl8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVLhAVtNYruiWNeNmSTvEXtg7nSEUxdSrQNfFmSGBw+zUOxbduIolmLIywBLNfGy9bkqnuPi2PJcxVF@vger.kernel.org, AJvYcCVh/AfbzVCx/BwVLu4flqnDmp5FhBSZ3GBzopvGL4cXfPFy/55VpcZRPOHVgtQ6M4yM8UNKhABcE+ZU@vger.kernel.org, AJvYcCWn2L6Qsvw8NswlcKJL0d9pp+OXM6dhIFOdMdQyWUN81AiTSYQWTVQDZA4j19lyOWQbjXqwVmgMCi44@vger.kernel.org, AJvYcCXLSYPw7//TtZWzV5ju+LP1v9KHCu1z9uZUacia8wWdOksxY1LCF0nnOTblN4l9XKpOMXm+AIUXAb9EMKc=@vger.kernel.org, AJvYcCXTENGoesEpvRM25XnwPf1hFb/PHD+y6ChKV7a6A2GrynQIzIF7V0ANVV6Qn7isdZg+1PnsXrgErNsw1Olx@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRJk8S/Px3lKTIIH4I8up2in4Bl+2YllxJr0KWUVBUuwiPXVRG
+	zJpozxUSPZrp4hkfv6PSb8twGINuD82qT6q47hxCE+pBHb/dcgHX
+X-Google-Smtp-Source: AGHT+IEYsIsrudryW9corBVyjAfoScGcO7wDmyEzHbL19yWzgOxw+c5e+cTjPS3eA4eTkgUaLwDIlA==
+X-Received: by 2002:a17:902:ea0a:b0:206:96bf:b0cf with SMTP id d9443c01a7336-2111ae27bddmr319831195ad.0.1730943925641;
+        Wed, 06 Nov 2024 17:45:25 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177dde241sm1274895ad.81.2024.11.06.17.45.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2024 16:29:58 -0800 (PST)
-Message-ID: <a9f59ffb-23e9-4c83-8d44-4c766e32b3bf@sifive.com>
-Date: Wed, 6 Nov 2024 18:29:56 -0600
+        Wed, 06 Nov 2024 17:45:24 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <697a9596-f5aa-48d0-ad26-ebe06b831ee8@roeck-us.net>
+Date: Wed, 6 Nov 2024 17:45:22 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,153 +78,89 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: spacemit: add support for K1 SoC
-To: Troy Mitchell <troymitchell988@gmail.com>, andi.shyti@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20241028053220.346283-1-TroyMitchell988@gmail.com>
- <20241028053220.346283-2-TroyMitchell988@gmail.com>
- <846b4f2a-602e-431e-affc-0e995db5eee5@sifive.com>
- <9dfb250c-d8a1-4536-8658-48b3a2585abd@gmail.com>
-From: Samuel Holland <samuel.holland@sifive.com>
+Subject: Re: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a,
+ ltp8800-4a, and ltp8800-2
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Peter Yin <peteryin.openbmc@gmail.com>,
+ Noah Wang <noahwang.wang@outlook.com>, Marek Vasut <marex@denx.de>,
+ Lukas Wunner <lukas@wunner.de>
+References: <20241106030918.24849-1-cedricjustine.encarnacion@analog.com>
+ <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
 Content-Language: en-US
-In-Reply-To: <9dfb250c-d8a1-4536-8658-48b3a2585abd@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Troy,
-
-On 2024-11-06 1:58 AM, Troy Mitchell wrote:
-> On 2024/11/2 11:48, Samuel Holland wrote:
->> On 2024-10-28 12:32 AM, Troy Mitchell wrote:
->>> The I2C of K1 supports fast-speed-mode and high-speed-mode,
->>> and supports FIFO transmission.
->>>
->>> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
->>> ---
->>>  .../bindings/i2c/spacemit,k1-i2c.yaml         | 51 +++++++++++++++++++
->>>  1 file changed, 51 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
->>> new file mode 100644
->>> index 000000000000..57af66f494e7
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
->>> @@ -0,0 +1,51 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/i2c/spacemit,k1-i2c.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: I2C controller embedded in SpacemiT's K1 SoC
->>> +
->>> +maintainers:
->>> +  - Troy Mitchell <troymitchell988@gmail.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: spacemit,k1-i2c
->>> +
->>> +  reg:
->>> +    maxItems: 2
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    maxItems: 1
->>
->> Looking at the K1 user manual (9.1.4.77 RCPU I2C0 CLOCK RESET CONTROL
->> REGISTER(RCPU_I2C0_CLK_RST)), I see two clocks (pclk, fclk) and a reset, which
->> looks to be standard across the peripherals in this SoC. Please be sure that the
->> binding covers all resources needed to use this peripheral.
->
-> RCPU stands for Real-time CPU, which is typically used for low power consumption
-> applications.
-> We should be using the APBC_TWSIx_CLK_RST register, but it's not listed in the
-> user manual. However, you can find this register referenced in the K1 clock patch:
-> https://lore.kernel.org/all/SEYPR01MB4221AA2CA9C91A695FEFA777D7602@SEYPR01MB4221.apcprd01.prod.exchangelabs.com/
-
-Ah, well that driver is missing most of the bus clocks. For example, from a
-quick comparison with the manual, the driver includes sdh_axi_aclk, but misses
-all of the PWM APB clocks at APBC_PWMx_CLK_RST bit 0.
-
-If the clock gate exists in the hardware, even if it is enabled by default, it
-needs to be modeled in the devicetree.
-
-> Also, to see how to enable the I2C clock in the device tree (note that the
-> spacemit,apb_clock property is unused in the driver), check out the example here:
-> https://gitee.com/bianbu-linux/linux-6.1/blob/bl-v1.0.y/arch/riscv/boot/dts/spacemit/k1-x.dtsi#L1048
-
-The devicetree describes the hardware, irrespective of which features the driver
-may or may not use.
-
->>> +
->>> +  clock-frequency:
->>> +    description:
->>> +      Desired I2C bus clock frequency in Hz. As only fast and high-speed
->>> +      modes are supported by hardware, possible values are 100000 and 400000.
->>> +    enum: [100000, 400000]
->>
->> This looks wrong. In the manual I see:
->>
->> * Supports standard-mode operation up to 100 Kbps
->> * Supports fast-mode operation up to 400Kbps
->> * Supports high-speed mode (HS mode) slave operation up to 3.4Mbps(High-speed
->> I2C only)
->> * Supports high-speed mode (HS mode) master operation up to 3.3 Mbps (High-speed
->> I2C only)
->>
->> So even ignoring HS mode, 100 kHz and 400 kHz are only the maximums, not fixed
->> frequencies.
-> okay. I will fix it in next version.
-> and should I keep to ignore high-speed mode here?
-> if not, how about this:
+On 11/5/24 19:09, Cedric Encarnacion wrote:
+> LTP8800-1A 54V, 150A DC/DC µModule Regulator with PMBus Interface
+> LTP8800-4A 54V, 200A DC/DC µModule Regulator with PMBus Interface
+> LTP8800-2 54V, 135A DC/DC μModule Regulator with PMBus Interface
 > 
->   clock-frequency:
->     description:
->       Desired I2C bus clock frequency in Hz.
->       K1 supports standard, fast, high-speed modes, from 1 to 3300000.
->     default: 100000
->     minimum: 1
->     maximum: 3300000
-
-I don't know if high-speed mode should be included, since it requires some extra
-negotiation to use. Assuming it should be, that looks reasonable.
-
-Regards,
-Samuel
-
->>
->> Regards,
->> Samuel
->>
->>> +    default: 100000
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - interrupts
->>> +  - clocks
->>> +
->>> +unevaluatedProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    i2c@d4010800 {
->>> +        compatible = "spacemit,k1-i2c";
->>> +        reg = <0x0 0xd4010800 0x0 0x38>;
->>> +        interrupt-parent = <&plic>;
->>> +        interrupts = <36>;
->>> +        clocks = <&ccu 90>;
->>> +        clock-frequency = <100000>;
->>> +    };
->>> +
->>> +...
->>
+> The LTP8800 is a family of step-down μModule regulators that provides
+> microprocessor core voltage from 54V power distribution architecture. It
+> features telemetry monitoring of input/output voltage, input current,
+> output power, and temperature over PMBus.
 > 
+> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+
+Looking closer into the datasheets, I found that the PMBus commands are identical
+to those of ADP1055, and an extension of the ADP1050 driver to support ADP1055
+has been submitted.
+
+With this in mind, please explain why this series warrants a new driver instead
+of just extending the existing driver to support LTP8800.
+
+Thanks,
+Guenter
 
 
