@@ -1,105 +1,105 @@
-Return-Path: <linux-i2c+bounces-7905-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7906-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BCEC9C2567
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2024 20:12:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 173259C2838
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Nov 2024 00:43:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4FDA1C23795
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2024 19:12:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C68ED283E12
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2024 23:43:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86A001F26E6;
-	Fri,  8 Nov 2024 19:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C63E41F26C7;
+	Fri,  8 Nov 2024 23:43:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Bnhapw5f"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=zago.net header.i=@zago.net header.b="DDxVoBXK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cp4.obambu.com (cp4.obambu.com [88.99.29.238])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647201F26C2
-	for <linux-i2c@vger.kernel.org>; Fri,  8 Nov 2024 19:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70E2610D;
+	Fri,  8 Nov 2024 23:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.99.29.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731093085; cv=none; b=WRteD/dD5k+eDPLbKSmHRTv9Q+tsG6Ucnq3EtqGcW8a8iF+TgvU0z1W8UFQsG4iwUuXE10XkH1N19PSCEJ3i59265p2mnPLxmEYckH+mVlGLb6Wm8LspGcQ6E/xresXW1Qwp6gwKCfwHDckIIfRNM+jQcT7uCR+62qlT/3L816U=
+	t=1731109424; cv=none; b=okyhkOSba8VtWpaR5ppTSkYFUGc+jgllL8J7rzv0lcu/bWGXrOoMi93nAVuvPBvNGLgyVGGj1pdlNa8LRzMpxR0cJCWveiOBhtSs619YLn48rlAL7vZsBUnFfRad3wQ543n2IcGVJIPElX6oY9FVzXiKAKBRTuzmWRayJV6fomE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731093085; c=relaxed/simple;
-	bh=VIRkx+efX/6GJFRSs+ScK+sQvOdc8uMwqc3bnd22j8Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fl0rdC8tf0dzmg5aZdimpRHp8T1qC3wIZxTtXMzf/2jlYML3u98EJGpr/rlOCcKBzTGy+MJ7RPeHQ2WTSWL65dV4C2/fHqgwcXGc2LTt3tf0KZi87vKta6Gz+3aaLsHpYRaIdn89dWS3WZmGF5Y1FzVevNjt/Hv9gn+oJCxFL2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Bnhapw5f; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2fb584a8f81so21937871fa.3
-        for <linux-i2c@vger.kernel.org>; Fri, 08 Nov 2024 11:11:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731093081; x=1731697881; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VIRkx+efX/6GJFRSs+ScK+sQvOdc8uMwqc3bnd22j8Q=;
-        b=Bnhapw5foka1Ig1WeR6wObMuvHk+Lkrn7kqmlqF+/eF0YfntamtnA6RoJgRnXGf8Jv
-         YY8KT/AFztF1GTtnF2u0ZfaFB4SENE1oc2ohWEwM+3YJ6l3x/q8xm+gMvfb4Tpurs9x+
-         G3YrI9rB0ERKoVnfLENfxxzYRGlFQAnWdT8O1Tm9EvhVk7W1RieTNDgGPABuE0KxIdMZ
-         WUGfSyzxXFKUEHiUVSJ+REFhwODHSMZGwOa8jDg+WbsWtfVlAboZivA5VPaEXC3Crva0
-         S6sPm1NUgCBrLKt8FTfWYA/NddiT8ORoS+FPzyqc8A7RQlBcWwCmySP12MrPwhC6gq9m
-         qUFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731093081; x=1731697881;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VIRkx+efX/6GJFRSs+ScK+sQvOdc8uMwqc3bnd22j8Q=;
-        b=uvGPqgMpQz4yJWk/8dOwzkWl8KXRtt3HT45npcJSReKDU+TppVsVS7LybxcVdo1nmZ
-         CrRbX+sw2piMaWgRq3VOn+Fi6mT2fAjWYg84xTUkh2ZOvzbfvdLmOuUtr3o1RmdUIDpL
-         9rWxBZWCw172KarQ3YqpLVQCYWeySr6J9nsVdHu7rex9vLKHZIboCVJ7vw5g7vNnEW6V
-         CVMZgI34vX8wS5tY8dYzfw3E5cq2EurzxNb1IoX4P6nUqlqLe/26lutBpXW7gxx6Ze2t
-         soLatI4H9GMwSlZuDPdfiCydTm2uN5sTGaKadjCkTUPk8b+JFCAP22abKrr521TZxTjy
-         plAg==
-X-Forwarded-Encrypted: i=1; AJvYcCV6Qpmq58bi36PM+6tIgqqpJsapcEHjchDjHGSO3zZSh72GLv1Jv+MD1n4y9uFNq0KqRhQzNQ/W4gk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoSGiwWkU5z2uUBhREddeSCpOHSqgb1upAMt+UOjX+gEri817g
-	vfagJtL3FaV6RqFgSNltbLldwiZDYZ+e1bBXBkv2jdKKjLAzXCN6lsjh69dYV9895WP2sUnDUjm
-	hYnY7Jg8vThbMrx7MnZvyyfe000MG5BJwbzYGDg==
-X-Google-Smtp-Source: AGHT+IEyu3ErGRSaoQFi38Acb6XQ4BU2dWUjhmoCrPXW6aChPPUQ0fFsyrxlijdB2I2MeCnQFX6bAQ4S/Z/CIgMGk7U=
-X-Received: by 2002:a2e:be24:0:b0:2fb:591d:3db8 with SMTP id
- 38308e7fff4ca-2ff2028a90bmr22074941fa.35.1731093081457; Fri, 08 Nov 2024
- 11:11:21 -0800 (PST)
+	s=arc-20240116; t=1731109424; c=relaxed/simple;
+	bh=1F6o1Mm9k1WAn14nc9JRZ2ZtOUFVZL9tySgRg7tUAAA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=FK2TE7t8hhks5vCUtHICrAuKj3aL4UsSaSuM5fcnU+sa9s9I6PFoppAw4YBrvJyRsbW+8k0yNBCq01/dDea88waD5a0FoL4atQe091Bv/RWd/LvQ8bzzP6q+L4b1ppIz0Io7U/jQF35iAxu1xa8kBLy46OjTpuIb1tALPqN6pHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zago.net; spf=pass smtp.mailfrom=zago.net; dkim=pass (2048-bit key) header.d=zago.net header.i=@zago.net header.b=DDxVoBXK; arc=none smtp.client-ip=88.99.29.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zago.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zago.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=zago.net;
+	s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=oZnDyn217luRqPFzEExOuU33vSfngwVL/QQQZ1x16iQ=; b=DDxVoBXKPM5EYv/7hjTek6Ia8y
+	oGU3YBrM4xCvFEjH7YpH5sEnzBDj68GReCdwdbbbSao48uuARV/Ym/gJuKKptMfIhYzvyQjiUF4Dz
+	1GmP2JksN9e0qcfviEXlh3l4OoRMUOBjBVCQNXa+BWacVnOA4GPyn9nNRwF9mWY+Ed2G0bG+FZW8c
+	EfXtiVD2dqrrLFu3nQbwrGC/DkUiVpmusy29Uic8W/rsIV+rlI0BOaLuDN14LPTGhcIISH2P2vM2h
+	mFpieE/pJYpCxvEJUX6pWd4QPpjTIWzprbwRcrf8S/n00OvG0RNHcujfg0zN2DCsEPKw69I4YHpSi
+	hnCci/LQ==;
+Received: from syn-068-203-021-078.res.spectrum.com ([68.203.21.78]:42318 helo=[192.168.1.205])
+	by cp4.obambu.com with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+	(Exim 4.98)
+	(envelope-from <frank@zago.net>)
+	id 1t9YCo-00000008Hfy-2Lpx;
+	Sat, 09 Nov 2024 00:15:55 +0100
+Message-ID: <e052d872-6de2-42f4-8b36-d1e2f8359624@zago.net>
+Date: Fri, 8 Nov 2024 17:15:50 -0600
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20220616013747.126051-1-frank@zago.net> <cf32d676-831c-4c3f-8965-c9be3abd5300@gmail.com>
-In-Reply-To: <cf32d676-831c-4c3f-8965-c9be3abd5300@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 8 Nov 2024 20:11:10 +0100
-Message-ID: <CACRpkdb-VWnOcHBcHOfMMxKicDGvGt3vB-dSo2nhz_M7oxq35A@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v6 0/4] add driver for the WCH CH341 in I2C/GPIO mode
-To: "Matwey V. Kornilov" <matwey.kornilov@gmail.com>, Howard Harte <hharte@magicandroidapps.com>
-Cc: frank zago <frank@zago.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, Bartosz Golaszewski <bgolaszewski@baylibre.com>, 
-	Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org, 
-	Lee Jones <lee.jones@linaro.org>, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: "Matwey V. Kornilov" <matwey.kornilov@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, Bartosz Golaszewski
+ <bgolaszewski@baylibre.com>, Wolfram Sang <wsa@kernel.org>,
+ Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+ Lee Jones <lee.jones@linaro.org>, Linus Walleij <linus.walleij@linaro.org>,
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20220616013747.126051-1-frank@zago.net>
+ <cf32d676-831c-4c3f-8965-c9be3abd5300@gmail.com>
+Content-Language: en-US
+From: Frank Zago <frank@zago.net>
+In-Reply-To: <cf32d676-831c-4c3f-8965-c9be3abd5300@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cp4.obambu.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - zago.net
+X-Get-Message-Sender-Via: cp4.obambu.com: authenticated_id: frank@zago.net
+X-Authenticated-Sender: cp4.obambu.com: frank@zago.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On Fri, Nov 8, 2024 at 4:58=E2=80=AFPM Matwey V. Kornilov
-<matwey.kornilov@gmail.com> wrote:
-
-
+On 11/8/24 9:58 AM, Matwey V. Kornilov wrote:
+> 
 > Hi Frank,
->
-> Are you going to further proceed with this patch set? As far as I can
-> see, there were no updates since 2022.
+> 
+> 
+> Are you going to further proceed with this patch set? As far as I can see, there were no updates since 2022.
+> 
 
-I suggest you take it over if there is no reply in a week or so.
+Hi Matwey,
 
-IIRC Howard Harte also has this very device inside the USR8200 router,
-but I don't know if it uses the I2C/GPIO portions in that device.
+I've been maintaining it at https://github.com/frank-zago/ch341-i2c-spi-gpio, but I have had no desire to try again to upstream it. Feel free to do it if you'd like.
 
-Yours,
-Linus Walleij
+Also there's been an SPI only driver that was upstreamed a couple revisions ago, which is incompatible with this driver.
+
+Regards,
+  Frank.
+
+
 
