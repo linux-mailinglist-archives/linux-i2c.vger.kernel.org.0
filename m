@@ -1,239 +1,148 @@
-Return-Path: <linux-i2c+bounces-7875-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7876-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64A709C10CD
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2024 22:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FB279C12E9
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2024 01:14:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9C671F20B66
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Nov 2024 21:15:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 204011F23105
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2024 00:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACAF21893A;
-	Thu,  7 Nov 2024 21:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06C1AEBE;
+	Fri,  8 Nov 2024 00:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MuJAqHdm"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gwIHnxL2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5113C2185BD;
-	Thu,  7 Nov 2024 21:14:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8EC629
+	for <linux-i2c@vger.kernel.org>; Fri,  8 Nov 2024 00:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731014078; cv=none; b=GS/ls7tfJ2S2K3vUMvz1DkfRSIAQKRP9FOzc7Qj4ln4LOYlzQXzqoO5GVnOtRlRZ8vuD4eoJOr9F3O5vb4IFoh1pxjM/6RwE2soEHB3/Q69iBcpvJuqk4+MXDWxraLKsWv8gqFHL4pZdC78MhcUERzbVJhN1Efffz7SOUu1aL8g=
+	t=1731024836; cv=none; b=q8oycYl5qafQ4640Nj8THNXowg2OnMvuQIQwppj+8ushn0M44vLezLh0Tgh32dRXcC9euD/CcavmDuUmeI2cIgJuE4it/hzDfdg5HbNwzTEY4KO6cZKSoOmr4tOcU0cwt4lk2nij5Gx9FAVBAJSKILXn3YClItu+P+vjA1xMPqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731014078; c=relaxed/simple;
-	bh=zzzyW8v7EZ7zw7Pi/ba6/6m1PE4JwT6Zv996YFDghKs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iTTWTAb/d9JVGCBun6CCAVWy4ONMq2Y+xAZmUIxgOmS+WXG9yyNxvOBX67qzJoI71mzsLMbKfCI11pQTtHHAQ8r7hvx9aTVW1EcfxrectPcibE1A8+kr4Mrx2QQm0BUbzyAJPLDXNImD/SQPuOMgOGANnk2kzFwX80bVaQ9lSSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MuJAqHdm; arc=none smtp.client-ip=209.85.167.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3e6005781c0so931090b6e.3;
-        Thu, 07 Nov 2024 13:14:37 -0800 (PST)
+	s=arc-20240116; t=1731024836; c=relaxed/simple;
+	bh=NOMCMry9fM7muBAW3IdfEmyNmvqPVzwg+MGT8mPmCek=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L6oT28Czz1RD76P//pNPp3CPiH8JmHoCts9qleRs1yP5lfLMk+2u7fYRpNU0DUiSubYkc2XdChtOqnw6FJb2ctYIoM8NhphnWmt3W7VwrCC4fDVUlLMwnwqs4MKtx/xzb7PDncGeGKoh9xmXVQHL1/EQT1vNPd3BOQF94FHD9Ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gwIHnxL2; arc=none smtp.client-ip=209.85.166.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3a3b28ac9a1so23855ab.1
+        for <linux-i2c@vger.kernel.org>; Thu, 07 Nov 2024 16:13:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731014076; x=1731618876; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vtYJat2vwne5+4WJO2r1NKcoNFx7A4N4AD7ayp8QtCI=;
-        b=MuJAqHdmJZHOtvRGTpSUdlGTUTWxrBby5A4ANaNVVFFdbkFZVHagZ5fzE/Nyo7f60W
-         2t6sZgfMkYgUngj3XvjUpbPdq1Ceoo8P+k8konXhx/5lRMWNo+TVD9jVz+Eh/BpJ0Mj5
-         vPET5562fjgOPccmjD3MZLSrN6dD8nbszyiXJ4QpPcbzp2Ee4ZPQugD7HvcGxnPoiTfw
-         Z2EHf6kusgcoWrhM5ukqFr/prCOnq1kUGLwGGOwkYgzf0Al2PO4v2HX6nY2XOm9j/9/C
-         ygoUc59ACpMa16623kDJu9wgifMupvwgunSnnnshFx8mhUm7wACOCfM19a699hBbCJlV
-         lnqQ==
+        d=google.com; s=20230601; t=1731024834; x=1731629634; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WArJZsg1N6vAqQam1Ti66Bn4ToK/NY0ZHWyQAcoQtDM=;
+        b=gwIHnxL2e8wtRfo3a/fp+83Ix0jNvz88tfq2SObkEnYfxLJ3D3bxezTli4HYvw9mH5
+         1F/uXzM4BAD7asY61+5B+etD+UJa98QMzMatwtBQLrH/UmThber6BhxO/IK3qxrkcV/Q
+         RKs+TgC5L8eOK+7K2k2tJIk/d0ZtnZGNv23F/F9FNOQGob4VdbTb575BIDJRFBf2q7HZ
+         ca9kOikYTZH7VizVQ2myydvgHwTYcDa+JbkhlBHXq6aWD/rMRkJmG6+DCwUl0gzqUC98
+         vJuQRaR6BcQupTEGEvWNg0LJdYN2fUvQ2C7+FpTqyx5tglXX/w9uGIE864yGe/vuLZvD
+         Pjig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731014076; x=1731618876;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vtYJat2vwne5+4WJO2r1NKcoNFx7A4N4AD7ayp8QtCI=;
-        b=jxzqGKPymOA++U9IOnWmyVQNJygPhsW5DsMynBBVXaR8+DJ1fBGOu3d1oMX0Egsvi6
-         ZnxwPTJygGB8YHg8wlQhFURAHohleFtvCZRWyxZnwMSmrf3KUA+wZMrVDmTr5H9WuqCV
-         OBiY7WY4hRj2HYKM7l2axvyvvetIyFS54ISJtkOBLtQ2fUhMw+u6SCU0uxaWyCDvjxiu
-         B513+qYJWS8R30qNENMX5TZ65whmJZXdJyXy5eWtl/H4iWo1GKyOL3gPkKAyMhD80DKS
-         ewxCVh+fqEmhIRFsZ4/X61DSllfhjKJNhQTW8Si9fk0ocuTBA7yNsHyhBs6UIN1yruPr
-         VVmA==
-X-Forwarded-Encrypted: i=1; AJvYcCUMFO3kn+xuhMveX1raIXzaa6GYWMDROcJyaB18613PHBW3c+VLERQ4OFGTr/vW+p4peJmNm53u8To=@vger.kernel.org, AJvYcCXEbVw6vzFelisEJmB1y/rWrX4Wu/HtViTrhtSxH1OZtv6nXYcPSW1M0UdOb3dpwZ/Ls6EpzlcmKkb4yMqk@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywzwi7dNI0vajmXWGhb02dUMN6exwhnA9oUV8V+X1SBplbVE1uD
-	tEjJXdA4EaB66KRIYB+pmLx+U8ac25GlyouKfe76vKIImoWd9Oz1
-X-Google-Smtp-Source: AGHT+IGHP0pu9JWTZVGvNEWya7gP+rkzPi0pM59LG1R+OZu7lEwHGebIcNHfjBTkDrWb+2m5YeySdQ==
-X-Received: by 2002:a05:6358:790:b0:1c6:12aa:a50d with SMTP id e5c5f4694b2df-1c641f81b71mr65221955d.25.1731014076286;
-        Thu, 07 Nov 2024 13:14:36 -0800 (PST)
-Received: from newman.cs.purdue.edu ([128.10.127.250])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d3962089fesm11486116d6.61.2024.11.07.13.14.35
+        d=1e100.net; s=20230601; t=1731024834; x=1731629634;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WArJZsg1N6vAqQam1Ti66Bn4ToK/NY0ZHWyQAcoQtDM=;
+        b=DHrm67uqIl0TiTr9AndI3TSZcRWASWKZkkuXnAKLYJqemnDQIT8dAN6laMYeGySsWe
+         3BQV4zAT1s9t1acW6jXj+3HhbyQTt9aZ+2MaFVsldRDKHMuL1lQzKMEdhwLE/e4DSuRY
+         mHrg2Kegdyk8DcmQcef3XySfGCQxYguqzcjOXG6//+3HbShdAy5VEUEBVp1i44+5DIF2
+         cACHrc+tdMaxlXoXWuyxt1tQbPHqDaPHHmTUwlRx4ZFKIT7T491IT1thveyJSq58L6xs
+         0PGVzHL6vGbs1LzZfWB3wCneullS5To0fAqqrrly/qj7kSmk8+dWjeAfpfy9K+7D7OaG
+         DhAw==
+X-Forwarded-Encrypted: i=1; AJvYcCWhqAqUCQjZ2ekQj5S0ZrUVUFP8cNQ5ey3p8fLRPsS4NdU8MYP4akAxJ4V9LRdyofSBA3VIY5oeWB8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPknwyjWG3nVEyGvofX6oTX6jQMUU0etFjtcHZgzpbU4EMJVJA
+	1WrDajWo7psS9bCfoOzAgoEmOl28lg6mw9br8MMyPqvQiTVdCeu6R/s72IwHvQ==
+X-Gm-Gg: ASbGncvuESSFZj+GZJRD0uDMLeBN4FQvN66gHiz42+I6rqa4TqmdKum+2ZvaM4KBDXh
+	35n40krzH3C7SUCwpsVvon05JqPrtG6oTYwSVtZ3rrzA6gvR69fvRHEBuOY0WlcBmM2HakSh5A3
+	gbGysrQploKAdbDi5xwEwor9W3fcgYxUjA1VhqEU+K0KQDWQtNmuPJ0UxzZaMnriUx9xPpoE9Jp
+	cO/yiAWOtVNc9AhIBP7WrUPpZOk8xVyno1K2NZP49vIX1wI/eYSWeXw1OR4/PzIME+n3IyBLcAn
+	Gax0J62MG3cr
+X-Google-Smtp-Source: AGHT+IFli50z58Q8piVHDbT4N8joEA65iTon5BhGcKUq3FKRg2ka27CwgBMtgshOVs+Nbm7aTn91gg==
+X-Received: by 2002:a05:6e02:12ea:b0:3a0:8cb6:3ad1 with SMTP id e9e14a558f8ab-3a6e7a62020mr8287555ab.20.1731024834208;
+        Thu, 07 Nov 2024 16:13:54 -0800 (PST)
+Received: from google.com (98.144.168.34.bc.googleusercontent.com. [34.168.144.98])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e99a5f935dsm4664987a91.35.2024.11.07.16.13.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2024 13:14:36 -0800 (PST)
-From: Jiasheng Jiang <jiashengjiangcool@gmail.com>
-To: andi.shyti@kernel.org
-Cc: dianders@chromium.org,
-	rmk@dyn-67.arm.linux.org.uk,
-	max.schwarz@online.de,
-	david.wu@rock-chips.com,
-	heiko@sntech.de,
-	vz@mleia.com,
-	wsa@kernel.org,
-	manabian@gmail.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jiasheng Jiang <jiashengjiangcool@gmail.com>
-Subject: [PATCH v3 3/3] i2c: rk3x: Add check for clk_enable()
-Date: Thu,  7 Nov 2024 21:14:28 +0000
-Message-Id: <20241107211428.32273-3-jiashengjiangcool@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241107211428.32273-1-jiashengjiangcool@gmail.com>
-References: <20241107211428.32273-1-jiashengjiangcool@gmail.com>
+        Thu, 07 Nov 2024 16:13:53 -0800 (PST)
+Date: Fri, 8 Nov 2024 00:13:50 +0000
+From: Igor Pylypiv <ipylypiv@google.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: dev: Fix memory leak when underlying adapter does
+ not support I2C
+Message-ID: <Zy1Xvk9YKrjqc4S7@google.com>
+References: <20241107014827.3962940-1-ipylypiv@google.com>
+ <jc76qean5mqxba4nh5qdocxhl5aa7r4epryyviqkyktbu6grog@u43wzsaki23k>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <jc76qean5mqxba4nh5qdocxhl5aa7r4epryyviqkyktbu6grog@u43wzsaki23k>
 
-Add check for the return value of clk_enable() in order to catch the
-potential exception. Moreover, convert the return type of
-rk3x_i2c_adapt_div() into int and add the check.
+On Thu, Nov 07, 2024 at 06:14:29PM +0100, Andi Shyti wrote:
+> Hi Igor,
+> 
+> that's a good catch, but...
+> 
+> On Thu, Nov 07, 2024 at 01:48:27AM +0000, Igor Pylypiv wrote:
+> > i2cdev_ioctl_rdwr() receives a buffer which is allocated by the caller.
+> 
+> This needs to be a bit re-written. In the commit log you should
+> describe what the patch does. You are telling where the buffer is
+> allocated.
 
-Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
----
-Changelog:
+I thought subject line covered what the patch does. Ack. I'll update
+the commit message in v2.
 
-v2 -> v3:
+> 
+> > Fixes: 97ca843f6ad3 ("i2c: dev: Check for I2C_FUNC_I2C before calling i2c_transfer")
+> > Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
+> > ---
+> >  drivers/i2c/i2c-dev.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+> > index 61f7c4003d2f..5d15519ef737 100644
+> > --- a/drivers/i2c/i2c-dev.c
+> > +++ b/drivers/i2c/i2c-dev.c
+> > @@ -247,8 +247,10 @@ static noinline int i2cdev_ioctl_rdwr(struct i2c_client *client,
+> >  	int i, res;
+> >  
+> >  	/* Adapter must support I2C transfers */
+> > -	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+> > +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
+> > +		kfree(msgs);
+> >  		return -EOPNOTSUPP;
+> 
+> Please, don't free it here, free it where it has been allocated,
+> i.e. in compat_i2cdev_ioctl().
+>
 
-1. Roll back unsuitable dev_err_probe() to dev_err()
+Sounds good. I'll move kfree() in v2.
 
-v1 -> v2:
-
-1. Remove the Fixes tag.
-2. Use dev_err_probe to simplify error handling.
----
- drivers/i2c/busses/i2c-rk3x.c | 55 ++++++++++++++++++++++++++---------
- 1 file changed, 41 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-index 4ef9bad77b85..0263ee0e0470 100644
---- a/drivers/i2c/busses/i2c-rk3x.c
-+++ b/drivers/i2c/busses/i2c-rk3x.c
-@@ -871,7 +871,7 @@ static int rk3x_i2c_v1_calc_timings(unsigned long clk_rate,
- 	return ret;
- }
+Thanks,
+Igor
  
--static void rk3x_i2c_adapt_div(struct rk3x_i2c *i2c, unsigned long clk_rate)
-+static int rk3x_i2c_adapt_div(struct rk3x_i2c *i2c, unsigned long clk_rate)
- {
- 	struct i2c_timings *t = &i2c->t;
- 	struct rk3x_i2c_calced_timings calc;
-@@ -883,7 +883,11 @@ static void rk3x_i2c_adapt_div(struct rk3x_i2c *i2c, unsigned long clk_rate)
- 	ret = i2c->soc_data->calc_timings(clk_rate, t, &calc);
- 	WARN_ONCE(ret != 0, "Could not reach SCL freq %u", t->bus_freq_hz);
- 
--	clk_enable(i2c->pclk);
-+	ret = clk_enable(i2c->pclk);
-+	if (ret) {
-+		dev_err(i2c->dev, "Can't enable bus clk for rk3399: %d\n", ret);
-+		return ret;
-+	}
- 
- 	spin_lock_irqsave(&i2c->lock, flags);
- 	val = i2c_readl(i2c, REG_CON);
-@@ -904,6 +908,8 @@ static void rk3x_i2c_adapt_div(struct rk3x_i2c *i2c, unsigned long clk_rate)
- 		clk_rate / 1000,
- 		1000000000 / t->bus_freq_hz,
- 		t_low_ns, t_high_ns);
-+
-+	return 0;
- }
- 
- /**
-@@ -942,19 +948,27 @@ static int rk3x_i2c_clk_notifier_cb(struct notifier_block *nb, unsigned long
- 			return NOTIFY_STOP;
- 
- 		/* scale up */
--		if (ndata->new_rate > ndata->old_rate)
--			rk3x_i2c_adapt_div(i2c, ndata->new_rate);
-+		if (ndata->new_rate > ndata->old_rate) {
-+			if (rk3x_i2c_adapt_div(i2c, ndata->new_rate))
-+				return NOTIFY_STOP;
-+		}
- 
- 		return NOTIFY_OK;
- 	case POST_RATE_CHANGE:
- 		/* scale down */
--		if (ndata->new_rate < ndata->old_rate)
--			rk3x_i2c_adapt_div(i2c, ndata->new_rate);
-+		if (ndata->new_rate < ndata->old_rate) {
-+			if (rk3x_i2c_adapt_div(i2c, ndata->new_rate))
-+				return NOTIFY_STOP;
-+		}
-+
- 		return NOTIFY_OK;
- 	case ABORT_RATE_CHANGE:
- 		/* scale up */
--		if (ndata->new_rate > ndata->old_rate)
--			rk3x_i2c_adapt_div(i2c, ndata->old_rate);
-+		if (ndata->new_rate > ndata->old_rate) {
-+			if (rk3x_i2c_adapt_div(i2c, ndata->old_rate))
-+				return NOTIFY_STOP;
-+		}
-+
- 		return NOTIFY_OK;
- 	default:
- 		return NOTIFY_DONE;
-@@ -1068,8 +1082,20 @@ static int rk3x_i2c_xfer_common(struct i2c_adapter *adap,
- 
- 	spin_lock_irqsave(&i2c->lock, flags);
- 
--	clk_enable(i2c->clk);
--	clk_enable(i2c->pclk);
-+	ret = clk_enable(i2c->clk);
-+	if (ret) {
-+		spin_unlock_irqrestore(&i2c->lock, flags);
-+		dev_err(i2c->dev, "Can't enable bus clk: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = clk_enable(i2c->pclk);
-+	if (ret) {
-+		clk_disable(i2c->clk);
-+		spin_unlock_irqrestore(&i2c->lock, flags);
-+		dev_err(i2c->dev, "Can't enable bus clk for rk3399: %d\n", ret);
-+		return ret;
-+	}
- 
- 	i2c->is_last_msg = false;
- 
-@@ -1149,9 +1175,7 @@ static __maybe_unused int rk3x_i2c_resume(struct device *dev)
- {
- 	struct rk3x_i2c *i2c = dev_get_drvdata(dev);
- 
--	rk3x_i2c_adapt_div(i2c, clk_get_rate(i2c->clk));
--
--	return 0;
-+	return rk3x_i2c_adapt_div(i2c, clk_get_rate(i2c->clk));
- }
- 
- static u32 rk3x_i2c_func(struct i2c_adapter *adap)
-@@ -1365,9 +1389,12 @@ static int rk3x_i2c_probe(struct platform_device *pdev)
- 	}
- 
- 	clk_rate = clk_get_rate(i2c->clk);
--	rk3x_i2c_adapt_div(i2c, clk_rate);
-+	ret = rk3x_i2c_adapt_div(i2c, clk_rate);
- 	clk_disable(i2c->clk);
- 
-+	if (ret)
-+		goto err_clk_notifier;
-+
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret < 0)
- 		goto err_clk_notifier;
--- 
-2.25.1
-
+> Andi
+> 
+> > +	}
+> >  
+> >  	data_ptrs = kmalloc_array(nmsgs, sizeof(u8 __user *), GFP_KERNEL);
+> >  	if (data_ptrs == NULL) {
+> > -- 
+> > 2.47.0.277.g8800431eea-goog
+> > 
 
