@@ -1,133 +1,339 @@
-Return-Path: <linux-i2c+bounces-7885-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7886-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92BCA9C1875
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2024 09:53:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C7349C1972
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2024 10:43:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C50FC1C209B3
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2024 08:53:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F0021C24EA1
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Nov 2024 09:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A98C1E0092;
-	Fri,  8 Nov 2024 08:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="j6QGW8sW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 629071E130F;
+	Fri,  8 Nov 2024 09:43:51 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886691DEFC2
-	for <linux-i2c@vger.kernel.org>; Fri,  8 Nov 2024 08:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9DE1E0DE2;
+	Fri,  8 Nov 2024 09:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.198.224.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731055976; cv=none; b=R8XHsOJDwC4tNVWwT7hSRVPUZn2xwwdf2lRo/iugm5t2uMgXVGH3jvjI/7WeVoViithhfQYiEiX60GdieT2WF7WJOsoPPskFvR9NMdIcGZDorgTfR8lerSV/w8kqB6UMom/LEMmIszaKVXzXJZ4Fh/CrOQkedkRwkOrtd5Sn9oY=
+	t=1731059031; cv=none; b=BIubNpqylpo9IdkScNDS4rNZBb6cKdVRkZQTi+NA08sUSLv2bd8XOw1PO9FmHIh3fGhxQjbVw8jZbaoXUW7GikKU7Yx/4pD0ezh8kn1SQxJgzKCneVLQz6EyjpKEIqOR1qo2HaCNEj5/uhQOspWjIu5lynDxRiK8rSE1FU8DI9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731055976; c=relaxed/simple;
-	bh=PkFcoKJleuYpcIVKqjj4ePMg+uxMZ0ZQlIkzmFZpuiM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=naYUDR9St7vMs2VgjdPqEuWByWZdA2IYsBYtWxQ+FeYis71H5DNGsWTQc3KPqE00JkTNtaKfMRNV5+D8s6NuZLPoVb8aLw0BW0dcmmYTqlkjxpWpcwbY2d5FwTGtv0uiUMvAAszTHX2LbJiHXeQ0pvdfhwotggXDqXg0uuwrDQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=j6QGW8sW; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37d5689eea8so1154634f8f.1
-        for <linux-i2c@vger.kernel.org>; Fri, 08 Nov 2024 00:52:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1731055973; x=1731660773; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2bVEgQli2SIBR629KGbbTzWRzrwVtdlvbf9uG5F0B5k=;
-        b=j6QGW8sWfGTJIzw4U6jzl4/awByXE+CDEIcUa/oXwzm1g6kpIgHn0mthJzxvfhVQE6
-         xOUc2r29rskBWxqQ0mlXlK9eN26wrjwPoy0/TDKCcjTUbgzqsxtK2IOMHDTMBzmkIX7f
-         NLVqkHDlU+gaIzBYncXxvxTsvoY8tqYJN0sE6HEGKDlWj4KDMI4RJP9cJs5AHu3cKkwZ
-         FT7UGNCgRUGEc1MlEujTXzmcjXaHOBYN04Z/sVX8BiTCoz2rerHbI71oOaPUyn+vSHCe
-         n7GBItRxmRmE0uCZCT9QZ3K8O3QnTMtnAceZhi/92Z5aS5w6asC+4/IHNW8DUrASxf/d
-         DFkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731055973; x=1731660773;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2bVEgQli2SIBR629KGbbTzWRzrwVtdlvbf9uG5F0B5k=;
-        b=en3se0qfXIIrz6uq45i+3mc2AVBOaAh2QcISK1S7DcAycqBPMllhELY3zYsr5FLIdI
-         dimNfsEiBDhRNMLj56AmLgt7AA7YjIovGFSXN7n4hdnz5/t8evLVRJjvRUXtkME4kxmX
-         8X/3IW1HhIvQKotvpbHWuJ1O7aerCEkgoVeKcfGlFHhkkjNXC29URdEKNQM6q5QWjJiz
-         R7+WJ+fedIitMl6t36KaKL4hRUiHvwHYCnoSNz4dCj8qiwN+rkTEF1QSEIkXqKnClzh1
-         bhBbkU9PmVzXxmuKbwi0u0SLBNdEyTMV4VTkLEr1mv1DQV40cjAiC+XWyJHnuh3jW5mO
-         4T0A==
-X-Forwarded-Encrypted: i=1; AJvYcCXskmnaXHVC9XsuIVotx/jis65wtKjrjin+rwnd47VTRUBdOnV/ysDycd5g3Axy+vkC2Uh4NETcmf0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVECGo5M+KrftcxHQTUoRZqqczTUkICnPZOsChKTG4UOICOnmp
-	8c02hJs094JqsPRV3qR1Py6YxTtKo2nBB2Kf3whXqk4inn9xhWnpAbaGBa/Kefo=
-X-Google-Smtp-Source: AGHT+IH5YojtTCXPyJJ4lTGTYwMyqJoiDT2Gfsd5O7M+EFfJaBPt+qjG+4n23Bhz9LKYCstgj2LvHQ==
-X-Received: by 2002:a05:6000:1f8a:b0:37d:3f42:9b59 with SMTP id ffacd0b85a97d-381f1865395mr1669883f8f.11.1731055972660;
-        Fri, 08 Nov 2024 00:52:52 -0800 (PST)
-Received: from localhost ([2a01:e0a:3c5:5fb1:ecfd:9f8d:62a3:6ba8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381eda05f89sm3921215f8f.98.2024.11.08.00.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2024 00:52:52 -0800 (PST)
-From: Jerome Brunet <jbrunet@baylibre.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>,  Jonathan Corbet <corbet@lwn.net>,
-  Patrick Rudolph <patrick.rudolph@9elements.com>,  Naresh Solanki
- <naresh.solanki@9elements.com>,  Rob Herring <robh@kernel.org>,  Krzysztof
- Kozlowski <krzk+dt@kernel.org>,  Conor Dooley <conor+dt@kernel.org>,
-  Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
-  linux-hwmon@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-doc@vger.kernel.org,  devicetree@vger.kernel.org,
-  linux-i2c@vger.kernel.org,  Conor Dooley <conor.dooley@microchip.com>,
-  Vaishnav Achath <vaishnav.a@ti.com>
-Subject: Re: [PATCH v4 0/7] hwmon: pmbus: add tps25990 efuse support
-In-Reply-To: <e88956d9-0dd1-4a38-8a91-8175223c87cc@roeck-us.net> (Guenter
-	Roeck's message of "Wed, 6 Nov 2024 08:12:04 -0800")
-References: <20241105-tps25990-v4-0-0e312ac70b62@baylibre.com>
-	<e88956d9-0dd1-4a38-8a91-8175223c87cc@roeck-us.net>
-Date: Fri, 08 Nov 2024 09:52:51 +0100
-Message-ID: <1jldxu2jks.fsf@starbuckisacylon.baylibre.com>
+	s=arc-20240116; t=1731059031; c=relaxed/simple;
+	bh=OqdNxP1egErpHe7fa3L9WiiLyL1/x19dlBEjAklqdOE=;
+	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:In-Reply-To:
+	 References:Message-ID; b=vAOb98GB1sGiQHdq9LbuPoosku5MEY0jzWf/H79Hadftu+S8GHyRoYz4/AoeXBIoEtIbfcy/C8oYsHtMUcCm/o7TNzVon/thOq4a3M8HAphrElMHlBs5c6hJr/cBhEKH7y7nraqpiVlnsto5/m2qakiLqhRgfKL16G0ZEZjmY9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de; spf=pass smtp.mailfrom=dev.tdt.de; arc=none smtp.client-ip=91.198.224.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
+Received: from [194.37.255.9] (helo=mxout.expurgate.net)
+	by relay.expurgate.net with smtp (Exim 4.92)
+	(envelope-from <prvs=5056aec32c=fe@dev.tdt.de>)
+	id 1t9LGo-00Cfps-HZ; Fri, 08 Nov 2024 10:27:10 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <fe@dev.tdt.de>)
+	id 1t9LGn-00CfpP-Jt; Fri, 08 Nov 2024 10:27:09 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+	by securemail.tdt.de (Postfix) with ESMTP id 3CB3D240040;
+	Fri,  8 Nov 2024 10:27:09 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+	by securemail.tdt.de (Postfix) with ESMTP id 37997240036;
+	Fri,  8 Nov 2024 10:27:09 +0100 (CET)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+	by mail.dev.tdt.de (Postfix) with ESMTP id A8ECC39A36;
+	Fri,  8 Nov 2024 10:27:08 +0100 (CET)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Fri, 08 Nov 2024 10:27:08 +0100
+From: Florian Eckert <fe@dev.tdt.de>
+To: Konstantin Aladyshev <aladyshev22@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: Adding I2C devices to the SMBus (PIIX4) via the ACPI SSDT overlay
+ method
+In-Reply-To: <Zy3P7ld7UUL8XCrR@smile.fi.intel.com>
+References: <CACSj6VX77y6K9FNFZn-rMvEL9XSPS6rFDt-STGf1UxgkuS6msw@mail.gmail.com>
+ <Zy3P7ld7UUL8XCrR@smile.fi.intel.com>
+Message-ID: <7fc0f59b8264e965efc96c0aa0ba4c31@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-purgate: clean
+X-purgate-ID: 151534::1731058030-28FA178A-FCD63596/0/0
+X-purgate-type: clean
 
-On Wed 06 Nov 2024 at 08:12, Guenter Roeck <linux@roeck-us.net> wrote:
+Hello Konstantin,
 
-> On 11/5/24 09:58, Jerome Brunet wrote:
->> This patchset adds initial support for the Texas Instruments TPS25990
->> eFuse. The TPS25990 is an integrated, high-current circuit protection and
->> power management device. TPS25895 may be stacked on the TPS25990 for
->> higher currents.
->> This patchset provides basic telemetry support for the device.
->> On boot, the device is write protected. Limits can be changed in sysfs
->> if the write protection is removed using the introduced pmbus parameter.
->> Limits will be restored to the default value device on startup, unless
->> saved to NVM. Writing the NVM is not supported by the driver at the moment.
->> As part of this series, PMBus regulator support is improved to better
->> support write-protected devices.
->> Patch 3 depends on the regulator patchset available here [1].
->> This is a compilation dependency.
->> 
->
-> Unfortunately this means that I can not apply this and the following patch
-> until after the next commit window, which is unfortunate since patch 4
-> does not logically depend on patch 3. That also means that I can not apply
-> the last patch of the series since it depends on the ability to disable
-> write protect. Those patches will have to wait until after the next commit
-> window.
+On 2024-11-08 09:46, Andy Shevchenko wrote:
+> +Cc: Florian (as this indeed rang a bell to me)
+> 
+> https://lore.kernel.org/all/d84fb798722762862a7fb08f1e343b6a@dev.tdt.de/
 
-These 2 patches where always gonna be touching the same part of the
-code. Indeed 4 could have come before, I did not really think about it
-TBH.
+The message was forwarded by Andy because I had a similar problem with 
+my APU3 [1]
+from PC-engine [2], which is also using the PIIX4 for I2C (SMBUS).
 
-No problem waiting for -rc1. I'll rebase the remaining changes when it's
-out and add the necessary change on patch 7.
+>> Maybe I need to modify ACPI code somehow to create these
+>> 'physical_nodesX' folders for the relevant i2c-7/8/9 buses?
 
-Thanks for your support
+I don't know if that helps, but with the following SSDT overlay I 
+managed
+to get the driver to feel responsible for the mcp23017 via the I2C 
+(SMBUS) of
+the APU3. The mcp23017 is used on my APU3 to add additional LEDs to 
+'/sys/class/leds'.
 
->
-> Guenter
+```
+DefinitionBlock ("mcp.aml", "SSDT", 5, "TEST", "MCP", 2)
+{
+         External (\_SB.PCI0.SBUS, DeviceObj)
 
--- 
-Jerome
+         Scope (\_SB.PCI0.SBUS)
+         {
+                 Device (I2C0)
+                 {
+                         Name (_ADR, Zero)
+                         Device (GPIO)
+                         {
+                                 Name (_HID, "PRP0001")
+                                 Name (_DDN, "MCP23017 pinctrl")
+                                 Name (_CRS, ResourceTemplate ()
+                                 {
+                                         I2cSerialBus (
+                                                 0x24,
+                                                 ControllerInitiated,
+                                                 100000,
+                                                 AddressingMode7Bit,
+                                                 "\\_SB.PCI0.SBUS.I2C0",
+                                                 0x00
+                                         )
+                                 })
+                                 Name (_DSD, Package ()
+                                 {
+                                         
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                         Package () {
+                                                 Package () { 
+"compatible", "microchip,mcp23017" },
+                                         }
+                                 })
+
+                                 Device (LEDS)
+                                 {
+                                         Name (_HID, "PRP0001")
+                                         Name (_DDN, "GPIO LEDs device")
+                                         Name (_CRS, ResourceTemplate () 
+{
+                                                 GpioIo (
+                                                         Exclusive,
+                                                         PullNone,
+                                                         0,
+                                                         0,
+                                                         
+IoRestrictionOutputOnly,
+                                                         
+"\\_SB.PCI0.SBUS.I2C0.GPIO",
+                                                         0)
+                                                 {
+                                                         0,
+                                                         1,
+                                                         2,
+                                                         3,
+                                                         4,
+                                                         5,
+                                                         6,
+                                                         7,
+                                                 }
+                                         })
+
+                                         Name (_DSD, Package () {
+                                                 
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                                 Package () {
+                                                         Package () { 
+"compatible", Package() { "gpio-leds" } },
+                                                 },
+                                                 
+ToUUID("dbb8e3e6-5886-4ba6-8795-1319f52a966b"),
+                                                 Package () {
+                                                         Package () 
+{"led-0", "LED0"},
+                                                         Package () 
+{"led-1", "LED1"},
+                                                         Package () 
+{"led-2", "LED2"},
+                                                         Package () 
+{"led-3", "LED3"},
+                                                         Package () 
+{"led-4", "LED4"},
+                                                         Package () 
+{"led-5", "LED5"},
+                                                         Package () 
+{"led-6", "LED6"},
+                                                         Package () 
+{"led-7", "LED7"},
+                                                 }
+                                         })
+
+                                         Name (LED0, Package () {
+                                                 
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                                 Package () {
+                                                         Package () 
+{"label", "khan:green:led1"},
+                                                         Package () 
+{"default-state", "off"},
+                                                         Package () 
+{"linux,default-trigger", "default-off"},
+                                                         Package () 
+{"gpios", Package () {^LEDS, 0, 0, 1}},
+                                                         Package () 
+{"retain-state-suspended", 1},
+                                                 }
+                                         })
+
+                                         Name (LED1, Package () {
+                                                 
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                                 Package () {
+                                                         Package () 
+{"label", "khan:green:led2"},
+                                                         Package () 
+{"default-state", "off"},
+                                                                 Package 
+() {"linux,default-trigger", "default-off"},
+                                                         Package () 
+{"gpios", Package () {^LEDS, 0, 1, 1}},
+                                                         Package () 
+{"retain-state-suspended", 1},
+                                                 }
+                                         })
+
+                                         Name (LED2, Package () {
+                                                 
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                                 Package () {
+                                                         Package () 
+{"label", "khan:green:led3"},
+                                                         Package () 
+{"default-state", "off"},
+                                                         Package () 
+{"linux,default-trigger", "default-off"},
+                                                         Package () 
+{"gpios", Package () {^LEDS, 0, 2, 1}},
+                                                         Package () 
+{"retain-state-suspended", 1},
+                                                 }
+                                         })
+
+                                         Name (LED3, Package () {
+                                                 
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                                 Package () {
+                                                         Package () 
+{"label", "khan:green:led4"},
+                                                         Package () 
+{"default-state", "off"},
+                                                         Package () 
+{"linux,default-trigger", "default-off"},
+                                                         Package () 
+{"gpios", Package () {^LEDS, 0, 3, 1}},
+                                                         Package () 
+{"retain-state-suspended", 1},
+                                                 }
+                                         })
+
+                                         Name (LED4, Package () {
+                                                 
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                                 Package () {
+                                                         Package () 
+{"label", "khan:green:led5"},
+                                                         Package () 
+{"default-state", "off"},
+                                                         Package () 
+{"linux,default-trigger", "default-off"},
+                                                         Package () 
+{"gpios", Package () {^LEDS, 0, 4, 1}},
+                                                         Package () 
+{"retain-state-suspended", 1},
+                                                 }
+                                         })
+
+                                         Name (LED5, Package () {
+                                                 
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                                 Package () {
+                                                         Package () 
+{"label", "khan:green:led6"},
+                                                         Package () 
+{"default-state", "off"},
+                                                         Package () 
+{"linux,default-trigger", "default-off"},
+                                                         Package () 
+{"gpios", Package () {^LEDS, 0, 5, 1}},
+                                                         Package () 
+{"retain-state-suspended", 1},
+                                                 }
+                                         })
+
+                                         Name (LED6, Package () {
+                                                 
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                                 Package () {
+                                                         Package () 
+{"label", "khan:green:led7"},
+                                                         Package () 
+{"default-state", "off"},
+                                                         Package () 
+{"linux,default-trigger", "default-off"},
+                                                         Package () 
+{"gpios", Package () {^LEDS, 0, 6, 1}},
+                                                         Package () 
+{"retain-state-suspended", 1},
+                                                 }
+                                         })
+
+                                         Name (LED7, Package () {
+                                                 
+ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                                                 Package () {
+                                                         Package () 
+{"label", "khan:red:led8"},
+                                                         Package () 
+{"default-state", "off"},
+                                                         Package () 
+{"linux,default-trigger", "default-off"},
+                                                         Package () 
+{"gpios", Package () {^LEDS, 0, 7, 1}},
+                                                         Package () 
+{"retain-state-suspended", 1},
+                                                 }
+                                         })
+                                 }
+                         }
+                 }
+         }
+}
+```
+
+Best regards
+
+Florian
+
+[1] https://pcengines.ch/apu3d4.htm
+[2] https://pcengines.ch/
+[3] 
+https://github.com/pcengines/coreboot/blob/8d3e714804b1b2bb5bc89e3ffd9cb3c34f8eb0c6/src/southbridge/amd/pi/hudson/acpi/fch.asl#L29
 
