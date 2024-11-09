@@ -1,132 +1,124 @@
-Return-Path: <linux-i2c+bounces-7908-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7909-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B80AE9C2F76
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Nov 2024 21:20:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB0AB9C2FCE
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Nov 2024 23:49:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2CA31C212F1
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Nov 2024 20:20:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA60F1C20D35
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Nov 2024 22:49:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180AF1A2544;
-	Sat,  9 Nov 2024 20:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 420331A00E2;
+	Sat,  9 Nov 2024 22:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h9iM346J"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="LxnzV6dq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9C919DF8D;
-	Sat,  9 Nov 2024 20:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E871143725
+	for <linux-i2c@vger.kernel.org>; Sat,  9 Nov 2024 22:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731183604; cv=none; b=rElUmIhXUS5xN3mHRTS2XpEIiDi4ZSf0PpYCT1QoKKUjiPsq6Jon/sNv3hiEpaC+aC7AMLy5t9yKw57RQBaGrRR3JG/+AB+MuFX6Npgc/IQ1cJhZaYwndVle3CLEuCIGCIfv3qNLmQF7JpT8mBqEpMgIEH7Pq+ZzHthQs293ve0=
+	t=1731192561; cv=none; b=PZETQwJaN02VuRur9UG+40HgmwLwEUCG013+eZgYV5rr1uBY/R4t9EFwfV3y6caHlIry6RzW55+PtPumTTnPqgvPxbmuxrKmGnaf2r9QASEbGIoA89trV8tBI/Bve4M2NAsB/oGxPHhlY3EvAP0N5gK62QIHr3cYdDpjp+N/+s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731183604; c=relaxed/simple;
-	bh=k1SNTfKh5aZYqQJx6ZACI0/uVQVUJ/Vb3beFxFxNBRs=;
+	s=arc-20240116; t=1731192561; c=relaxed/simple;
+	bh=73e+vrdvdhoGKqX9VHO0bUjBMdE3jxeAuPODAv+9yT0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Prm/Zy/jF+J7T9A61EavfiXhrAQfnE2p0W+ehZtpcOZ1AVw8u1dKxzDN+rvxSJWomNQtiuXpV+xfE/B7CNNewUVzZGanWgv2ZFKtkj44XlAkazX03z1AioPalR2BlNrfWnSLmzViMJ32fbP1ExBJKeMkTM/OFgSiJmUXk47FqGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h9iM346J; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731183603; x=1762719603;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k1SNTfKh5aZYqQJx6ZACI0/uVQVUJ/Vb3beFxFxNBRs=;
-  b=h9iM346Jh07psTvt723Ehfxo8bGbaRDhvkIIs1w+lgmiLb1/Qo70QZWC
-   r4TCiUOHldMl1srcWaw0OnYgrY7zo+OvHHQzcEYfc5CmJJFQq9GJSblHX
-   81AIDg99E8Hm3C5JR7qNx02Wax8KOrypr73sdECS/ZRB3Jy0fwX/4MFNd
-   NR1ZLgKoCRvp268dapOxJm2qYjlNOBIGRcioP4IEK20otz9CmVNgTLHNV
-   begCu6+Q8um0CXfzFdHbVF5GQK6GXSbMcQmuBlQuqX6czvTlpF/NPuUTL
-   4TQclUbx6/p+E+CedluAU4aZ7C7jDrbojgxh+tUt8c/Fxj9PjcV5flACV
-   Q==;
-X-CSE-ConnectionGUID: 7OsTWqG6SZWsuZQS13RU4g==
-X-CSE-MsgGUID: UwjUFuUXR6CmtW8sk2tzlQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11251"; a="33901674"
-X-IronPort-AV: E=Sophos;i="6.12,141,1728975600"; 
-   d="scan'208";a="33901674"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2024 12:20:02 -0800
-X-CSE-ConnectionGUID: EaNgekS5RXOF8qipqvVGCg==
-X-CSE-MsgGUID: 8ujJZnVnS0eRwRiV/lCqpQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,141,1728975600"; 
-   d="scan'208";a="86090487"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 09 Nov 2024 12:19:58 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t9rw4-000sbe-0B;
-	Sat, 09 Nov 2024 20:19:56 +0000
-Date: Sun, 10 Nov 2024 04:19:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Romain Gantois <romain.gantois@bootlin.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Romain Gantois <romain.gantois@bootlin.com>
-Subject: Re: [PATCH 9/9] misc: add FPC202 dual port controller driver
-Message-ID: <202411100412.QeOt1w0W-lkp@intel.com>
-References: <20241108-fpc202-v1-9-fe42c698bc92@bootlin.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=i4cbtQUuMP9CVlh4us3Q9Hv7/g0ykDkJX1WH3qnnOD38Ed17D2osvLoHCMZikNBj8lZFZdqIgt3yCbhkJUjvjYKgEytghHkM/un3KdnoJgVugTSRR+lQjy8erTWt32xb1A89ZzrLDkdLPH4N3LUF88hgyXOsiGypZz+d5upUOUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=LxnzV6dq; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=7PF/
+	HP9U+Kb+DnYc/Pwv/OxdMkxInK/kmU3tuvOcPLw=; b=LxnzV6dqQ3VRZp1/bbU+
+	cMXj9nlXx2tqzethKSVgWAaClB0tXXXjCGnBzc98u/TosOZYyw4xx2IAqKgaXTeA
+	mFqMZCC2k8RW/mk4DSYv1dMPyXsTw7+vPB+RfZd7BDdMYaZJAXQsGcKuTdIhL4Hv
+	kbxlsKEstL/TUxPYaIsS4tgbtbNPUGjzr8uznCpo93OqcP6UeQaU0yYNwNHSema8
+	cT/yBTa77T7KmxeFfbrEH15yBrbi17wMws3k/iJHopKlXP1n5VMdx/CY37jSsUIf
+	i7QHOeRbcjFK7JA07YQVKXpD0TJQcKhNhdC1CJnmn34mTg8b8SD9/U3USFEsCWIr
+	oA==
+Received: (qmail 1680425 invoked from network); 9 Nov 2024 23:49:06 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Nov 2024 23:49:06 +0100
+X-UD-Smtp-Session: l3s3148p1@j6jBrIImdMdehhrW
+Date: Sat, 9 Nov 2024 23:49:05 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] i2c-host-fixes for v6.12-rc7
+Message-ID: <Zy_m4enf2HrK0X0t@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+References: <mulwdseybgm5uo4ml5zsurp4wno6afjwbi4miz4dm5zc4whtav@fqlocb6allqv>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="y5YfHOeUtfGDsvDt"
+Content-Disposition: inline
+In-Reply-To: <mulwdseybgm5uo4ml5zsurp4wno6afjwbi4miz4dm5zc4whtav@fqlocb6allqv>
+
+
+--y5YfHOeUtfGDsvDt
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241108-fpc202-v1-9-fe42c698bc92@bootlin.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Romain,
+On Fri, Nov 08, 2024 at 07:23:12PM +0100, Andi Shyti wrote:
+> Hi Wolfram,
+>=20
+> Two fixes this week: one is the fix from last week that you had
+> doubts about.
+>=20
+> Thanks and have a great weekend,
+> Andi
+>=20
+> The following changes since commit 59b723cd2adbac2a34fc8e12c74ae26ae45bf2=
+30:
+>=20
+>   Linux 6.12-rc6 (2024-11-03 14:05:52 -1000)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags=
+/i2c-host-fixes-6.12-rc7
+>=20
+> for you to fetch changes up to 8de3e97f3d3d62cd9f3067f073e8ac93261597db:
+>=20
+>   i2c: designware: do not hold SCL low when I2C_DYNAMIC_TAR_UPDATE is not=
+ set (2024-11-08 19:13:06 +0100)
 
-kernel test robot noticed the following build warnings:
+Thanks, pulled!
 
-[auto build test WARNING on 9852d85ec9d492ebef56dc5f229416c925758edc]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Romain-Gantois/dt-bindings-misc-Describe-TI-FPC202-dual-port-controller/20241108-234053
-base:   9852d85ec9d492ebef56dc5f229416c925758edc
-patch link:    https://lore.kernel.org/r/20241108-fpc202-v1-9-fe42c698bc92%40bootlin.com
-patch subject: [PATCH 9/9] misc: add FPC202 dual port controller driver
-config: openrisc-randconfig-r123-20241109 (https://download.01.org/0day-ci/archive/20241110/202411100412.QeOt1w0W-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 14.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20241110/202411100412.QeOt1w0W-lkp@intel.com/reproduce)
+--y5YfHOeUtfGDsvDt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411100412.QeOt1w0W-lkp@intel.com/
+-----BEGIN PGP SIGNATURE-----
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/misc/ti_fpc202.c:270:20: sparse: sparse: symbol 'fpc202_atr_ops' was not declared. Should it be static?
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmcv5t4ACgkQFA3kzBSg
+KbZEHw/8Do+RxWJK4Cgs0hp3BqneyFl6IL7tlNVFfBYl57m/k9nGxbVhOwszTUl1
+g2j9GYMgs8a/uDeUSZWzSUAe7MrGY4WTubxE36+SwRinDK0oo9BJAgEdYojTnTSz
+TQsxDH8041jDJt4vPrRp9CPjKfufZtxCxgdroupMKNAOA7hoyVm3ALJdgPfUE+rj
+DM6uCNd9d6FKfaiAaG9ZD7HkxAO5JUi2aFhFHg94NpPaEyrDLdXQ/tvPYP4DdzAp
+JBMxTcfnlzNiEhcgcKEf8v/BZjlJBO1AO9rYOnJy76klqJLbH+4cj1BUYldatbYR
+uX2+u4N78iEpQNpW+fLZM38NVoSTWRVvuFFKdD/SNaUK9D7x7OrCW2RAgSL920sN
+u1HaO/AZZ+0zOl2aH7KU5XempDOV9sDWKgpcOtjdXJ7fMruYNGcpPRaAlIhrDl7p
+zr2FICCHdeCtP+ZpuQKzFx8/RtXV+dPl4GWHW/zdNtIWbgBCG9JDh70WudrcnBb7
+sQVR7cnzb3LBfqVA5AjxzU6zjyeWrCNp/ZCbAiFi/KFVMmYgLGtF4m6jtKfMEIXZ
+6k9PrwsR1Xz7i1JtbJO3oJRaFee8T+igpsROlB30yLTah2IbIoVRJAdet6lEQrDH
+uclYSXchaDlT37O2n8g7uHKKSHaEvZlxUVeuQqweelv4gehjr1M=
+=Nmaa
+-----END PGP SIGNATURE-----
 
-vim +/fpc202_atr_ops +270 drivers/misc/ti_fpc202.c
-
-   269	
- > 270	struct i2c_atr_ops fpc202_atr_ops = {
-   271		.attach_addr = fpc202_attach_addr,
-   272		.detach_addr = fpc202_detach_addr,
-   273	};
-   274	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--y5YfHOeUtfGDsvDt--
 
