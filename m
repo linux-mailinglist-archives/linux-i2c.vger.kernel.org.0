@@ -1,91 +1,106 @@
-Return-Path: <linux-i2c+bounces-7914-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7915-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 621B89C362C
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 02:36:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2E3F9C3A4A
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 09:57:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 278EB280E9C
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 01:36:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B81D1C216D6
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 08:57:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5AF01F94A;
-	Mon, 11 Nov 2024 01:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD54316DED2;
+	Mon, 11 Nov 2024 08:57:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="MyAM8ivJ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iNgfJzXE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AD81B960
-	for <linux-i2c@vger.kernel.org>; Mon, 11 Nov 2024 01:36:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAACA158520;
+	Mon, 11 Nov 2024 08:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731288986; cv=none; b=JzayN0piAhbx1RGhZ98fa75D0BCIpVK9/tsvgKQlxFXeO8Mlzfr4JGg+KSSOnwDeu0hz93H7iJHpf5cLbzuw76nj5qiuBucFwA8nlAkFWq5ekFAoypCYk1yMCf3tjxKae2sExu3f2l/G6qxMYDvFyvSoa9ttgCw6WWv5NnuGU/E=
+	t=1731315431; cv=none; b=ufbb7aGLpHIEL4vRjPc5POJtpiN0qIxDil4AZjDm3vgPDO3haExTYrRGk1YHyKQAVRkDAVe8bjhsmNTjV8tkT9imhLseQSaxJHkeTK9rZWbKyWG585xVfwobcKH0S7+K0jo2sdYFV3etQEiiL9dVNyNAM1510GiONY+Xpbqs98w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731288986; c=relaxed/simple;
-	bh=Kros6mW/0XKzeR7gms8yRD9dF6FA2lfPlJjgKH7/phg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=CwUN9h9CUZeb48gjahbFFymJWH74yFz7r46nxaijPn1dLsIR7O8X7bNkohvnFy3+T8nD+434zFM5wvDSnhC8KaQSGzGlZDg5nQGYjLw7nBsVySSozxe3pnOSEF+6tazO8fbsacwsW2sI39DVpcZV0NfFH6QwHSr/XAnlJVVx3wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=MyAM8ivJ; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7B0592C05C6;
-	Mon, 11 Nov 2024 14:36:22 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1731288982;
-	bh=Kros6mW/0XKzeR7gms8yRD9dF6FA2lfPlJjgKH7/phg=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:Reply-To:From;
-	b=MyAM8ivJNPtN9eABJmjzPvnQ7IYQQx43ZJJlRSy6VywL5RWR3ZIKdyXgfcQ6Giw0V
-	 Io5QJE0IFYUbAXFJ26CjQ/MvCkkCGvUa7ZdNTcXKcnDcwOu/j1tzj1Pq/k4dNshBVb
-	 OxP++cs5XULSOFqUi1TXlsLWSaa328VzVSaTy1NqsDw5GS+yQPpmPJlKP/6wEe052+
-	 01DCH6EJXJUJ36K4g05VU8wgesosLK0JNcrhVkN1MYFq6JYqTZJIL/UAGO4BtC+uA7
-	 4gzP0cCb7+yGF+YBXrrKbBa+bauV03t4LbH5l1h2cmi2HDJoqp9NQ81AVw6BxSZ6Oq
-	 QVKVdS/Ljyvsw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B67315f960001>; Mon, 11 Nov 2024 14:36:22 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 11 Nov 2024 14:36:22 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.011; Mon, 11 Nov 2024 14:36:22 +1300
-From: Aryan Srivastava <Aryan.Srivastava@alliedtelesis.co.nz>
-To: "Markus.Elfring@web.de" <Markus.Elfring@web.de>, "andi.shyti@kernel.org"
-	<andi.shyti@kernel.org>
-CC: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 0/2] i2c: octeon: Add block-mode r/w
-Thread-Topic: [PATCH v10 0/2] i2c: octeon: Add block-mode r/w
-Thread-Index: AQHbGr+ko8X+fGGa20OHvcJKEYTUELKwpMuA
-Date: Mon, 11 Nov 2024 01:36:22 +0000
-Message-ID: <77e95bcdbb1cb986686487d777f8966dca0cf435.camel@alliedtelesis.co.nz>
-References: <20241010025317.2040470-1-aryan.srivastava@alliedtelesis.co.nz>
-In-Reply-To: <20241010025317.2040470-1-aryan.srivastava@alliedtelesis.co.nz>
-Reply-To: "20241010025317.2040470-1-aryan.srivastava@alliedtelesis.co.nz"
-	<20241010025317.2040470-1-aryan.srivastava@alliedtelesis.co.nz>
-Accept-Language: en-US, en-NZ
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CCD4C577D7F7C94992087BBAD38E310C@atlnz.lc>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1731315431; c=relaxed/simple;
+	bh=z9dw0l5UOapbVYHtSh0YgsOlSd/jG78r3YeG/pb3Lk0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DTLdOYeW8lT6+wGi/ln3G1wTbQJVbW1Ak5Kx2H2ASTk/jQpR1bsROGB1agShWpJGsp29pyDIr6UR35KEgyD6pIoyLCUiwVBZs3W5oXeWb+GGxWqtzMRE0s1FWC/6r6J7OuleYtsNVtMiXf2BuYl8HQIESLIJVut43llUlkMdwek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iNgfJzXE; arc=none smtp.client-ip=217.70.178.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 0587EC179C;
+	Mon, 11 Nov 2024 08:57:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B47F040002;
+	Mon, 11 Nov 2024 08:56:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1731315418;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yy2JIrNqCiMMLqKNKg3du/73cbqDyGd8eMn3yWuGcqA=;
+	b=iNgfJzXE70TZMmGXMZxfw6FJgi3PWa2J6ZbOYt1PbRqyEC5X3M3iLXUS8TkzVf1ILCY25U
+	aIMJ8zMPIdrY/4DiaTdJ4jZ5pnWPjToktGVdO1aYN1ElTaVFEtgsJsu3uZhKMWRyRAbz5J
+	L00X9U6EOOU6NngBiE97TR4Rd3/3YdeE81Dd48vgDICmiPLnbHzhK4CXRz7KUzJrB+l7os
+	D/wziWaulMz6C2D2MbI4ulCQZNt/YgRXvoCBpil7HRwVHfguUrmcij2jn44iGPBPBufLWQ
+	Yeeax7ymMcRAABlPqHikcmyaOf2Q3wEjYg6T0uAkOPEJ2BT3+DRWIm2hQXL8ng==
+Date: Mon, 11 Nov 2024 09:56:55 +0100
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Romain Gantois <romain.gantois@bootlin.com>, Wolfram Sang
+ <wsa-dev@sang-engineering.com>, Tomi Valkeinen
+ <tomi.valkeinen@ideasonboard.com>, Andi Shyti <andi.shyti@kernel.org>, Rob
+ Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, Conor
+ Dooley <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>, Dragan
+ Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, oe-kbuild-all@lists.linux.dev,
+ linux-media@vger.kernel.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Kory Maincent <kory.maincent@bootlin.com>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org
+Subject: Re: [PATCH 9/9] misc: add FPC202 dual port controller driver
+Message-ID: <20241111095655.2c77df7d@booty>
+In-Reply-To: <202411100412.QeOt1w0W-lkp@intel.com>
+References: <20241108-fpc202-v1-9-fe42c698bc92@bootlin.com>
+	<202411100412.QeOt1w0W-lkp@intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=67315f96 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=w1vUsAckAk8A:10 a=IkcTkHD0fZMA:10 a=VlfZXiiP6vEA:10 a=UKpnUFwHtDN5F1jNoLQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-SGkgQW5kaSwgZGlkIHlvdSBoYXZlIGFueW1vcmUgY29tbWVudHMgZm9yIHRoaXMgcGF0Y2ggc2Vy
-aWVzPw0KDQpUaGFua3MsDQpBcnlhbi4NCg==
+On Sun, 10 Nov 2024 04:19:43 +0800
+kernel test robot <lkp@intel.com> wrote:
+
+> >> drivers/misc/ti_fpc202.c:270:20: sparse: sparse: symbol 'fpc202_atr_ops' was not declared. Should it be static?
+
+And perhaps 'const' too.
+  
+> vim +/fpc202_atr_ops +270 drivers/misc/ti_fpc202.c
+> 
+>    269	
+>  > 270	struct i2c_atr_ops fpc202_atr_ops = {  
+>    271		.attach_addr = fpc202_attach_addr,
+>    272		.detach_addr = fpc202_detach_addr,
+>    273	};
+>    274	
+> 
+
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
