@@ -1,162 +1,186 @@
-Return-Path: <linux-i2c+bounces-7917-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7918-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4FCE9C3DCD
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 12:57:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A0799C3DEC
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 13:04:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3ABE1C2190A
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 11:57:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADE821C21671
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 12:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D5141991AA;
-	Mon, 11 Nov 2024 11:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA145189BA4;
+	Mon, 11 Nov 2024 12:04:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c7S0RsBJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SETk7WdP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3E7153820;
-	Mon, 11 Nov 2024 11:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D9415539A;
+	Mon, 11 Nov 2024 12:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731326227; cv=none; b=ELby2KiiFKW24SnEXCImtge+WlYxZX5eKsB04yhX+Azgce2FiTInINAbDEj/JnKNBhCt/oT34+OeKQW1yYnMV0ILPqkJuCpIqCJjFZKQN49ehB86lGXG2jm8vmIh00JRxHZiEstTRzYg0/I2UGvjPbqoF86s7cabjz/izS0A0Gw=
+	t=1731326684; cv=none; b=lU2nQuAslojJZisb+6lRztGWVuaGxIrmkpF6Y6v4limHly1Hbr9TVFarjWWRoAZNs8Lfhhrw+FDnPTHCXisjolcRBw56iBOng+K72jEEBc9KHV4HeNryzkstEIj6JBJ0BnoXfgf/NZ3YQZV/nm55vGlUyz9o16Bd2RLVNe7qTeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731326227; c=relaxed/simple;
-	bh=vwpxLPqs6e9mK8zFIWmULmuEM7zyKfZQlEVhMUWXvDg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pNUOQgpVVQEFfDyYsoCtTCuoJHp4JvaoBE9UP+vepVosVvu8q7BJ8NKfeYmCO7oa0cE3SV1PCB0lOo/D6qBBcVh22JdPtkUXAWDHpI5iNisCZTjAyDy0hhWqH6ADT7prANtp53ZBUvESArfSj8+uEn9kaJEYmWH8zAgEB/ULrRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c7S0RsBJ; arc=none smtp.client-ip=209.85.167.54
+	s=arc-20240116; t=1731326684; c=relaxed/simple;
+	bh=XDMRgofP1EQDz+AMrkp03fxhwMShxc3/uITnZtP9/hA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mGdX3JpGGlpX9Ilzvp2ctiG5B2ARZHu80l4sQkQAw/70LjHoW1/h8YiFSCqLNiVo+FEZdYcvxh7IUbTd7IRyBZhB+jmUNKf4aXVgmgq/0vjyOj9bkpl4LHfNjzfqUBETdRubWr/nZy+xuyT4YzkOaBi0+cMesy3s087tKRX2nyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SETk7WdP; arc=none smtp.client-ip=209.85.210.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53c78ebe580so5968996e87.1;
-        Mon, 11 Nov 2024 03:57:05 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7187e0041d5so2594751a34.2;
+        Mon, 11 Nov 2024 04:04:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731326223; x=1731931023; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e4gRipgU/qVxirvz+WYr+6bdwv9Aapc1v6Tm0i8THg8=;
-        b=c7S0RsBJAW9KVMHfFGeB2q7ixOkeEmgSJUP8EkXQbS2VrzssNhOQ6Im4U8IYlHa/MJ
-         +Q4ssA124DcLJRSe7AWGJ3bPOjvRhoeHOwM1zcpvQyIE19RAQISqE9ue4dEZD20vcFXp
-         be573I2uSgn4ytHuztto2jdlBt5tdWejbdMeyJg8NLfvM2QVEMVnx1EKkNBcBy3M2lnW
-         5lB/OmHxKkkccrpCZH2fVkOPVpxFKF8RnnTv88ZldMU0afRi699Ltg+oiXhPotA27cHH
-         K3RzZ2ecynUHLU2qq2UgfJfn3jBW4ZDFViWTi4ag8ghQg53jXlUzTzrX7FOw7Fyhl4Eg
-         bg/w==
+        d=gmail.com; s=20230601; t=1731326682; x=1731931482; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yOhBF4mPrU4dB2Iuq+imlClyfFR5aLjqfJMpZx/Fwwo=;
+        b=SETk7WdPZL0kfwm9spYaK5uxBqFZCl/zrfMtD2pz+Zx5de3/46oFiWQLP0ZAKJBqCl
+         4Athe6D1PLPtF2SN7iU0yeI0wU44qGzwNboxV1CKWG6MBimk4bPF8x3sBgLq9wN4hjnV
+         2ThZUv5YWSY76iXXWG7TpbIYgowyXF0557qwHq4+C+ZDYxhwkjWZ2Eb8xT3Sz5Drx+/f
+         hg9mBPCy3OySXDCxyz9HPerTzTbdsQ9ri2krpbwPEvg/ZHFSrKE5ptwVMESjsGBEGTbH
+         nCpIufnoJdeTd/pz5S2DtFdAYFVG8LRwCBpwWL22aFCl6Z3v7e3AmJ6mSznq1TiS0Zs6
+         HjXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731326223; x=1731931023;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e4gRipgU/qVxirvz+WYr+6bdwv9Aapc1v6Tm0i8THg8=;
-        b=dX/B8Lifsw2oSxKPpE8I0ZoWc+ItBWoe1ULlvL6r7qDqWmm+SXgD5r+d6pEdg7WuqW
-         vhEm0O0ay7XDA/Kbpk57NwGhD0lyVVFyq9zqCG6kpPD67+6Dq9UiItWaLwDTYQb6dK3P
-         0KYV5E8XhRUyAnrTZ5pcQtyS/oTpwlaXT9RL9aGlsy/mFXl2q6IBnDG8g9ULFpkMZ2dg
-         4f6npbgN2Dhzzwtdd4irZreD90qzk/8dDmJIaHl7R5vP2g3miqhyNl3vC6QZYMQWtFkg
-         oivKeDEVTllPGZnu4lH8rGiiSvbbjvnhvDneFFLB8TtsWLM13zgAoOe69EKCRk7wrEVh
-         2/Ag==
-X-Forwarded-Encrypted: i=1; AJvYcCWty8HHhuHuZpEXjORNlD+kcdjjFrMYOydAlIc1GIU6R7YHekaP7tnk6brAGP92epiyfPlcOPJbWpg=@vger.kernel.org, AJvYcCXmEZeqErhpXPK9kiqGmmvvqPxSOakDnQrQMViJobOfZmMHQI7sDU6+QSYoFAJWh9NKPMF+APbJhbGJFFOd@vger.kernel.org
-X-Gm-Message-State: AOJu0YyERvBlnhL3r6/DwEEln4ZPPZdV6FVcHMDc3+qYm82YZmn/HXno
-	BJ6sPgCJVo39xwmYgMciSnbB3z2Z8ptoHxNAINuSJJ7o6LksK1UX
-X-Google-Smtp-Source: AGHT+IEaie61UgfrXf0LmdPOZAyuHoON1t9bH1ow34KyDKYJYUkLLuPNtSQN0Y1U9XG0SNN8lA1lLQ==
-X-Received: by 2002:a05:6512:3c87:b0:52f:1b08:d2d8 with SMTP id 2adb3069b0e04-53d866c8fa6mr3932093e87.7.1731326223110;
-        Mon, 11 Nov 2024 03:57:03 -0800 (PST)
-Received: from PC10411.67 ([82.97.198.254])
-        by smtp.googlemail.com with ESMTPSA id 2adb3069b0e04-53d82685f9fsm1558218e87.91.2024.11.11.03.57.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 03:57:02 -0800 (PST)
-From: Konstantin Aladyshev <aladyshev22@gmail.com>
-To: andriy.shevchenko@linux.intel.com
-Cc: aladyshev22@gmail.com,
-	Jean Delvare <jdelvare@suse.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] docs: i2c: piix4: Add ACPI section
-Date: Mon, 11 Nov 2024 14:56:52 +0300
-Message-ID: <20241111115652.10831-1-aladyshev22@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1731326682; x=1731931482;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yOhBF4mPrU4dB2Iuq+imlClyfFR5aLjqfJMpZx/Fwwo=;
+        b=O92rCuxiYmPphZfLbn2705Tn+ClDASZbjxw76GCzC8+9Smb++6JJ/H0u9I+h+O7Aqe
+         pYwplZ1dMdPZJQ1fd07ypT3Or8mUuTrSPI+u8/5qcVUhYT3Gzja4T1O2D4Vxo6d+6pWx
+         be9986B8WuPYhazh5pnCZixMlIfBVFHTk9ip2Z0A0GtIUuBAGeWqvAexbIWx/pfNxEHJ
+         KQlCuYsEjZZr/D+9s/tdSmt8TP2ABAdYegjYYL66SmEQ+slfiSc4oKoRk69k5Ezl6z2X
+         6SVQmpGbRa/5ao1nbV56eqz0PLKUD3DJmEvIAWAxYhl0/BmgT/TvFoEkKNGIY7TaHFSp
+         BRaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUO44TCZocbFYqHzCPZtxJkBl/+12o7jMxAgQmgAuzRss1uLuiyBJYWXrKgcT9ZlPDz7yVulPHhN/k1@vger.kernel.org, AJvYcCWHOve5D5bwIc8VyTHYJiSmer6iov2bajhP3H1+Fm2KGmuVC8wSSnNDxPwLybEiwXDoZfJ97t6PFpDu@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxy7KTDASK47tTs+H4ObaikghSQIEMqu90QdE4CNdRxPJSgdqsk
+	WMTtYeYl+2m8ivqh+deXIMZKML957qMOFN0Ja73MaIs+MmSJ/t8UrHsmKlIgJCmJudYBoRHLHOm
+	Oj+PJWGsWypE0GHIcFUKSnFsNbIIc1vw72Ms=
+X-Google-Smtp-Source: AGHT+IEDhSYNCJ/eKcicgFK7x/kTNvlQvG7YPtuUhlMVlBge5oJSDBwDM7huxviQjknKhH5uxr+uv/2AapuFbE1QWF8=
+X-Received: by 2002:a05:6358:72a2:b0:1c3:7415:693d with SMTP id
+ e5c5f4694b2df-1c641e749a2mr395840355d.5.1731326682184; Mon, 11 Nov 2024
+ 04:04:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CACSj6VX77y6K9FNFZn-rMvEL9XSPS6rFDt-STGf1UxgkuS6msw@mail.gmail.com>
+ <Zy3P7ld7UUL8XCrR@smile.fi.intel.com> <7fc0f59b8264e965efc96c0aa0ba4c31@dev.tdt.de>
+ <CACSj6VW7WKv5tiAkLCvSujENJvXq1Mc7_7vtkQsRSz3JGY0i3Q@mail.gmail.com> <Zy4IRAeLvoku4LfL@smile.fi.intel.com>
+In-Reply-To: <Zy4IRAeLvoku4LfL@smile.fi.intel.com>
+From: Konstantin Aladyshev <aladyshev22@gmail.com>
+Date: Mon, 11 Nov 2024 15:09:55 +0300
+Message-ID: <CACSj6VU1pxDeJaGT6qsA4_ftn_z0rqDicTTB1Hert5Zc1fF0OA@mail.gmail.com>
+Subject: Re: Adding I2C devices to the SMBus (PIIX4) via the ACPI SSDT overlay method
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Florian Eckert <fe@dev.tdt.de>, linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Provide information how to reference I2C busses created by the PIIX4
-chip driver from the ACPI code.
+Sorry, I needed some time to recompile my kernel.
+I've verified your patch for the jc42 driver and it works as expected.
+Now the driver correctly connects to the I2C device and the hwmon
+directory created in the sysfs.
+Thanks for the help!
 
-Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
----
- Documentation/i2c/busses/i2c-piix4.rst | 56 ++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+I've also sent a patchset for the piix4 documentation update as you've
+requested. Please review.
 
-diff --git a/Documentation/i2c/busses/i2c-piix4.rst b/Documentation/i2c/busses/i2c-piix4.rst
-index 07fe6f6f4b18..2a00158b508a 100644
---- a/Documentation/i2c/busses/i2c-piix4.rst
-+++ b/Documentation/i2c/busses/i2c-piix4.rst
-@@ -109,3 +109,59 @@ which can easily get corrupted due to a state machine bug. These are mostly
- Thinkpad laptops, but desktop systems may also be affected. We have no list
- of all affected systems, so the only safe solution was to prevent access to
- the SMBus on all IBM systems (detected using DMI data.)
-+
-+
-+Description in the ACPI code
-+----------------------------
-+
-+Device driver for the PIIX4 chip creates a separate I2C bus for each of its ports::
-+
-+    $ i2cdetect -l
-+    ...
-+    i2c-7   unknown         SMBus PIIX4 adapter port 0 at 0b00      N/A
-+    i2c-8   unknown         SMBus PIIX4 adapter port 2 at 0b00      N/A
-+    i2c-9   unknown         SMBus PIIX4 adapter port 1 at 0b20      N/A
-+    ...
-+
-+Therefore if you want to access one of these busses in the ACPI code, you need to
-+declare port subdevices inside the PIIX device::
-+
-+    Scope (\_SB_.PCI0.SMBS)
-+    {
-+        Name (_ADR, 0x00140000)
-+
-+        Device (SMB0) {
-+            Name (_ADR, 0)
-+        }
-+        Device (SMB1) {
-+            Name (_ADR, 1)
-+        }
-+        Device (SMB2) {
-+            Name (_ADR, 2)
-+        }
-+    }
-+
-+As an example of usage here is the ACPI snippet code that would assign jc42 driver
-+to the 0x1C device on the I2C bus created by the PIIX port 0::
-+
-+    Device (JC42) {
-+        Name (_HID, "PRP0001")
-+        Name (_DDN, "JC42 Temperature sensor")
-+        Name (_CRS, ResourceTemplate () {
-+            I2cSerialBusV2 (
-+                0x001c,
-+                ControllerInitiated,
-+                100000,
-+                AddressingMode7Bit,
-+                "\\_SB.PCI0.SMBS.SMB0",
-+                0
-+            )
-+        })
-+
-+        Name (_DSD, Package () {
-+            ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-+            Package () {
-+                Package () { "compatible", Package() { "jedec,jc-42.4-temp" } },
-+            }
-+        })
-+    }
--- 
-2.43.0
+Best regards,
+Konstantin Aladyshev
 
+On Fri, Nov 8, 2024 at 3:47=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Nov 08, 2024 at 02:48:44PM +0300, Konstantin Aladyshev wrote:
+> > Thanks for the help!
+>
+>
+> > $ cat /sys/bus/acpi/devices/device\:25/path
+>
+> These cat:s you made are mostly useless in this case. And you should look=
+ for
+> the real device folders in sysfs and firmware_node links there.
+>
+> ...
+>
+> > However I was using the at24 device only as an example.
+> > My real target device is jc42
+> > (https://github.com/torvalds/linux/blob/906bd684e4b1e517dd424a354744c5b=
+0aebef8af/drivers/hwmon/jc42.c#L600).
+>
+> > Does it mean that jc42 driver doesn't support ACPI binding?
+>
+> Kinda. I just sent a patch, please test and provide your Tested-by if it =
+helps.
+>
+> ...
+>
+> > Just in case here is my SSDT:
+> > ```
+> > DefinitionBlock ("jc42.aml", "SSDT", 5, "", "JC42", 1)
+> > {
+> >     External (_SB_.PCI0.SMBS, DeviceObj)
+> >
+> >     Scope (\_SB_.PCI0.SMBS)
+> >     {
+> >         Device (SMB0) {
+> >             Name (_ADR, 0)
+> >         }
+> >         Device (SMB1) {
+> >             Name (_ADR, 1)
+> >         }
+> >         Device (SMB2) {
+> >             Name (_ADR, 2)
+> >         }
+> >     }
+> >
+> >     Scope (\_SB.PCI0.SMBS)
+>
+> While this works, we expect Scope to be under the respective host control=
+ler, i.e.
+>
+>      Scope (\_SB.PCI0.SMBS.SMB0)
+>
+> in your case.
+>
+> >     {
+> >         Device (JC42) {
+> >             Name (_HID, "PRP0001")
+> >             Name (_DDN, "JC42 Temperature sensor")
+> >             Name (_CRS, ResourceTemplate () {
+> >                 I2cSerialBusV2 (
+> >                     0x001c,              // I2C Slave Address
+> >                     ControllerInitiated,
+> >                     400000,              // Bus speed
+> >                     AddressingMode7Bit,
+> >                     "\\_SB.PCI0.SMBS.SMB0",   // Link to ACPI I2C host
+> > controller
+> >                     0
+> >                 )
+> >             })
+> >
+> >             Name (_DSD, Package () {
+> >                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+> >                 Package () {
+> >                     Package () { "compatible", Package() {
+> > "jedec,jc-42.4-temp" } },
+> >                 }
+> >             })
+> >         }
+> >     }
+> > }
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
