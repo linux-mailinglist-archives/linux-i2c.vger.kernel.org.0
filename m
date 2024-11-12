@@ -1,232 +1,202 @@
-Return-Path: <linux-i2c+bounces-7932-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7933-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F01B9C4940
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 23:45:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EBDD9C4B48
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Nov 2024 01:55:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE1E9B29240
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Nov 2024 22:36:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74C30B272D1
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Nov 2024 00:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CDEE1BD9EB;
-	Mon, 11 Nov 2024 22:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA6C8201030;
+	Tue, 12 Nov 2024 00:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nBBm2a0P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RRyOWKnN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D6F1BD4E2;
-	Mon, 11 Nov 2024 22:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EB720102B;
+	Tue, 12 Nov 2024 00:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731364574; cv=none; b=hPV6NRp0Y/V9sC6Em1qaHxrJD326n6X0orKW0k2oAeXW3UWQb8deFbu8F0B/q5Cd9/Zo5HapF0MfKlGiu2hplYYwAiW2smuDlB16NBj28f/D7VuI11GfaqL6vUDRvtG50VBzq9g+ugoAXD8TfOCHFjLss2gy+2K9f059ayS5Nwg=
+	t=1731372710; cv=none; b=pmYlyHn6pQNifkp6B7/VdzSl9ZJg5VyXuTQhbtzXX+Hq9kxYdyQ2aWx0F0IOk78/JLsDlVWsVEJES7xGw+SIOmiJs1RjUYptKflaj7ixY3eSSXtJxOvRY6DMDuS0mTElZlS/XPeCzb2YZGeyXSsgqRDwX8ZDp2o4NOnO1RYR+tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731364574; c=relaxed/simple;
-	bh=VTKOlFWEU9rOqd7gZBhNAomP4MX1h4GCfami6fw8+/Q=;
+	s=arc-20240116; t=1731372710; c=relaxed/simple;
+	bh=9tfPNV02GCkITZAOAN9kCGxQqCXY5PZBvXb7afmjqQ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WzuAiLRoDmAo6SG8weyNO/m+geziKTjTQM4e2zR/36ziEOTh18Vyjjizz8XJ9UVBU8zyTLAfpc6jYs0jZABz9BWKuATF6odGCrzFqzMrT02OHdL9jT82p2eS694zWKDdIuvucFyWpZcdI35xo2hNl4Vuoqn76zI7ftE7+VqP8oQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nBBm2a0P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 496E2C4CECF;
-	Mon, 11 Nov 2024 22:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731364573;
-	bh=VTKOlFWEU9rOqd7gZBhNAomP4MX1h4GCfami6fw8+/Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nBBm2a0Pr5NIWYOXXdCLtj4EMDDSCHlucluq1dxm1h+bLuHxsdJd7zYrkj9ZyXfCH
-	 0A4lnLn8RKNJf8Q549CVDQxiXLaPQ9r+BVSRAFxbScVTg7VKlMECAT1SoAgWn746Hx
-	 V35WXqXKezaqHYOYSrjZlRNAUikqmN5VKzUa1clVDQpGJaelcp6Hoiu6EKWFWAbOni
-	 aZtZCYLmnLLyWNyuAP/0EDLTYCnFhwGf6IfxFo2rwC2Hu+yVXxb3AkQI8aUBCvVAZI
-	 MF6a8idmqoVdNa68SD3gzhwgZvBB0iWRcjYjjJYqhXYOt/oy0Nvcm+fErtxdMWD8xA
-	 VrXKt6UU1U8Mw==
-Date: Mon, 11 Nov 2024 23:36:10 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
-Cc: Vinod Koul <vkoul@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, quic_msavaliy@quicinc.com, 
-	quic_vtanuku@quicinc.com
-Subject: Re: [PATCH v2 RESEND 1/3] dmaengine: qcom: gpi: Add GPI Block event
- interrupt support
-Message-ID: <cewuxwkn75cfnopvzidwmwp6rq7wjyewdjmiohx5jsntke5dym@oc5tgzp7km2t>
-References: <20241111140244.13474-1-quic_jseerapu@quicinc.com>
- <20241111140244.13474-2-quic_jseerapu@quicinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=epdI+Udy+DP8JYfB936+eRcSlo1B3rxjs5cvXljjD5M1X+L2spLxMWSx1HWMSONZBi6u7vNVGsccWbis2IrJlfknWJUm7RdXmoSWqhwRZRWmuVm47qBRR06fBX0hJFmj7dcBENrnVaxVbxl9c5HLkUhRt8lkJ/KbciJDDj7/3jU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RRyOWKnN; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-720b2d8bcd3so4072906b3a.2;
+        Mon, 11 Nov 2024 16:51:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731372708; x=1731977508; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3fL2pW4OdzbftIG60Xwe6fk+2YDD50T0x8PSYiwmv0M=;
+        b=RRyOWKnNOF9ucAbWMffLxI+b3H/z02b9mvo/7X8bJWLASDpi17BWXhE4pEUL4M+Uj+
+         IaJFCwOd1IFFwnOZVT8Xsas9MoavkFgTgGurODqnZrehRPU3Weo99eS5SkS/csF0uP7U
+         6mETWSYMsbDstwZa2IOibqp5pPX0oD0KCl8T/spRcvqRmSORVNaMwvTDmNIaI1Cq+j8L
+         kr2DEnH0IQZGDDDtx5aob1zwjU0NI9g9wKBfRXL0kGEI5q9AglETCbvfMaMXNAxJZ2FR
+         gtsFNJycQIkDFAKtiHAkXmLTr0XFTOAXJ7XnJYWxDKfo96/Ej9PRu0eDMDhVeExInBFn
+         BB4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731372708; x=1731977508;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3fL2pW4OdzbftIG60Xwe6fk+2YDD50T0x8PSYiwmv0M=;
+        b=r7q0fEx/gVy1uIQY4iZfZ+BxDw/+/RDSHZXNUvrQ/92lEOMgvoXcAeQtLVW/JL51iG
+         A6ZfjDeNSV3i0tbHxKhJYmkDtebd1IiQWr/TqmbVQICQyCyId/YVI4b5kgNvWkAPWSQM
+         X+jLPj0ly8VBOuvbi/CyJj5S/AaafTp4caOTsIt5jA1Rx2YcX2ftERkxd2b+Km1qoSh4
+         2TJItTIYPumPSE4QhXFSvqKc2r0NyKsvCEfN/qfulzi8+CtjQjBr5gNhdQ6qpGKC/KM6
+         //+K/CxltzJ7PZRum4QiGLPUj4ch3U9IarH/gbFSj2G2cDPQOuZWMH8Px3LDryuucM5X
+         gXfg==
+X-Forwarded-Encrypted: i=1; AJvYcCUKMqO5h73dlDCx/WttGaOZOk5zvCe7Rxc3pvWsLJqYty5Pp8djgNUhaNi/sfOBWRf4zqACPsN2EIuhsorS@vger.kernel.org, AJvYcCUTUf8p8PJua1Jq2g4OlOvPsUi88fT83tFwI2TlCuoq7O9lXlE7rtm6uUqFWbF0AsRPsBjaNUITPkQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8ivZ2RrpanPb+Xy+zSY1XUgZ/aEXbVqVN/ZuU+pbXTrqf4Hk+
+	F7MX5PIlC0Hg0M3g5EAhsMq4VXO87qv8Yi+VC2VH2fanj4dW2qmX6HfMJg==
+X-Google-Smtp-Source: AGHT+IEHZ9vBflMx6lLV5ldmHmhWu2yFR7l6cgJMNdoDYvtIQPYQJO4WD2MuFw8Y2xI3HxND8hVKsg==
+X-Received: by 2002:a05:6a00:148f:b0:71e:6e4a:507a with SMTP id d2e1a72fcca58-724132595d2mr19646669b3a.3.1731372708255;
+        Mon, 11 Nov 2024 16:51:48 -0800 (PST)
+Received: from archie.me ([103.124.138.80])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407a571ccsm9710542b3a.196.2024.11.11.16.51.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2024 16:51:47 -0800 (PST)
+Received: by archie.me (Postfix, from userid 1000)
+	id C5E5B4209E61; Tue, 12 Nov 2024 07:51:43 +0700 (WIB)
+Date: Tue, 12 Nov 2024 07:51:43 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Konstantin Aladyshev <aladyshev22@gmail.com>,
+	andriy.shevchenko@linux.intel.com
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] docs: i2c: piix4: Add ACPI section
+Message-ID: <ZzKmn2K3Uzp30i8Q@archie.me>
+References: <ZzH-KeSavsPkldLU@smile.fi.intel.com>
+ <20241111140231.15198-1-aladyshev22@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qhBYF6HTZwxQb3Tk"
 Content-Disposition: inline
-In-Reply-To: <20241111140244.13474-2-quic_jseerapu@quicinc.com>
+In-Reply-To: <20241111140231.15198-1-aladyshev22@gmail.com>
 
-Ping, Vinod :-)
 
-Andi
+--qhBYF6HTZwxQb3Tk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 11, 2024 at 07:32:42PM +0530, Jyothi Kumar Seerapu wrote:
-> GSI hardware generates an interrupt for each transfer completion.
-> For multiple messages within a single transfer, this results
-> in receiving N interrupts for N messages, which can introduce
-> significant software interrupt latency. To mitigate this latency,
-> utilize Block Event Interrupt (BEI) only when an interrupt is necessary.
-> When using BEI, consider splitting a single multi-message transfer into
-> chunks of 8. This approach can enhance overall transfer time and
-> efficiency.
-> 
-> Signed-off-by: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
-> ---
-> 
-> v1 -> v2: 
->    - Changed dma_addr type from array of pointers to array.
->    - To support BEI functionality with the TRE size of 64 defined in GPI driver,
->      updated QCOM_GPI_MAX_NUM_MSGS to 16 and NUM_MSGS_PER_IRQ to 8.
->  
->  drivers/dma/qcom/gpi.c           | 49 ++++++++++++++++++++++++++++++++
->  include/linux/dma/qcom-gpi-dma.h | 37 ++++++++++++++++++++++++
->  2 files changed, 86 insertions(+)
-> 
-> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
-> index 52a7c8f2498f..a98de3178764 100644
-> --- a/drivers/dma/qcom/gpi.c
-> +++ b/drivers/dma/qcom/gpi.c
-> @@ -1693,6 +1693,9 @@ static int gpi_create_i2c_tre(struct gchan *chan, struct gpi_desc *desc,
->  
->  		tre->dword[3] = u32_encode_bits(TRE_TYPE_DMA, TRE_FLAGS_TYPE);
->  		tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_IEOT);
+On Mon, Nov 11, 2024 at 05:02:31PM +0300, Konstantin Aladyshev wrote:
+> diff --git a/Documentation/i2c/busses/i2c-piix4.rst b/Documentation/i2c/b=
+usses/i2c-piix4.rst
+> index 07fe6f6f4b18..90447dff7419 100644
+> --- a/Documentation/i2c/busses/i2c-piix4.rst
+> +++ b/Documentation/i2c/busses/i2c-piix4.rst
+> @@ -109,3 +109,65 @@ which can easily get corrupted due to a state machin=
+e bug. These are mostly
+>  Thinkpad laptops, but desktop systems may also be affected. We have no l=
+ist
+>  of all affected systems, so the only safe solution was to prevent access=
+ to
+>  the SMBus on all IBM systems (detected using DMI data.)
 > +
-> +		if (i2c->flags & QCOM_GPI_BLOCK_EVENT_IRQ)
-> +			tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_BEI);
->  	}
->  
->  	for (i = 0; i < tre_idx; i++)
-> @@ -2098,6 +2101,52 @@ static int gpi_find_avail_gpii(struct gpi_dev *gpi_dev, u32 seid)
->  	return -EIO;
->  }
->  
-> +/**
-> + * gpi_multi_desc_process() - Process received transfers from GSI HW
-> + * @dev: pointer to the corresponding dev node
-> + * @multi_xfer: pointer to the gpi_multi_xfer
-> + * @num_xfers: total number of transfers
-> + * @transfer_timeout_msecs: transfer timeout value
-> + * @transfer_comp: completion object of the transfer
-> + *
-> + * This function is used to process the received transfers based on the
-> + * completion events
-> + *
-> + * Return: On success returns 0, otherwise return error code
-> + */
-> +int gpi_multi_desc_process(struct device *dev, struct gpi_multi_xfer *multi_xfer,
-> +			   u32 num_xfers, u32 transfer_timeout_msecs,
-> +			   struct completion *transfer_comp)
-> +{
-> +	int i;
-> +	u32 max_irq_cnt, time_left;
 > +
-> +	max_irq_cnt = num_xfers / NUM_MSGS_PER_IRQ;
-> +	if (num_xfers % NUM_MSGS_PER_IRQ)
-> +		max_irq_cnt++;
+> +Description in the ACPI code
+> +----------------------------
 > +
-> +	/*
-> +	 * Wait for the interrupts of the processed transfers in multiple
-> +	 * of 64 and for the last transfer. If the hardware is fast and
-> +	 * already processed all the transfers then no need to wait.
-> +	 */
-> +	for (i = 0; i < max_irq_cnt; i++) {
-> +		reinit_completion(transfer_comp);
-> +		if (max_irq_cnt != multi_xfer->irq_cnt) {
-> +			time_left = wait_for_completion_timeout(transfer_comp,
-> +								transfer_timeout_msecs);
-> +			if (!time_left) {
-> +				dev_err(dev, "%s: Transfer timeout\n", __func__);
-> +				return -ETIMEDOUT;
-> +			}
-> +		}
-> +		if (num_xfers > multi_xfer->msg_idx_cnt)
-> +			return 0;
-> +	}
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(gpi_multi_desc_process);
+> +Device driver for the PIIX4 chip creates a separate I2C bus for each of =
+its ports::
 > +
->  /* gpi_of_dma_xlate: open client requested channel */
->  static struct dma_chan *gpi_of_dma_xlate(struct of_phandle_args *args,
->  					 struct of_dma *of_dma)
-> diff --git a/include/linux/dma/qcom-gpi-dma.h b/include/linux/dma/qcom-gpi-dma.h
-> index 6680dd1a43c6..1341ff0db808 100644
-> --- a/include/linux/dma/qcom-gpi-dma.h
-> +++ b/include/linux/dma/qcom-gpi-dma.h
-> @@ -15,6 +15,12 @@ enum spi_transfer_cmd {
->  	SPI_DUPLEX,
->  };
->  
-> +#define QCOM_GPI_BLOCK_EVENT_IRQ	BIT(0)
+> +    $ i2cdetect -l
+> +    ...
+> +    i2c-7   unknown         SMBus PIIX4 adapter port 0 at 0b00      N/A
+> +    i2c-8   unknown         SMBus PIIX4 adapter port 2 at 0b00      N/A
+> +    i2c-9   unknown         SMBus PIIX4 adapter port 1 at 0b20      N/A
+> +    ...
 > +
-> +#define QCOM_GPI_MAX_NUM_MSGS		16
-> +#define NUM_MSGS_PER_IRQ		8
-> +#define MIN_NUM_OF_MSGS_MULTI_DESC	4
+> +Therefore if you want to access one of these busses in the ACPI code, po=
+rt subdevices
+> +are needed to be declared inside the PIIX device::
 > +
->  /**
->   * struct gpi_spi_config - spi config for peripheral
->   *
-> @@ -51,6 +57,29 @@ enum i2c_op {
->  	I2C_READ,
->  };
->  
-> +/**
-> + * struct gpi_multi_xfer - Used for multi transfer support
-> + *
-> + * @msg_idx_cnt: message index for the transfer
-> + * @buf_idx: dma buffer index
-> + * @unmap_msg_cnt: unampped transfer index
-> + * @freed_msg_cnt: freed transfer index
-> + * @irq_cnt: received interrupt count
-> + * @irq_msg_cnt: transfer message count for the received irqs
-> + * @dma_buf: virtual address of the buffer
-> + * @dma_addr: dma address of the buffer
-> + */
-> +struct gpi_multi_xfer {
-> +	u32 msg_idx_cnt;
-> +	u32 buf_idx;
-> +	u32 unmap_msg_cnt;
-> +	u32 freed_msg_cnt;
-> +	u32 irq_cnt;
-> +	u32 irq_msg_cnt;
-> +	void *dma_buf[QCOM_GPI_MAX_NUM_MSGS];
-> +	dma_addr_t dma_addr[QCOM_GPI_MAX_NUM_MSGS];
-> +};
+> +    Scope (\_SB_.PCI0.SMBS)
+> +    {
+> +        Name (_ADR, 0x00140000)
 > +
->  /**
->   * struct gpi_i2c_config - i2c config for peripheral
->   *
-> @@ -65,6 +94,8 @@ enum i2c_op {
->   * @rx_len: receive length for buffer
->   * @op: i2c cmd
->   * @muli-msg: is part of multi i2c r-w msgs
-> + * @flags: true for block event interrupt support
-> + * @multi_xfer: indicates transfer has multi messages
->   */
->  struct gpi_i2c_config {
->  	u8 set_config;
-> @@ -78,6 +109,12 @@ struct gpi_i2c_config {
->  	u32 rx_len;
->  	enum i2c_op op;
->  	bool multi_msg;
-> +	u8 flags;
-> +	struct gpi_multi_xfer multi_xfer;
->  };
->  
-> +int gpi_multi_desc_process(struct device *dev, struct gpi_multi_xfer *multi_xfer,
-> +			   u32 num_xfers, u32 tranfer_timeout_msecs,
-> +			   struct completion *transfer_comp);
+> +        Device (SMB0) {
+> +            Name (_ADR, 0)
+> +        }
+> +        Device (SMB1) {
+> +            Name (_ADR, 1)
+> +        }
+> +        Device (SMB2) {
+> +            Name (_ADR, 2)
+> +        }
+> +    }
 > +
->  #endif /* QCOM_GPI_DMA_H */
-> -- 
-> 2.17.1
-> 
+> +If it is not the case for your UEFI firmware and you don't have access t=
+o the source
+> +code, you can use ACPI SSDT Overlays to provide the missing parts. Just =
+keep in mind
+> +that in this case you would need to load your extra SSDT table before th=
+e piix4 driver
+> +start, i.e. you should provide SSDT via initrd or EFI variable methods a=
+nd not via
+> +configfs.
+> +
+> +As an example of usage here is the ACPI snippet code that would assign j=
+c42 driver
+> +to the 0x1C device on the I2C bus created by the PIIX port 0::
+> +
+> +    Device (JC42) {
+> +        Name (_HID, "PRP0001")
+> +        Name (_DDN, "JC42 Temperature sensor")
+> +        Name (_CRS, ResourceTemplate () {
+> +            I2cSerialBusV2 (
+> +                0x001c,
+> +                ControllerInitiated,
+> +                100000,
+> +                AddressingMode7Bit,
+> +                "\\_SB.PCI0.SMBS.SMB0",
+> +                0
+> +            )
+> +        })
+> +
+> +        Name (_DSD, Package () {
+> +            ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+> +            Package () {
+> +                Package () { "compatible", Package() { "jedec,jc-42.4-te=
+mp" } },
+> +            }
+> +        })
+> +    }
+
+Looks good, thanks!
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--qhBYF6HTZwxQb3Tk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZzKmmwAKCRD2uYlJVVFO
+o6lkAQC2YG+wRNNVrbkIL8gpUWUTAZhOEbKw4zsaqGyOfQfhIgD7BXFqBfMr3wu4
+6RPBVeocE2oD3/tatDuVdi9fB/4hvAA=
+=G+tH
+-----END PGP SIGNATURE-----
+
+--qhBYF6HTZwxQb3Tk--
 
