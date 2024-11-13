@@ -1,222 +1,308 @@
-Return-Path: <linux-i2c+bounces-7951-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7952-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A74AC9C6A22
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 08:43:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B3049C6AF6
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 09:54:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07451B2566A
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 07:43:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D18528328C
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 08:54:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFB2A187355;
-	Wed, 13 Nov 2024 07:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C01E18870D;
+	Wed, 13 Nov 2024 08:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="GjzLrIv/"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="iQhqx4TB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sg2apc01on2133.outbound.protection.outlook.com [40.107.215.133])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62147185939;
-	Wed, 13 Nov 2024 07:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.133
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731483793; cv=fail; b=sDnLXPyt1qo+6h981lyHbmidHRCR3YyrbbvorQzh1IIy23DFVmH3QtHt+9laT4vq+8ZWjrruvpLL0JmPqjcK0JVNuYK7YH+14BxtI5lHyx2bZEAkiJjgITK2hQCf6rvR4McsnnRwVpizP42umUNjWIQ32QcsV13ZoInGHaaPBRY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731483793; c=relaxed/simple;
-	bh=EQwrC1ckcf9nadNUe1ds3GTsu6b6cpAWAq7m5xIXxG4=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Nwm1ZoAIY207cv7R8UJEHWwY2a7+ht0OEBfqhBlOIxBVPzltMuaZ+raR3UznqVOTfHw17cq5udE+JZ0jcTgHIIzbxlRJSzlmRNyxRS2Kg1G34Q7bW08c3V0247cRCvEQKNqXgxGk7lOyqTFa6phvaUFsikygcv6XvwBHURpw7q8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=GjzLrIv/; arc=fail smtp.client-ip=40.107.215.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IXML4wiOVQnbW4EOfWknyJznAV3pwzL6ocdU72SSTfYBgydZVaNHrZXONHDQKbxhjEEHAYop6LSue63TlV1IhrmfmcHolFJRn9Xq1Zt9PM0XWcU1N4IigLe8esXJF3EKyOiMDo5eqQj9jZ5hjlZMs/QRM/2dwoGLnNWHWvzYvJs6uyN5Bj+6MDWCEf7AoyH3qXaviD07VSEtWC5ho69lXUZ5JrNrWqCmvKuahGDZUg1gbB+jgWaIc63fBONl29TgxYgdATduIPbB6CBypgYg66ISrsUSotSKWlapplTnQUDzJul8gDNQsN5adgdV0IEp1vXeR33bzQd7ApvR+h35Jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EQwrC1ckcf9nadNUe1ds3GTsu6b6cpAWAq7m5xIXxG4=;
- b=cORBpnrEcRSfxQv2YSVY0k7q04Mhjnmmulrg9+I9Ptl2VfI2F5I8mYhNGaYUanqfM3bzmsO8xNKBObBbFGAZdP+74BVWa/kFKV8Zo/p49lXv6Bach60tv1KjrHxlOlVcA6bEgqi6NevkovdBHI66zX2SqhZTLb14fD9tEkWl03wq4iYVvC6qFZeX7SSXKv8n5Mc5UMn1ptuoldNe2v5FPgiiIRwEqRyAZiqpy81Dnm0ae/BLaphlNH+2UP8WlqEldu25JpQUPaLw5B8EnDzkSyZSDIIB9IYYKI0qbqkz8rnQYOwvFlogwK8bUkXSWTK6DBaW/qkN1qjNJHnPKxeDKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EQwrC1ckcf9nadNUe1ds3GTsu6b6cpAWAq7m5xIXxG4=;
- b=GjzLrIv/fGk+zu/G/o/WE4EOJVA+Dr3Y+Dwk3p6OZG1aeFyx0dMc2kmcTz4DJURS5gTKRP95mRB2GDaWUlt/YqjgOJPirTRk0e05MYYU68JmnEQvuTi8TgVeHAstPDo00mwSGoIG8HSUyt72YUgxm4NMyF9OLCCZwQe31dBYhdUfpv9yWYwYVe/ddcSaA/6QFqy9VBQj7vIhm69xQ5zFK5c4dRm5wLiJc9z9SUEzVv2P8A+tzC1TCwZ0bYf1lZHLBLjyJaJ8kaB/IbhNRrtI7tlWAII2ym5lKzMN5N49P7pmXBj7bYQnbu4XZkwqei7kF+meU9mRwUlByME/geDEwQ==
-Received: from OS8PR06MB7541.apcprd06.prod.outlook.com (2603:1096:604:2b1::11)
- by TYSPR06MB6749.apcprd06.prod.outlook.com (2603:1096:400:470::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.17; Wed, 13 Nov
- 2024 07:43:04 +0000
-Received: from OS8PR06MB7541.apcprd06.prod.outlook.com
- ([fe80::9f51:f68d:b2db:da11]) by OS8PR06MB7541.apcprd06.prod.outlook.com
- ([fe80::9f51:f68d:b2db:da11%6]) with mapi id 15.20.8158.011; Wed, 13 Nov 2024
- 07:43:04 +0000
-From: Ryan Chen <ryan_chen@aspeedtech.com>
-To: Philipp Zabel <p.zabel@pengutronix.de>, "brendan.higgins@linux.dev"
-	<brendan.higgins@linux.dev>, "benh@kernel.crashing.org"
-	<benh@kernel.crashing.org>, "joel@jms.id.au" <joel@jms.id.au>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>, "robh@kernel.org"
-	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "andrew@codeconstruct.com.au"
-	<andrew@codeconstruct.com.au>, "andriy.shevchenko@linux.intel.com"
-	<andriy.shevchenko@linux.intel.com>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>, "openbmc@lists.ozlabs.org"
-	<openbmc@lists.ozlabs.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v15 2/3] i2c: aspeed: support AST2600 i2c new register
- mode driver
-Thread-Topic: [PATCH v15 2/3] i2c: aspeed: support AST2600 i2c new register
- mode driver
-Thread-Index: AQHbGGxcfd5QCYaLt02IHuq/iSVWarKzqJsAgAFlhJA=
-Date: Wed, 13 Nov 2024 07:43:04 +0000
-Message-ID:
- <OS8PR06MB7541739C4D1E69C0981CBCB4F25A2@OS8PR06MB7541.apcprd06.prod.outlook.com>
-References: <20241007035235.2254138-1-ryan_chen@aspeedtech.com>
-	 <20241007035235.2254138-3-ryan_chen@aspeedtech.com>
- <6aea003a286162c465d0ee7681988b3697feb103.camel@pengutronix.de>
-In-Reply-To: <6aea003a286162c465d0ee7681988b3697feb103.camel@pengutronix.de>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS8PR06MB7541:EE_|TYSPR06MB6749:EE_
-x-ms-office365-filtering-correlation-id: c78005d3-13da-4f51-0cbb-08dd03b6cf0c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|376014|7416014|366016|921020|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?NzRaWXBSRldtbXl6S1ZFTWFvTXcvcE1takVvR2NobmZnbDJ2R0k0MzNKZHNz?=
- =?utf-8?B?bURxa045ajMrS0x2ejdScmZHRko1VVFRU0ZMSW92OTVoSS9mNmRGb0NMNXhK?=
- =?utf-8?B?ZllKR21tekw4NmQrU1BxVlhyQUhhMGZkYitYamdxRU5iVWo4MURCV2pvUktQ?=
- =?utf-8?B?eFQ2UlBnNW9pV0VKYm1Zd0pqN08zY3V4V3VlZDJ1WHpSU2kwMituZmxXUEto?=
- =?utf-8?B?MGVwUnVNVHVQOW5DbFJvWmFPdWx3dktlWmZUa2YzTWNYMmdpTzM3MkJRS3c3?=
- =?utf-8?B?RldiaDRDdDluUWlkVWlMcXNpaUd3dVBXdGpvT2JVdElxL1plcWh2YUFxV01V?=
- =?utf-8?B?Nk1FUlB1R2NTZFJ5V3hVSlZoSnlEalBHNW1UWFJKejFkRUZvYWRrdVdPcU1a?=
- =?utf-8?B?Z2pTUmsyS3pLbkhyZU1Ed0JrZWtqTXhwOUFLRmpEbWx0cFN4UkljQUl6T21t?=
- =?utf-8?B?eXNDYXFpTzVZMHM2WU9UL0lHdzBpM2F6dGdUNGVUbUxSSk1ReXdRM2V5N0Y2?=
- =?utf-8?B?blRxSHJXMHRuanNma2h2bDgrUzZuV044bmxZYjBySlpGY0lIb0Vhd2VMbjlp?=
- =?utf-8?B?TW5oL25ma0lNWTViOVNrdnVNeVFSV3NvdHo3OUZkalczNzFWRXhaeWxmMFBm?=
- =?utf-8?B?NzM0QXBRUkhPL1V6TE5lSWhkQWpnaWFhZXBQK3hucThqdnpuYmUvbkxjVTI3?=
- =?utf-8?B?WEFzaDJyK3dUZ0NLbGxBYlZ3YWJKbDdPZnE5aDVDaGkwKzJEMDh6RzltK21R?=
- =?utf-8?B?MU1laVhCbWtzd25QSE9MOHpvOVVjeGZSS2FZMU9aVjV5TktLZUh4UzM4OFFN?=
- =?utf-8?B?R0RseEhqYTN6b1IyV2orcTRyWVc3dzBqSmpBQXBCTEpUbFdVVHZaU0d6ck5q?=
- =?utf-8?B?bkZYYWVuaVNJYno5NHNTc3V6cCtCTlQ0di9yM2FGdUQ2UHlIcWhkQk9UUzlk?=
- =?utf-8?B?TS9GUXBqdmhsZkZUdXZqQlpvMGZXM2dWczJWbjdxeGk5U3p2QWtxYWY5TG44?=
- =?utf-8?B?VGhoVkhrTVM3NlJaUGxTUjI2VExGQWk4T283QkFjc3JIUlFudzA5blU2U245?=
- =?utf-8?B?ZlJlbXhDTnVYRlBiTi96ZUx3TUVyQS9GUWw3Q2pwL0F4YWJDUUs5YzIzMmc0?=
- =?utf-8?B?VzdtU2IxZE44M0RXa0RDdXc2MExpNTc2VEsrODNEbkxjR2VBdUQ2VVdiSjFz?=
- =?utf-8?B?cFRQVFl6eXdhZW85KzUrd2FhZzJyQ0V1R3dNb2MwRTRoLzhqVlh3RnlkcjRU?=
- =?utf-8?B?V2oyUnl1bGQzQitLUG1pTjYyMm1VUEpFM012YU44QmFmZmJ2SytMUXo3U3dI?=
- =?utf-8?B?RnFkOE91azY0WnRMNEkvZGVzL2dUc2V1c0lQNzQ1dUR4WDhYZmljb2IxTVJS?=
- =?utf-8?B?LzFZTXNnSGFUV2xNWlM4SzNhQ1RSNG9wU1Q3Z05tK1FIUGh3aXdNTytMSXhi?=
- =?utf-8?B?SDdrVmRQSzg2MzlTNzF2Wlk1SDUrSi80NHFsR0kwY08yVjNCSGZIRTJoY1Rx?=
- =?utf-8?B?cFFkdDRBQkVOb1pYOXdQeHhkRVlsN3VkdVc3Q2M4RzlWT0U4VUxScEQ3YmRT?=
- =?utf-8?B?UkpCNFl5THg4UEJMQXZnV09pUEZVVmszeVJ5aGlYQ3B5Z0haUVNqWkdGQUZU?=
- =?utf-8?B?T1RQTXY3cnZYdHp2MVFRMnpxbmI4U3hsaCtKVWw2NDlOWDl6Y0g1c2o4US9m?=
- =?utf-8?B?VkhwVmlzdGlndlhYbDZNbzl2a2ZWbmFOblkwamYrREc1c3ZrS3dIT2h6dVFK?=
- =?utf-8?B?dlVuTkYvcFlIWGhrVnl2OTRhaWgwNEo3KzRuMm8rREFKbEhPN1dCY1VBOE5H?=
- =?utf-8?B?K2pDak5BMWhNVGNxaE43b0p5V0N6ekVzL0dvZFpEWmlvSlQ0Uml4TTlJRkIr?=
- =?utf-8?Q?HJfup4S9kN4gG?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS8PR06MB7541.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(921020)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?ZnA5ZUROc3lzR3MzRkNabVJIc2ZWR0psQXl5M1orTWx4RVE0ZVkybDBGMzdw?=
- =?utf-8?B?MHQ4d1hUWExNU1RuY1ltbDIrZkd4TkJBdWQ4NjN1NWU5ajlEdlA5ME9KWUds?=
- =?utf-8?B?M2s5aVh0V3hTOFdybzdZYk5TaGVKZjlkd3poN1V6QXdzWEtyS2NEMVhkczNz?=
- =?utf-8?B?cmJZdkl1QkRYVlFaM2Jrbk4rOUhaSXNyMjJZTHZDRDM3QUpraTNzZlZTbE1u?=
- =?utf-8?B?S0hUWEpSVENBeFRlQ280TlVBWnhhZUIrUklSS1B2aEl6UG1kWm9FbEVRVFhr?=
- =?utf-8?B?cUNGL3NTQzdoZDA3OXR6YmUrNjJjNEpEc0tWTkpUNFJOZXpoMldrdGQ5RHNz?=
- =?utf-8?B?R0lOTUtjay9VdFNrRTc2NFJBRzJTM2RsY2RYbmlDeTlNK0srVFlpSWJFTmk2?=
- =?utf-8?B?WkUySzQycmdHZmRCdHgzL2RLcGZ2VFYreHcvUEtlaktXdFovbGFDdURDbmh4?=
- =?utf-8?B?aUc3b2twYzY2cnZ6NHRrWk5WVFFiT0ZUbjBxRjFJTkpzYThrS0Jna2ZpUHFu?=
- =?utf-8?B?aGpjeDJhTHMvMVRVWVh6cUhuWVBtS1RkVXFJd3ZIeUJUdjlvRVVNdm5aT2JK?=
- =?utf-8?B?NkhMRnV4TGJJemFjYVBQWVVRSkxONFFGSlhkNDFtQXY1VnlHdUVNMFRLMHVa?=
- =?utf-8?B?ZUJEdzcreVlUQUNqMTZRN05rL3hVRlZtVW5jMERXcy80WG45YkxGQmVRQjEx?=
- =?utf-8?B?MVcrdWEwbm5BV2V6T2Nxa1Z6WG1pdHNsbUVmQUhDSm9Ed2x5VmNWQ1pBM1py?=
- =?utf-8?B?SEJoNDEveHVHYlBPdGNrVTJrNlo3a2p5VjBMMmJzcmJaay84aXd5T1ZlZ04y?=
- =?utf-8?B?WTJack10Uk9YU1FXWm5LWXhSbVlNdkdPclJvaW5SelZ0R2dMWjlrZEF5czRm?=
- =?utf-8?B?YmdNZHBBWXNibnlCR2tMMTFNbEQ1cHBzYjNxeVRrUEFWMnJtc0k2ZjdRbHdU?=
- =?utf-8?B?QzQ3VmZVaGZYVHp2K3BRMDRRVW5OeG5wRjg5S3hjemZHMkNYYnRmNkhQMVVI?=
- =?utf-8?B?YllnOVBLbzhVYTlsSVJ4VjJtaFNnZVl4RTc1bE04SlZMTEFMd0FDeXlKdTlU?=
- =?utf-8?B?amJyNkczY1hBeTRMMGRzK0ZSUWRybnQ1aDJEWUVrbjNhZWtrbytzTTBMWHZM?=
- =?utf-8?B?czR3Yzc3SjhZQzVETFJOblBoc2hHc3FHYWtPOFFTdVlEQU1VQ0Z0RTFnOWpO?=
- =?utf-8?B?YXZROW9zWnNFQlRDVkFlbmVHd3NVM2NkZlBBenhqa0s3b2FMYlRvREo0NGsv?=
- =?utf-8?B?bjV5NlVwZzJiYTlhTllIUG9rT1JWU2x4OGkyZ2JaZ0VGczFseVArOFJadmFI?=
- =?utf-8?B?WlR6UURPdXQrRXFWdTFrT3BTRDlIaUlpZzRUWjViMk1IYkZ4aldoMHpoWm9a?=
- =?utf-8?B?akNGN0wwV21jaTY0ZTFyc3ZUelZhRWVjMTBVYklTTk81dVg3L1JpUTdFblQ1?=
- =?utf-8?B?YVhtYkZGOUM3RERDSGRjR1Q4MXc0d2paeUxvdFZ3K3dsMlg4ZEVUUWJDbmxG?=
- =?utf-8?B?bllncFhuWTlHMWRDdXRVY203cGttUWRiUHMvSUdQQXc3VWRvS1p4eHNXbkRz?=
- =?utf-8?B?VjcvMjJlUGVuV2FvZFRGUHRHeDhFOFBsOHpOc29jdGYwbjI5UmxFUU8xWEJi?=
- =?utf-8?B?UXc5UHlVRko2eVVGVFd0S0h3ZkJOelJRQVR2c2RPdEh5UFVjdk9rQkZIclNO?=
- =?utf-8?B?aXFQczRMdXZETlFpcUdvNUV1OGV3dnM1TFhuZnNldG44bjhkSTJmSGErT0RT?=
- =?utf-8?B?OHF1bzkrSnpaaXZUczZPRzJLUGVueWg3WXJuMDB3dy83VlE0cXA0M0M4LzNR?=
- =?utf-8?B?OURHcWJGVDFseEd1VHljT3pBYklLTGQ2VUs0YW1Vc3kxaVl5eXYrdXQ3d2RW?=
- =?utf-8?B?YW9QNTAyRzRlM0hhZWpNRWNoVXFNZEVSQzFqRm1NTXJRb2l3YjVhUHRqZ25X?=
- =?utf-8?B?anVMVEZoUFRFVzRmM2d0UkdDVnRCa1o2MlBQRXZuUm8yT3RRQWhodlVraFRG?=
- =?utf-8?B?UElRTUlWckZmRGo4YkY0WVB5VStrVmM0QjdKbmVqZlpENEY1RGI2bTkzWmFt?=
- =?utf-8?B?TTNnVnROWk5qSkUzWEluSHB2RGRUSlFHMU5EdW5lN1Q3T2Z2UkNlVlRiYmk4?=
- =?utf-8?Q?Bymoe21N6I7kxkGgW2S9MHTIY?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28039230999;
+	Wed, 13 Nov 2024 08:54:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731488057; cv=none; b=j8llrY3/KchbAXfc2kH7ZiA+3/yGTir01GiH1iDK0235Q8SQbYKSa9KVhMY7dN6iq8gzcHy+YfbNHZ+8zLsC3DCAjYLxA+r0FL9aFCgVgohe3qx/eewFKx/QZNyqnM3kcBhyQ6hBxMb5TDzBDXtBqIyxznwR6FS0ENJjc89aXg8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731488057; c=relaxed/simple;
+	bh=H7Y1+xgTkIPEtStm71lFE6l4dByLaWE7iB5+9vnDGGI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k4ZzD4wzJvHtBqCWGcLabWossmysvcucDkpufyzQVm6yf1aPKt0/h86kvz7QlKJLGIv23iGkq5jfuFSWJrYntv0KA5rNwFbm0Cix626uZbTCl1PSzLsQK0zCD2Ru6LIeZP1Hxi5Uxubou2jxnsIODkYtZynTvKZwjv48yF6yDjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=iQhqx4TB; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1731488053;
+	bh=H7Y1+xgTkIPEtStm71lFE6l4dByLaWE7iB5+9vnDGGI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iQhqx4TBleDVuF99NZ8lyPaVvrWj/UzjnPj9HXGubDsaH/yb2EBFBDZmsuCAerrkE
+	 UZATpUZPFy/XJzSlnqI/Zw0O8t/UKQMCqCpEdXrVZ8JmjrC/+OYVBLVVrXKn7RY6Q1
+	 Z7BOKOntTQsJBEFpY+7tKRQHEd5PDEw/WSUpCal4dO3WCV5DYdXtkjZo3BkkkkzCd+
+	 diKkNAGTz52wbN3T+hKLmTdm0Zc/CE2Kej0CfgODqBWENTnY1A/lOTNPdcTacgWJxE
+	 uglHlcgvaj/X8zcvREF3Dd+lUakW/K97aMq47V7XmxwKb1Bs8eodv2ZsvZIpnDbljh
+	 lfMEU5K3d+YKQ==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0CE0017E139E;
+	Wed, 13 Nov 2024 09:54:13 +0100 (CET)
+Message-ID: <c2d1f933-0bb8-4aee-acd3-af4246f66913@collabora.com>
+Date: Wed, 13 Nov 2024 09:54:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS8PR06MB7541.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c78005d3-13da-4f51-0cbb-08dd03b6cf0c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2024 07:43:04.8838
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XrhPtkHK0MOQL4eHBtEvgPjHsPZaX2mV5dQgKEDdrdXDe8vd4q1NiTOtNinqAI7FwLxWupuGT3wJGq/ECCehy00B+xqL7JGHsSDO3crYqHg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6749
+User-Agent: Mozilla Thunderbird
+Subject: Re: [v2,1/1] i2c: mediatek: add runtime PM operations and bus
+ regulator control
+To: =?UTF-8?B?Wm9pZSBMaW4gKOael+emueWmoSk=?= <Zoie.Lin@mediatek.com>,
+ "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+ =?UTF-8?B?UWlpIFdhbmcgKOeOi+eQqik=?= <Qii.Wang@mediatek.com>,
+ "andi.shyti@kernel.org" <andi.shyti@kernel.org>
+Cc: "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+ =?UTF-8?B?VGVkZHkgQ2hlbiAo6Zmz5Lm+5YWDKQ==?= <Teddy.Chen@mediatek.com>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ Project_Global_Chrome_Upstream_Group
+ <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <20241106125212.27362-1-zoie.lin@mediatek.com>
+ <20241106125212.27362-2-zoie.lin@mediatek.com>
+ <c7c5e802-3df8-4218-865f-81a207c517cd@collabora.com>
+ <d1744ec6c7dbd63b128fa0cada2622dead9cb95b.camel@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <d1744ec6c7dbd63b128fa0cada2622dead9cb95b.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-PiBTdWJqZWN0OiBSZTogW1BBVENIIHYxNSAyLzNdIGkyYzogYXNwZWVkOiBzdXBwb3J0IEFTVDI2
-MDAgaTJjIG5ldyByZWdpc3Rlcg0KPiBtb2RlIGRyaXZlcg0KPiANCj4gT24gTW8sIDIwMjQtMTAt
-MDcgYXQgMTE6NTIgKzA4MDAsIFJ5YW4gQ2hlbiB3cm90ZToNCj4gPiBBZGQgaTJjIG5ldyByZWdp
-c3RlciBtb2RlIGRyaXZlciB0byBzdXBwb3J0IEFTVDI2MDAgaTJjIG5ldyByZWdpc3Rlcg0KPiA+
-IG1vZGUuIEFTVDI2MDAgaTJjIGNvbnRyb2xsZXIgaGF2ZSBsZWdhY3kgYW5kIG5ldyByZWdpc3Rl
-ciBtb2RlLiBUaGUNCj4gPiBuZXcgcmVnaXN0ZXIgbW9kZSBoYXZlIGdsb2JhbCByZWdpc3RlciBz
-dXBwb3J0IDQgYmFzZSBjbG9jayBmb3Igc2NsDQo+ID4gY2xvY2sgc2VsZWN0aW9uLCBhbmQgbmV3
-IGNsb2NrIGRpdmlkZXIgbW9kZS4gVGhlIG5ldyByZWdpc3RlciBtb2RlDQo+ID4gaGF2ZSBzZXBh
-cmF0ZSByZWdpc3RlciBzZXQgdG8gY29udHJvbCBpMmMgY29udHJvbGxlciBhbmQgdGFyZ2V0LiBU
-aGlzDQo+ID4gcGF0Y2ggaXMgZm9yIGkyYyBjb250cm9sbGVyIG1vZGUgZHJpdmVyLg0KPiA+DQo+
-ID4gU2lnbmVkLW9mZi1ieTogUnlhbiBDaGVuIDxyeWFuX2NoZW5AYXNwZWVkdGVjaC5jb20+DQo+
-ID4gLS0tDQo+ID4gIGRyaXZlcnMvaTJjL2J1c3Nlcy9LY29uZmlnICAgICAgIHwgICAxMSArDQo+
-ID4gIGRyaXZlcnMvaTJjL2J1c3Nlcy9NYWtlZmlsZSAgICAgIHwgICAgMSArDQo+ID4gIGRyaXZl
-cnMvaTJjL2J1c3Nlcy9pMmMtYXN0MjYwMC5jIHwgMTAzMg0KPiA+ICsrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKw0KPiA+ICAzIGZpbGVzIGNoYW5nZWQsIDEwNDQgaW5zZXJ0aW9ucygrKQ0K
-PiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hc3QyNjAwLmMN
-Cj4gPg0KPiBbLi4uXQ0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWFz
-dDI2MDAuYw0KPiA+IGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hc3QyNjAwLmMNCj4gPiBuZXcg
-ZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uMTdiYTBlZTc3YzI3DQo+
-ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtYXN0MjYw
-MC5jDQo+ID4gQEAgLTAsMCArMSwxMDMyIEBADQo+IFsuLi5dDQo+ID4gK3N0YXRpYyBpbnQgYXN0
-MjYwMF9pMmNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikgew0KPiBbLi4uXQ0K
-PiA+ICsJaTJjX2J1cy0+cnN0ID0gZGV2bV9yZXNldF9jb250cm9sX2dldF9zaGFyZWQoZGV2LCBO
-VUxMKTsNCj4gPiArCWlmIChJU19FUlIoaTJjX2J1cy0+cnN0KSkNCj4gPiArCQlyZXR1cm4gZGV2
-X2Vycl9wcm9iZShkZXYsIFBUUl9FUlIoaTJjX2J1cy0+cnN0KSwgIk1pc3NpbmcgcmVzZXQNCj4g
-PiArY3RybFxuIik7DQo+ID4gKw0KPiA+ICsJcmVzZXRfY29udHJvbF9kZWFzc2VydChpMmNfYnVz
-LT5yc3QpOw0KPiANCj4gVGhlIHNoYXJlZCByZXNldCBzaG91bGQgYmUgYXNzZXJ0ZWQgYWdhaW4g
-aW4gYXN0MjYwMF9pMmNfcmVtb3ZlKCkuDQo+IA0KSGVsbG8sDQpJdCBpcyBzaGFyZSByZXNldCwg
-aWYgdW5ib25kIGRyaXZlciBhbmQgYXNzZXJ0ZWQgdGhlIHJlc2V0LCBpdCB3aWxsIGFmZmVjdCBv
-dGhlcnMgZHJpdmVyIHJ1bm5pbmcgKHdoaWNoIGlzIHNoYXJlIHdpdGggdGhlIHNhbWUgcmVzZXQu
-KQ0KDQo+IHJlZ2FyZHMNCj4gUGhpbGlwcA0K
+Il 07/11/24 16:19, Zoie Lin (林禹妡) ha scritto:
+> Hi Angelo,
+> 
+> On Thu, 2024-11-07 at 11:13 +0100, AngeloGioacchino Del Regno wrote:
+>> External email : Please do not click links or open attachments until
+>> you have verified the sender or the content.
+>>
+>>
+>> Il 06/11/24 13:52, Zoie Lin ha scritto:
+>>> This commit introduces support for runtime PM operations in
+>>> the I2C driver, enabling runtime suspend and resume functionality.
+>>>
+>>> Although in the most platforms, the bus power of i2c are always
+>>> on, some platforms disable the i2c bus power in order to meet
+>>> low power request.
+>>>
+>>> This implementation includes bus regulator control to facilitate
+>>> proper handling of the bus power based on platform requirements.
+>>>
+>>> Signed-off-by: Zoie Lin <zoie.lin@mediatek.com>
+>>> ---
+>>>    drivers/i2c/busses/i2c-mt65xx.c | 77
+>>> ++++++++++++++++++++++++++++-----
+>>>    1 file changed, 65 insertions(+), 12 deletions(-)
+>>>
+>>> diff --git a/drivers/i2c/busses/i2c-mt65xx.c
+>>> b/drivers/i2c/busses/i2c-mt65xx.c
+>>> index 5bd342047d59..4209daec1efa 100644
+>>> --- a/drivers/i2c/busses/i2c-mt65xx.c
+>>> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+>>
+>> ..snip..
+>>
+>>> @@ -1370,6 +1373,40 @@ static int mtk_i2c_parse_dt(struct
+>>> device_node *np, struct mtk_i2c *i2c)
+>>>        return 0;
+>>>    }
+>>>
+>>> +static int mtk_i2c_runtime_suspend(struct device *dev)
+>>> +{
+>>> +     struct mtk_i2c *i2c = dev_get_drvdata(dev);
+>>> +
+>>> +     clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>>> +     if (i2c->adap.bus_regulator)
+>>> +             regulator_disable(i2c->adap.bus_regulator);
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int mtk_i2c_runtime_resume(struct device *dev)
+>>> +{
+>>> +     int ret = 0;
+>>> +     struct mtk_i2c *i2c = dev_get_drvdata(dev);
+>>
+>>          struct mtk_i2c *i2c = dev_get_drvdata(dev);
+>>          int ret;
+>>
+>>> +
+>>> +     if (i2c->adap.bus_regulator) {
+>>> +             ret = regulator_enable(i2c->adap.bus_regulator);
+>>> +             if (ret) {
+>>> +                     dev_err(dev, "enable regulator failed!\n");
+>>> +                     return ret;
+>>> +             }
+>>> +     }
+>>> +
+>>> +     ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>>> +     if (ret) {
+>>> +             if (i2c->adap.bus_regulator)
+>>> +                     regulator_disable(i2c->adap.bus_regulator);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>>    static int mtk_i2c_probe(struct platform_device *pdev)
+>>>    {
+>>>        int ret = 0;
+>>> @@ -1472,13 +1509,18 @@ static int mtk_i2c_probe(struct
+>>> platform_device *pdev)
+>>>                }
+>>>        }
+>>>
+>>> -     ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c-
+>>>> clocks);
+>>> +     ret = clk_bulk_prepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>>>        if (ret) {
+>>> -             dev_err(&pdev->dev, "clock enable failed!\n");
+>>>                return ret;
+>>>        }
+>>> +
+>>> +     platform_set_drvdata(pdev, i2c);
+>>> +
+>>> +     ret = mtk_i2c_runtime_resume(i2c->dev);
+>>> +     if (ret < 0)
+>>> +             goto err_clk_bulk_unprepare;
+>>>        mtk_i2c_init_hw(i2c);
+>>> -     clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>>> +     mtk_i2c_runtime_suspend(i2c->dev);
+>>>
+>>>        ret = devm_request_irq(&pdev->dev, irq, mtk_i2c_irq,
+>>>                               IRQF_NO_SUSPEND | IRQF_TRIGGER_NONE,
+>>> @@ -1486,19 +1528,22 @@ static int mtk_i2c_probe(struct
+>>> platform_device *pdev)
+>>>        if (ret < 0) {
+>>>                dev_err(&pdev->dev,
+>>>                        "Request I2C IRQ %d fail\n", irq);
+>>> -             goto err_bulk_unprepare;
+>>> +             goto err_clk_bulk_unprepare;
+>>>        }
+>>> +     pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
+>>
+>> You had comments from me and from Andi on this delay, and you
+>> completely ignored
+>> both of us.
+>>
+>> We're still waiting for an answer to our question.
+> 
+> I am sorry for any confusion caused by my previous response.
+> The response to your question was included in the cover letter, which
+> might not have been very noticeable.
+>   
+> The delay before runtime_put_autosuspend() actually executes
+> mtk_i2c_runtime_suspend() depends on the frequency of I2C usage by the
+> devices attached to this bus. A 1000ms delay is a balanced value for
+> latency and power metrics based on the MTK platform.
+>   
+
+Can you please write down "the numbers" into the commit description?
+
+As in, to justify why 1000ms is a balanced value for latency and power, so,
+write down a small table containing both values for various delays, like:
+
+Delay(ms)    Latency(us)   Power(uW)
+200          999           9999
+500          9999          99999
+1000         99999         999999
+
+Please also say what is the minimum acceptable latency.
+
+Thanks,
+Angelo
+
+>   
+> Thank you.
+>   
+> Best regards,
+> Zoie
+>>
+>>
+>>> +     pm_runtime_use_autosuspend(&pdev->dev);
+>>> +     pm_runtime_enable(&pdev->dev);
+>>
+>> devm_pm_runtime_enable() please.
+>>
+>>>
+>>>        i2c_set_adapdata(&i2c->adap, i2c);
+>>>        ret = i2c_add_adapter(&i2c->adap);
+>>>        if (ret)
+>>> -             goto err_bulk_unprepare;
+>>> -
+>>> -     platform_set_drvdata(pdev, i2c);
+>>> +             goto err_pm_runtime_disable;
+>>>
+>>>        return 0;
+>>>
+>>> -err_bulk_unprepare:
+>>> +err_pm_runtime_disable:
+>>> +     pm_runtime_disable(&pdev->dev);
+>>> +err_clk_bulk_unprepare:
+>>>        clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>>>
+>>>        return ret;
+>>> @@ -1510,6 +1555,7 @@ static void mtk_i2c_remove(struct
+>>> platform_device *pdev)
+>>>
+>>>        i2c_del_adapter(&i2c->adap);
+>>>
+>>> +     pm_runtime_disable(&pdev->dev);
+>>>        clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>>>    }
+>>>
+>>> @@ -1518,6 +1564,10 @@ static int mtk_i2c_suspend_noirq(struct
+>>> device *dev)
+>>>        struct mtk_i2c *i2c = dev_get_drvdata(dev);
+>>>
+>>>        i2c_mark_adapter_suspended(&i2c->adap);
+>>> +
+>>> +     if (!pm_runtime_status_suspended(dev))
+>>> +             mtk_i2c_runtime_suspend(dev);
+>>> +
+>>>        clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>>>
+>>>        return 0;
+>>> @@ -1536,7 +1586,8 @@ static int mtk_i2c_resume_noirq(struct device
+>>> *dev)
+>>>
+>>>        mtk_i2c_init_hw(i2c);
+>>>
+>>> -     clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>>> +     if (pm_runtime_status_suspended(dev))
+>>> +             mtk_i2c_runtime_suspend(dev);
+>>
+>> You want to resume, not to suspend, in a resume handler.
+>>
+>>>
+>>>        i2c_mark_adapter_resumed(&i2c->adap);
+>>>
+>>> @@ -1546,6 +1597,8 @@ static int mtk_i2c_resume_noirq(struct device
+>>> *dev)
+>>>    static const struct dev_pm_ops mtk_i2c_pm = {
+>>>        NOIRQ_SYSTEM_SLEEP_PM_OPS(mtk_i2c_suspend_noirq,
+>>>                                  mtk_i2c_resume_noirq)
+>>> +     SET_RUNTIME_PM_OPS(mtk_i2c_runtime_suspend,
+>>> mtk_i2c_runtime_resume,
+>>> +                        NULL)
+>>>    };
+>>>
+>>>    static struct platform_driver mtk_i2c_driver = {
+>>
+>>
+>>
+
 
