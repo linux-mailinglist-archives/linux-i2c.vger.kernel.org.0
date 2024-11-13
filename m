@@ -1,308 +1,164 @@
-Return-Path: <linux-i2c+bounces-7952-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7953-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B3049C6AF6
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 09:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B1D69C6BB1
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 10:46:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D18528328C
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 08:54:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FCC42859EB
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 09:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C01E18870D;
-	Wed, 13 Nov 2024 08:54:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C0A01BDA8D;
+	Wed, 13 Nov 2024 09:46:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="iQhqx4TB"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZKEyeK+6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28039230999;
-	Wed, 13 Nov 2024 08:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84220165EE3;
+	Wed, 13 Nov 2024 09:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731488057; cv=none; b=j8llrY3/KchbAXfc2kH7ZiA+3/yGTir01GiH1iDK0235Q8SQbYKSa9KVhMY7dN6iq8gzcHy+YfbNHZ+8zLsC3DCAjYLxA+r0FL9aFCgVgohe3qx/eewFKx/QZNyqnM3kcBhyQ6hBxMb5TDzBDXtBqIyxznwR6FS0ENJjc89aXg8=
+	t=1731491176; cv=none; b=lIn6DprxnZJuJtYaT48eeegKB3DqPLvno6IUgaMizRuTdUYkrw98h2iSkLwYLiP649XxItOLm+rXq6TIs6fTaPJoZHzhfmuI3qnIFamqrkbmqyEbPswAc2AlKPqBcs7g6nbDlUfcTBnhvdm9ImwomxSzpDHfP7UGRGjemmtxRG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731488057; c=relaxed/simple;
-	bh=H7Y1+xgTkIPEtStm71lFE6l4dByLaWE7iB5+9vnDGGI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k4ZzD4wzJvHtBqCWGcLabWossmysvcucDkpufyzQVm6yf1aPKt0/h86kvz7QlKJLGIv23iGkq5jfuFSWJrYntv0KA5rNwFbm0Cix626uZbTCl1PSzLsQK0zCD2Ru6LIeZP1Hxi5Uxubou2jxnsIODkYtZynTvKZwjv48yF6yDjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=iQhqx4TB; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1731488053;
-	bh=H7Y1+xgTkIPEtStm71lFE6l4dByLaWE7iB5+9vnDGGI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iQhqx4TBleDVuF99NZ8lyPaVvrWj/UzjnPj9HXGubDsaH/yb2EBFBDZmsuCAerrkE
-	 UZATpUZPFy/XJzSlnqI/Zw0O8t/UKQMCqCpEdXrVZ8JmjrC/+OYVBLVVrXKn7RY6Q1
-	 Z7BOKOntTQsJBEFpY+7tKRQHEd5PDEw/WSUpCal4dO3WCV5DYdXtkjZo3BkkkkzCd+
-	 diKkNAGTz52wbN3T+hKLmTdm0Zc/CE2Kej0CfgODqBWENTnY1A/lOTNPdcTacgWJxE
-	 uglHlcgvaj/X8zcvREF3Dd+lUakW/K97aMq47V7XmxwKb1Bs8eodv2ZsvZIpnDbljh
-	 lfMEU5K3d+YKQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0CE0017E139E;
-	Wed, 13 Nov 2024 09:54:13 +0100 (CET)
-Message-ID: <c2d1f933-0bb8-4aee-acd3-af4246f66913@collabora.com>
-Date: Wed, 13 Nov 2024 09:54:12 +0100
+	s=arc-20240116; t=1731491176; c=relaxed/simple;
+	bh=apE8jTV/ZkMww8QZb6cSv/1Or8/nWuo6+FYangEzxtA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V4FclAF9Ptj6lczMMbssUy2ga5ikANBvSUDyoEPYLYgX6IBaO80DSmnz5lCYPK7hokF17N9mVtKHewC62Kug7h/VqOHqDiZRcZSg4uk9KLGh7xJqYa4j69+Zg6zgSG/nTAtm5KjOm3Bm07zWtx1PtI5I8MxO6JUdFDVJFPIM5QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZKEyeK+6; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B325FFF806;
+	Wed, 13 Nov 2024 09:46:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1731491171;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pHq+vYIrolU1nZUuSeLnYvUIGG1CZQC1c8NU0N+rIFc=;
+	b=ZKEyeK+6V5aRy331CcLZv4lE78JJh8eOCitutwiN/gjfA2MyLxRPJxyzjrZUvfD+58OFwd
+	u2wDu+EBSc+OBJN3w/29epRgCBPrlb/h6H/e/moCnbZEGnmtuRGeay2fiUVgWqRp9U2WX4
+	PU6m5qhVvh93cDuuTmQYtuFRhN/PNqXH1KFjcPutLbB3b9TLFEa3WkmMLjR4bSwz9C5At9
+	SLPa268aBsgfm4Odfu6S46V7BTEH6LmoCP0iqMxPdXwzgCgEtBf3Taja1KXAXp+Prug4v2
+	2+VWQXeqU4+/esBoCSJ6oU6satKkWtK4s6koW3E+p761tvCcEwQJ02PGSeYdWg==
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-media@vger.kernel.org
+Subject:
+ Re: [PATCH 1/9] dt-bindings: misc: Describe TI FPC202 dual port controller
+Date: Wed, 13 Nov 2024 10:46:10 +0100
+Message-ID: <4965494.31r3eYUQgx@fw-rgant>
+In-Reply-To: <20241108-reimburse-saucy-2682e370469a@spud>
+References:
+ <20241108-fpc202-v1-0-fe42c698bc92@bootlin.com>
+ <20241108-fpc202-v1-1-fe42c698bc92@bootlin.com>
+ <20241108-reimburse-saucy-2682e370469a@spud>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v2,1/1] i2c: mediatek: add runtime PM operations and bus
- regulator control
-To: =?UTF-8?B?Wm9pZSBMaW4gKOael+emueWmoSk=?= <Zoie.Lin@mediatek.com>,
- "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
- =?UTF-8?B?UWlpIFdhbmcgKOeOi+eQqik=?= <Qii.Wang@mediatek.com>,
- "andi.shyti@kernel.org" <andi.shyti@kernel.org>
-Cc: "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
- =?UTF-8?B?VGVkZHkgQ2hlbiAo6Zmz5Lm+5YWDKQ==?= <Teddy.Chen@mediatek.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- Project_Global_Chrome_Upstream_Group
- <Project_Global_Chrome_Upstream_Group@mediatek.com>
-References: <20241106125212.27362-1-zoie.lin@mediatek.com>
- <20241106125212.27362-2-zoie.lin@mediatek.com>
- <c7c5e802-3df8-4218-865f-81a207c517cd@collabora.com>
- <d1744ec6c7dbd63b128fa0cada2622dead9cb95b.camel@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <d1744ec6c7dbd63b128fa0cada2622dead9cb95b.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-GND-Sasl: romain.gantois@bootlin.com
 
-Il 07/11/24 16:19, Zoie Lin (林禹妡) ha scritto:
-> Hi Angelo,
-> 
-> On Thu, 2024-11-07 at 11:13 +0100, AngeloGioacchino Del Regno wrote:
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>
->>
->> Il 06/11/24 13:52, Zoie Lin ha scritto:
->>> This commit introduces support for runtime PM operations in
->>> the I2C driver, enabling runtime suspend and resume functionality.
->>>
->>> Although in the most platforms, the bus power of i2c are always
->>> on, some platforms disable the i2c bus power in order to meet
->>> low power request.
->>>
->>> This implementation includes bus regulator control to facilitate
->>> proper handling of the bus power based on platform requirements.
->>>
->>> Signed-off-by: Zoie Lin <zoie.lin@mediatek.com>
->>> ---
->>>    drivers/i2c/busses/i2c-mt65xx.c | 77
->>> ++++++++++++++++++++++++++++-----
->>>    1 file changed, 65 insertions(+), 12 deletions(-)
->>>
->>> diff --git a/drivers/i2c/busses/i2c-mt65xx.c
->>> b/drivers/i2c/busses/i2c-mt65xx.c
->>> index 5bd342047d59..4209daec1efa 100644
->>> --- a/drivers/i2c/busses/i2c-mt65xx.c
->>> +++ b/drivers/i2c/busses/i2c-mt65xx.c
->>
->> ..snip..
->>
->>> @@ -1370,6 +1373,40 @@ static int mtk_i2c_parse_dt(struct
->>> device_node *np, struct mtk_i2c *i2c)
->>>        return 0;
->>>    }
->>>
->>> +static int mtk_i2c_runtime_suspend(struct device *dev)
->>> +{
->>> +     struct mtk_i2c *i2c = dev_get_drvdata(dev);
->>> +
->>> +     clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
->>> +     if (i2c->adap.bus_regulator)
->>> +             regulator_disable(i2c->adap.bus_regulator);
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +static int mtk_i2c_runtime_resume(struct device *dev)
->>> +{
->>> +     int ret = 0;
->>> +     struct mtk_i2c *i2c = dev_get_drvdata(dev);
->>
->>          struct mtk_i2c *i2c = dev_get_drvdata(dev);
->>          int ret;
->>
->>> +
->>> +     if (i2c->adap.bus_regulator) {
->>> +             ret = regulator_enable(i2c->adap.bus_regulator);
->>> +             if (ret) {
->>> +                     dev_err(dev, "enable regulator failed!\n");
->>> +                     return ret;
->>> +             }
->>> +     }
->>> +
->>> +     ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
->>> +     if (ret) {
->>> +             if (i2c->adap.bus_regulator)
->>> +                     regulator_disable(i2c->adap.bus_regulator);
->>> +             return ret;
->>> +     }
->>> +
->>> +     return 0;
->>> +}
->>> +
->>>    static int mtk_i2c_probe(struct platform_device *pdev)
->>>    {
->>>        int ret = 0;
->>> @@ -1472,13 +1509,18 @@ static int mtk_i2c_probe(struct
->>> platform_device *pdev)
->>>                }
->>>        }
->>>
->>> -     ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c-
->>>> clocks);
->>> +     ret = clk_bulk_prepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
->>>        if (ret) {
->>> -             dev_err(&pdev->dev, "clock enable failed!\n");
->>>                return ret;
->>>        }
->>> +
->>> +     platform_set_drvdata(pdev, i2c);
->>> +
->>> +     ret = mtk_i2c_runtime_resume(i2c->dev);
->>> +     if (ret < 0)
->>> +             goto err_clk_bulk_unprepare;
->>>        mtk_i2c_init_hw(i2c);
->>> -     clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
->>> +     mtk_i2c_runtime_suspend(i2c->dev);
->>>
->>>        ret = devm_request_irq(&pdev->dev, irq, mtk_i2c_irq,
->>>                               IRQF_NO_SUSPEND | IRQF_TRIGGER_NONE,
->>> @@ -1486,19 +1528,22 @@ static int mtk_i2c_probe(struct
->>> platform_device *pdev)
->>>        if (ret < 0) {
->>>                dev_err(&pdev->dev,
->>>                        "Request I2C IRQ %d fail\n", irq);
->>> -             goto err_bulk_unprepare;
->>> +             goto err_clk_bulk_unprepare;
->>>        }
->>> +     pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
->>
->> You had comments from me and from Andi on this delay, and you
->> completely ignored
->> both of us.
->>
->> We're still waiting for an answer to our question.
-> 
-> I am sorry for any confusion caused by my previous response.
-> The response to your question was included in the cover letter, which
-> might not have been very noticeable.
->   
-> The delay before runtime_put_autosuspend() actually executes
-> mtk_i2c_runtime_suspend() depends on the frequency of I2C usage by the
-> devices attached to this bus. A 1000ms delay is a balanced value for
-> latency and power metrics based on the MTK platform.
->   
+Hello Conor,
 
-Can you please write down "the numbers" into the commit description?
+On vendredi 8 novembre 2024 19:23:37 heure normale d=E2=80=99Europe central=
+e Conor Dooley wrote:
+> On Fri, Nov 08, 2024 at 04:36:53PM +0100, Romain Gantois wrote:
+=2E..
+> > index
+> > 0000000000000000000000000000000000000000..ad11abe11e68aa266acdd6b43a5b4=
+25
+> > 340bbbba8 --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/misc/ti,fpc202.yaml
+> > @@ -0,0 +1,75 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/misc/ti,fpc202.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: TI FPC202 dual port controller with expanded IOs
+> > +
+> > +maintainers:
+> > +  - Romain Gantois <romain.gantois@bootlin.com>
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/i2c/i2c-atr.yaml#
+>=20
+> Gotta say, this looks absolutely nothing like the other i2c-atr user!
 
-As in, to justify why 1000ms is a balanced value for latency and power, so,
-write down a small table containing both values for various delays, like:
+Indeed, the critical difference between the two is that the existing
+user has a global alias pool whereas this component doesn't. So
+the "i2c-alias-pool" property isn't relevant here, and it's currently
+the only property defined by the i2c-atr binding.
 
-Delay(ms)    Latency(us)   Power(uW)
-200          999           9999
-500          9999          99999
-1000         99999         999999
+We did consider defining a per-channel alias pool in the i2c-atr binding
+but the results were quite awkward and it didn't seem like this property
+belonged in the device tree at all, since the alias values were hardwired
+into the FPC202 and were known in advance.
 
-Please also say what is the minimum acceptable latency.
+>=20
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: ti,fpc202
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  gpio-controller: true
+> > +
+> > +  "#gpio-cells":
+> > +    const: 2
+> > +
+> > +  enable-gpios:
+> > +    description:
+> > +      Specifier for the GPIO connected to the EN pin.
+> > +    maxItems: 1
+> > +
+>=20
+> > +  port0:
+> ports usually go in a ports node, and are port@0 not port0. That said,
+> these are i2c buses, so the node name would usually be i2c@ for those.
+> In fact, given you have i2c-mux as your node name, the binding for that
+> expects you to format your child nodes like '^i2c@[0-9a-f]+$'. Is there
+> a reason you can't just drop this ports business and go with a pattern
+> property here that restricts the pattern to '^i2c@[0-1]$'?
+
+I didn't think of restricting the pattern in this way, that is indeed more
+appropriate than using static port names.
+
+Moreover, I don't think that the "i2c-mux" naming is appropriate here,
+as the FPC202 isn't a mux at all. I'll look for a better name for the next
+iteration.
 
 Thanks,
-Angelo
 
->   
-> Thank you.
->   
-> Best regards,
-> Zoie
->>
->>
->>> +     pm_runtime_use_autosuspend(&pdev->dev);
->>> +     pm_runtime_enable(&pdev->dev);
->>
->> devm_pm_runtime_enable() please.
->>
->>>
->>>        i2c_set_adapdata(&i2c->adap, i2c);
->>>        ret = i2c_add_adapter(&i2c->adap);
->>>        if (ret)
->>> -             goto err_bulk_unprepare;
->>> -
->>> -     platform_set_drvdata(pdev, i2c);
->>> +             goto err_pm_runtime_disable;
->>>
->>>        return 0;
->>>
->>> -err_bulk_unprepare:
->>> +err_pm_runtime_disable:
->>> +     pm_runtime_disable(&pdev->dev);
->>> +err_clk_bulk_unprepare:
->>>        clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
->>>
->>>        return ret;
->>> @@ -1510,6 +1555,7 @@ static void mtk_i2c_remove(struct
->>> platform_device *pdev)
->>>
->>>        i2c_del_adapter(&i2c->adap);
->>>
->>> +     pm_runtime_disable(&pdev->dev);
->>>        clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
->>>    }
->>>
->>> @@ -1518,6 +1564,10 @@ static int mtk_i2c_suspend_noirq(struct
->>> device *dev)
->>>        struct mtk_i2c *i2c = dev_get_drvdata(dev);
->>>
->>>        i2c_mark_adapter_suspended(&i2c->adap);
->>> +
->>> +     if (!pm_runtime_status_suspended(dev))
->>> +             mtk_i2c_runtime_suspend(dev);
->>> +
->>>        clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
->>>
->>>        return 0;
->>> @@ -1536,7 +1586,8 @@ static int mtk_i2c_resume_noirq(struct device
->>> *dev)
->>>
->>>        mtk_i2c_init_hw(i2c);
->>>
->>> -     clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
->>> +     if (pm_runtime_status_suspended(dev))
->>> +             mtk_i2c_runtime_suspend(dev);
->>
->> You want to resume, not to suspend, in a resume handler.
->>
->>>
->>>        i2c_mark_adapter_resumed(&i2c->adap);
->>>
->>> @@ -1546,6 +1597,8 @@ static int mtk_i2c_resume_noirq(struct device
->>> *dev)
->>>    static const struct dev_pm_ops mtk_i2c_pm = {
->>>        NOIRQ_SYSTEM_SLEEP_PM_OPS(mtk_i2c_suspend_noirq,
->>>                                  mtk_i2c_resume_noirq)
->>> +     SET_RUNTIME_PM_OPS(mtk_i2c_runtime_suspend,
->>> mtk_i2c_runtime_resume,
->>> +                        NULL)
->>>    };
->>>
->>>    static struct platform_driver mtk_i2c_driver = {
->>
->>
->>
+=2D-=20
+Romain Gantois, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+
 
 
