@@ -1,63 +1,63 @@
-Return-Path: <linux-i2c+bounces-7964-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7965-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE8499C79D6
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 18:20:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36BE69C7859
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 17:11:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E0ECB294F7
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 16:10:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAB8E1F2563A
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Nov 2024 16:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C54316088F;
-	Wed, 13 Nov 2024 16:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67411249EB;
+	Wed, 13 Nov 2024 16:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="f1vC2gci"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SVtweeOL"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379F615C14B;
-	Wed, 13 Nov 2024 16:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E004158DC4;
+	Wed, 13 Nov 2024 16:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731514240; cv=none; b=mET2b/R9WZuJqfLQhn5Q20A8GIHkWRHUeSRYGPvQr4ih2Dw3OLNaVsaB29uBNmRFf6Y18coIoSDEHXz0iyeAb1z6vXEsgK7/dA0QpOlzeW3k182n9l6hmY17eswbfmb212h8huMFQFwz5+AXoXzaHYJLXAKda9UDoToH76w+cMM=
+	t=1731514255; cv=none; b=sH2WnEczhvrCHslfP3e9ujQbRe9QfVhI57cHrjbMeJAu1a+Y+XTk0ug3o/x+4l0oKLySBdfvWKEqPrLyjZyr3/NoZJVvoI5RBlxXR+mqnluHt3/7xNZFx5VXd+AGkLwor2bdIDnf5eY3PRX/zexTyccBF0FVdkbs3D8K3dOLuDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731514240; c=relaxed/simple;
-	bh=h7rgYNY0zMGLozPpnICPg0s1zDS8h/q1Wmkb+nNMBWI=;
+	s=arc-20240116; t=1731514255; c=relaxed/simple;
+	bh=07vn2WYaIiTIdjb7DdSnO6mqXwHZ9cnmNt3olG+c/yY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=nWmqUBerLGDc0FQdHnbk2yy3O8KiVQGm3KJqDFQFuXtlgrxZVENEeOzVh58ZFk4Tf7VndhUUC5Snie9vbE/vkBe8mDl0A3KmoT+dPAOzHv+tRqrB43PwuRilRN8S4B8Be8lFOMHWVwVJgENtOBbdCpJbWg9XhrJ6AUlgA0O82ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=f1vC2gci; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:Content-Type; b=kn+0wufhVY/ZirJHqhjsv8SitsKl6UNlr5BGWliEAih8SIaaF3coEQcvTXso06UEe5BailTY4b2w4dDdI/mopI5Grr+TyW3Ky7gsZCprViMZu1z2On4ZdU8Kl9aZnjMDobQXP6QbBZDgU5soD6PABJatgMqxAuMI+wHwkqfTLjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SVtweeOL; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ADAppQR004020;
-	Wed, 13 Nov 2024 16:10:30 GMT
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ADCljxn030398;
+	Wed, 13 Nov 2024 16:10:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	yZK0+YyweZQCes29dh8tlT1jQMLj3p8TWxhGiIGAqi4=; b=f1vC2gcizXg8j4r+
-	uS+n0N3twR8WBoboJrE/WNlMVABJquNJrshzeQJtPf41eRo01/zUuGDnLCy2klM+
-	WEMzaYImRivxq2UFjnoxCRiBDzOxsL5skp/grnKLah+HTJ0g+gXHQsAXsV3BGCpg
-	QZj9dQwL31aqSlzRq29Ll6jRAV9kTXLNSMwyXi0S8Cq//+lAAMSeOiI5kF89jolY
-	G/CLryb3nVEvKcH2IASWlSwTHNVpfckUNsq9JhdbMoDp7OFFLpds7orgbrFNy6gu
-	wEdPju1Vv6n9/YbAB0BhVW0fw9CeqOzV4bwN7ewDZ+zDixQXJk9qncLt/OPEVFvk
-	ceYRig==
+	/VqO27XBldIsWpo7ihs4mogTaikB4ZvhXdqC5i/FfOI=; b=SVtweeOL6AfLdfzW
+	Gn84B8+aDeR63kLwslkrUOIQVgMvXZ61Q8LF9ZU3pXTjQ7Kp1xvlAJXNg7Tu8kMR
+	QVhfXFRxSiUeAav+THG3ZtuVRtRBAL+BvpqeN17wuyuM4cV+q54f3h2/oV2SKZEH
+	FOaT4wgtg74oEGhwUrcZydEs70DXMUiGSztXmg9CnxFxKPsEEuRl6oLF5sTMdyWo
+	n2gB/K+A0R6x024SQGls8R9KG8/l5Ha34VDtkhAfpls01s+9gaplTsBEbZc4jQBm
+	aR49+pQYcHR9Oo0vDnjUs2+LO0Ye4SPYKNMeQm+vaX6lg7dvZidAxus6Tbk5MLnw
+	sFm6Gw==
 Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42vtqwrt38-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42vkvr9wv7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Nov 2024 16:10:29 +0000 (GMT)
+	Wed, 13 Nov 2024 16:10:46 +0000 (GMT)
 Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ADGATKm005284
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ADGAj9q005418
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Nov 2024 16:10:29 GMT
+	Wed, 13 Nov 2024 16:10:45 GMT
 Received: from [10.217.219.207] (10.80.80.8) by nasanex01c.na.qualcomm.com
  (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 13 Nov
- 2024 08:10:24 -0800
-Message-ID: <b2ec9392-8682-4c4f-8ffc-8ec540ac6e00@quicinc.com>
-Date: Wed, 13 Nov 2024 21:40:21 +0530
+ 2024 08:10:40 -0800
+Message-ID: <71b5a108-a38b-4260-b683-d1a70178afc8@quicinc.com>
+Date: Wed, 13 Nov 2024 21:40:37 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,178 +65,114 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/4] dma: gpi: Add Lock and Unlock TRE support to
- access SE exclusively
-To: Vinod Koul <vkoul@kernel.org>
-CC: <konrad.dybcio@linaro.org>, <andersson@kernel.org>,
-        <andi.shyti@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <conor+dt@kernel.org>,
-        <agross@kernel.org>, <devicetree@vger.kernel.org>, <linux@treblig.org>,
-        <dan.carpenter@linaro.org>, <Frank.Li@nxp.com>,
-        <konradybcio@kernel.org>, <bryan.odonoghue@linaro.org>,
-        <krzk+dt@kernel.org>, <robh@kernel.org>
+Subject: Re: [PATCH v3 4/4] i2c: i2c-qcom-geni: Enable i2c controller sharing
+ between two subsystems
+To: Bjorn Andersson <andersson@kernel.org>,
+        Dan Carpenter
+	<dan.carpenter@linaro.org>
+CC: <konrad.dybcio@linaro.org>, <andi.shyti@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <conor+dt@kernel.org>, <agross@kernel.org>,
+        <devicetree@vger.kernel.org>, <vkoul@kernel.org>, <linux@treblig.org>,
+        <Frank.Li@nxp.com>, <konradybcio@kernel.org>,
+        <bryan.odonoghue@linaro.org>, <krzk+dt@kernel.org>, <robh@kernel.org>
 References: <20240927063108.2773304-1-quic_msavaliy@quicinc.com>
- <20240927063108.2773304-3-quic_msavaliy@quicinc.com> <Zw1jm+cVpwz0xhGp@vaman>
+ <20240927063108.2773304-5-quic_msavaliy@quicinc.com>
+ <lmo4jylfwt3wingdqb6zc6ew2537kqksuckfyd7vwuu4ufg5cr@ic2j7bv2r6e4>
+ <42e0622d-0bb6-4850-bf5a-629996c702db@stanley.mountain>
+ <7eg2g2ykqccc74l6chkwlq54wcobzevqlzngkr3lnegv36pcsb@t3asip2mbmew>
 Content-Language: en-US
 From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <Zw1jm+cVpwz0xhGp@vaman>
+In-Reply-To: <7eg2g2ykqccc74l6chkwlq54wcobzevqlzngkr3lnegv36pcsb@t3asip2mbmew>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: r9mL_ha9NlOVg1s_x2LISSLA2695Ij0T
-X-Proofpoint-ORIG-GUID: r9mL_ha9NlOVg1s_x2LISSLA2695Ij0T
+X-Proofpoint-ORIG-GUID: sY6gqdoXglrVMzvtIK5Y-M1K3Mocbw0n
+X-Proofpoint-GUID: sY6gqdoXglrVMzvtIK5Y-M1K3Mocbw0n
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 phishscore=0 impostorscore=0 adultscore=0 suspectscore=0
- clxscore=1015 malwarescore=0 mlxscore=0 priorityscore=1501 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411130135
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ phishscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
+ bulkscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2411130134
 
-Thanks Vinod for your review comments !
+Hi Bjorn,
 
-On 10/15/2024 12:01 AM, Vinod Koul wrote:
-> On 27-09-24, 12:01, Mukesh Kumar Savaliya wrote:
->> GSI DMA provides specific TREs namely Lock and Unlock TRE, which
->> provides mutual exclusive access to SE from any of the subsystem
->> (E.g. Apps, TZ, ADSP etc). Lock prevents other subsystems from
->> concurrently performing DMA transfers and avoids disturbance to
->> data path. Basically for shared SE usecase, lock the SE for
->> particular subsystem, complete the transfer, unlock the SE.
-> 
-> it is dmaengine: xxx so please update that
-> 
-Done
+On 10/1/2024 8:09 AM, Bjorn Andersson wrote:
+> On Mon, Sep 30, 2024 at 11:21:23AM GMT, Dan Carpenter wrote:
+>> On Sun, Sep 29, 2024 at 10:46:37PM -0500, Bjorn Andersson wrote:
+>>>> @@ -602,6 +603,7 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
+>>>>   	peripheral.clk_div = itr->clk_div;
+>>>>   	peripheral.set_config = 1;
+>>>>   	peripheral.multi_msg = false;
+>>>> +	peripheral.shared_se = gi2c->se.shared_geni_se;
+>>>>   
+>>>>   	for (i = 0; i < num; i++) {
+>>>>   		gi2c->cur = &msgs[i];
+>>>> @@ -612,6 +614,8 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
+>>>>   		if (i < num - 1)
+>>>>   			peripheral.stretch = 1;
+>>>>   
+>>>> +		peripheral.first_msg = (i == 0);
+>>>> +		peripheral.last_msg = (i == num - 1);
+>>>
+>>> There are multiple error paths in this loop, which would result in us
+>>> never issuing the unlock TRE - effectively blocking other subsystems
+>>> from accessing the serial engine until we perform our next access
+>>> (assuming that APSS issuing a lock TRE when APSS already has the channel
+>>> locked isn't a problem?)
+>>>
 >>
->> Apply Lock TRE for the first transfer of shared SE and Apply Unlock
->> TRE for the last transfer.
+>> Hi Bjorn,
 >>
->> Also change MAX_TRE macro to 5 from 3 because of the two additional TREs.
+>> I saw the words "error paths" and "unlock" and I thought there was maybe
+>> something we could do here with static analysis.
+> 
+> Appreciate you picking up on those topics :)
+> 
+>> But I don't know what TRE or APSS mean.
 >>
->> TRE = Transfer Ring Element, refers to the queued descriptor.
->> SE = Serial Engine
->> SS = Subsystems (Apps processor, TZ, ADSP, Modem)
+> 
+> The "APSS" is "the application processor sub system", which is where
+> we typically find Linux running. TRE is, if I understand correctly, a
+> request on the DMA engine queue.
+Yes, Thats right. Transfer ring element, it's like a command to the 
+engine. Can be configuration TRE, DMA xfer request TRE etc.
+> 
+>> The one thing I do see is that this uses "one err" style error handling where
+>> there is one err label and it calls dmaengine_terminate_sync(gi2c->rx_c)
+>> regardless of whether or not geni_i2c_gpi() was called or failed/succeeded.
 >>
->> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->> ---
->>   drivers/dma/qcom/gpi.c           | 37 +++++++++++++++++++++++++++++++-
->>   include/linux/dma/qcom-gpi-dma.h |  6 ++++++
->>   2 files changed, 42 insertions(+), 1 deletion(-)
+> 
+> The scheme presented in this series injects a "LOCK" request before the
+> DMA request marked first_msg, and an "UNLOCK" after the ones marked
+> last_msg. This is needed because the controller is also concurrently by
+> some DSP (or similar), so the LOCK/UNLOCK scheme forms mutual exclusion
+> of the operations between the Linux and DSP systems.
+> 
+> I'm not sure if it's possible to tie the unlock operation to
+> dmaengine_terminate_sync() in some way.
+> 
+I think terminate_sync() should clean up all xfers and will continue for 
+the next request as a fresh start.
+> Giving this some more thought, it feels like the current scheme serves
+> the purpose of providing mutual exclusion both for the controller and
+> to some degree for the device. But I'd like to understand why we can't
+> inject the lock/unlock implicitly for each transfer...
+> 
+Explicitly adding lock/unlock per transfer adds execution load. Lock is 
+meant for taking an ownership of the bus which is better to manage per 
+session.
+> Regards,
+> Bjorn
+> 
+>> regards,
+>> dan carpenter
 >>
->> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
->> index 52a7c8f2498f..120d91234442 100644
->> --- a/drivers/dma/qcom/gpi.c
->> +++ b/drivers/dma/qcom/gpi.c
->> @@ -2,6 +2,7 @@
->>   /*
->>    * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
->>    * Copyright (c) 2020, Linaro Limited
->> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
->>    */
->>   
->>   #include <dt-bindings/dma/qcom-gpi.h>
->> @@ -65,6 +66,14 @@
->>   /* DMA TRE */
->>   #define TRE_DMA_LEN		GENMASK(23, 0)
->>   
->> +/* Lock TRE */
->> +#define TRE_I2C_LOCK		BIT(0)
->> +#define TRE_MINOR_TYPE		GENMASK(19, 16)
->> +#define TRE_MAJOR_TYPE		GENMASK(23, 20)
->> +
->> +/* Unlock TRE */
->> +#define TRE_I2C_UNLOCK		BIT(8)
->> +
->>   /* Register offsets from gpi-top */
->>   #define GPII_n_CH_k_CNTXT_0_OFFS(n, k)	(0x20000 + (0x4000 * (n)) + (0x80 * (k)))
->>   #define GPII_n_CH_k_CNTXT_0_EL_SIZE	GENMASK(31, 24)
->> @@ -516,7 +525,7 @@ struct gpii {
->>   	bool ieob_set;
->>   };
->>   
->> -#define MAX_TRE 3
->> +#define MAX_TRE 5
->>   
->>   struct gpi_desc {
->>   	struct virt_dma_desc vd;
->> @@ -1637,6 +1646,19 @@ static int gpi_create_i2c_tre(struct gchan *chan, struct gpi_desc *desc,
->>   	struct gpi_tre *tre;
->>   	unsigned int i;
->>   
->> +	/* create lock tre for first tranfser */
->> +	if (i2c->shared_se && i2c->first_msg) {
->> +		tre = &desc->tre[tre_idx];
->> +		tre_idx++;
->> +
->> +		tre->dword[0] = 0;
->> +		tre->dword[1] = 0;
->> +		tre->dword[2] = 0;
->> +		tre->dword[3] = u32_encode_bits(1, TRE_I2C_LOCK);
->> +		tre->dword[3] |= u32_encode_bits(0, TRE_MINOR_TYPE);
->> +		tre->dword[3] |= u32_encode_bits(3, TRE_MAJOR_TYPE);
->> +	}
->> +
->>   	/* first create config tre if applicable */
->>   	if (i2c->set_config) {
->>   		tre = &desc->tre[tre_idx];
->> @@ -1695,6 +1717,19 @@ static int gpi_create_i2c_tre(struct gchan *chan, struct gpi_desc *desc,
->>   		tre->dword[3] |= u32_encode_bits(1, TRE_FLAGS_IEOT);
->>   	}
->>   
->> +	/* Unlock tre for last transfer */
->> +	if (i2c->shared_se && i2c->last_msg && i2c->op != I2C_READ) {
->> +		tre = &desc->tre[tre_idx];
->> +		tre_idx++;
->> +
->> +		tre->dword[0] = 0;
->> +		tre->dword[1] = 0;
->> +		tre->dword[2] = 0;
->> +		tre->dword[3] = u32_encode_bits(1, TRE_I2C_UNLOCK);
->> +		tre->dword[3] |= u32_encode_bits(1, TRE_MINOR_TYPE);
->> +		tre->dword[3] |= u32_encode_bits(3, TRE_MAJOR_TYPE);
->> +	}
->> +
->>   	for (i = 0; i < tre_idx; i++)
->>   		dev_dbg(dev, "TRE:%d %x:%x:%x:%x\n", i, desc->tre[i].dword[0],
->>   			desc->tre[i].dword[1], desc->tre[i].dword[2], desc->tre[i].dword[3]);
->> diff --git a/include/linux/dma/qcom-gpi-dma.h b/include/linux/dma/qcom-gpi-dma.h
->> index 6680dd1a43c6..8589c711afae 100644
->> --- a/include/linux/dma/qcom-gpi-dma.h
->> +++ b/include/linux/dma/qcom-gpi-dma.h
->> @@ -65,6 +65,9 @@ enum i2c_op {
->>    * @rx_len: receive length for buffer
->>    * @op: i2c cmd
->>    * @muli-msg: is part of multi i2c r-w msgs
->> + * @shared_se: bus is shared between subsystems
->> + * @bool first_msg: use it for tracking multimessage xfer
->> + * @bool last_msg: use it for tracking multimessage xfer
->>    */
->>   struct gpi_i2c_config {
->>   	u8 set_config;
->> @@ -78,6 +81,9 @@ struct gpi_i2c_config {
->>   	u32 rx_len;
->>   	enum i2c_op op;
->>   	bool multi_msg;
->> +	bool shared_se;
->> +	bool first_msg;
->> +	bool last_msg;
-> 
-> Looking at the usage in following patches, why cant this be handled
-> internally as part of prep call?
-> 
-As per design, i2c driver iterates over each message and submits to GPI 
-where it creates TRE. Since it's per transfer, we need to create Lock 
-and Unlock TRE based on first or last message.
-> 
->>   };
->>   
->>   #endif /* QCOM_GPI_DMA_H */
->> -- 
->> 2.25.1
-> 
 
