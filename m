@@ -1,118 +1,114 @@
-Return-Path: <linux-i2c+bounces-7996-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7997-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E4AF9C8D81
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Nov 2024 16:02:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98C519C90EE
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Nov 2024 18:38:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47D4AB2BFCF
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Nov 2024 14:57:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8110DB45DBF
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Nov 2024 16:50:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90AB136658;
-	Thu, 14 Nov 2024 14:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF3818A930;
+	Thu, 14 Nov 2024 16:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="TPg2wrns"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EFTdvLwO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5EB6F307
-	for <linux-i2c@vger.kernel.org>; Thu, 14 Nov 2024 14:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF39E189F3C;
+	Thu, 14 Nov 2024 16:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731596242; cv=none; b=Q2N++dVPMj5dQCxptx/h4xSL1tamz/KQkMAeG4GUEvBM1AH8N/Rz/UkxGmdQX42S7opCYLFA/lYEAZ1p/cLfSXxIGE/Y3FucWRMOb4JtPyD+OhHOUFy2SEv/R7ygr4qoaFuCJr6uznLxJGjymFzW8izAleKtoZchoM5/Tb+A79M=
+	t=1731603012; cv=none; b=rV5fGxJ5/zUd3DNwuPybOY7k1s3ggV8Uk1ouC3ughoTl3+lUc6/DGgcaYADxPlpNYpDEmJhZx/tA3rHsEzkO49va8OpMj3z14IsiPgNVzGhmGeyo5umKlqF2dDbWQffH3EHfaLUKx2WQuDyP2NSuIS5LdNyT2XbdxDIJhk3k/Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731596242; c=relaxed/simple;
-	bh=dRsJqeYZfBgIesQfn/MHcP7T/a2QWpqLVvkqC7gdriE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TkCbrwMJlFJ2XZqf8bsHrprq+g+YA4nMBaLRR4oK17/MRxYjzaN88LndWxk0T3pUUqIj8wLjbMpR195Nj420OJS7tk+VDuBwod5PgmIbwUaCabmnNQyVbe4WystNPKy2p2Q2M7WtLhWQl3qrfAep/gIopFYORYaAHBC76z4761c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TPg2wrns; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=dRsJ
-	qeYZfBgIesQfn/MHcP7T/a2QWpqLVvkqC7gdriE=; b=TPg2wrnsiZu1NYDo0UWQ
-	WWGaj67MS0s9qoeBXwcUmvL6YpuoQuDzh409d61LeLTl02dCuil29KbG0ReeCImf
-	P9vm6WmT4lHb1ArPYSJL2G4kbgTB9kaknO+ZhDjpwn1PTO0KyPQADDYyrvAxBnqb
-	eCgDHKrpqdAnkswYs4xbS6IZxfwXImZrg4MfcX8wB+JbsoDI42pK7QfUlrFX1h8r
-	cC2qFgUG3JVv2bExD0BeLSbVGmm0A4P7cuxQ6r9/s/3vAxV8gi2+aKcXCZe0OYz1
-	2Tvcv1v5UWcNuO6oMtOXOuBshikV0regki5T0UFd/WPDZ44w4u/rNN8dsjiSxqpn
-	Pw==
-Received: (qmail 3195118 invoked from network); 14 Nov 2024 15:57:08 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Nov 2024 15:57:08 +0100
-X-UD-Smtp-Session: l3s3148p1@nFYUquAmstJehhtH
-Date: Thu, 14 Nov 2024 15:57:08 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, arnd@arndb.de,
-	Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [RFC PATCH 09/10] i2c: Remove I2C_HYDRA
-Message-ID: <ZzYPxBvZ44pMzeJN@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	arnd@arndb.de, Linux I2C <linux-i2c@vger.kernel.org>
-References: <20241114131114.602234-1-mpe@ellerman.id.au>
- <20241114131114.602234-9-mpe@ellerman.id.au>
- <CAMuHMdXLM-eeAa9=YwkU6gcwmD60Wba5v=F6PU20QMqzxRbM4w@mail.gmail.com>
+	s=arc-20240116; t=1731603012; c=relaxed/simple;
+	bh=Ub1te92EUjR3KKO91jYzVthuH+ro/ejxDQT2LL/DeoQ=;
+	h=From:Message-ID:Subject:To:Cc:Date:Content-Type:MIME-Version; b=rGZCn9wPB7CSfTLc9yxMTEszdSBv1bhrBqRtEQXWho3JloshHiIulO8+BgarkRubxSB4NGfnT1Dd2VIAjbTBKaR8gyseaRz0W2sbPp5ipgnssUiacfHpUdA3fyPr0eB+b9eUwJxbi3SNZXGUIq1e9K6HQx2s/r1H4WnFQ/R2BxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EFTdvLwO; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5cf8593ca4bso570173a12.1;
+        Thu, 14 Nov 2024 08:50:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731603009; x=1732207809; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to
+         :subject:message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ILtapZECsvODEytONKExRHUU53rGzXL43ZOeVl85mJc=;
+        b=EFTdvLwOUXk0C3etC1uPsg/upmtXzxyvQ1LV9L1+7DQhUFGL5mJ53dKF9V/tQesgE6
+         j3HF66utn3KEk+i/MmmvX655UONfwMQmJGAWfTdC5qmOFDf75kZUvzBmQeZH4ecitMcN
+         JlW2dXclfpLF1Xq9k1RIADW2Ow3wer96vhMsPzs94zdsaQPqg8h4PGop30nN01p/cExu
+         4DEuO8FJTax07SrJzgqVXLVMc5wXWlUrhi13NNt1OZmL6zexMq6TOO0EzRwYkDhWGYvg
+         ikWrdFKgdvrboKVLqyurKpcUypQ+s53nM08YdsJBjCniZn68Gi2h3lQUXqk2V5O5vG9B
+         bPyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731603009; x=1732207809;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to
+         :subject:message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ILtapZECsvODEytONKExRHUU53rGzXL43ZOeVl85mJc=;
+        b=diDy9RKsW6WxfGHIZFQJliS3D/cfmZvosFQlgJcJKunkRZYszw/Vsm2IW7DOZOE2LM
+         q4wQ3at7bovgUML9FvpmQmsmRXwHtSEw03FoohI71FGKs4ZuNgi+zMLxssFiDO7jc0Sf
+         xhqmrnRQewYfAnPgtGXhLiSt2XDeVaPDs1jRNwf0JdjRawpiOmqavMKJVlgQxQ4a88wW
+         2olXieEK+BOSm2VmHVChQxu+MKURm/T/f9FMZOYiP595nVKg7kpfHvQr+jXCjjKuqocD
+         IkrSabIDylNZhcPnP+OsBsB44buHI6HwFBcLexTu8w6cinc5uQgVfKXwzyLg0g4SLZmc
+         gnIw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKtuAyt2NsWKpRwj5rMyYiKfIueAgPcc2chtF/lT/YaUgrcYXB3JNL7en1nBhoxZT3pVZ70oNO5CRBsj0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwF9TBkpo/Du+kIo7orJxllalFN3juOUX+sD6XlT+9kbM5UHkbU
+	l+BJNmxjJabpKjqMpBxtqYNFP6ui3VpRPvKSl4vABcbfnu65MOKajCBn9QrCJ+Y=
+X-Google-Smtp-Source: AGHT+IFjXtHbzJ4huqBidQnrOtxCNVNIDJqBKNtDTw1ffM4pLAYGpURs5/jw+75nUZtQENK1095tKw==
+X-Received: by 2002:a05:6402:d06:b0:5ce:d028:e11 with SMTP id 4fb4d7f45d1cf-5cf77ea3808mr2308434a12.17.1731603008752;
+        Thu, 14 Nov 2024 08:50:08 -0800 (PST)
+Received: from [10.0.2.15] (23-152-178-143.ftth.glasoperator.nl. [143.178.152.23])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf79bb3579sm729724a12.37.2024.11.14.08.50.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2024 08:50:08 -0800 (PST)
+From: Liam Zuiderhoek <zuiderhoekl@gmail.com>
+X-Google-Original-From: Liam Zuiderhoek <Zuiderhoekl@gmail.com>
+Message-ID: <2494788d943ed75741e6671e615f9e3c31cdc2ea.camel@gmail.com>
+Subject: [PATCH] i2c: i2c-core-smbus: fixed a whitespace style issue
+To: wsa+renesas@sang-engineering.com
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Thu, 14 Nov 2024 17:50:06 +0100
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="b3oYDcQCh8M8X+Z5"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXLM-eeAa9=YwkU6gcwmD60Wba5v=F6PU20QMqzxRbM4w@mail.gmail.com>
+
+From 214adebf7cf37be941f208124fac9ea6bec0f1d2 Mon Sep 17 00:00:00 2001
+From: Liam Zuiderhoek <zuiderhoekl@gmail.com>
+Date: Tue, 22 Oct 2024 20:46:59 +0200
+Subject: [PATCH] i2c: i2c-core-smbus: fixed a whitespace style issue
+
+Fixing a coding style issue.
+
+Signed-off-by: Liam Zuiderhoek <zuiderhoekl@gmail.com>
+---
+ drivers/i2c/i2c-core-smbus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
+index e3b96fc53b5c..6829def15933 100644
+--- a/drivers/i2c/i2c-core-smbus.c
++++ b/drivers/i2c/i2c-core-smbus.c
+@@ -122,7 +122,7 @@ EXPORT_SYMBOL(i2c_smbus_read_byte);
+ s32 i2c_smbus_write_byte(const struct i2c_client *client, u8 value)
+ {
+ 	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+-	                      I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
++				I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
+ }
+ EXPORT_SYMBOL(i2c_smbus_write_byte);
+=20
+--=20
+2.43.0
 
 
---b3oYDcQCh8M8X+Z5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Nov 14, 2024 at 03:37:15PM +0100, Geert Uytterhoeven wrote:
-> CC linux-i2c
->=20
-> On Thu, Nov 14, 2024 at 2:11=E2=80=AFPM Michael Ellerman <mpe@ellerman.id=
-=2Eau> wrote:
-> > The i2c-hydra driver depends on PPC_CHRP which has now been removed,
-> > remove the driver also.
-> >
-> > Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
->=20
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
->=20
-> > ---
-
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-
---b3oYDcQCh8M8X+Z5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmc2D8AACgkQFA3kzBSg
-KbYpqQ//cTHdKtv+OT5iUTvVPKKtfZLUlFRc3Sf4Y0Ui+JFxjueaUVzQ16CzDyy8
-VcRTIJHL2t4AjIpp1LSAVp8Tcc7xJTEiksfx6ycdnIXgnvvgk/RaCz5gwMH+1W+j
-U6QMG1b1tVoFZF69zHn7G6XU84cvqPO8JdUuZB0WGbzAKZcbsIKoagg2LykuZa5h
-BWC21WX9Ze+Vkao46dtUKvrkWA63u89a3xlv4yoFjlkEVwCd1fXYqoLMFEjiVtk+
-2ouXqCX73imUI66OWlBnoNGuhwuh+RAnuHlnu8eskko6ggILkRUZ87SZWd1WR4x2
-fkduX62y8/B+qVFuKPqmWV+2lR38fwEU2CY72Ild4XtgPaBX5wyFAAdVDGaE14er
-94saEMP2pHWJXNTa/AuH/PV4cSZcRUVzDm5kcRaEj2hQkn4u8YTPlCCIvyJ8Dnjr
-TpxKl4PxmSYaVGYlyLwbD8oM5JsTiyOcZNBshLCvJE1IHdgKsJZiIMSiBs6Itazl
-/mRksfIhshodHSS/ebydCbHQTWp1LAKTJDeqxvw2fuq2W0ZAigtkc67qisWJEQ53
-p7r0iccjMim8QrhGROyxZCE+50JxuqVoKRgsgTuG53jIYjETzGcumqrqAVhskxWR
-vZljCognLV9cSah+JDPKZ9oovcJ2pfxSjyL314DQF4hvkMgGmIQ=
-=t0n4
------END PGP SIGNATURE-----
-
---b3oYDcQCh8M8X+Z5--
 
