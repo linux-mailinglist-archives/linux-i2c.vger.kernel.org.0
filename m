@@ -1,151 +1,112 @@
-Return-Path: <linux-i2c+bounces-7981-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-7982-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C86889C83A5
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Nov 2024 08:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 746AA9C845C
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Nov 2024 08:55:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E0401F23402
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Nov 2024 07:06:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2007F1F2138E
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Nov 2024 07:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B68931EBA13;
-	Thu, 14 Nov 2024 07:06:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B91001F4718;
+	Thu, 14 Nov 2024 07:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m2bM8jB4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFB41EABA9;
-	Thu, 14 Nov 2024 07:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246621CAAC;
+	Thu, 14 Nov 2024 07:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731567969; cv=none; b=g5fmM0KWaZmV815WqYP8SPpFKRth/GmbUoqwbji1EPWLq6oBK1GHj5bbLWgzMX37I4wyYfeXoZbwJzQmUc82/GBtPxi28nvyBjnDvSLEr8tmyoWBYeBK679qG303h/Ie3CDF9vVm8x6/zOFrmzkJT7FFHpwsA5U+T+qdSiisEQw=
+	t=1731570945; cv=none; b=Eqcfz3l/qX9aIuoLkZsuLHEm+voomJQlmpOtBuA+1PI0H4KUhR00Kxiy+4THG+eSEsPnWlLBeHCyWjh3zQTZ/7QbZ27K1Oi1sWOL1ilX/5fD2IC6co6S5H60sGL9U4lnez5EroN4bW7MxipFTVUZ+Jnb5JxF20i8hoaqtSZa/no=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731567969; c=relaxed/simple;
-	bh=s9+yE6EWvbV+CXOwEgtNLb0gY6LWIVlrlrPXHyfyjd0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RYth2Y2M92VNNqzDMpy4hlayf5CdWloxJKo/aHwDrmQqLwUUpycdOJp3dW7/N0BkZIGoQetz/gODoT8HctbNEtA93Ul5cOGNXpmGx3gOZsZUg24GDQ0NqHgrjlElRsWpegUJUIfhqsuJk7sVli9vRopaQ1iSAB2CJF85TvwVeQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Date: Thu, 14 Nov 2024 15:06:01 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Troy Mitchell <troymitchell988@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-riscv@lists.infradead.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: i2c: spacemit: add support for K1 SoC
-Message-ID: <20241114070601-GYA1001363@gentoo>
-References: <20241112-k1-i2c-master-v3-0-5005b70dc208@gmail.com>
- <20241112-k1-i2c-master-v3-1-5005b70dc208@gmail.com>
- <20241112-aged-trailing-cffda6af0944@spud>
+	s=arc-20240116; t=1731570945; c=relaxed/simple;
+	bh=KIYoFbDin3lcVwyLqDPbArwgFa9vOBowKdR5I0YRv3g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SKZfagBqWNVtBQNzCjljfvBsR7F4E25BTO/SlX3alzWk5SgHHOdAzEHwZc0OCut8Z6Px2Vn4ntRH8KgTRGdKZT/E5gaM4OHE8ypU8fcLVXGihiqRMRtzkfa7pXdCOm1A8IiLuL6TpNTelzOIqGCtph+9lndhnn4hfqtE+Pepckw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m2bM8jB4; arc=none smtp.client-ip=209.85.222.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-856cd075b3aso160597241.0;
+        Wed, 13 Nov 2024 23:55:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731570943; x=1732175743; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KIYoFbDin3lcVwyLqDPbArwgFa9vOBowKdR5I0YRv3g=;
+        b=m2bM8jB4NS4mOP/A5ScnAGSOo+mqinGQwEcvXoabXViSsaGOdnsl076bC3aZzgJE5N
+         JtfsWHB1lKd8GSXr3y3ewlRBgoOmVCfJKl+LoajwRtvRqaD65LUAMvwaSP4+370tOrHq
+         flofZyWxyWTDZ1eV+KC8xQ5dlWZ+zuNVM4CLId6E4THfnTBfJSUdUeN3tn4z16vTWiD+
+         ik5XCSbcdV5fA3E/+vIhZZ+M4OGuyDdY4qVHT6Az0FbjRCz4A4XZfu5dA6dUwzWwBzh/
+         Sr2M0+e/gHUZ4Q3ahA5OK9p6CGcc5kTNDgG0NuPsfoYYZPd+kYhAVdCZRBYs3L9lDpL5
+         gzeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731570943; x=1732175743;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KIYoFbDin3lcVwyLqDPbArwgFa9vOBowKdR5I0YRv3g=;
+        b=KzXLXV+YlT7kViUW0sae8Z06i3UX2DDEp8UQujAc6MPw5Mko/7UYooj2g3kyeaL0Bj
+         I2+Jygz+HcMTm7kD6uJsRm7mLyjD44ykAFLIuErqzAVrVB0lz1GrexyAai3ul9tzyT3G
+         zjhhbfGmRv8EqKtUejTTN2rol28qZLjbafQsaIzlEoVd3COXkyxOtSWy48EqRMKp4uNR
+         6UnC/3IZD7WyZPTsrujZ94TdrJuwzc8dRCibvbKz+DU+xChyzOvtLMCrAAA0qMRFz2VA
+         goLiIgw/Ua9v9ENGS4olA5aFw7E9PS7hat2eYCP1Xzq5LDrUyHpTR6Ue8cAWFJu/rt1r
+         8ENA==
+X-Forwarded-Encrypted: i=1; AJvYcCWMy2BMXaM+9G2I2p6ueg5bylg+IE8/9lr1zITBH0o7o25oujni6A8nUOvRI5dpzDO0Fmb3CokoPZU=@vger.kernel.org, AJvYcCX7+b3xFT7EW1VSgWCmKYyNR+e5EQiiga6GzyU883daE5Ys1kKIuHyJI+BWNOXpaMYIugvJ3f/yYq8I8TOZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywh8TEkhJBhXebkH/XTr8yJtnB8HBvLWpn8VSmN71jUraXYyraB
+	kNbKshYfnydyBg8E6JdHzMr98TdF94IuMnMc/V3UmBvmzH9JSN8wEOxoIPgon1pUjkET8Q9YQky
+	zDOq7iJGin/Yo67eKcCvA+ZExFmo=
+X-Google-Smtp-Source: AGHT+IHeZimHONI8F5rMiQ6QwqJiUgYh9DKo8BSaqPnO7gDfdQOdApPukZRFOjdYUp6VoHapqHsR7oQv7EKAfFqlLkA=
+X-Received: by 2002:a67:eb96:0:b0:4ad:48cf:c855 with SMTP id
+ ada2fe7eead31-4ad48cfd251mr4937798137.15.1731570942930; Wed, 13 Nov 2024
+ 23:55:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241112-aged-trailing-cffda6af0944@spud>
+References: <ZzH-KeSavsPkldLU@smile.fi.intel.com> <20241111140231.15198-1-aladyshev22@gmail.com>
+ <fnjhtnnwuktkqj7ck7psc3e7potptogz2ioxw2lghkncd2ct7k@pmrk7angjkwd>
+In-Reply-To: <fnjhtnnwuktkqj7ck7psc3e7potptogz2ioxw2lghkncd2ct7k@pmrk7angjkwd>
+From: Konstantin Aladyshev <aladyshev22@gmail.com>
+Date: Thu, 14 Nov 2024 11:01:02 +0300
+Message-ID: <CACSj6VVp14RJ2WTvB93SbwC0Lh7x2DiQpjf18VrVNCpXTU5s_A@mail.gmail.com>
+Subject: Re: [PATCH v2] docs: i2c: piix4: Add ACPI section
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: andriy.shevchenko@linux.intel.com, Jean Delvare <jdelvare@suse.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 18:03 Tue 12 Nov     , Conor Dooley wrote:
-> On Tue, Nov 12, 2024 at 11:07:39AM +0800, Troy Mitchell wrote:
-> > From: Troy Mitchell <troymitchell988@gmail.com>
-> > 
-> > The I2C of K1 supports fast-speed-mode and high-speed-mode,
-> > and supports FIFO transmission.
-> > 
-> > Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
-> > ---
-> >  .../devicetree/bindings/i2c/spacemit,k1-i2c.yaml   | 52 ++++++++++++++++++++++
-> >  1 file changed, 52 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
-> > new file mode 100644
-> > index 000000000000..e8cce360bf03
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
-> > @@ -0,0 +1,52 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/i2c/spacemit,k1-i2c.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: I2C controller embedded in SpacemiT's K1 SoC
-> > +
-> > +maintainers:
-> > +  - Troy Mitchell <troymitchell988@gmail.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: spacemit,k1-i2c
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  clock-frequency:
-> > +    description:
-> > +      Desired I2C bus clock frequency in Hz.
-> > +      K1 supports standard, fast, high-speed modes, from 1 to 3300000.
-while we are here, I'd suggest rephrase the sentence above to align it better with the doc
+Hi Andi!
 
-K1 support three different modes which running different frequencies
-standard speed mode: up to 100000 (100Hz)
-fast speed mode    : up to 400000 (400Hz)
-high speed mode    : up to 3300000 (3.3Mhz)
+Sorry, I just didn't have time to fix it yesterday. Of course I don't
+mind your changes. Thanks for the help!
 
-> > +    default: 100000
-> > +    minimum: 1
-> > +    maximum: 3300000
-> 
-> It's sufficient to define just default and max btw, the min is set in
-> i2c-controller.yaml (in dt-schema itself). Don't respin for that alone.
-+1, the minimum settings isn't really useful, clearly not apply in the practical case
+Best regards,
+Konstantin Aladyshev
 
-> 
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    i2c@d4010800 {
-> > +        compatible = "spacemit,k1-i2c";
-> > +        reg = <0xd4010800 0x38>;
-> > +        interrupt-parent = <&plic>;
-> > +        interrupts = <36>;
-> > +        clocks = <&ccu 90>;
-> > +        clock-frequency = <100000>;
-> > +    };
-> > +
-> > +...
-> > 
-> > -- 
-> > 2.34.1
-> > 
-
-
-
--- 
-Yixun Lan (dlan)
-Gentoo Linux Developer
-GPG Key ID AABEFD55
+On Thu, Nov 14, 2024 at 1:50=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org> =
+wrote:
+>
+> Hi Konstantin,
+>
+> On Mon, Nov 11, 2024 at 05:02:31PM +0300, Konstantin Aladyshev wrote:
+> > Provide information how to reference I2C busses created by the PIIX4
+> > chip driver from the ACPI code.
+> >
+> > Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+>
+> I merged the patch into i2c/i2c-host with the changes I
+> suggested and I also wrapped the lines to 80 characters to keep a
+> uniform style throughout the doc file.
+>
+> Andi
 
