@@ -1,123 +1,110 @@
-Return-Path: <linux-i2c+bounces-8005-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8006-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04ED89CEFBF
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Nov 2024 16:24:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D0A79CF2F6
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Nov 2024 18:32:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1B9A289830
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Nov 2024 15:24:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B96991F2226C
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Nov 2024 17:32:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 365311CF2A2;
-	Fri, 15 Nov 2024 15:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4217B1D63C0;
+	Fri, 15 Nov 2024 17:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o8XkM5qv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kac7kQLZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56DE720B20
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Nov 2024 15:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3DF615573A;
+	Fri, 15 Nov 2024 17:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731684261; cv=none; b=ixtyLDdceGuPX1sh88LC6zHzy/99dTIK483NFj1TGAHnK+iHWs7R0BQ/uJrJpRxZ4o49aICEmngtfrYvtlFUCe+pOQXx8D4qIFkpQB3EvYRG/BCaH6vxCjsj52VOpEucVN98yBUKvriJxvCMBNMPuhYDCFmBcYEeSLygHENdGbs=
+	t=1731691920; cv=none; b=rAcQNh8RIVtZ76iRtPm/VZaUVyZHhlJRok+AjJg/OZKoHpLVwCEqQ1jTEpkfQL9JM5axWO9qp7SavAxD22ZLRXN/VwrfB14QwiDjEmB3DnJh+8eYjv9PL/lJzQYM+M7KM14NNw0gJ1DvDUH4z7R34n4L9FWj0NoamkXJEjMQA+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731684261; c=relaxed/simple;
-	bh=6CbonmGIEt1LytS/5LcyBBLPi6YyB8nOYoG0UOl1eSo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=i35KbERSVfNAgmUQf2lQ6nfbbDbTlPaJGySoJOaDJ2H6N7iyAcfyeanQBoE93g1vB1BCVSkbWZr78NwtIPfxILtnAnbQcVh/spvjr/8rriaj7soHPnhQgpBcJLe5AdxbGkG55L6KKpCQkJbZL5gNzQZRdpxAxQ0HbiYbr09xoPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o8XkM5qv; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5cf6f5d4939so8399a12.1
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Nov 2024 07:24:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731684258; x=1732289058; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6CbonmGIEt1LytS/5LcyBBLPi6YyB8nOYoG0UOl1eSo=;
-        b=o8XkM5qvbh075Uxc2K2mtMtNsVyw7BiPNlOuqhrVio2ScvdzsW/b0MBXbzmk5ALw1N
-         jOndOlkPX626cmSWkbKGw6aTSseYiNtqd4agM1VYHlbmPCbfIJyhpQ/SmOaWuKPuBLNM
-         o0DaLznaak8QvQI8JJr4kmYegsFr03hyGgUHl1+0TgyTbA4q00EcMrN/0zwkFY0otmX9
-         xrBhoFT/mi/XmyIYQZ3Hwd6OxsG3cbatESd41UWirqw668WToqlSEOuhJY90vAoXxnK5
-         F8hMef3+7fAWHVzIW+bxwcWeFfO/pOy81najLVPM4Oa4xoMPIrQh1hR8qvldRMUpJOZB
-         mTuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731684258; x=1732289058;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6CbonmGIEt1LytS/5LcyBBLPi6YyB8nOYoG0UOl1eSo=;
-        b=PyJ4K5vsCS8z0ZPjrxE39VTAaDWxfJhNl4QliWkyn1kkTwfaA/Qp4gLnc7kF/TDIdw
-         FSIRytsXVeZ4flcnVdeRMDtoLU/HpvjASw853jZniFUOgMPy+Opwed2lyX23urp9ltLj
-         ZTw+tuBMoPLmQgOtb0cRPGf9ODcX/6Q0WK1gZm31CdvAtKmWf2Otdpju3l6kyfki8YdN
-         upymvTghx/J3LUlCNasaO1thWAqZy1kPY176tN+o310M82W2O2FP16iNlG4rtXqH1Wg5
-         VBk3sQ3Mlbh2aXneuSCowLl2XGt6R9eiOUCPjnifnt7M8pYYc7Hh7vbChn4t7RiotYnN
-         qtzw==
-X-Forwarded-Encrypted: i=1; AJvYcCVKpKf5U/kLYLfZoiwCQx7DbUU4QkdwEkGxBKgb1kv4a1mEf9jJ3wkw4I9z3eGNtJ8CWQmyH/tLA8k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOsOAFXAR071rjBeH7dKuOXGkOJ6vFgSA/5sXv2CpI6HQkgG3E
-	FB76bYgDEw4OQQVcQeV/DP+ETchM2a47JwL/6dupD8MC8b3qcKhAZD8qKhHJw/qXyJ5rNwmPMuu
-	nJ+6BKeuv9V0Kr0r0F3YDnABj+dzPlAcV+ep/
-X-Gm-Gg: ASbGncuBTc6SHEs6oICaGISktw1ezAmIBwr4X81DxeEhOOoLu+woWpSIDCfro6O/YBn
-	9GL2pR3GRUwteKadSl/1pJVH+eYjezKw=
-X-Google-Smtp-Source: AGHT+IE0eFPESw33JfWkreHkpBmuXVgMQWpYruE4CtoQxvuEgukCXd5q+5EAuID/wRomZNlf7jXpJVGQwrxqMyn7stw=
-X-Received: by 2002:a50:8e51:0:b0:5cf:968d:f807 with SMTP id
- 4fb4d7f45d1cf-5cfa069dcddmr30a12.6.1731684257447; Fri, 15 Nov 2024 07:24:17
- -0800 (PST)
+	s=arc-20240116; t=1731691920; c=relaxed/simple;
+	bh=ByzyFL3jHBewomqNCtrQfFmYzlwTibEpwsTpO0RE8jo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tDli5/UN2cfDvlPwPsSg/t9oPa1SjDFxuj1hFCQGo/nmmZAjOEbQ6elsw451MAzI60SQNjJXYGEOHVmVuhQLovlnzZ1VwiDOFsIF3WFyfQ2sVBQJAEMvEDRgt9WnXbsTGvuL6ijJJAI71/2AVytfbFMVDPR9yZCQr+Cuu4eJnyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kac7kQLZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233D5C4CECF;
+	Fri, 15 Nov 2024 17:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731691918;
+	bh=ByzyFL3jHBewomqNCtrQfFmYzlwTibEpwsTpO0RE8jo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kac7kQLZx6tmvyWAIEbTAlQzl59DR9Qou9YktDrEWS1LyQzDGztyBHivLBTpIjY35
+	 P841wfiKpvutW1mpe9dVdRfh9kZh3O70heccc9YSzFzEnBMM7f/0YdyI/aeeeUXRg9
+	 DThZ1XF1C+o1Xr80FDRwZTjuElqjS9JniABgw5xt0pxYx3oMLKeUUdZh05/cwCf5dY
+	 JW1XTpnoXlleMoSUXR2oLI29sxpsPg54FBrkQFO9lUq/S2+kPWt3RNQVR9StMj0Qhn
+	 y7L8Gx94CxjPMDhIiKWnoMPuITR6elk2/W0iXY/FncBZoBYJ7EhIyMc/40Ugj+0ECc
+	 Hx+D6MSKBFFQw==
+Date: Fri, 15 Nov 2024 11:31:56 -0600
+From: Rob Herring <robh@kernel.org>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
+	linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
+	vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
+	Frank.Li@nxp.com, konradybcio@kernel.org,
+	bryan.odonoghue@linaro.org, krzk+dt@kernel.org,
+	quic_vdadhani@quicinc.com
+Subject: Re: [PATCH v4 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
+ flag
+Message-ID: <20241115173156.GA3432253-robh@kernel.org>
+References: <20241113161413.3821858-1-quic_msavaliy@quicinc.com>
+ <20241113161413.3821858-2-quic_msavaliy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241115044303.50877-1-brendanhiggins@google.com> <ZzcPJ9sweqxLZOGf@ninjato>
-In-Reply-To: <ZzcPJ9sweqxLZOGf@ninjato>
-From: Brendan Higgins <brendanhiggins@google.com>
-Date: Fri, 15 Nov 2024 10:24:05 -0500
-Message-ID: <CAFd5g47+y0JH4StoKRTwJTQ2TsUCqmjdxqg=3cxY64Kous73=w@mail.gmail.com>
-Subject: Re: [RFC v1] MAINTAINERS: transfer i2c-aspeed maintainership from
- Brendan to Ryan
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Brendan Higgins <brendanhiggins@google.com>, tommy_huang@aspeedtech.com, 
-	benh@kernel.crashing.org, joel@jms.id.au, andi.shyti@kernel.org, 
-	andrew@codeconstruct.com.au, wsa@kernel.org, ryan_chen@aspeedtech.com, 
-	linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	BMC-SW@aspeedtech.com, brendan.higgins@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241113161413.3821858-2-quic_msavaliy@quicinc.com>
 
-On Fri, Nov 15, 2024 at 4:06=E2=80=AFAM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> On Fri, Nov 15, 2024 at 04:43:03AM +0000, Brendan Higgins wrote:
-> > Remove Brendan Higgins <brendanhiggins@google.com> from i2c-aspeed entr=
-y
-> > and replace with Ryan Chen <ryan_chen@aspeedtech.com>.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > ---
-> > I am leaving Google and am going through and cleaning up my @google.com
->
-> Thanks for your work on this driver.
->
-> > address in the relevant places. I was just going to remove myself from
-> > the ASPEED I2C DRIVER since I haven't been paying attention to it, but
-> > then I saw Ryan is adding a file for the I2C functions on 2600, which
-> > made my think: Should I replace myself with Ryan as the maintainer?
-> >
-> > I see that I am the only person actually listed as the maintainer at th=
-e
-> > moment, and I don't want to leave this in an unmaintained state. What
-> > does everyone think? Are we cool with Ryan as the new maintainer?
->
-> I am fine, depends on Ryan as far as I am concerned.
+On Wed, Nov 13, 2024 at 09:44:10PM +0530, Mukesh Kumar Savaliya wrote:
+> Adds qcom,is-shared flag usage. Use this flag when I2C serial controller
 
-One thing I forgot to note in my previous email: today - Friday,
-November 15th is my last day at Google, so after today I won't have
-access to this account. If future replies or patch updates are needed,
-they will come from my brendan.higgins@linux.dev account.
+Doesn't match the property name.
+
+> needs to be shared in multiprocessor system(APPS,Modem,ADSP) environment.
+> 
+> Two clients from different processors can share an I2C controller for same
+> slave device OR their owned slave devices. Assume I2C Slave EEPROM device
+> connected with I2C controller. Each client from ADSP SS and APPS Linux SS
+> can perform i2c transactions.
+> 
+> Transfer gets serialized by Lock TRE + DMA xfer + Unlock TRE at HW level.
+> 
+> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> index 9f66a3bb1f80..fe36938712f7 100644
+> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> @@ -60,6 +60,10 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> +  qcom,shared-se:
+
+What is 'se'? Is that defined somewhere?
+
+> +    description: True if I2C controller is shared between two or more system processors.
+> +    type: boolean
+> +
+>    reg:
+>      maxItems: 1
+>  
+> -- 
+> 2.25.1
+> 
 
