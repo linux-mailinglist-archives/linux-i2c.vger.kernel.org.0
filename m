@@ -1,116 +1,116 @@
-Return-Path: <linux-i2c+bounces-8057-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8058-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2097C9D2F1D
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Nov 2024 20:51:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 195869D2F6B
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Nov 2024 21:25:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA396282ED3
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Nov 2024 19:51:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F6CEB229C3
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Nov 2024 20:25:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45A371D1E63;
-	Tue, 19 Nov 2024 19:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42F941D2707;
+	Tue, 19 Nov 2024 20:25:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XcCYWmSa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hY+1Y8c1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38081CF2BD;
-	Tue, 19 Nov 2024 19:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FBF14A098;
+	Tue, 19 Nov 2024 20:25:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732045882; cv=none; b=A0BGSHjG2/u7s142L4WtiZZaLvv+3mrnYp/cHwHkCbQ6LZSLzwVotWWt3M6EuQmioajv/uaDuZejnTfydfrLj6lhtc+8kP3tqXDoJcu85Jxrws4kqFL+1m3TmmygxZ+V4P4V3wMej0lx1cDQj6ZZCDRkoW88JOGEFbkQw5/KsS4=
+	t=1732047926; cv=none; b=X6hT06DdgpfONMEeuAYuGIDKh+MOW6FgZP3HbbSybzlK4GrtkupD1U86c0O/TpG15iOF55a7LbvSii3hPpHaBp4pzgVnrp1OmmKxW1cSDISt99ThRJXql8n6HzOZBnmQOCICWxL9sejHSpI+JQ3KuoyHqZE6GxnGtdykoUnFmys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732045882; c=relaxed/simple;
-	bh=CP7GeHYh1tm06iAkA9ey3zTxerSkSP4ApCcyvAC8PCk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=izXn2eRATkel1SfuGfRu559YeHkGwyrKqJyito7zojaO68xHu8oczuTZXAWDcS76fNmkOjZM2Hl1LBk9hgtt4bErOmhu78mlBR5s8pSvp6xRrTHMW7FdJbvcZGhzUw2Yc273/JOCDGG1aMtslZORUDQURpbe9bDQ+6JjnqlCt2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XcCYWmSa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2688DC4CECF;
-	Tue, 19 Nov 2024 19:51:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732045881;
-	bh=CP7GeHYh1tm06iAkA9ey3zTxerSkSP4ApCcyvAC8PCk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XcCYWmSadOhqVH+fZSKCtOfmAXfQq232RTsZcb3YU8hrHZVpj45QhItsNvAgsV+sH
-	 iSsHiljax6l9/qxDRjiqQrccusSekQHmZHVcErkWH22xMf+XawgjAzVJZ+JILdob2M
-	 URn8Lu1GubAYbSm6+oLv8/12JZHRCzXqynyPqNN2QjskM1h21PmJ4mCtR7In10yypA
-	 8CbIXqXPMlWeHEJ65MmTjuNt7dKU2lhY2TkdbhYNtBqe4QII4jV3QmUVdm0VPzv8vU
-	 LRMny11xvw0C8e5FzuAf2O83dqusy4c1UHA6VtUs/RKoyaxXd3NjOD4VOQMpdfG9RB
-	 zdkamKH8hontA==
-Date: Tue, 19 Nov 2024 20:51:17 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Liam Zuiderhoek <zuiderhoekl@gmail.com>
-Cc: wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: i2c-core-smbus: fixed a whitespace style issue
-Message-ID: <jqidbstpdrn7k7w55rwkg6e243d7r373qfjvz2ujzstcr5oda5@v2vxvsithtb5>
-References: <2494788d943ed75741e6671e615f9e3c31cdc2ea.camel@gmail.com>
+	s=arc-20240116; t=1732047926; c=relaxed/simple;
+	bh=9CPvK88OV/qNLB+5ATBB+gzFyaWUkpZCuEm5YUbDyE4=;
+	h=From:Message-ID:Subject:To:Cc:Date:Content-Type:MIME-Version; b=uMryt5FXcGMmjWG8MfIfpWX8iwuOozdQPrKeERlTTxJrikByZzd2CT0vQ2yoYPb8IeCpmPty7PdqbtRmLbt42IEhNYArtjZEKFBA4NoG9nM6wzw3LlXAV/99Yr+ZsW8Z86M8PItJLcasu1vSsOWhnuv8AGKBPgGsXBSfnKbqjMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hY+1Y8c1; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5cfcf4df87aso3109542a12.1;
+        Tue, 19 Nov 2024 12:25:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732047923; x=1732652723; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to
+         :subject:message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YAuKpVe3qBPu3OtLjaPPxU5rhIOwfwNASENV7Eit6MI=;
+        b=hY+1Y8c12CCtCyo3VpT1OAD+wT3yCzXkWH7RkcHJDSLmAX+lUg5bbiDT5NwcSLDzrH
+         5RCzT4fuDAaX9J51m1nKr3NGn0NtUa6u0dHhcBH7/r5fG5ty6+HurrzfhdtD0syx1nqO
+         nf2PjJaHZfpMAvD35CxzuGQMlRzlncIoS9CtiyBpsajuY1iE6rsMj3hyZV8jCuC/pyvT
+         betGHybyT6kJ2qPeTB2Rq6LJguaJdmvK4mXs+hHYFxr5WhClgT6zsdraT7OXpkmSCTue
+         9bN0mhQLLWdJV0ItQK7CDbPRL7KhSZlu9zt0DL1NQovnNBtqWJBhlH+S7A1ht0dCkDu1
+         FbVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732047923; x=1732652723;
+        h=mime-version:user-agent:content-transfer-encoding:date:cc:to
+         :subject:message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YAuKpVe3qBPu3OtLjaPPxU5rhIOwfwNASENV7Eit6MI=;
+        b=G3CYnbJbVK3n7RVsTuhgXSWzzYRcvIet56dhKA6xjJRs79LIUnY6cIyjtekVth2TRM
+         EOOZG3KCmlHZmYu0PHCv+/sTqGp3EwSb/9pTI95nJxClnUXHhFswkmgbi0FDiIe/+E7E
+         2EtO4Svr5pDsemYWTPtAUzm2LCOVFVccucf+WBDsflc/cL8+xKxb+s0hkNsANn6ykTZC
+         jVAGhjkRYfDgkW6yv8hmf0ZMsjT6ReluvVbOb4xndeaxCHaK08lnS2/waA4oZHATmTW/
+         190zFVhezxTJKG2/oZMrLt34qM8g83GPIow3T+S7+fqcsgQcrrlwifnU+BTuf3W8ywIq
+         716Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXa6megbZciWAvlfBsRizoDoY4LvKeHfTbv+dccit4j5kxzHsJm7WrsqaXqTATxj5ZNe8JvwlZNFofw/xU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHXbe/vHx6qcE/NRhiOpjYU0XcpLsreGFK8GwCE72IudFzczdb
+	/gcz9NSYj2FlUOlTwa72Bt/+rC77m9Jx0dEb2mpO6QVRoYBpbyzlXKGHFA==
+X-Google-Smtp-Source: AGHT+IGMYIpH/ZnenPMmML9e9ZwGjZXHGivrg7kc7vmurkv4flw+bqs70baBfK8FFhG/SZ19oA8FLg==
+X-Received: by 2002:a05:6402:278c:b0:5c9:6f20:4cf1 with SMTP id 4fb4d7f45d1cf-5cff4cbcc75mr4210a12.27.1732047922529;
+        Tue, 19 Nov 2024 12:25:22 -0800 (PST)
+Received: from [10.0.2.15] (23-152-178-143.ftth.glasoperator.nl. [143.178.152.23])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cff4501bcfsm60584a12.47.2024.11.19.12.25.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Nov 2024 12:25:22 -0800 (PST)
+From: Liam Zuiderhoek <zuiderhoekl@gmail.com>
+X-Google-Original-From: Liam Zuiderhoek <Zuiderhoekl@gmail.com>
+Message-ID: <2921f50a7e2f112f0c16e116d2992da8a0340cab.camel@gmail.com>
+Subject: [PATCH] i2x: Fix whitespace style issue
+To: wsa+renesas@sang-engineering.com
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 19 Nov 2024 21:25:21 +0100
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2494788d943ed75741e6671e615f9e3c31cdc2ea.camel@gmail.com>
 
-Hi Liam,
+From 0107b1649e3f74f1cd4e0695968edb4d81028f91 Mon Sep 17 00:00:00 2001
+From: Liam Zuiderhoek <zuiderhoekl@gmail.com>
+Date: Tue, 22 Oct 2024 20:46:59 +0200
+Subject: [PATCH] i2c: Fix whitespace style issue
 
-your patch is almost correct, just a few things need to be fixed.
+This patch fixes a coding style issue in the alignment of parameters
+in the function i2c_smbus_write_bytes(). It replaces spaces with tabs for
+alignment,  as per the coding style guidelines.
 
-On Thu, Nov 14, 2024 at 05:50:06PM +0100, Liam Zuiderhoek wrote:
-> From 214adebf7cf37be941f208124fac9ea6bec0f1d2 Mon Sep 17 00:00:00 2001
-> From: Liam Zuiderhoek <zuiderhoekl@gmail.com>
-> Date: Tue, 22 Oct 2024 20:46:59 +0200
-> Subject: [PATCH] i2c: i2c-core-smbus: fixed a whitespace style issue
+Signed-off-by: Liam Zuiderhoek <zuiderhoekl@gmail.com>
+---
+ drivers/i2c/i2c-core-smbus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Why the header file is in the commit log?
+diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
+index e3b96fc53b5c..473f8ec7fedf 100644
+--- a/drivers/i2c/i2c-core-smbus.c
++++ b/drivers/i2c/i2c-core-smbus.c
+@@ -122,7 +122,7 @@ EXPORT_SYMBOL(i2c_smbus_read_byte);
+ s32 i2c_smbus_write_byte(const struct i2c_client *client, u8 value)
+ {
+ 	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
+-	                      I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
++			      I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
+ }
+ EXPORT_SYMBOL(i2c_smbus_write_byte);
+=20
+--=20
+2.43.0
 
-The title needs to be written in imperative form:
 
-  "Fix whitespace style issue"
-
-instead of
-
-  "fixed a whitespace..."
-
-> Fixing a coding style issue.
-
-We have plenty of space in the commit log and you can be more
-specific on the coding style you are fixing; e.g. "use tabs
-instead of white spaces for alignment".
-
-Please read Documentation/process/submitting-patches.rst.
-
-> Signed-off-by: Liam Zuiderhoek <zuiderhoekl@gmail.com>
-> ---
->  drivers/i2c/i2c-core-smbus.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-> index e3b96fc53b5c..6829def15933 100644
-> --- a/drivers/i2c/i2c-core-smbus.c
-> +++ b/drivers/i2c/i2c-core-smbus.c
-> @@ -122,7 +122,7 @@ EXPORT_SYMBOL(i2c_smbus_read_byte);
->  s32 i2c_smbus_write_byte(const struct i2c_client *client, u8 value)
->  {
->  	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-> -	                      I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
-> +				I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
-
-Please align everything under the "(":
-
-	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-			      I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
-
-That means, use as many tabs as you can, until you need to use
-spaces to align under the "(".
-
-Thanks,
-Andi
 
