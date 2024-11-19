@@ -1,281 +1,213 @@
-Return-Path: <linux-i2c+bounces-8045-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8046-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA7AD9D2836
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Nov 2024 15:33:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B83379D2832
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Nov 2024 15:31:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15E5CB2EA51
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Nov 2024 14:30:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78D30282E1E
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Nov 2024 14:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8BA1CF295;
-	Tue, 19 Nov 2024 14:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9AFC1CC177;
+	Tue, 19 Nov 2024 14:31:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="COfzrCD2"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kBPZx9wl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0601CCB37;
-	Tue, 19 Nov 2024 14:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C82EE56A;
+	Tue, 19 Nov 2024 14:31:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732026596; cv=none; b=CAwGS815LRzmOG+oJwvMArtF687u3jACAPRWm9nZFRt1sA+Ph1IIHNbRQK9HufvmJOUk53H8ykVrnjOvk0CpWL7mdhE3z9bi67Glyt7RhbYosQ+wy6WcvXPgzTmd7R2VOaelwOldZu9ySlevwqIKcirVqrAU39U9KCcy1bW5MI4=
+	t=1732026664; cv=none; b=NY4I76wkW3jPOQ3yjRLNb2krAHrCu82A8SSCJMKjN8BCPr26+sOpfMMiyk0y3fTfgAzCcmUhgwRKM1rdY+QsCB/TNiFGG29c2h8SisnRJdMsIUfDm7mtL89I3T/bjnnreCF3TOf0xjighDoeyl7j7oyUhcpLgFmkkBej+iVdVWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732026596; c=relaxed/simple;
-	bh=EO3sfTmhyUx5iue2RICmgxoTkF0h093Jx5l0j2IOeAM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
-	 In-Reply-To:Content-Type; b=jguV3D/3cZny4LG/R8W4herfhheEitFryp6rIvojN291zfHBxGR0VOHmSty9UA+LIgJ2TP5vCqXap6d6Zj9Tmcgyige/Mw11DUpuykZyQYY8urcUrHqZyPH65LDEwoz//eXeDsdx1+3HKW8J+8IRBrILpa6gyMQdS5eXFMqN3IQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=COfzrCD2; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1732026664; c=relaxed/simple;
+	bh=19chT3VK5iUOy0Ed4mobVGVETZcuXaPQI0WZCJfbcQ8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=X2Dp5VTtk1SjAdAu7OdUyH8+EZbwt/4OQYm+PQkIvZwCMyLbKZBrBz3lsjcQFePqF8ABFDfrJhdOEKSuRlUhkRVN0EQtpVH5KxZztcEViXMqYKyBfu+Tk8ESmVdn+y/jI3lkF+CEOYbHqe74LyTYHjxmz6wGTEjZJYQDD1wh++U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kBPZx9wl; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AJ7t7Bk022570;
-	Tue, 19 Nov 2024 14:29:51 GMT
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AJ7CRqW027076;
+	Tue, 19 Nov 2024 14:30:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ofAYoofWTIk1it3ZO0tvccKOORJ5cLPrfxut7KWrleE=; b=COfzrCD2OGvFvTq4
-	t+SMrd9jthcxwhCYEpRnY9nCGjOuuFdLGW0R4KMz8NdjjhocLXM5zWW9I5rXyvhs
-	LvuZGCP4Xn7KdcgQ2GzXSiQF+JwdbhxnAUjKZ99X2kzHK0LpXCDxh/QWyXNLWlMJ
-	WJtLh/gz+pbHuLDFu33lPt8279/hutDHe/wqoLHBArEi0QWJxRTqQMtc55PqcqPf
-	4in2FR4Fp7wCLJBgvbW+GQ+GsNymfUuNCyBZp64Vj4HBwr8kKc0LlkJTM6zv4j/R
-	Brq3Fm1r7kyuRItlh8rCjyXBG+y7V3YQ17GmE6QLXyHtQOLtx55TvhrHq+5LECFf
-	uw5c/w==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4308y62rb8-1
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=E1kCAu+pULAojbnh8MS7CwsULAt3cJ+Tvm2
+	EnuFeRfQ=; b=kBPZx9wl0Hw2MWyt/Cz3cNioL+xLh+Uyjzxp2lQerQiesqW3CYu
+	tIM+Ebvi8wA3kVIk3ERN040xk6KKKLenmZLUdJeCJh64b0VEJhWW02V4cB9o3XwV
+	JFIyj/oSPMzNI2hd/cDHtsAnA7Mz1vqSwZ5xO8kw00sg0MpO2h4BuS3B610mh15u
+	c9EMQ+V0yWmsp+YRW1JZlsHzI7rSqB/2ZpwJakSTfDQq4xTHKuElU6x56gaEZl31
+	YIiSPvfqKs1hV0URbo7jyRRoRzhW/fMD5zu/ih/EJikbyy7ozKscR4+krQjhEz7u
+	Se9hUhDyLjlyOQ8NwPVP8SOSQCg7Lh/CM7A==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4308y7tth6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Nov 2024 14:29:50 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AJETolI010664
+	Tue, 19 Nov 2024 14:30:56 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 4AJEUrER010746;
+	Tue, 19 Nov 2024 14:30:53 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 42xmfm502c-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Nov 2024 14:29:50 GMT
-Received: from [10.217.219.207] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 19 Nov
- 2024 06:29:47 -0800
-Message-ID: <3797c11f-b263-4f5d-9307-963fd6662b26@quicinc.com>
-Date: Tue, 19 Nov 2024 19:59:44 +0530
+	Tue, 19 Nov 2024 14:30:53 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4AJEUrOp010741;
+	Tue, 19 Nov 2024 14:30:53 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-msavaliy-hyd.qualcomm.com [10.213.110.207])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 4AJEUrWm010739
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Nov 2024 14:30:53 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 429934)
+	id 1B5EA24060; Tue, 19 Nov 2024 20:00:52 +0530 (+0530)
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+To: andi.shyti@kernel.org, quic_bjorande@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, --cc=konrad.dybcio@linaro.org,
+        quic_vdadhani@quicinc.com, vkoul@kernel.org
+Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Subject: [PATCH v3] i2c: i2c-qcom-geni: Serve transfer during early resume stage
+Date: Tue, 19 Nov 2024 20:00:31 +0530
+Message-Id: <20241119143031.3331753-1-quic_msavaliy@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Subject: Re: [PATCH v2] i2c: i2c-qcom-geni: Serve transfer during early resume
- stage
-To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-CC: <andi.shyti@kernel.org>, <quic_bjorande@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <konrad.dybcio@linaro.org>,
-        <quic_vdadhani@quicinc.com>, <vkoul@kernel.org>
-References: <20241011121757.2267336-1-quic_msavaliy@quicinc.com>
- <ZwlnWIWkS1pwQ/xK@hu-bjorande-lv.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <ZwlnWIWkS1pwQ/xK@hu-bjorande-lv.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8AYKc7W3tgfOo7c2-Qc1Ny3E9FRRdF9n
-X-Proofpoint-ORIG-GUID: 8AYKc7W3tgfOo7c2-Qc1Ny3E9FRRdF9n
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 1XYFHjsaLiahucoNLglRV-Y8FQPu3Jld
+X-Proofpoint-GUID: 1XYFHjsaLiahucoNLglRV-Y8FQPu3Jld
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 clxscore=1015 malwarescore=0 priorityscore=1501 mlxscore=0
- mlxlogscore=999 impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411190106
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 clxscore=1015 suspectscore=0 adultscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 bulkscore=0
+ lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2411190106
 
-Hi Bjorn, thanks for the review.
+pm_runtime_get_sync() function fails during PM early resume and returns
+-EACCES because runtime PM for the device is disabled at the early stage
+causing i2c transfer to fail. Make changes to serve transfer with forced
+resume.
 
-On 10/11/2024 11:28 PM, Bjorn Andersson wrote:
-> On Fri, Oct 11, 2024 at 05:47:57PM +0530, Mukesh Kumar Savaliya wrote:
-> 
-> Your recipients list is broken. Please check go/upstream and adopt b4 to
-> help avoid such mistakes.
-> 
-Sorry, My mistake in keeping output of maintainers script separately 
-into --to and --cc which i shouldn't do.
->> pm_runtime_get_sync() function fails during PM early resume and returning
->> -EACCES because runtime PM for the device is disabled at the early stage
->> causing i2c transfer to fail. Make changes to serve transfer with forced
->> resume.
->>
->> Few i2c clients like PCI OR touch may request i2c transfers during early
->> resume stage. In order to serve transfer request do :
->>
-> 
-> This problem description is too generic. I am not aware of any use case
-> upstream where PCI or touch might need to perform i2c transfers during
-> early resume; your commit message should educate me.
-> 
-yes, it's generic as of now since we have an internal usecase with PCI 
-is yet to be enabled in upstream. Not tied up with any usecase in 
-upstream, i just heard recently.
+Few i2c clients like PCI OR touch may request i2c transfers during early
+resume stage. Any i2c client can keep transfer request very early resume
+stage like noirq phase of PM. To serve the transfer, register an interrupt
+with IRQF_EARLY_RESUME and IRQF_NO_SUSPEND flags to avoid timeout of
+transfer when IRQ is not enabled during early stage.
 
-Provided the scenario is generic and possible by any client, can this 
-code change be reviewed or shall be kept on halt till PCI usecase gets 
-enabled ?
+pm_runtime_get_sync() fails when runtime PM is not enabled, then use
+pm_runtime_force_resume() and serve the transfer.
 
->> 1. Register interrupt with IRQF_EARLY_RESUME and IRQF_NO_SUSPEND flags
->>     to avoid timeout of transfer when IRQ is not enabled during early stage.
->> 2. Do force resume if pm_runtime_get_sync() is failing after system
->>     suspend when runtime PM is not enabled.
->> 3. Increment power usage count after forced resume to balance
->>     it against regular runtime suspend.
->>
-> 
-> Please avoid the bullet list form technical description of your patch.
-> 
-Sure. Made the changes in commit log with free flow writeup.
+Co-developed-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+---
 
->> Co-developed-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
->> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
->> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->> ---
->> v1 -> v2:
->>
->> - Changed gi2c->se.dev to dev during dev_dbg() calls.
->> - Addressed review comments from Andi and Bjorn.
-> 
-> That's nice, but spell out the changes you're doing so that reviewers
-> now what you did.
-Sure, changes done are also listed but i will add reviewers name per change.
-> 
->> - Returned 0 instead garbage inside geni_i2c_force_resume().
->> - Added comments explaining forced resume transfer when runtime PM
->>    remains disabled.
->>
->> V1 link: https://patches.linaro.org/project/linux-i2c/patch/20240328123743.1713696-1-quic_msavaliy@quicinc.com/
->> ---
->> ---
->>   drivers/i2c/busses/i2c-qcom-geni.c | 61 +++++++++++++++++++++++++-----
->>   1 file changed, 51 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
->> index 212336f724a6..e1207f1a3de3 100644
->> --- a/drivers/i2c/busses/i2c-qcom-geni.c
->> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
->> @@ -134,6 +134,8 @@ struct geni_i2c_clk_fld {
->>   	u8	t_cycle_cnt;
->>   };
->>   
->> +static int geni_i2c_runtime_resume(struct device *dev);
->> +
->>   /*
->>    * Hardware uses the underlying formula to calculate time periods of
->>    * SCL clock cycle. Firmware uses some additional cycles excluded from the
->> @@ -675,22 +677,49 @@ static int geni_i2c_fifo_xfer(struct geni_i2c_dev *gi2c,
->>   	return num;
->>   }
->>   
->> +static int geni_i2c_force_resume(struct geni_i2c_dev *gi2c)
->> +{
->> +	struct device *dev = gi2c->se.dev;
->> +	int ret;
->> +
->> +	ret = geni_i2c_runtime_resume(dev);
-> 
-> Wouldn't pm_runtime_force_resume() help you do what you're looking for?
-> 
-Yes, i have reviewed and seems this API can also serve the same purpose. 
-Made the changes accordingly.
+Link to V2: https://lore.kernel.org/lkml/202410132233.P25W2vKq-lkp@intel.com/T/
 
->> +	if (ret) {
->> +		dev_err(gi2c->se.dev, "Failed to enable SE resources: %d\n", ret);
->> +		pm_runtime_put_noidle(dev);
->> +		pm_runtime_set_suspended(dev);
->> +		return ret;
->> +	}
->> +	pm_runtime_get_noresume(dev);
->> +	pm_runtime_set_active(dev);
->> +	return 0;
->> +}
->> +
->>   static int geni_i2c_xfer(struct i2c_adapter *adap,
->>   			 struct i2c_msg msgs[],
->>   			 int num)
->>   {
->>   	struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
->> +	struct device *dev = gi2c->se.dev;
->>   	int ret;
->>   
->>   	gi2c->err = 0;
->>   	reinit_completion(&gi2c->done);
->> -	ret = pm_runtime_get_sync(gi2c->se.dev);
->> -	if (ret < 0) {
->> -		dev_err(gi2c->se.dev, "error turning SE resources:%d\n", ret);
->> -		pm_runtime_put_noidle(gi2c->se.dev);
->> -		/* Set device in suspended since resume failed */
->> -		pm_runtime_set_suspended(gi2c->se.dev);
->> -		return ret;
->> +
->> +	/* Serve I2C transfer by forced resume whether Runtime PM is enbled or not */
->> +	if (!pm_runtime_enabled(dev) && gi2c->suspended) {
->> +		dev_dbg(dev, "Runtime PM is disabled hence force resume, pm_usage_count: %d\n",
->> +			atomic_read(&dev->power.usage_count));
->> +		ret = geni_i2c_force_resume(gi2c);
->> +		if (ret)
->> +			return ret;
->> +	} else {
->> +		ret = pm_runtime_get_sync(dev);
->> +		if (ret == -EACCES && gi2c->suspended) {
->> +			dev_dbg(dev, "pm_runtime_get_sync() failed-%d, force resume\n", ret);
->> +			ret = geni_i2c_force_resume(gi2c);
->> +			if (ret)
->> +				return ret;
->> +		}
->>   	}
->>   
->>   	qcom_geni_i2c_conf(gi2c);
->> @@ -700,8 +729,19 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
->>   	else
->>   		ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
->>   
->> -	pm_runtime_mark_last_busy(gi2c->se.dev);
->> -	pm_runtime_put_autosuspend(gi2c->se.dev);
->> +	/* Does Opposite to Forced Resume when runtime PM was not enabled and served
->> +	 * Transfer via forced resume.
-> 
-> Please polish this comment.
-Sure, Enhanced my comments. Thanks.
-> 
-> Regards,
-> Bjorn
-> 
->> +	 */
->> +	if (!pm_runtime_enabled(dev) && !gi2c->suspended) {
->> +		pm_runtime_put_noidle(dev);
->> +		pm_runtime_set_suspended(dev);
->> +		/* Reset flag same as runtime suspend, next xfer PM can be enabled */
->> +		gi2c->suspended = 0;
->> +	} else {
->> +		pm_runtime_mark_last_busy(gi2c->se.dev);
->> +		pm_runtime_put_autosuspend(gi2c->se.dev);
->> +	}
->> +
->>   	gi2c->cur = NULL;
->>   	gi2c->err = 0;
->>   	return ret;
->> @@ -818,7 +858,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
->>   	init_completion(&gi2c->done);
->>   	spin_lock_init(&gi2c->lock);
->>   	platform_set_drvdata(pdev, gi2c);
->> -	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq, IRQF_NO_AUTOEN,
->> +	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq,
->> +			       IRQF_NO_AUTOEN | IRQF_EARLY_RESUME | IRQF_NO_SUSPEND,
->>   			       dev_name(dev), gi2c);
->>   	if (ret) {
->>   		dev_err(dev, "Request_irq failed:%d: err:%d\n",
->> -- 
->> 2.25.1
->>
+ v2 -> v3:
+ - Updated exact usecase and scenario in the commit log description.
+ - Removed bulleted points from technical description, added details in free flow.
+ - Used pm_runtime_force_resume/suspend() instead customized local implementation.
+ - Added debug log after pm_runtime_force_suspend().
+
+---
+Link to V1: https://patches.linaro.org/project/linux-i2c/patch/20240328123743.1713696-1-quic_msavaliy@quicinc.com/
+
+ v1 -> v2:
+ - Changed gi2c->se.dev to dev during dev_dbg() calls.
+ - Addressed review comments from Andi and Bjorn.
+ - Returned 0 instead garbage inside geni_i2c_force_resume().
+ - Added comments explaining forced resume transfer when runtime PM
+   remains disabled.
+---
+
+ drivers/i2c/busses/i2c-qcom-geni.c | 43 +++++++++++++++++++++---------
+ 1 file changed, 31 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index 7a22e1f46e60..4fe5fa4532ca 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -695,17 +695,27 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+ 			 int num)
+ {
+ 	struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
++	struct device *dev = gi2c->se.dev;
+ 	int ret;
+ 
+ 	gi2c->err = 0;
+ 	reinit_completion(&gi2c->done);
+-	ret = pm_runtime_get_sync(gi2c->se.dev);
+-	if (ret < 0) {
+-		dev_err(gi2c->se.dev, "error turning SE resources:%d\n", ret);
+-		pm_runtime_put_noidle(gi2c->se.dev);
+-		/* Set device in suspended since resume failed */
+-		pm_runtime_set_suspended(gi2c->se.dev);
+-		return ret;
++	/* Serve I2C transfer by forced resume if Runtime PM is enbled or not */
++	if (!pm_runtime_enabled(dev) && gi2c->suspended) {
++		dev_dbg(dev, "Runtime PM is disabled hence force resume, pm_usage_count: %d\n",
++			atomic_read(&dev->power.usage_count));
++		ret = pm_runtime_force_resume(dev);
++		if (ret)
++			return ret;
++	} else {
++		ret = pm_runtime_get_sync(gi2c->se.dev);
++		if (ret < 0) {
++			dev_err(gi2c->se.dev, "error turning SE resources:%d\n", ret);
++			pm_runtime_put_noidle(gi2c->se.dev);
++			/* Set device in suspended since resume failed */
++			pm_runtime_set_suspended(gi2c->se.dev);
++			return ret;
++		}
+ 	}
+ 
+ 	qcom_geni_i2c_conf(gi2c);
+@@ -715,8 +725,18 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+ 	else
+ 		ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
+ 
+-	pm_runtime_mark_last_busy(gi2c->se.dev);
+-	pm_runtime_put_autosuspend(gi2c->se.dev);
++	/* if Runtime PM is disabled, do force_suspend() else autosuspend the driver */
++	if (!pm_runtime_enabled(dev) && !gi2c->suspended) {
++		ret = pm_runtime_force_suspend(dev);
++		dev_dbg(dev, "Runtime PM is disabled hence force suspend, pm_usage_count: %d\n",
++			atomic_read(&dev->power.usage_count));
++		if (ret)
++			return ret;
++	} else {
++		pm_runtime_mark_last_busy(gi2c->se.dev);
++		pm_runtime_put_autosuspend(gi2c->se.dev);
++	}
++
+ 	gi2c->cur = NULL;
+ 	gi2c->err = 0;
+ 	return ret;
+@@ -833,9 +853,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
+ 	init_completion(&gi2c->done);
+ 	spin_lock_init(&gi2c->lock);
+ 	platform_set_drvdata(pdev, gi2c);
+-
+-	/* Keep interrupts disabled initially to allow for low-power modes */
+-	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq, IRQF_NO_AUTOEN,
++	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq,
++			       IRQF_NO_AUTOEN | IRQF_EARLY_RESUME | IRQF_NO_SUSPEND,
+ 			       dev_name(dev), gi2c);
+ 	if (ret) {
+ 		dev_err(dev, "Request_irq failed:%d: err:%d\n",
+-- 
+2.25.1
+
 
