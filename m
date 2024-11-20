@@ -1,196 +1,119 @@
-Return-Path: <linux-i2c+bounces-8087-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8088-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC9CC9D3CCB
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 14:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A666C9D3DAE
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 15:35:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B35992849F9
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 13:53:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C7622846FA
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 14:35:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D050C1B5338;
-	Wed, 20 Nov 2024 13:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 633511AA7A6;
+	Wed, 20 Nov 2024 14:35:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d4v0JyRq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HVAmTbSB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1893D1AAE38;
-	Wed, 20 Nov 2024 13:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8915FA939
+	for <linux-i2c@vger.kernel.org>; Wed, 20 Nov 2024 14:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732110750; cv=none; b=Wo8aZ/NdCE9sn6vUpPgN0k2iWtN0IT9XmC/YQ+7ul5DR1qL0S3SlI2eHmezS6oaibIJYTR2+w8ILWrZNZ56KKoWeqj0XDD/kg6xnoSzY9N/CkOOCnCYw3KbBcXEng7YO5epZ8lZumH8EIM1xVrl0Z7A8EzXP/P9S6HF7CAPlhOA=
+	t=1732113336; cv=none; b=GDmNBHazrbJKoPssn2HzI/qJZhgOnokj1ADViD4zX8wzBaKsRGmCvZTguvpGNoOk9V23IcrSORS/77aru7ejRuT9eOM63XVInQQenSa1VqAmtuVydGUwztCVapCBKw4TRw3b+bfiS+q2H3DV1DzZeWEsgfzTVH5Gee2uG3jtVRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732110750; c=relaxed/simple;
-	bh=PQrcyJYdhYqVRHp1hFJ6nsEgP+ywNZS0Nb4DS9YUiyk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oKVDZc3lj/7NI6INANoBGyhSKONNlx6odZxoXRgxvktamTXyciL7cAqpbDBGS6OE/7DJu6bFESFrQP65lr23BYq/7maOYGJSJkbzLQEekX8F3MV1LaBeVppqhECQxXC4oz6mnUKvElZTqgXNOrZbT9cChPFGLk4it+8c8M+ipGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d4v0JyRq; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732110749; x=1763646749;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=PQrcyJYdhYqVRHp1hFJ6nsEgP+ywNZS0Nb4DS9YUiyk=;
-  b=d4v0JyRqzVOpyXBXV6plXgeKV4TLLnAnPIDumP626OEQcFXv58HhQ2na
-   rjZfj4mpxcpjwU+Kv8EDBCP8D2GIs2DDlIU9LI9ept6WjkYej9G8buDht
-   a/QHEOtTcvsCmMLXzMqmN+nPNgXkzobpfmgWByshyIhdZDan2HOLIDsCc
-   WvkW/snUIk5Gr9clGbXQ7//94WMkwHluSp6ZWuWJyua1S1dXK2FTo9bkt
-   3e7GO3cR4Lza9qiG/5797w8bqDte/OSROl0qNMq0p/70Uc4YMfCG1QR7C
-   SVvkNbX4h/5sCh3s4YZ5AxJPfygnKhm3Kj7K7gvLSl2tVMpMkP/2aZWf/
-   w==;
-X-CSE-ConnectionGUID: wzH90gTlTYG4/mhsXQ9elA==
-X-CSE-MsgGUID: FbB2pMccRpm8dhRi8nYrPA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="35950582"
-X-IronPort-AV: E=Sophos;i="6.12,169,1728975600"; 
-   d="scan'208";a="35950582"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 05:52:29 -0800
-X-CSE-ConnectionGUID: ewyTpNRjTmiV5Njm8LNmjg==
-X-CSE-MsgGUID: gcsYJZEzQxOLfSRDFTU9kQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,169,1728975600"; 
-   d="scan'208";a="94378389"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 05:52:25 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tDl82-0000000Gj02-0ORK;
-	Wed, 20 Nov 2024 15:52:22 +0200
-Date: Wed, 20 Nov 2024 15:52:21 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Radu Sabau <radu.sabau@analog.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
- adp1055 and ltp8800
-Message-ID: <Zz3plZOyMcxn54_h@smile.fi.intel.com>
-References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
- <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+	s=arc-20240116; t=1732113336; c=relaxed/simple;
+	bh=FmFmA786Xnnh4fyc/uaDqdewoBevznugnbpqVfJZ8F8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NE/GqW3AVFVLFkqaXNj65HOftNrJUXDOb+Y/L0KSsBiqbneYYzFOHNp1cE/yKS4nPpifd6etiq2ds66r8VVscdi0oZ+qWOD2IkkRtFRoWntBVLnI0DT1oHrdaHp9PRZ9MgFbYG/igEn56PZ5rj2ICkkFybUkMmYGBEnezM4kJPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HVAmTbSB; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-38248b810ffso1505020f8f.0
+        for <linux-i2c@vger.kernel.org>; Wed, 20 Nov 2024 06:35:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732113332; x=1732718132; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T5q/NrOb0j9a7AJB2JY8f6QBt3D5Yw/OXkV0jHgryNM=;
+        b=HVAmTbSBfAd0c2i8CSGhUGOKnryqellooZ+nXMNItLxrPugaOEFjEG9cBpuDaeGYok
+         zaikWjYFcCWUi+uzlLAy+g0OrXABlJSi3n0tXLumtvSvSqO9NMS69RJT3r6NQJwTEZNW
+         zab6cwwX/ZXsT8e3aHfHBDsuX6fDWe+kBUeYyZ5JhD09HA9wARFbbzFv7kQTRe5V+boX
+         sYlUn8jRAJ7McFWXjwpFxo1VscIk5qJwEYwR4nzZ8M62+2x3IpfVQMdOM7a/TEvyHUpL
+         EgkmUXeKAIXuq4Hvcu25oS1srqOkhNoDeJIJh2Blga2NqoI4bN9kJPRAIkh3OY4BUYne
+         ij4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732113332; x=1732718132;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T5q/NrOb0j9a7AJB2JY8f6QBt3D5Yw/OXkV0jHgryNM=;
+        b=BcSUiFUf/0Sl1bus78n20+VbOMrYLotCUE5RQ7g+ArzWjVAVV/rbtehXDJR6bS3DLR
+         J9AFhxFi12qKiePD/qZu60hCJE4N5tJSFgsyBKJK/xiiB8tTu8duueihFVrLh4diaAR2
+         xn71yPHx9dsAET8OVuwMV7F1eZRRe1NqzYmUCCmRi1/CLrP0kU2ZKQ/n2K56X/crKT6n
+         I+CvAmhAQ/DbluXpRF9HJSrlxJ4yyK4LvJrXrwrM7YJZAkTDkBLrC4Fo8V9T1UlfooW2
+         Wbn/beaqjmEEz3S/wJMfjZwIWbT+pehvQ7gZ74v7T8682C0KG//SMzz4ryceU6wNxkn4
+         nbWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUiAJ9tkmwXYp0jQgCjDj4RYVzeIkBFoAM/QKU9lF7DPwLLupUzPxnGy/GWItaX9gAb09x/EQTWn4A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyK4mEqOQiSOfYjvwbKvzx0d8wJff/bKp8zOy2hAiOyXbl4+j03
+	beqYyXtbfCcJWqbhhr1d8qIntFVj1zAFPS1YHPbeG2SuX1EdUwg5WMCjzkF6itA=
+X-Google-Smtp-Source: AGHT+IFWe/uFMAKibkVW/x9MHd8Z1EECf5mY82HweltfCWS/ylgqPpMPLvVAMlvSP5bESkBAHm7oYA==
+X-Received: by 2002:a5d:5886:0:b0:382:346b:3675 with SMTP id ffacd0b85a97d-38254b1803fmr2152247f8f.46.1732113331881;
+        Wed, 20 Nov 2024 06:35:31 -0800 (PST)
+Received: from [192.168.0.40] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38254933c85sm2229157f8f.65.2024.11.20.06.35.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Nov 2024 06:35:31 -0800 (PST)
+Message-ID: <7ae98d62-9617-41de-ba67-bad2120b33b3@linaro.org>
+Date: Wed, 20 Nov 2024 14:35:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] dt-bindings: i2c: qcom-cci: Document x1e80100
+ compatible
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Jagadeesh Kona <quic_jkona@quicinc.com>,
+ Konrad Dybcio <konradybcio@kernel.org>, linux-i2c@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-clk@vger.kernel.org
+References: <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-0-54075d75f654@linaro.org>
+ <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-1-54075d75f654@linaro.org>
+ <jfhd6fhp55dsahqajx375jitezsvscsbjfrbetpnzplsrq3ciu@5q2up7wbgp4y>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <jfhd6fhp55dsahqajx375jitezsvscsbjfrbetpnzplsrq3ciu@5q2up7wbgp4y>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 20, 2024 at 11:58:26AM +0800, Cedric Encarnacion wrote:
-
-I would start the commit message with the plain English sentence that describes
-the list given below. E.g., "Introduce support for the following components:".
-
->     ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
->     ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
->     LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
+On 20/11/2024 08:49, Krzysztof Kozlowski wrote:
+> On Tue, Nov 19, 2024 at 01:10:30PM +0000, Bryan O'Donoghue wrote:
+>> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>> ---
 > 
-> The LTP8800 is a family of step-down μModule regulators that provides
-> microprocessor core voltage from 54V power distribution architecture.
-> LTP8800 features telemetry monitoring of input/output voltage, input
-> current, output power, and temperature over PMBus.
+> Missing commit msg. Checkpatch :)
+> 
+>>   Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
+>>   1 file changed, 2 insertions(+)
+> 
+> Best regards,
+> Krzysztof
+> 
 
-...
-
->    - Radu Sabau <radu.sabau@analog.com>
->  
-> -
->  Description
->  -----------
-
-Stray change.
-
-...
-
-> -This driver supprts hardware monitoring for Analog Devices ADP1050 Digital
-> -Controller for Isolated Power Supply with PMBus interface.
-> +This driver supports hardware monitoring for Analog Devices ADP1050, ADP1051, and
-> +ADP1055 Digital Controller for Isolated Power Supply with PMBus interface.
->  
-> -The ADP1050 is an advanced digital controller with a PMBus™
-> +The ADP105X is an advanced digital controller with a PMBus™
-
-Can we use small x to make it more visible that it's _not_ the part of the
-name, but a glob-like placeholder?
-
->  interface targeting high density, high efficiency dc-to-dc power
->  conversion used to monitor system temperatures, voltages and currents.
-
-...
-
-> +#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
-
-Why? Is the data type undefined without this?
-
-> +static const struct regulator_desc adp1050_reg_desc[] = {
-> +	PMBUS_REGULATOR_ONE("vout"),
-> +};
-> +#endif /* CONFIG_SENSORS_ADP1050_REGULATOR */
-
-Note, this can be dropped anyway in order to use PTR_IF() below, if required.
-
-...
-
-> +#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
-> +	.num_regulators = 1,
-> +	.reg_desc = adp1050_reg_desc,
-> +#endif
-
-Ditto, are the fields not defined without the symbol?
-
-...
-
->  static int adp1050_probe(struct i2c_client *client)
->  {
-> -	return pmbus_do_probe(client, &adp1050_info);
-> +	const struct pmbus_driver_info *info;
-> +
-> +	info = device_get_match_data(&client->dev);
-
-Why not i2c_get_match_data()?
-
-> +	if (!info)
-> +		return -ENODEV;
-> +
-> +	return pmbus_do_probe(client, info);
->  }
-
-...
-
->  static const struct i2c_device_id adp1050_id[] = {
-> -	{"adp1050"},
-> +	{ .name = "adp1050", .driver_data = (kernel_ulong_t)&adp1050_info},
-
-Please, split this patch to at least two:
-1) Introduce chip_info;
-2) add new devices.
-
-> +	{ .name = "adp1051", .driver_data = (kernel_ulong_t)&adp1051_info},
-> +	{ .name = "adp1055", .driver_data = (kernel_ulong_t)&adp1055_info},
-> +	{ .name = "ltp8800", .driver_data = (kernel_ulong_t)&ltp8800_info},
->  	{}
->  };
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+How did I miss that...
 
