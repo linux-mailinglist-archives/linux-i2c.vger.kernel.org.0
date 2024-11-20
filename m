@@ -1,57 +1,59 @@
-Return-Path: <linux-i2c+bounces-8076-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8077-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E89A19D33EE
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 08:02:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AA449D33F4
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 08:03:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2B121F21BB3
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 07:02:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18AA91F2419A
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 07:03:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D16B1865E1;
-	Wed, 20 Nov 2024 07:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB72116EBEE;
+	Wed, 20 Nov 2024 07:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLHExhL4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PO/GJ28P"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475E8181B8D;
-	Wed, 20 Nov 2024 07:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA9F1662F1;
+	Wed, 20 Nov 2024 07:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732086084; cv=none; b=MzalPBIseFcEzaiJGcHeag9eOgpmdZtfGwzAS9klxtEy5sBwAJVJ9aVXb7xRyxtWZNyRvhytRAxqq2J9qd169ljIgwKjyQQl+jH4MVRqj7GcVaXhgkpojyf/SAO3fEvYMc5l9mUjiqTPJ58V3V2KyU156ADVDVG5ROM0lLtmLvo=
+	t=1732086154; cv=none; b=DfpsiFl/nLVCE7I1fG9+WtDZDhNQTffLxReel7LUOVBTubkk2XhP7Bfx5CHge/LlNWE5hnoMBHVbVrNFk3NOS1aWSs0e5nXtol1DZE6bWjrIpNeYtJh0m+4OBfoEMmdY1InqxNtDn9fQRuN2pGXI14L/iqeMMpx/j3nNKWKHiWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732086084; c=relaxed/simple;
-	bh=xCeCfDqKC2oQd+82Wsb/Bc/uI6yodHwTjgoDgi0COO4=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ebkh9fw/sqDV311d2yJk3fsHNkyTUhXiLJkYHJ+BGUwbHSiF2dxY6+GeR/o7oUEMA8DEJH2pQVdVk/5Z4Su8/9sfO6q5KwBpQutjvmFc+5Z/sLnReET+ri2EG3w2W76U3JRFnIXCId/QCx5UgiTTdF8Mc2LaOhGF4IbI/OThHfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLHExhL4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465F9C4CED6;
-	Wed, 20 Nov 2024 07:01:23 +0000 (UTC)
+	s=arc-20240116; t=1732086154; c=relaxed/simple;
+	bh=1V+lROt7o3roFGG9XlSfD0KUf/yppNvuAk1fHarFLjg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dp5HomwkRKjgR68voCMyOFChz5qlqFBqbuHFRx3tOr3sE92roIfFGxdiXcerqcCwDb13zVWxOmTPKYDhNr9rTS8K2tBT8/MSu1IhtLTyRd5+w/wVGgbPX67AJo45GOnaYUw9ociq69gvClu7xnlsCnVOlfi4UBBjIW9PXsXcDN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PO/GJ28P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A58BC4CED0;
+	Wed, 20 Nov 2024 07:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732086083;
-	bh=xCeCfDqKC2oQd+82Wsb/Bc/uI6yodHwTjgoDgi0COO4=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=kLHExhL4TScH9boO5ucuK0cV0xiW5Pomsu6ZTbsGwt5STwd2fzEpEqMlZ0ObC9wuU
-	 BT94DG6cfpCDdXkz+p7WADNEfNI02AypytYy5nSKamDBDfc/CRcPF3IovREoi9lX89
-	 l77HCUJEc3XgMFQr+BttOQcBWThvycYJdnBEUGvjfUSpNMGNb/xqZAXRkuWuyaJ+X9
-	 V4eJ7i4WseLLbDaCDMs9hqdqiV8Y5e5O3da/13TuquFG3KaP3eQ5nqZXOkJ8jtwi5p
-	 BoGJ8/ke7bA08NcZzIwDgsviyxXOkZ2eHHo2JHyqkenlViIGVQPyIniRsOVFOiencT
-	 xjW18GRXIkYNg==
-Date: Wed, 20 Nov 2024 08:01:20 +0100
+	s=k20201202; t=1732086154;
+	bh=1V+lROt7o3roFGG9XlSfD0KUf/yppNvuAk1fHarFLjg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PO/GJ28PqyJ83SlHBFNymbZzjig4P5QqrK99dPHKrG29wUGBJH0fMcb3fyDNcQMTP
+	 z6NuJiUwwstfGTeSu/nbpSrB+cgrHF4GI83RgxJORFaPI6aEMRusYT7ZB29ymwsak6
+	 eKEU0oCp+61L5IGF6ncStrW6LhUuVqkcgrC/QkzjDn2XGOFhMiFaMPVpaf/s0ljhL5
+	 bxkLRk35Kyvc484129SV5x0T5cJ+zx/ZZflf6kzJqdnIxJF5jZ6FgaPqecbZ4JzenY
+	 ttX196tzCgPQl4L1mLhb1qY7G4wOt/wb1PU+Ap5aCOWO8i+wAhfbjAMuKF5IsCRYiN
+	 1odhIRO+8Xzxg==
+Date: Wed, 20 Nov 2024 08:02:30 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, Thomas Richard <thomas.richard@bootlin.com>, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: cgbc: Convert to use struct
- platform_driver::remove()
-Message-ID: <r34ulkawh3c3e2mzyv4eskla7e76z73otpbp4ei2gddarabyxk@pcuw2a3kards>
-References: <20241016091323.12578-2-u.kleine-koenig@baylibre.com>
- <twrnl6zi3tzluj4z7yutb34r7ljr3jbk5jzf6jzcygxt5yq6iv@h7cwqlbtcayg>
- <Zz10-aGTFmWcw-1e@shikoro>
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com, 
+	blake.vermeer@keysight.com, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Subject: Re: [PATCH v2 3/5] i2c: Congatec Board Controller i2c bus driver
+Message-ID: <vrbdmnhekuw3p4zf7xlztd3pf2mgedhrgmfgmryzcyqsuwywhj@p5yhisrggti2>
+References: <20240503-congatec-board-controller-v2-0-681511a01c8f@bootlin.com>
+ <20240503-congatec-board-controller-v2-3-681511a01c8f@bootlin.com>
+ <lfh3asa2bmy73c4otgtbpr6l2wmjn7btsqzy6zv22sjots53a6@axonub5u454l>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,16 +62,25 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zz10-aGTFmWcw-1e@shikoro>
+In-Reply-To: <lfh3asa2bmy73c4otgtbpr6l2wmjn7btsqzy6zv22sjots53a6@axonub5u454l>
 
-> > This driver has not been merged yet.
+Hi Thomas,
+
+On Tue, Nov 19, 2024 at 11:41:36PM +0100, Andi Shyti wrote:
+> Hi Thomas,
 > 
-> It is in Lee's MFD tree, and thus, in -next.  It will go to Linus' tree
-> this mergewindow.
+> ...
+> 
+> > +static struct platform_driver cgbc_i2c_driver = {
+> > +	.driver = {
+> > +		.name = "cgbc-i2c",
+> > +	},
+> > +	.probe		= cgbc_i2c_probe,
+> > +	.remove_new	= cgbc_i2c_remove,
+> 
+> Please use "remove" now.
 
-right! I saw it but forgot about it... then I will pin this
-patch for later.
+please ignore this comment.
 
-Thanks, Wolfram!
 Andi
 
