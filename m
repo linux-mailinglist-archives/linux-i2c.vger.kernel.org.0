@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-8083-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8084-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7BBC9D35F7
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 09:53:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F4079D3606
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 09:55:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39783B267AB
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 08:53:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 094B71F2465F
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 08:55:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6F9C18D63E;
-	Wed, 20 Nov 2024 08:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4703D185E53;
+	Wed, 20 Nov 2024 08:55:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nS3fVpfi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e5i0EB64"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BD0189F54;
-	Wed, 20 Nov 2024 08:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA787219ED;
+	Wed, 20 Nov 2024 08:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732092781; cv=none; b=SEYewIF+hyy7Rgy9WPLDwq5RkKEzrm8cLprmL9NEk3E9GLPtk9WqZ2Hzulh5q3PG6zlUaxX858WvofUcz7ZdKDvKjO/Los0R4NsEW7gmSLUoS4Wk01Lc5t7A0U2QFr0rTB8h00rauN60/rG1jlojzmfeDtvIHDZgi+dczVJ1DO0=
+	t=1732092918; cv=none; b=Wv5zeqtt1kMhJO6Tvi0+klZmyG9aGNF95s6iaVcX2n/vtQ4uzPrerdXihyNVEmlMiBAUASA58JqArUaftnEMydRAfQloK2RicoDjK5iUPbiss7Wr83GPWPgA4DD8WmV64tUm9VgNAFr6Spzbs5Kprqx/ttsShcotZJ+1xZMuX2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732092781; c=relaxed/simple;
-	bh=Hn6npxFVYkALgkljMWG2aKs+3PZdGymydRwuopKUxxo=;
+	s=arc-20240116; t=1732092918; c=relaxed/simple;
+	bh=neLM4rD8TKmmOJUcOz3f6gA1PSXpvQ8J4X8n8gHpHfY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cxG9f/c95TH6xgSLFLsdrUF//OWVo7mjfgU4amB75D/f18dNzH+ktd4GxRVw6pQTiuE9eoyWKdUGbVNeYrdEXcZgEvQHSwWzXmNYFy4YE2F98OmKlMAZt3Pu4l2Z0ejFgowJXlLESniBcwj3/SzyuX2ydi0hX9eRHh+bKVi1zG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nS3fVpfi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30E4C4CED7;
-	Wed, 20 Nov 2024 08:53:00 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=B4LKBINL3HtUcg53Tr4IiZyMt4TVrmtzjBJE0KEBoHfFiq4VZXr8lycPXTvQzkaI95nbl6D5I1w+AlZmj6l/W5dhoKEo77ztCJSc9TkFD8wfRxJqpZYEhbXP5bNd96hnr8BM4mfdwhbo5JbXKje9xetCvOVVGLMnhpOZPrEqQi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e5i0EB64; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F50C4CECD;
+	Wed, 20 Nov 2024 08:55:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732092781;
-	bh=Hn6npxFVYkALgkljMWG2aKs+3PZdGymydRwuopKUxxo=;
+	s=k20201202; t=1732092916;
+	bh=neLM4rD8TKmmOJUcOz3f6gA1PSXpvQ8J4X8n8gHpHfY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nS3fVpfipJGRTqGyEO4Kk0eskgpQElJA19ceS29wy5S9oOT3oxrP6GtYJZg05f9Qy
-	 aZ9hs+vBrc1bjJ994xpW6Kr77lD2lC36HghIVWt4GFZeoXck35lOb3Pbq9WjWxZtnq
-	 cFlEvwuUVYoyyK7nuvvEzkLvNixMKo3bthEh9EnVSke0Nof3WMsmFQDxyZeME2B4+N
-	 F1+f0o8oa6IA3Z6xJx5wFGu4c0ximz8m1FKlE+CSvsuInGq7tagASAi7vwuUzFWH9Y
-	 vlG4DZROcfCPBiTCHlmqwOvplsVhJyVGtjBySpZqLgGS4aV1KcpLyIV+oHbdFwE8ga
-	 gcMONahdMPHqA==
-Date: Wed, 20 Nov 2024 09:52:57 +0100
+	b=e5i0EB646RoVWoyfbIAFGc7c7Nw8VyfJAhTXdvXTuul095Nc8Wj6mTLDpf+Ga+Y8N
+	 16/tEOX4UklgARs1JuyLOZsjaDMCtkHctONUccu62IdATO4S5kCUIGhY+QT12uIoIy
+	 gZlKKhWi6BmYioY3y2X2gODAS5e0/ocpgdGHsvE5rEixtqY61ywdq7G793goQs6hU0
+	 Pj+eNATpqAEv+rYgd4vQMLL2eqXV3tWtDLqkFNfHGSrd5tr3xNJwsVlkPn8xVlymfj
+	 Tz6QnOKbBVhkvRJQui0bqjEI/L07Ydp6wdGWjUWEu3VLu8RbJx/nB8494bO+VeEjio
+	 Rerimjg1fFOXg==
+Date: Wed, 20 Nov 2024 09:55:12 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>, 
@@ -53,11 +53,10 @@ Cc: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
 	Jagadeesh Kona <quic_jkona@quicinc.com>, Konrad Dybcio <konradybcio@kernel.org>, 
 	linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 6/6] arm64: dts: qcom: x1e80100: Add CAMSS block
- definition
-Message-ID: <vh6fvvminsq7eeovz6su336awgq56kc2r54mldmihgqxo2wkgt@wxciyxacp2ov>
+Subject: Re: [PATCH 2/6] dt-bindings: media: Add qcom,x1e80100-camss binding
+Message-ID: <6fcishrguciy5d5auihnx4c43dle7ceusaahhg56jbwpmat5il@2f2wjunitjxn>
 References: <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-0-54075d75f654@linaro.org>
- <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-6-54075d75f654@linaro.org>
+ <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-2-54075d75f654@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,42 +65,97 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-6-54075d75f654@linaro.org>
+In-Reply-To: <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-2-54075d75f654@linaro.org>
 
-On Tue, Nov 19, 2024 at 01:10:35PM +0000, Bryan O'Donoghue wrote:
-> Add dtsi to describe the xe180100 CAMSS block
-> 
-> 4 x CSIPHY
-> 2 x CSID
-> 2 x CSID Lite
-> 2 x IFE
-> 2 x IFE Lite
-> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/x1e80100.dtsi | 180 +++++++++++++++++++++++++++++++++
->  1 file changed, 180 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-> index c19754fdc7e0fa4f674ce19f813db77fe2615cf3..f23352493cb270c0fdc3c42add032286601db1e9 100644
-> --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-> @@ -4730,6 +4730,186 @@ cci1_i2c1: i2c-bus@1 {
->  			};
->  		};
->  
-> +		camss: camss@ac62000 {
-> +			compatible = "qcom,x1e80100-camss";
+On Tue, Nov 19, 2024 at 01:10:31PM +0000, Bryan O'Donoghue wrote:
+
+A nit, subject: drop second/last, redundant "binding". The
+"dt-bindings" prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+
+> +  power-domains:
+> +    items:
+> +      - description: IFE0 GDSC - Image Front End, Global Distributed Switch Controller.
+> +      - description: IFE1 GDSC - Image Front End, Global Distributed Switch Controller.
+> +      - description: Titan Top GDSC - Titan ISP Block, Global Distributed Switch Controller.
 > +
-> +			reg = <0 0x0acb7000 0 0x2000>,
+> +  power-domain-names:
+> +    items:
+> +      - const: ife0
+> +      - const: ife1
+> +      - const: top
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    description:
+> +      CSI input ports.
+> +
+> +    patternProperties:
+> +      "^port@[03]+$":
 
-It does not look like you tested the DTS against bindings. Please run
-'make dtbs_check W=1' (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
+[0-3], no?
 
-Best regards,
-Krzysztof
 
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +
+> +        description:
+> +          Input port for receiving CSI data from a CSIPHY.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              clock-lanes:
+> +                maxItems: 1
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +            required:
+> +              - clock-lanes
+> +              - data-lanes
+> +
+
+...
+
+> +            interconnects = <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_CAMERA_CFG 0>,
+> +                            <&mmss_noc MASTER_CAMNOC_HF 0 &mc_virt SLAVE_EBI1 0>,
+> +                            <&mmss_noc MASTER_CAMNOC_SF 0 &mc_virt SLAVE_EBI1 0>,
+> +                            <&mmss_noc MASTER_CAMNOC_ICP 0 &mc_virt SLAVE_EBI1 0>;
+> +            interconnect-names = "cam_ahb",
+> +                                 "cam_hf_mnoc",
+> +                                 "cam_sf_mnoc",
+> +                                 "cam_sf_icp_mnoc";
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                    reg = <0>;
+> +                    #address-cells = <1>;
+> +                    #size-cells = <0>;
+
+These are not needed, I think. Not sure if even correct...
+
+> +
+> +                    csiphy_ep0: endpoint {
+> +                        clock-lanes = <7>;
+> +                        data-lanes = <0 1>;
+> +                        remote-endpoint = <&sensor_ep>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> 
+> -- 
+> 2.45.2
+> 
 
