@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-8094-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8095-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D337A9D41C4
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 19:00:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6238B9D41CF
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 19:07:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECBEFB25BD6
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 18:00:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAC381F23082
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 18:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB0891AB6FD;
-	Wed, 20 Nov 2024 18:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D614C1AA1D6;
+	Wed, 20 Nov 2024 18:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZHo1a+x2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RhBjjdQt"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8FB1F931;
-	Wed, 20 Nov 2024 18:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB9E1E489;
+	Wed, 20 Nov 2024 18:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732125625; cv=none; b=p0Wr32OqgA1TQrp3LScrr2/0lbYsa8ybK7CvN3X7/WHYpwvQcsYrAsMXnyCYT/Ub8i/P2YWOTh13BV/lZyeIyk4VGq+mxx8ImegAmBriLCgiPcT/wLA5LvsxN0UvzEeLa8nx3qysElUtEThQkF0IDBJ/BP9vHn3oLKPDlOfsIAI=
+	t=1732126049; cv=none; b=TtXpd1lHDypP6leDszhoDvXpoUTDRhLxHUJdAUkrugUXvw4p9df64yCTAg9T2UW5cJjiIokS8lOwazRL+aXzzUOcfP+k/qegPy4jNoKXW5OvMKy8oZke/SHoSEgw7u5f9L3BgbvoouiDHF6pbykzf3p6qyJRtRUFmICua3jq6Mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732125625; c=relaxed/simple;
-	bh=i6R8kkJssIDgVcwuxFE7H4ZdlZSb15xvvuSUmk2sGwE=;
+	s=arc-20240116; t=1732126049; c=relaxed/simple;
+	bh=fC0a0dcffjP8d0yxp5ThNzmgwtjg0ZK+4idfGdgNdcQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YY0kH6n8Ia3y06mh18bb//VK6K1BnZjjKS1+kNFQKk9WCiIxVwTcdAEYP4XWDOPOc08MYfYO3KeLSRoceuK3mc3NceQmFWUJMzCfs/96p1kLeabsFsqy+mxIFT5ylV+RFNPkR9mjp2fhd6ZsBam7zzMFsDIHGNhuFsMb3p4VmVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZHo1a+x2; arc=none smtp.client-ip=209.85.210.175
+	 In-Reply-To:Content-Type; b=C/9k9kvMIuL2MB8Il3NMFDyexB1HLaiQHh2SM+3v+Sj/5r4YUIs1wXpLs8tV6uewBbDtq+QCELTu3dFfGjvIAd/sC4yJCyUihEP42kAsZE/9In+UsDC6ZhnaLNZEHFQKCQrQK3YmYANYoKQdMBaBGn+fyat8+9C1LtcAqjoKr2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RhBjjdQt; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-71e592d7f6eso47679b3a.3;
-        Wed, 20 Nov 2024 10:00:23 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-212581a0b33so21955605ad.0;
+        Wed, 20 Nov 2024 10:07:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732125623; x=1732730423; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732126047; x=1732730847; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=pFC7gRuwEUwIU3goRx6tJJxo1gNezEBJEX3ODkGVP7Q=;
-        b=ZHo1a+x2MMRNIbzUTjLn62v6KS6C20iMtmZqPgDQ7H0AVjeKewV1kNcr+8rwooq4xH
-         6SDHOo6ny2SJV4+p7bPlxN1tpGSyiP1Gv3h5oYy4ShdN/P40KfHnQwDqVd9P2UhOAHx+
-         jpADAModaux+FVrlz3/wb+RtMAN+/dWm+wX/RKDKcUI8GmrDytUSCjt9C9/tIEl3wI6h
-         fwNBOXE2S0/2a4UhwoXAoO9l9MrKhoglCvYSYqRT4GuKapsYyn5VxrA3TCBofEhM5q/K
-         8epbvEO3VuLJ40nmVv78WmNPwopO6i+6y9v9IHpUTk5/r0gWSusF8QiXvo9gBxrNNHH9
-         cAJw==
+        bh=oCD9jqN15ZFMZzQekYM10Jocq9g8TJDb85MimZfpYhQ=;
+        b=RhBjjdQtmCoFFGXeJHUrJFAmAtGPCyTcCYf0ksghPmvuqRN6v07f2gS2MJEzyIwzRJ
+         FX7GuIk5X798Cg5MW7wBjKWTprN6Cx1h8duCjRxEPfgef6gDOQhA7yR1IvEBfJgC72LE
+         rWEOzxfyK1FQHNeI+1dIS5L6gEEBueULWajrdSf8f1AJeysTLp9frUVN8aoL3kYRUX19
+         49TaG9HWDO/PSsUBOS3CTrYPC8gNhLhQnpCJcZN0rgcozEqTwElryWCnnNxJ8DmFeYyj
+         XaHDnOqbfR1sf08V8FB+fN0hZ41ySEh+aHPtaJAiOT7W5g8k0pPYIPcUSVXha9YTo4MN
+         g3Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732125623; x=1732730423;
+        d=1e100.net; s=20230601; t=1732126047; x=1732730847;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pFC7gRuwEUwIU3goRx6tJJxo1gNezEBJEX3ODkGVP7Q=;
-        b=ajP7jk4+I9uo+R3JN07XxlzJm+Vygj92GcFjTVz2zxApPlTfuqrqreKEVD2tvIiU2O
-         eCOpPAZ9cDxK0+6M8LAXty6l5NDO8KuuujM5pxpuVMevN5jCMxg3FChZbomycOfdbQ3v
-         IFa9xwE7A/Nz54yhTUiujJVN8yPCeawWn6VE9ZAVwlGBn/gsYf+AXMcOwOr83a7VBia9
-         +iV4Z9t7pojfqhIjfNyTXYceuuFfe9NauK91bhy1jnKCEwHPICv3CqIVF/S+T2ZOQkwm
-         2KrHf1qpwpqDOlg8Z+VFr+bP5a+BL3zEW2xPANePN156Pdou8O6TAxswU8omec7pzYrW
-         /KaA==
-X-Forwarded-Encrypted: i=1; AJvYcCVXjHYl9uEFB128Eeg+bE0zmkddbQ535O/XoxM5KgPK9UILPa5u1ktbGnoMvKDCC5boN9CN/lcWbqmw@vger.kernel.org, AJvYcCW4AbHbbuRkMdoLPps5UH9TejNDxh6Lrm8mWG8PSRTRdmfdBomnRWZMP0whNQi/ZVlvS9HP4eVeXPBiSOn0@vger.kernel.org, AJvYcCWkAKTrZtBqDPEDEt3Cb2cCqrtdQ+tZnig4eXSBbS7XAjQ60Of7aar2CoEPvYDzznZDrOmtHu/i+G8=@vger.kernel.org, AJvYcCXwDCRi10x2K9P7sv5opvAMa+M07Y1BgERvhNQwtNq+q0r3KRfZr4DqkFO9cvgHq5aZjeUQ0bE+JKtmtqI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbPaaT87LfqZpxwJsqFjtR6DK9p1E6okOt29wYfcDpAPkYN8CX
-	velLVqtclRJfKQ25M/IuBR1yNr8aal1GB5J1LLDSEsLMp84o9s1D
-X-Google-Smtp-Source: AGHT+IGtBHU21hYZhI1zWHbxZDyKvXruQ8NMzZ+kLATwW64vi9AkorIQBMfuokaW5BaMWWjJNBy/LQ==
-X-Received: by 2002:a05:6a00:1495:b0:71e:108e:9c16 with SMTP id d2e1a72fcca58-724becb837fmr5156189b3a.12.1732125622771;
-        Wed, 20 Nov 2024 10:00:22 -0800 (PST)
+        bh=oCD9jqN15ZFMZzQekYM10Jocq9g8TJDb85MimZfpYhQ=;
+        b=UcmRR/BU4hfJSNeykuKcN0SDDvnXdjwtOyTAcTYkMDV63d9OEoYrGUv7DLFHbWHp6g
+         blZ74BdokqfM1GPYTxk1zue7mOWagQxOfv9GFG3HJzmp+FBEHduBC0MjtOBsMLtykdj0
+         TUKQwlQSvrLC6RgpS1bUn3hdN0NPlMAXG2C7wGfhgxxi0Nbn7vp6INwncEb/qhkiseLo
+         DtTHcX24sROtTWPr3VuPHYVUYTTLm5JlfQJv+/WAlMGnJjpAsgeyHWLIyc5MMhpn+6Hf
+         gq1Gte87NXJo0/KcpSg7opJG+JujOJPwC0WNuosfXb18xVJ3cA8D+dlyrRZOMAekkPMX
+         rD9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUNfmQpzC4GYpVrx62SoNZ0i3nC7g+yMMZ9lgqLo7x6fctrfDXiTMoHTI7aWQ/VBrp2wV0BAX0rKrrc/YU=@vger.kernel.org, AJvYcCVUp/k0rSuv4k/XrP/RXZJleiSFx1LhVP0dsuFAqOF2zFIDOkkihT5PzsbU2EzmVpIiU4Dzxu14mp85@vger.kernel.org, AJvYcCVeTZnt6ie6nYo4q7VfORVPe7VS3hFJF7pJgpDyLIQ6oYJs1d7dnypZR0my0OrygY9hKSRzOsRAiTcy1Yyz@vger.kernel.org, AJvYcCXhgMs+80sxfTJzgnPCowF0kMVuv7AOEO4uDLD/2LNJJYzQdF/mxrLcnieE6vGEMOmKIyCf9t2HTlY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3wJZhr+O7suE37UmnPcXthTEabi7j4Xn7FI0ImV9r6WR4+E5I
+	yur06TxFRHb/oJAdJTPXZ7FTrOFU23r6ygE7CBy7JFKqEv/Eywl5
+X-Google-Smtp-Source: AGHT+IEwiDtnSAxEOk/AeSg1QOgAISxDY3a8s/vd75HOZF7OG4Cyqd/uUg4tGRHsf0HmRkc2OfjoXQ==
+X-Received: by 2002:a17:902:d2cf:b0:212:6187:6a76 with SMTP id d9443c01a7336-2126a3a43e4mr41756665ad.14.1732126047311;
+        Wed, 20 Nov 2024 10:07:27 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f8c1dce9afsm9756598a12.82.2024.11.20.10.00.20
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724beeb83easm1961536b3a.16.2024.11.20.10.07.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Nov 2024 10:00:21 -0800 (PST)
+        Wed, 20 Nov 2024 10:07:26 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e2e10b1e-cce3-409c-9327-178cbf4b0d64@roeck-us.net>
-Date: Wed, 20 Nov 2024 10:00:19 -0800
+Message-ID: <7e55a403-eb1c-4369-8180-1639b50cc9b1@roeck-us.net>
+Date: Wed, 20 Nov 2024 10:07:24 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -80,7 +80,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings for
  adp1051, adp1055 and ltp8800
-To: Conor Dooley <conor@kernel.org>,
+To: Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor@kernel.org>,
  Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -95,6 +95,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
  <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
  <20241120-process-hulk-ecedcbf088f7@spud>
+ <dfe8e47e-6c31-4b11-b733-38e5bd0e49d3@kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -140,44 +141,34 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241120-process-hulk-ecedcbf088f7@spud>
+In-Reply-To: <dfe8e47e-6c31-4b11-b733-38e5bd0e49d3@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 11/20/24 09:11, Conor Dooley wrote:
-> On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrote:
->> add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
->>      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
->>      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
->>      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
+On 11/20/24 09:35, Krzysztof Kozlowski wrote:
+> On 20/11/2024 18:11, Conor Dooley wrote:
+>> On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrote:
+>>> add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
+>>>      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+>>>      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
+>>>      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
+>>>
+>>> Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+>>> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+>>> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
 >>
->> Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
->> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
->> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+>> Why did you drop my ack?
+>> https://lore.kernel.org/all/20241106-linoleum-kebab-decf14f54f76@spud/
+> So that's a v2? Or v3? Then should be marked correctly. Please start
+> using b4. I already asked analog.com for this in few cases. Feel free
+> not to use b4 if you send correct patches, but this is not the case here.
 > 
-> Why did you drop my ack?
-> https://lore.kernel.org/all/20241106-linoleum-kebab-decf14f54f76@spud/
-> 
 
-There:
+In general I agree, but this is a combination of two patch series, as mentioned
+in the summary. I am not sure how to use versioning in such situations. Is it
+v2 of one series or v3 of the other ?
 
- > +    enum:
- > +      - adi,adp1050
- > +      - adi,adp1051
- > +      - adi,adp1055
- >
-
-Here:
-
- >> +    enum:
- >> +      - adi,adp1050
- >> +      - adi,adp1051
- >> +      - adi,adp1055
- >> +      - adi,ltp8800   <--
-
-This is a combination of two patch series. I'd personally hesitant to carry
-Acks along in such situations.
-
+Thanks,
 Guenter
 
 
