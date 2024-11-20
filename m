@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-8089-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8090-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FFD99D3DC2
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 15:41:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2E8C9D3E6C
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 16:03:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B557AB2A8D4
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 14:40:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D97B1F2455D
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Nov 2024 15:03:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2E3B1BBBD8;
-	Wed, 20 Nov 2024 14:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B531C1F0A;
+	Wed, 20 Nov 2024 14:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hod7eXOf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBRL9r9X"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97CD1A9B20;
-	Wed, 20 Nov 2024 14:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F201BDA84;
+	Wed, 20 Nov 2024 14:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732113584; cv=none; b=TDdV1jeH0tBjenImpHy35MuO73QXga5p4Jcr0DGBOxpUKY2Cm/Xb/0OyUNgrJSSXAAwQiM44zXAf5viOXB8vu0fx6AmJlcwg4AGwPSswsAJk97K9ysQYEyDjjLNoUKs2f4EH1WL01yHYxsHM2AiZbpd3FZu+lMqbBiVTm9Yl4Kk=
+	t=1732114443; cv=none; b=dca5kFboJfFV/FpSDSFkOJ3eoscQUZ/iGcazdle33dNvncpHNtHd2KrcjGuupFpLG7Lt9IMZ02+ao1Hl/v2bNtEztXeprYZGMU47tn6dN4At/Atic2jUgJat1CvrX3YSJr0r0XgMSJmahqymKxiLs4NZRPRuVBqxD7+KzlvrWF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732113584; c=relaxed/simple;
-	bh=jCOqnJI1jSfMbdikbviwyyXbQRNLkjTouIoyWIbfo1c=;
+	s=arc-20240116; t=1732114443; c=relaxed/simple;
+	bh=w/qHOXWGR2K5CW5roNgYOh4+z3UBJ/xM5PUliSS86aQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rmEojRS1qI/B+82qZ1ERiszHcQcSzOT3MRh22rS47JsDqwHERT6H0InxvqMoWDb1CFbvawYizYREwpMyjfhymv2YT+DkEoAg+yuaHGBrJegrJT7wn9bk1xSRizJwtWOxFUejrIgwWiGpRYIjFCumaDYj+90cV7c5KPtxduRCgHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hod7eXOf; arc=none smtp.client-ip=209.85.214.176
+	 In-Reply-To:Content-Type; b=mw2WfaTanAc1WkW4QqALPHHIgbEta3tFPUgw2/TB9LiI20yWBI1XR5wlUopkwVB+sXVqQUY2UzJNL0dXkAm3PBuyfRalu3fX44aevngb6Iu1lhfYSvJwWl/TjkEy2DopEmqyTB7XDbFEmd6aqt0v+gUsKxsnELQ9vsIHZRVfSok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBRL9r9X; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21207f0d949so42397885ad.2;
-        Wed, 20 Nov 2024 06:39:41 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21271dc4084so6335365ad.2;
+        Wed, 20 Nov 2024 06:54:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732113581; x=1732718381; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732114441; x=1732719241; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zabGifVxpVy+avsG3rCPsHo6MQzgl8H9BAM18fNKYAU=;
-        b=hod7eXOf930nJiau4zfm8AMUEribF5ND0eWAOBK73GrLhOgiGkui2LzdQcNWsCro2S
-         9rub3BaTUZ6NBlkBVbiVLgoUmx3sP2AhV4GHab4Xq2T/CPZndX9AUgdo9ZoceQk9va/x
-         BxS/DRQtkfM8hc1A30ogMLAfBiUCGkxZXIHIFBS5ENgkd8NoUROfHlNeyXfE0F2tHjLR
-         VEax5722Ih4TqlYUR7KHZabfcA+8y3cngV5npfuPT9IaZCG0VAKiCTZ5FZ2Joz+aBH2U
-         ha6Ukc7Y6xxEtrGHTaNHAg7gefm1jgxX6MvcVffOPPZ6Q9h7TEgDjzCzV5n/eztL+YrE
-         hgQg==
+        bh=4HOLlXKlpo9etvsYTVy5j+/b27rCxEh6rId0n16/9CI=;
+        b=ZBRL9r9XHk1X2hOWYTj1DLNfpZnCss8KsWFCk+Uuo74HEYFE73KdAfh2ymizHWFeKI
+         0mZKzj1LXxosS198lxp7UByR79e9jibbJmBFxi0TEDuOfl3LaQXxMXHM9hvwRp0COeA9
+         rP07PGCWCKI8h7Ru+fTsZZd9huBFcUXdmuVE2vZWxu81bp7e9aNmcFWQKCl3/TwUfByA
+         RPBI0Uh+JBxh0nU8t/hqQ7F9HCUVGFuoHUWx3yLRnAheIGNe9k/dHjStzk8hI8Iyog6c
+         tVsX+o2X+wJYtoZo8LOrrO/w09XRtk9bPPYieczjYHQq0ZRW8JJyMRkgPn6LRh3r9dYg
+         EqQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732113581; x=1732718381;
+        d=1e100.net; s=20230601; t=1732114441; x=1732719241;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zabGifVxpVy+avsG3rCPsHo6MQzgl8H9BAM18fNKYAU=;
-        b=vNinHtGuaFX+HQNEiqp/hCbzRHHjhPi8WvoSV6jbeCRmc4sdj6mdPlBjAZRWVTMMPh
-         cTCsfqeQWbPQUdrYjRuc2/xBFVsQDMtqH/nLlafEsMZjRPUpgGpXKMX99LQ6jxGe0e0b
-         lAL4C8TSkTYJJfsX+y+iW+VdP51JuHP6NFBNpH69CuMn6Lf/93BK5kwFj/GkQT4D5zbT
-         UJ767YBk7rVRyZf/mpy0P4wOyOgpMT1KTHXKfvlfJbIFprg+Uj3a9D1DUqjlgoOTRRfl
-         ROwJJXQPl7ll9Cegem23eklp/2pIEadU7dX5XJ/NGY9jG21igqJhEw9Z5S3AnqMWcO42
-         fkgw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6GbcHQku7IY4ZAeV1I0BuuBl7BC3WF8nQDIVU39PZFsB7KG9vC+qj3EKR1VZT1kbL9stnuekLTaZU@vger.kernel.org, AJvYcCVXxm3wwvdHDQjfWFVH52mKGiF8GdcNr0n1ponBqi6sTVyoIte/p1OBBC31BbnCWocnggR0XJ/qSYoP194l@vger.kernel.org, AJvYcCVsowFz3B7gKy5C7JTynrXoMsUprjHAYtybvMPxczRCFO4ynPzJw6c7NAQcJV3FXe+0HJlyI7ko2fze@vger.kernel.org, AJvYcCVyGHIjPeDjh9iff5rxtXK+MMFct+YNSCikYjy5evGDX90Ovdqee5jSdR67E2/54bvGoWWz8Tkg92wD@vger.kernel.org, AJvYcCW+zCXjUYTQwdIpctE0nQyhCJFsFz+KQd11iX8Pgz1wtHkMOupmxDbWiS2qJduGy7wMWWwRehCMu11VBKk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyjay+rJPRB51VCxYPJmr91PxhhyM5ONAb0rScrSPWafLo/ZxPm
-	4BGR5lGkQRDrPngZThyVC/ZbmyDs3p4KvvxDTF2zgNz//3UiTuq+
-X-Google-Smtp-Source: AGHT+IHRii0hD75xSkktHp2W+X5T+R33piATj8nmXJpALNeeMbH64uAdw6Rbga1ucavvsOxTjAgFvQ==
-X-Received: by 2002:a17:902:ccc9:b0:20c:8dff:b4ed with SMTP id d9443c01a7336-2126fb34cabmr25636265ad.16.1732113580802;
-        Wed, 20 Nov 2024 06:39:40 -0800 (PST)
+        bh=4HOLlXKlpo9etvsYTVy5j+/b27rCxEh6rId0n16/9CI=;
+        b=MvGBDvuBomH+OR7k5d3tOi4Ur44Nu7OrHNJZ+OszZZEJ+XHGPYrRjUxGEfoBClAHmG
+         t79LB33EpbIWn+gFkM3Aq8XHucU//fo5v3GOlpJSopay0pawkV17Z5iMNZgFYxYDdgWV
+         OL2zoL00SQkuYcWBdwM6MdXK6B7VaM1RuVwf36mFZ5EiXu4zQdqM1TnkjWy3RV2sCCYq
+         qRCw/kaCLLam5IDl5zcjtiRqWipPYc9ExTwHNAup92nxB5YYjZq8FpI18/4xRsnfy6LM
+         109NK52YVly4EHew5rdeE0UeB5bkKYnHkreKUunmjN5Hfie3/VeUlGswDrnIbe8Qy+DR
+         X3UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWhlrfzqeHzLXZuEfqOKqc0IwiBr4Id3r7b0igtmjEtlaSsLJ2gaTgupaekQkWZ+u2HWWMIpVZ9hrlFWqi3@vger.kernel.org, AJvYcCWo9EJmrcDAkmYVAIuRJhj6rZqFQTofQx0/jogw9fRhukyde61dvAnDLohPyL9V493coaBrQTHtkIU=@vger.kernel.org, AJvYcCXTazctrTOQxAHGZn1blnyFzArlvh1SoEY28Wx0VGVukLyGOSTLUrWLgYA+4/yZNWE46Oxce+Fhc4Kl@vger.kernel.org, AJvYcCXWYZPHG1cZRFsgz8j++kQYCPYRNPbuOWxJOGJGWXHgZLlQzslrtuj4DK8uTNtdqB3EXexU746igbqU3Fw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwM9TNlQEvuYjISsMErIMQNuUFBHF7LTtX6WlTE0ldtywXbK5OY
+	cz6qfjoaUoJoQPREHcz5rcXdKpOI7wCRmc035k6gvYe4lYiT6pJUYDWxuw==
+X-Google-Smtp-Source: AGHT+IHHp9YR2PhXujmQ76MKwqjnaa2KpsLMbdRvFrp29j6GuCt0xPzB8n87MCQy+VAomjc5MEWhjw==
+X-Received: by 2002:a17:903:2312:b0:20c:ee32:7597 with SMTP id d9443c01a7336-2126ca4ea95mr32956435ad.8.1732114441133;
+        Wed, 20 Nov 2024 06:54:01 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-212037e004asm65327835ad.205.2024.11.20.06.39.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2125bec05acsm27038395ad.32.2024.11.20.06.53.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Nov 2024 06:39:39 -0800 (PST)
+        Wed, 20 Nov 2024 06:54:00 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f1b338a0-fe51-48a1-a35e-41041df79b63@roeck-us.net>
-Date: Wed, 20 Nov 2024 06:39:38 -0800
+Message-ID: <4cfb8bd8-4ce7-4474-b7c0-0fd2693ce34f@roeck-us.net>
+Date: Wed, 20 Nov 2024 06:53:58 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -80,19 +80,20 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
  adp1055 and ltp8800
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, Rob Herring
+ linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, Rob Herring
  <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Radu Sabau <radu.sabau@analog.com>,
  =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+ Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
  <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+ <Zz3plZOyMcxn54_h@smile.fi.intel.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -138,86 +139,128 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+In-Reply-To: <Zz3plZOyMcxn54_h@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 11/19/24 19:58, Cedric Encarnacion wrote:
->      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
->      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
->      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
+On 11/20/24 05:52, Andy Shevchenko wrote:
+> On Wed, Nov 20, 2024 at 11:58:26AM +0800, Cedric Encarnacion wrote:
 > 
-> The LTP8800 is a family of step-down μModule regulators that provides
-> microprocessor core voltage from 54V power distribution architecture.
-> LTP8800 features telemetry monitoring of input/output voltage, input
-> current, output power, and temperature over PMBus.
+> I would start the commit message with the plain English sentence that describes
+> the list given below. E.g., "Introduce support for the following components:".
 > 
-> Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> ---
->   Documentation/hwmon/adp1050.rst | 63 +++++++++++++++++++++++++++--
->   drivers/hwmon/pmbus/Kconfig     |  9 +++++
->   drivers/hwmon/pmbus/adp1050.c   | 72 +++++++++++++++++++++++++++++++--
->   3 files changed, 137 insertions(+), 7 deletions(-)
+>>      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+>>      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
+>>      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
+>>
+>> The LTP8800 is a family of step-down μModule regulators that provides
+>> microprocessor core voltage from 54V power distribution architecture.
+>> LTP8800 features telemetry monitoring of input/output voltage, input
+>> current, output power, and temperature over PMBus.
 > 
-> diff --git a/Documentation/hwmon/adp1050.rst b/Documentation/hwmon/adp1050.rst
-> index 8fa937064886..1692373ee5af 100644
-> --- a/Documentation/hwmon/adp1050.rst
-> +++ b/Documentation/hwmon/adp1050.rst
-> @@ -13,18 +13,43 @@ Supported chips:
->   
->       Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADP1050.pdf
->   
-> +  * Analog Devices ADP1051
-> +
-> +    Prefix: 'adp1051'
-> +
-> +    Addresses scanned: I2C 0x70 - 0x77
-> +
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADP1051.pdf
-> +
-> +  * Analog Devices ADP1055
-> +
-> +    Prefix: 'adp1055'
-> +
-> +    Addresses scanned: I2C 0x4B - 0x77
-> +
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADP1055.pdf
-> +
-> +  * Analog Devices LTP8800-1A/-2/-4A
-> +
-> +    Prefix: 'ltp8800'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/LTP8800-1A.pdf
-> +         https://www.analog.com/media/en/technical-documentation/data-sheets/LTP8800-2.pdf
-> +         https://www.analog.com/media/en/technical-documentation/data-sheets/LTP8800-4A.pdf
-> +
->   Authors:
->   
->     - Radu Sabau <radu.sabau@analog.com>
->   
-> -
+> ...
+> 
+>>     - Radu Sabau <radu.sabau@analog.com>
+>>   
+>> -
+>>   Description
+>>   -----------
+> 
+> Stray change.
+> 
+> ...
+> 
+>> -This driver supprts hardware monitoring for Analog Devices ADP1050 Digital
+>> -Controller for Isolated Power Supply with PMBus interface.
+>> +This driver supports hardware monitoring for Analog Devices ADP1050, ADP1051, and
+>> +ADP1055 Digital Controller for Isolated Power Supply with PMBus interface.
+>>   
+>> -The ADP1050 is an advanced digital controller with a PMBus™
+>> +The ADP105X is an advanced digital controller with a PMBus™
+> 
+> Can we use small x to make it more visible that it's _not_ the part of the
+> name, but a glob-like placeholder?
+> 
 
-Unrelated
+As mentioned in my other reply, I'd rather not have a placeholder in the first
+place.
 
->   Description
->   -----------
->   
-> -This driver supprts hardware monitoring for Analog Devices ADP1050 Digital
-> -Controller for Isolated Power Supply with PMBus interface.
-> +This driver supports hardware monitoring for Analog Devices ADP1050, ADP1051, and
-> +ADP1055 Digital Controller for Isolated Power Supply with PMBus interface.
->   
-> -The ADP1050 is an advanced digital controller with a PMBus™
-> +The ADP105X is an advanced digital controller with a PMBus™
+>>   interface targeting high density, high efficiency dc-to-dc power
+>>   conversion used to monitor system temperatures, voltages and currents.
+> 
+> ...
+> 
+>> +#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
+> 
+> Why? Is the data type undefined without this?
+> 
 
-Please refrain from using device name wildcards, There is no guarantee that
-all chips in the name range of ADP105[0-9] will have the same functionality.
-Either name the chips, or say something like "The supported chips are ...".
+Look into other drivers. That is how it is implemented there,
+and not really the point. One has to know about an alternative to use it.
 
+>> +static const struct regulator_desc adp1050_reg_desc[] = {
+>> +	PMBUS_REGULATOR_ONE("vout"),
+>> +};
+>> +#endif /* CONFIG_SENSORS_ADP1050_REGULATOR */
+> 
+> Note, this can be dropped anyway in order to use PTR_IF() below, if required.
+> 
+
+FWIW, PTR_IF() isn't widely used, and I for my part was not aware that
+it exists.
+
+> ...
+> 
+>> +#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
+>> +	.num_regulators = 1,
+>> +	.reg_desc = adp1050_reg_desc,
+>> +#endif
+> 
+> Ditto, are the fields not defined without the symbol?
+> 
+
+They are, but they must be 0/NULL. PTR_IF() would be an alternative.
+It is a bit odd to use it for a non-pointer, but it is type-agnostic,
+so using it should be ok to avoid the #ifdefs. We should maybe adopt
+that mechanism for other PMBus drivers.
+
+> ...
+> 
+>>   static int adp1050_probe(struct i2c_client *client)
+>>   {
+>> -	return pmbus_do_probe(client, &adp1050_info);
+>> +	const struct pmbus_driver_info *info;
+>> +
+>> +	info = device_get_match_data(&client->dev);
+> 
+> Why not i2c_get_match_data()?
+> 
+>> +	if (!info)
+>> +		return -ENODEV;
+>> +
+>> +	return pmbus_do_probe(client, info);
+>>   }
+> 
+> ...
+> 
+>>   static const struct i2c_device_id adp1050_id[] = {
+>> -	{"adp1050"},
+>> +	{ .name = "adp1050", .driver_data = (kernel_ulong_t)&adp1050_info},
+> 
+> Please, split this patch to at least two:
+> 1) Introduce chip_info;
+
+That would really be "Use driver data to point to chip info".
+
+> 2) add new devices.
+> 
+
+I don't really care much about separating those two (after all, they are
+related), but adding regulator support to the driver is a major change
+and should be a separate patch. On top of that, it isn't even mentioned
+in the patch description.
+
+Thanks,
 Guenter
 
 
