@@ -1,77 +1,72 @@
-Return-Path: <linux-i2c+bounces-8105-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8106-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5712A9D47C5
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 07:42:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FA879D47CE
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 07:42:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EFA4283CF0
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 06:42:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C84301F214D8
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 06:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A2391CB526;
-	Thu, 21 Nov 2024 06:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C17951C8FD2;
+	Thu, 21 Nov 2024 06:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kDkEftL2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O3UAp6Ct"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BEF615099D;
-	Thu, 21 Nov 2024 06:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BB61CC88D;
+	Thu, 21 Nov 2024 06:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732171275; cv=none; b=WPtjTY+8dY7giXofTXaMrMgb/vcGfnfmLKo2SeIepD8gF2hJHCxJm2P5o5Pr/gj2JRmrNyvvpSt3IiXETOoV68AqJ7bwN3O24zTOT0r9mppLyEumTh3an+ElKrsh5kQeK6NdzYNrNbXv0SWgQ4nVott9Q9dRymrVuXd+YBzIAAs=
+	t=1732171280; cv=none; b=gf33wIcrZ/vyBzYVlCzecZu3GTiJxm/mWh23wbnM0arlYXZuLyBjogQNhFjmj7eOE68bYdXsoU1MYClU6n4afX5ejXGMgR/YP6sgkDAs4lHdfXnPWKQ05F38TNe3MQcOs8+ol91BB4F1TTZwd+C+lHub3BtcfR9pEFIdILgBtts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732171275; c=relaxed/simple;
-	bh=44flUDwzHTOuwdS/AmpIAJD6AXf1fHpI1Z+26lfCyYk=;
+	s=arc-20240116; t=1732171280; c=relaxed/simple;
+	bh=0hVL2t1CuwPfGPKzkFkaDPuidSi/hglvmDs8gsH7JSs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EmPgHYJ7UKunDvIhnpFMgf4IJTvESYgUIzwHhevL0F/Id23Hz9YwVzNeXCPQue63Fy9i2RpdAQzNoTuLCho2z73wUTN9XR13GmQbzQ21DWqIbEcHXkws6JW3Bt3tb5YWoJ9J/U/1z2DukLI9DzcpGuNu0xSPc7nk5v4QmX0uAUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kDkEftL2; arc=none smtp.client-ip=209.85.215.169
+	 MIME-Version; b=svDoJlcNAo50bofVxkHEEKV5EJOFk80Pp2UQ+YxbW9AEpCof21ZERTBG66gVeS3604K2Fiw7QxrM6r3Use4Wuv52Ol5uDGDsscyAjDMCcN8IHb7t/uXGuvYi9+VPocsQQzabuKcKZc3K8rNOdE63CQmRgmS/E4wLbQmPEELpaDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O3UAp6Ct; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7f46d5d1ad5so482379a12.3;
-        Wed, 20 Nov 2024 22:41:14 -0800 (PST)
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7f3e30a43f1so443250a12.1;
+        Wed, 20 Nov 2024 22:41:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732171273; x=1732776073; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732171277; x=1732776077; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z06lEdw1Wb06OgkCMR/MvOB5af33NE4Om1wi64Y5ueM=;
-        b=kDkEftL2wvVXT/XWdd1TrBfjFviA4wb18j4CSUQFsvHhi97iQlDApeVMfIVq7WfA3r
-         LrR5DF+oStYWCjVg2dfPudaHE6KQtsHuZFpF3PUNA/sh7pQJXKuog8LoNn0Zqe7Oc2zS
-         wsE+MovHSMReJYvchRFOd6gdS4J0KZWMeRYUaeG303Zge/pr2pDK0MIyv1ngE0/s7GhE
-         NlnHZvIhAARqdzNFellvuw6VyP0wL24+y8wZB1dn7vKSuUqDYTmSjbyVaTitU4Z+JlEl
-         Q/9WX9VepjlcFXidz/bTU3aThHizbWkm/PJ6BbkZRQvMYcSsYgXlABMF5nFRWnX9aci2
-         JDXQ==
+        bh=4ivXA3ih4Jtkvn6o309jxZBtNqJlVaJGdZyO9cc2dUM=;
+        b=O3UAp6CtfXaWR9y/w69gZh2WXqIN8KOi4S0ssZYCZJR5wfCGPjnQ076/l0dkJ8QWps
+         xSz3CTmpJbksIlgkS7yVJbvZZsBtMr00FlVe8Ac9maOM7JpsZK+tLy3lBInyi74hGArR
+         ZBLqafWQDYEcUkRD9X2UEkzIwcg35hGSFovoGKSquXKn1uKh4CpBFFeKDSfzmwn2cHrG
+         o8T1vqoYT8qNDH3dti7yV+UbhvVEwKN6C3/9T8O92foTtdMvspjOSbYL62FO6gN6Ns2q
+         5jd5KTBHUr7sHqSvc29FuoSs3q31X9J7Ku0tkLZdumBd0KTe62Wksjnf6nGoDnfnmSME
+         RWVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732171273; x=1732776073;
+        d=1e100.net; s=20230601; t=1732171277; x=1732776077;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Z06lEdw1Wb06OgkCMR/MvOB5af33NE4Om1wi64Y5ueM=;
-        b=waBywvu6NFPJoO6ziK5ROfjHA/HBDrao8daWMDn77J34K4BrwiOjr6/nC+T/ow5h21
-         JWM7iTCospJW1ACNt6oh2OjRosoztnPEwW0co4wPFFcOADTmUQ8U0FcTnB7g1Atb2ex8
-         XBzPGSyd9Aw2+DKElPrFpmrFigvoUODdamCah0CIK9/xhmv54QJFbdRngmoztn2necgR
-         xoCZawI7JOyQyrvhh2CqlaXnrkaRYsAc8DR/QzQf96vmDSzmDj8NVHC1HvGhnE9V77R8
-         vpp1Q9QRnQwjNQToJmmzRv+aKEGEQhdPWQv1DWsXRV/PJkHhyQ8UhgwAc6T0OIJqBuun
-         LVEg==
-X-Forwarded-Encrypted: i=1; AJvYcCU2435wSl+/QZg45xqb+Fksw23Am4Xmjlh8LtkfufyyUtApCbVMOWT/jiIy5Kgvk6QXwQBKf9w8iN8TdPE=@vger.kernel.org, AJvYcCU4KaxQlG8++4qZj/F5FZ94MxFwA0WIu9toegiBFkOXoNAfZmH1Xeodn6PLTpZD3snJp9/TX3aN@vger.kernel.org, AJvYcCUZHapRQEJjKw1hgsSF0mq6CVAKeNA5bEIpxpG7YMT+ogWZMk3y98g6gnywMYqN3wSP6Sl2gN3rfC8UnA==@vger.kernel.org, AJvYcCVNlcsRVG1gM3ohe82T/D3DOveLNvr7Wg0D/qM0TC7WKzj5PZxCDXFSfipxNodtOzJEZVgk2xY2Q5s=@vger.kernel.org, AJvYcCVPI8HnnOi8ii9c21t+fYF5nIhE+FmfYRZlbIAnW8ljTmNddR13C0ahPXVdlIME6fZTRfoNxWKGcP3o@vger.kernel.org, AJvYcCWUc6sgRsP9rNsmLp+aHtCm4TH4EE2rVinv5LuY6jazXfIUW/GLSG89ZMVLJl3tfMRBAXhrgPACPLWy@vger.kernel.org, AJvYcCXJP8qMpaduXhmyf5bkJ1/Q7OwPbwQfYeDm9b2pcGHK5rC0skTWVRXx+CTBU9siyBHeitR2vuGmdkzNdVxzBPc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmY1kwCwf3y1AU5u90TxLkTKuhy6aMU8Ow1ragP1+9LaIhqDEZ
-	SYGaZoSmhZ8fW4tVXTiIBwhgdJMXmxlPf58r5t0OJCzs+hCFdf5P
-X-Gm-Gg: ASbGncuHQGlrZUfVxP32A5ns1EC/8Jqrffhd6ocDnlbikk2ldHqC/1X25X07GYopNCP
-	qiVCPfUsiHJisonAfjPl6iioOttPbo2H+c0pwY7PUoBkgUOC8J44nxwxbtp/8zHEA6geO+lswGh
-	4/lpMJ19t+KK+BdmA9Dl+GYSCBANbHZhAv6CjjT3C79sjZ+XYsOuQchw6tb3fQAOVsIzlXuz6aw
-	1NCfJdIAtmkC5whUCMvVbTf4CbevG3aumZG0Lt2B5UdOJ/pjJBU8LBPD7Hz4lUAL/BEygrwZUos
-	59TwTwEelSE9
-X-Google-Smtp-Source: AGHT+IHwkLpxRqEoEahyxYL8ckipeHn0RrOylLzacy2EPPt1/BMEDWRQZS0KNwimnpjdKEtj3rk1ng==
-X-Received: by 2002:a05:6a20:158f:b0:1db:edb3:ed87 with SMTP id adf61e73a8af0-1ddaecd0d51mr8338555637.22.1732171273445;
-        Wed, 20 Nov 2024 22:41:13 -0800 (PST)
+        bh=4ivXA3ih4Jtkvn6o309jxZBtNqJlVaJGdZyO9cc2dUM=;
+        b=Q8/9D1kqb6HRIpQViIx5E4bDn7VXGtBxqByoFsNt1uAInsq6dR6OdjQjj62vltdC/V
+         Il3LeZbOlGSr4SB6HGaVL1ozV9v0u9G7RXmAtEZKrCJ+158VCDlbEPbKk9PvfQvugRPd
+         PqeUMFMB4U/pWu77SDH0oSEMdhM/L3YPhnmRCi9fDSn3w1EluxYtdwNHOIdCLvPqFrXf
+         yTJ237F73YYpjGWJI683rJaMjL/EsFid7L6lV7qgy6V9RgcqtM04LYFdlH9sXtxAX3J0
+         SkWYoI+BDkpreRIHJFEbAcmhHkXawEtcybn5Y7Yyf5FLzwS6Zv38yRF49d9zySxq7wV1
+         a6HA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3/5mxFci4ryHMsLrz57TImS7M/qk2+8F/Is5iZqzSupPFHf7HA3/dx2jwx8wSnQzNYCaVx65jteZP@vger.kernel.org, AJvYcCV6+abJuJTdexwWdrLmTlQeApirvwyWs8sadu0urKfpXAzpowfVk9+qGBpdCFD8Q1Aanw+PfbOr@vger.kernel.org, AJvYcCVtTVAE2v/usqjd2bW0yKRIlkOO8by2+X9U7I19u3e2WaEGK5ZSiQOyPYR6nccijwzj6cHF6AqM9Iym@vger.kernel.org, AJvYcCW+NaBBl5d+2yCQZPpJkgfMLZrtkwp4iGSa+mzoVFeMwSXyFks/z0Q3KJBX/j+R2kGR5vQJPyGpDhQ=@vger.kernel.org, AJvYcCWDoGJERfeEdzQVlTkvHlBsiiBJbjixVmMuzHKZwwk6Mq4kThJ84NfNbRIx27AOTDD1RExGSLm1LlKDhcAFQTk=@vger.kernel.org, AJvYcCWQSytfBL3YWHiTUpgnEWdzTgVvwgsouKr5mw1sLnTlhsl/sQyUQnDqFeiGvAMXVkf3G62mrkX6iT8YOG8=@vger.kernel.org, AJvYcCWcl4KSyV6aoD9JH2LavicW42tkeLDKKnypPIqq19n5glCMIrVIVMazKX7+Dgf1hp21IMjsUfYGyHFH3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YynhJmE9boeMKH1A1Yt8O89+LZxKMWB69N3WPzjSPC5W9eIPr6X
+	8qNBv7EH0T6IIVEi/ZIbH5W8hSiGdpHNP62/L1PNmJKw0wHltxoA
+X-Google-Smtp-Source: AGHT+IG3ypNSbqHChFy9UQbSlhwShNvXEdjqWejgJ/1uq+MONYjlC8GwoXsOSxg7ea8jHuvDYkRNPg==
+X-Received: by 2002:a05:6a20:a124:b0:1dc:7907:6d67 with SMTP id adf61e73a8af0-1ddb04340ebmr8605324637.40.1732171277249;
+        Wed, 20 Nov 2024 22:41:17 -0800 (PST)
 Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724beeb83d4sm2812530b3a.40.2024.11.20.22.41.09
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724beeb83d4sm2812530b3a.40.2024.11.20.22.41.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2024 22:41:13 -0800 (PST)
+        Wed, 20 Nov 2024 22:41:16 -0800 (PST)
 From: Ming Yu <a0282524688@gmail.com>
 X-Google-Original-From: Ming Yu <tmyu0@nuvoton.com>
 To: tmyu0@nuvoton.com,
@@ -98,9 +93,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-watchdog@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-rtc@vger.kernel.org
-Subject: [PATCH v2 3/7] i2c: Add Nuvoton NCT6694 I2C support
-Date: Thu, 21 Nov 2024 14:40:42 +0800
-Message-Id: <20241121064046.3724726-4-tmyu0@nuvoton.com>
+Subject: [PATCH v2 4/7] can: Add Nuvoton NCT6694 CAN support
+Date: Thu, 21 Nov 2024 14:40:43 +0800
+Message-Id: <20241121064046.3724726-5-tmyu0@nuvoton.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241121064046.3724726-1-tmyu0@nuvoton.com>
 References: <20241121064046.3724726-1-tmyu0@nuvoton.com>
@@ -112,220 +107,993 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This driver supports I2C adapter functionality for NCT6694 MFD
-device based on USB interface, each I2C controller use default
-baudrate(100K).
+This driver supports Socket CANfd functionality for NCT6694 MFD
+device based on USB interface.
 
 Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
 ---
- MAINTAINERS                      |   1 +
- drivers/i2c/busses/Kconfig       |  10 ++
- drivers/i2c/busses/Makefile      |   1 +
- drivers/i2c/busses/i2c-nct6694.c | 152 +++++++++++++++++++++++++++++++
- 4 files changed, 164 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ MAINTAINERS                     |   1 +
+ drivers/net/can/Kconfig         |  10 +
+ drivers/net/can/Makefile        |   1 +
+ drivers/net/can/nct6694_canfd.c | 926 ++++++++++++++++++++++++++++++++
+ 4 files changed, 938 insertions(+)
+ create mode 100644 drivers/net/can/nct6694_canfd.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 6688c5c470b7..a190f2b08fa3 100644
+index a190f2b08fa3..eb5d46825e71 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -16546,6 +16546,7 @@ M:	Ming Yu <tmyu0@nuvoton.com>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
+@@ -16548,6 +16548,7 @@ S:	Supported
  F:	drivers/gpio/gpio-nct6694.c
-+F:	drivers/i2c/busses/i2c-nct6694.c
+ F:	drivers/i2c/busses/i2c-nct6694.c
  F:	drivers/mfd/nct6694.c
++F:	drivers/net/can/nct6694_canfd.c
  F:	include/linux/mfd/nct6694.h
  
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 4977abcd7c46..1962cf1e71f9 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -1325,6 +1325,16 @@ config I2C_LJCA
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-ljca.
+ NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
+diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+index cf989bea9aa3..130e98ec28a5 100644
+--- a/drivers/net/can/Kconfig
++++ b/drivers/net/can/Kconfig
+@@ -200,6 +200,16 @@ config CAN_SUN4I
+ 	  To compile this driver as a module, choose M here: the module will
+ 	  be called sun4i_can.
  
-+config I2C_NCT6694
-+	tristate "Nuvoton NCT6694 I2C adapter support"
++config CAN_NCT6694
++	tristate "Nuvoton NCT6694 Socket CANfd support"
 +	depends on MFD_NCT6694
 +	help
 +	  If you say yes to this option, support will be included for Nuvoton
-+	  NCT6694, a USB to I2C interface.
++	  NCT6694, a USB device to socket CANfd controller.
 +
 +	  This driver can also be built as a module. If so, the module will
-+	  be called i2c-nct6694.
++	  be called nct6694_canfd.
 +
- config I2C_CP2615
- 	tristate "Silicon Labs CP2615 USB sound card and I2C adapter"
- 	depends on USB
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index a6bcbf2febcf..6d2fd8e56569 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -135,6 +135,7 @@ obj-$(CONFIG_I2C_GXP)		+= i2c-gxp.o
- obj-$(CONFIG_I2C_DIOLAN_U2C)	+= i2c-diolan-u2c.o
- obj-$(CONFIG_I2C_DLN2)		+= i2c-dln2.o
- obj-$(CONFIG_I2C_LJCA)		+= i2c-ljca.o
-+obj-$(CONFIG_I2C_NCT6694)	+= i2c-nct6694.o
- obj-$(CONFIG_I2C_CP2615) += i2c-cp2615.o
- obj-$(CONFIG_I2C_PARPORT)	+= i2c-parport.o
- obj-$(CONFIG_I2C_PCI1XXXX)	+= i2c-mchp-pci1xxxx.o
-diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nct6694.c
+ config CAN_TI_HECC
+ 	depends on ARM
+ 	tristate "TI High End CAN Controller"
+diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+index a71db2cfe990..4a6b5b9d6c2b 100644
+--- a/drivers/net/can/Makefile
++++ b/drivers/net/can/Makefile
+@@ -28,6 +28,7 @@ obj-$(CONFIG_CAN_JANZ_ICAN3)	+= janz-ican3.o
+ obj-$(CONFIG_CAN_KVASER_PCIEFD)	+= kvaser_pciefd.o
+ obj-$(CONFIG_CAN_MSCAN)		+= mscan/
+ obj-$(CONFIG_CAN_M_CAN)		+= m_can/
++obj-$(CONFIG_CAN_NCT6694)	+= nct6694_canfd.o
+ obj-$(CONFIG_CAN_PEAK_PCIEFD)	+= peak_canfd/
+ obj-$(CONFIG_CAN_SJA1000)	+= sja1000/
+ obj-$(CONFIG_CAN_SUN4I)		+= sun4i_can.o
+diff --git a/drivers/net/can/nct6694_canfd.c b/drivers/net/can/nct6694_canfd.c
 new file mode 100644
-index 000000000000..2a5e0629f860
+index 000000000000..d488414981ec
 --- /dev/null
-+++ b/drivers/i2c/busses/i2c-nct6694.c
-@@ -0,0 +1,152 @@
++++ b/drivers/net/can/nct6694_canfd.c
+@@ -0,0 +1,926 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Nuvoton NCT6694 I2C adapter driver based on USB interface.
++ * Nuvoton NCT6694 Socket CANfd driver based on USB interface.
 + *
 + * Copyright (C) 2024 Nuvoton Technology Corp.
 + */
 +
-+#include <linux/i2c.h>
++#include <linux/can/dev.h>
++#include <linux/irqdomain.h>
 +#include <linux/kernel.h>
 +#include <linux/mfd/core.h>
 +#include <linux/mfd/nct6694.h>
 +#include <linux/module.h>
++#include <linux/netdevice.h>
 +#include <linux/platform_device.h>
 +
++#define DRVNAME "nct6694-can"
++
 +/* Host interface */
-+#define NCT6694_I2C_MOD		0x03
++#define NCT6694_CAN_MOD			0x05
 +
 +/* Message Channel*/
 +/* Command 00h */
-+#define NCT6694_I2C_CMD0_OFFSET	0x0000	/* OFFSET = SEL|CMD */
-+#define NCT6694_I2C_CMD0_LEN	0x90
++#define NCT6694_CAN_CMD0_LEN		0x18
++#define NCT6694_CAN_CMD0_OFFSET(idx)	(idx ? 0x0100 : 0x0000)
++#define NCT6694_CAN_CTRL1_MON		BIT(0)
++#define NCT6694_CAN_CTRL1_NISO		BIT(1)
++#define NCT6694_CAN_CTRL1_LBCK		BIT(2)
 +
-+enum i2c_baudrate {
-+	I2C_BR_25K = 0,
-+	I2C_BR_50K,
-+	I2C_BR_100K,
-+	I2C_BR_200K,
-+	I2C_BR_400K,
-+	I2C_BR_800K,
-+	I2C_BR_1M
++/* Command 01h */
++#define NCT6694_CAN_CMD1_LEN		0x08
++#define NCT6694_CAN_CMD1_OFFSET		0x0001
++
++/* Command 02h */
++#define NCT6694_CAN_CMD2_LEN            0x10
++#define NCT6694_CAN_CMD2_OFFSET(idx, mask)			\
++	({ typeof(mask) mask_ = (mask);				\
++	   idx ? ((0x80 | (mask_ & 0xFF)) << 8 | 0x02) :	\
++		 ((0x00 | (mask_ & 0xFF)) << 8 | 0x02); })
++
++#define NCT6694_CAN_EVENT_ERR		BIT(0)
++#define NCT6694_CAN_EVENT_STATUS	BIT(1)
++#define NCT6694_CAN_EVENT_TX_EVT	BIT(2)
++#define NCT6694_CAN_EVENT_RX_EVT	BIT(3)
++#define NCT6694_CAN_EVENT_REC		BIT(4)
++#define NCT6694_CAN_EVENT_TEC		BIT(5)
++#define NCT6694_CAN_EVT_TX_FIFO_EMPTY	BIT(7)	/* Read-clear */
++#define NCT6694_CAN_EVT_RX_DATA_LOST	BIT(5)	/* Read-clear */
++#define NCT6694_CAN_EVT_RX_HALF_FULL	BIT(6)	/* Read-clear */
++#define NCT6694_CAN_EVT_RX_DATA_IN	BIT(7)
++
++/* Command 10h */
++#define NCT6694_CAN_CMD10_LEN		0x90
++#define NCT6694_CAN_CMD10_OFFSET(buf_cnt)	\
++	(((buf_cnt) & 0xFF) << 8 | 0x10)
++#define NCT6694_CAN_TAG_CAN0		0xC0
++#define NCT6694_CAN_TAG_CAN1		0xC1
++#define NCT6694_CAN_FLAG_EFF		BIT(0)
++#define NCT6694_CAN_FLAG_RTR		BIT(1)
++#define NCT6694_CAN_FLAG_FD		BIT(2)
++#define NCT6694_CAN_FLAG_BRS		BIT(3)
++#define NCT6694_CAN_FLAG_ERR		BIT(4)
++
++/* Command 11h */
++#define NCT6694_CAN_CMD11_LEN		0x90
++#define NCT6694_CAN_CMD11_OFFSET(idx, buf_cnt)			\
++	({ typeof(buf_cnt) buf_cnt_ = (buf_cnt);		\
++	   idx ? ((0x80 | (buf_cnt_ & 0xFF)) << 8 | 0x11) :	\
++		 ((0x00 | (buf_cnt_ & 0xFF)) << 8 | 0x11); })
++
++#define NCT6694_CAN_RX_QUOTA		64
++
++enum nct6694_event_err {
++	NCT6694_CAN_EVT_NO_ERROR,
++	NCT6694_CAN_EVT_CRC_ERROR,
++	NCT6694_CAN_EVT_STUFF_ERROR,
++	NCT6694_CAN_EVT_ACK_ERROR,
++	NCT6694_CAN_EVT_FORM_ERROR,
++	NCT6694_CAN_EVT_BIT_ERROR,
++	NCT6694_CAN_EVT_TIMEOUT_ERROR,
++	NCT6694_CAN_EVT_UNKNOWN_ERROR,
 +};
 +
-+struct __packed nct6694_i2c_cmd0 {
-+	u8 port;
-+	u8 br;
-+	u8 addr;
-+	u8 w_cnt;
-+	u8 r_cnt;
-+	u8 rsv[11];
-+	u8 write_data[0x40];
-+	u8 read_data[0x40];
++enum nct6694_event_status {
++	NCT6694_CAN_EVT_ERROR_ACTIVE,
++	NCT6694_CAN_EVT_ERROR_PASSIVE,
++	NCT6694_CAN_EVT_BUS_OFF,
++	NCT6694_CAN_EVT_WARNING,
 +};
 +
-+struct nct6694_i2c_data {
++struct __packed nct6694_can_cmd0 {
++	u32 nbr;
++	u32 dbr;
++	u32 active:8;
++	u32 reserved:24;
++	u16 ctrl1;
++	u16 ctrl2;
++	u32 nbtp;
++	u32 dbtp;
++};
++
++struct __packed nct6694_can_cmd1 {
++	u8 tx_fifo_cnt;
++	u8 rx_fifo_cnt;
++	u16 reserved;
++	__le32 can_clk;
++};
++
++struct __packed nct6694_can_cmd2 {
++	u8 err1;
++	u8 status1;
++	u8 tx_evt1;
++	u8 rx_evt1;
++	u8 rec1;
++	u8 tec1;
++	u8 reserved1[2];
++	u8 err2;
++	u8 status2;
++	u8 tx_evt2;
++	u8 rx_evt2;
++	u8 rec2;
++	u8 tec2;
++	u8 reserved2[2];
++};
++
++struct __packed nct6694_can_cmd10_11 {
++	u8 tag;
++	u8 flag;
++	u8 reserved;
++	u8 dlc;
++	__le32 id;
++	u8 data[64];
++	u8 msg_buf[72];
++};
++
++struct nct6694_canfd_priv {
++	struct can_priv can;	/* must be the first member */
++	struct net_device *ndev;
 +	struct nct6694 *nct6694;
-+	struct i2c_adapter adapter;
-+	unsigned char *xmit_buf;
-+	unsigned char port;
-+	unsigned char br;
++	struct mutex lock;
++	struct sk_buff *tx_skb;
++	struct workqueue_struct *wq;
++	struct work_struct tx_work;
++	unsigned char *tx_buf;
++	unsigned char *rx_buf;
++	unsigned char can_idx;
++	bool tx_busy;
 +};
 +
-+static int nct6694_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
++static const struct can_bittiming_const nct6694_canfd_bittiming_nominal_const = {
++	.name = DRVNAME,
++	.tseg1_min = 2,
++	.tseg1_max = 256,
++	.tseg2_min = 2,
++	.tseg2_max = 128,
++	.sjw_max = 128,
++	.brp_min = 1,
++	.brp_max = 511,
++	.brp_inc = 1,
++};
++
++static const struct can_bittiming_const nct6694_canfd_bittiming_data_const = {
++	.name = DRVNAME,
++	.tseg1_min = 1,
++	.tseg1_max = 32,
++	.tseg2_min = 1,
++	.tseg2_max = 16,
++	.sjw_max = 16,
++	.brp_min = 1,
++	.brp_max = 31,
++	.brp_inc = 1,
++};
++
++static void nct6694_canfd_clean(struct net_device *ndev)
 +{
-+	struct nct6694_i2c_data *data = adap->algo_data;
-+	struct nct6694_i2c_cmd0 *cmd = (struct nct6694_i2c_cmd0 *)data->xmit_buf;
-+	int ret, i;
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
 +
-+	for (i = 0; i < num ; i++) {
-+		struct i2c_msg *msg_temp = &msgs[i];
++	if (priv->tx_skb || priv->tx_busy)
++		ndev->stats.tx_errors++;
++	dev_kfree_skb(priv->tx_skb);
++	if (priv->tx_busy)
++		can_free_echo_skb(priv->ndev, 0, NULL);
++	priv->tx_skb = NULL;
++	priv->tx_busy = false;
++}
 +
-+		memset(data->xmit_buf, 0, sizeof(struct nct6694_i2c_cmd0));
++static int nct6694_canfd_get_berr_counter(const struct net_device *ndev,
++					  struct can_berr_counter *bec)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct nct6694_can_cmd2 *buf = (struct nct6694_can_cmd2 *)priv->rx_buf;
++	u8 mask = NCT6694_CAN_EVENT_REC | NCT6694_CAN_EVENT_TEC;
++	int ret;
 +
-+		if (msg_temp->len > 64)
-+			return -EPROTO;
-+		cmd->port = data->port;
-+		cmd->br = data->br;
-+		cmd->addr = i2c_8bit_addr_from_msg(msg_temp);
-+		if (msg_temp->flags & I2C_M_RD) {
-+			cmd->r_cnt = msg_temp->len;
-+			ret = nct6694_write_msg(data->nct6694, NCT6694_I2C_MOD,
-+						NCT6694_I2C_CMD0_OFFSET,
-+						NCT6694_I2C_CMD0_LEN,
-+						cmd);
-+			if (ret < 0)
-+				return 0;
++	guard(mutex)(&priv->lock);
 +
-+			memcpy(msg_temp->buf, cmd->read_data, msg_temp->len);
++	ret = nct6694_read_msg(priv->nct6694, NCT6694_CAN_MOD,
++			       NCT6694_CAN_CMD2_OFFSET(priv->can_idx, mask),
++			       NCT6694_CAN_CMD2_LEN,
++			       buf);
++	if (ret < 0)
++		return ret;
++
++	bec->rxerr = priv->can_idx ? buf->rec2 : buf->rec1;
++	bec->txerr = priv->can_idx ? buf->tec2 : buf->tec1;
++
++	return 0;
++}
++
++static int nuv_canfd_handle_lost_msg(struct net_device *ndev)
++{
++	struct net_device_stats *stats = &ndev->stats;
++	struct sk_buff *skb;
++	struct can_frame *frame;
++
++	netdev_err(ndev, "RX FIFO overflow, message(s) lost.\n");
++
++	stats->rx_errors++;
++	stats->rx_over_errors++;
++
++	skb = alloc_can_err_skb(ndev, &frame);
++	if (unlikely(!skb))
++		return 0;
++
++	frame->can_id |= CAN_ERR_CRTL;
++	frame->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
++
++	netif_receive_skb(skb);
++
++	return 1;
++}
++
++static void nuv_canfd_read_fifo(struct net_device *ndev)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct nct6694_can_cmd10_11 *buf = (struct nct6694_can_cmd10_11 *)priv->rx_buf;
++	struct net_device_stats *stats = &ndev->stats;
++	struct canfd_frame *cf;
++	struct sk_buff *skb;
++	int can_idx = priv->can_idx;
++	u32 id;
++	int ret;
++	u8 fd_format = 0;
++	int i;
++
++	guard(mutex)(&priv->lock);
++
++	ret = nct6694_read_msg(priv->nct6694, NCT6694_CAN_MOD,
++			       NCT6694_CAN_CMD11_OFFSET(can_idx, 1),
++			       NCT6694_CAN_CMD11_LEN, buf);
++	if (ret < 0)
++		return;
++
++	/* Check type of frame and create skb */
++	fd_format = buf->flag & NCT6694_CAN_FLAG_FD;
++	if (fd_format)
++		skb = alloc_canfd_skb(ndev, &cf);
++	else
++		skb = alloc_can_skb(ndev, (struct can_frame **)&cf);
++
++	if (!skb) {
++		stats->rx_dropped++;
++		return;
++	}
++
++	cf->len = buf->dlc;
++
++	/* Get ID and set flag by its type(Standard ID format or Ext ID format) */
++	id = le32_to_cpu(buf->id);
++	if (buf->flag & NCT6694_CAN_FLAG_EFF) {
++		/*
++		 * In case the Extended ID frame is received, the standard
++		 * and extended part of the ID are swapped in the register,
++		 * so swap them back to obtain the correct ID.
++		 */
++		id |= CAN_EFF_FLAG;
++	}
++
++	cf->can_id = id;
++
++	/* Set ESI flag */
++	if (buf->flag & NCT6694_CAN_FLAG_ERR) {
++		cf->flags |= CANFD_ESI;
++		netdev_dbg(ndev, "ESI Error\n");
++	}
++
++	/* Set RTR and BRS */
++	if (!fd_format && (buf->flag & NCT6694_CAN_FLAG_RTR)) {
++		cf->can_id |= CAN_RTR_FLAG;
++	} else {
++		if (buf->flag & NCT6694_CAN_FLAG_BRS)
++			cf->flags |= CANFD_BRS;
++
++		for (i = 0; i < cf->len; i++)
++			cf->data[i] = buf->data[i];
++	}
++
++	/* Remove the packet from FIFO */
++	stats->rx_packets++;
++	stats->rx_bytes += cf->len;
++	netif_receive_skb(skb);
++}
++
++static int nct6694_canfd_do_rx_poll(struct net_device *ndev, int quota)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct nct6694_can_cmd2 *buf = (struct nct6694_can_cmd2 *)priv->rx_buf;
++	int can_idx = priv->can_idx;
++	u32 pkts = 0;
++	u8 mask_rx = NCT6694_CAN_EVENT_RX_EVT;
++	u8 rx_evt;
++
++	for (;;) {
++		scoped_guard(mutex, &priv->lock) {
++			nct6694_read_msg(priv->nct6694, NCT6694_CAN_MOD,
++					 NCT6694_CAN_CMD2_OFFSET(can_idx, mask_rx),
++					 NCT6694_CAN_CMD2_LEN, buf);
++
++			rx_evt = can_idx ? buf->rx_evt2 : buf->rx_evt1;
++		}
++
++		if (rx_evt & NCT6694_CAN_EVT_RX_DATA_LOST)
++			nuv_canfd_handle_lost_msg(ndev);
++
++		/* No data */
++		if ((rx_evt & NCT6694_CAN_EVT_RX_DATA_IN) == 0)
++			break;
++
++		if (quota <= 0)
++			break;
++
++		nuv_canfd_read_fifo(ndev);
++		quota--;
++		pkts++;
++	}
++
++	return pkts;
++}
++
++static int nct6694_canfd_handle_lec_err(struct net_device *ndev, u8 bus_err)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct net_device_stats *stats = &ndev->stats;
++	struct can_frame *cf;
++	struct sk_buff *skb;
++
++	if (bus_err == NCT6694_CAN_EVT_NO_ERROR)
++		return 0;
++
++	priv->can.can_stats.bus_error++;
++	stats->rx_errors++;
++
++	/* Propagate the error condition to the CAN stack. */
++	skb = alloc_can_err_skb(ndev, &cf);
++
++	if (unlikely(!skb))
++		return 0;
++
++	/* Read the error counter register and check for new errors. */
++	cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
++
++	switch (bus_err) {
++	case NCT6694_CAN_EVT_CRC_ERROR:
++		cf->data[3] = CAN_ERR_PROT_LOC_CRC_SEQ;
++		break;
++
++	case NCT6694_CAN_EVT_STUFF_ERROR:
++		cf->data[2] |= CAN_ERR_PROT_STUFF;
++		break;
++
++	case NCT6694_CAN_EVT_ACK_ERROR:
++		cf->data[3] = CAN_ERR_PROT_LOC_ACK;
++		break;
++
++	case NCT6694_CAN_EVT_FORM_ERROR:
++		cf->data[2] |= CAN_ERR_PROT_FORM;
++		break;
++
++	case NCT6694_CAN_EVT_BIT_ERROR:
++		cf->data[2] |= CAN_ERR_PROT_BIT |
++			       CAN_ERR_PROT_BIT0 |
++			       CAN_ERR_PROT_BIT1;
++		break;
++
++	case NCT6694_CAN_EVT_TIMEOUT_ERROR:
++		cf->data[2] |= CAN_ERR_PROT_UNSPEC;
++		break;
++
++	case NCT6694_CAN_EVT_UNKNOWN_ERROR:
++		cf->data[2] |= CAN_ERR_PROT_UNSPEC;
++		/*
++		 * It means 'unspecified'(the value is '0').
++		 * But it is not sure if it's ok to send an error package
++		 * without specific error bit.
++		 */
++		break;
++
++	default:
++		break;
++	}
++
++	/* Reset the error counter, ack the IRQ and re-enable the counter. */
++	stats->rx_packets++;
++	stats->rx_bytes += cf->can_dlc;
++	netif_receive_skb(skb);
++
++	return 1;
++}
++
++static int nct6694_canfd_handle_state_change(struct net_device *ndev,
++					     enum can_state new_state)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct net_device_stats *stats = &ndev->stats;
++	struct can_frame *cf;
++	struct sk_buff *skb;
++	struct can_berr_counter bec;
++
++	switch (new_state) {
++	case CAN_STATE_ERROR_ACTIVE:
++		/* error active state */
++		priv->can.can_stats.error_warning++;
++		priv->can.state = CAN_STATE_ERROR_ACTIVE;
++		break;
++	case CAN_STATE_ERROR_WARNING:
++		/* error warning state */
++		priv->can.can_stats.error_warning++;
++		priv->can.state = CAN_STATE_ERROR_WARNING;
++		break;
++	case CAN_STATE_ERROR_PASSIVE:
++		/* error passive state */
++		priv->can.can_stats.error_passive++;
++		priv->can.state = CAN_STATE_ERROR_PASSIVE;
++		break;
++	case CAN_STATE_BUS_OFF:
++		/* bus-off state */
++		priv->can.state = CAN_STATE_BUS_OFF;
++		priv->can.can_stats.bus_off++;
++		can_bus_off(ndev);
++		break;
++	default:
++		break;
++	}
++
++	/* propagate the error condition to the CAN stack */
++	skb = alloc_can_err_skb(ndev, &cf);
++	if (unlikely(!skb))
++		return 0;
++
++	nct6694_canfd_get_berr_counter(ndev, &bec);
++
++	switch (new_state) {
++	case CAN_STATE_ERROR_WARNING:
++		/* error warning state */
++		cf->can_id |= CAN_ERR_CRTL;
++		cf->data[1] = (bec.txerr > bec.rxerr) ? CAN_ERR_CRTL_TX_WARNING :
++							CAN_ERR_CRTL_RX_WARNING;
++		cf->data[6] = bec.txerr;
++		cf->data[7] = bec.rxerr;
++		break;
++	case CAN_STATE_ERROR_PASSIVE:
++		/* error passive state */
++		cf->can_id |= CAN_ERR_CRTL;
++		cf->data[1] |= CAN_ERR_CRTL_RX_PASSIVE;
++		if (bec.txerr > 127)
++			cf->data[1] |= CAN_ERR_CRTL_TX_PASSIVE;
++		cf->data[6] = bec.txerr;
++		cf->data[7] = bec.rxerr;
++		break;
++	case CAN_STATE_BUS_OFF:
++		/* bus-off state */
++		cf->can_id |= CAN_ERR_BUSOFF;
++		break;
++	default:
++		break;
++	}
++
++	stats->rx_packets++;
++	stats->rx_bytes += cf->can_dlc;
++	netif_receive_skb(skb);
++
++	return 1;
++}
++
++static int nct6694_canfd_handle_state_errors(struct net_device *ndev,
++					     unsigned char can_status)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	int work_done = 0;
++
++	if (can_status == NCT6694_CAN_EVT_ERROR_ACTIVE &&
++	    priv->can.state != CAN_STATE_ERROR_ACTIVE) {
++		netdev_dbg(ndev, "Error, entered active state\n");
++		work_done += nct6694_canfd_handle_state_change(ndev,
++							       CAN_STATE_ERROR_ACTIVE);
++	}
++
++	if (can_status == NCT6694_CAN_EVT_WARNING &&
++	    priv->can.state != CAN_STATE_ERROR_WARNING) {
++		netdev_dbg(ndev, "Error, entered warning state\n");
++		work_done += nct6694_canfd_handle_state_change(ndev,
++							       CAN_STATE_ERROR_WARNING);
++	}
++
++	if (can_status == NCT6694_CAN_EVT_ERROR_PASSIVE &&
++	    priv->can.state != CAN_STATE_ERROR_PASSIVE) {
++		netdev_dbg(ndev, "Error, entered passive state\n");
++		work_done += nct6694_canfd_handle_state_change(ndev,
++							       CAN_STATE_ERROR_PASSIVE);
++	}
++
++	if (can_status == NCT6694_CAN_EVT_BUS_OFF &&
++	    priv->can.state != CAN_STATE_BUS_OFF) {
++		netdev_dbg(ndev, "Error, entered bus-off state\n");
++		work_done += nct6694_canfd_handle_state_change(ndev,
++							       CAN_STATE_BUS_OFF);
++	}
++
++	return work_done;
++}
++
++static int nct6694_canfd_poll(struct net_device *ndev, int quota)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct nct6694_can_cmd2 *buf = (struct nct6694_can_cmd2 *)priv->rx_buf;
++	int can_idx = priv->can_idx;
++	int work_done = 0, ret;
++	u8 evt_mask = NCT6694_CAN_EVENT_ERR | NCT6694_CAN_EVENT_STATUS;
++	u8 bus_err, can_status;
++
++	scoped_guard(mutex, &priv->lock) {
++		ret = nct6694_read_msg(priv->nct6694, NCT6694_CAN_MOD,
++				       NCT6694_CAN_CMD2_OFFSET(can_idx, evt_mask),
++				       NCT6694_CAN_CMD2_LEN, buf);
++		if (ret < 0)
++			return IRQ_NONE;
++
++		if (can_idx) {
++			bus_err = buf->err2;
++			can_status = buf->status2;
 +		} else {
-+			cmd->w_cnt = msg_temp->len;
-+			memcpy(cmd->write_data, msg_temp->buf, msg_temp->len);
-+			ret = nct6694_write_msg(data->nct6694, NCT6694_I2C_MOD,
-+						NCT6694_I2C_CMD0_OFFSET,
-+						NCT6694_I2C_CMD0_LEN,
-+						cmd);
-+			if (ret < 0)
-+				return 0;
++			bus_err = buf->err1;
++			can_status = buf->status1;
 +		}
 +	}
 +
-+	return num;
++	/* Handle bus state changes */
++	work_done += nct6694_canfd_handle_state_errors(ndev, can_status);
++
++	/* Handle lec errors on the bus */
++	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)
++		work_done += nct6694_canfd_handle_lec_err(ndev, bus_err);
++
++	/* Handle RX events */
++	work_done += nct6694_canfd_do_rx_poll(ndev, quota - work_done);
++	return work_done;
 +}
 +
-+static u32 nct6694_func(struct i2c_adapter *adapter)
++static void nct6694_canfd_tx_irq(struct net_device *ndev)
 +{
-+	return (I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL);
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct net_device_stats *stats = &ndev->stats;
++
++	guard(mutex)(&priv->lock);
++	stats->tx_bytes += can_get_echo_skb(ndev, 0, NULL);
++	stats->tx_packets++;
++	priv->tx_busy = false;
++	netif_wake_queue(ndev);
 +}
 +
-+static const struct i2c_algorithm algorithm = {
-+	.master_xfer = nct6694_xfer,
-+	.functionality = nct6694_func,
++static irqreturn_t nct6694_canfd_irq(int irq, void *data)
++{
++	struct net_device *ndev = data;
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct nct6694_can_cmd2 *buf = (struct nct6694_can_cmd2 *)priv->rx_buf;
++	int can_idx = priv->can_idx;
++	int ret;
++	u8 mask_sts = NCT6694_CAN_EVENT_TX_EVT;
++	u8 tx_evt;
++
++	scoped_guard(mutex, &priv->lock) {
++		ret = nct6694_read_msg(priv->nct6694, NCT6694_CAN_MOD,
++				       NCT6694_CAN_CMD2_OFFSET(can_idx, mask_sts),
++				       NCT6694_CAN_CMD2_LEN, buf);
++		if (ret < 0)
++			return IRQ_NONE;
++
++		tx_evt = can_idx ? buf->tx_evt2 : buf->tx_evt1;
++	}
++
++	if (tx_evt) {
++		nct6694_canfd_tx_irq(ndev);
++	} else {
++		ret = nct6694_canfd_poll(ndev, NCT6694_CAN_RX_QUOTA);
++		if (!ret)
++			return IRQ_NONE;
++	}
++
++	return IRQ_HANDLED;
++}
++
++static int nct6694_canfd_start(struct net_device *ndev)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct nct6694_can_cmd0 *buf = (struct nct6694_can_cmd0 *)priv->tx_buf;
++	const struct can_bittiming *n_bt = &priv->can.bittiming;
++	const struct can_bittiming *d_bt = &priv->can.data_bittiming;
++	int ret;
++
++	guard(mutex)(&priv->lock);
++
++	memset(priv->tx_buf, 0, NCT6694_CAN_CMD0_LEN);
++	buf->nbr = n_bt->bitrate;
++	buf->dbr = d_bt->bitrate;
++
++	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
++		buf->ctrl1 |= NCT6694_CAN_CTRL1_MON;
++
++	if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) &&
++	    priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
++		buf->ctrl1 |= NCT6694_CAN_CTRL1_NISO;
++
++	if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
++		buf->ctrl1 |= NCT6694_CAN_CTRL1_LBCK;
++
++	ret = nct6694_write_msg(priv->nct6694, NCT6694_CAN_MOD,
++				NCT6694_CAN_CMD0_OFFSET(priv->can_idx),
++				NCT6694_CAN_CMD0_LEN, buf);
++	if (ret < 0)
++		return ret;
++
++	priv->can.state = CAN_STATE_ERROR_ACTIVE;
++
++	return 0;
++}
++
++static int nct6694_canfd_stop(struct net_device *ndev)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++
++	netif_stop_queue(ndev);
++	free_irq(ndev->irq, ndev);
++	destroy_workqueue(priv->wq);
++	priv->wq = NULL;
++	nct6694_canfd_clean(ndev);
++	priv->can.state = CAN_STATE_STOPPED;
++	close_candev(ndev);
++
++	return 0;
++}
++
++static int nct6694_canfd_set_mode(struct net_device *ndev, enum can_mode mode)
++{
++	switch (mode) {
++	case CAN_MODE_START:
++		nct6694_canfd_clean(ndev);
++		nct6694_canfd_start(ndev);
++		netif_wake_queue(ndev);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return 0;
++}
++
++static int nct6694_canfd_open(struct net_device *ndev)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	int ret;
++
++	ret = open_candev(ndev);
++	if (ret)
++		return ret;
++
++	ret = request_threaded_irq(ndev->irq, NULL,
++				   nct6694_canfd_irq, IRQF_ONESHOT,
++				   "nct6694_can", ndev);
++	if (ret) {
++		netdev_err(ndev, "Failed to request IRQ\n");
++		goto close_candev;
++	}
++
++	priv->wq = alloc_ordered_workqueue("%s-nct6694_wq",
++					   WQ_FREEZABLE | WQ_MEM_RECLAIM,
++					   ndev->name);
++	if (!priv->wq) {
++		ret = -ENOMEM;
++		goto free_irq;
++	}
++
++	priv->tx_skb = NULL;
++	priv->tx_busy = false;
++
++	ret = nct6694_canfd_start(ndev);
++	if (ret)
++		goto destroy_wq;
++
++	netif_start_queue(ndev);
++
++	return 0;
++
++destroy_wq:
++	destroy_workqueue(priv->wq);
++free_irq:
++	free_irq(ndev->irq, ndev);
++close_candev:
++	close_candev(ndev);
++	return ret;
++}
++
++static netdev_tx_t nct6694_canfd_start_xmit(struct sk_buff *skb,
++					    struct net_device *ndev)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++
++	if (priv->tx_skb || priv->tx_busy) {
++		netdev_err(ndev, "hard_xmit called while tx busy\n");
++		return NETDEV_TX_BUSY;
++	}
++
++	if (can_dev_dropped_skb(ndev, skb))
++		return NETDEV_TX_OK;
++
++	netif_stop_queue(ndev);
++	priv->tx_skb = skb;
++	queue_work(priv->wq, &priv->tx_work);
++
++	return NETDEV_TX_OK;
++}
++
++static void nct6694_canfd_tx(struct net_device *ndev, struct canfd_frame *cf)
++{
++	struct nct6694_canfd_priv *priv = netdev_priv(ndev);
++	struct nct6694_can_cmd10_11 *buf = (struct nct6694_can_cmd10_11 *)priv->tx_buf;
++	u32 txid = 0;
++	int i;
++
++	memset(buf, 0, NCT6694_CAN_CMD10_LEN);
++
++	if (priv->can_idx == 0)
++		buf->tag = NCT6694_CAN_TAG_CAN0;
++	else
++		buf->tag = NCT6694_CAN_TAG_CAN1;
++
++	if (cf->can_id & CAN_EFF_FLAG) {
++		txid = cf->can_id & CAN_EFF_MASK;
++		/*
++		 * In case the Extended ID frame is transmitted, the
++		 * standard and extended part of the ID are swapped
++		 * in the register, so swap them back to send the
++		 * correct ID.
++		 */
++		buf->flag |= NCT6694_CAN_FLAG_EFF;
++	} else {
++		txid = cf->can_id & CAN_SFF_MASK;
++	}
++
++	buf->id = cpu_to_le32(txid);
++	buf->dlc = cf->len;
++
++	if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) &&
++	    can_is_canfd_skb(priv->tx_skb)) {
++		buf->flag |= NCT6694_CAN_FLAG_FD;
++		if (cf->flags & CANFD_BRS)
++			buf->flag |= NCT6694_CAN_FLAG_BRS;
++	}
++
++	if (cf->can_id & CAN_RTR_FLAG)
++		buf->flag |= NCT6694_CAN_FLAG_RTR;
++
++	/* set data to buf */
++	for (i = 0; i < cf->len; i++)
++		buf->data[i] = cf->data[i];
++
++	nct6694_write_msg(priv->nct6694, NCT6694_CAN_MOD,
++			  NCT6694_CAN_CMD10_OFFSET(1),
++			  NCT6694_CAN_CMD10_LEN,
++			  buf);
++}
++
++static void nct6694_canfd_tx_work(struct work_struct *work)
++{
++	struct nct6694_canfd_priv *priv = container_of(work,
++						       struct nct6694_canfd_priv,
++						       tx_work);
++	struct net_device *ndev = priv->ndev;
++	struct canfd_frame *cf;
++
++	guard(mutex)(&priv->lock);
++
++	if (priv->tx_skb) {
++		if (priv->can.state == CAN_STATE_BUS_OFF) {
++			nct6694_canfd_clean(ndev);
++		} else {
++			cf = (struct canfd_frame *)priv->tx_skb->data;
++			nct6694_canfd_tx(ndev, cf);
++			priv->tx_busy = true;
++			can_put_echo_skb(priv->tx_skb, ndev, 0, 0);
++			priv->tx_skb = NULL;
++		}
++	}
++}
++
++static const struct net_device_ops nct6694_canfd_netdev_ops = {
++	.ndo_open = nct6694_canfd_open,
++	.ndo_stop = nct6694_canfd_stop,
++	.ndo_start_xmit = nct6694_canfd_start_xmit,
++	.ndo_change_mtu = can_change_mtu,
 +};
 +
-+static int nct6694_i2c_probe(struct platform_device *pdev)
++static int nct6694_canfd_get_clock(struct nct6694_canfd_priv *priv)
++{
++	struct nct6694_can_cmd1 *buf = (struct nct6694_can_cmd1 *)priv->rx_buf;
++	int ret;
++
++	ret = nct6694_read_msg(priv->nct6694, NCT6694_CAN_MOD,
++			       NCT6694_CAN_CMD1_OFFSET,
++			       NCT6694_CAN_CMD1_LEN,
++			       buf);
++	if (ret)
++		return ret;
++
++	return le32_to_cpu(buf->can_clk);
++}
++
++static int nct6694_canfd_probe(struct platform_device *pdev)
 +{
 +	const struct mfd_cell *cell = mfd_get_cell(pdev);
 +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	struct nct6694_i2c_data *data;
++	struct nct6694_canfd_priv *priv;
++	struct net_device *ndev;
++	int ret, irq, can_clk;
 +
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
++	irq = irq_create_mapping(nct6694->domain,
++				 NCT6694_IRQ_CAN1 + cell->id);
++	if (!irq)
++		return -EINVAL;
++
++	ndev = alloc_candev(sizeof(struct nct6694_canfd_priv), 1);
++	if (!ndev)
 +		return -ENOMEM;
 +
-+	data->xmit_buf = devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ,
-+				      sizeof(unsigned char), GFP_KERNEL);
-+	if (!data->xmit_buf)
-+		return -ENOMEM;
++	ndev->irq = irq;
++	ndev->flags |= IFF_ECHO;
++	ndev->netdev_ops = &nct6694_canfd_netdev_ops;
 +
-+	data->nct6694 = nct6694;
-+	data->port = cell->id;
-+	data->br = I2C_BR_100K;
++	priv = netdev_priv(ndev);
++	priv->nct6694 = nct6694;
++	priv->ndev = ndev;
 +
-+	sprintf(data->adapter.name, "NCT6694 I2C Adapter %d", cell->id);
-+	data->adapter.owner = THIS_MODULE;
-+	data->adapter.algo = &algorithm;
-+	data->adapter.dev.parent = &pdev->dev;
-+	data->adapter.algo_data = data;
++	priv->tx_buf = devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ,
++				    sizeof(unsigned char), GFP_KERNEL);
++	if (!priv->tx_buf) {
++		ret = -ENOMEM;
++		goto free_candev;
++	}
 +
-+	platform_set_drvdata(pdev, data);
++	priv->rx_buf = devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ,
++				    sizeof(unsigned char), GFP_KERNEL);
++	if (!priv->rx_buf) {
++		ret = -ENOMEM;
++		goto free_candev;
++	}
 +
-+	return i2c_add_adapter(&data->adapter);
++	can_clk = nct6694_canfd_get_clock(priv);
++	if (can_clk < 0) {
++		ret = -EIO;
++		goto free_candev;
++	}
++
++	mutex_init(&priv->lock);
++	INIT_WORK(&priv->tx_work, nct6694_canfd_tx_work);
++
++	priv->can_idx = cell->id;
++	priv->can.state = CAN_STATE_STOPPED;
++	priv->can.clock.freq = can_clk;
++	priv->can.bittiming_const = &nct6694_canfd_bittiming_nominal_const;
++	priv->can.data_bittiming_const = &nct6694_canfd_bittiming_data_const;
++	priv->can.do_set_mode = nct6694_canfd_set_mode;
++	priv->can.do_get_berr_counter = nct6694_canfd_get_berr_counter;
++
++	priv->can.ctrlmode = CAN_CTRLMODE_FD;
++
++	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK		|
++				       CAN_CTRLMODE_LISTENONLY		|
++				       CAN_CTRLMODE_FD			|
++				       CAN_CTRLMODE_FD_NON_ISO		|
++				       CAN_CTRLMODE_BERR_REPORTING;
++
++	platform_set_drvdata(pdev, priv);
++	SET_NETDEV_DEV(priv->ndev, &pdev->dev);
++
++	ret = register_candev(priv->ndev);
++	if (ret)
++		goto free_candev;
++
++	return 0;
++
++free_candev:
++	free_candev(ndev);
++	return dev_err_probe(&pdev->dev, ret, "Probe failed\n");
 +}
 +
-+static void nct6694_i2c_remove(struct platform_device *pdev)
++static void nct6694_canfd_remove(struct platform_device *pdev)
 +{
-+	struct nct6694_i2c_data *data = platform_get_drvdata(pdev);
++	struct nct6694_canfd_priv *priv = platform_get_drvdata(pdev);
 +
-+	i2c_del_adapter(&data->adapter);
++	cancel_work_sync(&priv->tx_work);
++	unregister_candev(priv->ndev);
++	free_candev(priv->ndev);
 +}
 +
-+static struct platform_driver nct6694_i2c_driver = {
++static struct platform_driver nct6694_canfd_driver = {
 +	.driver = {
-+		.name	= "nct6694-i2c",
++		.name	= DRVNAME,
 +	},
-+	.probe		= nct6694_i2c_probe,
-+	.remove		= nct6694_i2c_remove,
++	.probe		= nct6694_canfd_probe,
++	.remove		= nct6694_canfd_remove,
 +};
 +
-+module_platform_driver(nct6694_i2c_driver);
++module_platform_driver(nct6694_canfd_driver);
 +
-+MODULE_DESCRIPTION("USB-I2C adapter driver for NCT6694");
++MODULE_DESCRIPTION("USB-CAN FD driver for NCT6694");
 +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
 +MODULE_LICENSE("GPL");
 -- 
