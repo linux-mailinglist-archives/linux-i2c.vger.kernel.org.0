@@ -1,140 +1,149 @@
-Return-Path: <linux-i2c+bounces-8126-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8127-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B16B79D53B0
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 20:59:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68D289D5512
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 22:56:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A8D42815A5
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 19:58:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21B821F22644
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 21:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 951C21D63D5;
-	Thu, 21 Nov 2024 19:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD871D9324;
+	Thu, 21 Nov 2024 21:56:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GUPxfl1z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QGlu0Iby"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3881C9B68
-	for <linux-i2c@vger.kernel.org>; Thu, 21 Nov 2024 19:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DE583CDA;
+	Thu, 21 Nov 2024 21:56:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732219094; cv=none; b=byMXzxk98qKCkDLwYHAh2BiadvfGWi8r/+IBrMDqPEffkB3jB4Q7Mv3PGcnzCK9wr2/k9FyUy7yONGChsmN2lu2oimpO3VZgzw8m9KagTsTQ+8cRvKeolsivaywH/AvEURGtAVJQMXsYF784fySYwMloFIC9JBBCu9JHb7RtEUg=
+	t=1732226163; cv=none; b=tqUQMmC7Uojpohy860LMyzHwcES4zjh+AKbT+ZmFK5yYHYAETIOVc1sI0uH8KNhFfEi4PGpajqsg6Sgr9S4761J1u2+yvFWphYi4WtUUNHTBQadMsHL53NznW9JVmOCnckfZakcMO3PeNekMpr4ExRTelStDEdV3TyFtAtDfWds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732219094; c=relaxed/simple;
-	bh=Ci5rgaKMcbABvz0Hq2okBdlgbreLxrd9dmDVHdg4jHg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F0irK8u+RJVj/bQclQbECseOldI442HUGJeysk9DlYUVmiCId+mfgCcibbNeFm0fW56YinuZ/cg/wxav/cHmNPTOcHeNuiDLQlVHnf8RIyIijL6kphKvHR4QK3JFtv4wEcuVcfr+a5t33py9klJlLuXGD2SFOGxkrD9BpD/yViY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GUPxfl1z; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732219091;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=juFFITBwgxbTeEGzKvrIeAZUrlzxGf1mZ1vezYeX2J0=;
-	b=GUPxfl1zuiFQr15cdNjC2JcEg7ucj1QPWLVr6zskV5gW2o3WCU4o9BJqCUNYoRkjPb4jQg
-	/uPEyLqALQ5/3ph+4wwKDhNt6T5nw8tHNrp205jT7/2yL1lqhZRlR/+VYGKIfnb1RI03Yz
-	NwIg7OnSV9K9XcbpsRiiKNn4NadwJu0=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-301-0m4g3IDvPyOPHRFPcdl2WA-1; Thu, 21 Nov 2024 14:58:08 -0500
-X-MC-Unique: 0m4g3IDvPyOPHRFPcdl2WA-1
-X-Mimecast-MFC-AGG-ID: 0m4g3IDvPyOPHRFPcdl2WA
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2ff13df3766so10579121fa.3
-        for <linux-i2c@vger.kernel.org>; Thu, 21 Nov 2024 11:58:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732219086; x=1732823886;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=juFFITBwgxbTeEGzKvrIeAZUrlzxGf1mZ1vezYeX2J0=;
-        b=sWpChuY/DWDsRqNT7RXV/c6NaTg5xbRAEihljiFAQQsilQEnz0TfIGMtjFnpNBgBsA
-         djaCe8FRiVDy0qIy5vu8FzdVc6HOMU+QabGz5OYZk5kUPoAQWkcyyxp+xczkTQHvExY2
-         qX51s1SE9qieeq9bm6v1E3KIBqCzIJSA/I1eNwZR5aJ1iGOaNitesZf/7hQmROpqpRst
-         AcHVCnaPIyNh3J+1bOUEoBqp4QyLhoQ5ulT5BcwEmNys803oYYZfxD7Fj+WCEDyhsPbr
-         Fn44gR/J3z46R+EFjkQP8U+8UP+INGannzJR8VUVFK3pS/wsADd3AHJllW0FBrkf+kxY
-         7xxA==
-X-Gm-Message-State: AOJu0Yy4inRSbOQz7cadJsiPaRRBro2ueM02dnIu473QaQOOCEe1+Ihj
-	i40RiZrlcJYTHjdC1LZ8HuNiiyQPYKjH3n1vVNlu8j7RTnIOrmlT027K5eHrabne8qS9zQyOedW
-	q9ruEV76TNNE9bsp+DiaT0KxADVZIuO4lFvB21xZklsxFTWYhqJNu1UgHQj4fnzIMyA==
-X-Gm-Gg: ASbGncvdnn1gSFukd9pwsDMotmprqHyLDH6rFE8DVNLgKBHhs2lgtOU2iXeL6jJMAyG
-	pBtq/EBaIqTW5rkMFjCl7uDFgqogILRZxSdMbDEAumq1zBB+tkzoRvqJevcvwJKK2GIXH/bgZ33
-	SkKNaESsJhWQNvKaLmWkVysPGjh4mTSIIUf/rBSZLj+C4cXWrO5GNftRO1GgcT30lZtekxQui99
-	oBp+2199aHqPrdJ5dbNLqg6adBlIdSH7cKBEy1rbOkpsnnM87aABNK2m32/Elc=
-X-Received: by 2002:a05:651c:2106:b0:2fa:c014:4b6b with SMTP id 38308e7fff4ca-2ff8dcfeeeamr43367241fa.41.1732219086563;
-        Thu, 21 Nov 2024 11:58:06 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHld/7g4KDxVVzct+EU5FiZIyFo1DaNYX143LVFTQdBZBW+2hhFCe7EG9OaPHgNPlxajfp9pg==
-X-Received: by 2002:a05:651c:2106:b0:2fa:c014:4b6b with SMTP id 38308e7fff4ca-2ff8dcfeeeamr43367091fa.41.1732219086170;
-        Thu, 21 Nov 2024 11:58:06 -0800 (PST)
-Received: from eisenberg.fritz.box ([2001:16b8:3db7:3400:37d7:1f36:6e6a:3d66])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d01d401f64sm119592a12.70.2024.11.21.11.58.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2024 11:58:05 -0800 (PST)
-From: Philipp Stanner <pstanner@redhat.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Philipp Stanner <pstanner@redhat.com>
-Subject: [PATCH] i2c: i801: Remove unnecessary PCI function call
-Date: Thu, 21 Nov 2024 20:56:25 +0100
-Message-ID: <20241121195624.144839-2-pstanner@redhat.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1732226163; c=relaxed/simple;
+	bh=ATxtgNT34FvQqkHxvnc3dDn3NIUe4BGii5/L3CVbL5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gsGf6wS1WUtofrNlq63n9PTwBjGNQN9NS0yuKlU4mJ97gOtIc1PCy1CPkB5np5u96NzADHrrwruseJNRoH6ff6r0HBNSlOHh2XglFUX6hIpL6LFkLeafj8H7XY7BoQcwAwUkY7BrrS6pe7juY5BxXuMO9g33ZmoEuSm9NAGOZAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QGlu0Iby; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732226162; x=1763762162;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ATxtgNT34FvQqkHxvnc3dDn3NIUe4BGii5/L3CVbL5Q=;
+  b=QGlu0IbyLJU2/RNwn29EG7ENIsVehgsxdkFe1gzeyvRDAEB60Ryvrn2S
+   7C1zP8+Predzx48hxwd1j/M6XLnbAenf5IFmb/h3X07nS/16yAdErJaRX
+   4+Oltzzv5wvp5G5T52tY/xJ8lZM4P3IXLGEMG94vFVanIsNef8Iv6VNbi
+   rX/QBuG+DNGjixn8xk8pWuQsvFmhRUwVamdH2MG2a0lF2GnsoICXeGD73
+   RppeZXGVoIFY4iAdOH/8XKFN/92XA7w9lAgCuohG/yy0epJIhOx+2qt68
+   9xHknFnDHJfYzpGzhg2TxEtxnnuvvqszC76gK1E+vCr8YPCFJWdDZ8uoQ
+   A==;
+X-CSE-ConnectionGUID: W6XjVuczQ9m2rp/ObaKBoQ==
+X-CSE-MsgGUID: YjH2JAfhT9S4ewyGNSl/Fw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="36146985"
+X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
+   d="scan'208";a="36146985"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 13:56:01 -0800
+X-CSE-ConnectionGUID: umi9aa9ESiO+m450r70/Og==
+X-CSE-MsgGUID: ssMEiMNuSPSKEiEAD/cNgQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
+   d="scan'208";a="90183953"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 21 Nov 2024 13:55:56 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tEF9W-0003Od-17;
+	Thu, 21 Nov 2024 21:55:54 +0000
+Date: Fri, 22 Nov 2024 05:54:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?unknown-8bit?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
+ adp1055 and ltp8800
+Message-ID: <202411220500.414mHL27-lkp@intel.com>
+References: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
 
-Since the changes in
+Hi Cedric,
 
-	commit f748a07a0b64 ("PCI: Remove legacy pcim_release()")
+kernel test robot noticed the following build warnings:
 
-all pcim_enable_device() does is set up a callback that disables the
-device from being disabled from driver detach. The function
-pcim_pin_device() prevents said disabling. pcim_enable_device(),
-therefore, sets up an action that is removed immediately afterwards by
-pcim_pin_device().
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.12 next-20241121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Replace pcim_enable_device() with pci_enable_device() and remove the
-unnecessary call to pcim_pin_device().
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-bindings-for-adp1051-adp1055-and-ltp8800/20241121-144856
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20241120035826.3920-3-cedricjustine.encarnacion%40analog.com
+patch subject: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051, adp1055 and ltp8800
+config: loongarch-randconfig-r064-20241122 (https://download.01.org/0day-ci/archive/20241122/202411220500.414mHL27-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411220500.414mHL27-lkp@intel.com/reproduce)
 
-Signed-off-by: Philipp Stanner <pstanner@redhat.com>
----
- drivers/i2c/busses/i2c-i801.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411220500.414mHL27-lkp@intel.com/
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 299fe9d3afab..514d3f8277cf 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1676,13 +1676,16 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	if (!(priv->features & FEATURE_BLOCK_BUFFER))
- 		priv->features &= ~FEATURE_BLOCK_PROC;
- 
--	err = pcim_enable_device(dev);
-+	/*
-+	 * Do not call pcim_enable_device(), because the device has to remain
-+	 * enabled on driver detach. See i801_remove() for the reasoning.
-+	 */
-+	err = pci_enable_device(dev);
- 	if (err) {
- 		dev_err(&dev->dev, "Failed to enable SMBus PCI device (%d)\n",
- 			err);
- 		return err;
- 	}
--	pcim_pin_device(dev);
- 
- 	/* Determine the address of the SMBus area */
- 	priv->smba = pci_resource_start(dev, SMBBAR);
+All warnings (new ones prefixed by >>):
+
+   drivers/hwmon/pmbus/adp1050.c: In function 'adp1050_probe':
+>> drivers/hwmon/pmbus/adp1050.c:88:39: warning: passing argument 2 of 'pmbus_do_probe' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      88 |         return pmbus_do_probe(client, info);
+         |                                       ^~~~
+   In file included from drivers/hwmon/pmbus/adp1050.c:12:
+   drivers/hwmon/pmbus/pmbus.h:541:73: note: expected 'struct pmbus_driver_info *' but argument is of type 'const struct pmbus_driver_info *'
+     541 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info);
+         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+
+vim +88 drivers/hwmon/pmbus/adp1050.c
+
+    79	
+    80	static int adp1050_probe(struct i2c_client *client)
+    81	{
+    82		const struct pmbus_driver_info *info;
+    83	
+    84		info = device_get_match_data(&client->dev);
+    85		if (!info)
+    86			return -ENODEV;
+    87	
+  > 88		return pmbus_do_probe(client, info);
+    89	}
+    90	
+
 -- 
-2.47.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
