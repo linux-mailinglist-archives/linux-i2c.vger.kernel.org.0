@@ -1,192 +1,199 @@
-Return-Path: <linux-i2c+bounces-8101-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8102-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 953D09D4680
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 05:12:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF1519D47AF
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 07:41:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E397EB23A96
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 04:12:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EDFB282500
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Nov 2024 06:41:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A293713B787;
-	Thu, 21 Nov 2024 04:12:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF70C1C4A24;
+	Thu, 21 Nov 2024 06:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LAjronJL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hB6Nkohm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C38570820;
-	Thu, 21 Nov 2024 04:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1309E4207A;
+	Thu, 21 Nov 2024 06:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732162340; cv=none; b=ixHJ2AHbdzHwwa4bZHYX9JJ7iuc0IUmOrFRHEjud2hve9E8paZvBVp/nr4fuCnCTsFcOmttWwOpk5nsql5gA9IExyuhouo6xLMYIKC+PEeVCZBbvEWZrwQmHlomJabNsE99vVdUcpRx33FaA2IolMRkR1gD9Jezp4gDqQK27VHA=
+	t=1732171264; cv=none; b=fHvW3oORcs3rCzLFH7DCUpTHnZu8l3gYZmDvRX3lJOdwZ6FBwbaNpn2GK6xhyJVilLA5SLXB/2E6Jx/2+guFgIUrUqFsb/NUYTNNyAoXtS1M6yFonotCvT/vRU8iBf6hety5OZ2FmO7eBqaFG1fk1DF0BnJmBeoDIDPeKtWlCrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732162340; c=relaxed/simple;
-	bh=GlMztYYmcyNEeazAr57ckRUkyI6r4uv5fJqxGe/m/Q8=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=r/AsRoLholaBUROekZtoVJ0LlnV81uJYLG1skZtdBMhtGiYaFmJ77/vUU2PNZpV7tZW3vB0xM2Y+gQSOiddVidYQ0q1KoySMV3re2GC4v8ZOBE+BFWXwo5qutkRn2uY1zihL0y0KXRsqczEWC8j4kqGMUkiQH8OXyUtcm7bFiwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LAjronJL; arc=none smtp.client-ip=209.85.215.196
+	s=arc-20240116; t=1732171264; c=relaxed/simple;
+	bh=FINqjynRckCPdREA15LQd+d/wJ58MH+XzrwNRb4sGD0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oVEnNIBYf9DopeF5r++heH0A+5PgtMBFjcH6yQNY2Fi6qmD2Is379xuq1YFkR+tPdP/wnaWM3JuYLu94z2WXj+VYtJC/iDR11Sl4AoN5nLszcy36Uc4wyCcobG2YfW2OetzN6ayoVI4+7ZUN+ZawEo8f0rHMJJQEOuQOgSFZdu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hB6Nkohm; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f196.google.com with SMTP id 41be03b00d2f7-7f8095a200eso1259949a12.1;
-        Wed, 20 Nov 2024 20:12:17 -0800 (PST)
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7f46d5d1ad5so482264a12.3;
+        Wed, 20 Nov 2024 22:41:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732162337; x=1732767137; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=exKez1cVDbnXT6rl2hY31i8NAVz7pgT+MF0bJD/FrI8=;
-        b=LAjronJLdj5UC+hnlmVP9G0cMrBwbAYPKrmWV9v53PMzjEaeBbFJkT7LWaZqv8c+nC
-         LZoMDdo3CFeVvmYP4H2X9hnoX3roEEaIjXAzGFrkbOwO82WL6+C4qJXYGSOVJy9GtQ6x
-         MR3CCZ9hPaeRoBLatNFJ3O9N/gf2Dkn3OWLG/QHEXNe3oTayUalc312wa00jqz2xJ89z
-         R+rGuM9bLClzoGtPI5SeZxv1x79YIT+n9jX4SKNGbgsLn539QDI+8tkamyoQtioQHcJI
-         z2y0Ps/Q0Q1FrKGv9Ckfc4qGK5n3Nb/1DFmVJVRW3g1NDO3aSZnXb/kip4anYXctsWQ9
-         /kGQ==
+        d=gmail.com; s=20230601; t=1732171262; x=1732776062; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VGWHthOdkm6Gt06IJVjO799GK6ZHCX/yfS2o21G73Jg=;
+        b=hB6Nkohmkd8c9Ym/lYDp4ljAAy4GrYhRGj4/7F1HvCBYQV0Bpz6jNixqiUPkxoEqdX
+         Bhnbu/7CrM/bmlSNauOmyefR1o+aXWJ3Kbcd+kegjQSka7ISTfWyp0CpNOFcQr2xQqBU
+         zX12RK0fXWKZFbeZ7xYpfB6NZaESFn0N11CCoOa9h38WM9k+qRZgjNyHABjUVsGbgk4L
+         7+ElDjAXoBFXWonpr6GRq/F9mqXRY1DmT/Vicxeq5HGgluat+EUS3YuGIjorL3ojHefT
+         msyvs1ONBSomsZ0cC+LSESMuczV5b4rzftUl/dLcHSYjbSWB1tGJkYY/LOn1xg4VuUOO
+         g7dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732162337; x=1732767137;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=exKez1cVDbnXT6rl2hY31i8NAVz7pgT+MF0bJD/FrI8=;
-        b=TtoCa0n3vDlCnRbWBRvHavOBwhc7JzKMFrtHBH4Y3vl+0LOH4Z447qtBsWoymOTMB+
-         88l7PmEDV2htUOqxQdu8ZICS3HaWkZUp8q+NOzc6EQAZvbh574aIqmdUofKtMjcyXWnV
-         OH5L3Ox24A2YDrpr3a2f7a/tWisshqV2PG79sTy8yxUdFwsEAhBDmt2eO8tbFKDUMrx3
-         p6J9e1FDSfnMWu/umd/c2ZbIP+AROENLKMl8KMgqcj44g9Mat838UaWBvC0S2Xvjng26
-         2/cyn59c9ElO08/NCvCmCgbq/RJV1yJtfz9X3AI+4SdYLzMrl6EpxY0b5ux/E9Zbrkep
-         DjZw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKIHcqFo7OrG64iTBNLmedr3GA2abcKVhIax4a7XWpZB/8pSXBXAB6IUm0Vk6gIsMOgt7veXX0OV+t@vger.kernel.org, AJvYcCUrrwqbZpeZkUVPcrZYgyyWlxod9FPNc4txfXKNSR/nEGp/ddXedf9DoVxd1vXQzkH02t676TuGOjBFoya6@vger.kernel.org, AJvYcCXWb69hVKPxPRMcdjWuoFYFVghr8apE1lQDwd6TwXskXkUhtDCaR5rsK74bEIJV/4R9Wfrh2EovZOto@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4tUi5Iji3a9+mQL9mzpuqJGmJQmgAkeeub7JHHsWx5psnENVi
-	ETA0um8r+VpfNdZa3VcnmeEBa+KWstZl6SNe2XZjY9hng6Abwsxbg1feoSZriAY9Sh7oKz4=
-X-Google-Smtp-Source: AGHT+IFbBC3R8kywIfLzFXI+0EAqpAjQMEKGdZuXjprw2fRIlUUyKvdgCICLjlTr54Bq/GOwyWWm3g==
-X-Received: by 2002:a05:6a21:998f:b0:1d9:dc8:b80d with SMTP id adf61e73a8af0-1dfacc36566mr3164471637.20.1732162337164;
-        Wed, 20 Nov 2024 20:12:17 -0800 (PST)
-Received: from [127.0.0.1] ([2407:cdc0:8010::ec])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fbb64ed022sm280846a12.20.2024.11.20.20.12.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Nov 2024 20:12:16 -0800 (PST)
-Message-ID: <9a1e20a0-6a79-4bb3-990c-a1c6dfb22f1c@gmail.com>
-Date: Thu, 21 Nov 2024 12:12:04 +0800
+        d=1e100.net; s=20230601; t=1732171262; x=1732776062;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VGWHthOdkm6Gt06IJVjO799GK6ZHCX/yfS2o21G73Jg=;
+        b=shqyhC61a2e6DdnKmse/hpVdefC3e5RGWg/6bJ0xDUNTaah1vygFrh0EKXEigGA5eE
+         zrnysRzAW3nTeIq7neoZ1CvS7Vj1D3sRfjmuTDahG5Vf/dt/OmwS09f+JPYD0MzCArGu
+         9lmb7BnAcZpA+aUCcHdEKeP+pKjtptgO51AE31CnfLsNq123ilnHdA5VvPdTcY0WPiCI
+         52jGYpnOR/aLwSkP0JOwi6+i+u354O3jlKlLtdLC22xLaonlKoOVTb5pQwKVuVbNQDHd
+         E+3LBxXaNHXHWIB43kVo+9xJNIj7iqaeY/7furTcVXhopRAOHTdyBxe/u4W8lwyK/bcL
+         sllg==
+X-Forwarded-Encrypted: i=1; AJvYcCUA2RJLmFqv33S6EBA6ViLdBXcGpCxJMuE1+w2AXR15+/inxZ3NexWsHO1ag2Mqcgz33yhxlEVhSAwR@vger.kernel.org, AJvYcCUnAGXjPyW20LWWmuTdEK9xXQG8MrwmdjMsWfwiIVmEIdbuYPtg2VzPtzIEui0OpN+7Pj7MqCD2w/iV@vger.kernel.org, AJvYcCUwuMUUS5u4HshgbqZ3feX1h0orR5NNVIp6z7QKK1Ikaomcr1N6+eWgMheYR9M/t78yO5w+n6fHjD6OA7lRCCY=@vger.kernel.org, AJvYcCWLFFmgNje1S7unLKhaEzIldYLhmzeGCGa3YHnofYo8XB/PhP4bO3EayMfvpj8HzVPP+sMoDaSP@vger.kernel.org, AJvYcCWgGQR0XGaIHPgSOtwxDM7K9DpTbCKuJ90E9VllrFQimUbUNzfMWEkMMklvz5ruoSKd/cPdwrFTclI=@vger.kernel.org, AJvYcCWp1hktI2mzRcbwskIAshN35nUyCvncfdRq2QBWp8Df6wLUr2ZmUWaijmo/GGmGEcFzyePrKSVy45ibBA==@vger.kernel.org, AJvYcCXLaVG6qi7i2L96sokAMIWPMdyi6WPTpIns2a8L6Pd81QqaljxJeEu6Tw11AB5F7DtdhK4mAol5T83ajGk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxHouaq78TKjK3ouNli1wXadKUO0Za0k4pMsbay4w8xDmiTnz6
+	3Qvq/zzE4meb3YnKt2GdRALeeYQjbagqT9u7gd34H60Bal1XwLCh
+X-Gm-Gg: ASbGnctFLZvWDvaPv31S46m14Lb0MetQz54+QiwzbEpUf68jYDc53IHOwI4rOMDI5gi
+	Zr689dZzGZXEjol3Ysan0Ae6kZDDwro/gW6/3er7hgKYY4L1oavLHX/XohtEM7qj/AAhURWSj2C
+	t6LMEaoGKCIAsDGdeh/2j1csDonwCEpX6fqm8rx2KProZRSSyL801qj8o4PYSifN7DzR1FNDLYI
+	fwbsOUYk4yp7UPVB1H+Vio8LZ4jjI51ugY2cNYJhuGrkn9FzMOcdhl4xeTL1yj3L1ZIA5RlHyTA
+	KFUZFfHQMoCG
+X-Google-Smtp-Source: AGHT+IGpnymgSDU5esqrFpiME6WfRsGDqK+fak4YLAOVub093rVM6M8RmgJK2D1J5DliCzpHz7ksUQ==
+X-Received: by 2002:a05:6a20:a110:b0:1db:f02d:dd49 with SMTP id adf61e73a8af0-1ddb10dfb56mr8061282637.40.1732171262113;
+        Wed, 20 Nov 2024 22:41:02 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724beeb83d4sm2812530b3a.40.2024.11.20.22.40.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Nov 2024 22:41:01 -0800 (PST)
+From: Ming Yu <a0282524688@gmail.com>
+X-Google-Original-From: Ming Yu <tmyu0@nuvoton.com>
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: [PATCH v2 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Thu, 21 Nov 2024 14:40:39 +0800
+Message-Id: <20241121064046.3724726-1-tmyu0@nuvoton.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: troymitchell988@gmail.com, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-riscv@lists.infradead.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: i2c: spacemit: add support for K1 SoC
-To: Yixun Lan <dlan@gentoo.org>, Conor Dooley <conor@kernel.org>
-References: <20241112-k1-i2c-master-v3-0-5005b70dc208@gmail.com>
- <20241112-k1-i2c-master-v3-1-5005b70dc208@gmail.com>
- <20241112-aged-trailing-cffda6af0944@spud> <20241114070601-GYA1001363@gentoo>
-Content-Language: en-US
-From: Troy Mitchell <troymitchell988@gmail.com>
-In-Reply-To: <20241114070601-GYA1001363@gentoo>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi, Yixun. Thanks for ur review.
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-On 2024/11/14 15:06, Yixun Lan wrote:
-> On 18:03 Tue 12 Nov     , Conor Dooley wrote:
->> On Tue, Nov 12, 2024 at 11:07:39AM +0800, Troy Mitchell wrote:
->>> From: Troy Mitchell <troymitchell988@gmail.com>
->>>
->>> The I2C of K1 supports fast-speed-mode and high-speed-mode,
->>> and supports FIFO transmission.
->>>
->>> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
->>> ---
->>>  .../devicetree/bindings/i2c/spacemit,k1-i2c.yaml   | 52 ++++++++++++++++++++++
->>>  1 file changed, 52 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
->>> new file mode 100644
->>> index 000000000000..e8cce360bf03
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/i2c/spacemit,k1-i2c.yaml
->>> @@ -0,0 +1,52 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/i2c/spacemit,k1-i2c.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: I2C controller embedded in SpacemiT's K1 SoC
->>> +
->>> +maintainers:
->>> +  - Troy Mitchell <troymitchell988@gmail.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: spacemit,k1-i2c
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    maxItems: 1
->>> +
->>> +  clock-frequency:
->>> +    description:
->>> +      Desired I2C bus clock frequency in Hz.
->>> +      K1 supports standard, fast, high-speed modes, from 1 to 3300000.
-> while we are here, I'd suggest rephrase the sentence above to align it better with the doc
-> 
-> K1 support three different modes which running different frequencies
-> standard speed mode: up to 100000 (100Hz)
-> fast speed mode    : up to 400000 (400Hz)
-> high speed mode    : up to 3300000 (3.3Mhz)>
->>> +    default: 100000
->>> +    minimum: 1
-I will modify `description` and drop `minimum` in next version
->>> +    maximum: 3300000
->>
->> It's sufficient to define just default and max btw, the min is set in
->> i2c-controller.yaml (in dt-schema itself). Don't respin for that alone.
-> +1, the minimum settings isn't really useful, clearly not apply in the practical case
-> 
->>
->> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - interrupts
->>> +  - clocks
->>> +
->>> +unevaluatedProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    i2c@d4010800 {
->>> +        compatible = "spacemit,k1-i2c";
->>> +        reg = <0xd4010800 0x38>;
->>> +        interrupt-parent = <&plic>;
->>> +        interrupts = <36>;
->>> +        clocks = <&ccu 90>;
->>> +        clock-frequency = <100000>;
->>> +    };
->>> +
->>> +...
->>>
->>> -- 
->>> 2.34.1
->>>
-> 
-> 
-> 
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
+
+The following introduces the custom-define USB transactions:
+	nct6694_read_msg - Send bulk-out pipe to write request packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
+
+	nct6694_write_msg - Send bulk-out pipe to write request packet
+			    Send bulk-out pipe to write data packet
+			    Receive bulk-in pipe to read response packet
+			    Receive bulk-in pipe to read data packet
+
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
+
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CAN support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                      |  13 +
+ drivers/gpio/Kconfig             |  12 +
+ drivers/gpio/Makefile            |   1 +
+ drivers/gpio/gpio-nct6694.c      | 441 +++++++++++++++
+ drivers/hwmon/Kconfig            |  10 +
+ drivers/hwmon/Makefile           |   1 +
+ drivers/hwmon/nct6694-hwmon.c    | 771 +++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig       |  10 +
+ drivers/i2c/busses/Makefile      |   1 +
+ drivers/i2c/busses/i2c-nct6694.c | 152 +++++
+ drivers/mfd/Kconfig              |  10 +
+ drivers/mfd/Makefile             |   2 +
+ drivers/mfd/nct6694.c            | 382 +++++++++++++
+ drivers/net/can/Kconfig          |  10 +
+ drivers/net/can/Makefile         |   1 +
+ drivers/net/can/nct6694_canfd.c  | 926 +++++++++++++++++++++++++++++++
+ drivers/rtc/Kconfig              |  10 +
+ drivers/rtc/Makefile             |   1 +
+ drivers/rtc/rtc-nct6694.c        | 263 +++++++++
+ drivers/watchdog/Kconfig         |  11 +
+ drivers/watchdog/Makefile        |   1 +
+ drivers/watchdog/nct6694_wdt.c   | 277 +++++++++
+ include/linux/mfd/nct6694.h      | 139 +++++
+ 23 files changed, 3445 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
 
 -- 
-Troy Mitchell
+2.34.1
+
 
