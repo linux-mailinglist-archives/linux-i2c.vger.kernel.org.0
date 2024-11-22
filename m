@@ -1,85 +1,85 @@
-Return-Path: <linux-i2c+bounces-8137-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8138-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBEA59D5AC5
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 09:12:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4D799D5ADB
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 09:15:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 748A0282F1E
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 08:12:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48FCA1F23712
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 08:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D1018A6D9;
-	Fri, 22 Nov 2024 08:12:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A43E318B49B;
+	Fri, 22 Nov 2024 08:15:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bw21WrI0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kkCHLhtO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E623822075;
-	Fri, 22 Nov 2024 08:12:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9819184101;
+	Fri, 22 Nov 2024 08:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732263124; cv=none; b=fwxost7CFCkk2ePBszawGvNdc+J5U0M+dBy3WPhlmmM30uosqr2yKnAvzIYBIRsIO9GH1nMjPngeJN1X19GXYFcDjEQNmoxoRF32qHm8bt3pbv8KoNJLiPeMcXuEr3gLp+/35Ae5t7FsaztEB54n0UkgtSXJdSmT8NZcz9AIYvg=
+	t=1732263339; cv=none; b=Qb/Kb3UcUgLNGM8nwSrI62lGpVDWeZCz3NIONC8F4QX4/Wwalt/hPtTuT4LjEvAzSVR78CLRAuceCRMdJjJDC3S+BbBL46h9ZBtG+uXCG8nKJvuQEaY2+SeDqo0q+ONB0tOZ9EZOVM4DnONnECVqD/gtb4grfEJoELAyR297S0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732263124; c=relaxed/simple;
-	bh=vfa73H59aXhR7J0Cv4I/H0vg//RnzL84g9+gABL6x10=;
+	s=arc-20240116; t=1732263339; c=relaxed/simple;
+	bh=UXngmQ22E5Ln7cPommdezSyEwswMdAZSYYQteIcmhII=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VjO+/gde0yRgk5J0aUaiKsWwlH44rsw5b9nRL21NK/p33c9an/xSRDCBE/Mu1ZPSN91hmg2h5/SlkLOGmF4j/KPstg2tTzCUb0HmbEczELwhnXGvKMMNwz+xDzzKs7M6NTLGUpOYb7eIgVnS8WKC4wBzxuQ+/I4f4JIasWFCva8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bw21WrI0; arc=none smtp.client-ip=209.85.128.172
+	 To:Cc:Content-Type; b=exuS48kkVj14hHTLF9YAnBkUuwixSeej/iniLkzH5yxWffTwu3j3r3JuDR8s2ulvc2G8HavRgU1uWCnd5lrVKh0xA9nAB73z+WIwD/DR7CzOLswlMMb4M3J2nIZFgD4BzRrrf+9OrdvjkeccspRI7g8uSAZXz865ujAmydwpdC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kkCHLhtO; arc=none smtp.client-ip=209.85.128.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6ee7b886b5fso18413347b3.3;
-        Fri, 22 Nov 2024 00:12:02 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6ee745e3b2bso22145297b3.0;
+        Fri, 22 Nov 2024 00:15:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732263122; x=1732867922; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732263336; x=1732868136; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xBVVfxBZW2KFqRVvhdXWhW+v4WR7l4QlIwMPMmDHj5U=;
-        b=Bw21WrI0i24iZi/fSUe98oPj7BCAbL0gup0uqRjTO907lmxf0HPTv7a6r+i2kL0rDG
-         qD00C4U1svCzsPWKHL4/BBF8+mzssy/rNYhg5J9nb5YqpkAYl868mhGUyWJjve9bxwoC
-         83QG701GoBdLKEv0FSBSV8gmdGxheX1sl9fKeKMhlvLlXE/VdFA5+UU/gVYwdOMPKda4
-         1NicrZvTgMNhUhwC3p3uim+rijYVrl3s46ZqnFXdiDonEYB/TiH/w3nwLzwZdB0Tag0w
-         MwhkXW61rlp1jW6/cRUpVLdU3YCvps7dm2Ftm8rH0hOesKu+bBp8QgT6Pv2uGspLR8CI
-         IgNg==
+        bh=vyr8qLSn43QIrBhIICQVkh1BFCJxDyjXHmi9R1Z0AAg=;
+        b=kkCHLhtOIpqe5H4w8qBboIFBWVw4FTRDjBxljfEADKu9itukrYBboh4r6NcJtki2HH
+         n7UVvMuXYsvuB0Ht23e+OK9Q/Ju2q2csHcGCB6oLdQLZGXoGbs0b4emPV4+H9hF1pwK9
+         nqayGZdLQkrRjH6Tx9M92MZzk7nehZ8BcZ7OYhnTI/V2FX7Vqjz3LP9nucTNqhq2ncnt
+         enOHxiPDLkTEG/hrPN1aeP7V6sBYqHAkXBt3hGv+8BOukgO47Gio0Mfdxo73jH3n5xcc
+         Jh5zNPCCIajNKrIZH2ygrWNjb6jRUfH3aTNr1NzaHuDabqcwz6R9DOZh7fZEt5cUwkO+
+         o4PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732263122; x=1732867922;
+        d=1e100.net; s=20230601; t=1732263336; x=1732868136;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xBVVfxBZW2KFqRVvhdXWhW+v4WR7l4QlIwMPMmDHj5U=;
-        b=T3ew7zzvp4eKWU1uwfEgPkti2Btxn6ZExK8LnpN4nmDII4p6WqOQQm1LWBd+ph4F+R
-         p5/T7qJ6PVWpn9eYTB6cUmcNO8MEpFbQI0vJgEADW9pCZJKWL8UmVbMzliv/VyjscYgN
-         d6tdEqRxVlaB0eS76pTZuJfsIPI01x8I6Ks+Nnhr9G+uu0vTUrc/Sq3OfMTXjToI0GbJ
-         Q02X4YRyPc59ujdTwzoF/9Rra4kZPj3dHzwk8k5MyUv4yb1744biGnRkNlIK9/CTEZAL
-         Xp8d5emakCpEuDM7wL+HVYppQUIKCV3XMnCD/IzyxoPP0vXo9pWUU9JgahWY6K4M8KXZ
-         ucHA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1/nZrJjzneiQp8j+EwLzsxiq3lebEYfys7Jmk7MDz9vC/5+t/H9E7kpZ5dJIxo8uo91A5C2l3VerU@vger.kernel.org, AJvYcCU9fXGfTTGwtP+nL9GNjo1xX/FGrWf4RHrg8cg0DSHkpZed7jmsFa2zHNK5AU7KO2SKU1pUYFOkr3nVq1Bo@vger.kernel.org, AJvYcCUbGF3AeF4hNw6QwIa7Oa1PBKWwBo4n6ehIXQo7cOtZQU8V202ObXaOQ7s3B74JsJ2GUVnMwWiD@vger.kernel.org, AJvYcCUxI1CzXuxD//Gc7BMKN9oNPBXD72IABeRbf7n0MFTQ0JMSr8ZaFwh3NjMf/+vDlSKhDO/r4bJewQ4siw==@vger.kernel.org, AJvYcCVxYRO77xrX9fjFgP9tyJrV/kk811YXdhyn3AeAi2q6aXFuIE9iLHMMTUGWN+QE2amVjFALiLXElEZU@vger.kernel.org, AJvYcCW5eU4dwLo74n1lDGdxkJooS99q4Jo4elT25nC2hJ3hT9+TQMp1iz0RViP3Aw4pQ1r5VAN7GL4Tu2HxlqM=@vger.kernel.org, AJvYcCXdDsT5T4lekrQ18yTB7oq+ftCI7ZvQ/t3FfIaXTCdrCNLZg8Tu/pl47MXjRSKz4MTQ0fCa8GZbgUo=@vger.kernel.org, AJvYcCXokhqSfl446yC5RMoZa28aAR2OPoSKNb9vJR7tk60Q3CnVYVj1Efs/QRBP5J7mWuHPfxQDxMpsjGwv+fg1cC4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQ6XZ1bQdCxM5/smmLR+ZaJmEn9yA/o9ToOOQtTF+7hu5XF599
-	OPfz/7MnNxiYZJGwlwuOPJaayMUNrM2vYtKZ42p1YPSXsxv74ft2u/wqORUPihMxS9Ka3r4gvC+
-	opvhSMqs61qkHLEJXfAOOFTb4wrU=
-X-Gm-Gg: ASbGncuV3jmeFHdQmoQtUNcuStc0253+HDsWJwKBOOFYtWmXXCSOVuKinUiWCV6mJ3m
-	EUfs0vCbpxkOZ2ZiqfR684qfj9rrGsmQ=
-X-Google-Smtp-Source: AGHT+IGmgdSbiik8QuTUl0/67zUkXwlQddlW2hCReHsnX53P5ohf/5TneLt36igaRho14/sg+tTkQNogVtwDsPUozas=
-X-Received: by 2002:a05:6902:1245:b0:e38:f293:5b63 with SMTP id
- 3f1490d57ef6-e38f8bd97d6mr2235315276.33.1732263121799; Fri, 22 Nov 2024
- 00:12:01 -0800 (PST)
+        bh=vyr8qLSn43QIrBhIICQVkh1BFCJxDyjXHmi9R1Z0AAg=;
+        b=R8H7aHETg0f/4bXjlhFI+WUY/bPnh6W5quOebcUqD7bUuULpdBXWvp73Tmw10aOONX
+         iIywGd/TqDESY+bps/s4g1yeyATaS+o9E2TbHQYwWKZpy5Fa342kBL+RbFtZKIwjnCPr
+         NPYs1jZG+cXlXzaaTE6e7Jf4jNRtyIvTi3pycF48oBDjUOUtOmnakyP3oANCw8+ERKlH
+         bGS7qL4KBc7N1LYkn9/1qG0gthRXc+CFBmLYLqpAQ2g7msLI9CbWo01LxEmoyf3IUmmA
+         IfomB+/wzraNLPQ3qICBtOipvsw7P2AYfIe9FDaXHqtLZuMkivF+IscLGskwefgWcrQD
+         9WoA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2WyExLH9owD3emx6WA+7WJV5azLkAAMuCqsCuIGhbqPGUKFWht3RiFFj2SYtiTEdjjbrj+1TRlB9K7A==@vger.kernel.org, AJvYcCU5gQTVBn7FmChr8Is0w0jbfBfv875zdNIioOKlHWqzVswzTw6KGlWp6NAq13O3BVzPHFvauHtXYGmV@vger.kernel.org, AJvYcCVAfaEv7sqoUu8Hv+sEHhKkHLmQG0gGITjNxZOnXuyYyZ0rAxSVK15A/TP2TBPrpR/91IJUyxfZ@vger.kernel.org, AJvYcCVJSKRDkluUedrxjweUXFi0RQpuUHggHFePBJx9sHPVDqasRmR/qjR351iw7YjXJLkZnc3mtABOPfE=@vger.kernel.org, AJvYcCVlFjY4Egt39ACx0b5EjfBib8TVwMzVvadGkSdGLOPh/UahIwPyqqpjy2zDzX2jyKFP2E8q4JTKf32zb5Q=@vger.kernel.org, AJvYcCVm+qKMmCsi02hwmTkk9kTbNkcqSUzatzIA1HkB6uoFE2TF7LLxcYBA8z/aYlpMlfihYv6tJk03euCVxPkU@vger.kernel.org, AJvYcCW30Rgm3bvxaLSlyi2nZ8Cr/PvUxiBWNQBMVaYnAkNJ4mO6uwlNo5+y8wREeO7EhEAVQ+FKDWIUNUvi@vger.kernel.org, AJvYcCWknUIrxd5IQKbpUEY4efq4BBVK6Qabha/LqF+NQ3OJC+VJ1aRDMzWfNRX4xkgXcG19vyG4W7qFRlLfH43JFis=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXEI81tUhnMYpj82d/mH092FQY5GdpuW7c6ZhTlDYSqfXo3hwA
+	6mCfjDGWvKIZWuiGlJMJpRzD2N2GhBqoFG4FX/JF1zLawDK189Zh+5IEdxpVXVIMlu/TQz+gGuB
+	DUWCRFClOi7W8bqD+fMvmy4ngA9M=
+X-Gm-Gg: ASbGnctvS1Cl5cxFsCrhd2DWfx2XHH0QxtOn5ZQ7rUd5PPgYwSfrd/8jsrBwnyFumd9
+	UU7yShf1gUBk5hg7jfdhG9GIUbi46XZA=
+X-Google-Smtp-Source: AGHT+IH4e/mVYiQ32e25TRZ177Vd5CDQUc1yz6a5vA71sHZkd/Q1Rlk/9prOUk+6rMXUHws0NFGThryLzmxccLQtL+w=
+X-Received: by 2002:a05:6902:c07:b0:e2b:dc72:3bdf with SMTP id
+ 3f1490d57ef6-e38f7047ea6mr2183988276.10.1732263336640; Fri, 22 Nov 2024
+ 00:15:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241121064046.3724726-1-tmyu0@nuvoton.com> <20241121064046.3724726-6-tmyu0@nuvoton.com>
- <2d21093f-7efd-4356-a1f5-2ae3af4a0da3@roeck-us.net>
-In-Reply-To: <2d21093f-7efd-4356-a1f5-2ae3af4a0da3@roeck-us.net>
+References: <20241121064046.3724726-1-tmyu0@nuvoton.com> <20241121064046.3724726-7-tmyu0@nuvoton.com>
+ <c1ff92a6-8ad9-43fa-97af-12b1471b5bef@roeck-us.net>
+In-Reply-To: <c1ff92a6-8ad9-43fa-97af-12b1471b5bef@roeck-us.net>
 From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 22 Nov 2024 16:11:50 +0800
-Message-ID: <CAOoeyxUMGhvNukqc0ufT1UrCi4WK60cNaOpyx1ngqOxm5OsT4Q@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] watchdog: Add Nuvoton NCT6694 WDT support
+Date: Fri, 22 Nov 2024 16:15:25 +0800
+Message-ID: <CAOoeyxW5PrvhO_cunYwAjXynLH9jZ4OQsdnju-ZONBKsrXgakg@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
 	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
@@ -98,139 +98,125 @@ Dear Guenter,
 Thank you for your comments,
 
 Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2024=E5=B9=B411=E6=9C=8821=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:15=E5=AF=AB=E9=81=93=EF=BC=
+=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:22=E5=AF=AB=E9=81=93=EF=BC=
 =9A
-> > +config NCT6694_WATCHDOG
-> > +     tristate "Nuvoton NCT6694 watchdog support"
-> > +     depends on MFD_NCT6694
-> > +     select WATCHDOG_CORE
-> > +     help
-> > +       If you say yes to this option, support will be included for Nuv=
-oton
-> > +       NCT6694, a USB device to watchdog timer.
-> > +
 >
-> It is a peripheral expander, not a "USB device to watchdog timer". Watchd=
-og is only
-> a small part of its functionality.
->
-
-Understood. I will make the modifications in v3.
-
-> > +       This driver can also be built as a module. If so, the module wi=
-ll
-> > +       be called nct6694_wdt.
 ...
-> > +     ret =3D nct6694_wdt_setting(wdev, wdev->timeout, NCT6694_ACTION_G=
-PO,
-> > +                               wdev->pretimeout, NCT6694_ACTION_GPO);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     dev_info(data->dev, "Setting WDT(%d): timeout =3D %d, pretimeout =
-=3D %d\n",
-> > +              data->wdev_idx, wdev->timeout, wdev->pretimeout);
-> > +
->
-> This is logging noise. Drop or set as debug message.
->
-
-Okay, I'll drop it in v3.
-
-> > +     return ret;
-> > +}
-...
-> > +static int nct6694_wdt_set_timeout(struct watchdog_device *wdev,
-> > +                                unsigned int timeout)
+> > +static int nct6694_in_read(struct device *dev, u32 attr, int channel,
+> > +                        long *val)
 > > +{
-> > +     struct nct6694_wdt_data *data =3D watchdog_get_drvdata(wdev);
-> > +     int ret;
-> > +
-> > +     if (timeout < wdev->pretimeout) {
-> > +             dev_warn(data->dev, "pretimeout < timeout. Setting to zer=
-o\n");
-> > +             wdev->pretimeout =3D 0;
-> > +     }
-> > +
-> This is only necessary if the pretimeout was not validated during probe
-> since otherwise the watchdog core does the check. Please validate it ther=
-e.
->
-
-Understood. I will make the modifications in v3.
-
-> > +     ret =3D nct6694_wdt_setting(wdev, timeout, NCT6694_ACTION_GPO,
-> > +                               wdev->pretimeout, NCT6694_ACTION_GPO);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     wdev->timeout =3D timeout;
-> > +
-> > +     return ret;
->
-> ret =3D=3D 0 here, so return 0.
->
-
-Okay, fix it in v3.
-
-> > +}
-> > +
-> > +static int nct6694_wdt_set_pretimeout(struct watchdog_device *wdev,
-> > +                                   unsigned int pretimeout)
-> > +{
-> > +     int ret;
-> > +
-> > +     ret =3D nct6694_wdt_setting(wdev, wdev->timeout, NCT6694_ACTION_G=
-PO,
-> > +                               pretimeout, NCT6694_ACTION_GPO);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     wdev->pretimeout =3D pretimeout;
-> > +
-> > +     return ret;
->
-> ret =3D=3D 0 here, so return 0.
->
-
-Okay, fix it in v3.
-
-> > +}
-> > +
-> > +static unsigned int nct6694_wdt_get_time(struct watchdog_device *wdev)
-> > +{
-> > +     struct nct6694_wdt_data *data =3D watchdog_get_drvdata(wdev);
-> > +     struct nct6694_wdt_cmd0 *buf =3D (struct nct6694_wdt_cmd0 *)data-=
->xmit_buf;
-> > +     struct nct6694 *nct6694 =3D data->nct6694;
-> > +     unsigned int timeleft_ms;
+> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
+> > +     unsigned char vin_en;
 > > +     int ret;
 > > +
 > > +     guard(mutex)(&data->lock);
 > > +
-> > +     ret =3D nct6694_read_msg(nct6694, NCT6694_WDT_MOD,
-> > +                            NCT6694_WDT_CMD0_OFFSET(data->wdev_idx),
-> > +                            NCT6694_WDT_CMD0_LEN, buf);
-> > +     if (ret)
-> > +             return ret;
+> > +     switch (attr) {
+> > +     case hwmon_in_enable:
+> > +             vin_en =3D data->hwmon_en[NCT6694_VIN_EN(channel / 8)];
+> > +             *val =3D vin_en & BIT(channel % 8) ? 1 : 0;
 >
-> The function does not return an error code. Return 0 instead.
+> Nit: !!(vin_en & BIT(channel % 8))
+>
+> Not even worth mentioning, but !! is used below, so it would make sense
+> to use it here as well for consistency.
+>
 
-Okay, fix it in v3.
+Understood. I will make the modifications in v3.
 
 > > +
-> > +     timeleft_ms =3D le32_to_cpu(buf->countdown);
-> > +
-> > +     return timeleft_ms / 1000;
-> > +}
+> > +             return 0;
 ...
-> > +     wdev =3D &data->wdev;
-> > +     wdev->info =3D &nct6694_wdt_info;
-> > +     wdev->ops =3D &nct6694_wdt_ops;
-> > +     wdev->timeout =3D timeout;
-> > +     wdev->pretimeout =3D pretimeout;
+> > +static int nct6694_temp_write(struct device *dev, u32 attr, int channe=
+l,
+> > +                           long val)
+> > +{
+> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
+> > +     signed char temp_max, temp_hyst;
+> > +     int ret;
+> > +
+> > +     guard(mutex)(&data->lock);
+> > +
+> > +     switch (attr) {
+> > +     case hwmon_temp_enable:
+> > +             return nct6694_enable_channel(dev, NCT6694_TIN_EN(channel=
+ / 8),
+> > +                                           channel, val);
+> > +     case hwmon_temp_max:
+> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD=
+,
+> > +                                    NCT6694_HWMON_CMD2_OFFSET,
+> > +                                    NCT6694_HWMON_CMD2_LEN,
+> > +                                    data->xmit_buf);
+> > +             if (ret)
+> > +                     return ret;
+> > +
+> > +             val =3D clamp_val(val, -127000, 127000);
+> > +             data->xmit_buf[NCT6694_TIN_HL(channel)] =3D temp_to_reg(v=
+al);
+> > +
+> > +             return nct6694_write_msg(data->nct6694, NCT6694_HWMON_MOD=
+,
+> > +                                      NCT6694_HWMON_CMD2_OFFSET,
+> > +                                      NCT6694_HWMON_CMD2_LEN,
+> > +                                      data->xmit_buf);
+> > +     case hwmon_temp_max_hyst:
+> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD=
+,
+> > +                                    NCT6694_HWMON_CMD2_OFFSET,
+> > +                                    NCT6694_HWMON_CMD2_LEN,
+> > +                                    data->xmit_buf);
+> > +
+> > +             val =3D clamp_val(val, -127000, 127000);
+> > +             temp_max =3D (signed char)data->xmit_buf[NCT6694_TIN_HL(c=
+hannel)];
+> > +             temp_hyst =3D (temp_max < 0) ? (temp_max + val / 1000) :
+> > +                                          (temp_max - val / 1000);
+> > +             if (temp_hyst < 0 || temp_hyst > 7)
+> > +                     return -EINVAL;
+> > +
 >
-> pretimeout should be validated here.
+> Just use clamp_val() again. Otherwise it is difficult for the user to det=
+ermine
+> valid ranges.
+>
+
+Understood. I will make the modifications in v3.
+
+> > +             data->xmit_buf[NCT6694_TIN_HYST(channel)] =3D
+> > +                    (data->xmit_buf[NCT6694_TIN_HYST(channel)] & ~NCT6=
+694_TIN_HYST_MASK) |
+> > +                    FIELD_PREP(NCT6694_TIN_HYST_MASK, temp_hyst);
+> > +
+> > +             return nct6694_write_msg(data->nct6694, NCT6694_HWMON_MOD=
+,
+> > +                                      NCT6694_HWMON_CMD2_OFFSET,
+> > +                                      NCT6694_HWMON_CMD2_LEN,
+> > +                                      data->xmit_buf);
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +}
+> > +
+> > +static int nct6694_fan_write(struct device *dev, u32 attr, int channel=
+,
+> > +                          long val)
+> > +{
+> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
+> > +     int ret;
+> > +
+> > +     guard(mutex)(&data->lock);
+> > +
+> > +     switch (attr) {
+> > +     case hwmon_fan_enable:
+> > +             return nct6694_enable_channel(dev, NCT6694_FIN_EN(channel=
+ / 8),
+> > +                                           channel, val);
+> > +     case hwmon_fan_min:
+> > +             if (val <=3D 0)
+> > +                     return -EINVAL;
+> > +
+> I'd suggest to just use clamp_val() and drop this check.
 >
 
 Understood. I will make the modifications in v3.
