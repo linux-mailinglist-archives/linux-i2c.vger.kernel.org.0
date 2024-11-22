@@ -1,166 +1,207 @@
-Return-Path: <linux-i2c+bounces-8142-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8143-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AB849D5C73
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 10:52:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B73E09D5E6B
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 12:52:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCC251F22696
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 09:52:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08AE0B2443B
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 11:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 485D11DE8A7;
-	Fri, 22 Nov 2024 09:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27C831DE2B3;
+	Fri, 22 Nov 2024 11:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JalwzHlU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q0dicT3V"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E981DE88A;
-	Fri, 22 Nov 2024 09:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21701C9DD8;
+	Fri, 22 Nov 2024 11:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732269077; cv=none; b=JxUobY929ujSuTN1EQ3/sXep7sOKjSemZhppD6MMNTaoibMxtE0GOyvb//5aC3VgiCrzp7SxGD24rLdp36pYKEFx8eHYtJxnuEG79AHXERoojLqQmLgkzDyJQ/rgw/Z7y4o74RWkrugSkXCarrjnvqNoOAkTnBmuWU6UnV4WN50=
+	t=1732276348; cv=none; b=FcpmM6VTgbfZbAMwOxLjR0Oa+QzomFxPlEknLcgHTzvOCB+5ZbuLL6AWBDXAvKfQ4J+l1KboG+CTBSA2Qy5CwNjnPc6KDFkXho34LcESHlhqFprhEgU3xAMsSLRxMJWbQn9bQfQsYo8dKCd8jLaAZDD17sd1tnVbei/jBnB7a+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732269077; c=relaxed/simple;
-	bh=CD3QMkeKwPJwplOb9+RxUlyJP3HAfLpfRmOmE5WErmI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KNw3FPooODQJ4WD1kp1C+E+5EfqHdDqmU2MywFiuTZzIS3fZGZocyBluPw1djDgbigJ+YZfQnVcAHm8Z85BQ8MFDfBowsDw/sZPQxE6wK5XLvyUiivT8kRWXZE0y1fKtsWmPJTEGYOODjTxfGKvUyQXbMwgcB2+RUdbqO/GSGcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JalwzHlU; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6e2e41bd08bso24743437b3.2;
-        Fri, 22 Nov 2024 01:51:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732269074; x=1732873874; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3Rt7HhukuMOT/wZor/U1/vRsl6sRp7OR5MfA/Y7RLEM=;
-        b=JalwzHlUfpqIqd2ryWww20z5D3sPmuh4CobMYrOqTWAvWp2MFimdOR0OJQxRN/1ds+
-         wBS4Uasb0bIk7aov5oXJwhXwzASUx78fqMlkSwwyvjC0OB+vScfVArgrXtdY2fHxR0hr
-         Fc5EUyetFJRrpwVTRuaoaMWPPxABygyUpVfg45iGfD2+3G3H8bGqUPI4njDkS6l5pUoO
-         lWniiApHvojM02k7OETE5x3RDEhQVih0tm2oUH59gbIWYYNgKsP/uwUsp9DVxGDFc+HH
-         iu7TUE9vcR02wiVlt8f3qJYDpfK+JN8cxXJg/y/26wVUbIKEcx1HdAPJ6yqit8eTbo8C
-         lITw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732269074; x=1732873874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3Rt7HhukuMOT/wZor/U1/vRsl6sRp7OR5MfA/Y7RLEM=;
-        b=bGD44A3mZAw5iHGnha7Pqe9uqayXck6gN0CnrW/nO89zCml7KBWgN24pMr9acTSLxc
-         L9Mj5wtEcIuA+B2YXWPoekdYZBScU5syvYD1En7n/GoiWqYZsJyhfFemOkLLQUZG3Tf5
-         zq+FYAhHwL9b9tyYPl1Td+vOldUhLY2BSmjb3JW+bx4q1fFjngzSl5xuPasmFkwdTrdH
-         kcndi5kdas2jvUz5wRRnR3qnYrZDJDExiYqqPmPrOABkXe6d1jxCHewVc+OiLVLW/q6P
-         zDHdWgc4G7/qYz8uXN8xn7jFoeJ8LAUD9y4Kt9Bo6NPnkR3rxEtTVWDsPosaEEd+UNCL
-         lxHA==
-X-Forwarded-Encrypted: i=1; AJvYcCUEhQq1bnLHfSHNmxUcA8V5w0z4FshaWOSIKuMlVR223tI6pzOCjR+UV+vKNxsdGX4UOc0o3UoQ@vger.kernel.org, AJvYcCUc+i0kOdNpsBQ2DHJVM6qOvglEefJGtKdlvVJOQ3hwDfvuAl9EXIzj1sXBjHN9FvA2qvZfOlj+N9W1gQ==@vger.kernel.org, AJvYcCUxuKn9zYibzJp+aEoowRV8ZphIQdV71/kCuWpL+bZ6jfylONQ27HhcO4mGkY/RqzZE6nM5wKLdpHrpHYl5@vger.kernel.org, AJvYcCV23Pj6ipwNwTtLMYVQH9UtLudUrQFLf+iYFr9DvxXCNmoMnnCMIyi8GKzo9MIKZ8XA4h0nuWELSMqslG4=@vger.kernel.org, AJvYcCVM6NfegYh+uoLuKn81YEJZfEjkRtCFC/5f1uwkB9aCuEtsL4FZT95k2/ATRw3IqYG9fyAW7bfWgiFT@vger.kernel.org, AJvYcCXB0D74lMRpddlVaD6TE34rdhSpBQUSL3bfchjiBi8lP5AiJbjBIyiCC4CbtC5F9A8E5Ed7ttnjHWg+@vger.kernel.org, AJvYcCXGuJfigQjVf4aiPlB9PDn1IzK8VVbXiR5hpLzxXqCw668anSIZ5TRAFK3YP5c+q+VK2Fbuxq3xs/2QO9eeDg0=@vger.kernel.org, AJvYcCXoWw+sHqPgX7SmyBDh4k5SJVvOR+XhFYqI646Z7Ex1mqv2B+h9KkcP8aFkXx/9BPJPLBF2P0tTqIA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsS+u0Wex6HpQzrcGr6rqMeIlGjv2XC92GIArmekYvwgetLV1c
-	43iBe3bfUD36usHT0iVSVqUyAPhypODq1UZnUQDS0bfoFCy2cH1Q9gZEwLlN7sS3Flh2Q8K709i
-	Com2v1uU6OJrqkEk3n+BdnbyJwiY=
-X-Gm-Gg: ASbGncsVTBm+cXx6niwKCbf5OnbVOpWJx8qJVOPtXE8HF8qCY03zCRFnEhFC3TyilwK
-	d1k1S3ysS2N635AcTsh0oBBavbds3bDQ=
-X-Google-Smtp-Source: AGHT+IHNFF/GKbFCFULGPf7sWZKHfQpR06VsGIF9URj5G0bpXBz7ffdWhNp3VuNmFHIa5U4s+MVbE4ADk3JCewL8aHw=
-X-Received: by 2002:a05:6902:10c1:b0:e33:4341:28dd with SMTP id
- 3f1490d57ef6-e38f8bdb861mr1785555276.38.1732269073985; Fri, 22 Nov 2024
- 01:51:13 -0800 (PST)
+	s=arc-20240116; t=1732276348; c=relaxed/simple;
+	bh=oHOunADvi+vIy3JhCVGF2ZdiCG/NxMIxl0/zchipkCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KWFVCPOvnvCq2s+lWn7FtIads2h99KG0LDZqC7/XRkCxzppgXz7NT8OIwPQYai4C+cPtZi39sAa+/2Gma+nlxjlDvgaT3As+lYStTvhlfUbwLsSWbGxqbbxL6rkKs+z4+uKCJSbUxC+ECsyceXZDjFp8aAJcc5UkjDdg+MLVXLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q0dicT3V; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732276347; x=1763812347;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oHOunADvi+vIy3JhCVGF2ZdiCG/NxMIxl0/zchipkCU=;
+  b=Q0dicT3V3NjFtGEPujIZhR3zqnCmdNYbJ3ztLPveUyy/uu8mrdzdQ360
+   WL0WEz9DoL/9RcGwIOGM/IC5Zt+qWZPsSENH5pFgUO4nC0sRznCL4LKa0
+   IAa7M2v5FIpzf3HKjS0gMxg2sPdaJfAi7ouWkkj5nVi0a4ECdDih65Wfr
+   ru/8L7SO1KkoaOPdvkykrDB6G5IbltG1yuTkXLnJfXzJem0KWTbkgbxeb
+   5H+iEQIcEYO0HaIxHB4XZAKi51TlViVWNwomAJKQ1yDN3lW2IUiEOsJnT
+   i2nKxLmAWkJQBIodLte+9M31wD9W7TqzRpx68lUNMHXwUt5h5qS2mrNC8
+   Q==;
+X-CSE-ConnectionGUID: kb5luEpJQt+aJ9nDqj3DqQ==
+X-CSE-MsgGUID: Aoicl7RAS1aMeTSz/8J0lQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="35287347"
+X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
+   d="scan'208";a="35287347"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 03:52:26 -0800
+X-CSE-ConnectionGUID: Lo8E8s5IQAyDBezPcZfrHA==
+X-CSE-MsgGUID: sUBvT3y6SrOc4tV2IGsaCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
+   d="scan'208";a="90722980"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 22 Nov 2024 03:52:20 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tESCv-0003sJ-2j;
+	Fri, 22 Nov 2024 11:52:17 +0000
+Date: Fri, 22 Nov 2024 19:51:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
+	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+Message-ID: <202411221902.1IFRsKWS-lkp@intel.com>
+References: <20241121064046.3724726-7-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241121064046.3724726-1-tmyu0@nuvoton.com> <20241121064046.3724726-5-tmyu0@nuvoton.com>
- <08a91d47-ad78-4f7d-896f-b75d7418be1e@wanadoo.fr> <CAOoeyxVjBsmOr=-14iq7pQamJ90j_PBMhQK0Lo=xmvPyqqseGQ@mail.gmail.com>
- <CAMZ6Rq+WePVM2aSk2HzXoa-t+ZE97yeqS6bndpGXUh+NuiM8sg@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+WePVM2aSk2HzXoa-t+ZE97yeqS6bndpGXUh+NuiM8sg@mail.gmail.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 22 Nov 2024 17:51:02 +0800
-Message-ID: <CAOoeyxUaJwd5_tSLFxUJBB47G0y1p3dr4zeMx3Qkx3KVrQNa9A@mail.gmail.com>
-Subject: Re: [PATCH v2 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241121064046.3724726-7-tmyu0@nuvoton.com>
 
-Dear Vincent,
+Hi Ming,
 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2024=E5=B9=B411=E6=
-=9C=8822=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=884:25=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> > > > +static int nct6694_canfd_start(struct net_device *ndev)
-> > > > +{
-> > > > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
-> > > > +     struct nct6694_can_cmd0 *buf =3D (struct nct6694_can_cmd0 *)p=
-riv->tx_buf;
-> > >
-> > > Give a more memorable name to buf, for example: bittiming_cmd.
-> > >
-> >
-> > Got it. So, every buf that uses a command must be renamed similarly, ri=
-ght?
->
-> Yes. Note that you can use different names if you have a better idea.
-> It is just that generic names like "buf" or "cmd1" do not tell me what
-> this variable actually is. On the contrary, bittiming_cmd tells me
-> that this variable holds the payload for the command to set the device
-> bittiming. This way, suddenly, the code becomes easier to read and
-> understand. As long as your naming conveys this kind of information,
-> then I am fine with whatever you choose, just avoid the "buf" or
-> "cmd1" names.
->
+kernel test robot noticed the following build errors:
 
-Understood. I will make the modifications in v3.
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.12 next-20241121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > > > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
-> > > > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittimin=
-g;
-...
-> > > > +static netdev_tx_t nct6694_canfd_start_xmit(struct sk_buff *skb,
-> > > > +                                         struct net_device *ndev)
-> > > > +{
-> > > > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
-> > > > +
-> > > > +     if (priv->tx_skb || priv->tx_busy) {
-> > > > +             netdev_err(ndev, "hard_xmit called while tx busy\n");
-> > > > +             return NETDEV_TX_BUSY;
-> > > > +     }
-> > > > +
-> > > > +     if (can_dev_dropped_skb(ndev, skb))
-> > > > +             return NETDEV_TX_OK;
-> > > > +
-> > > > +     netif_stop_queue(ndev);
-> > >
-> > > Here, you are inconditionally stopping the queue. Does it mean that y=
-our
-> > > device is only able to manage one CAN frame at the time?
-> > >
-> >
-> > Yes, we designed it to manage a single CAN frame, so we stop the queue
-> > here until a TX event is received to wake queue.
->
-> Do you mean that the device is designed to manage only one single CAN
-> frame or is the driver designed to only manage one single CAN frame?
-> If the device is capable of handling several CAN frames, your driver
-> should take advantage of this. Else the driver will slow down the
-> communication a lot whenever packets start to accumulate in the TX
-> queue.
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Yu/mfd-Add-core-driver-for-Nuvoton-NCT6694/20241121-155723
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20241121064046.3724726-7-tmyu0%40nuvoton.com
+patch subject: [PATCH v2 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241122/202411221902.1IFRsKWS-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411221902.1IFRsKWS-lkp@intel.com/reproduce)
 
-I understand, but our device currently supports handling only one CAN frame=
-.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411221902.1IFRsKWS-lkp@intel.com/
 
-Best regards,
-Ming
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/nct6694-hwmon.c:263:15: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     263 |                 frac_part = FIELD_GET(NCT6694_LSB_REG_MASK, data->xmit_buf[1]);
+         |                             ^
+>> drivers/hwmon/nct6694-hwmon.c:508:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     508 |                        FIELD_PREP(NCT6694_TIN_HYST_MASK, temp_hyst);
+         |                        ^
+   2 errors generated.
+
+
+vim +/FIELD_GET +263 drivers/hwmon/nct6694-hwmon.c
+
+   238	
+   239	static int nct6694_temp_read(struct device *dev, u32 attr, int channel,
+   240				     long *val)
+   241	{
+   242		struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
+   243		unsigned char temp_en, temp_hyst;
+   244		int ret, int_part, frac_part;
+   245		signed char temp_max;
+   246	
+   247		guard(mutex)(&data->lock);
+   248	
+   249		switch (attr) {
+   250		case hwmon_temp_enable:
+   251			temp_en = data->hwmon_en[NCT6694_TIN_EN(channel / 8)];
+   252			*val = temp_en & BIT(channel % 8) ? 1 : 0;
+   253	
+   254			return 0;
+   255		case hwmon_temp_input:
+   256			ret = nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
+   257					       NCT6694_TIN_IDX(channel), 2,
+   258					       data->xmit_buf);
+   259			if (ret)
+   260				return ret;
+   261	
+   262			int_part = sign_extend32(data->xmit_buf[0], 7);
+ > 263			frac_part = FIELD_GET(NCT6694_LSB_REG_MASK, data->xmit_buf[1]);
+   264			if (int_part < 0)
+   265				*val = (int_part + 1) * 1000 - (8 - frac_part) * 125;
+   266			else
+   267				*val = int_part * 1000 + frac_part * 125;
+   268	
+   269			return 0;
+   270		case hwmon_temp_max:
+   271			ret = nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD,
+   272					       NCT6694_HWMON_CMD2_OFFSET,
+   273					       NCT6694_HWMON_CMD2_LEN,
+   274					       data->xmit_buf);
+   275			if (ret)
+   276				return ret;
+   277	
+   278			*val = temp_from_reg(data->xmit_buf[NCT6694_TIN_HL(channel)]);
+   279	
+   280			return 0;
+   281		case hwmon_temp_max_hyst:
+   282			ret = nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD,
+   283					       NCT6694_HWMON_CMD2_OFFSET,
+   284					       NCT6694_HWMON_CMD2_LEN,
+   285					       data->xmit_buf);
+   286			if (ret)
+   287				return ret;
+   288	
+   289			temp_max = (signed char)data->xmit_buf[NCT6694_TIN_HL(channel)];
+   290			temp_hyst = FIELD_GET(NCT6694_TIN_HYST_MASK,
+   291					      data->xmit_buf[NCT6694_TIN_HYST(channel)]);
+   292			if (temp_max < 0)
+   293				*val = temp_from_reg(temp_max + temp_hyst);
+   294			else
+   295				*val = temp_from_reg(temp_max - temp_hyst);
+   296	
+   297			return 0;
+   298		case hwmon_temp_max_alarm:
+   299			ret = nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
+   300					       NCT6694_TIN_STS(channel / 8), 1,
+   301						   data->xmit_buf);
+   302			if (ret)
+   303				return ret;
+   304	
+   305			*val = !!(data->xmit_buf[0] & BIT(channel % 8));
+   306	
+   307			return 0;
+   308		default:
+   309			return -EOPNOTSUPP;
+   310		}
+   311	}
+   312	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
