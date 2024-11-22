@@ -1,186 +1,159 @@
-Return-Path: <linux-i2c+bounces-8152-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8153-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 296999D5FD8
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 14:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B63A09D5FEA
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 14:47:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDF00282F50
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 13:43:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 769B728318D
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Nov 2024 13:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F9411CD1F;
-	Fri, 22 Nov 2024 13:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22D00762EF;
+	Fri, 22 Nov 2024 13:47:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ML4U6GSH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VFG5ZbX0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7281CA9C
-	for <linux-i2c@vger.kernel.org>; Fri, 22 Nov 2024 13:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF05223741;
+	Fri, 22 Nov 2024 13:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732282985; cv=none; b=Sp3l8rfBj1yHSiL06zni24CKsXnUKtiytLLEFDEF1MgoCBHxwOU8asBMlsbdcFrCDOYpagklXRgzAd8YLIroJjgcQFOxu/T/gFgXKef41rN/U0vj6L7HK17xfx4B7uiCJIg8A/ikb7GI/+qt0bDA6Bfi6YySv+A0l15o+ufaw5U=
+	t=1732283257; cv=none; b=tFtEi1JW4fUr4b8jtQl+5sVF4CcjJjERPAcxmanWrNwbLLngXkkOXTVhiISdW8gI5EpfD23QdYO2wgDqm/Mqg/nYWtV0EqzEkazGV+fI0Vp7MpErSN7Zm2mSPJMI8tVmOX0HEF2Q+TiRXsVESe3Fh8HNJme2qE3N5WFqanXsi7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732282985; c=relaxed/simple;
-	bh=mUBMZZqal/zQohdwT6EZNdZQME9eFfnneurHUwJz3TQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DsgOr/NAjTtd14rJXkJz7lYxdbELnx5QkHLpxo0MUZSnZnzMYYJysZUVAqDVYi9djC3dsTgekDIVn1gDuSJrwHBJTTRfxauYPssReQnH/A4nlvDObpghW+Kc1EhPbG2O2XKwasw5kzk3HQR9mqlTpT4ZdtZLiZKk45TtbJ56OCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ML4U6GSH; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AMA6jGf027595
-	for <linux-i2c@vger.kernel.org>; Fri, 22 Nov 2024 13:43:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	I4jyN5sgIKsB6Ac+agW1/Q5Zjbq+xV9LLsj7FAcZutI=; b=ML4U6GSH7KJo9+Tw
-	F9GXRdZUv/op0bnfOvkSwFo0X4ry/+IvNlonZWWRAIfd1Usjg5s5n1tpsjLfPm6/
-	rTj7uZ8KOMfhmfzvTVfKz/pboODFFFpgtJGlmfiZ/IBg+cnimCw4nwu1T0FC/LN6
-	I8EbmDDRUoCRdzmIe3LbsZDW3HmpqBDqv4mag3pMzxPS9pXgGwJ+pJ92U/J1guWS
-	jHICk46wAJLHuCXZ6a2OLsrqTUxz7qdpxfaqEYOv0JhwtCwfgQxv63z2KnClapNH
-	jFBziL0CC5QeSfGvbD6GT9t62JfoxEG5bsPpvfR4JhfZeecGNjHNuaXVfm612gGt
-	Bzkccw==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 432d5b2346-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Fri, 22 Nov 2024 13:43:02 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4608a761cb2so4789271cf.3
-        for <linux-i2c@vger.kernel.org>; Fri, 22 Nov 2024 05:43:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732282981; x=1732887781;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I4jyN5sgIKsB6Ac+agW1/Q5Zjbq+xV9LLsj7FAcZutI=;
-        b=lMOrpwh9iuQdG24g/nksgqJYYGQEeDO81LpzUmbJjuuz2B2U1HvJGRlgDnkg9tV/om
-         FzyF1i8U94BRBOYXz7WzKKhovDfIUJYPGFB834wh0G2QLRSI2X5i/kETRU5wAhujdJyv
-         T10Hod+pxATFisNInci6yDgtXZthQuHxi8kzgOq7bUy3Khqgd0ilTS/GoL1y2u8IBLnJ
-         +4DbVib7shr8oeX2zfXrIyjehU8reQwnXcxCu4VzFvNbwKqxYolfcw/8WQlevLpXRTMt
-         sJ8qD2aAVUU3WgrfoHWD0i50iyyU7P2ulJkN262oaZYPhdnY3bo4Flh3xGD4mVkcFyU7
-         kW8w==
-X-Forwarded-Encrypted: i=1; AJvYcCWnbPx3Ir4ErhsTM2EkF3KuXI3Xl6p9dxIUlz5kWmXmFx5cjKEWW0dJMgKe4+U6Co7KwSaBtohLGHk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2CaUVmYygCXBa8LHVX9GCSGSx3UeOfYyiR3qRhcM1lFI2xbDe
-	VX4U4in7McywsQkFMCnwhO6tTtvKqEujCNAJ6J1so048W6OfSMgbQueU0FVLgIXV3ILTgRQx7bq
-	RWJ3fXK7bJwhU++NbEU5hANjdICIE7CUIXoYHcSHuRPtYaxD56jNHSLZMFHE=
-X-Gm-Gg: ASbGncvPIwgi4GPqgSNSIY+D9T3ajHkf6oGKqjnZtjd/VuSljb8wnSQdN269NYWStUB
-	bChKKv9zRfPGk7WmBmeXMD5uC13fIghpy/S5RsDW8WqNcy0MyCnuejMly9KX7KovhiMR7r9ekRV
-	j8gX8qCg7ZCZAuEHcrnCGf+HkrT4dZlNjwE4Tu8jBvmYV3xnnw0MLPFk40NAEfVemeWSAuUv3en
-	2VdRyT4OPWRVjmJsJvjy/5bsj7xkNoAUf7GoEfsPpegwqWHZYwr1Vym1+tV/B0pNZxPUISia76P
-	KyGI3pjVWlc8rFC2QLqff8MdfTg8z3Y=
-X-Received: by 2002:a05:620a:4593:b0:79f:70f:ee0b with SMTP id af79cd13be357-7b5144c18admr171826885a.6.1732282981182;
-        Fri, 22 Nov 2024 05:43:01 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE6qWdpFprMy+djvMsdCITWGkdx6i8r/hwcoEINJOKRyzD0W2OkpAMxFf70grZjlw3X3/R3nQ==
-X-Received: by 2002:a05:620a:4593:b0:79f:70f:ee0b with SMTP id af79cd13be357-7b5144c18admr171823385a.6.1732282980786;
-        Fri, 22 Nov 2024 05:43:00 -0800 (PST)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d01d41af2esm939297a12.84.2024.11.22.05.42.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Nov 2024 05:42:59 -0800 (PST)
-Message-ID: <8508988c-a74b-4f65-8060-30a0cb5afa64@oss.qualcomm.com>
-Date: Fri, 22 Nov 2024 14:42:56 +0100
+	s=arc-20240116; t=1732283257; c=relaxed/simple;
+	bh=EVVq2Cqaf1z5IkK+BzTRksvS9eOhQkxJl5rsZKtwTe0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dbrrUiO6EuBRT95x83O2wMkroUWBkSwfcRhZ4llLgpCnSSBDTpCnny3AvkLjIsuyger8uTaSn9rC34xwnwCxWnxtpCIe+qBWlL2WIGNfYeIYloaTpYfBW67IIlkvFEr2hEGm5cmCLaBJ0ZFB+kIwbX7YaxU9OhEiGMOYro0G8Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VFG5ZbX0; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732283256; x=1763819256;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EVVq2Cqaf1z5IkK+BzTRksvS9eOhQkxJl5rsZKtwTe0=;
+  b=VFG5ZbX0W+eyb5ml1cAwtBwYYuPnmL7jTUlQWFMk8cMlPslmj08EquTu
+   UUQVH1d1oPxh87XcLG5phXvbyvJJaR+37kLwV4Dv2EhSE6WKV9irRSjzn
+   mhKNcP9CDwoBQpMyfc/INDvaJlIN8q2j29ZAwPRl55rXFGH+DEJnanG2G
+   lYFco28kjvSItxaKirjITwJRAyn5N/CHPBJLnnFz+rgUykQnyViNkmww/
+   44TeLCExSqVJLGPhzHq/JooIvMA7DO59Hyt1YyM6D78tmjD4lmlzkI0BO
+   cSbAjlw2kCQRvFLucnX0nAohmEjOG3m7OmxGQdYW+5CItUUUMNpTAF4+y
+   g==;
+X-CSE-ConnectionGUID: fkbdgRaMR1KAeUpPk89NDw==
+X-CSE-MsgGUID: A9U5P6ACSk+wx/gLXAPTlA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="35297349"
+X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
+   d="scan'208";a="35297349"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 05:47:35 -0800
+X-CSE-ConnectionGUID: gwJu5Cn3S7648obOxWUOhw==
+X-CSE-MsgGUID: V/Vy3jg+TcSJXsIE9BfUCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
+   d="scan'208";a="90994961"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 22 Nov 2024 05:47:30 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tEU0O-0003x1-1Y;
+	Fri, 22 Nov 2024 13:47:28 +0000
+Date: Fri, 22 Nov 2024 21:46:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?unknown-8bit?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
+ adp1055 and ltp8800
+Message-ID: <202411222109.6PmpUvSa-lkp@intel.com>
+References: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/4] i2c: i2c-qcom-geni: Enable i2c controller sharing
- between two subsystems
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
-        vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
-        Frank.Li@nxp.com, konradybcio@kernel.org, bryan.odonoghue@linaro.org,
-        krzk+dt@kernel.org, robh@kernel.org
-Cc: quic_vdadhani@quicinc.com
-References: <20241113161413.3821858-1-quic_msavaliy@quicinc.com>
- <20241113161413.3821858-5-quic_msavaliy@quicinc.com>
- <37762281-4903-4b2d-8f44-3cc4d988558d@oss.qualcomm.com>
- <cbbb78c9-54ec-453a-92ec-6b174bd3d9cb@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <cbbb78c9-54ec-453a-92ec-6b174bd3d9cb@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: Ec5fCI-Fr3iyy8n41lVcdzT0xw5lW1Nw
-X-Proofpoint-ORIG-GUID: Ec5fCI-Fr3iyy8n41lVcdzT0xw5lW1Nw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 adultscore=0 clxscore=1015 impostorscore=0 suspectscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411220115
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
 
-On 18.11.2024 6:45 AM, Mukesh Kumar Savaliya wrote:
-> Thanks for the review konrad !
-> 
-> On 11/16/2024 12:58 AM, Konrad Dybcio wrote:
->> On 13.11.2024 5:14 PM, Mukesh Kumar Savaliya wrote:
->>> Add support to share I2C controller in multiprocessor system in a mutually
->>> exclusive way. Use "qcom,shared-se" flag in a particular i2c instance node
->>> if the usecase requires i2c controller to be shared.
->>
->> Can we read back some value from the registers to know whether such sharing
->> takes place?
-> Actually, HW register doesn't provide such mechanism, it's add on feature if SE is programmed for GSI mode.
+Hi Cedric,
 
-So it's more of an unwritten contract between subsystems.. okay
+kernel test robot noticed the following build errors:
 
->>
->>> Sharing of I2C SE(Serial engine) is possible only for GSI mode as client
->>> from each processor can queue transfers over its own GPII Channel. For
->>> non GSI mode, we should force disable this feature even if set by user
->>> from DT by mistake.
->>
->> The DT is to be taken authoritatively
->>
-> To clarify - Does it mean i should not have SW disable this feature OR override  ? And let it continue in non GSI mode even it's not going to work ?
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.12 next-20241122]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If a configuration is invalid, you should return -EINVAL from probe,
-with an appropriate error message.
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-bindings-for-adp1051-adp1055-and-ltp8800/20241121-144856
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20241120035826.3920-3-cedricjustine.encarnacion%40analog.com
+patch subject: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051, adp1055 and ltp8800
+config: i386-buildonly-randconfig-003-20241122 (https://download.01.org/0day-ci/archive/20241122/202411222109.6PmpUvSa-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411222109.6PmpUvSa-lkp@intel.com/reproduce)
 
->>>
->>> I2C driver just need to mark first_msg and last_msg flag to help indicate
->>> GPI driver to take lock and unlock TRE there by protecting from concurrent
->>> access from other EE or Subsystem.
->>>
->>> gpi_create_i2c_tre() function at gpi.c will take care of adding Lock and
->>> Unlock TRE for the respective transfer operations.
->>>
->>> Since the GPIOs are also shared between two SS, do not unconfigure them
->>> during runtime suspend. This will allow other SS to continue to transfer
->>> the data without any disturbance over the IO lines.
->>>
->>> For example, Assume an I2C EEPROM device connected with an I2C controller.
->>> Each client from ADSP and APPS processor can perform i2c transactions
->>> without any disturbance from each other.
->>>
->>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->>> ---
->>
->> [...]
->>
->>>       } else {
->>>           gi2c->gpi_mode = false;
->>> +
->>> +        /* Force disable shared SE case for non GSI mode */
->>> +        gi2c->se.shared_geni_se = false;
->>
->> Doing this silently sounds rather odd..
-> we can have Some SW logging added ?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411222109.6PmpUvSa-lkp@intel.com/
 
-Normally such overrides mandate a warning/notice, but as I said above,
-we should disallow such combinations altogether for sanity
+All errors (new ones prefixed by >>):
 
-Konrad
+   In file included from drivers/hwmon/pmbus/adp1050.c:8:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/pmbus/adp1050.c:88:32: error: passing 'const struct pmbus_driver_info *' to parameter of type 'struct pmbus_driver_info *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+      88 |         return pmbus_do_probe(client, info);
+         |                                       ^~~~
+   drivers/hwmon/pmbus/pmbus.h:541:73: note: passing argument to parameter 'info' here
+     541 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info);
+         |                                                                         ^
+   1 warning and 1 error generated.
+
+
+vim +88 drivers/hwmon/pmbus/adp1050.c
+
+    79	
+    80	static int adp1050_probe(struct i2c_client *client)
+    81	{
+    82		const struct pmbus_driver_info *info;
+    83	
+    84		info = device_get_match_data(&client->dev);
+    85		if (!info)
+    86			return -ENODEV;
+    87	
+  > 88		return pmbus_do_probe(client, info);
+    89	}
+    90	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
