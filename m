@@ -1,142 +1,149 @@
-Return-Path: <linux-i2c+bounces-8161-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8162-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B66769D6761
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Nov 2024 04:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FAC89D68FA
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Nov 2024 13:13:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50E9BB21088
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Nov 2024 03:12:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E964DB218C0
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Nov 2024 12:13:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 705FD80604;
-	Sat, 23 Nov 2024 03:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4099189916;
+	Sat, 23 Nov 2024 12:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tt25ql+B"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Vlsq0FoQ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAD62AE90;
-	Sat, 23 Nov 2024 03:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD3B14F9E9;
+	Sat, 23 Nov 2024 12:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732331523; cv=none; b=k676LCLp+YzHcZ3jrY0iMqHpbn7CQx09qiF9Fj9bNLjUoPM6zv6dCCY6W5Cxq7epm3XG0/+mM2V7bFw47/6+3FGM1J/PAoj9EiTBgOj6T0ZOANHk6hJP9hKybysuxIGgvh0x/1elA8mt4w+r9gNey9xGH+KDf130R7gkwie6u7U=
+	t=1732364002; cv=none; b=IpbPzi7Swp1ejsVjg6706QXLl7PEYwLlHwq/NNiqwvZZdIS0Cu9utFH7ZhHRhupcHsMnwH2+0wH/JWsH1y3B+a6Jx5EQq+ESjc1CNJMD7OMwipXJZqB5ev6/hxxskux03RVkQS1yXgosh2X+8EVw3fXSpsY3FaUJEo5B2h2G8k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732331523; c=relaxed/simple;
-	bh=my0sdPbCbL8tbsUq7oPzvstqctD2sVWOdIYw0qX9VXU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YcLTWo0WKv9W72YoUsXtq9fF2z2mYuvBk5gsndDYQrajdhHwwqPUIYaZJFwoHBwueVmIUwOrKMP4rTkj2seuD8q//o/763TsX+qLkj4GKEM7641AYDiaIT8Ovwk7hp8sVSRE8qH00gS1sbLt9kmuu67CvTOWX2qYPUwRzLVh+Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tt25ql+B; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732331522; x=1763867522;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=my0sdPbCbL8tbsUq7oPzvstqctD2sVWOdIYw0qX9VXU=;
-  b=Tt25ql+BhzWDl7qTYott/MMd+OFjQEThIkT0gddFu8kjnqybNJsqBsho
-   H5M7sG97b1Com2fXOk0ILip2JgofiI3PCM4mQny009oAcNutjBahCSi29
-   aBdVFIjB1t+ub7FB27lbrr7dB6hy1ZZLKp9JPxPuO3cRdAs0jqadxXQ2e
-   2P7Mg2vI0TXw1ofZQIlK7zkBxxTKIMbhaU3vcan0hoCzf1MNFgOceIi8c
-   UwA8AVkNr5d6AhQzFQHjDzA5eWH7x5RKnx7j6d1k0bLY31oXVLETSyCXd
-   NOFJTNiliaMbG+nf/mUDKgxZ/qM6hja1bJ3ZThjPi8XIB9yHINagpdXrw
-   w==;
-X-CSE-ConnectionGUID: xLNfb9EdTASG4GCo6hlfXg==
-X-CSE-MsgGUID: 9py0CTYlQp2axVX8xqCnWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="50015387"
-X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="50015387"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 19:12:01 -0800
-X-CSE-ConnectionGUID: x0paM7rRQPiyVYKCEYUY0w==
-X-CSE-MsgGUID: WgtPotOpRRyTBS+VLlxiJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="95804544"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 22 Nov 2024 19:11:57 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEgYs-0004NL-28;
-	Sat, 23 Nov 2024 03:11:54 +0000
-Date: Sat, 23 Nov 2024 11:11:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Radu Sabau <radu.sabau@analog.com>,
-	Uwe =?unknown-8bit?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
-	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
- adp1055 and ltp8800
-Message-ID: <202411231030.hhgCtzrl-lkp@intel.com>
-References: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+	s=arc-20240116; t=1732364002; c=relaxed/simple;
+	bh=1dM5uHcLVJ4kOXWd0J8Gu9w8OhsgSUXOM8wfFq038M0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ttAlfaD/m7T+5oC3l2JN+1AFFahUSqFJ5ydwMq4r9wEEIl0H7c3kIzrg8j8VeAzFSVRywkVA+6enbyk4f9Cf+zXWMcFpbZg2yOTGPkUjjRD9EYCZ10M4XT7QDYkB0B3bPk+HPCdZJEJ4g3txBWYP/wSMmZa1ASi8590oH/6nyFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Vlsq0FoQ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AN9X4nM021444;
+	Sat, 23 Nov 2024 12:13:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	l5alXzzFD3JlV4R06VDMhg9cSTZcm4OkikXmaWosx7E=; b=Vlsq0FoQMDhgx3bn
+	EBo/tbTrznsQAgv0Hfn4yNa47egmItRmfpzcP9/N+GleCDL6mPknliGs8FHstv+d
+	rPDNk7FaTMhicJ1Rb1qwC69GVdn8M5RzNzQnVtjWYsK7mwWGNjz9v+eLmQ/wDC2n
+	sfk1Y3bCvCLUYuX1scotowT1/PW/f2smC6ZVya/c63O/MQ4FMTF0XW5jX1yBSNmS
+	Z8Ffoi5PNoP8b7siJk1Pz8pxGRQeheHmUgexcp+SzxDq4oxBqA58LdRu1T2aTZxU
+	AjdJLrK3ajszDAJw9qLKDeODaYZ29xVtbifjqdoYWn9wf6lexGx4hATA2X+/TVgH
+	CXx84A==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4337e6rps7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 23 Nov 2024 12:13:16 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ANCDFoE024074
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 23 Nov 2024 12:13:15 GMT
+Received: from [10.216.31.245] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sat, 23 Nov
+ 2024 04:13:12 -0800
+Message-ID: <f96fbfc5-ed5a-4def-a7e0-df4098dea4b3@quicinc.com>
+Date: Sat, 23 Nov 2024 17:43:09 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] i2c: i2c-qcom-geni: Serve transfer during early resume
+ stage
+To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+CC: <andi.shyti@kernel.org>, <quic_bjorande@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <konrad.dybcio@linaro.org>,
+        <quic_vdadhani@quicinc.com>, <vkoul@kernel.org>
+References: <20241011121757.2267336-1-quic_msavaliy@quicinc.com>
+ <ZwlnWIWkS1pwQ/xK@hu-bjorande-lv.qualcomm.com>
+ <3797c11f-b263-4f5d-9307-963fd6662b26@quicinc.com>
+ <CADLxj5RD5syLXdVnfsMpEso9VOhWiwdP8_iV12R=mvhKwUY_bA@mail.gmail.com>
+Content-Language: en-US
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+In-Reply-To: <CADLxj5RD5syLXdVnfsMpEso9VOhWiwdP8_iV12R=mvhKwUY_bA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cabVDFBPFFZzUr2N_0-bjYKUK5IR4W66
+X-Proofpoint-ORIG-GUID: cabVDFBPFFZzUr2N_0-bjYKUK5IR4W66
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 spamscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2411230104
 
-Hi Cedric,
+Thanks Bjorn.
 
-kernel test robot noticed the following build warnings:
+On 11/19/2024 8:29 PM, Bjorn Andersson wrote:
+> On Tue, Nov 19, 2024 at 8:29 AM Mukesh Kumar Savaliya
+> <quic_msavaliy@quicinc.com> wrote:
+>> On 10/11/2024 11:28 PM, Bjorn Andersson wrote:
+>>> On Fri, Oct 11, 2024 at 05:47:57PM +0530, Mukesh Kumar Savaliya wrote:
+> [..]
+>>>> pm_runtime_get_sync() function fails during PM early resume and returning
+>>>> -EACCES because runtime PM for the device is disabled at the early stage
+>>>> causing i2c transfer to fail. Make changes to serve transfer with forced
+>>>> resume.
+>>>>
+>>>> Few i2c clients like PCI OR touch may request i2c transfers during early
+>>>> resume stage. In order to serve transfer request do :
+>>>>
+>>>
+>>> This problem description is too generic. I am not aware of any use case
+>>> upstream where PCI or touch might need to perform i2c transfers during
+>>> early resume; your commit message should educate me.
+>>>
+>> yes, it's generic as of now since we have an internal usecase with PCI
+>> is yet to be enabled in upstream. Not tied up with any usecase in
+>> upstream, i just heard recently.
+>>
+>> Provided the scenario is generic and possible by any client, can this
+>> code change be reviewed or shall be kept on halt till PCI usecase gets
+>> enabled ?
+>>
+> 
+> If this is a valid scenario in the upstream kernel, yes. If it solves
+> a problem only manifesting itself based on a downstream design then
+> you need to exactly describe that scenario so that reviewers can
+> decide if this is a problem with the upstream kernel or your
+> downstream design.
+> 
+The exact scenario from PCIe switch is as below.  Hope it describes the 
+usecase at high level to understand PCIe client -> PCIe Driver -> I2C 
+driver.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.12 next-20241122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+PCIe switch needs certain configurations through i2c after powering on 
+the switch, as part of suspend we are using suspend_noirq() to turn off 
+the switch because some PCIe clients do some transfers till 
+suspend_noirq() phase. And as part of resume_noirq(), we will enable the 
+power to the switch and configures the switch again through i2c.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-bindings-for-adp1051-adp1055-and-ltp8800/20241121-144856
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20241120035826.3920-3-cedricjustine.encarnacion%40analog.com
-patch subject: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051, adp1055 and ltp8800
-config: loongarch-randconfig-r111-20241122 (https://download.01.org/0day-ci/archive/20241123/202411231030.hhgCtzrl-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20241123/202411231030.hhgCtzrl-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411231030.hhgCtzrl-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/hwmon/pmbus/adp1050.c:88:39: sparse: sparse: incorrect type in argument 2 (different modifiers) @@     expected struct pmbus_driver_info *info @@     got struct pmbus_driver_info const *[assigned] info @@
-   drivers/hwmon/pmbus/adp1050.c:88:39: sparse:     expected struct pmbus_driver_info *info
-   drivers/hwmon/pmbus/adp1050.c:88:39: sparse:     got struct pmbus_driver_info const *[assigned] info
-
-vim +88 drivers/hwmon/pmbus/adp1050.c
-
-    79	
-    80	static int adp1050_probe(struct i2c_client *client)
-    81	{
-    82		const struct pmbus_driver_info *info;
-    83	
-    84		info = device_get_match_data(&client->dev);
-    85		if (!info)
-    86			return -ENODEV;
-    87	
-  > 88		return pmbus_do_probe(client, info);
-    89	}
-    90	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Regards,
+> Bjonr
+> 
 
