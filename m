@@ -1,149 +1,137 @@
-Return-Path: <linux-i2c+bounces-8162-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8163-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FAC89D68FA
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Nov 2024 13:13:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98D6B9D6B4E
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Nov 2024 20:56:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E964DB218C0
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Nov 2024 12:13:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E58928214D
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Nov 2024 19:56:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4099189916;
-	Sat, 23 Nov 2024 12:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D289C18A6BA;
+	Sat, 23 Nov 2024 19:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Vlsq0FoQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f8I7xdrb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD3B14F9E9;
-	Sat, 23 Nov 2024 12:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738BD17C2;
+	Sat, 23 Nov 2024 19:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732364002; cv=none; b=IpbPzi7Swp1ejsVjg6706QXLl7PEYwLlHwq/NNiqwvZZdIS0Cu9utFH7ZhHRhupcHsMnwH2+0wH/JWsH1y3B+a6Jx5EQq+ESjc1CNJMD7OMwipXJZqB5ev6/hxxskux03RVkQS1yXgosh2X+8EVw3fXSpsY3FaUJEo5B2h2G8k0=
+	t=1732391787; cv=none; b=R1ORmjCeZbADofhqI8UtSMs2zw2P7FoXoq7pAY4GBi6ejnt8k+5p6FP8Z/61CvWdEGmBsFFSMzZ5HCV6LHotOKTQkJfLgpXOaorQZSZgo7milH8KfMo4qGmTQ7rPEsZvH4PAUbT2K8DGTg8HfFGX16fwFCJadc6l9+d0jCVOsvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732364002; c=relaxed/simple;
-	bh=1dM5uHcLVJ4kOXWd0J8Gu9w8OhsgSUXOM8wfFq038M0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ttAlfaD/m7T+5oC3l2JN+1AFFahUSqFJ5ydwMq4r9wEEIl0H7c3kIzrg8j8VeAzFSVRywkVA+6enbyk4f9Cf+zXWMcFpbZg2yOTGPkUjjRD9EYCZ10M4XT7QDYkB0B3bPk+HPCdZJEJ4g3txBWYP/wSMmZa1ASi8590oH/6nyFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Vlsq0FoQ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AN9X4nM021444;
-	Sat, 23 Nov 2024 12:13:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	l5alXzzFD3JlV4R06VDMhg9cSTZcm4OkikXmaWosx7E=; b=Vlsq0FoQMDhgx3bn
-	EBo/tbTrznsQAgv0Hfn4yNa47egmItRmfpzcP9/N+GleCDL6mPknliGs8FHstv+d
-	rPDNk7FaTMhicJ1Rb1qwC69GVdn8M5RzNzQnVtjWYsK7mwWGNjz9v+eLmQ/wDC2n
-	sfk1Y3bCvCLUYuX1scotowT1/PW/f2smC6ZVya/c63O/MQ4FMTF0XW5jX1yBSNmS
-	Z8Ffoi5PNoP8b7siJk1Pz8pxGRQeheHmUgexcp+SzxDq4oxBqA58LdRu1T2aTZxU
-	AjdJLrK3ajszDAJw9qLKDeODaYZ29xVtbifjqdoYWn9wf6lexGx4hATA2X+/TVgH
-	CXx84A==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4337e6rps7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 23 Nov 2024 12:13:16 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ANCDFoE024074
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 23 Nov 2024 12:13:15 GMT
-Received: from [10.216.31.245] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sat, 23 Nov
- 2024 04:13:12 -0800
-Message-ID: <f96fbfc5-ed5a-4def-a7e0-df4098dea4b3@quicinc.com>
-Date: Sat, 23 Nov 2024 17:43:09 +0530
+	s=arc-20240116; t=1732391787; c=relaxed/simple;
+	bh=2Dr+1/xy0c9O2O7Rh/iTI4pCCprRhp25smGc9hLCi6E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XXIZQVkAhIvTjtb5UKo5UNswIcfuO7qsoG8WNmeDUvdnft5dCWqYqOb633489glChEABogTaukhZz1RkyPYO5Uoq9+jGt/KZIFZ7MvCf+mZa33xpa7yXQsXvB/yQQhott4CbqfGJIwOQGQU7ya4UC5IiZfnARvKJfjmnMZcoj3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f8I7xdrb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF279C4CECD;
+	Sat, 23 Nov 2024 19:56:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732391786;
+	bh=2Dr+1/xy0c9O2O7Rh/iTI4pCCprRhp25smGc9hLCi6E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f8I7xdrb//OBg2l83AFpc7Fje5EKN7IGO7qK2tiqxk2xJ2p0GxKLoGvO4sj9+xFvF
+	 qi3+hIUCibrrzVSvUNLzSyy8k0qy5s8ukt07t7Zkr4OI7kaFk0Yv98U7x7PVRTfvj2
+	 w6PAkAOubeX2OYTmnsfeFj3Jx9pLp5+KICFUQvME5plZe/5qBITB89d4rThmR6d5tj
+	 xnzeUvLgkdeFV9TA1PjXB0L1njrOexJh+h+FourJqSp9dYk08ICUk32IZ/EnHsvmrC
+	 1Sy6XX/Q6mc4z9oR8nKsBTPMmbw1/KHCCV2AlBtHZsih0X+XPwHnZria3S1k/VVEUT
+	 jgpQZHlW+00sQ==
+Date: Sat, 23 Nov 2024 19:56:21 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings
+ for adp1051, adp1055 and ltp8800
+Message-ID: <20241123-paced-osmosis-007bf72c4b02@spud>
+References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
+ <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
+ <20241120-process-hulk-ecedcbf088f7@spud>
+ <e2e10b1e-cce3-409c-9327-178cbf4b0d64@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] i2c: i2c-qcom-geni: Serve transfer during early resume
- stage
-To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-CC: <andi.shyti@kernel.org>, <quic_bjorande@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <konrad.dybcio@linaro.org>,
-        <quic_vdadhani@quicinc.com>, <vkoul@kernel.org>
-References: <20241011121757.2267336-1-quic_msavaliy@quicinc.com>
- <ZwlnWIWkS1pwQ/xK@hu-bjorande-lv.qualcomm.com>
- <3797c11f-b263-4f5d-9307-963fd6662b26@quicinc.com>
- <CADLxj5RD5syLXdVnfsMpEso9VOhWiwdP8_iV12R=mvhKwUY_bA@mail.gmail.com>
-Content-Language: en-US
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <CADLxj5RD5syLXdVnfsMpEso9VOhWiwdP8_iV12R=mvhKwUY_bA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cabVDFBPFFZzUr2N_0-bjYKUK5IR4W66
-X-Proofpoint-ORIG-GUID: cabVDFBPFFZzUr2N_0-bjYKUK5IR4W66
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2411230104
-
-Thanks Bjorn.
-
-On 11/19/2024 8:29 PM, Bjorn Andersson wrote:
-> On Tue, Nov 19, 2024 at 8:29 AM Mukesh Kumar Savaliya
-> <quic_msavaliy@quicinc.com> wrote:
->> On 10/11/2024 11:28 PM, Bjorn Andersson wrote:
->>> On Fri, Oct 11, 2024 at 05:47:57PM +0530, Mukesh Kumar Savaliya wrote:
-> [..]
->>>> pm_runtime_get_sync() function fails during PM early resume and returning
->>>> -EACCES because runtime PM for the device is disabled at the early stage
->>>> causing i2c transfer to fail. Make changes to serve transfer with forced
->>>> resume.
->>>>
->>>> Few i2c clients like PCI OR touch may request i2c transfers during early
->>>> resume stage. In order to serve transfer request do :
->>>>
->>>
->>> This problem description is too generic. I am not aware of any use case
->>> upstream where PCI or touch might need to perform i2c transfers during
->>> early resume; your commit message should educate me.
->>>
->> yes, it's generic as of now since we have an internal usecase with PCI
->> is yet to be enabled in upstream. Not tied up with any usecase in
->> upstream, i just heard recently.
->>
->> Provided the scenario is generic and possible by any client, can this
->> code change be reviewed or shall be kept on halt till PCI usecase gets
->> enabled ?
->>
-> 
-> If this is a valid scenario in the upstream kernel, yes. If it solves
-> a problem only manifesting itself based on a downstream design then
-> you need to exactly describe that scenario so that reviewers can
-> decide if this is a problem with the upstream kernel or your
-> downstream design.
-> 
-The exact scenario from PCIe switch is as below.  Hope it describes the 
-usecase at high level to understand PCIe client -> PCIe Driver -> I2C 
-driver.
-
-PCIe switch needs certain configurations through i2c after powering on 
-the switch, as part of suspend we are using suspend_noirq() to turn off 
-the switch because some PCIe clients do some transfers till 
-suspend_noirq() phase. And as part of resume_noirq(), we will enable the 
-power to the switch and configures the switch again through i2c.
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="AWQlxOs3FPQWb1p8"
+Content-Disposition: inline
+In-Reply-To: <e2e10b1e-cce3-409c-9327-178cbf4b0d64@roeck-us.net>
 
 
-> Regards,
-> Bjonr
-> 
+--AWQlxOs3FPQWb1p8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Nov 20, 2024 at 10:00:19AM -0800, Guenter Roeck wrote:
+> On 11/20/24 09:11, Conor Dooley wrote:
+> > On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrote:
+> > > add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
+> > >      ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+> > >      ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
+> > >      LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC =B5Module Regulator
+> > >=20
+> > > Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.c=
+om>
+> > > Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> > > Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.c=
+om>
+> >=20
+> > Why did you drop my ack?
+> > https://lore.kernel.org/all/20241106-linoleum-kebab-decf14f54f76@spud/
+> >=20
+>=20
+> There:
+>=20
+> > +    enum:
+> > +      - adi,adp1050
+> > +      - adi,adp1051
+> > +      - adi,adp1055
+> >
+>=20
+> Here:
+>=20
+> >> +    enum:
+> >> +      - adi,adp1050
+> >> +      - adi,adp1051
+> >> +      - adi,adp1055
+> >> +      - adi,ltp8800   <--
+>=20
+> This is a combination of two patch series. I'd personally hesitant to car=
+ry
+> Acks along in such situations.
+
+Ah, I didn't notice that. Thanks for pointing it out. Cedric, in the
+future please mention things like this if you drop an ack.
+
+--AWQlxOs3FPQWb1p8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ0IzZQAKCRB4tDGHoIJi
+0vhZAQDzdL7go7DxZ7U0c+qzOvYnfw4FgyQ089ccvliFWD8PsQD/ZJDSQHtnAw5R
+xP46Hg3dSbXJIo2G1CZhmP0gbIAitw0=
+=LmCI
+-----END PGP SIGNATURE-----
+
+--AWQlxOs3FPQWb1p8--
 
