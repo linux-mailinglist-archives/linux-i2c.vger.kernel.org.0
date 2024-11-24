@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-8166-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8167-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BFC69D71FC
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Nov 2024 14:56:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC9649D730B
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Nov 2024 15:27:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C60592843D9
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Nov 2024 13:56:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2BE1281A3F
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Nov 2024 14:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D08571E909A;
-	Sun, 24 Nov 2024 13:38:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA02212EFD;
+	Sun, 24 Nov 2024 13:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1wblvcR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3Pz68Ax"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8345C1E9093;
-	Sun, 24 Nov 2024 13:38:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C4A212EF4;
+	Sun, 24 Nov 2024 13:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732455514; cv=none; b=JBmb9hJgOK52W5qzvw07VCLQlLwmvB2A0o7cez361gTXmRaJIBvce6bwwk+BICoN+CrayXqaV9I9Rnk6K++KzXQdqRzkqZaZkSWe12/Pioma6+6jFid/+pwSIXGCJxXB3YwjSZJRY+3CT7MCNFSxOT/s/S2+26D6gZOPOW4ts3A=
+	t=1732455911; cv=none; b=STbByf6DPw78jH0Lm/jjKJsyIDSJHTqnBqcOLLHWyNhRiqSKoB39o2IPJCsUO4A4HwqIT0JzMeTYmb/Xww1ijJKaSNb0osr+P4GVzt0MJEfSgdypU/I0KVZgksnH9AzLkhm3R2XIKS3ghXPiw4bG3Dmbmm1BaaOfW0dg/7Psy9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732455514; c=relaxed/simple;
-	bh=laDrs0Vb2L0/CzdXMIjKElRV1JFcqlTDdyHVbdJUJDg=;
+	s=arc-20240116; t=1732455911; c=relaxed/simple;
+	bh=Za9kCBxWoL4z2LTmVf0IGghmPVV7WbHS9v++BgVF4Ik=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tDTdw6JKmw5hdScBu83WyWpGt01TwzTux35s9dhoxUlrx10PEUGmOw8Iw72lAnbdBJl5+DQRSpOR9Rfw8/u4VgNM1Dlrc94lm+wLqYm1kIVHdQ5JbQ5VvMvYVdZ4op/mt6Bc7C8GFl2yXMKdaz/DvI6DfJ2WNhdB9Nzvs4/rqNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V1wblvcR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23983C4CECC;
-	Sun, 24 Nov 2024 13:38:33 +0000 (UTC)
+	 MIME-Version; b=cYJEmFPMajdR+t/vL3P00hM+vMfbJJcmyelXLjC3HbRulPRlfvHmn/g9fwHMzuwBddzScRLPf9P6ShXKs0+KTqSau3lx/X3v0bAPgL6fzRkutuFctVCg4NWQGaxAqDY29DGQaT1OxyCFmKA7sn1mH47IfYFLkFCFvWEaH+hpx0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3Pz68Ax; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94389C4CECC;
+	Sun, 24 Nov 2024 13:45:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732455514;
-	bh=laDrs0Vb2L0/CzdXMIjKElRV1JFcqlTDdyHVbdJUJDg=;
+	s=k20201202; t=1732455911;
+	bh=Za9kCBxWoL4z2LTmVf0IGghmPVV7WbHS9v++BgVF4Ik=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V1wblvcR88d7YU5GuXysMJl89JjtrN31JCDAjYiOLpEry3qEu2pHyECn7ToGEgZVM
-	 qcliE38OZ2sHEQ/YvaepRfxPtL2ZoRBO15z4Zp1ex1iXNkxLS3HikxmTL6CbpXNo8a
-	 QBcKsCPJ4sZkqKaJgyPZGEV0+RA4P3cItXtRAh14zJV0OieU2NAJ2NIHmCEAYDgK4X
-	 rIgxH4GlDpt5YX175/nFG/E6jlcGfFjk8xKZfcjf58HNb5YjxpAumR20E1+ZJhRsJn
-	 MbbagZ40PpBbTJluhgEJNSOLYUahtW7mw7mVF2raoroW8g+QRh+8UGm/KraibwnPAM
-	 Sl/dcYdYTvQkg==
+	b=M3Pz68AxXAn4i2rfpby1G8399nuVWh2ez30G+91m51iFiKiaFxlLs9b9cwoSKlFqv
+	 mB01d2p0kiCcUgcmBxR0eHjWzWoLdZ7GGMnhv1usKPu0/J42pPF0ANu4yVjkh03UlG
+	 RiNT6vp1b+Fz1dRHihVVPomLwe48C7bifbM2DseasNgN96JDygiu/X1Vztco485vnV
+	 2S4VGrVF4655UWqnURGOwHvX1K+EProaJidLQ0em2qY85Eax9Iy6YHt/X0GppAorJh
+	 YmbVSp2xiaDOqDUpwFcC2/Rw3/HoZLjwjhqkF5+lLB3FYDytllSQ9uH87I4UCDXi0L
+	 AuRqXUVmllR/A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
 	jdelvare@suse.com,
 	wsa+renesas@sang-engineering.com,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 092/107] i2c: i801: Add support for Intel Panther Lake
-Date: Sun, 24 Nov 2024 08:29:52 -0500
-Message-ID: <20241124133301.3341829-92-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.11 75/87] i2c: i801: Add support for Intel Panther Lake
+Date: Sun, 24 Nov 2024 08:38:53 -0500
+Message-ID: <20241124134102.3344326-75-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241124133301.3341829-1-sashal@kernel.org>
-References: <20241124133301.3341829-1-sashal@kernel.org>
+In-Reply-To: <20241124134102.3344326-1-sashal@kernel.org>
+References: <20241124134102.3344326-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.1
+X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
 
 From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
@@ -95,7 +95,7 @@ index c840b597912c8..47e8ac5b7099f 100644
     Datasheets: Publicly available at the Intel website
  
 diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 6b3ba7e5723aa..2254abda5c46c 100644
+index a22f9125322a7..e14281aed1acf 100644
 --- a/drivers/i2c/busses/Kconfig
 +++ b/drivers/i2c/busses/Kconfig
 @@ -160,6 +160,7 @@ config I2C_I801
