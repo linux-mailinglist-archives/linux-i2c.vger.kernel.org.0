@@ -1,156 +1,143 @@
-Return-Path: <linux-i2c+bounces-8165-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8166-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 878899D6D5A
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Nov 2024 10:55:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BFC69D71FC
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Nov 2024 14:56:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6A36B2111F
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Nov 2024 09:55:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C60592843D9
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Nov 2024 13:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A2DE154C05;
-	Sun, 24 Nov 2024 09:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D08571E909A;
+	Sun, 24 Nov 2024 13:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+VjuBz3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1wblvcR"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1B133987;
-	Sun, 24 Nov 2024 09:55:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8345C1E9093;
+	Sun, 24 Nov 2024 13:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732442101; cv=none; b=o6Wh505r61n1d83L8ukzCWCmpgAFHDeXj7hD5IYGtaO/SJpcgZmXivZxz42Xva90BUUi1+ahscRrynbO07wchywRtZtHa3iOL0By3u2mWP8Viw8rt2adoKEgnp8j1Zwy7eUrt9VHnrUc+BqBeSeu5iHDveIh6WbLmBrhU7MBv1w=
+	t=1732455514; cv=none; b=JBmb9hJgOK52W5qzvw07VCLQlLwmvB2A0o7cez361gTXmRaJIBvce6bwwk+BICoN+CrayXqaV9I9Rnk6K++KzXQdqRzkqZaZkSWe12/Pioma6+6jFid/+pwSIXGCJxXB3YwjSZJRY+3CT7MCNFSxOT/s/S2+26D6gZOPOW4ts3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732442101; c=relaxed/simple;
-	bh=Ju2NM1n+0JxWamVT9l0hVU7x1rv4ubx8xQIT9My6QYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kHbQUAhkdnYFIxeuw+6GITXN960U+/+ZMggJnF2El4gXmcPSfTviWGqRYVef1tBBU3N2ZoM1TexdAcHdSENJaDEvvLXvYPAvDlyfbBMcafIjAlbszzcndZhQPYNFpSTkrJTewQJOJEjWt/eSmLOUxijJ6BWKiO4W0P8MlsKgAZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+VjuBz3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9148C4CECC;
-	Sun, 24 Nov 2024 09:54:59 +0000 (UTC)
+	s=arc-20240116; t=1732455514; c=relaxed/simple;
+	bh=laDrs0Vb2L0/CzdXMIjKElRV1JFcqlTDdyHVbdJUJDg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tDTdw6JKmw5hdScBu83WyWpGt01TwzTux35s9dhoxUlrx10PEUGmOw8Iw72lAnbdBJl5+DQRSpOR9Rfw8/u4VgNM1Dlrc94lm+wLqYm1kIVHdQ5JbQ5VvMvYVdZ4op/mt6Bc7C8GFl2yXMKdaz/DvI6DfJ2WNhdB9Nzvs4/rqNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V1wblvcR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23983C4CECC;
+	Sun, 24 Nov 2024 13:38:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732442100;
-	bh=Ju2NM1n+0JxWamVT9l0hVU7x1rv4ubx8xQIT9My6QYk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=V+VjuBz3M2ue73E7lMnXXRLpEMM7hgAd7mSeeavHv32Y2D95Hs8++0LfMS/raknvk
-	 sPP9tCyUWBysl99B9STd1INyd6TJj7a4sQ9YAetrlz/qoIq/b5NAhoaUX0L7FnsNHc
-	 l+g3WsY4ivUDcV14eg04YW05wmZ9gj9s8LF7KuDqQTrquQanBCYd4+oGFIed0c1zZR
-	 bM72NbA4bmwELwWeXgI8m8+g45R8LLQ79N2feK+VkXlvuSGgxPwkdTxOBbx08vWs3f
-	 kSdGKUFx77j8nwecyrmzJ8Fj0iOqg2Lfy64NWHUgV1jd0GlT9Ax8t9up1XYkgufeU8
-	 5Tvf6A2bNrI7Q==
-Date: Sun, 24 Nov 2024 10:54:56 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
-	lkml <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>
-Subject: [GIT PULL] i2c-host for v6.13, part 2
-Message-ID: <bomhuajtvdsac6bsb5di6sixmr7pflgnmy7axmbpo6qwswm27d@bjwwk3mr5tbu>
+	s=k20201202; t=1732455514;
+	bh=laDrs0Vb2L0/CzdXMIjKElRV1JFcqlTDdyHVbdJUJDg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=V1wblvcR88d7YU5GuXysMJl89JjtrN31JCDAjYiOLpEry3qEu2pHyECn7ToGEgZVM
+	 qcliE38OZ2sHEQ/YvaepRfxPtL2ZoRBO15z4Zp1ex1iXNkxLS3HikxmTL6CbpXNo8a
+	 QBcKsCPJ4sZkqKaJgyPZGEV0+RA4P3cItXtRAh14zJV0OieU2NAJ2NIHmCEAYDgK4X
+	 rIgxH4GlDpt5YX175/nFG/E6jlcGfFjk8xKZfcjf58HNb5YjxpAumR20E1+ZJhRsJn
+	 MbbagZ40PpBbTJluhgEJNSOLYUahtW7mw7mVF2raoroW8g+QRh+8UGm/KraibwnPAM
+	 Sl/dcYdYTvQkg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	jdelvare@suse.com,
+	wsa+renesas@sang-engineering.com,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 092/107] i2c: i801: Add support for Intel Panther Lake
+Date: Sun, 24 Nov 2024 08:29:52 -0500
+Message-ID: <20241124133301.3341829-92-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241124133301.3341829-1-sashal@kernel.org>
+References: <20241124133301.3341829-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.12.1
 Content-Transfer-Encoding: 8bit
 
-Hi Wolfram,
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-please find the description for the second part of the pull 
-request.
+[ Upstream commit bd492b58371295d3ae26162b9666be584abad68a ]
 
-Thank you again for accepting this second part. I believe we've
-now included all the accepted patches for I2C. For the next
-release, I plan to focus on clearing out leftovers from the past.
+Add SMBus PCI IDs on Intel Panther Lake-P and -U.
 
-As always, feel free to advise or correct the tag description.
-I'm always open to suggestions and never bothered by them.
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ Documentation/i2c/busses/i2c-i801.rst | 1 +
+ drivers/i2c/busses/Kconfig            | 1 +
+ drivers/i2c/busses/i2c-i801.c         | 6 ++++++
+ 3 files changed, 8 insertions(+)
 
-Thank you,
-Andi
+diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
+index c840b597912c8..47e8ac5b7099f 100644
+--- a/Documentation/i2c/busses/i2c-i801.rst
++++ b/Documentation/i2c/busses/i2c-i801.rst
+@@ -49,6 +49,7 @@ Supported adapters:
+   * Intel Meteor Lake (SOC and PCH)
+   * Intel Birch Stream (SOC)
+   * Intel Arrow Lake (SOC)
++  * Intel Panther Lake (SOC)
+ 
+    Datasheets: Publicly available at the Intel website
+ 
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 6b3ba7e5723aa..2254abda5c46c 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -160,6 +160,7 @@ config I2C_I801
+ 	    Meteor Lake (SOC and PCH)
+ 	    Birch Stream (SOC)
+ 	    Arrow Lake (SOC)
++	    Panther Lake (SOC)
+ 
+ 	  This driver can also be built as a module.  If so, the module
+ 	  will be called i2c-i801.
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 299fe9d3afab0..75dab01d43a75 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -81,6 +81,8 @@
+  * Meteor Lake PCH-S (PCH)	0x7f23	32	hard	yes	yes	yes
+  * Birch Stream (SOC)		0x5796	32	hard	yes	yes	yes
+  * Arrow Lake-H (SOC)		0x7722	32	hard	yes	yes	yes
++ * Panther Lake-H (SOC)		0xe322	32	hard	yes	yes	yes
++ * Panther Lake-P (SOC)		0xe422	32	hard	yes	yes	yes
+  *
+  * Features supported by this driver:
+  * Software PEC				no
+@@ -261,6 +263,8 @@
+ #define PCI_DEVICE_ID_INTEL_CANNONLAKE_H_SMBUS		0xa323
+ #define PCI_DEVICE_ID_INTEL_COMETLAKE_V_SMBUS		0xa3a3
+ #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_SOC_S_SMBUS	0xae22
++#define PCI_DEVICE_ID_INTEL_PANTHER_LAKE_H_SMBUS	0xe322
++#define PCI_DEVICE_ID_INTEL_PANTHER_LAKE_P_SMBUS	0xe422
+ 
+ struct i801_mux_config {
+ 	char *gpio_chip;
+@@ -1055,6 +1059,8 @@ static const struct pci_device_id i801_ids[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_PCH_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+ 	{ PCI_DEVICE_DATA(INTEL, BIRCH_STREAM_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+ 	{ PCI_DEVICE_DATA(INTEL, ARROW_LAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, PANTHER_LAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
++	{ PCI_DEVICE_DATA(INTEL, PANTHER_LAKE_P_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+ 	{ 0, }
+ };
+ 
+-- 
+2.43.0
 
-The following changes since commit 1b3073291ddbe23fede7e0dd1b6f5635e370f8ba:
-
-  Merge tag 'i2c-host-6.13-p1' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-mergewindow (2024-11-18 08:35:47 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-6.13-p2
-
-for you to fetch changes up to 68e7aa7ae92f5d5af1a3bfd0aae566e687b980fe:
-
-  MAINTAINERS: transfer i2c-aspeed maintainership from Brendan to Ryan (2024-11-22 22:17:43 +0100)
-
-----------------------------------------------------------------
-i2c-host updates for v6.13, part 2
-
-Improvements and refactoring:
- - Qualcomm I2C now uses the generic device property functions.
- - Nomadik controller updated to use of_match_device().
- - Fixed the Baud Rate Counter (BRCR) calculation and handling in
-   the Nomadik controller, enabling support for frequencies above
-   1 MHz.
-
-New feature support:
- - Added support for frequencies up to 3.4 MHz on Nomadik I2C.
- - DesignWare now accounts for bus capacitance and clock
-   optimisation (declared as new parameters in the binding) to
-   improve the calculation of signal rise and fall times
-   (t_high and t_low).
- - Added atomic transfer support to the Xilinx IIC controller.
-
-New Hardware support:
- - DWAPB I2C controller on FUJITSU-MONAKA (new ACPI HID).
- - Allwinner A523 (new compatible ID).
- - Mobileye EyeQ6H (new compatible ID).
-
-Maintenance:
- - Ryan replaces Brendan as the maintainer for the ASPEED
-   controller.
-
-----------------------------------------------------------------
-Andre Przywara (1):
-      dt-bindings: i2c: mv64xxx: Add Allwinner A523 compatible string
-
-Bartosz Golaszewski (1):
-      i2c: qup: use generic device property accessors
-
-Brendan Higgins (1):
-      MAINTAINERS: transfer i2c-aspeed maintainership from Brendan to Ryan
-
-Manikanta Guntupalli (2):
-      i2c: xiic: Relocate xiic_i2c_runtime_suspend and xiic_i2c_runtime_resume to facilitate atomic mode
-      i2c: xiic: Add atomic transfer support
-
-Michael Wu (2):
-      dt-bindings: i2c: snps,designware-i2c: declare bus capacitance and clk freq optimized
-      i2c: designware: determine HS tHIGH and tLOW based on HW parameters
-
-Théo Lebrun (6):
-      dt-bindings: i2c: nomadik: add mobileye,eyeq6h-i2c bindings
-      dt-bindings: i2c: nomadik: support 400kHz < clock-frequency <= 3.4MHz
-      i2c: nomadik: switch from of_device_is_compatible() to of_match_device()
-      i2c: nomadik: support Mobileye EyeQ6H I2C controller
-      i2c: nomadik: fix BRCR computation
-      i2c: nomadik: support >=1MHz speed modes
-
-Yoshihiro Furudera (1):
-      i2c: designware: Add ACPI HID for DWAPB I2C controller on FUJITSU-MONAKA
-
- .../bindings/i2c/marvell,mv64xxx-i2c.yaml          |   1 +
- .../bindings/i2c/snps,designware-i2c.yaml          |  18 ++
- .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    |  13 +-
- MAINTAINERS                                        |   2 +-
- drivers/i2c/busses/i2c-designware-common.c         |   5 +
- drivers/i2c/busses/i2c-designware-core.h           |   6 +
- drivers/i2c/busses/i2c-designware-master.c         |  23 +-
- drivers/i2c/busses/i2c-designware-platdrv.c        |   1 +
- drivers/i2c/busses/i2c-nomadik.c                   |  87 ++++---
- drivers/i2c/busses/i2c-qup.c                       |   4 +-
- drivers/i2c/busses/i2c-xiic.c                      | 287 +++++++++++++++++----
- 11 files changed, 348 insertions(+), 99 deletions(-)
 
