@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-8183-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8184-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1668D9D7C55
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2024 09:06:14 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75B3D9D7C9A
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2024 09:11:27 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF4ED2820F3
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2024 08:06:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3DFD162746
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2024 08:11:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69F3161320;
-	Mon, 25 Nov 2024 08:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C915188006;
+	Mon, 25 Nov 2024 08:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kd2l48Hc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CsGIwaDe"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6178827;
-	Mon, 25 Nov 2024 08:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C508827;
+	Mon, 25 Nov 2024 08:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732521968; cv=none; b=ecNjS5tfqnWAAqtZwOc4hHzJmzCL42bTjFKn3y0cHrzY/RLAnFjETDvP4t/Vnm2qzUxbTlLs6C0rK+f+Ebjzw8buxCNvB6mU56FooH06TFOmJ1Ij14MA/yZwFOLd1V6nKNMHbPqZmlYbzlRuDjVtCOTe5Xe4PNDOzL9kJrZ3gqA=
+	t=1732522280; cv=none; b=LJZ5aPn+lAUKEgRDj3VrR6h2SRI70mkPZFGiBmfek87tIOZkZB0GGkSmVsenXlBuxkIAGvljtq8/ukqEhOP3H0LQCDPfItjjZIGLuEpMJODK+cYxkcSXSXuPOoi2w5dtI2vXQlf7v0nFvn1Qo4IBHab1cFMQNWL4YyPz5ugN6qY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732521968; c=relaxed/simple;
-	bh=dpPPy5YDFoAWcqG5N+i72aqHivusJrXT3+3sy3jMemQ=;
+	s=arc-20240116; t=1732522280; c=relaxed/simple;
+	bh=zV+uPzFR4jgxt9py0AYoazJ5UUZncuWxs2GK2HxNutI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HvVkMQpZGjv0PvFU0iBjiSlspo0/qZOTtdduoyPW3xWsXXJOGjeq7gJ5zuI6tb4l5mj28t+fmEfbLF+76grr7i3kYCCSPxvbxW5tEcVV17GPNWZ30bT6jgvs1CKI9MZd+5EANW3I5vtTJbQZeOjqmm67bGWrks3UoT2H01VvH9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kd2l48Hc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29DCC4CECE;
-	Mon, 25 Nov 2024 08:06:04 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=cTCzRTX0I7DxUKed5wU8CR/OiQrTAvV8/0em1zx36vd0SESelOe3JbuNdLqQUceakM83nQmytVsxkdwS/yMEk0lQ7fNEk1ugG4amLtd/xY84EVLMwWd5BrConfo1YEgMMiTJHlKDemtXk/UN3t2sOQDWuRvHXddYkALgDeycK2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CsGIwaDe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E55C4CECE;
+	Mon, 25 Nov 2024 08:11:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732521968;
-	bh=dpPPy5YDFoAWcqG5N+i72aqHivusJrXT3+3sy3jMemQ=;
+	s=k20201202; t=1732522279;
+	bh=zV+uPzFR4jgxt9py0AYoazJ5UUZncuWxs2GK2HxNutI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kd2l48Hcgo8DEatTnIcLx7p7qz/g3tLDlCbupbL5mfA6D8GqPmOYod+N12TR25CMF
-	 6ErwmnSeynH0KAi1DVMF5aE1YN8yah/UVJoz3ns1JpamLrK2VNKIMSi72zvNhfOPoO
-	 4sPFFnX1a9mTtaeni67a9cJkds/F2OA50lzrzASZSLwaIxP4P3oNNs6TmwVyKGLSC3
-	 peCbgxMhoiGTpswxHxuGl7fmZf/W8WFho4Jk1VPjkPXx2pmUH2KFBoro0AjvrfTxYc
-	 DEhaDBGvS3GQB904OHl6XChBoQdG5VfZmmfKDedbOhmKR+FGsjiAeu5Pyx/hZd0pY5
-	 Y1+kNDvv0uOUA==
-Message-ID: <5d69e1db-2ec5-445d-9336-9345c918722a@kernel.org>
-Date: Mon, 25 Nov 2024 09:06:02 +0100
+	b=CsGIwaDeYx4LhwxV2uAj7ROqK8UrTWCwCP0EnMS7IiQDDNGEvn9J+lWHecXU8Y0Fn
+	 uw4JmJYqcxa/5aGub3L0IbUzVco3s7ATcw51J+p0qjA70Tskj8KTUyDVqGT9GOYR9S
+	 Eo6LKpxe67ISRVUi8ogB11i06n5YGeA4OU6psF01IXsUMx9RVlGgL2z/9chJJzdZSY
+	 Kc0d5cIwn35e2OwJAQKgAQh+VKwJUpSFn8N5zwrA7g4FWrV2sF0xoJvB1E5aqbxQzD
+	 +qfDtiNpGtWgEyvtRwoCUWQ0ouj0hDDdQxNxY1QmDnUszIkJqrTrK44cE3fD6aweOs
+	 JRmX1//XF8ieQ==
+Message-ID: <e1a7d9d6-c382-48f6-bf7f-145290d214d1@kernel.org>
+Date: Mon, 25 Nov 2024 09:11:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,13 +50,21 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] riscv: spacemit: add i2c support to K1 SoC
-To: Troy Mitchell <troymitchell988@gmail.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241125-k1-i2c-master-v4-0-0f3d5886336b@gmail.com>
+Subject: Re: [PATCH v4 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
+ flag
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+ Rob Herring <robh@kernel.org>
+Cc: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
+ linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+ conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
+ vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
+ Frank.Li@nxp.com, konradybcio@kernel.org, bryan.odonoghue@linaro.org,
+ krzk+dt@kernel.org, quic_vdadhani@quicinc.com
+References: <20241113161413.3821858-1-quic_msavaliy@quicinc.com>
+ <20241113161413.3821858-2-quic_msavaliy@quicinc.com>
+ <20241115173156.GA3432253-robh@kernel.org>
+ <ff20d185-4db4-482b-b6dd-06e46124b8ab@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -102,50 +110,72 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241125-k1-i2c-master-v4-0-0f3d5886336b@gmail.com>
+In-Reply-To: <ff20d185-4db4-482b-b6dd-06e46124b8ab@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 25/11/2024 07:49, Troy Mitchell wrote:
-> Hi all,
+On 17/11/2024 18:45, Mukesh Kumar Savaliya wrote:
+> Thanks Rob for your review and comments !
 > 
-> This patch implements I2C driver for the SpacemiT K1 SoC,
-> providing basic support for I2C read/write communication which
-> compatible with standard I2C bus specifications.
+> On 11/15/2024 11:01 PM, Rob Herring wrote:
+>> On Wed, Nov 13, 2024 at 09:44:10PM +0530, Mukesh Kumar Savaliya wrote:
+>>> Adds qcom,is-shared flag usage. Use this flag when I2C serial controller
+>>
+>> Doesn't match the property name.
+> Sure, i need to change the name here as qcom,shared-se, will upload a 
+> new patch.
+>>
+>>> needs to be shared in multiprocessor system(APPS,Modem,ADSP) environment.
+>>>
+>>> Two clients from different processors can share an I2C controller for same
+>>> slave device OR their owned slave devices. Assume I2C Slave EEPROM device
+>>> connected with I2C controller. Each client from ADSP SS and APPS Linux SS
+>>> can perform i2c transactions.
+>>>
+>>> Transfer gets serialized by Lock TRE + DMA xfer + Unlock TRE at HW level.
+>>>
+>>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++++
+>>>   1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>>> index 9f66a3bb1f80..fe36938712f7 100644
+>>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>>> @@ -60,6 +60,10 @@ properties:
+>>>     power-domains:
+>>>       maxItems: 1
+>>>   
+>>> +  qcom,shared-se:
+>>
+>> What is 'se'? Is that defined somewhere?
+>>
+> SE is Serial Engine acting as I2C controller. Let me add second line for 
+> SE here also.
 > 
-> In this version, the driver defaults to use fast-speed-mode and
-> interrupts for transmission, and does not support DMA, high-speed mode, or FIFO.
-> 
-> The docs of I2C can be found here, in chapter 16.1 I2C [1]
-> 
-> Link: https://developer.spacemit.com/documentation?token=Rn9Kw3iFHirAMgkIpTAcV2Arnkf#part5 [1]
-> ---
-> Change in v4:
-> - Patch #1:
-> 	- Change the default value of clock-frequency from 100000 to
-> 	  400000. This is to correspond to the driver's default value.
-> 	- Drop the minimum of clock-frequency
-> 	- Modify the description of clock-frequency
+> It's mentioned in source code in Patch 3 where it's used.
+>  >>> True if serial engine is shared between multiprocessors OR 
+> Execution Environment.
+You already got this comment:
+https://lore.kernel.org/lkml/20240927063108.2773304-4-quic_msavaliy@quicinc.com/T/#m79efdd1172631aca99a838b4bfe57943755701e3
 
-Explain why do you request re-review.
+""se" is also not explained in the binding - please open it and look for
+such explanation."
 
-<form letter>
-This is a friendly reminder during the review process.
+Further comments asked you to rephrase it. Did anything improve? No,
+nothing.
 
-It looks like you received a tag and forgot to add it.
+You got comments, you ignore them and send the same.
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
+But most important: I keep repeating this over and over - NAK for some
+specific "shared-se" flag, different for each of your IP blocks. Come
+with something generic for entire qualcomm. There are few of such flags
+already and there are some patches adding it in different flavors.
 
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+Get this consistent.
 
-If a tag was not added on purpose, please state why and what changed.
-</form letter>
+NAK for this and v5 doing exactly theh same.
 
 Best regards,
 Krzysztof
