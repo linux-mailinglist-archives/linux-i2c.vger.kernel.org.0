@@ -1,182 +1,153 @@
-Return-Path: <linux-i2c+bounces-8184-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8185-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75B3D9D7C9A
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2024 09:11:27 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3DFD162746
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2024 08:11:23 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C915188006;
-	Mon, 25 Nov 2024 08:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CsGIwaDe"
-X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68DC99D7D2C
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2024 09:45:43 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C508827;
-	Mon, 25 Nov 2024 08:11:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 294C1282AC3
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Nov 2024 08:45:42 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03DED18CC1D;
+	Mon, 25 Nov 2024 08:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZSxjbz+w"
+X-Original-To: linux-i2c@vger.kernel.org
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A780618A95A;
+	Mon, 25 Nov 2024 08:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732522280; cv=none; b=LJZ5aPn+lAUKEgRDj3VrR6h2SRI70mkPZFGiBmfek87tIOZkZB0GGkSmVsenXlBuxkIAGvljtq8/ukqEhOP3H0LQCDPfItjjZIGLuEpMJODK+cYxkcSXSXuPOoi2w5dtI2vXQlf7v0nFvn1Qo4IBHab1cFMQNWL4YyPz5ugN6qY=
+	t=1732524336; cv=none; b=ZmfH98PityVz/hm/DSsg/ki9pztHHw1BBvw7/28Ec1xcBB8J1pG7brPV5QaAdk6Ve+3ytEemtzeQLElNNlGcsT4NCcVuoOSStoaA0OLn3QUjBYl7sqofzV8UFwNBc3uvFOFOBpv2e7k7I9uh17JpfLd/zwIUmYol3G1VUsUnedU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732522280; c=relaxed/simple;
-	bh=zV+uPzFR4jgxt9py0AYoazJ5UUZncuWxs2GK2HxNutI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cTCzRTX0I7DxUKed5wU8CR/OiQrTAvV8/0em1zx36vd0SESelOe3JbuNdLqQUceakM83nQmytVsxkdwS/yMEk0lQ7fNEk1ugG4amLtd/xY84EVLMwWd5BrConfo1YEgMMiTJHlKDemtXk/UN3t2sOQDWuRvHXddYkALgDeycK2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CsGIwaDe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E55C4CECE;
-	Mon, 25 Nov 2024 08:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732522279;
-	bh=zV+uPzFR4jgxt9py0AYoazJ5UUZncuWxs2GK2HxNutI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CsGIwaDeYx4LhwxV2uAj7ROqK8UrTWCwCP0EnMS7IiQDDNGEvn9J+lWHecXU8Y0Fn
-	 uw4JmJYqcxa/5aGub3L0IbUzVco3s7ATcw51J+p0qjA70Tskj8KTUyDVqGT9GOYR9S
-	 Eo6LKpxe67ISRVUi8ogB11i06n5YGeA4OU6psF01IXsUMx9RVlGgL2z/9chJJzdZSY
-	 Kc0d5cIwn35e2OwJAQKgAQh+VKwJUpSFn8N5zwrA7g4FWrV2sF0xoJvB1E5aqbxQzD
-	 +qfDtiNpGtWgEyvtRwoCUWQ0ouj0hDDdQxNxY1QmDnUszIkJqrTrK44cE3fD6aweOs
-	 JRmX1//XF8ieQ==
-Message-ID: <e1a7d9d6-c382-48f6-bf7f-145290d214d1@kernel.org>
-Date: Mon, 25 Nov 2024 09:11:10 +0100
+	s=arc-20240116; t=1732524336; c=relaxed/simple;
+	bh=lJwVS70v3SVo849D24NQ+rHlsxNtn9U5Tb4DJEULkZQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Q0Kl4rt8T61oNHOTdqkMUJJSjVjORPpEsxBu6f6pPEIPmjsqwxelc23uYu1+3IjZolDGvFNkmHo7WwL0/9DUkFBQi+MChLc3hhv+nA5d4nnLdaYKVnHKK5f7dH6IkxwVKPaWJG+LOdP/MQpIUN3aV9EM/QqtLqZlaoZCxrVhjYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZSxjbz+w; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 982751BF209;
+	Mon, 25 Nov 2024 08:45:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1732524330;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ia3Rtg8suGGbEgeGtI6bMKQYuwy5zPE5EYeOCxo1k80=;
+	b=ZSxjbz+wvLN0WDnB48hKLTWmaFX2E909P7klwppPN4lP3GrB0sD8Ab6jnSAGCbVEdAYq7X
+	peOF2fC2V1T5zDGVSfZS0rGZpeZJSyTQA/dn+lZjpxSHsyAPQ1fyhpAkErxmK+ncZo+I5e
+	AueQ27DuCwMWX1UEL/0YZaIYeghgi4T3IdyRHnIjLjXNjyTpE7sGjx+fHua0TJpU0r/m5Z
+	uyhMDgZ7edyr6Uav25qKcTBX04LvbhmeyNSMaODWvuoVeu5hJ2+BMzSzd+jq5Mf77IH99K
+	DeN4MI/1T0tVbstV5pMW0FjfVByffz2szzJ+xPXZ1k+F3qXvlm+MK9e22Q/edA==
+From: Romain Gantois <romain.gantois@bootlin.com>
+Subject: [PATCH v3 0/9] misc: Support TI FPC202 dual-port controller
+Date: Mon, 25 Nov 2024 09:45:14 +0100
+Message-Id: <20241125-fpc202-v3-0-34e86bcb5b56@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
- flag
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
- Rob Herring <robh@kernel.org>
-Cc: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
- linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
- vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
- Frank.Li@nxp.com, konradybcio@kernel.org, bryan.odonoghue@linaro.org,
- krzk+dt@kernel.org, quic_vdadhani@quicinc.com
-References: <20241113161413.3821858-1-quic_msavaliy@quicinc.com>
- <20241113161413.3821858-2-quic_msavaliy@quicinc.com>
- <20241115173156.GA3432253-robh@kernel.org>
- <ff20d185-4db4-482b-b6dd-06e46124b8ab@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <ff20d185-4db4-482b-b6dd-06e46124b8ab@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABs5RGcC/1WMQQ6CMBBFr0K6tqYzNJS64h7GBZSpNFFKWtJoC
+ He3YIy6+28y7y0sUnAU2alYWKDkovNjhvJQMDO045W46zMzFChBgOJ2MnnzyopOlTpvVbP8PAW
+ y7rGHzpfMg4uzD8+9m2C7vhMg6k8iARfckkRT6bozGpvO+/nmxqPxd7ZFEv6I8BUxi0pKkhY0t
+ tj/i+u6vgC4ORTF1wAAAA==
+X-Change-ID: 20241017-fpc202-6f0b739c2078
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>, 
+ Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ Romain Gantois <romain.gantois@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: romain.gantois@bootlin.com
 
-On 17/11/2024 18:45, Mukesh Kumar Savaliya wrote:
-> Thanks Rob for your review and comments !
-> 
-> On 11/15/2024 11:01 PM, Rob Herring wrote:
->> On Wed, Nov 13, 2024 at 09:44:10PM +0530, Mukesh Kumar Savaliya wrote:
->>> Adds qcom,is-shared flag usage. Use this flag when I2C serial controller
->>
->> Doesn't match the property name.
-> Sure, i need to change the name here as qcom,shared-se, will upload a 
-> new patch.
->>
->>> needs to be shared in multiprocessor system(APPS,Modem,ADSP) environment.
->>>
->>> Two clients from different processors can share an I2C controller for same
->>> slave device OR their owned slave devices. Assume I2C Slave EEPROM device
->>> connected with I2C controller. Each client from ADSP SS and APPS Linux SS
->>> can perform i2c transactions.
->>>
->>> Transfer gets serialized by Lock TRE + DMA xfer + Unlock TRE at HW level.
->>>
->>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->>> ---
->>>   Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++++
->>>   1 file changed, 4 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->>> index 9f66a3bb1f80..fe36938712f7 100644
->>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->>> @@ -60,6 +60,10 @@ properties:
->>>     power-domains:
->>>       maxItems: 1
->>>   
->>> +  qcom,shared-se:
->>
->> What is 'se'? Is that defined somewhere?
->>
-> SE is Serial Engine acting as I2C controller. Let me add second line for 
-> SE here also.
-> 
-> It's mentioned in source code in Patch 3 where it's used.
->  >>> True if serial engine is shared between multiprocessors OR 
-> Execution Environment.
-You already got this comment:
-https://lore.kernel.org/lkml/20240927063108.2773304-4-quic_msavaliy@quicinc.com/T/#m79efdd1172631aca99a838b4bfe57943755701e3
+Hello everyone,
 
-""se" is also not explained in the binding - please open it and look for
-such explanation."
+This is version three of my series which adds support for the TI FPC202
+dual-port controller. This is an unusual kind of device which is used as a
+low-speed signal aggregator for various types of SFP-like hardware ports.
 
-Further comments asked you to rephrase it. Did anything improve? No,
-nothing.
+The FPC202 exposes an I2C, or SPI (not supported in this series) control
+interface, which can be used to access two downstream I2C busses, along
+with a set of low-speed GPIO signals for each port. It also has I2C address
+translation (ATR) features, which allow multiple I2C devices with the same
+address (e.g. SFP EEPROMs at address 0x50) to be accessed from the upstream
+control interface on different addresses.
 
-You got comments, you ignore them and send the same.
+I've chosen to add this driver to the misc subsystem, as it doesn't
+strictly belong in either the i2c or gpio sybsystem, and as far as I know
+it is the first device of its kind to be added to the kernel.
 
-But most important: I keep repeating this over and over - NAK for some
-specific "shared-se" flag, different for each of your IP blocks. Come
-with something generic for entire qualcomm. There are few of such flags
-already and there are some patches adding it in different flavors.
+Along with the FPC202 driver itself, this series also adds support for
+dynamic address translation to the i2c-atr module. This allows I2C address
+translators to update their translation table on-the-fly when they receive
+transactions to unmapped clients. This feature is needed by the FPC202
+driver to access up to three logical I2C devices per-port, given that the
+FPC202 address translation table only has two address slots.
 
-Get this consistent.
+Best Regards,
 
-NAK for this and v5 doing exactly theh same.
+Romain
+
+Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+---
+Changes in v3:
+- Described the "reg" property of downstream ports in the FPC202 bindings
+- Link to v2: https://lore.kernel.org/r/20241118-fpc202-v2-0-744e4f192a2d@bootlin.com
+
+Changes in v2:
+- Renamed port nodes to match i2c adapter bindings.
+- Declared atr ops struct as static const.
+- Free downstream ports during FPC202 removal.
+- Link to v1: https://lore.kernel.org/r/20241108-fpc202-v1-0-fe42c698bc92@bootlin.com
+
+---
+Romain Gantois (9):
+      dt-bindings: misc: Describe TI FPC202 dual port controller
+      media: i2c: ds90ub960: Replace aliased clients list with bitmap
+      media: i2c: ds90ub960: Protect alias_use_mask with a mutex
+      i2c: use client addresses directly in ATR interface
+      i2c: move ATR alias pool to a separate struct
+      i2c: rename field 'alias_list' of struct i2c_atr_chan to 'alias_pairs'
+      i2c: support per-channel ATR alias pools
+      i2c: Support dynamic address translation
+      misc: add FPC202 dual port controller driver
+
+ .../devicetree/bindings/misc/ti,fpc202.yaml        |  96 +++++
+ MAINTAINERS                                        |   7 +
+ drivers/i2c/i2c-atr.c                              | 480 ++++++++++++++-------
+ drivers/media/i2c/ds90ub913.c                      |   9 +-
+ drivers/media/i2c/ds90ub953.c                      |   9 +-
+ drivers/media/i2c/ds90ub960.c                      |  65 +--
+ drivers/misc/Kconfig                               |  11 +
+ drivers/misc/Makefile                              |   1 +
+ drivers/misc/ti_fpc202.c                           | 440 +++++++++++++++++++
+ include/linux/i2c-atr.h                            |  67 ++-
+ 10 files changed, 989 insertions(+), 196 deletions(-)
+---
+base-commit: adc218676eef25575469234709c2d87185ca223a
+change-id: 20241017-fpc202-6f0b739c2078
 
 Best regards,
-Krzysztof
+-- 
+Romain Gantois <romain.gantois@bootlin.com>
+
 
