@@ -1,99 +1,94 @@
-Return-Path: <linux-i2c+bounces-8223-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8224-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 398AC9D939D
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Nov 2024 09:56:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64DED9D94F3
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Nov 2024 10:56:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88918B224D6
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Nov 2024 08:55:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29EAE283821
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Nov 2024 09:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7668B1ABEBB;
-	Tue, 26 Nov 2024 08:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF191C4616;
+	Tue, 26 Nov 2024 09:56:30 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACF113C3F6
-	for <linux-i2c@vger.kernel.org>; Tue, 26 Nov 2024 08:55:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9C91B85C2
+	for <linux-i2c@vger.kernel.org>; Tue, 26 Nov 2024 09:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732611354; cv=none; b=R3EgaT1ybyvLQm30xVKKSYawDxa9CxP0Zh9XTnTsz6q9JOjEjUWg5QR4blICNBuhugcRkXrjgo/0JG2+OTo8qfs4IHomZ89gFafzmvjGL2MCS1CKY81aA37M4eVQ5y1zbRbRdeRYCjknRIbNuca7sFjUtd+yvMayU9efDiFSyeU=
+	t=1732614990; cv=none; b=kM1zv282rRpbRa2egl6irM5VoJHYpEiIdGygfjELyEnCu/nrWjGoXRygWIwzbSc4GDfOH+Xm0MgjxA7j233qrQo021mEE8PG0Cnhzo3t+j03B5Z60JnZy0dhSGKnCe7T4UUQSJaXMPLNjoGxCLlCsDyplBr/gSFv87bYChXyQss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732611354; c=relaxed/simple;
-	bh=Nop+Fg8GS/0NpREEDIYBgHXxXm3xMK8uqkpjtLrbD+8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L4POB5B5ss7FB/zUHPQh3qjaBPW2YtkjrF2wtvoQJ4MAPpmWc9ORK01ClqV3EkPF/yNWMU12F+PQclsqxYm4Lal2g032YD5JgsOHmDtXbMUy3L7zQ4yyT+YyEV5yS5EpWuaeIbcqhboIspBlS4L0jm+k58RpNdjZ7mUTk0COfg8=
+	s=arc-20240116; t=1732614990; c=relaxed/simple;
+	bh=+feGJRjcfPwbPpHmyp0x7CL0HRq3+5VOgfkum0dgPQ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pS6Rpquf0mpAM/QjqL0BVj4b1ZPoRZFqQYISl+vMoWsJKdFcK683qjTTBCFD7vysUIetEDAUGqF3/8CPM1ii77SVxbTopoMPrnFzjtSzYTN9k8G9N/V+SVtWepYkxxbB2NJxYsj+Q5zoU2GEi/XcyEXlDpNe0KiyWrW/nigfVNI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tFrME-0002WF-HB; Tue, 26 Nov 2024 09:55:42 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tFrMD-000Der-0E;
-	Tue, 26 Nov 2024 09:55:41 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 6F55437D766;
-	Tue, 26 Nov 2024 08:55:41 +0000 (UTC)
-Date: Tue, 26 Nov 2024 09:55:41 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: carlos.song@nxp.com
-Cc: frank.li@nxp.com, o.rempel@pengutronix.de, kernel@pengutronix.de, 
-	andi.shyti@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com, 
-	imx@lists.linux.dev, linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: imx: support DMA defer probing
-Message-ID: <20241126-economic-energetic-junglefowl-5197a9-mkl@pengutronix.de>
-References: <20241126082535.1878554-1-carlos.song@nxp.com>
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tFsIv-00011x-Vm; Tue, 26 Nov 2024 10:56:22 +0100
+Message-ID: <19a43db4-db5c-4638-9778-d94fb571a206@pengutronix.de>
+Date: Tue, 26 Nov 2024 10:56:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="idutayp4iw5aar47"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] i2c: imx: support DMA defer probing
+To: carlos.song@nxp.com, frank.li@nxp.com, o.rempel@pengutronix.de,
+ kernel@pengutronix.de, andi.shyti@kernel.org, shawnguo@kernel.org,
+ s.hauer@pengutronix.de, festevam@gmail.com
+Cc: imx@lists.linux.dev, linux-i2c@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20241126082535.1878554-1-carlos.song@nxp.com>
+Content-Language: en-US
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
 In-Reply-To: <20241126082535.1878554-1-carlos.song@nxp.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
+Hello Carlos,
 
---idutayp4iw5aar47
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] i2c: imx: support DMA defer probing
-MIME-Version: 1.0
-
-On 26.11.2024 16:25:35, carlos.song@nxp.com wrote:
+On 26.11.24 09:25, carlos.song@nxp.com wrote:
 > From: Carlos Song <carlos.song@nxp.com>
->=20
+> 
 > Return -EPROBE_DEFER when dma_request_slave_channel() because DMA driver
 > have not ready yet.
->=20
+> 
 > Move i2c_imx_dma_request() before registering I2C adapter to avoid
 > infinite loop of .probe() calls to the same driver, see "e8c220fac415
 > Revert "i2c: imx: improve the error handling in i2c_imx_dma_request()""
 > and "Documentation/driver-api/driver-model/driver.rst".
->=20
+> 
 > Use CPU mode to avoid stuck registering i2c adapter when DMA resources
 > are unavailable.
->=20
+
+Wouldn't this break probe for all i2c-imx users who have CONFIG_IMX_SDMA
+disabled?
+
+Also I am wondering on what kernel version and what configuration
+(CONFIG_I2C_IMX=?, CONFIG_IMX_SDMA=?) you have that made you run into
+this situation.
+
+I'd have expected that with fw_devlink enabled, the I2C controller wouldn't
+be probed before the DMA provider is available.
+
+Cheers,
+Ahmad
+
+> 
 > Signed-off-by: Carlos Song <carlos.song@nxp.com>
 > Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
 > ---
@@ -104,94 +99,79 @@ On 26.11.2024 16:25:35, carlos.song@nxp.com wrote:
 > ---
 >  drivers/i2c/busses/i2c-imx.c | 21 +++++++++++++--------
 >  1 file changed, 13 insertions(+), 8 deletions(-)
->=20
+> 
 > diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
 > index 5ed4cb61e262..4e5633166a1e 100644
 > --- a/drivers/i2c/busses/i2c-imx.c
 > +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -397,17 +397,16 @@ static void i2c_imx_reset_regs(struct imx_i2c_struc=
-t *i2c_imx)
+> @@ -397,17 +397,16 @@ static void i2c_imx_reset_regs(struct imx_i2c_struct *i2c_imx)
 >  }
-> =20
+>  
 >  /* Functions for DMA support */
 > -static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
 > -						dma_addr_t phy_addr)
-> +static int i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx, dma_addr_=
-t phy_addr)
+> +static int i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx, dma_addr_t phy_addr)
 >  {
 >  	struct imx_i2c_dma *dma;
 >  	struct dma_slave_config dma_sconfig;
-> -	struct device *dev =3D &i2c_imx->adapter.dev;
-> +	struct device *dev =3D i2c_imx->adapter.dev.parent;
+> -	struct device *dev = &i2c_imx->adapter.dev;
+> +	struct device *dev = i2c_imx->adapter.dev.parent;
 >  	int ret;
-> =20
->  	dma =3D devm_kzalloc(dev, sizeof(*dma), GFP_KERNEL);
+>  
+>  	dma = devm_kzalloc(dev, sizeof(*dma), GFP_KERNEL);
 >  	if (!dma)
 > -		return;
 > +		return -ENOMEM;
-> =20
->  	dma->chan_tx =3D dma_request_chan(dev, "tx");
+>  
+>  	dma->chan_tx = dma_request_chan(dev, "tx");
 >  	if (IS_ERR(dma->chan_tx)) {
-> @@ -452,7 +451,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct=
- *i2c_imx,
+> @@ -452,7 +451,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
 >  	dev_info(dev, "using %s (tx) and %s (rx) for DMA transfers\n",
 >  		dma_chan_name(dma->chan_tx), dma_chan_name(dma->chan_rx));
-> =20
+>  
 > -	return;
 > +	return 0;
-> =20
+>  
 >  fail_rx:
 >  	dma_release_channel(dma->chan_rx);
-> @@ -460,6 +459,8 @@ static void i2c_imx_dma_request(struct imx_i2c_struct=
- *i2c_imx,
+> @@ -460,6 +459,8 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
 >  	dma_release_channel(dma->chan_tx);
 >  fail_al:
 >  	devm_kfree(dev, dma);
 > +
 > +	return ret;
 >  }
-> =20
+>  
 >  static void i2c_imx_dma_callback(void *arg)
-> @@ -1803,6 +1804,13 @@ static int i2c_imx_probe(struct platform_device *p=
-dev)
->  	if (ret =3D=3D -EPROBE_DEFER)
+> @@ -1803,6 +1804,13 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>  	if (ret == -EPROBE_DEFER)
 >  		goto clk_notifier_unregister;
-> =20
+>  
 > +	/* Init DMA config if supported */
-> +	ret =3D i2c_imx_dma_request(i2c_imx, phy_addr);
-> +	if (ret =3D=3D -EPROBE_DEFER) {
+> +	ret = i2c_imx_dma_request(i2c_imx, phy_addr);
+> +	if (ret == -EPROBE_DEFER) {
 > +		dev_err(&pdev->dev, "DMA not ready, go defer probe!\n");
 > +		goto clk_notifier_unregister;
 > +	}
+> +
+>  	/* Add I2C adapter */
+>  	ret = i2c_add_numbered_adapter(&i2c_imx->adapter);
+>  	if (ret < 0)
+> @@ -1817,9 +1825,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
+>  		i2c_imx->adapter.name);
+>  	dev_info(&i2c_imx->adapter.dev, "IMX I2C adapter registered\n");
+>  
+> -	/* Init DMA config if supported */
+> -	i2c_imx_dma_request(i2c_imx, phy_addr);
+> -
+>  	return 0;   /* Return OK */
+>  
+>  clk_notifier_unregister:
 
-Don't spam the logs if the driver defers probing, it's not a error. And
-it looks strange to ignore all other errors here. Either add a comment
-here, something like "continue without DMA", or let the function return
-0 in case the driver should continue and propagate the error if the
-caller should take care of it.
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---idutayp4iw5aar47
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmdFjQoACgkQKDiiPnot
-vG9yIgf+KeMn1/k836gXtD2Zg1FuuWGbO2RIaxvsdEJjgPTk0/uKBRn6hl6dcD6E
-WLeR88F/j/GCTj5kOuFWCDaUlTyIsnWvSHpy/Rj9BebzsAL6dbiUWQ7a8CGvvA6L
-PLtCoNC5JcooBTmqGXIRjRdBbpFnNo+BHPmwoeseFIbsTitjuESVjvsG6m8gDoAn
-w1zieedbBsvAhpiukgxVFav5PDe2wdrXtTBdwNYvynBhnbVNjxxrxhz3k5eaaBWq
-BSutaHC/ObVAMb8UqORr8TqQqlwZBuiPSxghHXdRl/7IMFhs6F3QdKIjlMZQPsoI
-YJcLA6tWs00i/VanuDHWa8WA2RMyWg==
-=Wvyt
------END PGP SIGNATURE-----
-
---idutayp4iw5aar47--
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
