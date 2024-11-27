@@ -1,155 +1,142 @@
-Return-Path: <linux-i2c+bounces-8229-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8230-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 621939D9D21
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Nov 2024 19:09:56 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F21A4161B9B
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Nov 2024 18:09:52 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E061DD88E;
-	Tue, 26 Nov 2024 18:09:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EqFjblAH"
-X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 729CF9DA026
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Nov 2024 01:56:54 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AA611187;
-	Tue, 26 Nov 2024 18:09:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3823A282F81
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Nov 2024 00:56:53 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D4E8BFF;
+	Wed, 27 Nov 2024 00:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IpMmrRsn"
+X-Original-To: linux-i2c@vger.kernel.org
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3564C7464;
+	Wed, 27 Nov 2024 00:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732644590; cv=none; b=nr18EGvAbUFZYtcw/JgbWYQXqtZirtK8OJ3fxUaHLvCyACt4iw/Tau1yhmuK6w6Ss2HFAFrzX/hnGaoJs5u+2ol4pBOYu0GURJbLqQS/LBgv9AS72i8rF8rI8LtG0unGZpN9jPQSrnwBH/WPD4BFhtyANAlECzDlIyeSCoRS2WY=
+	t=1732669009; cv=none; b=XJbpRGxX4wkDDP8Bh2T43VLbqi/CCuDa29g6MaG105KKG0hT7NY33DU+q9cCZAQK8PdMyyTi0fWJVly4J/Bn6i1Hm0q9rb4wCdlEHpgXYfCTWgsAz3WldSOu7b5kTJ1fOJBpqu1GFv9SLijZNkevFCty9wI/h1X5RqNH8I6KfS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732644590; c=relaxed/simple;
-	bh=Dn68kwfusM/F6PFzcK9RRMgIKLG8Q2p95XVK2fHrCpI=;
+	s=arc-20240116; t=1732669009; c=relaxed/simple;
+	bh=SU7sjnuvXx89piKsXBDVHVCBxQmJmobOXJg9m0XREXo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HdOb3CRsqfe9fYx8NLvdSWQtqA9LkkEO+B9/qVDmz4PC4Y5th0HlDAIA6e+i1PvExQYncUdHqwQSt14MftlBHKY3W7BCpgBc5dryCfvpWsxGJMbxGWa9vpJ/WcjYVKySLUL34scJqwIZcRtQQrWsWc3lJTdzQcJXAiLfYrbyG1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EqFjblAH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27BBC4CECF;
-	Tue, 26 Nov 2024 18:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732644589;
-	bh=Dn68kwfusM/F6PFzcK9RRMgIKLG8Q2p95XVK2fHrCpI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EqFjblAHK+acST9EGdraw8bb/dxcuETdMlcHHy2i1lRe1YVc5tLv+qNV31V6Ab/fU
-	 IcrBVFs5YMywsHEUWNBWXWYDqHdQLGadZVOxLIoo+npNxHP62hOvbpPxwvC6jr1dDZ
-	 b1gy3AwfIi0HyO7znaTYGuIS92IrJUuIfkAg3fiiPVBlgoOnO8DfZqLoHtqYBXeqTS
-	 W+mUh9K6EAxwZLXGOyDtqxWVScl7Opw9Ms4Seyj8uidgfsZSRQ0HXA9GZNALdX/3EN
-	 PEdlmZsoef3RyvyalQg2Nm6tJfL2C9jEk6dNSRQdz5PidL7KZOgVxjhzxzD9ADbsee
-	 yb2EMIaRpeYog==
-Date: Tue, 26 Nov 2024 18:09:43 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=RN2bcPxo5F69pIkn4IXCeGm2qZJEZnJF4FFRYCBIghQVzLfuzFiu7CELgOpnLXiZoiUr8VDiaoQAduaW7vGnbDuQ3xtarL10Mja5Nnh/sGl/lAAXAKUxQH1OvFpxdqhNZdHzuiR6M3UsV1lrZlFtUyjM6Ei35Uqth8yG4y1A2fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IpMmrRsn; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732669006; x=1764205006;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SU7sjnuvXx89piKsXBDVHVCBxQmJmobOXJg9m0XREXo=;
+  b=IpMmrRsn+mzgR864jTGitPlax3Z0h2wGsa35L+ON3WtBKFg/Wy4rZ3Qs
+   EhbIyWiNaBbak7b6iF2mttuK80Sba2hR/CpEiWoI+wt66986zrR4UKro5
+   XP4K2cED9GcYrJbf7Cbg/U2uD9xkpydMdF9pxz0NVZYexDro9IGaMcba5
+   Tr4pMJHvKjPOKhX2cqlIsSQAN3M4YZCrnnyxPSSN3RQrwi+6NZKLDHdqE
+   tC4WNga4G07yLRfbTOLxyf6Pwfji+ZMjjoMojHZhy+mOru9M5TWnWoHbc
+   m2ip4e//EaG3OHwXH/fX19Ho1CfrGk1zpAFSOJugBCzHuQjuwnednS9tA
+   Q==;
+X-CSE-ConnectionGUID: qBiTgFgLR66u8ylN1l0WBg==
+X-CSE-MsgGUID: 80rHt7kRSdWLbmrVTc3B6Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11268"; a="50383949"
+X-IronPort-AV: E=Sophos;i="6.12,188,1728975600"; 
+   d="scan'208";a="50383949"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2024 16:56:44 -0800
+X-CSE-ConnectionGUID: S/NdkWs9QH+kObQfEiNOkg==
+X-CSE-MsgGUID: uxUYF5O7SsGkXuI6gQ9V/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,188,1728975600"; 
+   d="scan'208";a="115055182"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 26 Nov 2024 16:56:41 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tG6MA-0007dH-2Y;
+	Wed, 27 Nov 2024 00:56:38 +0000
+Date: Wed, 27 Nov 2024 08:56:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v3 1/9] dt-bindings: misc: Describe TI FPC202 dual port
- controller
-Message-ID: <20241126-precinct-corrode-516d3a476479@spud>
-References: <20241125-fpc202-v3-0-34e86bcb5b56@bootlin.com>
- <20241125-fpc202-v3-1-34e86bcb5b56@bootlin.com>
- <20241125-overhand-economist-5a3fc6339265@spud>
- <2072150.UuDqf3iUMg@fw-rgant>
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?unknown-8bit?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051,
+ adp1055 and ltp8800
+Message-ID: <202411270817.VqF8OwAB-lkp@intel.com>
+References: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="hkZzaXn6Nj+Xev9H"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2072150.UuDqf3iUMg@fw-rgant>
+In-Reply-To: <20241120035826.3920-3-cedricjustine.encarnacion@analog.com>
 
+Hi Cedric,
 
---hkZzaXn6Nj+Xev9H
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-On Tue, Nov 26, 2024 at 09:05:42AM +0100, Romain Gantois wrote:
-> Hello Conor,
->=20
-> On lundi 25 novembre 2024 19:26:35 heure normale d=E2=80=99Europe central=
-e Conor Dooley wrote:
-> > On Mon, Nov 25, 2024 at 09:45:15AM +0100, Romain Gantois wrote:
-> > > The FPC202 dual port controller serves as a low speed signal aggregat=
-or
-> > > for
-> ...
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - gpio-controller
-> > > +  - "#gpio-cells"
-> > > +  - reg
-> > > +  - "#address-cells"
-> > > +  - "#size-cells"
-> > > +  - i2c@0
-> > > +  - i2c@1
-> >=20
-> > btw, why are both downstream ports required?
->=20
-> It's because both downstream ports are always present in an FPC202 unit
-> so in my opinion, it doesn't make sense to describe an FPC202 with only o=
-ne
-> downstream port.
->=20
-> I suppose you could also consider that ports would only be described in t=
-he DT
-> if they were connected to something in the hardware, but I don't think it=
- would
-> make sense to use an FPC202 in this way. After all, the whole point of th=
-is
-> component is to act as an I2C ATR and low-speed signal aggregator for
-> downstream devices which would have address collisions if you placed them
-> on the same I2C bus.
->=20
-> But then again, you could consider that DT bindings should only describe =
-what is
-> possible, and not only what makes sense as a use case. I don't really kno=
-w how to
-> answer this question myself, so I'll refer to the maintainers' opinions.
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.12 next-20241126]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I don't really know what how this device works, which is why I am asking
-questions. If there is no use case were someone would only wire up one
-of the downstream ports then making both required is fine. I was just
-thinking that someone might only hook devices up to one side of it and
-leave the other unused entirely. Seemed like it could serve its role
-without both sides being used based on the diagram in
-https://docs.kernel.org/i2c/i2c-address-translators.html
-unless it is not possible for the atr to share the "parent" i2c bus with
-other devices?
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-bindings-for-adp1051-adp1055-and-ltp8800/20241121-144856
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20241120035826.3920-3-cedricjustine.encarnacion%40analog.com
+patch subject: [PATCH 2/2] hwmon: (pmbus/adp1050): add support for adp1051, adp1055 and ltp8800
+config: loongarch-randconfig-r111-20241122 (https://download.01.org/0day-ci/archive/20241127/202411270817.VqF8OwAB-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 14.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20241127/202411270817.VqF8OwAB-lkp@intel.com/reproduce)
 
---hkZzaXn6Nj+Xev9H
-Content-Type: application/pgp-signature; name="signature.asc"
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411270817.VqF8OwAB-lkp@intel.com/
 
------BEGIN PGP SIGNATURE-----
+sparse warnings: (new ones prefixed by >>)
+>> drivers/hwmon/pmbus/adp1050.c:88:39: sparse: sparse: incorrect type in argument 2 (different modifiers) @@     expected struct pmbus_driver_info *info @@     got struct pmbus_driver_info const *[assigned] info @@
+   drivers/hwmon/pmbus/adp1050.c:88:39: sparse:     expected struct pmbus_driver_info *info
+   drivers/hwmon/pmbus/adp1050.c:88:39: sparse:     got struct pmbus_driver_info const *[assigned] info
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ0YO5wAKCRB4tDGHoIJi
-0peVAP0Tx4IuAFRG1f+DIwASl/6j0oDlZVMHvalzkyIQp7Ma4QD/WL2qSBDyyW3P
-hTovWdSEjm5sUQSwdUr2MU+1r5AGpgo=
-=Hc1y
------END PGP SIGNATURE-----
+vim +88 drivers/hwmon/pmbus/adp1050.c
 
---hkZzaXn6Nj+Xev9H--
+    79	
+    80	static int adp1050_probe(struct i2c_client *client)
+    81	{
+    82		const struct pmbus_driver_info *info;
+    83	
+    84		info = device_get_match_data(&client->dev);
+    85		if (!info)
+    86			return -ENODEV;
+    87	
+  > 88		return pmbus_do_probe(client, info);
+    89	}
+    90	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
