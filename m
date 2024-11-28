@@ -1,620 +1,289 @@
-Return-Path: <linux-i2c+bounces-8250-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8251-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F07789DB2F1
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Nov 2024 07:54:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91EE69DBBF3
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Nov 2024 18:51:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BFC3B20D35
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Nov 2024 06:54:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C66C281F63
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Nov 2024 17:51:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C87145B21;
-	Thu, 28 Nov 2024 06:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 307271BE238;
+	Thu, 28 Nov 2024 17:50:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="j3ZHGgiS"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="rkjMSvyb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2072.outbound.protection.outlook.com [40.107.104.72])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1162E13B590;
-	Thu, 28 Nov 2024 06:54:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732776851; cv=fail; b=BGmo28CfbZhQP8sw3vKC4hIk6iKVuqU8AZbJv75SA+hgtAKHCSnVQDfXr+NOhEdtH6SISmtLR9Sc6wCHJIUB7qqAwXZPqorAjf6XbME3kcyu+EUKQF6kgliXgUhKrvGptY9Mjy5ZGclN+0ALK9+S3DC0UbZ5XqX7ObaqpC1gSMw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732776851; c=relaxed/simple;
-	bh=LWzkNBOn2iOe61OikU8b4oJLSKLFt+2s2dlRr507j0c=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=GUj68CjyniUt0ECPNDOqqlOfes5A3BPyPslCUKQEqZw0npk1KwqENQsxUBCzHoCWfbvM56X5rC7B3g++uDlK/ZknFhpAfW/FJeS84n8axspso3aE8sellvZzBDldvrmn4eHCiDKvCL8D5hAbAMjVukNz3rzkmwcFneCpBA5GBm0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=j3ZHGgiS; arc=fail smtp.client-ip=40.107.104.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ylGrO8FaUHmpuOB/sch+kdVwF+hbOM7ztRgIWZSpHGZvE92zhK7Gk81DtT09gIemH+A8j+FhYabn6tgMjBScx9oJyXNyWR8x5tuaPYZA9cEH9XG+rXKIfHs0bFIuuJ9lHY+1C5AXBJhazCXTp4+g+1VQ3bSuiXGbQBr2UxmGpRHRj/QzECYPbWIlbWI2SPOahE/zEHD0QjNrkSXD1Y8JIdyFqC1vfoXFIiZs6EFOihwb07xcW7+EbFLdF4MdiW0WLEZ3rFqWzkKRbymy4STlRiqN524O8c7Jvb+sq0uyj6Gs/qpvcbqMS+oCEpTt/RWWuWJ6bBqOxAnlGDc/nKANlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Tgeg+e/ZvUXKZDYTynkZgpbU0g6UXeS4r9Ja5ZQpj3U=;
- b=pPaoLnefsunAaZy4C1PpU10w90SRcC+Kt2PzMKrYLjM7I3Q0HvXeV5cGYL6U9okgw/Qjqa5oxwERcJwDcn3Z37NE5TiKabwGFriloEUGX/f+ygJV2uHZMYIKVFwR/5xxKDDLjo43tgJOggzR+v29gHEDb2uNet0q7RHOHQlptzCuNC0I1nCi4p6UxiOci7ygtAARx8S/128cZb95pa1PxFLEhVWdRDXJIuyyC5tFXkfs3XV8hwBrbYCexKNYMGl6yGb12BciDy5s5VhE4H6d45KkcroxgXxTeTiFk54HsU76hM6O4264addKXyZQbEVZf9494QloOsu9fQq4yLvutA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tgeg+e/ZvUXKZDYTynkZgpbU0g6UXeS4r9Ja5ZQpj3U=;
- b=j3ZHGgiSiL2ND+CGOPJfMKJqr40+CNAmtC3i+LDf58Z1V6tEaoKq1S1cqPRJnffqWCPYWTsPVEmhiWlXqHwV/tZh2XmFJe9ihfXGdhN7ajy8qntxJV/+96nDWAqJ7bY6MR3pmvhKezKTEoarOh9/i89hDvIY8mEYnYVW0NW7wxUk69197ck7pd5Nnk3Prguy5mhBEEvKr3vGu2Q+Qpt/6OxYAHwVg29KtUFResi/wKvT28ofYPsdZQ7cdQjxogL0ZpHHy/nwjYgoAFrtUA1xQ9wlDKfd9WhGeYcrmBlrQs0Wg2mpDzaoOs9IY1KeWqkuPYcOrY/TgrQ0YQnlTmE3qw==
-Received: from AM0PR0402MB3937.eurprd04.prod.outlook.com (2603:10a6:208:5::22)
- by AM8PR04MB7809.eurprd04.prod.outlook.com (2603:10a6:20b:242::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.14; Thu, 28 Nov
- 2024 06:54:04 +0000
-Received: from AM0PR0402MB3937.eurprd04.prod.outlook.com
- ([fe80::4e37:f56b:8a3e:bff0]) by AM0PR0402MB3937.eurprd04.prod.outlook.com
- ([fe80::4e37:f56b:8a3e:bff0%4]) with mapi id 15.20.8048.020; Thu, 28 Nov 2024
- 06:54:04 +0000
-From: Carlos Song <carlos.song@nxp.com>
-To: Ahmad Fatoum <a.fatoum@pengutronix.de>, "mkl@pengutronix.de"
-	<mkl@pengutronix.de>, Frank Li <frank.li@nxp.com>, "o.rempel@pengutronix.de"
-	<o.rempel@pengutronix.de>, "kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>, "shawnguo@kernel.org"
-	<shawnguo@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>
-CC: "imx@lists.linux.dev" <imx@lists.linux.dev>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4] i2c: imx: support DMA defer probing
-Thread-Topic: [PATCH v4] i2c: imx: support DMA defer probing
-Thread-Index: AQHbQLkj2JmsLENAeEerpa0YTZxURbLMBLQQ
-Date: Thu, 28 Nov 2024 06:54:04 +0000
-Message-ID:
- <AM0PR0402MB3937CD206F229B750EB790E4E8292@AM0PR0402MB3937.eurprd04.prod.outlook.com>
-References: <20241127083818.2108201-1-carlos.song@nxp.com>
- <153e8e36-7b0e-4379-9cc3-6dacb5d705be@pengutronix.de>
- <AM0PR0402MB39370E69BC4B71C761EE8377E8282@AM0PR0402MB3937.eurprd04.prod.outlook.com>
-In-Reply-To:
- <AM0PR0402MB39370E69BC4B71C761EE8377E8282@AM0PR0402MB3937.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR0402MB3937:EE_|AM8PR04MB7809:EE_
-x-ms-office365-filtering-correlation-id: 94fdaea2-7382-4489-c8de-08dd0f7972be
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?L37PCkJ8H5oAJIoVcqYVqmdJ4RelLm7KG4+23eGAg2kA3wRgnV7fE4AF6q1X?=
- =?us-ascii?Q?hLTAmhyGX0DLIkMoyiK7HVcePXePkN+SV3TwY3SmKLozBMOOQCyQrj6TLBPH?=
- =?us-ascii?Q?phzP4nRaVBCLFxzP4DDCRDJq7WITKHlkQRalE8UzvLKa8GHKTmLSwOxRrnW/?=
- =?us-ascii?Q?cBsoeGgszBsw95flnojkw1K6BHxQNCkkpMciYqvLjm7+7bGS1e88QZWM4HKO?=
- =?us-ascii?Q?KNKf6cjd5sax5j7XhAGKWkgrKyFCkY1Iffusy0Qd+jZyvW+BZqOGHhcYZhzw?=
- =?us-ascii?Q?EM+V1hAWjnBHXmPBV92pwxCKUvaNoMmYu5OTFXKLOl/yNeWUr9Zb4Aj4X2xz?=
- =?us-ascii?Q?l9abiFy0ANF6KgjWrYK+q3YGs56sfhn3BAMm320gp3AHvKFFhtY/K64omxR/?=
- =?us-ascii?Q?VWdcP0jD21IUN1VOTE1ekYYAngqOFxCmQ86Ie6U4kIPQXMK4+VaDVQgNTBnb?=
- =?us-ascii?Q?mAkVqgb5FoS1RfnmVwe2bSjOg6Z4E2Oe85O2sSpjORcov0OOstznc8nRAkou?=
- =?us-ascii?Q?dceuJD+XIVV4L+1TBxbMFg3W9iLrf+4OokhDF9cKS7MpVAD8sRyS32/rH8HV?=
- =?us-ascii?Q?tpfUzz8Dy/3md90muVSwoo7FYjEWRrGNM1Y5a/L6to5FgGoyv097QGcJON1W?=
- =?us-ascii?Q?tqMxnjGzYxWHBvExB2f1AOFjgPYxX/gNodRu9ZxH/5SQ8LpVJlAOutytxnVV?=
- =?us-ascii?Q?3+wZAtZ0QaYARbDUy3rk18ZTKvsyBeb3GmxaE3MEesvOFEcGh7K4opbvzuwE?=
- =?us-ascii?Q?If+gVAMWntn/FuCMjZ+DwsrfBuSySUptOgAZGvRgu0Q+jkqjUse4AJTdROhE?=
- =?us-ascii?Q?OZe19XlPgkQjBnyDQF7jK/TDUMGSl1eqLvaiM+MkHRTTvOUaesbbUJc2AphQ?=
- =?us-ascii?Q?5Mj9VZcSExVj1gfy/F98ZKOYUVno5GLtc1IY7R3V21nb/JEjHic6OyILNMzq?=
- =?us-ascii?Q?BnQ00WTeVGw09jEfr5AiN3IZqmG4yXJCRG0NocNzlLEnGajIB9qGhQkcKQBr?=
- =?us-ascii?Q?zESCScnMJa6Hde30HdbP5w4k7zuwgPQq5VuqblpqnzDABhbdHBrKLnBWz2UF?=
- =?us-ascii?Q?+1qt736G1mEOTigYqU/PD4AQj68+0fDXvecgar4J4atTj10m1Sp0g8UjMinU?=
- =?us-ascii?Q?wAmDN/7zwvCVqPFtmKeZ2oWluhqhlCezappvqqXuBWhK0wZCbBWSx7H1cAGi?=
- =?us-ascii?Q?90FmfkLiLoZGqFjV1gdeCl+0azs5Ec52eZwbUoGCa1eqzZxMXUrFIOMLLBIw?=
- =?us-ascii?Q?BxZCbkiZgJkDDGUe03RQTFo1Jqryjoe3hKwOqZVx1bWUi520q/snzT0xNzgA?=
- =?us-ascii?Q?LYkzkgrtKLYIQOmNGjXndzFERChzHKzD1npiP1YJmHIzc78FKSKZ+FWoooX9?=
- =?us-ascii?Q?A9YZ89A=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3937.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?A3rIPigZsg8AE9yuYTRpj9kQcj7Ui0J1u7LClGyiirus+UUmVED2Q1bmHQhu?=
- =?us-ascii?Q?CHKpSs+MVgufLhfy1xyXOtZU8twF5qW0kwq5RLuZ9AyGWCRiufGoni3dX9pu?=
- =?us-ascii?Q?eYDSgOSYsDR4wUcebSQVJx1D73AEXitZs8tmAE7TqK685nqOttUIdTSmrL/9?=
- =?us-ascii?Q?WZYgbfYeef3g7mhM7UrUwBgt/FfU7pBxnGvCzmK94lK1GbJyhsUVK4r3nntH?=
- =?us-ascii?Q?49OHZJNLTkEXZBIjFTGNEEYil4xFAD0PqMjkGw3YJ1Z9AZng6C5NUCXPu1iH?=
- =?us-ascii?Q?1rP1xjvXPBqAaRUGMoZatX6odyzRx9dWuPBAF4/eFqMwcsSj4lsLGUY37ooo?=
- =?us-ascii?Q?OiMWbYMQ/x+PGqJs69iy145Veh+1vWuVjepH9TqVER7/umlROJ1wJe3vFEiT?=
- =?us-ascii?Q?J9EoS5jxOLWWjaiXFdleteIF00iv0avTw0kRBvJ5yRgTd4KtrcmYTOrR6ZM3?=
- =?us-ascii?Q?5bmWZz3ZwxRdqzP2Bwqy1umbmQBM9t5AtiXn6VUFcVfqJZHuCSw58VLsU1ej?=
- =?us-ascii?Q?KxrnJuMScUXFLbscgYDMGOJfppMAt5L17rr3GnmYd0niQrogPjzn4va274L3?=
- =?us-ascii?Q?3qfiYhk5vSG8uAYSzGnRPfhNeTETC9CA4pWtMpo5vDWadPF7PHWvbTGajZ5C?=
- =?us-ascii?Q?aj6biUPzQZkaGDkCxgeCukiIUf2L9BUeZO/QruSIo0qXFqwveGxCrW5huoko?=
- =?us-ascii?Q?LXI6dukFBpVWAWz4u21MVCid3sqBKrSEkOKSsGwyt6wP6DvX+uVmCOtjHrxs?=
- =?us-ascii?Q?oBke0vI2shjvUG8DoACbSw5y5TpwhlAtIO7tlYo2y8oQPhqwbT1ES8INLS8B?=
- =?us-ascii?Q?mHGdmpqxamZJY7cdIYa84PE0Us6DncGnfUbDCSIx67pdLznSEiC4a3n7/Zbm?=
- =?us-ascii?Q?GzWuNG0lo0I6TNtv4q7WxsvsUJRxWT521iSvAG++X75/25UfvBLMKhSBKEJ3?=
- =?us-ascii?Q?KUHZ1ELjxGzcQbSejMcOATObu770+CrtIVs/yqdvsHARwxvgG5lBwBBTLQDH?=
- =?us-ascii?Q?4TInwacB4Fe4obNO721LzZt/n0QKI2mv8gwTjpG8r3hFBeVu9q6snd2IKxI2?=
- =?us-ascii?Q?FXPOj9/e2e0gDdERbodUimu0hDHZWWPnWbalfXzYXxkvRu8XRH3C5R/39wfT?=
- =?us-ascii?Q?Jd/UtpJo87SzrbdwoMjSNMfmwxoEBwqJ9X0MOnqRIUCZgOdIgHgs+4Xz2FAA?=
- =?us-ascii?Q?zlLBbKq7/SseAUd+TFQxZDVLjiK+MLt8wEsSi5i66C1xUkojrp2G6QK8YizD?=
- =?us-ascii?Q?A4Seu8zLgsugdFGhlndsKDWds5KLFBffYmM+UCpES3u0jTF5FEAnireXKaCN?=
- =?us-ascii?Q?sCNOPrCAGKWwRe9HVE6WolWLRxsHd79nyMBzipf+kqAtIckmFm70fxOBp2YN?=
- =?us-ascii?Q?89TabRL6+YgKQQ7NRMh+79CwcX+Edt0H2vEwB1HdY4JFWDEVPqSc+Vje/l8b?=
- =?us-ascii?Q?n6c0aR6ZGyPbV+qy33a/kBfQoi0jId26FlUfgJQWiBeDduPNm4wtUMk8oKx1?=
- =?us-ascii?Q?7+Q2Ti9zUB2S/3/aCHjIczpj9e1JFtUfqkxC1Tt+uD3oZUT9NGg33hTs5Qfw?=
- =?us-ascii?Q?2sM78GjMm40HGz/VcSU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7166E2BE;
+	Thu, 28 Nov 2024 17:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732816256; cv=none; b=dPoejZkjBFsdxyYENKOW8apY/3OTNfQ2J+HDQjzmTvBXouEHLzmMVwftajfHe6VWInPkqXHZTxkfdBIIZCEapvMAgFtqQh2vQJa284R4tN8Z6/LqDj4ulHoP7QAtqma1MODeeR99X/WhrtaxVpQoPgyCPuHr5hIUevIqIBECL8Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732816256; c=relaxed/simple;
+	bh=SovO8bO/4SkAGQ5PxJrpQYbIb7A25285Cs95y0isrT0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ThMK3W/8Ss6FqaUw8RgBvFRBv0oWhIIE1kJMmk/b5kAA2IyS2rkNrGempCzgIzUsl8Ii5K0UXUfXevZcXkH/xfGUKJvG+uZS/HWtNiYRdM1M7ubD12XgGrZPtZODcGVEZNAFEvJ7ZII3O34P+TGt9roxbuanpPFa3oNisnrnpg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=rkjMSvyb; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-157-155-49.elisa-laajakaista.fi [91.157.155.49])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4D161526;
+	Thu, 28 Nov 2024 18:50:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1732816225;
+	bh=SovO8bO/4SkAGQ5PxJrpQYbIb7A25285Cs95y0isrT0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=rkjMSvybIueUJ8loIEjG2jz/4bpJ3Ls4ZH0R/sUFZ/BlZEu2JIBxtnWlhxZMeu7e2
+	 txedk8hWLhrvJU7lz/n6G4ZCFEk2//UvJxqEsizG7VwuYcQHh/KZtzpUQPSQsFu2J3
+	 1Wx3kfKd/xJ+GpAs0TZhQa3e9mHXg9Jpi+B0x6iA=
+Message-ID: <30732dbb-21e6-4075-84b1-544fc6e6abce@ideasonboard.com>
+Date: Thu, 28 Nov 2024 19:50:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3937.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94fdaea2-7382-4489-c8de-08dd0f7972be
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2024 06:54:04.6633
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: orrPNjNbiYfYdHPpq5tN7Bikk6r4O5/bz+a635Iwigvxwjhh9kj+p9FFVGpL2qKSN/TyEDinUTCE9atVVJ2jzQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7809
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] i2c: atr: Allow unmapped addresses from nested
+ ATRs
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Cosmin Tanislav <demonsingur@gmail.com>,
+ Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+ Romain Gantois <romain.gantois@bootlin.com>
+References: <20241122-i2c-atr-fixes-v2-0-0acd325b6916@ideasonboard.com>
+ <20241122-i2c-atr-fixes-v2-2-0acd325b6916@ideasonboard.com>
+ <20241126091610.05e2d7c7@booty>
+ <b954c7b7-1094-48f9-afd9-00e386cd2443@ideasonboard.com>
+ <20241127131931.19af84c2@booty>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <20241127131931.19af84c2@booty>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Hi,
 
+On 27/11/2024 14:19, Luca Ceresoli wrote:
+> Hello Tomi,
+> 
+> On Tue, 26 Nov 2024 10:35:46 +0200
+> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+> 
+>> Hi Luca,
+>>
+>> On 26/11/2024 10:16, Luca Ceresoli wrote:
+>>> Hello Tomi,
+>>>
+>>> On Fri, 22 Nov 2024 14:26:19 +0200
+>>> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+>>>    
+>>>> From: Cosmin Tanislav <demonsingur@gmail.com>
+>>>>
+>>>> i2c-atr translates the i2c transactions and forwards them to its parent
+>>>> i2c bus. Any transaction to an i2c address that has not been mapped on
+>>>> the i2c-atr will be rejected with an error.
+>>>>
+>>>> However, if the parent i2c bus is another i2c-atr, the parent i2c-atr
+>>>> gets a transaction to an i2c address that is not mapped in the parent
+>>>> i2c-atr, and thus fails.
+>>>
+>>> Nested ATRs are "interesting", to say the least! :-)
+>>>
+>>> I must say I don't understand the problem here. If this is the picture:
+>>>
+>>>     adapter ---->     ATR1     ---->     ATR2     ----> leaf device
+>>>                       map:               map:              addr:
+>>>                    alias addr         alias addr           0x10
+>>>                    0x30  0x20         0x20  0x10
+>>>
+>>> Then I'd expect this:
+>>>
+>>>    1. the leaf device asks ATR2 for a transaction to 0x10
+>>>    2. 0x10 is in ATR2 map, ATR2 translates address 0x10 to 0x20
+>>>    3. ATR2 asks ATR1 for a transaction to 0x20
+>>>    4. 0x20 is in ATR1 map, ATR1 translates address 0x20 to 0x30
+>>>    5. ATR1 asks adapter for transaction on 0x30
+>>>
+>>> So ATR1 is never asked for 0x10.
+>>
+>> Yes, that case would work. But in your example the ATR1 somehow has
+>> created a mapping for ATR2's alias.
+> 
+> You're of course right. I had kind of assumed ATR1 is somehow
+> configured to map 0x30 on 0x20, but this is not going to happen
+> magically and there is no code AFAIK to do that. So of course my
+> comment is bogus, thanks for taking time to explain.
+> 
+>> Generally speaking, ATR1 has aliases only for devices in its master bus
+>> (i.e. the i2c bus where the ATR1 is the master, not slave), and
+>> similarly for ATR2. Thus I think a more realistic example is:
+>>
+>>       adapter ---->     ATR1     ---->     ATR2     ----> leaf device
+>>                      addr: 0x50         addr: 0x30
+>>                         map:               map:              addr:
+>>                      alias addr         alias addr           0x10
+>>                      0x40  0x30         0x20  0x10
+>>
+>> So, both ATRs create the alias mapping based on the i2c-aliases given to
+>> them in the DT, for the slave devices in their i2c bus. Assumption is,
+>> of course, that the aliases are not otherwise used, and not overlapping.
+>>
+>> Thus the aliases on ATR2 are not present in the alias table of ATR1.
+> 
+> OK, so the above is what now I'd expect to be configured in the ATR
+> alias tables.
+> 
+> I still fail to understand how that would work. This is the actions I'd
+> expect:
+> 
+>    1. the leaf device asks ATR2 for a transaction to 0x10
+>    2. 0x10 is in ATR2 map, ATR2 translates address 0x10 to 0x20
+>    3. ATR2 asks ATR1 for a transaction to 0x20
+>    4. 0x20 is *not* in ATR1 map, *but* this patch is applied
+>        => i2c-atr lets the transaction through, unmodified
+>    5. ATR1 asks adapter for transaction on 0x20
+>    6. adapter sends transaction for 0x20 on wires
+>    7. ATR1 chip receives transaction for 0x20
+>        => 0x20 not in its tables, ignores it
+> 
+> Note steps 1-5 are in software (kernel). Step 7 may work if ATR1 were
+> configured to let all transactions for unknown addresses go through
+> unmodified, but I don't remember having seen patches to allow that in
+> i2c-atr.c and I'm not even sure the hardware allows that, the DS90UB9xx
+> at least.
 
-> -----Original Message-----
-> From: Carlos Song
-> Sent: Wednesday, November 27, 2024 6:43 PM
-> To: Ahmad Fatoum <a.fatoum@pengutronix.de>; mkl@pengutronix.de; Frank Li
-> <frank.li@nxp.com>; o.rempel@pengutronix.de; kernel@pengutronix.de;
-> andi.shyti@kernel.org; shawnguo@kernel.org; s.hauer@pengutronix.de;
-> festevam@gmail.com
-> Cc: imx@lists.linux.dev; linux-i2c@vger.kernel.org;
-> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v4] i2c: imx: support DMA defer probing
->
->
->
-> > -----Original Message-----
-> > From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> > Sent: Wednesday, November 27, 2024 4:38 PM
-> > To: Carlos Song <carlos.song@nxp.com>; mkl@pengutronix.de; Frank Li
-> > <frank.li@nxp.com>; o.rempel@pengutronix.de; kernel@pengutronix.de;
-> > andi.shyti@kernel.org; shawnguo@kernel.org; s.hauer@pengutronix.de;
-> > festevam@gmail.com
-> > Cc: imx@lists.linux.dev; linux-i2c@vger.kernel.org;
-> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> > Subject: [EXT] Re: [PATCH v4] i2c: imx: support DMA defer probing
-> >
-> > Caution: This is an external email. Please take care when clicking
-> > links or opening attachments. When in doubt, report the message using
-> > the 'Report this email' button
-> >
-> >
-> > Hello Carlos,
-> >
-> > On 27.11.24 09:38, carlos.song@nxp.com wrote:
-> > > From: Carlos Song <carlos.song@nxp.com>
-> > >
-> > > Return -EPROBE_DEFER when dma_request_slave_channel() because DMA
-> > > driver have not ready yet.
-> > >
-> > > Move i2c_imx_dma_request() before registering I2C adapter to avoid
-> > > infinite loop of .probe() calls to the same driver, see
-> > > "e8c220fac415 Revert "i2c: imx: improve the error handling in
-> i2c_imx_dma_request()""
-> > > and "Documentation/driver-api/driver-model/driver.rst".
-> > >
-> > > Use CPU mode to avoid stuck registering i2c adapter when DMA
-> > > resources are unavailable.
-> >
-> > Please try to address open questions before sending new versions of
-> > the patch set. Otherwise, it's difficult to follow the conversation.
-> >
-> > Did you see my question[1] on your v2:
-> >
->
-> Hi, thank you so much! So sorry about it... I missed it yesterday. I will=
- answer
-> your question[1] in this mail.
->
->
-> > | Wouldn't this break probe for all i2c-imx users who have
-> > | CONFIG_IMX_SDMA disabled?
-> > |
->
-> I have tested i2c probe at IMX and LS platform when DMA disabled, it won'=
-t
-> break i2c-imx probe.
-> When require DMA channel in i2c_imx_dma_request, find no devices and retu=
-rn
-> -ENODEV, as you see at V4 patch, it will continue to probe and work in PI=
-O
-> mode.
-> I2C adapter should keep available whatever DMA mode is or isn't enabled.
->
-> > | Also I am wondering on what kernel version and what configuration
-> > | (CONFIG_I2C_IMX=3D?, CONFIG_IMX_SDMA=3D?) you have that made you run
-> > | into this situation.
-> > |
->
-> I want to correct something, these code about DMA in i2c-imx.c is for eDM=
-A not
-> for SDMA.
-> For eDMA mode, I have tested this patch at layerscape-1043 platform. My p=
-atch
-> is based on
-> cfba9f07a1d6 (tag: next-20241122, origin/master, origin/HEAD).
->
-> Test log is :
-> No apply this patch:
-> CONFIG_I2C_IMX=3Dy
-> CONFIG_FSL_EDMA=3Dy
-> root@ls1043ardb:~# dmesg | grep i2c
-> [    1.162053] i2c i2c-0: IMX I2C adapter registered
-> [    1.166826] i2c i2c-0: using dma0chan16 (tx) and dma0chan17 (rx) for D=
-MA
-> transfers
-> [    4.722057] i2c_dev: i2c /dev entries driver
->
-> Not apply the patch:
-> CONFIG_I2C_IMX=3Dy
-> CONFIG_FSL_EDMA=3Dm
-> root@ls1043ardb:~# dmesg | grep i2c
-> [    1.166381] i2c i2c-0: IMX I2C adapter registered
-> [    4.719226] i2c_dev: i2c /dev entries driver
-> (result shows i2c not enabled the eDMA mode) root@ls1043ardb:~# i2cdetect
-> -y -l
-> i2c-0   i2c             2180000.i2c                             I2C
-> adapter
-> root@ls1043ardb:~# i2cdetect -y 0
->      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-> 00:                         08 -- -- -- -- -- -- --
-> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 40: UU -- -- -- -- -- -- -- -- -- -- -- UU -- -- --
-> 50: -- UU UU UU -- -- -- -- -- -- -- -- -- -- -- --
-> 60: -- -- -- -- -- -- -- -- -- 69 -- -- -- -- -- --
-> 70: -- -- -- -- -- -- -- --
->
-> After apply the patch:
-> CONFIG_I2C_IMX=3Dy
-> CONFIG_FSL_EDMA=3Dm
-> root@ls1043ardb:~#
-> root@ls1043ardb:~# dmesg | grep i2c
-> [    4.697046] i2c_dev: i2c /dev entries driver
-> [    7.304142] imx-i2c 2180000.i2c: using dma0chan16 (tx) and dma0chan17
-> (rx) for DMA transfers
-> [    7.313532] i2c i2c-0: IMX I2C adapter registered
-> (result shows i2c probed after eDMA module installed) root@ls1043ardb:~#
-> root@ls1043ardb:~# i2cdetect -y -l
-> i2c-0   i2c             2180000.i2c                             I2C
-> adapter
-> root@ls1043ardb:~# i2cdetect -y 0
->      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-> 00:                         08 -- -- -- -- -- -- --
-> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 40: UU -- -- -- -- -- -- -- -- -- -- -- UU -- -- --
-> 50: -- UU UU UU -- -- -- -- -- -- -- -- -- -- -- --
-> 60: -- -- -- -- -- -- -- -- -- 69 -- -- -- -- -- --
-> 70: -- -- -- -- -- -- -- --
->
->
-> > | I'd have expected that with fw_devlink enabled, the I2C controller
-> > | wouldn't be probed before the DMA provider is available.
-> >
->
-> This is a legacy patch, it has been in our local tree for a long time. Th=
-e related
-> history is relatively vague.
-> I reproduced the problem and found this patch is effective, so I referred=
- the
-> community patch and legacy patch to rewrite the commit log(I am not sure =
-if
-> this would happened in some cases so I kept this information).
-> Now it seems that these descriptions are redundant. I should completely
-> removed this in the commit log:
->     Move i2c_imx_dma_request() before registering I2C adapter to avoid
->     infinite loop of .probe() calls to the same driver, see "e8c220fac415
->     Revert "i2c: imx: improve the error handling in i2c_imx_dma_request()=
-""
->     and "Documentation/driver-api/driver-model/driver.rst".
->
-> [1]:
-> https://lore.kernel.org/all/19a43db4-db5c-4638-9778-d94fb571a206@pengutr
-> onix.de/
-> [2]:https://lore.kernel.org/all/153e8e36-7b0e-4379-9cc3-6dacb5d705be@peng
-> utronix.de/
->
+DS90UB9xx has I2C_PASS_THROUGH_ALL. However, our particular use case is 
+with Maxim GMSL desers and sers. They're not as nice as the FPD-Link 
+devices in this particular area.
 
-Hi, Ahmad
+Cosmin, feel free to elaborate or fix my mistakes, but here's a summary:
 
-I have done more test about following comment in [1]:
-----------------
-> | I'd have expected that with fw_devlink enabled, the I2C controller
-> | wouldn't be probed before the DMA provider is available.
->
+The deserializers don't have ATRs, whereas the serializers do (so vice 
+versa compared to FPD-Link). The deserializers forward everything to all 
+enabled GMSL ports. At probe/setup time we can enable a single link at a 
+time, so that we can direct transactions to a specific serializer (or 
+devices behind it), but after the setup, we need to keep all the ports 
+enabled, as otherwise the video streams would stop for all the other 
+ports except the one we want to send an i2c transaction to.
 
-This is a legacy patch, it has been in our local tree for a long time. The =
-related history is relatively vague.
-I reproduced the problem and found this patch is effective, so I referred t=
-he community patch and
-legacy patch to rewrite the commit log(I am not sure if this would happened=
- in some cases so I kept this information).
-Now it seems that these descriptions are redundant. I should completely rem=
-oved this in the commit log:
-    Move i2c_imx_dma_request() before registering I2C adapter to avoid
-    infinite loop of .probe() calls to the same driver, see "e8c220fac415
-    Revert "i2c: imx: improve the error handling in i2c_imx_dma_request()""
-    and "Documentation/driver-api/driver-model/driver.rst".
-----------------
-You can refer the link about the history:
-[1]: https://lore.kernel.org/all/AM0PR0402MB39370E69BC4B71C761EE8377E8282@A=
-M0PR0402MB3937.eurprd04.prod.outlook.com/
+The serializers have their own i2c address, but transactions to anything 
+else go through the ser's ATR. The ATR does the translation, if an entry 
+exists in the table, but all transactions are forwarded, whether they 
+are translated or not.
 
-I don't know if I have understanded you rightly. But I am trying your expec=
-t.
-I create a new case, only add "return defer probe and error in i2c_imx_dma_=
-request()" and
-still keep i2c_imx_dma_request() after the adapter register.
+Where's the nested ATR, you ask? That's a detail which is a bit 
+"interesting": all the serializers have a default i2c address. So we can 
+have 4 serializers all replying to the same address. But we don't have 
+an ATR at the deser. However, we can change the address of the 
+serializer by writing to a serializer register. This must be done at the 
+deser probe time (and before the ser driver probes) where we can enable 
+just a single link at a time. So at probe time we change the addresses 
+of the serializers to be distinct values.
 
-The code step like:
-  ret =3D i2c_add_numbered_adapter()
-  ...
-  ret =3D i2c_imx_dma_request(i2c_imx, phy_addr);
-  if (ret =3D=3D -EPROBE_DEFER)
-        goto delete_adapter;
-  ...
-  return 0;
+Still no ATR, right? Well, the i2c-atr accomplishes the above quite 
+nicely: there's an address pool (for the new ser addresses), 
+.attach_client() where we can set the new address for the serializer, 
+and .detach_client() where we can (optionally) restore the original 
+address. This way the serializer driver will operate using the original 
+address, but when it does an i2c transaction, the i2c-atr changes it to 
+the new address.
 
-delete_adapter:
-        /* remove adapter */
-        dev_dbg(&i2c_imx->adapter.dev, "adapter removed\n");
-        i2c_del_adapter(&i2c_imx->adapter);
-clk_notifier_unregister:
-...
+So strictly speaking it's not an ATR, but this achieves the same.
 
-Now,
-CONFIG_I2C_IMX=3Dy
-CONFIG_FSL_EDMA=3Dm
-As you expected, if I understand rightly, I think I shouldn't see any i2c p=
-robe log until DMA is available.
+> And even in case that were possible, that would seems a bit fragile.
+> What if two child ATRs attached to two different ports of the parent
+> ATR use the same alias, and the parent ATR let transactions for such
+> alias go through both ports unmodified? Sure, the alias pools can be
+> carefully crafted to avoid such duplicated aliases, but pools have long
 
-When I make all i2c devices module installed, i2c still defer probe if DMA =
-is not available.
+Yes, the pools have to be non-overlapping and no overlap with anything 
+on the main i2c bus.
 
-root@ls1043ardb:~# dmesg | grep i2c
-[    1.153535] i2c i2c-0: IMX I2C adapter registered
-[    4.705068] i2c_dev: i2c /dev entries driver
-[    4.995118] i2c i2c-0: IMX I2C adapter registered
-[    5.003324] i2c i2c-0: IMX I2C adapter registered
-[    8.079458] i2c i2c-0: IMX I2C adapter registered
-[    8.213536] i2c i2c-0: IMX I2C adapter registered
-[    8.278704] i2c i2c-0: IMX I2C adapter registered
-[    8.283669] i2c i2c-0: using dma1chan16 (tx) and dma1chan17 (rx) for DMA=
- transfers
+I feel the GMSL HW requires quite strict design rules, and preferably 
+the deser would be on an i2c bus alone. I think an eeprom at 0x10 and a 
+remote sensor at 0x10 would cause trouble, without any way to deal with 
+it in the SW.
 
-However when I make some i2c devices build-in, the infinite loop of .probe(=
-) calls
-will happened:
+> been considered a non-optimal solution, and they make no sense at all
+> in cases like the FPC202 that Romain is working to support.
+> 
+> Again, I'm pretty sure I'm missing something here. If you could
+> elaborate with a complete example, including the case of two child ATRs
+> attached to two ports of the same parent ATR, I'm sure that would be
+> very helpful.
 
-[    5.004716] ina2xx 0-0040: supply vs not found, using dummy regulator
-[    5.012526] ina2xx 0-0040: power monitor ina220 (Rshunt =3D 1000 uOhm)
-[    5.021217] pcf85363 0-0051: registered as rtc0
-[    5.027042] pcf85363 0-0051: setting system clock to 2020-12-05T14:02:14=
- UTC (1607176934)
-[    5.035644] i2c i2c-0: IMX I2C adapter registered
-[    5.045357] ina2xx 0-0040: supply vs not found, using dummy regulator
-[    5.053111] ina2xx 0-0040: power monitor ina220 (Rshunt =3D 1000 uOhm)
-[    5.061748] pcf85363 0-0051: registered as rtc0
-[    5.067569] pcf85363 0-0051: setting system clock to 2020-12-05T14:02:14=
- UTC (1607176934)
-[    5.076148] i2c i2c-0: IMX I2C adapter registered
-[    5.097323] ina2xx 0-0040: supply vs not found, using dummy regulator
-[    5.105081] ina2xx 0-0040: power monitor ina220 (Rshunt =3D 1000 uOhm)
-[    5.113585] pcf85363 0-0051: registered as rtc0
-[    5.119402] pcf85363 0-0051: setting system clock to 2020-12-05T14:02:14=
- UTC (1607176934)
-[    5.127958] i2c i2c-0: IMX I2C adapter registered
-[    5.139289] ina2xx 0-0040: supply vs not found, using dummy regulator
-[    5.147014] ina2xx 0-0040: power monitor ina220 (Rshunt =3D 1000 uOhm)
-[    5.155584] pcf85363 0-0051: registered as rtc0
-[    5.161427] pcf85363 0-0051: setting system clock to 2020-12-05T14:02:14=
- UTC (1607176934)
-[    5.169968] i2c i2c-0: IMX I2C adapter registered
-[    5.181278] ina2xx 0-0040: supply vs not found, using dummy regulator
-[    5.189015] ina2xx 0-0040: power monitor ina220 (Rshunt =3D 1000 uOhm)
-[    5.197515] pcf85363 0-0051: registered as rtc0
-[    5.203394] pcf85363 0-0051: setting system clock to 2020-12-05T14:02:14=
- UTC (1607176934)
-[    5.211930] i2c i2c-0: IMX I2C adapter registered
-...
-[   26.405830] i2c i2c-0: IMX I2C adapter registered
-[   26.413765] ina2xx 0-0040: supply vs not found, using dummy regulator
-[   26.421485] ina2xx 0-0040: power monitor ina220 (Rshunt =3D 1000 uOhm)
-[   26.429980] pcf85363 0-0051: registered as rtc0
-[   26.435735] pcf85363 0-0051: setting system clock to 2020-12-05T14:02:35=
- UTC (1607176955)
-[   26.444324] i2c i2c-0: IMX I2C adapter registered
-[   26.452250] ina2xx 0-0040: supply vs not found, using dummy regulator
-[   26.459968] ina2xx 0-0040: power monitor ina220 (Rshunt =3D 1000 uOhm)
-[   26.468395] pcf85363 0-0051: registered as rtc0
-[   26.474233] pcf85363 0-0051: setting system clock to 2020-12-05T14:02:35=
- UTC (1607176955)
-[   26.482774] i2c i2c-0: IMX I2C adapter registered
-[   26.490694] ina2xx 0-0040: supply vs not found, using dummy regulator
-[   26.498405] ina2xx 0-0040: power monitor ina220 (Rshunt =3D 1000 uOhm)
-[   26.506897] pcf85363 0-0051: registered as rtc0
-[   26.512678] pcf85363 0-0051: setting system clock to 2020-12-05T14:02:35=
- UTC (1607176955)
+I hope my text above covered this.
 
-Is above test not in line with your expectations?(with fw_devlink enabled, =
-I2C controller wouldn't be probed before the DMA provider is available.)
+> At my current level of understanding, it looks like the only correct
+> way to manage nested ATRs is to add a "recursive alias mapping", i.e.
+> to add for each alias another alias to all parent ATRs, up to the top
+> one, like in my initial picture. I realize that would imply several
+> complications, though.
 
-When I apply the V4 patch. I2C adapter can defer probe and whatever i2c dev=
-ices module installed/build-in, no issue happened. The build-in device
-driver also start probing after adapter really registered:
-(-------------i2c_imx_dma_request--------------)
-[    7.437482] imx-i2c 2180000.i2c: using dma0chan16 (tx) and dma0chan17 (r=
-x) for DMA transfers
-(----------i2c_add_numbered_adapter-------------)
-[    7.446581] ina2xx 0-0040: supply vs not found, using dummy regulator
-[    7.455945] ina2xx 0-0040: power monitor ina220 (Rshunt =3D 1000 uOhm)
-[    7.465146] pcf85363 0-0051: registered as rtc0
-[    7.471052] pcf85363 0-0051: setting system clock to 2020-12-05T17:54:39=
- UTC (1607190879)
-[    7.479902] i2c i2c-0: IMX I2C adapter registered
+Yes, that has complications too. Say, if we have a device that has an 
+ATR but also passes everything through (like the GMSL ser), then the 
+driver has to manage two different kinds of aliases: one set for the 
+actual ATR, and one that are just pass-through ones.
 
-Inevitably, on some boards some i2c device drivers are build-in. The V4 pat=
-ch will avoid some issue and is safer for i2c-imx user at different platfor=
-m.
-So I think it is necessary to move i2c_imx_dma_request() before registering=
- I2C adapter and I should also keep the log part.
+Or what if we have i2c-atr - i2c-mux - i2c-atr chain. The system would 
+need to skip the i2c-mux, and continue to the first i2c-atr.
 
-> > >
-> > > Signed-off-by: Carlos Song <carlos.song@nxp.com>
-> > > Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> > > ---
-> > > Change for V4:
-> > > - Output "Only use PIO mode" log in debug level when no DMA configure=
-.
-> > > Change for V3:
-> > > - According to Marc's comment, remove error print when defer probe.
-> > >   Add info log when DMA has not been enabled and add error log when
-> > >   DMA error, both won't stuck the i2c adapter register, just for remi=
-nding,
-> > >   i2c adapter is working only in PIO mode.
-> > > Change for V2:
-> > > - According to Frank's comments, wrap at 75 char and Simplify fix cod=
-e
-> > >   at i2c_imx_dma_request().
-> > > - Use strict patch check, fix alignment warning at
-> > > i2c_imx_dma_request()
-> > > ---
-> > >  drivers/i2c/busses/i2c-imx.c | 31 +++++++++++++++++++++++--------
-> > >  1 file changed, 23 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/drivers/i2c/busses/i2c-imx.c
-> > > b/drivers/i2c/busses/i2c-imx.c index 5ed4cb61e262..b11d66d56c55
-> > > 100644
-> > > --- a/drivers/i2c/busses/i2c-imx.c
-> > > +++ b/drivers/i2c/busses/i2c-imx.c
-> > > @@ -397,17 +397,16 @@ static void i2c_imx_reset_regs(struct
-> > > imx_i2c_struct *i2c_imx)  }
-> > >
-> > >  /* Functions for DMA support */
-> > > -static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
-> > > -                                             dma_addr_t
-> > phy_addr)
-> > > +static int i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
-> > > +dma_addr_t phy_addr)
-> > >  {
-> > >       struct imx_i2c_dma *dma;
-> > >       struct dma_slave_config dma_sconfig;
-> > > -     struct device *dev =3D &i2c_imx->adapter.dev;
-> > > +     struct device *dev =3D i2c_imx->adapter.dev.parent;
-> > >       int ret;
-> > >
-> > >       dma =3D devm_kzalloc(dev, sizeof(*dma), GFP_KERNEL);
-> > >       if (!dma)
-> > > -             return;
-> > > +             return -ENOMEM;
-> > >
-> > >       dma->chan_tx =3D dma_request_chan(dev, "tx");
-> > >       if (IS_ERR(dma->chan_tx)) {
-> > > @@ -452,7 +451,7 @@ static void i2c_imx_dma_request(struct
-> > imx_i2c_struct *i2c_imx,
-> > >       dev_info(dev, "using %s (tx) and %s (rx) for DMA transfers\n",
-> > >               dma_chan_name(dma->chan_tx),
-> > > dma_chan_name(dma->chan_rx));
-> > >
-> > > -     return;
-> > > +     return 0;
-> > >
-> > >  fail_rx:
-> > >       dma_release_channel(dma->chan_rx);
-> > > @@ -460,6 +459,8 @@ static void i2c_imx_dma_request(struct
-> > imx_i2c_struct *i2c_imx,
-> > >       dma_release_channel(dma->chan_tx);
-> > >  fail_al:
-> > >       devm_kfree(dev, dma);
-> > > +
-> > > +     return ret;
-> > >  }
-> > >
-> > >  static void i2c_imx_dma_callback(void *arg) @@ -1803,6 +1804,23 @@
-> > > static int i2c_imx_probe(struct platform_device *pdev)
-> > >       if (ret =3D=3D -EPROBE_DEFER)
-> > >               goto clk_notifier_unregister;
-> > >
-> > > +     /*
-> > > +      * Init DMA config if supported, -ENODEV means DMA not enabled
-> at
-> > > +      * this platform, that is not a real error, so just remind "onl=
-y
-> > > +      * PIO mode is used". If DMA is enabled, but meet error when
-> request
-> > > +      * DMA channel, error should be showed in probe error log. PIO
-> mode
-> > > +      * should be available regardless of DMA.
-> > > +      */
-> > > +     ret =3D i2c_imx_dma_request(i2c_imx, phy_addr);
-> > > +     if (ret) {
-> > > +             if (ret =3D=3D -EPROBE_DEFER)
-> > > +                     goto clk_notifier_unregister;
-> > > +             else if (ret =3D=3D -ENODEV)
-> > > +                     dev_dbg(&pdev->dev, "Only use PIO mode\n");
-> > > +             else
-> > > +                     dev_err_probe(&pdev->dev, ret, "Failed to
-> > > + setup
-> > DMA, only use PIO mode\n");
-> > > +     }
-> > > +
-> > >       /* Add I2C adapter */
-> > >       ret =3D i2c_add_numbered_adapter(&i2c_imx->adapter);
-> > >       if (ret < 0)
-> > > @@ -1817,9 +1835,6 @@ static int i2c_imx_probe(struct
-> > > platform_device
-> > *pdev)
-> > >               i2c_imx->adapter.name);
-> > >       dev_info(&i2c_imx->adapter.dev, "IMX I2C adapter
-> > > registered\n");
-> > >
-> > > -     /* Init DMA config if supported */
-> > > -     i2c_imx_dma_request(i2c_imx, phy_addr);
-> > > -
-> > >       return 0;   /* Return OK */
-> > >
-> > >  clk_notifier_unregister:
-> >
-> >
-> > --
-> > Pengutronix e.K.                           |
-> > |
-> > Steuerwalder Str. 21                       |
-> > http://www.p/
-> > en
-> gutronix.de%2F&data=3D05%7C02%7Ccarlos.song%40nxp.com%7C1acf840d499f
-> >
-> 49a7872408dd0ebedc39%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0
-> > %7C638682935131084746%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjA
-> w
-> >
-> MDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&s
-> >
-> data=3DY9Qn9XEk15yu4CespwsNu6hl3%2FqfNTvEeOn4ZvnGxbo%3D&reserved=3D0
-> > |
-> > 31137 Hildesheim, Germany                  | Phone:
-> +49-5121-206917-0
-> > |
-> > Amtsgericht Hildesheim, HRA 2686           | Fax:
-> > +49-5121-206917-5555 |
+Probably both are solvable, though, but it doesn't sound simple.
+
+  Tomi
+
 
