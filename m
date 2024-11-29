@@ -1,233 +1,208 @@
-Return-Path: <linux-i2c+bounces-8255-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8256-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1593C9DBFE3
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 08:48:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E76B9DC135
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 10:12:58 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA5CE2819F2
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 07:48:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17E89163C4A
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 09:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2031581F2;
-	Fri, 29 Nov 2024 07:47:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D84F170A30;
+	Fri, 29 Nov 2024 09:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XzVwNK/7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nh5hDs9j"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584FE1386DA;
-	Fri, 29 Nov 2024 07:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79020143C40;
+	Fri, 29 Nov 2024 09:12:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732866478; cv=none; b=pgcDcxVRzTFonZ+bcRFH8AGxHCssTTGlIxawhynswf2h6135x90vlAeuYpfxTlg1kiOAPzgs2xPcAZCUFLN2x1uyAAFcjLWZP7CfX5BVjdgHWJQRrWwCvEmbHsLsb8Ut4uncUmFkawZl1YJVHAZT441Q3hVzk3qlbtimNEmlQSY=
+	t=1732871569; cv=none; b=IN+Z3ychhzf8YQoh7dZkLnrAxCtCewdZRJBG2pMAMS2GBNL/IVNk1MkbsFwx7Wf6cOg1D7xsXdB4kvPi6WSEqJv50wtwPGwB9uhLVXjwrxuQCuX5SquF+9jDdMt5sqdvQRb9hD1CujoNqjNkqMqEyjQaB8cFROh298Wz7yxf0Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732866478; c=relaxed/simple;
-	bh=kwuMROrURsHseoiSdB0iqwJm9reXjPuCRbvQJB4guio=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CKUgckgok5bV2FD88GMLOsLokU+Q1jSaYvJz5hVqMRC9dpCIx+Z2eRrpFxHWnlo7aB3Rjs88vIBGH2A7ymlLyroK48grkupPG3l/8cx1acWzvaGpHrBf1XKXrKmGOaFvfnqJMCE3ahJOVhRskAphpOh2rNoJeZbvGbRpkDlWpWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XzVwNK/7; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ASLafqV019798;
-	Fri, 29 Nov 2024 07:47:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=K3hNAk7Wtna1DBG67fmm8hJ0HmP9zar30SA
-	zfWmV4qA=; b=XzVwNK/7gOSLoLkizfgYWxJ6dfwbjZVhlRo83nJ7jrio8Hi7eOa
-	NxmJKAUfofez7SI65+vePjN1ipNt+K3vm35dtLkcw13EMH3wPNkc1UbgVXCwmGtn
-	F8NZtpUeUTQxhmYvjpzU5JhNJCvSJDQBpqJtyL3gsyKOuPY+Yz9G6V+5j8TQ+DEd
-	xkyzxheitq2WVQlnCZ9KIhO0G43EKm5Yz4YuUZHLgFTvnl2GOlgkH463IFYw8j78
-	3B6wJXdmSSnZLXUwDsAlDFt11xaCDLWdR+eWagcl6DK7C+UQ4ExXDkD67djQB6+G
-	8aweqyNSpBYSbvMlh8iZPEEiDZ5n+1tsHIA==
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4366y04py5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Nov 2024 07:47:50 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 4AT7llWt013065;
-	Fri, 29 Nov 2024 07:47:47 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 43384n0fsb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Nov 2024 07:47:47 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4AT7lldt013057;
-	Fri, 29 Nov 2024 07:47:47 GMT
-Received: from hu-maiyas-hyd.qualcomm.com (hu-msavaliy-hyd.qualcomm.com [10.213.110.207])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 4AT7lllR013054
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Nov 2024 07:47:47 +0000
-Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 429934)
-	id 63BD6240BE; Fri, 29 Nov 2024 13:17:46 +0530 (+0530)
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-To: andi.shyti@kernel.org, quic_bjorande@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, --cc=konrad.dybcio@linaro.org,
-        quic_vdadhani@quicinc.com, vkoul@kernel.org
-Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Subject: [PATCH v4] i2c: i2c-qcom-geni: Serve transfer during early resume stage
-Date: Fri, 29 Nov 2024 13:17:42 +0530
-Message-Id: <20241129074742.1844031-1-quic_msavaliy@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1732871569; c=relaxed/simple;
+	bh=dJ6IY9QS2O7JmjJbpKwvcmlKLPRPwSASvHz6cnbvrLs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=U6+QnQQEiNh2Ri5xb8aoY+L/YC+OzUIPl1xiXIvGky8X52oybBWAy53tCBnwVJrW1cPtM4x+sxbFvNkg+FUbjWd/G7owFqt3hqJdsFRRWdC9Co+oquIPb0TcxCY9J23w5vJ2CM/2DWGdbzTvWHp+sf2D2PCAH1uHJXlEl62n9W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nh5hDs9j; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43494a20379so15018755e9.0;
+        Fri, 29 Nov 2024 01:12:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732871566; x=1733476366; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dJ6IY9QS2O7JmjJbpKwvcmlKLPRPwSASvHz6cnbvrLs=;
+        b=Nh5hDs9jvWHa7g6XKUzzk6RbohMA4yWRH/0FyVqTamfleTR2jDmhtBV6vVtsF0Yp3q
+         hYvDSa/U1xh1Vq7nfQIUII8WtLUocOUv8N4kYFlm4ly8wmrTJLhU9/+adaPap6FSj2Wx
+         SunBZzurAuCbg8Ijot8JKmnV6tdRfIg9KkhkKQqVcmwqMur0w9N7hfIwToxCD/EHCQGW
+         0PxFNNCkiLRXO6axwy49zT1OTNdyqKF4vr6Crp2Pf1Ld++WceeI9q23PlthTzOiTZOgw
+         UrI6qwuUELItoJ0uDuKqWHcMguFqp0RVucjgOnZ98LrLSjaHevp691w/cUe4zHr5xG5A
+         se2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732871566; x=1733476366;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dJ6IY9QS2O7JmjJbpKwvcmlKLPRPwSASvHz6cnbvrLs=;
+        b=ramd/flqrfUgYbvUePutpmzEwbbJpu/hwToSsboVrquCYPXTpZgRGYw4Yu7p/R3CjP
+         UeObpS0tFrWqiNK2PfhJSOG69W0QpfMemM4q1t3t0ZVFUhLkiMsh1LNXJ0bIrnc71HAN
+         NUv/eCp1jqNc5SulWjeAhdMlCED0abrNTEDO97q6pn3xOGAbvfPmli+F3ztqx1MSZDZC
+         3d0ZXeDmZk2w0UIuzIVtO4FNcRnyvOuNMnXWz1VlSs5+tCWSbhmjEziaL7SVANvF30zw
+         ZwnmElTWTYhcQQiHQLjZ2rTj4syhEeu4XwraQ7jinpamnqhjf0j3o32RpqAOJPyd9wdO
+         tLCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUorMr5T8BhlRLTWs9G7wArGnJ2Dqch5fFivwy/N13NzAnB0YiV0snTpSux39g//jmykWbdOmywhNE=@vger.kernel.org, AJvYcCV/XDpPPxCzmxNchsMYnuO6n4MnQpQYlJMS2udTjRr1tUqYY5yw1GJRiu1sXz5XYn/D87wsRXZVprXl@vger.kernel.org, AJvYcCWfY7VinHM6slJVnLqBMDpNFsfd1DTgeWGqXj5TzJ+dkaZidf53EyVoPNKcl9GQC6cMOGwDWdW75kbmRteA@vger.kernel.org, AJvYcCXCCjz3R5dICvkgMGVYZSfmLNxR8gSboDFSrKwcW6DY4WcMVa+j4Cz6LeOe0cm7i/DwEltw2saga9U8OE8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGzXBWzp5xqMm3EeLJH070GBH8VxXgtcZMT2n/ZGmMam1ICPPt
+	H3oGfov6wtb5rms0l0p1SGlH6jzgrPJrnpxRZ4ZtUg+mIBaJzzU0
+X-Gm-Gg: ASbGncuEsvqY6TIi8MP4HKsLPRphrBD0pzkfWqgGvVgIXZpZyQ0eh+YdG+Jb5Z1tIkw
+	YcD0dwec2RvgN1gvG5tJ3hME71lMPeGhxO+mrMHGXsNbMRI8b+FwtVustezx2/hpRgOh0T/bD9V
+	Ym4W6bkSvxfXUoprK8f1ZOE+Q+to8x7u7iajkGY417bfMrSkV63iHX3pCkOZ9HVeTjjxu492Snw
+	jXn5E23oZN/cWcILg8v43qRzNMzyoNIg3IeFJpJoUw4fR4HZNq0FLJEUNJNpXFNE3sm5b7K6Gpk
+	hFyVZ8DvqlxMHNcbqNQu5BI=
+X-Google-Smtp-Source: AGHT+IGF5USQPPQnUyvNi/ekI6n1SlDmZye8w3YoCpMzfV67iTqVMeWXyPxA03INAS0aAlQ6wy7ufA==
+X-Received: by 2002:a05:600c:4e8a:b0:431:5ab3:d28d with SMTP id 5b1f17b1804b1-434a9dc3cc3mr100465735e9.9.1732871565606;
+        Fri, 29 Nov 2024 01:12:45 -0800 (PST)
+Received: from ?IPv6:2a01:599:923:c59f:ea19:16d1:ab07:4803? ([2a01:599:923:c59f:ea19:16d1:ab07:4803])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385ccd36855sm3905633f8f.36.2024.11.29.01.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Nov 2024 01:12:45 -0800 (PST)
+Message-ID: <f0cbbbe4b20f828fbd48b504a58437c06ef90908.camel@gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings
+ for adp1051, adp1055 and ltp8800
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>, 
+ Krzysztof Kozlowski
+	 <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>, Conor Dooley
+	 <conor@kernel.org>
+Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Jean Delvare
+ <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, Delphine CC Chiu
+ <Delphine_CC_Chiu@wiwynn.com>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Sabau,
+ Radu bogdan" <Radu.Sabau@analog.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+ <u.kleine-koenig@pengutronix.de>, "Torreno, Alexis Czezar"
+ <AlexisCzezar.Torreno@analog.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>
+Date: Fri, 29 Nov 2024 10:12:45 +0100
+In-Reply-To: <PH0PR03MB6938F9DE7173FE958D645CFE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
+References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
+	 <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
+	 <20241120-process-hulk-ecedcbf088f7@spud>
+	 <dfe8e47e-6c31-4b11-b733-38e5bd0e49d3@kernel.org>
+	 <7e55a403-eb1c-4369-8180-1639b50cc9b1@roeck-us.net>
+	 <4d907ddf-16ca-4136-b912-f571a691dc90@kernel.org>
+	 <PH0PR03MB6938F9DE7173FE958D645CFE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: sgFfcwCk6fSYCXsUa73aSfX2ZM0naH0p
-X-Proofpoint-GUID: sgFfcwCk6fSYCXsUa73aSfX2ZM0naH0p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- priorityscore=1501 bulkscore=0 malwarescore=0 adultscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2411290062
 
-pm_runtime_get_sync() function fails during PM early resume and returns
--EACCES because runtime PM for the device is disabled at the early stage
-causing i2c transfer to fail. Make changes to serve transfer with forced
-resume.
+On Mon, 2024-11-25 at 02:44 +0000, Encarnacion, Cedric justine wrote:
+> > -----Original Message-----
+> > From: Krzysztof Kozlowski <krzk@kernel.org>
+> > Sent: Thursday, November 21, 2024 2:39 AM
+> > To: Guenter Roeck <linux@roeck-us.net>; Conor Dooley <conor@kernel.org>=
+;
+> > Encarnacion, Cedric justine <Cedricjustine.Encarnacion@analog.com>
+> > Cc: devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> > i2c@vger.kernel.org; linux-doc@vger.kernel.org; linux-hwmon@vger.kernel=
+.org;
+> > Jean Delvare <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>;
+> > Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>; Rob Herring
+> > <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>; Conor Dool=
+ey
+> > <conor+dt@kernel.org>; Sabau, Radu bogdan <Radu.Sabau@analog.com>; Uwe
+> > Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>; Torreno, Alexis Cze=
+zar
+> > <AlexisCzezar.Torreno@analog.com>; Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com>
+> > Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindi=
+ngs
+> > for adp1051, adp1055 and ltp8800
+> >=20
+> > [External]
+> >=20
+> > On 20/11/2024 19:07, Guenter Roeck wrote:
+> > > On 11/20/24 09:35, Krzysztof Kozlowski wrote:
+> > > > On 20/11/2024 18:11, Conor Dooley wrote:
+> > > > > On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrot=
+e:
+> > > > > > add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 ADP1051: 6 PWM for I/O Voltage, I/O Cu=
+rrent, Temperature
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 ADP1055: 6 PWM for I/O Voltage, I/O Cu=
+rrent, Power, Temperature
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 LTP8800-1A/-2/-4A: 150A/135A/200A DC/D=
+C =C2=B5Module Regulator
+> > > > > >=20
+> > > > > > Co-developed-by: Alexis Czezar Torreno
+> > <alexisczezar.torreno@analog.com>
+> > > > > > Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@anal=
+og.com>
+> > > > > > Signed-off-by: Cedric Encarnacion
+> > <cedricjustine.encarnacion@analog.com>
+> > > > >=20
+> > > > > Why did you drop my ack?
+> > > > > https://urldefense.com/v3/__https://lore.kernel.org/all/20241106-
+> > linoleum-kebab-
+> > decf14f54f76@spud/__;!!A3Ni8CS0y2Y!7Q2KluGdg8cJW_wYUd-
+> > vh5mP66Ns62VZOkPG4Jf7NY9ULtTfjiwYqrUHbik_tI9X4izI6fAQS_7eVscdEFK_X
+> > OEm$
+> > > > So that's a v2? Or v3? Then should be marked correctly. Please star=
+t
+> > > > using b4. I already asked analog.com for this in few cases. Feel fr=
+ee
+> > > > not to use b4 if you send correct patches, but this is not the case=
+ here.
+> > > >=20
+>=20
+> Okay, I will start exploring b4 for future patches.
+>=20
 
-Few i2c clients like PCI OR touch may request i2c transfers during early
-resume stage. Any i2c client can keep transfer request very early resume
-stage like noirq phase of PM. To serve the transfer, register an interrupt
-with IRQF_EARLY_RESUME and IRQF_NO_SUSPEND flags to avoid timeout of
-transfer when IRQ is not enabled during early stage.
+Next time, reach out to me. I have been pointing everbody to b4 (if asked n=
+aturally).
 
-The actual usecase over i2c is(Not in upstream yet), PCIe client ->
-PCIe Driver -> I2C driver.
-PCIe client needs certain configurations over i2c after powering on the
-PCIe switch. As part of suspend it uses suspend_noirq() to turn off the
-switch, because some PCIe clients do some transfers till suspend_noirq()
-phase. And as part of resume_noirq(), it enables the power to the switch
-and configures the switch again through i2c.
+> > >=20
+> > > In general I agree, but this is a combination of two patch series, as=
+ mentioned
+> > > in the summary. I am not sure how to use versioning in such situation=
+s. Is it
+> > > v2 of one series or v3 of the other ?
+> > I would say the highest and keep the b4 changeset. This allows to use b=
+4
+> > diff easily. Choice done here - v1, no usage of b4=C2=A0 - breaks every=
+thing,
+> > look:
+> >=20
+> > b4 diff '<20241120035826.3920-1-cedricjustine.encarnacion@analog.com>'
+> > Grabbing thread from
+> > lore.kernel.org/all/20241120035826.3920-1-
+> > cedricjustine.encarnacion@analog.com/t.mbox.gz
+> > ---
+> > Analyzing 13 messages in the thread
+> > Could not find lower series to compare against.
+>=20
+> This is v2 of one and v3 of another. For the upcoming versions, should I
+> proceed to v4 which succeeds the highest or continue to v2 based on this
+> series?
+>=20
 
-If pm_runtime_get_sync() is failing when runtime PM is not enabled, then
-use pm_runtime_force_resume().
+It seems to me the highest is the preferred...
 
-Co-developed-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
----
-Link to V3: https://lore.kernel.org/all/20241119143031.3331753-1-quic_msavaliy@quicinc.com/T/
-
-v3->v4 :
- - Enhanced commit log by explaining client usecase scenario during early resume.
- - Covered 'usage_count' of 'struct dev_pm_info' under CONFIG_PM to compile non PM CONFIG.
-
----
-Link to V2: https://lore.kernel.org/lkml/202410132233.P25W2vKq-lkp@intel.com/T/
-
- v2 -> v3:
- - Updated exact usecase and scenario in the commit log description.
- - Removed bulleted points from technical description, added details in free flow.
- - Used pm_runtime_force_resume/suspend() instead customized local implementation.
- - Added debug log after pm_runtime_force_suspend().
-
----
-
- v1 -> v2:
- - Changed gi2c->se.dev to dev during dev_dbg() calls.
- - Addressed review comments from Andi and Bjorn.
- - Returned 0 instead garbage inside geni_i2c_force_resume().
- - Added comments explaining forced resume transfer when runtime PM
-   remains disabled.
----
-
-    V1 link: https://patches.linaro.org/project/linux-i2c/patch/20240328123743.1713696-1-quic_msavaliy@quicinc.com/
----
----
- drivers/i2c/busses/i2c-qcom-geni.c | 47 ++++++++++++++++++++++--------
- 1 file changed, 35 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 7a22e1f46e60..94f875aca9aa 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -695,17 +695,29 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 			 int num)
- {
- 	struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
-+	struct device *dev = gi2c->se.dev;
- 	int ret;
- 
- 	gi2c->err = 0;
- 	reinit_completion(&gi2c->done);
--	ret = pm_runtime_get_sync(gi2c->se.dev);
--	if (ret < 0) {
--		dev_err(gi2c->se.dev, "error turning SE resources:%d\n", ret);
--		pm_runtime_put_noidle(gi2c->se.dev);
--		/* Set device in suspended since resume failed */
--		pm_runtime_set_suspended(gi2c->se.dev);
--		return ret;
-+	/* Serve I2C transfer by forced resume if Runtime PM is enbled or not */
-+	if (!pm_runtime_enabled(dev) && gi2c->suspended) {
-+		#if (IS_ENABLED(CONFIG_PM))
-+		dev_dbg(dev, "Runtime PM is disabled hence force resume, pm_usage_count: %d\n",
-+			atomic_read(&dev->power.usage_count));
-+		#endif
-+		ret = pm_runtime_force_resume(dev);
-+		if (ret)
-+			return ret;
-+	} else {
-+		ret = pm_runtime_get_sync(gi2c->se.dev);
-+		if (ret < 0) {
-+			dev_err(gi2c->se.dev, "error turning SE resources:%d\n", ret);
-+			pm_runtime_put_noidle(gi2c->se.dev);
-+			/* Set device in suspended since resume failed */
-+			pm_runtime_set_suspended(gi2c->se.dev);
-+			return ret;
-+		}
- 	}
- 
- 	qcom_geni_i2c_conf(gi2c);
-@@ -715,8 +727,20 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 	else
- 		ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
- 
--	pm_runtime_mark_last_busy(gi2c->se.dev);
--	pm_runtime_put_autosuspend(gi2c->se.dev);
-+	/* if Runtime PM is disabled, do force_suspend() else autosuspend the driver */
-+	if (!pm_runtime_enabled(dev) && !gi2c->suspended) {
-+		ret = pm_runtime_force_suspend(dev);
-+		#if (IS_ENABLED(CONFIG_PM))
-+		dev_dbg(dev, "Runtime PM is disabled hence force suspend, pm_usage_count: %d\n",
-+			atomic_read(&dev->power.usage_count));
-+		#endif
-+		if (ret)
-+			return ret;
-+	} else {
-+		pm_runtime_mark_last_busy(gi2c->se.dev);
-+		pm_runtime_put_autosuspend(gi2c->se.dev);
-+	}
-+
- 	gi2c->cur = NULL;
- 	gi2c->err = 0;
- 	return ret;
-@@ -833,9 +857,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 	init_completion(&gi2c->done);
- 	spin_lock_init(&gi2c->lock);
- 	platform_set_drvdata(pdev, gi2c);
--
--	/* Keep interrupts disabled initially to allow for low-power modes */
--	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq, IRQF_NO_AUTOEN,
-+	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq,
-+			       IRQF_NO_AUTOEN | IRQF_EARLY_RESUME | IRQF_NO_SUSPEND,
- 			       dev_name(dev), gi2c);
- 	if (ret) {
- 		dev_err(dev, "Request_irq failed:%d: err:%d\n",
--- 
-2.25.1
+- Nuno S=C3=A1
 
 
