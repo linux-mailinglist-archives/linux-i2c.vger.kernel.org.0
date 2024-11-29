@@ -1,221 +1,276 @@
-Return-Path: <linux-i2c+bounces-8259-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8260-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A3029DC1BD
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 10:54:52 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC90F1632BC
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 09:54:48 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8E418858A;
-	Fri, 29 Nov 2024 09:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KHsdzp7a"
-X-Original-To: linux-i2c@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F7C09DC31E
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 12:53:59 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47938183CB8;
-	Fri, 29 Nov 2024 09:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 411C128216D
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 11:53:58 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B588194AFB;
+	Fri, 29 Nov 2024 11:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WxVyyEmT"
+X-Original-To: linux-i2c@vger.kernel.org
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E6933C5;
+	Fri, 29 Nov 2024 11:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732874086; cv=none; b=j85hn5cC0Jktg51zT7HULbe1tAx0dtOfO3H/TBhG4ZawJ3E5T1sa2zMXmIfNdNLM2/BOz9nH9AJGqdLHKACvrjW0qgwkBpWyvyXYyatiks8vvunQd6wH7LoID2KQy+qkb5pOHHTR4o+5I1leBkNRjpkj++HUIgS20YKO4aXVvlY=
+	t=1732881234; cv=none; b=inQUS6Ty/EvPR78UZvvG5iMcywspVGyDPbXBqwT91XULkDdHYQkZMb3G67odad4frHGbvcwaut+gUiUuO2rhVcdTBXMGobqsIWejGtofOwFIaO0T78jpdZePlSdK3GUDnpMkrw6/vq4iOU8N2Mqqkzdf9ah7bFsd/B/5Kpp3jOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732874086; c=relaxed/simple;
-	bh=KL4bVis3gEo0B4TOmVGIBjdTbMicbca8z4NKFTxx3A4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DNdARoe6R9AFTQmqXBH3tuECVT+Z1hyRT4WexJvrxsyex52NWgyyS1GeDzVylRnywD8jbTDBH+V9LnI2NP4Ea0ATqtIv6zWQZwIoC2AAzVPoUqSFW3esz4ycWP2e/yakNwdAnl0MXhsxvXGeKL8pjghof/3DP6xgMeyXmQjAm/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=KHsdzp7a; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from [192.168.88.20] (91-157-155-49.elisa-laajakaista.fi [91.157.155.49])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 91EC0A8F;
-	Fri, 29 Nov 2024 10:54:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1732874055;
-	bh=KL4bVis3gEo0B4TOmVGIBjdTbMicbca8z4NKFTxx3A4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KHsdzp7a4AV03+w/uEFFdkB8i8wbNRS9goa6OVXNI3EQJkuYdVOPnpRRVWCR9b/Zm
-	 sK9ah/osEiC+EcVpYqOQXJC6rWKfR/Kc/e9VFPzXd0H/DNMfsfSUg3yjct91oz76+5
-	 WunRYG7+W3dPdiUFun0fky7U/aaYlqln8HvCzUKY=
-Message-ID: <141bbac1-5289-4335-a566-387721439bef@ideasonboard.com>
-Date: Fri, 29 Nov 2024 11:54:35 +0200
+	s=arc-20240116; t=1732881234; c=relaxed/simple;
+	bh=j3kYlJUz0ZaK/afBJJ+9h38eNZLmTaPSKUIofRHnXP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NfTlgJmVwR/bOHvNJ5KgKkfTJvwT4zsXojmobVwjs80CBOxIfqXPoQumAhLa9a5LEkvdFw9P1Xuk9p3UZi+BPxJ+TqpvauvZjHlhII3RImPkN/crgQwSeRQ/mikCKaArx8R7byfvhc847rGo6C0UJyZTX1rscmHMcsrwavNUGxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WxVyyEmT; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A1191BF20A;
+	Fri, 29 Nov 2024 11:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1732881223;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ye5nj48q3iId/qtqeEWPGVqgFmv3xruHRbkutNeHEUI=;
+	b=WxVyyEmTB/70tworDrjJS+kD+9bqjDVCwq05DAD1v0pCIWt8LKCMBRMvzBsxN1gKU9hp3Y
+	ifSIfGT9m0DXAmUDMWkfT4e7AKzGjCM9J3d5Lg+4STimT9hKP0SO3Tc+8yBv/OfX95/vIN
+	2YSN7yMEGUWVnZ3YqFa8iL32V0DxGLSGKXw8dGb2XB0WQdhH2MF70yEnLNs0WxXKKfFE2S
+	y/A7E2iJAeeMWNla4BCmo0NkXvPseXES1lDJVMyVG/Fuo2Hu+CUg3eFb1Zf9UDtRThoXRa
+	874VXHlnVDtKJhpnqIgq28r2xw8YyGLV+Cu2Waqk5YA3Jm1FT/CgVS8o8rRmTA==
+Date: Fri, 29 Nov 2024 12:53:40 +0100
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Sakari Ailus
+ <sakari.ailus@linux.intel.com>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>, Mauro Carvalho
+ Chehab <mchehab@kernel.org>, Cosmin Tanislav <demonsingur@gmail.com>, Tomi
+ Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, Romain Gantois
+ <romain.gantois@bootlin.com>, Matti Vaittinen
+ <Matti.Vaittinen@fi.rohmeurope.com>
+Subject: Re: [PATCH v2 2/3] i2c: atr: Allow unmapped addresses from nested
+ ATRs
+Message-ID: <20241129125340.0e2c57d9@booty>
+In-Reply-To: <30732dbb-21e6-4075-84b1-544fc6e6abce@ideasonboard.com>
+References: <20241122-i2c-atr-fixes-v2-0-0acd325b6916@ideasonboard.com>
+	<20241122-i2c-atr-fixes-v2-2-0acd325b6916@ideasonboard.com>
+	<20241126091610.05e2d7c7@booty>
+	<b954c7b7-1094-48f9-afd9-00e386cd2443@ideasonboard.com>
+	<20241127131931.19af84c2@booty>
+	<30732dbb-21e6-4075-84b1-544fc6e6abce@ideasonboard.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 8/9] i2c: Support dynamic address translation
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-media@vger.kernel.org, linux-gpio@vger.kernel.org,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Andi Shyti
- <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>,
- Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
- <brgl@bgdev.pl>, Cosmin Tanislav <demonsingur@gmail.com>
-References: <20241125-fpc202-v3-0-34e86bcb5b56@bootlin.com>
- <20241125-fpc202-v3-8-34e86bcb5b56@bootlin.com>
-Content-Language: en-US
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
- 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
-In-Reply-To: <20241125-fpc202-v3-8-34e86bcb5b56@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-Hi Romain,
+Hi Tomi,
 
-On 25/11/2024 10:45, Romain Gantois wrote:
-> The i2c-atr module keeps a list of associations between I2C client aliases
-> and I2C addresses. This represents the address translation table which is
-> programmed into an ATR channel at any given time. This list is only updated
-> when a new client is bound to the channel.
++Cc Matti
+
+On Thu, 28 Nov 2024 19:50:46 +0200
+Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+
+> Hi,
 > 
-> However in some cases, an ATR channel can have more downstream clients than
-> available aliases. One example of this is an SFP module that is bound to an
-> FPC202 port. The FPC202 port can only access up to two logical I2C
-> addresses. However, the SFP module may expose up to three logical I2C
-> addresses: its EEPROM on 7-bit addresses 0x50 and 0x51, and a PHY
-> transceiver on address 0x56.
+> On 27/11/2024 14:19, Luca Ceresoli wrote:
+> > Hello Tomi,
+> > 
+> > On Tue, 26 Nov 2024 10:35:46 +0200
+> > Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+> >   
+> >> Hi Luca,
+> >>
+> >> On 26/11/2024 10:16, Luca Ceresoli wrote:  
+> >>> Hello Tomi,
+> >>>
+> >>> On Fri, 22 Nov 2024 14:26:19 +0200
+> >>> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+> >>>      
+> >>>> From: Cosmin Tanislav <demonsingur@gmail.com>
+> >>>>
+> >>>> i2c-atr translates the i2c transactions and forwards them to its parent
+> >>>> i2c bus. Any transaction to an i2c address that has not been mapped on
+> >>>> the i2c-atr will be rejected with an error.
+> >>>>
+> >>>> However, if the parent i2c bus is another i2c-atr, the parent i2c-atr
+> >>>> gets a transaction to an i2c address that is not mapped in the parent
+> >>>> i2c-atr, and thus fails.  
+> >>>
+> >>> Nested ATRs are "interesting", to say the least! :-)
+> >>>
+> >>> I must say I don't understand the problem here. If this is the picture:
+> >>>
+> >>>     adapter ---->     ATR1     ---->     ATR2     ----> leaf device
+> >>>                       map:               map:              addr:
+> >>>                    alias addr         alias addr           0x10
+> >>>                    0x30  0x20         0x20  0x10
+> >>>
+> >>> Then I'd expect this:
+> >>>
+> >>>    1. the leaf device asks ATR2 for a transaction to 0x10
+> >>>    2. 0x10 is in ATR2 map, ATR2 translates address 0x10 to 0x20
+> >>>    3. ATR2 asks ATR1 for a transaction to 0x20
+> >>>    4. 0x20 is in ATR1 map, ATR1 translates address 0x20 to 0x30
+> >>>    5. ATR1 asks adapter for transaction on 0x30
+> >>>
+> >>> So ATR1 is never asked for 0x10.  
+> >>
+> >> Yes, that case would work. But in your example the ATR1 somehow has
+> >> created a mapping for ATR2's alias.  
+> > 
+> > You're of course right. I had kind of assumed ATR1 is somehow
+> > configured to map 0x30 on 0x20, but this is not going to happen
+> > magically and there is no code AFAIK to do that. So of course my
+> > comment is bogus, thanks for taking time to explain.
+> >   
+> >> Generally speaking, ATR1 has aliases only for devices in its master bus
+> >> (i.e. the i2c bus where the ATR1 is the master, not slave), and
+> >> similarly for ATR2. Thus I think a more realistic example is:
+> >>
+> >>       adapter ---->     ATR1     ---->     ATR2     ----> leaf device
+> >>                      addr: 0x50         addr: 0x30
+> >>                         map:               map:              addr:
+> >>                      alias addr         alias addr           0x10
+> >>                      0x40  0x30         0x20  0x10
+> >>
+> >> So, both ATRs create the alias mapping based on the i2c-aliases given to
+> >> them in the DT, for the slave devices in their i2c bus. Assumption is,
+> >> of course, that the aliases are not otherwise used, and not overlapping.
+> >>
+> >> Thus the aliases on ATR2 are not present in the alias table of ATR1.  
+> > 
+> > OK, so the above is what now I'd expect to be configured in the ATR
+> > alias tables.
+> > 
+> > I still fail to understand how that would work. This is the actions I'd
+> > expect:
+> > 
+> >    1. the leaf device asks ATR2 for a transaction to 0x10
+> >    2. 0x10 is in ATR2 map, ATR2 translates address 0x10 to 0x20
+> >    3. ATR2 asks ATR1 for a transaction to 0x20
+> >    4. 0x20 is *not* in ATR1 map, *but* this patch is applied  
+> >        => i2c-atr lets the transaction through, unmodified  
+> >    5. ATR1 asks adapter for transaction on 0x20
+> >    6. adapter sends transaction for 0x20 on wires
+> >    7. ATR1 chip receives transaction for 0x20  
+> >        => 0x20 not in its tables, ignores it  
+> > 
+> > Note steps 1-5 are in software (kernel). Step 7 may work if ATR1 were
+> > configured to let all transactions for unknown addresses go through
+> > unmodified, but I don't remember having seen patches to allow that in
+> > i2c-atr.c and I'm not even sure the hardware allows that, the DS90UB9xx
+> > at least.  
 > 
-> In cases like these, it is necessary to reconfigure the channel's
-> translation table on the fly, so that all three I2C addresses can be
-> accessed when needed.
+> DS90UB9xx has I2C_PASS_THROUGH_ALL. However, our particular use case is 
+> with Maxim GMSL desers and sers. They're not as nice as the FPD-Link 
+> devices in this particular area.
 > 
-> Add an optional "dynamic_c2a" flag to the i2c-atr module which allows it to
-> provide on-the-fly address translation. This is achieved by modifying an
-> ATR channel's translation table whenever an I2C transaction with unmapped
-> clients is requested.
+> Cosmin, feel free to elaborate or fix my mistakes, but here's a summary:
 > 
-> Add a mutex to protect alias_list. This prevents
-> i2c_atr_dynamic_attach/detach_addr from racing with the bus notifier
-> handler to modify alias_list.
+> The deserializers don't have ATRs, whereas the serializers do (so vice 
+> versa compared to FPD-Link). The deserializers forward everything to all 
+> enabled GMSL ports. At probe/setup time we can enable a single link at a 
+> time, so that we can direct transactions to a specific serializer (or 
+> devices behind it), but after the setup, we need to keep all the ports 
+> enabled, as otherwise the video streams would stop for all the other 
+> ports except the one we want to send an i2c transaction to.
 > 
-> Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
-> ---
->   drivers/i2c/i2c-atr.c         | 244 ++++++++++++++++++++++++++++++++----------
->   drivers/media/i2c/ds90ub960.c |   2 +-
->   include/linux/i2c-atr.h       |  13 ++-
->   3 files changed, 202 insertions(+), 57 deletions(-)
+> The serializers have their own i2c address, but transactions to anything 
+> else go through the ser's ATR. The ATR does the translation, if an entry 
+> exists in the table, but all transactions are forwarded, whether they 
+> are translated or not.
+> 
+> Where's the nested ATR, you ask? That's a detail which is a bit 
+> "interesting": all the serializers have a default i2c address. So we can 
+> have 4 serializers all replying to the same address. But we don't have 
+> an ATR at the deser. However, we can change the address of the 
+> serializer by writing to a serializer register. This must be done at the 
+> deser probe time (and before the ser driver probes) where we can enable 
+> just a single link at a time. So at probe time we change the addresses 
+> of the serializers to be distinct values.
+> 
+> Still no ATR, right? Well, the i2c-atr accomplishes the above quite 
+> nicely: there's an address pool (for the new ser addresses), 
+> .attach_client() where we can set the new address for the serializer, 
+> and .detach_client() where we can (optionally) restore the original 
+> address. This way the serializer driver will operate using the original 
+> address, but when it does an i2c transaction, the i2c-atr changes it to 
+> the new address.
+> 
+> So strictly speaking it's not an ATR, but this achieves the same.
 
-This fails with:
+Thanks for the extensive and very useful explanation. I had completely
+missed the GMSL serder and their different I2C handling, apologies.
 
-WARNING: CPU: 1 PID: 360 at lib/list_debug.c:35 
-__list_add_valid_or_report+0xe4/0x100
+So, the "parent ATR" is the GMSL deser, which is not an ATR but
+implementing it using i2c-atr makes the implementation cleaner. That
+makes sense.
 
-as the i2c_atr_create_c2a() calls list_add(), but i2c_atr_attach_addr(), 
-which is changed to use i2c_atr_create_c2a(), also calls list_add().
+However removing the checks in i2c_atr_map_msgs() is dangerous in the
+general case with "proper" ATRs (the TI ones and AFAIK the Rohm ones)
+and it conflicts with the FPC202 case as Romain pointed out.
 
-Also, if you add i2c_atr_create_c2a() which hides the allocation and 
-list_add, I think it makes sense to add a i2c_atr_destroy_c2a() to 
-revert that.
+So I think we need those checks to be disabled only when in the the
+"nested ATR" scenario, which leads to Romain's suggestion of adding a
+flag when instantiating the ATR, so I'll switch to that branch of this
+discussion.
 
-There's also a memory error "BUG: KASAN: slab-use-after-free in 
-__lock_acquire+0xc4/0x375c" (see below) when unloading the ub960 or 
-ub953 driver. I haven't looked at that yet.
+> > And even in case that were possible, that would seems a bit fragile.
+> > What if two child ATRs attached to two different ports of the parent
+> > ATR use the same alias, and the parent ATR let transactions for such
+> > alias go through both ports unmodified? Sure, the alias pools can be
+> > carefully crafted to avoid such duplicated aliases, but pools have long  
+> 
+> Yes, the pools have to be non-overlapping and no overlap with anything 
+> on the main i2c bus.
+> 
+> I feel the GMSL HW requires quite strict design rules, and preferably 
+> the deser would be on an i2c bus alone. I think an eeprom at 0x10 and a 
+> remote sensor at 0x10 would cause trouble, without any way to deal with 
+> it in the SW.
+> 
+> > been considered a non-optimal solution, and they make no sense at all
+> > in cases like the FPC202 that Romain is working to support.
+> > 
+> > Again, I'm pretty sure I'm missing something here. If you could
+> > elaborate with a complete example, including the case of two child ATRs
+> > attached to two ports of the same parent ATR, I'm sure that would be
+> > very helpful.  
+> 
+> I hope my text above covered this.
+> 
+> > At my current level of understanding, it looks like the only correct
+> > way to manage nested ATRs is to add a "recursive alias mapping", i.e.
+> > to add for each alias another alias to all parent ATRs, up to the top
+> > one, like in my initial picture. I realize that would imply several
+> > complications, though.  
+> 
+> Yes, that has complications too. Say, if we have a device that has an 
+> ATR but also passes everything through (like the GMSL ser), then the 
+> driver has to manage two different kinds of aliases: one set for the 
+> actual ATR, and one that are just pass-through ones.
 
-  Tomi
+I agree this won't make sense for the GMSL case you described.
 
-   316.204193] BUG: KASAN: slab-use-after-free in __lock_acquire+0xc4/0x375c
-[  316.211059] Read of size 4 at addr cc44d558 by task rmmod/1505
-[  316.216979]
-[  316.218475] CPU: 1 UID: 0 PID: 1505 Comm: rmmod Not tainted 6.12.0+ #2
-[  316.225097] Hardware name: Generic DRA74X (Flattened Device Tree)
-[  316.231231] Call trace:
-[  316.231262]  unwind_backtrace from show_stack+0x18/0x1c
-[  316.239105]  show_stack from dump_stack_lvl+0x6c/0x8c
-[  316.244232]  dump_stack_lvl from print_report+0x130/0x538
-[  316.249694]  print_report from kasan_report+0x98/0xd8
-[  316.254821]  kasan_report from __lock_acquire+0xc4/0x375c
-[  316.260284]  __lock_acquire from lock_acquire.part.0+0x128/0x340
-[  316.266357]  lock_acquire.part.0 from _raw_spin_lock+0x4c/0x5c
-[  316.272247]  _raw_spin_lock from i2c_atr_release_alias+0x20/0x98 
-[i2c_atr]
-[  316.279235]  i2c_atr_release_alias [i2c_atr] from 
-i2c_atr_bus_notifier_call+0x150/0x46c [i2c_atr]
-[  316.288238]  i2c_atr_bus_notifier_call [i2c_atr] from 
-notifier_call_chain+0x68/0x23c
-[  316.296081]  notifier_call_chain from 
-blocking_notifier_call_chain+0x5c/0x74
-[  316.303192]  blocking_notifier_call_chain from bus_notify+0x3c/0x48
-[  316.309539]  bus_notify from device_del+0xf0/0x514
-[  316.314392]  device_del from device_unregister+0x28/0x80
-[  316.319763]  device_unregister from __unregister_client+0x84/0x90
-[  316.325927]  __unregister_client from device_for_each_child+0xc0/0x12c
-[  316.332550]  device_for_each_child from i2c_del_adapter+0x28c/0x45c
-[  316.338897]  i2c_del_adapter from i2c_atr_del_adapter+0x10c/0x250 
-[i2c_atr]
-[  316.345947]  i2c_atr_del_adapter [i2c_atr] from 
-ub953_remove+0x48/0xcc [ds90ub953]
-[  316.353637]  ub953_remove [ds90ub953] from i2c_device_remove+0x54/0xf8
-[  316.360260]  i2c_device_remove from 
-device_release_driver_internal+0x218/0x2a8
-[  316.367553]  device_release_driver_internal from 
-bus_remove_device+0x130/0x1cc
-[  316.374847]  bus_remove_device from device_del+0x1f8/0x514
-[  316.380401]  device_del from device_unregister+0x28/0x80
-[  316.385772]  device_unregister from ub960_remove+0xb0/0x244 [ds90ub960]
-[  316.392517]  ub960_remove [ds90ub960] from i2c_device_remove+0x54/0xf8
-[  316.399139]  i2c_device_remove from 
-device_release_driver_internal+0x218/0x2a8
-[  316.406433]  device_release_driver_internal from driver_detach+0x6c/0xc4
-[  316.413238]  driver_detach from bus_remove_driver+0xa0/0x134
-[  316.418945]  bus_remove_driver from i2c_del_driver+0x48/0x84
-[  316.424682]  i2c_del_driver from sys_delete_module+0x280/0x3cc
-[  316.430572]  sys_delete_module from ret_fast_syscall+0x0/0x1c
+Luca
 
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
