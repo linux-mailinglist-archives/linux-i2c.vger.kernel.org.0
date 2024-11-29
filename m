@@ -1,208 +1,150 @@
-Return-Path: <linux-i2c+bounces-8256-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8257-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E76B9DC135
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 10:12:58 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 117E19DC19B
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 10:44:10 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17E89163C4A
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 09:12:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63186B2299B
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 09:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D84F170A30;
-	Fri, 29 Nov 2024 09:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E5117A90F;
+	Fri, 29 Nov 2024 09:44:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nh5hDs9j"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bsSSD7Ri"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79020143C40;
-	Fri, 29 Nov 2024 09:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C27E165EED;
+	Fri, 29 Nov 2024 09:43:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732871569; cv=none; b=IN+Z3ychhzf8YQoh7dZkLnrAxCtCewdZRJBG2pMAMS2GBNL/IVNk1MkbsFwx7Wf6cOg1D7xsXdB4kvPi6WSEqJv50wtwPGwB9uhLVXjwrxuQCuX5SquF+9jDdMt5sqdvQRb9hD1CujoNqjNkqMqEyjQaB8cFROh298Wz7yxf0Yc=
+	t=1732873441; cv=none; b=fxGrix/O4ZLun4W1IbqBCnopK75mYDenn/N8h2OXaUalToNZZ7NoNkYDZk7miqEq9ncLXEriPXBOPj5rmg9RfOrlET/MV8gbETTmsp0LQEnz0CsvIEiKfDs7yPMX4sfJhgwpoDjPbrk3s7lLdorBLPtsS+65QgDOBqvsMtd84Hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732871569; c=relaxed/simple;
-	bh=dJ6IY9QS2O7JmjJbpKwvcmlKLPRPwSASvHz6cnbvrLs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=U6+QnQQEiNh2Ri5xb8aoY+L/YC+OzUIPl1xiXIvGky8X52oybBWAy53tCBnwVJrW1cPtM4x+sxbFvNkg+FUbjWd/G7owFqt3hqJdsFRRWdC9Co+oquIPb0TcxCY9J23w5vJ2CM/2DWGdbzTvWHp+sf2D2PCAH1uHJXlEl62n9W8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nh5hDs9j; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43494a20379so15018755e9.0;
-        Fri, 29 Nov 2024 01:12:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732871566; x=1733476366; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dJ6IY9QS2O7JmjJbpKwvcmlKLPRPwSASvHz6cnbvrLs=;
-        b=Nh5hDs9jvWHa7g6XKUzzk6RbohMA4yWRH/0FyVqTamfleTR2jDmhtBV6vVtsF0Yp3q
-         hYvDSa/U1xh1Vq7nfQIUII8WtLUocOUv8N4kYFlm4ly8wmrTJLhU9/+adaPap6FSj2Wx
-         SunBZzurAuCbg8Ijot8JKmnV6tdRfIg9KkhkKQqVcmwqMur0w9N7hfIwToxCD/EHCQGW
-         0PxFNNCkiLRXO6axwy49zT1OTNdyqKF4vr6Crp2Pf1Ld++WceeI9q23PlthTzOiTZOgw
-         UrI6qwuUELItoJ0uDuKqWHcMguFqp0RVucjgOnZ98LrLSjaHevp691w/cUe4zHr5xG5A
-         se2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732871566; x=1733476366;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dJ6IY9QS2O7JmjJbpKwvcmlKLPRPwSASvHz6cnbvrLs=;
-        b=ramd/flqrfUgYbvUePutpmzEwbbJpu/hwToSsboVrquCYPXTpZgRGYw4Yu7p/R3CjP
-         UeObpS0tFrWqiNK2PfhJSOG69W0QpfMemM4q1t3t0ZVFUhLkiMsh1LNXJ0bIrnc71HAN
-         NUv/eCp1jqNc5SulWjeAhdMlCED0abrNTEDO97q6pn3xOGAbvfPmli+F3ztqx1MSZDZC
-         3d0ZXeDmZk2w0UIuzIVtO4FNcRnyvOuNMnXWz1VlSs5+tCWSbhmjEziaL7SVANvF30zw
-         ZwnmElTWTYhcQQiHQLjZ2rTj4syhEeu4XwraQ7jinpamnqhjf0j3o32RpqAOJPyd9wdO
-         tLCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUorMr5T8BhlRLTWs9G7wArGnJ2Dqch5fFivwy/N13NzAnB0YiV0snTpSux39g//jmykWbdOmywhNE=@vger.kernel.org, AJvYcCV/XDpPPxCzmxNchsMYnuO6n4MnQpQYlJMS2udTjRr1tUqYY5yw1GJRiu1sXz5XYn/D87wsRXZVprXl@vger.kernel.org, AJvYcCWfY7VinHM6slJVnLqBMDpNFsfd1DTgeWGqXj5TzJ+dkaZidf53EyVoPNKcl9GQC6cMOGwDWdW75kbmRteA@vger.kernel.org, AJvYcCXCCjz3R5dICvkgMGVYZSfmLNxR8gSboDFSrKwcW6DY4WcMVa+j4Cz6LeOe0cm7i/DwEltw2saga9U8OE8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGzXBWzp5xqMm3EeLJH070GBH8VxXgtcZMT2n/ZGmMam1ICPPt
-	H3oGfov6wtb5rms0l0p1SGlH6jzgrPJrnpxRZ4ZtUg+mIBaJzzU0
-X-Gm-Gg: ASbGncuEsvqY6TIi8MP4HKsLPRphrBD0pzkfWqgGvVgIXZpZyQ0eh+YdG+Jb5Z1tIkw
-	YcD0dwec2RvgN1gvG5tJ3hME71lMPeGhxO+mrMHGXsNbMRI8b+FwtVustezx2/hpRgOh0T/bD9V
-	Ym4W6bkSvxfXUoprK8f1ZOE+Q+to8x7u7iajkGY417bfMrSkV63iHX3pCkOZ9HVeTjjxu492Snw
-	jXn5E23oZN/cWcILg8v43qRzNMzyoNIg3IeFJpJoUw4fR4HZNq0FLJEUNJNpXFNE3sm5b7K6Gpk
-	hFyVZ8DvqlxMHNcbqNQu5BI=
-X-Google-Smtp-Source: AGHT+IGF5USQPPQnUyvNi/ekI6n1SlDmZye8w3YoCpMzfV67iTqVMeWXyPxA03INAS0aAlQ6wy7ufA==
-X-Received: by 2002:a05:600c:4e8a:b0:431:5ab3:d28d with SMTP id 5b1f17b1804b1-434a9dc3cc3mr100465735e9.9.1732871565606;
-        Fri, 29 Nov 2024 01:12:45 -0800 (PST)
-Received: from ?IPv6:2a01:599:923:c59f:ea19:16d1:ab07:4803? ([2a01:599:923:c59f:ea19:16d1:ab07:4803])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385ccd36855sm3905633f8f.36.2024.11.29.01.12.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Nov 2024 01:12:45 -0800 (PST)
-Message-ID: <f0cbbbe4b20f828fbd48b504a58437c06ef90908.camel@gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindings
- for adp1051, adp1055 and ltp8800
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>, 
- Krzysztof Kozlowski
-	 <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>, Conor Dooley
-	 <conor@kernel.org>
-Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Jean Delvare
- <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, Delphine CC Chiu
- <Delphine_CC_Chiu@wiwynn.com>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Sabau,
- Radu bogdan" <Radu.Sabau@analog.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
- <u.kleine-koenig@pengutronix.de>, "Torreno, Alexis Czezar"
- <AlexisCzezar.Torreno@analog.com>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>
-Date: Fri, 29 Nov 2024 10:12:45 +0100
-In-Reply-To: <PH0PR03MB6938F9DE7173FE958D645CFE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
-References: <20241120035826.3920-1-cedricjustine.encarnacion@analog.com>
-	 <20241120035826.3920-2-cedricjustine.encarnacion@analog.com>
-	 <20241120-process-hulk-ecedcbf088f7@spud>
-	 <dfe8e47e-6c31-4b11-b733-38e5bd0e49d3@kernel.org>
-	 <7e55a403-eb1c-4369-8180-1639b50cc9b1@roeck-us.net>
-	 <4d907ddf-16ca-4136-b912-f571a691dc90@kernel.org>
-	 <PH0PR03MB6938F9DE7173FE958D645CFE8E2E2@PH0PR03MB6938.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1732873441; c=relaxed/simple;
+	bh=icqs1w9LL7qajOL+gpc61iCL/Gz9usCSC33by1uMk7g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=RUHKRKfLQ+VRPzmPrMMUB/dkbrzQyN8lzOSUzbksAdG6YC2F4PeBlLRmJ6HaDpJIQR3kcLsVXo8J0lEv/SJ7/B6+GU+jMYbvYFbJLTeSpyS1Lm8D76pRpfvW+hq9YmNN5PhEofw/6u3GI0+6N1d/6VRife/4jlRSkgMaKBpO/zE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bsSSD7Ri; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AT83vaN004494;
+	Fri, 29 Nov 2024 09:43:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	gtdtYxt7yTx0KLUyvnV//EGcEUs43332Pgjx121kuL0=; b=bsSSD7Ri3plJQvi8
+	zPj4mIWtdu97ZjIE7lhs7J86zAit3tcHWzAD7bb8TSWxWyR3QxfdyXXiK4+tpl/f
+	JS8STX0l4sqKTN6ujsc5mHJ4vFFdr6HFPDlXu+3Yo9qknR2Z5vPHm5J5YWtigDXx
+	FEP4z4slksOb/pzMTWk1emwokXSs8bw5AuX03l04qUzySIc+C0CKXBKYdzX/jMAL
+	NNAmp1CnVi60wRVItvNUg8C09mQo2F9Ararp/FrrpF+APVRrwn3ukYJoEUGGalAC
+	/4Wg9dBkMsYfmRrF78IYAQK+XmwCniUg5dCX5vniYzWulC3wT7epXzgAAW0uwgoE
+	YFS+LQ==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4379s6r8fx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Nov 2024 09:43:51 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AT9hoKR025335
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Nov 2024 09:43:50 GMT
+Received: from [10.216.24.185] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 29 Nov
+ 2024 01:43:46 -0800
+Message-ID: <a52483fb-d8ea-4dfd-9d29-5270376de1d9@quicinc.com>
+Date: Fri, 29 Nov 2024 15:13:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/3] i2c: i2c-qcom-geni: Update compile dependenices
+ for I2C GENI driver
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Vinod Koul <vkoul@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+        "Sumit
+ Semwal" <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?=
+	<christian.koenig@amd.com>,
+        <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <quic_msavaliy@quicinc.com>,
+        <quic_vtanuku@quicinc.com>
+References: <20241121130134.29408-1-quic_jseerapu@quicinc.com>
+ <20241121130134.29408-4-quic_jseerapu@quicinc.com>
+ <zfkhbjm6wrmcocqcvluov3nbrpb2ozbo52c6nlwxro44gublcw@5645ksz4cfm2>
+Content-Language: en-US
+From: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
+In-Reply-To: <zfkhbjm6wrmcocqcvluov3nbrpb2ozbo52c6nlwxro44gublcw@5645ksz4cfm2>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 42OQXquwmQrh0AN9gU47rFgN46NHDaud
+X-Proofpoint-GUID: 42OQXquwmQrh0AN9gU47rFgN46NHDaud
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2411290079
 
-On Mon, 2024-11-25 at 02:44 +0000, Encarnacion, Cedric justine wrote:
-> > -----Original Message-----
-> > From: Krzysztof Kozlowski <krzk@kernel.org>
-> > Sent: Thursday, November 21, 2024 2:39 AM
-> > To: Guenter Roeck <linux@roeck-us.net>; Conor Dooley <conor@kernel.org>=
-;
-> > Encarnacion, Cedric justine <Cedricjustine.Encarnacion@analog.com>
-> > Cc: devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> > i2c@vger.kernel.org; linux-doc@vger.kernel.org; linux-hwmon@vger.kernel=
-.org;
-> > Jean Delvare <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>;
-> > Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>; Rob Herring
-> > <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>; Conor Dool=
-ey
-> > <conor+dt@kernel.org>; Sabau, Radu bogdan <Radu.Sabau@analog.com>; Uwe
-> > Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>; Torreno, Alexis Cze=
-zar
-> > <AlexisCzezar.Torreno@analog.com>; Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com>
-> > Subject: Re: [PATCH 1/2] dt-bindings: hwmon: (pmbus/adp1050): Add bindi=
-ngs
-> > for adp1051, adp1055 and ltp8800
-> >=20
-> > [External]
-> >=20
-> > On 20/11/2024 19:07, Guenter Roeck wrote:
-> > > On 11/20/24 09:35, Krzysztof Kozlowski wrote:
-> > > > On 20/11/2024 18:11, Conor Dooley wrote:
-> > > > > On Wed, Nov 20, 2024 at 11:58:25AM +0800, Cedric Encarnacion wrot=
-e:
-> > > > > > add dt-bindings for adp1051, adp1055, and ltp8800 pmbus.
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 ADP1051: 6 PWM for I/O Voltage, I/O Cu=
-rrent, Temperature
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 ADP1055: 6 PWM for I/O Voltage, I/O Cu=
-rrent, Power, Temperature
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 LTP8800-1A/-2/-4A: 150A/135A/200A DC/D=
-C =C2=B5Module Regulator
-> > > > > >=20
-> > > > > > Co-developed-by: Alexis Czezar Torreno
-> > <alexisczezar.torreno@analog.com>
-> > > > > > Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@anal=
-og.com>
-> > > > > > Signed-off-by: Cedric Encarnacion
-> > <cedricjustine.encarnacion@analog.com>
-> > > > >=20
-> > > > > Why did you drop my ack?
-> > > > > https://urldefense.com/v3/__https://lore.kernel.org/all/20241106-
-> > linoleum-kebab-
-> > decf14f54f76@spud/__;!!A3Ni8CS0y2Y!7Q2KluGdg8cJW_wYUd-
-> > vh5mP66Ns62VZOkPG4Jf7NY9ULtTfjiwYqrUHbik_tI9X4izI6fAQS_7eVscdEFK_X
-> > OEm$
-> > > > So that's a v2? Or v3? Then should be marked correctly. Please star=
-t
-> > > > using b4. I already asked analog.com for this in few cases. Feel fr=
-ee
-> > > > not to use b4 if you send correct patches, but this is not the case=
- here.
-> > > >=20
->=20
-> Okay, I will start exploring b4 for future patches.
->=20
 
-Next time, reach out to me. I have been pointing everbody to b4 (if asked n=
-aturally).
 
-> > >=20
-> > > In general I agree, but this is a combination of two patch series, as=
- mentioned
-> > > in the summary. I am not sure how to use versioning in such situation=
-s. Is it
-> > > v2 of one series or v3 of the other ?
-> > I would say the highest and keep the b4 changeset. This allows to use b=
-4
-> > diff easily. Choice done here - v1, no usage of b4=C2=A0 - breaks every=
-thing,
-> > look:
-> >=20
-> > b4 diff '<20241120035826.3920-1-cedricjustine.encarnacion@analog.com>'
-> > Grabbing thread from
-> > lore.kernel.org/all/20241120035826.3920-1-
-> > cedricjustine.encarnacion@analog.com/t.mbox.gz
-> > ---
-> > Analyzing 13 messages in the thread
-> > Could not find lower series to compare against.
->=20
-> This is v2 of one and v3 of another. For the upcoming versions, should I
-> proceed to v4 which succeeds the highest or continue to v2 based on this
-> series?
->=20
+On 11/22/2024 3:40 AM, Dmitry Baryshkov wrote:
+> On Thu, Nov 21, 2024 at 06:31:34PM +0530, Jyothi Kumar Seerapu wrote:
+>> I2C functionality has dependencies on the GPI driver.
+>> Ensure that the GPI driver is enabled when using the I2C
+>> driver functionality.
+>> Therefore, update the I2C GENI driver to depend on the GPI driver.
+>>
+>> Signed-off-by: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
+>> ---
+>> v2 -> v3:
+>>     - Moved this change to patch3.
+>>     - Updated commit description.
+>>
+>> v1 -> v2:
+>>     -  This patch is added in v2 to address the kernel test robot
+>>        reported compilation error.
+>>        ERROR: modpost: "gpi_multi_desc_process" [drivers/i2c/busses/i2c-qcom-geni.ko] undefined!
+>>
+>>   drivers/i2c/busses/Kconfig | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+>> index 0aa948014008..87634a682855 100644
+>> --- a/drivers/i2c/busses/Kconfig
+>> +++ b/drivers/i2c/busses/Kconfig
+>> @@ -1049,6 +1049,7 @@ config I2C_QCOM_GENI
+>>   	tristate "Qualcomm Technologies Inc.'s GENI based I2C controller"
+>>   	depends on ARCH_QCOM || COMPILE_TEST
+>>   	depends on QCOM_GENI_SE
+>> +	depends on QCOM_GPI_DMA
+> 
+> So... without this change the previous patch is broken, which is a
+> no-go. And anyway, adding dependency onto a particular DMA driver is a
+> bad idea. Please make use of the DMA API instead.
 
-It seems to me the highest is the preferred...
-
-- Nuno S=C3=A1
-
+Sure, thanks for the details. In V4, will withdraw these changes.
+> 
+>>   	help
+>>   	  This driver supports GENI serial engine based I2C controller in
+>>   	  master mode on the Qualcomm Technologies Inc.'s SoCs. If you say
+>> -- 
+>> 2.17.1
+>>
+> 
 
