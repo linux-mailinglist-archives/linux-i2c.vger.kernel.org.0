@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-8273-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8274-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB1B19DE920
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 16:12:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B88219DE925
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 16:15:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D47DB21EAD
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 15:12:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F33DB20BCA
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 15:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3F81422C7;
-	Fri, 29 Nov 2024 15:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1DB2142E77;
+	Fri, 29 Nov 2024 15:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uosba0C7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yxnx/jgB"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B5173446;
-	Fri, 29 Nov 2024 15:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0D028691;
+	Fri, 29 Nov 2024 15:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732893169; cv=none; b=CJPKHg8DXhZY1eXkOfJg3Eh4Gjcgtpgt7/yQs1H3d3k7qkrEGtXVJsXW5p8Id/PxGfZB/awJraM6YE7zbfcp5qehrdFlhpER7PI/vmwHbXyAKHDQL4P6hOZP9HvcnrMM6STyWbyaIEtmHgN93aA2anMBIf+82Sipxc67n+GisI4=
+	t=1732893299; cv=none; b=IEuCAcbRJcPg/XYtLJATVmkWu+09Her5i6ejUMVFI31hKmO3pbg/bhd1kLB1KgnvRfL5wbSRzkUyFfuPrNgzP3ywtxZOzInIroT1ZTW+DCa9kOFVTax5N8XJSmVLQOlYF6+y2/YlXWxNoO3Lh00cLcq2ytuMgfkva/S7QkACHms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732893169; c=relaxed/simple;
-	bh=q+7djqvrkTdzD2RTxW+m6SQ5uT6I3NS74K4EgwnZdDY=;
+	s=arc-20240116; t=1732893299; c=relaxed/simple;
+	bh=Fu73ZvJQgwTOaD6ZnCdF4NOgkna/X4Iq7KcREPusr1g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Po1XGYOHNut6/9/cOTdww7rGvlkVgaxeFuuq/WssZPxqOvYKQ/m8aDqqW2pGUD9BoCiBsdz1Haz7swa0hAC4GskYgGZN3e1LJPOZJ1baGvrPn82T77nymXGzjNXewGFWnSvblZemRqQWEF01tKWOneJUy+zwd4uKXA1Uror5uO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uosba0C7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F36C4CECF;
-	Fri, 29 Nov 2024 15:12:42 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ZWWCVUatBNT7LVDwEnQ/4hlg8Cbceo+cBVVJJ5QNVvdNIVUxMJ6wJDk+TmF3x9VONGRWXl4iEKo7336zU56XzOSFSmo75TQ6qxVZYeMikB3+8WcsHn/+mQ27n/RI/gQujr2Dwis/iYuS4pO7oy56C8AtucKoexsSGbhdk+X12K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yxnx/jgB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6BA1C4CECF;
+	Fri, 29 Nov 2024 15:14:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732893169;
-	bh=q+7djqvrkTdzD2RTxW+m6SQ5uT6I3NS74K4EgwnZdDY=;
+	s=k20201202; t=1732893298;
+	bh=Fu73ZvJQgwTOaD6ZnCdF4NOgkna/X4Iq7KcREPusr1g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uosba0C7IN+qEzQi8appFX7tGbHFEmsrxWgf680PlJo3uwSWgyclDcodphIGtB0Tp
-	 XhUqKoRiEXJtiImRGSdYVZq4wzBOJVu//KeJ7ZADUF20RXcJd5NXFeZD/qDhnT1LFE
-	 5c1+eEpuXzlgzNGz+x4LEIoVxTSf25t4+oGA4e94nEMsoF5zIN04mWNFcMTUXzc4rN
-	 1novfq/ontK5GbM0254ANlRKdHhull3eWElWdu5mfcSxBAmvxvBjqCjERmXixiB3zn
-	 8mHjcbmzL8yZRNfkJuQM9qx8/SIZtAeJMz1+oOfMezeCov3w196GBC0YK0PnIvKMQY
-	 iZGVTtsJxfabg==
-Message-ID: <78cd2bf3-d4e3-4da9-9a92-91ec15475071@kernel.org>
-Date: Fri, 29 Nov 2024 16:12:39 +0100
+	b=Yxnx/jgBSYGoc8uegwkEdA/UNg2znGgJ7Z8uUwfauf2YZSwlbKtYJfE8LMcmA7Q6A
+	 wCcqHqQWpcUUDMdwOXGl6oq6ALKd+ea8RMybphpEIUsWwc22PEkqn5gIqrvp8ZjOvC
+	 LaJzhoBcIYq7xOuanXy5vwzChP49kF0h6fdztOnAVIPLY+KleUyY2nUCLNJBRcVzsk
+	 IAqPgVi8vNGfWbSwz8w4zfRwOCgnfTwiMTLKPkjRl7p9afc3Tlvsk9GeqrYRwJcj/V
+	 O8nFh01SiXEMqiJurAsDZZ4+sPIUtx4mYxuc/RrdaYx6vt8WozjlBTLwyt5xXXoiXU
+	 1LsK7KUhuAZzA==
+Message-ID: <db428697-a9dc-46e1-abbe-73341306403f@kernel.org>
+Date: Fri, 29 Nov 2024 16:14:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,23 +50,19 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
+Subject: Re: [PATCH v5 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
  flag
 To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
- Rob Herring <robh@kernel.org>
-Cc: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
+ konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
  linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
  conor+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
  vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org,
  Frank.Li@nxp.com, konradybcio@kernel.org, bryan.odonoghue@linaro.org,
- krzk+dt@kernel.org, quic_vdadhani@quicinc.com
-References: <20241113161413.3821858-1-quic_msavaliy@quicinc.com>
- <20241113161413.3821858-2-quic_msavaliy@quicinc.com>
- <20241115173156.GA3432253-robh@kernel.org>
- <ff20d185-4db4-482b-b6dd-06e46124b8ab@quicinc.com>
- <e1a7d9d6-c382-48f6-bf7f-145290d214d1@kernel.org>
- <8ea18a1d-1ba5-47b4-9fb6-343be3b2b26a@quicinc.com>
+ krzk+dt@kernel.org, robh@kernel.org
+Cc: quic_vdadhani@quicinc.com
+References: <20241129144357.2008465-1-quic_msavaliy@quicinc.com>
+ <20241129144357.2008465-2-quic_msavaliy@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -112,29 +108,58 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <8ea18a1d-1ba5-47b4-9fb6-343be3b2b26a@quicinc.com>
+In-Reply-To: <20241129144357.2008465-2-quic_msavaliy@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 29/11/2024 15:43, Mukesh Kumar Savaliya wrote:
->> But most important: I keep repeating this over and over - NAK for some
->> specific "shared-se" flag, different for each of your IP blocks. Come
->> with something generic for entire qualcomm. There are few of such flags
->> already and there are some patches adding it in different flavors.
->>
-> we do have SE (serial engine) which works for i2c, spi, uart, i3c. And 
-> SE is single HW entity as you are aware of. But I feel it makes sense to 
-> keep this flag name per SE and even for SPI OR I3C we should be using 
-> same flag name in DTSI.
->> Get this consistent.
->>
->> NAK for this and v5 doing exactly theh same.
->>
-> Hope i meet expectations considering all your suggestions and past 
-> learning and not missing anything out of my mind.
+> Adds qcom,shared-se flag usage. Use this flag when I2C serial controller
+> needs to be shared in multiprocessor system(APPS,Modem,ADSP) environment.
 > 
-Nothing from my comment above was resolved. I will NAK the next version
-as well for the same reasons.
+> SE(Serial Engine HW controller acting as protocol master controller) is an
+> I2C controller. Basically a programmable SERDES(serializer/deserializer)
+> coupled with data DMA entity, capable in handling a bus protocol, and data
+> moves to/from system memory.
+> 
+> Two clients from different processors can share an I2C controller for same
+> slave device OR their owned slave devices. Assume I2C Slave EEPROM device
+> connected with I2C controller. Each client from ADSP SS and APPS Linux SS
+> can perform i2c transactions.
+> 
+> Transfer gets serialized by Lock TRE + DMA xfer + Unlock TRE at HW level.
+> 
+> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> ---
+>  .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml       | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> index 9f66a3bb1f80..88682a333399 100644
+> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> @@ -60,6 +60,14 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> +  qcom,shared-se:
+> +    description: True if I2C controller is shared between two or more system processors.
+> +        SE(Serial Engine HW controller working as protocol master controller) is an
+> +        I2C controller. Basically, a programmable SERDES(serializer/deserializer)
+> +        coupled with data DMA entity, capable in handling a bus protocol, and data
+> +        moves to/from system memory.
+I replied why I NAK it. You did not really address my concerns, but
+replied with some generic statement. After that generic statement you
+gave me exactly 0 seconds to react and you sent v5.
+
+Really 0 seconds to respond to your comment, while you give yourself
+days to respond to my comments.
+
+This is not how it works.
+
+NAK
+
+Implement previous feedback. Don't send any new versions before you
+understand what you have to do and get some agreement with reviewers.
 
 Best regards,
 Krzysztof
