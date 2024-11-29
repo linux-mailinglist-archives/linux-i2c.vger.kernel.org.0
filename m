@@ -1,178 +1,128 @@
-Return-Path: <linux-i2c+bounces-8261-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8262-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A6749DC320
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 12:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F3D49DC329
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 12:56:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7A6A163DF8
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 11:54:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CCC4163E70
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Nov 2024 11:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 062C119C54C;
-	Fri, 29 Nov 2024 11:53:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28D4199FDE;
+	Fri, 29 Nov 2024 11:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gY6cN+Sr"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="HzmXzuTb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFA0199FDE;
-	Fri, 29 Nov 2024 11:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178F233C5
+	for <linux-i2c@vger.kernel.org>; Fri, 29 Nov 2024 11:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732881238; cv=none; b=VUV5uHeqedg018SjY7xU1Lz9ip26C2UL8xopy1QY2o+MKKiBq+jyJ3yAo8VQXnG79XdKIM46h2lWWGLz5ns2+lr4yodFKCUQnEIE3/Jkk7PGgY/hlw64CwDncVJwIH+sUxS6Ln5GaZGhX8RT3ji4PgpoC0CxJ19OxTytkg2jUhU=
+	t=1732881383; cv=none; b=DPCHuLxRURmbNc6mrwvXDX2YZIpY0vFCS+NqZSeWBlJDZ8rPBfrLICj8MlT+GHXmlJ4STdT58MZPDN2vqTJZEecf7cHdzhQxK/YbjTbcHy0C84cS0wDvowsykGDZQ852XAzKkA4A2kGq7pqisbSg2S9WkBLYmiX7cEb08Zs+8Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732881238; c=relaxed/simple;
-	bh=FKTtTzKPitKQekXQRY8q7c7YHDt5xU6Tmh7mEm/rn7o=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Cv7mqqR1qVqZZfA443Mlh/PpHsc4EOdbzLXkOgn3sXBHUt/U68lANx0SNCGhIIWKrzV7Bs4XzhUJ1oo/vuk7HJhBqCGbeV1C5f68PWR+MD6tlorjA7aWO5y1F3Gc+OFCbjlqxXPeEm5pP0vb8gdOK1r3YOc5J9aV13eJVTkgxGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gY6cN+Sr; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F23F1240004;
-	Fri, 29 Nov 2024 11:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1732881228;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fcmStz0km1pUl2gTG3edWWHjVxRxTo+//f8yA/6DdOY=;
-	b=gY6cN+SrmCBU2oBvBzJxjUijMcDzcoUUVaxRG1FfXiRQJXf0LtsPJfuodLNTns62fGCTC8
-	vaEzrdSEqXe4E7dFwx3zF4Kd+XU/k6btMVPNuqVTzSrR6vlsVigEnvgOHEYso6BKG41GAM
-	DKP2amGC3OKkhaxylGOuMkcKHmkV48vARdHR35I+R0y2Ug7chdDDho09w6Qfc65Cja7wjd
-	0YO1sTUIcapzyTIgGlBR1WlrUn20+LNHZRcW4GpBeJI3+jVhE7SsI9QcV4CPovw5dogw9X
-	/9vfyFQkdsQEPTpWDL6egCnijFq+wb9Zl7HYStwSmJJqAXbre7651tDwBNZnKw==
-Date: Fri, 29 Nov 2024 12:53:45 +0100
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Tomi Valkeinen
- <tomi.valkeinen@ideasonboard.com>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>, Mauro Carvalho
- Chehab <mchehab@kernel.org>, Cosmin Tanislav <demonsingur@gmail.com>, Tomi
- Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, Matti Vaittinen
- <Matti.Vaittinen@fi.rohmeurope.com>
-Subject: Re: [PATCH v2 2/3] i2c: atr: Allow unmapped addresses from nested
- ATRs
-Message-ID: <20241129125345.3cf2fde4@booty>
-In-Reply-To: <7074006.bC9N32Mljn@fw-rgant>
-References: <20241122-i2c-atr-fixes-v2-0-0acd325b6916@ideasonboard.com>
-	<20241122-i2c-atr-fixes-v2-2-0acd325b6916@ideasonboard.com>
-	<7074006.bC9N32Mljn@fw-rgant>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1732881383; c=relaxed/simple;
+	bh=BRdQq1d646B38q0Lh5kk9wKgLFcCeeNgaOzA4wBFSYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Eu9JU1zXdFyF+EeJDIsOIzT9+DMWcIX4J1BIE00Jjg9403dQZZSJURzPQQhGmg4mlnAdJM2vgeG0RUfXHcSsAfPiyStbDM4Yw7C7VA0lvO+cRfzDTe4PINI9kQV+YldY6EogePm2BQohwFqy2eb35S2lYYDeOwqFgqQEyEZMCYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=HzmXzuTb; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=BRdQ
+	q1d646B38q0Lh5kk9wKgLFcCeeNgaOzA4wBFSYs=; b=HzmXzuTbPF/4uDarEdbY
+	oMBibca0fqng0poVkkQP+vUFIM1sfz/nke4hLYjX6vS+OWNDBRQKXaeLpodoVbZc
+	Y2rMkOzItkbUXzju+UuDzC+WEQkM439gX1vnalf+T0RPeb5MRTxtmzgPuw8cBW9J
+	zbMb7qKyjgXYpVUqdg2Q8UYS3IiMAqL7lBoEi+CS2+Oo9lP/xdvpIKoyQRY/85mX
+	nssR/XQOdckKeluQCYNbpy3Wg/R2/qr5ie7hLQ0LjPSa8hWudo+QXNDENAYb6Wdc
+	vExRZAE/KKZBsrhNG3jTD4sVQseG70jbe9CLd+W29Do3kEiFloV1tG2ge/0qYOp2
+	yA==
+Received: (qmail 1390799 invoked from network); 29 Nov 2024 12:56:15 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Nov 2024 12:56:15 +0100
+X-UD-Smtp-Session: l3s3148p1@0VPL4gsodtMgAQnoAEnuAE61Ad4iLfCs
+Date: Fri, 29 Nov 2024 12:56:14 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Lukas Bulwahn <lbulwahn@redhat.com>
+Cc: Chen-Yu Tsai <wenst@chromium.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Subject: Re: [PATCH] MAINTAINERS: fix typo in I2C OF COMPONENT PROBER
+Message-ID: <Z0mr3uIatn1A0iSE@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Lukas Bulwahn <lbulwahn@redhat.com>,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
+References: <20241129095238.51748-1-lukas.bulwahn@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yBRPQr3UFnGOqWre"
+Content-Disposition: inline
+In-Reply-To: <20241129095238.51748-1-lukas.bulwahn@redhat.com>
+
+
+--yBRPQr3UFnGOqWre
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: luca.ceresoli@bootlin.com
 
-Hello Tomi, Romain,
-
-+Cc Matti
-
-On Tue, 26 Nov 2024 09:34:56 +0100
-Romain Gantois <romain.gantois@bootlin.com> wrote:
-
-> Hello Tomi,
+On Fri, Nov 29, 2024 at 10:52:38AM +0100, Lukas Bulwahn wrote:
+> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 >=20
-> On vendredi 22 novembre 2024 13:26:19 heure normale d=E2=80=99Europe cent=
-rale Tomi Valkeinen wrote:
-> > From: Cosmin Tanislav <demonsingur@gmail.com>
-> >=20
-> > i2c-atr translates the i2c transactions and forwards them to its parent
-> > i2c bus. Any transaction to an i2c address that has not been mapped on
-> > the i2c-atr will be rejected with an error.
-> >=20
-> > However, if the parent i2c bus is another i2c-atr, the parent i2c-atr
-> > gets a transaction to an i2c address that is not mapped in the parent
-> > i2c-atr, and thus fails.
-> >=20
-> > Relax the checks, and allow non-mapped transactions to fix this issue. =
-=20
+> Commit 157ce8f381ef ("i2c: Introduce OF component probe function") adds t=
+he
+> header file include/linux/i2c-of-prober.h and a corresponding file entry =
+in
+> the newly added MAINTAINERS section I2C OF COMPONENT PROBER. This file
+> entry unfortunately has a typo.
+> Fortunately, ./scripts/get_maintainer.pl --self-test=3Dpatterns detects t=
+his
+> broken reference.
 >=20
-> I have a series in the review pipeline which adds optional support for dy=
-namic=20
-> I2C ATR address translation. If this option is enabled, then transactions=
- on any
-> unmapped address are assigned an alias on-the-fly. This feature is requir=
-ed to
-> handle alias shortages on some hardware setups:
+> Fix the typo in this file entry in the I2C OF COMPONENT PROBER section.
 >=20
-> https://lore.kernel.org/all/20241125-fpc202-v3-0-34e86bcb5b56@bootlin.com/
->=20
-> Letting all non-mapped transactions through would conflict with my series=
-, since
-> these two scenarios would be indistinguishable:
->=20
-> case 1:
-> transaction with 3 messages is requested, msg1 -> 0x50; msg2 -> 0x51; msg=
-3 -> 0x56
-> alias pool can only hold 2 mappings at a time, so transaction cannot go t=
-hrough
->=20
-> case 2:
-> transaction with 3 messages is requested, msg1 -> 0x50; msg2 -> 0x51; msg=
-3 -> 0x50
-> alias pool can hold 2 mappings at a time, so transaction can go through
->=20
-> Could you perhaps introduce an ATR flag which would enable/disable lettin=
-g all unmapped
-> messages through? I have something similar in patch 8 of my FPC202 series:
->=20
-> https://lore.kernel.org/all/20241125-fpc202-v3-8-34e86bcb5b56@bootlin.com/
->=20
-> There could be a flag named "I2C_ATR_FLAG_NESTED_ATR", which would be ena=
-bled in i2c_atr_new():
->=20
-> ```
-> @@ i2c_atr_new()
->=20
-> if (is_an_atr(parent))
-> 	atr->flags |=3D I2C_ATR_FLAG_NESTED_ATR;
-> ```
+> Fixes: 157ce8f381ef ("i2c: Introduce OF component probe function")
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 
-As I discussed on another branch of this thread, after Tomi's
-explanations I think the flag is the correct solution because disabling
-the checks in i2c_atr_map_msgs() is useful for a specific
-implementation of the GMSL deserializer, but armful is other cases.
+Applied to for-mergewindow, thanks!
 
-About the implementation, I think we should not use something like
-is_an_atr(parent). First, it would potentially need to recursively
-climb the parent tree, and handling all combinations of
-ats/mux/whatever would be very complex. But even more because it is not
-needed. Tomi explained the use case is for the GMSL deser being the
-"parent ATR" (even though it is not physically an ATR) and the GMSL
-serializer the "child ATR", and the change in this patch is only needed
-for the parent ATR AFAICU. So the GMSL deser driver could
-unconditionally set the flag, and no other driver should ever set it.
-Tomi, do you think this is correct?
 
-Based on the above,  i2c_atr_new() or other parts of the i2c-atr code
-are unable to self-detect whether the flag should be set or not. That
-would mean we have a new user for the 'flags' field of i2c_atr_new()
-that Romain proposed [0].
+--yBRPQr3UFnGOqWre
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Finally, I think the name should not mention "nested ATR" but rather
-tell what it does, like I2C_ATR_FLAG_PASS_THROUGH.
+-----BEGIN PGP SIGNATURE-----
 
-So, that's my random thoughts, what do you think about this?
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdJq9oACgkQFA3kzBSg
+KbZSDA//WVfUWr7RZtRfQdM3rxGc3tg3gOh/v43xBLYMzMw+YRr5ntV59jLBixkc
+i5Dljx+8yOOqw3oNJwTe6uVoHfwP8kc/n0BbdunKUoO9LyoI2Jv1cpsANdleKJi0
+9QXahMyl/w0Jmoruv9SaMxg1GYg1wNx5mtCqIo3kZEnopxkzuOXpE6u1gelQ69f3
+u69Opunm4olZ4+SwShk/y0M2t2om8sUoSeNuTT2L9wSJbuEk/uTnKhe/ft3NP/H8
+d/D4VMBOAQLDP4TlC5hJZD/Jxi8KKbEoJN0KbZMysACtcWiPdlu/RWIUg64OzfQ9
+y4gyiCtlDBGufCJicdhctxFD6PCK6ay7ZY6BwfUW1xKRV1f4sdSpOBtOZDqdMMi6
+s55/MnKtu9RvCXqVgPPNfd1VYLK3DKQe5/WDBYRm9r2esbXvKwS4kD5M/U3MxMJ/
+XVxbCzTQWhqc5RDnvOJW+O53FVj4vRFqavCd4D4DVRFqBdL/bXTdvvR0gH0gUvJV
+sYSB5wiKzW9iKgLeKYqyaS6Y2t/87rqjfxyRPrybX4CdEGijcbBjIA5Y+56XtMTp
+OQn7TVoANIHZFEb3E/PpbFY70GINlzfp2QHwt8olCGP3lI5w0ugg7H0ZHP6ozzyu
+XZ7/rXO6FQRX+6cpYCsWxc1co+LCPcEqgw+wOZQedvFdNqBhlPU=
+=hFPO
+-----END PGP SIGNATURE-----
 
-[0] https://lore.kernel.org/linux-i2c/20241125-fpc202-v3-8-34e86bcb5b56@boo=
-tlin.com/
-
-Luca
-
---=20
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--yBRPQr3UFnGOqWre--
 
