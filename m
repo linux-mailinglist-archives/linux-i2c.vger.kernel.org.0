@@ -1,141 +1,209 @@
-Return-Path: <linux-i2c+bounces-8276-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8277-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 466539DEEFA
-	for <lists+linux-i2c@lfdr.de>; Sat, 30 Nov 2024 05:45:55 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B9A69DF5C0
+	for <lists+linux-i2c@lfdr.de>; Sun,  1 Dec 2024 14:14:09 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C9652815BF
-	for <lists+linux-i2c@lfdr.de>; Sat, 30 Nov 2024 04:45:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC2E1162F69
+	for <lists+linux-i2c@lfdr.de>; Sun,  1 Dec 2024 13:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E6513BAE2;
-	Sat, 30 Nov 2024 04:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 486451CB505;
+	Sun,  1 Dec 2024 13:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cT781H+d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e4GOAVMp"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6351798F;
-	Sat, 30 Nov 2024 04:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FD31CB507;
+	Sun,  1 Dec 2024 13:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732941948; cv=none; b=uJZYrP7IumbggvOIPdxgJq83PzSF5y3RePzlrt4vYXYk+Op+iAHmOCwmmgeadaNNh6vMHIwc9u45mDRWL/rUOh4Rd4M60Ni1K+C1ZLVTKpyvxVx8+mu8u8AIZ+lUnPqFMLwcmA3gYKabgfAAz0DIBDAnD/hm+ztYPXEOdqx4tC4=
+	t=1733058816; cv=none; b=nHsdw3oZFJ5OwuIZerd64/Hg6XzL6gDxpcykx5BUWXRmaVq68t7lVeici84Elrkld9wHH4UwPpMhZHHIe0nGDDcxJAZb+lRMsxgJD517cjIuJyPYV+/1WcFO4SeynEedA9mTxiZESI9PJGJ3RKLWs9y4FoPhIvF30/puXwOqxL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732941948; c=relaxed/simple;
-	bh=buFC7QWTIP8S4n9Bn7J8DHZ6cCnpP8huZHS8Hy77UoM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ACndIDT/GwzzCSnVe4IGpGRYz7IxMfKODTTa7FNstBgluzxpm2sZxkspUX1mFmiaM228l/8eoxlVXw6WHkmIobpXuk/l9/2h7OCbnJ9bua5thJnXKzSYVy6wUjxYnXGvCX8bFlboIf2RbwBIJTOmR6yDEi9r5XvBQVwU7ZCV1xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cT781H+d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E93C4CECC;
-	Sat, 30 Nov 2024 04:45:45 +0000 (UTC)
+	s=arc-20240116; t=1733058816; c=relaxed/simple;
+	bh=TV3OWw6PnaSi79vN5C5jq4rek5728H681ST6MubeH+I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oQk/FjZPDiFhDTeO2h/T+bln4wlEpJfR1KgbBu+MbWtFtfff4UZRravs01KwtvA3DgF4TN/wnf4ltMuf+RuO0pdxOWJBQOiyLfKkL+G72r3aMeLjQKl6C+X9tgZQ33FuKmAwYI+b+pystaCp+tJtlY/sn9Wm2Bggw7OyPLRq4Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e4GOAVMp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87022C4CECF;
+	Sun,  1 Dec 2024 13:13:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732941947;
-	bh=buFC7QWTIP8S4n9Bn7J8DHZ6cCnpP8huZHS8Hy77UoM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cT781H+dfprlBRwuk+c3G8/Nd3+YDMQFT5iEfNw8Pxgcz71KR+AjpoL3uPq9s+z8U
-	 6sXYDfb5fW9cc2YEpdBNdJuoTYvFoS7LVJOSyhRWawrbB0E+HBcmGl78re7rtot34M
-	 UVDfGX+6K9VTwK2WC/Qlk7Gzh9EyOx7XBzc2knJ+BkRMJ2W7mBt4HKUtEPhVBtvmOo
-	 0ffYG+SY9RyxBy/mvujUsJIgfkYfE/goKAgjMNmmBy68TK9hcFPGbUOvodpyhAf1Y1
-	 zQFm7Fj8L2PhftIaTZJL5gm7uPKZmr2pdP38tuOVoRig+acbcxjTABRatCixQBEs+o
-	 2PLeNkEm/Zwvw==
-Date: Fri, 29 Nov 2024 22:45:43 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: konrad.dybcio@linaro.org, andi.shyti@kernel.org, 
-	linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, conor+dt@kernel.org, agross@kernel.org, 
-	devicetree@vger.kernel.org, vkoul@kernel.org, linux@treblig.org, dan.carpenter@linaro.org, 
-	Frank.Li@nxp.com, konradybcio@kernel.org, bryan.odonoghue@linaro.org, 
-	krzk+dt@kernel.org, robh@kernel.org, quic_vdadhani@quicinc.com
-Subject: Re: [PATCH v5 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
- flag
-Message-ID: <5gy5gldcybby53irzyu6lejbwb6wcorb2k4qpd4j7yrijemehu@wmj3tgvxvhdy>
-References: <20241129144357.2008465-1-quic_msavaliy@quicinc.com>
- <20241129144357.2008465-2-quic_msavaliy@quicinc.com>
+	s=k20201202; t=1733058815;
+	bh=TV3OWw6PnaSi79vN5C5jq4rek5728H681ST6MubeH+I=;
+	h=Date:From:To:Cc:Subject:From;
+	b=e4GOAVMpLpHPiF/xBklqusrqgdl4ReS5Q/b+D/PgBhnviOyDXrN1T3qXzYM719JWb
+	 YDwmy2KOV7o5/IhKf3JLM1pfD97YK4+6L4TNl06DQezGeGtNgY2/JXDikUTKthTOtg
+	 RTrUAnBPs+SoE6s7XHzpIt5/XpNWaJcUDfLOzItNH0lXGhLw/hINxNXiqxpluKCbPc
+	 iTUcIYikUFrAaGg7OZkV7sbXrxECvapHgHD3PloBMK5xdLXMxye42zzr+Oj9/zhYBH
+	 zlYsBhnsDc0X2WHXgS524GNRpXYbiISj402pK7Rxq2Kk2tXgG2khhQWWIayDyj7iL4
+	 QEuJcd1zp7kew==
+Date: Sun, 1 Dec 2024 14:13:32 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.13-rc1-part3
+Message-ID: <Z0xg_JliD3EJmNtt@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="1HKa28Cze5WOfw6w"
+Content-Disposition: inline
+
+
+--1HKa28Cze5WOfw6w
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241129144357.2008465-2-quic_msavaliy@quicinc.com>
 
-On Fri, Nov 29, 2024 at 08:13:54PM +0530, Mukesh Kumar Savaliya wrote:
-> Adds qcom,shared-se flag usage. Use this flag when I2C serial controller
-> needs to be shared in multiprocessor system(APPS,Modem,ADSP) environment.
-> 
+Linus,
 
-Per https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
-your commit message should start with a description of your problem.
-"Add" isn't the right word to start a problem description with.
+so it happened not only to Andi but also to me that a series nearly fell
+through the cracks. This pull request contains a new feature which has
+been ready for some weeks but I forgot that we agreed that I2C is its
+path upstream :(
 
-> SE(Serial Engine HW controller acting as protocol master controller) is an
-> I2C controller. Basically a programmable SERDES(serializer/deserializer)
+So, given the amount of review by experienced people and the fact that
+the series only adds "opt-in" stuff (so less likely to cause
+regressions), I hope it is still possible to get it into 6.13. It has
+been in -next for a few days and build bots are happy now.
 
-"Basically"?
+Thanks and regards,
 
-> coupled with data DMA entity, capable in handling a bus protocol, and data
-> moves to/from system memory.
-> 
-> Two clients from different processors can share an I2C controller for same
-> slave device OR their owned slave devices. Assume I2C Slave EEPROM device
-> connected with I2C controller. Each client from ADSP SS and APPS Linux SS
-> can perform i2c transactions.
-> 
+   Wolfram
 
-The DeviceTree binding describes properties used to describe the
-hardware; your commit message describes what a SE is and that it can
-exist can exist in a configuration with multiple client etc etc.
 
-> Transfer gets serialized by Lock TRE + DMA xfer + Unlock TRE at HW level.
-> 
+The following changes since commit aaf20f870da056752f6386693cc0d8e25421ef35:
 
-This isn't what this patch implements. It defines a property which when
-specified means to the OS that any DMA transfers should be performed
-using TRE lock/unlock operations.
+  Merge tag 'rpmsg-v6.13' of git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux (2024-11-26 18:36:55 -0800)
 
-> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-> ---
->  .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml       | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> index 9f66a3bb1f80..88682a333399 100644
-> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> @@ -60,6 +60,14 @@ properties:
->    power-domains:
->      maxItems: 1
->  
-> +  qcom,shared-se:
-> +    description: True if I2C controller is shared between two or more system processors.
+are available in the Git repository at:
 
-This attempts to describe the property.
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.13-rc1-part3
 
-> +        SE(Serial Engine HW controller working as protocol master controller) is an
-> +        I2C controller. Basically, a programmable SERDES(serializer/deserializer)
-> +        coupled with data DMA entity, capable in handling a bus protocol, and data
-> +        moves to/from system memory.
+for you to fetch changes up to caf4bdb558cbc9893524b0a15e6423ee6305cb0c:
 
-But this is basically just 4 lines of text expanding the acronym "se",
-but while it might give some insight into what this binding (the whole
-binding) is about, I'm afraid it doesn't add value to the understanding
-of the property...
+  MAINTAINERS: fix typo in I2C OF COMPONENT PROBER (2024-11-29 12:56:05 +0100)
 
-Regards,
-Bjorn
+----------------------------------------------------------------
+i2c-for-6.13-rc1-part3
 
-> +    type: boolean
-> +
->    reg:
->      maxItems: 1
->  
-> -- 
-> 2.25.1
-> 
+core: add of based component probing
+
+Some devices are designed and manufactured with some components having
+multiple drop-in replacement options. These components are often
+connected to the mainboard via ribbon cables, having the same signals
+and pin assignments across all options. These may include the display
+panel and touchscreen on laptops and tablets, and the trackpad on
+laptops. Sometimes which component option is used in a particular device
+can be detected by some firmware provided identifier, other times that
+information is not available, and the kernel has to try to probe each
+device.
+
+Instead of a delicate dance between drivers and device tree quirks, this
+change introduces a simple I2C component probe function. For a given
+class of devices on the same I2C bus, it will go through all of them,
+doing a simple I2C read transfer and see which one of them responds. It
+will then enable the device that responds.
+
+----------------------------------------------------------------
+Chen-Yu Tsai (8):
+      of: dynamic: Add of_changeset_update_prop_string
+      of: base: Add for_each_child_of_node_with_prefix()
+      i2c: Introduce OF component probe function
+      i2c: of-prober: Add simple helpers for regulator support
+      i2c: of-prober: Add GPIO support to simple helpers
+      platform/chrome: Introduce device tree hardware prober
+      arm64: dts: mediatek: mt8173-elm-hana: Mark touchscreens and trackpads as fail
+      of: base: Document prefix argument for of_get_next_child_with_prefix()
+
+Liam Zuiderhoek (1):
+      i2c: Fix whitespace style issue
+
+Lukas Bulwahn (1):
+      MAINTAINERS: fix typo in I2C OF COMPONENT PROBER
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andrey Skvortsov (1):
+      (Test) i2c: of-prober: Add GPIO support to simple helpers
+
+Andy Shevchenko (3):
+      (Rev.) i2c: of-prober: Add GPIO support to simple helpers
+      (Rev.) i2c: of-prober: Add simple helpers for regulator support
+      (Rev.) i2c: Introduce OF component probe function
+
+AngeloGioacchino Del Regno (7):
+      (Rev.) arm64: dts: mediatek: mt8173-elm-hana: Mark touchscreens and trackpads as fail
+      (Rev.) platform/chrome: Introduce device tree hardware prober
+      (Rev.) i2c: of-prober: Add GPIO support to simple helpers
+      (Rev.) i2c: of-prober: Add simple helpers for regulator support
+      (Rev.) i2c: Introduce OF component probe function
+      (Rev.) of: base: Add for_each_child_of_node_with_prefix()
+      (Rev.) of: dynamic: Add of_changeset_update_prop_string
+
+Douglas Anderson (5):
+      (Rev.) arm64: dts: mediatek: mt8173-elm-hana: Mark touchscreens and trackpads as fail
+      (Rev.) platform/chrome: Introduce device tree hardware prober
+      (Rev.) i2c: of-prober: Add GPIO support to simple helpers
+      (Rev.) i2c: of-prober: Add simple helpers for regulator support
+      (Rev.) i2c: Introduce OF component probe function
+
+Rob Herring (Arm) (2):
+      (Rev.) of: base: Add for_each_child_of_node_with_prefix()
+      (Rev.) of: dynamic: Add of_changeset_update_prop_string
+
+ MAINTAINERS                                       |   8 +
+ arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi |  14 +
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi      |   4 +-
+ drivers/i2c/Makefile                              |   1 +
+ drivers/i2c/i2c-core-of-prober.c                  | 415 ++++++++++++++++++++++
+ drivers/i2c/i2c-core-smbus.c                      |   2 +-
+ drivers/of/base.c                                 |  36 ++
+ drivers/of/dynamic.c                              |  44 +++
+ drivers/platform/chrome/Kconfig                   |  11 +
+ drivers/platform/chrome/Makefile                  |   1 +
+ drivers/platform/chrome/chromeos_of_hw_prober.c   | 154 ++++++++
+ include/linux/i2c-of-prober.h                     | 140 ++++++++
+ include/linux/of.h                                |  13 +
+ 13 files changed, 840 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/i2c/i2c-core-of-prober.c
+ create mode 100644 drivers/platform/chrome/chromeos_of_hw_prober.c
+ create mode 100644 include/linux/i2c-of-prober.h
+
+--1HKa28Cze5WOfw6w
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdMYPcACgkQFA3kzBSg
+Kbbgfg/8CtGUoKvcg4Rj/TSty9ajgcq7S7OoCpZQ4QGWGRf44iK3TbGPsdpBTCkt
+pf4Hr+7DEAXdN12BzlTfbDx/QijclgrzMtll8nIKwqywsiZDpNQ6vWmqbrVegTOK
+HOUPVhLZx3HXHxpLUScT0zQtKoHou03U3MoxRcwvBIablxgzlYRH9wM4wAdwjrui
+Tpd6ny67NPtPpkS3kKNUk6nVYOZGawfGtvupCRAqV6Hn0WwD+ubUI4QZa8XvXKpf
+KpOjnsHg12ozyWyM9GNOe0lEPqauO/OPO1kYrPIkyMrMAOF+J42bPqZtpOS5wVpQ
+YsGwdRHvHBCWE/hUnf4tWz3dUIezyKSh9Qi2kvBVeVp9dHNtnobspNi4MlfyAh7u
+sZf/J9PCx2rP8oxAvH5Db/piH3gLUkBrgQ7LOAxdUjMlLOKh876Cyyk6VnqUEUkr
+OmIPkeSQPJMsr1x285P9/EVpzJNahMWfAFah21BNmndafJRhNf85jYl1semXC2i7
+PHGw3UZ5RpyqA14vW3CdNxT0midcaJ85L+OMhgsh2ozeyXhyWyiGVlndXP++y0uJ
+zeIlt/Miw0UTzNzMcFg3Qtjt9Mn2dB6YB/2m6P3MYlcElEJYPP/ycdU9alu1kfYQ
+pSaSCPBxPliUaBSB3eMcmufg8SmQvwiFSuGQukWf4jkSZJF1mMI=
+=lMyG
+-----END PGP SIGNATURE-----
+
+--1HKa28Cze5WOfw6w--
 
