@@ -1,124 +1,126 @@
-Return-Path: <linux-i2c+bounces-8298-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8299-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B6FF9E08E9
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Dec 2024 17:44:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6927A9E084F
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Dec 2024 17:21:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C328B34D98
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Dec 2024 15:30:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EAA22866D9
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Dec 2024 16:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98D5F207A27;
-	Mon,  2 Dec 2024 15:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB93188583;
+	Mon,  2 Dec 2024 16:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexus-software-ie.20230601.gappssmtp.com header.i=@nexus-software-ie.20230601.gappssmtp.com header.b="QJrAvFU9"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RGLLq2CG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EAB205E32
-	for <linux-i2c@vger.kernel.org>; Mon,  2 Dec 2024 15:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF954204D;
+	Mon,  2 Dec 2024 16:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733153409; cv=none; b=WTLWVN+wkf92Vw+5uK2y7z0cnEJptwm4KEbY/C006+LyEJtOUJoZWwK3hEl7/Y2Mjmjc863x6J5Ds+xW6beDDlUJXIL9xmx6Ea5aAZdLIDsxK8euW1k+FP13LNjGMze9PI/ZJ+Lsdf3UkNYHt/G32O7gke9b7eBmD+Xfq6FsHAs=
+	t=1733156513; cv=none; b=Sv5po+pT/k3SIWx3Hg/GT+9w3csgr+NznmeOQ/F6rtQNqc1JtQoyJwj7+yMGI/3eDlg/0v8y1Pk3lJ4nZv5Gy9ppH3iCOMH8J1YQTyXd2Jw0V2digUB+Vd+JfVVVI4spA8Q2jGxaktdqv2HtatfBied5nE3AYOrxI8UWzEDqhT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733153409; c=relaxed/simple;
-	bh=4xxCGmBo7FQG0p5BmYqe1NOagdrpfXWw9XcSG+Ugioo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D38r7MVfHww8Ys4RO+SahUaJklf6Ovps6KFYYhgAdMsp68BC5zHew1QRKt3bxqo3YOMo1Ifpc8vu50+KdGzAV+buwLlclJSksZqHnLH3MDz2ei+A7jFJlMIJYXo5W2kYNRwD9gSEu0SwGhPtZQQLd3MjrJKJBnWM4/l/P7DtM7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexus-software.ie; spf=none smtp.mailfrom=nexus-software.ie; dkim=pass (2048-bit key) header.d=nexus-software-ie.20230601.gappssmtp.com header.i=@nexus-software-ie.20230601.gappssmtp.com header.b=QJrAvFU9; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexus-software.ie
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=nexus-software.ie
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-434a2033562so35790235e9.1
-        for <linux-i2c@vger.kernel.org>; Mon, 02 Dec 2024 07:30:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20230601.gappssmtp.com; s=20230601; t=1733153406; x=1733758206; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P8jtIniQHqaGnIfrwCj5iJuQZ/gWHR/Lk4yIJETbzAw=;
-        b=QJrAvFU9PGw4ecwNa9iwbiRcvMsM81tKQr2eYUFLVZkF/qYnhOf9N0FQ58Lnx1mJJH
-         I9lbBL/yQxGzCV1CDfuodaYjDdma6kNDxwlHlnxatZbCKFY07MumOpCV5KAhH5850Ppu
-         grS+FyUAuQTeel53Bn9q1qvvzWyW/d48rXzKaaaBTjCOQ/dukEtLS3VXBC3L/pLelLIm
-         QJmhZ5SCQMp79/q2hgKF0fdvvIZPFEm01BWAQBfwXUz6+rgoOniIXUd/BDdz1s7hW/Vn
-         f5hPDXSFT1XD3rxMAgQwTPkuqfHlOOzCxOXfLgvogec9bUjNWh1tPkzVZQSpnsZSWcCr
-         pE7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733153406; x=1733758206;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P8jtIniQHqaGnIfrwCj5iJuQZ/gWHR/Lk4yIJETbzAw=;
-        b=dHlhFZmbni8X87F+GZU64Cb95Hepp7SYIR+PgrLm0hfhghmlPBxEMe+q2uvXMjJx3c
-         QwmBcZKyB+XXCm4KZt4oDq4+SYcxUiMsg22rQR8IQ4FYfWTUP41RBMMSWso1259SoOaV
-         39uCRIR/hTTiCgW2gaOv6JbgSIlgRwHx8YzJ5RwdUK3BiabpDiE2y4CWZML/T2tPgP/1
-         9B8PDp7htSm8nvohQcD6T6+fJ6cc5Bxo0UE5dRN5DqxpczdIOlXgWVtyVUjY3XWhrs9X
-         tbq1SxSHy1+TyHnLyonT/AP5yKbmQonlQdNtXL2oK05nt83hLP9Gi9a9svbUusqWHOEv
-         G8ig==
-X-Forwarded-Encrypted: i=1; AJvYcCXGswjl84K5YcrZAuSqdjwrgNJ6bfuY1EwnzXPv/y/5fNQA9SDnpgyGBKBe1K++JnH6WItKPslHtp8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaV83FyE15Oewg8JAM92SUi+CFJa7H3Ozcq2dcQz+nPz6k/Owe
-	UC+pe8U96BY0fLOv+iP2iVlxsTQG4yoOU3Qo0wW46XVLAiPvsi0mTHjUHwthXRg=
-X-Gm-Gg: ASbGnctjrUsW6MLnwE0P1cjDUT+3biJkp/zl6IZisaEfPmfiHOEw9ZGFrtCqcMw1PNH
-	uGAD8lKFOBrH+TCZt3JVIDLhVKteop897ebj06ScIvaXA+gWbeKOoXLKL+iETInl4pUDzpShobP
-	9tLv7XIg25uvbyvscb+Xd2ckE4NT5hjr2Ka1++AQhYMm/qO6hTZBynS9KH9xjFfn6f5gLJfe+mR
-	Y9t1sPTqKLFiu5mHSyRDAPqz+WJFYsbwf5g3Bz1/NCpwckDmcVh+AsIw7h3yAg/mw==
-X-Google-Smtp-Source: AGHT+IH1hTljFKEA9DHhDP/Bl2T9X3iPXf4B7h5kmrrQdKTb7FK5jK4sFt7iXegFoa1F8JVAtQP1Kw==
-X-Received: by 2002:a05:600c:4447:b0:434:a5bc:70fc with SMTP id 5b1f17b1804b1-434a9dc3c8emr211879435e9.8.1733153405821;
-        Mon, 02 Dec 2024 07:30:05 -0800 (PST)
-Received: from [192.168.0.40] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385e230b283sm8019425f8f.106.2024.12.02.07.30.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Dec 2024 07:30:05 -0800 (PST)
-Message-ID: <90fc1097-d353-4b6a-bcbf-81f8a8e24390@nexus-software.ie>
-Date: Mon, 2 Dec 2024 15:30:03 +0000
+	s=arc-20240116; t=1733156513; c=relaxed/simple;
+	bh=FuuewJd0xgy6SswgETCkr24Q/CXWixc+DK17YLD4yHE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mFdqJ0XAUb2X3xdqCwQv1cI71F0bZ6EwpweGT3v2QYITUdI23nmtIoTpkue5LChXlfp0BLRmFVwNCHYQylliDr1OvpAuEWzP733BEhDL95YeJqyYPeMAd0M60wtGIpd5rqT/o7D5AzLSSVe+J0QhflHQgN61TpIySN4hcnnWk1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RGLLq2CG; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6B1202000B;
+	Mon,  2 Dec 2024 16:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1733156503;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DWuQP6dS8+NmZBcntvso++MRt6a15SWWGT2AIb959RI=;
+	b=RGLLq2CGoEjcqd+gKN/ktqXtcE8p1p5n8+b28cqBMhsW/NEVNEAkFoELeO4IgCvXkdkr2/
+	hlaVtg7P3s9OTtE89/4hRw300qW6UZg60Oj62JgNOuSOVtlNcU6AR0dx5XJ3c1yQG7ARRC
+	f6X5XPp2QrpCXVpFT8/MLk2h1WjSnsY+jR7+jI5FEIXx+TUXf37c+r/Zf1QEQbEW0StumV
+	w44ypUVkND2+h0asZXYHzSUfBZo1trPLPih2D7tRe1o2LqCXClu2+XTssFxA3aWaNQe08l
+	zZ2xqytw1NsJBTWpM/CPqxjgJ2SghL+v8Zwilmme+h+r7BELz9It2SxONPvDPg==
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Wolfram Sang <wsa@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Cosmin Tanislav <demonsingur@gmail.com>,
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+ Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+ stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] i2c: atr: Fix client detach
+Date: Mon, 02 Dec 2024 17:21:42 +0100
+Message-ID: <12772983.O9o76ZdvQC@fw-rgant>
+In-Reply-To: <20241122-i2c-atr-fixes-v2-1-0acd325b6916@ideasonboard.com>
+References:
+ <20241122-i2c-atr-fixes-v2-0-0acd325b6916@ideasonboard.com>
+ <20241122-i2c-atr-fixes-v2-1-0acd325b6916@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/6] arm64: dts: qcom: x1e80100: Add CAMCC block
- definition
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Jagadeesh Kona <quic_jkona@quicinc.com>,
- Konrad Dybcio <konradybcio@kernel.org>, linux-i2c@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-clk@vger.kernel.org
-References: <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-0-54075d75f654@linaro.org>
- <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-4-54075d75f654@linaro.org>
- <02dd5593-38ba-4344-aa64-0913eca45808@oss.qualcomm.com>
- <2chygbm3yjozhkhps64oae5gwirdk5b3orsybss7jgutu5g7ke@4jskpnermxfm>
-Content-Language: en-US
-From: Bryan O'Donoghue <pure.logic@nexus-software.ie>
-In-Reply-To: <2chygbm3yjozhkhps64oae5gwirdk5b3orsybss7jgutu5g7ke@4jskpnermxfm>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-GND-Sasl: romain.gantois@bootlin.com
 
-On 02/12/2024 15:02, Dmitry Baryshkov wrote:
->>> +			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
->> This clock is not registered with the CCF
-> Isn't that be going to be handled by the CCF on its own (like orphans,
-> etc)?
+On vendredi 22 novembre 2024 13:26:18 heure normale d=E2=80=99Europe centra=
+le Tomi=20
+Valkeinen wrote:
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+>=20
+> i2c-atr catches the BUS_NOTIFY_DEL_DEVICE event on the bus and removes
+> the translation by calling i2c_atr_detach_client().
+>=20
+> However, BUS_NOTIFY_DEL_DEVICE happens when the device is about to be
+> removed from this bus, i.e. before removal, and thus before calling
+> .remove() on the driver. If the driver happens to do any i2c
+> transactions in its remove(), they will fail.
+>=20
+> Fix this by catching BUS_NOTIFY_REMOVED_DEVICE instead, thus removing
+> the translation only after the device is actually removed.
+>=20
+> Fixes: a076a860acae ("media: i2c: add I2C Address Translator (ATR) suppor=
+t")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> ---
+>  drivers/i2c/i2c-atr.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+> index f21475ae5921..0d54d0b5e327 100644
+> --- a/drivers/i2c/i2c-atr.c
+> +++ b/drivers/i2c/i2c-atr.c
+> @@ -412,7 +412,7 @@ static int i2c_atr_bus_notifier_call(struct
+> notifier_block *nb, dev_name(dev), ret);
+>  		break;
+>=20
+> -	case BUS_NOTIFY_DEL_DEVICE:
+> +	case BUS_NOTIFY_REMOVED_DEVICE:
+>  		i2c_atr_detach_client(client->adapter, client);
+>  		break;
 
-For refence this is always-on ATM.
+LGTM, tested on a TI FPC202 ATR.
 
-drivers/clk/qcom/gcc-x1e80100.c:	qcom_branch_set_clk_en(regmap, 
-0x26004); /* GCC_CAMERA_AHB_CLK */
+Reviewed-by: Romain Gantois <romain.gantois@bootlin.com>
+Tested-by: Romain Gantois <romain.gantois@bootlin.com>
 
----
-bod
+=2D-=20
+Romain Gantois, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+
+
 
