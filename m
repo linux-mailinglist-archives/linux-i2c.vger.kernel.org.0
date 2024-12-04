@@ -1,138 +1,182 @@
-Return-Path: <linux-i2c+bounces-8337-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8338-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A675A9E44C6
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 20:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83EC49E462D
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 21:59:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5B59B3CC0B
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 19:01:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BF63B3D7CD
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 20:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2DB71C3BFB;
-	Wed,  4 Dec 2024 19:01:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A12E1F540A;
+	Wed,  4 Dec 2024 20:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="LxRDAdf+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M8lm2Enu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206961C3BEA
-	for <linux-i2c@vger.kernel.org>; Wed,  4 Dec 2024 19:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961A21F1316;
+	Wed,  4 Dec 2024 20:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733338877; cv=none; b=cutM/XksGML5A0d/OxF/+jIb/c4+UhpGrMNhOu1ZvdtI7ZldHkHstpWTaE/m34pG1ormq0ob9VXw82eC9+OUrWshoIhsMLWkPMklAzbWMHy6nhI7dS05LSiCWUbUazt7CBzkTuwgkH7JdYVijBxP9UdOtBQJDOEmkciG9lEDK6Y=
+	t=1733343617; cv=none; b=M8a3wKHxnvP81mTGOx5hcVBRi1iFdDh2hQrIhn40S4aj919wOmq6p1/EgtRWqCn5aO2DwuJhyVVru2BHuy+IY5MgcX8JfRKnAzC6j9PXSejtl9VKGXcJBkOTv+/PNbm1eFMbdLZs3XOqXQhtlBDwPly519XKARpORUrTiOoiFSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733338877; c=relaxed/simple;
-	bh=dGMgCWy/FiSkAdMp9UvdT741buU8HdpvqsGF6tj+vB0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=omn85gkX0w3nyr1kBdT989DOvek9vwg4v4xCsDhfFQjmMZTHYsgsFdx7udneIOenuYPiVwFpNW2I2y+viMmllcPOhzLNpODTm/xC9mM+rWv9LOTMoGxjWMn1uEUYQ6x8B8h2DXliA8G6/ldU0eGN2YkPJzWFk6vtlIlmPzqHMAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=LxRDAdf+; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-21572ca3cccso620325ad.2
-        for <linux-i2c@vger.kernel.org>; Wed, 04 Dec 2024 11:01:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1733338875; x=1733943675; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=XYJicyJQPAVSX/dBdv1LhzFxvGUg1nM0XwsK+pFCmjQ=;
-        b=LxRDAdf+1DwFC7+7OCZbeC8YeWu57C5qeiACTR1rQwKS0Q7NYPXYGZjQ/o5l9dZgZR
-         6wXyKrlVwjJ5Z0Jh2Tq/SWp8YwbEs22rw3QbC7ORmR5pqRTBh/qWvDzQNmxbn7TD5eCm
-         81nnx5DXNMd469igADCgyXg8+SVX5K66sUcN4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733338875; x=1733943675;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XYJicyJQPAVSX/dBdv1LhzFxvGUg1nM0XwsK+pFCmjQ=;
-        b=prA9CQ+tgJeljPzuVCUjRroILcuxqc8iD8PwxgO4l+3LiHWrcPnir7aYtXBnsDIYu0
-         7VxSb3siR5KPz19hpPVy5DySW9N2V0JEFLykeVIoAzgenxyiPZmlAdpN0NmTI3lO67P0
-         zQ2cVuVigcwmXoNS1Pj3UQN8Xqla2/G9YgMdvuq9ejwO0RVxATzUzzKOFDM2MuMFvTW3
-         FooQdTjgfOVWTO+TzjktWvrCzLXQSSQCRhX32Vwg2U/5xMAgPDsFwWRGzBeOCU+2vXaQ
-         j6BPYUXLoeyCp5bKGMWT4f0HpDidjY4N/x5M01vACD49FVXzvCqNnEO9XPm32ZLwIWHY
-         sCsQ==
-X-Gm-Message-State: AOJu0YxKHnySL7iU1Uzx67+SL65bgoxgdh4RroT4hntg+zuyKGvo2vjj
-	92hQOPZ6tiuXDlKrAvEIeuK2NTuMVQ1qhrU+PLSycMZlonT0zlMOeJgCyRGihpwlNf3M8lDHWfk
-	zjw==
-X-Gm-Gg: ASbGnctPCfFMdp16dDMQnMzYv0mqGswkFAWtPVrMhoaBSpFEfqMRixiBLhLkyDK7awh
-	fR3HuE3fRhfMiUBGdVJLkNrZxF6pwktWC41gYzquipmVaZW7NCF2kN/dYwzaK49MgzIPEvJ1HvJ
-	w6JA0QGKri7WxbO6rQIJmISh5TydUFeXY6OhRblJajSTspaNjYZdToIREHuFg919WMpwRjalmrp
-	LXp8EMyxgJyKlFyosP+CI+a6ZJKkCPRMg27NIz9vHaiN3L+XhLcL0884oRLA0Row2uXytJWt9cf
-	0UV0KtgK/gF/aA==
-X-Google-Smtp-Source: AGHT+IFx2UQX3Qw+wx2n9U/LxHVb25NkWhzrS7DgmJE1ZbsrB31Xb7ZyILPG5QkvWqZrajsrH/wjwg==
-X-Received: by 2002:a17:902:da81:b0:215:5d43:6f0e with SMTP id d9443c01a7336-215bd24af1cmr94175695ad.41.1733338875373;
-        Wed, 04 Dec 2024 11:01:15 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2154e33e424sm89293845ad.144.2024.12.04.11.01.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Dec 2024 11:01:14 -0800 (PST)
-Message-ID: <34d5854e-0686-4ddf-bbfe-92f2bafa782e@broadcom.com>
-Date: Wed, 4 Dec 2024 11:01:12 -0800
+	s=arc-20240116; t=1733343617; c=relaxed/simple;
+	bh=2DwAxXKr5OmgZNqp/rw57rkElXZOOYwlLMtsGH2s168=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UD68N60d+sJbWJd50e3Xd33ApvWkVMqAnwapFo8fz/bALE8xYJqRc7G6SvqsgoFHWI0nOewfPdPRq7Itmq0WIOBAHjFYsENsGCxaDNlJjHZkmksFyF974dNVKIv1I0P7a2eREeQz+WUnpss9CKeWBSbfC2YfLwhnoXIuA9FciNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M8lm2Enu; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733343616; x=1764879616;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2DwAxXKr5OmgZNqp/rw57rkElXZOOYwlLMtsGH2s168=;
+  b=M8lm2EnuJ0A1mAPggTtULvCr0HyMm8n5UMxEj1yZuzhfzAbkQQPjHo3v
+   yiF7Qsl2a9USGG2xcEv3PirZIW5klCmMmrVoLM8MMeRQBcCBTe1hn4EW+
+   0nlIiGtWUO/I7JKtRbUsITLkxRM7lPb0TTXVWSs/ZYXnTrquxB9c8NtgW
+   XGw7Xp8tYThoVzhkiWYrh3APMfxpgtsazlVNrByxouKkrx0X3YdaMwnTO
+   s0cXaeZkauDM1uHqtsF76gECj+cIbjyVYH5Q3HxaTh/jxnZ7Oerf3dk9B
+   7JkaJr45J88t1fMQjRPWMFVxfXFC9FOgXrD88R25CIWXCZZwSr0vX7yaQ
+   w==;
+X-CSE-ConnectionGUID: D333gxziSWa6AoiQmKwpAw==
+X-CSE-MsgGUID: SoWwH3IQRXy/m68ZNPLIKA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="44664944"
+X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
+   d="scan'208";a="44664944"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 12:20:15 -0800
+X-CSE-ConnectionGUID: IU3ZpTEuTOejbQP8wEFewg==
+X-CSE-MsgGUID: bE2DErQ6T+qJMIn+xvSW/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
+   d="scan'208";a="93773478"
+Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 04 Dec 2024 12:20:09 -0800
+Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tIvqs-0003SH-1D;
+	Wed, 04 Dec 2024 20:20:02 +0000
+Date: Thu, 5 Dec 2024 04:19:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
+	andersson@kernel.org, konradybcio@kernel.org,
+	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, =quic_msavaliy@quicinc.com,
+	quic_anupkulk@quicinc.com,
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Subject: Re: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE
+ Firmware via Linux subsystem
+Message-ID: <202412050429.SJvNsU2f-lkp@intel.com>
+References: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: I2C_BRCMSTB should not default to y when
- compile-testing
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Andi Shyti <andi.shyti@kernel.org>, Anand Gore <anand.gore@broadcom.com>,
- Kursad Oney <kursad.oney@broadcom.com>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <rafal@milecki.pl>, William Zhang <william.zhang@broadcom.com>
-Cc: linux-i2c@vger.kernel.org,
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-References: <36b2923241f285595f43bb9565da352fd366c63e.1733242595.git.geert+renesas@glider.be>
-Content-Language: en-US
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <36b2923241f285595f43bb9565da352fd366c63e.1733242595.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
 
-On 12/3/24 08:19, Geert Uytterhoeven wrote:
-> Merely enabling compile-testing should not enable additional
-> functionality.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hi Viken,
 
-Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on tty/tty-testing tty/tty-next tty/tty-linus broonie-spi/for-next linus/master v6.13-rc1 next-20241204]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Viken-Dadhaniya/dt-bindings-i2c-qcom-i2c-geni-Document-DT-properties-for-QUP-firmware-loading/20241204-230736
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20241204150326.1470749-5-quic_vdadhani%40quicinc.com
+patch subject: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE Firmware via Linux subsystem
+config: arm-randconfig-002 (https://download.01.org/0day-ci/archive/20241205/202412050429.SJvNsU2f-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050429.SJvNsU2f-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412050429.SJvNsU2f-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/soc/qcom/qcom-geni-se.c: In function 'read_elf':
+>> drivers/soc/qcom/qcom-geni-se.c:975:23: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     975 |                 *phdr = &phdrs[i];
+         |                       ^
+   drivers/soc/qcom/qcom-geni-se.c: At top level:
+   drivers/soc/qcom/qcom-geni-se.c:1268:5: warning: no previous prototype for 'qup_fw_load' [-Wmissing-prototypes]
+    1268 | int qup_fw_load(struct qup_se_rsc *rsc)
+         |     ^~~~~~~~~~~
+
+
+vim +/const +975 drivers/soc/qcom/qcom-geni-se.c
+
+   946	
+   947	/**
+   948	 * read_elf: Function to read elf file.
+   949	 * @rsc: A pointer to SE resources structure.
+   950	 * @fw: A pointer to the fw buffer.
+   951	 * @pelfseg: A pointer to SE specific elf header.
+   952	 * @phdr: pointer to one of the valid headers from list from fw buffer.
+   953	 *
+   954	 * This function reads the ELF file and outputs the pointer to header
+   955	 * data which contains the FW data and any other details.
+   956	 *
+   957	 * return: Return 0 if no error, else return error value.
+   958	 */
+   959	static int read_elf(struct qup_se_rsc *rsc, const struct firmware *fw,
+   960			    struct elf_se_hdr **pelfseg, struct elf32_phdr **phdr)
+   961	{
+   962		const struct elf32_phdr *phdrs;
+   963		const struct elf32_hdr *ehdr;
+   964		const u8 *addr;
+   965		int i;
+   966	
+   967		ehdr = (struct elf32_hdr *)fw->data;
+   968	
+   969		if (ehdr->e_phnum < 2)
+   970			return -EINVAL;
+   971	
+   972		phdrs = (struct elf32_phdr *)(ehdr + 1);
+   973	
+   974		for (i = 0; i < ehdr->e_phnum; i++) {
+ > 975			*phdr = &phdrs[i];
+   976			if (!elf_phdr_valid(*phdr))
+   977				continue;
+   978	
+   979			if ((*phdr)->p_filesz >= sizeof(struct elf_se_hdr)) {
+   980				addr =  fw->data + (*phdr)->p_offset;
+   981				*pelfseg = (struct elf_se_hdr *)addr;
+   982	
+   983				if ((*pelfseg)->magic == MAGIC_NUM_SE &&
+   984				    (*pelfseg)->version == 1 &&
+   985				    valid_seg_size(*pelfseg, (*phdr)->p_filesz))
+   986					if ((*pelfseg)->serial_protocol == rsc->protocol &&
+   987					    (*pelfseg)->serial_protocol != GENI_SE_NONE)
+   988						return 0;
+   989			}
+   990		}
+   991		return -EINVAL;
+   992	}
+   993	
+
 -- 
-Florian
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
