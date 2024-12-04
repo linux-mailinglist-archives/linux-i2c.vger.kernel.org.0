@@ -1,85 +1,92 @@
-Return-Path: <linux-i2c+bounces-8339-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8340-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E10C9E468C
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 22:24:00 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21A6E168395
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 21:23:57 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1F06191F92;
-	Wed,  4 Dec 2024 21:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KsAOUROv"
-X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DFDD9E47EC
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 23:36:29 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F5A190696;
-	Wed,  4 Dec 2024 21:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAE3D284AAE
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 22:36:27 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D87FE1F5422;
+	Wed,  4 Dec 2024 22:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fB4WuRcM"
+X-Original-To: linux-i2c@vger.kernel.org
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C3C1A8F7E
+	for <linux-i2c@vger.kernel.org>; Wed,  4 Dec 2024 22:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733347428; cv=none; b=CiBokvckQ5bGU5v5ucOjHQGoeItYvKBL5UiA2O21vt/7wBb9Ln/M2wHpRl6zeMe0g9hbrDpNY3ALa0xyN5lAoaF/9V7DfmtNt/0/s4OLJdXGgQxOchsyZqnqYbGWTXZSDF2uVmMZsTazU3eaX3AWyzPOmBHsQFNh66p+Ek12HVo=
+	t=1733351781; cv=none; b=SvCpEd6TW2AFmpOyWq5VLhpytho30d8uM514pyGFACvxsA1GjQ4j/dMqGN0JmqhfNHjHN9gqGtSyJ25gB/sKsqxHWUWKXP53DezgL5akVdqpL1Aa5CSuuqiuNNbjHpbI2f0VrG1wSwXASjQtLAbIC8NjXiNpRnOnUhDHcL/e4+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733347428; c=relaxed/simple;
-	bh=SYresexVuihEbtFpKspS20LpBlURd+mfZxrEx78+LYw=;
+	s=arc-20240116; t=1733351781; c=relaxed/simple;
+	bh=8nyNe6nBOf2Dk/jqULA7hpqv08Qyov1aCsfLJP+e0ac=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k91dpjaTFxiWGk/8btwHSgytgYX/7Cn+QdGyHcFwfWMEy6yRupAiRy/kfgeHvNpQCKKWtZNgdmFNi6DypffC51jCk4+ecfSPmPSBa53tlw14I/1O+O6VhYLvAkbzeBqtrUmpz4V0F5xaoTSgdRS1g4SRVdcUNZDM6/27fvvm22M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KsAOUROv; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733347427; x=1764883427;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SYresexVuihEbtFpKspS20LpBlURd+mfZxrEx78+LYw=;
-  b=KsAOUROvA2XltG8pAJo9MkZEuvjakffRL6HpUZKSZ+mZCx29HyXD/PF1
-   hHQbZqR9CiC5YpCLNn8jWXhb6P/LK76CCem0wm2jCW0mxJ1jWOPK6/76i
-   4jhL2WmBCMTlD4WwRI4138UEh09nAgEk7WH7XXOO/TCzSFeQN6X8MY8Yv
-   LBmNA4lCsJH/Fwa1DcR5ZF8Q1u2yN9+9UyXtQvjAeEjkOfK6SOgVVcGMq
-   1TkfPI5wW0sN+B5YMHxvHTyKjgt0/uHbK8XsaScNF6WH/9XHKuoe+EMyb
-   /ZkeuUWMnpZP6eq5PiNNFgyz6Pc60zL7L85rSlwvU+htRt1Ao93zh7O/g
-   Q==;
-X-CSE-ConnectionGUID: zLbDmcKuTA+7np2WNFjWDg==
-X-CSE-MsgGUID: lMFSsmScTp2XWj0syw+KBw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="36480157"
-X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="36480157"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 13:23:45 -0800
-X-CSE-ConnectionGUID: I5msKDoLTuiUgPkb0enNRw==
-X-CSE-MsgGUID: +kYhVszvTda+p8e150Savg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="93783615"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 04 Dec 2024 13:23:39 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tIwqJ-0003Vq-1m;
-	Wed, 04 Dec 2024 21:23:32 +0000
-Date: Thu, 5 Dec 2024 05:22:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
-	andersson@kernel.org, konradybcio@kernel.org,
-	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	=quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
-	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ci7MZxzko3ZpGWZidKlAzc/DEXFZQdBs8zqY3J8NYNdFKb8Wx5NSfoM/lAFFqJ2IiAB3PWctKvFx0CtH0a3pvhsA3SXhhMRNso9xsj/fweoeLdGiJQ8KiPluGxHNfpksF+mFuWCbd6KmLjlbK8oBK3kJK+XaL9Q16+W+WEf6AxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fB4WuRcM; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-53de8ecb39bso443411e87.2
+        for <linux-i2c@vger.kernel.org>; Wed, 04 Dec 2024 14:36:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733351778; x=1733956578; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+mmQIbMpMz7O0AOKTkxfl8dFrxJ33xOJobw0OfEwbNw=;
+        b=fB4WuRcM3FIp3T0F7f5PzJzFKbU/bMYUYGPDay+g8J48QH0dCklAeeNTvHN3ZmW/Yd
+         9C0xzANYRgGvyyjJxKgQzKq1mRnbNWxpkFdrKB/XVHomB0HhOZwlVfQnbgCrkgB3JFEJ
+         JFgH0auMNwDgnydg/bUUCSk6vRZk07hwwJuYtnXfwkDqdQFMRB0O+5dfXToOQbH0DKxJ
+         9qkDmYVDfxCj7Q0jrdONvImyT3Q6YJ/9Hi8R2DLDDWXhQBjbTkmZOz1S1/k7/gI7P7ek
+         O7EkwK42zF/uvdRPRGogcgaflKYKCJ+qv1hj2asg5NwIITHtI2+Va7d6K/APbo0YKG6A
+         cEmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733351778; x=1733956578;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+mmQIbMpMz7O0AOKTkxfl8dFrxJ33xOJobw0OfEwbNw=;
+        b=NNimz5lPL9LbtgxbT2qnE76UxeVE103+BSEmbHHqHz8QkNBAxYoMjjpeFcpxJyCW5F
+         cLnMC734NzpPxzJVEPxj/V+Vs5q19vIhYggvKPUzLPcQA1YLozkcHze4Gx17ZFIWzZJM
+         Ulv3VaYgU9FIEXCUForVGOyufc/6K7/GMCEZH27e3lExVAYTbkiGLf0tIB0JPZPerEl5
+         Kszm3yemBddQMCG9exI4gnGdV/zGxXYq+r89q9NGbWh4l5m5TMJ/+rVYS/zwxQL7te0H
+         4ru1loJ21M0QBe8feRCR09gR0JFnlShPDPAfeDSRnmhsVoDKr5K26RsV+l+j4V5kGRDh
+         4sOg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6kA7S9HTfRGROcDqPnRASZZXxJoOqMnFW5i8YuJ5l21XRLsMXm347GXVA9XumlM2U7pCbyR13U6o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaQjuKlJr3hcV7d13/RRP2nozOyPKnwB96KAVXJoK6b2X+iBeB
+	vf3iRxSUK+Rm+eEi427rLHo5BEJ2uvr/YkhxGXPt881SN5Ypk6Otn97m/qlS8Ag=
+X-Gm-Gg: ASbGncs9o8fQ54vVlcm+cgAtKUIyutn9NeogVnZ9Pwa5OcI04OfqhJ+oMH4J8yTxfnP
+	eQdnpTg5Yt9QK4UvpraiHBWZOhK3s0RsyEpFG+uWCvOWhUUZJtciuab+s7UfqMdAo3f98LWc7zx
+	vofMcpJa7xyzkudFEPjpng96y03oPfTpvCGlS4nZR3hBbvPPvlWOYisHqRnBwC9goMDtLeuoFZY
+	Hv9pQk5yVWKdmuuXJb6i6ch8lx2p0M0JkuR1VqEm9yBJ1KK9pKjsf88QdxvtnUdoJftO6SvpRKw
+	Ja/D6/rQX3pL22AViYr10ui3rFDIkw==
+X-Google-Smtp-Source: AGHT+IGuGoCD3puMElK86ZdB02YG7dUQkM6ohz8Me4tads6hOhrBog3l0JNlc1YxUZmWAvJj211T6g==
+X-Received: by 2002:a05:6512:220d:b0:53d:d3c1:9fc4 with SMTP id 2adb3069b0e04-53e12a31944mr5017238e87.41.1733351778075;
+        Wed, 04 Dec 2024 14:36:18 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53e229ca47esm21650e87.264.2024.12.04.14.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2024 14:36:16 -0800 (PST)
+Date: Thu, 5 Dec 2024 00:36:14 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org, 
+	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+	=quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com, 
 	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Subject: Re: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE
- Firmware via Linux subsystem
-Message-ID: <202412050408.rTlLBe7e-lkp@intel.com>
-References: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
+Subject: Re: [PATCH v1 1/7] dt-bindings: i2c: qcom,i2c-geni: Document DT
+ properties for QUP firmware loading
+Message-ID: <garuc5au5464xpmj3exlull4o2763xrkqubplde56xmyfhfhmn@cpd4bbt4dfyr>
+References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
+ <20241204150326.1470749-2-quic_vdadhani@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -88,112 +95,61 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
+In-Reply-To: <20241204150326.1470749-2-quic_vdadhani@quicinc.com>
 
-Hi Viken,
+On Wed, Dec 04, 2024 at 08:33:20PM +0530, Viken Dadhaniya wrote:
+> Document the 'qcom,load-firmware' and 'qcom,xfer-mode' properties to
+> support SE(Serial Engine) firmware loading from the protocol driver and to
+> select the data transfer mode, either GPI DMA (Generic Packet Interface)
+> or non-GPI mode (PIO/CPU DMA).
+> 
+> I2C controller can operate in one of two modes based on the
+> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
+> 
+> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+> ---
+>  .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml   | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> index 9f66a3bb1f80..a26f34fce1bb 100644
+> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> @@ -66,6 +66,15 @@ properties:
+>    required-opps:
+>      maxItems: 1
+>  
+> +  qcom,load-firmware:
+> +    type: boolean
+> +    description: Optional property to load SE (serial engine) Firmware from protocol driver.
+> +
+> +  qcom,xfer-mode:
+> +    description: Value 1,2 and 3 represents FIFO, CPU DMA and GSI DMA mode respectively.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 3]
+> +
+>  required:
+>    - compatible
+>    - interrupts
+> @@ -142,5 +151,7 @@ examples:
+>          interconnect-names = "qup-core", "qup-config", "qup-memory";
+>          power-domains = <&rpmhpd SC7180_CX>;
+>          required-opps = <&rpmhpd_opp_low_svs>;
+> +        qcom,load-firmware;
 
-kernel test robot noticed the following build errors:
+please use instead:
+firmware-name = "qcom/sc7180/qupv3.elf"
 
-[auto build test ERROR on andi-shyti/i2c/i2c-host]
-[also build test ERROR on tty/tty-testing tty/tty-next tty/tty-linus broonie-spi/for-next linus/master v6.13-rc1 next-20241204]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Viken-Dadhaniya/dt-bindings-i2c-qcom-i2c-geni-Document-DT-properties-for-QUP-firmware-loading/20241204-230736
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20241204150326.1470749-5-quic_vdadhani%40quicinc.com
-patch subject: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE Firmware via Linux subsystem
-config: x86_64-buildonly-randconfig-003-20241205 (https://download.01.org/0day-ci/archive/20241205/202412050408.rTlLBe7e-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050408.rTlLBe7e-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412050408.rTlLBe7e-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from drivers/soc/qcom/qcom-geni-se.c:11:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/soc/qcom/qcom-geni-se.c:975:9: error: assigning to 'struct elf32_phdr *' from 'const struct elf32_phdr *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     975 |                 *phdr = &phdrs[i];
-         |                       ^ ~~~~~~~~~
->> drivers/soc/qcom/qcom-geni-se.c:1182:2: warning: variable 'reg_value' is uninitialized when used here [-Wuninitialized]
-    1182 |         reg_value |= DMA_GENERAL_CFG_AHB_SEC_SLV_CLK_CGC_ON_BMSK |
-         |         ^~~~~~~~~
-   drivers/soc/qcom/qcom-geni-se.c:1136:18: note: initialize the variable 'reg_value' to silence this warning
-    1136 |         u32 i, reg_value, mask, ramn_cnt;
-         |                         ^
-         |                          = 0
-   drivers/soc/qcom/qcom-geni-se.c:1268:5: warning: no previous prototype for function 'qup_fw_load' [-Wmissing-prototypes]
-    1268 | int qup_fw_load(struct qup_se_rsc *rsc)
-         |     ^
-   drivers/soc/qcom/qcom-geni-se.c:1268:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1268 | int qup_fw_load(struct qup_se_rsc *rsc)
-         | ^
-         | static 
-   3 warnings and 1 error generated.
-
-
-vim +975 drivers/soc/qcom/qcom-geni-se.c
-
-   946	
-   947	/**
-   948	 * read_elf: Function to read elf file.
-   949	 * @rsc: A pointer to SE resources structure.
-   950	 * @fw: A pointer to the fw buffer.
-   951	 * @pelfseg: A pointer to SE specific elf header.
-   952	 * @phdr: pointer to one of the valid headers from list from fw buffer.
-   953	 *
-   954	 * This function reads the ELF file and outputs the pointer to header
-   955	 * data which contains the FW data and any other details.
-   956	 *
-   957	 * return: Return 0 if no error, else return error value.
-   958	 */
-   959	static int read_elf(struct qup_se_rsc *rsc, const struct firmware *fw,
-   960			    struct elf_se_hdr **pelfseg, struct elf32_phdr **phdr)
-   961	{
-   962		const struct elf32_phdr *phdrs;
-   963		const struct elf32_hdr *ehdr;
-   964		const u8 *addr;
-   965		int i;
-   966	
-   967		ehdr = (struct elf32_hdr *)fw->data;
-   968	
-   969		if (ehdr->e_phnum < 2)
-   970			return -EINVAL;
-   971	
-   972		phdrs = (struct elf32_phdr *)(ehdr + 1);
-   973	
-   974		for (i = 0; i < ehdr->e_phnum; i++) {
- > 975			*phdr = &phdrs[i];
-   976			if (!elf_phdr_valid(*phdr))
-   977				continue;
-   978	
-   979			if ((*phdr)->p_filesz >= sizeof(struct elf_se_hdr)) {
-   980				addr =  fw->data + (*phdr)->p_offset;
-   981				*pelfseg = (struct elf_se_hdr *)addr;
-   982	
-   983				if ((*pelfseg)->magic == MAGIC_NUM_SE &&
-   984				    (*pelfseg)->version == 1 &&
-   985				    valid_seg_size(*pelfseg, (*phdr)->p_filesz))
-   986					if ((*pelfseg)->serial_protocol == rsc->protocol &&
-   987					    (*pelfseg)->serial_protocol != GENI_SE_NONE)
-   988						return 0;
-   989			}
-   990		}
-   991		return -EINVAL;
-   992	}
-   993	
+> +        qcom,xfer-mode = <1>;
+>      };
+>  ...
+> -- 
+> 2.34.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
 
