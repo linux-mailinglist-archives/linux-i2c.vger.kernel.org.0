@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-8331-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8332-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 935D19E3DC9
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 16:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 635049E3DCE
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 16:08:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53980280A23
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 15:07:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28453280D9B
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 15:08:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E27B20B20C;
-	Wed,  4 Dec 2024 15:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF23020C037;
+	Wed,  4 Dec 2024 15:07:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvKR5RS1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LyKCgVzp"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355D0199B8;
-	Wed,  4 Dec 2024 15:07:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F80199B8;
+	Wed,  4 Dec 2024 15:07:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733324863; cv=none; b=fyy8zceQbzKhi4p5J2vRqMPb9wcZsmGx/C/SuGyl6EpQCuZlU96MtevZdAFSrWeSogZuB0Atldq5FaJ67vHDF+38i4QuNUC1GjFWAO4W6knk5fGEDGfd2Fe0LkjC0GT3OvKe6SU/tcxXkaZWZddF/5yQJCwXBnOZMNSQKPzeqBE=
+	t=1733324870; cv=none; b=LLPBA3KE364qG1WjXKaLw3++Pg1QQHuDKntLcsDDwvryferzRw15PZ0uD+aFhsM+1FNQQPaV45DAZoVP4SdyfU1FRNWmv3mybApZcDMLPOZOUVdGDYWH7GtuDiLBhBaf84D0R8eV4OMfMhVf2Qk5uBTK5Rb6fzX57KiZB5NSAhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733324863; c=relaxed/simple;
-	bh=bYFDui5o6MfDmAuyJUHOjs7Lk8R9vRm1rUxRwl/f30c=;
+	s=arc-20240116; t=1733324870; c=relaxed/simple;
+	bh=tP6EyDHdUnwdw+Y54FZrgWjH9tvcAAhrZS8JZ46NA3E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=thgA4KWucZMGUubixMGjcEKYVTkoiSpqxyCLh8YRHwFGKV4X9dQwbi218gCjBiFoX2TGGPprCpQYE/fa6nsCXQYGEsjKFLqL8lts8twrYtdo0AJEiccjI2jFyRYn1QQ/7MB7I+MgILV4v7GFIveV1csnu+Cx3omwWQdtKXvYWLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvKR5RS1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A4A9C4CECD;
-	Wed,  4 Dec 2024 15:07:37 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=D7iews1WtYSPLHGltfoclbccUpGvYvx51ESOw7dkN/W3z5fBuQAvNeuogxYsH8/BVpLLLUFw9xQxZ8EPcmsP9yoQRKI76ueJzN0klOVjYk4/FwBY/sQRR1hajUIGQm63PQrYna3xWXKFtyU119TzRE3pihIwpOFnHmejSnq6UJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LyKCgVzp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62A88C4CED2;
+	Wed,  4 Dec 2024 15:07:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733324862;
-	bh=bYFDui5o6MfDmAuyJUHOjs7Lk8R9vRm1rUxRwl/f30c=;
+	s=k20201202; t=1733324869;
+	bh=tP6EyDHdUnwdw+Y54FZrgWjH9tvcAAhrZS8JZ46NA3E=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kvKR5RS1/XfLobsZmixwmkVdSzhWCfLgFlshIEumd+TnctTDDvlY8rbPECwiTE2xl
-	 ToZn0vUJgixk5ttyxvsWUPMX+dG5ZQye+9KOkoX9NFCtxJKL454/wazadgEisoQbe5
-	 lG91YMmTJIPe3DObyYf3NIG/woImwWLiSzvKSPH12QJnDEyeE9Je8QZFauWkIcJuEm
-	 k50bM4SYyEpMhHjDpO12JfphNNQz4LHFo1BXdaDiWago8BfHBp4ycqbmTlXDFkcv7/
-	 qaM5luAPcOAKEDuO/ovgsgsGPXJ1ubfwCs8vhB8H5x9DsRpCq/jI/rpnr167V94rOV
-	 +rAdD9G8xRJxA==
-Message-ID: <93e59e64-00a2-43b8-b7d6-ef20d07207b2@kernel.org>
-Date: Wed, 4 Dec 2024 16:07:36 +0100
+	b=LyKCgVzpyceLH9cwGwK8oy9aTGxEv0iGgBbnz9OMzs9FqKwTF7nAJ3QZF9tAR5tuJ
+	 jh+OYPxqw4IlGKRxuRZECghI/2/696JJpWmX3xlbpS8/8o15stMfxRTj/KF0f8iM1L
+	 Kkcr48gGoUx4ZyNTlAup+hukS6Tl/EswgjGNrehK3dcqy5xNkOXmwNyykOWgHCKTBD
+	 32/se+dpQoV9bWsW7erY7biofobEtCBpS6uJjcFc6nDM10CvpxX2j4bIjW+Wxa12xg
+	 7aNTjZ302lv30YpBr99cMxiuMMJZaAhtuzdOXcuzWG61NqscZ/DQaQlIPcSneUXq+l
+	 6SFpL/dXTbe0A==
+Message-ID: <3d6fa3c1-7488-446e-b2c9-9579c73d4b76@kernel.org>
+Date: Wed, 4 Dec 2024 16:07:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/7] spi: dt-bindings: Document DT properties for QUP
- firmware loading
+Subject: Re: [PATCH v1 3/7] dt-bindings: serial: Document DT properties for
+ QUP firmware loading
 To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
@@ -63,7 +63,7 @@ To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
 Cc: =quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
  Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
 References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
- <20241204150326.1470749-3-quic_vdadhani@quicinc.com>
+ <20241204150326.1470749-4-quic_vdadhani@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,17 +109,17 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241204150326.1470749-3-quic_vdadhani@quicinc.com>
+In-Reply-To: <20241204150326.1470749-4-quic_vdadhani@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 04/12/2024 16:03, Viken Dadhaniya wrote:
 > Document the 'qcom,load-firmware' and 'qcom,xfer-mode' properties to
-> support SE(Serial Engine) firmware loading from the protocol driver and
-> to select the data transfer mode, either GPI DMA (Generic Packet Interface)
+> support SE(Serial Engine) firmware loading from the protocol driver and to
+> select the data transfer mode, either GPI DMA (Generic Packet Interface)
 > or non-GPI mode (PIO/CPU DMA).
 > 
-> SPI controller can operate in one of two modes based on the
+> UART controller can operate in one of two modes based on the
 > 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
 > 
 > Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
