@@ -1,177 +1,167 @@
-Return-Path: <linux-i2c+bounces-8335-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8336-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEFCB9E4283
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 18:56:15 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B05F169B01
-	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 17:56:12 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 788BC213228;
-	Wed,  4 Dec 2024 17:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RjBCpCuq"
-X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D0619E4572
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 21:13:24 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16ED212B32;
-	Wed,  4 Dec 2024 17:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84086BE1649
+	for <lists+linux-i2c@lfdr.de>; Wed,  4 Dec 2024 17:59:12 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2894217647;
+	Wed,  4 Dec 2024 17:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mcGJHurP"
+X-Original-To: linux-i2c@vger.kernel.org
+Received: from mail-lj1-f193.google.com (mail-lj1-f193.google.com [209.85.208.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E8520C02C
+	for <linux-i2c@vger.kernel.org>; Wed,  4 Dec 2024 17:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733332811; cv=none; b=b/xsP5ZJA0XNj6Q4f4/5L6mYPHBRXm3ZGJV29HeAzmF2G+jRpp7GaAmapUP4ZgHglGdMsx0YwOZ3yM0Ux9NAYMBkdrDoRYeLtcuJ0wlWQNL1n5jddapK9L4p0LI/yQYPxQ2Z1pXJWKKhksDYeWnxkpm+ZihjOKgiEpS8uS6qCa0=
+	t=1733333171; cv=none; b=k+Cp9vSKeiaZUvn8uF8lrkcvC17AwLv+J9WhhK/61+PqLiktuRMw4477mVZThnfk+p38XIoWB0NyxDFurWHc0bHC3pLB6/T9Sfc/Q/wgHMJRKdTtyCvtzHwIhoG02YBpNOMksTVWgjBjvKLcmHI0+WnPR2mwxttbierS+EZ7xFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733332811; c=relaxed/simple;
-	bh=rrzwTMHt3x8E/1ni+TFWF6p3v6qRtGpQPz3NJv2LAGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qu25FmWGye6bGo6jNjFQhaU8pcl5Auep5LZCZWTNkiM2JCOjG3xAv9wKftXAlf88CHnYF1Ia5TbaXpwAlw86PRHkFxdgkXWVsH4lMRmnzRMjJT7nXN6dOvlrDDG9GE8i58jYgYHjbxOKJXM/+EERG42DK7Py6Q93IKvoHQin7dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RjBCpCuq; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D641D1BF205;
-	Wed,  4 Dec 2024 17:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1733332807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+sUuv8WEBnWh2ry91oVX4FPFYh0jD4hLU1SV5Zjdf0o=;
-	b=RjBCpCuqNMZ9JPWMndgv5J5tWRFxHNPzl7ZEFBt7aJFqdElZahUrRDFuj29QvRBah+zQzJ
-	cZ9bjab0lXEE8uCCbsFk6/tacET3gBMdeTaIHkiYQoXo6YfMHpjbNct+ob3hrdd8zXhSjL
-	uyC2xjzp/wqSkF9po5Uai/V8MYL6q/gCXaQ7v/MZCpcTY+tUdH7F/TaNDQmptw6oKjxs86
-	GjH2IrPqqRYPEAJE506Va7tJuwxZrwsSg74wrLZlApqcKaExcSg/bsEa1J3KXEK2hsDDMG
-	Bcej963yznHk0mPE6DVAdZAOZ0jFpaVAwkcl46aQRFoXmSwBY95Txk/l1EXicA==
-Date: Wed, 4 Dec 2024 18:20:04 +0100
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Cosmin Tanislav <demonsingur@gmail.com>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>, Mauro Carvalho
- Chehab <mchehab@kernel.org>, Tomi Valkeinen
- <tomi.valkeinen+renesas@ideasonboard.com>, Romain Gantois
- <romain.gantois@bootlin.com>, Matti Vaittinen
- <Matti.Vaittinen@fi.rohmeurope.com>
-Subject: Re: [PATCH v2 2/3] i2c: atr: Allow unmapped addresses from nested
- ATRs
-Message-ID: <20241204182004.7c317177@booty>
-In-Reply-To: <fba09c57-cf13-4f50-8fb2-874ae6f6d310@gmail.com>
-References: <20241122-i2c-atr-fixes-v2-0-0acd325b6916@ideasonboard.com>
-	<20241122-i2c-atr-fixes-v2-2-0acd325b6916@ideasonboard.com>
-	<20241126091610.05e2d7c7@booty>
-	<b954c7b7-1094-48f9-afd9-00e386cd2443@ideasonboard.com>
-	<20241127131931.19af84c2@booty>
-	<30732dbb-21e6-4075-84b1-544fc6e6abce@ideasonboard.com>
-	<20241129125340.0e2c57d9@booty>
-	<9bae963f-037a-46e1-abf6-f2ec464c4cf8@ideasonboard.com>
-	<20241203103932.3cd412bc@booty>
-	<fba09c57-cf13-4f50-8fb2-874ae6f6d310@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1733333171; c=relaxed/simple;
+	bh=3XOKyfOtCe+byiVNEcWIU0XMb6iWf0YuG2kDOBxGSKk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y43U3HeYD82tB/dWIG+jzm5re7VrVo5Rlvqi9vdEZMZg/U0OyT2BNb4oO0Bdu+FRvIoki4nMIh682JS1XuZM8Wn1u/mFDhYxJz+tb3TFdeGcgpbClprbWKL/a9XRcAq0RiFMTFtfY/lO2ZQx5/P7JmpFQV+xkluX5w57FB+4QSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mcGJHurP; arc=none smtp.client-ip=209.85.208.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f193.google.com with SMTP id 38308e7fff4ca-3001b14d696so5619611fa.3
+        for <linux-i2c@vger.kernel.org>; Wed, 04 Dec 2024 09:26:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1733333168; x=1733937968; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wcxUVGNwDSHYT0cP1lB+JvbULa6oEpjDSAOsUsCsW1c=;
+        b=mcGJHurPFhyWZrzxsqhe3WqxFJ6pLKqpNZR9oI+eEzSGuu+sDvSvgQMRio6kGjgH6a
+         KZ4dF6e1XOqzPO6uGws0h5EMgOQFmNHFxT7lLtBkfc/xsdSL9zJ8Ek+o+/fRT1jHYEmS
+         SaB8m20QSdJbwsZkI7de/iKUf5IZGfww3N6JM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733333168; x=1733937968;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wcxUVGNwDSHYT0cP1lB+JvbULa6oEpjDSAOsUsCsW1c=;
+        b=CEB8jiWn3Yz+us34J0wzKU88R8ThiDtRDEj6IFi3uwRigF6M7h0KiCwaGZ7jPJ4mRM
+         qS6pZnkJ0CG/Pi4GHrkmN36wJD2nstNT5lk9lJrtxgg7aYe+Lfv8aVYVj1zfq7o4gGz9
+         GBdcmys4Cf0KxHYknmwbW6umltq6fBwoQsLey/V2qvhd+MZrVuzZiR6nv5UF2Tbd8sQm
+         T0FdPixWYTNXcmfWdAVkHh4sbg8hFrEWnPYz/rzgI0QDQ4khMXgSQYbHfDrj7VLUAUqQ
+         pAKp/afVcxaJGKodMbe8SPtCTcMOIC6PRDgyVTXN/kdfplSFTWJ6kcfucGBx6fNp1xd+
+         fRrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUwH6Yfa9BztGDNoyvxMIBLE5iOgOiTFoyqpX/hJmOUFf6ICXBbY024DWmHVWr0N9hxa0dz++xahD0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycZF/kZXTEcT2Sqg/ALVe3IR+9Lsj38/RgJFoP8dGGJlHDLbp2
+	4yeFeG7lfPIiTycGILMgwu58KLT2+aMvNEmD8B2PeJQEjZIJ0AEIqi/ef6dKDTN1E+sGhbTcMla
+	UBPzj
+X-Gm-Gg: ASbGncuK65N01vGjs3kL+jX+jV96JEcDlAwO9QCTinQGSzVXQSGdKO4JfXCNssWx1Yl
+	RALV/FKZwC/+76Ql/+qZW5Mq3VmL2mA5KazYrOPexaaxVSXFURTp5pQM5dRWz8Gk2JEMUsR0SPx
+	qSlm1hC1rZ4xliTh48zW5lYBuMstoIBcvY2QA/mQoVmIWZJJunov+olW5Hv8PuXqXqg6DW7QzMI
+	iiJ2SoDvbE9ecp121OU8tGi10FGmJv2pk8UnwbtwKsUGiJQD0RNRbv3DVyFVw2e6IVojDAUh9CF
+	00MjdYj6ptBjIS/bRA==
+X-Google-Smtp-Source: AGHT+IGnIdA58HLe06/y5cpSUerJqWbTKFt573XZNazP6B7C+ck+83uTMNNVP9muAE+gSqdEIwXl0w==
+X-Received: by 2002:a05:6512:3ca4:b0:53d:d431:74fc with SMTP id 2adb3069b0e04-53e129ecff2mr2730337e87.10.1733333167802;
+        Wed, 04 Dec 2024 09:26:07 -0800 (PST)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53e216e847bsm16095e87.211.2024.12.04.09.26.07
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Dec 2024 09:26:07 -0800 (PST)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2ffd6af012eso82352091fa.2
+        for <linux-i2c@vger.kernel.org>; Wed, 04 Dec 2024 09:26:07 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVoFlZZevg8wt8yya74Xx3Ged1d8Q7hmj5n9nPY2H1j3Bhb+cA5clf1RKSycy0QYeFZ8Kl3FINiyOg=@vger.kernel.org
+X-Received: by 2002:a2e:a108:0:b0:2ff:c027:cf5c with SMTP id
+ 38308e7fff4ca-30009c3f871mr30428561fa.16.1733333166812; Wed, 04 Dec 2024
+ 09:26:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
+References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com> <20241204150326.1470749-2-quic_vdadhani@quicinc.com>
+In-Reply-To: <20241204150326.1470749-2-quic_vdadhani@quicinc.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Wed, 4 Dec 2024 09:25:54 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XF+9wxZ5xNtO3Uy8QW9UY4tb+KR46jkondvBeQuVLsrA@mail.gmail.com>
+Message-ID: <CAD=FV=XF+9wxZ5xNtO3Uy8QW9UY4tb+KR46jkondvBeQuVLsrA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/7] dt-bindings: i2c: qcom,i2c-geni: Document DT
+ properties for QUP firmware loading
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org, 
+	johan+linaro@kernel.org, agross@kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-spi@vger.kernel.org, =quic_msavaliy@quicinc.com, 
+	quic_anupkulk@quicinc.com, Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Cosmin, Tomi,
+Hi,
 
-On Tue, 3 Dec 2024 12:35:29 +0200
-Cosmin Tanislav <demonsingur@gmail.com> wrote:
+On Wed, Dec 4, 2024 at 7:03=E2=80=AFAM Viken Dadhaniya
+<quic_vdadhani@quicinc.com> wrote:
+>
+> Document the 'qcom,load-firmware' and 'qcom,xfer-mode' properties to
+> support SE(Serial Engine) firmware loading from the protocol driver and t=
+o
+> select the data transfer mode, either GPI DMA (Generic Packet Interface)
+> or non-GPI mode (PIO/CPU DMA).
+>
+> I2C controller can operate in one of two modes based on the
+> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
+>
+> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+> ---
+>  .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml   | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yam=
+l b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> index 9f66a3bb1f80..a26f34fce1bb 100644
+> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> @@ -66,6 +66,15 @@ properties:
+>    required-opps:
+>      maxItems: 1
+>
+> +  qcom,load-firmware:
+> +    type: boolean
+> +    description: Optional property to load SE (serial engine) Firmware f=
+rom protocol driver.
+> +
+> +  qcom,xfer-mode:
+> +    description: Value 1,2 and 3 represents FIFO, CPU DMA and GSI DMA mo=
+de respectively.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 3]
 
-> On 12/3/24 11:39 AM, Luca Ceresoli wrote:
-> > Hello Tomi,
-> > 
-> > On Fri, 29 Nov 2024 15:31:45 +0200
-> > Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
-> >   
-> >> On 29/11/2024 13:53, Luca Ceresoli wrote:
-> >>  
-> >>>> So strictly speaking it's not an ATR, but this achieves the same.  
-> >>>
-> >>> Thanks for the extensive and very useful explanation. I had completely
-> >>> missed the GMSL serder and their different I2C handling, apologies.
-> >>>
-> >>> So, the "parent ATR" is the GMSL deser, which is not an ATR but
-> >>> implementing it using i2c-atr makes the implementation cleaner. That
-> >>> makes sense.  
-> >>
-> >> Right.
-> >>
-> >> But, honestly, I can't make my mind if I like the use of ATR here or not =).  
-> > 
-> > Hehe, indeed, hardware designers use a lot of fantasy in stretching the
-> > I2C standard to its limits, perhaps more than actually needed.
-> >   
-> >> So it's not an ATR, but I'm not quite sure what it is. It's not just
-> >> that we need to change the addresses of the serializers, we need to do
-> >> that in particular way, enabling one port at a time to do the change.
-> >>
-> >> If we forget about the init time hurdles, and consider the situation
-> >> after the serializers are been set up and all ports have been enabled,
-> >> we have:
-> >>
-> >> There's the main i2c bus, on which we have the deserializer. The
-> >> deserializer acts as a i2c repeater (for any transaction that's not
-> >> directed to the deser), sending the messages to all serializers. The
-> >> serializers catch transactions directed at the ser, and everything else
-> >> goes through ATR and to the remote bus.
-> >>
-> >> Do we have something that represents such a "i2c repeater"? I guess we
-> >> could just have an i2c bus, created by the deser, and all the sers would
-> >> be on that bus. So we'd somehow do the initial address change first,
-> >> then set up the i2c bus, and the serializer i2c clients would be added
-> >> to that bus.  
-> > 
-> > So you think about another thing, like i2c-repeater, in addition to
-> > i2c-mux and i2c-atr?
-> >   
-> 
-> Since most of the functionality needed (besides allowing pass-through
-> transfers for unmapped I2C addresses) can be achieved already using I2C
-> ATR, I think we should make use of it.
+I'm a little confused about this. I'll admit I haven't fully analyzed
+your patch with actual code in it, but in the past "CPU DMA" mode and
+"FIFO" mode were compatible with each other and then it was up to the
+driver to decide which of the two modes made sense in any given
+situation. For instance, last I looked at the i2c driver it tried to
+use DMA for large transfers and FIFO for small transfers. The SPI
+driver also has some cases where it will use DMA mode and then
+fallback to FIFO mode.
 
-If it allows code reuse, then it makes sense.
+...so what exactly is the point of differentiating between "FIFO" and
+"CPU DMA" mode here?
 
-> > Well, I think it would make sense, as it would generalize a feature
-> > that might be used by other chips. However at the moment we do have a
-> > working driver for the GMSL deser, and so I don't see the benefit of
-> > extracting the i2c-repeater functionality to a separate file, unless
-> > there are drivers for other chips being implemented: this would motivate
-> > extracting common features to a shared file. IOW, I'd not generalize
-> > something with a single user.
-> >   
-> 
-> We have GMSL drivers for 6 new chips that make use of the I2C ATR, and
-> we want to send these upstream. Adding pass-through support for the I2C
-> ATR is one of the only things keeping us back, and it's the solution
-> that makes the most sense to me.
+Then when it comes to "GSI DMA" mode, my understanding is that the
+firmware for "GSI DMA" mode is always loaded by Trustzone because the
+whole point is that the GSI mode arbitrates between multiple clients.
+Presumably if the firmware already loaded the GSI firmware then the
+code would just detect that case. ...so there shouldn't need to be any
+reason to specify GSI mode here either, right?
 
-I see, so I understand the aim of this patch. As it was presented
-initially, in a "fixes" series and without any mention to new GMSL
-drivers, it didn't make sense to me. I think it would be ideal to send
-it in the same series as the GMSL driver(s) using it, otherwise there
-is no reason to want this change. Also it should not be presented as a
-fix, because it is not: it is changing the ATR functionality in order
-to extend it to new chips. Finally, documenting the oddities (the deser
-being implemented using i2c-atr even though it is not an ATR, in the
-first place) wouldbe very useful in the commit message and/or cover
-letter.
-
-Best regards,
-Luca
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-Doug
 
