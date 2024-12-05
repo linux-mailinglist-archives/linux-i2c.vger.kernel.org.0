@@ -1,190 +1,161 @@
-Return-Path: <linux-i2c+bounces-8350-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8351-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D84129E5A99
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Dec 2024 17:01:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE6589E5B61
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Dec 2024 17:28:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C8EF16DC39
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Dec 2024 16:01:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A71B1161E31
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Dec 2024 16:27:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A6F0221457;
-	Thu,  5 Dec 2024 15:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ADFC21D585;
+	Thu,  5 Dec 2024 16:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oy51uELB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kGeMbJqD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6693721D5B0
-	for <linux-i2c@vger.kernel.org>; Thu,  5 Dec 2024 15:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE5E2F29;
+	Thu,  5 Dec 2024 16:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733414349; cv=none; b=Ta4hRWeHMh6g9H6mSCG3iaCWjGja7Yzhb56sCAmrGmevj6E8jjkouMukErvmHg+jQVhuUYkLWVqX9PftLWXiY1FWtUeleZxyCTQ1EULbHG8M9crT7Eng364TogUq6ztuyELe0W+RTDsOyQDu5xwoYjxwPrLGB6Vnn76LnGHiNTQ=
+	t=1733416041; cv=none; b=cD2TiT4ka/fk+FKV1ctcQLwX5+ZNzDVDDf7XvWMGGziGgZlGhqQ4o/m7WpNxBhndLTUMsU4aMqfnfTddlHTxCN1YClRabJ5iGBW1okT4uqqJhtwpeh7bgWjytWHqg8o9ZJ50NcE7/OHVz0Wdf2x9P2LLkxVeYTRyCEAFbb76oks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733414349; c=relaxed/simple;
-	bh=xx6bzW93qYug9NUFOUEItSLZ3A3+XlADGHoEE8dk5AM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fKCG+anOb0PsZg53KlqDZeHHhjla3CPs/ZJSpoF+6w2wdjX6r9pUrBuJoc6EM7lwZRiVlTjVILsoR/DscNCbkXBTAyqu/xRONTK9MnGaaOFkfsz1Gx9b/MDdeSfwxvEQ868LayXUzkoAKv7MCTKw8r6YsWoUYDvrQK1uW/c2XGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oy51uELB; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B5Bt0WI025655
-	for <linux-i2c@vger.kernel.org>; Thu, 5 Dec 2024 15:59:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	yszwgFsqvwEaF88/m9YMRCU6cVZhMmNKsZobuMzE7pU=; b=oy51uELBg3N//5P+
-	FvBJWUd9FQzJUs4jZIfd9zQOvRiPEQtEVM1V7O0xRlESA0al6hcrmjIwgqpN0QYA
-	HreH6qfGR1p9Nh0nRN7ihB0iZwtZ7E1L0yxd8ynqbBtzF5HVy4DQCrKZVqHL2zrv
-	eGoQLtdT2op/1PLsYd8NZIS0ULwy2r7Tdn/zAdz7Ix8cR/J8Kd8Z+gk2gC3EdAR5
-	8DpWAkxSmh5EWBHzUx59zbAbBru5ZC6cMva+O0OXY/2nkL0xhLeOy8KevXFT8VIA
-	lWwRjLwYIlYRNfKhBi9DfDdhkARSjeRTDpWz+GH0CPHXVNl4ZI04eOPh//dDsLBl
-	5uv3vQ==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43bbqm0n71-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Thu, 05 Dec 2024 15:59:06 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-46692fb862bso2179861cf.1
-        for <linux-i2c@vger.kernel.org>; Thu, 05 Dec 2024 07:59:06 -0800 (PST)
+	s=arc-20240116; t=1733416041; c=relaxed/simple;
+	bh=KIKU7vNg+z/Wt1u6A5HZLGcWAsp5tnmkpoh9k7jl7fc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gl5U1QPimNv0IQVXUgQm90c1K5tCh8ZS2GSeKelaJDIf5ecENraxhyrw/0mqCR5acY2b7j9Bf0KLzCCfujeMk9nWWjtZ23OepGwjKY8DEjRuieYY1b5HyFsnXxL++F20/KVOhtr/ekoSbLtcGQUctIDJmJytxf2R9VZICShTGlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kGeMbJqD; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7fcfb7db9bfso933574a12.1;
+        Thu, 05 Dec 2024 08:27:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733416038; x=1734020838; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UmVy9retQhH8au80HraGWl14e7NomlL+OC1Ht0/e3l4=;
+        b=kGeMbJqDvgaIwdf5xmi43ddHftwlzjgB655O/f8tR9kzPoR0d+9oV1kCR4CVy+iB6I
+         XSMlWrZ+e1I9zmmcqOvVU3UZJTEixj3h4DvLTBC0Ie+AWnSbZbNqWmo2k/mBjQa9RGVa
+         QNRX8S15tDB4pedUIvk8EVAO08cVHoC/GQ/B/GQOCH+nGCa8DQzCePH+YLRh/JPh0tOw
+         3QsaAq7H9KjHwxhqasJHPImi4xSU02u3GYDhkUUJTxbc3nPNSuPXbsMEMvzspl5BYUhm
+         6kVP6+xY3k59LuOzhDY4Om9YDf4gLtsqMqLbjrBdHpRE0ht1keTL+BCl5nHghxqp0zJw
+         DOsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733414345; x=1734019145;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1733416038; x=1734020838;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yszwgFsqvwEaF88/m9YMRCU6cVZhMmNKsZobuMzE7pU=;
-        b=vOCFPWEDQp2wH3QQMkUmuARbghrsH2dvPn8aTQhsZpbuXJOjFhmzftBlTidQYkrYEj
-         oxVbZMXGHbrdU3wiYhvFS3RcIuiLEe5JLpKFtI4yG+ZI+SjdYwqiHJpOqtf3Gjl0xUWz
-         RdBKDM7aV1XunJSvx9XtY7QDfqThCRl3kfRaqET0jZ14GLVDsLf6T41KxFtLZW+kBb+9
-         TV5acG94M1cJnt96t4Ygy4tVU1nvZrrENshNTXnAo+voZM3AgP9qDa1Io3phs5pCHPZT
-         4vJrFRD1Nck3bdWxz+goFw8DedL4pS6hR1aQhj29TYE0p8Ck2s0Z197AEvAReaDWZpnz
-         V/Pw==
-X-Forwarded-Encrypted: i=1; AJvYcCVLxhvM7FkjxE3Ivl1iPGDDVzHrbflUpgDYxKvUAKc0fttqcwfbGk/LIQeGxlds+grOekkqxUw5Atk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyc+vNBH9uY1OkSke8b6Xe2Z9+7ta4m/8filFU+Ov60CfFLe+6/
-	GnNlUk7slAVtPa0QaM1Qpm0bIvyIdRW7AVCyojSwQfkIEULXRvQaHrH3v1k1VlaZS37Wd9mEHkB
-	jqH71Zau873yX+lynlWXioyQugA5BHKD9Xo0RqdOkB46N1THR3JOEb6Ihbg4=
-X-Gm-Gg: ASbGncuiRvCaRwjdsui7HW3fH9atKPt+l6HIUvtS3KhYpTr3lUzi0Izlytb226FXfxh
-	bsLHCgylFneFN7pEHNXmH7jrIFtT1YOUlzKtlf1bKTKNTidGaPS4hYAIqWknsw5yJBNWmsBXVHP
-	gpa7DjfKRZhTSFub9KRir1HrOYZSLf56RLZWWbru7ywtv68lTWiGBxJ3SER6LDadSg3/Ecn+ts4
-	KbginV3TapAbCWLOzjW/bFTNVIK6fISoyznm2AC8p5MzJKooGDTmVJlKbQZ8drBhWlLYIe93XLw
-	yVBUvy5SefluJRfkYOaPga/YyXsi3ZY=
-X-Received: by 2002:a05:622a:a:b0:462:fb65:cbb5 with SMTP id d75a77b69052e-4670c75dc63mr66201701cf.16.1733414345311;
-        Thu, 05 Dec 2024 07:59:05 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHdcQYLx+GQCSQcULNKkIdrTlHsmQZvRQx/a32/wYnjknMOOl++SdYS334Mh6nI8mZ+tkelig==
-X-Received: by 2002:a05:622a:a:b0:462:fb65:cbb5 with SMTP id d75a77b69052e-4670c75dc63mr66201661cf.16.1733414344903;
-        Thu, 05 Dec 2024 07:59:04 -0800 (PST)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d14b608b7dsm951356a12.45.2024.12.05.07.59.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Dec 2024 07:59:04 -0800 (PST)
-Message-ID: <9d5e5b8b-aeaf-4ec8-b34a-8edeaec20037@oss.qualcomm.com>
-Date: Thu, 5 Dec 2024 16:59:00 +0100
+        bh=UmVy9retQhH8au80HraGWl14e7NomlL+OC1Ht0/e3l4=;
+        b=qqkurgkZmSzCEKVDZGOKl9uR8H6XfH4EuYeLvqm/2RCj11lpXh/8KaReSOUBhNZLfd
+         ZUPoChdz3FUpvZy7OUVxyD/uaKzGFVqsr3VcfPzULUT6dKKkIqwIhT+lBHEuk3W2tTbt
+         3guLIkm84+HS1L8Jiu9zutwmbEfOYnVFiUAOofx1DMVJ8VPCqbPeDsBGJqwRA2uZpk0J
+         /swg93GxpeQSV2D8kaeLDezthsqs3Olamm5CnhPavJkMph1xEJgqffrq8ge+ZztsvsXq
+         v61m2ajRRqheVnO6diJAhw3x6iKCIrvZmbiM50lzCqE3cnONLZUPpdGGnWufhS1NdN4K
+         WNhw==
+X-Forwarded-Encrypted: i=1; AJvYcCV0AXk0MOJnEg4oqXRHoZVYJ+wO8+udqHUm2vM4JSgiPd0J8TvUYnnoJE07aAnEYIZzSDUilrWsZlwD+Q==@vger.kernel.org, AJvYcCWk6murul07BFPZkoPfPdHI20iu0YwlRrlKE2yq8s/mG41bGthFVaUP5Z0JoU+G8R3VslAHlnmJ65E8@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeyeJ8i2HvGcbYdtOls/D5THJWWYwjrHCui6mUl15WUEU3Sf/R
+	JVKOppwSct8msZd5R/ZsXBKubtsD3/bx+2SBumIVnNyHkLu0fdyR
+X-Gm-Gg: ASbGncsRMMlP9G5fHJ4aHXswEWeqzq5VPeFwARFeM+/mTcDZxIDD6ZGd2NDGqQzJ6gY
+	mO8zbVnXjBYd2OwMvoAQQd80Ji+q8kCmZHHDqikTPVIPvtdhST88oHx09lYHs/yIM300WahFQSI
+	NtrTx+33BaeEqHF4MWO3CbB4ocKC2W7go4HGaZWWcq1u/P/hnCqhA912oiyeHTRlHV08Sn7NgL1
+	rnpypa5TZkPmY3kefuntbqqd07KeN7x9EPP3y/Un5AdN1nN0QH4vfiSYCTXK2U=
+X-Google-Smtp-Source: AGHT+IEfMtihQO9z97g/N9babHIuzjUsUU5ANaygqGEoAOe77AI6HGqvZzZIxjE45atU0Z9Uubajrg==
+X-Received: by 2002:a05:6a21:78a0:b0:1db:e8dc:4ae1 with SMTP id adf61e73a8af0-1e1653b996amr13655152637.17.1733416037557;
+        Thu, 05 Dec 2024 08:27:17 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a2a90317sm1429268b3a.113.2024.12.05.08.27.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2024 08:27:16 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 5 Dec 2024 08:27:15 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	George Joseph <george.joseph@fairview5.com>,
+	Juerg Haefliger <juergh@proton.me>,
+	Riku Voipio <riku.voipio@iki.fi>,
+	Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>,
+	Zev Weiss <zev@bewilderbeest.net>,
+	Eric Tremblay <etremblay@distech-controls.com>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Jose Ramon San Buenaventura <jose.sanbuenaventura@analog.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Grant Peltier <grantpeltier93@gmail.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Rob Herring <robh@kernel.org>,
+	Mariel Tinaco <Mariel.Tinaco@analog.com>,
+	Peter Yin <peteryin.openbmc@gmail.com>,
+	Potin Lai <potin.lai.pt@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Konstantin Aladyshev <aladyshev22@gmail.com>,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Eddie James <eajames@linux.ibm.com>,
+	Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] hwmon: Initialize i2c_device_id structures by name
+Message-ID: <89b8d605-c5ac-490f-977d-76315d6d5f46@roeck-us.net>
+References: <20241205152833.1788679-2-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/7] Add support to load QUP SE firmware from
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
-        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
-        andersson@kernel.org, konradybcio@kernel.org, johan+linaro@kernel.org,
-        dianders@chromium.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-Cc: =quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
-References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: riOV-b9DbiYoXoI_WrKnuc-wxzM3whKz
-X-Proofpoint-ORIG-GUID: riOV-b9DbiYoXoI_WrKnuc-wxzM3whKz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=999 spamscore=0 adultscore=0 suspectscore=0
- malwarescore=0 mlxscore=0 impostorscore=0 bulkscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412050116
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241205152833.1788679-2-u.kleine-koenig@baylibre.com>
 
-On 4.12.2024 4:03 PM, Viken Dadhaniya wrote:
-> In Qualcomm SoCs, firmware loading for Serial Engines (SE) in the QUP
-> hardware has traditionally been managed by TrustZone (TZ). This setup
-> handled Serial Engines(SE) assignments and access control permissions,
-> ensuring a high level of security but limiting flexibility and
-> accessibility.
->  
-> This limitation poses a significant challenge for developers who need more
-> flexibility to enable any protocol on any of the SEs within the QUP
-> hardware.
->  
-> To address this, we are introducing a change that opens the firmware
-> loading mechanism to the Linux environment. This enhancement increases
-> flexibility and allows for more streamlined and efficient management. We
-> can now handle SE assignments and access control permissions directly
-> within Linux, eliminating the dependency on TZ.
->  
-> We propose an alternative method for firmware loading and SE
-> ownership/transfer mode configuration based on device tree configuration.
-> This method does not rely on other execution environments, making it
-> accessible to all developers.
->  
-> For SEs used prior to the kernel, their firmware will be loaded by the
-> respective image drivers (e.g., Debug UART, Secure or trusted SE).
-> Additionally, the GSI firmware, which is common to all SEs per QUPV3 core,
-> will not be loaded by Linux driver but TZ only. At the kernel level, only
-> the SE protocol driver should load the respective protocol firmware.
+On Thu, Dec 05, 2024 at 04:28:33PM +0100, Uwe Kleine-König wrote:
+> I intend to change the definition of struct i2c_device_id to look as
+> follows:
+> 
+>         struct i2c_device_id {
+>                char name[I2C_NAME_SIZE];
+>                /* Data private to the driver */
+>                union {
+>                        kernel_ulong_t driver_data;
+>                        const void *driver_data_ptr;
+>                };
+>         };
+> 
+> That the initializers for these structures also work with this new
+> definition, they must use named members.
+> 
+> The motivation for that change is to be able to drop many casts from
+> pointer to kernel_ulong_t. So once the definition is updated,
+> initializers that today use:
+> 
+> 	{"adp4000", (kernel_ulong_t)&pmbus_info_one},
+> 
+> can be changed to
+> 
+>         { .name = "adp4000", .driver_data_ptr = &pmbus_info_one },
+> 
 
-I think this is a great opportunity to rethink the SE node in general.
+How about introducing a macro for that instead, similar to I3C_DEVICE() ?
+That would enable hiding the data field definition completely from drivers.
 
-Currently, for each supported protocol, we create a new node that
-differs in (possibly) interconnects and pinctrl states. These are really
-defined per-SE however and we can programmatically determine which ones
-are relevant.
+> and some more casts when the driver data is used can be dropped, too.
+> (e.g.
+> 
+> 	-       device_info = (struct pmbus_device_info *)i2c_match_id(pmbus_id, client)->driver_data;
+> 	+       device_info = i2c_match_id(pmbus_id, client)->driver_data_ptr;
 
-With the growing number of protocols supported, we would have to add
-20+ nodes in some cases for each one of them. I think a good one would
-look like:
+That code could (should ?) probably use i2c_get_match_data() even today
+to avoid the type cast. It would also be nice to have a similar API
+function returning ->driver_data as kernel_ulong_t to be able to avoid
+dereferencing ->driver_data directly if the value is not used as pointer.
 
-geni_se10: serial-engine@abcdef {
-	compatible = "qcom,geni-se";
+This way ->driver_data and its use could be made internal to the I2C code,
+with dereferencing completely handled in the I2C core.
 
-	reg
-	clocks
-	power-domains
-	interconnects
-	...
-
-	status
-
-	geni_se10_i2c: i2c {
-		// i2c-controller.yaml
-	};
-
-	geni_se10_spi: spi {
-		// spi-controller.yaml
-	};
-
-	...
-}
-
-Or maybe even get rid of the subnodes and restrict that to a single
-se-protocol = <SE_PROTOCOL_xyz> property, if the bindings folks agree.
-
-We could extend the DMA APIs to dynamically determine the protocol
-ID and get rid of hardcoding it.
-
-And then we could spawn an instance of the spi, i2c, etc. driver from
-the GENI SE driver.
-
-Konrad
+Thanks,
+Guenter
 
