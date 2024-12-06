@@ -1,263 +1,218 @@
-Return-Path: <linux-i2c+bounces-8358-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8359-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B767A9E69D8
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2024 10:13:28 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3AAF9E6D95
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2024 12:48:16 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72F51281D64
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2024 09:13:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD3E8162D11
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Dec 2024 11:48:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6DE81B412D;
-	Fri,  6 Dec 2024 09:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1EDA1FC7FE;
+	Fri,  6 Dec 2024 11:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="C6TSIAbJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOAAfRfF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2046.outbound.protection.outlook.com [40.107.21.46])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F1A1DED74;
-	Fri,  6 Dec 2024 09:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733476403; cv=fail; b=THNHTZqhsWZ/31TOJ5AWYQd1psiA5Mu4f59drKBdl/L03hYWW5a8UxEUI1oTESB4+wCoWzEp0nv9RyiEOTMQUAnmhMjhNumbTJuw3+B38DH6g46Yy5P5RXTs5gVZKSShdMhwtYc9wVHqvZOy6mAnBdoIpW/u6QEIUQ9CT5G3LyA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733476403; c=relaxed/simple;
-	bh=vmvmb1KCc6WKhJhOFnFzvKwlWma3NemmM6z1rzn7yL0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=JvDIlkmGtikmnAVPiMGywPS+9ZCI+TKxGbF7hduoDokpsIathHHXkA5eKF3ZPJmAb6s8MzCtAclowWwYpkWePbI0Pga7pL2Q9ZHMVMGJUuk4wddFEQqXot0+6bk2VVCTKg8bgCUqWtNS/HKS+CgznmXOqb6u3RM5GIUZ25yT31I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=C6TSIAbJ; arc=fail smtp.client-ip=40.107.21.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TB0+1UuhHUoYgV+xs8eEMQPSeageUuAY/vd5Y6+nMhbpkgt1IE0CAPzBhzzsvy+LnLkPUfI6cCGnp1NleWxZA2s+o1SHL+Y3MpeYYe3tDEI6xuSCcB1f3h18wNfVDWzu2Ubp5p52l85sKCPr3ieKMfbyLFwIAvLrB8aOd9WRKGIB3jhdailYb7LgMDa4ozvn33Pq/S6/jBJzypoUwi/BP9Sbpajt1ZkveanwJO9Qp5StjjzJdCEfGdaf0KFBpHOqKGxHDetC6iKrKjZZTbWgitQYSIJeSe9Druklj5FfCTxTmJM7Nh5tWrHgAjNMWYnI8ZN9ll9RXjUFCSJyU/r+mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WIqd6cICLcDtgVU8TjeLaWc6sKaVVwdmQxgOHtChvG4=;
- b=T/s1SOlpKMYgDkYSoWTQDqCveXkaU8yfBEULrZQwWkLEgrrseYyVHi9XW72HEganz38rQjmuV7MGwkuo8oz/N66dzwJmRB5bmDLz5fD3uYa1ILjUMHiZsmAzkK9L94gofITZw8AwZHJRwOzCdpOHM61PFI2nFHNR8NMbniWjjQ3aIqbRhsbNfxuzhvwX2ioaG56CzO6xcXOOU0SRT+e5jHrRgxD93NbOWQb5h/t2lypSyjQIZ5e2Ymn4EAoJdpP2u7XUNTHbqyqqAXNaezsTWg1FIQQvtNIGVubSXUVGQiUDylKOEDrpWdHCuEowMHkpV+gB7/FnQZWwzkItNtoPnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WIqd6cICLcDtgVU8TjeLaWc6sKaVVwdmQxgOHtChvG4=;
- b=C6TSIAbJ5M6OUIhhf2/wegU53YAhyLFHluSUY/gCsQ5AFDSPCRXtvFA93LTFF3sU36dcoxvKzmDmntkESostjGhHtnsUN0Id+Yvo9GKfjkKuBOUV1WE3NVuOwUE5nxLUKI0o6NRFJRH7ZjJsqNgFI5Zgi+MlObCZ6IOLZwv0+7vyyj2GlOpvCQCIHMB5hxylsMUzx7J//baP4vit8MV7ZWV3wVD5X/GOfbYzUml4wJ20KzuWdCxkVh8yxQCG+hDXoJ0m7/lAeGQwRmM4eI3mFBGrUskor9zul1CJmFcc8SbQUJ4XmRXBX7wx286vhOXBAbE2qV52bTClLZl9YBMR3g==
-Received: from AM0PR0402MB3937.eurprd04.prod.outlook.com (2603:10a6:208:5::22)
- by PAXPR04MB9644.eurprd04.prod.outlook.com (2603:10a6:102:242::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.12; Fri, 6 Dec
- 2024 09:13:16 +0000
-Received: from AM0PR0402MB3937.eurprd04.prod.outlook.com
- ([fe80::4e37:f56b:8a3e:bff0]) by AM0PR0402MB3937.eurprd04.prod.outlook.com
- ([fe80::4e37:f56b:8a3e:bff0%5]) with mapi id 15.20.8207.017; Fri, 6 Dec 2024
- 09:13:16 +0000
-From: Carlos Song <carlos.song@nxp.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-CC: "o.rempel@pengutronix.de" <o.rempel@pengutronix.de>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>, "shawnguo@kernel.org"
-	<shawnguo@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>, Frank Li <frank.li@nxp.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: imx: make controller available until system
- suspend_noirq() and from resume_noirq()
-Thread-Topic: [PATCH] i2c: imx: make controller available until system
- suspend_noirq() and from resume_noirq()
-Thread-Index: AQHbR78V5fUGsbCKp0i1DGjXUsVoLQ==
-Date: Fri, 6 Dec 2024 09:13:16 +0000
-Message-ID:
- <AM0PR0402MB3937ECA7D10662217F787AEBE8312@AM0PR0402MB3937.eurprd04.prod.outlook.com>
-References: <20241125142108.1613016-1-carlos.song@nxp.com>
- <6d6xgvuvu74hm5466xeovgr4qqkwxaxaoeemvfdty3dqnl4gjp@axlzm6mxnzkv>
-In-Reply-To: <6d6xgvuvu74hm5466xeovgr4qqkwxaxaoeemvfdty3dqnl4gjp@axlzm6mxnzkv>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR0402MB3937:EE_|PAXPR04MB9644:EE_
-x-ms-office365-filtering-correlation-id: 874a092b-5936-4c9d-1a42-08dd15d637e3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?ECOafoj+FT2Ovnh876Id3hjXmnVxWN+jorD6BpxaiRm11lXIRzB6HdMgwf4m?=
- =?us-ascii?Q?Pbn1jrq0aaaeOsKAT4APuemya4U9q6ycIZNftZy3DMNS9j18oooOw3VJ1LRw?=
- =?us-ascii?Q?/hOl8konioazIbojmzWFZxmPqoa/tP1zgzIk+vYqMXwW18dcSh9PhR4ct461?=
- =?us-ascii?Q?XAA0O9LtzN2DW3QGuAqgw6JtWnXZb5bN2UT321voRUWaUYV8okci6ApLKtk4?=
- =?us-ascii?Q?bcDrWM478zflLlfbH6vTsSbrKPSgtfoACoGkkk01+zUaGvPmPp161xJzIg5f?=
- =?us-ascii?Q?zFqAv9U/Ht6+TfLfhrhBIziZ3L6JwMyd2bzqJSf52yYwkvCHK9bm7d9EmJXQ?=
- =?us-ascii?Q?L5wbb1hFHqUV2HlXP3jgNTLZWorngEYMr6GuM8scVuazVcCXR2k6o2mzHsBp?=
- =?us-ascii?Q?gOWlghBoDM0cvyutz/m2hmIB/K3OcAdNz3r67AICE1x6MWRk/Qx4dvyCMN+0?=
- =?us-ascii?Q?KdepIH/pcK+ksEAEU6Qc8/xqAxn5FjZ3PccY7y7fGX0F3MWjvrD4ZAt7yrB7?=
- =?us-ascii?Q?3nfoT5u2nDsAoW14IVqy58vKXNa6+FuL4AfQXG9xyjTRKSxd25zcs7D5cc36?=
- =?us-ascii?Q?KMG8ml3tcZj/Vj6hKfM5ryOR/2ORTcfPy4J/ZOHMzeM/TdmC/6z7Cvuf+OFr?=
- =?us-ascii?Q?xkoLwv5vpsHJh3oxh8Zcy7meWsxotHRTu74zga22I/dUbyfIuybwn2xWm3O+?=
- =?us-ascii?Q?ZPVfl+UacdqkGa8TQ+jAO8dwsRGoRMEnZugG2RdOz7AJJpbFpeVKYkTBY3CZ?=
- =?us-ascii?Q?V3ihnhxk7r81vrksfCerxPrMuLuHyN/qHMVgU4KPcKsUF3enSSB5kq3pEbTd?=
- =?us-ascii?Q?KjRrXALXZFDJ9RXSBNB5uvso1qPA4kISAnh+F/CDjOlvC1KwZU71+WzOAppq?=
- =?us-ascii?Q?jxPQHpFB32Hg6tXWkBIrDis4pKFpoerp6BvmGGORx6pbaOducO0OaY4KuYB4?=
- =?us-ascii?Q?j84gCQVKorKbe8ijEzi+6WA0w+Og1G76ChcxQ7xQMUWrGC6LkBnC0F9XGsYA?=
- =?us-ascii?Q?yy17TNobjtIZKFQYU5xwAIfha5Nd6xh5gxm/I6U743GTwhCNt2ZQWXWToImg?=
- =?us-ascii?Q?o+uRMZYWU0pFKtrZ/aW/1aXsXhcyQzdUJ6+JsrhDr51NIlpqgm1WD/upV58O?=
- =?us-ascii?Q?TiymPgS23XTFM4kJcCKWlrdXM6eu9JtODZcUxolLreC5Jofy8aLQ1+PULgRL?=
- =?us-ascii?Q?s+JekFheeH5mLRw7Ua3QmUrg9WSAQ+3BjMUcYU/qg+y0SrZymt4xphDCCg01?=
- =?us-ascii?Q?CPADN356TIhk5mSDNHgiGayJbRK7hMNwLpKHhM1PIecEkTibnObeOmOGmFnk?=
- =?us-ascii?Q?OXYBVuWSDoVheJOdJiayqON74fWTpcQsppVHFBzkaSSBm3bQAb2Uh0gwwuY8?=
- =?us-ascii?Q?q39KyCoqTfdsIGOWpDFn3ailQ/kQqjoZ4q7LxVnBWhEbWuicYw=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3937.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?lvEYMToRFvCzf2+rneDhXeRWP85xEibzeVBxtYKI4bcENXFaQERatdJAKs/s?=
- =?us-ascii?Q?5xTE/Oe9jl9/Idca0JOqZ7GqPMqOErGzenaA1/VseaoPAF1KW2H6AoioQsgR?=
- =?us-ascii?Q?/X45bhe1ZrN7TbjUZ3+hVW2wlrCuqumm1H1DKUJSvSSjF5CAkMEwzoXQlVkX?=
- =?us-ascii?Q?zjnuwOiekaIM2lemmXNV+WiBW+gz9Cja9NDiOkTFgMjE3PNgRvfYrRy9IQbE?=
- =?us-ascii?Q?j4BGwjLz2ezMUqcUpux8EQKsW6iTnKPIadJ21FfP3HSjGgLTCFlkr+MD2Jfv?=
- =?us-ascii?Q?jrGFrFmkBky7Ps0hL08lgYcR6IcFB7MSqoA7/W3+8iUdGlYJ9wTZYxzxTs2j?=
- =?us-ascii?Q?UVY18IQhaM0SMY3zqSvLGg/b4UNcr7fcNO2wjLz7XAybSTEXAJqNavdFfx8a?=
- =?us-ascii?Q?cwq6pDpoBsBwzX+I72ajXCr28RFMorgc6/UxQFhOccYD3zoEX/EX938TbS0B?=
- =?us-ascii?Q?T+SGORAMS4/7S3gNxNQXnSQk7nZu0gg2QxEnlh+W52qR3XCxRFXjTaCETnYa?=
- =?us-ascii?Q?N90Z3a2xVzLbjn/5pmFX03n7SS/xRht0P7X5JBW119eY05SaIYyJ79D5RDoh?=
- =?us-ascii?Q?c1zcMRoI++FlvSwaG6FvccZA2VBxJorQfdVd1AJryED6I0urk7YOKONcS5tu?=
- =?us-ascii?Q?TxZncG/XAOTsFab1VagfSb7jVhzcY2kwo2eyW7I0C3c4i3o8nc9LirvoOzhr?=
- =?us-ascii?Q?q5JDZpYa9BHN2S+9qAjD3OZN1z01qYahFLjqM5VUVa8rgr3sVX84roo6z4X1?=
- =?us-ascii?Q?WLL57XxiAVPzSyfIazAQabuo40HQJUxND6zLswbl2CRjhfL/U7zQtb5eBZ/R?=
- =?us-ascii?Q?ph9c38dfm8Ji5Cyc5sFraSN3fbbVSbaWeFrFUOy8VrBHVwTVSmBWhPvo7Cfm?=
- =?us-ascii?Q?SnH3S7EhE+rjk/jFbqaxBKsazGuugIQdUURx8SyYpBHTs9NxziZM/OTis3j5?=
- =?us-ascii?Q?THWG+dvGOEQGjNnZ2vKUjxwFzbZRSYZ7iYiNddivTEUOCbZBQBLREAzjHwaM?=
- =?us-ascii?Q?t0sim666P8RBNfgOKI908k1GhnOlgP/gcluKCd1M4d4checkOFCb4C4ARF3z?=
- =?us-ascii?Q?lGhst8NYJF/mcBSVMrbiAAbuRKFBhDQOM1LJ4xXJkjUiQ6lZhmmEJymTIyb/?=
- =?us-ascii?Q?oRImBqaKrDGIErg4P/7PTNPLq0pfoWqE6NHxMBSfqg56KD2oNSCAJhEbPef9?=
- =?us-ascii?Q?ibflB2jzY83Kb6SiEh0OpLbDLJFE4/z6fsf/uP5Qv6RqcpdzNtEp8nXwJ/Vi?=
- =?us-ascii?Q?0XUKhDmlJsQkHBAu6ZGijNxDzKJLelBh4j2jSmUWWoIoiB7SrhoiT4h+yu07?=
- =?us-ascii?Q?5wXw8azIJmdhs6ZmUGOWSmXcrI/PpOj+dJLexSScdN9jOPajS7QBdJKAf7ab?=
- =?us-ascii?Q?A5UpIC45FFXfT+OJwD6fSONLWyYeZu+XKo9ZgFzodFMaoS5iWJecsr8Cx7wD?=
- =?us-ascii?Q?UGr3ZG0kVN2+TVwYMbTcLgyGpVWSA9Z1aa9vgGRvIFfnyD2+gZMHDHPKwUKT?=
- =?us-ascii?Q?kt69zmqdgwv0o1Yi27uV/bqTUt3XqR5ts4wnuLXPdsh8hClYa51EcrvpA6ad?=
- =?us-ascii?Q?c7mCJsOJ0n4y07h32UevFZF8ovllLmIX9H7yUnqY?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5253C1BDA97;
+	Fri,  6 Dec 2024 11:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733485692; cv=none; b=nt63nswO4Fk70mh+U0Kj3dVwJ7uKKC7njAV6VkA5I7q/eAH/yyzWW67pD0dg53ZnY49Mz0pd/vMdVJC1ZdLRz/6K7AH3/sfok63noqlxwh/gJ5V2eUggUc+OsRkDeHgo8GVTLuAq3WV4n+dEhEL46eaFPBQpUt8n3UXMPJHcjJg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733485692; c=relaxed/simple;
+	bh=qEiT145v+mmmXz/X9So4yw/RdnpSM6fmg8D+g80PLnA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M+plK4sZ8l6kDoLGFzs0hA5r8CrsXnLFBmefso/RoFEy4Z7HEsZe7hij6uieeRVoaPYTHMd/tRAjaOufF9f9TGAg4UT2O9rgYZhE1oryUfgn0Pn/JH/MJlnaKh4u3CsUecgIkV5nSywvvxrybx94peYBda3CTbKaot0LyGTdSd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOAAfRfF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A25C4CED1;
+	Fri,  6 Dec 2024 11:48:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733485691;
+	bh=qEiT145v+mmmXz/X9So4yw/RdnpSM6fmg8D+g80PLnA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EOAAfRfFmhScD8M4YKfBg2hzYH8fYRKO6PP8IZIL7Ra22OCa9M499fbQ+fQZ715Uu
+	 FvFVlvEe+fXm9svkgmCugWUW+noYen6B/6nWguggGORGE+7XAqjE1pNL1N3uKDzd5y
+	 n6G2Z1exSB00BxTvr1sardR1LSMTqkhupS1IMTBJyiNMoYszJ8E8fDp7Jbyxmr+zhI
+	 UYKFa6qjWlvv61+6eSrwexgt2y1Y7Ljs50KL8opS0XeRCvwTXn/SbMEUqF+kTlyaj+
+	 ryKUFjVCrbYt524ZClofRwD/yxQmIxoyiqmdmGk+tuGzQuNdqdKa98fXWxB+YsATBW
+	 opKuZyDIwvP7g==
+Date: Fri, 6 Dec 2024 11:48:07 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	valentina.fernandezalanis@microchip.com
+Subject: Re: [PATCH v1] i2c: microchip-core: actually use repeated sends
+Message-ID: <20241206-random-spectacle-9de88d412653@spud>
+References: <20240930-uneasy-dorsal-1acda9227b0d@spud>
+ <Zvu38H2Y-pRryFFQ@shikoro>
+ <20241001-haphazard-fineness-ac536ff4ae96@spud>
+ <20241024-snagged-elated-d168d0d6bf35@spud>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3937.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 874a092b-5936-4c9d-1a42-08dd15d637e3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2024 09:13:16.1033
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DCicVmq4e0I+KlkX4DJU6qhwNK923GfZ3QPjF3M+/0q86dhVg2gt17b0zZIXSFY22+LIHf49iMWR3xj4Xlpa1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9644
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="2o2i0BUpv0Ef1SLM"
+Content-Disposition: inline
+In-Reply-To: <20241024-snagged-elated-d168d0d6bf35@spud>
 
 
+--2o2i0BUpv0Ef1SLM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> -----Original Message-----
-> From: Andi Shyti <andi.shyti@kernel.org>
-> Sent: Thursday, December 5, 2024 7:54 PM
-> To: Carlos Song <carlos.song@nxp.com>
-> Cc: o.rempel@pengutronix.de; kernel@pengutronix.de; shawnguo@kernel.org;
-> s.hauer@pengutronix.de; festevam@gmail.com; Frank Li <frank.li@nxp.com>;
-> linux-i2c@vger.kernel.org; imx@lists.linux.dev;
-> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> Subject: [EXT] Re: [PATCH] i2c: imx: make controller available until syst=
-em
-> suspend_noirq() and from resume_noirq()
->=20
-> Caution: This is an external email. Please take care when clicking links =
+Hey Wolfram,
+
+On Thu, Oct 24, 2024 at 10:36:33AM +0100, Conor Dooley wrote:
+> On Tue, Oct 01, 2024 at 11:16:24AM +0100, Conor Dooley wrote:
+> > On Tue, Oct 01, 2024 at 10:50:56AM +0200, Wolfram Sang wrote:
+> > > > At present, where repeated sends are intended to be used, the
+> > > > i2c-microchip-core driver sends a stop followed by a start. Lots of=
+ i2c
+> > >=20
+> > > Oh, this is wrong. Was this just overlooked or was maybe older hardwa=
+re
+> > > not able to generated correct repeated-starts?
+> >=20
+> > Overlooked, because the devices that had been used until recently didn't
+> > care about whether they got a repeated start or stop + start. The bare
+> > metal driver upon which the Linux one was originally based had a trivial
+> > time of supporting repeated starts because it only allows specific sorts
+> > of transfers. I kinda doubt you care, but the bare metal implementation
+> > is here:
+> > https://github.com/polarfire-soc/polarfire-soc-bare-metal-library/blob/=
+614a67abb3023ba47ea6d1b8d7b9a9997353e007/src/platform/drivers/mss/mss_i2c/m=
+ss_i2c.c#L737
+> >=20
+> > It just must have been missed that the bare metal method was not replac=
+ed.
+> >=20
+> > > > devices must not malfunction in the face of this behaviour, because=
+ the
+> > > > driver has operated like this for years! Try to keep track of wheth=
+er or
+> > > > not a repeated send is required, and suppress sending a stop in the=
+se
+> > > > cases.
+> > >=20
+> > > ? I don't get that argument. If the driver is expected to do a repeat=
+ed
+> > > start, it should do a repeated start. If it didn't, it was a bug and =
+you
+> > > were lucky that the targets could handle this. Because most controlle=
+rs
+> > > can do repeated starts correctly, we can also argue that this works f=
 or
-> opening attachments. When in doubt, report the message using the 'Report =
-this
-> email' button
+> > > most targets for years. In the unlikely event that a target fails aft=
+er
+> > > converting this driver to proper repeated starts, the target is buggy
+> > > and needs fixing. It would not work with the majority of other
+> > > controllers this way.
+> > >=20
+> > > I didn't look at the code but reading "keeping track whether rep start
+> > > is required" looks wrong from a high level perspective.
+> >=20
+> > I think if you had looked at the code, you'd (hopefully) understand what
+> > I meant w.r.t. tracking that.
+> > The design of this IP is pretty old, and intended for use with other
+> > logic implemented in FPGA fabric where each interrupt generated by
+> > the core would be the stimulus for the state machine controlling it to
+> > transition state. Cos of that, when controlling it from software, the
+> > interrupt handler assumes the role of that state machine. When I talk
+> > about tracking whether or not a repeated send is required, that's
+> > whether or not a particular message in a transfer requires it, not
+> > whether or not the target device requires them or not.
+> >=20
+> > Currently the driver operates by iterating over a list of messages in a
+> > transfer, and calling send() for each one, and then effectively "loopin=
+g"
+> > in the interrupt handler until the message has been sent. By looking at
+> > the current code, you can see that the completion's "lifecycle" matches
+> > that. Currently, at the end of each message being sent
+> > 	static irqreturn_t mchp_corei2c_handle_isr(struct mchp_corei2c_dev *id=
+ev)
+> > 	{
+> > =09
+> > 		<snip>
+> > =09
+> > 		/* On the last byte to be transmitted, send STOP */
+> > 		if (last_byte)
+> > 			mchp_corei2c_stop(idev);
+> > =09
+> > 		if (last_byte || finished)
+> > 			complete(&idev->msg_complete);
+> > =09
+> > 		return IRQ_HANDLED;
+> > 	}
+> > a stop is put on the bus, unless !last_byte, which is only true in error
+> > cases. Clearly I don't need to explain why that is a problem to you...
+> > You'd think that we could do something like moving the stop out of the
+> > interrupt handler, and to the loop in mchp_corei2c_xfer(), where we have
+> > access to the transfer's message list and can check if a stop should be
+> > sent or not - that's not really possible with the hardware we have.
+> >=20
+> > When the interrupt handler completes, it clears the interrupt bit in the
+> > IP, as you might expect. The controller IP uses that as the trigger to
+> > transition state in its state machine, which is detailed in
+> > https://ww1.microchip.com/downloads/aemDocuments/documents/FPGA/Product=
+Documents/UserGuides/ip_cores/directcores/CoreI2C_HB.pdf
+> > On page 23, row 0x28, you can see the case that (IIRC) is the
+> > problematic one. It is impossible to leave this state without triggering
+> > some sort of action.
+> > The only way that I could see to make this work correctly was to get the
+> > driver track whether or not the next message required a repeated start =
+or
+> > not, so as to transition out of state 0x28 correctly.
+> >=20
+> > Unfortunately, then the clearing of the interrupt bit causing state
+> > transitions kicked in again - after sending a repeated start, it will
+> > immediately attempt to act (see state 0x10 on page 23). Without
+> > reworking the driver to send entire transfers "in one go" (where the
+> > completion is that of the transfer rather than the message as it
+> > currently is) the controller will re-send the last target address +
+> > read/write command it sent, instead of the next one. That's why there's
+> > so many changes outside of the interrupt handler and so many additional
+> > members in the controller's private data structure.
+> >=20
+> > I hope that that at least makes some sense..
+> >=20
+> > > The driver
+> > > should do repeated start when it should do repeated start.
+> >=20
+> > Yup, that's what I'm trying to do here :)
 >=20
->=20
-> Hi Carlos,
->=20
-> ...
->=20
-> > +static int i2c_imx_suspend(struct device *dev) {
-> > +     /*
-> > +      * Some I2C devices may need I2C controller up during resume_noir=
-q()
-> > +      * or suspend_noirq(), if the controller is autosuspended, there =
-is
-> > +      * no way to wakeup it once runtime pm is disabled (in
-> suspend_late()).
-> > +      * When system resume, I2C controller will be available until run=
-time
-> pm
-> > +      * is enabled(in_resume_early()). But it is too late for some dev=
-ices.
-> > +      * Wakeup the controller in suspend() callback while runtime pm i=
-s
-> enabled,
-> > +      * I2C controller will be available until suspend_noirq() callbac=
-k
-> > +      * (pm_runtime_force_suspend()) is called. During the resume, I2C
-> controller
-> > +      * can be restored by resume_noirq() callback
-> (pm_runtime_force_resume()).
-> > +      * Then resume() callback enables autosuspend. It will make I2C
-> controller
-> > +      * available until system suspend_noirq() and from resume_noirq()=
-.
-> > +      */
->=20
-> Just made some little adjustments to the comment above, please let me kno=
-w if
-> they are fine:
->=20
->         /*
->          * Some I2C devices may need the I2C controller to remain active
->          * during resume_noirq() or suspend_noirq(). If the controller is
->          * autosuspended, there is no way to wake it up once runtime PM i=
-s
->          * disabled (in suspend_late()).
->          *
->          * During system resume, the I2C controller will be available onl=
-y
->          * after runtime PM is re-enabled (in resume_early()). However, t=
-his
->          * may be too late for some devices.
->          *
->          * Wake up the controller in the suspend() callback while runtime=
- PM
->          * is still enabled. The I2C controller will remain available unt=
-il
->          * the suspend_noirq() callback (pm_runtime_force_suspend()) is
->          * called. During resume, the I2C controller can be restored by t=
-he
->          * resume_noirq() callback (pm_runtime_force_resume()).
->          *
->          * Finally, the resume() callback re-enables autosuspend, ensurin=
-g
->          * the I2C controller remains available until the system enters
->          * suspend_noirq() and from resume_noirq().
->          */
->=20
-> If so, I will take it in.
->=20
+> I'd like to get this fix in, and Andi only had some minor comments that
+> didn't require a respin. I don't want to respin or resend while this
+> conversation remains unresolved.
 
-Hi, Andi,
+Could you please respond to this thread? I don't want to respin without
+resolving this conversation since I feel like we'd just end up having it
+all over again.
 
-That is so nice!
+Thanks,
+Conor.
 
-> Andi
->=20
-> > +     return pm_runtime_resume_and_get(dev); }
+--2o2i0BUpv0Ef1SLM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ1LkdwAKCRB4tDGHoIJi
+0m1XAQCdwXDfHtbOt/o2xFRN6ijk2Q9nmrqhXvVgFV7mO2qxswD7BTQa1bc4lUaZ
+wcUgcQzSvYG39FZbjfGmB8Hf2jCKPAM=
+=TYme
+-----END PGP SIGNATURE-----
+
+--2o2i0BUpv0Ef1SLM--
 
