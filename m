@@ -1,172 +1,115 @@
-Return-Path: <linux-i2c+bounces-8366-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8367-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36D819E7FE9
-	for <lists+linux-i2c@lfdr.de>; Sat,  7 Dec 2024 13:45:01 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 000969E7FF3
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 Dec 2024 13:54:16 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D8F91653FC
-	for <lists+linux-i2c@lfdr.de>; Sat,  7 Dec 2024 12:44:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3EC128223B
+	for <lists+linux-i2c@lfdr.de>; Sat,  7 Dec 2024 12:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAC161474D3;
-	Sat,  7 Dec 2024 12:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D5114431B;
+	Sat,  7 Dec 2024 12:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AnVDwX2t"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vZcbW689"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D17146019;
-	Sat,  7 Dec 2024 12:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56DB51E4AB
+	for <linux-i2c@vger.kernel.org>; Sat,  7 Dec 2024 12:54:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733575495; cv=none; b=C9jQREurgDlCEJLqiDmO4bH8J38bqPz1yTRzNhVfZPperoTErXoxCKNg1H6x2Tsp6RUckwME9JgQ4GIF46weUyEaI3HKiAr8aygOHt9HtJWVV1harnulgzIRltPV6epbfOE6sTDhMuU+R/BGnDCxWjFz+jl2WPEHtaBJPJoPTMs=
+	t=1733576052; cv=none; b=YUutUpBKXsrHup5KKak3d9EXApbvt3kAVE+IutH+ow+d3JhETTX0DU4Wny7sCFL0tS8Mm5hF1bpleHv2AsII0ZRjfGf2W+YzUJLKZYKcZ0ezr8YSNrwmyIoeqR3RkK2f6b2tN2ALb6uNubZrqoVvZm+VP/LkTwkgXjLuF7fn0Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733575495; c=relaxed/simple;
-	bh=ZQiYl+yF7ZmNyXH0sDvnPCu11Nf7kHjyeXP+B0FEETA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m0pge4T6yY4vF4kmOGAIU89f9xcM7FA5hwlmkrav5kWCsEQ3AQETBBw9r2zyxRbkPS2TjR7QoI1gtVvHXmwEuL2WKINUGxohHCskZqK5JHaIZT1LKlb5wwrbkyNisjfSH0ca6b0E9D4vKdXY+ScRpuZPTPOusqkkjHj390AU2Tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AnVDwX2t; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7256dc42176so3255961b3a.3;
-        Sat, 07 Dec 2024 04:44:53 -0800 (PST)
+	s=arc-20240116; t=1733576052; c=relaxed/simple;
+	bh=+xpWbnlKN0xIcwG1gfDbBIpqe9Xe15ljIylCd0kf7zg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NjtyKUs9fm4RFu0l7BUAkCUDXWUwo0OTI569DW1b4cDa3ijoDjHDA8Fc0Z8E/Cpq/vBAsJf0gemIW0THD2uJXn7btp/sE/iGbT+44NAboTbxxuBSTVv2+dITq9xHYy9N3Vk3e6J8Red2VCKNNs0Gjw6MIEA6ZDvBpl6iTEWbxN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vZcbW689; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a9f1d76dab1so198188266b.0
+        for <linux-i2c@vger.kernel.org>; Sat, 07 Dec 2024 04:54:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733575493; x=1734180293; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aTApM3TBvXu60J320dXWpHizSsg3CAfWttCGDerVGgY=;
-        b=AnVDwX2t6Urv4sWgegNSJQrxrw3nTrBAtcOiX71lseEFXayQZ9p8xA0KglJRLmBsOb
-         V+MxFOW7mp61kjcgl8Wti5EaJiFMtmdwWLiZD50bUoNY0tA/JH0yGWeNbmOjWBnBd0sN
-         lrz2rBvJeY6bjxAxpQc17wOjQw7NxNOdJW5CYWfIX0bgwzS1jz9s5Ysf5bBMbG+KEWFO
-         kp6bi86PahWR8LViKIuQA9N1+MCa59x0ZNWMgTBhv9OH7hI6EfhUyhR6/0ogJrw8Q8Zl
-         HT42eBZXXaQ3zXZnU8EenuIxKMTyGO9JWYHyJBAiYCoY9blNd8NcVc21JJZCJh5vI1iV
-         tCJw==
+        d=linaro.org; s=google; t=1733576049; x=1734180849; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+xpWbnlKN0xIcwG1gfDbBIpqe9Xe15ljIylCd0kf7zg=;
+        b=vZcbW689fo9hzgFT96Kn11WBOtOmQxJIb0z1krKuK/Z4iKbkLRRwB5pv3My+Ec7mO0
+         v1Y1DJUC5O0af/NyvYZQ1EteMj1qnoGXF2m549WDFNmrpHtGYvGvOEUs9KBWMnk09LeE
+         i1ZK9HohEIofn7JLQP0ZNdkZr6+5YqyDe86AAEm33SpYEz6mzcB0d1GF3wWpkyoE7oKA
+         wDJNwXkU2kTfjHS6JRgfbADXToFAy4sSpZY7YPJdIqlXVibmVN2Ds+lTEvR7cOTnFltG
+         te6zqD5lZnmHHAk2n/3fwVdFf2vob419E2deYM++vHOBuMTBBxROTCa6xyOSKGd0kbKB
+         OlPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733575493; x=1734180293;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aTApM3TBvXu60J320dXWpHizSsg3CAfWttCGDerVGgY=;
-        b=NXYi5wkUr69EgrD22vrlcYglY+bBM0XJlGJkrFuMaewJoxdTWnPhg8YERF08hhfyNR
-         O9/FvEt/TQa+wZ7Ysb4JEXcEP2h8WhUkWSDuPRttks1YGyzWfmfItKmfeAX4bVoSC5MU
-         dN3amOs99gcSsLK7OgAQ1WhBAz5wsLusLxQHC8qAcghdKX2e7JAkSBLdbSnoJ7p78On4
-         oDMHvjZ154C3BUNKtjsAF8INFINuv4CYQsCtHoR/TVKxHopv47tQVEG7IW/qW2QiShvF
-         SZ0yyHm2jwd+/g+DNQgdT98y4FCkWQf0MQegvW3vpP7G8Jcp/LTLid6Rpe9lb9L8LpvW
-         8nrA==
-X-Forwarded-Encrypted: i=1; AJvYcCXPRDSPCLRi0b/fPDWBGcTQueFqHjhBHc67iYWs7K+5rOU57fFSJPUG4Vc072eL4ywM6IeDgWJtxVQULA==@vger.kernel.org, AJvYcCXVF3qdsANYxCpfNxFp855WIUa+cZV8qICvikHgONyq1cBODuh3E18l16fIWdZ8bsKOJ4MO/dmd9Bw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbzjTqwxqLvbgEscJU7iXv2WDWOhLThKFjjiLSiNJoj3PvGDCL
-	zhEpZC3knEprrfnXT+vZ+de2OjToj/QU+jIjYBPHjW9GcvGbNXmg
-X-Gm-Gg: ASbGncsKfmMMuF6afvYmnSQKhPIDd6CHivGLwVdEj7F08l9wYIp2TzpnFXpRqDB3nqs
-	46uze617WKBSfz/04qrra0HYZfSHdt5Rz5mcCdIu170loJkkQZgNCKkrToHtL+PMlP8isfkEeBl
-	I2mEH00IcT95GJ0pJNldcOV9ijPHiXX5QYPmu3DTnJJLd3irne/2eCX4UDFW4vK6udPpUQDQFBc
-	8HaaIJ7D7zZb16S4pcL3A0MkvKq44tfv8BshwxwnueP50H91KFvTRc=
-X-Google-Smtp-Source: AGHT+IFR33pSremvHHbTtQOK22aOSRDr4tG2TI3TJK5dWlt1Rl/mi7RIrlL/e5TWQ9D+DRaDroEu8w==
-X-Received: by 2002:a05:6a20:72a0:b0:1e0:f390:f2ad with SMTP id adf61e73a8af0-1e1870bb417mr9571826637.18.1733575493493;
-        Sat, 07 Dec 2024 04:44:53 -0800 (PST)
-Received: from melbuntu.. ([122.171.22.181])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725c82b4852sm1700850b3a.135.2024.12.07.04.44.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Dec 2024 04:44:53 -0800 (PST)
-From: Dhruv Menon <dhruvmenon1104@gmail.com>
-To: aaro.koskinen@iki.fi,
-	andreas@kemnade.info,
-	vigneshr@ti.com,
-	andi.shyti@kernel.org
-Cc: jmkrzyszt@gmail.com,
-	tony@atomide.com,
-	khilman@baylibre.com,
-	rogerq@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Dhruv Menon <dhruvmenon1104@gmail.com>
-Subject: [PATCH v3 2/2] i2c: omap: remove unused parameter
-Date: Sat,  7 Dec 2024 18:12:03 +0530
-Message-ID: <e4327ab4199883ec2554222c2697225abb797491.1733217877.git.dhruvmenon1104@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1733217877.git.dhruvmenon1104@gmail.com>
-References: <cover.1733217877.git.dhruvmenon1104@gmail.com>
+        d=1e100.net; s=20230601; t=1733576049; x=1734180849;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+xpWbnlKN0xIcwG1gfDbBIpqe9Xe15ljIylCd0kf7zg=;
+        b=j3RQbXqU00/CkeSgdeR0oYUvFDfJGmiGH5cFxat1NmiPanN2xtRuGgeCYbh2sd6vSI
+         7RWk48wSc1T1KjCPYwMMh4fWZapNXUFF0PRNATOl6CZDHKy6OYDjqcNy3Szw/Mc/r82D
+         nFzkw/gfvcOIbR3wiaeDcNRA1mlcBjyYInw50clLeIVY6JCT30rwlPDQA9GMmuqKLUOX
+         Sso5PKVz8plyLMFaCEIorLCdtdmT8doEbmTtNS66jRodpe1/MznEIuVUz2fL/p4KSGvq
+         lpoailn7wdQwLiPCzgfutsX1O1APWWEuhoTVAxHNvcjSGXwFZVsJB/o0+x3te2T2XubN
+         6gzQ==
+X-Gm-Message-State: AOJu0Yy4yluHC3o8sFSw3mlXPm9RUohP+5B2m4/Ps2pr4l3bIJRNoXci
+	4sjUNvc4iT8dTwIxjBbq6M8Ljzqzt8Q3ckBbdWWE5AmjYqtBH5ylXrY34dACC02SjSqM3d3mS0f
+	U
+X-Gm-Gg: ASbGncsL1GDh4597J7YnswghZHocWicpdp6kjV3bn3nfiAAbl636wJuyk80i0kt+nXo
+	GHvbdeAu5iyb11l2CdD7eyIu+ivqyyIRFpSUzNJ1lrypQa42Tx2x3uL8Mn8aKdKKb/xWKEIP0wJ
+	y/T6GY6XVEDA7YsctGL12OdhhnygQAjqQyb5D4QTjH77qJuxVefptAmicrjQBbR0u51yeLJuXNk
+	/TnMjus46RsACzTzMIWxBJQm268Csj5vkJepDoFgaWv/AnZ+quEn784CLitzgk=
+X-Google-Smtp-Source: AGHT+IFc59lrx1M6saKGPjF02Omnnsj0HLfp4v7ByL1sRkcUPHF3WsyaIILgsB+Yi9QNF0Qp9YtwjA==
+X-Received: by 2002:a17:907:7814:b0:aa6:19f3:d083 with SMTP id a640c23a62f3a-aa63a07357dmr584148866b.30.1733576048745;
+        Sat, 07 Dec 2024 04:54:08 -0800 (PST)
+Received: from [192.168.0.27] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa66b96a249sm19541366b.159.2024.12.07.04.54.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Dec 2024 04:54:08 -0800 (PST)
+Message-ID: <444a0d03-7518-4f54-a29d-2d3c85d9743d@linaro.org>
+Date: Sat, 7 Dec 2024 12:54:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/6] arm64: dts: qcom: x1e80100: Add CCI definitions
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Jagadeesh Kona <quic_jkona@quicinc.com>,
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-0-54075d75f654@linaro.org>
+ <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-5-54075d75f654@linaro.org>
+ <b5400627-6359-4dfc-abb2-2c142217a28b@oss.qualcomm.com>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <b5400627-6359-4dfc-abb2-2c142217a28b@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The parameters `is_rdr` in `omap_i2c_receive_data` and `is_xdr` in
-`omap_i2c_transmit_data` were unused in the function implementations.
-This commit removes these parameters.
+On 07/12/2024 11:59, Konrad Dybcio wrote:
+> Otherwise looks good and I can attest to this working, as the sensor on the
+> SL7 happily talks back
 
-Signed-off-by: Dhruv Menon <dhruvmenon1104@gmail.com>
+:x
+
 ---
- drivers/i2c/busses/i2c-omap.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index df945ddfe089..9838d89df385 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -990,8 +990,7 @@ static int errata_omap3_i462(struct omap_i2c_dev *omap)
- 	return 0;
- }
- 
--static void omap_i2c_receive_data(struct omap_i2c_dev *omap, u8 num_bytes,
--		bool is_rdr)
-+static void omap_i2c_receive_data(struct omap_i2c_dev *omap, u8 num_bytes)
- {
- 	u16		w;
- 
-@@ -1011,8 +1010,7 @@ static void omap_i2c_receive_data(struct omap_i2c_dev *omap, u8 num_bytes,
- 	}
- }
- 
--static int omap_i2c_transmit_data(struct omap_i2c_dev *omap, u8 num_bytes,
--		bool is_xdr)
-+static int omap_i2c_transmit_data(struct omap_i2c_dev *omap, u8 num_bytes)
- {
- 	u16		w;
- 
-@@ -1128,7 +1126,7 @@ static int omap_i2c_xfer_data(struct omap_i2c_dev *omap)
- 					OMAP_I2C_BUFSTAT_REG) >> 8) & 0x3F;
- 			}
- 
--			omap_i2c_receive_data(omap, num_bytes, true);
-+			omap_i2c_receive_data(omap, num_bytes);
- 			omap_i2c_ack_stat(omap, OMAP_I2C_STAT_RDR);
- 			continue;
- 		}
-@@ -1139,7 +1137,7 @@ static int omap_i2c_xfer_data(struct omap_i2c_dev *omap)
- 			if (omap->threshold)
- 				num_bytes = omap->threshold;
- 
--			omap_i2c_receive_data(omap, num_bytes, false);
-+			omap_i2c_receive_data(omap, num_bytes);
- 			omap_i2c_ack_stat(omap, OMAP_I2C_STAT_RRDY);
- 			continue;
- 		}
-@@ -1151,7 +1149,7 @@ static int omap_i2c_xfer_data(struct omap_i2c_dev *omap)
- 			if (omap->fifo_size)
- 				num_bytes = omap->buf_len;
- 
--			ret = omap_i2c_transmit_data(omap, num_bytes, true);
-+			ret = omap_i2c_transmit_data(omap, num_bytes);
- 			if (ret < 0)
- 				break;
- 
-@@ -1166,7 +1164,7 @@ static int omap_i2c_xfer_data(struct omap_i2c_dev *omap)
- 			if (omap->threshold)
- 				num_bytes = omap->threshold;
- 
--			ret = omap_i2c_transmit_data(omap, num_bytes, false);
-+			ret = omap_i2c_transmit_data(omap, num_bytes);
- 			if (ret < 0)
- 				break;
- 
--- 
-2.43.0
-
+bod
 
