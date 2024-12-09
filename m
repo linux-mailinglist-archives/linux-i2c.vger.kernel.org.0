@@ -1,186 +1,196 @@
-Return-Path: <linux-i2c+bounces-8379-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8380-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5F059E9A0B
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 16:08:00 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48ABB9E9E1D
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 19:36:19 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 851002823F3
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 15:07:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B53BC1888463
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 18:36:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B2C1BEF6D;
-	Mon,  9 Dec 2024 15:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F99B17836B;
+	Mon,  9 Dec 2024 18:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CGP7wulN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bIvPqe7b"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F741B422E;
-	Mon,  9 Dec 2024 15:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C01816CD1D
+	for <linux-i2c@vger.kernel.org>; Mon,  9 Dec 2024 18:36:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733756872; cv=none; b=ezd0v1tdGzOyVJm5kATB8aITaFJSanMysmlR0HpW7gvbujiXwDvh+K/1+l9Zom2yzz3wqD98YWsRxxL+S5uJj3fza+wNqc3Jl0GCq+NzXgTHFoi+jc/2IuqwoZnDENAKkrS4G+9jRg0hGOXXf4iEeyHBOHRa21X6hnYJEe7bcZA=
+	t=1733769373; cv=none; b=hJDinyHqkhVLNL6OVVFTTjRmeQn0vK71Bdhce4FnoHCTHZumIMoIg/p2nHhdOqok5qDJTouXamCvOJKZEKacMlxt4MFvOE+vsVxx3Cd6wJc9WG+zs3ulp1v6ej6u3p11Fivql33Sc7p+19whKs3gC5NUn/rdVlN6g2MBZQDK3E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733756872; c=relaxed/simple;
-	bh=uk/0UdEMXtESb27s2FPly12gPgWEWDNT9EA+JVxL4ng=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=IzsdBwDVJIkNLeQ78OoOdXSnkzr51SF38DMudm1HY611CYw/mPv5tsdYlBpN3nxnscCe2yC/97WoVFBaH6uohYGuRGLcLQAkUWuKKlDIGNLR97RJ33OMRotygqwOfjMLRboPiZvquVMzI0HE5o3vFkj1AlKfqp7eJan+tTQWr5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CGP7wulN; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B9AEdLR031613;
-	Mon, 9 Dec 2024 15:07:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zcXxgrlJj9QA/6b1Wp+0cE8SmamP7uL7/ApWHq7oe+o=; b=CGP7wulNN5n/6q6H
-	r8xgH0M+U9KK+h3pC1izXwe9njH9VUjNx13EI2v5TcySk22qzbCrs+zkyIXcdPLc
-	UL6G6q95KCPpq25NJL3zeK1XZ6LNT6AMox5+IecULWJDy4lNF01kK4bxzyYtrvlt
-	z06xGE7h4Wy1no9KZOlryLwUyYJqbnwXpa++TUJ7i8OVEEvfq78VhL4Kgi7vFTFd
-	BQVrpgBLK8pPzcyEgMfdhMvm0d8kNXwBgnNfxR24opREPlHt4yyQXbF6cZlOD0jb
-	OFYgnlCT5m7XpRgw6hfuKm4R/jUy4j/k+c4x+6fjwWTK6sEwMbHzCN024HFYNAGb
-	qavmkQ==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43cdxxd6ps-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Dec 2024 15:07:42 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B9F7f9H008342
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 9 Dec 2024 15:07:41 GMT
-Received: from [10.50.34.16] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 9 Dec 2024
- 07:07:32 -0800
-Message-ID: <c275cf76-0335-4b01-8d07-86d38e6d27e0@quicinc.com>
-Date: Mon, 9 Dec 2024 20:37:27 +0530
+	s=arc-20240116; t=1733769373; c=relaxed/simple;
+	bh=ZEYplIOq10xjae08qI9+kU5Z7KB5L1PMHsqZr9IETM4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ebeLNz2oUcs1/yoRc7xbEmh0sxjywK/xGO5EmmAXNR6o2PyjTaywfphsv3N9OndVNWbFY7Nmg1fCPFsc9SRayi40/SxbxWlkdkHJkhNDntq8yQSaVCbp5w3qYa2Qyil0O1zUMOxaZruQw5shUnfHpwKz63orMbArmvYe+PuZrp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bIvPqe7b; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1733769370;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AAMc5MpMujgl5pX3TiAF+Pgw3NS8Qs1CNeL7AS+qtnc=;
+	b=bIvPqe7bzol2altiIVZPvwNBiAaesjpDR9+InwAWMEX6bfICeBWmoNMLMWwzbhMZXoK5kQ
+	HMKaEx3YsS5nYUIGjTCpKgeWc0yjMr5VgVtOEB/g2XH0OSIIbnrPTCAz5VYYi/wFKAktSq
+	ajJpmizWslyEt3qONtHrLOgoSqZZ5V8=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-641-xa6HUsYWNMmvWtpvWyelAg-1; Mon,
+ 09 Dec 2024 13:36:06 -0500
+X-MC-Unique: xa6HUsYWNMmvWtpvWyelAg-1
+X-Mimecast-MFC-AGG-ID: xa6HUsYWNMmvWtpvWyelAg
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F3C971954AFF;
+	Mon,  9 Dec 2024 18:36:03 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.52])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E6771956048;
+	Mon,  9 Dec 2024 18:35:58 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Wolfram Sang <wsa@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	eric.piel@tremplin-utc.net,
+	Marius Hoch <mail@mariushoch.de>,
+	Dell.Client.Kernel@dell.com,
+	Kai Heng Feng <kai.heng.feng@canonical.com>,
+	platform-driver-x86@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH v9 0/4] i2c-i801 / dell-lis3lv02d: Move instantiation of lis3lv02d i2c_client from i2c-i801 to dell-lis3lv02d
+Date: Mon,  9 Dec 2024 19:35:53 +0100
+Message-ID: <20241209183557.7560-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
- flag
-To: Krzysztof Kozlowski <krzk@kernel.org>, <konrad.dybcio@linaro.org>,
-        <andersson@kernel.org>, <andi.shyti@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <conor+dt@kernel.org>, <agross@kernel.org>,
-        <devicetree@vger.kernel.org>, <vkoul@kernel.org>, <linux@treblig.org>,
-        <dan.carpenter@linaro.org>, <Frank.Li@nxp.com>,
-        <konradybcio@kernel.org>, <bryan.odonoghue@linaro.org>,
-        <krzk+dt@kernel.org>, <robh@kernel.org>
-CC: <quic_vdadhani@quicinc.com>
-References: <20241129144357.2008465-1-quic_msavaliy@quicinc.com>
- <20241129144357.2008465-2-quic_msavaliy@quicinc.com>
- <db428697-a9dc-46e1-abbe-73341306403f@kernel.org>
- <a8b1ccd2-c37b-4a6f-b592-caf1a53be02c@quicinc.com>
- <fc33c4ed-32e5-46cc-87d6-921f2e58b4ff@kernel.org>
- <75f2cc08-e3ab-41fb-aa94-22963c4ffd82@quicinc.com>
- <904ae8ea-d970-4b4b-a30a-cd1b65296a9b@kernel.org>
- <fa3ee895-5353-44f5-b816-9d17b6a7d199@kernel.org>
-Content-Language: en-US
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <fa3ee895-5353-44f5-b816-9d17b6a7d199@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4p6cn0PN7oKNSSsHKWihQNEvHKrwDQg7
-X-Proofpoint-GUID: 4p6cn0PN7oKNSSsHKWihQNEvHKrwDQg7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- phishscore=0 mlxlogscore=622 priorityscore=1501 clxscore=1015
- malwarescore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412090118
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Hi Krzysztof ,
+Hi All,
 
-On 12/2/2024 4:43 PM, Krzysztof Kozlowski wrote:
-> On 02/12/2024 12:04, Krzysztof Kozlowski wrote:
->> On 02/12/2024 11:38, Mukesh Kumar Savaliya wrote:
->>>>
->>>> Come with one flag or enum, if needed, covering all your cases like this.
-Please review below comment which was about other cores. I think we can 
-go with single flag naming qcom,shared-corename, for similar features 
-for any core.
->>>>
->>> Let me explain, this feature is one of the additional software case
->>> adding on base protocol support. if we dont have more than one usecase
->>> or repurposing this feature, why do we need to add enums ? I see one
->>> flag gpi_mode but it's internal to driver not exposed to user or expose
->>> any usecase/feature.
->>>
->>> Below was our earlier context, just wanted to add for clarity.
->>> --
->>>   > Is sharing of IP blocks going to be also for other devices? If yes, then
->>>   > this should be one property for all Qualcomm devices. If not, then be
->>>   > sure that this is the case because I will bring it up if you come with
->>>   > one more solution for something else.
->>
->>
->> You keep repeating the same. You won't receive any other answer.
->>
->>>   >
->>> IP blocks like SE can be shared. Here we are talking about I2C sharing.
->>> In future it can be SPI sharing. But design wise it fits better to add
->>> flag per SE node. Same we shall be adding for SPI too in future.
->>
->>
->> How flag per SE node is relevant? I did not ask to move the property.
->>
->>>
->>> Please let me know your further suggestions.
->> We do not talk about I2C or SPI here only. We talk about entire SoC.
->> Since beginning. Find other patch proposals and align with rest of
->> Qualcomm developers so that you come with only one definition for this
->> feature/characteristic. Or do you want to say that I am free to NAK all
->> further properties duplicating this one?
->>
->> Please confirm that you Qualcomm engineers understand the last statement
->> and that every block will use se-shared, even if we speak about UFS for
->> example.
->>
-> 
-> I think I was pretty clear also 2 months ago what do I expect from this:
-> 
-> https://lore.kernel.org/all/52f83419-cc5e-49f3-90a7-26a5b4ddd5a0@kernel.org/
-> 
-> 
-> I do not see this addressing qcom-wide way at all. Four new versions of
-> patch and you still did not address first fedback you got.
-> 
+Here is v9 of my patch series to move the manual instantation of lis3lv02d
+i2c_client-s for SMO88xx ACPI device from the generic i2c-i801.c code to
+a SMO88xx specific dell-lis3lv02d driver.
 
-To answer the comment @ 
-https://lore.kernel.org/all/52f83419-cc5e-49f3-90a7-26a5b4ddd5a0@kernel.org/ 
+The i2c-core and i2c-i801 dependencies have both been merged into 6.13-rc1
+so I believe that this series is ready to be merged now .
+
+Patch 2/4 does still touch the i2c-i801 code removing the quirk code which
+is moved to the pdx86 dell-smo8800 code. I think it would be best if Ilpo
+prepares an immutable branch with this series to be merged into both
+pdx86/for-next and the i2c-subsystem. Andi can we get your Ack for merging
+the i2c-i801 changes through the pdx86 tree ?
+
+Moving the i2c_client instantiation has the following advantages:
+
+1. This moves the SMO88xx ACPI device quirk handling away from the generic
+i2c-i801 module which is loaded on all Intel x86 machines to a module
+which will only be loaded when there is an ACPI SMO88xx device.
+
+2. This removes the duplication of the SMO88xx ACPI Hardware ID (HID) table
+between the i2c-i801 and dell-smo8800 drivers.
+
+3. This allows extending the quirk handling by adding new code and related
+module parameters to the dell-lis3lv02d driver, without needing to modify
+the i2c-i801 code.
+
+This series also extends the i2c_client instantiation with support for
+probing for the i2c-address of the lis3lv02d chip on devices which
+are not yet listed in the DMI table with i2c-addresses for known models.
+This probing is only done when requested through a module parameter.
+
+Changes in v9:
+- Rebase on top of v6.13-rc1
+- Drop already merged i2c-core and i2c-i801 dependencies
+
+Changes in v8:
+- Address some minor review remarks from Andy
+
+Changes in v7:
+- Rebase on v6.11-rc1
+
+Changes in v6:
+- Use i2c_new_scanned_device() instead of re-inventing it
+
+Changes in v5:
+- Make match_acpi_device_ids() and match_acpi_device_ids[] __init[const]
+- Add "Depends on I2C" to Kconfig (to fix kernel-test-robot reported issues)
+- Add "this may be dangerous warning" to MODULE_PARM_DESC(probe_i2c_addr)
+
+Changes in v4:
+- Move the i2c_client instantiation to a new dell-lis3lv02d driver instead
+  of adding it to the dell-smo8800 driver
+- Address a couple of other minor review comments
+
+Changes in v3:
+- Use an i2c bus notifier so that the i2c_client will still be instantiated if
+  the i801 i2c_adapter shows up later or is re-probed (removed + added again).
+  This addresses the main concern / review-comments made during review of v2.
+- Add 2 prep patches to the i2c-core / the i2c-i801 driver to allow bus-notifier
+  use / to avoid the need to duplicate the PCI-ids of IDF i2c-i801 adapters.
+- Switch to standard dmi_system_id matching to check both sys-vendor +
+  product-name DMI fields
+- Drop the patch to alternatively use the st_accel IIO driver instead of
+  drivers/misc/lis3lv02d/lis3lv02d.c
+
+Changes in v2:
+- Drop "[PATCH 1/6] platform/x86: dell-smo8800: Only load on Dell laptops"
+- Use a pci_device_id table to check for IDF (non main) i2c-i801 SMBusses
+- Add a comment documenting the IDF PCI device ids
+- Keep using drivers/misc/lis3lv02d/lis3lv02d.c by default
+- Rename the module-parameter to use_iio_driver which can be set to
+  use the IIO st_accel driver instead
+- Add a new patch adding the accelerometer address for the 2 models
+  I have tested this on to dell_lis3lv02d_devices[]
+
+Since this touches files under both drivers/i2c and drivers/platform/x86
+some subsystem coordination is necessary. I think it would be best to just
+merge the entire series through the i2c subsystem since this touches some
+core i2c files. As pdx86 subsys co-maintainer I'm fine with doing so.
+
+Regards,
+
+Hans
 
 
-Sorry for not replying straight to this query. Let me, sort out here 
-being in agreement with you. I queried internally, no USB OR UFS OR PCIe 
-having this case. BAM (sps driver) has such usecase, and if it's comes 
-up in future, we should give similar name like shared-xxx if it's 
-similar in nature.
+Hans de Goede (4):
+  platform/x86: dell-smo8800: Move SMO88xx acpi_device_ids to
+    dell-smo8800-ids.h
+  platform/x86: dell-smo8800: Move instantiation of lis3lv02d i2c_client
+    from i2c-i801 to dell-lis3lv02d
+  platform/x86: dell-smo8800: Add a couple more models to
+    lis3lv02d_devices[]
+  platform/x86: dell-smo8800: Add support for probing for the
+    accelerometer i2c address
 
-"qcom,shared-xxx" is what i think a better option. Can it be renamed per 
-core and let individual HW core use it when required ? Just my thought, 
-you may please suggest better and simplified way.
+ drivers/i2c/busses/i2c-i801.c                | 124 ---------
+ drivers/platform/x86/dell/Kconfig            |   1 +
+ drivers/platform/x86/dell/Makefile           |   1 +
+ drivers/platform/x86/dell/dell-lis3lv02d.c   | 252 +++++++++++++++++++
+ drivers/platform/x86/dell/dell-smo8800-ids.h |  27 ++
+ drivers/platform/x86/dell/dell-smo8800.c     |  16 +-
+ 6 files changed, 282 insertions(+), 139 deletions(-)
+ create mode 100644 drivers/platform/x86/dell/dell-lis3lv02d.c
+ create mode 100644 drivers/platform/x86/dell/dell-smo8800-ids.h
 
-clock controllers, TLMMs, MMUs  etc should also should add similar name 
-if it's best suiting to the needs and similar feature.
-
-> 
-> Best regards,
-> Krzysztof
+-- 
+2.47.1
 
 
