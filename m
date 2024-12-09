@@ -1,158 +1,140 @@
-Return-Path: <linux-i2c+bounces-8373-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8374-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43D679E8B4F
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 07:04:35 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A869E9490
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 13:42:58 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D9A7161CDC
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 12:42:55 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16D26224894;
+	Mon,  9 Dec 2024 12:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lkLPGtuJ"
+X-Original-To: linux-i2c@vger.kernel.org
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4B24281538
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 06:04:33 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 647B91C3022;
-	Mon,  9 Dec 2024 06:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="LsYQHE49"
-X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150C414AD0E
-	for <linux-i2c@vger.kernel.org>; Mon,  9 Dec 2024 06:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC1F184545;
+	Mon,  9 Dec 2024 12:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733724270; cv=none; b=UcT8LAYyzdHPKia5KwHspMPeQWJxDr1+qwj3Z5KVe+M8st+F6nti7CZlfr39d6slVklF6ebvIjLEVR15G4kDYFEOuSQa+tT4QcLw7KMJHYyusqvGzq7lxsDsfl1ThZgHCVghzuy2H/P405X8CDEa5J0vNlfaVIkVNie8JKdOrlQ=
+	t=1733748172; cv=none; b=AqeAKvlAb5tFMzJHC8UXKwHI7PwQH5oDWzXtVfouuUe1WqoBtcEj9axZM4xK5aZ5yMgxoQ8oq90hKakGPKGCvOVoQ/cFbJR3I4PknhEqARTLbQOiBmuxozRAm0UoY4KyKA4TYvKPzzzaxT3DFJXWDO+ATEoXtQVBuFj6Xd14rYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733724270; c=relaxed/simple;
-	bh=F4vouyVtcKW0X8jSdaJkiCxfL9VYGc6mP6tX/c3lWDA=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=fPqOO1h5oOXkTwJi0zRaGH4KvzBdr7xN6rkCLIc7AYyNQKW4ABGWTTQ96tNXd6ujM5d46+C+kzIx01jsonmah2ZDXMS263Ic9Gfaf4LN6FnwS6fljSMqqD3VS54SxztT6KSHrGP9xgGRhkbUZtI5mvNg0z5Nhr1y2J+b4Ik0R38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=LsYQHE49; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-725c24f3a89so1944805b3a.0
-        for <linux-i2c@vger.kernel.org>; Sun, 08 Dec 2024 22:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1733724265; x=1734329065; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4xBLZIFuwdPdIo7c9yIdBVJBPUeOE/XllfXOGGCfPYA=;
-        b=LsYQHE496pg9BA6LE2dn9A+BOVKHc0A6jsKr9ryx2Wu1sCkWSdE9HMfuMjw1wPoVgy
-         cqBKdd7Pz6jyI2IOXZKINh+QEfS66jIvn4C8UWKaY4DzQCSm+IUeinD3C6JQtUr9OWBv
-         1Ur22+/g8PHZRxOF1wkPWIKzHgadSlX6/tBmHFAaWoi3UBdUsExajDcYzxBa9zzjUhxK
-         YmxFNUiv31xVoSMY353Kbj++POQRtJnilwfTepjJ89r0G+J3QRvxY7VVE8j1b2HXY/ea
-         +7pE1ZYCuM6OsTkmCSO4CLJ6vIIhwDW5F3DlhDUykHfyB2/Zk5h5jcPcJDuQIcNjRlFL
-         qsUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733724265; x=1734329065;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4xBLZIFuwdPdIo7c9yIdBVJBPUeOE/XllfXOGGCfPYA=;
-        b=lhLyfccHchRSgVCu4hkn11h2YOjQgtQaJ/0Rpk4cUozCYYzgyJtyotb/hBp9Ks3iit
-         ir7P2wP8Fd+U/cTWapTBbSxo6VEWiuX+iN2ANB/+qK+vA0k2iyFCgEllXKD0tbvsp7D3
-         9W0loJRa5OHN+eco7oXCTVqN7HwEhS7b7Rna58f0oiunrZgV1jMv5clMlFmbO1wCahTs
-         6vUd03ToAmFrFNZZnWxnWB+neMnyQK18PdN7e/JoM5PQtniKbflxHs9MaV0L27WM9TFV
-         fXnQtBELpcL2zdu9xV+95Jv9aEfx/jBaYeZ14gwRD5Mc5eLi5C0cx0qUNoUDFyXAjjiY
-         t9zw==
-X-Forwarded-Encrypted: i=1; AJvYcCXfXmHAgiEQOgRAf//WkaHsQqYH8OLzzP72+YrFJfAUkkwvQNyvy5YEMby0od/xPYw6Aht2l+7K080=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywae+1Ni761neyupAY/Vnzd3THYiNHcgwDtcKN9bUNpMB6Z6FRo
-	rsXwwEuMnMCesuegF6G/9vK8OWqVNvYYte975vqkx2wVMZJZ+OxWk3rbkn3o5zbH3LSMSsZi5cR
-	p
-X-Gm-Gg: ASbGnctWUYGVrxT97XJTGhN20s550HzTNnwVJkDJ6qccEyyvV/xc3h+IvQv6uj9rXxe
-	JfpKtLaI2w180ruDG+pVU72Cyf9Ej0KSL1OHta5KpnOh+PeiiqRwRvtOhX6f5XEnim1S/GBj0c+
-	KraqLevsSvq91Qh2qxfE/TarZf6S2dohFK99mYUlWgsbRId00e33Eo/h4mfE6opIr6exE48MTX5
-	bE1kx0aKb9USRVCNnnlyWgW2DXtKo5qWqRXtz8hAC4KQbDc59BNGQaMYAYckw==
-X-Google-Smtp-Source: AGHT+IGnNpiYR9YRPDiKPN9Q5vTAOHi7xpfdLlQY2S9l/FJYyvgp5XVUlnCd4fDLpn15Z3eTjLxA7A==
-X-Received: by 2002:a05:6a21:7895:b0:1e1:ab63:c5ed with SMTP id adf61e73a8af0-1e1ab63c75cmr2452719637.23.1733724265250;
-        Sun, 08 Dec 2024 22:04:25 -0800 (PST)
-Received: from localhost ([106.38.221.187])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725e34bbb17sm2104894b3a.56.2024.12.08.22.04.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Dec 2024 22:04:24 -0800 (PST)
-From: Jian Zhang <zhangjian.3032@bytedance.com>
-To: wsa+renesas@sang-engineering.com,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: slave-eeprom: add latch mode
-Date: Mon,  9 Dec 2024 14:04:21 +0800
-Message-ID: <20241209060422.1021512-1-zhangjian.3032@bytedance.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1733748172; c=relaxed/simple;
+	bh=RQrfWmo4OTsSJ/kPbJNVpBZAz5FRd3GqPzJiPkdi6cM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=L5pQEBOWNb/gf/WkzE0feSebva3rtQDbrM90+WJit3PnRvMwaFqKueI5KKEeE0BNiG5rIr/UUidZVzg7YdwdwklMgHQTZd5QkQbZmH3tk7ql4vt5KEXkUm4+PJ8bHJqmGoEAujUYcLtz5UKswH5AI1Buk1abxwc8ZfpE79u8osI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lkLPGtuJ; arc=none smtp.client-ip=217.70.178.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 5353FC0F10;
+	Mon,  9 Dec 2024 12:42:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A2011BF203;
+	Mon,  9 Dec 2024 12:42:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1733748152;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zmWNpmDB2L6Ktl0LzB1M24Lop3ag8dWEwbvJgygrndU=;
+	b=lkLPGtuJmohDKLCRhYFzRQNNYRhSi2WALq49ASl+yflenUQahjVdkz9DvEadX3HcT1vMo9
+	rWqSytJYK5p6kGoTKTXWrwiA7PjoKOWVgQxubgMrtPWBTmlB4mhuxU8euFJ1bfVSTiY8DK
+	Eqc6poaKfSGVy/GRIJVy79ZJg3+AJYrk+NUYpQjoxlY8yy4IvhLn2SuXkFfs+gZ65jv+F3
+	H6S8lMWa6b4Gj/2q6FVR/7rnIWaLyThJwXsIX2QkuOVm5hJuNhJRjI9lsBG3idPXXRDTVe
+	5q7GhzXzteeuN10P47mSPd/diAjb0lzixf4x0DXwdAkbXLMladlDtxUMjqjYkA==
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-gpio@vger.kernel.org,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Cosmin Tanislav <demonsingur@gmail.com>
+Subject: Re: [PATCH v3 8/9] i2c: Support dynamic address translation
+Date: Mon, 09 Dec 2024 13:42:29 +0100
+Message-ID: <3255950.5fSG56mABF@fw-rgant>
+In-Reply-To: <141bbac1-5289-4335-a566-387721439bef@ideasonboard.com>
+References:
+ <20241125-fpc202-v3-0-34e86bcb5b56@bootlin.com>
+ <20241125-fpc202-v3-8-34e86bcb5b56@bootlin.com>
+ <141bbac1-5289-4335-a566-387721439bef@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-GND-Sasl: romain.gantois@bootlin.com
 
-The read operation is locked by byte, while the write operation is
-locked by block (or based on the amount of data written). If we need to
-ensure the integrity of a "block" of data that the other end can read,
-then we need a latch mode, lock the buffer when a read operation is
-requested.
+Hi Tomi,
 
-Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
----
- drivers/i2c/i2c-slave-eeprom.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+On vendredi 29 novembre 2024 10:54:35 heure normale d=E2=80=99Europe centra=
+le Tomi=20
+Valkeinen wrote:
+> Hi Romain,
+>=20
+> On 25/11/2024 10:45, Romain Gantois wrote:
+> > The i2c-atr module keeps a list of associations between I2C client alia=
+ses
+=2E..
+> > i2c_atr_dynamic_attach/detach_addr from racing with the bus notifier
+> > handler to modify alias_list.
+> >=20
+> > Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+> > ---
+> >=20
+> >   drivers/i2c/i2c-atr.c         | 244
+> >   ++++++++++++++++++++++++++++++++----------
+> >   drivers/media/i2c/ds90ub960.c |   2 +-
+> >   include/linux/i2c-atr.h       |  13 ++-
+> >   3 files changed, 202 insertions(+), 57 deletions(-)
+>=20
+> This fails with:
+>=20
+> WARNING: CPU: 1 PID: 360 at lib/list_debug.c:35
+> __list_add_valid_or_report+0xe4/0x100
+>=20
+> as the i2c_atr_create_c2a() calls list_add(), but i2c_atr_attach_addr(),
+> which is changed to use i2c_atr_create_c2a(), also calls list_add().
+>=20
+> Also, if you add i2c_atr_create_c2a() which hides the allocation and
+> list_add, I think it makes sense to add a i2c_atr_destroy_c2a() to
+> revert that.
+>=20
+> There's also a memory error "BUG: KASAN: slab-use-after-free in
+> __lock_acquire+0xc4/0x375c" (see below) when unloading the ub960 or
+> ub953 driver. I haven't looked at that yet.
 
-diff --git a/drivers/i2c/i2c-slave-eeprom.c b/drivers/i2c/i2c-slave-eeprom.c
-index 5946c0d0aef9..29246ac7d350 100644
---- a/drivers/i2c/i2c-slave-eeprom.c
-+++ b/drivers/i2c/i2c-slave-eeprom.c
-@@ -33,7 +33,9 @@ struct eeprom_data {
- 	u16 address_mask;
- 	u8 num_address_bytes;
- 	u8 idx_write_cnt;
-+	bool latch;
- 	bool read_only;
-+	u8 *buffer_latch;
- 	u8 buffer[];
- };
- 
-@@ -49,6 +51,11 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
- 
- 	switch (event) {
- 	case I2C_SLAVE_WRITE_RECEIVED:
-+		if (eeprom->latch) {
-+			spin_lock(&eeprom->buffer_lock);
-+			memcpy(eeprom->buffer_latch, eeprom->buffer, eeprom->bin.size);
-+			spin_unlock(&eeprom->buffer_lock);
-+		}
- 		if (eeprom->idx_write_cnt < eeprom->num_address_bytes) {
- 			if (eeprom->idx_write_cnt == 0)
- 				eeprom->buffer_idx = 0;
-@@ -69,7 +76,10 @@ static int i2c_slave_eeprom_slave_cb(struct i2c_client *client,
- 		fallthrough;
- 	case I2C_SLAVE_READ_REQUESTED:
- 		spin_lock(&eeprom->buffer_lock);
--		*val = eeprom->buffer[eeprom->buffer_idx & eeprom->address_mask];
-+		if (eeprom->latch)
-+			*val = eeprom->buffer_latch[eeprom->buffer_idx & eeprom->address_mask];
-+		else
-+			*val = eeprom->buffer[eeprom->buffer_idx & eeprom->address_mask];
- 		spin_unlock(&eeprom->buffer_lock);
- 		/*
- 		 * Do not increment buffer_idx here, because we don't know if
-@@ -152,6 +162,17 @@ static int i2c_slave_eeprom_probe(struct i2c_client *client)
- 	if (!eeprom)
- 		return -ENOMEM;
- 
-+	if (of_property_read_bool(client->adapter->dev.of_node, "use-latch")) {
-+		dev_info(&client->dev, "Using latch mode");
-+		eeprom->latch = true;
-+		eeprom->buffer_latch = devm_kzalloc(&client->dev, size, GFP_KERNEL);
-+		if (!eeprom->buffer_latch)
-+			return -ENOMEM;
-+	} else {
-+		eeprom->buffer_latch = NULL;
-+		eeprom->latch = false;
-+	}
-+
- 	eeprom->num_address_bytes = flag_addr16 ? 2 : 1;
- 	eeprom->address_mask = size - 1;
- 	eeprom->read_only = FIELD_GET(I2C_SLAVE_FLAG_RO, id->driver_data);
--- 
-2.47.0
+I think I've found what's causing this KASAN splat.  i2c_atr_del_adapter is
+freeing it's alias pool before setting atr->adapter[chan_id] to NULL. So
+there's a time window during which bus notifications can trigger a call
+to i2c_atr_attach_addr, leading to a UAF on the alias pool struct.
+
+I'll fix this in v4.
+
+Thanks,
+
+=2D-=20
+Romain Gantois, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+
 
 
