@@ -1,63 +1,48 @@
-Return-Path: <linux-i2c+bounces-8393-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8394-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9022B9EA7D3
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 06:28:30 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8935E18866B3
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 05:28:29 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81018227567;
-	Tue, 10 Dec 2024 05:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dqr2pwl6"
-X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 233C69EA97C
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 08:23:56 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB51F23312A;
-	Tue, 10 Dec 2024 05:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8B1B286897
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 07:23:54 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD99422CBFC;
+	Tue, 10 Dec 2024 07:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bVE1tsBW"
+X-Original-To: linux-i2c@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E30013B280;
+	Tue, 10 Dec 2024 07:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733808499; cv=none; b=o/hLByl0O4d+lme8B8SGCP+6nrmZc0egffeQhzDCcL/9CFPzQFAbMzYIwXAXjXSkCY+FLtSnafYzYTvj8yVbLHNXBma9CWsKeJPff8mGnNeZqaWTtBuyIbpQHZFLtvsHliXHyOwGqgekZN3uA4vijxW2RdkrKrzTti7H4vzW0Ac=
+	t=1733815430; cv=none; b=Z8gmnrTxQ6uKxC5CLBRGgoamdxVRYN7K+BFkCN1o5XoFk87LvSzI6HuenFrnCG3pMEdntKMQqoVLXgHVUgTcaNM6jY61xF9DbuUHEMeSujo2xODn7sY8NG+WqY5IUw4JUtWPp0SuSrHf2uo3EMUiOQdBo6d6G4yOqZUQ0vF4wfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733808499; c=relaxed/simple;
-	bh=txhvRaf+R9QdSufZl3717uQGuiVRFvUpk86pxA4g3ww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=H3MkHjBggxO672wEJf0TuQMkpTbfODiKhj18jIBcLRCg95mqswtbA03ww7ltyPOw3LP/HublpsenDUgWwktZ0MGOVAxuhIe5524OzYF9acLljYWe5tW/g7euMLU/VAgLIZCtFVsYrFCVl8Rwni9yXffkFXgK+N1O+7UTP0VarTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dqr2pwl6; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B9IVk3Y015575;
-	Tue, 10 Dec 2024 05:28:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	bb16b8Pee7Mo4CdKwQ3mIDWyAba/OId2sDiOEbzqDIQ=; b=dqr2pwl680cKXFr0
-	DPSFgOLt8JV4mboz8ARJGmXOQxuP25i9fAsssvjSR5XI7IAqJgk8gYBTFQbrWJIK
-	ukN9iR9mfjrjqjgMYJOd9kulVFtgbRXWWNPenhYE9jXqWbO99tPbXSaENaNjO8Jt
-	dreBaSOqpoOBAnYFPr8dsYoY3Ji62pnOsX7y5b72cXo3QhaaYGhZEn9d0SIPmH93
-	7Ekmpe0XHfBbZWz0jo8/6RcxiMRBpJ2kMqETikX9R4SAAaN0cpRM/oMB806NePW5
-	CwNs4b92n7MGn98xMSU6V/CaZWkOcxy6T+DYlMSUft7mIkyEvbtuqqqXu3sYxP9a
-	YiW16w==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43dy8ttt9p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Dec 2024 05:28:13 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BA5SB1T013395
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Dec 2024 05:28:11 GMT
-Received: from [10.216.2.81] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 9 Dec 2024
- 21:28:06 -0800
-Message-ID: <6736db20-127b-45c3-ac90-3e3e359c343b@quicinc.com>
-Date: Tue, 10 Dec 2024 10:58:03 +0530
+	s=arc-20240116; t=1733815430; c=relaxed/simple;
+	bh=C+u8g83KCxT/nbDzJu9qW5mBPgHJajxnd1sqC3ctG5s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZaPAy+rgk2Z0BJPLEBhmkXyn6qALPK+34GEf7mS/47Eg40uXwG1CdltphFUpEUnh1WMjUOOU4XU3EtqTx79Ig3ZwFh/anm2oWK8XIENFht46hIQDSEvRGJFW/qKoDMkyeNcfaRPKipWXzLRVNNmFeZ5dh0C9eOGn1GDuvzF+FNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bVE1tsBW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECA8C4CED6;
+	Tue, 10 Dec 2024 07:23:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733815429;
+	bh=C+u8g83KCxT/nbDzJu9qW5mBPgHJajxnd1sqC3ctG5s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bVE1tsBWChJQfIvoakA6dzr78bWNmi7ILz3zm2woT47v0B5zsegAdY4cpD3ErQxjc
+	 TJlJFvyGT+FN8MvurOS3WsOwO6oQh8RZKC/QAdfv+Bg4Kbel81YTwlyVAZCadIAxR0
+	 poMXtexrzCupgpuzZvKVYSHwLCddugBcGAaoeL8oV6e3xPODwHH5MHebA4RMq6m/jO
+	 c69jqffmiFAxnjWM3uZQQlumEoL21/OpBaP8x56z952jZAijwy/fiVnEONkA3QgO/L
+	 gvD5sUJbZq0OyClxeXhw3gf64Vq7DsusAhtmTHmppoZ0jYltOnrx1LVLEdnUhGffoY
+	 KFJbzKFMBiqKA==
+Message-ID: <9df703d9-b2c3-4978-9325-7ad50087e8f1@kernel.org>
+Date: Tue, 10 Dec 2024 08:23:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,110 +52,88 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v1 1/7] dt-bindings: i2c: qcom,i2c-geni: Document DT
  properties for QUP firmware loading
-To: Doug Anderson <dianders@chromium.org>
-CC: <andi.shyti@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <broonie@kernel.or>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <johan+linaro@kernel.org>,
-        <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <quic_anupkulk@quicinc.com>,
-        Mukesh Kumar Savaliya
-	<quic_msavaliy@quicinc.com>
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
+ andersson@kernel.org, konradybcio@kernel.org, johan+linaro@kernel.org,
+ dianders@chromium.org, agross@kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org
+Cc: quic_anupkulk@quicinc.com,
+ Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
 References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
  <20241204150326.1470749-2-quic_vdadhani@quicinc.com>
- <CAD=FV=XF+9wxZ5xNtO3Uy8QW9UY4tb+KR46jkondvBeQuVLsrA@mail.gmail.com>
+ <dacfdaf0-329f-4580-94e0-7c3e26b52776@kernel.org>
+ <2d615fdb-a661-4fb5-bde7-46f4690ecdce@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-In-Reply-To: <CAD=FV=XF+9wxZ5xNtO3Uy8QW9UY4tb+KR46jkondvBeQuVLsrA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: nfe7i1wYIs8_G6lizIJvF3W0W9HLbWjZ
-X-Proofpoint-GUID: nfe7i1wYIs8_G6lizIJvF3W0W9HLbWjZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- priorityscore=1501 mlxlogscore=999 clxscore=1015 mlxscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412100039
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <2d615fdb-a661-4fb5-bde7-46f4690ecdce@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 12/4/2024 10:55 PM, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Dec 4, 2024 at 7:03 AM Viken Dadhaniya
-> <quic_vdadhani@quicinc.com> wrote:
+On 10/12/2024 05:43, Viken Dadhaniya wrote:
+>>>       maxItems: 1
+>>>   
+>>> +  qcom,load-firmware:
+>>> +    type: boolean
+>>> +    description: Optional property to load SE (serial engine) Firmware from protocol driver.
 >>
->> Document the 'qcom,load-firmware' and 'qcom,xfer-mode' properties to
->> support SE(Serial Engine) firmware loading from the protocol driver and to
->> select the data transfer mode, either GPI DMA (Generic Packet Interface)
->> or non-GPI mode (PIO/CPU DMA).
 >>
->> I2C controller can operate in one of two modes based on the
->> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
->>
->> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
->> ---
->>   .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml   | 11 +++++++++++
->>   1 file changed, 11 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->> index 9f66a3bb1f80..a26f34fce1bb 100644
->> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->> @@ -66,6 +66,15 @@ properties:
->>     required-opps:
->>       maxItems: 1
->>
->> +  qcom,load-firmware:
->> +    type: boolean
->> +    description: Optional property to load SE (serial engine) Firmware from protocol driver.
->> +
->> +  qcom,xfer-mode:
->> +    description: Value 1,2 and 3 represents FIFO, CPU DMA and GSI DMA mode respectively.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [1, 2, 3]
-> 
-> I'm a little confused about this. I'll admit I haven't fully analyzed
-> your patch with actual code in it, but in the past "CPU DMA" mode and
-> "FIFO" mode were compatible with each other and then it was up to the
-> driver to decide which of the two modes made sense in any given
-> situation. For instance, last I looked at the i2c driver it tried to
-> use DMA for large transfers and FIFO for small transfers. The SPI
-> driver also has some cases where it will use DMA mode and then
-> fallback to FIFO mode.
-> 
-> ...so what exactly is the point of differentiating between "FIFO" and
-> "CPU DMA" mode here?
+>> Please wrap code according to coding style (checkpatch is not a coding
+>> style description, but only a tool).
+> Actually i have ran dt-schema for yaml validation. I couldn't get if you 
+> have any comment for description statement OR it's related to code ? 
+> Could you please be more descriptive so i can adopt the suggestions.
 
-Yes, correct, Will update in V2.
-I plan to add 2 modes, GSI and non-GSI(PIO or DMA based on length).
-
-> 
-> Then when it comes to "GSI DMA" mode, my understanding is that the
-> firmware for "GSI DMA" mode is always loaded by Trustzone because the
-> whole point is that the GSI mode arbitrates between multiple clients.
-> Presumably if the firmware already loaded the GSI firmware then the
-> code would just detect that case. ...so there shouldn't need to be any
-> reason to specify GSI mode here either, right?
-> 
-> -Doug
-
-GSI firmware is loaded from TZ per QUP, but to use GSI mode,
-we need to configure the SE to use GSI mode by writing into SE register 
-QUPV3_SE_GENI_DMA_MODE_EN and SE_GSI_EVENT_EN. This register is
-used to configure data transfer mode for Serial Engine.
+This code is not conforming to coding style in terms of wrapping, what
+dtschema has to do with it? Please read coding style.
 
 
 
+Best regards,
+Krzysztof
 
