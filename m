@@ -1,48 +1,80 @@
-Return-Path: <linux-i2c+bounces-8412-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8413-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F9679EB06E
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 13:05:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDF909EB0FF
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 13:38:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 518B816906D
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 12:05:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D9511886628
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 12:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 853221A0BC9;
-	Tue, 10 Dec 2024 12:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE0E1A725A;
+	Tue, 10 Dec 2024 12:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FluYWaZO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BsYDYLxq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337D923DEBA;
-	Tue, 10 Dec 2024 12:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2563F1A3AB8;
+	Tue, 10 Dec 2024 12:38:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733832347; cv=none; b=BlnywGnfbDR+Z6xt84t7T6SOfiG5TpW8wzyZe9U+KTbLnYWnc2efscHC3qRdcRnm3GPTBwmVFtScPtd2RooAUarkG93ztKMVylgmFRbZ0FI87nuWruqy8+862Pk2LFwd5uPIckTFWE+/IqrFQbNBQaKf9oVczqT39MqSwpLQ8Cg=
+	t=1733834317; cv=none; b=eXmBTKYab/f50v9310L4y52jqsmMqjf3SbM7txgZrCZVE2rN1FX1jKHlVfnMpDXPG2DCujvBWSoiRgbWtlD6IEAngtmgHtY9vtDTyRNTDjkoTWswGUM2tqC8rWKZq31kMKSk94ilwXQG9BFAvioY3cb78Yd/4JvdP2ZWXS9uwFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733832347; c=relaxed/simple;
-	bh=nBO5Ds3JwYoGI0hwO79o3kkiya7ohUrrfSkZ0bb/Wb4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=VRl/FWEr3DH1LSUH1KLEHMFpjoyuGUDTJq+zhKOhJfbHIkPqJ9zcAm1EkjoqvacV4Z/V004LlAZdzNDAcEiCa0Hh3LUYixWH04r+pWaGSdAzlz7vVAwRgyol0TVYs5RGCexrd+gmMIZp2v1qmpZblmHgPD4tICKMkh9YsAewoM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FluYWaZO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B12C4CED6;
-	Tue, 10 Dec 2024 12:05:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733832347;
-	bh=nBO5Ds3JwYoGI0hwO79o3kkiya7ohUrrfSkZ0bb/Wb4=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=FluYWaZOcxnf6cXZGyGj8Gml7fo8VPRETZiBZsI5+Agj+Zaq3SZ4FyC0YpaEtVBX5
-	 dslZvImb9rOk6qIbs4ozbhRt5PDoQcCqQAJXiLuo3Qh9Zusq7rKuvv8FDwk15h1Ptv
-	 A8xIQWhXGU/LtLLIWXiRjl3o34gS0PE4fnsqDSvPjJU6fzFUzd+SZ/PzaCo5ZMb1hi
-	 Qv0KuCg0xl2WpHxe5Tq21Q1NBEuIvK3VDP68l3cET05JhCURdAWtq+vkacSabokTlK
-	 ztNlXCBAx+cxpm3env+x2oZWUg1QRSRU2eVD3RQmHzmf8bqjKJCBmrHissS/cwBCEW
-	 VnWAP1X+5oMkw==
-Message-ID: <8b33f935-04a9-48df-8ea1-f6b98efecb9d@kernel.org>
-Date: Tue, 10 Dec 2024 13:05:38 +0100
+	s=arc-20240116; t=1733834317; c=relaxed/simple;
+	bh=6XCqSE4PX87UUcMXJwDzqbV0B9paAPJx9Z1elIYDjEY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OqYHAPh9Lr1rq+ew2TLZUjZoCg6Rfz4xaAQziEzFORHjhdYxtCAjaM7ZjIO7V2iuKZiH6bFggQACdNsCLeuFpvbF4KcAihksfBwm9g3ZdAb6G11UgeX+0tZhaiTFzFPDjBBWuqhZmV9NnrtgsxOFduT0Mj3braQwFot6KixZ07c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BsYDYLxq; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-435f8f29f8aso3394535e9.2;
+        Tue, 10 Dec 2024 04:38:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733834313; x=1734439113; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/L26b1cngPFNrc6gaDUcEqCgyOcOzvpS/5bv/9HvOTs=;
+        b=BsYDYLxq5mHnDzeNPU074l1YoBfG6lxfylzHAWdFqZb5KnqH27qkQLZZQfxYQcjRn3
+         1KJGBa1HDXLDB+7zXM/8lT1N4ENpd9Oub9Tl1oynPY+qb+rfJCflGdHYb0Zc+ENi93vf
+         Qw0qcQHyAWuifbT2m5w5gq17ReNubRyIVJ5DO7UiPgX6GsuLGSw0GvIukv6Hi+qrJ1r3
+         cgSIQzQhRPBVaIg44pSDOuZBhbSLMFXHol6OiCNxoHu9zPlGvXZEznWPfzX7eMKvYJUW
+         luXG2BnYD4/NiZB1rBwbA1cKdcHQulevfm8zD9tmKsqX56ARUY/Ck3yOG9dTdOPzGNE6
+         Ck4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733834313; x=1734439113;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/L26b1cngPFNrc6gaDUcEqCgyOcOzvpS/5bv/9HvOTs=;
+        b=i45jcZoRsCyTNucnRdPCG8dnqI4bD/8QrUE/+DR1s9GV/DAuI8SQFw2aCAdKHS5A/p
+         LVV2HzqezQmqeOXKGWnJ+36VQnVzDmIFXZrzK+9RoXpR6Wn4yCf3FiuvFThtiUelmoL8
+         cg2kYZrMFdBmC4/Xxbj5PE52yTmG69/TtPmdoV5aFxOCtgRb/kSVFsQV7hsOjEaUfPXE
+         WKltMcjc3qeXeUL83SEfPR/NxDDWDQHfLuDMrRp3RLGDN3HJoJJWjuT86xnOhy7LXXTK
+         nlf1GvGQwJMDehQ6AvY3Pxxb3Vqr5bpZfMiWgVZ7jf9LAr1Y8JZX2lPmBhDW8JCYZ7jZ
+         oc+g==
+X-Forwarded-Encrypted: i=1; AJvYcCUCHfjjgejaNLX2Y+0f2ETx7xgC2gDoRmWIqrt2BLBIUKEZeiF+lDeZcrDokKqvBDC01wLJM6FkikY4C+zdHQ==@vger.kernel.org, AJvYcCUjEXHEprWBeqojTMY6VbDMfIa5gDz5ZQQwtMcMaB44ei+a6wI9+q3Df7aJ2clEg4sYskFgiXAditNa@vger.kernel.org, AJvYcCVDMmk7EYf4hOUX5Tf1VFqAUGi3DPc3OtKnTbUat7hD9i720ZjeC4Q8+q0FUEP9AnDWzhBpPsJ/Wy8D@vger.kernel.org, AJvYcCW+dBFwQoVwgLt6ece/1KhQu6eJPc7LEr+FnoXflfhbL06fcPE4+7c/w4xX9v0AadY1iMuZ1VyH2cvA@vger.kernel.org, AJvYcCWS+6op44NgS0ahlQJL5qIDsIXrNbzs8uRVO+0R+QDMVblMnZgteZ7t+MB7yvc6dMGN+ZyBXbvPAm8V7yAw@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWIHurIAbtLQV+2VT1p34dsOs/ZDYhwSqly/Bn19mstT3K7UqQ
+	bs1ZsJZP6k6i6gZASyd0GAfky5x2+F9ak7E4HQggaZDD2IupeNRM
+X-Gm-Gg: ASbGncv0tkezZJskbK0B2Q2MAG5IMOA6F3RGkiDQYHxxIyEpscLN05ngxScYoqaN+ab
+	QXFUYg8CSx0NHqZBG0IE3tBA39quD2M1kh/swQrmi3zxIm7GvLpxUQ4GU3aCbLXs0k8OY6C6jg7
+	gtIne2uwvYgWwbPfN+xlrjD9tUcKyOnqtDBPNocw/cSByWllfyiJ1qcFblHNmww8LkkIIU6tk2R
+	v98D40M9MOUMbtZ25bqc6miIYfe6iYT/S+s7PcVD4xeB8CGz+wR9fHspuFIFSbSY2jlzAEwvEcu
+	tOHMugFiSXXGIW42VP6wz0TDHQ==
+X-Google-Smtp-Source: AGHT+IGker31etdhubmaX8W/x+4MUbOn5bJSDYHrfshAnDAtpYV5vqGrST/Sh3Lmoukaj9PN1Pm8Og==
+X-Received: by 2002:a05:600c:5756:b0:434:a350:207c with SMTP id 5b1f17b1804b1-434dded76fdmr115871875e9.23.1733834312964;
+        Tue, 10 Dec 2024 04:38:32 -0800 (PST)
+Received: from ?IPV6:2a00:f41:c02:ff08:9aca:84ea:6a33:e5c8? ([2a00:f41:c02:ff08:9aca:84ea:6a33:e5c8])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434da11935asm191728645e9.37.2024.12.10.04.38.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Dec 2024 04:38:31 -0800 (PST)
+Message-ID: <422e6a1e-e76a-4ebc-a0a5-64c47ea57823@gmail.com>
+Date: Tue, 10 Dec 2024 13:38:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,8 +84,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v5 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
  flag
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Konrad Dybcio <konradybcio@gmail.com>,
+To: Krzysztof Kozlowski <krzk@kernel.org>,
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
  Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, konrad.dybcio@linaro.org,
  andersson@kernel.org, andi.shyti@kernel.org, linux-arm-msm@vger.kernel.org,
@@ -75,125 +106,142 @@ References: <20241129144357.2008465-1-quic_msavaliy@quicinc.com>
  <e9fb294b-b6b8-4034-84c9-a25b83321399@kernel.org>
  <835ac8c6-3fbb-4a0d-aa07-716d1c8aad7c@gmail.com>
  <f1fa2bde-95ce-45e9-ad2d-f1d82ec6303c@kernel.org>
+ <8b33f935-04a9-48df-8ea1-f6b98efecb9d@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <f1fa2bde-95ce-45e9-ad2d-f1d82ec6303c@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+From: Konrad Dybcio <konradybcio@gmail.com>
+Autocrypt: addr=konradybcio@gmail.com; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <8b33f935-04a9-48df-8ea1-f6b98efecb9d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/12/2024 12:53, Krzysztof Kozlowski wrote:
->>>> I'm not sure a single property name+description can fit all possible
->>>> cases here. The hardware being "shared" can mean a number of different
->>>
->>> Existing property does not explain anything more, either. To recap -
->>> this block is SE and property is named "se-shared", so basically it is
->>> equal to just "shared". "shared" is indeed quite vague, so I was
->>> expecting some wider work here.
->>>
->>>
->>>> things, with some blocks having hardware provisions for that, while
->>>> others may have totally none and rely on external mechanisms (e.g.
->>>> a shared memory buffer) to indicate whether an external entity
->>>> manages power to them.
->>>
->>> We have properties for that too. Qualcomm SoCs need once per year for
->>> such shared properties. BAM has two or three. IPA has two. There are
->>> probably even more blocks which I don't remember now.
->>
->> So, the problem is "driver must not toggle GPIO states", because
->> "the bus controller must not be muxed away from the endpoint".
->> You can come up with a number of similar problems by swapping out
->> the quoted text.
->>
->> We can either describe what the driver must do (A), or what the
->> reason for it is (B).
->>
->>
->> If we go with A, we could have a property like:
->>
->> &i2c1 {
->> 	externally-handled-resources = <(EHR_PINCTRL_STATE | EHR_CLOCK_RATE)>
->> };
->>
->> which would be a generic list of things that the OS would have to
->> tiptoe around, fitting Linux's framework split quite well
->>
->>
->>
->> or if we go with B, we could add a property like:
->>
->> &i2c1 {
->> 	qcom,shared-controller;
->> };
->>
->> which would hide the implementation details into the driver
->>
->> I could see both approaches having their place, but in this specific
->> instance I think A would be more fitting, as the problem is quite
->> simple.
-> 
-> 
-> The second is fine with me, maybe missing information about "whom" do
-> you share it with. Or maybe we get to the point that all this is
-> specific to SoC, thus implied by compatible and we do not need
-> downstream approach (another discussion in USB pushed by Qcom: I want
-> one compatible and 1000 properties).
-> 
-> I really wished Qualcomm start reworking their bindings before they are
-> being sent upstream to match standard DT guidelines, not downstream
-> approach. Somehow these hundreds reviews we give could result in new
-> patches doing things better, not just repeating the same issues.
-
-This is BTW v5, with all the same concerns from v1 and still no answers
-in commit msg about these concerns. Nothing explained in commit msg
-which hardware needs it or why the same SoC have it once shared, once
-not (exclusive). Basically there is nothing here corresponding to any
-real product, so since five versions all this for me is just copy-paste
-from downstream approach.
 
 
-Best regards,
-Krzysztof
+On 12/10/24 13:05, Krzysztof Kozlowski wrote:
+> On 10/12/2024 12:53, Krzysztof Kozlowski wrote:
+>>>>> I'm not sure a single property name+description can fit all possible
+>>>>> cases here. The hardware being "shared" can mean a number of different
+>>>>
+>>>> Existing property does not explain anything more, either. To recap -
+>>>> this block is SE and property is named "se-shared", so basically it is
+>>>> equal to just "shared". "shared" is indeed quite vague, so I was
+>>>> expecting some wider work here.
+>>>>
+>>>>
+>>>>> things, with some blocks having hardware provisions for that, while
+>>>>> others may have totally none and rely on external mechanisms (e.g.
+>>>>> a shared memory buffer) to indicate whether an external entity
+>>>>> manages power to them.
+>>>>
+>>>> We have properties for that too. Qualcomm SoCs need once per year for
+>>>> such shared properties. BAM has two or three. IPA has two. There are
+>>>> probably even more blocks which I don't remember now.
+>>>
+>>> So, the problem is "driver must not toggle GPIO states", because
+>>> "the bus controller must not be muxed away from the endpoint".
+>>> You can come up with a number of similar problems by swapping out
+>>> the quoted text.
+>>>
+>>> We can either describe what the driver must do (A), or what the
+>>> reason for it is (B).
+>>>
+>>>
+>>> If we go with A, we could have a property like:
+>>>
+>>> &i2c1 {
+>>> 	externally-handled-resources = <(EHR_PINCTRL_STATE | EHR_CLOCK_RATE)>
+>>> };
+>>>
+>>> which would be a generic list of things that the OS would have to
+>>> tiptoe around, fitting Linux's framework split quite well
+>>>
+>>>
+>>>
+>>> or if we go with B, we could add a property like:
+>>>
+>>> &i2c1 {
+>>> 	qcom,shared-controller;
+>>> };
+>>>
+>>> which would hide the implementation details into the driver
+>>>
+>>> I could see both approaches having their place, but in this specific
+>>> instance I think A would be more fitting, as the problem is quite
+>>> simple.
+>>
+>>
+>> The second is fine with me, maybe missing information about "whom" do
+>> you share it with. Or maybe we get to the point that all this is
+>> specific to SoC, thus implied by compatible and we do not need
+>> downstream approach (another discussion in USB pushed by Qcom: I want
+>> one compatible and 1000 properties).
+>>
+>> I really wished Qualcomm start reworking their bindings before they are
+>> being sent upstream to match standard DT guidelines, not downstream
+>> approach. Somehow these hundreds reviews we give could result in new
+>> patches doing things better, not just repeating the same issues.
+> 
+> This is BTW v5, with all the same concerns from v1 and still no answers
+> in commit msg about these concerns. Nothing explained in commit msg
+> which hardware needs it or why the same SoC have it once shared, once
+> not (exclusive). Basically there is nothing here corresponding to any
+> real product, so since five versions all this for me is just copy-paste
+> from downstream approach.
+
+So since this is a software contract and not a hardware
+feature, this is not bound to any specific SoC or "firmware",
+but rather to what runs on other cores (e.g. DSPs, MCUs spread
+across the SoC or in a different software world, like TZ).
+
+Specifying the specific intended use would be helpful though,
+indeed.
+
+Let's see if we can somehow make this saner.
+
+
+Mukesh, do we have any spare registers that we could use to
+indicate that a given SE is shared? Preferably within the
+SE's register space itself. The bootloader or another entity
+(DSP or what have you) would then set that bit before Linux
+runs and we could skip the bindings story altogether.
+
+It would need to be reserved on all SoCs though (future and
+past), to make sure the contract is always held up, but I
+think finding a persistent bit that has never been used
+shouldn't be impossible.
+
+Konrad
 
