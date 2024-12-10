@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-8411-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8412-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 006B59EB03B
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 12:54:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F9679EB06E
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 13:05:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAA0E18871CB
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 11:54:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 518B816906D
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 12:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5AF119F130;
-	Tue, 10 Dec 2024 11:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 853221A0BC9;
+	Tue, 10 Dec 2024 12:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFUM+C+Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FluYWaZO"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAAE19CC3E;
-	Tue, 10 Dec 2024 11:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337D923DEBA;
+	Tue, 10 Dec 2024 12:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733831633; cv=none; b=Nmk1D1Lg7hxAyBncnduC9Di9zT9Y+2FR0+4HZd2QtA4pOUQXYLg9mStPuyCQvXUC8MzlFDY54pqsC0pYBwgv3qJOyWhBlvvsiNxx3Z+nDBAzN5TiDfYdlr/cBMt7Iz2bTFWT6v5Y1z7p465vaafOo00gOB1QAe+J9ZHDFcvTmiE=
+	t=1733832347; cv=none; b=BlnywGnfbDR+Z6xt84t7T6SOfiG5TpW8wzyZe9U+KTbLnYWnc2efscHC3qRdcRnm3GPTBwmVFtScPtd2RooAUarkG93ztKMVylgmFRbZ0FI87nuWruqy8+862Pk2LFwd5uPIckTFWE+/IqrFQbNBQaKf9oVczqT39MqSwpLQ8Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733831633; c=relaxed/simple;
-	bh=kKMugwoj+LY16aSGWK/2tQQCmAZ5WDFr5c3LH6IO5QE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eX1cWBDps1BDifYrvaUhWn1K+VtL2s5yklteCchDLnIL+mb6S8OEXzON20Ti6KjMsMm7zDz3YNEycgrqzwISPN83k2jGxjz5ValIYbYFmDp2cKdD7/Cy1t2Y/l+UNFaMNZ1etQ/UJ4H9DZnKTmLMWZfaIHMuEellFGqxYWTeUWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFUM+C+Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36290C4CED6;
-	Tue, 10 Dec 2024 11:53:45 +0000 (UTC)
+	s=arc-20240116; t=1733832347; c=relaxed/simple;
+	bh=nBO5Ds3JwYoGI0hwO79o3kkiya7ohUrrfSkZ0bb/Wb4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=VRl/FWEr3DH1LSUH1KLEHMFpjoyuGUDTJq+zhKOhJfbHIkPqJ9zcAm1EkjoqvacV4Z/V004LlAZdzNDAcEiCa0Hh3LUYixWH04r+pWaGSdAzlz7vVAwRgyol0TVYs5RGCexrd+gmMIZp2v1qmpZblmHgPD4tICKMkh9YsAewoM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FluYWaZO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B12C4CED6;
+	Tue, 10 Dec 2024 12:05:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733831633;
-	bh=kKMugwoj+LY16aSGWK/2tQQCmAZ5WDFr5c3LH6IO5QE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VFUM+C+YzXsy3tbsR6OodE2idxFxVv/QJ5jzxDTpt+89NqqmmmhDhzTY9KrJFYA8r
-	 iGwOnra9JdjMNYpkDYt1DGdeT/Q/ylJPI60/wYvOiwVJ2kCfTZ5djrlsFHM1P3uJqI
-	 CdR2vPwKdR6QLtmcdDWAPYO5z8toeDbHggGCxDtJzE4lH3HQkJfkaaGWPsdrd0CzIO
-	 JS8D9xNMM9KOBmE9oH6eBWbRb7hIbC1ch/DHBliC3+97Ys6wRAxvHc8L/xc3AQzlXm
-	 xlPV1FZqLToWWJt1h5WW3BoSE8C9dYHMDhfd+DWSDbimr8us6rjUglriM8QUJzxx7R
-	 eRcbWVzN1l9AQ==
-Message-ID: <f1fa2bde-95ce-45e9-ad2d-f1d82ec6303c@kernel.org>
-Date: Tue, 10 Dec 2024 12:53:43 +0100
+	s=k20201202; t=1733832347;
+	bh=nBO5Ds3JwYoGI0hwO79o3kkiya7ohUrrfSkZ0bb/Wb4=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=FluYWaZOcxnf6cXZGyGj8Gml7fo8VPRETZiBZsI5+Agj+Zaq3SZ4FyC0YpaEtVBX5
+	 dslZvImb9rOk6qIbs4ozbhRt5PDoQcCqQAJXiLuo3Qh9Zusq7rKuvv8FDwk15h1Ptv
+	 A8xIQWhXGU/LtLLIWXiRjl3o34gS0PE4fnsqDSvPjJU6fzFUzd+SZ/PzaCo5ZMb1hi
+	 Qv0KuCg0xl2WpHxe5Tq21Q1NBEuIvK3VDP68l3cET05JhCURdAWtq+vkacSabokTlK
+	 ztNlXCBAx+cxpm3env+x2oZWUg1QRSRU2eVD3RQmHzmf8bqjKJCBmrHissS/cwBCEW
+	 VnWAP1X+5oMkw==
+Message-ID: <8b33f935-04a9-48df-8ea1-f6b98efecb9d@kernel.org>
+Date: Tue, 10 Dec 2024 13:05:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,6 +52,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v5 1/4] dt-bindindgs: i2c: qcom,i2c-geni: Document shared
  flag
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Konrad Dybcio <konradybcio@gmail.com>,
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
  Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, konrad.dybcio@linaro.org,
@@ -73,7 +74,7 @@ References: <20241129144357.2008465-1-quic_msavaliy@quicinc.com>
  <a7186553-d8f6-46d4-88da-d042a4a340e2@oss.qualcomm.com>
  <e9fb294b-b6b8-4034-84c9-a25b83321399@kernel.org>
  <835ac8c6-3fbb-4a0d-aa07-716d1c8aad7c@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <f1fa2bde-95ce-45e9-ad2d-f1d82ec6303c@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -118,92 +119,80 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <835ac8c6-3fbb-4a0d-aa07-716d1c8aad7c@gmail.com>
+In-Reply-To: <f1fa2bde-95ce-45e9-ad2d-f1d82ec6303c@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 10/12/2024 10:09, Konrad Dybcio wrote:
-> 
-> 
-> On 12/10/24 08:28, Krzysztof Kozlowski wrote:
->> On 02/12/2024 15:04, Konrad Dybcio wrote:
->>>>>>    >
->>>>>> IP blocks like SE can be shared. Here we are talking about I2C sharing.
->>>>>> In future it can be SPI sharing. But design wise it fits better to add
->>>>>> flag per SE node. Same we shall be adding for SPI too in future.
->>>>>
->>>>>
->>>>> How flag per SE node is relevant? I did not ask to move the property.
->>>>>
->>>>>>
->>>>>> Please let me know your further suggestions.
->>>>> We do not talk about I2C or SPI here only. We talk about entire SoC.
->>>>> Since beginning. Find other patch proposals and align with rest of
->>>>> Qualcomm developers so that you come with only one definition for this
->>>>> feature/characteristic. Or do you want to say that I am free to NAK all
->>>>> further properties duplicating this one?
+On 10/12/2024 12:53, Krzysztof Kozlowski wrote:
+>>>> I'm not sure a single property name+description can fit all possible
+>>>> cases here. The hardware being "shared" can mean a number of different
 >>>
->>> I'm not sure a single property name+description can fit all possible
->>> cases here. The hardware being "shared" can mean a number of different
+>>> Existing property does not explain anything more, either. To recap -
+>>> this block is SE and property is named "se-shared", so basically it is
+>>> equal to just "shared". "shared" is indeed quite vague, so I was
+>>> expecting some wider work here.
+>>>
+>>>
+>>>> things, with some blocks having hardware provisions for that, while
+>>>> others may have totally none and rely on external mechanisms (e.g.
+>>>> a shared memory buffer) to indicate whether an external entity
+>>>> manages power to them.
+>>>
+>>> We have properties for that too. Qualcomm SoCs need once per year for
+>>> such shared properties. BAM has two or three. IPA has two. There are
+>>> probably even more blocks which I don't remember now.
 >>
->> Existing property does not explain anything more, either. To recap -
->> this block is SE and property is named "se-shared", so basically it is
->> equal to just "shared". "shared" is indeed quite vague, so I was
->> expecting some wider work here.
+>> So, the problem is "driver must not toggle GPIO states", because
+>> "the bus controller must not be muxed away from the endpoint".
+>> You can come up with a number of similar problems by swapping out
+>> the quoted text.
+>>
+>> We can either describe what the driver must do (A), or what the
+>> reason for it is (B).
 >>
 >>
->>> things, with some blocks having hardware provisions for that, while
->>> others may have totally none and rely on external mechanisms (e.g.
->>> a shared memory buffer) to indicate whether an external entity
->>> manages power to them.
+>> If we go with A, we could have a property like:
 >>
->> We have properties for that too. Qualcomm SoCs need once per year for
->> such shared properties. BAM has two or three. IPA has two. There are
->> probably even more blocks which I don't remember now.
-> 
-> So, the problem is "driver must not toggle GPIO states", because
-> "the bus controller must not be muxed away from the endpoint".
-> You can come up with a number of similar problems by swapping out
-> the quoted text.
-> 
-> We can either describe what the driver must do (A), or what the
-> reason for it is (B).
-> 
-> 
-> If we go with A, we could have a property like:
-> 
-> &i2c1 {
-> 	externally-handled-resources = <(EHR_PINCTRL_STATE | EHR_CLOCK_RATE)>
-> };
-> 
-> which would be a generic list of things that the OS would have to
-> tiptoe around, fitting Linux's framework split quite well
-> 
+>> &i2c1 {
+>> 	externally-handled-resources = <(EHR_PINCTRL_STATE | EHR_CLOCK_RATE)>
+>> };
+>>
+>> which would be a generic list of things that the OS would have to
+>> tiptoe around, fitting Linux's framework split quite well
+>>
+>>
+>>
+>> or if we go with B, we could add a property like:
+>>
+>> &i2c1 {
+>> 	qcom,shared-controller;
+>> };
+>>
+>> which would hide the implementation details into the driver
+>>
+>> I could see both approaches having their place, but in this specific
+>> instance I think A would be more fitting, as the problem is quite
+>> simple.
 > 
 > 
-> or if we go with B, we could add a property like:
+> The second is fine with me, maybe missing information about "whom" do
+> you share it with. Or maybe we get to the point that all this is
+> specific to SoC, thus implied by compatible and we do not need
+> downstream approach (another discussion in USB pushed by Qcom: I want
+> one compatible and 1000 properties).
 > 
-> &i2c1 {
-> 	qcom,shared-controller;
-> };
-> 
-> which would hide the implementation details into the driver
-> 
-> I could see both approaches having their place, but in this specific
-> instance I think A would be more fitting, as the problem is quite
-> simple.
+> I really wished Qualcomm start reworking their bindings before they are
+> being sent upstream to match standard DT guidelines, not downstream
+> approach. Somehow these hundreds reviews we give could result in new
+> patches doing things better, not just repeating the same issues.
 
+This is BTW v5, with all the same concerns from v1 and still no answers
+in commit msg about these concerns. Nothing explained in commit msg
+which hardware needs it or why the same SoC have it once shared, once
+not (exclusive). Basically there is nothing here corresponding to any
+real product, so since five versions all this for me is just copy-paste
+from downstream approach.
 
-The second is fine with me, maybe missing information about "whom" do
-you share it with. Or maybe we get to the point that all this is
-specific to SoC, thus implied by compatible and we do not need
-downstream approach (another discussion in USB pushed by Qcom: I want
-one compatible and 1000 properties).
-
-I really wished Qualcomm start reworking their bindings before they are
-being sent upstream to match standard DT guidelines, not downstream
-approach. Somehow these hundreds reviews we give could result in new
-patches doing things better, not just repeating the same issues.
 
 Best regards,
 Krzysztof
