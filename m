@@ -1,189 +1,183 @@
-Return-Path: <linux-i2c+bounces-8385-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8386-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A8F49E9E52
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 19:51:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62DD59EA73C
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 05:44:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E6D916419B
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Dec 2024 18:50:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45A091889EE1
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 04:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F9715666A;
-	Mon,  9 Dec 2024 18:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E23491D8E09;
+	Tue, 10 Dec 2024 04:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyjoZoUy"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JXNc1HOT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8B313B59A;
-	Mon,  9 Dec 2024 18:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0449F469D;
+	Tue, 10 Dec 2024 04:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733770257; cv=none; b=XpriUeXIW8T0Dlz/p4o9A8yjAEmRuvFnQailoqy5+PfmvMGKGAo/MOQGtBXj9cWWTlN98CdLatiycxGfaXJMEer6NZtuWTWg9loBb2CvOZIuBv0FxUM9PmRHUQdDjRybPv0n4sgxbmaEe6kiTKknQ/kLwuxRt7MclZfZunSRUTY=
+	t=1733805834; cv=none; b=h3h9QieZGeeNVAL5trguUfCYabg5aNa/gLHlE1x21aEKjf6mGmmVM3WxTGC/5C50m41VwM/z+BicLfGYY6Kse6Ac9K5VptzAmlicSOr75iaTP2NdVkMWJhSWH1/VZRuSI7oo0Bq4P5CsXVfLftYyBfXRutkyydffV4HyQp4GlBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733770257; c=relaxed/simple;
-	bh=NC3oH/77mCDm31MTZiTtgd3GAXV/566oYMAClHvpl/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LaYDXX3LRCnbTVwfuKsbNf/OQq1IrKEIPrv/JeT1qZFWS236nvBHA/6R28t0TtatVqN4ql1oGOiR5xw4isj6t/4XOK+vFoF1o2J/pQaOOsm2GXXe5JXlPBwoYv4NlajHQhv+JN5eFVq/Lx3acNjFaMVM9ykpXWT+/ky3s8QqNm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyjoZoUy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C085C4CED1;
-	Mon,  9 Dec 2024 18:50:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733770256;
-	bh=NC3oH/77mCDm31MTZiTtgd3GAXV/566oYMAClHvpl/4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XyjoZoUyQB7gb0tHau4yLQfXVqIj3vuEo60pTAXxiiXgggZ7SZBZTsOqdhw7g+rfT
-	 50pkh/PAo/8nDQxehCk0lhRjhEn9QtsKegbsX+PEw6HA1E/u55IK5XgfbvSDc8Iutm
-	 HX43RhA7/oLKK/xoh71nkH2in8aJKzVaCHA081S5Nyg0o9pYHXxU++TnnOW3AsrrOZ
-	 IugUCnGESkZJ/QQjLbIo4JDhBjXk2bD59EJ4IYJo00MzdZbOiKVLmsxyA0YziUAiza
-	 rMqUB4AIeHLMzsmyXECqVdG8TvAj7JTklVSMTHPANj5bOR9XAEMMH4ZnaBAtNYP6K5
-	 ESfb9kwHmOgwg==
-Received: by pali.im (Postfix)
-	id C933C8A0; Mon,  9 Dec 2024 19:50:47 +0100 (CET)
-Date: Mon, 9 Dec 2024 19:50:47 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Paul Menzel <pmenzel@molgen.mpg.de>, Wolfram Sang <wsa@kernel.org>,
-	eric.piel@tremplin-utc.net, Marius Hoch <mail@mariushoch.de>,
-	Dell.Client.Kernel@dell.com,
-	Kai Heng Feng <kai.heng.feng@canonical.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v9 0/4] i2c-i801 / dell-lis3lv02d: Move instantiation of
- lis3lv02d i2c_client from i2c-i801 to dell-lis3lv02d
-Message-ID: <20241209185047.7nuweqmjensbhvvu@pali>
-References: <20241209183557.7560-1-hdegoede@redhat.com>
+	s=arc-20240116; t=1733805834; c=relaxed/simple;
+	bh=BFre1Q/RZBsHPJEt+3yr2HTkn+7tOU95wCZviqIYog4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=DF/I11jM3D83gyhTLxnLmwuQt0fC1ro8PS7v1dnRAYcnNNwf6uk1qB8EVczBxCrseV8ViG2QDstrvGdO7OvulbLzcn6RfT0LW5mdzAuxdIbkf0lAuN+Rzadw2bMCCbzKoVDQSj4xR+3Sqe0JR91rq5gapBCxGBRv+W9Ve0lBA8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JXNc1HOT; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BA43Cw0019361;
+	Tue, 10 Dec 2024 04:43:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Ng2RFeyU4jQDif/mpf1Cnnoo9al34JrXPX2txI15hs0=; b=JXNc1HOTWknDkrse
+	TMpVHu/P64zlJiwf0x3Gd27YXSB77dQcI1vNPQbKE2jj2Y+CsuI4tS9915VVuAsP
+	iDe4cVh8b67UNH8mbSYS/jUYtCKGTyTtFhOkVCgS8nv4lgpMITL1328nKu7C0RFo
+	BYFByOCeb64kSDGlsWYWZnAlwSEkY2EKKjZA8cu/tZkJcDZdKTV19DwstqHo8jFL
+	q44D9rsLEADbpoYJiCO/qMJpB8xubNnwVpLJv1F+Y6+PupAIM7hkAPBHOJ1bEpSb
+	x9Qy/lHAh49j6zD3lAqk57trhNtb6gbgNHFqukqFarwgcMlu+jPF9b1eMjuAFPPz
+	UVeedg==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43e3419tx4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Dec 2024 04:43:47 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BA4hkx1023756
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Dec 2024 04:43:46 GMT
+Received: from [10.216.2.81] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 9 Dec 2024
+ 20:43:40 -0800
+Message-ID: <2d615fdb-a661-4fb5-bde7-46f4690ecdce@quicinc.com>
+Date: Tue, 10 Dec 2024 10:13:37 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241209183557.7560-1-hdegoede@redhat.com>
-User-Agent: NeoMutt/20180716
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/7] dt-bindings: i2c: qcom,i2c-geni: Document DT
+ properties for QUP firmware loading
+To: Krzysztof Kozlowski <krzk@kernel.org>, <andi.shyti@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <broonie@kernel.or>, <andersson@kernel.org>, <konradybcio@kernel.org>,
+        <johan+linaro@kernel.org>, <dianders@chromium.org>,
+        <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>
+CC: <quic_anupkulk@quicinc.com>,
+        Mukesh Kumar Savaliya
+	<quic_msavaliy@quicinc.com>
+References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
+ <20241204150326.1470749-2-quic_vdadhani@quicinc.com>
+ <dacfdaf0-329f-4580-94e0-7c3e26b52776@kernel.org>
+Content-Language: en-US
+From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+In-Reply-To: <dacfdaf0-329f-4580-94e0-7c3e26b52776@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: BPKHs58NCM6xbtkgf3v-goBHtplJZA9K
+X-Proofpoint-ORIG-GUID: BPKHs58NCM6xbtkgf3v-goBHtplJZA9K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 suspectscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0
+ spamscore=0 phishscore=0 malwarescore=0 adultscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412100033
 
-All patches except the last one are reviewed and should be ready, that
-it fine. The last patch is basically no-go, as it was discussed many
-times, it should not be accepted at all. As Hans said that would not
-respond to my emails, I'm also not going to discuss more with him.
+Thanks Krzysztof for the review and helpful comments.
 
-On Monday 09 December 2024 19:35:53 Hans de Goede wrote:
-> Hi All,
-> 
-> Here is v9 of my patch series to move the manual instantation of lis3lv02d
-> i2c_client-s for SMO88xx ACPI device from the generic i2c-i801.c code to
-> a SMO88xx specific dell-lis3lv02d driver.
-> 
-> The i2c-core and i2c-i801 dependencies have both been merged into 6.13-rc1
-> so I believe that this series is ready to be merged now .
-> 
-> Patch 2/4 does still touch the i2c-i801 code removing the quirk code which
-> is moved to the pdx86 dell-smo8800 code. I think it would be best if Ilpo
-> prepares an immutable branch with this series to be merged into both
-> pdx86/for-next and the i2c-subsystem. Andi can we get your Ack for merging
-> the i2c-i801 changes through the pdx86 tree ?
-> 
-> Moving the i2c_client instantiation has the following advantages:
-> 
-> 1. This moves the SMO88xx ACPI device quirk handling away from the generic
-> i2c-i801 module which is loaded on all Intel x86 machines to a module
-> which will only be loaded when there is an ACPI SMO88xx device.
-> 
-> 2. This removes the duplication of the SMO88xx ACPI Hardware ID (HID) table
-> between the i2c-i801 and dell-smo8800 drivers.
-> 
-> 3. This allows extending the quirk handling by adding new code and related
-> module parameters to the dell-lis3lv02d driver, without needing to modify
-> the i2c-i801 code.
-> 
-> This series also extends the i2c_client instantiation with support for
-> probing for the i2c-address of the lis3lv02d chip on devices which
-> are not yet listed in the DMI table with i2c-addresses for known models.
-> This probing is only done when requested through a module parameter.
-> 
-> Changes in v9:
-> - Rebase on top of v6.13-rc1
-> - Drop already merged i2c-core and i2c-i801 dependencies
-> 
-> Changes in v8:
-> - Address some minor review remarks from Andy
-> 
-> Changes in v7:
-> - Rebase on v6.11-rc1
-> 
-> Changes in v6:
-> - Use i2c_new_scanned_device() instead of re-inventing it
-> 
-> Changes in v5:
-> - Make match_acpi_device_ids() and match_acpi_device_ids[] __init[const]
-> - Add "Depends on I2C" to Kconfig (to fix kernel-test-robot reported issues)
-> - Add "this may be dangerous warning" to MODULE_PARM_DESC(probe_i2c_addr)
-> 
-> Changes in v4:
-> - Move the i2c_client instantiation to a new dell-lis3lv02d driver instead
->   of adding it to the dell-smo8800 driver
-> - Address a couple of other minor review comments
-> 
-> Changes in v3:
-> - Use an i2c bus notifier so that the i2c_client will still be instantiated if
->   the i801 i2c_adapter shows up later or is re-probed (removed + added again).
->   This addresses the main concern / review-comments made during review of v2.
-> - Add 2 prep patches to the i2c-core / the i2c-i801 driver to allow bus-notifier
->   use / to avoid the need to duplicate the PCI-ids of IDF i2c-i801 adapters.
-> - Switch to standard dmi_system_id matching to check both sys-vendor +
->   product-name DMI fields
-> - Drop the patch to alternatively use the st_accel IIO driver instead of
->   drivers/misc/lis3lv02d/lis3lv02d.c
-> 
-> Changes in v2:
-> - Drop "[PATCH 1/6] platform/x86: dell-smo8800: Only load on Dell laptops"
-> - Use a pci_device_id table to check for IDF (non main) i2c-i801 SMBusses
-> - Add a comment documenting the IDF PCI device ids
-> - Keep using drivers/misc/lis3lv02d/lis3lv02d.c by default
-> - Rename the module-parameter to use_iio_driver which can be set to
->   use the IIO st_accel driver instead
-> - Add a new patch adding the accelerometer address for the 2 models
->   I have tested this on to dell_lis3lv02d_devices[]
-> 
-> Since this touches files under both drivers/i2c and drivers/platform/x86
-> some subsystem coordination is necessary. I think it would be best to just
-> merge the entire series through the i2c subsystem since this touches some
-> core i2c files. As pdx86 subsys co-maintainer I'm fine with doing so.
-> 
-> Regards,
-> 
-> Hans
+On 12/4/2024 8:36 PM, Krzysztof Kozlowski wrote:
+> On 04/12/2024 16:03, Viken Dadhaniya wrote:
+>> Document the 'qcom,load-firmware' and 'qcom,xfer-mode' properties to
+>> support SE(Serial Engine) firmware loading from the protocol driver and to
+>> select the data transfer mode, either GPI DMA (Generic Packet Interface)
+>> or non-GPI mode (PIO/CPU DMA).
 > 
 > 
-> Hans de Goede (4):
->   platform/x86: dell-smo8800: Move SMO88xx acpi_device_ids to
->     dell-smo8800-ids.h
->   platform/x86: dell-smo8800: Move instantiation of lis3lv02d i2c_client
->     from i2c-i801 to dell-lis3lv02d
->   platform/x86: dell-smo8800: Add a couple more models to
->     lis3lv02d_devices[]
->   platform/x86: dell-smo8800: Add support for probing for the
->     accelerometer i2c address
+> You described the desired Linux feature or behavior, not the actual
+> hardware. The bindings are about the latter, so instead you need to
+> rephrase the property and its description to match actual hardware
+> capabilities/features/configuration etc.
+Sure, IIUC, i should explain the need of FW loading. Agree that binding 
+is for the hardware. This feature needs to have some intelligence to 
+know that Software driver needs to load Firmware or not ?
+
+Let me add description about the actual hardware capabilities, its 
+features. Hope this can be better from my side on V2.
 > 
->  drivers/i2c/busses/i2c-i801.c                | 124 ---------
->  drivers/platform/x86/dell/Kconfig            |   1 +
->  drivers/platform/x86/dell/Makefile           |   1 +
->  drivers/platform/x86/dell/dell-lis3lv02d.c   | 252 +++++++++++++++++++
->  drivers/platform/x86/dell/dell-smo8800-ids.h |  27 ++
->  drivers/platform/x86/dell/dell-smo8800.c     |  16 +-
->  6 files changed, 282 insertions(+), 139 deletions(-)
->  create mode 100644 drivers/platform/x86/dell/dell-lis3lv02d.c
->  create mode 100644 drivers/platform/x86/dell/dell-smo8800-ids.h
+> I don't quite get why firmware-name is not suitable here, what is
+> "protocol driver" in this context and how firmware is loaded from it?
 > 
-> -- 
-> 2.47.1
+yes, as per Dmitry's comment, i should replace with 
+/soc/sc7180/firmware.  This would be become "firmware-name" property 
+instead of qcom,load-firmware.
+
+>>
+>> I2C controller can operate in one of two modes based on the
+>> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
+>>
+>> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+>> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+>> ---
+>>   .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml   | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>> index 9f66a3bb1f80..a26f34fce1bb 100644
+>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+>> @@ -66,6 +66,15 @@ properties:
+>>     required-opps:
+>>       maxItems: 1
+>>   
+>> +  qcom,load-firmware:
+>> +    type: boolean
+>> +    description: Optional property to load SE (serial engine) Firmware from protocol driver.
 > 
+> 
+> Please wrap code according to coding style (checkpatch is not a coding
+> style description, but only a tool).
+Actually i have ran dt-schema for yaml validation. I couldn't get if you 
+have any comment for description statement OR it's related to code ? 
+Could you please be more descriptive so i can adopt the suggestions.
+> 
+> 
+>> +
+>> +  qcom,xfer-mode:
+>> +    description: Value 1,2 and 3 represents FIFO, CPU DMA and GSI DMA mode respectively.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    enum: [1, 2, 3]
+> 
+> 
+> Use string but anyway this would need some changes and explanation why
+> lack of DMA cannot be used to determine that. CPU DMA and GSI DMA also
+> need some background.
+Sure, i got it.
+I need to add enum strings and shall provide explanation abut modes in use.
+As per Doug's comment, we plan to keep GSI and non-GSI mode. It would be 
+more clear in next patch.
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
 
