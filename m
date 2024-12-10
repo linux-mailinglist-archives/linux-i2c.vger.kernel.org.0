@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-8396-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8397-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C73049EAA2C
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 09:01:22 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEDBB9EAA34
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 09:04:32 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C38F28252F
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 08:01:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF03B162305
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 08:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00786153598;
-	Tue, 10 Dec 2024 08:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D7CC197A68;
+	Tue, 10 Dec 2024 08:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="qKJtRfSy"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="nyZ7M7J4"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7874964F;
-	Tue, 10 Dec 2024 08:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A31A4964F;
+	Tue, 10 Dec 2024 08:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733817677; cv=none; b=WuextUsH3/+7XKFb5uSfNf+8Fh5K/uwqh16r8l6zlHfRECDWRIKrpOvRnJQefNyMSq9VG/jthOyEE1ESeN046q6JE76R6zCcVTKSBGnoXuztocYOXNncJ26BBelcg19PR/QCdcH0bT95v45wB+gLDKGDs0jr9hSpKWCCkuwJxwc=
+	t=1733817867; cv=none; b=FZoBCPpPmGBwRnl0PQHiDEGnVZLraIPfb9gE+U4+AoIhQj05zScxO+LHPfy5/f2msxuZ/EnKRa0wLN9TyuGr3rp7/pvcnHLK6OPfEcH0LtuNDaCpwc8vFUtfTakWt6bvTqpT6+gDKZHXdgmQnpDh5KvEvcFltS3YaeP0IboWpf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733817677; c=relaxed/simple;
-	bh=WxbDCCx1D6fsydVXKKtLKFxkZTA/k/Rlez36TW3A+hA=;
+	s=arc-20240116; t=1733817867; c=relaxed/simple;
+	bh=J8hiiFbvoRrMpH7SKj0oVZrIO4q1KTRKaE84KOCxvDU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BQopHHli/0+lP6IZcuyWlOqmvtDg9+i3fcKYIDnhq8R6AJsjr7D4rY9RF1YV7ArFLhVMoXxz/2kY+eq7eL4l0sEPPI0uuNfmnJjbwQsJ3K9tHqh+XfpNlWRVsC+bofcI2gbedckPr16jPHsE/rrKCjjgen9PomS9dzDisiQws4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=qKJtRfSy; arc=none smtp.client-ip=213.167.242.64
+	 In-Reply-To:Content-Type; b=DTcTgzzQ4zv8jKywW3ffbtfE/z8OGo3jGJyEXBp/YkzDe06aXvblRkhQYoLLTF8gqxNpn3xz2k71TaCRm/+0DiimFjwuCxr3fCl0uj5eluf6JmNaOYfB0j/8tOVcreN0GiKTxlxiYdSZQ2YFySCo9DAhe6gol5S15yn1jKlR648=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=nyZ7M7J4; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Received: from [192.168.88.20] (91-157-155-49.elisa-laajakaista.fi [91.157.155.49])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 742536EC;
-	Tue, 10 Dec 2024 09:00:40 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A2754752;
+	Tue, 10 Dec 2024 09:03:47 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1733817641;
-	bh=WxbDCCx1D6fsydVXKKtLKFxkZTA/k/Rlez36TW3A+hA=;
+	s=mail; t=1733817828;
+	bh=J8hiiFbvoRrMpH7SKj0oVZrIO4q1KTRKaE84KOCxvDU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qKJtRfSyPdhWZ7w8RUKXQJDKgq/kHXASt2rVX3hsF9cfV6Lw7bkAD8oNiWAkoSd4B
-	 Xe6OkoR+hCJeT0/KjTbrhF3ORcqpRxq3lBroX3RISaIu5KElbEzIs7zKHwFsXxhfuM
-	 onhprnsk0wHBiAB4w1U98qmSccttwV+9KHE4Nk0k=
-Message-ID: <e846622b-2a3b-45cd-9ccb-7b92583f47f9@ideasonboard.com>
-Date: Tue, 10 Dec 2024 10:01:09 +0200
+	b=nyZ7M7J4i3gwXotxz3eg9fanfFqq/Lv2DNiiK9R9E7Us4ZZU18Wd3ncdCDwch5n5A
+	 nFwPOHIEGmQK33JN0cVdulajpabn+3z1NYVTdgcgba7rl/malXQuCMXh+/tnXylkz0
+	 nqtXocSjcW2djWLOGvOnV+Cf0nt0PlTQDoTOpO18=
+Message-ID: <b01e8c0d-8847-48d5-b198-ae000fdb2b20@ideasonboard.com>
+Date: Tue, 10 Dec 2024 10:04:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -51,18 +51,17 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/3] i2c: atr: Fix client detach
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+To: Wolfram Sang <wsa@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
  Mauro Carvalho Chehab <mchehab@kernel.org>,
  Cosmin Tanislav <demonsingur@gmail.com>,
  Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
- stable@vger.kernel.org
+ stable@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>
 References: <20241122-i2c-atr-fixes-v2-0-0acd325b6916@ideasonboard.com>
  <20241122-i2c-atr-fixes-v2-1-0acd325b6916@ideasonboard.com>
- <Z0CQJOpRPGqM2uE_@smile.fi.intel.com>
 Content-Language: en-US
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
@@ -108,30 +107,50 @@ Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
  ueeIlwJl5CpT5l8RpoZXEOVtXYn8zzOJ7oGZYINRV9Pf8qKGLf3Dft7zKBP832I3PQjeok7F
  yjt+9S+KgSFSHP3Pa4E7lsSdWhSlHYNdG/czhoUkSCN09C0rEK93wxACx3vtxPLjXu6RptBw
  3dRq7n+mQChEB1am0BueV1JZaBboIL0AGlSJkm23kw==
-In-Reply-To: <Z0CQJOpRPGqM2uE_@smile.fi.intel.com>
+In-Reply-To: <20241122-i2c-atr-fixes-v2-1-0acd325b6916@ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
+Hi Wolfram,
 
-On 22/11/2024 16:07, Andy Shevchenko wrote:
-> On Fri, Nov 22, 2024 at 02:26:18PM +0200, Tomi Valkeinen wrote:
->> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+On 22/11/2024 14:26, Tomi Valkeinen wrote:
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 > 
->> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> i2c-atr catches the BUS_NOTIFY_DEL_DEVICE event on the bus and removes
+> the translation by calling i2c_atr_detach_client().
 > 
-> We (used to?) have a check in Linux Next against missing SoB of the committer,
-> wouldn't this trap into it?
+> However, BUS_NOTIFY_DEL_DEVICE happens when the device is about to be
+> removed from this bus, i.e. before removal, and thus before calling
+> .remove() on the driver. If the driver happens to do any i2c
+> transactions in its remove(), they will fail.
+> 
+> Fix this by catching BUS_NOTIFY_REMOVED_DEVICE instead, thus removing
+> the translation only after the device is actually removed.
+> 
+> Fixes: a076a860acae ("media: i2c: add I2C Address Translator (ATR) support")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> ---
+>   drivers/i2c/i2c-atr.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+> index f21475ae5921..0d54d0b5e327 100644
+> --- a/drivers/i2c/i2c-atr.c
+> +++ b/drivers/i2c/i2c-atr.c
+> @@ -412,7 +412,7 @@ static int i2c_atr_bus_notifier_call(struct notifier_block *nb,
+>   				dev_name(dev), ret);
+>   		break;
+>   
+> -	case BUS_NOTIFY_DEL_DEVICE:
+> +	case BUS_NOTIFY_REMOVED_DEVICE:
+>   		i2c_atr_detach_client(client->adapter, client);
+>   		break;
+>   
+> 
 
-I don't think linux-next can check that. Or rather, it can, but the 
-committer there (which is the subsystem maintainer, probably) is not 
-related to the sender of this mail, so I don't think linux-next can 
-complain about this particular issue.
-
-I didn't right away figure out how to easily change the From address for 
-the email with the standard tooling. As this is such a clear case of the 
-sender and the author being the same person, I'll just ignore this point 
-for now (although strictly speaking I think you're right).
+Can you pick this one up (ignore the two other patches in this series), 
+or should I send it as a separate patch?
 
   Tomi
 
