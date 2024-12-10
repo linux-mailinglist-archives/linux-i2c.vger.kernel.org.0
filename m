@@ -1,174 +1,192 @@
-Return-Path: <linux-i2c+bounces-8428-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8429-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6414B9EB775
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 18:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BC5FC9EB8A4
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 18:49:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D07CA282401
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 17:09:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6666428289C
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 17:49:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3565B233150;
-	Tue, 10 Dec 2024 17:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79991A9B31;
+	Tue, 10 Dec 2024 17:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TWKZtLVm"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="L8shsK9e"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16F8C2111
-	for <linux-i2c@vger.kernel.org>; Tue, 10 Dec 2024 17:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE98923ED5F
+	for <linux-i2c@vger.kernel.org>; Tue, 10 Dec 2024 17:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733850549; cv=none; b=Sn1TdWf7qRVXECupI2LoHtgwNsQBMJ0NE5ea5Ykpd+68ZnimH9fNm9lwdnujeBxgPAMmKcDSoYYnWl6GIWw8izZMGdTdY4Ohc2N10uPCYxHNUf1U5npxUe6qPIzc1ox47Y27N2MuNHeZB8Hokog609rFBkuG7l2amOUg9aiGDWo=
+	t=1733852982; cv=none; b=P2oNCcLNkTSwbo6mnSHi1+H2VdRcel09PGHbaGgtYBCpLvlTNQp1ELNitnaoch28eXs2xQ/WbAPb10Qh2U/5MBGsstZyHa5Xb0DgzxDXmjQw1qFlIulSmqUnF9SXuZQHyaVUznF3983YjuRw3ozzkZEY5TQ8o4iJP+bTz4HnXyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733850549; c=relaxed/simple;
-	bh=kmpw+MU85Klv2VgMx3ZqVirEPF5gOEEsCLRROZYzfzg=;
+	s=arc-20240116; t=1733852982; c=relaxed/simple;
+	bh=zyY+LvfKIlfyAiCLJWS7+1JGxiO0FEIr6sylV/Xgzzg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RXtHmJrFGAyHmsATF8Xcd+UBBUVkvwwBI87vlD/sJl9iCaurbrTf++BL1Scq3w+d+Hm/G0d11eJbqtndnKZP+Rg3TCip0dJOwLuo8KCnmSYA8To4/ocxSQtGy5I2iUNiU5jAm5LytoblH34YfEbv476BiT6BwQtHt1tSGp1db1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=TWKZtLVm; arc=none smtp.client-ip=209.85.167.46
+	 To:Cc:Content-Type; b=eNXW+tFMvsu1jsVq4SnRSjj82ENc0xIV2azRC8Whg0SADjQk1hOQdFnnhpHTruqT/OdHL2h6r8xNkLVcgkDFoYjMmOBs3zAFpSqj73ReZv0pY3u5JWe/260p91EwQhoOidqDqTHwVnQVd4m3hkMpsMnPPsbfmBO9KylanlhtgcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=L8shsK9e; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5401e6efffcso2588264e87.3
-        for <linux-i2c@vger.kernel.org>; Tue, 10 Dec 2024 09:09:06 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5d3e6f6cf69so5020814a12.1
+        for <linux-i2c@vger.kernel.org>; Tue, 10 Dec 2024 09:49:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733850545; x=1734455345; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1733852979; x=1734457779; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LuhRNegPQNd7+gF/yjuNpjthxXavGQO/1ZgSXezZky4=;
-        b=TWKZtLVm4OaWDqZ/JZoCE2gV7M7kBSp1uJrR+PQvlGhgS0SE+ZDSZXLNS8h0LiCE8V
-         OR9oReOZKGleiVtOwMW6e/6Hi/ioda+tIA29bfUag89bARe+HsROuG29nILvuHKG2/zl
-         NWOZhnYkIf0XXYkbH0AOhZRuZbtwbTPkZju78=
+        bh=AjuuFtemyP+DI+76rQdawmoZ3eTqeNEd2wfGxX97PdQ=;
+        b=L8shsK9e1+QvFx4S24YzNSwySwXuQkmckEKEs80HpC2d/D0cSh7JO5MZZjdPZplwTq
+         CvqHjcdd0ssquX4m/4G5RZtA09J2jWhhm99gTX4oMoaMvy2jd/IIMGoWBcFfkYORqCDq
+         vRXQBJG7/3MkuTtaHBKm8BD5FEy28GGQb3NYs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733850545; x=1734455345;
+        d=1e100.net; s=20230601; t=1733852979; x=1734457779;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LuhRNegPQNd7+gF/yjuNpjthxXavGQO/1ZgSXezZky4=;
-        b=CnCg6gfS2TWYGD7+GzExB9j2iagPccBPbRwduFpfzr7fT/PMnPf3+GcYrA81az5eB5
-         JNbB4B8A6X9uWImoTTYadCJOdPctbwQqniny4RJXO0KbKQoaLUeXf+9ZkyFb8b3FM4pg
-         FHOlXnau+a0UaTrOxBkz3jL12CC/D6LmKMLoU18pkOzs1UameMmznN4zbFH/ARdM/94m
-         lmzROYJStBpCwHbMD9x7JBWnrneMkoFA1W8AracOezGey2gbyJzybd7d6m2+Q0I7qrqA
-         oFagdd/cXItCSP5TEcsM25/kpMokpdlggtpa0pBY9O8UnWvpdX+4EMgy9wqTTdvyxM3l
-         eIig==
-X-Forwarded-Encrypted: i=1; AJvYcCW6zpoYZpXuD51LzNr7xbZbmy9FP0MhBNP+jRKVq+MUIW6sKt0gC0S4O4JM96n6ycmg6U5Jr2NOcV0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ68qHiUGHnOjoDioHbB8vZLFzRpEkxiv4v0lY0NehIUVilk3j
-	LGLASxMFpnnnKQmsRTnX+B3pcQfvSwBZYX30Z72+ec1Nk0xyy9UFsUfcSMOYrTfDG61xs4WZXWu
-	xJw==
-X-Gm-Gg: ASbGncuvQhw7NdoRYnJsXH7nHKFCEE4HKYUlpriXxlYktrXazOFR2ffI5wDBPZ9VCl5
-	dtdk5BzH6mc48vrjXMFH/r8C0mGbJupMRwUAERvDyxCnnOghGQh+IcCMYtY67wHCoq9IufMndDL
-	39lHW9GOnFK/HhZpYXygbQupjfA76F22B3/hRYm7PCsZg3vbobwrsqyJC0EP6NyPx+39wO4gctV
-	xVsCf7jYcVT9B3ppnacRppXRYrv2j4r4C3G+AOGWouP/FxNpZD0dbxP04QYdZGAKuRyHgq2xWsZ
-	xTDvdK1JpU5q7NEvvQ==
-X-Google-Smtp-Source: AGHT+IFSAE1eC6wiXX5ZDkhy5g1oUnd5KSV78hOAbWEAs8+yKCWIpSfaoUWshjimjHHHS5kmec768g==
-X-Received: by 2002:a05:6512:104b:b0:53e:362e:ed6 with SMTP id 2adb3069b0e04-5402410d24emr2247655e87.50.1733850545208;
-        Tue, 10 Dec 2024 09:09:05 -0800 (PST)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5401fc930fcsm670035e87.19.2024.12.10.09.09.04
+        bh=AjuuFtemyP+DI+76rQdawmoZ3eTqeNEd2wfGxX97PdQ=;
+        b=kbWPhs9H7db3PB2Y05tMz5//WkqIQzvUwQWr37BHG5jSI+05c1jceUaXWSmaKH94oi
+         EhZaZwvkLb7YjaPc24p7xUwOBq8LWKmy1meSUqI7/gkMPXK+HkVF1AkVHi+D6mwLeRVs
+         jIwqwvh/Wnm3A1QKvQd1ZgYcJLsu97YhpFaqQREBLi333gTzOHR5q2u0hYZSIXvNeXcn
+         gWzKnjr+V9e0c5dSfYd8ec6nATAt2aEP0dVlBEmXpwuwT+7Iq0s28FexLdO+YpxlC1l/
+         QK8wymTUCAhrJtU5xVj5l1A22og/ypfgI/byyIks0+SAlJtN9x+peCHEnBshBBIltpTB
+         2Uow==
+X-Forwarded-Encrypted: i=1; AJvYcCXp+T7ZhbXzIUoiNvSnMvduFBGnGJScW3/IgSL1vhuwUHcygN+LaZ2WjgIg/8MXlfIYspqhoWhDaXg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgZjWq6Ab5kI7oqMeUIPM+ByOKls+xELf8azC3s8uZIds8V7JD
+	ATpSZEyZrzHmw31+IaRkjpER4YGug9+KJ75qO3IjcZOSyN6jWRzxVnJsBLWHrZ8GwCPD9YZkWsN
+	A+qLY
+X-Gm-Gg: ASbGncsO2+mdkwT2Bl2pi9h7s/BCiGbyP0dWTCqyserx12+9eA2SO6bjtou5d80VKTe
+	5lf49XBQ1EoVAG5ycY69PzbJVGvHLGhp/dhmmZopaausDdke85783uLWCBECpeq/cKqSfYvJhJX
+	gGV6mHl2dBGslrVimAC4SOCgJoWyzfpy56+t20WlJRrOoAK6CK40v+R1LOL1JV4wu+Y2RBzMlX5
+	CatcHtBoeKGsSnk2xrlvjgME1A4RWupzN/4lb0Z0eSathOB1ciVUVeImLV5yyNPXRGJ952rKww8
+	XK2wh9BzNipmKK5veg==
+X-Google-Smtp-Source: AGHT+IFDsAu3n/S+pdqgZRj3+yds/Kya6ckVFlB3iaHLDTAJ2jYJvqR39CBKaMilAqVjD+RON4YDsA==
+X-Received: by 2002:a05:6402:2552:b0:5d3:ba42:e9e9 with SMTP id 4fb4d7f45d1cf-5d3be6d69c2mr15650960a12.9.1733852978866;
+        Tue, 10 Dec 2024 09:49:38 -0800 (PST)
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d3d9e30b7asm5511663a12.57.2024.12.10.09.49.38
         for <linux-i2c@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Dec 2024 09:09:04 -0800 (PST)
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53df6322ea7so6749131e87.0
-        for <linux-i2c@vger.kernel.org>; Tue, 10 Dec 2024 09:09:04 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVp7d+28lbcHcpZg5Y1/xIs067zDsWYrp9szpfs1GLAew18z7buwLWSbP+5PU+wZpH8zFu8SuWH9k0=@vger.kernel.org
-X-Received: by 2002:a05:6512:33d0:b0:53e:368c:ac43 with SMTP id
- 2adb3069b0e04-540240aac8fmr2378233e87.5.1733850544359; Tue, 10 Dec 2024
- 09:09:04 -0800 (PST)
+        Tue, 10 Dec 2024 09:49:38 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-434fe0a8cceso18301735e9.1
+        for <linux-i2c@vger.kernel.org>; Tue, 10 Dec 2024 09:49:38 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUNVOIVXYmuoGa/X1SbInuvQpNgRPtf4Ml3zUoGep8SOuEkb62AtTAnfkIqJFfyHF8Q5R7dc3jVyck=@vger.kernel.org
+X-Received: by 2002:a2e:800a:0:b0:302:1c90:58d9 with SMTP id
+ 38308e7fff4ca-30240ced962mr314001fa.16.1733852563643; Tue, 10 Dec 2024
+ 09:42:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <7a68a0e3f927e26edca6040067fb653eb06efb79.1733840089.git.geert+renesas@glider.be>
-In-Reply-To: <7a68a0e3f927e26edca6040067fb653eb06efb79.1733840089.git.geert+renesas@glider.be>
+References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
+ <20241204150326.1470749-2-quic_vdadhani@quicinc.com> <CAD=FV=XF+9wxZ5xNtO3Uy8QW9UY4tb+KR46jkondvBeQuVLsrA@mail.gmail.com>
+ <6736db20-127b-45c3-ac90-3e3e359c343b@quicinc.com>
+In-Reply-To: <6736db20-127b-45c3-ac90-3e3e359c343b@quicinc.com>
 From: Doug Anderson <dianders@chromium.org>
-Date: Tue, 10 Dec 2024 09:08:52 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XpRt_ivSDz0Lzc=A+z3KFrXkVYTn716TD1kZMAyoGQ_A@mail.gmail.com>
-X-Gm-Features: AZHOrDkvV4hXVBzL5LdGwv2-ywEkfcu0N74i9maLRg8R7KrBlypjtg_v-QyKEuk
-Message-ID: <CAD=FV=XpRt_ivSDz0Lzc=A+z3KFrXkVYTn716TD1kZMAyoGQ_A@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/bridge: ti-sn65dsi86: Fix multiple instances
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Linus Walleij <linus.walleij@linaro.org>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Greg KH <gregkh@linuxfoundation.org>, dri-devel@lists.freedesktop.org, 
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Tue, 10 Dec 2024 09:42:31 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VReNQ3nw+wfZizL7JjxEX9z=GwDEJAFzheNkW7rSrB5Q@mail.gmail.com>
+X-Gm-Features: AZHOrDkKw2FmHmZQUJPUfL4ELobjfrjI9icl10Uq0FkzH_2PdMnaEbBKyuOx5E0
+Message-ID: <CAD=FV=VReNQ3nw+wfZizL7JjxEX9z=GwDEJAFzheNkW7rSrB5Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/7] dt-bindings: i2c: qcom,i2c-geni: Document DT
+ properties for QUP firmware loading
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org, 
+	johan+linaro@kernel.org, agross@kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-spi@vger.kernel.org, quic_anupkulk@quicinc.com, 
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Dec 10, 2024 at 6:19=E2=80=AFAM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
+On Mon, Dec 9, 2024 at 9:28=E2=80=AFPM Viken Dadhaniya
+<quic_vdadhani@quicinc.com> wrote:
 >
-> Each bridge instance creates up to four auxiliary devices with different
-> names.  However, their IDs are always zero, causing duplicate filename
-> errors when a system has multiple bridges:
+> On 12/4/2024 10:55 PM, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Wed, Dec 4, 2024 at 7:03=E2=80=AFAM Viken Dadhaniya
+> > <quic_vdadhani@quicinc.com> wrote:
+> >>
+> >> Document the 'qcom,load-firmware' and 'qcom,xfer-mode' properties to
+> >> support SE(Serial Engine) firmware loading from the protocol driver an=
+d to
+> >> select the data transfer mode, either GPI DMA (Generic Packet Interfac=
+e)
+> >> or non-GPI mode (PIO/CPU DMA).
+> >>
+> >> I2C controller can operate in one of two modes based on the
+> >> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
+> >>
+> >> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> >> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> >> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+> >> ---
+> >>   .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml   | 11 +++++++++=
+++
+> >>   1 file changed, 11 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.=
+yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> >> index 9f66a3bb1f80..a26f34fce1bb 100644
+> >> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> >> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+> >> @@ -66,6 +66,15 @@ properties:
+> >>     required-opps:
+> >>       maxItems: 1
+> >>
+> >> +  qcom,load-firmware:
+> >> +    type: boolean
+> >> +    description: Optional property to load SE (serial engine) Firmwar=
+e from protocol driver.
+> >> +
+> >> +  qcom,xfer-mode:
+> >> +    description: Value 1,2 and 3 represents FIFO, CPU DMA and GSI DMA=
+ mode respectively.
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    enum: [1, 2, 3]
+> >
+> > I'm a little confused about this. I'll admit I haven't fully analyzed
+> > your patch with actual code in it, but in the past "CPU DMA" mode and
+> > "FIFO" mode were compatible with each other and then it was up to the
+> > driver to decide which of the two modes made sense in any given
+> > situation. For instance, last I looked at the i2c driver it tried to
+> > use DMA for large transfers and FIFO for small transfers. The SPI
+> > driver also has some cases where it will use DMA mode and then
+> > fallback to FIFO mode.
+> >
+> > ...so what exactly is the point of differentiating between "FIFO" and
+> > "CPU DMA" mode here?
 >
->     sysfs: cannot create duplicate filename '/bus/auxiliary/devices/ti_sn=
-65dsi86.gpio.0'
+> Yes, correct, Will update in V2.
+> I plan to add 2 modes, GSI and non-GSI(PIO or DMA based on length).
 >
-> Fix this by using a unique instance ID per bridge instance.  The
-> instance ID is derived from the I2C adapter number and the bridge's I2C
-> address, to support multiple instances on the same bus.
+> >
+> > Then when it comes to "GSI DMA" mode, my understanding is that the
+> > firmware for "GSI DMA" mode is always loaded by Trustzone because the
+> > whole point is that the GSI mode arbitrates between multiple clients.
+> > Presumably if the firmware already loaded the GSI firmware then the
+> > code would just detect that case. ...so there shouldn't need to be any
+> > reason to specify GSI mode here either, right?
+> >
+> > -Doug
 >
-> Fixes: bf73537f411b0d4f ("drm/bridge: ti-sn65dsi86: Break GPIO and MIPI-t=
-o-eDP bridge into sub-drivers")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> On the White Hawk development board:
->
->     /sys/bus/auxiliary/devices/
->     |-- ti_sn65dsi86.aux.1068
->     |-- ti_sn65dsi86.aux.4140
->     |-- ti_sn65dsi86.bridge.1068
->     |-- ti_sn65dsi86.bridge.4140
->     |-- ti_sn65dsi86.gpio.1068
->     |-- ti_sn65dsi86.gpio.4140
->     |-- ti_sn65dsi86.pwm.1068
->     `-- ti_sn65dsi86.pwm.4140
->
-> Discussion after v1:
->   - https://lore.kernel.org/8c2df6a903f87d4932586b25f1d3bd548fe8e6d1.1729=
-180470.git.geert+renesas@glider.be
->
-> Notes:
->   - While the bridge supports only two possible I2C addresses, I2C
->     translators may be present, increasing the address space.  Hence the
->     instance ID calculation assumes 10-bit addressing.  Perhaps it makes
->     sense to introduce a global I2C helper function for this?
->
->   - I think this is the simplest solution.  If/when the auxiliary bus
->     receives support =C3=A0 la PLATFORM_DEVID_AUTO, the driver can be
->     updated.
->
-> v2:
->   - Use I2C adapter/address instead of ida_alloc().
-> ---
->  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 2 ++
->  1 file changed, 2 insertions(+)
+> GSI firmware is loaded from TZ per QUP, but to use GSI mode,
+> we need to configure the SE to use GSI mode by writing into SE register
+> QUPV3_SE_GENI_DMA_MODE_EN and SE_GSI_EVENT_EN. This register is
+> used to configure data transfer mode for Serial Engine.
 
-While I agree with Laurent that having a more automatic solution would
-be nice, this is small and fixes a real problem. I'd be of the opinion
-that we should land it.
-
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-
-If I personally end up being the person to land it, I'll likely wait
-until January since I'll be on vacation soon for the holidays and I
-don't want to check something that's slightly controversial in and
-then disappear. If someone else feels it's ready to land before then I
-have no objections.
+Can't you detect it's in GSI mode without any device tree property
+like the code does today?
 
 -Doug
 
