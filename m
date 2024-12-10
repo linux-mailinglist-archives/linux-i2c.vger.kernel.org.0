@@ -1,77 +1,85 @@
-Return-Path: <linux-i2c+bounces-8431-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8432-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B2019EB9BA
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 20:00:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCC649EBF98
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2024 00:48:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EF4D1885C91
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 19:00:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92931167B62
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Dec 2024 23:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492F321420B;
-	Tue, 10 Dec 2024 18:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YGIBTn3w"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9D122C35D;
+	Tue, 10 Dec 2024 23:48:42 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 1.mo576.mail-out.ovh.net (1.mo576.mail-out.ovh.net [178.33.251.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048F1214200;
-	Tue, 10 Dec 2024 18:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8735522C352
+	for <linux-i2c@vger.kernel.org>; Tue, 10 Dec 2024 23:48:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.33.251.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733857199; cv=none; b=X1lZNVs7h8pWp5gXu7Smgj+vfU1UUqhOBPHOcDf1YwbfTK6Qfc46DxjS8zlx/fP4mnAAkBygIb34mgiJ4YLs3SJAR8SQKyQaUPkFMDtbgFMqSGz0A0DV1q2e7fu08FAVap+WdsKXs9asuG0BkBUlNuxMjJpIGrxERi+75KS0QmU=
+	t=1733874522; cv=none; b=PZU/94VAEK04aBjAzhqROmBqASHNoHWL7MmvUOdzhoRupDYEOZRthzHluC+m9WkZFBzWR6Rg/nb+JxBQndt4y5mMtwfRncBLzUs6dkJveHbFM1MvDNeuH4UtgIcmav4uRgNW2dFI5THUweBLER+NbnKPjqn2X2ntdN8rJC4WEDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733857199; c=relaxed/simple;
-	bh=2NRBUcwP6ADVM9R7gTZwPbbRPE94lPjt0cZuUUXJ6GY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FKHctoRo9KJMsaVJL3P/M1zoqDowWrQuAxft87r6HQeHqlVtVlt30L1w7XFvLcDb3f4I2rIzlmoaB/PDVTQjLTpVBVnBE864rOBVSiRH/jJgcwkcGYP1wqEI9+8opdnDG3AI32FxsHeFOzDvRaPJf06/rR+WEEEp+kACMHEOOAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YGIBTn3w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04288C4CEE2;
-	Tue, 10 Dec 2024 18:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733857198;
-	bh=2NRBUcwP6ADVM9R7gTZwPbbRPE94lPjt0cZuUUXJ6GY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YGIBTn3wtYjyRu94EIEgV+ps+3x1ocKtGE0nwB9UMNSC1/dfPJv0NZUvdpeTDIuOm
-	 DYkr4BOfikTdT0TnCKjNFEPvhSIRJXiUMgjeC0/MkjsA9nBpouepqWLgAtuqjMxyjn
-	 FnX5zer9cyr9SnkRAXrQX2xcpP84IqzIokThXor0926VT/qof9GuqTyIoajI+yeZEd
-	 TYEJLEtN9mHP+mifcy+FgxN9Qq7jVTUvXSPAsath9fKYoqY3JYL3poJFV7eGK2ATux
-	 B1Gmj1owed+dKcG3Sa4KidGm1uGB13WCB7jk96RG7e1PHASKXH3Hgx8qfNZUa/dpTk
-	 Ec5cE9GpPvNxA==
-Date: Tue, 10 Dec 2024 19:59:54 +0100
+	s=arc-20240116; t=1733874522; c=relaxed/simple;
+	bh=j5ER/U++K3NTN1bsXcSqkjj7oAx3VBI4ceUUXc1ubLs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ovz+bTyhb2uEzEkK8vn1RtUBjYOGx8IAwHZeRZcUM1bcWi7fCDOA+CvmGT0r8QGCnwlfnrXRnWAsZU4KsXCBXXBe6wpAH6RlL4iQETphHeVdkVWNsc2GW8KR8YPT6V+LtFCFZyxNMgqOaoVgd5S0ycLFmySo/TNfeVlSQhRDQIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=178.33.251.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director6.ghost.mail-out.ovh.net (unknown [10.108.17.147])
+	by mo576.mail-out.ovh.net (Postfix) with ESMTP id 4Y7Dy40fxJz1qLc
+	for <linux-i2c@vger.kernel.org>; Tue, 10 Dec 2024 23:11:40 +0000 (UTC)
+Received: from ghost-submission-5b5ff79f4f-4ztgx (unknown [10.110.96.141])
+	by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id C28531FDDD;
+	Tue, 10 Dec 2024 23:11:39 +0000 (UTC)
+Received: from etezian.org ([37.59.142.113])
+	by ghost-submission-5b5ff79f4f-4ztgx with ESMTPSA
+	id xdhtJ6vKWGesBAAA0jbQjQ
+	(envelope-from <andi@etezian.org>); Tue, 10 Dec 2024 23:11:39 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-113S0073d1be6e0-ac99-4a32-abac-3ac2cd99c39c,
+                    FE3B76875E3B0A6FCB1003007887B313CBEB2737) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:178.39.90.92
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: nomadik: Add missing sentinel to match table
-Message-ID: <6gfa3lvgmdqsr4kjaojphlxiu6soxiri7xjcttdpljcd5btbl3@xboan7zamrfp>
-References: <34b6ee90437fe19526d9388f2f304d175596cb1f.1733473582.git.geert+renesas@glider.be>
+To: linux-arm-msm@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Cc: Andi Shyti <andi.shyti@kernel.org>
+Subject: [PATCH 0/2] Qcom Geni exit path cleanups
+Date: Wed, 11 Dec 2024 00:10:52 +0100
+Message-ID: <20241210231054.2844202-1-andi.shyti@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <34b6ee90437fe19526d9388f2f304d175596cb1f.1733473582.git.geert+renesas@glider.be>
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 14604047693996165703
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrjeelgddtiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnheptdevueeiheeftedujefhheelieejvdevteelfefhheeutdelkedtveejudejgfdvnecukfhppeduvdejrddtrddtrddupddujeekrdefledrledtrdelvddpfeejrdehledrudegvddruddufeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejiegmpdhmohguvgepshhmthhpohhuth
 
-Hi Geert,
+Hi,
 
-On Fri, Dec 06, 2024 at 09:28:06AM +0100, Geert Uytterhoeven wrote:
-> The OF match table is not NULL-terminated.
-> Fix this by adding a sentinel to nmk_i2c_eyeq_match_table[].
-> 
-> Fixes: a0d15cc47f29be6d ("i2c: nomadik: switch from of_device_is_compatible() to of_match_device()")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+I am submitting two trivial cleanups in this series. The first 
+replaces all instances of dev_err with dev_err_probe throughout 
+the probe function for consistency. The second improves the error
+exit path by introducing a single 'goto' label for better 
+maintainability.
 
-merged to i2c/i2c-host-fixes.
-
-Thanks,
+Thank you,  
 Andi
+
+Andi Shyti (2):
+  i2c: qcom-geni: Use dev_err_probe in the probe function
+  i2c: qcom-geni: Simplify error handling in probe function
+
+ drivers/i2c/busses/i2c-qcom-geni.c | 53 ++++++++++++++----------------
+ 1 file changed, 25 insertions(+), 28 deletions(-)
+
+-- 
+2.45.2
+
 
