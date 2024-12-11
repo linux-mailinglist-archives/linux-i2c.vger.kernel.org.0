@@ -1,148 +1,187 @@
-Return-Path: <linux-i2c+bounces-8449-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8450-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88CE49ECA45
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2024 11:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DED359ECAF5
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2024 12:20:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FC222815ED
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2024 10:24:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02008285097
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2024 11:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0919211A3E;
-	Wed, 11 Dec 2024 10:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDE9E1C5CD6;
+	Wed, 11 Dec 2024 11:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="u2vOGOir"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dBQKwEZo"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430991EC4E8
-	for <linux-i2c@vger.kernel.org>; Wed, 11 Dec 2024 10:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BA9187872;
+	Wed, 11 Dec 2024 11:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733912632; cv=none; b=Qd0yJaOR2WKEMJ4F/5zmBWm3Y3gDp++E98pJ5vpRBT97fNBI6fnMGTN5RH6rds5iQA/8ZUrBlJ+qKc+FBasK4ZCqw7Ida58456X+KxlND8z4gYVYz6uE6CsWxkgfGPRDNqYG8lYBXT/CLFELDJ2esP6JMTNhyUESfAOEyDUJHkg=
+	t=1733916020; cv=none; b=E2+flM5AbmP+3YGlBPZ3wg9VRPmbwROq6sbwqdFMGDDJ7w8QUFca+g6MrVl4mSwNUG0jh6ThV8DNAns6q1PTwuXTL5Jy2T55fakp0Io36+6hiAiO+PDFH7xG2m3rdY3foMUBJH+ceAkfyTIRsz2VKdH0pzA/uz17SBD1nx4y9xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733912632; c=relaxed/simple;
-	bh=AvkwhoWiBNLBQ0DMxqKzJFjYJd3orUN55tfFIIyDd00=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CAPCG0Lwd37me7s36Gfwf1MWUK4I1DsNj+9NnkPDO3OY86U76ipP7IkJy4DFt0RML4gglKr99MV5tzHbsgL3B+I43J/vetvVxoHaOJuQvajZh4M1JpzBjVYDxvvyWTSx/aStm0AtQNUZc6YHcwKraXogduQ2Nv/m9ojAe0nxKys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=u2vOGOir; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4361b6f9faeso2934855e9.1
-        for <linux-i2c@vger.kernel.org>; Wed, 11 Dec 2024 02:23:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1733912628; x=1734517428; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UoYTxKIN+xa5B1OH/ejn5xfQpSaxCFnsi2/bPSTrz2Y=;
-        b=u2vOGOirK819S0RuSFaLClgEbh7kJgUaQp1yNMrAef5O7rCRSRRnQRO3QFeNMB7BuS
-         q0yoKwc6FuCIKXDUxVSTqQLov6gD17zYATWbiTwFr70Bt7M9MaWVwl/w0hYOG90foGqM
-         HxqqB6fc2Z7kGQn0dE98K9BjVW4yMDLAZpYgMsGtDn4hth/xt/vBk69slj6nykH2IHDb
-         kUEDiSK5r6N5lNX5pwvbBx4+V/ad8IKyD6W8AKgxJm0k05+3njbqlC+5YOGAtVvJDBn/
-         gBFWUHQAadL0+zwQQMnaPGA2Zh4kDgZSk9p3KFKPm5hWTqaiIZrr0QXVRQBIty0TGRRM
-         BXvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733912628; x=1734517428;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UoYTxKIN+xa5B1OH/ejn5xfQpSaxCFnsi2/bPSTrz2Y=;
-        b=Cqspm+Th7FDuXT7Kw7Aj8IWJf+9Wy124/H3bgmMFzNiJJAlClqn9/wIgV9Dge6kpCQ
-         MahkekdG4SIv8/fRKRRmXG+yLtXEv34uvZATIMvwpTnZce/9M/xVuzDItcCB2hgvC/6I
-         HVX8K18qmNnmOUCrUa0RlwDc5B2Tt3HJkFnfUsnYYoJOFcdwsxVw7UFZTyLDXlB9SMl9
-         ThRvoeXCMf8Eha1u4tKDyR59eXffKBSIiMxDuiFYYB5I3ZQLEr/YC/XVNrYcJUeDRHAo
-         aUQ73pd0QwO+Tr0MJsMifDT+GxGqYqYcnj6zKRgGuZnuAOQXMdeWD4HyFPaqxnN+FXPe
-         p4vw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0We0b1DjgJ79fY+gQyNWcsklG+iZH6sflD1siS+kX1tlj6FN2vhagXQdgwcBDnr+YQQNkxkZUyug=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbPr+owwvsw8ISp0tFgeEx4RMcbb7QEAKbIzo1GDe74W2a+CLt
-	MrcM94CdqiwCizG0tK9sv8HVTA8A1M7wZnBQH3it0oMgE0ykY8vek5VSrsXixTU=
-X-Gm-Gg: ASbGncu100ZdP08tOJaNncRKgsOZcX3Wf8A2hA/fsbR5wVgvUC5mwarZVF/dLWn6ydU
-	jJ4hn1dvfzxKVuVx9PrtT71FahxsW3F6CBGFe0kn7j2kqm6uhIpmG+HgmGSXYIq51XKMVvFCpEt
-	1CojiHKkrgBokKMb/EsuBJ9HDe4h+1n39ABB7E7suMPjHVIEzknXBuLbNEpFNrCYh20TTPSmgZw
-	9wuwKZMoMjbYT34WuNcBFKjsQA77fISmlvBUeh0Odu9ozUrIhnUmw==
-X-Google-Smtp-Source: AGHT+IFbH76aSaMWfUWSLsltMf1aj67sgeQOV+1fX/o5OmT9HfAeHOm6psOWA85iumCSEI4DBs/c8Q==
-X-Received: by 2002:a05:600c:1511:b0:434:9ce6:3ec with SMTP id 5b1f17b1804b1-4361c5b1b37mr13444565e9.7.1733912628390;
-        Wed, 11 Dec 2024 02:23:48 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:d1b3:c106:bf71:3b65])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38782514da2sm935137f8f.66.2024.12.11.02.23.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2024 02:23:47 -0800 (PST)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa@the-dreams.de>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 3/3] i2c: davinci: use generic device property accessors
-Date: Wed, 11 Dec 2024 11:23:37 +0100
-Message-ID: <20241211102337.37956-3-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241211102337.37956-1-brgl@bgdev.pl>
-References: <20241211102337.37956-1-brgl@bgdev.pl>
+	s=arc-20240116; t=1733916020; c=relaxed/simple;
+	bh=W5sH/BUvR3Vg2JFLycXph7Qauev5/AAKrJsrnlwUCso=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qMI7ZsbOjJ8HBJVoiaI09vimHmV7aLt35NNJILMJ4zW3C/jNXkl/D3c5NjcvWl6fCQ1dt00ErJr3fFMnIRTi50YloRjdMpc0008UTRrUFSY1w/YWdvgnPkV1quUA0fHztUE0Ta1+q2DuGF80EfeIdLwPCPz3PAycGICY1eT/Eps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dBQKwEZo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AC62C4CED2;
+	Wed, 11 Dec 2024 11:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733916020;
+	bh=W5sH/BUvR3Vg2JFLycXph7Qauev5/AAKrJsrnlwUCso=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dBQKwEZorV1rWaXhfZgkpXWc5vio0gv0T49rLoCqiE22UyoukxSf3GRTULRtvgb9G
+	 xlwPpV6bIWOn4ibx1zBDCTRc/Is1DyqrsP2Ns4ASXYpmKhrspunM2r77/N0cb2ZZzb
+	 LWW31BPBNDgt1eZvd8i8dVfue7CChl0eLkDfNGe+Sd2a/YGsGgmEh0hMJqm0XG2wH2
+	 Thu/NtZCVtPD0781h3bTX5S2cYB+UOECMxNE+Jonj/p9LgnQJWhjm8j3Hb/FfUILvW
+	 sxK9d0adpDAlS3807l0QmyRsNZZwr0t3RREvZsO8K6nxsREydw4EAtFfACus8ydNi7
+	 gNLcwjLNQBTzA==
+Date: Wed, 11 Dec 2024 12:20:15 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Chris Brandt <chris.brandt@renesas.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Adam Ford <aford173@gmail.com>, linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: riic: Always round-up when calculating bus period
+Message-ID: <ljyho2ftsxmjkyi44hgc5zavxv3ytbvi2iuoht3gjetr3b4jq3@mjuvcrwm4klt>
+References: <c59aea77998dfea1b4456c4b33b55ab216fcbf5e.1732284746.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c59aea77998dfea1b4456c4b33b55ab216fcbf5e.1732284746.git.geert+renesas@glider.be>
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Fri, Nov 22, 2024 at 03:14:35PM +0100, Geert Uytterhoeven wrote:
+> Currently, the RIIC driver may run the I2C bus faster than requested,
+> which may cause subtle failures.  E.g. Biju reported a measured bus
+> speed of 450 kHz instead of the expected maximum of 400 kHz on RZ/G2L.
+> 
+> The initial calculation of the bus period uses DIV_ROUND_UP(), to make
+> sure the actual bus speed never becomes faster than the requested bus
+> speed.  However, the subsequent division-by-two steps do not use
+> round-up, which may lead to a too-small period, hence a too-fast and
+> possible out-of-spec bus speed.  E.g. on RZ/Five, requesting a bus speed
+> of 100 resp. 400 kHz will yield too-fast target bus speeds of 100806
+> resp. 403226 Hz instead of 97656 resp. 390625 Hz.
+> 
+> Fix this by using DIV_ROUND_UP() in the subsequent divisions, too.
+> 
+> Tested on RZ/A1H, RZ/A2M, and RZ/Five.
+> 
+> Fixes: d982d66514192cdb ("i2c: riic: remove clock and frequency restrictions")
+> Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> Apart from the rounding issue fixed by this patch, I could not find any
+> bugs in the calculation of the various parameters (based on the formulas
+> in the documentation).  Still, the actual (measured) bus speed may still
+> be higher than the target bus speed.  Hence this patch is not sufficient
+> to reduce the actual bus speed to safe levels, and I have not yet addded
+> 
+>     Closes: https://lore.kernel.org/TYCPR01MB11269BFE7A9D3DC605BA2A2A9864E2@TYCPR01MB11269.jpnprd01.prod.outlook.com/
 
-Don't use generic OF APIs if the generic device-level ones will do.
+Can I add this in the commit log?
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/i2c/busses/i2c-davinci.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+> On RZ/A1H (RSK+RZA1):
+> 
+>               speed    actual  duty  fall  rise  cks  brl  brh
+>              ------  --------  ----  ----  ----  ---  ---  ---
+>     before:  101600   113 kHz    63     1     4    3   20   10
+>     after:    99181   110 kHz    64     1     4    3   21   10
+> 
+>     before:  396726   407 kHz    62     5     5    1   17    9
+>     after:   396726   407 kHz    62     5     5    1   17    9
+> 
+>     Note that before commit d982d66514192cdb, the actual values were
+>     within spec, so probably the parameters were hand-tuned with the
+>     help of scope:
+>              101600    99.2 kHz  63     1     4    3   19   16
+> 	     396726   370   kHz  62     5     5    1   21    9
+> 
+> RZ/A2M (RZA2MEVB):
+> 
+>               speed    actual  duty  fall  rise  cks  brl  brh
+>              ------  --------  ----  ----  ----  ---  ---  ---
+>     before:  100609   115 kHz    63     1     4    4   20   10
+>     after:    98214   111 kHz    64     1     4    4   21   10
+> 
+>     before:  402439   459 kHz    61     5     5    2   16    9
+>     after:   392857   446 kHz    62     5     5    2   17    9
+> 
+> RZ/Five (RZ/Five  SMARC):
+> 
+>               speed    actual  duty  fall  rise  cks  brl  brh
+>              ------  --------  ----  ----  ----  ---  ---  ---
+>     before:  100806   112 kHz    64     0     3    5   15    7
+>     after:    97656   108 kHz    65     0     3    5   16    7
+> 
+>     before:  403225   446 kHz    60     3     3    3   12    7
+>     after:   390625   431 kHz    61     3     3    3   13    7
+> 
+> I.e. the actual bus speed is still up to 10% higher than requested.
+> 
+> The driver assumes the default register settings:
+>   - FER.SCLE = 1 (SCL sync circuit enabled, adds 2 or 3 cycles)
+>   - FER.NFE = 1 (noise circuit enabled)
+>   - MR3.NF = 0 (1 cycle of noise filtered out)
+> As these are not explicitly set by the driver, I verified that the
+> assumptions are true on all affected platforms.
+> 
+> I also tried disabling FER.SCLE and removing the compensation for SCLE
+> on RZ/Five.  For a bus speed of 100 kHz, that gave:
+> 
+>               speed    actual     duty  fall  rise  cks  brl  brh
+>              ------  ----------   ----  ----  ----  ---  ---  ---
+>     before:   97656   108   kHz   65     0     3    5   16    7
+>     after:    97656    94.7 kHz   63     0     3    5   18    9
+> 
+> which looks better, but obviously the SCL sync circuit must add some
+> value?
+> 
+> So it looks like the default values provided by i2c_parse_fw_timings()
+> do not work well for us, and all board DTS files should provide suitable
+> values explicitly, using the "i2c-scl-rising-time-ns" and
+> "i2c-scl-falling-time-ns" properties.
+> Adam submitted something similar for R-Car a while ago[1].
 
-diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-davinci.c
-index bab9f785eeec..6a909d339681 100644
---- a/drivers/i2c/busses/i2c-davinci.c
-+++ b/drivers/i2c/busses/i2c-davinci.c
-@@ -23,9 +23,9 @@
- #include <linux/io.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-+#include <linux/property.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- 
-@@ -173,7 +173,6 @@ static void i2c_davinci_calc_clk_dividers(struct davinci_i2c_dev *dev)
- 	u32 clkh;
- 	u32 clkl;
- 	u32 input_clock = clk_get_rate(dev->clk);
--	struct device_node *of_node = dev->dev->of_node;
- 
- 	/* NOTE: I2C Clock divider programming info
- 	 * As per I2C specs the following formulas provide prescaler
-@@ -207,7 +206,7 @@ static void i2c_davinci_calc_clk_dividers(struct davinci_i2c_dev *dev)
- 		psc++;	/* better to run under spec than over */
- 	d = (psc >= 2) ? 5 : 7 - psc;
- 
--	if (of_node && of_device_is_compatible(of_node, "ti,keystone-i2c"))
-+	if (device_is_compatible(dev->dev, "ti,keystone-i2c"))
- 		d = 6;
- 
- 	clk = ((input_clock / (psc + 1)) / (dev->bus_freq * 1000));
-@@ -811,7 +810,7 @@ static int davinci_i2c_probe(struct platform_device *pdev)
- 	adap->algo = &i2c_davinci_algo;
- 	adap->dev.parent = &pdev->dev;
- 	adap->timeout = DAVINCI_I2C_TIMEOUT;
--	adap->dev.of_node = pdev->dev.of_node;
-+	adap->dev.of_node = dev_of_node(&pdev->dev);
- 
- 	if (dev->has_pfunc)
- 		adap->bus_recovery_info = &davinci_i2c_scl_recovery_info;
--- 
-2.45.2
+It's a pity that all this description is lost. I love long
+explanations especially when they come from test results.
 
+Can I add it in the commit log?
+
+Andi
+
+> Thanks for your comments!
+> 
+> [1] "[PATCH] arm64: dts: renesas: beacon: Fix i2c2 speed calcuation"
+>     https://lore.kernel.org/20210825122757.91133-1-aford173@gmail.com
+> ---
+>  drivers/i2c/busses/i2c-riic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
+> index 0c2342f86d3d2fbe..a6aeb40aae04d607 100644
+> --- a/drivers/i2c/busses/i2c-riic.c
+> +++ b/drivers/i2c/busses/i2c-riic.c
+> @@ -352,7 +352,7 @@ static int riic_init_hw(struct riic_dev *riic)
+>  		if (brl <= (0x1F + 3))
+>  			break;
+>  
+> -		total_ticks /= 2;
+> +		total_ticks = DIV_ROUND_UP(total_ticks, 2);
+>  		rate /= 2;
+>  	}
+>  
+> -- 
+> 2.34.1
+> 
 
