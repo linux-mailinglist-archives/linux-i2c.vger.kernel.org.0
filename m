@@ -1,57 +1,56 @@
-Return-Path: <linux-i2c+bounces-8465-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8466-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC3E9EE666
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 13:12:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD8579EE801
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 14:45:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92D2E1883D16
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 12:12:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF96218899D2
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 13:45:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D3B5211709;
-	Thu, 12 Dec 2024 12:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8223120B7FA;
+	Thu, 12 Dec 2024 13:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZRDZ6IX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SG97DJ6x"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F2A1E9B27;
-	Thu, 12 Dec 2024 12:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A35154720;
+	Thu, 12 Dec 2024 13:45:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734005563; cv=none; b=bYJILeRvQr44/q/G6SalqNu0Md1MLS49bB0+BY3kS1jMqIBjihzhHqgnqUN6TC0fIqCOythYXXY2EBsLY7yrtX77B3tVQ8KUa7kox5zbcj8BOQJ7QKFLBP0+wUM2vOZqKGMvU0zYtzOya3L8lIdT/prEcqg7sXMbYg07Cf2C3gU=
+	t=1734011136; cv=none; b=Ab2FDMvL1/+5jMu2Pt1C718n+ZX8sV3Gv9Yox2F9tK1wohDCuD9wLexlu25YPILLUAIKlEZ5FBzgQYwWSfZ8gGcq2jitZuSOEpdU6aYhB2g44Nzl7eyKzAZAz87Z2IPCaB+B2rYHy4k/SilqvChFlV3Jid+Ehwd2CivfIRYXeJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734005563; c=relaxed/simple;
-	bh=+XrIez4xocMGbkR6OBBEEUJb2yDAgLlSckB/4e+OAsw=;
+	s=arc-20240116; t=1734011136; c=relaxed/simple;
+	bh=N/xB9jv77LySRrAbu2Yk7Cbgx2o0HIhjAMeMKxcxFls=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YQbepneCSlM1fprLZbRRrd2FTcdO827WSJt5tEPM+Ge/qf+yCNbjf90vp/r+4z+YlMeStFOhfpGLzzvvzlYowuae3pBZdCEx1sDRr9lwR6H9ITS5kmO3Ix85jEFs4LO8vS1ecOQPjwMAzoNcms8aiO6H8Em6TdffqoCtkIe49QA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZRDZ6IX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E268C4CECE;
-	Thu, 12 Dec 2024 12:12:41 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=jC+HuZkQYzVrpPNr7EJM6+a9+NMeEjcb5NaZzJC9T8x9LYuE4CNBao8TqcRT4eXvZqs7zj0zwt036F7WWIRlL2p1eGak074sJCeTRWHATd9JhpEMVyJa8H1kvbLExjDpkvlzMzC4WU0MGQ6p6XODCVuiVRr1KSeS8R+ZxTjwIxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SG97DJ6x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CD4C4CECE;
+	Thu, 12 Dec 2024 13:45:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734005562;
-	bh=+XrIez4xocMGbkR6OBBEEUJb2yDAgLlSckB/4e+OAsw=;
+	s=k20201202; t=1734011135;
+	bh=N/xB9jv77LySRrAbu2Yk7Cbgx2o0HIhjAMeMKxcxFls=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tZRDZ6IX+vjLI18v2MB96dEha09ed9JEGGrjLB+JQwNQa16MI3woIcLG9jW5ssmWq
-	 HrdSxmo5pR57A6yq8KYBKA2MHGjJe6m6XfiqxvtUYUiUWEf3KGQl+6BdaOXJMCe9ac
-	 N0uMU7Mb61frJCgjr7Gd5mweVWTETA6/9e11E5KhWi90UDpPV3cM5ZX/hKkinvuOke
-	 CJEjjvg81KK5+i5ymmNxYTIPMIw7nxqZx4cfX498VSjczbU/GMbY4zr+BpGVbxW57d
-	 IV4GvvYp36RpSQKbAw1HF2U315GQI86YFcUzPEfKyBirKo6hfd9ZLCngPEd0FYkU/J
-	 UPuG4Qn7qP8Ig==
-Date: Thu, 12 Dec 2024 13:12:37 +0100
+	b=SG97DJ6xU1fP6+O5sk6LIgcW+s0XXwLsifGTaHW7gCxl2Cg3qNMpHyl6sPGA5UUO3
+	 phS498n5LIzCuhBEQFiPhXWFL8CneeJi10Y5jye0k3sflYaqcqIlahvnRTjQhhXV4w
+	 6f+zXQu3afNMvSVg2FhZikGu8kDIw3tSWFEMrq3KfxNr/E2v8mmLZHE93hs/a6fZNf
+	 j6DdMU+2urjt0QBq+qidWqGctY8UG7zdBVycVZt853Rz1PCsv0sVJekOLQ8m1Q6cu2
+	 D399M8Ia2zqf1Zq6aaducU4HDOel7bu7JVKEQcksALkhO3+PpNKhhYhm4pvU3ahPS8
+	 ANIaj55JCcCLw==
+Date: Thu, 12 Dec 2024 14:45:31 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: carlos.song@nxp.com
-Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, festevam@gmail.com, frank.li@nxp.com, linux-i2c@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx: make controller available until system
- suspend_noirq() and from resume_noirq()
-Message-ID: <awvsvzf5ucgcvl6v7giuxeb6dvt3sw5e6kxo7t56n4rk6u3527@2hid4a7acavv>
-References: <20241125142108.1613016-1-carlos.song@nxp.com>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 2/2] i2c: qcom-geni: Simplify error handling in probe
+ function
+Message-ID: <fd45ts4bgcaaoydvvkq52c3r65dhrmbe4ig3oxp7pqtmrckdwd@wnyfmzlfhgs5>
+References: <20241210231054.2844202-1-andi.shyti@kernel.org>
+ <20241210231054.2844202-3-andi.shyti@kernel.org>
+ <50ebc5f1-967a-4aa7-a4c3-3304961d1f8b@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,48 +59,87 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241125142108.1613016-1-carlos.song@nxp.com>
+In-Reply-To: <50ebc5f1-967a-4aa7-a4c3-3304961d1f8b@quicinc.com>
 
-Hi Carlos,
+Hi Mukesh,
 
-On Mon, Nov 25, 2024 at 10:21:08PM +0800, carlos.song@nxp.com wrote:
-> From: Carlos Song <carlos.song@nxp.com>
-> 
-> Put runtime pm to resume state between suspend() and suspend_noirq(),
-> resume_noirq() and resume(), because some I2C devices need controller
-> on to do communication during this period.
-> 
-> The controller can't be wakeup once runtime pm is disabled and in
-> runtime autosuspended state.
-> 
-> The problem can be easily reproduced on the I.MX8MQ platform:
-> PMIC needs to be used to enable regular when the system resumes.
-> When PMIC uses I2C controller, I2C runtime pm has not been enabled,
-> so in i2c xfer(), pm_runtime_resume_and_get() will return error,
-> which causes data transfer failed. Therefore, regulars can not
-> be enabled and hang system resumes.
-> Here is resume error log:
-> [   53.888902] galcore 38000000.gpu3d: PM: calling genpd_resume_noirq @ 529, parent: platform
-> [   53.897203] i2c_imx_xfer, pm_runtime_resume_and_get is -13
-> [   53.902713] imx-pgc imx-pgc-domain.5: failed to enable regulator: -EACCES
-> [   53.909518] galcore 38000000.gpu3d: PM: genpd_resume_noirq returned 0 after 12331 usecs
-> [   53.917545] mxc_hantro 38300000.vpu: PM: calling genpd_resume_noirq @ 529, parent: soc@0
-> [   53.925659] i2c_imx_xfer, pm_runtime_resume_and_get is -13
-> [   53.931157] imx-pgc imx-pgc-domain.6: failed to enable regulator: -EACCES
-> 
-> I.MX8MQ system resume normally after applying the fix. Here is resume log:
-> [   71.068807] galcore 38000000.gpu3d: PM: calling genpd_resume_noirq @ 530, parent: platform
-> [   71.077103] i2c_imx_xfer, pm_runtime_resume_and_get is 0
-> [   71.083578] galcore 38000000.gpu3d: PM: genpd_resume_noirq returned 0 after 6490 usecs
-> [   71.091526] mxc_hantro 38300000.vpu: PM: calling genpd_resume_noirq @ 530, parent: soc@0
-> [   71.099638] i2c_imx_xfer, pm_runtime_resume_and_get is 0
-> [   71.106091] mxc_hantro 38300000.vpu: PM: genpd_resume_noirq returned 0 after 6458 usecs
-> 
-> Signed-off-by: Carlos Song <carlos.song@nxp.com>
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+> > diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> > index 01db24188e29..3fc85595a4aa 100644
+> > --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> > +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> > @@ -867,14 +867,13 @@ static int geni_i2c_probe(struct platform_device *pdev)
+> >   	ret = geni_se_resources_on(&gi2c->se);
+> >   	if (ret) {
+> > -		clk_disable_unprepare(gi2c->core_clk);
+> > -		return dev_err_probe(dev, ret, "Error turning on resources\n");
+> > +		dev_err_probe(dev, ret, "Error turning on resources\n");
+> > +		goto err_clk;
+> >   	}
+> >   	proto = geni_se_read_proto(&gi2c->se);
+> >   	if (proto != GENI_SE_I2C) {
+> > -		geni_se_resources_off(&gi2c->se);
+> > -		clk_disable_unprepare(gi2c->core_clk);
+> > -		return dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
+> > +		dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
+> Suggestive comment, can we make this second patch as first patch ? So that
+> we can have both above lines reduced in this patch.
 
-merged to i2c/i2c-host.
+I'm sorry, I missed this comment. I tried to swap it and there is
+not much reduction in line changes[*].
 
-Thanks,
+The reason I chose this order is to avoid changing the same line
+on both the patches, like here[**].
+
+If it's not binding for you, I would keep the ordering.
+
+Thanks again a lot for looking into this,
 Andi
+
+[*] https://paste.debian.net/1339486/
+[**] https://paste.debian.net/1339488/
+
+> > +		goto err_off;
+> >   	}
+> >   	if (desc && desc->no_dma_support)
+> > @@ -886,11 +885,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
+> >   		/* FIFO is disabled, so we can only use GPI DMA */
+> >   		gi2c->gpi_mode = true;
+> >   		ret = setup_gpi_dma(gi2c);
+> > -		if (ret) {
+> > -			geni_se_resources_off(&gi2c->se);
+> > -			clk_disable_unprepare(gi2c->core_clk);
+> > -			return ret;
+> > -		}
+> > +		if (ret)
+> > +			goto err_off;
+> >   		dev_dbg(dev, "Using GPI DMA mode for I2C\n");
+> >   	} else {
+> > @@ -902,10 +898,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
+> >   			tx_depth = desc->tx_fifo_depth;
+> >   		if (!tx_depth) {
+> > -			geni_se_resources_off(&gi2c->se);
+> > -			clk_disable_unprepare(gi2c->core_clk);
+> > -			return dev_err_probe(dev, -EINVAL,
+> > -					     "Invalid TX FIFO depth\n");
+> > +			dev_err_probe(dev, -EINVAL, "Invalid TX FIFO depth\n");
+> > +			goto err_off;
+> >   		}
+> >   		gi2c->tx_wm = tx_depth - 1;
+> > @@ -944,8 +938,16 @@ static int geni_i2c_probe(struct platform_device *pdev)
+> >   	return 0;
+> return ret here ? yes, we need to initialize ret = 0.
+> > +err_off:
+> can we rename as err_resources ?
+> > +	geni_se_resources_off(&gi2c->se);
+> > +err_clk:
+> > +	clk_disable_unprepare(gi2c->core_clk);
+> > +
+> > +	return ret;
+> > +
+> >   err_dma:
+> >   	release_gpi_dma(gi2c);
+> > +
+> >   	return ret;
+> >   }
+> 
 
