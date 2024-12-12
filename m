@@ -1,102 +1,106 @@
-Return-Path: <linux-i2c+bounces-8464-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8465-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C80AD9EE619
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 13:03:05 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEC3E9EE666
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 13:12:50 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8610428783E
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 12:03:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92D2E1883D16
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 12:12:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6689A212B1C;
-	Thu, 12 Dec 2024 11:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D3B5211709;
+	Thu, 12 Dec 2024 12:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EshvOJIU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZRDZ6IX"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B58212B0A;
-	Thu, 12 Dec 2024 11:58:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F2A1E9B27;
+	Thu, 12 Dec 2024 12:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734004681; cv=none; b=B65OgbqdQvb8+xU9P+QRfzr0M5poSUY/efYppMsQlA7QIv9eJuf07Ja1EotuP6iG9evYen2Xt59JssEz+BosR+0BVUVywOKY0YVnFk083wYDbi/ukb07jHv2fkFi6ythEElHRXIp/aMJlpxXhwd02/YvW/wwjEV6z0jJWm8C44M=
+	t=1734005563; cv=none; b=bYJILeRvQr44/q/G6SalqNu0Md1MLS49bB0+BY3kS1jMqIBjihzhHqgnqUN6TC0fIqCOythYXXY2EBsLY7yrtX77B3tVQ8KUa7kox5zbcj8BOQJ7QKFLBP0+wUM2vOZqKGMvU0zYtzOya3L8lIdT/prEcqg7sXMbYg07Cf2C3gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734004681; c=relaxed/simple;
-	bh=9LjBuGLrxCe+g6plv0erkWv+VARnNem0wGIO13PZceo=;
+	s=arc-20240116; t=1734005563; c=relaxed/simple;
+	bh=+XrIez4xocMGbkR6OBBEEUJb2yDAgLlSckB/4e+OAsw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p4TYDfqCTCo+GR3TeDrHTnjkCX/d8aKE21J6UGc+QzJ5dlhrpaKznDwdN+/IKS4JL74539t7JpZEsLpr5uRDmURSWOtpIZAX0Pj95V3utDtJFJBbwLPf/0P+rTj9ziECDyl6U4MdQ0rpg4FcnjRTr5zhukmkeMyCHZftVGi8l+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EshvOJIU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13768C4CECE;
-	Thu, 12 Dec 2024 11:57:59 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YQbepneCSlM1fprLZbRRrd2FTcdO827WSJt5tEPM+Ge/qf+yCNbjf90vp/r+4z+YlMeStFOhfpGLzzvvzlYowuae3pBZdCEx1sDRr9lwR6H9ITS5kmO3Ix85jEFs4LO8vS1ecOQPjwMAzoNcms8aiO6H8Em6TdffqoCtkIe49QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZRDZ6IX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E268C4CECE;
+	Thu, 12 Dec 2024 12:12:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734004680;
-	bh=9LjBuGLrxCe+g6plv0erkWv+VARnNem0wGIO13PZceo=;
+	s=k20201202; t=1734005562;
+	bh=+XrIez4xocMGbkR6OBBEEUJb2yDAgLlSckB/4e+OAsw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EshvOJIUnaTCLuz5A4NhWzlqdicKcbeYUGXsGRTwq8cXP994B5Ay6VCMpvKyYfQ7f
-	 brouHpowxOEy+uqED7Gcs8cgnSMAKZvxtwGW+eV5HK3FBe/9lTZeZHAYaBBeJMIfsv
-	 cGaWbQzwoYBT1MqYepz764ksIolBl5b1gDmorden8GnW/guqBkg5yWO81OR5+06tLX
-	 h9/Z2wmWF3h+ecYhXooXXyyxo3Zo5iz/JOhoXJdzBlybFhEQ+Zsc/a+U3ZnAs0MzwN
-	 WAFu093f4pHtoSD/RfDHepci1jdyI83XM5hVsTwA68VeWUnef1MPE7D15AjYZByXbG
-	 Vsk2pzjLjJH9g==
-Date: Thu, 12 Dec 2024 12:57:55 +0100
+	b=tZRDZ6IX+vjLI18v2MB96dEha09ed9JEGGrjLB+JQwNQa16MI3woIcLG9jW5ssmWq
+	 HrdSxmo5pR57A6yq8KYBKA2MHGjJe6m6XfiqxvtUYUiUWEf3KGQl+6BdaOXJMCe9ac
+	 N0uMU7Mb61frJCgjr7Gd5mweVWTETA6/9e11E5KhWi90UDpPV3cM5ZX/hKkinvuOke
+	 CJEjjvg81KK5+i5ymmNxYTIPMIw7nxqZx4cfX498VSjczbU/GMbY4zr+BpGVbxW57d
+	 IV4GvvYp36RpSQKbAw1HF2U315GQI86YFcUzPEfKyBirKo6hfd9ZLCngPEd0FYkU/J
+	 UPuG4Qn7qP8Ig==
+Date: Thu, 12 Dec 2024 13:12:37 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Chris Brandt <chris.brandt@renesas.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Adam Ford <aford173@gmail.com>, linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: riic: Always round-up when calculating bus period
-Message-ID: <peodxpeu4nh3a4lmrmu66237tvucgx5v46rgq6uwqwcbvy44ev@zfwiqfpjod4z>
-References: <c59aea77998dfea1b4456c4b33b55ab216fcbf5e.1732284746.git.geert+renesas@glider.be>
- <ljyho2ftsxmjkyi44hgc5zavxv3ytbvi2iuoht3gjetr3b4jq3@mjuvcrwm4klt>
- <CAMuHMdWc63Q47=4Z5_zDLy3BfGaaV8RyQRAcQbhC8PFvtz4z7A@mail.gmail.com>
- <nlk3esdnddvnfxj3peuldcblxnbninnmhpfu7n26tbyq2swqzp@z456toyekd6z>
- <CAMuHMdWYt3AsDq9wiXiZS__nnd2QXSPBvu0vT5dQLeJsyV9b6w@mail.gmail.com>
+To: carlos.song@nxp.com
+Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, shawnguo@kernel.org, 
+	s.hauer@pengutronix.de, festevam@gmail.com, frank.li@nxp.com, linux-i2c@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: imx: make controller available until system
+ suspend_noirq() and from resume_noirq()
+Message-ID: <awvsvzf5ucgcvl6v7giuxeb6dvt3sw5e6kxo7t56n4rk6u3527@2hid4a7acavv>
+References: <20241125142108.1613016-1-carlos.song@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdWYt3AsDq9wiXiZS__nnd2QXSPBvu0vT5dQLeJsyV9b6w@mail.gmail.com>
+In-Reply-To: <20241125142108.1613016-1-carlos.song@nxp.com>
 
-On Wed, Dec 11, 2024 at 04:46:45PM +0100, Geert Uytterhoeven wrote:
-> On Wed, Dec 11, 2024 at 4:43 PM Andi Shyti <andi.shyti@kernel.org> wrote:
-> > > > It's a pity that all this description is lost. I love long
-> > > > explanations especially when they come from test results.
-> > > >
-> > > > Can I add it in the commit log?
-> > >
-> > > What about starting to add Link: tags pointing to lore to I2C commits,
-> > > like most other subsystems do?
-> > > That way people can easily reach any background information (if
-> > > available), and find the corresponding email thread where to report
-> > > issues or follow-up information?
-> >
-> > To be honest, I'm not a big fan of putting links in commit logs
-> > (not even 'Closes:') and was happy not to see any here. If the
-> > domain changes for some reason (which always happens sooner or
-> > later), we'd just end up with a bunch of broken links in our
-> > commits.
-> >
-> > If others want to have the Link added I can definitely add them.
-> 
-> In general, we assume kernel.org will survive...
-> 
-> > > [1] https://elixir.bootlin.com/linux/v6.12.4/source/Documentation/maintainer/configure-git.rst#L33
-> >
-> > b4 can add the link, as well.
-> >
-> > If you prefer, then, I will take this patch as it is.
-> 
-> Please do so; thanks!
+Hi Carlos,
 
-merged to i2c/i2c-host-fixes with the Link: tag.
+On Mon, Nov 25, 2024 at 10:21:08PM +0800, carlos.song@nxp.com wrote:
+> From: Carlos Song <carlos.song@nxp.com>
+> 
+> Put runtime pm to resume state between suspend() and suspend_noirq(),
+> resume_noirq() and resume(), because some I2C devices need controller
+> on to do communication during this period.
+> 
+> The controller can't be wakeup once runtime pm is disabled and in
+> runtime autosuspended state.
+> 
+> The problem can be easily reproduced on the I.MX8MQ platform:
+> PMIC needs to be used to enable regular when the system resumes.
+> When PMIC uses I2C controller, I2C runtime pm has not been enabled,
+> so in i2c xfer(), pm_runtime_resume_and_get() will return error,
+> which causes data transfer failed. Therefore, regulars can not
+> be enabled and hang system resumes.
+> Here is resume error log:
+> [   53.888902] galcore 38000000.gpu3d: PM: calling genpd_resume_noirq @ 529, parent: platform
+> [   53.897203] i2c_imx_xfer, pm_runtime_resume_and_get is -13
+> [   53.902713] imx-pgc imx-pgc-domain.5: failed to enable regulator: -EACCES
+> [   53.909518] galcore 38000000.gpu3d: PM: genpd_resume_noirq returned 0 after 12331 usecs
+> [   53.917545] mxc_hantro 38300000.vpu: PM: calling genpd_resume_noirq @ 529, parent: soc@0
+> [   53.925659] i2c_imx_xfer, pm_runtime_resume_and_get is -13
+> [   53.931157] imx-pgc imx-pgc-domain.6: failed to enable regulator: -EACCES
+> 
+> I.MX8MQ system resume normally after applying the fix. Here is resume log:
+> [   71.068807] galcore 38000000.gpu3d: PM: calling genpd_resume_noirq @ 530, parent: platform
+> [   71.077103] i2c_imx_xfer, pm_runtime_resume_and_get is 0
+> [   71.083578] galcore 38000000.gpu3d: PM: genpd_resume_noirq returned 0 after 6490 usecs
+> [   71.091526] mxc_hantro 38300000.vpu: PM: calling genpd_resume_noirq @ 530, parent: soc@0
+> [   71.099638] i2c_imx_xfer, pm_runtime_resume_and_get is 0
+> [   71.106091] mxc_hantro 38300000.vpu: PM: genpd_resume_noirq returned 0 after 6458 usecs
+> 
+> Signed-off-by: Carlos Song <carlos.song@nxp.com>
+> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+
+merged to i2c/i2c-host.
 
 Thanks,
 Andi
