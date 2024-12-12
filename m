@@ -1,232 +1,147 @@
-Return-Path: <linux-i2c+bounces-8457-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8458-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6C5D9ED9AE
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2024 23:28:16 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15E089EDEE9
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 06:28:10 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4532E283062
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Dec 2024 22:28:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 173221889BB1
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 05:28:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B13A1F2C38;
-	Wed, 11 Dec 2024 22:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCADB17C7C4;
+	Thu, 12 Dec 2024 05:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="g25QaZNV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mHDfh5SJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3191EC4F9
-	for <linux-i2c@vger.kernel.org>; Wed, 11 Dec 2024 22:27:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038D816DC28;
+	Thu, 12 Dec 2024 05:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733956062; cv=none; b=HtIlM2FxbU4ua954hdud+w9DNbRwlRNYTt7jfoPFgiEdRR3tELORb1oebWgB25TVgeP3DtdwV3z12KTsH7SeFtafqjBnavAIb0TwI929r1In978sjZwVjAi9TnoaClFQ5PmG1eaRYin9+MmlzJbZcx3yp/QmwhKw00k971KfNDs=
+	t=1733981280; cv=none; b=d5BupylUznLUZ20PEwr6M/yRDeKZv1Lkxr1WcZcakM0PlRkVb4EPyrBHMfTxukQS4zo41CtrFEggXBkHfYFltrYN42Te280ImB+Mb/ZwRTzDEOCxEe2c6pLXP/l84QTEO4Z2d7HK4+ekdUbydHoY/gz8cU3orFpLer0KvaanyxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733956062; c=relaxed/simple;
-	bh=CxczlAVJ2KXIHFoak56IOVnj4UTzCb1FwfYB8pYAXj4=;
+	s=arc-20240116; t=1733981280; c=relaxed/simple;
+	bh=qp0i5w/u39t3jbXhVMeRQCOlDTJ4v3kQ6Qs1em2ybJ4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EB6GRtDCsUANOgmh8wgBHdHygHlZVVVJVNCPZdP6Lr74us9C3UEUMp4p2uholPyzXQANjjIqe3y1XE4baTX4H0i+bbl6ljV8vAUlx2aowJBHGo3WIxSDITViwlwHWMdv8jutUZuWRKMjTEKj6H7dRcnl5sBnQ9cZxgl5s1vlDgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=g25QaZNV; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53df80eeeedso6952270e87.2
-        for <linux-i2c@vger.kernel.org>; Wed, 11 Dec 2024 14:27:40 -0800 (PST)
+	 To:Cc:Content-Type; b=ZBmB1prfHkn6FB1SEt6NYyxFZ63Gg+U0TJuZNJCEf149wMG+69DAYyActd2BuL9YOSDKt/3XIEWkjq3CurfDl21P0YyGDAxxdhz5iWHYNkjNDTJFsAKrpN0L4LKIg4zUSyPgKMc2Wg1h3u78M5GbfeCoa1Fn/tQAN/WbJSz2ZRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mHDfh5SJ; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6ef8028fe9fso1834257b3.2;
+        Wed, 11 Dec 2024 21:27:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733956056; x=1734560856; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733981278; x=1734586078; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OP5yTlQX9Qcr5Sy7oqm3jVaqriEDKIPmmSAXtfhzrP8=;
-        b=g25QaZNVdLsi49hDDiQ8E7JV55EgTicKHuTYYH6lkrZFKd2ce8yPqbz+i/6yNX6QJd
-         2xc3ubIZzfMdQ3qXza9FJbFo9XKQ2NISV20jH5RR5TZ/sMfU2zxHvHwRAiTtHViIYhmw
-         j041ffngNuD+E15ZcolLVvr4QKNCF/sSkUStk=
+        bh=i2jQavP4ta6B4Cbqnu1IGli2ZwXsJRL5QsCRRyBteD4=;
+        b=mHDfh5SJQP+HIePXtVlkvBf2FRCtretS6vVkF4QOvrzmUM9gXKatBDWKpq8xJNTrrc
+         fxbsr28Ln0iInO1oQDlJ09JPNw5vkaYjsOdVl1rhXh1krqa3Ombz+G12VHPt/FeV4qBS
+         opas9J3A+gVVCMCT1+9NJ9hvm4m93B7Efb2ed20mTYaELI38zQIES7eepmUdbiPGyhIA
+         An23NXM972ctVGXGIafTW0rZu8tvESOfRGF2pK0Z4xbaPgspKCTtAY0Mg0eatiFZ2uHu
+         vPNQ8+d8LE+r2nNsCsPD7sAU7tZd7kLuMVcSseiSuzcGcTb4lsy/qnTZhpfqLCjb7Vsa
+         xojw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733956056; x=1734560856;
+        d=1e100.net; s=20230601; t=1733981278; x=1734586078;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OP5yTlQX9Qcr5Sy7oqm3jVaqriEDKIPmmSAXtfhzrP8=;
-        b=AIEDHQkylluAVWhD2OvCXjfjaLXkZJ/+SlxoCOKx+hFJdl+YZq5ZUGRU3Ea/P/gp/f
-         aSMg73mEvCjEHFG4kUP2aOuYkTqUChY2DAqosghc6+fQ2UF6+3GbVxIRKlGPkbBge8bJ
-         Rzk0taiXd2RGZZ76+v5qrntPrXc/Pmw57FzGcXM3ir+kX9x8w9HGjD/1p5bxxoMQ9Be2
-         fp47rYLNmipPv8OFYx7qU/2DIvPzic8kPwKsLg+YN++9EsIZv0z/Y0IH9KwHMvTYSCr4
-         pjZyV6uoG1YjvdJkQndQxuiLfVaUC3YQLraHZ63C9ak/caYJP9JO5iExhEB7Hobl//8P
-         UR6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWMe8X1nfsI8nPzpY7n77/P/k9/seAnuf5zpeuqb0WBZktD9+sgG1R3IZPV0ZfGJEFlsAZ9ZM73BxQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkB9HNTYRnySzs1RylbAKzCTYmsj3nrUXDbWij6gRAzs6llekY
-	fmuRC1tBvNaT/j0waiQjzpR+XTPytr4uSRu9jBU7kA5WYHQLDHfiu1caM7iUFmgIoY0XbsxbdE4
-	oRg==
-X-Gm-Gg: ASbGnctQh0Uhln2dMQQuNME+93vQ+/Mn5XQliqlGrjSEovxjCeZ/xOYSxfU7sSbAai/
-	6NuxLDXXUijrsuaCkpq9s6mZfhRBj7CY1WSBln7D1oXkbyX2t3k4sX3TJEhUL9TeWToX3xcHZ+n
-	dNX8xt/2S6IUvQk+WXJHPBn0HLnz/AEyIFjchLVEdrz9akNJM4dNNMbWYp1VmX6dRtKd4HYbz3J
-	sneuyElHgdu91WbJIOg0awyZZKtVcV2c51ATLuoOOa9t/zTD7eOSKpr0hlTw8hBV/IzD1QNRfVw
-	subDtbU4+Sjpv/AtADkVyQ==
-X-Google-Smtp-Source: AGHT+IFI7DnGa8c7KLG+6R8PFKtw+xByBdFnQTwK72fIpedLog5fzjYrJ7BB+o8bo4eLti8VmJTQ/g==
-X-Received: by 2002:a05:6512:e83:b0:53e:fa8b:821f with SMTP id 2adb3069b0e04-5402a5ff53dmr1452676e87.37.1733956056270;
-        Wed, 11 Dec 2024 14:27:36 -0800 (PST)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5402042ad64sm1019732e87.178.2024.12.11.14.27.34
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Dec 2024 14:27:35 -0800 (PST)
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-300392cc4caso49797791fa.3
-        for <linux-i2c@vger.kernel.org>; Wed, 11 Dec 2024 14:27:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUEEhUrsA8/gzh+4qa3R89hHMzs26+bII+ECyGfcejKlJ4oUiuMSsIGnYH27hSZUgCYYTRCJyzSQng=@vger.kernel.org
-X-Received: by 2002:a05:651c:210c:b0:300:3a15:8f2a with SMTP id
- 38308e7fff4ca-30249e00c59mr4195391fa.2.1733956053624; Wed, 11 Dec 2024
- 14:27:33 -0800 (PST)
+        bh=i2jQavP4ta6B4Cbqnu1IGli2ZwXsJRL5QsCRRyBteD4=;
+        b=MhchKkJ6AFALxTi8dEdQh5LqzuA1dNxIW66wImlZei2Y9appkDIE63BXd8VP99irhM
+         8D4GFkKHWFQVf9hANJSwOQ5R0oK0Z5/hvSVqB9Gd2PixZQ3p6gBEHh4dIQphNeRdjY08
+         Eox1bk4Wqx8kSd005uU0xTAw9H98Uh3lAqr+KMteece/Nwqqp/W1WiihylWKoaiYGjSc
+         5UU7F80gOUxReSPmtx9qakTW2wLG/Bw6OU1mzOMUNkFiWKzWseK2a4zdfeWVKQWfeWUZ
+         Lu8NN+z1X8GyA0f4Zrvf//yxGfFSvtRYkMaBqsTxOubE6I7SQ5FsWDKZ0EFa485D8Rdn
+         E7DQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3RnsTOJijdK+9GGDlO0fJQB8SmvaxIXanpwg+kZcj6959XZa8UkO2aezo+DnmjaQWEQKN4p8ZrCp25k5n@vger.kernel.org, AJvYcCUJkIv0zvdY38ma9IJm810eTixMY2RfUX7ULm6MBnWB0PwTKitDrx81Nqq9S8WZQ9jgDd9v94HRMwo=@vger.kernel.org, AJvYcCUbhLHoPHK19WtURQ34faZrPMRbcwjA0UHbqpiKTxEYY5mXvfASARFdms14AhwY8Ny+V/7iPy4UAzuktWs1iLU=@vger.kernel.org, AJvYcCUfMWOlpQCYeeKZRAUuB1TgIGikSo5LE1BfZp98W1qrx6anwsKCGsFYC5cAi2K2SUlFHDy8vFtnANdkpz4=@vger.kernel.org, AJvYcCUzWJl07K2EpOlF+vVJGCcQEEolKF0KZZmEs8DjV/MNDUzvOH6Ed2l6S3sy1kFOYQJQrUGr+9giD2Ta@vger.kernel.org, AJvYcCX3Z5D/p1iCpfIQx/2elza+/Wi0y4+TmU+eUgzSrY7G36R0jM2dKln4k0eQRSHraU4G4yXp0/JhtGNGXw==@vger.kernel.org, AJvYcCXm+zHuWwEo3eX3JIZRZyCZXTs0y1qjixscBuXC4eqLgZTFkiwHkf4p1RPHRrovUCjzezEm7C8H8dQb@vger.kernel.org, AJvYcCXr5YixUF63Jf3WjDg2TUu8ELQkaIRhrWUdXfW8fvRozSGSBApRG0nL+oo9jwagNQsX3qx9i0Qh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOQraaoPhxpySDDNf4lLt0a+MKupDzmoSRkI/lTTsJRmIqJAIL
+	nRgCMmfI50tdgFSjUqzXxRci0xuZdPbsKRac0qgNMsgmMNhyqx2fnnXKPiGnKWk3hYuiyRC5sEP
+	eERfs/FQFWh9UJC28J94n/aEmyBs=
+X-Gm-Gg: ASbGncvsgnEwA5EGm8LflYi2gufq8ko55BRGJDcF/j78TgZlV3BXtfLbjKd22HgWqVL
+	paNh5ONWMtJIi9WDqu0ZqpPGaaPuPElu0ncHEffYlCLgQ+lKDJFkcnGBFN0eSCy6LvztB2Ro=
+X-Google-Smtp-Source: AGHT+IFdrPaTPZ9GejJx+R+k192Po7wThLXGiNtYgpHneGtofpZWdqMlRAawKJACPdSwzsCirltSWXVY1xz5qEDY38E=
+X-Received: by 2002:a05:690c:7249:b0:6ef:6a91:4965 with SMTP id
+ 00721157ae682-6f19e861030mr21004747b3.37.1733981277626; Wed, 11 Dec 2024
+ 21:27:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
- <20241204150326.1470749-2-quic_vdadhani@quicinc.com> <CAD=FV=XF+9wxZ5xNtO3Uy8QW9UY4tb+KR46jkondvBeQuVLsrA@mail.gmail.com>
- <6736db20-127b-45c3-ac90-3e3e359c343b@quicinc.com> <CAD=FV=VReNQ3nw+wfZizL7JjxEX9z=GwDEJAFzheNkW7rSrB5Q@mail.gmail.com>
- <65ded632-963a-4bfd-906c-1b09e916b5e0@quicinc.com>
-In-Reply-To: <65ded632-963a-4bfd-906c-1b09e916b5e0@quicinc.com>
-From: Doug Anderson <dianders@chromium.org>
-Date: Wed, 11 Dec 2024 14:27:22 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WrXegUW7n0e5Lp6AMN9u492Rn1yFXCOzGRbs36VeKrMA@mail.gmail.com>
-X-Gm-Features: AZHOrDnd4yPKzZ7z0r-DDC60k0pmk_2L5RUUePsjv7ZkRWOmo6qWozIHPBzjPco
-Message-ID: <CAD=FV=WrXegUW7n0e5Lp6AMN9u492Rn1yFXCOzGRbs36VeKrMA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/7] dt-bindings: i2c: qcom,i2c-geni: Document DT
- properties for QUP firmware loading
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
-	broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org, 
-	johan+linaro@kernel.org, agross@kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-spi@vger.kernel.org, quic_anupkulk@quicinc.com, 
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-2-tmyu0@nuvoton.com>
+ <68d1490a-ba67-480b-943f-afa56e5b8436@kernel.org>
+In-Reply-To: <68d1490a-ba67-480b-943f-afa56e5b8436@kernel.org>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 12 Dec 2024 13:27:46 +0800
+Message-ID: <CAOoeyxVAbf45g-PGiDiUkZoBrSq6mRvAwHdoC6OCjEUYAUS=Lw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Dear Krzysztof,
 
-On Tue, Dec 10, 2024 at 9:27=E2=80=AFPM Viken Dadhaniya
-<quic_vdadhani@quicinc.com> wrote:
+Thank you for your comments,
+
+Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2024=E5=B9=B412=E6=9C=8810=
+=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8810:38=E5=AF=AB=E9=81=93=EF=
+=BC=9A
 >
-> On 12/10/2024 11:12 PM, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Mon, Dec 9, 2024 at 9:28=E2=80=AFPM Viken Dadhaniya
-> > <quic_vdadhani@quicinc.com> wrote:
-> >>
-> >> On 12/4/2024 10:55 PM, Doug Anderson wrote:
-> >>> Hi,
-> >>>
-> >>> On Wed, Dec 4, 2024 at 7:03=E2=80=AFAM Viken Dadhaniya
-> >>> <quic_vdadhani@quicinc.com> wrote:
-> >>>>
-> >>>> Document the 'qcom,load-firmware' and 'qcom,xfer-mode' properties to
-> >>>> support SE(Serial Engine) firmware loading from the protocol driver =
-and to
-> >>>> select the data transfer mode, either GPI DMA (Generic Packet Interf=
-ace)
-> >>>> or non-GPI mode (PIO/CPU DMA).
-> >>>>
-> >>>> I2C controller can operate in one of two modes based on the
-> >>>> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
-> >>>>
-> >>>> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-> >>>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-> >>>> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-> >>>> ---
-> >>>>    .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml   | 11 ++++++=
-+++++
-> >>>>    1 file changed, 11 insertions(+)
-> >>>>
-> >>>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qco=
-m.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> >>>> index 9f66a3bb1f80..a26f34fce1bb 100644
-> >>>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> >>>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> >>>> @@ -66,6 +66,15 @@ properties:
-> >>>>      required-opps:
-> >>>>        maxItems: 1
-> >>>>
-> >>>> +  qcom,load-firmware:
-> >>>> +    type: boolean
-> >>>> +    description: Optional property to load SE (serial engine) Firmw=
-are from protocol driver.
-> >>>> +
-> >>>> +  qcom,xfer-mode:
-> >>>> +    description: Value 1,2 and 3 represents FIFO, CPU DMA and GSI D=
-MA mode respectively.
-> >>>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>>> +    enum: [1, 2, 3]
-> >>>
-> >>> I'm a little confused about this. I'll admit I haven't fully analyzed
-> >>> your patch with actual code in it, but in the past "CPU DMA" mode and
-> >>> "FIFO" mode were compatible with each other and then it was up to the
-> >>> driver to decide which of the two modes made sense in any given
-> >>> situation. For instance, last I looked at the i2c driver it tried to
-> >>> use DMA for large transfers and FIFO for small transfers. The SPI
-> >>> driver also has some cases where it will use DMA mode and then
-> >>> fallback to FIFO mode.
-> >>>
-> >>> ...so what exactly is the point of differentiating between "FIFO" and
-> >>> "CPU DMA" mode here?
-> >>
-> >> Yes, correct, Will update in V2.
-> >> I plan to add 2 modes, GSI and non-GSI(PIO or DMA based on length).
-> >>
-> >>>
-> >>> Then when it comes to "GSI DMA" mode, my understanding is that the
-> >>> firmware for "GSI DMA" mode is always loaded by Trustzone because the
-> >>> whole point is that the GSI mode arbitrates between multiple clients.
-> >>> Presumably if the firmware already loaded the GSI firmware then the
-> >>> code would just detect that case. ...so there shouldn't need to be an=
-y
-> >>> reason to specify GSI mode here either, right?
-> >>>
-> >>> -Doug
-> >>
-> >> GSI firmware is loaded from TZ per QUP, but to use GSI mode,
-> >> we need to configure the SE to use GSI mode by writing into SE registe=
-r
-> >> QUPV3_SE_GENI_DMA_MODE_EN and SE_GSI_EVENT_EN. This register is
-> >> used to configure data transfer mode for Serial Engine.
-> >
-> > Can't you detect it's in GSI mode without any device tree property
-> > like the code does today?
-> >
-> > -Doug
+> > +
+> > +     dev_set_drvdata(dev, nct6694);
+> > +     usb_set_intfdata(iface, nct6694);
+> > +
+> > +     ret =3D mfd_add_hotplug_devices(dev, nct6694_dev, ARRAY_SIZE(nct6=
+694_dev));
+> > +     if (ret)
+> > +             goto err_mfd;
+> > +
+> > +     dev_info(dev, "Probed device: (%04X:%04X)\n", id->idVendor, id->i=
+dProduct);
 >
-> No, we can't detect GSI mode in the current design. The GSI firmware is
-> loaded from the TZ side, while mode selection occurs on the APPS side
-> based on the Device Tree property.
+> Drop. Duplicating existing messages and interfaces. Your driver is
+> supposed to be silent on success.
+>
 
-Presumably you can check to see if the geni firmware has already been
-loaded before the kernel started, right? In the case that it's already
-loaded, can't you fall back to the way that existing code detects GSI
-mode? From reading `drivers/spi/spi-geni-qcom.c` I see that if the
-FIFO is disabled then it assumes we must be in GSI mode...
-Specifically, it checks:
+Okay, I will drop it in v4.
 
-readl(se->base + GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
+> > +     return 0;
+> > +
+> > +err_mfd:
+> > +     usb_kill_urb(nct6694->int_in_urb);
+> > +err_urb:
+> > +     usb_free_urb(nct6694->int_in_urb);
+> > +     return dev_err_probe(dev, ret, "Probe failed\n");
+>
+> No, this should go to individual call causing errors so this will be
+> informative. Above is not informative at all and kernel already reports
+> this, so drop.
+>
 
-The i2c code today (`drivers/i2c/busses/i2c-qcom-geni.c`) does the same.
+Okay, I will drop it in v4.
 
-So, essentially:
+> > +}
+> > +
+> > +static void nct6694_usb_disconnect(struct usb_interface *iface)
+> > +{
+> > +     struct usb_device *udev =3D interface_to_usbdev(iface);
+> > +     struct nct6694 *nct6694 =3D usb_get_intfdata(iface);
+>
 
-* If geni firmware has already been loaded, then check
-FIFO_IF_DISABLE. If the FIFO is disabled it's GSI. If not then both
-"CPU DMA" and "FIFO" are allowed.
-
-* If geni firmware hasn't already been loaded then it's impossible to
-be in GSI mode since GSI only makes sense if the geni firmware was
-loaded before the kernel started. Thus we're in "CPU DMA" / "FIFO"
-mode.
-
-In both cases you don't need an attribute telling you whether to use
-GSI mode or not, right?
-
--Doug
+Best regards,
+Ming
 
