@@ -1,157 +1,198 @@
-Return-Path: <linux-i2c+bounces-8467-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8469-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E3A99EE819
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 14:55:17 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65B541642CF
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 13:55:08 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DBA12144C2;
-	Thu, 12 Dec 2024 13:54:57 +0000 (UTC)
-X-Original-To: linux-i2c@vger.kernel.org
-Received: from 3.mo576.mail-out.ovh.net (3.mo576.mail-out.ovh.net [188.165.52.203])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF4049EE960
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 15:51:50 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884F32135B0
-	for <linux-i2c@vger.kernel.org>; Thu, 12 Dec 2024 13:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.52.203
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 985FF282F6F
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Dec 2024 14:51:49 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F82121571B;
+	Thu, 12 Dec 2024 14:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nYl9/Vp5"
+X-Original-To: linux-i2c@vger.kernel.org
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4022135AC;
+	Thu, 12 Dec 2024 14:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734011697; cv=none; b=DpiQbgDzPejYVTgbW+/1kyXCfnw2TKyXkIEXjU2T1f/marxOM/dL6iUyklG8+McBfGvYWPvqOpvQkNinukJkjm2KAEmilFn9oo9/ReiWZcMhvitEwUNbRbPoKLo6I0+d+ohZJaJdzxNsq5m6DN3TtRneNhsR8MF1AfEgD79dCQY=
+	t=1734015105; cv=none; b=Gn6Zoxvy6xufaIHouqcvMqLJ9Rrzye6IDfkILM7nzI3nI0TUw68DkqNB+cZOCHq3lg/6kLJd5wcltdio0eEeEwRQVh69YA4TYLf6DSoIwJdBOuRmS8gL0T+OBe02Y47l3U/8LxnglIjGaHwa5YArtycACTDzNFojwZg/ZZ+S0Bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734011697; c=relaxed/simple;
-	bh=VPjRocNSukRbmdBc3XUtxk+vawkhCNClBfvUMhwY5J4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RdTMBRQylWsjvpWXonrMj1Y6ksOWoINz5kUcpCmbUGEF1lllG964EO20EGnxojQpN2vXLvC5/mZudBrmll9a+RuddtC7a3C+zcASXQNz3WFZfLNnACkGayQhsbveMhvmZDSZPFdf+6aHzk5BTkdKh6wwtMMI9pFm/St44IYs7vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.52.203
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director9.ghost.mail-out.ovh.net (unknown [10.109.140.140])
-	by mo576.mail-out.ovh.net (Postfix) with ESMTP id 4Y8DVX6cTtz1wKv
-	for <linux-i2c@vger.kernel.org>; Thu, 12 Dec 2024 13:54:44 +0000 (UTC)
-Received: from ghost-submission-5b5ff79f4f-dx889 (unknown [10.110.164.150])
-	by director9.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 8B0D71FE94;
-	Thu, 12 Dec 2024 13:54:44 +0000 (UTC)
-Received: from etezian.org ([37.59.142.98])
-	by ghost-submission-5b5ff79f4f-dx889 with ESMTPSA
-	id IP8jGSTrWmfJBAEAV5M9HA
-	(envelope-from <andi@etezian.org>); Thu, 12 Dec 2024 13:54:44 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-98R002bd5ad6a2-8b7b-4542-9082-b4b10b8058e6,
-                    7E8E14E11F102121CE247F47C6B4DBC0808239E0) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:178.39.90.92
-From: Andi Shyti <andi.shyti@kernel.org>
-To: linux-arm-msm@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PATCH v2 2/2] i2c: qcom-geni: Simplify error handling in probe function
-Date: Thu, 12 Dec 2024 14:54:16 +0100
-Message-ID: <20241212135416.244504-3-andi.shyti@kernel.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241212135416.244504-1-andi.shyti@kernel.org>
-References: <20241212135416.244504-1-andi.shyti@kernel.org>
+	s=arc-20240116; t=1734015105; c=relaxed/simple;
+	bh=C3UueoPQb5TI3q2csvi7noxJa26+vSnj4JeStgcfWGk=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=qHhAW8rYNUAnQMFs6gKWpPFi+0QM5EXIL9VDb/ky38M+FYLl7YWp3OCqEASVQZjmSGJpKxv6buoTgnyIo7xDPNBfzvu7sTMf8Yq3Zb+XAmH2L06NtkBuXcZ6qSdCoVvAnEEzfs08tPponUh4F8NwvHo3XZZP+Iu1riV2OR5Q1m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nYl9/Vp5; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734015104; x=1765551104;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=C3UueoPQb5TI3q2csvi7noxJa26+vSnj4JeStgcfWGk=;
+  b=nYl9/Vp5C6fC26vv9DQiEPfFazfSI8YNpRdHTvx90OLfuq3oYf/k84ke
+   gfFT/Tl225BjLaufMCsygNEYHCjOGp2o07vcDawVSeW8XAaTxmWugZhUT
+   GeW3QxaR5ZH1tt6N0SPlb4L8tzORXVJFMO+WlrmboruGI8zeTW5droljN
+   S7IBchM6wmhisWZz/glRh5LShNjw4ob9R1xUdUq+lfInd/TLfkJY9LvkC
+   p2x/Sk33AaZLq2NZnZ86B1KGBaRF+VQ/GonyxzU0HcyFdSxCxbsEPLOp9
+   D/JSSJh9jOvsXmoyabNdvra0DUyQyx1ZhianZf2yFKz1aLX/rwz1JLvuo
+   Q==;
+X-CSE-ConnectionGUID: 7xDymELcQxq40+HDZQDqlw==
+X-CSE-MsgGUID: 2itc7dgHQLuL7WDYXZJzmQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11284"; a="37278178"
+X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
+   d="scan'208";a="37278178"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:51:43 -0800
+X-CSE-ConnectionGUID: dqfj+1xRR/CawK0/CXYT+Q==
+X-CSE-MsgGUID: ITA4j0XbQr6FBxs2XSLmbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
+   d="scan'208";a="101267889"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.137])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 06:51:39 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 12 Dec 2024 16:51:35 +0200 (EET)
+To: Hans de Goede <hdegoede@redhat.com>
+cc: =?ISO-8859-15?Q?Pali_Roh=E1r?= <pali@kernel.org>, 
+    Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>, 
+    Wolfram Sang <wsa@kernel.org>, eric.piel@tremplin-utc.net, 
+    Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com, 
+    Kai Heng Feng <kai.heng.feng@canonical.com>, 
+    platform-driver-x86@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
+    Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v9 0/4] i2c-i801 / dell-lis3lv02d: Move instantiation of
+ lis3lv02d i2c_client from i2c-i801 to dell-lis3lv02d
+In-Reply-To: <20241209183557.7560-1-hdegoede@redhat.com>
+Message-ID: <ec2de47c-ec08-7aa8-4caa-0a4d80ba7701@linux.intel.com>
+References: <20241209183557.7560-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 16943667699760040519
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrkeehgdehiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepgfduveejteegteelhfetueetheegfeehhfektddvleehtefhheevkeduleeuueevnecukfhppeduvdejrddtrddtrddupddujeekrdefledrledtrdelvddpfeejrdehledrudegvddrleeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehjeeimgdpmhhouggvpehsmhhtphhouhht
+Content-Type: text/plain; charset=US-ASCII
 
-Avoid repeating the error handling pattern:
+On Mon, 9 Dec 2024, Hans de Goede wrote:
 
-        geni_se_resources_off(&gi2c->se);
-        clk_disable_unprepare(gi2c->core_clk);
-        return;
+> Hi All,
+> 
+> Here is v9 of my patch series to move the manual instantation of lis3lv02d
+> i2c_client-s for SMO88xx ACPI device from the generic i2c-i801.c code to
+> a SMO88xx specific dell-lis3lv02d driver.
+> 
+> The i2c-core and i2c-i801 dependencies have both been merged into 6.13-rc1
+> so I believe that this series is ready to be merged now .
+> 
+> Patch 2/4 does still touch the i2c-i801 code removing the quirk code which
+> is moved to the pdx86 dell-smo8800 code. I think it would be best if Ilpo
+> prepares an immutable branch with this series to be merged into both
+> pdx86/for-next and the i2c-subsystem. Andi can we get your Ack for merging
+> the i2c-i801 changes through the pdx86 tree ?
+> 
+> Moving the i2c_client instantiation has the following advantages:
+> 
+> 1. This moves the SMO88xx ACPI device quirk handling away from the generic
+> i2c-i801 module which is loaded on all Intel x86 machines to a module
+> which will only be loaded when there is an ACPI SMO88xx device.
+> 
+> 2. This removes the duplication of the SMO88xx ACPI Hardware ID (HID) table
+> between the i2c-i801 and dell-smo8800 drivers.
+> 
+> 3. This allows extending the quirk handling by adding new code and related
+> module parameters to the dell-lis3lv02d driver, without needing to modify
+> the i2c-i801 code.
+> 
+> This series also extends the i2c_client instantiation with support for
+> probing for the i2c-address of the lis3lv02d chip on devices which
+> are not yet listed in the DMI table with i2c-addresses for known models.
+> This probing is only done when requested through a module parameter.
+> 
+> Changes in v9:
+> - Rebase on top of v6.13-rc1
+> - Drop already merged i2c-core and i2c-i801 dependencies
+> 
+> Changes in v8:
+> - Address some minor review remarks from Andy
+> 
+> Changes in v7:
+> - Rebase on v6.11-rc1
+> 
+> Changes in v6:
+> - Use i2c_new_scanned_device() instead of re-inventing it
+> 
+> Changes in v5:
+> - Make match_acpi_device_ids() and match_acpi_device_ids[] __init[const]
+> - Add "Depends on I2C" to Kconfig (to fix kernel-test-robot reported issues)
+> - Add "this may be dangerous warning" to MODULE_PARM_DESC(probe_i2c_addr)
+> 
+> Changes in v4:
+> - Move the i2c_client instantiation to a new dell-lis3lv02d driver instead
+>   of adding it to the dell-smo8800 driver
+> - Address a couple of other minor review comments
+> 
+> Changes in v3:
+> - Use an i2c bus notifier so that the i2c_client will still be instantiated if
+>   the i801 i2c_adapter shows up later or is re-probed (removed + added again).
+>   This addresses the main concern / review-comments made during review of v2.
+> - Add 2 prep patches to the i2c-core / the i2c-i801 driver to allow bus-notifier
+>   use / to avoid the need to duplicate the PCI-ids of IDF i2c-i801 adapters.
+> - Switch to standard dmi_system_id matching to check both sys-vendor +
+>   product-name DMI fields
+> - Drop the patch to alternatively use the st_accel IIO driver instead of
+>   drivers/misc/lis3lv02d/lis3lv02d.c
+> 
+> Changes in v2:
+> - Drop "[PATCH 1/6] platform/x86: dell-smo8800: Only load on Dell laptops"
+> - Use a pci_device_id table to check for IDF (non main) i2c-i801 SMBusses
+> - Add a comment documenting the IDF PCI device ids
+> - Keep using drivers/misc/lis3lv02d/lis3lv02d.c by default
+> - Rename the module-parameter to use_iio_driver which can be set to
+>   use the IIO st_accel driver instead
+> - Add a new patch adding the accelerometer address for the 2 models
+>   I have tested this on to dell_lis3lv02d_devices[]
+> 
+> Since this touches files under both drivers/i2c and drivers/platform/x86
+> some subsystem coordination is necessary. I think it would be best to just
+> merge the entire series through the i2c subsystem since this touches some
+> core i2c files. As pdx86 subsys co-maintainer I'm fine with doing so.
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> Hans de Goede (4):
+>   platform/x86: dell-smo8800: Move SMO88xx acpi_device_ids to
+>     dell-smo8800-ids.h
+>   platform/x86: dell-smo8800: Move instantiation of lis3lv02d i2c_client
+>     from i2c-i801 to dell-lis3lv02d
+>   platform/x86: dell-smo8800: Add a couple more models to
+>     lis3lv02d_devices[]
+>   platform/x86: dell-smo8800: Add support for probing for the
+>     accelerometer i2c address
+> 
+>  drivers/i2c/busses/i2c-i801.c                | 124 ---------
+>  drivers/platform/x86/dell/Kconfig            |   1 +
+>  drivers/platform/x86/dell/Makefile           |   1 +
+>  drivers/platform/x86/dell/dell-lis3lv02d.c   | 252 +++++++++++++++++++
+>  drivers/platform/x86/dell/dell-smo8800-ids.h |  27 ++
+>  drivers/platform/x86/dell/dell-smo8800.c     |  16 +-
+>  6 files changed, 282 insertions(+), 139 deletions(-)
+>  create mode 100644 drivers/platform/x86/dell/dell-lis3lv02d.c
+>  create mode 100644 drivers/platform/x86/dell/dell-smo8800-ids.h
 
-Introduce a single 'goto' exit label for cleanup in case of
-errors. While there are currently two distinct exit points, there
-is no overlap in their handling, allowing both branches to
-coexist cleanly.
+Patches 1-3 applied into review-ilpo-next branch.
 
-Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
----
- drivers/i2c/busses/i2c-qcom-geni.c | 32 ++++++++++++++++--------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 01db24188e29..88709b97f86d 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -867,14 +867,13 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 
- 	ret = geni_se_resources_on(&gi2c->se);
- 	if (ret) {
--		clk_disable_unprepare(gi2c->core_clk);
--		return dev_err_probe(dev, ret, "Error turning on resources\n");
-+		dev_err_probe(dev, ret, "Error turning on resources\n");
-+		goto err_clk;
- 	}
- 	proto = geni_se_read_proto(&gi2c->se);
- 	if (proto != GENI_SE_I2C) {
--		geni_se_resources_off(&gi2c->se);
--		clk_disable_unprepare(gi2c->core_clk);
--		return dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
-+		dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
-+		goto err_resources;
- 	}
- 
- 	if (desc && desc->no_dma_support)
-@@ -886,11 +885,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 		/* FIFO is disabled, so we can only use GPI DMA */
- 		gi2c->gpi_mode = true;
- 		ret = setup_gpi_dma(gi2c);
--		if (ret) {
--			geni_se_resources_off(&gi2c->se);
--			clk_disable_unprepare(gi2c->core_clk);
--			return ret;
--		}
-+		if (ret)
-+			goto err_resources;
- 
- 		dev_dbg(dev, "Using GPI DMA mode for I2C\n");
- 	} else {
-@@ -902,10 +898,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 			tx_depth = desc->tx_fifo_depth;
- 
- 		if (!tx_depth) {
--			geni_se_resources_off(&gi2c->se);
--			clk_disable_unprepare(gi2c->core_clk);
--			return dev_err_probe(dev, -EINVAL,
--					     "Invalid TX FIFO depth\n");
-+			dev_err_probe(dev, -EINVAL, "Invalid TX FIFO depth\n");
-+			goto err_resources;
- 		}
- 
- 		gi2c->tx_wm = tx_depth - 1;
-@@ -942,10 +936,18 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 
- 	dev_dbg(dev, "Geni-I2C adaptor successfully added\n");
- 
--	return 0;
-+	return ret;
-+
-+err_resources:
-+	geni_se_resources_off(&gi2c->se);
-+err_clk:
-+	clk_disable_unprepare(gi2c->core_clk);
-+
-+	return ret;
- 
- err_dma:
- 	release_gpi_dma(gi2c);
-+
- 	return ret;
- }
- 
 -- 
-2.45.2
+ i.
 
 
