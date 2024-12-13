@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-8499-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8500-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 329C89F148A
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2024 18:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E3E69F148D
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2024 18:59:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA05016AF3A
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2024 17:59:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44A2916A27E
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2024 17:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66ACD1EF092;
-	Fri, 13 Dec 2024 17:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4171EF0BD;
+	Fri, 13 Dec 2024 17:58:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DgbyM5lZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mlQXQEgJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689201EE006;
-	Fri, 13 Dec 2024 17:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECAA1EE7A5;
+	Fri, 13 Dec 2024 17:58:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734112723; cv=none; b=fKJFqC4b/EpL1XVOI3iGiMRgTWyA1+0SS+Df7Ye9uGTXCQlUlmv9+hq+y9STm/q8clGDafiiP0Vewbzi3ujiVisUE09RPHjUSwdP0I825OgQmGyNPg36zZ08uIGgu7k7Boy4zC5Op7Pg7TeGFJIrKqnhFIA++cn2UnBOq4d8ttY=
+	t=1734112724; cv=none; b=PkECeAkvtDq9mR+bva60Ebqvh0M2LijCulw66mlAv05LtX8o0Gy5PIIUGAJk751Zz+d3twWPqdxwNxMTJqZ5tjSUV9ad5mYH0//K5ptVJERp0qNHf06WDx0XhMdfppADuB7AVbPbXKGbXuANgBWRNfU8MoatHaTaPiC7NFqAn7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734112723; c=relaxed/simple;
-	bh=AhbwkG5EX1Hcj27wbvdujXUKwhLkJuv+2Gb2iyjaGg0=;
+	s=arc-20240116; t=1734112724; c=relaxed/simple;
+	bh=ds8NCw46ssQGEQqUUOIbn2Ea79pBKLnCoyHVaH9R6+8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zd8Qgspss6Ata5TLC9oVc8BiraR5BckWRfoCk2+jRYbKFw2SODreuYS5lGTMIbRB78y+X93SDJc1/abBMV5uAzUgtfnt3GfpF1B5HNnlCrVZuz+6Q9Ot6S5eHJHi9brv/8f6yZd1Kr3S8ug514/QFG9UqlocLbbdjs9qlAdb2as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DgbyM5lZ; arc=none smtp.client-ip=209.85.128.41
+	 MIME-Version; b=anvJA1iEKB+uBPDN+NSsUhhOE1B5cLSCHaKs/Zl722DWxGdLJqrzCxZig3J1sI2DDKhhPC19yvB2dVkn5XOU7qpsZ/jhcU+qOtb5SdjevFzWPNpqhGqVw9bKuyYzhhPC4Hjeo4re29tdYqF6GweoCPWtOV1J2ywGVbYvYkPeMqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mlQXQEgJ; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4361f796586so24560535e9.3;
-        Fri, 13 Dec 2024 09:58:41 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-38789e5b6a7so1061447f8f.1;
+        Fri, 13 Dec 2024 09:58:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734112720; x=1734717520; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734112721; x=1734717521; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZMWKkTzdj8DKVIv1nP3k0aiD5Wz9gMpH8BYSjw4iCUE=;
-        b=DgbyM5lZFDu9k/W3XsNy1YR4w2yvCYLAQz15nkFMmMwVAA4wZyvvRPFnTgZgcwmMYF
-         Msk4e3jEQu3wgQpDb1sx7t16RBo+Qcf7v8UaSb44lxu2feIwi897yD4am5/HFgAikgdl
-         PttiIJ5toRa2QDdaAJFPfCdgW0IisXrT3e2sFunwREDGgNOrZtfOLjGK8lFfj7Z7Bm7A
-         cgt+dTE8ejC77q6AZILiLR42EXzDHqn+PvehCNjq2FOOwbWePEdqxg27R79EzKLVlo3K
-         cKtURHK8hPHTxM3NS3hHt1PeqDCcX49vMDQhQPzs+EDEEe9TYQNGXupv3VQXQyK8lRuM
-         +XEQ==
+        bh=TiNH0sKIYgt1PPiF5X1cBcEENcf83pWJytTWM8aI9Ck=;
+        b=mlQXQEgJ3jf3dNczZa0rUXE3J4ZuNmrwkimkFKYF3kurTm6yPKMmaDd5Qj7BFhCJLp
+         fZyxSz22Upl6olDKhEPKFZfmqRWD43cxiRJRu4XTHo2MefUfOMHyUsa2uWqI9zOa9d+5
+         wBahb4fPlPIzBKTpANYMje2BkS7ah4Rm09y9PXiK7Tc3c/PKOLeeRggsChZkhEwwZqQH
+         bi5wMrFmzQukhI/4ZsqLdMqmCPMY7MG4ffuwYLjxFAhku6M5A/6kLNx4nEtb3AhGRHfv
+         Y1BHErQISUrb0rsBP/vLGYiSZ4p6VYWNewU5PEYI5AZiSnDPY5S5G1uj3QHJm7mGfRV+
+         3i6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734112720; x=1734717520;
+        d=1e100.net; s=20230601; t=1734112721; x=1734717521;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZMWKkTzdj8DKVIv1nP3k0aiD5Wz9gMpH8BYSjw4iCUE=;
-        b=QwseuB6mo46BIACMVsQVwenGvesyOAoUaxsEvW4M9rlVYSwfEnLiZNEitVb/Po/58s
-         2DMNdso0H4TcX81ZMdvWt75W/3k41CGlPFtXUtQ/GlpTNntWiidT2xOY0ugLIFvScGSw
-         Z9SpKYIX1CmTTDk0WwWAjYuUgnBobhEGNvYKANuXVB98L6sxrjl16zJp/1E5z0FlCXpK
-         V2wj0H5DvIgi0wzkNtVwiS1LTVSuwZudMyAT95FBMwXBNgq61MNHldD6jwp4QH+pHqnh
-         4o6YdSOZfng04tlNDpm6VYmJohrJbF4ZgU1KK8/bAJ0f4WTiVB52klYhDSw6CUAHtRoy
-         qr+w==
-X-Forwarded-Encrypted: i=1; AJvYcCV+H6pwXW9gSVK/FtlL1cwQ50zHcWPfX/oIEYPVojnj1c5h/lIxYnKUG6xlpL1OPEJZB2E9UrKLuMk=@vger.kernel.org, AJvYcCXjyx/CVVJbPPjLbG66TwehGpSnaqJ8mGxAujBZKRVVvE08ZkJhjkfxM7PxAQYZC74spJomBXGP3LdEBFix@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSQgy1OUgFKrZ5Zw+4ginVTGX2Ql8/tI8vJg/qMNIOjgpgPFXy
-	EZBHn8u3SDgBBipGxt50xTwm4nXVUSrIvxqeWmZP8qgc6V+BWpoa
-X-Gm-Gg: ASbGncs3zFcVJVXNHPodpXfjYrB01tCFJXXZ85s4vnX666KaqSQLTL5oPMRm58uBbG4
-	okD08Ki8TlqKjlyz5C+QYDXjqeasFtVS4PLiaqcn+r6oY33/D/OAC1PF/twzlibLirrpW5JzFhB
-	GYZMD2fxSu4J/B4eYLGVn6HIz36AhRxKdLtkDKr2kmbfcoKq2FcuuUiqEYr6rasuC3eTjZJ1xK7
-	sykDdjweeGbMX+W+A5fjy64cBlydRBe9+pu15NK7O4wUQehEXsX+UrYKqcfWYD834603sARLxwI
-	ai/gVcvGBw==
-X-Google-Smtp-Source: AGHT+IFFvzvo+BgYEIPYdv9QhG0mMtRndQ0E4BmMrB01WgpcQo+o6kij8Qugk5H0PSio32gzXM2Srw==
-X-Received: by 2002:a05:600c:524c:b0:436:2238:97f6 with SMTP id 5b1f17b1804b1-4362aa1af5emr31723585e9.1.1734112719414;
-        Fri, 13 Dec 2024 09:58:39 -0800 (PST)
+        bh=TiNH0sKIYgt1PPiF5X1cBcEENcf83pWJytTWM8aI9Ck=;
+        b=VF2GYh7fdAjOm9Mg5TFlP9scWT+1D9zbRwQTHdvOjryEc1QYBzQWmMqOEk4dg8qgVs
+         1uftMmtLAc4gffYgs1L+JaTvOymt1lkjZrz7Ae/oadmMwmBg2TFJIN09O0wn7yQA7wrh
+         zgoLDze6YRUGh/nrvUicqiekJIAJ1w2yuMyf99St78CH2dyegngZsmfOeeBPIMpnVYLq
+         715lZRZk0RSLRIO4z2nNpNp/q/QRe532vzNTDX7rvUgeIrbTu7MVBoUxAz2LWwFae9O+
+         8WGvot8eKcfqpDO0ZnnuMFUi3U8t196WuKPQQSPqLDZT05VZwOpejK5vJdM+2F8itxhL
+         ogzA==
+X-Forwarded-Encrypted: i=1; AJvYcCUGUJA8TRtFT5HdptA11AROGccyp1fI2RWTh7tNoQJp+SdmZ0tmXK6y/JA1Xv4ZCXblK608TUW2+qo=@vger.kernel.org, AJvYcCXBOEbiKZ6xU8brcxst1hjMg3Ur56EoxG4FsI+wTeqG61OFydVC4VBNgzUYiWYe48lo/xPmZ2aFNMK9qrEV@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqu45jPhjPwVM7N8pRLwcSZY+arRvEeMkb46VEnkNzQmQ9Afoo
+	QQWP48glaqeeF1D7+6IvZP7CAay/JXInYFgCx1ZwJ2oAUMVqjLjz
+X-Gm-Gg: ASbGncuows0bgvWgV2ir8aIcittab/6Nsm4SPfVNnO0d1wNbf54PuEZ87TL7f1/i9uj
+	RNDxfbHzfHjwi6enKB7jutz0L/8Mdgr4hWNKxjce+3iXh19QPXSRiHdYW1KmT34jdMMsBi522PZ
+	BAuxdJKnSToZ1fNdIzdeGMixkPCA3zs2e8OgAYo4kg2UBBChe69tfA82UpQunlSEO1Vst8otu/o
+	1DXkB32AFhe3pCiOXt704xK81BZlQWwsCZNC+ZJpoM9EeK7OKoZMYx1TpBceDZr3FLMRkcyg1iF
+	/JP1zRkcVA==
+X-Google-Smtp-Source: AGHT+IHVBCJt+7+MsngrIntVfZGLihZBqVCT0I+Sk3D782RivAOgWvy/pP1gVjqqVG9bQFQoFA4m8g==
+X-Received: by 2002:a5d:598e:0:b0:385:e1a8:e2a1 with SMTP id ffacd0b85a97d-38880af153bmr3219292f8f.3.1734112721109;
+        Fri, 13 Dec 2024 09:58:41 -0800 (PST)
 Received: from prasmi.Home ([2a06:5906:61b:2d00:4eec:e99c:89a6:d7a6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c804d573sm119088f8f.64.2024.12.13.09.58.38
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c804d573sm119088f8f.64.2024.12.13.09.58.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2024 09:58:38 -0800 (PST)
+        Fri, 13 Dec 2024 09:58:39 -0800 (PST)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Chris Brandt <chris.brandt@renesas.com>,
@@ -86,9 +86,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 5/9] i2c: riic: Make use of devres helper to request deasserted reset line
-Date: Fri, 13 Dec 2024 17:58:24 +0000
-Message-ID: <20241213175828.909987-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 6/9] i2c: riic: Mark riic_irqs array as const
+Date: Fri, 13 Dec 2024 17:58:25 +0000
+Message-ID: <20241213175828.909987-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241213175828.909987-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20241213175828.909987-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -102,53 +102,27 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Simplify the `riic_i2c_probe()` function by using the
-`devm_reset_control_get_optional_exclusive_deasserted()` API to request a
-deasserted reset line. This eliminates the need to manually deassert the
-reset control and the additional cleanup.
+The riic_irqs array describes the supported IRQs by the RIIC driver and
+does not change at runtime.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/i2c/busses/i2c-riic.c | 17 ++---------------
- 1 file changed, 2 insertions(+), 15 deletions(-)
+ drivers/i2c/busses/i2c-riic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index 487fa26264b0..032cf0b1368e 100644
+index 032cf0b1368e..e51bf911da0c 100644
 --- a/drivers/i2c/busses/i2c-riic.c
 +++ b/drivers/i2c/busses/i2c-riic.c
-@@ -422,11 +422,6 @@ static struct riic_irq_desc riic_irqs[] = {
- 	{ .res_num = 5, .isr = riic_tend_isr, .name = "riic-nack" },
- };
+@@ -414,7 +414,7 @@ static int riic_init_hw(struct riic_dev *riic)
+ 	return 0;
+ }
  
--static void riic_reset_control_assert(void *data)
--{
--	reset_control_assert(data);
--}
--
- static int riic_i2c_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -447,18 +442,10 @@ static int riic_i2c_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(riic->clk),
- 				     "missing controller clock");
- 
--	riic->rstc = devm_reset_control_get_optional_exclusive(dev, NULL);
-+	riic->rstc = devm_reset_control_get_optional_exclusive_deasserted(dev, NULL);
- 	if (IS_ERR(riic->rstc))
- 		return dev_err_probe(dev, PTR_ERR(riic->rstc),
--				     "Error: missing reset ctrl\n");
--
--	ret = reset_control_deassert(riic->rstc);
--	if (ret)
--		return ret;
--
--	ret = devm_add_action_or_reset(dev, riic_reset_control_assert, riic->rstc);
--	if (ret)
--		return ret;
-+				     "Failed to acquire deasserted reset control\n");
- 
- 	for (i = 0; i < ARRAY_SIZE(riic_irqs); i++) {
- 		ret = platform_get_irq(pdev, riic_irqs[i].res_num);
+-static struct riic_irq_desc riic_irqs[] = {
++static const struct riic_irq_desc riic_irqs[] = {
+ 	{ .res_num = 0, .isr = riic_tend_isr, .name = "riic-tend" },
+ 	{ .res_num = 1, .isr = riic_rdrf_isr, .name = "riic-rdrf" },
+ 	{ .res_num = 2, .isr = riic_tdre_isr, .name = "riic-tdre" },
 -- 
 2.43.0
 
