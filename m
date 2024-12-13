@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-8495-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8496-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2476F9F1482
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2024 18:59:18 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3D459F147E
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2024 18:59:05 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFB901883DC7
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2024 17:58:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 774D3280D94
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Dec 2024 17:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 828EB1E8841;
-	Fri, 13 Dec 2024 17:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7C241EBA0B;
+	Fri, 13 Dec 2024 17:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="moC8fTrj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SoQHTe4M"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF7C1E3775;
-	Fri, 13 Dec 2024 17:58:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED001E7678;
+	Fri, 13 Dec 2024 17:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734112717; cv=none; b=o7n3N7RcLiIXjFTEGBBxXypa9g3jZwpvhFvT4o54lRD1azbwkrbS2+Exh7quHT3q6u9vNqPb3Z8msNDiye67vQEEkXnTDRAeyZyHswQJp3QFL8wCwcb2svI5J9I8R7YeYKGLJRaqdeOjD5IvUV41c1gBO6SjEP+D6Gvf1qbHjz8=
+	t=1734112718; cv=none; b=QmuTZVDEIILEDGdO68SCiaJhEj+YNsoyICTSrBQkQrYVO0d1oOTo8vpzsOmHGFcdRk3b3Kc9GLADuc07Z0CBF2PocVTcPO4B7vVO2MTvbCua9gBGKdQQqQVlTd/NFG6BVfIlyns6DoeIHfZ9lVtzPr/f2a2VLk+P86/UT6mn9kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734112717; c=relaxed/simple;
-	bh=W8oNQSeOIQ27iGni2+2i4bYsGd5Lo8gwn0kk254jE38=;
+	s=arc-20240116; t=1734112718; c=relaxed/simple;
+	bh=owd0zn1P5YfeNkYMC+oUSuFlHqUQWKes+FGyKpfhQiY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X40jzpLyEGCS1V6BIKXLfXgOHavRyQRUYMZKTzDu7nfNVdSd4qCKa1pNqrbN6wJDLczgeX4KI3UUZyRybjmiYwdpdf5pB8noJ+l7XwlYA1sdomzhE0qECCmh4HsUmGK0xIgWQYFuj0cFNX+fFPoH48OwtO8cYrhRU3MEr1Rc99o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=moC8fTrj; arc=none smtp.client-ip=209.85.128.45
+	 MIME-Version; b=t4Qssf6R612kieiu71c4CQgkbDSrjK6WuEBZoKO9Fp53gZX/7X3x8Dd8zAgW9Y5beb+QsJfzI6e0+IauhuXS505EQ5ldCPUKtwyCh4y0G2oE4VpCpk0a4G17/hvZMHyNNWKmHR9uMwLV1t5xyttcLvHf1h5QrqvmgagUUtFWY98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SoQHTe4M; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43618283dedso19382565e9.3;
-        Fri, 13 Dec 2024 09:58:35 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-385df53e559so1623667f8f.3;
+        Fri, 13 Dec 2024 09:58:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734112714; x=1734717514; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734112715; x=1734717515; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=m22X8YrMWCLSXkLU9BQ9UULdRQ3y6T7GHGyJIqVQpsA=;
-        b=moC8fTrj3yh8i6GPJfM25umKI2407HXM637fVQhEl+TCgza1ZhTw4VoddbShZ5XUBx
-         rmxV0MTnq4Xrgax+UHFOmGc4rHxFNxDLynJE5brXQbELmaQDVz4MoqmBPT/YE8WJbJwg
-         7/NsMsWqLq2i16UtDd8wWKfZ2Ig2LXTraRQox5/GpmbOxyYQXEEWr4GTZHRzoHWniDM5
-         CQUfPaa6fomy+6LU2tF+DqVHjTb6QKhxUHvjhKA3Wi48X5kmvLSlMjDoJoFjqQQ2c1zl
-         McBn+AiJeweQCn19GMjRkb01tTM9eoQcQsgKOXav7rk5vnaKDzh2Z5eEUclwfLtYHQjN
-         Dj9Q==
+        bh=vaLlRj3ObamRETdZi3/ztjW/T2zRB+N3Lr9QOtAkYD0=;
+        b=SoQHTe4MyI3oCh1N9dJDjCGa7nLyAvbc2ypJYLT0Jnpz17dpe7lZxRETaahj6v/EQN
+         aLH7NuwyhYpFhngBcK/ZlI0le1kXyyfC+GOKELWP5WbLMaoAzn1kCUUbuDQ3t7DaJw0H
+         kzZa6aYrc8cOExic4ftrdpSOd3vObS7Xj95LInVfbsEuNCVspKogAvvemvXfhKQmpzJZ
+         U+mc45Z+1KcvgDncl4xFa8A1YdSoSFQcXS9VZxHdAUrSEEPCQyI8gJSb5YHyNCwnqNpm
+         vCJzIWdCmGUpKW/5Q0e7FMg2/5SJ7TwqkwMQBo+ubIsGJiuIWcJal1zUIR8l6kitcQ9T
+         YTaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734112714; x=1734717514;
+        d=1e100.net; s=20230601; t=1734112715; x=1734717515;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m22X8YrMWCLSXkLU9BQ9UULdRQ3y6T7GHGyJIqVQpsA=;
-        b=J43h4qsjOZXe1Mjf0+8gXU+mEP5lIi+ToUfd+RD+TtTU5KMfml77Fh0kUGqh/uGhpQ
-         qQwpTotIaM23lMbTiDncWkUpXAFmqpfFPdDunI4MzyBOdlqff/lgoQH8Zr4C+/9/AVel
-         tkxK8cgJy2Pi7xwvycn1IA1L1BClyCjPvC3/DhgHaIDemkMJF6N57PrjkgsxGxnRfShh
-         PZgsfo9j+tn2UszEXg7sFZew3G5Q5YVli6cdAIEk3EZUfJhe096+GKFmnlIkrHdXVTk+
-         GoYmwiOvEoyM2cxL3ZJUAC1BYe8jugvWw1Sw7J5nVv3PhC4JdiZxREzICr4s0A2Z8taP
-         ds6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWNS7HGCcUyew4Qoeo76/pDoeMTKKmfV/ovqmLJ8RzlLK8wLZ61pzNF1EZSXe+x8oFx0yLWUP6vklg=@vger.kernel.org, AJvYcCWlfSdR3VdcAKNEGTqtedaOUnpWizlSNPKZWVv6RsxP8MTRrpjvJZKwPp8Q6BvZbNElHZnDNZpaopqCuTmy@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKRQw8kL9cNHwzewk809ohSWPCBl4htjE+vV9z7L4CWGUqjZzG
-	k/3wZdYCIet8//KpCE7YnYPO9P3vks1L4kdjeH0J2Qqc809twiqsXq0BjQ==
-X-Gm-Gg: ASbGncu+wp7U1a42q8lErBbSn1iHtPtOVk5bf9695nqFcBDQf9z5knd8ieut4dzJnrZ
-	vYhYPOGmLbp2xOKoPQljyDZGeLhEH2Ixt8e3wnDunT6Q84mLsWFoOPkcvZ3h41A06qJPZwcBWfN
-	WINhA3OPCqZP8++Wn02ciNm/Qms+5mQdUVx7xjTEprmiGNE1R/NJRCBI5mSNfU9cwj72wBZnFdz
-	TA7w5JHjWcxGNZ9qmM+Mh5kxFKH+O1RKbiDkJyI2hAfw1oRb7hdjJqWAKiHm07k084oi8NqMn7g
-	T2mi/fFhKg==
-X-Google-Smtp-Source: AGHT+IFO96Lc8qDkLcXuP0pFBLM9GcL6S1MVl8Atv1Y7dbdV+Yk4b4sn9KSn0FCe2DhGRAXehYI7Pg==
-X-Received: by 2002:a05:6000:2a6:b0:385:f527:be6d with SMTP id ffacd0b85a97d-3888e0f4763mr2697926f8f.36.1734112713561;
-        Fri, 13 Dec 2024 09:58:33 -0800 (PST)
+        bh=vaLlRj3ObamRETdZi3/ztjW/T2zRB+N3Lr9QOtAkYD0=;
+        b=gtRH2MLsRGVoWO80autOCuO9N4cMcWsCRWa1FUT54dtWZ2dCxygIM4raKV1F3q0q2Q
+         Hz+3hhXvzQV8HC47Ag+BAwiT4pFBhhYDv3lDquIWo8uf2KsFv3171lcJad7vOQciEp42
+         +xyoZ4XrB0bC8GGcra0+ZTWyhREz30PtlQbg/QPVclqO99G5gEi9d070wHpTyhnhEtQS
+         OtcMkZCqkg+Ivwe+AbfdzAZrJFkBSr8oGrCR+/cMMrfXBO+pHljAHgITKC6QGc0d7WeU
+         A20hfUEBkXdUz71aU3pYKzKTMzidZ2KhKM3Y/PUKcYpu+RixC2htE0zaix3x8o4Be3cu
+         sFNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnQh8P4ImyrW5ytmKdOHdCm1TB0lbFMmCghnjNOhjSShfwYeyF79Kr9AdaSX4+f0l1+p1MnQ2GiyU=@vger.kernel.org, AJvYcCVdTx7cdcw2C+JFtJPhnNTF6tM7yJTgMmF4BUuf+DNJbqlJaeyyi+AP8y0V8P1kmgOqqmhIhUffmN0Vfkls@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0A6uPZna2cLGbHZOwBN7l9POjTN0ZyCZDEigGyfcxAapNrnUJ
+	h4Yn2U76ewY50shxo5TVSGq89q1LjQm/MoHp8Yyx1Mc0jUsD2Zf275rn9g==
+X-Gm-Gg: ASbGncvRmxG9l+8yciHLNVnQQVXhHPlX5UiH9UbmspmYkgop7ETtHxGrXuCUqgtzA98
+	F3ANt6z67MVF1BlXqmtFxHofo+11I9VVs6M4gXE5VIgh6OqOnjv5YbflnQgfEvg18FHvsJdDcZV
+	5KXToAXzvhc57Weyza/7bWXhnwT0uTXSYwM4/5Jsn3ioOdfLWTYet6Wcp4lMNT8EUd4yd0YYjIw
+	nuioBMC4Egk7uMywFR92iIG8ZUUC80L2ek4ZhlollAVHAGYmVLRqEzO7ubi3ikcRWrecKAXhQes
+	mFUXk/i3Iw==
+X-Google-Smtp-Source: AGHT+IGM2iCVKSaOg2DupxSNUtFLUFBnepSblvZs1s4dgrr1Uu7AOUZYvAO9rnQwyUgNWxIvzWbb1w==
+X-Received: by 2002:a05:6000:188f:b0:386:3e87:2cd6 with SMTP id ffacd0b85a97d-3888e0f4779mr2647388f8f.38.1734112715063;
+        Fri, 13 Dec 2024 09:58:35 -0800 (PST)
 Received: from prasmi.Home ([2a06:5906:61b:2d00:4eec:e99c:89a6:d7a6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c804d573sm119088f8f.64.2024.12.13.09.58.32
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c804d573sm119088f8f.64.2024.12.13.09.58.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2024 09:58:32 -0800 (PST)
+        Fri, 13 Dec 2024 09:58:34 -0800 (PST)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Chris Brandt <chris.brandt@renesas.com>,
@@ -86,9 +86,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 1/9] i2c: riic: Replace dev_err with dev_err_probe in probe function
-Date: Fri, 13 Dec 2024 17:58:20 +0000
-Message-ID: <20241213175828.909987-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 2/9] i2c: riic: Use local `dev` pointer in `dev_err_probe()`
+Date: Fri, 13 Dec 2024 17:58:21 +0000
+Message-ID: <20241213175828.909987-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241213175828.909987-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20241213175828.909987-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -102,46 +102,52 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Refactor error handling in the riic_i2c_probe() function by replacing
-multiple dev_err() calls with dev_err_probe().
+Update the `riic_init_hw()` function to use the local `dev` pointer in
+calls to `dev_err_probe()`. Previously, `riic_init_hw()` used
+`riic->adapter.dev` in error reporting. Since this function is invoked
+during the probe phase, the I2C adapter is not yet initialized, leading to
+`(null) ...` being printed in error messages. This patch fixes the issue by
+consistently using the local `dev` pointer, which points to
+`riic->adapter.dev.parent`.
 
+Additionally, replace `dev_err()` with `dev_err_probe()` throughout
+`riic_init_hw()` for consistency.
+
+Fixes: d982d66514192 ("i2c: riic: remove clock and frequency restrictions")
+Fixes: 71dacb2565ed (i2c: riic: Simplify unsupported bus speed handling")
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/i2c/busses/i2c-riic.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-riic.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index c218f73c3650..7ab32aeead4b 100644
+index 7ab32aeead4b..d01bb52d86ed 100644
 --- a/drivers/i2c/busses/i2c-riic.c
 +++ b/drivers/i2c/busses/i2c-riic.c
-@@ -445,10 +445,9 @@ static int riic_i2c_probe(struct platform_device *pdev)
- 		return PTR_ERR(riic->base);
+@@ -320,7 +320,7 @@ static int riic_init_hw(struct riic_dev *riic)
+ 				      : I2C_MAX_FAST_MODE_FREQ;
  
- 	riic->clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(riic->clk)) {
--		dev_err(dev, "missing controller clock");
--		return PTR_ERR(riic->clk);
--	}
-+	if (IS_ERR(riic->clk))
-+		return dev_err_probe(dev, PTR_ERR(riic->clk),
-+				     "missing controller clock");
+ 	if (t->bus_freq_hz > max_freq)
+-		return dev_err_probe(&riic->adapter.dev, -EINVAL,
++		return dev_err_probe(dev, -EINVAL,
+ 				     "unsupported bus speed %uHz (%u max)\n",
+ 				     t->bus_freq_hz, max_freq);
  
- 	riic->rstc = devm_reset_control_get_optional_exclusive(dev, NULL);
- 	if (IS_ERR(riic->rstc))
-@@ -470,10 +469,9 @@ static int riic_i2c_probe(struct platform_device *pdev)
- 
- 		ret = devm_request_irq(dev, ret, riic_irqs[i].isr,
- 				       0, riic_irqs[i].name, riic);
--		if (ret) {
--			dev_err(dev, "failed to request irq %s\n", riic_irqs[i].name);
--			return ret;
--		}
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to request irq %s\n",
-+					     riic_irqs[i].name);
+@@ -356,11 +356,9 @@ static int riic_init_hw(struct riic_dev *riic)
+ 		rate /= 2;
  	}
  
- 	riic->info = of_device_get_match_data(dev);
+-	if (brl > (0x1F + 3)) {
+-		dev_err(&riic->adapter.dev, "invalid speed (%lu). Too slow.\n",
+-			(unsigned long)t->bus_freq_hz);
+-		return -EINVAL;
+-	}
++	if (brl > (0x1F + 3))
++		return dev_err_probe(dev, -EINVAL, "invalid speed (%lu). Too slow.\n",
++				     (unsigned long)t->bus_freq_hz);
+ 
+ 	brh = total_ticks - brl;
+ 
 -- 
 2.43.0
 
