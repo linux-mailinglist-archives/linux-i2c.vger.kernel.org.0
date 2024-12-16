@@ -1,155 +1,115 @@
-Return-Path: <linux-i2c+bounces-8521-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8522-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2FC29F3443
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2024 16:18:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47E189F34DA
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2024 16:44:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10209167773
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2024 15:18:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF9291886EE4
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2024 15:43:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41DED1465A1;
-	Mon, 16 Dec 2024 15:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TYuQ+ULc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5DE202C50;
+	Mon, 16 Dec 2024 15:43:01 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4974A146599;
-	Mon, 16 Dec 2024 15:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBBC51714B7;
+	Mon, 16 Dec 2024 15:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734362329; cv=none; b=ah5e0JZAG4KcBw2V6CEE9JmnpldeQ1fnHzFZkzLGGNTWfVxtUUwoNCZNPU1qLs2swYw3N8ZaPDBbpaeNaSPBU8274vAhP7Q9MqUPem1KZzCPZu3LXXe1TO+AyIoPRyore+vDYXCU81WjZqncJimlEk7QegPo2fVyiyJcmXTBJfI=
+	t=1734363781; cv=none; b=Vj7U6EnpUIvjBswrXKVTcLkbu8D9qKq9CL2vWmOBvmr/YtS5wTQJ4S9t/6Yp6fdpu0Sx/Fci/0bobKjmbIcrLa2oj2K2QSMZha5WRDe7aUg0Lhmu1cubEGZTyCN9AuBVlIiVRGNFZS9GIDlnxDGnGWIbQGvf2b/dQy6qevj/fjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734362329; c=relaxed/simple;
-	bh=UzGoSy4ZSRHs3s5CX4llzjwYLDEDVAKyM9abgyG2RGY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=t8nyIzEbXhUBywZzVKqu36W7RkgGSfVwFlW8oStxnr8knBD+bhbVTy9W/IrrpxHtuXOXDhY56DHTE37WrG4vkE6r5eGSr2v/6pgaHSDzDyCYuleNVJhE1huLpFO11P6wqXSGF6BOXXpiAXY5OyDTZ0/VZBUlK02awh9HGTghdv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TYuQ+ULc; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1734363781; c=relaxed/simple;
+	bh=58FYXRqBpcNh81+gZYGToNCLzgg83BEO8O5Yry+Fhoc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bQRjI71bb8QbnK3ak9jbDVrkhe1DDt+7dNBDXOi6X8wrib+5KIQ9bk2/qru1ySkZhYFZrcUGybJKY7PKMj7Bde3NB8Tlhqb5JnSt1QAoPcfrdabjTIb/fvY0zPU2D5F373dWP8M7EcBKEDR4lmZvuuszW0U5s+5piVJtuKdZ8Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3863494591bso2277606f8f.1;
-        Mon, 16 Dec 2024 07:18:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734362325; x=1734967125; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zTbfi6p8iEyDiLbIuWboyEfmfnDgznyILb9W4NSw86U=;
-        b=TYuQ+ULcFasz3pNBRTkzCoaCpsDYSX024Zwey2g9kHTkqflKUbzYyBH1DDxQIqouAM
-         E971+aC+vzmz2u74WNP9UmLEy08TGS6hPODgJYvHvmmQCfpE3sIw1XnCLLrCFPzlb9Nz
-         24apfuupmerk8qz/jHUIWjoNlKaSvlyicGh/aCZwVn9+rJU3PQ96z9kYAKuRJ8/5dXdj
-         BZdDg58N0uHZWj6OVzmIuMfN6eIkK++q6p6bCam/6mYOAnCPWZc4tUkvsLL1+haeDBd/
-         YAvQ8pgk7JA89rW/MwJdiKKSYTJWZiUKZRerm3EjCgMeZr9ZC+A4uzPGyxKHSUxY4Fqt
-         La5A==
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5188c6f260cso1278033e0c.1;
+        Mon, 16 Dec 2024 07:42:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734362325; x=1734967125;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zTbfi6p8iEyDiLbIuWboyEfmfnDgznyILb9W4NSw86U=;
-        b=kBzIjEYfrGH1AVQUtYAEkba5mxBU5jmBDhUg2f0H8pBDMar5uZkJisam6+t9vGOnsK
-         U1WvKO7rP5RZtkQhFtbzzEIBUBXCJ/DeexbRPdCj0t6u9D+syXQEUrJqomnfkF4O7cJE
-         3/VPS3FnMSIS8aoz0qZ/Y6mKLvtffS6lQTmYPa2ThwY4+7jh7jnelK2E61r16uBJoKZn
-         2yA9q2TGbGOvG9ETyTmngF91bRbn70TnwbdQdvQ6T42hB8T3ctW0k3J43hmFF2zBNNC/
-         nHES5rllHF252R3iLkLfR3I15tR9Jka0/zxMK/LpRd1HJaueMTQdbCopIFXBlwOcRZrF
-         Zzhw==
-X-Forwarded-Encrypted: i=1; AJvYcCWDSEXSlQ3qYJy/KZ5zwwvCMDCsVUFltVdka4m1AqvpMifled/qtA1mMLbRQMSc6jVDM5wG+1hooR0jNF0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLycxPXeQlKf17H6nUyVzP1AwO3B9NO86/rI3HVwB/K0VAvHZ3
-	g8hqk7Cfwfr0CB9+oWytEEmDMNuqoS+GE1oSaV+I/7z+e7JpXcW4
-X-Gm-Gg: ASbGncu6nW4oeHgyBmqj2uzZM0rt2UWYbyaStdcv91x1jHtmM+Rp9eeHdx2mi5M5KxX
-	LcCj3tuvDUs5aXF8PiL1z6YUIT94oYeOI6kS3wU9nsIotWUUpYVbDy/o8n7IXi9XKH3rO+VKfaQ
-	wwcrHlpu17aGrcl2jxZ6gGBvvbE3oQdx70tCPGpoVNNdqmEAV8YV81TFUnLeP1VlV8hdzg3vkDw
-	OFQ7uBTKEtyTY1DGlk68FXTXNg67btIM+zOJ2Uv2dL2eL2sRUGdh1+iLuURVVvFSpOWsGSL
-X-Google-Smtp-Source: AGHT+IEr92SrsyLf8UEGh/qJ4AcuJCbiE9QwqwVLL1sL4V60D+nHXLQW58JemQqBLG51UkqEem66Mw==
-X-Received: by 2002:a5d:6487:0:b0:382:5088:9372 with SMTP id ffacd0b85a97d-3888e0b88afmr11406631f8f.43.1734362324993;
-        Mon, 16 Dec 2024 07:18:44 -0800 (PST)
-Received: from eichest-laptop.toradex.int ([2a02:168:af72:0:9096:1cad:6f4d:511a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c8015f77sm8351129f8f.26.2024.12.16.07.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 07:18:44 -0800 (PST)
-From: Stefan Eichenberger <eichest@gmail.com>
-To: o.rempel@pengutronix.de,
-	kernel@pengutronix.de,
-	andi.shyti@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	festevam@gmail.com,
-	Frank.Li@nxp.com,
-	stefan.eichenberger@toradex.com,
-	francesco.dolcini@toradex.com
-Cc: linux-i2c@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1] i2c: imx: fix missing stop condition in single-master mode
-Date: Mon, 16 Dec 2024 16:16:40 +0100
-Message-ID: <20241216151829.74056-1-eichest@gmail.com>
-X-Mailer: git-send-email 2.45.2
+        d=1e100.net; s=20230601; t=1734363777; x=1734968577;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+acnXNVUQ0LA7MYUEQM7LfAc1qmX6IAb7It8hYEHGtQ=;
+        b=KpFXkfxHibf+nIQlazEOzgbdux6XiFrJvA8geopSZ5F/OS6o+0VuVxKc7GJSAA0ULq
+         eF4LBTzVxx526w4GyG3rZNuzEAfVq6qghXT9igYVYE7Y/dGkVgAj6bRxEWW+kZWQM35W
+         TBVg/tbaROnplK8lcibcDO/6g7xkWBBihdde2g0cnYdsyx0jt+/Wjvc3cAR15E+slHQK
+         im4qp2pjKf2N6sZtjaVW9asEZE1IupxOAo40mEZQjuu0ogqdmNzLochLuy4NEABhywNo
+         e3Mubd34II6+nqM01v5OfT8+pGgKNUKB8keNSyIU7/5CHiYNnn+/IAqPUqudd3zHXB+o
+         U70Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVJl4AUq75QgYlW1Aw/mYMyoRSySD3W2xfTSDnZxG1KCTV/f+CVX+XfKfNcOZFkbILcF3Z/azIzHMfjlGuy@vger.kernel.org, AJvYcCWIXojEZUwhI7nHomdh0p3P5BKllAQJwIII736mWSG/4/+EnsdZ7sCkcUu74K+ZONtZNMaQrXPVitM=@vger.kernel.org, AJvYcCWXJsbtJCtJJiVknCz88Vi2PJ3HpjQkSlTNPGrBrC8lGGYOcoVC90WsplWDQFLbiN/f7owDstEFWkrFlbBkPDZ1OiU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIuFEinTbwva8ZsjjFoMhCmiFirDdIXIqM2o7x/1xYukLhd0hR
+	sbgkxcHHfs/MKrKbpCFHRRp7YvCdCG2Mex5bytWiBl/srCMtYKBXzaW1UsRc
+X-Gm-Gg: ASbGncsbwv0KsW6vk+R5WQ6BoVghQU5zw1j35Atn4snIHdn0CX6JyXQ6jfX79FqCKDn
+	YCDXOy3bzzWBHUu7XQfbmlIHvhQAnfgQYdiH/lBNJg7b0OXC2SgJZNM77G/pxe1QCuOv58btTbX
+	H0uHxEpm0nZp92/ux9ypVe9FZnNbUsAwdBbg1MY4b3Lq2C9FeLNaMgKLyOffNn4w/8yWs7cEQHT
+	l3Mmk6eO8GwaBId1vm/ACi8Diaq7x349X4aueJvCKlbwN7wmCeqDX0NlElX3Q78ZfIL3X/wIx8L
+	hS+EpAL4zQfZJLQGHlc=
+X-Google-Smtp-Source: AGHT+IGLVYyX1dGArf5gdqdcc8zgHtAJ//EzJwRXmYQhgiD+0+UuIg/0dxB1gViQMD9Gy5VMyUyVeg==
+X-Received: by 2002:a05:6122:2505:b0:515:ed1b:e6dd with SMTP id 71dfb90a1353d-518ca2182bemr11488424e0c.0.1734363776923;
+        Mon, 16 Dec 2024 07:42:56 -0800 (PST)
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-519eb72a06csm675458e0c.44.2024.12.16.07.42.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Dec 2024 07:42:56 -0800 (PST)
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4afefc876c6so1148533137.2;
+        Mon, 16 Dec 2024 07:42:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU/9rYR9DfvyHkxYL9cOfXCUDHV2xHtFu+j2gNWP7LqzIPWOcss0cTjE0VIpYKTWEq+IBSqTfF61gLa9y1XkI+yZmM=@vger.kernel.org, AJvYcCWVttc3vqgwMZQ6k21bzLGoYjcUCQAWJtAGT8+BNb73kqgYbkN7FAYuKxEmJFEAUi3JjVD9KSW9Cv/pVHo5@vger.kernel.org, AJvYcCXz5ArgDlavh4i2FNz1y8X/dUiOirV6goyisW7VmYHGzMvklp7Shhb1VRg31YC4oK+gSt3fxFXGhbg=@vger.kernel.org
+X-Received: by 2002:a05:6102:418e:b0:4b1:1b33:eb0f with SMTP id
+ ada2fe7eead31-4b25db3f6a0mr11773132137.24.1734363776010; Mon, 16 Dec 2024
+ 07:42:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241213175828.909987-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20241213175828.909987-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20241213175828.909987-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 16 Dec 2024 16:42:44 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW9=ZNzaJaxyEB3Bu-EFL-txa4c9BOUo6w8Uk8zuPeQeQ@mail.gmail.com>
+Message-ID: <CAMuHMdW9=ZNzaJaxyEB3Bu-EFL-txa4c9BOUo6w8Uk8zuPeQeQ@mail.gmail.com>
+Subject: Re: [PATCH 1/9] i2c: riic: Replace dev_err with dev_err_probe in
+ probe function
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Wolfram Sang <wsa@kernel.org>, 
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+On Fri, Dec 13, 2024 at 6:58=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail.c=
+om> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Refactor error handling in the riic_i2c_probe() function by replacing
+> multiple dev_err() calls with dev_err_probe().
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-A regression was introduced with the implementation of single-master
-mode, preventing proper stop conditions from being generated. Devices
-that require a valid stop condition, such as EEPROMs, fail to function
-correctly as a result.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-The issue only affects devices with the single-master property enabled.
+Gr{oetje,eeting}s,
 
-This commit resolves the issue by re-enabling I2C bus busy bit (IBB)
-polling for single-master mode when generating a stop condition. The fix
-further ensures that the i2c_imx->stopped flag is cleared at the start
-of each transfer, allowing the stop condition to be correctly generated
-in i2c_imx_stop().
+                        Geert
 
-According to the reference manual (IMX8MMRM, Rev. 2, 09/2019, page
-5270), polling the IBB bit to determine if the bus is free is only
-necessary in multi-master mode. Consequently, the IBB bit is not polled
-for the start condition in single-master mode.
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-Fixes: 6692694aca86 ("i2c: imx: do not poll for bus busy in single master mode")
-Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
----
- drivers/i2c/busses/i2c-imx.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index f751d231ded8..cbf66a69e20b 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -534,20 +534,18 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool a
- {
- 	unsigned long orig_jiffies = jiffies;
- 	unsigned int temp;
--
--	if (!i2c_imx->multi_master)
--		return 0;
-+	bool multi_master = i2c_imx->multi_master;
- 
- 	while (1) {
- 		temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2SR);
- 
- 		/* check for arbitration lost */
--		if (temp & I2SR_IAL) {
-+		if (multi_master && (temp & I2SR_IAL)) {
- 			i2c_imx_clear_irq(i2c_imx, I2SR_IAL);
- 			return -EAGAIN;
- 		}
- 
--		if (for_busy && (temp & I2SR_IBB)) {
-+		if (for_busy && (!multi_master || (temp & I2SR_IBB))) {
- 			i2c_imx->stopped = 0;
- 			break;
- 		}
--- 
-2.45.2
-
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
