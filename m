@@ -1,81 +1,81 @@
-Return-Path: <linux-i2c+bounces-8547-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8548-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DD169F3935
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2024 19:47:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9DA9F3940
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2024 19:48:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5904188AE7B
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2024 18:47:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 130CC16A703
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Dec 2024 18:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522DC20764E;
-	Mon, 16 Dec 2024 18:47:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA17B207DE5;
+	Mon, 16 Dec 2024 18:48:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AHBvTw9k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SCrfdr7V"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72E81E493;
-	Mon, 16 Dec 2024 18:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04737207658;
+	Mon, 16 Dec 2024 18:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734374859; cv=none; b=rqV2RHuqsG+i6ilMm7PUKreBB5y1sTh+m1oTqVxNXFudry7sg8S+m1roTMLMIeIQhgazkn7AEIlVpEG+A2qEar6zxjA9zQK4PZgA9xHoJGZEx6pa83PfIJ+H+WENaKueSC2gmCkyqJGTTL6+JwZn5l2/amfwvcQXiyQUKtou5P4=
+	t=1734374899; cv=none; b=Y76GqdNd7XP8hQh48ROirQsEA8t6n2dfqU37Wt7TpJ62PA3FxZUVLt/DJC7VTTmEi+nUouAYALMAvbtJDHk5DNmZvUQU30z4kRcvZaSiwqufwnQmRvFzpojWUNrM1nsA/c71Ya/Odjhosr8s5oO3RvPsoVwPV2/VwbPzVmNpoYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734374859; c=relaxed/simple;
-	bh=J6/FzYFwHnRv9BLzHltNFMIOIxKwdbIG8JjNRs53Fi8=;
+	s=arc-20240116; t=1734374899; c=relaxed/simple;
+	bh=kmEYNF71/7++qPgLBRe0qCZQCXLr12g/b3oiSdt3p/Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IoLHyZJ0gAg1BnJKT4fYfNH2gP/oY5R94xZksIHAcL7mZfH+kfqqoj1t/wDblYmJxiChDUUDLEVsafwGYw4hE8kjMJ199BbxPB9hxedyXiZoD3337Cnt+69BkrafpDwshsCJcKni8/bPMOUAX5lsuHarxEo1dFctZ9DU8Ye9WNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AHBvTw9k; arc=none smtp.client-ip=209.85.214.171
+	 In-Reply-To:Content-Type; b=n0XKNorp77Sly6bvQ3ai7lnhGanc7zf73zjiSZCufPn8uLXp1YjbnGVKinFfCzO+ODiqXMjhnWJWL/lzIlZhc8M6BL2Ne1xTLTRNo31Te/+qV0popT1VtorfWwbCD7GFuxmu1EOMQqsTdGApfmQiebW/N5PjzawCttVnGntGZEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SCrfdr7V; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2166651f752so47238005ad.3;
-        Mon, 16 Dec 2024 10:47:37 -0800 (PST)
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7fd17f2312bso3095141a12.0;
+        Mon, 16 Dec 2024 10:48:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734374857; x=1734979657; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734374897; x=1734979697; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=CqFXFmSmKLaSa4Vhvi8HNeoTtmpRApxU91TTMrXkHTg=;
-        b=AHBvTw9kyiNTr2FiytgKeR2Ynd7O0s0IYNLZ5KBJutLCq2m8eXeEhISlCboFAY3IAY
-         2l9PSgGQqFRUupclOGuOl5KRsc4XamkIaWUnA3vqsTHDDlOq14ZXR0rt8Smqi5HAbRKE
-         Vo1Sf4KYT44tJv868kvtw4jAzI4BOZuWz7sfrCY9kT1YeVugnzNwrR0bSzmtYbcCeW09
-         szh9hKZ1ESQzyrQUf/HHjLcrMvIokcBrAQ8oDdTYH25+5OPm5YT4+b3glKKwi+VXswqo
-         W6Ov8e0xEoPQsSt+KM07PRRdN4xflVdxlJAW19I7SPJBfVpXAiuXu8upKISpnDdtf4oK
-         7nEA==
+        bh=GUU/XypxaduzqMjt/wtaQMQLw5fmlBNHttBG958fM88=;
+        b=SCrfdr7VsbNpHdS8t6BSRrPgHN+6H3zWGSAIPdghHyV3Lt5VKA1Q0ElBTy3q+b/+cU
+         PrZY0pt7p74TlJNlMky4vQ+0DNav5uPmwZVIRZ8Q+E9gOTXm9Wj/Mztl3QpcXMOWlTLY
+         VzQDof/yL68yUdEPyxEfILkxtUevWHsU+9hEz5TAgxHbj9RaUG57RIcTo2JNwT8jK7Vl
+         W4aYZL4x5r6jYC9qLyFgYy//6JqajUhGCzS7oitScVwWaDrag9X/541bhNF/B8GyXTfO
+         cAuTZSki6FvoRkqI2j5fT+Sp/IUMT+xGAu21bg8UpE4tvfvCyYXNa0FmOyDMEfUgQX/0
+         PwMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734374857; x=1734979657;
+        d=1e100.net; s=20230601; t=1734374897; x=1734979697;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CqFXFmSmKLaSa4Vhvi8HNeoTtmpRApxU91TTMrXkHTg=;
-        b=fYKcDPDbwFeXIeySS84N09fXL9EpR/5jcClo78ETUQz11NYc2mpFzq/x1e0N1q+IzY
-         fcdu9h/DHNp56Dbm3/s0tzqcqpiyRgTGpYBarauVRdZdpNg5ODKQIFPGN/FxDlvZ41o7
-         RjtQLG6kUzIL5HOilN+1CQnZ19Tn5jcEB00gWpTL8F/aT+Uv+oQmd66Cuecmp1ZA1Xcf
-         wG7t3wJEITQIG2QYpmwF/8N6F0dVbOUMLRqDM4McLCk1yXq5n6gJLHZFfCbXtKFPYTQB
-         FA1gubQ6Wn9vv+0DI1WfmpKe9HaLPVddLsyfgyjnb2PobyeNL7kdRHEns1ZHzZhy44tF
-         SxUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUa2UN0JJaMhIpgBnAViZpBQRwpYo5BW9837Hwtn9F0lCmW7A1JRN6BNK2OGn+I9tzmdXRdC7TCfEnq8OU5@vger.kernel.org, AJvYcCUq2Vhs9ohHZo28ja41rn7BqpvSnOpXt44onyLMRd6qdEZa9q7SCnpo/ZUcS00RrQUx1Xua4NlEk+vp4io=@vger.kernel.org, AJvYcCWV+rUcZo79EC/NKv79P1pjJwHwI8w8zKGishSI4IWoOCO1iucTdbePeXcI5f5qSnU/+CGOYewZyZbt@vger.kernel.org, AJvYcCWVfcDbeG/12HTBkxH8kueJdEx/5UBLzfv1PJzmbld1D1qj/M2o4lLUDBHR7mfH7fnDoC3SRxYVicuJ@vger.kernel.org, AJvYcCWkjX6lGCmnKWAuR9rTV3H7AGuDGdwcJ8+MEUSbCTsMH+bC7nbZGABp5t8y+jvea+YmJmRlvku9WkDF@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4Xn9zknBBJuJUbZwZHfmicYG0SDYCjYq/V1kblEaKzcyOIsIq
-	ZM9vuGC1/S2cQgQeoDdIT2OzrMVI90EAxeaiXm8TKIH+2d0ywAYe
-X-Gm-Gg: ASbGncuINbU8rFWovm+apGEUOrvHikIgS/6qGetYfUGG7DZ33B6bNmhWUv0hlWl69Fj
-	u/4fA99POaeNeYZVfThPtFWJqtWRb7Idh0bKBwoejpYANkBW+qfaEVdCSbaeeG3DIKiALG8Z2cG
-	EkKCBj85vgSnLjrOPuLreiijV+xr3sTNgGXhJ39s6qnNWRhfIrSYX8PqwRNqwxFFnV93lnijJTR
-	gpUqYCJ5ty1LiFW+uJM38DL+7K9aPaF0dtGrHLoGsP5q33eXBTIKIgZ4GjEZNRf2BC4o0sRvQ4s
-	N3YvwQqrJfZXTd5RyUJ6NxoWwBV6sA==
-X-Google-Smtp-Source: AGHT+IEIIrPoJh1GXWlfdX3/QWjWvj2/h7CMhTzjWUDIMndNQJ5On8mQEgeMF8lUXxA39smV+RBsqw==
-X-Received: by 2002:a17:902:ce8d:b0:215:385e:921c with SMTP id d9443c01a7336-21892a7a2d9mr152417255ad.51.1734374856981;
-        Mon, 16 Dec 2024 10:47:36 -0800 (PST)
+        bh=GUU/XypxaduzqMjt/wtaQMQLw5fmlBNHttBG958fM88=;
+        b=bpAJgktlXY33h9+KtbadekXWxLByoY6sg81SUdMax4+aDfc3GdCLRyOtYcMTyZIAQ6
+         MZvyzm0oMWzwCpGgF6NzQxaDRl4NeF2AY3NnFrrqKq/Pax3SWLJ5zseYB3XM/ek1ZOgE
+         Gjr9Vg+yDtr3PC+ANkGFccjmhw8S2uzmi22Jed9NAY1WnnGeJJlfmXvI8y+Hz64xTd1n
+         knS5gpbF9FoZzU73yhig+7Jo+2Ke2NJpTvGwMHAeB/6ouZGre6WNdLIHU3O4nsIO5A39
+         vroXG4SQ/Zeu6bJduQbqYF2DH8KVu4/M7d0tK7h+MdN0QkyNXK2cWZxYEtYLUppMRR0E
+         hO9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUKvcLH5cVW6t5iAES5CHI9S+LumhDkv2QCmRMDZP9V/DSGFqES9nQo3lw5c++L57MewdR2xNEO497J@vger.kernel.org, AJvYcCUNgwd1uwbDgwQNZ8QKyDkyC+JL33/Z+/+fCxEsvqXWhRyIj0BT7z9nw6gh1mexG2cMLQ+RULe7647XajQ=@vger.kernel.org, AJvYcCV6cgWjIpBr1sP3OANYNYFHkTH6WD8rW5RmhYuPEi82ixecWoQZ1IN3kPhxqjyw/oo8L2x5VIUjjneZ@vger.kernel.org, AJvYcCVuTCeILj/8wHSfhUqkTgk2CdOoO9GlXfo2AChvNM5s8f//i2+wSXxL4Oj2rXmR/3uET93Yo7pSlZkrmC3g@vger.kernel.org, AJvYcCWxz8erpn2RWZk9hyH4YVlmWN3m1o7II/nCqGrwdo4f/bsB5ClNCv3SztPgXooIycWvcuymPuscpGSg@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1IwFhwc1uJGgARZ5NZYPC5tKz8MDQxzD5gPrJ8GWkj4PdxdOd
+	ifgvaN80+u8jM9eHs++DMfp7lc3x0N/l9GUt+LWnpPbQm4xEupcP
+X-Gm-Gg: ASbGncsQD9qwRPkEaPQYhTpjphS6ptFT1q/WZQWoQF921Xs9z/VbTbcXP3jgyyqlX7j
+	KcrjHd1PPF61hECO0c1W8MzV8NOgJjaVdhPhtKcfS3xlFnJJb5ppOWGJirL9eF59Iufr9IX8x+E
+	sCQh2d6lH1kd++rHCj53dzqEB6g2Qs3Xkd1Y2kOhkjyg4Qxibn/tsd/5oK52Lz6vHy1VCuXh2cG
+	SSeOCRemYEDLjm4paPrOJtI9TmJzZVO9iRnV+iNz5mQGaBDX0aPCYTPt4ThJPt76UimrdGTJg9J
+	05cYF81c69ZGGGZzBUnFR4+zxBKrlg==
+X-Google-Smtp-Source: AGHT+IFjQgGzXMt3UDx2US4yIi+IDTITId8IwO9BLtbyFBWANvRg/nW81MMDSaOHXQlVmHcHYluZ1w==
+X-Received: by 2002:a17:90b:2e4f:b0:2ee:f687:6ad5 with SMTP id 98e67ed59e1d1-2f2d7d6d692mr891327a91.2.1734374897329;
+        Mon, 16 Dec 2024 10:48:17 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1dcb353sm46475315ad.76.2024.12.16.10.47.34
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142c2b1f6sm8453029a91.0.2024.12.16.10.48.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2024 10:47:36 -0800 (PST)
+        Mon, 16 Dec 2024 10:48:16 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a010366e-b911-43bd-8445-e893e11fa51a@roeck-us.net>
-Date: Mon, 16 Dec 2024 10:47:34 -0800
+Message-ID: <c64bb634-46d4-486a-8743-699775326058@roeck-us.net>
+Date: Mon, 16 Dec 2024 10:48:14 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,7 +83,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] dt-bindings: hwmon: intel,crps185: Add to trivial
+Subject: Re: [PATCH v2 0/4] Add support for Intel CRPS PSU
 To: Ninad Palsule <ninad@linux.ibm.com>, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, eajames@linux.ibm.com, jdelvare@suse.com,
  corbet@lwn.net, joel@jms.id.au, andrew@codeconstruct.com.au,
@@ -96,7 +96,6 @@ To: Ninad Palsule <ninad@linux.ibm.com>, robh@kernel.org, krzk+dt@kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
  linux-i2c@vger.kernel.org
 References: <20241216175044.4144442-1-ninad@linux.ibm.com>
- <20241216175044.4144442-4-ninad@linux.ibm.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -142,38 +141,43 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241216175044.4144442-4-ninad@linux.ibm.com>
+In-Reply-To: <20241216175044.4144442-1-ninad@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 12/16/24 09:50, Ninad Palsule wrote:
-> Add INTEL Common Redundant Power Supply Versions crps185 bindings as
-> trivial. It is trivial because only compatibility string is required in
-> the device tree to load this driver.
+> Hello,
 > 
-> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
+> Please review the patchset for Intel CRPS185 driver.
+> V2:
+> ---
+>    - Incorporated review comments by Guenter Roeck
+>    - Incorporated review comments by Krzysztof Kozlowski
+> 
 
-Krzysztof had Acked this patch. I don't immediately see why you dropped it.
-Am I missing something ?
+That is not a useful change log. Please describe what you changed, not who
+asked for it.
 
 Guenter
 
-> ---
->   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->   1 file changed, 2 insertions(+)
+> Ninad Palsule (4):
+>    hwmon: (pmbus/core) Add PMBUS_REVISION in debugfs
+>    hwmon: (pmbus/crps) Add Intel CRPS185 power supply
+>    dt-bindings: hwmon: intel,crps185: Add to trivial
+>    ARM: dts: aspeed: system1: Use crps PSU driver
 > 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 73a49d50c4ef..7d07b08b1459 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -151,6 +151,8 @@ properties:
->             - injoinic,ip5306
->               # Inspur Power System power supply unit version 1
->             - inspur,ipsps1
-> +            # Intel common redudant power supply crps185
-> +          - intel,crps185
->               # Intersil ISL29028 Ambient Light and Proximity Sensor
->             - isil,isl29028
->               # Intersil ISL29030 Ambient Light and Proximity Sensor
+>   .../devicetree/bindings/trivial-devices.yaml  |  2 +
+>   Documentation/hwmon/crps.rst                  | 97 +++++++++++++++++++
+>   Documentation/hwmon/index.rst                 |  1 +
+>   MAINTAINERS                                   |  7 ++
+>   .../dts/aspeed/aspeed-bmc-ibm-system1.dts     |  8 +-
+>   drivers/hwmon/pmbus/Kconfig                   |  9 ++
+>   drivers/hwmon/pmbus/Makefile                  |  1 +
+>   drivers/hwmon/pmbus/crps.c                    | 79 +++++++++++++++
+>   drivers/hwmon/pmbus/pmbus_core.c              | 13 ++-
+>   9 files changed, 211 insertions(+), 6 deletions(-)
+>   create mode 100644 Documentation/hwmon/crps.rst
+>   create mode 100644 drivers/hwmon/pmbus/crps.c
+> 
 
 
