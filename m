@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-8562-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8563-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 950529F42B9
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 06:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7B149F4328
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 06:50:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C06BB18857E3
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 05:29:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFDD3188A6A1
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 05:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E662B145335;
-	Tue, 17 Dec 2024 05:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39CF814F117;
+	Tue, 17 Dec 2024 05:49:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gy6EJ1c9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IkOaD+mQ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DE314D70E;
-	Tue, 17 Dec 2024 05:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92A183CC7;
+	Tue, 17 Dec 2024 05:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734413094; cv=none; b=GPgHCCimuhYKgHbBRRWhZGjYgTwLaQqmD7npG7CnyZMBX7Ck0fBqgpQtYJRAa77hRPFcFLTxpajPFkOQMTUTGa6XbnwmkxISfDTSvB/YAHCuCZ108AsFRYqUhthZXjGvxZ7FpxABxYIXCydqYaZKyBDGg8i626nLdIgt6vkffjQ=
+	t=1734414596; cv=none; b=leFZxTIm3i/Feu8BkwHz9QrhnBVwk/w+PDNwC6dtQqozQniHPgSigAhgrsze1UHSI9nfHapD1QwFPjVhoVeCKF2j3XpjkUwq4/ZAd4dKgbBwy4HHqQkKilYZATeo7xHRkra59bjfC0UmgubN8WaLjlinMAMt04dz3FniD4VGeZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734413094; c=relaxed/simple;
-	bh=9RcEuBF5bowQAtfg1xxeDCSTyQtNu3L63uQXRiWuZGg=;
+	s=arc-20240116; t=1734414596; c=relaxed/simple;
+	bh=nNTJ+RSKF3nNEr9KviDI+mWYUDxyuqhmE+lCTSJr90M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SqD13fvbbHzFJTQ8c5/UkYIAilkh+KqzNLllEd65g4ekUM5rHcCFceHDuLkcuSCpT44zqCOsFhxzENzfrhuxZVf+pyeLIoHIsiABofYXQjcCHe5FXbF09We4nEMVDuSvun3no55haF4czp/Ho1DFKYT7dF06r6Hocgy+v3yTIEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gy6EJ1c9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170B5C4CED3;
-	Tue, 17 Dec 2024 05:24:50 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ndd8C7lY55zT1iH+e4EPwNrD2Ee6mUHce3mOQe3tWJ5/eJ0NXcjsF9QlY8A0D/B88xWKR5T+Zg9e0eIGukgooYU5iPanese84mgW32L4kxBIw4GHH7JEUuBhZ/QSxCP6ldHCNLNg0AD0BEhERCAZRF8fYV4eW9dnT/DHfEOAZAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IkOaD+mQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B580C4CED3;
+	Tue, 17 Dec 2024 05:49:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734413094;
-	bh=9RcEuBF5bowQAtfg1xxeDCSTyQtNu3L63uQXRiWuZGg=;
+	s=k20201202; t=1734414595;
+	bh=nNTJ+RSKF3nNEr9KviDI+mWYUDxyuqhmE+lCTSJr90M=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gy6EJ1c9Ufla1uqwXLhVNI+sp3OxX5axM8kD85nc2St+C1g9/KojFx7/dVTCFbQaY
-	 wuuUjm94hYmXTfiWj08eIA8AVLu6TYizzznreAFJTakBvBLWRQXHlbIvjIOqgyt+xl
-	 XKWSpX3Br2Ucm3QWu7yi8IPyGMWAtcEKCWQlV0BnpF2bxKWx1AMgbOeEBQCf0lZ6/A
-	 2aWj3DshcG3mhisUJecw6s1Sr3gTMWP0KL1pGxO2I2Sg2wLFg6jtyIRou3rPJqoOef
-	 DY0zII+eqzmOy714FHshiqEVtvoOMTxH67Uc3w3+YvJccJQSOYLJqml1XSzGU0mtmx
-	 AMaZaryMwjH8g==
-Message-ID: <cccca881-dd59-43c0-9072-dcd91d01671d@kernel.org>
-Date: Tue, 17 Dec 2024 06:24:49 +0100
+	b=IkOaD+mQZumFR6kVGx98rNnXoQRbhQpDBUcM0d1Ml9c9rv/dOwsJu+vM1JmmxUV/t
+	 ntunHvKGKd1aImhUM/iKqWN224vgYTZ2cbU275pZbyEG4ugUDis83N42mJybWRSF/7
+	 bkc46DKLKTHSuemlt5Exa76O7v5nKskPMGM/Go7ORYq7QXUr4aEqCNi6XeTrCtTMeG
+	 7ZX2++mKV4ddURHk6aVk+QNXQxBZyPG4ih6omQeEOrIcil938XuLN+4VEJbVnq9+vq
+	 uX5ueb0QOreybgNI0AcIXE/f2ebTolsS+kvPl2wChgonZNZF2BIXth6Ck7dzaHVoDQ
+	 kWW5ZArTDTz3w==
+Message-ID: <21008f97-d0bd-45bf-8e10-9ec2539ed858@kernel.org>
+Date: Tue, 17 Dec 2024 06:49:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,19 +50,21 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: exynos5: Add
- samsung,exynos8895-hsi2c compatible
-To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241214220419.723100-1-ivo.ivanov.ivanov1@gmail.com>
- <20241214220419.723100-2-ivo.ivanov.ivanov1@gmail.com>
- <0ebc12ed-fe91-4c8a-a626-b735b0eeecf1@kernel.org>
- <007559c5-f566-4625-99b7-e761a916fba3@gmail.com>
+Subject: Re: [PATCH v3 3/4] dt-bindings: hwmon: intel,crps185: Add to trivial
+To: Ninad Palsule <ninad@linux.ibm.com>, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, eajames@linux.ibm.com, jdelvare@suse.com,
+ linux@roeck-us.net, corbet@lwn.net, joel@jms.id.au,
+ andrew@codeconstruct.com.au, Delphine_CC_Chiu@Wiwynn.com,
+ broonie@kernel.org, peteryin.openbmc@gmail.com, noahwang.wang@outlook.com,
+ naresh.solanki@9elements.com, lukas@wunner.de, jbrunet@baylibre.com,
+ patrick.rudolph@9elements.com, gregkh@linuxfoundation.org,
+ peterz@infradead.org, pbiel7@gmail.com, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20241217022046.113830-1-ninad@linux.ibm.com>
+ <20241217022046.113830-4-ninad@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,74 +110,19 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <007559c5-f566-4625-99b7-e761a916fba3@gmail.com>
+In-Reply-To: <20241217022046.113830-4-ninad@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/12/2024 21:59, Ivaylo Ivanov wrote:
-> On 12/16/24 10:44, Krzysztof Kozlowski wrote:
->> On 14/12/2024 23:04, Ivaylo Ivanov wrote:
->>> Add samsung,exynos8895-hsi2c dedicated compatible for representing
->>> I2C of Exynos8895 SoC. Since there are I2C buses that aren't implemented
->>> as a part of USIv1 blocks, they only require a single clock.
->>>
->>> Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
->>> ---
->>>  .../devicetree/bindings/i2c/i2c-exynos5.yaml  | 26 ++++++++++++++++---
->>>  1 file changed, 23 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
->>> index cc8bba553..b029be88e 100644
->>> --- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
->>> +++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
->>> @@ -25,6 +25,7 @@ properties:
->>>            - samsung,exynos5250-hsi2c    # Exynos5250 and Exynos5420
->>>            - samsung,exynos5260-hsi2c    # Exynos5260
->>>            - samsung,exynos7-hsi2c       # Exynos7
->>> +          - samsung,exynos8895-hsi2c
->>>            - samsung,exynosautov9-hsi2c
->>>        - items:
->>>            - enum:
->>> @@ -94,9 +95,28 @@ allOf:
->>>          - clock-names
->>>  
->>>      else:
->>> -      properties:
->>> -        clocks:
->>> -          maxItems: 1
->>> +      if:
->>> +        properties:
->>> +          compatible:
->>> +            contains:
->>> +              enum:
->>> +                - samsung,exynos8895-hsi2c
->>> +
->>> +      then:
->>> +        properties:
->>> +          clocks:
->> Missing minItems
->>
->>> +            maxItems: 2
->>> +
->>> +          clock-names:
->> Ditto
->>
->>> +            maxItems: 2
->>> +
->>> +        required:
->>> +          - clock-names
->> I don't understand why do you need second, same branch in if, basically
-> 
-> Because, as I stated in the commit message, we have HSI2C controllers
-> both implemented in USIv1 blocks and outside. These that are a part of
+On 17/12/2024 03:20, Ninad Palsule wrote:
+> Add INTEL Common Redundant Power Supply Versions crps185 bindings as
+> trivial. It is trivial because only compatibility string is required in
+> the device tree to load this driver.
 
-On Exynos8895? Where? With the same compatible?
+That's incorrect reason. You should describe the hardware, e.g. the
+hardware does not have any resources, like clocks or supplies.
 
-> USIv1 need 2 clocks, and those that aren't have only one. So it's not
-> a duplicate for the previous - autov9 sets a minitems of 2 and the
-> others have a maxitems of 1.
 
-We talk here about branch that says 2 items. You duplicate that one.
 
 Best regards,
 Krzysztof
