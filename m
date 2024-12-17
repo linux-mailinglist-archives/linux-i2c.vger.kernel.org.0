@@ -1,182 +1,214 @@
-Return-Path: <linux-i2c+bounces-8568-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8569-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE92F9F484E
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 11:04:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BD8A9F515F
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 17:49:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86F997A0461
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 10:04:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B64AC168506
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 16:49:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A28E1DF274;
-	Tue, 17 Dec 2024 10:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8795F156F20;
+	Tue, 17 Dec 2024 16:49:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GwIYUmO6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gnE8MLNl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B9A189521;
-	Tue, 17 Dec 2024 10:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613CD13D891;
+	Tue, 17 Dec 2024 16:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734429864; cv=none; b=Z3gfqudRwzijTEb2d/QRPLUVup6QsDpyajwGPfyyWfYQ52OblFUkP8Oc5h2faEVzrHQ6e5hr+d3ScC9ZybU7CeDmlaCly/3rTb10/aYcd2AGiJU5LsfdqZJYhmGA7Hmedkeu9AWV27fW8RBBcgHB1SD9BDKYbmjnL1IQyMbFDSo=
+	t=1734454147; cv=none; b=AvRZ8C9h/tYch7QXw0EQnmZnhMkl2VlKgJaWa1OXzq7mB6FrcRSfcwbc2eIdz3dRwKck9+S8uoYjhJDjG5tfxyy+mIq4U5dGxseWi1ugLiXeTUrwO7Uv/3oEOqsAx22V95Jnw0si2DU/h6y6VxCF9cbJhCWLsJgiM8ot6EVRNRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734429864; c=relaxed/simple;
-	bh=Invtadyl/B6DpvSzM33P8HmnrJ1jB0ElzQuvHi1ZYrk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T+L7cdJnY3i96TZ5zJvfv5wPBq6YhLHKjpElAdz90XTqtAZvbjNVME5xkzbc8eBs7j0/NdlzoeYole37fk9ONZsYDhNhNjYyQDwobz5k4m+ERIuaN2MBzaIj5MoI7baOS2xxHE16YIKm0Yxr5bxJy1/7vXamcDI2H1z2iUYIJXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GwIYUmO6; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4361fe642ddso53884055e9.2;
-        Tue, 17 Dec 2024 02:04:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734429861; x=1735034661; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iYrLrg3M5tgHoTzQrdp8f9Dfp9oiWl/aUFmJid3JjVg=;
-        b=GwIYUmO6Gt0866GfDcu9F7CwN+ryRaxdnfRJAcxGnoXIJKRzQmn75++/E7vWuMMVyP
-         d2Ih8efgwdkTpxLox6cILoQ0Xs4jyAjNadPu/f5Z/+e2jTeCVrQXs5aOgONvmsN5iY5I
-         JKWIFo22BEi03Y9ORH4kphvKapJMDknaFAeGeyBte1BbDFmIIyYQTwzhOc8Ex+LAQEBI
-         MmRf6gSuwvFOrCkmR7Xvj2JLjNCAKM5c0TJzpNMV1JS59PpphzPLxnwUv//oc9d+n9OI
-         niCg2IRU2N0dvg04u9qyYa9TDix1zGdtObpFdpNtJpHijyJ9eGwdQa0LN83mlbsILWzN
-         P0mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734429861; x=1735034661;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iYrLrg3M5tgHoTzQrdp8f9Dfp9oiWl/aUFmJid3JjVg=;
-        b=RoQkATQE2nAfKt/YXLhsJdW2kVsaJWeNvQhlNvrekBe8DpE30mpNq/Viem1xUXSaUS
-         QKtZEhK+WcPFRwMFJKgfR4gF876jyA9GRongFFl51sZ1B3DlNQN4pha1WNxEIxgAH+BE
-         CyBjl3cvY3aUl7RSoBPXSEDSGbgKdP+kLTuK+phYXzLSdu2CxfDoW2oAlJGqkh3JSk6i
-         Ut+TO7ixXGqH6KMfFByecRNhrwrBQeub9dbFiyZ+hyjaY6IWe1g+lSY6XYbUc91lrE19
-         GPfIgtLa5yCPJqC7TuEAQpUnihpIxYa61GqI5+lXpdSSer5fuCVNEaB9+HVauVtRk2wM
-         rQMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUumzqyzk0EGTSA2L+im+XbLVrH/mA0oBN9qYt+EduIDPz2ahE/LdhSndCc8BcfosAXF3gYcOmkxvr0@vger.kernel.org, AJvYcCUvC03fVqIjVwVImlkaaPEzF9Xmo2RyrV3SQPVKZoVjOBBfAbT6uLaJYkwf4J4qYa8fOMdI2V3tk0YJejLQvdao1Zo=@vger.kernel.org, AJvYcCVWEbX2T/bvZIn8s2VhZAaGIJF8fHdMWgOwp+EPjlRTf9AHUxuo2/Vb1MO2M7nK+U3f3QuYNC+V7cw8ROfw@vger.kernel.org
-X-Gm-Message-State: AOJu0YyECBPPhLaMt1865Sp16cq/i/063+AXmiKMaihaREH9y/QH8UN7
-	TZWs8aUrxMLBUUkh48jfa4/tD9r9pLw9AQI7tBviQDXve0NsvoYvwp2ryw==
-X-Gm-Gg: ASbGnctoTOWeQGN2XeJTlsULf3KDRC+72Rffo7nm1qpf6Vkk1MR2sypeTdYuAr+tWHy
-	Vn8PY2kh+r7I5bpowaGcY4ytjI8uVtMUD4dTI1C8ScSt0AeLnpiP4PZCTAg5g5IRaIL5YvZ9hjb
-	G3baGvty1Q2yM7tBeERw+apFocGBQp8AgoT+7fgWTeZ/oapvTUw6DKCxzb0191HFH2Ur5CuydMj
-	fVKJ4ITQrPV2Ykx8QyPFxKIr4P7cA/3mgfa/DodAvWEMU9/NtYuhcePtg9W8Uj0THpqxoBMx+Mr
-	wIcMg+9GnF5FSPa7xWVpzA==
-X-Google-Smtp-Source: AGHT+IErqPnymSh1uEMNFLA6EU4DTN3bB21g37HvGXd0a+FwRC+Ivd5Be09XHezjPdYkMyJH1U4RHA==
-X-Received: by 2002:a5d:5f88:0:b0:385:e37a:2a58 with SMTP id ffacd0b85a97d-38880ac2841mr14909475f8f.1.1734429860764;
-        Tue, 17 Dec 2024 02:04:20 -0800 (PST)
-Received: from [172.16.20.173] (62-73-104-42.ip.btc-net.bg. [62.73.104.42])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c8046c71sm10530914f8f.65.2024.12.17.02.04.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Dec 2024 02:04:20 -0800 (PST)
-Message-ID: <d8d0a1c8-f2b4-425a-858b-610ae7291ebc@gmail.com>
-Date: Tue, 17 Dec 2024 12:04:08 +0200
+	s=arc-20240116; t=1734454147; c=relaxed/simple;
+	bh=ffP/A1FwqZUN0fq401ch5jHCfiRHhidUNp9QFwcD2vQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=mYJTtMvLRxm4/RUVkmX7FzTgwulmNXIOcNf978omRiZ/0D9qgZTHQhUjOdHMX6I29qN1G7UZXZW0ioGMS8m/WDYlPWXxpDbzPXxBWg4Q8OKU/l0NZ3pprCrS09ZdF0LiGNVLhK4zH9OgcHhfLRcfXDguAYy/oPm6IMxgtfBqz4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gnE8MLNl; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734454145; x=1765990145;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ffP/A1FwqZUN0fq401ch5jHCfiRHhidUNp9QFwcD2vQ=;
+  b=gnE8MLNl0kibLtSE7ctt+D0L66LZBNM2eJ1Rq2rgACqKFFIwX/JFmLpm
+   uv3wv8F1HHKTY1jEhiiT1MnI3jfqSzdHzGpAFlollOVp2Soxg1puCJG41
+   C4q6kPpXVq+eWeT9veD6lZxCFf9Nh3INcbu8y7yGNEljJPJceDYXkvIY1
+   vF/BU0S8EsP0LCTqBxKvnY8bdWKqPuHp+f85nUglqu9dFN+3Ns4H3AY9t
+   sa8tRh0cI3nKkRD7bUiTNaxSeZdk8M18DkLSm3YBN4cUQcLeY8Eg1AL+m
+   XN3o4w8dnEVVGU3zuYYtMzCEkh7GU83TT85DouIYiDOscbuxJ7mKNs2QE
+   Q==;
+X-CSE-ConnectionGUID: JXErsGX0RLqRlXLHU7SBGw==
+X-CSE-MsgGUID: XHHpCPejRROkyIDmp8u5Dw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="34784572"
+X-IronPort-AV: E=Sophos;i="6.12,242,1728975600"; 
+   d="scan'208";a="34784572"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 08:49:04 -0800
+X-CSE-ConnectionGUID: 2FhLg9n4SU+ioYE6W89gog==
+X-CSE-MsgGUID: T0CD/t+OSTSv9GSg0Qo1sQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="120834384"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.192])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 08:49:00 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 17 Dec 2024 18:48:55 +0200 (EET)
+To: Hans de Goede <hdegoede@redhat.com>
+cc: =?ISO-8859-15?Q?Pali_Roh=E1r?= <pali@kernel.org>, 
+    Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>, 
+    Wolfram Sang <wsa@kernel.org>, eric.piel@tremplin-utc.net, 
+    Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com, 
+    Kai Heng Feng <kai.heng.feng@canonical.com>, 
+    platform-driver-x86@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
+    Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v9 4/4] platform/x86: dell-smo8800: Add support for
+ probing for the accelerometer i2c address
+In-Reply-To: <20241209183557.7560-5-hdegoede@redhat.com>
+Message-ID: <ee90da14-024e-4563-00ff-9b525e700106@linux.intel.com>
+References: <20241209183557.7560-1-hdegoede@redhat.com> <20241209183557.7560-5-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: exynos5: Add
- samsung,exynos8895-hsi2c compatible
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>, Andi Shyti
- <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241214220419.723100-1-ivo.ivanov.ivanov1@gmail.com>
- <20241214220419.723100-2-ivo.ivanov.ivanov1@gmail.com>
- <0ebc12ed-fe91-4c8a-a626-b735b0eeecf1@kernel.org>
- <007559c5-f566-4625-99b7-e761a916fba3@gmail.com>
- <cccca881-dd59-43c0-9072-dcd91d01671d@kernel.org>
- <6e93d59d-71e5-4c09-862f-55b5504121aa@gmail.com>
- <69fd1dbc-a29f-488c-a30f-7e5ea8f01a23@kernel.org>
- <17fbfcdd-8b79-4907-a4c8-798da0ef0526@gmail.com>
- <56c5788a-2d49-4abb-af4b-65a11bdc4094@kernel.org>
-From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-In-Reply-To: <56c5788a-2d49-4abb-af4b-65a11bdc4094@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 
-On 12/17/24 11:43, Krzysztof Kozlowski wrote:
-> On 17/12/2024 10:31, Ivaylo Ivanov wrote:
->> On 12/17/24 11:26, Krzysztof Kozlowski wrote:
->>> On 17/12/2024 10:08, Ivaylo Ivanov wrote:
->>>>>>>>        - items:
->>>>>>>>            - enum:
->>>>>>>> @@ -94,9 +95,28 @@ allOf:
->>>>>>>>          - clock-names
->>>>>>>>  
->>>>>>>>      else:
->>>>>>>> -      properties:
->>>>>>>> -        clocks:
->>>>>>>> -          maxItems: 1
->>>>>>>> +      if:
->>>>>>>> +        properties:
->>>>>>>> +          compatible:
->>>>>>>> +            contains:
->>>>>>>> +              enum:
->>>>>>>> +                - samsung,exynos8895-hsi2c
->>>>>>>> +
->>>>>>>> +      then:
->>>>>>>> +        properties:
->>>>>>>> +          clocks:
->>>>>>> Missing minItems
->>>>>>>
->>>>>>>> +            maxItems: 2
->>>>>>>> +
->>>>>>>> +          clock-names:
->>>>>>> Ditto
->>>>>>>
->>>>>>>> +            maxItems: 2
->>>>>>>> +
->>>>>>>> +        required:
->>>>>>>> +          - clock-names
->>>>>>> I don't understand why do you need second, same branch in if, basically
->>>>>> Because, as I stated in the commit message, we have HSI2C controllers
->>>>>> both implemented in USIv1 blocks and outside. These that are a part of
->>>>> On Exynos8895? Where? With the same compatible?
->>>> hsi2c_0 which has a clock from BUSC and hsi2c_1 to hsi2c_4 which use clocks
->>>> from PERIC1 (CLK_GOUT_PERIC1_HSI2C_CAM{0,1,2,3}_IPCLK). Why would
->>>> they need a different compatible though? It's functionally the same i2c design
->>>> as the one implemented in USIv1 blocks.
->>> If one block is part of USI and other not, they might not be the same
->>> I2C blocks, even if interface is similar. If they were the same or even
->>> functionally the same, they would have the same clock inputs. However
->> I see, so in such case I should make samsung,exynos8895-hsi2c-nonusi or
->> something like that?
->>
->>> user manual also suggests that there is only one clock, not two (for
->>> both cases), so they could be functionally equivalent but then number of
->>> clocks looks incorrect.
->> That'd be weird. Both according to downstream and upstream clk driver,
->> for the USI-implemented i2cs we have a pclk and an sclk_usi.
-> Something is not precise here, as usually with Samsung clock topology.
->
-> First, the non-USI instances have the IPCLK as well, e.g. things like
-> PERIC1_UID_HSI2C_CAM1_IPCLKPORT_iPCLK
->
-> USI have BLK_PERIC0_UID_USI03_IPCLKPORT_i_SCLK_USI, but that's USI
-> clock, not HSI2C in USI. Datasheet mentions this is UART and SPI special
-> clock, but not I2C.
+On Mon, 9 Dec 2024, Hans de Goede wrote:
 
-That's weird. Don't we need the clock enabled in order for the
-USIv1's HSI2C to work?
+> Unfortunately the SMOxxxx ACPI device does not contain the i2c-address
+> of the accelerometer. So a DMI product-name to address mapping table
+> is used.
+> 
+> At support to have the kernel probe for the i2c-address for modesl
+> which are not on the list.
+> 
+> The new probing code sits behind a new probe_i2c_addr module parameter,
+> which is disabled by default because probing might be dangerous.
+> 
+> Link: https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de/
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Best regards,
-Ivo
+So what was the result of the private inquiry to Dell?
 
->  The PCLK is used for HSI2C iPCLK.
->
->
-> Best regards,
-> Krzysztof
+Did they respond?
+
+Did they provide useful info?
+
+> Changes in v8:
+> - Use dev_err() / dev_dbg() where possible using &adap->dev as the device
+>   for logging
+> 
+> Changes in v6:
+> - Use i2c_new_scanned_device() instead of re-inventing it
+> 
+> Changes in v5:
+> - Add "this may be dangerous warning" to MODULE_PARM_DESC(probe_i2c_addr)
+> ---
+>  drivers/platform/x86/dell/dell-lis3lv02d.c | 53 ++++++++++++++++++++--
+>  1 file changed, 49 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-lis3lv02d.c b/drivers/platform/x86/dell/dell-lis3lv02d.c
+> index d2b34e10c5eb..8d9dc59c7d8c 100644
+> --- a/drivers/platform/x86/dell/dell-lis3lv02d.c
+> +++ b/drivers/platform/x86/dell/dell-lis3lv02d.c
+> @@ -15,6 +15,8 @@
+>  #include <linux/workqueue.h>
+>  #include "dell-smo8800-ids.h"
+>  
+> +#define LIS3_WHO_AM_I 0x0f
+> +
+>  #define DELL_LIS3LV02D_DMI_ENTRY(product_name, i2c_addr)                 \
+>  	{                                                                \
+>  		.matches = {                                             \
+> @@ -57,6 +59,39 @@ static u8 i2c_addr;
+>  static struct i2c_client *i2c_dev;
+>  static bool notifier_registered;
+>  
+> +static bool probe_i2c_addr;
+> +module_param(probe_i2c_addr, bool, 0444);
+> +MODULE_PARM_DESC(probe_i2c_addr, "Probe the i801 I2C bus for the accelerometer on models where the address is unknown, this may be dangerous.");
+> +
+> +static int detect_lis3lv02d(struct i2c_adapter *adap, unsigned short addr)
+> +{
+> +	union i2c_smbus_data smbus_data;
+> +	int err;
+> +
+> +	dev_info(&adap->dev, "Probing for lis3lv02d on address 0x%02x\n", addr);
+> +
+> +	err = i2c_smbus_xfer(adap, addr, 0, I2C_SMBUS_READ, LIS3_WHO_AM_I,
+> +			     I2C_SMBUS_BYTE_DATA, &smbus_data);
+> +	if (err < 0)
+> +		return 0; /* Not found */
+> +
+> +	/* valid who-am-i values are from drivers/misc/lis3lv02d/lis3lv02d.c */
+> +	switch (smbus_data.byte) {
+> +	case 0x32:
+> +	case 0x33:
+> +	case 0x3a:
+> +	case 0x3b:
+> +		break;
+> +	default:
+> +		dev_warn(&adap->dev, "Unknown who-am-i register value 0x%02x\n",
+> +			 smbus_data.byte);
+> +		return 0; /* Not found */
+> +	}
+> +
+> +	dev_dbg(&adap->dev, "Detected lis3lv02d on address 0x%02x\n", addr);
+> +	return 1; /* Found */
+> +}
+> +
+>  static bool i2c_adapter_is_main_i801(struct i2c_adapter *adap)
+>  {
+>  	/*
+> @@ -97,10 +132,18 @@ static void instantiate_i2c_client(struct work_struct *work)
+>  	if (!adap)
+>  		return;
+>  
+> -	info.addr = i2c_addr;
+>  	strscpy(info.type, "lis3lv02d", I2C_NAME_SIZE);
+>  
+> -	i2c_dev = i2c_new_client_device(adap, &info);
+> +	if (i2c_addr) {
+> +		info.addr = i2c_addr;
+> +		i2c_dev = i2c_new_client_device(adap, &info);
+> +	} else {
+> +		/* First try address 0x29 (most used) and then try 0x1d */
+> +		static const unsigned short addr_list[] = { 0x29, 0x1d, I2C_CLIENT_END };
+> +
+> +		i2c_dev = i2c_new_scanned_device(adap, &info, addr_list, detect_lis3lv02d);
+> +	}
+> +
+>  	if (IS_ERR(i2c_dev)) {
+>  		dev_err(&adap->dev, "error %ld registering i2c_client\n", PTR_ERR(i2c_dev));
+>  		i2c_dev = NULL;
+> @@ -169,12 +212,14 @@ static int __init dell_lis3lv02d_init(void)
+>  	put_device(dev);
+>  
+>  	lis3lv02d_dmi_id = dmi_first_match(lis3lv02d_devices);
+> -	if (!lis3lv02d_dmi_id) {
+> +	if (!lis3lv02d_dmi_id && !probe_i2c_addr) {
+>  		pr_warn("accelerometer is present on SMBus but its address is unknown, skipping registration\n");
+> +		pr_info("Pass dell_lis3lv02d.probe_i2c_addr=1 on the kernel commandline to probe, this may be dangerous!\n");
+>  		return 0;
+>  	}
+>  
+> -	i2c_addr = (long)lis3lv02d_dmi_id->driver_data;
+> +	if (lis3lv02d_dmi_id)
+> +		i2c_addr = (long)lis3lv02d_dmi_id->driver_data;
+
+If somebody enables this parameter and it successfully finds a device, 
+shouldn't the user be instructed to report the info so that new entries 
+can be added and the probe parameter is no longer needed in those case?
+
+-- 
+ i.
 
 
