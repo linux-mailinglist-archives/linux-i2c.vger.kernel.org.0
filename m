@@ -1,48 +1,79 @@
-Return-Path: <linux-i2c+bounces-8565-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8566-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88B379F477A
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 10:28:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46C179F4798
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 10:31:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0F3B1892E23
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 09:27:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C13491885E2A
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 09:31:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 091391DE3A3;
-	Tue, 17 Dec 2024 09:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9875A1D54D1;
+	Tue, 17 Dec 2024 09:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EebKne8L"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KRuQVkQZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94821D63F6;
-	Tue, 17 Dec 2024 09:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A82481B1;
+	Tue, 17 Dec 2024 09:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734427607; cv=none; b=jDlqoxAMRY+eWFsdO6faNHgZg2sU5/dvAslXrUDjKPg7A74lGeQ7Eh53645MD+tLplNPjDxlCDTSplmji7wPPrq8K7iyp7bgKIPDj7EulVHxeWKgFKrojaYzPrK4eI8szOoWip2Sv3YxNvDrUIEtbtSZ6YqIkrBfvvmOmjztCBI=
+	t=1734427897; cv=none; b=K6fN1MNvw3U3fKCycCTph9GFPqkOXDfR2Jy+C15jPG5tUpvxtvHppMW5uxlO+uBmVyNAlr0tHPCF7C5ZQbq1iLpnDCRqcjkXLC0bNNbiXYp5Fwgwdl1ROLPZS2P90weK8vsh7zrE/hF4C4vHo2Nv83LHKjnyqiG2aGFdzf6Lbg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734427607; c=relaxed/simple;
-	bh=hH+aXQtRv0LkIufCC2+NDXYdogSlCDjYzhV7jhPovxo=;
+	s=arc-20240116; t=1734427897; c=relaxed/simple;
+	bh=BQx9VBv6KjaGKO3Z7ZsGDIaiPVS9StUXtcp6ErxcTog=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kFAtslIBxH9i3oWpidRKNfEnRawp+EWzb2IU+5J3zOPZAl2DxZancjxzrjXerwv8p9RXXvqg0nZG0Hq6dQGgr3iG+DiVQWyyKHzOcmT4WeVibIDT/atTD3UvKuaTVTmiqb+BNGRdGVwWXDJLaOoj00bgv35hScEnzVGHLsn0McI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EebKne8L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42C5BC4CED3;
-	Tue, 17 Dec 2024 09:26:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734427607;
-	bh=hH+aXQtRv0LkIufCC2+NDXYdogSlCDjYzhV7jhPovxo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EebKne8LQEylRxUK5CD0+WlXZ8S9OBHOWvJxCv+DHguqsHTP0cLHPSLM3278+gikD
-	 HGYAvLyJcnfK//ljZlyF4e8Lio3k0uwDxOSDqJWFnatskJPuc4DPrXBdF2kt4x7w81
-	 aox4nSuc7Q3bD1GyJxOAo/f+fVB6ZU/wo+rOtwOQp7JZ1G5POuUcMAuSaPOCU9Nanc
-	 3eYY98aviZgT4iME5ZRHHgeyiLbHjlpCTBOWV5+39v2HCFLvtTxPwe7qID25RGCsAJ
-	 wAQMgtDyCtmLnw4GGDU/tesrQxfwmcX+CGcZTBxf5YMrxkr2A2voczQNZ7WuPifykL
-	 xI2zDpuWlOfPQ==
-Message-ID: <69fd1dbc-a29f-488c-a30f-7e5ea8f01a23@kernel.org>
-Date: Tue, 17 Dec 2024 10:26:41 +0100
+	 In-Reply-To:Content-Type; b=MQAx6fM7pX7m5Q63fFv+3V/npgsD7ivhdbMv1OZAOlbtACeZVfFvf2ZWE5sPWixdC3uRjn5CeqTVX4VxADNPKy0sSo3afVXcfqTKD8adOiTRNs5CZapmdHjQ9vH/grKKaNDkOxeRLoxWpdeM6Bpkkp6s7pSnQqbraUwNOzL6Nm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KRuQVkQZ; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43618283dedso49503595e9.3;
+        Tue, 17 Dec 2024 01:31:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734427894; x=1735032694; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T49MJOLV8ESyJTCSjrdtWjc6wkPEGcbyfLqIvLotXMo=;
+        b=KRuQVkQZsaZ6gUCQlUlvUbFm2T1GuTByqiHM0Xrm0F5jNm9uCUG9T1N61MXvYoUPa3
+         G6H6G9D37n5EEFeDSdhj5mBviAVhcyG367Gkhg3V/rfY6dEWkw6KkFjInc82tOhZ9raW
+         WEDckLmGK1E9ospL9abM87TP9006akBEL7XEvAEQpcBTLCr4hdDOSdmZCOCuYRzP2svv
+         w/be4jU05a+Q9GeKk9zp83/GX3RoS1MpjLOV/EKutPjqEhuMoG1zvT1+pXER70a2tn/Q
+         K0JTXhrJLbHg48s18UIe3woeyDo+qr71LjJ1KFdTXyLf/rXDD0c52/PB+BGIfFsEl5Iw
+         9g4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734427894; x=1735032694;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T49MJOLV8ESyJTCSjrdtWjc6wkPEGcbyfLqIvLotXMo=;
+        b=dbwHPJ4dbVL+ehn3pBMIkLdLNavP3z0QB8i+7niVs0rZrudbIN00RJzoHCOY1fhgO7
+         qOGqol/YAv1YZxpa2uGpxDdTIJ4jfzDnqfzR6kmkhfya4WES/UhvHIwv0tLivGh4yFVJ
+         v8y79su0vKxLz+sNocjesbWjV/V7g2rBOvbIPM+1q49ptRaZ2N1Ck0oiV/4KKbg7VKb7
+         jntmGzvM4lmVATDSEPPeNpXOAdfDBb19KMVRxNDaJRtPLD0/AGQ4pQ98WYwvE7Q6d6JP
+         bfyX9JZF8I9kx/F3jPtoDIF12ZhF6or0lLlAbvFBunxCwklEzvNT0yn9j3g2v9lCtRC6
+         uAZA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+heLl7kYeXltnk7hR0pX7/33qt3HKpMSv2nlMAeOHjRU8rfHY1g+GnTDaU8/4wIbY50nJf9JwjxdBfzdz@vger.kernel.org, AJvYcCW+XmDmRLMUTnmEl/6NKtK/1zLkWXnnhnp6gYtxXZ8CF/ZsjDIlnCfLVQ9cnrPxV7t9xRwzflTzfL8WTNhNXkxVRbk=@vger.kernel.org, AJvYcCX1rA5CxM11/sAU0qkrb4hPihCtWH5ja5/5VhOIw1YfHgDrQAhHW9Q8HWAubk3rg6hdFHO4P+CEOBwP@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/1s2e/Vrr84z9g8HVKbUwGqkDpc/4spF8qkIV9pcpF7lreOLX
+	skuQ2tzSXs+nueclHOnlgLgx9uu/51wxSNbyEjWv7nv23P+LC+u3
+X-Gm-Gg: ASbGncvdZnyAN02zewym1XGGrwYnPhunlE4GdypCJ5whcwzu+teLbXZmIYqvLmT1syF
+	HpZ26Aow3eQ0F6ImpZ4TeEgXYHDOmul10WEnn+9U53M8qTOWUSU4HF7mX+InvV+hxcxIKr0Ou0z
+	XMJGJB0QV3H6DVWgKvUONZdXuiBoRa0aP+mr0/b8z9b4LLiGzr5KHmajYiUk39DoMzOhRR81mWf
+	gCgyjQHdEEqtN+XLToEnAqLcobmo+jkEAW6mCyNhNyFDClBzXOlWR7FalQ7YUtQ6Xx6jZxwNoLx
+	qN5CVXbKtJFiRiWd95ld7g==
+X-Google-Smtp-Source: AGHT+IGsXtjvTI2iQZt474j852R5W0w8BTFwUgVheZ+H6j7bDyIn+pg0qTpB+H2pDDr2MYOaChXPXg==
+X-Received: by 2002:a05:600c:1e8a:b0:434:f5d1:f10f with SMTP id 5b1f17b1804b1-4362aa52fa7mr148788375e9.17.1734427893553;
+        Tue, 17 Dec 2024 01:31:33 -0800 (PST)
+Received: from [172.16.20.173] (62-73-104-42.ip.btc-net.bg. [62.73.104.42])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4362571776asm164546165e9.40.2024.12.17.01.31.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Dec 2024 01:31:33 -0800 (PST)
+Message-ID: <17fbfcdd-8b79-4907-a4c8-798da0ef0526@gmail.com>
+Date: Tue, 17 Dec 2024 11:31:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,8 +83,9 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: exynos5: Add
  samsung,exynos8895-hsi2c compatible
-To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzk@kernel.org>, Andi Shyti
+ <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
 Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
@@ -65,102 +97,71 @@ References: <20241214220419.723100-1-ivo.ivanov.ivanov1@gmail.com>
  <007559c5-f566-4625-99b7-e761a916fba3@gmail.com>
  <cccca881-dd59-43c0-9072-dcd91d01671d@kernel.org>
  <6e93d59d-71e5-4c09-862f-55b5504121aa@gmail.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <6e93d59d-71e5-4c09-862f-55b5504121aa@gmail.com>
+ <69fd1dbc-a29f-488c-a30f-7e5ea8f01a23@kernel.org>
+From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+In-Reply-To: <69fd1dbc-a29f-488c-a30f-7e5ea8f01a23@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/12/2024 10:08, Ivaylo Ivanov wrote:
->>>>>        - items:
->>>>>            - enum:
->>>>> @@ -94,9 +95,28 @@ allOf:
->>>>>          - clock-names
->>>>>  
->>>>>      else:
->>>>> -      properties:
->>>>> -        clocks:
->>>>> -          maxItems: 1
->>>>> +      if:
->>>>> +        properties:
->>>>> +          compatible:
->>>>> +            contains:
->>>>> +              enum:
->>>>> +                - samsung,exynos8895-hsi2c
->>>>> +
->>>>> +      then:
->>>>> +        properties:
->>>>> +          clocks:
->>>> Missing minItems
->>>>
->>>>> +            maxItems: 2
->>>>> +
->>>>> +          clock-names:
->>>> Ditto
->>>>
->>>>> +            maxItems: 2
->>>>> +
->>>>> +        required:
->>>>> +          - clock-names
->>>> I don't understand why do you need second, same branch in if, basically
->>> Because, as I stated in the commit message, we have HSI2C controllers
->>> both implemented in USIv1 blocks and outside. These that are a part of
->> On Exynos8895? Where? With the same compatible?
-> 
-> hsi2c_0 which has a clock from BUSC and hsi2c_1 to hsi2c_4 which use clocks
-> from PERIC1 (CLK_GOUT_PERIC1_HSI2C_CAM{0,1,2,3}_IPCLK). Why would
-> they need a different compatible though? It's functionally the same i2c design
-> as the one implemented in USIv1 blocks.
-If one block is part of USI and other not, they might not be the same
-I2C blocks, even if interface is similar. If they were the same or even
-functionally the same, they would have the same clock inputs. However
-user manual also suggests that there is only one clock, not two (for
-both cases), so they could be functionally equivalent but then number of
-clocks looks incorrect.
+On 12/17/24 11:26, Krzysztof Kozlowski wrote:
+> On 17/12/2024 10:08, Ivaylo Ivanov wrote:
+>>>>>>        - items:
+>>>>>>            - enum:
+>>>>>> @@ -94,9 +95,28 @@ allOf:
+>>>>>>          - clock-names
+>>>>>>  
+>>>>>>      else:
+>>>>>> -      properties:
+>>>>>> -        clocks:
+>>>>>> -          maxItems: 1
+>>>>>> +      if:
+>>>>>> +        properties:
+>>>>>> +          compatible:
+>>>>>> +            contains:
+>>>>>> +              enum:
+>>>>>> +                - samsung,exynos8895-hsi2c
+>>>>>> +
+>>>>>> +      then:
+>>>>>> +        properties:
+>>>>>> +          clocks:
+>>>>> Missing minItems
+>>>>>
+>>>>>> +            maxItems: 2
+>>>>>> +
+>>>>>> +          clock-names:
+>>>>> Ditto
+>>>>>
+>>>>>> +            maxItems: 2
+>>>>>> +
+>>>>>> +        required:
+>>>>>> +          - clock-names
+>>>>> I don't understand why do you need second, same branch in if, basically
+>>>> Because, as I stated in the commit message, we have HSI2C controllers
+>>>> both implemented in USIv1 blocks and outside. These that are a part of
+>>> On Exynos8895? Where? With the same compatible?
+>> hsi2c_0 which has a clock from BUSC and hsi2c_1 to hsi2c_4 which use clocks
+>> from PERIC1 (CLK_GOUT_PERIC1_HSI2C_CAM{0,1,2,3}_IPCLK). Why would
+>> they need a different compatible though? It's functionally the same i2c design
+>> as the one implemented in USIv1 blocks.
+> If one block is part of USI and other not, they might not be the same
+> I2C blocks, even if interface is similar. If they were the same or even
+> functionally the same, they would have the same clock inputs. However
+
+I see, so in such case I should make samsung,exynos8895-hsi2c-nonusi or
+something like that?
+
+> user manual also suggests that there is only one clock, not two (for
+> both cases), so they could be functionally equivalent but then number of
+> clocks looks incorrect.
+
+That'd be weird. Both according to downstream and upstream clk driver,
+for the USI-implemented i2cs we have a pclk and an sclk_usi.
 
 Best regards,
-Krzysztof
+Ivo.
+
+>
+> Best regards,
+> Krzysztof
+
 
