@@ -1,48 +1,79 @@
-Return-Path: <linux-i2c+bounces-8563-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8564-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7B149F4328
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 06:50:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FE8A9F46E2
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 10:08:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFDD3188A6A1
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 05:50:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 679A016C45C
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 09:08:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39CF814F117;
-	Tue, 17 Dec 2024 05:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6F61DE3D7;
+	Tue, 17 Dec 2024 09:08:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IkOaD+mQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jShYx6So"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92A183CC7;
-	Tue, 17 Dec 2024 05:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF411DE2B3;
+	Tue, 17 Dec 2024 09:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734414596; cv=none; b=leFZxTIm3i/Feu8BkwHz9QrhnBVwk/w+PDNwC6dtQqozQniHPgSigAhgrsze1UHSI9nfHapD1QwFPjVhoVeCKF2j3XpjkUwq4/ZAd4dKgbBwy4HHqQkKilYZATeo7xHRkra59bjfC0UmgubN8WaLjlinMAMt04dz3FniD4VGeZY=
+	t=1734426513; cv=none; b=EaK52dbYhjuuXdmuQkhY1yG9zYichdkTombUpiJso5mmpbaDyPoBef48FvAY+jWDr0XrEzigV6Rh+RqXf+OVmneKaMuK1952XTP9QHsxgPUcz9VQCjPd4g74dbIQBvcv0HWRrzfjhJhCyHf9RZ0vOzR+l6l4JLcnssGPMyUkfYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734414596; c=relaxed/simple;
-	bh=nNTJ+RSKF3nNEr9KviDI+mWYUDxyuqhmE+lCTSJr90M=;
+	s=arc-20240116; t=1734426513; c=relaxed/simple;
+	bh=CHyFqO9Srp6ss3rLdTR3OwjKwdFQnlQugV3a49zxFz0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ndd8C7lY55zT1iH+e4EPwNrD2Ee6mUHce3mOQe3tWJ5/eJ0NXcjsF9QlY8A0D/B88xWKR5T+Zg9e0eIGukgooYU5iPanese84mgW32L4kxBIw4GHH7JEUuBhZ/QSxCP6ldHCNLNg0AD0BEhERCAZRF8fYV4eW9dnT/DHfEOAZAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IkOaD+mQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B580C4CED3;
-	Tue, 17 Dec 2024 05:49:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734414595;
-	bh=nNTJ+RSKF3nNEr9KviDI+mWYUDxyuqhmE+lCTSJr90M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IkOaD+mQZumFR6kVGx98rNnXoQRbhQpDBUcM0d1Ml9c9rv/dOwsJu+vM1JmmxUV/t
-	 ntunHvKGKd1aImhUM/iKqWN224vgYTZ2cbU275pZbyEG4ugUDis83N42mJybWRSF/7
-	 bkc46DKLKTHSuemlt5Exa76O7v5nKskPMGM/Go7ORYq7QXUr4aEqCNi6XeTrCtTMeG
-	 7ZX2++mKV4ddURHk6aVk+QNXQxBZyPG4ih6omQeEOrIcil938XuLN+4VEJbVnq9+vq
-	 uX5ueb0QOreybgNI0AcIXE/f2ebTolsS+kvPl2wChgonZNZF2BIXth6Ck7dzaHVoDQ
-	 kWW5ZArTDTz3w==
-Message-ID: <21008f97-d0bd-45bf-8e10-9ec2539ed858@kernel.org>
-Date: Tue, 17 Dec 2024 06:49:45 +0100
+	 In-Reply-To:Content-Type; b=G9UjGOoSHaE4GEIaIemWHOsViHAayubq3KgunLFJ0s4MVLEaPf+xGWxNcmLN/F/ttgl8ZzsyIQ4ggqqfWGY7/jkRAzEwooEJLbGXaztZ/rnfeCl6gDALw6tasUz2/JqOTj2WPW9uB+i0xv0x/evUy5ixaksVmim+G3YlSYecXrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jShYx6So; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-385eed29d17so2537531f8f.0;
+        Tue, 17 Dec 2024 01:08:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734426509; x=1735031309; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5weIQENd/TWSQgQ6aqWujhlJ38EIL0ozLxoFHUkrYE=;
+        b=jShYx6SowHf9YNXu3Ln9CRTXmQBMglmoHPXBI8oBfcd16goNWWuej/DfAGOCZSuCby
+         o8FcrG1UP+Yh9XOFQSDYEvRVGrZPfIB0jXo1VOYYraE74elGaDMQEo/d68N5ZFGp+IYB
+         Hg6nCetPOFoMbp6/m+tBDzzedISjCkZy1AracnS71LUEod9a3pEzXo7kVmUHmNu2Vspu
+         u8WlfER8vuwT50hDyUZ+j4uh43n8MvmI7SjmNFdMeNCyXh1lJJ6obqRmRrlf3WC3yZbR
+         CE5/7goAigf84F7hsaBag/eNxVDPRqtOSwGV0xaMhd3r8cl1dVDGbAUGh5If8ZrXuPyJ
+         n1qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734426509; x=1735031309;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5weIQENd/TWSQgQ6aqWujhlJ38EIL0ozLxoFHUkrYE=;
+        b=tNalSb4nOBlfoVUsQ8eEYjV9vhfyBjjOpG0G7DQp8tObvXq2RC54ZVYlWhCycCT6D5
+         boyehJVfg3k5mVScojIJKk1UDss4FvBcc+Mt3MJNPhtL/+vy3UHtpRG5a36oz05OXeen
+         xJWqrgpopiFCyTSk+DKz6dmz8mWldRfcSmbfJr7FH/QTulWIXaG4fv2QqA8tH7e49Rw4
+         yX8fRXeIupsSPG0MbRlvE53kq/DwC7b7Vv/mgV5WYNro1V647c6UTpk1K/XtoqYSYkCO
+         sYcE7TtdTOb+ywjY2H8AOu3dEBnGwAL2Jn74P+ihPMzjEuvPHEQhcdfQfZQsNKPhP9HA
+         3ucg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ0Dgo1CuQIlVTN4JIKW+SbJysWwH1uhH4bjT8BjcgGWd0aJmzvj4CcEPq7iPunaWmYN19tKYJlZL2EPXaI3Sas3E=@vger.kernel.org, AJvYcCXCQPw7bXckZ2CxmpQrH58u1T5r+oD6QUjrDzhU85SVTvGvNIkDhY/kr4eCBkqWgKpHfWVLnZsJ0UIt@vger.kernel.org, AJvYcCXs311ZlseEShR1ml3zIURXENn4N+mwNh3ur+RdUdc5TJlzECrniVLKerSNNsx523cHmd3WphQX+rDgsm24@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZwwK4PymF0yucwRDjCDw8DAJL49lwT3BqbGIC0mnMBjVSewOQ
+	5dp+TKPlGCNaauvUKdWlfW2VIB7DiDKN1lLQ9XTHEMCYrxPvA5zs
+X-Gm-Gg: ASbGncs3oDZb0c2IvgBO9zarozxYfFr1oGAFY43cvPiaAjTGoGq7CuUuSm3fpwqjIgU
+	dXQARiwgPJYyap7x986JtKUqWIsWveUVKUl5AV2tLHyeENSmvmE8PLAJgtYOn7V2qZ8QQqipK+Y
+	WEJHnice2E3K4fk9wkkeSXkDWrCrsTXdegr/CxAVReNL3aoM599V7plpfsgfLXRL9y3Blh/0B9c
+	t8uRY2XFu1q3R8RibxbfLmz76bcYUd5YBorJirFsDpmP4SxQhbScUayCwPni3gMcLVvhHiEKT8p
+	oMEL9h+/iImHgrSRFDRUnA==
+X-Google-Smtp-Source: AGHT+IFKUA5hQNQSywoZDLpGUcdLM6zt8M6vh5FswSnswuK4fj51IzxHglfrE9X7z3ZJ7TaFHj1FhQ==
+X-Received: by 2002:a05:6000:156f:b0:385:e328:890a with SMTP id ffacd0b85a97d-3888e0c0520mr13813018f8f.49.1734426509180;
+        Tue, 17 Dec 2024 01:08:29 -0800 (PST)
+Received: from [172.16.20.173] (62-73-104-42.ip.btc-net.bg. [62.73.104.42])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c80165c5sm10519556f8f.25.2024.12.17.01.08.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Dec 2024 01:08:28 -0800 (PST)
+Message-ID: <6e93d59d-71e5-4c09-862f-55b5504121aa@gmail.com>
+Date: Tue, 17 Dec 2024 11:08:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,80 +81,102 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] dt-bindings: hwmon: intel,crps185: Add to trivial
-To: Ninad Palsule <ninad@linux.ibm.com>, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, eajames@linux.ibm.com, jdelvare@suse.com,
- linux@roeck-us.net, corbet@lwn.net, joel@jms.id.au,
- andrew@codeconstruct.com.au, Delphine_CC_Chiu@Wiwynn.com,
- broonie@kernel.org, peteryin.openbmc@gmail.com, noahwang.wang@outlook.com,
- naresh.solanki@9elements.com, lukas@wunner.de, jbrunet@baylibre.com,
- patrick.rudolph@9elements.com, gregkh@linuxfoundation.org,
- peterz@infradead.org, pbiel7@gmail.com, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20241217022046.113830-1-ninad@linux.ibm.com>
- <20241217022046.113830-4-ninad@linux.ibm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: exynos5: Add
+ samsung,exynos8895-hsi2c compatible
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241217022046.113830-4-ninad@linux.ibm.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Andi Shyti
+ <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241214220419.723100-1-ivo.ivanov.ivanov1@gmail.com>
+ <20241214220419.723100-2-ivo.ivanov.ivanov1@gmail.com>
+ <0ebc12ed-fe91-4c8a-a626-b735b0eeecf1@kernel.org>
+ <007559c5-f566-4625-99b7-e761a916fba3@gmail.com>
+ <cccca881-dd59-43c0-9072-dcd91d01671d@kernel.org>
+From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+In-Reply-To: <cccca881-dd59-43c0-9072-dcd91d01671d@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/12/2024 03:20, Ninad Palsule wrote:
-> Add INTEL Common Redundant Power Supply Versions crps185 bindings as
-> trivial. It is trivial because only compatibility string is required in
-> the device tree to load this driver.
+On 12/17/24 07:24, Krzysztof Kozlowski wrote:
+> On 16/12/2024 21:59, Ivaylo Ivanov wrote:
+>> On 12/16/24 10:44, Krzysztof Kozlowski wrote:
+>>> On 14/12/2024 23:04, Ivaylo Ivanov wrote:
+>>>> Add samsung,exynos8895-hsi2c dedicated compatible for representing
+>>>> I2C of Exynos8895 SoC. Since there are I2C buses that aren't implemented
+>>>> as a part of USIv1 blocks, they only require a single clock.
+>>>>
+>>>> Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+>>>> ---
+>>>>  .../devicetree/bindings/i2c/i2c-exynos5.yaml  | 26 ++++++++++++++++---
+>>>>  1 file changed, 23 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+>>>> index cc8bba553..b029be88e 100644
+>>>> --- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+>>>> +++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+>>>> @@ -25,6 +25,7 @@ properties:
+>>>>            - samsung,exynos5250-hsi2c    # Exynos5250 and Exynos5420
+>>>>            - samsung,exynos5260-hsi2c    # Exynos5260
+>>>>            - samsung,exynos7-hsi2c       # Exynos7
+>>>> +          - samsung,exynos8895-hsi2c
+>>>>            - samsung,exynosautov9-hsi2c
+>>>>        - items:
+>>>>            - enum:
+>>>> @@ -94,9 +95,28 @@ allOf:
+>>>>          - clock-names
+>>>>  
+>>>>      else:
+>>>> -      properties:
+>>>> -        clocks:
+>>>> -          maxItems: 1
+>>>> +      if:
+>>>> +        properties:
+>>>> +          compatible:
+>>>> +            contains:
+>>>> +              enum:
+>>>> +                - samsung,exynos8895-hsi2c
+>>>> +
+>>>> +      then:
+>>>> +        properties:
+>>>> +          clocks:
+>>> Missing minItems
+>>>
+>>>> +            maxItems: 2
+>>>> +
+>>>> +          clock-names:
+>>> Ditto
+>>>
+>>>> +            maxItems: 2
+>>>> +
+>>>> +        required:
+>>>> +          - clock-names
+>>> I don't understand why do you need second, same branch in if, basically
+>> Because, as I stated in the commit message, we have HSI2C controllers
+>> both implemented in USIv1 blocks and outside. These that are a part of
+> On Exynos8895? Where? With the same compatible?
 
-That's incorrect reason. You should describe the hardware, e.g. the
-hardware does not have any resources, like clocks or supplies.
+hsi2c_0 which has a clock from BUSC and hsi2c_1 to hsi2c_4 which use clocks
+from PERIC1 (CLK_GOUT_PERIC1_HSI2C_CAM{0,1,2,3}_IPCLK). Why would
+they need a different compatible though? It's functionally the same i2c design
+as the one implemented in USIv1 blocks.
 
+>
+>> USIv1 need 2 clocks, and those that aren't have only one. So it's not
+>> a duplicate for the previous - autov9 sets a minitems of 2 and the
+>> others have a maxitems of 1.
+> We talk here about branch that says 2 items. You duplicate that one.
 
+I see. I can just define the clocks for all at this point.
 
 Best regards,
-Krzysztof
+Ivo.
+
+>
+> Best regards,
+> Krzysztof
+
 
