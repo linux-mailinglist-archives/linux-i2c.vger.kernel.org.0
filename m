@@ -1,188 +1,246 @@
-Return-Path: <linux-i2c+bounces-8578-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8579-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD7EC9F551C
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 18:54:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6961D9F5663
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 19:36:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48089174BD4
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 17:49:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2D7016468B
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Dec 2024 18:35:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9E51FA260;
-	Tue, 17 Dec 2024 17:42:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7CB6166F3A;
+	Tue, 17 Dec 2024 18:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k7Uiu3M+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VlulLJMh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A751F8684;
-	Tue, 17 Dec 2024 17:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84151442F;
+	Tue, 17 Dec 2024 18:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734457358; cv=none; b=JXwxGQH+k8gE2ethZHaToE48U3MYcLgDnJWLzo3X3MZYU18tdP/qORB1yquunz3e1rq46SC1GjWdiNkcMVa8UkDr5OtILiNvzhChOZttZMHGcvUCK1ICeZ8Wfm5uNLdMngTqu5PzVA3wkFGXUGtTm/YPWDfW32MispiupgLyNGM=
+	t=1734460554; cv=none; b=D/FoTKIIKnH9T24udnXp5CRmzXzE62vkyL2eyDqpH0PIZZPFSOyBfFn7QBk0qRcSv47kB0IZ00TlW1CidANXtI4LLk9O7IDvG7Nxal0UvE5izPv2h2tz2alDRDhkr+MNBcMUwh+2oMPo7a2gLDrbWnSLHTWhw9kzpCJdbsvSCnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734457358; c=relaxed/simple;
-	bh=GTNIQUJPRw7t7GatnKHSMlEYz/YyeJ+Ed/C875PamEs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XE/dCYSALxC1NQEYyzn/RobfscRqmVMfoziPyzoEflK+LCTetbhE7jIwCW3q/YGBADjyflrxg0UoqHa0TZ0Qq5XhIaHwJTJt/Moz8u6HHvMwRRQcfRBIDZ7OdMy4voFv+KGC9xgkrgABUXJ4OSsxJLtLxvg8KjzQYCYh0fap9j4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k7Uiu3M+; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-aa5f1909d6fso935946666b.3;
-        Tue, 17 Dec 2024 09:42:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734457355; x=1735062155; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RX3Us/R+Ba73C0CkzYR3VNICfGaHFr1lgKKzTrGydJU=;
-        b=k7Uiu3M+JLpB4h8CQj1mYHskMvEpxruU5q2Zxe1XHJvAW24V4IXcEmjaNuVXvW5VZK
-         Eco0SEPMZY4V4W6s+/49hs1SPsIM70S1xxsHOwVKNOlcwFwh0S4AYrP7K8aoUmXJFQsT
-         Wfmk2MTWHdsEsPMqCXekRly+VjgDqushUIRL+wMkj7z4iGbkH1c8btyMJtTkUGM90C2K
-         JL4kiUtvYQS4S5MiQylUb0DDRXRupaYXM2or9is5uZR0U98SrZxM70oVj5vofqiTT7mE
-         iGJipUnz2mwMo9fiYgyxOUAdY4kxwD4oDdDgpy/m9A7KIhz1hx7yuyJ2q0wAwvJdVJyW
-         U9OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734457355; x=1735062155;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RX3Us/R+Ba73C0CkzYR3VNICfGaHFr1lgKKzTrGydJU=;
-        b=sXdDcp09z1bQtX9HFJktlj+MidZDNkmmQRTZBHItadYB0tWVYE5bbHhlmcWlakoSHd
-         xTKzxe4pPpPG8YFlue07PFmA2rw8lMDbb3bO/bljXBQWgregDc+xj3IXh4Vzfa4KrMqf
-         dJlRFfZi8wByONNwvNDKuHKS9JkIGzYCRPfL8KIvnrXhDkW1rPu0PzFGPg4R/j1ykMq4
-         laNnKRK1N1nPNIesx/dU/fs9Vb2L97CjdjriFy7gdfGaTptOAjY5i/QaFfcueAi2/2fB
-         Uffn7gkqQlb8z/54HPl2h7XsRCMdjsE1lwmtUmhDOGuG8oE9tUSf+yrf9fojjehbCmOm
-         drhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUG4absQp3wMzGttd8a7M7j83si+4V2q5M7st+fbyfV20DosAKCvlB6M/nwEfmZMCx783VEWqKGOhByb7VjBgXDD3Y=@vger.kernel.org, AJvYcCVUZzXWgjV34OTs8EfLVhhQaGi2/z38a03J46nLGF1auR4Qj7o4grjZENsl80J6eW1u9Qb0uRZmupjC@vger.kernel.org, AJvYcCWJKdYc8V1uuGYDcDxFpYWxmtByQvbw1n1UOfCJgX2KlpxOfugHeAU1quzU4DHQ+i7RSR3weMJN1cTTX3CP@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZqJw6axv/QgL+i3/8jmyU16p2YfgtEJBMeSM2dKRH4Rbj2GT0
-	K4oLmB9r3bXPeK34qsa6AKZp/YT2yMPn0ICGOQX/dGlCeG1hC4oO
-X-Gm-Gg: ASbGncuYlsp6C06F+hjoNE09Y8uSi3Z5HaRuzPWtqCpdBb/zx4LdaXvvJUlMNyJyaFo
-	mclXFnAzY5pQFWCFWirUL2kVPMcckw/BkRYPa4KT2HXCthhDKGjpFzc1PuDuT6n87Ygpg5ZPwH8
-	q47Pxr8wx7LFRZJoE8nPZeUky+dBqsw7GhrpH9BPVV7EDhMbJgzSojR6KyBL752DiCgfEtiFnHV
-	C9pLsgrzWcx6Gd9h3n9sIud5v86gjgpR4cGnhJs860yCPUB2aam8pGfnEgATqLZYtw7
-X-Google-Smtp-Source: AGHT+IFjIUHzuO2MBnqXBKlI2P4aoVJoD6xBmuIZQ/ueNl9n5qqJbUqwItJ883MoEIIeh9jzL5p2ug==
-X-Received: by 2002:a17:906:4fc7:b0:aab:c78c:a7ed with SMTP id a640c23a62f3a-aabf1cf01e1mr22140966b.49.1734457355131;
-        Tue, 17 Dec 2024 09:42:35 -0800 (PST)
-Received: from [192.168.31.111] ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab96005f73sm467420566b.4.2024.12.17.09.42.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Dec 2024 09:42:34 -0800 (PST)
-Message-ID: <685eb8ab-2767-43da-80d0-ec77ff779d86@gmail.com>
-Date: Tue, 17 Dec 2024 19:42:32 +0200
+	s=arc-20240116; t=1734460554; c=relaxed/simple;
+	bh=wij3ElUa0/t3wfliWgMTifTt8iMGWm7a+SOOKMXIXNw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bZCS4pmtfWOQ2/lLvphL6+W+bc1NZz73rfL6JVSoTKhocLjqmdf0KuWKzMkoJZz7X31laI/sFIeglBcpGkC3dVwKRADFKDsHlS5rDdho6LQBz1X20A6fn268zI6tbpj0rX1MDz+tsak2iymhcOrLaF/3MPB1CIDRmJlGOjjmjdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VlulLJMh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B1C9C4CED3;
+	Tue, 17 Dec 2024 18:35:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734460554;
+	bh=wij3ElUa0/t3wfliWgMTifTt8iMGWm7a+SOOKMXIXNw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VlulLJMh7uD/z5Bv/s64cWLcn4AdlXLVoDizkhGmkydmJedP+Ie8Q6zNYJyCvwqjX
+	 7LCnMk9VXAoEp4cHtL06Bf7x0n4MpbyQOT+VTU6ZagXQL06IgNXpZ+f2bI8uiqB/8v
+	 J0d6U3Ppxj4j2DoOuL2F61tYCrJ1XoqyH7D7H2vR62k+Mx2vn+WJ6FkTgPJxFk+HBp
+	 kCtMzlpJfj3HJxkQ8j9NHpQ1b6YnQ7iKAScVCaOqv2WLny05xxj3ySFXk76ji87vgf
+	 gnj5n7ZZ4NbQ7cAqEXAkXzTjQ4mQturl97evBfdnO5WDsBPmp8C+uflhClLNy4usxq
+	 SYNhbiMsui3aQ==
+Date: Tue, 17 Dec 2024 18:35:50 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	valentina.fernandezalanis@microchip.com
+Subject: Re: [PATCH v1] i2c: microchip-core: actually use repeated sends
+Message-ID: <20241217-probe-snowdrift-9c4b9521a2e9@spud>
+References: <20240930-uneasy-dorsal-1acda9227b0d@spud>
+ <Zvu38H2Y-pRryFFQ@shikoro>
+ <20241001-haphazard-fineness-ac536ff4ae96@spud>
+ <20241024-snagged-elated-d168d0d6bf35@spud>
+ <20241206-random-spectacle-9de88d412653@spud>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: exynos5: Add
- samsung,exynos8895-hsi2c compatible
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241214220419.723100-1-ivo.ivanov.ivanov1@gmail.com>
- <20241214220419.723100-2-ivo.ivanov.ivanov1@gmail.com>
- <0ebc12ed-fe91-4c8a-a626-b735b0eeecf1@kernel.org>
- <007559c5-f566-4625-99b7-e761a916fba3@gmail.com>
- <cccca881-dd59-43c0-9072-dcd91d01671d@kernel.org>
- <6e93d59d-71e5-4c09-862f-55b5504121aa@gmail.com>
- <69fd1dbc-a29f-488c-a30f-7e5ea8f01a23@kernel.org>
- <17fbfcdd-8b79-4907-a4c8-798da0ef0526@gmail.com>
- <56c5788a-2d49-4abb-af4b-65a11bdc4094@kernel.org>
-Content-Language: en-US
-From: Markuss Broks <markuss.broks@gmail.com>
-In-Reply-To: <56c5788a-2d49-4abb-af4b-65a11bdc4094@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-Hi Krzysztof,
-
-On 12/17/24 11:43 AM, Krzysztof Kozlowski wrote:
-> On 17/12/2024 10:31, Ivaylo Ivanov wrote:
->> On 12/17/24 11:26, Krzysztof Kozlowski wrote:
->>> On 17/12/2024 10:08, Ivaylo Ivanov wrote:
->>>>>>>>         - items:
->>>>>>>>             - enum:
->>>>>>>> @@ -94,9 +95,28 @@ allOf:
->>>>>>>>           - clock-names
->>>>>>>>   
->>>>>>>>       else:
->>>>>>>> -      properties:
->>>>>>>> -        clocks:
->>>>>>>> -          maxItems: 1
->>>>>>>> +      if:
->>>>>>>> +        properties:
->>>>>>>> +          compatible:
->>>>>>>> +            contains:
->>>>>>>> +              enum:
->>>>>>>> +                - samsung,exynos8895-hsi2c
->>>>>>>> +
->>>>>>>> +      then:
->>>>>>>> +        properties:
->>>>>>>> +          clocks:
->>>>>>> Missing minItems
->>>>>>>
->>>>>>>> +            maxItems: 2
->>>>>>>> +
->>>>>>>> +          clock-names:
->>>>>>> Ditto
->>>>>>>
->>>>>>>> +            maxItems: 2
->>>>>>>> +
->>>>>>>> +        required:
->>>>>>>> +          - clock-names
->>>>>>> I don't understand why do you need second, same branch in if, basically
->>>>>> Because, as I stated in the commit message, we have HSI2C controllers
->>>>>> both implemented in USIv1 blocks and outside. These that are a part of
->>>>> On Exynos8895? Where? With the same compatible?
->>>> hsi2c_0 which has a clock from BUSC and hsi2c_1 to hsi2c_4 which use clocks
->>>> from PERIC1 (CLK_GOUT_PERIC1_HSI2C_CAM{0,1,2,3}_IPCLK). Why would
->>>> they need a different compatible though? It's functionally the same i2c design
->>>> as the one implemented in USIv1 blocks.
->>> If one block is part of USI and other not, they might not be the same
->>> I2C blocks, even if interface is similar. If they were the same or even
->>> functionally the same, they would have the same clock inputs. However
->> I see, so in such case I should make samsung,exynos8895-hsi2c-nonusi or
->> something like that?
->>
->>> user manual also suggests that there is only one clock, not two (for
->>> both cases), so they could be functionally equivalent but then number of
->>> clocks looks incorrect.
->> That'd be weird. Both according to downstream and upstream clk driver,
->> for the USI-implemented i2cs we have a pclk and an sclk_usi.
-> Something is not precise here, as usually with Samsung clock topology.
->
-> First, the non-USI instances have the IPCLK as well, e.g. things like
-> PERIC1_UID_HSI2C_CAM1_IPCLKPORT_iPCLK
->
-> USI have BLK_PERIC0_UID_USI03_IPCLKPORT_i_SCLK_USI, but that's USI
-> clock, not HSI2C in USI. Datasheet mentions this is UART and SPI special
-> clock, but not I2C. The PCLK is used for HSI2C iPCLK.
-
-In USI, USI PCLK is used for the internal AMBA APB bus clock and the 
-IPCLK signal is used for the peripheral controller blocks (i2c/spi/uart).
-
-So perhaps we have it described incorrectly, and the hsi2c controllers 
-(at least on E8895) should take only one clock input (IPCLK), and USI 
-block should take the PCLK input.
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="3ncXWw6MCTEpEL92"
+Content-Disposition: inline
+In-Reply-To: <20241206-random-spectacle-9de88d412653@spud>
 
 
->
->
-> Best regards,
-> Krzysztof
->
+--3ncXWw6MCTEpEL92
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-- Markuss
+Andi, Wolfram,
 
+I'm just going to resend this tomorrow, it's 2.5 months since this
+conversation started and I'd really like to get this fix included.
+
+Cheers,
+conor.
+
+On Fri, Dec 06, 2024 at 11:48:07AM +0000, Conor Dooley wrote:
+> On Thu, Oct 24, 2024 at 10:36:33AM +0100, Conor Dooley wrote:
+> > On Tue, Oct 01, 2024 at 11:16:24AM +0100, Conor Dooley wrote:
+> > > On Tue, Oct 01, 2024 at 10:50:56AM +0200, Wolfram Sang wrote:
+> > > > > At present, where repeated sends are intended to be used, the
+> > > > > i2c-microchip-core driver sends a stop followed by a start. Lots =
+of i2c
+> > > >=20
+> > > > Oh, this is wrong. Was this just overlooked or was maybe older hard=
+ware
+> > > > not able to generated correct repeated-starts?
+> > >=20
+> > > Overlooked, because the devices that had been used until recently did=
+n't
+> > > care about whether they got a repeated start or stop + start. The bare
+> > > metal driver upon which the Linux one was originally based had a triv=
+ial
+> > > time of supporting repeated starts because it only allows specific so=
+rts
+> > > of transfers. I kinda doubt you care, but the bare metal implementati=
+on
+> > > is here:
+> > > https://github.com/polarfire-soc/polarfire-soc-bare-metal-library/blo=
+b/614a67abb3023ba47ea6d1b8d7b9a9997353e007/src/platform/drivers/mss/mss_i2c=
+/mss_i2c.c#L737
+> > >=20
+> > > It just must have been missed that the bare metal method was not repl=
+aced.
+> > >=20
+> > > > > devices must not malfunction in the face of this behaviour, becau=
+se the
+> > > > > driver has operated like this for years! Try to keep track of whe=
+ther or
+> > > > > not a repeated send is required, and suppress sending a stop in t=
+hese
+> > > > > cases.
+> > > >=20
+> > > > ? I don't get that argument. If the driver is expected to do a repe=
+ated
+> > > > start, it should do a repeated start. If it didn't, it was a bug an=
+d you
+> > > > were lucky that the targets could handle this. Because most control=
+lers
+> > > > can do repeated starts correctly, we can also argue that this works=
+ for
+> > > > most targets for years. In the unlikely event that a target fails a=
+fter
+> > > > converting this driver to proper repeated starts, the target is bug=
+gy
+> > > > and needs fixing. It would not work with the majority of other
+> > > > controllers this way.
+> > > >=20
+> > > > I didn't look at the code but reading "keeping track whether rep st=
+art
+> > > > is required" looks wrong from a high level perspective.
+> > >=20
+> > > I think if you had looked at the code, you'd (hopefully) understand w=
+hat
+> > > I meant w.r.t. tracking that.
+> > > The design of this IP is pretty old, and intended for use with other
+> > > logic implemented in FPGA fabric where each interrupt generated by
+> > > the core would be the stimulus for the state machine controlling it to
+> > > transition state. Cos of that, when controlling it from software, the
+> > > interrupt handler assumes the role of that state machine. When I talk
+> > > about tracking whether or not a repeated send is required, that's
+> > > whether or not a particular message in a transfer requires it, not
+> > > whether or not the target device requires them or not.
+> > >=20
+> > > Currently the driver operates by iterating over a list of messages in=
+ a
+> > > transfer, and calling send() for each one, and then effectively "loop=
+ing"
+> > > in the interrupt handler until the message has been sent. By looking =
+at
+> > > the current code, you can see that the completion's "lifecycle" match=
+es
+> > > that. Currently, at the end of each message being sent
+> > > 	static irqreturn_t mchp_corei2c_handle_isr(struct mchp_corei2c_dev *=
+idev)
+> > > 	{
+> > > =09
+> > > 		<snip>
+> > > =09
+> > > 		/* On the last byte to be transmitted, send STOP */
+> > > 		if (last_byte)
+> > > 			mchp_corei2c_stop(idev);
+> > > =09
+> > > 		if (last_byte || finished)
+> > > 			complete(&idev->msg_complete);
+> > > =09
+> > > 		return IRQ_HANDLED;
+> > > 	}
+> > > a stop is put on the bus, unless !last_byte, which is only true in er=
+ror
+> > > cases. Clearly I don't need to explain why that is a problem to you...
+> > > You'd think that we could do something like moving the stop out of the
+> > > interrupt handler, and to the loop in mchp_corei2c_xfer(), where we h=
+ave
+> > > access to the transfer's message list and can check if a stop should =
+be
+> > > sent or not - that's not really possible with the hardware we have.
+> > >=20
+> > > When the interrupt handler completes, it clears the interrupt bit in =
+the
+> > > IP, as you might expect. The controller IP uses that as the trigger to
+> > > transition state in its state machine, which is detailed in
+> > > https://ww1.microchip.com/downloads/aemDocuments/documents/FPGA/Produ=
+ctDocuments/UserGuides/ip_cores/directcores/CoreI2C_HB.pdf
+> > > On page 23, row 0x28, you can see the case that (IIRC) is the
+> > > problematic one. It is impossible to leave this state without trigger=
+ing
+> > > some sort of action.
+> > > The only way that I could see to make this work correctly was to get =
+the
+> > > driver track whether or not the next message required a repeated star=
+t or
+> > > not, so as to transition out of state 0x28 correctly.
+> > >=20
+> > > Unfortunately, then the clearing of the interrupt bit causing state
+> > > transitions kicked in again - after sending a repeated start, it will
+> > > immediately attempt to act (see state 0x10 on page 23). Without
+> > > reworking the driver to send entire transfers "in one go" (where the
+> > > completion is that of the transfer rather than the message as it
+> > > currently is) the controller will re-send the last target address +
+> > > read/write command it sent, instead of the next one. That's why there=
+'s
+> > > so many changes outside of the interrupt handler and so many addition=
+al
+> > > members in the controller's private data structure.
+> > >=20
+> > > I hope that that at least makes some sense..
+> > >=20
+> > > > The driver
+> > > > should do repeated start when it should do repeated start.
+> > >=20
+> > > Yup, that's what I'm trying to do here :)
+> >=20
+> > I'd like to get this fix in, and Andi only had some minor comments that
+> > didn't require a respin. I don't want to respin or resend while this
+> > conversation remains unresolved.
+>=20
+> Could you please respond to this thread? I don't want to respin without
+> resolving this conversation since I feel like we'd just end up having it
+> all over again.
+>=20
+> Thanks,
+> Conor.
+
+
+
+--3ncXWw6MCTEpEL92
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ2HEhgAKCRB4tDGHoIJi
+0hl1APwIXHwW10oO02kRxqmh1W9UKke1PozdqDAxCsWRAp3rBAEAhxSip2syQmVz
+jpckourpupLAWwSnWwmUvxrNNWuLtA4=
+=jCFQ
+-----END PGP SIGNATURE-----
+
+--3ncXWw6MCTEpEL92--
 
