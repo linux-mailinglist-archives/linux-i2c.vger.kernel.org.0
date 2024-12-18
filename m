@@ -1,126 +1,114 @@
-Return-Path: <linux-i2c+bounces-8600-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8601-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFAAA9F674F
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 14:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 61AD09F6989
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 16:09:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE05D7A1760
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 13:31:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 380387A17F8
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 15:09:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7EEA1ACEA9;
-	Wed, 18 Dec 2024 13:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 124731DF27F;
+	Wed, 18 Dec 2024 15:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="escR9EL3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA18817C219;
-	Wed, 18 Dec 2024 13:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F451B042C;
+	Wed, 18 Dec 2024 15:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734528711; cv=none; b=MZjPT2u9rMeKvHMwiVXL9jyeubFPVdizY4GuY9IrQS8ZooI1WLVnDtgJ9STdcBeJarlxjqS2WPm4PC1hxYirH4a0/DDOFTexBjhVXQ8dWACQnDSvZVrJdIDiSX8jRYP9tjVHxJrAsS57rziR/TLCsjyp6oNbKheUDnErc0vKvVk=
+	t=1734534574; cv=none; b=sjkAnwr/pRu6q2GV+DyeCG1bNRAf/lEUwj81IAkLv0i4j91e83qOoyTdhqeTCX3cUyI8bu22rTASGXIN4miB3/dNFND6kcsuzOlhyC+v6+XSFNNtkFufIW/g4XkLJgDQ77Goo6SlsvCugjoN5AMacqtSbTVfQf4sq/mwq235WZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734528711; c=relaxed/simple;
-	bh=M67mW0vysFwnvjj1IVUzkZ4GR3CeNqaYeZEiUUl5tvI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UgL5l2YcGSj+r7stiLRsC4d2+mMAY6r3f6wB7qVZM3AV+JVbdO6v+B7Ee+BjBZQ/sXdTROvQeoD0WzlGNi5pnpW+SeITGLVM7HGr8BTywb+W5ZXG39nEcckKHU9DJUOmJJT8cKQeuf99P36ZJpqiu3GPJIcEYnzrjFlbENi9T7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1734534574; c=relaxed/simple;
+	bh=ydy5HU4CGoMJt1uvr2m9ZF+Vo35d2rFYwpjhIV68zvE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zm40qElt17b03OGQEWn0wyeYKadFODUvLvif3rq/BEbOUjUVx3yoJIekUT9lzcN7ZsK3UxOg8Qd1U1/Cs23f4rTWICby+E174zalRwVJ+lYr7psLG2kqip//BIqlfVt++XcEt/4CgW0s1w/mjBqaahWNLr8hmA3o5vkojVj4F4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=escR9EL3; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7b6f1be1daeso521032985a.0;
-        Wed, 18 Dec 2024 05:31:49 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21675fd60feso69247515ad.2;
+        Wed, 18 Dec 2024 07:09:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734534572; x=1735139372; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6mDeikeFSe+F1f6WRvocmJwWKAt2yrKKW2tQ+SDhd5c=;
+        b=escR9EL3IYyOmNxlPFl3xglOY1xA9nY43KXcus+WzBnSgnDzAZiUDpyGB65cScwyyA
+         UwRCUsucLNbtif6sP6Ebf+GN/OFuhW6XlAP7KX2q2R6AVa31f8H9gDrMlFSlYz1SqTUI
+         LExtniuePzyB331Eq5zWQc2rhIG96RR7FUOSJZdLhtKF9Ok5ctzdcis8mIVnXW2hrHev
+         V8XZoK1eABu6gsHkFhJPvsKC/SG0VRYWeXRHp9KrXfJUcjBZfM1+PQZdSdCanjyo/krB
+         hmZlfKyTmn1SYjphDkqEecy0/RskbDHkQVuYeN0HilcNZIFQdDZkI1aJOxZT2uEzv5p+
+         FWMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734528707; x=1735133507;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1734534572; x=1735139372;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cL/KgIXTFRYnZUnBOg8gRh9RZCj4EmozXh9LLXsdgJM=;
-        b=F/r8utlMZHmmxtN13HjbNn0MqN2Ev++oWX4GX/k5i4vuxeMn8oSJf/z5BnDZdOJTZL
-         v/bYUsL8xlfOEXEurJnuuuKKDu6R6GBnIybSFa9Upkf6EApjvm5G6DBbHQsrWMvmdbJo
-         Ou9aNl4vjauCE5Qf6rWe7FfNTa42Yjt+F8LO72b8jEHZM8MRNKI/04y1LqLX3HnNwgZ6
-         AI+VTaDdsWmQmLgyhlT3o+ojQMQxDP3HeY9Q42j0Ukn/6kAcsKgWeoZstl+83OpZgkQw
-         dZv2W3dD2gaQPg4zBbsxKt75qk9TROhwd1GDVxvhzyEnAUEe6TK2ypZzKS0cV9F/8NoG
-         EeCg==
-X-Forwarded-Encrypted: i=1; AJvYcCUuYsjSybk67iqQJ77X+bodm8bVbUL3wbp2FcMGbwDBNa6OacrfNaMC+BRSzpVannzN4iIlE00+84D0lWn9@vger.kernel.org, AJvYcCVs/utIjnlUVyjJB2tiWt4MgJNGQ2/rL/h9z/g0OvHr04f9o0h4zq886cK7GeZ5APF4q979EERUCuH5wLLC21iBnCE=@vger.kernel.org, AJvYcCVvha1QOmB5OdWVfvbEj0k+WA4GNpiyQUWOLWtz4RL0dXWDwpnCkqhf/JNz5+f0ahfXIiS/VdfmL80=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx69NImB4rFRWxAeUxB98HUIyJAbJaSiBDko5GC+8nQGfh4p1VQ
-	EhgTE4PtfCokMk8EYa7yozzAyIgscXlHCjRROegdHC15BtHpKEjte/hcE6T+
-X-Gm-Gg: ASbGncu60Ju13zVsNKrUliNe2/8Qd6Txul18lVnFavWAZMfCbGqmli6oHHZB+rxEtQo
-	YYi47cnDEpwX3lx1+O5F6XorC/sszDKEBViPfKHRh8guBKbK1aMJWMyRUuJhvRm7Cc0fJsYfoqn
-	wwjR+ZPMJ9FoG4x1bkmCvZoPL7uJ7zbyg+Fd3c24INY87myOoa2dJVPNah0dwOOa9wys3YMwKh3
-	BGPciNs48ZoOQbQIKcFEgvjo08LLpq5tIrxZ7MOEFl0BQtzR71AAYG23QGICa5ZCY73YqRBrPRe
-	xSPPrIYje2xd/mGKIWKzbLU=
-X-Google-Smtp-Source: AGHT+IGElyw5NFZH+33CE7KgQbeT6Kvf/ELkyrHY/esm7XaW8WQR7uXx3OqdphPMDfNZW9RrVgAB1g==
-X-Received: by 2002:a05:6214:f27:b0:6d8:7ed4:3367 with SMTP id 6a1803df08f44-6dd091b15a1mr58156396d6.19.1734528707038;
-        Wed, 18 Dec 2024 05:31:47 -0800 (PST)
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com. [209.85.222.177])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dccd3a9ad7sm48585446d6.130.2024.12.18.05.31.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Dec 2024 05:31:46 -0800 (PST)
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7b702c3c021so395323085a.3;
-        Wed, 18 Dec 2024 05:31:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUJz+D/YkP3nr2ABMNFzFGjS/sjEjGZHP2mwtyQQPkkJcenP4c6Z/LawbRdJXTupJAvpWX6WTRBnjhT20lUnMhB5ZA=@vger.kernel.org, AJvYcCXXwHlxVEepBc6r365ZFcIsVDGzjzXvcF2gCYZZAI+fAvM1vCgxsGaK9NMaHPY11gGvyHx2T6NYKTI=@vger.kernel.org, AJvYcCXvCfXqFsbsgi8zI58Z1ybqXkYROSPDfbGdXtz22NEc0kZgO8D6wVfthlkN1OaBtQZWoIVKj1tS3xBocHDr@vger.kernel.org
-X-Received: by 2002:a05:620a:31a4:b0:7b6:6701:7a4a with SMTP id
- af79cd13be357-7b8638be02dmr435077685a.53.1734528706069; Wed, 18 Dec 2024
- 05:31:46 -0800 (PST)
+        bh=6mDeikeFSe+F1f6WRvocmJwWKAt2yrKKW2tQ+SDhd5c=;
+        b=P3ST2gnKOdc2iHHbat3R46E/ISeIbSmniyQbXOrRm/2EQ9GiwF8Cnl2Pv9Zuqxvdba
+         7Z97l5ztT+jtn390DDETkG/M6G2n3YQ87zL3WaWnfB8U4gZuZdwvTB95etAc/XDPeGlV
+         yOqPZXLRUmwRq/uw4bN8izcUQUxKZ6uIhIf+/HaespoTnHh+uyKV/ya9Rv456oBTGPRA
+         QxgDcXfON/GfijSkSTRms+PckLC8IXfyUP8utJoGEGgP+zjK+1aDDHInmYP/xII+jxxP
+         ArSXMLq21uo1zjo2cr3G/SG/Kg+oUgwOPOZmWxiyCFD9axSz1E2xHq+t/WnWYP7m/RNJ
+         qEOg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3lsJ6/IQ5kqQBI/in7d9BebTOGsn66pyZHBUOthqKWt0n6Y/FaROVropcAYvSlxIVrAWiCYceQTZU@vger.kernel.org, AJvYcCW5K5gJ/7vPsvyN6eloejm1AMPgo4BdA/Fuf7Qe8nliS0GhvbaGNDltKyztlkbv/qJeMqsbz91dgrVhTRqG@vger.kernel.org, AJvYcCW5hvJyPYIEvA0p2ZfNbY6t14MAqP7W3gG3QAWm3bUFFG4nLKKfg7O3UOJzWnkkveDBvXOTXpptNGDxSTY=@vger.kernel.org, AJvYcCXV7SPfIYQQzOnfAkyWuPyO0NWrcfp6Nv6FOKkTGiHr+D3pK6cowStA8RHlg73BL25MgHmUuJqQA0Nq@vger.kernel.org, AJvYcCXWmVthIi574gfte5QYPW/dDjN3T3qN2v/dBaMHOLOAOkNCi/uY0BZoEZ1gMoyOHbHmWX98O6CHEhs0@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxoh5RZu15EKM7biSqNHCXAztt015Hlv0YdXj/xIPnYqc3NMx5H
+	Um7/o6ug2dEIJvZEFYFuf3S1Aa7S4ZtNSAgqFA0yr/+4Ti3x1klw
+X-Gm-Gg: ASbGncsQLA5XT850OuiXwCVRq1hN6cIIe9Q1rjbyTND/tG/Jqp1KJXEzVhpdB4LSO2R
+	gZQEOzzuTRBXrysBRL6gBrNFZgN4ku1ebv+Skm51SQTc/TalEn6nP9KTKZwag3dT8Em3hXg0LAq
+	99WN4jErVgtBXpnusyRP8fcvSY48tA19zX9I3BwDKiLaKXi2RxFo4+40fiyZrqYE0FMCC0Tm/QW
+	ak0zJh39aZk4qgPZR2uZYGwRhfPlynH6AebcvSCYMF6zIXnLl+4MohphXNOCdKJnM8bXg==
+X-Google-Smtp-Source: AGHT+IEewReQwgk+5Ua6YOOIYy2d2/wQCgEBDZk3bKIj2d8jpP3GFkNNyFGtuZW0MM3ArXC6dPDOAw==
+X-Received: by 2002:a17:902:f68e:b0:216:4b5a:998b with SMTP id d9443c01a7336-218d7252a1cmr34156515ad.45.1734534572373;
+        Wed, 18 Dec 2024 07:09:32 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e728a8sm75452185ad.280.2024.12.18.07.09.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2024 07:09:31 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 18 Dec 2024 07:09:30 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ninad Palsule <ninad@linux.ibm.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	eajames@linux.ibm.com, jdelvare@suse.com, corbet@lwn.net,
+	joel@jms.id.au, andrew@codeconstruct.com.au,
+	Delphine_CC_Chiu@wiwynn.com, broonie@kernel.org,
+	peteryin.openbmc@gmail.com, noahwang.wang@outlook.com,
+	naresh.solanki@9elements.com, lukas@wunner.de, jbrunet@baylibre.com,
+	patrick.rudolph@9elements.com, gregkh@linuxfoundation.org,
+	peterz@infradead.org, pbiel7@gmail.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] hwmon: (pmbus/core) Add PMBUS_REVISION in debugfs
+Message-ID: <89ff7229-2e86-4d36-9349-50af109b0085@roeck-us.net>
+References: <20241217173537.192331-1-ninad@linux.ibm.com>
+ <20241217173537.192331-2-ninad@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241218001618.488946-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20241218001618.488946-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20241218001618.488946-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 18 Dec 2024 14:31:34 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWNMVGL0WEiPMgnXyvmbWEsDZX18mhQg_H5GUBpKdVp0w@mail.gmail.com>
-Message-ID: <CAMuHMdWNMVGL0WEiPMgnXyvmbWEsDZX18mhQg_H5GUBpKdVp0w@mail.gmail.com>
-Subject: Re: [PATCH v2 8/9] i2c: riic: Add `riic_bus_barrier()` to check bus availability
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Wolfram Sang <wsa@kernel.org>, 
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241217173537.192331-2-ninad@linux.ibm.com>
 
-On Wed, Dec 18, 2024 at 1:16=E2=80=AFAM Prabhakar <prabhakar.csengg@gmail.c=
-om> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Introduce a new `riic_bus_barrier()` function to verify bus availability
-> before initiating an I2C transfer. This function enhances the bus
-> arbitration check by ensuring that the SDA and SCL lines are not held low=
-,
-> in addition to checking the BBSY flag using `readb_poll_timeout()`.
->
-> Previously, only the BBSY flag was checked to determine bus availability.
-> However, it is possible for the SDA line to remain low even when BBSY =3D=
- 0.
-> This new implementation performs an additional check on the SDA and SCL
-> lines to avoid potential bus contention issues.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v1->v2
-> - Used single register read to check SDA/SCL lines
+On Tue, Dec 17, 2024 at 11:35:32AM -0600, Ninad Palsule wrote:
+> Add debugfs file for the PMBUS_REVISION command. This command provides
+> information about PMBus protocol revision number.
+> 
+> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+I already applied this patch, so there is no need to re-send it.
+If it turns out to have a bug, please send an update on top of it.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Thanks,
+Guenter
 
