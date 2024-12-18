@@ -1,79 +1,79 @@
-Return-Path: <linux-i2c+bounces-8610-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8611-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32B3F9F70DE
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 00:37:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55A9F9F70E2
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 00:38:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77ADF16F05F
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 23:37:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F66B188F293
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 23:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BC41FDE06;
-	Wed, 18 Dec 2024 23:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BE61FE44A;
+	Wed, 18 Dec 2024 23:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b4es2Ivx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z5Rd4rcq"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBEA1FD78C;
-	Wed, 18 Dec 2024 23:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D1F1FDE0E;
+	Wed, 18 Dec 2024 23:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734565042; cv=none; b=XfXKVEzYpfAmiXuSxVnBojUd0OOi0gYhCjfhME0i3zdVtfJ01NxqDvG85BFIWEJEzioQK3BzSh/U1vJ7rTsKBvdPOcf0aYPPWSsDdG7yUbpZDpNQojGl9pWw4aMC5ILQj2JOx5wMShUXqwiMQKK/oY0sR8eQV0StVqc8qwavlHM=
+	t=1734565045; cv=none; b=M2SfkB3YnWo9I/wnB+1WyE5hTZmUOf68BwW145r0rqUrXina53StkBJ3TBSNcbLgCGsua0649r38IT0yAiLfoHbHqKZP/3vNKfkf1TWgI3a/0OSXpjhte7/zNTDeicIeqPFB9V7pDb2fGk6oV9lV72StbrmN5m7HnDKVqMNYwxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734565042; c=relaxed/simple;
-	bh=4SE9setPSSrH0hJjJY1xCu9tx2HYa/TBhF8z5FVIs4g=;
+	s=arc-20240116; t=1734565045; c=relaxed/simple;
+	bh=j3wc2EEDIkSt7Jt4Tu4hX3JgRdd8DStHRuD6IWi4vaQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=q8sC7ocsogEHQ0o7Jz9kSi0vjPb6XeKj+aNKDkhlCBUEC3tAzJgflGeTdLst18oez23Nl0zByt+5R+Ct59Xi1T3iqhPGRZrs6Cuxs6ua+AMCVk6KfSaHXz9VhC3pzs9j1LoS9101o9c0FHPi8kE4zXup83rkuQ6EawKZYPZpGSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b4es2Ivx; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:To:Cc; b=r17bzvcNSMRMPKFG4DWHEWSWMqP1sbgi3EvraS8Sb2WYJZDWzejL8TB8arrN57vrERbZwhJjcJ21QixcWu+TxvZNH103cGwfcpEXA1Yw9GUt70o1lYUYstCRgi69S18NHxiBvyjHGSaBMBOXHse9SSarMyYrH3Vy4bvAwGbs+T4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z5Rd4rcq; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21654fdd5daso1958805ad.1;
-        Wed, 18 Dec 2024 15:37:19 -0800 (PST)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21675fd60feso2537965ad.2;
+        Wed, 18 Dec 2024 15:37:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734565039; x=1735169839; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734565042; x=1735169842; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UhAzgwSjNox/FIb+hLHlHMNNI9yeP1VLZ/ht4Xnzx9w=;
-        b=b4es2Ivx440lTh6viRB9LN5BYyxzNn55qYZowsx6aFWnjagV4qKvrwqBh9UkKIH7Sy
-         LI3NG61EhxWMxbzPeBKEGqOyy0jhUT2dZmxlQrZhxv3YtkDlFUjDDEJU2WDk6fLosDMV
-         tmzO7njsMRSUwbLQ7yiyuy3AdZXl3HK/mRHpr1ihMDIEyuyWfA6khYXJ6jb57F8g8ROE
-         l8wMzYnq7hKdAgPL3rPcuOxUy4G6o2Y2wi1zvsvFyKLfYr/9ZwDEyEXGZrqtih9o796W
-         93/6o9MC2tAFW8opb8klHeLuq14oteCmRNzDcgQDBToJbAprKtIRBuPqUuRLtM6l+Jzx
-         7R2A==
+        bh=ockGlkCd98WlE+xo+Tpb4P4fffRELdWNwnS7jE1fxFQ=;
+        b=Z5Rd4rcqYuS64WP9/p0DttLy33ElCmJ0gniq8w1v2qpGQqj/1lH4WovH+QgxPpBgS7
+         LtAVTywsd70sHbfLgmOeXnzCjBM+smER03caRycl3uNvVr7hV7AChTamEj9XvvPZECPB
+         h8ERNz11qmE4O/Dcrj+CHdHe9NPfKfqlHDmbST0T9ElY3DR6wVukaCnGvQADlYMLBA8J
+         66ID5pZRg6pPdCt1Lk+v5vCuotG+7i6RnSozOErH2K/IsEiH4UoNARJ2vnca8WJ2iUW6
+         XlEjl6RDy3JjqQAWr6ENX5Wx/8xdq4B9DJWQtRHXCTxbgk37sjwmDNeqVqU6ui3b6tz6
+         zsug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734565039; x=1735169839;
+        d=1e100.net; s=20230601; t=1734565042; x=1735169842;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UhAzgwSjNox/FIb+hLHlHMNNI9yeP1VLZ/ht4Xnzx9w=;
-        b=K4H0pzWnvI/aGwSASqsn5TC+IwJ8GTjJ+FD6TGk0fZRMROelEdx0Bu6fcTihavjRuV
-         V64OxIDEzvsck+xmTUkeA00NA5acAVA0zwgJ7apAeqjzvN2gZqk+HAMjgthCMkdXC/eg
-         fIQJpUiXNzbpIXWGlSTtnV6409U0vKuopTao45WSLQwaUmCBbS4R5DCS5Z8TYD2QKdEs
-         xZUNQlc0S0KclK83p2Nbac5wPoOODtxjEKehk+WDUWj+XqATRmQNManMWm7zq4ThNpqz
-         sJsH7nS1539sKhqlo/v4ApDOp5yAwi4RND6HoOKwJYeBK4DmyABdkzZc/np1ArvzMyyp
-         g8ww==
-X-Forwarded-Encrypted: i=1; AJvYcCUFlKmqjaToa95W6uLYp2mD1cgENnVZOCDjRufS+VRrgm7fRC8nidX8vabYjlVbG64hHuS3qODB9BGk@vger.kernel.org, AJvYcCWVwhcqW7QwmgtQST7GT8rcQ+wkGV6vy+F9buB17XkZqzRB0shc8R6VzwDp8e6zYIA6RZLMk479sbur57le@vger.kernel.org, AJvYcCWnrtplwpG8FZiNZ/WTuziE+Brd3O7W6/KVe44a1yGZ36Auy4lFQM6Qqy5EHGhEP7rTaIg2yZ9QSamviEgl@vger.kernel.org, AJvYcCXHUAm7KmTsM5H7Gvh12Jr/0KJk3XxJxwhlM1ZM/CG1+Dh86sTu9HrUWZe3HbHkuhqfVinBhymULPMi+KdLWAo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVnUYUmb/nwrLtfrAj76ZR8f9WSnjWu2SCY/XRr8bFo2/crtHf
-	DV6LdIfYE6xQO+Eu50i/BBOkNEfxCQVAM3R0i5UUrJgsPoj3yy+a
-X-Gm-Gg: ASbGncvwhtRtHg/zmbj3HOhOLbf7m9PkrRhPv+Kt4MMbE9v4873uRcAsfjf7SwECm10
-	3gPVKC4JZY6bPSk+nG48yTrLt/lEasI6CiDf9B51vgO5V+GNLEdBuHRI6dWM5M3NYf7IUe0nPSa
-	a0Hya5ywlVGHtklFti11UqnwYCLJHVpxu6p49RFCVTahJxOcW8+9hVZYJjlp5OdchmWm2w4pdmO
-	bdsn2NqPaMRDa4IWNeoltS+99oxBJjEl1Nc/YeG0wV3ANbhF/lqExkL
-X-Google-Smtp-Source: AGHT+IG25MGGi4G1Umt/pBxrQoT0UKWAYNG0VN2GMrkgQXxU0hwxukqEiX52e1fIsrdjr9zWG8xfmg==
-X-Received: by 2002:a17:902:ec81:b0:216:5568:38c9 with SMTP id d9443c01a7336-218d72349edmr71021735ad.31.1734565039076;
-        Wed, 18 Dec 2024 15:37:19 -0800 (PST)
+        bh=ockGlkCd98WlE+xo+Tpb4P4fffRELdWNwnS7jE1fxFQ=;
+        b=n1GCBqdh07lQQ+XfAWrfOlIoNZpzIkZ531dNbvYkj2VGc2hi0oR8/Z5yl1USvDik/6
+         6aHQ4VvPDuRyeAM3fID4R7vgj2W92VeNFEA/tgTevddgfF+hgW61n1hRDr7q2HNzDUTi
+         E6QC9t2wm05bxX22Hm6tD6jGjj5I6e0jLk9M7xhT8zOV6DlzLMTPlKcTDkb0O/CxYq0q
+         hHWC+hmeokKw8kH6yM1Wo5x10Q2RHYiDThKCaR81/ybgeg3iNf5LI4sUIF0gQPdyzP03
+         44kasYrp6xqJIOweFbdKg4tUZM4xWZKKHoXOwJ44yADvvCM2OQD19W3KwR5i5Lyhd5pz
+         l5pg==
+X-Forwarded-Encrypted: i=1; AJvYcCVyPfQzXEXQlEpIkvnFqyqP3D02AEhmwwkYKBfZEIB07vbbmbOQY9OUGLm26nvDP8Ske4A+HTvA8f6uwl+b@vger.kernel.org, AJvYcCWmDYOeXj+h5Zaj0lO/lgSgDFfZpwAORB1rsn6Op+1yMyiEr0gXFr8wxviJuPnHehh5RgCCKxSy/eyP@vger.kernel.org, AJvYcCXFwxiNVfTkNu6AbWbymWb38uuNDSVe0dUFbYwIKadkgDlIBcvVSQkymfUiPXPpf/KflQXjsypWebBe9kAG2Cw=@vger.kernel.org, AJvYcCXrc1fCEy3PbWbUiTsHL+X34k3gAaVpL93DNBbtSFGAhHaNH4VXU4kwLYa6BrXjG3cg2uEwgcLBbXX79mQV@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsGDlcgyfgLPOZ8gJe1XR8hLhSDD7De538ZUjPYhf+elgBhw3M
+	g8gvOWRAkpKpEhOG0lMOdPf+ijWGz5rua1dBd9FuIuERH5FHPzjx
+X-Gm-Gg: ASbGnctF/9f+WQtzoNjhZeg6PXXi91dmq7ZkAF3wGP7U8yk9qP26QAXhwoJ57jdIdDb
+	OvHT7OE9bNynI8g93yW/g7cBQOAG3ixy3R9s//Izh9IR/460Iw9cRv+/nlNt6HLYvUdQJby/Vi8
+	fA4ZXFwU8EvsKkaUPeZVpcbZpfyvTTSQesTmLa76OxmgToQf2Cy5ka1Nm0h3gGNE3djqB5+qXrJ
+	eL7I4KBXSLGyab0KO1Vjq0Bt0AINSAjn88+Pi7AsEeucQ4UgttGkJxb
+X-Google-Smtp-Source: AGHT+IHYH3KVwnRTvYRwZC7AJ0r+S6sHw+o4bGhziQYszB3LQZl42HyGhMJEzegvZl87Cbw65ACw6w==
+X-Received: by 2002:a17:902:ecd1:b0:215:5625:885b with SMTP id d9443c01a7336-218d726d4a4mr58689935ad.52.1734565041440;
+        Wed, 18 Dec 2024 15:37:21 -0800 (PST)
 Received: from [127.0.1.1] ([2001:569:fcea:600:2e06:283e:5daa:4d0f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f6967sm802335ad.214.2024.12.18.15.37.17
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f6967sm802335ad.214.2024.12.18.15.37.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2024 15:37:18 -0800 (PST)
+        Wed, 18 Dec 2024 15:37:20 -0800 (PST)
 From: Fabien Parent <parent.f@gmail.com>
-Date: Wed, 18 Dec 2024 15:36:31 -0800
-Subject: [PATCH 1/9] rust: i2c: add basic I2C client abstraction
+Date: Wed, 18 Dec 2024 15:36:32 -0800
+Subject: [PATCH 2/9] rust: add abstraction for regmap
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -82,7 +82,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241218-ncv6336-v1-1-b8d973747f7a@gmail.com>
+Message-Id: <20241218-ncv6336-v1-2-b8d973747f7a@gmail.com>
 References: <20241218-ncv6336-v1-0-b8d973747f7a@gmail.com>
 In-Reply-To: <20241218-ncv6336-v1-0-b8d973747f7a@gmail.com>
 To: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
@@ -102,412 +102,1206 @@ To: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
 Cc: devicetree@vger.kernel.org, rust-for-linux@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
  linux-arm-msm@vger.kernel.org, vinod.koul@linaro.org, 
- Fabien Parent <fabien.parent@linaro.org>, Fiona Behrens <me@kloenk.dev>
+ Fabien Parent <fabien.parent@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13005; i=parent.f@gmail.com;
- h=from:subject:message-id; bh=kd7a0C90uxuWTBjnlJWT2Q5dPINXmEd9sR6MvOUkVYg=;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=42675; i=parent.f@gmail.com;
+ h=from:subject:message-id; bh=JJ70W7lDM4S7VasavE0jv8kh6nau/IdZ3LdUVUbKmtA=;
  b=LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tCgpvd0o0bkFGdEFwTDlrQTBEQUFvQmlKc2d4Q
- kw5cktRQnl5WmlBR2RqWEtMNE1RVFdRTFpsRGxBdVl0WHJwNFVPCjFvc1d6OTYvZUZFOVByUXNZ
- Z1NYWjRrQ013UUFBUW9BSFJZaEJONk0wZElMeXpzd3JmRnNxWWliSU1RUy9heWsKQlFKblkxeWl
- BQW9KRUlpYklNUVMvYXlrOFNZUC9SQzVQZGIvdktiZ2RaOXBoY2pvQWMzWElFemFzTm1SMHVmMA
- orRE5FQlQ2YmhISzFyQVM2NStoTU5ET1g4VlZVTFBBejNjQTVjWGJmSm1uVGtoelgzaEt6Z1pUS
- TNocjdrUXgwCmxXU3JpU1J1QnUzYVZCN2pJS3FlanhKU3JCNytUZStWeC9NbDNaYWNsWHJkZzFD
- NnNRc3lWSWRkbjNPd3hTVEEKenZERmxxZDN5d3FaR25ocXZkLy9iL3ZXdzlYcEJ3cXF3ZnJLL0R
- MdDRDQnZxeTB6eDhsYk9SYUNCa3pxVHUrMAp1cGkzRmUvQ2FIbXBUNXpjOFpMN3pZalNtRzU5WH
- p2c2g2RndRcklVT0N6eTcvUVZqMDhaNXpEMVZRdzhsYWRZCmw0YStacENWR3V2Smtld1hMVkJOa
- EV3U0MvbDFuOW9SUFhyVFVYUmlNWlNPcDZyV01hZ3NXdmhyem1aUk1GakcKU2NySkNUdEhZWTNL
- OFhnZmt3WlhZS1preVFkS2ZRUjV1Z3lxcjVDbnhNRWwzbisvZVlIMTFPQWhGU1BhY2lDNgpjNVJ
- RQWI2MGNUeHcvTCtKUjM4ckE4UnZiM2JHY25JTnRMRkZyUHZWYy9PN2ZJYnNoSS8rZHdFMGt0Nj
- ZoMCsvCmk3YjVMR01BM3ZIcGR0VUNmRDJyZDZxd0VOelJoODdMdERRWDNDcXpkeHJ5SG1FYnhhZ
- E52OTZaVVBhTWtuZnMKMEhjZzZmRERtYU9ycU5ZWnVhcDBxcWJ0VWlaM00vQ29OOGRqd0VPemho
- NDhBRjBUcUJjbUc5UU4ybUhRUE1TLwpVaW94UWEvbUZscDM0N1lKUWRqRzZNTVB6YUV5TGZrUFJ
- NbTJjN0o1bUUrZDNhbmxacllyQXdTNFl4QUFrMVNJCk5meVpWaHUvT0NBMytnPT0KPWpHVUMKLS
+ kw5cktRQnl5WmlBR2RqWEtOOFk1bHhYUjdJYmlIdDhXckQrSGRaCk9YUm9tTVBjd3pYNGtvYUNl
+ eUF0Rm9rQ013UUFBUW9BSFJZaEJONk0wZElMeXpzd3JmRnNxWWliSU1RUy9heWsKQlFKblkxeWp
+ BQW9KRUlpYklNUVMvYXlrdzJRUC9pc29iVFcwVWo2V1VDbFlid0NSQ3k5bThMOC9RKzBtdG9SbA
+ p6bjJlRUJNeVdtQlYxVjBYbHRkamtvRkVLYUllYmZ1aHFvYnU1TUQzRGVTR1JrSzhRanlNd1FhU
+ HIxL0F5MVVOCjJlSitIT2Z5QTltSDBWRDc2V2NNTFRITFMxR0h3TWQ0MmlsVjd4ekZZOTVGdUZ0
+ MVRzN1lQaWc0b2VPNC9vTUQKekxIQWdnV3V1WFlqdFJOeU1JNlhjeVFqQ1BlS2NSQnJjZU8vQ2M
+ 4NUxDUlE2eUhHazZUV0l0UmUrZjBMRTdQTgo3eitOamEyaFlUQ2pDRkg4QXFCeTZ0dlMvLzkvRG
+ dMblJtekxvZTh0ZFVVdVlITEQxYXJUUGs2V0NDNlp6WFZECnBEWFZzS2xMbXRUSFdKd2cveFBxR
+ XFHWmRzZEE5SkV3K2NPWVdocktuTEswbjBSYlVxeHBvMzBCVjRta0QvSTcKZE9YQml1dUJaODRk
+ ejFDb0NDL2VKdGFST0gzR2ZIZVVoM0Q1T1F6YmUyVFh2ZVpRWnU1akx5amNZK1VwUDN2QgpjRUN
+ rNThYcExySjJ1UkZUaDl2OXI4T2hHVzJhZE9QSzlTdHVabDFqRStjUmdOY3RUNVZiRjBZc3pQYk
+ NBTEV6CjF2SkV0MkNxWkJyeURQcmxZdDUwemtBSW4xbzZoTW45OXV5M2xHSzhMVW04YUxTS2VVb
+ mEyeXFxbXp3SjFsOSsKaFNxL1hFOXhWQXc4bTZ3MHlQRjlqeWU4SVFWQ0wxeUNtelUxM0dUVHhl
+ Q0lBTUtPb2ZqVkpVdGY3bFlUVUw4UwpsazRUTmQ3U3JVZkV0Tk1LSUltcnpoeTF3L3RvNENqZ0Z
+ LblJpZmxsUC84K3gvQXJpQVN5dGsxd1MwelFEdTFpCnI0eXJQdW9GTXJZdzVnPT0KPXlGMlkKLS
  0tLS1FTkQgUEdQIE1FU1NBR0UtLS0tLQo=
 X-Developer-Key: i=parent.f@gmail.com; a=openpgp;
  fpr=07BB034F9E8E3AF0DF4CF7607AE864A1E16FA383
 
-From: Fiona Behrens <me@kloenk.dev>
+From: Fabien Parent <fabien.parent@linaro.org>
 
-Implement an abstraction to write I2C device drivers. The abstraction
-is pretty basic and provides just the infrastructure to probe
-a device from I2C/OF device_id and abstract `i2c_client`.
-The client will be used by the Regmap abstraction to perform
-I/O on the I2C bus.
+This regmap abstraction is implemented using only the regmap_field
+APIs. This abstraction tries to bring some type-safety features and
+ease of use by enhancing the regmap API through extensive macro use
+to generate code.
+The abstraction is bringing only a small subset of all the features
+provided by regmap by only supporting the most vital field from
+`struct regmap_config`.
 
-Signed-off-by: Fiona Behrens <me@kloenk.dev>
-Co-developed-by: Fabien Parent <fabien.parent@linaro.org>
+This abstraction is used by the Regulator abstraction as well as the
+following driver:
+https://github.com/Fabo/linux/blob/b4/ncv6336/drivers/regulator/ncv6336_regulator.rs
+
 Signed-off-by: Fabien Parent <fabien.parent@linaro.org>
 ---
- MAINTAINERS                     |   1 +
- rust/bindings/bindings_helper.h |   1 +
- rust/helpers/helpers.c          |   1 +
- rust/helpers/i2c.c              |  13 ++
- rust/kernel/i2c.rs              | 288 ++++++++++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs              |   2 +
- 6 files changed, 306 insertions(+)
+ MAINTAINERS                     |    1 +
+ rust/bindings/bindings_helper.h |    1 +
+ rust/helpers/helpers.c          |    1 +
+ rust/helpers/regmap.c           |   48 ++
+ rust/kernel/lib.rs              |    2 +
+ rust/kernel/regmap.rs           | 1043 +++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 1096 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 6b9e10551392c185b9314c9f94edeaf6e85af58f..961fe4ed39605bf489d1d9e473f47bccb692ff14 100644
+index 961fe4ed39605bf489d1d9e473f47bccb692ff14..acb3942eb1b66ec2bc09ac50f51c2054b7b45355 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -10796,6 +10796,7 @@ F:	include/linux/i2c-smbus.h
- F:	include/linux/i2c.h
- F:	include/uapi/linux/i2c-*.h
- F:	include/uapi/linux/i2c.h
-+F:	rust/kernel/i2c.rs
+@@ -19790,6 +19790,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git
+ F:	Documentation/devicetree/bindings/regmap/
+ F:	drivers/base/regmap/
+ F:	include/linux/regmap.h
++F:	rust/kernel/regmap.rs
  
- I2C SUBSYSTEM HOST DRIVERS
- M:	Andi Shyti <andi.shyti@kernel.org>
+ REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM
+ M:	Bjorn Andersson <andersson@kernel.org>
 diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index e9fdceb568b8f94e602ee498323e5768a40a6cba..a882efb90bfc27960ef1fd5f2dc8cc40533a1c27 100644
+index a882efb90bfc27960ef1fd5f2dc8cc40533a1c27..48d2b91b34067e7e9ee9c64c2e42681e988e9aad 100644
 --- a/rust/bindings/bindings_helper.h
 +++ b/rust/bindings/bindings_helper.h
-@@ -16,6 +16,7 @@
- #include <linux/file.h>
- #include <linux/firmware.h>
- #include <linux/fs.h>
-+#include <linux/i2c.h>
- #include <linux/jiffies.h>
- #include <linux/jump_label.h>
- #include <linux/mdio.h>
+@@ -28,6 +28,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/poll.h>
+ #include <linux/refcount.h>
++#include <linux/regmap.h>
+ #include <linux/sched.h>
+ #include <linux/security.h>
+ #include <linux/slab.h>
 diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
-index 0640b7e115be1553549312dcfdf842bcae3bde1b..630e903f516ee14a51f46ff0bcc68e8f9a64021a 100644
+index 630e903f516ee14a51f46ff0bcc68e8f9a64021a..f78371d1932939821ecc5f57b065bd63b8bc9dee 100644
 --- a/rust/helpers/helpers.c
 +++ b/rust/helpers/helpers.c
-@@ -15,6 +15,7 @@
- #include "device.c"
- #include "err.c"
- #include "fs.c"
-+#include "i2c.c"
- #include "io.c"
- #include "jump_label.c"
- #include "kunit.c"
-diff --git a/rust/helpers/i2c.c b/rust/helpers/i2c.c
+@@ -27,6 +27,7 @@
+ #include "rbtree.c"
+ #include "rcu.c"
+ #include "refcount.c"
++#include "regmap.c"
+ #include "security.c"
+ #include "signal.c"
+ #include "slab.c"
+diff --git a/rust/helpers/regmap.c b/rust/helpers/regmap.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..8ffdc454e7597cc61909da5b3597057aeb5f7299
+index 0000000000000000000000000000000000000000..2426e563df339a9c7c9c52a72f9982eea5a0ed29
 --- /dev/null
-+++ b/rust/helpers/i2c.c
-@@ -0,0 +1,13 @@
++++ b/rust/helpers/regmap.c
+@@ -0,0 +1,48 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
 +#include <linux/i2c.h>
++#include <linux/regmap.h>
 +
-+void *rust_helper_i2c_get_clientdata(const struct i2c_client *client)
++#if IS_BUILTIN(CONFIG_REGMAP_I2C)
++struct regmap *rust_helper_regmap_init_i2c(struct i2c_client *i2c,
++					   const struct regmap_config *config)
 +{
-+	return i2c_get_clientdata(client);
++	return regmap_init_i2c(i2c, config);
++}
++#endif
++
++int rust_helper_regmap_field_write(struct regmap_field *field, unsigned int val)
++{
++	return regmap_field_write(field, val);
 +}
 +
-+void rust_helper_i2c_set_clientdata(struct i2c_client *client, void *data)
++int rust_helper_regmap_field_force_write(struct regmap_field *field,
++					 unsigned int val)
 +{
-+	i2c_set_clientdata(client, data);
++	return regmap_field_force_write(field, val);
 +}
-diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
++
++int rust_helper_regmap_field_update_bits(struct regmap_field *field,
++					 unsigned int mask, unsigned int val)
++{
++	return regmap_field_update_bits(field, mask, val);
++}
++
++int rust_helper_regmap_field_set_bits(struct regmap_field *field,
++				      unsigned int bits)
++{
++	return regmap_field_set_bits(field, bits);
++}
++
++int rust_helper_regmap_field_clear_bits(struct regmap_field *field,
++					unsigned int bits)
++{
++	return regmap_field_clear_bits(field, bits);
++}
++
++int rust_helper_regmap_field_force_update_bits(struct regmap_field *field,
++					       unsigned int mask,
++						unsigned int val)
++{
++	return regmap_field_force_update_bits(field, mask, val);
++}
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 71ef7df94302b689be665676a36bd5c2e6effff3..456e979724d1079045cb157086ff2b2ed0fcca3b 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -66,6 +66,8 @@
+ pub mod prelude;
+ pub mod print;
+ pub mod rbtree;
++#[cfg(CONFIG_REGMAP)]
++pub mod regmap;
+ pub mod revocable;
+ pub mod security;
+ pub mod seq_file;
+diff --git a/rust/kernel/regmap.rs b/rust/kernel/regmap.rs
 new file mode 100644
-index 0000000000000000000000000000000000000000..efa03335e5b59e72738380e94213976b2464c25b
+index 0000000000000000000000000000000000000000..232fe93df769eee97966703e0ba92c969b8f506e
 --- /dev/null
-+++ b/rust/kernel/i2c.rs
-@@ -0,0 +1,288 @@
++++ b/rust/kernel/regmap.rs
+@@ -0,0 +1,1043 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+//! Abstractions for the I2C bus.
++//! Register map access API.
 +//!
-+//! C header: [`include/linux/i2c.h`](srctree/include/linux/i2c.h)
++//! C header: [`include/linux/regmap.h`](srctree/include/linux/regmap.h)
++//!
++//! # Examples
++//!
++//! ```ignore
++//! regmap::define_regmap_field_descs!(FIELD_DESCS, {
++//!     (pid, 0x3, READ, { value => raw([7:0], ro) }),
++//!     (limconf, 0x16, RW, {
++//!         rearm     => bit(0, rw),
++//!         rststatus => bit(1, rw),
++//!         tpwth     => enum([5:4], rw, {
++//!             Temp83C  = 0x0,
++//!             Temp94C  = 0x1,
++//!             Temp105C  = 0x2,
++//!             Temp116C  = 0x3,
++//!         }),
++//!     })
++//! });
++//!
++//! fn probe(client: &mut i2c::Client) -> Result {
++//!     let config = regmap::Config::<AccessOps>::new(8, 8)
++//!         .with_max_register(0x16)
++//!         .with_cache_type(regmap::CacheType::RbTree);
++//!     let regmap = regmap::Regmap::init_i2c(client, &config);
++//!     let mut fields = regmap.alloc_fields(&FIELD_DESCS)?;
++//!
++//!     dev_info!(client.as_ref(), "PID: {:#x}", pid::value::read(&mut fields)?);
++//! }
++//! ```
 +
 +use crate::{
-+    bindings, container_of,
-+    device::Device,
-+    device_id::{self, RawDeviceId},
-+    driver,
-+    error::{to_result, Result},
-+    of,
-+    prelude::*,
-+    str::CStr,
-+    types::{ARef, ForeignOwnable, Opaque},
-+    ThisModule,
++    bindings,
++    error::{code::*, to_result, Error, Result},
++    macros::paste,
++    sync::Arc,
 +};
++#[cfg(CONFIG_REGMAP_I2C = "y")]
++use crate::{error::from_err_ptr, i2c};
++use core::{marker::PhantomData, ptr::NonNull};
 +
-+/// Abstraction for `bindings::i2c_device_id`.
-+#[repr(transparent)]
-+#[derive(Clone, Copy)]
-+pub struct DeviceId(bindings::i2c_device_id);
-+
-+impl DeviceId {
-+    /// Create a new device id from an I2C name.
-+    pub const fn new(name: &CStr) -> Self {
-+        let src = name.as_bytes_with_nul();
-+        // TODO: Replace with `bindings::i2c_device_id::default()` once stabilized for `const`.
-+        // SAFETY: FFI type is valid to be zero-initialized.
-+        let mut i2c: bindings::i2c_device_id = unsafe { core::mem::zeroed() };
-+
-+        let mut i = 0;
-+        while i < src.len() {
-+            i2c.name[i] = src[i] as _;
-+            i += 1;
-+        }
-+
-+        Self(i2c)
-+    }
++/// Type of caching
++#[repr(u32)]
++pub enum CacheType {
++    /// Don't cache anything
++    None = bindings::regcache_type_REGCACHE_NONE,
++    /// Use RbTree caching
++    RbTree = bindings::regcache_type_REGCACHE_RBTREE,
++    /// Use Flat caching
++    Flat = bindings::regcache_type_REGCACHE_FLAT,
++    /// Use Maple caching
++    Maple = bindings::regcache_type_REGCACHE_MAPLE,
 +}
 +
-+// SAFETY:
-+// * `DeviceId` is a `#[repr(transparent)` wrapper of `i2c_device_id` and does not add
-+//   additional invariants, so it's safe to transmute to `RawType`.
-+// * `DRIVER_DATA_OFFSET` is the offset to the `data` field.
-+unsafe impl RawDeviceId for DeviceId {
-+    type RawType = bindings::i2c_device_id;
-+
-+    const DRIVER_DATA_OFFSET: usize = core::mem::offset_of!(bindings::i2c_device_id, driver_data);
-+
-+    fn index(&self) -> usize {
-+        self.0.driver_data as _
-+    }
-+}
-+
-+/// I2C [`DeviceId`] table.
-+pub type IdTable<T> = &'static dyn device_id::IdTable<DeviceId, T>;
-+
-+/// An adapter for the registration of I2C drivers.
-+#[doc(hidden)]
-+pub struct Adapter<T: Driver + 'static>(T);
-+
-+impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-+    type RegType = bindings::i2c_driver;
-+
-+    fn register(
-+        i2cdrv: &Opaque<Self::RegType>,
-+        name: &'static CStr,
-+        module: &'static ThisModule,
-+    ) -> Result {
-+        // SAFETY: It's safe to set the fields of `struct i2c_driver` on initialization.
-+        unsafe {
-+            (*i2cdrv.get()).driver.name = name.as_char_ptr();
-+            (*i2cdrv.get()).probe = Some(Self::probe_callback);
-+            (*i2cdrv.get()).remove = Some(Self::remove_callback);
-+            if let Some(t) = T::I2C_ID_TABLE {
-+                (*i2cdrv.get()).id_table = t.as_ptr();
-+            }
-+            if let Some(t) = T::OF_ID_TABLE {
-+                (*i2cdrv.get()).driver.of_match_table = t.as_ptr();
-+            }
-+        }
-+
-+        // SAFETY: `i2cdrv` is guaranteed to be a valid `RegType`.
-+        to_result(unsafe { bindings::i2c_register_driver(module.0, i2cdrv.get()) })
-+    }
-+
-+    fn unregister(i2cdrv: &Opaque<Self::RegType>) {
-+        // SAFETY: `i2cdrv` is guaranteed to be a valid `RegType`.
-+        unsafe { bindings::i2c_del_driver(i2cdrv.get()) };
-+    }
-+}
-+
-+impl<T: Driver> Adapter<T> {
-+    /// Get the [`Self::IdInfo`] that matched during probe.
-+    fn id_info(client: &mut Client) -> Option<&'static T::IdInfo> {
-+        let id = <Self as driver::Adapter>::id_info(client.as_ref());
-+        if id.is_some() {
-+            return id;
-+        }
-+
-+        // SAFETY: `client` and `client.as_raw()` are guaranteed to be valid.
-+        let id = unsafe { bindings::i2c_client_get_device_id(client.as_raw()) };
-+        if !id.is_null() {
-+            // SAFETY: `DeviceId` is a `#[repr(transparent)` wrapper of `struct i2c_device_id` and
-+            // does not add additional invariants, so it's safe to transmute.
-+            let id = unsafe { &*id.cast::<DeviceId>() };
-+            return Some(T::I2C_ID_TABLE?.info(id.index()));
-+        }
-+
-+        None
-+    }
-+
-+    extern "C" fn probe_callback(client: *mut bindings::i2c_client) -> core::ffi::c_int {
-+        // SAFETY: The i2c bus only ever calls the probe callback with a valid `client`.
-+        let dev = unsafe { Device::get_device(core::ptr::addr_of_mut!((*client).dev)) };
-+        // SAFETY: `dev` is guaranteed to be embedded in a valid `struct i2c_client` by the
-+        // call above.
-+        let mut client = unsafe { Client::from_dev(dev) };
-+
-+        let info = Self::id_info(&mut client);
-+        match T::probe(&mut client, info) {
-+            Ok(data) => {
-+                // Let the `struct i2c_client` own a reference of the driver's private data.
-+                // SAFETY: By the type invariant `client.as_raw` returns a valid pointer to a
-+                // `struct i2c_client`.
-+                unsafe { bindings::i2c_set_clientdata(client.as_raw(), data.into_foreign() as _) };
-+            }
-+            Err(err) => return Error::to_errno(err),
-+        }
-+
-+        0
-+    }
-+
-+    extern "C" fn remove_callback(client: *mut bindings::i2c_client) {
-+        // SAFETY: `client` is a valid pointer to a `struct i2c_client`.
-+        let ptr = unsafe { bindings::i2c_get_clientdata(client) };
-+
-+        // SAFETY: `remove_callback` is only ever called after a successful call to
-+        // `probe_callback`, hence it's guaranteed that `ptr` points to a valid and initialized
-+        // `KBox<T>` pointer created through `KBox::into_foreign`.
-+        let _ = unsafe { KBox::<T>::from_foreign(ptr) };
-+    }
-+}
-+
-+impl<T: Driver + 'static> driver::Adapter for Adapter<T> {
-+    type IdInfo = T::IdInfo;
-+
-+    fn of_id_table() -> Option<of::IdTable<Self::IdInfo>> {
-+        T::OF_ID_TABLE
-+    }
-+}
-+
-+/// The I2C driver trait.
++/// Register map
 +///
-+/// Drivers must implement this trait in order to get a i2c driver registered.
-+///
-+/// # Example
-+///
-+///```
-+/// # use kernel::{bindings, c_str, i2c, of};
-+/// #
-+/// kernel::of_device_table!(
-+///     OF_ID_TABLE,
-+///     MODULE_OF_ID_TABLE,
-+///     <MyDriver as i2c::Driver>::IdInfo,
-+///     [(of::DeviceId::new(c_str!("onnn,ncv6336")), ()),]
-+/// );
-+///
-+/// kernel::i2c_device_table!(
-+///     I2C_ID_TABLE,
-+///     MODULE_I2C_ID_TABLE,
-+///     <MyDriver as i2c::Driver>::IdInfo,
-+///     [(i2c::DeviceId::new(c_str!("ncv6336")), ()),]
-+/// );
-+///
-+/// struct MyDriver;
-+///
-+/// impl i2c::Driver for MyDriver {
-+///     type IdInfo = ();
-+///     const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> = Some(&OF_ID_TABLE);
-+///     const I2C_ID_TABLE: Option<i2c::IdTable<Self::IdInfo>> = Some(&I2C_ID_TABLE);
-+///
-+///     fn probe(_client: &mut i2c::Client,
-+///              id_info: Option<&Self::IdInfo>) -> Result<Pin<KBox<Self>>> {
-+///         Ok(KBox::new(Self, GFP_KERNEL)?.into())
-+///     }
-+/// }
-+///```
-+pub trait Driver {
-+    /// The type holding information about each device id supported by the driver.
-+    // TODO: Use associated_type_defaults once stabilized:
-+    // type IdInfo: 'static = ();
-+    type IdInfo: 'static;
-+
-+    /// An optional table of I2C device ids supported by the driver.
-+    const I2C_ID_TABLE: Option<IdTable<Self::IdInfo>>;
-+
-+    /// An optional table of OF device ids supported by the driver.
-+    const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>>;
-+
-+    /// I2C driver probe.
-+    ///
-+    /// Called when a new I2C client is added or discovered.
-+    fn probe(client: &mut Client, id_info: Option<&Self::IdInfo>) -> Result<Pin<KBox<Self>>>;
-+}
-+
-+/// An I2C Client.
++/// Note for Rust abstractions using Regmap:
++/// Regmap C structure does not implement reference count, so in order to keep the abstractions
++/// safe it is essential to keep a `Arc<Regmap>` instance whenever the associated C API is holding
++/// on the `struct regmap` pointer.
 +///
 +/// # Invariants
 +///
-+/// `Client` holds a valid reference of `ARef<device::Device>` whose underlying `struct device` is a
-+/// member of a `struct i2c_client`.
-+#[derive(Clone)]
-+pub struct Client(ARef<Device>);
++/// * `self.0` is valid, non-zero, and the memory is owned by `self`.
++/// * This abstraction does not allow to disable regmap locking.
++pub struct Regmap(NonNull<bindings::regmap>);
 +
-+impl Client {
-+    /// Convert a raw kernel device into a `Client`
-+    ///
-+    /// # Safety
-+    ///
-+    /// `dev` must be an `Aref<Device>` whose underlying `bindings::device` is a member of a
-+    /// `bindings::i2c_client`.
-+    unsafe fn from_dev(dev: ARef<Device>) -> Self {
-+        Self(dev)
++impl Regmap {
++    #[cfg(CONFIG_REGMAP_I2C = "y")]
++    /// Initialize a [`Regmap`] instance for an `i2c` client.
++    pub fn init_i2c<T: ConfigOps>(i2c: &i2c::Client, config: &Config<T>) -> Result<Self> {
++        // SAFETY: Type invariants guarantee that `i2c.as_raw` is valid and non-null and
++        // the Config type invariant guarantee that `config.raw` always contains valid data.
++        let regmap = from_err_ptr(unsafe { bindings::regmap_init_i2c(i2c.as_raw(), &config.raw) })?;
++
++        Ok(Regmap(NonNull::new(regmap).ok_or(EINVAL)?))
 +    }
 +
-+    /// Returns the raw `struct i2c_client`.
-+    pub fn as_raw(&self) -> *mut bindings::i2c_client {
-+        // SAFETY: By the type invariant `self.0.as_raw` is a pointer to the `struct device`
-+        // embedded in `struct i2c_client`.
-+        unsafe { container_of!(self.0.as_raw(), bindings::i2c_client, dev) }.cast_mut()
++    /// Return the raw pointer of this regmap.
++    pub fn as_raw(&self) -> *mut bindings::regmap {
++        self.0.as_ptr()
 +    }
 +}
 +
-+impl AsRef<Device> for Client {
-+    fn as_ref(&self) -> &Device {
-+        &self.0
++impl Drop for Regmap {
++    fn drop(&mut self) {
++        // SAFETY: By the type invariant, `self.as_raw` is a valid pointer and it can be freed
++        // because we own the memory.
++        unsafe { bindings::regmap_exit(self.as_raw()) }
 +    }
 +}
 +
-+/// Declares a kernel module that exposes a single I2C driver.
++// SAFETY: The type invariants guarantee that the memory of `bindings::regmap` is owned and
++// guarantee that the C API is using locked accesses.
++unsafe impl Send for Regmap {}
++
++/// Field Descriptors
++///
++/// FieldDescriptors can be created by calling the [`define_regmap_field_descs`] macro.
 +///
 +/// # Examples
 +///
 +/// ```ignore
-+/// kernel::module_i2c_driver! {
-+///     type: MyDriver,
-+///     name: "Module name",
-+///     author: "Author name",
-+///     description: "Description",
-+///     license: "GPL v2",
++/// use kernel::regmap::{define_regmap_field_descs, Fields};
++///
++/// define_regmap_field_descs!(DESCS, {
++///     (pid, 0x3, READ, { value => raw([7:0], ro) })
++/// });
++///
++/// struct Registrations {
++///    fields: Fields<{ DESCS.len() }>,
 +/// }
 +/// ```
-+#[macro_export]
-+macro_rules! module_i2c_driver {
-+    ($($f:tt)*) => {
-+        $crate::module_driver!(<T>, $crate::i2c::Adapter<T>, { $($f)* });
++pub struct FieldDescs<const N: usize>([bindings::reg_field; N]);
++
++impl<const N: usize> FieldDescs<N> {
++    // macro use only
++    #[doc(hidden)]
++    pub const fn new(fields: [bindings::reg_field; N]) -> Self {
++        Self(fields)
++    }
++
++    /// Number of fields being held by `FieldDescs<N>`
++    ///
++    /// This function can be used to retrieve the number of fields that were
++    /// created when calling [`define_regmap_field_descs`].
++    #[allow(clippy::len_without_is_empty)]
++    pub const fn len(&self) -> usize {
++        N
++    }
++}
++
++/// Regmap fields
++///
++/// # Invariants
++///
++/// `self.fields` array is garanteed to contains valid and non-null pointers.
++/// `self.fields[0]` memory is owned by `Fields`.
++/// `self.fields[*]` values cannot be modified.
++pub struct Fields<const N: usize> {
++    fields: [NonNull<bindings::regmap_field>; N],
++
++    // Each regmap_field hold a pointer to the `struct regmap` instance, so we need to keep a copy
++    // of the wrapper around.
++    _regmap: Arc<Regmap>,
++}
++impl<const N: usize> Fields<N> {
++    /// Allocate regmap [`Fields`]
++    ///
++    /// This function allocate regmap fields from the `reg_fields` descriptors
++    pub fn new(regmap: &Arc<Regmap>, descs: &'static FieldDescs<N>) -> Result<Self> {
++        let mut fields = [NonNull::<bindings::regmap_field>::dangling(); N];
++        // SAFETY:
++        // * [`Regmap`] type invariants guarantee that `Regmap::as_raw` returns a valid pointer.
++        // * `FieldDescs::<N>` is guaranteed to hold a valid array of size N.
++        to_result(unsafe {
++            bindings::regmap_field_bulk_alloc(
++                regmap.as_raw(),
++                fields.as_mut_ptr().cast(),
++                descs.0.as_ptr().cast(),
++                descs.0.len() as i32,
++            )
++        })?;
++
++        Ok(Fields {
++            fields,
++            _regmap: regmap.clone(),
++        })
++    }
++
++    /// Get field `index`
++    pub fn index(&mut self, index: usize) -> *mut bindings::regmap_field {
++        self.fields[index].as_ptr()
++    }
++
++    // macro use only
++    #[doc(hidden)]
++    pub fn read(&mut self, index: usize) -> Result<core::ffi::c_uint> {
++        let mut val = 0;
++
++        // Make sure we don't panic if the index is out of bound.
++        if index >= N {
++            return Err(EINVAL);
++        }
++
++        // SAFETY: By the type invariants, we are garanteed that all fields entries point
++        // to valid and initialized values, hence it is safe to make this FFI call.
++        let ret = unsafe { bindings::regmap_field_read(self.fields[index].as_ptr(), &mut val) };
++        if ret < 0 {
++            return Err(Error::from_errno(ret));
++        }
++
++        Ok(val)
++    }
++}
++
++impl<const N: usize> Drop for Fields<N> {
++    fn drop(&mut self) {
++        // SAFETY: Per type invariant, `self.fields[0].as_mut` is garanteed to be valid and
++        // are owned by `Fields`.
++        unsafe { bindings::regmap_field_bulk_free(core::ptr::from_mut(self.fields[0].as_mut())) }
++    }
++}
++
++// SAFETY: The type invariants guarantee that we own the `struct regmap_field` data and that they
++// cannot be modified after allocation, and _regmap is Send, so it is safe for `Fields` to be Send.
++unsafe impl<const N: usize> Send for Fields<N> {}
++
++macro_rules! config_with {
++    ($(#[$meta:meta])* $name:ident: $type:ty) => {
++        config_with!($(#[$meta])* $name: $type, $name);
++    };
++
++    ($(#[$meta:meta])* $name:ident: $type:ty, $e:expr) => {
++        paste! {
++            $(#[$meta])*
++            pub const fn [<with_$name>](mut self, $name: $type) -> Self {
++                self.raw.$name = $e;
++                self
++            }
++        }
 +    };
 +}
 +
-+/// Create an I2C `IdTable` with an "alias" for modpost.
++// macro use only
++#[doc(hidden)]
++pub trait ConfigOps {
++    fn is_readable_reg(reg: u32) -> bool;
++    fn is_writeable_reg(reg: u32) -> bool;
++    fn is_volatile_reg(reg: u32) -> bool;
++    fn is_precious_reg(reg: u32) -> bool;
++}
++
++/// Regmap Configuration
++///
++/// # Invariants
++///
++/// `self.raw` always contain valid data.
++pub struct Config<T: ConfigOps> {
++    raw: bindings::regmap_config,
++    _phantom: PhantomData<T>,
++}
++impl<T: ConfigOps> Config<T> {
++    /// Create a new regmap Config
++    pub const fn new(reg_bits: i32, val_bits: i32) -> Self {
++        // SAFETY: FFI type is valid to be zero-initialized.
++        let mut cfg: bindings::regmap_config = unsafe { core::mem::zeroed() };
++
++        cfg.reg_bits = reg_bits;
++        cfg.val_bits = val_bits;
++        cfg.writeable_reg = Some(Self::writeable_reg_callback);
++        cfg.readable_reg = Some(Self::readable_reg_callback);
++        cfg.volatile_reg = Some(Self::volatile_reg_callback);
++        cfg.precious_reg = Some(Self::precious_reg_callback);
++
++        Self {
++            raw: cfg,
++            _phantom: PhantomData,
++        }
++    }
++
++    config_with!(
++        /// Specifies the maximum valid register address.
++        max_register: u32
++    );
++
++    config_with!(
++        /// Type of caching being performed.
++        cache_type: CacheType, cache_type as _
++    );
++
++    /// # Safety
++    ///
++    /// `_dev` must be a non-null and valid `struct device` pointer.
++    unsafe extern "C" fn writeable_reg_callback(_dev: *mut bindings::device, reg: u32) -> bool {
++        T::is_writeable_reg(reg)
++    }
++
++    /// # Safety
++    ///
++    /// `_dev` must be a non-null and valid `struct device` pointer.
++    unsafe extern "C" fn readable_reg_callback(_dev: *mut bindings::device, reg: u32) -> bool {
++        T::is_readable_reg(reg)
++    }
++
++    /// # Safety
++    ///
++    /// `_dev` must be a non-null and valid `struct device` pointer.
++    unsafe extern "C" fn volatile_reg_callback(_dev: *mut bindings::device, reg: u32) -> bool {
++        T::is_volatile_reg(reg)
++    }
++
++    /// # Safety
++    ///
++    /// `_dev` must be a non-null and valid `struct device` pointer.
++    unsafe extern "C" fn precious_reg_callback(_dev: *mut bindings::device, reg: u32) -> bool {
++        T::is_precious_reg(reg)
++    }
++}
++
++/// Definitions describing how registers can be accessed.
++pub mod access {
++    /// Register can be read from.
++    pub const READ: u32 = 0b000001;
++    /// Register can be written to.
++    pub const WRITE: u32 = 0b000010;
++    /// Register should not be read outside of a call from the driver.
++    pub const PRECIOUS: u32 = 0b000100;
++    /// Register value can't be cached.
++    pub const VOLATILE: u32 = 0b001000;
++
++    /// Register can be read from and written to.
++    pub const RW: u32 = READ | WRITE;
++}
++
++// macro use only
++#[doc(hidden)]
++#[macro_export]
++macro_rules! regmap_check_access {
++    ($type:ident, $access:expr, $reg:ident, $addr:literal) => {
++        if kernel::regmap::access::$type & $access > 0 && $reg == $addr {
++            return true;
++        }
++    };
++}
++// macro use only
++#[doc(hidden)]
++pub use regmap_check_access;
++
++/// Common operations for all field types
++pub trait FieldCommonOps {
++    /// Get the Mask for the field
++    fn mask() -> u32;
++}
++
++/// Read operations for fields with `bit` type
++pub trait BitFieldReadOps {
++    /// Returns whether the bit is set
++    fn is_set<const N: usize>(fields: &mut Fields<N>) -> Result<bool>;
++}
++
++/// Write operations for fields with `bit` type
++pub trait BitFieldWriteOps {
++    /// Set the bit
++    fn set<const N: usize>(fields: &mut Fields<N>) -> Result;
++
++    /// Force set the bit
++    fn force_set<const N: usize>(fields: &mut Fields<N>) -> Result;
++
++    /// Clear the bit
++    fn clear<const N: usize>(fields: &mut Fields<N>) -> Result;
++
++    /// Force clear the bit
++    fn force_clear<const N: usize>(fields: &mut Fields<N>) -> Result;
++}
++
++/// Read operations for fields with `enum` type
++pub trait EnumFieldReadOps {
++    #[doc(hidden)]
++    /// Underlying enum type reprensenting the field values
++    type EnumType;
++
++    /// Read the field
++    fn read<const N: usize>(fields: &mut Fields<N>) -> Result<Self::EnumType>;
++}
++
++/// Write operations for fields with `enum` type
++pub trait EnumFieldWriteOps {
++    #[doc(hidden)]
++    /// Underlying enum type reprensenting the field values
++    type EnumType;
++
++    /// Write the field
++    fn write<const N: usize>(fields: &mut Fields<N>, val: Self::EnumType) -> Result;
++
++    /// Force write the field
++    fn force_write<const N: usize>(fields: &mut Fields<N>, val: Self::EnumType) -> Result;
++}
++
++/// Read operations for fields with `raw` type
++pub trait RawFieldReadOps {
++    /// Read the field
++    fn read<const N: usize>(fields: &mut Fields<N>) -> Result<core::ffi::c_uint>;
++
++    /// Test the field bits
++    fn test_bits<const N: usize>(fields: &mut Fields<N>, bits: core::ffi::c_uint) -> Result;
++}
++
++/// Write operations for fields with `raw` type
++pub trait RawFieldWriteOps {
++    /// Write the field
++    fn write<const N: usize>(fields: &mut Fields<N>, val: core::ffi::c_uint) -> Result;
++
++    /// Force write the field
++    fn force_write<const N: usize>(fields: &mut Fields<N>, val: core::ffi::c_uint) -> Result;
++
++    /// Update the field using a mask
++    fn update_bits<const N: usize>(
++        fields: &mut Fields<N>,
++        mask: core::ffi::c_uint,
++        val: core::ffi::c_uint,
++    ) -> Result;
++
++    /// Force update the field using a mask
++    fn force_update_bits<const N: usize>(
++        fields: &mut Fields<N>,
++        mask: core::ffi::c_uint,
++        val: core::ffi::c_uint,
++    ) -> Result;
++
++    /// Set field bits
++    fn set_bits<const N: usize>(fields: &mut Fields<N>, bits: core::ffi::c_uint) -> Result;
++
++    /// Clear the field bits
++    fn clear_bits<const N: usize>(fields: &mut Fields<N>, bits: core::ffi::c_uint) -> Result;
++}
++
++/// Bit field
++///
++/// `bit` should be use when a feature is implemented through reading or writing a single bit of
++/// a register.
++///
++/// See [`BitFieldReadOps`] and [`BitFieldWriteOps`] for operations available..
++///
++/// # Syntax
++///
++/// `bit(index, access)`
++///
++/// where
++/// * `index`: bit index starting from 0
++/// * `access`: access of the bit with the following possible values:
++///     - `ro`: read-only ([`BitFieldReadOps`] gets implemented)
++///     - `wo`: write-only ([`BitFieldWriteOps`] gets implemented)
++///     - `rw`: read and write (both [`BitFieldReadOps`] and [`BitFieldWriteOps`] gets
++///         implemented)
 +///
 +/// # Examples
 +///
-+/// ```
-+/// use kernel::{c_str, i2c};
++/// ```ignore
++/// regmap::define_regmap_field_descs!(FIELD_DESCS, {
++///     (command, 0x14, RW, {
++///         vselgt   => bit(0, rw),
++///         pwmvsel1 => bit(6, rw),
++///         pwmvsel0 => bit(7, rw),
++///     })
++/// });
 +///
-+/// kernel::i2c_device_table!(
-+///     I2C_ID_TABLE,
-+///     MODULE_I2C_ID_TABLE,
-+///     u32,
-+///     [(i2c::DeviceId::new(c_str!("ncv6336")), 0x6336),]
-+/// );
++/// command::pwmvsel0::set(&mut fields);
++/// command::pwmvsel0::is_set(&mut fields);
++/// command::pwmvsel0::clear(&mut fields);
 +/// ```
 +#[macro_export]
-+macro_rules! i2c_device_table {
-+    ($table_name:ident, $module_table_name:ident, $id_info_type: ty, $table_data: expr) => {
-+        const $table_name: $crate::device_id::IdArray<
-+            $crate::i2c::DeviceId,
-+            $id_info_type,
-+            { $table_data.len() },
-+        > = $crate::device_id::IdArray::new($table_data);
++macro_rules! regmap_field_bit {
++    ($field_name:ident, $access: expr, $reg:literal, $pos:literal, rw) => {
++        kernel::static_assert!($access & kernel::regmap::access::RW == kernel::regmap::access::RW);
 +
-+        $crate::module_device_table!("i2c", $module_table_name, $table_name);
++        $crate::regmap_field_bit!($field_name, $reg, $pos, reserved);
++        $crate::regmap_field_bit!($field_name, _ro);
++        $crate::regmap_field_bit!($field_name, _wo);
++    };
++
++    ($field_name:ident, $access: expr, $reg:literal, $pos:literal, ro) => {
++        kernel::static_assert!(
++            $access & kernel::regmap::access::READ == kernel::regmap::access::READ
++        );
++
++        $crate::regmap_field_bit!($field_name, $reg, $pos, reserved);
++        $crate::regmap_field_bit!($field_name, _ro);
++    };
++
++    ($field_name:ident, $access: expr, $reg:literal, $pos:literal, wo) => {
++        kernel::static_assert!(
++            $access & kernel::regmap::access::WRITE == kernel::regmap::access::WRITE
++        );
++
++        $crate::regmap_field_bit!($field_name, $reg, $pos, reserved);
++        $crate::regmap_field_bit!($field_name, _wo);
++    };
++
++    ($field_name:ident, $reg:literal, $pos:literal, reserved) => {
++        kernel::macros::paste! {
++            struct [<_Bit $pos >];
++        }
++
++        impl $field_name {
++            pub(crate) const fn reg_field() -> bindings::reg_field {
++                bindings::reg_field {
++                    reg: $reg,
++                    lsb: $pos,
++                    msb: $pos + 1,
++                    id_offset: 0,
++                    id_size: 0,
++                }
++            }
++
++            #[allow(dead_code)]
++            pub(crate) const fn mask() -> u32 {
++                kernel::genmask!($pos, $pos) as _
++            }
++        }
++    };
++
++    ($field_name:ident, _ro) => {
++        impl super::BitFieldReadOps for $field_name {
++            fn is_set<const N: usize>(fields: &mut regmap::Fields<N>) -> Result<bool> {
++                let field = fields.index(Self::id() as usize);
++                let mut val: core::ffi::c_uint = 0;
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe { bindings::regmap_field_read(field, &mut val) })?;
++                Ok(val == 1)
++            }
++        }
++    };
++
++    ($field_name:ident, _wo) => {
++        impl super::BitFieldWriteOps for $field_name {
++            fn set<const N: usize>(fields: &mut regmap::Fields<N>) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe { bindings::regmap_field_write(field, 1) })
++            }
++
++            fn force_set<const N: usize>(fields: &mut regmap::Fields<N>) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe { bindings::regmap_field_force_write(field, 1) })
++            }
++
++            fn clear<const N: usize>(fields: &mut regmap::Fields<N>) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe { bindings::regmap_field_write(field, 0) })
++            }
++
++            fn force_clear<const N: usize>(fields: &mut regmap::Fields<N>) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe { bindings::regmap_field_force_write(field, 0) })
++            }
++        }
 +    };
 +}
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 7fb9858966e8457611d5868783000844ba640db9..71ef7df94302b689be665676a36bd5c2e6effff3 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -48,6 +48,8 @@
- #[cfg(CONFIG_RUST_FW_LOADER_ABSTRACTIONS)]
- pub mod firmware;
- pub mod fs;
-+#[cfg(CONFIG_I2C)]
-+pub mod i2c;
- pub mod init;
- pub mod ioctl;
- pub mod jump_label;
++
++/// Enum field
++///
++/// `enum` should be used when a series of contineous bits represent possible values that can be
++/// enumerated.
++/// `enum` fields provide type-safety and preventing to write into the fields incorrect values.
++///
++/// See [`EnumFieldReadOps`] and [`EnumFieldWriteOps`] for operations available..
++///
++/// # Syntax
++///
++/// `enum(bits_range, access, { variant_definitions })`
++///
++/// where
++/// * `bits_range`: bit used to store the data.
++/// * `access`: access of the bits with the following possible values:
++///     - `ro`: read-only ([`EnumFieldReadOps`] gets implemented)
++///     - `wo`: write-only ([`EnumFieldWriteOps`] gets implemented)
++///     - `rw`: read and write (both [`EnumFieldReadOps`] and [`EnumFieldWriteOps`] gets
++///         implemented)
++/// * `variant_definitions`: list of all the enum variants using the syntax: `VariantName = Value,`.
++///
++/// # Examples
++///
++/// ```ignore
++/// regmap::define_regmap_field_descs!(FIELD_DESCS, {
++///     (limconf, 0x16, RW, {
++///         ipeak     => enum([7:6], rw, {
++///             Peak3p5A = 0x0,
++///             Peak4p0A = 0x1,
++///             Peak4p5A = 0x2,
++///             Peak5p0A = 0x3,
++///         }),
++///     })
++/// });
++///
++/// limconf::ipeak::write(&mut fields, limconf::ipeak::Peak4p0A);
++/// limconf::ipeak::read(&mut fields);
++/// ```
++#[macro_export]
++macro_rules! regmap_field_enum {
++    ($field_name:ident, $access: expr, $reg:literal, [$msb:literal:$lsb:literal], ro, {
++        $($k:ident = $v:literal,)+ }) => {
++        kernel::static_assert!(
++            $access & kernel::regmap::access::READ == kernel::regmap::access::READ
++        );
++
++        $crate::regmap_field_enum!($field_name, $reg, [$msb:$lsb], reserved, { $($k = $v,)+ });
++        $crate::regmap_field_enum!($field_name, _ro);
++    };
++
++    ($field_name:ident, $access: expr, $reg:literal, [$msb:literal:$lsb:literal], rw, {
++        $($k:ident = $v:literal,)+ }) => {
++        kernel::static_assert!($access & kernel::regmap::access::RW == kernel::regmap::access::RW);
++
++        $crate::regmap_field_enum!($field_name, $reg, [$msb:$lsb], reserved, { $($k = $v,)+ });
++        $crate::regmap_field_enum!($field_name, _ro);
++        $crate::regmap_field_enum!($field_name, _wo);
++    };
++
++    ($field_name:ident, $access: expr, $reg:literal, [$msb:literal:$lsb:literal], wo, {
++        $($k:ident = $v:literal,)+ }) => {
++        kernel::static_assert!(
++            $access & kernel::regmap::access::WRITE == kernel::regmap::access::WRITE
++        );
++
++        $crate::regmap_field_enum!($field_name, $reg, [$msb:$lsb], reserved, { $($k = $v,)+ });
++        $crate::regmap_field_enum!($field_name, _wo);
++    };
++
++    ($field_name:ident, $reg:literal, [$msb:literal:$lsb:literal], reserved, {
++        $($k:ident = $v:literal,)+ }) => {
++        kernel::macros::paste! {
++            #[repr(u32)]
++            #[allow(non_camel_case_types)]
++            pub(crate) enum [<$field_name _enum>] {
++                $($k = $v,)+
++            }
++
++            impl TryFrom<core::ffi::c_uint> for [<$field_name _enum>] {
++                type Error = kernel::error::Error;
++
++                fn try_from(raw_value: core::ffi::c_uint) -> Result<Self> {
++                    match raw_value {
++                        $($v => Ok(Self::$k),)+
++                        _ => Err(kernel::error::code::EINVAL),
++                    }
++                }
++            }
++
++            impl $field_name {
++                pub(crate) const fn reg_field() -> bindings::reg_field {
++                    bindings::reg_field {
++                        reg: $reg,
++                        lsb: $lsb,
++                        msb: $msb,
++                        id_offset: 0,
++                        id_size: 0,
++                    }
++                }
++
++                #[allow(dead_code)]
++                pub(crate) const fn mask() -> u32 {
++                    kernel::genmask!($msb, $lsb) as _
++                }
++            }
++        }
++    };
++
++    ($field_name:ident, _ro) => {
++        impl super::EnumFieldReadOps for $field_name {
++            type EnumType = kernel::macros::paste! {[<$field_name _enum>]};
++
++            fn read<const N: usize>(fields: &mut regmap::Fields<N>) -> Result<Self::EnumType> {
++                Self::EnumType::try_from(fields.read(Self::id() as usize)?)
++            }
++        }
++    };
++
++    ($field_name:ident, _wo) => {
++        impl super::EnumFieldWriteOps for $field_name {
++            type EnumType = kernel::macros::paste! {[<$field_name _enum>]};
++
++            fn write<const N: usize>(
++                fields: &mut regmap::Fields<N>,
++                val: Self::EnumType
++            ) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                let ret = unsafe { bindings::regmap_field_write(field, val as _) };
++                kernel::error::to_result(ret)
++            }
++
++            fn force_write<const N: usize>(
++                fields: &mut regmap::Fields<N>,
++                val: Self::EnumType
++            ) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                let ret = unsafe { bindings::regmap_field_force_write(field, val as _) };
++                kernel::error::to_result(ret)
++            }
++        }
++    };
++}
++
++/// Raw field
++///
++/// `raw` should be used when bits cannot be represented by any other field types. It provides
++/// raw access to the register bits.
++///
++/// # Syntax
++///
++/// `raw(bits_range, access)`
++///
++/// where
++/// * `bits_range`: bits used to store the data.
++/// * `access`: access of the bit with the following possible values:
++///     - `ro`: read-only ([`RawFieldReadOps`] gets implemented)
++///     - `wo`: write-only ([`RawFieldWriteOps`] gets implemented)
++///     - `rw`: read and write (both [`RawFieldReadOps`] and [`RawFieldWriteOps`] gets
++///         implemented)
++///
++/// # Examples
++///
++/// ```ignore
++/// regmap::define_regmap_field_descs!(FIELD_DESCS, {
++///     (pid, 0x3, READ, { value => raw([7:0], ro) }),
++///     (progvsel1, 0x10, RW, {
++///         voutvsel1 => raw([6:0], rw),
++///     })
++/// });
++///
++/// pid::value::read(&mut fields);
++/// progvsel1::voutvsel1::write(&mut fields, 0x42);
++/// ```
++#[macro_export]
++macro_rules! regmap_field_raw {
++    ($field_name:ident, $access: expr, $reg:literal, [$msb:literal:$lsb:literal], rw) => {
++        kernel::static_assert!($access & kernel::regmap::access::RW == kernel::regmap::access::RW);
++
++        $crate::regmap_field_raw!($field_name, $reg, [$msb:$lsb], reserved);
++        $crate::regmap_field_raw!($field_name, $reg, [$msb:$lsb], _ro);
++        $crate::regmap_field_raw!($field_name, $reg, [$msb:$lsb], _wo);
++    };
++
++    ($field_name:ident, $access: expr, $reg:literal, [$msb:literal:$lsb:literal], ro) => {
++        kernel::static_assert!(
++            $access & kernel::regmap::access::READ == kernel::regmap::access::READ
++        );
++
++        $crate::regmap_field_raw!($field_name, $reg, [$msb:$lsb], reserved);
++        $crate::regmap_field_raw!($field_name, $reg, [$msb:$lsb], _ro);
++    };
++
++    ($field_name:ident, $access: expr, $reg:literal, [$msb:literal:$lsb:literal], wo) => {
++        kernel::static_assert!(
++            $access & kernel::regmap::access::WRITE == kernel::regmap::access::WRITE
++        );
++
++        $crate::regmap_field_raw!($field_name, $reg, [$msb:$lsb], reserved);
++        $crate::regmap_field_raw!($field_name, $reg, [$msb:$lsb], _wo);
++    };
++
++    ($field_name:ident, $reg:literal, [$msb:literal:$lsb:literal], reserved) => {
++        impl $field_name {
++            pub(crate) const fn reg_field() -> bindings::reg_field {
++                bindings::reg_field {
++                    reg: $reg,
++                    lsb: $lsb,
++                    msb: $msb,
++                    id_offset: 0,
++                    id_size: 0,
++                }
++            }
++
++            #[allow(dead_code)]
++            pub(crate) const fn mask() -> u32 {
++                kernel::genmask!($msb, $lsb) as _
++            }
++        }
++    };
++
++    ($field_name:ident, $reg:literal, [$msb:literal:$lsb:literal], _ro) => {
++        impl super::RawFieldReadOps for $field_name {
++            fn read<const N: usize>(fields: &mut regmap::Fields<N>) -> Result<core::ffi::c_uint> {
++                fields.read(Self::id() as usize)
++            }
++
++            fn test_bits<const N: usize>(
++                fields: &mut regmap::Fields<N>,
++                bits: core::ffi::c_uint,
++            ) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe { bindings::regmap_field_test_bits(field, bits) })
++            }
++        }
++    };
++
++    ($field_name:ident, $reg:literal, [$msb:literal:$lsb:literal], _wo) => {
++        impl super::RawFieldWriteOps for $field_name {
++            fn write<const N: usize>(
++                fields: &mut regmap::Fields<N>,
++                val: core::ffi::c_uint,
++            ) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe { bindings::regmap_field_write(field, val as _) })
++            }
++
++            fn force_write<const N: usize>(
++                fields: &mut regmap::Fields<N>,
++                val: core::ffi::c_uint,
++            ) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe {
++                    bindings::regmap_field_force_write(field, val as _)
++                })
++            }
++
++            fn update_bits<const N: usize>(
++                fields: &mut regmap::Fields<N>,
++                mask: core::ffi::c_uint,
++                val: core::ffi::c_uint,
++            ) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe {
++                    bindings::regmap_field_update_bits(field, mask, val)
++                })
++            }
++
++            fn force_update_bits<const N: usize>(
++                fields: &mut regmap::Fields<N>,
++                mask: core::ffi::c_uint,
++                val: core::ffi::c_uint,
++            ) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe {
++                    bindings::regmap_field_force_update_bits(field, mask, val)
++                })
++            }
++
++            fn set_bits<const N: usize>(
++                fields: &mut regmap::Fields<N>,
++                bits: core::ffi::c_uint,
++            ) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe { bindings::regmap_field_set_bits(field, bits) })
++            }
++
++            fn clear_bits<const N: usize>(
++                fields: &mut regmap::Fields<N>,
++                bits: core::ffi::c_uint,
++            ) -> Result {
++                let field = fields.index(Self::id() as usize);
++                // SAFETY: `Fields` guarantee that anything returned from `Fields::index` is valid
++                // and non-null, hence it is safe to perform the FFI function call.
++                kernel::error::to_result(unsafe { bindings::regmap_field_clear_bits(field, bits) })
++            }
++        }
++    };
++}
++
++// macro use only
++#[doc(hidden)]
++#[macro_export]
++macro_rules! regmap_fields {
++    ($type:ident, $reg:ident, $access:expr, $name:ident, $($t:tt)*) => {
++        kernel::macros::paste! {
++            #[allow(non_camel_case_types)]
++            pub(crate) struct $name;
++
++            impl $name {
++                #[allow(dead_code)]
++                pub(crate) const fn id() -> super::Fields {
++                    super::Fields::[<$reg _ $name>]
++                }
++            }
++
++            $crate::[<regmap_field_ $type>]!($name, $access, $($t)*);
++        }
++    };
++}
++
++// macro use only
++#[doc(hidden)]
++#[macro_export]
++macro_rules! regmap_reg_field {
++    ($reg_name:ident, $field_name:ident) => {
++        register::$reg_name::$field_name::reg_field()
++    };
++}
++
++// macro use only
++#[doc(hidden)]
++#[macro_export]
++macro_rules! regmap_count_fields {
++    () => { 0usize };
++    ($type:ident $($rhs:ident)*) => { 1 + $crate::regmap_count_fields!($($rhs)*) };
++}
++
++/// Define regmap field descriptors
++///
++/// # Syntax
++///
++/// ```ignore
++/// define_regmap_field_desc!(VAR_NAME, { <register_definition>, [<register_definition>, ...] });
++/// ```
++///
++/// where `VAR_NAME`: symbol under which the regmap [`Fields`] are available.
++///
++/// register_definition:
++/// ```ignore
++/// (name, address, access_permission, { <field_definition>, [<field_definition>, ...] })
++/// ```
++/// where
++///
++/// * name: symbol under which this field will be available
++/// * address: register address
++/// * access_permission: [`access`] permission of the register
++///
++/// field_definition:
++/// ```ignore
++/// field_name => <field_type>(...),
++/// ```
++///
++/// where `field_name` is the symbol under which the field will be accessible.
++///
++/// The following `<field_type>`s are available:
++/// * [bit](`regmap_field_bit`)
++/// * [enum](`regmap_field_enum`)
++/// * [raw](`regmap_field_raw`)
++///
++/// # Examples
++///
++/// ```ignore
++/// regmap::define_regmap_field_descs!(FIELD_DESCS, {
++///     (pid, 0x3, READ, { value => raw([7:0], ro) }),
++///     (limconf, 0x16, RW, {
++///         rearm     => bit(0, rw),
++///         rststatus => bit(1, rw),
++///         tpwth     => enum([5:4], rw, {
++///             Temp83C  = 0x0,
++///             Temp94C  = 0x1,
++///             Temp105C  = 0x2,
++///             Temp116C  = 0x3,
++///         }),
++///     })
++/// });
++/// ```
++#[macro_export]
++macro_rules! define_regmap_field_descs {
++    ($name:ident, {
++        $((
++            $reg_name:ident, $reg_addr:literal, $access:expr, {
++                $($field_name:ident => $type:ident($($x:tt),*)),* $(,)?
++            }
++        )),+
++    }) => {
++        mod register {
++            use kernel::regmap::{
++                access::*,
++                BitFieldReadOps, BitFieldWriteOps,
++                ConfigOps,
++                EnumFieldReadOps, EnumFieldWriteOps,
++                RawFieldReadOps, RawFieldWriteOps
++            };
++
++            kernel::macros::paste! {
++                $(
++                    pub(crate) mod $reg_name {
++                        use kernel::{bindings, error::{Result}, regmap::{self, access::*}};
++                        $(
++                            $crate::regmap_fields!($type, $reg_name, $access, $field_name,
++                                                   $reg_addr, $($x),*);
++                        )*
++
++                        #[allow(dead_code)]
++                        pub(crate) const fn addr() -> u32 {
++                            $reg_addr
++                        }
++                    }
++                )+
++
++                #[repr(u32)]
++                #[allow(non_camel_case_types)]
++                pub(crate) enum Fields {
++                    $($(
++                        [<$reg_name _ $field_name>],
++                    )*)+
++                }
++
++                pub(crate) struct AccessOps;
++                impl ConfigOps for AccessOps {
++                    fn is_readable_reg(reg: u32) -> bool {
++                        $(
++                            kernel::regmap::regmap_check_access!(READ, $access, reg, $reg_addr);
++                        )+
++
++                        false
++                    }
++
++                    fn is_writeable_reg(reg: u32) -> bool {
++                        $(
++                            kernel::regmap::regmap_check_access!(WRITE, $access, reg, $reg_addr);
++                        )+
++
++                        false
++                    }
++
++                    fn is_volatile_reg(reg: u32) -> bool {
++                        $(
++                            kernel::regmap::regmap_check_access!(VOLATILE, $access, reg, $reg_addr);
++                        )+
++
++                        false
++                    }
++
++                    fn is_precious_reg(reg: u32) -> bool {
++                        $(
++                            kernel::regmap::regmap_check_access!(PRECIOUS, $access, reg, $reg_addr);
++                        )+
++
++                        false
++                    }
++                }
++            }
++        }
++
++        const $name: regmap::FieldDescs<{$crate::regmap_count_fields!($($($type)*)+)}> =
++            regmap::FieldDescs::new([
++                $(
++                    $(
++                        $crate::regmap_reg_field!($reg_name, $field_name)
++                    ),*
++                ),+
++            ]);
++    };
++}
++pub use define_regmap_field_descs;
 
 -- 
 2.45.2
