@@ -1,176 +1,120 @@
-Return-Path: <linux-i2c+bounces-8598-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8599-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F074B9F65FC
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 13:34:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49BCD9F674B
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 14:30:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 416B116CE4E
-	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 12:34:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24A3D18811C7
+	for <lists+linux-i2c@lfdr.de>; Wed, 18 Dec 2024 13:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 032881A23B6;
-	Wed, 18 Dec 2024 12:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mSOvVslc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F7D31ACEAD;
+	Wed, 18 Dec 2024 13:30:49 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90A8199FC5;
-	Wed, 18 Dec 2024 12:34:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016AD1ACEA9;
+	Wed, 18 Dec 2024 13:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734525267; cv=none; b=rkK2EStyM4Jw239EK/JGHkAtwduhts3e/8XosUwPS+clcXnu6BX8Jm9WFMZeNGpHYIDIusIYCmZcgJ9qmZq4P9e+0MRRS5Tyarotxz3Xi3doHqlMmvp7QmyCnHJLZwTSZHXn9gaYLqDbYgXIQtfySiZ44hSUkhvgAuJ5fueSTBQ=
+	t=1734528649; cv=none; b=HEF6AR8jo97O/TKM8NlT8cUReAhHq4718t/dxaq/F/TzYWU+IRtiE1JuAkRXpYy3rtiM3pGbRdvOjtCOHDqpd//UXf7INVP7i66+2xp8dxo63SrpG+uZdZl2MfrIY6czq+KDhhUzYYZ2cG+m2ll8Oyx5f17CYD6f8o603KVkffc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734525267; c=relaxed/simple;
-	bh=QYc4xY8AeNSgge56dJ3MvqzLhT/3x0EYFavC+ntvJs4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SB2KYOYMmaUp/wjs0U0KlPSgQc/5kHiGnc/im3LaSLxk5jEobgEZXnSxrXPZb4j1MwlxlKsBdBl5mYeQzpNKLi4B6Gm+M0/Bx9KDht3qIBYZ3G4BfrsANDLCumzt0C+wSzaScltWZbuPOlLFaXtlqsTapgF3ipib4n7hTs8lUGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=mSOvVslc; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BI7V5iF025318;
-	Wed, 18 Dec 2024 12:34:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	0C94w/0C+OzA0oXh9i7IsC80vig3DOMsP0LguORAZO0=; b=mSOvVslcyvPQhTRD
-	gigAf8Q4B6nwZf/50MXI+c5hf/9FiRxsEekzgMpnWnktYh4e3QPSfbyY5v9O2obK
-	bjm0PuAdYsxsREvAIwlOwsC4ynrM5D12GxGlEpYeBQPoTiZQ2zPKHqxwzaJUhltF
-	ElZuC8FaEan4N+VIxXiiJGLR8Q8rw7m+XlKoSZNh/DWmDODuPnsFOB0GwTDhF1kb
-	tDsaLg5GZ1uEALRk4XlZWskr80PSt13WGPF+yQ66RDbXAfbv/4knblD/tJ5DVKLO
-	fzDVFIo/GhvSdhs6VXA8YxjR3rBpGMKNpMGBA5Vkccg8K8eAJ4LCFU/CXr/b0d4k
-	UzpZpg==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43kt2w8rm0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Dec 2024 12:34:16 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BICYEZQ011739
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Dec 2024 12:34:14 GMT
-Received: from [10.216.12.179] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 18 Dec
- 2024 04:34:08 -0800
-Message-ID: <5ef44277-6739-4e1e-af62-0f40ae081ec1@quicinc.com>
-Date: Wed, 18 Dec 2024 18:04:04 +0530
+	s=arc-20240116; t=1734528649; c=relaxed/simple;
+	bh=Hoddnh63odfLX/AxlvRS9aAWHM5VjFs/XwvlPtsVKqU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bFGNKWfgMmZgUrz2PbUfmzjnItB6ItK8Adc4dsIhd493JDYJ/gNQ6O5fmfTg+XpaYLSKZfaaxMy2DWecL0uZ/ajs2MUsL6OQhheQGKl2f7PYNfBRY6pJuhdPqDP+GlEjvIyKp3OhHsp6s0WNVufCgKefDmNq5x569of6kOkuh38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-4afe4f1ce18so1783110137.3;
+        Wed, 18 Dec 2024 05:30:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734528645; x=1735133445;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l5bmGNivVaG1Qy8JNXysm8cK8Vgjt38i52LnDxCzAVo=;
+        b=XY0lG8tXlr2oPPx1ncgG1VYKNwsLzsgFlOcpSPVpdqL6gUbXA/EKXTbp6/KHspMICR
+         hXZcP+DlK5dgbDgxTF5P2de9tiKOgt9wPLCGRPE2mEE322+OkBRuvjyP+KvtRufykXkX
+         pjkUwnSkFd3SqYD4MqFfFLffWq25mQYzIjXK7J1jkRG/nzeTMIDcMhW/scimvPuy4Xq1
+         43aOt7zzP0ICoX7de7y4p+EiA5LhQb2JOCtQRQhh8Pqt83u6SemqmERxTP0xtTekkytM
+         ruDlpx5871HxHX56G83MN6QlTWpA1EMkW7YHkoLLNp5iGctlXwvE69FQZmsE95Y2Hs76
+         f2LA==
+X-Forwarded-Encrypted: i=1; AJvYcCWheZ4rUDmz6W2lNlCy9Z1Q7ZOAhTPGOaygJhmmSvKwY2mO0MqFvTWOsQwJ22oBNkR9b0Xw0StuWu7RQTfh@vger.kernel.org, AJvYcCWqirua15+p8eUmAxhlzr8QpEehALmJwAOkdiXZrnIr+dct3s50R0FvBTDEtR9Sy2UDkj4kvlp4P32ayGuVPtHK+xM=@vger.kernel.org, AJvYcCXLRINAMmatE9zMO7qxiViPxd+CZee5G/ncJQ+aWup830TDuUjbT7hXgt3ofsdo7Jp0wJ8CC2EAlxk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwphMQicrVrGSqStUjF0gPLwgKUVIGAceexcGruPrDIN9TpRHFL
+	COcK6orEXuxsvcTxo3vibBK/ged6BbGve3ewyUszfGLJvBpVzm7SgQcsOaJT
+X-Gm-Gg: ASbGncsKSwuDXp4clSO5MtCWqhA/rwAEqiY8Wf3wLyHgpHKv4NhuGNjylowUTWjO057
+	svK5xjdSc5vqLzrs78U8wotd6NRSv4d7BycxiQYOZu7ZkTFy+OK3VLzimrUQW/yV9qCkBxr2m1e
+	Mzm0kC8IJBYV5YI87hhULkzkef0wRiwf8SjNdfO429JeEBVvqdldc353gLYC2uj6Cx7dvqHbgWv
+	JhcpdsQ/E0/gd3oGfpWVgkyQa176xoSe5gyD4Eh6M4VtHc8NXOGK8KOlyoO3cYrwnLwto0JHyT+
+	aJE0lb7khek+/7TBac/eLA8=
+X-Google-Smtp-Source: AGHT+IGGaP1W2UMQgYBDNCgvzUcMfiNhNz88VKB8OZnAmZkQg6QjJhh7gPIalhNWNWLoBQwvVUZzSw==
+X-Received: by 2002:a05:6102:5121:b0:4af:fa7d:71bd with SMTP id ada2fe7eead31-4b2ae70c0d9mr2263502137.3.1734528645463;
+        Wed, 18 Dec 2024 05:30:45 -0800 (PST)
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com. [209.85.221.171])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b2701f6b07sm1463354137.5.2024.12.18.05.30.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Dec 2024 05:30:44 -0800 (PST)
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-5187f6f7bcaso1869893e0c.3;
+        Wed, 18 Dec 2024 05:30:44 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV3apY9Ijx+U18MMPY7P4gnZdocnInsJSW3T4vrZRKmTeJRPnox8oR3poEkMWuNx94FXjBg7qAnSI7rIGbN@vger.kernel.org, AJvYcCVJH5Oq5bG+CThKWOvMfex6E2EirCLzm7UV39Vq9hOFHg5xKTx1bz17wzG4GXplNQPsfbNNe0bMeFU=@vger.kernel.org, AJvYcCVpqck2VPTB0v4nKKpVan+AiF6A274M2qbpqElw0oz3DurGI0HnLEO7AzN6qmUYVDuwIrsGNGFm8RnBk7n+HKHoJyM=@vger.kernel.org
+X-Received: by 2002:a05:6122:659b:b0:517:4fb0:74bc with SMTP id
+ 71dfb90a1353d-51a36c519d0mr2435170e0c.3.1734528643745; Wed, 18 Dec 2024
+ 05:30:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/4] dmaengine: gpi: Add Lock and Unlock TRE support to
- access I2C exclusively
-To: Vinod Koul <vkoul@kernel.org>
-CC: <konrad.dybcio@linaro.org>, <andersson@kernel.org>,
-        <andi.shyti@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <conor+dt@kernel.org>,
-        <agross@kernel.org>, <devicetree@vger.kernel.org>, <linux@treblig.org>,
-        <dan.carpenter@linaro.org>, <Frank.Li@nxp.com>,
-        <konradybcio@kernel.org>, <bryan.odonoghue@linaro.org>,
-        <krzk+dt@kernel.org>, <robh@kernel.org>, <quic_vdadhani@quicinc.com>
-References: <20241129144357.2008465-1-quic_msavaliy@quicinc.com>
- <20241129144357.2008465-3-quic_msavaliy@quicinc.com> <Z01YBLcxDXI2UwXR@vaman>
- <d49b16b2-95e5-42b4-9bc1-40cb0bfa15b1@quicinc.com> <Z1BJSbf+1G8ojTib@vaman>
-Content-Language: en-US
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <Z1BJSbf+1G8ojTib@vaman>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fLj0LppQqDwBIQBoNr_scSKpO1tWPoNJ
-X-Proofpoint-ORIG-GUID: fLj0LppQqDwBIQBoNr_scSKpO1tWPoNJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- mlxlogscore=999 priorityscore=1501 malwarescore=0 clxscore=1015
- suspectscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412180101
+References: <20241218001618.488946-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20241218001618.488946-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20241218001618.488946-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 18 Dec 2024 14:30:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXt5STYVt6Ht7Gq=LYCXaF7XOwFgk2mrDEi4YXix-Jh-w@mail.gmail.com>
+Message-ID: <CAMuHMdXt5STYVt6Ht7Gq=LYCXaF7XOwFgk2mrDEi4YXix-Jh-w@mail.gmail.com>
+Subject: Re: [PATCH v2 5/9] i2c: riic: Make use of devres helper to request
+ deasserted reset line
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Wolfram Sang <wsa@kernel.org>, 
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Vinod, Thanks !  I just saw your comments now as somehow it was going 
-in some other folder and didn't realize.
+On Wed, Dec 18, 2024 at 1:16=E2=80=AFAM Prabhakar <prabhakar.csengg@gmail.c=
+om> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Simplify the `riic_i2c_probe()` function by using the
+> `devm_reset_control_get_optional_exclusive_deasserted()` API to request a
+> deasserted reset line. This eliminates the need to manually deassert the
+> reset control and the additional cleanup.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1->v2
+> - Updated error message
 
-On 12/4/2024 5:51 PM, Vinod Koul wrote:
-> On 02-12-24, 16:13, Mukesh Kumar Savaliya wrote:
->> Thanks for the review comments Vinod !
->>
->> On 12/2/2024 12:17 PM, Vinod Koul wrote:
->>> On 29-11-24, 20:13, Mukesh Kumar Savaliya wrote:
->>>> GSI DMA provides specific TREs(Transfer ring element) namely Lock and
->>>> Unlock TRE. It provides mutually exclusive access to I2C controller from
->>>> any of the processor(Apps,ADSP). Lock prevents other subsystems from
->>>> concurrently performing DMA transfers and avoids disturbance to data path.
->>>> Basically for shared I2C usecase, lock the SE(Serial Engine) for one of
->>>> the processor, complete the transfer, unlock the SE.
->>>>
->>>> Apply Lock TRE for the first transfer of shared SE and Apply Unlock
->>>> TRE for the last transfer.
->>>>
->>>> Also change MAX_TRE macro to 5 from 3 because of the two additional TREs.
->>>>
->>>
->>> ...
->>>
->>>> @@ -65,6 +65,9 @@ enum i2c_op {
->>>>     * @rx_len: receive length for buffer
->>>>     * @op: i2c cmd
->>>>     * @muli-msg: is part of multi i2c r-w msgs
->>>> + * @shared_se: bus is shared between subsystems
->>>> + * @bool first_msg: use it for tracking multimessage xfer
->>>> + * @bool last_msg: use it for tracking multimessage xfer
->>>>     */
->>>>    struct gpi_i2c_config {
->>>>    	u8 set_config;
->>>> @@ -78,6 +81,9 @@ struct gpi_i2c_config {
->>>>    	u32 rx_len;
->>>>    	enum i2c_op op;
->>>>    	bool multi_msg;
->>>> +	bool shared_se;
->>>
->>> Looking at this why do you need this field? It can be internal to your
->>> i2c driver... Why not just set an enum for lock and use the values as
->>> lock/unlock/dont care and make the interface simpler. I see no reason to
->>> use three variables to communicate the info which can be handled in
->>> simpler way..?
->>>
->> Below was earlier reply to [PATCH V3, 2/4], please let me know if you have
->> any additional comment and need further clarifications.
-> 
-> Looks like you misunderstood, the question is why do you need three
-> variables to convey this info..? Use a single variable please
-Yes, I think so. Please let me clarify.
-First variable is a feature flag and it's required to be explicitly 
-mentioned by client (i2c/spi/etc) to GSI driver.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Second and third, can be optimized to boolean so either first or last 
-can be passed.
+Gr{oetje,eeting}s,
 
-Please correct me or add simple change where you would like to make, i 
-can add that.
-> 
->> --
->>> Looking at the usage in following patches, why cant this be handled
->>> internally as part of prep call?
->>>
->> As per design, i2c driver iterates over each message and submits to GPI
->> where it creates TRE. Since it's per transfer, we need to create Lock and
->> Unlock TRE based on first or last message.
->> --
->>>> +	bool first_msg;
->>>> +	bool last_msg;
->>>
-> 
+                        Geert
 
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
