@@ -1,89 +1,67 @@
-Return-Path: <linux-i2c+bounces-8629-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8630-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE2EF9F782F
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 10:19:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B11179F787E
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 10:29:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7701B7A3D01
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 09:19:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E67481886969
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 09:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1F08221D94;
-	Thu, 19 Dec 2024 09:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B253E22146F;
+	Thu, 19 Dec 2024 09:28:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zcakyx+U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oy960b59"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3237157A72;
-	Thu, 19 Dec 2024 09:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5938D149DF4;
+	Thu, 19 Dec 2024 09:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734599951; cv=none; b=TBO7tw4ic/yHH8hnfVAiv5mJpjf+T2dZbdx013ap7eetlUIdrIQypWgQNqNlBYv5QzhgJSBhljU6j6szU5yqbKEfq6fvT0le6GRMlb+icRN3rnnyLTBIB3amoSk7N0rgKIQpPqIt4nHF3dYmyJw2wQu5rBQnedORlCcU70Y38t8=
+	t=1734600533; cv=none; b=TuQAqNcfiEcS0Y4/BHG3LjjcY/wpS8PYOqMs+RqMq2uSm9wdw/+hGl/1waIV0TU6WdVRV8N+78qDr0zZKOrTPYF6bLnd7j/tv/Y1VBeaPtcNqY+Ew4sZbkTTXL1fWBYnuEp0Ch/CqRefwXptCv/8WEWJweTe2YuzEnwSJszb97Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734599951; c=relaxed/simple;
-	bh=2pzXg6r8WcLgdnkjujmPrNasAAtlDRtHlv676oVeFkQ=;
+	s=arc-20240116; t=1734600533; c=relaxed/simple;
+	bh=G9YDF+1hDYtfBO4tQpAjo/U/ppewsYDLTzmy84NZADo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SLpPpzBxALZ4e4wp1OPouH8NP68lvdt/vxzJVYfeAoc0xqH65MtHIU7s/baQBvtBQAXF4UhKN/xzwftpIZm9F01WHNvJUQE6SV0/mr9YwWdVnB30NG9veJuaVFZsjAlVQLivkxpfEgyEplz0TnlWcsd9XU5tu0HkTGesBvQ9lCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zcakyx+U; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4361815b96cso3561305e9.1;
-        Thu, 19 Dec 2024 01:19:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734599948; x=1735204748; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=euiOK8NNPzupxLdx+tbLr1TI8FnBjorvwfESAZao6H8=;
-        b=Zcakyx+UW08xUtsV8zv/a7TTaBq2czmQx31MoAdnM4MbmOb72JIcZv2NBYT7ecq3D+
-         rX8fhnodFKEahxb8VkmJ8rYBvxBxY6+d8/M6qD9Ormz6eucCsJdN31sGrs00SznCk5/X
-         ZYNHrgD3rrmTKVaCbYgRhLK5Y/tHwlJpQQY5fsr4q+2NYhf8J5sBNVjjZqeD35mOOmbj
-         g4gLh1fTimhbog1uZKEwTi1KXyt/+ZXkbkcSRHGo6mx/mWV/Oc7xcMR6QxiuNCEBK9Yc
-         PJSeX+4H+OfqLrDB6F9ASMTxHpvoptD+coa3zmCvU2ZbzaA9uu4jVo8mmmPW4BmhU+19
-         qVTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734599948; x=1735204748;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=euiOK8NNPzupxLdx+tbLr1TI8FnBjorvwfESAZao6H8=;
-        b=Pxgc1VENSaBpi4UiHmhTyfLohwg5Lke9rctk6RYVl9Co5PqKnuvRD2//d50llJUBbu
-         YytNNGbF6tVcrXh+67VXo4DfbptEiEruTVDwKxw4SR+K9BScbeHPmOkXKF8RiwLHAAxc
-         2CAHHGVkVo9vMibeRyMttlj8c23PrOOgUP4iEFbvrEI2wrouHYay6WM+v5dO9n0cvmZb
-         LIeTjkM54WWz8vNTuXefiUOKkyMLs4fvoTwv4T/IiIQ6n/fnsVYsS4s4jEmo9UgrUV4D
-         IkRVFnhnpEpGgyk2B06cCSZPqmzin3rXqMYYHXcJs2kvPGMguh4bcj1Z5NxGigCVSzKV
-         hxNg==
-X-Forwarded-Encrypted: i=1; AJvYcCW642PpjlgabFRKNuRdtIcwq6u20He7o7C8qVVAzyNrerKiF/5Q0GyshdkpZSDPhdExetLhro+AENo=@vger.kernel.org, AJvYcCXKJK3kCNmfb4gHG5T1bW5Da7MNOJr4wPguEIDsaaTtGjiPb5/l4Z+PAHXAdX5garq0Rw3IefFIz2m6/rAZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJl2KHjjDAuWT6CDKYFlkublSIuhM6lumPkSEd87Nc0paAt1bD
-	wxwcFkO1cf/iRFFV7ytZVERXfyUwun5DMnTX/B7ik9dmQmw6gb6m
-X-Gm-Gg: ASbGnct4FJ+KVMnPq3+t/69QH+OFwS5G6n3MCGi/c8XVr6OaSiNL+S8FPoMvk02qbYh
-	qAjCDQ0oM/D1fBIGiACX1ZRVcp9qTH+ZCOXN0+GuIy20MnYqFehxNMcWemNLbTUkI3FgWGuXi0A
-	1rVugxDRdFnM1cjlTQ1iBUk04PmN9HAtKuBXJGavjuhnzbxVcUZeaot4+uc32AkrJiCJb8+vppy
-	pgkhNEO1ouh4bRH22ACtl0X93qG383IrJgGdcFIAG7lT/IJdv0PKw2r
-X-Google-Smtp-Source: AGHT+IG0fZL5g+zEG/fpP6eHHf2IPe9NkoBsaKGeRiza0EwWdk6u44xsj9AYe2YdbuChkpugl2kmMw==
-X-Received: by 2002:a05:600c:4f08:b0:436:51bb:7a52 with SMTP id 5b1f17b1804b1-4365c77e3e9mr18873865e9.7.1734599947763;
-        Thu, 19 Dec 2024 01:19:07 -0800 (PST)
-Received: from eichest-laptop ([2a02:168:af72:0:7407:1f5c:37ef:e8ea])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c8ac97fsm1056999f8f.92.2024.12.19.01.19.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2024 01:19:07 -0800 (PST)
-Date: Thu, 19 Dec 2024 10:19:05 +0100
-From: Stefan Eichenberger <eichest@gmail.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, festevam@gmail.com, Frank.Li@nxp.com,
-	stefan.eichenberger@toradex.com, francesco.dolcini@toradex.com,
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] i2c: imx: fix missing stop condition in single-master
- mode
-Message-ID: <Z2PlCXSG8qt5_3ni@eichest-laptop>
-References: <20241216151829.74056-1-eichest@gmail.com>
- <w3x46is2s463ektusvnyu5tt2rinz7eae2ekzyqw2urw5yh5ga@pfzrgzpxjc4y>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OftE4KxwEMmleJN05mMmpec1WYN0QU9utV8Eenn7nAFVPDReQaRqoiQM4rfAjybzz+E9rwzbHQ28lKyh6J17HM2fImyHIyDazpfzp53pV+rIxxXPlPqbxtEp4wBBZelblt5HwbNCXwj5P6D6mDFVG7gW72CxrVBKGdmT9Gi3Co0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oy960b59; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C042C4CECE;
+	Thu, 19 Dec 2024 09:28:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734600533;
+	bh=G9YDF+1hDYtfBO4tQpAjo/U/ppewsYDLTzmy84NZADo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Oy960b59B6Aiis2IUkJGIbOgwXWaTvzfis/e58EG44cB7YCKy2JLNnzVduPGK1V9k
+	 u9M6C2H15VX1dSg5anZyifZfsLSJBXJcXgB9D2c9kCE9v2hY0xP+ly8XnJF1e9L8aE
+	 hFaC2ScazWkBQDMpZ/zx2wa4NrmCcc/4zBms6geDFNwy8LL+7/lb5ASWMlJweDUqgA
+	 U1aFPEw3f1xoMtEg2dBclG3VspfnIAZU6v/s14vqHPXYOjmQQ+U0zWndYzyA1iDPeD
+	 ICneS3XHaTnRwsOPXDMTxaJ8d0KmXar/ku7xMslLmL2qkNzz5vMbymqI1COedbF4OA
+	 qoS5FPIPGghQQ==
+Date: Thu, 19 Dec 2024 10:28:49 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Fabien Parent <parent.f@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	devicetree@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org, vinod.koul@linaro.org, 
+	Fabien Parent <fabien.parent@linaro.org>
+Subject: Re: [PATCH 7/9] dt-bindings: regulator: add binding for ncv6336
+ regulator
+Message-ID: <kb2ejk6c4uvazuumuezsd24qhjwh3k5bw76k2shywdugjqlf6e@lrghxcxxmnrm>
+References: <20241218-ncv6336-v1-0-b8d973747f7a@gmail.com>
+ <20241218-ncv6336-v1-7-b8d973747f7a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -92,69 +70,100 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <w3x46is2s463ektusvnyu5tt2rinz7eae2ekzyqw2urw5yh5ga@pfzrgzpxjc4y>
+In-Reply-To: <20241218-ncv6336-v1-7-b8d973747f7a@gmail.com>
 
-Hi Andi,
+On Wed, Dec 18, 2024 at 03:36:37PM -0800, Fabien Parent wrote:
+> From: Fabien Parent <fabien.parent@linaro.org>
+> 
+> Add binding documentation for the Onsemi NCV6336 regulator.
+> 
+> Signed-off-by: Fabien Parent <fabien.parent@linaro.org>
+> ---
+>  .../bindings/regulator/onnn,ncv6336.yaml           | 54 ++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+> 
 
-On Wed, Dec 18, 2024 at 07:16:23PM +0100, Andi Shyti wrote:
-> Hi Stefan,
-> 
-> On Mon, Dec 16, 2024 at 04:16:40PM +0100, Stefan Eichenberger wrote:
-> > From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> > 
-> > A regression was introduced with the implementation of single-master
-> > mode, preventing proper stop conditions from being generated. Devices
-> > that require a valid stop condition, such as EEPROMs, fail to function
-> > correctly as a result.
-> > 
-> > The issue only affects devices with the single-master property enabled.
-> > 
-> > This commit resolves the issue by re-enabling I2C bus busy bit (IBB)
-> > polling for single-master mode when generating a stop condition. The fix
-> > further ensures that the i2c_imx->stopped flag is cleared at the start
-> > of each transfer, allowing the stop condition to be correctly generated
-> > in i2c_imx_stop().
-> > 
-> > According to the reference manual (IMX8MMRM, Rev. 2, 09/2019, page
-> > 5270), polling the IBB bit to determine if the bus is free is only
-> > necessary in multi-master mode. Consequently, the IBB bit is not polled
-> > for the start condition in single-master mode.
-> > 
-> > Fixes: 6692694aca86 ("i2c: imx: do not poll for bus busy in single master mode")
-> > Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> > ---
-> >  drivers/i2c/busses/i2c-imx.c | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> > index f751d231ded8..cbf66a69e20b 100644
-> > --- a/drivers/i2c/busses/i2c-imx.c
-> > +++ b/drivers/i2c/busses/i2c-imx.c
-> > @@ -534,20 +534,18 @@ static int i2c_imx_bus_busy(struct imx_i2c_struct *i2c_imx, int for_busy, bool a
-> >  {
-> >  	unsigned long orig_jiffies = jiffies;
-> >  	unsigned int temp;
-> > -
-> > -	if (!i2c_imx->multi_master)
-> > -		return 0;
-> > +	bool multi_master = i2c_imx->multi_master;
-> 
-> with this small adjustment, I have applied your patch to 
-> i2c/i2c-host-fixes.
-> 
-> The idea behind the change is that variables are sorted by 
-> length, forming a kind of reversed Christmas tree shape. It's 
-> not a strict rule—some communities enforce it, others don't, and 
-> some follow entirely different conventions.
-> 
-> Since it feels somewhat arbitrary to me, I don't enforce it 
-> strictly. However, I personally try to adhere to the reversed 
-> Christmas tree rule whenever possible.
+subject: regulator first, then dt-bindings.
 
-Thanks a lot for doing the change and for the explanation. I will keep
-it in mind for future patches.
+Please use subject prefixes matching the subsystem. You can get them for
+example with 'git log --oneline -- DIRECTORY_OR_FILE' on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
+
+
+> diff --git a/Documentation/devicetree/bindings/regulator/onnn,ncv6336.yaml b/Documentation/devicetree/bindings/regulator/onnn,ncv6336.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..c69d126cab33668febe18e77bb34bd4bef52c993
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/onnn,ncv6336.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/onnn,ncv6336.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Onsemi NCV6336 Buck converter
+> +
+> +maintainers:
+> +  - Fabien Parent <fabien.parent@linaro.org>
+> +
+> +description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+> +  The NCV6336 is an I2C programmable BUCK (step-down) converter.
+> +  It is designed for mobile power applications.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "regulator@[0-9a-f]{2}"
+
+Drop nodename, not really needed in device schema.
+
+> +
+> +  compatible:
+> +    const: onnn,ncv6336
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  buck:
+> +    description: buck regulator description
+
+Why do you need "buck" node? Just merge the properties into this device
+node.
+
+> +    type: object
+> +    $ref: regulator.yaml#
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - buck
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        regulator@1c {
+> +            compatible = "onnn,ncv6336";
+> +            reg = <0x1c>;
+> +
+> +            buck {
+> +                regulator-name = "ncv6336,buck";
+> +            };
+> +       };
+
+Messed indentation.
 
 Best regards,
-Stefan
+Krzysztof
+
 
