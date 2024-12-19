@@ -1,89 +1,90 @@
-Return-Path: <linux-i2c+bounces-8641-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8642-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D35959F7E22
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 16:33:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C8E49F7EB6
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 17:01:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FC111887E99
-	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 15:33:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 064B17A3753
+	for <lists+linux-i2c@lfdr.de>; Thu, 19 Dec 2024 16:00:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C02A7154C04;
-	Thu, 19 Dec 2024 15:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F52D22688E;
+	Thu, 19 Dec 2024 16:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QsvrVD8s"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ntYaN73j"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84EF286348;
-	Thu, 19 Dec 2024 15:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7984F226194;
+	Thu, 19 Dec 2024 16:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734622414; cv=none; b=D3oi8gWHBuR6bCzNX/TVEqbNKHWLVK2aTCc/ju0hUobCdV/OScTYYLDLZr3PE09Y6JfzlJ8rCsWJ6Q0KOCaM483es04zLleuy5Akw40p3FYYLjn61MoV1jUzUGeXUQNfl7aN5MRemgNaEVGu9zgq8nLXavMH07k6s4W8OOpFQ7E=
+	t=1734624038; cv=none; b=EHIubPfTc8zURJsXnCOcLMEWbf5WkrYTXeLk0RBuSnhUScqf2a9VrXZ6CJvCuY5u4LjdZ4DIEvOzOAaimWoJu/6a66OYFT/I+oBCxQFeU6h5TzZsjbxM2npa42SLn8GdlmjmRaZws/uQEHA/67wAtOBVYaEWDXcp0yHZYOQmuo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734622414; c=relaxed/simple;
-	bh=eg3dfe2a2VJ/1TkwR/APhHReQZey+HnZphRRuvDWBV8=;
+	s=arc-20240116; t=1734624038; c=relaxed/simple;
+	bh=0QM2ti8i9s871qi0x4KwwxP8Df8XTk98Rm6A8u6ePfE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DGKr+QTbYiqXyHzB+0m47S0KHkKfljeMhGJx1oo5BdZw1V4IwQokRlFqHTMeo9yApgZAeJI/igAqhRoOds8ydMIKVCbjMTCo9h6eFV/h+RuVjsJJFYSQu2w1zHCOQWpn9MC03sjML4TMCKVZF20QpiDIptwJMHQZYkVrx48fFeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QsvrVD8s; arc=none smtp.client-ip=209.85.218.44
+	 To:Cc:Content-Type; b=e0sCQFlQCkhnUofBYUSoxSJYg2D9BF13qPctKD0ze842fpXk0Gm8FEHVHcmsCVKDV3w8B40wk2pEP+oHs4qwiQTcbRksSIPu7rfXjNltqpm/BW9Y33I3Szb1f/mJ3avthJjU26QAtAaRGa/f63j2lF+h20N4UhToajhcebr5znk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ntYaN73j; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-aa6a92f863cso184605766b.1;
-        Thu, 19 Dec 2024 07:33:32 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-aa670ffe302so181256966b.2;
+        Thu, 19 Dec 2024 08:00:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734622411; x=1735227211; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734624033; x=1735228833; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DOpLztTGrQi9imn7fNK1wmSK1nZbFILsVsxsH4Anurs=;
-        b=QsvrVD8s+nOcPJdqB52VrMf9cYs4CFz0pdjvJrz3Gtf5cbNAQ877mddAa/HfAPCG1W
-         8f8YmvcOmGJbtG2Wyhf0BroK8okKMloSdqFQ71ICJGsME+Bz886w8Q1enKGKAWHUeF9l
-         B1FuWp4SuDHkbUk9DbRaOSoWUy9ZSd9CGpTcnG/6lg6D/vRalGqf5H8JfMy170v2oaSD
-         8Px71kaLXmJd+wL37053dMx4KgizvWf7CQsNAoIEzD4h44V6mWxt3GnsC4ZI5ctr44lJ
-         M0p89KVk6Ecv7YQfP/MbzDfNd9zFqAX3W1c/oADRTwdE6LdbALC9ICLpiVz2wk5M0i8q
-         AqQA==
+        bh=MZSF5Ysxh6AQqhA1lxPBEzFa3Vv/6I7Dne2knacYfHQ=;
+        b=ntYaN73jpQBy+ZbcST/yyoBIh6BStxr9z2gGUDkGsqYWse9pY6kLdf62T+8A1Ayow+
+         cz0E3P6oq2tVTsBBH2kYf1iF3WK9ElMHMm0ZUQoBg4hm1P81UB5DoEmfiu7kdguUmocf
+         l5HDmyWYrTaLpnb1zfPMCxYq+MxiGgN6htXOFGALyjaOfQHj/zHCispZMj45gVaR02s1
+         3RsztI4QvvSphWKtZFw3njDxyQTttetMXVJYwIa7hLBnq2N0q1rUQE5iBw9ps7h8T6Pw
+         S6aChtx6Xl5rFL7IS+0730GaYSyCVYv0IP5Pks5+D4phtmeYofjXnRNE0CYP1xOZWMDU
+         0J4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734622411; x=1735227211;
+        d=1e100.net; s=20230601; t=1734624033; x=1735228833;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DOpLztTGrQi9imn7fNK1wmSK1nZbFILsVsxsH4Anurs=;
-        b=DO1dXyAzU3hwhfSAbjYYC7P3arN1ysjmQx/gfxOzo061suDLBU5K68PuyW/hX4c11/
-         ze0bplWGxBKSjFGxhIn7GbTsDd90JwPWQ9Vx2y3oHLuAld/kosEq6PYQxXcvDZrBj6jr
-         QPzcp3nmjtOxlDXobyOq+7LLkR1NJVi+XIY6D/Gi35aZQsaGewOM9artbDgvGdRMyMzo
-         xUTc2B3eQyNFlrX82SgX2eh4UK7niITRKyQEqbCRzS6likF9Tl7/4Gj7+2LgE2Iso7t2
-         ewwDUnrS2xwz6J3XK3Vc3bgfNtiy++k3SdKRI8zhTijnMadouiGRWKORgGOLw5qWvMKi
-         xC7w==
-X-Forwarded-Encrypted: i=1; AJvYcCU/bTulO7LnaqNI+TIuyLYaKFYc2c9pS+6MH2Za4IYBxH41ehG/Vb0AkeRS+XCQnywcDlY6+P4Y+l6C96bfTtQ=@vger.kernel.org, AJvYcCUwktKLdN9bUYpoCl0J4b5ChDSTQKnw/UQoMEbIHhl6WUGuUChVs0ukKyE7rVyhV95ewI0glOzwkuT/@vger.kernel.org, AJvYcCVeIksV0VDI8dTnxPUz67QzrRS6K6c6v0Ve93iUaHadgDHlxyuEW8lwKo2TuhIhPVWjVL3PT1WmmCRnyDKa0A==@vger.kernel.org, AJvYcCW6bXTq+E5rT0E6A5jvIMKyRLTlaEVQ0P87W5AwBoynPY2hn50bmUMGbNLYVylKiBZdMX56c91xMtYskhOz@vger.kernel.org, AJvYcCX+b3pfiLYrpsLmhEioz9JKNN4+XWj/G6QDLz9zvzLl967IrjmYGjFvKqW/qGVuCVBCmApT4145aEbI@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi4xtxRagnmykrbiFufVMxbHEPOul6VCPWyGUK+c3Xi8Qm6XNe
-	DAVvoyS1MrzzgNzwb0q/wZojRGVoFZYBvv5hHgHsZ8GXrU7uoKPW6kx+SF6nAq56Nr7SBLfkiJG
-	zKY2NYAzrDMySYNRu2OVW4aVlmHw=
-X-Gm-Gg: ASbGnctUxoAOqkabQAotJ5xYOqU8wkUfh/EolqoY3itEMXiLKg7O/BAl+AS/lDP7fjC
-	oOlRLlbKs/GLsl5g/gxC+/sPWFdWMdbeRvuZuNFvjH0dUnQ7aB0RnGogYXx2906tSgt5gcA==
-X-Google-Smtp-Source: AGHT+IEO/lZAywCTKr7DVZ7W7rFExD2nJ9XBby6vZc4gEVGXW1oykWToRQP+0LMsYn6+q1jgvuzXnlll/zAAOzAnkSw=
-X-Received: by 2002:a17:907:7747:b0:aac:439:10ce with SMTP id
- a640c23a62f3a-aac07950e3dmr315470666b.27.1734622410417; Thu, 19 Dec 2024
- 07:33:30 -0800 (PST)
+        bh=MZSF5Ysxh6AQqhA1lxPBEzFa3Vv/6I7Dne2knacYfHQ=;
+        b=lJw5CuiQs2OM6tDhTP4Yz1uJHeXAec99IFyjDYZCGma0RUPdpB362TF1tUCLSyGHi+
+         H5DuGhX/5nDGLpPWjkkiG9AKT1HMLZdBZshBzr3tulyRRoXVUZpVVavp+O/rYoHV7MwP
+         iykdmVhV4dwMPliAUm2s8wZb1XB5Ztz1xxQKrdegwaSmosP1gzTqxN4uEQc76F/rIFlg
+         9Mb4TumY9ahNsA0f+O4rYxG+oGzVF55/QdudKintHA1uSt7zrnYExTqRtafmwVj7nWZb
+         OhNHLxZuoiuA6lQi+N/D50mCJ4LNt7NUfq4jGLRm0klnidPTrUnAeginwhB669WcE5+1
+         j8yA==
+X-Forwarded-Encrypted: i=1; AJvYcCWV0vCLbOs7kJBS5rRlE9csz7gH7ijc7hIFGmyf8cZK9kKQoH0COeyTKof9RA+a+SFMBeYcxHzXYFi4MqWRBIc=@vger.kernel.org, AJvYcCWcyxBwg/SPui3WWP3vGYrO/5bCbI08CrG9LFEtTivzN7Q3LxLIBBYntRXkQ7625albp5C4154T9UJS@vger.kernel.org, AJvYcCWtNX8WBglzH5MsR4GePQ43yc3G6cErAYSl12Ihu2Gu3ubOx5wxh7rgzvsTq5joGk0EylRv5Vqd3iy2C/t4vQ==@vger.kernel.org, AJvYcCXXTCPWVzA1iGS6sl/aw0BphLOkrTG6i3y15CpCgTgdbzxY5xIlTEb26n9Leizp+8C+bUCrLQ18DY1IADR5@vger.kernel.org, AJvYcCXn5JnjMB+7QJla7LWJ16bjDhXI5016VxSiXGzwhVkc7gm2RWuU/x1EzPWXliN9lCrVb9hM/E56uSLa@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlLHjkAPKwm0i3Em88/H3eGzcyAvOuKu9dZeIiX0m5sT3jjaPs
+	iamFKDjx7Aypmm6+NTh67g2D3/Mxnd+kvZ3x0priMWaKNnOf5gYTWs8UzQ6+jLrEk4F8ZLIXGCU
+	ylgqLF3KSwOBe3N/NFy9ZUl0Ncb4=
+X-Gm-Gg: ASbGncs11hP2JuWfHMOUnboqyHmJNoRcqs6Zonws3C4IrxGg2Ga/ara8DfbNEK34bg5
+	c0kOySTYNSd2/KMSF5V4gBPYnhMX9t9e0yF1IlYhhbTWa7dvui2eThIyEHIs49C4Y9tpmGg==
+X-Google-Smtp-Source: AGHT+IFYDL/9C4e5CUzxDL/No54s0+NFqF5OPjvIwwjBIGiy6wBvLb6HqZ4Oy+HTJ7tP68ZVwv/vffdGlt2qZO2lRHk=
+X-Received: by 2002:a17:907:9557:b0:aa6:7c8e:8085 with SMTP id
+ a640c23a62f3a-aabf474a2b4mr597203366b.15.1734624031826; Thu, 19 Dec 2024
+ 08:00:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241218-ncv6336-v1-0-b8d973747f7a@gmail.com> <20241218-ncv6336-v1-1-b8d973747f7a@gmail.com>
- <20241219130323.GA4049504-robh@kernel.org>
-In-Reply-To: <20241219130323.GA4049504-robh@kernel.org>
+References: <20241218-ncv6336-v1-0-b8d973747f7a@gmail.com> <20241218-ncv6336-v1-5-b8d973747f7a@gmail.com>
+ <Z2P00_DCL5H6Zwor@pollux.localdomain>
+In-Reply-To: <Z2P00_DCL5H6Zwor@pollux.localdomain>
 From: Fabien Parent <parent.f@gmail.com>
-Date: Thu, 19 Dec 2024 07:33:18 -0800
-Message-ID: <CAL6vTrga0bN591VT0JJq8cd-kUgedsmRCMu=ST=NyZijT7dXQA@mail.gmail.com>
-Subject: Re: [PATCH 1/9] rust: i2c: add basic I2C client abstraction
-To: Rob Herring <robh@kernel.org>
-Cc: Saravana Kannan <saravanak@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+Date: Thu, 19 Dec 2024 08:00:20 -0800
+Message-ID: <CAL6vTrgmL9GUbS5RpTgAKSHy=tN6EO+BusEPvmxxhstiwmRJ8g@mail.gmail.com>
+Subject: Re: [PATCH 5/9] rust: regulator: add Regulator Driver abstraction
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
 	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
 	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -93,250 +94,1091 @@ Cc: Saravana Kannan <saravanak@google.com>, Miguel Ojeda <ojeda@kernel.org>,
 	Konrad Dybcio <konradybcio@kernel.org>, devicetree@vger.kernel.org, 
 	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	vinod.koul@linaro.org, Fabien Parent <fabien.parent@linaro.org>, 
-	Fiona Behrens <me@kloenk.dev>
+	vinod.koul@linaro.org, Fabien Parent <fabien.parent@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 19, 2024 at 5:03=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
-:
+On Thu, Dec 19, 2024 at 2:26=E2=80=AFAM Danilo Krummrich <dakr@kernel.org> =
+wrote:
 >
-> On Wed, Dec 18, 2024 at 03:36:31PM -0800, Fabien Parent wrote:
-> > From: Fiona Behrens <me@kloenk.dev>
+> On Wed, Dec 18, 2024 at 03:36:35PM -0800, Fabien Parent wrote:
+> > From: Fabien Parent <fabien.parent@linaro.org>
 > >
-> > Implement an abstraction to write I2C device drivers. The abstraction
-> > is pretty basic and provides just the infrastructure to probe
-> > a device from I2C/OF device_id and abstract `i2c_client`.
-> > The client will be used by the Regmap abstraction to perform
-> > I/O on the I2C bus.
+> > This commit adds a Rust abstraction to write Regulator drivers. Only
+> > the features used by the NCV6336 driver were added to this abstraction.
 > >
-> > Signed-off-by: Fiona Behrens <me@kloenk.dev>
-> > Co-developed-by: Fabien Parent <fabien.parent@linaro.org>
 > > Signed-off-by: Fabien Parent <fabien.parent@linaro.org>
 > > ---
 > >  MAINTAINERS                     |   1 +
 > >  rust/bindings/bindings_helper.h |   1 +
-> >  rust/helpers/helpers.c          |   1 +
-> >  rust/helpers/i2c.c              |  13 ++
-> >  rust/kernel/i2c.rs              | 288 ++++++++++++++++++++++++++++++++=
+> >  rust/kernel/regulator.rs        |   4 +-
+> >  rust/kernel/regulator/driver.rs | 850 ++++++++++++++++++++++++++++++++=
 ++++++++
-> >  rust/kernel/lib.rs              |   2 +
-> >  6 files changed, 306 insertions(+)
+> >  4 files changed, 855 insertions(+), 1 deletion(-)
 > >
 > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 6b9e10551392c185b9314c9f94edeaf6e85af58f..961fe4ed39605bf489d1d9e=
-473f47bccb692ff14 100644
+> > index 90c231f0aa7381aa8d206fb94c5d1f013dfcae41..87da43251bf0f20d2b58313=
+45778ead592c407dc 100644
 > > --- a/MAINTAINERS
 > > +++ b/MAINTAINERS
-> > @@ -10796,6 +10796,7 @@ F:    include/linux/i2c-smbus.h
-> >  F:   include/linux/i2c.h
-> >  F:   include/uapi/linux/i2c-*.h
-> >  F:   include/uapi/linux/i2c.h
-> > +F:   rust/kernel/i2c.rs
+> > @@ -25160,6 +25160,7 @@ F:    drivers/regulator/
+> >  F:   include/dt-bindings/regulator/
+> >  F:   include/linux/regulator/
+> >  F:   rust/kernel/regulator.rs
+> > +F:   rust/kernel/regulator/
+> >  K:   regulator_get_optional
 > >
-> >  I2C SUBSYSTEM HOST DRIVERS
-> >  M:   Andi Shyti <andi.shyti@kernel.org>
+> >  VOLTAGE AND CURRENT REGULATOR IRQ HELPERS
 > > diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_h=
 elper.h
-> > index e9fdceb568b8f94e602ee498323e5768a40a6cba..a882efb90bfc27960ef1fd5=
-f2dc8cc40533a1c27 100644
+> > index b18d772bc3a0e78d749cc9e5ae81a4237a57f8c5..124129daea73c143c919d05=
+814fc02bb4460ddfd 100644
 > > --- a/rust/bindings/bindings_helper.h
 > > +++ b/rust/bindings/bindings_helper.h
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/file.h>
-> >  #include <linux/firmware.h>
-> >  #include <linux/fs.h>
-> > +#include <linux/i2c.h>
-> >  #include <linux/jiffies.h>
-> >  #include <linux/jump_label.h>
-> >  #include <linux/mdio.h>
-> > diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
-> > index 0640b7e115be1553549312dcfdf842bcae3bde1b..630e903f516ee14a51f46ff=
-0bcc68e8f9a64021a 100644
-> > --- a/rust/helpers/helpers.c
-> > +++ b/rust/helpers/helpers.c
-> > @@ -15,6 +15,7 @@
-> >  #include "device.c"
-> >  #include "err.c"
-> >  #include "fs.c"
-> > +#include "i2c.c"
-> >  #include "io.c"
-> >  #include "jump_label.c"
-> >  #include "kunit.c"
-> > diff --git a/rust/helpers/i2c.c b/rust/helpers/i2c.c
+> > @@ -30,6 +30,7 @@
+> >  #include <linux/refcount.h>
+> >  #include <linux/regmap.h>
+> >  #include <linux/regulator/consumer.h>
+> > +#include <linux/regulator/driver.h>
+> >  #include <linux/sched.h>
+> >  #include <linux/security.h>
+> >  #include <linux/slab.h>
+> > diff --git a/rust/kernel/regulator.rs b/rust/kernel/regulator.rs
+> > index d695ac955193efcfda62770784a92d70d606b93d..bd8202fe5702b944201e765=
+53b9496e1d42cb429 100644
+> > --- a/rust/kernel/regulator.rs
+> > +++ b/rust/kernel/regulator.rs
+> > @@ -2,12 +2,14 @@
+> >
+> >  //! SoC Regulators
+>
+> Why "SoC", could be a regulator for anything else too, right?
+
+I used "SoC" to match the C headers "include/linux/regulator/driver.h"
+and "include/linux/regulator/consumer.h". But as you
+mention this, I just noticed that "SoC" is nowhere to be found in
+Documentation/driver-api/regulator.rst, so maybe I should
+indeed remove it.
+
+>
+> >
+> > +pub mod driver;
+> > +
+> >  use crate::{
+> >      bindings,
+> >      error::{code::*, Error, Result},
+> >  };
+> >
+> > -/// Regulators operating modes
+> > +/// [`driver::Device`] operating modes
+> >  #[derive(Copy, Clone)]
+> >  #[repr(u32)]
+> >  pub enum Mode {
+> > diff --git a/rust/kernel/regulator/driver.rs b/rust/kernel/regulator/dr=
+iver.rs
 > > new file mode 100644
-> > index 0000000000000000000000000000000000000000..8ffdc454e7597cc61909da5=
-b3597057aeb5f7299
+> > index 0000000000000000000000000000000000000000..8079ea28fd5bf7b6871a0b1=
+d2cea7a6fffcb43ca
 > > --- /dev/null
-> > +++ b/rust/helpers/i2c.c
-> > @@ -0,0 +1,13 @@
+> > +++ b/rust/kernel/regulator/driver.rs
+> > @@ -0,0 +1,850 @@
 > > +// SPDX-License-Identifier: GPL-2.0
 > > +
-> > +#include <linux/i2c.h>
-> > +
-> > +void *rust_helper_i2c_get_clientdata(const struct i2c_client *client)
-> > +{
-> > +     return i2c_get_clientdata(client);
-> > +}
-> > +
-> > +void rust_helper_i2c_set_clientdata(struct i2c_client *client, void *d=
-ata)
-> > +{
-> > +     i2c_set_clientdata(client, data);
-> > +}
-> > diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..efa03335e5b59e72738380e=
-94213976b2464c25b
-> > --- /dev/null
-> > +++ b/rust/kernel/i2c.rs
-> > @@ -0,0 +1,288 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +//! Abstractions for the I2C bus.
+> > +//! SoC Device Driver Interface
+>
+> Should rather be "Regulator Device Driver Interface".
+>
 > > +//!
-> > +//! C header: [`include/linux/i2c.h`](srctree/include/linux/i2c.h)
+> > +//! C header: [`include/linux/regulator/driver.h`](srctree/include/lin=
+ux/regulator/driver.h)
+> > +//!
+> > +//! # Examples
+> > +//!
+> > +//! ```
+> > +//! use kernel::regulator::driver::{Config, Desc, Device, Driver, Type=
+};
+> > +//!
+> > +//! static DESC: Desc =3D
+> > +//!     Desc::new::<MyDeviceDriver>(kernel::c_str!("my-regulator-drive=
+r"), Type::Voltage);
+> > +//!
+> > +//! struct MyDeviceDriver;
+> > +//!
+> > +//! #[vtable]
+> > +//! impl Driver for MyDeviceDriver {
+>
+> I usually prefer to keep the module prefix for the `Driver` traits, i.e.
+> `impl regulator::Driver for ...`, this makes things a bit more obvious.
+>
+> > +//!     type Data =3D ();
+> > +//!
+> > +//!     // Implement supported `Driver`'s operations here.
+> > +//!
+> > +//!     // Example:
+> > +//!     fn is_enabled(reg: &mut Device<Self::Data>) -> Result<bool> {
+> > +//!         Ok(true)
+> > +//!     }
+> > +//! }
+> > +//!
+> > +//! impl MyDeviceDriver {
+> > +//!     fn probe(dev: &mut kernel::device::Device) {
+> > +//!         let _ =3D Device::register(dev, &DESC, Config::<<Self as D=
+river>::Data>::new(dev, ()));
+>
+> Like below, this is confusing, the device is immediately unregistered aga=
+in.
+>
+> > +//!     }
+> > +//! }
+> > +//! ```
 > > +
 > > +use crate::{
-> > +    bindings, container_of,
-> > +    device::Device,
-> > +    device_id::{self, RawDeviceId},
-> > +    driver,
-> > +    error::{to_result, Result},
-> > +    of,
-> > +    prelude::*,
+> > +    device,
+> > +    error::{code::*, from_err_ptr, from_result, Error, Result},
+> > +    macros::vtable,
+> > +    regulator::Mode,
 > > +    str::CStr,
-> > +    types::{ARef, ForeignOwnable, Opaque},
+> > +    types::ForeignOwnable,
 > > +    ThisModule,
 > > +};
+> > +use core::{marker::PhantomData, mem::ManuallyDrop, ptr::NonNull};
 > > +
-> > +/// Abstraction for `bindings::i2c_device_id`.
-> > +#[repr(transparent)]
-> > +#[derive(Clone, Copy)]
-> > +pub struct DeviceId(bindings::i2c_device_id);
+> > +/// [`Device`]'s status
+> > +#[derive(Eq, PartialEq)]
+> > +pub enum Status {
+> > +    /// Device is off
+> > +    Off,
+> > +    /// Device is on
+> > +    On,
+> > +    /// Device is in an error state
+> > +    Error,
+> > +    /// Device is on and in Fast mode
+> > +    Fast,
+> > +    /// Device is on and in Normal mode
+> > +    Normal,
+> > +    /// Device is on and in Idle mode
+> > +    Idle,
+> > +    /// Device is on and in Standby mode
+> > +    Standby,
+> > +    /// Device is enabled but not regulating
+> > +    Bypass,
+> > +    /// Device is any other status
+> > +    Undefined,
+> > +}
 > > +
-> > +impl DeviceId {
-> > +    /// Create a new device id from an I2C name.
-> > +    pub const fn new(name: &CStr) -> Self {
-> > +        let src =3D name.as_bytes_with_nul();
-> > +        // TODO: Replace with `bindings::i2c_device_id::default()` onc=
-e stabilized for `const`.
-> > +        // SAFETY: FFI type is valid to be zero-initialized.
-> > +        let mut i2c: bindings::i2c_device_id =3D unsafe { core::mem::z=
-eroed() };
+> > +impl TryFrom<core::ffi::c_uint> for Status {
+> > +    type Error =3D Error;
 > > +
-> > +        let mut i =3D 0;
-> > +        while i < src.len() {
-> > +            i2c.name[i] =3D src[i] as _;
-> > +            i +=3D 1;
+> > +    fn try_from(status: core::ffi::c_uint) -> Result<Self> {
+> > +        match status {
+> > +            bindings::regulator_status_REGULATOR_STATUS_OFF =3D> Ok(Se=
+lf::Off),
+> > +            bindings::regulator_status_REGULATOR_STATUS_ON =3D> Ok(Sel=
+f::On),
+> > +            bindings::regulator_status_REGULATOR_STATUS_ERROR =3D> Ok(=
+Self::Error),
+> > +            bindings::regulator_status_REGULATOR_STATUS_FAST =3D> Ok(S=
+elf::Fast),
+> > +            bindings::regulator_status_REGULATOR_STATUS_NORMAL =3D> Ok=
+(Self::Normal),
+> > +            bindings::regulator_status_REGULATOR_STATUS_IDLE =3D> Ok(S=
+elf::Idle),
+> > +            bindings::regulator_status_REGULATOR_STATUS_STANDBY =3D> O=
+k(Self::Standby),
+> > +            bindings::regulator_status_REGULATOR_STATUS_BYPASS =3D> Ok=
+(Self::Bypass),
+> > +            bindings::regulator_status_REGULATOR_STATUS_UNDEFINED =3D>=
+ Ok(Self::Undefined),
+> > +            _ =3D> Err(EINVAL),
 > > +        }
->
-> You can simplify this now that char maps to u8 (in rust next).
->
-> > +
-> > +        Self(i2c)
 > > +    }
 > > +}
 > > +
-> > +// SAFETY:
-> > +// * `DeviceId` is a `#[repr(transparent)` wrapper of `i2c_device_id` =
-and does not add
-> > +//   additional invariants, so it's safe to transmute to `RawType`.
-> > +// * `DRIVER_DATA_OFFSET` is the offset to the `data` field.
-> > +unsafe impl RawDeviceId for DeviceId {
-> > +    type RawType =3D bindings::i2c_device_id;
+> > +impl From<Mode> for Status {
+> > +    fn from(mode: Mode) -> Self {
+> > +        // SAFETY: `regulator_mode_to_status` is a `pure function` tha=
+t is only doing integer
+> > +        // to integer conversion, hence this function call is safe.
+> > +        let status =3D unsafe { bindings::regulator_mode_to_status(mod=
+e as _) };
 > > +
-> > +    const DRIVER_DATA_OFFSET: usize =3D core::mem::offset_of!(bindings=
-::i2c_device_id, driver_data);
-> > +
-> > +    fn index(&self) -> usize {
-> > +        self.0.driver_data as _
-> > +    }
-> > +}
-> > +
-> > +/// I2C [`DeviceId`] table.
-> > +pub type IdTable<T> =3D &'static dyn device_id::IdTable<DeviceId, T>;
-> > +
-> > +/// An adapter for the registration of I2C drivers.
-> > +#[doc(hidden)]
-> > +pub struct Adapter<T: Driver + 'static>(T);
-> > +
-> > +impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-> > +    type RegType =3D bindings::i2c_driver;
-> > +
-> > +    fn register(
-> > +        i2cdrv: &Opaque<Self::RegType>,
-> > +        name: &'static CStr,
-> > +        module: &'static ThisModule,
-> > +    ) -> Result {
-> > +        // SAFETY: It's safe to set the fields of `struct i2c_driver` =
-on initialization.
-> > +        unsafe {
-> > +            (*i2cdrv.get()).driver.name =3D name.as_char_ptr();
-> > +            (*i2cdrv.get()).probe =3D Some(Self::probe_callback);
-> > +            (*i2cdrv.get()).remove =3D Some(Self::remove_callback);
-> > +            if let Some(t) =3D T::I2C_ID_TABLE {
-> > +                (*i2cdrv.get()).id_table =3D t.as_ptr();
-> > +            }
-> > +            if let Some(t) =3D T::OF_ID_TABLE {
-> > +                (*i2cdrv.get()).driver.of_match_table =3D t.as_ptr();
-> > +            }
+> > +        if status < 0 {
+> > +            Self::Undefined
+> > +        } else {
+> > +            Self::try_from(status as core::ffi::c_uint).unwrap_or(Self=
+::Undefined)
 > > +        }
-> > +
-> > +        // SAFETY: `i2cdrv` is guaranteed to be a valid `RegType`.
-> > +        to_result(unsafe { bindings::i2c_register_driver(module.0, i2c=
-drv.get()) })
-> > +    }
-> > +
-> > +    fn unregister(i2cdrv: &Opaque<Self::RegType>) {
-> > +        // SAFETY: `i2cdrv` is guaranteed to be a valid `RegType`.
-> > +        unsafe { bindings::i2c_del_driver(i2cdrv.get()) };
 > > +    }
 > > +}
+> > +
+> > +/// [`Device`]'s operations
+> > +#[vtable]
+> > +pub trait Driver {
+> > +    /// User data that will be accessible to all operations
+> > +    type Data: ForeignOwnable + Send + Sync;
+> > +
+> > +    /// Return one of the supported voltages, in microvolt; zero if th=
+e selector indicates a
+> > +    /// voltage that is unusable by the system; or negative errno. Sel=
+ectors range from zero to one
+> > +    /// less than the number of voltages supported by the system.
+> > +    fn list_voltage(_rdev: &mut Device<Self::Data>, _selector: u32) ->=
+ Result<i32> {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Set the voltage for the regulator within the range specified. =
+The driver should select the
+> > +    /// voltage closest to `min_uv`.
+> > +    fn set_voltage(_rdev: &mut Device<Self::Data>, _min_uv: i32, _max_=
+uv: i32) -> Result<i32> {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Set the voltage for the regulator using the specified selector=
+.
+> > +    fn set_voltage_sel(_rdev: &mut Device<Self::Data>, _selector: u32)=
+ -> Result {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Convert a voltage into a selector.
+> > +    fn map_voltage(_rdev: &mut Device<Self::Data>, _min_uv: i32, _max_=
+uv: i32) -> Result<i32> {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Get the currently configured voltage for the regulator; Return=
+s
+> > +    /// [`ENOTRECOVERABLE`] if the regulator can't be read at bootup a=
+nd hasn't been
+> > +    /// set yet.
+> > +    fn get_voltage(_rdev: &mut Device<Self::Data>) -> Result<i32> {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Get the currently configured voltage selector for the regulato=
+r; Returns
+> > +    /// [`ENOTRECOVERABLE`] if the regulator can't be read at bootup a=
+nd hasn't been
+> > +    /// set yet.
+> > +    fn get_voltage_sel(_rdev: &mut Device<Self::Data>) -> Result<i32> =
+{
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Configure a limit for a current-limited regulator.
+> > +    ///
+> > +    /// The driver should select the current closest to `max_ua`.
+> > +    fn set_current_limit(_rdev: &mut Device<Self::Data>, _min_ua: i32,=
+ _max_ua: i32) -> Result {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Get the configured limit for a current-limited regulator.
+> > +    fn get_current_limit(_rdev: &mut Device<Self::Data>) -> Result<i32=
+> {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Enable or disable the active discharge of the regulator.
+> > +    fn set_active_discharge(_rdev: &mut Device<Self::Data>, _enable: b=
+ool) -> Result {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Configure the regulator as enabled.
+> > +    fn enable(_rdev: &mut Device<Self::Data>) -> Result {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Configure the regulator as disabled.
+> > +    fn disable(_rdev: &mut Device<Self::Data>) -> Result {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Returns enablement state of the regulator.
+> > +    fn is_enabled(_rdev: &mut Device<Self::Data>) -> Result<bool> {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Set the configured operating [`Mode`] for the regulator.
+> > +    fn set_mode(_rdev: &mut Device<Self::Data>, _mode: Mode) -> Result=
+ {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Get the configured operating [`Mode`] for the regulator.
+> > +    fn get_mode(_rdev: &mut Device<Self::Data>) -> Mode {
+> > +        Mode::Invalid
+> > +    }
+> > +
+> > +    /// Report the regulator [`Status`].
+> > +    fn get_status(_rdev: &mut Device<Self::Data>) -> Result<Status> {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Set the voltage for the regaultor when the system is suspended=
+.
+> > +    fn set_suspend_voltage(_rdev: &mut Device<Self::Data>, _uv: i32) -=
+> Result {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Mark the regulator as enabled when the system is suspended.
+> > +    fn set_suspend_enable(_rdev: &mut Device<Self::Data>) -> Result {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Mark the regulator as disabled when the system is suspended.
+> > +    fn set_suspend_disable(_rdev: &mut Device<Self::Data>) -> Result {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +
+> > +    /// Set the operating mode for the regulator when the system is su=
+spended.
+> > +    fn set_suspend_mode(_rdev: &mut Device<Self::Data>, _mode: Mode) -=
+> Result {
+> > +        Err(ENOTSUPP)
+> > +    }
+> > +}
+> > +
+> > +/// [`Device`]'s descriptor
+> > +///
+> > +/// # Examples
+> > +///
+> > +/// ```
+> > +/// use kernel::{
+> > +///     c_str,
+> > +///     device,
+> > +///     regulator::driver::{Config, Desc, Device, Driver, Type},
+> > +///     types::ForeignOwnable,
+> > +/// };
+> > +///
+> > +/// struct MyDeviceDriver;
+> > +///
+> > +/// #[vtable]
+> > +/// impl Driver for MyDeviceDriver {
+> > +///     type Data =3D ();
+> > +/// }
+>
+> This seems incomplete.
+>
+> > +///
+> > +/// static BUCK_DESC: Desc =3D Desc::new::<MyDeviceDriver>(c_str!("my_=
+driver"), Type::Voltage)
+> > +///     .with_of_match(c_str!("buck"))
+> > +///     .with_enable(0x24, 0x1, 0x1, 0);
+> > +///
+> > +/// fn example(dev: &mut device::Device, mut config: Config<<MyDeviceD=
+river as Driver>::Data>) {
+> > +///     let _ =3D Device::register(dev, &BUCK_DESC, config);
+> > +/// }
+>
+> `example`? This should be within a driver trait with `probe` instead.
+>
+> > +/// ```
+> > +///
+> > +/// # Invariants
+> > +///
+> > +/// `self.0` has always valid data.
+> > +pub struct Desc(bindings::regulator_desc);
+>
+> I think this needs `#[repr(transparent)]`.
+>
+> > +impl Desc {
+> > +    /// Create a new [`Device`] descriptor
+> > +    pub const fn new<T: Driver>(name: &'static CStr, reg_type: Type) -=
+> Self {
+> > +        // SAFETY: `bindings::regulator_desc" is safe to initialize wi=
+th 0s.
+> > +        let mut desc: bindings::regulator_desc =3D unsafe { core::mem:=
+:zeroed() };
+> > +        desc.name =3D name.as_char_ptr();
+> > +        desc.type_ =3D match reg_type {
+> > +            Type::Voltage =3D> bindings::regulator_type_REGULATOR_VOLT=
+AGE,
+> > +            Type::Current =3D> bindings::regulator_type_REGULATOR_CURR=
+ENT,
+> > +        };
+> > +        desc.ops =3D Adapter::<T>::build();
+> > +        Self(desc)
+> > +    }
+> > +
+> > +    /// Setup the register address, mask, and {en,dis}able values
+> > +    pub const fn with_enable(mut self, reg: u32, mask: u32, en_val: u3=
+2, dis_val: u32) -> Self {
+> > +        self.0.enable_reg =3D reg;
+> > +        self.0.enable_mask =3D mask;
+> > +        self.0.enable_val =3D en_val;
+> > +        self.0.disable_val =3D dis_val;
+> > +        self
+> > +    }
+> > +
+> > +    /// Setup the register address, mask, and {en,dis}able values. {En=
+,Dis}able values are
+> > +    /// inverted, i.e. `dis_val` will be use to enable the regulator w=
+hile `en_val` will be used
+> > +    /// to disable the regulator.
+> > +    pub const fn with_inverted_enable(
+> > +        mut self,
+> > +        reg: u32,
+> > +        mask: u32,
+> > +        en_val: u32,
+> > +        dis_val: u32,
+> > +    ) -> Self {
+> > +        self.0.enable_is_inverted =3D true;
+> > +        self.with_enable(reg, mask, en_val, dis_val)
+> > +    }
+> > +
+> > +    /// Setup the active discharge regiter address, mask, on/off value=
+s.
+> > +    pub const fn with_active_discharge(mut self, reg: u32, mask: u32, =
+on: u32, off: u32) -> Self {
+> > +        self.0.active_discharge_on =3D on;
+> > +        self.0.active_discharge_off =3D off;
+> > +        self.0.active_discharge_reg =3D reg;
+> > +        self.0.active_discharge_mask =3D mask;
+> > +        self
+> > +    }
+> > +
+> > +    /// Setup the current selection register address, mask, and curren=
+t table
+> > +    pub const fn with_csel(mut self, reg: u32, mask: u32, table: &'sta=
+tic [u32]) -> Self {
+> > +        self.0.csel_reg =3D reg;
+> > +        self.0.csel_mask =3D mask;
+> > +        self.0.curr_table =3D table.as_ptr();
+> > +        self
+> > +    }
+> > +
+> > +    /// Voltages are a linear mapping
+> > +    pub const fn with_linear_mapping(
+> > +        mut self,
+> > +        reg: u32,
+> > +        mask: u32,
+> > +        min_uv: u32,
+> > +        uv_step: u32,
+> > +        n_voltages: u32,
+> > +        linear_min_sel: u32,
+> > +    ) -> Self {
+> > +        self.0.vsel_reg =3D reg;
+> > +        self.0.vsel_mask =3D mask;
+> > +        self.0.n_voltages =3D n_voltages;
+> > +        self.0.min_uV =3D min_uv;
+> > +        self.0.uV_step =3D uv_step;
+> > +        self.0.linear_min_sel =3D linear_min_sel;
+> > +        self
+> > +    }
+> > +
+> > +    /// Set the regulator owner
+> > +    pub const fn with_owner(mut self, owner: &'static ThisModule) -> S=
+elf {
+> > +        self.0.owner =3D owner.as_ptr();
+> > +        self
+> > +    }
+> > +
+> > +    /// Set the name used to identify the regulator in the DT.
+> > +    pub const fn with_of_match(mut self, of_match: &'static CStr) -> S=
+elf {
+> > +        self.0.of_match =3D of_match.as_char_ptr();
+> > +        self
+> > +    }
+> > +}
+> > +
+> > +// SAFETY: `Desc` cannot be modified after its declaration and owns it=
+s data, hence it is safe
+> > +// to share references between threads.
+> > +unsafe impl Sync for Desc {}
+> > +
+> > +/// [`Device`]'s Config
+> > +///
+> > +/// # Examples
+> > +///
+> > +/// ```
+> > +/// use kernel::regulator::driver::Config;
+> > +/// # use kernel::regulator::driver::{Desc, Device};
+> > +/// # use kernel::{device, sync::Arc};
+> > +///
+> > +/// struct DriverData(u32);
+> > +///
+> > +/// # fn probe(dev: &device::Device, desc: &'static Desc) -> Result {
+> > +/// let config =3D Config::<Arc<DriverData>>::new(dev, Arc::new(Driver=
+Data(128), GFP_KERNEL)?);
+>
+> Why does this need reference counting?
+>
+> > +/// let reg =3D Device::register(dev, desc, config)?;
+> > +/// #     Ok(())
+> > +/// # }
+>
+> I think this example is a bit misleading, the regulator device is immedia=
+tely
+> unregistered after probe() returns.
+>
+> Here you have to rely on the driver to keep `reg` alive until the device =
+is
+> dropped. Instead you can use `Devres::new_foreign_owned`, like I do in [1=
+].
+>
+> [1] https://cgit.freedesktop.org/drm/drm-misc/tree/rust/kernel/drm/drv.rs=
+?h=3Dtopic/rust-drm#n173
+>
+> > +/// ```
+> > +///
+> > +/// # Invariants
+> > +///
+> > +/// `self.cfg` always hold valid data.
+> > +pub struct Config<T: ForeignOwnable + Send + Sync =3D ()> {
+> > +    cfg: bindings::regulator_config,
+> > +    data: T,
+> > +}
+> > +
+> > +impl<T: ForeignOwnable + Send + Sync> Config<T> {
+> > +    /// Create a [`Device`] config.
+> > +    pub fn new(dev: &device::Device, data: T) -> Self {
+> > +        Self {
+> > +            cfg: bindings::regulator_config {
+> > +                dev: dev.as_raw(),
+> > +                ..Default::default()
+> > +            },
+> > +            data,
+> > +        }
+> > +    }
+> > +}
+> > +
+> > +/// Regulator device
+> > +///
+> > +/// Abstraction for `struct regulator_dev`.
+> > +///
+> > +/// # Invariants
+> > +///
+> > +/// * `self.rdev` is valid and non-null.
+> > +/// * [`Self`] has owns `self.rdev` memory allocation.
+> > +/// * [`Self`] has owns memory of type `T` that can be retrieved throu=
+gh `rdev_get_drvdata`.
+> > +pub struct Device<T: ForeignOwnable + Send + Sync> {
+> > +    rdev: NonNull<bindings::regulator_dev>,
+> > +    _data_type: PhantomData<T>,
+> > +}
+>
+> I think you should split this into a `regulator::Device` and a
+> `regulator::Registration` structure instead. For regulator this seems to =
+works
+> as well, but it gets confusing if we do not stick to the same representat=
+ions
+> between subsystems.
+>
+> > +
+> > +impl<T: ForeignOwnable + Send + Sync> Device<T> {
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be valid and non-null.
+> > +    unsafe fn from_raw(rdev: *mut bindings::regulator_dev) -> Manually=
+Drop<Self> {
+> > +        ManuallyDrop::new(Self {
+> > +            // SAFETY: The caller of `Self::from_raw` must garantee th=
+at `rdev` is non-null and
+> > +            // valid..
+> > +            rdev: unsafe { NonNull::new_unchecked(rdev) },
+> > +            _data_type: PhantomData::<T>,
+> > +        })
+> > +    }
+> > +
+> > +    /// register a Regulator driver
+> > +    pub fn register(
+> > +        dev: &device::Device,
+> > +        desc: &'static Desc,
+> > +        mut config: Config<T>,
+> > +    ) -> Result<Self> {
+> > +        config.cfg.driver_data =3D config.data.into_foreign() as _;
+> > +
+> > +        // SAFETY: By the type invariants, we know that `dev.as_ref().=
+as_raw()` is always
+> > +        // valid and non-null, and the descriptor and config are guara=
+nteed to be valid values,
+> > +        // hence it is safe to perform the FFI call.
+> > +        let rdev =3D from_err_ptr(unsafe {
+> > +            bindings::regulator_register(dev.as_raw(), &desc.0, &confi=
+g.cfg)
+> > +        })?;
+> > +
+> > +        Ok(Self {
+> > +            rdev: NonNull::new(rdev).ok_or(EINVAL)?,
+> > +            _data_type: PhantomData::<T>,
+> > +        })
+> > +    }
+> > +
+> > +    /// List voltages when the regulator is using linear mapping
+> > +    pub fn list_voltage_linear(&self, selector: u32) -> Result<i32> {
+> > +        // SAFETY: By the type invariants, we know that `self.rdev` is=
+ always valid and non-null.
+> > +        // The C function is safe to call with any selector values.
+> > +        let ret =3D unsafe { bindings::regulator_list_voltage_linear(s=
+elf.rdev.as_ptr(), selector) };
+> > +        if ret < 0 {
+> > +            return Err(Error::from_errno(ret));
+> > +        }
+> > +        Ok(ret)
+> > +    }
+> > +
+> > +    /// Get regulator's name
+> > +    pub fn get_name(&self) -> &'static CStr {
+> > +        // SAFETY: By the type invariants, we know that `self.rdev` is=
+ always valid and non-null.
+> > +        // The C function is guaranteed to return a valid string.
+> > +        unsafe { CStr::from_char_ptr(bindings::rdev_get_name(self.rdev=
+.as_ptr())) }
+> > +    }
+> > +
+> > +    /// Get regulator's ID
+> > +    pub fn get_id(&self) -> i32 {
+> > +        // SAFETY: By the type invariants, we know that `self.rdev` is=
+ always valid and non-null.
+> > +        unsafe { bindings::rdev_get_id(self.rdev.as_ptr()) }
+> > +    }
+> > +
+> > +    /// Retrieve driver data associated to `self`
+> > +    pub fn data(&self) -> T::Borrowed<'_> {
+> > +        // SAFETY: By the type invariants, we know that `self.rdev` is=
+ always valid and non-null.
+> > +        unsafe { T::borrow(bindings::rdev_get_drvdata(self.rdev.as_ptr=
+())) }
+> > +    }
+> > +}
+> > +
+> > +impl<T: ForeignOwnable + Send + Sync> Drop for Device<T> {
+> > +    fn drop(&mut self) {
+> > +        // SAFETY: The type invariants guarantee that `self.rdev` is v=
+alid and non-null,
+> > +        // so it is safe to perform the FFI call.
+> > +        unsafe { bindings::regulator_unregister(self.rdev.as_ptr()) };
+> > +
+> > +        // SAFETY: The type invariants garuantee that `self.rdev` is v=
+alid and non-null, and
+> > +        // that `rdev_get_drvdata` is valid memory of type `T` stored =
+there by calling
+> > +        // `T::into_foreign`.
+> > +        unsafe { T::from_foreign(bindings::rdev_get_drvdata(self.rdev.=
+as_ptr())) };
+> > +    }
+> > +}
+> > +
+> > +// SAFETY: `Device` has sole ownership of `self.rdev` and is never rea=
+d outside of the C
+> > +// implementation. It is safe to use it from any thread.
+> > +unsafe impl<T: ForeignOwnable + Send + Sync> Send for Device<T> {}
+> > +
+> > +// SAFETY: It is OK to access `Device` through shared references from =
+other threads because
+> > +// the C code is insuring proper synchronization of `self.rdev`.
+> > +unsafe impl<T: ForeignOwnable + Send + Sync> Sync for Device<T> {}
+> > +
+> > +/// [`Device`] type
+> > +pub enum Type {
+> > +    /// Voltage regulator
+> > +    Voltage,
+> > +    /// Current regulator
+> > +    Current,
+> > +}
+> > +
+> > +pub(crate) struct Adapter<T>(PhantomData<T>);
 > > +
 > > +impl<T: Driver> Adapter<T> {
-> > +    /// Get the [`Self::IdInfo`] that matched during probe.
-> > +    fn id_info(client: &mut Client) -> Option<&'static T::IdInfo> {
-> > +        let id =3D <Self as driver::Adapter>::id_info(client.as_ref())=
-;
-> > +        if id.is_some() {
-> > +            return id;
-> > +        }
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn list_voltage_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +        selector: core::ffi::c_uint,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| T::list_voltage(&mut rdev, selector))
+> > +    }
 > > +
-> > +        // SAFETY: `client` and `client.as_raw()` are guaranteed to be=
- valid.
-> > +        let id =3D unsafe { bindings::i2c_client_get_device_id(client.=
-as_raw()) };
-> > +        if !id.is_null() {
-> > +            // SAFETY: `DeviceId` is a `#[repr(transparent)` wrapper o=
-f `struct i2c_device_id` and
-> > +            // does not add additional invariants, so it's safe to tra=
-nsmute.
-> > +            let id =3D unsafe { &*id.cast::<DeviceId>() };
-> > +            return Some(T::I2C_ID_TABLE?.info(id.index()));
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` and `selector` must be non-null and valid.
+> > +    unsafe extern "C" fn set_voltage_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +        min_uv: core::ffi::c_int,
+> > +        max_uv: core::ffi::c_int,
+> > +        selector: *mut core::ffi::c_uint,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        match T::set_voltage(&mut rdev, min_uv, max_uv) {
+> > +            Ok(v) =3D> {
+> > +                // SAFETY: Per this function safety requirements, `rde=
+v` is non-null and valid.
+> > +                unsafe { *selector =3D v as _ };
+> > +                0
+> > +            }
+> > +            Err(e) =3D> e.to_errno(),
 > > +        }
->
-> You aren't handling the DT based matching.
-
-It is handled with the first line of this function:
-
-+    fn id_info(client: &mut Client) -> Option<&'static T::IdInfo> {
-+        let id =3D <Self as driver::Adapter>::id_info(client.as_ref());
-
-This Adapter driver::Adapter is implemented by the I2C bus:
-
-+impl<T: Driver + 'static> driver::Adapter for Adapter<T> {
-+    type IdInfo =3D T::IdInfo;
-+
-+    fn of_id_table() -> Option<of::IdTable<Self::IdInfo>> {
-+        T::OF_ID_TABLE
-+    }
-+}
-
-This function is first using the adapter to retrieve the IdInfo, and
-if nothing is returned then we perform our own match based on
-i2c::IdInfo.
-
->
-> Rob
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn map_voltage_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +        min_uv: core::ffi::c_int,
+> > +        max_uv: core::ffi::c_int,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| T::map_voltage(&mut rdev, min_uv, max_uv))
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn set_voltage_sel_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +        selector: core::ffi::c_uint,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            T::set_voltage_sel(&mut rdev, selector)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn get_voltage_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| T::get_voltage(&mut rdev))
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn get_voltage_sel_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| T::get_voltage_sel(&mut rdev))
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn set_current_limit_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +        min_ua: core::ffi::c_int,
+> > +        max_ua: core::ffi::c_int,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            T::set_current_limit(&mut rdev, min_ua, max_ua)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn get_current_limit_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| T::get_current_limit(&mut rdev))
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn set_active_discharge_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +        enable: bool,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            T::set_active_discharge(&mut rdev, enable)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn enable_callback(rdev: *mut bindings::regulato=
+r_dev) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            T::enable(&mut rdev)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn disable_callback(rdev: *mut bindings::regulat=
+or_dev) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            T::disable(&mut rdev)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn is_enabled_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            T::is_enabled(&mut rdev)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn set_mode_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +        mode: core::ffi::c_uint,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            let mode =3D Mode::try_from(mode).unwrap_or(Mode::Invalid)=
+;
+> > +            T::set_mode(&mut rdev, mode)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn get_mode_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +    ) -> core::ffi::c_uint {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        T::get_mode(&mut rdev) as _
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn get_status_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| Ok(T::get_status(&mut rdev)? as _))
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn set_suspend_voltage_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +        uv: core::ffi::c_int,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            T::set_suspend_voltage(&mut rdev, uv)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn set_suspend_enable_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            T::set_suspend_enable(&mut rdev)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn set_suspend_disable_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            T::set_suspend_disable(&mut rdev)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    /// # Safety
+> > +    ///
+> > +    /// `rdev` must be non-null and valid.
+> > +    unsafe extern "C" fn set_suspend_mode_callback(
+> > +        rdev: *mut bindings::regulator_dev,
+> > +        mode: core::ffi::c_uint,
+> > +    ) -> core::ffi::c_int {
+> > +        // SAFETY: Per this function safety requirements, `rdev` is no=
+n-null and valid.
+> > +        let mut rdev =3D unsafe { Device::from_raw(rdev) };
+> > +        from_result(|| {
+> > +            let mode =3D Mode::try_from(mode).unwrap_or(Mode::Invalid)=
+;
+> > +            T::set_suspend_mode(&mut rdev, mode)?;
+> > +            Ok(0)
+> > +        })
+> > +    }
+> > +
+> > +    const VTABLE: bindings::regulator_ops =3D bindings::regulator_ops =
+{
+> > +        list_voltage: if T::HAS_LIST_VOLTAGE {
+> > +            Some(Adapter::<T>::list_voltage_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        set_voltage: if T::HAS_SET_VOLTAGE {
+> > +            Some(Adapter::<T>::set_voltage_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        map_voltage: if T::HAS_MAP_VOLTAGE {
+> > +            Some(Adapter::<T>::map_voltage_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        set_voltage_sel: if T::HAS_SET_VOLTAGE_SEL {
+> > +            Some(Adapter::<T>::set_voltage_sel_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        get_voltage: if T::HAS_GET_VOLTAGE {
+> > +            Some(Adapter::<T>::get_voltage_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        get_voltage_sel: if T::HAS_GET_VOLTAGE_SEL {
+> > +            Some(Adapter::<T>::get_voltage_sel_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        set_current_limit: if T::HAS_SET_CURRENT_LIMIT {
+> > +            Some(Adapter::<T>::set_current_limit_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        get_current_limit: if T::HAS_GET_CURRENT_LIMIT {
+> > +            Some(Adapter::<T>::get_current_limit_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        set_active_discharge: if T::HAS_SET_ACTIVE_DISCHARGE {
+> > +            Some(Adapter::<T>::set_active_discharge_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        enable: if T::HAS_ENABLE {
+> > +            Some(Adapter::<T>::enable_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        disable: if T::HAS_DISABLE {
+> > +            Some(Adapter::<T>::disable_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        is_enabled: if T::HAS_IS_ENABLED {
+> > +            Some(Adapter::<T>::is_enabled_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        set_mode: if T::HAS_SET_MODE {
+> > +            Some(Adapter::<T>::set_mode_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        get_mode: if T::HAS_GET_MODE {
+> > +            Some(Adapter::<T>::get_mode_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        get_status: if T::HAS_GET_STATUS {
+> > +            Some(Adapter::<T>::get_status_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        set_suspend_voltage: if T::HAS_SET_SUSPEND_VOLTAGE {
+> > +            Some(Adapter::<T>::set_suspend_voltage_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        set_suspend_enable: if T::HAS_SET_SUSPEND_ENABLE {
+> > +            Some(Adapter::<T>::set_suspend_enable_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        set_suspend_disable: if T::HAS_SET_SUSPEND_DISABLE {
+> > +            Some(Adapter::<T>::set_suspend_disable_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        set_suspend_mode: if T::HAS_SET_SUSPEND_MODE {
+> > +            Some(Adapter::<T>::set_suspend_mode_callback)
+> > +        } else {
+> > +            None
+> > +        },
+> > +        // SAFETY: The rest is zeroed out to initialize `struct regula=
+tor_ops`,
+> > +        // sets `Option<&F>` to be `None`.
+> > +        ..unsafe { core::mem::zeroed() }
+> > +    };
+> > +
+> > +    const fn build() -> &'static bindings::regulator_ops {
+> > +        &Self::VTABLE
+> > +    }
+> > +}
+> >
+> > --
+> > 2.45.2
+> >
+> >
 
