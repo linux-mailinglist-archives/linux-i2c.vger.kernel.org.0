@@ -1,134 +1,206 @@
-Return-Path: <linux-i2c+bounces-8664-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8665-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB5F9F9215
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 13:22:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BA4D9F926B
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 13:42:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28EDA7A3675
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 12:22:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9D3E18988D8
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 12:42:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320A52046A0;
-	Fri, 20 Dec 2024 12:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 649432156EE;
+	Fri, 20 Dec 2024 12:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Yq+tb1ps"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZSfMj0bY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFA31A7AE3;
-	Fri, 20 Dec 2024 12:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240362153CB
+	for <linux-i2c@vger.kernel.org>; Fri, 20 Dec 2024 12:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734697316; cv=none; b=TDIiwUUrEtm6twyomjSCct5MRfRt/tgfmLYP7tyGJs4zp4xeEktFTHJOdvfE01lI03uCkzQFBbROcerheaD7e1Pu7nDazQAmuoNnEMzaWZzeP63emPIcJxjJSyZmaBXCOh+SizanyH5ZATwo+XqSJFMZREv9avFiCAWnI/EZYp8=
+	t=1734698534; cv=none; b=c55gj4GcXoHgqlMKCw5EaIZgFDRHJiM5MHyQULcaTFBExhuCr8vsgLWTPpLInyIvBV4Tu6UVkiU+EqoK64NPcPCPpSdXvvejIJ+SVk9qgMWYtZsn3TzJ2JbivFI1L0SKv4b0nteF95qhzo+IE3/2I5H2zd6WpVQv1Rmd2xiJlX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734697316; c=relaxed/simple;
-	bh=JduFaswRmxN5tGLStvzwUiaywMEIItZVTSmKsVx9nOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rm4jRIh61FDTqFa4Wqoho1YpUA8bygGHav7a9cstSMKlhSuVDC+bbPGXdAGx77au9BuXy6CUCYnYD8s6iLuqXiGA0AboG0Jzab3zzVyaGpoHQxF9Cz88n2PtJg4pJpREJiF49Btjh0DQYiAwCcpna2SOfS5Lr4jX7ZEmu8z7lBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Yq+tb1ps; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B3BC4CECD;
-	Fri, 20 Dec 2024 12:21:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1734697316;
-	bh=JduFaswRmxN5tGLStvzwUiaywMEIItZVTSmKsVx9nOI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yq+tb1psbAD0EEaGVo62BeRkwh9Xj1zwGjU1RnX9bPc3zuKVZ+vFaKjzZirLF0O5Q
-	 cWqZTrj/8oUOashMDH0in9idt9Jf9pCN3xfKSbuna7zWsHJDYmyLi1Jgqy+04F5+b+
-	 WkFCtRLWZn13uCsuIFDP/5NAmVeHVQ3OLBfdEu0A=
-Date: Fri, 20 Dec 2024 13:21:51 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Kever Yang <kever.yang@rock-chips.com>
-Cc: heiko@sntech.de, linux-rockchip@lists.infradead.org,
-	Simon Xue <xxm@rock-chips.com>, Lee Jones <lee@kernel.org>,
-	dri-devel@lists.freedesktop.org, Zhang Rui <rui.zhang@intel.com>,
-	Elaine Zhang <zhangqing@rock-chips.com>, linux-clk@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, FUKAUMI Naoki <naoki@radxa.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Andy Yan <andyshrk@163.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jose Abreu <joabreu@synopsys.com>, Jamie Iles <jamie@jamieiles.com>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Frank Wang <frank.wang@rock-chips.com>, linux-mmc@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
-	Simona Vetter <simona@ffwll.ch>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-watchdog@vger.kernel.org, David Wu <david.wu@rock-chips.com>,
-	Shresth Prasad <shresthprasad7@gmail.com>,
-	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
-	linux-pci@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	linux-phy@lists.infradead.org, Jonas Karlman <jonas@kwiboo.se>,
-	Maxime Ripard <mripard@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Vinod Koul <vkoul@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-pwm@vger.kernel.org,
-	Rob Herring <robh@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Mark Brown <broonie@kernel.org>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>, Johan Jonker <jbx6244@gmail.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-serial@vger.kernel.org,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	devicetree@vger.kernel.org,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Tim Lunn <tim@feathertop.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-	netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Subject: Re: [PATCH 00/38] rockchip: Add rk3562 support
-Message-ID: <2024122018-groove-glitzy-f3bc@gregkh>
-References: <20241220103825.3509421-1-kever.yang@rock-chips.com>
+	s=arc-20240116; t=1734698534; c=relaxed/simple;
+	bh=HlBOh4jSSPlbfpktzNvwp+qwVjt5nv4jbi7s8EDlL/o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UKNQPM4AaWai8Vm+GIQqTmpQSP7tEOpK/lXW03WBDFv7lmby2Id7RqnejlRnhTk7WYb/Bo+J2kXq7EO+o0hfh6+F6vXXA1hdT/JrXU7s8IB/QGxkZ3uWhv/ijXF5CITN2lSJ8jHSfNbM6dWr3YSJniwGgqNjvznVqJazuvMk4jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZSfMj0bY; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-54024ecc33dso2151332e87.0
+        for <linux-i2c@vger.kernel.org>; Fri, 20 Dec 2024 04:42:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734698530; x=1735303330; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JAaYSv0Ae1yeH34mVXmK+u6UW76Um4Sm/+sIA+YD/I=;
+        b=ZSfMj0bYjlPZLWmuWDgA4Da9C1QVUPPwtBC3SiYjXmMD/6V8MGsNjyi743ZCK4cWEH
+         ADdHj8y1WE6IG2U1TTb6MqyBGxX5zrf8lI9FmhF4C4wVYRzPDytmjUmu1nDf8IZffLzC
+         F8m1NxRDsyejLaLwV5VqD6qe9v/OgOSQE7m8H85NNa3bt0RpMur5sRcPwFbrQS1cBAEo
+         6ERxm3vBXfTUCa2xh5bIo5H55QjFiAd5f3nk2+H09b5MAvk1z6Lgl+DQlqjGm7zLN9GE
+         QnXi/ijgaaJAOk+1GEKyvwGL6O9yssG8C+2fvDNDwGyQK28onE+Zm/hXrFfUEqWH8tfy
+         8B1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734698530; x=1735303330;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6JAaYSv0Ae1yeH34mVXmK+u6UW76Um4Sm/+sIA+YD/I=;
+        b=Q1rzvDVp0vjct8FJddD/8wxWRSeYI/2vk6vLPwlwmbJ7hKiA/NQgY44hQ1t5GkFqyh
+         8IW5Bg0W/yFcKwfgEwiEfZJMemY3e0+a3Ak5FkDXFfiauP8iOYZlnwMm3WeMnj3p6kYS
+         Vwspcrh8Lpt0TL1vJz7tPNDnJHIE9jPPmCdBk4IAC7gFOH3WeXHb80oS9KFSqDr79+c/
+         WK7b9a1VCH2xqBJDFOXgUElIvMI71TFNS+1cGLZGEAY+M1LW/eLB9JpMy1y+/+Xl31OA
+         1642OHZZ+6rGSGFwNrf7cXt9OXUAZozkc6OkpfstTiaem/Nifg/GgVk9I/zQwrbd7dTk
+         bEiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqbN4YhDoejgJ2O1pkPZMc9VScglqx1kt1czjngPmY4w8MwgKjffvl1mPVA4RCS0higmNIEp5Y8x8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzQLDmB4dHI5zmjxxLn7W7Q14Nk2z4ydATrN5rXJxw0N1DqMVZ
+	t+dbvpOL+Fq5/Z52TPM2usbxg6PDkqGw+SdEsOMf7y3+n3D6+aS4RXqxKfj2ke0o3+86IpQFmvT
+	c0tmlBjYM+c+eYtRcYDeK7oDtiZzQ5hftwuGokA==
+X-Gm-Gg: ASbGncv9AINOWjR6eHSVbqEk4fUd7/wCVimQ/VFpeS6sP3C8r538IbxOVZzScWB5GXl
+	N8y4DrPA+LQHeTFpKPJQWjiE9VRfi0zqdiVhxWw==
+X-Google-Smtp-Source: AGHT+IG/0DIpoBQtLX+2xTrpZ52kWuFm4zd5NY5XA3IybGxFiXX/atFeHWgT1av/lrPuINKlOWhHxww9t7kKEEWHrDk=
+X-Received: by 2002:ac2:4c48:0:b0:540:3579:f38f with SMTP id
+ 2adb3069b0e04-542295821afmr969235e87.37.1734698530305; Fri, 20 Dec 2024
+ 04:42:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241220103825.3509421-1-kever.yang@rock-chips.com>
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-3-tmyu0@nuvoton.com>
+In-Reply-To: <20241210104524.2466586-3-tmyu0@nuvoton.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 20 Dec 2024 13:41:59 +0100
+Message-ID: <CACRpkdajLe94novxjsHkCCx3m5raB0DxMnnSegCqkdWxRoWazw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/7] gpio: Add Nuvoton NCT6694 GPIO support
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 20, 2024 at 06:37:46PM +0800, Kever Yang wrote:
-> 
-> This patch set adds rk3562 SoC and its evb support.
-> 
-> The patch number is a little bit too big, some of them may need to split
-> out for different maintainers, please let me know which patch need to
-> split out.
+Hi Ming,
 
-I recommend you doing the split-apart as you know the dependencies here
-the best, right?  Otherwise we all will just probably ignore them
-assuming someone else is going to review/accept them...
+thanks for your patch!
 
-thanks,
+Some nits below:
 
-greg k-h
+On Tue, Dec 10, 2024 at 11:46=E2=80=AFAM Ming Yu <a0282524688@gmail.com> wr=
+ote:
+
+> This driver supports GPIO and IRQ functionality for NCT6694 MFD
+> device based on USB interface.
+>
+> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+(...)
+> +#include <linux/gpio/driver.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+
+#include <linux/bits.h>
+is missing, include it explicitly.
+
+> +       return !(BIT(offset) & data->xmit_buf);
+
+Here you use the BIT() macro from <linux/bits.h>
+
+> +static int nct6694_direction_input(struct gpio_chip *gpio, unsigned int =
+offset)
+> +{
+> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
+> +       int ret;
+> +
+> +       guard(mutex)(&data->lock);
+> +
+> +       ret =3D nct6694_read_msg(data->nct6694, NCT6694_GPIO_MOD,
+> +                              NCT6694_GPO_DIR + data->group,
+> +                              NCT6694_GPIO_LEN, &data->xmit_buf);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       data->xmit_buf &=3D ~(1 << offset);
+
+data->xmit_buf &=3D ~BIT(offset);
+
+> +static int nct6694_direction_output(struct gpio_chip *gpio,
+> +                                   unsigned int offset, int val)
+> +{
+> +       struct nct6694_gpio_data *data =3D gpiochip_get_data(gpio);
+> +       int ret;
+> +
+> +       guard(mutex)(&data->lock);
+> +
+> +       /* Set direction to output */
+> +       ret =3D nct6694_read_msg(data->nct6694, NCT6694_GPIO_MOD,
+> +                              NCT6694_GPO_DIR + data->group,
+> +                              NCT6694_GPIO_LEN, &data->xmit_buf);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       data->xmit_buf |=3D (1 << offset);
+
+data->xmit_buf |=3D BIT(offset);
+
+> +       if (val)
+> +               data->xmit_buf |=3D (1 << offset);
+> +       else
+> +               data->xmit_buf &=3D ~(1 << offset);
+
+Same
+
+> +static void nct6694_set_value(struct gpio_chip *gpio, unsigned int offse=
+t,
+> +                             int val)
+> +{
+(...)
+> +       if (val)
+> +               data->xmit_buf |=3D (1 << offset);
+> +       else
+> +               data->xmit_buf &=3D ~(1 << offset);
+
+Same
+
+> +static irqreturn_t nct6694_irq_handler(int irq, void *priv)
+> +{
+> +       struct nct6694_gpio_data *data =3D priv;
+> +       unsigned char status;
+> +
+> +       guard(mutex)(&data->lock);
+> +
+> +       nct6694_read_msg(data->nct6694, NCT6694_GPIO_MOD,
+> +                        NCT6694_GPI_STS + data->group,
+> +                        NCT6694_GPIO_LEN, &data->xmit_buf);
+> +
+> +       status =3D data->xmit_buf;
+> +
+> +       while (status) {
+> +               int bit =3D __ffs(status);
+> +
+> +               data->xmit_buf =3D BIT(bit);
+> +               handle_nested_irq(irq_find_mapping(data->gpio.irq.domain,=
+ bit));
+> +               status &=3D ~(1 << bit);
+
+Same
+
+Just use BIT() consistently please.
+
+Yours,
+Linus Walleij
 
