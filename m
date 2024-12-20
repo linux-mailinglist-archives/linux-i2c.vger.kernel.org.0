@@ -1,128 +1,134 @@
-Return-Path: <linux-i2c+bounces-8663-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8664-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1846B9F91E5
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 13:04:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DB5F9F9215
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 13:22:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77F5916C6C8
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 12:04:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28EDA7A3675
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 12:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D431C5F31;
-	Fri, 20 Dec 2024 12:02:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320A52046A0;
+	Fri, 20 Dec 2024 12:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="S0ewAtjQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Yq+tb1ps"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B763B1C5F36
-	for <linux-i2c@vger.kernel.org>; Fri, 20 Dec 2024 12:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFA31A7AE3;
+	Fri, 20 Dec 2024 12:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734696176; cv=none; b=A/UmIh0ihfh0oWPFNV7MgQuBu7kpCIVcPndLBRGyK7co3g0LIFOWOs8dJXAIyI98quJVnZ/E5tSwgbXwa6pCDWHFqitDHWYPPS1xp7o/QvlSuPhTOe3VLKCN51RAQ14+Q4NUgcSBuPsvtZAeWdHKv0ulw/vsgoFY9ZzLZwBoZ1Q=
+	t=1734697316; cv=none; b=TDIiwUUrEtm6twyomjSCct5MRfRt/tgfmLYP7tyGJs4zp4xeEktFTHJOdvfE01lI03uCkzQFBbROcerheaD7e1Pu7nDazQAmuoNnEMzaWZzeP63emPIcJxjJSyZmaBXCOh+SizanyH5ZATwo+XqSJFMZREv9avFiCAWnI/EZYp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734696176; c=relaxed/simple;
-	bh=XusNw49e0lceOwLFdgDeOV6klV2YgVaHYcKXPwyT9+w=;
+	s=arc-20240116; t=1734697316; c=relaxed/simple;
+	bh=JduFaswRmxN5tGLStvzwUiaywMEIItZVTSmKsVx9nOI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ThQb5WoKbocbS0Z8AmvBOojp2fajGiPJM4/6WsV4GBfW5GHe7UI3tPKLJTDv25BNkLCbdmFG+qgRDhhIzssKRcyKXfvIVNcY1Ems1sn6nMt9RvNSOZOgX6aoPNj6DASpZcCWNzPRel0iEpNU2c8UWRVWcj6d97YEA+oB6PI9EWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=S0ewAtjQ; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=XusN
-	w49e0lceOwLFdgDeOV6klV2YgVaHYcKXPwyT9+w=; b=S0ewAtjQaNwcOTfy/2Vh
-	qvoJc2JVn9odOsKyKLsjkYxP7e8IdS8fHrWZYve6Plap9ayxXgu8Id3xGqMeeKYk
-	UGUD7V9UmPGzWnTcleK58GVSuAsO8lw/bZDSE9AkpU0aqKMZzN2o5Mmp0mMUcmOg
-	BRIQ8kdL2jzljvBik9M7CZmDt8HhXGqgZxfayKl9XGlRPF6sb4e7IXMcjIITfIcF
-	RVM7Bnr/zTAGKS1cVpQU1O+BDw/xvLsogwvWRGbMYkC1zQ77lgY2nItu+4XbfbDQ
-	tHzVJJPleXwREC2zEheIr6BJezCzFmWbvzXZfEAE2B0dckI7tqvXIKEBbyukMVwQ
-	1A==
-Received: (qmail 998727 invoked from network); 20 Dec 2024 13:02:51 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Dec 2024 13:02:51 +0100
-X-UD-Smtp-Session: l3s3148p1@ldsUbbIp6NgujnsY
-Date: Fri, 20 Dec 2024 13:02:51 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=rm4jRIh61FDTqFa4Wqoho1YpUA8bygGHav7a9cstSMKlhSuVDC+bbPGXdAGx77au9BuXy6CUCYnYD8s6iLuqXiGA0AboG0Jzab3zzVyaGpoHQxF9Cz88n2PtJg4pJpREJiF49Btjh0DQYiAwCcpna2SOfS5Lr4jX7ZEmu8z7lBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Yq+tb1ps; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B3BC4CECD;
+	Fri, 20 Dec 2024 12:21:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1734697316;
+	bh=JduFaswRmxN5tGLStvzwUiaywMEIItZVTSmKsVx9nOI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Yq+tb1psbAD0EEaGVo62BeRkwh9Xj1zwGjU1RnX9bPc3zuKVZ+vFaKjzZirLF0O5Q
+	 cWqZTrj/8oUOashMDH0in9idt9Jf9pCN3xfKSbuna7zWsHJDYmyLi1Jgqy+04F5+b+
+	 WkFCtRLWZn13uCsuIFDP/5NAmVeHVQ3OLBfdEu0A=
+Date: Fri, 20 Dec 2024 13:21:51 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Kever Yang <kever.yang@rock-chips.com>
+Cc: heiko@sntech.de, linux-rockchip@lists.infradead.org,
+	Simon Xue <xxm@rock-chips.com>, Lee Jones <lee@kernel.org>,
+	dri-devel@lists.freedesktop.org, Zhang Rui <rui.zhang@intel.com>,
+	Elaine Zhang <zhangqing@rock-chips.com>, linux-clk@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>, FUKAUMI Naoki <naoki@radxa.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Andy Yan <andyshrk@163.com>,
+	Michael Riesch <michael.riesch@wolfvision.net>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 0/9] Add support for I2C bus recovery for riic driver
-Message-ID: <Z2Vc61czIYHHNMI_@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Chris Brandt <chris.brandt@renesas.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20241218001618.488946-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Jose Abreu <joabreu@synopsys.com>, Jamie Iles <jamie@jamieiles.com>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Frank Wang <frank.wang@rock-chips.com>, linux-mmc@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
+	Simona Vetter <simona@ffwll.ch>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-watchdog@vger.kernel.org, David Wu <david.wu@rock-chips.com>,
+	Shresth Prasad <shresthprasad7@gmail.com>,
+	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
+	linux-pci@vger.kernel.org, David Airlie <airlied@gmail.com>,
+	linux-phy@lists.infradead.org, Jonas Karlman <jonas@kwiboo.se>,
+	Maxime Ripard <mripard@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-pwm@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Mark Brown <broonie@kernel.org>,
+	Dragan Simic <dsimic@manjaro.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>, Johan Jonker <jbx6244@gmail.com>,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-serial@vger.kernel.org,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	devicetree@vger.kernel.org,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Tim Lunn <tim@feathertop.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+	netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
+Subject: Re: [PATCH 00/38] rockchip: Add rk3562 support
+Message-ID: <2024122018-groove-glitzy-f3bc@gregkh>
+References: <20241220103825.3509421-1-kever.yang@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aJ7NNRgyWjyNN0Ov"
-Content-Disposition: inline
-In-Reply-To: <20241218001618.488946-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-
---aJ7NNRgyWjyNN0Ov
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241220103825.3509421-1-kever.yang@rock-chips.com>
 
+On Fri, Dec 20, 2024 at 06:37:46PM +0800, Kever Yang wrote:
+> 
+> This patch set adds rk3562 SoC and its evb support.
+> 
+> The patch number is a little bit too big, some of them may need to split
+> out for different maintainers, please let me know which patch need to
+> split out.
 
-> This patch series introduces support for I2C bus recovery in the RIIC
-> driver, which is utilized in RZ series SoCs. The addition of bus recovery
-> functionality enhances the reliability of the I2C interface by allowing it
-> to recover from error conditions that might leave the bus in an unusable
-> state.
->=20
-> Alongside the bus recovery implementation, the series includes several
-> cleanup and improvement patches that simplify and modernize the driver
-> code. These include replacing `dev_err` calls with `dev_err_probe`,
-> consistent usage of the `BIT` and `GENMASK` macros, leveraging devres
-> helpers for reset management, and improving code readability by marking
-> static data as `const`.
+I recommend you doing the split-apart as you know the dependencies here
+the best, right?  Otherwise we all will just probably ignore them
+assuming someone else is going to review/accept them...
 
-I am planning to review and test this series later today.
+thanks,
 
-
---aJ7NNRgyWjyNN0Ov
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdlXOcACgkQFA3kzBSg
-KbY33BAArKZKPs3wJdE1WyI9mcpwMYYJ0cc/5q3CyKMS+YoEAkIvOA2FELkm7fBI
-y4Q3wHP/vZJ5jNXo4iUgIv/XCOml50a64yR5IkJbEkGSGNab4uB8Q/CrgqLXBMnM
-dVXULiVA7tUcvlJRftDIV5pg7LWxiT6n+ew+kvyKD096Cg6zHKJaHhs6r9VOUQfZ
-bRSx7UGVQ5HKZULRNy90SuZL0ctIzy236GV7ndZfCXKMQZMoykXkuYRGPUdSZunU
-iW7ztalIZ50Qd1bXa1VvA4z0hrwkPNOU2eIr/xRVGXHEPzoGQ5rXHsEsIti7Envj
-zARIlsjAteX3/eyOZ1ZkfxnktJwe9adDL2AiRRNEXDQtE+B5H5tfBjDAPEw3Ncoy
-GOhJOwlY5uvGntCaTlIBIqLzGiBZ/pYAyuFsx8p96wQBQskJMW0TB94j773dkvu7
-0fsaJfhia0EjLS0iRGS7hrvBnMMImr7HkWk/n9Bvx9VrndW0M2A6btfRDsDumjXU
-MYSNAzBB8xeraGcjtcmgwx88gkX5PDUutiPW0xfLjB4X7BQa3lZCSWx7QQ+vsuIF
-KFOXS1++svsCQHhIuVs9mauk8H1az4iCLV9KGb79LCH+6p4X/QakHnhQmiEGSNU5
-CZbagcfXX12hCT6Kywca9uF4LN47dmzQ61cWgM7lyVjII1vxSu0=
-=cxOA
------END PGP SIGNATURE-----
-
---aJ7NNRgyWjyNN0Ov--
+greg k-h
 
