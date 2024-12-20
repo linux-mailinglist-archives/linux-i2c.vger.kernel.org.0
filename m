@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-8673-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8674-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00DC39F9BD1
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 22:19:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 453C89F9BD5
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 22:21:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 631FD16D23B
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 21:19:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A5A27A4822
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 21:20:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F10223715;
-	Fri, 20 Dec 2024 21:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804B72163A6;
+	Fri, 20 Dec 2024 21:20:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="bmQmyy45"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="dcMNtuP7"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB971AA1D5
-	for <linux-i2c@vger.kernel.org>; Fri, 20 Dec 2024 21:19:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DFC1A3BD7
+	for <linux-i2c@vger.kernel.org>; Fri, 20 Dec 2024 21:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734729585; cv=none; b=ZgBUalCzfX+ogM4+TEBfgdtDR5NLcSc4TV3bznVLdPNS1aaGiVR2P2/gCcmo22epxJAi+k/CBiglxVO2vfP6ANKC02LznWGIvCOp5UsHNOxoXf1deTTnsVI7JF+iOetH2oDpZmTtZ2V0KXh6TBmf8kw8/b2CHd+m8LZpru/YiZg=
+	t=1734729651; cv=none; b=nhes8OaUPxePCESDAfuB+EWk070ZKK5/4ShdvHblUr/4qQ8DZQdkQteBzg5a6dL+8vHOG4vdJpWN8YiJy1BFHQskBkx3s8Ve+ZibhlGLpJfBsbB3TdFxZvK0RTTe/d5rSntHKnv2ofnUh8P23TH5NHJ7+5wsAndbxNxRYYAHRpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734729585; c=relaxed/simple;
-	bh=maBh6NU5WerKErHYv6tUHuN9oiALjm15eD/eE51bhWU=;
+	s=arc-20240116; t=1734729651; c=relaxed/simple;
+	bh=MjhFa8bJqhTdz6UBNHivFjTo1NItfH8DgUMWVxWfc3w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F26zrmzJ+SR8jlF2ke6NLOi8FyOlTBtkTFQcdOMT5Wb5ONahA71bRZ4z2rpFZOIdWmOjZ+dOarVEE9ldeSzV2kpDKk9PomTmI4gkeky4xlMl6eaamlNpkh7bbvelAyA8hKvd3JnGNB8etxRUa94xMkl6uYCbFBEx3669fZJAxLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=bmQmyy45; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oxdv71Sq0kjVqHd/UFjOKr0CFrux9KewYR2f5/F2Nv3biscvqrVpsOHNQqYIVw0RgBh4dw2h7fLTxCF+8BdB5D8jafCqKHVaQYZEc1hEzDVOc/EF1jZUwhmMHUNHy4z6QFHKyDRGMbEVc/xVOqwtam6oXt7NcZ1s85WFQcTULh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=dcMNtuP7; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=maBh
-	6NU5WerKErHYv6tUHuN9oiALjm15eD/eE51bhWU=; b=bmQmyy45zNHpsStLNfWr
-	i2PH/iTAZ6ODBPoXivJgDWJXoKBjGQ5dBR1uO0njRm8XxAD4F6w1sv0aDhys6ZmQ
-	IDzixKIy4EEmWp1g1qiK0f6QfGZflSCTOFxl75jhb0F857wqizQtMdYwG1hqz7Vj
-	JnFFAOG68eRF6Iw7TAkV1jjhFY9Ox2p2qhGFtoyLcs7M2NPnFlqC0P/9B7KL+aYF
-	iiw9VxZRyHPZcifFpPmmI70Ev2WQGUvqPRzMqzvbGYmDx3Se4xoQ2oAWKf2msjtd
-	+0qnXpz7bApIAWXL0thEJ2kOfoBGlLtEayPsUb8QSqyK0QI01eTsCB2PQxSl3cyO
-	fA==
-Received: (qmail 1126791 invoked from network); 20 Dec 2024 22:19:41 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Dec 2024 22:19:41 +0100
-X-UD-Smtp-Session: l3s3148p1@zTt2NLopRKIujnsY
-Date: Fri, 20 Dec 2024 22:19:40 +0100
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=MjhF
+	a8bJqhTdz6UBNHivFjTo1NItfH8DgUMWVxWfc3w=; b=dcMNtuP7Pn8iHw6mnXz+
+	D5aO0pHzaYmCt4fI4BirVuCSuUUPztd5qGr9A4LN/O7mueyTCs0/DbG5QPa3knpI
+	QNMV+XsFWznf+GonLonqhji/MMeH9Orvmpdk+vcYVN/VQ9hfHpgX5JUWvND2ZldK
+	8T8Ts8HwiLj/REJ+OqgEoL7zFTouJMYBLuzDzMKCT+HQWRglstOnqdzewnPlenrG
+	M8DsyXGylbnzRvnlN6m2otz8y8yQwGPqd/i+um2lqY2lmK0z2Co1NV8JdMNPhQmY
+	9ilu/y62OLbvXt1hnoezCarXqF2LU2LpBI6YlKFd3M4jjwRslCyjc4EWUe8W7tl3
+	Ng==
+Received: (qmail 1127111 invoked from network); 20 Dec 2024 22:20:47 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Dec 2024 22:20:47 +0100
+X-UD-Smtp-Session: l3s3148p1@SC9pOLop0JoujnsY
+Date: Fri, 20 Dec 2024 22:20:46 +0100
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Prabhakar <prabhakar.csengg@gmail.com>
 Cc: Chris Brandt <chris.brandt@renesas.com>,
@@ -56,8 +56,9 @@ Cc: Chris Brandt <chris.brandt@renesas.com>,
 	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 3/9] i2c: riic: Use BIT macro consistently
-Message-ID: <Z2XfbNCHZHBRFYNw@ninjato>
+Subject: Re: [PATCH v2 4/9] i2c: riic: Use GENMASK() macro for bitmask
+ definitions
+Message-ID: <Z2XfrsxD9-IVXk1O@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Prabhakar <prabhakar.csengg@gmail.com>,
 	Chris Brandt <chris.brandt@renesas.com>,
@@ -70,7 +71,7 @@ Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20241218001618.488946-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20241218001618.488946-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20241218001618.488946-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,46 +79,49 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sL8jQhzq0EGQvSe3"
+	protocol="application/pgp-signature"; boundary="TxjIsOP/09NdNLXg"
 Content-Disposition: inline
-In-Reply-To: <20241218001618.488946-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20241218001618.488946-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 
 
---sL8jQhzq0EGQvSe3
+--TxjIsOP/09NdNLXg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 18, 2024 at 12:16:12AM +0000, Prabhakar wrote:
+On Wed, Dec 18, 2024 at 12:16:13AM +0000, Prabhakar wrote:
 > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >=20
-> Easier to read and ensures proper types.
+> Replace raw bitmask values with the `GENMASK()` macro in the `i2c-riic`
+> driver to improve readability and maintain consistency.
 >=20
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+Again, I think patches 3+4 could be squashed, but this is minor.
+
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---sL8jQhzq0EGQvSe3
+--TxjIsOP/09NdNLXg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdl32sACgkQFA3kzBSg
-KbYKkBAAmYcbQN6oTymzDnnuNzrJ5TjBxCAkWw0CDGf94J5DDe2e4X4bZA9uVgx7
-HLIpdWtXCjEDUw6zcJrQaxhydLNo7oDKrv3Y5kNEckXqbGqWc40ZOXGdG+ngcUZC
-o6AR3BAaQ5kAaasS42BmmB+S1py3cQqJ30ng1qievbY0X2B4L0oWG/g7rj9sXqcS
-3O4u2rMdOYuQnR8CSy29y1e/EjDPkMkTuUaXSpRdYERcWC4UuJMa90x+Sdw021cC
-I7I05ZJ0W7bMeqM3cKPZO4HimYyQMZbsbZNRenzrF7UPH9+NZsy1kbHXB7UnmC7v
-rlMTBN72CRNvH/WZDRJcP4SII1OBSwX7OFqhrL8lGbz4eZp85qJybAgdpx/Uh6O/
-kvcSGankSz8kllVkLyUsvyYhec2CrT73h2xMJpD8du1FwZpP3F8OsQcRL+C9AOB/
-qmyluEWxGA60ICNJi+6PHx3GQAnFp66AJSNYJaTwWQPO0SIktlVbcx74Bqt9HvQi
-BaoeGLj3jt6kn5CzAPl2UUeFqtChXu6wHq8n9DwDiKu7uylsFCFsyWQdStumv5JW
-WLEJG9a2MtGQx9e6kLSW4IcdCGRofg/KfvhT4THWuF8obA6Rw0leZkghllxU5vV5
-KcJ4yk2TeJkqHN1GdTf7n6ICGVAqAUi7Hf5n5AN+iT7TGt9Q4xs=
-=FzqL
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdl364ACgkQFA3kzBSg
+KbbkhBAAsiV85GFvsNwG1rJWEOLa0tzefzvXSPxP5HXtq3N9Pzh8cw0/2Cil2vGW
+8FBBKXFxEb2Rz8CcR+N/NMJ1+qax/YUhbqw35IDMq3DXWntqP6eAG1Kp2iRNw/p7
+cDeX23beC4gpX/othZUxnRrY9WhzmiBKCoDGpHrQPrb2XpD2YefFZjdyYYTDcQfB
+hKpSwh/iMgVKyx8GmqJuHTl0W8bTy0TH2X04MwEXrU88tRsVPhZQS1m74lR77sJA
+9OD4PG1FdifPoO43foaJG+ITMANOpC6hmVqejLfWI5O4H9BmKVYXyWYOJQvx5jxI
+o/f1wbcxHJrQYCcuLLYiXP08qxNxk0AzVSCmRJZGYfqFetNtlWxqhMXUwzww7cBK
+0UgqYtV2b0Y5tSK2qXvEq6kT5s4NGj2M583g1VUQdP8Mr06sTQRIMUvKxLL5wRmW
+rjBFRHpR+YJ5LfEabwl1KzM9eGA/+9CXnVZv71J/lDA+1BuVYOEaLNhcIDaWgEg7
+Q6dol65N9IUTBuVrNtpFHGR4O/2g0Dr44yBbnVqhk8vkOIUM/d84j2Rb21nggqLs
+Sslmy6eMHUfd3FOboZaf/LP1LLJRgAy2rP3BnOD9dNZmLoMV1yTWkQLKztb6Df3V
+QYGHPlN6FTyxa6SMrR0VM6oOW/zSK9FcRxLS+GhdaOVFcaYj0T8=
+=wEjg
 -----END PGP SIGNATURE-----
 
---sL8jQhzq0EGQvSe3--
+--TxjIsOP/09NdNLXg--
 
