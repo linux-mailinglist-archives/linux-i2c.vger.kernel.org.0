@@ -1,149 +1,128 @@
-Return-Path: <linux-i2c+bounces-8662-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8663-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 495279F919D
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 12:47:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1846B9F91E5
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 13:04:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A81F3168B34
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 11:47:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77F5916C6C8
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Dec 2024 12:04:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F98D1C32FE;
-	Fri, 20 Dec 2024 11:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D431C5F31;
+	Fri, 20 Dec 2024 12:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="S0ewAtjQ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEA41C1F07
-	for <linux-i2c@vger.kernel.org>; Fri, 20 Dec 2024 11:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B763B1C5F36
+	for <linux-i2c@vger.kernel.org>; Fri, 20 Dec 2024 12:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734695228; cv=none; b=IpOK/DMc3b4AK9pzk2Po0NYqU72r4DFVZw5TMHlgBxhYjqz4T6w/Y7VM1VYnQtFJCxLiBiFeGbPWdMvdbsdlhpZh/qfaUbw7PRZGj6JwMPF7cXl0UHmyHJwiUzxaseF6TVJ+4KbbS9tbsNDBKODDKfF29zV6I2vJ5o982jXQVPk=
+	t=1734696176; cv=none; b=A/UmIh0ihfh0oWPFNV7MgQuBu7kpCIVcPndLBRGyK7co3g0LIFOWOs8dJXAIyI98quJVnZ/E5tSwgbXwa6pCDWHFqitDHWYPPS1xp7o/QvlSuPhTOe3VLKCN51RAQ14+Q4NUgcSBuPsvtZAeWdHKv0ulw/vsgoFY9ZzLZwBoZ1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734695228; c=relaxed/simple;
-	bh=qyfxmvqgHPbMu65uPtrn2Jh4bwUe3hULoZymw2CJzHY=;
+	s=arc-20240116; t=1734696176; c=relaxed/simple;
+	bh=XusNw49e0lceOwLFdgDeOV6klV2YgVaHYcKXPwyT9+w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZWCpdCAgYCYANLj8sJuoD02d5ob24Xc/Lp0slgHxQROWS7owq3VqV0gM5ekweYXDsruhC4QmOom+ENnfFUIXwrWqFQpdc4J6IOz4PXFQxSQaVVKgAFDOfEHn64XpmDkvoaLxti4tHdjeCDvzi75hxDzFWttAQSziHFO5ut8+QX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1tObT5-0005Gt-Uu; Fri, 20 Dec 2024 12:46:55 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1tObT4-004Msi-2X;
-	Fri, 20 Dec 2024 12:46:55 +0100
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1tObT5-00AQqo-1S;
-	Fri, 20 Dec 2024 12:46:55 +0100
-Date: Fri, 20 Dec 2024 12:46:55 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc: Carlos Song <carlos.song@nxp.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Frank Li <frank.li@nxp.com>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>,
-	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Clark Wang <xiaoning.wang@nxp.com>
-Subject: Re: [PATCH v5] i2c: imx: support DMA defer probing
-Message-ID: <Z2VZLw0RGiEA68Nd@pengutronix.de>
-References: <b919e252-6ff4-4e55-9bd6-4d610dda5348@pengutronix.de>
- <Z2UeKZcpeRUt2OQ4@pengutronix.de>
- <AM0PR0402MB393739E1D91ED2A539B5A2C7E8072@AM0PR0402MB3937.eurprd04.prod.outlook.com>
- <Z2Ugt8NVued0_4c4@pengutronix.de>
- <AM0PR0402MB3937419BBB58B75FB8F8DE2DE8072@AM0PR0402MB3937.eurprd04.prod.outlook.com>
- <89a3b1c9-2be2-4e7f-a0c6-abbf8b88957b@pengutronix.de>
- <AM0PR0402MB39374CFFA66D8121DB218334E8072@AM0PR0402MB3937.eurprd04.prod.outlook.com>
- <451e8c12-7b45-4b12-af10-63f60ba6e92e@pengutronix.de>
- <AM0PR0402MB3937E87BBDC5CEA1C51E4E3AE8072@AM0PR0402MB3937.eurprd04.prod.outlook.com>
- <f2690b83-b907-4ade-bb9d-daa0636c6786@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ThQb5WoKbocbS0Z8AmvBOojp2fajGiPJM4/6WsV4GBfW5GHe7UI3tPKLJTDv25BNkLCbdmFG+qgRDhhIzssKRcyKXfvIVNcY1Ems1sn6nMt9RvNSOZOgX6aoPNj6DASpZcCWNzPRel0iEpNU2c8UWRVWcj6d97YEA+oB6PI9EWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=S0ewAtjQ; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=XusN
+	w49e0lceOwLFdgDeOV6klV2YgVaHYcKXPwyT9+w=; b=S0ewAtjQaNwcOTfy/2Vh
+	qvoJc2JVn9odOsKyKLsjkYxP7e8IdS8fHrWZYve6Plap9ayxXgu8Id3xGqMeeKYk
+	UGUD7V9UmPGzWnTcleK58GVSuAsO8lw/bZDSE9AkpU0aqKMZzN2o5Mmp0mMUcmOg
+	BRIQ8kdL2jzljvBik9M7CZmDt8HhXGqgZxfayKl9XGlRPF6sb4e7IXMcjIITfIcF
+	RVM7Bnr/zTAGKS1cVpQU1O+BDw/xvLsogwvWRGbMYkC1zQ77lgY2nItu+4XbfbDQ
+	tHzVJJPleXwREC2zEheIr6BJezCzFmWbvzXZfEAE2B0dckI7tqvXIKEBbyukMVwQ
+	1A==
+Received: (qmail 998727 invoked from network); 20 Dec 2024 13:02:51 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Dec 2024 13:02:51 +0100
+X-UD-Smtp-Session: l3s3148p1@ldsUbbIp6NgujnsY
+Date: Fri, 20 Dec 2024 13:02:51 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Chris Brandt <chris.brandt@renesas.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Wolfram Sang <wsa@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 0/9] Add support for I2C bus recovery for riic driver
+Message-ID: <Z2Vc61czIYHHNMI_@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Chris Brandt <chris.brandt@renesas.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Wolfram Sang <wsa@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20241218001618.488946-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="aJ7NNRgyWjyNN0Ov"
 Content-Disposition: inline
-In-Reply-To: <f2690b83-b907-4ade-bb9d-daa0636c6786@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20241218001618.488946-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-On Fri, Dec 20, 2024 at 11:51:27AM +0100, Ahmad Fatoum wrote:
-> Hi Carlos,
-> 
-> On 20.12.24 11:46, Carlos Song wrote:
-> > 
-> > 
-> >> -----Original Message-----
-> >> From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> >> Sent: Friday, December 20, 2024 5:32 PM
-> >> To: Carlos Song <carlos.song@nxp.com>; Oleksij Rempel
-> 
-> >> I know -110, but -12 I need to look up :) Both are cryptic to end users, which is
-> >> why %pe was added on top of the existing %p:
-> >>
-> >> If CONFIG_SYMBOLIC_ERRNAME is enabled %pe expands to an error string, e.g.
-> >> "ENOMEM" or "ETIMEDOUT". If it's disabled, you get the same error number
-> >> that was printed raw before.
-> >>
-> >> Cheers,
-> >> Ahmad
-> >>
-> > 
-> > Wow! Looks so cool.
-> > Thank you very much for your patient explanation! I agree it.
-> > 
-> > Also I will change the comment from your suggestion[1]:
-> > 
-> > "
-> >   /*
-> >    * As we can always fall back to PIO, let's ignore the error setting up
-> >    * DMA and see if we run into errors while setting up PIO mode.
-> >    */
-> > "
-> > In fact, other errors are also from DMA setting not from setting PIO mode.
-> > So can I comment simply like this?
-> > 
-> >         /* As we can always fall back to PIO, let's ignore the error setting up DMA. */
-> >         ret = i2c_imx_dma_request(i2c_imx, phy_addr);
-> >         if (ret) {
-> >                 if (ret == -EPROBE_DEFER)
-> >                         goto clk_notifier_unregister;
-> >                 else if (ret == -ENODEV)
-> >                         dev_dbg(&pdev->dev, "Only use PIO mode\n");
-> >                 else
-> >                         dev_err(&pdev->dev, "Failed to setup DMA (%pe), only use PIO mode\n", ERR_PTR(ret));
-> >         }
-> > 
-> > [1]https://lore.kernel.org/imx/89a3b1c9-2be2-4e7f-a0c6-abbf8b88957b@pengutronix.de/
-> 
-> Sure, looks good to me. @Oleksij?
 
-Ack, looks good. Thank you!
+--aJ7NNRgyWjyNN0Ov
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+> This patch series introduces support for I2C bus recovery in the RIIC
+> driver, which is utilized in RZ series SoCs. The addition of bus recovery
+> functionality enhances the reliability of the I2C interface by allowing it
+> to recover from error conditions that might leave the bus in an unusable
+> state.
+>=20
+> Alongside the bus recovery implementation, the series includes several
+> cleanup and improvement patches that simplify and modernize the driver
+> code. These include replacing `dev_err` calls with `dev_err_probe`,
+> consistent usage of the `BIT` and `GENMASK` macros, leveraging devres
+> helpers for reset management, and improving code readability by marking
+> static data as `const`.
+
+I am planning to review and test this series later today.
+
+
+--aJ7NNRgyWjyNN0Ov
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdlXOcACgkQFA3kzBSg
+KbY33BAArKZKPs3wJdE1WyI9mcpwMYYJ0cc/5q3CyKMS+YoEAkIvOA2FELkm7fBI
+y4Q3wHP/vZJ5jNXo4iUgIv/XCOml50a64yR5IkJbEkGSGNab4uB8Q/CrgqLXBMnM
+dVXULiVA7tUcvlJRftDIV5pg7LWxiT6n+ew+kvyKD096Cg6zHKJaHhs6r9VOUQfZ
+bRSx7UGVQ5HKZULRNy90SuZL0ctIzy236GV7ndZfCXKMQZMoykXkuYRGPUdSZunU
+iW7ztalIZ50Qd1bXa1VvA4z0hrwkPNOU2eIr/xRVGXHEPzoGQ5rXHsEsIti7Envj
+zARIlsjAteX3/eyOZ1ZkfxnktJwe9adDL2AiRRNEXDQtE+B5H5tfBjDAPEw3Ncoy
+GOhJOwlY5uvGntCaTlIBIqLzGiBZ/pYAyuFsx8p96wQBQskJMW0TB94j773dkvu7
+0fsaJfhia0EjLS0iRGS7hrvBnMMImr7HkWk/n9Bvx9VrndW0M2A6btfRDsDumjXU
+MYSNAzBB8xeraGcjtcmgwx88gkX5PDUutiPW0xfLjB4X7BQa3lZCSWx7QQ+vsuIF
+KFOXS1++svsCQHhIuVs9mauk8H1az4iCLV9KGb79LCH+6p4X/QakHnhQmiEGSNU5
+CZbagcfXX12hCT6Kywca9uF4LN47dmzQ61cWgM7lyVjII1vxSu0=
+=cxOA
+-----END PGP SIGNATURE-----
+
+--aJ7NNRgyWjyNN0Ov--
 
