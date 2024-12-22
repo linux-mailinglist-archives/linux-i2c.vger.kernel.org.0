@@ -1,138 +1,125 @@
-Return-Path: <linux-i2c+bounces-8689-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8690-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9DBD9FA58C
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Dec 2024 13:44:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9994B9FA606
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Dec 2024 15:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23FB9166370
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Dec 2024 12:44:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F3C718863B4
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Dec 2024 14:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F18618C018;
-	Sun, 22 Dec 2024 12:44:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7E9192B69;
+	Sun, 22 Dec 2024 14:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="j2KQo1DT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WhNfi6sz"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E11618B494
-	for <linux-i2c@vger.kernel.org>; Sun, 22 Dec 2024 12:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3181925AF;
+	Sun, 22 Dec 2024 14:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734871491; cv=none; b=D4NfYJz2Sw3S9M/YYvuan+XUpTPzue/sdLFEsf4i6XsfLSdYbbZIyH29vknqVqSNlBfKwDNOQQYNZYYHysJQ+1SbKNSyL0BUktehwZYR2K28w6cghXtvk6F7/tEvlulgvPdkb0ibQglrO+L0Cnkn/xaKnLhT8cPDoji9uzgFTxE=
+	t=1734877447; cv=none; b=gQqXHnZCyGkZWkUI+EsIuGxVlGja75VsoezP//ivwMqjvz5j7vLWmPQR7Uma+K0MjpqEfDaXCUF1l/tJOllWaRJ/Vm4vh6FjvBezz0LVHjcYcGhpw7+rADuhUBgVTxbzYBZarFj4g2xCEAbsNCgC/EQN+BH8vdpC6IJ63Glp+ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734871491; c=relaxed/simple;
-	bh=HH7gJqCg9xpiTgkDU0PbNh9P31bMSGqjQzQmK0O5Yek=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uGHY+OGxoU+Pth+FUN8uIfaxnZM319Qdx/g75lkgcjp4tKPl8Jv1BuUJk4A3KtN0aDalcOFk8jMA9N7xhlVYUTqhYrCGHqLKfeKqfa7FzaeIfz1rvp+UNMYy7gfZwdG3pszF4vQdXuZDjtzsNlXjyDnl1JG4mGvLTsZ8f3TpoGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=j2KQo1DT; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=HH7g
-	JqCg9xpiTgkDU0PbNh9P31bMSGqjQzQmK0O5Yek=; b=j2KQo1DTqt1kjc0U/wSD
-	A1Jn0aCI6iCWTZT8icLnA7xbTX3V+xUacGCyPFc5ITyILuW04mvU0o7g8xSvJ14A
-	tXsZt5BU/+rhGheS+m+OSCv2n+Yo03NlKiw/2rVn+6rku1rFyePuLWSCKNmeezmq
-	mm1gxd3odFwKrOdhQAFwHXhSy8Mho4rKwO1ZMET0kyWfXUblE65AzM/t+g065y/2
-	vpWkbVi7EgKnq92BPIA9r9WFlgonuZggqajMWhKq3V5ziTNEGdNVoWG57sR8uiXH
-	VojK76qNc56jw3h2RuUMZcVPmFvmrHuj4Gnn61dl+pKfd3ph5j4oNAfws2kCt1Jx
-	wA==
-Received: (qmail 1590584 invoked from network); 22 Dec 2024 13:44:38 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Dec 2024 13:44:38 +0100
-X-UD-Smtp-Session: l3s3148p1@xHc1PtspkNwujnsY
-Date: Sun, 22 Dec 2024 13:44:38 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 9/9] i2c: riic: Implement bus recovery
-Message-ID: <Z2gJtlb5Sc9esEba@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-	Chris Brandt <chris.brandt@renesas.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20241218001618.488946-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20241218001618.488946-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Z2XewglpALJFE1Ay@ninjato>
- <CA+V-a8vB1c8Zp+zzoHp0zFpW8fjw-xq2=KPr=dyBUUZbOhBxJQ@mail.gmail.com>
+	s=arc-20240116; t=1734877447; c=relaxed/simple;
+	bh=WmqZgBi2dOhVI2I6axRyu/MA940Or9KtvPbp9JK8dbk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BQDSk82iDW7bJR0fwvV/n/lAZY250p0cPuS2mTFsbG4s43Irwx65pjuVTKdN2L2bntJVIwDDOEEos8Jf/L0m8FkiOdHeCmC96rhb+xZsmLTG9qaF5ClcOLsYtVt+2+IddxZzog7LinuC070E+BiRBGmgJRqd5BwwvH40df9IfE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WhNfi6sz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E432EC4CEDC;
+	Sun, 22 Dec 2024 14:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734877446;
+	bh=WmqZgBi2dOhVI2I6axRyu/MA940Or9KtvPbp9JK8dbk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WhNfi6szaP2uGgu8V+PuliGMYv7iSASs9zuaRxU9jlUqGonqJkf+Z5jqtwNk8xmjc
+	 M1ywuZg4dOYXvoxIxAuraooB60tcWMM0senpNyyLH/VlWAsopZr0HYY0NvIFErdrvP
+	 Er3Z66YWXQnnELpvRcK5mPmv9b25RK1smpYj4QV0DBg8wfqvWbL7FbamyCjIO1kluL
+	 DLxs82W8O+Dy2UNtIw3dnFwGgK8FJ90vY7Uoq2ppvnCFh0+EFUz9hKiynIKvMADX7z
+	 zpGlKDo3UanQXJWQ669FQqdbJODI/qsYe910ui23KUEAFkvd/2tQoN2iIzurHJniA/
+	 psl9jAIn/JtMw==
+Message-ID: <017c4a8a-4b18-4f7a-b10d-2596dadca8c1@kernel.org>
+Date: Sun, 22 Dec 2024 12:48:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="F9g9mdzG1L2gcjr0"
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8vB1c8Zp+zzoHp0zFpW8fjw-xq2=KPr=dyBUUZbOhBxJQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: exynos5: Add
+ samsung,exynos8895-hsi2c compatible
+To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241221151937.1659139-1-ivo.ivanov.ivanov1@gmail.com>
+ <20241221151937.1659139-2-ivo.ivanov.ivanov1@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241221151937.1659139-2-ivo.ivanov.ivanov1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 21/12/2024 16:19, Ivaylo Ivanov wrote:
+> Add samsung,exynos8895-hsi2c dedicated compatible for representing
+> I2C of Exynos8895 SoC. I2C buses may be implemented both as a part
+> of USIv1 and separately.
+> 
+> Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+> ---
 
---F9g9mdzG1L2gcjr0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-
-> On the RZ/G2L and RZ/G3S there is a restriction for forcing the SDA/SCL s=
-tates:
->=20
-> =E2=97=8F Write:
-> 0: Changes the RIICnSCL/RIICnSDA pin output to a low level.
-> 1: Changes the RIICnSCL/RIICnSDA pin in a high-impedance state.
-> (High level output is achieved through an external pull-up resistor.)
->=20
-> So using the generic algorithm may be platform dependent as it would
-> only work on platforms which have external pull-up resistor on SDA/SCL
-> pins. So to overcome this and make recovery possible on the platforms
-> I choose the RIIC feature to output clock cycles as required.
-
-I would be super-surprised if this is really a restriction and not a
-very precise documentation. In other words, I am quite sure that there
-is no difference between the bit forcing SCL high (via high-impedance)
-and the internal RIIC handling when it needs SCL high. Most I2C busses
-are open-drain anyhow.
-
-Or is it confirmed by hardware engineers that RIIC is able to support
-push/pull-busses but only this bit cannot?
-
-
---F9g9mdzG1L2gcjr0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdoCbIACgkQFA3kzBSg
-KbYatA/9G14Fc0aa9RqUTNNQpnhYPnOt/Bk6DY3q/mb7GpXt735np+HpegeITTj/
-k75jG79ssVpJUJIUggMFeUSM+4MgyveluEr3mq0XDy0Fpr507i+PxXrFDGjKOoI2
-Uo7+Nc4r4DkI8PJ0gU4nxsLLfVvnWgrPgdGBqOvWDuqpS7x08t4F4tuGFUoegYNR
-RoKAQDUl9o0oQGhEbWz6vj43cwFoi6gvB7H3FwqmSBHlZRAm8JEEOVHKSZUB9q4Z
-s9J4jbhxAsJ60oX4kt8VxSIxwDDDBBQqlPCoYS6waWyJTpkuztTf7EVIfkjHcfgW
-aA3d2nlW6+j7vXEVKLdlEQ0Ed1/aiMxqGeEiTmx1/3SgQv7g5lB6Q5gpQLcWY1ik
-WsAPPzzpCIbigb10TuoO+LVY9QVuQCLK3mKYWUSC5EEFyxgG+xjM8N5u3sntxewN
-TxLVQZNzDtDY1rXhRRngnDpPVyGZkC0GfGnzdOzCYH9sMy1c7heGDYs5CEVW8gkm
-+VEBuy5w95cym4sO0tBhqYC2cZ7YCC3z+pfE/k81qY1nfxksau3Juqjojt2xn/dr
-8Ow66vmaM8Em5XW2+Y4Q1j2Z7qaFCEozt/r6/cHqntuOiAbW3dYH//V/MCgQiRWV
-2UzLRn8S5+00bwA/OzFfkNVIRhiI3RNuovtUxiV2zWhVo8oXRYQ=
-=W6+A
------END PGP SIGNATURE-----
-
---F9g9mdzG1L2gcjr0--
+Best regards,
+Krzysztof
 
