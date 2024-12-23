@@ -1,125 +1,156 @@
-Return-Path: <linux-i2c+bounces-8690-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8691-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9994B9FA606
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Dec 2024 15:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EBC69FA914
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Dec 2024 02:51:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F3C718863B4
-	for <lists+linux-i2c@lfdr.de>; Sun, 22 Dec 2024 14:25:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E21A1885B84
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Dec 2024 01:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7E9192B69;
-	Sun, 22 Dec 2024 14:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EAB4125D6;
+	Mon, 23 Dec 2024 01:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WhNfi6sz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+TWeHzS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3181925AF;
-	Sun, 22 Dec 2024 14:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B266C23D7;
+	Mon, 23 Dec 2024 01:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734877447; cv=none; b=gQqXHnZCyGkZWkUI+EsIuGxVlGja75VsoezP//ivwMqjvz5j7vLWmPQR7Uma+K0MjpqEfDaXCUF1l/tJOllWaRJ/Vm4vh6FjvBezz0LVHjcYcGhpw7+rADuhUBgVTxbzYBZarFj4g2xCEAbsNCgC/EQN+BH8vdpC6IJ63Glp+ig=
+	t=1734918670; cv=none; b=BBFoqiA2aYlwAqt1NPRGiwRO+ZSEWsYv26cLIDxwwsIDQBkL9PvRNoEH8PysFhSMe56aU/v3WIiiaS3a74jC1HrD3GvmYXwAnn5HRS1WqqUwxvJ+9z+93UFEk1q5uNmFhj+v0Cni1WmNjGK/0qLEDGTU3r2k5SXIU62vwmeBjyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734877447; c=relaxed/simple;
-	bh=WmqZgBi2dOhVI2I6axRyu/MA940Or9KtvPbp9JK8dbk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BQDSk82iDW7bJR0fwvV/n/lAZY250p0cPuS2mTFsbG4s43Irwx65pjuVTKdN2L2bntJVIwDDOEEos8Jf/L0m8FkiOdHeCmC96rhb+xZsmLTG9qaF5ClcOLsYtVt+2+IddxZzog7LinuC070E+BiRBGmgJRqd5BwwvH40df9IfE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WhNfi6sz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E432EC4CEDC;
-	Sun, 22 Dec 2024 14:24:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734877446;
-	bh=WmqZgBi2dOhVI2I6axRyu/MA940Or9KtvPbp9JK8dbk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WhNfi6szaP2uGgu8V+PuliGMYv7iSASs9zuaRxU9jlUqGonqJkf+Z5jqtwNk8xmjc
-	 M1ywuZg4dOYXvoxIxAuraooB60tcWMM0senpNyyLH/VlWAsopZr0HYY0NvIFErdrvP
-	 Er3Z66YWXQnnELpvRcK5mPmv9b25RK1smpYj4QV0DBg8wfqvWbL7FbamyCjIO1kluL
-	 DLxs82W8O+Dy2UNtIw3dnFwGgK8FJ90vY7Uoq2ppvnCFh0+EFUz9hKiynIKvMADX7z
-	 zpGlKDo3UanQXJWQ669FQqdbJODI/qsYe910ui23KUEAFkvd/2tQoN2iIzurHJniA/
-	 psl9jAIn/JtMw==
-Message-ID: <017c4a8a-4b18-4f7a-b10d-2596dadca8c1@kernel.org>
-Date: Sun, 22 Dec 2024 12:48:43 +0100
+	s=arc-20240116; t=1734918670; c=relaxed/simple;
+	bh=Ueo1SkvfgIF6RG7Tayj9JKXB2Ay6IMh4xY7wb58eVDM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DX4GULvkMEFh/9ytL9HgEtdPPZ20IVbAXOn2WTesFJGpJvhOYNJI5nEVZVAgOTZPOJuV80PlrlA0ON3mpVTNo6EtpTYT+hQcsSN5jGs1lyqrj3KsCBEWanbDI5hji4LOwf1d6ywsCXMRutn9erStoN/ucMCbFm0qJuZfGEbX/2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e+TWeHzS; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6f29aa612fbso26253017b3.0;
+        Sun, 22 Dec 2024 17:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734918668; x=1735523468; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=llHDEsm2+HQacxAs8QUDGLwaO/ynmYbcHeL3fhay3CI=;
+        b=e+TWeHzSoogZdLRVw7IDeSohJpjFekyiqjkrG8f5mZ3pQE0Lqs9q0nQKevXKcuE4r+
+         qk3CYmJTEC8lIkkol7N2KmPxijp+msc7WiIpqX/Rm7K5iwwBIUP4LuvHYZjEKd99hMTC
+         /kePwoULwTFlhr2PNRZStAqhdufFqcN6883rut4FXmwUwjxign10fpQxk4cVPicF00C1
+         RPr/yVUN7NGlE6bmftVNqReT6mB42bUYZIdqa+N24OAGacKQdQWvrqiRmYSM/OYrp4PM
+         Ij2Tqc2dpQSPKRs9pHpP41Og/QnxTp9/3OmDInCvbajWqW4XCmUeiMxsoB5TZQfUeN2Q
+         BUEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734918668; x=1735523468;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=llHDEsm2+HQacxAs8QUDGLwaO/ynmYbcHeL3fhay3CI=;
+        b=uQrxuumue5WELiTyC+FiEO+ZT7lV4OwpfyXyjcF0fZ/i6Zp7icQCPuqHEjyKi6ebHv
+         nANlS5Mb+D+5LYCdSky/2Jo+0v/ZTMXAlBcxGxShDw6NCH+1bZWDDA8gvebUqF64r0vo
+         P/+ys08NA9OzG1wX4XrDvA3ZmyE7MUmm3OMofYFBDh77oTmjWMS6haHA6DT1jrHu5uwI
+         pGtmMdwegIX6zAtQBiHZnQ5nDr0Gmlt8NY/TZ9qNMfpEzQK8g0Izefl9DRCynX5z9raX
+         BdVobj7+0En7j8PymG70Zc6UD1myx+H5/3f/65eblhPjnSmPGBPcLMWA5wL340DOnO2z
+         FVqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU4FFvIYDPVG0Mrcot9LHwNslot8YAlxbLM40w8FqtRHNn82n06YcxA6lZ16YA8ryLTDkURlc2hKs21sJoC4t4=@vger.kernel.org, AJvYcCU9K8CeYcP9jHc9HjglFskU8ab90I92quYhD+irz7pmLWXUDm9GOcTO5OarCC4Wkg7VSFBSu2GlvXM=@vger.kernel.org, AJvYcCVRVQKSNNNRRC/koAUnUa+5lU1CRucjooQlwTVpJ1s9YCiv3K8j/wwdeL/l95WEjWzqOJJ3F4sg@vger.kernel.org, AJvYcCVkBeVkCublCZ2nW1DgewcW6QeLKNHe7bTiXzfMS3lSahbToIRhT33NKUrnVdOY2oPw4HqmKrACvrg97kQ=@vger.kernel.org, AJvYcCVmjKF0kp79wYrxnsm76Bh0Fejhjw/PaUSw9kCw9rWngWBQSg7v1LYEBOy67a78OSeSWNr5yyi+FZsD@vger.kernel.org, AJvYcCVsCWIaNzilrsqX0KF06QxFTUSyu5MC630a2fkDfnYSGksBOdeieLpQWPjot2MDvNDuypfC7o/3npPHFdBH@vger.kernel.org, AJvYcCW8+uOON/MvHROcGdUknBG4bU7lPbHuVcymMVs7iOcoM5NajLMV6iBYZQ7V+6sv+uRpi6QJnJHrvw3t@vger.kernel.org, AJvYcCWcHIs5REuYFllCjr6I4JNEqpu5wcXvW1tA1r0pz14/+vBqLNTdKOzyQUcipDatP0FEW8H99EEttw/+0A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnGYWeI2yESsLEifncFS7v0LU7zOAsWphhpOJBPWmRBcxe1iVr
+	JonyETn3SXDxlySaa1imBFrHdMG0Z1vmDzyYYNsDLWGzd4/uoMqC5jBsM5aTB7jHlnVUuAk3cbf
+	oBtjUrcuDgs1k+SwqIL7X5N+B7hM=
+X-Gm-Gg: ASbGnctEDZRrbvg/rlXIU0ILaguKZ/z9C93znyILwL1CTBWsLt8S4AsjSZ0bWV76isg
+	tP6cT92wxfpyJGB9sn9L+4cmOB9HyCS8ahXx9
+X-Google-Smtp-Source: AGHT+IHNEPgUnyOUOLJNYmuWZzb+A9VZ8DHSgD5LFG69R5fcYpoa/i4kczMgAE3xSasrhbjfGxzaLMqjTmL1iCVGthQ=
+X-Received: by 2002:a05:690c:640b:b0:6ef:8296:359d with SMTP id
+ 00721157ae682-6f3f813cc98mr75276497b3.22.1734918667598; Sun, 22 Dec 2024
+ 17:51:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: exynos5: Add
- samsung,exynos8895-hsi2c compatible
-To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241221151937.1659139-1-ivo.ivanov.ivanov1@gmail.com>
- <20241221151937.1659139-2-ivo.ivanov.ivanov1@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241221151937.1659139-2-ivo.ivanov.ivanov1@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-8-tmyu0@nuvoton.com>
+ <202412161041586ed7c0ff@mail.local>
+In-Reply-To: <202412161041586ed7c0ff@mail.local>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Mon, 23 Dec 2024 09:50:56 +0800
+Message-ID: <CAOoeyxUOZSA++uprMZ+4rbjb1zuyPUi6728Cx8sudRaizqSwnA@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] rtc: Add Nuvoton NCT6694 RTC support
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 21/12/2024 16:19, Ivaylo Ivanov wrote:
-> Add samsung,exynos8895-hsi2c dedicated compatible for representing
-> I2C of Exynos8895 SoC. I2C buses may be implemented both as a part
-> of USIv1 and separately.
-> 
-> Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-> ---
+Dear Alexandre,
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Thank you for your comments,
+
+Alexandre Belloni <alexandre.belloni@bootlin.com> =E6=96=BC 2024=E5=B9=B412=
+=E6=9C=8816=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=886:42=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> On 10/12/2024 18:45:24+0800, Ming Yu wrote:
+> > +static int nct6694_rtc_probe(struct platform_device *pdev)
+> > +{
+> > +     struct nct6694_rtc_data *data;
+> > +     struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
+> > +     int ret, irq;
+> > +
+> > +     irq =3D irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
+> > +     if (!irq)
+> > +             return -EINVAL;
+> > +
+> > +     data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> > +     if (!data)
+> > +             return -ENOMEM;
+> > +
+> > +     data->xmit_buf =3D devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ=
+,
+> > +                                   sizeof(unsigned char), GFP_KERNEL);
+> > +     if (!data->xmit_buf)
+> > +             return -ENOMEM;
+> > +
+> > +     data->rtc =3D devm_rtc_allocate_device(&pdev->dev);
+> > +     if (IS_ERR(data->rtc))
+> > +             return PTR_ERR(data->rtc);
+> > +
+> > +     data->nct6694 =3D nct6694;
+> > +     data->rtc->ops =3D &nct6694_rtc_ops;
+> > +     data->rtc->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
+> > +     data->rtc->range_max =3D RTC_TIMESTAMP_END_2099;
+> > +
+> > +     mutex_init(&data->lock);
+>
+> You should use rtc_lock/rtc_unlock instead of having your own lock. The
+> core will take and release the lock appropriately before calling the
+> rtc_ops so you only have to do it in the irq handler.
+>
+
+Understood. I will make the modifications in the next patch.
+
+> > +
+> > +     device_set_wakeup_capable(&pdev->dev, 1);
+>
+> This will cause a memory leak later on, see the discussion here:
+>
+> https://lore.kernel.org/linux-rtc/a88475b6-08bf-4c7c-ad63-efd1f29307e3@pf=
+.is.s.u-tokyo.ac.jp/T/#mf51fdce6036efa3ea12fe75bd5126d4ac0c6813e
+>
+
+Okay! I will drop it and add device_init_wakeup() in the next patch.
 
 Best regards,
-Krzysztof
+Ming
 
