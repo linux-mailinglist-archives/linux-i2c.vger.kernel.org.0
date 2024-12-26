@@ -1,143 +1,108 @@
-Return-Path: <linux-i2c+bounces-8714-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8715-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18B849FC74D
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Dec 2024 02:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0377F9FC754
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Dec 2024 02:22:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 815991882BE8
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Dec 2024 01:19:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C0661882C7F
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Dec 2024 01:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43B238F49;
-	Thu, 26 Dec 2024 01:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6176EACD;
+	Thu, 26 Dec 2024 01:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZMeqpox"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZU0pj6gu"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9A0EC5;
-	Thu, 26 Dec 2024 01:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC354409;
+	Thu, 26 Dec 2024 01:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735175971; cv=none; b=vBtgBvBOrrX6xzSmlnXj97o3yGjOuHNVxHDl67fc6uh3NgWyFXt9ZK7WFrigZwae6iQIzqUgPrdB5m7E7oG5+PN1N34cjXh3C3KEQhhS8wYZR8Yqem820iKfg5tc/9NTYCOdy67JnDnqHbsdebkAVGyqcxXzR7fF14mNCDaoHdk=
+	t=1735176123; cv=none; b=bM8S92D1k2ua141QDG/eO6r5VB141/st2XQEsfkMlS/FfszOGK4hGVyVmyWikSMuNU7bfl2UZFsU9Xq6AaU3qkduKbjaFBpYeWBQWFAHn1JvN2yuNtVY5GfL9TA5O4/WcJBtIY5hmIM8A3tgCBUbGc3cqfql4PoDvdpKl0zMjeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735175971; c=relaxed/simple;
-	bh=/o7bii7whGZZIXffbmXzCf/xQEufJQaOabnBZMBqJ4E=;
+	s=arc-20240116; t=1735176123; c=relaxed/simple;
+	bh=/HV+A+tOtDUwaySH6TqbPWpUMtZ7Yq53yTPEq/IV9Jw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fUYes1tjN+G/VeDtgME/SFWwGVLipOz/jgcZW/WOBOYiGP+H5jxefkZJ6azD+Dbc9iz1mZptEFvqDIF5ypUPajQd60HgYcMSa2hv9VsXPjE5Yp4lZTIx+6IEdtFLjFzdF7pv9YWDn9MfWEH+fzrjpGBEmsZMHi/IwurOpP6yVY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZMeqpox; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6C6C4CECD;
-	Thu, 26 Dec 2024 01:19:29 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TfzXKz4s94U9ZZ/F5CDllnfiMwaAmrMC08h0ojhRS7icDPz2Jg3Hj0iumVmyld25zxhhKywxQbc1RW9Y0gEHVhgK8qum0nhfay/vux2maEjZsNVx8GK9Ttsso4rnfv3F+JWea7wpDxraBtxG18n8m6Pd9nyjkOhSOtuKDzFyJ/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZU0pj6gu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A90CC4CECD;
+	Thu, 26 Dec 2024 01:22:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735175970;
-	bh=/o7bii7whGZZIXffbmXzCf/xQEufJQaOabnBZMBqJ4E=;
+	s=k20201202; t=1735176123;
+	bh=/HV+A+tOtDUwaySH6TqbPWpUMtZ7Yq53yTPEq/IV9Jw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lZMeqpoxCpYR4jHz6v03AR1gweumdSw0d3EH6DWrS/5Pc7MsfCwH7z34qNoSy2dMi
-	 wUhdFzo2UVgWF5VeVi7pGkz4WMHDR8cAo6b9xnoYV8OLfUzOL0qXiXcBZodDHSBaS0
-	 y9eDVsoZR8dtRb3CeNxgv0ZGK3Ocij4z5lo09xArUuRVnZdlpyUgd7UkRPVVCUy0Ax
-	 ZSTQkVPaoR9MhhiV0GxasXdvryvZCx0sCyzhXMCLirECFYLvdrvKY+Z8rtz+YuMAz9
-	 vv8HwJxJ+yROyOp2qrMPcb/AolClwXURsOWwArFC/40zC8m51cAzeceiel81N3CYZ0
-	 nygLw8BSv93AA==
-Date: Thu, 26 Dec 2024 02:19:25 +0100
+	b=ZU0pj6gub1kaYxDSevlezA21Dl5aFvSttKQvFy/k5GDld7v6IAaV75GX9GZYANonT
+	 qkQJbQL5wtlxPx8DZxPMDGBaaariY4jhG+vIub3vLwg/Eev4H8Hw6eaT7zPirVKkO1
+	 femQH4yJYAF+S6aFj8Ml4zVb3JcITe0oJc2fzyk4EWmOmOX78nFbGSmGXWZQPxPchO
+	 600VHP+ZvxXEDgb+77fLbaWWxc4EMYI8SKlvcDBtkE3fhdD+GPZI1CHHno4/xN+yYk
+	 ufD0ofvMx6/8Vy5GDmakxpQhaJIvf/UGWET19yACi3y+/kkDIfur9lqrcl86oHgdQH
+	 B9AwdhnE+8e/Q==
+Date: Thu, 26 Dec 2024 02:21:58 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Wolfram Sang <wsa@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 2/9] i2c: riic: Use local `dev` pointer in
- `dev_err_probe()`
-Message-ID: <vb5nqey4teo3mtblh7wxqwykw2ebs7oo3fjn56kulzgn5il5pm@jgr3xsdn6m2j>
+To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Chris Brandt <chris.brandt@renesas.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Wolfram Sang <wsa@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 9/9] i2c: riic: Implement bus recovery
+Message-ID: <cnwphrjjrakaafm7zp725mickh63xw5qm6mlh6q43745ljgxfe@33y2z234oauu>
 References: <20241218001618.488946-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20241218001618.488946-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20241218001618.488946-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Z2XewglpALJFE1Ay@ninjato>
+ <CA+V-a8vB1c8Zp+zzoHp0zFpW8fjw-xq2=KPr=dyBUUZbOhBxJQ@mail.gmail.com>
+ <Z2gJtlb5Sc9esEba@ninjato>
+ <CA+V-a8s+tY6dnVHFhjyOZ43L+roLfqPr-_28FS1KyADwyTH2+w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241218001618.488946-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+V-a8s+tY6dnVHFhjyOZ43L+roLfqPr-_28FS1KyADwyTH2+w@mail.gmail.com>
 
-Hi Prabhakar,
+Hi,
 
-On Wed, Dec 18, 2024 at 12:16:11AM +0000, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> Update the `riic_init_hw()` function to use the local `dev` pointer in
-> calls to `dev_err_probe()`. Previously, `riic_init_hw()` used
-> `riic->adapter.dev` in error reporting. Since this function is invoked
-> during the probe phase, the I2C adapter is not yet initialized, leading to
-> `(null) ...` being printed in error messages. This patch fixes the issue by
-> consistently using the local `dev` pointer, which points to
-> `riic->adapter.dev.parent`.
-> 
-> Additionally, replace `dev_err()` with `dev_err_probe()` throughout
-> `riic_init_hw()` for consistency.
-> 
-> Fixes: d982d66514192 ("i2c: riic: remove clock and frequency restrictions")
-> Fixes: 71dacb2565ed (i2c: riic: Simplify unsupported bus speed handling")
+On Mon, Dec 23, 2024 at 06:35:28AM +0000, Lad, Prabhakar wrote:
+> On Sun, Dec 22, 2024 at 12:44 PM Wolfram Sang
+> > > ● Write:
+> > > 0: Changes the RIICnSCL/RIICnSDA pin output to a low level.
+> > > 1: Changes the RIICnSCL/RIICnSDA pin in a high-impedance state.
+> > > (High level output is achieved through an external pull-up resistor.)
+> > >
+> > > So using the generic algorithm may be platform dependent as it would
+> > > only work on platforms which have external pull-up resistor on SDA/SCL
+> > > pins. So to overcome this and make recovery possible on the platforms
+> > > I choose the RIIC feature to output clock cycles as required.
+> >
+> > I would be super-surprised if this is really a restriction and not a
+> > very precise documentation. In other words, I am quite sure that there
+> > is no difference between the bit forcing SCL high (via high-impedance)
+> > and the internal RIIC handling when it needs SCL high. Most I2C busses
+> > are open-drain anyhow.
+> >
+> I had asked this previously to the HW engineers about the requirement
+> (as this restriction is not mentioned in the RZ/V2H(P) SoC, Ive seen
+> it for RZ/A series RZ/G2L family and RZ/G3S only) before the start of
+> the I2C recovery work but haven't got a response yet. Ive pinged them
+> again and I'll wait for their feedback.
 
-I'm not sure the Fixes are really necessary here, as it's not
-really leading to a bug, but I can live with it. But, then, ...
+Wolfram has commented on a very valid point, on a standard i2c
+specification.
 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v1->v2
-> - Collected RB tag from Geert
-> ---
->  drivers/i2c/busses/i2c-riic.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-> index bfaa2d728a76..01195ffd4c07 100644
-> --- a/drivers/i2c/busses/i2c-riic.c
-> +++ b/drivers/i2c/busses/i2c-riic.c
-> @@ -320,7 +320,7 @@ static int riic_init_hw(struct riic_dev *riic)
->  				      : I2C_MAX_FAST_MODE_FREQ;
->  
->  	if (t->bus_freq_hz > max_freq)
-> -		return dev_err_probe(&riic->adapter.dev, -EINVAL,
-> +		return dev_err_probe(dev, -EINVAL,
->  				     "unsupported bus speed %uHz (%u max)\n",
->  				     t->bus_freq_hz, max_freq);
->  
-> @@ -356,11 +356,9 @@ static int riic_init_hw(struct riic_dev *riic)
->  		rate /= 2;
->  	}
->  
-> -	if (brl > (0x1F + 3)) {
-> -		dev_err(&riic->adapter.dev, "invalid speed (%lu). Too slow.\n",
-> -			(unsigned long)t->bus_freq_hz);
-> -		return -EINVAL;
-> -	}
-> +	if (brl > (0x1F + 3))
-> +		return dev_err_probe(dev, -EINVAL, "invalid speed (%lu). Too slow.\n",
-> +				     (unsigned long)t->bus_freq_hz);
+I'd like to merge this once all the hardware questions are
+answered.
 
-... I'm not happy with the splitting here: mixing a bug fix with
-a cosmetic is wrong for two reasons:
-
- - they are conceptually different;
- - fixes take are applied to the -fixes branch and sent to the
-   weekly pull request.
-
-I will appreciate if this second chunk is squashed with patch 1
-and the first part has a patch on its own.
+Please, do follow up on this.
 
 Thanks,
 Andi
-
->  
->  	brh = total_ticks - brl;
->  
-> -- 
-> 2.43.0
-> 
 
