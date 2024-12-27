@@ -1,242 +1,221 @@
-Return-Path: <linux-i2c+bounces-8741-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8742-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 640A19FD20A
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 09:36:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC0029FD2AC
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 10:57:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF593162856
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 08:36:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DB053A06F4
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 09:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90DED347A2;
-	Fri, 27 Dec 2024 08:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B37156C70;
+	Fri, 27 Dec 2024 09:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="CZpNAw6L"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQclhQ7i"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2066.outbound.protection.outlook.com [40.107.103.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4314114AD3D;
-	Fri, 27 Dec 2024 08:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735288609; cv=fail; b=XT8nlf2ZOLCRv+V6vRpqLGyh7G+fcTLIuFu6AxeCgGRJP6w8IRgI1Jgj4Pjshpn1/lVTEfN4vKcWkk6+A/XNruTOYGyyVrmbi/gM0/7qfK8/d/f5iX8D5qh+RctP6j7tq/XRlUa4hZ/QpbMCvh8Amtkk7TnVgXisTjxHAO27Kow=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735288609; c=relaxed/simple;
-	bh=HUTLeLAcY1hxkHHzJsyTuqFKi2LbARX769FjSYy0LDM=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=AO85Uhn969u6dbjYrPr+cMagjMxwFU8tbhNl1vDS4fYAwbWKRHyJhqK8lnAZd0IHgA6SoEilwxc+1bXFPFRTFZ84T3ix289KuNSieFvUg97/9c8X3pK2ZdPAY/Gtd1B6NxtQ4PK7+j0CVXganyi8DGNJuwRMiDD5fCEWRojjeNk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=CZpNAw6L; arc=fail smtp.client-ip=40.107.103.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zUFB2jq9ruRQgPoVSLFSngPKmSsp+Zdnfnk/J6T7TRhkBSDu7O94IGoD0hkFp2Vsu965cOMK1oEFQdbftM8OvmAT7ZGuJ8PjCXcItzwqWsoydD06hH6xIQnh86s5iAgUvzBxToTZmCyP6DrZf/Y0CYZjnalJT5SXYnP6p63VRVgkI+HPeAn3JBqjcYjUUUBmU7N/24qie4RULe/EeOgf6L0JfQYuKhBoFEm/p+ifGXq2euqxJvR7HqzId9grjZHPLYcBqFN6U5RYw6ZYaz5QNTe6WnJrOX0tHdoJJaeH01FtaLfjQcJlxVix7lKQ92D9kZk+4pKc/jw2LhwlxuKhKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BPN3yoGReuPyuM5ciF5VqarPj7uyOgBlK396WipObKg=;
- b=jvKfUXC499Y8M3C12EtBuu6t2rMmhxAscmjan8NaRVNzx6g3SwvJm9fZk1RJVj0AiwgCafMO0XMYWRZZ34HOqMzLHJ0ah/igCrdjZxqBo3h+qTou2uqL0NJ4vSSOin0UOnG4I+LVOMtRiSRhOJE9PHQAsg3JjDb9Pf9PZenTPnu3FYuwXxQbaMcnVH1p7ktcdlNtE4Ub6hj7xzbon1xk9CGwxG+/VVRxDQs6a3o2ubjjrhtbIB3hdIwbuesuZbW+IPJIvu0VzYxb9pGzyal1RKXjmLzDJk1DprBIW5oCLx4Kw10yICF3aXCVNjI1XQofkDUZox8+PIGjdQODsZk6fw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BPN3yoGReuPyuM5ciF5VqarPj7uyOgBlK396WipObKg=;
- b=CZpNAw6LxBsYD/bdWwVx+J2AB17lu5pIH1fgEMzWlReV6bgR0SHQInnwpG9Fu4hKajwYhcWpRISVCTyy9oq4oMeaxRFXspJZWAfr/ElYfT00tcdmCZ9zVw8vhj7DYoWrEGL5hVG6ovRdrIbB/3E3oH1h1u+jFS4cfAbM+sQoV13Dkc4IBN0gr15V6R6xcTa7K7STLIzgtIPr8P++Y57vnbIWcLfkHdmEGpX5oMrocC4DRTmWKtqf4sSCSJDEKOmYOjPrUkdD/ItRYxSrTW9kBoytJSuZob7r2mwiYXJU8FNrimO1kvq72lfv1bj14BGZwW+vMS7ndJdk49SRE/J0UQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR0402MB3937.eurprd04.prod.outlook.com (2603:10a6:208:5::22)
- by DU0PR04MB9443.eurprd04.prod.outlook.com (2603:10a6:10:35b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8293.15; Fri, 27 Dec
- 2024 08:36:40 +0000
-Received: from AM0PR0402MB3937.eurprd04.prod.outlook.com
- ([fe80::4e37:f56b:8a3e:bff0]) by AM0PR0402MB3937.eurprd04.prod.outlook.com
- ([fe80::4e37:f56b:8a3e:bff0%4]) with mapi id 15.20.8293.000; Fri, 27 Dec 2024
- 08:36:40 +0000
-From: Carlos Song <carlos.song@nxp.com>
-To: frank.li@nxp.com,
-	aisheng.dong@nxp.com,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914A3482EF;
+	Fri, 27 Dec 2024 09:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1735293468; cv=none; b=J29ghebFFRQrSyHWHOo1nwA8UTowx/uv+sEznSjHXJ2iRMgpclh0p5X1Z0utKb+Ruk/wCwR3VczZEdZIP0e1oEguZ4aVD5H6ps32oRMhVW5WkfeOzXNp6aPWhcxcpUg8DxNlbkxPsZbDOXW1Be6HZDRYnlb4gSztWLh7EiZk7Yk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1735293468; c=relaxed/simple;
+	bh=oQ8zPcgjAYCtu8aCCr473SaZxWRFCenBaHw8L4UCImA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rv1uwkaHNgzhObu9XKPXCKemrsTUvD6FZ0KVMsmhTj9AYGTFQG9HOmSe3463qRJAVqZZiSLQy2Mi1MQAHAYgytnPsQO4uJ1dARPnL+q5bZGc6mOIK0TNVgH8TVM2XoqqxopPipwAncdGv2LDGS3dhS1TuDIyXC9nINs+wyWqKAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kQclhQ7i; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2ef714374c0so7314436a91.0;
+        Fri, 27 Dec 2024 01:57:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735293466; x=1735898266; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E61b0CQfQJpOWoe/QUwMSbRUTPIEuAgZxxE/14WHMCY=;
+        b=kQclhQ7i+SjF7pYEqzov6mJNk9xYabuWsk06lW/p95Hu1rGAFeuRwHZZSP6a5vL4pr
+         l0DPo/tCG9SxdXEleX43sVrNMUr8A6K6AuLBzozkoEj0fkcbsu0osDQzeKDqA8qXUHk+
+         02CC8PF5GvdrGpCnrRlR5k737CufqqjOhqqjGs3ym20SU6LjFWTVuV/Nqp2k6+rGXM/s
+         NtFCltd9hg1Gqzu5wFA5nVkq2uA2MbGpssF29DDxuLcHxnBT4n2vIpRHPkKr8jFiBuDz
+         MLoQmuSPmu7C4Gs7m9wPCj1LqjAmV/L61ZkOQT2hB9D7ME+st4Z+iav5UBSBZtZugODE
+         eqUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735293466; x=1735898266;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E61b0CQfQJpOWoe/QUwMSbRUTPIEuAgZxxE/14WHMCY=;
+        b=UznF1Ta32qDRXjyR/z6oehCAV1ztqX/tDOwzSJVCBkNziNFIlPw8vay6ekYRkiDtiy
+         INTSsflBuzKgzi2CW5DcDQj69JduqFphFDMq0Q8WLatuUdMGfCRmJdrxV3/L9FCxWn/N
+         fweAWq/ev75U/TVDQjBB1SrcgqbC9yAt3Yy3h+4kQ5oqqADmwsYUmCtjepKSDQaolCF/
+         S3bJ6ow9+EHodEkWSVuZP7o+gzo56+W7zdl7hlqFyfnUsG1giFlfe7iWvh9d244XrJT+
+         vi5xeuhDqi5aPQ626m3PFcS9P5obv9Xm1SlnMRAvoqv6Cny1TjZlY8Vegf5e25rr44Ds
+         HhPg==
+X-Forwarded-Encrypted: i=1; AJvYcCVrYKgpBGOJdHxBP3EOmC7a3O3E19B2nef8Ias1mkgA94fYvuwSVW4RExbtoGXA9dO0pyPJsFnkr9TsFUE=@vger.kernel.org, AJvYcCW5b7ZZramQ5JM1qqZjmcgpVaAv9gjmlTQDP2HgH/SVQjkuQXWf1qv3hBsAiRKQ2ByWfLz15DCLNgc=@vger.kernel.org, AJvYcCW8qxS7IQz8j4hCF7/1Pwq8V3brqFEp9a+664Ukur9Z87Ph8xTdM0EdhSMbhsQTqD/ItszQM+kY@vger.kernel.org, AJvYcCWPwJZS26Qvl+Xspgb3scF1AK6LtM/Zmy7IsErS8EnGlH/ZyguanbpUL9LK8W71VL2Jgl+UTRgpICym@vger.kernel.org, AJvYcCXKw6h6RmZUPxgux0ZohjmbvL4fbfCvX3C261nGUfAnbCOZIRXJkfA46PJz3WMASFJ2OZ3pF7eJ70qnbf05zCI=@vger.kernel.org, AJvYcCXSZiqAk89mS2Nl4egayfkPvZkMgAtCux+De3esouC8RoAQthWedR8yvTj0JtYCkBVKrGSRc6e6MLKy@vger.kernel.org, AJvYcCXUmh/WZmjYPzsYy+CDPy+tMH6ec0lUdJxfnCpmQnLRteXoHmiuDdcvt/cwgivd1t/EqCA1pbFL3ArsDQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YysZBap6HAuFXuITEvJI8/T/2gMtMVTsefjiHxvPskac2L4fsKh
+	hYym7zyyyeNh40BxgqYY4XqwNZy4naVkgPg1makeZpz3I0nUR5yn
+X-Gm-Gg: ASbGnctCmoorbTe0ovhLALPB4M02wyLBj38t/M2rKczGXPCEeYSfSsvOhx9SV/pkzEw
+	1m8N5c8iEHt62Jm9jXbh+pM1ORo14AziXSRBokSYd2LqOeIww2Lhh+EpA/0Wjps4/7T9+q74Mhw
+	jcnZAd3sgtseNWX2WPpvEg0clOTappttAldfescpQxleH7TuP6dFcPw9117M+QtteW06yCJodml
+	p6Og+ftiwG54LoE67DpIOXIpfWJnxs4BRVEfPb4FKcVyOL471h36AHWOZkIfx2MpsFMhrGoNhh7
+	Mli9AVJWUZPErX4i9TON9pLO
+X-Google-Smtp-Source: AGHT+IG25VBuVyNEsjj0ruD0xAOoFQVrnR9gRNTql3ILiys1KjxdfmFcTBW3jd60qhrZpc7MLTd+5Q==
+X-Received: by 2002:a17:90b:5251:b0:2f2:a90e:74ef with SMTP id 98e67ed59e1d1-2f44353f0b2mr45145356a91.1.1735293465820;
+        Fri, 27 Dec 2024 01:57:45 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f51a0sm131581135ad.187.2024.12.27.01.57.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Dec 2024 01:57:45 -0800 (PST)
+From: Ming Yu <a0282524688@gmail.com>
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
 	andi.shyti@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com
-Cc: linux-i2c@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Carlos Song <carlos.song@nxp.com>
-Subject: [PATCH] i2c: imx-lpi2c: make controller available until the system enters suspend_noirq() and from resume_noirq().
-Date: Fri, 27 Dec 2024 16:47:36 +0800
-Message-Id: <20241227084736.1323943-1-carlos.song@nxp.com>
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v4 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Fri, 27 Dec 2024 17:57:20 +0800
+Message-Id: <20241227095727.2401257-1-a0282524688@gmail.com>
 X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0024.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::20) To AM0PR0402MB3937.eurprd04.prod.outlook.com
- (2603:10a6:208:5::22)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR0402MB3937:EE_|DU0PR04MB9443:EE_
-X-MS-Office365-Filtering-Correlation-Id: a1ad1504-8422-4b99-b563-08dd2651957c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|376014|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?/3fJuqdQ6QnBLBr4kmAmmu/EsM97KWp5R83Nm72lnAtM+VDlkXjKoYSnv54N?=
- =?us-ascii?Q?gVemKW4lNpnzjqAzv4zYfhua6ggc8rd2ZknFDqFhMdRHR2CDEV3DUT0tAwDz?=
- =?us-ascii?Q?A4y7xO9fgBriS0LjGoJgfcHNvgueISu9dhVzAtBf+wIHjEOgExBtoQi02RIG?=
- =?us-ascii?Q?ohQBhDO05KyaUsfYFo4aYdmOtk4ecZ9sHcMR2vkh9cBi2Yp6Rpe36vzHM5F2?=
- =?us-ascii?Q?F7T89BTiS+bLDNAzvaCAUlRjANtOoCRjfneNe/pjxw9aUqqNyfI5fyWWVgnh?=
- =?us-ascii?Q?Pg10c5QjgH/3fEkKvRKVeXsra+R9C92qS+E7f0v5OVDnyleecNWquDxNxSjZ?=
- =?us-ascii?Q?SuoJIFZIPKqXNab5hwiqiKuvRdZUsjguH6m7VwTe2WFPfCYHql1xH5n4AnWF?=
- =?us-ascii?Q?iQDNjjaiSU1Lh/VRUGw+Rc9lluPJu8xNiCenPGWidFD5GWV1WVztgvBlAAiG?=
- =?us-ascii?Q?UBPh8CLEVLrWMR1WuWi5NIfULoncP/vFQtQD95kekDG8MhyBgsuIAN+TJ1q0?=
- =?us-ascii?Q?j1uYmgEE0Yjt7UfUx3K1QPMa5ylkxljJrWIpyk1gVK4JUJ7GrR7FwpO5F7db?=
- =?us-ascii?Q?HHgXDgHp353VFuwq4RBKIUGab1QLP/L02tvE2u/f914K7LTzR9YQSvNawZzL?=
- =?us-ascii?Q?ZBA5b+uf5aJ1kCujj0/15ppcTBnYY0VflW55gjcICSUamTTHEk2CLs3foYsG?=
- =?us-ascii?Q?h1P3PH5BtyMrSxhVZxSgQgjzQ2kBkTywNia4h9kO8C2dP+li0e9GR6+gl8j2?=
- =?us-ascii?Q?NUMAC+yaO4IdwFji/uH27zM2D28agYey9dydJPlzogKMjOiUStYCRvm4ZPNj?=
- =?us-ascii?Q?1Gn80iA3O8lmRxLec4q+YPQJ1+s+IyFKWAnIDcLcf489H3V89XW4wlaSPUeY?=
- =?us-ascii?Q?OgfwEKnBB+2GyZ2OVkWupADz6DcPwLvmRJwtT+mup/JrWeSYOcWMsirvFOa3?=
- =?us-ascii?Q?gJlRN8WZRTzoj93Lzmc3Cx1uVCZ4dJx8uuK47QM4O97wj+GeQnxTMeZAtW1h?=
- =?us-ascii?Q?RnOF41T+lEW34hbla8+fXTdKJB3k35yBx38/OxfOXZl3N7Z2t0Uv8ll8N37I?=
- =?us-ascii?Q?ZZ4MFZp+A5vgRMnLtDxcrui79mf+vzvDJ2V4qw7QYogkZkZ/OZUgcSK/XV1a?=
- =?us-ascii?Q?/lr4MOhb2SrYjqgJ/cGjkhMbQeA5RTFEYaPfSYfIT9yCjIow4nGG7+/Iveoy?=
- =?us-ascii?Q?ZAb9fHps+T1kQVKqX3y68NYteLIdaqBv+/UZdyrV+IFsReCxUqXnwO66x70+?=
- =?us-ascii?Q?6Iz9J0ilqHxMUw+lPrF2kXXEomVPGsU50FyKqQWrhKH9UYvoGyanVRCC96Il?=
- =?us-ascii?Q?7mnodC6Hol5jwrulX1yqVlgIN9C3n8VDw1F8dgte04HmSOty9k90SoDYZUaC?=
- =?us-ascii?Q?PojJgXxqXmo4zhgQ1JY0Trh7Fr+Ci3upB0sUpJ8MyOfRDLooO4PW8jMwBCoZ?=
- =?us-ascii?Q?ZEMjlnjIVtVlS0s+WdmCsNADEcfF/Jh1?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3937.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(376014)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ewNVJP+zCcG/V/WDKPvWpTAgzFldCiigEn132Ax4XfOGom7SePDAI6NK5ijW?=
- =?us-ascii?Q?kPlfIjwZELmvNYLd5KjM9v/lza9cux4tklf0q9VQ1Am854EEU9NzfIkvCtME?=
- =?us-ascii?Q?ZT52EUIage9r1JRFsZgBa6f9t7fzvYVAwV4LWQcxdTLShlwNZVG7vBEYOwjw?=
- =?us-ascii?Q?90fLyBvNRCdvvXS2cQLm7v7JUvNV+Z9LniRR1p+EQwTqj8EDtAOuamuMFLSe?=
- =?us-ascii?Q?YkQ+Q+Ujx31ty8U5FEWjT5WkL/b+q1xV71nyVRH0tllgIWfhAy68L2QgQCrt?=
- =?us-ascii?Q?VAJFtC1Sap1rEppeCq61GmxJuD92+vJt88RMKtcPV6nMWxCJI0b4yZHMlHvA?=
- =?us-ascii?Q?P18PzN9xoZF49lP9DQ5Ake8jF1geBTmPH8aCArUNgT6M1ZrO82X4DfeqntWB?=
- =?us-ascii?Q?jB1ZAkAbYvkik3SMSP874WiNawMuYDQVTbDpcf9NrhC6rXKx7ZjDRkphTwVo?=
- =?us-ascii?Q?wUPftiEVQ9GpChSLmieY9AW1LJpEDWoyVouXjmaWf1CsT+cMZA8J/EwhQUCf?=
- =?us-ascii?Q?SkcS4uvonEqBTOtP+LdRVIwOQJgsxI2nIaZQBOeJpHZ8Uyz5KZ5L2/GtcA0X?=
- =?us-ascii?Q?99o2MTtLoSboimnMg8v4+iUKe2Oup4smhhpgT74F636c32Io4OBfWSEjIopE?=
- =?us-ascii?Q?DhMgP3yFbNgSwvjT/VhTyR4nsnBQWc4FzisDAdZZJxtlRbu74C8DqpT7nqWj?=
- =?us-ascii?Q?OypQpmRL//Ttwpux+LO+aDRR37u4g424bE5EjsnbpR+oUqYx2q1q/G7zcRmc?=
- =?us-ascii?Q?YLR6m7oONtEBe1uAFapiyPyotawHbkucmA3SKEjAV99mVekxPWDcELYKAA01?=
- =?us-ascii?Q?r7zmXDc4N3Edv4+f451wEgN8/bhEPEM4rTVZpddt5oAflNqF0LAmZJ8iCrSm?=
- =?us-ascii?Q?jPQ144xMz1rRIL12+tX6qH8OayhLNbVGo9kPXa5QpJt0qW8KNVxtTvmcjV5Q?=
- =?us-ascii?Q?Q9jWK4/9vmlOGFUxwB+XPW9m1LbnyAWBkzezaf3Hy6m1PQdjmS3LkGLg0mVS?=
- =?us-ascii?Q?sFy83OPtt2wkYGpb9Cj4VHan6SEv6BxKV7vJntcJ7JyPjEnt+P6D5rwJzBx9?=
- =?us-ascii?Q?jNw15AGZxOBZoeL9+v0WrUSeDBa4fHMlGoRi6vutNx4gyi9wcBltGU00CHXw?=
- =?us-ascii?Q?iSeudNydZtSYQc3rhcpAYJSRMdGs6A0d4qHSRlq7qr8i6T3v70dGuOLlrKOA?=
- =?us-ascii?Q?mnf4gFnrCrFbTjmBbupk074t4kIqg683UsJ4MjNV1pylttZkw4vQaBtre/jB?=
- =?us-ascii?Q?f1VW3BRxgEr40utkGGEgcGocksxsd2XbUgmrpDdOadcQdQ7S8q0Y3UXd0rjt?=
- =?us-ascii?Q?J7/5nuJ+DrDi7Uzq3mc0lZ1MbZfFVTRODbUZEWHEcHT3ApC4Y/wCfFxm3HHv?=
- =?us-ascii?Q?JIrhoeMI/j/nOarPsaQhhU6g0SSmam0EhzYkAZOYSDEDs/vB7oZTm+B9hGOI?=
- =?us-ascii?Q?YpRUc0lk/YywydHBGkUBGqOErcyvIUBkwA9XwmVgDpwD4LR/9pcS3AwO0icB?=
- =?us-ascii?Q?7kk5dpd31R/bm9ufJfbF4hs1NiUkSYdc1q8vxs3W0iOZ0z6EAASnvpS3UoRD?=
- =?us-ascii?Q?AhaZqgNZIBzS/Jvu/TLsn2fWDDarKWjfGZZblVCF?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1ad1504-8422-4b99-b563-08dd2651957c
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3937.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Dec 2024 08:36:40.2047
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kJ7UIgJzp9QwfvHUjEHCq6BNdUJm+f4X81SC6PB1C84Dha1fkDNKo9zc/Jdm6jZX+HgzqEkCtrTXmVzqj2wAlg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9443
+Content-Transfer-Encoding: 8bit
 
-This is a general i2c controller feature. Some I2C devices may need the
-I2C controller to remain active during resume_noirq() or suspend_noirq().
-If the controller is autosuspended, there is no way to wake it up once
-runtime PM disabled (in suspend_late()). During system resume, the I2C
-controller will be available only after runtime PM is re-enabled
-(in resume_early()). However, this may be too late for some devices.
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-Wake up the controller in the suspend() callback while runtime PM is
-still enabled. The I2C controller will remain available until the
-suspend_noirq() callback (pm_runtime_force_suspend()) is called. During
-resume, the I2C controller can be restored by the resume_noirq() callback
-(pm_runtime_force_resume()). Finally, the resume() callback re-enables
-autosuspend. As a result, the I2C controller can remain available until
-the system enters suspend_noirq() and from resume_noirq().
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
 
-Signed-off-by: Carlos Song <carlos.song@nxp.com>
----
- drivers/i2c/busses/i2c-imx-lpi2c.c | 37 +++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+The following introduces the custom-define USB transactions:
+        nct6694_read_msg - Send bulk-out pipe to write request packet
+                           Receive bulk-in pipe to read response packet
+                           Receive bulk-in pipe to read data packet
 
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index 02361274fcaa..62b3f2cc57fb 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -1318,7 +1318,7 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	if (ret)
- 		lpi2c_imx->bitrate = I2C_MAX_STANDARD_MODE_FREQ;
- 
--	ret = devm_request_irq(&pdev->dev, irq, lpi2c_imx_isr, 0,
-+	ret = devm_request_irq(&pdev->dev, irq, lpi2c_imx_isr, IRQF_NO_SUSPEND,
- 			       pdev->name, lpi2c_imx);
- 	if (ret)
- 		return dev_err_probe(&pdev->dev, ret, "can't claim irq %d\n", irq);
-@@ -1447,9 +1447,44 @@ static int lpi2c_resume_noirq(struct device *dev)
- 	return 0;
- }
- 
-+static int lpi2c_suspend(struct device *dev)
-+{
-+	/*
-+	 * Some I2C devices may need the I2C controller to remain active
-+	 * during resume_noirq() or suspend_noirq(). If the controller is
-+	 * autosuspended, there is no way to wake it up once runtime PM is
-+	 * disabled (in suspend_late()).
-+	 *
-+	 * During system resume, the I2C controller will be available only
-+	 * after runtime PM is re-enabled (in resume_early()). However, this
-+	 * may be too late for some devices.
-+	 *
-+	 * Wake up the controller in the suspend() callback while runtime PM
-+	 * is still enabled. The I2C controller will remain available until
-+	 * the suspend_noirq() callback (pm_runtime_force_suspend()) is
-+	 * called. During resume, the I2C controller can be restored by the
-+	 * resume_noirq() callback (pm_runtime_force_resume()).
-+	 *
-+	 * Finally, the resume() callback re-enables autosuspend, ensuring
-+	 * the I2C controller remains available until the system enters
-+	 * suspend_noirq() and from resume_noirq().
-+	 */
-+
-+	return pm_runtime_resume_and_get(dev);
-+}
-+
-+static int lpi2c_resume(struct device *dev)
-+{
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	return 0;
-+}
-+
- static const struct dev_pm_ops lpi2c_pm_ops = {
- 	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(lpi2c_suspend_noirq,
- 				      lpi2c_resume_noirq)
-+	SYSTEM_SLEEP_PM_OPS(lpi2c_suspend, lpi2c_resume)
- 	SET_RUNTIME_PM_OPS(lpi2c_runtime_suspend,
- 			   lpi2c_runtime_resume, NULL)
- };
+        nct6694_write_msg - Send bulk-out pipe to write request packet
+                            Send bulk-out pipe to write data packet
+                            Receive bulk-in pipe to read response packet
+                            Receive bulk-in pipe to read data packet
+
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
+
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
+
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
+
+
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CAN support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                      |  13 +
+ drivers/gpio/Kconfig             |  12 +
+ drivers/gpio/Makefile            |   1 +
+ drivers/gpio/gpio-nct6694.c      | 462 +++++++++++++++++
+ drivers/hwmon/Kconfig            |  10 +
+ drivers/hwmon/Makefile           |   1 +
+ drivers/hwmon/nct6694-hwmon.c    | 851 +++++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig       |  10 +
+ drivers/i2c/busses/Makefile      |   1 +
+ drivers/i2c/busses/i2c-nct6694.c | 156 ++++++
+ drivers/mfd/Kconfig              |  10 +
+ drivers/mfd/Makefile             |   2 +
+ drivers/mfd/nct6694.c            | 394 ++++++++++++++
+ drivers/net/can/Kconfig          |  10 +
+ drivers/net/can/Makefile         |   1 +
+ drivers/net/can/nct6694_canfd.c  | 826 ++++++++++++++++++++++++++++++
+ drivers/rtc/Kconfig              |  10 +
+ drivers/rtc/Makefile             |   1 +
+ drivers/rtc/rtc-nct6694.c        | 263 ++++++++++
+ drivers/watchdog/Kconfig         |  11 +
+ drivers/watchdog/Makefile        |   1 +
+ drivers/watchdog/nct6694_wdt.c   | 281 ++++++++++
+ include/linux/mfd/nct6694.h      | 142 ++++++
+ 23 files changed, 3469 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
 -- 
 2.34.1
 
