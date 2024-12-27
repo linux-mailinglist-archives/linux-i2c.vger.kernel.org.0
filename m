@@ -1,247 +1,180 @@
-Return-Path: <linux-i2c+bounces-8761-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8762-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B1589FD49C
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 14:05:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3A189FD4A3
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 14:12:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA189165156
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 13:05:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D8683A1930
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 13:12:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16EEB1F37AA;
-	Fri, 27 Dec 2024 13:03:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF12C1F3D24;
+	Fri, 27 Dec 2024 13:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LCOOsiG0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YXEtfF64"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB381D319B;
-	Fri, 27 Dec 2024 13:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776FF1F37B3
+	for <linux-i2c@vger.kernel.org>; Fri, 27 Dec 2024 13:12:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735304623; cv=none; b=ABaRIlgIiTr3PZ6tdJwIzJFakNT2QnvycnrQ8ezJIMxP0QV+YsRWJhFmr60B+q35n8o5tgpy5xJgz5WwnPs9OYq+TkIAPBtKe/NQ4dUnIbmk4RBf/uUQ+qHwzvZbtzLGsQ0heMss0KErZ4qusZikmM0TGao7A9N1UfmI3N85LH4=
+	t=1735305136; cv=none; b=FrPy36Y4NfehSkZWeWtWbJMC5OPtSr2dCGSCHtY/fzjmqQpGjgupAoSGiriZ3supcBTEE3QtETsORN+zRlCswr/p74OYCZ1BkIr/JsYYL6Qm2xVBGb0IgnIGC+52MPBt0AzxbH0CRPNfWpN4y8RUTpExZRkal8/ZWlbtK4N6W88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735304623; c=relaxed/simple;
-	bh=NPvRVHPoCx6i/S/a2n8Uv5w62XRFWSuO9H5fH84L2I4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bPDy1yCFcN4wvHyQ1XX6+d0Z9aiM1irPAg8Prxzjg3k1RkZgk5Yc/fNnE+lXHXwh7jQkBJMrEAkNomWX7Da/QqdUdMjLiwxKiKxRAATkE2zuGk/1PWnhfVT/NLjahwzFgNsbM+gClu95IXK+0F50sUkxwmbrd0xjGiYq/rVoBHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LCOOsiG0; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BR7gfU6009558;
-	Fri, 27 Dec 2024 13:03:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=Y5n9JQdtdMfi3qeXGMHfeqYIM0OQ+1rnqib
-	v04kUWIg=; b=LCOOsiG01+Zh+24pJhDreJj4irfbSPyviCcnx3b6SV6s2Rj7agT
-	ZWcmVlxPGLe1IfguWY6oTDc4ndvAeTbaoraxBCe3zUYPjZnjj4vLgyTls770ULyo
-	hbzrZFMUi5k/Y3EVovrzYRcjEunbXvJB0cefqMPLQN8uXTADOodxZ9mGX5WFdxMP
-	8xoZ6Z3kkxqpwsQFMuwUtr324BYDSKNCGJ9dpkoWhQ0MSPikNqMZjh60nCMv9ffw
-	TYz7x4UPydXHwooK3WT0vSFUCHFoJia+W2SI1s9HNDqL2RM6PfW8kk8x1OG/WnC7
-	BbNheJcu8TGBbx3qvOzQkHl28eci29FVXvw==
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43sr3b9gdy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Dec 2024 13:03:36 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BRD3WuU012383;
-	Fri, 27 Dec 2024 13:03:32 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 43nprmnpd0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Dec 2024 13:03:32 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4BRD3WiS012372;
-	Fri, 27 Dec 2024 13:03:32 GMT
-Received: from hu-maiyas-hyd.qualcomm.com (hu-msavaliy-hyd.qualcomm.com [10.213.110.207])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 4BRD3VIZ012345
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Dec 2024 13:03:32 +0000
-Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 429934)
-	id CBAA42408A; Fri, 27 Dec 2024 18:33:30 +0530 (+0530)
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-To: andi.shyti@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_bjorande@quicinc.com
-Cc: konrad.dybcio@linaro.org, quic_vdadhani@quicinc.com, vkoul@kernel.org,
-        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Subject: [PATCH v5] i2c: i2c-qcom-geni: Serve transfer during early resume stage
-Date: Fri, 27 Dec 2024 18:32:36 +0530
-Message-Id: <20241227130236.755794-1-quic_msavaliy@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1735305136; c=relaxed/simple;
+	bh=o6AAcz9J0udUgMaYOxi05wAWfjvg31AtsZqAU1K4TPg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KcLM0YRoL1h3yOUD7p4LvpbQAJzA0CD/pDFq+U4dCNbhUehiF0O3iqN2BxflMXwXvXRsxZIdLeSfr0crg6sfyDwzOr6tckocBgqd3K9Vv/OAmwC61/bFI9sQc3GQeS2gxp8MdJ4PfdjHvUFpnDMebH3/Brs1IzPSvxaaHs3geJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YXEtfF64; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3862b364538so4060845f8f.1
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Dec 2024 05:12:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1735305133; x=1735909933; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Sm+sDgdDQlH/NgufjiV344PWkD6XSva0idB1/UqFcc=;
+        b=YXEtfF64lpnyp9A9yxyzw6OE1KtHHsb3PcUgAYmOMt2rbr21h1jU01v5gweRawowGm
+         RFCuRQOlJFwlVaRcEgxVfjRYKeyAZb5GEic3fGY0RtUA/uEdUGtBFth88enTVOjR+vW7
+         7FpVsVsQPlsq3csONBqhAgC7B6qrN48OJaNmsL7Ui42CFwN7vpdJGjDqYkcAVBEse+si
+         mNvaPAHT/IUjecYiwzNe+FNDORglRqAQciYj9m3WePH57Dgf1KEzyvLYmCnctrhg4pwh
+         dW37jvIS1CbqC3+2qZ7Firki3CEzQ0gDmES8KPGKl9/favYGH81juRJEIXmU1earbqN/
+         9bmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735305133; x=1735909933;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Sm+sDgdDQlH/NgufjiV344PWkD6XSva0idB1/UqFcc=;
+        b=W7AiK24F4qdj2TIPcI6eZ7Gj97VCu15rwzJ3z/ndDqx9DIIBOktYRM4qbaD8FDi39f
+         s2C3fxiafXCqNhbNLDSfXjy9pTX0BcnWj8lrv/uC2jcVTYo/XbdMjDdi22hENgwdSGvP
+         kkyzTlrb3jwYqyhtPuiKFwnNT7ZUUTnfMKk9BLFSAVisZSWe/PociB/1PXoS+ExjMICd
+         V71ayAPANC3R7Bawd+H8eny/gCVS/KuHeufcqTY7ZJykfhJc5vOyQjkRebiDd8/I2yhU
+         3yfoaXwpFfKvev0xINrj968+P/UHFLrbkIOzSBN7xh7Q9rhDvt8LUD7lG8HDGLlCVUs2
+         xu4w==
+X-Gm-Message-State: AOJu0YzY/yo0OroYK8fz0ROBMCrtqZHlbgusUdqUZH7gz0UpHV6BC5xA
+	P6c42DCwA0Y7ZsnU6RL0ThDxrpzw0XTVMyN7QPTGoMQ5QEprWeccQC8jkGTFwO3dW3pI/7jjpnB
+	w
+X-Gm-Gg: ASbGncv98FR7whuwTc0ySJFEOOJSk+61nwDLu58Y4dhV3qBw09FMOkpssvyF68ieUs4
+	BqQedmqEGTYemm+p5rLa3yME/jt/pBnZkCXC7Fqd+dPcsUt02TJqn5ueqKng+seYs50rf47VVQo
+	RT/6uLYA/yzpD1Egm5OEgiEmI4ERjLziTahY1O60WteOCHpY6r5ziBx7zZB9lO4QbjYcVu9dZxe
+	v7LYIRtAio0F38aco1n0PK7B/Yxz8+CzHnLSm4gU5ErA6oC9CXrmgRKPlZXCfFj0A==
+X-Google-Smtp-Source: AGHT+IFRAeRoU+IdqAaoKzRh+DY3FMLdh4h364QfZ7giAar2WSsgfkdc7AMMqclquzc5rde5/NGSNQ==
+X-Received: by 2002:a05:6000:1faa:b0:386:3672:73e7 with SMTP id ffacd0b85a97d-38a1a1fdecfmr27843731f8f.9.1735305132744;
+        Fri, 27 Dec 2024 05:12:12 -0800 (PST)
+Received: from [127.0.1.1] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656af6c42sm298899425e9.9.2024.12.27.05.12.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Dec 2024 05:12:12 -0800 (PST)
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH v2 0/6] Add dt-bindings and dtsi changes for CAMSS on
+ x1e80100 silicon
+Date: Fri, 27 Dec 2024 13:11:33 +0000
+Message-Id: <20241227-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v2-0-06fdd5a7d5bb@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WnzKqYrMzuJekbT5xmaUANLBCS0wUvF4
-X-Proofpoint-ORIG-GUID: WnzKqYrMzuJekbT5xmaUANLBCS0wUvF4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 priorityscore=1501 spamscore=0 bulkscore=0
- mlxscore=0 suspectscore=0 malwarescore=0 clxscore=1015 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412270110
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIWnbmcC/52NQQ6DIBBFr2JYdxoGQWxXvUfjggrqJC0YsIbGe
+ PdSj9Dl+8l/b2PJRXKJXauNRbdSouALiFPF+sn40QHZwkxwIRHxAg8JT/LvDN7lBYQERMAW7JI
+ IMrqWI+fQm1dK0ArT1LpuLNeCFeEc3UD5iN27whOlJcTP0V7xt/6VWRE4KMm1sloNjZK38jQxn
+ EMcWbfv+xe5LVqq5QAAAA==
+X-Change-ID: 20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-82a63736d072
+To: Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Jagadeesh Kona <quic_jkona@quicinc.com>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-clk@vger.kernel.org, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.15-dev-1b0d6
 
-Fix the issue where pm_runtime_get_sync() fails during the PM early resume
-phase, returning -EACCES because runtime PM for the device is disabled at
-this stage. This failure causes I2C transfers to fail. To resolve this,
-serve transfers with a forced resume.
+v2:
 
-Allow certain I2C clients, such as PCI or Touch devices, to request I2C
-transfers during the early resume stage. Enable any I2C client to initiate
-a transfer request very early in the resume stage, such as during the
-noirq phase of PM. Register an interrupt with the IRQF_EARLY_RESUME and
-IRQF_NO_SUSPEND flags to handle these transfers and avoid timeouts when
-IRQs are not enabled during the early stage.
+I've gone through each comment and implemented each suggestion since IMO
+they were all good/correct comments.
 
-A Potential usecase: PCIe client -> PCIe Driver -> I2C driver. It involves
-a PCIe client driver communicating with the PCIe driver, which in turn
-interfaces with the I2C driver. Upon powering on the PCIe device, send
-certain configurations over I2C. During the suspend phase, use the
-suspend_noirq() routine to turn off the PCIe device, as some PCIe clients
-continue transfers until this phase. During the resume_noirq() phase,
-restore power to the PCIe device and reconfigure it via I2C. This ensures
-that the PCIe device is properly configured and operational after resuming
-from a suspended state.
+Detail:
 
-Use pm_runtime_force_resume() to address the failure of
-pm_runtime_get_sync() returning a negative value when runtime PM is
-disabled.
+- Moves x1e80100 camcc to its own yaml - Krzysztof
+- csid_wrapper comes first because it is the most relevant
+  register set - configuring all CSID blocks subordinate to it - bod, Krzysztof
+- Fixes missing commit log - Krz
+- Updates to latest format established @ sc7280 - bod
+- Includes CSID lite which I forgot to add @ v1 - Konrad, bod
+- Replaces static ICC parameters with defines - Konrad
+- Drops newlines between x and x-name - Konrad
+- Drops redundant iommu extents - Konrad
+- Leaves CAMERA_AHB_CLK as-is - Kronrad, Dmitry
+  Link: https://lore.kernel.org/r/3f1a960f-062e-4c29-ae7d-126192f35a8b@oss.qualcomm.com
+- Interrupt EDGE_RISING - Vladimir
+- Implements suggested regulator names pending refactor to PHY API - Vladimir
+- Drop slow_ahb_src clock - Vladimir
 
-Co-developed-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Link to v1:
+https://lore.kernel.org/r/20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-0-54075d75f654@linaro.org
+
+Working tree:
+https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/arm-laptop/wip/x1e80100-6.13-rc3
+
+v1:
+
+This series adds dt-bindings and dtsi for CAMSS on x1e80100.
+
+The primary difference between x1e80100 and other platforms is a new VFE
+and CSID pair at version 680.
+
+Some minor driver churn will be required to support outside of the new VFE
+and CSID blocks but nothing too major.
+
+The CAMCC in this silicon requires two, not one power-domain requiring
+either this fix I've proposed here or something similar:
+
+https://lore.kernel.org/linux-arm-msm/bad60452-41b3-42fb-acba-5b7226226d2d@linaro.org/T/#t
+
+That doesn't gate adoption of the binding description though.
+
+A working tree in progress can be found here:
+https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/x1e80100-6.12-rc7+camss?ref_type=heads
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
-Link to V4: https://lore.kernel.org/lkml/bd699719-4958-445a-a685-4b5f6a8ad81f@quicinc.com/
+Bryan O'Donoghue (6):
+      dt-bindings: i2c: qcom-cci: Document x1e80100 compatible
+      dt-bindings: clock: move qcom,x1e80100-camcc to its own file
+      dt-bindings: media: Add qcom,x1e80100-camss
+      arm64: dts: qcom: x1e80100: Add CAMCC block definition
+      arm64: dts: qcom: x1e80100: Add CCI definitions
+      arm64: dts: qcom: x1e80100: Add CAMSS block definition
 
-v4->v5:
-- Commit log enhanced considering Bjorn's comments by explaining PCIe usecase.
-- Enhanced comment with reason when using pm_runtime_force_resume().
-- Corrected IS_ENABLED(CONFIG_PM) condition inside geni_i2c_xfer().
-- Improved debug log as per Bjorn's suggestions during suspend, resume.
-- Reverted back comment before devm_request_irq().
-
+ .../bindings/clock/qcom,sm8450-camcc.yaml          |   2 -
+ .../bindings/clock/qcom,x1e80100-camcc.yaml        |  74 +++++
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      |   2 +
+ .../bindings/media/qcom,x1e80100-camss.yaml        | 367 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi             | 352 ++++++++++++++++++++
+ 5 files changed, 795 insertions(+), 2 deletions(-)
 ---
-Link to V3: https://lore.kernel.org/all/20241119143031.3331753-1-quic_msavaliy@quicinc.com/T/
+base-commit: e25c8d66f6786300b680866c0e0139981273feba
+change-id: 20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-82a63736d072
 
-v3->v4 :
- - Enhanced commit log by explaining client usecase scenario during early resume.
- - Covered 'usage_count' of 'struct dev_pm_info' under CONFIG_PM to compile non PM CONFIG.
-
----
-Link to V2: https://lore.kernel.org/lkml/202410132233.P25W2vKq-lkp@intel.com/T/
-
- v2 -> v3:
- - Updated exact usecase and scenario in the commit log description.
- - Removed bulleted points from technical description, added details in free flow.
- - Used pm_runtime_force_resume/suspend() instead customized local implementation.
- - Added debug log after pm_runtime_force_suspend().
-
----
-
- v1 -> v2:
- - Changed gi2c->se.dev to dev during dev_dbg() calls.
- - Addressed review comments from Andi and Bjorn.
- - Returned 0 instead garbage inside geni_i2c_force_resume().
- - Added comments explaining forced resume transfer when runtime PM
-   remains disabled.
----
-
-    V1 link: https://patches.linaro.org/project/linux-i2c/patch/20240328123743.1713696-1-quic_msavaliy@quicinc.com/
----
----
- drivers/i2c/busses/i2c-qcom-geni.c | 47 +++++++++++++++++++++++-------
- 1 file changed, 37 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 7a22e1f46e60..1885e1ceb11c 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -695,17 +695,31 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 			 int num)
- {
- 	struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
-+	struct device *dev = gi2c->se.dev;
- 	int ret;
- 
- 	gi2c->err = 0;
- 	reinit_completion(&gi2c->done);
--	ret = pm_runtime_get_sync(gi2c->se.dev);
--	if (ret < 0) {
--		dev_err(gi2c->se.dev, "error turning SE resources:%d\n", ret);
--		pm_runtime_put_noidle(gi2c->se.dev);
--		/* Set device in suspended since resume failed */
--		pm_runtime_set_suspended(gi2c->se.dev);
--		return ret;
-+	/* During early resume stage, runtime PM is disabled and pm_runtime_get_sync()
-+	 * returns error Hence use force_resume() and serve transfer.
-+	 */
-+	if (!pm_runtime_enabled(dev) && gi2c->suspended) {
-+		#if (!IS_ENABLED(CONFIG_PM))
-+		dev_dbg(dev, "Forced power ON, pm_usage_count: %d\n",
-+			atomic_read(&dev->power.usage_count));
-+		#endif
-+		ret = pm_runtime_force_resume(dev);
-+		if (ret)
-+			return ret;
-+	} else {
-+		ret = pm_runtime_get_sync(gi2c->se.dev);
-+		if (ret < 0) {
-+			dev_err(gi2c->se.dev, "Error turning resources: %d\n", ret);
-+			pm_runtime_put_noidle(gi2c->se.dev);
-+			/* Set device in suspended since resume failed */
-+			pm_runtime_set_suspended(gi2c->se.dev);
-+			return ret;
-+		}
- 	}
- 
- 	qcom_geni_i2c_conf(gi2c);
-@@ -715,8 +729,20 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 	else
- 		ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
- 
--	pm_runtime_mark_last_busy(gi2c->se.dev);
--	pm_runtime_put_autosuspend(gi2c->se.dev);
-+	/* if Runtime PM is disabled, do force_suspend() else autosuspend the driver */
-+	if (!pm_runtime_enabled(dev) && !gi2c->suspended) {
-+		ret = pm_runtime_force_suspend(dev);
-+		#if (!IS_ENABLED(CONFIG_PM))
-+		dev_dbg(dev, "Forced power OFF, pm_usage_count: %d\n",
-+			atomic_read(&dev->power.usage_count));
-+		#endif
-+		if (ret)
-+			return ret;
-+	} else {
-+		pm_runtime_mark_last_busy(gi2c->se.dev);
-+		pm_runtime_put_autosuspend(gi2c->se.dev);
-+	}
-+
- 	gi2c->cur = NULL;
- 	gi2c->err = 0;
- 	return ret;
-@@ -835,7 +861,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, gi2c);
- 
- 	/* Keep interrupts disabled initially to allow for low-power modes */
--	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq, IRQF_NO_AUTOEN,
-+	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq,
-+			       IRQF_NO_AUTOEN | IRQF_EARLY_RESUME | IRQF_NO_SUSPEND,
- 			       dev_name(dev), gi2c);
- 	if (ret) {
- 		dev_err(dev, "Request_irq failed:%d: err:%d\n",
+Best regards,
 -- 
-2.25.1
+Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
 
