@@ -1,98 +1,77 @@
-Return-Path: <linux-i2c+bounces-8760-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8761-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B62E29FD405
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 12:53:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B1589FD49C
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 14:05:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 375E63A112A
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 11:53:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA189165156
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 13:05:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E781F4283;
-	Fri, 27 Dec 2024 11:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16EEB1F37AA;
+	Fri, 27 Dec 2024 13:03:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hIxsAGcZ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LCOOsiG0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B406B1F4279;
-	Fri, 27 Dec 2024 11:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB381D319B;
+	Fri, 27 Dec 2024 13:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735300357; cv=none; b=Uthgi2A9vWWl+2w8VjmsurfJt3FKgaUVnfl6qsrXHvUOoi3F0dv+KMkVlGsOqoMKTYDTGx2IdI66AD/kBYoHm5ZAtnwFRC2oKzplyT003XXCPnF1ye+UZy+lOLnN+Qan88CvfurHkgPJ1iaodLUJqxPK0z9J9nhk0b1u74SmJrI=
+	t=1735304623; cv=none; b=ABaRIlgIiTr3PZ6tdJwIzJFakNT2QnvycnrQ8ezJIMxP0QV+YsRWJhFmr60B+q35n8o5tgpy5xJgz5WwnPs9OYq+TkIAPBtKe/NQ4dUnIbmk4RBf/uUQ+qHwzvZbtzLGsQ0heMss0KErZ4qusZikmM0TGao7A9N1UfmI3N85LH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735300357; c=relaxed/simple;
-	bh=og/4mZT4bNYEAKSmR/ylW3YHosMHCE9n6VPZsM7lb2w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=vE6BT3d10xNrOG1yUC2YKazFOsfF9Qzfi9g2AYR9/QT9Bp1AE30D+YfuR5/OzuttZvV3yQ3TcMIGh2wNqSCTebC83OrLcoKu36+j7f8bJpvUismaE1Wa4Z6I1b9RFEZQPi3KJKPk45JulI3ly6BH1WFE1n2y8A4r91Lcpj53jhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hIxsAGcZ; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2162c0f6a39so95380435ad.0;
-        Fri, 27 Dec 2024 03:52:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735300355; x=1735905155; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SxrnLWAApnmijlLFIQl/ov451ANyf6P2dk6YwXU3Ne0=;
-        b=hIxsAGcZprTJ9n0qGJ7I0qoR+Kxgx3yZG0YL+1EfLTlwFcR2jCXAZhnf0IbRCKcGYz
-         i7N/PDYTdh4XqRB0DoIpQZf5V0arOZCYnDrZe1cqI9rXvmS0MREJVcifAmAzQDtPA31t
-         +L3QLhenIEGWIxJHyj657feZv25PieYZYMq/kqKjrvPl/rITgRBvfKdqDrvvd6QdCBks
-         mPdOBWvffWikXN/aWFbx1Dd2sWL+r6ZPLIvHny4qt+eGovzQ4kxll2Et4etBwq6jcido
-         JrDh5vWzv/DpWJDcPS/3bdgZOJyOp6Tf3DP1OwwP3HCqN79EjurzNyaxjWevyhhizcCi
-         Otsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735300355; x=1735905155;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SxrnLWAApnmijlLFIQl/ov451ANyf6P2dk6YwXU3Ne0=;
-        b=Q4ZGl7b4OWu3/4n0nfHvuhLY08rCv1299Y0anGZbdpnbZkJDZ+ULkVVtp5+n1jeKwr
-         L9oeveUdQRMwwxwySE0LaSqsXSdRUZiqUFd7QD0MBur9TVLpJOrswFdUz+pmEmJ/V/cD
-         0FaBVGg+PWhkIJdFfv025FXf/YeHqUn+1KlybG0lvbzEk2hZCKVn/bFgcqSy1gXqH1FQ
-         RIdrFwes0jhOI1u/8NK7nDM9yNQA1vM2bipjips9zfS3gw1skc1aLIxGSInymOQGQSJ8
-         7VJ21220Bdzcic+VpQgYba8oymOj3yQ58Ic4H3mBrfBZUbxGBjpjsK23GHeSIK0RX65A
-         6Gsw==
-X-Forwarded-Encrypted: i=1; AJvYcCWmpjDmripYji9X/65K9fSs9on3sg2RxURu9803il9C0nR29xHNnsENC8Vmro7RUGcYvp1ztaP+XIIqDGiW@vger.kernel.org, AJvYcCWuUgyfi6iw7hW8f/2/gRxRMxE5lqESe9eSNGdusWO/3Fq5oIrsrCGub1lDwllmfiiOYNl0rXIsFLQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycNfOK78dUn7wS6kVWPmGMkXxJxljJwfkqAp6e4GH5Ygiqmy34
-	va4UmEJFeRSSapEMF88tRHQqQtmEQd1abz3LqA22u0u1HUpUr63l
-X-Gm-Gg: ASbGncsrZAelDGAkSvlVHUqMJfg8vlLMtibW2QyEofcmVsiAO2o/5kSAPjK3ufXUV0H
-	iwHrphrMjLD5Xy3xRkoKJT+IzUll6E8qDpBheNlPq99UC0hqUvFFG08rh8SQshhYeLRj0zHCG++
-	a19GFfQYzVG8BEDJr/ZS0I36WhMpRu5WzxPYBO5x5zlOi+GhTb121AMEGne1ppkJ4e/AEee6tbL
-	2+GLUCeKjmdMX6jlvblVgosggaoI205LudHp/gKe5gqtGjmBZdPfqMakF7uJHr1RPcvYlxKkUDa
-	ozeDOoY=
-X-Google-Smtp-Source: AGHT+IHtSLgnEjDMksHOF6grV+q2mjiLXJSbkTz7D07bHxrB0gSSLrsfjF9hKxiqgbgqLdyJ+6xAsA==
-X-Received: by 2002:a05:6a21:648c:b0:1e2:2e4:6893 with SMTP id adf61e73a8af0-1e5e1e2979bmr43579802637.9.1735300354864;
-        Fri, 27 Dec 2024 03:52:34 -0800 (PST)
-Received: from prasmi.. ([2401:4900:1c07:9010:ac08:3a91:844a:cc65])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8dbcbbsm14363990b3a.97.2024.12.27.03.52.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Dec 2024 03:52:34 -0800 (PST)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Chris Brandt <chris.brandt@renesas.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v3 8/8] i2c: riic: Add `riic_bus_barrier()` to check bus availability
-Date: Fri, 27 Dec 2024 11:51:54 +0000
-Message-ID: <20241227115154.56154-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241227115154.56154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20241227115154.56154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	s=arc-20240116; t=1735304623; c=relaxed/simple;
+	bh=NPvRVHPoCx6i/S/a2n8Uv5w62XRFWSuO9H5fH84L2I4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bPDy1yCFcN4wvHyQ1XX6+d0Z9aiM1irPAg8Prxzjg3k1RkZgk5Yc/fNnE+lXHXwh7jQkBJMrEAkNomWX7Da/QqdUdMjLiwxKiKxRAATkE2zuGk/1PWnhfVT/NLjahwzFgNsbM+gClu95IXK+0F50sUkxwmbrd0xjGiYq/rVoBHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LCOOsiG0; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BR7gfU6009558;
+	Fri, 27 Dec 2024 13:03:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=Y5n9JQdtdMfi3qeXGMHfeqYIM0OQ+1rnqib
+	v04kUWIg=; b=LCOOsiG01+Zh+24pJhDreJj4irfbSPyviCcnx3b6SV6s2Rj7agT
+	ZWcmVlxPGLe1IfguWY6oTDc4ndvAeTbaoraxBCe3zUYPjZnjj4vLgyTls770ULyo
+	hbzrZFMUi5k/Y3EVovrzYRcjEunbXvJB0cefqMPLQN8uXTADOodxZ9mGX5WFdxMP
+	8xoZ6Z3kkxqpwsQFMuwUtr324BYDSKNCGJ9dpkoWhQ0MSPikNqMZjh60nCMv9ffw
+	TYz7x4UPydXHwooK3WT0vSFUCHFoJia+W2SI1s9HNDqL2RM6PfW8kk8x1OG/WnC7
+	BbNheJcu8TGBbx3qvOzQkHl28eci29FVXvw==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43sr3b9gdy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Dec 2024 13:03:36 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BRD3WuU012383;
+	Fri, 27 Dec 2024 13:03:32 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 43nprmnpd0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Dec 2024 13:03:32 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4BRD3WiS012372;
+	Fri, 27 Dec 2024 13:03:32 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-msavaliy-hyd.qualcomm.com [10.213.110.207])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 4BRD3VIZ012345
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Dec 2024 13:03:32 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 429934)
+	id CBAA42408A; Fri, 27 Dec 2024 18:33:30 +0530 (+0530)
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+To: andi.shyti@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_bjorande@quicinc.com
+Cc: konrad.dybcio@linaro.org, quic_vdadhani@quicinc.com, vkoul@kernel.org,
+        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Subject: [PATCH v5] i2c: i2c-qcom-geni: Serve transfer during early resume stage
+Date: Fri, 27 Dec 2024 18:32:36 +0530
+Message-Id: <20241227130236.755794-1-quic_msavaliy@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -100,101 +79,169 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: WnzKqYrMzuJekbT5xmaUANLBCS0wUvF4
+X-Proofpoint-ORIG-GUID: WnzKqYrMzuJekbT5xmaUANLBCS0wUvF4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ mlxscore=0 suspectscore=0 malwarescore=0 clxscore=1015 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412270110
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Fix the issue where pm_runtime_get_sync() fails during the PM early resume
+phase, returning -EACCES because runtime PM for the device is disabled at
+this stage. This failure causes I2C transfers to fail. To resolve this,
+serve transfers with a forced resume.
 
-Introduce a new `riic_bus_barrier()` function to verify bus availability
-before initiating an I2C transfer. This function enhances the bus
-arbitration check by ensuring that the SDA and SCL lines are not held low,
-in addition to checking the BBSY flag using `readb_poll_timeout()`.
+Allow certain I2C clients, such as PCI or Touch devices, to request I2C
+transfers during the early resume stage. Enable any I2C client to initiate
+a transfer request very early in the resume stage, such as during the
+noirq phase of PM. Register an interrupt with the IRQF_EARLY_RESUME and
+IRQF_NO_SUSPEND flags to handle these transfers and avoid timeouts when
+IRQs are not enabled during the early stage.
 
-Previously, only the BBSY flag was checked to determine bus availability.
-However, it is possible for the SDA line to remain low even when BBSY = 0.
-This new implementation performs an additional check on the SDA and SCL
-lines to avoid potential bus contention issues.
+A Potential usecase: PCIe client -> PCIe Driver -> I2C driver. It involves
+a PCIe client driver communicating with the PCIe driver, which in turn
+interfaces with the I2C driver. Upon powering on the PCIe device, send
+certain configurations over I2C. During the suspend phase, use the
+suspend_noirq() routine to turn off the PCIe device, as some PCIe clients
+continue transfers until this phase. During the resume_noirq() phase,
+restore power to the PCIe device and reconfigure it via I2C. This ensures
+that the PCIe device is properly configured and operational after resuming
+from a suspended state.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Use pm_runtime_force_resume() to address the failure of
+pm_runtime_get_sync() returning a negative value when runtime PM is
+disabled.
+
+Co-developed-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
 ---
-v2->v3
-- Collected RB and tested tags
+Link to V4: https://lore.kernel.org/lkml/bd699719-4958-445a-a685-4b5f6a8ad81f@quicinc.com/
 
-v1->v2
-- Used single register read to check SDA/SCL lines
+v4->v5:
+- Commit log enhanced considering Bjorn's comments by explaining PCIe usecase.
+- Enhanced comment with reason when using pm_runtime_force_resume().
+- Corrected IS_ENABLED(CONFIG_PM) condition inside geni_i2c_xfer().
+- Improved debug log as per Bjorn's suggestions during suspend, resume.
+- Reverted back comment before devm_request_irq().
+
 ---
- drivers/i2c/busses/i2c-riic.c | 30 ++++++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+Link to V3: https://lore.kernel.org/all/20241119143031.3331753-1-quic_msavaliy@quicinc.com/T/
 
-diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index a2d0cde5ac54..cf20e75da044 100644
---- a/drivers/i2c/busses/i2c-riic.c
-+++ b/drivers/i2c/busses/i2c-riic.c
-@@ -40,6 +40,7 @@
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-@@ -50,6 +51,8 @@
- #define ICCR1_ICE	BIT(7)
- #define ICCR1_IICRST	BIT(6)
- #define ICCR1_SOWP	BIT(4)
-+#define ICCR1_SCLI	BIT(1)
-+#define ICCR1_SDAI	BIT(0)
- 
- #define ICCR2_BBSY	BIT(7)
- #define ICCR2_SP	BIT(3)
-@@ -135,6 +138,27 @@ static inline void riic_clear_set_bit(struct riic_dev *riic, u8 clear, u8 set, u
- 	riic_writeb(riic, (riic_readb(riic, reg) & ~clear) | set, reg);
- }
- 
-+static int riic_bus_barrier(struct riic_dev *riic)
-+{
-+	int ret;
-+	u8 val;
-+
-+	/*
-+	 * The SDA line can still be low even when BBSY = 0. Therefore, after checking
-+	 * the BBSY flag, also verify that the SDA and SCL lines are not being held low.
-+	 */
-+	ret = readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICCR2], val,
-+				 !(val & ICCR2_BBSY), 10, riic->adapter.timeout);
-+	if (ret)
-+		return -EBUSY;
-+
-+	if ((riic_readb(riic, RIIC_ICCR1) & (ICCR1_SDAI | ICCR1_SCLI)) !=
-+	     (ICCR1_SDAI | ICCR1_SCLI))
-+		return -EBUSY;
-+
-+	return 0;
-+}
-+
- static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+v3->v4 :
+ - Enhanced commit log by explaining client usecase scenario during early resume.
+ - Covered 'usage_count' of 'struct dev_pm_info' under CONFIG_PM to compile non PM CONFIG.
+
+---
+Link to V2: https://lore.kernel.org/lkml/202410132233.P25W2vKq-lkp@intel.com/T/
+
+ v2 -> v3:
+ - Updated exact usecase and scenario in the commit log description.
+ - Removed bulleted points from technical description, added details in free flow.
+ - Used pm_runtime_force_resume/suspend() instead customized local implementation.
+ - Added debug log after pm_runtime_force_suspend().
+
+---
+
+ v1 -> v2:
+ - Changed gi2c->se.dev to dev during dev_dbg() calls.
+ - Addressed review comments from Andi and Bjorn.
+ - Returned 0 instead garbage inside geni_i2c_force_resume().
+ - Added comments explaining forced resume transfer when runtime PM
+   remains disabled.
+---
+
+    V1 link: https://patches.linaro.org/project/linux-i2c/patch/20240328123743.1713696-1-quic_msavaliy@quicinc.com/
+---
+---
+ drivers/i2c/busses/i2c-qcom-geni.c | 47 +++++++++++++++++++++++-------
+ 1 file changed, 37 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index 7a22e1f46e60..1885e1ceb11c 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -695,17 +695,31 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+ 			 int num)
  {
- 	struct riic_dev *riic = i2c_get_adapdata(adap);
-@@ -147,13 +171,11 @@ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 	if (ret)
- 		return ret;
+ 	struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
++	struct device *dev = gi2c->se.dev;
+ 	int ret;
  
--	if (riic_readb(riic, RIIC_ICCR2) & ICCR2_BBSY) {
--		riic->err = -EBUSY;
-+	riic->err = riic_bus_barrier(riic);
-+	if (riic->err)
- 		goto out;
--	}
+ 	gi2c->err = 0;
+ 	reinit_completion(&gi2c->done);
+-	ret = pm_runtime_get_sync(gi2c->se.dev);
+-	if (ret < 0) {
+-		dev_err(gi2c->se.dev, "error turning SE resources:%d\n", ret);
+-		pm_runtime_put_noidle(gi2c->se.dev);
+-		/* Set device in suspended since resume failed */
+-		pm_runtime_set_suspended(gi2c->se.dev);
+-		return ret;
++	/* During early resume stage, runtime PM is disabled and pm_runtime_get_sync()
++	 * returns error Hence use force_resume() and serve transfer.
++	 */
++	if (!pm_runtime_enabled(dev) && gi2c->suspended) {
++		#if (!IS_ENABLED(CONFIG_PM))
++		dev_dbg(dev, "Forced power ON, pm_usage_count: %d\n",
++			atomic_read(&dev->power.usage_count));
++		#endif
++		ret = pm_runtime_force_resume(dev);
++		if (ret)
++			return ret;
++	} else {
++		ret = pm_runtime_get_sync(gi2c->se.dev);
++		if (ret < 0) {
++			dev_err(gi2c->se.dev, "Error turning resources: %d\n", ret);
++			pm_runtime_put_noidle(gi2c->se.dev);
++			/* Set device in suspended since resume failed */
++			pm_runtime_set_suspended(gi2c->se.dev);
++			return ret;
++		}
+ 	}
  
- 	reinit_completion(&riic->msg_done);
--	riic->err = 0;
+ 	qcom_geni_i2c_conf(gi2c);
+@@ -715,8 +729,20 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+ 	else
+ 		ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
  
- 	riic_writeb(riic, 0, RIIC_ICSR2);
+-	pm_runtime_mark_last_busy(gi2c->se.dev);
+-	pm_runtime_put_autosuspend(gi2c->se.dev);
++	/* if Runtime PM is disabled, do force_suspend() else autosuspend the driver */
++	if (!pm_runtime_enabled(dev) && !gi2c->suspended) {
++		ret = pm_runtime_force_suspend(dev);
++		#if (!IS_ENABLED(CONFIG_PM))
++		dev_dbg(dev, "Forced power OFF, pm_usage_count: %d\n",
++			atomic_read(&dev->power.usage_count));
++		#endif
++		if (ret)
++			return ret;
++	} else {
++		pm_runtime_mark_last_busy(gi2c->se.dev);
++		pm_runtime_put_autosuspend(gi2c->se.dev);
++	}
++
+ 	gi2c->cur = NULL;
+ 	gi2c->err = 0;
+ 	return ret;
+@@ -835,7 +861,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, gi2c);
  
+ 	/* Keep interrupts disabled initially to allow for low-power modes */
+-	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq, IRQF_NO_AUTOEN,
++	ret = devm_request_irq(dev, gi2c->irq, geni_i2c_irq,
++			       IRQF_NO_AUTOEN | IRQF_EARLY_RESUME | IRQF_NO_SUSPEND,
+ 			       dev_name(dev), gi2c);
+ 	if (ret) {
+ 		dev_err(dev, "Request_irq failed:%d: err:%d\n",
 -- 
-2.43.0
+2.25.1
 
 
