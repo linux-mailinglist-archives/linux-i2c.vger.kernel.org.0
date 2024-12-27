@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-8759-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8760-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60B399FD401
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 12:53:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B62E29FD405
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 12:53:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFDD3163215
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 11:53:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 375E63A112A
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 11:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 366241F2C43;
-	Fri, 27 Dec 2024 11:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E781F4283;
+	Fri, 27 Dec 2024 11:52:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lar2jGjq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hIxsAGcZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571461F4263;
-	Fri, 27 Dec 2024 11:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B406B1F4279;
+	Fri, 27 Dec 2024 11:52:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735300353; cv=none; b=TMxRXel90vFF9tQ9DpEC+Xsc/4QkWoMo19MMrm6VRTZzyfDjwq9B8sey7jhwf5VC/BRQYLfcVynUvTmUB5ga0RtxyZcA6pIz6nPmXH0BdQZFc0371CW0+XiTItzk2Tasp5oZ6Olra8YqVMc9vaCwGsSJDzxNvvQSu0dxFiVNbaY=
+	t=1735300357; cv=none; b=Uthgi2A9vWWl+2w8VjmsurfJt3FKgaUVnfl6qsrXHvUOoi3F0dv+KMkVlGsOqoMKTYDTGx2IdI66AD/kBYoHm5ZAtnwFRC2oKzplyT003XXCPnF1ye+UZy+lOLnN+Qan88CvfurHkgPJ1iaodLUJqxPK0z9J9nhk0b1u74SmJrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735300353; c=relaxed/simple;
-	bh=64StuxBrvBnQvmF+a4yvTMMg+o+iA0UY3EvIwVFalTo=;
+	s=arc-20240116; t=1735300357; c=relaxed/simple;
+	bh=og/4mZT4bNYEAKSmR/ylW3YHosMHCE9n6VPZsM7lb2w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VSxkNuTsgeg7kCobqT1hFe2MA3McsdaciiVR+fczhezSg7+90JNXquVe09K36CIJxaXkexZyZJ3+HwMoD8AFgYrZW9ztN667iKNR7pa6wdOatLjQZ6Y2bU0rRYT3DAb/bxlbQK5O/NGe7hJ4BGPI/Mv61+NAwXCSIfz1v/U/AgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lar2jGjq; arc=none smtp.client-ip=209.85.216.43
+	 MIME-Version; b=vE6BT3d10xNrOG1yUC2YKazFOsfF9Qzfi9g2AYR9/QT9Bp1AE30D+YfuR5/OzuttZvV3yQ3TcMIGh2wNqSCTebC83OrLcoKu36+j7f8bJpvUismaE1Wa4Z6I1b9RFEZQPi3KJKPk45JulI3ly6BH1WFE1n2y8A4r91Lcpj53jhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hIxsAGcZ; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2f441904a42so9105247a91.1;
-        Fri, 27 Dec 2024 03:52:31 -0800 (PST)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2162c0f6a39so95380435ad.0;
+        Fri, 27 Dec 2024 03:52:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735300350; x=1735905150; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1735300355; x=1735905155; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F68oBqhMh44dH9Aw6MBNH7MGeSmZg+ZawOT9qNwzoiM=;
-        b=Lar2jGjqlI+KcECaHSxzm2JuJaWrneC590c4LpMEQGpZBsELjROqdRUxkw7Y6hR6Wn
-         8G78kxFP9S2nYsiJ5bXF9j0Q/SkNS3d7z05Kd7+BQvnUqjwkXc9K91KXDyAFQ5zaXbxS
-         6lMYDij+WxFoXbs+XfvGKb+Rwd+VMHu0jEp23yCxEqVgkfomwBUgB/wsngG+eK9s7wHg
-         RZbiVVD6GBDLayefrFfmEsiSy2NamIsvAHtBIf7Mg2mGKVb/UB9um5pWgkxtlHCwGtMt
-         t+vkVVMNasvALP2w4E5lLZHkTa8B1xDkUBAdjkW1Cm7GiXRCmszytq0gC8YtCc6C66SI
-         ttFg==
+        bh=SxrnLWAApnmijlLFIQl/ov451ANyf6P2dk6YwXU3Ne0=;
+        b=hIxsAGcZprTJ9n0qGJ7I0qoR+Kxgx3yZG0YL+1EfLTlwFcR2jCXAZhnf0IbRCKcGYz
+         i7N/PDYTdh4XqRB0DoIpQZf5V0arOZCYnDrZe1cqI9rXvmS0MREJVcifAmAzQDtPA31t
+         +L3QLhenIEGWIxJHyj657feZv25PieYZYMq/kqKjrvPl/rITgRBvfKdqDrvvd6QdCBks
+         mPdOBWvffWikXN/aWFbx1Dd2sWL+r6ZPLIvHny4qt+eGovzQ4kxll2Et4etBwq6jcido
+         JrDh5vWzv/DpWJDcPS/3bdgZOJyOp6Tf3DP1OwwP3HCqN79EjurzNyaxjWevyhhizcCi
+         Otsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735300350; x=1735905150;
+        d=1e100.net; s=20230601; t=1735300355; x=1735905155;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F68oBqhMh44dH9Aw6MBNH7MGeSmZg+ZawOT9qNwzoiM=;
-        b=qr+TEPHlhiOzsYB9NOTgfRF6lTJ8xRcX+l72GSacjg4tc4sZUgdU9AEnOhhCk231yK
-         PSCuiWpe5pqFRtZQnwncCfY79BggWm4LDaQPHJlljQz0102wak8C24goKE2QBwDig01v
-         +O6o2rD3u1ejnIy5euqGUvz2zt1J7mSuqjBz01LkeFA+xwpKHi0S83BSDa4T8X7kiOg8
-         5zWWORSOQ1TVL0SbCscW5s2LsGYl+FYCBYIcRzX1o9GL6MY8PR/Kno97sWjG/Hp5yYwo
-         Lrpzc4VASR+p2gCEaQ72qb2udyc8bbjSwMrnBxunuMHQNOmADlhVfypDgIJS7qsWMvCT
-         vM1g==
-X-Forwarded-Encrypted: i=1; AJvYcCVWPOAoXcmXnzmcPZHmzF68A8Ko3cSyfqVn8pR8RtZN+gBwGqYkJjceqWjY2QBQhPg1uhipi8JTXS4=@vger.kernel.org, AJvYcCXMbEuLbI4EOIJkn9t33RcaSnVHx35oBxIm4cjqd8jgrnGFD1zwtdWusznu0TXpyc/um3dh9SV+iw7VZ54W@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZN3FDHP9feYCfxSiv0je3C0IUUpgHE7CTNhXCz/xsd/XoxoKu
-	6oSnBa50g/CF4RYoeoQM8XsG0OrbdSbN2GlAjoAKjeNSpaM9Rkx+
-X-Gm-Gg: ASbGncvZSlEwfueLJROvMWc1oINx5yXxmCiSLni8Cme31Kr4uFm981PJDdjIdS0G1no
-	OO1ZIQ33sKfs0q62dB339devB/+svnRfUhAr9/tsgVCceheVKrt8W8ikUQnGwKo26tynQsS/tkP
-	NzuIvty1JttgGN8LQAsrFw56gGdMTmPEAyBaqzTNwN1WwCrumw3Hoch0PpJpCgm6+kkNb59RaPV
-	hwT+5PWvFGGtJjvRcXixNNXmiOr0jH5KYuaamNfjQrLcRbC5ekJDMKyOkqLKid2kt7mRNKBngsK
-	M63+HfQ=
-X-Google-Smtp-Source: AGHT+IE+GHwcp2U0mfwQBqgIzk2BUQI+hEo1INr+GTD4RMqz/gzyNVwPGRV/amtwD6RtAHtD1sBkbA==
-X-Received: by 2002:a05:6a00:2181:b0:72a:a7a4:b641 with SMTP id d2e1a72fcca58-72abdebb873mr31587017b3a.18.1735300350475;
-        Fri, 27 Dec 2024 03:52:30 -0800 (PST)
+        bh=SxrnLWAApnmijlLFIQl/ov451ANyf6P2dk6YwXU3Ne0=;
+        b=Q4ZGl7b4OWu3/4n0nfHvuhLY08rCv1299Y0anGZbdpnbZkJDZ+ULkVVtp5+n1jeKwr
+         L9oeveUdQRMwwxwySE0LaSqsXSdRUZiqUFd7QD0MBur9TVLpJOrswFdUz+pmEmJ/V/cD
+         0FaBVGg+PWhkIJdFfv025FXf/YeHqUn+1KlybG0lvbzEk2hZCKVn/bFgcqSy1gXqH1FQ
+         RIdrFwes0jhOI1u/8NK7nDM9yNQA1vM2bipjips9zfS3gw1skc1aLIxGSInymOQGQSJ8
+         7VJ21220Bdzcic+VpQgYba8oymOj3yQ58Ic4H3mBrfBZUbxGBjpjsK23GHeSIK0RX65A
+         6Gsw==
+X-Forwarded-Encrypted: i=1; AJvYcCWmpjDmripYji9X/65K9fSs9on3sg2RxURu9803il9C0nR29xHNnsENC8Vmro7RUGcYvp1ztaP+XIIqDGiW@vger.kernel.org, AJvYcCWuUgyfi6iw7hW8f/2/gRxRMxE5lqESe9eSNGdusWO/3Fq5oIrsrCGub1lDwllmfiiOYNl0rXIsFLQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycNfOK78dUn7wS6kVWPmGMkXxJxljJwfkqAp6e4GH5Ygiqmy34
+	va4UmEJFeRSSapEMF88tRHQqQtmEQd1abz3LqA22u0u1HUpUr63l
+X-Gm-Gg: ASbGncsrZAelDGAkSvlVHUqMJfg8vlLMtibW2QyEofcmVsiAO2o/5kSAPjK3ufXUV0H
+	iwHrphrMjLD5Xy3xRkoKJT+IzUll6E8qDpBheNlPq99UC0hqUvFFG08rh8SQshhYeLRj0zHCG++
+	a19GFfQYzVG8BEDJr/ZS0I36WhMpRu5WzxPYBO5x5zlOi+GhTb121AMEGne1ppkJ4e/AEee6tbL
+	2+GLUCeKjmdMX6jlvblVgosggaoI205LudHp/gKe5gqtGjmBZdPfqMakF7uJHr1RPcvYlxKkUDa
+	ozeDOoY=
+X-Google-Smtp-Source: AGHT+IHtSLgnEjDMksHOF6grV+q2mjiLXJSbkTz7D07bHxrB0gSSLrsfjF9hKxiqgbgqLdyJ+6xAsA==
+X-Received: by 2002:a05:6a21:648c:b0:1e2:2e4:6893 with SMTP id adf61e73a8af0-1e5e1e2979bmr43579802637.9.1735300354864;
+        Fri, 27 Dec 2024 03:52:34 -0800 (PST)
 Received: from prasmi.. ([2401:4900:1c07:9010:ac08:3a91:844a:cc65])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8dbcbbsm14363990b3a.97.2024.12.27.03.52.26
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8dbcbbsm14363990b3a.97.2024.12.27.03.52.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Dec 2024 03:52:30 -0800 (PST)
+        Fri, 27 Dec 2024 03:52:34 -0800 (PST)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Chris Brandt <chris.brandt@renesas.com>,
@@ -87,9 +87,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v3 7/8] i2c: riic: Use predefined macro and simplify clock tick calculation
-Date: Fri, 27 Dec 2024 11:51:53 +0000
-Message-ID: <20241227115154.56154-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 8/8] i2c: riic: Add `riic_bus_barrier()` to check bus availability
+Date: Fri, 27 Dec 2024 11:51:54 +0000
+Message-ID: <20241227115154.56154-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241227115154.56154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20241227115154.56154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -103,9 +103,15 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Replace the hardcoded `1000000000` with the predefined `NANO` macro for
-clarity. Simplify the code by introducing a `ns_per_tick` variable to
-store `NANO / rate`, reducing redundancy and improving readability.
+Introduce a new `riic_bus_barrier()` function to verify bus availability
+before initiating an I2C transfer. This function enhances the bus
+arbitration check by ensuring that the SDA and SCL lines are not held low,
+in addition to checking the BBSY flag using `readb_poll_timeout()`.
+
+Previously, only the BBSY flag was checked to determine bus availability.
+However, it is possible for the SDA line to remain low even when BBSY = 0.
+This new implementation performs an additional check on the SDA and SCL
+lines to avoid potential bus contention issues.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
@@ -118,53 +124,76 @@ v2->v3
 - Collected RB and tested tags
 
 v1->v2
-- Collected RB tag from Geert
+- Used single register read to check SDA/SCL lines
 ---
- drivers/i2c/busses/i2c-riic.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-riic.c | 30 ++++++++++++++++++++++++++----
+ 1 file changed, 26 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index 378887b133a5..a2d0cde5ac54 100644
+index a2d0cde5ac54..cf20e75da044 100644
 --- a/drivers/i2c/busses/i2c-riic.c
 +++ b/drivers/i2c/busses/i2c-riic.c
-@@ -45,6 +45,7 @@
+@@ -40,6 +40,7 @@
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
  #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
-+#include <linux/units.h>
- 
+@@ -50,6 +51,8 @@
  #define ICCR1_ICE	BIT(7)
  #define ICCR1_IICRST	BIT(6)
-@@ -312,6 +313,7 @@ static int riic_init_hw(struct riic_dev *riic)
+ #define ICCR1_SOWP	BIT(4)
++#define ICCR1_SCLI	BIT(1)
++#define ICCR1_SDAI	BIT(0)
+ 
+ #define ICCR2_BBSY	BIT(7)
+ #define ICCR2_SP	BIT(3)
+@@ -135,6 +138,27 @@ static inline void riic_clear_set_bit(struct riic_dev *riic, u8 clear, u8 set, u
+ 	riic_writeb(riic, (riic_readb(riic, reg) & ~clear) | set, reg);
+ }
+ 
++static int riic_bus_barrier(struct riic_dev *riic)
++{
++	int ret;
++	u8 val;
++
++	/*
++	 * The SDA line can still be low even when BBSY = 0. Therefore, after checking
++	 * the BBSY flag, also verify that the SDA and SCL lines are not being held low.
++	 */
++	ret = readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICCR2], val,
++				 !(val & ICCR2_BBSY), 10, riic->adapter.timeout);
++	if (ret)
++		return -EBUSY;
++
++	if ((riic_readb(riic, RIIC_ICCR1) & (ICCR1_SDAI | ICCR1_SCLI)) !=
++	     (ICCR1_SDAI | ICCR1_SCLI))
++		return -EBUSY;
++
++	return 0;
++}
++
+ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
  {
- 	int ret;
- 	unsigned long rate;
-+	unsigned long ns_per_tick;
- 	int total_ticks, cks, brl, brh;
- 	struct i2c_timings *t = &riic->i2c_t;
- 	struct device *dev = riic->adapter.dev.parent;
-@@ -375,8 +377,9 @@ static int riic_init_hw(struct riic_dev *riic)
- 	 * Remove clock ticks for rise and fall times. Convert ns to clock
- 	 * ticks.
- 	 */
--	brl -= t->scl_fall_ns / (1000000000 / rate);
--	brh -= t->scl_rise_ns / (1000000000 / rate);
-+	ns_per_tick = NANO / rate;
-+	brl -= t->scl_fall_ns / ns_per_tick;
-+	brh -= t->scl_rise_ns / ns_per_tick;
- 
- 	/* Adjust for min register values for when SCLE=1 and NFE=1 */
- 	if (brl < 1)
-@@ -386,8 +389,7 @@ static int riic_init_hw(struct riic_dev *riic)
- 
- 	pr_debug("i2c-riic: freq=%lu, duty=%d, fall=%lu, rise=%lu, cks=%d, brl=%d, brh=%d\n",
- 		 rate / total_ticks, ((brl + 3) * 100) / (brl + brh + 6),
--		 t->scl_fall_ns / (1000000000 / rate),
--		 t->scl_rise_ns / (1000000000 / rate), cks, brl, brh);
-+		 t->scl_fall_ns / ns_per_tick, t->scl_rise_ns / ns_per_tick, cks, brl, brh);
- 
- 	ret = pm_runtime_resume_and_get(dev);
+ 	struct riic_dev *riic = i2c_get_adapdata(adap);
+@@ -147,13 +171,11 @@ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
  	if (ret)
+ 		return ret;
+ 
+-	if (riic_readb(riic, RIIC_ICCR2) & ICCR2_BBSY) {
+-		riic->err = -EBUSY;
++	riic->err = riic_bus_barrier(riic);
++	if (riic->err)
+ 		goto out;
+-	}
+ 
+ 	reinit_completion(&riic->msg_done);
+-	riic->err = 0;
+ 
+ 	riic_writeb(riic, 0, RIIC_ICSR2);
+ 
 -- 
 2.43.0
 
