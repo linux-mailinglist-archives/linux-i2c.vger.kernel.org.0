@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-8757-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8758-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E44E9FD3FB
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 12:53:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 185CF9FD3FE
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 12:53:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E143C1882B1F
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 11:53:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB296162513
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 11:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8EF8156228;
-	Fri, 27 Dec 2024 11:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 967D41F3D46;
+	Fri, 27 Dec 2024 11:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E9ge8OQK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZjVNsgTk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E021F3D26;
-	Fri, 27 Dec 2024 11:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010721F3D27;
+	Fri, 27 Dec 2024 11:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735300344; cv=none; b=XXWB5Fu/CNwBj1k7iSrDOqayMweo04gjrGt+NGQKlKGMI8DpfgIIX8iM4qVOENH6SDRbPJFehOjlu57HdYhAxh/Zcb7EgJv6QesnxtYJjtxokx1e+tYum/RL8scHYqLs2rM1iEYwWyImY6atfXFR9WflotPvldgK2neDWo0OFdg=
+	t=1735300348; cv=none; b=QkCiiqXgVcsLdDLbgE8r5/Ulrpz/FT93a9SLzxrnzes0RtYvLXRouVs6vY9syfAdTI/F6s1RzPbudOQ1i89/w6rplr6TgFNSCvpz/UH+q6+LKmsbnn/3unUxwa20uUR1OK68/oBHLfcA62N/h0IAmxjv1ookENlOdihsdI5Uii4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735300344; c=relaxed/simple;
-	bh=pWYrPctcHjB+u0MD5MK8kQG+ASNgsWEjBAQzgKyQI9s=;
+	s=arc-20240116; t=1735300348; c=relaxed/simple;
+	bh=D/DsT1pJOp2v92eWJ6q2fpcaxKGx/oBC/neVfd9Jws4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rI7RalXCUGUlht8p+FfgQwEb5LFl+VsDydCLpWcDGvc9trEmnmHf4qnzbed2gNehQpWhY5G2D75V9gYtvhuZ4Tw4nyN9Mnwri3vPjD5pKImOHdvmjwnynJDIQvv5tLKEQGH65wAfrLy7+XSquQOMib6K/R8m+XM+sJh8TrD6YKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E9ge8OQK; arc=none smtp.client-ip=209.85.214.178
+	 MIME-Version; b=sGIR0uvIrACitsLahYyrm+xO8mXsVVRs8TTXkPWPUDuMA66zv4YNs2Uug2GQF6Xnyzsrv2JevFjHFSqur8gapiPRsbM0tvhX7j7LjVjS7mT90R+P6QBf2RUfV311KT4jYHY+Qbyu4MCIT9+BVQ9AzyCQ2DXw00+XP7BeZ+wacQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZjVNsgTk; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2162c0f6a39so95378365ad.0;
-        Fri, 27 Dec 2024 03:52:22 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2161eb95317so89874805ad.1;
+        Fri, 27 Dec 2024 03:52:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735300342; x=1735905142; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1735300346; x=1735905146; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N8oY5oTbQVZDPH/A0GVWyEqZ6b/K+sdv50js6rIf5Sk=;
-        b=E9ge8OQKJMoDnLT26Ht2nlncKtgAIrSO0o+wQuhWcTcKzJClc8ozqygpVkCSF0+G6w
-         TuRLtHOLhYmjMm3W6cQ/SrsmhDlNmcOa0gvO55wdMcRSvxKEvDlJylEPEI0x8Oh46naE
-         /icivn3ALWS4d5QEpIld50YijN+uiP4TTAsUB5WCeBwXLLWiJk9SL7/wrFsQ7VC/yTd+
-         oJE/lhikjFpVKRvx8WxnZoOnCSlCrH22JUb7sp5lMXtAWsXrwpeK8tOxWWUDB+6bv0tZ
-         bsKBV1WG6y4f1gMZSWJ8DI1VTcKthM4pyyuPwctNXn1wbpxDbi70rxiGHp+p7R4j8hds
-         9plw==
+        bh=8MX7zL6e/eANjDZsXHEbEpyJVdlNQUXGXrD7nBKxrgM=;
+        b=ZjVNsgTkmcGTzEnCYj5B8+yQjftcpoAsYs7FPOPPY74ilbcfdHCYfC0/dom6kZ7p9k
+         bOVdKcITA2TrjTAB9LJrXa4Ny32pCx9O0Pj/nbt0iHJR6buApdErbLyGUA9zJsmcG07b
+         hCkS2Yd1ManjUm9mtBXVcBkffec1iibD3co/426L9PBFrma4Aqd9v9OFJN8tayc4pLlP
+         3t3YqGpsMaial6l+JYNq49KXGcybby+TGjBg2Gcu5ju3mUA1otR3PZAuBKIorNn8vl4I
+         elc6KFAYpMbx8i8GLZ+tp4jwzwvmCa/KclEZiPs+zX0zWT+oE0Sycdl2RpogxrDhUryp
+         YKQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735300342; x=1735905142;
+        d=1e100.net; s=20230601; t=1735300346; x=1735905146;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N8oY5oTbQVZDPH/A0GVWyEqZ6b/K+sdv50js6rIf5Sk=;
-        b=hq5f6D8CrS7WG2JBdTRRc7QaVbJg+x4umW5KZAqGwHWGWVn3advHHUCotxrwYq7+RE
-         x0ed82E7v0+NguARL4/Qc7FiZQQjKiWdblbG/6f7cxJP6k4cGlJDtDxu0S9rendt+pEt
-         fNi/rbczkMFpr3sv+O/oNIAgAAb3A0Ub2gmL9oo9kctaMQPYvLDS2Ed3FXBFOC0p0soT
-         oy0MTv+qqGhSus1jzR6rwvIBxVlm/6xTmvcCTdR67zqTkAbpzbXn8vPBYwUHqsQpt3t+
-         cKGt/aJOj48btkH3hE/svkRplmD/wfKr3qGptIEmfJFaFWcIijBtvxAFecCLwYureCQc
-         ke8w==
-X-Forwarded-Encrypted: i=1; AJvYcCU7AdMg421wqbiQnIDtB6qv7/m9WSnEIySEw5b444UX7aY/gb7q6XT+d1HbxJRfrszk21OGnW5uFMo=@vger.kernel.org, AJvYcCVp9hUCWx24S5x0nPNrhruuDZxYJpvF5YZYU5Pn7tZVD/919Acy14w8bB9T99my/rpOqD6DowN0u+duw9fT@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNQw3s9FKPM4EkvQTAc8cozczZZoQk7kP+VkjXDDtbnxnN6ALV
-	i1ZYTOUwuCkMx+1exmmvez/hxSShDurOInKkcD1D9uRwADXphXiH
-X-Gm-Gg: ASbGncv0W6H8XM+11Fk/TIPEMe0bWWjWt5Sj03KnwE7opGWp3xVGlQ0cT7YT7DxlOwj
-	g6rN3XLBVJj2iau3lTkNgX3QKhgPsr8Z6pav8CMR8z5HLq56VzVP7RHjaEorNkkLlbwWdcn6nb7
-	Yreu/lMIgDDhS/jYQQrz7yVE8rSjoV1yXbdEPDC8MASisIjHwxRSj9iPJrg+6YZfaGjJ9PHPnxf
-	xcCwFpoorBkidXS9W/4w5/4FxHEUQ2bgdu8BA55i9czyLts1DVqkU5wZr/LyVwo9BmINxRdzPh1
-	SPJAUkU=
-X-Google-Smtp-Source: AGHT+IHhOrlXifDprZrXy/XB3FzmU5oowjgUWr7eScjm2AeiT3HSQ6NsqfJduujIZteUgCktiysOuw==
-X-Received: by 2002:a05:6a21:3291:b0:1e1:a434:296f with SMTP id adf61e73a8af0-1e5c6ef034bmr43880502637.10.1735300342244;
-        Fri, 27 Dec 2024 03:52:22 -0800 (PST)
+        bh=8MX7zL6e/eANjDZsXHEbEpyJVdlNQUXGXrD7nBKxrgM=;
+        b=vxGHtYRiVP3V45D14X0Gqbh2I8nPbGRUc7Fumus9GAangF1lEJwx7kUgHDQ/rU/2Gr
+         VrhELPZddnd4pTs1f0wiSGL2TRiONT+I5sACl2PtPApMtYorkGMWIE28FacPVDJCu8iF
+         z3AFHbKK1kXSJco/86xcFtSXXup6WLNd1AWNj/Ju5p9kSAFBITRKe0sEP7czWSBblsC4
+         qNkdhdpxp/8S4J2mKemAYmJQF7ME282nylJtUDqPJZ0uBzACigH6Y5ZSFtDvtuTz3Pvj
+         le7YCkLfzCiOD7dVl6+UOk9RxZl8r6l+GGWhuHas9oRwm+Ve0NOWHVvSgeNW+pYBbksU
+         y1yQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVgx4tjgyq6Oipc0fL5Yqe+h7B+E1pWVgPvfAhRZUtC1C5FUBeBfcTbt3f2nZPDBC/5ej2DEA3kXb/JMra+@vger.kernel.org, AJvYcCW1sl1z/1gIKFWKYvM3hthtpHflj0Gv7Mz7dGD+tXX/AeHSinSgBhbOw9xbcGCD0sWFS9eSOBV5YZ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwxUVzl+V89w5ziaiMf/h59ZeYFTcE6h83UPqIzTbDWXQECva9
+	69BhdW1Wcc1oWxp/S/IKgX4P2w7jPy7tXqmtnEWASvJ4GUQ/Pkdu
+X-Gm-Gg: ASbGncu2Mu4HlNlTVKntU6eZJcWLMWUec21h+4JMzZdiOQkorlXo1/gGhETjik51x9b
+	jr6quU+HMHWcfyrmID8fCjDtFDEMm5LmlEDX/EH/JJedP+B2S929gXWcb6of+wc+ORqX8LmPyyp
+	IUNW29ZfVa9rQijlcm5CE+UYfB4S6STasrr0A1y2tnqztEHO1LGlA/a3nd/6Xfy8IrVrINy4W8l
+	pk88dIRw1g7u4zOfKR1iljV6w70x6nwgZHPSfYGNA1ApRFohq/a8BAWsWEt0BlEhphdAPkWHN/+
+	8ReNVZ4=
+X-Google-Smtp-Source: AGHT+IHVYuJMQbzX2/MmsJlcNCQV6d6xSNOiE++9sMeb34z/sZ8avS7a8K8n+uzFcSL564OuhFGLeA==
+X-Received: by 2002:a05:6a21:1505:b0:1e0:9cc2:84b1 with SMTP id adf61e73a8af0-1e5e0800447mr44647770637.30.1735300346360;
+        Fri, 27 Dec 2024 03:52:26 -0800 (PST)
 Received: from prasmi.. ([2401:4900:1c07:9010:ac08:3a91:844a:cc65])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8dbcbbsm14363990b3a.97.2024.12.27.03.52.18
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8dbcbbsm14363990b3a.97.2024.12.27.03.52.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Dec 2024 03:52:21 -0800 (PST)
+        Fri, 27 Dec 2024 03:52:25 -0800 (PST)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Chris Brandt <chris.brandt@renesas.com>,
@@ -87,9 +87,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v3 5/8] i2c: riic: Make use of devres helper to request deasserted reset line
-Date: Fri, 27 Dec 2024 11:51:51 +0000
-Message-ID: <20241227115154.56154-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 6/8] i2c: riic: Mark riic_irqs array as const
+Date: Fri, 27 Dec 2024 11:51:52 +0000
+Message-ID: <20241227115154.56154-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241227115154.56154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20241227115154.56154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -103,10 +103,8 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Simplify the `riic_i2c_probe()` function by using the
-`devm_reset_control_get_optional_exclusive_deasserted()` API to request a
-deasserted reset line. This eliminates the need to manually deassert the
-reset control and the additional cleanup.
+The riic_irqs array describes the supported IRQs by the RIIC driver and
+does not change at runtime.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
@@ -118,48 +116,24 @@ v2->v3
 - Collected RB and tested tags
 
 v1->v2
-- Updated error message
+- Collected RB tag from Geert
 ---
- drivers/i2c/busses/i2c-riic.c | 17 ++---------------
- 1 file changed, 2 insertions(+), 15 deletions(-)
+ drivers/i2c/busses/i2c-riic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index ddae4b74a86b..edf2212e96ea 100644
+index edf2212e96ea..378887b133a5 100644
 --- a/drivers/i2c/busses/i2c-riic.c
 +++ b/drivers/i2c/busses/i2c-riic.c
-@@ -422,11 +422,6 @@ static struct riic_irq_desc riic_irqs[] = {
- 	{ .res_num = 5, .isr = riic_tend_isr, .name = "riic-nack" },
- };
+@@ -414,7 +414,7 @@ static int riic_init_hw(struct riic_dev *riic)
+ 	return 0;
+ }
  
--static void riic_reset_control_assert(void *data)
--{
--	reset_control_assert(data);
--}
--
- static int riic_i2c_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -447,18 +442,10 @@ static int riic_i2c_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(riic->clk),
- 				     "missing controller clock");
- 
--	riic->rstc = devm_reset_control_get_optional_exclusive(dev, NULL);
-+	riic->rstc = devm_reset_control_get_optional_exclusive_deasserted(dev, NULL);
- 	if (IS_ERR(riic->rstc))
- 		return dev_err_probe(dev, PTR_ERR(riic->rstc),
--				     "Error: missing reset ctrl\n");
--
--	ret = reset_control_deassert(riic->rstc);
--	if (ret)
--		return ret;
--
--	ret = devm_add_action_or_reset(dev, riic_reset_control_assert, riic->rstc);
--	if (ret)
--		return ret;
-+				     "failed to acquire deasserted reset\n");
- 
- 	for (i = 0; i < ARRAY_SIZE(riic_irqs); i++) {
- 		ret = platform_get_irq(pdev, riic_irqs[i].res_num);
+-static struct riic_irq_desc riic_irqs[] = {
++static const struct riic_irq_desc riic_irqs[] = {
+ 	{ .res_num = 0, .isr = riic_tend_isr, .name = "riic-tend" },
+ 	{ .res_num = 1, .isr = riic_rdrf_isr, .name = "riic-rdrf" },
+ 	{ .res_num = 2, .isr = riic_tdre_isr, .name = "riic-tdre" },
 -- 
 2.43.0
 
