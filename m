@@ -1,158 +1,113 @@
-Return-Path: <linux-i2c+bounces-8778-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8777-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 888BE9FD856
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 00:49:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C23859FD846
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 00:27:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24D0E1884EC4
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 23:49:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62EB51883FA4
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Dec 2024 23:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AAF914A62A;
-	Fri, 27 Dec 2024 23:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76DC1158DC6;
+	Fri, 27 Dec 2024 23:27:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="bY0BWLKt"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 12.mo581.mail-out.ovh.net (12.mo581.mail-out.ovh.net [178.33.107.167])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03561547F3
-	for <linux-i2c@vger.kernel.org>; Fri, 27 Dec 2024 23:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.33.107.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C17155352
+	for <linux-i2c@vger.kernel.org>; Fri, 27 Dec 2024 23:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735343350; cv=none; b=MYNzI4nsVrkYJqwvZI8EjuITRg5MEKRNxpcdWxaiEcuotwpGH18DWLvEkigQv7M34lIzZkOwmLGehsp3BGfIqA2hcrx9ypiL+53Z67jK4aevcikfP6VrzTnHjsBDhyT1iJKJOJgHFrd0ixgrrK+JURUS3v/rzksGuP/NpS6aej4=
+	t=1735342067; cv=none; b=kj577Wr/w1iYm/f5PSKMm72pA7OWr5HAC6GL0a3MaGV/MtCnMHs2illj//1hNWbX3mNwG5Qkkodz489q0VGhgvHKoh7Tok9T5gk6DS6CToere96GGa0g9F7CL2yGbWQceKkzrD3642RE/QU/6MLmz+sxm6P2Sv3fRkAdRyDnUU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735343350; c=relaxed/simple;
-	bh=wBn9uz/w0EiNkmFY57lHz7M0KHBUCBPGBvzCnVi6Qm0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TYJAEsqCMIMt8kED4FjcTcBwllMqYrVa5LIJa0qrIykdDboXm4ufFzuz1XCvMSCDdkTqmduHM3Mzy7Gyt8AtqyQWlWRnbSoyFnieQn0THd2sIu4VTO4+mLPG9sw7S5nSyQTm8SHkpTSFkOWmrwB//XqANDTjVtOwZwkR55nwbxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=178.33.107.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director10.ghost.mail-out.ovh.net (unknown [10.109.176.103])
-	by mo581.mail-out.ovh.net (Postfix) with ESMTP id 4YKgHP3hPlz1H02
-	for <linux-i2c@vger.kernel.org>; Fri, 27 Dec 2024 22:32:49 +0000 (UTC)
-Received: from ghost-submission-5b5ff79f4f-rcdtk (unknown [10.110.101.246])
-	by director10.ghost.mail-out.ovh.net (Postfix) with ESMTPS id B99091FD42;
-	Fri, 27 Dec 2024 22:32:48 +0000 (UTC)
-Received: from etezian.org ([37.59.142.110])
-	by ghost-submission-5b5ff79f4f-rcdtk with ESMTPSA
-	id 3HomGxArb2cnXRkAKJWVUA
-	(envelope-from <andi@etezian.org>); Fri, 27 Dec 2024 22:32:48 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-110S00481b48f1e-0671-40b4-ba33-6822b09e1607,
-                    1CF389E8DC6EE1CDBE94366E1222F406669E166D) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:197.26.54.218
-From: Andi Shyti <andi.shyti@kernel.org>
-To: linux-arm-msm@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-	Vladimir Zapolskiy <vz@mleia.com>
-Subject: [PATCH v3 2/2] i2c: qcom-geni: Simplify error handling in probe function
-Date: Fri, 27 Dec 2024 23:32:30 +0100
-Message-ID: <20241227223230.462395-3-andi.shyti@kernel.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241227223230.462395-1-andi.shyti@kernel.org>
-References: <20241227223230.462395-1-andi.shyti@kernel.org>
+	s=arc-20240116; t=1735342067; c=relaxed/simple;
+	bh=l1bt3gioY/SRJvkgdIR9/UbyqKiq3EZKPnl7Mh2rx38=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BUWLDxN0uuSeyYZ0t9p/HPP9kfohWFnoxR0IDm6XocThpr/7kVOdefNQyfLPPHk5SO6VO5T9makdJg2yEO5b/Bt132k4esNQFOER7/vwjYPCkGpGj3dF6Ziu/Iv7fc0vXbQrwo+ZQ/QxOmMl/xkyl08DIbTKCEU5iIrwk6LAJDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=bY0BWLKt; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=l1bt
+	3gioY/SRJvkgdIR9/UbyqKiq3EZKPnl7Mh2rx38=; b=bY0BWLKt8EhTZ5Cl2MDo
+	lhuT5kYrAsdVB7EuQ0pSBiPffdqXlFNoRO4QE5PdicIBNDDScTPDJlV1uAfFqg/T
+	upCN+9HufmlOzRaA3pXZOaX8aLwEt/4UFRmodPojLN3vOiSuPvNCwvKh5DQZHMaf
+	2b4Z5vlwMoelQXF0UhrKY49negj8yLk6yNqJR1s4F4QZuDQYAJEcuwmJN+1GdB8Q
+	41KIP+xPpGpZ2FjxaZwlJMsdscizwZe3PfLhudpiFzmDoUeR6LhxjU8ThWrW576D
+	NmUY1c3jKHFmeypUj0MRVT8kyrAJpQve1++vbxf455lwMohgJj7g4ObDt0F9NBp9
+	AQ==
+Received: (qmail 3281739 invoked from network); 28 Dec 2024 00:27:39 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 28 Dec 2024 00:27:39 +0100
+X-UD-Smtp-Session: l3s3148p1@DegHz0gqqNgujnsY
+Date: Sat, 28 Dec 2024 00:27:39 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] i2c-host-fixes for v6.13-r5
+Message-ID: <Z28360kVxXxkiPyw@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>
+References: <fznmpnkmgyh37tcpmjnvccjl5bc5sjpzspfwvyxv5k4hq57zze@ng233ic3mfye>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 3103261619345951309
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddruddvudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpefgudevjeetgeetlefhteeuteehgeefhefhkedtvdelheethfehveekudelueeuveenucfkphepuddvjedrtddrtddruddpudeljedrvdeirdehgedrvddukedpfeejrdehledrudegvddruddutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekudgmpdhmohguvgepshhmthhpohhuth
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="685GEHycCtB1PTF8"
+Content-Disposition: inline
+In-Reply-To: <fznmpnkmgyh37tcpmjnvccjl5bc5sjpzspfwvyxv5k4hq57zze@ng233ic3mfye>
 
-Avoid repeating the error handling pattern:
 
-        geni_se_resources_off(&gi2c->se);
-        clk_disable_unprepare(gi2c->core_clk);
-        return;
+--685GEHycCtB1PTF8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Introduce a single 'goto' exit label for cleanup in case of
-errors. While there are currently two distinct exit points, there
-is no overlap in their handling, allowing both branches to
-coexist cleanly.
 
-Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
----
- drivers/i2c/busses/i2c-qcom-geni.c | 33 ++++++++++++++++--------------
- 1 file changed, 18 insertions(+), 15 deletions(-)
+> Attached is the pull request for rc5. I have also included two
+> patches from Conor for the Microchip driver. These have been
+> waiting for way too long, and I decided to include them since I
+> don't have anything against them.
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 01db24188e29..7bbd478171e0 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -867,14 +867,13 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 
- 	ret = geni_se_resources_on(&gi2c->se);
- 	if (ret) {
--		clk_disable_unprepare(gi2c->core_clk);
--		return dev_err_probe(dev, ret, "Error turning on resources\n");
-+		dev_err_probe(dev, ret, "Error turning on resources\n");
-+		goto err_clk;
- 	}
- 	proto = geni_se_read_proto(&gi2c->se);
- 	if (proto != GENI_SE_I2C) {
--		geni_se_resources_off(&gi2c->se);
--		clk_disable_unprepare(gi2c->core_clk);
--		return dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
-+		ret = dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
-+		goto err_resources;
- 	}
- 
- 	if (desc && desc->no_dma_support)
-@@ -886,11 +885,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 		/* FIFO is disabled, so we can only use GPI DMA */
- 		gi2c->gpi_mode = true;
- 		ret = setup_gpi_dma(gi2c);
--		if (ret) {
--			geni_se_resources_off(&gi2c->se);
--			clk_disable_unprepare(gi2c->core_clk);
--			return ret;
--		}
-+		if (ret)
-+			goto err_resources;
- 
- 		dev_dbg(dev, "Using GPI DMA mode for I2C\n");
- 	} else {
-@@ -902,10 +898,9 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 			tx_depth = desc->tx_fifo_depth;
- 
- 		if (!tx_depth) {
--			geni_se_resources_off(&gi2c->se);
--			clk_disable_unprepare(gi2c->core_clk);
--			return dev_err_probe(dev, -EINVAL,
--					     "Invalid TX FIFO depth\n");
-+			ret = dev_err_probe(dev, -EINVAL,
-+					    "Invalid TX FIFO depth\n");
-+			goto err_resources;
- 		}
- 
- 		gi2c->tx_wm = tx_depth - 1;
-@@ -942,10 +937,18 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 
- 	dev_dbg(dev, "Geni-I2C adaptor successfully added\n");
- 
--	return 0;
-+	return ret;
-+
-+err_resources:
-+	geni_se_resources_off(&gi2c->se);
-+err_clk:
-+	clk_disable_unprepare(gi2c->core_clk);
-+
-+	return ret;
- 
- err_dma:
- 	release_gpi_dma(gi2c);
-+
- 	return ret;
- }
- 
--- 
-2.45.2
+Thanks, pulled!
 
+> Lastly, I think this will be the final pull request of 2024 and,
+> since I have the privilege of being the maintainer of this
+> community, I want to take this chance to send my best wishes to
+> everyone here for an amazing end to 2024 and a great start to
+> 2025.
+
+Fully seconded. All the best to you all!
+
+
+--685GEHycCtB1PTF8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdvN+YACgkQFA3kzBSg
+KbYs9w//ZOfteoeq4RoLKEHYGFUk1xaiiyatUFbENrFfNX1sTcRWHqJ+mBRpuUCu
+LDWHZ6KvmfcEbPrzi/T34pw9RzoxCTqvmjYVwtgGzFRgFBKP8VNgh7UAvTDgWQyO
+nxgubtcMHypqrObru3LzF5pydg43Ax4PeoubhvFCbzv/rluZU7tFdqmGZAI/WFlZ
+YGRaGYvMWaj+8RQB783bDEgQ/PVX+03dqldyAdikg6FtoTgoUvHXVEvUNMYtk6N3
+m1YNTezYOECcfTJfEDaAqf0YZo8yFoBz01DSVCywybdvkDfR1xKRh+gp7zGWfgus
+71KkBLqKz9tl1kzD0cJIZEjFT0PG4++eVm7ppGR23fnLCgBO5FOlDMbRrp0kOtYs
+rzZBda+SK2GFgExnmOHjM5bZLeAM/C5azBVEcIG1cFnj5VqSWplHG586uSPeHasm
+/S/4MMPrnZHba6nEMX7koe5n4DlDF5HuzLPVEMywrsdJxyJL6b0G4ZWI+h3x2tq/
+oKoNaZLLwD+8E639EL1bT/L/nVCwrc4oWbDOQ6unydi91xmHIlCpLZ5Dld9f5OIS
+5u55HrIQ7HkXIwmo1RRoOXILbREkOaDUUD2yCb/vrDbKoAx3xYFs09JtzA3O5fiS
+FsYfF4zGo5hTVmu2GHl3c4bSBO7zUr6HX79eOjx42X6Q1Jwk+bQ=
+=WYeT
+-----END PGP SIGNATURE-----
+
+--685GEHycCtB1PTF8--
 
