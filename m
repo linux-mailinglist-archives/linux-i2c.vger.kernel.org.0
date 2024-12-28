@@ -1,150 +1,148 @@
-Return-Path: <linux-i2c+bounces-8792-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8793-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E7CE9FDC54
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 22:45:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F07D9FDC55
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 22:51:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9A9016146A
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 21:45:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22DAB1882F52
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 21:51:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 023A4192D79;
-	Sat, 28 Dec 2024 21:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8B71917E4;
+	Sat, 28 Dec 2024 21:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g3/Lmy8Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ov7TIic6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4069118A6CE
-	for <linux-i2c@vger.kernel.org>; Sat, 28 Dec 2024 21:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2653C45009;
+	Sat, 28 Dec 2024 21:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735422319; cv=none; b=RudGlhxduAndg03hwS/YVQ6AdGGDf3Q3QN3GcFbglaOXEPH20qhs5RVTzjPMW+FFocu9dePLy2PJZ8XI94w7l17Y825cNnWab430M7wLXgJn2LTLk7p3wAzt+H3JefyA0x7zDLuW8ykbn8vh4p1OcU+0m0JUMJeBrojoCPQvWzA=
+	t=1735422661; cv=none; b=DL1hW59cnEkN0qBd49WleLEQQQpYi5gNFHakwxR+3wWHOoUNoV/1s89nlXQOLuTlCALnbKoDDIc+/7eEMNWCgDKmrq9ywgiU7Py6NZB8jIGGTFRxhOSqGf9L1dqizgmiGii7+QJ7ev5UOeWzgREHJUIq4OBxm+tUDV+F+3dtPwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735422319; c=relaxed/simple;
-	bh=zKXyaOzgTDZNTU89OEAMpGikt47btCzpmQNgMgfWTyk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AT4ddihLA4Rs8AOwu+AWYTGFZLy1cGQYTmZNmCUh88eny5C6LFNFI6N1u1RaUhRSKr3RifMTU0PpobsAKZ3FLZMZdP9wQ5vMIcofQtaXqOaR6B0i4zfeX4fS0355qmlBYAUZ3q9b0nyxX6oVXetc8dyIwj9yn2C5O2eSrsdAvSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g3/Lmy8Y; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735422318; x=1766958318;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=zKXyaOzgTDZNTU89OEAMpGikt47btCzpmQNgMgfWTyk=;
-  b=g3/Lmy8YtqPmr1oDKDcL10rDV1T80gLtTfc0kKz+fFIUTxyfzQk2cRGY
-   A1Ym4ISBCNRbFsE7RpxkHrc0voUiIQ+Z68SupmBdkLxR8vGrabzDrLjio
-   wx1S/yfsz7XFlM/zS28kC6ggs01X1JsWfwl2fQtyYlOeIFpCLvzcuRC4u
-   5vVwC2uUNwQa6SKU45wFzKVyHkXxVOSyFcOTAckojYmTSGSsyUmw6wM3O
-   rCm/0cGtBFmX4MkF0o4aJfhSJjeK76OutjiD5cnHIQS2Bu7m/4edNHQwT
-   M8MnMWElRhlpRfxvG9A3u2pOaDY9Tf55WeUUf5a8+BhZxUIV/9b3v4s/K
-   A==;
-X-CSE-ConnectionGUID: 5K6h8BpgR3m+a5STsNlveA==
-X-CSE-MsgGUID: 5yWQE7GqTFKO3/Ja79prCQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="35077144"
-X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
-   d="scan'208";a="35077144"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 13:45:17 -0800
-X-CSE-ConnectionGUID: pE0uwDFTR36dWjFNpofyXQ==
-X-CSE-MsgGUID: DVXJVLRiSKeju1MY3bC5aQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="101279148"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 13:45:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tRecS-0000000DUSY-3evc;
-	Sat, 28 Dec 2024 23:45:12 +0200
-Date: Sat, 28 Dec 2024 23:45:12 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: designware: Actually make use of the I2C_DW_COMMON
- and I2C_DW symbol namespaces
-Message-ID: <Z3BxaFhtI1guVSle@smile.fi.intel.com>
-References: <20241203173640.1648939-2-u.kleine-koenig@baylibre.com>
- <Z09bp9uMzwXRLXuF@smile.fi.intel.com>
- <aenflylxg46hie6yj2hzlelnzbq42mox24fzzz7o44dvb3j575@r2hgad4ghgym>
- <Z0-vKE3FLxa2BWmS@smile.fi.intel.com>
- <k75ryxfif2jhzb4b6ipkyxol22rt4p4uv4dquajkiwj5m5du6s@mxe2q7s2n575>
- <Z1Fb7eYPr8y_l2dT@smile.fi.intel.com>
- <907e39c2-ca06-4b51-9fb0-5b0745bf0f56@linux.intel.com>
- <Z1Fjuo9Js0NzX5lH@smile.fi.intel.com>
- <3lngh3xdllg5bx5u6uhzn42r557axqyrdpcmezg33nv75rngjv@pxifwvw3rhae>
+	s=arc-20240116; t=1735422661; c=relaxed/simple;
+	bh=izvaR50vbFkqLYbm8Y2Li10f44wd+l6UapmM8wF39r0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UCSwZEIiEub2MkqmGnYHShffVfTwd2zc3XJtlDUg1dokERRms2uR4dEj0Ew4g/BK1yn1SidSVmWPA9aubGJjna4CsK4AkVGr/+2aA7ZAepQMFNmCD30q0faRR+Zc0QJ8maR63UEwud9iOCnuEkxzu7UkIxitg+GfrPola8cPyfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ov7TIic6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0622FC4CECD;
+	Sat, 28 Dec 2024 21:50:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735422659;
+	bh=izvaR50vbFkqLYbm8Y2Li10f44wd+l6UapmM8wF39r0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=ov7TIic6AiCD0LRtc7dxozmSWv+O/z1GSFRWBYqt+URL94gLxMRBjLIfh5nbg/u77
+	 tGv1hY0P1DPYqBcX1FXzqgWjTEDN+/bA1tb7OTjR1HB9oNlxN7hnRTxNLR4kCMBbZr
+	 m/66avGEOKC4SGEobUcrKN9KnflYey5Dx9aZ3w1w8bsnZdnE7eou/Gz8uMvuwRUIFo
+	 oaPdHwHZ/y8MQB4e4erbM2OS/LfTcEINlH88NtPuN6t1xH2fcv+kmopxCMv0kbxFQ+
+	 XKPFTLv3vHKBpBlms6/LCW6phW0CAEb+D87+CFk51PRTd6V0DfEY8K4YHspUtl12Q2
+	 QsEVbMe1s4urA==
+Date: Sat, 28 Dec 2024 22:50:55 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.13-rc5
+Message-ID: <Z3Byv8tvueVAsv08@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wmUxOIRU6WHKc07G"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3lngh3xdllg5bx5u6uhzn42r557axqyrdpcmezg33nv75rngjv@pxifwvw3rhae>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Fri, Dec 27, 2024 at 01:07:11AM +0100, Andi Shyti wrote:
-> On Thu, Dec 05, 2024 at 10:26:34AM +0200, Andy Shevchenko wrote:
-> > On Thu, Dec 05, 2024 at 10:12:43AM +0200, Jarkko Nikula wrote:
-> > > On 12/5/24 9:53 AM, Andy Shevchenko wrote:
-> > > > On Wed, Dec 04, 2024 at 11:25:40AM +0100, Uwe Kleine-König wrote:
-> > > > > On Wed, Dec 04, 2024 at 03:23:52AM +0200, Andy Shevchenko wrote:
-> > > > > > On Tue, Dec 03, 2024 at 11:46:07PM +0100, Uwe Kleine-König wrote:
-> > > > > > > On Tue, Dec 03, 2024 at 09:27:35PM +0200, Andy Shevchenko wrote:
-> > > > > > > > On Tue, Dec 03, 2024 at 06:36:40PM +0100, Uwe Kleine-König wrote:
-> > > > > > > > > DEFAULT_SYMBOL_NAMESPACE must already be defined when <linux/export.h>
-> > > > > > > > > is included. So move the define above the include block.
-> > > > > > > > 
-> > > > > > > > As in the other email I pointed out the doc says that we need to undef the
-> > > > > > > > symbol. No need to move it around.
-> > > > > > > > 
-> > > > > > > > The only requirement is to place that before any EXPORT_SYMBOL*() we want to
-> > > > > > > > add it to.
-
-[...]
-
-> > > > > > Perhaps we need to update the documentation first.
-> > > > > 
-> > > > > I addressed that in https://lore.kernel.org/all/3dd7ff6fa0a636de86e091286016be8c90e03631.1733305665.git.ukleinek@kernel.org/
-> > > > 
-> > > > Thank you!
-> > 
-> > > Andy: is this your reviewed by? If so then
-> > > 
-> > > Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > 
-> > I would like to have a clarifications from Documentation to be settled down
-> > first. When it's done, depending on the outcome it may or may not be my Rb tag.
-> 
-> ping! Andy,
-
-Sorry, I'm on vacation till mid-January.
-
-> I don't feel like merging this patch without your ack
-> as you had quite many comments here.
-
-Yeah, it seems now we got the second approach, we need to choose one and
-document it. This just makes my point: documentation needs to have
-clarification to make sure everybody got it right and provide a unified
-solution.
-
-> Can you please check here again?
-
-FWIW, technically the patch is correct and needed, but see above.
-
--- 
-With Best Regards,
-Andy Shevchenko
 
 
+--wmUxOIRU6WHKc07G
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+The following changes since commit 4bbf9020becbfd8fc2c3da790855b7042fad455b:
+
+  Linux 6.13-rc4 (2024-12-22 13:22:21 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.13-rc5
+
+for you to fetch changes up to f802f11b2336b0f5c522c6ba827a013bb0b83826:
+
+  Merge tag 'i2c-host-fixes-6.13-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current (2024-12-28 00:25:04 +0100)
+
+----------------------------------------------------------------
+i2c-for-6.13-rc5
+
+i2c-host-fixes (Andi)
+
+- IMX: fixed stop condition in single master mode and added
+  compatible string for errata adherence.
+- Microchip: Added support for proper repeated sends and fixed
+  unnecessary NAKs on empty messages, which caused false bus
+  detection.
+
+----------------------------------------------------------------
+Carlos Song (1):
+      i2c: imx: add imx7d compatible string for applying erratum ERR007805
+
+Conor Dooley (2):
+      i2c: microchip-core: actually use repeated sends
+      i2c: microchip-core: fix "ghost" detections
+
+Stefan Eichenberger (1):
+      i2c: imx: fix missing stop condition in single-master mode
+
+Wolfram Sang (1):
+      Merge tag 'i2c-host-fixes-6.13-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux into i2c/for-current
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andi Shyti (2):
+      (Rev.) i2c: microchip-core: fix "ghost" detections
+      (Rev.) i2c: microchip-core: actually use repeated sends
+
+Francesco Dolcini (1):
+      (Rev.) i2c: imx: fix missing stop condition in single-master mode
+
+Frank Li (2):
+      (Rev.) i2c: imx: add imx7d compatible string for applying erratum ERR007805
+      (Rev.) i2c: imx: fix missing stop condition in single-master mode
+
+ drivers/i2c/busses/i2c-imx.c               |   9 +--
+ drivers/i2c/busses/i2c-microchip-corei2c.c | 122 ++++++++++++++++++++++-------
+ 2 files changed, 98 insertions(+), 33 deletions(-)
+
+--wmUxOIRU6WHKc07G
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmdwcr8ACgkQFA3kzBSg
+KbbjyhAAtGgkHscwt+ZxnhYPJaHwSe6cxF3qiThye/p+qeOJ4CyJRjHbBShE8N3J
+pPgglsFwjKSBiBNk/SrlGV9xSCs5Xi0QCww2o2rq4vg8IiqVg+S8rs9tFBFl8W8O
+k+lpN68o9IKgn6dLzHMHojKwz8f8xVvqQ9/Z5LciQSFWbRHwdeBSbzTYpPWOrh/o
+V+8gorJNSvK+FuKsPxCIJ/gtt4Cqo18nVRnruwNpsQAxgz/uY/l99L3A1bNFCxfK
+XVURI0NtZYvOW3MxxvtDwjLcurGfU4I0mB+MVWlCUSGnklv7Pa0Uvoupo/Dhgr7y
+vnjnyqTotGdkFvaIvHkQA9lsuADp1KFzzsxlsfXXp5nmPojSuj9XXEEk4OrQn42i
+grtx/tlpWHQsaD7cFlyU0NMFZYhtE+h9oRQK6wi5JI2th0V662W4zTp2FRFWfcWq
+KTD9Y6RofpDMLoY2SJIcbDDKImNt2Bp8AzJech99nvAe/QITj1AS891kHSLodeex
+HmBSVLteCp/Mr1DUgS5X2KhjTpMy6KWyxngsHDuJu1UDz7pz9QlP5Vl7d5aOKCVz
+jBMAxFEIyHmuKZ1eRzLBZBeE7E7PUE501IdVYF0KciOtlquoyx36g5eijtrZMtHl
+AOYf8rKDmxr3XCJJ+Y4zr3T081Pc0/feRtMsWKMJjqmhXzis33M=
+=gVWn
+-----END PGP SIGNATURE-----
+
+--wmUxOIRU6WHKc07G--
 
