@@ -1,58 +1,77 @@
-Return-Path: <linux-i2c+bounces-8790-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8791-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF209FDC49
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 22:01:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C8E69FDC51
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 22:39:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61B9C3A166F
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 21:01:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3DBD1615D5
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 21:38:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 125B8192D79;
-	Sat, 28 Dec 2024 21:01:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 552E319884B;
+	Sat, 28 Dec 2024 21:38:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bbFiLOuA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i7BsXc7a"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC2C158A09;
-	Sat, 28 Dec 2024 21:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DDC27082D;
+	Sat, 28 Dec 2024 21:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735419681; cv=none; b=Rw3mkSTvQBdW0+NvEDnHzRzrTPqE1j5plfYDkBMv+Zh11KXZ7jqtgoPx3Kuf24VxrhOuSd32pFRFm2NNcqvMa/2G7UgcwyvSyZ8+LvQcSfKTQRfhmOWbadxXiFkhNAHjsjDcPZxPlV1fxi43UelTMHeQ0Zs1q96HI8VtHEtl7ys=
+	t=1735421937; cv=none; b=PFpm5nR/LC4xemb/ukOyj8AbgAuBEakVeshYOgijhnZNmoV5TSV3n0cD6Bm/FdjFzXagM39DCiIhFVhYQwrBPO+vTg0AJXg18tP1+zO6k111ZHLhc3RnpqlExLhtzxWJEtDnSGnPmU7FshJzjnEBM/ivs0q51ssCm+dOWXpFJ6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735419681; c=relaxed/simple;
-	bh=JSy7kKq7vvXln6X37mx3NLcerk0ooPQdIqGHyzb0PMU=;
+	s=arc-20240116; t=1735421937; c=relaxed/simple;
+	bh=xdVGAXuXB8BIeBKE51APQ1NBE3ClDDMog+pNRvkkUGU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gjX5PuZV0Yj4vcU39wDsMxwenLzKKlzHdihbUlsfaJse0KcDKQohyLJH83ICIcy8z1uZ08ZHBGJfdYIpudas3SIOS4xpdSEDtcWHB9RgLNqm11xa5H8rcC/JkrkE4PkyZGUdWsY1/e670ID2dsF5pWB4JJ4XqIskdrCLQXkTRZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bbFiLOuA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78CD7C4CECD;
-	Sat, 28 Dec 2024 21:01:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735419681;
-	bh=JSy7kKq7vvXln6X37mx3NLcerk0ooPQdIqGHyzb0PMU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bbFiLOuA0eQ9ejBBfHrFyL7mSreqjiOeJrMmtw0Zuu+93uRaUSdR55Upta+G551/8
-	 x38gTjEkC9+NKvr4kH6egRYEXPXhVFCSsNSmIyfxiA5NsFLH0VcNG+j29E122Ii/LZ
-	 RkXVWMit7LVjKDkMMgwPg8Gz+j8sGjJeOq85aSATw0z9K4y4aDca3J79eIIbHCGwEf
-	 ojBwJi4NFyGc6Vq/JKdqPEls0vOliOD8orYtjPj4sk4vSsLsa7pL8lV3xcvOwgJ1pY
-	 QfAX2O9Ta9f8HkYxwG7Q6nsQLmbzZGfhXv3Zt0OPUy3m8BYgUE4j0xrVERqquOtI0a
-	 iAzFdPAugk31g==
-Date: Sat, 28 Dec 2024 22:01:13 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Carlos Song <carlos.song@nxp.com>
-Cc: frank.li@nxp.com, aisheng.dong@nxp.com, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] i2c: imx-lpi2c: fix build warning "function defined but
- not used"
-Message-ID: <lv7cliatuynamsimld546tjr7uhn3r7dqq5d7uhype2wh3au45@mdiv4asd33ti>
-References: <20241228090852.2049321-1-carlos.song@nxp.com>
- <o4hxr2redr6dp4ot35pbc5vyjldiec6sxy72xesharhphsvdsm@mnufmvmpd2dm>
+	 Content-Type:Content-Disposition:In-Reply-To; b=EaBzjKrMziI+tfMKRxpZC8vNVDAkvTmkakE18PWF6yGMeP8q4N89OMVyDP/an9B4HzzglCW7UmTul/btgEbOtPtx51pNRJGQwW7bpGA+ybgn9RPfLHKY47Szm80ytFD3xKTKkUwB0AlMB7M8hBb8xLPTwaVuUE7jWeWG3QtpZSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i7BsXc7a; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735421935; x=1766957935;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xdVGAXuXB8BIeBKE51APQ1NBE3ClDDMog+pNRvkkUGU=;
+  b=i7BsXc7ajvtQwx1THPaa3XUSWFtzF6pEQA82tQ3rjB42uqF9ZaqEvb6d
+   pgPHRNSxf9yKhmmVAmQH5X+2uue52qc3xWYNXK7WHGRCqRE9Vf+jUB2Qv
+   58JBCWZLtj4z9vg9nzYq8XpwXo6pEj3xVjUP2Ob0qMQGlLaPuBgo/WV/Y
+   7m6Litytmn9F2DkscYXiYSM/1uolgKmjDOhJWjeLJGjMbflfMRmfev0Of
+   2CygQx6BlorPJD0LYibdgNso/Az5jKjcsHfi2yr+oj6eRAj6feUgk9v9h
+   XOeXY2NGD6OuaR1b+90N2Xrx2hxBTkKQsi6XywYn10zOfGDVfOChbzahH
+   w==;
+X-CSE-ConnectionGUID: 2wGnDvLjQb6I4O/m8GLD8w==
+X-CSE-MsgGUID: SRIgoxUhRuyq/oxz+9WmYw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="35031838"
+X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
+   d="scan'208";a="35031838"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 13:38:54 -0800
+X-CSE-ConnectionGUID: S5hi6pLpQYS8GXVO15umqA==
+X-CSE-MsgGUID: R1lq69KMQz+xkmEfJBUbVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="137776371"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 13:38:53 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tReWH-0000000DUM2-476C;
+	Sat, 28 Dec 2024 23:38:49 +0200
+Date: Sat, 28 Dec 2024 23:38:49 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: andi.shyti@kernel.org, masahiroy@kernel.org,
+	u.kleine-koenig@baylibre.com, torvalds@linux-foundation.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] module: Allow DEFAULT_SYMBOL_NAMESPACE be set after
+ export.h included
+Message-ID: <Z3Bv6YhZMAzSLcyg@smile.fi.intel.com>
+References: <20241228184328.5ced280b@dsl-u17-10>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -61,33 +80,32 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <o4hxr2redr6dp4ot35pbc5vyjldiec6sxy72xesharhphsvdsm@mnufmvmpd2dm>
+In-Reply-To: <20241228184328.5ced280b@dsl-u17-10>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Carlos,
-
-On Sat, Dec 28, 2024 at 09:53:22PM +0100, Andi Shyti wrote:
-> On Sat, Dec 28, 2024 at 05:08:52PM +0800, Carlos Song wrote:
-> > lpi2c_resume_noirq() and lpi2c_suspend_noirq() are defined but it maybe
-> > unused, so should add __maybe_unused to both functions to avoid build
-> > warning.
-> > 
-> > Fixes: fa89723f7a78 ("i2c: imx-lpi2c: add target mode support")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202412280835.LRAV3z0g-lkp@intel.com/
-> > Signed-off-by: Carlos Song <carlos.song@nxp.com>
+On Sat, Dec 28, 2024 at 06:43:28PM +0000, David Laight wrote:
+> Commit ceb8bf2ceaa77 ("module: Convert default symbol namespace to string
+> literal") changed DEFAULT_SYMBOL_NAMESPACE to be a string literal.
+> However the conditional definition of _EXPORT_SYMBOL() was left in.
 > 
-> yeah, I have different PM configuration to catch these kind of
-> error and I missed this.
+> Instead just default DEFAULT_SYMBOL_NAMESPACE to "" and remove the
+> extra _EXPORT_SYMBOL() wrapper.
 > 
-> Rather than applying a fix over a recent patch, I am going to
-> remove your original patch and ask you to send a v7 of your
-> "imx-lpi2c: add target mode support".
-> 
-> Is it OK with you?
+> This lets DEFAULT_SYMBOL_NAMESPACE be defined after export.h is included.
 
-I removed the patch and updated patchwork. I will be waiting for
-your v7.
+> Fixes fd57a3325a779 ("i2c: designware: Move exports to I2C_DW namespaces")
 
-Thanks,
-Andi
+Incorrect format, and this should be a tag.
+
+...
+
+This patch in a different form had been already submitted by Uwe. So, guys, fix
+the documentation or clarify it and when you agree on the approach, choose the
+patch to review. No Ack till that. Andi, FYI.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
