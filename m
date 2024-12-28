@@ -1,199 +1,172 @@
-Return-Path: <linux-i2c+bounces-8787-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8788-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C53A9FDA1F
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 12:15:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A0F29FDBDD
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 19:43:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A0F13A0415
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 11:15:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 006953A13FD
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Dec 2024 18:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97D8A15855E;
-	Sat, 28 Dec 2024 11:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 964E7192D79;
+	Sat, 28 Dec 2024 18:43:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W8tDTJ7d"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nSVARfaM"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A496414A630;
-	Sat, 28 Dec 2024 11:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C7E15990C;
+	Sat, 28 Dec 2024 18:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735384523; cv=none; b=D2UGhv/crvObtIPQG+wRL5tLqXCp4YAPX/gTRCJcmuYNd7nV9/pd2Aj8JWxkFCrd6HMApXNIP+/Hc1pLyM98/FaQuWaxarCvcMT9MdLec0IZQ3mcJLS0IsWc9pXaXqjMgDue1aiZ2XneHfSHoJ3kpJUUbiqpWmuXkmsrlxFXUl0=
+	t=1735411413; cv=none; b=IfY0ZvqHFObeb7j+Ut+jtIX6k3tVJtsWzFHhZC2XHg3yrNhTnDqErXBo/zHnF2PPlGP02l9pZWnvHMEpMkr0WabUHaRalCdHpLCvGdccTNJrxGu+jIXiVhNlApVINrV7QXrIzi9WB3lJTkZfiaTzCu6HsjCYiM2DzorhI19DYeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735384523; c=relaxed/simple;
-	bh=AkGEjO5MqaJ6/WaiLUJEmWNdRQOYqjQBeJBH2t2NWYU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=An2Yj2rx/v1KtGMYR0RV+WVlJ7FQXAQNLUaDg6/GNkCgF5/OFIlKaY4Wmss4U2es3ZVBCO/c40L+dl0gKvvEhCZAMr7LidIo41zImtF06zlBqKyFJXgBS3G3DsgcqlPMwORQZKzMM5RAor+Tch4vdU/FTFjOkILOanKnT6fSkvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W8tDTJ7d; arc=none smtp.client-ip=209.85.128.51
+	s=arc-20240116; t=1735411413; c=relaxed/simple;
+	bh=b4YAHP/NqGIdpBMyg571wN6VkaTKSOFvmBWPQXzDzdY=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type; b=JhgJFsvEZOsypzSBmAAE8WYVzWRo57Uc6vM9XfxdfwAFUBCSDBysgN3S4caSn99QMw9eS3ygqW7nhyNsVnpts/pb42mnYOyjnfYE6jXgAKZ4l6dnmMsmLigWPyHEEy39oAqpAp6/TMRM+jVoFktjIFKjv1HEHs6h86m4JB9fNgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nSVARfaM; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4361c705434so57006925e9.3;
-        Sat, 28 Dec 2024 03:15:21 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4364a37a1d7so85423005e9.3;
+        Sat, 28 Dec 2024 10:43:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735384520; x=1735989320; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AGkgSa0SQvLDucqBA9QZhIAOHAKfj9lHxmPDg4KGqrA=;
-        b=W8tDTJ7diw2ngLEEm6LffpLv+gQ/T2clzm312wyuR26pAuFivXcMIjXx9sFsyq7kec
-         OmFiaBDGEKXPn8Ia30q9YjWDJPwkvvksgF0xzK9htilHTKa0Ncsn6GUiRe3I17NcgLBG
-         ja8fX7P4rz4mMpvZeLnuDltZmK0aWLQqNXC5ddimlmNRVGS4uiyMbPzRv4PfovjwsIft
-         AVtZSRqgERlHERqiRX6k9FxB8U79FU1RUlbaQm+OhNyx12GIQ99E+ALxBQq33qKeHZGd
-         yF/Yo4akD/W1i6Lf6bsjVglkYI9Hvuan19oNfTvrrYtXefew3ffy07iamwNnHRcv8WLI
-         pv0w==
+        d=gmail.com; s=20230601; t=1735411410; x=1736016210; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4/iR0gFEYs7f2gNk+zQwj+MOFDfQzmKI+7kUoHj4NKA=;
+        b=nSVARfaMp8KwRVslWY9HcMNp91ULjsbbHsTqebfIFlDSu5wqZlUjfqU93iD8xdRTSa
+         0qCO4Z0l0Ifx+Gb20gpnEh7rRX141vC9hsby95bYNeIjAVNuZeCSPbOymxt4b7fcnY25
+         H97F96eMgC2higp7MEAAlaivn5rt0Fc2a6jowGwTibQ/jk4Ya1oho2/at5hTbfyF7AQT
+         Z+UNQqB4SDHnfqbg/cVD2GxmgiLdjNCHRV6q7VMFGlVR8Rqo9HpTVgkMo2vBS82g59YY
+         HatcugiyspiWfcT7sCPy5NNlYWbRfvmJCuyDwDDFI0pvJ6Ynw5p5NNrkpcQ0zFOqrXM6
+         f/dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735384520; x=1735989320;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AGkgSa0SQvLDucqBA9QZhIAOHAKfj9lHxmPDg4KGqrA=;
-        b=rK8IaTQWFSRN29+wJ5rpde+qnicldHIjVQLkQhWT5DNIOKSW/s+L9qoOw+e2BQzNaD
-         3rcHTS1qObAzbGMgpD5kBKP7P/58QiAIyjlQY2HS5O9+RR22eQy6wCR1Ip8RUIe9n3kJ
-         d4KU0IFqyCZGsW8pHWJoSakEgqfL+M/aYZrR0g8M7hDqhZxO7UxGfd1oFjsH4r6MnNTO
-         MEDUcHLYNyN3zoyHg067EteLUQdb1HjxiMtPImXXZnepE2DaYbcQ12W0AD6gFSyGHzNc
-         ZoyWlicRAgI4c0dMUzg4u12OuJ0iWmkPMG/mXQR8Cn1ftMLjXR9o0ewrwsOd7s8RDhQY
-         qZRA==
-X-Forwarded-Encrypted: i=1; AJvYcCUhYxW9JE6RanSnTo4h3ttrZ8B63t20N2jXJ+GQicDPAcyS2HEX6uJryS7dswCNk2/VsKD+eDT6oq62Bk/9@vger.kernel.org, AJvYcCVKAVBy0RPS+HGJ1ux08ZgrRIFq3d7ZPitKdfoyCH1TbXtqyep0LwyuC+BXVGC9zDljq1NnJE5j8AdOsQM2PIgh7NE=@vger.kernel.org, AJvYcCW6y8wCyE8/3UOMqQnDKeW4bRbWEz5FarcJHjtQzDtzkM5kJPSe1V6FlBC7DFRtM4Sm78/SCPidgqQZ@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywlzgz68Jb9izxqGZfAifv224+BtA7A5Gw3MEA28EhequKN8oWs
-	FSIXG6UIt2mjYXNSA+RKyYNToC4MzRuYlay6efmNqlqYo8ZBKnP3mefdOg==
-X-Gm-Gg: ASbGncsaqHk2fjzljD3JWXCuL5ZD3+J6DpMJP4KjZJq7G2PnbUh9fS0LxlfV1xyGBI7
-	eFAY3yAZ7Hq07Ld8ov1cttVE+zPr1VouFtwv3WtXb/ZyuWOGoyFmrtH1/d34J0pQgsms5bwLBOv
-	O+mrb9Wrrs6Kj+pLAT6Zd4TZN8LM5DylzoVE8F9SXPG39UnhmMClhjjcSfWYJqFdhu4YktSZp37
-	CT4lhS67MGKXWX0zQwYJzjjmj+xPvtldH8f9mDskWD7cuzrLX83IUZANa1mJtxUhAlaw0fehYWg
-	FHv5L5Ztfvf/B3L9VPb39FXey96dzp6n
-X-Google-Smtp-Source: AGHT+IGonq6ADsghjW9IBuZqhLVqoiM+c2VPos3/y2X87BVvkguYZeN1qm4TOAKkZwV2Z2DmbfJI8A==
-X-Received: by 2002:a05:600c:3b23:b0:434:9499:9e87 with SMTP id 5b1f17b1804b1-43668b5e194mr216960055e9.25.1735384519730;
-        Sat, 28 Dec 2024 03:15:19 -0800 (PST)
-Received: from ivaylo-T580.. (91-139-201-119.stz.ddns.bulsat.com. [91.139.201.119])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656af6c25sm326226075e9.8.2024.12.28.03.15.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Dec 2024 03:15:19 -0800 (PST)
-From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] i2c: exynos5: Add support for Exynos8895 SoC
-Date: Sat, 28 Dec 2024 13:15:09 +0200
-Message-ID: <20241228111509.896502-3-ivo.ivanov.ivanov1@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241228111509.896502-1-ivo.ivanov.ivanov1@gmail.com>
-References: <20241228111509.896502-1-ivo.ivanov.ivanov1@gmail.com>
+        d=1e100.net; s=20230601; t=1735411410; x=1736016210;
+        h=content-transfer-encoding:mime-version:message-id:subject:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4/iR0gFEYs7f2gNk+zQwj+MOFDfQzmKI+7kUoHj4NKA=;
+        b=WQA0Gl8PovDFbXAiMmf3TSX69X3NXnTYskXLFwFl3cC6U/60pq8Pj+yLCFP7DFYpMf
+         wqr4Uwl9IbguyXDqoKjKj/kqCHjaSPlT6fxj+PBXhdt6O572ujHtd6UN0QN6Etocoj+v
+         VOyMnom3ZgSppXk/C93BVKGyFQ3pKqlzb5skfVrZEmJ9G1WElTVy8SZmrQT56PROR1Af
+         c6vw6xpCGNzBaXxZ/3liHzp7DMAWn87PXn7jhPImfl/r84MMFmlXgXx/yz5u3ExEl2O5
+         SizZu0n3xq2VspLiSHk5npW4e/1LhFarDhzWRrh3RaP6KF5HBL6ZB5S4CyHI9pyyygk9
+         /Khw==
+X-Forwarded-Encrypted: i=1; AJvYcCUMutUm6XpezcaFI0yiw28mqc5TTdwcMQKITpHVgBlqZIj9nJvlYFzOB485u8VfiYEGBTxCHASfwew=@vger.kernel.org, AJvYcCUcdCaHXi5mqv6zG2YZb9TkXjnSkNP8ceuAAfPt8BQ0ACt6ubanHysboZ11rC/t1ZXOMeJ3SgZQtITNsGoL@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrO0UlIvWrAvDWbWAZfyHUW72CsT1K4tQ/10UaRW+P7oR7NvLV
+	/wDHhBDC5414LzZXhm8i0w4S/gEnjaKGEtvx7uvl88LEfZHaHjP2
+X-Gm-Gg: ASbGncszDk8siJru+3bqiePtb8f9MIoybFmkEB7tEJE1xprVMrPWwL+qMHHjM50EpG6
+	xqmnemwbruF50CCfrgoiFAZUYdQq75wEZ6lE0YLYopwl4VLFAHRdquc7cv4RU91qg9UGbeR4n1W
+	niCOSI+lmXTxRnIZs+n44x8R8x06EUAfMQ3iuv0nxNJwhgc2N+4bSAzSfJ0poaYZ8evzrmoo5jS
+	5ShcDtsCH077teRTsD9sdj+kU8QLu19LQh3JhQYYnxrJP24425i0fjYmFAJ/bDcBf7V1x7y6h15
+	CHTB123LF+fi3eyxR+fCIEM=
+X-Google-Smtp-Source: AGHT+IHdY/66BM6Eif1fpm76U1/JH008dakmpoPtAE78HZwCyWXaGk+2yibGNY9Pk8AJs8eH8JljgA==
+X-Received: by 2002:a05:6000:1fae:b0:385:df43:2179 with SMTP id ffacd0b85a97d-38a221eaf62mr26059512f8f.17.1735411409670;
+        Sat, 28 Dec 2024 10:43:29 -0800 (PST)
+Received: from dsl-u17-10 (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656af6cbbsm337727275e9.3.2024.12.28.10.43.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 28 Dec 2024 10:43:29 -0800 (PST)
+Date: Sat, 28 Dec 2024 18:43:28 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: andi.shyti@kernel.org, andriy.shevchenko@linux.intel.com,
+ masahiroy@kernel.org, u.kleine-koenig@baylibre.com,
+ torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+Subject: [PATCH] module: Allow DEFAULT_SYMBOL_NAMESPACE be set after
+ export.h included
+Message-ID: <20241228184328.5ced280b@dsl-u17-10>
+X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Exynos8895 functioning logic mostly follows I2C_TYPE_EXYNOS7, but timing
-and temp calculations are slightly different according to the following
-logic:
+Commit ceb8bf2ceaa77 ("module: Convert default symbol namespace to string
+literal") changed DEFAULT_SYMBOL_NAMESPACE to be a string literal.
+However the conditional definition of _EXPORT_SYMBOL() was left in.
 
-FPCLK / FI2C = (CLK_DIV + 1) * (TSCLK_L + TSCLK_H + 2) + 2 *
-((FLT_CYCLE + 3) - (FLT_CYCLE + 3) % (CLK_DIV + 1))
+Instead just default DEFAULT_SYMBOL_NAMESPACE to "" and remove the
+extra _EXPORT_SYMBOL() wrapper.
 
-temp := (FPCLK / FI2C) - (FLT_CYCLE + 3) * 2
+This lets DEFAULT_SYMBOL_NAMESPACE be defined after export.h is included.
 
-Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+Fixes fd57a3325a779 ("i2c: designware: Move exports to I2C_DW namespaces")
+
+Signed-off-by: David Laight <david.laight.linux@gmail.com>
 ---
- drivers/i2c/busses/i2c-exynos5.c | 35 ++++++++++++++++++++++++++++----
- 1 file changed, 31 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-designware-common.c |  1 +
+ drivers/i2c/busses/i2c-designware-master.c |  1 +
+ drivers/i2c/busses/i2c-designware-slave.c  |  1 +
+ include/linux/export.h                     | 10 ++++------
+ 4 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
-index e33001508..6cdd957ea 100644
---- a/drivers/i2c/busses/i2c-exynos5.c
-+++ b/drivers/i2c/busses/i2c-exynos5.c
-@@ -168,6 +168,7 @@ enum i2c_type_exynos {
- 	I2C_TYPE_EXYNOS5,
- 	I2C_TYPE_EXYNOS7,
- 	I2C_TYPE_EXYNOSAUTOV9,
-+	I2C_TYPE_EXYNOS8895,
- };
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index 183a35038eef..be5850330c75 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -29,6 +29,7 @@
+ #include <linux/types.h>
+ #include <linux/units.h>
  
- struct exynos5_i2c {
-@@ -240,6 +241,11 @@ static const struct exynos_hsi2c_variant exynosautov9_hsi2c_data = {
- 	.hw		= I2C_TYPE_EXYNOSAUTOV9,
- };
++#undef DEFAULT_SYMBOL_NAMESPACE
+ #define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW_COMMON"
  
-+static const struct exynos_hsi2c_variant exynos8895_hsi2c_data = {
-+	.fifo_depth	= 64,
-+	.hw		= I2C_TYPE_EXYNOS8895,
-+};
-+
- static const struct of_device_id exynos5_i2c_match[] = {
- 	{
- 		.compatible = "samsung,exynos5-hsi2c",
-@@ -256,6 +262,9 @@ static const struct of_device_id exynos5_i2c_match[] = {
- 	}, {
- 		.compatible = "samsung,exynosautov9-hsi2c",
- 		.data = &exynosautov9_hsi2c_data
-+	}, {
-+		.compatible = "samsung,exynos8895-hsi2c",
-+		.data = &exynos8895_hsi2c_data
- 	}, {},
- };
- MODULE_DEVICE_TABLE(of, exynos5_i2c_match);
-@@ -331,6 +340,14 @@ static int exynos5_i2c_set_timing(struct exynos5_i2c *i2c, bool hs_timings)
- 	 * clk_cycle := TSCLK_L + TSCLK_H
- 	 * temp := (CLK_DIV + 1) * (clk_cycle + 2)
- 	 *
-+	 * In case of HSI2C controllers in Exynos8895
-+	 * FPCLK / FI2C =
-+	 * (CLK_DIV + 1) * (TSCLK_L + TSCLK_H + 2) +
-+	 * 2 * ((FLT_CYCLE + 3) - (FLT_CYCLE + 3) % (CLK_DIV + 1))
-+	 *
-+	 * clk_cycle := TSCLK_L + TSCLK_H
-+	 * temp := (FPCLK / FI2C) - (FLT_CYCLE + 3) * 2
-+	 *
- 	 * Constraints: 4 <= temp, 0 <= CLK_DIV < 256, 2 <= clk_cycle <= 510
- 	 *
- 	 * To split SCL clock into low, high periods appropriately, one
-@@ -352,11 +369,19 @@ static int exynos5_i2c_set_timing(struct exynos5_i2c *i2c, bool hs_timings)
- 	 *
- 	 */
- 	t_ftl_cycle = (readl(i2c->regs + HSI2C_CONF) >> 16) & 0x7;
--	temp = clkin / op_clk - 8 - t_ftl_cycle;
--	if (i2c->variant->hw != I2C_TYPE_EXYNOS7)
--		temp -= t_ftl_cycle;
-+	if (i2c->variant->hw == I2C_TYPE_EXYNOS8895)
-+		temp = clkin / op_clk - (t_ftl_cycle + 3) * 2;
-+	else if (i2c->variant->hw == I2C_TYPE_EXYNOS7)
-+		temp = clkin / op_clk - 8 - t_ftl_cycle;
-+	else
-+		temp = clkin / op_clk - 8 - (t_ftl_cycle * 2);
- 	div = temp / 512;
--	clk_cycle = temp / (div + 1) - 2;
-+
-+	if (i2c->variant->hw == I2C_TYPE_EXYNOS8895)
-+		clk_cycle = (temp + ((t_ftl_cycle + 3) % (div + 1)) * 2) /
-+			    (div + 1) - 2;
-+	else
-+		clk_cycle = temp / (div + 1) - 2;
- 	if (temp < 4 || div >= 256 || clk_cycle < 2) {
- 		dev_err(i2c->dev, "%s clock set-up failed\n",
- 			hs_timings ? "HS" : "FS");
-@@ -491,6 +516,8 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
- 	switch (i2c->variant->hw) {
- 	case I2C_TYPE_EXYNOSAUTOV9:
- 		fallthrough;
-+	case I2C_TYPE_EXYNOS8895:
-+		fallthrough;
- 	case I2C_TYPE_EXYNOS7:
- 		if (int_status & HSI2C_INT_TRANS_DONE) {
- 			i2c->trans_done = 1;
+ #include "i2c-designware-core.h"
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index c8cbe5b1aeb1..083c5961d189 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -22,6 +22,7 @@
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+ 
++#undef DEFAULT_SYMBOL_NAMESPACE
+ #define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW"
+ 
+ #include "i2c-designware-core.h"
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+index dc2b788eac5b..72b973afb0ec 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -16,6 +16,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ 
++#undef DEFAULT_SYMBOL_NAMESPACE
+ #define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW"
+ 
+ #include "i2c-designware-core.h"
+diff --git a/include/linux/export.h b/include/linux/export.h
+index 2633df4d31e6..6cea1c3982cd 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -59,14 +59,12 @@
+ 
+ #endif
+ 
+-#ifdef DEFAULT_SYMBOL_NAMESPACE
+-#define _EXPORT_SYMBOL(sym, license)	__EXPORT_SYMBOL(sym, license, DEFAULT_SYMBOL_NAMESPACE)
+-#else
+-#define _EXPORT_SYMBOL(sym, license)	__EXPORT_SYMBOL(sym, license, "")
++#ifndef DEFAULT_SYMBOL_NAMESPACE
++#define DEFAULT_SYMBOL_NAMESPACE ""
+ #endif
+ 
+-#define EXPORT_SYMBOL(sym)		_EXPORT_SYMBOL(sym, "")
+-#define EXPORT_SYMBOL_GPL(sym)		_EXPORT_SYMBOL(sym, "GPL")
++#define EXPORT_SYMBOL(sym)		__EXPORT_SYMBOL(sym, "", DEFAULT_SYMBOL_NAMESPACE)
++#define EXPORT_SYMBOL_GPL(sym)		__EXPORT_SYMBOL(sym, "GPL", DEFAULT_SYMBOL_NAMESPACE)
+ #define EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", ns)
+ #define EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "GPL", ns)
+ 
 -- 
-2.43.0
+2.17.1
 
 
