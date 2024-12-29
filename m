@@ -1,129 +1,148 @@
-Return-Path: <linux-i2c+bounces-8805-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8806-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD86B9FDD2D
-	for <lists+linux-i2c@lfdr.de>; Sun, 29 Dec 2024 04:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68D639FDE02
+	for <lists+linux-i2c@lfdr.de>; Sun, 29 Dec 2024 09:25:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6905A188283C
-	for <lists+linux-i2c@lfdr.de>; Sun, 29 Dec 2024 03:33:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E7961882584
+	for <lists+linux-i2c@lfdr.de>; Sun, 29 Dec 2024 08:25:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB2EC147;
-	Sun, 29 Dec 2024 03:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CDD7347CC;
+	Sun, 29 Dec 2024 08:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IfvQzkjl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VfV3tnJb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84895680;
-	Sun, 29 Dec 2024 03:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11731F94D;
+	Sun, 29 Dec 2024 08:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735443224; cv=none; b=NKFEaR7EfTXkdAls+Tk51BsCAozADhw6FtXiyAcYsa6wWu3188JO6KMi1x6YqAsa6n+qlcDYvAGlqiH11u8afzHVM7AEam62KsRIN5KWFWUzUJG5KTMj33rLOpcArTTXg8vHlv6gAGS6SLSRBXlFGitQxyT3+2LUOyzYiGMg5EE=
+	t=1735460729; cv=none; b=DcvXMuifwfJ0iGqGcHiBYdv62/Cuc/MW4GxrIUqOoWVjUpHPVM3E+cR8PgQYtSRppUUvja30tEpY0vNWdTrMjzoq00wi6pWlyNuZ05fY2BSm4e6X0txfTawBHUzoEdWlwd/W3NeeSJPWCQq8rkh/WKrWYOYC9sw/NKA0/arR3dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735443224; c=relaxed/simple;
-	bh=XwoovLm8yoaFjgI4B0ibds4k+XbUr6BG+p7sFBLZz2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RrxeQH7py7F7HJJUJaq2u894R3nCkV44brB6wp6TVZ6eEaiAN6zuPWM+DKb/a6easJ9kYatJXtfveipG+oYsjiug6TIZ2rAcpWRo3eICa3lyQPQCC4aelQMVqVnLCHdd8/I5WRO7c5W2Z5EzzzoSqJT2ES/E8jb5ylbZLn7k6EQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IfvQzkjl; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735443223; x=1766979223;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XwoovLm8yoaFjgI4B0ibds4k+XbUr6BG+p7sFBLZz2s=;
-  b=IfvQzkjlzmTou4aAkQ9yqYottTbeo64zqs3b3zoW7YthGF4+0v3SslNQ
-   SwRRNC2hhZCW6yq87Ep7aUhDoX+uf6m/jpFsSkGpI3y/Xtu7us6Rykqx2
-   vnXe6EqyUJYFWOstwWvGIzYCUWMisE7NQE+C1n60uddqnRxA+sE7o4Oot
-   80ndjz+3FMJf5r7wyiUkOjvcvtnzhrTPmceiUGbmLVMhIv43RICnnnE6o
-   PRE9NvjmIMaYyT7fwmxNC9pYWwR6LdVcxFNk5CceuFRiYU15ZtIoGEdpV
-   i7vT9XutbdcquAgzWIizAww75zC8DplQDTZ1G22uxYe/q72iQkRusOkaH
-   g==;
-X-CSE-ConnectionGUID: w3vcQ+IkSRGG6OMeDIJL0A==
-X-CSE-MsgGUID: Nlz6wMZVQlSEXnsFQ+Wfgg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="53312109"
-X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
-   d="scan'208";a="53312109"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 19:33:42 -0800
-X-CSE-ConnectionGUID: t7dwh/+4SVGFum/pILbHuA==
-X-CSE-MsgGUID: tUqVM2o1TVCoYeN4iwYFQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
-   d="scan'208";a="100230565"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 28 Dec 2024 19:33:40 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tRk3e-0004SC-0U;
-	Sun, 29 Dec 2024 03:33:38 +0000
-Date: Sun, 29 Dec 2024 11:32:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Laight <david.laight.linux@gmail.com>, andi.shyti@kernel.org,
-	andriy.shevchenko@linux.intel.com, masahiroy@kernel.org,
-	u.kleine-koenig@baylibre.com, torvalds@linux-foundation.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+	s=arc-20240116; t=1735460729; c=relaxed/simple;
+	bh=jhqMKmcbBrXpkYRBIUIKeDArx0ylUnza3bfnuY4cNZo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rC4wjGXMvi4LWpHOIat5VlRgUDAh+aSGrMmoIXObQk8uW8njUB8N6Kp88tFoNDKI2wxPjgkJwsXjj37P1T/y5KK9/VTImbYSlNwS4gCI2fQCC250b7m8VUX230FIcqUbvf6U+170NC8b5ZDEzMbQyZ3u33yAOKchQ8eyqg3DkOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VfV3tnJb; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-385ddcfc97bso7131612f8f.1;
+        Sun, 29 Dec 2024 00:25:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735460726; x=1736065526; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H0/zSKIavJ+yDSlBkUWHvpQE4DV9OrAVClKn2PvpTRY=;
+        b=VfV3tnJb5b0gLBGwnZN+AAcY+rBz/qYZAzBMAOt7ZgIM1Vep56yDpen1Rt3+OijlaN
+         JsH63/Mi2HAufPDGYAuTkZ6/Q6ByWlK8ARNsNNRFrbVg0CV2YvWi687lttTC1r0dKPtM
+         ytYpjPEjltFK+raNwQ/J4toykme/qliCFVYGwwuxTadnkSVSI3HvU4fJ8j2j3tRPgHmS
+         JbAYH5djKsXqf1AkNSIkIrX3WoudUDkikOZ54H2rg3anYB7TJPKMyQzJaOG4MhDA/0yJ
+         27sPK1dCoBDce1Besnyb46GehE+3ZhTnqYlEnbVBBGX2wrq6ul63Z4P1xgivsceOgUT2
+         DEBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735460726; x=1736065526;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H0/zSKIavJ+yDSlBkUWHvpQE4DV9OrAVClKn2PvpTRY=;
+        b=dZzsSPUAio07uATKcX6NbGnJ90uCOE1mYw5wiE/f6FYTSID7BCsnzNni0hgIKuzWGj
+         AGiuGjIpI047+2WsS28xv2wBE8K0dfNhJb1K1LnhIdhuW/farUl5YhjllFDi9W+Ikx+U
+         sl3g50USFNNN6BlKdk3BfVobaO5361LznmuRcz3vsfMaYXH8n9wBRMY6s7tEY2e+njHR
+         nGGQXBfQ5ZnW8DnU5gGJlL+JBDuTJNnKGUL9/sftmp1gTb4Eabf2JM+ws6KePwNYwGG2
+         sT6cGkI5/OcqlbW6qeRnuGunFw+nZWLXxOBSbv88y62tREnuTW6QCxjRdcYwYW9cZ9Pp
+         6eFg==
+X-Forwarded-Encrypted: i=1; AJvYcCW5tmj4JodNfEwghHlRM2cTr0LKcFTmCR9GsUKSebv7/nc6R5/UU+hd8CfC5HB227CrvfoqO12pRAk=@vger.kernel.org, AJvYcCWae66g8zbw46G480fe7gxWYNaaaz/pAl+HkAH0MgLGLBhxwX9uvdzQnClDT8I+dWcYILVbgEMDAc2/PWQy@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzli9wQ8CQEcfxlx1Vj4HSXXcRN0cm9LEfOW8XhYgL0aeN8tnlh
+	SwymbUHSDHnSUf5P+ACfEUe8gLIMt++D3NoFifLFhUR+9irtyI1U
+X-Gm-Gg: ASbGnctpvXqAmqTYShBKudJOTq2yOlqC08TZ6sDLV5xdzE/qBrmKB91eloPNeUJvWtR
+	OlU7hhgh4G3CI6UH4vxvN6vJKkgfW18W2AlCKa4Ij7H1HtT3NougTVY7YK1zUDMueMRPlnsam/H
+	swr9nriCC3J1ZN9qh7iJgjZOXsvZ8Yq03TbT6fv0trpueLy3dDTQu2yAbvvh1+ebWwOhA+L8v2A
+	KKcxnGul98Gd6dEoaze9H5lJRgs8crwW8wj7A9L1vm6mQMoWqHDH/9P0+yboGM39ZuW7cR7v+xT
+	QlHMEGybK3OSsJXjoaIkJ6I=
+X-Google-Smtp-Source: AGHT+IGqTuLbENhjoe8PXOuxdXq27b+7IEIcj0mx+DgTzlWhcj7pPh+nsi7nSb37gAM0B6z0ZrHbmg==
+X-Received: by 2002:a5d:5e09:0:b0:385:ddd2:6ab7 with SMTP id ffacd0b85a97d-38a2240874bmr29239583f8f.52.1735460725599;
+        Sun, 29 Dec 2024 00:25:25 -0800 (PST)
+Received: from dsl-u17-10 (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c832e74sm26463152f8f.30.2024.12.29.00.25.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 29 Dec 2024 00:25:25 -0800 (PST)
+Date: Sun, 29 Dec 2024 08:25:24 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: andi.shyti@kernel.org, masahiroy@kernel.org,
+ u.kleine-koenig@baylibre.com, torvalds@linux-foundation.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
 Subject: Re: [PATCH] module: Allow DEFAULT_SYMBOL_NAMESPACE be set after
  export.h included
-Message-ID: <202412291114.MzNzqKpo-lkp@intel.com>
+Message-ID: <20241229082524.41494308@dsl-u17-10>
+In-Reply-To: <Z3Bv6YhZMAzSLcyg@smile.fi.intel.com>
 References: <20241228184328.5ced280b@dsl-u17-10>
+	<Z3Bv6YhZMAzSLcyg@smile.fi.intel.com>
+X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241228184328.5ced280b@dsl-u17-10>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi David,
+On Sat, 28 Dec 2024 23:38:49 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> On Sat, Dec 28, 2024 at 06:43:28PM +0000, David Laight wrote:
+> > Commit ceb8bf2ceaa77 ("module: Convert default symbol namespace to string
+> > literal") changed DEFAULT_SYMBOL_NAMESPACE to be a string literal.
+> > However the conditional definition of _EXPORT_SYMBOL() was left in.
+> > 
+> > Instead just default DEFAULT_SYMBOL_NAMESPACE to "" and remove the
+> > extra _EXPORT_SYMBOL() wrapper.
+> > 
+> > This lets DEFAULT_SYMBOL_NAMESPACE be defined after export.h is included.  
+> 
+> > Fixes fd57a3325a779 ("i2c: designware: Move exports to I2C_DW namespaces")  
+> 
+> Incorrect format, and this should be a tag.
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on linus/master v6.13-rc4 next-20241220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Except that it doesn't want to be picked up by the back-port bots.
+At least not in this form - since the changes to export.h that remove
+the __stringify() don't really want back-porting.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/module-Allow-DEFAULT_SYMBOL_NAMESPACE-be-set-after-export-h-included/20241229-024441
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20241228184328.5ced280b%40dsl-u17-10
-patch subject: [PATCH] module: Allow DEFAULT_SYMBOL_NAMESPACE be set after export.h included
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241229/202412291114.MzNzqKpo-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241229/202412291114.MzNzqKpo-lkp@intel.com/reproduce)
+> 
+> ...
+> 
+> This patch in a different form had been already submitted by Uwe.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412291114.MzNzqKpo-lkp@intel.com/
+Did that move the DEFAULT_SYMBOL_NAMESPACE define to the top of the file?
+That can be back-ported provided the " are removed.
 
-All warnings (new ones prefixed by >>):
+The simplification to export.h (which is what I was trying to do)
+can then be done after the other patches.
 
->> drivers/pwm/pwm-lpss.c:22:9: warning: 'DEFAULT_SYMBOL_NAMESPACE' macro redefined [-Wmacro-redefined]
-      22 | #define DEFAULT_SYMBOL_NAMESPACE "PWM_LPSS"
-         |         ^
-   include/linux/export.h:63:9: note: previous definition is here
-      63 | #define DEFAULT_SYMBOL_NAMESPACE ""
-         |         ^
-   1 warning generated.
+> So, guys, fix
+> the documentation or clarify it and when you agree on the approach, choose the
+> patch to review. No Ack till that. Andi, FYI.
+> 
 
+I had another thought overnight - which is more changes.
+Instead of using DEFAULT_SYMBOL_NAMESPACE in EXPORT_SYMBOL() use it as
+a default for EXPORT_SYMBOL_NS().
+So you have something like:
+#define EXPORT_SYMBOL_NS(sym, ...) _EXPORT_SYMBOL_NS(sym, __VA_ARGS__, DEFAULT_SYMBOL_NAMESPACE)
+#define _EXPORT_SYMBOL_NS(sym, ns, ...) __EXPORT_SYMBOL(sym, "", ns)
 
-vim +/DEFAULT_SYMBOL_NAMESPACE +22 drivers/pwm/pwm-lpss.c
+That requires that all the EXPORT_SYMBOL(sym) in files that define DEFAULT_SYMBOL_NAMESPACE
+be changed to EXPORT_SYMBOL_NS(sym).
+But it doesn't require a default definition of DEFAULT_SYMBOL_NAMESPACE and lets
+it be defined in a more obvious part of the source file.
 
-093e00bb3f82f3 Alan Cox        2014-04-18  21  
-ceb8bf2ceaa77f Masahiro Yamada 2024-12-03 @22  #define DEFAULT_SYMBOL_NAMESPACE "PWM_LPSS"
-a3682d2fe3c36c Andy Shevchenko 2022-09-27  23  
+	David
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
