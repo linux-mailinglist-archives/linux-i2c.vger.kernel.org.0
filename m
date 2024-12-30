@@ -1,188 +1,144 @@
-Return-Path: <linux-i2c+bounces-8838-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8839-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAE809FE8D5
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 17:00:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D2349FE8E3
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 17:06:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BF2F1882ACA
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 16:00:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D06B97A10FA
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 16:06:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 896621AA1FE;
-	Mon, 30 Dec 2024 16:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B851ABECA;
+	Mon, 30 Dec 2024 16:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="3TosvWTl"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KK3Sdas/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39F71AAA1D
-	for <linux-i2c@vger.kernel.org>; Mon, 30 Dec 2024 16:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7386E1A9B28
+	for <linux-i2c@vger.kernel.org>; Mon, 30 Dec 2024 16:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735574406; cv=none; b=AiUdxVeHyw4/tjvFFhAQRwBcMihkPdDf599fRryKnnvbJOZ3Id98zAIbo1BjPemgRoxC7c3TJpnKT3obi+KMK+rqzyL1evHCUZOlzzWODR2XjMdabGqKjkbYzr/QeFsrbC3D6b0yUqUFcSQeAu9Y4jEnRfiiiTAAg58Skq4b4AQ=
+	t=1735574806; cv=none; b=cqVeUKRiZPC4WQVyAkYXu1oXwg27dTu4OxNKf+DOKHKjp2zyrAeGAh/EmI/7J5b+qB7oTWZxx+s+Qyv+AaiSenPujhmD7vzHdjVDOY7+uWz8a/VYT+TIctJza8Xm9/02KYG2+egV0BsCs6s25h4khuYyNIFZo60ShPyUogWQZW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735574406; c=relaxed/simple;
-	bh=e5pa9zm/IDPD6ojXEZScjQ8sMVk15k4rJMivCJ178Zg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m8pZ2e9XFbBxcGT5Jpn5fHgmf+M0D0I7OVfPCpxX+igwOANDuRFS+OGDkddzRT0Rw1jE9dRub7gGvbltaTARHsmJWli4Km+5SRslCePsuGW2Up6ujazEGud0YvyW0kVLRV1MVvLsB9Jctbi8zcmI9h8xuoFwtLubFRoRogD9TBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=3TosvWTl; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aabfb33aff8so1619569466b.0
-        for <linux-i2c@vger.kernel.org>; Mon, 30 Dec 2024 08:00:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1735574402; x=1736179202; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TCXX2yJLWj9ThSdd+lMtqSTGbzNmb973OvmHPhSe13Y=;
-        b=3TosvWTl5QdFnw22FtkzmpYB7g4TfQE+Eot/fLDiUDUGDIJ+53Ofpd6FoTwqoFtxSD
-         rK2niwMzvNrFLZ27Y28V08xYHAPNH+qxzFmdRxkYaxhuwHB1MMJTFtb+cR9YKVHiOQNM
-         /r/JHhyYkfMmxpXGKfU0Kp4xPh7WHIokvh3JJeDOpjuQPri8A3dKh2icYWRwIgGhuafF
-         1yqbew+LcWdMd03vskIwWOQXRjLY0G65JLfYhOPcspthCKiwcuWLemzHTayojc313MXP
-         sDBe8fmpy50F8UE/Mt+DdfpjTXdKtqyN9iZCFUKTlpqu95q+T9bwbv2Zsyj0B5L9tlYh
-         5BjA==
+	s=arc-20240116; t=1735574806; c=relaxed/simple;
+	bh=1FqEAIHNzdL2Pt+Yq3U0+Th3OM9VqC8etEFnWVnoaEE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eD5ArZWciMzotXShg7j5RAbRLofJxHPd9pp6faeTmh5hKnckGYoPg8jELdY3shNos5cNRj45Ylp0O4hPJ9WBOopkeZdjtYmtb8rFwAabi55lW/VdWIfV4M/STXyTcLmvwh0hPPMEK83PgR6tNkPRNIqqOcLrViU4sOxxxA0LORk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KK3Sdas/; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BUE6DVJ027345
+	for <linux-i2c@vger.kernel.org>; Mon, 30 Dec 2024 16:06:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	XgElpvo8OcSUFCA7YNzM7duH76GnQ300RgK0OBHRX2M=; b=KK3Sdas/p/VgedFs
+	izgm+xQX8xVLlFQOpLJat7slDqLhQqytiPu160QyY1tcd/M2Io6/y42qLASd9TnQ
+	MvgJ9lSBLdD/fmnI/0n1A20gjEpM+IG+M3YWiIk+LGJrMFMfvvgjELqEjKorILam
+	065V57b2xnpc65bvzFYPRKgpMrv5ZQdBgjzYGRt7oCQlK8fzPlJJqj0lAIZQ20Fd
+	FI18Sh97hwLdgmjF+9rU0erz2H+Fy9dXne+uR3+qHAPlCs0/um9VI+zYI6ho2HGw
+	zCXYYarNx+OSgzcKDFFN09/K3MNcX31yb3XOEL+2D0pisa81fpA0et7ufvt24FtT
+	XEww2Q==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43uvyt09k8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Mon, 30 Dec 2024 16:06:44 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7b6f134dac1so77174485a.3
+        for <linux-i2c@vger.kernel.org>; Mon, 30 Dec 2024 08:06:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735574402; x=1736179202;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TCXX2yJLWj9ThSdd+lMtqSTGbzNmb973OvmHPhSe13Y=;
-        b=jhiDWXZTVsPzVqMetL3L1Tza/q60qmvUgmqvyOU2YmVVUiZxFYV9yYcAWhod2vmdPX
-         BDXpFe6oLsApmFkPgk+exN+rH5WbTnkEHixn+Yq3fayFxghCcEtMvL7KNFWpB9zmEXWf
-         xVpx5rwE/tElCLhvmkTAUv95Ixya+o3SQS8kZlwDiBLd/yrFNhaBtArKMCNlJC5hd/hA
-         EIt/pcgCH3xEWwstSbXjnIFw29IP1eefqo8w0LS8qNOJJZz7d1vIPlFpE4P7D10aPd26
-         0+m6OQGdF5EHg+UHYCsx2fg8wdTykYpavssDl20TK0adDM4qrgKn8SEoSCX2V62f8Uvv
-         TVAg==
-X-Forwarded-Encrypted: i=1; AJvYcCXHEmISdh7fLjgnzeqGBALE6w0SMbpaOXx050a4a3U28vmewAxP1ngCuD1CwGViagglrFV8uvYxjhw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzCUsxzOX9yufmtDS+Bo1BiKIhQoK6Lb4tpXwH1QPU5m5mDGJl
-	8MC7WjNFtFW0YeniyTJl7bDDTPHMucK91lgtYG/3NBHzjxBvo4PhTx/MJzY4lfQ=
-X-Gm-Gg: ASbGncsUZ4jCTUnrN1oGrvxYG8pz1bJXBw96heJMDjkompT8L1piNRrmGnvjWPhq5Um
-	ZRAndYpF8sNtBSV+3+x2qKOs5xQJcIUsVIEyf++zTRvkL0t8O6Q/5W4iyf3wEk0s3CkPMqi2yXt
-	vLxKBEzcu2UITDrk7S0GEKOW3Zb0wcA3JdpHf7t4hVSumOnRx7Q6Lp8WRnruMzmiruRFeihTx92
-	QbVgciWq+/I9W0SuNntpXQnPfS7mjJBbvCicuCNiwcXRd9vua9tCEJINEeY+itetMb4RvIr++p9
-	tHISD35wtA==
-X-Google-Smtp-Source: AGHT+IFCIH4sn41HQmYmDRm+g00lWH6lqDxFRyKMkiMzRjxmD8u8PYxihE/16RAw/A+An+k+dXV1RA==
-X-Received: by 2002:a17:906:6a21:b0:aab:edc2:ccef with SMTP id a640c23a62f3a-aac080fe36dmr3284047966b.2.1735574401937;
-        Mon, 30 Dec 2024 08:00:01 -0800 (PST)
-Received: from localhost (p50915bc6.dip0.t-ipconnect.de. [80.145.91.198])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aaf69b4540csm75036466b.159.2024.12.30.08.00.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2024 08:00:01 -0800 (PST)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Andi Shyti <andi.shyti@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH v2] i2c: designware: Actually make use of the I2C_DW_COMMON and I2C_DW symbol namespaces
-Date: Mon, 30 Dec 2024 16:59:49 +0100
-Message-ID: <20241230155948.3211743-2-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.45.2
+        d=1e100.net; s=20230601; t=1735574803; x=1736179603;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XgElpvo8OcSUFCA7YNzM7duH76GnQ300RgK0OBHRX2M=;
+        b=gAVI2yrMxDSAE/BewUzcZlqLCyTfoyi4WoWSix5cM4PirJEPco1sfSiHZm5kKifRxB
+         sQbTmcEh7E+mcYo7quexUGupVqIgLEjxdWehJ36ShGq7b295aKtZpqZw2J9+vDo3TWWR
+         ZFr9VfUtyZxZqsM7ujS9xhk3ZZFc/CNNB+BGHuePV8IR6TdFcMtWz9e4t8glDcVpCIEe
+         od4YB07oUijgiJ6raeqeSZRE9c1cOISKLXlYFAD+JGxiucVVzlpaW8Os0XVbWCJwS0y+
+         PoawQCtRlJp9yki1OV19R9r+W7dtvgAITPczi+H2AtfJ1D/cKfuBLarc714rIG7s6yPw
+         ZYYw==
+X-Gm-Message-State: AOJu0YzNi3lcQkuU+fkGpE5UrOpMDJBwzyrxEPm+8zqNmwfvrwqqzIS7
+	m747FSjzxr6papip9GczPdtVqUHm/WSjrLMMBHPNjVHoKHhSz5iTVk0qoV0nxEzbbQ9PpmJATDk
+	9evJrn0Ltj/6NNrB8256o6R8uKdbjj94q5JHyD7k4pz7hPeUu71jE8i9zLUU=
+X-Gm-Gg: ASbGncsK4rEnct5vCb+FR0P0+KqV0vyJxqIr3m2g3yTYMSOMp/ZbKonRbzhaxCqL8rx
+	fyBbKtBw01armbph2S+UAsyP3sAeadle9+mDs3EksD3gT3iINl6wGG7QANvikHZhDzkXhaXnsPp
+	pyywINrS8gccCS2PjMro6VVSMSKElI+Uour4AQ8LA5qk2vS4sIli/VBk8EYOhMf2oSaC2HHWWwT
+	nhxsfmPGcLBY8U+5t06sjq45++K1piK1xmWbIgTAp3P8LGi6q9mYj3VQcSlrpsoo7IeQnRTHU4Z
+	jlaAEnRcHIGHb7Pgi4X2atOnzeUwPVVPd6M=
+X-Received: by 2002:a05:620a:191d:b0:7b6:d026:29f with SMTP id af79cd13be357-7b9ba712954mr2330669485a.1.1735574803192;
+        Mon, 30 Dec 2024 08:06:43 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG9bycyPmrIZt2cXa/IYa2d3alwG8C6WlLAth6Yoz4ieNDGkAfMo0HQWekj5vkZCqZ1QC9Gqg==
+X-Received: by 2002:a05:620a:191d:b0:7b6:d026:29f with SMTP id af79cd13be357-7b9ba712954mr2330666485a.1.1735574802734;
+        Mon, 30 Dec 2024 08:06:42 -0800 (PST)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0e82f858sm1501596766b.21.2024.12.30.08.06.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Dec 2024 08:06:42 -0800 (PST)
+Message-ID: <7465404d-da79-4cb1-a3c6-0e88cf024e0f@oss.qualcomm.com>
+Date: Mon, 30 Dec 2024 17:06:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/6] arm64: dts: qcom: x1e80100: Add CCI definitions
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20241227-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v2-0-06fdd5a7d5bb@linaro.org>
+ <20241227-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v2-5-06fdd5a7d5bb@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20241227-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v2-5-06fdd5a7d5bb@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2860; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=e5pa9zm/IDPD6ojXEZScjQ8sMVk15k4rJMivCJ178Zg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBncsN1F5WHq4nUsdvUCtLkXSGpq9UcG+l4EtwNn dkk3gwWFo6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZ3LDdQAKCRCPgPtYfRL+ TvSyB/4mnrQ5DxXv36Fm4O1cUI78s1wS3B4oym4rzdPUM8LUos5e7umSORYPKXD9YLt05XuoTyC aEgA9QjQoEyYVGfme8OX4JlPyjs7eP8wOYgkTB/U2fbTgtfzEM+vtkX77ehfWjGcV4LiHRWPtc6 wZbo28pLNs2CvQqJpTy6wmaEBIO8dDR0PHbNKDx8TEZC406to8b9K4/vq2IW4jl8kCLXyt3c5Hd G++sDTqyZjjVRkD0KapkIjG+VAv99D516FqssaW+q9jeYfpJjRXOie5HzXpA2eucJHg9LN/O/8W yJQCgVp2YlpTxqYWzoS5Xd0AGzqC/5LYPKU+8e3NRYkAkJ4R
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: HBe4CPwuPdUrV-6TcP4eE8PoEY14rb5J
+X-Proofpoint-GUID: HBe4CPwuPdUrV-6TcP4eE8PoEY14rb5J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ spamscore=0 priorityscore=1501 malwarescore=0 adultscore=0 mlxlogscore=761
+ suspectscore=0 lowpriorityscore=0 mlxscore=0 impostorscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412300139
 
-DEFAULT_SYMBOL_NAMESPACE must already be defined when <linux/export.h>
-is included. So move the define above the include block.
+On 27.12.2024 2:11 PM, Bryan O'Donoghue wrote:
+> Add in 2 CCI busses. One bus has two CCI bus master pinouts:
+> cci_i2c_scl0 = gpio101
+> cci_i2c_sda0 = gpio102
+> cci_i2c_scl1 = gpio103
+> cci_i2c_sda1 = gpio104
+> 
+> A second bus has a single CCI bus master pinout:
+> cci_i2c_scl2 = gpio105
+> cci_i2c_sda2 = gpio106
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
 
-Fixes: fd57a3325a77 ("i2c: designware: Move exports to I2C_DW namespaces")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
----
-Hello,
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Changes since (implicit) v1 that is available at
-https://lore.kernel.org/linux-i2c/20241203173640.1648939-2-u.kleine-koenig@baylibre.com:
-
- - Also fix drivers/i2c/busses/i2c-designware-master.c
- - Make added line breaks consistent
-
- drivers/i2c/busses/i2c-designware-common.c | 4 ++--
- drivers/i2c/busses/i2c-designware-master.c | 5 +++--
- drivers/i2c/busses/i2c-designware-slave.c  | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index 183a35038eef..8eb7bd640f8d 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -8,6 +8,9 @@
-  * Copyright (C) 2007 MontaVista Software Inc.
-  * Copyright (C) 2009 Provigent Ltd.
-  */
-+
-+#define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW_COMMON"
-+
- #include <linux/acpi.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
-@@ -29,8 +31,6 @@
- #include <linux/types.h>
- #include <linux/units.h>
- 
--#define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW_COMMON"
--
- #include "i2c-designware-core.h"
- 
- static const char *const abort_sources[] = {
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index c8cbe5b1aeb1..2569bf1a72e0 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -8,6 +8,9 @@
-  * Copyright (C) 2007 MontaVista Software Inc.
-  * Copyright (C) 2009 Provigent Ltd.
-  */
-+
-+#define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW"
-+
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/errno.h>
-@@ -22,8 +25,6 @@
- #include <linux/regmap.h>
- #include <linux/reset.h>
- 
--#define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW"
--
- #include "i2c-designware-core.h"
- 
- #define AMD_TIMEOUT_MIN_US	25
-diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
-index dc2b788eac5b..5cd4a5f7a472 100644
---- a/drivers/i2c/busses/i2c-designware-slave.c
-+++ b/drivers/i2c/busses/i2c-designware-slave.c
-@@ -6,6 +6,9 @@
-  *
-  * Copyright (C) 2016 Synopsys Inc.
-  */
-+
-+#define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW"
-+
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/errno.h>
-@@ -16,8 +18,6 @@
- #include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- 
--#define DEFAULT_SYMBOL_NAMESPACE	"I2C_DW"
--
- #include "i2c-designware-core.h"
- 
- static void i2c_dw_configure_fifo_slave(struct dw_i2c_dev *dev)
-
-base-commit: fc033cf25e612e840e545f8d5ad2edd6ba613ed5
--- 
-2.25.1
-
+Konrad
 
