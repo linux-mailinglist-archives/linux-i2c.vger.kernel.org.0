@@ -1,56 +1,54 @@
-Return-Path: <linux-i2c+bounces-8809-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8810-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C5279FE1AD
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 03:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BC74A9FE1B1
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 03:02:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B0A43A1A16
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 02:02:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 201CA3A1A66
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 02:02:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A08D52AD22;
-	Mon, 30 Dec 2024 02:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF2702AD22;
+	Mon, 30 Dec 2024 02:02:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="er9idcRM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YZbE5vjd"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7EB2905;
-	Mon, 30 Dec 2024 02:02:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F0E3C30;
+	Mon, 30 Dec 2024 02:02:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735524124; cv=none; b=nvWEt98qP2/DBr8TmnHayljTc2wl1le11Gy0+Uvh+/iZb1KYBHXLvq6JY34jpXy35yqZDA5ZYiQ3tRz5+u8IFz2nnw+DdtScfzEIXgeB8NOtaZVQmQ80HJNuytkZk6AZ10ZdbPwxmT7oDxrQhPUyj24xDkqm8bj8K9E6RtGlyC0=
+	t=1735524158; cv=none; b=QAFzd90LvAdk6pS6f/x6HujPIwbl3TUMxXWGwjWT2YfaRXKDxZ92FCG9d1ZVbqlBEEVtVVu09Plkq4smLHxp72rIaZEpAOqqC5Ani0Nc9XaJ9EeR6kBNn3QeSQyOnMMEps1D7JwWVhX9Dpx4rQh+xF/VvvUZ3uwXTjIr/pK9tq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735524124; c=relaxed/simple;
-	bh=cIMTaIWQP22lxD4w5uccVrK9JiGvXC+KewwIKgur0rM=;
+	s=arc-20240116; t=1735524158; c=relaxed/simple;
+	bh=4VtUCj7Nnv/joJSbGmmW6tt51gimX2/gVM6QBoag2Is=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r8eDaFUduq19zXwZ5sXiJu4/dJJXfke5z/s5vBeDN17v0k1SdWbEluAmni6X5CCMh2rcDLEDB1rC8OYszNFaEkbK9jrThz+V9/Kj+yiDIfIwThw+8Wpa5/15SHWdvkAYz8ZC+vzp7SxuZyzTQQB/L1kIR3L1bcXDxEIq0ucPlrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=er9idcRM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E2CC4CED1;
-	Mon, 30 Dec 2024 02:02:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=thybCd+61a4PDYloMDGMENIJekvenRLQQwiruuTRMP9IbQZOks3g0NNHCKlJMAT1HCDzf2LuEhYEV6n5IFjrqA4MO5gylvD55rAir22RPu+5QZYlVDXMLqOoVtapSPyuEgJJMc7cLH5EoHaa2nQbt7rQVeWpmwo4K8c7jljOr8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YZbE5vjd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3397DC4CED1;
+	Mon, 30 Dec 2024 02:02:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735524123;
-	bh=cIMTaIWQP22lxD4w5uccVrK9JiGvXC+KewwIKgur0rM=;
+	s=k20201202; t=1735524157;
+	bh=4VtUCj7Nnv/joJSbGmmW6tt51gimX2/gVM6QBoag2Is=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=er9idcRMKTuWjY7CD9Wyph32phBi9WA1SFSNm464Ymm3sma/+JT+nq+qf930FaesG
-	 Szb2t4DretQKxdMWAFvgj1tj763ANNrmwBetymVK/3UUN0qQ/YTsdOUBe/FgnlDHFj
-	 +E+THvdowcaM0191QLokZ3V8k4NZB95TPtLO0eVEdeKPWa9QATkkOIgh3DInGKDFS0
-	 1fhjSFdJzjhe+DjJAto4IZtrpwZ7+KuVXWMeDlLZE5855zWfQqj+dNpDtTHXQZKZCS
-	 dm4uPHUlCHltARa7rAeFZxGJr2Dg42dQXiD4NmB/93x5mkfdVjPMRofZD1RmjKMe0L
-	 FGokCUhIRZA8w==
-Date: Mon, 30 Dec 2024 03:01:57 +0100
+	b=YZbE5vjdwRetf6MmEKXXod7pPq1IC6rTQmhbZk2hfi2ylyxamV+vcp+smBAd1ca0c
+	 LsV+QXdJsr5ERxFA+MLL+H9eDSJG/jcIVjz+eaBbpFhNsCR2Ow0D7Ow2IxNn6v3uOp
+	 FesYbBAnx5a42vFpyFlt5pqPIJa8/dYhYMFbHBLnMDzt2KaL/kSAganKR1AAZiMnLl
+	 U/pekQOL+lWnvaqspQx59nii2zNzxVeYepCjxFCUud68nwQT8UNOeFZpj7oYpoHRMf
+	 6w6USE1vwscL9ZdTsM3MnGHTxf+KCIlXjPNVY0XGW+mM+ZVT+FII4cAyrrHqKfrcIv
+	 3389+zbSGcPng==
+Date: Mon, 30 Dec 2024 03:02:33 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] i2c: exynos5: Add support for Exynos8895 SoC
-Message-ID: <awtro3dlxmdhwfjr4kjtzurn24fmrvxvdnwzkesn7vca3c7yvd@ixkp2v4bmhmt>
-References: <20241228111509.896502-1-ivo.ivanov.ivanov1@gmail.com>
+To: linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, 
+	Vladimir Zapolskiy <vz@mleia.com>
+Subject: Re: [PATCH v3 0/2] Qcom Geni exit path cleanups
+Message-ID: <lmb7cgkksmwweo6xv4ivwbqh6k6i6jtfuowlpjkrrly3olzhg6@tsxezikdz74d>
+References: <20241227223230.462395-1-andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,13 +57,13 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241228111509.896502-1-ivo.ivanov.ivanov1@gmail.com>
+In-Reply-To: <20241227223230.462395-1-andi.shyti@kernel.org>
 
-Hi Ivaylo,
+Hi,
 
-> Ivaylo Ivanov (2):
->   dt-bindings: i2c: exynos5: Add samsung,exynos8895-hsi2c compatible
->   i2c: exynos5: Add support for Exynos8895 SoC
+> Andi Shyti (2):
+>   i2c: qcom-geni: Use dev_err_probe in the probe function
+>   i2c: qcom-geni: Simplify error handling in probe function
 
 merged to i2c/i2c-host.
 
