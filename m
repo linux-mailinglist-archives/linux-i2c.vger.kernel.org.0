@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-8829-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8831-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3F139FE640
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 14:22:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C0A99FE64D
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 14:23:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B7483A1F10
-	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 13:22:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05685161287
+	for <lists+linux-i2c@lfdr.de>; Mon, 30 Dec 2024 13:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A4371AA1DA;
-	Mon, 30 Dec 2024 13:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C397F1ACEA2;
+	Mon, 30 Dec 2024 13:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OGSYl3kJ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JKcEjcit"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2FA1A76DA;
-	Mon, 30 Dec 2024 13:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC931A83ED;
+	Mon, 30 Dec 2024 13:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735564949; cv=none; b=rRi7Sjh+rpgITftEpapBoncKwBsYtWLDb4Tv+bBRkgosKEeBabKXUtqoSpFrOehO2GCeXxUgGv6AoOjSVMZYqwJW6CuCEVkrZEjumBZuhezWBG8GrpiJCKfNs6fkLMYVIhfnRkbWZPP/ahUF+0GM48urjo8keCCZxqmmxtysJ2M=
+	t=1735564950; cv=none; b=Z5AZRyBv1O5WPVWBGQU/JYv0Dg1wamoEy4LdMtKbBUZfzkZmN2e9vg2GLKxsF2GMRVYbSTE0/9T92GslA+d1JBvD8xYYW45pudlXp5yftMZVVhUEnHrkU5SIwE8A2v7oPOiTaAKdQ0rWg20NOauyG5sRAYsQGcjDcw8HEVK0u5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735564949; c=relaxed/simple;
-	bh=tLYT5stcMWOf18NHJ97XP8D8uPJH8VXGXq75C1Q0Pzw=;
+	s=arc-20240116; t=1735564950; c=relaxed/simple;
+	bh=itDdHLKXbbzyZ0JoOeIZSHSxCclHceriAM2H2KstmCI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P+cHfM4IVhqTXQTFCAd+7Pi+H/id7+19S+hVQ4yzFfMdIYVqKBqracs7/sZEzDllFl/pPtlyssWNHOhMgjzGxQpPoXECt42bqOIX7gcRX7DBO6dt2nfM0pP9Hm13HrGL7rYvMz1TG+SZKblq5pgR4JM7HWi2QGjjQ/gGhzNHUdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OGSYl3kJ; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=p9v2sLxn2EPI00draCfbrvIVcXXyBsfmRmtNCEYEl84R2NEqPgUxmbjxeAJEZMfwJOxj905Xk817NgEonH8DXDKl77WZ1i56vGdo1zXXRnH75vvPPwE/rVSuLV0I84Y8SuJUF420z9PGUBXVdlAAE8GfYZ+DcRPTtkmvgh6QghU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JKcEjcit; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D88BB4000A;
-	Mon, 30 Dec 2024 13:22:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D81D240012;
+	Mon, 30 Dec 2024 13:22:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1735564944;
+	t=1735564945;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=SsQLTZi5YCzNpeNGDm5XclqGQuSht5cADzE52HbVqG4=;
-	b=OGSYl3kJ86xi8PFqHV/nwII3ZNr3ykErVrgg2JoMOb/+UvjftX+kY2dG4v7Up6TfSm6oYd
-	oVaR53KGircvuCG5hU3VCEk3AdexI24HMPIqVC86Nd7VWOuYNBnipEot86KMQKBXPk427A
-	gph5dPULLj7UaGbzo9ds387foVrPU/qK7N/eXHXoOI35/1GupuI/oO+qFKUWLR9mflXxDO
-	H2jLBklmf24naygpBtZxa2pU+2AiqIoIh0t6t6mvU74wfbzzl6QcQbKVkBVcG0NZV11gRW
-	65g2N5LKzk58nCGAOxSDZo+VxDuvbIARX3fdj2tBiThkSHLNFWSyhC3oXfuD5g==
+	bh=3aixxuyP9DQfn6/ANYL+4jTxDoKgiOIK+tYi41OOALk=;
+	b=JKcEjcitOJHRCFbKTwreXUJoSj/01Y06LSI0QdPU8eqP3ABncjui0s3OlokPGdqK6V/Yq/
+	04R6Eb9Hp3mlppk4srIW4AmV+aGbxDvu53mz2djvd5IR7i00fpMCs6tkD0Q9PW0wFL02gk
+	5SHGQbCLfTFmZdZhHUBdlj86esCvhbobn615LPhgMmX9b14p/Tl7PiFv/CqtZBJ8dcP0Zd
+	9p+IulybLzg5nvk78w7/SGh79aau0s3Vb36eL30UZGMrhA0ZbFDIGi3UoLoLmvKBGDWqoe
+	dfCEREQ+ZoRvB60hJX/mExZS7ztJN8VBkdYr1QGTsrlZYDKm3G28vxZmBIkRAQ==
 From: Romain Gantois <romain.gantois@bootlin.com>
-Date: Mon, 30 Dec 2024 14:22:09 +0100
-Subject: [PATCH v4 7/9] i2c: support per-channel ATR alias pools
+Date: Mon, 30 Dec 2024 14:22:10 +0100
+Subject: [PATCH v4 8/9] i2c: Support dynamic address translation
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241230-fpc202-v4-7-761b297dc697@bootlin.com>
+Message-Id: <20241230-fpc202-v4-8-761b297dc697@bootlin.com>
 References: <20241230-fpc202-v4-0-761b297dc697@bootlin.com>
 In-Reply-To: <20241230-fpc202-v4-0-761b297dc697@bootlin.com>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
@@ -78,344 +78,458 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: romain.gantois@bootlin.com
 
-Some I2C address translators (ATRs) assign each of their remote peripheral
-aliases to a specific channel. To properly handle these devices, add
-support for having separate alias pools for each ATR channel.
+The i2c-atr module keeps a list of associations between I2C client aliases
+and I2C addresses. This represents the address translation table which is
+programmed into an ATR channel at any given time. This list is only updated
+when a new client is bound to the channel.
 
-This is achieved by allowing callers of i2c_atr_add_adapter to pass an
-optional alias list. If present, this list will be used to populate the
-channel's alias pool. Otherwise, the common alias pool will be used.
+However in some cases, an ATR channel can have more downstream clients than
+available aliases. One example of this is an SFP module that is bound to an
+FPC202 port. The FPC202 port can only access up to two logical I2C
+addresses. However, the SFP module may expose up to three logical I2C
+addresses: its EEPROM on 7-bit addresses 0x50 and 0x51, and a PHY
+transceiver on address 0x56.
+
+In cases like these, it is necessary to reconfigure the channel's
+translation table on the fly, so that all three I2C addresses can be
+accessed when needed.
+
+As there are currently no known ATR's which do not support dynamic address
+translation, this feature can be enabled by default without breaking
+existing use cases.
+
+Modify the i2c-atr module to provide on-the-fly address translation. This
+is achieved by modifying an ATR channel's translation table whenever an I2C
+transaction with unmapped clients is requested.
+
+Add a mutex to protect alias_list. This prevents
+i2c_atr_dynamic_attach/detach_addr from racing with the bus notifier
+handler to modify alias_list.
 
 Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
 ---
- drivers/i2c/i2c-atr.c         | 74 ++++++++++++++++++++++++++++++-------------
- drivers/media/i2c/ds90ub913.c |  9 ++++--
- drivers/media/i2c/ds90ub953.c |  9 ++++--
- include/linux/i2c-atr.h       | 34 ++++++++++++++------
- 4 files changed, 91 insertions(+), 35 deletions(-)
+ drivers/i2c/i2c-atr.c | 249 +++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 188 insertions(+), 61 deletions(-)
 
 diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
-index 4652e9c2917ebdc817a5a661642e9f535e421c1a..26de5b7ec89576e8e522627da1d9997b244f8a8c 100644
+index 26de5b7ec89576e8e522627da1d9997b244f8a8c..54ffa756b5b2af3e152865315a5b8e0e3103b66a 100644
 --- a/drivers/i2c/i2c-atr.c
 +++ b/drivers/i2c/i2c-atr.c
-@@ -37,6 +37,7 @@ struct i2c_atr_alias_pair {
- /**
-  * struct i2c_atr_alias_pool - Pool of client aliases available for an ATR.
-  * @size:     Total number of aliases
-+ * @shared:   Indicates if this alias pool is shared by multiple channels
-  *
-  * @lock:     Lock protecting @aliases and @use_mask
-  * @aliases:  Array of aliases, must hold exactly @size elements
-@@ -44,6 +45,7 @@ struct i2c_atr_alias_pair {
-  */
- struct i2c_atr_alias_pool {
- 	size_t size;
-+	bool shared;
+@@ -16,6 +16,7 @@
+ #include <linux/mutex.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
++#include <linux/lockdep.h>
  
- 	/* Protects aliases and use_mask */
- 	spinlock_t lock;
-@@ -58,6 +60,8 @@ struct i2c_atr_alias_pool {
+ #define ATR_MAX_ADAPTERS 100	/* Just a sanity limit */
+ #define ATR_MAX_SYMLINK_LEN 11	/* Longest name is 10 chars: "channel-99" */
+@@ -27,9 +28,17 @@
+  * @alias:  I2C alias address assigned by the driver.
+  *          This is the address that will be used to issue I2C transactions
+  *          on the parent (physical) bus.
++ * @fixed:  Alias pair cannot be replaced during dynamic address attachment.
++ *          This flag is necessary for situations where a single I2C transaction
++ *          contains more distinct target addresses than the ATR channel can handle.
++ *          It marks addresses that have already been attached to an alias so
++ *          that their alias pair is not evicted by a subsequent address in the same
++ *          transaction.
++ *
+  */
+ struct i2c_atr_alias_pair {
+ 	struct list_head node;
++	bool fixed;
+ 	u16 addr;
+ 	u16 alias;
+ };
+@@ -58,6 +67,7 @@ struct i2c_atr_alias_pool {
+  * @adap:            The &struct i2c_adapter for the channel
+  * @atr:             The parent I2C ATR
   * @chan_id:         The ID of this channel
++ * @alias_pairs_lock: Mutex protecting @alias_pairs
   * @alias_pairs:     List of @struct i2c_atr_alias_pair containing the
   *                   assigned aliases
-+ * @alias_pool:      Pool of available client aliases
-+ *
-  * @orig_addrs_lock: Mutex protecting @orig_addrs
-  * @orig_addrs:      Buffer used to store the original addresses during transmit
-  * @orig_addrs_size: Size of @orig_addrs
-@@ -68,6 +72,7 @@ struct i2c_atr_chan {
+  * @alias_pool:      Pool of available client aliases
+@@ -71,6 +81,8 @@ struct i2c_atr_chan {
+ 	struct i2c_atr *atr;
  	u32 chan_id;
  
++	/* Lock alias_pairs during attach/detach */
++	struct mutex alias_pairs_lock;
  	struct list_head alias_pairs;
-+	struct i2c_atr_alias_pool *alias_pool;
- 
- 	/* Lock orig_addrs during xfer */
- 	struct mutex orig_addrs_lock;
-@@ -84,7 +89,7 @@ struct i2c_atr_chan {
-  * @algo:      The &struct i2c_algorithm for adapters
-  * @lock:      Lock for the I2C bus segment (see &struct i2c_lock_operations)
-  * @max_adapters: Maximum number of adapters this I2C ATR can have
-- * @alias_pool: Pool of available client aliases
-+ * @alias_pool: Optional common pool of available client aliases
-  * @i2c_nb:    Notifier for remote client add & del events
-  * @adapter:   Array of adapters
-  */
-@@ -107,7 +112,7 @@ struct i2c_atr {
- 	struct i2c_adapter *adapter[] __counted_by(max_adapters);
- };
- 
--static struct i2c_atr_alias_pool *i2c_atr_alloc_alias_pool(size_t num_aliases)
-+static struct i2c_atr_alias_pool *i2c_atr_alloc_alias_pool(size_t num_aliases, bool shared)
- {
  	struct i2c_atr_alias_pool *alias_pool;
- 	int ret;
-@@ -130,6 +135,8 @@ static struct i2c_atr_alias_pool *i2c_atr_alloc_alias_pool(size_t num_aliases)
- 		goto err_free_aliases;
+ 
+@@ -155,16 +167,132 @@ static void i2c_atr_free_alias_pool(struct i2c_atr_alias_pool *alias_pool)
+ 	kfree(alias_pool);
+ }
+ 
++/* Must be called with alias_pairs_lock held */
++static struct i2c_atr_alias_pair *i2c_atr_create_c2a(struct i2c_atr_chan *chan,
++						     u16 alias, u16 addr)
++{
++	struct i2c_atr_alias_pair *c2a;
++
++	lockdep_assert_held(&chan->alias_pairs_lock);
++
++	c2a = kzalloc(sizeof(*c2a), GFP_KERNEL);
++	if (!c2a)
++		return NULL;
++
++	c2a->addr = addr;
++	c2a->alias = alias;
++
++	list_add(&c2a->node, &chan->alias_pairs);
++
++	return c2a;
++}
++
++/* Must be called with alias_pairs_lock held */
++static void i2c_atr_destroy_c2a(struct i2c_atr_alias_pair **pc2a)
++{
++	list_del(&(*pc2a)->node);
++	kfree(*pc2a);
++	*pc2a = NULL;
++}
++
++static int i2c_atr_reserve_alias(struct i2c_atr_alias_pool *alias_pool)
++{
++	unsigned long idx;
++	u16 alias;
++
++	spin_lock(&alias_pool->lock);
++
++	idx = find_first_zero_bit(alias_pool->use_mask, alias_pool->size);
++	if (idx >= alias_pool->size) {
++		spin_unlock(&alias_pool->lock);
++		return -EBUSY;
++	}
++
++	set_bit(idx, alias_pool->use_mask);
++
++	alias = alias_pool->aliases[idx];
++
++	spin_unlock(&alias_pool->lock);
++	return alias;
++}
++
++static void i2c_atr_release_alias(struct i2c_atr_alias_pool *alias_pool, u16 alias)
++{
++	unsigned int idx;
++
++	spin_lock(&alias_pool->lock);
++
++	for (idx = 0; idx < alias_pool->size; ++idx) {
++		if (alias_pool->aliases[idx] == alias) {
++			clear_bit(idx, alias_pool->use_mask);
++			spin_unlock(&alias_pool->lock);
++			return;
++		}
++	}
++
++	spin_unlock(&alias_pool->lock);
++}
++
++/* Must be called with alias_pairs_lock held */
+ static struct i2c_atr_alias_pair *
+-i2c_atr_find_mapping_by_addr(const struct list_head *list, u16 phys_addr)
++i2c_atr_find_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
+ {
++	struct i2c_atr *atr = chan->atr;
+ 	struct i2c_atr_alias_pair *c2a;
++	struct list_head *alias_pairs;
++	u16 alias;
++	int ret;
++
++	lockdep_assert_held(&chan->alias_pairs_lock);
+ 
+-	list_for_each_entry(c2a, list, node) {
+-		if (c2a->addr == phys_addr)
++	alias_pairs = &chan->alias_pairs;
++
++	list_for_each_entry(c2a, alias_pairs, node) {
++		if (c2a->addr == addr)
+ 			return c2a;
  	}
  
-+	alias_pool->shared = shared;
-+
- 	spin_lock_init(&alias_pool->lock);
- 
- 	return alias_pool;
-@@ -357,7 +364,7 @@ static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
- 	u16 alias;
- 	int ret;
- 
--	ret = i2c_atr_reserve_alias(atr->alias_pool);
 +	ret = i2c_atr_reserve_alias(chan->alias_pool);
- 	if (ret < 0) {
- 		dev_err(atr->dev, "failed to find a free alias\n");
- 		return ret;
-@@ -387,7 +394,7 @@ static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
- err_free:
- 	kfree(c2a);
- err_release_alias:
--	i2c_atr_release_alias(atr->alias_pool, alias);
++	if (ret < 0) {
++		// If no free aliases are left, replace an existing one
++		if (unlikely(list_empty(alias_pairs)))
++			return NULL;
++
++		list_for_each_entry_reverse(c2a, alias_pairs, node)
++			if (!c2a->fixed)
++				break;
++
++		if (c2a->fixed)
++			return NULL;
++
++		atr->ops->detach_addr(atr, chan->chan_id, c2a->addr);
++		c2a->addr = addr;
++
++		// Move updated entry to beginning of list
++		list_move(&c2a->node, alias_pairs);
++
++		alias = c2a->alias;
++	} else {
++		alias = ret;
++
++		c2a = i2c_atr_create_c2a(chan, alias, addr);
++		if (!c2a)
++			goto err_release_alias;
++	}
++
++	ret = atr->ops->attach_addr(atr, chan->chan_id, c2a->addr, c2a->alias);
++	if (ret) {
++		dev_err(atr->dev, "failed to attach 0x%02x on channel %d: err %d\n",
++			addr, chan->chan_id, ret);
++		goto err_del_c2a;
++	}
++
++	return c2a;
++
++err_del_c2a:
++	i2c_atr_destroy_c2a(&c2a);
++err_release_alias:
 +	i2c_atr_release_alias(chan->alias_pool, alias);
+ 	return NULL;
+ }
  
+@@ -180,7 +308,7 @@ static int i2c_atr_map_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+ {
+ 	struct i2c_atr *atr = chan->atr;
+ 	static struct i2c_atr_alias_pair *c2a;
+-	int i;
++	int i, ret = 0;
+ 
+ 	/* Ensure we have enough room to save the original addresses */
+ 	if (unlikely(chan->orig_addrs_size < num)) {
+@@ -196,11 +324,13 @@ static int i2c_atr_map_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+ 		chan->orig_addrs_size = num;
+ 	}
+ 
++	mutex_lock(&chan->alias_pairs_lock);
++
+ 	for (i = 0; i < num; i++) {
+ 		chan->orig_addrs[i] = msgs[i].addr;
+ 
+-		c2a = i2c_atr_find_mapping_by_addr(&chan->alias_pairs,
+-						   msgs[i].addr);
++		c2a = i2c_atr_find_mapping_by_addr(chan, msgs[i].addr);
++
+ 		if (!c2a) {
+ 			dev_err(atr->dev, "client 0x%02x not mapped!\n",
+ 				msgs[i].addr);
+@@ -208,13 +338,19 @@ static int i2c_atr_map_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+ 			while (i--)
+ 				msgs[i].addr = chan->orig_addrs[i];
+ 
+-			return -ENXIO;
++			ret = -ENXIO;
++			goto out_unlock;
+ 		}
+ 
++		// Prevent c2a from being overwritten by another client in this transaction
++		c2a->fixed = true;
++
+ 		msgs[i].addr = c2a->alias;
+ 	}
+ 
+-	return 0;
++out_unlock:
++	mutex_unlock(&chan->alias_pairs_lock);
++	return ret;
+ }
+ 
+ /*
+@@ -227,10 +363,24 @@ static int i2c_atr_map_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+ static void i2c_atr_unmap_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+ 			       int num)
+ {
++	struct i2c_atr_alias_pair *c2a;
+ 	int i;
+ 
+ 	for (i = 0; i < num; i++)
+ 		msgs[i].addr = chan->orig_addrs[i];
++
++	mutex_lock(&chan->alias_pairs_lock);
++
++	if (unlikely(list_empty(&chan->alias_pairs)))
++		goto out_unlock;
++
++	// unfix c2a entries so that subsequent transfers can reuse their aliases
++	list_for_each_entry(c2a, &chan->alias_pairs, node) {
++		c2a->fixed = false;
++	}
++
++out_unlock:
++	mutex_unlock(&chan->alias_pairs_lock);
+ }
+ 
+ static int i2c_atr_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+@@ -268,14 +418,23 @@ static int i2c_atr_smbus_xfer(struct i2c_adapter *adap, u16 addr,
+ 	struct i2c_atr *atr = chan->atr;
+ 	struct i2c_adapter *parent = atr->parent;
+ 	struct i2c_atr_alias_pair *c2a;
++	u16 alias;
++
++	mutex_lock(&chan->alias_pairs_lock);
++
++	c2a = i2c_atr_find_mapping_by_addr(chan, addr);
+ 
+-	c2a = i2c_atr_find_mapping_by_addr(&chan->alias_pairs, addr);
+ 	if (!c2a) {
+ 		dev_err(atr->dev, "client 0x%02x not mapped!\n", addr);
++		mutex_unlock(&chan->alias_pairs_lock);
+ 		return -ENXIO;
+ 	}
+ 
+-	return i2c_smbus_xfer(parent, c2a->alias, flags, read_write, command,
++	alias = c2a->alias;
++
++	mutex_unlock(&chan->alias_pairs_lock);
++
++	return i2c_smbus_xfer(parent, alias, flags, read_write, command,
+ 			      size, data);
+ }
+ 
+@@ -317,44 +476,6 @@ static const struct i2c_lock_operations i2c_atr_lock_ops = {
+ 	.unlock_bus =  i2c_atr_unlock_bus,
+ };
+ 
+-static int i2c_atr_reserve_alias(struct i2c_atr_alias_pool *alias_pool)
+-{
+-	unsigned long idx;
+-	u16 alias;
+-
+-	spin_lock(&alias_pool->lock);
+-
+-	idx = find_first_zero_bit(alias_pool->use_mask, alias_pool->size);
+-	if (idx >= alias_pool->size) {
+-		spin_unlock(&alias_pool->lock);
+-		return -EBUSY;
+-	}
+-
+-	set_bit(idx, alias_pool->use_mask);
+-
+-	alias = alias_pool->aliases[idx];
+-
+-	spin_unlock(&alias_pool->lock);
+-	return alias;
+-}
+-
+-static void i2c_atr_release_alias(struct i2c_atr_alias_pool *alias_pool, u16 alias)
+-{
+-	unsigned int idx;
+-
+-	spin_lock(&alias_pool->lock);
+-
+-	for (idx = 0; idx < alias_pool->size; ++idx) {
+-		if (alias_pool->aliases[idx] == alias) {
+-			clear_bit(idx, alias_pool->use_mask);
+-			spin_unlock(&alias_pool->lock);
+-			return;
+-		}
+-	}
+-
+-	spin_unlock(&alias_pool->lock);
+-}
+-
+ static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
+ 			       u16 addr)
+ {
+@@ -372,7 +493,9 @@ static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
+ 
+ 	alias = ret;
+ 
+-	c2a = kzalloc(sizeof(*c2a), GFP_KERNEL);
++	mutex_lock(&chan->alias_pairs_lock);
++
++	c2a = i2c_atr_create_c2a(chan, alias, addr);
+ 	if (!c2a) {
+ 		ret = -ENOMEM;
+ 		goto err_release_alias;
+@@ -380,22 +503,19 @@ static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
+ 
+ 	ret = atr->ops->attach_addr(atr, chan->chan_id, addr, alias);
+ 	if (ret)
+-		goto err_free;
++		goto err_del_c2a;
+ 
+ 	dev_dbg(atr->dev, "chan%u: addr 0x%02x mapped at alias 0x%02x\n",
+ 		chan->chan_id, addr, alias);
+ 
+-	c2a->addr = addr;
+-	c2a->alias = alias;
+-	list_add(&c2a->node, &chan->alias_pairs);
+-
+-	return 0;
++	goto out_unlock;
+ 
+-err_free:
+-	kfree(c2a);
++err_del_c2a:
++	i2c_atr_destroy_c2a(&c2a);
+ err_release_alias:
+ 	i2c_atr_release_alias(chan->alias_pool, alias);
+-
++out_unlock:
++	mutex_unlock(&chan->alias_pairs_lock);
  	return ret;
  }
-@@ -408,7 +415,7 @@ static void i2c_atr_detach_addr(struct i2c_adapter *adapter,
+ 
+@@ -408,21 +528,25 @@ static void i2c_atr_detach_addr(struct i2c_adapter *adapter,
+ 
+ 	atr->ops->detach_addr(atr, chan->chan_id, addr);
+ 
+-	c2a = i2c_atr_find_mapping_by_addr(&chan->alias_pairs, addr);
++	mutex_lock(&chan->alias_pairs_lock);
++
++	c2a = i2c_atr_find_mapping_by_addr(chan, addr);
+ 	if (!c2a) {
+ 		 /* This should never happen */
+ 		dev_warn(atr->dev, "Unable to find address mapping\n");
++		mutex_unlock(&chan->alias_pairs_lock);
  		return;
  	}
  
--	i2c_atr_release_alias(atr->alias_pool, c2a->alias);
-+	i2c_atr_release_alias(chan->alias_pool, c2a->alias);
++	mutex_unlock(&chan->alias_pairs_lock);
++
+ 	i2c_atr_release_alias(chan->alias_pool, c2a->alias);
  
  	dev_dbg(atr->dev,
  		"chan%u: addr 0x%02x unmapped from alias 0x%02x\n",
-@@ -469,16 +476,20 @@ static int i2c_atr_parse_alias_pool(struct i2c_atr *atr)
- 	u32 *aliases32;
- 	int ret;
+ 		chan->chan_id, addr, c2a->alias);
  
--	ret = fwnode_property_count_u32(dev_fwnode(dev), "i2c-alias-pool");
--	if (ret < 0) {
--		dev_err(dev, "Failed to count 'i2c-alias-pool' property: %d\n",
--			ret);
--		return ret;
--	}
-+	if (!fwnode_property_present(dev_fwnode(dev), "i2c-alias-pool")) {
-+		num_aliases = 0;
-+	} else {
-+		ret = fwnode_property_count_u32(dev_fwnode(dev), "i2c-alias-pool");
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to count 'i2c-alias-pool' property: %d\n",
-+				ret);
-+			return ret;
-+		}
- 
--	num_aliases = ret;
-+		num_aliases = ret;
-+	}
- 
--	alias_pool = i2c_atr_alloc_alias_pool(num_aliases);
-+	alias_pool = i2c_atr_alloc_alias_pool(num_aliases, true);
- 	if (IS_ERR(alias_pool)) {
- 		ret = PTR_ERR(alias_pool);
- 		dev_err(dev, "Failed to allocate alias pool, err %d\n", ret);
-@@ -592,15 +603,15 @@ void i2c_atr_delete(struct i2c_atr *atr)
+-	list_del(&c2a->node);
+-	kfree(c2a);
++	i2c_atr_destroy_c2a(&c2a);
  }
- EXPORT_SYMBOL_NS_GPL(i2c_atr_delete, I2C_ATR);
  
--int i2c_atr_add_adapter(struct i2c_atr *atr, u32 chan_id,
--			struct device *adapter_parent,
--			struct fwnode_handle *bus_handle)
-+int i2c_atr_add_adapter(struct i2c_atr *atr, struct i2c_atr_adap_desc *desc)
- {
-+	struct fwnode_handle *bus_handle = desc->bus_handle;
- 	struct i2c_adapter *parent = atr->parent;
-+	char symlink_name[ATR_MAX_SYMLINK_LEN];
- 	struct device *dev = atr->dev;
-+	u32 chan_id = desc->chan_id;
- 	struct i2c_atr_chan *chan;
--	char symlink_name[ATR_MAX_SYMLINK_LEN];
--	int ret;
-+	int ret, idx;
- 
- 	if (chan_id >= atr->max_adapters) {
- 		dev_err(dev, "No room for more i2c-atr adapters\n");
-@@ -616,8 +627,8 @@ int i2c_atr_add_adapter(struct i2c_atr *atr, u32 chan_id,
- 	if (!chan)
- 		return -ENOMEM;
- 
--	if (!adapter_parent)
--		adapter_parent = dev;
-+	if (!desc->parent)
-+		desc->parent = dev;
- 
+ static int i2c_atr_bus_notifier_call(struct notifier_block *nb,
+@@ -633,6 +757,7 @@ int i2c_atr_add_adapter(struct i2c_atr *atr, struct i2c_atr_adap_desc *desc)
  	chan->atr = atr;
  	chan->chan_id = chan_id;
-@@ -629,7 +640,7 @@ int i2c_atr_add_adapter(struct i2c_atr *atr, u32 chan_id,
- 	chan->adap.owner = THIS_MODULE;
- 	chan->adap.algo = &atr->algo;
- 	chan->adap.algo_data = chan;
--	chan->adap.dev.parent = adapter_parent;
-+	chan->adap.dev.parent = desc->parent;
- 	chan->adap.retries = parent->retries;
- 	chan->adap.timeout = parent->timeout;
- 	chan->adap.quirks = parent->quirks;
-@@ -656,13 +667,26 @@ int i2c_atr_add_adapter(struct i2c_atr *atr, u32 chan_id,
- 		fwnode_handle_put(atr_node);
- 	}
+ 	INIT_LIST_HEAD(&chan->alias_pairs);
++	mutex_init(&chan->alias_pairs_lock);
+ 	mutex_init(&chan->orig_addrs_lock);
  
-+	if (desc->num_aliases > 0) {
-+		chan->alias_pool = i2c_atr_alloc_alias_pool(desc->num_aliases, false);
-+		if (IS_ERR(chan->alias_pool)) {
-+			ret = PTR_ERR(chan->alias_pool);
-+			goto err_fwnode_put;
-+		}
-+
-+		for (idx = 0; idx < desc->num_aliases; idx++)
-+			chan->alias_pool->aliases[idx] = desc->aliases[idx];
-+	} else {
-+		chan->alias_pool = atr->alias_pool;
-+	}
-+
- 	atr->adapter[chan_id] = &chan->adap;
- 
- 	ret = i2c_add_adapter(&chan->adap);
- 	if (ret) {
- 		dev_err(dev, "failed to add atr-adapter %u (error=%d)\n",
- 			chan_id, ret);
--		goto err_fwnode_put;
-+		goto err_free_alias_pool;
- 	}
- 
- 	snprintf(symlink_name, sizeof(symlink_name), "channel-%u",
-@@ -679,6 +703,9 @@ int i2c_atr_add_adapter(struct i2c_atr *atr, u32 chan_id,
- 
- 	return 0;
- 
-+err_free_alias_pool:
-+	if (!chan->alias_pool->shared)
-+		i2c_atr_free_alias_pool(chan->alias_pool);
+ 	snprintf(chan->adap.name, sizeof(chan->adap.name), "i2c-%d-atr-%d",
+@@ -709,6 +834,7 @@ int i2c_atr_add_adapter(struct i2c_atr *atr, struct i2c_atr_adap_desc *desc)
  err_fwnode_put:
  	fwnode_handle_put(dev_fwnode(&chan->adap.dev));
  	mutex_destroy(&chan->orig_addrs_lock);
-@@ -711,6 +738,9 @@ void i2c_atr_del_adapter(struct i2c_atr *atr, u32 chan_id)
- 
- 	i2c_del_adapter(adap);
- 
-+	if (!chan->alias_pool->shared)
-+		i2c_atr_free_alias_pool(chan->alias_pool);
-+
- 	atr->adapter[chan_id] = NULL;
++	mutex_destroy(&chan->alias_pairs_lock);
+ 	kfree(chan);
+ 	return ret;
+ }
+@@ -745,6 +871,7 @@ void i2c_atr_del_adapter(struct i2c_atr *atr, u32 chan_id)
  
  	fwnode_handle_put(fwnode);
-diff --git a/drivers/media/i2c/ds90ub913.c b/drivers/media/i2c/ds90ub913.c
-index 8eed4a200fd89b5af1fc4578cb865bf1408acd76..1bb4efa44ede1267e15d29e0ce3965372bf3bb89 100644
---- a/drivers/media/i2c/ds90ub913.c
-+++ b/drivers/media/i2c/ds90ub913.c
-@@ -656,6 +656,7 @@ static int ub913_i2c_master_init(struct ub913_data *priv)
- static int ub913_add_i2c_adapter(struct ub913_data *priv)
- {
- 	struct device *dev = &priv->client->dev;
-+	struct i2c_atr_adap_desc desc = { };
- 	struct fwnode_handle *i2c_handle;
- 	int ret;
- 
-@@ -663,8 +664,12 @@ static int ub913_add_i2c_adapter(struct ub913_data *priv)
- 	if (!i2c_handle)
- 		return 0;
- 
--	ret = i2c_atr_add_adapter(priv->plat_data->atr, priv->plat_data->port,
--				  dev, i2c_handle);
-+	desc.chan_id = priv->plat_data->port;
-+	desc.parent = dev;
-+	desc.bus_handle = i2c_handle;
-+	desc.num_aliases = 0;
-+
-+	ret = i2c_atr_add_adapter(priv->plat_data->atr, &desc);
- 
- 	fwnode_handle_put(i2c_handle);
- 
-diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
-index 8b028a84f5bc7fd2af5c95115dcb6a7c1dadc821..013e6b5b9fbddb00d6d859972b63cf905ee988c7 100644
---- a/drivers/media/i2c/ds90ub953.c
-+++ b/drivers/media/i2c/ds90ub953.c
-@@ -1100,6 +1100,7 @@ static int ub953_register_clkout(struct ub953_data *priv)
- static int ub953_add_i2c_adapter(struct ub953_data *priv)
- {
- 	struct device *dev = &priv->client->dev;
-+	struct i2c_atr_adap_desc desc = { };
- 	struct fwnode_handle *i2c_handle;
- 	int ret;
- 
-@@ -1107,8 +1108,12 @@ static int ub953_add_i2c_adapter(struct ub953_data *priv)
- 	if (!i2c_handle)
- 		return 0;
- 
--	ret = i2c_atr_add_adapter(priv->plat_data->atr, priv->plat_data->port,
--				  dev, i2c_handle);
-+	desc.chan_id = priv->plat_data->port;
-+	desc.parent = dev;
-+	desc.bus_handle = i2c_handle;
-+	desc.num_aliases = 0;
-+
-+	ret = i2c_atr_add_adapter(priv->plat_data->atr, &desc);
- 
- 	fwnode_handle_put(i2c_handle);
- 
-diff --git a/include/linux/i2c-atr.h b/include/linux/i2c-atr.h
-index 14c1f9175c0db6a8a9c6ef5d771ae68361132a76..1c3a5bcd939fc56f4a6ca1b6a5cc0ac2c17083b7 100644
---- a/include/linux/i2c-atr.h
-+++ b/include/linux/i2c-atr.h
-@@ -36,6 +36,29 @@ struct i2c_atr_ops {
- 			    u16 addr);
- };
- 
-+/**
-+ * struct i2c_atr_adap_desc - An ATR downstream bus descriptor
-+ * @chan_id:        Index of the new adapter (0 .. max_adapters-1).  This value is
-+ *                  passed to the callbacks in `struct i2c_atr_ops`.
-+ * @parent:         The device used as the parent of the new i2c adapter, or NULL
-+ *                  to use the i2c-atr device as the parent.
-+ * @bus_handle:     The fwnode handle that points to the adapter's i2c
-+ *                  peripherals, or NULL.
-+ * @num_aliases:    The number of aliases in this adapter's private alias pool. Set
-+ *                  to zero if this adapter uses the ATR's global alias pool.
-+ * @aliases:        An optional array of private aliases used by the adapter
-+ *                  instead of the ATR's global pool of aliases. Must contain
-+ *                  exactly num_aliases entries if num_aliases > 0, is ignored
-+ *                  otherwise.
-+ */
-+struct i2c_atr_adap_desc {
-+	u32 chan_id;
-+	struct device *parent;
-+	struct fwnode_handle *bus_handle;
-+	size_t num_aliases;
-+	u16 *aliases;
-+};
-+
- /**
-  * i2c_atr_new() - Allocate and initialize an I2C ATR helper.
-  * @parent:       The parent (upstream) adapter
-@@ -65,12 +88,7 @@ void i2c_atr_delete(struct i2c_atr *atr);
- /**
-  * i2c_atr_add_adapter - Create a child ("downstream") I2C bus.
-  * @atr:        The I2C ATR
-- * @chan_id:    Index of the new adapter (0 .. max_adapters-1).  This value is
-- *              passed to the callbacks in `struct i2c_atr_ops`.
-- * @adapter_parent: The device used as the parent of the new i2c adapter, or NULL
-- *                  to use the i2c-atr device as the parent.
-- * @bus_handle: The fwnode handle that points to the adapter's i2c
-- *              peripherals, or NULL.
-+ * @desc:       An ATR adapter descriptor
-  *
-  * After calling this function a new i2c bus will appear. Adding and removing
-  * devices on the downstream bus will result in calls to the
-@@ -85,9 +103,7 @@ void i2c_atr_delete(struct i2c_atr *atr);
-  *
-  * Return: 0 on success, a negative error code otherwise.
-  */
--int i2c_atr_add_adapter(struct i2c_atr *atr, u32 chan_id,
--			struct device *adapter_parent,
--			struct fwnode_handle *bus_handle);
-+int i2c_atr_add_adapter(struct i2c_atr *atr, struct i2c_atr_adap_desc *desc);
- 
- /**
-  * i2c_atr_del_adapter - Remove a child ("downstream") I2C bus added by
+ 	mutex_destroy(&chan->orig_addrs_lock);
++	mutex_destroy(&chan->alias_pairs_lock);
+ 	kfree(chan->orig_addrs);
+ 	kfree(chan);
+ }
 
 -- 
 2.47.1
