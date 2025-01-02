@@ -1,140 +1,142 @@
-Return-Path: <linux-i2c+bounces-8855-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8856-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36FB59FF816
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jan 2025 11:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82D9F9FF96E
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jan 2025 13:44:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28C963A20EA
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jan 2025 10:33:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 767C43A328E
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 Jan 2025 12:44:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739AD19F12D;
-	Thu,  2 Jan 2025 10:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEE3C199234;
+	Thu,  2 Jan 2025 12:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LMQxs7XP"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="WicmtEKD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60E5195F0D;
-	Thu,  2 Jan 2025 10:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E3618FDB2
+	for <linux-i2c@vger.kernel.org>; Thu,  2 Jan 2025 12:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735813984; cv=none; b=CfDptP4RY/hspF+KZFk8fbA1IvgbIsHvJ37itE/XcaUxiv83tXH4w7sseUMcSi6gyv1G01Ei95TtXHX98ngb75w+6Ow820/AU+Nn8OASg7tYBEnjeRfO/XrMAN0rwv5NsYksgE32ljsX6wS1OWVVtsE1dS+464I7QP7b+rmDI6A=
+	t=1735821865; cv=none; b=ePbVBJOx1Hja9TCOTSdOxJxQM9WhMxiKYMsid3FLB/l7jN9ReKtr5wTraBsZQKv5pmTbfc4JU6bMBbh8ViJADQrblhsSuK49Dsk6bMZ8UH9++O0AxPM06c3ndo/6lePRuKRH6I1zZbsnWDYHGvUdAMrgmDzMPvq9uxk0TtXaHLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735813984; c=relaxed/simple;
-	bh=HLWvJVNFwoktW8wEOo0bWlwwovqzAKaPoCfXmBG2liE=;
+	s=arc-20240116; t=1735821865; c=relaxed/simple;
+	bh=K2dvsT7dhz/LmlWsIq7JyNaEasRXZuOQ87PujQkWaMk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g446bJnap9p3O9ZPEmg9DD1PtExpkXoQMzeERGn+s4agdclcvc0hvY42ExIO0ZOkWvkZQFc1EVsBR98MUDuSKwbcoc2O6z/kGA6CBKQ1aBQtF/kak/QTv6lfPvC21eGys0eVMGCwFAD9HpDcOAl52w4EktXcAHlzvfAC4hKuhoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LMQxs7XP; arc=none smtp.client-ip=209.85.221.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-517aea3ee2aso6013336e0c.2;
-        Thu, 02 Jan 2025 02:33:02 -0800 (PST)
+	 To:Cc:Content-Type; b=Lkdboq2jHnSbAc6Aq3PYrhlFC7W5Mgzg8cv/CvPk3iuaop3IM7xyjZ+z5Tl+AC5SlwzQH6WOKRXNYWj0v177GDoypdiNhxDdL0ZfaMMf0tst6SIO1q5cjJhLGvtYkMxBIIbcfKPVU7PZpAB58fS8jdJUoYrFtrhVSoKTbCpOfeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=WicmtEKD; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-54263b52b5aso1127682e87.1
+        for <linux-i2c@vger.kernel.org>; Thu, 02 Jan 2025 04:44:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735813982; x=1736418782; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1735821862; x=1736426662; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G1V0K6yo6Wf/PUo+YoETdrngUBEdR+h+JumeuooVghc=;
-        b=LMQxs7XPmBo4IUCSgtxpvgD/djkdczUHVN1oZzk2gODhZLFLk7Xg1SVw1g9fKxJr9w
-         s/3lB44ix+eIZ5kye6JROgIMzsW6I/oRiXKGwxLKymstb1xAjzErHrC7RUPQpxzFUDxB
-         jxMRiVOWkCt3bPmCA11cbjB+fMu4ga3Rx/R3QA1ziIgIKaCy1MoxUEzGarT+vGr3PPYb
-         3Q1y9JTYYAxblj5Zc2dR4fKJ5mk6JgfBO1K6L404E6YTfrtzfRM9MYqmU4etI2Mq8lw/
-         KSB6OOC8fB/GlWldCWZqMVw1aQM4FKPdyhOWtm5Nn578XefzPimkfMfLN72z+jDYmtUi
-         uMIQ==
+        bh=OXTAfC+Euk2ZqORptfnn4DhQu7bG9q9vO1UaX0EloG4=;
+        b=WicmtEKDKS3oXbVGkmZJTS6wRgGpVksRwcjPAqCn9cNIw+7Eau0a5lDNrQZ6fAKCBh
+         qoLB0N50IGkP67CbmJt4mKXak/wzkglHwL08Lv5FjI2IJvbXQNypafoI9CHCv7exu2Hx
+         qClXQCuZ6x8soJX5hBvcEdx718rpI7EBJYRkM4skgUgw6jznDiApkqPQXtfaZKD5nUT/
+         dDmAOWyD+OtEKuTtc5b0igWE7oOsXU/xXT7nx+0nIC8V40QnVmDRDz9qg8YlqoIzM78R
+         oD/SiUyB/Ntumjau9eIPnz+6dAPDVcbHLvkuVN06Mb/G8sw7RcldetUHHTxk2745jHQB
+         DOnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735813982; x=1736418782;
+        d=1e100.net; s=20230601; t=1735821862; x=1736426662;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G1V0K6yo6Wf/PUo+YoETdrngUBEdR+h+JumeuooVghc=;
-        b=I/siLjbCFF/sa77Lx/J6vTA8y35p89D+7q0EXwnfMMhOQejATZx2545bV1wua+XUMD
-         z6GMiM+fX8QeHgIPzoYuUP7sLOJl3nzs3NiyQzGS7oyumeH54POyfhf7eF36kxvuRHZQ
-         WfBFKi5OQfIW5s2EtbkR9IPAzbRs+U1aQwK2Y7OOnjmA3FfCHnYH1LJXsBxM01mWXYSL
-         ZoMfeqY/aHJKZxxJ0AzsGh7xii08zuIZ44UNlXPj+V1UBsLgZVYTV3+Yzw/ktt3cwAaV
-         SAAzK0bFesQRyRuW6iSPMuor+DeciaXI896cFuwnfCM9fAe3+7tES4rwUeL+GYzjAvPa
-         GvVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUfPo6Vc9b19RUSvZuv5vabLR6cDGzpJnZfg3+qxcgl69C0L3KWWxa2UyqwNzIyxWOrDTkQpH77gTxfMuHP@vger.kernel.org, AJvYcCVeJp1JugmdtQACItk12Sl9QoWW6vcabMekM4YVDTBK40ZW6Mjgwu/Ft8hLuCVaLO6+Vz3V+am6Xko=@vger.kernel.org, AJvYcCWrK3JjlGed1GcQzwyM4cm2wduXLfuMmvbibj/kyXY1f+DqM3SU0SUjX4SPjUNf4W6hMGKaBcxx/lvHUFx3QTGU4Pk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3GtDrk1qZKD4afndlsnGj1AJkab7RmiGhiN8M4AFcstfiokcw
-	2gFoBRDLHuKoIktP7cDlngm+tOaPUKfzOKxmNaaKliqpt92S58a+w6zjz3uoifcsoZ7GX4h+acG
-	+zOb7RiwzklntDWdXUQP+pd+qUd0=
-X-Gm-Gg: ASbGncueEXBubcuujNpR+oB6FWRoiewjno0cljafyngSqwexB8umCOUFR5YiilV8xNZ
-	SY0Un5LVQn1nQfHcxV+2NfcDE4fr/4C65Ih9Mf8JeDpbTeO7wTskn+goBhk3OOA6GS5DUlTE=
-X-Google-Smtp-Source: AGHT+IH7Y3W65L1qDcWaixfPlYcRws1PWLqAsZg+e5De3ff5eJEByU5I0MkcfUBq14eHPSiNmYy3JjlvRZeJRfaMujU=
-X-Received: by 2002:a05:6122:4302:b0:518:859e:87b5 with SMTP id
- 71dfb90a1353d-51b75c6a74cmr32286037e0c.4.1735813981749; Thu, 02 Jan 2025
- 02:33:01 -0800 (PST)
+        bh=OXTAfC+Euk2ZqORptfnn4DhQu7bG9q9vO1UaX0EloG4=;
+        b=EKotdtuXNGdCv2e1gVriaVcFuAz0St/9Tg7IYNah+aHih7dJ8Le0ejTQ+Y2ur0fX9z
+         4HWKhv/e8V+PZY5bIlIa36NYC919uBQvdzRVrYB4KIb0j95buCHHx2Z/5FAgZADGVJA7
+         rDJprUAYypJfU/b2XoHU3/JMTeCsD/xmuf5CuTPHRY+QibuoKvdt4w6DWfbpH1jeUlO3
+         iSIn6wdOOmIlIVKHfjlIWUuw7bh3EV8nubriCZsfp4mrtzpeUH1Um/heliGmxas5EMqg
+         oy7ZcPu6DzUBHsj+O4pidxowvAfOYdE1BgjaCzxUfyqzJUUXdoOekkAunaLhxvwR89Sa
+         Eu7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUCmtthedPATS1gx9ZUJfEQ3HzZa4qrQ9UzgaCk2vHRkvgznxutmcGil6xBCS7eP36RYAJ257di4T8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4m7hi1PLoMmefUq0ZjvIq2AmB3il4gsiiXtg3qa+Gx8bbT2EI
+	xd18qf/JL2O+SyETsiJim5DniT+4q4kM4KZbGsEkkz0chnUUTyP2ZsRF2TOZ70RPCM20EYnS/Rg
+	gqykZRWo81NfnTpW1BdwdS4qNoJ6bZheMWQywoA==
+X-Gm-Gg: ASbGncuAnshMyL87z2DW2VYz1WcbyWpdyL6s053nRJ0Bcmbie8PzIjWVQdhSRxgaZBf
+	hwN4KeyjUAzUwCTKxoei23ptgA3yPN3Sq4KjVZFdJ5hD15Lx9f1YyvXrb5Q2XkjZ+ZocdHQ==
+X-Google-Smtp-Source: AGHT+IFN+1+CuipJvqCLG4Vw4U/YbFqzg/NPb7q0hphJvRrX/+TBcZVtRLbOtGXDIiwzUKteo04vTtva7evlHbUMD1E=
+X-Received: by 2002:a05:6512:15a2:b0:542:2929:63ea with SMTP id
+ 2adb3069b0e04-5422953998dmr15195603e87.24.1735821861896; Thu, 02 Jan 2025
+ 04:44:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241227115154.56154-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20241227115154.56154-9-prabhakar.mahadev-lad.rj@bp.renesas.com> <Z3CMUDX4evaVdizJ@surfacebook.localdomain>
-In-Reply-To: <Z3CMUDX4evaVdizJ@surfacebook.localdomain>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Thu, 2 Jan 2025 10:32:36 +0000
-Message-ID: <CA+V-a8t-eZ7nq+-OgzYq+FzpK7GEnSrzBFJJKfTSv-hzBktjpg@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] i2c: riic: Add `riic_bus_barrier()` to check bus availability
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-renesas-soc@vger.kernel.org, 
+References: <20241211102337.37956-1-brgl@bgdev.pl> <awney7utrl5n63xsgzxnnlpqajuqtjnrjsbpzloic5iqt4pv2u@ktkhejuihbde>
+In-Reply-To: <awney7utrl5n63xsgzxnnlpqajuqtjnrjsbpzloic5iqt4pv2u@ktkhejuihbde>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 2 Jan 2025 13:44:10 +0100
+Message-ID: <CAMRc=Mci6bPCirruk90hnjBvJW0=HKhqCq+9p4t2k9B=Oy8Ocw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] i2c: davinci: kill platform data
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Wolfram Sang <wsa@the-dreams.de>, linux-arm-kernel@lists.infradead.org, 
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
-
-Thank you for the review.
-
-On Sat, Dec 28, 2024 at 11:40=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Fri, Dec 27, 2024 at 12:41=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org>=
+ wrote:
 >
-> Fri, Dec 27, 2024 at 11:51:54AM +0000, Prabhakar kirjoitti:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Introduce a new `riic_bus_barrier()` function to verify bus availabilit=
-y
-> > before initiating an I2C transfer. This function enhances the bus
-> > arbitration check by ensuring that the SDA and SCL lines are not held l=
-ow,
-> > in addition to checking the BBSY flag using `readb_poll_timeout()`.
-> >
-> > Previously, only the BBSY flag was checked to determine bus availabilit=
-y.
-> > However, it is possible for the SDA line to remain low even when BBSY =
-=3D 0.
-> > This new implementation performs an additional check on the SDA and SCL
-> > lines to avoid potential bus contention issues.
+> Hi Bartosz,
 >
 > ...
 >
-> > +     /*
-> > +      * The SDA line can still be low even when BBSY =3D 0. Therefore,=
- after checking
-> > +      * the BBSY flag, also verify that the SDA and SCL lines are not =
-being held low.
-> > +      */
-> > +     ret =3D readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICC=
-R2], val,
-> > +                              !(val & ICCR2_BBSY), 10, riic->adapter.t=
-imeout);
-> > +     if (ret)
-> > +             return -EBUSY;
+> >  struct davinci_i2c_dev {
+> >       struct device           *dev;
+> >       void __iomem            *base;
+> > @@ -132,13 +133,10 @@ struct davinci_i2c_dev {
+> >  #ifdef CONFIG_CPU_FREQ
+> >       struct notifier_block   freq_transition;
+> >  #endif
+> > -     struct davinci_i2c_platform_data *pdata;
+> > -};
+> > -
+> > -/* default platform data to use if not supplied in the platform_device=
+ */
+> > -static struct davinci_i2c_platform_data davinci_i2c_platform_data_defa=
+ult =3D {
+> > -     .bus_freq       =3D 100,
+> > -     .bus_delay      =3D 0,
 >
-> Why the return code is shadowed? Is it requirement by ABI?
+> what happened to bus_delay?
 >
-I will propagate the error instead of shadowing it.
 
-Cheers,
-Prabhakar
+bus_delay is not set by means other than platform data and it defaults
+to 0 so it's safe to just remove it.
+
+> ...
+>
+> > +     /* standard bus frequency (kHz) */
+> > +     unsigned int            bus_freq;
+> > +     /* Chip has a ICPFUNC register */
+> > +     bool                    has_pfunc;
+> >  };
+>
+> > -static struct i2c_bus_recovery_info davinci_i2c_gpio_recovery_info =3D=
+ {
+> > -     .recover_bus =3D i2c_generic_scl_recovery,
+> > -     .prepare_recovery =3D davinci_i2c_prepare_recovery,
+> > -     .unprepare_recovery =3D davinci_i2c_unprepare_recovery,
+> > -};
+> > -
+>
+> what happened to the gpio_recovery_info?
+>
+
+Similar story: it's only ever used if there's a pdata-provided
+recovery GPIO line set but nobody does it anymore.
+
+Bartosz
 
