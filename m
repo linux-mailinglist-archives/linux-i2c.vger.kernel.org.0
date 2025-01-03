@@ -1,167 +1,136 @@
-Return-Path: <linux-i2c+bounces-8886-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8887-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24457A0085D
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 12:12:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF366A008A1
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 12:30:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39F9B3A3A7C
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 11:12:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A8CF7A1F44
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 11:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A62A81F941B;
-	Fri,  3 Jan 2025 11:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 025B41FA144;
+	Fri,  3 Jan 2025 11:30:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="x7SfxGNA"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="a+dSub32"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8763E1F9F51
-	for <linux-i2c@vger.kernel.org>; Fri,  3 Jan 2025 11:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5370F1F9F51
+	for <linux-i2c@vger.kernel.org>; Fri,  3 Jan 2025 11:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735902731; cv=none; b=ZgHGwXJxGKPBIBAG8/uKg9+ORPkQI7XexoOjzPIu9N9pzD/81Tb0iUzHeTelj9r33tD7WxA1H5l+VqKcSTRRxym85qSpUlvNPhX4aJqAsQjEJA6AE+mctURQIr5glRX46JfKzvAusdLF/2bn3Kq1dSlj8+10EhL1rHzoqx7FARk=
+	t=1735903824; cv=none; b=Sww5Y9R2kPLNd3QHgBzC9VQhqlikDQJib+ki70kCoyR3l1UV5sfJ9hYgB3LSWdLxz+gJB6tiqkW/w0WGa71ASg97i4uhAVqo34VBHLTmXxmUAt0+VnR/+6ViCns/rO8y4mdhe/gkWSc/9C7J2XekWvVtPdJVsLinjsk1iKUSk0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735902731; c=relaxed/simple;
-	bh=hFrxBgJ07NatLLy+nIK/H0Io113gN4/rPtmjVt9wEEY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=diOEymiw5/kZNL1bd+bEKNtvdkSZvWrzD1LsUtm1dGt9XST1977QugzGapWYwmyrmYKlHTBPW63Ed2jedxjseFx7n+in3LnvgP4KTluZ+hAqF6JmUL+XBMHAqhdYJBKIEY8ic4+qkv3SbD90PxebZlV8iJIoiy7InCJ73o9WQpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=x7SfxGNA; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aaeecbb7309so1315564066b.0
-        for <linux-i2c@vger.kernel.org>; Fri, 03 Jan 2025 03:12:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1735902725; x=1736507525; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YHOvMibGbyPBOPoFr5QKh/wTDy8ZFQYsWy6HgvhHWug=;
-        b=x7SfxGNAuWCxuDecvpbjVDbPrrcHCJ/4J9ZqjFQ4L1iqfYBzFejVby5DJb6oXpnVnz
-         IG4hb+o/0q/tDsnnyu5jDgLZxa9dBfS7bRbZjaujRCo/4dj74BX36B4G8Tu8pv9XZg3k
-         nHOtImYW8byr+VfvKNP/U1Twy6MloDqrwMFnsX53Y5nUfglAhVlN29051RWVU8AutTeL
-         ZQCc8MlgM4pKg0Pj6XcBOkX96bPu5Nz4s/7ZOVd+DeC/DcXm17t/Lie8KnVnvd7Qk439
-         ++PaHkVQXPY9kNP4X6qX2Yt+H083Z5a9JhO88YXsb1QbQosa3DujL/qJu9jfF+EQRAtN
-         32Yw==
+	s=arc-20240116; t=1735903824; c=relaxed/simple;
+	bh=xIe09ebymTzrmNS3ehuwtU+HDBREWaPhxBx+WASpvJY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gPHgGGwOvhiMWJRk5HsQ50Y+cVN+7o8I5XkYT1f0YSIF5R60c9vYK/MoGReN1TXercmEoFOn+ryOG2E+vNwz+3vxJAKksAILgoGcLYkj+sJRf8IpEJAI3fpoh+nMj7TNCofOLvbGoXO4/FipMrLbDLc9gwuAzrf/KyLpMSurkBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=a+dSub32; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50375u7V031530
+	for <linux-i2c@vger.kernel.org>; Fri, 3 Jan 2025 11:30:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	o2MRsFx3bMUSG9QzwttMjqbwl6vaosB+gmA/2Y/BBj8=; b=a+dSub32uRRJEQ48
+	Qz5RsRK4oDN0DlX99oW7yw6XZ4xlb4mxu1Znf/G7AoMajJ86Zw4VLiklK6DgWvwa
+	IbcuRwMK+7cXwkrIn1Rozz6kSvt1SnHrxSBaZh6j+qL6uZofSPQt0b5KLpwbR/C3
+	788tpHNVDg0ynkLvaSFi8FYQWl1khoqnrfNxuepTPx38/tPnZx+quEqhGqdEXrs5
+	qb+Z/qjTv2OZ0MKQXYuhvJ1Y86ZhWTyVV7KU2PEINRZP1r8fZgKYiZEYYgr069uY
+	bcGSFz6BB915hC8ggydBwnZ0cibrgM2YkzYIndliFQvPpAMSv0pZNVoJe4AH2I44
+	AGLlvQ==
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43xb700je9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Fri, 03 Jan 2025 11:30:21 +0000 (GMT)
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6d8f15481bbso28649136d6.1
+        for <linux-i2c@vger.kernel.org>; Fri, 03 Jan 2025 03:30:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735902725; x=1736507525;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YHOvMibGbyPBOPoFr5QKh/wTDy8ZFQYsWy6HgvhHWug=;
-        b=jKJ8Ft1MWPxw9hSgsmQO7xP9am6xozBTQKgJ0nAFdkoYUWnltOsjPXcqhsCY/DAJCU
-         DVYBEgIIpVJ6SqIjBu4kSTtD643Iurk1l65Ja2obBDfkRsG3rMH3mPqs7srncwPqhejT
-         Y5lHLkiRGKmmgfGVo5ElDiSJ2xxAgLig7shlcCrPN0RRJnCMFlX2QERczBhKWQLrg+dL
-         ijoyChS6wey0f8BbZAQexqXyyCX5KxbQtVQnFk428VK52ZXgJ9QEeMw/c3G8HD62FgiH
-         dQG5+861PkLHgxAS2HjV7T7JW1HeTsgBrMZQ0atx5EkzVMlnBEd+GKirN7G+M75Pgert
-         Z3VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUA7uBdHlT2Zg50ARWCw1SjmewzMEMT81n/QSj1Z2SlR2LKOv95ZxMoZtACZlfGCGTgUid+X25FHS0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yws/Pypv2S3rTVV37cJk+EdEaOWFDl+II7fDkv6bUQArOO0QaYi
-	Z3tbr0BwdazShKISJQYtZE+PMZtg7npStCpX7BFHhlumVqpymr+TUqMfMB+V0mA=
-X-Gm-Gg: ASbGncu0e+x6ADJbHEy1cIuxPvHOAjtJQhaCeteVe4OIsR5dOvnYWQmLr6w1rtJPIgo
-	E6wrnry3pFmxgGH7MCZltG8oSLaKAYd1m0xoJU6obOlXwvGO5v0ATdEz/evrqBBvcVDDrs7zuMb
-	tWZy1KqJtQC7bB+75YaQpLVTl1UxedX0UC0MT5LxKqqA2MDPdiJ+s4Cls0uC/c4qzNElDr4J7G6
-	ccMg5iAntTGc222DWwTjRLX3vP0F+1RWEOZpN7VHSCbYMVZ4xvqElKcyO9jUOVRgrU5Fk8NzVLV
-	x/gqV8OqqmYYQIq6tRxEzR08ww==
-X-Google-Smtp-Source: AGHT+IFd8bCOiprfe2Wzx8rbAxGJwtv5TEfV+pliUKXxGJMY/Rwo3+ia2wgDHt5fi12mELrWPAU58w==
-X-Received: by 2002:a17:907:3607:b0:aa6:5910:49af with SMTP id a640c23a62f3a-aac2b6611c2mr4470650166b.24.1735902724669;
-        Fri, 03 Jan 2025 03:12:04 -0800 (PST)
-Received: from [192.168.178.188] (31-151-138-250.dynamic.upc.nl. [31.151.138.250])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0f066130sm1894101366b.183.2025.01.03.03.12.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2025 03:12:04 -0800 (PST)
-From: Luca Weiss <luca.weiss@fairphone.com>
-Date: Fri, 03 Jan 2025 12:12:01 +0100
-Subject: [PATCH 5/5] arm64: dts: qcom: qcm6490-fairphone-fp5: Enable camera
- EEPROMs
+        d=1e100.net; s=20230601; t=1735903820; x=1736508620;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o2MRsFx3bMUSG9QzwttMjqbwl6vaosB+gmA/2Y/BBj8=;
+        b=pBICUU6A+eHAb4DkWJBhPYvj43esrh8S66OmXnIviv3qs3CgBS1MmSJYMLVCg6SDs5
+         sX9OhAiQB3NHHjZKI2GjU3ki5nQQb2gQ8Qhqm1nA16UZ0sKH87uhvaPIk7J70GFoBfoO
+         r8bHeBZRDdk7siHnX8ssnDAlY3mY8+mKe7xU7A+s2aPdjVVHKlq96kNxTZFPAYR5Xo8G
+         HznxwmjRBvCRUFSIZYqE5VlGfK304ge5Mfv9kW9KCygEpu6C7k4768BxFYbbbPtQ6P4V
+         dSXxd3WLr3IS9Zt0Oo3s5FS6hk5KZU0vHYfyeyVARcrA8z3Z/lAQCSc94c3cMGs1xPrm
+         JPsg==
+X-Forwarded-Encrypted: i=1; AJvYcCVmgrLswERa6v0kmk9PgX75acV/YcKOZGGfGT/nmqVAZxPkkWM7vqSO2am3qxHFN16A1nCX7kjWF8g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmpQLwzAqo+mnq1OwTsdnNC9ba3VSh1fWlsRmmuNGAYj8g1F7S
+	weye2/mFAqtwlNbMhJxdakZlD7b8q20EI/j66KEs2EkJBmHrSHZAnkHSTIv+UHIOKZU5M3PHwba
+	6H/GIraisn2ngTrKjqMKzCKeueqtbzmKypWeqjfbeLOmj4VTX/rXTMYW0Jv8=
+X-Gm-Gg: ASbGncsLVGK9OWvGymlqknlw4EZkz4eXtT4F7u300NB3QN6pkohLe9ykZGzT7n5EpxU
+	KDJVpyYH5uKgTBZk0RedtnCl9Pifqxd6xKSeXqwijWw8KMk0HWc4M9zPgxgoUHnAoxa1/wyBrvT
+	/NN8qumR+7+NY5o2/LneiNW+HAhW6Uuou//rIEEFZ9uyQcBmcFxLKakQt2DssjG1qpxrb/T4CEU
+	UwYaKzsGQPiuN0Oi9zH1KD80JcOtqIw8bhYS+KNXJW2FUKHn0bhSYeEFlNSw3CRNFZjUSDLxU8Z
+	Vm7esa171VTKo5/1/Pv79s6/CXVwJkFSOMo=
+X-Received: by 2002:a05:622a:1a03:b0:467:5eaf:7d23 with SMTP id d75a77b69052e-46a4a8bd016mr278472171cf.2.1735903820395;
+        Fri, 03 Jan 2025 03:30:20 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH6yfhfXdw6egYbhDHkpAKPnsfYJ/f65rP+b7aYP2oQNqtV105SjlWWqv3GWFFKMbv3p8e9EA==
+X-Received: by 2002:a05:622a:1a03:b0:467:5eaf:7d23 with SMTP id d75a77b69052e-46a4a8bd016mr278471971cf.2.1735903819989;
+        Fri, 03 Jan 2025 03:30:19 -0800 (PST)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0f01285esm1888510066b.141.2025.01.03.03.30.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jan 2025 03:30:19 -0800 (PST)
+Message-ID: <1e224db1-04d0-45a6-b0e0-e43de7c7a0b4@oss.qualcomm.com>
+Date: Fri, 3 Jan 2025 12:30:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250103-fp5-cam-eeprom-v1-5-88dee1b36f8e@fairphone.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/5] arm64: dts: qcom: qcm6490-fairphone-fp5: Enable
+ camera EEPROMs
+To: Luca Weiss <luca.weiss@fairphone.com>,
+        Bartosz Golaszewski
+ <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
 References: <20250103-fp5-cam-eeprom-v1-0-88dee1b36f8e@fairphone.com>
-In-Reply-To: <20250103-fp5-cam-eeprom-v1-0-88dee1b36f8e@fairphone.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.14.2
+ <20250103-fp5-cam-eeprom-v1-5-88dee1b36f8e@fairphone.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250103-fp5-cam-eeprom-v1-5-88dee1b36f8e@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: O88QpOiiarL8r_Pynp57e8CVvGt528yF
+X-Proofpoint-GUID: O88QpOiiarL8r_Pynp57e8CVvGt528yF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ phishscore=0 bulkscore=0 mlxscore=0 priorityscore=1501 suspectscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=839 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501030101
 
-Configure the EEPROMs which are found on the different camera sensors on
-this device.
+On 3.01.2025 12:12 PM, Luca Weiss wrote:
+> Configure the EEPROMs which are found on the different camera sensors on
+> this device.
+> 
+> The pull-up regulator for these I2C busses is vreg_l6p, the same supply
+> that powers VCC of all the EEPROMs.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
 
-The pull-up regulator for these I2C busses is vreg_l6p, the same supply
-that powers VCC of all the EEPROMs.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts b/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-index cc1f89a4015218b0ea06811d2acd4ec56078961e..769c66cb5d19dbf50e137b3a72de2e36ec4daecf 100644
---- a/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-+++ b/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-@@ -556,6 +556,47 @@ vreg_bob: bob {
- 	};
- };
- 
-+&cci0 {
-+	status = "okay";
-+};
-+
-+&cci0_i2c0 {
-+	/* IMX800 @ 1a */
-+
-+	eeprom@50 {
-+		compatible = "puya,p24c256c", "atmel,24c256";
-+		reg = <0x50>;
-+		vcc-supply = <&vreg_l6p>;
-+		read-only;
-+	};
-+};
-+
-+&cci0_i2c1 {
-+	/* IMX858 @ 29 */
-+
-+	eeprom@54 {
-+		compatible = "giantec,gt24p128f", "atmel,24c128";
-+		reg = <0x54>;
-+		vcc-supply = <&vreg_l6p>;
-+		read-only;
-+	};
-+};
-+
-+&cci1 {
-+	status = "okay";
-+};
-+
-+&cci1_i2c1 {
-+	/* S5KJN1SQ03 @ 10 */
-+
-+	eeprom@51 {
-+		compatible = "giantec,gt24p128f", "atmel,24c128";
-+		reg = <0x51>;
-+		vcc-supply = <&vreg_l6p>;
-+		read-only;
-+	};
-+};
-+
- &dispcc {
- 	/* Disable for now so simple-framebuffer continues working */
- 	status = "disabled";
-
--- 
-2.47.1
-
+Konrad
 
