@@ -1,89 +1,94 @@
-Return-Path: <linux-i2c+bounces-8868-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8869-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64C30A0038C
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 06:20:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8F94A006A6
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 10:19:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C5FD162AEC
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 05:20:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC3B43A34CB
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 09:19:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FEC5169397;
-	Fri,  3 Jan 2025 05:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C081D0F50;
+	Fri,  3 Jan 2025 09:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lGjl/axw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qt5Y8WIb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6821C20E6;
-	Fri,  3 Jan 2025 05:20:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378531CEAC2;
+	Fri,  3 Jan 2025 09:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735881623; cv=none; b=bH96KYBiln6ggIJRyiBohJwNJmsKx2Xa5Fx9aoFsWRSRaNkxraceZpDJuVwA+QYoEdR3aPJblns6pvGnWGgvIjCqKZtyKm8HwYV4P+2hHzS5yQ9zogUeC1pc7xvCOs1Nnj+/uXuvxMkP1e6LMEH9Wv3Wa2rTJ97TJbC9+rADOZM=
+	t=1735895954; cv=none; b=oNE7yMj1Fc+nzxzsC8cIQZtzRBstO/UFJt5KKibMAyGYaPm437GkmdIee6hGqVNFr8Z2wRH9j0BTNVEgDGZdx4SHLZLusqCf3HvSvGAEfbwEbHxp3NKm2ZjclHMDaScsXM88of++jdMmeNuGFEPoE6tYygDNYlsUxMqOkI42nN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735881623; c=relaxed/simple;
-	bh=CCZSg0LpZCWknkCpLTNUMFfGRitT6YuIDiBgQItGHS4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SKW3/CeCk9G4K4joat+1lxWxYNaP5opRTSa1neFGsRNudwknfg8CkUsD3otr4LaC6kJJWlcIqpeBRHr5bTenmEi661tRRCw2HnSqxIQv2INO2Pbjg2yXsiYCLYHMDyN7MMmMDpvnOxOwVwIHSAuc0yb44QqZ7n/8pHSa+N/hr60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lGjl/axw; arc=none smtp.client-ip=209.85.166.45
+	s=arc-20240116; t=1735895954; c=relaxed/simple;
+	bh=yOYVinbwj/xoOv82gqqmWleznmjYf7adcOq8gPVED88=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RW2D3l7rAbBuCnS8tGJn5A0+/xUsbdtnm8tRAhUaLjXtQs4b/A6w7tora1hQ6FOjXjZrFQRf4TgbGT4xdD9NAdPbVskfZLL3Bn8cnRwWMHKVBIo1OOyw/erji6gElP2RA21sdmPF97BKp6850+KpjU9WjqWTmjTCjgo3CRxEBG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qt5Y8WIb; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-844ee166150so436228139f.2;
-        Thu, 02 Jan 2025 21:20:22 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-385dece873cso4480051f8f.0;
+        Fri, 03 Jan 2025 01:19:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735881621; x=1736486421; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eTcxCh/SKuj1+MmzUqQvYOI6MPGJvoEQRsb0fTFH820=;
-        b=lGjl/axwJp9j7fVBMbQtdPNEBP4kHfOMmVfXeBnkWul1TMX3VsYwTI0BaNBh9zAYFI
-         XvPGqIcYTzI3bJq1+uO+i2ujTZm18obUc5kUhjQhz91zhe11Oejv7hEIOlpKiKpUOJgi
-         ggsyIZT7JdAthgqorQU3S3/5plVEpbd3eyr/KetiWEFo+dFPoiPfjs8Y+qCNRSzvZ5QK
-         nrUbcSlvTKkSHz5axQLCo2Q0N5Q0WS+q1FjdqjP9Ohx5dC5Y+IX2M1szzMl0WqhmfVMm
-         IkDEKTaeb58E9Nok0sWS5q9q4v2rhO/c3CutHI1SHCjIMJSw0mbGTixSSj/jFTzcn3qP
-         DWQA==
+        d=gmail.com; s=20230601; t=1735895951; x=1736500751; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FipiwNA8gdjPBvhGW8Pa4OHxz81j0CoQV0VISShOknM=;
+        b=Qt5Y8WIb2DOzMcRFAyyC2jkavn09U3tLS1OFahDq6yO0gUbPEOOPPiCpb7k9L6ABRp
+         Vf6IIER6wIgg39Nh1h/0xBPda0RS4NtdNL/2Ef3Yf1+EnhC8bNdroFY3IAWfmeAgMsF0
+         1/wKnNEkmnl2hffbZc14iyCIFSx0qmpyOGQhWbg5LMGXmAymGoXrshZ6uAdrn2ClWNe7
+         bf1+49kLLbTl0NU0rPD+ccakT5XXU1pI5iFT/UYqdsuhceyRZVJbLpr9WxdrY4X3IxDh
+         poVDQ1POcNT1KhlYaXZCqzqosklWFO0gdFQKFdR4gjjdLGcGjSzBpJ43pHTlJ7hBvilW
+         cr0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735881621; x=1736486421;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eTcxCh/SKuj1+MmzUqQvYOI6MPGJvoEQRsb0fTFH820=;
-        b=gV60vx0TLCAZpPUntDl4AaiHdAXFxFB4pN5g7JB5B5cZ5axWHlB7JfEbcZRF/pK/Is
-         kYY4ODYWyBBqIG/QRPHvQSgUvlCYbILH3d/EGNJBExu6soF9qVm9Q7nUay5XPUZRnqky
-         JwFu6mtupLyQEG6rDQ21UBO69BRyfF2mQ55mNr+Z20i3o82RDyCzQNr4ftnUz015DeTr
-         WmsVRYZA2FwFanXbpQfbTAsvJYoh0HxFCUwtueO+oACZK2bTCc9R+w5E7ClZ4zYIn4v8
-         uiRe3rZUzWkv141kk4vLxZtNyIU6alaAx1ztG+6eh/KRC9TY9JLD5147NY2cnW9jKGGI
-         Z1cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4nbtRIt52nGUJnPhmsl9TJ/Cg6Hc5FR59llfKXSsuR1qnQLcQeh2c5UElCLibezkc1GsPISc6P6Qz@vger.kernel.org, AJvYcCWvco0lmvMdPtH7PIS9SHADQmplJga+KICrVu/vJWIRp/ibJtPo+iPXgUbmalvl5FNMDJxZhe2q3mBZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYY50HJ98sa/+nk6HTc0aJm/sdnNgzGKnsQxTJgi3Qjqsa+nFm
-	f0KjqyLx7ct1pILa+E2YPcDbjTVL5CsAVvlQ0SiUxLIbSqifbC0a
-X-Gm-Gg: ASbGncsOz1ATXMVlp/GwzeD+qKRBiS3q1NOIviTlCIxbtcBwU8dbYMVLsU0bekvcAuh
-	CTJTF0HLxL09UcrhjkG4lJIMAG3wDVc+iz7kzRUpM75MFo0Dr0L/oRspYemYzLaWhLdLT6xkBuc
-	X+odEucWotJGpSxIQedP/8x28iew/Ssj35VCN/8WRiM9lzoB9+4mvtgC8BEeGak2SYBmRo8YzaD
-	y1XKDtoRQV3UD8kKLpRQQ+UqEZP67MpwGfahmisdnhpRPjNQ3F6zmIdG1gpUK7+gZWm
-X-Google-Smtp-Source: AGHT+IEpkNVmI/FoHtLAS3w6ZZg9728+l51SDIwTMFsZN2q6EAhxML1byJgp3DASEibkDLHdOt7H5w==
-X-Received: by 2002:a05:6602:3c7:b0:841:9d3d:ea14 with SMTP id ca18e2360f4ac-8499e61e2f1mr4688829239f.6.1735881621561;
-        Thu, 02 Jan 2025 21:20:21 -0800 (PST)
-Received: from localhost.localdomain ([71.201.112.51])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e68bf4f43esm7427972173.21.2025.01.02.21.20.19
+        d=1e100.net; s=20230601; t=1735895951; x=1736500751;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FipiwNA8gdjPBvhGW8Pa4OHxz81j0CoQV0VISShOknM=;
+        b=pPiwWY7BRsINoFIgyH9hd2DYi3vybGOfqqQRLXzb7t0vjS93OMeMKd0iDC1PlyGZ2n
+         U4KqwmG1k1W65pqA5ueahvfgF4Ow5yWWkLmd4DtitKnHEe7OOT7qK8rQb/kx6iP0leWo
+         w0Q6rsvIN78zABsxlPtDsx/Th+eVH650I8NnFwhL7KvvVHYxGkeLXSAjkMXyIk2yzyd4
+         7sObsc1KoZkZZpVMlMzU6bsmQHm4ppA7jfI7i2Vz7nwr8B2XPc+n9yNbxZo6k22IOpG7
+         fLraJ8TwYv+AGscJTE7g8xSkyMEF4cE0JC1d3hmzVAPPKFIw+SDsbtqSU97pAb2hGAEl
+         JjIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVZm/wlrgIeaFfoiKqrhpSLCK24vA5sVIlj9rLVwU9qs8OC+2z+0tfHcMGgWOjrO4xjyCTQX9w+L6EmTlOW@vger.kernel.org, AJvYcCWzhI1ybNe+RB6vMoG227/g7YyuaezQw0EscZyV10R09WCX5awEur+001CGA4tI1o2ApLuTB3cRF1M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtXphh7lqkXFRR9heuEOwmCzm8gj+ZH/PAWDiAS08PtzyytlQ0
+	6zQFb9hhRcdVX/DUjCrO5UXASw0r4A8iaqWmt4GNB7kiVjQpnmdT
+X-Gm-Gg: ASbGncsxn8oU4ElPiZ144NVnpFONCXUo1c7+Xcz1N4mgV3OR622yyi2muTICATA2K+e
+	KRFbGFh/5tDJtgbulZnlN6dx98zLzhx0ZyLf15R6p4vVmms/G2eHEv7NtVzWDzMkSOYXZwJPXtC
+	Snyd8TnBEyq2u55Iame1oLi3lGD99uyysl1SXLE1mBA2lV+wTzVaA22eWaLNhKYNk19B/Xsco+x
+	kKIRDSZbA/9xjPSvtaq2S/Bix7oqG/VVZmmO3i2va08DXtvKaXgKaSrfF4Kc0kjQ/eY6MJaYcUX
+	AEoM8kyAZw==
+X-Google-Smtp-Source: AGHT+IH2SqpESCQ6oyw3L3KhLHtOFtS9UxvC15UaQfTT3zQnG4jgGHs6g7FFzg2EHFlPp93mKnd8fg==
+X-Received: by 2002:a05:6000:4022:b0:385:e879:45cc with SMTP id ffacd0b85a97d-38a221faa63mr39177180f8f.19.1735895951175;
+        Fri, 03 Jan 2025 01:19:11 -0800 (PST)
+Received: from prasmi.Home ([2a06:5906:61b:2d00:84e9:7adb:b646:c9c0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4366a093cbfsm452493275e9.22.2025.01.03.01.19.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2025 21:20:20 -0800 (PST)
-From: Randolph Ha <rha051117@gmail.com>
-To: mika.westerberg@linux.intel.com,
-	wsa+renesas@sang-engineering.com,
+        Fri, 03 Jan 2025 01:19:09 -0800 (PST)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Chris Brandt <chris.brandt@renesas.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-renesas-soc@vger.kernel.org,
 	linux-i2c@vger.kernel.org,
-	linux-acpi@vger.kernel.org
-Cc: trivial@kernel.org,
-	Randolph Ha <rha051117@gmail.com>
-Subject: [PATCH 1/1] Force ELAN06FA touchpad I2C bus freq to 100KHz
-Date: Thu,  2 Jan 2025 23:16:52 -0600
-Message-ID: <20250103051657.211966-2-rha051117@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250103051657.211966-1-rha051117@gmail.com>
-References: <20250103051657.211966-1-rha051117@gmail.com>
+	linux-kernel@vger.kernel.org,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 0/9] i2c: riic: driver cleanup and improvements
+Date: Fri,  3 Jan 2025 09:18:51 +0000
+Message-ID: <20250103091900.428729-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -92,50 +97,48 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some devices do not define valid bus frequencies for the ELAN06FA
-touchpad in their ACPI table, and some controllers run them at
-400KHz by default. The 06FA touchpad exhibits excessive smoothing
-behaviors when run at 400KHz, so force the bus frequency to 100KHz.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: Randolph Ha <rha051117@gmail.com>
----
- drivers/i2c/i2c-core-acpi.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Simplify and modernize the RIIC I2C driver with the following changes:
 
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 14ae0cfc325e..b10f52e12fe8 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -355,6 +355,18 @@ static const struct acpi_device_id i2c_acpi_force_400khz_device_ids[] = {
- 	{}
- };
- 
-+static const struct acpi_device_id i2c_acpi_force_100khz_device_ids[] = {
-+	/*
-+	 * When a 400KHz freq is used on this model of ELAN touchpad instead
-+	 * of 100Khz, excessive smoothing (similar to when there is noise in
-+	 * the signal) is intermittently applied. As some devices' ACPI
-+	 * tables do not specify the 100KHz frequency requirement, it is
-+	 * necessary to force the speed to 100KHz.
-+	 */
-+	{ "ELAN06FA", 0 },
-+	{}
-+};
-+
- static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
- 					   void *data, void **return_value)
- {
-@@ -373,6 +385,9 @@ static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
- 	if (acpi_match_device_ids(adev, i2c_acpi_force_400khz_device_ids) == 0)
- 		lookup->force_speed = I2C_MAX_FAST_MODE_FREQ;
- 
-+	if (acpi_match_device_ids(adev, i2c_acpi_force_100khz_device_ids) == 0)
-+		lookup->force_speed = I2C_MAX_STANDARD_MODE_FREQ;
-+
- 	return AE_OK;
- }
- 
+1. Refactor error handling in `riic_i2c_probe()` and `riic_init_hw()` by
+   replacing `dev_err()` with `dev_err_probe()` and using a local `dev`
+   pointer.
+2. Use `BIT()` and `GENMASK()` macros for consistent and clear bit
+   handling.
+3. Manage reset lines with `devm_reset_control_get_exclusive()` to
+   simplify resource handling.
+4. Mark `riic_irqs` as `const` and simplify clock tick calculations with
+   predefined macros.
+5. Add `riic_bus_barrier()` to check bus availability and improve
+   reliability.
+
+v3->v4
+-> Created new patch 1/9
+-> Dropped RB/TB tags from patch 8/9
+-> Dropped `unsigned long` cast and updated the format specifier while
+   printing bus frequency
+-> Included required headers
+-> Propogated the error
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (9):
+  i2c: riic: Introduce a separate variable for IRQ
+  i2c: riic: Use dev_err_probe in probe and riic_init_hw functions
+  i2c: riic: Use local `dev` pointer in `dev_err_probe()`
+  i2c: riic: Use BIT macro consistently
+  i2c: riic: Use GENMASK() macro for bitmask definitions
+  i2c: riic: Make use of devres helper to request deasserted reset line
+  i2c: riic: Mark riic_irqs array as const
+  i2c: riic: Use predefined macro and simplify clock tick calculation
+  i2c: riic: Add `riic_bus_barrier()` to check bus availability
+
+ drivers/i2c/busses/i2c-riic.c | 137 ++++++++++++++++++----------------
+ 1 file changed, 72 insertions(+), 65 deletions(-)
+
 -- 
-2.47.1
+2.43.0
 
 
