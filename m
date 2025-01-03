@@ -1,124 +1,139 @@
-Return-Path: <linux-i2c+bounces-8892-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8893-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C607A00939
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 13:29:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 319A0A0094B
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 13:33:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E9CA18843EE
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 12:29:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E235163BCE
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 12:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC8A01F9ED5;
-	Fri,  3 Jan 2025 12:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77EBE1E3DCB;
+	Fri,  3 Jan 2025 12:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="i2LL/3Rn"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="gSU6ysg/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA4B219E0
-	for <linux-i2c@vger.kernel.org>; Fri,  3 Jan 2025 12:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0981F8EEB
+	for <linux-i2c@vger.kernel.org>; Fri,  3 Jan 2025 12:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735907360; cv=none; b=Bpc9k/p+LYVTUhsqK9Blh3nEIXydLxUusaQlK6STiOgOwVeQD9wg1ny4h1iXuF0JVcb2/i3dRnFfUQO+G4v/sy3rqWzwGS5pbf4I1rPc+EomFMlPTGMde3dkH2ar0uK5vd5BgftJNay+kDpu7Xcw3scT+cm6p0ppjGCupzdT8bI=
+	t=1735907621; cv=none; b=U7XV9P56ZFIL+/Jckx3KurQ0aPv8tOTQWTNope32+WHoRrHHTuvbEQ3tx5jqzTGRnNsyxrqPLUrzVOMxDLVLgSvz8n+zqz89ItfRntpFNjzzrhHjOkzGscyGbsRhws82mN1xBK4u85XevKDka2q1tyAJIFs/2CY8CTxDRVFa800=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735907360; c=relaxed/simple;
-	bh=Mt79dF5LZFyOeJFzb0aUcYRJxif6AiVV9XY1hEF08bQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OXVjV6X5gpKSKo0ECE8/hQ1i3cU6RIQdqN5NcyVeBmOZgvrNgF8JpMtspqavPAOziedcQKTW7vtbsLkoI9HYNAk+yWjRN0ZpzkLxhaz/ZlFTV8A/ulezRbDDLPUa2Sg6DAmMVKGql7fj5CvKgnU5kI/grH6vOMe2l2VZbKfeBMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=i2LL/3Rn; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=k+S6
-	kIMGdD9Inba7G068U7KObO269XTEjvwYPnnVPws=; b=i2LL/3RnwKqT1+jlXqRM
-	IWMLegMwziLqaHGCxczxo7KngNt9zG8qKqMoQlzTHTvLdzUT0QHfrBcRafUqX5Ys
-	jC36ClbAoRPHfXZVCx+hsuVwiYQzMjQfb9Mdbp0BbFekcQDsxJ9fpVF217FbDb/n
-	GLkmAwl29FWE1Yrj8vsRba+s4ogezV5q3gQuYICYLEp1do1mZx3aWhRckOywB01f
-	Q7un3/KM5/nFdHcGdn9CwLAFwIWysyca1zR2+oWxFD/wc4DV27XxqYvV9Ot8lm/G
-	yUZCXL9VR1YHSbFTycZEcbhH2YyEuZURXnZTStfIoskysnkIwDv06uEWeBd4XXLr
-	Lg==
-Received: (qmail 899452 invoked from network); 3 Jan 2025 13:29:14 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Jan 2025 13:29:14 +0100
-X-UD-Smtp-Session: l3s3148p1@cfU5bcwqCOogAwDPXw20AOMQ2KO98fSH
-Date: Fri, 3 Jan 2025 13:29:14 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Wolfram Sang <wsa@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	linux-sound@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] i2c: Replace list-based mechanism for handling
- auto-detected clients
-Message-ID: <Z3fYGvxAs5HkUx_P@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Wolfram Sang <wsa@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	linux-sound@vger.kernel.org
-References: <97970201-24fd-473d-b20a-d21d2cd468f3@gmail.com>
- <ad839a82-8694-4f99-b1c1-0ee53c9d40cf@gmail.com>
+	s=arc-20240116; t=1735907621; c=relaxed/simple;
+	bh=pEzUak3KSwcyxR/a9pc2u+/ko9TsfzXb06M294EVjmw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ty2ecFL/XokDAP9Nd8WzoOKOsZ9HmzPkeEkrQEwtNPiTGVchzqVT/eL+GZZ981IkKOljTGYV1NqXkkzlvQ9jK02AvnLucnEDv0KSH2VJatbLeTUObw9oDYm7wQNdXQFe3oPYbhUcdrQMS88hBo1v8fyUuEw0r/8/MDS8DCxQxOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=gSU6ysg/; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 503BIWfo007237
+	for <linux-i2c@vger.kernel.org>; Fri, 3 Jan 2025 12:33:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	n2Dpbmc/KnZM07+zlG/yLj5EEwSqvLtt5wQl4yd+ONY=; b=gSU6ysg/NIkk9D+9
+	++Vold3gv781AW4DhM6aV1y2JM2HGBq5Dl959mngtiMICh5ZuZBAsXAFuuJcY2t5
+	9WPCfXdxrRY+lEhPWgxtGUw1cYWP8K40P5X2OOp9BH11L8yNAPCojjUW+qqgR0Ak
+	qK8E0eJpMydmFYoGKx3RgO5JS2yW2C8WiaOwGgK0+5L9lPNDFbVMljthACC22V1G
+	44mj8AfzHxpA8YsaE2S3Eyzlx/9yYFQRT2QUWCxqBvHb6RvBHW7W7kOOELG9aLo0
+	t5phHpvChr0I6oJHlwsag4buHaULmge19D3n5/9fB3MLUSujjvrK/iso4GxdVVnt
+	rL/k6Q==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43xewfg4gw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-i2c@vger.kernel.org>; Fri, 03 Jan 2025 12:33:38 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-467bb3eeb04so27998471cf.2
+        for <linux-i2c@vger.kernel.org>; Fri, 03 Jan 2025 04:33:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735907617; x=1736512417;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n2Dpbmc/KnZM07+zlG/yLj5EEwSqvLtt5wQl4yd+ONY=;
+        b=Kq3DOcF2BqnmG3OHJqa0MHuT+JEkmpvwQdBNchTz6rkY8DD5GIYjQdlKTYJE/1YZ6x
+         Cht/hzPmc6OLOU30yykcuKPtkNhzE5IFLOwLk1as+FP1VgXPOCcGFqVYmbBGBCWFWLqT
+         Tq+l84NCggorLXRmBaGyDUC1Bl/xLe+ww565rnbo2DU2tE5ylxqXY8q1EtnDrOOe34KU
+         Znq7PjHUdiIqtBPGPlvfyK1LrlDVS9pix9083DUNhX+5uJqWRMzHm0o+MCgPkGrbT+by
+         tM6T9Prl1qitvFq1fY/q/ZM7amnOrjQFs6wwxD/hWLJBpBStG/U9hIreEfw+6vsWd1fA
+         7AQw==
+X-Gm-Message-State: AOJu0YyxLWuJTCZ6SedHmFsv5x2y/mgdV70lBBIOFFGQCOipbok5Dbkn
+	ABQIi5Tw+m1m53wBZ4Bde9VXW5gAsMP25G2M0B1E10VizVx5KOk+bsGq3eSXK5NEmNmXawW6zsW
+	XsRS7692NSVTGKeQefvbhP2JZDzDv/6frhfMMYTEP/ZVqfvbNXuC9HDBqTzk=
+X-Gm-Gg: ASbGncur5YpHkVRlY71QGFm5w3tn7OWY9gt5mxGgq+bpXua7eYu1Rju7ZG21Z1l4Aqn
+	2NLHHjC7FY2EwIJmNMWsdJ9IIdj6NTBG1FBrMrxeV2xn/G2OPMyJVpiqmpCix7B98ngRfKPsLcw
+	YCK03M1JW9nKn/msdSsfljwL4Vvd4Ib5hzTs6QbumRtdrlQyu9k/M+u361+BklbHlN03pb1oq7x
+	+7kPJwb4RfqSYS97h7zU6/sjB9BaD1J95tdF+NkujwKVOttS5Phpea23tUy+fmED4RAV0GWJQtE
+	UeVbz3fTH/i6xnpGH4ItehPDvWeMqYEjq3c=
+X-Received: by 2002:ac8:5a4d:0:b0:467:5462:4a14 with SMTP id d75a77b69052e-46a4a68fa9bmr291986191cf.0.1735907617241;
+        Fri, 03 Jan 2025 04:33:37 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHnMA0EQ857HFoyRLGK5cmdBugpr0LylR4BGIjaNVCCKL8WAfGOH/wKHJw8YeCRcmbXx+Ybig==
+X-Received: by 2002:ac8:5a4d:0:b0:467:5462:4a14 with SMTP id d75a77b69052e-46a4a68fa9bmr291985931cf.0.1735907616857;
+        Fri, 03 Jan 2025 04:33:36 -0800 (PST)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0e82ed65sm1871999766b.33.2025.01.03.04.33.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jan 2025 04:33:36 -0800 (PST)
+Message-ID: <aecff79e-0c14-41e5-82a9-e24413798e21@oss.qualcomm.com>
+Date: Fri, 3 Jan 2025 13:33:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dySJziBeBkN/MzbD"
-Content-Disposition: inline
-In-Reply-To: <ad839a82-8694-4f99-b1c1-0ee53c9d40cf@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/6] arm64: dts: qcom: x1e80100: Add CAMCC block
+ definition
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20250102-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v3-0-cb66d55d20cc@linaro.org>
+ <20250102-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v3-4-cb66d55d20cc@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250102-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v3-4-cb66d55d20cc@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: itTNlrM7tQKaj2CDGxhjPryQv77pAmEw
+X-Proofpoint-ORIG-GUID: itTNlrM7tQKaj2CDGxhjPryQv77pAmEw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ spamscore=0 mlxlogscore=878 clxscore=1015 suspectscore=0 bulkscore=0
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501030111
 
+On 2.01.2025 5:32 PM, Bryan O'Donoghue wrote:
+> Add the CAMCC block for x1e80100. The x1e80100 CAMCC block is an iteration
+> of previous CAMCC blocks with the exception of having two required
+> power-domains not just one.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
 
---dySJziBeBkN/MzbD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-On Fri, Nov 01, 2024 at 11:09:51PM +0100, Heiner Kallweit wrote:
-> So far a list is used to track auto-detected clients per driver.
-> The same functionality can be achieved much simpler by flagging
-> auto-detected clients.
->=20
-> Two notes regarding the usage of driver_for_each_device:
-> In our case it can't fail, however the function is annotated __must_check.
-> So a little workaround is needed to avoid a compiler warning.
-> Then we may remove nodes from the list over which we iterate.
-> This is safe, see the explanation at the beginning of lib/klist.c.
->=20
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-
-Applied to for-next, thanks! One minor edit:
-
-> +#define I2C_CLIENT_AUTO		0x100	/* for board_info; auto-detected */
-
-This is not for 'board_info'. I changed it to "client was
-auto-detected".
-
-
---dySJziBeBkN/MzbD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmd32BoACgkQFA3kzBSg
-KbbPbw/7BACdJlannB3ripq7pUfzMWnqMPRdrUGJYDTLa82axiBLLFRG5R3G5mQp
-7LDl4FogENRw/jpK2XtnuYBgOhObYuDKvDAWPxpk0huSRlJpCrl4Z/J+qKUmgmBE
-eXMt0i7rMvVamXbomwBZs1sZVXTGB5VR1pRS9HcFtAnGnR1HQL15aCZ+YLvPajLO
-PrW9qCYMmoMbbY93TidIj7kNgF4RhadtDQVIsE9V/Zp6BVVYk6EDsJpf5Mnk4OCD
-rc+JNt9wnIjhMlsMNOQwx2fYUoFzVSOh6/7KF+lLVG1/YPEgxIBKoVNbZgPpYo6R
-IM42OBfdMAsqvSZp0iVPLUkUl59jN+jNUb2PvnHhJR9qTGw4VZtXBAGE4ywL+07X
-7zqgZTbOWC3MOCZRcIGRO+Och6b8VjJRH2xs7WR4LrJSsv4pEh37BH3uWL7ZiemG
-anu8D63zR323p7H6beyAyZ4GFovrmagqulz5fAxf57bP84Kv0kVEkE2OpycM6Lg0
-ndQu2V6Z3AD/gfEDZgCKk5Lk5RWr2xSiEN0ttqOxtqUVmGikaAiIoFsafw0ejdA8
-uw9asX3XQHpPhGxs3xT5lycvcLfhWFNA793QYmVx4hElqYGpwEzAwhAfldaEJsGe
-xE4KzOG19LvhesymTfbhkb/WMiICIFOK5lt50Z6RJ9T/dBOh+wI=
-=6izm
------END PGP SIGNATURE-----
-
---dySJziBeBkN/MzbD--
+Konrad
 
