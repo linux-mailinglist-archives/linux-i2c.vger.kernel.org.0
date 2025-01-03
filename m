@@ -1,263 +1,123 @@
-Return-Path: <linux-i2c+bounces-8898-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8899-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8574A00A92
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 15:33:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68E0FA00BB9
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 16:56:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FD8A163776
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 14:33:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B17191884CDC
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 15:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655011FA256;
-	Fri,  3 Jan 2025 14:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="KfHcPbqd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7945F1FA8C8;
+	Fri,  3 Jan 2025 15:56:12 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1571F9406;
-	Fri,  3 Jan 2025 14:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5031A1A8F9A;
+	Fri,  3 Jan 2025 15:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735914802; cv=none; b=DTrlxmDq51zPga2bS3FdZbEVd14LyqVX+13mMlP5OgyJdkC4Q79vKxt9PZv7br6Rwgrz8IS9xsf+U5eaW2IlpngGyVlie6oSTEipOGyhynLVDsoUkU9zXx2UNdbNpKpzJV1hvfqmieCgRlZFD2u07EHPFHJ7Ikt9y67iO9AZIKo=
+	t=1735919772; cv=none; b=uIdY7LR0ipV1whWqV3/m3scj7jfscm/tO2rqTzVVEHnVpPRf2VBS3ZhuwkMCdB/Cn+C0scL6FF1kEndllHeciRfIZ+0o70miHuANWUKsCx4H1w3W4sAtkD0W52RiUcMahsLeVsaSvZBI3OpXRjjI8WGx+eGMQ6hmEP3VXVv8zYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735914802; c=relaxed/simple;
-	bh=jLCG6kgDcEz5vYQwGG3KZtSdtegrw3QTHbWt3XDDrM8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fQdsepWNKoRAekM9p8T43ZgqaMX4AdENo9mS4L43cC9mhMt2x9+Mi8o5PY45kNWtrFFrk/3AKY7D3rrmg83iFNCPSZeFCZf+hsuKDfXn9C+RtASwXQePKeb8oahIR4IwhLZLQGU8wN8PZ6+XddV1Vcti6apZK/Cxjm+eI8ksMss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=KfHcPbqd; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: ab97c408c9df11ef99858b75a2457dd9-20250103
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ldWYjAq3x6Tt0epgSToehaUvZ4JC3VKI8OdUZeG/niw=;
-	b=KfHcPbqd4UMTsu72sbkwAIkKeR9ZWgapwgkuqS12hhPflkST6ooLJG8yI6FNGw4DQsdJZZj5QvLHTrFXAFJ8gmeQtMag/+W66QBn7d84xXM6yyko1VWHs/9u4eGr046RVGEI5PnlDC/y6UYOsWGxIZ/khdT750g5LvRXSlNxnXc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.46,REQID:dd03cee4-d95e-44e4-8432-99fefa4d1ea7,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:60aa074,CLOUDID:ef649e25-8650-4337-bf57-045b64170f0c,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: ab97c408c9df11ef99858b75a2457dd9-20250103
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-	(envelope-from <zoie.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1782453349; Fri, 03 Jan 2025 22:33:16 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 3 Jan 2025 22:33:15 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 3 Jan 2025 22:33:15 +0800
-From: Zoie Lin <zoie.lin@mediatek.com>
-To: Qii Wang <qii.wang@mediatek.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<teddy.chen@mediatek.com>, Zoie Lin <zoie.lin@mediatek.com>
-Subject: [PATCH v3 1/1] i2c: mediatek: add runtime PM operations and bus regulator control
-Date: Fri, 3 Jan 2025 22:32:34 +0800
-Message-ID: <20250103143250.1521287-2-zoie.lin@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250103143250.1521287-1-zoie.lin@mediatek.com>
-References: <20250103143250.1521287-1-zoie.lin@mediatek.com>
+	s=arc-20240116; t=1735919772; c=relaxed/simple;
+	bh=pT0U6gKqWknNj+IOXBlNYt9rdbHzosm81zpu05FijRo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dPX1Yum3K0tpUK23mM0PU0/fmhsgW5GFTPFf+iddxOBL5edB/vlyudJmOp2L6LctiJSA1Q1COryY2cSJZysKAxAC7RDPwJyyNW58hrc6uS1o504Q5d/3Mh/kEmER29x+KSdJMCwEZxPOlAYJHJ5swySnhlC9y0IKbdLHpcy5v3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-4aff1c57377so6644959137.0;
+        Fri, 03 Jan 2025 07:56:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735919768; x=1736524568;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vsYlLH3YG4Vh2vY/zLWj0jkuQzixjgYhRXWHh9jcJBQ=;
+        b=wiH3LZXLOYmOiUMxvoEHnBSgrHQIq3sD1/X8HTtiRQ1D3Pezp+RqfaoAjYwVNTPzmM
+         RvZ9+MGQZSNkyoTfocdpAEp2JEwkr4kTWuK18DFj+f4w0X81nniix36v6lr6ROMZODwk
+         rAtlstn268w9h/khm8PXSxr1xUjuzFFSTBHu2DxRz3nGI25skbcYs+bslNni4yDoinZ1
+         9W7L4B4UgilCulub0bGbjhKtAX5TrrUVMP/gPJy5qM5+aOqIHrkB8lj95qy5rMaMRodT
+         vScKzfRg81UlChg5Jspna3X2PF9IgLqN2cMniNNdbamuiipU0e88Urv7Jot/6DAC6Jio
+         d6+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWGy2T+sLnEAPuw9qm/fiFCoOo9AUZkTdDNHl6KVN+f9acqPPnmDWg0x7R2+eyPQA78ZV33f5kwGTdznzCO@vger.kernel.org, AJvYcCX8ytkHjSQxSx9oXjEYAWnudieiANxcivgspHtxpu4LmjqbAWVPuJGtgMWzrsAjZiQNGI0XkwxB+ON5e8C80u5mAwg=@vger.kernel.org, AJvYcCXl5ehhvv1kChedH4sSbRkmO5VxaEwiN4MdrQLQ+fYai1vcVHbrrBfCnNztI1CbqgpWjbu5XsZ6A84=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/PJsnx2HRwTDHTMxiV3Zc6XxxY2c1amPVXEQc5iycE0EggrM2
+	PSgL9Zxxqhf38RW0qksTMq9vHHfqb+AXKwiPTJ450iQ3iJpOLZj/15ZVypWf5ew=
+X-Gm-Gg: ASbGncv8nrE4ViJzz8uLDw3Jvj8ZDXOcAbXC7uHUgTHd+P76Ngc2L2vqAQTVq1CVaxL
+	ELxA2IsExI0gDUhNAk4MYhG84+v/U1TLOMjTggsDnZPN4q84CGwTs6lebn5ZvM204epSER5srO0
+	sEmrMZGTZ4YUNlANYCELNqv4nYlv00SJXRNuAbJkGt2FJaA2G8sc9i+hgYZYgNWfAynVOQDJUVW
+	1Hly6QHbZvc1sBO5RwA4gg9NqVKY1pwYz0YJD4EC1a5ukRC/wRREkTgJzI5Bkgmnb8+OI/omtRg
+	cyl9FVeb5+2MPYEMv0xGV5I=
+X-Google-Smtp-Source: AGHT+IGkmLERhKz9U0tnGN/BteplE56HRXOH5effySnE6n7u3WmFo/5y56Hq4eWU/Pcd9pcmPt9d+Q==
+X-Received: by 2002:a67:fbcd:0:b0:4af:d263:de23 with SMTP id ada2fe7eead31-4b2bc0da4dfmr33600899137.9.1735919768619;
+        Fri, 03 Jan 2025 07:56:08 -0800 (PST)
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-8610ac4bfb2sm5658876241.11.2025.01.03.07.56.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jan 2025 07:56:08 -0800 (PST)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5174db4e34eso8750409e0c.0;
+        Fri, 03 Jan 2025 07:56:08 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUXFE95da3LKGajsAIbbapcqoEc2ARDZFWDkmTC9OMsXWscLtHGHG7E8B6uafjT/JHagBx551AyZvEzcqdZ@vger.kernel.org, AJvYcCV7wZD6Svg6M849lU4e9nbPOzmBUr52cVSvuny3wlo8pUEtR/GH4jq57ZtmMQrrrNII9JiHDxgCC8k=@vger.kernel.org, AJvYcCW1KFm+f0/cGDZXRxMmrTjs0wmmK/Z6ZkKSDnoQI8i45JtmBxmHnT7KWltFYobL+rLqDXo6ksOeVR0xFEKSuRtc5+A=@vger.kernel.org
+X-Received: by 2002:a05:6122:320d:b0:517:e7b7:d04b with SMTP id
+ 71dfb90a1353d-51b64c0534bmr43510145e0c.5.1735919768085; Fri, 03 Jan 2025
+ 07:56:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20250103091900.428729-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250103091900.428729-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250103091900.428729-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 3 Jan 2025 16:55:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUN41eOT8nUH=RhE-ynzJGF4mi1s=vhYiXMm7wRUH+Y2w@mail.gmail.com>
+Message-ID: <CAMuHMdUN41eOT8nUH=RhE-ynzJGF4mi1s=vhYiXMm7wRUH+Y2w@mail.gmail.com>
+Subject: Re: [PATCH v4 8/9] i2c: riic: Use predefined macro and simplify clock
+ tick calculation
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Andy Shevchenko <andy.shevchenko@gmail.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This commit introduces support for runtime PM operations in
-the I2C driver, enabling runtime suspend and resume functionality.
+On Fri, Jan 3, 2025 at 10:19=E2=80=AFAM Prabhakar <prabhakar.csengg@gmail.c=
+om> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Replace the hardcoded `1000000000` with the predefined `NSEC_PER_SEC`
+> macro for clarity. Simplify the code by introducing a `ns_per_tick`
+> variable to store `NSEC_PER_SEC / rate`, reducing redundancy and
+> improving readability.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v3->v4
+> - Switched to use NSEC_PER_SEC instead of NANO
+> - Updated the commit message
+> - Dropped the RB/TB tags
 
-Although in the most platforms, the bus power of i2c are always
-on, some platforms disable the i2c bus power in order to meet
-low power request.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-This implementation includes bus regulator control to facilitate
-proper handling of the bus power based on platform requirements.
+Gr{oetje,eeting}s,
 
-Signed-off-by: Zoie Lin <zoie.lin@mediatek.com>
----
- drivers/i2c/busses/i2c-mt65xx.c | 75 +++++++++++++++++++++++++++------
- 1 file changed, 63 insertions(+), 12 deletions(-)
+                        Geert
 
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index 5bd342047d59..307598a5f80e 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -21,6 +21,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
- #include <linux/scatterlist.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-@@ -1245,8 +1246,8 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
- 	int left_num = num;
- 	struct mtk_i2c *i2c = i2c_get_adapdata(adap);
- 
--	ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
--	if (ret)
-+	ret = pm_runtime_resume_and_get(i2c->dev);
-+	if (ret < 0)
- 		return ret;
- 
- 	i2c->auto_restart = i2c->dev_comp->auto_restart;
-@@ -1299,7 +1300,9 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
- 	ret = num;
- 
- err_exit:
--	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	pm_runtime_mark_last_busy(i2c->dev);
-+	pm_runtime_put_sync(i2c->dev);
-+
- 	return ret;
- }
- 
-@@ -1370,6 +1373,40 @@ static int mtk_i2c_parse_dt(struct device_node *np, struct mtk_i2c *i2c)
- 	return 0;
- }
- 
-+static int mtk_i2c_runtime_suspend(struct device *dev)
-+{
-+	struct mtk_i2c *i2c = dev_get_drvdata(dev);
-+
-+	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	if (i2c->adap.bus_regulator)
-+		regulator_disable(i2c->adap.bus_regulator);
-+
-+	return 0;
-+}
-+
-+static int mtk_i2c_runtime_resume(struct device *dev)
-+{
-+	int ret = 0;
-+	struct mtk_i2c *i2c = dev_get_drvdata(dev);
-+
-+	if (i2c->adap.bus_regulator) {
-+		ret = regulator_enable(i2c->adap.bus_regulator);
-+		if (ret) {
-+			dev_err(dev, "enable regulator failed!\n");
-+			return ret;
-+		}
-+	}
-+
-+	ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	if (ret) {
-+		if (i2c->adap.bus_regulator)
-+			regulator_disable(i2c->adap.bus_regulator);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int mtk_i2c_probe(struct platform_device *pdev)
- {
- 	int ret = 0;
-@@ -1472,13 +1509,18 @@ static int mtk_i2c_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	ret = clk_bulk_prepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
- 	if (ret) {
--		dev_err(&pdev->dev, "clock enable failed!\n");
- 		return ret;
- 	}
-+
-+	platform_set_drvdata(pdev, i2c);
-+
-+	ret = mtk_i2c_runtime_resume(i2c->dev);
-+	if (ret < 0)
-+		goto err_clk_bulk_unprepare;
- 	mtk_i2c_init_hw(i2c);
--	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	mtk_i2c_runtime_suspend(i2c->dev);
- 
- 	ret = devm_request_irq(&pdev->dev, irq, mtk_i2c_irq,
- 			       IRQF_NO_SUSPEND | IRQF_TRIGGER_NONE,
-@@ -1486,19 +1528,20 @@ static int mtk_i2c_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		dev_err(&pdev->dev,
- 			"Request I2C IRQ %d fail\n", irq);
--		goto err_bulk_unprepare;
-+		goto err_clk_bulk_unprepare;
- 	}
-+	pm_runtime_enable(&pdev->dev);
- 
- 	i2c_set_adapdata(&i2c->adap, i2c);
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret)
--		goto err_bulk_unprepare;
--
--	platform_set_drvdata(pdev, i2c);
-+		goto err_pm_runtime_disable;
- 
- 	return 0;
- 
--err_bulk_unprepare:
-+err_pm_runtime_disable:
-+	pm_runtime_disable(&pdev->dev);
-+err_clk_bulk_unprepare:
- 	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
- 
- 	return ret;
-@@ -1510,6 +1553,7 @@ static void mtk_i2c_remove(struct platform_device *pdev)
- 
- 	i2c_del_adapter(&i2c->adap);
- 
-+	pm_runtime_disable(&pdev->dev);
- 	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
- }
- 
-@@ -1518,6 +1562,10 @@ static int mtk_i2c_suspend_noirq(struct device *dev)
- 	struct mtk_i2c *i2c = dev_get_drvdata(dev);
- 
- 	i2c_mark_adapter_suspended(&i2c->adap);
-+
-+	if (!pm_runtime_status_suspended(dev))
-+		mtk_i2c_runtime_suspend(dev);
-+
- 	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
- 
- 	return 0;
-@@ -1536,7 +1584,8 @@ static int mtk_i2c_resume_noirq(struct device *dev)
- 
- 	mtk_i2c_init_hw(i2c);
- 
--	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	if (pm_runtime_status_suspended(dev))
-+		mtk_i2c_runtime_resume(dev);
- 
- 	i2c_mark_adapter_resumed(&i2c->adap);
- 
-@@ -1546,6 +1595,8 @@ static int mtk_i2c_resume_noirq(struct device *dev)
- static const struct dev_pm_ops mtk_i2c_pm = {
- 	NOIRQ_SYSTEM_SLEEP_PM_OPS(mtk_i2c_suspend_noirq,
- 				  mtk_i2c_resume_noirq)
-+	SET_RUNTIME_PM_OPS(mtk_i2c_runtime_suspend, mtk_i2c_runtime_resume,
-+			   NULL)
- };
- 
- static struct platform_driver mtk_i2c_driver = {
--- 
-2.45.2
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
