@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-8872-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8873-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F182AA006AF
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 10:19:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87B03A006B0
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 10:19:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 816BA3A4212
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 09:19:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62E29163A76
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Jan 2025 09:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3EB01D516B;
-	Fri,  3 Jan 2025 09:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE3661D54F2;
+	Fri,  3 Jan 2025 09:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DcqbDMH3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HrWFMcXl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5817F1D432F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B857A1D2F46;
 	Fri,  3 Jan 2025 09:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735895959; cv=none; b=aNJvuL1h9jPH1HwgcTURATHl/r8Fh2WIFGn2JqetbD8LciT3UB9ECicfCUMgfJdoc1bmOBYGFiMXuW8cNtFQJ0/zIzguE//rxGDR5aZVlD1qWqsLW1WsxumS7LMK669wRQJSUf9vJnEv/61SHzbdejyp3pXTW1g26TBwtEeQb9Y=
+	t=1735895960; cv=none; b=AkJdFQNok4x6fChv2dN6eHYpH1Tg98Q50nVHU7gPUgLp8D0L1SL3KSSyGk/EzFBWHYfAJgHysOhKkk54L/gSl4zkIrjJGYK+lKgfLhgMH5noAnUmtqDX8VKO+TE2TxtU2c0q5kj+NAeSTyzhKqOeaBq9QBfXrHt6dFmI+yNo//U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735895959; c=relaxed/simple;
-	bh=Cb/Xx1BBP42JVzj+xyi/HC4NS8Uto5wanu77JCmVC58=;
+	s=arc-20240116; t=1735895960; c=relaxed/simple;
+	bh=zkRrUObJmVJ9XbJbPhkBEEXKgumRrCvPWXppMfRVLd0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=foTeN0mM8nu9Lc27VtNYq20W4ajhfXDSEjrJINckuqJEEVBcxKSv2yrsH6ssstDuZlZWslY4jGZ9ZaSXozyanoTOBwV0LTjDLlvjI1McHk2VUkGq5PaCHvQ1tiloz7jx6+xZ26NRLp10skYcBryCQZ510YptPXh2ukvwLrNjSVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DcqbDMH3; arc=none smtp.client-ip=209.85.221.44
+	 MIME-Version; b=K3YHXV7FFTpkutdD7uD+WbFR5Gn4B608YzxLY4TgwY8eKIhACxk5LZfq992QOwEdHZ4/kffCfqiX9hIp3aWQj/czsbSYU2DNyiQTNpz7rkLlZVdzRPXjjL/udIU/9WfvwQt+0KvbYsXnjxIHTkbfXJm270zrVFFVBmPCPx6ywVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HrWFMcXl; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3862a921123so8176272f8f.3;
-        Fri, 03 Jan 2025 01:19:16 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4361c705434so87524255e9.3;
+        Fri, 03 Jan 2025 01:19:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735895955; x=1736500755; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1735895956; x=1736500756; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H6Idbb7bGpoVzKoKkuBpR2WvH0u9CWLrp2ifBVLPjBU=;
-        b=DcqbDMH3OtGW5onLSx3/mMVaYnW8/8pYEEVD5/Bpbsu0XQLKMGr6Wd4fNmShKNOf57
-         jeO1dgVfg3TWb6n8MB5fja7H7MoHUvpKRI+/+PRVfqjscNhWW6n9OtesAmcDdqozK9a2
-         IzHGPZYoI3gdAuRH8y8OczngFhI/OCvj1aBNis/itGw3NVCRDMIJrQ9I+yjm/YmA0tm8
-         juJr2evq9mT6AB8k5i8CkdQdrBW2kHpOz2fyEnpRrRY6BnU1O7I8vS4ynXYPztEsRMp6
-         a00VtVxXeewlpZ9mgrQqxsplIHhgQshutFjbYIL6YY0etzvYCeTH57S2Vj02kArQxaUE
-         F42g==
+        bh=J2HVpu9VKlVzY8IdkZhOKiWna1uiPP+wmt/t5mxL2t4=;
+        b=HrWFMcXlf4nKxpT2NsRIQCSysrX0DxLW/QF2qe28sRclw/2Lm+rrMABoQnu3D66oYD
+         2qb9nYxT6sGj3h6xHB+/a3kDQrVFlwQqckydLh8d29fd1V3aHovbDAxrHC59cFam5h+B
+         Q/GYJI5OuwDgt1k3voqq5r50l1ExHCD6R9r0Gj4eL5BLljAnzygJhwXaQe6oZ9LI5I5d
+         DhlvE/Feo1smPQM6d9tCT/ByLRDVIf69o8ZTVNOsq603AXVhGHX/WLsJVXOiAnsz764A
+         XMbyjywVNQQoSXqloiklvrQvAkiWXnYxnD6TDfW03YYbnwSAssWw4ijoE/nN9ID8e+yT
+         aKSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735895955; x=1736500755;
+        d=1e100.net; s=20230601; t=1735895956; x=1736500756;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H6Idbb7bGpoVzKoKkuBpR2WvH0u9CWLrp2ifBVLPjBU=;
-        b=ccA7I4vfu09QLQTbKStYYbrR5vHrMXN5BpqSQJeLX90T7IqY1oimca4mtlwKMLdxo2
-         hFiNuZiWWzEY8K2eyM7JEW5kuSyDhRZYdyNUvvJDRQ0wpPM6ixdK0sm5jSZwLcJ1xiwU
-         mYSyUEmxMhu9BF9oulHRgyShed/1EamzpkJIcnbem+eWnkG7Xx02qWsU8OHCwiRUrpFT
-         nVupQ6o3XjiDFvdl/HiljYPk1b/EN7wOftFTxb8N6X3iUJ5TSKUANHDhx8tTryAvh2Mt
-         ydZZwsiv6PIW97E3ytkgrxmQG0YjkbGW24EC+Rn6DvUjaTTpcoqHYbyRmYd/hXn9JQCl
-         iUIw==
-X-Forwarded-Encrypted: i=1; AJvYcCVfSYQAJdq6ZkQ4fBn6wf6CtkDS63ScYZia9fSN/c68UoMQlrD+0WLSFUcDEfFvhECF7LycJtL79FwVnkLz@vger.kernel.org, AJvYcCVjohTuN/OwZ0NAqZKmsa3HbovzJ10lzfVmW94p7Bh7UOSCPuNmuBwxvAZzUle1uBK9ZZmGHb/JbxA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsddhYVvSvOTMIOFYQc0pPTpRAwPL2VDIe+TQwIqO0ArpxGZlN
-	B+dv5Bl2fGZE4Rwxrz25eBQWjL23hoDWbeKztIeLSsesZh49Gjvf
-X-Gm-Gg: ASbGnctW5kdrVza4vvGJfouS0j2mCwD/5vMHkLyG1eJzOcAudVvR/SYnqnOYB5ODOAZ
-	zser6LdQ/lbVNhhAhoZmgh2qxKlkq7b5WvCe2A1cOTnH5SJ45VzwtPenliXaSOSwPjgw8RoODwF
-	cwsEJCG+jdBqd8AgprKOBUp5zssHb/X7HK4UpEqlVSYdM9y6VNl0jZWaR3RWrIICpotI+AS6nGZ
-	dfiQmSuhSziR2246hCSrIkqfrwzfcpLDFh/bGfmBZEm996/L2M54VfjN3jgyEqT3ZOrhS5LiW6B
-	H+LogTwkNA==
-X-Google-Smtp-Source: AGHT+IF5g6Cwah1nUH4293law20BWq2kOqEosji28czoj5s+tXSGVRYefZBOtc+tsL0eYZ30GPMwFg==
-X-Received: by 2002:a5d:64a3:0:b0:385:fae2:f443 with SMTP id ffacd0b85a97d-38a221fa238mr43347757f8f.34.1735895955042;
+        bh=J2HVpu9VKlVzY8IdkZhOKiWna1uiPP+wmt/t5mxL2t4=;
+        b=ZBwwLneCMj1rV9ap2/C17NQlHZGidZqh+QHKGAwcIWaYbPiSj+1/Rh9kBC9BCHzCtD
+         WhAK82hMj6otu75gBB7jsNwEOXUDihlKz6QYzFu2fRbykX7NtkT5tNbIGncydLrVrdE0
+         Ocx+ujg6GWtrqu/OzTLdOauzsz8iGI/gaEqN7sfQupybIMlDgZVF8YHexEN4/seRHyT4
+         3oJXRtSS+CERf4P+FwkbrkFXb481L5SmYipj7QOdFn0W2XxGdLp3lA5hMkqlIom1DmZ4
+         BOIgUBt4y5L+xuXpJ+Ishko9StlSlUAT8MlC5JVH4dUIMvJv/d/dW/lj+LscLx3evqgS
+         Z4dg==
+X-Forwarded-Encrypted: i=1; AJvYcCUI1/kkxwTDZ4yXQp3sk4CcoAHKiLajehfZgEyF/QyjZ5GUmjrSk/MH4BVPnt4/DBV8UZ1C0MxBP3I=@vger.kernel.org, AJvYcCULiNXQDrbIH5JsAyQgaW2XKStOyIwjwmNi3QdgDIkPnOr31A3BZjjTFB/sqkkGzI1wlvrfgvYXnLi5eGro@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjLSzaFuNStGRpG/NXIO2nxB5P5CgXQvH0VGYZvb+O93AAfT7w
+	qW9hXJPLHy7+afbzkWXBB1Lw7mEN3MR3twR16Fac/asSM0OKD/iy
+X-Gm-Gg: ASbGncunc0TBsKy3/D9VzLQ/8mabcB7Z2LqOOWHZSfliU8Gm13jjYK10bgZ+YPpWVUt
+	lsNSlwui6j5sbE71/vo0dqWqq4tXH06JDdGhLAFhjI+CF3yXd1vtoJWxIO41rTLhRjAvdSVf2/v
+	hFXVnuLD45OJAL3/GMWbM0FyggKsqUU5jrVgYI/dx7rauITqn8FJHXsjZRpKO/NXDTNFuFsRKZC
+	l9N2apMMekdfwKx7N1SIs1m4zyx6aGR7hRJ2nqS7xQH/raGqlt4dBQZo3dnz4UTEpN92MVNum+7
+	UmQBULKKRA==
+X-Google-Smtp-Source: AGHT+IH4+6w4OKa2DqT69LRW9WmPeorZEubkFLvWp64oZz/hpENXwQwdi4VP6FcTFTVWOy30ULwPsA==
+X-Received: by 2002:a5d:47c9:0:b0:38a:615c:8223 with SMTP id ffacd0b85a97d-38a615c82bemr8284509f8f.10.1735895955911;
         Fri, 03 Jan 2025 01:19:15 -0800 (PST)
 Received: from prasmi.Home ([2a06:5906:61b:2d00:84e9:7adb:b646:c9c0])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4366a093cbfsm452493275e9.22.2025.01.03.01.19.13
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4366a093cbfsm452493275e9.22.2025.01.03.01.19.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2025 01:19:14 -0800 (PST)
+        Fri, 03 Jan 2025 01:19:15 -0800 (PST)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Chris Brandt <chris.brandt@renesas.com>,
@@ -88,9 +88,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v4 3/9] i2c: riic: Use local `dev` pointer in `dev_err_probe()`
-Date: Fri,  3 Jan 2025 09:18:54 +0000
-Message-ID: <20250103091900.428729-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 4/9] i2c: riic: Use BIT macro consistently
+Date: Fri,  3 Jan 2025 09:18:55 +0000
+Message-ID: <20250103091900.428729-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250103091900.428729-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20250103091900.428729-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -104,13 +104,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Update the `riic_init_hw()` function to use the local `dev` pointer in
-calls to `dev_err_probe()`. Previously, `riic_init_hw()` used
-`riic->adapter.dev` in error reporting. Since this function is invoked
-during the probe phase, the I2C adapter is not yet initialized, leading to
-`(null) ...` being printed in error messages. This patch fixes the issue
-by consistently using the local `dev` pointer, which points to
-`riic->adapter.dev.parent`.
+Easier to read and ensures proper types.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
@@ -120,32 +114,74 @@ Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
 v3->v4
-- No change
+- Included bits.h
+- Since the changes were small, I've kept the RB/TB tags.
 
 v2->v3
-- Moved replacing dev_err -> dev_err_probe into patch#1
-- Dropped fixes tags
-- Updated commit message
 - Collected RB and tested tags
 
 v1->v2
 - Collected RB tag from Geert
 ---
- drivers/i2c/busses/i2c-riic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-riic.c | 37 ++++++++++++++++++-----------------
+ 1 file changed, 19 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index 9041936fde04..459f7158ed11 100644
+index 459f7158ed11..5551964c3971 100644
 --- a/drivers/i2c/busses/i2c-riic.c
 +++ b/drivers/i2c/busses/i2c-riic.c
-@@ -320,7 +320,7 @@ static int riic_init_hw(struct riic_dev *riic)
- 				      : I2C_MAX_FAST_MODE_FREQ;
+@@ -45,33 +45,34 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
++#include <vdso/bits.h>
  
- 	if (t->bus_freq_hz > max_freq)
--		return dev_err_probe(&riic->adapter.dev, -EINVAL,
-+		return dev_err_probe(dev, -EINVAL,
- 				     "unsupported bus speed %uHz (%u max)\n",
- 				     t->bus_freq_hz, max_freq);
+-#define ICCR1_ICE	0x80
+-#define ICCR1_IICRST	0x40
+-#define ICCR1_SOWP	0x10
++#define ICCR1_ICE	BIT(7)
++#define ICCR1_IICRST	BIT(6)
++#define ICCR1_SOWP	BIT(4)
+ 
+-#define ICCR2_BBSY	0x80
+-#define ICCR2_SP	0x08
+-#define ICCR2_RS	0x04
+-#define ICCR2_ST	0x02
++#define ICCR2_BBSY	BIT(7)
++#define ICCR2_SP	BIT(3)
++#define ICCR2_RS	BIT(2)
++#define ICCR2_ST	BIT(1)
+ 
+ #define ICMR1_CKS_MASK	0x70
+-#define ICMR1_BCWP	0x08
++#define ICMR1_BCWP	BIT(3)
+ #define ICMR1_CKS(_x)	((((_x) << 4) & ICMR1_CKS_MASK) | ICMR1_BCWP)
+ 
+-#define ICMR3_RDRFS	0x20
+-#define ICMR3_ACKWP	0x10
+-#define ICMR3_ACKBT	0x08
++#define ICMR3_RDRFS	BIT(5)
++#define ICMR3_ACKWP	BIT(4)
++#define ICMR3_ACKBT	BIT(3)
+ 
+-#define ICFER_FMPE	0x80
++#define ICFER_FMPE	BIT(7)
+ 
+-#define ICIER_TIE	0x80
+-#define ICIER_TEIE	0x40
+-#define ICIER_RIE	0x20
+-#define ICIER_NAKIE	0x10
+-#define ICIER_SPIE	0x08
++#define ICIER_TIE	BIT(7)
++#define ICIER_TEIE	BIT(6)
++#define ICIER_RIE	BIT(5)
++#define ICIER_NAKIE	BIT(4)
++#define ICIER_SPIE	BIT(3)
+ 
+-#define ICSR2_NACKF	0x10
++#define ICSR2_NACKF	BIT(4)
+ 
+ #define ICBR_RESERVED	0xe0 /* Should be 1 on writes */
  
 -- 
 2.43.0
