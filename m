@@ -1,124 +1,140 @@
-Return-Path: <linux-i2c+bounces-8914-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8915-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4A03A01133
-	for <lists+linux-i2c@lfdr.de>; Sat,  4 Jan 2025 01:03:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8A28A0113D
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 Jan 2025 01:09:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93BDD163618
-	for <lists+linux-i2c@lfdr.de>; Sat,  4 Jan 2025 00:02:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BABE93A4753
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 Jan 2025 00:09:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 397DC1C01;
-	Sat,  4 Jan 2025 00:02:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89DAA2914;
+	Sat,  4 Jan 2025 00:09:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LclNP1Vk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sKarAGkp"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8FFCA29;
-	Sat,  4 Jan 2025 00:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B6B36B;
+	Sat,  4 Jan 2025 00:09:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735948976; cv=none; b=oS351nrmDt7U/iRP/NoRJSAZxCHTT1bVBddou2JqS8lnYIXEzx/UrrQfrfo46TbhUr+bQDuSUpFGa1uKrDngL5FdzzM9PjietfOW1T7MjbLPa1Kfza467dZrWq4P7aMROKKSWFWO/Nz4pc29v11OUBaG4LrbVHhieOJ+ev/eutc=
+	t=1735949371; cv=none; b=Sxu40c/8cqmmp2IeEfGdlcYPfq8+Mb2fCPYmJZSi0IP7twPC08a13c2BwybOqvgFa767eRJVcam0CWOj7nJy5E8NMfpOt1LLEaM6DyGNNlBgnDI8iJbXF+cWeod6PuJ5gyvrR/tk5RaLwzgegKLr3o6HfGbyxyJ3Oaep9PUAx8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735948976; c=relaxed/simple;
-	bh=TE63Ok9/k2mxRdrtTCnTzYnZSgktDJM8WGR5CCypWOI=;
+	s=arc-20240116; t=1735949371; c=relaxed/simple;
+	bh=NL+6UMAqEckQgTyP9CfH1geXhZoa5MSlyXNrFreAQ64=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P0xZiZbRZ5guGBsFVf8ks9eYqBwqOGoWkBJayYOxPOVIRHY3r0DmCz4OUheQPqwqJXkMflUmlX7vIrfni2/tNaXRAqq6Brd4C9chfZxFSg/1OepVhnL8cQxWwWKkJP1sg96mB+ZViZGD851tSJLZ/EBGL8nEZLHX0g8PR+i+OqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LclNP1Vk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E193CC4CEDE;
-	Sat,  4 Jan 2025 00:02:54 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=bEnZUjHHBIMjTXLI4kDe2mIE35XcoPGqc80VKtb+RhEGrysSudNuhlgQZ4RerGpF375p9WUzVnhvrfGzAePUcky/B5FLIrE/9v6gojcCi5PJaVk+siy5voyEOftxWwiTPkxY+C5DTu2iEGOyftUuldVfAcOqeWuBc32FSlBSvBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sKarAGkp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6B75C4CEDD;
+	Sat,  4 Jan 2025 00:09:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735948975;
-	bh=TE63Ok9/k2mxRdrtTCnTzYnZSgktDJM8WGR5CCypWOI=;
+	s=k20201202; t=1735949370;
+	bh=NL+6UMAqEckQgTyP9CfH1geXhZoa5MSlyXNrFreAQ64=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LclNP1Vk5tmWjrsKW4K7ZB1NqpCMwbZW3yGH8htuNDU6CFDHM5brGg9/Hiaes1CLN
-	 +6bEWICChpndHl2pA50hXLIIsg2W6B/2mbuficfoBXHB8KkKe5KvzKZhB6GN7XUq69
-	 67fiet5wD58jq50X83XwbFVwsLbGIa21rO17f5O7qTmexQP0Kr+xbIdiBcDieUJZHk
-	 E4ez3/FzpjhX24jGU1apT8ZoFKzqX/9jQSkkzcO/EHbCQfgRI1OWxcm90pjUGlQ/Ql
-	 wQ/2SxKk0KQ05tHwO6Ch2Itl49iHaDiTyMcNp3EUDhlNgwNrIHeR3d5OsW5o1TwgZG
-	 JdAbOxiCUE6ng==
-Date: Sat, 4 Jan 2025 01:02:51 +0100
+	b=sKarAGkp3shhVy//F9vhDi4mvw09GclBlXaRSATpbcyL8j552aZD9Y7cQ5DF9COtd
+	 JdtaeWyIjgtXy6u934m7tcw8FtUCT4nmEkv+DVNDNNXsqcN8YZaoUXiUmVxZAWVAj7
+	 qblQ1+7OKVcVpoMHDT//fgnivbb5LpPw9LZ1OHU7ZVBbTnoKKBSLBYzN9Bp4oiFUx0
+	 sGWNpJAKUUqNgO3FGHsp1lggl5I8tVADngudzQ99v2PAdol3TSmxGPoCt0jHtO26TH
+	 Wb/Sa8sJYqufUshEHl3GYTFUlwvVcbCaS1NnpaBnYYOQ/elsPbIf7QFakZUWorC7OW
+	 A91XqQ8ANJJNg==
+Date: Sat, 4 Jan 2025 01:09:26 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Wolfram Sang <wsa@the-dreams.de>, linux-arm-kernel@lists.infradead.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 1/3] i2c: davinci: kill platform data
-Message-ID: <fxj2tqrjfr23cxqmtmpj74bombtfjn3qtpz5iiegvhbap7v5md@pkmrskwamatl>
-References: <20241211102337.37956-1-brgl@bgdev.pl>
- <awney7utrl5n63xsgzxnnlpqajuqtjnrjsbpzloic5iqt4pv2u@ktkhejuihbde>
- <CAMRc=Mci6bPCirruk90hnjBvJW0=HKhqCq+9p4t2k9B=Oy8Ocw@mail.gmail.com>
+To: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
+Cc: Vinod Koul <vkoul@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, quic_msavaliy@quicinc.com, 
+	quic_vtanuku@quicinc.com
+Subject: Re: [PATCH v4 0/2] Add Block event interrupt support for I2C protocol
+Message-ID: <pvcu35x7prqonlhptakepn5bdqm6skd4qmigvoavejyjj363ug@aemx3pd2po2v>
+References: <20241217170424.14703-1-quic_jseerapu@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=Mci6bPCirruk90hnjBvJW0=HKhqCq+9p4t2k9B=Oy8Ocw@mail.gmail.com>
+In-Reply-To: <20241217170424.14703-1-quic_jseerapu@quicinc.com>
 
-Hi Bartosz,
+Hi,
 
-On Thu, Jan 02, 2025 at 01:44:10PM +0100, Bartosz Golaszewski wrote:
-> On Fri, Dec 27, 2024 at 12:41 AM Andi Shyti <andi.shyti@kernel.org> wrote:
-> >
-> > Hi Bartosz,
-> >
-> > ...
-> >
-> > >  struct davinci_i2c_dev {
-> > >       struct device           *dev;
-> > >       void __iomem            *base;
-> > > @@ -132,13 +133,10 @@ struct davinci_i2c_dev {
-> > >  #ifdef CONFIG_CPU_FREQ
-> > >       struct notifier_block   freq_transition;
-> > >  #endif
-> > > -     struct davinci_i2c_platform_data *pdata;
-> > > -};
-> > > -
-> > > -/* default platform data to use if not supplied in the platform_device */
-> > > -static struct davinci_i2c_platform_data davinci_i2c_platform_data_default = {
-> > > -     .bus_freq       = 100,
-> > > -     .bus_delay      = 0,
-> >
-> > what happened to bus_delay?
-> >
-> 
-> bus_delay is not set by means other than platform data and it defaults
-> to 0 so it's safe to just remove it.
-
-yes, but how is it related to this patch? Can we put it on a
-different patch?
+this patch has been hanging here for a while, can we please have
+someone from DMA and Qualcomm look at it?
 
 Thanks,
 Andi
 
-> > ...
-> >
-> > > +     /* standard bus frequency (kHz) */
-> > > +     unsigned int            bus_freq;
-> > > +     /* Chip has a ICPFUNC register */
-> > > +     bool                    has_pfunc;
-> > >  };
-> >
-> > > -static struct i2c_bus_recovery_info davinci_i2c_gpio_recovery_info = {
-> > > -     .recover_bus = i2c_generic_scl_recovery,
-> > > -     .prepare_recovery = davinci_i2c_prepare_recovery,
-> > > -     .unprepare_recovery = davinci_i2c_unprepare_recovery,
-> > > -};
-> > > -
-> >
-> > what happened to the gpio_recovery_info?
-> >
+On Tue, Dec 17, 2024 at 10:34:22PM +0530, Jyothi Kumar Seerapu wrote:
+> The I2C driver gets an interrupt upon transfer completion.
+> When handling multiple messages in a single transfer, this
+> results in N interrupts for N messages, leading to significant
+> software interrupt latency.
 > 
-> Similar story: it's only ever used if there's a pdata-provided
-> recovery GPIO line set but nobody does it anymore.
+> To mitigate this latency, utilize Block Event Interrupt (BEI)
+> mechanism. Enabling BEI instructs the hardware to prevent interrupt
+> generation and BEI is disabled when an interrupt is necessary.
 > 
-> Bartosz
+> Large I2C transfer can be divided into chunks of 8 messages internally.
+> Interrupts are not expected for the first 7 message completions, only
+> the last message triggers an interrupt, indicating the completion of
+> 8 messages. This BEI mechanism enhances overall transfer efficiency.
+> 
+> This optimization reduces transfer time from 168 ms to 48 ms for a
+> series of 200 I2C write messages in a single transfer, with a
+> clock frequency support of 100 kHz.
+> 
+> BEI optimizations are currently implemented for I2C write transfers only,
+> as there is no use case for multiple I2C read messages in a single transfer
+> at this time.
+> 
+> v3 -> v4:
+>   - API's added for Block event interrupt with multi descriptor support is 
+>     moved from qcom-gpi-dma.h file to I2C geni qcom driver file.
+>   - gpi_multi_xfer_timeout_handler function is moved from GPI driver to
+>     I2C driver.
+>   - geni_i2c_gpi_multi_desc_xfer structure is added as a member of
+>     struct geni_i2c_dev.
+>   - Removed the changes of making I2C driver is dependent on GPI driver.
+> 
+> v2 -> v3:
+>   - Updated commit description
+>   - In I2C GENI driver, for i2c_gpi_cb_result moved the logic of
+>     "!is_tx_multi_xfer" to else part.
+>   - MIN_NUM_OF_MSGS_MULTI_DESC changed from 4 to 2
+>   - Changes of I2C GENI driver to depend on the GPI driver moved
+>     to patch3.
+>   - Renamed gpi_multi_desc_process to gpi_multi_xfer_timeout_handler
+>   - Added description for newly added changes in "qcom-gpi-dma.h" file.
+> 
+> v1 -> v2:
+>   - DT changes are reverted for adding dma channel size as a new arg of
+>     dma-cells property.
+>   - DT binding change reveted for dma channel size as a new arg of
+>     dma-cells property.
+>   - In GPI driver, reverted the changes to parse the channel TRE size
+>     from device tree.
+>   - Made the changes in QCOM I2C geni driver to support the BEI
+>     functionality with the existing TRE size of 64.
+>   - Made changes in QCOM I2C geni driver as per the review comments.
+>   - Fixed Kernel test robot reported compiltion issues.
+> 
+> 
+> Jyothi Kumar Seerapu (2):
+>   dmaengine: qcom: gpi: Add GPI Block event interrupt support
+>   i2c: i2c-qcom-geni: Add Block event interrupt support
+> 
+>  drivers/dma/qcom/gpi.c             |   3 +
+>  drivers/i2c/busses/i2c-qcom-geni.c | 275 ++++++++++++++++++++++++++---
+>  include/linux/dma/qcom-gpi-dma.h   |   9 +
+>  3 files changed, 262 insertions(+), 25 deletions(-)
+> 
+> -- 
+> 2.17.1
+> 
 
