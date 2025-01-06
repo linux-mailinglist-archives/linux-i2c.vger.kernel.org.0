@@ -1,119 +1,141 @@
-Return-Path: <linux-i2c+bounces-8927-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8930-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6441A022F9
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 11:31:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C34EA0280A
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 15:31:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD1421635AF
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 10:31:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9A253A2041
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 14:31:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E3B1D9A76;
-	Mon,  6 Jan 2025 10:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59BA91DED5B;
+	Mon,  6 Jan 2025 14:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="XhTJ6zPa"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="TeXyAI28"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909A01DB540
-	for <linux-i2c@vger.kernel.org>; Mon,  6 Jan 2025 10:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3379A1DE8BD;
+	Mon,  6 Jan 2025 14:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736159499; cv=none; b=FMdRDys0oNnYqGQSZIfUVu1CS9K/0vxA1c8YDXFqX+Up/pUWs1A49cXnnKijqQoRnMmDqU0LoIrAn1Ewp13ryfjqeVud3LA1FltnOtocfiw4IQD+I6jl/faw3GMPnWEfbZaLC6xZHmv11/XsEpv9P6NMlpVMRy5ZNtFjqs0NV0c=
+	t=1736173904; cv=none; b=Lz8jzJeuZleHNBVH8oSa4XmQh+vlVCg9ckgAWa+Ikq59hD4q7nt4O8QWpQUb3i8mwkmgxgH75yhVAvVeE+htMrrSdwH6aPIlIZ/NCML2ynQO3lRFe1b+YP+oE/mx4ApOBs0ZdaLjz/4ngQsQBnHBSsbw81T8Ymnrw7izLTvKnhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736159499; c=relaxed/simple;
-	bh=hNHQY6hbUh82jZV4XF67JxgFkShGL8GqnQh2CtEYaBo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AqZ94zHNwny2mlXSrG3Kn5+eexGrfYnodzt6UwCihuiyYBPsoQu55iFLA1FZW8t+/K4RU6uLZiUtAV8vvDqNB+N1FVU6fAemBczd632bVGY+a8j8PveVqdNMucd2Iqqr3tx/D4SI5GNSr08GkbilO2PwCYPxjJC6SfAUQDd1KEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=XhTJ6zPa; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3003d7ca01cso150616091fa.0
-        for <linux-i2c@vger.kernel.org>; Mon, 06 Jan 2025 02:31:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1736159495; x=1736764295; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XankIvDMHUqYhqUmdSBV0fOsVivenUwuoWrt76c4yck=;
-        b=XhTJ6zPatBgXX7jUvLxiaGG+jcFh2pHoyDOpnDINIyJUIj6oyBIAu0UMuaedtOrQUq
-         dWcYpjRjS/QEasu0c7POtGzrWLFa+wQK2Pk+wP0RbsOo0IiIZY9OUqeEmr3IaPKkEjqU
-         pVxLTzMwPLIw3/ZiZ7oEMOv7xKyZvcF0P3OWN8LkreAOxGFXNkqfafz5loUxrrBCH2iI
-         ZQJ0Zi/OraEb86NL2oT17bPMkZRJDxdS4dJ9QIQjdkSQtYgGgFnH7d0aF3H4/ttyEZ+i
-         m6FQNf95fNYl4IbQQcVcMglaXve8PJCB8KhSd2iHQuAbKa8YE8Bi4/QsoVAtUOfnAdE8
-         KhXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736159495; x=1736764295;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XankIvDMHUqYhqUmdSBV0fOsVivenUwuoWrt76c4yck=;
-        b=JhymW8a1XWd672lNiY3naE9hoOLIS3pDB86CLOEi3Qg3axo4cUorvC1Ys11EO0rhFx
-         risV6187wjpNDOKAu8X8H1/1vhFMGK8MphDio1Hx9ATXVAmhXI9HshdI6CqxS5HLPIYO
-         x52kadmpWM8GhyRZGub5sd1qP/9/xKx8OHBdPZZOSeE2veFfDKf9PY4hSnkxO8sg04Vq
-         s5bdctzCTRIPtptznVHVfhrowmrhK0ALFcPCmhctS2pNHhnxttoicKIkdgjJn+eUphzH
-         uSSKMMvzl3kuBCbql0rm+mdESdOyIMlNY3Vi5v/MlaNMBwF4ThnnWwPKeR8TtkrxeIMC
-         WxXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUntPYPBe6VRzxQQWkAwbtaAHi37Y/ak1/SmRcES98HN5g2hE+lg9pUaNKMMXeV1LMfI1S+2YbbnR0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3Qyg6vqPK4DF5KQazGpg1MmdprlEv8Z97ZZp9Jlu3A6nhlshX
-	/sRtomNei+9fQyQ8p252FyHRlptqYgIrd8zOl2EFHd5vRC1YHlps/mey0ka2MD9i7+R+XKZuf+G
-	TRx8cfVSzO1I93OlBuZ2cxhg/BwuhjJ/PzzJPkzaAh44LK1tw
-X-Gm-Gg: ASbGncu3Dev+/oVOD3Vsp2aHHPPE5j9EIqRk7Ys352E5dnN1O8uFRr3CHNvUh+vO+ER
-	6FBAeVOv05w4cn9rz8OqpD969gqOliklsKLGa8fASXZnQM/8t8pFtikw/d+l1VN6pnLA=
-X-Google-Smtp-Source: AGHT+IEiDRVszLPNSWReELs+FvHEEQT4b591zdm5BwFAgIooM/r46g0uSJ600ZcQi8LjZ7XFbgcpfge5W6rypOCrkew=
-X-Received: by 2002:a05:6512:3d1f:b0:53e:3a94:c2bc with SMTP id
- 2adb3069b0e04-5422953305fmr17304530e87.18.1736159494514; Mon, 06 Jan 2025
- 02:31:34 -0800 (PST)
+	s=arc-20240116; t=1736173904; c=relaxed/simple;
+	bh=cGopoQ3gUhrwm/x+IJqHHj7+VFcZg0+zW57GRnMnK+U=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BU4wpr97MutQSiBlYqastV5qTkgALJwIeiJ+UH/G+gJjKZJA+V4iqE5U6RTx4rKigmT0VUz61NfDB8FJA6DcJKmjnD5pA6RfphEmKe1QwRdW1ah9oLBSpmmLMevfHjXfA/gHJ84GzWWUeTi8Q9ZrVfQjKnpyVvCrMAMysaHkkm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=TeXyAI28; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5068Y8bD005948;
+	Mon, 6 Jan 2025 08:18:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=kt7Iz
+	I7J20UqIdknLawLtG52wUhrMclt9jb9IooJjBM=; b=TeXyAI28fjeJwfyXt6HZC
+	gtPYlnZwJ/6MDnwhXCT3k3ha0R/GxndITcouQrSufcAeMhf6KmWCDx4jZPj0roqS
+	W2/GD4tu4GNZZ9lkK+4gZMV9A3/SfshXVhyjv/ooOl8N9/emc6JO52Lv7+B3QTBQ
+	a33h3j7OyU/njneKDtR7DsftLAsgdD+6zpiVZHGI/DG7tcO/6R+82NEW1r7E0TQe
+	lIT23mFNFMM4oKmRd7zx5E6keUd1RyNjFfgtiBA27wmgKf/d/nXTcauY5S7Sujct
+	kfrufqK/gen5zIcWTrli1LwDXZrCAS0qsnDKXx0QGvsiXf1p82CHthpVPiggwQNG
+	w==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 440bsf8vvs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Jan 2025 08:18:10 -0500 (EST)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 506DI8kr036669
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 6 Jan 2025 08:18:08 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 6 Jan 2025 08:18:08 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 6 Jan 2025 08:18:08 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 6 Jan 2025 08:18:08 -0500
+Received: from JGERONI2-L01.ad.analog.com (JGERONI2-L01.ad.analog.com [10.117.223.41])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 506DHlGR001854;
+	Mon, 6 Jan 2025 08:18:00 -0500
+From: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
+To: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+CC: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        "Rob
+ Herring" <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Delphine CC
+ Chiu" <Delphine_CC_Chiu@Wiwynn.com>,
+        Wolfram Sang
+	<wsa+renesas@sang-engineering.com>
+Subject: [PATCH 1/2] dt-bindings: hwmon: adm1275: add adm1273
+Date: Mon, 6 Jan 2025 21:17:39 +0800
+Message-ID: <20250106131740.305988-2-johnerasmusmari.geronimo@analog.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250106131740.305988-1-johnerasmusmari.geronimo@analog.com>
+References: <20250106131740.305988-1-johnerasmusmari.geronimo@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241211102337.37956-1-brgl@bgdev.pl> <awney7utrl5n63xsgzxnnlpqajuqtjnrjsbpzloic5iqt4pv2u@ktkhejuihbde>
- <CAMRc=Mci6bPCirruk90hnjBvJW0=HKhqCq+9p4t2k9B=Oy8Ocw@mail.gmail.com> <fxj2tqrjfr23cxqmtmpj74bombtfjn3qtpz5iiegvhbap7v5md@pkmrskwamatl>
-In-Reply-To: <fxj2tqrjfr23cxqmtmpj74bombtfjn3qtpz5iiegvhbap7v5md@pkmrskwamatl>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 6 Jan 2025 11:31:23 +0100
-Message-ID: <CAMRc=MfRq9xU7a64qCOrDCYgSbeWVKF=PnzS8Cabm5a3zzFekQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] i2c: davinci: kill platform data
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Wolfram Sang <wsa@the-dreams.de>, linux-arm-kernel@lists.infradead.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: rBmado6AC_qDo0hmpaGeCJ66qc6FrUiQ
+X-Proofpoint-GUID: rBmado6AC_qDo0hmpaGeCJ66qc6FrUiQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 priorityscore=1501 malwarescore=0 clxscore=1011
+ mlxscore=0 spamscore=0 adultscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=989 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2411120000 definitions=main-2501060118
 
-On Sat, Jan 4, 2025 at 1:02=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org> w=
-rote:
->
-> > > > -
-> > > > -/* default platform data to use if not supplied in the platform_de=
-vice */
-> > > > -static struct davinci_i2c_platform_data davinci_i2c_platform_data_=
-default =3D {
-> > > > -     .bus_freq       =3D 100,
-> > > > -     .bus_delay      =3D 0,
-> > >
-> > > what happened to bus_delay?
-> > >
-> >
-> > bus_delay is not set by means other than platform data and it defaults
-> > to 0 so it's safe to just remove it.
->
-> yes, but how is it related to this patch? Can we put it on a
-> different patch?
->
+Add support for the adm1273 Hot-Swap Controller and Digital Power
+and Energy Monitor
 
-No, why? This patch removes platform data and all bits and pieces
-associated with it. Splitting it into two just to first remove
-bus_delay and then the rest doesn't make much sense IMO. The argument
-that it's already not used would be incorrect as it IS used by
-platform data (even though it itself is no longer defined anywhere).
-I'd keep it as is.
+Signed-off-by: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
+---
+ Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Bart
+diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+index 5b076d677..fd79bf2e0 100644
+--- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
+@@ -24,6 +24,7 @@ properties:
+     enum:
+       - adi,adm1075
+       - adi,adm1272
++      - adi,adm1273
+       - adi,adm1275
+       - adi,adm1276
+       - adi,adm1278
+@@ -79,6 +80,7 @@ allOf:
+           contains:
+             enum:
+               - adi,adm1272
++              - adi,adm1273
+     then:
+       properties:
+         adi,volt-curr-sample-average:
+-- 
+2.34.1
+
 
