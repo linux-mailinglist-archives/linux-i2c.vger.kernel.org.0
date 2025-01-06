@@ -1,115 +1,129 @@
-Return-Path: <linux-i2c+bounces-8934-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8935-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 457B7A03129
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 21:10:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42B98A0314C
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 21:21:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A6B51610B4
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 20:10:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC924188673C
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 20:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C801DF993;
-	Mon,  6 Jan 2025 20:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5AB91DF26B;
+	Mon,  6 Jan 2025 20:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="puK09+u6"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="VEPPO9yO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3E21D5CF4;
-	Mon,  6 Jan 2025 20:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839641E008B
+	for <linux-i2c@vger.kernel.org>; Mon,  6 Jan 2025 20:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736194230; cv=none; b=Itp0rk5zRYZOjbUt6G4ZxhfJXc9h9R/FlEMnglUzBxv1tsXnuNbPNaLU1tZzD+e+dVx+8TTu6CrkUPHNPi5fB5mzwykFj8a4anxhxu23l9PHDg8C2Fegzg3Wd8wlw/wcgbsB2oUGvQS8C36sjE6p7S53rXMKwdN1O0dGQh4x/hc=
+	t=1736194893; cv=none; b=hJA++Zwu/otnvGWKhEWd8HUzx1Pwwu9DhM3hOZJmH94zytk7IB7jqTK5vW//4x+WFpG1qy6fpL63LkyPavaRmtwSc4/2/00IuCCXyLCn7MkD8JdcbQClk+SCfRQ84Pdannx/fwwJ93oPnuDjAbo8JQUoah8PfSmCaP/6E2Mnxqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736194230; c=relaxed/simple;
-	bh=GySwZvwHq/rQKcdNFGju7/mc17U4Z+zs03kdm5nnP8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R9GczMncrz44UJLZXIjSa3tTH+lOnsMOpN/mpvQq0QgTOWLNm8d6FQwFOZiGrVSq6xu8EaLc5du1UgD4i4ucviAv0FLZn9nee/I9fjOuZ9hhzEzFhuRxNB8FVfFxGJYabfHkmao8XUMGL2V1DEs/GM0SmvXhJh2HUrCHjNedcxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=puK09+u6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F41B8C4CED2;
-	Mon,  6 Jan 2025 20:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736194229;
-	bh=GySwZvwHq/rQKcdNFGju7/mc17U4Z+zs03kdm5nnP8M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=puK09+u6w1nNc+80ZSC6EBo9hxb1uaOz7+CX9s9J/B/qPTv1+VYbqp7AxIds4MdrP
-	 I4BVa8JSACW+mpHB40KYK5HemQ0qGD7vpVWhxlraL855BeyEtcJ/+WGOYV4vEBTAxW
-	 L1KFEks++sQ2C47SAX9WD2IKrS+u0ETYyWCUMG3Cr9JyCym/ubxkU1a1aypgR/1KEn
-	 VTp1Xj/FZdnMVsE6k8brGBEHk4NV/FwC4fNuuNrIRaDPkLubstbCAqu7hf9wSbOoXe
-	 H+gM8ayTSD+wtl2NA6Zon/1R4OpHzTakAO8W9nXd0jqi5AmiHsAxDDARj4o+0qeFOp
-	 6KW/yPV9gM5gQ==
-Date: Mon, 6 Jan 2025 20:10:23 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+	s=arc-20240116; t=1736194893; c=relaxed/simple;
+	bh=bMAr4DQGzlza/TutyhbPaI1HQ2tcZJbHpg/SajkA+Do=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RSory7ws7DnQNuvvwm9P4jtT7i0i4+dg3ERIQMxfSkXhyx35/xTcoxaVeZVvr2gmWLS+3tXuehfSFGer5EoasX4YFP4P7VuXbWetLHplthpiPLtPBPcu/VDfoydI+u+tEMT2q20ZXdmVzHnx2l1zQm2umUjZGCEanuXobMckxGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=VEPPO9yO; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3862df95f92so6487183f8f.2
+        for <linux-i2c@vger.kernel.org>; Mon, 06 Jan 2025 12:21:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1736194890; x=1736799690; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N08679NMA6u8B70kqY81dtpRf5QTarA7SLWj7Tm0mBQ=;
+        b=VEPPO9yOrtM7AwJMvO5TUaTzpzfEKod72PJMFGjyDP7+5P0lQWsYVi2JeOqanGduid
+         2imuFl2sqEl4UhQP5U7hYZCBQ0SyqAMkkzDXMsy+bl8Z0AIPWnx3Wte7L+hEEkWMNeui
+         kpjZjNpsaOjNAtENgJfM51DJThb7St8cs/V42J0k99XTnt8JCbkuF9F+BI6o0mT6pQHF
+         KeAiA2eIH886FQyrcSVdywQGgTY6J94MW+wm4h/qww1j4Wu+EnyuFV0/4bliu8ZPFC1+
+         8Z/DwMtSXAiiwjdYHq6ojamHyds5Zp40YTUFMy70KTkpIFD9k5Sn3qPQqG34XYHn5vRC
+         QSOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736194890; x=1736799690;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N08679NMA6u8B70kqY81dtpRf5QTarA7SLWj7Tm0mBQ=;
+        b=lMd4f6Uc8NQrM5+wLf62IO8LKCcUpb6mrASaJ6/SKikuB8oH/mSWJa1Pi1jw5Bx3g6
+         sMEbxKkBh2hR7NWqeVSyfHzVIdBgt+L1WcQJo0f5IO5yB3zYz0EbxSeptH73dwNSV1cd
+         wnD7guKwrxITa0cFu4f38JrDRy3CiDuAMdZApCMKH9FbAYPijH7U+S8+gGz4Qlhe7yDf
+         bDYkqKTT1a2kIdRtzLVN3srKG60jUGNU2IHmq7t6w6mHr8EsRw6vfbMFFvE+vs8sEnfO
+         mV12DfEyXWypGJkLTGTwbXggrxk7syPyG/XFPxNJ0WajkA0/OfpRz11Ee+HBJlyWPXvw
+         cYiw==
+X-Forwarded-Encrypted: i=1; AJvYcCWeZd4lOYt9LYCWVUAy9eNC1Qq7/nB1mEetI3nA+Wc1FgNWZSVInRDn0ducE6pt0KrWuRVlrHC0DPc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUDElxy6b6c0mDhGqOaDAnKgVcEX3TLKD00Vc9Vowr6PJ7iPER
+	OOId8L6exIq3j1ILW4HQrPaa3fACIlYvp2D/eN1eCjBFNynS/fYhWnY1XuFitck=
+X-Gm-Gg: ASbGncs7ZiQhDocArqZjqUv4jXe2vlISev2Qco65Wd5Fkxcv3fIPEd5AKwcVL3+M5Bh
+	iMp/khSdsPls0dN5ALIduYcwQBM4rMV2E0L1wftUdzdiohel0ymKc7lCxtwo8WRlHDth0/d55Jz
+	VnKbTkCNYDBDP84CRKqBsRX8Hu3DtKL7/g0D5oRg0reDSqRysY7Ybl21gKahN11+o4GdF7HIhh2
+	mv/L7MmrtfqsbXaB+7g30rLw1YptBo21Y++uOGdp1azv3yRYpx2Vg==
+X-Google-Smtp-Source: AGHT+IGcUgKVgqgZbOiKeAaKRBuyaX/xWL0sgO52tcYB5Zp3oWkT56O/vF9ag2QUJgqxEUh+Octj7w==
+X-Received: by 2002:a5d:64c8:0:b0:388:c75c:e839 with SMTP id ffacd0b85a97d-38a223f7167mr46626721f8f.42.1736194888096;
+        Mon, 06 Jan 2025 12:21:28 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:6d7c:e1c5:e9:58a5])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b4471bsm611364335e9.44.2025.01.06.12.21.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jan 2025 12:21:27 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Bartosz Golaszewski <brgl@bgdev.pl>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v4 1/9] dt-bindings: misc: Describe TI FPC202 dual port
- controller
-Message-ID: <20250106-reabsorb-polygon-dc16642f6725@spud>
-References: <20241230-fpc202-v4-0-761b297dc697@bootlin.com>
- <20241230-fpc202-v4-1-761b297dc697@bootlin.com>
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Luca Weiss <luca.weiss@fairphone.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	~postmarketos/upstreaming@lists.sr.ht,
+	phone-devel@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/5] Add EEPROMs found in the camera sensors on Fairphone 5
+Date: Mon,  6 Jan 2025 21:21:26 +0100
+Message-ID: <173619488358.255016.2244642661299426243.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250103-fp5-cam-eeprom-v1-0-88dee1b36f8e@fairphone.com>
+References: <20250103-fp5-cam-eeprom-v1-0-88dee1b36f8e@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="x2ndQYfNbQ223Djg"
-Content-Disposition: inline
-In-Reply-To: <20241230-fpc202-v4-1-761b297dc697@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
 
---x2ndQYfNbQ223Djg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Fri, 03 Jan 2025 12:11:56 +0100, Luca Weiss wrote:
+> While out-of-tree already two of the three camera sensors are working on
+> this smartphone, getting those upstream-ready will still take a while.
+> 
+> Until then already enable the EEPROMs found on those camera sensors
+> which doesn't have a dependency to the sensor drivers and gets those out
+> of the way.
+> 
+> [...]
 
-On Mon, Dec 30, 2024 at 02:22:03PM +0100, Romain Gantois wrote:
-> +required:
-> +  - compatible
-> +  - gpio-controller
-> +  - "#gpio-cells"
-> +  - reg
+Applied, thanks!
 
-nit: this should be after compatible, like it is in the property
-definitions.
+[1/5] dt-bindings: eeprom: at24: Add compatible for Giantec GT24P128F
+      commit: 56d4ef115cc51b1fe7de1e695923126923c9f9bf
+[2/5] dt-bindings: vendor-prefixes: Add Puya Semiconductor (Shanghai) Co., Ltd.
+      commit: eace9d83c831c44b4f63beec18774fe4a46d12cc
+[3/5] dt-bindings: eeprom: at24: Add compatible for Puya P24C256C
+      commit: 36036a164fac96727ed724a388dae38d2f5f21c1
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-> +  - "#address-cells"
-> +  - "#size-cells"
-
-
-
---x2ndQYfNbQ223Djg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ3w4rwAKCRB4tDGHoIJi
-0n9XAQC0d63BP3SE13K/FHLL58blt3sV1piP1mi8Hh+3IcBdlAD/T7hYSgVqKvjb
-ZY9sAbpGaFYqrlEFoh2+mO1zOi9KuAw=
-=ZduG
------END PGP SIGNATURE-----
-
---x2ndQYfNbQ223Djg--
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
