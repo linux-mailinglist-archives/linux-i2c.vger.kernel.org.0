@@ -1,309 +1,204 @@
-Return-Path: <linux-i2c+bounces-8923-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8924-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40E70A02178
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 10:08:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EE69A021F3
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 10:34:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6768A7A1316
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 09:08:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 305CD1615C7
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 09:34:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE081D63FD;
-	Mon,  6 Jan 2025 09:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804E41D958E;
+	Mon,  6 Jan 2025 09:34:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qk2O8RuG"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="K3fDUiln"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E4B178362;
-	Mon,  6 Jan 2025 09:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF9B159596;
+	Mon,  6 Jan 2025 09:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736154503; cv=none; b=HSH4XDUrIEeece+Ctqs8fPxYNMUNHy6mhRkghxNK6dh7Y5C1it0WajKevD2xLKXGiXToWP/XjK6rVSubtBCJBWoVQ0msI44FKVYzcW3DeEMxTs2W9tHQMq8nIy9mqcmRPQGBh8QiZsnez/+ZPfq+qaSMbHyM3DDLBFzwqPNjssM=
+	t=1736156059; cv=none; b=fDiSBbOLyixS+5wnmz4QwegTLt3y/zaqNPWOupUjknrgzzsu4RZ3BGLn0Lit0U/BR5xK5UyIZS9pyQ3i8Klru7iYEQ+S3BE3LIwknyffJ6qHuM0XQOhFo3iZ5vHzzn/Muc5NquXO83s6DrpoRJz/wBdC3IQdf/3Xp9OI5qD5RkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736154503; c=relaxed/simple;
-	bh=PgjN+2kumaqc2hc8uyyOtdC6ASxN2G/S34Ge5VoGnCQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qeWsizDXpRIFkbenpL14em0/0n1zp4JIFjR8LFADGDoZuoYI6zLJrFZesjyuz2baLDUod4FM7mCBy5k8/qMIE//cVKc302tDnVh4IcT7fVC488KQVHkP0SoM/JHaeVSnqPDtAksYNFVOpG087FmLoeAmrmXABlQHqu/BVOLmy3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qk2O8RuG; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2f441904a42so20696845a91.1;
-        Mon, 06 Jan 2025 01:08:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736154499; x=1736759299; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PgjN+2kumaqc2hc8uyyOtdC6ASxN2G/S34Ge5VoGnCQ=;
-        b=Qk2O8RuG0fQVdiivfTgcP1zKDd2y1AaxLB/fHCjXuw6a+7iYqybOhJRziHZg7/5Q5U
-         4OoAc9x3S3xetcpDrTsUI6V8G7OscDOoaG0ZKDrrsOVRTSRYPylbEimw1XghB96Rd3mo
-         Jll/H02WayFtJKVj8J6/jj5clmcPXhw+j2VT6EtZ7W+krPg6cXwdauWVByvw6wo7Ym3i
-         eMZ7lSMCvpc+6mhMWP5t2E69uhZ0TO5TiovqhjjrxVB9c0JIIoYUWvk4WE+mIeQqqMS1
-         qUjY9n2Kb3kwBChGi+9s+dr4D57n+Yl6gAHCVakKxX9ejd4BHbbWc95AsJyO0oSUWRRG
-         CddQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736154499; x=1736759299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PgjN+2kumaqc2hc8uyyOtdC6ASxN2G/S34Ge5VoGnCQ=;
-        b=jWxmN/3SVyWcsRw0QJMWO+ZaGZhCZEU9ymaMMrLYAmQlwqNJGwWx5LgSrABNvxw2cm
-         6BFOmeMW2JAty+1H5W344j9kxJNLB48WHJVoc/30TZLkBR2NICf6SkGWFgDayEOkWJt0
-         U0p8ADngBlWh/AbKrui66QMZpSSuuFIlCpWR11CadxqSzMKAQknLQqkUIEQ1YlLOqCSn
-         QiZz+Q/CqSRE3NalPBVWpRfUPZ6OTyNYS38pkier9iAVnC7C+g0NzNnJovzwYhYHsPZX
-         PbFE+V12EPLQ38e60zAmSU2xoKJIO3iIYQt0r3tuVbW0jlHYU1XDDryObRkTHxMxS8rp
-         tZPg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxsepE55HvubZyVaP0o/9KEbWT/UTH2a0MkpW2syoPu09+UlBeJD0Wi400bFkqtVLqdEYdQrfXpy0W@vger.kernel.org, AJvYcCWOHEoCI+IsuzpYAj9T4ojn68OcinZ59tMYp83ZjuDwkndNd7hyEngoJib5KYxw9HNwnvSQE737pDCk@vger.kernel.org
-X-Gm-Message-State: AOJu0YyF2oVjph0orOyppi+C71DSgH9uNu/7+nbMz7ubbV9HQj99j8pP
-	YquF3uTWgtdga2olUF9Sesf7MW8+3T6bpb6WGwLoai9oWJtLtaAcJJUUwrf3vO2ItOYWcKyC3wp
-	94Z4Zmi57ifcBPoVlEeW5djxUZ70=
-X-Gm-Gg: ASbGncuF3NADDO2FWnDxrQcp77T0pgH0WNd1AHGtSjQ2hUE9gnT4qcpmLf2I9uh9uWo
-	0ZDIfkxU8GszID9RE/EoQyn3quFNF8CT5bdXQGg==
-X-Google-Smtp-Source: AGHT+IEcli02UzGojGojfR3dMJVAIlIErK5k58eTSxsaXy6mbL7mxS+gz/+IPPhM3qs8uPHcib/sYQj1k04rJ2K8lnI=
-X-Received: by 2002:a17:90b:6cb:b0:2f2:f6e0:3f6a with SMTP id
- 98e67ed59e1d1-2f452e1ea53mr82998602a91.14.1736154499543; Mon, 06 Jan 2025
- 01:08:19 -0800 (PST)
+	s=arc-20240116; t=1736156059; c=relaxed/simple;
+	bh=Hx6Q1XxpCrlM9HFYF18nbTRLQ3CRo6WtQWwUgFBECE4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TZluiUTu2HPNSoQ7ia7hpDstx9vQLhN1Z0LFaF+Dy5ltCPpmVciRFbmYLeheld/EH2OFhSWfgE3cmFz1fb7Fbf+9YEsaUm8GFXvpSQUnRUWm2/xH8d1enjRYYGAbjZCL2z5ERwQ4R0HRgtEoXZPg2Oz7FCP5Un+lxOIhTzxXr7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=K3fDUiln; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 43D3F2A5;
+	Mon,  6 Jan 2025 10:33:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1736156003;
+	bh=Hx6Q1XxpCrlM9HFYF18nbTRLQ3CRo6WtQWwUgFBECE4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=K3fDUilnaOfN/nS+FAqsPaKsO5stPX9sLpLRJ9ncxDOmZbIUoW5i83VgFNSLFTnEd
+	 403ZSjcIZlK80nxPHyHHN/ocDpLn4uNevL6h/9ibN6v5Mrh20cZHbAKRTHsyIiASgj
+	 X3kfj+2Hqw5vtJF56vRMkISUSUIgI2W99Xhy1hDs=
+Message-ID: <7a6fd045-3513-4979-9210-8e30361022e3@ideasonboard.com>
+Date: Mon, 6 Jan 2025 11:34:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250103051657.211966-1-rha051117@gmail.com> <20250103051657.211966-2-rha051117@gmail.com>
- <20250103093353.GP3713119@black.fi.intel.com> <CACHtJB-rZ6SKF3d3xTsbJ=zQ+fPVcCcYxXLX_yMRdpE_4tyYYw@mail.gmail.com>
- <20250105083358.GU3713119@black.fi.intel.com>
-In-Reply-To: <20250105083358.GU3713119@black.fi.intel.com>
-From: R Ha <rha051117@gmail.com>
-Date: Mon, 6 Jan 2025 03:08:08 -0600
-X-Gm-Features: AbW1kvZibhZMSGtOUeKGWbufUGmumLZGNKeZ4l1u8iU0BKAOJjrgSlXMOjgQoYU
-Message-ID: <CACHtJB9=7S0A0-C2vHOUaO21otDiVbUm1a-rft3GwWVyUcdh3g@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Force ELAN06FA touchpad I2C bus freq to 100KHz
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, trivial@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/9] media: i2c: ds90ub960: Replace aliased clients
+ list with address list
+To: Romain Gantois <romain.gantois@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-gpio@vger.kernel.org,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, Andi Shyti
+ <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>,
+ Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>
+References: <20241230-fpc202-v4-0-761b297dc697@bootlin.com>
+ <20241230-fpc202-v4-2-761b297dc697@bootlin.com>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ xsFNBE6ms0cBEACyizowecZqXfMZtnBniOieTuFdErHAUyxVgtmr0f5ZfIi9Z4l+uUN4Zdw2
+ wCEZjx3o0Z34diXBaMRJ3rAk9yB90UJAnLtb8A97Oq64DskLF81GCYB2P1i0qrG7UjpASgCA
+ Ru0lVvxsWyIwSfoYoLrazbT1wkWRs8YBkkXQFfL7Mn3ZMoGPcpfwYH9O7bV1NslbmyJzRCMO
+ eYV258gjCcwYlrkyIratlHCek4GrwV8Z9NQcjD5iLzrONjfafrWPwj6yn2RlL0mQEwt1lOvn
+ LnI7QRtB3zxA3yB+FLsT1hx0va6xCHpX3QO2gBsyHCyVafFMrg3c/7IIWkDLngJxFgz6DLiA
+ G4ld1QK/jsYqfP2GIMH1mFdjY+iagG4DqOsjip479HCWAptpNxSOCL6z3qxCU8MCz8iNOtZk
+ DYXQWVscM5qgYSn+fmMM2qN+eoWlnCGVURZZLDjg387S2E1jT/dNTOsM/IqQj+ZROUZuRcF7
+ 0RTtuU5q1HnbRNwy+23xeoSGuwmLQ2UsUk7Q5CnrjYfiPo3wHze8avK95JBoSd+WIRmV3uoO
+ rXCoYOIRlDhg9XJTrbnQ3Ot5zOa0Y9c4IpyAlut6mDtxtKXr4+8OzjSVFww7tIwadTK3wDQv
+ Bus4jxHjS6dz1g2ypT65qnHen6mUUH63lhzewqO9peAHJ0SLrQARAQABzTBUb21pIFZhbGtl
+ aW5lbiA8dG9taS52YWxrZWluZW5AaWRlYXNvbmJvYXJkLmNvbT7CwY4EEwEIADgWIQTEOAw+
+ ll79gQef86f6PaqMvJYe9QUCX/HruAIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRD6
+ PaqMvJYe9WmFD/99NGoD5lBJhlFDHMZvO+Op8vCwnIRZdTsyrtGl72rVh9xRfcSgYPZUvBuT
+ VDxE53mY9HaZyu1eGMccYRBaTLJSfCXl/g317CrMNdY0k40b9YeIX10feiRYEWoDIPQ3tMmA
+ 0nHDygzcnuPiPT68JYZ6tUOvAt7r6OX/litM+m2/E9mtp8xCoWOo/kYO4mOAIoMNvLB8vufi
+ uBB4e/AvAjtny4ScuNV5c5q8MkfNIiOyag9QCiQ/JfoAqzXRjVb4VZG72AKaElwipiKCWEcU
+ R4+Bu5Qbaxj7Cd36M/bI54OrbWWETJkVVSV1i0tghCd6HHyquTdFl7wYcz6cL1hn/6byVnD+
+ sR3BLvSBHYp8WSwv0TCuf6tLiNgHAO1hWiQ1pOoXyMEsxZlgPXT+wb4dbNVunckwqFjGxRbl
+ Rz7apFT/ZRwbazEzEzNyrBOfB55xdipG/2+SmFn0oMFqFOBEszXLQVslh64lI0CMJm2OYYe3
+ PxHqYaztyeXsx13Bfnq9+bUynAQ4uW1P5DJ3OIRZWKmbQd/Me3Fq6TU57LsvwRgE0Le9PFQs
+ dcP2071rMTpqTUteEgODJS4VDf4lXJfY91u32BJkiqM7/62Cqatcz5UWWHq5xeF03MIUTqdE
+ qHWk3RJEoWHWQRzQfcx6Fn2fDAUKhAddvoopfcjAHfpAWJ+ENc7BTQROprNHARAAx0aat8GU
+ hsusCLc4MIxOQwidecCTRc9Dz/7U2goUwhw2O5j9TPqLtp57VITmHILnvZf6q3QAho2QMQyE
+ DDvHubrdtEoqaaSKxKkFie1uhWNNvXPhwkKLYieyL9m2JdU+b88HaDnpzdyTTR4uH7wk0bBa
+ KbTSgIFDDe5lXInypewPO30TmYNkFSexnnM3n1PBCqiJXsJahE4ZQ+WnV5FbPUj8T2zXS2xk
+ 0LZ0+DwKmZ0ZDovvdEWRWrz3UzJ8DLHb7blPpGhmqj3ANXQXC7mb9qJ6J/VSl61GbxIO2Dwb
+ xPNkHk8fwnxlUBCOyBti/uD2uSTgKHNdabhVm2dgFNVuS1y3bBHbI/qjC3J7rWE0WiaHWEqy
+ UVPk8rsph4rqITsj2RiY70vEW0SKePrChvET7D8P1UPqmveBNNtSS7In+DdZ5kUqLV7rJnM9
+ /4cwy+uZUt8cuCZlcA5u8IsBCNJudxEqBG10GHg1B6h1RZIz9Q9XfiBdaqa5+CjyFs8ua01c
+ 9HmyfkuhXG2OLjfQuK+Ygd56mV3lq0aFdwbaX16DG22c6flkkBSjyWXYepFtHz9KsBS0DaZb
+ 4IkLmZwEXpZcIOQjQ71fqlpiXkXSIaQ6YMEs8WjBbpP81h7QxWIfWtp+VnwNGc6nq5IQDESH
+ mvQcsFS7d3eGVI6eyjCFdcAO8eMAEQEAAcLBXwQYAQIACQUCTqazRwIbDAAKCRD6PaqMvJYe
+ 9fA7EACS6exUedsBKmt4pT7nqXBcRsqm6YzT6DeCM8PWMTeaVGHiR4TnNFiT3otD5UpYQI7S
+ suYxoTdHrrrBzdlKe5rUWpzoZkVK6p0s9OIvGzLT0lrb0HC9iNDWT3JgpYDnk4Z2mFi6tTbq
+ xKMtpVFRA6FjviGDRsfkfoURZI51nf2RSAk/A8BEDDZ7lgJHskYoklSpwyrXhkp9FHGMaYII
+ m9EKuUTX9JPDG2FTthCBrdsgWYPdJQvM+zscq09vFMQ9Fykbx5N8z/oFEUy3ACyPqW2oyfvU
+ CH5WDpWBG0s5BALp1gBJPytIAd/pY/5ZdNoi0Cx3+Z7jaBFEyYJdWy1hGddpkgnMjyOfLI7B
+ CFrdecTZbR5upjNSDvQ7RG85SnpYJTIin+SAUazAeA2nS6gTZzumgtdw8XmVXZwdBfF+ICof
+ 92UkbYcYNbzWO/GHgsNT1WnM4sa9lwCSWH8Fw1o/3bX1VVPEsnESOfxkNdu+gAF5S6+I6n3a
+ ueeIlwJl5CpT5l8RpoZXEOVtXYn8zzOJ7oGZYINRV9Pf8qKGLf3Dft7zKBP832I3PQjeok7F
+ yjt+9S+KgSFSHP3Pa4E7lsSdWhSlHYNdG/czhoUkSCN09C0rEK93wxACx3vtxPLjXu6RptBw
+ 3dRq7n+mQChEB1am0BueV1JZaBboIL0AGlSJkm23kw==
+In-Reply-To: <20241230-fpc202-v4-2-761b297dc697@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jan 5, 2025 at 2:34=E2=80=AFAM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
-> I would expect this works in Windows? Have you
-> checked if it uses 100 kHz or 400kHz there?
+Hi,
 
-The touchpad does work in Windows. I couldn't find a way to check the
-frequency there. I think that I need to do some more investigation
-into how I can find the "proper" frequency, though if anyone has any
-tips I would appreciate them greatly.
+On 30/12/2024 15:22, Romain Gantois wrote:
+> The ds90ub960 driver currently uses a list of i2c_client structs to keep
+> track of used I2C address translator (ATR) alias slots for each RX port.
+> 
+> Keeping these i2c_client structs in the alias slot list isn't actually
+> needed, the driver only needs to know the client address for each slot.
+> 
+> Convert the aliased_clients list to a list of aliased client addresses.
+> This will allow removing the "client" parameter from the i2c-atr callbacks
+> in a future patch.
+> 
+> Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+> ---
+>   drivers/media/i2c/ds90ub960.c | 18 +++++++++---------
+>   1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
+> index 33f362a008757578e4c96e6ea7bed2e590776d8d..7534ddf2079fef466d3a114f0be98599427639fa 100644
+> --- a/drivers/media/i2c/ds90ub960.c
+> +++ b/drivers/media/i2c/ds90ub960.c
+> @@ -467,7 +467,7 @@ struct ub960_rxport {
+>   		};
+>   	} eq;
+>   
+> -	const struct i2c_client *aliased_clients[UB960_MAX_PORT_ALIASES];
+> +	u16 aliased_addrs[UB960_MAX_PORT_ALIASES];
+>   };
+>   
+>   struct ub960_asd {
+> @@ -1031,17 +1031,17 @@ static int ub960_atr_attach_client(struct i2c_atr *atr, u32 chan_id,
+>   	struct device *dev = &priv->client->dev;
+>   	unsigned int reg_idx;
+>   
+> -	for (reg_idx = 0; reg_idx < ARRAY_SIZE(rxport->aliased_clients); reg_idx++) {
+> -		if (!rxport->aliased_clients[reg_idx])
+> +	for (reg_idx = 0; reg_idx < UB960_MAX_PORT_ALIASES; reg_idx++) {
 
-In Windows, my touchpad does not have a vendor-provided driver, but
-uses the default I2C HID driver provided by Microsoft.
-Actually, my touchpad is registered as two devices: An "I2C HID
-Device" using the default "HIDI2C.inf" driver, and an "HID-compliant
-touch pad", using the default "input.inf" driver. Both were provided
-by Microsoft, so it appears there is no vendor-specific firmware here.
+Any reason to drop the use of ARRAY_SIZE()? Usually when dealing with 
+fixed size arrays, it's nicer to use ARRAY_SIZE().
 
-I initially assumed that the driver would default to 100KHz (as being
-the lowest speed defined in
-drivers/i2c/busses/i2c-designware-common.c), but after reading
-Microsoft's documentation for I2C HID devices it appears that they
-recommend 400KHz or more [1].
-After reading this, I tried forcing the speed to 1MHz in the kernel,
-which surprisingly also alleviated the laggy behavior. So it appears
-that the speed can be either 100KHz or 1MHz, but I think that in
-Windows it should be whatever the "default" defined by the Windows
-driver is.
+  Tomi
 
-I tried finding the I2C frequency using the steps defined in the
-Microsoft guide to tracing I2C HID events using Logman [2], and this
-was (what I believe to be) the relevant snippet for setting up the I2C
-device, though it does not appear there is anything related to the
-controller frequency:
-[1]0004.0140::01/06/2025-02:34:21.359
-[hidi2c][WDFDEVICE:0x000018796F20AFD8] Received WDFREQUEST
-0x000018797575D918 (IOCTL_HID_READ_REPORT) on WDFQUEUE
-0x000018796F20AC08
-[1]0004.0140::01/06/2025-02:34:21.368
-[hidi2c][WDFDEVICE:0x000018796F20AFD8] Error retrieving read
-WDFREQUEST 0x0000000000000000 from ReportQueue on interrupt
-status:0x8000001a(STATUS_NO_MORE_ENTRIES)
-[3]0004.3184::01/06/2025-02:34:21.369
-[hidi2c][WDFDEVICE:0x000018796F20AFD8] D0Exit to target state D4
-[0]0004.3184::01/06/2025-02:34:21.369
-[hidi2c][WDFDEVICE:0x000018796F20AFD8] Power command (opcode:0x801)
-sent to device register 0x5
-[0]0004.3184::01/06/2025-02:34:21.369
-[hidi2c][WDFDEVICE:0x000018796F20AFD8] Successfully put device into
-sleep power state
-[0]0004.3184::01/06/2025-02:34:21.369
-[hidi2c][WDFDEVICE:0x000018796F20AFD8] Deinitialized device HID state
-[0]0004.3184::01/06/2025-02:34:21.369
-[hidi2c][WDFDEVICE:0x000018796F20AFD8] WdfObjectDelete closed and
-deleted SpbIoTarget
-[1]0004.0150::01/06/2025-02:34:23.172 [hidi2c]Created WDF driver
-object:0xFFFFE78696EE0E30
-[3]0004.0150::01/06/2025-02:34:23.180
-[hidi2c][WDFDEVICE:0x00001879716173C8] Created new device
-[1]0004.2364::01/06/2025-02:34:23.183
-[hidi2c][WDFDEVICE:0x00001879716173C8] I2C resource found at index 0
-with connection id: 0x1
-[1]0004.2364::01/06/2025-02:34:23.183
-[hidi2c][WDFDEVICE:0x00001879716173C8] Interrupt resource found at
-index 1
-[1]0004.2364::01/06/2025-02:34:23.183
-[hidi2c][WDFDEVICE:0x00001879716173C8] Created Spb IO Target and
-resources
-[1]0004.2364::01/06/2025-02:34:23.184
-[hidi2c][WDFDEVICE:0x00001879716173C8] Found supported DSM function:1
-[1]0004.2364::01/06/2025-02:34:23.184
-[hidi2c][WDFDEVICE:0x00001879716173C8] HID Descriptor register address
-0x1 retrieved from ACPI
-[1]0004.2364::01/06/2025-02:34:23.184
-[hidi2c][WDFDEVICE:0x00001879716173C8] D0Entry from from previous
-state D4
-[1]0004.2364::01/06/2025-02:34:23.185
-[hidi2c][WDFDEVICE:0x00001879716173C8] HID descriptor retrieved from
-register 0x1 : LEN 30 VER 0x100 VID 0x4f3 PID 0x32b9 VER 0x4 RDL 679
-RDA 0x2 IRA 0x3 IRML 31 ORA 0x4 ORML 0 CRA 0x5 DRA 0x6
-[1]0004.2364::01/06/2025-02:34:23.185
-[hidi2c][WDFDEVICE:0x00001879716173C8] Initialized device HID state
-[3]0004.2364::01/06/2025-02:34:23.185
-[hidi2c][WDFDEVICE:0x00001879716173C8] Power command (opcode:0x800)
-sent to device register 0x5
-[3]0004.2364::01/06/2025-02:34:23.185
-[hidi2c][WDFDEVICE:0x00001879716173C8] Successfully put device into on
-power state
-[3]0004.2364::01/06/2025-02:34:23.185
-[hidi2c][WDFDEVICE:0x00001879716173C8] WdfIoQueueRetrieveNextRequest
-failed to find idle notification request in IdleQueue WDFQUEUE
-0x000018796F1CCFD8 status:0x8000001a(STATUS_NO_MORE_ENTRIES)
-[1]0004.2364::01/06/2025-02:34:23.186
-[hidi2c][WDFDEVICE:0x00001879716173C8] Failed querying registry value
-for DoNotWaitForResetResponsestatus:0xc0000034(STATUS_OBJECT_NAME_NOT_FOUND=
-)
-[1]0004.2364::01/06/2025-02:34:23.186
-[hidi2c][WDFDEVICE:0x00001879716173C8] Starting timer for reset
-response - IO queue stopped
-[1]0004.2364::01/06/2025-02:34:23.186
-[hidi2c][WDFDEVICE:0x00001879716173C8] Reset command sent to device
-register 0x5
-[0]0004.0140::01/06/2025-02:34:23.188
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC4C48 (IOCTL_HID_GET_DEVICE_DESCRIPTOR) on WDFQUEUE
-0x000018796258EA28
-[0]0004.0140::01/06/2025-02:34:23.188
-[hidi2c][WDFDEVICE:0x00001879716173C8] Returning device descriptor to
-hidclass, report descriptor length 679
-[0]0004.0140::01/06/2025-02:34:23.188
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC4C48 (IOCTL_HID_GET_DEVICE_DESCRIPTOR) with
-STATUS_SUCCESS
-[0]0004.0140::01/06/2025-02:34:23.188
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received reset response -
-starting IO queue
-[3]0004.0150::01/06/2025-02:34:23.189
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC4C48 (IOCTL_HID_GET_DEVICE_ATTRIBUTES) on WDFQUEUE
-0x000018796258EA28
-[3]0004.0150::01/06/2025-02:34:23.189
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC4C48 (IOCTL_HID_GET_DEVICE_ATTRIBUTES) with
-STATUS_SUCCESS
-[3]0004.0150::01/06/2025-02:34:23.189
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC4C48 (IOCTL_HID_GET_REPORT_DESCRIPTOR) on WDFQUEUE
-0x000018796258EA28
-[3]0004.0150::01/06/2025-02:34:23.209
-[hidi2c][WDFDEVICE:0x00001879716173C8] Report descriptor of length 679
-retrieved from register 0x2
-[3]0004.0150::01/06/2025-02:34:23.209
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC4C48 (IOCTL_HID_GET_REPORT_DESCRIPTOR) with
-STATUS_SUCCESS
-[3]0004.0150::01/06/2025-02:34:23.209
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC4C48 (IOCTL_HID_READ_REPORT) on WDFQUEUE
-0x000018796258EA28
-[3]0004.0150::01/06/2025-02:34:23.209
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received first ping pong read -
-enabling interrupt processing
-[3]0004.0150::01/06/2025-02:34:23.209
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC48C8 (IOCTL_HID_READ_REPORT) on WDFQUEUE
-0x000018796258EA28
-[2]0790.0A3C::01/06/2025-02:34:23.225
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC5A48 (IOCTL_HID_GET_STRING) on WDFQUEUE
-0x000018796258EA28
-[2]0790.0A3C::01/06/2025-02:34:23.225
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC5A48 (IOCTL_HID_GET_STRING) with STATUS_SUCCESS
-[2]0790.0A3C::01/06/2025-02:34:23.225
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC5A48 (IOCTL_HID_GET_FEATURE) on WDFQUEUE
-0x000018796258EA28
-[0]0790.0A3C::01/06/2025-02:34:23.233
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC5A48 (IOCTL_HID_GET_FEATURE) with STATUS_SUCCESS
-[0]0790.0A3C::01/06/2025-02:34:23.234
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC5A48 (IOCTL_HID_GET_FEATURE) on WDFQUEUE
-0x000018796258EA28
-[2]0790.0A3C::01/06/2025-02:34:23.242
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC5A48 (IOCTL_HID_GET_FEATURE) with STATUS_SUCCESS
-[2]0790.0A3C::01/06/2025-02:34:23.242
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC5A48 (IOCTL_HID_DEVICERESET_NOTIFICATION) on WDFQUEUE
-0x000018796258EA28
-[2]0790.0A3C::01/06/2025-02:34:23.242
-[hidi2c][WDFDEVICE:0x00001879716173C8] Pended device reset
-notification WDFREQUEST 0x0000187962CC5A48 to WDFQUEUE
-0x0000187967F9EB08
-[8]0004.020C::01/06/2025-02:34:23.243
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC3208 (IOCTL_HID_SET_FEATURE) on WDFQUEUE
-0x000018796258EA28
-[0]0004.0300::01/06/2025-02:34:23.243
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC1608 (IOCTL_HID_SET_FEATURE) on WDFQUEUE
-0x000018796258EA28
-[2]0004.020C::01/06/2025-02:34:23.244
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC3208 (IOCTL_HID_SET_FEATURE) with STATUS_SUCCESS
-[2]0004.0300::01/06/2025-02:34:23.244
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC1608 (IOCTL_HID_SET_FEATURE) with STATUS_SUCCESS
-[2]0790.0A3C::01/06/2025-02:34:23.247
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC1608 (IOCTL_HID_SET_FEATURE) on WDFQUEUE
-0x000018796258EA28
-[8]0004.0300::01/06/2025-02:34:23.247
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC3208 (IOCTL_HID_SET_FEATURE) on WDFQUEUE
-0x000018796258EA28
-[9]0004.020C::01/06/2025-02:34:23.247
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC0F08 (IOCTL_HID_SET_FEATURE) on WDFQUEUE
-0x000018796258EA28
-[2]0790.0A3C::01/06/2025-02:34:23.247
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC1608 (IOCTL_HID_SET_FEATURE) with STATUS_SUCCESS
-[2]0004.0300::01/06/2025-02:34:23.248
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC3208 (IOCTL_HID_SET_FEATURE) with STATUS_SUCCESS
-[2]0004.020C::01/06/2025-02:34:23.248
-[hidi2c][WDFDEVICE:0x00001879716173C8] Completing WDFREQUEST
-0x0000187962CC0F08 (IOCTL_HID_SET_FEATURE) with STATUS_SUCCESS
-[3]0004.0140::01/06/2025-02:34:23.267
-[hidi2c][WDFDEVICE:0x00001879716173C8] Received WDFREQUEST
-0x0000187962CC0F08 (IOCTL_HID_READ_REPORT) on WDFQUEUE
-0x000018796258EA28
+> +		if (!rxport->aliased_addrs[reg_idx])
+>   			break;
+>   	}
+>   
+> -	if (reg_idx == ARRAY_SIZE(rxport->aliased_clients)) {
+> +	if (reg_idx == UB960_MAX_PORT_ALIASES) {
+>   		dev_err(dev, "rx%u: alias pool exhausted\n", rxport->nport);
+>   		return -EADDRNOTAVAIL;
+>   	}
+>   
+> -	rxport->aliased_clients[reg_idx] = client;
+> +	rxport->aliased_addrs[reg_idx] = client->addr;
+>   
+>   	ub960_rxport_write(priv, chan_id, UB960_RR_SLAVE_ID(reg_idx),
+>   			   client->addr << 1);
+> @@ -1062,18 +1062,18 @@ static void ub960_atr_detach_client(struct i2c_atr *atr, u32 chan_id,
+>   	struct device *dev = &priv->client->dev;
+>   	unsigned int reg_idx;
+>   
+> -	for (reg_idx = 0; reg_idx < ARRAY_SIZE(rxport->aliased_clients); reg_idx++) {
+> -		if (rxport->aliased_clients[reg_idx] == client)
+> +	for (reg_idx = 0; reg_idx < UB960_MAX_PORT_ALIASES; reg_idx++) {
+> +		if (rxport->aliased_addrs[reg_idx] == client->addr)
+>   			break;
+>   	}
+>   
+> -	if (reg_idx == ARRAY_SIZE(rxport->aliased_clients)) {
+> +	if (reg_idx == UB960_MAX_PORT_ALIASES) {
+>   		dev_err(dev, "rx%u: client 0x%02x is not mapped!\n",
+>   			rxport->nport, client->addr);
+>   		return;
+>   	}
+>   
+> -	rxport->aliased_clients[reg_idx] = NULL;
+> +	rxport->aliased_addrs[reg_idx] = 0;
+>   
+>   	ub960_rxport_write(priv, chan_id, UB960_RR_SLAVE_ALIAS(reg_idx), 0);
+>   
+> 
 
-[1]: https://learn.microsoft.com/en-us/windows-hardware/design/component-gu=
-idelines/touchpad-device-bus-connectivity#acpi-table-entries
-[2]: https://learn.microsoft.com/en-us/windows-hardware/drivers/hid/event-t=
-racing#using-logmanexe
 
