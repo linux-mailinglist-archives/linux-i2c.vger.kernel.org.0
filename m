@@ -1,207 +1,144 @@
-Return-Path: <linux-i2c+bounces-8920-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8921-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90E9CA01887
-	for <lists+linux-i2c@lfdr.de>; Sun,  5 Jan 2025 09:34:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01792A01D05
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 02:29:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D66C418837ED
-	for <lists+linux-i2c@lfdr.de>; Sun,  5 Jan 2025 08:34:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CE6018822CA
+	for <lists+linux-i2c@lfdr.de>; Mon,  6 Jan 2025 01:29:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F196813665A;
-	Sun,  5 Jan 2025 08:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C4E1339A1;
+	Mon,  6 Jan 2025 01:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Asd5StWU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lL7fJwi2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A9279C4;
-	Sun,  5 Jan 2025 08:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6675D647;
+	Mon,  6 Jan 2025 01:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736066043; cv=none; b=CyYrfwXzyg94Y83X0+4VixyuQEPPnjK+1HaR1F+wlsu20smHiKT9Lhe6QdXZO1J3c1bqG6LJtCdbEk/A8cUu9JkwqDILBUcsO8Qm2zngjqnmKYe0E3hdH8U32PIUia6SXZYFmL6AllV656UtzDpY3VRO4gIAOgUfN2FdSVdeYiU=
+	t=1736126977; cv=none; b=JVXcwDkJ9U7R+qnDbfUs00MjToKCJf6smxBatiBjKcOA5nvcShL0U7YMfTCiSKyFtn6WsBJVhqIyudhFFMcVFBkCJLm03+untkxrN3WVQacWVc19m7hhdVnceyDbFfdUdMlcVbaXp66jcAAUrF3ZeuP+iqvqtezaZfs2FJ4IGt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736066043; c=relaxed/simple;
-	bh=HK0uWLs3KgLuoE1NQZE49bG1NVGbXZ96y8GV3SPnkWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h+hDE2dm0+GgX6MXBOyae4XshJ0fZT3eidSL3rPWqIFMYMG+VnpGBhpX6lgGjvt1GEoH9MyFRooe/NPRtibyH4d5fRD1fpb6f73l9E99rSBAZXxAJAHseyyCycnACrfpb+27hxtEb71+ZZmezT4VLRYgTfal3GHog3CLf348CKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Asd5StWU; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736066042; x=1767602042;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=HK0uWLs3KgLuoE1NQZE49bG1NVGbXZ96y8GV3SPnkWw=;
-  b=Asd5StWUdXeF5KKIC8iXvdFOW79jCMDhdgR44YEzOfwTWwJwO4e3EU/B
-   KCIHNlci8TfbUWBlotQqCyCLDFhc7VxEQ07ac/9fw2Tns+znvU/ZeT393
-   Y+vdCzn9euUFh3VUsacxfFj8gWTvzq/a+zRke+R3LU9L0Vr8752o0p8f1
-   bmvPlWYmGKX2NpV462IOfgbutxQg40BAxNkvZvenYs99DGkVAEYuW0Yco
-   WWCb5AHKIzm+BvydQaZjMl1esjLmSYpshtE7OdL17nG4IBrBzJuXOcdq5
-   4ikdtUp/7Yg8FVNBFIxT7SYdVl+DSC4wJ2EHaFCN1UiiyX2IkyD5FmptE
-   A==;
-X-CSE-ConnectionGUID: oe22YPnyRfSES3M9ghWg4g==
-X-CSE-MsgGUID: D/tv6y26QmOJO8FFxlbdAA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11305"; a="36119576"
-X-IronPort-AV: E=Sophos;i="6.12,290,1728975600"; 
-   d="scan'208";a="36119576"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2025 00:34:02 -0800
-X-CSE-ConnectionGUID: mpPAVplvTwGiCoEe58+7Ww==
-X-CSE-MsgGUID: IDClCMzeSTayQe6naDuKJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="106792189"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa005.fm.intel.com with ESMTP; 05 Jan 2025 00:34:00 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id B59E826A; Sun, 05 Jan 2025 10:33:58 +0200 (EET)
-Date: Sun, 5 Jan 2025 10:33:58 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: R Ha <rha051117@gmail.com>
-Cc: wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org,
-	linux-acpi@vger.kernel.org, trivial@kernel.org
-Subject: Re: [PATCH 1/1] Force ELAN06FA touchpad I2C bus freq to 100KHz
-Message-ID: <20250105083358.GU3713119@black.fi.intel.com>
-References: <20250103051657.211966-1-rha051117@gmail.com>
- <20250103051657.211966-2-rha051117@gmail.com>
- <20250103093353.GP3713119@black.fi.intel.com>
- <CACHtJB-rZ6SKF3d3xTsbJ=zQ+fPVcCcYxXLX_yMRdpE_4tyYYw@mail.gmail.com>
+	s=arc-20240116; t=1736126977; c=relaxed/simple;
+	bh=yGjdqkeP0eVHV23f9G3Rr6TIJ5rU12NR+dd6zrpy8Qk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=g3TcyV9At17oNcLeQxNKo/993JJgM4w1pprx/Pglg08Cd0aJWfeB3csyivZXXqmVpR0Vt+QZmR6GlFF3kayIGWu9uqTz5/wrfbDtfcPj8tevojkJ/qqPN+nqQBB5hh8p0qSCATRisuQAhzBAu6VKQNsL/xNB4Qd/hCLjWX6/hBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lL7fJwi2; arc=none smtp.client-ip=209.85.166.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3a7d7c1b190so49194675ab.3;
+        Sun, 05 Jan 2025 17:29:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736126975; x=1736731775; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kduibBjFmNFXNP3SSbAzX9SCVe5hZLT75L4Y/x0XbKM=;
+        b=lL7fJwi2veVF3b2u4wpdPyAp7yEvpqZhFfH/nRRWraVokcmRpI6Sgl3TbUjuT46M25
+         bkMdDqLsRRj3YWiRdbB8gmt20d7jSXQm5D727pKg6jman4uhsBl2gL0GxH90LWcc/hvI
+         VA7BhvngZCnAvwMlDhBFuE6c8Ovw18iHMmYPOd8q1iLcgz3/3PQjI5JuXWWBsHKgcn5s
+         UudaO2yPIDCz1/CtkF0RCyuW7lYDSPI1oGgHtUGR+HOBiDjZHmfsKCzKDSA+RWnbeVGU
+         RqHor2/yTCs5Lbb7b4BmAazSCMZxaYLujqlhm3tddVFd610u5+FoMm50kntMoUDmQyEZ
+         /vlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736126975; x=1736731775;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kduibBjFmNFXNP3SSbAzX9SCVe5hZLT75L4Y/x0XbKM=;
+        b=MWjeORMQAhcyPLS0AnAYQN4DfFh5pMamh/Zb3AuJ6kNw0Js8hlCidBip81XNCODGtU
+         DT7auqgDW36SCFHql2oLzJpvu6ckJ0tYIUHpgM7R4wJkexYQ23ICBW0j7xwgRUoCnaQi
+         DivEpGvvxQFk72kqkr772aHkpaXMAI3afId6gUBaXIIgk5lO95shb7dMQzNnwD1tZqJS
+         9594BCsnKG2MTbOkRyjatcld9AwFMZjeYb6Zikk2yWCmaMXlE7/BZkeBfMKFTqWTHfhS
+         qKNL1KC4shD5Uyh/KrdZzxNSnQDvcm8mp1deC91bsPKKiCkNqu3asTQ+0oCD8I43c+pV
+         jbFw==
+X-Forwarded-Encrypted: i=1; AJvYcCWpc4z8rf3AnmMomocwaXIhRKHdjNCh1XALaHa7yaQ1PL/HVjCFDIfcLcCJfchoXKF2KjFXrLQ/59wN@vger.kernel.org, AJvYcCXxJQEehd/zgZZEXLvIoajk/1LIx3+yfWJLvsRGECIpxp878pKq0IMO1JP6Y2Mk8yi83BT2tadp0kTq@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4JtjJ/DxgvVCWXq5ZJ1I4sTYEOiSiwCltY7GuartbIrlWp5FU
+	lXFc16rwkNkxQPDFPL98lhZ/nPuiqzTVOyjdvEgbbJiBT+R7yfPX
+X-Gm-Gg: ASbGnctO3MavlY6/+dJjm+/h9WgFfze8qT44TNkWQMkl9StBOZHHLcc7SCQKOIFkZRG
+	4eLp87Vc3hJwFS2lRqGjnSxkFMpY4zwE2ukmon3PqiQsyPZ3IpOO0j8a7Afdiz+MBBSRhFvF/+L
+	Cq8q8FIxy1KrhTA6hmK5qLFx5YQFdLqpFkRujxNRsHQ4GOVzkuSFbHPZmPj+jSiWGI+HtMv/bz6
+	QozFGgtF7Hp1b3X46HFiC8ywh3VpvciRpIkin7JoOS3Uq/SeCRps05V+DzL83BfLegM
+X-Google-Smtp-Source: AGHT+IGNspJDPgCh0KDla5JcCqiJVIczUHgHNbyKE22M3WbAX0IVcYacHOZ5JzwKaSHyJtY05NbJUw==
+X-Received: by 2002:a05:6e02:3687:b0:3a7:6d14:cc29 with SMTP id e9e14a558f8ab-3c2d18b43aamr515787525ab.1.1736126975409;
+        Sun, 05 Jan 2025 17:29:35 -0800 (PST)
+Received: from localhost.localdomain ([71.201.112.51])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3c0e3f36354sm92712785ab.52.2025.01.05.17.29.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jan 2025 17:29:34 -0800 (PST)
+From: Randolph Ha <rha051117@gmail.com>
+To: mika.westerberg@linux.intel.com
+Cc: wsa+renesas@sang-engineering.com,
+	linux-i2c@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	trivial@kernel.org,
+	Randolph Ha <rha051117@gmail.com>
+Subject: [PATCH] Force ELAN06FA touchpad I2C bus freq to 100KHz
+Date: Sun,  5 Jan 2025 19:28:35 -0600
+Message-ID: <20250106012902.212850-1-rha051117@gmail.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250105083358.GU3713119@black.fi.intel.com>
+References: <20250105083358.GU3713119@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACHtJB-rZ6SKF3d3xTsbJ=zQ+fPVcCcYxXLX_yMRdpE_4tyYYw@mail.gmail.com>
 
-On Fri, Jan 03, 2025 at 05:46:27PM -0600, R Ha wrote:
-> Hello,
-> 
-> Thanks for reading my patch!
-> 
-> On Fri, Jan 3, 2025 at 3:33 AM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> > What are those "some devices" and "some controllers"?
-> 
-> The "Some Devices" are the Lenovo V15 G4 IRU, which I use, and
-> potentially the Lenovo V15 G4 AMN and Lenovo Ideapad Slim 3 15IAH8 as
-> well (based on issue reports from other users [1]).
-> The "Some Controllers" are the Designware I2C controller.
-> 
-> Sorry for not putting this in the commit message; I had tried to
-> follow the comments for the quirk I copied in Commit 7574c0db2e68c
-> ("i2c: acpi: Force bus speed to 400KHz if a Silead touchscreen is
-> present"), which left them out.
+When a 400KHz freq is used on this model of ELAN touchpad,
+excessive smoothing (similar to when there is noise in the signal)
+is sometimes applied. As some devices' (e.g, Lenovo V15 G4) ACPI
+tables do not specify the 100KHz frequency requirement, and some
+I2C busses (e.g, Designware I2C) default to a 400KHz frequency,
+it is necessary to force the speed to 100KHz.
 
-In general it is good to follow the existing changelogs but in this case I
-would prefer to add the details of the system in question (so we know what
-systems the quirk is applied to).
+Signed-off-by: Randolph Ha <rha051117@gmail.com>
+---
+ drivers/i2c/i2c-core-acpi.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-> On Fri, Jan 3, 2025 at 3:33 AM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> > Can you add the ACPI table snippet here too for reference?
-> 
-> I believe this is the correct snippet in my ACPI table (Again, V15 G4
-> IRU). Tried to edit it down as much as I could, hopefully this tells
-> everything. Please let me know how I should attach a longer snippet or
-> the full ACPI table if needed.
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index 14ae0cfc325e..8ba167f59db1 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -355,6 +355,19 @@ static const struct acpi_device_id i2c_acpi_force_400khz_device_ids[] = {
+ 	{}
+ };
+ 
++static const struct acpi_device_id i2c_acpi_force_100khz_device_ids[] = {
++	/*
++	 * When a 400KHz freq is used on this model of ELAN touchpad,
++	 * excessive smoothing (similar to when there is noise in the signal)
++	 * is sometimes applied. As some devices' (e.g, Lenovo V15 G4) ACPI
++	 * tables do not specify the 100KHz frequency requirement, and some
++	 * I2C busses (e.g, Designware I2C) default to a 400KHz frequency,
++	 * it is necessary to force the speed to 100KHz.
++	 */
++	{ "ELAN06FA", 0 },
++	{}
++};
++
+ static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
+ 					   void *data, void **return_value)
+ {
+@@ -373,6 +386,9 @@ static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
+ 	if (acpi_match_device_ids(adev, i2c_acpi_force_400khz_device_ids) == 0)
+ 		lookup->force_speed = I2C_MAX_FAST_MODE_FREQ;
+ 
++	if (acpi_match_device_ids(adev, i2c_acpi_force_100khz_device_ids) == 0)
++		lookup->force_speed = I2C_MAX_STANDARD_MODE_FREQ;
++
+ 	return AE_OK;
+ }
+ 
+-- 
+2.47.1
 
-Okay thanks for sharing. I don't see the "SPED" beeing assigned in the
-below snipped though. I would expect this works in Windows? Have you
-checked if it uses 100 kHz or 400kHz there?
-
-> Scope (_SB.PC00.I2C1)
-> {
->     [...]
->     Device (TPD0)
->     {
->         [...]
->         CreateWordField (SBFB, \_SB.PC00.I2C1.TPD0._Y53._ADR, BADR)
-> // _ADR: Address
->         CreateDWordField (SBFB, \_SB.PC00.I2C1.TPD0._Y53._SPE, SPED)
-> // _SPE: Speed
->         CreateWordField (SBFG, 0x17, INT1)
->         CreateDWordField (SBFI, \_SB.PC00.I2C1.TPD0._Y54._INT, INT2)
-> // _INT: Interrupts
->         Method (_INI, 0, NotSerialized)  // _INI: Initialize
->         {
->             If ((OSYS < 0x07DC))
->             {
->                 SRXO (0x09080011, One)
->             }
-> 
->             INT1 = GNUM (0x09080011)
->             INT2 = INUM (0x09080011)
->             If ((TPTY == One))
->             {
->                 _HID = "ELAN06FA"
->                 _SUB = "ELAN0001"
->                 BADR = 0x15
->                 HID2 = One
->                 Return (Zero)
->             }
->             [...]
->         }
-> 
->         Name (_HID, "XXXX0000")  // _HID: Hardware ID
->         Name (_CID, "PNP0C50" /* HID Protocol Device (I2C bus) */)  //
-> _CID: Compatible ID
->         Name (_SUB, "XXXX0000")  // _SUB: Subsystem ID
->         Name (_S0W, 0x03)  // _S0W: S0 Device Wake State
->         Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
->         {
->             If ((Arg0 == HIDG))
->             {
->                 Return (HIDD (Arg0, Arg1, Arg2, Arg3, HID2))
->             }
-> 
->             If ((Arg0 == TP7G))
->             {
->                 Return (TP7D (Arg0, Arg1, Arg2, Arg3, SBFB, SBFG))
->             }
-> 
->             Return (Buffer (One)
->             {
->                  0x00                                             // .
->             })
->         }
->         [...]
->         Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
->         {
->             If ((OSYS < 0x07DC))
->             {
->                 Return (SBFI) /* \_SB_.PC00.I2C1.TPD0.SBFI */
->             }
-> 
->             If ((TPDM == Zero))
->             {
->                 Return (ConcatenateResTemplate (I2CM (I2CX, BADR, SPED), SBFG))
->             }
-> 
->             Return (ConcatenateResTemplate (I2CM (I2CX, BADR, SPED), SBFI))
->         }
->         [...]
->     }
-> }
-> 
-> For comparison, the properties for a device that I think did set a
-> proper speed was like this:
-> If ((TPNP == 0xD64D))
-> {
->     _HID = "GTCH7503"
->     HID2 = One
->     BADR = 0x10
->     SPED = 0x000F4240
->     Return (Zero)
-> }
-> 
-> [1]: https://bbs.archlinux.org/viewtopic.php?id=297092
 
