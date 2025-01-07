@@ -1,126 +1,98 @@
-Return-Path: <linux-i2c+bounces-8955-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8956-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4937A04BEF
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2025 22:51:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D93BA04CCA
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 00:00:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36F8C3A3F49
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2025 21:50:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CE871887539
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2025 23:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E917C1F7082;
-	Tue,  7 Jan 2025 21:50:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C8131E2859;
+	Tue,  7 Jan 2025 23:00:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvYfmm0k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gF85C++3"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A351256446;
-	Tue,  7 Jan 2025 21:50:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84D41DE4CA;
+	Tue,  7 Jan 2025 23:00:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736286655; cv=none; b=I/3I0V6+lm70Y5hVhZ4fTyL2XEesc9zxzd4+Dr7i9WuAqNhRSkFLKbkw8M+6L/9PxbNBttsgjrzcenMW2ySZVJXYQCqgQGmrP9wPKokYxtMgmsO+6cUYtoywVBZavzLXcUjBlm4gH7GRJXwLvB4Lj55k2ji1cWDXt/tsnmZ+yIM=
+	t=1736290816; cv=none; b=kfES5b0pSfRIEGwQ0jv4WFfi0aRvB49gmOuYUUAiiU6FXDv8YP9KEPcFFHjCTEa5Jg0TYb9un41WAKGeE0+jOEJPFXEPK/y8xVcxclw47Ubs4LWwjRsIoC1nlb9XGk5HvRGcURMh+16x3CaL0VOpVOZIveDPA3HVb47xz3UD7GE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736286655; c=relaxed/simple;
-	bh=TsCpx7aKGUcwB6mW8YLBLjC9e8pZ6xstkV3qO1nZsG0=;
+	s=arc-20240116; t=1736290816; c=relaxed/simple;
+	bh=UnKUUBq2SmugIKnovltJwIBCdCDqgI5xyyhzrT51Mgg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qGI4Qd50q2M0CEu9deXUNSd6ULz0OYrRet7grUXbONv691dXrpVDFFRiFli9aUPFWL4zJBx5yBCZX81HA/c5fSbnyG3m5HxDOB+rJBVllVHXMM0SgACnU4+Odjvo8NdtoPOL7tLPWO76APd12JGQdMFhMW5nAFXb1BXJMfde3ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvYfmm0k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B86C4CED6;
-	Tue,  7 Jan 2025 21:50:54 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=qGB0fIq4r/HNMsyOFnkNKgPxf2d5ITUugfhhqhmHBqeW/7F9boSPKt8dXuS9RzBnjG8Gg/6dUCu5qiUHRCQ9M13fVfF6rBL/1wnTdLJ7kAWB16JOPfHKAqi/AhSKxSfMuald/ePYWHdfjSyfUAfMuDTTjJd47D5R+qBvC3WN9lQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gF85C++3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6887C4CED6;
+	Tue,  7 Jan 2025 23:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736286655;
-	bh=TsCpx7aKGUcwB6mW8YLBLjC9e8pZ6xstkV3qO1nZsG0=;
+	s=k20201202; t=1736290816;
+	bh=UnKUUBq2SmugIKnovltJwIBCdCDqgI5xyyhzrT51Mgg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lvYfmm0kNt473KUEQpk9r7jj5m1XOUbMX1J0ej8kCZO/3PcWsvZbvaBKbYYwy3FB7
-	 H4W2BvEjbEpsgcGB03DkO1p5RqcM1SutTFfAGnrkDN22CO5WFonk0HceIg+UH4nXW+
-	 Bb/VuXarWE2h5W7ky21Twnc5c8dsfIdPN1NR9IexGhcUyq1lrPOXzCuC1LHtdmsGe1
-	 3gMSvnZxAnQIciXUTlNm303nBwm9Jw4OWHAiwd8gQkCLTz0bhWYC/DAb/lsfWgw5hu
-	 JRM99JVcAkpreyL8gcN8DqSzievz5Kl/i1A6BQy2JAY7M4GdXMQ4ZDIXJxTSzBUtcb
-	 LEE0RN3JTCK1g==
-Date: Tue, 7 Jan 2025 22:50:51 +0100
+	b=gF85C++3bN9UpvT2RJ/5CcEeXC7FbIHXE446W6YChguOboVhbzHOsitcnL4XGRaou
+	 559UqdEzhzR2AMljbBLE+6OVcN+tgYb8Pn1nwzwnL6ATu5zmG2rbxB9CyaGTyMwPUh
+	 m9RRMiiy/SRxlWB9S7XgxzNWAz6VRBmBDCBP5K+jUWah26yoQc7Qdayh/sg5I8sfA0
+	 XCU0AbNph2tHQ8PM2b8kbVePbfEV7diIuaNv/hzAfx+ppvuW9N6oyVnWUthCJFPD+8
+	 WOnLxayCk0t7RfbmMn7c/4qp/LwZBjLgpfwBMLM9xQGKL7zfGshMOxGyfY3/RphnGV
+	 awwqbn2V6eS1w==
+Date: Wed, 8 Jan 2025 00:00:12 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Zoie Lin <zoie.lin@mediatek.com>
-Cc: Qii Wang <qii.wang@mediatek.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Project_Global_Chrome_Upstream_Group@mediatek.com, 
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Wolfram Sang <wsa@the-dreams.de>, linux-arm-kernel@lists.infradead.org, 
 	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, teddy.chen@mediatek.com
-Subject: Re: [PATCH v3 1/1] i2c: mediatek: add runtime PM operations and bus
- regulator control
-Message-ID: <puotk7kms35fh3mgmsg24uxwadmcqjfr5iuijr2zknezcg7dtg@zlbrphpd6jn5>
-References: <20250103143250.1521287-1-zoie.lin@mediatek.com>
- <20250103143250.1521287-2-zoie.lin@mediatek.com>
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH 1/3] i2c: davinci: kill platform data
+Message-ID: <cpf327z4gotr3keocxe2pwhwpyao5abg6izt332r5w3ulfz45y@wdzmqwujsg2t>
+References: <20241211102337.37956-1-brgl@bgdev.pl>
+ <awney7utrl5n63xsgzxnnlpqajuqtjnrjsbpzloic5iqt4pv2u@ktkhejuihbde>
+ <CAMRc=Mci6bPCirruk90hnjBvJW0=HKhqCq+9p4t2k9B=Oy8Ocw@mail.gmail.com>
+ <fxj2tqrjfr23cxqmtmpj74bombtfjn3qtpz5iiegvhbap7v5md@pkmrskwamatl>
+ <CAMRc=MfRq9xU7a64qCOrDCYgSbeWVKF=PnzS8Cabm5a3zzFekQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250103143250.1521287-2-zoie.lin@mediatek.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRc=MfRq9xU7a64qCOrDCYgSbeWVKF=PnzS8Cabm5a3zzFekQ@mail.gmail.com>
 
-Hi Zoie,
+Hi Bartosz,
 
-On Fri, Jan 03, 2025 at 10:32:34PM +0800, Zoie Lin wrote:
-> This commit introduces support for runtime PM operations in
-> the I2C driver, enabling runtime suspend and resume functionality.
-
-Please, don't start the commit log with "This patch...", please
-use the informative form.
-
-> Although in the most platforms, the bus power of i2c are always
-
-/the//
-/are/is/
-
-> on, some platforms disable the i2c bus power in order to meet
-> low power request.
+On Mon, Jan 06, 2025 at 11:31:23AM +0100, Bartosz Golaszewski wrote:
+> On Sat, Jan 4, 2025 at 1:02 AM Andi Shyti <andi.shyti@kernel.org> wrote:
+> > > > > -/* default platform data to use if not supplied in the platform_device */
+> > > > > -static struct davinci_i2c_platform_data davinci_i2c_platform_data_default = {
+> > > > > -     .bus_freq       = 100,
+> > > > > -     .bus_delay      = 0,
+> > > >
+> > > > what happened to bus_delay?
+> > > >
+> > >
+> > > bus_delay is not set by means other than platform data and it defaults
+> > > to 0 so it's safe to just remove it.
+> >
+> > yes, but how is it related to this patch? Can we put it on a
+> > different patch?
+> >
 > 
-> This implementation includes bus regulator control to facilitate
-> proper handling of the bus power based on platform requirements.
-> 
-> Signed-off-by: Zoie Lin <zoie.lin@mediatek.com>
+> No, why? This patch removes platform data and all bits and pieces
+> associated with it. Splitting it into two just to first remove
+> bus_delay and then the rest doesn't make much sense IMO. The argument
+> that it's already not used would be incorrect as it IS used by
+> platform data (even though it itself is no longer defined anywhere).
+> I'd keep it as is.
 
-...
+yeah... merged to i2c/i2c-host.
 
-> +static int mtk_i2c_runtime_resume(struct device *dev)
-> +{
-> +	int ret = 0;
-
-initialization is not needed.
-
-> +	struct mtk_i2c *i2c = dev_get_drvdata(dev);
-> +
-> +	if (i2c->adap.bus_regulator) {
-> +		ret = regulator_enable(i2c->adap.bus_regulator);
-> +		if (ret) {
-> +			dev_err(dev, "enable regulator failed!\n");
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
-> +	if (ret) {
-> +		if (i2c->adap.bus_regulator)
-> +			regulator_disable(i2c->adap.bus_regulator);
-> +		return ret;
-
-no need to return here...
-
-> +	}
-
-... you can remove the brackets...
-
-> +	return 0;
-
-... return ret;
-
+Thanks,
 Andi
-
-> +}
 
