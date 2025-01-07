@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-8952-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8953-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E783A04AF0
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2025 21:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D43A7A04AF4
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2025 21:29:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E49091885A60
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2025 20:24:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4552018878F8
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Jan 2025 20:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BF41F4735;
-	Tue,  7 Jan 2025 20:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE1121F4723;
+	Tue,  7 Jan 2025 20:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fuisAbzQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UatNsQ8Q"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CC91F63EA
-	for <linux-i2c@vger.kernel.org>; Tue,  7 Jan 2025 20:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095581DF97A
+	for <linux-i2c@vger.kernel.org>; Tue,  7 Jan 2025 20:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736281474; cv=none; b=dbpJDI/I+s01An206wO2YP+8smGf/DGvZoTrjpIv6UYOmvYRNR+An8Si/zmWGs3sMV/ypuB+AIybiP5KEiy7vaHMFwpBXPFbCaZdnAMTCE/oA9HI1oaG2VVNiAbv3iAgzRz4oK0DaL/B6htRY4tW1AvSEvAikuvLjkbdpx1P7wg=
+	t=1736281752; cv=none; b=UPk9b/jpbx4Rn/SDT09NbrWDHfucp8wNt3tHiPTBOD9y6GNBFIyi+EKI5qa01/JoxyJ47hePRHowzEWjeLuQ8hKkf0wURLu2r+mQ6N0GLxxGqGsLRiMUk+2ayx5ke2AkCjidnP689MMMVyuBKA9gGcQMHjj3Akii3VasLTg6/ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736281474; c=relaxed/simple;
-	bh=aOqbDJRoCwikGBgixHiZRExGVu5rSkeY8hGq629ui+U=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=ukGA3VthM1+PvuJww0H9WnkBEYTN9yG46+AVui0W1SzwE0l6n59QmdVvN0unwJ21hkPVbMcw/0R4I8gDMdXJWPz6WmjN89/goRBW8LR2s90AQ/QP5Ykwo1jNQqjxwbIg9Kcw6tDoTsOtYuvRqDo+GGGZoCtXZN92A4n1TUGGJZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fuisAbzQ; arc=none smtp.client-ip=209.85.218.50
+	s=arc-20240116; t=1736281752; c=relaxed/simple;
+	bh=2XGFJytdmS/NtJyoaleiW0ZJAoK4VUyYwOdAZueyHvk=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=o9J21Od/y99CQaRYPEAdF+aT3gx+aBIViwjMYLNdWN7dDppoZn12YPSC/DAoFM1HCGt0GoXIiWV9TnGKJ4F88mdiffk4zI7ZvAvU4gdJWY8OVgL99utBW84MiTnO7kDmLxYDmLPoXBb94q3jxob0prPdbZorKkWBCahAIb86TTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UatNsQ8Q; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aaef00ab172so1831172866b.3
-        for <linux-i2c@vger.kernel.org>; Tue, 07 Jan 2025 12:24:32 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-aaf900cc7fbso983150666b.3
+        for <linux-i2c@vger.kernel.org>; Tue, 07 Jan 2025 12:29:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736281471; x=1736886271; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736281749; x=1736886549; darn=vger.kernel.org;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+tHDWFAPTGj7RED9GGmz3UZZAIXKNVYfpitnJIGBGh8=;
-        b=fuisAbzQrtqigHOB7aMjAaFnIfOQEWGSYAPC5e6Z5N3gqkh62X6wrYgKjVZazqkPDy
-         69Mni8K+yg2O64BppR4I7/F4sPbqCz6C581g+ePXTMS+x2GKQ5xbyZ1VpZoQnozK+Sfa
-         EevbRdtSZqz82cCY8cfekYUtFg2xuFDfSS29c3vFOBUgaMEOIEQCRxs+5nda3grTOPgr
-         wBz8TJYrw8sygPGXiuWuu2WkluqllgQZX/MmDkbSwGcPZMeIaDzOqCq4zlRb4vghMLuz
-         N+T1WYhYL8O+uvgPUC3J93/kzMl7mOHyar5PHhd8Gh/7RTL+vDeM6CMzKEeCdEitfzbE
-         wjFg==
+        bh=YHBW8mI5qAP2AyOhRCw18RUOfoPUQh68OaQcaqyMUEY=;
+        b=UatNsQ8Q+57mmjCozsxZBrL8Urz/HTHW1uFuHZOSJyNDQCtiTCyem5f5Xuq4MpeDl0
+         pABXPD6MGBvOA9vrhJymHyU1bLU1TBFU/QaDcIp+8i9NTYBimIs+YTFfNIh/6xMnq+0D
+         uNh1B/qR81ZTM7r3idAklfawxvUTmUqodlDf88ulhAMZ2CNTkPgdPDsiidHsEZ8s6DS8
+         WyoiYjrvzpJDLc1AON8CDxj3/TBxPN6AkbUCv1ckOX1qsPlU0lhYVQ/FKWDbu8Vmqr2b
+         kv8QBdPy+JKGw2Wi8c72XUe4kjAwMtsvhVASvydFHMj4dxvFoSQuILaEeA8oSY5EaGd7
+         A3eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736281471; x=1736886271;
+        d=1e100.net; s=20230601; t=1736281749; x=1736886549;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+tHDWFAPTGj7RED9GGmz3UZZAIXKNVYfpitnJIGBGh8=;
-        b=hKx6NY33goZZl25zhY7RhKGB8T3gaBEBOp2+N4OzelsC4+PK04DrdQOSYJromzjh33
-         oqRGWc6KBM2ntVlMcmkw5rp3WKgWgQgz7WN3297lHEr7ZIL0eWokg+FkJ173F3duCqvs
-         C056yeLrPtSFzqMqWNoeDhEIp4Q8nA4PjjBWqRhqzEWfNkha4Jz4WHqd/9UXqMs103Fu
-         5huEdEA0BTfyHNqG6+LnVJ6IzXPUFGSUgSyXA4B9d9Le9+mY0yqU/nEfV4StPng0l7i5
-         9W+nLiQ7HhT1xwQ1t53KbeixHQCmeY63LFmkJJHGCYbyHPc7Pnlee3LyZKzPM4mXPjoe
-         zOJA==
-X-Gm-Message-State: AOJu0YxWLjhAUE97ODaibH+28rWE67q4xtbUffzkVdP3EoEPPt7key5O
-	c5mGopJwCH4xm8rR5ZEo4bOz6b1H1kuVpCoDxi1XvEftrK4Cr69XenIoag==
-X-Gm-Gg: ASbGncskvOJjUEWRAVNzAQiUXTx3B6t9ne6HBZrwnYncREAAj2imt/AwMLZOzMz1xt+
-	eJZImrr7eaTp1TdV+Hj5T5KOckFBSuFIQk80D3oRxW5KvlrJjfsT9vPxCyKvAD3lEqX4uQk2eMZ
-	oLmV+3pD8R8x9vNA9zDXJNHibODvK4xPeANYXbSJ6oEHpyKG7UgrvIUxWuC9d86lzrlxIj51hdm
-	VHeRgEMRpSFsbqpp2o+cGehSBEGkt1GHWZdzMhshmhGNF9rDA6L1QKmOgLJsIG2HZvMhOgLvcov
-	2lRS317UhItyi+4/kVP6nhoY1WWdQKCkQfnBxrbg4ypTEufueyY/xb4GQcmjLiY04zIV97NVGX3
-	/GEPUoEGDVsvUArifcRj/YF3+aPn+/ZEA9z3724E/i3smbGap
-X-Google-Smtp-Source: AGHT+IFhLs/WlV9/lp4mcHoifTa/vueV5mFJkSXK8rMp4y/NdMWWi/p8Q+Muf35XsBWedISXvt1uAQ==
-X-Received: by 2002:a05:6402:35ca:b0:5d0:d818:559d with SMTP id 4fb4d7f45d1cf-5d972e0b954mr458206a12.11.1736281470966;
-        Tue, 07 Jan 2025 12:24:30 -0800 (PST)
+        bh=YHBW8mI5qAP2AyOhRCw18RUOfoPUQh68OaQcaqyMUEY=;
+        b=QDZeMHJaVMsNT8KpVdBxNPgUoSiW51vqXsW1Ko6mFtO7py3UisJaGl9K+UTzqAm7GI
+         x0LEWeHLiwBshrJPHZe/MCIIl20T8RWRjtVC02PAmhJsgy+9Xz1UUE9IuQiS5WRgGZe2
+         0Mh2QtCCAYfrhaJuGBRaj7a9vMPZwA5UbiAbM+rWiK7QGbrNpQxAeJV5a/hBoxM/avqV
+         PLOl7KWV3hFWj2SFF1uj0EvKLoVYhgUjEqaZdrY/ZG5hH0/knY+Wesi/4rSO/uP2UnCA
+         g8GbeV/aNtVlYNoDcnwuYFyUyRhWEJL8Hv+/utItEzu9aOtNMjKpAj6YQF/UAnqc9eMz
+         0+Ug==
+X-Gm-Message-State: AOJu0YxC3PP/Jy1wypkrZysuQlWLJym/1ahoPocpaazz7eir3zndnJOR
+	a/s+Vc+5AnxUsAIFaaOSw6jbuVO0/oQeKkGm2YDLw65eCpO2kxDK6sFhdQ==
+X-Gm-Gg: ASbGncuTcChS5DKE+ZCDqFxOu+q2zZomi/5eu4HdE6N3wJPV6WpMHUUNUz9XCTkwvnE
+	JB749drRyOrAW875QPfKe2RwZoqB9LfXt3j4H4yq4OGz2MGmFZqWIlX39iDL94BdnEJbUDqsC4g
+	a9fzRGY5K41WJidiI+RDpSTEAzSVDylvZx0FpVLf0FTSOkdWUmG1y048KOgcdApiYSRCraxf71q
+	HvojprbZK5qD8t/VGtbdrA1cX7DOy3wGaWS1tGX1irzFGqorxSWrjZSuu7VyUbdbIf+fPmmXsqE
+	1dGe9KxE8qnMKaqqPKvx9xn09ch+msCr8lZetMT3gzaN738Qr8xjNl8oxcxWH/Luf+V/Kk2wgeX
+	t8ZNdJe98AiWH7SEet9vwWaYKvqSEGkwFhXQkVDEvVc3tI3aP
+X-Google-Smtp-Source: AGHT+IE4S8xAd1cqTkEw+2MCu+mKjl+eoXMmY48HI1qeE1X1fDEP6Q8AIJ3GAkJe4LuvAyhCe31E/g==
+X-Received: by 2002:a17:907:3e9e:b0:aaf:86a2:651f with SMTP id a640c23a62f3a-ab2abdc0a2emr15667166b.38.1736281748929;
+        Tue, 07 Jan 2025 12:29:08 -0800 (PST)
 Received: from ?IPV6:2a02:3100:a00f:1000:a57d:a6cf:6f93:badf? (dynamic-2a02-3100-a00f-1000-a57d-a6cf-6f93-badf.310.pool.telefonica.de. [2a02:3100:a00f:1000:a57d:a6cf:6f93:badf])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-aac0e830b2dsm2408998466b.8.2025.01.07.12.24.29
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-aac0e8951ebsm2402956666b.71.2025.01.07.12.29.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jan 2025 12:24:30 -0800 (PST)
-Message-ID: <29ff7e5a-fea6-4e2a-9bf1-baa69d77821c@gmail.com>
-Date: Tue, 7 Jan 2025 21:24:29 +0100
+        Tue, 07 Jan 2025 12:29:07 -0800 (PST)
+Message-ID: <f4110289-f7e9-471a-bb91-941c85bfb43e@gmail.com>
+Date: Tue, 7 Jan 2025 21:29:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -84,7 +84,7 @@ Content-Language: en-US
 To: Wolfram Sang <wsa@kernel.org>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] i2c: core: Allocate temp client on the stack in i2c_detect
+Subject: [PATCH] i2c: core: Improve i2c_new_scanned_device
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -131,53 +131,55 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-The temp client is used only in scope of this function, so there's no
-benefit in dynamic allocation.
+Simplify the logic in this function. And as we're no longer limited to
+C89, move the iterator variable declaration to the for loop.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/i2c-core-base.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/i2c/i2c-core-base.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index c21a16aa9..39de0e485 100644
+index 4a858b1ae..f3b1106f2 100644
 --- a/drivers/i2c/i2c-core-base.c
 +++ b/drivers/i2c/i2c-core-base.c
-@@ -2461,7 +2461,7 @@ static int i2c_detect_address(struct i2c_client *temp_client,
- static int i2c_detect(struct i2c_adapter *adapter, struct i2c_driver *driver)
+@@ -2507,12 +2507,10 @@ i2c_new_scanned_device(struct i2c_adapter *adap,
+ 		       unsigned short const *addr_list,
+ 		       int (*probe)(struct i2c_adapter *adap, unsigned short addr))
  {
- 	const unsigned short *address_list;
--	struct i2c_client *temp_client;
-+	struct i2c_client temp_client;
- 	int i, err = 0;
+-	int i;
+-
+ 	if (!probe)
+ 		probe = i2c_default_probe;
  
- 	address_list = driver->address_list;
-@@ -2482,22 +2482,19 @@ static int i2c_detect(struct i2c_adapter *adapter, struct i2c_driver *driver)
- 		return 0;
+-	for (i = 0; addr_list[i] != I2C_CLIENT_END; i++) {
++	for (int i = 0; addr_list[i] != I2C_CLIENT_END; i++) {
+ 		/* Check address validity */
+ 		if (i2c_check_7bit_addr_validity_strict(addr_list[i]) < 0) {
+ 			dev_warn(&adap->dev, "Invalid 7-bit address 0x%02x\n",
+@@ -2529,17 +2527,15 @@ i2c_new_scanned_device(struct i2c_adapter *adap,
+ 		}
  
- 	/* Set up a temporary client to help detect callback */
--	temp_client = kzalloc(sizeof(struct i2c_client), GFP_KERNEL);
--	if (!temp_client)
--		return -ENOMEM;
--	temp_client->adapter = adapter;
-+	memset(&temp_client, 0, sizeof(temp_client));
-+	temp_client.adapter = adapter;
- 
- 	for (i = 0; address_list[i] != I2C_CLIENT_END; i += 1) {
- 		dev_dbg(&adapter->dev,
- 			"found normal entry for adapter %d, addr 0x%02x\n",
- 			i2c_adapter_id(adapter), address_list[i]);
--		temp_client->addr = address_list[i];
--		err = i2c_detect_address(temp_client, driver);
-+		temp_client.addr = address_list[i];
-+		err = i2c_detect_address(&temp_client, driver);
- 		if (unlikely(err))
- 			break;
+ 		/* Test address responsiveness */
+-		if (probe(adap, addr_list[i]))
+-			break;
++		if ((probe(adap, addr_list[i]))) {
++			info->addr = addr_list[i];
++			return i2c_new_client_device(adap, info);
++		}
  	}
  
--	kfree(temp_client);
- 	return err;
+-	if (addr_list[i] == I2C_CLIENT_END) {
+-		dev_dbg(&adap->dev, "Probing failed, no device found\n");
+-		return ERR_PTR(-ENODEV);
+-	}
++	dev_dbg(&adap->dev, "Probing failed, no device found\n");
+ 
+-	info->addr = addr_list[i];
+-	return i2c_new_client_device(adap, info);
++	return ERR_PTR(-ENODEV);
  }
+ EXPORT_SYMBOL_GPL(i2c_new_scanned_device);
  
 -- 
 2.47.1
