@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-8967-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8968-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59443A05CBC
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 14:28:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF70DA05CD0
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 14:31:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C0287A2830
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 13:27:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 952E93A68E5
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 13:31:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 132A81FBEA6;
-	Wed,  8 Jan 2025 13:27:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD521FBEB4;
+	Wed,  8 Jan 2025 13:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NyaLbDRP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NIkRI5uL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5831F2C44;
-	Wed,  8 Jan 2025 13:27:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2194E1F2C50;
+	Wed,  8 Jan 2025 13:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736342873; cv=none; b=HzakFMXuWfYPv+OwGnFRnPkDEed+wk/Bcsuc1+pD8KKc3fBwJFI54TDSNXGbm1Oa/zYZpjsaVo+S1KjCaK7QNsIjJIbqlPqDmSMx3bqy+LlHE4LuF5NOtRGiHyNlDX2JRtdE61Atl1Y3iUxgu4JIC3IXo2v16PhVFa32WlbLBys=
+	t=1736343083; cv=none; b=iCmeOZ86E40dyG6DNkkiaDC3Z3axWEKpNXO9AFdSTAL7mzssvVnyrEFLiudbynAQ/h7op5ZP8lkmNPiNSV4LI/Ant0IW1yoWIcFOX9yny8cl8n7XntMUBsQIHF0Kc5IIir5iRa0XP5oKg0XMWceooGs7XwG8eANESLbxqqVwgvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736342873; c=relaxed/simple;
-	bh=K3vKch6pwTZcFhHb3zmyX67q0tEfzd/HAjj6PSe+e7k=;
+	s=arc-20240116; t=1736343083; c=relaxed/simple;
+	bh=0ox4Gok/cDwc/lMCPWEFwROP9f7HnlHHvDoz5gzQkb8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a3L+DsN/bLn4mSj6lxBc1xmse+IqH0yvlqB54eTnD//mSRAwhQK/XpeeEl1QZfbeYC3jnvd8Cpw/uGt+kfHCbAF9yV70Dzz79ygEOm71znddeBdkxfCMTYlJQU9q+0+71/x+2TQil1m0gGKIPtn2NYcvgnZL6alxkmRdLWjiCn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NyaLbDRP; arc=none smtp.client-ip=217.70.183.194
+	 MIME-Version:Content-Type; b=DVKrzwoxFpKoahA1UsFQ/L1RYHjT5nuA2JDcBeb7kl4zMSs7tkXoj6u5GAwlpWzZ0z8wOMY5WJMAKz0prwgK/nWbbc8K/EaFCPilIYvGooF6AJXvkomtzXTLWYG9jr18GSJ8wbYG+dl001BjNvx7sGXzu6id+IxP+rzqYYoeCOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NIkRI5uL; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B195E40005;
-	Wed,  8 Jan 2025 13:27:47 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 297FC1BF20A;
+	Wed,  8 Jan 2025 13:31:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736342868;
+	t=1736343078;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZrbytonOxInlQhTuoGN3sUJ1B7TmgLdiBbBf/qnlJJg=;
-	b=NyaLbDRP15Uw7ie3FAjz5w+HVy+/bmmd6ALlpvc9RtKEZ307L+GirMYw+l2VxuhHwwT8pX
-	ie6y5SU5Xy8kwDFG4+/02WOAhvtstQ7ze1W/qUwgNAgrhyJ8eHcqYomN76ZAsSYf0wIvfX
-	HTUqq85mMLfq2i68C6v+rjVzvt4wSBsVaX+ll0aQf2qSRk8cI1FgMj4NYZ2D2d0vfDr6G5
-	TVkHh5j4lAGOm6PK4JKrXnfO0Nh+9B0pqNDqxG2FAbcKJsVgAZ3sbScARWUbf+LgwB9z9B
-	V24VF0lZlLnBGnksSVOVTgPdCb0wh7/xQfxMSSxkwsI1R0pt7aevYXw23alIVw==
+	bh=Cf2NWmnc2Jen5D58ipG2WLWbqKZuYBjzjSVe9QJgIPs=;
+	b=NIkRI5uL7wk434caYW50oXj/MljX/TXQdQZaWLFHVy3edyf7sTb9UCMxSJP6ZB5+lPnvbz
+	775S5cVRAvJ4GNBNYHG39BHJiAVedY1HO6FVx6laj+jTy2hL817Z2CRppgpgSy8hBjnoyD
+	dv3OWCFasdJvbiwusnd1wBI9h/WE7oIsstJZh30+MxoBcPXN3Duy1RGDtgHramqm0S4zCx
+	Fl9ddkN35RTM7j+zrnf/6no3ypmtA/c2s5wtQMumoKFacO+4FQhihaoq2sdRzVkAhkBiDV
+	f72I5GajeTCCHYUnWhhMWFMdYhrbguep+t+j3scRvyTFZF6c7IvPTzpPqMegQA==
 From: Romain Gantois <romain.gantois@bootlin.com>
 To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
@@ -60,60 +60,59 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Mauro Carvalho Chehab <mchehab@kernel.org>,
  Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>
 Subject:
- Re: [PATCH v4 2/9] media: i2c: ds90ub960: Replace aliased clients list with
- address list
-Date: Wed, 08 Jan 2025 14:27:36 +0100
-Message-ID: <2762571.mvXUDI8C0e@fw-rgant>
-In-Reply-To: <7a6fd045-3513-4979-9210-8e30361022e3@ideasonboard.com>
+ Re: [PATCH v4 4/9] i2c: use client addresses directly in ATR interface
+Date: Wed, 08 Jan 2025 14:31:16 +0100
+Message-ID: <6115974.lOV4Wx5bFT@fw-rgant>
+In-Reply-To: <f63b7744-b86e-4dbe-aa49-10614a025b7e@ideasonboard.com>
 References:
  <20241230-fpc202-v4-0-761b297dc697@bootlin.com>
- <20241230-fpc202-v4-2-761b297dc697@bootlin.com>
- <7a6fd045-3513-4979-9210-8e30361022e3@ideasonboard.com>
+ <20241230-fpc202-v4-4-761b297dc697@bootlin.com>
+ <f63b7744-b86e-4dbe-aa49-10614a025b7e@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart12584284.O9o76ZdvQC";
+Content-Type: multipart/signed; boundary="nextPart4977285.31r3eYUQgx";
  micalg="pgp-sha256"; protocol="application/pgp-signature"
 X-GND-Sasl: romain.gantois@bootlin.com
 
---nextPart12584284.O9o76ZdvQC
+--nextPart4977285.31r3eYUQgx
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
 From: Romain Gantois <romain.gantois@bootlin.com>
 To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Date: Wed, 08 Jan 2025 14:27:36 +0100
-Message-ID: <2762571.mvXUDI8C0e@fw-rgant>
-In-Reply-To: <7a6fd045-3513-4979-9210-8e30361022e3@ideasonboard.com>
+Date: Wed, 08 Jan 2025 14:31:16 +0100
+Message-ID: <6115974.lOV4Wx5bFT@fw-rgant>
+In-Reply-To: <f63b7744-b86e-4dbe-aa49-10614a025b7e@ideasonboard.com>
 MIME-Version: 1.0
 
-Hi Tomi,
+Hi,
 
-On lundi 6 janvier 2025 10:34:10 heure normale d=E2=80=99Europe centrale To=
+On lundi 6 janvier 2025 10:51:20 heure normale d=E2=80=99Europe centrale To=
 mi=20
 Valkeinen wrote:
 > Hi,
 >=20
 > On 30/12/2024 15:22, Romain Gantois wrote:
+> > The I2C Address Translator (ATR) module defines mappings from i2c_client
+> > structs to aliases. However, only the physical address of each i2c_clie=
+nt
 =2E..
-> > @@ -1031,17 +1031,17 @@ static int ub960_atr_attach_client(struct i2c_a=
-tr
-> > *atr, u32 chan_id,>=20
-> >   	struct device *dev =3D &priv->client->dev;
-> >   	unsigned int reg_idx;
 > >=20
-> > -	for (reg_idx =3D 0; reg_idx < ARRAY_SIZE(rxport->aliased_clients);
-> > reg_idx++) { -		if (!rxport->aliased_clients[reg_idx])
-> > +	for (reg_idx =3D 0; reg_idx < UB960_MAX_PORT_ALIASES; reg_idx++) {
+> > -	dev_dbg(atr->dev, "chan%u: client 0x%02x mapped at alias 0x%02x (%s)
+\n",
+> > -		chan->chan_id, client->addr, alias, client->name);
+> > +	dev_dbg(atr->dev, "chan%u: addr 0x%02x mapped at alias 0x%02x\n",
+> > +		chan->chan_id, addr, alias);
 >=20
-> Any reason to drop the use of ARRAY_SIZE()? Usually when dealing with
-> fixed size arrays, it's nicer to use ARRAY_SIZE().
+> This, and the dev_dbg() below, sound a bit odd to my ear. But I'm not
+> sure what would be a good print... "added alias 0x12 for address 0x34"?
 
-No reason in particular, I just thought it was more explicit to use ARRAY_S=
-IZE=20
-but I'll keep the UB960_MAX_PORT_ALIASES since you think it's nicer.
+Maybe "assigned address 0x34 to alias 0x12"? Since the alias doesn't really=
+ go=20
+anywhere, we just assign different downstream addresses to it.
 
 Thanks,
 
@@ -122,29 +121,29 @@ Romain Gantois, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
 
---nextPart12584284.O9o76ZdvQC
+--nextPart4977285.31r3eYUQgx
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part.
 Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAmd+fUkACgkQ3R9U/FLj
-286cKw/9GhzDSwcSpgGMmFby1lU9mmX18t6BSx1U9pic2TrlaD9TSE1oisI9vGj4
-wNYw5SVl0tvlVNnYGgpOIohecJbW9Oq1yFSyDCiCKTr+kSUooNqMOj9Iqy1lDtBn
-1ntBEu938RStiwhhYqb5hloFTODwLY+S16OroeeOa8/9GC0ueC6IDoetccfFlD+m
-KztldSKL+rJJyEBbMBUoHSiHgDaUXBz3D+YRSmDzl+yH2mFh7y+0nvZV8JgYJ6UG
-VlkqqZCXKzVCze/cyjs1yRJDlYLMFUIEQMHfUEhTpVzUd+oZZzr0fSlIcKgoQoO0
-PyzhB3nZcd1GRTB99akoSvZOa4ovr8R7W5kn+5PajYVihMBStYPTF1nj4gNXusFx
-vuFttK+ITt9mxV0tVLOwNvtAIGQQinz2m3fhQWW/xWlnj4dI/FqjRqF04LgD4EeL
-/dg2M6qkkBbEqzGFCX5hWrDYtGRS2rcezNXX0ybLOmD1R/gtHllzXOaKgeBPxvOj
-QmClb3hf+9ZVpS1uZST5wByvfJSMV6s/+qf9jSYJ1T+rbFFhbbHr2bvjMI+T/lLP
-/yJ5KymRwT3h9MYnz0hgnHsudnTomCQtbspL3TDVl6a8RayKhdtsZwFU6gwNpmj6
-i78QJwjPWd8ttk8ItnbP1ubuqxz/2Oiot+ECzgd0K2xIIcwoXb0=
-=L+BG
+iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAmd+fiQACgkQ3R9U/FLj
+287kzhAAmx9rt3wn5w/RFRgHFY4GuprPGlHlzS4A/sIiGl08K3sd/NTa8HFad5Hw
+ZOTjBx2jYIAP6okEaYXNR1Jc2rMXqtVIFy+juU/Q6JdZPv9AKD8oQaX35bT2i5cH
+qgYVy/1B0f7Dx8r0SPrYIlHXftZxfcAwQguiO3vVuJKIEBYHNfCPrIIS++IY+D4E
+/JaOeymz0wiagnz8rZcSo5EdVKS6YFsbWp89CQrma/lrR7oe7ljV4l6Y37PuaDjv
+tZyQo21tDJ5fkzuUDXi69VHd4ZdhsAnToY4lZrN6/vl/Lft62UoI1PZ2M3ATpopr
+X/9REUhDPQszy16pOrPbakeCZT4wATrCpHyAKZSDaDofj0eR0FlNy6urTW2PqVUn
+fshpFdWw7+/a3zgchq/w1nUeijYTe9GShrRKQyH6MLl1DUVgSz5VHkePl8v+Rpjh
+Xy5ZKWgXN48CE7bCsDkfTB+6rWkj2N9p7W5DSQ68o8LkD/d2kGrzTcuo1F4RY0mj
+X7fIAK45gHxCUVCxbWXxlYdVvH70yQUvQu+ll8ZnauNVBeGE4RqvEnNjG4JD9mBU
+lW9onTWytYyu8/q5vlX577aZOi/iOpYAtFoNNQ0Nevx/D6eXuTLtiRhwVzD2tMss
+Wm9Q7rkksUWtWeIIO7QjNWjA/+oefM9qUyWmdGEa61sNGEh6ioI=
+=yP4c
 -----END PGP SIGNATURE-----
 
---nextPart12584284.O9o76ZdvQC--
+--nextPart4977285.31r3eYUQgx--
 
 
 
