@@ -1,179 +1,151 @@
-Return-Path: <linux-i2c+bounces-8965-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8967-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 239F1A0592F
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 12:07:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59443A05CBC
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 14:28:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9A5D1887724
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 11:07:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C0287A2830
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 13:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FFAA1F9418;
-	Wed,  8 Jan 2025 11:07:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 132A81FBEA6;
+	Wed,  8 Jan 2025 13:27:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mKuwvJh2"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NyaLbDRP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2073.outbound.protection.outlook.com [40.107.243.73])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962621F892F;
-	Wed,  8 Jan 2025 11:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.73
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736334421; cv=fail; b=dDkyMDxxfubUdDfwp69PZ4ibjEkdTrk/9rSyzLz329LlwyuiJLRXr43LgzvN4buSfkmgf9Mqvi8BsZV5ca75TYYYlr/wygk/KVs65BEBHi/Z2bQhT+QrKmHIXKl9SPReQTwqoyauSFCsMr6UBCpFbKgnDqIIDBfhoauuBsiSYfc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736334421; c=relaxed/simple;
-	bh=Ob61tQEgnodv4jim7ASqJlPDOq8BTbhGtY+q0jRfMvU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ciKxl3imQUcpkrUB52htiGLnbJyVuOt0UCT6OHhxcyOEAdakoS3rxrO3fD1j8ZzBXhfESG0CSkthZKPkbYu1ecWtP9usDMjTIcSqCYBB+j6f+eBeIGHwyhga6y2L1nbM3TktD9cbXw4SZfFlvcWh11vp27V7wcirXZDtkRx12U8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mKuwvJh2; arc=fail smtp.client-ip=40.107.243.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iUPZ6S/EtV39lEKIueM9Jbh8FZyT88jVmp+WQYl2KpXmZEoM/YuKPTQMbTvPj4lJRAXjnHoF8AyyWeGvT2NJtB2JZRMDe8JbZmfjheyxlJmIBcINdkvEAYILu48DaLKP1HK5W8+ofzteWkR98XMOHapOuiw0FfoGoz8X5nKZjc2y8MOCLKUh91F7iNPO3uSbFptRyEgirGKl6K3NvwhnCqC9NZKgvStPnUKWzyhEqVf6MDpz0f6jDnc/nUCklTJtZ6Ho5vqxrECuD/rwwQtROxzfBJK4O6SkkzC3dD93nXY0yF+tq94bqLVLfiD5w6vWXLZWYesuDkY7TeCGipLIJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ywO8N9n+e0imsQzgla0liGJyQM3BUhglmjqwd2s+MXo=;
- b=BH7p6q4FCq2Tm6yC5JLYQFgJV9bzeEMhPGr9eP1w5k3dU6/3dfkMcyHHBsbyRdreiO2YsOPa1SD4C2d8RZ5+VfFsJkeihgRN4LmeffvUCtYoMKaW8AN6ZpzI99qcXuiIHCxEFPKZx+ZFo9J7ToB7+69i4BogNRkw3MIcVBTBwd+qzwB5ZJvL1PNOW+wJ1o+eVXYZriUe5PAsT48emKQ05qAoUbGmoMNkiGSM5wHaYQ/eEtnxClVmooZRwtio9YGz+5IcpdXiBVSHEUHE6wk1VMc6Bi8dwdL9ixdQGeZxvE+XVWJ3zV+TC73D3nCk4W/hGQVO1md4FNVfXJPV/pFhqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ywO8N9n+e0imsQzgla0liGJyQM3BUhglmjqwd2s+MXo=;
- b=mKuwvJh2u30A3Tk2i3OK6blQ0aRb3s6q94mlmwqPf3CUbgj8WChPuPrxw3aIp4RFGvccYSAGJgLzvizQ95xPxvDY+NkblahiW2Haq3juv7IusoLjfVY1nag6tB3Fi1UiSEuh/u/r0CCVtQ91QflU6JZ8QRoo/HxP8x8hTgzbH3qXnolVIu6Ot9g7Xe659CcEXzfIlxXAak3YV7qYeGZLjyGO+yTfp6GM9nhDzRDwxDxh5SBVFtxJLu5dPxhCQfRH15K+GoAAOLGz88Ra9NnlcHaZtP1xCq9hu0vQxUiiMQ/GAbXFO8/6WTeCgW06phH9GfK/dtetkQ1e5o0N/Kf5lQ==
-Received: from CH3P221CA0026.NAMP221.PROD.OUTLOOK.COM (2603:10b6:610:1e7::27)
- by SN7PR12MB8602.namprd12.prod.outlook.com (2603:10b6:806:26d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.10; Wed, 8 Jan
- 2025 11:06:55 +0000
-Received: from CH2PEPF0000013F.namprd02.prod.outlook.com
- (2603:10b6:610:1e7:cafe::cd) by CH3P221CA0026.outlook.office365.com
- (2603:10b6:610:1e7::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8335.10 via Frontend Transport; Wed,
- 8 Jan 2025 11:06:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CH2PEPF0000013F.mail.protection.outlook.com (10.167.244.71) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8335.7 via Frontend Transport; Wed, 8 Jan 2025 11:06:55 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 8 Jan 2025
- 03:06:49 -0800
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Wed, 8 Jan 2025 03:06:49 -0800
-Received: from NV-2XGVVG3.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Wed, 8 Jan 2025 03:06:45 -0800
-From: Kartik Rajput <kkartik@nvidia.com>
-To: <akhilrajeev@nvidia.com>, <andi.shyti@kernel.org>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <thierry.reding@gmail.com>,
-	<jonathanh@nvidia.com>, <ldewangan@nvidia.com>, <digetx@gmail.com>,
-	<linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 5/5] i2c: tegra: Do not configure DMA if not supported
-Date: Wed, 8 Jan 2025 16:36:20 +0530
-Message-ID: <20250108110620.86900-6-kkartik@nvidia.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250108110620.86900-1-kkartik@nvidia.com>
-References: <20250108110620.86900-1-kkartik@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5831F2C44;
+	Wed,  8 Jan 2025 13:27:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736342873; cv=none; b=HzakFMXuWfYPv+OwGnFRnPkDEed+wk/Bcsuc1+pD8KKc3fBwJFI54TDSNXGbm1Oa/zYZpjsaVo+S1KjCaK7QNsIjJIbqlPqDmSMx3bqy+LlHE4LuF5NOtRGiHyNlDX2JRtdE61Atl1Y3iUxgu4JIC3IXo2v16PhVFa32WlbLBys=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736342873; c=relaxed/simple;
+	bh=K3vKch6pwTZcFhHb3zmyX67q0tEfzd/HAjj6PSe+e7k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=a3L+DsN/bLn4mSj6lxBc1xmse+IqH0yvlqB54eTnD//mSRAwhQK/XpeeEl1QZfbeYC3jnvd8Cpw/uGt+kfHCbAF9yV70Dzz79ygEOm71znddeBdkxfCMTYlJQU9q+0+71/x+2TQil1m0gGKIPtn2NYcvgnZL6alxkmRdLWjiCn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NyaLbDRP; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B195E40005;
+	Wed,  8 Jan 2025 13:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1736342868;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZrbytonOxInlQhTuoGN3sUJ1B7TmgLdiBbBf/qnlJJg=;
+	b=NyaLbDRP15Uw7ie3FAjz5w+HVy+/bmmd6ALlpvc9RtKEZ307L+GirMYw+l2VxuhHwwT8pX
+	ie6y5SU5Xy8kwDFG4+/02WOAhvtstQ7ze1W/qUwgNAgrhyJ8eHcqYomN76ZAsSYf0wIvfX
+	HTUqq85mMLfq2i68C6v+rjVzvt4wSBsVaX+ll0aQf2qSRk8cI1FgMj4NYZ2D2d0vfDr6G5
+	TVkHh5j4lAGOm6PK4JKrXnfO0Nh+9B0pqNDqxG2FAbcKJsVgAZ3sbScARWUbf+LgwB9z9B
+	V24VF0lZlLnBGnksSVOVTgPdCb0wh7/xQfxMSSxkwsI1R0pt7aevYXw23alIVw==
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-gpio@vger.kernel.org,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>
+Subject:
+ Re: [PATCH v4 2/9] media: i2c: ds90ub960: Replace aliased clients list with
+ address list
+Date: Wed, 08 Jan 2025 14:27:36 +0100
+Message-ID: <2762571.mvXUDI8C0e@fw-rgant>
+In-Reply-To: <7a6fd045-3513-4979-9210-8e30361022e3@ideasonboard.com>
+References:
+ <20241230-fpc202-v4-0-761b297dc697@bootlin.com>
+ <20241230-fpc202-v4-2-761b297dc697@bootlin.com>
+ <7a6fd045-3513-4979-9210-8e30361022e3@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000013F:EE_|SN7PR12MB8602:EE_
-X-MS-Office365-Filtering-Correlation-Id: dab58ac4-73ca-40a8-c7b4-08dd2fd49059
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|376014|7416014|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?fdGsDtbQGwvdZroC+cubv4ye7CcXI7u2Nv1MJ2IAz1p/bAB9l3QYHVXYXQz2?=
- =?us-ascii?Q?FPkgYk5ua90hmorSahD0RNvHEqTOQEia8R6qPtbD61dNI4kmkXpwtebrLAcv?=
- =?us-ascii?Q?6ZBF1hGVxqzQAOnLOohp9kGXDJfQvmAD3y7PD0qPJBDp2vdCZ0X+8QdAIsR9?=
- =?us-ascii?Q?HnPi+qdOa1r4ngyl5QKCJKljmLtc/k3+PNQ1rd66il1uCo8wGrSfGXJ0nbcr?=
- =?us-ascii?Q?Y+07LORHtMnrzrOgZTcTEAzeFH2F81GBuAe5t9QgyUmjglDLUcoULH8FT923?=
- =?us-ascii?Q?Bi7rHZ9AwYIIpqLWY4l1eMqgMyxBLix3VnjW6YLSquEPkASggCxvHTmDL5Q1?=
- =?us-ascii?Q?dZD8b2YwoqjE8wpVg+9RrTgHwABynVVF1P5t16/pZB52M1yvXj8FQzOcp3tY?=
- =?us-ascii?Q?FVq70yVEFSyimVE08yYg2k/Ub844bnp2AouiM06u74yf8c9pxZ1XLSR3dCkk?=
- =?us-ascii?Q?WcAXlDiZi/a8T4/nxAUaAqsLpc+4AGbF8WqvIJKdXuftrvCAM0LZ6/qLN2B3?=
- =?us-ascii?Q?xd7+m3jxkEPU71v954HnRfeJVG6Kpsknb2Ibno76X/PB7QrIqrechlbZGruZ?=
- =?us-ascii?Q?MjTvNDiFlOOF1fkIafBbihs0+2YzPvgHfqoV3bgEwD8NVEatqfbEi/o/cfgU?=
- =?us-ascii?Q?kxfSQfnW+AUwD95cHbDrVlCmy5t1GbXnfAe3TYldDM1enq21bctvJDo/wLMU?=
- =?us-ascii?Q?I3tdTjUmUik1vJrXNP6nsZpvLL2f8UqjVQ53M97zWjWUMZtZfKjCOCg+PtNS?=
- =?us-ascii?Q?2RrPYHWANOhCfbbyR7M64blJIxOibINL3yiwGnMYKQUUebGwKASj1oHnkOS0?=
- =?us-ascii?Q?EDodMFGtAGYiOO7pJ8/c/eMOQTNfN24jl667QUPuWs4WFyiphoKKf3OStsY9?=
- =?us-ascii?Q?hWBMZVzM6MxL7F9fcIyE6uMbPU3CvUV7gIOgJVuWm57HbyrdN6mY5VB7mTpP?=
- =?us-ascii?Q?9mNnZTDDetT6jHxUpxMOdtZtQTsj+iVqaXpb3IVZdqjoQVOn2H1Oz2AKdx09?=
- =?us-ascii?Q?fT3b0+pWWkqZbdaRrCvLDueWk5m1XJIOK6lLgSTykeRAMWemJBIF6a6cq3yM?=
- =?us-ascii?Q?UiBPd1bWV2ddxAmf/BZXpGgmaZRykLXPW5spfIckkv2IysTKGIzRmTWh1zyh?=
- =?us-ascii?Q?t60Fh6NnUUZPX2yxIQD4wHo1vYaLcr0XKk1UVeVCYefg4la97/POeGgZKbqV?=
- =?us-ascii?Q?zR5+fS7I1N92s8UvDEkRSna5AtmwAvluXBsftJTQO+DQeRLNnia3wnfjEIGO?=
- =?us-ascii?Q?r2yVQ8fdciW2nfeXWzUH1W6akHwZwZhfXNaEFfTHpTZ/iNwZggqeTJ1zxldF?=
- =?us-ascii?Q?b/4oOHb36RD7tlasXYV8nyn8+UhjnEHpZ325wvXHfEEzrtinqzEL+4GJ5S5X?=
- =?us-ascii?Q?s7aK84hlUpqUIH7le9my9KSIt35nkTAK4qwXxiQyvuZAvSt2KxrlG09U1xAz?=
- =?us-ascii?Q?0hz3XwLmw88dkPPTGeFpl4XKUmpbDyIfQQVf5PYCjs383ITNj15DsIEWS+xF?=
- =?us-ascii?Q?lelcsRgEmbCi5Y4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(7416014)(1800799024)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2025 11:06:55.6291
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dab58ac4-73ca-40a8-c7b4-08dd2fd49059
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF0000013F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8602
+Content-Type: multipart/signed; boundary="nextPart12584284.O9o76ZdvQC";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-GND-Sasl: romain.gantois@bootlin.com
 
-On Tegra264, not all I2C controllers support DMA, this causes failures
-when function tegra_i2c_init_dma() is called.
+--nextPart12584284.O9o76ZdvQC
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Date: Wed, 08 Jan 2025 14:27:36 +0100
+Message-ID: <2762571.mvXUDI8C0e@fw-rgant>
+In-Reply-To: <7a6fd045-3513-4979-9210-8e30361022e3@ideasonboard.com>
+MIME-Version: 1.0
 
-Ensure that "dmas" device-tree property is present before initializing
-DMA in function tegra_i2c_init_dma().
+Hi Tomi,
 
-Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
----
- drivers/i2c/busses/i2c-tegra.c | 3 +++
- 1 file changed, 3 insertions(+)
+On lundi 6 janvier 2025 10:34:10 heure normale d=E2=80=99Europe centrale To=
+mi=20
+Valkeinen wrote:
+> Hi,
+>=20
+> On 30/12/2024 15:22, Romain Gantois wrote:
+=2E..
+> > @@ -1031,17 +1031,17 @@ static int ub960_atr_attach_client(struct i2c_a=
+tr
+> > *atr, u32 chan_id,>=20
+> >   	struct device *dev =3D &priv->client->dev;
+> >   	unsigned int reg_idx;
+> >=20
+> > -	for (reg_idx =3D 0; reg_idx < ARRAY_SIZE(rxport->aliased_clients);
+> > reg_idx++) { -		if (!rxport->aliased_clients[reg_idx])
+> > +	for (reg_idx =3D 0; reg_idx < UB960_MAX_PORT_ALIASES; reg_idx++) {
+>=20
+> Any reason to drop the use of ARRAY_SIZE()? Usually when dealing with
+> fixed size arrays, it's nicer to use ARRAY_SIZE().
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index a5974af5b1af..9957802fa4ed 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -546,6 +546,9 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
- 	if (IS_VI(i2c_dev))
- 		return 0;
- 
-+	if (!device_property_present(i2c_dev->dev, "dmas"))
-+		return 0;
-+
- 	if (i2c_dev->hw->has_apb_dma) {
- 		if (!IS_ENABLED(CONFIG_TEGRA20_APB_DMA)) {
- 			dev_dbg(i2c_dev->dev, "APB DMA support not enabled\n");
--- 
-2.43.0
+No reason in particular, I just thought it was more explicit to use ARRAY_S=
+IZE=20
+but I'll keep the UB960_MAX_PORT_ALIASES since you think it's nicer.
+
+Thanks,
+
+=2D-=20
+Romain Gantois, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--nextPart12584284.O9o76ZdvQC
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAmd+fUkACgkQ3R9U/FLj
+286cKw/9GhzDSwcSpgGMmFby1lU9mmX18t6BSx1U9pic2TrlaD9TSE1oisI9vGj4
+wNYw5SVl0tvlVNnYGgpOIohecJbW9Oq1yFSyDCiCKTr+kSUooNqMOj9Iqy1lDtBn
+1ntBEu938RStiwhhYqb5hloFTODwLY+S16OroeeOa8/9GC0ueC6IDoetccfFlD+m
+KztldSKL+rJJyEBbMBUoHSiHgDaUXBz3D+YRSmDzl+yH2mFh7y+0nvZV8JgYJ6UG
+VlkqqZCXKzVCze/cyjs1yRJDlYLMFUIEQMHfUEhTpVzUd+oZZzr0fSlIcKgoQoO0
+PyzhB3nZcd1GRTB99akoSvZOa4ovr8R7W5kn+5PajYVihMBStYPTF1nj4gNXusFx
+vuFttK+ITt9mxV0tVLOwNvtAIGQQinz2m3fhQWW/xWlnj4dI/FqjRqF04LgD4EeL
+/dg2M6qkkBbEqzGFCX5hWrDYtGRS2rcezNXX0ybLOmD1R/gtHllzXOaKgeBPxvOj
+QmClb3hf+9ZVpS1uZST5wByvfJSMV6s/+qf9jSYJ1T+rbFFhbbHr2bvjMI+T/lLP
+/yJ5KymRwT3h9MYnz0hgnHsudnTomCQtbspL3TDVl6a8RayKhdtsZwFU6gwNpmj6
+i78QJwjPWd8ttk8ItnbP1ubuqxz/2Oiot+ECzgd0K2xIIcwoXb0=
+=L+BG
+-----END PGP SIGNATURE-----
+
+--nextPart12584284.O9o76ZdvQC--
+
+
 
 
