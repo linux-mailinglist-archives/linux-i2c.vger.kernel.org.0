@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-8971-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8972-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86EC7A05DA3
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 14:56:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67009A05ECA
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 15:35:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5AA7167C12
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 13:53:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0AB718880A5
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 14:35:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F061FCFF6;
-	Wed,  8 Jan 2025 13:53:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104F41FC7CC;
+	Wed,  8 Jan 2025 14:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="j101E+6h"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QSSzq61I"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795BF1FCF47;
-	Wed,  8 Jan 2025 13:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899081FCFE5;
+	Wed,  8 Jan 2025 14:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736344420; cv=none; b=VF5PD8JjNjgl8l716opuluwJ2q/wxSGb/zEM9xuTMFFIB1G9/q/4UpVYEvVqlVP+XjbWz0C/kKr7+7r93MFDK/JJ9fIwWHt7y5HbtKLGdBZksYF+dfzi6MO/JZJYK24Ks1r1Hg4nBxmwlH0obA+7YLHfz1p8ymPyShz0ELar+c4=
+	t=1736346934; cv=none; b=NM4Tq5LLtYQZ+IvUIeM/ObZH6/VebukhY4rACODtefO4AlZ9eqcHTkeekj6EDisa8dcT9AzxrwEg9JKAjOxLsZDmhdeNkRMcf1B4hWv7U1sfff8SANUUK7EQM940xXIlqLNiJ/o66CGPIslYZwrXEuuU25OCJ8Kza9TrZ1NALz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736344420; c=relaxed/simple;
-	bh=uct8ngrtAYFwmaDlO5TtIfQDb3EXImPieYEtv+ChXJY=;
+	s=arc-20240116; t=1736346934; c=relaxed/simple;
+	bh=1Vcd3m5CeikLybOKNrCxgdhM/0s/YGKHXucTnN2vmZ8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uLo4dvOkclt/1fcC5yvokH/uobJa85NAwIhBSrI+173/HxAU5O1CNVmi+d5hogsUPDKY0zfQW6HuyQaMlK8O9BWU0kvwizdDrJUYmnvb282KfbT2AiBizjYbyCuubo2ZUU2P8TcsBtxR2xrjotTvCtR4yoNCprQcfd/zRrQvfv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=j101E+6h; arc=none smtp.client-ip=217.70.183.197
+	 MIME-Version:Content-Type; b=AP9XZZ3QA7LBpCzWizQ/gW4SogzIrwlBBJvh+q5EjJntX6W/BrE7MGlqr3IfrWW8g6xKYYjgUeOdS1/0jmja9tR69MbuokpleQP9ockiRAMIGYON44XItm/DHua8Ky/WIwxQAtVd0bCW3fDGwXzYh0/msYXN10zjBkWrtyVQKnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QSSzq61I; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8DB021C0006;
-	Wed,  8 Jan 2025 13:53:34 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 911011BF20A;
+	Wed,  8 Jan 2025 14:35:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736344415;
+	t=1736346929;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+3Kh9FOtNOABfkcFw/vRG/uViQsqV0K16PlRC2zuhdE=;
-	b=j101E+6hfpDaOII7o8qnF6mR1fc7olv4PQ6l0r0/K6hxVDwAXRJu4o7lBS/fH4Y3cH2GS1
-	ejsRWmHcz2BXVgAP8n1uyWattPKWJ09TclfPYz0NOGEqJAvryaw8cxrGVewo47ZuKPwKlb
-	whPuWO7FSJQODopUA/rsRkwRdhjXOMQ8rshHdpGPHaDhv6s7pKnkM7WYtRYl1W66jo7A/H
-	pTu/pEEF7f434jPbQ8TnW7SVwLpzGoFOLnhxQh9jkwMlfPf4A4+qJlpczuuiNRr0MfOZvi
-	NIf/EyfHghbGLZPGXb6AAH4H/r/h1JEX7jQZBkxdPZuWppAA6WuU0SqSWhLyDg==
+	bh=trpeX/yrgvrx494dZDc3rwrb5PajAOKim9AmZ1tZ+lA=;
+	b=QSSzq61Itkc1oOkrfZwMJKrQ6ZFbMI9AcPaR0XBBVP7ZR1zJhjcgLaTXcgaLikFc3BVl85
+	FKrxPuLrGjehuO6N5WeuuSY+K+A7vZ73jP2hyAc1SRM1TAj26cNF3d83+LqtGhaKSi9uRj
+	5a4QAjEeYhqtKKSEqFP4BDnypEtXKlZe1udJkniN7BoTejJIUYZDuYKHzN3eujKSqPusWk
+	2Ynu1kzc1e+JunbINDJX0oYqffMcivRIZmyqz+Fla1eY2fCsWQ9lRHHRWmlMqgWaw32FnY
+	Sy9+fElj5FClUsirb0TYouOIctDMd6uxAuAUVg7xb+BV/NgC8v5kehh05lA17w==
 From: Romain Gantois <romain.gantois@bootlin.com>
 To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
@@ -60,72 +60,79 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Mauro Carvalho Chehab <mchehab@kernel.org>,
  Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>
 Subject:
- Re: [PATCH v4 2/9] media: i2c: ds90ub960: Replace aliased clients list with
- address list
-Date: Wed, 08 Jan 2025 14:50:13 +0100
-Message-ID: <2351676.ElGaqSPkdT@fw-rgant>
-In-Reply-To: <54985f33-a15a-4d9e-89ff-8999802e3a35@ideasonboard.com>
+ Re: [PATCH v4 4/9] i2c: use client addresses directly in ATR interface
+Date: Wed, 08 Jan 2025 15:35:28 +0100
+Message-ID: <2292785.iZASKD2KPV@fw-rgant>
+In-Reply-To: <0281025b-983a-42ab-90d3-3de845944de4@ideasonboard.com>
 References:
- <20241230-fpc202-v4-0-761b297dc697@bootlin.com> <2762571.mvXUDI8C0e@fw-rgant>
- <54985f33-a15a-4d9e-89ff-8999802e3a35@ideasonboard.com>
+ <20241230-fpc202-v4-0-761b297dc697@bootlin.com> <6115974.lOV4Wx5bFT@fw-rgant>
+ <0281025b-983a-42ab-90d3-3de845944de4@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart4948939.GXAFRqVoOG";
+Content-Type: multipart/signed; boundary="nextPart1988756.PYKUYFuaPT";
  micalg="pgp-sha256"; protocol="application/pgp-signature"
 X-GND-Sasl: romain.gantois@bootlin.com
 
---nextPart4948939.GXAFRqVoOG
+--nextPart1988756.PYKUYFuaPT
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
 From: Romain Gantois <romain.gantois@bootlin.com>
 To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Date: Wed, 08 Jan 2025 14:50:13 +0100
-Message-ID: <2351676.ElGaqSPkdT@fw-rgant>
-In-Reply-To: <54985f33-a15a-4d9e-89ff-8999802e3a35@ideasonboard.com>
+Date: Wed, 08 Jan 2025 15:35:28 +0100
+Message-ID: <2292785.iZASKD2KPV@fw-rgant>
+In-Reply-To: <0281025b-983a-42ab-90d3-3de845944de4@ideasonboard.com>
 MIME-Version: 1.0
 
-On mercredi 8 janvier 2025 14:32:54 heure normale d=E2=80=99Europe centrale=
+Hi,
+
+On mercredi 8 janvier 2025 14:38:11 heure normale d=E2=80=99Europe centrale=
  Tomi=20
 Valkeinen wrote:
 > Hi,
 >=20
-> On 08/01/2025 15:27, Romain Gantois wrote:
-> > Hi Tomi,
+> On 08/01/2025 15:31, Romain Gantois wrote:
+> > Hi,
 > >=20
-> > On lundi 6 janvier 2025 10:34:10 heure normale d=E2=80=99Europe central=
+> > On lundi 6 janvier 2025 10:51:20 heure normale d=E2=80=99Europe central=
 e Tomi
 > >=20
 > > Valkeinen wrote:
 > >> Hi,
-> >=20
+> >>=20
 > >> On 30/12/2024 15:22, Romain Gantois wrote:
+> >>> The I2C Address Translator (ATR) module defines mappings from i2c_cli=
+ent
+> >>> structs to aliases. However, only the physical address of each
+> >>> i2c_client
+> >=20
 > > ...
 > >=20
-> >>> @@ -1031,17 +1031,17 @@ static int ub960_atr_attach_client(struct
-> >>> i2c_atr
-> >>> *atr, u32 chan_id,>
-> >>>=20
-> >>>    	struct device *dev =3D &priv->client->dev;
-> >>>    	unsigned int reg_idx;
-> >>>=20
-> >>> -	for (reg_idx =3D 0; reg_idx < ARRAY_SIZE(rxport->aliased_clients);
-> >>> reg_idx++) { -		if (!rxport->aliased_clients[reg_idx])
-> >>> +	for (reg_idx =3D 0; reg_idx < UB960_MAX_PORT_ALIASES; reg_idx++) {
-> >>=20
-> >> Any reason to drop the use of ARRAY_SIZE()? Usually when dealing with
-> >> fixed size arrays, it's nicer to use ARRAY_SIZE().
+> >>> -	dev_dbg(atr->dev, "chan%u: client 0x%02x mapped at alias 0x%02x (%s)
 > >=20
-> > No reason in particular, I just thought it was more explicit to use
-> > ARRAY_SIZE but I'll keep the UB960_MAX_PORT_ALIASES since you think it's
-> > nicer.
-> You got that the wrong way. The driver uses ARRAY_SIZE, but you change
-> it to UB960_MAX_PORT_ALIASES...
+> > \n",
+> >=20
+> >>> -		chan->chan_id, client->addr, alias, client->name);
+> >>> +	dev_dbg(atr->dev, "chan%u: addr 0x%02x mapped at alias 0x%02x\n",
+> >>> +		chan->chan_id, addr, alias);
+> >>=20
+> >> This, and the dev_dbg() below, sound a bit odd to my ear. But I'm not
+> >> sure what would be a good print... "added alias 0x12 for address 0x34"?
+> >=20
+> > Maybe "assigned address 0x34 to alias 0x12"? Since the alias doesn't
+> > really go anywhere, we just assign different downstream addresses to it.
+>=20
+> I guess it's how you look at this =3D). I like to think it (in this
+> order): alias -> address, as it's basically a mapping. So a debug print
+> that prints the alias first and address second feels more natural.
+> "using alias 0x12 for address 0x34"?
 
-Yes indeed, I meant the opposite, I'll keep ARRAY_SIZE.
+This seems like a valid view as well. Since you're the ATR maintainer I'll =
+go=20
+with your suggestion.
 
 Thanks,
 
@@ -134,29 +141,29 @@ Romain Gantois, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
 
---nextPart4948939.GXAFRqVoOG
+--nextPart1988756.PYKUYFuaPT
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part.
 Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAmd+gpUACgkQ3R9U/FLj
-286cThAAoJuYYEDN1yt1QTy35tgWwGqUs77u4aQ6LzSFGn4S7zya0Ly6LwBUUwR3
-e1+cg0aSI/5fNN61eAWDQQP0dGC3fS34i3E3C5AsTV+lCjUN5a6wFR0Mazf0dTkl
-4Y1FiBdq7dobiATIg3j1tZFaZp7yCdUyXo2S72AOoNs3y1hG8ZNgdIrMOoJoUsky
-LZjRBIFTqCfWpQUXZ8t8//ef2XFNp/CnsCd81WY7QpH9OyFDGSSLDKoJxIqcQhOJ
-hgqGUgn1eHfeG7qgGcReqaSsKc2ubXjdPb90n0jrkU2oBDwSjRjyO4P95n1q8KX8
-WTXFpr3ORoacVpqKZpRegw/jgDi/y796gwXML9xVIRMvBpEPrqJ1bOkHoupWXZhT
-+D84JuVxCVQ7z383A4M/9DsD6lmcS74vPTqMScULr54FZZtrgLPOuCd26WFBrTN+
-rq135zABgLi8u2CXD2GBWFtRfMoGfWHAtrqre21dU9HUYTy++M+lks8pH46TzX/2
-M3wqf3MkIzaMsN8+wO/pnobuDACQ+A8gotYUsV0KEpfa46qPQuw91G3LxAQbA3pr
-TstHTOw1IsiX5LbhAEaDUzaCFE7YNyn1OHaUDjo+MekzIz1pQtiTJOZKfIUF39Og
-VaArH0UHHwyK+elwx59F/cw/OwJV3kxljW9kG3jsg3xYGCEcw5M=
-=nweI
+iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAmd+jTAACgkQ3R9U/FLj
+285usw//Qd4pYBDL9wAILta7WOsX1FQ43pSO2+H1a85+OJH0dWd2pFOArEifUDnB
+VY+UIhmN5nyWFNG8I+ULDma9wXzGmQASm71ezBHPnezL53FeZYJMcmtHSAntkiy8
+T7ddbYtZaIeuMSdhyb3kXPumT2rVB0WpROo8dD2yU9YCRvrC1NDACoGAU9S45XSN
+B2gb8TpDDFIJnCExt03BQuWBHbPoWG48XisJUUnwcimF/rhTKG3Uonhzbk6UU3zn
+0mBA0Cno2iZ8q95/eM1mTKDilrP/UkrWUi4CfwVdmRhEzHyrbrlxM2rjD+Ru6iQj
+Smmw+rFLdbRU8xz7RRkG9DSJIBYtwaLRNsHe3WJvtmwvUWiEeXs55fcuIma1qPR8
+kEhaTZTiW2H4kuqlrtOrLHtTzkFE6iwpeOAaQnDbDRPVc7eJjEb6k5GLegCWKC9G
+xIFF83LpQ/mR/GpAhH/RSCNxY6mmKsgHKU/BEYvJSSr5kuTzewhp/1c56eAYRMPf
+Egeutv1p4PgLkVQe2r6mlUtxokSkzYhbI4cpFyfxOdlq1YosACb3mLfJTTrxYvBs
+8JDlkT3GtmgFvLxYcEXkNy+kVEPf+BpNA2m1qyZZhi9pbUc82/d+skI/gvLjDr0c
+Qp8mh+68O7NtSjEoT9fRJFM087bRHDEOL6SKnroCdV9Y/j/KBOs=
+=nOA3
 -----END PGP SIGNATURE-----
 
---nextPart4948939.GXAFRqVoOG--
+--nextPart1988756.PYKUYFuaPT--
 
 
 
