@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-8969-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8970-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03C17A05CDA
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 14:33:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1784AA05CF2
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 14:38:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 020F416704B
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 13:33:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58BCA3A4603
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 13:38:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 917371FC0EB;
-	Wed,  8 Jan 2025 13:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF8431FC114;
+	Wed,  8 Jan 2025 13:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="q7gGWyi3"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lG4fshcF"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF51D1F2C50;
-	Wed,  8 Jan 2025 13:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101CB1FBEAF;
+	Wed,  8 Jan 2025 13:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736343183; cv=none; b=cgE33bIeaqKXEBNwQUMWa1pdfEX6Yv5DkbE2D0bv/yaUhijdUeXSUCzjDTRG5zO6qlVFRItF2qJT5wb8HT+Wn4lIuZl44SKTfG3hm+o3KQQeofDjXxhzIRB9TEdxV65kIXRn5h16DT15+VWkh+9Z8sXFNWWhlVihWFefwtSsm/I=
+	t=1736343499; cv=none; b=BdA9NDwY4F2yN75E2isvt5QDxs3MZO2a66LNT/gZEXfsue75x9LDXvA1W73NqUwvghDsoNOCmSmFyvp///tXyj0Bjv6dCh5yHe+eMZDP1uJM0t47dUi++KAH6iBUgfJKaSUtiOOTBQzcBgvzYJ4BdUzbgoZXNLWsthlJZdu5tj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736343183; c=relaxed/simple;
-	bh=QHXoYB9ibR7NplzRaSqqC8gG9D9bqYVx+3GUKEstR1c=;
+	s=arc-20240116; t=1736343499; c=relaxed/simple;
+	bh=xBO1kwjUOtRgqWKjSS24GUJOJxN9ULpcl9DQ6ON9DrE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R9eHevAOIaxsA/B5sc/Uyu9caaXtLTaSEYV4YSqNQKrEeaooojAj6ZkPyIqwiOlNhX4nbz4WlYgfgONW/qXjjxFff+EtEJNna6EY7SzjBIs7qt9H9YBpgxI8VWzdleO23go7xdjIsj/T5nSvtS6puuCAy+tuxm2xWoHMCQ1pZ90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=q7gGWyi3; arc=none smtp.client-ip=213.167.242.64
+	 In-Reply-To:Content-Type; b=ANOAh9g0aJn+Mc40gnxoIf6lMwjBKRBNaWFtHQM0NRSeCccH5hmcOT22D8Ivmtw9ZVdqWIybAaFssn4OvYMoRVs7rdYPJNhEAlesidQQ/i6TjKNEKdLipjdgnPqyMdYslLC0Vrs7ifOBL+rpqZVERb7muyqM7O4pngOxfsVKThk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=lG4fshcF; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6220F110F;
-	Wed,  8 Jan 2025 14:32:04 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 969195B3;
+	Wed,  8 Jan 2025 14:37:21 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1736343125;
-	bh=QHXoYB9ibR7NplzRaSqqC8gG9D9bqYVx+3GUKEstR1c=;
+	s=mail; t=1736343442;
+	bh=xBO1kwjUOtRgqWKjSS24GUJOJxN9ULpcl9DQ6ON9DrE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=q7gGWyi3/I9be+YqqrX9cDY3xg376IWMhgU4tDmARwaqg/tfMnpAScBEbMIZ5+UU5
-	 btz88VzWNbkckRoBzHmCvVjsMwXt59wwCq+Wx742n7ptmVthgNczKAhAWyx+Qs++cx
-	 6doUIa7HXvOgguzjSkjSWznk+tLPlQunfnle/nG8=
-Message-ID: <54985f33-a15a-4d9e-89ff-8999802e3a35@ideasonboard.com>
-Date: Wed, 8 Jan 2025 15:32:54 +0200
+	b=lG4fshcFu7c7osy6ad+TBjGPrk9hJk/s5zFtAzNNJhfrxKtaU/ecvV4bECYTnVa6l
+	 9jhx4bNi1F9q9jBI/+IcYli57VH9DzCvUMbya83gmQwa9ZXn3VplmcQM+mDwEMNli+
+	 vAw6BHXlfdi7qatcQ8p+787TFXNmZOk260sGMDMc=
+Message-ID: <0281025b-983a-42ab-90d3-3de845944de4@ideasonboard.com>
+Date: Wed, 8 Jan 2025 15:38:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/9] media: i2c: ds90ub960: Replace aliased clients
- list with address list
+Subject: Re: [PATCH v4 4/9] i2c: use client addresses directly in ATR
+ interface
 To: Romain Gantois <romain.gantois@bootlin.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org,
@@ -67,9 +67,9 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Mauro Carvalho Chehab <mchehab@kernel.org>,
  Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>
 References: <20241230-fpc202-v4-0-761b297dc697@bootlin.com>
- <20241230-fpc202-v4-2-761b297dc697@bootlin.com>
- <7a6fd045-3513-4979-9210-8e30361022e3@ideasonboard.com>
- <2762571.mvXUDI8C0e@fw-rgant>
+ <20241230-fpc202-v4-4-761b297dc697@bootlin.com>
+ <f63b7744-b86e-4dbe-aa49-10614a025b7e@ideasonboard.com>
+ <6115974.lOV4Wx5bFT@fw-rgant>
 Content-Language: en-US
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
@@ -115,38 +115,42 @@ Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
  ueeIlwJl5CpT5l8RpoZXEOVtXYn8zzOJ7oGZYINRV9Pf8qKGLf3Dft7zKBP832I3PQjeok7F
  yjt+9S+KgSFSHP3Pa4E7lsSdWhSlHYNdG/czhoUkSCN09C0rEK93wxACx3vtxPLjXu6RptBw
  3dRq7n+mQChEB1am0BueV1JZaBboIL0AGlSJkm23kw==
-In-Reply-To: <2762571.mvXUDI8C0e@fw-rgant>
+In-Reply-To: <6115974.lOV4Wx5bFT@fw-rgant>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 Hi,
 
-On 08/01/2025 15:27, Romain Gantois wrote:
-> Hi Tomi,
+On 08/01/2025 15:31, Romain Gantois wrote:
+> Hi,
 > 
-> On lundi 6 janvier 2025 10:34:10 heure normale d’Europe centrale Tomi
+> On lundi 6 janvier 2025 10:51:20 heure normale d’Europe centrale Tomi
 > Valkeinen wrote:
 >> Hi,
 >>
 >> On 30/12/2024 15:22, Romain Gantois wrote:
+>>> The I2C Address Translator (ATR) module defines mappings from i2c_client
+>>> structs to aliases. However, only the physical address of each i2c_client
 > ...
->>> @@ -1031,17 +1031,17 @@ static int ub960_atr_attach_client(struct i2c_atr
->>> *atr, u32 chan_id,>
->>>    	struct device *dev = &priv->client->dev;
->>>    	unsigned int reg_idx;
 >>>
->>> -	for (reg_idx = 0; reg_idx < ARRAY_SIZE(rxport->aliased_clients);
->>> reg_idx++) { -		if (!rxport->aliased_clients[reg_idx])
->>> +	for (reg_idx = 0; reg_idx < UB960_MAX_PORT_ALIASES; reg_idx++) {
+>>> -	dev_dbg(atr->dev, "chan%u: client 0x%02x mapped at alias 0x%02x (%s)
+> \n",
+>>> -		chan->chan_id, client->addr, alias, client->name);
+>>> +	dev_dbg(atr->dev, "chan%u: addr 0x%02x mapped at alias 0x%02x\n",
+>>> +		chan->chan_id, addr, alias);
 >>
->> Any reason to drop the use of ARRAY_SIZE()? Usually when dealing with
->> fixed size arrays, it's nicer to use ARRAY_SIZE().
+>> This, and the dev_dbg() below, sound a bit odd to my ear. But I'm not
+>> sure what would be a good print... "added alias 0x12 for address 0x34"?
 > 
-> No reason in particular, I just thought it was more explicit to use ARRAY_SIZE
-> but I'll keep the UB960_MAX_PORT_ALIASES since you think it's nicer.
+> Maybe "assigned address 0x34 to alias 0x12"? Since the alias doesn't really go
+> anywhere, we just assign different downstream addresses to it.
 
-You got that the wrong way. The driver uses ARRAY_SIZE, but you change 
-it to UB960_MAX_PORT_ALIASES...
+I guess it's how you look at this =). I like to think it (in this 
+order): alias -> address, as it's basically a mapping. So a debug print 
+that prints the alias first and address second feels more natural. 
+"using alias 0x12 for address 0x34"?
+
+But this is nit-picking, I don't have any strong views here.
 
   Tomi
 
