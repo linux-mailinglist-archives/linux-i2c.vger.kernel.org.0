@@ -1,652 +1,256 @@
-Return-Path: <linux-i2c+bounces-8959-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8960-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6518CA052C8
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 06:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 29521A056E3
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 10:29:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6CB018885BD
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 05:52:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2DA71886C74
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Jan 2025 09:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716021A23AE;
-	Wed,  8 Jan 2025 05:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813DE1F130D;
+	Wed,  8 Jan 2025 09:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V37I/h9O"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nCDfj3Dy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587F1153836;
-	Wed,  8 Jan 2025 05:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E761E181B8F;
+	Wed,  8 Jan 2025 09:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736315516; cv=none; b=VrSfgmxMoX9yDZtpIzy4TTlIyo/MKUa169GhkBGFRTAFAIG7Rtve4lprMmvX5lDyesPSdhguO+S3PWtzXJX74nvtZ0jllMovyZJBkTsUycU8dPs+0i5KK95TtexRNZIQyJATc9DX5Z2YYbj55Qxa9VdmNn2py25H3aBsX5sT7zg=
+	t=1736328587; cv=none; b=TiqibOVEocxwb3fzT57jJbJBvXGa4Al+J2Q+nJqUFBcMCgQtzr3sQMauGYHLa3dGqsLz8GCewbnKXU8XuNyzsM5DDsFH9Ue93XLISqfSO+Hz8LaXQURjfFPuPmvCYrn8ShOc2IH88JWPpNOMyf1UgzYUfb+i8ELgmHZA+eVIZwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736315516; c=relaxed/simple;
-	bh=cOb2V8K7jUBA9LdBAneRDwXty7d1gvsG/l4ojraj9mg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bo94cRQ/rHHyFWpoi1G9dG0R4B7hC7e0DWPkeebzQoLNs+dv1Oxzik3rNQd/HcjkpBWsxrlSON8L3Jnm1AJOrPFYxKf6LDPVP9lSDTEL8vfq+azf81zJx/t2nFhDhFTTagJTj1NvFA85uJpH02dl8671KwmCx72XkmjLEm4pj7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V37I/h9O; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736315514; x=1767851514;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cOb2V8K7jUBA9LdBAneRDwXty7d1gvsG/l4ojraj9mg=;
-  b=V37I/h9Ot1THN5FojjcK4/0EEknL3B2QaWZg28tb31TTSugs9pg7NZ/A
-   xWsSW/eVW2hADG0my19pDUpwCdHa/7vuZkQqBMzFapp8pcFJyV4GGXBPJ
-   SZZYBPL3o2Lh8bVlwWEUisf8jfGsbiiA0rMHijx3e7uX86h7fh4msL8fm
-   wsrVU6qzA848BCimZ/b8RTvdw+IhTMrMzwXFzs5G+i7vFwOg7WtpDXIyO
-   x7+hm+MOGcQMaDmKf22SPKU6LXF7sN6BGocpwUxipeqmtzILZ0hMs4dA8
-   LP4Gqc30cxcnH6SVjBcRWK6GF9UQhTi0lfzUHfkcYTsELmWIwach5oSCF
-   A==;
-X-CSE-ConnectionGUID: rjUxKML/RSWV2Edy+Z10+A==
-X-CSE-MsgGUID: wzVR7QxCQViI4ovK6EMjyg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="47193363"
-X-IronPort-AV: E=Sophos;i="6.12,297,1728975600"; 
-   d="scan'208";a="47193363"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 21:51:53 -0800
-X-CSE-ConnectionGUID: 3l+0IhoCRVGid+koiWJ/dw==
-X-CSE-MsgGUID: dy2NPaQGS02mw5fnu0BBhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,297,1728975600"; 
-   d="scan'208";a="102809607"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa009.jf.intel.com with ESMTP; 07 Jan 2025 21:51:51 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id A9DBB235; Wed, 08 Jan 2025 07:51:50 +0200 (EET)
-Date: Wed, 8 Jan 2025 07:51:50 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: R Ha <rha051117@gmail.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc: wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org,
-	linux-acpi@vger.kernel.org, trivial@kernel.org
-Subject: Re: [PATCH 1/1] Force ELAN06FA touchpad I2C bus freq to 100KHz
-Message-ID: <20250108055150.GY3713119@black.fi.intel.com>
-References: <20250103051657.211966-1-rha051117@gmail.com>
- <20250103051657.211966-2-rha051117@gmail.com>
- <20250103093353.GP3713119@black.fi.intel.com>
- <CACHtJB-rZ6SKF3d3xTsbJ=zQ+fPVcCcYxXLX_yMRdpE_4tyYYw@mail.gmail.com>
- <20250105083358.GU3713119@black.fi.intel.com>
- <CACHtJB94K5OLdHgs8dDj4jDBtZmsdymovboCcJJUt5OkD8o+Mg@mail.gmail.com>
- <20250107072746.GW3713119@black.fi.intel.com>
- <CACHtJB-4UGaqKw5zZjE_vPeYX+bMUMiHPNfNYzD6Wmv6jdAuhg@mail.gmail.com>
+	s=arc-20240116; t=1736328587; c=relaxed/simple;
+	bh=lbLgja7iFrxALEZWuG3Cn8M2bIoxMClSO0bPUsYntks=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JbeYsP2jLphuipaz5H+DZPw8ufYZqG36m/8RaYE3Lqz5ay/1HUSHFO2hYCXgZoro+KoUYcwSVVbb9B+MYNxuiOvuTY3IXUmVdX3VzcdSFBGUMVGCh9sZ8mXlVzTwmN5dFCSP0p2Emb47kwTi9lgMFVCz9QSHfT6G/E93wl8wEe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nCDfj3Dy; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2ee50ffcf14so1002115a91.0;
+        Wed, 08 Jan 2025 01:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736328585; x=1736933385; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Co1MX43J1KLoMimh8ejh62AJZqz0f32R+OMN2vhkJHg=;
+        b=nCDfj3DyKVDm3OTvprMehMoitckprKwGzWkErVNQIcSoCymPjQnu7LKTo+5lNkb4BD
+         TkL+Ww/iwQiemEllM7NBztkb+VMhK4BZGYLAHzV4Y7RuLwuzQk7JiKLT1HDni1k9QA9u
+         yRQ794zo9KZh6lhwZUVXMO64NMfUuviw9YUjiGRAjLil9+OUMhcm6UG1u47kcrBIHfN1
+         J1LYu4O43K+E5zSlqXtYIGNcSHFscMbzzHxm0xJBwxECXb/HEhzAm7XdLzGaChDqqXs6
+         nSkvrGajKT8w8R5E1cxZcErUwtGs9OrbscmH4CoXBDA2yIve9lB1gJy0IQ/gmDeT4zEn
+         7vIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736328585; x=1736933385;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Co1MX43J1KLoMimh8ejh62AJZqz0f32R+OMN2vhkJHg=;
+        b=WrTB1ROaGa77SpxGoJ9hwTUhealfrFj9iMz7rB0BuQPPiPu2nJAaIiz3lqaMozhq8Q
+         5jH9F+ehBNkQpbVRLA702GouHNYD5tDKNmE5bjFiM8Js6Z0yBODnYFHGABDH7kMOfMAA
+         khe67tEZzZcCmCP/bnOK1D/OSEDDrW/NjFbVXiaCfm8O5x1zB5Nwp4og4ty5ePA+l8P6
+         6OfDpclmpwGSe7CtzxDXuLqryyidqiz+XcxRgR+k626BBMW6gLkvlZAHfa5eRD/MNVmK
+         hz1/xvIn2CbIZhPlo7JexW6u73CF111VpU98bNBeZ0Huz5kR1TD+lyqmV4xwHYBZgBEA
+         N7vQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2dEY0oNjQmwP6vl4+5kOfGvhy1LkTpLwz3o3wUUv1if9Wno8Xcz+ndNbWrRpoIFssRbn7jydEPg+5@vger.kernel.org, AJvYcCWfkJ0DrOgi0bT3S+X9E56PVg6isutOzOFrdwZMNpoKVah19mdpAoFTkMD0ira05AIIjFy021GmwJQZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyc0VkhezRd7Lml8sH2grh3F9/ZACKfc58s09KJcIkc0bNLICpT
+	YuEeOP262y1L9rXzUx9fSepVbXyslheQzw9CUEtKFg+OPGaNxmSP9NryPwjWDhK4AqfrLnPuPsT
+	JSRHO19/9eoBHLDOZWEeLKjyvlar2G/MTtCA=
+X-Gm-Gg: ASbGncvMjjZSBSPgPoR2NTzxVccmwQhB9wZgC82F6EZYSOu19os9+khCHZl0t4LL1hy
+	m9UNxKzQMmJ+1xfVswQCV+Pf/yX8yHlfMzdj30g==
+X-Google-Smtp-Source: AGHT+IGOsozX6DJwAwVyC37JOhFkTNhXkVC+9kdxtG1TOepF01FW0KXYOfnYCnglUlPx0X3/qvyNfAC/Z6EgYAaBu1E=
+X-Received: by 2002:a17:90b:2e4b:b0:2ee:463d:8e8d with SMTP id
+ 98e67ed59e1d1-2f53cc6e272mr9951514a91.14.1736328585083; Wed, 08 Jan 2025
+ 01:29:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CACHtJB-4UGaqKw5zZjE_vPeYX+bMUMiHPNfNYzD6Wmv6jdAuhg@mail.gmail.com>
+References: <20250103051657.211966-1-rha051117@gmail.com> <20250103051657.211966-2-rha051117@gmail.com>
+ <20250103093353.GP3713119@black.fi.intel.com> <CACHtJB-rZ6SKF3d3xTsbJ=zQ+fPVcCcYxXLX_yMRdpE_4tyYYw@mail.gmail.com>
+ <20250105083358.GU3713119@black.fi.intel.com> <CACHtJB94K5OLdHgs8dDj4jDBtZmsdymovboCcJJUt5OkD8o+Mg@mail.gmail.com>
+ <20250107072746.GW3713119@black.fi.intel.com> <CACHtJB-4UGaqKw5zZjE_vPeYX+bMUMiHPNfNYzD6Wmv6jdAuhg@mail.gmail.com>
+ <20250108055150.GY3713119@black.fi.intel.com>
+In-Reply-To: <20250108055150.GY3713119@black.fi.intel.com>
+From: R Ha <rha051117@gmail.com>
+Date: Wed, 8 Jan 2025 03:29:34 -0600
+X-Gm-Features: AbW1kvYaR7Cp_6kGvrDtcqtahfgcmOSppgfOSNFfbMggKzkx0EVI0F4tSyPEBo4
+Message-ID: <CACHtJB-33Pgoj0xORt75G0=cyoKem_K=Dfeg0iQNow18v2sV6Q@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Force ELAN06FA touchpad I2C bus freq to 100KHz
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>, wsa+renesas@sang-engineering.com, 
+	linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org, trivial@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hello,
 
-On Tue, Jan 07, 2025 at 06:16:09AM -0600, R Ha wrote:
-> Hi,
-> 
-> Thanks for clarifying the speed. Seems like this bug is different than
-> I thought.
-> 
-> In my ACPI table there were no references to HCNT or LCNT
-> specifically. I'm not sure if this is normal.
-> 
-> In addition, I noticed that there were debug messages in dmesg
-> relating to the HCNT and LCNT.
-> I'm not sure if they'll be useful, but here they are (taken from an
-> unmodified kernel):
-> [    3.543648] i2c i2c-14: Successfully instantiated SPD at 0x50
-> [    3.543790] Standard Mode HCNT:LCNT = 552:652
-> [    3.543794] Fast Mode HCNT:LCNT = 100:200
+On Tue, Jan 7, 2025 at 11:51=E2=80=AFPM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+> There should be Device() node for that too. The ones you listed are just
+> child devices connected to that bus.
 
-I'm adding Jarkko who is expert in the designware I2C maybe he has some
-ideas. IIRC we expect the HCNT/LCNT values to be passed from ACPI tables to
-the driver.
+You're right, after searching for Device nodes I was able to find this
+snippet. But it doesn't seem to have anything related to HCNT/LCNT
+values either, but maybe they're hidden somewhere.
+Thanks for the tip again.
 
-@Jarkko, it seems that standard I2C HID touchpad does not work properly
-with the 400 kHz as passed in I2CSerialBusV2() resource but it works with
-either 100 kHz and 1 MHz. It also works fine in Windows. To me it sounds
-like that we may have wrong/missing HCNT/LCNT values?
+Scope (_SB.PC00)
+{
+    Scope (\_SB.PC00)
+    {
+        Method (SOD3, 3, Serialized)
+        {
+            OperationRegion (ICB1, SystemMemory, (GPCB () + Arg0), 0x88)
+            If (Arg1)
+            {
+                Field (ICB1, ByteAcc, NoLock, Preserve)
+                {
+                    Offset (0x84),
+                    PMEC,   8
+                }
 
-> Here's what I have found with the string "\\_SB.PC00.I2C1" in my ACPI table:
-> #1
+                PMEC =3D 0x03
+                PMEC |=3D Zero
+            }
 
-There should be Device() node for that too. The ones you listed are just
-child devices connected to that bus.
+            If ((Arg1 && Arg2))
+            {
+                Field (ICB1, AnyAcc, NoLock, Preserve)
+                {
+                    Offset (0x10),
+                    BAR0,   64
+                }
 
-> Scope (_SB)
-> {
->     Device (PEPD)
->     {
->         Name (_HID, "INT33A1" /* Intel Power Engine */)  // _HID: Hardware ID
->         Name (_CID, EisaId ("PNP0D80") /* Windows-compatible System
-> Power Management Controller */)  // _CID: Compatible ID
->         Name (_UID, One)  // _UID: Unique ID
->         Name (LBUF, Buffer (0xC0){})
->         Name (PPD0, Package (0x03)
->         {
->             "\\_SB.PC00.SAT0",
->             Zero,
->             Package (0x02)
->             {
->                 Zero,
->                 Package (0x03)
->                 {
->                     0xFF,
->                     Zero,
->                     0x81
->                 }
->             }
->         })
->         Name (PPD3, Package (0x03)
->         {
->             "\\_SB.PC00.SAT0",
->             Zero,
->             Package (0x02)
->             {
->                 Zero,
->                 Package (0x02)
->                 {
->                     0xFF,
->                     0x03
->                 }
->             }
->         })
->         Name (WWD3, Package (0x03)
->         {
->             "\\_SB.PC00.RP04",
->             Zero,
->             Package (0x02)
->             {
->                 Zero,
->                 Package (0x02)
->                 {
->                     0xFF,
->                     0x03
->                 }
->             }
->         })
->         Name (PKD0, Package (0x02)
->         {
->             Zero,
->             Package (0x03)
->             {
->                 0xFF,
->                 Zero,
->                 0x81
->             }
->         })
->         Name (PKD3, Package (0x02)
->         {
->             Zero,
->             Package (0x02)
->             {
->                 0xFF,
->                 0x03
->             }
->         })
->         Name (DEVY, Package (0x77)
->         {
->             [...]
->             Package (0x03)
->             {
->                 "\\_SB.PC00.I2C0",
->                 One,
->                 Package (0x02)
->                 {
->                     Zero,
->                     Package (0x02)
->                     {
->                         0xFF,
->                         0x03
->                     }
->                 }
->             },
-> 
->             Package (0x03)
->             {
->                 "\\_SB.PC00.I2C1",
->                 One,
->                 Package (0x02)
->                 {
->                     Zero,
->                     Package (0x02)
->                     {
->                         0xFF,
->                         0x03
->                     }
->                 }
->             },
-> 
->             Package (0x03)
->             {
->                 "\\_SB.PC00.XHCI",
->                 One,
->                 Package (0x02)
->                 {
->                     Zero,
->                     Package (0x02)
->                     {
->                         0xFF,
->                         0x03
->                     }
->                 }
->             },
-> 
->             Package (0x03)
->             {
->                 "\\_SB.PC00.HDAS",
->                 One,
->                 Package (0x02)
->                 {
->                     Zero,
->                     Package (0x03)
->                     {
->                         0xFF,
->                         Zero,
->                         0x81
->                     }
->                 }
->             },
->             [...The rest are similar, only changinng the strings]
->         })
->     }
-> }
-> 
-> #2 (seems related to another device)
-> Scope (_SB.PC00.I2C1)
-> {
->     Device (PA06)
->     {
->         Name (_HID, "MCHP1930")  // _HID: Hardware ID
->         Name (_UID, "I2C1&PA06")  // _UID: Unique ID
->         Name (_S0W, 0x03)  // _S0W: S0 Device Wake State
->         Method (_STA, 0, Serialized)  // _STA: Status
->         {
->             If (POME)
->             {
->                 Switch (ToInteger (PLID))
->                 {
->                     Case (Package (0x01)
->                         {
->                             0x0C
->                         }
-> 
-> )
->                     {
->                         Return (0x0F)
->                     }
->                     Default
->                     {
->                         Return (Zero)
->                     }
-> 
->                 }
->             }
-> 
->             Return (Zero)
->         }
-> 
->         Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
->         {
->             Name (RBUF, ResourceTemplate ()
->             {
->                 I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
->                     AddressingMode7Bit, "\\_SB.PC00.I2C1",
->                     0x00, ResourceConsumer, _Y3A, Exclusive,
->                     )
->             })
->             CreateWordField (RBUF, \_SB.PC00.I2C1.PA06._CRS._Y3A._ADR,
-> BADR)  // _ADR: Address
->             Switch (ToInteger (PLID))
->             {
->                 Case (Package (0x01)
->                     {
->                         0x0C
->                     }
-> 
-> )
->                 {
->                     BADR = 0x17
->                 }
->                 Default
->                 {
->                     BADR = Zero
->                 }
-> 
->             }
-> 
->             Return (RBUF) /* \_SB_.PC00.I2C1.PA06._CRS.RBUF */
->         }
-> 
->         Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
->         {
->             If ((Arg0 != ToUUID
-> ("033771e0-1705-47b4-9535-d1bbe14d9a09") /* Unknown UUID */))
->             {
->                 Return (Buffer (One)
->                 {
->                      0x00                                             // .
->                 })
->             }
-> 
->             Switch (ToInteger (Arg2))
->             {
->                 Case (Zero)
->                 {
->                     Switch (ToInteger (Arg1))
->                     {
->                         Case (Zero)
->                         {
->                             Return (Buffer (One)
->                             {
->                                  0x03
->            // .
->                             })
->                         }
->                         Case (One)
->                         {
->                             Return (Buffer (One)
->                             {
->                                  0x7F
->            // .
->                             })
->                         }
-> 
->                     }
-> 
->                     Break
->                 }
->                 Case (One)
->                 {
->                     Name (PKG1, Package (0x02)
->                     {
->                         Package (0x08)
->                         {
->                             "",
->                             Zero,
->                             "",
->                             Zero,
->                             "",
->                             Zero,
->                             "",
->                             Zero
->                         },
-> 
->                         Package (0x08)
->                         {
->                             "",
->                             Zero,
->                             "VBAT_IN_ELPMIC",
->                             0x32,
->                             "V3P3DX_EDP",
->                             0x0A,
->                             "VCC_EDP_BKLT",
->                             0x32
->                         }
->                     })
->                     Switch (ToInteger (PLID))
->                     {
->                         Case (Package (0x01)
->                             {
->                                 0x0C
->                             }
-> 
-> )
->                         {
->                             Return (DerefOf (PKG1 [One]))
->                         }
->                         Default
->                         {
->                             Return (DerefOf (PKG1 [Zero]))
->                         }
-> 
->                     }
->                 }
->                 Case (0x02)
->                 {
->                     If ((Arg1 < One))
->                     {
->                         Break
->                     }
-> 
->                     Name (PKG2, Package (0x02)
->                     {
->                         Package (0x04)
->                         {
->                             Zero,
->                             Zero,
->                             Zero,
->                             Zero
->                         },
-> 
->                         Package (0x04)
->                         {
->                             Zero,
->                             0xC350,
->                             0x2710,
->                             0xC350
->                         }
->                     })
->                     Switch (ToInteger (PLID))
->                     {
->                         Case (Package (0x01)
->                             {
->                                 0x0C
->                             }
-> 
-> )
->                         {
->                             Return (DerefOf (PKG2 [One]))
->                         }
->                         Default
->                         {
->                             Return (DerefOf (PKG2 [Zero]))
->                         }
-> 
->                     }
->                 }
->                 Case (0x03)
->                 {
->                     If ((Arg1 < One))
->                     {
->                         Break
->                     }
-> 
->                     Name (BUF3, Package (0x01)
->                     {
->                         0x0F
->                     })
->                     Return (BUF3) /* \_SB_.PC00.I2C1.PA06._DSM.BUF3 */
->                 }
->                 Case (0x04)
->                 {
->                     If ((Arg1 < One))
->                     {
->                         Break
->                     }
-> 
->                     Name (BUF4, Package (0x01)
->                     {
->                         Zero
->                     })
->                     Return (BUF4) /* \_SB_.PC00.I2C1.PA06._DSM.BUF4 */
->                 }
->                 Case (0x05)
->                 {
->                     If ((Arg1 < One))
->                     {
->                         Break
->                     }
-> 
->                     Name (BUF5, Package (0x02)
->                     {
->                         0x0400,
->                         0x08
->                     })
->                     Return (BUF5) /* \_SB_.PC00.I2C1.PA06._DSM.BUF5 */
->                 }
->                 Case (0x06)
->                 {
->                     If ((Arg1 < One))
->                     {
->                         Break
->                     }
-> 
->                     Name (BUF6, Package (0x01)
->                     {
->                         0x0384
->                     })
->                     Return (BUF6) /* \_SB_.PC00.I2C1.PA06._DSM.BUF6 */
->                 }
-> 
->             }
-> 
->             Return (Buffer (One)
->             {
->                  0x00                                             // .
->             })
->         }
->     }
-> }
-> 
-> #3 (also seems related to another device)
-> ElseIf ((I2SB == One))
-> {
->     Scope (_SB.PC00.I2C1)
->     {
->         Device (HDAC)
->         {
->             Name (_HID, "INT00000")  // _HID: Hardware ID
->             Name (_DDN, "Intel(R) Smart Sound Technology Audio Codec")
->  // _DDN: DOS Device Name
->             Name (_UID, One)  // _UID: Unique ID
->             Name (CADR, Zero)
->             Name (CDIS, Zero)
->             Method (_INI, 0, NotSerialized)  // _INI: Initialize
->             {
->                 If ((I2SC == One))
->                 {
->                     _HID = "INT34C2"
->                     _CID = "INT34C2"
->                     CADR = 0x1C
->                 }
->                 ElseIf ((I2SC == 0x02))
->                 {
->                     _HID = "10EC1308"
->                     _CID = "10EC1308"
->                     CADR = 0x10
->                 }
->                 ElseIf ((I2SC == 0x03))
->                 {
->                     _HID = "ESSX8326"
->                     _CID = "ESSX8326"
->                     _DDN = "ESSX Codec Controller 8326 "
->                 }
->             }
-> 
->             Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
->             {
->                 If ((I2SC == 0x03))
->                 {
->                     Name (SBFB, ResourceTemplate ()
->                     {
->                         I2cSerialBusV2 (0x0018, ControllerInitiated, 0x00061A80,
->                             AddressingMode7Bit, "\\_SB.PC00.I2C0",
->                             0x00, ResourceConsumer, , Exclusive,
->                             )
->                         I2cSerialBusV2 (0x0009, ControllerInitiated, 0x00061A80,
->                             AddressingMode7Bit, "\\_SB.PC00.I2C0",
->                             0x00, ResourceConsumer, , Exclusive,
->                             )
->                     })
->                     Name (PBUF, ResourceTemplate ()
->                     {
->                         GpioIo (Exclusive, PullDefault, 0x0000,
-> 0x0000, IoRestrictionOutputOnly,
->                             "\\_SB.GPI0", 0x00, ResourceConsumer, ,
->                             )
->                             {   // Pin list
->                                 0x0000
->                             }
->                     })
->                     Name (SBFG, ResourceTemplate ()
->                     {
->                         GpioInt (Edge, ActiveBoth, ExclusiveAndWake,
-> PullNone, 0x0000,
->                             "\\_SB.GPI0", 0x00, ResourceConsumer, ,
->                             )
->                             {   // Pin list
->                                 0x0000
->                             }
->                     })
->                     CreateWordField (PBUF, 0x17, PWRP)
->                     PWRP = GNUM (0x09030006)
->                     CreateWordField (SBFG, 0x17, INTP)
->                     INTP = GNUM (0x09030007)
->                     Return (ConcatenateResTemplate (SBFB,
-> ConcatenateResTemplate (PBUF, SBFG)))
->                 }
->                 Else
->                 {
->                     Return (ConcatenateResTemplate (IICB (CADR, I2SB),
-> INTB (I2SI, Zero, Zero)))
->                 }
->             }
-> 
->             Method (_STA, 0, NotSerialized)  // _STA: Status
->             {
->                 If (((I2SC != Zero) && (CDIS != One)))
->                 {
->                     Return (0x0F)
->                 }
-> 
->                 If ((CDIS == One))
->                 {
->                     Return (0x0D)
->                 }
-> 
->                 Return (Zero)
->             }
-> 
->             Method (_SRS, 1, Serialized)  // _SRS: Set Resource Settings
->             {
->                 CDIS = Zero
->             }
-> 
->             Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
->             {
->                 CDIS = One
->             }
-> 
->             Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
->             {
->                 If ((Arg0 == Buffer (0x10)
->                         {
->                             /* 0000 */  0x04, 0x0C, 0x80, 0xA9, 0x16,
-> 0xE0, 0x3E, 0x34,  // ......>4
->                             /* 0008 */  0x41, 0xF4, 0x6B, 0xCC, 0xE7,
-> 0x0F, 0x43, 0x32   // A.k...C2
->                         }))
->                 {
->                     If ((Arg2 == Zero))
->                     {
->                         Return (0x55)
->                     }
-> 
->                     [...Rest are similar to above, for values of Arg2
-> from 0 to DF]
->                 }
-> 
->                 Return (0xFF)
->             }
->         }
->     }
-> }
+                BAR0 =3D Zero
+            }
+        }
+    }
+
+    Method (I2CH, 1, Serialized)
+    {
+        OperationRegion (ICB1, SystemMemory, Arg0, 0x20)
+        Field (ICB1, AnyAcc, NoLock, Preserve)
+        {
+            Offset (0x10),
+            BAR0,   64,
+            BAR1,   64
+        }
+
+        Name (BUF0, ResourceTemplate ()
+        {
+            Memory32Fixed (ReadWrite,
+                0x00000000,         // Address Base
+                0x00001000,         // Address Length
+                _Y2B)
+        })
+        Name (BUF1, ResourceTemplate ()
+        {
+            Memory32Fixed (ReadWrite,
+                0x00000000,         // Address Base
+                0x00001000,         // Address Length
+                _Y2C)
+        })
+        CreateDWordField (BUF0, \_SB.PC00.I2CH._Y2B._BAS, ADR0)  //
+_BAS: Base Address
+        CreateDWordField (BUF1, \_SB.PC00.I2CH._Y2C._BAS, ADR1)  //
+_BAS: Base Address
+        ADR0 =3D (BAR0 & 0xFFFFFFFFFFFFF000)
+        ADR1 =3D (BAR1 & 0xFFFFFFFFFFFFF000)
+        ConcatenateResTemplate (BUF0, BUF1, Local0)
+        Return (Local0)
+    }
+
+    Device (I2C0)
+    {
+        If ((IM00 =3D=3D 0x02))
+        {
+            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Sett=
+ings
+            {
+                Return (I2CH (IC00))
+            }
+
+            Name (_STA, 0x08)  // _STA: Status
+        }
+
+        If ((IM00 =3D=3D One))
+        {
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+
+            Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+            {
+                SOD3 (IC00, One, One)
+            }
+
+            Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+            {
+            }
+        }
+
+        If (((IM00 =3D=3D One) || (IM00 =3D=3D Zero)))
+        {
+            Method (_ADR, 0, NotSerialized)  // _ADR: Address
+            {
+                Return (0x00150000)
+            }
+        }
+    }
+
+    [...I2C1-7 nodes removed]
+
+    Method (SPIH, 1, Serialized)
+    {
+        OperationRegion (ICB1, SystemMemory, Arg0, 0x20)
+        Field (ICB1, AnyAcc, NoLock, Preserve)
+        {
+            Offset (0x10),
+            BAR0,   64,
+            BAR1,   64
+        }
+
+        Name (BUF0, ResourceTemplate ()
+        {
+            Memory32Fixed (ReadWrite,
+                0x00000000,         // Address Base
+                0x00001000,         // Address Length
+                _Y2D)
+        })
+        Name (BUF1, ResourceTemplate ()
+        {
+            Memory32Fixed (ReadWrite,
+                0x00000000,         // Address Base
+                0x00001000,         // Address Length
+                _Y2E)
+        })
+        CreateDWordField (BUF0, \_SB.PC00.SPIH._Y2D._BAS, ADR0)  //
+_BAS: Base Address
+        CreateDWordField (BUF1, \_SB.PC00.SPIH._Y2E._BAS, ADR1)  //
+_BAS: Base Address
+        ADR0 =3D (BAR0 & 0xFFFFFFFFFFFFF000)
+        ADR1 =3D (BAR1 & 0xFFFFFFFFFFFFF000)
+        ConcatenateResTemplate (BUF0, BUF1, Local0)
+        Return (Local0)
+    }
+
+    [...SPI nodes removed]
+}
 
