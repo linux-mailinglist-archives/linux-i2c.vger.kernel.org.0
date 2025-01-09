@@ -1,54 +1,86 @@
-Return-Path: <linux-i2c+bounces-9009-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9010-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93A3BA07B7C
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2025 16:14:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 181C6A07BF5
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2025 16:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61AA27A4DD9
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2025 15:12:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2CD818839AE
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2025 15:29:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E2592248A0;
-	Thu,  9 Jan 2025 15:09:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A3921CFE2;
+	Thu,  9 Jan 2025 15:29:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h9Hh4LGo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZJCtEE7Y"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D1D21CA1F;
-	Thu,  9 Jan 2025 15:09:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5744921CA14;
+	Thu,  9 Jan 2025 15:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736435392; cv=none; b=KxvW2XBnoupt/k9DlLIPXpgMNs/DpSA1brSbNXIPz27en7CAmPOAOLLSxw6tzmN8vMmhPgh/7hbnpJC23dw+5YK/ija7PjrlDIx9Ol0m6Qoa5whDVU8a5XVnWwhXw1Rck+W1gwyiBM7IaV5BAQJJnyKCE5ySi8hnEMargVdaJmU=
+	t=1736436589; cv=none; b=pLh6sbWqyvQYI28Sydcfqb4d7vokcohJjJfcnnD553zADj3sbPsQUBYex3j4btmRxfc8M797DiAn3LMX1IpE7+xdz3f38uL2xg2CTRAWpDiqzinQ+Gci1aRYNIyLJWZPbkGL5hYKadPZdMIAUMxxaelKJOz7Gpg5OE+MQWxbTwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736435392; c=relaxed/simple;
-	bh=xHeiIxIa6E6yZ6Kk6iQDzKIDM6gnEF3XyhKm1STJdpE=;
+	s=arc-20240116; t=1736436589; c=relaxed/simple;
+	bh=BAr3+m74Gh91Fgmg4tIOeipVGM2nnkFV+k5gfRbmOQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hHyr/Zv+aM1MAS34w4s428j9vTNqkZondo7Ek56LK7y4ExzxW4UV3m/ditrqx1if3y/HTWWDNWtNwmE7S48HApagNPxa0ZvtRvSFr5uKlcuNlgp7neasfaGn3Bol4bdra6NBIM9qdAk5iF01Mu4JVghCI/GMOWy9Litt3q+hBe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h9Hh4LGo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EFE7C4CED2;
-	Thu,  9 Jan 2025 15:09:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736435390;
-	bh=xHeiIxIa6E6yZ6Kk6iQDzKIDM6gnEF3XyhKm1STJdpE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h9Hh4LGo1LjKNof7M9Jer1YS9JWnRoTYm5XIbaPr30BmvrtGbnoeYXpWxmM3hYvC7
-	 BQoA76AIwFcKGNxsJX1N70ctRLsQID6KkgCKyaYP/EgCkto1pb9HGN1moss1BYHtgz
-	 5SMdnahpiSaT9XMWEB2t50aQLKT7ixbmr0Q5p9tv2cQyfrN4hGYUb8hoaD3WxG4MSv
-	 bl1ns5wGVdSufF9jp82iFR9Le+wUsNBO9D+KVdFrxT6TrnLudHxColVY/7ceORE2nr
-	 fnxp9cw+tGHQ6wjhqq1juyvWWAPZYIFCo3bFmVg+XR6j7rcM9xsIbyTXCSODAxAzY2
-	 x0enUuC+waJHA==
-Date: Thu, 9 Jan 2025 16:09:46 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Chris Babroski <cbabroski@nvidia.com>
-Cc: kblaiech@nvidia.com, asmaa@nvidia.com, davthompson@nvidia.com, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c-mlxbf: Add repeated start condition support
-Message-ID: <db3daq7guy52ywmgslnmphx4mxyp2l7swq2y6erezokolg3v6u@p7ufvbi3tarc>
-References: <20241119211215.352797-1-cbabroski@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ut38Y24LoZT5Qte6a3na277/krx7totqZJ/FQzr6kvaPIvir7mqCKDUnvSUlDAKAvSNWNvhCj0keepjfNiv+TB6nlQQ0Z8C0w0YWw3PKaX2Ay5q0gIjiRfk2Bb7VL8cG2O8BMjwxN14DSlPlNaIsM+pJWyrmlur8kJebD9yUii8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZJCtEE7Y; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-215770613dbso13167925ad.2;
+        Thu, 09 Jan 2025 07:29:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736436586; x=1737041386; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pMO+qZUr2e9651wYqz5uA9oLsdfXXLNSEuWj2opd+Ro=;
+        b=ZJCtEE7Yw9PHzQxSUI8Ty3g0CzwLRN4+hImaOoJcAoEArzgtZYDNPrz/AJbafWEyS+
+         2Wp63yE78scwjVv8rIc86bAckNdWFzMJO7xLPXK3snEIvNZ34WsQqDj6++4kD+zibI0l
+         UDr/yX+JOOO48PKwa/3C4ShVvhEDp0Ig69x2AMEH8qaQUIX93wyKhqgFvxHa9azkvSQH
+         HC4icJpyVyOdXLHZpMViysMcfb5CeVCn9ANwhoTxWIe7LY+658ozwaoM14Hyk56A6SQd
+         KQx8j08TrV1OM+Dp4/Fg4PXnGKNmj16ESw5dcqqyjXwCfprOYmoKfvuhbOV4jaqrLRci
+         Tnjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736436586; x=1737041386;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pMO+qZUr2e9651wYqz5uA9oLsdfXXLNSEuWj2opd+Ro=;
+        b=XDUbYKPbOegIin+6itrGohPTHhV20TLpiIDDKgAeUpH/zYbi+rLKBtaN8xgsQxwt7W
+         YZhWJ2wPfX7/R8OPOnoa0IimFAlqxp52q1m6ZVGaYEVQdG1j2FAC5Qop/zFZiSkF3ivk
+         GkD07cLIgll3IJbze5svooTAjqwoF+2p26YmfhFsylSPqBV7HHXFLhmkBHJD3PH49YZY
+         LAvwwnkZzFi5+KsURkQg82yzetcNlp2oHGgETllHybmGOkkqHFAwz3A5dYUk0H1k6vKt
+         Rjir2912tj8oRnxdTLFV14Ee0NwhgGzxzAKqYNEdwuVFnIwU/v4kVaF2IYCLS8ElF55q
+         6diQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWEe3OA3/+oACRu1klsDCr5qdsFayJj5h4Se2XOfOVSIPWLMegGFaCmMrfL87TrEUuHxTWhCWiz6DrCfFGE@vger.kernel.org, AJvYcCX0SOVI1lixwPq67umG9Xp6Fsp9JPA9kDxgEm49Vkfc51UPdc884jos5H3ygRHnPpWO4I8DJHPEAfc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzxo6u4LFa7ujmClA128Ur19T5GYACo5Jp7dTOzrQ0gNx2jZGPC
+	DTppAc+oql0Wt7juYLk4H9OKy3pE8JTXFjNWQ5DAxHsWRJPHvKl/e9NaDQ==
+X-Gm-Gg: ASbGncubo4/qjHkj34R6DaMk+cWLIZ0V/f/3617Zk2RSwA4AHRHVFU3h0QUA5kj8qbi
+	6j5BNf8nfOyGbwQH1TEHthi0Tw0LEWluSSh6jAYvg3Mpg6PFo5W0pVZQvvBpyL7uiio5pjXr6jb
+	Eg8aWcGDxttUiFo+ML5ITbJmlyvtlAzuyyfYBRtjAqVwiRsz1wV43ShHXxsHBl3ZLYbiEQInDXn
+	G1c2/GwmTzBdG2Jx+OIPP3x/jwRhWQ3xWO565e9iCHo6Nbeyt4MzVmscKvP/XfE3o8eIA==
+X-Google-Smtp-Source: AGHT+IGcaOl5ov1x2+OFRyQ0n7dDN8SNMZB+ZvtIEQrST9UioEnFh/ODva5sOuYSx8DFK83itNgxpQ==
+X-Received: by 2002:a05:6a00:ac2:b0:729:c7b:9385 with SMTP id d2e1a72fcca58-72d21f27b01mr10756345b3a.6.1736436586603;
+        Thu, 09 Jan 2025 07:29:46 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8164c7sm37381996b3a.4.2025.01.09.07.29.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jan 2025 07:29:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 9 Jan 2025 07:29:44 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: add core-managed per-client directory in debugfs
+Message-ID: <a519d066-7325-446c-99ab-87f36a26b850@roeck-us.net>
+References: <20250109122112.45810-1-wsa+renesas@sang-engineering.com>
+ <20250109122112.45810-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -57,96 +89,66 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241119211215.352797-1-cbabroski@nvidia.com>
+In-Reply-To: <20250109122112.45810-2-wsa+renesas@sang-engineering.com>
 
-Hi Chris,
+On Thu, Jan 09, 2025 at 01:21:10PM +0100, Wolfram Sang wrote:
+> More and more I2C client drivers use debugfs entries and currently they
+> need to manage a subdir for their files on their own. This means
+> inconsistent naming for these subdirs and they are scattered all over
+> the debugfs-tree as well. Not to mention the duplicated code.
+> 
+> Let the I2C core provide and maintain a proper directory per client.
+> 
+> Note: It was considered to save the additional pointer in 'struct
+> i2c_client' and only provide a subdir when requested via a helper
+> function. When sketching this approach, more and more corner cases
+> appeared, though, so the current solution with its simple and unabiguous
+> code was chosen.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Can I have an ack from the other nvidia guys, please? Khalil and
-Asmaa?
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-...
-
-> @@ -694,16 +695,19 @@ static void mlxbf_i2c_smbus_read_data(struct mlxbf_i2c_priv *priv,
->  }
+> ---
+>  drivers/i2c/i2c-core-base.c | 4 ++++
+>  include/linux/i2c.h         | 1 +
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index b072030a9105..00f171ebc01f 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -1015,6 +1015,8 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+>  	if (status)
+>  		goto out_remove_swnode;
 >  
->  static int mlxbf_i2c_smbus_enable(struct mlxbf_i2c_priv *priv, u8 slave,
-> -				  u8 len, u8 block_en, u8 pec_en, bool read)
-> +				  u8 len, u8 block_en, u8 pec_en, bool read, bool no_stop)
-
-I don't really like how the alignment turned out here. This file
-rarely exceeds 80 characters, so can we keep it that way?
-
->  {
-> -	u32 command;
-> +	u32 command = 0;
->  
->  	/* Set Master GW control word. */
-> +	if (!no_stop)
-> +		command |= MLXBF_I2C_MASTER_STOP_BIT;
-
-If "no stop" we enable the stop bit? Can we make it a bit more
-straight?
-
+> +	client->debugfs = debugfs_create_dir(dev_name(&client->dev), adap->debugfs);
 > +
-
-...
-
-> -/*
-> - * Note that the mlxbf_i2c_timings->timeout value is not related to the
-> - * bus frequency, it is impacted by the time it takes the driver to
-> - * complete data transmission before transaction abort.
-> - */
-> +/* Timing values are in nanoseconds */
->  static const struct mlxbf_i2c_timings mlxbf_i2c_timings[] = {
->  	[MLXBF_I2C_TIMING_CONFIG_100KHZ] = {
->  		.scl_high = 4810,
-> @@ -1203,8 +1218,8 @@ static const struct mlxbf_i2c_timings mlxbf_i2c_timings[] = {
->  		.scl_fall = 50,
->  		.hold_data = 300,
->  		.buf = 20000,
-> -		.thigh_max = 5000,
-> -		.timeout = 106500
-> +		.thigh_max = 50000,
-> +		.timeout = 35000000
->  	},
->  	[MLXBF_I2C_TIMING_CONFIG_400KHZ] = {
->  		.scl_high = 1011,
-> @@ -1219,24 +1234,24 @@ static const struct mlxbf_i2c_timings mlxbf_i2c_timings[] = {
->  		.scl_fall = 50,
->  		.hold_data = 300,
->  		.buf = 20000,
-> -		.thigh_max = 5000,
-> -		.timeout = 106500
-> +		.thigh_max = 50000,
-> +		.timeout = 35000000
->  	},
->  	[MLXBF_I2C_TIMING_CONFIG_1000KHZ] = {
-> -		.scl_high = 600,
-> -		.scl_low = 1300,
-> +		.scl_high = 383,
-> +		.scl_low = 460,
->  		.hold_start = 600,
-> -		.setup_start = 600,
-> -		.setup_stop = 600,
-> -		.setup_data = 100,
-> +		.setup_start = 260,
-> +		.setup_stop = 260,
-> +		.setup_data = 50,
->  		.sda_rise = 50,
->  		.sda_fall = 50,
->  		.scl_rise = 50,
->  		.scl_fall = 50,
->  		.hold_data = 300,
-> -		.buf = 20000,
-> -		.thigh_max = 5000,
-> -		.timeout = 106500
-> +		.buf = 500,
-> +		.thigh_max = 50000,
-> +		.timeout = 35000000
-
-Can you please explain better how the stop bit affects the timing
-values?
-
-Thanks,
-Andi
+>  	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
+>  		client->name, dev_name(&client->dev));
+>  
+> @@ -1058,6 +1060,8 @@ void i2c_unregister_device(struct i2c_client *client)
+>  
+>  	if (ACPI_COMPANION(&client->dev))
+>  		acpi_device_clear_enumerated(ACPI_COMPANION(&client->dev));
+> +
+> +	debugfs_remove_recursive(client->debugfs);
+>  	device_remove_software_node(&client->dev);
+>  	device_unregister(&client->dev);
+>  }
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index 66fb3d6cf686..36de788dc7fe 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -347,6 +347,7 @@ struct i2c_client {
+>  	i2c_slave_cb_t slave_cb;	/* callback for slave mode	*/
+>  #endif
+>  	void *devres_group_id;		/* ID of probe devres group	*/
+> +	struct dentry *debugfs;		/* per-client debugfs dir	*/
+>  };
+>  #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
+>  
+> -- 
+> 2.45.2
+> 
 
