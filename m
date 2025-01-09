@@ -1,68 +1,79 @@
-Return-Path: <linux-i2c+bounces-8987-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-8988-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE5A9A0715B
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2025 10:23:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CDF1A0718E
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2025 10:36:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD99D167645
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2025 09:23:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECC631889FFB
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Jan 2025 09:36:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30DCD215182;
-	Thu,  9 Jan 2025 09:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 640702153DC;
+	Thu,  9 Jan 2025 09:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Zk0H+5Gg"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="BnTUW8uL"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5B1214A98
-	for <linux-i2c@vger.kernel.org>; Thu,  9 Jan 2025 09:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278512153C9
+	for <linux-i2c@vger.kernel.org>; Thu,  9 Jan 2025 09:36:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736414626; cv=none; b=hwldZ18nbjZIFZ7vkI/IeYRv5RF3+TIY8F0e7PpDdPPKtfVlxPdkwX6mP9tv/ESk5PxkXPTm7JiJQt1VQOoZX4iOYQh/m6nInhZT4nVbwJRRTY+kYEUmfd+k3aiSS7NZJ++cyVDC/to1HRZaZLdyuICCtOmdBRcEgV33RiDDPVQ=
+	t=1736415372; cv=none; b=mGU2tA2VHVi708Kb9/caMeKQI4ibp81zCxkwjLtEcs8+r0FAuVoGZvxBvvS+iIf548SV2XhSMO6HUPEzc9e43CSwYGLqs8IAOzTD5LJ6iK7tegS76hgXYXWKZj0x4NJTl0tMVc6BvMtcdtXXQfPeyzWGROAWdM4FCAAMlGM8eNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736414626; c=relaxed/simple;
-	bh=pVhawgNaSYa0/cslbgYeWY/ycUTHcgkNXuYbH+GNQoc=;
+	s=arc-20240116; t=1736415372; c=relaxed/simple;
+	bh=AN72JnqIoww0+UNCFKmbnailjgT+hMF2BivOAJQ8dG8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n0295PO592kmHowtUe5jy6cC+zCZd9HVHxWxicyFouTMGeA4RC+XgKXb/OdkxE72Jz+HDu6y48cD2sc9cr3chn1DzDEJv42mZbl+EpTEYv5tkpuOKo+DMCvx2pn/IlcyzZvudWmlLUn8s0zcZJN9k7BW/bxNFbZASG1stNHgRfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Zk0H+5Gg; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=nYTvGZi8Y4BkN2U8IxvJIB+y0Orn2rVMHy8W6/hWWJiniJsz/Pfbu+FXTDdwFUsr9cvD6F3p9tiXs/RRIHV2fRHCbFVWE1lgklKsQNo1F5wMaeoW/ljndn1DmwRzumOGQgp6Omcx3PW7D2EQQGLLsa/trFUGv/b4ANjfnJNPEx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=BnTUW8uL; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=pVha
-	wgNaSYa0/cslbgYeWY/ycUTHcgkNXuYbH+GNQoc=; b=Zk0H+5GgwjV2W5oNolMT
-	NFh4x1ScFw5AwEMh59Fik1iYriVK00wHrLcdUGOFggEv6MAuUizhXiLhom6LbzJA
-	AJ1FhLuSAfopEjWQn7QLEVrY9a+yk0NRTu/J4JFUhYyiZ29Ve4Kkbk9GhY1fHLk2
-	CYC9mbJFXm0RQvrJ3Xj63mEquSnbSh3eA7iV/SN4jmGkegChIa1ufkOFoW3lZ41j
-	ap1ut9cwpbOYUSxrIsJZ/Z0cqwXa6lmR7ZOaDq97Pr4jOqqK1pMmTPt+Dg1z8r9Q
-	mQL/BsfahcS8ScW9GJ/Q7Yqa+yHdvJphVYc3d/+Fev19T1GjOyuK7icV3bUteHjk
-	aA==
-Received: (qmail 2850531 invoked from network); 9 Jan 2025 10:23:38 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Jan 2025 10:23:38 +0100
-X-UD-Smtp-Session: l3s3148p1@A01/iEIrIpAgAwDPXw20AOMQ2KO98fSH
-Date: Thu, 9 Jan 2025 10:23:38 +0100
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=AN72
+	JnqIoww0+UNCFKmbnailjgT+hMF2BivOAJQ8dG8=; b=BnTUW8uLqoWYfQBIXkiW
+	ldYnGuE70abyGytScVX3Dfi2cAFfsicwPzNtGT0Ur7A9q3EjhXWs6L1NalR13HrY
+	PQTVXDU+Lc+VGFFu8NlkbAmjMS6Z3hL4YoXQc92/qutrnmsG2D5rhQKokb6R9kaC
+	crUFcGgGbtTzViyFtSmBRnk6ATo76Oaue58OkiX4kAcjN+KUIV/RtUvcR2j9vDER
+	j90onV10TaEscAFFul5P6wsU6s8QnTFObjBxO/fODjQms4pzGvug+kXArEBXxe0x
+	ToDPH4LhYOxd961DS7uZE2JjovhUV88iWqcZcRsdWHFN8yR1wERrrFdoB2iAIvS/
+	Tw==
+Received: (qmail 2854001 invoked from network); 9 Jan 2025 10:36:07 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Jan 2025 10:36:07 +0100
+X-UD-Smtp-Session: l3s3148p1@9g8etUIrSK0gAwDPXw20AOMQ2KO98fSH
+Date: Thu, 9 Jan 2025 10:36:06 +0100
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Atharva Tiwari <evepolonium@gmail.com>,
-	kernel test robot <lkp@intel.com>, Jean Delvare <jdelvare@suse.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: amd756: Fix endianness handling for word data
-Message-ID: <Z3-VmirXK5L8o9oc@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Chris Brandt <chris.brandt@renesas.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	Atharva Tiwari <evepolonium@gmail.com>,
-	kernel test robot <lkp@intel.com>, Jean Delvare <jdelvare@suse.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250101103422.30523-1-evepolonium@gmail.com>
- <qj3ymbntblc26wnezki2pn2g26z5poc5njhsfbxzam3mpjy52p@px44dxiqhedt>
- <Z3hyr3ZVf4rBuV-N@shikoro>
- <eqjgc5a4fiz6csqmehyo66yduorxt3d3vnr62d5ijxy3wooheo@qabiaft2nri3>
- <Z3kOW11SxEVwqcw-@ninjato>
- <ovddzx2zitp6lqjdasinn2zaaefp35y4mspol3v3x5rk3tddgo@kgcwexuai2ir>
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH v4 6/9] i2c: riic: Make use of devres helper to request
+ deasserted reset line
+Message-ID: <Z3-Yhg18VKreoOOi@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Chris Brandt <chris.brandt@renesas.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20250103091900.428729-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20250103091900.428729-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -70,42 +81,54 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="h5419xBSTIk/tCOP"
+	protocol="application/pgp-signature"; boundary="0lXB0H7QkhmkNsQ0"
 Content-Disposition: inline
-In-Reply-To: <ovddzx2zitp6lqjdasinn2zaaefp35y4mspol3v3x5rk3tddgo@kgcwexuai2ir>
+In-Reply-To: <20250103091900.428729-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 
 
---h5419xBSTIk/tCOP
+--0lXB0H7QkhmkNsQ0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jan 03, 2025 at 09:18:57AM +0000, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>=20
+> Simplify the `riic_i2c_probe()` function by using the
+> `devm_reset_control_get_optional_exclusive_deasserted()` API to request a
+> deasserted reset line. This eliminates the need to manually deassert the
+> reset control and the additional cleanup.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+
+Missed to give my tag here:
+
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
-> On one hand, I want to give credit to Atharva for his effort; on
-> the other hand, I think the real solution would be to just remove
-> the comments altogether.
-
-Yes. Atharva can still send a patch doing this.
-
-
---h5419xBSTIk/tCOP
+--0lXB0H7QkhmkNsQ0
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmd/lZYACgkQFA3kzBSg
-KbYCrg//b42SPGaqBIduruCnBJP/0ZYnJt48JS74YSwjCAH9PCPsd2QtM95whQvi
-u2IJTO/A8YzOsu+FImgfqnoFn0sbOUlHb9mAaReZwpXJ5zbaa83/0CXv/neXdYUP
-aDEenqKl/8Vf2xljNgqlHrDdyEWJ70hFNwYsv5KGwOWD8wrOEwU5ppdqfrwvD41r
-lIou8ljVMlFd8qntbA3AdWhae6GE5g8S75LtFlL86Xg8Dlkm1lHR0L95EtEU+LBB
-oHzi2O1l4EnnQHJtwNBFfps/i7d1TdlGlciM82fMTj8F1zuu7vrAX/17jLmDo+C6
-UpqErpAZ2yJ4ER4kvbBxLgrJ3DAiIifiaasVCNVgqRweQ3p3TSnwwyENeTYXGoQF
-V7+IoC3UTgl+zgRnceejcRHJoeS9lJSqFhjHeJlZW3syqaRFPSQkYvuuZ/BhtZg5
-vMlbTD4+Vpu1zC9xsVpXVjA52o/1mD7vw5CKl33lNn/2JWbneyFGrNURmpDE8YyH
-qqIbiF2p5eddII4uD+9LFCE3GxWpNfDa2iNi3DrbuoLNZGC1sH+JLAVjAbDJwsFe
-iCpPqeOQ84mKh2pcUZKkuWGrAOKk3WcEq4mSfO3FyPKVoz9wAsVUH3AUrgUIDz21
-yc74+rwVLckYbVkKpkbyh8IxMAt4sU6FHwWSr1EYbhn7BN/0jno=
-=AncV
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmd/mIYACgkQFA3kzBSg
+Kba10Q//UDOySENe6mL+lpRSfzb4yyORheMlHaKXlTNLWGKxJBoiQHYgl95w0yQI
+SeSzS31EJ0CBPzpcPXcr1xXZaUxiCItP1Jd7+hRcD+FI2A91fT5cHda2ceTSXB3z
+J/oYNPHRTLdhMvphVZMQgcnbOgeijjwXIUpI9VPc1tYhpo68ds8+4Uu5PNGkpboh
+U8NaEUwA2f5dul298RtHPqvBP0ceMX6gQu/xaViAWHOCFgRtWv8ZPpOeKeT/YroY
+xIxwesSEQdOpeuMkrbvRK6MY0/JlY7q/lbfkIRMO07uSyl6kqd4TVbELQWfoIn3U
+li28BFjnJl33JbHnS1dLyF1/yM+CFdtcicfXSgvJVSlusKNR9VOsq3xjap2nU4zX
+a1JcQyWMb8gi3joWZBuxVGfdmIzYVrHZSQVH8kneQ5bx1yuMU3BHFRwNOabUZNqS
+nnH+MmI1lcg3oMUydVbJKODc3ki6gj961jf4Uu9dhRe+3ceKkxpPtv1KkyaemQl4
+M2/RqMdb5eFRkj9HZc8mvlG1erf8eioN6NVuY50wQxHSrkPMjx0NCo1dga1InWC4
+VDoYkh47PXDVvbr7gox9Ih9lMj91mhmzX0fSMPRAtAeuvh2QCXdewIu/60H3mtXU
+NwmQQ6gOT9h4BBxzbghcul/qfX7zmA/fyCOtJfsWXQO3UVt9B6c=
+=7jwK
 -----END PGP SIGNATURE-----
 
---h5419xBSTIk/tCOP--
+--0lXB0H7QkhmkNsQ0--
 
