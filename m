@@ -1,129 +1,119 @@
-Return-Path: <linux-i2c+bounces-9021-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9022-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57B5FA08B8A
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jan 2025 10:24:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAA10A08F32
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jan 2025 12:27:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5D383AB8A5
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jan 2025 09:21:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D7463A53BE
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Jan 2025 11:27:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BE120A5FD;
-	Fri, 10 Jan 2025 09:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E51F520C464;
+	Fri, 10 Jan 2025 11:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NjOBa0nF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20DC209F5B;
-	Fri, 10 Jan 2025 09:19:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C744220B21D;
+	Fri, 10 Jan 2025 11:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736500781; cv=none; b=sywPoKOXRAtTu+yfPe3kTqSEppymvhss2Kiec3YDGsaJMuuuiIY7I9kVlHxrd5UWccSZgwprJo3y0fg2AnOy6eA1nw2e282cv6wyg6+my2D6nJDvP0C61/co5VXG+upYHJ0oxBMmK3PjJ+7H54HoVkrZlozVynzzfXnHhV91h4w=
+	t=1736508390; cv=none; b=hUFdOSha9DYyLM7tfmumtX4aGB7YJMACqdOt/QoO+/y1UMK/qRHgipKAZ7kyRMQzFqUgQOtxT2h1V5BiB+hA8ogZ4e3o59WKqVulbsu2wQyrvUTTQTOKR10zLfQhOBAQQQSRrmW/cek8OFoa+5kYlzo2kvFiqVKZvzXEkRHaU5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736500781; c=relaxed/simple;
-	bh=JMLJNmjrpVNhSyYor3WfZtZoG1a1M6ftc+6NOLiXkGE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Pw7xQjWogtLV1VwM7JWtPws34qDzCMdCHBnI+NM3fQ4NDZR+Zuhc4kCK+av9qfFL+W8wcqgaTpSoSihsmnvTP38JfMFsJss6/wLKjBtk6AEPNvwwqT7+gU2IK71VvcDElZh7mabLoLjGCf1Lz0dJRIMwQ/yVcZsbqTAVpjAS+Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-5187cd9b8e5so546595e0c.1;
-        Fri, 10 Jan 2025 01:19:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736500777; x=1737105577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YxSh8575ZUBFw1IXV0jSdJrky3vPKB7mOTEQ7sqZRH4=;
-        b=Wnd3CBg9yUi46Ky499+EnhGElj4Fp6Q1NawOKHuqXRRMHCvR5rKoi1IYwbZfPSQFvs
-         MXpKiVxlktbhIM+Kytj5R9kPprluFyOkvzxpUV7YOAHe6oCr5WPd670K2j5i3BaLS3rW
-         1u8ndQ1PLSmAoEr98OghXqYHlu59tJjXcziVsSMoc98D2jPru/J3TKna5W8at6318LpE
-         UWFlcas+kNDkWcxDobGerELA4Ol/yE1eWKJ1wLPzuAWkT3XXlj5PDKs5mMRvTd90CZak
-         x3ML21TzL2SX1IY9lASGKHP8t/bsdywpe3GjKw5tJNvKmIFQKrn3u+y6GtPB+o2jncEz
-         7+8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVB082dgMLuVLbJE51+ix4QAnu1KmHxWX9/nSuEe/P8MrEMbv6BdmpfPw7o89HYJ/wsu8WKk0F9RkIGAW/LRqCjMK4=@vger.kernel.org, AJvYcCVkhbdhw6Jm8NP3tbSDy6XWccIhShTR/lrn1LaY6SnBdsoZ8aDoYeIOy54yjzwgSSkE0T+UHLcSWnI=@vger.kernel.org, AJvYcCXZmwrOZSvMbqG7jbrCDdpyYvWDxPUJkuQQtFcn8BOj7DPix0IliPYVBgvjHRdR5KYf0p60P2cpR82WnsXE@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywjcc4fX1PVBXVLJlyjmwjruxebvQOQcPqW2ADoTeW7N5J5D89+
-	rg20D1tUNHyqzgRZpXq7wv8PC6Iq2o5DZvNLY1A8G9t8BU7hJRhl/WmjjoFk
-X-Gm-Gg: ASbGncvRjTApmoTjlvJRXpOykZAYp1Ab4zSb+Y8djpgi1WFX9KnOwAr+E40dEinm3MC
-	YYSS/MqEgJJOjsL3EHlLtHyKdbqKcIkKzRONFxSL21dyOYDCaj6/Nd4iB97CPIiUCO1N9Ck8T4e
-	KFQ1Fi8huSm83kuVY7McdIcRf/eCf2OqnfFH4MAseB4JzZS00jtK7OXY+p8m8YzfCggrRLLbttz
-	nI++2RB+clLH4ZdY+OFpS5uBVdFJvlqU1jKYOcNPCpIkRylCWO3qxrCttUzokqdjjujv/QB2vSF
-	gCLydn4YOdnIi6QhnqM=
-X-Google-Smtp-Source: AGHT+IHzShoLgNc/il6C5X+CpAglybljXHPMQNAaE13BC+k+n9FKhKUU/BS/puxOhyUielVIn8EkEQ==
-X-Received: by 2002:a05:6122:1788:b0:517:4fca:86e2 with SMTP id 71dfb90a1353d-51c6c535bdamr7635318e0c.10.1736500777239;
-        Fri, 10 Jan 2025 01:19:37 -0800 (PST)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-51c7fcfd614sm1846091e0c.36.2025.01.10.01.19.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2025 01:19:35 -0800 (PST)
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-8622c3be2f4so529815241.1;
-        Fri, 10 Jan 2025 01:19:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUwKh6ZhxsSUsoOEqLSOwLuvvf7uhNcHUY2xVG+CmykFULd1CCUEOEwYkNuMuXBPd5hifAMfOc0s5gQnFYD@vger.kernel.org, AJvYcCVWgcZMQRJVI27R8V8zmqSDcQZHw+7v6Nk/ouzEfrMDQALblalT7vsKWhTVka6zSuY40qh0MSIc3GE=@vger.kernel.org, AJvYcCVZCKHLbv5kVcH3E40qS9/A9pfzq8Sq17r3NnVqN7bxKPca5B5W0URJm4soxkuLVzRd+p1PW98cYN1te81HDbPmBj4=@vger.kernel.org
-X-Received: by 2002:a05:6102:2b85:b0:4b2:9f20:51d3 with SMTP id
- ada2fe7eead31-4b3d0e0b114mr9457902137.0.1736500775162; Fri, 10 Jan 2025
- 01:19:35 -0800 (PST)
+	s=arc-20240116; t=1736508390; c=relaxed/simple;
+	bh=zDc3mG6+T3MimEZCscASes4oz5AK//74JP++D4lXaDs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dCj+TMTlhhJ24d+UrePTHmrJBFZLEt14/jTo7dLZQpwpFDRkLUNED5nSh7oJ6AB92QmUyg/mADwOtdPbtp0+yqTc1h5VqXQIrLKOBN6F44hnGZZvhfEBAxg8vq17sw3SG68jKFZgD+F/dF0LyIaO2kD+hLbD+/bVQsIGoHTc8l0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NjOBa0nF; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736508389; x=1768044389;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zDc3mG6+T3MimEZCscASes4oz5AK//74JP++D4lXaDs=;
+  b=NjOBa0nF+UOhvc7Lk9dZla8FkMpTlO2YMZyOBdhzYhmEvuploa3MyFro
+   4g8nHW7uK02A6qt6eekd0BIg371ymqHfQaph2mBI1JOgFi1yC2iC7cz2n
+   nkB4mUeB/pQvKrHhCh9oFDYmDFIC1Gf2X+9Y2Gzx1jR0hkbMmSSbya0fE
+   LO/y9tWa3ZqBL+vRo6j+rdUE0i6qpfWmOwwHmgG8Oq0q1j7r5/zjZtfQe
+   qIQ/7qtUD6ecFagTNOtzo8rBLWIhsyuiWHjUjpcJTbKfL/C4eiJ8JOL6q
+   NzAyUJulRpAyjXUqDAA6yWLxpz5M/a20UV5SAlvszdThxUOcGL/8OcDtA
+   w==;
+X-CSE-ConnectionGUID: YM22GWNRR/6bwPgC9iXAiA==
+X-CSE-MsgGUID: vZ8oModFSTKfqHw3k7kutw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="47295709"
+X-IronPort-AV: E=Sophos;i="6.12,303,1728975600"; 
+   d="scan'208";a="47295709"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2025 03:26:27 -0800
+X-CSE-ConnectionGUID: tq9fGEejQ++jwcr0olnbWQ==
+X-CSE-MsgGUID: iCW+7HzlTAy5iDlOzJTjfQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,303,1728975600"; 
+   d="scan'208";a="134549437"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa002.jf.intel.com with ESMTP; 10 Jan 2025 03:26:24 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 5F7A03EF; Fri, 10 Jan 2025 13:26:23 +0200 (EET)
+Date: Fri, 10 Jan 2025 13:26:23 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: R Ha <rha051117@gmail.com>
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org,
+	linux-acpi@vger.kernel.org, trivial@kernel.org
+Subject: Re: [PATCH 1/1] Force ELAN06FA touchpad I2C bus freq to 100KHz
+Message-ID: <20250110112623.GF3713119@black.fi.intel.com>
+References: <20250103093353.GP3713119@black.fi.intel.com>
+ <CACHtJB-rZ6SKF3d3xTsbJ=zQ+fPVcCcYxXLX_yMRdpE_4tyYYw@mail.gmail.com>
+ <20250105083358.GU3713119@black.fi.intel.com>
+ <CACHtJB94K5OLdHgs8dDj4jDBtZmsdymovboCcJJUt5OkD8o+Mg@mail.gmail.com>
+ <20250107072746.GW3713119@black.fi.intel.com>
+ <CACHtJB-4UGaqKw5zZjE_vPeYX+bMUMiHPNfNYzD6Wmv6jdAuhg@mail.gmail.com>
+ <20250108055150.GY3713119@black.fi.intel.com>
+ <CACHtJB-33Pgoj0xORt75G0=cyoKem_K=Dfeg0iQNow18v2sV6Q@mail.gmail.com>
+ <20250109111910.GD3713119@black.fi.intel.com>
+ <CACHtJB9XeGBhg9de3Y0DkHKBUD-i=rKi2bEi93tv3jjz+LZ=_g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250109211206.241385-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20250109211206.241385-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 10 Jan 2025 10:19:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXeU9o7PN62gK9ks4SSeVP2KH-a_mf2+xB+fS-jDqtCxQ@mail.gmail.com>
-X-Gm-Features: AbW1kvY9TyrtgHNKZuzZdhq64uRtlEl-82G9RWtD1jR7YafWrvuuljLYvEmz6FM
-Message-ID: <CAMuHMdXeU9o7PN62gK9ks4SSeVP2KH-a_mf2+xB+fS-jDqtCxQ@mail.gmail.com>
-Subject: Re: [PATCH v5] i2c: riic: Introduce a separate variable for IRQ
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Andy Shevchenko <andy.shevchenko@gmail.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CACHtJB9XeGBhg9de3Y0DkHKBUD-i=rKi2bEi93tv3jjz+LZ=_g@mail.gmail.com>
 
-On Thu, Jan 9, 2025 at 10:12=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail.c=
-om> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Refactor the IRQ handling in riic_i2c_probe by introducing a local variab=
-le
-> `irq` to store IRQ numbers instead of assigning them to `ret`. This chang=
-e
-> improves code readability and clarity.
->
-> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> Note, this patch is part of series [0], as requested by Andi, sending
-> only patch 1/9 from series [0].
->
-> [0] https://lore.kernel.org/all/20250103091900.428729-1-prabhakar.mahadev=
--lad.rj@bp.renesas.com/
->
-> v4->v5
-> - validate return value of platform_get_irq()
+Hi,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Fri, Jan 10, 2025 at 02:31:26AM -0600, R Ha wrote:
+> Hi,
+> 
+> Sounds like a good idea. I'm a little worried I'm missing something,
+> so I think being able to check my earlier answers will help as well.
+> I'm sending the entire output as attachments, but let me know if it's
+> better to upload them somewhere and paste the link instead. Some of
+> the ssdt* files are missing, but they're empty files so Gmail won't
+> let me attach them.
 
-Gr{oetje,eeting}s,
+Thanks for sharing! Okay checked now dsdt.dsl (the other files are not
+relevant here) and what I can tell the device is supposed to be run at 400
+kHz. I suspect this is what Windows is doing as well, there is nothing that
+indicates otherwise.
 
-                        Geert
+And since this is a standard I2C HID device it should just work (as it does
+not require any vendor specific driver even in Windows).
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Only thing I can think of that affects this is the LCNT/HCNT and SDA hold
+values of the I2C designware controller (and maybe the input clock) but
+there is nothing in the ACPI tables that set these so it could be that the
+Windows driver uses different values for those and that explains why it
+works better there.
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+@Jarkko, do you have any input here? If we cannot figure a better way then
+I don't see other option than to add this quirk.
 
