@@ -1,85 +1,85 @@
-Return-Path: <linux-i2c+bounces-9029-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9030-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE45EA0AA00
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Jan 2025 15:25:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52FDEA0AA02
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Jan 2025 15:26:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B7E27A367D
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Jan 2025 14:25:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 671B51652A2
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Jan 2025 14:26:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C671B81B8;
-	Sun, 12 Jan 2025 14:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADA2B1B81B8;
+	Sun, 12 Jan 2025 14:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DLPvSN1U"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BXfPxNyH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D2D29CA;
-	Sun, 12 Jan 2025 14:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019791B6CF9;
+	Sun, 12 Jan 2025 14:26:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736691922; cv=none; b=onK13C1ZcOM4RacPiTCfkzxIfixFarqOlejpqvpXQWWnzARWBhhimcQ106fVGzM3otj+W4r+ZjAXyYOrnbEq8MOEP1KZVbd+s1CQM2Il5UI1rpKwo2Pa6wPV06U9dTfQujHPnZtA7Nb6qDY42jX1FvGuY4gTS0ZnzSTTNE54zWs=
+	t=1736691966; cv=none; b=iQN1y2qHXvw1gNRWotsxU8qy0NLY/KTGMCOqJkaoH0wnEL9xUQ/NEkZVp3UZQ+aQUG5jl6hzs8P1TTVcEZsKtqNRfRCDpuT7jVQDed2Jfydwuis0l0eOYWlgEFPVkWq5qhY11EXfsoYdTDIjouL6vuoxAtpLGzzIShnCdsPbK0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736691922; c=relaxed/simple;
-	bh=dEW/UrPBd5B4wYsB+D0Jq/PZ/e1zbmaic0vzM7BQiOs=;
+	s=arc-20240116; t=1736691966; c=relaxed/simple;
+	bh=H5bMDX8q19uef4bYaJh6I2X1vbdsTGXD6Hqw3SfElNE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sIqvXFbnS2xmxJOqMQ6S2zrHd/xrAjqyGWohl3si0vjk5+/0metPZvDGuc9OPowUxzBjcvpf0jG9KTy5co5m++ekx5DvYI5BlIr9gGiKfuQeVvGcTdb/NzTfJkiCI2xTIsBbf+LMbO2EXZIPBamZuZsTy3SQTxgMfBaXZ0ORuWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DLPvSN1U; arc=none smtp.client-ip=209.85.218.48
+	 To:Cc:Content-Type; b=HufoaSMP4rP5P+N4TVmpBHPgrfhcJ7IO7m7wau9yW1tOjo/0GFPXDuujyJ9BgjSu6eiNcxQlYvEVmvjtU4iNG0g9M+qNc3MZm8ziaVYgvi29NiRU7NiXQO/KVRFd0bbM6Xm79BfDcNKoyMlBy/cvnT1XfKBBv7W5FQqreLsugKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BXfPxNyH; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aa68b513abcso622015566b.0;
-        Sun, 12 Jan 2025 06:25:20 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-aaec111762bso638407466b.2;
+        Sun, 12 Jan 2025 06:26:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736691919; x=1737296719; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736691963; x=1737296763; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EBjVaClL6WFVbusP2/xv1jX9mWhdlAzc6iu2Wxm6VBk=;
-        b=DLPvSN1UnudvskcSTWmoveI0QZAmi1VGP7/zqoT2T4dQfr20/RddsiHxcDtYQvRjXT
-         ULfYkwoJKeXb1E+xcq+0a7UPNEtRiVNGN8WVfuvB6iUpggg349HBflNWfX4h9hesGITo
-         Crf3jGgz1sTJDpF8juGyOhqwGBizodM0TCJ4FxXl2UoyCgFL9ZB4uBjrxdogMwClZKlo
-         A8No90zN1nrc14ImsWVhpIJ1PzKwzmVeDLBcoN18yARNKxAW3/hynE0Ghm9+RpVgS7Gm
-         IIsKzb7dj45S9Aw0jOJjdW5qUEOTkkcEvlTfxMUu5fXkkuLsC3XFRnD79ZigxT2MDIy1
-         2hjw==
+        bh=H5bMDX8q19uef4bYaJh6I2X1vbdsTGXD6Hqw3SfElNE=;
+        b=BXfPxNyHBiJyAMCamduT8zMRvhHncfmSyY5cjRuz9FVLNPPrKKZlSIsHBYCRWUW2K4
+         O8lK30dNyd5sHG7mcfB0wJ8NwGbwMSi96Rj+sTS13R4sUWhUEUXXun3LH/KA3KiuKFvE
+         tQOGawthaCz2Kw9MLGcmk3YywG2H4yuWfyEEx9m1bSCMPccTn09+/bUdqq+ngMpbK43L
+         A59zQ/B5zqPQKhA2ArWp61rHJF0NzllmU/SgiJhNFyCQUlk4UNlcd5IKM4gMNVnyGuVz
+         3SPOwiwByYdMeBocosGpqrihfVgSoa1bHRr3IpJioaaMl0w3ekSxxbHtub91ibjpeDB9
+         iCxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736691919; x=1737296719;
+        d=1e100.net; s=20230601; t=1736691963; x=1737296763;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EBjVaClL6WFVbusP2/xv1jX9mWhdlAzc6iu2Wxm6VBk=;
-        b=azPgI0kQpeqBkRcqjnZtyJGwXFQQEKWVDTos1hnNFG6QU8Glg35KJHRZxChVUn0ye6
-         uduweQb5DBBveRd+Axqz9qnltsXrRIL7zoNWVMGJ8z9sUARPKgPdF/M6DmfJBOs4Ow25
-         6qH3CzKykKJxpVNr5KFhoPWqWRQkxT/bXmctX0SfssjQqPgRS+7aOcFxbCRXKE5Piiu0
-         MHBl+mi49ZjSQNtPDkM9tCLKyTz16TrRma1wCRNGZa0RrqteTjA+krY0rS8zHjxnBCtp
-         uKrVzYw6Z/vClrlX3Em/Z1Sk6oBP2aEFq/W92p10zO94yKKVFKYxCYZZ+r1afLYkzx4t
-         v+GQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVXjxTIGYD54LYlMu069GcxMnSLXt0rjH1KFibUMq1NNiP0mjf+i0sYrl+DTL4EuartqkbzoVEsErAy5sjP@vger.kernel.org, AJvYcCWdJQwl8TTdX4mNpOoBQf1m7aEMkB81zte+8gkI1OOt9xYQwtUKSySsgQ5zue9mLC5X9ks7G9BeLsM=@vger.kernel.org, AJvYcCXGfxi+Fb95hPJnMA6TRoRFkTujTGawv9ub7u5a5f9A0VU1nQffp5VWk/YQ5F+i6tq0LkrIXrCg1YsGQ7iWA8bItvQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrYxVTimp7+xD2/bPbUoJpzjjQuairyHMn0ikVA5tFKoDN+VUp
-	d6ns/IPZ1jYtQsZZiTvcGYazxmwAo5JDBUj0hpuHGNve6H1vAx/T/oBtUxRpunf+lZQ3njf2WxQ
-	giPXRqALrvN+NNBY623/1pGdaCUjEtfCm
-X-Gm-Gg: ASbGncttuNZnpqSd/vIexaHkfEIV6M/nXpNigXQuRp1FnjpyMihy2mkLsIMp+vq7zKM
-	RMLI+MpJuMhhVwmHvj3vpZ9fhMuFFJf1YF+fg1Q==
-X-Google-Smtp-Source: AGHT+IFWuE9OUxANf5rI/jbrrwuOA0ZyyQ5nVQrYq07A3JpUuSnmBZagtgSp1iJ8ZrKv1GWp7QERTFYq9F+WsDwz5oE=
-X-Received: by 2002:a17:907:7e81:b0:aac:4324:977e with SMTP id
- a640c23a62f3a-ab2ab73b67dmr1412130566b.27.1736691919183; Sun, 12 Jan 2025
- 06:25:19 -0800 (PST)
+        bh=H5bMDX8q19uef4bYaJh6I2X1vbdsTGXD6Hqw3SfElNE=;
+        b=IfhciedG8EEPqin1F3b8eUl4vNcGodK3HDW4bb5c2mQIPyxF9LUWUqEE2kqYTB9Zaw
+         CdC5mXlktmhXE2diiWrTy7/KvJQfvEciolmvBrC8cQMWGp66AIVFerT2FbgRVQTxL4Rp
+         Z83b7twe8I3LKC55bb8gLoB3QiFus0OK9PRDQYspGqb9e5WplHNAua5qiBOM5hiekwm5
+         meR//ZIje+unvmoLMpC+zx3+CP1QHjHlg2BT6DQILCF0QwYLi9+J79vWiSU8GWliH0aa
+         Jj6gPjZt6+KopWDANDuPLKvoHzvkuLzcG0cqB3Ii2JCu+X9qWXP2+5LDUdSBBwZgIFDj
+         1NWA==
+X-Forwarded-Encrypted: i=1; AJvYcCUnXt/U5vY0iEaGiAokCV/kg4jTSbR5W3wQ8ZhTS2wwFPQd7JmSPC4R2dltvt96aL75Gz3i3mqLmPvdAfYxzrWEEPQ=@vger.kernel.org, AJvYcCWnxIuCBa5OoYAidcFZTYE5P0kqld+xorWjQlRYBtgqx0KPhIkLgd0ImPWLCpQY7BA/fPezDoiycpo=@vger.kernel.org, AJvYcCXa97X9pLcCqSXyaXCWt+JppZ+nL3zTgFAVb5z4+Pi0Oykc6p/N5CoIKEsDsVGgnJaSQkNhLKfBJGD8I1Nz@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAfn28M0ttF2ne3Gyx6pgwDsCMMuopVNK3+IZsM94TkWRLyQMY
+	dtAzeDpf3gY9IvFCUoGBADPzo4toLYogG8FC17g/RHwC03L1jhzQ4onTmnB6wqxdXdU/nk2D2EB
+	w8tku+AovF0a6gHLy3FRGWQCLdKIhTqm4
+X-Gm-Gg: ASbGnctXMDHXcJU27B0i9WMP9AzdaJvQ6T/SS3fnDvGXbD/R1KFVfw6ml3ufXjo44kF
+	16e+7TQ9WGPAm2GAJOZOz+xKh2YYPeLGAr5JxnQ==
+X-Google-Smtp-Source: AGHT+IHbo/90Wso/3AlBA0aAMsc0fHXlAFU/aZUOSdZ10hlUPH9Gwx+/vfci6AMq0Lc1fWNnwnYttODb/FlF6O1nUGk=
+X-Received: by 2002:a17:906:7311:b0:aa6:bcc2:4da1 with SMTP id
+ a640c23a62f3a-ab2ab6a84c8mr1420433766b.7.1736691963254; Sun, 12 Jan 2025
+ 06:26:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250103091900.428729-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250103091900.428729-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20250103091900.428729-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20250103091900.428729-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250103091900.428729-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250103091900.428729-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sun, 12 Jan 2025 16:24:43 +0200
-X-Gm-Features: AbW1kvZkxM5hLy7H5F77RdIe_rWnniWx81cp4Vl8ae6o2Q4qNcP8N0dLxrYzM8o
-Message-ID: <CAHp75Vff+S6Cx4VqJ_TEGvbQNN_ZTV15fK-+B8A82qR9LsTEZw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/9] i2c: riic: Use BIT macro consistently
+Date: Sun, 12 Jan 2025 16:25:27 +0200
+X-Gm-Features: AbW1kva-Ec5KBYUZOQENkqE_-SX8z39kscjsKiukxPWnXSMFptR2u60pIC4qZyI
+Message-ID: <CAHp75VcQ34VzMt6c-MDRQKtiPTgN9DE1ZkC-rOa8GM6kAp4nYg@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] i2c: riic: Use GENMASK() macro for bitmask definitions
 To: Prabhakar <prabhakar.csengg@gmail.com>
 Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
 	Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
@@ -97,21 +97,14 @@ om> wrote:
 >
 > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> Easier to read and ensures proper types.
-
-ensure
+> Replace raw bitmask values with the `GENMASK()` macro in the `i2c-riic`
+> driver to improve readability and maintain consistency.
 
 ...
 
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/reset.h>
+> +#include <linux/bits.h>
 
-> +#include <vdso/bits.h>
-
-Please, don't include vdso/* directly in the code that has no
-relations with VDSO.
-Use linux/bits.h.
+This will be part of the previous patch.
 
 --=20
 With Best Regards,
