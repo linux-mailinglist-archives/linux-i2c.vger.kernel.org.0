@@ -1,169 +1,119 @@
-Return-Path: <linux-i2c+bounces-9028-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9029-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9C80A0A48D
-	for <lists+linux-i2c@lfdr.de>; Sat, 11 Jan 2025 17:05:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE45EA0AA00
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Jan 2025 15:25:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6DE93A9866
-	for <lists+linux-i2c@lfdr.de>; Sat, 11 Jan 2025 16:05:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B7E27A367D
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Jan 2025 14:25:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57E13192589;
-	Sat, 11 Jan 2025 16:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C671B81B8;
+	Sun, 12 Jan 2025 14:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G19Vb8ut"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DLPvSN1U"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE55C14A4D1;
-	Sat, 11 Jan 2025 16:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D2D29CA;
+	Sun, 12 Jan 2025 14:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736611536; cv=none; b=gkOHLI5T+ZMGCkSRCrts1ksQ+l88v22feu8KbADcOWDwMj8nLIsajdgixzzUCtNDc5xZVGqSdzxiLqZT1OpF8V+bSf8UxBCzqJ89oRbbCro3mFIn+hIbcNxpdaE0Xho7n7wWTsW84Trq3luVj/OAylehxNMLPnx4KS60UEholDU=
+	t=1736691922; cv=none; b=onK13C1ZcOM4RacPiTCfkzxIfixFarqOlejpqvpXQWWnzARWBhhimcQ106fVGzM3otj+W4r+ZjAXyYOrnbEq8MOEP1KZVbd+s1CQM2Il5UI1rpKwo2Pa6wPV06U9dTfQujHPnZtA7Nb6qDY42jX1FvGuY4gTS0ZnzSTTNE54zWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736611536; c=relaxed/simple;
-	bh=gexsX31ZUC+DOxnFtCksHO7C6pi0kMNmxcbuMdT+BEI=;
+	s=arc-20240116; t=1736691922; c=relaxed/simple;
+	bh=dEW/UrPBd5B4wYsB+D0Jq/PZ/e1zbmaic0vzM7BQiOs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=djqAPyGoPv73urfCTE63LzQNCi7c0vbhnSx95NT8ZCNxDtJh36hcEmoGYXgsNRbEXuFLiLRMzpnVqL2nleaJ/yr3PCXiD+01KW8BBoXrth3QR4+mryF20i3QNfkrrgbjYduh/st3Q35xZlR6chAa430OvhnVSY8ksYQv21vUPWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G19Vb8ut; arc=none smtp.client-ip=209.85.216.46
+	 To:Cc:Content-Type; b=sIqvXFbnS2xmxJOqMQ6S2zrHd/xrAjqyGWohl3si0vjk5+/0metPZvDGuc9OPowUxzBjcvpf0jG9KTy5co5m++ekx5DvYI5BlIr9gGiKfuQeVvGcTdb/NzTfJkiCI2xTIsBbf+LMbO2EXZIPBamZuZsTy3SQTxgMfBaXZ0ORuWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DLPvSN1U; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2eed82ca5b4so4905589a91.2;
-        Sat, 11 Jan 2025 08:05:34 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aa68b513abcso622015566b.0;
+        Sun, 12 Jan 2025 06:25:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736611534; x=1737216334; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736691919; x=1737296719; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gexsX31ZUC+DOxnFtCksHO7C6pi0kMNmxcbuMdT+BEI=;
-        b=G19Vb8utPSpMVUyWWS1fCCVyqd3lSzC5NwwU3BOo9A/DvHn0xhNHmlNf2/9d3pM5/z
-         ydbbVJpLt4BE+d1TfKWWqYeGTGqkOifCJyZgNMKnotHyUWyTes6GJz2Vc9pT0BYp6bdF
-         PEjFjTH4xKhhlv3U2Mxb7gT4cX2efQl6QNnQlm0c8T+THuCpZOxVwjFCAqo1qP1pc8V7
-         gmIfJAeniHhU1r+FOk+GSlyufPNRt9JB9MpN10s3+rQ6rZB/rn0tdfB1X0fRtLH9RjmM
-         eUuan1EbcsKyWx2PkaAlqOZ9pl5P1M8BbD6OeXTExypeeaPo6tCgga4VnzXO8QUJTeBr
-         jfWQ==
+        bh=EBjVaClL6WFVbusP2/xv1jX9mWhdlAzc6iu2Wxm6VBk=;
+        b=DLPvSN1UnudvskcSTWmoveI0QZAmi1VGP7/zqoT2T4dQfr20/RddsiHxcDtYQvRjXT
+         ULfYkwoJKeXb1E+xcq+0a7UPNEtRiVNGN8WVfuvB6iUpggg349HBflNWfX4h9hesGITo
+         Crf3jGgz1sTJDpF8juGyOhqwGBizodM0TCJ4FxXl2UoyCgFL9ZB4uBjrxdogMwClZKlo
+         A8No90zN1nrc14ImsWVhpIJ1PzKwzmVeDLBcoN18yARNKxAW3/hynE0Ghm9+RpVgS7Gm
+         IIsKzb7dj45S9Aw0jOJjdW5qUEOTkkcEvlTfxMUu5fXkkuLsC3XFRnD79ZigxT2MDIy1
+         2hjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736611534; x=1737216334;
+        d=1e100.net; s=20230601; t=1736691919; x=1737296719;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gexsX31ZUC+DOxnFtCksHO7C6pi0kMNmxcbuMdT+BEI=;
-        b=F/HpUBaYyV+l1jbmdjqUW7nbiu6Ry7CFgkPpNXF5XHE5Eju4gGBGA/J0zlqVej/ZIy
-         J0CunzRRWmtcl46vrwnkw8qVneDRApIEIvQnOYAvooNy2hJNkNCOjhOLovrQWjyiPGkJ
-         rbBynZOrsQ2BKp0INJwxcOMAMbHKiIcQ8v/9rC0xvkrpSpdt+gMLR+U6HJ/TS3MAIjbj
-         2yZAFiob6RD299KzMcoyYI0J+ZK8yMFgK23AS14lI0t5OsWGB5aOrp9+xQ6YI7pRhrgd
-         xyxZgg/fl/9MPSYqRXEzpkXnOANU2TpuMua3d8Yx0OtvyAl3a6GkBwiuXg2hvtRTrI4T
-         dc+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXJ/J8DaK5nssm/CPiBMqHmrf1Hmzgdkn/AvBnqFt0Dkzsp+KWNgP4vP2vC769kmhAcToaeYVlItalW@vger.kernel.org, AJvYcCXVKyuBGZQnlO86/m0bEVPeIOx8HZwIXEBSDeDG9ZsiruDP7s44MMFZOMFwTOviqMk6xfKnK/M5tDhu@vger.kernel.org
-X-Gm-Message-State: AOJu0YxefSQ+ZBoXy8biTaivr6Kdkd8wo9d5zW6dy+GkJ7hafP8upoAp
-	qrK7VRI0Z9Z7My4sXCacKlbWghGiyAF+bKsLXukXuxxWOZpgWqKofMtK+qRQ+Yshv+os3KBOxI4
-	jkztL7GHTYqt/3hItc+aYSj89ziNMUnwZ6q4=
-X-Gm-Gg: ASbGncvfyMS8FTI+N+zhpwgKDWz1ceTn6Lt0uMcj2R/TyL28SUTjW6aqWxK5ykayc30
-	dSdbFkiJNV0GlUL731De2yJJZxtbKTjkAAV7pFg==
-X-Google-Smtp-Source: AGHT+IEUc2lqPjmDsXIuUlfZ0Dnb1v5YbUDqiQOkCaBeNBuixeJU+0W8+OtcwHvMwjwrXIMeTFsXSWTPEpf3GrPWK3A=
-X-Received: by 2002:a17:90a:d448:b0:2ee:d63f:d71 with SMTP id
- 98e67ed59e1d1-2f548f2a85cmr23406906a91.14.1736611533940; Sat, 11 Jan 2025
- 08:05:33 -0800 (PST)
+        bh=EBjVaClL6WFVbusP2/xv1jX9mWhdlAzc6iu2Wxm6VBk=;
+        b=azPgI0kQpeqBkRcqjnZtyJGwXFQQEKWVDTos1hnNFG6QU8Glg35KJHRZxChVUn0ye6
+         uduweQb5DBBveRd+Axqz9qnltsXrRIL7zoNWVMGJ8z9sUARPKgPdF/M6DmfJBOs4Ow25
+         6qH3CzKykKJxpVNr5KFhoPWqWRQkxT/bXmctX0SfssjQqPgRS+7aOcFxbCRXKE5Piiu0
+         MHBl+mi49ZjSQNtPDkM9tCLKyTz16TrRma1wCRNGZa0RrqteTjA+krY0rS8zHjxnBCtp
+         uKrVzYw6Z/vClrlX3Em/Z1Sk6oBP2aEFq/W92p10zO94yKKVFKYxCYZZ+r1afLYkzx4t
+         v+GQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVXjxTIGYD54LYlMu069GcxMnSLXt0rjH1KFibUMq1NNiP0mjf+i0sYrl+DTL4EuartqkbzoVEsErAy5sjP@vger.kernel.org, AJvYcCWdJQwl8TTdX4mNpOoBQf1m7aEMkB81zte+8gkI1OOt9xYQwtUKSySsgQ5zue9mLC5X9ks7G9BeLsM=@vger.kernel.org, AJvYcCXGfxi+Fb95hPJnMA6TRoRFkTujTGawv9ub7u5a5f9A0VU1nQffp5VWk/YQ5F+i6tq0LkrIXrCg1YsGQ7iWA8bItvQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrYxVTimp7+xD2/bPbUoJpzjjQuairyHMn0ikVA5tFKoDN+VUp
+	d6ns/IPZ1jYtQsZZiTvcGYazxmwAo5JDBUj0hpuHGNve6H1vAx/T/oBtUxRpunf+lZQ3njf2WxQ
+	giPXRqALrvN+NNBY623/1pGdaCUjEtfCm
+X-Gm-Gg: ASbGncttuNZnpqSd/vIexaHkfEIV6M/nXpNigXQuRp1FnjpyMihy2mkLsIMp+vq7zKM
+	RMLI+MpJuMhhVwmHvj3vpZ9fhMuFFJf1YF+fg1Q==
+X-Google-Smtp-Source: AGHT+IFWuE9OUxANf5rI/jbrrwuOA0ZyyQ5nVQrYq07A3JpUuSnmBZagtgSp1iJ8ZrKv1GWp7QERTFYq9F+WsDwz5oE=
+X-Received: by 2002:a17:907:7e81:b0:aac:4324:977e with SMTP id
+ a640c23a62f3a-ab2ab73b67dmr1412130566b.27.1736691919183; Sun, 12 Jan 2025
+ 06:25:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250105083358.GU3713119@black.fi.intel.com> <CACHtJB94K5OLdHgs8dDj4jDBtZmsdymovboCcJJUt5OkD8o+Mg@mail.gmail.com>
- <20250107072746.GW3713119@black.fi.intel.com> <CACHtJB-4UGaqKw5zZjE_vPeYX+bMUMiHPNfNYzD6Wmv6jdAuhg@mail.gmail.com>
- <20250108055150.GY3713119@black.fi.intel.com> <CACHtJB-33Pgoj0xORt75G0=cyoKem_K=Dfeg0iQNow18v2sV6Q@mail.gmail.com>
- <20250109111910.GD3713119@black.fi.intel.com> <CACHtJB9XeGBhg9de3Y0DkHKBUD-i=rKi2bEi93tv3jjz+LZ=_g@mail.gmail.com>
- <20250110112623.GF3713119@black.fi.intel.com> <0151b609-98d9-402a-b553-c9af5b0eb51f@linux.intel.com>
- <20250110120740.GH3713119@black.fi.intel.com>
-In-Reply-To: <20250110120740.GH3713119@black.fi.intel.com>
-From: R Ha <rha051117@gmail.com>
-Date: Sat, 11 Jan 2025 10:05:23 -0600
-X-Gm-Features: AbW1kvagOXDI_QDqPegI9r6Z4CwrDal30lqfC3WApNGxladdwp03ni3RRpMwBUU
-Message-ID: <CACHtJB-mXYAkmPLT1bV-wZR-3SGfS8R8Wo3i2qUio8a7AmcZtw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Force ELAN06FA touchpad I2C bus freq to 100KHz
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>, wsa+renesas@sang-engineering.com, 
-	linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org, trivial@kernel.org
+References: <20250103091900.428729-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250103091900.428729-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250103091900.428729-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Sun, 12 Jan 2025 16:24:43 +0200
+X-Gm-Features: AbW1kvZkxM5hLy7H5F77RdIe_rWnniWx81cp4Vl8ae6o2Q4qNcP8N0dLxrYzM8o
+Message-ID: <CAHp75Vff+S6Cx4VqJ_TEGvbQNN_ZTV15fK-+B8A82qR9LsTEZw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/9] i2c: riic: Use BIT macro consistently
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Chris Brandt <chris.brandt@renesas.com>, Andi Shyti <andi.shyti@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-renesas-soc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-I updated the description, please let me know if it's covered everything.
-
-Just as a question, because the touchpad works well at both 100KHz and
-1000KHz, is it better to force it to 100KHz or 1000KHz? I was
-considering that the Microsoft docs [1] specified that the frequency
-should be "no less than 400KHz", but didn't change it for now because
-the touchpad feels the same at 100KHz and 1000KHz, including for
-gestures.
-
-Is it possible that there will be any sort of compatibility issues if
-the speed is set to 1000KHz? From what I can tell, the only other
-device on I2C1 is the "Intel Smart Sound" related device, but I'm not
-exactly sure what that does or whether it will work at 1000KHz. The
-sound output itself seems to be unaffected regardless of the
-frequency, though I don't think the other device is directly related
-to sound output.
-
-[1]: https://learn.microsoft.com/en-us/windows-hardware/design/component-gu=
-idelines/touchpad-device-bus-connectivity#acpi-table-entries
-
-On Fri, Jan 10, 2025 at 6:07=E2=80=AFAM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
+On Fri, Jan 3, 2025 at 11:19=E2=80=AFAM Prabhakar <prabhakar.csengg@gmail.c=
+om> wrote:
 >
-> On Fri, Jan 10, 2025 at 01:45:03PM +0200, Jarkko Nikula wrote:
-> > On 1/10/25 1:26 PM, Mika Westerberg wrote:
-> > > Hi,
-> > >
-> > > On Fri, Jan 10, 2025 at 02:31:26AM -0600, R Ha wrote:
-> > > > Hi,
-> > > >
-> > > > Sounds like a good idea. I'm a little worried I'm missing something=
-,
-> > > > so I think being able to check my earlier answers will help as well=
-.
-> > > > I'm sending the entire output as attachments, but let me know if it=
-'s
-> > > > better to upload them somewhere and paste the link instead. Some of
-> > > > the ssdt* files are missing, but they're empty files so Gmail won't
-> > > > let me attach them.
-> > >
-> > > Thanks for sharing! Okay checked now dsdt.dsl (the other files are no=
-t
-> > > relevant here) and what I can tell the device is supposed to be run a=
-t 400
-> > > kHz. I suspect this is what Windows is doing as well, there is nothin=
-g that
-> > > indicates otherwise.
-> > >
-> > > And since this is a standard I2C HID device it should just work (as i=
-t does
-> > > not require any vendor specific driver even in Windows).
-> > >
-> > > Only thing I can think of that affects this is the LCNT/HCNT and SDA =
-hold
-> > > values of the I2C designware controller (and maybe the input clock) b=
-ut
-> > > there is nothing in the ACPI tables that set these so it could be tha=
-t the
-> > > Windows driver uses different values for those and that explains why =
-it
-> > > works better there.
-> > >
-> > > @Jarkko, do you have any input here? If we cannot figure a better way=
- then
-> > > I don't see other option than to add this quirk.
-> >
-> > Unfortunately I don't have idea.
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> Okay thanks anyway! Then I don't see any other option than adding that
-> quirk.
->
-> @R Ha, can you then submit a new version of the patch with the latest
-> details in the changelog?
+> Easier to read and ensures proper types.
+
+ensure
+
+...
+
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/reset.h>
+
+> +#include <vdso/bits.h>
+
+Please, don't include vdso/* directly in the code that has no
+relations with VDSO.
+Use linux/bits.h.
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
