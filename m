@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-9049-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9051-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7377A0B6E7
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 13:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EE396A0B6E9
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 13:28:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFE7E16214D
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 12:28:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04B951623DA
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 12:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87CD223A564;
-	Mon, 13 Jan 2025 12:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A960E23A59E;
+	Mon, 13 Jan 2025 12:27:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k7156tSE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="diG434a+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4D2235BED;
-	Mon, 13 Jan 2025 12:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A26239799;
+	Mon, 13 Jan 2025 12:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736771225; cv=none; b=q3EPWn673Qho7J3R7hazd3H3JTszjjnAnUBGvOz0Lk5GG77dQpeFRQ6PBgnqpoUw50gohA3tJKEB9I7Rifs0k4Rh0oPsq0ENgaeMYqWMOEquQmwcIQmEET/C5wDFw+Mdcs2eMT5Nji8P/OotBdPdRfbSCNPk3hQ6cMRWXBp69yw=
+	t=1736771226; cv=none; b=gOq+XZ1aBcCpCBBhNAVbRKbAFSezO+ejFVMdWzoYDSvRK59qfFysPPrEyq8Wfrq6+MJEawXjiyLdQ5KpqMiGvrtdu1YvMybYEbevicFF4lB3jKlTzTTzV1yHdLlkRR77WfBL9drPxRISO2DEZnQjlcAEQG0oXTfim+cBhmhMa94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736771225; c=relaxed/simple;
-	bh=J9hyRBKSuXe8hqhiAoUA3WRKFV5ZyRq8cJJ8EI+szls=;
+	s=arc-20240116; t=1736771226; c=relaxed/simple;
+	bh=kxkVdWLNWABkMrhQXDHs8153xINcmHXb/kPLxxUgWhc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QfYjUIbmmuQhfV1irrk1v0Eb/5tVqR0hnMi4bMxlYAR08cmiPZxtZwiD6EywPfevTucT+lhX8zyZ9KWds0FsyskfClHieLJOUDZbznfMMgoGg+nUwdGo5//rXRXsm8jFHvu/UJMXiP74THOzRUTmckVDrkjmQ57s9W1z2pEMGDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k7156tSE; arc=none smtp.client-ip=209.85.221.44
+	 MIME-Version; b=QOsTAyQP7OIZ5wk/pPzi1dEdM8VvR4iM9ymSMFrj+oEy2g9H9zO/jrr7+y9vI9N1NVxlixdA9JZvtcokxOnPNFpusIlzYj4L9z2fS3xsdUuV8u1ZQ2fk10vRh3/Bm7AwBXjgERrjQc2Pqme5I2eN8Ll0LsA2+PVoc1glDtQmX5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=diG434a+; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-385ef8b64b3so3656713f8f.0;
-        Mon, 13 Jan 2025 04:27:03 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-436202dd730so29766455e9.2;
+        Mon, 13 Jan 2025 04:27:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736771222; x=1737376022; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736771223; x=1737376023; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JwlrU1/L4OoVV250darEN+AvnT2p06BYtepXz4Se2OE=;
-        b=k7156tSEtY8eE1t/IVqJltlcubA8LnyEp/DGob24HZgZM0qrbmRBHSkvyoIAE5/HYy
-         rDm3XsuW0UQBnmp2LaIWzvj+wplCFXlyHwHHnpIit5Q5mg6zZFBTX8I5lK496JNPSyJG
-         wtNLyTn4x26haQjBeWUtD2TZkwT+E+ahyr2ql8UX/YJoneNiMGJs/y3FkxrnnBHSvovD
-         y3l6Cx2tXhDZSNt6TrpaeEXB4kcJapIbs5yMLP5xcuQGnqzJUSJgdDXdNBeCnqRniov/
-         c1JvAl/8POsiq5RrKmOfB/pnh0CReAF0ktPLNq3xv6P+ig8uAteHNg0uhsBTf26KaFZ5
-         ikpQ==
+        bh=Ep0KfFAO2kailNpwGXc9iLyPxYa9AKLwF9zXOgKPL94=;
+        b=diG434a+9zVeYf4ZIwXWFqBIi2NptFA8Tnoa/zHPqVmmX51rTqFXGcQ+OOmnKWr7/N
+         bcBT8Oopj7abQ+vkoEYQ2g2IR8KLCDjbdf6fBvCvx+szTZs1Oz8QylbWuaGUwCtGQJ6f
+         YL8xur3QSTkCXK0dxqyJLwN1lH0eiWIYsv1NNe7V+yI9meP8WeTqTQflNRcDEl1810dA
+         aMhVlDOyciMHFnR2tbilw8R7/yOVo5SXQRgJcuDC5PFQeVEpBw0f2/1fY5ZYoTKQKheb
+         zHgbw31fUA05ioPScrWWHxB5GvCQSgbyx6KNdBgfLfx33w0lKe8yFZmVBQ+0zMvg8lNL
+         zcZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736771222; x=1737376022;
+        d=1e100.net; s=20230601; t=1736771223; x=1737376023;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JwlrU1/L4OoVV250darEN+AvnT2p06BYtepXz4Se2OE=;
-        b=fAv7uvhteunOX2F6E9k6pjApIgTYAzsBsuHWblO5py+K6ubQ5CyIbU7KXFlseLOTtj
-         0M412Pol3x3EFMz8JpKFniNJApdxNse5A26bg0/WlTUM9ZE8f6og6IhtGEMWcFsohDWU
-         TcM1FB6LpUXG/CXafvh5/VM4DtJ5vtDVXkeFGPW6B7q5MScRqBKcRlNkuW0RWViAJspC
-         yO+g09kTaPYeKnvRQPX/sjOQLvTnPpndT/lPXRvC660mM7XQdlM3P3BChGWwNjRKfZYT
-         JPrn4By2FNV1/nsOt/c2YCoI3wBza+9WANLDAyPsrcthfObtdOE4dG6MD0rDyZ6s8pDM
-         J9rw==
-X-Forwarded-Encrypted: i=1; AJvYcCWXLt2PtiDhXfz4uSWMjyf/f3eiXLML4E4yPxhgadMSeUfVYAggKriAu3cprjlgb8KuHPomDNWGi4w=@vger.kernel.org, AJvYcCWl9wnPu+xdj4Vi2LekXhlHknSc+qk8ci+hAM5Qg8SOqVAyKhvTfgIp05YkGKOqjBV+eeJ51eSA6lmRBJcN@vger.kernel.org
-X-Gm-Message-State: AOJu0YwojPtCGdg41Jtz585AOA7MMJLDkd21DKbtbHtNAxO8nVzQvff/
-	arN61y/KZBG3IIiVC2fw1ml1zw7vSsw8E6w1ASeAzjoGySvrcgdxz6uXCc4HwiA=
-X-Gm-Gg: ASbGncvau0QO+esxn2HU52McaJ/6WpMYbGdH/0U7bvtKNORmmh83i4M90KJbpSGfQjH
-	T9weJx1SKcU7cLsYYG88y1LRXG0jXI+Am7398IJx20U+8RQGPHeETyDIAaqhatwKdQHqhs+YAap
-	72YJEGAFd1grCuiW3XWpqArGo8seKiw5jTG/Y1D2UNDptYT7Tml01H49D12j0s7gLs2M9VpTK9e
-	sPrXYBRl2Xf/ehECLxESJ6WN2Im2+F67yR6M0lDuqjcNbHnhfMyZZ/eimasBFoj/0UPkwC14Izs
-	tLhWM33RmA==
-X-Google-Smtp-Source: AGHT+IFFobk5AQ2m4K7uPD7TeaYAsYgBxs8uq8w+kSbuaKt94jIejAPw3myughySRCs1PqIrI6LI7Q==
-X-Received: by 2002:a05:6000:4711:b0:386:2d40:a192 with SMTP id ffacd0b85a97d-38a872f51ffmr18082388f8f.34.1736771221625;
-        Mon, 13 Jan 2025 04:27:01 -0800 (PST)
+        bh=Ep0KfFAO2kailNpwGXc9iLyPxYa9AKLwF9zXOgKPL94=;
+        b=MnlEBc+GUdBP4F+pL0l9I3GONyM8v2RthqMwuvdSpFltToPH99rEnNqW2pjNilcrIh
+         6dniBGAIcTTJsAg+Ia44DqMuw7nwsdMRO5RukM1jd657JrcUUhrVGHxp03SoyhKAZdgh
+         Fjy4DU8phz7udyJrohKsQOLiccU53gyE0618zG4s9WWrqeDseBrUCFZ/58PQg2X61jEf
+         XxbRxuYBC/ahECPvvm9R81eYgiGoi8zfO1i/EoYMkra2AQ4+Nb+MKMYkFT42ZyzhqU9g
+         4i9nDL/H2hQ12I48OyPAceksGScrywaEpXbnfzmzcogDSYmBEgkL4NGfVRCl7wcRgoSY
+         lJJA==
+X-Forwarded-Encrypted: i=1; AJvYcCURzyYlztPZ83OdkYW9kdr7lnRFozKQmRJ2MUpSJ7p+Z9X6FCzUAqaFEKfTmNi4e2IluJIEvxQEKOeIDO3+@vger.kernel.org, AJvYcCUxGZ7TZtinU4RdZwPY9yaGPR+TtW8YzU/y+WqGirfyKC+aTtrx7X2r3aRVuh+8lqdND+q457ny+9c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/IDtG7O6iQrkfjLRI7kYVAVnPgjuzTepfHt+RXCw5ksQk8utO
+	orJXetdAhptJl5Cc0JMq9+x6+faQeQAzHbs8rMHCSRpS3ENhlnlLxc1ece3lDrM=
+X-Gm-Gg: ASbGncvETNYpeJpeB+cmrzzUR+no4qfrCAX9Y1z8+W2ecwbypJSoDpUHkDkCv8xS1sE
+	x/eQil4LvYvoSpQsNL/fursOVb/7XcUQx4TfP04SWzfg7WwvK6uqWKYeG60KcqvNyLugPsTbt1/
+	mMcsjaIxOdH+rIqoqbp7ufez74mPKj0Z8SfD/gn/UyAqZBg9+gy3cr2EeUumDOtDIX0npxbLZXU
+	XdYcALZSqUdSnnp1GTk0FUeyST72H+ZGR5vTqPVw5zSblMV4Z8+WjNEn/k4kvTagkvzoI61Ef7X
+	BGMGqF2jRQ==
+X-Google-Smtp-Source: AGHT+IFsgLgEBrMB7TTIJ/qjyTgtk19I+bBa9GftLkpjygWN6k7hLa5OVQFYWM3xH/JzRmnhoP+0xA==
+X-Received: by 2002:adf:9787:0:b0:386:3e48:f732 with SMTP id ffacd0b85a97d-38a87303f5dmr15132911f8f.16.1736771222734;
+        Mon, 13 Jan 2025 04:27:02 -0800 (PST)
 Received: from prasmi.Home ([2a06:5906:61b:2d00:acc9:404c:3a6c:d1aa])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4c23dcsm11812720f8f.101.2025.01.13.04.27.00
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4c23dcsm11812720f8f.101.2025.01.13.04.27.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2025 04:27:01 -0800 (PST)
+        Mon, 13 Jan 2025 04:27:02 -0800 (PST)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Chris Brandt <chris.brandt@renesas.com>,
@@ -86,11 +86,10 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Prabhakar <prabhakar.csengg@gmail.com>,
 	Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v6 07/10] i2c: riic: Mark riic_irqs array as const
-Date: Mon, 13 Jan 2025 12:26:40 +0000
-Message-ID: <20250113122643.819379-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v6 08/10] i2c: riic: Use predefined macro and simplify clock tick calculation
+Date: Mon, 13 Jan 2025 12:26:41 +0000
+Message-ID: <20250113122643.819379-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250113122643.819379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20250113122643.819379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -104,21 +103,23 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-The riic_irqs array describes the supported IRQs by the RIIC driver and
-does not change at runtime.
+Replace the hardcoded `1000000000` with the predefined `NSEC_PER_SEC`
+macro for clarity. Simplify the code by introducing a `ns_per_tick`
+variable to store `NSEC_PER_SEC / rate`, reducing redundancy and
+improving readability.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
 v4->v6
-- Included RB tag from Wolfram
+- Included `linux/time.h`
+- Included RB/TB tested from Geert and Wolfram
 
 v3->v4
-- No change
+- Switched to use NSEC_PER_SEC instead of NANO
+- Updated the commit message
+- Dropped the RB/TB tags
 
 v2->v3
 - Collected RB and tested tags
@@ -126,22 +127,51 @@ v2->v3
 v1->v2
 - Collected RB tag from Geert
 ---
- drivers/i2c/busses/i2c-riic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-riic.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index 577be1fb941e..d1768b38b12d 100644
+index d1768b38b12d..aa3e4f430b11 100644
 --- a/drivers/i2c/busses/i2c-riic.c
 +++ b/drivers/i2c/busses/i2c-riic.c
-@@ -415,7 +415,7 @@ static int riic_init_hw(struct riic_dev *riic)
- 	return 0;
- }
+@@ -46,6 +46,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
++#include <linux/time.h>
  
--static struct riic_irq_desc riic_irqs[] = {
-+static const struct riic_irq_desc riic_irqs[] = {
- 	{ .res_num = 0, .isr = riic_tend_isr, .name = "riic-tend" },
- 	{ .res_num = 1, .isr = riic_rdrf_isr, .name = "riic-rdrf" },
- 	{ .res_num = 2, .isr = riic_tdre_isr, .name = "riic-tdre" },
+ #define ICCR1_ICE	BIT(7)
+ #define ICCR1_IICRST	BIT(6)
+@@ -313,6 +314,7 @@ static int riic_init_hw(struct riic_dev *riic)
+ {
+ 	int ret;
+ 	unsigned long rate;
++	unsigned long ns_per_tick;
+ 	int total_ticks, cks, brl, brh;
+ 	struct i2c_timings *t = &riic->i2c_t;
+ 	struct device *dev = riic->adapter.dev.parent;
+@@ -376,8 +378,9 @@ static int riic_init_hw(struct riic_dev *riic)
+ 	 * Remove clock ticks for rise and fall times. Convert ns to clock
+ 	 * ticks.
+ 	 */
+-	brl -= t->scl_fall_ns / (1000000000 / rate);
+-	brh -= t->scl_rise_ns / (1000000000 / rate);
++	ns_per_tick = NSEC_PER_SEC / rate;
++	brl -= t->scl_fall_ns / ns_per_tick;
++	brh -= t->scl_rise_ns / ns_per_tick;
+ 
+ 	/* Adjust for min register values for when SCLE=1 and NFE=1 */
+ 	if (brl < 1)
+@@ -387,8 +390,7 @@ static int riic_init_hw(struct riic_dev *riic)
+ 
+ 	pr_debug("i2c-riic: freq=%lu, duty=%d, fall=%lu, rise=%lu, cks=%d, brl=%d, brh=%d\n",
+ 		 rate / total_ticks, ((brl + 3) * 100) / (brl + brh + 6),
+-		 t->scl_fall_ns / (1000000000 / rate),
+-		 t->scl_rise_ns / (1000000000 / rate), cks, brl, brh);
++		 t->scl_fall_ns / ns_per_tick, t->scl_rise_ns / ns_per_tick, cks, brl, brh);
+ 
+ 	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret)
 -- 
 2.43.0
 
