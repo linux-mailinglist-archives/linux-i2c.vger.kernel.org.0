@@ -1,211 +1,168 @@
-Return-Path: <linux-i2c+bounces-9036-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9037-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDDBEA0ADA7
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 04:00:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66D80A0AF75
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 07:48:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE6DF3A600B
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 03:00:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F70F1886D20
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 06:48:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8172D139CEF;
-	Mon, 13 Jan 2025 03:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5B78230D19;
+	Mon, 13 Jan 2025 06:48:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msrmVdeE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NzGHpmRG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52C279E1;
-	Mon, 13 Jan 2025 03:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C703122F19;
+	Mon, 13 Jan 2025 06:48:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736737222; cv=none; b=rWGLD+Ik/ca036BVBdCx88tt91VWpGZS7Y+8s8b4RMTsFTiQ4jyxNzcL2lC0g3Ancgu4qVFuIwOHZiGkRUHcaZHBJgARK5q8RfU4nwcHM3do0AfX0zBWu9zJaWIgTxbAHuBIwcAF1IFn3MudHDb52M3yPGzWZMDDLS9hPBq3k8w=
+	t=1736750888; cv=none; b=NehMdX78IBW9+Q8KyYx2G3TuTT2sfFU02iuVgCO615QZTE3omkex2xfrfDZZaFZXUCbMozUwVzdtSaDiSIWC+kiGRYWaFPL50dM3bssXujjsbdc0Lbfye4GfZOZU/FH/9Nt0HRy0D5m4CfIV0G3ctTyyAcmKyppN8BBJzkhu+og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736737222; c=relaxed/simple;
-	bh=vWDv9c+Hb5NFBDqnLC3anS0jUC4B07QypVbhZL/BxTk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pmf+eAJtbIH/LRS8V24RLS3He/IwgfqZL506ztWHylZCrB4fqg/SgCTwMuMrCtb8UqXLm2a2njhg0oVVqYt+7B0Lp0S+QIq73hrZKFXldmyZSsqrhgUQA2V0rRRo9bY5GkvZNtpDiUlUJnWcBwy2FtlLvLbYMqhX8qTPJPBOCJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msrmVdeE; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e3983426f80so5878731276.1;
-        Sun, 12 Jan 2025 19:00:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736737219; x=1737342019; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vHUyb9eNg2JqWHIeEtx4JxxlaEahhQgvricUcB0kaU=;
-        b=msrmVdeEXhgI6OED5WasaszCm5FJkvfwO3V8oini06lN/Mojp3sV8ykJybQRGFQWuS
-         Ew4rAU1R1AUK5pgbno5Nb9RR+bIkn0OW4uJHmQ7s4+rWo6lPX85smR7wyx5j77HZ9aMq
-         twY7tS0SH6tJqpETq5PeX0L7Kg+L3Gvn6n6nY3cNWnkgziJiZ/GHE427Oj8YzvkBuyz/
-         GVJY80AGg0t+ybgFyfDcoiM6yi5Tt089NLddd9HtHC2v4QDZ3BKyQjQZiPwTRSDOxO0H
-         pn6tFJ8vrNY7+q0LNx/aAirs4YN6unnNSLhHvcsZXTepPJAN2MAPfpXycAhj4NpfjnXN
-         Pvug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736737219; x=1737342019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7vHUyb9eNg2JqWHIeEtx4JxxlaEahhQgvricUcB0kaU=;
-        b=qTHphbfIIT1Iq8UwDKRHQ574R1okZ5Z2hcmXyK/XKLbBxk293ek3NIvwHiYEZkdrkV
-         mDKlYRl7iwi15/lr4/bfr2t2f3OAh1SjXJMMIU7lfylitsgKmYZZcdTX0KiRrUojYn+m
-         ZsLR8sAgP8VXyitGejHPZrPve5gDE7o4aS4g7nbqR1ubSAoa3dNUa9Y9ZZ4B4oQuxRDV
-         KUbzrdwi8ugQyHhO/lOrR3cJ/r9KUr3kAM5h4o5HAJW1l2rE53rs0OfjaFl17Whtubse
-         jqrTWs+YEPqegIF3irgAaWl3c1h1xH368c9mc0SGfFBxO8MKyCQVuoxpE3Qj4PsGmoAx
-         UYhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUK0CiXomYykw0fdYj25dDmuoz/DZ4uJO3K2AxyvWTU8flJhvikoOuw9IBPC0ybs/6dyjgORcr/@vger.kernel.org, AJvYcCW0ApG1ciJhKM3IKFIVaRBORJuiwNEbF8++CiaFhPEizgTZcR3fwFxpmu/v0dYxgiQYQ08bJBfXlXlZ+H83@vger.kernel.org, AJvYcCW6EaLrO+tG32JQ0cue501tXWsg4XFhspq3VfT/Kba979fUmpClYRfKlTIk4gl7RifjG5EGhYqreHj+@vger.kernel.org, AJvYcCWMmIrFgET8eIEZlM1xmwg7b73IWmYEzR5ajuUQLOtuqeKNwdaFddDaEDpuhyJEFDRo1SpLo1rufE7Dk536ZAg=@vger.kernel.org, AJvYcCWO+oeLv2sCLPYF6YY2NyFoJfy9kMEMoJ3RejC7We6Ihj74u8nqlX9Slin68afjb0DV87ogDvkEZVwW@vger.kernel.org, AJvYcCWTdxm8p1omKnHHmheTqjL4KsjoQFY/8u3ZWOhgQh24MxzIABD6NgS2ZYgHIV9On3utXfGl9F5cK99sreA=@vger.kernel.org, AJvYcCX20F3YL8xNuL17QBGXdtMQBbKB0AYtjkbbvA+2M78HpK1rqJ5godFBk/fGSYflfzYWfL9oa7XPc3YftA==@vger.kernel.org, AJvYcCXcKAb20c0Lj9IQ0urOd6JsQ3dDTXJbz/FVxlUt5o4TuGW2GWcY3PkPA4U5GJ+ptk9WTukgx65oTCA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxobPcfGrskszvDhj9vf0VjY4IUM9aypLXs2avVgcBTYruQ9wj
-	LxtFSMwhhUXvo4qZIPdlv1kWHt3wMZ3vUbgBuyRqYYJDJxzSIUOrOFe2ZGEwUh3hZL4Zd1BEVPd
-	haJYYAgbSONTloICF8jkoCr0T/qo=
-X-Gm-Gg: ASbGncubp5jZFm15NToKBfk87nrjcXQn9k0H3umDmqmj2WsUvn7eB3GNyJggPD3RGxW
-	cPsN4i9M5JtDr0qFhlTPPD8k4sXoiJDcUX2XkNd85rJHDD4/0ni8b+HDHxdYf3w/5Dkr+M08=
-X-Google-Smtp-Source: AGHT+IGsfoH84Emy/3VAy+2ciT/LDM53GHF7kLpSuNtlkY+mcbIYtSqMBLpJAo2tp5wPRRi4KWOuDrwlzY99kXjwbZU=
-X-Received: by 2002:a25:2104:0:b0:e47:f4e3:87e3 with SMTP id
- 3f1490d57ef6-e54edf25ca4mr10429337276.11.1736737218579; Sun, 12 Jan 2025
- 19:00:18 -0800 (PST)
+	s=arc-20240116; t=1736750888; c=relaxed/simple;
+	bh=LrpF7j9F5VORHOi/E4E5KDMzb5+CgHjpT5r6CxJ9MlA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o5TsMUkPD2u+pucB1ve7sTXJYqeEbdb/aDd3u7VKIqFcS+CZQlKGfEa66Cwxt1AS0lJES+t9i6YW8GRB51E8yt+jGAAv5VEPpQFJ8ihPlWyz7cxl3oX/QgIEPXt91btXRm7m0mm/Y+AqWORc5+xG02OwKYDXaeBjaExycbgyZPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NzGHpmRG; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736750887; x=1768286887;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LrpF7j9F5VORHOi/E4E5KDMzb5+CgHjpT5r6CxJ9MlA=;
+  b=NzGHpmRGonVx2aS4w1nlCg47g1uBPYfojtQOmoHbnPlS5XCdqmjJ1v2U
+   mad6Tbe9iKXyPb096ODGKLQeNbFDLjDkAE4m0M+PsdXmaXRbiFMnKVeUY
+   kmBWbdGGWqBLjxY3O/PjaXAyobQUd62leneHVWi6fA9zMgH6xn5SP8kTi
+   3OGeqd6HrUeqkAyv2zYdReiNUCDm4xHP8/LUmY2AErLr6XL2gfucW5Me3
+   h21cJfngzx28pMka5NWhCH+A41jYveo0KQysp8TWQlv5dAR9T4cOY0diq
+   PYcQokNTrz3rLpV3IDXWBP9KA7T/Zq5ItNQgX+TbCHMSMqDzsCmOrWg/H
+   w==;
+X-CSE-ConnectionGUID: ajVzGisBSpGihFUVAo4Nhw==
+X-CSE-MsgGUID: cszJRacZQnWF8ehPt3oM8g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11313"; a="36877855"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="36877855"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2025 22:48:05 -0800
+X-CSE-ConnectionGUID: kkJvr9eMSWm1LoTkX5NmSQ==
+X-CSE-MsgGUID: oAeUxNv4SyWcFM95Lyksfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="109363319"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa004.jf.intel.com with ESMTP; 12 Jan 2025 22:48:03 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 5F6F2329; Mon, 13 Jan 2025 08:48:02 +0200 (EET)
+Date: Mon, 13 Jan 2025 08:48:02 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Randolph Ha <rha051117@gmail.com>
+Cc: wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org,
+	linux-acpi@vger.kernel.org, trivial@kernel.org,
+	jarkko.nikula@linux.intel.com
+Subject: Re: [PATCH] Force ELAN06FA touchpad I2C bus freq to 100KHz
+Message-ID: <20250113064802.GJ3713119@black.fi.intel.com>
+References: <20250110120740.GH3713119@black.fi.intel.com>
+ <20250111155744.2874-1-rha051117@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241227095727.2401257-1-a0282524688@gmail.com>
- <20241227095727.2401257-7-a0282524688@gmail.com> <20250106135135.GN4068@kernel.org>
-In-Reply-To: <20250106135135.GN4068@kernel.org>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 13 Jan 2025 11:00:07 +0800
-X-Gm-Features: AbW1kvZmveBm_1ZsSzbrQ6SCqOa0J-Y9vxXUkcqQ9J4x_X6pa8sZdwCwcoEMWQw
-Message-ID: <CAOoeyxWvRzHRVLW-U=nemfUpoF5pcO_bDmvg4U-wVqkFp=V=Yg@mail.gmail.com>
-Subject: Re: [PATCH v4 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Simon Horman <horms@kernel.org>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250111155744.2874-1-rha051117@gmail.com>
 
-Dear Simon,
+Hi,
 
-Thank you for your comments,
+On Sat, Jan 11, 2025 at 09:57:10AM -0600, Randolph Ha wrote:
+> When a 400KHz freq is used on this model of ELAN touchpad in Linux,
+> excessive smoothing (similar to when the touchpad's firmware detects
+> a noisy signal) is sometimes applied. As some devices' (e.g, Lenovo
+> V15 G4) ACPI tables do not specify a frequency for this device and
+> some I2C busses (e.g, Designware I2C) default to a 400KHz freq,
+> force the speed to 100KHz as a workaround.
 
-Simon Horman <horms@kernel.org> =E6=96=BC 2025=E5=B9=B41=E6=9C=886=E6=97=A5=
- =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=889:51=E5=AF=AB=E9=81=93=EF=BC=9A
->
-...
-> > +static int nct6694_pwm_read(struct device *dev, u32 attr, int channel,
-> > +                         long *val)
-> > +{
-> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> > +     unsigned char pwm_en;
-> > +     int ret;
-> > +
-> > +     guard(mutex)(&data->lock);
-> > +
-> > +     switch (attr) {
-> > +     case hwmon_pwm_enable:
-> > +             pwm_en =3D data->hwmon_en.pwm_en[channel / 8];
-> > +             *val =3D !!(pwm_en & BIT(channel % 8));
-> > +
-> > +             return 0;
-> > +     case hwmon_pwm_input:
-> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
-> > +                                    NCT6694_PWM_IDX(channel),
-> > +                                    sizeof(data->rpt->fin),
-> > +                                    &data->rpt->fin);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             *val =3D data->rpt->fin;
->
-> Hi Ming Yu,
->
-> *val is host byte order, but fin is big endian.
-> Elsewhere in this patch this seems to be handled using,
-> which looks correct to me:
->
->                 *val =3D be16_to_cpu(data->rpt->fin);
->
-> Flagged by Sparse.
->
+Actually the ACPI tables provide the speed:
 
-Yes, it needs to be fixed to be16_to_cpu(). I'll make the modification
-in the next patch.
+	I2cSerialBusV2 (0x002C, ControllerInitiated, 0x00061A80,
+	    AddressingMode7Bit, "\\_SB.PC00.I2C1",
+	    0x00, ResourceConsumer, _Y53, Exclusive,
+	    )
 
-> > +
-> > +             return 0;
-> > +     case hwmon_pwm_freq:
-> > +             *val =3D NCT6694_FREQ_FROM_REG(data->hwmon_en.pwm_freq[ch=
-annel]);
-> > +
-> > +             return 0;
-> > +     default:
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +}
->
-> ...
->
-> > +static int nct6694_fan_write(struct device *dev, u32 attr, int channel=
-,
-> > +                          long val)
-> > +{
-> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> > +     int ret;
-> > +
-> > +     guard(mutex)(&data->lock);
-> > +
-> > +     switch (attr) {
-> > +     case hwmon_fan_enable:
-> > +             if (val =3D=3D 0)
-> > +                     data->hwmon_en.fin_en[channel / 8] &=3D ~BIT(chan=
-nel % 8);
-> > +             else if (val =3D=3D 1)
-> > +                     data->hwmon_en.fin_en[channel / 8] |=3D BIT(chann=
-el % 8);
-> > +             else
-> > +                     return -EINVAL;
-> > +
-> > +             return nct6694_write_msg(data->nct6694, NCT6694_HWMON_MOD=
-,
-> > +                                      NCT6694_HWMON_CONTROL,
-> > +                                      sizeof(data->msg->hwmon_ctrl),
-> > +                                      &data->hwmon_en);
-> > +     case hwmon_fan_min:
-> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD=
-,
-> > +                                    NCT6694_HWMON_ALARM,
-> > +                                    sizeof(data->msg->hwmon_alarm),
-> > +                                    &data->msg->hwmon_alarm);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             val =3D clamp_val(val, 1, 65535);
-> > +             data->msg->hwmon_alarm.fin_ll[channel] =3D (u16)cpu_to_be=
-16(val);
->
-> cpu_to_be16() returns a 16bit big endian value.
-> And, AFAIKT, the type of data->msg->hwmon_alarm.fin_ll[channel] is __be16=
-.
->
-> So the cast above seems both unnecessary and misleading.
->
-> Also flagged by Sparse,
->
+It's that 0x00061A80 == 400kHz. Linux uses that and I would expect Windows
+to do the same.
 
-Understood. Fix it in v5.
+However, since the behavior is different between the OSses we are missing
+something in Linux side. And because we cannot figure out what that is the
+current workaround is to quirk the speed down to 100kHz which seems to cure
+the problem.
 
-> ...
+> This problem may be related to the default HCNT/LCNT values given by
+> some busses' drivers, because they are also not specified in the
+> aforementioned devices' ACPI tables, and because the device works at
+> what appears to be a 400KHz frequency in Windows without issues.
+> 
+> Signed-off-by: Randolph Ha <rha051117@gmail.com>
 
-Best regards,
-Ming
+This is fine by me if we cannot figure out a better way but please correct
+the commit message and the comment below to match the fact that the speed
+is specified and that we don't know the root cause.
+
+Once done, freel free to add my,
+
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+> ---
+>  drivers/i2c/i2c-core-acpi.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> index 14ae0cfc325e..6f1c2377db0a 100644
+> --- a/drivers/i2c/i2c-core-acpi.c
+> +++ b/drivers/i2c/i2c-core-acpi.c
+> @@ -355,6 +355,24 @@ static const struct acpi_device_id i2c_acpi_force_400khz_device_ids[] = {
+>  	{}
+>  };
+>  
+> +static const struct acpi_device_id i2c_acpi_force_100khz_device_ids[] = {
+> +	/*
+> +	 * When a 400KHz freq is used on this model of ELAN touchpad in Linux,
+> +	 * excessive smoothing (similar to when the touchpad's firmware detects
+> +	 * a noisy signal) is sometimes applied. As some devices' (e.g, Lenovo
+> +	 * V15 G4) ACPI tables do not specify a frequency for this device and
+> +	 * some I2C busses (e.g, Designware I2C) default to a 400KHz freq,
+> +	 * force the speed to 100KHz as a workaround.
+> +	 *
+> +	 * This problem may be related to the default HCNT/LCNT values given by
+> +	 * some busses' drivers, because they are also not specified in the
+> +	 * aforementioned devices' ACPI tables, and because the device works at
+> +	 * what appears to be a 400KHz frequency in Windows without issues.
+> +	 */
+> +	{ "ELAN06FA", 0 },
+> +	{}
+> +};
+> +
+>  static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
+>  					   void *data, void **return_value)
+>  {
+> @@ -373,6 +391,9 @@ static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
+>  	if (acpi_match_device_ids(adev, i2c_acpi_force_400khz_device_ids) == 0)
+>  		lookup->force_speed = I2C_MAX_FAST_MODE_FREQ;
+>  
+> +	if (acpi_match_device_ids(adev, i2c_acpi_force_100khz_device_ids) == 0)
+> +		lookup->force_speed = I2C_MAX_STANDARD_MODE_FREQ;
+> +
+>  	return AE_OK;
+>  }
+>  
+> -- 
+> 2.47.1
 
