@@ -1,242 +1,158 @@
-Return-Path: <linux-i2c+bounces-9063-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9064-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3093CA0C225
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 20:54:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF291A0C22E
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 20:55:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15EF83A5956
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 19:54:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 855321881C9E
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Jan 2025 19:55:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A87E81CF2B7;
-	Mon, 13 Jan 2025 19:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9570B1CB31D;
+	Mon, 13 Jan 2025 19:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GdLtirxB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IL5d+dpU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C341C760A;
-	Mon, 13 Jan 2025 19:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D152124022B;
+	Mon, 13 Jan 2025 19:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736797974; cv=none; b=LcLFrpxtiehVcvN8AdWHa/lnkA2Tv0cvQwwn10BkpTL3c/caGfiLBJMcAajeL8g27qg4U0DYgSyFkJSwnv+AziuURyXcz4bryvhXddKr/wp5m9wBvFGIsI13buJ8QedBmVwWErTGSzq6REOTEuV4GMEjHSC8fvgd8CRtkrjDwG4=
+	t=1736798045; cv=none; b=SsTKZYCys1h/x93+D9KoV6pTRn6esP6LpMn9aFDkqOy/bZLtsCXICRGhSaL+mBej09c3MJ8sa8oqKY5mDcBW9TSKcMqztVS/eZV3tpMXgCQVX7/pk69Jy3pifU09pCuhMMXxbIpSLYcdshN8Cy0we6uVZnsAgFFgWKkZ9wQOkfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736797974; c=relaxed/simple;
-	bh=XO823bjt5X9FnUPfO46pBp/AvJdPdplIJ+Z5fefXKXU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UcRawDz54N5FlmQK1MRObU7fMTGEQ59l0hp/5Q8pFaCLdtyDzB37EtuYod3ljrFL8l12eaSKzi6cLFw3UJeXr1tuZZlGo/FITetQdOW2pWhjDVJmO9VVZLrw5tNkhQ5vXN7WHaHsP+ZYttTcwrgs11CmHzh5JFOL/b0VGY8mkQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GdLtirxB; arc=none smtp.client-ip=209.85.218.41
+	s=arc-20240116; t=1736798045; c=relaxed/simple;
+	bh=k4LKV03K423NSP5l/ihlxE8Wb1V7/r55T6m4NqGTao0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fqiYs99i32IfAKxrJm6mf+RP/V6tE6Eg7EcErIKlE6gJmXCofBnrc2tP/jOy6VPLATl0B15Sg1mc/QAOH1kmv31M7gpd22KUO6bCUR+zjAL7wWd/PDvZ+T+q1+jzlVd+V71883STUWomZMK/CGF/Vip+YiaRuRt/yMFB9ldXCoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IL5d+dpU; arc=none smtp.client-ip=209.85.166.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aaec61d0f65so922470366b.1;
-        Mon, 13 Jan 2025 11:52:52 -0800 (PST)
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3a8ed4c8647so31347955ab.1;
+        Mon, 13 Jan 2025 11:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736797971; x=1737402771; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1736798043; x=1737402843; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XO823bjt5X9FnUPfO46pBp/AvJdPdplIJ+Z5fefXKXU=;
-        b=GdLtirxBrSPMBmX6Do8mmqE3O/14UDgMImNS+mrn+S8qQ7GYdzJrsmoPLfViXD7WnZ
-         JJ+ZmwtIwPMLtTJARQFprs8J8bVDCjp5ulvvgGPe4ssAIvO7NXiQzYkLtL8bKTEnjkWl
-         1j8ifjNJY+0COSXTZeN0CxweFNqLWhYTCh2Tvo3MuJlIzZAxt6CRsyRPBOMw6Zqxs3tQ
-         a2St2mIeMwYuLAb/BYMtlgGSmi8E3Dx7ZZA3g8v2VXL8ZnxTy03+b4jyw9XA3l5WxqSe
-         XfubMI5M73x8FCG2aK0onTuo4bcWp8hnEmVqpTtNnTW1aDqeIXe9aDAtOGU3hVl5rMbg
-         IQAw==
+        bh=OKxXqQsXK67zY0f/rcAukBJy+7D1L/GVlyST+DZVEuM=;
+        b=IL5d+dpUVtILLfoanroCsFjx3Boiti7wU1J9EgbTsFNFn4vwY6cc5zPeDZQRejFbJi
+         Z1a5WoI4wvFByemxPbg3dFaeO9vzLiuXLCd4Gdx7nN1UPyM+b+jiWvVJKlCUGji4MXcj
+         retcm9OzjIN+lBzKqqq2n9onCpda1UuIr0lsrG38E4n9YR06BjYVdjgTux1PTZ0AUaYk
+         l5CNkIjLArYIvcXolTfli33GvLkK8NQXbNwJwTsTsqKjVKD3GLgAIbfNDZHZYgdZJykd
+         AwTfLd3zaOlKZvJ/EZ2xxfXKRFphlyujnOXW9qRFmXFH2TUNMfRczdhZtH3lTFQVLqiX
+         0djQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736797971; x=1737402771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1736798043; x=1737402843;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XO823bjt5X9FnUPfO46pBp/AvJdPdplIJ+Z5fefXKXU=;
-        b=qINGgaRYH05HXBJiFdRNtNvxKaFm36Mkrat4vomj79YENKFkMZuJzGRm0EYAJe+FsL
-         YDwZip62RPahCZPNwG+pWi3N2PBsy0QjE0YObPkbJus7ihNfsh5q7FLGhR8xQeTFzRLv
-         pDTt9UeBnK2cG+g4u6TxoIyLUN9BtgsNniLfO7ViWJtHJpfSEE1mk7Lg/qU1b8D1Rh94
-         IfTslNVOy+aLzGfsGxk3Fa+svmaTCtDYyF4Wc3nOVoi45MK6flBJcC9rJTg4HHV+8bWc
-         4lnRx1drAAQpsNb7g6IxoL3CvsVzeQUE6LC77dMMse00egS77pZOOpB99P8XKulMTrte
-         POOg==
-X-Forwarded-Encrypted: i=1; AJvYcCV7symyKAPfwAeYVtswA7+0rewWPaY+Fw+sjQaTj2EMjkk8vUnNI5WnyJEv1Umqd508SBPYIsqaEEoDShMDM19RQUbn4w==@vger.kernel.org, AJvYcCWwu/TZ3Hn2CpQXkN3WWeamYjiuGif3LtBfRlK8KN5HI+CCsJdCD3l3R9tppa0ONxA5B7P1YIa/pzs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHADvi5n8yajn0unbNErGKsfBk4DeF7olfTlMYXzAcclEaAUWL
-	tn0t8qY1J1ptc2NZVEBZISjXPd/Z9egIxPDKLqlKt4Itbw7mDvSciG/24SneE6bQ3yt0/8beC2l
-	UUO2UJ90q5o7EQiIoIl/GBKtB/Nk=
-X-Gm-Gg: ASbGncsdR6hsUBf5Pf8V6y+5in80JgOY5olvxRX0liI4E5RFg7mNonf3F5yRP8ZVOce
-	kB20ayGbcetkjVjFafy0GL7MupQdKSBVEcOzHYA==
-X-Google-Smtp-Source: AGHT+IHrjIdb/g/gHUs4XqS7Q8O/UiCV+22KzXbCmSdUugelZJT7UcJcjZ1n8kJ3gSmwcQX45jNN+lqfh1tJxXpDcJE=
-X-Received: by 2002:a17:906:2792:b0:ab2:d84a:f86 with SMTP id
- a640c23a62f3a-ab2d84a11d7mr1221021066b.7.1736797970568; Mon, 13 Jan 2025
- 11:52:50 -0800 (PST)
+        bh=OKxXqQsXK67zY0f/rcAukBJy+7D1L/GVlyST+DZVEuM=;
+        b=r1ddkKrBA8YtGNOGdmczm/WTnhvqbLGapkh8U9/ncSk4Cx4cYYaZXhvJqVJ8DpDNdM
+         Pu91GrGlHDiq5agsveWdGhAzkogl4aXGAbSeeTTZs7JK/JiGKLTgbWxtsRk8+xBt6aGT
+         NEIn4A05kbAWADd2zBXu/8AZ/3rgWPMpai14Wgqjhzc8mh24/StbPY3y2iiQCkFfPTe2
+         y9LYi+v7oKiZmD80gLHwIsoUyTlQQTb95prnlao0shH4MtEwWGTtvndCy3thxmZm/VSs
+         A5juUBU4hgQMx9G+gT7ruORnOVThOJHG8KBcYCvWOv0dBa37rZ9PHQrxPNyTmj5RSSmh
+         xJHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU4w7yDRsXvoxjAuYlkfFkZzj2ZE/SvzzE1k3i7oUO6aA7lEcVP6iZS2rr6AInY5J2Vxlz+1UqBXPRn@vger.kernel.org, AJvYcCWa0Xx8w1r5Hw9Qro0cnVJspdhJYYOhLDmiZuq5cSXfPfERX/dTbOck/qN43UBI2Awx4JnLrrSHGEws@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5AYEqoUREJFi3P7edck73ng8dTe2C1I74EY2CGDaIifR8kot1
+	zlM9UVJI5AJPqL05K68VpPGr8QpOfRydTyH2UOPPALsUIHEnVFyR
+X-Gm-Gg: ASbGnct7BtNwDx1JtO0T9hWcP3OIlSE7eRj15yEQS8dgayLcip68f4WKpZaJH2KQuBF
+	SLlGZ7Hq7mAYosnTwCuniVd2Bhwl0J4ujEJx6mDs69iLY1VrFs1xPGKP3p7iAk9MC0Zs/ZiSsEB
+	s30GP0CySymM7IGfcbycNw1msNto3kUCRu6B/IOwDGqFyjOnxWL3ZNJFZgK26osOc7XhvsGRVH5
+	PLfEnN+/oyehheEo9T+G7R2+wbEZ0LOgTfBm6Hz06JMQK3qXZ6sK0l7eRI0HEuIZy/s
+X-Google-Smtp-Source: AGHT+IEiwvzn83fg1Frt3wf+UWSofVoJHAie5XO+is/r7E1bOzADaXMj6y0grvmwXjN8wODaDURw8w==
+X-Received: by 2002:a05:6e02:194c:b0:3a7:7ec0:a3dc with SMTP id e9e14a558f8ab-3ce3a88a2femr183819145ab.14.1736798042856;
+        Mon, 13 Jan 2025 11:54:02 -0800 (PST)
+Received: from LENOVO-V15-G4-L.lan ([128.211.252.159])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ea1b5f93ffsm2922575173.18.2025.01.13.11.54.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2025 11:54:02 -0800 (PST)
+From: Randolph Ha <rha051117@gmail.com>
+To: mika.westerberg@linux.intel.com
+Cc: wsa+renesas@sang-engineering.com,
+	linux-i2c@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	trivial@kernel.org,
+	jarkko.nikula@linux.intel.com,
+	Randolph Ha <rha051117@gmail.com>
+Subject: [PATCH] Force ELAN06FA touchpad I2C bus freq to 100KHz
+Date: Mon, 13 Jan 2025 14:52:37 -0500
+Message-ID: <20250113195308.244372-2-rha051117@gmail.com>
+X-Mailer: git-send-email 2.48.0
+In-Reply-To: <20250113064802.GJ3713119@black.fi.intel.com>
+References: <20250113064802.GJ3713119@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241209183557.7560-1-hdegoede@redhat.com> <20241209183557.7560-5-hdegoede@redhat.com>
- <ee90da14-024e-4563-00ff-9b525e700106@linux.intel.com> <67d6480a-6613-47a1-bf7d-b52532a5278c@redhat.com>
- <049555a0-ad65-7aad-2a7c-fc2047629010@linux.intel.com> <Z4Uy4FYgynLP3ZAp@smile.fi.intel.com>
- <2b2a3d16-039c-4cdf-94b9-41d074558d97@redhat.com> <20250113194702.j6ou2d7c3vn32unv@pali>
-In-Reply-To: <20250113194702.j6ou2d7c3vn32unv@pali>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 13 Jan 2025 21:52:13 +0200
-X-Gm-Features: AbW1kvad7cVQPuK1S9Yo2-u_-seXqbQgHs9fBJh4A23P_IEARGktvpxCgpGcNX4
-Message-ID: <CAHp75VdnDqpeiWZDwZb0Cfx8n4L_8N1cQRb2MKSteWCZ+yOrfw@mail.gmail.com>
-Subject: Re: [PATCH v9 4/4] platform/x86: dell-smo8800: Add support for
- probing for the accelerometer i2c address
-To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>, Andy Shevchenko <andy@kernel.org>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Prasanth Ksr <prasanth.ksr@dell.com>, Paul Menzel <pmenzel@molgen.mpg.de>, 
-	Wolfram Sang <wsa@kernel.org>, eric.piel@tremplin-utc.net, 
-	Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com, 
-	Kai Heng Feng <kai.heng.feng@canonical.com>, platform-driver-x86@vger.kernel.org, 
-	Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 13, 2025 at 9:47=E2=80=AFPM Pali Roh=C3=A1r <pali@kernel.org> w=
-rote:
-> On Monday 13 January 2025 17:49:19 Hans de Goede wrote:
-> > On 13-Jan-25 4:36 PM, Andy Shevchenko wrote:
-> > > On Mon, Jan 13, 2025 at 05:17:43PM +0200, Ilpo J=C3=A4rvinen wrote:
-> > >> On Sat, 21 Dec 2024, Hans de Goede wrote:
-> > >>> On 17-Dec-24 5:48 PM, Ilpo J=C3=A4rvinen wrote:
-> > >>>> On Mon, 9 Dec 2024, Hans de Goede wrote:
+When a 400KHz freq is used on this model of ELAN touchpad in Linux,
+excessive smoothing (similar to when the touchpad's firmware detects
+a noisy signal) is sometimes applied. As some devices' (e.g, Lenovo
+V15 G4) ACPI tables specify a 400KHz frequency for this device and
+some I2C busses (e.g, Designware I2C) default to a 400KHz freq,
+force the speed to 100KHz as a workaround.
 
-...
+For future investigation: This problem may be related to the default
+HCNT/LCNT values given by some busses' drivers, because they are not
+specified in the aforementioned devices' ACPI tables, and because
+the device works without issues on Windows at what is expected to be
+a 400KHz frequency. The root cause of the issue is not known.
 
-> > >>>> So what was the result of the private inquiry to Dell?
-> > >>>
-> > >>> On July 5th I send the following email to Prasanth Ksr
-> > >>> <prasanth.ksr@dell.com> which is the only dell.com address I could
-> > >>> find in MAINTAINERS other then Dell.Client.Kernel@dell.com which
-> > >>> does not seem to be monitored very actively:
-> > >>>
-> > >>> """
-> > >>> Hello Prasanth,
-> > >>>
-> > >>> I'm contacting you about a question lis3lv02d freelfall sensors /
-> > >>> accelerometers used on many (older) Dell laptop models. There
-> > >>> has been a question about this last December and a patch-set
-> > >>> trying to address part of this with Dell.Client.Kernel@dell.com
-> > >>> in the Cc but no-one seems to be responding to that email address
-> > >>> which is why I'm contacting you directly:
-> > >>>
-> > >>> https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161=
-bfc@molgen.mpg.de/
-> > >>> https://lore.kernel.org/platform-driver-x86/20240704125643.22946-1-=
-hdegoede@redhat.com/
-> > >>>
-> > >>> If you are not the right person to ask these questions to, then
-> > >>> please forward this email to the right person.
-> > >>>
-> > >>> The lis3lv02d sensors are I2C devices and are described in the ACPI
-> > >>> tables with an SMO88xx ACPI device node. The problem is that these
-> > >>> ACPI device nodes do not have an ACPI I2cResouce in there resource
-> > >>> (_CRS) list, so the I2C address of the sensor is unknown.
-> > >>>
-> > >>> When support was first added for these Dell provided a list of
-> > >>> model-name to I2C address mappings for the then current generation
-> > >>> of laptops, see:
-> > >>>
-> > >>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-tree/drivers/i2c/busses/i2c-i801.c#n1227
-> > >>>
-> > >>> And later the community added a few more mappings.
-> > >>>
-> > >>> Paul Menzel, the author of the email starting the discussion on thi=
-s:
-> > >>>
-> > >>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-tree/drivers/i2c/busses/i2c-i801.c#n1227
-> > >>>
-> > >>> did a search for the kernel message which is printed when an SMO88x=
-x
-> > >>> ACPI device is found but the i2c-address is unknown and Paul found
-> > >>> many models are missing from the mapping table (see Paul's email).
-> > >>>
-> > >>> Which leads us to the following questions:
-> > >>>
-> > >>> 1. Is there another, uniform (so not using a model name table)
-> > >>> way to find out the I2C address of the SMO88xx freefall sensor
-> > >>> from the ACPI or SMBIOS tables ?
-> > >>>
-> > >>> 2. If we need to keep using the model-name to I2C-address mapping
-> > >>> table can you help us complete it by providing the sensor's I2C
-> > >>> address for all models Paul has found where this is currently missi=
-ng ?
-> > >>>
-> > >>> Regards,
-> > >>>
-> > >>> Hans
-> > >>> """
-> > >>>
-> > >>> Pali and Paul Menzel where in the Cc of this email.
-> > >>>
-> > >>>> Did they respond?
-> > >>>
-> > >>> I got a reply from Prasanth that they would forward my request to t=
-he
-> > >>> correct team. Then I got on off-list reply to the v6 patch-set from
-> > >>> David Wang from Dell with as relevant content "We are working on it=
-."
-> > >>>
-> > >>>> Did they provide useful info?
-> > >>>
-> > >>> No further info was received after the "We are working on it." emai=
-l.
-> > >>
-> > >> Hi Hans,
-> > >>
-> > >> So you didn't try to remind them after that at all?
-> > >>
-> > >> This kind of sounds a low priority item they just forgot to do and m=
-ight have
-> > >> had an intention to follow through.
-> > >
-> > > Talking from my experience with other companies that could have done =
-something
-> > > better I dare to say that this entire buzz for them is no-priority at=
- all, like
-> > > "no money stuff", hence no attention given. That said, I believe ping=
- won't
-> > > change anything here, however I agree that it _was_ worth to try to a=
-cquire any
-> > > response from them.
-> >
-> > Basically what Andy says above.
-> >
-> > Note that Dell's client team has been on the Cc for all the versions of
-> > this patch-set many of which were posted after the "We are working on i=
-t." email.
-> >
-> > For completeness sake I have just send a request for a status update on
-> > this to Prasanth and David from Dell.
-> >
-> > In the mean time it would be good IMO to merge v11 of this patch, if we
-> > get useful info from Dell after all we can modify the driver for this
-> > later.
->
-> No, this change should not be taken at all. This change has a chance to
-> break booting or brick future dell devices. I'm not going to discuss it
-> again, but saying that it is good just because you do not have anything
-> better is not an argument to take such change. Also it is not an excuse
-> to hide dangerous things behind module parameter. And if you have been
-> doing to everything to ensure that companies would not want to tak with
-> you then sorry it is only your problem, so please do not complain here.
+Signed-off-by: Randolph Ha <rha051117@gmail.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/i2c/i2c-core-acpi.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-With all respect, this is not how we should treat the Linux kernel
-contributors and users (who want this feature to enable their
-devices). We have a ton of dangerous and DANGEROUS parameters and
-other algorithms here and there (in Linux kernel source tree),
-moreover, users with all responsibility may kill themselves with a
-laptop just by hitting their head or igniting Li-ion battery to set
-off a blast or heavy fire. Is there any _practical_ protection for
-that? No. Do you suggest we should ban Li-ion because of this? I don't
-see it, but be consistent, do it!
+diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+index 14ae0cfc325e..d2499f302b50 100644
+--- a/drivers/i2c/i2c-core-acpi.c
++++ b/drivers/i2c/i2c-core-acpi.c
+@@ -355,6 +355,25 @@ static const struct acpi_device_id i2c_acpi_force_400khz_device_ids[] = {
+ 	{}
+ };
+ 
++static const struct acpi_device_id i2c_acpi_force_100khz_device_ids[] = {
++	/*
++	 * When a 400KHz freq is used on this model of ELAN touchpad in Linux,
++	 * excessive smoothing (similar to when the touchpad's firmware detects
++	 * a noisy signal) is sometimes applied. As some devices' (e.g, Lenovo
++	 * V15 G4) ACPI tables specify a 400KHz frequency for this device and
++	 * some I2C busses (e.g, Designware I2C) default to a 400KHz freq,
++	 * force the speed to 100KHz as a workaround.
++	 *
++	 * For future investigation: This problem may be related to the default
++	 * HCNT/LCNT values given by some busses' drivers, because they are not
++	 * specified in the aforementioned devices' ACPI tables, and because
++	 * the device works without issues on Windows at what is expected to be
++	 * a 400KHz frequency. The root cause of the issue is not known.
++	 */
++	{ "ELAN06FA", 0 },
++	{}
++};
++
+ static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
+ 					   void *data, void **return_value)
+ {
+@@ -373,6 +392,9 @@ static acpi_status i2c_acpi_lookup_speed(acpi_handle handle, u32 level,
+ 	if (acpi_match_device_ids(adev, i2c_acpi_force_400khz_device_ids) == 0)
+ 		lookup->force_speed = I2C_MAX_FAST_MODE_FREQ;
+ 
++	if (acpi_match_device_ids(adev, i2c_acpi_force_100khz_device_ids) == 0)
++		lookup->force_speed = I2C_MAX_STANDARD_MODE_FREQ;
++
+ 	return AE_OK;
+ }
+ 
+-- 
+2.48.0
 
---=20
-With Best Regards,
-Andy Shevchenko
 
