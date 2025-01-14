@@ -1,160 +1,84 @@
-Return-Path: <linux-i2c+bounces-9088-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9089-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64DE2A10A6C
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2025 16:12:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95D7BA1126F
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2025 21:45:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 778DE1638DA
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2025 15:12:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D151A188B305
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2025 20:45:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4006615ECD7;
-	Tue, 14 Jan 2025 15:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5856220DD79;
+	Tue, 14 Jan 2025 20:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Dq3OjX15"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="QWrb2y8u"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF40523244D;
-	Tue, 14 Jan 2025 15:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303D31E4AE
+	for <linux-i2c@vger.kernel.org>; Tue, 14 Jan 2025 20:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736867531; cv=none; b=X8fHUOUbWPtLTbbSZdPohB1HuWHgEjtFQy3eeau3sXE9puXJTffrYfCNov+L8k6vSStnqWb0rvQtmmFih9L2KldTjGjpdoAt9eJ/2GSqLFUwqz2NbpjMfMzMdDdtL4bGeHLhdBqdi5OwBu9G6/uyLC2pYTle8NWdoa3KbbrUBfQ=
+	t=1736887541; cv=none; b=pzabcHKxeW/mkjcQmooCOjAADREi8/O1shHp50Fm2H57Vj9SiJ4U5+8yrQpCUcOhMERFrcBvQF3pLYbrS3w4g+urNPDuCQ2TgSEp47tSPULPzW8pG7LA795VwxN+LEXJ5jbhKcUI94J6UB9/yUgaWqnjHlD3xe+Iyf5TbKNTepM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736867531; c=relaxed/simple;
-	bh=DL8gwF1GJ20n33ml1FHEg/aAAglXZ3TF9OFCcZ0ipiA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F7tXeACVQIsxbLJWHS+B8MIRwMqcTXe/0OQIhHCt243V5kovoJAd6urQxLR8C2nu2sQZaA7qcTcRSd65Vb1m9uWj4cYUvMVC0bC/yfEUiJtfm8et5CtOgUZaqnUHsv2KrThI0XfSX9mnaTN9ez10xD/bb5+QdrvorSd8NKmvxNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Dq3OjX15; arc=none smtp.client-ip=193.252.22.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id XiZytlY9xyfdlXia3tQ2B1; Tue, 14 Jan 2025 16:11:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1736867519;
-	bh=XV4Id1xvYHlaSYqAm96ChNINwUN4AO6c7LrvEBY8Mp4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=Dq3OjX15koJsiFaPGJLMkr02s81/arOSIzSYmgnER7lakEeU8cyCDas42c5HdzPY/
-	 rtU5LMqs+bYPOYqAV7IFYKn9+JamBu8kD18TyYPEwZkmIszlDF5cQ5vQf4R/rv4kwD
-	 vb0jr8Hq7oB2aH0ZobATJjChAg69ptArkMXzbqk8F+A2qVdSQBnTlyylL+dEf9dBSG
-	 QVNFHAQ5klUnx/5p8OSiqTnxmkhXW+q9SooGiQEd30YcNb3/Oru9AeNc8xRvCv2NZb
-	 Gz4hFOD0eu2DbzgtBIWV4Xwk/Xt3nlEipG7y0KH/9b8+7eUZSemzie93loGr+DV/Cb
-	 JJXOMvikfVx1w==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 14 Jan 2025 16:11:59 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <6e349f0f-6509-4a3b-bb75-e2381e9205c6@wanadoo.fr>
-Date: Wed, 15 Jan 2025 00:11:41 +0900
+	s=arc-20240116; t=1736887541; c=relaxed/simple;
+	bh=+ijy8i3cqds7w4Z4ccJhKFfRb2LipIiUGlezk7uR3Jo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gOQB+USwGPbKmabDZvJsfgbC09DBYYhhJVJ0NcT7PmDWRY3BLnCp/rrKluGh7vZTh2gPw92I+ajqJ+qazkGHMtnJfzF/N2P0fDK4TABRen3eVYLk2mCPTXGbQaVwbOaimPmldjJRkTNEuNFWUABLzzT2Ci0IMLMW+RMlwtCKDvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=QWrb2y8u; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=FCknVfKdKqpwcV
+	ujR3yXZi+YFzM3P4I4A5f9KeiWB9M=; b=QWrb2y8uqnS0MXHWBw3Lif9jLuCqGB
+	8hARUCX5rNhUhxuaj2doXXsIjLlFP5CCdDEpZjjBV709xw2hHTOfRg7KyFsilVJc
+	j+WjOB6uaI7BxdKtXNmxQSabRaCwoYKaIJpGHRcx1qPY3qTV4E6+4miQ3L4/65oQ
+	bY2iRqAk/DQ/tWbGvF96GKDflffrYTm+Q52Rlecs5qylCp4VPULSynWatBTV6k4v
+	BWxG+knbKB48rFlwV+x2p/mTlTF4iqKOMvL8OFvTzcaAe3V+9NCeuCV2+V3NHaAx
+	bsgKNCJ8i4wlVbc4fOHo/+C8CIbTwVzlXEwon+DTrWzZpRqcI9CMUQaQ==
+Received: (qmail 340352 invoked from network); 14 Jan 2025 21:45:32 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jan 2025 21:45:32 +0100
+X-UD-Smtp-Session: l3s3148p1@J4ZepLArBpcujns1
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-i2c@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Peter Rosin <peda@axentia.se>
+Subject: [PATCH] i2c: mux: demux-pinctrl: correct comment
+Date: Tue, 14 Jan 2025 21:45:16 +0100
+Message-ID: <20250114204516.10093-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
- brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
- linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-5-a0282524688@gmail.com>
- <CAMZ6RqLHEoukxDfV33iDWXjM1baK922QnWSkOP01VzZ0S_9H8g@mail.gmail.com>
- <CAOoeyxW=k35-bkeqNmhyZwUxjy=g3irTBS5mbXLxqp1Stx-Zfg@mail.gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <CAOoeyxW=k35-bkeqNmhyZwUxjy=g3irTBS5mbXLxqp1Stx-Zfg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 14/01/2025 at 19:46, Ming Yu wrote:
-> Dear Vincent,
-> 
-> Thank you for your reply,
-> I'll add comments to describe these locks in the next patch,
-> 
-> Vincent Mailhol <mailhol.vincent@wanadoo.fr> 於 2025年1月14日 週二 下午4:06寫道：
+Two characters flipped, fix them.
 
-(...)
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/i2c/muxes/i2c-demux-pinctrl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->>> +static int nct6694_can_get_berr_counter(const struct net_device *ndev,
->>> +                                       struct can_berr_counter *bec)
->>> +{
->>> +       struct nct6694_can_priv *priv = netdev_priv(ndev);
->>> +       struct nct6694_can_event *evt = priv->rx->event;
->>> +       struct nct6694_cmd_header cmd_hd;
->>> +       u8 mask = NCT6694_CAN_EVENT_REC | NCT6694_CAN_EVENT_TEC;
->>> +       int ret;
->>> +
->>> +       guard(mutex)(&priv->lock);
->>> +
->>> +       cmd_hd = (struct nct6694_cmd_header) {
->>> +               .mod = NCT6694_CAN_MOD,
->>> +               .cmd = NCT6694_CAN_EVENT,
->>> +               .sel = NCT6694_CAN_EVENT_SEL(priv->can_idx, mask),
->>> +               .len = cpu_to_le16(sizeof(priv->rx->event))
->>> +       };
->>> +
->>> +       ret = nct6694_read_msg(priv->nct6694, &cmd_hd, evt);
->>> +       if (ret < 0)
->>> +               return ret;
->>
->> You are holding the priv->lock mutex before calling
->> nct6694_read_msg(). But nct6694_read_msg() then holds the
->> nct6694->access_lock mutex. Why do you need a double mutex here? What
->> kind of race scenario are you trying to prevent here?
->>
-> 
-> I think priv->lock need to be placed here to prevent priv->rx from
-> being assigned by other functions, and nct6694->access_lock ensures
-> that the nct6694_read_msg() transaction is completed.
-> But in this case, cmd_hd does not need to be in priv->lock's scope.
-
-So, the only reason for holding priv->lock is because priv->rx is shared
-between functions.
-
-struct nct6694_can_event is only 8 bytes. And you only need it for the
-life time of the function so it can simply be declared on the stack:
-
-  	struct nct6694_can_event evt;
-
-and with this, no more need to hold the lock. And the same thing also
-applies to the other functions.
-
-Here, by trying to optimize the memory for only a few bytes, you are
-getting a huge penalty on the performance by putting locks on all the
-functions. This is not a good tradeoff.
-
->>> +       bec->rxerr = evt[priv->can_idx].rec;
->>> +       bec->txerr = evt[priv->can_idx].tec;
->>> +
->>> +       return 0;
->>> +}
-
-
-Yours sincerely,
-Vincent Mailhol
+diff --git a/drivers/i2c/muxes/i2c-demux-pinctrl.c b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+index dce18f763a09..82a6580a3c60 100644
+--- a/drivers/i2c/muxes/i2c-demux-pinctrl.c
++++ b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+@@ -68,7 +68,7 @@ static int i2c_demux_activate_master(struct i2c_demux_pinctrl_priv *priv, u32 ne
+ 	}
+ 
+ 	/*
+-	 * Check if there are pinctrl states at all. Note: we cant' use
++	 * Check if there are pinctrl states at all. Note: we can't use
+ 	 * devm_pinctrl_get_select() because we need to distinguish between
+ 	 * the -ENODEV from devm_pinctrl_get() and pinctrl_lookup_state().
+ 	 */
+-- 
+2.45.2
 
 
