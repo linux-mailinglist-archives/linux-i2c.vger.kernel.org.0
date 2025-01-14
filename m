@@ -1,109 +1,124 @@
-Return-Path: <linux-i2c+bounces-9083-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9084-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01C09A10645
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2025 13:12:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B308A10761
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2025 14:06:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E47016798B
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2025 12:12:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4080D188782C
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Jan 2025 13:06:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C94F4236EAC;
-	Tue, 14 Jan 2025 12:12:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7074D2361D3;
+	Tue, 14 Jan 2025 13:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="f68S+rd2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2+5Fvvx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8222236EB8
-	for <linux-i2c@vger.kernel.org>; Tue, 14 Jan 2025 12:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F9922DC53;
+	Tue, 14 Jan 2025 13:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736856742; cv=none; b=ra15VlvTn5TqPqNoSJD5SwvB1O7FLvbgaxwJIHuqNXl9AqORMwoGM6u3cjQTycVw3aN50PeWYvfA66s6+hlu6ped5pu2F4mealvlkBuMnvfjM5T3bzSNHXOIhgCLyH9sp6Cu8ZYMUWit0hA/cWT6eUzk/IIlQJeeafJ+oiIuLnk=
+	t=1736859957; cv=none; b=XI6ahTMUneaoP/HTvFsVqLAvFVl8tTrM6A7U/w0TZoyKeHY2613MicePBMOtaZt40s27wJYQFDpRFJlRcQHRKYyUeBQ8tMRoPmvARsBXGQzqu3QhhvVjL9a0GgdlA+/jI4J9tVd2YCpW13NbxgJEC1Z4hkeNOsHvef1WL+c1qF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736856742; c=relaxed/simple;
-	bh=K6oz2DS94f8jy21SzXh52ZGsk7kmXvUL4fauuKsYHSA=;
+	s=arc-20240116; t=1736859957; c=relaxed/simple;
+	bh=yyH7YE+CG+eiWFi83dmPyWkVfF1aciuv75YL3Fg7Ed8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h8m/AbsVH/PU9WkYVjC02NjZi6MqNuh1fx/NxUr+zRtgsXxspSRaAHM/Xa5vuYvcF8Qm1u0qRytiZAP+/cqh4iVO8ueUmNSnjpJgvt5RIWSfZXQ4fC9hoqEGmgsJWGJJfkbLArvpeYEBbkoL4W47CwqKKAKoYYeOlgOJGdxKpog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=f68S+rd2; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-30229d5b229so45750581fa.0
-        for <linux-i2c@vger.kernel.org>; Tue, 14 Jan 2025 04:12:20 -0800 (PST)
+	 To:Content-Type; b=pHW1GxvUDBHfvOPIuNTxvNjnQ4+32Av3vK6SNwFjIKjlz7SkNimp1JHOrC+4e9YwlR9mTZ5zGlU5ZJIJS8/Du66vlPgNROqtbrxKpjwz3OGMn2CDEuxhHRZOk+bI6ah3/jQtfMIsqNuspwXeDafDfpAnChlSTPYpsjnZe+ZMQSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H2+5Fvvx; arc=none smtp.client-ip=209.85.222.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-85c4e74e2baso1160085241.0;
+        Tue, 14 Jan 2025 05:05:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1736856739; x=1737461539; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        d=gmail.com; s=20230601; t=1736859954; x=1737464754; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K6oz2DS94f8jy21SzXh52ZGsk7kmXvUL4fauuKsYHSA=;
-        b=f68S+rd2H2M+mTqpHL+RyKBn+6j9nrOVdFgEMefWySkKUAzP9y9mjuA6H0Ro66sBjM
-         FCXYXkG4Lcg5tb8jEqGt4CbD58xensbZNXE5Pbmq2LtOZIbez4+69aj4vauoxAXkTgTy
-         z6B1BSnHVTcPJ0q4kbHbJBN2xST9NIbHGqmkpCC8t6cBjS2olv3XycARQFl/Uo5WlRvV
-         FOnoRwUGqxCx91jKhvi0O0oPFHQpTZZWyz5B0CLpORzWhxOfMr1B283BdubODqySHg2+
-         tyzPDiJH777Ux4/Ar26YyhGNMjmIVyK5aJX69sAKH+0KRzFgg9irk2ishhA11kwkgKIR
-         GidQ==
+        bh=yyH7YE+CG+eiWFi83dmPyWkVfF1aciuv75YL3Fg7Ed8=;
+        b=H2+5FvvxNSXzWtMyHavD3weoWkiTHJHA42eGx/seEn+PXbLwSNIZVBE4c5DgaP2HDW
+         SLExiOfTEnxbed+UPrpkfws9plEBtjmIMAof2rNRSCe13ezMZ6xfV4DjTA23t95rfXdP
+         60syti6XQIFi/Z1CqZO9PoNgUUok/KLF4L+utnrBUCZ6QcH00CYU9s/24WZEf2xSbKaE
+         cJ1uOohlDVzg3pkchWdDBiGBPG6eacLhWT508rg2QTozLf1RfqccFZe0bhfdAeGLUPJt
+         CgNXbp/sr3xbPs9gu+R6bx8/uEQmpjtROK/q92gUan3e+blnQHtXRN7JyxjLvJ6aGe1O
+         IFsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736856739; x=1737461539;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        d=1e100.net; s=20230601; t=1736859954; x=1737464754;
+        h=content-transfer-encoding:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K6oz2DS94f8jy21SzXh52ZGsk7kmXvUL4fauuKsYHSA=;
-        b=utsZCSgCtSZ8yganE+kMiT/Nvq/SdrbnQEza5Zm30jVCwhm2mp/W51SM7/Esjufp15
-         aLRlIrXjywuLSRRGhCXQ4sdNgQP9ooVoVZT3AowrdYR4a64JleeeXEsylnxj1MqFdB6G
-         55Ebu6IGcQbhH91ZOUEMccUhn2YKsxrz01cX1cVWMsktFap0M9svx74Npnsu9/QJjepq
-         QpbL/ZZ/CHkUNX6EI+6Fucf/iS0fCHWB0FAqrHE15CoACK1i/bR8vEo9X0KLoTTKjlhD
-         5qaRI34LZZr8vKpANCZcsQREDHig0TbBC77zf2aOY0NCdPseGqg26tXUBgIFiIszyk0Q
-         0OUA==
-X-Forwarded-Encrypted: i=1; AJvYcCUDKQ9U78/7vkL8zKxuZyuZ1w7Gp43ww7IbPMDiXPXmPvQa4HIWTw/3HNN6ko0o9xeoY6AVv65RUQM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/4eQcdK35Pq6C9ZzK1U6+s8dVSdYrFfAVm3g4u7gb6hgK0EOr
-	AR9/9vRi2GkkNEYdwjkGPu4CmUMPYur0d4VmxJU9Lu9Fo6zqq4m9YuLcDaaP3G26Dbi4S7XNnCS
-	ywUUR650DZ8o6bxeBdwEIMXcaS8o/k44eVBLfjg==
-X-Gm-Gg: ASbGncuH0/AfYk8AbOx/HJBwkyi6EWxJp66jwp5t4WLv6sRpISzeh8jNgu9A3SDLQPo
-	PF5plQpEVIS5ZxFKz+1BP38HtMCpdujXoDlvow1Jvwmhug/8JYsaWNKfBAtqKn3Tqlz7syQ==
-X-Google-Smtp-Source: AGHT+IENAzQOWIqeBcjNLCeAWZHXeOZ644Mso77ytYMGJJwc3A78vETSt+TEx++AZVkXjYF397/HELxPeWd4tKYdKto=
-X-Received: by 2002:a2e:a587:0:b0:300:3a15:8f2a with SMTP id
- 38308e7fff4ca-305f459aaddmr69824011fa.2.1736856738634; Tue, 14 Jan 2025
- 04:12:18 -0800 (PST)
+        bh=yyH7YE+CG+eiWFi83dmPyWkVfF1aciuv75YL3Fg7Ed8=;
+        b=p7gflz7ukEWlxNuTqfbcewGJijo+NI6IE8NnJ7fDDXgSmlMLhdSXCFMBU+wPrm0SQL
+         7PHIPWJV2K91GEOBw0kJFv2VcZFjdu7OalvA/kTcTqdvVtcRMTVpXD8AAh3M07UqUkBp
+         r5MqHbC8cPAqGXHi7sXdmZLloeavPR9hd6ljYxMa1YdTreyGyxTWFD8ry12mWNFmd+Am
+         YWsxBnyqLbgY7nDiWKzrZvdm5Hh32yYJ6aqrMDDZOlmt9NlRnHXkMe37mLAzgq56NI9z
+         NrjzoDnhGwjC8FvUcFa6c/lDwx47Tck6VJukupdVM0MvYdSrrhKyO3VZsvnR2BUtoI24
+         jxJw==
+X-Forwarded-Encrypted: i=1; AJvYcCW4tAWET8yLPOZR+0RcnugJZhgNnyGMG6fVBBUou1BUOtzHglnTmeEkn8uX3JUDDOfEz4p6Qx3XBUIaVSyQ5GDqzec=@vger.kernel.org, AJvYcCWu01ipmhSp6HarcZZZe5skad9cksArmQ434C5Qx6v2s7NOv1Ks+KZrfTQ/vgE+02QN81YcDoDEkodcTDxX@vger.kernel.org, AJvYcCXQFkzUi6vKgPRKshxevMVGjiSYtEnGfqxSwlCqgLjSiUS9so2H9NkPnH4GV+ytNwksZcOLBIXHwA8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHOO/ZsZEH/eR7nPleqWbIXA3O7dyPNtnaCT72fuoHohvO6xnY
+	+I68yQAwKk99WrwhN7SEYDrzCQZAB1kSEsY3yRf4A+vT6CtrSXUQc13oMy1uNYQTpR6LcBE+MDS
+	eCZEdM/e8xEZ3d6n4ffK1SadFANU=
+X-Gm-Gg: ASbGnctK54vOYpdE0INQvG2/p0rJLpdhrMREtnWU34iMHgklXh31/IZw38v7jU5eD8Z
+	aqBgTEH2ocLPqYkRdLq3GrcY3pUd74lX9bZ+60/c=
+X-Google-Smtp-Source: AGHT+IHuen5JgT095oAhhOjZzmS64KMMfGtHLmFdLQJPs7/S8os7yTFzFAzuT221CmiSBRUyu41hrWR34QCpGKLEtlQ=
+X-Received: by 2002:a05:6122:180d:b0:518:a2af:d666 with SMTP id
+ 71dfb90a1353d-51c6c439cf2mr18077814e0c.1.1736859954182; Tue, 14 Jan 2025
+ 05:05:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250114033010.2445925-1-a0282524688@gmail.com> <20250114033010.2445925-3-a0282524688@gmail.com>
-In-Reply-To: <20250114033010.2445925-3-a0282524688@gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 14 Jan 2025 13:12:07 +0100
-X-Gm-Features: AbW1kvZqlT9ZQof5_cPsRoDpTSEUzbcfgE_gPvPzrdmIRQZ45w8iL14wP2FIYK8
-Message-ID: <CAMRc=MeEye9i2Z=Y8bHt2ruCS6JJRxmGiLvAUt6E7BJ2K4wosg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/7] gpio: Add Nuvoton NCT6694 GPIO support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250113122643.819379-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <Z4ZCJYPgvS0Ke39g@shikoro>
+In-Reply-To: <Z4ZCJYPgvS0Ke39g@shikoro>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Tue, 14 Jan 2025 13:05:28 +0000
+X-Gm-Features: AbW1kva5S2d8rr1gC3J1KnQIuGQSMb12d98LysE1wqMzVzrBXKLDpJlv86KXvFQ
+Message-ID: <CA+V-a8tSnfJeahjY0qn8_5+KBBTsLe0h=MqYwPMDq+Pqrnvi6A@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] i2c: riic: Add support for I2C bus recovery,
+ along with driver cleanup and improvements
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Prabhakar <prabhakar.csengg@gmail.com>, Chris Brandt <chris.brandt@renesas.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Andy Shevchenko <andy.shevchenko@gmail.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 14, 2025 at 4:30=E2=80=AFAM Ming Yu <a0282524688@gmail.com> wro=
-te:
->
-> This driver supports GPIO and IRQ functionality for NCT6694 MFD
-> device based on USB interface.
->
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
-> ---
+Hi Wolfram,
 
-Please pick up review tags when resending.
+On Tue, Jan 14, 2025 at 10:53=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+>
+> > This patch series introduces support for I2C bus recovery in the RIIC
+> > driver, which is utilized in RZ series SoCs. The addition of bus recove=
+ry
+> > functionality enhances the reliability of the I2C interface by allowing=
+ it
+> > to recover from error conditions that might leave the bus in an unusabl=
+e
+> > state.
+> >
+> > Alongside the bus recovery implementation, the series includes several
+> > cleanup and improvement patches that simplify and modernize the driver
+> > code. These include replacing `dev_err` calls with `dev_err_probe`,
+> > consistent usage of the `BIT` and `GENMASK` macros, leveraging devres
+> > helpers for reset management, and improving code readability by marking
+> > static data as `const`.
+>
+> Applied patches 1-9 to for-next, thank you! Patch 10 needs a separate
+> look.
+>
+Thank you. I'll resend patch 10/10 after the merge window.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cheers,
+Prabhakar
 
