@@ -1,139 +1,127 @@
-Return-Path: <linux-i2c+bounces-9117-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9118-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CA72A12B25
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 19:46:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88240A12BD9
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 20:39:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAFC53A3C2E
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 18:46:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEA801889E6A
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 19:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F96019924F;
-	Wed, 15 Jan 2025 18:46:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DFEB1D6DA9;
+	Wed, 15 Jan 2025 19:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="QP98BBy6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NuwEmzNi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427891ADC6D
-	for <linux-i2c@vger.kernel.org>; Wed, 15 Jan 2025 18:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A520C1D63E6;
+	Wed, 15 Jan 2025 19:39:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736966786; cv=none; b=en9x52NRuq7tVlPrOkGkypnPVk4zUQEd9JgF9ZKjKuBws3ak5YemSknxMsl/sv9eZkm8XCx4ILSdbbzD/qZwlhnghxbLYd7nomwhEDAmx9hEEyOFIeJw7tWVzAK0Nq+3CFT9ZtSDZgQ3HL9QswzCpwEbSxIwx8oCJs2jJKtV9oE=
+	t=1736969982; cv=none; b=VKHXUVuvyQ/Fvuq//Uo8V/i3tGvAu99gAfP273eeacWQ3MzWDvF4B7YXDp+uN0ZrJhAZL5HaAVt+ePry+GLc3PpMyUJD/3K+zYBSTVkrO1VZKDij+0xP3awXk1jNJdTKuZpD5S243TFo87eq4FHFm12OZGSEFNRGP3+zu+ommGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736966786; c=relaxed/simple;
-	bh=gYLvvuA5oVrndyDlJPQLhISgDod/57icq+QXziAVZH8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TYAc09aRTtWO4Zw99GBahbEbbRF5lqxgJXdBHqSNXjnAlYAdcB5Kgx4G49whacw8NjBXKtAmxLioguXuodp0+vnqyQUKsoeBtvFz7yV8zgx3iNE/ymEXvUDRhz12ITLSAOuipqUOMCFib7hAsb6+kEXy6TckQEvlx9MRVXtebl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=QP98BBy6; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=b3SEI0tmNp7NeA
-	yW1wDkmdqfYGrEagMvd54KDeSGp/8=; b=QP98BBy6JrZNEGMgB3hRSUAjGDuq0m
-	MAbYHH6TjLOhbsC5s3VYLPWWjA0bRKlTPOs7QwGlkDuw8AXrSoX2x/6jpkLnJ4rJ
-	etch0OJAQixpp4ieAdOeP3Y5wgow5DVP54peEHvTMw+cDUyOL+gbwqJP81UCW0xn
-	0T6zfsnwfcBqwgnOw7j63SvtWccW5VisnFXWV+FMukaoPYhzoZqrwzsXkUV83lZf
-	QJV+pY+ib9ieuR3sl3t0FtyuHXZXVBDg5WdHEPEF27/aqPK8ryrRku0DrdPTofFv
-	6AL6TQm8xoJplnFUIocFTS9cPgi+SQdugUIjwloHgbZ7yVk/JUndJfCQ==
-Received: (qmail 657249 invoked from network); 15 Jan 2025 19:46:17 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Jan 2025 19:46:17 +0100
-X-UD-Smtp-Session: l3s3148p1@TUW5F8MrBBVtKPNf
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH] i2c: testunit: on errors, repeat NACK until STOP
-Date: Wed, 15 Jan 2025 19:45:52 +0100
-Message-ID: <20250115184609.1844-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1736969982; c=relaxed/simple;
+	bh=VNV+PEsRw0ZO2nfjHcmLZeVzXAqYy7uSsMLEr5eyVsc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=uGNMB1Z79HaP5SSE7/bAFjdUvVvxNCuXdyYV68z0vrktiBxNrh6jKYDQO+1Rt3BHUtjmKZTlvcmDfVVyCL09i0dHUqdfwDKVWzut6eGcxXJIqPXtGPvl+UulKOSnE8smtPgkTw179tqDX8WgKsihpoGyxddjHnYE5WKl3b5dg54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NuwEmzNi; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2efd81c7ca4so253549a91.2;
+        Wed, 15 Jan 2025 11:39:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736969980; x=1737574780; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VNV+PEsRw0ZO2nfjHcmLZeVzXAqYy7uSsMLEr5eyVsc=;
+        b=NuwEmzNi0QUMG80PK3Ic/nZp0yYnJBRwn54alH+x0hVqUFIrjNbZX2l1fVDBnFY3aD
+         /PxxMCisStn/kdh69llzO/2w8HeU7VABzYA+ALxfxz3JdeXXN8gorvQK2t6L638ybYMq
+         0joQWXMVs9h2vbXY2uq6zvfDvvCBXriDAZgvTH5t06WepXvKYB20X69Pc17pKhSiiIrZ
+         ZPsaXY3+m+8YTYo/ZMbsZF9sdBCvts+S6rdMepz/7vilYqSBcuAXgi73tRWnZ8S/aghN
+         q6F9ugs9b5ybHqO+QHDxVCCFRubOeOWhZdApbaBC7ujk/V61R+O6dENicDZOWfOsGAL9
+         7ejA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736969980; x=1737574780;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VNV+PEsRw0ZO2nfjHcmLZeVzXAqYy7uSsMLEr5eyVsc=;
+        b=L5tOS0gH7JQ6vMUP3NNJmQDTQw0Evkg7lueRv00K6dC9n1OWvCq045XAfOH+7IoIbX
+         Ot3r8UO5BEbV4IZOBLXBbFBkkwVT9PT+RnhVAmyJR0B0Z+EUhjedAbGVduLPZm9e+/rx
+         xUSEWCsuD/9uioawvfZq/uf1GuEHrYms0D37LZXDMz9oiYefoacCSGq4fQcnIu0krnQS
+         Vmt4B/Of1lhZ9dHFW8d0xnLNL6Mvqtox7eaJeXXloTFrd6utvZGgj87Uj8532thN3qlN
+         0XmHI25H9AhB3NX+d/iKKofugGkDn3hRCH2yFhWxotdiZoOIKrt75viVFOQcU/7XbE/5
+         6kRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVxDcPW82Y8MHoXROYGpk3A3xmBilg1De9yufVyOpMbz+BqlGZCS8nNaol8g2jy5XUEDyV3seh5+onN@vger.kernel.org, AJvYcCWR+3eNYfQvdMECxknlCy6WhlahlADRVQ1gk+5qzHKx2tlRmK1nWYxhliUkt0BgcoJH7O1XpQbrK623@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyL2vNkVL1Aqtq4GDW6HfrjosShQBMRPfE2YxTVtwCnb7RRV2K
+	S75ZUeX3sbj9oe0VjXsh3Mwx4t/byqWfQuTHb88thanPxF1gmzHGLvIdi18kIx8uC9AO+oaEIt4
+	ZCqpIw67ygUjfIg4h3BGAyVr9rCs=
+X-Gm-Gg: ASbGncvpelZVwPyiZCt9wXzjDQHnozMsOnT0dx49s5xOZeQEc2nNvQY4v1bRHS9ZE0D
+	OJwXiSQ3n7IZAjBbOI0r/CnUAqeK69Evn130KhVxf
+X-Google-Smtp-Source: AGHT+IF848zy37xV+KL/On6J16UZRv/vH+VtdPGeF7EHdAgLGunOX2ASlkxUvLDH64kCrouY1ZHOsoA1X98x/ODYlXA=
+X-Received: by 2002:a17:90b:4d04:b0:2ee:aa95:6de9 with SMTP id
+ 98e67ed59e1d1-2f548f71e2bmr46059576a91.33.1736969979915; Wed, 15 Jan 2025
+ 11:39:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250113064802.GJ3713119@black.fi.intel.com> <20250113195308.244372-2-rha051117@gmail.com>
+ <Z4ZRXo2uYZlvWI2r@shikoro>
+In-Reply-To: <Z4ZRXo2uYZlvWI2r@shikoro>
+From: R Ha <rha051117@gmail.com>
+Date: Wed, 15 Jan 2025 14:39:29 -0500
+X-Gm-Features: AbW1kvZQc5hjUL0qetMdDNp9nUBdZkAUhAHiw7C-onZ0CRgJhby3UPT26U3CsaM
+Message-ID: <CACHtJB-5QNif0YQAGp19-9sM_TPhg4BVZ5AxYadJYuaT_XLUnQ@mail.gmail.com>
+Subject: Re: [PATCH] Force ELAN06FA touchpad I2C bus freq to 100KHz
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, Randolph Ha <rha051117@gmail.com>, 
+	mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, trivial@kernel.org, jarkko.nikula@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This backend requests a NACK from the controller driver when it detects
-an error. If that request gets ignored from some reason, subsequent
-accesses will wrongly be handled OK. To fix this, an error now changes
-the state machine, so the backend will report NACK until a STOP
-condition has been detected. This make the driver more robust against
-controllers which will sadly apply the NACK not to the current byte but
-the next one.
+Hello, and thanks for letting me know.
 
-Fixes: a8335c64c5f0 ("i2c: add slave testunit driver")
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+I'll keep your suggestions in mind the next time I have something to
+post. Thanks to everyone for helping debug and get my patch into the
+kernel, now I can use my laptop more easily! :)
 
-Found, debugged, and tested on a Renesas Lager board (R-Car H2).
-
- drivers/i2c/i2c-slave-testunit.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/i2c-slave-testunit.c b/drivers/i2c/i2c-slave-testunit.c
-index 0d6fbaa48248..6de4307050dd 100644
---- a/drivers/i2c/i2c-slave-testunit.c
-+++ b/drivers/i2c/i2c-slave-testunit.c
-@@ -38,6 +38,7 @@ enum testunit_regs {
- 
- enum testunit_flags {
- 	TU_FLAG_IN_PROCESS,
-+	TU_FLAG_NACK,
- };
- 
- struct testunit_data {
-@@ -90,8 +91,10 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
- 
- 	switch (event) {
- 	case I2C_SLAVE_WRITE_REQUESTED:
--		if (test_bit(TU_FLAG_IN_PROCESS, &tu->flags))
--			return -EBUSY;
-+		if (test_bit(TU_FLAG_IN_PROCESS | TU_FLAG_NACK, &tu->flags)) {
-+			ret = -EBUSY;
-+			break;
-+		}
- 
- 		memset(tu->regs, 0, TU_NUM_REGS);
- 		tu->reg_idx = 0;
-@@ -99,8 +102,10 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
- 		break;
- 
- 	case I2C_SLAVE_WRITE_RECEIVED:
--		if (test_bit(TU_FLAG_IN_PROCESS, &tu->flags))
--			return -EBUSY;
-+		if (test_bit(TU_FLAG_IN_PROCESS | TU_FLAG_NACK, &tu->flags)) {
-+			ret = -EBUSY;
-+			break;
-+		}
- 
- 		if (tu->reg_idx < TU_NUM_REGS)
- 			tu->regs[tu->reg_idx] = *val;
-@@ -129,6 +134,8 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
- 		 * here because we still need them in the workqueue!
- 		 */
- 		tu->reg_idx = 0;
-+
-+		clear_bit(TU_FLAG_NACK, &tu->flags);
- 		break;
- 
- 	case I2C_SLAVE_READ_PROCESSED:
-@@ -151,6 +158,10 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
- 		break;
- 	}
- 
-+	/* If an error occurred somewhen, we NACK everything until next STOP */
-+	if (ret)
-+		set_bit(TU_FLAG_NACK, &tu->flags);
-+
- 	return ret;
- }
- 
--- 
-2.45.2
-
+On Tue, Jan 14, 2025 at 6:58=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> On Mon, Jan 13, 2025 at 02:52:37PM -0500, Randolph Ha wrote:
+> > When a 400KHz freq is used on this model of ELAN touchpad in Linux,
+> > excessive smoothing (similar to when the touchpad's firmware detects
+> > a noisy signal) is sometimes applied. As some devices' (e.g, Lenovo
+> > V15 G4) ACPI tables specify a 400KHz frequency for this device and
+> > some I2C busses (e.g, Designware I2C) default to a 400KHz freq,
+> > force the speed to 100KHz as a workaround.
+> >
+> > For future investigation: This problem may be related to the default
+> > HCNT/LCNT values given by some busses' drivers, because they are not
+> > specified in the aforementioned devices' ACPI tables, and because
+> > the device works without issues on Windows at what is expected to be
+> > a 400KHz frequency. The root cause of the issue is not known.
+> >
+> > Signed-off-by: Randolph Ha <rha051117@gmail.com>
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>
+> Applied to for-next, thanks!
+>
+> Some comments for next contributions. Please send new patches always in
+> a new thread. It was a bit confusing here to find the latest one.
+>
+> Also, while the code change looks easy, this is not a trivial change, so
+> trivial@ is not appropriate here. Trivial patches are more like typos or
+> whitespace fixes.
+>
+> Nonetheless, thanks again for your efforts in timely debugging this!
+>
 
