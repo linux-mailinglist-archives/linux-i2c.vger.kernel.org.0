@@ -1,169 +1,139 @@
-Return-Path: <linux-i2c+bounces-9116-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9117-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0BA6A1290F
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 17:45:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CA72A12B25
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 19:46:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB2AE1666A3
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 16:45:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAFC53A3C2E
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 18:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28C3199FDE;
-	Wed, 15 Jan 2025 16:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F96019924F;
+	Wed, 15 Jan 2025 18:46:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="VVjKTBR3"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="QP98BBy6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5951BBBC5;
-	Wed, 15 Jan 2025 16:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427891ADC6D
+	for <linux-i2c@vger.kernel.org>; Wed, 15 Jan 2025 18:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736959533; cv=none; b=NLAPtHuImYotzoXfyDKinmI/DtNpj0XOgEJexBwZcTOJtD4ffd6hmgdZYmSNuloKsfZGCsdR/5p9bkBs0Cz1U8d/xkTu+CdFBlZodVKCKIjwxpuFj1tBBh4t1wyJKoJvCsBSBYDjR8i5grcIvUjVimHKLN4IEMf/8+yLNxiOaQU=
+	t=1736966786; cv=none; b=en9x52NRuq7tVlPrOkGkypnPVk4zUQEd9JgF9ZKjKuBws3ak5YemSknxMsl/sv9eZkm8XCx4ILSdbbzD/qZwlhnghxbLYd7nomwhEDAmx9hEEyOFIeJw7tWVzAK0Nq+3CFT9ZtSDZgQ3HL9QswzCpwEbSxIwx8oCJs2jJKtV9oE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736959533; c=relaxed/simple;
-	bh=FvS7/9I2GnMN906sdtqPLHpRpFYIqgyNF/PPN97ma84=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iQ4T6gRtgylSE2ZX1c8D5tN5cD81LNQxOHhiyFmjtXu0MFaYIGT7Jf+AWMXX7Xzv6TB0rCSdBfK/EUEVm7c13nP18o14YH3gC0Sj7av96Wn6HLuMNm9jE6b9+Jnty3io4/jwyGiCJcuQRchGKg2BOjVCHGGGBnMl+toJhuuxm3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=VVjKTBR3; arc=none smtp.client-ip=193.252.22.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id Y6VrtDFe4QUNRY6VwtCvLc; Wed, 15 Jan 2025 17:45:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1736959520;
-	bh=p50mlgWffUEX45aXIchC5f+eGOCl4aumziWGcWmIY94=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=VVjKTBR3UYceUdiNxKUVv5cm9EplKoT4EwGxOwTg/k8XmfEebeb4pjAIrHvSnLXVr
-	 gyjG3tM8eGKe4g7wECKnaackaaCzSxrXvd6ag3f2EtHFA9SCZ5tiYxtFNXwd1cmf27
-	 Gmb3A6pLlnsNRU2NznSAWQzXI86ZM7hruXaPn7NR4b4uNsuS1TgZxWhuZSsQ9MGBah
-	 h5+wpyLhmQ2+wn4vJ0KRa0NO15jjfayygMaHOl1DnxgSQJsQabAAqijlfvoJ54x0G8
-	 jfdJSteMXvFyrYB8y4Zqv6IqrKM6w8oZu/eoNUigDz1Wq7hBjcZ6Rz2+2TQL1VLoWB
-	 rvljtw20fSjew==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 15 Jan 2025 17:45:20 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
-Date: Thu, 16 Jan 2025 01:45:02 +0900
+	s=arc-20240116; t=1736966786; c=relaxed/simple;
+	bh=gYLvvuA5oVrndyDlJPQLhISgDod/57icq+QXziAVZH8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TYAc09aRTtWO4Zw99GBahbEbbRF5lqxgJXdBHqSNXjnAlYAdcB5Kgx4G49whacw8NjBXKtAmxLioguXuodp0+vnqyQUKsoeBtvFz7yV8zgx3iNE/ymEXvUDRhz12ITLSAOuipqUOMCFib7hAsb6+kEXy6TckQEvlx9MRVXtebl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=QP98BBy6; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=b3SEI0tmNp7NeA
+	yW1wDkmdqfYGrEagMvd54KDeSGp/8=; b=QP98BBy6JrZNEGMgB3hRSUAjGDuq0m
+	MAbYHH6TjLOhbsC5s3VYLPWWjA0bRKlTPOs7QwGlkDuw8AXrSoX2x/6jpkLnJ4rJ
+	etch0OJAQixpp4ieAdOeP3Y5wgow5DVP54peEHvTMw+cDUyOL+gbwqJP81UCW0xn
+	0T6zfsnwfcBqwgnOw7j63SvtWccW5VisnFXWV+FMukaoPYhzoZqrwzsXkUV83lZf
+	QJV+pY+ib9ieuR3sl3t0FtyuHXZXVBDg5WdHEPEF27/aqPK8ryrRku0DrdPTofFv
+	6AL6TQm8xoJplnFUIocFTS9cPgi+SQdugUIjwloHgbZ7yVk/JUndJfCQ==
+Received: (qmail 657249 invoked from network); 15 Jan 2025 19:46:17 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Jan 2025 19:46:17 +0100
+X-UD-Smtp-Session: l3s3148p1@TUW5F8MrBBVtKPNf
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH] i2c: testunit: on errors, repeat NACK until STOP
+Date: Wed, 15 Jan 2025 19:45:52 +0100
+Message-ID: <20250115184609.1844-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
- alexandre.belloni@bootlin.com
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-5-a0282524688@gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250114033010.2445925-5-a0282524688@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 14/01/2025 at 12:30, Ming Yu wrote:
+This backend requests a NACK from the controller driver when it detects
+an error. If that request gets ignored from some reason, subsequent
+accesses will wrongly be handled OK. To fix this, an error now changes
+the state machine, so the backend will report NACK until a STOP
+condition has been detected. This make the driver more robust against
+controllers which will sadly apply the NACK not to the current byte but
+the next one.
 
-(...)
+Fixes: a8335c64c5f0 ("i2c: add slave testunit driver")
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-> +static void nct6694_can_clean(struct net_device *ndev)
-> +{
-> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
-> +
-> +	if (priv->tx_skb || netif_queue_stopped(ndev))
-> +		ndev->stats.tx_errors++;
-> +	dev_kfree_skb(priv->tx_skb);
+Found, debugged, and tested on a Renesas Lager board (R-Car H2).
 
-Use:
+ drivers/i2c/i2c-slave-testunit.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-  	can_flush_echo_skb(ndev);
-
-(related to the following comments).
-
-> +	priv->tx_skb = NULL;
-> +}
-
-(...)
-
-> +static void nct6694_can_tx_work(struct work_struct *work)
-> +{
-> +	struct nct6694_can_priv *priv = container_of(work,
-> +						     struct nct6694_can_priv,
-> +						     tx_work);
-> +	struct net_device *ndev = priv->ndev;
-> +
-> +	guard(mutex)(&priv->lock);
-> +
-> +	if (priv->tx_skb) {
-> +		if (priv->can.state == CAN_STATE_BUS_OFF) {
-
-Just stop the queue when the can bus is off so that you do not have do
-check the bus status each time a frame is sent.
-
-> +			nct6694_can_clean(ndev);
-> +		} else {
-> +			nct6694_can_tx(ndev);
-> +			can_put_echo_skb(priv->tx_skb, ndev, 0, 0);
-> +			priv->tx_skb = NULL;
-> +		}
-> +	}
-> +}
-> +
-> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
-> +					  struct net_device *ndev)
-> +{
-> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
-> +
-> +	if (can_dev_dropped_skb(ndev, skb))
-> +		return NETDEV_TX_OK;
-> +
-> +	if (priv->tx_skb) {
-> +		netdev_err(ndev, "hard_xmit called while tx busy\n");
-> +		return NETDEV_TX_BUSY;
-> +	}
-> +
-> +	netif_stop_queue(ndev);
-> +	priv->tx_skb = skb;
-
-Here, you can directly do:
-
-  	can_put_echo_skb(skb, ndev, 0, 0);
-
-The skb remains accessible under priv->can.echo_skb[0]. With this, you
-can remove the priv->tx_skb field.
-
-> +	queue_work(priv->wq, &priv->tx_work);
-> +
-> +	return NETDEV_TX_OK;
-> +}
-
-
-Yours sincerely,
-Vincent Mailhol
+diff --git a/drivers/i2c/i2c-slave-testunit.c b/drivers/i2c/i2c-slave-testunit.c
+index 0d6fbaa48248..6de4307050dd 100644
+--- a/drivers/i2c/i2c-slave-testunit.c
++++ b/drivers/i2c/i2c-slave-testunit.c
+@@ -38,6 +38,7 @@ enum testunit_regs {
+ 
+ enum testunit_flags {
+ 	TU_FLAG_IN_PROCESS,
++	TU_FLAG_NACK,
+ };
+ 
+ struct testunit_data {
+@@ -90,8 +91,10 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
+ 
+ 	switch (event) {
+ 	case I2C_SLAVE_WRITE_REQUESTED:
+-		if (test_bit(TU_FLAG_IN_PROCESS, &tu->flags))
+-			return -EBUSY;
++		if (test_bit(TU_FLAG_IN_PROCESS | TU_FLAG_NACK, &tu->flags)) {
++			ret = -EBUSY;
++			break;
++		}
+ 
+ 		memset(tu->regs, 0, TU_NUM_REGS);
+ 		tu->reg_idx = 0;
+@@ -99,8 +102,10 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
+ 		break;
+ 
+ 	case I2C_SLAVE_WRITE_RECEIVED:
+-		if (test_bit(TU_FLAG_IN_PROCESS, &tu->flags))
+-			return -EBUSY;
++		if (test_bit(TU_FLAG_IN_PROCESS | TU_FLAG_NACK, &tu->flags)) {
++			ret = -EBUSY;
++			break;
++		}
+ 
+ 		if (tu->reg_idx < TU_NUM_REGS)
+ 			tu->regs[tu->reg_idx] = *val;
+@@ -129,6 +134,8 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
+ 		 * here because we still need them in the workqueue!
+ 		 */
+ 		tu->reg_idx = 0;
++
++		clear_bit(TU_FLAG_NACK, &tu->flags);
+ 		break;
+ 
+ 	case I2C_SLAVE_READ_PROCESSED:
+@@ -151,6 +158,10 @@ static int i2c_slave_testunit_slave_cb(struct i2c_client *client,
+ 		break;
+ 	}
+ 
++	/* If an error occurred somewhen, we NACK everything until next STOP */
++	if (ret)
++		set_bit(TU_FLAG_NACK, &tu->flags);
++
+ 	return ret;
+ }
+ 
+-- 
+2.45.2
 
 
