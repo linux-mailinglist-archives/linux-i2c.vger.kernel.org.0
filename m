@@ -1,593 +1,411 @@
-Return-Path: <linux-i2c+bounces-9107-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9108-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF712A11DCB
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 10:28:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5673A122CA
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 12:39:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B211618830F8
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 09:28:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 839E43A2132
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Jan 2025 11:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5427243872;
-	Wed, 15 Jan 2025 09:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8E9B20F968;
+	Wed, 15 Jan 2025 11:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dM3rrIIN"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IFnyNeND"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2086.outbound.protection.outlook.com [40.107.212.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C730242243;
-	Wed, 15 Jan 2025 09:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736933178; cv=none; b=uZObZcixjw11ag8ymwCdG04w3hTIPczcfMcd9RK7vceGRWzCHWdhU1/a83ypF4ka/476Oq2rpS1v3bFlralt+05ZAtbqA9k+CWB5ABC4wVd+I89XL1VqHHNBzGgrikex+UO0nDVMUemo0IIcTZ829qAgBW9tWA0t/l1XXywYxLA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736933178; c=relaxed/simple;
-	bh=34F956lz7/twA0gsIXXg018rpd53zWWXWodaHPKcJOs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oSONeEk7lBCm3R5Y1j7N3lPr42lKsWIt5Df7TzXJC7IR8DMR0uO0Icc/UjhBQi0AcYF1ywiu2gQRtGBU2SFykBSd0ILtGQORb5o0cvh97THgBFKLP5cqNFBd4cbr4MdCCgQTE3WQ6IGBeiDn/qMhu7H28Hu55uONVWjm+Fqd9Dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dM3rrIIN; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F0E67FF80A;
-	Wed, 15 Jan 2025 09:26:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736933174;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y+6fBkvzXwILuqk7WfTbRnQEw6uyRNDFY8eJx9IM6Jw=;
-	b=dM3rrIINnl0MGMZzSH14waZZzdmh24uuKvlRQF4JYkVRuCmXmEJZrUcd4k/wG7IJOpCaBD
-	FNU9P2g9c0ImgSZX5hgFRYZek1qHXseD4Fc1yH2a3nnhK/a3YgXOLU09Pb8JNX6/UDeJdK
-	kwma3nefTV84FakeG5mzafTdPlKJ2e1KTgYnXCU//a95l3pp+U4VbxftcErSXhubGfigq+
-	umdZpV/JIveZDyv98vdXP1RNCSy6nFjkX1H7ylP0G0lK8WvP5jm38fBk+akQ5Ydh5E47AI
-	cBP8l6w5taXpM/gH9KHJh3jVH869mVfbUHtAvhfIzvPujG4D2Nxn0lyYmrMphg==
-From: Romain Gantois <romain.gantois@bootlin.com>
-Date: Wed, 15 Jan 2025 10:25:46 +0100
-Subject: [PATCH v6 9/9] misc: add FPC202 dual port controller driver
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51788248BDD;
+	Wed, 15 Jan 2025 11:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736941164; cv=fail; b=eaVwDz6txyKLH37Sy3Y4kjMSI84CbkT2xSVeHy0nmUyiv4YAa3ofzENIg4xdnCuAWTUNDAGl6av1tVKmhuuH2q5QvD6ORQyx/cQJa62uJXAn8ee4VKV2wUlEJ28BJYD+E/4K3thk8oq31iD+HpNK53asBKFFg3yzpGOzTVVd2jk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736941164; c=relaxed/simple;
+	bh=SUHHfyRNBbarM8JLvEwgQIMl6yBtveiQO3c6xtYioF0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=dkjoYuMUY9oDpayHkkA69CiIhr+7eikj5tr04mULzsH33rGDYnI9l3AJdlIukaCQHOY05dTTr82Y4OipGlJ4KxoLSAiXFqb0+3XS4H9HHAfSfJo4QZWz9LtAqWnTia8ppVjLDrxNZ+UiLkxAeeaKQJclj7HlqH6aCFsNUZyniaA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IFnyNeND; arc=fail smtp.client-ip=40.107.212.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KcG+YTJJVkoIRMzUYNflBcWR1pSFfvdBXftKLPo4sr7waDVTc2vZsaJce/02JjhDLqP8xy3Ohv7yC8mMrQgIy1UhilKS9F0Jon/1AP9FFPPoq9xFGTdCW9A5zCOY4R/44nCrODQUlxuaBpQE9TxskkOCjkGqkRbnDbrzmmljtRZHW7trtp8sCr8C9PIEaW2qiSEfkp5uSceXAfJIyotoWnADZF2r7pJhGVwGbMekyjmZTtbJfMLiuEa9OzHLVUkYBPVjLB6iOH0577Z4MwT2e9V3h5zwjKVCUxpKiyuGsQCRtPTlWhmz2IR7AGrUdR1+hVXYn85PEf9QD7jVqLCZOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SUHHfyRNBbarM8JLvEwgQIMl6yBtveiQO3c6xtYioF0=;
+ b=xeWSyp8doJgjkaqkmNZ/mpp2qaIBwDcRiSo4oM9M9fgllCk5RHBljNlgX2MMiXFFCVM5U3qeShTji1ZRne8G4YW+HasmAtoroz7GOOrsdXjuz2yiZrywsJIfHL1+rqViHhXSctTiclm03hHY5EMlnQN7lW8sXQQCEoo0RAKRoUhRJ81+vZyfsT3RziS929DF1cpz/RGVf0/Z/Yxbui8lnj0aLJQYVqXO8v2EKxgrQ/EHAGEZGsyly/HsrqmELt+KuTsvkCnj9prD5iSlCxY9pcthwtjCmOtyK7Dl1YO81xFkY7t1yXj655EVixq6PK65B56GrJs518CSL/XZ65zz3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SUHHfyRNBbarM8JLvEwgQIMl6yBtveiQO3c6xtYioF0=;
+ b=IFnyNeNDp7LP6nLYnuKwh2T5Y9rbaKe0NbeyBDtUozFnjZs925do1DhQ3TqJMNsW61DuxFCfc0/12tCqWPU4uwaLuxZHnAtMeyfrqmNaR9P74X+n49E4itL5WMoMrvqV1xNJxuLObxfewcBmtAfzJksbmizxFGmisj7ZgfPsibx/oNz70nN4xRWkVSlBjeTWfl8qeNLxWLOIPkvbSvl6hC8OeXk/Hnp6y+DqHR6RvFVH36r24Icat2WafHv3HBG2+DCmCdVJlEk0CPJ9xiqeTDgL99psgz3nFA2hLOUDhwdnlIxqi+oX+Z0SXjzjCqEwrRy74b2rZWhfkhsLtK2Zcg==
+Received: from MN0PR12MB5716.namprd12.prod.outlook.com (2603:10b6:208:373::14)
+ by SA1PR12MB7224.namprd12.prod.outlook.com (2603:10b6:806:2bb::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.18; Wed, 15 Jan
+ 2025 11:39:19 +0000
+Received: from MN0PR12MB5716.namprd12.prod.outlook.com
+ ([fe80::1770:161a:675f:7861]) by MN0PR12MB5716.namprd12.prod.outlook.com
+ ([fe80::1770:161a:675f:7861%6]) with mapi id 15.20.8335.017; Wed, 15 Jan 2025
+ 11:39:19 +0000
+From: Kartik Rajput <kkartik@nvidia.com>
+To: "thierry.reding@gmail.com" <thierry.reding@gmail.com>
+CC: Laxman Dewangan <ldewangan@nvidia.com>, Jon Hunter <jonathanh@nvidia.com>,
+	Akhil R <akhilrajeev@nvidia.com>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "robh@kernel.org" <robh@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "andi.shyti@kernel.org"
+	<andi.shyti@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, "digetx@gmail.com"
+	<digetx@gmail.com>, "linux-tegra@vger.kernel.org"
+	<linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 4/5] i2c: tegra: Add support for SW Mutex register
+Thread-Topic: [PATCH 4/5] i2c: tegra: Add support for SW Mutex register
+Thread-Index: AQHbYe7uqzS2ILJVuEqR698eAwYeMLMXwFEA
+Date: Wed, 15 Jan 2025 11:39:18 +0000
+Message-ID: <b89d0f25a764cc34841d949186dd0859dcf1e7fb.camel@nvidia.com>
+References: <20250108110620.86900-1-kkartik@nvidia.com>
+	 <20250108110620.86900-5-kkartik@nvidia.com>
+	 <evtz6sp74wp2eiefmiefwwo7nffvj3aiz3o3gyrwojtxh4u7bv@hrbrfgedtmzk>
+In-Reply-To: <evtz6sp74wp2eiefmiefwwo7nffvj3aiz3o3gyrwojtxh4u7bv@hrbrfgedtmzk>
+Reply-To: Kartik Rajput <kkartik@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Evolution 3.44.4-0ubuntu2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB5716:EE_|SA1PR12MB7224:EE_
+x-ms-office365-filtering-correlation-id: 893cf964-9484-43ea-7fc2-08dd35593f7f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|366016|7416014|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?d05pNHZwR0RUcjl3YzhPeHBiaUJCck83Tm5wOFRrZFpndi8yU2RTNjYrTUl2?=
+ =?utf-8?B?bmRCR3M2TG9DTVVOM3o5M0VEblVLQTBuWmJGajllaWpINTc5QU8wQ3NCL1Vq?=
+ =?utf-8?B?V3p5dDVSa2xxVnpZci92bFpSdGhRU0FiMTZxZDdVSEFibVRhZlBZd3lHWmJr?=
+ =?utf-8?B?d2hnK2x4eko4Y3MxeGpMODRpR0NWOTV2SmM1cS81eFh3ZUxidmdXc0x5cUV1?=
+ =?utf-8?B?MnBLSFdzLzhQTTBoQ2pNaDdnTkpDcVQrUmtuWG01V29LODZZelVwaTJCVG1q?=
+ =?utf-8?B?TENIN3FwTlFkUHNjTDZhZ1hjcml3V3hwcU45T2VhT204M2Rnbis1Um1uc0p0?=
+ =?utf-8?B?Z3k0cHFYeTRWVTdEcHNqOVpVcGhldllCZkFUcnRBSmwrc3lTSTdaeWN1enRQ?=
+ =?utf-8?B?OXNSTGMrMStTMy9JTnVBd2xhRkdueFlIaHAwZnlJZlZQOUs5WS8rczBMZWZF?=
+ =?utf-8?B?R1c1c0UxZ0JTalIxREY2UXYyajVJS1hjZmpWalVvanJYdTJ6WllFMEtDZWtN?=
+ =?utf-8?B?d0o5Rld5YmMva01JbTY0a0lRZGt4cCtGVno5ajVZZ2IzbHBwWkVGU2d1bzZ4?=
+ =?utf-8?B?UCs4S2dabXBXYWFBOEljQWhJajFuS1ZVL1ZtbTZzY0JWWE5HYzdYZzRUOFpn?=
+ =?utf-8?B?RHZQd2ZFRzZFN25IWTdpb2RKQzN4S2QveTlFaUl0VVFZZ2JLMGtsK3cwcVlR?=
+ =?utf-8?B?eVd0aUpTdnc4VWNoa3lTMHJoOE1XaHpvVzZUWkpERDNoczBka1lybmxudFZu?=
+ =?utf-8?B?V3VLOGVScXB0Q0phbFdZdmNxdlNkM1dwZmxIeGhHWGdTbXZwRjUxYTdLN2JC?=
+ =?utf-8?B?QWgzVi9zd2lSYWZHL2RXMDVqL3R1Wk9SUVlldHpUaFpCR29xK0lKeWMzaXZN?=
+ =?utf-8?B?Q0c1RUpmbzhOZnlCamZ5TDRCZUlLUXMzYmZERngyS0VsbEJibC8xQ3Vmdjdt?=
+ =?utf-8?B?dnl2M0RXaXAydU50dWtDeHBjZ3dtN2dKUGV4VWZQTFhqS01HTWNMZUJSNmN6?=
+ =?utf-8?B?QWhnS21Id25oMU1jNm1DQmN3MFFaNE5OM1pZQTFLM05Iai9MRHFHZk1aUDlO?=
+ =?utf-8?B?ZTNDYTMvNldkVEpZNDJ2K3VoL1dmK0R4NzI3SXRMR25ZWHVtVnJvRzJ6dXpl?=
+ =?utf-8?B?OGVYUEFERmdZOFMwdDFTaGVWaHJ4WDA3c1ZLc2krQXV4VVlQcjFTRjE2TmhZ?=
+ =?utf-8?B?TC9kTkUvQXQzUW93WU1xbHZYUTl0SDNBTzBZb3JtaENuTUJoMUJneERjZG9y?=
+ =?utf-8?B?dm9UUHhtVUUzVml5bUMxRDFsSTBBZzFYSUtYQTJWb0szOW9IT3JwQmFGcWxC?=
+ =?utf-8?B?YnZPNWdEZ2hYV1gxaHh0ZTE4OVRXSGJ0NjM3SjRRUkNwcTU2YnBLT3B2UmM5?=
+ =?utf-8?B?dk9mNnBvMWtON2lIQjRySzJrR1AwdWRkTHZHSXRqa0RMQjVueUhqUmVZTk9v?=
+ =?utf-8?B?VnpYeEZsa0x0c2lLWlNWazJObVlaWmVZbXVmRnlWQU9PWUtvYm1Ta2xURWVF?=
+ =?utf-8?B?cEI5TGJFcWF1Q3ZrdE1KWDM4TWN5ZEdCNzZMMjVOK0pTSUo4OU5jclAydkVj?=
+ =?utf-8?B?NWhTTzVpN0piNWxhdTk2ZWtzVW9taUFQRWdWSXRSSHVGVWtrYXBFRnRBRDM1?=
+ =?utf-8?B?cVRkUGtaMTZ0akdNaFFrNHZWQ1RUT2IzZFB2L3BIbW81SG1WZEo3aDBncFIz?=
+ =?utf-8?B?NkV4dkplVHpIMlU5cDhTNGo1bGlXSitwK1lCbzJWQnl5c0tta2s2Yzd6YjFp?=
+ =?utf-8?B?cFRzK2NJYUVYMXRQZXYrb0t0YUl2Q3dpSGtkcWVIZjRJMlZYTWFlUGc5QXhG?=
+ =?utf-8?B?OUczOHMyaHFrY1dsUUNBeGlveTBoWUxvSVZRcGZVTmpTS09VYVBPUE5VeTdh?=
+ =?utf-8?B?NVF0dlFFamI4NGQ3RVZBRitMb0t6QmtMM0gyUGVnVGhkclNPd3lwMmtONjA1?=
+ =?utf-8?Q?s0FiBeK+FHja0/6PThs3Y3C3GPLbDFlb?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5716.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?elVyVjV6dEMyMmNjNmdnaFBmSlBiRjFZVzFIVktabkJ6ckZDWExIMWVIQmZL?=
+ =?utf-8?B?WUdOcEpTVkYxQVUxUFRacFNXcjliNGZKa2U0OUV1ZktvenVVRkk0VUwyaHBG?=
+ =?utf-8?B?YUJqL1I5MEVpcFdSdXFBajlkcml6WjN1b2NHWHVuSk5qRW9BTENYNXJCakdQ?=
+ =?utf-8?B?SXB5dEhrSnh0ZTN4NFArQ3BXOFBpUkVndjBuN2hTajJpUzZacnVHSnlCWkEr?=
+ =?utf-8?B?eEQ2NUVrcjFYWGorZ0gvelJvZFJpS1F1RmdHdGNwaFlYdDdDQitZbWdYSHJK?=
+ =?utf-8?B?dis1SUZtaXQ4R25mWmFXa0ptalNXYmdYSktMTXJaQitOMit0ckRjSDBpVCtS?=
+ =?utf-8?B?MFZHN2lyMkllR0VQZDJNMXVidzY2UzZpLzBVMTJkbk10M29LRVM4WmhQUDhY?=
+ =?utf-8?B?QlBDVlBnOVNRVHA5K3RmeWYzY21VVFBNOVFtWEU5aFpoRHQ1NTF6a0pjdHZn?=
+ =?utf-8?B?YUZXVDJnQ2I0UWI0ZDhvMjNkaDloYzNEM1NhRi9GNDc4ZzRoNlkzUWloT1ha?=
+ =?utf-8?B?a1MxcWc3SGhQOTd0R09ERFRZaGZEak5oTzFmbUpSNE9FeHlzbk9aSFN1NjN6?=
+ =?utf-8?B?SUFDVGpNbTF1cXJkNUlPU0xoaVdZdjI5eTM5TDhqTDJQMjVZTWZIbW8rZ2Ir?=
+ =?utf-8?B?bkg1aEdyTk1ib08ySnV0dS9ZY21ydVJQTmFPM1ZQajlPbzUyeHBGdWw0d2d1?=
+ =?utf-8?B?V2M1OFE5aURHM3gyeC8wMEwxVkJHUXJEbkZacEp6S2VUcEZSZjRCK1hsQm9H?=
+ =?utf-8?B?OEJlSytkZm1pREh0bmpnNko3VldlOGxEOEFMWGw2TktRVDVYbVNDUHVTZFRF?=
+ =?utf-8?B?NnpYblRLUXZGOHNVYkxSVHNxTDVvMFkxMkxLMnl5aFo5ZGpwYWxnR2RRcFFa?=
+ =?utf-8?B?OWh1aGtXYVVVMElFNytBWkRpQmhlZDFIY3dVMnRNaEZmU2dIZWlWSks3WGNJ?=
+ =?utf-8?B?VWhQbVZJTG8wZ0lpSitET2tTMlB0YlJwT2RERDdVa3RnNTlwaWRZb05lZUYr?=
+ =?utf-8?B?N1hJaG5SZFkwL0NMZmJCTk00TzJ0THF6V2M1WG4vUkpGR21HTzJlelR5MUJW?=
+ =?utf-8?B?Z05TaVRHRUZ0bU00cDIyRVNoMlpvQ3oxNisvWTMrQTlBbVI3cU8yclp4NVli?=
+ =?utf-8?B?OEJWY3RjWGhBNy9DZzRWQlREVEdVQ2xLZkNJaGp0azFvcUF1bU5zRE1CMHQ1?=
+ =?utf-8?B?SUtsem1HOENnTTIwaURPWmtCQ3ZJczMzSC9YUWg1bG9oTXZTcXhmLytkVU9F?=
+ =?utf-8?B?KzZ5MmYyTzAzSW0wa3hheE1lS1Q2MnA4ejdYUGJDOHVKMkpiSy9DS2szL1Mx?=
+ =?utf-8?B?WWdGUThmUG9xZEFhSnZWS2ZOelk4V29ScDVlTlNOL1lURWV5Z0JPVExESFZE?=
+ =?utf-8?B?K2RVZ3BxOGJFVW1ubGxPS2hjTzExT0xxS0R6ZFlnNmI2K0dtb3lDdGZqZ2NL?=
+ =?utf-8?B?K0YwcVd1dm1zeEJralJzbjhVWmhxZTlybEx5RTlqZlZIMldqbW1xM0lRSzg0?=
+ =?utf-8?B?dzlwVHpldGw4WUwrRzJqdzRrdTFURzQzdzAxRVVNYTkyYlNzZGpqT21Jay9r?=
+ =?utf-8?B?T3NTclVtYUpWNVF2SjA3c0UzQ0xPMUExYTloUzdubmx4MENMaEJqNE1ISFVF?=
+ =?utf-8?B?SHk0VTZPbUprOGxJbTNoMUEvM20yYzd0WEhXYk1BNGpTQkhKMTEzdDQvTHVt?=
+ =?utf-8?B?Z0pqKzE4cWcxSzFiTDNHbEU3RFMzUEJVK2FaaEcrYjBSTjRjaUo3NGpGVjlL?=
+ =?utf-8?B?VVJxUmMzNU9raXFkaEpKL0JOQ0VSYng0VXlaMkxNcDFYWmlnSmZDTHRRekZV?=
+ =?utf-8?B?T1F5OVRzem56KzJiUHpSOXQ0SUxBOFpDVXkwUTJTWXhYTWwxbkpLWFdhYkdr?=
+ =?utf-8?B?UWVKVlVjeHZvaGZPRWFjeFVnRUlEVldNclMwMWdnWGtia1dvNkRhUmR3aDFO?=
+ =?utf-8?B?dHZUQkp5dmRvajZYQjdRdndIVHVNdWdvM01ZMHYyU1FkUWhTblQ4eThhYm1Z?=
+ =?utf-8?B?QzcySEpoL1FKMVpJTVdxT2E5bXo3Y2VBNXJSVDVHRC9JT29WVm8xbjFCMTlH?=
+ =?utf-8?B?N1RydzRGSkNJMlZVbW8zRi8rNnlTOUpFUk9zT1VsVWJ4UHhxZ3hZSDM4ckE4?=
+ =?utf-8?Q?ZNPzW2xv4AysIYT1fuk2ftfFx?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <85E396869A48594BA38B996DABF75510@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250115-fpc202-v6-9-d47a34820753@bootlin.com>
-References: <20250115-fpc202-v6-0-d47a34820753@bootlin.com>
-In-Reply-To: <20250115-fpc202-v6-0-d47a34820753@bootlin.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>, 
- Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-media@vger.kernel.org, linux-gpio@vger.kernel.org, 
- Romain Gantois <romain.gantois@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: romain.gantois@bootlin.com
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5716.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 893cf964-9484-43ea-7fc2-08dd35593f7f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2025 11:39:18.9774
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CWr2AlqREg82aD71dAG0ArXnY/5pmgWZq/J3MoKwfOx7NZaGvC9YkM1Kin0ZmxAIojnkFyAJEI368x3O57fkzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7224
 
-The TI FPC202 dual port controller serves as a low-speed signal aggregator
-for common port types such as SFP, QSFP, Mini-SAS HD, and others.
-
-It aggregates GPIO and I2C signals across two downstream ports, acting as
-both a GPIO controller and an I2C address translator for up to two logical
-devices per port.
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
----
- MAINTAINERS              |   1 +
- drivers/misc/Kconfig     |  11 ++
- drivers/misc/Makefile    |   1 +
- drivers/misc/ti_fpc202.c | 440 +++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 453 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2ef5c0d395b3668167dddbd27237a2177f85571e..865ef413b38c293e1c7b1405322fafe9df81ea96 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -23502,6 +23502,7 @@ M:	Romain Gantois <romain.gantois@bootlin.com>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/misc/ti,fpc202.yaml
-+F:	drivers/misc/ti_fpc202.c
- 
- TI FPD-LINK DRIVERS
- M:	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 09cbe3f0ab1e56f85852c0cb50cfc03cae659d2b..3c7e82e86e4ae83eff84999d123cd8c0f018323c 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -114,6 +114,17 @@ config RPMB
- 
- 	  If unsure, select N.
- 
-+config TI_FPC202
-+	tristate "TI FPC202 Dual Port Controller"
-+	select GPIOLIB
-+	depends on I2C_ATR
-+	help
-+	  If you say yes here you get support for the Texas Instruments FPC202
-+	  Dual Port Controller.
-+
-+	  This driver can also be built as a module. If so, the module will be
-+	  called fpc202.
-+
- config TIFM_CORE
- 	tristate "TI Flash Media interface support"
- 	depends on PCI
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 40bf953185c773afa91f7784a286ae0752bb0b53..df5a97ebfaa15b50e23caa90b466a127c6dd64fa 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -12,6 +12,7 @@ obj-$(CONFIG_ATMEL_SSC)		+= atmel-ssc.o
- obj-$(CONFIG_DUMMY_IRQ)		+= dummy-irq.o
- obj-$(CONFIG_ICS932S401)	+= ics932s401.o
- obj-$(CONFIG_LKDTM)		+= lkdtm/
-+obj-$(CONFIG_TI_FPC202)		+= ti_fpc202.o
- obj-$(CONFIG_TIFM_CORE)       	+= tifm_core.o
- obj-$(CONFIG_TIFM_7XX1)       	+= tifm_7xx1.o
- obj-$(CONFIG_PHANTOM)		+= phantom.o
-diff --git a/drivers/misc/ti_fpc202.c b/drivers/misc/ti_fpc202.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..e251d8e0a640f05d59e5b20665d8a8237b8c2724
---- /dev/null
-+++ b/drivers/misc/ti_fpc202.c
-@@ -0,0 +1,440 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * ti_fpc202.c - FPC202 Dual Port Controller driver
-+ *
-+ * Copyright (C) 2024 Bootlin
-+ *
-+ */
-+
-+#include <linux/cleanup.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/i2c-atr.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/module.h>
-+
-+#define FPC202_NUM_PORTS 2
-+#define FPC202_ALIASES_PER_PORT 2
-+
-+/*
-+ * GPIO: port mapping
-+ *
-+ * 0: P0_S0_IN_A
-+ * 1: P0_S1_IN_A
-+ * 2: P1_S0_IN_A
-+ * 3: P1_S1_IN_A
-+ * 4: P0_S0_IN_B
-+ * ...
-+ * 8: P0_S0_IN_C
-+ * ...
-+ * 12: P0_S0_OUT_A
-+ * ...
-+ * 16: P0_S0_OUT_B
-+ * ...
-+ * 19: P1_S1_OUT_B
-+ *
-+ */
-+
-+#define FPC202_GPIO_COUNT 20
-+#define FPC202_GPIO_P0_S0_IN_B  4
-+#define FPC202_GPIO_P0_S0_OUT_A 12
-+
-+#define FPC202_REG_IN_A_INT    0x6
-+#define FPC202_REG_IN_C_IN_B   0x7
-+#define FPC202_REG_OUT_A_OUT_B 0x8
-+
-+#define FPC202_REG_OUT_A_OUT_B_VAL 0xa
-+
-+#define FPC202_REG_MOD_DEV(port, dev) (0xb4 + ((port) * 4) + (dev))
-+#define FPC202_REG_AUX_DEV(port, dev) (0xb6 + ((port) * 4) + (dev))
-+
-+/*
-+ * The FPC202 doesn't support turning off address translation on a single port.
-+ * So just set an invalid I2C address as the translation target when no client
-+ * address is attached.
-+ */
-+#define FPC202_REG_DEV_INVALID 0
-+
-+/* Even aliases are assigned to device 0 and odd aliases to device 1 */
-+#define fpc202_dev_num_from_alias(alias) ((alias) % 2)
-+
-+struct fpc202_priv {
-+	struct i2c_client *client;
-+	struct i2c_atr *atr;
-+	struct gpio_desc *en_gpio;
-+	struct gpio_chip gpio;
-+
-+	/* Lock REG_MOD/AUX_DEV and addr_caches during attach/detach */
-+	struct mutex reg_dev_lock;
-+
-+	/* Cached device addresses for both ports and their devices */
-+	u8 addr_caches[2][2];
-+
-+	/* Keep track of which ports were probed */
-+	DECLARE_BITMAP(probed_ports, FPC202_NUM_PORTS);
-+};
-+
-+static void fpc202_fill_alias_table(struct i2c_client *client, u16 *aliases, int port_id)
-+{
-+	u16 first_alias;
-+	int i;
-+
-+	/*
-+	 * There is a predefined list of aliases for each FPC202 I2C
-+	 * self-address.  This allows daisy-chained FPC202 units to
-+	 * automatically take on different sets of aliases.
-+	 * Each port of an FPC202 unit is assigned two aliases from this list.
-+	 */
-+	first_alias = 0x10 + 4 * port_id + 8 * ((u16)client->addr - 2);
-+
-+	for (i = 0; i < FPC202_ALIASES_PER_PORT; i++)
-+		aliases[i] = first_alias + i;
-+}
-+
-+static int fpc202_gpio_get_dir(int offset)
-+{
-+	return offset < FPC202_GPIO_P0_S0_OUT_A ? GPIO_LINE_DIRECTION_IN : GPIO_LINE_DIRECTION_OUT;
-+}
-+
-+static int fpc202_read(struct fpc202_priv *priv, u8 reg)
-+{
-+	int val;
-+
-+	val = i2c_smbus_read_byte_data(priv->client, reg);
-+	return val;
-+}
-+
-+static int fpc202_write(struct fpc202_priv *priv, u8 reg, u8 value)
-+{
-+	return i2c_smbus_write_byte_data(priv->client, reg, value);
-+}
-+
-+static void fpc202_set_enable(struct fpc202_priv *priv, int enable)
-+{
-+	if (!priv->en_gpio)
-+		return;
-+
-+	gpiod_set_value(priv->en_gpio, enable);
-+}
-+
-+static void fpc202_gpio_set(struct gpio_chip *chip, unsigned int offset,
-+			    int value)
-+{
-+	struct fpc202_priv *priv = gpiochip_get_data(chip);
-+	int ret;
-+	u8 val;
-+
-+	if (fpc202_gpio_get_dir(offset) == GPIO_LINE_DIRECTION_IN)
-+		return;
-+
-+	ret = fpc202_read(priv, FPC202_REG_OUT_A_OUT_B_VAL);
-+	if (ret < 0) {
-+		dev_err(&priv->client->dev, "Failed to set GPIO %d value! err %d\n", offset, ret);
-+		return;
-+	}
-+
-+	val = (u8)ret;
-+
-+	if (value)
-+		val |= BIT(offset - FPC202_GPIO_P0_S0_OUT_A);
-+	else
-+		val &= ~BIT(offset - FPC202_GPIO_P0_S0_OUT_A);
-+
-+	fpc202_write(priv, FPC202_REG_OUT_A_OUT_B_VAL, val);
-+}
-+
-+static int fpc202_gpio_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct fpc202_priv *priv = gpiochip_get_data(chip);
-+	u8 reg, bit;
-+	int ret;
-+
-+	if (offset < FPC202_GPIO_P0_S0_IN_B) {
-+		reg = FPC202_REG_IN_A_INT;
-+		bit = BIT(4 + offset);
-+	} else if (offset < FPC202_GPIO_P0_S0_OUT_A) {
-+		reg = FPC202_REG_IN_C_IN_B;
-+		bit = BIT(offset - FPC202_GPIO_P0_S0_IN_B);
-+	} else {
-+		reg = FPC202_REG_OUT_A_OUT_B_VAL;
-+		bit = BIT(offset - FPC202_GPIO_P0_S0_OUT_A);
-+	}
-+
-+	ret = fpc202_read(priv, reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	return !!(((u8)ret) & bit);
-+}
-+
-+static int fpc202_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
-+{
-+	if (fpc202_gpio_get_dir(offset) == GPIO_LINE_DIRECTION_OUT)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int fpc202_gpio_direction_output(struct gpio_chip *chip, unsigned int offset,
-+					int value)
-+{
-+	struct fpc202_priv *priv = gpiochip_get_data(chip);
-+	int ret;
-+	u8 val;
-+
-+	if (fpc202_gpio_get_dir(offset) == GPIO_LINE_DIRECTION_IN)
-+		return -EINVAL;
-+
-+	fpc202_gpio_set(chip, offset, value);
-+
-+	ret = fpc202_read(priv, FPC202_REG_OUT_A_OUT_B);
-+	if (ret < 0)
-+		return ret;
-+
-+	val = (u8)ret | BIT(offset - FPC202_GPIO_P0_S0_OUT_A);
-+
-+	return fpc202_write(priv, FPC202_REG_OUT_A_OUT_B, val);
-+}
-+
-+/*
-+ * Set the translation table entry associated with a port and device number.
-+ *
-+ * Each downstream port of the FPC202 has two fixed aliases corresponding to
-+ * device numbers 0 and 1. If one of these aliases is found in an incoming I2C
-+ * transfer, it will be translated to the address given by the corresponding
-+ * translation table entry.
-+ */
-+static int fpc202_write_dev_addr(struct fpc202_priv *priv, u32 port_id, int dev_num, u16 addr)
-+{
-+	int ret, reg_mod, reg_aux;
-+	u8 val;
-+
-+	guard(mutex)(&priv->reg_dev_lock);
-+
-+	reg_mod = FPC202_REG_MOD_DEV(port_id, dev_num);
-+	reg_aux = FPC202_REG_AUX_DEV(port_id, dev_num);
-+	val = addr & 0x7f;
-+
-+	ret = fpc202_write(priv, reg_mod, val);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * The FPC202 datasheet is unclear about the role of the AUX registers.
-+	 * Empirically, writing to them as well seems to be necessary for
-+	 * address translation to function properly.
-+	 */
-+	ret = fpc202_write(priv, reg_aux, val);
-+
-+	priv->addr_caches[port_id][dev_num] = val;
-+
-+	return ret;
-+}
-+
-+static int fpc202_attach_addr(struct i2c_atr *atr, u32 chan_id,
-+			      u16 addr, u16 alias)
-+{
-+	struct fpc202_priv *priv = i2c_atr_get_driver_data(atr);
-+
-+	dev_dbg(&priv->client->dev, "attaching address 0x%02x to alias 0x%02x\n", addr, alias);
-+
-+	return fpc202_write_dev_addr(priv, chan_id, fpc202_dev_num_from_alias(alias), addr);
-+}
-+
-+static void fpc202_detach_addr(struct i2c_atr *atr, u32 chan_id,
-+			       u16 addr)
-+{
-+	struct fpc202_priv *priv = i2c_atr_get_driver_data(atr);
-+	int dev_num, reg_mod, val;
-+
-+	for (dev_num = 0; dev_num < 2; dev_num++) {
-+		reg_mod = FPC202_REG_MOD_DEV(chan_id, dev_num);
-+
-+		mutex_lock(&priv->reg_dev_lock);
-+
-+		val = priv->addr_caches[chan_id][dev_num];
-+
-+		mutex_unlock(&priv->reg_dev_lock);
-+
-+		if (val < 0) {
-+			dev_err(&priv->client->dev, "failed to read register 0x%x while detaching address 0x%02x\n",
-+				reg_mod, addr);
-+			return;
-+		}
-+
-+		if (val == (addr & 0x7f)) {
-+			fpc202_write_dev_addr(priv, chan_id, dev_num, FPC202_REG_DEV_INVALID);
-+			return;
-+		}
-+	}
-+}
-+
-+static const struct i2c_atr_ops fpc202_atr_ops = {
-+	.attach_addr = fpc202_attach_addr,
-+	.detach_addr = fpc202_detach_addr,
-+};
-+
-+static int fpc202_probe_port(struct fpc202_priv *priv, struct device_node *i2c_handle, int port_id)
-+{
-+	u16 aliases[FPC202_ALIASES_PER_PORT] = { };
-+	struct device *dev = &priv->client->dev;
-+	struct i2c_atr_adap_desc desc = { };
-+	int ret = 0;
-+
-+	desc.chan_id = port_id;
-+	desc.parent = dev;
-+	desc.bus_handle = of_node_to_fwnode(i2c_handle);
-+	desc.num_aliases = FPC202_ALIASES_PER_PORT;
-+
-+	fpc202_fill_alias_table(priv->client, aliases, port_id);
-+	desc.aliases = aliases;
-+
-+	ret = i2c_atr_add_adapter(priv->atr, &desc);
-+	if (ret)
-+		return ret;
-+
-+	set_bit(port_id, priv->probed_ports);
-+
-+	ret = fpc202_write_dev_addr(priv, port_id, 0, FPC202_REG_DEV_INVALID);
-+	if (ret)
-+		return ret;
-+
-+	return fpc202_write_dev_addr(priv, port_id, 1, FPC202_REG_DEV_INVALID);
-+}
-+
-+static void fpc202_remove_port(struct fpc202_priv *priv, int port_id)
-+{
-+	i2c_atr_del_adapter(priv->atr, port_id);
-+	clear_bit(port_id, priv->probed_ports);
-+}
-+
-+static int fpc202_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct device_node *i2c_handle;
-+	struct fpc202_priv *priv;
-+	int ret, port_id;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	mutex_init(&priv->reg_dev_lock);
-+
-+	priv->client = client;
-+	i2c_set_clientdata(client, priv);
-+
-+	priv->en_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_HIGH);
-+	if (IS_ERR(priv->en_gpio)) {
-+		ret = PTR_ERR(priv->en_gpio);
-+		dev_err(dev, "failed to fetch enable GPIO! err %d\n", ret);
-+		goto destroy_mutex;
-+	}
-+
-+	priv->gpio.label = "gpio-fpc202";
-+	priv->gpio.base = -1;
-+	priv->gpio.direction_input = fpc202_gpio_direction_input;
-+	priv->gpio.direction_output = fpc202_gpio_direction_output;
-+	priv->gpio.set = fpc202_gpio_set;
-+	priv->gpio.get = fpc202_gpio_get;
-+	priv->gpio.ngpio = FPC202_GPIO_COUNT;
-+	priv->gpio.parent = dev;
-+	priv->gpio.owner = THIS_MODULE;
-+
-+	ret = gpiochip_add_data(&priv->gpio, priv);
-+	if (ret) {
-+		priv->gpio.parent = NULL;
-+		dev_err(dev, "failed to add gpiochip err %d\n", ret);
-+		goto disable_gpio;
-+	}
-+
-+	priv->atr = i2c_atr_new(client->adapter, dev, &fpc202_atr_ops, 2);
-+	if (IS_ERR(priv->atr)) {
-+		ret = PTR_ERR(priv->atr);
-+		dev_err(dev, "failed to create i2c atr err %d\n", ret);
-+		goto disable_gpio;
-+	}
-+
-+	i2c_atr_set_driver_data(priv->atr, priv);
-+
-+	bitmap_zero(priv->probed_ports, FPC202_NUM_PORTS);
-+
-+	for_each_child_of_node(dev->of_node, i2c_handle) {
-+		ret = of_property_read_u32(i2c_handle, "reg", &port_id);
-+		if (ret) {
-+			if (ret == -EINVAL)
-+				continue;
-+
-+			dev_err(dev, "failed to read 'reg' property of child node, err %d\n", ret);
-+			goto unregister_chans;
-+		}
-+
-+		if (port_id > FPC202_NUM_PORTS) {
-+			dev_err(dev, "port ID %d is out of range!\n", port_id);
-+			ret = -EINVAL;
-+			goto unregister_chans;
-+		}
-+
-+		ret = fpc202_probe_port(priv, i2c_handle, port_id);
-+		if (ret) {
-+			dev_err(dev, "Failed to probe port %d, err %d\n", port_id, ret);
-+			goto unregister_chans;
-+		}
-+	}
-+
-+	dev_info(&client->dev, "%s FPC202 Dual Port controller found\n", client->name);
-+
-+	goto out;
-+
-+unregister_chans:
-+	for_each_set_bit(port_id, priv->probed_ports, FPC202_NUM_PORTS)
-+		fpc202_remove_port(priv, port_id);
-+
-+	i2c_atr_delete(priv->atr);
-+disable_gpio:
-+	fpc202_set_enable(priv, 0);
-+	gpiochip_remove(&priv->gpio);
-+destroy_mutex:
-+	mutex_destroy(&priv->reg_dev_lock);
-+out:
-+	return ret;
-+}
-+
-+static void fpc202_remove(struct i2c_client *client)
-+{
-+	struct fpc202_priv *priv = i2c_get_clientdata(client);
-+	int port_id;
-+
-+	for_each_set_bit(port_id, priv->probed_ports, FPC202_NUM_PORTS)
-+		fpc202_remove_port(priv, port_id);
-+
-+	mutex_destroy(&priv->reg_dev_lock);
-+
-+	i2c_atr_delete(priv->atr);
-+
-+	fpc202_set_enable(priv, 0);
-+	gpiochip_remove(&priv->gpio);
-+}
-+
-+static const struct of_device_id fpc202_of_match[] = {
-+	{ .compatible = "ti,fpc202" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, fpc202_of_match);
-+
-+static struct i2c_driver fpc202_driver = {
-+	.driver = {
-+		.name = "fpc202",
-+		.of_match_table = fpc202_of_match,
-+	},
-+	.probe = fpc202_probe,
-+	.remove = fpc202_remove,
-+};
-+
-+module_i2c_driver(fpc202_driver);
-+
-+MODULE_AUTHOR("Romain Gantois <romain.gantois@bootlin.com>");
-+MODULE_DESCRIPTION("TI FPC202 Dual Port Controller driver");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(I2C_ATR);
-
--- 
-2.47.1
-
+VGhhbmtzIGZvciByZXZpZXdpbmcgdGhlIHBhdGNoIFRoaWVycnkhCgoKT24gV2VkLCAyMDI1LTAx
+LTA4IGF0IDE4OjAxICswMTAwLCBUaGllcnJ5IFJlZGluZyB3cm90ZToKPiBPbiBXZWQsIEphbiAw
+OCwgMjAyNSBhdCAwNDozNjoxOVBNICswNTMwLCBLYXJ0aWsgUmFqcHV0IHdyb3RlOgo+ID4gRnJv
+bTogQWtoaWwgUiA8YWtoaWxyYWplZXZAbnZpZGlhLmNvbT4KPiA+IAo+ID4gQWRkIHN1cHBvcnQg
+Zm9yIFNXIE11dGV4IHJlZ2lzdGVyIGludHJvZHVjZWQgaW4gVGVncmEyNjQgdG8gcHJvdmlkZQo+
+IAo+IFRoZSBzcGVsbGluZyBpcyBhIGJpdCBpbmNvbnNpc3RlbnQuIEVhcmxpZXIgeW91IHJlZmVy
+cmVkIHRvIHRoaXMgYXMKPiBTVwo+IE1VVEVYIHJlZ2lzdGVyLCB3aGljaCBtYWtlcyBzZW5zZSBp
+ZiB0aGF0J3Mgd2hhdCBpdCdzIGNhbGxlZC4gQnV0Cj4gdGhlbgo+IHlvdSBjYWxsIGl0ICJTVyBN
+dXRleCIgcmVnaXN0ZXIgaGVyZS4gSWYgeW91IGRvbid0IHdhbnQgdG8gcmVmZXIgdG8KPiBpdAo+
+IGJ5IHRoZSBkb2N1bWVudGVkIG5hbWUsIGl0IHNob3VsZCBwcm9iYWJseSBiZSAiU1cgbXV0ZXgi
+IGluc3RlYWQuCj4gCj4gPiBhbiBvcHRpb24gdG8gc2hhcmUgdGhlIGludGVyZmFjZSBiZXR3ZWVu
+IG11bHRpcGxlIGZpcm13YXJlIGFuZC9vcgo+IAo+ICJmaXJtd2FyZXMiCj4gCj4gPiBWaXJ0dWFs
+IE1hY2hpbmVzLgo+IAo+ICJ2aXJ0dWFsIG1hY2hpbmVzIiBvciAiVk1zIgo+IAoKQUNLLiBJIHdp
+bGwgZml4IHRoaXMgaW4gdGhlIG5leHQgcGF0Y2hzZXQuCgo+ID4gSG93ZXZlciwgdGhlIGhhcmR3
+YXJlIGRvZXMgbm90IGVuc3VyZSBhbnkgcHJvdGVjdGlvbiBiYXNlZCBvbiB0aGUKPiA+IHZhbHVl
+cy4gVGhlIGRyaXZlci9maXJtd2FyZSBzaG91bGQgaG9ub3IgdGhlIHBlZXIgd2hvIGFscmVhZHkg
+aG9sZHMKPiA+IHRoZSBtdXRleC4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogQWtoaWwgUiA8YWto
+aWxyYWplZXZAbnZpZGlhLmNvbT4KPiA+IFNpZ25lZC1vZmYtYnk6IEthcnRpayBSYWpwdXQgPGtr
+YXJ0aWtAbnZpZGlhLmNvbT4KPiA+IC0tLQo+ID4gwqBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLXRl
+Z3JhLmMgfCAxMjYKPiA+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLQo+ID4gwqAx
+IGZpbGUgY2hhbmdlZCwgMTExIGluc2VydGlvbnMoKyksIDE1IGRlbGV0aW9ucygtKQo+ID4gCj4g
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy10ZWdyYS5jCj4gPiBiL2RyaXZl
+cnMvaTJjL2J1c3Nlcy9pMmMtdGVncmEuYwo+ID4gaW5kZXggY2YwNTkzN2NiODI2Li5hNTk3NGFm
+NWIxYWYgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLXRlZ3JhLmMKPiA+
+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtdGVncmEuYwo+ID4gQEAgLTEzNSw2ICsxMzUs
+MTEgQEAKPiA+IMKgI2RlZmluZSBJMkNfTVNUX0ZJRk9fU1RBVFVTX1RYwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoEdFTk1BU0soMjMsIDE2KQo+ID4gwqAjZGVmaW5lIEkyQ19NU1Rf
+RklGT19TVEFUVVNfUljCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgR0VOTUFTSyg3
+LCAwKQo+ID4gwqAKPiA+ICsjZGVmaW5lIEkyQ19TV19NVVRFWMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDB4MGVjCj4gPiArI2RlZmluZSBJMkNf
+U1dfTVVURVhfUkVRVUVTVMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgR0VO
+TUFTSygzLCAwKQo+ID4gKyNkZWZpbmUgSTJDX1NXX01VVEVYX0dSQU5UwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgR0VOTUFTSyg3LCA0KQo+ID4gKyNkZWZpbmUgSTJD
+X1NXX01VVEVYX0lEwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoDkKPiA+ICsKPiA+IMKgLyogY29uZmlndXJhdGlvbiBsb2FkIHRp
+bWVvdXQgaW4gbWljcm9zZWNvbmRzICovCj4gPiDCoCNkZWZpbmUgSTJDX0NPTkZJR19MT0FEX1RJ
+TUVPVVTCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAxMDAw
+MDAwCj4gPiDCoAo+ID4gQEAgLTIwMiw2ICsyMDcsNyBAQCBlbnVtIG1zZ19lbmRfdHlwZSB7Cj4g
+PiDCoCAqwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbiBIUyBtb2RlLgo+ID4gwqAgKiBAaGFz
+X2ludGVyZmFjZV90aW1pbmdfcmVnOiBIYXMgaW50ZXJmYWNlIHRpbWluZyByZWdpc3RlciB0bwo+
+ID4gcHJvZ3JhbSB0aGUgdHVuZWQKPiA+IMKgICrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHRp
+bWluZyBzZXR0aW5ncy4KPiA+ICsgKiBAaGFzX211dGV4OiBIYXMgTXV0ZXggcmVnaXN0ZXIgZm9y
+IG11dHVhbCBleGNsdXNpb24gd2l0aCBvdGhlcgo+ID4gZmlybXdhcmVzIG9yIFZNLgo+IAo+ICJt
+dXRleCIKPiAKPiA+IMKgICovCj4gPiDCoHN0cnVjdCB0ZWdyYV9pMmNfaHdfZmVhdHVyZSB7Cj4g
+PiDCoMKgwqDCoMKgwqDCoMKgYm9vbCBoYXNfY29udGludWVfeGZlcl9zdXBwb3J0Owo+ID4gQEAg
+LTIyOCw2ICsyMzQsNyBAQCBzdHJ1Y3QgdGVncmFfaTJjX2h3X2ZlYXR1cmUgewo+ID4gwqDCoMKg
+wqDCoMKgwqDCoHUzMiBzZXR1cF9ob2xkX3RpbWVfaHNfbW9kZTsKPiA+IMKgwqDCoMKgwqDCoMKg
+wqBib29sIGhhc19pbnRlcmZhY2VfdGltaW5nX3JlZzsKPiA+IMKgwqDCoMKgwqDCoMKgwqBib29s
+IGhhc19oc19tb2RlX3N1cHBvcnQ7Cj4gPiArwqDCoMKgwqDCoMKgwqBib29sIGhhc19tdXRleDsK
+PiA+IMKgfTsKPiA+IMKgCj4gPiDCoC8qKgo+ID4gQEAgLTM3MSw2ICszNzgsOTkgQEAgc3RhdGlj
+IHZvaWQgaTJjX3JlYWRzbChzdHJ1Y3QgdGVncmFfaTJjX2Rldgo+ID4gKmkyY19kZXYsIHZvaWQg
+KmRhdGEsCj4gPiDCoMKgwqDCoMKgwqDCoMKgcmVhZHNsKGkyY19kZXYtPmJhc2UgKyB0ZWdyYV9p
+MmNfcmVnX2FkZHIoaTJjX2RldiwgcmVnKSwKPiA+IGRhdGEsIGxlbik7Cj4gPiDCoH0KPiA+IMKg
+Cj4gPiArc3RhdGljIGludCB0ZWdyYV9pMmNfcG9sbF9yZWdpc3RlcihzdHJ1Y3QgdGVncmFfaTJj
+X2RldiAqaTJjX2RldiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdTMyIHJlZywgdTMyIG1hc2ssIHUzMiBkZWxh
+eV91cywKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgdTMyIHRpbWVvdXRfdXMpCj4gPiArewo+ID4gK8KgwqDCoMKg
+wqDCoMKgdm9pZCBfX2lvbWVtICphZGRyID0gaTJjX2Rldi0+YmFzZSArCj4gPiB0ZWdyYV9pMmNf
+cmVnX2FkZHIoaTJjX2RldiwgcmVnKTsKPiA+ICvCoMKgwqDCoMKgwqDCoHUzMiB2YWw7Cj4gPiAr
+Cj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoIWkyY19kZXYtPmF0b21pY19tb2RlKQo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiByZWFkbF9yZWxheGVkX3BvbGxfdGltZW91
+dChhZGRyLCB2YWwsICEodmFsCj4gPiAmIG1hc2spLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBkZWxheV91cywKPiA+IHRpbWVvdXRfdXMpOwo+ID4gKwo+ID4g
+K8KgwqDCoMKgwqDCoMKgcmV0dXJuIHJlYWRsX3JlbGF4ZWRfcG9sbF90aW1lb3V0X2F0b21pYyhh
+ZGRyLCB2YWwsICEodmFsICYKPiA+IG1hc2spLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgZGVsYXlfdXMsCj4gPiB0aW1lb3V0X3VzKTsKPiA+ICt9Cj4gPiArCj4g
+PiArc3RhdGljIGludCB0ZWdyYV9pMmNfbXV0ZXhfdHJ5bG9jayhzdHJ1Y3QgdGVncmFfaTJjX2Rl
+diAqaTJjX2RldikKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqB1MzIgdmFsLCBpZDsKPiA+ICsK
+PiA+ICvCoMKgwqDCoMKgwqDCoHZhbCA9IGkyY19yZWFkbChpMmNfZGV2LCBJMkNfU1dfTVVURVgp
+Owo+ID4gK8KgwqDCoMKgwqDCoMKgaWQgPSBGSUVMRF9HRVQoSTJDX1NXX01VVEVYX0dSQU5ULCB2
+YWwpOwo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKGlkICE9IDApCj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgcmV0dXJuIDA7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqB2YWwgPSBG
+SUVMRF9QUkVQKEkyQ19TV19NVVRFWF9SRVFVRVNULCBJMkNfU1dfTVVURVhfSUQpOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgaTJjX3dyaXRlbChpMmNfZGV2LCB2YWwsIEkyQ19TV19NVVRFWCk7Cj4gPiAr
+Cj4gPiArwqDCoMKgwqDCoMKgwqB2YWwgPSBpMmNfcmVhZGwoaTJjX2RldiwgSTJDX1NXX01VVEVY
+KTsKPiA+ICvCoMKgwqDCoMKgwqDCoGlkID0gRklFTERfR0VUKEkyQ19TV19NVVRFWF9HUkFOVCwg
+dmFsKTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChpZCAhPSBJMkNfU1dfTVVURVhfSUQp
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIDA7Cj4gPiArCj4gPiAr
+wqDCoMKgwqDCoMKgwqByZXR1cm4gMTsKPiA+ICt9Cj4gPiArCj4gPiArc3RhdGljIHZvaWQgdGVn
+cmFfaTJjX211dGV4X2xvY2soc3RydWN0IHRlZ3JhX2kyY19kZXYgKmkyY19kZXYpCj4gPiArewo+
+ID4gK8KgwqDCoMKgwqDCoMKgLyogUG9sbCB1bnRpbCBtdXRleCBpcyBhY3F1aXJlZC4gKi8KPiA+
+ICvCoMKgwqDCoMKgwqDCoHdoaWxlICh0ZWdyYV9pMmNfbXV0ZXhfdHJ5bG9jayhpMmNfZGV2KSkK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjcHVfcmVsYXgoKTsKPiA+ICt9Cj4g
+Cj4gRG9uJ3Qgd2Ugd2FudCB0byB1c2UgYSB0aW1lb3V0IGhlcmU/IE90aGVyd2lzZSB3ZSByaXNr
+IGJsb2NraW5nIHRoZQo+IHRocmVhZCB0aGF0IHRoaXMgcnVucyBvbiBpZiBzb21lIGZpcm13YXJl
+IGRlY2lkZXMgbm90IHRvIHJlbGVhc2UgdGhlCj4gbXV0ZXguCj4gCgpXZSBjYW4gY29udGludWUg
+dG8gYWNjZXNzIHRoZSBjb250cm9sbGVyIHdpdGggYSB3YXJuaW5nIGluIGNhc2UKdGhlIHJlcXVl
+c3QgdGltZXMgb3V0LgoKU29tZXRoaW5nIGxpa2UgdGhpcz8KCnN0YXRpYyB2b2lkIHRlZ3JhX2ky
+Y19tdXRleF9sb2NrKHN0cnVjdCB0ZWdyYV9pMmNfZGV2ICppMmNfZGV2KQp7CiAgICAgICAgdW5z
+aWduZWQgaW50IG51bV9yZXRyaWVzID0gMjU7IC8vIE1vdmUgdGhpcyB0byBhIG1hY3JvLgoKICAg
+ICAgICAvKiBQb2xsIHVudGlsIG11dGV4IGlzIGFjcXVpcmVkIG9yIHRpbWVvdXQuICovCiAgICAg
+ICAgd2hpbGUgKCAtLW51bV9yZXRyaWVzICYmICF0ZWdyYV9pMmNfbXV0ZXhfdHJ5bG9jayhpMmNf
+ZGV2KSkKICAgICAgICAgICAgICAgIG1zbGVlcCgxKTsKCiAgICAgICAgV0FSTl9PTighbnVtX3Jl
+dHJpZXMpOwp9CgoKPiBBbHNvLCBpcyB0aGUgbG9naWMgbm90IHRoZSB3cm9uZyB3YXkgYXJvdW5k
+PyBJLmUuIHRyeWxvY2sgcmV0dXJucwo+IHRydWUKPiBpZiB0aGUgaGFyZHdhcmUgbXV0ZXggd2Fz
+IHN1Y2Nlc3NmdWxseSBsb2NrZWQsIGluIHdoaWNoIGNhc2UgaXQKPiBkb2Vzbid0Cj4gbWFrZSBz
+ZW5zZSB0byBrZWVwIHNwaW5uaW5nLCByaWdodD8gT3IgZG8gSSBtaXN1bmRlcnN0YW5kIGhvdyB0
+aGlzCj4gd29ya3M/Cj4gCj4gVGhpZXJyeQo+IAoKVGhlIGxvZ2ljIGlzIGluZGVlZCB3cm9uZyBo
+ZXJlLCBhcG9sb2dpZXMgZm9yIHRoZSBvdmVyc2lnaHQuIEkgd2lsbCBmaXgKdGhpcyBpbiB0aGUg
+bmV4dCBwYXRjaHNldC4KCgo+ID4gKwo+ID4gK3N0YXRpYyB2b2lkIHRlZ3JhX2kyY19tdXRleF91
+bmxvY2soc3RydWN0IHRlZ3JhX2kyY19kZXYgKmkyY19kZXYpCj4gPiArewo+ID4gK8KgwqDCoMKg
+wqDCoMKgdTMyIHZhbCwgaWQ7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqB2YWwgPSBpMmNfcmVh
+ZGwoaTJjX2RldiwgSTJDX1NXX01VVEVYKTsKPiA+ICvCoMKgwqDCoMKgwqDCoGlkID0gRklFTERf
+R0VUKEkyQ19TV19NVVRFWF9HUkFOVCwgdmFsKTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGlm
+IChXQVJOX09OKGlkICE9IEkyQ19TV19NVVRFWF9JRCkpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgcmV0dXJuOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgaTJjX3dyaXRlbChp
+MmNfZGV2LCAwLCBJMkNfU1dfTVVURVgpOwo+ID4gK30KPiA+ICsKPiA+ICtzdGF0aWMgdm9pZCB0
+ZWdyYV9pMmNfYnVzX2xvY2soc3RydWN0IGkyY19hZGFwdGVyICphZGFwdGVyLAo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdW5z
+aWduZWQgaW50IGZsYWdzKQo+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCB0ZWdyYV9p
+MmNfZGV2ICppMmNfZGV2ID0gaTJjX2dldF9hZGFwZGF0YShhZGFwdGVyKTsKPiA+ICsKPiA+ICvC
+oMKgwqDCoMKgwqDCoHJ0X211dGV4X2xvY2tfbmVzdGVkKCZhZGFwdGVyLT5idXNfbG9jaywKPiA+
+IGkyY19hZGFwdGVyX2RlcHRoKGFkYXB0ZXIpKTsKPiA+ICvCoMKgwqDCoMKgwqDCoHRlZ3JhX2ky
+Y19tdXRleF9sb2NrKGkyY19kZXYpOwo+ID4gK30KPiA+ICsKPiA+ICtzdGF0aWMgaW50IHRlZ3Jh
+X2kyY19idXNfdHJ5bG9jayhzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXB0ZXIsCj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCB1bnNpZ25lZCBpbnQgZmxhZ3MpCj4gPiArewo+ID4gK8KgwqDCoMKgwqDCoMKgc3RydWN0IHRl
+Z3JhX2kyY19kZXYgKmkyY19kZXYgPSBpMmNfZ2V0X2FkYXBkYXRhKGFkYXB0ZXIpOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgaW50IHJldDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoHJldCA9IHJ0X211
+dGV4X3RyeWxvY2soJmFkYXB0ZXItPmJ1c19sb2NrKTsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChy
+ZXQpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gdGVncmFfaTJjX211
+dGV4X3RyeWxvY2soaTJjX2Rldik7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gcmV0
+Owo+ID4gK30KPiA+ICsKPiA+ICtzdGF0aWMgdm9pZCB0ZWdyYV9pMmNfYnVzX3VubG9jayhzdHJ1
+Y3QgaTJjX2FkYXB0ZXIgKmFkYXB0ZXIsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdW5zaWduZWQgaW50IGZsYWdzKQo+
+ID4gK3sKPiA+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCB0ZWdyYV9pMmNfZGV2ICppMmNfZGV2ID0g
+aTJjX2dldF9hZGFwZGF0YShhZGFwdGVyKTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoHJ0X211
+dGV4X3VubG9jaygmYWRhcHRlci0+YnVzX2xvY2spOwo+ID4gK8KgwqDCoMKgwqDCoMKgdGVncmFf
+aTJjX211dGV4X3VubG9jayhpMmNfZGV2KTsKPiA+ICt9Cj4gPiArCj4gPiArc3RhdGljIGNvbnN0
+IHN0cnVjdCBpMmNfbG9ja19vcGVyYXRpb25zIHRlZ3JhX2kyY19sb2NrX29wcyA9IHsKPiA+ICvC
+oMKgwqDCoMKgwqDCoC5sb2NrX2J1cyA9IHRlZ3JhX2kyY19idXNfbG9jaywKPiA+ICvCoMKgwqDC
+oMKgwqDCoC50cnlsb2NrX2J1cyA9IHRlZ3JhX2kyY19idXNfdHJ5bG9jaywKPiA+ICvCoMKgwqDC
+oMKgwqDCoC51bmxvY2tfYnVzID0gdGVncmFfaTJjX2J1c191bmxvY2ssCj4gPiArfTsKPiA+ICsK
+PiA+IMKgc3RhdGljIHZvaWQgdGVncmFfaTJjX21hc2tfaXJxKHN0cnVjdCB0ZWdyYV9pMmNfZGV2
+ICppMmNfZGV2LCB1MzIKPiA+IG1hc2spCj4gPiDCoHsKPiA+IMKgwqDCoMKgwqDCoMKgwqB1MzIg
+aW50X21hc2s7Cj4gPiBAQCAtNTQ2LDIxICs2NDYsNiBAQCBzdGF0aWMgdm9pZCB0ZWdyYV9pMmNf
+dmlfaW5pdChzdHJ1Y3QKPiA+IHRlZ3JhX2kyY19kZXYgKmkyY19kZXYpCj4gPiDCoMKgwqDCoMKg
+wqDCoMKgaTJjX3dyaXRlbChpMmNfZGV2LCAweDAsIEkyQ19UTE9XX1NFWFQpOwo+ID4gwqB9Cj4g
+PiDCoAo+ID4gLXN0YXRpYyBpbnQgdGVncmFfaTJjX3BvbGxfcmVnaXN0ZXIoc3RydWN0IHRlZ3Jh
+X2kyY19kZXYgKmkyY19kZXYsCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHUzMiByZWcsIHUzMiBtYXNrLCB1MzIg
+ZGVsYXlfdXMsCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHUzMiB0aW1lb3V0X3VzKQo+ID4gLXsKPiA+IC3CoMKg
+wqDCoMKgwqDCoHZvaWQgX19pb21lbSAqYWRkciA9IGkyY19kZXYtPmJhc2UgKwo+ID4gdGVncmFf
+aTJjX3JlZ19hZGRyKGkyY19kZXYsIHJlZyk7Cj4gPiAtwqDCoMKgwqDCoMKgwqB1MzIgdmFsOwo+
+ID4gLQo+ID4gLcKgwqDCoMKgwqDCoMKgaWYgKCFpMmNfZGV2LT5hdG9taWNfbW9kZSkKPiA+IC3C
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcmVhZGxfcmVsYXhlZF9wb2xsX3Rp
+bWVvdXQoYWRkciwgdmFsLCAhKHZhbAo+ID4gJiBtYXNrKSwKPiA+IC3CoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGVsYXlfdXMsCj4gPiB0aW1lb3V0X3VzKTsKPiA+IC0K
+PiA+IC3CoMKgwqDCoMKgwqDCoHJldHVybiByZWFkbF9yZWxheGVkX3BvbGxfdGltZW91dF9hdG9t
+aWMoYWRkciwgdmFsLCAhKHZhbCAmCj4gPiBtYXNrKSwKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIGRlbGF5X3VzLAo+ID4gdGltZW91dF91cyk7Cj4gPiAtfQo+ID4g
+LQo+ID4gwqBzdGF0aWMgaW50IHRlZ3JhX2kyY19mbHVzaF9maWZvcyhzdHJ1Y3QgdGVncmFfaTJj
+X2RldiAqaTJjX2RldikKPiA+IMKgewo+ID4gwqDCoMKgwqDCoMKgwqDCoHUzMiBtYXNrLCB2YWws
+IG9mZnNldDsKPiA+IEBAIC0xNDk3LDYgKzE1ODIsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHRl
+Z3JhX2kyY19od19mZWF0dXJlCj4gPiB0ZWdyYTIwX2kyY19odyA9IHsKPiA+IMKgwqDCoMKgwqDC
+oMKgwqAuc2V0dXBfaG9sZF90aW1lX2Zhc3RfZmFzdF9wbHVzX21vZGUgPSAweDAsCj4gPiDCoMKg
+wqDCoMKgwqDCoMKgLnNldHVwX2hvbGRfdGltZV9oc19tb2RlID0gMHgwLAo+ID4gwqDCoMKgwqDC
+oMKgwqDCoC5oYXNfaW50ZXJmYWNlX3RpbWluZ19yZWcgPSBmYWxzZSwKPiA+ICvCoMKgwqDCoMKg
+wqDCoC5oYXNfbXV0ZXggPSBmYWxzZSwKPiA+IMKgfTsKPiA+IMKgCj4gPiDCoHN0YXRpYyBjb25z
+dCBzdHJ1Y3QgdGVncmFfaTJjX2h3X2ZlYXR1cmUgdGVncmEzMF9pMmNfaHcgPSB7Cj4gPiBAQCAt
+MTUyMSw2ICsxNjA3LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB0ZWdyYV9pMmNfaHdfZmVhdHVy
+ZQo+ID4gdGVncmEzMF9pMmNfaHcgPSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgLnNldHVwX2hvbGRf
+dGltZV9mYXN0X2Zhc3RfcGx1c19tb2RlID0gMHgwLAo+ID4gwqDCoMKgwqDCoMKgwqDCoC5zZXR1
+cF9ob2xkX3RpbWVfaHNfbW9kZSA9IDB4MCwKPiA+IMKgwqDCoMKgwqDCoMKgwqAuaGFzX2ludGVy
+ZmFjZV90aW1pbmdfcmVnID0gZmFsc2UsCj4gPiArwqDCoMKgwqDCoMKgwqAuaGFzX211dGV4ID0g
+ZmFsc2UsCj4gPiDCoH07Cj4gPiDCoAo+ID4gwqBzdGF0aWMgY29uc3Qgc3RydWN0IHRlZ3JhX2ky
+Y19od19mZWF0dXJlIHRlZ3JhMTE0X2kyY19odyA9IHsKPiA+IEBAIC0xNTQ1LDYgKzE2MzIsNyBA
+QCBzdGF0aWMgY29uc3Qgc3RydWN0IHRlZ3JhX2kyY19od19mZWF0dXJlCj4gPiB0ZWdyYTExNF9p
+MmNfaHcgPSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgLnNldHVwX2hvbGRfdGltZV9mYXN0X2Zhc3Rf
+cGx1c19tb2RlID0gMHgwLAo+ID4gwqDCoMKgwqDCoMKgwqDCoC5zZXR1cF9ob2xkX3RpbWVfaHNf
+bW9kZSA9IDB4MCwKPiA+IMKgwqDCoMKgwqDCoMKgwqAuaGFzX2ludGVyZmFjZV90aW1pbmdfcmVn
+ID0gZmFsc2UsCj4gPiArwqDCoMKgwqDCoMKgwqAuaGFzX211dGV4ID0gZmFsc2UsCj4gPiDCoH07
+Cj4gPiDCoAo+ID4gwqBzdGF0aWMgY29uc3Qgc3RydWN0IHRlZ3JhX2kyY19od19mZWF0dXJlIHRl
+Z3JhMTI0X2kyY19odyA9IHsKPiA+IEBAIC0xNTY5LDYgKzE2NTcsNyBAQCBzdGF0aWMgY29uc3Qg
+c3RydWN0IHRlZ3JhX2kyY19od19mZWF0dXJlCj4gPiB0ZWdyYTEyNF9pMmNfaHcgPSB7Cj4gPiDC
+oMKgwqDCoMKgwqDCoMKgLnNldHVwX2hvbGRfdGltZV9mYXN0X2Zhc3RfcGx1c19tb2RlID0gMHgw
+LAo+ID4gwqDCoMKgwqDCoMKgwqDCoC5zZXR1cF9ob2xkX3RpbWVfaHNfbW9kZSA9IDB4MCwKPiA+
+IMKgwqDCoMKgwqDCoMKgwqAuaGFzX2ludGVyZmFjZV90aW1pbmdfcmVnID0gdHJ1ZSwKPiA+ICvC
+oMKgwqDCoMKgwqDCoC5oYXNfbXV0ZXggPSBmYWxzZSwKPiA+IMKgfTsKPiA+IMKgCj4gPiDCoHN0
+YXRpYyBjb25zdCBzdHJ1Y3QgdGVncmFfaTJjX2h3X2ZlYXR1cmUgdGVncmEyMTBfaTJjX2h3ID0g
+ewo+ID4gQEAgLTE1OTMsNiArMTY4Miw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgdGVncmFfaTJj
+X2h3X2ZlYXR1cmUKPiA+IHRlZ3JhMjEwX2kyY19odyA9IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqAu
+c2V0dXBfaG9sZF90aW1lX2Zhc3RfZmFzdF9wbHVzX21vZGUgPSAwLAo+ID4gwqDCoMKgwqDCoMKg
+wqDCoC5zZXR1cF9ob2xkX3RpbWVfaHNfbW9kZSA9IDAsCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmhh
+c19pbnRlcmZhY2VfdGltaW5nX3JlZyA9IHRydWUsCj4gPiArwqDCoMKgwqDCoMKgwqAuaGFzX211
+dGV4ID0gZmFsc2UsCj4gPiDCoH07Cj4gPiDCoAo+ID4gwqBzdGF0aWMgY29uc3Qgc3RydWN0IHRl
+Z3JhX2kyY19od19mZWF0dXJlIHRlZ3JhMTg2X2kyY19odyA9IHsKPiA+IEBAIC0xNjE3LDYgKzE3
+MDcsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHRlZ3JhX2kyY19od19mZWF0dXJlCj4gPiB0ZWdy
+YTE4Nl9pMmNfaHcgPSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgLnNldHVwX2hvbGRfdGltZV9mYXN0
+X2Zhc3RfcGx1c19tb2RlID0gMCwKPiA+IMKgwqDCoMKgwqDCoMKgwqAuc2V0dXBfaG9sZF90aW1l
+X2hzX21vZGUgPSAwLAo+ID4gwqDCoMKgwqDCoMKgwqDCoC5oYXNfaW50ZXJmYWNlX3RpbWluZ19y
+ZWcgPSB0cnVlLAo+ID4gK8KgwqDCoMKgwqDCoMKgLmhhc19tdXRleCA9IGZhbHNlLAo+ID4gwqB9
+Owo+ID4gwqAKPiA+IMKgc3RhdGljIGNvbnN0IHN0cnVjdCB0ZWdyYV9pMmNfaHdfZmVhdHVyZSB0
+ZWdyYTE5NF9pMmNfaHcgPSB7Cj4gPiBAQCAtMTY0NCw2ICsxNzM1LDcgQEAgc3RhdGljIGNvbnN0
+IHN0cnVjdCB0ZWdyYV9pMmNfaHdfZmVhdHVyZQo+ID4gdGVncmExOTRfaTJjX2h3ID0gewo+ID4g
+wqDCoMKgwqDCoMKgwqDCoC5zZXR1cF9ob2xkX3RpbWVfaHNfbW9kZSA9IDB4MDkwOTA5LAo+ID4g
+wqDCoMKgwqDCoMKgwqDCoC5oYXNfaW50ZXJmYWNlX3RpbWluZ19yZWcgPSB0cnVlLAo+ID4gwqDC
+oMKgwqDCoMKgwqDCoC5oYXNfaHNfbW9kZV9zdXBwb3J0ID0gdHJ1ZSwKPiA+ICvCoMKgwqDCoMKg
+wqDCoC5oYXNfbXV0ZXggPSBmYWxzZSwKPiA+IMKgfTsKPiA+IMKgCj4gPiDCoHN0YXRpYyBjb25z
+dCBzdHJ1Y3QgdGVncmFfaTJjX2h3X2ZlYXR1cmUgdGVncmEyNjRfaTJjX2h3ID0gewo+ID4gQEAg
+LTE2NzEsNiArMTc2Myw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgdGVncmFfaTJjX2h3X2ZlYXR1
+cmUKPiA+IHRlZ3JhMjY0X2kyY19odyA9IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqAuc2V0dXBfaG9s
+ZF90aW1lX2hzX21vZGUgPSAweDA5MDkwOSwKPiA+IMKgwqDCoMKgwqDCoMKgwqAuaGFzX2ludGVy
+ZmFjZV90aW1pbmdfcmVnID0gdHJ1ZSwKPiA+IMKgwqDCoMKgwqDCoMKgwqAuaGFzX2hzX21vZGVf
+c3VwcG9ydCA9IHRydWUsCj4gPiArwqDCoMKgwqDCoMKgwqAuaGFzX211dGV4ID0gdHJ1ZSwKPiA+
+IMKgfTsKPiA+IMKgCj4gPiDCoHN0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIHRlZ3Jh
+X2kyY19vZl9tYXRjaFtdID0gewo+ID4gQEAgLTE4NzUsNiArMTk2OCw5IEBAIHN0YXRpYyBpbnQg
+dGVncmFfaTJjX3Byb2JlKHN0cnVjdAo+ID4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+ID4gwqDC
+oMKgwqDCoMKgwqDCoGkyY19kZXYtPmFkYXB0ZXIubnIgPSBwZGV2LT5pZDsKPiA+IMKgwqDCoMKg
+wqDCoMKgwqBBQ1BJX0NPTVBBTklPTl9TRVQoJmkyY19kZXYtPmFkYXB0ZXIuZGV2LAo+ID4gQUNQ
+SV9DT01QQU5JT04oJnBkZXYtPmRldikpOwo+ID4gwqAKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChp
+MmNfZGV2LT5ody0+aGFzX211dGV4KQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGkyY19kZXYtPmFkYXB0ZXIubG9ja19vcHMgPSAmdGVncmFfaTJjX2xvY2tfb3BzOwo+ID4gKwo+
+ID4gwqDCoMKgwqDCoMKgwqDCoGlmIChpMmNfZGV2LT5ody0+c3VwcG9ydHNfYnVzX2NsZWFyKQo+
+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpMmNfZGV2LT5hZGFwdGVyLmJ1c19y
+ZWNvdmVyeV9pbmZvID0KPiA+ICZ0ZWdyYV9pMmNfcmVjb3ZlcnlfaW5mbzsKPiA+IMKgCj4gPiAt
+LSAKPiA+IDIuNDMuMAo+ID4gCgo=
 
