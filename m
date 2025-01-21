@@ -1,86 +1,59 @@
-Return-Path: <linux-i2c+bounces-9145-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9146-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 303DDA18337
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Jan 2025 18:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 544FCA1879C
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Jan 2025 23:14:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 207E43A1DD9
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Jan 2025 17:50:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 358A63A49A1
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Jan 2025 22:14:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA46C1F5439;
-	Tue, 21 Jan 2025 17:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4451E1F76D3;
+	Tue, 21 Jan 2025 22:14:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="kaKb2PG+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tcUyvLmk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7811E9B38
-	for <linux-i2c@vger.kernel.org>; Tue, 21 Jan 2025 17:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96A61B041B;
+	Tue, 21 Jan 2025 22:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737481824; cv=none; b=qDJ6ycbu73khGMvmjyU5qdqw3lk5ig7KDazp/dxuBA0oc3nJia7IpajOdQ7MVVYB0vEaMbrdLFFvJQPc3TdYpquSGLlHYqpfr331Vj8ku6IGIYFQQRfaS/XDngDg05BR5kYWzaybJ6Xu1iOMaBp8cp5EuwpXHnT0I4vnshEfm6Y=
+	t=1737497687; cv=none; b=YAVP9bQI/xUEtraeoPYr2gdsSlcwIeXHG/1ZYBLItsHPouoFweOnkZWKmgePyiCnlcAWy1poGddc2AarcSYFZIX4KxDrAk+yyeJelu0CvEQGDwkb6w3RzZ3ReP6onC+kCLm+fsrEsLJNf5qxmpsJlQd+8eNCKnyE4YyDL5mOrN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737481824; c=relaxed/simple;
-	bh=RoMhuipM8TGxsbQLw/Bc12tlRQBMBDonsLZOaD7QmI8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nanVcy867c5XWdIJfnnxgakLHayEdxDqvSatRKpcTX/qH6KxIo/9yrZjxSyuFDZW91tBipR3irFFwS1+Ov/JOGAvCa+nB9rqiOkvDmP8c/kzQg1S7238yGtgip5OMiREPUoILcZN1W4ld2DRmMgWtR6UFEfmJ0sNAYcgHpi9It4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=kaKb2PG+; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-438a3216fc2so31944595e9.1
-        for <linux-i2c@vger.kernel.org>; Tue, 21 Jan 2025 09:50:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1737481821; x=1738086621; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RoMhuipM8TGxsbQLw/Bc12tlRQBMBDonsLZOaD7QmI8=;
-        b=kaKb2PG+pRm6+p/Eob8rTWL4EbvQ6MCZYsEH+163TFmFpMxRbOeOtKFQIE7U9I/MbM
-         WIt822usvvSjnKfW8zzjR2Vh7xOBR/xChpQln3DIu+zdNkoAwp+44MsR//f5yhTrNz/X
-         1MQa6b5JoB30pjRAVMlWdEtODwvFYGf8klyxbNpwaFFHw4x6p56L36G5Hl+jqWMutVk9
-         JBD/mZqNkUo8OMgldKNVKARrB95Jx5aMvN6SpqlT3cYRLzRsxgJ33/w1JABVUIWeQuXQ
-         pKu0589MKNAU7PQOMUyUgdjBrWI/q/S62rtiX8Cwcf42jAW3y1XatEfEW7UY5xIms4Qw
-         uwpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737481821; x=1738086621;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RoMhuipM8TGxsbQLw/Bc12tlRQBMBDonsLZOaD7QmI8=;
-        b=lm9trklAC8TMaRwUsp0v5Xw0i+jy+yKNUNRPy3+uWH9dApsBZPUKpSUZWcrlDLOnfe
-         AoV4iyw15DgaYJJxdFBF3Y5Vt+lwhMDu0j4xTUd4CptSSVGuWxRs1m/OKEP6w/FFJuit
-         36RVJfBuaKGowRsAHbdDXVgjLTQOwp5QBPMdJ92BJSvCYRdW52KQeqk4jkkSmyXMrLCj
-         8/F2GK6QZnSZGbccjrTjNfxvCBXx+I831Kbmw9vPbO/vEivP5do9FNPJLLR2SGe/M93B
-         R9NgLMswxoXeFGggUkIXoDqbJZ8sTalk7tReE0bpBOjnS6FPIGDxDEsLRl0WU0p372ww
-         Mf1w==
-X-Forwarded-Encrypted: i=1; AJvYcCUrStFghWNs0eynBXtl5jonVYmBtorA+2bpxvkxXZKYCbaUYQDqEAtrr1xgvkaVCHN9vb7hpnugHXA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJecOB+sUVfs7J3ikQ61KJLCa4w2dy7p0kiOmFemrN6EDfrAWz
-	Zc5IbuCjDWKsU+gXOvJz4nssjJJnspB713ozwqgs+zIGy980n0V0duK7upN29nI=
-X-Gm-Gg: ASbGncuxLhE4ecjIaqnLz5l4O+jo+lLzrrmoFs6g2a49xa5zJ8kQfDimy16iUY7W17d
-	qNPlPh96+oPUkRcE+h9B1X7Dy5Qxog2y+kn0qthTz8EZFOMH34kdWWRzJPpx0YxZNAEyHEpzTH8
-	Sls6ajMW7hJ1uGmhxIjnpvMDErmfleXm3P1o4sQ4jDJcRlQNBsvj2F8DydYrb+Nuhhm7sYEcMWr
-	8FIvSvKYJlg/+7f8rgzSSsHRPGYNYpkhBxcGw02yLhoGNafIgmYam7CqGRO4V5oOHywGDfSt14b
-	+XK9QbbqqoNbEuHCWs8RPctlYIzxe45CrLAt
-X-Google-Smtp-Source: AGHT+IGPbhDxMbt3iYzgXLX3wIo1AlxBNC0CatVnDX2Ryc3K1ya/vSA+XrTgwj8dmgoeD68B8Htdsg==
-X-Received: by 2002:a05:600c:9a3:b0:434:fa73:a907 with SMTP id 5b1f17b1804b1-4389191b819mr167514035e9.13.1737481820805;
-        Tue, 21 Jan 2025 09:50:20 -0800 (PST)
-Received: from localhost (p200300f65f0afb0400000000000001b9.dip0.t-ipconnect.de. [2003:f6:5f0a:fb04::1b9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-437c7499884sm252100635e9.5.2025.01.21.09.50.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jan 2025 09:50:20 -0800 (PST)
-Date: Tue, 21 Jan 2025 18:50:19 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Wentao Liang <vulab@iscas.ac.cn>
-Cc: andi.shyti@kernel.org, rjui@broadcom.com, sbranden@broadcom.com, 
-	bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: iproc: Refactor prototype and remove redundant
- error checks
-Message-ID: <rv3ej2tdmfff2qilnpgvef64ujrozuplu7ix54rpd25kbrbhwd@zm5sjyn2vjra>
-References: <20250121084818.2719-1-vulab@iscas.ac.cn>
+	s=arc-20240116; t=1737497687; c=relaxed/simple;
+	bh=XbNIxiQ1d3o5cq3LLQ8Fz6YdMgME3quh37lA7t4gZ+E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XXAkQThNff9pBoWZgycF9Oa92sXGgNy/mpZEawjxlVA6caadXhTipbREFgQUbHCVZyWwqGDVCs9OnnQi95MZSEdAv4q+xxYd1dMD2KZp1ikADgrFc/RPQuoG4in5OgsjgyxVbbIjPxPaNgyvcLMmrCh+BD970sJxXREw7vQLJBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tcUyvLmk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882D6C4CEDF;
+	Tue, 21 Jan 2025 22:14:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737497686;
+	bh=XbNIxiQ1d3o5cq3LLQ8Fz6YdMgME3quh37lA7t4gZ+E=;
+	h=Date:From:To:Cc:Subject:From;
+	b=tcUyvLmkhSt8FaYKod7OAJC7f+ONrR0HEINwhFzwF0HFAEC5cg+7Kn/X/jFvLlg5R
+	 M9oQF/OINkw0WzRqHxKrw7tHxA6Ms8nmAljI4RaQLq9sQ0AkdzwtnvlnVsy+O/rg+1
+	 KFE9+i6VwDgAsTe6QHoG78CjIKd6j+qKzia+fBoaIVQk1J6Z0N+qvR6b/rZxGF1ILR
+	 Cs00q/Ko38PaoFe8VgRcU1BLol++zyKrf3houEdBD7BFaAjbwEiryv3anWZTbElXXl
+	 H6bv6oWcukzniEJlc4t1oQoHucJex7VgQJAOzYfBYbNDq7ERFE6iRsj6khNFw6FM5a
+	 3yMZjBH083oww==
+Date: Tue, 21 Jan 2025 23:14:42 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.14-rc1
+Message-ID: <Z5AcUmwke1z4ZI4l@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -88,53 +61,326 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ug4dj3w4uiulvkrk"
+	protocol="application/pgp-signature"; boundary="9GSCKybAnQQ9OoPF"
 Content-Disposition: inline
-In-Reply-To: <20250121084818.2719-1-vulab@iscas.ac.cn>
 
 
---ug4dj3w4uiulvkrk
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+--9GSCKybAnQQ9OoPF
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] i2c: iproc: Refactor prototype and remove redundant
- error checks
-MIME-Version: 1.0
 
-Hello,
+The following changes since commit 9d89551994a430b50c4fffcb1e617a057fa76e20:
 
-On Tue, Jan 21, 2025 at 04:48:18PM +0800, Wentao Liang wrote:
-> The bcm_iproc_i2c_init() always returns 0. As a result, there
-> is no need to check its return value or handle errors.
->=20
-> This patch changes the prototype of bcm_iproc_i2c_init() to
-> return void and removes the redundant error handling code after
-> calls to bcm_iproc_i2c_init() in both the bcm_iproc_i2c_probe()
-> and bcm_iproc_i2c_resume().
->=20
-> Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
+  Linux 6.13-rc6 (2025-01-05 14:13:40 -0800)
 
-LGTM:
+are available in the Git repository at:
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@baylibre.com>
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
+6.14-rc1
 
-Best regards
-Uwe
+for you to fetch changes up to 27c3f0e61f19d2306527406cad233d5f5915ca1e:
 
---ug4dj3w4uiulvkrk
+  i2c: add kdoc for the new debugfs entry of clients (2025-01-15 22:04:06 +=
+0100)
+
+----------------------------------------------------------------
+i2c-for-6.14-rc1
+
+Core:
+
+- list-based mechanisms for handling auto-detected and userspace created
+  clients are replaced with a flag-based approach. The resulting code is
+  much simpler as well as the locking.
+
+- i2c clients now get a default debugfs dir managed by the I2C core.
+  Drivers don't have to maintain their own directory anymore.
+
+Drivers:
+
+- xiic gains atomic_transfer support
+- imx-lpi2c gains DMA and target mode support
+- riic gets a collection of cleanups
+- npcm gets a better timeout handling and more precise frequency setups
+- davinci loses the unused platform_data
+
+The rest is regular driver updates and improvements.
+
+AT24:
+
+- add new compatibles for at24 variants from Giantec and Puya
+  Semiconductor (together with a new vendor prefix)
+
+----------------------------------------------------------------
+Andi Shyti (3):
+      i2c: nomadik: Enable compile testing for the Nomadik driver
+      i2c: qcom-geni: Use dev_err_probe in the probe function
+      i2c: qcom-geni: Simplify error handling in probe function
+
+Atharva Tiwari (2):
+      i2c: amd756: Fix endianness handling for word data
+      i2c: amd756: Remove superfluous TODO
+
+Bartosz Golaszewski (3):
+      i2c: davinci: kill platform data
+      i2c: davinci: order includes alphabetically
+      i2c: davinci: use generic device property accessors
+
+Biju Das (1):
+      dt-bindings: i2c: renesas,riic: Document the R9A09G047 support
+
+Bryan O'Donoghue (1):
+      dt-bindings: i2c: qcom-cci: Document x1e80100 compatible
+
+Carlos Song (7):
+      i2c: imx: fix divide by zero warning
+      i2c: imx: make controller available until system suspend_noirq() and =
+=66rom resume_noirq()
+      i2c: imx: switch different pinctrl state in different system power st=
+atus
+      i2c: imx: support DMA defer probing
+      i2c: imx-lpi2c: add eDMA mode support for LPI2C
+      i2c: imx-lpi2c: add target mode support
+      i2c: imx-lpi2c: make controller available until the system enters sus=
+pend_noirq() and from resume_noirq().
+
+Charles Boyer (1):
+      i2c: npcm: Enable slave in eob interrupt
+
+Chen Ni (1):
+      i2c: isch: Convert comma to semicolon
+
+Geert Uytterhoeven (1):
+      i2c: I2C_BRCMSTB should not default to y when compile-testing
+
+Heiner Kallweit (4):
+      ALSA: ppc: Remove i2c client removal hack
+      i2c: Replace list-based mechanism for handling auto-detected clients
+      i2c: Replace list-based mechanism for handling userspace-created clie=
+nts
+      i2c: core: Allocate temp client on the stack in i2c_detect
+
+Ivaylo Ivanov (2):
+      dt-bindings: i2c: exynos5: Add samsung,exynos8895-hsi2c compatible
+      i2c: exynos5: Add support for Exynos8895 SoC
+
+Lad Prabhakar (9):
+      i2c: riic: Introduce a separate variable for IRQ
+      i2c: riic: Use dev_err_probe in probe and riic_init_hw functions
+      i2c: riic: Use local `dev` pointer in `dev_err_probe()`
+      i2c: riic: Use BIT macro consistently
+      i2c: riic: Use GENMASK() macro for bitmask definitions
+      i2c: riic: Make use of devres helper to request deasserted reset line
+      i2c: riic: Mark riic_irqs array as const
+      i2c: riic: Use predefined macro and simplify clock tick calculation
+      i2c: riic: Add `riic_bus_barrier()` to check bus availability
+
+Luca Weiss (3):
+      dt-bindings: eeprom: at24: Add compatible for Giantec GT24P128F
+      dt-bindings: vendor-prefixes: Add Puya Semiconductor (Shanghai) Co., =
+Ltd.
+      dt-bindings: eeprom: at24: Add compatible for Puya P24C256C
+
+Manikanta Guntupalli (2):
+      i2c: xiic: Relocate xiic_i2c_runtime_suspend and xiic_i2c_runtime_res=
+ume to facilitate atomic mode
+      i2c: xiic: Add atomic transfer support
+
+Patrick H=C3=B6hn (1):
+      i2c: i801: Add lis3lv02d for Dell Precision M6800
+
+Philipp Stanner (1):
+      i2c: i801: Remove unnecessary PCI function call
+
+Randolph Ha (1):
+      i2c: Force ELAN06FA touchpad I2C bus freq to 100KHz
+
+Thomas Wei=C3=9Fschuh (1):
+      i2c: slave-eeprom: Constify 'struct bin_attribute'
+
+Tyrone Ting (3):
+      i2c: npcm: Modify timeout evaluation mechanism
+      i2c: npcm: Assign client address earlier for `i2c_recover_bus()`
+      i2c: npcm: use i2c frequency table
+
+Uwe Kleine-K=C3=B6nig (1):
+      i2c: designware: Actually make use of the I2C_DW_COMMON and I2C_DW sy=
+mbol namespaces
+
+Wolfram Sang (6):
+      i2c: keba: drop check because i2c_unregister_device() is NULL safe
+      Merge branch 'i2c/i2c-host' of git://git.kernel.org/pub/scm/linux/ker=
+nel/git/andi.shyti/linux into i2c/for-mergewindow
+      Revert "i2c: amd756: Fix endianness handling for word data"
+      Merge tag 'at24-updates-for-v6.14-rc1' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/brgl/linux into i2c/for-mergewindow
+      i2c: add core-managed per-client directory in debugfs
+      i2c: add kdoc for the new debugfs entry of clients
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andi Shyti (2):
+      (Rev.) i2c: davinci: use generic device property accessors
+      (Rev.) i2c: davinci: order includes alphabetically
+
+Andy Shevchenko (9):
+      (Rev.) i2c: riic: Add `riic_bus_barrier()` to check bus availability
+      (Rev.) i2c: riic: Use predefined macro and simplify clock tick calcul=
+ation
+      (Rev.) i2c: riic: Mark riic_irqs array as const
+      (Rev.) i2c: riic: Make use of devres helper to request deasserted res=
+et line
+      (Rev.) i2c: riic: Use GENMASK() macro for bitmask definitions
+      (Rev.) i2c: riic: Use BIT macro consistently
+      (Rev.) i2c: riic: Use local `dev` pointer in `dev_err_probe()`
+      (Rev.) i2c: riic: Use dev_err_probe in probe and riic_init_hw functio=
+ns
+      (Rev.) i2c: riic: Introduce a separate variable for IRQ
+
+Claudiu Beznea (14):
+      (Test) i2c: riic: Add `riic_bus_barrier()` to check bus availability
+      (Rev.) i2c: riic: Add `riic_bus_barrier()` to check bus availability
+      (Test) i2c: riic: Mark riic_irqs array as const
+      (Rev.) i2c: riic: Mark riic_irqs array as const
+      (Test) i2c: riic: Make use of devres helper to request deasserted res=
+et line
+      (Rev.) i2c: riic: Make use of devres helper to request deasserted res=
+et line
+      (Test) i2c: riic: Use GENMASK() macro for bitmask definitions
+      (Rev.) i2c: riic: Use GENMASK() macro for bitmask definitions
+      (Test) i2c: riic: Use BIT macro consistently
+      (Rev.) i2c: riic: Use BIT macro consistently
+      (Test) i2c: riic: Use local `dev` pointer in `dev_err_probe()`
+      (Rev.) i2c: riic: Use local `dev` pointer in `dev_err_probe()`
+      (Test) i2c: riic: Use dev_err_probe in probe and riic_init_hw functio=
+ns
+      (Rev.) i2c: riic: Use dev_err_probe in probe and riic_init_hw functio=
+ns
+
+Frank Li (3):
+      (Rev.) i2c: imx: switch different pinctrl state in different system p=
+ower status
+      (Rev.) i2c: imx: make controller available until system suspend_noirq=
+() and from resume_noirq()
+      (Rev.) i2c: imx: fix divide by zero warning
+
+Geert Uytterhoeven (10):
+      (Rev.) i2c: riic: Add `riic_bus_barrier()` to check bus availability
+      (Rev.) i2c: riic: Use predefined macro and simplify clock tick calcul=
+ation
+      (Rev.) i2c: riic: Mark riic_irqs array as const
+      (Rev.) i2c: riic: Make use of devres helper to request deasserted res=
+et line
+      (Rev.) i2c: riic: Use GENMASK() macro for bitmask definitions
+      (Rev.) i2c: riic: Use BIT macro consistently
+      (Rev.) i2c: riic: Use local `dev` pointer in `dev_err_probe()`
+      (Rev.) i2c: riic: Use dev_err_probe in probe and riic_init_hw functio=
+ns
+      (Rev.) i2c: riic: Introduce a separate variable for IRQ
+      (Rev.) dt-bindings: i2c: renesas,riic: Document the R9A09G047 support
+
+Guenter Roeck (1):
+      (Rev.) i2c: add core-managed per-client directory in debugfs
+
+Krzysztof Kozlowski (2):
+      (Rev.) dt-bindings: i2c: qcom-cci: Document x1e80100 compatible
+      (Rev.) dt-bindings: i2c: exynos5: Add samsung,exynos8895-hsi2c compat=
+ible
+
+Mika Westerberg (1):
+      (Rev.) i2c: Force ELAN06FA touchpad I2C bus freq to 100KHz
+
+Takashi Iwai (1):
+      (Rev.) ALSA: ppc: Remove i2c client removal hack
+
+Tali Perry (4):
+      (Rev.) i2c: npcm: Enable slave in eob interrupt
+      (Rev.) i2c: npcm: use i2c frequency table
+      (Rev.) i2c: npcm: Assign client address earlier for `i2c_recover_bus(=
+)`
+      (Rev.) i2c: npcm: Modify timeout evaluation mechanism
+
+Vladimir Zapolskiy (2):
+      (Rev.) i2c: qcom-geni: Simplify error handling in probe function
+      (Rev.) i2c: qcom-geni: Use dev_err_probe in the probe function
+
+Wolfram Sang (18):
+      (Rev.) i2c: riic: Add `riic_bus_barrier()` to check bus availability
+      (Test) i2c: riic: Add `riic_bus_barrier()` to check bus availability
+      (Test) i2c: riic: Use predefined macro and simplify clock tick calcul=
+ation
+      (Rev.) i2c: riic: Use predefined macro and simplify clock tick calcul=
+ation
+      (Test) i2c: riic: Mark riic_irqs array as const
+      (Rev.) i2c: riic: Mark riic_irqs array as const
+      (Test) i2c: riic: Make use of devres helper to request deasserted res=
+et line
+      (Rev.) i2c: riic: Make use of devres helper to request deasserted res=
+et line
+      (Rev.) i2c: riic: Use GENMASK() macro for bitmask definitions
+      (Test) i2c: riic: Use GENMASK() macro for bitmask definitions
+      (Rev.) i2c: riic: Use BIT macro consistently
+      (Test) i2c: riic: Use BIT macro consistently
+      (Rev.) i2c: riic: Use local `dev` pointer in `dev_err_probe()`
+      (Test) i2c: riic: Use local `dev` pointer in `dev_err_probe()`
+      (Rev.) i2c: riic: Use dev_err_probe in probe and riic_init_hw functio=
+ns
+      (Test) i2c: riic: Use dev_err_probe in probe and riic_init_hw functio=
+ns
+      (Rev.) i2c: riic: Introduce a separate variable for IRQ
+      (Test) i2c: riic: Introduce a separate variable for IRQ
+
+ Documentation/devicetree/bindings/eeprom/at24.yaml |   5 +
+ .../devicetree/bindings/i2c/i2c-exynos5.yaml       |   1 +
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      |   2 +
+ .../devicetree/bindings/i2c/renesas,riic.yaml      |   5 +-
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ drivers/i2c/busses/Kconfig                         |   4 +-
+ drivers/i2c/busses/i2c-amd756.c                    |   4 +-
+ drivers/i2c/busses/i2c-davinci.c                   | 112 +--
+ drivers/i2c/busses/i2c-designware-common.c         |   5 +-
+ drivers/i2c/busses/i2c-designware-master.c         |   5 +-
+ drivers/i2c/busses/i2c-designware-slave.c          |   5 +-
+ drivers/i2c/busses/i2c-exynos5.c                   |  35 +-
+ drivers/i2c/busses/i2c-i801.c                      |   8 +-
+ drivers/i2c/busses/i2c-imx-lpi2c.c                 | 811 +++++++++++++++++=
++++-
+ drivers/i2c/busses/i2c-imx.c                       |  99 ++-
+ drivers/i2c/busses/i2c-isch.c                      |   6 +-
+ drivers/i2c/busses/i2c-keba.c                      |   8 +-
+ drivers/i2c/busses/i2c-npcm7xx.c                   | 427 ++++++++---
+ drivers/i2c/busses/i2c-qcom-geni.c                 |  56 +-
+ drivers/i2c/busses/i2c-riic.c                      | 134 ++--
+ drivers/i2c/busses/i2c-xiic.c                      | 281 +++++--
+ drivers/i2c/i2c-core-acpi.c                        |  22 +
+ drivers/i2c/i2c-core-base.c                        | 130 ++--
+ drivers/i2c/i2c-slave-eeprom.c                     |   8 +-
+ include/linux/i2c.h                                |  13 +-
+ include/linux/platform_data/i2c-davinci.h          |  26 -
+ sound/ppc/keywest.c                                |   7 +-
+ 27 files changed, 1714 insertions(+), 507 deletions(-)
+ delete mode 100644 include/linux/platform_data/i2c-davinci.h
+
+--9GSCKybAnQQ9OoPF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmeP3k8ACgkQj4D7WH0S
-/k7QlggAkOfHqgXrjFpc18b6r08Yz1N73AYGtxalMar9UBjbJ4mnvejHMlCZw1S9
-iMf6fMrZCQAdZQYoPQ4xc9Ri/EMTuYoNUN6SWnS0P53f7HIzpzSEZoYwflxDDxov
-rbPlhcXoCZPQ0eywbXbev1frxH06OPwj3Rb7WoECfJY18Tb1czKjgGa9vwS+otLu
-N4ZYlUQnbS7u0PO/omVtMB1voNBJzRVqc81tjVrwIHJjzLPf5xFHfjy45vbiCH5O
-ZabwO/ZQZWtHA+zwUjJ/UCM+8Wc948R+hhzDHRhipHO19/Y6nTqACwZ3hQj/ncay
-hhKz/yQOBncrz8yjTaAC+9AJGRqRTg==
-=q30A
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmeQHFIACgkQFA3kzBSg
+KbZguA//cympjMNowB9eSPMS3vzO9wda2r4abD7/pKJ406Azbljjq2MvTggWpmqb
+RXMjcBiB1IVz7xhXtU2uMyqOMlboAtgezRLi6AwcdI0TeOYzyeMdR9MIjXtes1IW
+3YqbheCd0ZIfCxNhSczAhEWYuZMn8S9VEFoi2ZB9QD5+crRBUdA39vQlmPc4O0BZ
+Lf0qyF1DDAdr91Dy14xwIx89UgIABilvxQ4zYRYV/0okkIjhWij1r40paoGtpA+L
+KSDKIMRlP9ygH4dW6xlngk1/6CilidTgNdabzfnrkt8KLt4rnzCKKScMCNzpPx67
+uvi7rnMYIY5rIMIh0MhwNDUBxGk5fEk8Rtbi5zr60oEhhGPqCqJZ98EG+2jn3Clg
+DuMNSRxMFZy1qsq3753zJrRm6fMDTAjPcVBXVXWt/TRwFbvHb//zcMdsjSQ+LNds
+YwxkwKUfzAYM7onI0PT+ZJYGY88zj5DjObyDmU+1672DihA9xdN71t0ocQVxqJh2
+GLRvWw9udXOhv9ELpIcgm9WeG5HKcN/P7rtG2THvd0gtwumkRv7dqoLrtB3YYUSB
+xe465wkZAeSxcn6avWVOai0Q3d58ifihUpLkayxeJumO9L6DWdZWH1V/oRlOBT9t
+U0sSPGNjzgQ8XN6lj2DoD5zVTi3BKhX/XZB1haaPZngw/cZQLMo=
+=wINE
 -----END PGP SIGNATURE-----
 
---ug4dj3w4uiulvkrk--
+--9GSCKybAnQQ9OoPF--
 
