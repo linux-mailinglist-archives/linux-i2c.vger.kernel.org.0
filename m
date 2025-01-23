@@ -1,77 +1,77 @@
-Return-Path: <linux-i2c+bounces-9157-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9158-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7201BA1A087
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2025 10:13:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5118DA1A098
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2025 10:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C5633ACCE5
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2025 09:13:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EFE8166DD1
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Jan 2025 09:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB31420E331;
-	Thu, 23 Jan 2025 09:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E533820E6FB;
+	Thu, 23 Jan 2025 09:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EwUF9YLA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fO8jZfkz"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E8220E315;
-	Thu, 23 Jan 2025 09:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D521220D4EA;
+	Thu, 23 Jan 2025 09:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737623523; cv=none; b=Vi6c+Hn/2O7PEehIulPqURb6rSH7lvULLimR95KZQSz44gH5xsFsGfdFOxIPsRRMl2pLcEvcYxL4dGv2I96NuSjfvO/w9zBh8HKS6TzKsTas2CiJp6Q8iKDD4PDSvpEhfpeBZIlJ+K+KcYvbTxcykDg4YVymmIbKK2LsOL2luRE=
+	t=1737623528; cv=none; b=TGujiuGrE/JsnIl2hwEC6jDgs27AcTdmNozeyRztjRpFpecK6TPjwhYyvbKmk625wYqMWWuo2SGKkZiE0Tkt8imIplNv8OptEWsBW1+0IPyfdTdCWz7V2V84XM24AgLpLGtg1md5zQVtryqxxqwQh0Rq25Zh16rPTjZUxYnGy44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737623523; c=relaxed/simple;
-	bh=/h4Myvxz+XixXATNk+ZvaxNgLT6BIB0bTE89TEWDgxU=;
+	s=arc-20240116; t=1737623528; c=relaxed/simple;
+	bh=J96T+fudBEKVDaZfOZ1QzFPQSmlJaLVSCfCpfBg1ewQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gG5ReTJVl/QmmhUvy4dM5q2BzppW7iB95HhlKAuJgbNXo+MzffgTkFp8yGhDTDChofIVo9KyxjQMtVldUz3RFO7wodGyDqDn2ya8QGhxfrZuEz/0uibhDFQfiqSVMPumjm65SoGSUCrkVwUIEfUC8+nO/cpeNUsYQDCrMhAn+qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EwUF9YLA; arc=none smtp.client-ip=209.85.214.174
+	 MIME-Version; b=j7VzJCYAtyzxvoijHIUpiFoXAIn9nJpF1mILp7kC7zwrIax+IqHwzd1y89WnLMlO7PojJ0Y8JeSYBgk3Zss9E/5yy2f2yYdaQyahiDCTm5Aq6AThwqFWpkXP12OnIrEksHLgLSvBYhXgmMWck2vYLmFXtR08tPh2cPHxYnXWu5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fO8jZfkz; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21680814d42so10103695ad.2;
-        Thu, 23 Jan 2025 01:12:01 -0800 (PST)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21669fd5c7cso10196205ad.3;
+        Thu, 23 Jan 2025 01:12:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737623520; x=1738228320; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737623525; x=1738228325; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1sU+cwZ2ji3njMzao5QI+HwWqAIc+49Ex5r+oMqGHko=;
-        b=EwUF9YLAU2e4DHhsISS/3VMqLIXDtFAArLlfBXtioviwntY6xIsah0xp6t97PcYms+
-         Z+EpsnJdensOSemRw2AVT3a99wyNpXNXiXiX0Va8I2gh4hmYT9b8lkOIB1hOcbEeKVsi
-         bIWzGUbCsEKBXSXcS4IGfsjL+tZEosHMOuvvr9AjE9IpPODAhicnRGWHimosPnXvwhGb
-         UpnJRyhceDvfP/CPbqMvl2kfsMMjRK/E69ocC/BrPIQ7H+bm9smrcH2fhX/ggK8XM/fE
-         dJp2ryU7heN37swHTHp72811uQSSZlB3PsWoXVcrpHIWfnk/EJivK7vzq1jKJBjTxANE
-         K9Eg==
+        bh=3FKy8dDIfywO1Cv5Ffm6I7UX2IltfuWyLqtYmoo6J1Q=;
+        b=fO8jZfkzZfsmnwhYSZUnDW8AZ9GE1GZxx8Xq2Sxd2V3tFDR5Cfsc+CPL20ip7RSQx/
+         xw3FR8pU+b7Ygg32Q4UMsBQAAhg/cWnvG5v0jOZvF+GkTIUo+U4d4KfUuAhqDGyz/REY
+         K6A1hgCc0fykUyR3QOCB90FjpFt95FSE9fu7QLCx529GXDs9iiQMn1V9wHyHeq+DIOQc
+         PKo75UbqC0/d4SHwKyq9RpTDphq/ckAEJ96f7UhOva4Q95MNMwBTzjrKe+vWfGfjHjUv
+         MA1mkeziMXTVgsjKP92DZzFcdKxfX05IMBJQ90JroeYqnfUKdI0MKbmycw0TbLe/YVAZ
+         nKqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737623520; x=1738228320;
+        d=1e100.net; s=20230601; t=1737623525; x=1738228325;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1sU+cwZ2ji3njMzao5QI+HwWqAIc+49Ex5r+oMqGHko=;
-        b=Wj8bByDlO6l3bT/7/VE9La7Ex0EM6gpMw/aBW7m/tjYU2rDsqF9xptFwh9g7xw1NV7
-         zytWrT44b5gbnQrYqy5oiuRmL3t4uTEbmnwj4tqzLpdw+t3yJRiFY18MvLkXJMm7AVEa
-         BxsFFpBSjZm7u3HLvplynsNYdGk/8SwBUUw+tgmVzNyEPWrGBCPsihe1fYcJcoQL5eai
-         O2syzmTXrN7Pv+pkoGVSGRugNE+7OCT6p9ARAILvpN1ou5TSSFVQk5C3QpaP5hJREcVq
-         3IZLL3xSY6gzZOodwVzPB6y7GhSzE0bpJ2G+ZcoQ9b0Yj9vN6CS48kmxdXbRktIrHNnA
-         LfPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+1eJ/CrmpohuWyTfnI+Xyzr+cp2j3wyVDgVR2qcSut42CKFHZ5QBbdbPwCurthSxtzIYRL4WE0kA=@vger.kernel.org, AJvYcCUGo2rpZWt2gMSCihwGVMFaOw/EdJQPS3DKG89HlmKlqYwVbMhf1dyoMce2GXKgI8sw29qjeFbKEL0h@vger.kernel.org, AJvYcCV+iEhtWI7EafsfnJJY7J3Tc1qYciyP4jsNieB3LCaap3qafQjIEZDwhMHXqhC899YY2DUNIIYo//Yd@vger.kernel.org, AJvYcCV477dSZZU6rjgyoQOibsqN04SDxl2lIkIOfDROXiFN9pDH0uSHN70PBoGxJkONQmk9+2tNNpAhuv51tw==@vger.kernel.org, AJvYcCVHuxCrb1klDJ/3gLBpzIACxwSINotqsbwwa2dJOP3HxW9Lmx4JHx9QWblJ8uToA+f5HcIL1ofl@vger.kernel.org, AJvYcCVJFxwZJf1mAORVjD3Ky8hXLlShTuJ9QJw3envaci71YdMJOpqjmuLjVBwNsahKFZoWv4oqqKVrNiPh+7IaRU0=@vger.kernel.org, AJvYcCX4A3Y7KdcJ7ec4Ad+elkSSAfPI7g/wcWLkt3Fjb7oBXDv4lkrv0gs93PqfSlHRX5ep4U9WMO+yjTfF@vger.kernel.org, AJvYcCXrRQ+UwWHzJnhgSNTEmqgRMyfJ/gLrjsve9wtH5bjc7xr7dDkkMOOTt7Y6woiTFunfgJemY79dxaGaEB0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmelZYKnOKHTockxoQqm/fHnykAB1MynQuvJCmzz7SzuJTOCZZ
-	h2fzJWW2XcbNTuQD0RQQqePNiD6DsjZGCiXhssdvy0oOkFmAFKZ8juB0Pg==
-X-Gm-Gg: ASbGncubY1ZKy1ZksoT06draynYeSvnDLoat1MBvHYdfb03dGL7Zt7fliAmL69JPfCl
-	oAkZDGc+umZxIK+3QfA9IgTjzOuqPpQubs16B8x209jgK68F+zfR4R70pAXMFt6Kg/qAiPbVBFn
-	L2chlptj8wQUb3kddOhbfPOpZeED5BfvFK9E5aeXYVkijrsh676WbYKnwsKYiFeBkgV3Tivt/1x
-	iWhYxxP+GmaMEQYyHbVEKUml9TRGyMC6c7XFD3mkb0Khpma+g7CBuWRaREeGgxI5fBdavXiqfBb
-	OCJXDzTxb0dYtjcm1YjXFH2UwyFNF4dXMlUE7B+nkOuwWCW+
-X-Google-Smtp-Source: AGHT+IHtow+mfLoCKBeOjamIpyMgDb9vuPn3r8pQcsaTpARwRaYmeEMgh94OoT4XGGagCAIzATQJ+A==
-X-Received: by 2002:a17:903:32c1:b0:21b:d126:6d30 with SMTP id d9443c01a7336-21c355c433amr344690845ad.33.1737623520429;
-        Thu, 23 Jan 2025 01:12:00 -0800 (PST)
+        bh=3FKy8dDIfywO1Cv5Ffm6I7UX2IltfuWyLqtYmoo6J1Q=;
+        b=dlVPPjYeJBq3lrAKB0dIkOwn3eNNq7HV/sT0TJ7S737rSktOH2eOIiwUJy1BYTCmuU
+         Kp+TRIA8pv5NQS2Yh6j1SBC5qe765FXWA1Cbn8oDnZA/Xj7LRvTvWSoKsTpHg7qJbS1j
+         RmG8nssrB399xOqm2JMghZ2V+3GKZj5t20mR4p2HFA2ySE0F5CIAsAAA8YPVH2uGTif1
+         +EkoRidG3Bht2+GBWlMBU1G6eZ9U3eNDnMwbVXIX00gw1qU+FdPK6AGEfPLVxZn1BLMY
+         AxOu6NDM15rVlxcUz/V2d+3z89QFOP/M34QgCHFrVYifF7PYCyAPKa/dzL9RVoKg9z3u
+         4c7w==
+X-Forwarded-Encrypted: i=1; AJvYcCU/x83gWxMczdQTgOQCsDUV9IXmrZEFg96griKNFyGV3tbizEPlQhhVsYH3ITAYtACeB4uxWjZYteo=@vger.kernel.org, AJvYcCUlaM4xHK/55ZuJdIbAKrQkaJGOLAlZi3xUpiTMDeWJFObtLUQZeFvY0ECD9jtKMr9GBj/p+TpX+sD72w==@vger.kernel.org, AJvYcCWHOOOhcYABB5YfnSvLK32eB8BxFj1MuxoQhjxRjPQPTvbuPMdiWhTagq6K0RGreThpkhZvcwxx8AqL@vger.kernel.org, AJvYcCWJdDCsHHZ0Zk/mAomxHE3+Q5/udY2yzB8G3FJepQ7PlE5m2gd/PuBTrjC0dgS/cigQo2MnurKqgmU9@vger.kernel.org, AJvYcCWK0b0qEUOd5SPvFfdNL1FK61fH5/IGflKU+2ypf7DGWqKwJEfv7juAEboY3toVKZTG5YynEUNndiZg@vger.kernel.org, AJvYcCWKsxOjo3BxVBN5FfI+7oW4z+WkIE1Bfv0aY39qNtsY5FuFf6yFyegRammm3pIh2+s85KhpNjUa@vger.kernel.org, AJvYcCX/ZMyE14H8yUlRsnVun6YCSUNR87/idpMRiX0WkUhzzHSL4YJNqMJLftMCn/+ZtBUaKebXC75dzyxldzQ=@vger.kernel.org, AJvYcCXP9LtOLR8kzZkgD9H7H14ePh8ne8pSlV8wf+Av3A5txz7dubMhxbCPCcdvLNpy6UbJgN8iPtcE+P3SEHRIni0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywhae6oAU+hJtlh5vAl2dA7T05d9prdYgAnNIhyQYpA8YCvb0gW
+	R3tA1IEPLZBhNusVcX8iARItFhR3jSJoE7uocO8Fhi6qr7lzulfV
+X-Gm-Gg: ASbGncttBNsIub8DBW7s8IM6XxtwSQPU6QsoEsVgeXDNlU/PTrdjv5k+B6pgCG8dcq7
+	ZjBHSaAq+w6LZ02aaeiJiqHqNOD9/My3IF79GkKWwiZvPgukXgqk5fXCf0UUopOO1fbBXhfaHaw
+	oFufg9ct3S1GYLYZ2lpEctgkgVBfv6BsCUkKE345tKlOhu9Cro+brS1XO8sg60ruMh1KH+QkQms
+	icvwy/s5t38+gO+UPFu7iVxd7XoXc26Az1ZBM9ATm26qjGml/83SJgiekOAlOEaMpvaQW/f92dG
+	/B+IOCpIrl14kTbwdsa5z3La3l/2NTKZrGumX/XLIs5A36XzyDpkUjfPqg4=
+X-Google-Smtp-Source: AGHT+IENZSkE8qZoPF5mVbaxbpglCwTH6ZB+bOkfiaPFG2l1EZAgXM1+yxnA5gaJkaTz2NyRH0DMNQ==
+X-Received: by 2002:a17:903:1105:b0:216:6f1a:1c81 with SMTP id d9443c01a7336-21c352c77eamr374634455ad.2.1737623524946;
+        Thu, 23 Jan 2025 01:12:04 -0800 (PST)
 Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2ceb735esm109365365ad.64.2025.01.23.01.11.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2ceb735esm109365365ad.64.2025.01.23.01.12.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 01:12:00 -0800 (PST)
+        Thu, 23 Jan 2025 01:12:04 -0800 (PST)
 From: Ming Yu <a0282524688@gmail.com>
 To: tmyu0@nuvoton.com,
 	lee@kernel.org,
@@ -99,9 +99,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-rtc@vger.kernel.org,
 	linux-usb@vger.kernel.org,
 	Ming Yu <a0282524688@gmail.com>
-Subject: [PATCH v6 4/7] can: Add Nuvoton NCT6694 CANFD support
-Date: Thu, 23 Jan 2025 17:11:12 +0800
-Message-Id: <20250123091115.2079802-5-a0282524688@gmail.com>
+Subject: [PATCH v6 5/7] watchdog: Add Nuvoton NCT6694 WDT support
+Date: Thu, 23 Jan 2025 17:11:13 +0800
+Message-Id: <20250123091115.2079802-6-a0282524688@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250123091115.2079802-1-a0282524688@gmail.com>
 References: <20250123091115.2079802-1-a0282524688@gmail.com>
@@ -113,882 +113,366 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This driver supports Socket CANFD functionality for NCT6694 MFD
+This driver supports Watchdog timer functionality for NCT6694 MFD
 device based on USB interface.
 
 Signed-off-by: Ming Yu <a0282524688@gmail.com>
 ---
- MAINTAINERS                         |   1 +
- drivers/net/can/usb/Kconfig         |  11 +
- drivers/net/can/usb/Makefile        |   1 +
- drivers/net/can/usb/nct6694_canfd.c | 813 ++++++++++++++++++++++++++++
- 4 files changed, 826 insertions(+)
- create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ MAINTAINERS                    |   1 +
+ drivers/watchdog/Kconfig       |  11 ++
+ drivers/watchdog/Makefile      |   1 +
+ drivers/watchdog/nct6694_wdt.c | 296 +++++++++++++++++++++++++++++++++
+ 4 files changed, 309 insertions(+)
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index f930252ad132..3196f87c547d 100644
+index 3196f87c547d..7bd5a0af27ab 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -16808,6 +16808,7 @@ S:	Supported
- F:	drivers/gpio/gpio-nct6694.c
+@@ -16809,6 +16809,7 @@ F:	drivers/gpio/gpio-nct6694.c
  F:	drivers/i2c/busses/i2c-nct6694.c
  F:	drivers/mfd/nct6694.c
-+F:	drivers/net/can/usb/nct6694_canfd.c
+ F:	drivers/net/can/usb/nct6694_canfd.c
++F:	drivers/watchdog/nct6694_wdt.c
  F:	include/linux/mfd/nct6694.h
  
  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
-diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
-index 9dae0c71a2e1..759e724a67cf 100644
---- a/drivers/net/can/usb/Kconfig
-+++ b/drivers/net/can/usb/Kconfig
-@@ -133,6 +133,17 @@ config CAN_MCBA_USB
- 	  This driver supports the CAN BUS Analyzer interface
- 	  from Microchip (http://www.microchip.com/development-tools/).
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index f81705f8539a..4c4f826368c4 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -748,6 +748,17 @@ config MAX77620_WATCHDOG
+ 	  MAX77620 chips. To compile this driver as a module,
+ 	  choose M here: the module will be called max77620_wdt.
  
-+config CAN_NCT6694
-+	tristate "Nuvoton NCT6694 Socket CANfd support"
++config NCT6694_WATCHDOG
++	tristate "Nuvoton NCT6694 watchdog support"
 +	depends on MFD_NCT6694
-+	select CAN_RX_OFFLOAD
++	select WATCHDOG_CORE
 +	help
-+	  If you say yes to this option, support will be included for Nuvoton
-+	  NCT6694, a USB device to socket CANfd controller.
++	  Say Y here to support Nuvoton NCT6694 watchdog timer
++	  functionality.
 +
-+	  This driver can also be built as a module. If so, the module will
-+	  be called nct6694_canfd.
++	  This driver can also be built as a module. If so, the module
++	  will be called nct6694_wdt.
 +
- config CAN_PEAK_USB
- 	tristate "PEAK PCAN-USB/USB Pro interfaces for CAN 2.0b/CAN-FD"
- 	help
-diff --git a/drivers/net/can/usb/Makefile b/drivers/net/can/usb/Makefile
-index 8b11088e9a59..fcafb1ac262e 100644
---- a/drivers/net/can/usb/Makefile
-+++ b/drivers/net/can/usb/Makefile
-@@ -11,5 +11,6 @@ obj-$(CONFIG_CAN_F81604) += f81604.o
- obj-$(CONFIG_CAN_GS_USB) += gs_usb.o
- obj-$(CONFIG_CAN_KVASER_USB) += kvaser_usb/
- obj-$(CONFIG_CAN_MCBA_USB) += mcba_usb.o
-+obj-$(CONFIG_CAN_NCT6694) += nct6694_canfd.o
- obj-$(CONFIG_CAN_PEAK_USB) += peak_usb/
- obj-$(CONFIG_CAN_UCAN) += ucan.o
-diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nct6694_canfd.c
+ config IMX2_WDT
+ 	tristate "IMX2+ Watchdog"
+ 	depends on ARCH_MXC || ARCH_LAYERSCAPE || COMPILE_TEST
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 8411626fa162..de2a04ff8a92 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -232,6 +232,7 @@ obj-$(CONFIG_WM831X_WATCHDOG) += wm831x_wdt.o
+ obj-$(CONFIG_WM8350_WATCHDOG) += wm8350_wdt.o
+ obj-$(CONFIG_MAX63XX_WATCHDOG) += max63xx_wdt.o
+ obj-$(CONFIG_MAX77620_WATCHDOG) += max77620_wdt.o
++obj-$(CONFIG_NCT6694_WATCHDOG) += nct6694_wdt.o
+ obj-$(CONFIG_ZIIRAVE_WATCHDOG) += ziirave_wdt.o
+ obj-$(CONFIG_SOFT_WATCHDOG) += softdog.o
+ obj-$(CONFIG_MENF21BMC_WATCHDOG) += menf21bmc_wdt.o
+diff --git a/drivers/watchdog/nct6694_wdt.c b/drivers/watchdog/nct6694_wdt.c
 new file mode 100644
-index 000000000000..56d729b438f3
+index 000000000000..b117647d9ceb
 --- /dev/null
-+++ b/drivers/net/can/usb/nct6694_canfd.c
-@@ -0,0 +1,813 @@
++++ b/drivers/watchdog/nct6694_wdt.c
+@@ -0,0 +1,296 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Nuvoton NCT6694 Socket CANfd driver based on USB interface.
++ * Nuvoton NCT6694 WDT driver based on USB interface.
 + *
 + * Copyright (C) 2024 Nuvoton Technology Corp.
 + */
 +
-+#include <linux/can/dev.h>
-+#include <linux/can/rx-offload.h>
-+#include <linux/ethtool.h>
-+#include <linux/irqdomain.h>
 +#include <linux/kernel.h>
 +#include <linux/mfd/core.h>
 +#include <linux/mfd/nct6694.h>
 +#include <linux/module.h>
-+#include <linux/netdevice.h>
 +#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/watchdog.h>
 +
-+#define DRVNAME "nct6694_canfd"
++#define DRVNAME "nct6694_wdt"
++
++#define NCT6694_DEFAULT_TIMEOUT		10
++#define NCT6694_DEFAULT_PRETIMEOUT	0
 +
 +/*
-+ * USB command module type for NCT6694 CANfd controller.
++ * USB command module type for NCT6694 WDT controller.
 + * This defines the module type used for communication with the NCT6694
-+ * CANfd controller over the USB interface.
++ * WDT controller over the USB interface.
 + */
-+#define NCT6694_CAN_MOD			0x05
++#define NCT6694_WDT_MOD			0x07
 +
-+/* Command 00h - CAN Setting and Initialization */
-+#define NCT6694_CAN_SETTING		0x00
-+#define NCT6694_CAN_SETTING_CTRL1_MON	BIT(0)
-+#define NCT6694_CAN_SETTING_CTRL1_NISO	BIT(1)
-+#define NCT6694_CAN_SETTING_CTRL1_LBCK	BIT(2)
++/* Command 00h - WDT Setup */
++#define NCT6694_WDT_SETUP		0x00
++#define NCT6694_WDT_SETUP_SEL(idx)	(idx ? 0x01 : 0x00)
 +
-+/* Command 01h - CAN Information */
-+#define NCT6694_CAN_INFORMATION		0x01
-+#define NCT6694_CAN_INFORMATION_SEL	0x00
++/* Command 01h - WDT Command */
++#define NCT6694_WDT_COMMAND		0x01
++#define NCT6694_WDT_COMMAND_SEL(idx)	(idx ? 0x01 : 0x00)
 +
-+/* Command 02h - CAN Event */
-+#define NCT6694_CAN_EVENT		0x02
-+#define NCT6694_CAN_EVENT_SEL(idx, mask)	\
-+	((idx ? 0x80 : 0x00) | ((mask) & 0x7F))
++static unsigned int timeout = NCT6694_DEFAULT_TIMEOUT;
++module_param(timeout, int, 0);
++MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
 +
-+#define NCT6694_CAN_EVENT_MASK		GENMASK(5, 0)
-+#define NCT6694_CAN_EVT_TX_FIFO_EMPTY	BIT(7)	/* Read-clear */
-+#define NCT6694_CAN_EVT_RX_DATA_LOST	BIT(5)	/* Read-clear */
-+#define NCT6694_CAN_EVT_RX_DATA_IN	BIT(7)	/* Read-clear*/
++static unsigned int pretimeout = NCT6694_DEFAULT_PRETIMEOUT;
++module_param(pretimeout, int, 0);
++MODULE_PARM_DESC(pretimeout, "Watchdog pre-timeout in seconds");
 +
-+/* Command 10h - CAN Deliver */
-+#define NCT6694_CAN_DELIVER		0x10
-+#define NCT6694_CAN_DELIVER_SEL(buf_cnt)	\
-+	((buf_cnt) & 0xFF)
++static bool nowayout = WATCHDOG_NOWAYOUT;
++module_param(nowayout, bool, 0);
++MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
++			   __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
 +
-+/* Command 11h - CAN Receive */
-+#define NCT6694_CAN_RECEIVE		0x11
-+#define NCT6694_CAN_RECEIVE_SEL(idx, buf_cnt)	\
-+	((idx ? 0x80 : 0x00) | ((buf_cnt) & 0x7F))
-+
-+#define NCT6694_CAN_FRAME_TAG_CAN0	0xC0
-+#define NCT6694_CAN_FRAME_TAG_CAN1	0xC1
-+#define NCT6694_CAN_FRAME_FLAG_EFF	BIT(0)
-+#define NCT6694_CAN_FRAME_FLAG_RTR	BIT(1)
-+#define NCT6694_CAN_FRAME_FLAG_FD	BIT(2)
-+#define NCT6694_CAN_FRAME_FLAG_BRS	BIT(3)
-+#define NCT6694_CAN_FRAME_FLAG_ERR	BIT(4)
-+
-+#define NCT6694_NAPI_WEIGHT		32
-+
-+enum nct6694_event_err {
-+	NCT6694_CAN_EVT_ERR_NO_ERROR = 0,
-+	NCT6694_CAN_EVT_ERR_CRC_ERROR,
-+	NCT6694_CAN_EVT_ERR_STUFF_ERROR,
-+	NCT6694_CAN_EVT_ERR_ACK_ERROR,
-+	NCT6694_CAN_EVT_ERR_FORM_ERROR,
-+	NCT6694_CAN_EVT_ERR_BIT_ERROR,
-+	NCT6694_CAN_EVT_ERR_TIMEOUT_ERROR,
-+	NCT6694_CAN_EVT_ERR_UNKNOWN_ERROR,
++enum {
++	NCT6694_ACTION_NONE = 0,
++	NCT6694_ACTION_SIRQ,
++	NCT6694_ACTION_GPO,
 +};
 +
-+enum nct6694_event_status {
-+	NCT6694_CAN_EVT_STS_ERROR_ACTIVE = 0,
-+	NCT6694_CAN_EVT_STS_ERROR_PASSIVE,
-+	NCT6694_CAN_EVT_STS_BUS_OFF,
-+	NCT6694_CAN_EVT_STS_WARNING,
-+};
-+
-+struct __packed nct6694_can_setting {
-+	__le32 nbr;
-+	__le32 dbr;
-+	u8 active;
-+	u8 reserved[3];
-+	__le16 ctrl1;
-+	__le16 ctrl2;
-+	__le32 nbtp;
-+	__le32 dbtp;
-+};
-+
-+struct __packed nct6694_can_information {
-+	u8 tx_fifo_cnt;
-+	u8 rx_fifo_cnt;
-+	u8 reserved[2];
-+	__le32 can_clk;
-+};
-+
-+struct __packed nct6694_can_event {
-+	u8 err;
++struct __packed nct6694_wdt_setup {
++	__le32 pretimeout;
++	__le32 timeout;
++	u8 owner;
++	u8 scratch;
++	u8 control;
 +	u8 status;
-+	u8 tx_evt;
-+	u8 rx_evt;
-+	u8 rec;
-+	u8 tec;
-+	u8 reserved[2];
++	__le32 countdown;
 +};
 +
-+struct __packed nct6694_can_frame {
-+	u8 tag;
-+	u8 flag;
-+	u8 reserved;
-+	u8 length;
-+	__le32 id;
-+	u8 data[CANFD_MAX_DLEN];
++struct __packed nct6694_wdt_cmd {
++	__le32 wdt_cmd;
++	__le32 reserved;
 +};
 +
-+struct nct6694_can_priv {
-+	struct can_priv can;	/* must be the first member */
-+	struct can_rx_offload offload;
-+	struct can_berr_counter bec;
-+	struct net_device *ndev;
++union __packed nct6694_wdt_msg {
++	struct nct6694_wdt_setup setup;
++	struct nct6694_wdt_cmd cmd;
++};
++
++struct nct6694_wdt_data {
++	struct watchdog_device wdev;
++	struct device *dev;
 +	struct nct6694 *nct6694;
-+	struct workqueue_struct *wq;
-+	struct work_struct tx_work;
-+	struct nct6694_can_frame tx;
-+	struct nct6694_can_frame rx;
-+	struct nct6694_can_event event[2];
-+	unsigned char can_idx;
++	/* Mutex to synchronize access to private data */
++	struct mutex lock;
++	union nct6694_wdt_msg *msg;
++	unsigned int wdev_idx;
 +};
 +
-+static inline struct nct6694_can_priv *rx_offload_to_priv(struct can_rx_offload *offload)
++static int nct6694_wdt_setting(struct watchdog_device *wdev,
++			       u32 timeout_val, u8 timeout_act,
++			       u32 pretimeout_val, u8 pretimeout_act)
 +{
-+	return container_of(offload, struct nct6694_can_priv, offload);
-+}
-+
-+static const struct can_bittiming_const nct6694_can_bittiming_nominal_const = {
-+	.name = DRVNAME,
-+	.tseg1_min = 2,
-+	.tseg1_max = 256,
-+	.tseg2_min = 2,
-+	.tseg2_max = 128,
-+	.sjw_max = 128,
-+	.brp_min = 1,
-+	.brp_max = 511,
-+	.brp_inc = 1,
-+};
-+
-+static const struct can_bittiming_const nct6694_can_bittiming_data_const = {
-+	.name = DRVNAME,
-+	.tseg1_min = 1,
-+	.tseg1_max = 32,
-+	.tseg2_min = 1,
-+	.tseg2_max = 16,
-+	.sjw_max = 16,
-+	.brp_min = 1,
-+	.brp_max = 31,
-+	.brp_inc = 1,
-+};
-+
-+static void nct6694_can_rx_offload(struct can_rx_offload *offload,
-+				   struct sk_buff *skb)
-+{
-+	struct nct6694_can_priv *priv = rx_offload_to_priv(offload);
-+	int ret;
-+
-+	ret = can_rx_offload_queue_tail(offload, skb);
-+	if (ret)
-+		priv->ndev->stats.rx_fifo_errors++;
-+}
-+
-+static void nct6694_can_handle_lost_msg(struct net_device *ndev)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+	struct net_device_stats *stats = &ndev->stats;
-+	struct can_frame *cf;
-+	struct sk_buff *skb;
-+
-+	netdev_err(ndev, "RX FIFO overflow, message(s) lost.\n");
-+
-+	stats->rx_errors++;
-+	stats->rx_over_errors++;
-+
-+	skb = alloc_can_err_skb(ndev, &cf);
-+	if (!skb)
-+		return;
-+
-+	cf->can_id |= CAN_ERR_CRTL;
-+	cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
-+
-+	nct6694_can_rx_offload(&priv->offload, skb);
-+}
-+
-+static void nct6694_can_rx(struct net_device *ndev, u8 rx_evt)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+	struct nct6694_can_frame *frame = &priv->rx;
++	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
++	struct nct6694_wdt_setup *setup = &data->msg->setup;
 +	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_CAN_MOD,
-+		.cmd = NCT6694_CAN_RECEIVE,
-+		.sel = NCT6694_CAN_RECEIVE_SEL(priv->can_idx, 1),
-+		.len = cpu_to_le16(sizeof(*frame))
++		.mod = NCT6694_WDT_MOD,
++		.cmd = NCT6694_WDT_SETUP,
++		.sel = NCT6694_WDT_SETUP_SEL(data->wdev_idx),
++		.len = cpu_to_le16(sizeof(*setup))
 +	};
-+	struct sk_buff *skb;
++	unsigned int timeout_fmt, pretimeout_fmt;
++
++	guard(mutex)(&data->lock);
++
++	if (pretimeout_val == 0)
++		pretimeout_act = NCT6694_ACTION_NONE;
++
++	timeout_fmt = (timeout_val * 1000) | (timeout_act << 24);
++	pretimeout_fmt = (pretimeout_val * 1000) | (pretimeout_act << 24);
++
++	memset(setup, 0, sizeof(*setup));
++	setup->timeout = cpu_to_le32(timeout_fmt);
++	setup->pretimeout = cpu_to_le32(pretimeout_fmt);
++
++	return nct6694_write_msg(data->nct6694, &cmd_hd, setup);
++}
++
++static int nct6694_wdt_start(struct watchdog_device *wdev)
++{
++	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
 +	int ret;
 +
-+	ret = nct6694_read_msg(priv->nct6694, &cmd_hd, frame);
-+	if (ret)
-+		return;
-+
-+	if (frame->flag & NCT6694_CAN_FRAME_FLAG_FD) {
-+		struct canfd_frame *cfd;
-+
-+		skb = alloc_canfd_skb(priv->ndev, &cfd);
-+		if (!skb)
-+			return;
-+
-+		cfd->can_id = le32_to_cpu(frame->id);
-+		cfd->len = canfd_sanitize_len(frame->length);
-+		if (frame->flag & NCT6694_CAN_FRAME_FLAG_EFF)
-+			cfd->can_id |= CAN_EFF_FLAG;
-+		if (frame->flag & NCT6694_CAN_FRAME_FLAG_BRS)
-+			cfd->flags |= CANFD_BRS;
-+		if (frame->flag & NCT6694_CAN_FRAME_FLAG_ERR)
-+			cfd->flags |= CANFD_ESI;
-+
-+		memcpy(cfd->data, frame->data, cfd->len);
-+	} else {
-+		struct can_frame *cf;
-+
-+		skb = alloc_can_skb(priv->ndev, &cf);
-+		if (!skb)
-+			return;
-+
-+		cf->can_id = le32_to_cpu(frame->id);
-+		cf->len = canfd_sanitize_len(frame->length);
-+		if (frame->flag & NCT6694_CAN_FRAME_FLAG_EFF)
-+			cf->can_id |= CAN_EFF_FLAG;
-+
-+		if (frame->flag & NCT6694_CAN_FRAME_FLAG_RTR)
-+			cf->can_id |= CAN_RTR_FLAG;
-+		else
-+			memcpy(cf->data, frame->data, cf->len);
-+	}
-+
-+	nct6694_can_rx_offload(&priv->offload, skb);
-+}
-+
-+static int nct6694_can_get_berr_counter(const struct net_device *ndev,
-+					struct can_berr_counter *bec)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+
-+	bec->txerr = priv->bec.txerr;
-+	bec->rxerr = priv->bec.rxerr;
-+
-+	return 0;
-+}
-+
-+static void nct6694_can_handle_state_change(struct net_device *ndev,
-+					    enum can_state new_state)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+	struct can_berr_counter bec;
-+	struct can_frame *cf;
-+	struct sk_buff *skb;
-+
-+	switch (new_state) {
-+	case CAN_STATE_ERROR_ACTIVE:
-+		priv->can.can_stats.error_warning++;
-+		priv->can.state = CAN_STATE_ERROR_ACTIVE;
-+		break;
-+	case CAN_STATE_ERROR_WARNING:
-+		priv->can.can_stats.error_warning++;
-+		priv->can.state = CAN_STATE_ERROR_WARNING;
-+		break;
-+	case CAN_STATE_ERROR_PASSIVE:
-+		priv->can.can_stats.error_passive++;
-+		priv->can.state = CAN_STATE_ERROR_PASSIVE;
-+		break;
-+	case CAN_STATE_BUS_OFF:
-+		priv->can.state = CAN_STATE_BUS_OFF;
-+		priv->can.can_stats.bus_off++;
-+		can_free_echo_skb(ndev, 0, NULL);
-+		netif_stop_queue(ndev);
-+		can_bus_off(ndev);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	skb = alloc_can_err_skb(ndev, &cf);
-+
-+	nct6694_can_get_berr_counter(ndev, &bec);
-+
-+	switch (new_state) {
-+	case CAN_STATE_ERROR_WARNING:
-+		cf->can_id |= CAN_ERR_CRTL;
-+		if (bec.txerr > bec.rxerr)
-+			cf->data[1] = CAN_ERR_CRTL_TX_WARNING;
-+		else
-+			cf->data[1] = CAN_ERR_CRTL_RX_WARNING;
-+		cf->data[6] = bec.txerr;
-+		cf->data[7] = bec.rxerr;
-+		break;
-+	case CAN_STATE_ERROR_PASSIVE:
-+		cf->can_id |= CAN_ERR_CRTL;
-+		cf->data[1] |= CAN_ERR_CRTL_RX_PASSIVE;
-+		if (bec.txerr > 127)
-+			cf->data[1] |= CAN_ERR_CRTL_TX_PASSIVE;
-+		cf->data[6] = bec.txerr;
-+		cf->data[7] = bec.rxerr;
-+		break;
-+	case CAN_STATE_BUS_OFF:
-+		cf->can_id |= CAN_ERR_BUSOFF;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	nct6694_can_rx_offload(&priv->offload, skb);
-+}
-+
-+static void nct6694_can_handle_state_errors(struct net_device *ndev, u8 status)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+
-+	if (status == NCT6694_CAN_EVT_STS_ERROR_ACTIVE &&
-+	    priv->can.state != CAN_STATE_ERROR_ACTIVE) {
-+		netdev_dbg(ndev, "Error, entered active state\n");
-+		nct6694_can_handle_state_change(ndev, CAN_STATE_ERROR_ACTIVE);
-+	}
-+
-+	if (status == NCT6694_CAN_EVT_STS_WARNING &&
-+	    priv->can.state != CAN_STATE_ERROR_WARNING) {
-+		netdev_dbg(ndev, "Error, entered warning state\n");
-+		nct6694_can_handle_state_change(ndev, CAN_STATE_ERROR_WARNING);
-+	}
-+
-+	if (status == NCT6694_CAN_EVT_STS_ERROR_PASSIVE &&
-+	    priv->can.state != CAN_STATE_ERROR_PASSIVE) {
-+		netdev_dbg(ndev, "Error, entered passive state\n");
-+		nct6694_can_handle_state_change(ndev, CAN_STATE_ERROR_PASSIVE);
-+	}
-+
-+	if (status == NCT6694_CAN_EVT_STS_BUS_OFF &&
-+	    priv->can.state != CAN_STATE_BUS_OFF) {
-+		netdev_dbg(ndev, "Error, entered bus-off state\n");
-+		nct6694_can_handle_state_change(ndev, CAN_STATE_BUS_OFF);
-+	}
-+}
-+
-+static void nct6694_can_handle_bus_err(struct net_device *ndev, u8 bus_err)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+	struct can_frame *cf;
-+	struct sk_buff *skb;
-+
-+	if (bus_err == NCT6694_CAN_EVT_ERR_NO_ERROR)
-+		return;
-+
-+	priv->can.can_stats.bus_error++;
-+
-+	skb = alloc_can_err_skb(ndev, &cf);
-+	if (skb)
-+		cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
-+
-+	switch (bus_err) {
-+	case NCT6694_CAN_EVT_ERR_CRC_ERROR:
-+		netdev_dbg(ndev, "CRC error\n");
-+		ndev->stats.rx_errors++;
-+		if (skb)
-+			cf->data[3] |= CAN_ERR_PROT_LOC_CRC_SEQ;
-+		break;
-+
-+	case NCT6694_CAN_EVT_ERR_STUFF_ERROR:
-+		netdev_dbg(ndev, "Stuff error\n");
-+		ndev->stats.rx_errors++;
-+		if (skb)
-+			cf->data[2] |= CAN_ERR_PROT_STUFF;
-+		break;
-+
-+	case NCT6694_CAN_EVT_ERR_ACK_ERROR:
-+		netdev_dbg(ndev, "Ack error\n");
-+		ndev->stats.tx_errors++;
-+		if (skb) {
-+			cf->can_id |= CAN_ERR_ACK;
-+			cf->data[2] |= CAN_ERR_PROT_TX;
-+		}
-+		break;
-+
-+	case NCT6694_CAN_EVT_ERR_FORM_ERROR:
-+		netdev_dbg(ndev, "Form error\n");
-+		ndev->stats.rx_errors++;
-+		if (skb)
-+			cf->data[2] |= CAN_ERR_PROT_FORM;
-+		break;
-+
-+	case NCT6694_CAN_EVT_ERR_BIT_ERROR:
-+		netdev_dbg(ndev, "Bit error\n");
-+		ndev->stats.tx_errors++;
-+		if (skb)
-+			cf->data[2] |= CAN_ERR_PROT_TX | CAN_ERR_PROT_BIT;
-+		break;
-+
-+	default:
-+		break;
-+	}
-+
-+	nct6694_can_rx_offload(&priv->offload, skb);
-+}
-+
-+static void nct6694_can_tx_irq(struct net_device *ndev)
-+{
-+	struct net_device_stats *stats = &ndev->stats;
-+
-+	stats->tx_bytes += can_get_echo_skb(ndev, 0, NULL);
-+	stats->tx_packets++;
-+	netif_wake_queue(ndev);
-+}
-+
-+static irqreturn_t nct6694_can_irq(int irq, void *data)
-+{
-+	struct net_device *ndev = data;
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+	struct nct6694_can_event *evt = priv->event;
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_CAN_MOD,
-+		.cmd = NCT6694_CAN_EVENT,
-+		.sel = NCT6694_CAN_EVENT_SEL(priv->can_idx, NCT6694_CAN_EVENT_MASK),
-+		.len = cpu_to_le16(sizeof(priv->event))
-+	};
-+	irqreturn_t handled = IRQ_NONE;
-+	int can_idx = priv->can_idx;
-+	int ret;
-+
-+	ret = nct6694_read_msg(priv->nct6694, &cmd_hd, evt);
-+	if (ret < 0)
-+		return handled;
-+
-+	if (priv->event[can_idx].rx_evt & NCT6694_CAN_EVT_RX_DATA_IN) {
-+		nct6694_can_rx(ndev, priv->event[can_idx].rx_evt);
-+		handled = IRQ_HANDLED;
-+	}
-+
-+	if (priv->event[can_idx].rx_evt & NCT6694_CAN_EVT_RX_DATA_LOST) {
-+		nct6694_can_handle_lost_msg(ndev);
-+		handled = IRQ_HANDLED;
-+	}
-+
-+	if (priv->event[can_idx].status) {
-+		nct6694_can_handle_state_errors(ndev, priv->event[can_idx].status);
-+		handled = IRQ_HANDLED;
-+	}
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
-+		nct6694_can_handle_bus_err(ndev, priv->event[can_idx].err);
-+		handled = IRQ_HANDLED;
-+	}
-+
-+	if (handled)
-+		can_rx_offload_threaded_irq_finish(&priv->offload);
-+
-+	if (priv->event[can_idx].tx_evt & NCT6694_CAN_EVT_TX_FIFO_EMPTY)
-+		nct6694_can_tx_irq(ndev);
-+
-+	priv->bec.rxerr = priv->event[can_idx].rec;
-+	priv->bec.txerr = priv->event[can_idx].tec;
-+
-+	return handled;
-+}
-+
-+static void nct6694_can_tx_work(struct work_struct *work)
-+{
-+	struct nct6694_can_priv *priv = container_of(work,
-+						     struct nct6694_can_priv,
-+						     tx_work);
-+	struct nct6694_can_frame *frame = &priv->tx;
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_CAN_MOD,
-+		.cmd = NCT6694_CAN_DELIVER,
-+		.sel = NCT6694_CAN_DELIVER_SEL(1),
-+		.len = cpu_to_le16(sizeof(*frame))
-+	};
-+	struct net_device *ndev = priv->ndev;
-+	struct net_device_stats *stats = &ndev->stats;
-+	struct sk_buff *skb = priv->can.echo_skb[0];
-+	u32 txid;
-+	int err;
-+
-+	memset(frame, 0, sizeof(*frame));
-+
-+	if (priv->can_idx == 0)
-+		frame->tag = NCT6694_CAN_FRAME_TAG_CAN0;
-+	else
-+		frame->tag = NCT6694_CAN_FRAME_TAG_CAN1;
-+
-+	if (can_is_canfd_skb(skb)) {
-+		struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+
-+		if (cfd->flags & CANFD_BRS)
-+			frame->flag |= NCT6694_CAN_FRAME_FLAG_BRS;
-+
-+		if (cfd->can_id & CAN_EFF_FLAG) {
-+			txid = cfd->can_id & CAN_EFF_MASK;
-+			frame->flag |= NCT6694_CAN_FRAME_FLAG_EFF;
-+		} else {
-+			txid = cfd->can_id & CAN_SFF_MASK;
-+		}
-+		frame->flag |= NCT6694_CAN_FRAME_FLAG_FD;
-+		frame->id = cpu_to_le32(txid);
-+		frame->length = cfd->len;
-+
-+		memcpy(frame->data, cfd->data, cfd->len);
-+	} else {
-+		struct can_frame *cf = (struct can_frame *)skb->data;
-+
-+		if (cf->can_id & CAN_EFF_FLAG) {
-+			txid = cf->can_id & CAN_EFF_MASK;
-+			frame->flag |= NCT6694_CAN_FRAME_FLAG_EFF;
-+		} else {
-+			txid = cf->can_id & CAN_SFF_MASK;
-+		}
-+
-+		if (cf->can_id & CAN_RTR_FLAG)
-+			frame->flag |= NCT6694_CAN_FRAME_FLAG_RTR;
-+		else
-+			memcpy(frame->data, cf->data, cf->len);
-+
-+		frame->id = cpu_to_le32(txid);
-+		frame->length = cf->len;
-+	}
-+
-+	err = nct6694_write_msg(priv->nct6694, &cmd_hd, frame);
-+	if (err) {
-+		netdev_err(ndev, "%s: TX FIFO is full!\n", __func__);
-+		can_free_echo_skb(ndev, 0, NULL);
-+		stats->tx_dropped++;
-+		stats->tx_errors++;
-+		netif_wake_queue(ndev);
-+	}
-+}
-+
-+static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
-+					  struct net_device *ndev)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+
-+	if (can_dev_dropped_skb(ndev, skb))
-+		return NETDEV_TX_OK;
-+
-+	netif_stop_queue(ndev);
-+	can_put_echo_skb(skb, ndev, 0, 0);
-+	queue_work(priv->wq, &priv->tx_work);
-+
-+	return NETDEV_TX_OK;
-+}
-+
-+static int nct6694_can_start(struct net_device *ndev)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+	struct nct6694_can_setting *setting;
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_CAN_MOD,
-+		.cmd = NCT6694_CAN_SETTING,
-+		.sel = priv->can_idx,
-+		.len = cpu_to_le16(sizeof(*setting))
-+	};
-+	const struct can_bittiming *n_bt = &priv->can.bittiming;
-+	const struct can_bittiming *d_bt = &priv->can.data_bittiming;
-+	int ret;
-+
-+	setting = kzalloc(sizeof(*setting), GFP_KERNEL);
-+	if (!setting)
-+		return -ENOMEM;
-+
-+	setting->nbr = cpu_to_le32(n_bt->bitrate);
-+	setting->dbr = cpu_to_le32(d_bt->bitrate);
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-+		setting->ctrl1 |= cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_MON);
-+
-+	if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) &&
-+	    priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-+		setting->ctrl1 |= cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_NISO);
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-+		setting->ctrl1 |= cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_LBCK);
-+
-+	ret = nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
-+	if (ret)
-+		goto exit;
-+
-+	priv->can.state = CAN_STATE_ERROR_ACTIVE;
-+
-+exit:
-+	kfree(setting);
-+	return ret;
-+}
-+
-+static int nct6694_can_stop(struct net_device *ndev)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+
-+	netif_stop_queue(ndev);
-+	free_irq(ndev->irq, ndev);
-+	destroy_workqueue(priv->wq);
-+	priv->wq = NULL;
-+	priv->can.state = CAN_STATE_STOPPED;
-+	can_rx_offload_disable(&priv->offload);
-+	close_candev(ndev);
-+
-+	return 0;
-+}
-+
-+static int nct6694_can_set_mode(struct net_device *ndev, enum can_mode mode)
-+{
-+	switch (mode) {
-+	case CAN_MODE_START:
-+		nct6694_can_start(ndev);
-+		netif_wake_queue(ndev);
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int nct6694_can_open(struct net_device *ndev)
-+{
-+	struct nct6694_can_priv *priv = netdev_priv(ndev);
-+	int ret;
-+
-+	ret = open_candev(ndev);
++	ret = nct6694_wdt_setting(wdev, wdev->timeout, NCT6694_ACTION_GPO,
++				  wdev->pretimeout, NCT6694_ACTION_GPO);
 +	if (ret)
 +		return ret;
 +
-+	can_rx_offload_enable(&priv->offload);
++	dev_dbg(data->dev, "Setting WDT(%d): timeout = %d, pretimeout = %d\n",
++		data->wdev_idx, wdev->timeout, wdev->pretimeout);
 +
-+	ret = request_threaded_irq(ndev->irq, NULL,
-+				   nct6694_can_irq, IRQF_ONESHOT,
-+				   "nct6694_can", ndev);
-+	if (ret) {
-+		netdev_err(ndev, "Failed to request IRQ\n");
-+		goto close_candev;
-+	}
-+
-+	priv->wq = alloc_ordered_workqueue("%s-nct6694_wq",
-+					   WQ_FREEZABLE | WQ_MEM_RECLAIM,
-+					   ndev->name);
-+	if (!priv->wq) {
-+		ret = -ENOMEM;
-+		goto free_irq;
-+	}
-+
-+	ret = nct6694_can_start(ndev);
-+	if (ret)
-+		goto destroy_wq;
-+
-+	netif_start_queue(ndev);
-+
-+	return 0;
-+
-+destroy_wq:
-+	destroy_workqueue(priv->wq);
-+free_irq:
-+	free_irq(ndev->irq, ndev);
-+close_candev:
-+	can_rx_offload_disable(&priv->offload);
-+	close_candev(ndev);
 +	return ret;
 +}
 +
-+static const struct net_device_ops nct6694_can_netdev_ops = {
-+	.ndo_open = nct6694_can_open,
-+	.ndo_stop = nct6694_can_stop,
-+	.ndo_start_xmit = nct6694_can_start_xmit,
-+	.ndo_change_mtu = can_change_mtu,
-+};
-+
-+static const struct ethtool_ops nct6694_can_ethtool_ops = {
-+	.get_ts_info = ethtool_op_get_ts_info,
-+};
-+
-+static int nct6694_can_get_clock(struct nct6694_can_priv *priv)
++static int nct6694_wdt_stop(struct watchdog_device *wdev)
 +{
-+	struct nct6694_can_information *info;
++	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
++	struct nct6694_wdt_cmd *cmd = &data->msg->cmd;
 +	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_CAN_MOD,
-+		.cmd = NCT6694_CAN_INFORMATION,
-+		.sel = NCT6694_CAN_INFORMATION_SEL,
-+		.len = cpu_to_le16(sizeof(*info))
++		.mod = NCT6694_WDT_MOD,
++		.cmd = NCT6694_WDT_COMMAND,
++		.sel = NCT6694_WDT_COMMAND_SEL(data->wdev_idx),
++		.len = cpu_to_le16(sizeof(*cmd))
 +	};
-+	int ret, can_clk;
 +
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
++	guard(mutex)(&data->lock);
 +
-+	ret = nct6694_read_msg(priv->nct6694, &cmd_hd, info);
-+	if (ret)
-+		goto exit;
++	memcpy(&cmd->wdt_cmd, "WDTC", 4);
++	cmd->reserved = 0;
 +
-+	can_clk = le32_to_cpu(info->can_clk);
-+
-+exit:
-+	kfree(info);
-+	return can_clk;
++	return nct6694_write_msg(data->nct6694, &cmd_hd, cmd);
 +}
 +
-+static int nct6694_can_probe(struct platform_device *pdev)
++static int nct6694_wdt_ping(struct watchdog_device *wdev)
++{
++	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
++	struct nct6694_wdt_cmd *cmd = &data->msg->cmd;
++	struct nct6694_cmd_header cmd_hd = {
++		.mod = NCT6694_WDT_MOD,
++		.cmd = NCT6694_WDT_COMMAND,
++		.sel = NCT6694_WDT_COMMAND_SEL(data->wdev_idx),
++		.len = cpu_to_le16(sizeof(*cmd))
++	};
++
++	guard(mutex)(&data->lock);
++	memcpy(&cmd->wdt_cmd, "WDTS", 4);
++	cmd->reserved = 0;
++
++	return nct6694_write_msg(data->nct6694, &cmd_hd, cmd);
++}
++
++static int nct6694_wdt_set_timeout(struct watchdog_device *wdev,
++				   unsigned int timeout)
++{
++	int ret;
++
++	ret = nct6694_wdt_setting(wdev, timeout, NCT6694_ACTION_GPO,
++				  wdev->pretimeout, NCT6694_ACTION_GPO);
++	if (ret)
++		return ret;
++
++	wdev->timeout = timeout;
++
++	return 0;
++}
++
++static int nct6694_wdt_set_pretimeout(struct watchdog_device *wdev,
++				      unsigned int pretimeout)
++{
++	int ret;
++
++	ret = nct6694_wdt_setting(wdev, wdev->timeout, NCT6694_ACTION_GPO,
++				  pretimeout, NCT6694_ACTION_GPO);
++	if (ret)
++		return ret;
++
++	wdev->pretimeout = pretimeout;
++
++	return 0;
++}
++
++static unsigned int nct6694_wdt_get_time(struct watchdog_device *wdev)
++{
++	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
++	struct nct6694_wdt_setup *setup = &data->msg->setup;
++	struct nct6694_cmd_header cmd_hd = {
++		.mod = NCT6694_WDT_MOD,
++		.cmd = NCT6694_WDT_SETUP,
++		.sel = NCT6694_WDT_SETUP_SEL(data->wdev_idx),
++		.len = cpu_to_le16(sizeof(*setup))
++	};
++	unsigned int timeleft_ms;
++	int ret;
++
++	guard(mutex)(&data->lock);
++
++	ret = nct6694_read_msg(data->nct6694, &cmd_hd, setup);
++	if (ret)
++		return 0;
++
++	timeleft_ms = le32_to_cpu(setup->countdown);
++
++	return timeleft_ms / 1000;
++}
++
++static const struct watchdog_info nct6694_wdt_info = {
++	.options = WDIOF_SETTIMEOUT	|
++		   WDIOF_KEEPALIVEPING	|
++		   WDIOF_MAGICCLOSE	|
++		   WDIOF_PRETIMEOUT,
++	.identity = DRVNAME,
++};
++
++static const struct watchdog_ops nct6694_wdt_ops = {
++	.owner = THIS_MODULE,
++	.start = nct6694_wdt_start,
++	.stop = nct6694_wdt_stop,
++	.set_timeout = nct6694_wdt_set_timeout,
++	.set_pretimeout = nct6694_wdt_set_pretimeout,
++	.get_timeleft = nct6694_wdt_get_time,
++	.ping = nct6694_wdt_ping,
++};
++
++static int nct6694_wdt_probe(struct platform_device *pdev)
 +{
 +	const struct mfd_cell *cell = mfd_get_cell(pdev);
++	struct device *dev = &pdev->dev;
 +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	struct nct6694_can_priv *priv;
-+	struct net_device *ndev;
-+	int ret, irq, can_clk;
++	struct nct6694_wdt_data *data;
++	struct watchdog_device *wdev;
 +
-+	irq = irq_create_mapping(nct6694->domain,
-+				 NCT6694_IRQ_CAN1 + cell->id);
-+	if (!irq)
-+		return irq;
-+
-+	ndev = alloc_candev(sizeof(struct nct6694_can_priv), 1);
-+	if (!ndev)
++	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
 +		return -ENOMEM;
 +
-+	ndev->irq = irq;
-+	ndev->flags |= IFF_ECHO;
-+	ndev->dev_port = cell->id;
-+	ndev->netdev_ops = &nct6694_can_netdev_ops;
-+	ndev->ethtool_ops = &nct6694_can_ethtool_ops;
++	data->msg = devm_kzalloc(dev, sizeof(union nct6694_wdt_msg),
++				 GFP_KERNEL);
++	if (!data->msg)
++		return -ENOMEM;
 +
-+	priv = netdev_priv(ndev);
-+	priv->nct6694 = nct6694;
-+	priv->ndev = ndev;
++	data->dev = dev;
++	data->nct6694 = nct6694;
++	data->wdev_idx = cell->id;
 +
-+	can_clk = nct6694_can_get_clock(priv);
-+	if (can_clk < 0) {
-+		ret = dev_err_probe(&pdev->dev, can_clk,
-+				    "Failed to get clock\n");
-+		goto free_candev;
++	wdev = &data->wdev;
++	wdev->info = &nct6694_wdt_info;
++	wdev->ops = &nct6694_wdt_ops;
++	wdev->timeout = timeout;
++	wdev->pretimeout = pretimeout;
++	if (timeout < pretimeout) {
++		dev_warn(data->dev, "pretimeout < timeout. Setting to zero\n");
++		wdev->pretimeout = 0;
 +	}
 +
-+	INIT_WORK(&priv->tx_work, nct6694_can_tx_work);
++	wdev->min_timeout = 1;
++	wdev->max_timeout = 255;
 +
-+	priv->can_idx = cell->id;
-+	priv->can.state = CAN_STATE_STOPPED;
-+	priv->can.clock.freq = can_clk;
-+	priv->can.bittiming_const = &nct6694_can_bittiming_nominal_const;
-+	priv->can.data_bittiming_const = &nct6694_can_bittiming_data_const;
-+	priv->can.do_set_mode = nct6694_can_set_mode;
-+	priv->can.do_get_berr_counter = nct6694_can_get_berr_counter;
++	devm_mutex_init(dev, &data->lock);
 +
-+	priv->can.ctrlmode = CAN_CTRLMODE_FD;
++	platform_set_drvdata(pdev, data);
 +
-+	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK		|
-+				       CAN_CTRLMODE_LISTENONLY		|
-+				       CAN_CTRLMODE_FD			|
-+				       CAN_CTRLMODE_FD_NON_ISO		|
-+				       CAN_CTRLMODE_BERR_REPORTING;
++	watchdog_set_drvdata(&data->wdev, data);
++	watchdog_set_nowayout(&data->wdev, nowayout);
++	watchdog_stop_on_reboot(&data->wdev);
 +
-+	ret = can_rx_offload_add_manual(ndev, &priv->offload,
-+					NCT6694_NAPI_WEIGHT);
-+	if (ret) {
-+		dev_err_probe(&pdev->dev, ret, "Failed to add rx_offload\n");
-+		goto free_candev;
-+	}
-+
-+	platform_set_drvdata(pdev, priv);
-+	SET_NETDEV_DEV(priv->ndev, &pdev->dev);
-+
-+	ret = register_candev(priv->ndev);
-+	if (ret)
-+		goto del_rx_offload;
-+
-+	return 0;
-+
-+del_rx_offload:
-+	can_rx_offload_del(&priv->offload);
-+free_candev:
-+	free_candev(ndev);
-+	return ret;
++	return devm_watchdog_register_device(dev, &data->wdev);
 +}
 +
-+static void nct6694_can_remove(struct platform_device *pdev)
-+{
-+	struct nct6694_can_priv *priv = platform_get_drvdata(pdev);
-+
-+	cancel_work_sync(&priv->tx_work);
-+	unregister_candev(priv->ndev);
-+	can_rx_offload_del(&priv->offload);
-+	free_candev(priv->ndev);
-+}
-+
-+static struct platform_driver nct6694_can_driver = {
++static struct platform_driver nct6694_wdt_driver = {
 +	.driver = {
 +		.name	= DRVNAME,
 +	},
-+	.probe		= nct6694_can_probe,
-+	.remove		= nct6694_can_remove,
++	.probe		= nct6694_wdt_probe,
 +};
 +
-+module_platform_driver(nct6694_can_driver);
++module_platform_driver(nct6694_wdt_driver);
 +
-+MODULE_DESCRIPTION("USB-CAN FD driver for NCT6694");
++MODULE_DESCRIPTION("USB-WDT driver for NCT6694");
 +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
 +MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:nct6694-can");
++MODULE_ALIAS("platform:nct6694-wdt");
 -- 
 2.34.1
 
