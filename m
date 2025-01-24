@@ -1,153 +1,143 @@
-Return-Path: <linux-i2c+bounces-9190-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9191-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDFBDA1B9BA
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Jan 2025 16:55:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31286A1BA3B
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Jan 2025 17:23:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78C523A576A
-	for <lists+linux-i2c@lfdr.de>; Fri, 24 Jan 2025 15:55:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DB00188FD79
+	for <lists+linux-i2c@lfdr.de>; Fri, 24 Jan 2025 16:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F80158A1F;
-	Fri, 24 Jan 2025 15:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C8DA18E057;
+	Fri, 24 Jan 2025 16:23:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s7zZ3quV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RBCHMy40"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DEB158555
-	for <linux-i2c@vger.kernel.org>; Fri, 24 Jan 2025 15:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A3CDF58;
+	Fri, 24 Jan 2025 16:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737734134; cv=none; b=BS4znLYgUyztYrUYC0vTZc3hFrOzfX0IUyw6J2JqetjJ30t6rBzMz3vLZGVO7KYNAMwUy/uQt/+z2XtfIYZtPhSEZUtAXfpPy5pdmpgKGeE2rIHSlDSzSDZWsOo+wu87e9AiQZGLTQ1sLUp7nnKZlg48pPWbmiv12g0gb9muJds=
+	t=1737735795; cv=none; b=kNHqV2C0szGUUnNtIuwpIONzVWf3Sr/tzfGpQyL3Xjy12f6D+fLq9RbEotMNPawyxoTYgh7BrtG7LHSoKdvJ518Q00a9NGyl4Z4LHvGJOR14XRrpFMHzw4EoYGVHyoS5HV3lT0/SRP20YCsrXcIZLf77CgFf2jOzkimW5d1vEQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737734134; c=relaxed/simple;
-	bh=s/jO4NPWKOieyxzi6luyHh+P5ju9zoKIC7bH0SB8o4s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S9yr+Y73MpXrfR9hX1ttiMssqiY1mWrTjRVJoww3vul3v/2Pa41us8/38RYosvIxLgXA/CZHOpkYFXaITbJX99WhdFGz2yFFz0NTJmb9vUnar8JRagLVwqfONWgsDcqNBwwYCRbWdNY+LDvqayElCMPgUiZ4DDInRNKnB4Evz0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s7zZ3quV; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e5447fae695so4077411276.2
-        for <linux-i2c@vger.kernel.org>; Fri, 24 Jan 2025 07:55:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737734131; x=1738338931; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ilPZPULNnLI6UK/uv5dVV+2Dss3A/uBmwkDVQdaY3K0=;
-        b=s7zZ3quV6sSGQi23hJ8dEM4EP7tlS0VnAiaxBv3lK2wpY8qVBS+nv0u+LtSgG3zm7a
-         3jC/AeebNiMJTjl0CVRjs0C+ZCprv/VSwLRNaAB+dBzP91o0J1unli1foSINTUIjCnrN
-         WHlsm/odmDIZNdqV4J+p6YtC9wuZ+t6FP+ZlBqLaLju/eWO3BGhQmaL8HMcSn3NxA5uM
-         wozOiTvrTWMH9N0FeRUT9N3m3ZjyqmTfRJlH4vvuzIdATqdDi3VjBVvW1VdVijcrWkOK
-         N5FZhjLj2bhGl8EF8f1n+WVssM5PB9NIxCkKwnRfCaN37YqkH2LBT4uq39WZsLnGIbfF
-         Dgpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737734131; x=1738338931;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ilPZPULNnLI6UK/uv5dVV+2Dss3A/uBmwkDVQdaY3K0=;
-        b=hmanpxaVNcXppsRgwmaohsOF+kPZ2pIY/Hylmi13KWjsik6bEyzITxjmhf9a2VrMjf
-         aKLj7YLOatun0qopK/dJcooGxFZ4c7+LwYekWU3wa70/nhwKhx8KJhZFdqVmPUr5bgeY
-         SouKKtJ+eM/QTE5jB0Mk5ksryW2DMTCUTLNPZnCYH3q83y/KGq9esvF6OE2Bs0mFwneO
-         yFFXuAW9NOvS1h9KxWKtNp3sKT3SbhIw+D15fZnR9JfkIjyS5hChs5ERfolTcRUFbezj
-         K833mB8U8qZu/fM33qdmUHkMvfVec1x7FQ2tFEZ8dFF006DQQ1YJSkL3kdvnB7Ssitf1
-         hl6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWTC1LGFIKfJumvlVeDZpUhOFyb7UT4q6QdrEUgzwuWHqNlvQ49kBAKM98dSKDIYC/Wo54eFyjqlpk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8J9Xh/nIHeqHheZ/VM2m02wndMWcksrJMwlgQmANeewgeGrm7
-	eg9Iw7Bk9q3GWWuUVi6CoapxpQhdXdfm1GN/QmQG6B+y5SSOtJr9bEe9xrFoPFc4topU6PiFvvC
-	usroHwGJzoKxUWiBKv5fxfPD4H3yJ7oAxV6nvVg==
-X-Gm-Gg: ASbGncvXpFPluyOQYosXnCN5EuH3FwiJE7tAt1ADsnvADabnqi6fW1oYyigFaIpKyr5
-	ixrdaCvvpDH7lJ3hMCst4T7jAaPEJS02XEVnR3jV+hlrWMlH1adeY7Bte4VpetI4p/JENCQpf/D
-	oiMACgY0u+EcMs0zhOjQ==
-X-Google-Smtp-Source: AGHT+IE5CrP20lwY9b957F+q8FfX4UrWyqpcD5u1RzqaZ3UIpMjXmbJiX0igSbAvphxXL+FBMTlukLRROvc9N2dsUB8=
-X-Received: by 2002:a05:690c:3701:b0:6f6:d4bf:d01a with SMTP id
- 00721157ae682-6f6eb940fb8mr246220177b3.34.1737734131503; Fri, 24 Jan 2025
- 07:55:31 -0800 (PST)
+	s=arc-20240116; t=1737735795; c=relaxed/simple;
+	bh=7ROf5X1kkkn8cYrBiuVKHlgFOAINugS1KRr6VcCft5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iDVNCMl+G8VbKsemTIB4vLppSN5qcSb/OUUjQVr7WBXLjt+/G/6o2FtID4jifRm1CA+TPpNmoHnxIw9Td3WPUhpZHW/AMhCvq2g8HX/nnbDxssN7PLnRquGaB4FkXGFQ1gyZyP+sqk0nf6xukRMya7JDZK4CnRPp+LWKgITkYdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RBCHMy40; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737735794; x=1769271794;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7ROf5X1kkkn8cYrBiuVKHlgFOAINugS1KRr6VcCft5w=;
+  b=RBCHMy40JLi+p9uU+W24uiNfleDmGQiMB/6ILwG0Jjgq9pNrUFZaXWB1
+   1APNBTbvewoY4QLG7Tpz6rABqFLeT3THX0yVe21pOSmv3c12p1eEnLXgW
+   Hdcs+2HOubY5aBM/6oQ6l6CZHMDlwPzXFgkq/e2MGA7QpkkCpsg2naWEU
+   /zDOSeJ/PkwxVDmyZmqXt9LYZPL2fHg/GxMuzjXMJOvdqd8t/lsiLBOGC
+   KSPkwjX9Z8WE0S2+vBrv/RiI//+S999ojSixo0D0rS6s9/NeUU6FlEcLz
+   lehUryuaaObHbr5494oRN7d5GqE+N2y3dOfOVVVfFguybuxkIEUZU+Waa
+   Q==;
+X-CSE-ConnectionGUID: enhnYXFPT7GtC7XiZyWYMw==
+X-CSE-MsgGUID: EKX1MsOOSneZTOBCxI9t7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11325"; a="60739782"
+X-IronPort-AV: E=Sophos;i="6.13,231,1732608000"; 
+   d="scan'208";a="60739782"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 08:23:14 -0800
+X-CSE-ConnectionGUID: fRvFk+MbSNO24Rr97pSusg==
+X-CSE-MsgGUID: Vw9OGhDXTr+G80KinyJWnA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,231,1732608000"; 
+   d="scan'208";a="108350103"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 08:23:09 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tbMSY-00000004rj1-2tYB;
+	Fri, 24 Jan 2025 18:23:06 +0200
+Date: Fri, 24 Jan 2025 18:23:06 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: Re: [PATCH v4 2/3] hwmon: (pmbus/adp1050): Add support for adp1051,
+ adp1055 and ltp8800
+Message-ID: <Z5O-avYZkWsD-Vka@smile.fi.intel.com>
+References: <20250124151746.1130-1-cedricjustine.encarnacion@analog.com>
+ <20250124151746.1130-3-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
- <20250124105309.295769-7-quic_vdadhani@quicinc.com> <d3tydp3m7pehhiphupwybjlol5v2u3sabqotqximxmnswjlczb@jmdzpbrcrgou>
- <08545d45-bfe6-45e4-b7be-503c318315af@quicinc.com>
-In-Reply-To: <08545d45-bfe6-45e4-b7be-503c318315af@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 24 Jan 2025 17:55:20 +0200
-X-Gm-Features: AWEUYZm4pYCNJdHGiPnsyF_MnRCwaJQzJ4L3pN0DCmSTM3Gxdme16eoXtL4QfTk
-Message-ID: <CAA8EJprSZx9Bx7EXA_RpwZdhieOLtrTARqXSuo-gO9sVMdK5Qg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/8] i2c: qcom-geni: Load i2c qup Firmware from linux side
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
-	broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org, 
-	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
-	quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250124151746.1130-3-cedricjustine.encarnacion@analog.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, 24 Jan 2025 at 17:24, Viken Dadhaniya <quic_vdadhani@quicinc.com> wrote:
->
->
->
-> On 1/24/2025 8:34 PM, Dmitry Baryshkov wrote:
-> > On Fri, Jan 24, 2025 at 04:23:07PM +0530, Viken Dadhaniya wrote:
-> >> Add provision to load firmware of Serial engine for I2C protocol from
-> >> Linux Execution Environment on running on APPS processor.
-> >>
-> >> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-> >> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-> >> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-> >> ---
-> >>   drivers/i2c/busses/i2c-qcom-geni.c | 7 +++++--
-> >>   1 file changed, 5 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> >> index 7bbd478171e0..9ad3b8c9a224 100644
-> >> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> >> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> >> @@ -872,8 +872,11 @@ static int geni_i2c_probe(struct platform_device *pdev)
-> >>      }
-> >>      proto = geni_se_read_proto(&gi2c->se);
-> >>      if (proto != GENI_SE_I2C) {
-> >> -            ret = dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
-> >> -            goto err_resources;
-> >> +            ret = geni_load_se_firmware(&gi2c->se, GENI_SE_I2C);
-> >
-> > Hmm, so if the SE has been configured to e.g. SPI by the TZ, can we
-> > switch it to the I2C?
->
-> No, in the current design, TZ will not load the SE firmware.
+On Fri, Jan 24, 2025 at 11:17:45PM +0800, Cedric Encarnacion wrote:
+> Introduce hardware monitoring support for the following devices:
+> 
+>     ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+>     ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
+>     LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
+> 
+> The ADP1051 and ADP1055 are similar digital controllers for high
+> efficiency DC-DC power conversion while the LTP8800 is a family of
+> step-down μModule regulators that provides microprocessor core voltage
+> from 54V power distribution architecture. All of the above components
+> features telemetry monitoring of input/output voltage, input current,
+> output power, and temperature over PMBus.
 
-But that's what your patch is doing: if the protocol is not I2C, try
-switching to I2C.
+...
 
-Instead it should be 'if unconfigured, try loading I2C'.
+>  static const struct i2c_device_id adp1050_id[] = {
+> -	{"adp1050"},
+> +	{ .name = "adp1050", .driver_data = (kernel_ulong_t)&adp1050_info},
+> +	{ .name = "adp1051", .driver_data = (kernel_ulong_t)&adp1051_info},
+> +	{ .name = "adp1055", .driver_data = (kernel_ulong_t)&adp1055_info},
+> +	{ .name = "ltp8800", .driver_data = (kernel_ulong_t)&ltp8800_info},
 
->
-> >
-> >> +            if (ret) {
-> >> +                    dev_err(gi2c->se.dev, "i2c firmware load failed ret: %d\n", ret);
-> >> +                    goto err_resources;
-> >> +            }
-> >>      }
-> >>
-> >>      if (desc && desc->no_dma_support)
-> >> --
-> >> 2.34.1
-> >>
-> >
+Seems like missing inner trailing space.
 
+>  	{}
+>  };
 
+...
+
+>  static const struct of_device_id adp1050_of_match[] = {
+> -	{ .compatible = "adi,adp1050"},
+> +	{ .compatible = "adi,adp1050", .data = &adp1050_info},
+> +	{ .compatible = "adi,adp1051", .data = &adp1051_info},
+> +	{ .compatible = "adi,adp1055", .data = &adp1055_info},
+> +	{ .compatible = "adi,ltp8800", .data = &ltp8800_info},
+
+Ditto.
+
+>  	{}
+>  };
 
 -- 
-With best wishes
-Dmitry
+With Best Regards,
+Andy Shevchenko
+
+
 
