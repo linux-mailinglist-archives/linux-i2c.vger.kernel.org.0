@@ -1,129 +1,131 @@
-Return-Path: <linux-i2c+bounces-9223-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9224-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BDEFA1DD60
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 21:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CAE8A1DD71
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 21:36:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A4311882B46
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 20:29:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8635188680C
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 20:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7674B197A92;
-	Mon, 27 Jan 2025 20:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FCDF198A06;
+	Mon, 27 Jan 2025 20:35:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="BCcCDzEb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lmFsocao"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D5E191F6D
-	for <linux-i2c@vger.kernel.org>; Mon, 27 Jan 2025 20:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD9E18FDA5;
+	Mon, 27 Jan 2025 20:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738009725; cv=none; b=eHIzxhJYlmcB9s4wvCCURpofqXCPEPiBOtHlBLWTLyDnHDlqQN4Z1jBAneqsYu1YOLQxu85GUD2yD5mczw3gXoIuomxxQJlXlWIyRjctSj9U7zgArVbIlOeEF75D4FZ9u8u3W9Ydyk6viThqk+vHl9cIlxWJfjqNXADsLlSUxV0=
+	t=1738010152; cv=none; b=HCcVJV0vXZscl+IySJSscIsocFJJK/77VmRgIVPq8K2kMWdggHkY2fGw40GNxi42bcXYr2lLSDbMn8LKQd6tkTPdJds3A4a66LVMgYomoXuByV659b53bvJFGKmbJ/CkzS2pg9fTS0x2EQ/M94Xv7BAT7LqxJbVwFWdvuP6H3js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738009725; c=relaxed/simple;
-	bh=gUM61sGEQMwuSHDve84gpHgedWVIYTryN8AyGJTsOtI=;
+	s=arc-20240116; t=1738010152; c=relaxed/simple;
+	bh=5eMJRLtuqqyveoagaSTgOeIYAFsliPhaMbkd6gMZSaU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+6ZTeK8tXwXJA6cjh0G5wJIlJblggDRFM5LP6rytpJ1aL3KFCkuVxu+asNyjdWR051cSaBLTTEVTXy8s1RKnLXYoIdAgklobgo1FDFpBOuQ9lfmoVgbcNufpGmc6wfWEMsJF/S/858e7uLhXXiI7QyJ/Ug7iqhOc0EEShWvof0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=BCcCDzEb; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=rvoJ
-	JYX6OtmfKYyCKNX4vxkctMoCnWSAtqlLGNIzBCg=; b=BCcCDzEbYiHPLcfpovSz
-	aurL5CdHMfyV4TEZ7DTMx1XMS+EYn8eaT84Naz1hjPFa8tJqdEQnaH38hcMNG/h9
-	UDDdq9oW7zdMEws17Mrc4RYMwNPqXXp0Vm7pYg5cwkvbf10ZlkLlqqwrFlCyFmai
-	KiHnOOVjBFkHO+bMNkO2SNDkh10vXTVB562wbQIC3KWSl2J+6uJzDJ98xhIfTy1q
-	U9+467TbeT5iHt/gIogj8liC472VoSwncLzH2LMcD8Q/YM1oBiWnA2e+MOyH3WEE
-	yDWONEzn/fJMrk1r/GxnDUwWARejGgMSrs35clhxWJddRZ0iOXnzzX/eBM3nreXF
-	Dw==
-Received: (qmail 366113 invoked from network); 27 Jan 2025 21:28:37 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Jan 2025 21:28:37 +0100
-X-UD-Smtp-Session: l3s3148p1@9AvT67UsatMujnvm
-Date: Mon, 27 Jan 2025 21:28:36 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: Fix core-managed per-client debugfs handling
-Message-ID: <Z5fsdIfeDIcfuntH@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-References: <20250127153938.34630-1-linux@roeck-us.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kEu3rInXD/qGKvYn0giBkSP7RrNEpTUt7Yduj4gRMXwJkPaa6AcIiYfXcKeGHNvaVE2CpI8Le4ttj72dGqEkQeVQdQc11iPKbb4RdDu6VM4aWXmEGlp6Linga2pdkFi5qve4eKWVDtORTEavpiGIdidXnkxvXH8Q1Ha/crACd+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lmFsocao; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738010151; x=1769546151;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5eMJRLtuqqyveoagaSTgOeIYAFsliPhaMbkd6gMZSaU=;
+  b=lmFsocaowAq5bsYdK4kIFzDgLldL7+9k6Z75UoOPuHBIu5V2VzCtyMdX
+   VrAJDA1PxWdfyy5ytwvPMr1pOkGTBzJDeexhHG9JmxbOZR8898ZqsRypj
+   p+aYqYsDXcWgCM2US3XzJuW72eQMYAKqmryo4BfEPQrLLufdxq4AiVdOG
+   GUXxqYc5yMIaRivQmZinCtW/hJ/A1qYo5gonzF8aCOxlg5dpiaOEdk0Z0
+   4CeoqnFyw1Dl0FBa9EKqcYlNDyfOyFcQCZ3mghnYUYAMrHq6rmdp0LWb/
+   MD5wQpvOvG5wFevq3kBZuhN65u9iMQ8frcNGs+QuQPNJ1GLttQJdQHwlf
+   Q==;
+X-CSE-ConnectionGUID: /fsOZOB6QnKUhq5woy8ywg==
+X-CSE-MsgGUID: ahXy+uORQL+lFQGzBMszaQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="63845729"
+X-IronPort-AV: E=Sophos;i="6.13,239,1732608000"; 
+   d="scan'208";a="63845729"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 12:35:48 -0800
+X-CSE-ConnectionGUID: 5guNiBOYQBmsRAtUYuMsUA==
+X-CSE-MsgGUID: nc+loxkyS++liyYqNhESqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="113171423"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 27 Jan 2025 12:35:45 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tcVpf-000h8Z-0t;
+	Mon, 27 Jan 2025 20:35:43 +0000
+Date: Tue, 28 Jan 2025 04:35:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/lt3074): add support for lt3074
+Message-ID: <202501280459.uH0yw7av-lkp@intel.com>
+References: <20250124-upstream-lt3074-v1-2-7603f346433e@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dqTSHeD+j9nOhdR6"
-Content-Disposition: inline
-In-Reply-To: <20250127153938.34630-1-linux@roeck-us.net>
-
-
---dqTSHeD+j9nOhdR6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250124-upstream-lt3074-v1-2-7603f346433e@analog.com>
 
-On Mon, Jan 27, 2025 at 07:39:38AM -0800, Guenter Roeck wrote:
-> Per-driver debugfs entries are created in the device probe function and
-> released in the device remove function. The common debugfs directory
-> introduced with commit d06905d68610 ("i2c: add core-managed per-client
-> directory in debugfs") is added when a device is registered, not when it
-> is probed, and it is removed when the device is unregistered. As result,
-> debugfs entries added by a driver are not deleted when a device remove
-> function is called since that does not necessarily result in device
-> unregistration. If the probe function is then called again, the debugfs
-> entries will already exist, which will result in error messages such as
->=20
-> 	debugfs: File 'test' in directory '3-0020' already present!
->=20
-> if 'test' was a debugfs file created during the first call to probe().
->=20
-> This is easy to reproduce by executing "modprobe -r" followed by "modprob=
-e"
-> with a driver using the debugfs pointer created by the i2c subsystem.
->=20
-> The debugfs directory should be created when a device is probed, not when
-> it is registered. It should be removed when the device is removed, not
-> when it is unregistered. Change the code accordingly.
->=20
-> Also clear the client->debugfs if creating the debugfs directory fails.
-> This simplifies I2C client driver code if it needs to call dentry
-> functions which do not validate dentry pointers passed as argument.
->=20
-> Fixes: d06905d68610 ("i2c: add core-managed per-client directory in debug=
-fs")
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Hi Cedric,
 
-Applied to for-current, thanks!
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on a76539b293677c5c163b9285b0cd8dd420d33989]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-trivial-devices-add-lt3074/20250124-234209
+base:   a76539b293677c5c163b9285b0cd8dd420d33989
+patch link:    https://lore.kernel.org/r/20250124-upstream-lt3074-v1-2-7603f346433e%40analog.com
+patch subject: [PATCH 2/2] hwmon: (pmbus/lt3074): add support for lt3074
+config: x86_64-randconfig-r071-20250126 (https://download.01.org/0day-ci/archive/20250128/202501280459.uH0yw7av-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250128/202501280459.uH0yw7av-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501280459.uH0yw7av-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/pmbus/lt3074.c:103:34: warning: 'lt3074_of_match' defined but not used [-Wunused-const-variable=]
+     103 | static const struct of_device_id lt3074_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~~
 
 
---dqTSHeD+j9nOhdR6
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/lt3074_of_match +103 drivers/hwmon/pmbus/lt3074.c
 
------BEGIN PGP SIGNATURE-----
+   102	
+ > 103	static const struct of_device_id lt3074_of_match[] = {
+   104		{ .compatible = "adi,lt3074" },
+   105		{}
+   106	};
+   107	MODULE_DEVICE_TABLE(of, lt3074_of_match);
+   108	
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmeX7HEACgkQFA3kzBSg
-KbbfyRAAjFuGdLdOy5Dv9XgUjps4tTblFMa7xIsMkVJ7nZV+UfiWZXI9SsfgNNTq
-wyS5rYjLO7MbB+Ti7uos8rTiVvCRIVcz9gkl+yqR2BGGUuB+bQj7tzlQRuBKeKdX
-iKCokSxCZGvUzUK7BiGR9T9AUXBM8QGukpBWFvGNWX+bKzOmBQzDEjF7bNCirv9A
-1ACHz8+heLLuDtVuDHKTx3HcDqOKUMvNM2Lmio2dO36snoTuJ911Yj1prKb2wX+d
-V6eXgXClqpxKECY9gPDTrN8tWWg3VQ6JKdNW0zBmDbwzpGIkLRMw5CaBmgw34F6T
-N2Y5IU+Um9Glo56OobZ3SF7K4rIv3Gd5gRDYR63hTCzql/GUxRy1a/0VU7dbjdLj
-LYqAaWETObCqGyRZVTDxQywhtAHTguomN6r8jfqmAhJtsBRX9HMHWPzYJ5G5bkhn
-5ZBfH1eU1LrekE3iDj0LCvRINCB7VFiDA6niRfSrGAcFPoDDJMqrYW3zmU2WoF3z
-7MQPSLi+8Shh5V8BKFbB46Wds8DbTuKlZoozSuBXIlPsZmmbiTo9jY5zR3xHdSzL
-NeShpOvMFiYVI6/aKIe7DWfpu0qgOzG6hVHE8EAsZG54DVFnrIJ9bFStLkucHcY9
-LmDcp141EXuF1mqUcffQU116zDDyGA53hx4/PWKxmhe22bH32Rc=
-=ONym
------END PGP SIGNATURE-----
-
---dqTSHeD+j9nOhdR6--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
