@@ -1,190 +1,129 @@
-Return-Path: <linux-i2c+bounces-9222-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9223-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6DFA1DB8A
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 18:50:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BDEFA1DD60
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 21:29:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84CA43A8B6D
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 17:50:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A4311882B46
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 20:29:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7FAA16DC3C;
-	Mon, 27 Jan 2025 17:50:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7674B197A92;
+	Mon, 27 Jan 2025 20:28:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VbqmqTb0"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="BCcCDzEb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA53E186E26
-	for <linux-i2c@vger.kernel.org>; Mon, 27 Jan 2025 17:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D5E191F6D
+	for <linux-i2c@vger.kernel.org>; Mon, 27 Jan 2025 20:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738000243; cv=none; b=uZHqYvELBxi0r2mnGRYlJjS2M1pdzj1Wy3bH14Fe5MrLxGcouhuFyoRZ/gyyHgD3qWDgs0TjNfcLSzJ5pwcDEubbRPznY2BkcwrZ0Km3Fgve2pxhH5x0flxCzbZIE5rPsuEymYU5IPM36ewvRgSZT4vjm1jg1tFnG8JNsTStw98=
+	t=1738009725; cv=none; b=eHIzxhJYlmcB9s4wvCCURpofqXCPEPiBOtHlBLWTLyDnHDlqQN4Z1jBAneqsYu1YOLQxu85GUD2yD5mczw3gXoIuomxxQJlXlWIyRjctSj9U7zgArVbIlOeEF75D4FZ9u8u3W9Ydyk6viThqk+vHl9cIlxWJfjqNXADsLlSUxV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738000243; c=relaxed/simple;
-	bh=oMtKn1w8MV7RLORjGlWvvKkp8uiAuM8uule2Sri1DiI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mUo5s8THcs01BzgnhZbpe/TzZ8kpeUYdSRd7RvAG3nkwNkYJyljqhBu9eFs53cO8DOhBAP0Il+qa6/va2hS1Xh9Jz+EOaaONurex03ETi4NkSi9n3//GWo13LgGVy8gpUbVmeROy1nPUdLtVtXtLSDnAe/e97YnzglHHN7mNcPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VbqmqTb0; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50RCTXp9021023
-	for <linux-i2c@vger.kernel.org>; Mon, 27 Jan 2025 17:50:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	JnFriaF66qty0fntObxiPXMC9qtMds3asWVEQb56mxM=; b=VbqmqTb0HjxQSMJX
-	Z0rsKuXrXEr4OCJRTmIf+hC4H6uRoYff6BwMe4dia7XPT+cMTueTix0nFY7rfeNQ
-	+qW/crq1ILW+Tv0mT5lHJYsbHqW5ET4zLhV4aviwVuATeb2a/wyaEPzely88ppM5
-	J8RmS0bYULha9ux02NRlODwp6L1JoGHO2Zapl0+0J9SnilfuJPoOVvNxq/qLMDA4
-	qMXRno9sZRqQLqLiwK2U7uhmJRzGo3hmzBUEtuPMcK5Vb6ZwBx2m4m2eOtiLev4l
-	2XZh4z0msNtPjdDsihOZ1n1pjL+JGw+3lTigmdLO3XxPHXZRmwnD/zJc5l8T/D3l
-	m6mXiQ==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44ea6s0pc0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-i2c@vger.kernel.org>; Mon, 27 Jan 2025 17:50:40 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-467a437e5feso13226531cf.0
-        for <linux-i2c@vger.kernel.org>; Mon, 27 Jan 2025 09:50:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738000239; x=1738605039;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JnFriaF66qty0fntObxiPXMC9qtMds3asWVEQb56mxM=;
-        b=jptItrchi9/5AxrNjf2MVX1VuPZH+cBd+TFFcc3ewczcW3/HeR7qiMHvGuAuuSxae9
-         O1f5YI1uBgMc7Jopojno4Fif8g7Ee4NbWfV3ODQxLXJKP6B7qncAOmP77cSvGRLuzf9J
-         4XM2bXD6rCwmUds3REFjoFbFuhl8bQC0jcfd6GlHJdl3m6+hrl5gs5mVZ7hEMih5ExM/
-         y0GR4EDjQMBM+nOKZsE/p3GUBFfDPNaldhSmyjdXCuW0tQXiDOjZWDZvtG0oG8UOiwo4
-         S3pIRnz5/Rb5JZegzi9hBKNmfNVCG4OUK/vHDWSZbTUuk/8Uqvvj7Ypc/BV+z44JVuQg
-         S3RA==
-X-Forwarded-Encrypted: i=1; AJvYcCWx0H9fwaKFaa0mTnicnQm5sWXoWZCnmBZnTB2mThwLeO4SdtfCW+KIIg+GqhohLVyNwWuPTF3WDrU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuC+zVt8v45z6PSFr8DrCydUjLUn5hLhlxOJWTin3t1WLrTtDp
-	BqfqcNHad3B6rudYUvRbq5CMJIpKB495BTw5PZl/XRQRSTvvqIR6rJCCHLFmdEmj2XDpgo+Jhjm
-	uccAejBEUwfZVZmlVxqP2BTxIKjkpeO42A7EkOuCGXvSH466D7czupLb92Qg=
-X-Gm-Gg: ASbGncutZlKSNN05xZQeCEZegh5RmjuUOCcOEjo0ZgDtOIaMuwfHyCVV+CvTBQ2FG9t
-	71HJdMU9EkpP1pxDbBl69O0WMZ6GKHpMnF0ogUS2gsRbygdbbJATcC9hJerj9FxRWcnqCFmK6E6
-	8W1jJVxPFptlTmHYXNZopVyovBXPIYA3FEgY0g2EytY5nsTkx2t2/2nr7D0cVfuxu2PMLVWSxDl
-	9T9FeUIk6CtrHH1K8d+ncRXJDHErsQzbLvJ32bXAGHYa237mty4K5esI5CV9loyMZcPBNjfVcEk
-	zN7vpX3fL9lDdkD4fZgNYfsPFXqp78PKSV41GadITA5xOWt9Zl+nVYfODN4=
-X-Received: by 2002:a05:622a:30c:b0:466:8e17:cd1f with SMTP id d75a77b69052e-46e12a162demr247808851cf.3.1738000239336;
-        Mon, 27 Jan 2025 09:50:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFTkQ6oLODC3x3JbwOrNQK8XQgzzBtmvlUI8UYGTs+vXLEGw9XGJuWNXuUxMNcvKByjipgqYA==
-X-Received: by 2002:a05:622a:30c:b0:466:8e17:cd1f with SMTP id d75a77b69052e-46e12a162demr247808531cf.3.1738000238876;
-        Mon, 27 Jan 2025 09:50:38 -0800 (PST)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dc186d8ad3sm5668983a12.71.2025.01.27.09.50.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jan 2025 09:50:38 -0800 (PST)
-Message-ID: <65a880ba-f721-4720-81f7-6891c335f7aa@oss.qualcomm.com>
-Date: Mon, 27 Jan 2025 18:50:34 +0100
+	s=arc-20240116; t=1738009725; c=relaxed/simple;
+	bh=gUM61sGEQMwuSHDve84gpHgedWVIYTryN8AyGJTsOtI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J+6ZTeK8tXwXJA6cjh0G5wJIlJblggDRFM5LP6rytpJ1aL3KFCkuVxu+asNyjdWR051cSaBLTTEVTXy8s1RKnLXYoIdAgklobgo1FDFpBOuQ9lfmoVgbcNufpGmc6wfWEMsJF/S/858e7uLhXXiI7QyJ/Ug7iqhOc0EEShWvof0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=BCcCDzEb; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=rvoJ
+	JYX6OtmfKYyCKNX4vxkctMoCnWSAtqlLGNIzBCg=; b=BCcCDzEbYiHPLcfpovSz
+	aurL5CdHMfyV4TEZ7DTMx1XMS+EYn8eaT84Naz1hjPFa8tJqdEQnaH38hcMNG/h9
+	UDDdq9oW7zdMEws17Mrc4RYMwNPqXXp0Vm7pYg5cwkvbf10ZlkLlqqwrFlCyFmai
+	KiHnOOVjBFkHO+bMNkO2SNDkh10vXTVB562wbQIC3KWSl2J+6uJzDJ98xhIfTy1q
+	U9+467TbeT5iHt/gIogj8liC472VoSwncLzH2LMcD8Q/YM1oBiWnA2e+MOyH3WEE
+	yDWONEzn/fJMrk1r/GxnDUwWARejGgMSrs35clhxWJddRZ0iOXnzzX/eBM3nreXF
+	Dw==
+Received: (qmail 366113 invoked from network); 27 Jan 2025 21:28:37 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Jan 2025 21:28:37 +0100
+X-UD-Smtp-Session: l3s3148p1@9AvT67UsatMujnvm
+Date: Mon, 27 Jan 2025 21:28:36 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: Fix core-managed per-client debugfs handling
+Message-ID: <Z5fsdIfeDIcfuntH@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+References: <20250127153938.34630-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/8] dt-bindings: serial: Add support for selecting
- data transfer mode
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
-        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
-        andersson@kernel.org, konradybcio@kernel.org, johan+linaro@kernel.org,
-        dianders@chromium.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
-References: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
- <20250124105309.295769-5-quic_vdadhani@quicinc.com>
- <10060d39-87a4-4565-a2a6-80c93ac2266a@kernel.org>
- <dudqd2y42wy6iq2k73aphd5ol4mtq7z4c54zhd27rl745rrw5x@p3oummf2jke7>
- <374e16d6-46aa-4bdf-85e9-bc2e33c38057@kernel.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <374e16d6-46aa-4bdf-85e9-bc2e33c38057@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: wKWjwHr5LkdD1el-MJpuaPRxiiVrEUrf
-X-Proofpoint-ORIG-GUID: wKWjwHr5LkdD1el-MJpuaPRxiiVrEUrf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-27_08,2025-01-27_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- phishscore=0 suspectscore=0 mlxscore=0 impostorscore=0 priorityscore=1501
- adultscore=0 malwarescore=0 clxscore=1015 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2501270141
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dqTSHeD+j9nOhdR6"
+Content-Disposition: inline
+In-Reply-To: <20250127153938.34630-1-linux@roeck-us.net>
 
-On 27.01.2025 5:24 PM, Krzysztof Kozlowski wrote:
-> On 27/01/2025 15:27, Dmitry Baryshkov wrote:
->> On Mon, Jan 27, 2025 at 08:02:12AM +0100, Krzysztof Kozlowski wrote:
->>> On 24/01/2025 11:53, Viken Dadhaniya wrote:
->>>> Data transfer mode is fixed by TrustZone (TZ), which currently restricts
->>>> developers from modifying the transfer mode from the APPS side.
->>>>
->>>> Document the 'qcom,xfer-mode' properties to select the data transfer mode,
->>>> either GPI DMA (Generic Packet Interface) or non-GPI mode (PIO/CPU DMA).
->>>>
->>>> UART controller can operate in one of two modes based on the
->>>> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
->>>>
->>>> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->>>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->>>> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
->>>> ---
->>>>
->>>> v1 -> v2:
->>>>
->>>> - Drop 'qcom,load-firmware' property and add 'firmware-name' property in
->>>>   qup common driver.
->>>> - Update commit log.
->>>>
->>>> v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-4-quic_vdadhani@quicinc.com/
->>>> ---
->>>> ---
->>>>  .../devicetree/bindings/serial/qcom,serial-geni-qcom.yaml | 8 ++++++++
->>>>  1 file changed, 8 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>>> index dd33794b3534..383773b32e47 100644
->>>> --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>>> +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
->>>> @@ -56,6 +56,13 @@ properties:
->>>>    reg:
->>>>      maxItems: 1
->>>>  
->>>> +  qcom,xfer-mode:
->>>> +    description: Set the value to 1 for non-GPI (FIFO/CPU DMA) mode and 3 for GPI DMA mode.
->>>> +      The default mode is FIFO.
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>> +    enum: [1, 3]
->>>> +
->>>> +
->>>
->>> Just one blank line, but anyway, this property should not be in three
->>> places. Do you really expect that each of serial engines within one
->>> GeniQUP will be configured differently by TZ?
->>
->> Yes, each SE is configured separately and it's quite frequent when
->> different SEs have different DMA configuration.
-> 
-> Well, I checked at sm8550 and sm8650 and each pair of SE - which shares
-> resources - has the same DMAs, so I would not call it frequent. Care to
-> bring an example where same serial engines have different DMAs and
-> different TZ? We do not talk about single QUP.
-> 
-> Anyway, if you need property per node, this has to be shared schema.
 
-I'd rather ask a different question.. Is there *any* reason to not use
-DMA for protocols that support it?
+--dqTSHeD+j9nOhdR6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Konrad
+On Mon, Jan 27, 2025 at 07:39:38AM -0800, Guenter Roeck wrote:
+> Per-driver debugfs entries are created in the device probe function and
+> released in the device remove function. The common debugfs directory
+> introduced with commit d06905d68610 ("i2c: add core-managed per-client
+> directory in debugfs") is added when a device is registered, not when it
+> is probed, and it is removed when the device is unregistered. As result,
+> debugfs entries added by a driver are not deleted when a device remove
+> function is called since that does not necessarily result in device
+> unregistration. If the probe function is then called again, the debugfs
+> entries will already exist, which will result in error messages such as
+>=20
+> 	debugfs: File 'test' in directory '3-0020' already present!
+>=20
+> if 'test' was a debugfs file created during the first call to probe().
+>=20
+> This is easy to reproduce by executing "modprobe -r" followed by "modprob=
+e"
+> with a driver using the debugfs pointer created by the i2c subsystem.
+>=20
+> The debugfs directory should be created when a device is probed, not when
+> it is registered. It should be removed when the device is removed, not
+> when it is unregistered. Change the code accordingly.
+>=20
+> Also clear the client->debugfs if creating the debugfs directory fails.
+> This simplifies I2C client driver code if it needs to call dentry
+> functions which do not validate dentry pointers passed as argument.
+>=20
+> Fixes: d06905d68610 ("i2c: add core-managed per-client directory in debug=
+fs")
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+
+Applied to for-current, thanks!
+
+
+--dqTSHeD+j9nOhdR6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmeX7HEACgkQFA3kzBSg
+KbbfyRAAjFuGdLdOy5Dv9XgUjps4tTblFMa7xIsMkVJ7nZV+UfiWZXI9SsfgNNTq
+wyS5rYjLO7MbB+Ti7uos8rTiVvCRIVcz9gkl+yqR2BGGUuB+bQj7tzlQRuBKeKdX
+iKCokSxCZGvUzUK7BiGR9T9AUXBM8QGukpBWFvGNWX+bKzOmBQzDEjF7bNCirv9A
+1ACHz8+heLLuDtVuDHKTx3HcDqOKUMvNM2Lmio2dO36snoTuJ911Yj1prKb2wX+d
+V6eXgXClqpxKECY9gPDTrN8tWWg3VQ6JKdNW0zBmDbwzpGIkLRMw5CaBmgw34F6T
+N2Y5IU+Um9Glo56OobZ3SF7K4rIv3Gd5gRDYR63hTCzql/GUxRy1a/0VU7dbjdLj
+LYqAaWETObCqGyRZVTDxQywhtAHTguomN6r8jfqmAhJtsBRX9HMHWPzYJ5G5bkhn
+5ZBfH1eU1LrekE3iDj0LCvRINCB7VFiDA6niRfSrGAcFPoDDJMqrYW3zmU2WoF3z
+7MQPSLi+8Shh5V8BKFbB46Wds8DbTuKlZoozSuBXIlPsZmmbiTo9jY5zR3xHdSzL
+NeShpOvMFiYVI6/aKIe7DWfpu0qgOzG6hVHE8EAsZG54DVFnrIJ9bFStLkucHcY9
+LmDcp141EXuF1mqUcffQU116zDDyGA53hx4/PWKxmhe22bH32Rc=
+=ONym
+-----END PGP SIGNATURE-----
+
+--dqTSHeD+j9nOhdR6--
 
