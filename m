@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-9211-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9212-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA335A1D10F
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 07:58:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50FC8A1D118
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 08:00:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D04471886DAB
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 06:58:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84EB61881C56
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Jan 2025 07:00:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B05B3172BD5;
-	Mon, 27 Jan 2025 06:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE8151FC7D4;
+	Mon, 27 Jan 2025 07:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="glMKjfxE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IBX1nXIk"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5618143AA9;
-	Mon, 27 Jan 2025 06:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614C81FC102;
+	Mon, 27 Jan 2025 07:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737961098; cv=none; b=DF9iB04kDIRq5jHgJGKdWzRZq4pfyihRqQwIs27rX8WPMHeGze2tt2PN77pRMt55PRyao0v8GES8Ds+1oDtTCtayQeEhBhm6YjOINPrKevcXEj2/vngxAKcrCKhDDxda13x9FYYoaxMybxirOZS2pCoRiyqDVUiFtejXoJC9x30=
+	t=1737961202; cv=none; b=myvnCoo3J20CzuAuOMWoIfHgJdn/pDHcWhtN6a37nfZE9KOINIsyTMDe3KjOMkc3lfF0KK83W9RxqyIBh5Ap5WBARaHRHa6FBXmyYmHSxOBurTyTU9UZUjTd7CViNCGLdYqUTL53EVrJCY6EsHUWkwMYa8kjd1W094kCYNGRXzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737961098; c=relaxed/simple;
-	bh=yGZewy6ZlY42LYpqKTQGCK96RH/vtFrL+3JX4UsMsxg=;
+	s=arc-20240116; t=1737961202; c=relaxed/simple;
+	bh=rpEvSuACf8EFgy+IlfznXSq42d92/qIZJPB8PyYbqnk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UabNFT4lpE6M2e8qkDaeXKaNETxGyFVdGmZ7MRAbHV6b6i9mFDaWGS1yfJOt77B0VkmnSXW0D4R8HZ0qgt+6nL/QdZd6YyPmcrNUvv31uATSurlwyZJsdU2aEg95eumopVIbViAc7qM3lYn5aA03lHDxwS7YOEXnwdMaTtG5C08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=glMKjfxE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED64BC4CED2;
-	Mon, 27 Jan 2025 06:58:10 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=B6qV1yI5Wg0/t87CS1Ps2MbGKeQC+stRqhyU97ceGz9ytrFLBEHfPcQ4t8Ld5TGHjhb6bgJVEMS+gcCxoaP9vMzhN+n3AFZzEkxj6Miuc4DnII4cTgeZVdlGV3iMB4GDJeQvS/blbcRYvbmWNhOvUill3CmfrQFo0LWjZoMWQSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IBX1nXIk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A2AC4CED2;
+	Mon, 27 Jan 2025 06:59:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737961098;
-	bh=yGZewy6ZlY42LYpqKTQGCK96RH/vtFrL+3JX4UsMsxg=;
+	s=k20201202; t=1737961201;
+	bh=rpEvSuACf8EFgy+IlfznXSq42d92/qIZJPB8PyYbqnk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=glMKjfxEyRTQgl+k8epZmUV0vMpQc9zbMJFTvu8IqZe2yMvSo8MG0dPRXUXVlLBbU
-	 8ww83qJbtIDcCqSQChArZyCsCVyL0Jk94CX9y1Rj5jIRi58wdRNIIYjsYURWNTvV0A
-	 VhYsMiqO70HIlz6QA53yMi0o+K1dewcKXQXFhxDEcouraLCvITYOXjX23tmiztQlRk
-	 Me/Vey+NIFPCVEpHbdwgi6+iU2zynvLSxx3KH1OvNnc8lEygwWiLj3NFS8oIcW06dU
-	 zkb8R0QjAuaHGr/MH4YeC3V1AWjYXLXEGbAgkSGqXRbYNkwXr2smZ5AS3mKmc1HlwT
-	 4ZZuM0oZSQaSQ==
-Message-ID: <2ef6561c-d5ba-40d9-a085-fdced597233f@kernel.org>
-Date: Mon, 27 Jan 2025 07:58:08 +0100
+	b=IBX1nXIkioFrecuoi+U12FRloh4aTKXaP9N8UYeLTk/7m94FMaiSLerhwl5M5zOz2
+	 Dq3kGgrUNRckGqlLyDYe7O9RKq/bVlnKZiBa4Qy8ODTm93RAgjCvTTBkHcXlQrhCan
+	 IDIYI+wcs81R6VIfXMBdugAOMTeypLGt3zDD3H1868hHnx0mUZ1rrAk6/2oaEMMQc4
+	 nKuZ2Ew3sCEWWemlNa6XKEJmdSMUVSBvoP0Mj/LQQxzwXPu9lMuvx4cmZdg3B+Ie/l
+	 5YoHJ6y7FQBk0TI7wjZ7uCTMclpSNC12xcwWQDdgNvJA0fKFTPOQdOqHogcyglg8lW
+	 spS9gKg4LXjHw==
+Message-ID: <f090d637-1ef1-4967-b5bc-6bfce3d7130e@kernel.org>
+Date: Mon, 27 Jan 2025 07:59:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,24 +50,19 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/8] dt-bindings: i2c: qcom,i2c-geni: Add support for
- selecting data transfer mode
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org,
- johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
- linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
- quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
+Subject: Re: [PATCH v2 3/8] spi: dt-bindings: Add support for selecting data
+ transfer mode
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
+ andersson@kernel.org, konradybcio@kernel.org, johan+linaro@kernel.org,
+ dianders@chromium.org, agross@kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org
+Cc: quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
 References: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
- <20250124105309.295769-3-quic_vdadhani@quicinc.com>
- <r4zfoaub3dwkirdbsolbl56xxa7ax5eusb2256c7ezlyl2s3vh@hit4g5cpzijw>
- <da7b9678-76cc-4e45-89e9-4e8d9c9a2005@quicinc.com>
- <ewwk5tvwlhu7cbev7su75ysooboq7ivloydvd3unwic2e6p7ap@bpyoqsrgvf6f>
- <38d24c6b-369e-4254-ae50-5387e2b6063e@quicinc.com>
+ <20250124105309.295769-4-quic_vdadhani@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,111 +108,28 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <38d24c6b-369e-4254-ae50-5387e2b6063e@quicinc.com>
+In-Reply-To: <20250124105309.295769-4-quic_vdadhani@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 24/01/2025 16:16, Viken Dadhaniya wrote:
+On 24/01/2025 11:53, Viken Dadhaniya wrote:
+>  .../devicetree/bindings/spi/qcom,spi-geni-qcom.yaml        | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> 
-> On 1/24/2025 8:33 PM, Dmitry Baryshkov wrote:
->> On Fri, Jan 24, 2025 at 05:52:24PM +0530, Viken Dadhaniya wrote:
->>>
->>>
->>> On 1/24/2025 4:48 PM, Dmitry Baryshkov wrote:
->>>> On Fri, Jan 24, 2025 at 04:23:03PM +0530, Viken Dadhaniya wrote:
->>>>> Data transfer mode is fixed by TrustZone (TZ), which currently restricts
->>>>> developers from modifying the transfer mode from the APPS side.
->>>>>
->>>>> Document the 'qcom,xfer-mode' properties to select the data transfer mode,
->>>>> either GPI DMA (Generic Packet Interface) or non-GPI mode (PIO/CPU DMA).
->>>>>
->>>>> I2C controller can operate in one of two modes based on the
->>>>> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
->>>>
->>>> Is it possible to load the firmware after it being loaded by TZ? Is it
->>>> possible to change the mode at runtime too?
->>>
->>> No, firmware can be loaded either from the TZ side or APPS side.
->>
->> You answer actually reads as "No, yes" (excuse me, non-native here).
->> Most likely you mean that it can not be reloaded once either TZ or APPS
->> has loaded it.
-> 
-> Yes correct. it can not be reloaded once either TZ or APPS has loaded it.
-> 
->>
->>> In non-GPI mode, the transfer mode will change runtime between PIO and CPU
->>> DMA based on the data length.
->>>
->>> We need to update the device tree property(qcom,xfer-mode) to change the
->>> mode between non-GPI and GPI.
->>
->> So, is it actually possible to change the mode? E.g. if the TZ has
->> loaded the firmware and configured SE for PIO/SE DMA, is it possible to
->> change it to GPI DMA?
-> 
-> No, if the TZ has loaded the firmware, it is not possible to switch from 
-> non-GPI (PIO/SE DMA) to GPI DMA mode.
-> 
->>
->>>
->>>>
->>>>>
->>>>> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->>>>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->>>>> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
->>>>> ---
->>>>>
->>>>> v1 -> v2:
->>>>>
->>>>> - Drop 'qcom,load-firmware' property and add 'firmware-name' property in
->>>>>     qup common driver.
->>>>> - Update commit log.
->>>>>
->>>>> v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-2-quic_vdadhani@quicinc.com/
->>>>> ---
->>>>> ---
->>>>>    .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml        | 7 +++++++
->>>>>    1 file changed, 7 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->>>>> index 9f66a3bb1f80..68e4bf0c84d1 100644
->>>>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->>>>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->>>>> @@ -66,6 +66,12 @@ properties:
->>>>>      required-opps:
->>>>>        maxItems: 1
->>>>> +  qcom,xfer-mode:
->>>>> +    description: Set the value to 1 for non-GPI (FIFO/CPU DMA) mode and 3 for GPI DMA mode.
->>>>> +      The default mode is FIFO.
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +    enum: [1, 3]
->>>>> +
->>>>>    required:
->>>>>      - compatible
->>>>>      - interrupts
->>>>> @@ -142,5 +148,6 @@ examples:
->>>>>            interconnect-names = "qup-core", "qup-config", "qup-memory";
->>>>>            power-domains = <&rpmhpd SC7180_CX>;
->>>>>            required-opps = <&rpmhpd_opp_low_svs>;
->>>>> +        qcom,xfer-mode = <1>;
->>>>
->>>> What does <1> mean? Please provide corresponding defines.
->>>
->>> Do we need to add a string instead of a number, like
->>> include/dt-bindings/dma/qcom-gpi.h?
->>
->> You need to '#define FOO_BAR 1', then another one for 3. String is a
->> "string", it's not required here (in my opinion).
->>
-> 
-> Sure, I will update it in the next patch.
+> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+> index 2e20ca313ec1..d0dd960ee12f 100644
+> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+> @@ -66,6 +66,12 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> +  qcom,xfer-mode:
+> +    description: Set the value to 1 for non-GPI (FIFO/CPU DMA) mode and 3 for GPI DMA mode.
+> +      The default mode is FIFO.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-Well, no. Not 3 but 2, because why having gap there?
-
-But anyway use string and explain what is GPI. I assume that DMA is
-present in both cases, you just choose not to use it? If so, then why?
+Same concerns as for I2C, so discussion going there.
 
 Best regards,
 Krzysztof
