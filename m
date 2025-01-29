@@ -1,79 +1,79 @@
-Return-Path: <linux-i2c+bounces-9229-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9230-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38420A2215C
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jan 2025 17:11:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E967FA22176
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jan 2025 17:12:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78F4C1884EDC
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jan 2025 16:11:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C0FC3A8ED1
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Jan 2025 16:12:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 653DB1E131B;
-	Wed, 29 Jan 2025 16:10:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A7841DF968;
+	Wed, 29 Jan 2025 16:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lfiFcInF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SB19OVvK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7F71DE3CF;
-	Wed, 29 Jan 2025 16:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E1C1D934D;
+	Wed, 29 Jan 2025 16:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738167004; cv=none; b=Zey1J+wi5WeX63wkSMxFJVVt3syjelMcCyHx61hSrwpNMa9y2DeTLFps3bwCexryxK5+A63Dfo4xmw8oy1DByZkcApdU9MuiF1HrAox7v8lgxp8jWDhcwvJcD+9QsmRTcMlWHIohtUJ/ptl/WpkE91+3V2F/r3fBil6i1O6pboQ=
+	t=1738167041; cv=none; b=q7IPFJa6eXS42arLmfYhQe38tQBQszZ2gURw/qLYUKldh+57wIH9IZ1tNyacMdFJUSmSo00uIf/iU9VQH+U5bMEIkPGQbBawKU5/iooB16g/4AZTrAmi5EzawLsy5WAyivi2/81GdkpwQOmTNRDbP7NX/OcIE0ZUZLZcu1Gj5Fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738167004; c=relaxed/simple;
-	bh=GRUP9Czg5ZC0JLPGF3rpH7PTSJ9YHTmouAsRiWAo75w=;
+	s=arc-20240116; t=1738167041; c=relaxed/simple;
+	bh=HuWWgKdPN3rrbj1Q3/2goTakqmU82azqfPkVIj8rcSM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZUB6U7xA+3anmHL/JbpNYhMuHlBFIGiu796c+1IOQh5H3BBfKTX6hTkQXdwn+Ng0PUMRfAsZi9VXAj76QiwgYA8ylwTqx+FQMRe8zD6N3EBgXGKIG743sZtnioYz7oOIW1cjkBHCHTaWV69Pn9Zr9YIAX2I+kAdeoi0sC+RhEJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lfiFcInF; arc=none smtp.client-ip=209.85.214.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=uQAK2FkW4+mBvwyTJhPs2o+Pku2sAvQsoaMTtzUJK+Z5BhkHFFGEv7SVTucF99Xy9bjjnF1DCaed15wPx+eiWX+LOv5s6LiVoCqipA5REfPHPm5tg4J6QNiqbtS8XAfHie/qj06vW+cAOGNR4I/xaB0YM5sGrR/xCKgpMjmSv44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SB19OVvK; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21636268e43so10093295ad.2;
-        Wed, 29 Jan 2025 08:10:02 -0800 (PST)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2161eb94cceso85721785ad.2;
+        Wed, 29 Jan 2025 08:10:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738167002; x=1738771802; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738167040; x=1738771840; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ymDSOEQ6GAWCTuGktRgzk09hgWGDW46vwLaYswetRgo=;
-        b=lfiFcInFMWcIWCS3RgzarE3jMsMXDzfK3cNwUaMpPFDzqbYD2HqL6jBta/VP+4guTT
-         //AGrIEJKnVAhD6+u1gDCR93+KFoB0HZ5LBqja4CzVy5bKMUta2FMm7akfyDIhpe3iUU
-         ZZZaNCi0Zk0LZTCqxik2xo7SttEBtQU/qYqRa7kqZEf60iVazMxwr5PTEfk21Ef318ck
-         OxhwPHyzsSclXFQ4iYJAzWlNA5MPE00GcDcJArLI7xKlFM2PzY/A1s+znUMXOwQpmVWo
-         paoxwB8pr7NV8hU6lgo7DAU2gdQVZ8i7n4EMAprIDcouCASducYd9EthvNLTPd9Tu7PY
-         yNyQ==
+        bh=e7txV3Z4FmkxdJk6rH/CicdGMAJpO3qzgUBCBB4jROs=;
+        b=SB19OVvKhWUbwNjzoFUC6K8GkUb+WfAV1BSca9qW6wVfywNDGwAjyaM2kqQwPu1rao
+         XrYOEBH9M3OdXOkmun4yoNSNTXA3TUf50DWRP1DauF+pMg9/dw4I2agY7oqbwVV/q4cK
+         sFqsTDFTTosiYNIwnA4dJFAiGRTWiu04kkJKeIAyqDlFtSfv/noiL9hJo1ZEGGEZWKMF
+         b1BRcUdukY9rtYJPP5PHhKAqTJGgq8qSnDwt1+tamjvMw1nF1QXuDw3I6UJP7gLmyYy9
+         P3IH52sdp+sIUpgS/SnzLS7F3C6Z1ei/UXYxhhJ+bJmqOlHK6L1sFB8eyPBP/vJGvik2
+         3CYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738167002; x=1738771802;
+        d=1e100.net; s=20230601; t=1738167040; x=1738771840;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ymDSOEQ6GAWCTuGktRgzk09hgWGDW46vwLaYswetRgo=;
-        b=wrJgqAbZ7GXfstEkZEH4VbjIZInvxY/asHEZWUFVytqUrD9FzoEjjZCkUmxjdKoWAh
-         p3ZCFKydN6zaJynr5B8cMMADnSlokYv9JJB4zIxa2rS2g6iTFclVD+c0w54nLcPPRhii
-         Ga1whxYmxHOKB2fwFRhx95yy4F2wrr142YW5fTCHV4En+lXbL9FuOUKYiXLbOIaMFs5X
-         olr/icmIi6Jy2Rid26B9D55gxI8IrKBXmPUoAwpXGhcuE0d7K6lOxhi55IcPG0l3j6La
-         IV6QiWpETEzdyjsYxwc5iJ+ltmcs27ylveIzqDODRXcQGLkskUa7Az9E85iaOuMupljD
-         yzgA==
-X-Forwarded-Encrypted: i=1; AJvYcCWCSWkM9TcgS7s3Fzn0qdoR3AZWT+SizjNJqnHHwCIsAQ7NyGyBOdLQWybbfuYs7yBnczMqXv0fQ/IX@vger.kernel.org, AJvYcCWJKMwoAnhCJAZj/NoS0ZX3f9JgVA1dtStGMXX0YGFKz2x72aJphXXbwGfP854YoSnXjkr3qIohcFNM@vger.kernel.org, AJvYcCWXl2LfyXuP5h0nZYcsSqu8H1cfch+A05bkEscx/U8igQ6KUR6sySvowWxN99LQAnWEuq/PojcOp3nlRFA=@vger.kernel.org, AJvYcCXbny7prp0o33oblv9x8iN3x9m8W5692EU+f6hK5IN6R+K+ZoIHPea1/KjmR5A5TurhgtiFsFMfRITGK2GM@vger.kernel.org, AJvYcCXqjAOMylq9vi1QmeX6B33KFvNHVJxfeyLnUxqu2oUlntFEvkNiVYYBOKbQCs0m/Xjby2rQuN4LZ7Ll@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrzIU97Oe9NbE4XhXzhL1bqljKdBQ6LlxnR0UBQl4bpFVcCO+Z
-	0f7/jwSgeunvqjA1Hd5vNRmLxAqNgEFARzxg++lGa7rFBhqrS1Kr
-X-Gm-Gg: ASbGncswvF3AYS6MaXMVVLzuL1CJI7Maz4LwSLEAcot5g1vAyfoGr1nX7lotvWlG6fk
-	YtaAEt/cI2xbbg9uUxgavAFJ3i1rwoIyzQ6D7La0JWjsqIy0CNXbTRIqaulAPv6xIJbOO/KS49q
-	w8rLn34P5J05wiKZsF5aboTuaDu5n4DM19fiSybgY3T9DPIdvdiBFGNrHGOqtW4z0MFpZmqULKl
-	IJ+qpMMO/QCfSJo4BtfyjYc5pIPxPBqrL3f490g2vOwiBDNaT0xJO2NDzlPCm1qvBko5qm09tyx
-	ZHv2Wzk5QYrD0PJJg0KnRoWnnLlI
-X-Google-Smtp-Source: AGHT+IEMzBy5A9c7aWN66LJLLpZu/t5jLTsQYXT/hCtX+4kKdRCfg3Q4oeCXElu7sq8bEWhcdZuznQ==
-X-Received: by 2002:a05:6a21:9985:b0:1e0:ca95:3cb2 with SMTP id adf61e73a8af0-1ed7a5c462bmr5580176637.8.1738167001747;
-        Wed, 29 Jan 2025 08:10:01 -0800 (PST)
+        bh=e7txV3Z4FmkxdJk6rH/CicdGMAJpO3qzgUBCBB4jROs=;
+        b=pLY/r9UuP+8eFALQGwtSAoPaFIk3R8Wpt4542qLtfQv+T+mxnQauKCfyIAZ7ipU/dZ
+         c+IWoQEClHku9JwYWOe6ARKFSv8GRIfmzjDtN/rzazXYXKKdQUt8jPc39iBa9T0fe6hf
+         30dvXqcU6rDO40ETDXxsSEpyPxe9SmWzIWV1ZgUS77a/Ur1kYA5vu8NyhyEU+QcAqXQX
+         nZt2oscXOl94FSzljSs7IZe+2WCp7uEKxkgirbLfMXRLo8Q7MPRKC5B2VpjH3FGAyT1C
+         thVG4klaMRudVpArkAyGBNcm+g7tQjkuWUpfIxNaAQQpKyiPE2LCtgM6WonOXmCsFsI4
+         L46A==
+X-Forwarded-Encrypted: i=1; AJvYcCVT4u0Yh/9fdi7fbZneEwxh8qB2OyD5tO+7+pHCTxT2KJXkiMEXjeLobfuXR1fV1p4T+9vAxUQGfIkmMlc=@vger.kernel.org, AJvYcCXBM2i/VusjFKO3Ygm95fuHXhrV8TQJmWf0W4sf/zRdAmYVgneaKbXVamFHwVANXsZMIaTzUWD1Fq/dOria@vger.kernel.org, AJvYcCXQR6xbsjwTETujQo3HJmUV59eaMrCoX+NTE5iWZ91ySAizwZndsGC/XTA8SnwbZMPKBf4TD+2q2NyW@vger.kernel.org, AJvYcCXbRuKPtOfzlIQtG17tFXgtxshUCEOVNbllh6bFKMfjFff705M0g+SdiLy6rJzDDRfZyDqxo5OjZElf@vger.kernel.org, AJvYcCXzsUiP8fCC1EgXC59XzigKNIyJwtDNCUr+8wu1ecNzgOGVkHJG3L8jNWPLYQwZqNYHx6TvU/MSgo0u@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqtoP/Ra/o1rJtaezDsFPVIDWVHnc6tIwEqtWcUi4448b5Twk9
+	szjk9duPNv6MoFOZpepqt/ln9TRo0ONszuYwKy9bCo9bgvIeX4+b
+X-Gm-Gg: ASbGnctE7i0+vrvXcUgtFT6V/2jdHAh0eq+88owIJzVk1531AZ0XNE2bVcko/K+fods
+	fhPCN6uKtn/TSQxv40lryoAExwb5gvP21R/SWYYzh+wewbt1wsH+yr/mrvqzACaS9XV38AGyHBZ
+	CU4giGlJlJsV6uW7KUUpqlO2ttKlNLZB559MdO8QELQJ/flf+WKF7ZW0tUkaLSkSONI/BqhHPrQ
+	umITJSTKbK1JBeybnnP5SJWFLhP+nr1wowel/g+HZX5PEnVyWZJBoxM6BV+AkXbvmjl77eLH4x/
+	Vhu16OzQgajginLYAP/fWudYdbBO
+X-Google-Smtp-Source: AGHT+IG0gETrZQe12EVu2mQr6aQqA/o8vYzdSso4/hdZUmrMFuDIX2TmAUYyW5P/BpL0HLYO5T9bNA==
+X-Received: by 2002:a05:6a21:3284:b0:1e8:bd15:6845 with SMTP id adf61e73a8af0-1ed7a5a50eamr5646950637.1.1738167039570;
+        Wed, 29 Jan 2025 08:10:39 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac48ea371dasm10435446a12.12.2025.01.29.08.10.00
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac48fe53bddsm10262564a12.25.2025.01.29.08.10.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2025 08:10:01 -0800 (PST)
+        Wed, 29 Jan 2025 08:10:39 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 29 Jan 2025 08:10:00 -0800
+Date: Wed, 29 Jan 2025 08:10:38 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
 Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
@@ -84,10 +84,10 @@ Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ltc2978: add support for ltm4673
-Message-ID: <45df9520-1727-4ac7-8e7f-8d15ed153684@roeck-us.net>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/ltc2978) add support for ltm4673
+Message-ID: <31a7f865-b9c4-430b-9bb6-80b4a11ad112@roeck-us.net>
 References: <20250124-ltm4673-v1-0-a2c6aa37c903@analog.com>
- <20250124-ltm4673-v1-1-a2c6aa37c903@analog.com>
+ <20250124-ltm4673-v1-2-a2c6aa37c903@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -97,14 +97,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250124-ltm4673-v1-1-a2c6aa37c903@analog.com>
+In-Reply-To: <20250124-ltm4673-v1-2-a2c6aa37c903@analog.com>
 
-On Fri, Jan 24, 2025 at 11:23:05PM +0800, Cedric Encarnacion wrote:
-> Add LTM4673 to supported devices of LTC2978. Unlike other LTM46xx
-> devices, LTM4673 is a μModule regulator that outputs four channels.
+On Fri, Jan 24, 2025 at 11:23:06PM +0800, Cedric Encarnacion wrote:
+> Add support for LTM4673. The LTM4673 is a quad output, dual 12A and dual
+> 5A, switching mode DC/DC step-down μModule regulator integrated with
+> 4-channel power system manager.
+> 
+> This adds only the chip id, the checks for the manufacturer special id,
+> and the relevant attributes for the device's pmbus_driver_info.
+> The device does not support clear peaks.
 > 
 > Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied to hwmon-next.
 
