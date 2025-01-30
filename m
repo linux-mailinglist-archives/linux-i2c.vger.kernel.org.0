@@ -1,207 +1,245 @@
-Return-Path: <linux-i2c+bounces-9237-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9238-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A70ABA2307C
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2025 15:36:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AA87A23190
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2025 17:13:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 106611637F8
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2025 14:36:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A3003A496F
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2025 16:12:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5321E9B20;
-	Thu, 30 Jan 2025 14:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BD951EBFE3;
+	Thu, 30 Jan 2025 16:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="W4HnyBDf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B4zLAEby"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2052.outbound.protection.outlook.com [40.107.243.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064291BB6BC;
-	Thu, 30 Jan 2025 14:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738247736; cv=fail; b=ncNlNxoD4bUyDuNpU7b+GxNRS0j9cxGwWyRwWs2QILWUC/6vtwHKFr7D4Se9UK3S461Fzix3AHTVgnN7q97kKsaA4d5r8NgDqipDF3jvuDXId5uNYlvMbo2Y7cC3XwDmwPk+votWdU4Wpqu8NL8SGoAfqUIfQlYsxpX5cL6OxMY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738247736; c=relaxed/simple;
-	bh=U6J7P5r7bhfF/VRlIeRlDRIrHmD1TGuC0i0ze/R9SKA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EiDLzFskG3XiY8wyvB522HetDYV/nu+RpsbNbbeWjPYXfNvILhLc/O7KeOqEI15zkoKuncfdnMJ34L7FB9ghXKUzbMUdu87zBG7/UdQwoq1guH+C4bwOa4/jyuHQv0DGoHykSc+H+kVVcu3s47eT/+QjhM1f8hvelYtJriPjwYA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=W4HnyBDf; arc=fail smtp.client-ip=40.107.243.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Xh1C4kAy8LWP4QU3ZzqTF3pg/AE+TXyRw9ulrtKz70+CtaBoGdBLjQcbXzh5Vh6ztV6uL0JC0TwzYBt4B+tM5qfJwKCa2mUdeUq2d5Sz+04fquPsfSUiqq4qT6ZVBc6r8+lwft5YAGdmsSVc+8lKxLHokHfkbYatvpyfKk7oo17ZN+6nhQsXE3NjBy6YdbDaujAFVSlRUERlOmoqVDmw+dqVRbMqUnlGfCPDTLwE5lq8kKL28U0cOeMucPcOJYFeZssDJZLXntvkJZYr0LqjZzPt0owSlJQnsHWGuWhLF1PyoScSEQlUPMu20IzWLwtF/0paPq7JdRIq3JNPQhwTAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gTD858treBe/4AVwJsJgAayrxyI6Wh+nR7PDWFF+vgA=;
- b=LIXvRAmT2RpImLLIXkehwsEREoiZ2d8Fd/co/21Um4JlFalv3UVUFOsFuqArM8TVY6hFAVKo3HZoOG2irL/eolct/Bjq/Tw7wUzRaBaSlpQ4atgYh2yeWs0YvCYUjmTiSahD9IdjA3iucHiX9ZC/hCCUunhamEitHG3Sh4XgO3YmCENrqvU+SQ6rmWeOLosMx0UlKxXEWreaFB65XdCEwyHms24AqfeUUMqzuRrgCz1G1gKqhcpeRe2qD8Zio1BZd7CJiGclQ43oHGNQslucvYog/10Q/33jBrchqJHieErtWO1Z+mW6Qr6NQdlNpHu/wTLVNIOe6wFc5I+O7pdRag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gTD858treBe/4AVwJsJgAayrxyI6Wh+nR7PDWFF+vgA=;
- b=W4HnyBDfPpOjy6kYGUIHq7HKH7qM4zqvqs11H8VsJvED6PXYAdmwVVs/PwJvoinxwTzZCg40CI63j2dLhuVjdsfjyYGjlOmIMTn/UFXKMbDu5MVJm+nmWdPfV0n8Yu8wFuKWFEtJl77Vr2LTgthA38IOhamhLi0UEIM7f9Py/3QUO1YPRDG1UiYM8WoR3iB3iWaq6tH/3QJ9CZbfQ9QPATGLW6M1QSWCrNyvVG6VyfKKc1wm7O/vafMa4gDcdLHAOD4oY/OdlQS4CMKUBDCZljA/Sjg6vxeUT8yqZrsdfthXEsYFrbJGq8u1KA/NNnocm4npR15YZbu3njjzxwBpWw==
-Received: from BN9P223CA0010.NAMP223.PROD.OUTLOOK.COM (2603:10b6:408:10b::15)
- by SA1PR12MB7174.namprd12.prod.outlook.com (2603:10b6:806:2b1::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.22; Thu, 30 Jan
- 2025 14:35:28 +0000
-Received: from BL6PEPF0001AB53.namprd02.prod.outlook.com
- (2603:10b6:408:10b:cafe::aa) by BN9P223CA0010.outlook.office365.com
- (2603:10b6:408:10b::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8398.18 via Frontend Transport; Thu,
- 30 Jan 2025 14:35:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL6PEPF0001AB53.mail.protection.outlook.com (10.167.241.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8398.14 via Frontend Transport; Thu, 30 Jan 2025 14:35:26 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 30 Jan
- 2025 06:35:06 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 30 Jan
- 2025 06:35:05 -0800
-Received: from NV-2XGVVG3.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
- Transport; Thu, 30 Jan 2025 06:35:01 -0800
-From: Kartik Rajput <kkartik@nvidia.com>
-To: <akhilrajeev@nvidia.com>, <andi.shyti@kernel.org>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <thierry.reding@gmail.com>,
-	<jonathanh@nvidia.com>, <ldewangan@nvidia.com>, <digetx@gmail.com>,
-	<linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 5/5] i2c: tegra: Add Tegra264 support
-Date: Thu, 30 Jan 2025 20:04:24 +0530
-Message-ID: <20250130143424.52389-6-kkartik@nvidia.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250130143424.52389-1-kkartik@nvidia.com>
-References: <20250130143424.52389-1-kkartik@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBC51DA5F;
+	Thu, 30 Jan 2025 16:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738253575; cv=none; b=ewBeEDaM2Lcxb8QItKLDKvTn7p2EwNyzCSThY6aKlBV1JAHeD7Z+FILOprX2bAeoMZBcYB4mqNUlJlDtIbAQWNfluhwLaGxiNBlHZPGKJtOqeaLNVLPOsEtRIDoVtQOO3BqhHBEEkICGRo4W1Pbyl9v2lm4GCAJNeUJtqL4gyAg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738253575; c=relaxed/simple;
+	bh=B0WiyP8kxOBx9oHNPc/Vy+XK0t+Gnb5cVEaSaHNC+IY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=YA938I7aG890FNzgLjv7ufaWDvDqhnOAQkmoz3KJWKIPkvcLNTrY6s8vYSDoBGgqo1NmsBW5Saxv8iFrYEy0uFYG/YQ5nV52rR084V1tx0Y3kFir4rDMwM7o4Sc8gmFBZ8sc/ivJDbROMoH4q2oKojCXMi38YZoYqGDVAGjdvOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B4zLAEby; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28336C4CEE0;
+	Thu, 30 Jan 2025 16:12:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738253575;
+	bh=B0WiyP8kxOBx9oHNPc/Vy+XK0t+Gnb5cVEaSaHNC+IY=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=B4zLAEbyaXFQ1A7gMx0FuLfBziPwEhReXIdTy6jtSQxG3Qw2dMzivdoBEdJKf8avM
+	 j+rSC1EvyRye4HdGOMgbYN1YmxYiCJZdvjveYk62oU748su8ncXGLjeTim5a7aXa7j
+	 oZFlQyPGujRZqkn2cy+BjlSzgaTrY0sg7o61d2IhrTOfbqvgy23SZMutw4cJEYUjaw
+	 2PjAfjSIPyWyAzGq+URH46wx1vfz6QJ2RhHaUO8ONHJfFT2qJ3cjEunGZmw2CMqCUk
+	 U8y/ho6GWuaC0KLWACPgcT5+mU6vw0mN6fJXhMhFPdfwrQe63o2qcB/QNZ/+U6XpKh
+	 V//HFpXVlZ0wA==
+Message-ID: <febb1225-3c14-4377-90e0-4d4aee307ede@kernel.org>
+Date: Thu, 30 Jan 2025 17:12:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB53:EE_|SA1PR12MB7174:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6802beb5-79cf-42ff-c699-08dd413b56c8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700013|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?7ZvFPRGCvnUsIpOc//AtKLODYhfM0RFDDMsM3I8nVQsc9n2z8ykad35oBWqm?=
- =?us-ascii?Q?RgD7qeLgR67DFuOXC7XtDQwje87hXvclQ5yKOO6zXPKEOmikebz+dTg1MTmj?=
- =?us-ascii?Q?wSQQPuXklJmFqWTKI85luF+fmLSWNsCSgaHYUpCiI5nswfrGQJCkF2HlTVnP?=
- =?us-ascii?Q?EqIpKrHftSpA14LKE6FWq2niC70htyj8+AKKfobWCDQ3bPeOlJGhv5oMjocP?=
- =?us-ascii?Q?PY7bZ95Gy+dwvbi9ohy6ALR+InUyH+LdjYgYa+OF+CMdkLavouxvreiw7bRN?=
- =?us-ascii?Q?VNY/aGhocM4dOFTJc7+ymjqW9T7YBhyqxB0pY7/+WHH/KBrT/2O0TH0J0iHs?=
- =?us-ascii?Q?d/MmpoeprFjo2N+l3LAtUglNjUSehOOXJthEJRwe6l5kWm57Nlxkoyf0VImY?=
- =?us-ascii?Q?iG73m+0Zoj7WpLbtXW52yt0X/YB7loSdfWB8BaP42mA7exF14FqoSG/N2m+6?=
- =?us-ascii?Q?lx+GBaJ5DiA73q71n5OMNnj3iFqSsUgkLymhQRFXtZ/Tz93GE7vQmRlx45GN?=
- =?us-ascii?Q?Vrh9/vMbFHyppGH+T25WzJUtKfvoKy3HJeCVtxUf2Z6Gxz3Chbl8BKOm1tDr?=
- =?us-ascii?Q?BvgstXsnszfQegVaQEpptZ6guDftt3lAJXu98/Du85/cl8knjWVc92c9R+/4?=
- =?us-ascii?Q?6d1uZtgxC5X9djQaTEdu45m+qgH9Ic+8zTPkR+OgCwD9thhUzH33F1PrCYaC?=
- =?us-ascii?Q?gXL5GHXYuhZm4ZoTrmKxSEqvaAApfIbB0vlHvQUmCaEL9QUv9ihgEYU/Mykg?=
- =?us-ascii?Q?Bmm7N1UOCURqvgYOKSZUTD3C8hPA9dKmjvZy6PfzFb4dbey3cmzlB+UJtfnN?=
- =?us-ascii?Q?Gi2D+JgLFi3LPK6qLsHxB5wHosk57OMnjQDMHMbFpnafz5sTMWo63jTBSsAs?=
- =?us-ascii?Q?OzwvZpJ6n12N895k9nM+dwOE9LHH/O/y6v+3FeZNTp+olVHHBpMgcx0zRc88?=
- =?us-ascii?Q?hiF5f7ZDv2JRa6Ovxu1cfvZxROwYzPF33HnVZ4ggA0CCKUMIRV5Q+iYUvszb?=
- =?us-ascii?Q?t6HvM/WB/O4KiCTCsNXAVOB0fYW9ULDQl5EL/ep4WNYuTtw7foQrd9dWDXFV?=
- =?us-ascii?Q?1Gtyy0ZVxTgfThTLQGi+utnLTKZMP9O6RAUZYHkEH62F8WPLp55oglIqGQdm?=
- =?us-ascii?Q?RhGqzpRawihT77N1n1NZ0GZp759jbFpsPHAegb4G6SjRicV0EicNFrYqdrcK?=
- =?us-ascii?Q?liuslHVl4HiXx+FGsm3fh9M4bQbrkwuDukhnybXk2h1J6XCULUEOJvxxHnvd?=
- =?us-ascii?Q?/FvWckQnaXxZRcqnmr/Ueb2mJFLJCkGLpOJucr3ZxbBzFknfLqoCRDP079GN?=
- =?us-ascii?Q?qKP6f4xDaIGdKgtVUfOU8kQZMoqiwbYiTmJH3xfMmV3+Bwf7o+L++eQPCCrd?=
- =?us-ascii?Q?mp9RgZ/hzCETD6KItmzYODabUDYToBMRZDxSu1+1W5Vnv7lbpe9ft3cVwPOA?=
- =?us-ascii?Q?VF3wXdPEoc8YXgAq+wJjaTTA5b2oYFaNM1Tj29vNUVcbKUgmsuDh+ZxJb2ZS?=
- =?us-ascii?Q?9tFo+bNmk7vYG5C1JiPDFZv9rw3lr0qqvLM2?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700013)(1800799024)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2025 14:35:26.9166
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6802beb5-79cf-42ff-c699-08dd413b56c8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB53.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7174
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/5] i2c: tegra: Add support for SW mutex register
+To: Kartik Rajput <kkartik@nvidia.com>, akhilrajeev@nvidia.com,
+ andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+ ldewangan@nvidia.com, digetx@gmail.com, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250130143424.52389-1-kkartik@nvidia.com>
+ <20250130143424.52389-5-kkartik@nvidia.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250130143424.52389-5-kkartik@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Akhil R <akhilrajeev@nvidia.com>
+On 30/01/2025 15:34, Kartik Rajput wrote:
+> From: Akhil R <akhilrajeev@nvidia.com>
+> 
+> Add support for SW mutex register introduced in Tegra264 to provide
+> an option to share the interface between multiple firmwares and/or
+> VMs.
+> 
+> However, the hardware does not ensure any protection based on the
+> values. The driver/firmware should honor the peer who already holds
+> the mutex.
+> 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
+> ---
+> v1 -> v2:
+> 	* Fixed typos.
+> 	* Fix tegra_i2c_mutex_lock() logic.
+> 	* Add a timeout in tegra_i2c_mutex_lock() instead of polling for
+> 	  mutex indefinitely.
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 132 +++++++++++++++++++++++++++++----
+>  1 file changed, 117 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index 7c8b76406e2e..aa92faa6f5cb 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -135,6 +135,14 @@
+>  #define I2C_MST_FIFO_STATUS_TX			GENMASK(23, 16)
+>  #define I2C_MST_FIFO_STATUS_RX			GENMASK(7, 0)
+>  
+> +#define I2C_SW_MUTEX				0x0ec
+> +#define I2C_SW_MUTEX_REQUEST			GENMASK(3, 0)
+> +#define I2C_SW_MUTEX_GRANT			GENMASK(7, 4)
+> +#define I2C_SW_MUTEX_ID				9
+> +
+> +/* SW mutex acquire timeout value in milliseconds. */
+> +#define I2C_SW_MUTEX_TIMEOUT			25
+> +
+>  /* configuration load timeout in microseconds */
+>  #define I2C_CONFIG_LOAD_TIMEOUT			1000000
+>  
+> @@ -203,6 +211,7 @@ enum msg_end_type {
+>   * @has_interface_timing_reg: Has interface timing register to program the tuned
+>   *		timing settings.
+>   * @has_hs_mode_support: Has support for high speed (HS) mode transfers.
+> + * @has_mutex: Has mutex register for mutual exclusion with other firmwares or VM.
+>   */
+>  struct tegra_i2c_hw_feature {
+>  	bool has_continue_xfer_support;
+> @@ -229,6 +238,7 @@ struct tegra_i2c_hw_feature {
+>  	u32 setup_hold_time_hs_mode;
+>  	bool has_interface_timing_reg;
+>  	bool has_hs_mode_support;
+> +	bool has_mutex;
+>  };
+>  
+>  /**
+> @@ -372,6 +382,103 @@ static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
+>  	readsl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data, len);
+>  }
+>  
+> +static int tegra_i2c_poll_register(struct tegra_i2c_dev *i2c_dev,
+> +				   u32 reg, u32 mask, u32 delay_us,
+> +				   u32 timeout_us)
+> +{
+> +	void __iomem *addr = i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg);
+> +	u32 val;
+> +
+> +	if (!i2c_dev->atomic_mode)
+> +		return readl_relaxed_poll_timeout(addr, val, !(val & mask),
+> +						  delay_us, timeout_us);
+> +
+> +	return readl_relaxed_poll_timeout_atomic(addr, val, !(val & mask),
+> +						 delay_us, timeout_us);
+> +}
+> +
+> +static int tegra_i2c_mutex_trylock(struct tegra_i2c_dev *i2c_dev)
+> +{
+> +	u32 val, id;
+> +
+> +	val = i2c_readl(i2c_dev, I2C_SW_MUTEX);
+> +	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
+> +	if (id != 0 && id != I2C_SW_MUTEX_ID)
+> +		return 0;
+> +
+> +	val = FIELD_PREP(I2C_SW_MUTEX_REQUEST, I2C_SW_MUTEX_ID);
+> +	i2c_writel(i2c_dev, val, I2C_SW_MUTEX);
 
-Add support for Tegra264 SoC which supports 17 generic I2C controllers,
-two of which are in the AON (always-on) partition of the SoC. Tegra264
-I2C supports all the features supported by Tegra194 I2C controllers.
+And how do you exactly prevent concurrent, overwriting write? This looks
+like pure race.
 
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
----
- drivers/i2c/busses/i2c-tegra.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+> +
+> +	val = i2c_readl(i2c_dev, I2C_SW_MUTEX);
+> +	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
+> +
+> +	if (id != I2C_SW_MUTEX_ID)
+> +		return 0;
+> +
+> +	return 1;
+> +}
+> +
+> +static void tegra_i2c_mutex_lock(struct tegra_i2c_dev *i2c_dev)
+> +{
+> +	unsigned int num_retries = I2C_SW_MUTEX_TIMEOUT;
+> +
+> +	/* Poll until mutex is acquired or timeout. */
+> +	while (--num_retries && !tegra_i2c_mutex_trylock(i2c_dev))
+> +		usleep_range(1000, 2000);
+> +
+> +	WARN_ON(!num_retries);
 
-diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index aa92faa6f5cb..415337e069f5 100644
---- a/drivers/i2c/busses/i2c-tegra.c
-+++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -1751,7 +1751,36 @@ static const struct tegra_i2c_hw_feature tegra194_i2c_hw = {
- 	.has_mutex = false,
- };
- 
-+static const struct tegra_i2c_hw_feature tegra264_i2c_hw = {
-+	.has_continue_xfer_support = true,
-+	.has_per_pkt_xfer_complete_irq = true,
-+	.clk_divisor_hs_mode = 1,
-+	.clk_divisor_std_mode = 0x1d,
-+	.clk_divisor_fast_mode = 0x15,
-+	.clk_divisor_fast_plus_mode = 0x8,
-+	.has_config_load_reg = true,
-+	.has_multi_master_mode = true,
-+	.has_slcg_override_reg = true,
-+	.has_mst_fifo = true,
-+	.quirks = &tegra194_i2c_quirks,
-+	.supports_bus_clear = true,
-+	.has_apb_dma = false,
-+	.tlow_std_mode = 0x8,
-+	.thigh_std_mode = 0x7,
-+	.tlow_fast_fastplus_mode = 0x2,
-+	.thigh_fast_fastplus_mode = 0x2,
-+	.tlow_hs_mode = 0x4,
-+	.thigh_hs_mode = 0x2,
-+	.setup_hold_time_std_mode = 0x08080808,
-+	.setup_hold_time_fast_fast_plus_mode = 0x02020202,
-+	.setup_hold_time_hs_mode = 0x090909,
-+	.has_interface_timing_reg = true,
-+	.has_hs_mode_support = true,
-+	.has_mutex = true,
-+};
-+
- static const struct of_device_id tegra_i2c_of_match[] = {
-+	{ .compatible = "nvidia,tegra264-i2c", .data = &tegra264_i2c_hw, },
- 	{ .compatible = "nvidia,tegra194-i2c", .data = &tegra194_i2c_hw, },
- 	{ .compatible = "nvidia,tegra186-i2c", .data = &tegra186_i2c_hw, },
- #if IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC)
--- 
-2.43.0
 
+Blocked thread is not a reason to reboot entire system (see panic on
+warn). Drop or change to some dev_warn.
+
+
+> +}
+> +
+> +static void tegra_i2c_mutex_unlock(struct tegra_i2c_dev *i2c_dev)
+> +{
+> +	u32 val, id;
+> +
+> +	val = i2c_readl(i2c_dev, I2C_SW_MUTEX);
+> +	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
+> +
+> +	if (WARN_ON(id != I2C_SW_MUTEX_ID))
+
+Same problem here.
+
+
+
+Best regards,
+Krzysztof
 
