@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-9238-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9239-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AA87A23190
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2025 17:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43666A23198
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2025 17:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A3003A496F
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2025 16:12:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 245F23A5F03
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Jan 2025 16:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BD951EBFE3;
-	Thu, 30 Jan 2025 16:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA62F1EBFEF;
+	Thu, 30 Jan 2025 16:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B4zLAEby"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u8ny/nC2"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBC51DA5F;
-	Thu, 30 Jan 2025 16:12:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEA81EBA02;
+	Thu, 30 Jan 2025 16:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738253575; cv=none; b=ewBeEDaM2Lcxb8QItKLDKvTn7p2EwNyzCSThY6aKlBV1JAHeD7Z+FILOprX2bAeoMZBcYB4mqNUlJlDtIbAQWNfluhwLaGxiNBlHZPGKJtOqeaLNVLPOsEtRIDoVtQOO3BqhHBEEkICGRo4W1Pbyl9v2lm4GCAJNeUJtqL4gyAg=
+	t=1738253660; cv=none; b=n5xBb/PdakD/oetx9RC1aeWJoGwztFfDKbmQpeCbwqSgiWJmVEUagYD4kA7Vr5lBrMpHjVnc88InjbQl4fZxg6i0umPjzGDdkb3SyOPAw94gxsdar+NKT4asmXw1Z55/BtfFGHGB1ZuR6vN4R+LOEredPyY73OTlkoQBffNnO8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738253575; c=relaxed/simple;
-	bh=B0WiyP8kxOBx9oHNPc/Vy+XK0t+Gnb5cVEaSaHNC+IY=;
+	s=arc-20240116; t=1738253660; c=relaxed/simple;
+	bh=tdiinxfPNRVOUjuUPr2GrvEGKpiCg0NubGwUjjyLiJQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=YA938I7aG890FNzgLjv7ufaWDvDqhnOAQkmoz3KJWKIPkvcLNTrY6s8vYSDoBGgqo1NmsBW5Saxv8iFrYEy0uFYG/YQ5nV52rR084V1tx0Y3kFir4rDMwM7o4Sc8gmFBZ8sc/ivJDbROMoH4q2oKojCXMi38YZoYqGDVAGjdvOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B4zLAEby; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28336C4CEE0;
-	Thu, 30 Jan 2025 16:12:49 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bC3CxE3yy6camgER/TEGrYjt9ghTBAznI+VgOynOXXNpIeHKw4cH7qdtBXMnezAGb9i/s/ASiXYANipkT19jC9ZSQ2kvmj++SrSbr44863L2A/D+8YBzsYmlCvO+qDQD/WwWit66F/gAy2uuIiE3IXAAdR0qGdV14hUxfhp9i3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u8ny/nC2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B36B9C4CED2;
+	Thu, 30 Jan 2025 16:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738253575;
-	bh=B0WiyP8kxOBx9oHNPc/Vy+XK0t+Gnb5cVEaSaHNC+IY=;
+	s=k20201202; t=1738253660;
+	bh=tdiinxfPNRVOUjuUPr2GrvEGKpiCg0NubGwUjjyLiJQ=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=B4zLAEbyaXFQ1A7gMx0FuLfBziPwEhReXIdTy6jtSQxG3Qw2dMzivdoBEdJKf8avM
-	 j+rSC1EvyRye4HdGOMgbYN1YmxYiCJZdvjveYk62oU748su8ncXGLjeTim5a7aXa7j
-	 oZFlQyPGujRZqkn2cy+BjlSzgaTrY0sg7o61d2IhrTOfbqvgy23SZMutw4cJEYUjaw
-	 2PjAfjSIPyWyAzGq+URH46wx1vfz6QJ2RhHaUO8ONHJfFT2qJ3cjEunGZmw2CMqCUk
-	 U8y/ho6GWuaC0KLWACPgcT5+mU6vw0mN6fJXhMhFPdfwrQe63o2qcB/QNZ/+U6XpKh
-	 V//HFpXVlZ0wA==
-Message-ID: <febb1225-3c14-4377-90e0-4d4aee307ede@kernel.org>
-Date: Thu, 30 Jan 2025 17:12:48 +0100
+	b=u8ny/nC26p32TlLeo9JKCcmL2tq79E0ICG0VgUeLa+PkRtl6f8KH3MZ586cNgboxr
+	 i9aKFl/PLhvfR953YsvQjO+pvaKHYXK1GLBvOmUnDvcKW7sIWdfxcJWye6NBJDL53p
+	 wamPd9dXWoW/rL4MfFFFw9Itz3jgr/H/l3k9GVIqYEzJVHGqkUPynrP12USLSfWsgX
+	 +756/AQnyaOsLEFs0gD+hLQNvRMyRBSW28euJ0aFYGCVsvoJTV5vs6HO5B5Jr4rNUL
+	 7RCjdnkhLqXTRR65/IB+h6CFO0wdIJVxbgHq3kr6lTLqrJ0PQKFFrYHZhIv4hOdmnf
+	 WOTj0W/Hs4vBw==
+Message-ID: <db995d99-f277-4438-89aa-299b0c821d00@kernel.org>
+Date: Thu, 30 Jan 2025 17:14:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/5] i2c: tegra: Add support for SW mutex register
+Subject: Re: [PATCH v2 1/5] dt-bindings: i2c: nvidia,tegra20-i2c: Document
+ Tegra264 I2C
 To: Kartik Rajput <kkartik@nvidia.com>, akhilrajeev@nvidia.com,
  andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
@@ -58,7 +59,7 @@ To: Kartik Rajput <kkartik@nvidia.com>, akhilrajeev@nvidia.com,
  devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250130143424.52389-1-kkartik@nvidia.com>
- <20250130143424.52389-5-kkartik@nvidia.com>
+ <20250130143424.52389-2-kkartik@nvidia.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,141 +105,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250130143424.52389-5-kkartik@nvidia.com>
+In-Reply-To: <20250130143424.52389-2-kkartik@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 30/01/2025 15:34, Kartik Rajput wrote:
-> From: Akhil R <akhilrajeev@nvidia.com>
+> Tegra264 has 17 generic I2C controllers, two of which are in always-on
+> partition of the SoC. In addition to the features supported by Tegra194
+> it also supports a SW mutex register to allow sharing the same I2C
+> instance across multiple firmware.
 > 
-> Add support for SW mutex register introduced in Tegra264 to provide
-> an option to share the interface between multiple firmwares and/or
-> VMs.
+> Document compatible string "nvidia,tegra264-i2c" for Tegra264 I2C.
 > 
-> However, the hardware does not ensure any protection based on the
-> values. The driver/firmware should honor the peer who already holds
-> the mutex.
-> 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 > Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
-> ---
-> v1 -> v2:
-> 	* Fixed typos.
-> 	* Fix tegra_i2c_mutex_lock() logic.
-> 	* Add a timeout in tegra_i2c_mutex_lock() instead of polling for
-> 	  mutex indefinitely.
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 132 +++++++++++++++++++++++++++++----
->  1 file changed, 117 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-> index 7c8b76406e2e..aa92faa6f5cb 100644
-> --- a/drivers/i2c/busses/i2c-tegra.c
-> +++ b/drivers/i2c/busses/i2c-tegra.c
-> @@ -135,6 +135,14 @@
->  #define I2C_MST_FIFO_STATUS_TX			GENMASK(23, 16)
->  #define I2C_MST_FIFO_STATUS_RX			GENMASK(7, 0)
->  
-> +#define I2C_SW_MUTEX				0x0ec
-> +#define I2C_SW_MUTEX_REQUEST			GENMASK(3, 0)
-> +#define I2C_SW_MUTEX_GRANT			GENMASK(7, 4)
-> +#define I2C_SW_MUTEX_ID				9
-> +
-> +/* SW mutex acquire timeout value in milliseconds. */
-> +#define I2C_SW_MUTEX_TIMEOUT			25
-> +
->  /* configuration load timeout in microseconds */
->  #define I2C_CONFIG_LOAD_TIMEOUT			1000000
->  
-> @@ -203,6 +211,7 @@ enum msg_end_type {
->   * @has_interface_timing_reg: Has interface timing register to program the tuned
->   *		timing settings.
->   * @has_hs_mode_support: Has support for high speed (HS) mode transfers.
-> + * @has_mutex: Has mutex register for mutual exclusion with other firmwares or VM.
->   */
->  struct tegra_i2c_hw_feature {
->  	bool has_continue_xfer_support;
-> @@ -229,6 +238,7 @@ struct tegra_i2c_hw_feature {
->  	u32 setup_hold_time_hs_mode;
->  	bool has_interface_timing_reg;
->  	bool has_hs_mode_support;
-> +	bool has_mutex;
->  };
->  
->  /**
-> @@ -372,6 +382,103 @@ static void i2c_readsl(struct tegra_i2c_dev *i2c_dev, void *data,
->  	readsl(i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg), data, len);
->  }
->  
-> +static int tegra_i2c_poll_register(struct tegra_i2c_dev *i2c_dev,
-> +				   u32 reg, u32 mask, u32 delay_us,
-> +				   u32 timeout_us)
-> +{
-> +	void __iomem *addr = i2c_dev->base + tegra_i2c_reg_addr(i2c_dev, reg);
-> +	u32 val;
-> +
-> +	if (!i2c_dev->atomic_mode)
-> +		return readl_relaxed_poll_timeout(addr, val, !(val & mask),
-> +						  delay_us, timeout_us);
-> +
-> +	return readl_relaxed_poll_timeout_atomic(addr, val, !(val & mask),
-> +						 delay_us, timeout_us);
-> +}
-> +
-> +static int tegra_i2c_mutex_trylock(struct tegra_i2c_dev *i2c_dev)
-> +{
-> +	u32 val, id;
-> +
-> +	val = i2c_readl(i2c_dev, I2C_SW_MUTEX);
-> +	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
-> +	if (id != 0 && id != I2C_SW_MUTEX_ID)
-> +		return 0;
-> +
-> +	val = FIELD_PREP(I2C_SW_MUTEX_REQUEST, I2C_SW_MUTEX_ID);
-> +	i2c_writel(i2c_dev, val, I2C_SW_MUTEX);
 
-And how do you exactly prevent concurrent, overwriting write? This looks
-like pure race.
-
-> +
-> +	val = i2c_readl(i2c_dev, I2C_SW_MUTEX);
-> +	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
-> +
-> +	if (id != I2C_SW_MUTEX_ID)
-> +		return 0;
-> +
-> +	return 1;
-> +}
-> +
-> +static void tegra_i2c_mutex_lock(struct tegra_i2c_dev *i2c_dev)
-> +{
-> +	unsigned int num_retries = I2C_SW_MUTEX_TIMEOUT;
-> +
-> +	/* Poll until mutex is acquired or timeout. */
-> +	while (--num_retries && !tegra_i2c_mutex_trylock(i2c_dev))
-> +		usleep_range(1000, 2000);
-> +
-> +	WARN_ON(!num_retries);
-
-
-Blocked thread is not a reason to reboot entire system (see panic on
-warn). Drop or change to some dev_warn.
-
-
-> +}
-> +
-> +static void tegra_i2c_mutex_unlock(struct tegra_i2c_dev *i2c_dev)
-> +{
-> +	u32 val, id;
-> +
-> +	val = i2c_readl(i2c_dev, I2C_SW_MUTEX);
-> +	id = FIELD_GET(I2C_SW_MUTEX_GRANT, val);
-> +
-> +	if (WARN_ON(id != I2C_SW_MUTEX_ID))
-
-Same problem here.
-
-
+You did not update the constraints.
 
 Best regards,
 Krzysztof
