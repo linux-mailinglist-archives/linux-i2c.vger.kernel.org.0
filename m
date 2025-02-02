@@ -1,52 +1,52 @@
-Return-Path: <linux-i2c+bounces-9250-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9251-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12122A24FA2
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Feb 2025 20:05:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33AD0A24FAC
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Feb 2025 20:09:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05EF53A2FE8
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Feb 2025 19:05:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD0223A47F7
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Feb 2025 19:09:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FD71FDA9E;
-	Sun,  2 Feb 2025 19:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 385B31FE449;
+	Sun,  2 Feb 2025 19:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="GGC2wyvm"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="TCmPGtHf"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7108F35979;
-	Sun,  2 Feb 2025 19:05:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A308C635;
+	Sun,  2 Feb 2025 19:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738523124; cv=none; b=WbUQ5vbG6C5h2D42G2QjHSKx7pB4f1rSaQfNudWdgNZudPJqLWN4ZEo8TLTWTgYFHmd8tmXejNBW2aGE7d3defUrlzY5quqW7AR5C5m3b88D2lksTCMrZZAKaxdca7NPu9zNQwaz48C3aE1VUQlEAOS1qnMY3EIAow0Y85+BfOM=
+	t=1738523348; cv=none; b=aAAT1EF1jKBbzCeFHKxUn95IYapTi138v/bp99Vn6oN3eRnLeS7Y0FsNZszwQwO9S2SbU5AZqTyVYOa5qepyWOkkqYdR0tZPtDSMmZOObU0KeFfNfYh8x2vSd6sH89MRVcsnfGBbAnFZI0y06OqOApUWFiHL5A+kpd1XRSjq6ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738523124; c=relaxed/simple;
+	s=arc-20240116; t=1738523348; c=relaxed/simple;
 	bh=uZPnvPpJWT6jieto24uQtfNE/WGiMaBy8XW8tZAAa5E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RZ7QMvVfqTqaT7Boko7tD2fz33uMxE3rQAgQGUmaiqdkGHQefg4JeJVbGeHaHpCT1+2NuG826ZsAWy9u7drnAVwspwbQ3xiTy8rTYwVzC3s49O/t6UUiPLtG6EzuWXCJPUpzGKViRgv5HCN/sJuLpwW8ZMaaHjfoPBCXCDr4rR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=GGC2wyvm; arc=none smtp.client-ip=178.21.23.139
+	 MIME-Version; b=jtEUHAgj1PrIhc1Q8iesok7fF5yQfmf1IsRh6UcO4E0LVN+1Bl8zs7OwWASoSzWDUIBZcMqMAe4mojQkiurAfNWxw5th/x8cdDW0DHGB82MXkf+p8BXDKxnDMezPJBVpBRfZpXZWRyYZVcf0WPnXgcOI1OSumkdVW2cMmIrcdVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=TCmPGtHf; arc=none smtp.client-ip=178.21.23.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id CE99325AB1;
-	Sun,  2 Feb 2025 20:05:18 +0100 (CET)
+	by disroot.org (Postfix) with ESMTP id BFE8025B4D;
+	Sun,  2 Feb 2025 20:09:03 +0100 (CET)
 X-Virus-Scanned: SPAM Filter at disroot.org
 Received: from layka.disroot.org ([127.0.0.1])
  by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0_FarVtUe3uv; Sun,  2 Feb 2025 20:05:17 +0100 (CET)
+ id R78ycfH2rEdc; Sun,  2 Feb 2025 20:08:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1738523117; bh=uZPnvPpJWT6jieto24uQtfNE/WGiMaBy8XW8tZAAa5E=;
+	t=1738523339; bh=uZPnvPpJWT6jieto24uQtfNE/WGiMaBy8XW8tZAAa5E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=GGC2wyvm5IetYNvJDj27pTw8z0xuRktP8pnIiNfKAraCLNvyiNFjy0cB6OwrIGMQa
-	 4ah1n0wCT2/rfz4XFgqLid5dnMlt7prpkW73xEUQRzWLHF0PyUjMmDZeHlO8u2hrSd
-	 OcdXzEt73p7UCNxDE9ZP2JeBRAz1VxqiDkb38l4evdS9BpEVDW6ZnAU3vN8KOgz7Ph
-	 8v0hFMuw0geSb3VU/5Njoh5ib8i4QAmGYzLIo1XvVOAWptz5zMYiLf+pSTSzvf5JbC
-	 3njsZbeXUFXFnk/efUe58NZwVvmWqU+WmZ+Iw9fLBgYEN6E+YPssErFwyh65EuDxLb
-	 bk7Th8uxYfIxQ==
+	b=TCmPGtHf33Hh1MO6RvRQV8fdoJeuB8jU38nVb9WuD2Od65unGQAANvP4e82tHr76E
+	 /tMKfwUmWTmQXXwDAwq43Imx5NL8wU1ygm2wMTxjhawWvbIRTnhaxOALlxkPxRQy5Y
+	 uRDqvnN1EH0TyITorxQHkuPKpu+SrdlwFkIXPT8b6VKjLE0CIIGQ6peis1JdlR4qL0
+	 cY2Hmj78ebblz861lJjz0+zppXpDxJ3oWE7j20YEBaszP2PG9OTg48vbjgsMfEu8lb
+	 U4lubAXwPjHpvk48mCLpNgUtqE3scV/I6Lnek8cwFhvm5HU2/1MQ+GMd9ccUnwLARz
+	 6/VphTJwyoiow==
 From: Kaustabh Chakraborty <kauschluss@disroot.org>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
@@ -94,9 +94,9 @@ Cc: Sergey Lisov <sleirsgoevy@gmail.com>,
 	linux-mmc@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	Kaustabh Chakraborty <kauschluss@disroot.org>
-Subject: [PATCH 03/34] dt-bindings: clock: add clock definitions for exynos7870 CMU
-Date: Mon,  3 Feb 2025 00:34:54 +0530
-Message-ID: <20250202190454.14632-1-kauschluss@disroot.org>
+Subject: [PATCH 02/33] dt-bindings: clock: add clock definitions for exynos7870 CMU
+Date: Mon,  3 Feb 2025 00:37:58 +0530
+Message-ID: <20250202190758.14986-1-kauschluss@disroot.org>
 In-Reply-To: <20250203-exynos7870-v1-0-2b6df476a3f0@disroot.org>
 References: <20250203-exynos7870-v1-0-2b6df476a3f0@disroot.org>
 Precedence: bulk
