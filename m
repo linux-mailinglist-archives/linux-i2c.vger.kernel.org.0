@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-9258-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9259-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5664EA25355
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 08:55:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E33E3A25368
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 08:57:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA661162A62
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 07:55:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DCDC1884260
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 07:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3856E1F9F47;
-	Mon,  3 Feb 2025 07:54:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 980201F9F51;
+	Mon,  3 Feb 2025 07:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZwVLYWoR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mH1VjjzF"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16501E7C34;
-	Mon,  3 Feb 2025 07:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C721E7C34;
+	Mon,  3 Feb 2025 07:57:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738569298; cv=none; b=VShy9QaL1vDq8lBpgi0ZZMhsGjgZfrEgUkho3rpFsonhObsFnf7kjHRDearTklH34oTvIm2rIzNBt/NEF9ljJ5gOMsmbiTgp2WviAc36EX+4uQxFyGw/dIYvbLQzFSQh8c9744rXt+/YzXXjS99vqFTcBpaefGgjZYt2nGTpHOA=
+	t=1738569428; cv=none; b=aA0cZyGdFQLcnuc9/THy2sBkG5tXss6vFJSX6tRgMs6dOKvAC1lGkGuEJUksl3Vy2bp46D+u8hR5PkXnnYrrG3c/f8s6RWO1oIe80AYkTz60QzKLN6Pbm+78dRZuz7nPHulvyiLyPG3ghapaFjPWD7MavoSbE4VRv55vNBJ+YRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738569298; c=relaxed/simple;
-	bh=Vjg/ZcQVDN+Ca75e3lqacBpyaOhpu24vEZ6rdbWC6RQ=;
+	s=arc-20240116; t=1738569428; c=relaxed/simple;
+	bh=5kJGuiN/HJ5xJyJ8CV/kCat9j7iBCMcYyia9cYykokw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FfjyJbxByQRatAkHm+DDyPoaOj+0JRquU3Nu447Yrtsz+OtPVSIsNxB71IjxtzkcIsQXSRMOt4KNDSiNtBdKRBSvIPHUCfh8jI9nmzRESUrKUftHJAuZTsCUP0LAWihGp2ZypmF+kevbnsQJQl0Q43Q5Jd4UdKcouevfG10s3cI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZwVLYWoR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE47C4CEE2;
-	Mon,  3 Feb 2025 07:54:56 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LPE32m7ZMXJepl7iClcl5bjIe7H3mj+BQvRF1jvlDDDwxfsdpeIzyxQAgaOVhBB05NeVjgQSjbF8C1fr6IqGt2v9lvtcaoMlGAe0i9q6MPfsgC98iNGTD0X+eTC/WQN4UJo4kWd2YPZ9E70Tm60aQ2f/nKjBwD2YQNvEUBvisPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mH1VjjzF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67AE8C4CEE2;
+	Mon,  3 Feb 2025 07:57:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738569297;
-	bh=Vjg/ZcQVDN+Ca75e3lqacBpyaOhpu24vEZ6rdbWC6RQ=;
+	s=k20201202; t=1738569427;
+	bh=5kJGuiN/HJ5xJyJ8CV/kCat9j7iBCMcYyia9cYykokw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZwVLYWoRQW3nmevqdQ0qxAVrjkFjwL1Ke44rdKWjOxT9tqVrylYJJwCxcRE+rn3FE
-	 GHLrKA99WxFYPkUjRtqI7SMSDajq+zX7rDBIQ0LqUBciA3E7+drheu+4Xwg0xL4mbP
-	 48HpVZy9TiQlPk6sVf0J0y67ml0DV69SPIwZJf+9u4hOd0dVlEDOhqrj9K6GOnafGA
-	 fbDrMV0SAiOdd6QpOTtOiPj0wAcJ7irBGalEw4dJNjmqDLaytiyKDbahVYnyO2HENj
-	 XHK2fF1D1cfADmWqh0mtF8h8+nvvspM/1yfR11facw7Wu9yU62TF9rowkcPEX3xQ4x
-	 fFjGjnIF/wlyw==
-Date: Mon, 3 Feb 2025 08:54:54 +0100
+	b=mH1VjjzFMznyc23SuohffVCndcU3q/YdzYR/SqCthoRVEnF6c5vo/uyAJD4itxzmg
+	 AN8S1mOgDCwqjsS1IblK7xZE+IbZ4isReC2oRPp4S5ECn9tVDV+kuLpbVk+jDHR1q8
+	 PDXYM8hmJ6B9vMirBDkMETCUHP9yIYAeJoOFyX7yKNhKMaZL2zHqa7N0j1SnfP0TUo
+	 Ay1dvF6uilNs/NFgm8T705/fLAp51TEyS4Nay6Jxl6fvxUXl54ekqsNnmhaNbif2PH
+	 /fB60l1Zix7lnVrxmUUwFAJaFNVoMb6/foIbVFBeXGj7VlsV9cx8t4u4MVzmEhPcTk
+	 gV3AAAwX7rxZA==
+Date: Mon, 3 Feb 2025 08:57:04 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Kaustabh Chakraborty <kauschluss@disroot.org>
 Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>, 
@@ -63,11 +63,11 @@ Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, 
 	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org, 
 	linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 02/33] dt-bindings: clock: add clock definitions for
- exynos7870 CMU
-Message-ID: <20250203-enigmatic-remarkable-beagle-709955@krzk-bin>
+Subject: Re: [PATCH 03/33] dt-bindings: clock: document exynos7870 clock
+ driver CMU bindings
+Message-ID: <20250203-congenial-transparent-horse-cc5d4b@krzk-bin>
 References: <20250203-exynos7870-v1-0-2b6df476a3f0@disroot.org>
- <20250202190758.14986-1-kauschluss@disroot.org>
+ <20250202190924.15036-1-kauschluss@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,24 +76,108 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250202190758.14986-1-kauschluss@disroot.org>
+In-Reply-To: <20250202190924.15036-1-kauschluss@disroot.org>
 
-On Mon, Feb 03, 2025 at 12:37:58AM +0530, Kaustabh Chakraborty wrote:
-> From: Sergey Lisov <sleirsgoevy@gmail.com>
+On Mon, Feb 03, 2025 at 12:39:24AM +0530, Kaustabh Chakraborty wrote:
+
+Subject - drop driver. Bindings are about hardware. This applies to all
+your bindings patches
+
+> +        clock-names:
+> +          items:
+> +            - const: oscclk
+> +            - const: gout_mif_cmu_mfcmscl_mfc
+> +            - const: gout_mif_cmu_mfcmscl_mscl
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: samsung,exynos7870-cmu-peri
+> +
+
+Drop blank line
+
+> +    then:
+> +      properties:
+> +        clocks:
+> +          items:
+> +            - description: External reference clock (26 MHz)
+> +            - description: CMU_PERI bus clock (from CMU_MIF)
+> +            - description: SPI0 clock (from CMU_MIF)
+> +            - description: SPI1 clock (from CMU_MIF)
+> +            - description: SPI2 clock (from CMU_MIF)
+> +            - description: SPI3 clock (from CMU_MIF)
+> +            - description: SPI4 clock (from CMU_MIF)
+> +            - description: UART0 clock (from CMU_MIF)
+> +            - description: UART1 clock (from CMU_MIF)
+> +            - description: UART2 clock (from CMU_MIF)
+> +
+> +        clock-names:
+> +          items:
+> +            - const: oscclk
+> +            - const: gout_mif_cmu_peri_bus
+> +            - const: gout_mif_cmu_peri_spi0
+> +            - const: gout_mif_cmu_peri_spi1
+> +            - const: gout_mif_cmu_peri_spi2
+> +            - const: gout_mif_cmu_peri_spi3
+> +            - const: gout_mif_cmu_peri_spi4
+> +            - const: gout_mif_cmu_peri_uart0
+> +            - const: gout_mif_cmu_peri_uart1
+> +            - const: gout_mif_cmu_peri_uart2
+> +
+> +required:
+> +  - compatible
+> +  - "#clock-cells"
+> +  - clocks
+> +  - clock-names
+> +  - reg
+
+required block is just after properties.
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # Clock controller node for CMU_PERI
+
+Drop
+
+> +  - |
+> +    #include <dt-bindings/clock/exynos7870.h>
+> +
+> +    cmu_peri: clock-controller@101F0000 {
+
+Lowercase hex
+
+> +      compatible = "samsung,exynos7870-cmu-peri";
+> +      reg = <0x101f0000 0x1000>;
+> +      #clock-cells = <1>;
+> +
+> +      clock-names = "oscclk",
+> +                    "gout_mif_cmu_peri_bus",
+> +                    "gout_mif_cmu_peri_spi0",
+> +                    "gout_mif_cmu_peri_spi1",
+> +                    "gout_mif_cmu_peri_spi2",
+> +                    "gout_mif_cmu_peri_spi3",
+> +                    "gout_mif_cmu_peri_spi4",
+> +                    "gout_mif_cmu_peri_uart0",
+> +                    "gout_mif_cmu_peri_uart1",
+> +                    "gout_mif_cmu_peri_uart2";
+> +      clocks = <&oscclk>,
+> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_BUS>,
+> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI0>,
+> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI1>,
+> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI2>,
+> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI3>,
+> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI4>,
+> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_UART0>,
+> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_UART1>,
+> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_UART2>;
+> +    };
+> +
+> +...
+> -- 
+> 2.48.1
 > 
-> Add unique identifiers for exynos7870 clocks for every bank. It adds all
-> clocks of CMU_MIF, CMU_DISPAUD, CMU_G3D, CMU_ISP, CMU_MFCMSCL, and
-> CMU_PERI.
-> 
-> Signed-off-by: Sergey Lisov <sleirsgoevy@gmail.com>
-> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-> ---
->  include/dt-bindings/clock/exynos7870.h | 324 +++++++++++++++++++++++++
->  1 file changed, 324 insertions(+)
-
-Look at git log - that's never a separate commit.
-
-Best regards,
-Krzysztof
-
 
