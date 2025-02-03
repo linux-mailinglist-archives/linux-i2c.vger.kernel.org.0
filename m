@@ -1,323 +1,156 @@
-Return-Path: <linux-i2c+bounces-9271-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9272-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 895C3A25D4C
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 15:49:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 317F8A25F5B
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 16:58:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C84216B869
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 14:43:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEF7A162A95
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 15:58:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A3B2080F9;
-	Mon,  3 Feb 2025 14:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4825C20A5DB;
+	Mon,  3 Feb 2025 15:58:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JHL/0zRC"
+	dkim=pass (2048-bit key) header.d=apevzner.com header.i=@apevzner.com header.b="LxIs+5Go"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB09205E32;
-	Mon,  3 Feb 2025 14:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C42C20A5C3
+	for <linux-i2c@vger.kernel.org>; Mon,  3 Feb 2025 15:58:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738593321; cv=none; b=pOZoTMdrSf39OCSE3FiHk7Airw4daF/TFUT8xu7hmfnVVfziPwrRIjk44tQht9wI5etu3kCDmmJ5D/CalmBOupTrijnCcwEgqV/EmTHtK3eh+bzMZp3W7UGOVg8b/204xUj1CgK8g+uvuIvcJTuRtO0bqRv0G0Ivfv4MTx3KyBg=
+	t=1738598328; cv=none; b=PyMxm2bVnU6xIW5ES7MTAv2hRCRBzCZbh6A5/IQy1OvmuFTMU7p0a9UcvlIAjIeNuBot5PM5NfKzbyO425DlMvRHGs4llEIHUzbwebMpC/Y3F0Uc7vGgztTbBFqXAZhDMkrdktzt3cScWLGRET+FBYG1A+8vstTWtB0OhyXmlE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738593321; c=relaxed/simple;
-	bh=zS3UIeRPJfp3kPaYC4qTWDFPitP0KcrMWf5JGk3//Vo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C06Fc7ZsURwzq4ALE+LvpNBpbd3HR26QwTJV+QffQ/BrMGIPIpk8FgdnjxeYeY2WkJfxvxutJYdYE89j9mh2O18J6+6GmF3eCfCFKz8LmgESGREQR83eTZbaXz8uaj6PnEJ98HzuYG6LmuvKK9e+kULEK+KUzpnanKYCCujisMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JHL/0zRC; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43625c4a50dso31045515e9.0;
-        Mon, 03 Feb 2025 06:35:19 -0800 (PST)
+	s=arc-20240116; t=1738598328; c=relaxed/simple;
+	bh=HaqSRVIjYecNiCeUI80LtyiV/KB2arNBCPJKjiB4ngI=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Cc:Content-Type; b=Tqoy/FvBuHShoYZoXlnUJGmARmo0S7ADTWNDzI7Gv9M/78hHarrTUTSRHICWS3aR3th+cOFSICckqkdpGgR99HalaF2HYFaM/Glu54/3ZGQJRreKGUzazqIIeWCAeKq3sL2mmncfEeC7By+1jJuL86I8Q0r02gYDDuovtRssoSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apevzner.com; spf=pass smtp.mailfrom=apevzner.com; dkim=pass (2048-bit key) header.d=apevzner.com header.i=@apevzner.com header.b=LxIs+5Go; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apevzner.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apevzner.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-307bc125e2eso12286741fa.3
+        for <linux-i2c@vger.kernel.org>; Mon, 03 Feb 2025 07:58:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738593318; x=1739198118; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YneFPgZdpkmHQjLzXmpP7gJsCnAh7wg4wW8Fsi2L000=;
-        b=JHL/0zRCzmI/8kajTFBjzsNoZxdsdEV1HpZOukhPHwZVJH4pY82F7bozWVCo/fD8n5
-         3GbuBJNla7SF1EJiII3oTjj9yXyZaETn0/tL0LKUaNi+NqMxK/dmmQ++Vlj5DedtAWF0
-         rWCPWZ74fc0mio4vGjMNqk/SG9H+4a0U6GciOh0Rf0Vk2cAcrH79o5RpvLnVGXeb3AXI
-         kIi7X4e4ME22c/y7uysZbgkPlcykkQ99W2T2mhH55XS4uPu2XFIEODFZq+B2AI1XyciK
-         Y60JUKf97QHykEjeRnwg6yF0G4SYrE4jF740VYCvLhtUhfjpFU5Bf1clBgPAZvRpPact
-         k3Cg==
+        d=apevzner.com; s=google; t=1738598321; x=1739203121; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wVwfvvt8sGDIx88933QOte4EitOaJG4KEZQc/GBV0TM=;
+        b=LxIs+5GoFTEmhH51fRtWmO0arBsL5XqFsFe4w8Y6NldEF6ptfcTJfa7o+X6lAw7R9D
+         T0ZdBT0ix08yC9aWMwpMbicqFJ7kjPMAY82XSoipj3J/X6ra9bOl4yEs1so8na9GtzRK
+         ZnQPJC2sBpDmbaMoaBLyL9wLH81oXUQxljH0hrTjSa8GzN8/FP3a7q1Sn2EQ7F4e1jWa
+         rh3lg2VFYGZr6ClECF2DSJbtALuV7xKQ5+UJSufcmjxpwa8N+ifb46zocfEiq8PnLjPj
+         IZ2tgqo7mf0asN1188bjIIRTLPnBuFphLGAol12p2Emat/oixyIhnEsBhYYtmcXGbSTb
+         uEgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738593318; x=1739198118;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YneFPgZdpkmHQjLzXmpP7gJsCnAh7wg4wW8Fsi2L000=;
-        b=KxD0MrbvcV1ZhaSIen2oQZDFMu0jY06tLu3aEsM79ChthyJIsXIpQEHyx9cJPA2qV+
-         3HFuxfHMDsUgl5uJqOZCqeUf/9qJRi0s6Nez101f7mOPBvqtIoiJMTgNjw2S/ymaUcq3
-         UJF0TKexG5vIldjUYGI04MBCkbNsTF2cG3987YTJs24ixTZmkCb4B993fVRw5NnHsE0r
-         7lHyTOFRMklFZY1FLKNVnqyaOBqG1emihSXEpoXaQZI8rYSviWo9CqnLRdA7SXYvTMgK
-         7VqULeUAF0v28EX/pMsDXLdakmDygr0753R36kcYA1HYfir7pc/Y0qBR0+8h2t6qw+Pg
-         UqZw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6GkCsp425Nw6KCDtfL6qPAeLl5b/I9fxnz+amV0HNzrQz6Vh7J5jp4aStTFmMX+Xwz9iGEt2/I7I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJSeJxKMQ2UOOWwXWgKqFCyzoCeb4HGzf0oIjZXmpte0GxoGb+
-	jByQWaPHcssR2uRm8Jk36Oq8zsS03Ud7BfvXo7yG9Gc7uIFYc9aV
-X-Gm-Gg: ASbGncsJPaD4a7R2OZKFzkV78LRtnOyxyeHxoBDoW5u+nhMjW0QiIbsHl5c8ltJHI+S
-	AXuenjIH9ViteHq/dXae5FCPdGNSf7DGO1U4VaM7Ca+YxAs0MADotLSDx9CetrLa8bdPdX1u6HV
-	tXQ3Yn+lIn997/L18lQa2FeaCqQHeC8ILrqp5Pur0cBxN9cs7+vIu8ErIhmvK4c5v0if+qYWoBV
-	e4uIroN/X9F0Zn5byIaQQE1hQxZxJsiXXV0sW5Vrur366yI/rq0sjLdgpVWp3qOAVZ/oyDLeJhu
-	OVz0Mf6yxAdiHWbkfy4MEwV/v9dTjbBXphfj9xkEKXt6
-X-Google-Smtp-Source: AGHT+IFNUT9OgvwMdS8tx4odlBZ6H+1KFmS9Shjrlqa93FoZ7wMKSJXIjQk2kIVEXwHetqC0WdeMHw==
-X-Received: by 2002:a05:600c:35c3:b0:434:a386:6ae with SMTP id 5b1f17b1804b1-438dc3c2372mr200429565e9.7.1738593317403;
-        Mon, 03 Feb 2025 06:35:17 -0800 (PST)
-Received: from prasmi.Home ([2a06:5906:61b:2d00:3d3f:f5d2:f4b2:fc45])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c1d0bbfsm13156635f8f.98.2025.02.03.06.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 06:35:16 -0800 (PST)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Chris Brandt <chris.brandt@renesas.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v7] i2c: riic: Implement bus recovery
-Date: Mon,  3 Feb 2025 14:35:11 +0000
-Message-ID: <20250203143511.629140-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1738598321; x=1739203121;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wVwfvvt8sGDIx88933QOte4EitOaJG4KEZQc/GBV0TM=;
+        b=DL8rywNyxANmzDrcn4C7/cvw4cJd/bJomcz/WuGZgjsejzpw4VCQg75l4Hfu0Vi2U3
+         BZ35oiwaDRkQF4grRK0N/ansAyfJaJpr5Tf7Xr/nc321KsR4wDz12WWZLJ9BDklkPo1e
+         T3/qkd55u+11DLSiiiHTFUrkajq1YJGU+DJLT/j1SvtvvGBn6T6Fuui2lkWg6oiGAzwI
+         jgf3Z6sMge+xGKHRPBPhMNFquznAw7Cd+1/fkVtKgfJYGIU+cmp7uFM1F+bpmNXE6Iuc
+         D2tHZyL+Dl0e2nM2G1f7+m8rm/6Qivuy3SSaVV3ZpecVmkUItLRnV33hpRPx5lOyrnM5
+         uUww==
+X-Gm-Message-State: AOJu0YxpVD9J9uB3rpIL/VY3YGzXyNqSIwBD6KO9hHwzeoGa1Nqvebmy
+	WdbfKKTzuU1c7jaotuAnlU+NwHqgNzGRpI+uwF+QR/+hKZDk+p4UCKdIUaabhAQKtpai1aRUsdx
+	3
+X-Gm-Gg: ASbGncsWPhJ8uTHUdUoBJrh7nYg3BSDQ+FpnDflcgGLScEN78UbYqa0+Z0zymbzHK5J
+	QoCcRxDd7JufUBqRRQfJgVroEME+eCD6dtnGzLQ5HViCG4AnJrWe0gSvuC/NGNPMpqnAKZoeNNA
+	M31+dUagFX81lqbPomAjEESFXzcOHWu/nnFUE0GgDuZrQTFFQphWvtnkw25tbrmjhdbVGUXMb5j
+	z8tM21eW8stQQGQK3HSbyjXUt34uVUCEgDzqn1Mic7mTLgLUJZdMe+Qdnz+SkUeXuEw69JbQDN4
+	IHpaP1QxsuMspwMs8Wv05Vqfyjwst8nN3/A5hWI4mLtA4Rx5/+4=
+X-Google-Smtp-Source: AGHT+IHXcrt8a+4+lWw5j7onoSpd8/q5z886NRH+OyrBNPHtma2d3YKVsnSdoKZTB3IKf2QKnQ7k9A==
+X-Received: by 2002:a05:651c:1990:b0:300:33b1:f0e2 with SMTP id 38308e7fff4ca-307968b9135mr64018451fa.3.1738598320882;
+        Mon, 03 Feb 2025 07:58:40 -0800 (PST)
+Received: from [192.168.0.6] (ppp85-141-194-172.pppoe.mtu-net.ru. [85.141.194.172])
+        by smtp.googlemail.com with ESMTPSA id 38308e7fff4ca-307a3088d24sm15155041fa.40.2025.02.03.07.58.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Feb 2025 07:58:39 -0800 (PST)
+Message-ID: <c56af12c-8964-4a76-bc6d-3e520e14a3c0@apevzner.com>
+Date: Mon, 3 Feb 2025 18:58:37 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+From: Alexander Pevzner <pzz@apevzner.com>
+Subject: On 6.12.x kernels I2C dies on the Intel i5-1235U CPU based notebook
+ (KVADRA NAU LE14U)
+Cc: temaps@gmail.com, m.novosyolov@rosa.ru, a.sudakov@rosa.ru
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Hi!
 
-Implement bus recovery by reinitializing the hardware to reset the bus
-state and generating 9 clock cycles (and a stop condition) to release
-the SDA line.
+On the KVADRA NAU LE14U notebook, the I2C subsystem stops functioning 
+after a period of inactivity (10-30 minutes).
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
-Resending this patch which was part of v6 [0] series.
+The notebook is equipped with an Intel i5-1235U CPU, four Intel 
+Corporation Alder Lake PCH Serial IO I2C controllers, and a SYNA3602 
+touchpad connected via the I2C serial bus.
 
-[0] https://lore.kernel.org/lkml/Z4ZCJYPgvS0Ke39g@shikoro/T/
+After some idle time, the following lines appear in the kernel log:
 
-Hi Wolfram,
+-----
+RSP: 0018:ffffa7d5001b7e80 EFLAGS: 00000246
+RAX: ffff93ab5f700000 RBX: ffff93ab5f761738 RCX: 000000000000001f
+RDX: 0000000000000002 RSI: 0000000033483483 RDI: 0000000000000000
+RBP: 0000000000000001 R08: 000004c7d586da52 R09: 0000000000000007
+R10: 000000000000002a R11: ffff93ab5f744f04 R12: ffffffffb964fe60
+R13: 000004c7d586da52 R14: 0000000000000001 R15: 0000000000000000
+  cpuidle_enter+0x2d/0x40
+  do_idle+0x1ad/0x210
+  cpu_startup_entry+0x29/0x30
+  start_secondary+0x11e/0x140
+  common_startup_64+0x13e/0x141
+  </TASK>
+handlers:
+[<00000000fa02aea8>] idma64_irq [idma64]
+[<00000000d22a6968>] i2c_dw_isr
+Disabling IRQ #27
+-----
 
-Ive replied to your comments on v2 here [1] as to why the generic
-recovery algorithm was not used.
+After this, the touchpad connected via I2C stops working.
 
-[1] https://lore.kernel.org/all/CA+V-a8s4-g9vxyfYMgnKMK=Oej9kDBwWsWehWLYTkxw-06w-2g@mail.gmail.com/
+This issue occurs on ROSA Linux with kernel version 6.12.10 and Fedora 
+41 with kernel version 6.12.11, but it does not occur on Fedora with 
+kernel version 6.11.4.
 
-Cheers,
-Prabhakar
+According to the following discussion, it also reproduces on Arch Linux 
+with kernel version 6.12.8:
 
-v6->v7
-- None
+https://bbs.archlinux.org/viewtopic.php?id=302348
 
-v2->v6
-- Included RB and TB from Claudiu.
+Although the notebook branding mentioned in that discussion is different 
+(MONSTER HUMA H4 V5.2), the hardware configuration appears to be similar.
 
-v1->v2
-- Used single register read to check SDA/SCL lines
----
- drivers/i2c/busses/i2c-riic.c | 100 ++++++++++++++++++++++++++++++----
- 1 file changed, 90 insertions(+), 10 deletions(-)
+It seems that the problem is not specific to any particular distribution 
+and is related to the 6.12.* versions of the kernel.
 
-diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index d7dddd6c296a..888825423d94 100644
---- a/drivers/i2c/busses/i2c-riic.c
-+++ b/drivers/i2c/busses/i2c-riic.c
-@@ -51,6 +51,7 @@
- 
- #define ICCR1_ICE	BIT(7)
- #define ICCR1_IICRST	BIT(6)
-+#define ICCR1_CLO	BIT(5)
- #define ICCR1_SOWP	BIT(4)
- #define ICCR1_SCLI	BIT(1)
- #define ICCR1_SDAI	BIT(0)
-@@ -69,6 +70,7 @@
- #define ICMR3_ACKBT	BIT(3)
- 
- #define ICFER_FMPE	BIT(7)
-+#define ICFER_MALE	BIT(1)
- 
- #define ICIER_TIE	BIT(7)
- #define ICIER_TEIE	BIT(6)
-@@ -82,6 +84,8 @@
- 
- #define RIIC_INIT_MSG	-1
- 
-+#define RIIC_RECOVERY_CLK_CNT	9
-+
- enum riic_reg_list {
- 	RIIC_ICCR1 = 0,
- 	RIIC_ICCR2,
-@@ -151,13 +155,16 @@ static int riic_bus_barrier(struct riic_dev *riic)
- 	ret = readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICCR2], val,
- 				 !(val & ICCR2_BBSY), 10, riic->adapter.timeout);
- 	if (ret)
--		return ret;
-+		goto i2c_recover;
- 
- 	if ((riic_readb(riic, RIIC_ICCR1) & (ICCR1_SDAI | ICCR1_SCLI)) !=
- 	     (ICCR1_SDAI | ICCR1_SCLI))
--		return -EBUSY;
-+		goto i2c_recover;
- 
- 	return 0;
-+
-+i2c_recover:
-+	return i2c_recover_bus(&riic->adapter);
- }
- 
- static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
-@@ -332,7 +339,7 @@ static const struct i2c_algorithm riic_algo = {
- 	.functionality = riic_func,
- };
- 
--static int riic_init_hw(struct riic_dev *riic)
-+static int riic_init_hw(struct riic_dev *riic, bool recover)
- {
- 	int ret;
- 	unsigned long rate;
-@@ -414,9 +421,11 @@ static int riic_init_hw(struct riic_dev *riic)
- 		 rate / total_ticks, ((brl + 3) * 100) / (brl + brh + 6),
- 		 t->scl_fall_ns / ns_per_tick, t->scl_rise_ns / ns_per_tick, cks, brl, brh);
- 
--	ret = pm_runtime_resume_and_get(dev);
--	if (ret)
--		return ret;
-+	if (!recover) {
-+		ret = pm_runtime_resume_and_get(dev);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	/* Changing the order of accessing IICRST and ICE may break things! */
- 	riic_writeb(riic, ICCR1_IICRST | ICCR1_SOWP, RIIC_ICCR1);
-@@ -434,8 +443,74 @@ static int riic_init_hw(struct riic_dev *riic)
- 
- 	riic_clear_set_bit(riic, ICCR1_IICRST, 0, RIIC_ICCR1);
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
-+	if (!recover) {
-+		pm_runtime_mark_last_busy(dev);
-+		pm_runtime_put_autosuspend(dev);
-+	}
-+	return 0;
-+}
-+
-+static int riic_recover_bus(struct i2c_adapter *adap)
-+{
-+	struct riic_dev *riic = i2c_get_adapdata(adap);
-+	struct device *dev = riic->adapter.dev.parent;
-+	int ret;
-+	u8 val;
-+
-+	ret = riic_init_hw(riic, true);
-+	if (ret)
-+		return ret;
-+
-+	/* output extra SCL clock cycles with master arbitration-lost detection disabled */
-+	riic_clear_set_bit(riic, ICFER_MALE, 0, RIIC_ICFER);
-+
-+	for (unsigned int i = 0; i < RIIC_RECOVERY_CLK_CNT; i++) {
-+		riic_clear_set_bit(riic, 0, ICCR1_CLO, RIIC_ICCR1);
-+		ret = readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICCR1], val,
-+					 !(val & ICCR1_CLO), 0, 100);
-+		if (ret) {
-+			dev_err(dev, "SCL clock cycle timeout\n");
-+			return ret;
-+		}
-+	}
-+
-+	/*
-+	 * The last clock cycle may have driven the SDA line high, so add a
-+	 * short delay to allow the line to stabilize before checking the status.
-+	 */
-+	udelay(5);
-+
-+	/*
-+	 * If an incomplete byte write occurs, the SDA line may remain low
-+	 * even after 9 clock pulses, indicating the bus is not released.
-+	 * To resolve this, send an additional clock pulse to simulate a STOP
-+	 * condition and ensure proper bus release.
-+	 */
-+	if ((riic_readb(riic, RIIC_ICCR1) & (ICCR1_SDAI | ICCR1_SCLI)) !=
-+	    (ICCR1_SDAI | ICCR1_SCLI)) {
-+		riic_clear_set_bit(riic, 0, ICCR1_CLO, RIIC_ICCR1);
-+		ret = readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICCR1], val,
-+					 !(val & ICCR1_CLO), 0, 100);
-+		if (ret) {
-+			dev_err(dev, "SCL clock cycle timeout occurred while issuing the STOP condition\n");
-+			return ret;
-+		}
-+		/* delay to make sure SDA line goes back HIGH again */
-+		udelay(5);
-+	}
-+
-+	/* clear any flags set */
-+	riic_writeb(riic, 0, RIIC_ICSR2);
-+	/* read back register to confirm writes */
-+	riic_readb(riic, RIIC_ICSR2);
-+
-+	/* restore back ICFER_MALE */
-+	riic_clear_set_bit(riic, 0, ICFER_MALE, RIIC_ICFER);
-+
-+	if ((riic_readb(riic, RIIC_ICCR1) & (ICCR1_SDAI | ICCR1_SCLI)) !=
-+	    (ICCR1_SDAI | ICCR1_SCLI))
-+		return -EINVAL;
-+
- 	return 0;
- }
- 
-@@ -447,6 +522,10 @@ static const struct riic_irq_desc riic_irqs[] = {
- 	{ .res_num = 5, .isr = riic_tend_isr, .name = "riic-nack" },
- };
- 
-+static struct i2c_bus_recovery_info riic_bri = {
-+	.recover_bus = riic_recover_bus,
-+};
-+
- static int riic_i2c_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -493,6 +572,7 @@ static int riic_i2c_probe(struct platform_device *pdev)
- 	strscpy(adap->name, "Renesas RIIC adapter", sizeof(adap->name));
- 	adap->owner = THIS_MODULE;
- 	adap->algo = &riic_algo;
-+	adap->bus_recovery_info = &riic_bri;
- 	adap->dev.parent = dev;
- 	adap->dev.of_node = dev->of_node;
- 
-@@ -505,7 +585,7 @@ static int riic_i2c_probe(struct platform_device *pdev)
- 	pm_runtime_use_autosuspend(dev);
- 	pm_runtime_enable(dev);
- 
--	ret = riic_init_hw(riic);
-+	ret = riic_init_hw(riic, false);
- 	if (ret)
- 		goto out;
- 
-@@ -613,7 +693,7 @@ static int riic_i2c_resume(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	ret = riic_init_hw(riic);
-+	ret = riic_init_hw(riic, false);
- 	if (ret) {
- 		/*
- 		 * In case this happens there is no way to recover from this
+We also have a simple workaround module that resolves the issue by 
+installing a shared interrupt handler for all IRQs owned by I2C. This 
+handler does nothing but return IRQ_HANDLED, effectively preventing the 
+kernel from disabling this interrupt as spurious.
+
+The source code for this module is available here:
+
+https://github.com/alexpevzner/hotfix-kvadra-touchpad
+
+When this module is loaded, the notebook operates very stably; the I2C 
+(touchpad) functions reliably, and the interrupt rate appears reasonable 
+(around 400 interrupts per second when the touchpad is active).
+
 -- 
-2.43.0
+
+	Wishes, Alexander Pevzner (pzz@apevzner.com)
 
 
