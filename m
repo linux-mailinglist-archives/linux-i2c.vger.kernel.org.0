@@ -1,169 +1,323 @@
-Return-Path: <linux-i2c+bounces-9270-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9271-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75073A25BCD
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 15:07:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 895C3A25D4C
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 15:49:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 784DA3A5C2A
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 14:03:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C84216B869
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 14:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11D95206F11;
-	Mon,  3 Feb 2025 14:01:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A3B2080F9;
+	Mon,  3 Feb 2025 14:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxJQFzlt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JHL/0zRC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982C3205E11;
-	Mon,  3 Feb 2025 14:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB09205E32;
+	Mon,  3 Feb 2025 14:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738591297; cv=none; b=Hzl/acI3eI1Nz3s5M1ClZ3h1UJ0tP/NCNhw/myoKJE+IP6+Agw2mQnEf1ANX7PXGfFg/Q9sOZG0URdbTGD6SKNNq308koDgoalfV5lmP0nJfr6/NL6xkXJcGLBbF5EtucraPJLwJs023wjp2Dmx4JwcnsDC0Zoys+QjWzP/3Sao=
+	t=1738593321; cv=none; b=pOZoTMdrSf39OCSE3FiHk7Airw4daF/TFUT8xu7hmfnVVfziPwrRIjk44tQht9wI5etu3kCDmmJ5D/CalmBOupTrijnCcwEgqV/EmTHtK3eh+bzMZp3W7UGOVg8b/204xUj1CgK8g+uvuIvcJTuRtO0bqRv0G0Ivfv4MTx3KyBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738591297; c=relaxed/simple;
-	bh=FUGVfpQsBsQZDnW8/29ndy6ufToxH4fLIZhk0OSH+vk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PWJnpIQnCcw3Z4NRiEFoorB/w8iMP32SiN53w1b31k6F5Pw7JxrhgJsMXPOGjz26mB0yQg4luk8+sfI1aenKAjSWwNw9Jzw4k9Ip/wkMAg7F3K3rcY72wl2txrwAS1XJKqsfrocFLGv84RaC+Xzgt3ujFGzsazGp4WnvIAe7y0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxJQFzlt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 664D6C4CED2;
-	Mon,  3 Feb 2025 14:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738591297;
-	bh=FUGVfpQsBsQZDnW8/29ndy6ufToxH4fLIZhk0OSH+vk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dxJQFzlt4BVNOgSQuojXmA9wuzm4juDMiaj0xfMOAE5qPk5Vzb1dY6VgLM/hLrYRI
-	 Zd9+pCEzYYVOR46Td4Mo1YEY21wDNc78e4E/NQu4MLG+yWelOi7uSJDHAR94Gq2Io2
-	 S/5g5li5Jhvv/wwVRI4ApfEeYqSP9+TuKxkXCOjaMGuMZGFoJXBSs7yJ/o4dYajCqM
-	 7sMqSFURdJ7oxQpQ7ZoOdRq4XLWiWKj1QXmNEhRzyyuYLgf26P1NSFzawTAN1FRBJ4
-	 ckEJtWX4+/sU6ftXPOVdiNouwo41UZKZrbT/T99jACiBEflDshR6f2c2lZ7XLI/b7z
-	 DPRk7DkWm7p3g==
-Message-ID: <9c8a9dee-92ba-47e4-b16b-ab47727d8057@kernel.org>
-Date: Mon, 3 Feb 2025 15:01:22 +0100
+	s=arc-20240116; t=1738593321; c=relaxed/simple;
+	bh=zS3UIeRPJfp3kPaYC4qTWDFPitP0KcrMWf5JGk3//Vo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C06Fc7ZsURwzq4ALE+LvpNBpbd3HR26QwTJV+QffQ/BrMGIPIpk8FgdnjxeYeY2WkJfxvxutJYdYE89j9mh2O18J6+6GmF3eCfCFKz8LmgESGREQR83eTZbaXz8uaj6PnEJ98HzuYG6LmuvKK9e+kULEK+KUzpnanKYCCujisMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JHL/0zRC; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43625c4a50dso31045515e9.0;
+        Mon, 03 Feb 2025 06:35:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738593318; x=1739198118; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YneFPgZdpkmHQjLzXmpP7gJsCnAh7wg4wW8Fsi2L000=;
+        b=JHL/0zRCzmI/8kajTFBjzsNoZxdsdEV1HpZOukhPHwZVJH4pY82F7bozWVCo/fD8n5
+         3GbuBJNla7SF1EJiII3oTjj9yXyZaETn0/tL0LKUaNi+NqMxK/dmmQ++Vlj5DedtAWF0
+         rWCPWZ74fc0mio4vGjMNqk/SG9H+4a0U6GciOh0Rf0Vk2cAcrH79o5RpvLnVGXeb3AXI
+         kIi7X4e4ME22c/y7uysZbgkPlcykkQ99W2T2mhH55XS4uPu2XFIEODFZq+B2AI1XyciK
+         Y60JUKf97QHykEjeRnwg6yF0G4SYrE4jF740VYCvLhtUhfjpFU5Bf1clBgPAZvRpPact
+         k3Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738593318; x=1739198118;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YneFPgZdpkmHQjLzXmpP7gJsCnAh7wg4wW8Fsi2L000=;
+        b=KxD0MrbvcV1ZhaSIen2oQZDFMu0jY06tLu3aEsM79ChthyJIsXIpQEHyx9cJPA2qV+
+         3HFuxfHMDsUgl5uJqOZCqeUf/9qJRi0s6Nez101f7mOPBvqtIoiJMTgNjw2S/ymaUcq3
+         UJF0TKexG5vIldjUYGI04MBCkbNsTF2cG3987YTJs24ixTZmkCb4B993fVRw5NnHsE0r
+         7lHyTOFRMklFZY1FLKNVnqyaOBqG1emihSXEpoXaQZI8rYSviWo9CqnLRdA7SXYvTMgK
+         7VqULeUAF0v28EX/pMsDXLdakmDygr0753R36kcYA1HYfir7pc/Y0qBR0+8h2t6qw+Pg
+         UqZw==
+X-Forwarded-Encrypted: i=1; AJvYcCU6GkCsp425Nw6KCDtfL6qPAeLl5b/I9fxnz+amV0HNzrQz6Vh7J5jp4aStTFmMX+Xwz9iGEt2/I7I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJSeJxKMQ2UOOWwXWgKqFCyzoCeb4HGzf0oIjZXmpte0GxoGb+
+	jByQWaPHcssR2uRm8Jk36Oq8zsS03Ud7BfvXo7yG9Gc7uIFYc9aV
+X-Gm-Gg: ASbGncsJPaD4a7R2OZKFzkV78LRtnOyxyeHxoBDoW5u+nhMjW0QiIbsHl5c8ltJHI+S
+	AXuenjIH9ViteHq/dXae5FCPdGNSf7DGO1U4VaM7Ca+YxAs0MADotLSDx9CetrLa8bdPdX1u6HV
+	tXQ3Yn+lIn997/L18lQa2FeaCqQHeC8ILrqp5Pur0cBxN9cs7+vIu8ErIhmvK4c5v0if+qYWoBV
+	e4uIroN/X9F0Zn5byIaQQE1hQxZxJsiXXV0sW5Vrur366yI/rq0sjLdgpVWp3qOAVZ/oyDLeJhu
+	OVz0Mf6yxAdiHWbkfy4MEwV/v9dTjbBXphfj9xkEKXt6
+X-Google-Smtp-Source: AGHT+IFNUT9OgvwMdS8tx4odlBZ6H+1KFmS9Shjrlqa93FoZ7wMKSJXIjQk2kIVEXwHetqC0WdeMHw==
+X-Received: by 2002:a05:600c:35c3:b0:434:a386:6ae with SMTP id 5b1f17b1804b1-438dc3c2372mr200429565e9.7.1738593317403;
+        Mon, 03 Feb 2025 06:35:17 -0800 (PST)
+Received: from prasmi.Home ([2a06:5906:61b:2d00:3d3f:f5d2:f4b2:fc45])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c1d0bbfsm13156635f8f.98.2025.02.03.06.35.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Feb 2025 06:35:16 -0800 (PST)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Chris Brandt <chris.brandt@renesas.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v7] i2c: riic: Implement bus recovery
+Date: Mon,  3 Feb 2025 14:35:11 +0000
+Message-ID: <20250203143511.629140-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/33] dt-bindings: clock: add clock definitions for
- exynos7870 CMU
-To: Kaustabh Chakraborty <kauschluss@disroot.org>
-Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Lee Jones <lee@kernel.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>, David Airlie
- <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- Andi Shyti <andi.shyti@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Jaehoon Chung <jh80.chung@samsung.com>,
- Vivek Gautam <gautam.vivek@samsung.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Kees Cook <kees@kernel.org>,
- Tony Luck <tony.luck@intel.com>, "Guilherme G . Piccoli"
- <gpiccoli@igalia.com>, Sergey Lisov <sleirsgoevy@gmail.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20250203-exynos7870-v1-0-2b6df476a3f0@disroot.org>
- <20250202190758.14986-1-kauschluss@disroot.org>
- <20250203-enigmatic-remarkable-beagle-709955@krzk-bin>
- <c1249f2f6ac8a2f5a1dcb3bbbba647f9@disroot.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <c1249f2f6ac8a2f5a1dcb3bbbba647f9@disroot.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 03/02/2025 13:40, Kaustabh Chakraborty wrote:
-> On 2025-02-03 07:54, Krzysztof Kozlowski wrote:
->> On Mon, Feb 03, 2025 at 12:37:58AM +0530, Kaustabh Chakraborty wrote:
->>> From: Sergey Lisov <sleirsgoevy@gmail.com>
->>>
->>> Add unique identifiers for exynos7870 clocks for every bank. It adds all
->>> clocks of CMU_MIF, CMU_DISPAUD, CMU_G3D, CMU_ISP, CMU_MFCMSCL, and
->>> CMU_PERI.
->>>
->>> Signed-off-by: Sergey Lisov <sleirsgoevy@gmail.com>
->>> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
->>> ---
->>>  include/dt-bindings/clock/exynos7870.h | 324 +++++++++++++++++++++++++
->>>  1 file changed, 324 insertions(+)
->>
->> Look at git log - that's never a separate commit.
-> 
-> Hmm, I see past examples which are mixed.
-> 
-> 2ae5c2c3f8d586b709cf67efe94488be397d7544
-> Exynos850 CMU (c. 2021). CMU definitions are in a separate commit.
-> 
-> 591020a516720e9eba1c4b1748cb73b6748e445f
-> Exynos7885 CMU (c. 2021). CMU definitions are in a separate commit.
-> 
-Huh, indeed, my mistake.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Let's avoid that pattern, so binding headers are always part of bindings
-commit.
+Implement bus recovery by reinitializing the hardware to reset the bus
+state and generating 9 clock cycles (and a stop condition) to release
+the SDA line.
 
-Best regards,
-Krzysztof
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+---
+Resending this patch which was part of v6 [0] series.
+
+[0] https://lore.kernel.org/lkml/Z4ZCJYPgvS0Ke39g@shikoro/T/
+
+Hi Wolfram,
+
+Ive replied to your comments on v2 here [1] as to why the generic
+recovery algorithm was not used.
+
+[1] https://lore.kernel.org/all/CA+V-a8s4-g9vxyfYMgnKMK=Oej9kDBwWsWehWLYTkxw-06w-2g@mail.gmail.com/
+
+Cheers,
+Prabhakar
+
+v6->v7
+- None
+
+v2->v6
+- Included RB and TB from Claudiu.
+
+v1->v2
+- Used single register read to check SDA/SCL lines
+---
+ drivers/i2c/busses/i2c-riic.c | 100 ++++++++++++++++++++++++++++++----
+ 1 file changed, 90 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
+index d7dddd6c296a..888825423d94 100644
+--- a/drivers/i2c/busses/i2c-riic.c
++++ b/drivers/i2c/busses/i2c-riic.c
+@@ -51,6 +51,7 @@
+ 
+ #define ICCR1_ICE	BIT(7)
+ #define ICCR1_IICRST	BIT(6)
++#define ICCR1_CLO	BIT(5)
+ #define ICCR1_SOWP	BIT(4)
+ #define ICCR1_SCLI	BIT(1)
+ #define ICCR1_SDAI	BIT(0)
+@@ -69,6 +70,7 @@
+ #define ICMR3_ACKBT	BIT(3)
+ 
+ #define ICFER_FMPE	BIT(7)
++#define ICFER_MALE	BIT(1)
+ 
+ #define ICIER_TIE	BIT(7)
+ #define ICIER_TEIE	BIT(6)
+@@ -82,6 +84,8 @@
+ 
+ #define RIIC_INIT_MSG	-1
+ 
++#define RIIC_RECOVERY_CLK_CNT	9
++
+ enum riic_reg_list {
+ 	RIIC_ICCR1 = 0,
+ 	RIIC_ICCR2,
+@@ -151,13 +155,16 @@ static int riic_bus_barrier(struct riic_dev *riic)
+ 	ret = readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICCR2], val,
+ 				 !(val & ICCR2_BBSY), 10, riic->adapter.timeout);
+ 	if (ret)
+-		return ret;
++		goto i2c_recover;
+ 
+ 	if ((riic_readb(riic, RIIC_ICCR1) & (ICCR1_SDAI | ICCR1_SCLI)) !=
+ 	     (ICCR1_SDAI | ICCR1_SCLI))
+-		return -EBUSY;
++		goto i2c_recover;
+ 
+ 	return 0;
++
++i2c_recover:
++	return i2c_recover_bus(&riic->adapter);
+ }
+ 
+ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+@@ -332,7 +339,7 @@ static const struct i2c_algorithm riic_algo = {
+ 	.functionality = riic_func,
+ };
+ 
+-static int riic_init_hw(struct riic_dev *riic)
++static int riic_init_hw(struct riic_dev *riic, bool recover)
+ {
+ 	int ret;
+ 	unsigned long rate;
+@@ -414,9 +421,11 @@ static int riic_init_hw(struct riic_dev *riic)
+ 		 rate / total_ticks, ((brl + 3) * 100) / (brl + brh + 6),
+ 		 t->scl_fall_ns / ns_per_tick, t->scl_rise_ns / ns_per_tick, cks, brl, brh);
+ 
+-	ret = pm_runtime_resume_and_get(dev);
+-	if (ret)
+-		return ret;
++	if (!recover) {
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret)
++			return ret;
++	}
+ 
+ 	/* Changing the order of accessing IICRST and ICE may break things! */
+ 	riic_writeb(riic, ICCR1_IICRST | ICCR1_SOWP, RIIC_ICCR1);
+@@ -434,8 +443,74 @@ static int riic_init_hw(struct riic_dev *riic)
+ 
+ 	riic_clear_set_bit(riic, ICCR1_IICRST, 0, RIIC_ICCR1);
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
++	if (!recover) {
++		pm_runtime_mark_last_busy(dev);
++		pm_runtime_put_autosuspend(dev);
++	}
++	return 0;
++}
++
++static int riic_recover_bus(struct i2c_adapter *adap)
++{
++	struct riic_dev *riic = i2c_get_adapdata(adap);
++	struct device *dev = riic->adapter.dev.parent;
++	int ret;
++	u8 val;
++
++	ret = riic_init_hw(riic, true);
++	if (ret)
++		return ret;
++
++	/* output extra SCL clock cycles with master arbitration-lost detection disabled */
++	riic_clear_set_bit(riic, ICFER_MALE, 0, RIIC_ICFER);
++
++	for (unsigned int i = 0; i < RIIC_RECOVERY_CLK_CNT; i++) {
++		riic_clear_set_bit(riic, 0, ICCR1_CLO, RIIC_ICCR1);
++		ret = readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICCR1], val,
++					 !(val & ICCR1_CLO), 0, 100);
++		if (ret) {
++			dev_err(dev, "SCL clock cycle timeout\n");
++			return ret;
++		}
++	}
++
++	/*
++	 * The last clock cycle may have driven the SDA line high, so add a
++	 * short delay to allow the line to stabilize before checking the status.
++	 */
++	udelay(5);
++
++	/*
++	 * If an incomplete byte write occurs, the SDA line may remain low
++	 * even after 9 clock pulses, indicating the bus is not released.
++	 * To resolve this, send an additional clock pulse to simulate a STOP
++	 * condition and ensure proper bus release.
++	 */
++	if ((riic_readb(riic, RIIC_ICCR1) & (ICCR1_SDAI | ICCR1_SCLI)) !=
++	    (ICCR1_SDAI | ICCR1_SCLI)) {
++		riic_clear_set_bit(riic, 0, ICCR1_CLO, RIIC_ICCR1);
++		ret = readb_poll_timeout(riic->base + riic->info->regs[RIIC_ICCR1], val,
++					 !(val & ICCR1_CLO), 0, 100);
++		if (ret) {
++			dev_err(dev, "SCL clock cycle timeout occurred while issuing the STOP condition\n");
++			return ret;
++		}
++		/* delay to make sure SDA line goes back HIGH again */
++		udelay(5);
++	}
++
++	/* clear any flags set */
++	riic_writeb(riic, 0, RIIC_ICSR2);
++	/* read back register to confirm writes */
++	riic_readb(riic, RIIC_ICSR2);
++
++	/* restore back ICFER_MALE */
++	riic_clear_set_bit(riic, 0, ICFER_MALE, RIIC_ICFER);
++
++	if ((riic_readb(riic, RIIC_ICCR1) & (ICCR1_SDAI | ICCR1_SCLI)) !=
++	    (ICCR1_SDAI | ICCR1_SCLI))
++		return -EINVAL;
++
+ 	return 0;
+ }
+ 
+@@ -447,6 +522,10 @@ static const struct riic_irq_desc riic_irqs[] = {
+ 	{ .res_num = 5, .isr = riic_tend_isr, .name = "riic-nack" },
+ };
+ 
++static struct i2c_bus_recovery_info riic_bri = {
++	.recover_bus = riic_recover_bus,
++};
++
+ static int riic_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -493,6 +572,7 @@ static int riic_i2c_probe(struct platform_device *pdev)
+ 	strscpy(adap->name, "Renesas RIIC adapter", sizeof(adap->name));
+ 	adap->owner = THIS_MODULE;
+ 	adap->algo = &riic_algo;
++	adap->bus_recovery_info = &riic_bri;
+ 	adap->dev.parent = dev;
+ 	adap->dev.of_node = dev->of_node;
+ 
+@@ -505,7 +585,7 @@ static int riic_i2c_probe(struct platform_device *pdev)
+ 	pm_runtime_use_autosuspend(dev);
+ 	pm_runtime_enable(dev);
+ 
+-	ret = riic_init_hw(riic);
++	ret = riic_init_hw(riic, false);
+ 	if (ret)
+ 		goto out;
+ 
+@@ -613,7 +693,7 @@ static int riic_i2c_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = riic_init_hw(riic);
++	ret = riic_init_hw(riic, false);
+ 	if (ret) {
+ 		/*
+ 		 * In case this happens there is no way to recover from this
+-- 
+2.43.0
+
 
