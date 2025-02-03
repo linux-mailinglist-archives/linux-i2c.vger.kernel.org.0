@@ -1,105 +1,79 @@
-Return-Path: <linux-i2c+bounces-9277-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9278-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E4C2A26487
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 21:34:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57712A2673C
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 23:59:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27DEE1885B04
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 20:34:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2029A188258E
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 22:59:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA33E20E71E;
-	Mon,  3 Feb 2025 20:34:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D161211499;
+	Mon,  3 Feb 2025 22:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="ZsqcxV2h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f7A8sNFU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D4A20E31E;
-	Mon,  3 Feb 2025 20:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE00211269;
+	Mon,  3 Feb 2025 22:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738614853; cv=none; b=K8fE2+pw0a+VEFQx1qaoRBzXv3Bovi8MYegubGDbjUg8E9NpMgz7SCKKcVLECGP7gIcn/vOJSEpc8mP7fq9XjcqyML+xJ/oTb9f+VIxc0PiCkjhZjTwIQqYb+o/mqjyk9HJ7q1Q6n0eCqpBzzSWff6yZdOOw8pxhVUb/3dbqrLA=
+	t=1738623552; cv=none; b=uqnSL+A9KTjjxV/XjBvsakJd8H68Be3AFNRHkD+Z4/sIUiiPgbNWMh+INkrJXjK83mH0Zo2EH/PFMWjuGK7tfLTXW+l8GEy5lXn1WGUq/FLsKHzcY3uusKjGV22v7ZNsNhryadixTzDWpWiokoRsUpGiCF7qfSiVMuMLF6inlQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738614853; c=relaxed/simple;
-	bh=4OcKoBLVCswFj8+WyqdYMQe1By0BpxCAengr9aXEi/M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NWntL79Y31AOl40IbTqdHcNU+2AxYaBlkg3ouNMl75LqLos3eBG0/DWumOB8vbi8oNymycXmRpozUCPN9iVL9Jocbk/ZIESyqozPWgw2f0PgOiBzOmi0jO4UJQWsshkHVHHJvbzXxWMVcsXLHwBXCjuytNb69klq4ll2AiGTD8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=ZsqcxV2h; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id A044020529;
-	Mon,  3 Feb 2025 21:34:10 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QDCwkQ1rbqBO; Mon,  3 Feb 2025 21:34:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1738614839; bh=4OcKoBLVCswFj8+WyqdYMQe1By0BpxCAengr9aXEi/M=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=ZsqcxV2hQqYaMrsKyB6I3XefykRZUY9V1HiLmuy4DfzXSGh7yztuNxtTahML9dPba
-	 k4qfPHjaYKJ9UXaOK0+qS27fRIjpDRVxsm2mj7iw2ICzAc4KD2trvGTmjF9TFRAqd5
-	 /s2rjC3MstoI5z2Kg9eoCWu+bne+lBAa3V4WvWssktXneI8XTIrrF4mNESn166Ekg6
-	 vtL8mFen9l7CA6LVSq6Edv+qaDoBCRTgUHWkmox0Wso71M1eVe3yxwFCrANt3fKfSo
-	 JnKUfVGhLjBjs5B0lpmeeZM3qVqXkexLlErrH2Jsc4oE6LQBktwojK9FYlm0kb/Le6
-	 xocBRD/wY0Gmg==
-From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Date: Tue, 04 Feb 2025 02:03:33 +0530
-Subject: [PATCH 2/2] dt-bindings: i2c: exynos5: add exynos7870-hsi2c
- compatible
+	s=arc-20240116; t=1738623552; c=relaxed/simple;
+	bh=Dtkd0WAYGkVPRrGF5Fu+Nq3Fzg/LXYPrWsGtnHhnbJg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ldaZWRn8ddZ5MXxKGnRErepDqc7Xzqhtpw76zGOb6gPYhD8aeP9Kck+gDMdoqjCa+SzM9Gqe4o54xWy4zo7yZ1eE3ACZFfkux2Shi2xsoPwGn9yP3PUh4gAJ31BXMex5YELGJtkNN31IuezedEF2bgvPeYZ3AGJ3/A02DGKld0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f7A8sNFU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1626CC4CEE4;
+	Mon,  3 Feb 2025 22:59:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738623552;
+	bh=Dtkd0WAYGkVPRrGF5Fu+Nq3Fzg/LXYPrWsGtnHhnbJg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f7A8sNFUcxgG5i5mMHwDV3zrzzvcC2UMjjKDF3XYf9iqT0dDrKSj8bIRWo+VSXNUh
+	 rMgRj7CVJG95Wa4T8uxdE7BO2gJmb4NMtXsfmz54K4omzFoKfePZtIcs1KI11PZkDW
+	 4V12B1RN9lmdTkRqnIdEtvOV6XJ08KU7HXHeO2djuRkFliw7pVj68QPRU6mJz7sPDx
+	 Uvvn/Jcy0F7PSUFEqs3ST27/9syZdTK/632zLd1ms75e9u1J3d8ickTLFJsl8Qmn2/
+	 SeWX3bMeanPEStNzgXVkdHXf8x2qCeU6FkcRFbklIMU93uwBanfv6fiPbT0ANjO88R
+	 Fe6Afb8x7hu4A==
+Date: Mon, 3 Feb 2025 16:59:11 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Danila Tikhonov <danila@jiaxyga.com>
+Cc: linux@mainlining.org, andersson@kernel.org, conor+dt@kernel.org,
+	devicetree@vger.kernel.org, konradybcio@kernel.org, brgl@bgdev.pl,
+	linux-kernel@vger.kernel.org, krzk+dt@kernel.org,
+	~postmarketos/upstreaming@lists.sr.ht, linux-i2c@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 2/4] dt-bindings: eeprom: at24: Add compatible for Puya
+ P24C64F
+Message-ID: <173862355055.499815.8730288713630470551.robh@kernel.org>
+References: <20250203111429.22062-1-danila@jiaxyga.com>
+ <20250203111429.22062-3-danila@jiaxyga.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250204-exynos7870-i2c-v1-2-63d67871ab7e@disroot.org>
-References: <20250204-exynos7870-i2c-v1-0-63d67871ab7e@disroot.org>
-In-Reply-To: <20250204-exynos7870-i2c-v1-0-63d67871ab7e@disroot.org>
-To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Sergey Lisov <sleirsgoevy@gmail.com>, linux-i2c@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- Kaustabh Chakraborty <kauschluss@disroot.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1738614819; l=926;
- i=kauschluss@disroot.org; s=20250202; h=from:subject:message-id;
- bh=4OcKoBLVCswFj8+WyqdYMQe1By0BpxCAengr9aXEi/M=;
- b=7OWgJnwDpMWLJ0RIujPOn4v878zVH0ND7VYLxNRdtoephlHI1ZdX1kDSCWEh9jhZF26NU3/XP
- dSjdIXVTsT/DEgOJSYj58I5Bp3X9DTIG7rJ2QiYRFC8kFfG1XaoUwXS
-X-Developer-Key: i=kauschluss@disroot.org; a=ed25519;
- pk=h2xeR+V2I1+GrfDPAhZa3M+NWA0Cnbdkkq1bH3ct1hE=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250203111429.22062-3-danila@jiaxyga.com>
 
-Exynos7870's HS-I2C controllers are entirely compatible with
-samsung,exynos7-hsi2c. Document Exynos7870's HS-I2C compatible string
-appropriately.
 
-Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
----
- Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, 03 Feb 2025 14:14:27 +0300, Danila Tikhonov wrote:
+> Add the compatible for another 64Kb EEPROM from Puya.
+> 
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> ---
+>  Documentation/devicetree/bindings/eeprom/at24.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-index 70cc2ee9ee27dd128be10152a0a0c873802f08a2..8d47b290b4ed1c95b7237ce7881b40872cc7ada9 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-@@ -30,6 +30,7 @@ properties:
-       - items:
-           - enum:
-               - samsung,exynos5433-hsi2c
-+              - samsung,exynos7870-hsi2c
-               - tesla,fsd-hsi2c
-           - const: samsung,exynos7-hsi2c
-       - items:
-
--- 
-2.48.1
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
 
