@@ -1,156 +1,97 @@
-Return-Path: <linux-i2c+bounces-9272-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9273-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 317F8A25F5B
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 16:58:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B37D5A26397
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 20:19:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEF7A162A95
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 15:58:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B42043A661F
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Feb 2025 19:18:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4825C20A5DB;
-	Mon,  3 Feb 2025 15:58:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0023B212B28;
+	Mon,  3 Feb 2025 19:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=apevzner.com header.i=@apevzner.com header.b="LxIs+5Go"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="orq8j9IL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C42C20A5C3
-	for <linux-i2c@vger.kernel.org>; Mon,  3 Feb 2025 15:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA1F212B0B;
+	Mon,  3 Feb 2025 19:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738598328; cv=none; b=PyMxm2bVnU6xIW5ES7MTAv2hRCRBzCZbh6A5/IQy1OvmuFTMU7p0a9UcvlIAjIeNuBot5PM5NfKzbyO425DlMvRHGs4llEIHUzbwebMpC/Y3F0Uc7vGgztTbBFqXAZhDMkrdktzt3cScWLGRET+FBYG1A+8vstTWtB0OhyXmlE8=
+	t=1738610134; cv=none; b=hws/hB+Wu9hm9wRhcDS2E0iFJO38gh4JEyb9d+EqiaqO40LAq0zcmWwfoXeb6ucITiGhl+Uyz1gRryduuWAWwy6bBD/tEcF6rwsW8vWtJVGdutsfTrmcBV7eoPlTFFrGu1MAcX+clPwe67vrkfLYmbJfZUeeG1VD0PFh5acUyIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738598328; c=relaxed/simple;
-	bh=HaqSRVIjYecNiCeUI80LtyiV/KB2arNBCPJKjiB4ngI=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Cc:Content-Type; b=Tqoy/FvBuHShoYZoXlnUJGmARmo0S7ADTWNDzI7Gv9M/78hHarrTUTSRHICWS3aR3th+cOFSICckqkdpGgR99HalaF2HYFaM/Glu54/3ZGQJRreKGUzazqIIeWCAeKq3sL2mmncfEeC7By+1jJuL86I8Q0r02gYDDuovtRssoSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apevzner.com; spf=pass smtp.mailfrom=apevzner.com; dkim=pass (2048-bit key) header.d=apevzner.com header.i=@apevzner.com header.b=LxIs+5Go; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apevzner.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apevzner.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-307bc125e2eso12286741fa.3
-        for <linux-i2c@vger.kernel.org>; Mon, 03 Feb 2025 07:58:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=apevzner.com; s=google; t=1738598321; x=1739203121; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wVwfvvt8sGDIx88933QOte4EitOaJG4KEZQc/GBV0TM=;
-        b=LxIs+5GoFTEmhH51fRtWmO0arBsL5XqFsFe4w8Y6NldEF6ptfcTJfa7o+X6lAw7R9D
-         T0ZdBT0ix08yC9aWMwpMbicqFJ7kjPMAY82XSoipj3J/X6ra9bOl4yEs1so8na9GtzRK
-         ZnQPJC2sBpDmbaMoaBLyL9wLH81oXUQxljH0hrTjSa8GzN8/FP3a7q1Sn2EQ7F4e1jWa
-         rh3lg2VFYGZr6ClECF2DSJbtALuV7xKQ5+UJSufcmjxpwa8N+ifb46zocfEiq8PnLjPj
-         IZ2tgqo7mf0asN1188bjIIRTLPnBuFphLGAol12p2Emat/oixyIhnEsBhYYtmcXGbSTb
-         uEgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738598321; x=1739203121;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wVwfvvt8sGDIx88933QOte4EitOaJG4KEZQc/GBV0TM=;
-        b=DL8rywNyxANmzDrcn4C7/cvw4cJd/bJomcz/WuGZgjsejzpw4VCQg75l4Hfu0Vi2U3
-         BZ35oiwaDRkQF4grRK0N/ansAyfJaJpr5Tf7Xr/nc321KsR4wDz12WWZLJ9BDklkPo1e
-         T3/qkd55u+11DLSiiiHTFUrkajq1YJGU+DJLT/j1SvtvvGBn6T6Fuui2lkWg6oiGAzwI
-         jgf3Z6sMge+xGKHRPBPhMNFquznAw7Cd+1/fkVtKgfJYGIU+cmp7uFM1F+bpmNXE6Iuc
-         D2tHZyL+Dl0e2nM2G1f7+m8rm/6Qivuy3SSaVV3ZpecVmkUItLRnV33hpRPx5lOyrnM5
-         uUww==
-X-Gm-Message-State: AOJu0YxpVD9J9uB3rpIL/VY3YGzXyNqSIwBD6KO9hHwzeoGa1Nqvebmy
-	WdbfKKTzuU1c7jaotuAnlU+NwHqgNzGRpI+uwF+QR/+hKZDk+p4UCKdIUaabhAQKtpai1aRUsdx
-	3
-X-Gm-Gg: ASbGncsWPhJ8uTHUdUoBJrh7nYg3BSDQ+FpnDflcgGLScEN78UbYqa0+Z0zymbzHK5J
-	QoCcRxDd7JufUBqRRQfJgVroEME+eCD6dtnGzLQ5HViCG4AnJrWe0gSvuC/NGNPMpqnAKZoeNNA
-	M31+dUagFX81lqbPomAjEESFXzcOHWu/nnFUE0GgDuZrQTFFQphWvtnkw25tbrmjhdbVGUXMb5j
-	z8tM21eW8stQQGQK3HSbyjXUt34uVUCEgDzqn1Mic7mTLgLUJZdMe+Qdnz+SkUeXuEw69JbQDN4
-	IHpaP1QxsuMspwMs8Wv05Vqfyjwst8nN3/A5hWI4mLtA4Rx5/+4=
-X-Google-Smtp-Source: AGHT+IHXcrt8a+4+lWw5j7onoSpd8/q5z886NRH+OyrBNPHtma2d3YKVsnSdoKZTB3IKf2QKnQ7k9A==
-X-Received: by 2002:a05:651c:1990:b0:300:33b1:f0e2 with SMTP id 38308e7fff4ca-307968b9135mr64018451fa.3.1738598320882;
-        Mon, 03 Feb 2025 07:58:40 -0800 (PST)
-Received: from [192.168.0.6] (ppp85-141-194-172.pppoe.mtu-net.ru. [85.141.194.172])
-        by smtp.googlemail.com with ESMTPSA id 38308e7fff4ca-307a3088d24sm15155041fa.40.2025.02.03.07.58.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Feb 2025 07:58:39 -0800 (PST)
-Message-ID: <c56af12c-8964-4a76-bc6d-3e520e14a3c0@apevzner.com>
-Date: Mon, 3 Feb 2025 18:58:37 +0300
+	s=arc-20240116; t=1738610134; c=relaxed/simple;
+	bh=amXpXM2dMijrA0MtGiAiusiXv5glXfKEr2kGBt5Mf5I=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=pxx8SiJP2KQJ+OtAy8ona4r3x1+l63DGj0AY2cexrrIsXunGnQaPyT7XBf5cwy4WFUQVOT1TGYB9sVTbhb62GkdfWtaX48qhpJI22j6Cu8ZunO6Z72wxkfRxXhydwSFTwt3DuUNNic2LFuP7xjo1z715GHzuxjI51sUv6yfxdJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=orq8j9IL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24813C4CEE3;
+	Mon,  3 Feb 2025 19:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738610134;
+	bh=amXpXM2dMijrA0MtGiAiusiXv5glXfKEr2kGBt5Mf5I=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=orq8j9IL4sJCwffHeQkMqQ1LIzj3bLY8D/nrO4mnXrEndAU5xhvp1AnN+MPsSWfAS
+	 IZvgG2Nw7sRKZfvdeBoU24R2M3mICG80BdgzQG5I/Uk/HAB63MWT6zBpw0p2oEMxlG
+	 E8a7k3yyvNeN7d09N1SQvXMuDzOc5RDhdiwzRZt1Onqk/9We/Jy6PWS/UhHcfOEo+8
+	 iErOqSj3NkZautMbNrY1aUZ+ZDSjaK42026+wZ4WVZ1YTR/W1+OjLgplV9vpJrYA1W
+	 bbv7Zo/NVVNEU9Q1bbcgG36BP63LfRm1tbxQAfzJ1eXk+ut+Untsl+R6vGED961E9B
+	 wK9dQCBP2xa1Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 710BB380AA67;
+	Mon,  3 Feb 2025 19:16:02 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Alexander Pevzner <pzz@apevzner.com>
-Subject: On 6.12.x kernels I2C dies on the Intel i5-1235U CPU based notebook
- (KVADRA NAU LE14U)
-Cc: temaps@gmail.com, m.novosyolov@rosa.ru, a.sudakov@rosa.ru
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/2] Microchip CoreI2C driver fixes
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <173861016099.3409359.8425752210633125446.git-patchwork-notify@kernel.org>
+Date: Mon, 03 Feb 2025 19:16:00 +0000
+References: <20241218-steadier-corridor-0c0a0ce58ca2@spud>
+In-Reply-To: <20241218-steadier-corridor-0c0a0ce58ca2@spud>
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
+ conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+ andi.shyti@kernel.org, wsa@kernel.org, linux-kernel@vger.kernel.org
 
-Hi!
+Hello:
 
-On the KVADRA NAU LE14U notebook, the I2C subsystem stops functioning 
-after a period of inactivity (10-30 minutes).
+This series was applied to riscv/linux.git (fixes)
+by Andi Shyti <andi.shyti@kernel.org>:
 
-The notebook is equipped with an Intel i5-1235U CPU, four Intel 
-Corporation Alder Lake PCH Serial IO I2C controllers, and a SYNA3602 
-touchpad connected via the I2C serial bus.
+On Wed, 18 Dec 2024 12:07:39 +0000 you wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Yo,
+> 
+> Here's a v2 with one of the minor items pointed out by Andi resolved and
+> a new patch for an issue fixed in the months since v1, plus some minor
+> checkpatch things that I seem to have missed on v1. On v1 there was
+> unresolved discussion with Wolfram, but it has been two months without a
+> response so I am sending this v2 in an attempt to make progress.
+> 
+> [...]
 
-After some idle time, the following lines appear in the kernel log:
+Here is the summary with links:
+  - [v2,1/2] i2c: microchip-core: actually use repeated sends
+    https://git.kernel.org/riscv/c/9a8f9320d67b
+  - [v2,2/2] i2c: microchip-core: fix "ghost" detections
+    https://git.kernel.org/riscv/c/49e1f0fd0d4c
 
------
-RSP: 0018:ffffa7d5001b7e80 EFLAGS: 00000246
-RAX: ffff93ab5f700000 RBX: ffff93ab5f761738 RCX: 000000000000001f
-RDX: 0000000000000002 RSI: 0000000033483483 RDI: 0000000000000000
-RBP: 0000000000000001 R08: 000004c7d586da52 R09: 0000000000000007
-R10: 000000000000002a R11: ffff93ab5f744f04 R12: ffffffffb964fe60
-R13: 000004c7d586da52 R14: 0000000000000001 R15: 0000000000000000
-  cpuidle_enter+0x2d/0x40
-  do_idle+0x1ad/0x210
-  cpu_startup_entry+0x29/0x30
-  start_secondary+0x11e/0x140
-  common_startup_64+0x13e/0x141
-  </TASK>
-handlers:
-[<00000000fa02aea8>] idma64_irq [idma64]
-[<00000000d22a6968>] i2c_dw_isr
-Disabling IRQ #27
------
-
-After this, the touchpad connected via I2C stops working.
-
-This issue occurs on ROSA Linux with kernel version 6.12.10 and Fedora 
-41 with kernel version 6.12.11, but it does not occur on Fedora with 
-kernel version 6.11.4.
-
-According to the following discussion, it also reproduces on Arch Linux 
-with kernel version 6.12.8:
-
-https://bbs.archlinux.org/viewtopic.php?id=302348
-
-Although the notebook branding mentioned in that discussion is different 
-(MONSTER HUMA H4 V5.2), the hardware configuration appears to be similar.
-
-It seems that the problem is not specific to any particular distribution 
-and is related to the 6.12.* versions of the kernel.
-
-We also have a simple workaround module that resolves the issue by 
-installing a shared interrupt handler for all IRQs owned by I2C. This 
-handler does nothing but return IRQ_HANDLED, effectively preventing the 
-kernel from disabling this interrupt as spurious.
-
-The source code for this module is available here:
-
-https://github.com/alexpevzner/hotfix-kvadra-touchpad
-
-When this module is loaded, the notebook operates very stably; the I2C 
-(touchpad) functions reliably, and the interrupt rate appears reasonable 
-(around 400 interrupts per second when the touchpad is active).
-
+You are awesome, thank you!
 -- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-	Wishes, Alexander Pevzner (pzz@apevzner.com)
 
 
