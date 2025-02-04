@@ -1,54 +1,54 @@
-Return-Path: <linux-i2c+bounces-9291-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9286-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33721A26E68
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2025 10:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C881A26E4F
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2025 10:29:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F3F77A43BC
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2025 09:30:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 504177A4FC2
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2025 09:28:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7459820C471;
-	Tue,  4 Feb 2025 09:29:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52582207E14;
+	Tue,  4 Feb 2025 09:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Acp/vsSd"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Y85470om"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8CD207A19;
-	Tue,  4 Feb 2025 09:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A940D207A27;
+	Tue,  4 Feb 2025 09:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738661371; cv=none; b=m2m1uRY6GXCHW6ddzpvDHZQSdV62JI7kXr7yWMW5pgXeiLhR54gFZpJrbM3koVS4z8vIHFZxMKHzdjDTefYwYIbICfJKxxip2woNFcy2UHvZq4VSsh+LlqusZu1eqtlHT+pKYWKAeX+7b1gUi7+yRyVS3pT/wWf6XCQzknVr4dA=
+	t=1738661366; cv=none; b=A9hRWB3rv8PCPSdzbbgJtdDGayaaEPLN37zlEHB16g0F32Ihbo3VNDCcETH+iiLCllTfQJbLYF/MlznXX5qTYZ2Sg95AyZOSh6wE83bZvsz03N4DcgvYt0yn0w8O1+CaQ7X/9vNTxqzJHE9YxemBY6/E7BgV3bcOv4OU/1JnWJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738661371; c=relaxed/simple;
-	bh=uwleHELCDxefzsTrKEyvJkFzG4zqH/uU5XUDcbB2FYk=;
+	s=arc-20240116; t=1738661366; c=relaxed/simple;
+	bh=PWVjDlbY+5QXMES1Jg43CGsHf063LAxvEUnul1zh5kw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YY0OgAsFNCYKgoQ0GW9EK6wtzh5ZpUIM9T+q9rfFMU5i5fTAnGJiIO6VsgDTH8AWlgjinz9N/y73LI+UAZUcAPss6/D/l/hSqPklgZvwfzJB0+3KgLDYhNEcAn4bx25wS43Shqfm7gXUQdD1WZJ4zxO3vkEg6n0bCMp6Kx7U6uQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Acp/vsSd; arc=none smtp.client-ip=217.70.183.196
+	 In-Reply-To:To:Cc; b=GzRDxGoxtTAKfg6vOg+Ohj+BuHH551ejochcyHO09yHpPrnReucf9rhKSEyEJst0pwPenI/U8f61m4ifC493QSpD/o1pOxRN8Hcvy/s6VqhjK6FOuJdbtMO+lUSilxXaoGAl8vzQRpb+upL0QxKOwYRZSK8aUb7dRwVzk6Uer4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Y85470om; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A49884435C;
-	Tue,  4 Feb 2025 09:29:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C808843423;
+	Tue,  4 Feb 2025 09:29:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738661360;
+	t=1738661361;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FEupvcbyFP1FMX7h0RUYEpOlmfghhLcT2eYt5M/AdM8=;
-	b=Acp/vsSdyGQ5NyG1+C9q1SEEM9EIT/+2kQW5RjZflrgSQXdweWunvKZZZ/1TjPEhTc4d/x
-	8VQ/ZwWt5T1kNdTNtckIPcpUueYuLorVkAZFLZsoSzPVV95JTU1/wv8ZmPD4lxzTcur8rB
-	AjQFdRyPHe1FQVWN0TWO5rjkQLRF3oExurzhQo7eyEsd2OyOY8uHtJGvCheLve9mf5uN1D
-	+Kfrg5MQhlZgOUoYsfL0tKWoAv7/NduSZl+TQNEd8N/6dAaCb64xoVi1z1hMqYh2IM5Uq+
-	bTv0P7AyPQxGY7NE4w7euLGs1GHgB9rkTNYa14bq5lqRNApww//t82lLpYTE+Q==
+	bh=vTmcIxBFhs+q9FfJ0TmuNV/3ZVPBqmxE+uUND15pWMY=;
+	b=Y85470omv+PEK8UOJ3mUTZmtHMB2wygbE1Wc7a0qyLFuhXob012694idgZH4CY/FyIBRFB
+	9d02rPJD+EIssAuPkUIWBfuZfY0NURE+2XRTMj4wHjKGlLHFiwnYjv85KbzGyGYCqc/anj
+	0C67LnFX8wlXdf+G8Gu/8cnPMifQTDFAUOydmuvob1vqgRXiunXn1Te71e0eJH4/dF1HLn
+	QXUv4nshOZL2wxH6kkASYN9OPPnfWN1SaZpOnbvd9kQ7NFoL2shUotEqBQgbAkVFwreoJJ
+	22y5em54/2zPjC8QdrNHLgheNj+DHXUvd9CHKcnLmhu9+r/NMydH3HwBNARb2A==
 From: Romain Gantois <romain.gantois@bootlin.com>
-Date: Tue, 04 Feb 2025 10:29:12 +0100
-Subject: [PATCH v7 1/9] dt-bindings: misc: Describe TI FPC202 dual port
- controller
+Date: Tue, 04 Feb 2025 10:29:13 +0100
+Subject: [PATCH v7 2/9] media: i2c: ds90ub960: Replace aliased clients list
+ with address list
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250204-fpc202-v7-1-78b4b8a35cf1@bootlin.com>
+Message-Id: <20250204-fpc202-v7-2-78b4b8a35cf1@bootlin.com>
 References: <20250204-fpc202-v7-0-78b4b8a35cf1@bootlin.com>
 In-Reply-To: <20250204-fpc202-v7-0-78b4b8a35cf1@bootlin.com>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
@@ -75,150 +75,87 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org, 
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-media@vger.kernel.org, linux-gpio@vger.kernel.org, 
- Romain Gantois <romain.gantois@bootlin.com>, 
- Conor Dooley <conor.dooley@microchip.com>
+ Romain Gantois <romain.gantois@bootlin.com>
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeftohhmrghinhcuifgrnhhtohhishcuoehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieethfejleejueduleffveejleefkeeiheffffefkefgtedtiedvvddtfeetgefhnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplgduledvrdduieekrddtrddufegnpdhmrghilhhfrhhomheprhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvfedprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtoheprhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepuggvrhgvkhdrkhhivghrnhgrnhesrghmugdrtghom
- hdprhgtphhtthhopehtohhmihdrvhgrlhhkvghinhgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepughrrghgrghnrdgtvhgvthhitgesrghmugdrtghomhdprhgtphhtthhopeguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhg
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeftohhmrghinhcuifgrnhhtohhishcuoehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepkeelieefteelffeuheevtdetkefhfffhteffkefgtefhkeevudeutdeugfffheegnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudefngdpmhgrihhlfhhrohhmpehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddvpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopeguvghrvghkrdhkihgvrhhnrghnsegrmhgurdgtohhmpdhrtghpthhtohepthhomhhirdhvrghlkhgvihhnvghns
+ ehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopegurhgrghgrnhdrtghvvghtihgtsegrmhgurdgtohhmpdhrtghpthhtohepuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughirdhshhihthhisehkvghrnhgvlhdrohhrgh
 X-GND-Sasl: romain.gantois@bootlin.com
 
-The FPC202 dual port controller serves as a low speed signal aggregator for
-common port types, notably SFP. It provides access to I2C and low-speed
-GPIO signals of a downstream device through a single upstream control
-interface.
+The ds90ub960 driver currently uses a list of i2c_client structs to keep
+track of used I2C address translator (ATR) alias slots for each RX port.
 
-Up to two logical I2C addresses can be accessed on each of the FPC202's
-ports. The port controller acts as an I2C translator (ATR). It converts
-addresses of incoming and outgoing I2C transactions. One use case of this
-is accessing two SFP modules at logical address 0x50 from the same upstream
-I2C controller, using two different client aliases.
+Keeping these i2c_client structs in the alias slot list isn't actually
+needed, the driver only needs to know the client address for each slot.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Convert the aliased_clients list to a list of aliased client addresses.
+This will allow removing the "client" parameter from the i2c-atr callbacks
+in a future patch.
+
 Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
 ---
- .../devicetree/bindings/misc/ti,fpc202.yaml        | 94 ++++++++++++++++++++++
- MAINTAINERS                                        |  6 ++
- 2 files changed, 100 insertions(+)
+ drivers/media/i2c/ds90ub960.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/misc/ti,fpc202.yaml b/Documentation/devicetree/bindings/misc/ti,fpc202.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..a8cb10f2d0df3fa5224f95f6f87467a8bce253bc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/misc/ti,fpc202.yaml
-@@ -0,0 +1,94 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/misc/ti,fpc202.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TI FPC202 dual port controller with expanded IOs
-+
-+maintainers:
-+  - Romain Gantois <romain.gantois@bootlin.com>
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-atr.yaml#
-+
-+properties:
-+  compatible:
-+    const: ti,fpc202
-+
-+  reg:
-+    maxItems: 1
-+
-+  gpio-controller: true
-+
-+  "#gpio-cells":
-+    const: 2
-+
-+  enable-gpios:
-+    description:
-+      Specifier for the GPIO connected to the EN pin.
-+    maxItems: 1
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  "^i2c@[0-1]$":
-+    $ref: /schemas/i2c/i2c-controller.yaml#
-+    description: Downstream device ports 0 and 1
-+
-+    properties:
-+      reg:
-+        maxItems: 1
-+        description:
-+          Downstream port ID
-+
-+    required:
-+      - "#address-cells"
-+      - "#size-cells"
-+      - reg
-+
-+    unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - gpio-controller
-+  - "#gpio-cells"
-+  - "#address-cells"
-+  - "#size-cells"
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        i2c-atr@f {
-+            compatible = "ti,fpc202";
-+            reg = <0xf>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            gpio-controller;
-+            #gpio-cells = <2>;
-+
-+            i2c@0 {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                reg = <0>;
-+            };
-+
-+            i2c@1 {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                reg = <1>;
-+            };
-+        };
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 896a307fa06545e2861abe46ea7029f9b4d3628e..4bb13de2b8ebad5180e2bde607dac40f35c51782 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -23709,6 +23709,12 @@ F:	drivers/misc/tifm*
- F:	drivers/mmc/host/tifm_sd.c
- F:	include/linux/tifm.h
+diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
+index 5dde8452739b64dd5b847a7bc1dac556ea43ca6c..e1d53ef087538f7df2c992612e70ce6a3e24906b 100644
+--- a/drivers/media/i2c/ds90ub960.c
++++ b/drivers/media/i2c/ds90ub960.c
+@@ -478,7 +478,7 @@ struct ub960_rxport {
+ 		};
+ 	} eq;
  
-+TI FPC202 DUAL PORT CONTROLLER
-+M:	Romain Gantois <romain.gantois@bootlin.com>
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/misc/ti,fpc202.yaml
-+
- TI FPD-LINK DRIVERS
- M:	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
- L:	linux-media@vger.kernel.org
+-	const struct i2c_client *aliased_clients[UB960_MAX_PORT_ALIASES];
++	u16 aliased_addrs[UB960_MAX_PORT_ALIASES];
+ };
+ 
+ struct ub960_asd {
+@@ -1054,17 +1054,17 @@ static int ub960_atr_attach_client(struct i2c_atr *atr, u32 chan_id,
+ 	struct device *dev = &priv->client->dev;
+ 	unsigned int reg_idx;
+ 
+-	for (reg_idx = 0; reg_idx < ARRAY_SIZE(rxport->aliased_clients); reg_idx++) {
+-		if (!rxport->aliased_clients[reg_idx])
++	for (reg_idx = 0; reg_idx < ARRAY_SIZE(rxport->aliased_addrs); reg_idx++) {
++		if (!rxport->aliased_addrs[reg_idx])
+ 			break;
+ 	}
+ 
+-	if (reg_idx == ARRAY_SIZE(rxport->aliased_clients)) {
++	if (reg_idx == ARRAY_SIZE(rxport->aliased_addrs)) {
+ 		dev_err(dev, "rx%u: alias pool exhausted\n", rxport->nport);
+ 		return -EADDRNOTAVAIL;
+ 	}
+ 
+-	rxport->aliased_clients[reg_idx] = client;
++	rxport->aliased_addrs[reg_idx] = client->addr;
+ 
+ 	ub960_rxport_write(priv, chan_id, UB960_RR_SLAVE_ID(reg_idx),
+ 			   client->addr << 1);
+@@ -1085,18 +1085,18 @@ static void ub960_atr_detach_client(struct i2c_atr *atr, u32 chan_id,
+ 	struct device *dev = &priv->client->dev;
+ 	unsigned int reg_idx;
+ 
+-	for (reg_idx = 0; reg_idx < ARRAY_SIZE(rxport->aliased_clients); reg_idx++) {
+-		if (rxport->aliased_clients[reg_idx] == client)
++	for (reg_idx = 0; reg_idx < ARRAY_SIZE(rxport->aliased_addrs); reg_idx++) {
++		if (rxport->aliased_addrs[reg_idx] == client->addr)
+ 			break;
+ 	}
+ 
+-	if (reg_idx == ARRAY_SIZE(rxport->aliased_clients)) {
++	if (reg_idx == ARRAY_SIZE(rxport->aliased_addrs)) {
+ 		dev_err(dev, "rx%u: client 0x%02x is not mapped!\n",
+ 			rxport->nport, client->addr);
+ 		return;
+ 	}
+ 
+-	rxport->aliased_clients[reg_idx] = NULL;
++	rxport->aliased_addrs[reg_idx] = 0;
+ 
+ 	ub960_rxport_write(priv, chan_id, UB960_RR_SLAVE_ALIAS(reg_idx), 0);
+ 
 
 -- 
 2.47.1
