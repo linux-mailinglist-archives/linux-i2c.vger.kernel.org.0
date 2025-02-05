@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-9315-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9314-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B2F4A297D0
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 18:46:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6168FA297C2
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 18:45:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D5363A9199
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 17:45:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49C2A1885A06
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 17:45:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E964A2135B1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC656212D86;
 	Wed,  5 Feb 2025 17:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WDQZE4dP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ka3aDkIy"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5808D2116E1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9582116F9;
 	Wed,  5 Feb 2025 17:39:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738777179; cv=none; b=f6ZDBeI1Hpa62y+xgnsu7YnKf6LJn4qEfBpnzV2lUiaKI1UKnjrQCHutJU3Mth2BkfOri1imlhMMBMKDv5GupIrdEUgW/gEaq/+eet9/wICJso1cwZtMRq2qZIwo0AISpTko6I0HsQSVfSuLlBaogQpdqFwy3QbCEoMFSi7yy6s=
+	t=1738777179; cv=none; b=CnzA8SJubCYmrEz8T98Cv5h6E/wVJF00dF8guVDtFqo6APKt38ZaHF2F2GaxvGF1WxaGBAYs8JII4bG+uo+Y1NCoQqJcbaLjfQU1hYUEwipbCsgJWQXazS5AtL3CvDoXEL6JFCajRfbg6PEIeO68g31XOSU1W7RVL29lbqr+VCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738777179; c=relaxed/simple;
-	bh=daUeTBsxtwvmSlL6Qc0i7fWgnNPSmTzG9lMNc/CHolg=;
+	bh=f+xBpNnxELe7+SSBuSSEu1KTcHFIkcpONAaBt+7Dc5w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fp6OfjzPVTVj1uqJRkH2fCX+fmtZAKROhLaYgemCBU/GMuyOdGUGabYKCWEcwA+287mDEqujLNn/y0V2CM1V+UTl2epGR5hz+DNLCTc1X4oKlcc3kx0I341wgoXXdkV5enOHqCWq4X22DTCcDXkwuEtf7bXsj8jbzXmy+yD7T0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WDQZE4dP; arc=none smtp.client-ip=217.70.183.200
+	 MIME-Version; b=Y+ppbS+Sf9EmxzRgAz2UdLVMrUP1f+NrYNDmogbkJ2AAow8P3cOFFUujO3lwg7ycTsaGp7NPpQfBDZ7KK19dB6jbMYE8PRUnBD8EG5l1wXZARUQsP4BqtwPASIpMJZDxMrm7rA55wdu5ULnOhjk0wPKri0F+Vj16eqApZlr5EwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ka3aDkIy; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 5ACFC441E7;
+Received: by mail.gandi.net (Postfix) with ESMTPA id 04A59441E0;
 	Wed,  5 Feb 2025 17:39:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738777169;
+	t=1738777170;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=IVfVEr+/GlegNfMgwKeHJFZjRZLo8kICClY1nut28aQ=;
-	b=WDQZE4dP6BOugSrXATqMsxkw7vSpElakM7gKARRGfd0EEraZBiVb9IWf/86AgaP/P/PoPV
-	HvMKNIxX4bTv/N1zkEK0O7fOl0V2Lfri13hxvk8Ba46t8291edpENuqNNyzmHAiGGRIzfr
-	dyeB9k47ZPh1c2VxcmPYoI7d0u2ypdfu3i+P3YuSJqY4WaFNA8HaoSb087Rdj6byCAqiAX
-	4SBaJCpqdCWph/CyZLGByTjA3DeVaGqI3sQrycQidrWp3xDMOyciBwoPqlekZuRDlKODdq
-	DXsw9b8XbWijg/zkgwagFpYPNtiY9opE12zF72/yUR8pveVVVqhVnNxatkXclw==
+	bh=C7T4oH0F+uOVl2FeHd3gTGC+QiKM3fGP2FR0FJ8gs5E=;
+	b=Ka3aDkIyywWDGCLelVFaELIkev6ncAUyRtASlgMv7zN8Esf//tPv9aG5+OGT90sNfiB7zF
+	+Axf9xrjLivXqMh0wYR52lV1s9/A1aj0SR6x3wMQsFheF4v0U2eJeWinIzov6Eae07gEWA
+	9bSe/OfW4bIkEpMZD1Tvq/hiV966PcjoQoflkzz6ZjkQ3t6LkMU0aG1Vw33rqmKYjW1nCa
+	kYME7gwDAoaRT6x5arb3lFfeIXWsZFuoL2u6oKGNgijtlu1aRyzAFRHmVDLqVXrDS38DNd
+	6bPIg1v8XCix0+SzhiTXSdDZdrp7hcyqJL9edM+Nvqq33smOs/kasMLlf3CSaQ==
 From: Herve Codina <herve.codina@bootlin.com>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Rob Herring <robh@kernel.org>,
@@ -56,9 +56,9 @@ Cc: linux-i2c@vger.kernel.org,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Herve Codina <herve.codina@bootlin.com>
-Subject: [RFC PATCH 1/3] i2c: core: Follow i2c-parent when retrieving an adapter from node
-Date: Wed,  5 Feb 2025 18:39:14 +0100
-Message-ID: <20250205173918.600037-2-herve.codina@bootlin.com>
+Subject: [RFC PATCH 2/3] i2c: i2c-core-of: Move children registration in a dedicated function
+Date: Wed,  5 Feb 2025 18:39:15 +0100
+Message-ID: <20250205173918.600037-3-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250205173918.600037-1-herve.codina@bootlin.com>
 References: <20250205173918.600037-1-herve.codina@bootlin.com>
@@ -75,137 +75,68 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgedtkecutefuodetggdotef
  hhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhm
 X-GND-Sasl: herve.codina@bootlin.com
 
-i2c bus extensions were introduced to decouple i2c busses when they are
-wired to connectors. Combined with devicetree overlays, they introduce
-an additional level of indirection, which is needed to decouple the
-overlay (describing the hardware available on addon baord) and the base
-tree (describing resources provided to the addon board).
+of_i2c_register_devices() perform the loop for registering child devices.
 
-For instance, the following devicetree fragment, available once
-overlays are applied, is legit:
-
-    i2c1: i2c@abcd0000 {
-        compatible = "xyz,i2c-ctrl";
-        i2c-bus-extension@0 {
-            reg = <0>;
-            i2c-bus = <&i2c-ctrl>;
-        };
-        ...
-    };
-
-    connector {
-        i2c-ctrl {
-            i2c-parent = <&i2c1>;
-            #address-cells = <1>;
-            #size-cells = <0>;
-
-            i2c-bus-extension@0 {
-                reg = <0>;
-                i2c-bus = <&i2c-other-connector>;
-            };
-
-            device@10 {
-                compatible = "xyz,foo";
-                reg = <0x10>;
-            };
-        };
-
-        devices {
-            other-connector {
-                i2c-at-other-connector {
-                    i2c-parent = <&i2c-ctrl>;
-                    #address-cells = <1>;
-                    #size-cells = <0>;
-
-                    device@20 {
-                       compatible = "xyz,bar";
-                       reg = <0x20>;
-                    };
-                };
-            };
-        };
-    };
-
-Current implementation of i2c_find_adapter_by_fwnode() supposes that the
-fwnode parameter correspond to the adapter.
-
-This assumption is no more valid with i2c bus extensions. Indeed, the
-fwnode parameter can reference an i2c bus extension node and not the
-related adapter.
-
-In the example, i2c-ctrl and i2c-at-other-connector nodes are chained
-bus extensions and those node can be passed to
-i2c_find_adapter_by_fwnode() in order to get the related adapter (i.e
-the adapter handling the bus and its extensions: i2c@abcd0000).
-
-Extend i2c_find_adapter_by_fwnode() to perform the walking from the
-given fwnode through i2c-parent references up to the adapter.
+In order to prepare the support for i2c bus extensions, extract this
+registration loop and move it in a dedicated function.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/i2c/i2c-core-base.c | 43 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+ drivers/i2c/i2c-core-of.c | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5546184df05f..cb7adc5c1285 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1827,14 +1827,55 @@ static int i2c_dev_or_parent_fwnode_match(struct device *dev, const void *data)
-  */
- struct i2c_adapter *i2c_find_adapter_by_fwnode(struct fwnode_handle *fwnode)
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index a6c407d36800..b4c9db137f5a 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -82,21 +82,15 @@ static struct i2c_client *of_i2c_register_device(struct i2c_adapter *adap,
+ 	return client;
+ }
+ 
+-void of_i2c_register_devices(struct i2c_adapter *adap)
++static void of_i2c_register_children(struct i2c_adapter *adap,
++				     struct device_node *bus)
  {
-+	struct fwnode_reference_args args;
-+	struct fwnode_handle *adap_fwnode;
- 	struct i2c_adapter *adapter;
- 	struct device *dev;
-+	int err;
+-	struct device_node *bus, *node;
+ 	struct i2c_client *client;
++	struct device_node *node;
  
- 	if (!fwnode)
- 		return NULL;
+-	/* Only register child devices if the adapter has a node pointer set */
+-	if (!adap->dev.of_node)
+-		return;
+-
+-	dev_dbg(&adap->dev, "of_i2c: walking child nodes\n");
+-
+-	bus = of_get_child_by_name(adap->dev.of_node, "i2c-bus");
+-	if (!bus)
+-		bus = of_node_get(adap->dev.of_node);
++	dev_dbg(&adap->dev, "of_i2c: walking child nodes from %pOF\n", bus);
  
--	dev = bus_find_device(&i2c_bus_type, NULL, fwnode,
-+	adap_fwnode = fwnode_handle_get(fwnode);
++	/* Register device directly attached to this bus */
+ 	for_each_available_child_of_node(bus, node) {
+ 		if (of_node_test_and_set_flag(node, OF_POPULATED))
+ 			continue;
+@@ -109,7 +103,21 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
+ 			of_node_clear_flag(node, OF_POPULATED);
+ 		}
+ 	}
++}
 +
-+	/* Walk extension busses (through i2c-parent) up to the adapter node */
-+	while (fwnode_property_present(adap_fwnode, "i2c-parent")) {
-+		/*
-+		 * A specific case exists for the i2c demux pinctrl. The i2c bus
-+		 * node related this component (the i2c demux pinctrl node
-+		 * itself) has an i2c-parent property set. This property is used
-+		 * by the i2c demux pinctrl component for the demuxing purpose
-+		 * and is not related to the extension bus feature.
-+		 *
-+		 * In this current i2c-parent walking, the i2c demux pinctrl
-+		 * node has to be considered as an adapter node and so, if
-+		 * the adap_fwnode node is an i2c demux pinctrl node, simply
-+		 * stop the i2c-parent walking.
-+		 */
-+		if (fwnode_property_match_string(adap_fwnode, "compatible",
-+						 "i2c-demux-pinctrl") >= 0)
-+			break;
++void of_i2c_register_devices(struct i2c_adapter *adap)
++{
++	struct device_node *bus;
 +
-+		/*
-+		 * i2c-parent property available in a i2c bus node means that
-+		 * this node is an extension bus node. In that case,
-+		 * continue i2c-parent walking up to the adapter node.
-+		 */
-+		err = fwnode_property_get_reference_args(adap_fwnode, "i2c-parent",
-+							 NULL, 0, 0, &args);
-+		if (err)
-+			break;
++	/* Only register child devices if the adapter has a node pointer set */
++	if (!adap->dev.of_node)
++		return;
 +
-+		pr_debug("Find adapter for %pfw, use parent: %pfw\n", fwnode,
-+			 args.fwnode);
-+
-+		fwnode_handle_put(adap_fwnode);
-+		adap_fwnode = args.fwnode;
-+	}
-+
-+	dev = bus_find_device(&i2c_bus_type, NULL, adap_fwnode,
- 			      i2c_dev_or_parent_fwnode_match);
-+	fwnode_handle_put(adap_fwnode);
- 	if (!dev)
- 		return NULL;
++	bus = of_get_child_by_name(adap->dev.of_node, "i2c-bus");
++	if (!bus)
++		bus = of_node_get(adap->dev.of_node);
+ 
++	of_i2c_register_children(adap, bus);
+ 	of_node_put(bus);
+ }
  
 -- 
 2.47.1
