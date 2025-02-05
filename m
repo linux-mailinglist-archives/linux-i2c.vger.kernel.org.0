@@ -1,97 +1,79 @@
-Return-Path: <linux-i2c+bounces-9303-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9306-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 623B0A287DC
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 11:24:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D395A28C38
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 14:46:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C817816988F
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 10:23:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B12C33A37C7
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 13:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FD7422AE75;
-	Wed,  5 Feb 2025 10:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A6D14A088;
+	Wed,  5 Feb 2025 13:46:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pXUBfIoL"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="GoazA48I"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906392063D8;
-	Wed,  5 Feb 2025 10:23:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8292E149C7B
+	for <linux-i2c@vger.kernel.org>; Wed,  5 Feb 2025 13:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738751033; cv=none; b=uCQg2HzfL1TL+DtEpaXtf1vVpJzNWZEV3ExaefmVvMPepn/TBjUte5v/37D+ZtCwuQZOK+KidIZCpiScK9gpqoupcXg260JlTBBFLaU12O7gBA+0a1slG4j62mRi8Bj4HIK7l8U2RmvhV0WtO8gZbFj2tL/Zx/ssZjNoVr9yjks=
+	t=1738763194; cv=none; b=WsjtoYVKGfdJY75esa1Q74/AwhSvCClbD3NSrP428sOQZ+ZKOQgFpRsdiBgAVr9gy3wf1Wp/tlZ2+8egVPSmRLuGspLO5xQYe2x9mRgw4NEKexyKGwjvNaVBeJ/C3r1AhXhPFz+IwrBkiNiCIxwgjOxAbY+gn74Ll43BBm/Z/6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738751033; c=relaxed/simple;
-	bh=l8WUMCh4/bacxntxMeJpQkFivTbCQf82Fd87xLkpqaI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eyedkiCT/O4K+Zw9NGYvQ2ok744E19GFjC1dEr48Fmmbqdk9bwWwQfygu6BmXd/KFCCNIjDOWIxNQ/4ZxAldWhgWq+a3gEeDnUD99YlUCabM9foiWldjeytPV82Bglv3JnugraYsgbh1u7KZhDmP3Jkv1E5rBBX+TeJG4RhSMPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pXUBfIoL; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B591520479;
-	Wed,  5 Feb 2025 10:23:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738751027;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OCgPDTwzHkVl8WwhlQzvIZcaXBEvz3BrPQEMI8PN0Po=;
-	b=pXUBfIoL9X29WYaV553bYN5PrfgONgLKE0knP7SlKPqVv8uGlYh9Bxe9QxV2k630fFi61g
-	8JRtqr1lglESNL4ldKtcPtWvovVbwaqyMR0Us/3eYh/dt/ecKtai3h5N+oQ8dALkZieMF8
-	NrQ3XW6n0EHwPolG4QhWEa3bXAy4FEXlyvt8LHrEMEFJiqeryImqpOCzfjOAb0QT1kXH+F
-	DVNnx+VR7FjW5+Y2NHaNxyO6fm+lRrj3Rg/HHOI5nfMjUf1aM4xPM0l6EYBbkGv9e/xKt4
-	mntXL3TnTl67ISClR5aS1I3sPi67Gh/ZwRD0iAkDtq2PmS/01ZNjbIl8GXJEMQ==
-Date: Wed, 5 Feb 2025 11:23:46 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wqlinux@roeck-us.net, jdelvare@suse.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Message-ID: <20250205102214a6357365@mail.local>
-References: <20250123091115.2079802-1-a0282524688@gmail.com>
- <20250123091115.2079802-8-a0282524688@gmail.com>
+	s=arc-20240116; t=1738763194; c=relaxed/simple;
+	bh=ODcL6Yxbj5cfyzCwYxhXJf9ai40FiBV7YJaFkeuxK88=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xq5Jwlbvoq1WANxwaqHn/Te7YrNRhPu4qa+g746XjBHjCsIYbzpwuk9S4zCW981r1K1tlk0p/MeedJArPMg9fcE0HQ8gKSeCvS/tq1gBuon56fhWGUKFcbyTGa2gPh+RqxkwZ3bHqXFNUUyxFnU4vPw+g4v5PbgZIeLDvzAhWgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=GoazA48I; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=FlKa0VMf792zDz
+	DUcLRwxTAZBpC0lZ3knvWFQqm0lA0=; b=GoazA48I25U53I2FSlk4P3DPSvGZdb
+	l6Ve1sNifpYrrU3sW4Ux+UxQkDxu1wXH5RUBbXpBhNDxc5H0pQ/+R2bi591e04Vi
+	mi3M1DToajLx1uXgpcnKOnPjPvygblmRMZHNEVxQoXMSo15SXkMZccKGml3uhixY
+	J6giFXUHlitajCSN0WqniasEXrHFGLkE8jWiHhP5dOhzes5eRH7SqrHBaJrmAH7K
+	+HgQgpEKws3C/SsbvoLnsadokfQczRFfFdtCLowRIIp4w8/PDW6hX0TF+tyanXRg
+	pQh4DVrfDbto5yAlfkMmmdyoruXJrFEr69xagmbWgKN+k86ctT6twR2A==
+Received: (qmail 3407749 invoked from network); 5 Feb 2025 14:46:26 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Feb 2025 14:46:26 +0100
+X-UD-Smtp-Session: l3s3148p1@RqgOWmUtisFtK/OC
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Heiner Kallweit <hkallweit1@gmail.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH 0/2] i2c: revert flag based client handling
+Date: Wed,  5 Feb 2025 14:42:25 +0100
+Message-ID: <20250205134623.6921-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250123091115.2079802-8-a0282524688@gmail.com>
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeeiudeuteehhfekgeejveefhfeiudejuefhgfeljefgjeegkeeujeeugfehgefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugdphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdegpdhrtghpthhtoheprgdtvdekvdehvdegieekkeesghhmrghilhdrtghomhdprhgtphhtthhopehtmhihuhdtsehnuhhvohhtohhnrdgtohhmpdhrtghpthhtoheplhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhus
- hdrfigrlhhlvghijheslhhinhgrrhhordhorhhgpdhrtghpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtthhopegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhklhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepmhgrihhlhhholhdrvhhinhgtvghnthesfigrnhgrughoohdrfhhr
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-On 23/01/2025 17:11:15+0800, Ming Yu wrote:
-> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> +					nct6694_irq, IRQF_ONESHOT,
-> +					"rtc-nct6694", data);
-> +	if (ret < 0)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-> +
-> +	ret = devm_rtc_register_device(data->rtc);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to register rtc\n");
+It turned out the new mechanism does not handle all muxing cases. Revert
+the changes to give a proper solution more time.
 
-This message is not necessary, all the error paths of
-devm_rtc_register_device already print a message
+
+Wolfram Sang (2):
+  Revert "i2c: Replace list-based mechanism for handling
+    userspace-created clients"
+  Revert "i2c: Replace list-based mechanism for handling auto-detected
+    clients"
+
+ drivers/i2c/i2c-core-base.c | 113 ++++++++++++++++++++++++------------
+ include/linux/i2c.h         |  10 +++-
+ 2 files changed, 83 insertions(+), 40 deletions(-)
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.45.2
+
 
