@@ -1,63 +1,60 @@
-Return-Path: <linux-i2c+bounces-9311-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9312-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29051A28F78
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 15:25:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 276CCA2927B
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 16:01:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EC843AA453
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 14:23:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA84E188E0D3
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 14:55:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5438E1547D8;
-	Wed,  5 Feb 2025 14:23:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B83BC191F60;
+	Wed,  5 Feb 2025 14:51:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="APFMFwFZ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UulgzBhU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5D41537AC
-	for <linux-i2c@vger.kernel.org>; Wed,  5 Feb 2025 14:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFC71632D3
+	for <linux-i2c@vger.kernel.org>; Wed,  5 Feb 2025 14:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738765425; cv=none; b=hgwhI2njkX0PRxJAXPbv6WD9XjCtx5D00ELagCTXizs18NnCARTLOArN/RNcbvs2MURk65NotDRj1KloISX5Yn9OONtzBv7eAh7u3kPAErbEIWSbNWcpCRB8iE0LyLxg375vDsQ6Yyf0RS3WmRf3/lAiV8/L5iZMVRwPwAhk60k=
+	t=1738767076; cv=none; b=dNCKGvFZIN5RESK5rWyMsclmAITGiZabA6atiYgTz3E0+N4BaFQFT9kNlhAdnp9lCfCteRrD0TxzfpBITwVGsydEfAdb+cv6K8mSIW43DnUxjS507RbVeoJWFW9ZbZmRoky6hcngPohMevpI73zciAkG9PNGDmdxGI4/a4y1BYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738765425; c=relaxed/simple;
-	bh=QmmCd8LWQql8Pe4G/Tzut8hhJhjOiQluQMq7oei+K7s=;
+	s=arc-20240116; t=1738767076; c=relaxed/simple;
+	bh=pmq3mMuv9ZTElfBCNsFWBn9tpxWsgUSdZRrmkDmOYe4=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XxJIn4BcCkeiMzyOtLeUh56yzlLBD5Jv+M4bPvJIiYr8eyjBTc1xLQO7XlZNCdKBv0TiDW0/m6h5SB69su+C/LMBVwgFdxnC1lxjjILVGV17W5FN6NhoGJWzcAYkwvTW7Q5KNZDNTrxUXnXOP0Apwij+A8wPg/wxYlqf+0eEMCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=APFMFwFZ; arc=none smtp.client-ip=217.70.183.200
+	 MIME-Version:Content-Type; b=paqcmQwYEjPPP866d99gkKte2k7BMH/H3EicgH7VuAtavaXpzm/Hc2UaMsEQFg29aV4zGE+JpySOTFjRC1saY5/MOpQ2z8S06pJGxSWcER6iXG6R/JO3czK3JBKNBous1yH7LTv/z3eTUVSFr4BD6mVoZRw/R6yhT3nEJCaYEdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UulgzBhU; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1BBEE441AD;
-	Wed,  5 Feb 2025 14:23:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 230BC443E7;
+	Wed,  5 Feb 2025 14:51:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738765421;
+	t=1738767066;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=HSaxWoJxywYc7VPtYsma4rWF3G3Oyrm0/IVpmxdpu7M=;
-	b=APFMFwFZAyZLrMOoVcaf4FpJZLlBGHifFUmxUAQhkRzmiugN9L+mUT09tU9qJO+yk8fe6n
-	2sniki6a/qj2oIGy24UVjET5C3wUNBBgl706b3fobPnTx9pnK9gRw4g7E7NUhCqGimSXok
-	c+mWA4HuW7T+nwFG8RsPXAHvdq8NIrtHQKkl+/X4u+wmdVXEIPgh0CKfzrUSUSsUslJ3Qk
-	JudKIf1rlp84oY1njVq9Oi9FB6bESn0EUiEY3fmXIK6SGxkIccsRcMN533Wx1i8JzWvgh7
-	tCcYVCqRQ9laiCpMebUylCuclUm9SfZLVRNkcDe+BvvjCJxfXhS+eZm7A/tcEg==
-Date: Wed, 5 Feb 2025 15:23:40 +0100
+	bh=nufmSjHMtEV5ZfsxJFcdW5JQCdm1arQKEFGEiUJrDS4=;
+	b=UulgzBhUSFGO69n74FA+ue67u8llEUUuiDYeq+nnFH/2B/zqbdz8mKEOhSue0Faa81Pkag
+	Ld2YUhu4aFfbeDndGHMBq1E/ptFAFp5YS3sSjX9sUMjbtJh7IchAmwv9u+HK69tnzPc9nv
+	xrKyNgl9fv8RegmLY7Z0bagUeM1w2xveJ12yT4CTeu91oM2UMfp11dzeHwe46cjfYA76pY
+	eDtccfTbvruwiBEQW46b8DNaxECs9kjAOl+dWSRLeYdp/Nsszpq1HVToOG2qGPjQOzyCti
+	Pf0Rav4V0bVGdJVJrj51hN7xlEz9hWfm0BI9VM5P7eoLD8KAVgsPhR4H2BV6zw==
+Date: Wed, 5 Feb 2025 15:51:05 +0100
 From: Herve Codina <herve.codina@bootlin.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, Luca Ceresoli
- <luca.ceresoli@bootlin.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH RFC] i2c: Fix deadlock on adapter removal
-Message-ID: <20250205152340.5effbbd5@bootlin.com>
-In-Reply-To: <Z6Ns6cFACV4sQi8H@shikoro>
-References: <71a49125-54a7-4705-b54a-a5e7cc54a78b@gmail.com>
-	<20250205090737.3b93ab14@bootlin.com>
-	<Z6Ns6cFACV4sQi8H@shikoro>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Wolfram Sang <wsa@kernel.org>, "linux-i2c@vger.kernel.org"
+ <linux-i2c@vger.kernel.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 RFC] i2c: Fix deadlock on adapter removal
+Message-ID: <20250205155105.76d9633f@bootlin.com>
+In-Reply-To: <72397ae6-43aa-4a15-be5e-cdfe06b2c7ea@gmail.com>
+References: <72397ae6-43aa-4a15-be5e-cdfe06b2c7ea@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
@@ -70,35 +67,46 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeeilecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeviefffeegiedtleelieeghfejleeuueevkeevteegffehledtkeegudeigffgvdenucfkphepvdgrtddumegvtdgrmedvgeeimeejjeeltdemvdeitgegmegvvddvmeeitdefugemheekrgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdegieemjeejledtmedviegtgeemvgdvvdemiedtfegumeehkegrpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepiedprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehhkhgrlhhlfigvihhtudesghhmrghilhdrtghomhdprhgtphhtthhopeifshgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhivdgtsehvg
- hgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeejhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeviefffeegiedtleelieeghfejleeuueevkeevteegffehledtkeegudeigffgvdenucfkphepvdgrtddumegvtdgrmedvgeeimeejjeeltdemvdeitgegmegvvddvmeeitdefugemheekrgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdegieemjeejledtmedviegtgeemvgdvvdemiedtfegumeehkegrpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehhkhgrlhhlfigvihhtudesghhmrghilhdrtghomhdprhgtphhtthhopeifshgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtl
+ hhinhdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
 X-GND-Sasl: herve.codina@bootlin.com
 
-Hi Wolfram,
+Hi Heiner,
 
-On Wed, 5 Feb 2025 14:51:37 +0100
-Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
+Cc Thomas and Luca
 
-> Hi everyone,
-> 
-> > Cc Luca and Thomas (they are interested in the issue).  
-> 
-> Thank you for this interest.
-> 
-> > I tested the patch.
-> > 
-> > The deadlock is no more present but I have this new issue using the exact
-> > same command as the one I used to detect the deadlock:  
-> 
-> As this seems to be a more complicated issue, I sent out reverts for the
-> original patches now. This removes the stress of finding a solution
-> soonish. We now have time to find something proper, test it thoroughly,
-> etc...
-> 
-> I hope you guys will still help Heiner with tests?
+On Wed, 5 Feb 2025 14:49:46 +0100
+Heiner Kallweit <hkallweit1@gmail.com> wrote:
 
-Will do my best.
+> i2c_del_adapter() can be called recursively if it has an i2c mux on
+> the bus. This results in a deadlock.
+> We use the lock to protect from parallel unregistering of clients in
+> case driver and adapter are removed at the same time.
+> The fix approach is based on the fact that the used iterators are
+> klist-based. So it's safe to remove list elements during the iteration,
+> and we don't have to acquire the core lock.
+> As a result we just have to prevent that i2c_unregister_device() is
+> executed in parallel for the same client. Use an atomic bit op for this
+> purpose.
+> 
+> Fixes: 56a50667cbcf ("i2c: Replace list-based mechanism for handling auto-detected clients")
+> Reported-by: Herve Codina <herve.codina@bootlin.com>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-Best regards,
+Tested on my side with the exact same command I used to report the issue
+  # echo 30a40000.i2c > /sys/bus/platform/drivers/imx-i2c/unbind
+
+The deadlock is no more present. The crash present in v1 is also no more
+present.
+
+Also I rebound the driver
+  # echo 30a40000.i2c > /sys/bus/platform/drivers/imx-i2c/bind
+
+Devices re-appeared and work correctly.
+It's ok on my side, thanks for this fix!
+
+Tested-by: Herve Codina <herve.codina@bootlin.com>
+
+Best regards
 Hervé
 
