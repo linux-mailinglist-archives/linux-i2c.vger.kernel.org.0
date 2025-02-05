@@ -1,294 +1,174 @@
-Return-Path: <linux-i2c+bounces-9298-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9299-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E41A8A27C50
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2025 21:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AD726A2854E
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 09:07:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E29F3A0360
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Feb 2025 19:59:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 160D53A25D6
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Feb 2025 08:07:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 698F12185A8;
-	Tue,  4 Feb 2025 20:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E262288EB;
+	Wed,  5 Feb 2025 08:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R9KFP4zm"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="V3UB5aW5"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B829158558;
-	Tue,  4 Feb 2025 19:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883AA2147E6
+	for <linux-i2c@vger.kernel.org>; Wed,  5 Feb 2025 08:07:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738699200; cv=none; b=iwOxwFAs2z6H1g7xn0nslaPGHwsr51/SXfORUbkBJpblxub3mHb1w6n+PftmtY2Cmq9UtD3t75fhqF2lbLt7qNVkEg/GjU092jSaiD/BoxDfq9S4fGRFHJFnFwQTZwKZcRPZJ2p7slKe4OLDzKB3JBeYRv5sKZR57Wg4anItkG0=
+	t=1738742865; cv=none; b=ZtqgYp1nqoJ7tE0s2DEqB2c6AceO1AzS8yB+6RvIPM1KgzVn1bUI694D48xi+E4DQmA5iPYc4brzuSSHQ5T2SspTY1EtK1KtP+FGRhVG1uT4Lq7e2Kq20Q0OrrIJW2hHMqLs5kl34aDRC3i6O0Aid4jDyiLPQIjB/QEKpgo7fcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738699200; c=relaxed/simple;
-	bh=FI1b3cRWO0hKx3US474N8G8wfAFghI5E0KmOQlLbftA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BTvoKkkZn2gGDj9f6r5+BZmlKgUCRdggg415O2RzwA6/qxuAR7Qrcsltg70rXg4dK6ZOVlwpUS6MmvQr+kCuT9/orXa6g5nIR8rI5XlAWzZ9kC0Yu75QtsMd0RGNqlX9boTIaJo4KlR1VEdkdu3N4jxapB//+UkNGA7WJwUNzO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R9KFP4zm; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-435f8f29f8aso44918695e9.2;
-        Tue, 04 Feb 2025 11:59:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738699196; x=1739303996; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Acdu3F34ZwXb2ZANcqhpUzzlIsJoGdAX61oVl4ufjzc=;
-        b=R9KFP4zmPHgtJ06GsfO0EL2zBT/K2ZmDxNbfIo047WUyZljKZ0mqKSvrYJjiDGxPLY
-         oWOODx4wESiq60W9tI6AhVyTGC+ADE+5cqjw+KRK7xS1QKvSTTcLF48YyN8RmNBlKw2h
-         1OuWI3IJ4Wo0IlzL+vU5ZHtVZIDkLlY+L6SrBoVcvUbywiF9tTIHKim0uIdyfCJpf5Zr
-         LGmzGFTORSzUtDox7Jso0QyCfCjqNgGjyt1dQY3aA+CHHMaLEvPpZnFhkul3KY3/rOa2
-         pESYSrZntT0IYS/3m4qJIb91tp0t4Lj3KM+gKmZUdq8QN8nFcUZ8nqLX0xkASjwQtqJB
-         Kj6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738699196; x=1739303996;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Acdu3F34ZwXb2ZANcqhpUzzlIsJoGdAX61oVl4ufjzc=;
-        b=RBwvJ3OmR4BREDmwNkni4PAQCF7nneVTuO3x9alZXKJTRw0rCchGjR8/IQXvsUw19/
-         PxS+adcxoU1sie0L010vuCvbuGMFx7xIvCKWQEZp57Y7A51nQ8qekmr6c7WWaMHdaQhZ
-         ZQ3XM+83tPUPHSRGODLnvYJeeYg3ef7ZO2T9wobA5xXP9q776fSvA9lc+V8sR362PMyE
-         Xxnp7bwxdBlJ/S1D2ferXixocVlFIabDVaPpKxTSxsXLt94xvWNkWyr9W9k+7yNMfdCI
-         EpxOFcXIwOJUlnAfMP+5nwhllFFO2yyUH/++7OY+HXwcDC0VFHKUliP2SxOV03JA0ksb
-         CsUg==
-X-Forwarded-Encrypted: i=1; AJvYcCUdOpYCEdgacbV9C6GjSmoIANZihkwkDyW1sIZ5gUxcy54tWg4gvzzRVARAK3eF52bXGv94z6qVe9A=@vger.kernel.org, AJvYcCXmr3Jbw3ehjysVVq9ms62LVrAHOam42jm0Ou3H2cUumBiMZVYaNH0rlW96/VJLYLf6GAnrpmJFW7lYfG4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzERmjDQ+VoE0zvswbdbGG1QP/maDnafyM3wjo9tFRRixN0i4up
-	vAQoMLq4G4t3j4MnZeRL2FxKp7B0772LKHWmcsCDYwqjGR6w13yM
-X-Gm-Gg: ASbGncuWLS4egxGZCNfDCpNIUIiS9wT6UjBb4Q3/oa3NRPzmHlUl+oKnyskiQPeAdLN
-	y2ORqg3LcCJs2gozC1/PXGsnT9KpUQFXzzL4I3k+G0IHWULA4HaK+oUP4RDmailVgfmDeAEc0hF
-	XIv9qrYSy5DEHoV/01p+jl2erIj34dL1j43c4E9uFzc84UBfk87KZ9aD5cJKxEnlebMKSUwlR6c
-	194nTZ0z3Bf/PgullbA25UtmGougqnO7q3oDlywEyu/yYYjzxNKFiRQqd/4Plj3Cq1rz/QGPVpm
-	yKb/TpVyNNHqsPX8r3vzppfoIL7LXLRSVsYwoHOg4uEXhTkFszOiqvnU94LO3GaCUGSoGEg/33H
-	IoW3VkAXcUJdR5dsUawawAQiE/GzYSiq9RVkJ7VmO0u2JKuSfwljkdhsKGVXVi+blSNrA9vLpvc
-	IEru/Z
-X-Google-Smtp-Source: AGHT+IFyOvVcVYFBFivoQdZg/7cF7hL0tg4Vqf5y0A5OqPkw/9AKkP9h1U99sTJMiJhiiqsbN6AM7w==
-X-Received: by 2002:a05:600c:3d96:b0:434:fe3c:c67c with SMTP id 5b1f17b1804b1-438dc41d7b0mr207447395e9.26.1738699196230;
-        Tue, 04 Feb 2025 11:59:56 -0800 (PST)
-Received: from ?IPV6:2a02:3100:b3d9:8600:21e9:f8e3:9d4:22be? (dynamic-2a02-3100-b3d9-8600-21e9-f8e3-09d4-22be.310.pool.telefonica.de. [2a02:3100:b3d9:8600:21e9:f8e3:9d4:22be])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-438e245f49dsm199410435e9.35.2025.02.04.11.59.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Feb 2025 11:59:55 -0800 (PST)
-Message-ID: <705ea273-f0b5-45cb-a710-dc1c3031cc10@gmail.com>
-Date: Tue, 4 Feb 2025 21:00:12 +0100
+	s=arc-20240116; t=1738742865; c=relaxed/simple;
+	bh=e5lR1tA8FGQm/n3hloNbvSlcN0703TplNUyt0JsQquE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eyu8NxDaaNM64dPbH5UUPU0CwIE/x36Cclc+DloNi4wUiU5ISrapb8nUANxYUnzMF9eHoqYKbHmA7QGS/lC9OIiqUdqWJKGrTklF354umMfNVwPEyzhjs3oJADXXKOLNuG31FyCgaG0ZEquYZdjf+dEiINkcqCupscXeM3dCUUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=V3UB5aW5; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7C71B443E3;
+	Wed,  5 Feb 2025 08:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1738742858;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JCVCgI33SLl03okJRDnKt8RNBcPsuWcP4VXNlIAs/Mc=;
+	b=V3UB5aW5ggREP8s1f9FCn9J735TwMgXXe2phiSLS2GJlagfq7rz7uVa9cXD2sT0CiNbdz8
+	tRo6C4MeSDOqpK4W6jzhozNDDqI8C2XF/z7TqI5gFkSxswEaoQGEmb3ipqI9r9f6j2euOr
+	1q6dRfTFq7xiKhHtIUxddxfPVFdqsBipdefxmMJesMXmNzX+7oDnGUDlBy/vjTaecLWhKb
+	FQluaSKAnDnYoPv1F06psElKBMBXptTMNOZn9fRITZWhOIDb1p4FNhJuGQIbI5I4eOYrx0
+	YvpsckwlCzINYM5qT88q6BZVqwg138pE6UeTbmQE3ywPLJfssZGYS6DdidM8AQ==
+Date: Wed, 5 Feb 2025 09:07:37 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Wolfram Sang <wsa@kernel.org>, "linux-i2c@vger.kernel.org"
+ <linux-i2c@vger.kernel.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH RFC] i2c: Fix deadlock on adapter removal
+Message-ID: <20250205090737.3b93ab14@bootlin.com>
+In-Reply-To: <71a49125-54a7-4705-b54a-a5e7cc54a78b@gmail.com>
+References: <71a49125-54a7-4705-b54a-a5e7cc54a78b@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/4] i2c: Replace list-based mechanism for handling
- auto-detected clients
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Wolfram Sang <wsa@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- linux-sound@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <97970201-24fd-473d-b20a-d21d2cd468f3@gmail.com>
- <ad839a82-8694-4f99-b1c1-0ee53c9d40cf@gmail.com>
- <20250204162442.25e72682@bootlin.com>
-Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <20250204162442.25e72682@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdelvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeviefffeegiedtleelieeghfejleeuueevkeevteegffehledtkeegudeigffgvdenucfkphepvdgrtddumegvtdgrmedvgeeimeejjeeltdemvdeitgegmegvvddvmeeitdefugemheekrgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdegieemjeejledtmedviegtgeemvgdvvdemiedtfegumeehkegrpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehhkhgrlhhlfigvihhtudesghhmrghilhdrtghomhdprhgtphhtthhopeifshgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtl
+ hhinhdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
+X-GND-Sasl: herve.codina@bootlin.com
 
-On 04.02.2025 16:24, Herve Codina wrote:
-> Hi,
-> 
-> Got a deadlock issue with this patch in v6.14-rc1.
-> 
-> On Fri, 1 Nov 2024 23:09:51 +0100
-> Heiner Kallweit <hkallweit1@gmail.com> wrote:
-> 
->> So far a list is used to track auto-detected clients per driver.
->> The same functionality can be achieved much simpler by flagging
->> auto-detected clients.
->>
->> Two notes regarding the usage of driver_for_each_device:
->> In our case it can't fail, however the function is annotated __must_check.
->> So a little workaround is needed to avoid a compiler warning.
->> Then we may remove nodes from the list over which we iterate.
->> This is safe, see the explanation at the beginning of lib/klist.c.
->>
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->> ---
->> v3:
->> - protect client removal with core_lock mutex
->> ---
->>  drivers/i2c/i2c-core-base.c | 52 ++++++++++++-------------------------
->>  include/linux/i2c.h         |  3 +--
->>  2 files changed, 17 insertions(+), 38 deletions(-)
->>
-> ...
-> 
->> @@ -1780,8 +1752,10 @@ void i2c_del_adapter(struct i2c_adapter *adap)
->>  	 * we can't remove the dummy devices during the first pass: they
->>  	 * could have been instantiated by real devices wishing to clean
->>  	 * them up properly, so we give them a chance to do that first. */
->> +	mutex_lock(&core_lock);
->>  	device_for_each_child(&adap->dev, NULL, __unregister_client);
->>  	device_for_each_child(&adap->dev, NULL, __unregister_dummy);
->> +	mutex_unlock(&core_lock);
->>  
-> 
-> Calling __unregister_client() with core_lock mutex held leads to a deadlock
-> in my case:
-> 
->     # echo 30a40000.i2c > /sys/bus/platform/drivers/imx-i2c/unbind
->     [  242.928264] 
->     [  242.929779] ============================================
->     [  242.935092] WARNING: possible recursive locking detected
->     [  242.940406] 6.14.0-rc1+ #22 Not tainted
->     [  242.944245] --------------------------------------------
->     [  242.949556] sh/299 is trying to acquire lock:
->     [  242.953915] ffff8000818b82e0 (core_lock){+.+.}-{4:4}, at: i2c_del_adapter+0x44/0x1b0
->     [  242.961689] 
->     [  242.961689] but task is already holding lock:
->     [  242.967524] ffff8000818b82e0 (core_lock){+.+.}-{4:4}, at: i2c_del_adapter+0xa0/0x1b0
->     [  242.975285] 
->     [  242.975285] other info that might help us debug this:
->     [  242.981814]  Possible unsafe locking scenario:
->     [  242.981814] 
->     [  242.987732]        CPU0
->     [  242.990179]        ----
->     [  242.992625]   lock(core_lock);
->     [  242.995686]   lock(core_lock);
->     [  242.998748] 
->     [  242.998748]  *** DEADLOCK ***
->     [  242.998748] 
->     [  243.004666]  May be due to missing lock nesting notation
->     [  243.004666] 
->     [  243.011455] 5 locks held by sh/299:
->     [  243.014946]  #0: ffff000079a533f0 (sb_writers#6){.+.+}-{0:0}, at: vfs_write+0x1c4/0x398
->     [  243.022976]  #1: ffff000005c29088 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0xf8/0x1c8
->     [  243.031962]  #2: ffff000000c240f8 (&dev->mutex){....}-{4:4}, at: device_release_driver_internal+0x48/0x250
->     [  243.041645]  #3: ffff8000818b82e0 (core_lock){+.+.}-{4:4}, at: i2c_del_adapter+0xa0/0x1b0
->     [  243.049845]  #4: ffff000079f24908 (&dev->mutex){....}-{4:4}, at: device_release_driver_internal+0x48/0x250
->     [  243.059522] 
->     [  243.059522] stack backtrace:
->     [  243.063883] CPU: 2 UID: 0 PID: 299 Comm: sh Not tainted 6.14.0-rc1+ #22
->     [  243.070502] Hardware name: GE HealthCare Supernova Patient Hub v1 (DT)
->     [  243.077032] Call trace:
->     [  243.079481]  show_stack+0x20/0x38 (C)
->     [  243.083152]  dump_stack_lvl+0x90/0xd0
->     [  243.086819]  dump_stack+0x18/0x28
->     [  243.090140]  print_deadlock_bug+0x260/0x350
->     [  243.094332]  __lock_acquire+0x113c/0x2180
->     [  243.098346]  lock_acquire+0x1c4/0x350
->     [  243.102015]  __mutex_lock+0x9c/0x500
->     [  243.105599]  mutex_lock_nested+0x2c/0x40
->     [  243.109528]  i2c_del_adapter+0x44/0x1b0
->     [  243.113371]  i2c_mux_del_adapters+0xa0/0x100
->     [  243.117649]  pca954x_cleanup+0x98/0xd0
->     [  243.121406]  pca954x_remove+0x38/0x50
->     [  243.125078]  i2c_device_remove+0x34/0xb8
->     [  243.129007]  device_remove+0x54/0x90
->     [  243.132590]  device_release_driver_internal+0x1e8/0x250
->     [  243.137824]  device_release_driver+0x20/0x38
->     [  243.142101]  bus_remove_device+0xd4/0x120
->     [  243.146116]  device_del+0x14c/0x410
->     [  243.149612]  device_unregister+0x20/0x48
->     [  243.153540]  i2c_unregister_device.part.0+0x50/0x88
->     [  243.158427]  __unregister_client+0x74/0x80
->     [  243.162530]  device_for_each_child+0x68/0xc8
->     [  243.166811]  i2c_del_adapter+0xb8/0x1b0
->     [  243.170653]  i2c_imx_remove+0x4c/0x190
->     [  243.174412]  platform_remove+0x30/0x58
->     [  243.178167]  device_remove+0x54/0x90
->     [  243.181751]  device_release_driver_internal+0x1e8/0x250
->     [  243.186982]  device_driver_detach+0x20/0x38
->     [  243.191172]  unbind_store+0xbc/0xc8
->     ...
-> 
-> When I unbind the i2c SoC adapter driver, i2c_del_adapter() is indeed called
-> recursively. The first call is for the 30a40000.i2c SoC adapter and the
-> second one for an i2c mux connected on the i2c bus.
-> 
-> My device-tree looks like this:
-> 	i2c@30a40000 {
-> 		compatible = "fsl,imx8mp-i2c", "fsl,imx21-i2c";
-> 		...
-> 		i2c-mux@70 {
-> 			compatible = "nxp,pca9543";
-> 			...
-> 			i2c@0 {
-> 				...
-> 				touchscreen@2a {
-> 					compatible = "eeti,exc80h60";
-> 					...
-> 				};
-> 			};
-> 			
-> 			i2c@1 {
-> 				...
-> 			};
-> 		};
-> 	};
-> 
-> 
-> Should the core_lock mutex be taken when both __unregister_client() and
-> __unregister_dummy() are called ?
-> 
+Hi Heiner,
 
-Thanks for the report! I just submitted a fix, for now as RFC.
-If fixes the deadlock and uses a new approach to prevent the race
-which caused us to acquire the core lock in few place.
-Could you please re-test?
+Cc Luca and Thomas (they are interested in the issue).
 
-> Best regards,
-> Hervé Codina
+On Tue, 4 Feb 2025 20:54:57 +0100
+Heiner Kallweit <hkallweit1@gmail.com> wrote:
 
-Heiner
+> i2c_del_adapter() can be called recursively if it has an i2c mux on
+> the bus. This results in a deadlock.
+> We use the lock to protect from parallel unregistering of clients in
+> case driver and adapter are removed at the same time.
+> The fix approach is based on the fact that the used iterators are
+> klist-based. So it's safe to remove list elements during the iteration,
+> and we don't have to acquire the core lock.
+> As a result we just have to prevent that i2c_unregister_device() is
+> executed in parallel for the same client. Use an atomic bit op for this
+> purpose.
+> 
+> Fixes: 56a50667cbcf ("i2c: Replace list-based mechanism for handling auto-detected clients")
+> Reported-by: Herve Codina <herve.codina@bootlin.com>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+
+I tested the patch.
+
+The deadlock is no more present but I have this new issue using the exact
+same command as the one I used to detect the deadlock:
+
+    # echo 30a40000.i2c > /sys/bus/platform/drivers/imx-i2c/unbind
+    [   35.221250] Unable to handle ker
+    ** replaying previous printk message **
+    [   35.221250] Unable to handle kernel paging request at virtual address 70ffff8000818b85
+    [   35.221298] Mem abort info:
+    [   35.221330]   ESR = 0x0000000096000005
+    [   35.221347]   EC = 0x25: DABT (current EL), IL = 32 bits
+    [   35.221364]   SET = 0, FnV = 0
+    [   35.221381]   EA = 0, S1PTW = 0
+    [   35.221398]   FSC = 0x05: level 1 translation fault
+    [   35.221415] Data abort info:
+    [   35.221428]   ISV = 0, ISS = 0x00000005, ISS2 = 0x00000000
+    [   35.221445]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+    [   35.221464]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+    [   35.221484] [70ffff8000818b85] address between user and kernel address ranges
+    [   35.221806] Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+    [   35.291401] Modules linked in: fsl_ldb imx8mp_interconnect imx_interconnect leds_pca963x imx_cpufreq_dt imx8mm_thermal lm75 tmp103 rtc_snvs     snvs_pwrkey rtc_rs5c372 pwm_imx27 st_pressure_spi st_sensors_spi regmap_spi st_pressure_i2c st_pressure st_sensors_i2c industrialio_triggered_buffer kfifo_buf st_sensors iio_hwmon gpio_charger led_bl panel_simple opt3001 governor_userspace imx_bus imx8mp_hdmi_tx dw_hdmi dwmac_imx stmmac_platform stmmac pcs_xpcs phylink samsung_dsim imx_sdma imx_lcdif drm_dma_helper imx8mp_hdmi_pvi fsl_imx8_ddr_perf caam exc3000 error pwm_bl ti_sn65dsi83 hotplug_bridge drm_display_helper drm_kms_helper drm drm_panel_orientation_quirks backlight gehc_sunh_connector
+    [   35.352122] CPU: 1 UID: 0 PID: 294 Comm: sh Not tainted 6.14.0-rc1+ #24
+    [   35.358743] Hardware name: HCO board (DT)
+    [   35.365273] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+    [   35.372239] pc : sysfs_remove_groups+0x20/0x70
+    [   35.376695] lr : device_remove_attrs+0xb8/0x100
+    [   35.381237] sp : ffff8000834db9a0
+    [   35.384551] x29: ffff8000834db9a0 x28: ffff000000e58000 x27: 0000000000000000
+    [   35.391700] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+    [   35.398850] x23: ffff00007bc611b0 x22: ffff800080c4fb01 x21: 0000000000000000
+    [   35.405997] x20: 70ffff8000818b85 x19: ffff00007bc72028 x18: 0000000000000000
+    [   35.413144] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000028
+    [   35.420290] x14: 0000000000000000 x13: 0000000000008d0d x12: ffff000000e58918
+    [   35.427437] x11: ffff8000820618a8 x10: 0000000000000000 x9 : ffff800080733d08
+    [   35.434585] x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : 647165746f623200
+    [   35.441733] x5 : ffff000000e58000 x4 : 0000000029dd16fe x3 : 0000000000000000
+    [   35.448881] x2 : 0000000000000000 x1 : 70ffff8000818b85 x0 : ffff00007bc72028
+    [   35.456030] Call trace:
+    [   35.458478]  sysfs_remove_groups+0x20/0x70 (P)
+    [   35.462932]  device_remove_attrs+0xb8/0x100
+    [   35.467123]  device_del+0x144/0x410
+    [   35.470616]  device_unregister+0x20/0x48
+    [   35.474544]  i2c_unregister_device.part.0+0x64/0xc0
+    [   35.479433]  __unregister_client+0x74/0x80
+    [   35.483539]  device_for_each_child+0x68/0xc8
+    [   35.487818]  i2c_del_adapter+0xac/0x198
+    [   35.491663]  i2c_imx_remove+0x4c/0x190
+    [   35.495419]  platform_remove+0x30/0x58
+    [   35.499179]  device_remove+0x54/0x90
+    [   35.502762]  device_release_driver_internal+0x1e8/0x250
+    [   35.507994]  device_driver_detach+0x20/0x38
+    [   35.512185]  unbind_store+0xbc/0xc8
+    [   35.515680]  drv_attr_store+0x2c/0x48
+    [   35.519349]  sysfs_kf_write+0x54/0x88
+    [   35.523018]  kernfs_fop_write_iter+0x128/0x1c8
+    [   35.527468]  vfs_write+0x290/0x398
+    [   35.530876]  ksys_write+0x70/0x110
+    [   35.534284]  __arm64_sys_write+0x24/0x38
+    [   35.538212]  invoke_syscall+0x50/0x120
+    [   35.541972]  el0_svc_common.constprop.0+0x48/0xf8
+    [   35.546686]  do_el0_svc+0x28/0x40
+    [   35.550009]  el0_svc+0x48/0x110
+    [   35.553159]  el0t_64_sync_handler+0x144/0x168
+    [   35.557522]  el0t_64_sync+0x198/0x1a0
+    [   35.561198] Code: a9bd7bfd 910003fd a90153f3 aa0103f4 (f9400021) 
+    [   35.567295] ---[ end trace 0000000000000000 ]---
+
+I really don't know if this new issue is related to 56a50667cbcf ("i2c:
+Replace list-based mechanism for handling auto-detected clients") or some
+other patches but for sure it was not present in v6.13.
+
+Can you have a look?
+
+Feel free to ask for more information or tests I can do to help if needed.
+
+Best regards,
+Hervé
 
