@@ -1,61 +1,61 @@
-Return-Path: <linux-i2c+bounces-9323-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9324-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 650B9A2A7FC
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Feb 2025 12:57:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14946A2A7FF
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Feb 2025 12:58:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4255A1886DF3
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Feb 2025 11:57:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FDC3162EED
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Feb 2025 11:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86F3A22CBC9;
-	Thu,  6 Feb 2025 11:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 495C322D4CB;
+	Thu,  6 Feb 2025 11:57:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="z7RE5OWZ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lyA4ssgZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2087.outbound.protection.outlook.com [40.107.243.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD692147E4;
-	Thu,  6 Feb 2025 11:57:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6302147E4;
+	Thu,  6 Feb 2025 11:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.87
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738843055; cv=fail; b=XQhTpICLPGwVYrPhaXGvhDoiibHxxlzK8Gvil2uZIxCQFUsQLtaVyT2XpB2/lITItGIWGv1SYfBSaZy0ITzknhF2ETOOp6fWF+w624dbT6N2KxScMPrT/H0NSSZEhoYVgo8hH/EKhdJFB4jzsAPIasKrniTaAUf9hoYYftpzX2U=
+	t=1738843061; cv=fail; b=ISuGaAoopHCbjd/pTBoG+iUlSrPZcpOA35+TrfALX690QvKgrCAEnvjMO2q/nJPPaGERzQuDxHQOYGoyX4j1c3QtKsuULxFuhbPSTNVf0W4hRGKRHxblqX7xloFQlXWeIciv7oPXsO14onMldlkXE+FG/+17izz9WSvfcMD51Cw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738843055; c=relaxed/simple;
-	bh=nwwVqw200njwVDZ9+YA2oms1+Zn4bnAJNKaZ6Cvj0bk=;
+	s=arc-20240116; t=1738843061; c=relaxed/simple;
+	bh=YZACOHaKo9T1IsvXVHGgaOgETM+8MDRJyPdBa++lptM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WUu9smcwMczfJCzsIlJ/VtF3xL5VCFKuNJ6TXNpPJRqfXxJfDg/uCmmYgytCsreoff3PmqyBq4wsGxeMR54P85ua58p3cbpL04RrRFV+IUGmZnul8WqxYagoqAgPSIcYVoMWfZqZj2KF6O+r94XkluV1TJu9EXNHzOP+cbbgrt0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=z7RE5OWZ; arc=fail smtp.client-ip=40.107.92.80
+	 MIME-Version:Content-Type; b=lzNykTUsQ9+qHb1COzJTqM8Cf6eFtEEX8RUcaGGCSRq6zvA3JzptbgAaNTaUPvLc0A4lOPPZtPqOM0TisXT40zb7IiJbgrhcWBCiJs6eVHiZlOtrl8UuezigUsRN9suqpumQfemmy+M3e644HvG5KSRvKW7Cxx7/AODreeFRapM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=lyA4ssgZ; arc=fail smtp.client-ip=40.107.243.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tF522wDQBH6Q4zswt+rGu1kFs65ved+5/16v8rx69ADvNMYfmJjW3EBuzG3TAUIVZ/8jeT5we0krcO1DHs0V4y1Q3EVcvTqc8wevgQ2DrnqrTZr6VzGx4wiqLV0xaH4OAdJlAuJeLjDULNaKe+EjOPx3UydouQt2eRqhf8XSiny1r5QwHXEtEPhZS2vFNJIY8qBSh+N7L6W7jFjv/g8Wc7Eehn7XRwO2v6l3CgUReWxdCPRD7w/JNi4cqb8TC4ZqJ9jsEtvUittWvWdHd2ZBIQ98q8IZOEu6PIcPCXEkhvMONH70pr2Nh2gzfq08pePRU/tVifDzWwU1YNkfBZzV6Q==
+ b=rU4REPmIH700DrtVFQo7v59OKMdnCX0ywwDAMtFE1UeRvys7qWJarg7/UMr4es7Tvk5dPOqM3XFl2tuyNmjK2yawk6IQvXbT5UbS/3eSasVTt7VOYJqHvM5dC5DuZLNR4AgXVwJXRKy3LMbYqtDo/mYwpjFE09e643NoAeXh2uaWqQInN3Q66tCwkE6l+1m5pAIHDNKvNu0yFLLRMU0Ants6fah4HbrxDHl/ELmf8x5KDCcW3PesfZOdVuFfCidbUKqLDp7yddMNsAV/yNL2/QIExHhqjIAPbnRFLcMJECoqlGVKTFgtI6k1YIGrqbFS7uktFyotnxMZZra9vR5I8Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VLg2OfvLHU1VcjhKsZeqA74rYbw6juNTurkE5jTVkdY=;
- b=mUx08rNdmy0GUAVm6n4wZ8ugaSEehETGDWsDW+ZyYsA5ABncyaGoIgav22JDnvHnPGeWp+z2hOZwqDbI5TVIpqvoyEg7ArLc/bLqhkcFdkqzHdmGcqcpP/4McZ90EaIavn5L3KeMhmsCLNKQP/44RYb/PXzWGVqDHn+NQVDGK1f/XWUU0PmvLtKtuQikKuwp/lyelw37Lby5jhw84+mlKdu+RSvsMrtlM3DFZDW+POJNTx+0SV4nCD9wwaN2DBJTtZg60sVNoUPxQFAQ54iGTIyglHe89DaCU9p6ZVKZ+Ifcm6pPJl45yJRJmDlAcTeWR6eoWR4CsZck5KRbfDmH6A==
+ bh=nlPA5sJK+RrtmAbsqXLO5U2BNtdfDlY8hLcmpjZ4xE8=;
+ b=Q39K2mJKIVNIH3K6E9DVhqouMojqyvUKycZbGDVI97Xgb+8X21J0/5adKpTx9EDa1fUwchA5UfNqDy+QDxT4Jrygx8N30Rv/f6kXNrfxdsPdD/l/xbkZCt1mrRE88vXWIVOdlA/Nz0qYAdK6WMddB+lwxNCVuPE9XzTG+lq6o4vYrn0ogdM3NneixgN9aGs4KUv2uVla6UZV+r60e0UBJ5rJS7lqALWputMRR63y7j1daAozEynske95v8N7wcrDfs9pjNLAWsfEipy2kt7gvR8uUd3BxKZ0l+pcAWBfuR7GoU61mcOX5mwhlVNEXPMAgKZSSSAp8eghRqDVT2v8Gw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VLg2OfvLHU1VcjhKsZeqA74rYbw6juNTurkE5jTVkdY=;
- b=z7RE5OWZ88AUV4tBJ2P6Gs14q1RP6Rc1ifYBdQBPxqv50uX/VtYSQQvwcxm8eZewXw0HyQoMbNat1KEAuvFW9ey8NTM7fZ8xYWeilprGSNwL/1lqvndsIllC+D7r+obX8917O7h1tftqMh7/3PUjT9AOY/KzZOwu4UR1Emwj78g=
-Received: from PH0PR07CA0057.namprd07.prod.outlook.com (2603:10b6:510:e::32)
- by SJ0PR12MB7068.namprd12.prod.outlook.com (2603:10b6:a03:4ae::7) with
+ bh=nlPA5sJK+RrtmAbsqXLO5U2BNtdfDlY8hLcmpjZ4xE8=;
+ b=lyA4ssgZZqusE34NASJgdLk5W/C3eZdSzSWHO9aSeRvwBw5JjRQyMcwLo15o/yRQV//8HmLcZmlLoI9qNwIAF/LrJadzY2SolDlcIIF9HiAnSwGfWIvxczHuBKRm+uTsjbnt6hiT/86TvlF1Ltl1cO0ysGYqpNpMjsTuPPpIXWw=
+Received: from SA1P222CA0059.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:2c1::11)
+ by PH7PR12MB5712.namprd12.prod.outlook.com (2603:10b6:510:1e3::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.11; Thu, 6 Feb
- 2025 11:57:29 +0000
-Received: from SN1PEPF000397B4.namprd05.prod.outlook.com
- (2603:10b6:510:e:cafe::83) by PH0PR07CA0057.outlook.office365.com
- (2603:10b6:510:e::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8398.24 via Frontend Transport; Thu,
- 6 Feb 2025 11:57:29 +0000
+ 2025 11:57:35 +0000
+Received: from SN1PEPF000397B1.namprd05.prod.outlook.com
+ (2603:10b6:806:2c1:cafe::61) by SA1P222CA0059.outlook.office365.com
+ (2603:10b6:806:2c1::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8398.28 via Frontend Transport; Thu,
+ 6 Feb 2025 11:57:35 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,16 +63,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF000397B4.mail.protection.outlook.com (10.167.248.58) with Microsoft
+ SN1PEPF000397B1.mail.protection.outlook.com (10.167.248.55) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8398.14 via Frontend Transport; Thu, 6 Feb 2025 11:57:29 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ 15.20.8398.14 via Frontend Transport; Thu, 6 Feb 2025 11:57:34 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 6 Feb
- 2025 05:57:27 -0600
+ 2025 05:57:34 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 6 Feb
+ 2025 05:57:33 -0600
 Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Thu, 6 Feb 2025 05:57:24 -0600
+ Transport; Thu, 6 Feb 2025 05:57:30 -0600
 From: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
 To: <git@amd.com>, <michal.simek@amd.com>, <andi.shyti@kernel.org>,
 	<p.zabel@pengutronix.de>, <linux-arm-kernel@lists.infradead.org>,
@@ -80,9 +84,9 @@ To: <git@amd.com>, <michal.simek@amd.com>, <andi.shyti@kernel.org>,
 CC: <radhey.shyam.pandey@amd.com>, <srinivas.goud@amd.com>,
 	<shubhrajyoti.datta@amd.com>, <manikantaguntupalli09@gmail.com>, "Manikanta
  Guntupalli" <manikanta.guntupalli@amd.com>
-Subject: [PATCH 1/2] i2c: cadence: Simplify using devm_clk_get_enabled()
-Date: Thu, 6 Feb 2025 17:27:07 +0530
-Message-ID: <20250206115708.1085523-2-manikanta.guntupalli@amd.com>
+Subject: [PATCH 2/2] i2c: cadence: Move reset_control_assert after pm_runtime_set_suspended in probe error path
+Date: Thu, 6 Feb 2025 17:27:08 +0530
+Message-ID: <20250206115708.1085523-3-manikanta.guntupalli@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250206115708.1085523-1-manikanta.guntupalli@amd.com>
 References: <20250206115708.1085523-1-manikanta.guntupalli@amd.com>
@@ -94,125 +98,79 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-Received-SPF: None (SATLEXMB04.amd.com: manikanta.guntupalli@amd.com does not
- designate permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF000397B4:EE_|SJ0PR12MB7068:EE_
-X-MS-Office365-Filtering-Correlation-Id: 09cb3d21-9b3b-4fdd-1a0f-08dd46a56e5b
+X-MS-TrafficTypeDiagnostic: SN1PEPF000397B1:EE_|PH7PR12MB5712:EE_
+X-MS-Office365-Filtering-Correlation-Id: faaf0a2c-6565-44a5-9291-08dd46a571db
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024;
+	BCL:0;ARA:13230040|376014|36860700013|1800799024|82310400026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?yEka1AVKyZBEfbKu2DfIg63K83VGor5iHym2PUavLq8UzwzapjrlncONS5kf?=
- =?us-ascii?Q?f/fKXag4BLPFCf60ezDIiN44lWPkKzO55Flbla22XKDeoUN/vi4pmJJ2OALh?=
- =?us-ascii?Q?SW+Mv9Kgge8BIiVqZI7hLM5w5MoDYa+hVh6S8vgAOXOgknSj9M6JXNsLcPPZ?=
- =?us-ascii?Q?PjJE5K5oZYq1vIBng/ZmwJJIjKgrRFQh//lNX31DNcUO+zUHW3BFEBLFEO3N?=
- =?us-ascii?Q?PYI5WohelcGg/0HNWkvBDRghm55Vid9B1+v83oF+TmRV8LuD/p1tHL7W7Tum?=
- =?us-ascii?Q?EtMmTSUj32dwFqlOBxqwEQEeycpILwpuEfBIvpYnmuCoQVDzpApm0TB1lrpN?=
- =?us-ascii?Q?uFkvDaOBsRXU63LvhCqq9KLPw4sZ8MyYeBA6fnFrgL90OB8OzhiVOg0OvDAT?=
- =?us-ascii?Q?yIsJbUDpMGKH9XfApbxFxEzF5cgwm+A0dNKQccHEmSitKWC47zh2mJf3tzjC?=
- =?us-ascii?Q?AdnXV2MOMQ4brgRWYYqGkd4pm8iYZaAiARCpoKccaKibWau6TjXRNce68dFE?=
- =?us-ascii?Q?zXBf/J8to458hmAUeUnb4N476/AzOrmdkDZ4erini4oJWIg4V1Sb72s3HCrT?=
- =?us-ascii?Q?ZW8yx72+2U5f14HCbTgf4Nrd+IYuG3NHVKPWeMr5YyNp3mCbNlGQBqog3fPY?=
- =?us-ascii?Q?GTnN+E65s3PTIEc9iShghkhFAR3rFCxE8vlmtcjYybCWmCJMSew74GmXyDqR?=
- =?us-ascii?Q?WQI/Wexq3KKfo28Dm1figLSv0BIcrjxk0twmHBxOR7J4NJWlHlI5YH2i2HrJ?=
- =?us-ascii?Q?SO5WDRUsjgTwi3UmGYYNb9Odqj7fNxXvEyvAsrFaKaMPfXt6yPchGf7CHJiz?=
- =?us-ascii?Q?68XzHQCP9jN+P9Ueai9HSmC068rer3IGEVPSWfu/5ddBgxTrquNeWussluWd?=
- =?us-ascii?Q?NGM9NVVy2ucVtQ7oB+flOLegZYzu23d6oSZg57vHvIYb8iB4UzfjPp/FmnRn?=
- =?us-ascii?Q?ey59DMLa8/9bmrKQM+UCv/3wcrZxScW9k9Q5DXse5/R3z4e/Lhk8mNNUuVw7?=
- =?us-ascii?Q?aGUtGNeDbwYCxIwVqribUxLVhPMaBRz4dOHiHtGuGCS29q9GyDboz1XKTPNs?=
- =?us-ascii?Q?tcWiFeffhmbA5hvBJdgz8QrZE7x4FxYjMqJlkOgDX0vu5fFqPwc7/gb0T8nM?=
- =?us-ascii?Q?ZRxYGJFBy2v4z+Thf0d+PmfNq+kLu3nqDf/jWZI8RuJsU79ESbxzdmAee83/?=
- =?us-ascii?Q?CiUyqtxXjoY0CkIp442VFGEeAxKjdjwSFdVQwhT7QPmFmvnlfDSCeRtoSl92?=
- =?us-ascii?Q?XKLFB0KjYWYtYAUI5yUD5guCu1z/mquEQ5R/xTTOVvUxpmGlJsNs+gWqS4+l?=
- =?us-ascii?Q?04KiulkqnCFafHHri3X6tseNBTinqtM7ZhLgIhkFrkDYAmLziRvqqEKLFkxG?=
- =?us-ascii?Q?caBqNq6+ECShc58fdIfSt3wEiukJ1HReC0EoehCdYVAgzF/QSzMRFK92SGCk?=
- =?us-ascii?Q?FF98qnFJd4hIEDBfvADnGThD1roHysYF0zdBg3yY1rOqY/5cdwRWCmOFWu9H?=
- =?us-ascii?Q?+svd2GcUiVkhsm4=3D?=
+	=?us-ascii?Q?e12cD1iH39StaTZwxgNMcGUJQssUJMxWyScpS2E7P2hLCoi5rJwJeYUYxpcd?=
+ =?us-ascii?Q?CUz+VWRtnAscDrqUh7GFyFwGjjyPBSTl5GFWtE+rk81e0H0rTzi8dRHJOSEC?=
+ =?us-ascii?Q?uFzfdy7nM/fuhAXa4YlJxQeKWZwvbi88tDjElRMQsL8u9iMIcAZFIg0KqYrr?=
+ =?us-ascii?Q?Pr8gsr4lyCtMPMn1X+uTkgrZv1WBkd5D7R1lduAETuPJHhrTo5dQ/TEqGcQx?=
+ =?us-ascii?Q?uNBX0PhjTVAG8lVgUaIMOw6npa9V/sC29XV2wft7wAnGu3r6rkw/iwAjwXeC?=
+ =?us-ascii?Q?r3t/zrDoF8ZO/bXhS3IhNLhcRSqAaFkw7N/CyOy1i0jJMOq2j1JzPzEbSn5s?=
+ =?us-ascii?Q?GVtm2OoQ3UeLjLY5IpFF1KAJK2/AkLdfsXkBbBqsa5fDDz26r3s7v2f4bx4d?=
+ =?us-ascii?Q?Vx7bvt7b2KJ73P436aJk3FWmhr4EKqlS16IYyDoEC++xhvu3jbEyB9zsqwCL?=
+ =?us-ascii?Q?asb7msVzDb85PLb+mdRlqotLWPS3VoURTAloJ6r5I/hAXnzK7F0kNS0il49r?=
+ =?us-ascii?Q?cTV9DaBPWqn9Mz6k+mTZm3V2dH3neHjq0avp1uYtEANpTVeBJcx0L0S5HGPV?=
+ =?us-ascii?Q?8ADDorvhLuo7zqMPjtu+e12VeYcwaj+9uprW2AovrJ52PUhuV0OxyucrfhHj?=
+ =?us-ascii?Q?JNGOQgDKjUlp/i7+Z0Up/XmwCvHVEomoPO05DCw7iKCAypWI6rb3HDbp/QLt?=
+ =?us-ascii?Q?AWIl6QSLYaKem+kcOncUODS7dp7cxC8UJS0Fjq49vfcm0Jjz+Rtghpz/3CKx?=
+ =?us-ascii?Q?sqX3OO9JZ9odm8r1lHnB5ehLjHpKS3hVjvoZ9uE1in56gRNz5bptZtX/1HqW?=
+ =?us-ascii?Q?gNS67hX/0XujDlerZqndoLzB0eQF3LRnaZ6bMfIYWemHYIYMz8rvoyxl41pT?=
+ =?us-ascii?Q?NlRimdW5SwvFo6vyMbZuaOBH4GKcQQybrcKnD5DByK1f4OZ3JuE1c7jN0Iq4?=
+ =?us-ascii?Q?8FmAVd143fQVRsPUkJmjvhA1aHxYC4ifj5ThCuMdT57LOY0H0ahpC0hgLTX1?=
+ =?us-ascii?Q?YKxoJ6j8qC81SAKVbtRVrWi7lf9fkLgpsivHJve5UQphOZecKNzQ2Pm8sLdM?=
+ =?us-ascii?Q?DdLCGtdBwoW45QunvNSYbkxXV8lw1QtwecW4APJqo7ZmfQJNi9Mp0DUuaLOD?=
+ =?us-ascii?Q?zC3J4Fh0xMkFGXRaPibILaQEQP8xeHhZVB36s2fw54eDhwNAKKsrWi5YD5FH?=
+ =?us-ascii?Q?htNVnwd1aj4c87+CX7H0Hh0UxuW7SMpxZxip3ud+6Rbf7ALl0Y8nUu/yLbou?=
+ =?us-ascii?Q?sgNHV9Ja6a5q5oCApjbC8SpfBFdrqzK3ybcnrZABGJvaS31TP187V6bfKmEJ?=
+ =?us-ascii?Q?RXKfHa+mb1WgMvUbDuUhIfkwZC2NW7Ua0jmElM/zwkMho/t4FESGwnzhPO2c?=
+ =?us-ascii?Q?MpgJjeBvj2+DHw0diAwJVWBwWkc8d3g6hFLJ4XnL1kBNdIjA6gHLjVAdPZcr?=
+ =?us-ascii?Q?lIJo1ljfVXjv3zAgOQ16NCm0exb0ffYRib1cVkgeTOgkYCutkosdmNmH/T2+?=
+ =?us-ascii?Q?9xMOKTiL6qlnAA8=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2025 11:57:29.0553
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2025 11:57:34.9460
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09cb3d21-9b3b-4fdd-1a0f-08dd46a56e5b
+X-MS-Exchange-CrossTenant-Network-Message-Id: faaf0a2c-6565-44a5-9291-08dd46a571db
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF000397B4.namprd05.prod.outlook.com
+	SN1PEPF000397B1.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7068
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5712
 
-From: Michal Simek <michal.simek@amd.com>
+Ensure reset_control_assert() is called after pm_runtime_set_suspended()
+in the cdns_i2c_probe exit path to maintain proper power management
+sequence in error cases.
 
-Clock handling can be very simplified with using devm_clk_get_enabled() as
-was done by commit 8d2aaf4382b7 ("gpio: zynq: Simplify using
-devm_clk_get_enabled()").
-And also fix issue in connection to incorrect sequence when err_clk_dis
-label is called.
-When reset_control_deassert() fails it jumps to err_clk_dis label which
-disables clock and also disable pm_runtime setup but nothing has been setup
-at this time of failure because initialization is done below
-reset_control_deassert() call.
-
-Signed-off-by: Michal Simek <michal.simek@amd.com>
 Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
 ---
- drivers/i2c/busses/i2c-cadence.c | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+ drivers/i2c/busses/i2c-cadence.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index b64026fbca66..51dc7728d133 100644
+index 51dc7728d133..8df63aaf2a80 100644
 --- a/drivers/i2c/busses/i2c-cadence.c
 +++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -1541,7 +1541,7 @@ static int cdns_i2c_probe(struct platform_device *pdev)
- 	snprintf(id->adap.name, sizeof(id->adap.name),
- 		 "Cadence I2C at %08lx", (unsigned long)r_mem->start);
+@@ -1609,9 +1609,9 @@ static int cdns_i2c_probe(struct platform_device *pdev)
  
--	id->clk = devm_clk_get(&pdev->dev, NULL);
-+	id->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(id->clk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(id->clk),
- 				     "input clock not found.\n");
-@@ -1551,16 +1551,10 @@ static int cdns_i2c_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, PTR_ERR(id->reset),
- 				     "Failed to request reset.\n");
- 
--	ret = clk_prepare_enable(id->clk);
--	if (ret)
--		dev_err(&pdev->dev, "Unable to enable clock.\n");
--
- 	ret = reset_control_deassert(id->reset);
--	if (ret) {
--		dev_err_probe(&pdev->dev, ret,
--			      "Failed to de-assert reset.\n");
--		goto err_clk_dis;
--	}
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "Failed to de-assert reset.\n");
- 
- 	pm_runtime_set_autosuspend_delay(id->dev, CNDS_I2C_PM_TIMEOUT);
- 	pm_runtime_use_autosuspend(id->dev);
-@@ -1616,8 +1610,6 @@ static int cdns_i2c_probe(struct platform_device *pdev)
  err_clk_notifier_unregister:
  	clk_notifier_unregister(id->clk, &id->clk_rate_change_nb);
- 	reset_control_assert(id->reset);
--err_clk_dis:
--	clk_disable_unprepare(id->clk);
+-	reset_control_assert(id->reset);
  	pm_runtime_disable(&pdev->dev);
  	pm_runtime_set_suspended(&pdev->dev);
++	reset_control_assert(id->reset);
  	return ret;
-@@ -1642,7 +1634,6 @@ static void cdns_i2c_remove(struct platform_device *pdev)
- 	i2c_del_adapter(&id->adap);
- 	clk_notifier_unregister(id->clk, &id->clk_rate_change_nb);
- 	reset_control_assert(id->reset);
--	clk_disable_unprepare(id->clk);
  }
  
- static struct platform_driver cdns_i2c_drv = {
 -- 
 2.34.1
 
