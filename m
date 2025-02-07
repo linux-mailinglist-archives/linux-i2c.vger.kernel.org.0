@@ -1,125 +1,135 @@
-Return-Path: <linux-i2c+bounces-9347-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9348-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8538DA2CBE5
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Feb 2025 19:49:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9785FA2CC58
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Feb 2025 20:13:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0982167E47
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Feb 2025 18:49:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36E4B167CAA
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Feb 2025 19:13:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074B31ADFE4;
-	Fri,  7 Feb 2025 18:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FD9018FDC9;
+	Fri,  7 Feb 2025 19:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="nHaBnrUd"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="IQb1rN4W"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-65.smtpout.orange.fr [80.12.242.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C653419CD19;
-	Fri,  7 Feb 2025 18:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A894923C8B4;
+	Fri,  7 Feb 2025 19:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738953987; cv=none; b=U5cIoV1Log3WK8pL7fBd+f3J/HlBEkVrmnoNb2dHdPt6HwBwJHegiI2AqwEq2LeIb8DHni1sDqEmqjBbMBq0vRG9p1wVCV3UsWIsPvkHwvREQ2NqZmseQaZGPFLi7SAh6ozWI9GKNRjZiHhurlVGuqsEspSVNEiWLpFYVJXW5no=
+	t=1738955622; cv=none; b=k53qA61or2KjcD4Mh+pi+CwnnvGGSBAQWC8LwfeVJkkgpBD05BVB23bVq4yYQwpBGHLxfMxkGuerq9sVcVDn8HDMwkGoUHTgJuBfG+Gn+JV+E1DFHyEHqtni+88YP7X0kuUeEB3+IApaYrUW/hbjTGoLQixt8j1ZtdUs68gYUVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738953987; c=relaxed/simple;
-	bh=jG9PP8OmSmsAi3gu2ND0UFBXsklxiSRJ0nVDoTXKJjQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FzEZcYjrLr/e+N/57VzZTy8FCqH3XmiGEhdMJOUbXa3Gle3tDsfv9haUjp7+pWPcPUHStfaMjSQvVlpo9tAaJZ3kUSK1x3z8myTlgsx7O5lEAflRnOPoo5kD5cjh0zqZOmHAi4K6mqT1PjDXdaGsD8m0y66FIJC4aZtb4zShlsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=nHaBnrUd; arc=none smtp.client-ip=80.12.242.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id gTDktBe395xHLgTDntrXhH; Fri, 07 Feb 2025 19:37:05 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1738953425;
-	bh=6PlvsS0qz2CZcL8tmalhXpsBjS7gKY13HQPvHB3Mi8k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=nHaBnrUdPy2gXkXp1Wx7o8rVZjSVn4a+/+Mp+IizYUbpbvBBy3HoHLGJMgWzlxKvK
-	 5mx95ssZsPeC5rsYQbglj27IczHL+NWevccjj363Yq+Rf4LvKqqgIKlI563wq+hmiG
-	 g4sWQJ7WfTaafSCF9z1teOIui76v+b9w9DP1hJciI4GLT1yyT09v9SyWBZYlhZVe2b
-	 +5iNuQOPcZGanus78zusUL+B02npJA3gBILv3KU6Myi1E5A4eVu25j7bb5slSrpAXS
-	 ao6+TeuupJbe8BNAdA+VveQj+8ZmmL9B1wxVhhjhyiAj1n3SjQQMilYPY8a5dWpeUs
-	 bKu8dZTtMSyZw==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Fri, 07 Feb 2025 19:37:05 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <1ee664ec-f912-467e-aedb-81208987ea2a@wanadoo.fr>
-Date: Fri, 7 Feb 2025 19:36:56 +0100
+	s=arc-20240116; t=1738955622; c=relaxed/simple;
+	bh=J4yryIaByWP8KIZwe+z/0r7YkxqehmJF+7Ro82u0zfU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fTiQyTWj7l1O0Qm20zHWJpXPDNUCWllyto3TqWZl2TtyYX7mY2KJ3IIUvUFnixAMkFiq72aytkrWhy7W4FmQvphCir+PeAsHPcrl1uEFTOfDApUenpZgCqqUzfSM4V0AB+oWiRQC8dcPB9Js0J22rC2pvsfIjO7cYL3KFABdVtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=IQb1rN4W; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=v+ctddmnQF2PlnEUYBVoF2cTShrkIZzsUJyQpI/HFCw=; b=IQb1rN4WJs5E5/0kCQGVwBnM+W
+	GcDOfoxuhBkrbJI1Bzv8knilAnNadiG3ohQHhgUV+lBa1tOJc1P3vbSSpLfcwWiIZHHNtrofgXr6H
+	yevXNIW0bDcv0jThr14mIE5ZvmJAfI6TsBxUuxxNM8HUiXTiSW0/XkNMB+Lt7LB79vnFn1Vw2RyNX
+	r45CBxDlkqX/ZPl1JSUZ2WD3ANYYP5w/pxTG7+LXedgL2Go7DluwEBW9+s/HXu2c+Qjfsu8Takmvb
+	Vn2HDoezgwxJnxTjFrjyCrWiTW8rdTS63OH6OmAFk3nSlLVhAHVxCDURs5EsIQ9DEORITG02zmqCT
+	A6jmPXgw==;
+From: Andreas Kemnade <andreas@kemnade.info>
+To: vigneshr@ti.com,
+	aaro.koskinen@iki.fi,
+	andreas@kemnade.info,
+	khilman@baylibre.com,
+	rogerq@kernel.org,
+	tony@atomide.com,
+	jmkrzyszt@gmail.com,
+	andi.shyti@kernel.org,
+	reidt@ti.com,
+	wsa@kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: stable@kernel.org
+Subject: [PATCH] i2c: omap: fix IRQ storms
+Date: Fri,  7 Feb 2025 19:54:35 +0100
+Message-Id: <20250207185435.751878-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
- jdelvare@suse.com, alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-2-a0282524688@gmail.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250207074502.1055111-2-a0282524688@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 07/02/2025 à 08:44, Ming Yu a écrit :
-> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> PWM, and RTC.
-> 
-> This driver implements USB device functionality and shares the
-> chip's peripherals as a child device.
-> 
-> Each child device can use the USB functions nct6694_read_msg()
-> and nct6694_write_msg() to issue a command. They can also request
-> interrupt that will be called when the USB device receives its
-> interrupt pipe.
+On the GTA04A5 writing a reset command to the gyroscope causes IRQ
+storms because NACK IRQs are enabled and therefore triggered but not
+acked.
 
-...
+Sending a reset command to the gyroscope by
+i2cset 1 0x69 0x14 0xb6
+with an additional debug print in the ISR (not the thread) itself
+causes
 
-> +static struct irq_chip nct6694_irq_chip = {
+[ 363.353515] i2c i2c-1: ioctl, cmd=0x720, arg=0xbe801b00
+[ 363.359039] omap_i2c 48072000.i2c: addr: 0x0069, len: 2, flags: 0x0, stop: 1
+[ 363.366180] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x1110)
+[ 363.371673] omap_i2c 48072000.i2c: IRQ (ISR = 0x0010)
+[ 363.376892] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
+[ 363.382263] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
+[ 363.387664] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
+repeating till infinity
+[...]
+(0x2 = NACK, 0x100 = Bus free, which is not enabled)
+Apparently no other IRQ bit gets set, so this stalls.
 
-This could be const.
+Do not ignore enabled interrupts and make sure they are acked.
+If the NACK IRQ is not needed, it should simply not enabled, but
+according to the above log, caring about it is necessary unless
+the Bus free IRQ is enabled and handled. The assumption that is
+will always come with a ARDY IRQ, which was the idea behind
+ignoring it, proves wrong.
+It is true for simple reads from an unused address.
 
-(I'm working on a serie that should constify struct irq_chip, so this 
-one would already be done)
+So revert
+commit c770657bd261 ("i2c: omap: Fix standard mode false ACK readings").
 
-> +	.name = "nct6694-irq",
-> +	.flags = IRQCHIP_SKIP_SET_WAKE,
-> +	.irq_bus_lock = nct6694_irq_lock,
-> +	.irq_bus_sync_unlock = nct6694_irq_sync_unlock,
-> +	.irq_enable = nct6694_irq_enable,
-> +	.irq_disable = nct6694_irq_disable,
-> +};
-> +
-> +static int nct6694_irq_domain_map(struct irq_domain *d, unsigned int irq,
-> +				  irq_hw_number_t hw)
-> +{
-> +	struct nct6694 *nct6694 = d->host_data;
-> +
-> +	irq_set_chip_data(irq, nct6694);
-> +	irq_set_chip_and_handler(irq, &nct6694_irq_chip, handle_simple_irq);
-> +
-> +	return 0;
-> +}
+The offending commit was used to reduce the false detections in
+i2cdetect. i2cdetect warns for confusing the I2C bus, so having some
+rare false detections (I have never seen such on my systems) is the
+lesser devil than having basically the system hanging completely.
 
-...
+No more details came to light in the corresponding email thread since
+several months:
+https://lore.kernel.org/linux-omap/20230426194956.689756-1-reidt@ti.com/
+so no better fix to solve both problems can be developed right now.
 
-CJ
+Fixes: c770657bd261 ("i2c: omap: Fix standard mode false ACK readings").
+CC: <stable@kernel.org>
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+ drivers/i2c/busses/i2c-omap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+index 92faf03d64cf..b54d4120899f 100644
+--- a/drivers/i2c/busses/i2c-omap.c
++++ b/drivers/i2c/busses/i2c-omap.c
+@@ -1057,7 +1057,7 @@ omap_i2c_isr(int irq, void *dev_id)
+ 	u16 stat;
+ 
+ 	stat = omap_i2c_read_reg(omap, OMAP_I2C_STAT_REG);
+-	mask = omap_i2c_read_reg(omap, OMAP_I2C_IE_REG) & ~OMAP_I2C_STAT_NACK;
++	mask = omap_i2c_read_reg(omap, OMAP_I2C_IE_REG);
+ 
+ 	if (stat & mask)
+ 		ret = IRQ_WAKE_THREAD;
+-- 
+2.39.5
 
 
