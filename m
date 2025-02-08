@@ -1,121 +1,79 @@
-Return-Path: <linux-i2c+bounces-9352-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9353-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14B42A2D5F3
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Feb 2025 12:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EE248A2D91A
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Feb 2025 22:59:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7BD4167867
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Feb 2025 11:59:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99B35166221
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Feb 2025 21:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04592451EA;
-	Sat,  8 Feb 2025 11:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9389024110F;
+	Sat,  8 Feb 2025 21:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GBblN31n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pbdYnpVi"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896481624D0;
-	Sat,  8 Feb 2025 11:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C633241100;
+	Sat,  8 Feb 2025 21:59:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739015940; cv=none; b=aw/rlCWgano0HwHG478w8NaPPsjFQmziG1RRzaKitsXm9tNXILmtpo7y1+/v6MFupt8UUiGul5k5lNTwng/WMuqFydGztHnX9ukXlSZSM+hMkMYyVYgCWixOzAAZf05FwBIe+H6vIVVrblaQMQ6BsMyY8QLE3ECV2ZrexSJ7D3w=
+	t=1739051987; cv=none; b=pHOVhJXRqSfPImToAhPuEQRbUH4umaULgDd/y/JxuArLIGigQ6THAlp6ZcWD1zxo3Zm13w7CbjmRpDkT2E2PHsfjrzCU3liALrxX+kXIq8/4S1O36AZaHU46753ttmvQJ/i+ybGYB8EieGMf6mWSL3tSEwG178B6CWjAQMkDVFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739015940; c=relaxed/simple;
-	bh=8zdPfaAd61HtnEzwzTOoIlR8RIenVo7mfoghgXMKMho=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AUZ/87a8uCgc7WKg+Ux4aEpEirHEe7Hu9m1/jwXXhKe4ql2rpJXySEI2lkQge9yTwxJ3mxFbN5YCdWOpWG43BIHc9eN1K/moOr0H74H7CZtk+coEV24VYs6YIhAK+l1/8pSyl1Xpek2yxesvBUOAyVz2puD9N2w3L6ySnGkT/D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GBblN31n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CDBDC4CED6;
-	Sat,  8 Feb 2025 11:58:59 +0000 (UTC)
+	s=arc-20240116; t=1739051987; c=relaxed/simple;
+	bh=opvDsrP0v/P8S2rjtY57rhFycm7ls+7vP+qbBtwjixE=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=FtegmU/5ZwtXaY0sbIDDeFCp6C1WozA2RiwZbl0Kt5N4BuGl5/phA/wc3zZ5RK/K/B4D3fqEqrJSmYdVgzXgrPTeaWDW64lkqjBbuXve6vhIocpdBFzYkgBgeQcvRJryxY87GnVwDvvE8WVa/lo8oq3rfuYW1C+BcQFkkr4kPWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pbdYnpVi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E70C4CED6;
+	Sat,  8 Feb 2025 21:59:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739015940;
-	bh=8zdPfaAd61HtnEzwzTOoIlR8RIenVo7mfoghgXMKMho=;
-	h=Date:From:To:Cc:Subject:From;
-	b=GBblN31nUMvL+abtT9hWPydGzdUDIwJhPLiQoxav1bE7X2Tw3FTxzYkkpH3kLefQc
-	 uAxBHDaiYBYfcGSgwEhHWYWRTr8xfvl5ZG7J1AQXOmTIz0lf1FNsevOtsDXxBTbKMf
-	 C/UzaAng6FTUoKIuEmVU03tihceJxCv4ateLXbVttoQSQwRW1sKGo2p54LJrE2eNfg
-	 BLYrvpYtc5X8udN4UHZNgHTCm7/n75eT28r+Fe455kfPOsOCEl5YujnMqYjPZg8kI9
-	 MeJzU33+klSj2M+gVZ58rKWvftsDfMe+QhuPQlQJwNkB32RnRQp5tnWBlIBMJQerq0
-	 rKck37no2Vg1w==
-Date: Sat, 8 Feb 2025 12:58:53 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PULL REQUEST] i2c-for-6.14-rc2
-Message-ID: <Z6dG_QT0l_ehhZd8@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
+	s=k20201202; t=1739051985;
+	bh=opvDsrP0v/P8S2rjtY57rhFycm7ls+7vP+qbBtwjixE=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=pbdYnpViYSdibMIOgowycpShOEeED793MU0djWSDvzG8l1rJgmytpqAVT1ZDnFrnZ
+	 ths4ul6mSsuUQUCN9WJpusnuUrO4Ke6ZZIDHW3c4dSxgtJludnq/7XRRIGWxUiDGkm
+	 rYMhGo7xHhvQwDDM6GwBbQaK1kL2x4yNtL5U8IDj0iF1n6dsDFn6504A5QRifIkp6o
+	 8TLF6bJ9HQDVOd1BJfdsaSjewbjTIoexdKfqKWUeHt23BN9oOBrXIjoJmYFhHcy6uY
+	 VRwhmLnwkYMf71BVFN2nLvRE2XJ7+ljiMRZvx2EqHeYPZF4vZE3COqk1yxgTDaggk8
+	 504zdpUGWZN1Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F0BB0380AAF5;
+	Sat,  8 Feb 2025 22:00:14 +0000 (UTC)
+Subject: Re: [PULL REQUEST] i2c-for-6.14-rc2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <Z6dG_QT0l_ehhZd8@shikoro>
+References: <Z6dG_QT0l_ehhZd8@shikoro>
+X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Z6dG_QT0l_ehhZd8@shikoro>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.14-rc2
+X-PR-Tracked-Commit-Id: 3bfa08fe9ec8dd79e183c88e1275be74191e7bc8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 74b5161d57c1dd221a20f89e3d490da56b223a29
+Message-Id: <173905201361.2669229.5599082119832862022.pr-tracker-bot@kernel.org>
+Date: Sat, 08 Feb 2025 22:00:13 +0000
+To: Wolfram Sang <wsa@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pXDECexc0vW3EbuW"
-Content-Disposition: inline
 
+The pull request you sent on Sat, 8 Feb 2025 12:58:53 +0100:
 
---pXDECexc0vW3EbuW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.14-rc2
 
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/74b5161d57c1dd221a20f89e3d490da56b223a29
 
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+Thank you!
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.14-rc2
-
-for you to fetch changes up to 3bfa08fe9ec8dd79e183c88e1275be74191e7bc8:
-
-  Revert "i2c: Replace list-based mechanism for handling auto-detected clients" (2025-02-05 14:22:12 +0100)
-
-----------------------------------------------------------------
-i2c-for-6.14-rc2
-
-It turned out the new mechanism for handling created devices does not
-handle all muxing cases. Revert the changes to give a proper solution
-more time.
-
-----------------------------------------------------------------
-Wolfram Sang (2):
-      Revert "i2c: Replace list-based mechanism for handling userspace-created clients"
-      Revert "i2c: Replace list-based mechanism for handling auto-detected clients"
-
- drivers/i2c/i2c-core-base.c | 113 +++++++++++++++++++++++++++++---------------
- include/linux/i2c.h         |  10 +++-
- 2 files changed, 83 insertions(+), 40 deletions(-)
-
---pXDECexc0vW3EbuW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmenRv0ACgkQFA3kzBSg
-KbYuLw//aa+CC3uiL3Wl07T+/ZnxgPBGJy5MGbrjmirmRykcL/8Y94lW1S2aTLF/
-aQSw5ogrMDsrmc66XHSGxeylF6+TSKWL9wqtsymAL+iAUQLr88AfycU2Z3updiW5
-Zzkon3cD2rXKsicLYHVZ40Ik+yvvY7wm1Ru1vpRiKBZ0j6dIxx9gqRAaUyjnnays
-gR352oZOZGWOBVSjWUOaFwIViEMW+PkSiD62tIZeFC6ZW6J315OJ5QSn+Rlo5V0P
-zYVezww6zWJRyig534tDhSnyzfdry6nAQW4FC7Pf+PQLXWvogZAE+r6FC0pBc9bt
-ukB3DE5JinJo1hfJ6IXLlxdLIxw96p2FB1Pla0OzPKkPS4m1Kh53oDfBbq9gsuwB
-H/pDrbGptI7j7JKmjoxnVXtb/mwaiOiJtx7lgIG34xZsCifW5Uy6ltNg//zxGCh0
-tDvN8GrvX8xp7ZBrg6pmRu5es1bwxB0iGFmU91lSkaa/QsXW2s43hsQxQwIMxVql
-cULWYKGmvy1mWMaR1eFuJcCc1xuzP1tUipcyAEDt4JlUjq26BkGb5p1ebQCZCR2P
-aW/FhtbSaRZqcl/XDQ1IebaOJTdalOSxt/LqiI+vniaXCnkIyWRsDQ1/mcBeUm04
-Qh72iVLGs1UZGnOGlQnhAEWC3LVMJVIsYpKK0ORHuGINX/IKVoo=
-=PMzS
------END PGP SIGNATURE-----
-
---pXDECexc0vW3EbuW--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
