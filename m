@@ -1,73 +1,73 @@
-Return-Path: <linux-i2c+bounces-9370-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9371-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67CE3A31BF5
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 03:25:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 300F6A31C03
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 03:28:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC1F2167E24
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 02:25:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C42213A7AAF
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 02:28:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233D31C54AA;
-	Wed, 12 Feb 2025 02:25:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB2391D5CC4;
+	Wed, 12 Feb 2025 02:27:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b+Fd1o0+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TZhxnhDH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB42199236;
-	Wed, 12 Feb 2025 02:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188CB1CAA7F;
+	Wed, 12 Feb 2025 02:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739327130; cv=none; b=Yr8vR3VmoVurvQ9R4AqiGPPkd29iocMbxSMJCmy1NiqT6f4HHosJT0QqJ5TFcT4DUnQdMwKYiu2A7JplHwvMnj+zELHQ5uyxVGNvCB0nB0ObAfwkY/AR9mmFu3dEfEBDrp0c0Q3tc8Ao9UYPhVpAIWxZjBSXanStvYSYF6ZynCU=
+	t=1739327268; cv=none; b=CIFE/P/+pf00xhCPoRkVwxJPM/5LC2pHRjgyz/E/zTrjUHeDUkeCybETM8my2NugsG8FmXbiwag+ilsX16sO9Zjkq3JpaGo+Le6ttK8SnWlBo3fFTP0ZNLgjuVI+iaiWpEs2ji0Z2i/0hK8/RMS7wBIvtaFcH/mPTlhPMVFlrLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739327130; c=relaxed/simple;
-	bh=/D4oLXD6LukOuRDzE7hhtI/PhDeHQ4JgeRu/msm7Lyo=;
+	s=arc-20240116; t=1739327268; c=relaxed/simple;
+	bh=XNTpRhZ3fxRHmJEWAMolHb8JRph6LE03ym0ZpWAutSY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nra7CQbGTIom6rqTKYsuuO5mJXAstBQVcUcDrH2P7mgLt60RPUXSoga/RrviTj7emv+ybFPNAaRdqyVvrQTsvADgItdnRD6zSHPWNjLDSmQzlnDY1E79bDHah6rvcANKSUIQjWPAI0AV+/4HwjF5m7aV95CF6J/GGx2dZaGmAjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b+Fd1o0+; arc=none smtp.client-ip=209.85.128.171
+	 To:Cc:Content-Type; b=nua2o3VPYj7LOiYccljNmmCZUdqJE0eMLInA5thuWcBeUYSWTSIhBgUwIJrYx4/aLVL9MTY0mY3OXeoBpK133TAso7mWOfZKNA5XELL1WUEqAploiSXTOSGoNSuN0dMgbtatnMRA057nc89Kop6EOT2uwXYk1/3zrzFrbBxj+n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TZhxnhDH; arc=none smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6ef60e500d7so52243277b3.0;
-        Tue, 11 Feb 2025 18:25:29 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6f77b9e0a34so46456287b3.2;
+        Tue, 11 Feb 2025 18:27:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739327128; x=1739931928; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739327265; x=1739932065; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KqrwQ+AdMSSLFwzy2Bp4Gf8n4XSBGfuqabnYZ/GVUcU=;
-        b=b+Fd1o0+2UTPqgYM3ryDr+fuySM0tN4vnZXJJATXnFYd63ZrvOfxFJCELr3Fx7BY+U
-         +/fiM/APG1nYdO+TFJz//OEpUUfUh/gkbL2/dHxaDLUv/eX5ftH51KzAw8/xEDYBh8Vp
-         Q2Z9omVkS5EIrLIeHRsntZ/XB3y4zmSxG2ThaMcXpDw0u3WOBaWkabbAPNHcWa0IdCJH
-         Vg3R7Jdywsd+fusevCyKjKjr8WFRGErozpF+bIsRPl8PA0RK4D21M6LinrJqfcPCOWIy
-         6M94EtBntovlx6x+8AXEaNE/veJfPUCBwhZSfLTMz0U7iQsQmJZvdt5Fdwgt6TdfJ1iH
-         vGRQ==
+        bh=i6F4L4SaFXOFnk/DwcnTDSe6yOs/RUxwb5c9eaTPL0A=;
+        b=TZhxnhDHQwSTJCV0+CQ6hm7PFfhD4jDWMgf4x0E3WmNvLdFb3qcMyyI/6ig2qNMmos
+         kTmurabQshN/1l4Dn/mLSNgasfzlXKSRFpNYYAG9Miw9vsMYR5zTuYTSx+m+dlZkbhxP
+         HWEJ+w+vbk0np0Uam+0+ugisHLcXIVjBOrWDh7TjbTS0bvMUrumjzLq1/fTH/ja/aCAd
+         dSuME6S2WJBO0HlafKPVv0Dhrl80RjXuDRAfhkv/hWwCP/lwAWhNUbw4tM2h1xrFsZJN
+         NZCW+pGqFngyoMYU5EHb9rFNKm61hwMdgY9Dtqc63Ut/ukurs+HEzICAnGB25QVvJ31k
+         R+Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739327128; x=1739931928;
+        d=1e100.net; s=20230601; t=1739327265; x=1739932065;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KqrwQ+AdMSSLFwzy2Bp4Gf8n4XSBGfuqabnYZ/GVUcU=;
-        b=Pc8eBUMSx7wgzaZFTFijL80KKQwMb2bZyWT1AkWKijz9xilyhjO7fe4zqjwqwSY79H
-         db8VVcJ3dJib3oQrQ7A5zxjoBzdfwJf9BDewhRQfjXTpByTbXfUc4IO2bT/C7yvYDy6H
-         /21qLsXmj0m/xWddNdm3y70Wc3VzLKtUIsrebXIREN9EXfA5e3eeSfsjMwsoZ19FUoJc
-         Wo9kcH0SmE5N6NvSVwTizv2LRMvq9eqXVo5q1vrdvptdxBXLxAk/BjDJ5wrsPJH8g5SK
-         Mgm7/3oAKK1A5MBkeubCyoLfswax1iqPfV9zqFK6AOQh6+N1ikLdAGgkuCs60YemQ4Nn
-         V9fw==
-X-Forwarded-Encrypted: i=1; AJvYcCUYJTtvlD5xkFCCWTj/6vQpQgZyV5YQzUBv/oFLg8Ob5Fh+E0JlSHrNunry67uUoxrM8EBLLdHj/4k+@vger.kernel.org, AJvYcCUiVw5/5mbMVHuVQ4ZBuGVsLNWZl6dtmQQRS4J3VuTnupsISB8ZtQ3qgaXmq9Sg4DzwOjwTxItWI0VPcxY=@vger.kernel.org, AJvYcCVQa7h/kIXsAcKCnK1Yb91I39oae//A7q+3ifNYi3ImeQwyaa13m2pFOfOx69sZizVhAEsWSBLmiaHPGbiBcYY=@vger.kernel.org, AJvYcCVyNDbxxVupHmDne3AyXzTnsd6F0KgchzOTRGdwFSCEk+F6iY4Hjz9e7l+C+2KOXMYppVta3Vges1BNt7QF@vger.kernel.org, AJvYcCWEMVANJ/i2VYxoRFh+wNf7i2PyMH3ALOvEHgcAJrJ3lokQYIDGWNfM0lbS29NeBjtJn2s95c6diag=@vger.kernel.org, AJvYcCX3ioplJpsJPpMcmQIVxkHVRYWYzgXSFqE3HcxiIFWbWwlIu+nUlV3PEdzvDI+Y5rm8yl/ihEuh@vger.kernel.org, AJvYcCX7lGTiEVVOCg1GFrJp/cZWiTPWP8U/v3zka2yBlKNXLMDCfXgv5rJfVsJKqm7n9qckryPswYcYkbSG@vger.kernel.org, AJvYcCXduaqkfuIsPZe4aVu4ijOcQyiBkZqRHOicT+k0O0dI9sfux09XWvd/LucIc+XNmToId4p2MutKnQkC+w==@vger.kernel.org, AJvYcCXswE/O4V1ozUS00dB7Yed7oYSFZVQCdbKaeCyKJW+yAuQzbuIVhiO2zFX2RBJ+5xoy1GU4rozILaIA@vger.kernel.org
-X-Gm-Message-State: AOJu0YycIroLFybI+CP7u7nznDKUioPK9Ckr7/KVoWfE9zK2Pu+xU4uQ
-	e0QVfEElG9QeQkrSZUbdJ1+CoX+NpUkcprGNEMFP5yIPVJ2AJX7giSeUi8Y9quEgfXQ8cspqcXF
-	Aeogn2Vtyn466hXvvj2/KbCB9oFM=
-X-Gm-Gg: ASbGncv395GYe3stp/SHGDuW7AVF9oq9mK5DUKcYpDTzTxe6nhrtRHxEFt++mrn4ghF
-	qQ5HgoA94komxqYzyyyy0ZHj9wyPths97llfQOveBsxYWSUvZupH97c/nrMRApdnj4Rp7W62VYu
-	M3N3cj/ZelWGlCTLs4UvCAnACVQGJgDs4=
-X-Google-Smtp-Source: AGHT+IEMT6jC3otOLY2+jOJPHXOzFROO3YopZvE8lHCSsXNWFhoxDLbOAPOO9nvDAukMRHd2MGxHoMAvgrjIuvXD2LY=
-X-Received: by 2002:a05:690c:7002:b0:6f9:b12b:8953 with SMTP id
- 00721157ae682-6fb1f5f54d2mr19732747b3.20.1739327128394; Tue, 11 Feb 2025
- 18:25:28 -0800 (PST)
+        bh=i6F4L4SaFXOFnk/DwcnTDSe6yOs/RUxwb5c9eaTPL0A=;
+        b=uYABGZaBF/jHmGXkN0epA5gqa6XBVrE2jhrkIUZgNOt4jdY1cB9KMnEFGtK/bzfVJX
+         V9J8mnqE6Fnc6QJoaShl4BKymELbQynR4I+s+YfVk+sEqwlQEmQNcwz0lXy6eDWR+fv7
+         8HDv5028d59jY8EDjVlJ1XETYTIpCh5q663dHvFGj0/PHIte7e8H05H8HZ51pPlMn3RX
+         NilI7sQt5/Tkdbg0K87CfwTagMBIhgIfbZQUVZVsQpMyz8cRrkvD8+MHZw126PpHgtxH
+         ZZj873+hg9jm7woXH7ryai4daoGzhV4J7DoMaXlhlsTGIkrzQ9i7vGGxJ4EXmRTZTpKV
+         /Nxg==
+X-Forwarded-Encrypted: i=1; AJvYcCUjYsbjtmTgOfJ69eVXqci2d4MEdwOSPKT/fzfLX2V71OMs3un4YHs43OU0bAmwZL/rJTB4avOv@vger.kernel.org, AJvYcCUzQZs/j/3WevJdmK+WPIB48mSudx8D78StpbhmLmTIA2v9XxdaxcG1aFlT7MW5GLLxaZLRXOaK16BQ@vger.kernel.org, AJvYcCVJTHsKMhpjESUj0AtyBd2g+yPl3TzzstNOq/aIo12+fEkM07DJpVHpi4RYe3+nVnYFiA7WsWGfaZyef4BF@vger.kernel.org, AJvYcCVK4UOd1jWyu//0OBlGQ9UAGmLV/2Pgq2dbGYO8OAa4aVUVg1bVpGvGBjFG0f/WV1J8RS7Ae3mF3X/p34c=@vger.kernel.org, AJvYcCWHJz9hRZMnj5cym9ZfH+zHclKri2hC2x4p0ii1ZxVSm+DQQKJPK0HyiWZGJDvKrY2aH7T+lGvn/yyY@vger.kernel.org, AJvYcCWtyPeeAlwRn4S2kxnopBEM6ybyKAW7b8LpdUI/VT0adgbYm75R8LFWcxL7rQ5DR4hXvtzrpWwzDHU=@vger.kernel.org, AJvYcCXNHtUu+eeb8dqr09v2QUEKerxdz1as7+Iu8YFdAkIfYXBQQLWsCpxN3QZVp3Wk2uaKWtUvsZeJaSey02aXg1A=@vger.kernel.org, AJvYcCXUVs0BRZavrv7M8wxVzNryb5jJv2Bz73ec8wJKFbSSAM0jFUdnnzr0Xjg7551PEhSkSprb/Jr++OTV@vger.kernel.org, AJvYcCXvxT61kfmVmICqwn7NppD50JZF67fsYqdHth7WvtW9zZ9DVIEmuz/c2Knlt/hnJGjxFofR86rMiXKJ6w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzA05BTCcGvrdpPafDmxGzfmeDvLJIVrEcLrwkEnHjiKhc23cRM
+	icRXUTqIGgjkToZ+jsaMq5xwm4TyqF/ZMDeukV6fFzTJapqvvoejXr1XczxZrhKPrDtHlbz05lU
+	XW6OHgATNJjXfeY6KF4m70lEUAes=
+X-Gm-Gg: ASbGnctif47bAfKPbdqkcNY6w4Sg0ZRBIIXswDeKJl3tbwL6By8yFcKNHCNFm11xuT2
+	lwKzhskG0GG2b/T0YHAPrmZDTjDVwkWqtePjaxTQfSV8t5Qz1ucJBHlkMABod/ZLNQiia/pIp3I
+	U8kjdMhpfXg5Ku3qX/f/ZRnC5abvD7790=
+X-Google-Smtp-Source: AGHT+IGulwT7PweDVmkr4+FYlxSo7B/VIPVfzNPz8aOBhzRqp88wCHV/cWMR2HEkNYYGahtbaGGkuIKK7iWPIbqnZIc=
+X-Received: by 2002:a05:690c:46c1:b0:6f9:82fa:6d96 with SMTP id
+ 00721157ae682-6fb1f19bbe5mr24081647b3.11.1739327264826; Tue, 11 Feb 2025
+ 18:27:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,13 +75,13 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-4-a0282524688@gmail.com> <01801937-6257-4381-bf18-90badf795da8@wanadoo.fr>
-In-Reply-To: <01801937-6257-4381-bf18-90badf795da8@wanadoo.fr>
+ <20250207074502.1055111-6-a0282524688@gmail.com> <9b451153-41b4-4c15-a586-01cb5126e207@wanadoo.fr>
+In-Reply-To: <9b451153-41b4-4c15-a586-01cb5126e207@wanadoo.fr>
 From: Ming Yu <a0282524688@gmail.com>
-Date: Wed, 12 Feb 2025 10:25:17 +0800
-X-Gm-Features: AWEUYZm7YgqpjIvBT60mCR7Y2j4SJyw5Ijy4sGaZXuVGNju1fwDvfHQWVzOsSR4
-Message-ID: <CAOoeyxUsoqtieRQVYr4DWPKOV4kTgcib1c3-tbz7KayTnshaig@mail.gmail.com>
-Subject: Re: [PATCH v7 3/7] i2c: Add Nuvoton NCT6694 I2C support
+Date: Wed, 12 Feb 2025 10:27:33 +0800
+X-Gm-Features: AWEUYZkhU0SYHW9fyypqI2zEJgjkjlaLa0F4ZfNBX2YLvjUCEHwSXFQN1lr6P_Q
+Message-ID: <CAOoeyxUthDO8wo5fbMuNyJBd-YKD9TrCE5Lr3ve=Z+rndm6X5g@mail.gmail.com>
+Subject: Re: [PATCH v7 5/7] watchdog: Add Nuvoton NCT6694 WDT support
 To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
 	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
@@ -100,34 +100,56 @@ Dear Christophe,
 Thank you for reviewing,
 
 Christophe JAILLET <christophe.jaillet@wanadoo.fr> =E6=96=BC 2025=E5=B9=B42=
-=E6=9C=888=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=883:06=E5=AF=AB=E9=
+=E6=9C=888=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=884:30=E5=AF=AB=E9=
 =81=93=EF=BC=9A
 >
-> Le 07/02/2025 =C3=A0 08:44, Ming Yu a =C3=A9crit :
-> > This driver supports I2C adapter functionality for NCT6694 MFD
-> > device based on USB interface, each I2C controller use default
-> > baudrate(100K).
+> Le 07/02/2025 =C3=A0 08:45, Ming Yu a =C3=A9crit :
+> > This driver supports Watchdog timer functionality for NCT6694 MFD
+> > device based on USB interface.
 >
 > ...
 >
-> > +static int nct6694_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs=
-, int num)
+> > +static int nct6694_wdt_probe(struct platform_device *pdev)
 > > +{
-> > +     struct nct6694_i2c_data *data =3D adap->algo_data;
-> > +     struct nct6694_i2c_deliver *deliver =3D &data->deliver;
-> > +     static const struct nct6694_cmd_header cmd_hd =3D {
-> > +             .mod =3D NCT6694_I2C_MOD,
-> > +             .cmd =3D NCT6694_I2C_DELIVER,
-> > +             .sel =3D NCT6694_I2C_DELIVER_SEL,
-> > +             .len =3D cpu_to_le16(sizeof(*deliver))
-> > +     };
-> > +     int ret, i;
+> > +     const struct mfd_cell *cell =3D mfd_get_cell(pdev);
+> > +     struct device *dev =3D &pdev->dev;
+> > +     struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
+> > +     struct nct6694_wdt_data *data;
+> > +     struct watchdog_device *wdev;
 > > +
-> > +     for (i =3D 0; i < num ; i++) {
+> > +     data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> > +     if (!data)
+> > +             return -ENOMEM;
+> > +
+> > +     data->msg =3D devm_kzalloc(dev, sizeof(union nct6694_wdt_msg),
+> > +                              GFP_KERNEL);
+> > +     if (!data->msg)
+> > +             return -ENOMEM;
+> > +
+> > +     data->dev =3D dev;
+> > +     data->nct6694 =3D nct6694;
+> > +     data->wdev_idx =3D cell->id;
+> > +
+> > +     wdev =3D &data->wdev;
+> > +     wdev->info =3D &nct6694_wdt_info;
+> > +     wdev->ops =3D &nct6694_wdt_ops;
+> > +     wdev->timeout =3D timeout;
+> > +     wdev->pretimeout =3D pretimeout;
+> > +     if (timeout < pretimeout) {
+> > +             dev_warn(data->dev, "pretimeout < timeout. Setting to zer=
+o\n");
+> > +             wdev->pretimeout =3D 0;
+> > +     }
+> > +
+> > +     wdev->min_timeout =3D 1;
+> > +     wdev->max_timeout =3D 255;
+> > +
+> > +     devm_mutex_init(dev, &data->lock);
 >
-> Tiny tiny nitpick: unneeded extra space after num
+> Error handling?
+> (also apply for patch 1/7 and 6/7)
 >
-Okay, I will fix it in the next patch.
+I will add error handling for these in the next patch.
 
 
 Best regards,
