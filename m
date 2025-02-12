@@ -1,157 +1,133 @@
-Return-Path: <linux-i2c+bounces-9368-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9369-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BE9EA31ACD
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 01:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18AE6A31BE2
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 03:20:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B19CE167F83
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 00:49:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0EBF167EA3
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 02:20:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D5381728;
-	Wed, 12 Feb 2025 00:49:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2539B1925A2;
+	Wed, 12 Feb 2025 02:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nN3gp/hw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MoCH0xs4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AC118651;
-	Wed, 12 Feb 2025 00:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5894B78F4E;
+	Wed, 12 Feb 2025 02:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739321348; cv=none; b=YTHIAHdSegApzrPRoUCGdhoPdcbWU2yQnwO10/jwpzZEz9ygLkcmOlcu00aC+ZMXOabji8g5WJ2K9Y3TdZ0uk91WpAJaUKggBg/BkPlqk1y/vAtyPxvWKI4ZNK/cA0kCoj0Px1DxxtwR7O538najXWVVdWVdzFwejOx8xLOkcvE=
+	t=1739326839; cv=none; b=rDo0wjM14EvB+N2uuFAEXdM+GPWT07RgUkKx9AavsVs+u61ueWWcbw/r8pK3Sg4xR8esJkcbXFLlqnflVEUZrIrDGkm6lqF4Q19GYRhqqMRBxo5pvtYWiyKhFVBqjqdyzBKr482tG4Q0tJ2ZaDovN/j10PjU+mSY2+qLhPhvbi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739321348; c=relaxed/simple;
-	bh=iuw2A8zkREkkUroCFRebmybVrMXnX7V3DMSxfmqIpNM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rovlsHrx+lS/+0/oYEhfUTH2syVcpRSq9vpm3aIb1qXLihFBW9+HvibBZ66LH3orxom77DMMfp8wU3EXubmXjFRPMuU1blrx4hbBjpu3pp1mWrDNpVdetv6NC9HyojbtGMyismgEqX2zMK/qw1Fqx7JCIw43+2qn0UBe44YJlDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nN3gp/hw; arc=none smtp.client-ip=209.85.222.48
+	s=arc-20240116; t=1739326839; c=relaxed/simple;
+	bh=BGF4WgRFYes+wXFKDiff8lSB4cxf0V4m7cSG+sh0234=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K154mY3x0vTwNDNl5/IQdCsw5vK/95r++ZuMLnt3Wg7eSbLkz0bYsDA3Q//leYdmzniLoufDIDGeAg9JbwDzFtZuGKTRf230WNg7WPSj0GWTbTyTZvGX5sskWVllFLu0lsHReRJlStE71J67yS7aRA6jmpjRWOeuwspXHaS3YTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MoCH0xs4; arc=none smtp.client-ip=209.85.128.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-85c4c9349b3so1620083241.3;
-        Tue, 11 Feb 2025 16:49:07 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6f9b8291c49so37446507b3.1;
+        Tue, 11 Feb 2025 18:20:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739321346; x=1739926146; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1739326837; x=1739931637; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cZLd1/1IT1KQrLTeqsilryM+oTbbpX7k277woXo0CNs=;
-        b=nN3gp/hwEXGkP4coWkK8lnjnmhGAyj1+BE3CnXL6i0hYxucMJhxbPiwb7eI4GQVES/
-         CLhob0zY471nVeBmJ6N8HGxtGDUWzncjKN1gXpM1vrS8m7Evs1KOnlxd/evOANXLpw+2
-         X1gskgfWDo3jYkGgM7rsIukTR449blrN+MM6OVhAw5y5V4UMJurMLKMjY+bY8jz+3yt4
-         tGYQLyIeLY8FuE9x1V/9nCJ6QSxHDV0hhotWDa2HTRy/rex+9cVXoy+7RTz2iRD3KTDv
-         Z7isfOgcTJNSc+/sZ4LpRaOc8Ym7wPGr5+bIKeAUVQZxN0+yWglaJyk0lV6a9Ct+c+Zi
-         esyg==
+        bh=BGF4WgRFYes+wXFKDiff8lSB4cxf0V4m7cSG+sh0234=;
+        b=MoCH0xs47Oufjn9oslv7MF59r/clAlbm/A38hhpc5XBd9klopVBnmDKOi7szex/0c+
+         e3zvOf8G9auXKVjjrZxDvXk3TRjkeDpH3+ECT5z3imEOzK2I8orFX0W0Pms6iO8EzFm/
+         paHha4KTNNdCPqmlKj/N677cmRbIdeWQrRSs+XVWb3b5vTGALIFEwsELdKOwMTjGex9U
+         sVv3t1KNyHOqgYinWdebs2oaO7vjr3rQDmX2qAT72CvZLsutjIOmjth3HNNElySR/IP7
+         SVm++FZUF4wyOJVto3G42jGbTOb+My0ug9/GN2F2nTExMHKNKjWyCW9iRoUgtGBlU3J/
+         mk0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739321346; x=1739926146;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1739326837; x=1739931637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cZLd1/1IT1KQrLTeqsilryM+oTbbpX7k277woXo0CNs=;
-        b=MRq/lhUM3qQRWMVSFaa8Bw6rqz3Be9Xt+tC9/AEefpUP2JRJaSEuJpW3jJlGYA9Qf+
-         SXyrn4uVp7YgOszYuFErtGEoU57HoOA544UozuB6U3Hxd5WenPkShlqHYZr9ouaguZ1t
-         hmxW1gtaOXcr9F0/t6wFUkocSWiPuZ2NYzJad57pW66YWZRDpZi9WMco4M/c0eoHpGqi
-         J7QLz2Q/GXWA9j+lKMOwRWC4StCgsCYMdFNagUggJEYTEIw2lY0pKUsWzabSPoWXxVka
-         SQiG1pPKZjBu5EBujqLEzCQTMVCsvcu8ZoiS9RAznVAyirvPAQ33CntY3RXBoVq2FARp
-         DeMA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8yuESptq2ha6D8EJwXJQM3K4xE8/Z4BDXU2HtWtcwlUCee/LJf0z8YBjPFQfs4G3CZIQo8l6ZAE60@vger.kernel.org, AJvYcCUjZy+u6ef5Vu13J5u4u8XMsTPkZQSxzMlgem8QdH2PlpwItJx6QzV8PhbybkwCGRNWN0AyHIGkwDPe@vger.kernel.org, AJvYcCVnrN9JYsTs2EqwA8hFtNC+mar/UqjEA6k9dIJNMnuOS8oYgPB3FTHA1eKO5NteTP71rUg05YUY9q7B@vger.kernel.org, AJvYcCX8zdGn95YvlEQfqzydbv67ztDXyHG0x0k1GyHsR03Qu15cjpR2kJkXZIsXD6Yk7bgw0xg79qDbfKzHdHGP@vger.kernel.org, AJvYcCXChBCdi7A0zMCgTHpsBu0cT29+B3039ndmpmAy3wCSIRX7/lcg7AKN/LWI21ItMewVgAjUiWIf8Gs75aPinn/lsas=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9k1mA75GU8Jkou7lJ7cAPCPnx/wXxSoJXY4QLWRa1CSXkK79U
-	XKCyPHYIAzI+CqlZaJyPyFFWnNKpZuQnrbvzHlFIlVt8Qdt/6GYv
-X-Gm-Gg: ASbGncsOGNk8Xsck8iOMS8lBHcmwDaPXw45a2S6/B5MtzZ438wczLWwPF3Gcv9u12Gi
-	hBZyVZzjsWve3t1Y/ErVKLqZn9L/n+dJo1nu0eFYLKm9qV29JKVAcQIhAkcXklhvbfDRBa/I5oX
-	Bbs9YcLEfGRQ6uuCFAffE/XhwgD4i3IJgQJQhAn5kcIMSnke9bPbn3HWkvaHDxrK6OwtZXbDQ9D
-	kI/3Dhdm5IqlY3auyIjF080vuXSZaNCGNL95VZibRHHBv5CTT6y0ZZnDKY6yy0/GVNn+KbbHn3M
-	ZWuU8X5Sxm15sxwmGEzXS1j8p72eBo22UNdFRPt94ZIeY34H5mU5b9MQIm6cAkyCfXqL4d5CToY
-	EoQ==
-X-Google-Smtp-Source: AGHT+IEkusJS08i56e3/A5ApNn7f580UIg227FWVQE1R58c4fK8LR1PjSKqLhKoph0+OeBxjbqNdCQ==
-X-Received: by 2002:a05:6102:50a9:b0:4b2:48ba:9943 with SMTP id ada2fe7eead31-4bbf231076fmr1647416137.24.1739321346111;
-        Tue, 11 Feb 2025 16:49:06 -0800 (PST)
-Received: from localhost.localdomain ([38.44.237.182])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bbce4c6fcfsm823832137.23.2025.02.11.16.49.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 16:49:05 -0800 (PST)
-From: Denzeel Oliva <wachiturroxd150@gmail.com>
-To: krzk@kernel.org,
-	s.nawrocki@samsung.com,
-	cw00.choi@samsung.com,
-	alim.akhtar@samsung.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	conor+dt@kernel.org,
-	andi.shyti@kernel.org,
-	igor.belwon@mentallysanemainliners.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Cc: Denzeel Oliva <wachiturroxd150@gmail.com>
-Subject: [PATCH v2 4/4] arm64: dts: exyno990: enable cmu-peric0/1 clock controller
-Date: Wed, 12 Feb 2025 00:48:24 +0000
-Message-Id: <20250212004824.1011-5-wachiturroxd150@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250212004824.1011-1-wachiturroxd150@gmail.com>
-References: <20250212004824.1011-1-wachiturroxd150@gmail.com>
+        bh=BGF4WgRFYes+wXFKDiff8lSB4cxf0V4m7cSG+sh0234=;
+        b=Vmce9+IvquEaC3gRTyou0OD8QwgAdmpOFE8VH8yVFpErZmiJSWy9tQ3yeZwWfGE1Kw
+         zrDlygOyN1xjYeyiSD0rr2g5cZz5TNje/UHD8yEoZCsiClP6caUFezG8fZY8mQBAvOCm
+         HKOGNMv//prVP63rLW5MdFN2stwnFAy6P7CPLiHqCQJwDKml3TvD3NA8US3FlgkmOAub
+         Z7OmwfrKfwJJK6Aeptha/nCxpY81PhocIewjOuDBluaufB0UDAXV9IaM+5RcRiF0Wrin
+         YvTNumXBKANRh9WycFmyO48XpCv5x+s3jK+wrs9rqSJb9tPGbIWcGRl3pEWoWMqkHBZ8
+         LyVw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3/RfjS8j4hO+tj/utkMXvhi8D51kOKyn6kxDTGfsIwJaXHdH0tpFX4zaf4VTGj0tSpbmyGX/tkqFCHwDANAU=@vger.kernel.org, AJvYcCUCS8qPEJiFXH8gUZaenfpHBUBvncH23prSEr/ppzCLGQKI9DK0NE2XqjuGukHlj9vwW1YqpkxUaJv9@vger.kernel.org, AJvYcCUhlJ1j3DZvJvRybAMWJ6qh1vjI1pxF5v+8Vtzf1c6H0cns6NuoVYdvWnO9PYK6B4o7K+bIhbfC4cE=@vger.kernel.org, AJvYcCVGZQfdreBJDj/zl/Kzf42VXic1IAorRmkK1yrTw4np3ujFjI5oy6ccBr9xAPXtRdMCkBhlMrSmLnrxPQ==@vger.kernel.org, AJvYcCW8cERn8w1aRtCbl4jtTam7Z7yBRyS94ZJOHnzj0ef/I511ED5L4S1F91uysqyeKOrn9+IQnmwrW0f2@vger.kernel.org, AJvYcCWJrh00gxBxBJMaxyhNSaiP3q1OlKXt3FLgzugsJJHUIkg00gtuHtxTH4yljrzEU6VAK6ICOX/GBaooaX3b@vger.kernel.org, AJvYcCWoloS8fg3dSEXyJOq9SZM9mWhJgUMhDNEI6y6mdMVF31gelqt7CniLtOkjg6FMQDi9dhtRZxiWS2TqQXQ=@vger.kernel.org, AJvYcCWtLSP9qRTt0OYqk6Gi4fGavkSPgIQk2ID3AdklMQAYFeiGGT/dGv6v2mGKehWoYtbHeMPUm8Dr@vger.kernel.org, AJvYcCXO7MotSiF0Bsb2goPvVuxF8f6CBJOU32cxpkB3u97zOkelaVQd5WsnyrNDXrl50p1MjnD08oJUje6T@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVSMJqCNkrbzyHMEaTQHB1rVYpe48Wzk5KklgR2vtVZVvV7OIj
+	RWjztbiNChd++deA0N1CiqisoYevGSzk3e/MIMuDV6Nw9BsyGnwuRsXwi5alNJMzgElBfxaz/cG
+	OBX0hRWnEGtS+/by+nlQ7SHvl8+lnFg==
+X-Gm-Gg: ASbGncu/lHuLWlgRLhtRokGP0QSzvFo7QYBpk9D3dK/9JQLgB6w8f3OwuhnUORkgX4C
+	5GqaPq+kOtFDolD4NgTm52JwNTmfW6fSRzC5VlqI7cnK0v9+A43+PUPP54wU6PToNlJb75YVOMs
+	KUYFalNkfQL0iuxB7hFiYA5j4919gtjLU=
+X-Google-Smtp-Source: AGHT+IF+oFBT4/eJC7fxrqCxEqFTUuytLV8FG9XSBDtcVlHz7Ohthj7nFqSBcKDND+KZxt4lh4ibh6h6TvJDsK+a7jk=
+X-Received: by 2002:a05:690c:6811:b0:6f9:8845:cfbf with SMTP id
+ 00721157ae682-6fb1f1e638emr16843557b3.22.1739326837122; Tue, 11 Feb 2025
+ 18:20:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-2-a0282524688@gmail.com> <1ee664ec-f912-467e-aedb-81208987ea2a@wanadoo.fr>
+In-Reply-To: <1ee664ec-f912-467e-aedb-81208987ea2a@wanadoo.fr>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 12 Feb 2025 10:20:26 +0800
+X-Gm-Features: AWEUYZk7swZO7fFhHB97EG7zyv5Dg2IiX0RdzYvso9G14rlwE4a_llIRTcKsa5A
+Message-ID: <CAOoeyxVUN9A3gKB_vMH_d2gzRSznF_DVifJ3ie7BgKhZU+P6Pg@mail.gmail.com>
+Subject: Re: [PATCH v7 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Enable the cmu-peric0/1 clock controller. It feeds USI and I2C.
+Dear Christophe,
 
-Signed-off-by: Denzeel Oliva <wachiturroxd150@gmail.com>
----
- arch/arm64/boot/dts/exynos/exynos990.dtsi | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Thank you for reviewing,
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos990.dtsi b/arch/arm64/boot/dts/exynos/exynos990.dtsi
-index dd7f99f51..843587b17 100644
---- a/arch/arm64/boot/dts/exynos/exynos990.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos990.dtsi
-@@ -231,12 +231,34 @@ pinctrl_peric0: pinctrl@10430000 {
- 			interrupts = <GIC_SPI 392 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		cmu_peric0: clock-controller@10400000 {
-+			compatible = "samsung,exynos990-cmu-peric0";
-+			reg = <0x10400000 0x8000>;
-+			#clock-cells = <1>;
-+
-+			clocks = <&oscclk>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_BUS>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_IP>;
-+			clock-names = "oscclk", "bus", "ip";
-+		};
-+
- 		pinctrl_peric1: pinctrl@10730000 {
- 			compatible = "samsung,exynos990-pinctrl";
- 			reg = <0x10730000 0x1000>;
- 			interrupts = <GIC_SPI 417 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		cmu_peric1: clock-controller@10700000 {
-+			compatible = "samsung,exynos990-cmu-peric1";
-+			reg = <0x10700000 0x8000>;
-+			#clock-cells = <1>;
-+
-+			clocks = <&oscclk>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_BUS>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_IP>;
-+			clock-names = "oscclk", "bus", "ip";
-+		};
-+
- 		cmu_hsi0: clock-controller@10a00000 {
- 			compatible = "samsung,exynos990-cmu-hsi0";
- 			reg = <0x10a00000 0x8000>;
--- 
-2.48.1
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> =E6=96=BC 2025=E5=B9=B42=
+=E6=9C=888=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=882:37=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> Le 07/02/2025 =C3=A0 08:44, Ming Yu a =C3=A9crit :
+> > The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
+> > 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
+> > PWM, and RTC.
+> >
+> > This driver implements USB device functionality and shares the
+> > chip's peripherals as a child device.
+> >
+> > Each child device can use the USB functions nct6694_read_msg()
+> > and nct6694_write_msg() to issue a command. They can also request
+> > interrupt that will be called when the USB device receives its
+> > interrupt pipe.
+>
+> ...
+>
+> > +static struct irq_chip nct6694_irq_chip =3D {
+>
+> This could be const.
+>
+> (I'm working on a serie that should constify struct irq_chip, so this
+> one would already be done)
+>
+Okay, I will fix it in the next patch.
 
+
+Best regards,
+Ming
 
