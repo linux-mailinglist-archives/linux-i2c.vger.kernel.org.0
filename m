@@ -1,112 +1,140 @@
-Return-Path: <linux-i2c+bounces-9376-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9377-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D752A3209D
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 09:09:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07A7FA322AB
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 10:46:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5AEC3A5DCB
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 08:08:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2C5D3A3053
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 09:45:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 436BA204C0A;
-	Wed, 12 Feb 2025 08:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD7E1EF0B9;
+	Wed, 12 Feb 2025 09:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cckCizXP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mHammSSf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AC1146A68;
-	Wed, 12 Feb 2025 08:08:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B79271828;
+	Wed, 12 Feb 2025 09:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739347738; cv=none; b=sAN4jwu11CY8E7wPKhpECbJPobIJU3hJtvw/01PY1qXpuTyc/gHRGDdGugE98I+5AZoj42BXawq2r1uek7M2gwUxPOjRSYFS83UbM498fHVv6Mrhnc1oszHjO7zlMDw6HBwGdzPn6c3nL9Giw+BRzFrxbH3zl5OZ3+ts5JVE6/s=
+	t=1739353556; cv=none; b=CEkGGI5aPGZi88bAA2lCby4q9oIGdf3Dx5bPs7QT94KJz5TBWHeIRM4dpcfqYydGZ+1DMx0kOgwaQrpmKBF/4KyXLYfIyj3AAIS7YcRqH9VjR3sBULvN1NT9cQQJaI1J/W2IOeDKXsoshsxgmqU0rIKxQOzqvV9fGCcnhBQUvAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739347738; c=relaxed/simple;
-	bh=3n3AiS8w4E0MDVQO+1aqzMTdo+6rb7zH+QU/hI+QJj4=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=tU6JUhjYjI/d8aSpDR95r0IdcrnoZOF3ptM9V/kFhZmAvrlbaoyvNRQ5zyCR7I5Vaikg/JkvdGc0BoBirE4yFMbZI4K2/9/gR+ew6K8wWQzudio6n6CZkBKqA2U9yRh8tdYZJqGe1SXCnc5CcKYY1BV4osZR+i4zSZuPZ4PtNtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cckCizXP; arc=none smtp.client-ip=209.85.222.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-86715793b1fso1180392241.0;
-        Wed, 12 Feb 2025 00:08:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739347735; x=1739952535; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zXFlucBnq2P5HHPVZLlRvii387YujpzgePwriGoGZ1Y=;
-        b=cckCizXP34HF+FubNyL26G1B2egqhZX8cYi8Da5PhJWwv2ShCvL2IPPvSUI1NCxQ/z
-         frd5kWtffArOoxeyZt3p76GPjxamUe6Qbh2qN39uGOY7+aUPBd2/PRdyUzbj8QowIXAY
-         +Mp0eXfm58mX0NB9bZC4bSl0TjQizxggIE7dxRvKeNjvh3MkmQ3pPNzGZqlOfo41v0jO
-         J+EFEKXiDR5gRfC8DEG/SrX56f/Pc263FkCQhE3QDZiVTxzKBiL4LrQR4WrgP/rZTqTL
-         eCLKo36belDYQhSK5KAg52+wRCGQvPgK/4Adz85fbhJOzu210hT6lQnxyC11SnLx2wZL
-         RVZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739347735; x=1739952535;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zXFlucBnq2P5HHPVZLlRvii387YujpzgePwriGoGZ1Y=;
-        b=W2w4PyAJjxk8g8mM9DkXVVqCyXH409kRyavXy1ZNum60P2NEfAtLERCkF8cBoyYzZ6
-         RxZYyOWnM956N/ed4GAj8yaDRg4MF+p6LEwCe3pjuHHOerzEM6zQVXsPSzhqW/Dd5Pu+
-         G2sFtE2gycvuDx3FnEcnISEbzn8Y41u2xydYD7+gBdrrWMOXbmUKluTpzo2EJ/5smZqL
-         SDYOJYU239pbBCn03O7ho39OMh3XAc5Q+2WvAfH37mei8bZ0cpMu5pdPwki2vLxitssx
-         pgR4MstwySCMDVhZ4kQAhIlzEqWQu0IAz3XxkxuNtOVKvFo4CI00dNDHIv3XWcITJJ3O
-         6a2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXgbRSa2S+ED8GE7L75o7T45pDHjVPiTXJ/1c0gqYpFSBmlGkjMr8PXGrrR4qnc6GFi0OtONka5Fy4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxthcuLq6PTkvGdwfMOWwt+tTskbdaoojokNsIANftJ7N5/OI8y
-	g2If6TJPnZ3ZQpB3vQdtQBmEVd9859G+sfmCzewUcakUk1JJq4IYQ1BMWHtRjJgZDkfeVgQqdGG
-	JbRG4GSKyY8raxTIbslaumxm9SKCDLV2f
-X-Gm-Gg: ASbGncvFGu1muN8KxjrDvKBgT9VwoLf40xuwzO1UUc1kS8e2xRFdmzxb1Dw7KkjfErM
-	wISbuXcIo5lcm8/BwmrY2uG2yYnJxOHYd+hTmiXNJ8qL1z7bazfphuhYo/L3jbII18XwnDxxW
-X-Google-Smtp-Source: AGHT+IFHNDP1D0RkSPacbTH+tDBi/AM2fA95i2nFPdN9s0/jsSX1a1j/V6SKmAY2TGo8ChqtX5QTBAGtvUomj9IH7aA=
-X-Received: by 2002:a05:6102:38d0:b0:4bb:c24b:b63c with SMTP id
- ada2fe7eead31-4bbf22dba4bmr1890808137.17.1739347735300; Wed, 12 Feb 2025
- 00:08:55 -0800 (PST)
+	s=arc-20240116; t=1739353556; c=relaxed/simple;
+	bh=kAK1JNEXBVI90rtvbzvhelzR8j2Kk8vnxGVJn1p7bBc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MkvZ842eExKM+/dwU4NVFHBH6MRwW/HezjwdRPzcWTj9AoSKEZItvVZ8Y0gC3+yczqg6S8845YiSdiiOWmMhAeAdGn/C5JaDdUOgUdksuWDbVcmW35grOAF5x5hO5bo93LFwL69NbvQspKkoJJ/KwUHgPwpqgV0tmcVS69gemCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mHammSSf; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E398A432FA;
+	Wed, 12 Feb 2025 09:45:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1739353551;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CfitNOlVMCBM5pFcbQFIlvndtGb2TiK3zUMFNWZwgDY=;
+	b=mHammSSfAxD36lSKrqFlgQ0FxjGr0GSfooYA6WuHOPvHq9JQbumFr0Ho3U1Q8tbb9rmgj8
+	tzyPK6jPpwkd3G3gLk3e1NimGOsnqsuAFerXeIsRKeyGNl/6qLEg3wHBjMGJoqCzuNpIlu
+	gG5mm//6DtYFd517rnZxUZIplJuyLTrwTsT9S9iFmFmODq2DPfQlcrRjAFf7c3H6SKPIQo
+	cRNPcLf/EXG4VWiBv8ryfwFbhp9vR61Su+ehl48mzUydz6bja2p044wqlsDs8IPX5fY0d3
+	3VQ0BUcWlu/pehPCt64yUHk1WP1jizH/rz1hkKhC60ggLigUfumfX2WaRsFFZw==
+Date: Wed, 12 Feb 2025 10:45:49 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Luca Ceresoli
+ <luca.ceresoli@bootlin.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+Subject: Re: [RFC PATCH 3/3] i2c: i2c-core-of: Handle i2c bus extensions
+Message-ID: <20250212104549.6b1d8781@bootlin.com>
+In-Reply-To: <71468d78-07aa-49b1-8b6d-3d98c6fc9893@kernel.org>
+References: <20250205173918.600037-1-herve.codina@bootlin.com>
+	<20250205173918.600037-4-herve.codina@bootlin.com>
+	<71468d78-07aa-49b1-8b6d-3d98c6fc9893@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Konstantin Aladyshev <aladyshev22@gmail.com>
-Date: Wed, 12 Feb 2025 11:18:44 +0300
-X-Gm-Features: AWEUYZmoy-CD2Ff05lPynwkRv_B82hN93kgUMKX-N_CN3_mwmlxP8OD_6m0VzmY
-Message-ID: <CACSj6VVNFZWJZVk4k98QYGdCQ=u5TzyfRE9NC_3xAKMRoPGzJA@mail.gmail.com>
-Subject: Assigning fixed numbers to i2c buses via ACPI code
-To: linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegfeehhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedtvdefvefgiedvtedvgedvgeelhfejkeejgefgvdfguedtudeiiedtieejffduhfenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehkrhiikheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihsrgdorhgvnhgvshgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnv
+ ghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: herve.codina@bootlin.com
 
-Hello!
+Hi Krzysztof,
 
-Is it possible to assign fixed numbers to i2c buses via ACPI code?
+On Wed, 12 Feb 2025 06:54:19 +0100
+Krzysztof Kozlowski <krzk@kernel.org> wrote:
 
-In DTS code it is done via aliases
-(https://docs.kernel.org/i2c/i2c-sysfs.html#caveat).
+> On 05/02/2025 18:39, Herve Codina wrote:
+> >  
+> >  	dev_dbg(&adap->dev, "of_i2c: walking child nodes from %pOF\n", bus);
+> >  
+> > -	/* Register device directly attached to this bus */
+> > +	/*
+> > +	 * Register device directly described in this bus node before looking
+> > +	 * at extensions.
+> > +	 */
+> >  	for_each_available_child_of_node(bus, node) {
+> > +		/* Filter out extension node */
+> > +		if (of_node_name_eq(node, "i2c-bus-extension"))  
+> 
+> Where is the ABI documented?
+> 
+> > +			continue;
+> > +
+> >  		if (of_node_test_and_set_flag(node, OF_POPULATED))
+> >  			continue;
+> >  
+> > @@ -103,6 +110,23 @@ static void of_i2c_register_children(struct i2c_adapter *adap,
+> >  			of_node_clear_flag(node, OF_POPULATED);
+> >  		}
+> >  	}
+> > +
+> > +	/* Look at extensions */
+> > +	for_each_available_child_of_node(bus, node) {
+> > +		if (!of_node_name_eq(node, "i2c-bus-extension"))
+> > +			continue;
+> > +
+> > +		extension = of_parse_phandle(node, "i2c-bus", 0);  
+> 
+> And this?
+> 
+> > +		if (!extension)
+> > +			continue;
+> > +  
 
-For example:
-```
-aliases {
-    i2c20 = &imux20;
-}
+I know the binding is not present in this RFC series.
 
-&i2c1 {
-status = "okay";
+As I mentioned in my cover letter, the binding that needs to be updated is
+available in dt-schema repo [0].
 
-  i2c-mux@77 {
-     ...
-     imux20: i2c@0 {
-        ...
-     }
-     ...
-  }
-}
-```
+When the binding is be accepted in dt-schema repo, I will not be able to
+change it and because two repos are involved, I cannot send the binding and
+the implementation in the same series.
 
-Is it possible to do something like that in ACPI code?
+Before sending a patch to update the binding in dt-schema repo, I would
+like first to discuss the proposed i2c bus extension idea in terms of:
+  1) DT properties naming and purpose
+  2) implementation
+
+[0] https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/i2c-controller.yaml
 
 Best regards,
-Konstantin Aladyshev
+Hervé
 
