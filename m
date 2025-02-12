@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-9366-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9367-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2BF8A31AC4
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 01:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56584A31AC7
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 01:49:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A6111888D5C
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 00:49:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 451191888FA9
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 00:49:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA56735956;
-	Wed, 12 Feb 2025 00:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2063017BD3;
+	Wed, 12 Feb 2025 00:49:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2scBwfn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3v7BBDQ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F94D2C187;
-	Wed, 12 Feb 2025 00:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B9778F20;
+	Wed, 12 Feb 2025 00:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739321339; cv=none; b=KhKO3Sri5i/thyUlvFytgms96H/7hoibJqh6EHGQzdoI3HXYA0bUibHlC3yLwHfod3eUIHjHjWDw9tai++mEpQOyupKSvY603AzO62pOVfuSnv/Ip5w0dIPAzXHiyfPHOLrCOLsmvrFcURyfCxB1U94+gs5aMoqCH+DJBJqXVsI=
+	t=1739321346; cv=none; b=jVwe7TMbtdnC8WLifOa9u/mLVllnc7qZ3IA77Yu8hi/uFzg3Jd/qNg52a/fAq94xW7+lp8lGF5w0Q6lFaNhqEtbKVwYN+nF8LydgiA/OjMvWmtgmqZVawSrV3uxFz/BE15pQlAwc8L2vvmH5hXUmzWa/vm0DQEZDplMfI6oUDog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739321339; c=relaxed/simple;
-	bh=FYcCyiq0VGmChKGKi5dUBIjif4f1EpVl1ijGUj+lGec=;
+	s=arc-20240116; t=1739321346; c=relaxed/simple;
+	bh=wSWHkxhuAi2loB88IXFEMHXYR1GUBTyvkpidceCnFxo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fd+C1hkWuclkVSMmwk2YmrIZFECx7HzuQDeKZPdqc98sRRcb95QehEND/Sj+CwqC8ofPQVREC5pGZpwZ3j1y8eeeUuYBPI1N9wCaL63Bdb1gjnzZDaSaiK63Jvk6RQRBBVWbUc+3THRy/Lw0IK24gevRGZVMuKpnL4jfRt5rcoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2scBwfn; arc=none smtp.client-ip=209.85.217.46
+	 MIME-Version; b=j0o6vR/w4gYsTjId8sY9B2ka1kE+fagPRCeJro3XAsIV0YoZHam617VMteAir4NEsnOCUxEleyofLuZci4Ttya8mQdxEm4/uds9hXBbS9irlmpssZgsVYGLxziPrfzlbk9mi0r6Ewe/6BzXnZXSlZjdU/xfSRjR7sRjG5GNyUgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3v7BBDQ; arc=none smtp.client-ip=209.85.217.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-4bbe0d2189aso522281137.2;
-        Tue, 11 Feb 2025 16:48:57 -0800 (PST)
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-4ba79f6c678so1928860137.3;
+        Tue, 11 Feb 2025 16:49:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739321337; x=1739926137; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739321342; x=1739926142; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SnO9e/u0soM6zfm7iXTquiJqIoHFdkct1rIsAUq8Ilw=;
-        b=R2scBwfnah5EZIgzDiBLMF85BBCFGqyzVk6whvxKlk+AMkg4ovV4DyfbJsoQIH7JBq
-         kZnNEPvZ5Ez2fD4gWiiMqf/Ygy9NJoeCBmBHg1h+kqRo7cfUstPZRmVSfq0N+pxBF1kX
-         lup5Su3KjOetnx2X/578govWomJc/QmW0MaKldAU/9kyCGUoglEFna5gr/QImLmUdQi5
-         +P62HK2eInE/R62tNgxDkjw0aK17VZzU2YPfiruJDZJQHLwpHl1f4Ua9d8r2Wz5HcAPv
-         5Kf7gto9+QIZIvHWBBFEdGzlpzapeDDheofDSgmoykORSoU0zZAH7LpTkNnaFQuoPs8g
-         CXww==
+        bh=I+T4x5DI5wf5yvQ8QBDGrEF95+/35pRZpUJeRNVLG9s=;
+        b=R3v7BBDQeNPJZ3UwMl3uNmyah7BJbyN7M0JSZVUNo4auTahjfi23dDbpOEmR//H5rl
+         QDoniUrGTIHyr/UeX7GudSF3lWuKxmCghGnPKd3uSay4B5qDAVLH9s2PKR8cRbEL3nBq
+         pp/U1c3s3UTwCYziZ/h2TfsOwJIkN/HkwNX3RAQ9NX3glWQWl2qWIIyUvh6ZXXl7aXqC
+         KUvwBw756uuUAWMv6Dclv4zSozljG5XDiaRpgUbPyHzm67VZpCgHX4tchzy9kzcjCrND
+         RZeXJ27wq2NGHWqqzFbCEm+c3E4D5Mz7cr5yLExBxj+Li1WVALkRFXMgWF6frW1ntNh4
+         QyGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739321337; x=1739926137;
+        d=1e100.net; s=20230601; t=1739321342; x=1739926142;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SnO9e/u0soM6zfm7iXTquiJqIoHFdkct1rIsAUq8Ilw=;
-        b=lnXpsb/Niu6ugf7e2hKmviYVSVqlsY7euJn/JiU4n8UZNnpOwVoy69PawSB48UzpMi
-         Iyx6dTrLMpu5+lBwLb94vn1DyiE+cmhiKcmBd2nZTQzLpoBGmG6r9VUIx0oprppCeozO
-         Jk1TozhPKIEkDrl2HgtflkusClPeeWX710DZJ0H7CEjv2Gjb2LI+jrW9Mg1NHyTNSKJ2
-         uMYAiz+LIZPuGastkICGlmru8GwI5k8q67kClWRfuntkB3VBn6D+6iu0fpYRxMGBH4SG
-         LkhyAPHd1KwNujZmCiMsYHDcHnEFYrZb7bARlpvgfTcGdyfs/PzS0ItQNZVg+IRG45Zt
-         4NdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW0PX13KkauAKmR1pmPCOO6nc/Qg60VZAYI6pMktDFiRGzDjfACHlR0Yy4C/ITRL53yGRmp/K0cRPNz@vger.kernel.org, AJvYcCX78xc1e2tibYoGxsqHir1Am4rGiuySzz4gZR/aqD6W9lm9yYHNl2ZRKKavc1GtElbpVGNd7tXXYYzlOgqOoAcJfKo=@vger.kernel.org, AJvYcCXF0NPxKDR7NGzksLFdxLs65tXC81BLDF9b4brroppuQVOPVBey3NcuAfbhwFyWHFGlT05j0qYc5G77@vger.kernel.org, AJvYcCXJE3YwqC6qqNPCEarOR1HmWomBIozhhpRe2nEk8klWo4Y+2DIDolPDTydr21iKQHvCF1LR4Uiv9S5c@vger.kernel.org, AJvYcCXWCTzk0F9MKy29b6//1ivgINZkHLb5QxXMw11PZFWJo9TuLw18JHXS6pOywQb1IN14ConE72Si5mwbzpj1@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOE28i7vFmJBRDTWGm7/LtW4zub6rWre31ObL399tLiCsojz/i
-	t93xj+QcRjJxWkOjBtr8H1Bm9kZUsg1TD2JI5WtOFJHA12kzm3AkRW45pu/1Drc=
-X-Gm-Gg: ASbGncuN4nOr7Kj2jXJA+1NZUO4aoIYUMCUspfaM6XhfTe9uuCTSDSqdiQMo6UefOnm
-	hsQQmMv9UApCohV4w+Xb1x3hTCrYBy+7WAUeeQihvqqGslXobGSNsc759MdoCxMiEuGN4LvlCpq
-	Jz8KToDgnc1mmFocv93xTH7enWElHQoWEy4SkEncrI/eEK7IofdGlffWJi9QJPLS2eWhh2/Jlx5
-	R8zFuuVhZfZ4Z1BgKfqE/b/KF9+8swNf5UU1lWISRCXoAO279xurKndCd6vDQ2iinccRSAT8Wqa
-	45YenR3svwgHSyRwtCfuW5r1bgCar53LMeoDbNSRPz4L5W+LfEXk58/TeagyIw0ii2WdvHvYTIi
-	WRA==
-X-Google-Smtp-Source: AGHT+IFrSRvTw7mvQhgJfawsqBloDC+lGaYWgkWYTPrS+C60KihHhrrLCY+PMmPP9OPsJfxtuui3Vw==
-X-Received: by 2002:a05:6102:3751:b0:4bb:e14a:944b with SMTP id ada2fe7eead31-4bbf22dbd9cmr1369181137.20.1739321336924;
-        Tue, 11 Feb 2025 16:48:56 -0800 (PST)
+        bh=I+T4x5DI5wf5yvQ8QBDGrEF95+/35pRZpUJeRNVLG9s=;
+        b=MV3DA44kMGu8/7pPKtQMdBkj1R7MCN+3vxxBys0fAOnc+ogL7PKYeyVPRH9CoyPACa
+         cbEWk+ojbEM6dlNndHwYV88umiTuQTACNxRr5IH0tQ1YJyrvQOLKIOpyBgvnVJLc45Lp
+         IqWHGhOY8Q5OQl4SggX7UUp2zg1Jk6XY98l7IHm7N0qiwSDiYfI3F51FO8hUjPouF+Cg
+         f1oUvlqZmhYnZKtPRCA9vM6mJtm/bx74PrOOy9oNI5YCBzQXneciC2vye/fDpW+qz4m+
+         jv8OnNhX69u8au9qW11oXhOPd7uEsqEW5dkx89YLMLbzVnnZyHEJeeI8zW62XhjybFac
+         I/TA==
+X-Forwarded-Encrypted: i=1; AJvYcCW5+wZ+ls6DVn02tOEsZ6yVwNt5F4duhVN+3heVwH2FjRHogyAGGsy7CFGZsWQEKSoPZ8Qi1wr/5a4jFJ6RReTjPhU=@vger.kernel.org, AJvYcCWmnNJXdHRgDkbfCtdXplaJJ4feWElECjPoqi5hVSjs49GYOJokJktr6mPJ//3dFBeRh49+wlRqBDLy@vger.kernel.org, AJvYcCWtdN7gmHFJ4JLvKMWHjbUwaay4FfEZA9TFR4QvQnp8aMt5vmprzxEl21gpg+9gzwwHUEWMDHjSzptC@vger.kernel.org, AJvYcCXbnkSBjATxYqGmtyVEcso/v/ErvVqw7aWH8bKrjXPU09cVhSCuiL0HfvH2BSfQTAOSCKzj6RVpilEO@vger.kernel.org, AJvYcCXbokPQsUMyFiAT6yMZQrAupqJSEcTThpfJSTh4Ly3Bx8FKQVCTj+Wgbqy35zwSJbQh1pTewttAIP/i6qiZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBgE4YIZSV8Ov9rWL0Eesx+1UQQlN4ee1fvzZdi1vcukTd46c0
+	h/hloPP2dMXLawHLqVCPrHJyp7ODNQ4I8o4ER9EbcOvj27ldEGFb
+X-Gm-Gg: ASbGncsrQzZAgPU0m6p4rPUAkfVP6dhMPDA3zlgtTG+zIzVdt1Dx525mwG6LvbA5RJ0
+	6BIr7T5plJ4COYH2FZPKpbqAk0e1EIBc6el36aFQE9VxdVywZ13t1LQclYTH9/gSqnz417OJCqt
+	9zz5BOKJ46O0SHu26MZtCgbOmPuIPzARqaNcwRNFkq4/x4wEwwB03jKkca9HOJ3EP3EPBJarayz
+	IWplYfdO/6EoLWlTkmjJNrPdjgNVSxXwAkYly0WRnvFjooju9z7p6LVb1VfcGkZ2CfkDT457eaR
+	/cndt+sgoaSFU4wiXn5siIANg8oZJR8ivrr5dbKEuyOuxK2VrgtYXJ5EMM+G9ZGCdGnNErzJq4F
+	kdw==
+X-Google-Smtp-Source: AGHT+IGKWKeuhqEXCXdvkfSSQRxX3RI31AZLwnLPYZ/AZ0XczXmAYb1tCyJGGSgJLYh9UqTm8D6bHQ==
+X-Received: by 2002:a05:6102:2c84:b0:4bb:eb4a:f9ec with SMTP id ada2fe7eead31-4bbf22df260mr1567989137.16.1739321341972;
+        Tue, 11 Feb 2025 16:49:01 -0800 (PST)
 Received: from localhost.localdomain ([38.44.237.182])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bbce4c6fcfsm823832137.23.2025.02.11.16.48.52
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bbce4c6fcfsm823832137.23.2025.02.11.16.48.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 16:48:56 -0800 (PST)
+        Tue, 11 Feb 2025 16:49:01 -0800 (PST)
 From: Denzeel Oliva <wachiturroxd150@gmail.com>
 To: krzk@kernel.org,
 	s.nawrocki@samsung.com,
@@ -91,9 +91,9 @@ To: krzk@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-i2c@vger.kernel.org
 Cc: Denzeel Oliva <wachiturroxd150@gmail.com>
-Subject: [PATCH v2 2/4] dt-bindings: i2c: exynos5: add samsung,exynos990-hsi2c compatible
-Date: Wed, 12 Feb 2025 00:48:22 +0000
-Message-Id: <20250212004824.1011-3-wachiturroxd150@gmail.com>
+Subject: [PATCH v2 3/4] clk: samsung: exynos990: add support for CMU_PERIC0/1
+Date: Wed, 12 Feb 2025 00:48:23 +0000
+Message-Id: <20250212004824.1011-4-wachiturroxd150@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250212004824.1011-1-wachiturroxd150@gmail.com>
 References: <20250212004824.1011-1-wachiturroxd150@gmail.com>
@@ -105,26 +105,1184 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add samsung,exynos990-hsi2c dedicated compatible
-for representing I2C of Exynos990 SoC.
+CMU_PERIC0/1 is the clock management unit used for the peric0/1 blockwhich
+is used for USI and I2C. Add support for all cmu_peric0 clocks but
+CLK_GOUT_PERIC0|1_IP (not enough info in the datasheet).
+
+Some clocks must have flags marked as critical, as the system hangs when
+those clocks are disabled.
 
 Signed-off-by: Denzeel Oliva <wachiturroxd150@gmail.com>
 ---
- Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/clk/samsung/clk-exynos990.c | 1148 +++++++++++++++++++++++++++
+ 1 file changed, 1148 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-index 70cc2ee9e..b05d1e9e2 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-@@ -36,6 +36,7 @@ properties:
-           - enum:
-               - google,gs101-hsi2c
-               - samsung,exynos850-hsi2c
-+              - samsung,exynos990-hsi2c
-           - const: samsung,exynosautov9-hsi2c
-       - const: samsung,exynos5-hsi2c    # Exynos5250 and Exynos5420
-         deprecated: true
+diff --git a/drivers/clk/samsung/clk-exynos990.c b/drivers/clk/samsung/clk-exynos990.c
+index 76f22a4a4..64cb7cffc 100644
+--- a/drivers/clk/samsung/clk-exynos990.c
++++ b/drivers/clk/samsung/clk-exynos990.c
+@@ -1307,6 +1307,1148 @@ static const struct samsung_cmu_info hsi0_cmu_info __initconst = {
+ 	.clk_name		= "bus",
+ };
+ 
++/* ---- CMU_PERIC0 --------------------------------------------------------- */
++
++/* Register Offset definitions for CMU_PERIC0 (0x10400000) */
++#define PLL_CON0_MUX_CLKCMU_PERIC0_BUS_USER						0x0600
++#define PLL_CON1_MUX_CLKCMU_PERIC0_BUS_USER						0x0604
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI00_USI_USER					0x0620
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI00_USI_USER					0x0624
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI01_USI_USER					0x0630
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI01_USI_USER					0x0634
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI02_USI_USER					0x0640
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI02_USI_USER					0x0644
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI03_USI_USER					0x0650
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI03_USI_USER					0x0654
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI04_USI_USER					0x0660
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI04_USI_USER					0x0664
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI05_USI_USER					0x0670
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI05_USI_USER					0x0674
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI_I2C_USER						0x06b0
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI_I2C_USER						0x06b4
++#define PLL_CON0_MUX_CLKCMU_PERIC0_UART_DBG						0x0610
++#define PLL_CON1_MUX_CLKCMU_PERIC0_UART_DBG						0x0614
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI13_USI_USER					0x0680
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI13_USI_USER					0x0684
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI14_USI_USER					0x0690
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI14_USI_USER					0x0694
++#define PLL_CON0_MUX_CLKCMU_PERIC0_USI15_USI_USER					0x06a0
++#define PLL_CON1_MUX_CLKCMU_PERIC0_USI15_USI_USER					0x06a4
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI00_USI						0x1804
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI01_USI						0x1808
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI02_USI						0x180c
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI03_USI						0x1810
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI04_USI						0x1814
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI05_USI						0x1818
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI_I2C						0x1828
++#define CLK_CON_DIV_DIV_CLK_PERIC0_UART_DBG						0x1800
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI13_USI						0x181c
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI14_USI						0x1820
++#define CLK_CON_DIV_DIV_CLK_PERIC0_USI15_USI						0x1824
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_GPIO_PERIC0_IPCLKPORT_PCLK			0x2010
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_SYSREG_PERIC0_IPCLKPORT_PCLK			0x20e4
++#define CLK_CON_GAT_CLK_BLK_PERIC0_UID_PERIC0_CMU_PERIC0_IPCLKPORT_PCLK			0x2004
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_BUSP_IPCLKPORT_CLK		0x20b4
++#define CLK_CON_GAT_CLK_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_OSCCLK_IPCLKPORT_CLK		0x2008
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI00_USI_IPCLKPORT_CLK	0x20bc
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI_I2C_IPCLKPORT_CLK	0x20e0
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI01_USI_IPCLKPORT_CLK	0x20c0
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI02_USI_IPCLKPORT_CLK	0x20c4
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI03_USI_IPCLKPORT_CLK	0x20c8
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI04_USI_IPCLKPORT_CLK	0x20cc
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI05_USI_IPCLKPORT_CLK	0x20d0
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_UART_DBG_IPCLKPORT_CLK	0x20b8
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_LHM_AXI_P_PERIC0_IPCLKPORT_I_CLK		0x2014
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI13_USI_IPCLKPORT_CLK	0x20d4
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI14_USI_IPCLKPORT_CLK	0x20d8
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_D_TZPC_PERIC0_IPCLKPORT_PCLK			0x200c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI15_USI_IPCLKPORT_CLK	0x20dc
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_4			0x2030
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_4			0x2060
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_5			0x2064
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_6			0x2068
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_7			0x206c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_8			0x2070
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_9			0x2074
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_10			0x2048
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_11			0x204c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_12			0x2050
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_13			0x2054
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_14			0x2058
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_15			0x205c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_5			0x2034
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_6			0x2038
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_7			0x203c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_8			0x2040
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_9			0x2044
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_10			0x2018
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_11			0x201c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_12			0x2020
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_13			0x2024
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_14			0x2028
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_15			0x202c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_0			0x2094
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_3			0x209c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_4			0x20a0
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_5			0x20a4
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_6			0x20a8
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_7			0x20ac
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_8			0x20b0
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_15			0x2098
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_0			0x2078
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_3			0x207c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_4			0x2080
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_5			0x2084
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_6			0x2088
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_7			0x208c
++#define CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_8			0x2090
++
++static const unsigned long peric0_clk_regs[] __initconst = {
++	PLL_CON0_MUX_CLKCMU_PERIC0_BUS_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_BUS_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI00_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI00_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI01_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI01_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI02_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI02_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI03_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI03_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI04_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI04_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI05_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI05_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI_I2C_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI_I2C_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_UART_DBG,
++	PLL_CON1_MUX_CLKCMU_PERIC0_UART_DBG,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI13_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI13_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI14_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI14_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC0_USI15_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC0_USI15_USI_USER,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI00_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI01_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI02_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI03_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI04_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI05_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI_I2C,
++	CLK_CON_DIV_DIV_CLK_PERIC0_UART_DBG,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI13_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI14_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC0_USI15_USI,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_GPIO_PERIC0_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_SYSREG_PERIC0_IPCLKPORT_PCLK,
++	CLK_CON_GAT_CLK_BLK_PERIC0_UID_PERIC0_CMU_PERIC0_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_BUSP_IPCLKPORT_CLK,
++	CLK_CON_GAT_CLK_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_OSCCLK_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI00_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI_I2C_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI01_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI02_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI03_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI04_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI05_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_UART_DBG_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_LHM_AXI_P_PERIC0_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI13_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI14_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_D_TZPC_PERIC0_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI15_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_4,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_4,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_5,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_6,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_7,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_8,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_9,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_10,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_11,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_12,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_13,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_14,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_15,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_5,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_6,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_7,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_8,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_9,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_10,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_11,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_12,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_13,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_14,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_15,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_0,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_3,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_4,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_5,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_6,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_7,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_8,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_15,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_0,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_3,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_4,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_5,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_6,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_7,
++	CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_8,
++};
++
++PNAME(mout_peric0_bus_user_p) = { "oscclk", "dout_cmu_peric0_bus" };
++PNAME(mout_peric0_usi00_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_usi01_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_usi02_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_usi03_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_usi04_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_usi05_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_usi_i2c_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_uart_dbg_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_usi13_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_usi14_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++PNAME(mout_peric0_usi15_user_p) = { "oscclk", "dout_cmu_peric0_ip" };
++
++static const struct samsung_mux_clock peric0_mux_clks[] __initconst = {
++	MUX(CLK_MOUT_PERIC0_BUS_USER, "mout_peric0_bus_user",
++	    mout_peric0_bus_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_BUS_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI00_USI_USER, "mout_peric0_usi00_usi_user",
++	    mout_peric0_usi00_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI00_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI01_USI_USER, "mout_peric0_usi01_usi_user",
++	    mout_peric0_usi01_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI01_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI02_USI_USER, "mout_peric0_usi02_usi_user",
++	    mout_peric0_usi02_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI02_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI03_USI_USER, "mout_peric0_usi03_usi_user",
++	    mout_peric0_usi03_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI03_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI04_USI_USER, "mout_peric0_usi04_usi_user",
++	    mout_peric0_usi04_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI04_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI05_USI_USER, "mout_peric0_usi05_usi_user",
++	    mout_peric0_usi05_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI05_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI_I2C_USER, "mout_peric0_usi_i2c_user",
++	    mout_peric0_usi_i2c_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI_I2C_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_UART_DBG, "mout_peric0_uart_dbg",
++	    mout_peric0_uart_dbg_p, PLL_CON0_MUX_CLKCMU_PERIC0_UART_DBG,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI13_USI_USER, "mout_peric0_usi13_usi_user",
++	    mout_peric0_usi13_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI13_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI14_USI_USER, "mout_peric0_usi14_usi_user",
++	    mout_peric0_usi14_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI14_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC0_USI15_USI_USER, "mout_peric0_usi15_usi_user",
++	    mout_peric0_usi15_user_p, PLL_CON0_MUX_CLKCMU_PERIC0_USI15_USI_USER,
++	    4, 1),
++};
++
++static const struct samsung_div_clock peric0_div_clks[] __initconst = {
++	DIV(CLK_DOUT_PERIC0_USI00_USI, "dout_peric0_usi00_usi",
++	    "mout_peric0_usi00_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI00_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_USI01_USI, "dout_peric0_usi01_usi",
++	    "mout_peric0_usi01_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI01_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_USI02_USI, "dout_peric0_usi02_usi",
++	    "mout_peric0_usi02_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI02_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_USI03_USI, "dout_peric0_usi03_usi",
++	    "mout_peric0_usi03_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI03_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_USI04_USI, "dout_peric0_usi04_usi",
++	    "mout_peric0_usi04_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI04_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_USI05_USI, "dout_peric0_usi05_usi",
++	    "mout_peric0_usi05_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI05_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_USI_I2C, "dout_peric0_usi_i2c",
++	    "mout_peric0_usi_i2c_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI_I2C,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_UART_DBG, "dout_peric0_uart_dbg",
++	    "mout_peric0_uart_dbg",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_UART_DBG,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_USI13_USI, "dout_peric0_usi13_usi",
++	    "mout_peric0_usi13_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI13_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_USI14_USI, "dout_peric0_usi14_usi",
++	    "mout_peric0_usi14_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI14_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC0_USI15_USI, "dout_peric0_usi15_usi",
++	    "mout_peric0_usi15_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC0_USI15_USI,
++	    0, 4),
++};
++
++static const struct samsung_gate_clock peric0_gate_clks[] __initconst = {
++	GATE(CLK_GOUT_PERIC0_GPIO_PCLK, "gout_peric0_gpio_pclk",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_GPIO_PERIC0_IPCLKPORT_PCLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_SYSREG_PCLK, "gout_peric0_sysreg_pclk",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_SYSREG_PERIC0_IPCLKPORT_PCLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_CMU_PCLK, "gout_peric0_cmu_pclk",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_CLK_BLK_PERIC0_UID_PERIC0_CMU_PERIC0_IPCLKPORT_PCLK,
++	     21, CLK_IS_CRITICAL, 0),
++	GATE(CLK_GOUT_PERIC0_BUSP_CLK, "gout_peric0_busp_clk",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_BUSP_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_OSCCLK_CLK, "gout_peric0_oscclk_clk",
++	     "oscclk",
++	     CLK_CON_GAT_CLK_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_OSCCLK_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_USI00_USI_CLK, "gout_peric0_usi00_usi_clk",
++	     "dout_peric0_usi00_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI00_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_USI_I2C_CLK, "gout_peric0_usi_i2c_clk",
++	     "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI_I2C_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_USI01_USI_CLK, "gout_peric0_usi01_usi_clk",
++	     "dout_peric0_usi01_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI01_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_USI02_USI_CLK, "gout_peric0_usi02_usi_clk",
++	     "dout_peric0_usi02_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI02_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_USI03_USI_CLK, "gout_peric0_usi03_usi_clk",
++	     "dout_peric0_usi03_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI03_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_USI04_USI_CLK, "gout_peric0_usi04_usi_clk",
++	     "dout_peric0_usi04_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI04_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_USI05_USI_CLK, "gout_peric0_usi05_usi_clk",
++	     "dout_peric0_usi05_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI05_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_UART_DBG_CLK, "gout_peric0_uart_dbg_clk",
++	     "dout_peric0_uart_dbg",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_UART_DBG_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_LHM_AXI_P_CLK, "gout_peric0_lhm_axi_p_clk",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_LHM_AXI_P_PERIC0_IPCLKPORT_I_CLK,
++	     21, CLK_IS_CRITICAL, 0),
++	GATE(CLK_GOUT_PERIC0_USI13_USI_CLK, "gout_peric0_usi13_usi_clk",
++	     "dout_peric0_usi13_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI13_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_USI14_USI_CLK, "gout_peric0_usi14_usi_clk",
++	     "dout_peric0_usi14_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI14_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_D_TZPC_PCLK, "gout_peric0_d_tpzc_pclk",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_D_TZPC_PERIC0_IPCLKPORT_PCLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_USI15_USI_CLK, "gout_peric0_usi15_usi_clk",
++	     "dout_peric0_usi15_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_RSTNSYNC_CLK_PERIC0_USI15_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_4, "gout_peric0_top0_ipclk_4",
++	     "dout_peric0_uart_dbg",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_4,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_4, "gout_peric0_top0_pclk_4",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_4,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_5, "gout_peric0_top0_pclk_5",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_5,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_6, "gout_peric0_top0_pclk_6",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_6,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_7, "gout_peric0_top0_pclk_7",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_7,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_8, "gout_peric0_top0_pclk_8",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_8,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_9, "gout_peric0_top0_pclk_9",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_9,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_10, "gout_peric0_top0_pclk_10",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_10,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_11, "gout_peric0_top0_pclk_11",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_11,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_12, "gout_peric0_top0_pclk_12",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_12,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_13, "gout_peric0_top0_pclk_13",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_13,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_14, "gout_peric0_top0_pclk_14",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_14,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_PCLK_15, "gout_peric0_top0_pclk_15",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_PCLK_15,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_5, "gout_peric0_top0_ipclk_5",
++	     "dout_peric0_usi00_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_5,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_6, "gout_peric0_top0_ipclk_6",
++	     "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_6,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_7, "gout_peric0_top0_ipclk_7",
++	     "dout_peric0_usi01_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_7,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_8, "gout_peric0_top0_ipclk_8",
++	    "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_8,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_9, "gout_peric0_top0_ipclk_9",
++	     "dout_peric0_usi02_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_9,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_10, "gout_peric0_top0_ipclk_10",
++	     "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_10,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_11, "gout_peric0_top0_ipclk_11",
++	     "dout_peric0_usi03_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_11,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_12, "gout_peric0_top0_ipclk_12",
++	     "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_12,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_13, "gout_peric0_top0_ipclk_13",
++	     "dout_peric0_usi04_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_13,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_14, "gout_peric0_top0_ipclk_14",
++	     "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_14,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP0_IPCLK_15, "gout_peric0_top0_ipclk_15",
++	     "dout_peric0_usi05_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP0_IPCLKPORT_IPCLK_15,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_PCLK_0, "gout_peric0_top1_pclk_0",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_0,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_PCLK_3, "gout_peric0_top1_pclk_3",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_3,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_PCLK_4, "gout_peric0_top1_pclk_4",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_4,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_PCLK_5, "gout_peric0_top1_pclk_5",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_5,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_PCLK_6, "gout_peric0_top1_pclk_6",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_6,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_PCLK_7, "gout_peric0_top1_pclk_7",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_7,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_PCLK_8, "gout_peric0_top1_pclk_8",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_8,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_PCLK_15, "gout_peric0_top1_pclk_15",
++	     "mout_peric0_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_PCLK_15,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_IPCLK_0, "gout_peric0_top1_ipclk_0",
++	     "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_0,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_IPCLK_3, "gout_peric0_top1_ipclk_3",
++	     "dout_peric0_usi13_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_3,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_IPCLK_4, "gout_peric0_top1_ipclk_4",
++	     "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_4,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_IPCLK_5, "gout_peric0_top1_ipclk_5",
++	     "dout_peric0_usi14_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_5,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_IPCLK_6, "gout_peric0_top1_ipclk_6",
++	     "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_6,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_IPCLK_7, "gout_peric0_top1_ipclk_7",
++	     "dout_peric0_usi15_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_7,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC0_TOP1_IPCLK_8, "gout_peric0_top1_ipclk_8",
++	     "dout_peric0_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC0_UID_PERIC0_TOP1_IPCLKPORT_IPCLK_8,
++	     21, 0, 0),
++};
++
++static const struct samsung_cmu_info peric0_cmu_info __initconst = {
++	.mux_clks		= peric0_mux_clks,
++	.nr_mux_clks		= ARRAY_SIZE(peric0_mux_clks),
++	.div_clks		= peric0_div_clks,
++	.nr_div_clks		= ARRAY_SIZE(peric0_div_clks),
++	.gate_clks		= peric0_gate_clks,
++	.nr_gate_clks		= ARRAY_SIZE(peric0_gate_clks),
++	.nr_clk_ids		= CLKS_NR_PERIC0,
++	.clk_regs		= peric0_clk_regs,
++	.nr_clk_regs		= ARRAY_SIZE(peric0_clk_regs),
++	.clk_name		= "bus",
++};
++
++/* ---- CMU_PERIC1 --------------------------------------------------------- */
++
++/* Register Offset definitions for CMU_PERIC1 (0x10700000) */
++#define PLL_CON0_MUX_CLKCMU_PERIC1_BUS_USER						0x0600
++#define PLL_CON1_MUX_CLKCMU_PERIC1_BUS_USER						0x0604
++#define PLL_CON0_MUX_CLKCMU_PERIC1_UART_BT_USER						0x0610
++#define PLL_CON1_MUX_CLKCMU_PERIC1_UART_BT_USER						0x0614
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI_I2C_USER						0x06c0
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI_I2C_USER						0x06c4
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI06_USI_USER					0x0620
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI06_USI_USER					0x0624
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI07_USI_USER					0x0630
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI07_USI_USER					0x0634
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI08_USI_USER					0x0640
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI08_USI_USER					0x0644
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI09_USI_USER					0x0650
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI09_USI_USER					0x0654
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI10_USI_USER					0x0660
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI10_USI_USER					0x0664
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI11_USI_USER					0x0670
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI11_USI_USER					0x0674
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI12_USI_USER					0x0680
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI12_USI_USER					0x0684
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI18_USI_USER					0x06b0
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI18_USI_USER					0x06b4
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI16_USI_USER					0x0690
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI16_USI_USER					0x0694
++#define PLL_CON0_MUX_CLKCMU_PERIC1_USI17_USI_USER					0x06a0
++#define PLL_CON1_MUX_CLKCMU_PERIC1_USI17_USI_USER					0x06a4
++#define CLK_CON_DIV_DIV_CLK_PERIC1_UART_BT						0x1800
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI_I2C						0x182c
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI06_USI						0x1804
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI07_USI						0x1808
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI08_USI						0x180c
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI18_USI						0x1828
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI12_USI						0x181c
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI09_USI						0x1810
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI10_USI						0x1814
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI11_USI						0x1818
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI16_USI						0x1820
++#define CLK_CON_DIV_DIV_CLK_PERIC1_USI17_USI						0x1824
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_GPIO_PERIC1_IPCLKPORT_PCLK			0x2018
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_SYSREG_PERIC1_IPCLKPORT_PCLK			0x2108
++#define CLK_CON_GAT_CLK_BLK_PERIC1_UID_PERIC1_CMU_PERIC1_IPCLKPORT_PCLK			0x2004
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_BUSP_IPCLKPORT_CLK		0x20dc
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI06_USI_IPCLKPORT_CLK	0x20e4
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI07_USI_IPCLKPORT_CLK	0x20e8
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI08_USI_IPCLKPORT_CLK	0x20ec
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI09_USI_IPCLKPORT_CLK	0x20f0
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI10_USI_IPCLKPORT_CLK	0x20f4
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI_I2C_IPCLKPORT_CLK	0x2104
++#define CLK_CON_GAT_CLK_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_UART_BT_IPCLKPORT_CLK	0x2008
++#define CLK_CON_GAT_CLK_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI12_USI_IPCLKPORT_CLK	0x200c
++#define CLK_CON_GAT_CLK_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI18_USI_IPCLKPORT_CLK	0x2010
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_LHM_AXI_P_PERIC1_IPCLKPORT_I_CLK		0x2020
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI11_USI_IPCLKPORT_CLK	0x20f8
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_D_TZPC_PERIC1_IPCLKPORT_PCLK			0x2014
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI16_USI_IPCLKPORT_CLK	0x20fc
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI17_USI_IPCLKPORT_CLK	0x2100
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_4			0x2058
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_10			0x2040
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_11			0x2044
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_12			0x2048
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_13			0x204c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_14			0x2050
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_15			0x2054
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_4			0x203c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_10			0x2024
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_11			0x2028
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_12			0x202c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_13			0x2030
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_14			0x2034
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_15			0x2038
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_1			0x20a0
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_0			0x209c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_2			0x20bc
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_3			0x20c0
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_4			0x20c4
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_5			0x20c8
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_6			0x20cc
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_7			0x20d0
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_9			0x20d8
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_10			0x20a4
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_0			0x205c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_1			0x2060
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_2			0x207c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_3			0x2080
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_4			0x2084
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_5			0x2088
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_6			0x208c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_7			0x2090
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_9			0x2098
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_10			0x2064
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_OSCCLK_IPCLKPORT_CLK	0x20e0
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_LHM_AXI_P_CSISPERIC1_IPCLKPORT_I_CLK		0x201c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_XIU_P_PERIC1_IPCLKPORT_ACLK			0x211c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_12			0x206c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_12			0x20ac
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_13			0x20b0
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_14			0x20b4
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_15			0x20b8
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_13			0x2070
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_14			0x2074
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_15			0x2078
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI16_I3C_IPCLKPORT_I_PCLK			0x210c
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI16_I3C_IPCLKPORT_I_SCLK			0x2110
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI17_I3C_IPCLKPORT_I_SCLK			0x2118
++#define CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI17_I3C_IPCLKPORT_I_PCLK			0x2114
++
++static const unsigned long peric1_clk_regs[] __initconst = {
++	PLL_CON0_MUX_CLKCMU_PERIC1_BUS_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_BUS_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_UART_BT_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_UART_BT_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI_I2C_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI_I2C_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI06_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI06_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI07_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI07_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI08_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI08_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI09_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI09_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI10_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI10_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI11_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI11_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI12_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI12_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI18_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI18_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI16_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI16_USI_USER,
++	PLL_CON0_MUX_CLKCMU_PERIC1_USI17_USI_USER,
++	PLL_CON1_MUX_CLKCMU_PERIC1_USI17_USI_USER,
++	CLK_CON_DIV_DIV_CLK_PERIC1_UART_BT,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI_I2C,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI06_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI07_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI08_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI18_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI12_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI09_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI10_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI11_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI16_USI,
++	CLK_CON_DIV_DIV_CLK_PERIC1_USI17_USI,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_GPIO_PERIC1_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_SYSREG_PERIC1_IPCLKPORT_PCLK,
++	CLK_CON_GAT_CLK_BLK_PERIC1_UID_PERIC1_CMU_PERIC1_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_BUSP_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI06_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI07_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI08_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI09_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI10_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI_I2C_IPCLKPORT_CLK,
++	CLK_CON_GAT_CLK_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_UART_BT_IPCLKPORT_CLK,
++	CLK_CON_GAT_CLK_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI12_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_CLK_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI18_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_LHM_AXI_P_PERIC1_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI11_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_D_TZPC_PERIC1_IPCLKPORT_PCLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI16_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI17_USI_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_4,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_10,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_11,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_12,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_13,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_14,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_15,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_4,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_10,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_11,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_12,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_13,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_14,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_15,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_1,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_0,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_2,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_3,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_4,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_5,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_6,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_7,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_9,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_10,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_0,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_1,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_2,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_3,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_4,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_5,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_6,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_7,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_9,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_10,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_OSCCLK_IPCLKPORT_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_LHM_AXI_P_CSISPERIC1_IPCLKPORT_I_CLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_XIU_P_PERIC1_IPCLKPORT_ACLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_12,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_12,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_13,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_14,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_15,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_13,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_14,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_15,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI16_I3C_IPCLKPORT_I_PCLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI16_I3C_IPCLKPORT_I_SCLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI17_I3C_IPCLKPORT_I_SCLK,
++	CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI17_I3C_IPCLKPORT_I_PCLK,
++};
++
++PNAME(mout_peric1_bus_user_p)  = { "oscclk", "dout_cmu_peric1_bus" };
++PNAME(mout_peric1_uart_bt_user_p) = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi_i2c_user_p) = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi06_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi07_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi08_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi09_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi10_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi11_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi12_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi18_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi16_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++PNAME(mout_peric1_usi17_user_p)  = { "oscclk", "dout_cmu_peric1_ip" };
++
++static const struct samsung_mux_clock peric1_mux_clks[] __initconst = {
++	MUX(CLK_MOUT_PERIC1_BUS_USER, "mout_peric1_bus_user",
++	    mout_peric1_bus_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_BUS_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_UART_BT_USER, "mout_peric1_uart_bt_user",
++	    mout_peric1_uart_bt_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_UART_BT_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI_I2C_USER, "mout_peric1_usi_i2c_user",
++	    mout_peric1_usi_i2c_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI_I2C_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI06_USI_USER, "mout_peric1_usi06_usi_user",
++	    mout_peric1_usi06_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI06_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI07_USI_USER, "mout_peric1_usi07_usi_user",
++	    mout_peric1_usi07_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI07_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI08_USI_USER, "mout_peric1_usi08_usi_user",
++	    mout_peric1_usi08_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI08_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI09_USI_USER, "mout_peric1_usi09_usi_user",
++	    mout_peric1_usi09_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI09_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI10_USI_USER, "mout_peric1_usi10_usi_user",
++	    mout_peric1_usi10_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI10_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI11_USI_USER, "mout_peric1_usi11_usi_user",
++	    mout_peric1_usi11_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI11_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI12_USI_USER, "mout_peric1_usi12_usi_user",
++	    mout_peric1_usi12_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI12_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI18_USI_USER, "mout_peric1_usi18_usi_user",
++	    mout_peric1_usi18_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI18_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI16_USI_USER, "mout_peric1_usi16_usi_user",
++	    mout_peric1_usi16_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI16_USI_USER,
++	    4, 1),
++	MUX(CLK_MOUT_PERIC1_USI17_USI_USER, "mout_peric1_usi17_usi_user",
++	    mout_peric1_usi17_user_p, PLL_CON0_MUX_CLKCMU_PERIC1_USI17_USI_USER,
++	    4, 1),
++};
++
++static const struct samsung_div_clock peric1_div_clks[] __initconst = {
++	DIV(CLK_DOUT_PERIC1_UART_BT, "dout_peric1_uart_bt",
++	    "mout_peric1_uart_bt_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_UART_BT,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI_I2C, "dout_peric1_usi_i2c",
++	    "mout_peric1_usi_i2c_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI_I2C,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI06_USI, "dout_peric1_usi06_usi",
++	    "mout_peric1_usi06_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI06_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI07_USI, "dout_peric1_usi07_usi",
++	    "mout_peric1_usi07_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI07_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI08_USI, "dout_peric1_usi08_usi",
++	    "mout_peric1_usi08_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI08_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI18_USI, "dout_peric1_usi18_usi",
++	    "mout_peric1_usi18_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI18_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI12_USI, "dout_peric1_usi12_usi",
++	    "mout_peric1_usi12_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI12_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI09_USI, "dout_peric1_usi09_usi",
++	    "mout_peric1_usi09_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI09_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI10_USI, "dout_peric1_usi10_usi",
++	    "mout_peric1_usi10_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI10_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI11_USI, "dout_peric1_usi11_usi",
++	    "mout_peric1_usi11_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI11_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI16_USI, "dout_peric1_usi16_usi",
++	    "mout_peric1_usi16_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI16_USI,
++	    0, 4),
++	DIV(CLK_DOUT_PERIC1_USI17_USI, "dout_peric1_usi17_usi",
++	    "mout_peric1_usi17_usi_user",
++	    CLK_CON_DIV_DIV_CLK_PERIC1_USI17_USI,
++	    0, 4),
++};
++
++static const struct samsung_gate_clock peric1_gate_clks[] __initconst = {
++	GATE(CLK_GOUT_PERIC1_GPIO_PCLK, "gout_peric1_gpio_pclk",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_GPIO_PERIC1_IPCLKPORT_PCLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_SYSREG_PCLK, "gout_peric1_sysreq_pclk",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_SYSREG_PERIC1_IPCLKPORT_PCLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_CMU_PCLK, "gout_peric1_cmu_pclk",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_CLK_BLK_PERIC1_UID_PERIC1_CMU_PERIC1_IPCLKPORT_PCLK,
++	     21, CLK_IS_CRITICAL, 0),
++	GATE(CLK_GOUT_PERIC1_BUSP_CLK, "gout_peric1_busp_clk",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_BUSP_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI06_USI_CLK, "gout_peric1_usi06_usi_clk",
++	     "dout_peric1_usi06_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI06_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI07_USI_CLK, "gout_peric1_usi07_usi_clk",
++	     "dout_peric1_usi07_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI07_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI08_USI_CLK, "gout_peric1_usi08_usi_clk",
++	     "dout_peric1_usi08_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI08_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI09_USI_CLK, "gout_peric1_usi09_usi_clk",
++	     "dout_peric1_usi09_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI09_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI10_USI_CLK, "gout_peric1_usi10_usi_clk",
++	     "dout_peric1_usi10_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI10_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI_I2C_CLK, "gout_peric1_usi_i2c_clk",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI_I2C_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_UART_BT_CLK, "gout_peric1_uart_bt_clk",
++	     "dout_peric1_uart_bt",
++	     CLK_CON_GAT_CLK_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_UART_BT_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI12_USI_CLK, "gout_peric1_usi12_usi_clk",
++	     "dout_peric1_usi12_usi",
++	     CLK_CON_GAT_CLK_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI12_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI18_USI_CLK, "gout_peric1_usi18_usi_clk",
++	     "dout_peric1_usi18_usi",
++	     CLK_CON_GAT_CLK_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI18_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_LHM_AXI_P_CLK, "gout_peric1_lhm_axi_p_clk",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_LHM_AXI_P_PERIC1_IPCLKPORT_I_CLK,
++	     21, CLK_IS_CRITICAL, 0),
++	GATE(CLK_GOUT_PERIC1_USI11_USI_CLK, "gout_peric1_usi11_usi_clk",
++	     "dout_peric1_usi11_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI11_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_D_TZPC_PCLK, "gout_peric1_d_tzpc_pclk",
++	     "dout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_D_TZPC_PERIC1_IPCLKPORT_PCLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI16_USI_CLK, "gout_peric1_usi16_usi_clk",
++	     "dout_peric1_usi16_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI16_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI17_USI_CLK, "gout_peric1_usi17_usi_clk",
++	     "dout_peric1_usi17_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_USI17_USI_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_PCLK_4, "gout_peric1_top0_pclk_4",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_4,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_PCLK_10, "gout_peric1_top0_pclk_10",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_10,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_PCLK_11, "gout_peric1_top0_pclk_11",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_11,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_PCLK_12, "gout_peric1_top0_pclk_12",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_12,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_PCLK_13, "gout_peric1_top0_pclk_13",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_13,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_PCLK_14, "gout_peric1_top0_pclk_14",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_14,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_PCLK_15, "gout_peric1_top0_pclk_15",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_PCLK_15,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_IPCLK_4, "gout_peric1_top0_ipclk_4",
++	     "dout_peric1_uart_bt",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_4,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_IPCLK_10, "gout_peric1_top0_ipclk_10",
++	     "dout_peric1_usi06_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_10,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_IPCLK_11, "gout_peric1_top0_ipclk_11",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_11,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_IPCLK_12, "gout_peric1_top0_ipclk_12",
++	     "dout_peric1_usi07_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_12,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_IPCLK_13, "gout_peric1_top0_ipclk_13",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_13,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_IPCLK_14, "gout_peric1_top0_ipclk_14",
++	     "dout_peric1_usi08_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_14,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP0_IPCLK_15, "gout_peric1_top0_ipclk_15",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP0_IPCLKPORT_IPCLK_15,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_1, "gout_peric1_top1_pclk_1",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_1,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_0, "gout_peric1_top1_pclk_0",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_0,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_2, "gout_peric1_top1_pclk_2",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_2,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_3, "gout_peric1_top1_pclk_3",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_3,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_4, "gout_peric1_top1_pclk_4",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_4,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_5, "gout_peric1_top1_pclk_5",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_5,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_6, "gout_peric1_top1_pclk_6",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_6,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_7, "gout_peric1_top1_pclk_7",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_7,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_9, "gout_peric1_top1_pclk_9",
++	     "dout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_9,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_10, "gout_peric1_top1_pclk_10",
++	     "dout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_10,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_0, "gout_peric1_top1_ipclk_0",
++	     "dout_peric1_usi09_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_0,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_1, "gout_peric1_top1_ipclk_1",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_1,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_2, "gout_peric1_top1_ipclk_2",
++	     "dout_peric1_usi10_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_2,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_3, "gout_peric1_top1_ipclk_3",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_3,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_4, "gout_peric1_top1_ipclk_4",
++	     "dout_peric1_usi11_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_4,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_5, "gout_peric1_top1_ipclk_5",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_5,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_6, "gout_peric1_top1_ipclk_6",
++	     "dout_peric1_usi16_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_6,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_7, "gout_peric1_top1_ipclk_7",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_7,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_9, "gout_peric1_top1_ipclk_9",
++	     "dout_peric1_usi17_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_9,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_10, "gout_peric1_top1_ipclk_10",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_10,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_OSCCLK_CLK, "gout_peric1_oscclk_clk",
++	     "oscclk",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_RSTNSYNC_CLK_PERIC1_OSCCLK_IPCLKPORT_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_LHM_AXI_P_CSIS_CLK, "gout_peric1_lhm_axi_p_csis_clk",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_LHM_AXI_P_CSISPERIC1_IPCLKPORT_I_CLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_XIU_P_ACLK, "gout_peric1_xiu_p_aclk",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_XIU_P_PERIC1_IPCLKPORT_ACLK,
++	     21, CLK_IGNORE_UNUSED, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_12, "gout_peric1_top1_ipclk_12",
++	     "dout_peric1_usi12_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_12,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_12, "gout_peric1_top1_pclk_12",
++	     "dout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_12,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_13, "gout_peric1_top1_pclk_13",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_13,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_14, "gout_peric1_top1_pclk_14",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_14,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_PCLK_15, "gout_peric1_top1_pclk_15",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_PCLK_15,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_13, "gout_peric1_top1_ipclk_13",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_13,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_14, "gout_peric1_top1_ipclk_14",
++	     "dout_peric1_usi18_usi",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_14,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_TOP1_IPCLK_15, "gout_peric1_top1_ipclk_15",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_PERIC1_TOP1_IPCLKPORT_IPCLK_15,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI16_I3C_PCLK, "gout_peric1_usi16_i3c_pclk",
++	     "mout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI16_I3C_IPCLKPORT_I_PCLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI16_I3C_SCLK, "gout_peric1_usi16_i3c_sclk",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI16_I3C_IPCLKPORT_I_SCLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI17_I3C_SCLK, "gout_peric1_usi17_i3c_sclk",
++	     "dout_peric1_usi_i2c",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI17_I3C_IPCLKPORT_I_SCLK,
++	     21, 0, 0),
++	GATE(CLK_GOUT_PERIC1_USI17_I3C_PCLK, "gout_peric1_usi17_i3c_pclk",
++	     "dout_peric1_bus_user",
++	     CLK_CON_GAT_GOUT_BLK_PERIC1_UID_USI17_I3C_IPCLKPORT_I_PCLK,
++	     21, 0, 0),
++};
++
++static const struct samsung_cmu_info peric1_cmu_info __initconst = {
++	.mux_clks		= peric1_mux_clks,
++	.nr_mux_clks		= ARRAY_SIZE(peric1_mux_clks),
++	.div_clks		= peric1_div_clks,
++	.nr_div_clks		= ARRAY_SIZE(peric1_div_clks),
++	.gate_clks		= peric1_gate_clks,
++	.nr_gate_clks		= ARRAY_SIZE(peric1_gate_clks),
++	.nr_clk_ids		= CLKS_NR_PERIC1,
++	.clk_regs		= peric1_clk_regs,
++	.nr_clk_regs		= ARRAY_SIZE(peric1_clk_regs),
++	.clk_name		= "bus",
++};
++
+ /* ---- CMU_PERIS ----------------------------------------------------------- */
+ 
+ /* Register Offset definitions for CMU_PERIS (0x10020000) */
+@@ -1500,6 +2642,12 @@ static const struct of_device_id exynos990_cmu_of_match[] = {
+ 	{
+ 		.compatible = "samsung,exynos990-cmu-hsi0",
+ 		.data = &hsi0_cmu_info,
++	}, {
++		.compatible = "samsung,exynos990-cmu-peric0",
++		.data = &peric0_cmu_info,
++	}, {
++		.compatible = "samsung,exynos990-cmu-peric1",
++		.data = &peric1_cmu_info,
+ 	},
+ 	{ },
+ };
 -- 
 2.48.1
 
