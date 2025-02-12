@@ -1,73 +1,73 @@
-Return-Path: <linux-i2c+bounces-9373-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9374-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A77D3A31C6D
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 03:58:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B973A31C7B
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 03:59:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BDEE3A6E9F
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 02:58:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21B8C188ACCD
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 02:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 715431D7E4C;
-	Wed, 12 Feb 2025 02:58:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA991D8A10;
+	Wed, 12 Feb 2025 02:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bYaBA3Sf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahTuZaHh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5751D47AD;
-	Wed, 12 Feb 2025 02:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7BA1D79A0;
+	Wed, 12 Feb 2025 02:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739329097; cv=none; b=uMi2jNaVNia4hq0IZm42dhYBd79zipAE/at5vkUfc2H2SimS40ApG7Tpex8xVvnpZCGL/wq9Am2FYvJboOlN3y3O3/6EMmyjMS3mkRUk7bPZZ65Cy3BCtqz+A9kXSsB/khbBjbdivULZ++zfqpfeIjFD+d1nqQJNcnPtLgVOlGQ=
+	t=1739329174; cv=none; b=lGTLQOxx1ad+4DCT8j6s0kChEsRpzx0ihJV4quqKI8lfq61/vPlqgxH/cFdrn7PDCD6bkfpyH4SPwweT8y5ACr0iLM3/CjY4Vgu3NwGDAUOi1rEOFR9vtQtsI2SVUr/HMNe/Rw558MgiE4rfT2+IPTb7dqrbY+FSopUpCX8jkno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739329097; c=relaxed/simple;
-	bh=dpHXdTTTzOTlYDNw+0rMw4yjpufMEd7BmBsMD427saM=;
+	s=arc-20240116; t=1739329174; c=relaxed/simple;
+	bh=DooFRktCEVvA6ei7DrdVf0d7v1fgelgEfdO5aKcqTDc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s0Nf6qSF1WvW4cnsJVt5TwA9W7SlJr1HRelRd7yU3zD2As7ICGxv8/iGoxsgH8k/og9/uJkBhFJVPoQCzs6ITGdWxzG0vJr2hWQzaXFAnlWtRyTFNsVKlyuu6DI+IFzAJeinJt8pR5kyq9uJTxY2EdUWPnBZLAvkaXcJuIDrWjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bYaBA3Sf; arc=none smtp.client-ip=209.85.128.175
+	 To:Cc:Content-Type; b=XjDV4Kp7yFCeROoTJ0v8eRqvAwD+Be01DJlIEAgceLHuP4AzA5hHVZuFgtrC97yZpwbjv3hOymEgi1Vjd62VY7HHIIgeOdWuslQAdWMX0SvzIinA4AutMpVhlPe2ZZ9izHB5UUOGvch5T37JVt7VV2pUa/IIQ7VAcu/CuokkEw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahTuZaHh; arc=none smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6fb0de4ecd4so14699287b3.3;
-        Tue, 11 Feb 2025 18:58:15 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6f972c031efso3614467b3.1;
+        Tue, 11 Feb 2025 18:59:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739329094; x=1739933894; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739329171; x=1739933971; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ghF3Hq1lteYIWO1zRuLq/VRrfWBkqaOQHyBkZfebU1k=;
-        b=bYaBA3SfNjtGL9gkcmrtv4CBpdXg1cI0fIqfp30Hb2qo3q56P0TL1ZBigaza352i4d
-         W9zfdilbqrRgsUP01tUO97Vai0d0kIw/z48KYqXQg0ACrlBBG97YbOw7u4GQBMAIWSWz
-         hdRZ2yDNojYagyFp3q4l6FgF1c36pz6fcfEEOgK7fDFtUT+S9OnJUmHabtyG/U2NCVmh
-         vtTprTFqDyGg2xumfxYYkuN12YAjFRaT0AIea+PiYW7h1kobPjdQLLzM2P85+7Wzm/vd
-         mxZJjl9cgVlBuE8nkyurZ2aYIhACLiGw3LDS1HuGvH3lsqd9JjcWKCAtiOfqaeUaduXH
-         E8eA==
+        bh=KFr81poCk30co8Z6rUcjrZ/vaw48HOEFaFkI76fkyJc=;
+        b=ahTuZaHhgBht2YLJHM+JHOGjrQX3MYf0ZgEq0CqXS3suSQMY9idO0xn0ZcYyGD69Pu
+         6ZeFqj/tJlfRpDBWqYGwBQJFTRY7DttKUsGYBekG7QeQFwafAmVLg1LQYAkcHahclBrH
+         N4LHFT8XB4My3wcFsHgu3256+SubaBxH/0JxwKBBfVUOeI6ZqcUm8cGFpFVsoNLaGm9n
+         XQKglwaiF25WMtWNA9qt+x55jMMeGiLUkotg81o/eCEViiJr91BFvQZ/ywGBOen14fl4
+         u09r0JKXci8fEaiEAoN4wck31IOg2aoaY2v3R1IE+X7drlFK0lL/473tZnKLfzpk76dP
+         4/aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739329094; x=1739933894;
+        d=1e100.net; s=20230601; t=1739329171; x=1739933971;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ghF3Hq1lteYIWO1zRuLq/VRrfWBkqaOQHyBkZfebU1k=;
-        b=DYpX0gQ/JVeBjWj3ex1qvJbgVYkfvNLjxn5LvtYHnD+KJNrh6XN+Ix9QH8qJK1Ga1o
-         DOQ2uOZD83lu23+LHRsENIDXrrmYxpsDEJBM7dC9LdoMn8JEMTSfdQpeon4OoMRwYZ8W
-         lfPFIAFm02R6Iuwdwj/QbU7rDjpJNXIeeDgikoweygNSQC7lmG5lP8skP3P4rEubwsSb
-         JX0fnqnnExSFbYdD+LtUdtESqV+7VGZ8cnBSiKJmKFB1uQs3RAO0i/NvpiCqPtXSSVBl
-         utgWLdZsP+AoUF2MFYhad6vT+fJ3zucQMxewBeioNq1kNWPmZjUm/EpX91cgojb2MR6U
-         avrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEnkqKcPZ/N7yVEuQ+BNBfKu8QHpqdUnrQpcM/2uydJ6c5GuciVjEJLeinRQLsCNd6NzfYQbF3fkE=@vger.kernel.org, AJvYcCUyyQS/62mVfRls6sDQEIfyRxBIlMHljLeKI4gGflMMR0qLkql5YRfa/aCwj93cV1/jE5NBhzh2TMGLP8g=@vger.kernel.org, AJvYcCV4t6hW0RhRKFoV+bD4ri5oY3xsXVyaAeScqBAZRu9VfZwHopWgWkSOBeHPzQ1ZjXDh48xDBqCwVuUC@vger.kernel.org, AJvYcCVo57m2V7pmaEuhUIwqGWH+zVfmE1ixZxTkd5n5LaIWJvrDCypJo99c85/HM0pz6L8FzNLvhtfBGYt2@vger.kernel.org, AJvYcCVzy9RE4ltqfxzw7AbCOFAoBCmp2ssFeN2zRZtePhOKhdMk3bLona2jJHKwbF2Q6g6XninIUuBo0NxW@vger.kernel.org, AJvYcCWL0wYwokgjebxTwdRyXcIDAIYPIh08dfhXMfXdVZREFWl2uTx7fyH09jFHi94Ne1zw21fdAa8Yi4A7PK9f@vger.kernel.org, AJvYcCWs+sAsShu0dZnWBW9lwte2zKkvqYGiJwjhBtsju+waW3YrHX751yRcnvEW8Qg4zI43cRmVbrtxHZhoNw==@vger.kernel.org, AJvYcCX1vcRxBZdoj377Ct+t3DdQU/iNgN/4P8HYyTv0X6XF0i2YkfuIjl4Cm8PjlF/No0cTcAUVsJoHITPAts/+nLs=@vger.kernel.org, AJvYcCXG0O1emb2i9wsyoo8CzHLaefzT3K1DuEQqmcl5ArtSAx6CFg2e8lVtaee0nUF9mlIl2d8U4sGM@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywe0WMxqoAgdtlo3+VCCO6rvbxwyW6t1Y3ljTtUXug9/Et+GK6b
-	1wRa4j9vpudkKdqY2wDb87feFayyod6e3PTCY3kH+bTAvKkjuUs+4/07M5n6zkG5pkcWmBwSzD+
-	eP5IkFmZPJH2fj6RWef+TbCKrhkE=
-X-Gm-Gg: ASbGnctdB/qLYFGbrcVAXjw3hfl5EgTxvMWFwAvBmQFCOfnmPuazzwNHwdRf0ahZwvf
-	j6/aJq5AoreWZYwPxyxFp3JVFZsqAhAFWQvMGnTYO2a29B63cJWf4WszJljFmtT9VXO9xniWe2c
-	AmmAhqdEXQpLMBYWGzM/2Ba1dAEdg+Z5E=
-X-Google-Smtp-Source: AGHT+IFKY9my2Mv2OyawicWmvsTiPPrg1FpdmnOOVsezjy/oHTQdlNbpQ9V/afgOZCXiHY1UWHQDp4ZlhYp2zbadPiA=
-X-Received: by 2002:a05:690c:892:b0:6ef:7370:96ee with SMTP id
- 00721157ae682-6fb21b00513mr11775887b3.12.1739329094572; Tue, 11 Feb 2025
- 18:58:14 -0800 (PST)
+        bh=KFr81poCk30co8Z6rUcjrZ/vaw48HOEFaFkI76fkyJc=;
+        b=BD6rLZrQK70FhrVK3/3T19gS8auyk3quoQXHbN/w1Ui0Ppcj4LX47+ydBS7PwSSXjk
+         sPYXkFZxU3kY0W3SgOT7wF5KgUDaU/bNugeXpl+BW6SzxUsQ1dIdVnRoG6TDteRQwbfl
+         5pWLenew031rJkDGtQrFhtdLXXZ6jSCO5Rtc0Co+IXt5ZkWoAL4Ddx2ERWgr5IvC7TCz
+         fqke+GBDz6bX8fo+ce4qYgbEdtit1+1g2zmeBjsHM7JQEcbQNbx3K6le625iwmU8GGWa
+         2Ae/CQhYBXuc1oW9baGpzWWfKlrMm9gj8v/E2+F7inAfVn753AtiSDRcbCmtLcV7+zWJ
+         YhlA==
+X-Forwarded-Encrypted: i=1; AJvYcCUh4OI3Dzt0ey7mFqpC1zLfK7NfV7xoA0Nkuv2SpvLN51+DkINssiZmanwnre99gCT8o+0Vue4ZD/8=@vger.kernel.org, AJvYcCUlPqYB+LqnYo0L+gmYkIMlSB0gJCLQ9gHs6Tjz5O2983ClxD1j6wtq3FKru85+GlvBmbK2JQ5O@vger.kernel.org, AJvYcCVGK2WM0Gd8O2KV/ggfY5my+kchSTW01Jcp4FpL7ebwvJYn5aWgXXdgajNtTrPQIlJbnC83WXXK6/nc@vger.kernel.org, AJvYcCWawiVqSlZ843MTNpZwXUkdG9PwRwuY/hqf2Jn+ZY4SWSHqxGOiF/0FYxNbxyVk9b9+SHvPkD6uEi6F@vger.kernel.org, AJvYcCWc41cql8FYlVh0dLU2rGiV7OGM7rqAHQpShOzEDDYE3sqzSqGz4Mdzvca4bAjHCPCVrVcVJ6uKacmh@vger.kernel.org, AJvYcCWehDpp4nb/F8EQo3qCrnGCshWvkDnANbi8tCnsUGVsHXmDM7G9GxUb9uWZiPU4c4SfHRVuIlxURy17RHk=@vger.kernel.org, AJvYcCWnXdKPVmcjHCP8ap1s2YdKniGoskvAC43C8WA3PgkWAO3hROxp8n5GODyex7UFRpJ3aZEWk7VOjjYzYEjfI3U=@vger.kernel.org, AJvYcCWzO+MXdJTCHumWhMz5NmkCELZ/pMfBf2ZrF8uQ1e0SnolEVQzu5ZQiNn0gmC6ds2TDxOR0iLztohuitP2W@vger.kernel.org, AJvYcCXi1/0JgWBXGzs8TnyduKD1uZRHyZGyq7OyARTE80RwMJHryd+it/P+Swe3Fl13VzfQeD2zzIIFNpYlvw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9LH8w9CSIz6XleCnBtjz1tWYiBHMqvAAtiyZ8ecoDrx6naCSj
+	WYsVAShiWCA7EjO00hQS6IdW2b/te4IwNpCRREPjZjXeA+yiSfZCaDI1dzbfB641mkgQ6JlKVsE
+	gO2IrU+H2/oN3YpipVnnv/3pX1y8=
+X-Gm-Gg: ASbGnctqdGJr/xiXqg/xV3NIJBYnkUXc+oNEq06uAHFU8C60NRkUUOkwRKNBuaiBePk
+	3qNKlE9xS/WmSwI0WBzxK7ywyoMbaIkERnkK78qfFvlNk0u4O1Lby6zNMdzWwOeTSXnNHg987mZ
+	oXgAmlnt/pKOxGGz0wnI3Z1xarR3ksZ6o=
+X-Google-Smtp-Source: AGHT+IGAAjKu3ijuvkklPj1UHUI20qu2CCBoL8o01Rki7jfm8ulRSwOxj+9C0sqtYuH7rLF8eGtDo4a4fre+pXEsE2k=
+X-Received: by 2002:a05:690c:c01:b0:6f9:4f93:c80f with SMTP id
+ 00721157ae682-6fb208b8e92mr12977497b3.6.1739329171475; Tue, 11 Feb 2025
+ 18:59:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,17 +75,16 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-5-a0282524688@gmail.com> <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
- <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
-In-Reply-To: <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
+ <20250207074502.1055111-5-a0282524688@gmail.com> <c714463f-e027-470d-82d8-3905f5107d6c@wanadoo.fr>
+In-Reply-To: <c714463f-e027-470d-82d8-3905f5107d6c@wanadoo.fr>
 From: Ming Yu <a0282524688@gmail.com>
-Date: Wed, 12 Feb 2025 10:58:02 +0800
-X-Gm-Features: AWEUYZl54-xZLEN8OeOBxenzu1HA2sNuQj1p9av_bN6w1NsNLHVF_aDMJX4KeNI
-Message-ID: <CAOoeyxWF-B90NyinEQVzpU1hqGewGR-29+Q+1ADe_W8r7y5oQw@mail.gmail.com>
+Date: Wed, 12 Feb 2025 10:59:20 +0800
+X-Gm-Features: AWEUYZlq8C-6fOlQaMyUi7TbWeoU_-OcuCn2P7TSMwOHCZmUYpYmx6cJl4mufqA
+Message-ID: <CAOoeyxUu+RuLsuctC-swDWmNi1WTVrVv26FuDOUmibaL7njXzw@mail.gmail.com>
 Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>, tmyu0@nuvoton.com, lee@kernel.org, 
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
 	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
 	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
 	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
@@ -96,49 +95,68 @@ Cc: Marc Kleine-Budde <mkl@pengutronix.de>, tmyu0@nuvoton.com, lee@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Dear Vincent,
+Dear Christophe,
 
 Thank you for reviewing,
-this part is as Marc mentioned.
+I will make the change in the next patch.
 
 
 Best regards,
 Ming
 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2025=E5=B9=B42=E6=9C=
-=887=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8811:01=E5=AF=AB=E9=81=93=
-=EF=BC=9A
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> =E6=96=BC 2025=E5=B9=B42=
+=E6=9C=888=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=883:18=E5=AF=AB=E9=
+=81=93=EF=BC=9A
 >
-> On 07/02/2025 at 21:15, Marc Kleine-Budde wrote:
-> > On 07.02.2025 15:44:59, Ming Yu wrote:
+> Le 07/02/2025 =C3=A0 08:44, Ming Yu a =C3=A9crit :
+> > This driver supports Socket CANFD functionality for NCT6694 MFD
+> > device based on USB interface.
 >
-> (...)
+> ...
 >
-> >> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
-> >> +                                      struct net_device *ndev)
-> >> +{
-> >> +    struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> >> +
-> >> +    if (can_dev_dropped_skb(ndev, skb))
-> >> +            return NETDEV_TX_OK;
-> >> +
-> >> +    netif_stop_queue(ndev);
-> >> +    can_put_echo_skb(skb, ndev, 0, 0);
-> >> +    queue_work(priv->wq, &priv->tx_work);
+> > +static int nct6694_can_start(struct net_device *ndev)
+> > +{
+> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +     struct nct6694_can_setting *setting;
 >
-> What is the reason to use a work queue here? xmit() is not a hard IRQ.
-> Also, the other USB CAN devices just directly send the USB message in
-> their xmit() without the need to rely on such worker.
+> Could be:
+> struct nct6694_can_setting *setting __free(kfree) =3D NULL;
 >
-> Sorry if this was discussed in the past, I can not remember if this
-> question has already been raised.
+> to slightly simplify code below.
 >
-> >> +    return NETDEV_TX_OK;
-> >> +}
 >
-> (...)
+> > +     struct nct6694_cmd_header cmd_hd =3D {
+> > +             .mod =3D NCT6694_CAN_MOD,
+> > +             .cmd =3D NCT6694_CAN_SETTING,
+> > +             .sel =3D priv->can_idx,
+> > +             .len =3D cpu_to_le16(sizeof(*setting))
+> > +     };
 >
-> Yours sincerely,
-> Vincent Mailhol
+> ...
+>
+> > +static int nct6694_can_get_clock(struct nct6694_can_priv *priv)
+> > +{
+> > +     struct nct6694_can_information *info;
+>
+> Could be:
+> struct nct6694_can_information *info __free(kfree) =3D NULL;
+>
+> to slightly simplify code below.
+>
+> > +     static const struct nct6694_cmd_header cmd_hd =3D {
+> > +             .mod =3D NCT6694_CAN_MOD,
+> > +             .cmd =3D NCT6694_CAN_INFORMATION,
+> > +             .sel =3D NCT6694_CAN_INFORMATION_SEL,
+> > +             .len =3D cpu_to_le16(sizeof(*info))
+> > +     };
+> > +     int ret, can_clk;
+> > +
+> > +     info =3D kzalloc(sizeof(*info), GFP_KERNEL);
+> > +     if (!info)
+> > +             return -ENOMEM;
+>
+> ...
+>
+> CJ
 >
 
