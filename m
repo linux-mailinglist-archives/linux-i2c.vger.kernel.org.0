@@ -1,154 +1,128 @@
-Return-Path: <linux-i2c+bounces-9407-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9408-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4579EA32ECA
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 19:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A0ED3A32ECC
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 19:37:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCFC1162C0E
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 18:37:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B4F5162E4B
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Feb 2025 18:37:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD6225E458;
-	Wed, 12 Feb 2025 18:37:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A3125E450;
+	Wed, 12 Feb 2025 18:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sxuLxvnq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84EF725E44A;
-	Wed, 12 Feb 2025 18:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D0627180B;
+	Wed, 12 Feb 2025 18:37:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739385423; cv=none; b=If0o/+Hy0FQtFaSS2zwiDYP6Plkan3f3k4mBgbDa5+hpo+Ne5eKSK6rc14aYyz9ebHIa+sYt5A2gRT8qW3ksTB46GLJnTbi38TYeFPUBt6iFnQIumupWGAww1PQkH75jlTkPR4TgEgWOYgexI3zlU/cxu3YDY8kZU0grpSFjWKY=
+	t=1739385435; cv=none; b=Z23ZNArRBHrxJYVkZtRY8IYx/RjNC8xjEQ2za1c8AACthBgaz8ZHltRFEwAD+q4uCZhjU7S8sta/GoTlmwYkB9Q/+Spn0RaF394Ag+np5zbfNGb29GBKklfyalEOeIG1/+4nMgxkf9W+WD3NZHnPJtVnkECs9MiJtafGLG4Fp6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739385423; c=relaxed/simple;
-	bh=FYua6SvZTTyZwm5obpFXnglnaJ0t3ySBzIR84QOZen0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TqI/Zh3/UZGUHydhVB9JNsfkRY1+ZjxlqhnnRTg+x0vNM74N3gKBfCz3uSATlOcu5+W4rKHeUi6tBdCJ8WozXpMJh8UUtRwYrBUPMdKJwrBP7VnMlRK2dKfsmhzPFLGJsqjCgYSjB1jhkh19yJD/Gt5d7id9bGzNbu9/wAjzH3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-51f42b1a69fso4871e0c.1;
-        Wed, 12 Feb 2025 10:37:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739385419; x=1739990219;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2pZ4JaDu880aYdD64xQr26gJgkpLcEjZGdougVKZC6A=;
-        b=vqYNauZsvbk+seIds1srOaxqfuHn8kMUUPmWEqO1U43Ll5jjwjGr0+lb0zq5UFNb5e
-         Jds8QG/MDZ+pst3zEu5BQC4lv+15XObkzCoB69+01a/2T89yygJVkWM+Spo7ulwxtRtF
-         M8Cwhi0FI2Bpgp/4NTiKQGIRItR+i8D2y1JUcwlj5iuzuE/rTSAEuaFaS2vkViR1wmJM
-         YYe42QlsarPPKQJt+IssXVQlVGnwdAKaq994DjlRIEx7iQch714y/XbKWjzhY3rj9nnN
-         yymZuVlqiUxH9YvGZAW7GIjHwJYO3go2Q/3SaoyTjW91XrO3jikOU5X3WSonH0JNgteH
-         HmqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUX+9fYx8KP3cywswB6B6kdpvD8y7nRY4+/VKlbg3iKjmP6//4Pi5ksxeuWckjBnsoku9yJUjSgd73D5UZI@vger.kernel.org, AJvYcCUsdGm32fgFwV8wHjU1XMgerMSB5CCLT8iyg/z57V1pF6PS2tSISqNSKFXCKXpb8dva6WW2GuAAGfziQ6v7uQQ38b8=@vger.kernel.org, AJvYcCX686y/YNZpS2P+Xk1J3fUPQ6lTkrbcD3xcsvvGy0SgFyTES4ECUIRGBII0us7AuG+6ujq1WWWUVzY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsK333LHqJ62Eu2IuMsd100wTlDFtA6MdnsqFLd3APH9hyZ/ZU
-	Nq0P6OeKSCrXMF+Amrp4ptlc1NG+7476FE0O84FMsigdDwsUTjYeU+zvhBDsj14=
-X-Gm-Gg: ASbGncuGRvjlH2KlEiicKsKRxU3r8UJLYqigrqxYUyzjArol4oP3xHW+sjibAhdjxkJ
-	LANL3vHdZniixqeQMQJyIO1xVsoBmXkih18t7jOTwP79liShZxgO1DTY/1uOYufhCd1YBywHvW2
-	OeIvdwO6ENZ8dl762IcJZeLuT95iQP0tzGF/3LoADM2/iBD758+P8SviOtr7lDZEZdKhXoEq4l5
-	/mesD52ptygcdBILxxGdtKvefSUUHnTyCNTRCAuGnhF2MMniyv0baB2IbcdbfpaTYB9eGm4hdul
-	Jeip5zeF72UWF/wQVm+I8V/tJKOCofAn6HOyPhYfqYgeNSqvN2szSw==
-X-Google-Smtp-Source: AGHT+IFLUJ2wy99kxdmlqQ5UvtKe1tvUy/zI+H1MLrAY6l3tLfaaej1hoAmj9uSmsFtq6seMi5frfg==
-X-Received: by 2002:a05:6122:1795:b0:520:5a87:66fa with SMTP id 71dfb90a1353d-52077def26emr453918e0c.3.1739385418263;
-        Wed, 12 Feb 2025 10:36:58 -0800 (PST)
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-52050a2c061sm685352e0c.32.2025.02.12.10.36.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2025 10:36:57 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4bbbaef28a5so1406013137.0;
-        Wed, 12 Feb 2025 10:36:57 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVLHGp1Qa9MgA66vshwz2UZ+wrQEqSVb5PDRROgkBp01PK+RoWt0lKFt1T0dmdbDK4fjbWEkILh1g1eFTTsa7tsGQo=@vger.kernel.org, AJvYcCVwVd73C3cLHLrHpq6Bk5hICx8mL5rd9AO050TpLRO2FIq3skf9Unf/s6QHLak0ukeqs9OoThkEUrA=@vger.kernel.org, AJvYcCXfArVR0FjWns9ILWA6Df07et/wqc1EqAf1WTI3CYd74iQbCVtfVCQKqGhxaDtWCau9am2O3/4K3oiFU2Ls@vger.kernel.org
-X-Received: by 2002:a05:6102:2912:b0:4b9:bc52:e050 with SMTP id
- ada2fe7eead31-4bc0351978amr1135729137.2.1739385417570; Wed, 12 Feb 2025
- 10:36:57 -0800 (PST)
+	s=arc-20240116; t=1739385435; c=relaxed/simple;
+	bh=MqYIPwPX2fN8FIm6K1ROUFQveHjsiR7V4H6VXdFj48M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VMEXZzv2M+eh+ZYQnoZcsQC1cz/5iF47xpMm8zOWRgIKC9VhmzpwP/l1gZBQWX+9H6/AOdlztRlfl5GGgHsSs/T5Em6l5Qo58EZeC56qAIjGBvO20h2106ozbMXYFWvsvAW1BoKzkcpKwK4fXuKv+ER23s/mNpcCP6gf8bNsbfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sxuLxvnq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6310C4CEDF;
+	Wed, 12 Feb 2025 18:37:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739385434;
+	bh=MqYIPwPX2fN8FIm6K1ROUFQveHjsiR7V4H6VXdFj48M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sxuLxvnqYXvHV2r5iyP2hIHTQFy+b6N6Ao/6tx20f7FpDH3VwCNEm+Z4FSaBJ5mhV
+	 PDJ7cG83QT9xDGGYT1VhmIChi9UVRvNmP2mmOrUOdx0N7TrjOE6xnvGdXDoucs3UEa
+	 0BzshAx9HiG9rZO3C6a/ozETYKkH7x2TuPJtiSJlhyBpfJVbZLuMJhCKdpFl0VfaaY
+	 exJOsphy9AxhVXxyU2zXOIyvMRT1AKDM0sAX0AqKxkSrbUAfRGctKLankRC8EzJrzn
+	 hk1Cv72NdUge8xO7ycnz/7Bp/q1sM7iP029fAw4xGS8vmuMj+/6GkncpBkFHHpFvQ4
+	 1GU4T1McR0UAg==
+Date: Wed, 12 Feb 2025 19:37:08 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Zoie Lin <zoie.lin@mediatek.com>
+Cc: Qii Wang <qii.wang@mediatek.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Project_Global_Chrome_Upstream_Group@mediatek.com, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, teddy.chen@mediatek.com, 
+	joseph-cc.chang@mediatek.com, leilk.liu@mediatek.com
+Subject: Re: [PATCH v4 0/1] i2c: mediatek: add runtime PM operations and bus
+ regulator control
+Message-ID: <minka4xfg4pymy4hjekooqyqk6xpbgenacsw32u6pdf3llcyyl@eh4u4ohccx3d>
+References: <20250211144016.488001-1-zoie.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250212163359.2407327-1-andriy.shevchenko@linux.intel.com> <20250212163359.2407327-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20250212163359.2407327-2-andriy.shevchenko@linux.intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 12 Feb 2025 19:36:46 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW1wxQ0cddeE72D+Sii4HkT4bJfeTWX4-8FfHiFr+=3DA@mail.gmail.com>
-X-Gm-Features: AWEUYZmLM0E1ki61JdMJvvq0q2FTXGeHJ8gpiMKPNt5HXp-8AeEKkxybEg-3nNk
-Message-ID: <CAMuHMdW1wxQ0cddeE72D+Sii4HkT4bJfeTWX4-8FfHiFr+=3DA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/8] i2c: Introduce i2c_10bit_addr_from_msg()
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-renesas-soc@vger.kernel.org, 
-	Krzysztof Adamski <krzysztof.adamski@nokia.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Stefan Roese <sr@denx.de>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250211144016.488001-1-zoie.lin@mediatek.com>
 
-Hi Andy,
+Hi Zoie,
 
-On Wed, 12 Feb 2025 at 17:35, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> There are already a lot of drivers that have been using
-> i2c_8bit_addr_from_msg() for 7-bit addresses, now it's time
-> to have the similar for 10-bit addresses.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+my comment was on the [PATCH v3 ...], this should have been
+[PATCH v4 1/1]. If you use git-format-patch, most probably you
+will get it right.
 
-Thanks for your patch!
+If you have more than one patch, you can use the --cover-letter.
+option to get the patch 0/X.
 
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -952,6 +952,16 @@ static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
->         return (msg->addr << 1) | (msg->flags & I2C_M_RD);
->  }
->
-> +static inline u8 i2c_10bit_addr_from_msg(const struct i2c_msg *msg)
+On Tue, Feb 11, 2025 at 10:39:37PM +0800, Zoie Lin wrote:
+> Introduce support for runtime PM operations in
+> the I2C driver, enabling runtime suspend and resume functionality.
+> 
+> Although in most platforms, the bus power of i2c is always
+> on, some platforms disable the i2c bus power in order to meet
+> low power request.
+> 
+> This implementation includes bus regulator control to facilitate
+> proper handling of the bus power based on platform requirements.
+> 
+> Signed-off-by: Zoie Lin <zoie.lin@mediatek.com>
 
-Having never used 10-bit addressing myself, or even looked into it,
-it took me a while to understand what this helper really does...
-So this returns the high byte of the artificial 16-bit address that
-must be used to address a target that uses 10-bit addressing?
-Hence I think this should be renamed, to better match its purpose.
+Is it possible to have an ack from Qii?
 
-> +{
-> +       /*
-> +        * 10-bit address
-> +        *   addr_1: 5'b11110 | addr[9:8] | (R/nW)
-> +        *   addr_2: addr[7:0]
+> ---
+>  drivers/i2c/busses/i2c-mt65xx.c | 73 +++++++++++++++++++++++++++------
+>  1 file changed, 61 insertions(+), 12 deletions(-)
+> 
+> This series is based on linux-next, tag: next-20250210
+> 
+> Changes in v4:
 
-I think the second comment line does not belong here, as this function
-doesn't care about that part.
+what about the previous versions?
 
-> +        */
-> +       return 0xf0 | ((msg->addr & GENMASK(9, 8)) >> 7) | (msg->flags & I2C_M_RD);
-> +}
+> - Removed unnecessary variable initialization.
+> - Removed unnecessary brackets.
+> - Corrected grammar issues in the commit message.
+> - Confirmed autosuspend delay is not necessary.
+> 
 
-Probably you also want to add a similar but much simpler helper to
-return the low byte?
+...
 
-> +
->  u8 *i2c_get_dma_safe_msg_buf(struct i2c_msg *msg, unsigned int threshold);
->  void i2c_put_dma_safe_msg_buf(u8 *buf, struct i2c_msg *msg, bool xferred);
->
+> @@ -1472,13 +1507,18 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> -	ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
+> +	ret = clk_bulk_prepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
+>  	if (ret) {
+> -		dev_err(&pdev->dev, "clock enable failed!\n");
 
-Gr{oetje,eeting}s,
+Why have you removed this dev_err? You coulde have rather changed
+it to match the error. While at it you could also replace it with
+dev_err_probe()
 
-                        Geert
+The rest looks good to me, I'll be happy if you can have an ack
+from Qii.
 
+Andi
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  		return ret;
 
