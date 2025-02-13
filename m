@@ -1,53 +1,54 @@
-Return-Path: <linux-i2c+bounces-9447-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9448-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0B16A35124
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2025 23:22:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9E11A3513D
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2025 23:26:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD5067A4DCD
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2025 22:21:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9992A16E052
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2025 22:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22239266B59;
-	Thu, 13 Feb 2025 22:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A1FA26E17B;
+	Thu, 13 Feb 2025 22:26:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pkIDze3M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NazImkbr"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D653E24A045
-	for <linux-i2c@vger.kernel.org>; Thu, 13 Feb 2025 22:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9FC626E159;
+	Thu, 13 Feb 2025 22:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739485337; cv=none; b=Owwn/NLEt2AJ6bOpMZZ641mMPIW40RPCWuGEQIq+iUzn9VYhbhrjYy3JOiI7c7bgqPa23H9CYRvVbClU8wQ7VuC2S/G3QpIGdYqFOdjVVCxgvHXT2ZXaEn0HVSPvS+91f29m6nhajHYEiFvCbgBrPoXW54XbgwxABayW0lxFRMw=
+	t=1739485560; cv=none; b=itEjXxblOnYPhirfPF7DRSU1QkpDRNGFiXr+PRe4LIVV3sdhnqHBKaFoyMTfJ9S9NqgUZVsEkudDAub6FGUvvA/SvOT097OWBcI95lL+wLLmsgYq5sfuOQeeMBUhgov7YIHk4DGZx2g02nMczH3SfO/Z0eBJFXMH2Ip7fwgrUao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739485337; c=relaxed/simple;
-	bh=hAplAi6f2jpwhA91/zPnKrze5khqUUslV6GHEqUsWwo=;
+	s=arc-20240116; t=1739485560; c=relaxed/simple;
+	bh=ylVap6Al2775f4UI/B+6B7Ze8RIOMoqYidVKiT1nRzo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s5D/++qHcjoAIYb1634wigIw32EaFzHJVA5a/18ggfHug1Se6ETVuzAa3PY6fxMHNnzHBDVlgnFfXFgHRBDmt/3kOLq8bo8F0h0jOfUUjuhIPIIIF4MeAhfYYG0kCP/Rt8V3ck2HQDun9G73TKPeGWhYPC+zefDbenOR3hcnUd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pkIDze3M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E17A5C4CED1;
-	Thu, 13 Feb 2025 22:22:16 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=PA5IHDp6MQ8ypeb6RgwhRf3408IrvsHvKRjnsIXw5RFEXcGtQ0BEEqJ6anidAtHTyG/WR9c6+v9AO6ylMFlvEbYl7jO/XywqxJHmQrXGbG43GCcYUmOBgwnreJIrUVdHvjCTaQV8411n0xPcOoKFOc2Yjg3mNW20d9qSNgikpgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NazImkbr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56B0BC4CED1;
+	Thu, 13 Feb 2025 22:26:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739485337;
-	bh=hAplAi6f2jpwhA91/zPnKrze5khqUUslV6GHEqUsWwo=;
+	s=k20201202; t=1739485560;
+	bh=ylVap6Al2775f4UI/B+6B7Ze8RIOMoqYidVKiT1nRzo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pkIDze3MtmzOuqOrBw9iuKZxqpg8IihZWPieXvgiCVQLUO+fTobmiIvMuXTohhtWH
-	 VtM8FM6MLDFiXXnMtv+hIGpJ9OLAqrOZlXIxh9hbcHCUBIWMTDMpe/QhrKILiUL1L4
-	 QKHs/FEIUmfVM+bDDxTC2P+KYTSnLoTZ1iNA9y/lVRwcGdoGqH+jhrLFFVWqtTXgQl
-	 xowZSnVu6Saf3MlQV9hUMjDiRiP1dGgQSmPUAKyq4jnPFyMsiXcdX3HG/sKcziSveK
-	 TliY+OOzFHTeYIONB+6PfnjllZ9CaXozaDFGnz5mMsCQIcketcZ8EfHu35lzUoe08e
-	 wA8f0A1RQH6jA==
-Date: Thu, 13 Feb 2025 23:22:14 +0100
+	b=NazImkbryysz2Jvih95SKmjuQnQiAMTB//xSzr1LvehUbFQnJRpC8JM2rHAxMXQxU
+	 xH/0xGmpr53HO9L79ZJXUhp/Vtd0hyk4E7kKn+EhoyNbpKfiv3gF47ze8byUqz94dg
+	 CHRiCJVJVJdxg9LRysj+JZpiKk7FWgkVzvB7TQ0ZXFGwQDSK7Yammx5E94MqvGEmxM
+	 c4ordmNx9Vd2FFS9G7e5Qy76jwZzmAboZxN8NpQoVPPbvu20DMqSgLHQXWvT2wPRUp
+	 TrFsDMXwiLJo+RB+tRZu0ARu+2lRASDGww1EDn80F1Z2p0oDPecsAz2KesWV7AOmM6
+	 bFDtaXVm9LXEw==
+Date: Thu, 13 Feb 2025 23:25:55 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: delete entry for AXXIA I2C
-Message-ID: <etop6cck4zy6m2idpbytgm2bdtqzh3nymqppnfhu2r7xz37vbe@rme3wpxioqy7>
-References: <20250213162950.45596-2-wsa+renesas@sang-engineering.com>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: linux-kernel@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: Add maintainer for Qualcomm's I2C GENI
+ driver
+Message-ID: <nozabphomzcwgdnwlibzibuy3jdx2juihyewsrwaslbgk32nz7@kkw47rlus3xi>
+References: <20250123084147.3632023-1-quic_msavaliy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,18 +57,22 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250213162950.45596-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20250123084147.3632023-1-quic_msavaliy@quicinc.com>
 
-Hi Wolfram,
+Hi Mukesh,
 
-On Thu, Feb 13, 2025 at 05:29:51PM +0100, Wolfram Sang wrote:
-> The maintainer's email address bounced and he wasn't active for 4 years.
-> Delete this entry and fall back to the generic I2C host drivers entry.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> +QUALCOMM I2C QCOM GENI DRIVER
+> +M:	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> +M:	Viken Dadhaniya <quic_vdadhani@quicinc.com>
 
-merged to i2c/i2c-host-fixes.
+Thanks for stepping up here, I really wanted to have some
+maintainership on this driver.
+
+Applied to i2c/i2c-host-fixes.
 
 Thanks,
 Andi
+
+PS Please don't forget to include the i2c mailing list. the LKML
+   is a bit of a black hole.
 
