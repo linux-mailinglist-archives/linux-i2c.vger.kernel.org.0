@@ -1,65 +1,65 @@
-Return-Path: <linux-i2c+bounces-9429-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9426-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82BCEA3416B
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2025 15:11:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6503DA34197
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2025 15:16:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AA757A5176
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2025 14:10:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2DF41895956
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Feb 2025 14:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0DFB211A36;
-	Thu, 13 Feb 2025 14:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E06F281349;
+	Thu, 13 Feb 2025 14:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GnWMFkAn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TDaKGdhh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBF9281369;
-	Thu, 13 Feb 2025 14:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852C9281344;
+	Thu, 13 Feb 2025 14:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739455859; cv=none; b=Qw/ca+xxKNCE1OxLO5KPj3hjlq3vX2Aa/FGjAtxnEqnpg2lNyrnja4Vj5Sj2XpvwouHtG6y8uEMEau2hY4Csm7Z+sf2e6xUzzegL4XFRZP03MZo4eMa+uLIFEy/692GrAUFk+e6xxw5EMFWE0FeI4iH0Pnncj8eAbIX1NM7HY9U=
+	t=1739455855; cv=none; b=maxbeGFJEKFM/1mLuasDLGMbmsa2Ih8wciN3iRHnzmF4MXm9pjKVajamp0NbvRWi2CNxNyQqoCVF6ZwbgYe/ouh9gabjcVUUO1XB2injDwVZSDW/q5uEIN2OlEtbR3ntU+QYVEJQ/rBAnVe63diMlaXm8epSYqGdKcYjkDgWbDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739455859; c=relaxed/simple;
-	bh=w5OIcmlLWZ5owUnVqwY4hOy9GeQY3Ik9w5ZZ4hRMggA=;
+	s=arc-20240116; t=1739455855; c=relaxed/simple;
+	bh=ctb+xk7MY+w2rTHBydALLPpKRzkmBYWDd9xLRSlOFgk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RpzCsq0zdTpVpioi/NAWQpoqwDD6UirOBnppdevjB4QzUcH37KYMIBLXwSoPmOmyHhkVASAumF2Zj0U4L4C7TkFwi6GZZFyWo5ZTo570ixM+1mgSWtAG2iJfFWyvELCxfyi5+2kBj2RBs26W81Uk/scDfNBKTCvv/M36sGFWGT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GnWMFkAn; arc=none smtp.client-ip=198.175.65.18
+	 MIME-Version; b=kskDPIQDUmUnmoAHhilzDiO8piAcPSb7/4qItARgrKmKFe29Cjf7G+ExOL2H46lmGyd2FZ/gPNF2SPMY+xO1UJWth5LN93DGu5EDvaUhNuGqGsBRenChc5X4fCicMTW/W+TGYwPydjsj9he2VZsD7721ytuk0ILhNDVlPGa8+WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TDaKGdhh; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739455858; x=1770991858;
+  t=1739455854; x=1770991854;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=w5OIcmlLWZ5owUnVqwY4hOy9GeQY3Ik9w5ZZ4hRMggA=;
-  b=GnWMFkAngEVEJINZz+btJN/Ibr8Co5ynejvvDrXgGvjvj+f7xf/qIPXV
-   f7bhgUgx8m3i4k/68RWT2rRjukqfyHu72AXrk60zOld68mtdY8z/ORS/X
-   3ZvmJBpVFETKpkSSlKY27HFNVVAr/hfdsDfHoai8zEjiYk/cqppKYrt/b
-   Ja+z3pkfJ45Dttl4ev8HgqisCLPntJ9z4seiw/j2sbHcx10P98FSwSiyB
-   wV4VDLidOu/4HbZGNFxvAiDM7loJ0eU9oQtQ1PrQgUbnUbsD/i1R+l70+
-   bHKV4qQfFRqoboXUqYEIIcNHrrUKEAw3zB8F54QKzhvY+k9pgn+Grtv5r
-   g==;
-X-CSE-ConnectionGUID: 9RFSUT42Sq6LA1MmjZ1xQA==
-X-CSE-MsgGUID: P95A80TkSmeD5y1pK2zeQA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="40273349"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="40273349"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 06:10:54 -0800
-X-CSE-ConnectionGUID: RpVy3KmLSyCp1ahol+ineA==
-X-CSE-MsgGUID: DCwuJTz5RTSR209KgyRuBg==
+  bh=ctb+xk7MY+w2rTHBydALLPpKRzkmBYWDd9xLRSlOFgk=;
+  b=TDaKGdhh0E/Zl0vJORBN+rZDZDaeuXuoYguQ7fcvMzIfwyWwA8o0vFqR
+   3F6GXx8oLfXbd7lf1VLvtQYWfpUPHJoINrhA4jTHGm6b4Xay2A3lKxfPb
+   IuJvyKtnfC1gfr5XHB8e1y/vzDUAfrXbbXWXyM1woESRlsn0dJDeJueiC
+   e/T04HqxNaXK0UsK0IJFetMYCPyVzBr+LX6Ub+dbUpr56raxahAXGT2Bh
+   jHWfjjhoEeDa+uxyrsfUfiU0+bE7M3xZzCxLcOytKz4B70Irf28JkQN68
+   RRJbNyVqGFHdXr9xbICFOl30aFwLeC5RuMeX4/M+Fjmt+nCeBZLfataZe
+   A==;
+X-CSE-ConnectionGUID: TlqD/77cTVyAnGTFIEGIUQ==
+X-CSE-MsgGUID: W7I08v6eSQmo/yy8hx9v7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="40280879"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="40280879"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 06:10:53 -0800
+X-CSE-ConnectionGUID: PFagJQ/uTyy19AXdvQFGPQ==
+X-CSE-MsgGUID: xtLFa7DZSjSggc3zBYFKzQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="113815327"
+   d="scan'208";a="113682998"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa009.fm.intel.com with ESMTP; 13 Feb 2025 06:10:48 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 13 Feb 2025 06:10:48 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 54C1E31C; Thu, 13 Feb 2025 16:10:47 +0200 (EET)
+	id 623E1322; Thu, 13 Feb 2025 16:10:47 +0200 (EET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -80,9 +80,9 @@ Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Subject: [PATCH v2 03/10] i2c: bcm-kona: Use i2c_10bit_addr_*_from_msg() helpers
-Date: Thu, 13 Feb 2025 16:07:17 +0200
-Message-ID: <20250213141045.2716943-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 04/10] i2c: brcmstb: Use i2c_10bit_addr_*_from_msg() helpers
+Date: Thu, 13 Feb 2025 16:07:18 +0200
+Message-ID: <20250213141045.2716943-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.45.1.3035.g276e886db78b
 In-Reply-To: <20250213141045.2716943-1-andriy.shevchenko@linux.intel.com>
 References: <20250213141045.2716943-1-andriy.shevchenko@linux.intel.com>
@@ -99,37 +99,42 @@ No functional change intended.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-bcm-kona.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-brcmstb.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-bcm-kona.c b/drivers/i2c/busses/i2c-bcm-kona.c
-index 340fe1305dd9..9d8838bbd938 100644
---- a/drivers/i2c/busses/i2c-bcm-kona.c
-+++ b/drivers/i2c/busses/i2c-bcm-kona.c
-@@ -471,12 +471,12 @@ static int bcm_kona_i2c_do_addr(struct bcm_kona_i2c_dev *dev,
+diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-brcmstb.c
+index 00f1a046e985..5fa30e8926c5 100644
+--- a/drivers/i2c/busses/i2c-brcmstb.c
++++ b/drivers/i2c/busses/i2c-brcmstb.c
+@@ -414,23 +414,22 @@ static int brcmstb_i2c_do_addr(struct brcmstb_i2c_dev *dev,
  
  	if (msg->flags & I2C_M_TEN) {
  		/* First byte is 11110XX0 where XX is upper 2 bits */
 -		addr = 0xF0 | ((msg->addr & 0x300) >> 7);
 +		addr = i2c_10bit_addr_hi_from_msg(msg) & ~I2C_M_RD;
- 		if (bcm_kona_i2c_write_byte(dev, addr, 0) < 0)
- 			return -EREMOTEIO;
+ 		bsc_writel(dev, addr, chip_address);
  
  		/* Second byte is the remaining 8 bits */
 -		addr = msg->addr & 0xFF;
 +		addr = i2c_10bit_addr_lo_from_msg(msg);
- 		if (bcm_kona_i2c_write_byte(dev, addr, 0) < 0)
+ 		if (brcmstb_i2c_write_data_byte(dev, &addr, 0) < 0)
  			return -EREMOTEIO;
  
-@@ -486,7 +486,7 @@ static int bcm_kona_i2c_do_addr(struct bcm_kona_i2c_dev *dev,
- 				return -EREMOTEIO;
- 
+ 		if (msg->flags & I2C_M_RD) {
+ 			/* For read, send restart without stop condition */
+-			brcmstb_set_i2c_start_stop(dev, COND_RESTART
+-						   | COND_NOSTOP);
++			brcmstb_set_i2c_start_stop(dev, COND_RESTART | COND_NOSTOP);
++
  			/* Then re-send the first byte with the read bit set */
 -			addr = 0xF0 | ((msg->addr & 0x300) >> 7) | 0x01;
 +			addr = i2c_10bit_addr_hi_from_msg(msg);
- 			if (bcm_kona_i2c_write_byte(dev, addr, 0) < 0)
+ 			if (brcmstb_i2c_write_data_byte(dev, &addr, 0) < 0)
  				return -EREMOTEIO;
+-
  		}
+ 	} else {
+ 		addr = i2c_8bit_addr_from_msg(msg);
 -- 
 2.45.1.3035.g276e886db78b
 
