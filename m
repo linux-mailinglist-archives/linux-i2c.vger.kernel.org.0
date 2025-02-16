@@ -1,79 +1,102 @@
-Return-Path: <linux-i2c+bounces-9463-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9464-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE2D1A37034
-	for <lists+linux-i2c@lfdr.de>; Sat, 15 Feb 2025 19:46:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E00DA37607
+	for <lists+linux-i2c@lfdr.de>; Sun, 16 Feb 2025 17:51:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1093189344F
-	for <lists+linux-i2c@lfdr.de>; Sat, 15 Feb 2025 18:47:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FC7C16BECB
+	for <lists+linux-i2c@lfdr.de>; Sun, 16 Feb 2025 16:51:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2060F1EA7CD;
-	Sat, 15 Feb 2025 18:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C00AF19C546;
+	Sun, 16 Feb 2025 16:51:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NKunhlai"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VVPi8agk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D116F23BB;
-	Sat, 15 Feb 2025 18:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43DC199FDE
+	for <linux-i2c@vger.kernel.org>; Sun, 16 Feb 2025 16:51:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739645213; cv=none; b=KT/jMQ59cNKry5ej/qnvYYGVK78d2iYFafHPKmXI9wpGJPerHWwv3ulxrJ06MkW+nFvRXrIbH8WT0liSpu7YXgmNVFIKJgblDNsIH1GYgNVvf5yfnJPybKjLCwjB95h7F7b6HNFdu7bwyKUBi6dKRmVRRe/NyYmngrypzGzk60M=
+	t=1739724677; cv=none; b=CrmsUv53FyDTu14oYuApUcrZvcPch7DpU48GnAVesZKe06Vn8aHQNuT9VTsOwcpHKyb8TEZWOPkdvVtWzorms4co31Lm4iZb4c02QvRl9MSPf5KnoQ1bl+mOTK+9yFjs/mJYsRG7dTYNN3ZZlfWh0upMImLX1yGxavtgc3R8zAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739645213; c=relaxed/simple;
-	bh=DCheD2LFTtVv+1y0v9qT6kfqA+K0HAufzWjrJzvnTmg=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=YfSqdKkLDSG/VJgJkMMhn2GoFYbqN0aN52db99r/65GDtvEIffweWKelEgxK5Z2OXQ2IgA9O2HxVVvwWv7524oO9i426Yj9+Xq3qsomIRzgsgA9G2/V3YYaQoWmUgCWALjDogAC2WJAvl7tFxwL9WRuJwN2L6AGj5Ww4XGkJ1y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NKunhlai; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41BF2C4CEDF;
-	Sat, 15 Feb 2025 18:46:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739645212;
-	bh=DCheD2LFTtVv+1y0v9qT6kfqA+K0HAufzWjrJzvnTmg=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=NKunhlaitrEwPpcxioxPScuVpmFQ0v6N8sTFFzsifQw969SxTBCObqoeDqcyuW87a
-	 T72IzNaA8kf6M8mvnDzStRuoBK73uLM5R3owh7QhdKupLbYox94vMS3aWY/ghyjvGW
-	 gUTGHBIvLLIZLnuf35Wg5VUgXPy2uQpmoEdR+927UfD0VI2FDrNHktlTPpCKngvPfU
-	 k0lzioY4Ox2I1GT2edbDidenpH3sPAwnyYYcRSGG6+sLbzEK99NcfooWppfn6madEN
-	 m11IAlzLWWIw5uxqtTPZZl0SBjEytdQeMim83DP49YBLMBS0SBHuK6nSH6IJK1rD8+
-	 IHNgduT8qdwew==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B4B380AA7E;
-	Sat, 15 Feb 2025 18:47:23 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c-for-6.14-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <Z7DLCmDPaRhLWwos@shikoro>
-References: <Z7DLCmDPaRhLWwos@shikoro>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Z7DLCmDPaRhLWwos@shikoro>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.14-rc3
-X-PR-Tracked-Commit-Id: f85478fb3fecad01927935c51fe7e9dd5731d0b7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 496659003dac5d08ea292c44fce9dfb36fa34691
-Message-Id: <173964524181.2320599.15446991110620659866.pr-tracker-bot@kernel.org>
-Date: Sat, 15 Feb 2025 18:47:21 +0000
-To: Wolfram Sang <wsa@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1739724677; c=relaxed/simple;
+	bh=O5LWncXqMGhNBqCSpMrkDb7CcDcJljEg1ZoT4TBKW78=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=bQn4r7xDvn0QrWx3uoQehE1GyL9cqSguMCmtjklSJYOB+SsMUFtn5NOF/sM5Ctd4C1Q3kmr3bVhv5n6OEM0p9lrPa88nmaCVDqPYi51MO9ichERor8iFF5k7/r/EpWu0iTX8HiL/bMhUwffQ8oPC/RSfyAZOYiQQi/6SrbhmZfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VVPi8agk; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-abb90c20baeso60574966b.1
+        for <linux-i2c@vger.kernel.org>; Sun, 16 Feb 2025 08:51:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739724674; x=1740329474; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=O5LWncXqMGhNBqCSpMrkDb7CcDcJljEg1ZoT4TBKW78=;
+        b=VVPi8agkdIeNP90xGhbdL34hAaqVczKCfMLORuNnC4+h/lO7k1LE57ZNkWySc0SVlw
+         smGVWVcPMxR8Twj50Xfz1Ki/Jf9NARdLxzPP4gyd3flj2gN2+Q/D80ZP1UOfCh4Zc23M
+         oHAVkOMv9OcF7ewZj4MWaTEdz+CXJ8Zkoq0kJyxmAteT5ghCW+BtUSrhaPQ3fVZFj/AT
+         N8ZNAlLVm6ZLzlWqZ6iLDcI/boOQQVdIqmGxCBZ8m4RsFy3bj1iPoP2Agrr6inKPOxcW
+         MEYn5dbpXG4Qb4qkX0XYnfjRietG41WeiCK2ziYHtRft0o7nbrpk5CQd8L70SxQGXwCQ
+         8TwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739724674; x=1740329474;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O5LWncXqMGhNBqCSpMrkDb7CcDcJljEg1ZoT4TBKW78=;
+        b=I7hmv5m6MDAYP4d3hkwEH0NeFyZJoT2437lgkSxcpMXSz+lHzp07N1BG3oiXDM+8Pd
+         e2MMdKCnh/qzijdf9/z0xR58oatCqMHXV4LFGFoasBU/s4mG5xqTVoavTHA5FICIcDXR
+         DHxELvJJoeWIYw/V4zc776lYxlAj9ZA1VAoGs+netxVI1S03UAvUfcpon1TbjzPFwx7K
+         8Pkbn65aOquA8Hb64Z/damFZjNan1h6RAmdbSW4b0/xs0621J6nVXialSjHnqJw7zcLC
+         yToL/nHBV7PC25sixKHexrscY1PJLRyj/Na0dq0Nbp7l7CwpIANoRT5msbnj31WZRNvX
+         bgBA==
+X-Gm-Message-State: AOJu0YyxiacNl5aW5PxTP2nDj3Srkox1fxIiU3mjYbccVZbaPAWQ55ys
+	7vyRF1k+k1TkdkexqyCDDHuPAxug1RMBXvDStH4jXcj9gRpkoNy5ARolUUd6JMsJLrmiAZxFHvD
+	8TvRpkHsNcU1iV1cdQ7GWErvBgbfrLnrbMiYxeg==
+X-Gm-Gg: ASbGncsw3x37Ep85x5qHieWHmKGF4dD5k3kPI/5Ex693t3LOgoOEwI2tWq9dvfjk128
+	UvwLTY/WxQ+r1JZ1VkE+dIh6cI01xAjdh3jTPujKqKT92zKzGjaIVk2ttK3XSFXjdCDwZHrsI
+X-Google-Smtp-Source: AGHT+IGS0pIgYVAHulL7hyEdHKXu74y2v/06eIZZ9yLXtxIbdmycAcVVViTPAFFvbjfTJJxSAgOzPJIWuwUBiD1GDTk=
+X-Received: by 2002:a17:906:c154:b0:ab6:db3e:2649 with SMTP id
+ a640c23a62f3a-abb70a95729mr662636366b.14.1739724673917; Sun, 16 Feb 2025
+ 08:51:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+From: =?UTF-8?Q?Frederik_Br=C3=A6ndstrup?= <frederikbraendstrup@gmail.com>
+Date: Sun, 16 Feb 2025 17:51:02 +0100
+X-Gm-Features: AWEUYZkUA-JMD6bsHVdTzBDR-W7MT3Ux1Sy2cZ6ud4Y8NGcKS4-c2LOTCgH2_R8
+Message-ID: <CADs2FCF+v3g4V4cfNREFm6KZ_LAHB0vCC2T2PcHjNO4UHq_atw@mail.gmail.com>
+Subject: Dynamic address for an i2c device
+To: linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The pull request you sent on Sat, 15 Feb 2025 18:12:42 +0100:
+Hello!
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.14-rc3
+I'm starting to mess around with linux drivers again, and made a PCB
+for controlling some stepper motors and I chose the TI DRV8847S
+driver, as it has an I2C interface for controlling the position of the
+connected stepper motor.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/496659003dac5d08ea292c44fce9dfb36fa34691
+DRV8847S Datasheet:
+https://www.ti.com/lit/ds/symlink/drv8847.pdf?ts=1739724138814&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FDRV8847%252Fpart-details%252FDRV8847SPWR
 
-Thank you!
+I have been trying (and failing) to understand if it's possible to
+make the arrangement specified on page 45 regarding "Multi-Slave
+Operation", where each device address is configured during
+initialization, by first pulling down the nFAULT pin of all other
+devices and then writing to the address register of the default
+address, which the remaining device would then ack and use afterwards.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Is anyone aware of other devices using similar schemes, that I could
+maybe draw some inspiration from?
+
+Thanks
+Frede Braendstrup
 
