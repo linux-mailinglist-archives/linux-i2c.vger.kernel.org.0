@@ -1,125 +1,148 @@
-Return-Path: <linux-i2c+bounces-9469-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9470-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B169A37F97
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2025 11:14:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79F9DA380C0
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2025 11:52:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 882ED7A231B
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2025 10:12:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FB487A1890
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Feb 2025 10:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AAB6215F6A;
-	Mon, 17 Feb 2025 10:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0710B216E2B;
+	Mon, 17 Feb 2025 10:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YPpiNbxl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GwUfvwnC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C64E81E
-	for <linux-i2c@vger.kernel.org>; Mon, 17 Feb 2025 10:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35DC1DE3B6;
+	Mon, 17 Feb 2025 10:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739787202; cv=none; b=Y2lcGS+cNgi574+qdrfDv9O1FZR4bsgpvXYWaqRBLC1HCgsj1mk73vBvQaypjI8xlm+AvjYs2wNdKddiv1D/1Zk4EF9jJh55cVSOywlPPw5zHLw/e/FrDmYF7LQWgLIIdDcs63cDWxvoOq9fAC88se7QFddYvMORJJiOgWboNtY=
+	t=1739789537; cv=none; b=W7d42srA2rr6PKRewJdNkvNe4OFVFRnVh9oMFae2TLGntGXlqcSygi0o3l2PMr1ZlzMPFoiBI7Pv8LgC5Zy06v7PboekS3vPqFWgKvXi9Di4gQDTeJzr4gLhf5idccbP9NMQQQXXI/ANlscPpVSGAuO44RvXuSxXfLwQAGx2mcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739787202; c=relaxed/simple;
-	bh=5lZiDOb4Cl4u75ojopXMXQj9ND2UBVVxu7wDpjgXEzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mLE2uXMmxANJKYBtKVUsKapvVqGTPGLKzdayh5qlYzMWMj+mWk868TR3z6aaCQSJsLioq9+yvPbY3DOVKi3/mFmG41HMDFMcX/hv64CDI3f3JV4jg3Jr0nr9LJCIywJe8o3gj38Z9JpoG6JRLTlOoZk5Iut49coo6b6iZM4oMeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YPpiNbxl; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=2oWb
-	+WruHpktLVYYWrQ9q/yqS/SDQBOJLksMRV/2xbQ=; b=YPpiNbxllUJH5yeLX7J9
-	OFPE++xZsyH1K8p6BPlNFEuzBQwNmc9DQXp+FlTPkJBHNh7LVH3FyPd1X9lFyWAH
-	zVvLWRVwi3Atbe/knHFSeu0qXD7ts9RMTjHHP1ckAZN6B75eIiNna64Ty3r6D1gV
-	kdGUmYJYaywZiSl6bntm/5ffnfg0aaCbqgTAx9zDLwjOdMS57gRN1WZ6uy30u0n3
-	4yTNH6/HVpcvPXgpuqg2FIc22CAyuWwYEozGh1XMuSOktB1tTaFm65BoYzv7TGya
-	CoOhZrM31FkTBbLctbF8x3bIEWrFysCUbr09QtpuKSE3sxqdlcoDRkXw14ObPRJr
-	LQ==
-Received: (qmail 3247893 invoked from network); 17 Feb 2025 11:13:18 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Feb 2025 11:13:18 +0100
-X-UD-Smtp-Session: l3s3148p1@FXLqxVMuTowujnvP
-Date: Mon, 17 Feb 2025 11:13:17 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Frederik =?utf-8?Q?Br=C3=A6ndstrup?= <frederikbraendstrup@gmail.com>
-Cc: linux-i2c@vger.kernel.org
-Subject: Re: Dynamic address for an i2c device
-Message-ID: <Z7MLvS5L3ttWJ1LA@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Frederik =?utf-8?Q?Br=C3=A6ndstrup?= <frederikbraendstrup@gmail.com>,
-	linux-i2c@vger.kernel.org
-References: <CADs2FCF+v3g4V4cfNREFm6KZ_LAHB0vCC2T2PcHjNO4UHq_atw@mail.gmail.com>
+	s=arc-20240116; t=1739789537; c=relaxed/simple;
+	bh=ECFQiigJkucz+54P1vwO33omMVv3zqagABDHOg3hkYA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mxV3wwKM5sn1H9XiXxFki6bRSg8c56KLqSaoSXvZxk1EcCd+/L268Spz1i8noOrtucYRIyGqM6IFKBlCT57BXoA0yldlpmoMLDa7DbjvROrb+Z64Xg3zUi5Rs4SLQur50g6hmahtxW79ZFdl91RP/2Fi7LaBFFkbrb69pfI89Bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GwUfvwnC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC596C4CED1;
+	Mon, 17 Feb 2025 10:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739789536;
+	bh=ECFQiigJkucz+54P1vwO33omMVv3zqagABDHOg3hkYA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GwUfvwnCZ+788bztR9frQqcjXFuVjAY9NK9RMmQu5y8GLRfFROqW30YiGXXNFI1DB
+	 iQxlNO4AVoe4sNj6JL3YoD2YzEj3YHV0BOm6hWOsNb0QgpSURlDHPaxMBoFpsMbjpi
+	 DubuGS55oUBE+Uv6wjihrWJXWVwdeNcbau2n0P8OStIj9kMI/nofrWCc5wAYpDiwTo
+	 zJLxInywER9Zyoh2zpNWA8GYUnwT8paCBOfOP2PzswETiq8uGXulrMsM3y/q1ojKd8
+	 csmd8UKp1o9Fh+8OG0GliEE9C6yPUrBhSpOqdKI7QsmE08O7yb7J6EH+lKroNzikD4
+	 RbPEv1GrdSaLw==
+Message-ID: <bcadb20f-4867-4b77-ac53-f855b14cd746@kernel.org>
+Date: Mon, 17 Feb 2025 11:52:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bKRBGjctkoJPllPo"
-Content-Disposition: inline
-In-Reply-To: <CADs2FCF+v3g4V4cfNREFm6KZ_LAHB0vCC2T2PcHjNO4UHq_atw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: trivial-devices: add lt3074
+To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <20250124-upstream-lt3074-v1-0-7603f346433e@analog.com>
+ <20250124-upstream-lt3074-v1-1-7603f346433e@analog.com>
+ <20250127-outgoing-ibis-of-respect-028c50@krzk-bin>
+ <PH0PR03MB6938B71327DAADC17492A5538EF62@PH0PR03MB6938.namprd03.prod.outlook.com>
+ <5d2b71a9-a62b-418c-91ae-fa2a195aa27c@kernel.org>
+ <PH0PR03MB693845F71D14B21D447D701A8EFB2@PH0PR03MB6938.namprd03.prod.outlook.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <PH0PR03MB693845F71D14B21D447D701A8EFB2@PH0PR03MB6938.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 17/02/2025 10:30, Encarnacion, Cedric justine wrote:
+>>
+>>> LT7182S. Like other PMBus drivers, its GPIOs are not exposed.
+>>>
+>>> Here are other PMBus regulators/power modules found in trivial-devices
+>>> I also used as reference:
+>>>
+>>> - infineon,irps5401
+>>> - delta,q54sj108a2
+>>
+>>
+>> I don't know these devices so still no clue. Please rather explain in
+>> the terms of the hardware, e.g. what this device has or has not. See
+>> also regulator bindings.
+> 
+> The device has enable-gpio and status-gpio. It also has registers of
+> similar functionality which the core driver accesses instead for
+> toggling enable and monitoring status of the device.
+> 
+> Upon checking regulator bindings and other related bindings for
+> PMBus devices with regulator support, this indeed should be a
+> separate binding outside of trivial devices. Please let me know
+> what do you suggest.
 
---bKRBGjctkoJPllPo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Even the GPIOs are outside of trivial devices, so for that sole reason
+this should not be here but in its own binding.
 
-Hi,
-
-> I have been trying (and failing) to understand if it's possible to
-> make the arrangement specified on page 45 regarding "Multi-Slave
-> Operation", where each device address is configured during
-> initialization, by first pulling down the nFAULT pin of all other
-> devices and then writing to the address register of the default
-> address, which the remaining device would then ack and use afterwards.
->=20
-> Is anyone aware of other devices using similar schemes, that I could
-> maybe draw some inspiration from?
-
-Well, GMSL has a somewhat similar mechanism, it seems. The de-serializer
-(drivers/media/i2c/max9286.c) is an i2c-mux to which n camera sensors
-are attached. The sensors all have the same i2c address initially. Now,
-the code first muxes each single bus to the controller, so that the
-serializer (drivers//media/i2c/max9271.c) on the "other side" of the
-muxed bus can then be programmed to translate the all-the-same-address
-to an individual address. After this is done for all cameras, the mux
-enables all channels at once because the addresses are now unique on the
-busses.
-
-The code for all that is complicated, though. Not sure if you can derive
-inspiration from it. Good luck, though!
-
-Happy hacking,
-
-   Wolfram
-
-
---bKRBGjctkoJPllPo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmezC70ACgkQFA3kzBSg
-KbaATg/+JWpkBuOGvvPz4ryeiWodZD/wakrUupuS4R7/JjzyKGoQpTkPhfyyqP9/
-/RDBRRvN2jdvknNiPUFCFKl5rwYXjZ7GMSDZ+YKOkmk2GJM9bEwA3mlxIwstkWQ0
-yWDeFrg+iyFYaWZ+W4WT5ohKm8ZmgXUWNEGIhGGVFXlZ/acK4McYhGO6q9jKKwLh
-D18lki8ooVG/iij4XGt7PGnoKFgEHFfeDGksXJFVUBDj2GdxSPIXhSLuCZzFroXY
-x/AkaJRXebZ+07JrxxvjrYcDpHHqOdENQagPRFLDwIK7sMlaAN+alS7aGpkIyf+P
-WXnc+tq+bW3+XU+dRpJliUUu5L/1dsaGKfPGEKnZERC6etgLhixsbz/5R6/Pm9Gk
-WEaWE4g+lU+shnooTuem038J2nx8tmHU7yJJV4AXmktKv+VJImTkhD5k4F0PGTsK
-h3HLJdj1RY8l+puR0ES+ZS3h/KEjNX3PdjCX0ouPu6He/NNJT9tKYaQxZWRTEXrq
-ySn3rzm963Zh5T1HUwBXUkblUrA/dubuW+zXnGMhCb1DQ+pqD7EwN/ng4bN1otxW
-3PSvXpwf16zQWUyMcc9FX0GHpxrAytJTTa+wArUqBmNmnN045qAla/rd8GOkcd30
-3d3vX6PKe3BDi5RoI/hmjP4d352jXMVsGGnGJsd1y6P51f9KRc8=
-=WHFd
------END PGP SIGNATURE-----
-
---bKRBGjctkoJPllPo--
+Best regards,
+Krzysztof
 
