@@ -1,112 +1,139 @@
-Return-Path: <linux-i2c+bounces-9483-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9484-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CD21A39D26
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Feb 2025 14:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 20B66A3AA7F
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Feb 2025 22:08:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A8593BA532
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Feb 2025 13:11:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 061DA3A11AB
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Feb 2025 21:07:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 031002686A4;
-	Tue, 18 Feb 2025 13:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C111E2862A2;
+	Tue, 18 Feb 2025 21:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LWlMFl/M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GuDLjxdN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0DD246353
-	for <linux-i2c@vger.kernel.org>; Tue, 18 Feb 2025 13:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9EB2862A0;
+	Tue, 18 Feb 2025 21:07:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739884255; cv=none; b=h1pf8vjZm1GNm0c7cO6HrES0AkXTZd/AlNA+KwZuXLeybM4ImrPlCgjpFs+Ox41jKMjCbpuJLYVOa1khcojs+fzdKMNJREkRJnvs9hIz0y4ZdIwLnuNwRt5XRm9dYCGyPZ2Mb08Vb60Im0VLGxtNw7gP+lyWv0tCIX/MpYh/dZI=
+	t=1739912848; cv=none; b=T0aEGqfwGHLLrzuYCPnCx84ovYr9Bi+yan+qsFVQtxAGmUr66z6gw4jTlDMa2x7X2jHIbb+wwrap0PT5WCT+RtN/ykPkXG/z/ljocE5O/rVc7kBwmZ5/X1T4bs9Hk04Dmip7aAi+tEw2myY890EF7Lozk2L5XXi9Qm3uEmUkKCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739884255; c=relaxed/simple;
-	bh=7sgFu+7FehmedZrCBn7qAyffQvuCBbFulPRIYm9nFhM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SE0nLTxw3YAyqrw1hS7SyDmrEiXZYqHDGYkabUEjzIm20j8Lp2I9+LmPdZq4BgVSTnsYcPrVYgZlU3LWijnHWlIWZ3UbE+O4wNT6velHg8UQiZKEmqe/Dg2OmdJwDOp6bYewrX/d/7AaaPwBPIAbeFhu6pT1m3Y57IiUVA1+jm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LWlMFl/M; arc=none smtp.client-ip=209.85.214.174
+	s=arc-20240116; t=1739912848; c=relaxed/simple;
+	bh=un1WmHqXukfmvrLkFiLVRUbAP7Kc9NnfZJdv/1KC0c8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fNkZHzlxrmfXZ/1HLSDiv7tDpLZ7dougZZnpQoNVPQK9Ob6yKxF4G0YbFl3vV+7zOPLW5BVF10RNJNJCL4TKfRDN6+X6EutGH4R6TrkQJ0+QnOBWKI16+DFRTZzBWUSTxWjhiHqtsCsgVRc7Z+eyd9gcZPURYUrz2qsoM5+Pnuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GuDLjxdN; arc=none smtp.client-ip=209.85.221.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2210d92292eso76093395ad.1
-        for <linux-i2c@vger.kernel.org>; Tue, 18 Feb 2025 05:10:54 -0800 (PST)
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-52099627b5aso132931e0c.1;
+        Tue, 18 Feb 2025 13:07:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739884253; x=1740489053; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IfhqTBus3xDwbZNLdmi+ftLFmbq3S7q0HQcR7EyOJ4w=;
-        b=LWlMFl/MzYqLiOW9JGDgMnoniqGEW8rb3gbBw9xXCdgUEzcoSC5PwCV8AsyO7+AM6i
-         492A3HCVrTX9kv8bxURDeS3OfJoCx1ZKyKV/pRU2GkCbc4/jPkIKVgO4PoDmoYO0CAPA
-         eLnfBUw4Rh0XO2KEPdBNHsrN1/FW3iJ1S/V4OY6iLpHoa1NiSXTvlQFlPbKowX1gvGqh
-         NPqHcW9OBmLckD23/DzQ0ZMViQswx2YB3CZxDku4V7Xgytv0REDrqJ+GccVmZd3WHCUh
-         E0yxnd1krnnwin20E24y9OHuk1AwcVp20Ybqbz8cqCxL8b8g58Gof2r9KFS0MEN2Jdcz
-         CdhQ==
+        d=gmail.com; s=20230601; t=1739912846; x=1740517646; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YUmz9mNlmOFx7fnJvKvu+IO94Ojxss29t7xq6j7B+j8=;
+        b=GuDLjxdNa3DewrszWlvGkVoAERun6tTyefKFZd0gZzeQ7AmWPl+tPjD5yyOLxN/c//
+         HBVCcbF/AR0R8Ltc0GAQP6aRIYuS1QRRxzeA4Ll0gp9yuzJElpIUdhTjrrPGeIXgSxHA
+         faEnAHG2nUKhH44doCkp9V73i3FN3kS/R42FWvGZNsF801mU25hMYCibSvxI4asm2mfs
+         6bAf5sX6cpQocHRxY7P3lLavUKolSmonYT61lTHq/BBNNgNU9QFyW0SvEFfJ24scZoe9
+         VO96Nx66UTbKjQpSguctJpJkYerGGiwvLyxigYRh/ZATGFOTIe0ryumP16JF9uS6Qr02
+         hr8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739884253; x=1740489053;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IfhqTBus3xDwbZNLdmi+ftLFmbq3S7q0HQcR7EyOJ4w=;
-        b=D74IOzTrx2gSxe2ZiVh0BBU3W5JexQMDHcSIN3pREIPKAS/1Yr+1n3dnJY/6r8oXY3
-         fTlCz8l2dn1/Qxx8W8O67ffEWh9RQFlJfx3W60aV6rGR6Jiv6/MOL4wbK1xxzXD9sMJj
-         BGEAQWgc6wTzfenYT/RZvZHtjmP+ZeSE6uQiZWcwOL1PgpkACrROcdsMagySU9ycMKbG
-         RDXhKZSuJJ5UAigHpY4Qf2NNd+0lKOeI2JN2eAuxCSsDLqUt1ovaoQknhAQPND6sKiLq
-         sUph5/W7xT1SpZCaiq17DX02sZtS9ZSqXylNB3reVAPu0udqiMrdFlzWPigP7DBgXDiR
-         dt8Q==
-X-Gm-Message-State: AOJu0YxW1tKk3V0md2ClvQHtMnclUJgyhvODep7GyRXbrrVKe7ShLTor
-	O+tFHZ9K265I4lOjskBduyF+M1JWrRphXHwhToJFhAQOGshPeplmLh2o6hqP
-X-Gm-Gg: ASbGnct/esTKIfSK4JQaCRbmyXxSHI9f1mLt1CgUZTeODmbuT19SBfqtdgdybYnk4pP
-	MJs62zviKKgjWk/16V82UeCWEtGNvH1cZTO9PcxvjfqVD4hDlvEVcRwLaLCUf4v+9F4wET//SjK
-	Yr6AP0+/+Wzft8kSrWoOpidJ7ljPbDWTmHN7nlxmcJrN3UrrMuBISoH5lTEcjtU7Unu6OdEtU52
-	9MmsoBS7QkMwq60pqPZjRTMc4EzwMVG1MdYVy7IIJqW4JT4MykcS3F6EQoj2LeSbYodiu2ZOplR
-	RQQKPs8tsWrxYTiGvHUqNPotJGZrQRrhBSaT4md+qcP24gk=
-X-Google-Smtp-Source: AGHT+IHEzId+F9Y/qcM2OvpwjCy0XxzJJ09b+HzFyA5pIuKXmDoAXMEnOESvreJXejyCFW2CYlJgCw==
-X-Received: by 2002:a17:902:e546:b0:220:ff3f:6cc9 with SMTP id d9443c01a7336-221040d6c64mr241376085ad.48.1739884253126;
-        Tue, 18 Feb 2025 05:10:53 -0800 (PST)
-Received: from LAPTOP-HLGLEP2K.domain.name ([223.185.131.235])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d558fe3asm87815765ad.234.2025.02.18.05.10.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 05:10:52 -0800 (PST)
-From: Viswanath <viswanathiyyappan@gmail.com>
-To: linux-i2c@vger.kernel.org
-Cc: Viswanath <viswanathiyyappan@gmail.com>
-Subject: [PATCH] i2c: Update i2c_msg documentation to clarify write
-Date: Tue, 18 Feb 2025 13:10:39 +0000
-Message-ID: <20250218131039.1344-1-viswanathiyyappan@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1739912846; x=1740517646;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YUmz9mNlmOFx7fnJvKvu+IO94Ojxss29t7xq6j7B+j8=;
+        b=RS2bVv0Lh2m5ZMcYSv5dK+vUTdXEo2nTVIB4zMXzH7H4aowrBEGvK9GzA28VRaf/80
+         tBNevIf94Y6yS5N7x850688nUitBiSaJ85RH8OIG7+aPPU2KMdDN2MovHS08VD7/u2Lt
+         hsdIzgrVvZ3ahEL9xqxeswQw1BdGjVr+b7nf/UKAyZyNQ/W2w7K2r9G5jpfF58WOoldC
+         IVH5YFNAYugwTGhBPm/g64GJ4+5QJFu0yWA8IvFOqn7L1kfYLGK7eoeZAYPz8fC2sEnX
+         lwuG4zG7FOHhxpCf2v9JvFaWcflCpCSKhrmG96YlIiNJiflTrIt3MVp7vYUawOrYndlw
+         VMJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU14GNbCnHQ40gNcDWwu0uMGgLJVRNUZzsIhg7IZ11ylU2kNL8B5ug8MPEMfXh3lGBd17we5l6moJU=@vger.kernel.org, AJvYcCWp0NczfhcueAVVFIomdyYVPYUHvh2feP4LdIDEwimj+2dBBcgYD30RDgDRm0htnLZ9ayRLz2kX6BNuQ7vS9XpdBPg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlvMm8UGes6tzDpRO3d/HHeO7poi280FSlLXiqqI9owNuSGZgE
+	7kdoEfpfD5JSM5kDJjrhjNlC5ZRmHqO4nQ+RZU0IEnxLDiUoYdlTVRTX4tCtHLUY2t4O52W6Ibf
+	gXC66tuNBSOX9MfOvF5xh6m7e2uo=
+X-Gm-Gg: ASbGnctb7yZDh4/gfmwRGx/N6012RWToN77jVRSvGy5WHvwzF/jXiUxcq3uiTpzLcxM
+	YXYH0pAimlsokYkdyTUluZG0ih7Mgy79A7ot3THqwee9LN+KLfmgoHYFzZFfiCdS6kje9qMIn
+X-Google-Smtp-Source: AGHT+IHHg0gJQicqT/YRBfdVUSvVS4oKvqKpZIF+JFNtFeMUtdcvhVDthvk+zUZcJUrCA4deF8WCEbtjZPSb3k6Fgpc=
+X-Received: by 2002:a05:6122:2a56:b0:51e:ffd1:67f3 with SMTP id
+ 71dfb90a1353d-521c33956femr1175006e0c.7.1739912845827; Tue, 18 Feb 2025
+ 13:07:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250203143511.629140-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250203143511.629140-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Tue, 18 Feb 2025 21:07:00 +0000
+X-Gm-Features: AWEUYZmBfl7qTjIPZlALeH7jw8POlOspLxhblK_ubWh16ACTMZS0xQBQJ1dlTJk
+Message-ID: <CA+V-a8uesAcYB4Be1Df9w+K3NbWZBDTq1mXz2KBPVkXBk754YQ@mail.gmail.com>
+Subject: Re: [PATCH v7] i2c: riic: Implement bus recovery
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, Andi Shyti <andi.shyti@kernel.org>, 
+	Chris Brandt <chris.brandt@renesas.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Update I2C_M_RD Documentation to clarify that not setting it
-signals a i2c_write
+Hi Wolfram,
 
-Signed-off-by: Viswanath <viswanathiyyappan@gmail.com>
----
- include/uapi/linux/i2c.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Mon, Feb 3, 2025 at 2:35=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail.co=
+m> wrote:
+>
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Implement bus recovery by reinitializing the hardware to reset the bus
+> state and generating 9 clock cycles (and a stop condition) to release
+> the SDA line.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Tested-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> Reviewed-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+> Resending this patch which was part of v6 [0] series.
+>
+> [0] https://lore.kernel.org/lkml/Z4ZCJYPgvS0Ke39g@shikoro/T/
+>
+> Hi Wolfram,
+>
+> Ive replied to your comments on v2 here [1] as to why the generic
+> recovery algorithm was not used.
+>
+> [1] https://lore.kernel.org/all/CA+V-a8s4-g9vxyfYMgnKMK=3DOej9kDBwWsWehWL=
+YTkxw-06w-2g@mail.gmail.com/
+>
+> Cheers,
+> Prabhakar
+>
+> v6->v7
+> - None
+>
+> v2->v6
+> - Included RB and TB from Claudiu.
+>
+> v1->v2
+> - Used single register read to check SDA/SCL lines
+> ---
+>  drivers/i2c/busses/i2c-riic.c | 100 ++++++++++++++++++++++++++++++----
+>  1 file changed, 90 insertions(+), 10 deletions(-)
+>
+Gentle ping.
 
-diff --git a/include/uapi/linux/i2c.h b/include/uapi/linux/i2c.h
-index aa751389de07..07cc80e9e854 100644
---- a/include/uapi/linux/i2c.h
-+++ b/include/uapi/linux/i2c.h
-@@ -21,7 +21,8 @@
-  *
-  * @flags:
-  *   Supported by all adapters:
-- *   %I2C_M_RD: read data (from slave to master). Guaranteed to be 0x0001!
-+ *   %I2C_M_RD: read data (from slave to master). Guaranteed to be 0x0001! If
-+ *   not set, the action is taken to be write data (from slave to master).
-  *
-  *   Optional:
-  *   %I2C_M_DMA_SAFE: the buffer of this message is DMA safe. Makes sense only
--- 
-2.43.0
-
+Cheers,
+Prabhakar
 
