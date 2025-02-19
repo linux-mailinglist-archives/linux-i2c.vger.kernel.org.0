@@ -1,56 +1,60 @@
-Return-Path: <linux-i2c+bounces-9500-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9501-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47D18A3C87E
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 20:23:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94E9EA3C8C7
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 20:32:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5CB57A770A
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 19:22:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61D6C17724D
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 19:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB17122ACEF;
-	Wed, 19 Feb 2025 19:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E0F22B5B7;
+	Wed, 19 Feb 2025 19:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VC0GJR/z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f6QGdFvj"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9F722ACC5;
-	Wed, 19 Feb 2025 19:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A337122B586;
+	Wed, 19 Feb 2025 19:30:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739992939; cv=none; b=iSvs4D3df/MAf4BjJENFs3to5VOGiBJAfcgbg2d3NAjA1lD8tTBwBMz3uyGETIGIqt1nJMVUUnjM1s5p1nVGAbBT4QWBLGaQbYQRuWAnHsMH0OS9U/D8Yz/k7xCxr5NKNIAX5VGlMLUDoggZ517rt9xpPK+SDGtDfjo6VWMDDKI=
+	t=1739993442; cv=none; b=bL/oeYHJYTUtWLOQQ26CZbDPLTd+PJ6VXdADDl1GkokpUbRlmu7CA4cJW1Q3U+g0FSO9Yjcaq/xkQhEdsX9lr2h+BkiflISBMevX6BWqUkKPrkFVfw3L1W2LBXGLFUJJEMr/LpxA+q/JRpRpX2t+p9F+NTrCVD1kQJ2hHN77b6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739992939; c=relaxed/simple;
-	bh=La6YpO1quzw/PLTrDv6KYWGSnd+rPhsxECccWv9nqa0=;
+	s=arc-20240116; t=1739993442; c=relaxed/simple;
+	bh=nlfURqsENwca9Br0Avr6yzA5aZroODLokKesP8xS9Xg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LqAOPv49fPT7lwCAxBluKXWSXk3z5sjbH49adVGWOjp8gUqE+B+E5qn2dtG/SR+E4XITukBVf7pCNj8bJ7U3BkSMsHCsHM3YglFSUrMhsJU4XcSvR4ZLzR5eg9Vs3kA7Ta+CC5/A+liSSTt0yPO1TQlA4cKDqnwD2xHRRO7ryj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VC0GJR/z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8EBBC4CED1;
-	Wed, 19 Feb 2025 19:22:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=G+1D7A0v1JA+lZB1aedlDTaysMTPr07krCei7Cuv0JVoRJNs5jzQByai2YIAUDkq0LHmCZtdE68sPkmemE5pw4k15MH0n0jbBMcJilXWz/DwK1J0RIYOl78vdOIYQkbzMkO+TjgyLjzPv37vz5B4Fg2mGEwlvmQATwOsSVJJIIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f6QGdFvj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4135EC4CED1;
+	Wed, 19 Feb 2025 19:30:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739992938;
-	bh=La6YpO1quzw/PLTrDv6KYWGSnd+rPhsxECccWv9nqa0=;
+	s=k20201202; t=1739993441;
+	bh=nlfURqsENwca9Br0Avr6yzA5aZroODLokKesP8xS9Xg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VC0GJR/zH6HKyhpw5vHIdKm9LjePcxjRFfYB8b2TcZtQ95FVen8g0jWPJl3JTQ7FA
-	 Ikn8we5oMtT3QPFO5Bv4omRt/830AofvaCk1t20WKvkjoiSKkY+WWaQxt49kXP630D
-	 6dSln/zLQqd9tk/jnGSdUhBWXgpege5XIJe2Gho3eBACar6mv989kLx0mog3MOGU3N
-	 Qkbs5jZLYvcMqeZlL9FVCl2//CJgN3zTFR+NyOQv9zTLu6vqDeandpdB55nMZgmMyH
-	 7zM/3dX1epcTJmzjY4m+Oz30HFNBfe/9MRxjWfpoQVfsxNboP4lavzKXasMEbv2RBG
-	 UXPwMAA62QpZw==
-Date: Wed, 19 Feb 2025 20:22:13 +0100
+	b=f6QGdFvj9rIWW2yeada2QUWeBL8IbBoH1OVXT8E5Jicua1Kd3HW6c7n2Z8q9lxeV9
+	 u3M6KoqMGlj7QxkKS8KB/nbCezg2gjhbQj1IkSGnOhrdo8NrmKGCWPFsw7R24XZzBi
+	 50F7j9pdZKrAed0pgh7tovkTklTVQv5F1XiBx7G0o66M9ihwrLgIQ4Xl6TNIN1ff7O
+	 WfubniMHc1eGVkMGmilN0WklHU2q2QBarg6i2h8/InIVRuKnONEpBb9qJO+X6CNv87
+	 DCy3BzJnasEEKpjnwPBaVQOQfkl2JFkJVsyKvatIwJEbSsPkogRd2p80wybdIrtVcD
+	 KXLCuCNtx2Txw==
+Date: Wed, 19 Feb 2025 20:30:35 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: vigneshr@ti.com, aaro.koskinen@iki.fi, khilman@baylibre.com, 
-	rogerq@kernel.org, tony@atomide.com, jmkrzyszt@gmail.com, reidt@ti.com, 
-	wsa@kernel.org, linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@kernel.org
-Subject: Re: [PATCH] i2c: omap: fix IRQ storms
-Message-ID: <c3bcusjbn23z5yd2a3xtm7swnfizkl7rb6ufhicdhn52epnjvb@5uqm3g6jcony>
-References: <20250207185435.751878-1-andreas@kemnade.info>
+To: Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: Wolfram Sang <wsa@kernel.org>, Andy Gross <agross@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Konrad Dybcio <konradybcio@kernel.org>
+Subject: Re: [PATCH 3/3] i2c: qup: Vote for interconnect bandwidth to DRAM
+Message-ID: <sc54ro4pwg5j2lqelsryx7cdw6ipcdp4gfk3ce5sxsvk3s7wzp@wup2pgdzmxtl>
+References: <20231128-i2c-qup-dvfs-v1-0-59a0e3039111@kernkonzept.com>
+ <20231128-i2c-qup-dvfs-v1-3-59a0e3039111@kernkonzept.com>
+ <5dr5ps4vb57xj2mfelgsxgoyrr3gg4ggwqggqchff6pda3ffsn@thxpg4h6kgel>
+ <Z7W1EJ7uGsaTZMRh@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,57 +63,97 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250207185435.751878-1-andreas@kemnade.info>
+In-Reply-To: <Z7W1EJ7uGsaTZMRh@linaro.org>
 
-Hi,
+Hi Stephan,
 
-On Fri, Feb 07, 2025 at 07:54:35PM +0100, Andreas Kemnade wrote:
-> On the GTA04A5 writing a reset command to the gyroscope causes IRQ
-> storms because NACK IRQs are enabled and therefore triggered but not
-> acked.
+On Wed, Feb 19, 2025 at 11:40:16AM +0100, Stephan Gerhold wrote:
+> Hi Andi,
 > 
-> Sending a reset command to the gyroscope by
-> i2cset 1 0x69 0x14 0xb6
-> with an additional debug print in the ISR (not the thread) itself
-> causes
+> On Wed, Feb 19, 2025 at 12:02:06AM +0100, Andi Shyti wrote:
+> > 
+> > sorry for the very late reply here. Just one question.
+> > 
 > 
-> [ 363.353515] i2c i2c-1: ioctl, cmd=0x720, arg=0xbe801b00
-> [ 363.359039] omap_i2c 48072000.i2c: addr: 0x0069, len: 2, flags: 0x0, stop: 1
-> [ 363.366180] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x1110)
-> [ 363.371673] omap_i2c 48072000.i2c: IRQ (ISR = 0x0010)
-> [ 363.376892] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
-> [ 363.382263] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
-> [ 363.387664] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
-> repeating till infinity
-> [...]
-> (0x2 = NACK, 0x100 = Bus free, which is not enabled)
-> Apparently no other IRQ bit gets set, so this stalls.
-> 
-> Do not ignore enabled interrupts and make sure they are acked.
-> If the NACK IRQ is not needed, it should simply not enabled, but
-> according to the above log, caring about it is necessary unless
-> the Bus free IRQ is enabled and handled. The assumption that is
-> will always come with a ARDY IRQ, which was the idea behind
-> ignoring it, proves wrong.
-> It is true for simple reads from an unused address.
-> 
-> So revert
-> commit c770657bd261 ("i2c: omap: Fix standard mode false ACK readings").
-> 
-> The offending commit was used to reduce the false detections in
-> i2cdetect. i2cdetect warns for confusing the I2C bus, so having some
-> rare false detections (I have never seen such on my systems) is the
-> lesser devil than having basically the system hanging completely.
-> 
-> No more details came to light in the corresponding email thread since
-> several months:
-> https://lore.kernel.org/linux-omap/20230426194956.689756-1-reidt@ti.com/
-> so no better fix to solve both problems can be developed right now.
+> Thanks for bringing the patch back up after such a long time. I've been
+> meaning to resend it, but never found the time to do so... :-)
 
-I need someone from TI or someone who can test to ack here.
+We have a long list of forgotten patches that belong to the far
+past. I'm trying to revive them.
 
-Can someone help?
+> > > downstream/vendor driver [1]. Due to lack of documentation about the
+> > > interconnect setup/behavior I cannot say exactly if this is right.
+> > > Unfortunately, this is not implemented very consistently downstream...
+> > 
+> > Can we have someone from Qualcomm or Linaro taking a peak here?
+> > 
+> 
+> I suppose I count as someone from Linaro nowadays. However, since this
+> driver is only used on really old platforms nowadays, I'm not sure where
+> to look or who to ask...
+> 
+> At the end, the whole bus scaling/interconnect is always somewhat
+> "imprecise". There is no clear "correct" or "wrong", since the ideal
+> bandwidth depends heavily on the actual use case that we are not aware
+> of in the driver. There is also overhead when voting for bandwidth,
+> since that can take a couple of milliseconds.
+> 
+> The most important part is that we vote for any bandwidth at all, since
+> otherwise the bus path could potentially be completely off and it would
+> get stuck. My patch implements one of the approaches that was used in
+> the downstream/vendor drivers and matches what we already have upstream
+> in the corresponding spi-qup driver. I think it's "good enough". If
+> someone ever wants to fine tune this based on actual measurements they
+> can just submit an incremental patch. Right now this series is blocking
+> adding the necessary properties in the device tree and that's not good.
+> 
+> Surprisingly this series still applies cleanly on top of linux-next. The
+> dt-bindings have review tags and there was plenty of time for someone
+> else to chime in for the driver. So maybe you can just pick them up? :D
+
+Yes, I already tested them.
+
+> > > [1]: https://git.codelinaro.org/clo/la/kernel/msm-3.10/-/commit/67174e2624ea64814231e7e1e4af83fd882302c6
+> > 
+> > ...
+> > 
+> > > @@ -1745,6 +1775,11 @@ static int qup_i2c_probe(struct platform_device *pdev)
+> > >  			goto fail_dma;
+> > >  		}
+> > >  		qup->is_dma = true;
+> > > +
+> > > +		qup->icc_path = devm_of_icc_get(&pdev->dev, NULL);
+> > > +		if (IS_ERR(qup->icc_path))
+> > > +			return dev_err_probe(&pdev->dev, PTR_ERR(qup->icc_path),
+> > > +					     "failed to get interconnect path\n");
+> > 
+> > Can we live without it if it fails?
+> > 
+> 
+> of_icc_get() returns NULL if the interconnect API is disabled, or if
+> "interconnects" is not defined in the device tree, so this is already
+> handled. If "interconnects" is enabled and defined, I think we shouldn't
+> ignore errors. Therefore, this should work as intended.
+
+yes, because qup_i2c_vote_bw() checks inside for NULL values.
+
+My idea was that:
+
+	if (IS_ERR(...)) {
+		dev_warn(...)
+		qup->icc_path = NULL;
+	}
+
+and let things work. Anyway, if you want to keep it this way,
+fine with me, I don't have a strong opinion, rather than a
+preference to keep going.
 
 Thanks,
 Andi
+
+> Let me know if I should resend the patch or if you can apply it
+> directly.
+> 
+> Thanks,
+> Stephan
 
