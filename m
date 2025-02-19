@@ -1,128 +1,250 @@
-Return-Path: <linux-i2c+bounces-9493-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9494-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3FC5A3B858
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 10:23:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46EACA3BAD6
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 10:53:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48EC63BABA5
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 09:16:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38F69188208A
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 09:53:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFBE1E835D;
-	Wed, 19 Feb 2025 09:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBD7A1C700B;
+	Wed, 19 Feb 2025 09:52:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTItAjl2"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="i9udF2Md"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C091E8329;
-	Wed, 19 Feb 2025 09:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5B513DBB1;
+	Wed, 19 Feb 2025 09:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739956328; cv=none; b=ekTjBVxtQN0n7FcTVVo7Xck//qkYJ5fel3LEDpsuXL2ZX1PamffyGjqr2yPttH/WSAOUIG7kCUvueJ2YAP1oNPia4MqxoVlidLjlP009Iq7IpNJ0HqdgURUkHubUvEhBDYroB7vJoPcwbuOAMNaaKTS9Pny1bdi/qZHNOQ7af08=
+	t=1739958775; cv=none; b=m1Fb1wXvPlgkGvPvSI9YRfwt+EDRUqqGb9gfOzwF9c3En4XSwWPsoJzDf+JPmIhizpFqHHZi7vbHkokK/7DJ/uOv9td9RL/0RDygNbhpIBSL1OYLSKWB2b4tIOZfaBjVwQ3GKh0vBp/I7QSXIT0cca9h3ANnCSk5EfD3oosdZJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739956328; c=relaxed/simple;
-	bh=1mDmGlQiTjrTM9JA4bPSMWae34JasEkJOVEndkM6ZvY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mid40fwRGob01G4FpUZKZVxjBxmnujzk033bx9DkS8MAC8COZKyQcNaKVbIN+OkLI6pVerzUd3h60zQ3HbhPe59KDIA8RIDi6H1kYflqP0uL1hgbpUmRJHXtCsmBV5lLZXv+g/Hpu3j1O6quS2rqbVbBByxFeJZBDR+xQGI+W14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NTItAjl2; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-abb90c20baeso448906666b.1;
-        Wed, 19 Feb 2025 01:12:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739956323; x=1740561123; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dBlQIQZTyl+c9YJhOesoDPaG6Lk+JATvxoUqF2ZkP5g=;
-        b=NTItAjl2TB1JZkFE5RZJHn4pbmcPMxA0pX8ybuSsSaIW4sRw16kd2zR6tgTzq3rBHu
-         wdDFdmURY4kJPLa//Ab014fOhW+ts62QB2ZFUKOCD9RiBybqI6yc2nwtj4fCn64l3NHe
-         roT9UgajHM1g+f6xnn3XqWOv9u0ix/3Qf0NUNKyX68Qfn+WDHuWHNgs6Kl7bOyX/kn9F
-         rTW16XqTtaFUFmdh8agVICIc+mWnuve11bTPDexikN1eUsDeCBzva5OZwq605o1IItya
-         uC/GlNsJR1jllrksaZo/wPXtDKVx785uHTWeP02fi3FQu7NxAwHJj18hocF0pQOkB0g2
-         UKzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739956323; x=1740561123;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dBlQIQZTyl+c9YJhOesoDPaG6Lk+JATvxoUqF2ZkP5g=;
-        b=SI4rknlM7nVG0aq84932FPPYNEmtPIS6rmMZ2rhgO82Fj6M0Q2JGVeW6GQm4r2JC9D
-         YMPTJQqLI6Ly/n7ik9Rp29S1lstFPNysx3oUNE7vNz5K/ImISlKWIakXpYcBpazJuhOP
-         cJyyB7I4iaNoYSDl7spePE0fBl0GpYA5OTNIY/PqWpNpbaac0ZziKkMmcE2vIqO+hwL9
-         LPnD3RPfcIEqmUoDZnfvjie0PWw7XiIdqQBR2yqMhAzPEoMRtQ5zWIeS4q98ykxlF3Ll
-         xRaJGplohHNBz/+9b8DL47MBM8hJ4AmH5tg+T6GomeNVRTwQk3FfuSbO67E02OxbsF+S
-         gSTA==
-X-Forwarded-Encrypted: i=1; AJvYcCUuf/cBMdcvSpKlKhVE9P1PPtiemUBozGbNhrUhUwwUbQzeLxJVQnCtndRl1n71ujxwMRbYoM+T@vger.kernel.org, AJvYcCWMnOI+MdrVleJA07jPqhhDd9Nrgh3ah1Dx8I2FUhZAo1ZhWii+PPkIY5JgjbdBd5ZbrrY8Lka0QrE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDTU2FUYrRA6gzIMi9SLQEWsZ+IyNDZmvZB21gdSaK9QIguB19
-	g4MKpRgN+WcimJda7XvD3N8T9nnOY7GksPlqkvGSe35bmNGdSBTL2BIR6fALFid84LzWDkm4Ig+
-	p0RCg6Mqa9GzfKKiNWIAQ/JLvuRc=
-X-Gm-Gg: ASbGncvGNBN9T5KeL8QJOfw3RBAY0i0o/QL9B0vxEd3ZoeOM4jSr3ZZd8pMkbie9zrn
-	I5ClGmH5lqEC5nUbjs+3xxzeY01ixecjRW3w9KjNXaP+5+K/H7wxa9FsShRuDeyvayXLlc+rU
-X-Google-Smtp-Source: AGHT+IGuIK/CQy8bOdyilmjVVAnjbdAlGWgVtHcOdZyL7b2VSZoGr3Oqwi/oJeLhkyY9/0jyPhsCU2sPtKBUq41RyoM=
-X-Received: by 2002:a17:907:7fac:b0:ab7:cc00:4d4a with SMTP id
- a640c23a62f3a-abb70d95cb3mr1810038166b.35.1739956323370; Wed, 19 Feb 2025
- 01:12:03 -0800 (PST)
+	s=arc-20240116; t=1739958775; c=relaxed/simple;
+	bh=VVmZ1t94laSDb1CDj+NkVnD18G2v8/iV64a8CkCO9Uk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WLKuIP1voFtFbBQnwu+LN0jECqBlbVN38Z3w+z/bYrO+fyYxtVTy5sapvgSdBKrJDnZF/KWXx9nUaUXcLv9C93zEb/P9KqktDDaf3JFaG2dZ/QIn9QdWgaUNvouEhL/wfnAKOXKOrZ140sbnU1VQOpiLBDIq98aFg05jb9IOaEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=i9udF2Md; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F0A8643150;
+	Wed, 19 Feb 2025 09:52:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1739958770;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LgcOqReuoYi9+3dGbbBaAaBh7Ej+UAFa0etXWozInys=;
+	b=i9udF2MdXMUwtO4mfxc6EUU1lVvvQltZc+A3e6Rh55jEG0BMVnERamffwMuYDkM3/fbkPZ
+	dt38YezlaK6LtYHoYDR9hZ2ZId0VmkCV/bLETIUXsPq71eZYMt96CAlDu6wy7F0ObLz/gd
+	gMYEDpGZ+w+4DB378O4wl5wcdLqly/wOSwqP5t15IA42nQPzUooqva1Fh0jaoOv7zBdJnn
+	hwbgcXHRDgr3/DF0wUHoHjsddcWCHTuHVJAAqvKLtBBvGoKL6dKP1MDuBLboSPNISDWewR
+	BsfQZoVp1GjHZI8Zmb9uLB8T38Rd7CllXkM5ug40VamEAMBPhGJfN1UyceTBlQ==
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: Cosmin Tanislav <demonsingur@gmail.com>
+Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Cosmin Tanislav <demonsingur@gmail.com>
+Subject: Re: [PATCH 3/3] i2c: atr: add passthrough flag
+Date: Wed, 19 Feb 2025 10:52:44 +0100
+Message-ID: <4414628.ejJDZkT8p0@fw-rgant>
+In-Reply-To: <20250203121629.2027871-4-demonsingur@gmail.com>
+References:
+ <20250203121629.2027871-1-demonsingur@gmail.com>
+ <20250203121629.2027871-4-demonsingur@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250219020809.3568972-1-zhoubinbin@loongson.cn>
-In-Reply-To: <20250219020809.3568972-1-zhoubinbin@loongson.cn>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 19 Feb 2025 11:11:26 +0200
-X-Gm-Features: AWEUYZndSh3zP-0TVudcjduNMhtOO5FnyJN-FotaI3FwFJihJXCAoNLkXbk2NmE
-Message-ID: <CAHp75VdSqFhEp_Xt=qtBNDDz984N97pZmS684oS137dFi0o_pw@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: ls2x: Fix frequency division register access
-To: Binbin Zhou <zhoubinbin@loongson.cn>
-Cc: Binbin Zhou <zhoubb.aaron@gmail.com>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, linux-i2c@vger.kernel.org, 
-	Huacai Chen <chenhuacai@kernel.org>, Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, 
-	stable@vger.kernel.org, Hongliang Wang <wanghongliang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="nextPart2229005.Mh6RI2rZIc";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeifeelfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfgggtsehgtderredttdejnecuhfhrohhmpeftohhmrghinhcuifgrnhhtohhishcuoehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhephfdvleekvefgieejtdduieehfeffjefhleegudeuhfelteduiedukedtieehlefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehffidqrhhgrghnthdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtohepuggvmhhonhhsihhnghhurhesghhmrghilhdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghinhgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopeifshgrodhrvghnvghsrghssehsr
+ ghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-Sasl: romain.gantois@bootlin.com
+
+--nextPart2229005.Mh6RI2rZIc
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: Cosmin Tanislav <demonsingur@gmail.com>
+Subject: Re: [PATCH 3/3] i2c: atr: add passthrough flag
+Date: Wed, 19 Feb 2025 10:52:44 +0100
+Message-ID: <4414628.ejJDZkT8p0@fw-rgant>
+In-Reply-To: <20250203121629.2027871-4-demonsingur@gmail.com>
+MIME-Version: 1.0
 
-On Wed, Feb 19, 2025 at 4:08=E2=80=AFAM Binbin Zhou <zhoubinbin@loongson.cn=
-> wrote:
->
-> According to the chip manual, the I2C register access type of
-> Loongson-2K2000/LS7A is "B", so we can only access registers in byte
-> form (readb/writeb).
+Hello Cosmin,
 
-readb()/writeb()
+On lundi 3 f=C3=A9vrier 2025 13:15:17 heure normale d=E2=80=99Europe centra=
+le Cosmin=20
+Tanislav wrote:
+> Some I2C ATRs can have other I2C ATRs as children. The I2C messages of
+> the child ATRs need to be forwarded as-is since the parent I2C ATR can
+> only do address remapping for the direct children.
+>=20
+> In the case of GMSL, the deserializer I2C ATR actually doesn't have I2C
+> address remapping hardware capabilities, but it is able to select which
+> GMSL link to talk to, allowing it to change the address of the
+> serializer.
+>=20
+> The child ATRs need to have their alias pools defined in such a way to
+> prevent overlapping addresses between them, but there's no way around
+> this without orchestration between multiple ATR instances.
+>=20
+> To allow for this use-case, add a flag that allows unmapped addresses
+> to be passed through, since they are already remapped by the child ATRs,
+> and disables dynamic remapping, since devices that need passthrough
+> messages to be forwarded as-is, can only handle remapping for their
+> direct children.
+>=20
+> There's no case where a non-remapped address will hit the parent ATR.
 
->
-> Although Loongson-2K0500/Loongson-2K1000 do not have similar
-> constraints, register accesses in byte form also behave correctly.
->
-> Also, in hardware, the frequency division registers are defined as two
-> separate registers (high 8-bit and low 8-bit), so we just access them
-> directly as bytes.
+I'm having trouble understanding this, because it seems like there's a=20
+contradiction with your previous statement:
 
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
+> add a flag that allows unmapped addresses to be passed through
 
-...
+Unmapped addresses are "non-remapped" by definition right? And they can hit=
+ the=20
+parent ATR since we're adding a flag to allow them to pass through...
 
-> +       /*
-> +        * According to the chip manual, we can only access the registers=
- as bytes,
-> +        * otherwise the high bits will be truncated.
-> +        * So set the I2C frequency with a sequential writeb instead of w=
-ritew.
+>=20
+> Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
+> ---
+>  drivers/i2c/i2c-atr.c   | 26 ++++++++++++++++++--------
+>  include/linux/i2c-atr.h | 20 +++++++++++++++++---
+>  2 files changed, 35 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+> index 13f7e07fd8e87..5f0e8f1cf69f7 100644
+> --- a/drivers/i2c/i2c-atr.c
+> +++ b/drivers/i2c/i2c-atr.c
+> @@ -106,6 +106,7 @@ struct i2c_atr_chan {
+>   * @lock:      Lock for the I2C bus segment (see &struct
+> i2c_lock_operations) * @lock_key:  Lock key for @lock
+>   * @max_adapters: Maximum number of adapters this I2C ATR can have
+> + * @flags:     Flags for ATR
+>   * @alias_pool: Optional common pool of available client aliases
+>   * @i2c_nb:    Notifier for remote client add & del events
+>   * @adapter:   Array of adapters
+> @@ -122,6 +123,7 @@ struct i2c_atr {
+>  	struct mutex lock;
+>  	struct lock_class_key lock_key;
+>  	int max_adapters;
+> +	u32 flags;
+>=20
+>  	struct i2c_atr_alias_pool *alias_pool;
+>=20
+> @@ -241,7 +243,7 @@ static void i2c_atr_release_alias(struct
+> i2c_atr_alias_pool *alias_pool, u16 ali
+>=20
+>  /* Must be called with alias_pairs_lock held */
+>  static struct i2c_atr_alias_pair *
+> -i2c_atr_find_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr)
+> +i2c_atr_find_mapping_by_addr(struct i2c_atr_chan *chan, u16 addr, bool
+> new_addr) {
 
-writeb()
-writew()
+IMO the "new_addr" naming is quite confusing.
 
-> +        */
+After this patch is applied, the expected behavior is:
 
---=20
-With Best Regards,
-Andy Shevchenko
+i2c_atr_find_mapping_by_addr() called from i2c_atr_attach_addr():
+  1. find existing mapping, return it
+  2. OR find free alias, create mapping and return it
+  3. OR remap used alias, return mapping
+  4. OR fail
+
+i2c_atr_find_mapping_by_addr(), called from anywhere else:
+   1. find existing mapping, return it
+   2. OR find free alias, create mapping and return it
+   3. OR if the ATR has PASSTHROUGH set, fail
+   4. OR remap used alias, return mapping
+   5. OR fail
+
+To me, the proposed code doesn't make it immediately obvious why the=20
+PASSTHROUGH flag should have anything to do with not attempting alias=20
+remapping.
+
+Moreover, if we truly want to ignore *all* unmapped addresses, then shouldn=
+'t=20
+we also give up on step 2.? (the one that tries to map a free alias to the=
+=20
+requested address).
+
+In that case, I think something like this would be clearer:
+
+in  i2c_atr_smbus_xfer() and i2c_atr_map_msgs():
+
+```
+#never attempts to create a new mapping, only to find an existing one
+c2a =3D i2c_atr_find_mapping_by_addr(chan, msgs[i].addr);
+if (!c2a) {
+	if (PASSTHROUGH)
+		# Since passthrough is set, we ignore unmapped addresses
+		goto success or whatever;
+
+	c2a =3D i2c_atr_create_mapping(chan, msgs[i].addr);
+	if (!c2a)
+		fail;
+}
+```
+
+in i2c_atr_attach_addr():
+
+```
+c2a =3D i2c_atr_find_mapping_by_addr(chan, msgs[i].addr);
+if (!c2a) {
+	c2a =3D i2c_atr_create_mapping(chan, msgs[i].addr);
+	if (!c2a)
+		fail;
+}
+```
+
+So what I'm suggesting is to remove all c2a mapping creation logic from
+find_mapping_by_addr() entirely, and to move it to a separate function.
+
+Please let me know what you think.
+
+Thanks,
+
+=2D-=20
+Romain Gantois, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--nextPart2229005.Mh6RI2rZIc
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAme1qewACgkQ3R9U/FLj
+2870hxAAmaH5ckqAaNlmDNpqprewOBmKb/d7BWmT3ND1a1xNo0QyZBtVPQeHFCu2
+iYUpgsfN2U7klc5aUi6FUXLxHR4gUhH6pjFk/CDTG1yPgJvit1Dg42PiUM3r7gmb
+uEA5U9tCkK6ku+ZD+2dvAz7+S6q0J6WA2aD4Kjs4hLzXqunw1WkhZ6Zx4PxI2eiV
+EOw62FobCosbkwWz7Pa3q5+ozsu/WmoUeP0MkVdZOaWDzvKYdxAag5aJZTYrGNQa
+82+6a0tSSoa1gpk0wQC5wFgtj7p8vpKAG1yofhIJDYik9oILfsaTTah6ZtDSN6qE
+ym3qKTZe0jrKrKnbdcDyyieY/jLMQyaDuP1iqX3L/nkUVvxuNwUTTaUSQC0wS5oa
+A279awso+p1lzgX46WtcgRSUrYjG6M9sP6INpRSg5XF5stNoySnvvelkp4xCMMx0
+cnUnnNb32bkPz4hx0Oy++qniHBOJ+HzfHE2GqvJrsiNUKzguO+SCXK86kGEh2nwA
+xmkRNm2U7+m+zRZvzbN/MLgBwbc2mk5bWWXkc0odO9FQuH0eZqN2hJ00/Eu8jZLG
+xieG8HiPOLbB8KGDAsya6xsQFhjW7LIo78zmrXmH6VCcTzJg5BVp3z4+lZ00kZ7z
+hevpxBZCXXgKaEHUspN9eykexwBCjegMzrIF0VKXAeQ9b6LUiPU=
+=mEhX
+-----END PGP SIGNATURE-----
+
+--nextPart2229005.Mh6RI2rZIc--
+
+
+
 
