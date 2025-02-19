@@ -1,157 +1,171 @@
-Return-Path: <linux-i2c+bounces-9491-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9492-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7C9EA3AF49
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 03:08:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D633DA3B1E6
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 08:00:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD9A218971F8
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 02:08:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B38916C0DF
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Feb 2025 07:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 231A81805A;
-	Wed, 19 Feb 2025 02:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3E51C07EC;
+	Wed, 19 Feb 2025 07:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CyL8xfXL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98EE076026;
-	Wed, 19 Feb 2025 02:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BE21BEF83
+	for <linux-i2c@vger.kernel.org>; Wed, 19 Feb 2025 07:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739930910; cv=none; b=Qbuuw/JPZeQZSY1wJYto8hiRgnyDCGXTKJzWMG0/k9oHtjzrR2YfiZRPViCyDXmDqIEZhjxrXU37yfh0NB5NqXIIhNQ8kixsFIPIo1ldomintpPKJyqEnLHUY0xP3koR/g++oa3znmVcB0+7GPyjKgtwuUIvARFRqlVXYWTzmac=
+	t=1739948432; cv=none; b=o5l4fsTcHZkcuwzr4YBc9dr55WgzXZWi0D9NW1QkzC+QZjq9sPF+YxpZjlBiXDJSoecAEO1gyu5+9UbVbrni3GLnKyz56OJnvA3/wdIga4XjSIDr4+wSd8qrCBb0AO8/DTKcpbvBkkbtTppVL62Mv6wjqZFC40gaWVZyb0q6HTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739930910; c=relaxed/simple;
-	bh=/x7AmjUEqZXu9ZDIShLi0SRmNBOfLhwNxbb5VincLTs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rEeZ67JqEMoEvzdV/tpKG5nZoHS4dCTdaIissa1XZNucHo4gY12PLHCo+lzlxafrfYqI9cW6Mlugel4ml0/HME0xtX0qQYHwDU/Qs3OfS6mn14leGZ+h2tu0BPepa4VmVBNVoGK3z8Zkimq/zpvQghXwQrLlEJZf7Z37yxt2FNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [223.64.68.156])
-	by gateway (Coremail) with SMTP id _____8Ax3eIYPbVn0nR6AA--.41181S3;
-	Wed, 19 Feb 2025 10:08:24 +0800 (CST)
-Received: from localhost.localdomain (unknown [223.64.68.156])
-	by front1 (Coremail) with SMTP id qMiowMAxj8UUPbVnhFUbAA--.38806S2;
-	Wed, 19 Feb 2025 10:08:22 +0800 (CST)
-From: Binbin Zhou <zhoubinbin@loongson.cn>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	linux-i2c@vger.kernel.org
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	loongarch@lists.linux.dev,
-	Binbin Zhou <zhoubinbin@loongson.cn>,
-	stable@vger.kernel.org,
-	Hongliang Wang <wanghongliang@loongson.cn>
-Subject: [PATCH v2] i2c: ls2x: Fix frequency division register access
-Date: Wed, 19 Feb 2025 10:08:09 +0800
-Message-ID: <20250219020809.3568972-1-zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1739948432; c=relaxed/simple;
+	bh=uL9V65RrvzaO8QKxlRnOlh5JtJT0OS+u+SyoZslI2Y8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cdM+36VgKCceI9z5tmLNlO8C4D0okQ5y8u2fcq/VQDGj1el15Ux+CNRRvorD3POe9UOr5w/yxyJwsVbkLZWXtbx3x/bxtl68MWrMc8itJqNBdgkdKc2dWnzmIh5MIhWNpUj5GMzKg/ZulNpRfaBt2dlDla5AQ0bVbr30LqqQdvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CyL8xfXL; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43937d315abso8435675e9.2
+        for <linux-i2c@vger.kernel.org>; Tue, 18 Feb 2025 23:00:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739948428; x=1740553228; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=sXqpspg2oyFM2qJRChCX03UIqMSUFVh2w86v8nO3Jzc=;
+        b=CyL8xfXLPnlMpgO+TWZa+ECoOuMbCRbiEkmXNLX1EyalG1MqWNYrqG5pRGsuXHYa2S
+         wzz+8HkN8uQZTjeUXlRTbUfasi6xwFGP41x3uwLOaOFeZBe0UfpMlkmI2geaLVpWqEb4
+         TbCnZTBWky6faPUGKyVy/q3xfqeSWGoXoxim43GBixK6LZySp1mAATIT+5JWvbA+/urC
+         ofJIpMDtg1NkWVoAYjYIzqtON14niDoFjctgIvPUafgV2Gz/vwxDy1yf7h1BDxZoJSlB
+         vhxeJnHO6Vixv9tGOL0P1xcPlr6TP9/TdzTE7hdnxpr57icJdQuU20lL5ErAVr19B0dc
+         3msQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739948428; x=1740553228;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sXqpspg2oyFM2qJRChCX03UIqMSUFVh2w86v8nO3Jzc=;
+        b=LpvB1yjMq7CqFVlAaLD7tgiZvjYq2m4rrTwgj/vnS/gJXVu80FrK+VZdioJSyE3zoU
+         fHzLaPlAoEGrQalY2aSVRcVWXAalnUdUlpuoJNfW3AU+EDr4ns70hUpjX/zWD8FjyvlY
+         +UkSlHWz5qEaJ64f25hWCCLRpyT9ONE0bBYJIskNRXVe8KNTiyIKOxADPmCduIPO7wEa
+         fX7hkd4fMxvyd/LyYh6S2s0atnOrl57VE8wWhLBpAGEMTvgEtDoyGc2fepg5iP94m0TW
+         TXOuDp9l5gDlovstpbjgWDNpM0uTr4VHWfQM1LE9dMMQ52EjlDcjh1efcfH3e0II8nIq
+         Q0wg==
+X-Forwarded-Encrypted: i=1; AJvYcCV9swDkrw0xKvvY+Goq75xSPOvSqyWiuO7GQEUQadP2h3RI034PK7xXnFJi1rUvJE92I7Fk8t591Fw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygDeHqVEgXPWpkSlJCYK/ZS/wOCG53n7HNsg8HT150xh50r6SG
+	ECkjQx4iC9F3yAZ1Y2GhTrwGPDGRME3XcXaSTzxB3x3hwG1cKSIQh/QrKpRmH0Y=
+X-Gm-Gg: ASbGnctLpeeYeTIBYsxZpI9pbD/z+UKOfEMipJ1dj09pRcmr4N50HwCfzFL62cRCGEz
+	StVnsPApMZNwL/5tyeE/Jo7KYT0c09s6IcTE0zF7VJ5Q6f5lU3tstppkxwl+Skwe2UMQQYRGejZ
+	MhzkPqMcgQkr+K4QMS8vCWV5wnJ94uNl2mqCPeRXiBKXpOqzCQ2IfqpUbShTn4RYwTGFxfvQXJV
+	CeOOG4pjMF87b9vC2wh4myQ+lQf4Juie6HnLy/VY7ScHrHHg5kefzStMLiff/BjSpeb+j6fsWck
+	xm1S6gh8CudeYBtoihLYmAR/3N0hmLbuEzI=
+X-Google-Smtp-Source: AGHT+IE47nw5xYxzEaB3Enx4NCsdF8Nyu4IfJL37yvgW3Oid/E4yN/fP4q4eRoW55FrgGJ3+PEkGCQ==
+X-Received: by 2002:a05:600c:354b:b0:439:9ec5:dfa with SMTP id 5b1f17b1804b1-4399ec50ea5mr733495e9.7.1739948428448;
+        Tue, 18 Feb 2025 23:00:28 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.206.225])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4398e84efb9sm54460205e9.10.2025.02.18.23.00.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Feb 2025 23:00:27 -0800 (PST)
+Message-ID: <dac33c2d-3bba-4ea6-8a20-12ff9b6ebbb3@linaro.org>
+Date: Wed, 19 Feb 2025 08:00:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMAxj8UUPbVnhFUbAA--.38806S2
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxCr18Zw1kZw15ArW8JryxZwc_yoW5Cr43p3
-	W7Cr95Gr4qyF4Iqws8Aa43uFy3X393JFW09F4jvwsxu3Zxur1vvay3JFs0yr1vgFWkWay8
-	X3yDCrW5uFWYyrcCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
-	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwI
-	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k2
-	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-	AFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8xuctUUUUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] i2c: qup: Vote for interconnect bandwidth to DRAM
+To: Andi Shyti <andi.shyti@kernel.org>,
+ Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc: Wolfram Sang <wsa@kernel.org>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231128-i2c-qup-dvfs-v1-0-59a0e3039111@kernkonzept.com>
+ <20231128-i2c-qup-dvfs-v1-3-59a0e3039111@kernkonzept.com>
+ <5dr5ps4vb57xj2mfelgsxgoyrr3gg4ggwqggqchff6pda3ffsn@thxpg4h6kgel>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <5dr5ps4vb57xj2mfelgsxgoyrr3gg4ggwqggqchff6pda3ffsn@thxpg4h6kgel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-According to the chip manual, the I2C register access type of
-Loongson-2K2000/LS7A is "B", so we can only access registers in byte
-form (readb/writeb).
+On 19/02/2025 00:02, Andi Shyti wrote:
+> Hi Stephen,
+> 
+> sorry for the very late reply here. Just one question.
+> 
+> ...
+> 
+>> downstream/vendor driver [1]. Due to lack of documentation about the
+>> interconnect setup/behavior I cannot say exactly if this is right.
+>> Unfortunately, this is not implemented very consistently downstream...
+> 
+> Can we have someone from Qualcomm or Linaro taking a peak here?
 
-Although Loongson-2K0500/Loongson-2K1000 do not have similar
-constraints, register accesses in byte form also behave correctly.
+You replied to some old email, not in my inbox anymore, but your quote
+lacks standard quote-template, like:
 
-Also, in hardware, the frequency division registers are defined as two
-separate registers (high 8-bit and low 8-bit), so we just access them
-directly as bytes.
+	On 19/02/2025 00:02, Andi Shyti wrote:
 
-Cc: stable@vger.kernel.org
-Fixes: 015e61f0bffd ("i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller")
-Co-developed-by: Hongliang Wang <wanghongliang@loongson.cn>
-Signed-off-by: Hongliang Wang <wanghongliang@loongson.cn>
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
----
-V2:
-- Add a comment to prevent from changing that back to 16-bit write.
+so I really don't know when was it sent. For sure more than a month ago,
+maybe more? This has to be resent if you want anything done here.
 
-Link to V1:
-https://lore.kernel.org/all/20250218111133.3058590-1-zhoubinbin@loongson.cn/
-
- drivers/i2c/busses/i2c-ls2x.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-ls2x.c b/drivers/i2c/busses/i2c-ls2x.c
-index 8821cac3897b..61377693a4d6 100644
---- a/drivers/i2c/busses/i2c-ls2x.c
-+++ b/drivers/i2c/busses/i2c-ls2x.c
-@@ -10,6 +10,7 @@
-  * Rewritten for mainline by Binbin Zhou <zhoubinbin@loongson.cn>
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/bits.h>
- #include <linux/completion.h>
- #include <linux/device.h>
-@@ -26,7 +27,8 @@
- #include <linux/units.h>
- 
- /* I2C Registers */
--#define I2C_LS2X_PRER		0x0 /* Freq Division Register(16 bits) */
-+#define I2C_LS2X_PRER_LO	0x0 /* Freq Division Low Byte Register */
-+#define I2C_LS2X_PRER_HI	0x1 /* Freq Division High Byte Register */
- #define I2C_LS2X_CTR		0x2 /* Control Register */
- #define I2C_LS2X_TXR		0x3 /* Transport Data Register */
- #define I2C_LS2X_RXR		0x3 /* Receive Data Register */
-@@ -93,6 +95,7 @@ static irqreturn_t ls2x_i2c_isr(int this_irq, void *dev_id)
-  */
- static void ls2x_i2c_adjust_bus_speed(struct ls2x_i2c_priv *priv)
- {
-+	u16 val;
- 	struct i2c_timings *t = &priv->i2c_t;
- 	struct device *dev = priv->adapter.dev.parent;
- 	u32 acpi_speed = i2c_acpi_find_bus_speed(dev);
-@@ -104,9 +107,14 @@ static void ls2x_i2c_adjust_bus_speed(struct ls2x_i2c_priv *priv)
- 	else
- 		t->bus_freq_hz = LS2X_I2C_FREQ_STD;
- 
--	/* Calculate and set i2c frequency. */
--	writew(LS2X_I2C_PCLK_FREQ / (5 * t->bus_freq_hz) - 1,
--	       priv->base + I2C_LS2X_PRER);
-+	/*
-+	 * According to the chip manual, we can only access the registers as bytes,
-+	 * otherwise the high bits will be truncated.
-+	 * So set the I2C frequency with a sequential writeb instead of writew.
-+	 */
-+	val = LS2X_I2C_PCLK_FREQ / (5 * t->bus_freq_hz) - 1;
-+	writeb(FIELD_GET(GENMASK(7, 0), val), priv->base + I2C_LS2X_PRER_LO);
-+	writeb(FIELD_GET(GENMASK(15, 8), val), priv->base + I2C_LS2X_PRER_HI);
- }
- 
- static void ls2x_i2c_init(struct ls2x_i2c_priv *priv)
-
-base-commit: 7e45b505e699f4c80aa8bf79b4ea2a5f5a66bb51
--- 
-2.47.1
-
+Best regards,
+Krzysztof
 
