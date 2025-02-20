@@ -1,150 +1,162 @@
-Return-Path: <linux-i2c+bounces-9508-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9507-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34E3DA3D553
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2025 10:50:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DA6BA3D55D
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2025 10:51:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D84DC7A57D2
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2025 09:49:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F51417D18A
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2025 09:48:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C733F1F03C9;
-	Thu, 20 Feb 2025 09:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0A1D1F0E5C;
+	Thu, 20 Feb 2025 09:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="hsLnC1K5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T3FUE++P"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF8B1F03DE;
-	Thu, 20 Feb 2025 09:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1C51F0E4E
+	for <linux-i2c@vger.kernel.org>; Thu, 20 Feb 2025 09:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740044991; cv=none; b=rMiATddkX6KoGRdHaWz/LLt9jVRJLtNvB03Y/DkwmmsNu5XXHTiwZUOrq+br2C6i3643F9jU7fFDwAN3nDZIpo+JeLxpi6lOelGt6LwjJqpCn4bUXCBw/XehoWlX+q9RIujokSX/VbJwh/IbMEEUpYTE5xKRE0s/Iu4UPvgtG7U=
+	t=1740044879; cv=none; b=oXYJOn2Wb1LfZG62xE11uoUOzl27JICqTSWEURDN7yoA91AMK7QksoLdX4ZHkui7HOuVG7R8p6kDopj/KI9w4l7Ol7pMvo5epM/0YI+aZ5Z4kzBD8vywrkSvCWW10aQLhK1gIQDtjQty/Plakqe5SnKK1wjNNSDaupLJxjaQehY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740044991; c=relaxed/simple;
-	bh=ql5dyUwzsmgYnivLcSbAiC+k4nEzrGO6ammvLo/uFNs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FQmpLf4AFGJC4SnK/57Pljb2BvMwBW+1DaCKtxg8norP6dKDjyZ2vvsRo1kDSPCQFHfcAd88nnGzkfksLMXldOiK5zmYys0lao3WxamTqJaXaRIWhkQL+4Pjnyg5QDubLFPuzkkgemDpUdBODNCOYrCulXAqaJX7aWM+yb0uGpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=hsLnC1K5; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ql5dyUwzsmgYnivLcSbAiC+k4nEzrGO6ammvLo/uFNs=; b=hsLnC1K5q78HwAijmfQrsz7sQy
-	98Kv/yILHk2lR8N1mro4X2N0PGTSjyWk1iFZ9yFWhqMmZBUqucdWMoMeqGIDoMZF6LhrVH4LWqCUc
-	DLJyWEsYXDwb43jgAzD+r9kE6gJebd0N4MMHcmbh30jbpYA1eAj+cQ17EjQDQHcf8oAhya0zyk42j
-	pzbtrno64PTIqK477bve9Nx9ZfTxRswAdFH87xiv8gURfw5NozPYlYL5JwSCAalSCGQmuY/ulVewT
-	7dTtFaUZ9ApmmHGJiKdr0HS+RHB4Ob82Aldc8FdzOvOa+lDKqXsi25Hcd+o2sBuJNjtTcFmTS0Dr8
-	LLzNM6Og==;
-Date: Thu, 20 Feb 2025 10:08:52 +0100
-From: Andreas Kemnade <andreas@kemnade.info>
+	s=arc-20240116; t=1740044879; c=relaxed/simple;
+	bh=IWsg9d6lbEashhnUPHSkRjmEXhpeKPSMS9vOhHCIlfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mb4YFA6kx0CYshfc0qddU4qW+5SBSKniGuruVWzphkJqVDxwLBnOF2pdi911SKTOHiALLt9hYAD/lq2GgMX6LsRkik2FrLA+Ti2qHnHA0eODu1LE6JcIoT88dyyQGZawch31JJgCLrMI0OmDkBiVc9e7j3Ch5/0mn4yZJRE7dyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=T3FUE++P; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-38f378498c9so611928f8f.1
+        for <linux-i2c@vger.kernel.org>; Thu, 20 Feb 2025 01:47:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740044875; x=1740649675; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3C+kognpjmHLZgIVXwXKpXpKvfpiYLWcBqUjAjWp7Tc=;
+        b=T3FUE++PN0U3+a3SEBSaJHD8QqhO+UgkgQYM8dZRMXZTGqpAYZyJgQT0Q1+6jGr07H
+         H/iUU00igxlY5xiwrjsc19xEVFpDgGInfAqueY4x3/u4hGxRg3JATpGpYuMbtOAnuilk
+         MXfFw17oXJIEnn2s+1bTZOg920iciE+LRztDeurB7uIsV1j3UQQFZ3O4+0jWkcyvf1ca
+         82mvTdeOWU62CIiq8nCmKCtRc/Hsg/Q+wuS7wV2OIJiyuee0tC0WsLCdj1zUQgiTbC4u
+         qHmGahno5mqJsr+fY/iMRbFD/Vl1pJ8HWZfCVueAYZw1spkCPghqbvnjm3snlyEnP747
+         b1kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740044875; x=1740649675;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3C+kognpjmHLZgIVXwXKpXpKvfpiYLWcBqUjAjWp7Tc=;
+        b=cuqbyIbNGIeaQmdYdrGApxBN9tDfhxohFUwAvjQqB7hFL5H5iO8R6QhdtJmo10UjJU
+         2aXsmUhqaVB7O0xJZd/NXSdc1agvj70hFcEtjrutMV38hf/n8Pp8FQvRnLkGVPGdkQVq
+         wg8HUbuuWKa2JTYbQG0rP+lwsMwLAZLa4S20oxK6LU8IaR2vOrFKbIHE4pwxD28Jz+db
+         Wjm68sXND/+KbZdKs7hlMOZM0j61c8imQZPz2YOyxezxU9g1i8LwNvEWKr1+SXASxJrp
+         HynJ0J09VtDMxiNMfVnaOYAGPXpWeoJlwcg9TTID0cTPpNmBPH9AX3UZT1BLYB2x9ZiK
+         OeRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXniOdZCorWWgzAK57z/sJebF0Qz0bNSfiedefw769Wm9uwDhhdagTQ/C9QiN2KsbpK2o65wBqP88U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyawRZZJWcTm98msrnTMegJbbeX4N3n4g5hW4HL9KbzZdKnaqs9
+	+TRBcia3wQDOtP1x9sS/HxoqMQc0Jf6SDgVMY1ZWV5IOHh7nYwST1FpQfvy35Lo=
+X-Gm-Gg: ASbGncsGriskhRwzE+87Wgrlfo3qkmmHG+owltb65H008s0zdruO2/2sie/O+jEFZJr
+	/zmhAHIdTwg5DxwfTz86i4hm1AsW65//+w/Y0I9dNiWcA5izsM6dtVdVJLgwdEBGZ+9kUh9+G3I
+	fnokVnaDpvVna3TXsMzUIy+qW9g7xQHHeVotEYIVblmBDPbqim4UrVvs1Fl7QngLeG81XBvJgm7
+	Lc35Xx4+hWcf79CNyjNW9aQVOUjiTgeYjBzK45SgvI7mmhMCNJs52iyRqJWVOplztIcEb8HTAmR
+	bdypC7y9xnpbn8uf7bt+/6vw+eY=
+X-Google-Smtp-Source: AGHT+IEsCez3GPLSZunwwFDyUVqq7Wkm5lBgpW3JvRE36iu83J5JlqvN9UXFhpA6HMjqTat9XWSXuQ==
+X-Received: by 2002:adf:f08c:0:b0:38f:30c7:eae4 with SMTP id ffacd0b85a97d-38f33f56507mr18120522f8f.52.1740044875163;
+        Thu, 20 Feb 2025 01:47:55 -0800 (PST)
+Received: from linaro.org ([2a02:2454:ff21:ef30:b30c:3d94:4d4a:a6eb])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f561bee3esm5514525f8f.21.2025.02.20.01.47.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Feb 2025 01:47:54 -0800 (PST)
+Date: Thu, 20 Feb 2025 10:47:49 +0100
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
 To: Andi Shyti <andi.shyti@kernel.org>
-Cc: vigneshr@ti.com, aaro.koskinen@iki.fi, khilman@baylibre.com,
- rogerq@kernel.org, tony@atomide.com, jmkrzyszt@gmail.com, reidt@ti.com,
- wsa@kernel.org, linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@kernel.org
-Subject: Re: [PATCH] i2c: omap: fix IRQ storms
-Message-ID: <20250220100745.05c0eff8@akair>
-In-Reply-To: <c3bcusjbn23z5yd2a3xtm7swnfizkl7rb6ufhicdhn52epnjvb@5uqm3g6jcony>
-References: <20250207185435.751878-1-andreas@kemnade.info>
-	<c3bcusjbn23z5yd2a3xtm7swnfizkl7rb6ufhicdhn52epnjvb@5uqm3g6jcony>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+Cc: Wolfram Sang <wsa@kernel.org>, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konradybcio@kernel.org>
+Subject: Re: [PATCH 3/3] i2c: qup: Vote for interconnect bandwidth to DRAM
+Message-ID: <Z7b6ReQdDtAUn5GP@linaro.org>
+References: <20231128-i2c-qup-dvfs-v1-0-59a0e3039111@kernkonzept.com>
+ <20231128-i2c-qup-dvfs-v1-3-59a0e3039111@kernkonzept.com>
+ <5dr5ps4vb57xj2mfelgsxgoyrr3gg4ggwqggqchff6pda3ffsn@thxpg4h6kgel>
+ <Z7W1EJ7uGsaTZMRh@linaro.org>
+ <sc54ro4pwg5j2lqelsryx7cdw6ipcdp4gfk3ce5sxsvk3s7wzp@wup2pgdzmxtl>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pGvym2.eb.LfB7wXpsrzdqG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <sc54ro4pwg5j2lqelsryx7cdw6ipcdp4gfk3ce5sxsvk3s7wzp@wup2pgdzmxtl>
 
---Sig_/pGvym2.eb.LfB7wXpsrzdqG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 19, 2025 at 08:30:35PM +0100, Andi Shyti wrote:
+> On Wed, Feb 19, 2025 at 11:40:16AM +0100, Stephan Gerhold wrote:
+> > On Wed, Feb 19, 2025 at 12:02:06AM +0100, Andi Shyti wrote:
+> > > 
+> > > sorry for the very late reply here. Just one question.
+> > > 
+> > 
+> > Thanks for bringing the patch back up after such a long time. I've been
+> > meaning to resend it, but never found the time to do so... :-)
+> 
+> We have a long list of forgotten patches that belong to the far
+> past. I'm trying to revive them.
+> 
 
-Am Wed, 19 Feb 2025 20:22:13 +0100
-schrieb Andi Shyti <andi.shyti@kernel.org>:
+Thanks, this is much appreciated!
 
-> Hi,
->=20
-> On Fri, Feb 07, 2025 at 07:54:35PM +0100, Andreas Kemnade wrote:
-> > On the GTA04A5 writing a reset command to the gyroscope causes IRQ
-> > storms because NACK IRQs are enabled and therefore triggered but not
-> > acked.
-> >=20
-> > Sending a reset command to the gyroscope by
-> > i2cset 1 0x69 0x14 0xb6
-> > with an additional debug print in the ISR (not the thread) itself
-> > causes
-> >=20
-> > [ 363.353515] i2c i2c-1: ioctl, cmd=3D0x720, arg=3D0xbe801b00
-> > [ 363.359039] omap_i2c 48072000.i2c: addr: 0x0069, len: 2, flags: 0x0, =
-stop: 1
-> > [ 363.366180] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x1110)
-> > [ 363.371673] omap_i2c 48072000.i2c: IRQ (ISR =3D 0x0010)
-> > [ 363.376892] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x0102)
-> > [ 363.382263] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x0102)
-> > [ 363.387664] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x0102)
-> > repeating till infinity
-> > [...]
-> > (0x2 =3D NACK, 0x100 =3D Bus free, which is not enabled)
-> > Apparently no other IRQ bit gets set, so this stalls.
-> >=20
-> > Do not ignore enabled interrupts and make sure they are acked.
-> > If the NACK IRQ is not needed, it should simply not enabled, but
-> > according to the above log, caring about it is necessary unless
-> > the Bus free IRQ is enabled and handled. The assumption that is
-> > will always come with a ARDY IRQ, which was the idea behind
-> > ignoring it, proves wrong.
-> > It is true for simple reads from an unused address.
-> >=20
-> > So revert
-> > commit c770657bd261 ("i2c: omap: Fix standard mode false ACK readings").
-> >=20
-> > The offending commit was used to reduce the false detections in
-> > i2cdetect. i2cdetect warns for confusing the I2C bus, so having some
-> > rare false detections (I have never seen such on my systems) is the
-> > lesser devil than having basically the system hanging completely.
-> >=20
-> > No more details came to light in the corresponding email thread since
-> > several months:
-> > https://lore.kernel.org/linux-omap/20230426194956.689756-1-reidt@ti.com/
-> > so no better fix to solve both problems can be developed right now. =20
->=20
-> I need someone from TI or someone who can test to ack here.
->=20
-> Can someone help?
->
-The original (IMHO minor) problem which should be fixed by c770657bd261
-is hard to test, I have never seen that on any system (and as a
-platform maintainer have a bunch of them) I have access to.
-There is not much description anywhere about the system in which the
-original system occured, and no reaction since several months from the
-author, so I do not see anything which can be done.
-Maybe it was just faulty hardware.
+> [...]
+> > > > @@ -1745,6 +1775,11 @@ static int qup_i2c_probe(struct platform_device *pdev)
+> > > >  			goto fail_dma;
+> > > >  		}
+> > > >  		qup->is_dma = true;
+> > > > +
+> > > > +		qup->icc_path = devm_of_icc_get(&pdev->dev, NULL);
+> > > > +		if (IS_ERR(qup->icc_path))
+> > > > +			return dev_err_probe(&pdev->dev, PTR_ERR(qup->icc_path),
+> > > > +					     "failed to get interconnect path\n");
+> > > 
+> > > Can we live without it if it fails?
+> > > 
+> > 
+> > of_icc_get() returns NULL if the interconnect API is disabled, or if
+> > "interconnects" is not defined in the device tree, so this is already
+> > handled. If "interconnects" is enabled and defined, I think we shouldn't
+> > ignore errors. Therefore, this should work as intended.
+> 
+> yes, because qup_i2c_vote_bw() checks inside for NULL values.
+> 
+> My idea was that:
+> 
+> 	if (IS_ERR(...)) {
+> 		dev_warn(...)
+> 		qup->icc_path = NULL;
+> 	}
+> 
+> and let things work. Anyway, if you want to keep it this way,
+> fine with me, I don't have a strong opinion, rather than a
+> preference to keep going.
 
-As said in the commit message, reverting it should be the lesser devil.
-And that state was tested for many years.
+I would prefer to keep it the way it is. It's okay to omit the
+"interconnects" in the DT (either for old device trees, or because you
+don't define the "dmas" either). But if they are defined, we should not
+be ignoring errors. -EPROBE_DEFER definitely needs to be handled, but
+even for -EINVAL or similar it would be better to make it obvious in my
+opinion.
 
-Regards,
-Andreas
+None of the existing users should be affected, since no one defines
+"interconnects" at the moment.
 
---Sig_/pGvym2.eb.LfB7wXpsrzdqG
-Content-Type: application/pgp-signature
-Content-Description: Digitale Signatur von OpenPGP
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQT6OyBG8iTmbVOVWD8X53T0dSWG3AUCZ7bxJAAKCRAX53T0dSWG
-3CEnAQD9YPchBZTlbER2pSZE6PR2QcdauLXq2J6xDhm69AFTVAD6AiOkdkrGCCLi
-aYx1UJCBw1gI8VZjHqDZljSOEvWjCgY=
-=OlEK
------END PGP SIGNATURE-----
-
---Sig_/pGvym2.eb.LfB7wXpsrzdqG--
+Thanks,
+Stephan
 
