@@ -1,155 +1,165 @@
-Return-Path: <linux-i2c+bounces-9512-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9513-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2C53A3DA73
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2025 13:51:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91D12A3DA94
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2025 13:57:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B986B188C80B
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2025 12:51:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E65E189D24E
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Feb 2025 12:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BC4B1F584D;
-	Thu, 20 Feb 2025 12:51:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jranXwu6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30EE71F7060;
+	Thu, 20 Feb 2025 12:56:45 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C86134B0;
-	Thu, 20 Feb 2025 12:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77191F582D;
+	Thu, 20 Feb 2025 12:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740055891; cv=none; b=uNO9HbWwzuKgdSLuN9R15SkVHrQRRWs0e+UqyKP0LYfKrO8D+9tptR7y8TIkjifaTdgeamBOxmqd1L5hxK3RMmwxPQJOIUgA+wnTpbkoYT58VmUOexHyeKUqGtIksICRIIlA4b1shlZOXialHJRonggzn1g5yDjh5906lBKytjg=
+	t=1740056205; cv=none; b=kxo/bqtV79gF4d/N3wiFLBxsL4zcYJFFOsBCmeobDtqgh2IGYJXruf4Mf9ijhD6CFL6X99bpy3Cj+WH96eqV4r9Ayu6wTIRnn46IdtiQhvZWwXWgig4TpUd0gezyEpX+Zd86T4esVMNZYQOo1aDCLBIdhLu9p6dEO3vLiBaIN58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740055891; c=relaxed/simple;
-	bh=5ypdshPfI3nsJ88dlIy/T3H0ZdxophNkWHmQ430+TI8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RWOsvp8C2kkBTjJYdFj1elT3LxJ96fdAWZkySBRUINidxHIlDzm38345qsexA2UAbHCSj754om13+umELcFOhfv4aZxls740jkptgkSISOS6vhpFQOUqfBNanexmF1FOIiRFb6GrNOSuvzmIRSeGIj6PjopgRya2GlfZic6ohMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jranXwu6; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EE3BA431ED;
-	Thu, 20 Feb 2025 12:51:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740055881;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V12Yk4AP6w0Kz77u/6UMamy0PAJDxKPB8Crw7PN4YQw=;
-	b=jranXwu6S39ULr7tv8yQXi5n3abengdJa871FcQj+dJgjWtC3dajQGOATSbkHF2zEk+/vS
-	eZIFEIjX6HCRn9yISFCqVSadBjnXoNr9/uRMgrx9gKjOwZoXCpN3R73hyPWs2pSxQzEBMi
-	ZS0W4JNbwMT37dnOwmc7nG012BIJhdo07Cx2gl04xto8dIgKg4edkf6FghBbmqXKUOaNg6
-	4iR4s5h+7QlIP4SJDZ8LIa7pl6vP+S95Z8fDuabYpfzzksIoYGGQGwuCXNDQhMAoruckrH
-	ANDErgtjbtm/IlAVu7+FSa5I+dEIzg+UKBhTkgDrlBbg1hgJEfl6rFpKasQBVQ==
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Romain Gantois <romain.gantois@bootlin.com>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
- Arnd Bergmann <arnd@arndb.de>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-media@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v7 9/9] misc: add FPC202 dual port controller driver
-Date: Thu, 20 Feb 2025 13:51:13 +0100
-Message-ID: <6232449.lOV4Wx5bFT@fw-rgant>
-In-Reply-To: <Z7cbX5jX3NL4C2GR@shikoro>
-References:
- <20250204-fpc202-v7-0-78b4b8a35cf1@bootlin.com>
- <2025022038-hangnail-rehab-c145@gregkh> <Z7cbX5jX3NL4C2GR@shikoro>
+	s=arc-20240116; t=1740056205; c=relaxed/simple;
+	bh=BkS1tOTWAxF1/HJDBGmdTDApEmIcHmgFmmLZH6q9FCc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j7RHqY86QawQtLztibPLzvU+qBy/NQpySp1n5z4Jxgk5lRFBD58hM04SYRGXJ07lgcL+sk9tJSpaSoFY0w7VFE/puzWuOfGFlq43+O4BVTYjaiKN3QqqfoAJ0GCPd11/2kZaYInFQY6hDi2+YMtrYf8DSdDeYj7P/TmL+gWzBbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [223.64.68.156])
+	by gateway (Coremail) with SMTP id _____8CxieCHJrdnVk18AA--.39552S3;
+	Thu, 20 Feb 2025 20:56:39 +0800 (CST)
+Received: from localhost.localdomain (unknown [223.64.68.156])
+	by front1 (Coremail) with SMTP id qMiowMCxbsWEJrdn4lQeAA--.49261S2;
+	Thu, 20 Feb 2025 20:56:38 +0800 (CST)
+From: Binbin Zhou <zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	linux-i2c@vger.kernel.org
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	loongarch@lists.linux.dev,
+	Binbin Zhou <zhoubinbin@loongson.cn>,
+	stable@vger.kernel.org,
+	Hongliang Wang <wanghongliang@loongson.cn>
+Subject: [PATCH v3] i2c: ls2x: Fix frequency division register access
+Date: Thu, 20 Feb 2025 20:56:12 +0800
+Message-ID: <20250220125612.1910990-1-zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5091325.31r3eYUQgx";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeijedukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhggtgesghdtreertddtjeenucfhrhhomheptfhomhgrihhnucfirghnthhoihhsuceorhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeehleefieekgeetkeetieetveeitefhgfejhefggfdtfffgteefieeufeeuteegjeenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghlohepfhifqdhrghgrnhhtrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddvpdhrtghpthhtohepfihsrgdorhgvnhgvshgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhomhhirdhvr
- ghlkhgvihhnvghnsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghnughirdhshhihthhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhg
-X-GND-Sasl: romain.gantois@bootlin.com
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMCxbsWEJrdn4lQeAA--.49261S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxCr18Zw1kZw15Aw1rWrykJFc_yoW5uF1fpa
+	47C3s5Cr1UtF4Iqws8Ga47ZFyUW393Jayj9FWjv39xu3ZrCw1vqay3WFs0yr1vgFWkWa4U
+	X3yDCrWUCFWYyrcCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwI
+	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
+	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k2
+	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+	AFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UUUUU==
 
---nextPart5091325.31r3eYUQgx
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Romain Gantois <romain.gantois@bootlin.com>
-Date: Thu, 20 Feb 2025 13:51:13 +0100
-Message-ID: <6232449.lOV4Wx5bFT@fw-rgant>
-In-Reply-To: <Z7cbX5jX3NL4C2GR@shikoro>
-MIME-Version: 1.0
+According to the chip manual, the I2C register access type of
+Loongson-2K2000/LS7A is "B", so we can only access registers in byte
+form (readb()/writeb()).
 
-Hello Wolfram,
+Although Loongson-2K0500/Loongson-2K1000 do not have similar
+constraints, register accesses in byte form also behave correctly.
 
-On jeudi 20 f=C3=A9vrier 2025 13:09:03 heure normale d=E2=80=99Europe centr=
-ale Wolfram Sang=20
-wrote:
-> > as this is a i2c_driver, why isn't it in drivers/i2c/ somewhere?  Why
-> > misc?
->=20
-> Because drivers/i2c is only for I2C controllers and this is not a
-> controller. Other address translators also reside in their respective
-> subsystem, e.g. media for GMSL (de-)serializers. I don't know this chip,
-> maybe it has no "respective" subsystem and, thus, misc?
+Also, in hardware, the frequency division registers are defined as two
+separate registers (high 8-bit and low 8-bit), so we just access them
+directly as bytes.
 
-That is correct, this chip acts both as an I2C address translator and as a=
-=20
-GPIO controller with LED control and prefetch capabilities. It's meant to=20
-aggregate control signals from multiple SFP cages (or other similar port=20
-types), which have both I2C and low-speed signals.
+Cc: stable@vger.kernel.org
+Fixes: 015e61f0bffd ("i2c: ls2x: Add driver for Loongson-2K/LS7A I2C controller")
+Co-developed-by: Hongliang Wang <wanghongliang@loongson.cn>
+Signed-off-by: Hongliang Wang <wanghongliang@loongson.cn>
+Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
+---
+V3:
+- Add Reviewed-by tag from Andy, thanks;
+- In comment and commit message, readb->read()/writeb->writeb().
 
-Moreover, the chip can be configured to use an SPI master interface instead=
- of=20
-an I2C one, although this isn't supported in this driver.
+Link to V2:
+https://lore.kernel.org/all/20250219020809.3568972-1-zhoubinbin@loongson.cn/
 
-Considering all of this, I didn't think that either the I2C subsystem or th=
-e=20
-GPIO subsystem were a good fit for this component, which is why I chose the=
-=20
-misc subsystem.
+V2:
+- Add a comment to prevent from changing that back to 16-bit write.
 
-Best Regards,
+Link to V1:
+https://lore.kernel.org/all/20250218111133.3058590-1-zhoubinbin@loongson.cn/
 
-=2D-=20
-Romain Gantois, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ drivers/i2c/busses/i2c-ls2x.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
---nextPart5091325.31r3eYUQgx
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+diff --git a/drivers/i2c/busses/i2c-ls2x.c b/drivers/i2c/busses/i2c-ls2x.c
+index 8821cac3897b..b475dd27b7af 100644
+--- a/drivers/i2c/busses/i2c-ls2x.c
++++ b/drivers/i2c/busses/i2c-ls2x.c
+@@ -10,6 +10,7 @@
+  * Rewritten for mainline by Binbin Zhou <zhoubinbin@loongson.cn>
+  */
+ 
++#include <linux/bitfield.h>
+ #include <linux/bits.h>
+ #include <linux/completion.h>
+ #include <linux/device.h>
+@@ -26,7 +27,8 @@
+ #include <linux/units.h>
+ 
+ /* I2C Registers */
+-#define I2C_LS2X_PRER		0x0 /* Freq Division Register(16 bits) */
++#define I2C_LS2X_PRER_LO	0x0 /* Freq Division Low Byte Register */
++#define I2C_LS2X_PRER_HI	0x1 /* Freq Division High Byte Register */
+ #define I2C_LS2X_CTR		0x2 /* Control Register */
+ #define I2C_LS2X_TXR		0x3 /* Transport Data Register */
+ #define I2C_LS2X_RXR		0x3 /* Receive Data Register */
+@@ -93,6 +95,7 @@ static irqreturn_t ls2x_i2c_isr(int this_irq, void *dev_id)
+  */
+ static void ls2x_i2c_adjust_bus_speed(struct ls2x_i2c_priv *priv)
+ {
++	u16 val;
+ 	struct i2c_timings *t = &priv->i2c_t;
+ 	struct device *dev = priv->adapter.dev.parent;
+ 	u32 acpi_speed = i2c_acpi_find_bus_speed(dev);
+@@ -104,9 +107,14 @@ static void ls2x_i2c_adjust_bus_speed(struct ls2x_i2c_priv *priv)
+ 	else
+ 		t->bus_freq_hz = LS2X_I2C_FREQ_STD;
+ 
+-	/* Calculate and set i2c frequency. */
+-	writew(LS2X_I2C_PCLK_FREQ / (5 * t->bus_freq_hz) - 1,
+-	       priv->base + I2C_LS2X_PRER);
++	/*
++	 * According to the chip manual, we can only access the registers as bytes,
++	 * otherwise the high bits will be truncated.
++	 * So set the I2C frequency with a sequential writeb() instead of writew().
++	 */
++	val = LS2X_I2C_PCLK_FREQ / (5 * t->bus_freq_hz) - 1;
++	writeb(FIELD_GET(GENMASK(7, 0), val), priv->base + I2C_LS2X_PRER_LO);
++	writeb(FIELD_GET(GENMASK(15, 8), val), priv->base + I2C_LS2X_PRER_HI);
+ }
+ 
+ static void ls2x_i2c_init(struct ls2x_i2c_priv *priv)
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAme3JUEACgkQ3R9U/FLj
-285XmQ/+JH6sTra2DHeFaZhXztjqmfO3by20dIZfJUrns3TrzJOsd8LMRdvKo7xu
-TqTrQ5E10KMNtVvu98HkF2Yhig2enCQxdlwpVEnbDA8lH+PjvV9sOA3Rz8n2fokC
-uPzgzVLAA7IOe5UyMdYPU2YmDgVn+kNUJCxJVHGM/qb/H7MUI2HH8QZxj6XNa3KS
-3ZWRMcc0XImISTzDpFC02Vwcfy+Q3wr+BtvWU8aT7OM5J96JBiyzvGWPYTNarSjg
-CTHXmGmRpLmvqfS2576qBV6XUfmUNqDAZhOoDm6zftIOOimUAentfKzFjdJ9Nlam
-ccf9WrWVbjgPsv78dX60N+9DpCsNLNeD7Vg2zHvgFRDs7l9NDztEX60vyAX1YLA7
-E2dMJ2NXgIx0+Co1IHFCBa3rYZLEflLHNem1TVloSZ9JvYNV2P/nlkM+JB3zc3mX
-h/jt/XYaXQvRmURW+kc+7NKYl9yVbBZQ7xt5b5ORxMITnrJjpfay3HEAxSh5oGDv
-7bjs2t9ti/7/JpA6FTbmjHfHiCfhF3FRajqq4JrP1f5i2CVFl9d/fEPFe45hBB4u
-vV1FUr1xOiGAFNO9IdcZKyiYtdcNAkCuzCJv19+bHth9eJL3oAA9caz67gEDtvrX
-YA9mCyW7ldjs3vScFnkZHzlWenElfk+WEPa1wvwOzIA0niWYMPc=
-=J7Vz
------END PGP SIGNATURE-----
-
---nextPart5091325.31r3eYUQgx--
-
-
+base-commit: 7e45b505e699f4c80aa8bf79b4ea2a5f5a66bb51
+-- 
+2.47.1
 
 
