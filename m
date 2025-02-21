@@ -1,81 +1,81 @@
-Return-Path: <linux-i2c+bounces-9525-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9526-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6827EA400EF
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Feb 2025 21:30:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51340A400F4
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Feb 2025 21:30:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF38B19C5108
-	for <lists+linux-i2c@lfdr.de>; Fri, 21 Feb 2025 20:29:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED6D11896350
+	for <lists+linux-i2c@lfdr.de>; Fri, 21 Feb 2025 20:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB47B253F0C;
-	Fri, 21 Feb 2025 20:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B9225333B;
+	Fri, 21 Feb 2025 20:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="biQgwvMm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bw5zB1qj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88DB253331
-	for <linux-i2c@vger.kernel.org>; Fri, 21 Feb 2025 20:28:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE29253331
+	for <linux-i2c@vger.kernel.org>; Fri, 21 Feb 2025 20:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740169717; cv=none; b=Ue66URISatosl/8AQM19g+FVypbsKrQOQjsYLrygcMbHzH73FhIvikGnEPqTC6hcbkGMoElZbhE/65xTHlEG/wM73uiZGjXN6UIBM99xoiuUT/j8Z2r7/P5ZV13z4ektZDSSMeuC79urqWSTpkMNM6nlfvCE62b3EDIpfW8Nsd0=
+	t=1740169800; cv=none; b=NNIXoU76S0bIpUrSthnh3zQscFEChYg4oxIXSS9yXZxUMpXGS1FGKllIBvEP+xnj+WpiQhGKm5EqwFlWmzae+JwGMP501z5yLAd0NWDOirRkryF28t8afK4EQl3uThUQm3FyhcQIubWrdxTSRLVuWC54+2g+O6FrwzC67iaHvcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740169717; c=relaxed/simple;
-	bh=uElLq3u87H7/x2+y61YQPjLWPd+Dw+wMfhkNZtcD7LE=;
+	s=arc-20240116; t=1740169800; c=relaxed/simple;
+	bh=fdClsAYlCVg4S/LxTIbAsqEJNDh4G9hG3IA5JJlcQdI=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=PvOdGHnomqNL7kDj2cxZOWxGaUcblmusy468tWsY7FDUbrBk4/JjFWdp0AuN7mjlEW1RPk+ltHTiCNBLVfbZHDVferd2Kit1rQHcGpMgh7M3dwJJl+OLH6J/uceS2U4UWyLGi3w3+0XimYEiCE9/+KdL+MoekY6mL+cIBANKGiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=biQgwvMm; arc=none smtp.client-ip=209.85.128.52
+	 In-Reply-To:Content-Type; b=Hi2Hn0JTaihN+2KDIfIJjtys7Qn+iyPKiMCVvooArj5W3a0L0u7eDPe09xnTyedlfgEI67hy821bTrvUya238Jk8n4uanSSgBTjF3Cu1k2wjbnnc9D7vg6CcmkPqjWHdQ2BEsHDWWKEvT15IOcJWDOEwLaC6lSVG6ZVDf6T9T/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bw5zB1qj; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4399ee18a57so15492595e9.1
-        for <linux-i2c@vger.kernel.org>; Fri, 21 Feb 2025 12:28:35 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43984e9cc90so21534095e9.1
+        for <linux-i2c@vger.kernel.org>; Fri, 21 Feb 2025 12:29:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740169714; x=1740774514; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740169797; x=1740774597; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=C1jDvM8SDjc5MrZ7z7/Lc3QzVT2dE13jH1UwHurT6uM=;
-        b=biQgwvMmotEoiAvvpEWqhLrX1T8gEpZmWd83lrh2XKCMyYPQKgEpeZEiJzeulAtD6L
-         FpWpkq3lgnmnfUXossf3/Ds8Ra/5iXeDx3ZkXAKoujI0sS8VhcEw4DgZzQulWb34g3sW
-         Xb99QbO2aAj1/15h4eHhFCqqQ5Z99+T/HQqIvfBcUTnq5oEXTdSF+ER1UM/Te7BInKfW
-         INI6XBp1JN/SYWf8CKd5gnYpm7gCTnyVtcCcxfTUrtnSKZJePZQPBQmlbU0MJweJt5t7
-         Z1hR4TNts46d2ll4nYDNF+EUG14eF2jFdBdYQs2seTitzeAqay1jKm2CSMM/N/0VfuJB
-         ZivQ==
+        bh=R/iIV9oyvJnN5NjB+DZojcdUVKM5TUfvBAJ8b+/2c5M=;
+        b=bw5zB1qjafIl2OjaKVEBQ1pKbw+puWOS7UeeCX8BzVjEGHrcFt2IXIF6tkeNvhuciF
+         OP7WGUvG/IZb1UBe3WX23JSNpoLUud8jgM44qO+GvHMyIfeLcdX4NPEOWdexK261D6kB
+         iM9CqzuJhIbB07Oye8zGvgbXIGqGUS9n9WIzTkdRk2maj7sWgCO8zAypdwyQG7GY2cvw
+         f1aVcBcsqznSU+DabBrpMk9Kb9bU1ypASsaMHQR/VmteWhzxwdZK454VFdInLWIKhzac
+         1fgYV0UY4exVWuP2rzISkxlPcqdizfh2I3iHTvuKfkw2f/uzxNSgRHFIBl1uvmn0P0V7
+         oluQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740169714; x=1740774514;
+        d=1e100.net; s=20230601; t=1740169797; x=1740774597;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=C1jDvM8SDjc5MrZ7z7/Lc3QzVT2dE13jH1UwHurT6uM=;
-        b=hs8AcsBXZ15lx+rQv1x6/IO8xB6vShsID7eMKE2tigOF88FWSENwITnxy5165izoLZ
-         agq2Zu5lrLkbsU4UdghrQaGz6kuC47LUwhiuGvz9MwaeZTAQ6SdtvLxoghATA7N7CxjR
-         f7B4iKhzHOWQca0eRYc7HkLszQbXbNgdVsxnka7LxkuNzwhdkbbKYEbTi1hCuwOrmmgV
-         G8sGn4VpNTIUmmOQZJ6fvxq35VShBHrQxmreYSIqomz2JhxwvxeGxK8cpCcvh3o/bZOG
-         pZj3uoH6FuOK9dEaNg2Au766ZAQmJ4AUWRhcg0RIcjRd/OKGNClQ15Mtu/gYp9m6jhTS
-         vCag==
-X-Gm-Message-State: AOJu0YxaxfBSFKX0KdZ5Ea/4m921VZ+GU/vHRd8v0EoNI9uoASl0v89I
-	n7vrVTfJHxkdyMeeWF1TPRmARbVekIRc1GwbtC1W8JLSw8HEqLWZ
-X-Gm-Gg: ASbGncusfRyKRq3a8gIGdQLHUtDsjAkiQTgYmbLHNI1Lm1PYolBy3xfNa0+KMFTROiX
-	JZKVVvdYQ8BBEhJ2+BpltR13bGNuf69lxjY45qNArMI+MfhbAxrG4LS/azQ2c6RLuRNxZ84MfJp
-	IU0qETyexzFkRRAUc61RWBkWaLc3tDOmRzBlhpvz3zduVADXM+iaiUpAAi2jotHeVnMnMAKsiG8
-	afaZ58iZ/24p+S/67xn+mTBCMOca7HsjwZB/EuVUrOWDJsor2BKtc2aIkSvCOmLrjY2G75HJmV5
-	6KBhuUzxAf+57HpD4uzYqra8cDnlsS4j/Edx5QnX5Cg5CvDWSmyL6+ymfx4uADirW9ZrHwhVAEH
-	fY/9+TR4TTMLdIXyLd2iec3VGyaNOz1TdXXDdvHCl7V/EfOzrSk8Prbkq3Dv/n8xYR7GFAClqX4
-	hFOsBKssZMIPlb
-X-Google-Smtp-Source: AGHT+IGE7ZnaYj3IDu6SQ6NhVCzr5rzI8RTwR+M3d1ilCO840lDGtuUSxQ9OEv3sU74Fn5pmHDwDlw==
-X-Received: by 2002:a05:600c:1f8c:b0:439:8634:9909 with SMTP id 5b1f17b1804b1-439ae33f748mr41187465e9.14.1740169714024;
-        Fri, 21 Feb 2025 12:28:34 -0800 (PST)
+        bh=R/iIV9oyvJnN5NjB+DZojcdUVKM5TUfvBAJ8b+/2c5M=;
+        b=vUMmmvsYSZjThcqQI+kf9QdtgM7LaHwSGQmVD+boz9FHoUKhv+KsiVC50TWlEwxAI0
+         u2Hln/zGlmZhcuGGeYb1ntp0pXjgMXJZv/V3EkqNDPDQ4dM+4fomEbjICheCWQZTJgSx
+         qP/gkPvg4KUAhynQCFhxsJ+bMZ0CDiEEkRoBt9pv4tt0j20GCI61HAGwGLz3I8PG2E6z
+         VRPiHYzuoQRR1lr87z85saBhOQRaJYlpnlnOzhUdMOtao7ul7wVgLGMd5SQl0qiYfjMd
+         rnualKBPmJydu9wgwsPNpk9h59Kt0P6LwgcpxMQlf1IT99Mnw0JPvPJkxvJdCC90rH8W
+         M3MQ==
+X-Gm-Message-State: AOJu0Yy7hzr+ezF4HidnLiqUtpOlNAohwIEDn52jbbHD4ecPV6lY1p9Q
+	5arXuMbxTgWXzdnDmJffDbLzfo3LvzyY7MSJe60zXkZZacGaeK/O
+X-Gm-Gg: ASbGncs/aPu4olHD9BF5jVP3Ay5KAuq+4aqx7el15/aFBwhUrYRdW5UBN+Ibq8mxzHH
+	KUFNdoHWOpITURvCu2h+S19XqRhytbGPhf29aHhrX7y1sx31z3gSmNBYB2aUNE/4TL4hdgEnQXB
+	v1HcqtQsNhzSfF3V4JaXuAIFilSavK9XAbA2EQrcpoii/2A7I/57jN/cXmrG7mwCwEEX1a6beEC
+	QQiO6lFb8705nvI7BMqLQSBmV6uDGNl3uG3Rozm9YEVAJG4mum60J9ULEWT8fVkEiHcyHI2HImN
+	+X7wtrroJs6Mx+qsLnhQEAmAvnxg/27LwpA7mALdu/sdsulwgEBLK4Zte7rv6lJW2XMryDkzuE+
+	w5gKDL3ApDK7Dli/FxmWs9BXMRH0EkMiplZrzNlJD6a9rhklJ7jKXTxuwFXMG/6T5Qe3c51EdK+
+	+yarjZV9cXtpTF
+X-Google-Smtp-Source: AGHT+IHYudsUGeJaSdkgJ8rYJ7Y0M+4GPN8U/00etRKGSiFQ4WFsoPAmHsvMuDvC/Dn5ZKMCsKneqA==
+X-Received: by 2002:a5d:6d8e:0:b0:38d:e420:3942 with SMTP id ffacd0b85a97d-38f61499154mr7115123f8f.3.1740169796536;
+        Fri, 21 Feb 2025 12:29:56 -0800 (PST)
 Received: from ?IPV6:2a02:3100:b29e:900:9dc2:647a:dfc:6311? (dynamic-2a02-3100-b29e-0900-9dc2-647a-0dfc-6311.310.pool.telefonica.de. [2a02:3100:b29e:900:9dc2:647a:dfc:6311])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38f259d5ee2sm23978701f8f.80.2025.02.21.12.28.33
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-439b030bd09sm27547865e9.29.2025.02.21.12.29.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2025 12:28:33 -0800 (PST)
-Message-ID: <a60ee54b-c5e8-4bdb-9f1f-8889f4dcd114@gmail.com>
-Date: Fri, 21 Feb 2025 21:29:23 +0100
+        Fri, 21 Feb 2025 12:29:56 -0800 (PST)
+Message-ID: <ad4ef645-5d03-4833-a0b6-f31f8fd06483@gmail.com>
+Date: Fri, 21 Feb 2025 21:30:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH v2 2/3] i2c: i801: Move i801_wait_intr and i801_wait_byte_done
- in the code
+Subject: [PATCH v2 3/3] i2c: i801: Improve too small kill wait time in
+ i801_check_post
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
@@ -137,99 +137,41 @@ In-Reply-To: <f620328f-1e0e-4875-916b-544181a13f0b@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Move both functions to avoid forward declarations in a subsequent patch.
+In my tests terminating a transaction took about 25ms, what is
+in line with the chip-internal timeout as described in 5.21.3.2
+"Bus Time Out" in [0]. Therefore the 2ms delay is too low.
+Instead of a fixed delay let's use i801_wait_intr() here,
+this also facilitates the status handling.
+
+This potential issue seems to have been existing forever, but as no
+related problem is known, treat it as an improvement.
+
+[0] Intel document #326776-003, 7 Series PCH datasheet
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 68 +++++++++++++++++------------------
- 1 file changed, 34 insertions(+), 34 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index a3d79a5ab..9097bb9cd 100644
+index 9097bb9cd..6a4147054 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -337,6 +337,40 @@ MODULE_PARM_DESC(disable_features, "Disable selected driver features:\n"
- 	"\t\t  0x10  don't use interrupts\n"
- 	"\t\t  0x20  disable SMBus Host Notify ");
+@@ -441,12 +441,11 @@ static int i801_check_post(struct i801_priv *priv, int status)
+ 	if (unlikely(status < 0)) {
+ 		/* try to stop the current command */
+ 		outb_p(SMBHSTCNT_KILL, SMBHSTCNT(priv));
+-		usleep_range(1000, 2000);
++		status = i801_wait_intr(priv);
+ 		outb_p(0, SMBHSTCNT(priv));
  
-+/* Wait for BUSY being cleared and either INTR or an error flag being set */
-+static int i801_wait_intr(struct i801_priv *priv)
-+{
-+	unsigned long timeout = jiffies + priv->adapter.timeout;
-+	int status, busy;
-+
-+	do {
-+		usleep_range(250, 500);
-+		status = inb_p(SMBHSTSTS(priv));
-+		busy = status & SMBHSTSTS_HOST_BUSY;
-+		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
-+		if (!busy && status)
-+			return status & STATUS_ERROR_FLAGS;
-+	} while (time_is_after_eq_jiffies(timeout));
-+
-+	return -ETIMEDOUT;
-+}
-+
-+/* Wait for either BYTE_DONE or an error flag being set */
-+static int i801_wait_byte_done(struct i801_priv *priv)
-+{
-+	unsigned long timeout = jiffies + priv->adapter.timeout;
-+	int status;
-+
-+	do {
-+		usleep_range(250, 500);
-+		status = inb_p(SMBHSTSTS(priv));
-+		if (status & (STATUS_ERROR_FLAGS | SMBHSTSTS_BYTE_DONE))
-+			return status & STATUS_ERROR_FLAGS;
-+	} while (time_is_after_eq_jiffies(timeout));
-+
-+	return -ETIMEDOUT;
-+}
-+
- static int i801_get_block_len(struct i801_priv *priv)
- {
- 	u8 len = inb_p(SMBHSTDAT0(priv));
-@@ -453,40 +487,6 @@ static int i801_check_post(struct i801_priv *priv, int status)
- 	return result;
- }
- 
--/* Wait for BUSY being cleared and either INTR or an error flag being set */
--static int i801_wait_intr(struct i801_priv *priv)
--{
--	unsigned long timeout = jiffies + priv->adapter.timeout;
--	int status, busy;
--
--	do {
--		usleep_range(250, 500);
+ 		/* Check if it worked */
 -		status = inb_p(SMBHSTSTS(priv));
--		busy = status & SMBHSTSTS_HOST_BUSY;
--		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
--		if (!busy && status)
--			return status & STATUS_ERROR_FLAGS;
--	} while (time_is_after_eq_jiffies(timeout));
--
--	return -ETIMEDOUT;
--}
--
--/* Wait for either BYTE_DONE or an error flag being set */
--static int i801_wait_byte_done(struct i801_priv *priv)
--{
--	unsigned long timeout = jiffies + priv->adapter.timeout;
--	int status;
--
--	do {
--		usleep_range(250, 500);
--		status = inb_p(SMBHSTSTS(priv));
--		if (status & (STATUS_ERROR_FLAGS | SMBHSTSTS_BYTE_DONE))
--			return status & STATUS_ERROR_FLAGS;
--	} while (time_is_after_eq_jiffies(timeout));
--
--	return -ETIMEDOUT;
--}
--
- static int i801_transaction(struct i801_priv *priv, int xact)
- {
- 	unsigned long result;
+-		if ((status & SMBHSTSTS_HOST_BUSY) || !(status & SMBHSTSTS_FAILED))
++		if (status < 0 || !(status & SMBHSTSTS_FAILED))
+ 			pci_dbg(priv->pci_dev, "Failed terminating the transaction\n");
+ 		return -ETIMEDOUT;
+ 	}
 -- 
 2.48.1
 
