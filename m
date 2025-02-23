@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-9536-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9537-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12F9FA40E02
-	for <lists+linux-i2c@lfdr.de>; Sun, 23 Feb 2025 11:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2922A40E07
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Feb 2025 11:20:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 834CD3AEF02
-	for <lists+linux-i2c@lfdr.de>; Sun, 23 Feb 2025 10:19:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10BA33AF3B8
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Feb 2025 10:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6B0204688;
-	Sun, 23 Feb 2025 10:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A672046B2;
+	Sun, 23 Feb 2025 10:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gbqP2PGk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F8KNOmAH"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9947335BA;
-	Sun, 23 Feb 2025 10:19:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA704335BA;
+	Sun, 23 Feb 2025 10:20:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740305962; cv=none; b=J4zFTLVnNOKg/e/N0ukv0B15MncWar0Eh4olzY+jeFEYEvof2tMn1XDOGNWFh1Kflqew15XIuiunqW5VBgP9rH1mC3B+sd+Z58K4iwsZ9TtLje5XNiqU0rRPONywmtx20UMwjk5v+7vjSMvmHAh9qPwgN6rC7hyabbw5NM6Gmtw=
+	t=1740306036; cv=none; b=INZTo6ku/POh4aZk6d+MwzjuJB3jbxB7NAlllDR7p/tTpq9thY1kMvDFMUuT1PEVGAOprHji+xwNowDUFaqKIy/UN3hsrZhZIYOTn0fHtsZJD/jxgee9fEJannRfF4M0yc8N+CcwpRItsNyBpf7+H1bxfsXtu5hnlffOfBgHF/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740305962; c=relaxed/simple;
-	bh=6a6RvYODvsCvev2GgRgrCtu9df64yuXStOe4JoBEGhY=;
+	s=arc-20240116; t=1740306036; c=relaxed/simple;
+	bh=SlJhErMDnJ/cJ096qh9yESBigz+dtJhOqtJDEx/QLpk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AlbPqmYBGELGUlAx7JV1XUBD6bhKrZeKShA3dymCnk0qHGLAPU8ZYR6DTayu2kflkV0UewBqSniAC9dVQZKqfe8vRYzWHjwAFSW4gCrj6dmkCMq7pgykZfLmURQiGjFTA85b2czSDCBeiq1jMxIn6nkpT7SDHlZYsVBp16b1jtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gbqP2PGk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBD6C4CEDD;
-	Sun, 23 Feb 2025 10:19:18 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=oag7yP0LB21NGukLvLI65EFrruittF5xs/7gpR11bdsLK+VnEEc4oFpuPGCeeKDq9ZI0X/9BP9dW6/pj1ySMyTFUWyjPpO75Own1oeAYvXI5nwOpXDRwU+3Ow4hK/cjxgfxaUChIOeBD5iuX8peoMMzjq/0PiYggL+k/+g/2gCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F8KNOmAH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3BFEC4CEDD;
+	Sun, 23 Feb 2025 10:20:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740305962;
-	bh=6a6RvYODvsCvev2GgRgrCtu9df64yuXStOe4JoBEGhY=;
+	s=k20201202; t=1740306035;
+	bh=SlJhErMDnJ/cJ096qh9yESBigz+dtJhOqtJDEx/QLpk=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=gbqP2PGkkwu5UtpATWbbW9uIV9GH1pYNemMW7TlkCSQqwQjgPVOoJhPldecTVzeGs
-	 Zz/IPAxrQvT0w2saAupyzRyDotw0DP++9Ek0w5NRMuoGQDinXQczMjciUJbThPqKno
-	 kJ1m3Ukc/kBSnAlxmdZm6Q2tGGrn9Erlw1eVokqso9QDqtSF/HfnsGXVuo6aYYZhi/
-	 rGSl3m9DleD5MtjxAYR4MxJle3dLqrktkisV7jsunbS+6Jz/owfPwkI2UJ4abmdC1r
-	 lX9Yc0YUzocf/3wyeqqABtsRDhpiHYvf/tRuZY0F0cSK7BsZJJFGjwVY7zStw7KCcJ
-	 ynFFKpd/CXM7g==
-Message-ID: <e190d51a-b585-4544-8154-b9a287f907be@kernel.org>
-Date: Sun, 23 Feb 2025 11:19:16 +0100
+	b=F8KNOmAHdJUWi+t+RO2TS9lWsYgtyLB2HTGzceD00pSWipX4a+UjLz9JnEywsofIv
+	 APcqpoJI6HY7gOLr1ugCHRMtypSNdcs2wWdCwj/4V+jlmMfV+YULV/oTJoIoXJMoJc
+	 AVhbnfcPbB6fudnBVGcojd2d7EVjD+VJD7WTsr75qlQxWsl4ZVu1oGiueVRJNHt5t4
+	 RCmxTF88eGWKoxJ/2FsexMp22eShje4/0wHdJ/6W3ykBF9+XuOGCUEGAgHIuRBjYMo
+	 7VeXQFQPc/1SLEcJS6VQSGiR1R/BCOtmnhAVWvB9OuDu696J1ZDpJH9CBpzOLeGIsU
+	 /z1XxIqwzl4bQ==
+Message-ID: <40b63bcb-799a-4ec3-87f8-28e3987845fa@kernel.org>
+Date: Sun, 23 Feb 2025 11:20:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: clock: samsung,exynos990-clock: add
- PERIC0/1 clock management unit
+Subject: Re: [PATCH v2 4/4] arm64: dts: exyno990: enable cmu-peric0/1 clock
+ controller
 To: Denzeel Oliva <wachiturroxd150@gmail.com>, s.nawrocki@samsung.com,
  cw00.choi@samsung.com, alim.akhtar@samsung.com, mturquette@baylibre.com,
  sboyd@kernel.org, robh@kernel.org, conor+dt@kernel.org,
@@ -60,7 +60,7 @@ To: Denzeel Oliva <wachiturroxd150@gmail.com>, s.nawrocki@samsung.com,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
 References: <20250212004824.1011-1-wachiturroxd150@gmail.com>
- <20250212004824.1011-2-wachiturroxd150@gmail.com>
+ <20250212004824.1011-5-wachiturroxd150@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,51 +106,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250212004824.1011-2-wachiturroxd150@gmail.com>
+In-Reply-To: <20250212004824.1011-5-wachiturroxd150@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/02/2025 01:48, Denzeel Oliva wrote:
-> Add dt-schema documentation for the Connectivity Peripheral 0 / 1
-> (PERIC0/1) clock management unit.
+> Enable the cmu-peric0/1 clock controller. It feeds USI and I2C.
 > 
 > Signed-off-by: Denzeel Oliva <wachiturroxd150@gmail.com>
 > ---
->  .../clock/samsung,exynos990-clock.yaml        |  24 +++
->  include/dt-bindings/clock/samsung,exynos990.h | 176 ++++++++++++++++++
->  2 files changed, 200 insertions(+)
+>  arch/arm64/boot/dts/exynos/exynos990.dtsi | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/samsung,exynos990-clock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynos990-clock.yaml
-> index c15cc1752..dd301deda 100644
-> --- a/Documentation/devicetree/bindings/clock/samsung,exynos990-clock.yaml
-> +++ b/Documentation/devicetree/bindings/clock/samsung,exynos990-clock.yaml
-> @@ -30,6 +30,8 @@ description: |
->  properties:
->    compatible:
->      enum:
-> +      - samsung,exynos990-cmu-peric0
-> +      - samsung,exynos990-cmu-peric1
-
-Mismatched order.
-
->        - samsung,exynos990-cmu-hsi0
->        - samsung,exynos990-cmu-peris
->        - samsung,exynos990-cmu-top
-> @@ -56,6 +58,28 @@ required:
->    - reg
+> diff --git a/arch/arm64/boot/dts/exynos/exynos990.dtsi b/arch/arm64/boot/dts/exynos/exynos990.dtsi
+> index dd7f99f51..843587b17 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos990.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynos990.dtsi
+> @@ -231,12 +231,34 @@ pinctrl_peric0: pinctrl@10430000 {
+>  			interrupts = <GIC_SPI 392 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
 >  
->  allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - samsung,exynos990-cmu-peric1
-> +              - samsung,exynos990-cmu-peric0
+> +		cmu_peric0: clock-controller@10400000 {
 
-These also reverse.  Keep things ordered alphabetically. Also this
-if:then: block should go to appropriate place.
 
+All entries are sorted by unit address.
 
 Best regards,
 Krzysztof
