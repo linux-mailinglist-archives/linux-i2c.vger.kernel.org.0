@@ -1,111 +1,130 @@
-Return-Path: <linux-i2c+bounces-9544-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9545-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D646BA41618
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2025 08:16:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF576A417E5
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2025 09:55:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 660E67A2196
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2025 07:15:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1993017230B
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Feb 2025 08:55:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65CD41C863D;
-	Mon, 24 Feb 2025 07:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dCsrvMjQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A404E241695;
+	Mon, 24 Feb 2025 08:55:14 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9DE1891AA;
-	Mon, 24 Feb 2025 07:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE742242916
+	for <linux-i2c@vger.kernel.org>; Mon, 24 Feb 2025 08:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740381395; cv=none; b=pvDu/mUkw17TIz8oUQX0grzC85CNuPR8dtfJUAadDvdlru3sXOsaOYZ3teAlv4FcN48HA9xPUWeM3K6WG2sxnXjX7nb324UR50DietNFgnt27fRjgCJH9vjWOCvdnftV8diKWaxDVSq3DKjv7JVWETB95qdqewgDu0RQiWBmJI0=
+	t=1740387314; cv=none; b=A6hFwYk0lZG75LSrxjPCRz9QUo4DeyTWvnXGL/4ELRj7K0zMOtHkCiRxnlDBIHZKQyA+5OsYDtuH4uZgH5vrGN2MmwrFfotD3ULBRDfCHFNJOnIRjxAuPdJaGIIGHox/5xWuuO9fZ0v8SGXab68CZSgI0Bl1ERNhVkUe/w9f7lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740381395; c=relaxed/simple;
-	bh=2pBGmTogQCkZU/xIxkV1ntJSYG2JD2YqKohqWLQmXu4=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=mFHuHCWFpcTmW4ezKfb85IqSTBz6cU9G3qRfylnYnFPHPWhczAOaM9ZZpO4ivJVr4Z/wuriybmWc2BakX8erdGgCWVKE/QL9OUVTRHOC8nAueYSaip6UQrLMo9iqZaAnd6exVINk/l0mD8sjs6Rp8fNG+4DOV3qjM/1rcETCbTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dCsrvMjQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48827C4CED6;
-	Mon, 24 Feb 2025 07:16:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740381394;
-	bh=2pBGmTogQCkZU/xIxkV1ntJSYG2JD2YqKohqWLQmXu4=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=dCsrvMjQLCzpbeyKIBH+s0BVDBGeHCz9RrZkebic83ktfM4vw0gqL8fje2cJ5ce7e
-	 BaDVvtxsrgzSHK+16pwIQsUc5y3vkghLu8MY96zCwSEVhw6Pb2HYEDKE2jfCqmE8TC
-	 Vtdc5FOmfpVaPd4TNIxN73EtlG0TwoJae/v9IRjHuOfHYL/Evaz+dIDXafrvMlZZ/J
-	 x+Y92P5h6+h+F+IN6f9lZ1QOhhC7uTYvI4FhKjz+E3qEX8Gp8GA69GF2iSD31NXE/o
-	 NspuiHPWB2/ZlbdGfFFJssj9Nrdvt5VtS5f0Ym8k/mHGz0Ssto5wY6vU7rc6qO1fmw
-	 YE8PdOQ2jmDNQ==
-Date: Mon, 24 Feb 2025 01:16:32 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1740387314; c=relaxed/simple;
+	bh=iaGyetzTOk9x8DCAlSGjmQ5hMyYgroRh/gV8kYtnW8M=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Za9Cn0Dz8DJ3AyXhl03vgd5atMXrmNme/GGdI7y8nWV1PqS3A8vD0lfczfq+cd6JQH85HZB5rvrnbqcYNH0n1SQKB+ovi5WXRQOpnCXl7VnP9wxK/b4pmI+mNKVTJ4IQ9q7+3IUaRsNtOOweWfDdxpCgmRB1HJFyIlnx4LZkkR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tmUEV-00031V-Cf; Mon, 24 Feb 2025 09:54:35 +0100
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tmUES-002Yzx-16;
+	Mon, 24 Feb 2025 09:54:32 +0100
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tmUEN-000201-0o;
+	Mon, 24 Feb 2025 09:54:27 +0100
+Message-ID: <ee0f5b583aadb42e7557e1afc49c5b9af594d2c3.camel@pengutronix.de>
+Subject: Re: [PATCH v16 2/3] i2c: aspeed: support AST2600 i2c new register
+ mode driver
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Ryan Chen <ryan_chen@aspeedtech.com>, benh@kernel.crashing.org, 
+ joel@jms.id.au, andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+  conor+dt@kernel.org, andrew@codeconstruct.com.au, 
+ andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org, 
+ openbmc@lists.ozlabs.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+ linux-kernel@vger.kernel.org
+Date: Mon, 24 Feb 2025 09:54:27 +0100
+In-Reply-To: <20250224055936.1804279-3-ryan_chen@aspeedtech.com>
+References: <20250224055936.1804279-1-ryan_chen@aspeedtech.com>
+	 <20250224055936.1804279-3-ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: benh@kernel.crashing.org, linux-i2c@vger.kernel.org, 
- andrew@codeconstruct.com.au, openbmc@lists.ozlabs.org, 
- p.zabel@pengutronix.de, linux-kernel@vger.kernel.org, andi.shyti@kernel.org, 
- krzk+dt@kernel.org, devicetree@vger.kernel.org, joel@jms.id.au, 
- andriy.shevchenko@linux.intel.com, conor+dt@kernel.org, 
- linux-aspeed@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-To: Ryan Chen <ryan_chen@aspeedtech.com>
-In-Reply-To: <20250224055936.1804279-2-ryan_chen@aspeedtech.com>
-References: <20250224055936.1804279-1-ryan_chen@aspeedtech.com>
- <20250224055936.1804279-2-ryan_chen@aspeedtech.com>
-Message-Id: <174038139252.1126908.7016492425946254564.robh@kernel.org>
-Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-
-On Mon, 24 Feb 2025 13:59:34 +0800, Ryan Chen wrote:
-> Add ast2600-i2cv2 compatible and aspeed,global-regs, aspeed,enable-dma
-> and description for ast2600-i2cv2.
-> 
+On Mo, 2025-02-24 at 13:59 +0800, Ryan Chen wrote:
+> Add i2c new register mode driver to support AST2600 i2c
+> new register mode. AST2600 i2c controller have legacy and
+> new register mode. The new register mode have global register
+> support 4 base clock for scl clock selection, and new clock
+> divider mode. The new register mode have separate register
+> set to control i2c controller and target. This patch is for i2c
+> controller mode driver.
+>=20
 > Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
 > ---
->  .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
-> 
+>  drivers/i2c/busses/Kconfig       |   11 +
+>  drivers/i2c/busses/Makefile      |    1 +
+>  drivers/i2c/busses/i2c-ast2600.c | 1036 ++++++++++++++++++++++++++++++
+>  3 files changed, 1048 insertions(+)
+>  create mode 100644 drivers/i2c/busses/i2c-ast2600.c
+>=20
+[...]
+> diff --git a/drivers/i2c/busses/i2c-ast2600.c b/drivers/i2c/busses/i2c-as=
+t2600.c
+> new file mode 100644
+> index 000000000000..bfac507693dd
+> --- /dev/null
+> +++ b/drivers/i2c/busses/i2c-ast2600.c
+> @@ -0,0 +1,1036 @@
+[...]
+> +static int ast2600_i2c_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev =3D &pdev->dev;
+> +	struct ast2600_i2c_bus *i2c_bus;
+> +	struct resource *res;
+> +	u32 global_ctrl;
+> +	int ret;
+> +
+> +	i2c_bus =3D devm_kzalloc(dev, sizeof(*i2c_bus), GFP_KERNEL);
+> +	if (!i2c_bus)
+> +		return -ENOMEM;
+> +
+> +	i2c_bus->reg_base =3D devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(i2c_bus->reg_base))
+> +		return PTR_ERR(i2c_bus->reg_base);
+> +
+> +	i2c_bus->rst =3D devm_reset_control_get_shared(dev, NULL);
+> +	if (IS_ERR(i2c_bus->rst))
+> +		return dev_err_probe(dev, PTR_ERR(i2c_bus->rst), "Missing reset ctrl\n=
+");
+> +
+> +	reset_control_deassert(i2c_bus->rst);
 
-My bot found errors running 'make dt_binding_check' on your patch:
+No reset_control_assert() in the error paths below? You could get that
+and simplify this by using devm_reset_control_get_shared_deasserted().
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml:82:1: [error] duplication of key "allOf" in mapping (key-duplicates)
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml: ignoring, error parsing file
-./Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml:82:1: found duplicate key "allOf" with value "[]" (original value: "[]")
-make[2]: *** Deleting file 'Documentation/devicetree/bindings/i2c/aspeed,i2c.example.dts'
-Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml:82:1: found duplicate key "allOf" with value "[]" (original value: "[]")
-make[2]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/i2c/aspeed,i2c.example.dts] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1511: dt_binding_check] Error 2
-make: *** [Makefile:251: __sub-make] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250224055936.1804279-2-ryan_chen@aspeedtech.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+regards
+Philipp
 
