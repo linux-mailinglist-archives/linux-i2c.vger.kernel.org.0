@@ -1,165 +1,153 @@
-Return-Path: <linux-i2c+bounces-9577-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9578-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3010A43F03
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2025 13:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D4F27A43F50
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2025 13:22:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B7863A5200
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2025 12:15:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E5273B2441
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2025 12:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16C4B1DD874;
-	Tue, 25 Feb 2025 12:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1042C268C48;
+	Tue, 25 Feb 2025 12:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Rgn+28v4"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="IVCv8PTj"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65D92571D0
-	for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2025 12:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB322571AD
+	for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2025 12:19:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740485739; cv=none; b=nm7kWoKAkCC7Y/R/GcREiW92GWhec+8xZfmpNOYfRlrp0066m0z3u1QwC6mqncLJBhXUR8otvSfIfSTNh4LaW66LgabIHMey9SaCZVF/tC0UKrCNQ7CQ3sF0clrVjF4LGgVR+lYsXaaCz7M5HWkM1VdNlgLmHDKFT5mwE6YzJJU=
+	t=1740485989; cv=none; b=Kq7f62uw+qlBFh4KJgndgFPntl5d6W3tKaoZrei3ZQWxHa8bUDCXTajBpwRqmQm5dHv48yLQHmy/TdAnDgZ5eJUQmNpO8TDVP8JVKSs+nc+EYzi7adaOgWuT1Zt1S6GSfZ29rCv1k/ubQtbJ7F7EcZgZj50aNwlSwVfqGIzSne8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740485739; c=relaxed/simple;
-	bh=n0qtHPUUpsqeZMp8vdvkoyvxCkxVZB87dbJPrhvR5C0=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=kXuLu4TwgJqpeoTaJEqfrOBnAaXgXgT9uIEgF+9jMlUet9EUFUJnn+jQbq/86m2KZZxhsI2XaqSxtTNoZv1DFSD9tLH3qxKSS3CetWytV5nsfk3aqNshIGqAIes2xKw1IZfLm7uAadndxWjDoZiHEbLu20WaoywDt4u89+CsVks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Rgn+28v4; arc=none smtp.client-ip=203.254.224.25
+	s=arc-20240116; t=1740485989; c=relaxed/simple;
+	bh=lRMt6jA061lprurvx0VShzAqXayV8eltmOsW49Zjb3A=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=CZI92dQsbIqk2vVaV4uFXlm7QaKJ4NB9u19BMjsheC0CEVQTnUpJkM3aFUCW2Rgl1Iu1rvHPJSNCQJ8OxtQifXhkqg7KOsq/ue3DoyeE9jBEi8Syc7rF3L6B7PW8TyX5ukempqyikakNgBZWym9APol723IrN3OzSOLdCcYPUmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=IVCv8PTj; arc=none smtp.client-ip=203.254.224.25
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250225121535epoutp0287ca5d31d8debe4f9b5a1890cc722258~nco4gwC9n0390103901epoutp02R
-	for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2025 12:15:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250225121535epoutp0287ca5d31d8debe4f9b5a1890cc722258~nco4gwC9n0390103901epoutp02R
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250225121945epoutp022334096d9ddb0bb611f6139928b6fd22~ncshRcBkf0845208452epoutp02z
+	for <linux-i2c@vger.kernel.org>; Tue, 25 Feb 2025 12:19:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250225121945epoutp022334096d9ddb0bb611f6139928b6fd22~ncshRcBkf0845208452epoutp02z
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1740485735;
-	bh=gXCuKyfIyNL+Jw6N7X9ie6bhyy40mSO9kKIdHahq8NA=;
+	s=mail20170921; t=1740485985;
+	bh=q0NY9q1nH4ABhU1WMsGxQmu1gQKIvkrPnNiTaH8G9/k=;
 	h=From:To:Cc:Subject:Date:References:From;
-	b=Rgn+28v4ATHc2wq1xIM3K0pDK58LGF/5HXzwoeW9yD2mbXxPWYPOMYvRpFJ0KigDN
-	 Go5NhMD1rBtS9+WB2Ms/WKQBcM3f270K91/TarYGjIgLfK0zIxf/ziSb4EDNE8B/JO
-	 x3vKzyT9OS0PWshv2hYy8GWkl3mQg6PWIS4u1xu0=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-	20250225121535epcas5p40740b4f93583e80a6b958bb8c82d1067~nco30fUnU1608716087epcas5p4v;
-	Tue, 25 Feb 2025 12:15:35 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4Z2GlT2Gklz4x9Pw; Tue, 25 Feb
-	2025 12:15:33 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	36.FE.19933.564BDB76; Tue, 25 Feb 2025 21:15:33 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250225121532epcas5p2343d6b813b78d92203cb06b54dfd1970~nco1BfpNw2438324383epcas5p2T;
-	Tue, 25 Feb 2025 12:15:32 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250225121532epsmtrp1f63b3cb7834312bbf4119908db82664b~nco1A8W611727217272epsmtrp1k;
-	Tue, 25 Feb 2025 12:15:32 +0000 (GMT)
-X-AuditID: b6c32a4a-c1fda70000004ddd-7a-67bdb465d9b9
+	b=IVCv8PTjCQMxhb78NVUuSVmb0pGligpqCZ8R3yFKxKm318oiV2q6Ctxi1fnqI1EN8
+	 QFbV05PMszOqy8v+0HbNgVrprEmEkBy9NfLGGyRrRHcimxPQw3meAJHsxVsKMs284V
+	 S405u8BbxRG6bhLl95vjliyo57fdV7dHeH5AwiJY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20250225121945epcas5p317219048972b9afbf040470ae890559d~ncsg6xqUN0319603196epcas5p3f;
+	Tue, 25 Feb 2025 12:19:45 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4Z2GrH6dR2z4x9Pv; Tue, 25 Feb
+	2025 12:19:43 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	EE.F3.19956.F55BDB76; Tue, 25 Feb 2025 21:19:43 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250225121943epcas5p129c54f2e9ad44af2ce342c26267fe38a~ncsfTJMmY1323613236epcas5p1-;
+	Tue, 25 Feb 2025 12:19:43 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20250225121943epsmtrp27a9dbdc10ee791740565f0d6c55cec2f~ncsfSjkFB0616406164epsmtrp23;
+	Tue, 25 Feb 2025 12:19:43 +0000 (GMT)
+X-AuditID: b6c32a4b-fd1f170000004df4-c4-67bdb55f6b91
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	D9.3F.23488.364BDB76; Tue, 25 Feb 2025 21:15:31 +0900 (KST)
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	3A.5F.18729.F55BDB76; Tue, 25 Feb 2025 21:19:43 +0900 (KST)
 Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
 	[107.109.115.6]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250225121528epsmtip28ad80b8c5f6611b0883d6dc06598800b~ncox7FvSB1051010510epsmtip2T;
-	Tue, 25 Feb 2025 12:15:27 +0000 (GMT)
+	20250225121936epsmtip2fed77c88d0b19afab8241a8d8987f4a9~ncsZEwLhq1286612866epsmtip2J;
+	Tue, 25 Feb 2025 12:19:35 +0000 (GMT)
 From: Anindya Sundar Gayen <anindya.sg@samsung.com>
 To: andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: aswani.reddy@samsung.com, pankaj.dubey@samsung.com
-Subject: [PATCH] i2c-algo-bit: Added the bus lock during a i2c transaction
-Date: Tue, 25 Feb 2025 17:03:14 +0530
-Message-Id: <20250225113314.12353-1-anindya.sg@samsung.com>
+Subject: [PATCH] i2c-algo-bit: cpu_relax/ yield replaced with cond_resched
+Date: Tue, 25 Feb 2025 17:07:24 +0530
+Message-Id: <20250225113724.14653-1-anindya.sg@samsung.com>
 X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPKsWRmVeSWpSXmKPExsWy7bCmhm7qlr3pBi828Vvc/9rBaHFo81Z2
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAKsWRmVeSWpSXmKPExsWy7bCmpm781r3pBlseGFrc/9rBaHFo81Z2
 	i46/XxgtLu+aw2axaOsXdgdWj02rOtk8+rasYvT4vEkugDkq2yYjNTEltUghNS85PyUzL91W
 	yTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMHaKWSQlliTilQKCCxuFhJ386mKL+0JFUh
-	I7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1xMrQwMDIFKgwITtj7+OtjAU3uSs2zVnM1MB4irOL
-	kZNDQsBEYtuSA+wgtpDAbkaJDTfjuhi5gOxPjBKtq+4yQTjfGCVWT/nIBNMx68weqMReRonZ
-	Wy6wQDjNTBIt716wdjFycLAJGEu0PagEaRARCJH41rOfEcRmFjCTmHn3NAuILSzgJbHp7BE2
-	EJtFQFVi+sZ1YGfwClhLLPo8nRlimbzE6g0HmEHmSwj0s0tcWTOZBSLhIrHtwBWoImGJV8e3
-	sEPYUhIv+9vYQW6QEMiXWHI2GyKcI3Fg+QOoB+wlDlyZwwJSwiygKbF+lz7EaXwSvb+fMEF0
-	8kp0tAlBmCoSEztYYGbP/rEDaqeHxIept1gh4RYrsevdc7YJjDKzEGYuYGRcxSiZWlCcm55a
-	bFpglJdaDo+Y5PzcTYzglKPltYPx4YMPeocYmTgYDzFKcDArifByZu5JF+JNSaysSi3Kjy8q
-	zUktPsRoCgykicxSosn5wKSXVxJvaGJpYGJmZmZiaWxmqCTO27yzJV1IID2xJDU7NbUgtQim
-	j4mDU6qByf/EXV6zrXpJXrU7TXf3fC6S6fiz8Quz1WNGvl1WmxafYXjBW5RQZl/meDNNq7/s
-	rP2e+8wZ/Z84Nm19qLlyZvq5Sb5zLFct7bhSO3+yt2bU35WHTqzJjfSMVz3h/nHelpeZjPE/
-	DEONJ0276xk8L3p3/+Xif+5Kh9nZ/V+zd5gxS2/8eMUws/Bzl7PexQAxoeS6QtW7T8pt485I
-	Wwf8VlqbHhZ4WWrhHC4eU7slTu4a4rfNYiLCf62MW8x/a0vt7IO/vHk6z7e/LS6bJn7/5W7O
-	zR9/CYot9WLhlew1vafGoPxKPeLVP+eeimrv/fcWn5y2ZuIcnrOC3QF/jHvtAte8jurIeh2n
-	uOQRwzx3JZbijERDLeai4kQAglNWwsIDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJJMWRmVeSWpSXmKPExsWy7bCSvG7ylr3pBmsumVrc/9rBaHFo81Z2
-	i46/XxgtLu+aw2axaOsXdgdWj02rOtk8+rasYvT4vEkugDmKyyYlNSezLLVI3y6BK2Pv462M
-	BTe5KzbNWczUwHiKs4uRk0NCwERi1pk9TF2MXBxCArsZJS4uaWSCSEhJ3P7fyQhhC0us/Pec
-	HaKokUli8vHNLF2MHBxsAsYSbQ8qQUwRgTCJz5t0QMqZBSwkVm45yAxiCwt4SWw6e4QNxGYR
-	UJWYvnEdO4jNK2AtsejzdGaI8fISqzccYJ7AyLOAkWEVo2RqQXFuem6yYYFhXmq5XnFibnFp
-	Xrpecn7uJkZwaGhp7GB8961J/xAjEwfjIUYJDmYlEV7OzD3pQrwpiZVVqUX58UWlOanFhxil
-	OViUxHlXGkakCwmkJ5akZqemFqQWwWSZODilGpjCLFiqWba/P9HoHPa4YuX1XRa/p26xmDBR
-	4MHChc+3fuz8VMzyrFlQ9UCbaqxEQPqvGSfkpu68NOUGrwTn9NqZFqXnhBaturVUl/Np97Oq
-	K438hjx5dzKMYxVbea2uCp9xK2epnLSrZOrKtJzeyyaOrQKaZr76VqwrTd+vnv9wbZlGSars
-	ldTHemsvlHqYV8tudz224GqDi8JS1ZNCtdmVhwLbuSstnRZPzw269TsgcW6t4q2K/92bnxlc
-	//vyJIfq7Qq9HxI7i+ax3Zsv89XnJt++VO+EjsY/gTpSrWtU3XjzJ9TY25/yvjFFNvZ0l2Rx
-	V4bvprjF0/7my6kvkV9ReKyp7aaInozUgrdPKpVYijMSDbWYi4oTAQppW/d8AgAA
-X-CMS-MailID: 20250225121532epcas5p2343d6b813b78d92203cb06b54dfd1970
+	I7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1xMrQwMDIFKgwITtj69zrzAXX2Ss2r3vG1sC4iq2L
+	kZNDQsBEYs6OJ8xdjFwcQgK7GSWe/bvKCuF8YpT4e+ALlPONUWLCmXcsMC3XH99jg0jsZZQ4
+	dG8WC4TTzCRx++1Nxi5GDg42AWOJtgeVIA0iAiES33r2M4LYzAJmEjPvngYbJCzgJXFux1Z2
+	EJtFQFXi2cunYDW8AtYSD35tYoJYJi+xesMBsPskBPrZJQ7//wqVcJFYt283I4QtLPHq+BZ2
+	CFtK4vO7vWwgN0gI5EssOZsNEc6ROLD8AVSrvcSBK3NYQEqYBTQl1u/ShziNT6L39xMmiE5e
+	iY42IQhTRWJiBwvM7Nk/djBD2B4SF172gO0UEoiVuPdhO/MERplZCDMXMDKuYpRMLSjOTU8t
+	Ni0wzksth8dMcn7uJkZw0tHy3sH46MEHvUOMTByMhxglOJiVRHg5M/ekC/GmJFZWpRblxxeV
+	5qQWH2I0BQbSRGYp0eR8YNrLK4k3NLE0MDEzMzOxNDYzVBLnbd7Zki4kkJ5YkpqdmlqQWgTT
+	x8TBKdXAJPs04a3IbVfb1TXqD1T9r23097yaY7m2s0to36plj/98Ti72O3W3s3H6g+Kge6/u
+	yE1va32a4ftyrsBBv4g/L/itGSLt75gELtD7srrDx2qxPcO1hrM10gvbmCaWLrEJOhFitNhH
+	/iNvXNqUv//e6b8OnHvtz5OeRKPE9TOOP+9kWnHu3hNtlfPPaxboN1mvYvYJnr07qYW/LspR
+	1F6dSX1C6NfVdpuenPt/zD0ieuWudxNy2NccSnGt/vJ57oGlvIpxd7+tzvI8WaYdanfk5pbd
+	hpp7xfZdmzRte6ClAHdHYskHFrf6xsUKH7N0b+o3Hr284lzGBy3ty+aT1HLaV22c9S0h+nOg
+	9S8+QZ4+FSWW4oxEQy3mouJEAIUAhDzDAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBJMWRmVeSWpSXmKPExsWy7bCSvG781r3pBiv+yVjc/9rBaHFo81Z2
+	i46/XxgtLu+aw2axaOsXdgdWj02rOtk8+rasYvT4vEkugDmKyyYlNSezLLVI3y6BK2Pr3OvM
+	BdfZKzave8bWwLiKrYuRk0NCwETi+uN7YLaQwG5GiTMLtCHiUhK3/3cyQtjCEiv/PWfvYuQC
+	qmlkkri+oIO1i5GDg03AWKLtQSWIKSIQJvF5kw5IObOAhcTKLQeZQWxhAS+Jczu2soPYLAKq
+	Es9ePgUbyStgLfHg1yYmiPHyEqs3HGCewMizgJFhFaNkakFxbnpusWGBYV5quV5xYm5xaV66
+	XnJ+7iZGcGBoae5g3L7qg94hRiYOxkOMEhzMSiK8nJl70oV4UxIrq1KL8uOLSnNSiw8xSnOw
+	KInzir/oTRESSE8sSc1OTS1ILYLJMnFwSjUwya7yOFdV5DX9kX6s1Llp5cJCGbNmPIw7Ipjx
+	fE3qoQszcu7sF5X78NPq5zpe1kuiOYobKg1/cl5z67+UuNm5f3+SYfT7H3l7VGezeClnP/5X
+	G2Le/YC3103g/tr1KnvcBILurNv2y2b/nMXmnQaVOR3To1gPlEsvXfxaJzDgS8uao6qSneaT
+	xKK3TeY6eTjUzvvUR6nT31iLGlNrl15qs5rhsY39ldl7/9i41x7fZ8zTy5/RuK1xU+OUnmDO
+	qzbtp/+K9Lx4xHSFddLv9yVr10/5lNfokJ7V9OJZkMeKJVF1oUpbg6a6TjG7lZnwreSVefHr
+	fXe3aC3Xlv4zR/5swL2T15nkn+2ZdXiLy6RjVUosxRmJhlrMRcWJAFY+Pql7AgAA
+X-CMS-MailID: 20250225121943epcas5p129c54f2e9ad44af2ce342c26267fe38a
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250225121532epcas5p2343d6b813b78d92203cb06b54dfd1970
-References: <CGME20250225121532epcas5p2343d6b813b78d92203cb06b54dfd1970@epcas5p2.samsung.com>
+X-CMS-RootMailID: 20250225121943epcas5p129c54f2e9ad44af2ce342c26267fe38a
+References: <CGME20250225121943epcas5p129c54f2e9ad44af2ce342c26267fe38a@epcas5p1.samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 
-Earlier i2c-bus lock was not available to i2c-algo-bit driver
-for that reason if there are back to back i2c transaction occurs
-it may be possible to occur a race condition.
-
-To avoid the race condition we added a mutex lock mechanism which will
-help to protect the i2c_outb()with a proper lock.
+cpu_relax/ yield replaced with better flexible approach in kernel
+with cond_resched.
 
 Signed-off-by: Anindya Sundar Gayen <anindya.sg@samsung.com>
 ---
- drivers/i2c/algos/i2c-algo-bit.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/i2c/algos/i2c-algo-bit.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/i2c/algos/i2c-algo-bit.c b/drivers/i2c/algos/i2c-algo-bit.c
-index eddf25b90ca8..18021dd9eef3 100644
+index eddf25b90ca8..4168fd901957 100644
 --- a/drivers/i2c/algos/i2c-algo-bit.c
 +++ b/drivers/i2c/algos/i2c-algo-bit.c
-@@ -31,7 +31,7 @@
- #endif /* DEBUG */
- 
- /* ----- global variables ---------------------------------------------	*/
--
-+static DEFINE_MUTEX(i2c_bus_lock);
- static int bit_test;	/* see if the line-setting functions work	*/
- module_param(bit_test, int, S_IRUGO);
- MODULE_PARM_DESC(bit_test, "lines testing - 0 off; 1 report; 2 fail if stuck");
-@@ -349,6 +349,8 @@ static int sendbytes(struct i2c_adapter *i2c_adap, struct i2c_msg *msg)
- 	int retval;
- 	int wrcount = 0;
- 
-+	/* Aquire the lock before accessing the I2C bus */
-+	mutex_lock(&i2c_bus_lock);
- 	while (count > 0) {
- 		retval = i2c_outb(i2c_adap, *temp);
- 
-@@ -379,6 +381,7 @@ static int sendbytes(struct i2c_adapter *i2c_adap, struct i2c_msg *msg)
- 			return retval;
+@@ -97,7 +97,7 @@ static int sclhi(struct i2c_algo_bit_data *adap)
+ 				break;
+ 			return -ETIMEDOUT;
  		}
+-		cpu_relax();
++		cond_resched();
  	}
-+	mutex_unlock(&i2c_bus_lock);
- 	return wrcount;
- }
- 
+ #ifdef DEBUG
+ 	if (jiffies != start && i2c_debug >= 3)
+@@ -329,7 +329,7 @@ static int try_address(struct i2c_adapter *i2c_adap,
+ 		bit_dbg(3, &i2c_adap->dev, "emitting stop condition\n");
+ 		i2c_stop(adap);
+ 		udelay(adap->udelay);
+-		yield();
++		cond_resched();
+ 		bit_dbg(3, &i2c_adap->dev, "emitting start condition\n");
+ 		i2c_start(adap);
+ 	}
 -- 
 2.17.1
 
