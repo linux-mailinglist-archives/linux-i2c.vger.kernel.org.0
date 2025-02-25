@@ -1,131 +1,127 @@
-Return-Path: <linux-i2c+bounces-9563-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9564-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84ECBA43BF4
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2025 11:41:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56556A43C1A
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2025 11:45:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B49BB164C41
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2025 10:38:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78D303AB01E
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Feb 2025 10:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E779B23BD11;
-	Tue, 25 Feb 2025 10:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB54266B6B;
+	Tue, 25 Feb 2025 10:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YC/xapEf"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="eiNmEuHC";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TFZGOM/h"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBDE1FDE18;
-	Tue, 25 Feb 2025 10:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC24192B96;
+	Tue, 25 Feb 2025 10:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740479878; cv=none; b=PJj7ePVSWnptzidzGsich76Jmuq0WXJsZEUl1MX7XrWT515hKoRx4v/fX62+fzw+WRnCBgZVwfokTVUxLsoSYvlVpRQYQ8InJef7p+htfvsfTTEvkPuLn6xSM9+tX9s4XX7PVGyXUJraH/TWjq2eaq4s8coZKr8qfrNkhAJShU8=
+	t=1740480193; cv=none; b=ZfT+5Oiy57raibtcOqTcfDH+3dnDfZ7cu6TM5n1Tb48V5aTdlWMy6XWDcXDnBt93+0eo6FslBiUda5GcWdAGQScyw9P8T3noAw1t41xnoLfsH1rdhAKVSpfhh9gpHqnl6r8lDRhJMnvFMk4DwOFymHaW+wqsesGD5cxvgG3hHXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740479878; c=relaxed/simple;
-	bh=vs/wwxt5DOMp/6xhNJ+6yjgOoU2fOm7g5unK87DJaC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oyMvHGRD7imhPF9YAPR5N4mTbHAZyDERHwSKagKhaXLQO7WH1GD/NrNrCIBKWhzNsKBGxf0uU6X7Sy883qOw385NftMTFMP+BOeQaTrrCbPLdLDW+LH27KLAzV6EsVsMtsxMVaXAF+sQ8GtvxMDlBPk2Vl/bBd+sxSH8w/QXj9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YC/xapEf; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740479877; x=1772015877;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vs/wwxt5DOMp/6xhNJ+6yjgOoU2fOm7g5unK87DJaC0=;
-  b=YC/xapEfoKCzwG1PrDnWCgdhVnifhQ2fuUC3wJOXwBiWHjUo29UJF9hW
-   fsI9yj62kxb3aOyedX+bIerC4SVODBAnD91FIfqWAAmDamVFi3pk4y4Jh
-   elLWS/shzmI/9nlT0h7/2WqihhDBOrF+acNacRbvMv8Gwg8LMOOCRoqTM
-   YJfeaN0nBD4L0kLFxyTDKUGad/2UBtJ2uaNjTX0dZnnBLGKGvMyfa3RKb
-   +LzgAbCm3LK/UruA7RfDffealkymADwWv/wuoScdvlswfDg3xw9oXXooe
-   fkgeMwIDUU/BIml+ergsFI/3SFsmL9BsjCJ5h1JiV46Rc9BLTw2lI8E1A
-   g==;
-X-CSE-ConnectionGUID: gIOttq0vS1ybJxWtST0OWg==
-X-CSE-MsgGUID: FsOXRq47SQusBIDL5VoPhw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="28869635"
-X-IronPort-AV: E=Sophos;i="6.13,314,1732608000"; 
-   d="scan'208";a="28869635"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 02:37:56 -0800
-X-CSE-ConnectionGUID: ZB6kWAn6SkWq6/29SPCKdw==
-X-CSE-MsgGUID: Rxoeeh+3QwG+6vRQoDD+Dg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,314,1732608000"; 
-   d="scan'208";a="116362428"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 02:37:55 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tmsK0-0000000ExbG-0sh8;
-	Tue, 25 Feb 2025 12:37:52 +0200
-Date: Tue, 25 Feb 2025 12:37:51 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/1] at24: Drop of_match_ptr() and ACPI_PTR()
- protections
-Message-ID: <Z72dfxKzLLORkLl1@smile.fi.intel.com>
-References: <20250225100838.362125-1-andriy.shevchenko@linux.intel.com>
- <b8a1315a-8d86-4904-92d1-179699f54e03@app.fastmail.com>
+	s=arc-20240116; t=1740480193; c=relaxed/simple;
+	bh=tv0R0s1TjtqmD93DRANhxUHfOVD0iMVBBhlDl7tSPL4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=oJElKVDBRbe4kwGon929fKcmNbbI3xLP+WBJIXwKNSXsp6+BcQSIoZKDoFOv2R+vYQARrB+YtqOHV/hcUQxrZJoZzkwlb+L0GyL/e1OPt/lqurfA3kMBimXYRXRnPyaI58lqmW3oY3q/WHr+ZF/Y6FLVUGvPQT2XFq9X7oasEC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=eiNmEuHC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TFZGOM/h; arc=none smtp.client-ip=202.12.124.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 28B4C25400AD;
+	Tue, 25 Feb 2025 05:43:09 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-11.internal (MEProxy); Tue, 25 Feb 2025 05:43:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1740480189;
+	 x=1740566589; bh=GC1Rd8pP+MYB/d62vWhN9HoZZUyWU3eCT57wkmcfp0Y=; b=
+	eiNmEuHCu+EJJVMQjznB/+iv14HoT4te4oFQTLWMrU3b+44pPUSIEjl7i88oFZmJ
+	tK8rzQmEBBb12w8FRfBt9DPKjCtPPD2+GMcAH4AhuZc+foWCHbZP9FGKX5Lsipte
+	Bjh/sHuGmpWHGS74V5eaJyafxqWqaK6jmR603/irbsOIow3W6hKGAdTb8g9Vc4ag
+	NNJgpUJc4uw0hqSciLQflRO9+EwEYsSDYQw63F4FkUefQI74Jl2s16XidLz2hWkJ
+	pRDqujti03sdfLUYir+NmhKvc8rZHj7j9vlAIIy+2/WvvytILcAB9iNO4zAtrt6I
+	FL5BOxhvO/wPkd3LksnLUg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1740480189; x=
+	1740566589; bh=GC1Rd8pP+MYB/d62vWhN9HoZZUyWU3eCT57wkmcfp0Y=; b=T
+	FZGOM/hv0/3rQuzrFGx34cc9B1Zf0M/p7f1/T4r67zxmiNss3+7nI6BV6YK0p6FL
+	TL8Sbl3c46rtQI+QExGqUyx1Ir/NN6EajJCpZs1h25oD+8e3YQ56+yEWTLX5aoDP
+	3UVKrrq9VCx066xT0aKdOEMoCuf21x7WKGL7PDKpFzwmjRjUsUiBFtYOLNiu+hlk
+	mbYwb2W9gkwkWGNSp4n5FtH1rwKeRV8ygiMNK+VJ5c5pLpxmod+4xe6U0ypaRH93
+	Zlha1a4zq7qiIsHsu3+3Nvap/N8NIzxJ1TGewHH3dezkgsmpr5rT75eaEqMyJUMY
+	ua3XhDvQIGJMMgpg3coBg==
+X-ME-Sender: <xms:vZ69Zyo4f53VsXNNAriilkJc4eVqylOuVqncAwrmWr4ilt7679s1jA>
+    <xme:vZ69ZwrCTtZvx3ZSZVxQSzwORh61zP3CB_CfH23PH6pwEFY4dILVD3TowbcVqAZwt
+    YbbH9c3EVKpwZ8_HOY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekudeglecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeei
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsrhhglhessghguggvvhdrphhlpd
+    hrtghpthhtohepsggrrhhtohhsiidrghholhgrshiivgifshhkiheslhhinhgrrhhordho
+    rhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrih
+    hnthgvlhdrtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurght
+    ihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhn
+    vghlrdhorhhg
+X-ME-Proxy: <xmx:vZ69Z3PydYbPRTly_fy_ePcqpRy6f8bFJWo6hJeuK6Dd-vagMkfnmg>
+    <xmx:vZ69Zx758rgsP3sFQoJmo1kInegkx8w-KFRQyQg_gXNbmennMM-OEQ>
+    <xmx:vZ69Zx7KMPP_NS59eS6GvXAtJwNAOT54uNiFPRlfIglDRT7Npun-Uw>
+    <xmx:vZ69Zxif6zkl8mrSyZVd8HSoE_ZSPLiky1clhmQjmUKGPPcTycfetg>
+    <xmx:vZ69Z_R_EdkxMkmoBzfDsd1W6j47b84U6Rmkp5V9V-4Lin1gv63Zxndm>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 8C03A2220072; Tue, 25 Feb 2025 05:43:09 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b8a1315a-8d86-4904-92d1-179699f54e03@app.fastmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Date: Tue, 25 Feb 2025 11:42:48 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Cc: "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Message-Id: <745ff032-1e71-4569-ac9f-07c44cbcb344@app.fastmail.com>
+In-Reply-To: <Z72dfxKzLLORkLl1@smile.fi.intel.com>
+References: <20250225100838.362125-1-andriy.shevchenko@linux.intel.com>
+ <b8a1315a-8d86-4904-92d1-179699f54e03@app.fastmail.com>
+ <Z72dfxKzLLORkLl1@smile.fi.intel.com>
+Subject: Re: [PATCH v1 1/1] at24: Drop of_match_ptr() and ACPI_PTR() protections
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 25, 2025 at 11:29:05AM +0100, Arnd Bergmann wrote:
-> On Tue, Feb 25, 2025, at 11:08, Andy Shevchenko wrote:
-> > These result in a very small reduction in driver size, but at the cost
-> > of more complex build and slightly harder to read code. In the case of
-> > of_match_ptr() it also prevents use of PRP0001 ACPI based identification.
-> > In this particular case we have a valid ACPI/PNP ID that should be used
-> > in preference to PRP0001 but doesn't mean we should prevent that route.
-> >
-> > With this done, drop unneeded of*.h inclusions and __maybe_unused markers.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
+On Tue, Feb 25, 2025, at 11:37, Andy Shevchenko wrote:
+> On Tue, Feb 25, 2025 at 11:29:05AM +0100, Arnd Bergmann wrote:
+>> On Tue, Feb 25, 2025, at 11:08, Andy Shevchenko wrote:
+>
+>> Subject: [PATCH] [SUBMITTED 20240403] spi: remove incorrect of_match_ptr
+>>  annotations
+>
+> Was it applied (and the rest you provided here)?
 
-Thank you!
+It was part of a longer series. Some were applied, but the ones
+I provided here are those that for some reason did not make it.
+They should apply cleanly to today's linux-next.
 
-> For reference, see below for a couple of patches in this area that
-> I have sent in the past. Ideally I think we should try to fix these
-> all up and enable -Wunused-const-variable, which is useful in its
-> own right.
-
-Agree.
-
-> Your patch does not address a warning, but it's still a step
-> in that direction.
-
-Yeah, because the original code uses __maybe_unused markers.
-
-...
-
-> Subject: [PATCH] [SUBMITTED 20240403] spi: remove incorrect of_match_ptr
->  annotations
-
-Was it applied (and the rest you provided here)?
-
-To me sounds like a good cleanup that should be applier sooner than later to
-move forward of getting rid of of_match_ptr()/ACPI_PTR() completely.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+      Arnd
 
