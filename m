@@ -1,136 +1,159 @@
-Return-Path: <linux-i2c+bounces-9628-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9629-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BCCAA480CB
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 15:20:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07189A480F5
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 15:24:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7382C7A0703
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 14:19:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B57973A2915
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 14:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFFD82356B0;
-	Thu, 27 Feb 2025 14:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BDB522C35C;
+	Thu, 27 Feb 2025 14:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="QSFYMRQo"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077DC235BE8
-	for <linux-i2c@vger.kernel.org>; Thu, 27 Feb 2025 14:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD99342AA1;
+	Thu, 27 Feb 2025 14:21:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740665911; cv=none; b=ELclizXF8693H7dvdvnSRRYNqaktR23uAahs21yK3W7HmRPyqLfVrLMGFXlj/msCga3W6mxzICyTqI0OI72A00p1B3N36C1P6h+LlK9+Gxg+mF3k4i2Kpn4iFF6ME856FdE8IG5/AXwTVHDEzBTPUmYqkpgcbxej6fokMIey8ko=
+	t=1740666087; cv=none; b=GHD+5y0ozGI3fDmWg1QdThZsBczw+QIuQv5FJXz482SnmkGcIFRzanDF1vMkr0nBKHP2RoFYl3KpZX08KDFpH7kzX0lEEfxxwlvmQyfty9NEmm36uwrM3vj92JhocveABzbzdtrtwqCawACkRZZKQxh+/c28jrpf03IvxJh4wG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740665911; c=relaxed/simple;
-	bh=LxGqDDciDNPai+yMXfQ6y3up7TsSxsnZOwf8EJYTN8g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SWy75Oe/lUzlDLYJu9hGmCSAhskyb5yAK7LiX/ghZvf0//bXt3i8LCh3MGF+oGNj8Blk9Q7qkmID5mFxo6NM0igPTWZaY0WSvbifkvtGyt+r7yOiapNLVvX5Yodd9XhrFojlvqL+dIjhsjPL9cQlrpKYVizTK2fYV1sSYVlXiNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tnehz-0003GQ-MD; Thu, 27 Feb 2025 15:17:51 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tnehw-0038i4-0Z;
-	Thu, 27 Feb 2025 15:17:48 +0100
-Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id C00033CD6A6;
-	Thu, 27 Feb 2025 14:17:47 +0000 (UTC)
-Date: Thu, 27 Feb 2025 15:17:47 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Ming Yu <a0282524688@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org, 
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250227-gregarious-garrulous-echidna-ca7975-mkl@pengutronix.de>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
- <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
+	s=arc-20240116; t=1740666087; c=relaxed/simple;
+	bh=gFa6GpKVLPwlHcDdDMyMTXz8bG022aq5QSyPy10QOa0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k5fX5+Y6FYX9vDG3eGapSC+y12eGd7EzyzrzjO6WyYcnmCWc24N90U7D74EUYzs2Q/x8vyxv7bvUwMjcqfeL/lYIyEZWkI86u+zGciwJ4xDFQDgFiz2Ax1Yp2vu0RJhEp6uNpkLP6y2mSWzScC+lZ7Z4IyN/ZiIGwUJd6jpoFEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=QSFYMRQo; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 51REKtYe1783638
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 27 Feb 2025 08:20:55 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1740666055;
+	bh=lM/T3w7yUieqaJocZ0BLAs84QNCXgUrCL8lVLG4NWTs=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=QSFYMRQocjgVFaCGWkMEyWi0F5TSes/NQaMaXjEAgo41xQLwoSAL/izLY3/DtIs/4
+	 HQkLhm44q6rSarjxpah6TdlvZxplsTPSnYPGHnh6MYHDQsms4GSovJvcQVP/MgO8e1
+	 YiG/ieHZ54+KkgQxOAAILN5QEVrgpZGRENbZjTSM=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 51REKt4m009869
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 27 Feb 2025 08:20:55 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 27
+ Feb 2025 08:20:55 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 27 Feb 2025 08:20:55 -0600
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51REKtcs097316;
+	Thu, 27 Feb 2025 08:20:55 -0600
+Date: Thu, 27 Feb 2025 08:20:55 -0600
+From: Nishanth Menon <nm@ti.com>
+To: Andreas Kemnade <andreas@kemnade.info>
+CC: Andi Shyti <andi.shyti@kernel.org>, <vigneshr@ti.com>,
+        <aaro.koskinen@iki.fi>, <khilman@baylibre.com>, <rogerq@kernel.org>,
+        <tony@atomide.com>, <jmkrzyszt@gmail.com>, <reidt@ti.com>,
+        <wsa@kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@kernel.org>
+Subject: Re: [PATCH] i2c: omap: fix IRQ storms
+Message-ID: <20250227142055.ndzavzysaenoducj@murky>
+References: <20250207185435.751878-1-andreas@kemnade.info>
+ <c3bcusjbn23z5yd2a3xtm7swnfizkl7rb6ufhicdhn52epnjvb@5uqm3g6jcony>
+ <20250220100745.05c0eff8@akair>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="i5nv6d7na7xl5d3b"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+In-Reply-To: <20250220100745.05c0eff8@akair>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+
+On 10:08-20250220, Andreas Kemnade wrote:
+> Am Wed, 19 Feb 2025 20:22:13 +0100
+> schrieb Andi Shyti <andi.shyti@kernel.org>:
+> 
+> > Hi,
+> > 
+> > On Fri, Feb 07, 2025 at 07:54:35PM +0100, Andreas Kemnade wrote:
+> > > On the GTA04A5 writing a reset command to the gyroscope causes IRQ
+> > > storms because NACK IRQs are enabled and therefore triggered but not
+> > > acked.
+> > > 
+> > > Sending a reset command to the gyroscope by
+> > > i2cset 1 0x69 0x14 0xb6
+> > > with an additional debug print in the ISR (not the thread) itself
+> > > causes
+> > > 
+> > > [ 363.353515] i2c i2c-1: ioctl, cmd=0x720, arg=0xbe801b00
+> > > [ 363.359039] omap_i2c 48072000.i2c: addr: 0x0069, len: 2, flags: 0x0, stop: 1
+> > > [ 363.366180] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x1110)
+> > > [ 363.371673] omap_i2c 48072000.i2c: IRQ (ISR = 0x0010)
+> > > [ 363.376892] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
+> > > [ 363.382263] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
+> > > [ 363.387664] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
+> > > repeating till infinity
+> > > [...]
+> > > (0x2 = NACK, 0x100 = Bus free, which is not enabled)
+> > > Apparently no other IRQ bit gets set, so this stalls.
+> > > 
+> > > Do not ignore enabled interrupts and make sure they are acked.
+> > > If the NACK IRQ is not needed, it should simply not enabled, but
+> > > according to the above log, caring about it is necessary unless
+> > > the Bus free IRQ is enabled and handled. The assumption that is
+> > > will always come with a ARDY IRQ, which was the idea behind
+> > > ignoring it, proves wrong.
+> > > It is true for simple reads from an unused address.
+> > > 
+> > > So revert
+> > > commit c770657bd261 ("i2c: omap: Fix standard mode false ACK readings").
+> > > 
+> > > The offending commit was used to reduce the false detections in
+> > > i2cdetect. i2cdetect warns for confusing the I2C bus, so having some
+> > > rare false detections (I have never seen such on my systems) is the
+> > > lesser devil than having basically the system hanging completely.
+> > > 
+> > > No more details came to light in the corresponding email thread since
+> > > several months:
+> > > https://lore.kernel.org/linux-omap/20230426194956.689756-1-reidt@ti.com/
+> > > so no better fix to solve both problems can be developed right now.  
+> > 
+> > I need someone from TI or someone who can test to ack here.
+> > 
+> > Can someone help?
+> >
+> The original (IMHO minor) problem which should be fixed by c770657bd261
+> is hard to test, I have never seen that on any system (and as a
+> platform maintainer have a bunch of them) I have access to.
+> There is not much description anywhere about the system in which the
+> original system occured, and no reaction since several months from the
+> author, so I do not see anything which can be done.
+> Maybe it was just faulty hardware.
+> 
+> As said in the commit message, reverting it should be the lesser devil.
+> And that state was tested for many years.
+
+Can we not handle this slightly differently? leave the fix based on
+compatible? we know that the i2c controller changed over time. the
+i2cdetect bug fixed by c770657bd261 esp hard to find and fix.
 
 
---i5nv6d7na7xl5d3b
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
 
-On 27.02.2025 11:08:50, Vincent Mailhol wrote:
-> > +static int nct6694_can_stop(struct net_device *ndev)
-> > +{
-> > +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +
-> > +	priv->can.ctrlmode =3D CAN_CTRLMODE_LISTENONLY;
->=20
-> Hmmm, when Marc asked you to put the device in listen only mode, I think
-> he meant that you set it on the device side (i.e. flag
-> NCT6694_CAN_SETTING_CTRL1_MON) and not on the driver side. If you set
-> CAN_CTRLMODE_LISTENONLY flag, that will be reported in the netlink
-> interface. So you should not change that flag.
-
-ACK
-
-> But before that, did you check the datasheet? Don't you have a device
-> flag to actually turn the device off (e.g. sleep mode)?
-
-Please test that the ifup -> ifdown -> ifup sequence works properly,
-even on a busy bus and on a bus without with a 2nd CAN station that is
-sending and you are the only receiver.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---i5nv6d7na7xl5d3b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfAdAgACgkQDHRl3/mQ
-kZxjHQf/cl+NPaGA6wNUTa68Le8AS6tbcg6UkzWcAd8AS8/6CWkgPeebGEbmzKvl
-iENWrgc7mfiuy346ubOPufojybeeXMdOHLiwDPEkVgZegMycqUnS+2F/mTCm50fR
-vf9mETJuODrqvL4I265jS9Z+SUA/R/pzTcs0pQItMSzfUwGJ5nv9JQS8mv3MOQhM
-zOqyOMX1bv3+0Ov9ZTpjaV2JoOmTqpDFIYuN2DyqGl+NlJfZyHCp/Z8UJ7MyQykL
-Nzk53OPw0yb1MC6RT8m5ijRnpiVzfV5Et+2/FEXSW0aE/SXBRailPfDqdEmxXFnf
-f4DOoo4Z+H6xhf0L7EUZ1HcmpU+ckA==
-=2o2X
------END PGP SIGNATURE-----
-
---i5nv6d7na7xl5d3b--
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
