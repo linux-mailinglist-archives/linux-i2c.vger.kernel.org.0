@@ -1,253 +1,171 @@
-Return-Path: <linux-i2c+bounces-9634-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9635-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46E77A4895C
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 21:04:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3995FA48ACD
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 22:48:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E944B1890232
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 20:04:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7C0E161C30
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 21:48:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD48326FA54;
-	Thu, 27 Feb 2025 20:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD43227129B;
+	Thu, 27 Feb 2025 21:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AFK7X9km"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="HNFB8BfO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB3026FA4D;
-	Thu, 27 Feb 2025 20:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D011CEAA3;
+	Thu, 27 Feb 2025 21:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740686671; cv=none; b=gvL+22feWevB+9NYucLpAYjMeA7RqzlyC+EaLIEaM8Yx3RIYmTA8w12LntwteurPLbwjFNHKcvWrKi5WF1QpB7CKui2ssOc9pCxPkmRKppWirxjKdSmRni9GsXoqgo5QqtCzDUKKP83PE+rS2wCBAX5HyqvDkVbvpcilKuHAIhI=
+	t=1740692876; cv=none; b=pROlkQfY4v+keDtmnWEq+5/XQTSIT7T2Kk7LrRjNvCpLgX0l0EKc3B7uAtaaNO0HhODYUjTp9gMJ7WKJq6N9ccCnlBPmxCyRgnaOYtVsGO0lST/y27o7eViIIA0GDlgo8ess7fY/Jtu7YztumnOEwuWUWr+DTYna+HYVYmoFdG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740686671; c=relaxed/simple;
-	bh=6GP4AhAYCIY77ceA92Y51zNK7MmiQ9TrM0VgUYibQPQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bagVwH2jH2EeGv3eQdf6X5n3KDY7EMOnKILHas9J8axgHPGXhhT0jW5kNzCrywLJ6BeP3XMjga0e7qtzEm3puA+9NDAZwRQbW06jNFruy8WuV+SR4TydUB0wAiJqKHyNJH0p8uJZGw1+dKzUpuB2q+OeC52+bRtYtYlke20ohlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AFK7X9km; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 614F8C4CEDD;
-	Thu, 27 Feb 2025 20:04:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740686671;
-	bh=6GP4AhAYCIY77ceA92Y51zNK7MmiQ9TrM0VgUYibQPQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AFK7X9kmlsIRtbfMuC68X0X3gW+Na0qEhy5shqufwWrqbphCI5Ma/ug++aK550cVB
-	 QWS+qtvdZMhlsFAPFxK0nXEgqFhBcFA70+8d5mZl0/IWHdSiNW44/8rpO2Rg+ncN3L
-	 GT1kwuztWWanBV5L5tuhX72fmrAOuUGBukRTViisY0qaAxAPlUqrl59qJPD1Z4Yp1s
-	 uJZT6Ecgg9SbbJVBfFQnoTVgAeafJA1C5LdjbGtTdGFqovibEGbLXoZZRgtTNq50bu
-	 6TW0AATqIN7P6CIT5t3+vo6YclyeGnlOjpMn4Yv2wWT+0wUxF4DOS3fsi0yumPKMvq
-	 1qj0Dm22odb5A==
-Message-ID: <d1b184c5-84c1-4d76-a1d0-a9f37f1e363c@kernel.org>
-Date: Thu, 27 Feb 2025 21:04:21 +0100
+	s=arc-20240116; t=1740692876; c=relaxed/simple;
+	bh=8s3KyPP5+X5tLO930i9gADccHKv4fCmFC0alqAjK0f4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QU5oYO8m/oCg5E7qpEnAFPRghWkaFW58VvCc2zPVe6JPAA4Slm9INdre7GqW6aGxDmP15gwNWU/7DeZClxJ0xV0J8wzxzB6lxhRLpsRKQXLrG4v5JGrUMnCSZa3Y/72a/yyte230ist0E4bmZ/BgEEjeOXNbgkWdZI0+zOpFzQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=HNFB8BfO; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=gYjaKOa1qyvTVLLATJgBPcnTo3YvBY1Vu2MT27yHSZo=; b=HNFB8BfOVSohIXtfIvjNdHwd2w
+	dasmnZAFnwCd6WtdseHM7+CukesU4EuE8ivRkTdDXlJArWVNQDbDZSrsnuFDo+tFd2R++XK2IElKg
+	xA0tAHsF4U1/+6gr/WTi4g0rlvIZSNbZzK5kP0cYNkDmdqdF30mI7/EnnOqooeW7SVVQ5G2//v4pw
+	tNHbWcmGHOWXWLkvPtu4yFyyMOXQeo6mxrDQfK0pL0XdRMQ1tnE9+jB43kewfhgmKlBgfPyCFj8NB
+	PwP1WFrjrGVIc7V4vS9VSBNbEmF0KltjGsamvRDAYQI3D84FTVHPV65BngQghdP+AkuLMtyUjGbBs
+	LTm4jOHg==;
+Date: Thu, 27 Feb 2025 22:47:38 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Nishanth Menon <nm@ti.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, <vigneshr@ti.com>,
+ <aaro.koskinen@iki.fi>, <khilman@baylibre.com>, <rogerq@kernel.org>,
+ <tony@atomide.com>, <jmkrzyszt@gmail.com>, <reidt@ti.com>,
+ <wsa@kernel.org>, <linux-omap@vger.kernel.org>,
+ <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <stable@kernel.org>
+Subject: Re: [PATCH] i2c: omap: fix IRQ storms
+Message-ID: <20250227224738.6d7ebd8e@akair>
+In-Reply-To: <20250227142055.ndzavzysaenoducj@murky>
+References: <20250207185435.751878-1-andreas@kemnade.info>
+	<c3bcusjbn23z5yd2a3xtm7swnfizkl7rb6ufhicdhn52epnjvb@5uqm3g6jcony>
+	<20250220100745.05c0eff8@akair>
+	<20250227142055.ndzavzysaenoducj@murky>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-To: Ryan Chen <ryan_chen@aspeedtech.com>
-Cc: "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
- "joel@jms.id.au" <joel@jms.id.au>,
- "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20250224055936.1804279-1-ryan_chen@aspeedtech.com>
- <20250224055936.1804279-2-ryan_chen@aspeedtech.com>
- <20250224-arrogant-adventurous-mackerel-0dc18a@krzk-bin>
- <OS8PR06MB75415E95342F26F576B5CF8AF2C22@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <50327725-f3b8-4a8b-94a2-85afccd2868a@kernel.org>
- <OS8PR06MB7541B0DBC64B3EF6838DFE74F2CD2@OS8PR06MB7541.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <OS8PR06MB7541B0DBC64B3EF6838DFE74F2CD2@OS8PR06MB7541.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 27/02/2025 09:19, Ryan Chen wrote:
->>
->>
->>> aspeed,enable-byte:
->>> Force i2c controller use byte mode transfer. the byte mode transfer
->>> will send i2c data each byte by byte, inlcude address read/write.
->>
->> Isn't this standard FIFO mode?
-> Yes, it is.
->>
->> Why anyone would need to enable byte mode for given board?
-> By default, it is buffer-mode, for performance, I don't want user enable byte-mode, it will increase CPU utilize.
-> But someone want to be force enable byte-mode, so I add properties. 
-> https://patchwork.ozlabs.org/project/linux-aspeed/patch/20241007035235.2254138-3-ryan_chen@aspeedtech.com/
+Am Thu, 27 Feb 2025 08:20:55 -0600
+schrieb Nishanth Menon <nm@ti.com>:
 
+> On 10:08-20250220, Andreas Kemnade wrote:
+> > Am Wed, 19 Feb 2025 20:22:13 +0100
+> > schrieb Andi Shyti <andi.shyti@kernel.org>:
+> >  =20
+> > > Hi,
+> > >=20
+> > > On Fri, Feb 07, 2025 at 07:54:35PM +0100, Andreas Kemnade wrote: =20
+> > > > On the GTA04A5 writing a reset command to the gyroscope causes IRQ
+> > > > storms because NACK IRQs are enabled and therefore triggered but not
+> > > > acked.
+> > > >=20
+> > > > Sending a reset command to the gyroscope by
+> > > > i2cset 1 0x69 0x14 0xb6
+> > > > with an additional debug print in the ISR (not the thread) itself
+> > > > causes
+> > > >=20
+> > > > [ 363.353515] i2c i2c-1: ioctl, cmd=3D0x720, arg=3D0xbe801b00
+> > > > [ 363.359039] omap_i2c 48072000.i2c: addr: 0x0069, len: 2, flags: 0=
+x0, stop: 1
+> > > > [ 363.366180] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x1110)
+> > > > [ 363.371673] omap_i2c 48072000.i2c: IRQ (ISR =3D 0x0010)
+> > > > [ 363.376892] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x0102)
+> > > > [ 363.382263] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x0102)
+> > > > [ 363.387664] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x0102)
+> > > > repeating till infinity
+> > > > [...]
+> > > > (0x2 =3D NACK, 0x100 =3D Bus free, which is not enabled)
+> > > > Apparently no other IRQ bit gets set, so this stalls.
+> > > >=20
+> > > > Do not ignore enabled interrupts and make sure they are acked.
+> > > > If the NACK IRQ is not needed, it should simply not enabled, but
+> > > > according to the above log, caring about it is necessary unless
+> > > > the Bus free IRQ is enabled and handled. The assumption that is
+> > > > will always come with a ARDY IRQ, which was the idea behind
+> > > > ignoring it, proves wrong.
+> > > > It is true for simple reads from an unused address.
+> > > >=20
+> > > > So revert
+> > > > commit c770657bd261 ("i2c: omap: Fix standard mode false ACK readin=
+gs").
+> > > >=20
+> > > > The offending commit was used to reduce the false detections in
+> > > > i2cdetect. i2cdetect warns for confusing the I2C bus, so having some
+> > > > rare false detections (I have never seen such on my systems) is the
+> > > > lesser devil than having basically the system hanging completely.
+> > > >=20
+> > > > No more details came to light in the corresponding email thread sin=
+ce
+> > > > several months:
+> > > > https://lore.kernel.org/linux-omap/20230426194956.689756-1-reidt@ti=
+.com/
+> > > > so no better fix to solve both problems can be developed right now.=
+   =20
+> > >=20
+> > > I need someone from TI or someone who can test to ack here.
+> > >=20
+> > > Can someone help?
+> > > =20
+> > The original (IMHO minor) problem which should be fixed by c770657bd261
+> > is hard to test, I have never seen that on any system (and as a
+> > platform maintainer have a bunch of them) I have access to.
+> > There is not much description anywhere about the system in which the
+> > original system occured, and no reaction since several months from the
+> > author, so I do not see anything which can be done.
+> > Maybe it was just faulty hardware.
+> >=20
+> > As said in the commit message, reverting it should be the lesser devil.
+> > And that state was tested for many years. =20
+>=20
+> Can we not handle this slightly differently? leave the fix based on
+> compatible? we know that the i2c controller changed over time. the
+> i2cdetect bug fixed by c770657bd261 esp hard to find and fix.
+>=20
+looking a bit more deeper in:
+Why do we have omap_i2c_isr at all? Can there any case that
+stat & mask =3D=3D 0 there (without c770657bd261 applied)?
 
-I don't see the reason why this would be a board property.
+I looked at omap_i2c_xfer_data() and nothing interesting seems to
+happen without other bits besides OMAP_I2C_STAT_NACK.=20
+Looking again, things get interesting when that loop is left.
 
-I understood need for DMA because it is shared and only some of the
-controllers can use it. But why choice between buffer and FIFO depending
-on hardware?
+Maybe just acking NACK, setting cmd_err and return -EAGAIN if no other
+bits are set. That should not cause changes to scenarios where NACK
+comes with other bits set. Lets check whether that fixes the
+mess I see here. Well, everything is better then having that IRQ going
+mad.
 
+For reference, the sensor involved was the BMG160. Because it is not
+enabled in omap2plus_defconfig, the issue did not show up early.
+=46rom my understanding, that there is a NACK after the reset command
+data byte is sent. @Nikolaus: are there any nice and simple test points
+for a scope?
 
->>
->>>
->>>>
->>>>> +      may require a DTS to manually allocate which controller can
->>>>> + use
->>>> DMA mode.
->>>>> +      The "aspeed,enable-dma" property allows control of this.
->>>>> +
->>>>> +      In cases where one the hardware design results in a specific
->>>>> +      controller handling a larger amount of data, a DTS would likely
->>>>> +      enable DMA mode for that one controller.
->>>>> +
->>>>> +  aspeed,enable-byte:
->>>>> +    type: boolean
->>>>> +    description: |
->>>>> +      I2C bus enable byte mode transfer.
->>>>
->>>> No, either this is expressed as lack of dma mode property or if you
->>>> have three modes, then rather some enum (aspeed,transfer-mode ?)
->>>
->>> Thanks suggestion, I will using an enum property like aspeed,transfer-mode
->> instead.
->>>>
->>>>
->>>>
->>>>> +
->>>>> +  aspeed,global-regs:
->>>>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>>>> +    description: The phandle of i2c global register node.
->>>>
->>>> For what? Same question as usual: do not repeat property name, but
->>>> say what is this used for and what exactly it points to.
->>>>
->>>> s/i2c/I2C/ but then what is "I2C global register node"? This is how
->>>> you call your device in datasheet?
->>>>
->>> I do descript in cover, should add into the yaml file ?
->>
->>
->> Again, cover letter does not matter. Your hardware must be explained here.
-> Will add into commit. 
->>
->>>
->>> aspeed,global-regs:
->>> This global register is needed, global register is setting for new
->>> clock divide control, and new register set control.
->>
->> So this means you implement clock controller via syscon?
-> No, it is just mode switch. It also explain in cover. I will add it in commit. 
-> The legacy register layout is mix controller/target register control together. The following is add more detail description about new register layout. And new feature set add for register.
->>
->>>
->>>>
->>>>> +
->>>>>  required:
->>>>>    - reg
->>>>>    - compatible
->>>>>    - clocks
->>>>>    - resets
->>>>>
->>>>> +allOf:
->>>>> +  - $ref: /schemas/i2c/i2c-controller.yaml#
->>>>> +  - if:
->>>>> +      properties:
->>>>> +        compatible:
->>>>> +          contains:
->>>>> +            const: aspeed,ast2600-i2cv2
->>>>
->>>> NAK, undocumented compatible.
->>>
->>> Sorry, I should add what kind of document about this compatible?
->>
->> You cannot add new compatibles without documenting them. Documentation
->> is in the form of DT schema and each compatible must be listed (in some
->> way) in compatible property description.
-> 
-> Sorry, do you mean, I add following in yaml or commit message?
+Do you have any chance to test such a scenario on any device requiring
+the c770657bd261 applied?
 
-You need to list this in compatibles first.
-
-> 
-> This series add AST2600 i2cv2 new register set driver. The i2cv2 driver is new register set that have new clock divider option for more flexiable generation. And also have separate i2c controller and target register set for control, patch #2 is i2c controller driver only, patch #3 is add i2c target mode driver.
-
-All this describes driver, not hardware.
-
-> 
-> The legacy register layout is mix controller/target register control together. The following is add more detail description about new register layout. And new feature set add for register.
-> 
-> -Add new clock divider option for more flexible and accurate clock rate generation -Add tCKHighMin timing to guarantee SCL high pulse width.
-> -Add support dual pool buffer mode, split 32 bytes pool buffer of each device into 2 x 16 bytes for Tx and Rx individually.
-> -Increase DMA buffer size to 4096 bytes and support byte alignment.
-> -Re-define the base address of BUS1 ~ BUS16 and Pool buffer.
-> -Re-define registers for separating controller and target mode control.
-> -Support 4 individual DMA buffers for controller Tx and Rx, target Tx and Rx.
-
-Does it mean hardware changed on AST2600? Or these are different devices
-than aspeed,ast2600-i2c-bus? If this is not a different device, how one
-SoC can have two different flavors of same device in the same instance?
-
-
-
-
-Best regards,
-Krzysztof
+Regards,
+Andreas
 
