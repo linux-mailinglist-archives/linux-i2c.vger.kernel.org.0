@@ -1,308 +1,191 @@
-Return-Path: <linux-i2c+bounces-9603-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9605-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6DDAA475CA
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 07:03:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6E29A47799
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 09:20:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0759165318
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 06:03:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6F37188EFC0
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 08:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516EB21930E;
-	Thu, 27 Feb 2025 06:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93931224AE8;
+	Thu, 27 Feb 2025 08:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJEY7UlC"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Qo10uA5x";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TWKnKn/7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BAA2E403;
-	Thu, 27 Feb 2025 06:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDF8223711;
+	Thu, 27 Feb 2025 08:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740636216; cv=none; b=GLVtlWAjgavgDtdMgn97ow/xsf3n7PIFPKv71m2xpd1gJHJ3wnplG5j7rcQwceoA4Cx1qN4fJm8O+daiEiWdxKGFjRAGguY14WMhnsi6IAH0zBe1+0EuvJ4MDrMirbq50td9Wg5aje3DrX2895vYRDD7UkI+UjZVl9RtSjH769k=
+	t=1740644373; cv=none; b=h4Ot5er+pB8hhQVXQUO6LynR0kM20dUyehTyxUBtIA+3nskvYvGicSXXZE1rX4jzk5P2rGD5CMdr8eZiFqVECOgMvDacmbXVfSA7uIzePz3uqmwcd8R1ZeZWd3fJvDAHXJ8THA/3hWB8w81x/rMzBviRuSIHfEB2LlE9VUBfwDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740636216; c=relaxed/simple;
-	bh=5bQCSUlFL3cNMzqJxwc4JWiUDzaWUIigVUibvHYYM8I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U7SInUxPaGpd2jQFdRtBR+mvuLdJ8quUbMU4EccYQf87GYQZpNK/BE9Y59v5Cofzcy4nESetdhPSFi9rX2Hq1jdMOzSMqP27wFV0BAlX4syV1K/TrMCSCDOLM2jnfzimqL0g2sRtOPOZ7CoI09LfOktqsiw3S3BTKQUGrRNBqeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJEY7UlC; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6f77b9e0a34so4445677b3.2;
-        Wed, 26 Feb 2025 22:03:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740636213; x=1741241013; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KtYpkd2jzucIGjS+RbAQ8XkHU/fTQAGMdmomglbM5kM=;
-        b=BJEY7UlCawcICN9hVZhAMc9HiM/0JQxlBPGTwH08R0Ww+FNqclbWPmcOTE4RRPhF0u
-         LED6rA0XaiNmrLspCLhzl1S84RR8jK6xsy0RQ/ZxbP9O1AeArYrPdA5Jlpzf3gICQSf8
-         Rd+4H+slRTWLe7gllg/9kgyOLJcZiRr52484ppJzArcXVq2MZaza5D4+RTz9NpLAEPNQ
-         wkL6NPkfSbr2H0wa1AiW/TeZnVTRawDEtwBbghIximLZIco3yZNrhcakoJ254xHgPE5K
-         PsmmE65dU37D32EuAx8jJKrvWIfTwG5hf+bsh0aEHW8S08DIZLvau89c2AHhPR0iK2e2
-         kXBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740636213; x=1741241013;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KtYpkd2jzucIGjS+RbAQ8XkHU/fTQAGMdmomglbM5kM=;
-        b=D+XUxTE5cI9ICx5WE1Qt2w7+v+PuPlLdKVSNJxyw88qU25y2qcbulPwFaJHPv+1jHN
-         Zn9Y7AkGwlUTZ/nQkjDPLmah0+n8NhVeJlUrcjL/2S3mdjn5/vJTjMLANL9+LWg9eL6b
-         4GnU2Dt7SbCC15q0Pshoe+ulCa6ydSOnNIBI+KWy4mySxYcny+DtljtmIhW5kpcqNAxo
-         +hMrGNuqFgFJ07GhaUajGSwH1khseK5kZquDxKMepSlq7UE2sfEfjs1iupVv34KyWWJ/
-         fYN89odGWZ9k9FyE8OOockziLdYZz+P6YK4DtM6qt99kIu8KEqCHDv42L+F0+jul734r
-         PZgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCtpnbkPZqSSB90WJefVbF3UVGQg1vuOoULWpks/KSegecs4RbzDBqo4T73nJ7bE92vogJQLHLbgBU@vger.kernel.org, AJvYcCV+j6l6tZuN9AVBB7ZlkSkMNcE5O/CXnV5eKhgAO9Pq4lpf7sgm+f0aYWhuTD3hg5yyYggNuz6Tx8Y=@vger.kernel.org, AJvYcCVH0DJ55Mp9tfAwnGUegXwh0FcCxpffMTN24DubxzEukfS1QhEy2zPyGOE0yO7gLiARd4rcydKx@vger.kernel.org, AJvYcCVzFgwizoGpVPBuhgS78hyO9DE4onasxNiQHnO5ZlV8KQUj2f1dW4k0YwPdJT/kD2Qb9bfJ5FfcD8iSOA==@vger.kernel.org, AJvYcCW+hu2Rtr8Ks6A7o7TXB/zuHSlhpca7YR5yRR9jrRPsTqOvPXXxaHC+eSMSdrNHiP9eYw24zNmb89B5GobPy/8=@vger.kernel.org, AJvYcCW6bShUpiRSE8tdp+f3gVzDs6zQw6FvQxLjKRpdTx4u8HkZLVd3RvPJZce77guIDcc4A/8W05nbM7N8@vger.kernel.org, AJvYcCWIMyWYsWWOplUd4GM/tDE6eB40P19p9cj9vLKsf0eKyBPHZ9U3sdWEEjKFloTIU3TzPUdECCQQ9wdB@vger.kernel.org, AJvYcCWirC+hJdMP1c9kTaWzdyg9ETkQ6G6UbLWkF30DZH9ORqKlIUmBb45NhAsuiU/BKaA3LN9PBFVS31RPABY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7SxDqufp/AVuD3yLIvceMmgVIdlll+a1ycvLteY1quqaKQUvg
-	KIee2VS+LdVq3/+StNizNzxeWUWD+sGoGVe7JjerUKSzf4KGjP0rp3/T4+fE8yz22Hvd3LaMlJs
-	Kq3d0zlXXdZ732+sQgMAvTg2kKQgx42Pl
-X-Gm-Gg: ASbGnctx+olhuQtj5eanz+KcTeYbh7l5aFoFP/oH1x8eRwxTUPIV53UKdOi/lj74w3V
-	Okjr4+Hb3n9n4ZQjP2vDWyHgEwEOy1n3gb7XjxSHmJMTewv0OX3Da/41v8f5juKh+99VlsUyUmw
-	7Gfj1c11NLltB6RprIDauce9hbc/7eV+oqQqI1m8HqIA==
-X-Google-Smtp-Source: AGHT+IHhW5RmOkI7gkOjlnGO69YlG3Snu/7w3uKIK+tMNwqUqsl2+cEq6+/+Jh1ycoF05KXQ4giGB5nQbc+/Fln9Lv8=
-X-Received: by 2002:a05:690c:6402:b0:6fd:359a:8fd2 with SMTP id
- 00721157ae682-6fd359aa0f1mr37893927b3.26.1740636213413; Wed, 26 Feb 2025
- 22:03:33 -0800 (PST)
+	s=arc-20240116; t=1740644373; c=relaxed/simple;
+	bh=WuQI1ITKOPVp5WgRE8s5tzHcfV10x3QWes8eKtMTqKc=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Txi/b1mfEqPN1YCrBlOfkxHz/+u8oBd1AluPMZu8DNG54c3ruGPQJJtDAZ9IyKjT6KC4z/19AJ8jiQ8IfVkaTVwBVExuB1zv/OM6/iu7USIY/VGEiS6oSfJmmwqdYf3KiHX6JanNVzZkJ+0P1UoWdK0/mefFmCICFsHiPGfjYdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Qo10uA5x; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TWKnKn/7; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 35FB61140B75;
+	Thu, 27 Feb 2025 03:19:30 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-11.internal (MEProxy); Thu, 27 Feb 2025 03:19:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1740644370;
+	 x=1740730770; bh=J4sN4a1OZVim1rCZfmG4xp4g6SnKXjn/a7pXMNn9YAQ=; b=
+	Qo10uA5xy/QdV/njsAM9pdNEjw9gdlulUParp7/jtuT9MuJiRodwdxBlUC6snmSg
+	ZBdlx6cXV/iHQkWo392S+w7QE3H+qFWjKY5bchm6WzJWjNxhrEFId462HWwx79CN
+	sRYteNhUaqS32dMohd6VDFhM9lQfPAWOnGyt7MhRrhoex/YtUnHW084K8HaW2zMk
+	OSaAqtf4DNc6i/urvFIHNRz9vhzk5mQfcWNlludrlZnPGyfB+e58juv2IIVuCaFT
+	4e4nDmbplHcJfptBhw8TOzXGDBGgA7oD3qwRN9bA3PxwMHD4kEw+xBkQmpMxQ8Z1
+	xMEp9R/Sz/wEP6SVDoHWLQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1740644370; x=
+	1740730770; bh=J4sN4a1OZVim1rCZfmG4xp4g6SnKXjn/a7pXMNn9YAQ=; b=T
+	WKnKn/7oNQpvbT2IVGC+P3eGDtXpBAN5bijQkowGPSB8eXkNztNCbNUU0bDbVy0u
+	b3umdtmdPNpNhK2A/XW/XKcqOtpA9US1t27EjAUBRjAAOfMjmXGmKDdVJ+BQ3bHg
+	yO3qa1y9EBHSFFJmaZZKSP8xno2jgaD7KY4V+xd4PCy5LcDlJXILVEwiUoP3fQM4
+	VpmUhKESwJ98SSu2P65DLCILhk9CZ7FyNcaKxlwFZSbw58vodgeJXlqAniFvLRBa
+	9fq5IYnromVRh2RAYuhobfgIh34VCdW5GyKw4nuUA/y5LIAsuPWNcej/C6/ltp5e
+	tDjXrsB4zIaEFKnlgW4Jg==
+X-ME-Sender: <xms:ESDAZ1Ta1E3WmZDKY9vR2D0E8y7ssuZjUfo5jrXhzt38CB0Oa4VpMA>
+    <xme:ESDAZ-yJLsXb8JldwKQJILOIhlrcOFlU9SVWDxKPiFc2MYHxwaWEZ1fkt604fVJja
+    KcjB_LmAz5BAGe51LQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekieeliecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpeefhfehteffuddvgfeigefhjeetvdekteekjeef
+    keekleffjeetvedvgefhhfeihfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegr
+    rhhnuggsrdguvgdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhhtpdhrtg
+    hpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtthhopehkrhiikheskhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtohepsggrrhhtohhsiidrghholhgrshiivgifshhkiheslh
+    hinhgrrhhordhorhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkohes
+    lhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugi
+    hfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgv
+    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvgh
+    gvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:ESDAZ60Zq4ldJJTsAsafBsApk-rilkR5biwtI7okTJaT5M4n45wQvA>
+    <xmx:ESDAZ9DISk2aHqS2FwENgsZzDiEI4RtLPZmg5sWW5ZBje8R9Ck8rRg>
+    <xmx:ESDAZ-gkRtWDcuawOJx6whFHy25EQoIhY6qzLzND3-aviJCKwbpo4w>
+    <xmx:ESDAZxrDzIrAMB0IW_No4w4XaFXLq9ZVGPJGEdv2NyWKEGvXgsV7ug>
+    <xmx:EiDAZ5V8PYZR0ip7QkuneVHeCF0OSbc1Gt6YMwHtPbK0cpwX-UEcAkTG>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9F46D2220076; Thu, 27 Feb 2025 03:19:29 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com> <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
-In-Reply-To: <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 27 Feb 2025 14:03:22 +0800
-X-Gm-Features: AQ5f1JqT0RaRfdM1W6C9qCDjKis5nvigOw3vz5qmtqucCho9jlDXbeZ2UgpSNeA
-Message-ID: <CAOoeyxXax83oNg1MpC7N4B6TrLMeg8z53SaHGqsej8ZDMP1SLA@mail.gmail.com>
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, 
-	lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date: Thu, 27 Feb 2025 09:18:30 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ "Krzysztof Kozlowski" <krzk@kernel.org>
+Cc: "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Message-Id: <f9b8acf8-7ed5-4d9f-84d1-acdbaa9e96d8@app.fastmail.com>
+In-Reply-To: <Z78itKfsojtMpr_o@smile.fi.intel.com>
+References: <20250225100838.362125-1-andriy.shevchenko@linux.intel.com>
+ <b8a1315a-8d86-4904-92d1-179699f54e03@app.fastmail.com>
+ <88ad89bc-9261-4af0-a7ab-28dd760af567@kernel.org>
+ <Z78itKfsojtMpr_o@smile.fi.intel.com>
+Subject: Re: [PATCH v1 1/1] at24: Drop of_match_ptr() and ACPI_PTR() protections
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Dear Vincent,
+On Wed, Feb 26, 2025, at 15:18, Andy Shevchenko wrote:
+> On Tue, Feb 25, 2025 at 06:21:29PM +0100, Krzysztof Kozlowski wrote:
+>> On 25/02/2025 11:29, Arnd Bergmann wrote:
+>> 
+>> I tried to fix this in SPI, regulator and ASoC 2 years ago and Mark
+>> rejected such approach of dropping ACPI/of_match_ptr. AFAIU, Mark wants
+>> this to be fixed in more generic way, on the OF and ACPI common code,
+>> not per driver.
+>> 
+>> SPI:
+>> https://lore.kernel.org/all/7a65d775-cf07-4393-8b10-2cef4d5266ab@sirena.org.uk/
+>> 
+>> regulator:
+>> https://lore.kernel.org/all/20230310214553.275450-1-krzysztof.kozlowski@linaro.org/
+>> 
+>> ASoC:
+>> https://lore.kernel.org/all/20230310214333.274903-1-krzysztof.kozlowski@linaro.org/
+>
+> It was almost two years ago. Things may be changed :-)
+> At least I have no impediments so far with converting drivers I'm supporting in
+> the SPI. For ASoC there might be a new attempt by Cezary Rojewski in the future
+> (he does some cleanups in that area, and we discussed cleaning up ACPI_PTR() at
+>  minimum).
 
-Thank you for reviewing,
+I skipped those three subsystems when I sent my backlog. Comparing
+what I have left with the version from the patches above I see
+that about 40% of the warnings in all three are already addressed
+in the meantime, leaving just
 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2025=E5=B9=B42=E6=9C=
-=8827=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8810:09=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-...
-> > +static void nct6694_can_handle_state_change(struct net_device *ndev,
-> > +                                         enum can_state new_state)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +     struct can_berr_counter bec;
-> > +     struct can_frame *cf;
-> > +     struct sk_buff *skb;
-> > +
-> > +     skb =3D alloc_can_err_skb(ndev, &cf);
-> > +
-> > +     nct6694_can_get_berr_counter(ndev, &bec);
-> > +
-> > +     switch (new_state) {
-> > +     case CAN_STATE_ERROR_ACTIVE:
-> > +             priv->can.can_stats.error_warning++;
-> > +             priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
-> > +             if (cf)
->
-> Set the CAN_ER_CRTL flag:
->
->                 if (cf) {
->                         cf->can_id |=3D CAN_ERR_CRTL;
->                         cf->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
->                 }
->
+ drivers/regulator/pbias-regulator.c   | 2 +-
+ drivers/regulator/twl-regulator.c     | 2 +-
+ drivers/regulator/twl6030-regulator.c | 2 +-
+ drivers/spi/spi-armada-3700.c | 2 +-
+ drivers/spi/spi-img-spfi.c    | 2 +-
+ drivers/spi/spi-meson-spicc.c | 2 +-
+ drivers/spi/spi-meson-spifc.c | 2 +-
+ drivers/spi/spi-orion.c       | 2 +-
+ drivers/spi/spi-pic32-sqi.c   | 2 +-
+ drivers/spi/spi-pic32.c       | 2 +-
+ drivers/spi/spi-rockchip.c    | 2 +-
+ drivers/spi/spi-s3c64xx.c     | 2 +-
+ drivers/spi/spi-st-ssc4.c     | 2 +-
+ sound/soc/amd/acp3x-rt5682-max9836.c | 2 +-
+ sound/soc/atmel/sam9x5_wm8731.c      | 2 +-
+ sound/soc/codecs/rt1318.c            | 6 ++----
+ sound/soc/codecs/rt5514-spi.c        | 2 +-
+ sound/soc/qcom/lpass-sc7280.c        | 2 +-
+ sound/soc/samsung/aries_wm8994.c     | 2 +-
 
-Fix it in the v9.
+I send everything else that I have to address the warnings, and
+they are slowly making their way into the tree, as of today the
+remaining ones are
 
-> > +                     cf->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
-> > +             break;
-> > +     case CAN_STATE_ERROR_WARNING:
-> > +             priv->can.can_stats.error_warning++;
-> > +             priv->can.state =3D CAN_STATE_ERROR_WARNING;
-> > +             if (cf) {
-> > +                     cf->can_id |=3D CAN_ERR_CRTL;
->
-> Set the CAN_ERR_CNT flag when you populate cf->data[6] and cf->data[7]:
->
->                         cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
->
+ drivers/char/apm-emulation.c              | 5 ++---
+ drivers/char/tpm/tpm_ftpm_tee.c           | 2 +-
+ drivers/comedi/drivers/ni_atmio.c         | 2 +-
+ drivers/dma/img-mdc-dma.c                 | 2 +-
+ drivers/fpga/versal-fpga.c                | 2 +-
+ drivers/input/touchscreen/stmpe-ts.c      | 2 +-
+ drivers/mux/adg792a.c                     | 2 +-
+ drivers/net/ethernet/apm/xgene-v2/main.c  | 4 +---
+ drivers/net/ethernet/hisilicon/hns_mdio.c | 2 +-
+ drivers/rtc/rtc-fsl-ftm-alarm.c           | 2 +-
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c    | 2 +-
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c    | 2 +-
+ drivers/tty/serial/amba-pl011.c           | 6 +++---
+ drivers/tty/serial/ma35d1_serial.c        | 2 +-
 
-Fix it in the v9.
+and I'm optimistic about most of them making it into the
+next merge window. Once few enough are left, I can send
+it again as a series that turns on the warning by default
+and hopefully by that time we can wear down Mark enough
+that he takes the patches even if he still disagrees ;-)
 
-> > +                     if (bec.txerr > bec.rxerr)
-> > +                             cf->data[1] =3D CAN_ERR_CRTL_TX_WARNING;
-> > +                     else
-> > +                             cf->data[1] =3D CAN_ERR_CRTL_RX_WARNING;
-> > +                     cf->data[6] =3D bec.txerr;
-> > +                     cf->data[7] =3D bec.rxerr;
-> > +             }
-> > +             break;
-> > +     case CAN_STATE_ERROR_PASSIVE:
-> > +             priv->can.can_stats.error_passive++;
-> > +             priv->can.state =3D CAN_STATE_ERROR_PASSIVE;
-> > +             if (cf) {
-> > +                     cf->can_id |=3D CAN_ERR_CRTL;
->
-> Set the CAN_ERR_CNT flag when you populate cf->data[6] and cf->data[7]:
->
->                         cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
->
-
-Fix it in the v9.
-
-> > +                     cf->data[1] |=3D CAN_ERR_CRTL_RX_PASSIVE;
-> > +                     if (bec.txerr >=3D CAN_ERROR_PASSIVE_THRESHOLD)
-> > +                             cf->data[1] |=3D CAN_ERR_CRTL_TX_PASSIVE;
-> > +                     cf->data[6] =3D bec.txerr;
-> > +                     cf->data[7] =3D bec.rxerr;
-> > +             }
-> > +             break;
-> > +     case CAN_STATE_BUS_OFF:
-> > +             priv->can.state =3D CAN_STATE_BUS_OFF;
-> > +             priv->can.can_stats.bus_off++;
-> > +             if (cf)
-> > +                     cf->can_id |=3D CAN_ERR_BUSOFF;
-> > +             can_free_echo_skb(ndev, 0, NULL);
-> > +             netif_stop_queue(ndev);> +              can_bus_off(ndev)=
-;
-> > +             break;
-> > +     default:
-> > +             break;
-> > +     }
-> > +
-> > +     nct6694_can_rx_offload(&priv->offload, skb);
-> > +}
-> > +
-...
-> > +static int nct6694_can_stop(struct net_device *ndev)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +
-> > +     priv->can.ctrlmode =3D CAN_CTRLMODE_LISTENONLY;
->
-> Hmmm, when Marc asked you to put the device in listen only mode, I think
-> he meant that you set it on the device side (i.e. flag
-> NCT6694_CAN_SETTING_CTRL1_MON) and not on the driver side. If you set
-> CAN_CTRLMODE_LISTENONLY flag, that will be reported in the netlink
-> interface. So you should not change that flag.
->
-> But before that, did you check the datasheet? Don't you have a device
-> flag to actually turn the device off (e.g. sleep mode)?
->
-
-Our firmware currently does not provide an interface to turn the
-device off, I will put the device in listen-only mode as an
-alternative.
-
-> > +     netif_stop_queue(ndev);
-> > +     free_irq(ndev->irq, ndev);
-> > +     destroy_workqueue(priv->wq);
-> > +     can_rx_offload_disable(&priv->offload);
-> > +     priv->can.state =3D CAN_STATE_STOPPED;
-> > +     close_candev(ndev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-...
-> > +static int nct6694_can_probe(struct platform_device *pdev)
-> > +{
-> > +     const struct mfd_cell *cell =3D mfd_get_cell(pdev);
-> > +     struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
-> > +     struct nct6694_can_priv *priv;
-> > +     struct net_device *ndev;
-> > +     int ret, irq, can_clk;
-> > +
-> > +     irq =3D irq_create_mapping(nct6694->domain,
-> > +                              NCT6694_IRQ_CAN0 + cell->id);
-> > +     if (!irq)
-> > +             return irq;
-> > +
-> > +     ndev =3D alloc_candev(sizeof(struct nct6694_can_priv), 1);
-> > +     if (!ndev)
-> > +             return -ENOMEM;
-> > +
-> > +     ndev->irq =3D irq;
-> > +     ndev->flags |=3D IFF_ECHO;
-> > +     ndev->dev_port =3D cell->id;
-> > +     ndev->netdev_ops =3D &nct6694_can_netdev_ops;
-> > +     ndev->ethtool_ops =3D &nct6694_can_ethtool_ops;
-> > +
-> > +     priv =3D netdev_priv(ndev);
-> > +     priv->nct6694 =3D nct6694;
-> > +     priv->ndev =3D ndev;
-> > +
-> > +     can_clk =3D nct6694_can_get_clock(priv);
-> > +     if (can_clk < 0) {
-> > +             ret =3D dev_err_probe(&pdev->dev, can_clk,
-> > +                                 "Failed to get clock\n");
-> > +             goto free_candev;
-> > +     }
-> > +
-> > +     INIT_WORK(&priv->tx_work, nct6694_can_tx_work);
-> > +
-> > +     priv->can.state =3D CAN_STATE_STOPPED;
->
-> Marc asked you to remove this line during the v7 review.
->
-
-Sorry, drop it in the v9.
-
-> > +     priv->can.clock.freq =3D can_clk;
-> > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_nominal_cons=
-t;
-> > +     priv->can.data_bittiming_const =3D &nct6694_can_bittiming_data_co=
-nst;
-> > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
-> > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_counter;
-> > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
-> > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
-> > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
-> > +
-> > +     ret =3D can_rx_offload_add_manual(ndev, &priv->offload,
-> > +                                     NCT6694_NAPI_WEIGHT);
-> > +     if (ret) {
-> > +             dev_err_probe(&pdev->dev, ret, "Failed to add rx_offload\=
-n");
-> > +             goto free_candev;
-> > +     }
-> > +
-> > +     platform_set_drvdata(pdev, priv);
-> > +     SET_NETDEV_DEV(priv->ndev, &pdev->dev);
-> > +
-> > +     ret =3D register_candev(priv->ndev);
-> > +     if (ret)
-> > +             goto rx_offload_del;
-> > +
-> > +     return 0;
-> > +
-> > +rx_offload_del:
-> > +     can_rx_offload_del(&priv->offload);
-> > +free_candev:
-> > +     free_candev(ndev);
-> > +     return ret;
-> > +}
-> > +
-
-
-Best regards,
-Ming
+      Arnd
 
