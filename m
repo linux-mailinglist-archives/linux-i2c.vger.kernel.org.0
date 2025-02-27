@@ -1,182 +1,136 @@
-Return-Path: <linux-i2c+bounces-9627-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9628-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6917CA48096
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 15:10:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BCCAA480CB
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 15:20:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77F9F188509F
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 14:05:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7382C7A0703
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 14:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC67323815D;
-	Thu, 27 Feb 2025 14:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bpKekfN/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFFD82356B0;
+	Thu, 27 Feb 2025 14:18:31 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5D22376E4;
-	Thu, 27 Feb 2025 14:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077DC235BE8
+	for <linux-i2c@vger.kernel.org>; Thu, 27 Feb 2025 14:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740664996; cv=none; b=IX/iLoIyv7iVw9/2XD2y/71YMZZ/3XUgRXWXodYk3HQo5hcOsloxEj+h5Xh1Vlyk+/lXG3nTGmN1LNdgkvCn7US6dI4Ir2AH7ChafVFSCp1Ac2XxTzroYdfT6Og9D4+AxGa3zTwHduLIFMQCpld6i0hl8hk3DwP3GnAhGrG4Ips=
+	t=1740665911; cv=none; b=ELclizXF8693H7dvdvnSRRYNqaktR23uAahs21yK3W7HmRPyqLfVrLMGFXlj/msCga3W6mxzICyTqI0OI72A00p1B3N36C1P6h+LlK9+Gxg+mF3k4i2Kpn4iFF6ME856FdE8IG5/AXwTVHDEzBTPUmYqkpgcbxej6fokMIey8ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740664996; c=relaxed/simple;
-	bh=JLO+r7+iufzO2U2reXscB7TDJvieGJZdLVLiFsAxonw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JDV9m3uzoFd1U9mTCFbKlO6LcjL+fOZaPRgE3AjjFnhbvAK2RdvGRMIzv3ut9hhp1l2nxL0dzCijLxyZ+oxLMJdgOduZy22L10g+4CE6sdzzyPuPJfNMyrktGUSMMRSCwG6RQc/nhhZmElKWFtEIGwRSPYhprOIN1JOU7BoMWpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bpKekfN/; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CDBDB442C4;
-	Thu, 27 Feb 2025 14:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740664992;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0WNgqZ5dUPe8U7ULV55+q6IefmukksRnh+jtW8bNVBo=;
-	b=bpKekfN/I8165LpdFb/JLvepAsynPSLiGnzyRBAq6fD03Bv9J4cdxN8etNCwX/ZUqQ+/8t
-	lqwJrDDAXBMk0H5U8v4eVd5IPeWCYdACqXkd9+G1+HTrQC2XS2yZQYkMvgO8lkNnnPj9ai
-	GtoNstE0Q5Df7tlzwp+4hqpXCIyNuSXw0Rdv4wsiwq7azrJiRNxKAqWAH/K/jyppVcFn8K
-	sXCU56VcEb5jONIKfTbJvVAf2W5IOyTPsoD6NVy4aFocvk8J1yQ5E1zEH7QjyF+kHMbtXc
-	2a4yd7bRWSrxcuXY6cDnURxwNXoNsm82jNV0JQSfQWXf7JQNV5qXnN31WZyVDg==
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: Cosmin Tanislav <demonsingur@gmail.com>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, Cosmin Tanislav <demonsingur@gmail.com>
-Subject: Re: [PATCH v2 9/9] i2c: atr: add passthrough flag
-Date: Thu, 27 Feb 2025 15:03:11 +0100
-Message-ID: <3833744.MHq7AAxBmi@fw-rgant>
-In-Reply-To: <20250225113939.49811-10-demonsingur@gmail.com>
-References:
- <20250225113939.49811-1-demonsingur@gmail.com>
- <20250225113939.49811-10-demonsingur@gmail.com>
+	s=arc-20240116; t=1740665911; c=relaxed/simple;
+	bh=LxGqDDciDNPai+yMXfQ6y3up7TsSxsnZOwf8EJYTN8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SWy75Oe/lUzlDLYJu9hGmCSAhskyb5yAK7LiX/ghZvf0//bXt3i8LCh3MGF+oGNj8Blk9Q7qkmID5mFxo6NM0igPTWZaY0WSvbifkvtGyt+r7yOiapNLVvX5Yodd9XhrFojlvqL+dIjhsjPL9cQlrpKYVizTK2fYV1sSYVlXiNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tnehz-0003GQ-MD; Thu, 27 Feb 2025 15:17:51 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tnehw-0038i4-0Z;
+	Thu, 27 Feb 2025 15:17:48 +0100
+Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id C00033CD6A6;
+	Thu, 27 Feb 2025 14:17:47 +0000 (UTC)
+Date: Thu, 27 Feb 2025 15:17:47 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Ming Yu <a0282524688@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org, 
+	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250227-gregarious-garrulous-echidna-ca7975-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
+ <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart1991169.taCxCBeP46";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekjeeihecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfgggtsehgtderredttdejnecuhfhrohhmpeftohhmrghinhcuifgrnhhtohhishcuoehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhephfdvleekvefgieejtdduieehfeffjefhleegudeuhfelteduiedukedtieehlefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehffidqrhhgrghnthdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtohepuggvmhhonhhsihhnghhurhesghhmrghilhdrtghomhdprhgtphhtthhopehtohhmihdrvhgrlhhkvghinhgvnhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopeifshgrodhrvghnvghsrghssehsr
- ghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-Sasl: romain.gantois@bootlin.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="i5nv6d7na7xl5d3b"
+Content-Disposition: inline
+In-Reply-To: <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
---nextPart1991169.taCxCBeP46
+
+--i5nv6d7na7xl5d3b
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: Cosmin Tanislav <demonsingur@gmail.com>
-Subject: Re: [PATCH v2 9/9] i2c: atr: add passthrough flag
-Date: Thu, 27 Feb 2025 15:03:11 +0100
-Message-ID: <3833744.MHq7AAxBmi@fw-rgant>
-In-Reply-To: <20250225113939.49811-10-demonsingur@gmail.com>
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
 MIME-Version: 1.0
 
-On mardi 25 f=C3=A9vrier 2025 12:39:37 heure normale d=E2=80=99Europe centr=
-ale Cosmin=20
-Tanislav wrote:
-> Some I2C ATRs can have other I2C ATRs as children. The I2C messages of
-> the child ATRs need to be forwarded as-is if the parent I2C ATR can
-> only do static mapping.
+On 27.02.2025 11:08:50, Vincent Mailhol wrote:
+> > +static int nct6694_can_stop(struct net_device *ndev)
+> > +{
+> > +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +
+> > +	priv->can.ctrlmode =3D CAN_CTRLMODE_LISTENONLY;
 >=20
-> In the case of GMSL, the deserializer I2C ATR actually doesn't have I2C
-> address remapping hardware capabilities, but it is able to select which
-> GMSL link to talk to, allowing it to change the address of the
-> serializer.
->=20
-> The child ATRs need to have their alias pools defined in such a way to
-> prevent overlapping addresses between them, but there's no way around
-> this without orchestration between multiple ATR instances.
->=20
-> To allow for this use-case, add a flag that allows unmapped addresses
-> to be passed through, since they are already remapped by the child ATRs.
->=20
-> There's no case where an address that has not been remapped by the child
-> ATR will hit the parent ATR.
->=20
-> Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
-> ---
->  drivers/i2c/i2c-atr.c   | 3 +++
->  include/linux/i2c-atr.h | 2 ++
->  2 files changed, 5 insertions(+)
->=20
-> diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
-> index f7b853f55630..1986fa055f20 100644
-> --- a/drivers/i2c/i2c-atr.c
-> +++ b/drivers/i2c/i2c-atr.c
-> @@ -394,6 +394,9 @@ static int i2c_atr_map_msgs(struct i2c_atr_chan *chan,
-> struct i2c_msg *msgs, c2a =3D i2c_atr_get_mapping_by_addr(chan,
-> msgs[i].addr);
->=20
->  		if (!c2a) {
-> +			if (atr->flags & I2C_ATR_PASSTHROUGH)
-> +				continue;
+> Hmmm, when Marc asked you to put the device in listen only mode, I think
+> he meant that you set it on the device side (i.e. flag
+> NCT6694_CAN_SETTING_CTRL1_MON) and not on the driver side. If you set
+> CAN_CTRLMODE_LISTENONLY flag, that will be reported in the netlink
+> interface. So you should not change that flag.
 
-Shouldn't this check also be added to i2c_atr_smbus_xfer?
+ACK
 
-> +
->  			dev_err(atr->dev, "client 0x%02x not mapped!\n",
->  				msgs[i].addr);
->=20
-> diff --git a/include/linux/i2c-atr.h b/include/linux/i2c-atr.h
-> index 2f79d0d9140f..b3797a930a7a 100644
-> --- a/include/linux/i2c-atr.h
-> +++ b/include/linux/i2c-atr.h
-> @@ -22,9 +22,11 @@ struct i2c_atr;
->   * enum i2c_atr_flags - Flags for an I2C ATR driver
->   *
->   * @I2C_ATR_STATIC: ATR does not support dynamic mapping, use static
-> mapping + * @I2C_ATR_PASSTHROUGH: Allow unmapped incoming addresses to pa=
-ss
-> through */
->  enum i2c_atr_flags {
->  	I2C_ATR_STATIC =3D BIT(0),
-> +	I2C_ATR_PASSTHROUGH =3D BIT(1),
+> But before that, did you check the datasheet? Don't you have a device
+> flag to actually turn the device off (e.g. sleep mode)?
 
-As stated for the previous patch, I'd prefer the "I2C_ATR_F_*" naming=20
-convention.
+Please test that the ifup -> ifdown -> ifup sequence works properly,
+even on a busy bus and on a bus without with a 2nd CAN station that is
+sending and you are the only receiver.
 
-Thanks,
+regards,
+Marc
 
-=2D-=20
-Romain Gantois, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---nextPart1991169.taCxCBeP46
+--i5nv6d7na7xl5d3b
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEYFZBShRwOvLlRRy+3R9U/FLj284FAmfAcJ8ACgkQ3R9U/FLj
-285D1xAAlqUgtz5BOzvP2dOWUz3GDJ3RIS3PLNrs0uwv2T0ZY7RALzyn8XQpIJ9I
-mjLLrJYb9dEsTZLx0e1w0w2VlS2lvKT12QymmnmA0/ssjone82Kx76OXhoCBrSLH
-ymXq00zn/JRH2/mgtsVXLZzMb0muuiBZvHIBlmn6gw0fuk2HSHh4zlfCvLWfZxFW
-hc9GRGjGs/oMQuhIGHH/Fito8lYL1MgWnqYMwB3MHVmK/vSNgdQmJJ/fR9DPzgwR
-K5SeE0TIMnUb9s0ip4zVHtCTSSuhGBtNpvJsRvSTiXkh5pGdNosVQTb29a5ATsTK
-tG4GY40xcDjgUmYBQbFMK0G++crQYqpILGj84C+UhuAgrgksxnbWMzribadBHB1v
-tTXxFuSV/GxALN/4Zseq02kmc6FOKE5TorMd2U1+6NgMGcexkbTgy+KnNn94jm/P
-Iuanv9SM/ufZyKKttGct0RTNVt0wfauSo0Bb5QVSt4uwh3g+glyD+JPv9ExtKgbB
-+xo6u1aKuKTXBebgQQ02eawSLk6LCHd+ymf+Hy5KxYE3lQidu20/KUBDauT0kL/v
-Nx52lywx6frHO8Kx6E6IJISiBsq1Y239IilrIDTVK0jMVHNkq1CPYRT3jUtKxVrv
-IWloY+UavJKWi4QGVX7pDaFkQYU2oWq6SCk+xFJxJMXKzxCF5v4=
-=1eMY
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfAdAgACgkQDHRl3/mQ
+kZxjHQf/cl+NPaGA6wNUTa68Le8AS6tbcg6UkzWcAd8AS8/6CWkgPeebGEbmzKvl
+iENWrgc7mfiuy346ubOPufojybeeXMdOHLiwDPEkVgZegMycqUnS+2F/mTCm50fR
+vf9mETJuODrqvL4I265jS9Z+SUA/R/pzTcs0pQItMSzfUwGJ5nv9JQS8mv3MOQhM
+zOqyOMX1bv3+0Ov9ZTpjaV2JoOmTqpDFIYuN2DyqGl+NlJfZyHCp/Z8UJ7MyQykL
+Nzk53OPw0yb1MC6RT8m5ijRnpiVzfV5Et+2/FEXSW0aE/SXBRailPfDqdEmxXFnf
+f4DOoo4Z+H6xhf0L7EUZ1HcmpU+ckA==
+=2o2X
 -----END PGP SIGNATURE-----
 
---nextPart1991169.taCxCBeP46--
-
-
-
+--i5nv6d7na7xl5d3b--
 
