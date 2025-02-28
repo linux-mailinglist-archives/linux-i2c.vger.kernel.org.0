@@ -1,147 +1,151 @@
-Return-Path: <linux-i2c+bounces-9638-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9639-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D8D7A495D2
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 10:49:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD181A496D9
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 11:18:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49E6E163B80
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 09:49:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6FC407A82DA
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 10:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC088257AEC;
-	Fri, 28 Feb 2025 09:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F1E25DCEB;
+	Fri, 28 Feb 2025 10:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="QKaDaYyR";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="wV3eEW2t"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="XxojHIRP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.216])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3D21F9416;
-	Fri, 28 Feb 2025 09:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.216
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740736191; cv=pass; b=mfNcdJ+eA+IC/lmIHFCr6al5DovTo9f4mbCWsBhjWVLCc95DNoKkqpL9XUDHuRgL4h8+cE0DPXnM+KQzj85IJmZYA8lTN7K9mYlONGVjfXFtCIUGAYr/Ou20RHb9P+bsvHMZBciThIe/KwcSnkfS4OoEG6mD/OkvkmrsD/39Rsk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740736191; c=relaxed/simple;
-	bh=VYGAI3rv8ysclVl7aBNvJn+D75Mvc5tRYEQHog/yWUs=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=HwEqcJdS5h1xvKOxSbtLCwLD54ywiYGwtdrT7NGwYDCayrbwlQztCpOjvPFfwRPuX0dSxYs9P5ioWqKwH4daKJXRjYli/Lq1VXsuXKH2dUWXXbXQU0xQKXBofG8yvRtM0p8GFz89Tr5QgZiocu12GWuXH0qDUT0YgZfKemmuGqc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=QKaDaYyR; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=wV3eEW2t; arc=pass smtp.client-ip=81.169.146.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1740736169; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=MoUDHBCqtSFYwuQ9e0LiSC/g2V3goZtdS45GBI8g6wFXWskbQxb82c1Aazw4huB3DU
-    SyVQCNgrXK7kNHtQHxwaioPHqESnflJo/B1GqfBc3s0WydAETZuHFKZ4ktNm/G1A3jKB
-    /9Jxsde5pxzRZ6n3w/VP0NjYfcpsAp0FJve7/QQnv/f2RcKXQ+F/JYE9KYuMqvoff1xS
-    G17u/H1NTrstN5I8Cjn+3HpGmRvujeW05X9xsVSLRzX9PvxUmnYtmItZ5E5J3rrvAXVc
-    qz85CwV5OYH6BR1CtCUGwLilJjHXdsb4WeUqmWR7/QbK6mNBO6naGOnsifhvlTNGoik4
-    rNWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1740736169;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=VYGAI3rv8ysclVl7aBNvJn+D75Mvc5tRYEQHog/yWUs=;
-    b=c1W4Dk9Ng7xrwmvP5Mlyd8aB60hYEmkXYpPTO3hCQSbzjYSGuUEottCLeS0IwhRuZG
-    0/obPRt8rh1nCK6Wr/lxhtNlVzTHFOWTIt7zzA/oFKJHh0gIdqYFzeaETPxn2SwkiJai
-    GVp3L1ljaJHhVJgQho5IREM4qanDAOKid9oSDwjc18bNr1zuEv7+4+0tSacpwxjTsL1P
-    J1KLBUPdo8x05cPrqZJv03qFEThfop/yJvHsoRZ9WKEiwmemjG8Zda5vXvbVJHfZndys
-    LAF03I+3h3Aox/gT168ztW4Wa8QcejSgPRJ094j98sjEqc3j/7qp93Gk8TvvAcJA2up5
-    Klng==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1740736169;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=VYGAI3rv8ysclVl7aBNvJn+D75Mvc5tRYEQHog/yWUs=;
-    b=QKaDaYyRlqG49ZVDPa96Lm2LFSGCSrbSpA7ZsfXEP+T3JTbP9NwAfMCpbEkiNgKtdS
-    glW/+RNe0gdvsw5IzXzmYDylNfq4AP8x8LWgd+V3ufiJOlsxaXim1U844pCKzekEM3r5
-    lWElZ2y07TJkHaTItoxv+999mdRZ1PEbOz3cUF/lzBVkDsge9Qp85pT8XwOxJXFSQUXZ
-    A6IWri/q6uaahnb3kmCgqjSF7d1t+DcDUlDMLwjAlzkCzjh1SCIQ1kCbQ5GEPDluL0E1
-    Oftth+0qQs5JJ/lKDBLzL0fqt+JNEQgNvzGBCOEpheHgCOw3Z6vyI7NUI8ak1P5MFhss
-    iBDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1740736169;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=VYGAI3rv8ysclVl7aBNvJn+D75Mvc5tRYEQHog/yWUs=;
-    b=wV3eEW2tPjNrAhtKFZGuAFjsyCV9y6LUgNADBooLbAiqtEDd8Hjb5mNeryHcc3rPlp
-    VnaxogI2u01Ks4MY4DBw==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yeTkZ"
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 51.3.0 DYNA|AUTH)
-    with ESMTPSA id Q56adc11S9nSGy3
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Fri, 28 Feb 2025 10:49:28 +0100 (CET)
-Content-Type: text/plain;
-	charset=us-ascii
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8DC25DAF4;
+	Fri, 28 Feb 2025 10:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740737840; cv=none; b=GVqBvwoIARoKLFFVsuIPZobYabjwJ80JSWab7IdfBS5KkJcaW7IpKQ0jj+ECqApUCmt8w6Guk/wzix3Jhb5TK85AYzzG+rP3aqfTcMVgbpl5WtHBV+tCkoqpKsKFCuwJ/6SxLk4gd+3+9TaiTxjecG8Ie0v2MAly6xZo9EWPcGo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740737840; c=relaxed/simple;
+	bh=fvbjrF3RFlitvr8uzEvx8ow4b31xsSTWcr8kpA4lx3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b89lqAkLb/x7dIWuaB+NXP9pjUrhEE54634UfU+gGKwCKcXvRG6SN941YatvWP68WMfzQUoQwCQiRmmkxuZTL9X/zsoihBaVYlkOIEM8UjRgzli+BhyKhETsVxMRFgGrjNpRe/+p00219xc2nHDkOmvBfJTsQc2BcmQpd7rqYNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=XxojHIRP; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=XM4FcO+7xezO5MBIOl4ah63+MR0NMozspQG+f2a2VZA=; b=XxojHIRPnmi/KnLTCn0pg9t8SF
+	435H+hao7/hsBjESMMsyzO52ehDz2U3BVZ7A2ss0o0DTAizrK/ksE+rjA03qdwmFe9y/E57r3KIXt
+	uncVANUBjTFZwy57BdErslKvidMkDf3ufAYGxBGm7V2Ygdl39DZZ1uc3xWt98keyYoETq9iWJMBCu
+	evGzAFalO1QN5Z2dv2L/ynJmE0RNg2k4Cot5mvee8Z4Gu1UvfUEbJSfFVwqVDrJUOroxeWAH9Sml9
+	XQup9aiE7vGTehfEJ3/V4bdRd3VM4MUlzJiBwMUy6BytytQhv6kdPM6Mu1dlCPy0t+uOyLhzBGzhX
+	bdTN0yJQ==;
+Date: Fri, 28 Feb 2025 11:17:07 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Nishanth Menon <nm@ti.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, <vigneshr@ti.com>,
+ <aaro.koskinen@iki.fi>, <khilman@baylibre.com>, <rogerq@kernel.org>,
+ <tony@atomide.com>, <jmkrzyszt@gmail.com>, <reidt@ti.com>,
+ <wsa@kernel.org>, <linux-omap@vger.kernel.org>,
+ <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <stable@kernel.org>
+Subject: Re: [PATCH] i2c: omap: fix IRQ storms
+Message-ID: <20250228111707.6bf2b992@akair>
+In-Reply-To: <20250227142055.ndzavzysaenoducj@murky>
+References: <20250207185435.751878-1-andreas@kemnade.info>
+	<c3bcusjbn23z5yd2a3xtm7swnfizkl7rb6ufhicdhn52epnjvb@5uqm3g6jcony>
+	<20250220100745.05c0eff8@akair>
+	<20250227142055.ndzavzysaenoducj@murky>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.1\))
-Subject: Re: [PATCH] i2c: omap: fix IRQ storms
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20250227224738.6d7ebd8e@akair>
-Date: Fri, 28 Feb 2025 10:49:18 +0100
-Cc: Nishanth Menon <nm@ti.com>,
- Andi Shyti <andi.shyti@kernel.org>,
- "Raghavendra, Vignesh" <vigneshr@ti.com>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Kevin Hilman <khilman@baylibre.com>,
- Roger Quadros <rogerq@kernel.org>,
- Tony Lindgren <tony@atomide.com>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>,
- Reid Tonking <reidt@ti.com>,
- wsa@kernel.org,
- Linux-OMAP <linux-omap@vger.kernel.org>,
- linux-i2c@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- stable@kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <137529D7-D8A6-458B-9658-2998F31239FD@goldelico.com>
-References: <20250207185435.751878-1-andreas@kemnade.info>
- <c3bcusjbn23z5yd2a3xtm7swnfizkl7rb6ufhicdhn52epnjvb@5uqm3g6jcony>
- <20250220100745.05c0eff8@akair> <20250227142055.ndzavzysaenoducj@murky>
- <20250227224738.6d7ebd8e@akair>
-To: Andreas Kemnade <andreas@kemnade.info>
-X-Mailer: Apple Mail (2.3776.700.51.11.1)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Andreas,
+Am Thu, 27 Feb 2025 08:20:55 -0600
+schrieb Nishanth Menon <nm@ti.com>:
 
-> Am 27.02.2025 um 22:47 schrieb Andreas Kemnade <andreas@kemnade.info>:
->=20
-> For reference, the sensor involved was the BMG160. Because it is not
-> enabled in omap2plus_defconfig, the issue did not show up early.
-> =46rom my understanding, that there is a NACK after the reset command
-> data byte is sent. @Nikolaus: are there any nice and simple test =
-points
-> for a scope?
+> On 10:08-20250220, Andreas Kemnade wrote:
+> > Am Wed, 19 Feb 2025 20:22:13 +0100
+> > schrieb Andi Shyti <andi.shyti@kernel.org>:
+> >   
+> > > Hi,
+> > > 
+> > > On Fri, Feb 07, 2025 at 07:54:35PM +0100, Andreas Kemnade wrote:  
+> > > > On the GTA04A5 writing a reset command to the gyroscope causes IRQ
+> > > > storms because NACK IRQs are enabled and therefore triggered but not
+> > > > acked.
+> > > > 
+> > > > Sending a reset command to the gyroscope by
+> > > > i2cset 1 0x69 0x14 0xb6
+> > > > with an additional debug print in the ISR (not the thread) itself
+> > > > causes
+> > > > 
+> > > > [ 363.353515] i2c i2c-1: ioctl, cmd=0x720, arg=0xbe801b00
+> > > > [ 363.359039] omap_i2c 48072000.i2c: addr: 0x0069, len: 2, flags: 0x0, stop: 1
+> > > > [ 363.366180] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x1110)
+> > > > [ 363.371673] omap_i2c 48072000.i2c: IRQ (ISR = 0x0010)
+> > > > [ 363.376892] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
+> > > > [ 363.382263] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
+> > > > [ 363.387664] omap_i2c 48072000.i2c: IRQ LL (ISR = 0x0102)
+> > > > repeating till infinity
+> > > > [...]
+> > > > (0x2 = NACK, 0x100 = Bus free, which is not enabled)
+> > > > Apparently no other IRQ bit gets set, so this stalls.
+> > > > 
+> > > > Do not ignore enabled interrupts and make sure they are acked.
+> > > > If the NACK IRQ is not needed, it should simply not enabled, but
+> > > > according to the above log, caring about it is necessary unless
+> > > > the Bus free IRQ is enabled and handled. The assumption that is
+> > > > will always come with a ARDY IRQ, which was the idea behind
+> > > > ignoring it, proves wrong.
+> > > > It is true for simple reads from an unused address.
+> > > > 
+> > > > So revert
+> > > > commit c770657bd261 ("i2c: omap: Fix standard mode false ACK readings").
+> > > > 
+> > > > The offending commit was used to reduce the false detections in
+> > > > i2cdetect. i2cdetect warns for confusing the I2C bus, so having some
+> > > > rare false detections (I have never seen such on my systems) is the
+> > > > lesser devil than having basically the system hanging completely.
+> > > > 
+> > > > No more details came to light in the corresponding email thread since
+> > > > several months:
+> > > > https://lore.kernel.org/linux-omap/20230426194956.689756-1-reidt@ti.com/
+> > > > so no better fix to solve both problems can be developed right now.    
+> > > 
+> > > I need someone from TI or someone who can test to ack here.
+> > > 
+> > > Can someone help?
+> > >  
+> > The original (IMHO minor) problem which should be fixed by c770657bd261
+> > is hard to test, I have never seen that on any system (and as a
+> > platform maintainer have a bunch of them) I have access to.
+> > There is not much description anywhere about the system in which the
+> > original system occured, and no reaction since several months from the
+> > author, so I do not see anything which can be done.
+> > Maybe it was just faulty hardware.
+> > 
+> > As said in the commit message, reverting it should be the lesser devil.
+> > And that state was tested for many years.  
+> 
+> Can we not handle this slightly differently? leave the fix based on
+> compatible? we know that the i2c controller changed over time. the
+> i2cdetect bug fixed by c770657bd261 esp hard to find and fix.
+> 
+Looking again more deeply, I do not understand how c770657bd261
+should reliably prevent doing stuff without ARDY:
+omap_i2c_xfer_data() is called as a reaction the the IRQ but also in
+a polling loop. So it must deal with situations were only NACK is set
+there.
+So just disabling the IRQ cannot help. If that is just tested via
+i2cdetect, the polling mode is not tested.
 
-According to schematics [1] you can either tap the I2C bus at the camera =
-connector
-(pins 3 and 5) or R206 and R207.
-
-For the camera connector you would need a flex cable that fits the =
-SD-52437-2471
-connector.
-
-The resistors are located near the pogo pin connector for the right =
-speaker (all
-are near the antenna connector). If you need a photo please let me know.
-It would be better to solder tiny wires...
-
-BR,
-Nikolaus
-
-[1]: https://projects.goldelico.com/p/gta04-main/downloads/48/
-
+Regards,
+Andreas
 
