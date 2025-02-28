@@ -1,171 +1,176 @@
-Return-Path: <linux-i2c+bounces-9635-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9636-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3995FA48ACD
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 22:48:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A64BCA48DFE
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 02:30:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7C0E161C30
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Feb 2025 21:48:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA15016CE01
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 01:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD43227129B;
-	Thu, 27 Feb 2025 21:47:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E77603596A;
+	Fri, 28 Feb 2025 01:29:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="HNFB8BfO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H7jtZsQR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D011CEAA3;
-	Thu, 27 Feb 2025 21:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A3A276D12;
+	Fri, 28 Feb 2025 01:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740692876; cv=none; b=pROlkQfY4v+keDtmnWEq+5/XQTSIT7T2Kk7LrRjNvCpLgX0l0EKc3B7uAtaaNO0HhODYUjTp9gMJ7WKJq6N9ccCnlBPmxCyRgnaOYtVsGO0lST/y27o7eViIIA0GDlgo8ess7fY/Jtu7YztumnOEwuWUWr+DTYna+HYVYmoFdG8=
+	t=1740706183; cv=none; b=MTPy/wZpWRFAHH6VT6no+UhmpI6AaXqoKa+ugBCppJggG0XO9wJSYWybNvAZ3s7pW7YuI++8HRrw+7oL9iAoympMkgr30tWecQpATTNHK0aXPjwi7OG6eCF4x0mCpGvisrTVl7UNbow2x8pOUNlloHNEFUkoJPXf+MqylVjpes0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740692876; c=relaxed/simple;
-	bh=8s3KyPP5+X5tLO930i9gADccHKv4fCmFC0alqAjK0f4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QU5oYO8m/oCg5E7qpEnAFPRghWkaFW58VvCc2zPVe6JPAA4Slm9INdre7GqW6aGxDmP15gwNWU/7DeZClxJ0xV0J8wzxzB6lxhRLpsRKQXLrG4v5JGrUMnCSZa3Y/72a/yyte230ist0E4bmZ/BgEEjeOXNbgkWdZI0+zOpFzQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=HNFB8BfO; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=gYjaKOa1qyvTVLLATJgBPcnTo3YvBY1Vu2MT27yHSZo=; b=HNFB8BfOVSohIXtfIvjNdHwd2w
-	dasmnZAFnwCd6WtdseHM7+CukesU4EuE8ivRkTdDXlJArWVNQDbDZSrsnuFDo+tFd2R++XK2IElKg
-	xA0tAHsF4U1/+6gr/WTi4g0rlvIZSNbZzK5kP0cYNkDmdqdF30mI7/EnnOqooeW7SVVQ5G2//v4pw
-	tNHbWcmGHOWXWLkvPtu4yFyyMOXQeo6mxrDQfK0pL0XdRMQ1tnE9+jB43kewfhgmKlBgfPyCFj8NB
-	PwP1WFrjrGVIc7V4vS9VSBNbEmF0KltjGsamvRDAYQI3D84FTVHPV65BngQghdP+AkuLMtyUjGbBs
-	LTm4jOHg==;
-Date: Thu, 27 Feb 2025 22:47:38 +0100
-From: Andreas Kemnade <andreas@kemnade.info>
-To: Nishanth Menon <nm@ti.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, <vigneshr@ti.com>,
- <aaro.koskinen@iki.fi>, <khilman@baylibre.com>, <rogerq@kernel.org>,
- <tony@atomide.com>, <jmkrzyszt@gmail.com>, <reidt@ti.com>,
- <wsa@kernel.org>, <linux-omap@vger.kernel.org>,
- <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <stable@kernel.org>
-Subject: Re: [PATCH] i2c: omap: fix IRQ storms
-Message-ID: <20250227224738.6d7ebd8e@akair>
-In-Reply-To: <20250227142055.ndzavzysaenoducj@murky>
-References: <20250207185435.751878-1-andreas@kemnade.info>
-	<c3bcusjbn23z5yd2a3xtm7swnfizkl7rb6ufhicdhn52epnjvb@5uqm3g6jcony>
-	<20250220100745.05c0eff8@akair>
-	<20250227142055.ndzavzysaenoducj@murky>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1740706183; c=relaxed/simple;
+	bh=0Kaw4aySzXzJh8b//ALxlZ2RwWuBVvZuS4cYdwjBK+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DtD+tLE00Nwc+VsAjWromQZr+23Nqn2ddunWIEkPDUtLkgNgoVMlh7z+87fglxVgzHUSbLalTNs67x11ekaFyT8ATKVMqibNEGr7lSUrZIoGTC94hnhKEgBLJlZ3g9ShZfBvP0Ucx5VhyieerEv9HLg9isp8Mpb982Tgni2JZlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H7jtZsQR; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740706182; x=1772242182;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0Kaw4aySzXzJh8b//ALxlZ2RwWuBVvZuS4cYdwjBK+4=;
+  b=H7jtZsQRDc99zPpjzw46j/obgI/Y6ruW0fF+IkqF9N4+v2rmFd+sNlY2
+   wy3SpOaQgNVpotQimsFenFlPKS3YNtliyXidma5ifn6dtI9HvzsmumArw
+   Ts5U9ANfZMiy//+pcRb588xRd/3Cq5lBOu5qL2pvufOGU3WHyGXNg80Sf
+   /uQ0oVifB9HkovvHU6ED0oUQuFdXenHTp7JARpKra+8lQoHaWtNuJlxI4
+   G5FRJ2cOsXNZpK1lraqTX08lqXpU6M49/LeuDIMLWTNW1iDiYgZ8FIept
+   gwKE2rcI7mjSG9dsslMLVWHXRJhKKvf4MU6ifg9n/V0OMQ1SeCasAVUBO
+   w==;
+X-CSE-ConnectionGUID: b9oBVvA8Q8WlHE56sbytfA==
+X-CSE-MsgGUID: J6VU82vITnSzNycvM0+0MQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="45275641"
+X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
+   d="scan'208";a="45275641"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 17:29:41 -0800
+X-CSE-ConnectionGUID: tQ2gpyfRQ9adco+P481y1g==
+X-CSE-MsgGUID: EFDf9J9jSi+DvFy8QwsOMQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
+   d="scan'208";a="148014413"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 27 Feb 2025 17:29:33 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnpBh-000EH4-0H;
+	Fri, 28 Feb 2025 01:29:25 +0000
+Date: Fri, 28 Feb 2025 09:28:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ryan Chen <ryan_chen@aspeedtech.com>, benh@kernel.crashing.org,
+	joel@jms.id.au, andi.shyti@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org,
+	andrew@codeconstruct.com.au, p.zabel@pengutronix.de,
+	andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+	openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v16 2/3] i2c: aspeed: support AST2600 i2c new register
+ mode driver
+Message-ID: <202502280902.U0gLDhve-lkp@intel.com>
+References: <20250224055936.1804279-3-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250224055936.1804279-3-ryan_chen@aspeedtech.com>
 
-Am Thu, 27 Feb 2025 08:20:55 -0600
-schrieb Nishanth Menon <nm@ti.com>:
+Hi Ryan,
 
-> On 10:08-20250220, Andreas Kemnade wrote:
-> > Am Wed, 19 Feb 2025 20:22:13 +0100
-> > schrieb Andi Shyti <andi.shyti@kernel.org>:
-> >  =20
-> > > Hi,
-> > >=20
-> > > On Fri, Feb 07, 2025 at 07:54:35PM +0100, Andreas Kemnade wrote: =20
-> > > > On the GTA04A5 writing a reset command to the gyroscope causes IRQ
-> > > > storms because NACK IRQs are enabled and therefore triggered but not
-> > > > acked.
-> > > >=20
-> > > > Sending a reset command to the gyroscope by
-> > > > i2cset 1 0x69 0x14 0xb6
-> > > > with an additional debug print in the ISR (not the thread) itself
-> > > > causes
-> > > >=20
-> > > > [ 363.353515] i2c i2c-1: ioctl, cmd=3D0x720, arg=3D0xbe801b00
-> > > > [ 363.359039] omap_i2c 48072000.i2c: addr: 0x0069, len: 2, flags: 0=
-x0, stop: 1
-> > > > [ 363.366180] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x1110)
-> > > > [ 363.371673] omap_i2c 48072000.i2c: IRQ (ISR =3D 0x0010)
-> > > > [ 363.376892] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x0102)
-> > > > [ 363.382263] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x0102)
-> > > > [ 363.387664] omap_i2c 48072000.i2c: IRQ LL (ISR =3D 0x0102)
-> > > > repeating till infinity
-> > > > [...]
-> > > > (0x2 =3D NACK, 0x100 =3D Bus free, which is not enabled)
-> > > > Apparently no other IRQ bit gets set, so this stalls.
-> > > >=20
-> > > > Do not ignore enabled interrupts and make sure they are acked.
-> > > > If the NACK IRQ is not needed, it should simply not enabled, but
-> > > > according to the above log, caring about it is necessary unless
-> > > > the Bus free IRQ is enabled and handled. The assumption that is
-> > > > will always come with a ARDY IRQ, which was the idea behind
-> > > > ignoring it, proves wrong.
-> > > > It is true for simple reads from an unused address.
-> > > >=20
-> > > > So revert
-> > > > commit c770657bd261 ("i2c: omap: Fix standard mode false ACK readin=
-gs").
-> > > >=20
-> > > > The offending commit was used to reduce the false detections in
-> > > > i2cdetect. i2cdetect warns for confusing the I2C bus, so having some
-> > > > rare false detections (I have never seen such on my systems) is the
-> > > > lesser devil than having basically the system hanging completely.
-> > > >=20
-> > > > No more details came to light in the corresponding email thread sin=
-ce
-> > > > several months:
-> > > > https://lore.kernel.org/linux-omap/20230426194956.689756-1-reidt@ti=
-.com/
-> > > > so no better fix to solve both problems can be developed right now.=
-   =20
-> > >=20
-> > > I need someone from TI or someone who can test to ack here.
-> > >=20
-> > > Can someone help?
-> > > =20
-> > The original (IMHO minor) problem which should be fixed by c770657bd261
-> > is hard to test, I have never seen that on any system (and as a
-> > platform maintainer have a bunch of them) I have access to.
-> > There is not much description anywhere about the system in which the
-> > original system occured, and no reaction since several months from the
-> > author, so I do not see anything which can be done.
-> > Maybe it was just faulty hardware.
-> >=20
-> > As said in the commit message, reverting it should be the lesser devil.
-> > And that state was tested for many years. =20
->=20
-> Can we not handle this slightly differently? leave the fix based on
-> compatible? we know that the i2c controller changed over time. the
-> i2cdetect bug fixed by c770657bd261 esp hard to find and fix.
->=20
-looking a bit more deeper in:
-Why do we have omap_i2c_isr at all? Can there any case that
-stat & mask =3D=3D 0 there (without c770657bd261 applied)?
+kernel test robot noticed the following build warnings:
 
-I looked at omap_i2c_xfer_data() and nothing interesting seems to
-happen without other bits besides OMAP_I2C_STAT_NACK.=20
-Looking again, things get interesting when that loop is left.
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on linus/master v6.14-rc4 next-20250227]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Maybe just acking NACK, setting cmd_err and return -EAGAIN if no other
-bits are set. That should not cause changes to scenarios where NACK
-comes with other bits set. Lets check whether that fixes the
-mess I see here. Well, everything is better then having that IRQ going
-mad.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Chen/dt-bindings-i2c-aspeed-support-for-AST2600-i2cv2/20250224-140221
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20250224055936.1804279-3-ryan_chen%40aspeedtech.com
+patch subject: [PATCH v16 2/3] i2c: aspeed: support AST2600 i2c new register mode driver
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20250228/202502280902.U0gLDhve-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280902.U0gLDhve-lkp@intel.com/reproduce)
 
-For reference, the sensor involved was the BMG160. Because it is not
-enabled in omap2plus_defconfig, the issue did not show up early.
-=46rom my understanding, that there is a NACK after the reset command
-data byte is sent. @Nikolaus: are there any nice and simple test points
-for a scope?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502280902.U0gLDhve-lkp@intel.com/
 
-Do you have any chance to test such a scenario on any device requiring
-the c770657bd261 applied?
+All warnings (new ones prefixed by >>):
 
-Regards,
-Andreas
+   drivers/i2c/busses/i2c-ast2600.c: In function 'ast2600_i2c_recover_bus':
+>> drivers/i2c/busses/i2c-ast2600.c:345:32: warning: unsigned conversion from 'int' to 'u8' {aka 'unsigned char'} changes value from '-145' to '111' [-Woverflow]
+     345 |                         return -ETIMEDOUT;
+         |                                ^
+
+
+vim +345 drivers/i2c/busses/i2c-ast2600.c
+
+   315	
+   316	static u8 ast2600_i2c_recover_bus(struct ast2600_i2c_bus *i2c_bus)
+   317	{
+   318		u32 state = readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
+   319		int ret = 0;
+   320		u32 ctrl;
+   321		int r;
+   322	
+   323		dev_dbg(i2c_bus->dev, "%d-bus recovery bus [%x]\n", i2c_bus->adap.nr, state);
+   324	
+   325		ctrl = readl(i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL);
+   326	
+   327		/* Disable controller */
+   328		writel(ctrl & ~(AST2600_I2CC_MASTER_EN | AST2600_I2CC_SLAVE_EN),
+   329		       i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL);
+   330	
+   331		writel(readl(i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL) | AST2600_I2CC_MASTER_EN,
+   332		       i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL);
+   333	
+   334		reinit_completion(&i2c_bus->cmd_complete);
+   335		i2c_bus->cmd_err = 0;
+   336	
+   337		/* Check 0x14's SDA and SCL status */
+   338		state = readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
+   339		if (!(state & AST2600_I2CC_SDA_LINE_STS) && (state & AST2600_I2CC_SCL_LINE_STS)) {
+   340			writel(AST2600_I2CM_RECOVER_CMD_EN, i2c_bus->reg_base + AST2600_I2CM_CMD_STS);
+   341			r = wait_for_completion_timeout(&i2c_bus->cmd_complete, i2c_bus->adap.timeout);
+   342			if (r == 0) {
+   343				dev_dbg(i2c_bus->dev, "recovery timed out\n");
+   344				writel(ctrl, i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL);
+ > 345				return -ETIMEDOUT;
+   346			} else if (i2c_bus->cmd_err) {
+   347				dev_dbg(i2c_bus->dev, "recovery error\n");
+   348				ret = -EPROTO;
+   349			}
+   350		}
+   351	
+   352		/* Recovery done */
+   353		state = readl(i2c_bus->reg_base + AST2600_I2CC_STS_AND_BUFF);
+   354		if (state & AST2600_I2CC_BUS_BUSY_STS) {
+   355			dev_dbg(i2c_bus->dev, "Can't recover bus [%x]\n", state);
+   356			ret = -EPROTO;
+   357		}
+   358	
+   359		/* restore original controller setting */
+   360		writel(ctrl, i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL);
+   361		return ret;
+   362	}
+   363	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
