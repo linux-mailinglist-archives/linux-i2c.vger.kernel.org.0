@@ -1,163 +1,147 @@
-Return-Path: <linux-i2c+bounces-9637-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9638-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B25E6A4940B
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 09:53:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D8D7A495D2
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 10:49:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDB563B0425
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 08:53:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49E6E163B80
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Feb 2025 09:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66626253F30;
-	Fri, 28 Feb 2025 08:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC088257AEC;
+	Fri, 28 Feb 2025 09:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="QKaDaYyR";
+	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="wV3eEW2t"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8E324FC08
-	for <linux-i2c@vger.kernel.org>; Fri, 28 Feb 2025 08:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740732788; cv=none; b=Uam03r7kJtvbuYLBAQAZrfX0olsWbPr+9dDg5Ly1PhUKyscVOV6njvtf216+l7a++hgWYw05XWvd/A85274WI0kTIy8nMnTYv4OqctYpM4IsS9EoHZ4tXrGVT+LJsLh0LSDI0WlJyXRfgGATCWlYKfgdBw0rfDfD1/mnJSu8XB8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740732788; c=relaxed/simple;
-	bh=qNe0LEGqpQQi8GIgH/wydL5K/ZSIvkZpuYesUP7jE8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sjP5gpvPpCRZLgE7xin6T/aH9ce7kNDvDq+nCl8SJIelYT993QVO4xsa/UALbFFQb6Zp+q9QPw3fdB+MOv7T8ZnL9XWfr761gGyOVGuDlk4W66Srb27RaiEAzaYDtPneb4oUFAFVk4sPK9igt/ffeGOxiAmcIXuah13r4LslXPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tnw6m-0005fo-VB; Fri, 28 Feb 2025 09:52:36 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tnw6j-003GS3-27;
-	Fri, 28 Feb 2025 09:52:33 +0100
-Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 28E693CDF52;
-	Fri, 28 Feb 2025 08:52:33 +0000 (UTC)
-Date: Fri, 28 Feb 2025 09:52:31 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250228-married-bullfrog-of-reading-89042b-mkl@pengutronix.de>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3D21F9416;
+	Fri, 28 Feb 2025 09:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.216
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740736191; cv=pass; b=mfNcdJ+eA+IC/lmIHFCr6al5DovTo9f4mbCWsBhjWVLCc95DNoKkqpL9XUDHuRgL4h8+cE0DPXnM+KQzj85IJmZYA8lTN7K9mYlONGVjfXFtCIUGAYr/Ou20RHb9P+bsvHMZBciThIe/KwcSnkfS4OoEG6mD/OkvkmrsD/39Rsk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740736191; c=relaxed/simple;
+	bh=VYGAI3rv8ysclVl7aBNvJn+D75Mvc5tRYEQHog/yWUs=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=HwEqcJdS5h1xvKOxSbtLCwLD54ywiYGwtdrT7NGwYDCayrbwlQztCpOjvPFfwRPuX0dSxYs9P5ioWqKwH4daKJXRjYli/Lq1VXsuXKH2dUWXXbXQU0xQKXBofG8yvRtM0p8GFz89Tr5QgZiocu12GWuXH0qDUT0YgZfKemmuGqc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=QKaDaYyR; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=wV3eEW2t; arc=pass smtp.client-ip=81.169.146.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
+ARC-Seal: i=1; a=rsa-sha256; t=1740736169; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=MoUDHBCqtSFYwuQ9e0LiSC/g2V3goZtdS45GBI8g6wFXWskbQxb82c1Aazw4huB3DU
+    SyVQCNgrXK7kNHtQHxwaioPHqESnflJo/B1GqfBc3s0WydAETZuHFKZ4ktNm/G1A3jKB
+    /9Jxsde5pxzRZ6n3w/VP0NjYfcpsAp0FJve7/QQnv/f2RcKXQ+F/JYE9KYuMqvoff1xS
+    G17u/H1NTrstN5I8Cjn+3HpGmRvujeW05X9xsVSLRzX9PvxUmnYtmItZ5E5J3rrvAXVc
+    qz85CwV5OYH6BR1CtCUGwLilJjHXdsb4WeUqmWR7/QbK6mNBO6naGOnsifhvlTNGoik4
+    rNWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1740736169;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=VYGAI3rv8ysclVl7aBNvJn+D75Mvc5tRYEQHog/yWUs=;
+    b=c1W4Dk9Ng7xrwmvP5Mlyd8aB60hYEmkXYpPTO3hCQSbzjYSGuUEottCLeS0IwhRuZG
+    0/obPRt8rh1nCK6Wr/lxhtNlVzTHFOWTIt7zzA/oFKJHh0gIdqYFzeaETPxn2SwkiJai
+    GVp3L1ljaJHhVJgQho5IREM4qanDAOKid9oSDwjc18bNr1zuEv7+4+0tSacpwxjTsL1P
+    J1KLBUPdo8x05cPrqZJv03qFEThfop/yJvHsoRZ9WKEiwmemjG8Zda5vXvbVJHfZndys
+    LAF03I+3h3Aox/gT168ztW4Wa8QcejSgPRJ094j98sjEqc3j/7qp93Gk8TvvAcJA2up5
+    Klng==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1740736169;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=VYGAI3rv8ysclVl7aBNvJn+D75Mvc5tRYEQHog/yWUs=;
+    b=QKaDaYyRlqG49ZVDPa96Lm2LFSGCSrbSpA7ZsfXEP+T3JTbP9NwAfMCpbEkiNgKtdS
+    glW/+RNe0gdvsw5IzXzmYDylNfq4AP8x8LWgd+V3ufiJOlsxaXim1U844pCKzekEM3r5
+    lWElZ2y07TJkHaTItoxv+999mdRZ1PEbOz3cUF/lzBVkDsge9Qp85pT8XwOxJXFSQUXZ
+    A6IWri/q6uaahnb3kmCgqjSF7d1t+DcDUlDMLwjAlzkCzjh1SCIQ1kCbQ5GEPDluL0E1
+    Oftth+0qQs5JJ/lKDBLzL0fqt+JNEQgNvzGBCOEpheHgCOw3Z6vyI7NUI8ak1P5MFhss
+    iBDg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1740736169;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=VYGAI3rv8ysclVl7aBNvJn+D75Mvc5tRYEQHog/yWUs=;
+    b=wV3eEW2tPjNrAhtKFZGuAFjsyCV9y6LUgNADBooLbAiqtEDd8Hjb5mNeryHcc3rPlp
+    VnaxogI2u01Ks4MY4DBw==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yeTkZ"
+Received: from smtpclient.apple
+    by smtp.strato.de (RZmta 51.3.0 DYNA|AUTH)
+    with ESMTPSA id Q56adc11S9nSGy3
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+	(Client did not present a certificate);
+    Fri, 28 Feb 2025 10:49:28 +0100 (CET)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="thau7tfhkoq4fek3"
-Content-Disposition: inline
-In-Reply-To: <20250225081644.3524915-2-a0282524688@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-
-
---thau7tfhkoq4fek3
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.1\))
+Subject: Re: [PATCH] i2c: omap: fix IRQ storms
+From: "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20250227224738.6d7ebd8e@akair>
+Date: Fri, 28 Feb 2025 10:49:18 +0100
+Cc: Nishanth Menon <nm@ti.com>,
+ Andi Shyti <andi.shyti@kernel.org>,
+ "Raghavendra, Vignesh" <vigneshr@ti.com>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Kevin Hilman <khilman@baylibre.com>,
+ Roger Quadros <rogerq@kernel.org>,
+ Tony Lindgren <tony@atomide.com>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+ Reid Tonking <reidt@ti.com>,
+ wsa@kernel.org,
+ Linux-OMAP <linux-omap@vger.kernel.org>,
+ linux-i2c@vger.kernel.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ stable@kernel.org
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-MIME-Version: 1.0
+Message-Id: <137529D7-D8A6-458B-9658-2998F31239FD@goldelico.com>
+References: <20250207185435.751878-1-andreas@kemnade.info>
+ <c3bcusjbn23z5yd2a3xtm7swnfizkl7rb6ufhicdhn52epnjvb@5uqm3g6jcony>
+ <20250220100745.05c0eff8@akair> <20250227142055.ndzavzysaenoducj@murky>
+ <20250227224738.6d7ebd8e@akair>
+To: Andreas Kemnade <andreas@kemnade.info>
+X-Mailer: Apple Mail (2.3776.700.51.11.1)
 
-On 25.02.2025 16:16:38, Ming Yu wrote:
+Hi Andreas,
 
-[...]
+> Am 27.02.2025 um 22:47 schrieb Andreas Kemnade <andreas@kemnade.info>:
+>=20
+> For reference, the sensor involved was the BMG160. Because it is not
+> enabled in omap2plus_defconfig, the issue did not show up early.
+> =46rom my understanding, that there is a NACK after the reset command
+> data byte is sent. @Nikolaus: are there any nice and simple test =
+points
+> for a scope?
 
-> +static int nct6694_usb_probe(struct usb_interface *iface,
-> +			     const struct usb_device_id *id)
-> +{
-> +	struct usb_device *udev =3D interface_to_usbdev(iface);
-> +	struct usb_endpoint_descriptor *int_endpoint;
-> +	struct usb_host_interface *interface;
-> +	struct device *dev =3D &iface->dev;
-> +	struct nct6694 *nct6694;
-> +	int pipe, maxp;
-> +	int ret;
-> +
-> +	nct6694 =3D devm_kzalloc(dev, sizeof(*nct6694), GFP_KERNEL);
-> +	if (!nct6694)
-> +		return -ENOMEM;
-> +
-> +	pipe =3D usb_rcvintpipe(udev, NCT6694_INT_IN_EP);
-> +	maxp =3D usb_maxpacket(udev, pipe);
-> +
-> +	nct6694->usb_msg =3D devm_kzalloc(dev, sizeof(union nct6694_usb_msg), G=
-FP_KERNEL);
-> +	if (!nct6694->usb_msg)
-> +		return -ENOMEM;
-> +
-> +	nct6694->int_buffer =3D devm_kzalloc(dev, maxp, GFP_KERNEL);
-> +	if (!nct6694->int_buffer)
-> +		return -ENOMEM;
-> +
-> +	nct6694->int_in_urb =3D usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!nct6694->int_in_urb)
-> +		return -ENOMEM;
-> +
-> +	nct6694->domain =3D irq_domain_add_simple(NULL, NCT6694_NR_IRQS, 0,
-> +						&nct6694_irq_domain_ops,
-> +						nct6694);
-> +	if (!nct6694->domain) {
-> +		ret =3D -ENODEV;
-> +		goto err_urb;
-> +	}
-> +
-> +	nct6694->dev =3D dev;
-> +	nct6694->udev =3D udev;
-> +	nct6694->timeout =3D NCT6694_URB_TIMEOUT;	/* Wait until URB completes */
+According to schematics [1] you can either tap the I2C bus at the camera =
+connector
+(pins 3 and 5) or R206 and R207.
 
-Why do you need this variable? You can directly use NCT6694_URB_TIMEOUT
-in the usb_bulk_msg() and friends calls.
+For the camera connector you would need a flex cable that fits the =
+SD-52437-2471
+connector.
 
-regards,
-Marc
+The resistors are located near the pogo pin connector for the right =
+speaker (all
+are near the antenna connector). If you need a photo please let me know.
+It would be better to solder tiny wires...
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+BR,
+Nikolaus
 
---thau7tfhkoq4fek3
-Content-Type: application/pgp-signature; name="signature.asc"
+[1]: https://projects.goldelico.com/p/gta04-main/downloads/48/
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfBeUwACgkQDHRl3/mQ
-kZwj8Qf/ZqqBAFXxAYb+Ol2EYuIUSztYKNYnXALK+Hmv/b3tCAl+WuYuPRuK3nal
-tYrpJPUVfYcm7WGux3J3oGKiRAZDaOMCPHitSwdEscltvot8zwcA0hHcKqL7Itij
-Qu5x/rzaoPfQAc7vMQ1EFTQZRJEtrQUP2xe4c4tH+bSDbG0rWNy7I824ATNnl8mi
-UlFsGcRv6QZB0DtF7LX4qme7Ufm2+Io91ImVCkN19DH2Q3yW6rjTyQwEs9ZNBsgj
-X9rbbaIqxYYtkYD+4oJ0wC6OqIBhyuzTJvOWp8WOUb3rjgCuELkVrST4Jz86u/oy
-/+qVxFkZP/3CWH8ORdrd3TAfXxZSUQ==
-=5Ywe
------END PGP SIGNATURE-----
-
---thau7tfhkoq4fek3--
 
