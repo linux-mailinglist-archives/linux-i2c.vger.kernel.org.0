@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-9692-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9693-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B18D7A4C0C1
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Mar 2025 13:46:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA043A4C0CC
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Mar 2025 13:46:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2D703ABC1E
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Mar 2025 12:45:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7361172A92
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Mar 2025 12:45:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 854E12139DB;
-	Mon,  3 Mar 2025 12:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB8E213E92;
+	Mon,  3 Mar 2025 12:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DSdzmB7i"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="L44YlHuL"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C412D2139C6;
-	Mon,  3 Mar 2025 12:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F5C213E6D;
+	Mon,  3 Mar 2025 12:44:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741005860; cv=none; b=cAx3LKD5EGoQ+8Vdzphad7LvtHGWd2vREbuJdyNCP72jcSbp8zinynxynBI9ayO30e9EMwi8e/S2XA5wBnZj/MIlZ9fv8eduMZcNwcCMVQvvSZgYx+heZkMEIr1awuKJStaPjtHPsbVoIkXlFDb8e3r1yOwiHcmSrq+Y3qwbXCk=
+	t=1741005862; cv=none; b=cOy0l4bqhE4F/9IoK38zSxvmo7zUyZSpXLPsD9FSHsITIdmy7ch9DKx4Z80UO2NbFf8HuTbspvSgaNZ+5IHbu/aIF3BRkqWN78gQ7Z2xgDCITL0FM20jDT8azDWNysl0MOCw99vo79uvvHO7Bb1+DBitGqq/a6+L1OkB+2XU0MQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741005860; c=relaxed/simple;
-	bh=3N0J+nLmdrUPNG88pWP93xptqh3l36lndwmwFMOO2l8=;
+	s=arc-20240116; t=1741005862; c=relaxed/simple;
+	bh=uoUXdct5EmOUuYnv6ICt/VL+QVwZjBtrkBQ/O0dxgjA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KW85Y3QtJYNHx1WLnoFOWejtjryh3AbASErL3b+eeCkTwggrTKI+qJtI9KUWOe2t9kgMZl3pPW1F5Ns2srxvxBWYFQ0O5rCFqlGnNV7NU1uDa0tzyGZvgq3J1MVHAANdQfu1wvp4FjZOfc4LRGRFN2VyGds8H/peugOXlhQsCho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DSdzmB7i; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version; b=FG1luR0WqfKBvBP3WM8O64miBFOslpWImRm1vNgbo+uolKVCxUhvCrabx6eUygCvlWJIrhw1987sq18+fINSo0nYifd5Ihkc7rgktt4zBTjD2Zxpki8kxvf//tH0ouztYB4kBtDD/Jq88Ai2g9isiMtTppi7T9OBI8reQrW0Xpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=L44YlHuL; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523An2vx021677;
-	Mon, 3 Mar 2025 12:44:14 GMT
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523AD6e9028826;
+	Mon, 3 Mar 2025 12:44:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=WqACNOFQHxR
-	nQGfjZbipebloyLYP8fDxvj8dZwe3OQ4=; b=DSdzmB7inxgPN1bxoVjBCo1+Zz3
-	fKNU+gIwdHXPoJBH4ldP/H3V8Buevjl6SM0uMq+B4RvbvBukeTsVd3aO886qP25o
-	lIo9yp8Z89aFffgNPlbSiX+kJqLm+vOE8TXbp/ipQokBewvth1orGtLaiF0cW3t5
-	3P4gV3PGqs4yOV8N/DXnpyYNgmXcJ9CNSS4/FYuSe+1A+4cMyHNj7563RC5auQz5
-	4BVd06PLKexp7P6F69fidBCVf/kVcadpX629iJN3Jz93B+jlrpFcoZZYpcNqRO/9
-	6S536NeVwM+MvswRVuriRecyTzSHxCBwFX2wHnljOhZDIuXPzVn9nElAYIw==
+	:mime-version:references:subject:to; s=qcppdkim1; bh=3RgNA3pa/gb
+	7yf7IrtrvAS53ImjhQOR7mB2xPasTijQ=; b=L44YlHuLkUZQQxkydLNI5MiXwkr
+	3bLL3sSHn9Pb50JRy7X0yzv+tCHrMJMGISPh9ncQEoqyDibIK0FI799V4MgwHoyE
+	r6RqE85QbwNq7grNIWCHmgrVrQrY8FTGmiNwkdvzreOsEPZWkoBiEbvmjWiC9qcB
+	uS+f/EqX2BdZlobde+InNv8lYkVrP68KEStgwE9qS5PG2pCDaFusb254dmI63Es6
+	s68PPXn97aJiThScDCWiOREweIZ5SmBZC5FUZ7PhUPpmZy06N9aYk+XO8dxT1Fxl
+	Y5u+e2UpAHOghU3VqPJfIkkMasw0wY4ApnWGBsuEjUjfwCWLwfCuUo5IfDA==
 Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453t88vxw3-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453tm5mxay-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Mar 2025 12:44:13 +0000 (GMT)
+	Mon, 03 Mar 2025 12:44:15 +0000 (GMT)
 Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 523CiAab015302;
-	Mon, 3 Mar 2025 12:44:10 GMT
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 523Ci5iD015256;
+	Mon, 3 Mar 2025 12:44:12 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 453uakx57j-1
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 453uakx580-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Mar 2025 12:44:10 +0000
+	Mon, 03 Mar 2025 12:44:12 +0000
 Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 523CiA45015296;
-	Mon, 3 Mar 2025 12:44:10 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 523Ci4Ip015238;
+	Mon, 3 Mar 2025 12:44:12 GMT
 Received: from hu-devc-hyd-u22-c.qualcomm.com ([10.213.97.252])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 523Ci9rc015295
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 523CiBaT015328
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Mar 2025 12:44:10 +0000
+	Mon, 03 Mar 2025 12:44:12 +0000
 Received: by hu-devc-hyd-u22-c.qualcomm.com (Postfix, from userid 4047106)
-	id 6821553B; Mon,  3 Mar 2025 18:14:09 +0530 (+0530)
+	id 284F353B; Mon,  3 Mar 2025 18:14:11 +0530 (+0530)
 From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
 To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
         conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
@@ -73,9 +73,9 @@ To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
         linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
 Cc: quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
         Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Subject: [PATCH v3 7/9] i2c: qcom-geni: Load i2c qup Firmware from linux side
-Date: Mon,  3 Mar 2025 18:13:47 +0530
-Message-Id: <20250303124349.3474185-8-quic_vdadhani@quicinc.com>
+Subject: [PATCH v3 8/9] spi: geni-qcom: Load spi qup Firmware from linux side
+Date: Mon,  3 Mar 2025 18:13:48 +0530
+Message-Id: <20250303124349.3474185-9-quic_vdadhani@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
 References: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
@@ -90,18 +90,18 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 86Q3HZot8HleYGLqSVVJNgcw_TTtxdKM
-X-Proofpoint-GUID: 86Q3HZot8HleYGLqSVVJNgcw_TTtxdKM
+X-Proofpoint-ORIG-GUID: aSBLk8KZzZFJDgsw-oQq5d_WZQUO_Ymc
+X-Proofpoint-GUID: aSBLk8KZzZFJDgsw-oQq5d_WZQUO_Ymc
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-03-03_07,2025-03-03_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- impostorscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=999 mlxscore=0 clxscore=1015 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
- definitions=main-2503030098
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+ priorityscore=1501 adultscore=0 clxscore=1015 bulkscore=0 mlxscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503030098
 
-Add provision to load firmware of Serial engine for I2C protocol from
+Add provision to load firmware of Serial engine for SPI protocol from
 Linux Execution Environment on running on APPS processor.
 
 Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
@@ -112,37 +112,35 @@ v2 -> v3:
 
 - Load firmware only if the protocol is invalid.
 
-v2 Link: https://lore.kernel.org/linux-arm-msm/20250124105309.295769-7-quic_vdadhani@quicinc.com/
+v2 Link: https://lore.kernel.org/linux-arm-msm/20250124105309.295769-8-quic_vdadhani@quicinc.com/
 
 v1 -> v2:
 
 - No change.
 
-v1 Link: https://lore.kernel.org/linux-arm-msm/20241204150326.1470749-6-quic_vdadhani@quicinc.com/
+v1 Link: https://lore.kernel.org/linux-arm-msm/20241204150326.1470749-7-quic_vdadhani@quicinc.com/
 ---
 ---
- drivers/i2c/busses/i2c-qcom-geni.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/spi/spi-geni-qcom.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 7bbd478171e0..b6cf85fbe521 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -871,7 +871,13 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 		goto err_clk;
- 	}
- 	proto = geni_se_read_proto(&gi2c->se);
--	if (proto != GENI_SE_I2C) {
-+	if (proto == GENI_SE_INVALID_PROTO) {
-+		ret = geni_load_se_firmware(&gi2c->se, GENI_SE_I2C);
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 768d7482102a..a0d8d3425c6c 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -671,6 +671,12 @@ static int spi_geni_init(struct spi_geni_master *mas)
+ 			goto out_pm;
+ 		}
+ 		spi_slv_setup(mas);
++	} else if (proto == GENI_SE_INVALID_PROTO) {
++		ret = geni_load_se_firmware(se, GENI_SE_SPI);
 +		if (ret) {
-+			dev_err_probe(dev, ret, "i2c firmware load failed ret: %d\n", ret);
-+			goto err_resources;
++			dev_err(mas->dev, "spi master firmware load failed ret: %d\n", ret);
++			goto out_pm;
 +		}
-+	} else if (proto != GENI_SE_I2C) {
- 		ret = dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
- 		goto err_resources;
- 	}
+ 	} else if (proto != GENI_SE_SPI) {
+ 		dev_err(mas->dev, "Invalid proto %d\n", proto);
+ 		goto out_pm;
 -- 
 2.34.1
 
