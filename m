@@ -1,399 +1,189 @@
-Return-Path: <linux-i2c+bounces-9737-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9738-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44D60A54BDF
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 14:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EFE9A54FDC
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 16:58:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3B65189823A
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 13:18:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E77C1894234
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 15:58:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D23211469;
-	Thu,  6 Mar 2025 13:16:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2627C211469;
+	Thu,  6 Mar 2025 15:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k7mj3JoI"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="QvwurLY0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR03CU001.outbound.protection.outlook.com (mail-westeuropeazon11012032.outbound.protection.outlook.com [52.101.71.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B3E20E700;
-	Thu,  6 Mar 2025 13:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741267009; cv=none; b=I++cMkxxuc9w7e1gdiHQDDggFiEQ40IHAMZehQp+7Gl26UNMxUl56EYWmz+CjgbcykoboIPCBcVwLjxHkSYz0h6BUJrIGT7gLnh34q/BR5knw4CZD204ORU8G2gjBYUaKNIG1fYpAtNvBh/Xz0rkBo9jPuK7UR2PLgwjOM5/mjA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741267009; c=relaxed/simple;
-	bh=BNTdlz+O6/yoAxyZStm5+vjqcla/S1CJaC4VhpHhXmg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qozcsT0OH/lIywegFx2OEylOR4MEttE02HWjhpeXwaiXTguJ1tFdZ0cQy4ZfrDPZWxBrk4+bd+ywHjMJb/0vJerT1Q80cZDe4aJUpTi5QTxo8srbNiFnxWcE3yz1CiFKWiNQda6fIprn7xmtAIsWTje9g0+dFniJNglKMBSVNXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k7mj3JoI; arc=none smtp.client-ip=209.85.214.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-223fd89d036so10730825ad.1;
-        Thu, 06 Mar 2025 05:16:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741267007; x=1741871807; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F7U7pk8UvOy5bs7uwLzg5dC0QofSOExWhjQaOhFe4NU=;
-        b=k7mj3JoIncS3s/PHQXX2fY7xBoRA6HBhFRM7N10M7wAkEHwcuxsxOd5339Z+WVtio9
-         AtR/A4HHobVKMqA7ThtWpu89P5SEp+OZa+DSlZsnFzlPg5GVgzjYrsVJtiz+Qd1OacPa
-         IPTKHH2eywRwQUx+KdcTEbhb0TIEi6IqltBQdfrbcY67bh6FoH+pGr0IqIE/EEtxKpbm
-         Cwtg7g2gqpMfe+9Gx0IlwjYOGiD/JNc2DKwbzxD3PAjEZeP3x4QfxPqcZBVr4F4ohOTx
-         ASCAOYMgUgqNxVRSImEt0i9O5fvv8wituweZHV3WAPUE3RrkkTsTBdYH5UjnoXqthJlp
-         Cb2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741267007; x=1741871807;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F7U7pk8UvOy5bs7uwLzg5dC0QofSOExWhjQaOhFe4NU=;
-        b=rf9c1YER2FuihMeCNwrvaEiKrNKtrU9sO7PEfM6vHxhfIVpNrALG1XK/x7XMJTcUO8
-         kIqb+i18gjetM37mjUlYTFb9b60JyS+cA9vvTcQQUFKTnM6vHGFk0asOSwZIFfVqeR88
-         lU/FYcreNn8kAF7ShF+VLjSj/Xl+3t8AgtO1YYSZIO39FOVh6Vl11fEHS6+M0AZgDbD2
-         OrtmASNIiINu4bSHKBLHhNng07Ce5ecSU5J14aO39d4SOE6pJRQ1hs8VZfTEa/ZohSV0
-         nHLO2BkbhEfyUsjccxbw68B8cMdIobd145d0FUvgUpZa6jEzG9bPUVV/K6JXCQFqahuV
-         xdlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVdP35oo8bJWlWNLcUy9Pf2qGZgbQziWdxfaw6ZPxb4FF5A84yquz93Y4nxuFrrUaShqWmdJq24UgS4tIzq@vger.kernel.org, AJvYcCWfpIAAvS4y3S/vgamISXyUaJ3rAQKhJepUUeP9psqDyPOCyMYMSBhmyS0qxfR2BRMIpqkMPkgtdPvT@vger.kernel.org, AJvYcCXIXJ1naR/opyKoaAlliP1BlCHZ1Oml7/oWraOi8vJ3a3frchTAvQV1AHY58KmDFzctDHvK3OpbIseG@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfFlM2qeDo5snPBTKniqJwge2xWB0AAAdDpZYdQx/MslP5BLRD
-	teDwEC+BwnFe4ktq6huTve2rz0Mryg82U60rJe4lLV00jvzofs3PwmtKUW5XEj+j+q81
-X-Gm-Gg: ASbGncshnir9woZ3G1enQrqJzBVcEZq+5v49pCuIQAh9wcB6IYnKw0wXzqGQqcHgm7o
-	G0bORanAMWqydvMUaFtbZXrMTFY4dL+BY7zFQsOKqqk7mdz4ewlY+ZfMQTtuYYn+icmep+4On5G
-	SWK/kL0AEGyWaIWBsJlwvIPivpeSarMlBIwGNtqS11U+Vj96/yc7x7F4iACGDJcVQf5IxMuifin
-	BvAMmAvdUK9k2j2qC7PhFdgXONhVw/CHfXGTXiX6lWvK+ij8NPBz2Xc7JIYHWNwSkBAuvHdMC7M
-	W5nrzKgD5BaRvv8QRAq/eOK3I6eW
-X-Google-Smtp-Source: AGHT+IH08B/pnoIFoMdt3ja0MC9Y8MP+37dUqKED3147DhyKQtyIeRsrx4pZtAJ2Zf6ULLi0sy2u9A==
-X-Received: by 2002:a05:6a00:14d5:b0:736:2d84:74da with SMTP id d2e1a72fcca58-73682b84ef1mr10341398b3a.10.1741267006841;
-        Thu, 06 Mar 2025 05:16:46 -0800 (PST)
-Received: from [127.0.0.1] ([2a0d:2683:c100::bf])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736985158f3sm1303566b3a.137.2025.03.06.05.16.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Mar 2025 05:16:46 -0800 (PST)
-Message-ID: <74b70a83-e10e-4496-9bc6-e376211db670@gmail.com>
-Date: Thu, 6 Mar 2025 21:16:37 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319A920B1E4;
+	Thu,  6 Mar 2025 15:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.71.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741276713; cv=fail; b=DeTLmXg3O9CBwHZZQaH8TvG1/KikZfB4a+tEXl9FOstXuC2iy+7O+EQsunNOQDWddOI91jxbzYCjM72rn3naMmlU4tqaEeLSGAPLu4Z5ScHdEgvd6Ampp4mk0oDMMExSzcJQjHMrFZvQme6G2mBvB9/532jZaM5dLQ5UwnoOer4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741276713; c=relaxed/simple;
+	bh=uCCBYbLkEClWyEkuRabYib7JXqlKp0TUDGNhwdR8rOA=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=PTuoTxgq2k1UG4t2csnQbGgjsWEfds2pi8H+v1iP1FHiZRs0Ioa9ZUcfjpB8D0KccPH208+oAH5ojLaMbAfOFcqEnkb6aLr+vIPQUAaJdV5jSBSQRXJWyx1Bi2wJwaqUrppBNAEo3ZKweM4+BeRBlgltVRKVLNwjYOQf15ahrW8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=QvwurLY0; arc=fail smtp.client-ip=52.101.71.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RwFsHksBAkGAV+hr3M7ycoH/dDwXWl/ocuDJUACYFvtf6tsDiIqIcuNbUjxMnIUAzlIEmdHvuZe39mwUMCxOxUdTT9uoQzdvPcH2m1/lJbhlLUVEWuHceolTofdPyBca1ZTynDxEVb4WyjIvPmI9wAzLNLoJZ0WUxPWzlpWxBj7LdqE+pGrzx+Xt+I3j11e+cjuPc/KJkYYYQwlHh4NgNShxQ/HPNMqtKH2N4UAR442IBpAQPCVVyZWdSwYmEcEfRTAvGUvWs6f1GEoVg7SNGv2gCzmwT+I7PAePREHztbNXcY1elyZF4jczHEkI2XXl9zoZvBbIzfJWBt890Mp2bA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eKLQOo+h6wkMC29fzswqSWk9MTt9qVypWoHFeqmEG58=;
+ b=v9T/OIR0FgH8Nl4pNf1lWGKb+3PM9Jr3dKMEmSJlO5RHfs3VMgMfwdPNWoEFZwRx3PJ0p9LEcABPMk27IIyhYlOn2KOYTMNwYRjLDv3luDfiPRy+jcyTYJzlK/CCeeWfiguWqFcx6gFGU028tne7myXGBeAsymApW6heNx8viSP8hibr0oCM2giZ4gwr/4nESnWTV7euNQAE/7j7T76JmvLD3Y7+CuLCsBDasu7VGepeyi7DxQ8rqK5lNjsspNZNqb+/hN0SE+LvEVrnbUHLckW38swv//I5rbuT+trKIfYEaS0Zo4IeelSMIELx7mHTMCDocvYli4GnWDH1OS9kLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eKLQOo+h6wkMC29fzswqSWk9MTt9qVypWoHFeqmEG58=;
+ b=QvwurLY0k4T6MNNsxWhYlBmoArhDBn8iVdY9dPeolod6XTGoTNP3UWsR3BMv958V/TypMJm4VqHIhmTJgJJpz2RzVhRErsfPcZdVOi3e3TXCc2RTn3q6KllsGw3m3UrdGsUNXgjyyMEpJmjvNqOCJ4h7A+3eqtxOdK8m2eae4LvEbo9qFctbUHcpF841iS7lXYyDMU0nIBkpMxZ3OklnHsM1Tq3vbHhEeOE4JT9VliA99ovCs9dNNI75OO1wDXQRmVjlBY7BNJWH69/Lnb85oHTe3bJIU7bmi75bq9edj6bX0aWZMSpPc0PdSHAJA+V5DKopBN14xxqLDAIszR4pZw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by DB9PR04MB9330.eurprd04.prod.outlook.com (2603:10a6:10:36e::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.17; Thu, 6 Mar
+ 2025 15:58:29 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%6]) with mapi id 15.20.8511.017; Thu, 6 Mar 2025
+ 15:58:29 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: Dong Aisheng <aisheng.dong@nxp.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-i2c@vger.kernel.org (open list:FREESCALE IMX LPI2C DRIVER),
+	imx@lists.linux.dev (open list:FREESCALE IMX LPI2C DRIVER),
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE),
+	linux-kernel@vger.kernel.org (open list)
+Cc: imx@lists.linux.dev
+Subject: [PATCH 1/1] dt-bindings: i2c: imx-lpi2c: add i.MX94 LPI2C
+Date: Thu,  6 Mar 2025 10:58:15 -0500
+Message-Id: <20250306155815.110514-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY5PR17CA0022.namprd17.prod.outlook.com
+ (2603:10b6:a03:1b8::35) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v5 2/2] i2c: spacemit: add support for SpacemiT K1
- SoC
-To: Alex Elder <elder@ieee.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>
-Cc: linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- spacemit@lists.linux.dev
-References: <20250303-k1-i2c-master-v5-0-21dfc7adfe37@gmail.com>
- <20250303-k1-i2c-master-v5-2-21dfc7adfe37@gmail.com>
- <ff0faba3-08fe-4ddd-803c-03df4e1e1e2d@ieee.org>
-Content-Language: en-US
-From: Troy Mitchell <troymitchell988@gmail.com>
-In-Reply-To: <ff0faba3-08fe-4ddd-803c-03df4e1e1e2d@ieee.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DB9PR04MB9330:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e76b1b7-de1b-4248-2d35-08dd5cc7bca1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|52116014|376014|366016|1800799024|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?hcBuNtGhykuoHr1HOLPeCy/bgT9lVV24SMeREzvKvHrzEc3WBjGquPMNhlb9?=
+ =?us-ascii?Q?Ly2smjP2D/0yCUAayJErFKGrrSxvgQl/GefAqlSgixsJFpNTTEuqOI2z8gzD?=
+ =?us-ascii?Q?ngL6Qa1ZYsaniX16FthwyMK/l9zVscFUlDuR5NQigeyKNtkET/TJhDfcHPgZ?=
+ =?us-ascii?Q?hypmiR/nx+zw37EYbB5djiwEIjUGL6WPlUQRfa1pYZUOSAfTpTGIETXNXL2o?=
+ =?us-ascii?Q?2cmqlATnhMGNUldlTsvNFRvF9Cayyl04gfDHS52UPFEEsA1qW0s5v5DrkFWG?=
+ =?us-ascii?Q?erECGu0p/p98Lvs7XOHJ9jwizl0rsCGfdgSEZKJ7Zei7/GzqXN7bjTm8DiVp?=
+ =?us-ascii?Q?om0zR9PyA/J0oh6JB7Kq1Ty71zRPUe91K/HeCtR5ZCsKbiGNa3lsPA16b9ob?=
+ =?us-ascii?Q?pedBnfnzl6/Da09vGexVczKE3gC8WvBPFg3CVteOL2YgBtYHtZfNDfaAZcMM?=
+ =?us-ascii?Q?DrZw597BUhYu9B+Z1adnH8ajp2Vptn/Flx8X2CBPnUsFYwvLBuGZAXsKooQ0?=
+ =?us-ascii?Q?Uoz/LFunrKtFCufDNcwzUL2c9cwVef75ucPHgLnDXlnwMuHzmohWPk2nlklo?=
+ =?us-ascii?Q?KRkFjOzGQI3MlPdRcpRGObc6N5kGDgBAMfsfubEUVQn/2SwxctqynilSRDfT?=
+ =?us-ascii?Q?nKnLDCkn+VSO5miGX9h9M6a2iQEgbdCdcYOGTmSCSZFqtLR4mYNFHOu3KrU4?=
+ =?us-ascii?Q?6l707151+n5OJQcVAnYIZDHWlG8AR1rNlOM/WGE9GiAmOdSsVz/TD6EpbXS7?=
+ =?us-ascii?Q?xpN5jOtYHPfNU54W1wfPxTBjZeopGZb3LnaNWj+rRiTDVIS7xiOT1xNtEb0A?=
+ =?us-ascii?Q?iDKuAf66FAE09WUljEXFVB5gTV5nzsUDsZihx5Kl5Z9lw6MVGxFaY8X1CB09?=
+ =?us-ascii?Q?+0v0BJPAculJVNd4D8FFhlI46I7zjUMXocrALk8zJrqWeCoX14uRdZdMijNk?=
+ =?us-ascii?Q?1GJ5K7HX4AJgK+NPx9GRNShQG8cQdt0P75PeFmLpo5Q7xpPPLF6iXWk+4G8+?=
+ =?us-ascii?Q?96745ckfNJn5SAu+6Od13kbdIb3KqCdyj47Q9+7hqjjHZmSpSKVV/Unw65Pz?=
+ =?us-ascii?Q?sSo75Ii0S/hKw00SFwhn0LU62vib7xAxFdCCRhsUIV7aeOx7Q41ry83zijnf?=
+ =?us-ascii?Q?TXOEbjYdvyie0rf7WHdi1yt4ZeSzW2oM0G+MqzGnVZpjNtg1SEjeHY3Q2fjR?=
+ =?us-ascii?Q?D4zzdgT8gFOl9mncdovL7evIweTMJGQabKDwxM5NLrLgnsky/UNjUxo3RrNd?=
+ =?us-ascii?Q?tpKKsK6H/mAgQnilVFZncHEDw6V4AJca0LTjapxh4FHFQpC/cIY4himV/Sf1?=
+ =?us-ascii?Q?SCMnD19T8mXqvSAHyo8CBHt9rBBmVPCbjHq7C+lGVIzQJgSyNQJr+n7cu2k+?=
+ =?us-ascii?Q?w3xM6vrPFGAyxHSjbZK7pODLC6MbFuFYBiHKmv8NzcWA/eD6BnD8oZ5n/rVT?=
+ =?us-ascii?Q?MJazUecZdAlNYdAVjS0DgBOp5Vn6h6zTt8kUjw82pQ7wIpc3LxuiSg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(52116014)(376014)(366016)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?BegnxSriWLAhDvxmDYv4ghCVYF45Qorwu7x3300r4+oKugXuRcwLrkZKFeC6?=
+ =?us-ascii?Q?mX7WexCQq68bSKBDGuQvJXzCqKbfsiiYQw5L568fc6S+wPQSqlVB1BDHtv/x?=
+ =?us-ascii?Q?0lxoh2HW1HN2zk4P4ho8G8s76+5zA48ISv0JqHyq7LIuCO83USUFKogZqKRW?=
+ =?us-ascii?Q?/UNWlwLuothmpT3b/tXCxFl14THDEVN9QPIv4Lc4L/L61J8uBn+cmYh/logW?=
+ =?us-ascii?Q?IzNuyZVrgmvNpMdvS2+5WW3AI1PuLLYdLfl6Mr2GVPU2CLgKbZAXhAuuoOyj?=
+ =?us-ascii?Q?AvDiPKoXG0j3ERU6RkSYJXPhQXBeuYleZW7CuX3Q9r9wrwJPlzw8Tqtey7+3?=
+ =?us-ascii?Q?IoT4dMtuy93UL1y4zkbrL5PSJnSmHU18TWXvGsT1wMhkOEN1n/vAXUBP+gsY?=
+ =?us-ascii?Q?xgDSVEhVV09qfhlrUW6ObIdAwQ4YEBY7iaMlcNugKO/ooIjDEzYflAqH13uK?=
+ =?us-ascii?Q?l0ylwwsficEowVvGU6KGJoZsWniQCgsHpodwXCkZAn0co1Sh8j6MQJNyLZs/?=
+ =?us-ascii?Q?+T5u9Y1lSD1KnlYst1JdOIzTKGEzjqqZNAS3AN7Cyzks3AoYmdhX+RHuuRqC?=
+ =?us-ascii?Q?08KtkiVuh6tTdAD20Z4nzJTZccIlgXxtd4c0lv9pZAddK8xsQDgulnHKqFxR?=
+ =?us-ascii?Q?870niuVjSbvibR4PkAtq3agkABG0x6Z//pnBwa4RlNGxQJxWr38R/hP/2FSr?=
+ =?us-ascii?Q?t1FTsd16G8yFZEpfnB1bCQy91Zo4nQEXNF+6FU4agQ5aQdXYSpNhegOmBY9J?=
+ =?us-ascii?Q?n+421voxwtm4NbhRLs6K4ZwKbUKACtADfe/EQEMWW5NmT6xEOki4kBOwtI1/?=
+ =?us-ascii?Q?14jcsDM1h9LCFi1TX8Uqby73uJeWV5XA9h/xVnB1gAP3y6sjhi1/+p8AnDut?=
+ =?us-ascii?Q?FpJ32oW6m1AVQ1o20/yJBRHleatmt7xpNzpvw2oPos6GxBdJZoaEM9eQbfD/?=
+ =?us-ascii?Q?VJT486SiGFTsPCyJ58tBwAf8fv81STapIc/CaCPpx/SVUPzRd+yAiVe4lN/m?=
+ =?us-ascii?Q?bcDtRCF8h7wMUx7LYTGGHKzdlFnwIA1gXcb2wbIFXoVUJFCLxh0sTFNlYqQs?=
+ =?us-ascii?Q?oPvoLJHkjzN2JviTkNknWaAJvjTprgIEch7yG7fdUQrj5lcSyHD7eTNQpQoz?=
+ =?us-ascii?Q?E2GWD4id+N4xba8J35/O0+pzZfHMZeFBqeEBzrKRdbl9Nr/hsqY/1g0oYXKs?=
+ =?us-ascii?Q?KYkTI6qF8/Wa9twdh1jwrxoZ7uAyqHctk/+f/AD5645g5ISpMvC5Pw9DKA0R?=
+ =?us-ascii?Q?9owYjxqBEiVQvel59VGTBrvCKB2bkqGynoG99e9HkX1f+DoDy+44FW91KQ2c?=
+ =?us-ascii?Q?iCo+SXxTJoFgmVhtnrwPMVhNIRzLeFDJxQV3+ZSjyRBGSrxvrL8kDyXFyNZs?=
+ =?us-ascii?Q?ExigfVMKvhpcojIuELX4EmnMobaFLSbNRlcixy0xfeKL8k8mFM22SthS7auX?=
+ =?us-ascii?Q?xtzQzOXT4IWGP4IVRpbSvfIeW0lBXz7xEWGzYI0KIjd0Q5UZTA4rTpGggKiL?=
+ =?us-ascii?Q?GtzkL+Y0i3nVdasWh+LWtsWlDoObHzWuuvOjvd0ti+awsh988V+257+7zGCa?=
+ =?us-ascii?Q?RaChGnaQCrodr7vdzE7t9c7LFetxzLhslHXid+ak?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e76b1b7-de1b-4248-2d35-08dd5cc7bca1
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2025 15:58:29.2604
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rdTVcv2mC0hojZHk25/TyA0fDL/Wx3F0hcrpCjlL1JE2HqPWj5z0A81g+FpbFkFlxWiJpdIUMJwJ5tl8U8i8yw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9330
 
-On 2025/3/4 08:01, Alex Elder wrote:
+Add compatible string "fsl,imx94-lpi2c" for the i.MX94 chip, which is
+backward compatible with i.MX7ULP. Set it to fall back to
+"fsl,imx7ulp-lpi2c".
 
-> On 3/2/25 11:30 PM, Troy Mitchell wrote:
->> This patch introduces basic I2C support for the SpacemiT K1 SoC,
->> utilizing interrupts for transfers.
->>
->> The driver has been tested using i2c-tools on a Bananapi-F3 board,
->> and basic I2C read/write operations have been confirmed to work.
->>
->> Signed-off-by: Troy Mitchell <troymitchell988@gmail.com>
->
-> I have some more comments, and some questions.  I appreciate
-> seeing some of the changes you've made based on my feedback.
-Hi, Alex. Thanks for your review.
->> +static void spacemit_i2c_init(struct spacemit_i2c_dev *i2c)
->> +{
->> +    u32 val;
->> +
->> +    /*
->> +     * Unmask interrupt bits for all xfer mode:
->> +     * bus error, arbitration loss detected.
->> +     * For transaction complete signal, we use master stop
->> +     * interrupt, so we don't need to unmask SPACEMIT_CR_TXDONEIE.
->> +     */
->> +    val = SPACEMIT_CR_BEIE | SPACEMIT_CR_ALDIE;
->> +
->> +    /*
->> +     * Unmask interrupt bits for interrupt xfer mode:
->> +     * DBR rx full.
->> +     * For tx empty interrupt SPACEMIT_CR_DTEIE, we only
->> +     * need to enable when trigger byte transfer to start
->> +     * data sending.
->> +     */
->> +    val |= SPACEMIT_CR_DRFIE;
->> +
->> +    /* set speed bits: default fast mode */
->
-> It is not *default* fast mode, it *is* fast mode.  (There
-> is no other mode used in this driver, right?)
-yes. I will talk it below.
->
->> +    val |= SPACEMIT_CR_MODE_FAST;
->> +
->> +    /* disable response to general call */
->> +    val |= SPACEMIT_CR_GCD;
->> +
->> +    /* enable SCL clock output */
->> +    val |= SPACEMIT_CR_SCLE;
->> +
->> +    /* enable master stop detected */
->> +    val |= SPACEMIT_CR_MSDE | SPACEMIT_CR_MSDIE;
->> +
->> +    writel(val, i2c->base + SPACEMIT_ICR);
->> +}
->> +
->> +
->> +static int spacemit_i2c_xfer_core(struct spacemit_i2c_dev *i2c)
->> +{
->> +    int ret;
->> +
->> +    spacemit_i2c_reset(i2c);
->
-> I don't have a lot of experience with I2C drivers, but is it normal
-> to reset before every transfer?
->
-> If it is, just tell me that.  But if it's not, can you explain why
-> it's necessary here?
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-My initial idea was to keep the I2C state in its initial state before each
-transmission. 
-
-But after testing, this is not necessary. I will move it to `probe` function.
-
->
->> +
->> +    spacemit_i2c_calc_timeout(i2c);
->> +
->> +    spacemit_i2c_init(i2c);
->> +
->
-> Here too, maybe I just don't know what most I2C drivers do, but
-> is it necessary to only enable the I2C adapter and its interrupt
-> handler when performing a transfer?
-
-It is necessary to enable before each transmission. 
-
-I have tested moving the `spacemit_i2c_enable` to the probe function. 
-
-It will cause transmission errors.
-
-As for the `enable_irq`, I think it can be moved to the `probe` function.
-
->
->> +    spacemit_i2c_enable(i2c);
->> +    enable_irq(i2c->irq);
->> +
->> +    /* i2c wait for bus busy */
->> +    ret = spacemit_i2c_recover_bus_busy(i2c);
->> +    if (ret)
->> +        return ret;
->> +
->> +    ret = spacemit_i2c_xfer_msg(i2c);
->> +    if (ret < 0)
->> +        dev_dbg(i2c->dev, "i2c transfer error\n");
->
-> If you're reporting the error you might as well say what
-> it is.
->
->     dev_dbg(i2c->dev, "i2c transfer error: %d\n", ret);
->
->> +
->> +    return ret;
->> +}
->> +
->> +static int spacemit_i2c_xfer(struct i2c_adapter *adapt, struct i2c_msg
->> *msgs, int num)
->> +{
->> +    struct spacemit_i2c_dev *i2c = i2c_get_adapdata(adapt);
->> +    int ret;
->> +    u32 err = SPACEMIT_I2C_GET_ERR(i2c->status);
->> +
->> +    i2c->msgs = msgs;
->> +    i2c->msg_num = num;
->> +
->> +    ret = spacemit_i2c_xfer_core(i2c);
->> +    if (!ret)
->> +        spacemit_i2c_check_bus_release(i2c);
->> +
->
-> The enable_irq() call that matches the disable call below is
-> found in spacemit_i2c_xfer_core().  That's where this call
-> belongs.
->
->> +    disable_irq(i2c->irq);
->> +
->
-> Same with the next call--it should be in the same function
-> that its corresponding spacemit_i2c_enable() is called.
->
-> With these suggestions in mind, I think you can safely
-> just get rid of spacemit_i2c_xfer_core().  It is only
-> called in this one spot (above), and you can just do
-> everything within spacemit_i2c_xfer() instead.
->
->> +    spacemit_i2c_disable(i2c);
->> +
->> +    if (ret == -ETIMEDOUT || ret == -EAGAIN)
->> +        dev_alert(i2c->dev, "i2c transfer failed, ret %d err 0x%x\n", ret,
->> err);
->> +
->> +    return ret < 0 ? ret : num;
->> +}
->> +
->> +static u32 spacemit_i2c_func(struct i2c_adapter *adap)
->> +{
->> +    return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
->> +}
->> +
->> +static const struct i2c_algorithm spacemit_i2c_algo = {
->> +    .xfer = spacemit_i2c_xfer,
->> +    .functionality = spacemit_i2c_func,
->> +};
->> +
->> +static int spacemit_i2c_probe(struct platform_device *pdev)
->> +{
->> +    struct clk *clk;
->> +    struct device *dev = &pdev->dev;
->> +    struct device_node *of_node = pdev->dev.of_node;
->> +    struct spacemit_i2c_dev *i2c;
->> +    int ret = 0;
->
-> There is no need to initialize ret.
->
->> +
->> +    i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
->> +    if (!i2c)
->> +        return -ENOMEM;
->> +
->> +    ret = of_property_read_u32(of_node, "clock-frequency", &i2c->clock_freq);
->> +    if (ret)
->> +        return dev_err_probe(dev, ret, "failed to read clock-frequency
->> property");
->> +
->> +    /* For now, this driver doesn't support high-speed. */
->> +    if (i2c->clock_freq < 1 || i2c->clock_freq > 400000) {
->
-> In your device tree binding, you indicate that three different
-> modes are supported, and that the maximum frequency is 3300000 Hz.
-> This says that only ranges from 1-400000 Hz are allowed.
->
-> In fact, although you look up this clock frequency in DT, I see
-> nothing that actually is affected by this value.  I.e., no I2C
-> bus frequency changes, regardless of what frequency you specify.
-> The only place the clock_freq field is used is in calculating
-> the timeout for a transfer.
->
-> So two things:
-> - My guess is that you are relying on whatever frequency the
->   hardware already is using, and maybe that's 400000 Hz.
->   That's fine, though at some point it should be more
->   directly controlled (set somehow).
-> - Since you don't actually support any other frequency,
->   drop this "clock-frequency" feature for now, and add it
->   when you're ready to actually support it.
->
-> And I might be wrong about this, but I don't think your
-> (new) DTS binding should specify behavior that is not
-> supported by the driver.
->
->                     -Alex
-
-I will support standard mode in next version.
-
-We just need to modify the function `spacemit_i2c_init`.
-
->
->> +        dev_warn(dev, "unsupport clock frequency: %d, default: 400000",
->> i2c->clock_freq);
->> +        i2c->clock_freq = 400000;
->> +    }
->> +
->> +    i2c->dev = &pdev->dev;
->> +
->> +    i2c->base = devm_platform_ioremap_resource(pdev, 0);
->> +    if (IS_ERR(i2c->base))
->> +        return dev_err_probe(dev, PTR_ERR(i2c->base), "failed to do ioremap");
->> +
->> +    i2c->irq = platform_get_irq(pdev, 0);
->> +    if (i2c->irq < 0)
->> +        return dev_err_probe(dev, i2c->irq, "failed to get irq resource");
->> +
->> +    ret = devm_request_irq(i2c->dev, i2c->irq, spacemit_i2c_irq_handler,
->> +                   IRQF_NO_SUSPEND | IRQF_ONESHOT, dev_name(i2c->dev), i2c);
->> +    if (ret)
->> +        return dev_err_probe(dev, ret, "failed to request irq");
->> +
->> +    disable_irq(i2c->irq);
->> +
->> +    clk = devm_clk_get_enabled(dev, "apb");
->> +    if (IS_ERR(clk))
->> +        return dev_err_probe(dev, PTR_ERR(clk), "failed to enable apb clock");
->> +
->> +    clk = devm_clk_get_enabled(dev, "twsi");
->> +    if (IS_ERR(clk))
->> +        return dev_err_probe(dev, PTR_ERR(clk), "failed to enable twsi clock");
->> +
->> +    i2c_set_adapdata(&i2c->adapt, i2c);
->> +    i2c->adapt.owner = THIS_MODULE;
->> +    i2c->adapt.algo = &spacemit_i2c_algo;
->> +    i2c->adapt.dev.parent = i2c->dev;
->> +    i2c->adapt.nr = pdev->id;
->> +
->> +    i2c->adapt.dev.of_node = of_node;
->> +    i2c->adapt.algo_data = i2c;
->> +
->> +    strscpy(i2c->adapt.name, "spacemit-i2c-adapter", sizeof(i2c->adapt.name));
->> +
->> +    init_completion(&i2c->complete);
->> +
->> +    platform_set_drvdata(pdev, i2c);
->> +
->> +    ret = i2c_add_numbered_adapter(&i2c->adapt);
->> +    if (ret)
->> +        return dev_err_probe(&pdev->dev, ret, "failed to add i2c adapter");
->> +
->> +    return 0;
->> +}
->> +
->> +static void spacemit_i2c_remove(struct platform_device *pdev)
->> +{
->> +    struct spacemit_i2c_dev *i2c = platform_get_drvdata(pdev);
->> +
->> +    i2c_del_adapter(&i2c->adapt);
->> +}
->> +
->> +static const struct of_device_id spacemit_i2c_of_match[] = {
->> +    { .compatible = "spacemit,k1-i2c", },
->> +    { /* sentinel */ }
->> +};
->> +MODULE_DEVICE_TABLE(of, spacemit_i2c_of_match);
->> +
->> +static struct platform_driver spacemit_i2c_driver = {
->> +    .probe = spacemit_i2c_probe,
->> +    .remove = spacemit_i2c_remove,
->> +    .driver = {
->> +        .name = "i2c-k1",
->> +        .of_match_table = spacemit_i2c_of_match,
->> +    },
->> +};
->> +module_platform_driver(spacemit_i2c_driver);
->> +
->> +MODULE_LICENSE("GPL");
->> +MODULE_DESCRIPTION("I2C bus driver for SpacemiT K1 SoC");
->>
->
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
+index 1dcb9c78de3b5..969030a6f82ab 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
+@@ -26,6 +26,7 @@ properties:
+               - fsl,imx8qm-lpi2c
+               - fsl,imx8ulp-lpi2c
+               - fsl,imx93-lpi2c
++              - fsl,imx94-lpi2c
+               - fsl,imx95-lpi2c
+           - const: fsl,imx7ulp-lpi2c
+ 
 -- 
-Troy Mitchell
+2.34.1
 
 
