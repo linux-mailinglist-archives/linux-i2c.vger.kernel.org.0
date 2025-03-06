@@ -1,189 +1,194 @@
-Return-Path: <linux-i2c+bounces-9738-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9739-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EFE9A54FDC
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 16:58:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61662A55078
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 17:23:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E77C1894234
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 15:58:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BFE5171BAE
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 16:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2627C211469;
-	Thu,  6 Mar 2025 15:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D26A21323D;
+	Thu,  6 Mar 2025 16:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="QvwurLY0"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mmDdAd9K"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from AS8PR03CU001.outbound.protection.outlook.com (mail-westeuropeazon11012032.outbound.protection.outlook.com [52.101.71.32])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319A920B1E4;
-	Thu,  6 Mar 2025 15:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.71.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741276713; cv=fail; b=DeTLmXg3O9CBwHZZQaH8TvG1/KikZfB4a+tEXl9FOstXuC2iy+7O+EQsunNOQDWddOI91jxbzYCjM72rn3naMmlU4tqaEeLSGAPLu4Z5ScHdEgvd6Ampp4mk0oDMMExSzcJQjHMrFZvQme6G2mBvB9/532jZaM5dLQ5UwnoOer4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741276713; c=relaxed/simple;
-	bh=uCCBYbLkEClWyEkuRabYib7JXqlKp0TUDGNhwdR8rOA=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=PTuoTxgq2k1UG4t2csnQbGgjsWEfds2pi8H+v1iP1FHiZRs0Ioa9ZUcfjpB8D0KccPH208+oAH5ojLaMbAfOFcqEnkb6aLr+vIPQUAaJdV5jSBSQRXJWyx1Bi2wJwaqUrppBNAEo3ZKweM4+BeRBlgltVRKVLNwjYOQf15ahrW8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=QvwurLY0; arc=fail smtp.client-ip=52.101.71.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RwFsHksBAkGAV+hr3M7ycoH/dDwXWl/ocuDJUACYFvtf6tsDiIqIcuNbUjxMnIUAzlIEmdHvuZe39mwUMCxOxUdTT9uoQzdvPcH2m1/lJbhlLUVEWuHceolTofdPyBca1ZTynDxEVb4WyjIvPmI9wAzLNLoJZ0WUxPWzlpWxBj7LdqE+pGrzx+Xt+I3j11e+cjuPc/KJkYYYQwlHh4NgNShxQ/HPNMqtKH2N4UAR442IBpAQPCVVyZWdSwYmEcEfRTAvGUvWs6f1GEoVg7SNGv2gCzmwT+I7PAePREHztbNXcY1elyZF4jczHEkI2XXl9zoZvBbIzfJWBt890Mp2bA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eKLQOo+h6wkMC29fzswqSWk9MTt9qVypWoHFeqmEG58=;
- b=v9T/OIR0FgH8Nl4pNf1lWGKb+3PM9Jr3dKMEmSJlO5RHfs3VMgMfwdPNWoEFZwRx3PJ0p9LEcABPMk27IIyhYlOn2KOYTMNwYRjLDv3luDfiPRy+jcyTYJzlK/CCeeWfiguWqFcx6gFGU028tne7myXGBeAsymApW6heNx8viSP8hibr0oCM2giZ4gwr/4nESnWTV7euNQAE/7j7T76JmvLD3Y7+CuLCsBDasu7VGepeyi7DxQ8rqK5lNjsspNZNqb+/hN0SE+LvEVrnbUHLckW38swv//I5rbuT+trKIfYEaS0Zo4IeelSMIELx7mHTMCDocvYli4GnWDH1OS9kLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eKLQOo+h6wkMC29fzswqSWk9MTt9qVypWoHFeqmEG58=;
- b=QvwurLY0k4T6MNNsxWhYlBmoArhDBn8iVdY9dPeolod6XTGoTNP3UWsR3BMv958V/TypMJm4VqHIhmTJgJJpz2RzVhRErsfPcZdVOi3e3TXCc2RTn3q6KllsGw3m3UrdGsUNXgjyyMEpJmjvNqOCJ4h7A+3eqtxOdK8m2eae4LvEbo9qFctbUHcpF841iS7lXYyDMU0nIBkpMxZ3OklnHsM1Tq3vbHhEeOE4JT9VliA99ovCs9dNNI75OO1wDXQRmVjlBY7BNJWH69/Lnb85oHTe3bJIU7bmi75bq9edj6bX0aWZMSpPc0PdSHAJA+V5DKopBN14xxqLDAIszR4pZw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by DB9PR04MB9330.eurprd04.prod.outlook.com (2603:10a6:10:36e::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.17; Thu, 6 Mar
- 2025 15:58:29 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%6]) with mapi id 15.20.8511.017; Thu, 6 Mar 2025
- 15:58:29 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: Dong Aisheng <aisheng.dong@nxp.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	linux-i2c@vger.kernel.org (open list:FREESCALE IMX LPI2C DRIVER),
-	imx@lists.linux.dev (open list:FREESCALE IMX LPI2C DRIVER),
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE),
-	linux-kernel@vger.kernel.org (open list)
-Cc: imx@lists.linux.dev
-Subject: [PATCH 1/1] dt-bindings: i2c: imx-lpi2c: add i.MX94 LPI2C
-Date: Thu,  6 Mar 2025 10:58:15 -0500
-Message-Id: <20250306155815.110514-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR17CA0022.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::35) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8704EC2;
+	Thu,  6 Mar 2025 16:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741278219; cv=none; b=TdtMF1JLwU9eRESSO18vbTaBEs3+grh/Ft0qBqGXGArKNoh7ntfPWIMTXaP2s/yhB/xmVtVmhIOO6Gw9aV/HA+54MS4f/4TphS++wARpkWUj7DcnYvcvILX3nGDWzn1oH8EJdbI8F+6UO/omOXvSb5RviSWN9lddh5H7qLJ6BzY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741278219; c=relaxed/simple;
+	bh=bbklhI3aQ73zd287vaasvsj4pDf8CW/6eLem5wZ2qBA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BugX8PIsx+AHbum7zOMeWxGReE3hZFUYNmEuRP1I4whF1eiCi14Q8Zk36S7Ge1kw94FzgLLstDU1vpmXjO5Yqnwha5VVWCaMUw6gaMWAptReb4ulhdN7jyc6dPfoS+MTm041g5vK+eCkS8C2YLfL+SnGa5JHpPz1JzT1YmFMjfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mmDdAd9K; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9E5CD44409;
+	Thu,  6 Mar 2025 16:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1741278214;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=si5Dfu8yQaBDrNM5uyIEeL+Od5jYUbAwYxzy5yMhdw0=;
+	b=mmDdAd9KBQJHq9RDUfSsMLBDxEsAFPwZTh0vwsvDGtmT6PsicV5qzmrqvtEL/9awTfzya9
+	naH8YtZot6ok8fMeTtj/uyCunSescSdtOi4j3RxoL0mb4sIjKa7LSnHeKP8VXPl7pPEgSz
+	g+7lxV3GRo1SH+2ecQuQ6O+TyAcWFTXTrJdj3CNoQYtYUuuCI4MaDyUkpxoFRC+ZWxgNLW
+	aYic6k98UB0x2YZUK4604B94lErw6AaPCdRdz8X8lBg2Uypkakc6jfUrd7NafQEDw5vwXy
+	g7kSyvsHCc7F7JGSJFnnVPQahoczrXl+i5jcodsLRZqxKGTyWt3N48vv1ZhS0Q==
+From: Romain Gantois <romain.gantois@bootlin.com>
+Subject: [PATCH v9 0/9] misc: Support TI FPC202 dual-port controller
+Date: Thu, 06 Mar 2025 17:23:21 +0100
+Message-Id: <20250306-fpc202-v9-0-2779af6780f6@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DB9PR04MB9330:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e76b1b7-de1b-4248-2d35-08dd5cc7bca1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|52116014|376014|366016|1800799024|921020|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?hcBuNtGhykuoHr1HOLPeCy/bgT9lVV24SMeREzvKvHrzEc3WBjGquPMNhlb9?=
- =?us-ascii?Q?Ly2smjP2D/0yCUAayJErFKGrrSxvgQl/GefAqlSgixsJFpNTTEuqOI2z8gzD?=
- =?us-ascii?Q?ngL6Qa1ZYsaniX16FthwyMK/l9zVscFUlDuR5NQigeyKNtkET/TJhDfcHPgZ?=
- =?us-ascii?Q?hypmiR/nx+zw37EYbB5djiwEIjUGL6WPlUQRfa1pYZUOSAfTpTGIETXNXL2o?=
- =?us-ascii?Q?2cmqlATnhMGNUldlTsvNFRvF9Cayyl04gfDHS52UPFEEsA1qW0s5v5DrkFWG?=
- =?us-ascii?Q?erECGu0p/p98Lvs7XOHJ9jwizl0rsCGfdgSEZKJ7Zei7/GzqXN7bjTm8DiVp?=
- =?us-ascii?Q?om0zR9PyA/J0oh6JB7Kq1Ty71zRPUe91K/HeCtR5ZCsKbiGNa3lsPA16b9ob?=
- =?us-ascii?Q?pedBnfnzl6/Da09vGexVczKE3gC8WvBPFg3CVteOL2YgBtYHtZfNDfaAZcMM?=
- =?us-ascii?Q?DrZw597BUhYu9B+Z1adnH8ajp2Vptn/Flx8X2CBPnUsFYwvLBuGZAXsKooQ0?=
- =?us-ascii?Q?Uoz/LFunrKtFCufDNcwzUL2c9cwVef75ucPHgLnDXlnwMuHzmohWPk2nlklo?=
- =?us-ascii?Q?KRkFjOzGQI3MlPdRcpRGObc6N5kGDgBAMfsfubEUVQn/2SwxctqynilSRDfT?=
- =?us-ascii?Q?nKnLDCkn+VSO5miGX9h9M6a2iQEgbdCdcYOGTmSCSZFqtLR4mYNFHOu3KrU4?=
- =?us-ascii?Q?6l707151+n5OJQcVAnYIZDHWlG8AR1rNlOM/WGE9GiAmOdSsVz/TD6EpbXS7?=
- =?us-ascii?Q?xpN5jOtYHPfNU54W1wfPxTBjZeopGZb3LnaNWj+rRiTDVIS7xiOT1xNtEb0A?=
- =?us-ascii?Q?iDKuAf66FAE09WUljEXFVB5gTV5nzsUDsZihx5Kl5Z9lw6MVGxFaY8X1CB09?=
- =?us-ascii?Q?+0v0BJPAculJVNd4D8FFhlI46I7zjUMXocrALk8zJrqWeCoX14uRdZdMijNk?=
- =?us-ascii?Q?1GJ5K7HX4AJgK+NPx9GRNShQG8cQdt0P75PeFmLpo5Q7xpPPLF6iXWk+4G8+?=
- =?us-ascii?Q?96745ckfNJn5SAu+6Od13kbdIb3KqCdyj47Q9+7hqjjHZmSpSKVV/Unw65Pz?=
- =?us-ascii?Q?sSo75Ii0S/hKw00SFwhn0LU62vib7xAxFdCCRhsUIV7aeOx7Q41ry83zijnf?=
- =?us-ascii?Q?TXOEbjYdvyie0rf7WHdi1yt4ZeSzW2oM0G+MqzGnVZpjNtg1SEjeHY3Q2fjR?=
- =?us-ascii?Q?D4zzdgT8gFOl9mncdovL7evIweTMJGQabKDwxM5NLrLgnsky/UNjUxo3RrNd?=
- =?us-ascii?Q?tpKKsK6H/mAgQnilVFZncHEDw6V4AJca0LTjapxh4FHFQpC/cIY4himV/Sf1?=
- =?us-ascii?Q?SCMnD19T8mXqvSAHyo8CBHt9rBBmVPCbjHq7C+lGVIzQJgSyNQJr+n7cu2k+?=
- =?us-ascii?Q?w3xM6vrPFGAyxHSjbZK7pODLC6MbFuFYBiHKmv8NzcWA/eD6BnD8oZ5n/rVT?=
- =?us-ascii?Q?MJazUecZdAlNYdAVjS0DgBOp5Vn6h6zTt8kUjw82pQ7wIpc3LxuiSg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(52116014)(376014)(366016)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?BegnxSriWLAhDvxmDYv4ghCVYF45Qorwu7x3300r4+oKugXuRcwLrkZKFeC6?=
- =?us-ascii?Q?mX7WexCQq68bSKBDGuQvJXzCqKbfsiiYQw5L568fc6S+wPQSqlVB1BDHtv/x?=
- =?us-ascii?Q?0lxoh2HW1HN2zk4P4ho8G8s76+5zA48ISv0JqHyq7LIuCO83USUFKogZqKRW?=
- =?us-ascii?Q?/UNWlwLuothmpT3b/tXCxFl14THDEVN9QPIv4Lc4L/L61J8uBn+cmYh/logW?=
- =?us-ascii?Q?IzNuyZVrgmvNpMdvS2+5WW3AI1PuLLYdLfl6Mr2GVPU2CLgKbZAXhAuuoOyj?=
- =?us-ascii?Q?AvDiPKoXG0j3ERU6RkSYJXPhQXBeuYleZW7CuX3Q9r9wrwJPlzw8Tqtey7+3?=
- =?us-ascii?Q?IoT4dMtuy93UL1y4zkbrL5PSJnSmHU18TWXvGsT1wMhkOEN1n/vAXUBP+gsY?=
- =?us-ascii?Q?xgDSVEhVV09qfhlrUW6ObIdAwQ4YEBY7iaMlcNugKO/ooIjDEzYflAqH13uK?=
- =?us-ascii?Q?l0ylwwsficEowVvGU6KGJoZsWniQCgsHpodwXCkZAn0co1Sh8j6MQJNyLZs/?=
- =?us-ascii?Q?+T5u9Y1lSD1KnlYst1JdOIzTKGEzjqqZNAS3AN7Cyzks3AoYmdhX+RHuuRqC?=
- =?us-ascii?Q?08KtkiVuh6tTdAD20Z4nzJTZccIlgXxtd4c0lv9pZAddK8xsQDgulnHKqFxR?=
- =?us-ascii?Q?870niuVjSbvibR4PkAtq3agkABG0x6Z//pnBwa4RlNGxQJxWr38R/hP/2FSr?=
- =?us-ascii?Q?t1FTsd16G8yFZEpfnB1bCQy91Zo4nQEXNF+6FU4agQ5aQdXYSpNhegOmBY9J?=
- =?us-ascii?Q?n+421voxwtm4NbhRLs6K4ZwKbUKACtADfe/EQEMWW5NmT6xEOki4kBOwtI1/?=
- =?us-ascii?Q?14jcsDM1h9LCFi1TX8Uqby73uJeWV5XA9h/xVnB1gAP3y6sjhi1/+p8AnDut?=
- =?us-ascii?Q?FpJ32oW6m1AVQ1o20/yJBRHleatmt7xpNzpvw2oPos6GxBdJZoaEM9eQbfD/?=
- =?us-ascii?Q?VJT486SiGFTsPCyJ58tBwAf8fv81STapIc/CaCPpx/SVUPzRd+yAiVe4lN/m?=
- =?us-ascii?Q?bcDtRCF8h7wMUx7LYTGGHKzdlFnwIA1gXcb2wbIFXoVUJFCLxh0sTFNlYqQs?=
- =?us-ascii?Q?oPvoLJHkjzN2JviTkNknWaAJvjTprgIEch7yG7fdUQrj5lcSyHD7eTNQpQoz?=
- =?us-ascii?Q?E2GWD4id+N4xba8J35/O0+pzZfHMZeFBqeEBzrKRdbl9Nr/hsqY/1g0oYXKs?=
- =?us-ascii?Q?KYkTI6qF8/Wa9twdh1jwrxoZ7uAyqHctk/+f/AD5645g5ISpMvC5Pw9DKA0R?=
- =?us-ascii?Q?9owYjxqBEiVQvel59VGTBrvCKB2bkqGynoG99e9HkX1f+DoDy+44FW91KQ2c?=
- =?us-ascii?Q?iCo+SXxTJoFgmVhtnrwPMVhNIRzLeFDJxQV3+ZSjyRBGSrxvrL8kDyXFyNZs?=
- =?us-ascii?Q?ExigfVMKvhpcojIuELX4EmnMobaFLSbNRlcixy0xfeKL8k8mFM22SthS7auX?=
- =?us-ascii?Q?xtzQzOXT4IWGP4IVRpbSvfIeW0lBXz7xEWGzYI0KIjd0Q5UZTA4rTpGggKiL?=
- =?us-ascii?Q?GtzkL+Y0i3nVdasWh+LWtsWlDoObHzWuuvOjvd0ti+awsh988V+257+7zGCa?=
- =?us-ascii?Q?RaChGnaQCrodr7vdzE7t9c7LFetxzLhslHXid+ak?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e76b1b7-de1b-4248-2d35-08dd5cc7bca1
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2025 15:58:29.2604
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rdTVcv2mC0hojZHk25/TyA0fDL/Wx3F0hcrpCjlL1JE2HqPWj5z0A81g+FpbFkFlxWiJpdIUMJwJ5tl8U8i8yw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9330
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPrLyWcC/2XRzW7DIAwH8FepOC8TGPPhnfYe0w5AYEXakiqpo
+ k1V3n1OpybRcsOI3x+Db2LMQ82jeDndxJCnOta+44KeTiKdQ/eRm9pyLUACKqlcUy6J140tMjp
+ NvHZe8OHLkEv9vge9vXN9ruO1H37uuZNadv8ilPSPiEk1sikZIVnyMRG8xr6/ftbuOfVfYgmZY
+ AfVBoGhQ8xYFEGA9gj1DoJZoWaoMXsbUzTR2CPEDYKWK8TlRqsikGu5XXeE5gGN3L/RMAyoKUQ
+ iak04QruDamvVMmzRBY2e/9joI3QbBIkrdEurPmL0QZtU1BH6HYR1opNnGB0Rf5krMf8bxzzPv
+ 1QmFE4tAgAA
+X-Change-ID: 20241017-fpc202-6f0b739c2078
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>, 
+ Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Kory Maincent <kory.maincent@bootlin.com>, 
+ Cosmin Tanislav <demonsingur@gmail.com>, linux-i2c@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ Romain Gantois <romain.gantois@bootlin.com>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdekvdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomheptfhomhgrihhnucfirghnthhoihhsuceorhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeekgeeggeehffeufeeivefffeelueeigeevjefhieduleekgeelleegudevfeekueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudefngdpmhgrihhlfhhrohhmpehrohhmrghinhdrghgrnhhtohhishessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdegpdhrtghpthhtoheprghnughirdhshhihthhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtt
+ hhopeguvghmohhnshhinhhguhhrsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqghhpihhosehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhomhgrihhnrdhgrghnthhoihhssegsohhothhlihhnrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhg
+X-GND-Sasl: romain.gantois@bootlin.com
 
-Add compatible string "fsl,imx94-lpi2c" for the i.MX94 chip, which is
-backward compatible with i.MX7ULP. Set it to fall back to
-"fsl,imx7ulp-lpi2c".
+Hello everyone,
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
+This is version nine of my series which adds support for the TI FPC202
+dual-port controller. This is an unusual kind of device which is used as a
+low-speed signal aggregator for various types of SFP-like hardware ports.
+
+The FPC202 exposes an I2C, or SPI (not supported in this series) control
+interface, which can be used to access two downstream I2C busses, along
+with a set of low-speed GPIO signals for each port. It also has I2C address
+translation (ATR) features, which allow multiple I2C devices with the same
+address (e.g. SFP EEPROMs at address 0x50) to be accessed from the upstream
+control interface on different addresses.
+
+I've chosen to add this driver to the misc subsystem, as it doesn't
+strictly belong in either the i2c or gpio sybsystem, and as far as I know
+it is the first device of its kind to be added to the kernel.
+
+Along with the FPC202 driver itself, this series also adds support for
+dynamic address translation to the i2c-atr module. This allows I2C address
+translators to update their translation table on-the-fly when they receive
+transactions to unmapped clients. This feature is needed by the FPC202
+driver to access up to three logical I2C devices per-port, given that the
+FPC202 address translation table only has two address slots.
+
+Best Regards,
+
+Romain
+
+Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
 ---
- Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v9:
+- Fix unmet dependency for I2C_ATR
+- Fix locking issue in i2c_atr_detach_addr()
+- Link to v8: https://lore.kernel.org/r/20250227-fpc202-v8-0-b7994117fbe2@bootlin.com
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml b/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-index 1dcb9c78de3b5..969030a6f82ab 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-@@ -26,6 +26,7 @@ properties:
-               - fsl,imx8qm-lpi2c
-               - fsl,imx8ulp-lpi2c
-               - fsl,imx93-lpi2c
-+              - fsl,imx94-lpi2c
-               - fsl,imx95-lpi2c
-           - const: fsl,imx7ulp-lpi2c
- 
+Changes in v8:
+- Changed from a "depends on I2C_ATR" to a "select I2C_ATR"
+- Link to v7: https://lore.kernel.org/r/20250204-fpc202-v7-0-78b4b8a35cf1@bootlin.com
+
+Changes in v7:
+- Removed a superfluous log message
+- Link to v6: https://lore.kernel.org/r/20250115-fpc202-v6-0-d47a34820753@bootlin.com
+
+Changes in v6:
+- Replaced spaces with tabs in misc Makefile
+- Link to v5: https://lore.kernel.org/r/20250108-fpc202-v5-0-a439ab999d5a@bootlin.com
+
+Changes in v5:
+- Used mutex guards in ub960 and fpc202 drivers
+- Changed wording of some i2c-atr logs
+- Link to v4: https://lore.kernel.org/r/20241230-fpc202-v4-0-761b297dc697@bootlin.com
+
+Changes in v4:
+- Fixed unbalanced refcounting in FPC202 port probing path
+- Fixed KASAN bug by setting alias_pool "shared" flag properly
+- Dropped requirement for both FPC202 ports to be described in the DT
+- Enabled dynamic translation by default, dropped support for non dynamic translation
+- Used aliased_addrs list instead of insufficient bitmap in ub960 driver
+- Added i2c_atr_destroy_c2a() function matching i2c_atr_create_c2a()
+- Fixed list corruption bug in dynamic address translation
+- Indented Kconfig entry with tabs instead of spaces
+- Link to v3: https://lore.kernel.org/r/20241125-fpc202-v3-0-34e86bcb5b56@bootlin.com
+
+Changes in v3:
+- Described the "reg" property of downstream ports in the FPC202 bindings
+- Link to v2: https://lore.kernel.org/r/20241118-fpc202-v2-0-744e4f192a2d@bootlin.com
+
+Changes in v2:
+- Renamed port nodes to match i2c adapter bindings.
+- Declared atr ops struct as static const.
+- Free downstream ports during FPC202 removal.
+- Link to v1: https://lore.kernel.org/r/20241108-fpc202-v1-0-fe42c698bc92@bootlin.com
+
+---
+Romain Gantois (9):
+      dt-bindings: misc: Describe TI FPC202 dual port controller
+      media: i2c: ds90ub960: Replace aliased clients list with address list
+      media: i2c: ds90ub960: Protect alias_use_mask with a mutex
+      i2c: use client addresses directly in ATR interface
+      i2c: move ATR alias pool to a separate struct
+      i2c: rename field 'alias_list' of struct i2c_atr_chan to 'alias_pairs'
+      i2c: support per-channel ATR alias pools
+      i2c: Support dynamic address translation
+      misc: add FPC202 dual port controller driver
+
+ .../devicetree/bindings/misc/ti,fpc202.yaml        |  94 ++++
+ MAINTAINERS                                        |   7 +
+ drivers/i2c/i2c-atr.c                              | 483 ++++++++++++++-------
+ drivers/media/i2c/ds90ub913.c                      |   9 +-
+ drivers/media/i2c/ds90ub953.c                      |   9 +-
+ drivers/media/i2c/ds90ub960.c                      |  49 ++-
+ drivers/misc/Kconfig                               |  12 +
+ drivers/misc/Makefile                              |   1 +
+ drivers/misc/ti_fpc202.c                           | 438 +++++++++++++++++++
+ include/linux/i2c-atr.h                            |  54 ++-
+ 10 files changed, 965 insertions(+), 191 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20241017-fpc202-6f0b739c2078
+
+Best regards,
 -- 
-2.34.1
+Romain Gantois <romain.gantois@bootlin.com>
 
 
