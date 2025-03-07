@@ -1,421 +1,743 @@
-Return-Path: <linux-i2c+bounces-9750-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9751-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD73DA55775
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 21:31:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C0DCA55CF2
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Mar 2025 02:15:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB7003B5379
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Mar 2025 20:31:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6390A18863B4
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Mar 2025 01:16:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 068BC1FDE18;
-	Thu,  6 Mar 2025 20:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7987515B99E;
+	Fri,  7 Mar 2025 01:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ieee.org header.i=@ieee.org header.b="en6xyb5B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aekRaXtW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3501DC19D
-	for <linux-i2c@vger.kernel.org>; Thu,  6 Mar 2025 20:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EDD184E;
+	Fri,  7 Mar 2025 01:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741293071; cv=none; b=p2lijScYhUVNI4IHRT21Dum/Jxvgj2Uyj3CCqRgP9Ps90rGuRJTrvAKnUY3SSlB6OuawamFD1HuP/xosjATp/Ei9FsNsQyKIDT1KK+huyEpr7zUGBLWhO9C8YHHsxJ2fPpB5vsxOgQ2j3QpvvT0RzJTlgZPPzihhBKCCRaKjo1k=
+	t=1741310146; cv=none; b=AOcVy9nVBla6P++CuLVHjlhjrpkv0MlAEcva+N7aZmWEKfnkE+mDvJY4BV42GTFMvecXhqZBYstH4h4T7dm4FIg3XWESFYwY/lOEPy7BqRBMi0ur1XL/FYV7kv+CKD4+BAE7eOaJiBQTHq0ManN7hIizW/edKyAE83c3zewAROY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741293071; c=relaxed/simple;
-	bh=S/KGJtxOG74t83ZzIR/ZfVntYBBU+88Q/ZYDz95bXB8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l0+MmWWMH8CZUiQZ8QxOcu/VO+e7lsEf5R3kKm2j1iTT+mgwaiMtpaFRdhMvl4UB4n2MboBKLvky/pq8FAz1A8PuB2Qw2+OjwhsWxs8VHwTA8k6bFbjFcAD2tjVcE0ctQU31Y4RhbpYx1SLDHrRLYBW+q1p+7Wc8zIFVjHfC0xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ieee.org; spf=pass smtp.mailfrom=ieee.org; dkim=pass (1024-bit key) header.d=ieee.org header.i=@ieee.org header.b=en6xyb5B; arc=none smtp.client-ip=209.85.166.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ieee.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ieee.org
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-85aec8c95c4so89937039f.1
-        for <linux-i2c@vger.kernel.org>; Thu, 06 Mar 2025 12:31:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1741293068; x=1741897868; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=loHfFjVjvy4eqcBCmiUQ0o6uWWkbgvV0v2eUTHhrrUw=;
-        b=en6xyb5B+uxR+6roYwaL2xu/n1eMRQFQF5W0/I+wn8KNrtlsApnvDqx/6tumH8QBHA
-         8VhIPlEWm74T5gbVFrNx5Oayy9jURi8yXU4qrX7N+HBIcprfydchysZXSEu+osN+Bjko
-         qoJSPTbQh79n/oE6LTsz7bghccT5xvYtugcKU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741293068; x=1741897868;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=loHfFjVjvy4eqcBCmiUQ0o6uWWkbgvV0v2eUTHhrrUw=;
-        b=V+ceVj3KXCuQviyZVUUFYtr+EbIYVKpP4d9RqT/fGxAkUapxsdz7R8O9b1CvWZm9kt
-         TPpxJ69cQkXbEEpcUZXtZncjKU9ULTDFbDZmoNhjYzoqaRqNQhdCYZfN/IxYJUAFH3i0
-         PKD5pqAcdVLvfRdrV7bFYoaPiqfunf6XkW930bEJJOz7/ORTFY6CyqoYPnE5T5xEo+/w
-         pZvAIg0IuYX1QZfLqXnEjGuchdYQuIta3VBJpA2Chy6NkseSV4OTTxvfO0Xdpbo00k6y
-         o6LlrcXWgrdOzvkKZ11pS47Ok6NOmQWDPnPycyLjvmVzBD7rIiu+mBTF+EJoLlR26uBn
-         Gu+g==
-X-Forwarded-Encrypted: i=1; AJvYcCUm9ksKis6xvKLODq7U0PfIIbcJnEm4VzmPcCbboA8wQ9lOd8Hj+HiCvmDWcYfVszQSVVAPp8FU8/8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+umG9iC/ClkvhUBSIcFgeKce8W2Ctss67BZzzDqeTBUyAeszI
-	mcQJyEp9+aFbDgKVM6HNWgymm6ziETY8CoUCcQlVGAeAazdJ55X9FccUgccA8g==
-X-Gm-Gg: ASbGncsWU1rgZEgwB8rTWRtOez0rF0wNTYOtuLqS+94zMgf0j5QBObzttCJmiVuLlTC
-	b7CDfK19I1R3+yK2B+hn8e6c5UNahBDbaArpZlv3ujcppy+sYBCJCg6opJJJgEPku6CTykf2c7n
-	/BNEDe+fXtW22D7KGi9JHSr7AreUpr/N0AaLIPev01Gjs0wQSLTW2O2lJstuUIGxbldkX+lu0CZ
-	JmDqY8SLP12tKrWNn3M7+/haoL5Hu7CkHIXDPPRsyfacWoQd9TMe2ZrVD0/z/mVzfQCmXi4cQoh
-	3uR+zmBSMCnpKW8kTPoQGtADjVDFb+0/bK7FJrZIDOb5S8bDAySVEA3ZOxRaTVcwNTc4QcXQFIY
-	ZgIk=
-X-Google-Smtp-Source: AGHT+IG3t+M0Sd4QGM8IcjTJ8M+ia/7Mi3XDtcLmvU8toOATQlbGKf+G0QuDaS520ZPFijFdXU7SWw==
-X-Received: by 2002:a05:6602:3584:b0:85a:e24f:2b60 with SMTP id ca18e2360f4ac-85b1cfae990mr142309839f.4.1741293066607;
-        Thu, 06 Mar 2025 12:31:06 -0800 (PST)
-Received: from [172.22.22.28] (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
-        by smtp.googlemail.com with ESMTPSA id ca18e2360f4ac-85b11a74c4fsm41603039f.36.2025.03.06.12.31.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Mar 2025 12:31:05 -0800 (PST)
-Message-ID: <7e5b0362-50f9-4cb7-abb6-6f26d14b7407@ieee.org>
-Date: Thu, 6 Mar 2025 14:30:14 -0600
+	s=arc-20240116; t=1741310146; c=relaxed/simple;
+	bh=bNMIUhhh/RXnwf99mZAYMem+tdjeV/8p4QU6V3jVJR0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IfuH2J8YkHISuflzN1hoImXBmv3SJZ6J3L1nlNgvE6bKgB+pr3qBkuF4BeENHk2hWKlekNgtdkkpWDec0jvYiI1Vfb8j0fHK1HrNhgJccpSGYaG6XPYTU09eb/IXS7TMLxOVx3NZ9Mke6SvIOT20D09Ekb9A/hNivxv9rWGJeQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aekRaXtW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF99EC4CEE0;
+	Fri,  7 Mar 2025 01:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741310144;
+	bh=bNMIUhhh/RXnwf99mZAYMem+tdjeV/8p4QU6V3jVJR0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aekRaXtWfB1bTMiIpIND4XhzzWiL3Oo9VY8UcIKQrVMpmft1kZhAfRaB3VllW+5ro
+	 CcUEzR6bKGGSskD0FPiiduNDYcFohfarR2OwaDwAwEWLa6M9m+b1YrPocC3oJ2+lvW
+	 F0YggBMMgoSik766qD1Ogo/zvR1OnUSkvWnSJPtH2VDlKSVoUmvsWmAaXD8BVNsATq
+	 hII2fzQW59GTHh5B0fW4bOMrz8lUyV0lNfHXuOnowexaQyepMQrKWQeFUzR2Hp/X0R
+	 3Pg0OyvBnJF0LShNiJKCRkm75HpKmfWBFzVqxUIPtJ4V3hx/32OBTqzhE3a42o6ZhA
+	 V0fWJq1X+o8JA==
+Date: Thu, 6 Mar 2025 17:15:42 -0800
+From: Lee Jones <lee@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250307011542.GE8350@google.com>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-2-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v5 2/2] i2c: spacemit: add support for SpacemiT K1
- SoC
-To: Troy Mitchell <troymitchell988@gmail.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>
-Cc: linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- spacemit@lists.linux.dev
-References: <20250303-k1-i2c-master-v5-0-21dfc7adfe37@gmail.com>
- <20250303-k1-i2c-master-v5-2-21dfc7adfe37@gmail.com>
- <ff0faba3-08fe-4ddd-803c-03df4e1e1e2d@ieee.org>
- <74b70a83-e10e-4496-9bc6-e376211db670@gmail.com>
-Content-Language: en-US
-From: Alex Elder <elder@ieee.org>
-In-Reply-To: <74b70a83-e10e-4496-9bc6-e376211db670@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250225081644.3524915-2-a0282524688@gmail.com>
 
-On 3/6/25 7:16 AM, Troy Mitchell wrote:
-> On 2025/3/4 08:01, Alex Elder wrote:
+On Tue, 25 Feb 2025, Ming Yu wrote:
+
+> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
+> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
+> PWM, and RTC.
+
+This needs to go into the Kconfig help passage.
+
+> This driver implements USB device functionality and shares the
+> chip's peripherals as a child device.
+
+This driver doesn't implement USB functionality.
+
+> Each child device can use the USB functions nct6694_read_msg()
+> and nct6694_write_msg() to issue a command. They can also request
+> interrupt that will be called when the USB device receives its
+> interrupt pipe.
 > 
->> On 3/2/25 11:30 PM, Troy Mitchell wrote:
->>> This patch introduces basic I2C support for the SpacemiT K1 SoC,
->>> utilizing interrupts for transfers.
->>>
->>> The driver has been tested using i2c-tools on a Bananapi-F3 board,
->>> and basic I2C read/write operations have been confirmed to work.
->>>
->>> Signed-off-by: Troy Mitchell <troymitchell988@gmail.com>
->>
->> I have some more comments, and some questions.  I appreciate
->> seeing some of the changes you've made based on my feedback.
-> Hi, Alex. Thanks for your review.
->>> +static void spacemit_i2c_init(struct spacemit_i2c_dev *i2c)
->>> +{
->>> +    u32 val;
->>> +
->>> +    /*
->>> +     * Unmask interrupt bits for all xfer mode:
->>> +     * bus error, arbitration loss detected.
->>> +     * For transaction complete signal, we use master stop
->>> +     * interrupt, so we don't need to unmask SPACEMIT_CR_TXDONEIE.
->>> +     */
->>> +    val = SPACEMIT_CR_BEIE | SPACEMIT_CR_ALDIE;
->>> +
->>> +    /*
->>> +     * Unmask interrupt bits for interrupt xfer mode:
->>> +     * DBR rx full.
->>> +     * For tx empty interrupt SPACEMIT_CR_DTEIE, we only
->>> +     * need to enable when trigger byte transfer to start
->>> +     * data sending.
->>> +     */
->>> +    val |= SPACEMIT_CR_DRFIE;
->>> +
->>> +    /* set speed bits: default fast mode */
->>
->> It is not *default* fast mode, it *is* fast mode.  (There
->> is no other mode used in this driver, right?)
-> yes. I will talk it below.
->>
->>> +    val |= SPACEMIT_CR_MODE_FAST;
->>> +
->>> +    /* disable response to general call */
->>> +    val |= SPACEMIT_CR_GCD;
->>> +
->>> +    /* enable SCL clock output */
->>> +    val |= SPACEMIT_CR_SCLE;
->>> +
->>> +    /* enable master stop detected */
->>> +    val |= SPACEMIT_CR_MSDE | SPACEMIT_CR_MSDIE;
->>> +
->>> +    writel(val, i2c->base + SPACEMIT_ICR);
->>> +}
->>> +
->>> +
->>> +static int spacemit_i2c_xfer_core(struct spacemit_i2c_dev *i2c)
->>> +{
->>> +    int ret;
->>> +
->>> +    spacemit_i2c_reset(i2c);
->>
->> I don't have a lot of experience with I2C drivers, but is it normal
->> to reset before every transfer?
->>
->> If it is, just tell me that.  But if it's not, can you explain why
->> it's necessary here?
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+
+Why aren't you signing off with your work address?
+
+> ---
+>  MAINTAINERS                 |   7 +
+>  drivers/mfd/Kconfig         |  18 ++
+>  drivers/mfd/Makefile        |   2 +
+>  drivers/mfd/nct6694.c       | 378 ++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/nct6694.h | 102 ++++++++++
+>  5 files changed, 507 insertions(+)
+>  create mode 100644 drivers/mfd/nct6694.c
+>  create mode 100644 include/linux/mfd/nct6694.h
 > 
-> My initial idea was to keep the I2C state in its initial state before each
-> transmission.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 873aa2cce4d7..c700a0b96960 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16918,6 +16918,13 @@ F:	drivers/nubus/
+>  F:	include/linux/nubus.h
+>  F:	include/uapi/linux/nubus.h
+>  
+> +NUVOTON NCT6694 MFD DRIVER
+> +M:	Ming Yu <tmyu0@nuvoton.com>
+> +L:	linux-kernel@vger.kernel.org
+
+This is the default list.  You shouldn't need to add that here.
+
+> +S:	Supported
+> +F:	drivers/mfd/nct6694.c
+> +F:	include/linux/mfd/nct6694.h
+> +
+>  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
+>  M:	Antonino Daplas <adaplas@gmail.com>
+>  L:	linux-fbdev@vger.kernel.org
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 6b0682af6e32..c97a2bdcea0b 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1045,6 +1045,24 @@ config MFD_MENF21BMC
+>  	  This driver can also be built as a module. If so the module
+>  	  will be called menf21bmc.
+>  
+> +config MFD_NCT6694
+> +	tristate "Nuvoton NCT6694 support"
+> +	select MFD_CORE
+> +	depends on USB
+> +	help
+> +	  This enables support for the Nuvoton USB device NCT6694, which shares
+> +	  peripherals.
+> +
+> +	  This driver provides core APIs to access the NCT6694 hardware
+> +	  monitoring and control features.
+> +
+> +	  The NCT6694 is a versatile multi-function device that supports
+
+Please drop the term multi-function device and replace it what a proper
+description of the devices.
+
+> +	  functionalities such as GPIO, I2C, CAN, WDT, HWMON, and RTC
+> +	  management.
+
+All of these line breaks should be removed.
+
+> +	  Additional drivers must be enabled to utilize the specific
+> +	  functionalities of the device.
+> +
+>  config MFD_OCELOT
+>  	tristate "Microsemi Ocelot External Control Support"
+>  	depends on SPI_MASTER
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 9220eaf7cf12..7725b732e265 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -121,6 +121,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
+>  obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
+>  obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
+>  
+> +obj-$(CONFIG_MFD_NCT6694)	+= nct6694.o
+> +
+>  obj-$(CONFIG_MFD_CORE)		+= mfd-core.o
+>  
+>  ocelot-soc-objs			:= ocelot-core.o ocelot-spi.o
+> diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
+> new file mode 100644
+> index 000000000000..c82457679ca6
+> --- /dev/null
+> +++ b/drivers/mfd/nct6694.c
+> @@ -0,0 +1,378 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Nuvoton NCT6694 core driver using USB interface to provide
+> + * access to the NCT6694 hardware monitoring and control features.
+> + *
+> + * The NCT6694 is a versatile multi-function device that supports
+
+Here too.
+
+> + * functionalities such as GPIO, I2C, CAN, WDT, HWMON and RTC
+> + * management.
+> + *
+> + * Copyright (C) 2024 Nuvoton Technology Corp.
+
+This goes at the top.
+
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb.h>
+> +
+> +static const struct mfd_cell nct6694_dev[] = {
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x0),
+
+"-gpio" usually goes on the end.
+
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
+
+IDs are usually given in base-10.
+
+Why are you manually adding the device IDs?
+
+PLATFORM_DEVID_AUTO doesn't work for you?
+
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x2),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x3),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x4),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x5),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x6),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x7),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x8),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x9),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xA),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xB),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xC),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xD),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xE),
+> +	MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xF),
+> +
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x0),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x1),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x2),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x3),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x4),
+> +	MFD_CELL_BASIC("i2c-nct6694", NULL, NULL, 0, 0x5),
+> +
+> +	MFD_CELL_BASIC("nct6694_canfd", NULL, NULL, 0, 0x0),
+
+Why has the naming convention changed here?
+
+> +	MFD_CELL_BASIC("nct6694_canfd", NULL, NULL, 0, 0x1),
+> +
+> +	MFD_CELL_BASIC("nct6694_wdt", NULL, NULL, 0, 0x0),
+> +	MFD_CELL_BASIC("nct6694_wdt", NULL, NULL, 0, 0x1),
+> +
+> +	MFD_CELL_NAME("nct6694-hwmon"),
+> +	MFD_CELL_NAME("rtc-nct6694"),
+
+There doesn't seem to be any consistency here.
+
+> +};
+> +
+> +static int nct6694_response_err_handling(struct nct6694 *nct6694,
+
+> +{
+> +	switch (err_status) {
+> +	case NCT6694_NO_ERROR:
+> +		return err_status;
+
+This is odd since you already know this will be 0.
+
+> +	case NCT6694_NOT_SUPPORT_ERROR:
+> +		dev_warn(nct6694->dev, "Command is not supported!\n");
+
+Why not dev_err()?
+
+> +		break;
+> +	case NCT6694_NO_RESPONSE_ERROR:
+> +		dev_warn(nct6694->dev, "Command received no response!\n");
+> +		break;
+> +	case NCT6694_TIMEOUT_ERROR:
+> +		dev_warn(nct6694->dev, "Command timed out!\n");
+> +		break;
+> +	case NCT6694_PENDING:
+> +		dev_warn(nct6694->dev, "Command is pending!\n");
+
+Is this an error?
+
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return -EIO;
+> +}
+> +
+> +int nct6694_read_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf)
+> +{
+> +	union nct6694_usb_msg *msg = nct6694->usb_msg;
+> +	int tx_len, rx_len, ret;
+> +
+> +	guard(mutex)(&nct6694->access_lock);
+> +
+> +	/* Send command packet to USB device */
+
+This doesn't really describe the next 2 lines.
+
+Move it down?
+
+> +	memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
+> +	msg->cmd_header.hctrl = NCT6694_HCTRL_GET;
+> +
+> +	ret = usb_bulk_msg(nct6694->udev,
+
+Since you use nct6694->udev a bunch - sometimes twice in the same call,
+it might be nicer to pull it into it's own variable instead of
+dereferencing it all the time.
+
+> +			   usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OUT_EP),
+> +			   &msg->cmd_header, sizeof(*msg), &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive response packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   &msg->response_header, sizeof(*msg), &rx_len,
+
+How can you read sizeof(*msg) Bytes (22?) into the smaller
+response_header (16?) attribute?
+
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive data packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   buf, le16_to_cpu(cmd_hd->len), &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (rx_len != le16_to_cpu(cmd_hd->len)) {
+> +		dev_err(nct6694->dev, "Expected received length %d, but got %d\n",
+> +			le16_to_cpu(cmd_hd->len), rx_len);
+> +		return -EIO;
+> +	}
+> +
+> +	return nct6694_response_err_handling(nct6694, msg->response_header.sts);
+> +}
+> +EXPORT_SYMBOL(nct6694_read_msg);
+> +
+> +int nct6694_write_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf)
+> +{
+> +	union nct6694_usb_msg *msg = nct6694->usb_msg;
+> +	int tx_len, rx_len, ret;
+> +
+> +	guard(mutex)(&nct6694->access_lock);
+> +
+> +	/* Send command packet to USB device */
+> +	memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
+> +	msg->cmd_header.hctrl = NCT6694_HCTRL_SET;
+> +
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OUT_EP),
+> +			   &msg->cmd_header, sizeof(*msg), &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Send data packet to USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OUT_EP),
+> +			   buf, le16_to_cpu(cmd_hd->len), &tx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive response packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   &msg->response_header, sizeof(*msg), &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Receive data packet from USB device */
+> +	ret = usb_bulk_msg(nct6694->udev,
+> +			   usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN_EP),
+> +			   buf, le16_to_cpu(cmd_hd->len), &rx_len,
+> +			   nct6694->timeout);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (rx_len != le16_to_cpu(cmd_hd->len)) {
+> +		dev_err(nct6694->dev, "Expected transmitted length %d, but got %d\n",
+> +			le16_to_cpu(cmd_hd->len), rx_len);
+> +		return -EIO;
+> +	}
+> +
+> +	return nct6694_response_err_handling(nct6694, msg->response_header.sts);
+> +}
+> +EXPORT_SYMBOL(nct6694_write_msg);
+> +
+> +static void usb_int_callback(struct urb *urb)
+> +{
+> +	struct nct6694 *nct6694 = urb->context;
+> +	unsigned int *int_status = urb->transfer_buffer;
+> +	int ret;
+> +
+> +	switch (urb->status) {
+> +	case 0:
+> +		break;
+> +	case -ECONNRESET:
+> +	case -ENOENT:
+> +	case -ESHUTDOWN:
+> +		return;
+> +	default:
+> +		generic_handle_irq_safe(irq_find_mapping(nct6694->domain, irq));
+> +		*int_status &= ~BIT(irq);
+> +	}
+> +
+> +resubmit:
+> +	ret = usb_submit_urb(urb, GFP_ATOMIC);
+> +	if (ret)
+> +		dev_dbg(nct6694->dev, "%s: Failed to resubmit urb, status %pe",
+
+Why debug?
+
+> +			__func__, ERR_PTR(ret));
+
+Remove the __func__ part.
+
+> +}
+> +
+> +static void nct6694_irq_lock(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +
+> +	mutex_lock(&nct6694->irq_lock);
+> +}
+> +
+> +static void nct6694_irq_sync_unlock(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +
+> +	mutex_unlock(&nct6694->irq_lock);
+> +}
+> +
+> +static void nct6694_irq_enable(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +	irq_hw_number_t hwirq = irqd_to_hwirq(data);
+> +
+> +	nct6694->irq_enable |= BIT(hwirq);
+> +}
+> +
+> +static void nct6694_irq_disable(struct irq_data *data)
+> +{
+> +	struct nct6694 *nct6694 = irq_data_get_irq_chip_data(data);
+> +	irq_hw_number_t hwirq = irqd_to_hwirq(data);
+> +
+> +	nct6694->irq_enable &= ~BIT(hwirq);
+> +}
+> +
+> +static const struct irq_chip nct6694_irq_chip = {
+> +	.name = "nct6694-irq",
+> +	.flags = IRQCHIP_SKIP_SET_WAKE,
+> +	.irq_bus_lock = nct6694_irq_lock,
+> +	.irq_bus_sync_unlock = nct6694_irq_sync_unlock,
+> +	.irq_enable = nct6694_irq_enable,
+> +	.irq_disable = nct6694_irq_disable,
+> +};
+> +
+> +static int nct6694_irq_domain_map(struct irq_domain *d, unsigned int irq,
+> +				  irq_hw_number_t hw)
+> +{
+> +	struct nct6694 *nct6694 = d->host_data;
+> +
+> +	irq_set_chip_data(irq, nct6694);
+> +	irq_set_chip_and_handler(irq, &nct6694_irq_chip, handle_simple_irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static void nct6694_irq_domain_unmap(struct irq_domain *d, unsigned int irq)
+> +{
+> +	irq_set_chip_and_handler(irq, NULL, NULL);
+> +	irq_set_chip_data(irq, NULL);
+> +}
+> +
+> +static const struct irq_domain_ops nct6694_irq_domain_ops = {
+> +	.map	= nct6694_irq_domain_map,
+> +	.unmap	= nct6694_irq_domain_unmap,
+> +};
+> +
+> +static int nct6694_usb_probe(struct usb_interface *iface,
+> +			     const struct usb_device_id *id)
+> +{
+> +	struct usb_device *udev = interface_to_usbdev(iface);
+> +	struct usb_endpoint_descriptor *int_endpoint;
+> +	struct usb_host_interface *interface;
+> +	struct device *dev = &iface->dev;
+> +	struct nct6694 *nct6694;
+> +	int pipe, maxp;
+> +	int ret;
+> +
+> +	nct6694 = devm_kzalloc(dev, sizeof(*nct6694), GFP_KERNEL);
+> +	if (!nct6694)
+> +		return -ENOMEM;
+> +
+> +	pipe = usb_rcvintpipe(udev, NCT6694_INT_IN_EP);
+> +	maxp = usb_maxpacket(udev, pipe);
+> +
+> +	nct6694->usb_msg = devm_kzalloc(dev, sizeof(union nct6694_usb_msg), GFP_KERNEL);
+> +	if (!nct6694->usb_msg)
+> +		return -ENOMEM;
+> +
+> +	nct6694->int_buffer = devm_kzalloc(dev, maxp, GFP_KERNEL);
+> +	if (!nct6694->int_buffer)
+> +		return -ENOMEM;
+> +
+> +	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
+> +	if (!nct6694->int_in_urb)
+> +		return -ENOMEM;
+> +
+> +	nct6694->domain = irq_domain_add_simple(NULL, NCT6694_NR_IRQS, 0,
+> +						&nct6694_irq_domain_ops,
+> +						nct6694);
+> +	if (!nct6694->domain) {
+> +		ret = -ENODEV;
+> +		goto err_urb;
+> +	}
+> +
+> +	nct6694->dev = dev;
+> +	nct6694->udev = udev;
+> +	nct6694->timeout = NCT6694_URB_TIMEOUT;	/* Wait until URB completes */
+
+No need to save this known value.
+
+> +	ret = devm_mutex_init(dev, &nct6694->access_lock);
+> +	if (ret)
+> +		goto err_urb;
+> +
+> +	ret = devm_mutex_init(dev, &nct6694->irq_lock);
+> +	if (ret)
+> +		goto err_urb;
+> +
+> +	interface = iface->cur_altsetting;
+> +	int_endpoint = &interface->endpoint[0].desc;
+> +	if (!usb_endpoint_is_int_in(int_endpoint)) {
+> +		ret = -ENODEV;
+> +		goto err_urb;
+> +	}
+> +	usb_fill_int_urb(nct6694->int_in_urb, udev, pipe,
+> +			 nct6694->int_buffer, maxp, usb_int_callback,
+> +			 nct6694, int_endpoint->bInterval);
+> +	ret = usb_submit_urb(nct6694->int_in_urb, GFP_KERNEL);
+> +	if (ret)
+> +		goto err_urb;
+
+Please unsquash these calls - space them out.
+
+> +
+> +	usb_set_intfdata(iface, nct6694);
+> +
+> +	ret = mfd_add_hotplug_devices(dev, nct6694_dev, ARRAY_SIZE(nct6694_dev));
+> +	if (ret)
+> +		goto err_mfd;
+> +
+> +	return 0;
+> +
+> +err_mfd:
+> +	usb_kill_urb(nct6694->int_in_urb);
+> +err_urb:
+> +	usb_free_urb(nct6694->int_in_urb);
+> +	return ret;
+> +}
+> +
+> +static void nct6694_usb_disconnect(struct usb_interface *iface)
+> +{
+> +	struct nct6694 *nct6694 = usb_get_intfdata(iface);
+> +
+> +	mfd_remove_devices(nct6694->dev);
+> +	usb_kill_urb(nct6694->int_in_urb);
+> +	usb_free_urb(nct6694->int_in_urb);
+> +}
+> +
+> +static const struct usb_device_id nct6694_ids[] = {
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(NCT6694_VENDOR_ID,
+> +					NCT6694_PRODUCT_ID,
+> +					0xFF, 0x00, 0x00)},
+
+This should fit on one line.  You can use up to 100-chars.
+
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(usb, nct6694_ids);
+> +
+> +static struct usb_driver nct6694_usb_driver = {
+> +	.name	= "nct6694",
+
+Odd spaces.
+
+> +	.id_table = nct6694_ids,
+> +	.probe = nct6694_usb_probe,
+> +	.disconnect = nct6694_usb_disconnect,
+> +};
+> +
+
+Remove this line.
+
+> +module_usb_driver(nct6694_usb_driver);
+> +
+> +MODULE_DESCRIPTION("USB core driver for NCT6694");
+
+This is not a USB driver.
+
+> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+
+Different to SoB.
+
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+> new file mode 100644
+> index 000000000000..8171f975761e
+> --- /dev/null
+> +++ b/include/linux/mfd/nct6694.h
+> @@ -0,0 +1,102 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Nuvoton NCT6694 USB transaction and data structure.
+> + *
+> + * Copyright (C) 2024 Nuvoton Technology Corp.
+
+At the top.
+
+> + */
+> +
+> +#ifndef __MFD_NCT6694_H
+> +#define __MFD_NCT6694_H
+> +
+> +#define NCT6694_VENDOR_ID	0x0416
+> +#define NCT6694_PRODUCT_ID	0x200B
+> +#define NCT6694_INT_IN_EP	0x81
+> +#define NCT6694_BULK_IN_EP	0x02
+> +#define NCT6694_BULK_OUT_EP	0x03
+> +
+> +#define NCT6694_HCTRL_SET	0x40
+> +#define NCT6694_HCTRL_GET	0x80
+> +
+> +#define NCT6694_URB_TIMEOUT	1000
+> +
+> +enum nct6694_irq_id {
+> +	NCT6694_IRQ_GPIO0 = 0,
+> +	NCT6694_IRQ_GPIO1,
+> +	NCT6694_IRQ_GPIO2,
+> +	NCT6694_IRQ_GPIO3,
+> +	NCT6694_IRQ_GPIO4,
+> +	NCT6694_IRQ_GPIO5,
+> +	NCT6694_IRQ_GPIO6,
+> +	NCT6694_IRQ_GPIO7,
+> +	NCT6694_IRQ_GPIO8,
+> +	NCT6694_IRQ_GPIO9,
+> +	NCT6694_IRQ_GPIOA,
+> +	NCT6694_IRQ_GPIOB,
+> +	NCT6694_IRQ_GPIOC,
+> +	NCT6694_IRQ_GPIOD,
+> +	NCT6694_IRQ_GPIOE,
+> +	NCT6694_IRQ_GPIOF,
+> +	NCT6694_IRQ_CAN0,
+> +	NCT6694_IRQ_CAN1,
+> +	NCT6694_IRQ_RTC,
+> +	NCT6694_NR_IRQS,
+> +};
+> +
+> +enum nct6694_response_err_status {
+> +	NCT6694_NO_ERROR = 0,
+> +	NCT6694_FORMAT_ERROR,
+> +	NCT6694_RESERVED1,
+> +	NCT6694_RESERVED2,
+> +	NCT6694_NOT_SUPPORT_ERROR,
+> +	NCT6694_NO_RESPONSE_ERROR,
+> +	NCT6694_TIMEOUT_ERROR,
+> +	NCT6694_PENDING,
+> +};
+> +
+> +struct __packed nct6694_cmd_header {
+> +	u8 rsv1;
+> +	u8 mod;
+> +	union __packed {
+> +		__le16 offset;
+> +		struct __packed {
+> +			u8 cmd;
+> +			u8 sel;
+> +		};
+> +	};
+> +	u8 hctrl;
+> +	u8 rsv2;
+> +	__le16 len;
+> +};
+> +
+> +struct __packed nct6694_response_header {
+> +	u8 sequence_id;
+> +	u8 sts;
+> +	u8 reserved[4];
+> +	__le16 len;
+> +};
+> +
+> +union __packed nct6694_usb_msg {
+> +	struct nct6694_cmd_header cmd_header;
+> +	struct nct6694_response_header response_header;
+> +};
+> +
+> +struct nct6694 {
+> +	struct device *dev;
+> +	struct irq_domain *domain;
+> +	/* Mutex to protect access to the device */
+> +	struct mutex access_lock;
+> +	/* Mutex to protect access to the IRQ */
+> +	struct mutex irq_lock;
+> +	struct urb *int_in_urb;
+> +	struct usb_device *udev;
+> +	union nct6694_usb_msg *usb_msg;
+> +	unsigned char *int_buffer;
+> +	unsigned int irq_enable;
+> +	/* Time in msec to wait for the URB to the complete */
+> +	long timeout;
+
+timeout_ms
+
+> +};
+> +
+> +int nct6694_read_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf);
+> +int nct6694_write_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf);
+> +
+> +#endif
+> -- 
+> 2.34.1
 > 
-> But after testing, this is not necessary. I will move it to `probe` function.
 
-OK, that seems better.  But honestly you should do this only
-if you're certain the reset isn't required before every transfer.
-I don't know, but I assumed it was there for a reason.
-
->>> +
->>> +    spacemit_i2c_calc_timeout(i2c);
->>> +
->>> +    spacemit_i2c_init(i2c);
->>> +
->>
->> Here too, maybe I just don't know what most I2C drivers do, but
->> is it necessary to only enable the I2C adapter and its interrupt
->> handler when performing a transfer?
-> 
-> It is necessary to enable before each transmission.
-> 
-> I have tested moving the `spacemit_i2c_enable` to the probe function.
-> 
-> It will cause transmission errors.
-> 
-> As for the `enable_irq`, I think it can be moved to the `probe` function.
-
-It really depends on whether you intend to rule out
-any interrupts other than when you are performing
-a transfer.
-
-This might be reasonable, but sometimes drivers will
-keep an interrupt enabled most of the time, sometimes
-they restrict when it's enabled.  Hence my question.
-
-> 
->>
->>> +    spacemit_i2c_enable(i2c);
->>> +    enable_irq(i2c->irq);
->>> +
->>> +    /* i2c wait for bus busy */
->>> +    ret = spacemit_i2c_recover_bus_busy(i2c);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    ret = spacemit_i2c_xfer_msg(i2c);
->>> +    if (ret < 0)
->>> +        dev_dbg(i2c->dev, "i2c transfer error\n");
->>
->> If you're reporting the error you might as well say what
->> it is.
->>
->>      dev_dbg(i2c->dev, "i2c transfer error: %d\n", ret);
->>
->>> +
->>> +    return ret;
->>> +}
->>> +
->>> +static int spacemit_i2c_xfer(struct i2c_adapter *adapt, struct i2c_msg
->>> *msgs, int num)
->>> +{
->>> +    struct spacemit_i2c_dev *i2c = i2c_get_adapdata(adapt);
->>> +    int ret;
->>> +    u32 err = SPACEMIT_I2C_GET_ERR(i2c->status);
->>> +
->>> +    i2c->msgs = msgs;
->>> +    i2c->msg_num = num;
->>> +
->>> +    ret = spacemit_i2c_xfer_core(i2c);
->>> +    if (!ret)
->>> +        spacemit_i2c_check_bus_release(i2c);
->>> +
->>
->> The enable_irq() call that matches the disable call below is
->> found in spacemit_i2c_xfer_core().  That's where this call
->> belongs.
-
-I think the above comment is important.  I'll look at
-your next version of the series to see what you do.
-
->>
->>> +    disable_irq(i2c->irq);
->>> +
->>
->> Same with the next call--it should be in the same function
->> that its corresponding spacemit_i2c_enable() is called.
->>
->> With these suggestions in mind, I think you can safely
->> just get rid of spacemit_i2c_xfer_core().  It is only
->> called in this one spot (above), and you can just do
->> everything within spacemit_i2c_xfer() instead.
->>
->>> +    spacemit_i2c_disable(i2c);
->>> +
->>> +    if (ret == -ETIMEDOUT || ret == -EAGAIN)
->>> +        dev_alert(i2c->dev, "i2c transfer failed, ret %d err 0x%x\n", ret,
->>> err);
->>> +
->>> +    return ret < 0 ? ret : num;
->>> +}
->>> +
->>> +static u32 spacemit_i2c_func(struct i2c_adapter *adap)
->>> +{
->>> +    return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
->>> +}
->>> +
->>> +static const struct i2c_algorithm spacemit_i2c_algo = {
->>> +    .xfer = spacemit_i2c_xfer,
->>> +    .functionality = spacemit_i2c_func,
->>> +};
->>> +
->>> +static int spacemit_i2c_probe(struct platform_device *pdev)
->>> +{
->>> +    struct clk *clk;
->>> +    struct device *dev = &pdev->dev;
->>> +    struct device_node *of_node = pdev->dev.of_node;
->>> +    struct spacemit_i2c_dev *i2c;
->>> +    int ret = 0;
->>
->> There is no need to initialize ret.
->>
->>> +
->>> +    i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
->>> +    if (!i2c)
->>> +        return -ENOMEM;
->>> +
->>> +    ret = of_property_read_u32(of_node, "clock-frequency", &i2c->clock_freq);
->>> +    if (ret)
->>> +        return dev_err_probe(dev, ret, "failed to read clock-frequency
->>> property");
->>> +
->>> +    /* For now, this driver doesn't support high-speed. */
->>> +    if (i2c->clock_freq < 1 || i2c->clock_freq > 400000) {
->>
->> In your device tree binding, you indicate that three different
->> modes are supported, and that the maximum frequency is 3300000 Hz.
->> This says that only ranges from 1-400000 Hz are allowed.
->>
->> In fact, although you look up this clock frequency in DT, I see
->> nothing that actually is affected by this value.  I.e., no I2C
->> bus frequency changes, regardless of what frequency you specify.
->> The only place the clock_freq field is used is in calculating
->> the timeout for a transfer.
->>
->> So two things:
->> - My guess is that you are relying on whatever frequency the
->>    hardware already is using, and maybe that's 400000 Hz.
->>    That's fine, though at some point it should be more
->>    directly controlled (set somehow).
->> - Since you don't actually support any other frequency,
->>    drop this "clock-frequency" feature for now, and add it
->>    when you're ready to actually support it.
->>
->> And I might be wrong about this, but I don't think your
->> (new) DTS binding should specify behavior that is not
->> supported by the driver.
->>
->>                      -Alex
-> 
-> I will support standard mode in next version.
-
-I'll wait to see what you do, but please try not to change
-anything substantive between versions of a patch series.
-
-> We just need to modify the function `spacemit_i2c_init`.
-
-Thanks for your responses.
-
-					-Alex
-
->>
->>> +        dev_warn(dev, "unsupport clock frequency: %d, default: 400000",
->>> i2c->clock_freq);
->>> +        i2c->clock_freq = 400000;
->>> +    }
->>> +
->>> +    i2c->dev = &pdev->dev;
->>> +
->>> +    i2c->base = devm_platform_ioremap_resource(pdev, 0);
->>> +    if (IS_ERR(i2c->base))
->>> +        return dev_err_probe(dev, PTR_ERR(i2c->base), "failed to do ioremap");
->>> +
->>> +    i2c->irq = platform_get_irq(pdev, 0);
->>> +    if (i2c->irq < 0)
->>> +        return dev_err_probe(dev, i2c->irq, "failed to get irq resource");
->>> +
->>> +    ret = devm_request_irq(i2c->dev, i2c->irq, spacemit_i2c_irq_handler,
->>> +                   IRQF_NO_SUSPEND | IRQF_ONESHOT, dev_name(i2c->dev), i2c);
->>> +    if (ret)
->>> +        return dev_err_probe(dev, ret, "failed to request irq");
->>> +
->>> +    disable_irq(i2c->irq);
->>> +
->>> +    clk = devm_clk_get_enabled(dev, "apb");
->>> +    if (IS_ERR(clk))
->>> +        return dev_err_probe(dev, PTR_ERR(clk), "failed to enable apb clock");
->>> +
->>> +    clk = devm_clk_get_enabled(dev, "twsi");
->>> +    if (IS_ERR(clk))
->>> +        return dev_err_probe(dev, PTR_ERR(clk), "failed to enable twsi clock");
->>> +
->>> +    i2c_set_adapdata(&i2c->adapt, i2c);
->>> +    i2c->adapt.owner = THIS_MODULE;
->>> +    i2c->adapt.algo = &spacemit_i2c_algo;
->>> +    i2c->adapt.dev.parent = i2c->dev;
->>> +    i2c->adapt.nr = pdev->id;
->>> +
->>> +    i2c->adapt.dev.of_node = of_node;
->>> +    i2c->adapt.algo_data = i2c;
->>> +
->>> +    strscpy(i2c->adapt.name, "spacemit-i2c-adapter", sizeof(i2c->adapt.name));
->>> +
->>> +    init_completion(&i2c->complete);
->>> +
->>> +    platform_set_drvdata(pdev, i2c);
->>> +
->>> +    ret = i2c_add_numbered_adapter(&i2c->adapt);
->>> +    if (ret)
->>> +        return dev_err_probe(&pdev->dev, ret, "failed to add i2c adapter");
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static void spacemit_i2c_remove(struct platform_device *pdev)
->>> +{
->>> +    struct spacemit_i2c_dev *i2c = platform_get_drvdata(pdev);
->>> +
->>> +    i2c_del_adapter(&i2c->adapt);
->>> +}
->>> +
->>> +static const struct of_device_id spacemit_i2c_of_match[] = {
->>> +    { .compatible = "spacemit,k1-i2c", },
->>> +    { /* sentinel */ }
->>> +};
->>> +MODULE_DEVICE_TABLE(of, spacemit_i2c_of_match);
->>> +
->>> +static struct platform_driver spacemit_i2c_driver = {
->>> +    .probe = spacemit_i2c_probe,
->>> +    .remove = spacemit_i2c_remove,
->>> +    .driver = {
->>> +        .name = "i2c-k1",
->>> +        .of_match_table = spacemit_i2c_of_match,
->>> +    },
->>> +};
->>> +module_platform_driver(spacemit_i2c_driver);
->>> +
->>> +MODULE_LICENSE("GPL");
->>> +MODULE_DESCRIPTION("I2C bus driver for SpacemiT K1 SoC");
->>>
->>
-
+-- 
+Lee Jones [李琼斯]
 
