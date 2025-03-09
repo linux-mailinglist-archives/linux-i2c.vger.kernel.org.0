@@ -1,71 +1,56 @@
-Return-Path: <linux-i2c+bounces-9759-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9760-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF347A58157
-	for <lists+linux-i2c@lfdr.de>; Sun,  9 Mar 2025 08:07:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2653A5816A
+	for <lists+linux-i2c@lfdr.de>; Sun,  9 Mar 2025 09:00:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90CC27A4F78
-	for <lists+linux-i2c@lfdr.de>; Sun,  9 Mar 2025 07:06:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A2EE16BA24
+	for <lists+linux-i2c@lfdr.de>; Sun,  9 Mar 2025 08:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C5718E743;
-	Sun,  9 Mar 2025 07:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="JDh0VXQS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE4B7175D47;
+	Sun,  9 Mar 2025 08:00:41 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA08317A302;
-	Sun,  9 Mar 2025 07:06:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE7B136A;
+	Sun,  9 Mar 2025 08:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741504011; cv=none; b=mAAtxwE3FPzpeLufcgV8LmnwVi2nLNxwJ2wboLIf3koXkLQpX5MaLmM1PUt1Zooqh6nkdUeM5AfI+vcOQ4T1wnuofSVyEwuOll8TJgh6NlaXWh2OtMDcIhkduoNYI1vjuaY0uJeS2hyu6+/NqTHypiy0sQRqPNBjt9j1x7lXIDU=
+	t=1741507241; cv=none; b=LrGjdUHy6UFIqTCEQ4CywlN+n6Am9j+INYSSp3jXFliU1TLNZ18Zdgk+oEUFCgD5LFCBSX9J9zfftX7wgDpuQVeREa3UmRt3a04JQ9pRn+r2TQWCyZwQax8ZSoZrQS+yGnEPaTgVf4da9e9dnkgRfS7Q/Exp6G9qgIyRRFiMCjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741504011; c=relaxed/simple;
-	bh=YZ1NsQ1LjueMRWx5/RoVphfcn/yEKTPpf10GAJTNcmA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QfA83swehavbqX+ujrI037gC7g9RVpXod4+i+8Bn8rvuyWVjumvJOldDEPg+OoAxFTvrGx7DdYif+i+yZjq/hNWj8Kj1jHp8EN8VbJ0BCGMfz+GlU8L7jPjpeP0dEu5NGoqS4tQ47nA/XLFxH+8uwNR9mC0DTPnU9g8ugyVaY5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=JDh0VXQS; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 6ED5125EA7;
-	Sun,  9 Mar 2025 08:06:48 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r5s36HJaxT31; Sun,  9 Mar 2025 08:06:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1741504007; bh=YZ1NsQ1LjueMRWx5/RoVphfcn/yEKTPpf10GAJTNcmA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=JDh0VXQSKXAliQQF/zxU6fQcqg1cc4yIDhJMoInrGxY5AE6wY5Z2RFVdZt4uJghho
-	 A95cxH/N6VJhKASlkbfX0fKpJsASyFEn/vDvQLwude6+eKM48pauSIOmw2OYvhiZFX
-	 vhLYYunQSG9iK5551JyaMjSy7kRj25yXmRBBz9aq4N8f0V4q1I1g4obSYpK3Ex7NM7
-	 d/oIa4sANlCQe/5ZcaATnh/B8KKY2MneeeTZyRuci88+IYNCeESrGHM1RAkBT0ddqq
-	 9YSanSlQkhd4nrfSw3P8EOGLBYIN4NfK+JRYCgf0nuMkSWLijg3jjlLxMmrFWdNjIf
-	 ZIK4KeX67CfzQ==
-From: Yao Zi <ziyao@disroot.org>
-To: Heiko Stuebner <heiko@sntech.de>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Yao Zi <ziyao@disroot.org>,
-	Chukun Pan <amadeus@jmu.edu.cn>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-i2c@vger.kernel.org,
+	s=arc-20240116; t=1741507241; c=relaxed/simple;
+	bh=8ebHqbGzxOQH8RAdTcUNMElnJDlicrnx+krGy2rt8RQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=T8Z29n9ZvWKYkKA8b8gOQseesnFOvWkRpKney5v0TS4CpRh+cSjCtHsr5BRjVw1t4b4kwD3kXfVqQQGDx9izbToRI4JO/AbObXdGn+gOzmv5lRclFOjsn0iEXSoxwu2vGeaPh1n5b6lie1sDsu/w7b9POzFIS/Q9Y2XjARj2gLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=101.71.155.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
+Received: from localhost.localdomain (unknown [119.122.215.89])
+	by smtp.qiye.163.com (Hmail) with ESMTP id da0595fb;
+	Sun, 9 Mar 2025 16:00:30 +0800 (GMT+08:00)
+From: Chukun Pan <amadeus@jmu.edu.cn>
+To: ziyao@disroot.org
+Cc: amadeus@jmu.edu.cn,
+	andi.shyti@kernel.org,
+	conor+dt@kernel.org,
 	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: rockchip: Add onboard EEPROM for Radxa E20C
-Date: Sun,  9 Mar 2025 07:06:03 +0000
-Message-ID: <20250309070603.35254-4-ziyao@disroot.org>
-In-Reply-To: <20250309070603.35254-1-ziyao@disroot.org>
-References: <20250309070603.35254-1-ziyao@disroot.org>
+	heiko@sntech.de,
+	jonas@kwiboo.se,
+	krzk+dt@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 2/3] arm64: dts: rockchip: Add I2C controllers for RK3528
+Date: Sun,  9 Mar 2025 16:00:25 +0800
+Message-Id: <20250309080025.15825-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250309070603.35254-3-ziyao@disroot.org>
+References: <20250309070603.35254-3-ziyao@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -73,40 +58,33 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaTR0aVh4eGEJKSk9DGEpMQ1YeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlKSkJVSklJVUlKTlVDQllXWRYaDxIVHRRZQVlPS0hVSktISk5MTlVKS0tVSk
+	JLS1kG
+X-HM-Tid: 0a9579eb7c2703a2kunmda0595fb
+X-HM-MType: 10
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MTI6Mzo4LjJPCC8fKSIoHjQc
+	ARxPCixVSlVKTE9KTktMSUhKT09DVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUpK
+	QlVKSUlVSUpOVUNCWVdZCAFZQU9OTTcG
 
-Radxa E20C ships an onboard I2C EEPROM for storing production
-information. Enable it in devicetree.
+Hi,
 
-Signed-off-by: Yao Zi <ziyao@disroot.org>
----
- arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+> +		i2c0: i2c@ffa50000 {
+> +			compatible = "rockchip,rk3528-i2c",
+> +				     "rockchip,rk3399-i2c";
+> +			reg = <0x0 0xffa50000 0x0 0x1000>;
+> +			clocks = <&cru CLK_I2C0>, <&cru PCLK_I2C0>;
+> +			clock-names = "i2c", "pclk";
+> +			interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts b/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts
-index b74e605a5a82..ddcf690eb513 100644
---- a/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts
-@@ -122,6 +122,19 @@ vccio_sd: regulator-vccio-sd {
- 	};
- };
- 
-+&i2c1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c1m0_xfer>;
-+	status = "okay";
-+
-+	eeprom@50 {
-+		compatible = "belling,bl24c16a", "atmel,24c16";
-+		reg = <0x50>;
-+		pagesize = <16>;
-+		vcc-supply = <&vcc_3v3>;
-+	};
-+};
-+
- &pinctrl {
- 	gpio-keys {
- 		user_key: user-key {
+It would be better to add default pinctrl for all i2c nodes
+using m0 group. (Only 1 group of pinctrl for i2c4 and i2c7)
+
+Thanks,
+Chukun
+
 -- 
-2.48.1
+2.25.1
 
 
