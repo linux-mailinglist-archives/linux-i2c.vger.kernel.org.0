@@ -1,58 +1,55 @@
-Return-Path: <linux-i2c+bounces-9792-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9793-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CF28A5D2BB
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 23:53:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABC83A5D2EF
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Mar 2025 00:06:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D25FA1894103
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 22:53:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAF2B17AA25
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 23:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8E12248B4;
-	Tue, 11 Mar 2025 22:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBD171FE44A;
+	Tue, 11 Mar 2025 23:06:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ejFSraxY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="StBPAcEa"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCBD1E573F;
-	Tue, 11 Mar 2025 22:53:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910231EB182;
+	Tue, 11 Mar 2025 23:06:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741733581; cv=none; b=SHsXNosXfDhEoodtoyCvZGjj3UXpyzpAWeis64Ba8wJ+94txCrVKhtHm+Z7Z0gsMLrHpJhjgABSDWU+9V9QkogbzG948KVI1JlIstGQsapzhTk1mBEELcnHjkpnbcFFBqWuEZcbV976W0xj73PcgZI70gp5mBPD5LR099gcjmiI=
+	t=1741734410; cv=none; b=W8NlDJOAxH0hyr+2ImkwIP3Gn746h0dbsPYPnGCYBtEAqH6WL/1Pr/nYBYgqzx6taEyNw/uF3gqlgvHKY6bKFV4Q4n4EYavVhmWAdXHBPpI//wuXB5azMcYl/F6ENFSYKRSNuHSX73NsePpwFuyeQairPZqkbrgcjOuc1hyjJ08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741733581; c=relaxed/simple;
-	bh=KEX5faxsQsWkg721kkVxKxCrx0PVeG7B3p7zEqzbq3o=;
+	s=arc-20240116; t=1741734410; c=relaxed/simple;
+	bh=z2jr4kUGHp/i4t2CDbop0oW0icTJSM6eKJBi7WCLEZc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BH56Wd7rj/+NU5xVYfX0ZCQNVvbZ1axFo57Zrgn4bsXC1yawQdFDYMML41nf+ZGisFzvV38lcGxw/M3IbwYrHUze2/apuMfo7OHWmfnErLXXj++p6ApJm709aEeCNzdnkgi21soeLQZlE9B6my1Av3jVbtBt/h94A1B+aKq3wIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ejFSraxY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C3CCC4CEE9;
-	Tue, 11 Mar 2025 22:52:57 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=u9QYHFoi3JaNTHyRxah7Qb4lPWevMDOKItTlCnpMBaLe5HlgtRBOawU4R66iY0G7502O4EbAy7T9vjKWaOptpgwJ6j8lqqFxYEriKuxpBy9yX84I0bjs1SUY04mSpODj1hbCLZjwAicCzB4+Qch99SQYZevy70R0l2BAHt8NtTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=StBPAcEa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5E1FC4CEE9;
+	Tue, 11 Mar 2025 23:06:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741733580;
-	bh=KEX5faxsQsWkg721kkVxKxCrx0PVeG7B3p7zEqzbq3o=;
+	s=k20201202; t=1741734410;
+	bh=z2jr4kUGHp/i4t2CDbop0oW0icTJSM6eKJBi7WCLEZc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ejFSraxYqzOg9hmkx8gLlKzXz6jGLZ1YUSeP5ZVQX6fCbug+BDTzAUIdtIg3ayxPv
-	 FJT8PfdUEfkSJZRLJ8qI6HC6JCjd2dB/MrNo3fSVhvWJA5HScaMJIZVmFgVI1P1EVe
-	 JGhBlRrHu1DvXSSO8TUfNpv0VSxpFjUhi89G9ukQRmX2u9+zRk7C3cyrEPFWl8v347
-	 4YksuuG7U/IQnXn8a0x/jWvlKyWpmJ7mHbe9ZdzvZ5cQjn/ZaduQnWbCJylATeUluf
-	 QIXqNj8QGh7QEjTq88CAbhvbmP7XK3lMpzk0ArUfT35v/yZKjFRB/1CKpxNfwgYMMw
-	 qKFzG5QL61icQ==
-Date: Tue, 11 Mar 2025 23:52:49 +0100
+	b=StBPAcEaQmWeVb0Q6S3o1pX7MhbUshl50qMH8JnSOXbRxANoMv29l8rY+sZVnmhOh
+	 l/C0L2UyDSyAN2pSuueSNS9PpoCmAPT/uB58V1IgT4Jfmd2aZhDCv4ujphrC7hkFPt
+	 2/e8BzFsmtIn68owBWn4RMNPBCSFJWm8GmPj00Yj2BAA5GDqwyiZVwVH+aPe69605c
+	 2vhhblSo0DKn0dYQSyOAos+thm324mcIYC2U7GZwi/T6gEFu6yhG3ksbQDGIn1E1FQ
+	 IIB4B7o6oCFhWwDjJmodYcHKiDz4VBOdf2NRkBu+zo/lbRiUU6w/jOM1QsryecmmiK
+	 tO4fLJ+micCRA==
+Date: Wed, 12 Mar 2025 00:06:39 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Vitalii Mordan <mordan@ispras.ru>
-Cc: Michal Simek <michal.simek@amd.com>, 
-	Harini Katakam <harinik@xilinx.com>, Wolfram Sang <wsa@kernel.org>, 
-	Soren Brinkmann <soren.brinkmann@xilinx.com>, linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Fedor Pchelkin <pchelkin@ispras.ru>, 
-	Alexey Khoroshilov <khoroshilov@ispras.ru>, Vadim Mutilin <mutilin@ispras.ru>, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] i2c: cadence: fix call balance of id->clk handling
- routines
-Message-ID: <rbn5jxvmcl76n3grg3fzc3z5vqgmieixmrq3rkhbpdremlbeze@quqxmsszknfe>
-References: <20250303140805.644143-1-mordan@ispras.ru>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org, 
+	kernel-janitors@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: ali1535: Fix an error handling path in
+ ali1535_probe()
+Message-ID: <lzvf42gr6thyweoub5xhkhoaaom76bzefbvjvifsctnhfofwzr@e73yatf26vet>
+References: <0daf63d7a2ce74c02e2664ba805bbfadab7d25e5.1741031571.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -61,25 +58,19 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250303140805.644143-1-mordan@ispras.ru>
+In-Reply-To: <0daf63d7a2ce74c02e2664ba805bbfadab7d25e5.1741031571.git.christophe.jaillet@wanadoo.fr>
 
-Hi Vitalii,
+Hi Christophe,
 
-On Mon, Mar 03, 2025 at 05:08:05PM +0300, Vitalii Mordan wrote:
-> If the clock id->clk was not enabled in cdns_i2c_probe(), it should not be
-> disabled in any execution path. If the clock was not enabled, the probe
-> function should return an error code.
+On Mon, Mar 03, 2025 at 08:53:08PM +0100, Christophe JAILLET wrote:
+> If i2c_add_adapter() fails, the request_region() call in ali1535_setup()
+> must be undone by a corresponding release_region() call, as done in the
+> remove function.
 > 
-> Use the devm_clk_get_enabled() helper function to ensure proper call
-> balance for id->clk.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with Klever.
-> 
-> Fixes: df8eb5691c48 ("i2c: Add driver for Cadence I2C controller")
-> Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Thanks for this patch, but it was already sent previously by
-Michal and Manikanta.
+merged to i2c/i2c-host-fixes.
 
 Thanks,
 Andi
