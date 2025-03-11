@@ -1,57 +1,57 @@
-Return-Path: <linux-i2c+bounces-9790-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9791-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00516A5D297
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 23:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 74852A5D2B6
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 23:51:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5C4C189DE2D
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 22:34:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 375FF1891770
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 22:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E6C8264A7C;
-	Tue, 11 Mar 2025 22:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 141862248B4;
+	Tue, 11 Mar 2025 22:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nCAt106v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Na5n4Dho"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9EB18A93C;
-	Tue, 11 Mar 2025 22:33:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D811E832A;
+	Tue, 11 Mar 2025 22:51:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741732436; cv=none; b=dG9V13JAggYX/LcuBNfxavY14zOGVz8dIPU2cMqOD8EELQrkxhBm/KIBBnr7QyKA1jMsAAyeSCXXU8UtIHazikWaDeWro8MgPYjl0R2r4U/93E1tO10KMLRdmD5e0RicbhwYTpfTps7Igr5cYjEbRiisvZ9YDVaEYRV+IhXIwiA=
+	t=1741733501; cv=none; b=Z01eq4W7PpRkCt+Q/3fJAYUSVB8l1ygcMNtLKTzvdy9bxCtpcoIbSUUq6W3XufRAxPGHq+1P16LlX4GlJEpI/5PgLw0rLvmXfJzNveaZZK8SETQwPiSMeQoDJguEtNd9vbDbQzut9tEArDn3S2jQIrCIOleCWQUFwbfJBvbvz9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741732436; c=relaxed/simple;
-	bh=3Z1R+L+jSx5edeWaQS0cx6WJe3wb6MZKgrGV01ESFAs=;
+	s=arc-20240116; t=1741733501; c=relaxed/simple;
+	bh=cQ32UG7gcBmU0q9LiPDwqk5Trgsxlc2FpDLbm/adFj4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=an2sia/xdmx7cGPR54y0DREGcASsisDClxRhzNtnbqWRCdn+28pyUkl/xREqusW/Acms+ORihcd61nD49oxXCGqGd6axd9tuZkzohEhi2czwQRy098oTvASiVI5TpfgsLDEKT+D9hlbeXwlVDOaEbBdMuAeZYC1Rul+RXgqNQpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nCAt106v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9523AC4CEE9;
-	Tue, 11 Mar 2025 22:33:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=BMmEFFSSYFvDYi9ueQe1s7OzXFdFFVZnm2TV5ozB0PV3Zlbs7NxhvIBLpsXjaVfOAq1t1m8swgDPk/mnLKYeo3+jjsofhusdIILeBCE8/xN2qLjdVGlbngTh2FvgQmVMOgZM5lLSP5ymd/gJyFlZvuSkTKTu0KnNxIeMUDmTZuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Na5n4Dho; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8352AC4CEE9;
+	Tue, 11 Mar 2025 22:51:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741732435;
-	bh=3Z1R+L+jSx5edeWaQS0cx6WJe3wb6MZKgrGV01ESFAs=;
+	s=k20201202; t=1741733501;
+	bh=cQ32UG7gcBmU0q9LiPDwqk5Trgsxlc2FpDLbm/adFj4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nCAt106vo4mx0IunDxJo/tZeqkwBgQXFwAdGFGATTpJqAHxWOEzH1rt3h2cbbaL18
-	 ELbiVSL6qxyYjnBp0OmGbOFe6TEee2lL32MzveTbUgrceFvDbo/jC9KMeyL7eW7c2D
-	 IMf+DRS/ojD2Lhldw/AySw9OwyXFiuV6IaRxHTbZta//FSwmo86+BBuREkvSDbNPCU
-	 2fwbAsGDNeNG9qCPu9875swgHns1VFA4H7l7oYstzmp3x9kexg6iYKu+aTVnKx9lpY
-	 lgd1LzFGQgH4uDyKQd4jbe6Sp7nyZONyJeTHoZC3zfgpQmcbwNh3qlYhSbBTH4HaOz
-	 QcCn7eAth8SOw==
-Date: Tue, 11 Mar 2025 23:33:42 +0100
+	b=Na5n4DhoO8vB/ZZp9X0AIMkONd7kUt4XrONA99mgyzOTmYq3IXKUM/K7QszUAnmxl
+	 wktFngOe7+oy6P1rXVNhgaY7aX87c/yiuDSFnMwrhg1KCBUbnz5c9NfSnzaqmaVu4H
+	 Usq7L1Z7dTSmcp7IJUm4C+2NlMWSt35x/nMkQs39ZpHQqnEqFW19SFhk32IthVtBWC
+	 6AM4RNIesAspf6pdig1nfmk2cmtDnjDO3ZZ7vPDRZxJHS9XDEnbHq/KNzbwdtX3+0+
+	 gwU/R+7/gjrrSPDuuOWgQDc7Hv71GxvVcAp1qwJV71Nc96FHEZy8MRL5eIEm1i/x7B
+	 +YFpaiKVfDFBw==
+Date: Tue, 11 Mar 2025 23:51:32 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Kever Yang <kever.yang@rock-chips.com>
-Cc: heiko@sntech.de, linux-rockchip@lists.infradead.org, 
-	devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
-	Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 04/15] dt-bindings: i2c: i2c-rk3x: Add rk3562 support
-Message-ID: <dqgqw2e33gaieos3lk4vkrfqmnunrxooar7gisrdwqjhdnl4m5@s2cxnaur5a2b>
-References: <20250227111913.2344207-1-kever.yang@rock-chips.com>
- <20250227111913.2344207-5-kever.yang@rock-chips.com>
+To: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+Cc: git@amd.com, michal.simek@amd.com, p.zabel@pengutronix.de, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	radhey.shyam.pandey@amd.com, srinivas.goud@amd.com, shubhrajyoti.datta@amd.com, 
+	manikantaguntupalli09@gmail.com
+Subject: Re: [PATCH 0/2] Simplify clock handling and fix probe error handling
+ sequence
+Message-ID: <6xj34bjcmcdktbztrovkionpazqadiscmpg632k2qevxbuf2bb@tzdnnrkc4py5>
+References: <20250206115708.1085523-1-manikanta.guntupalli@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,17 +60,26 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250227111913.2344207-5-kever.yang@rock-chips.com>
+In-Reply-To: <20250206115708.1085523-1-manikanta.guntupalli@amd.com>
 
-Hi Kever,
+Hi,
 
-On Thu, Feb 27, 2025 at 07:19:02PM +0800, Kever Yang wrote:
-> rk3562 i2c compatible to the existing rk3399 binding.
+On Thu, Feb 06, 2025 at 05:27:06PM +0530, Manikanta Guntupalli wrote:
+> This series includes two patches that improve the Cadence I2C driver
+> by simplifying clock handling and ensuring correct reset sequencing
+> in the probe error path.
 > 
-> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> Manikanta Guntupalli (1):
+>   i2c: cadence: Move reset_control_assert after pm_runtime_set_suspended
+>     in probe error path
+> 
+> Michal Simek (1):
+>   i2c: cadence: Simplify using devm_clk_get_enabled()
 
-merged to i2c/i2c-host.
+I was sure I did take this patch, but unfortunately I forgot it.
+Feel free to ping me in such case.
+
+Merged to i2c/i2c-host.
 
 Thanks,
 Andi
