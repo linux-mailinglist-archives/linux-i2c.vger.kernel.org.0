@@ -1,91 +1,118 @@
-Return-Path: <linux-i2c+bounces-9796-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9797-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79069A5D2FF
-	for <lists+linux-i2c@lfdr.de>; Wed, 12 Mar 2025 00:13:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 587B9A5D30B
+	for <lists+linux-i2c@lfdr.de>; Wed, 12 Mar 2025 00:16:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCA70176C9B
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 23:13:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A085189AA98
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 23:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F59225A29;
-	Tue, 11 Mar 2025 23:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 435B7233731;
+	Tue, 11 Mar 2025 23:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n72wMNa3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nHwfdiPk"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3CC51F09B4;
-	Tue, 11 Mar 2025 23:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23701D6DBB;
+	Tue, 11 Mar 2025 23:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741734798; cv=none; b=V2fPvgfRkmruXTpe/b20+82QctCvW8T+UJmYdc+d4hqLTkvTQ0GGe/PfcAE20dtAT37lVdOG1XHmcl6M0Jk48zfL9d+SPJY27RIcAkQu+XlLL7MR5LiRSJEBotzuKnlVf38lr8VS2QiLlMARs4ktgQbCJvdSOexgZfuHbSO/ZG0=
+	t=1741735001; cv=none; b=FvwMfU08meeY6zPRZ19Qi0I55ibCjUN9ia0AGlMcupf/nHC0I/xsNPkY7eH2YHeaBjpqF+qwZdJjGB0OZJiEf01BgwEXjOMARDQaoJ2ZFO7jjXWLOyr0G3gtR6DoxvVOl/ZNudApzXo8pY9lxOJ7GpWip8gEkG7uTiNXFX1zgJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741734798; c=relaxed/simple;
-	bh=8zqqrE6NewUBWLpJZUQ9TW4QDanmnleqtNEBYnbMVTE=;
+	s=arc-20240116; t=1741735001; c=relaxed/simple;
+	bh=PfimZx7PgZ/5Gi9CD2rOAcgt5dAWqfxSVWTYj2Jq5nY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kz4kQIth44eu4/G8nI4VFV3RApnFQiiIHYMr7ZImpjPFXvWDvtpgtz14NLn53/NQzm0nelyjZTlxBBVjPRx8XBXpQZnvu9+lJ7fsMtKwZZP9UNiUZmVrMTpLJVsZSLM6lDqt7ADeytEIaLGOJTm6fpwFk7rY4WBixgyTrJ4BPOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n72wMNa3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B16C4C4CEE9;
-	Tue, 11 Mar 2025 23:13:15 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=X5HxK2FfUFhpIy/6rzorzWWYN8Hzx5XVAgZ5pKsMJY/puITgSNEjpENBJiNbl4KCz6+cctbpsyMeOavLqthBml/Ns6FhwUFjrhAlbwHQ9oit5f/Jf7byTmwH8hlEK1CxNTsDOHrn3MiHZDxJ963pHD4kHdDdK0dWnrM4S2A8zMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nHwfdiPk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA6EC4CEEE;
+	Tue, 11 Mar 2025 23:16:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741734797;
-	bh=8zqqrE6NewUBWLpJZUQ9TW4QDanmnleqtNEBYnbMVTE=;
+	s=k20201202; t=1741735000;
+	bh=PfimZx7PgZ/5Gi9CD2rOAcgt5dAWqfxSVWTYj2Jq5nY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n72wMNa3Jz0xhi592qwthWXHm9rUyqJmj8Nr/TkskBp7IiNe3/ds1wy404etUxux9
-	 vrkb8V8GqZiLBtTp4iWf9eCS2DEjEIA5LZNHJm4XsihtynVTav9pS1J/91Nue4CjS5
-	 EEiLv0EXT7CYCs8sSFH4FHo3QIKJfBcN0L48Bzvj8YvVuXYJ/rAYO7hZaVJ1H8EVEJ
-	 yxX9Ay8U1ETzjuP5dEx+uQ/Rc8ZDnKckGE/XmgV0/NtGAg4bqfubeKfaSdyI7PwDUS
-	 QqHWh6Qn0PJROsbHrVf+0f1b5mwlQMgPasICv6DpmpyTjYFsuK6PZIBU3F9/eBBC7I
-	 x6O1Hqzg4nGkw==
-Date: Wed, 12 Mar 2025 00:13:09 +0100
+	b=nHwfdiPkB4R7wXEfdDOvowQshJv8zRAnt6aBix9+yfuWB7qg34ggPKMQQe+8L1O0Q
+	 uHRRPWfNw/VcezTLuYbGh2MIYNmLV+3rjTjf5vj/zNopgqy0TPvBR6xGHcHz/e9oFU
+	 nlci6yxjSOIi0Z5UF5J8CRSh0NPMiWLIs/7sA6oL27ey1dpANMCybYfPSSj5Ucv5di
+	 kkRvC9cXy0mgGsvCFhgsc85TLM8TQpS8trr0xJEdPx7XxmGr8joo6f4dwUoOcxbj6F
+	 tTIURLvA0H7KKcS81zfVKv8E3ANKWuj0KsDDCk676xjgcbLFO1jyiDSjZqaZdItCIk
+	 cIq/q4P18b2lQ==
+Date: Wed, 12 Mar 2025 00:16:31 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Denzeel Oliva <wachiturroxd150@gmail.com>
-Cc: krzk@kernel.org, s.nawrocki@samsung.com, cw00.choi@samsung.com, 
-	alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
-	conor+dt@kernel.org, igor.belwon@mentallysanemainliners.org, 
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Add PERIC0/1 support for Exynos 990 and hsi2c
- compatible
-Message-ID: <jwihm4ahyjluillz5szgvwj3ntjypqekjf43g4c2poa7r3v7ar@5uka5xftxjzf>
-References: <20250212004824.1011-1-wachiturroxd150@gmail.com>
+To: Zoie Lin =?utf-8?B?KOael+emueWmoSk=?= <Zoie.Lin@mediatek.com>
+Cc: Qii Wang =?utf-8?B?KOeOi+eQqik=?= <Qii.Wang@mediatek.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>, 
+	Teddy Chen =?utf-8?B?KOmZs+S5vuWFgyk=?= <Teddy.Chen@mediatek.com>, 
+	Project_Global_Chrome_Upstream_Group <Project_Global_Chrome_Upstream_Group@mediatek.com>, 
+	Shunchang Wang =?utf-8?B?KOeOi+iInOaYjCk=?= <ot_shunchang.wang@mediatek.com>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	Joseph-CC Chang =?utf-8?B?KOW8teasvea0sik=?= <Joseph-CC.Chang@mediatek.com>, 
+	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>, "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
+	Leilk Liu =?utf-8?B?KOWImOejiik=?= <Leilk.Liu@mediatek.com>
+Subject: Re: [PATCH v4 0/1] i2c: mediatek: add runtime PM operations and bus
+ regulator control
+Message-ID: <idbp6ckhu2pdt5p6vapcblqlinezpq5miqzl4hrzmlbgrniw7o@ucd42tvbtfmr>
+References: <20250211144016.488001-1-zoie.lin@mediatek.com>
+ <46621db1-6096-46af-b021-c919c1cae7ef@collabora.com>
+ <ec77bb9478cd86a6737b92135170064970925b3c.camel@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250212004824.1011-1-wachiturroxd150@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ec77bb9478cd86a6737b92135170064970925b3c.camel@mediatek.com>
 
-Hi Denzel,
+Hi Zoie,
 
-On Wed, Feb 12, 2025 at 12:48:20AM +0000, Denzeel Oliva wrote:
-> This patch series enables the PERIC0/1 (Peripheral Connectivity)
-> and compatible hsi2 for Exynos990:
+On Tue, Mar 04, 2025 at 08:37:27AM +0000, Zoie Lin (林禹妡) wrote:
 > 
-> - PERIC0/1 feeds HSI2C, SPI and UART
+> ...
 > 
-> This part tests one by one to see which clock hangs without
-> the CLK_IGNORE_UNUSED flag.
+> On Thu, 2025-02-13 at 12:57 +0100, AngeloGioacchino Del Regno wrote:
+> > 
+> > 
+> > Turning on and off regulators at start of transfer and end of
+> > transfer respectively
+> > is very expensive and, while it makes sense for power efficiency of
+> > the controller,
+> > it doesn't make sense for:
+> > 
+> >   1. Responsiveness (latency); and
+> >   2. Platform power efficiency at a whole.
+> > 
+> > As a start, just set the autosuspend delay to 250ms; this gives you
+> > at least time
+> > to bring up clocks and regulators and usually finish a transfer at
+> > 400KHz, giving
+> > you the chance to also get some more requests before autosuspend
+> > decides to, well,
+> > auto..suspend the device.
+> > 
+> > The right way of choosing an autosuspend delay a bit more precisely,
+> > though, for
+> > this device, would be to check the bus speed and calculate the
+> > autosuspend time
+> > accordingly.
 > 
-> Changes v2:
->  - Remove other unnecessary patches which is nothing related
->    to linux shipping style.
+> We understand the importance of balancing power efficiency and
+> responsiveness. Given the diversity of I2C devices connected
+> under each platform, it is indeed challenging to estimate an
+> appropriate delay time for testing.
 > 
-> Denzeel Oliva (4):
->   dt-bindings: clock: samsung,exynos990-clock: add PERIC0/1 clock
->     management unit
->   dt-bindings: i2c: exynos5: add samsung,exynos990-hsi2c compatible
->   clk: samsung: exynos990: add support for CMU_PERIC0/1
->   arm64: dts: exyno990: enable cmu-peric0/1 clock controller
+> Therefore, we would like to proceed with your initial suggestion
+> and set the autosuspend delay to 250ms. Based on our preliminary
+> tests, this adjustment appears to be a practical solution across 
+> our existing platforms.
 
-what is the future of this series? Are you planning a v2?
+Am I understanding correctly that you are planning a v2?
 
 Andi
 
