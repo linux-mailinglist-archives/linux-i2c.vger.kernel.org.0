@@ -1,79 +1,79 @@
-Return-Path: <linux-i2c+bounces-9784-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9785-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC545A5D20F
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 22:54:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBB48A5D21B
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 22:57:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D18437A49F1
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 21:53:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C70E17BF6E
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 21:57:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA8A265606;
-	Tue, 11 Mar 2025 21:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E65AB264F9B;
+	Tue, 11 Mar 2025 21:56:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f/yhf+Ow"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="M/4EFY6c"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97826264F99
-	for <linux-i2c@vger.kernel.org>; Tue, 11 Mar 2025 21:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24DD264A7D
+	for <linux-i2c@vger.kernel.org>; Tue, 11 Mar 2025 21:56:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741730043; cv=none; b=ku9ZFZFDyvyrqRXBFhZPunjQiklSeGhKFhnywHWbHEExJkpzldsf3wuc8OuS8CQR5Ge5JRqJABT0NtNjdPLPpenwx0Fp8uKsesJK7ojq50QmeNWDAHlzdEv9cUVAEHAW4YAr8yRmSzCBK+5Q8caIJ2DPs0sbb1xLuynmGTvjQBI=
+	t=1741730214; cv=none; b=DeDZbi7HyI+n9zftNYWZAIqIHk8lmRfmYUd4Y6605G+RSBn89+mDMKAxwYJdj2P23SjUDWyEBbrVTmVj99jxVeQ6AT0rDgR2XeoAwKOz2qcX+/e56H/vxtj1ZbDcI9LxCQ6Qxk0lpGtCNarkVCcoBpD4UAzIt/YjOGK/1Ce9raU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741730043; c=relaxed/simple;
-	bh=ZgzE4thBCoSTa+dcViXPcQn5/G3IUHp1o/3wzyNpJ6I=;
+	s=arc-20240116; t=1741730214; c=relaxed/simple;
+	bh=avNY8ak+JQWmkFVsZS0aeZyCgTV7dWit3U7qT7O+ZI0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WhFHekJ07fC2/qXd6CKGJ3Y43XcQqi6i7tALWXJ3jd3y3XFxGzBUxgIZiSW2fVbjSYYbwLxn6u5EWzDhJcgKidzYBOjzIA12FGYgzjbDXQKLSFpzVcocHhKF2ef4oMowrh/lao6XVa1AFUiOAjIewBVqZsVHzRnMD7KCKbP7NEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f/yhf+Ow; arc=none smtp.client-ip=209.85.208.174
+	 In-Reply-To:Content-Type; b=X0hSzErpdoNwpPMdX12TrTe4Znyih6zwvWYGQXAJxUH2UgQu7hK4lj16iiwK7lMKycTbFRBVo+CdDl+9Qayn0vbk3nL7Bzhf8jiYE0CwrVgy67j2kdey6EZNOl1IjQ5CeNw55HvuALvM8IUDyIyOVVH0/6SHInItl0g/qMjsTDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=M/4EFY6c; arc=none smtp.client-ip=209.85.208.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-30bff515d07so3412871fa.0
-        for <linux-i2c@vger.kernel.org>; Tue, 11 Mar 2025 14:53:59 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-30bf25190f8so3842821fa.1
+        for <linux-i2c@vger.kernel.org>; Tue, 11 Mar 2025 14:56:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741730038; x=1742334838; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1741730211; x=1742335011; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=X5gsB+0yYh8xE9yPNlTczFYo/dqiaFhvnnAdkeUoWJg=;
-        b=f/yhf+Ow6qLnHeu7fpBARK6iQQyRmHWvFObl/a0hci1teamJW+UNUazoTQxxo7esNl
-         arQvnfnn6Eq+GUuglGzFjCRxlPy3bGNrmpA7ZWCmnuNPB9lsq6CTUuQn/n6i1o4XdJpZ
-         WYP7WVSZou2lt+5F8OHTinmJSjsNNe/IaaQ2XeS7BNvGbr4MUehdokjGbMjXFobxE1qL
-         cwTYeXwwdp9u+Kz/q5/1SuPIPxv3hIvJwvOTEHOTzO8tYdmtCoYFq/nw8w7PxTh9YWrg
-         R25eUG17re6Scd0jjMyQ6S5xoM6tAYGXlJn4JyxKoFswjSCyDehZf/Dg9nsICyE0UNn+
-         wQtA==
+        bh=qXfL2talT+3Pc3/IEr/DhQxuVz1xDl6VWwKjRxG3X98=;
+        b=M/4EFY6cIVYvdw2LILkLrz9hi5jz+hEd0WxqKe2+e2uXEhWds1c8wNc2TUGmnDd3F8
+         bvF+yC8mu3usy+jlHfhVXFZF+Smn4TSKgjHxWS7xgfJC/msJ7kJoamlnTfhDziUUPCe5
+         njbxjOMWOc84SrvU9qwyrO4/rCZ1moRke350leqQ2147BDUlevwfTEMyP43eKyVrLlPA
+         LDUEalgs8XfrRcYrlJulv2k77ZUSeXlGPzO9d+ImhM+ca2U+OePyOZ8GK3dLsTGrp9Se
+         nM3KAXw3aMM+jc/NpoIavEonN/HT32Nl8gUuAr6i6r7eI3G3LktTTa77Gh7HGIWKeXGe
+         Q4IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741730038; x=1742334838;
+        d=1e100.net; s=20230601; t=1741730211; x=1742335011;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X5gsB+0yYh8xE9yPNlTczFYo/dqiaFhvnnAdkeUoWJg=;
-        b=sHF7D6DTH2QH9uhtFmBau+k19ulEBVTJ841x8PNMcGNQ8WPB2M07roKbMD3vZH6T5R
-         QRt26sU3laZntCV13A40uxQWqVYOqvJJyAa9A0xTCJjTa5U6xmQ8/cUgebUJC+ZHcSJq
-         1ysOjKQM3tGsquVBILH8vYeVXhIsw936YX3ItfQsGmoCy/RMDFE+jZSx87FGm68DKssm
-         JsRU7kzfpDcG4Pokx48/EaOz1AK/iDnIwZoACqr8By20heVjsAB9JD9FwU9T0rv8F4Gv
-         x+tviciQbbPjSSRzjHX3KwsAi0bwwlnuZekoNTz97o428CUjSo1ZiCXAFk3DoOkuN4ZJ
-         l5Bg==
-X-Gm-Message-State: AOJu0Ywq331SAzU1rip6mh0ZE/XIuaD2drxObu8biEgw+LP49/AlrUH2
-	D7J7tTXqpOqbsXO07zml9hWe4W/8ObtlB5nm5UoqwX4tWmm8c8GZGHP5PNtEJQc=
-X-Gm-Gg: ASbGncsDR/+68ltJsVXctplyAY7T1QqR5EVVonAVKQZ3OJILb2PmfGO1iM7xg9ZpNIE
-	5kTpkHcbMzFOYT+GfYx7zvb1D+/yY9l1brK8OT3jB+2YFvLTMZKBGVxNbsFqDo2y4ZcCHvhWvj0
-	/MyYUGQRf7537tDFsntcgSZAaQ/SAoKA+nnKxLYKpcO2I92fZ3l2GE8Qclvt5KbEBbYWrA9hau1
-	/ZSJloWLsBDXmOV2kbkC6wsGdUhNqaXQeUdmXOXaSlgjKAz6KXJUMRwH/gjGEM8qKv9bXuo8p+z
-	QLLGzL957T9/loyNq6v1YL/zNvQ6l9L7mdaR7v0SwBHA0mIRcawGYMhw6FluAO95yO8Gh0sOizQ
-	9rrt76AK+6A7NnqMtSsN5u5rkYLN45XDREA==
-X-Google-Smtp-Source: AGHT+IFMqD7MP0QO68gqxLROvT5NFpnEwxTOzpskeLzkJrA9xPbwOTw4OmpOx0RaAr9lWptyIlaMyw==
-X-Received: by 2002:a05:6512:3b10:b0:545:6f1:948d with SMTP id 2adb3069b0e04-549abacc9e6mr613771e87.7.1741730037032;
-        Tue, 11 Mar 2025 14:53:57 -0700 (PDT)
+        bh=qXfL2talT+3Pc3/IEr/DhQxuVz1xDl6VWwKjRxG3X98=;
+        b=ac1iyb96wyyKSi4RZg4QN9jAkgSWE4PExNlWyAuFOSEwsvtqyWi3v6OK2kbWg9xujf
+         I56ufpWiqq5DnSonHwocU6ZRdcSTgaFAQhzsFPb6qNE5iH3RRD4Hocu37IhoCepguf9U
+         9H2vVmragktlHHrGWmpVi3oRJ/G3hEhYxwpVda0oY1U1UnrcJWnT/iwTulHt4lfYuWn2
+         TD9AIrdDX3qNm9+xxR6qg7s9c0yAEmhWbfwolqThAsHFHTYBCs9Iw33Ulb0/hnKAAA+S
+         uUeOcSIZEBtPqtMafTRBjAU2JlQYQEIUQwpbMYDeDo3luI/sC88WYoG8D9xN/yv5ggEv
+         cavA==
+X-Gm-Message-State: AOJu0YwPSvuDfjpMMsoyuDr+R/4KZ0mRdkxno+rNkwgnmS/3uFBZ7dM6
+	l29ltZ7zrX7r21LV6xjfLHxFiAJpYLV5FMOzxWZuXnGCIPnDESQntSaGiIzpZLI=
+X-Gm-Gg: ASbGncupbSU1mtcVDtbMLUVxbxgz20zhJI2H7tykSnejdihXzM7zdJkor8riqY9eU1c
+	dtAYBOsu6kwn1h1YfC2XLTVnHUxEnxffyCsXrsapXxotU/sbrh7moCY/ihFqKrMbtmcjfnnVtki
+	+am/clO8U47p+9nFjB4xuIkXdAvlBFJ6I3q8PKo5DB9GyKwAqfxUjDzNYVirADRs2sXqkBWujS9
+	/kdE12pEKxktqk8zN+6uL8O2S0H2O7Jd76nq+EWTnOdG/P0zQcmEhRMhpjv+ehk5kaonHNII5LK
+	BlDV40MYmbj70agbkn40NMsQk12VTaJK0aP6+cuCTHadrhaMyAbxLqlA8fFuRK4I/sLNgAt800C
+	l+PYsBFhv60V+d09b97yivi8=
+X-Google-Smtp-Source: AGHT+IEYO4fmrspVYYrTHdjMDWmEnFADk1AWRMVfCLAiR2Kql+MwftBAWZmi1W1b6z3wGvyZYMCvEg==
+X-Received: by 2002:a05:6512:158e:b0:549:8b24:9889 with SMTP id 2adb3069b0e04-549ababf63cmr763732e87.6.1741730210970;
+        Tue, 11 Mar 2025 14:56:50 -0700 (PDT)
 Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5498ae462c6sm1910515e87.4.2025.03.11.14.53.50
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5498b0bd5b5sm1901122e87.158.2025.03.11.14.56.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Mar 2025 14:53:55 -0700 (PDT)
-Message-ID: <70d6acfc-739a-4c0a-9087-77e16c6ac989@linaro.org>
-Date: Tue, 11 Mar 2025 23:53:49 +0200
+        Tue, 11 Mar 2025 14:56:49 -0700 (PDT)
+Message-ID: <3caf6aa5-32d4-4e2a-8872-87e5ddadd7c4@linaro.org>
+Date: Tue, 11 Mar 2025 23:56:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -104,8 +104,6 @@ In-Reply-To: <20250119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v4-1-c29645041
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Bryan.
-
 On 1/19/25 02:54, Bryan O'Donoghue wrote:
 > Add bindings for qcom,x1e80100-camss in order to support the camera
 > subsystem for x1e80100 as found in various Co-Pilot laptops.
@@ -115,126 +113,39 @@ On 1/19/25 02:54, Bryan O'Donoghue wrote:
 
 <snip>
 
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
 > +
-> +  reg-names:
-> +    items:
-> +      - const: csid_wrapper
-> +      - const: csid0
-> +      - const: csid1
-> +      - const: csid2
-> +      - const: csid_lite0
-> +      - const: csid_lite1
-> +      - const: csiphy0
-> +      - const: csiphy1
-> +      - const: csiphy2
-> +      - const: csiphy4
-> +      - const: csitpg0
-> +      - const: csitpg1
-> +      - const: csitpg2
-> +      - const: vfe_lite0
-> +      - const: vfe_lite1
-> +      - const: vfe0
-> +      - const: vfe1
-
-Here I'm a bit lost about the selected ordering rule, I kindly
-ask for a clarification.
-
-In ASCII the underscore symbol '_' goes way after any 7-bit symbols
-including '0' and other digits, but this is violated in the sorting
-order above.
-
-The expected sorting order would rather be like this one:
-
-   - const: csid0
-   - const: csid1
-   - const: csid2
-   - const: csid_lite0
-   - const: csid_lite1
-   - const: csid_wrapper
-   - const: csiphy0
-   - const: csiphy1
-   - const: csiphy2
-   - const: csiphy4
-   - const: csitpg0
-   - const: csitpg1
-   - const: csitpg2
-   - const: vfe0
-   - const: vfe1
-   - const: vfe_lite0
-   - const: vfe_lite1
-
+> +    description:
+> +      CSI input ports.
 > +
-> +  clocks:
-> +    maxItems: 29
+> +    patternProperties:
+> +      "^port@[0-3]+$":
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
 > +
-> +  clock-names:
-> +    items:
-> +      - const: camnoc_rt_axi
-> +      - const: camnoc_nrt_axi
+> +        description:
+> +          Input port for receiving CSI data from a CSIPHY.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              clock-lanes:
+> +                maxItems: 1
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +            required:
+> +              - clock-lanes
+> +              - data-lanes
+> +
 
-Okay, there might be some explanations about the underscore symbol,
-anyway I would appreciate to get them, but here it's definitely
-incorrect, it's very unlikely that the symbol 'r' precedes 'n'.
-
-> +      - const: core_ahb
-> +      - const: cpas_ahb
-> +      - const: cpas_fast_ahb
-> +      - const: cpas_vfe0
-> +      - const: cpas_vfe1
-> +      - const: cpas_vfe_lite
-> +      - const: cphy_rx_clk_src
-> +      - const: csid
-> +      - const: csid_csiphy_rx
-> +      - const: csiphy0
-> +      - const: csiphy0_timer
-> +      - const: csiphy1
-> +      - const: csiphy1_timer
-> +      - const: csiphy2
-> +      - const: csiphy2_timer
-> +      - const: csiphy4
-> +      - const: csiphy4_timer
-> +      - const: gcc_axi_hf
-> +      - const: gcc_axi_sf
-> +      - const: vfe0
-> +      - const: vfe0_fast_ahb
-> +      - const: vfe1
-> +      - const: vfe1_fast_ahb
-> +      - const: vfe_lite
-> +      - const: vfe_lite_ahb
-> +      - const: vfe_lite_cphy_rx
-> +      - const: vfe_lite_csid
-> +
-> +  interrupts:
-> +    maxItems: 13
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: csid0
-> +      - const: csid1
-> +      - const: csid2
-> +      - const: csid_lite0
-> +      - const: csid_lite1
-> +      - const: csiphy0
-> +      - const: csiphy1
-> +      - const: csiphy2
-> +      - const: csiphy4
-> +      - const: vfe0
-> +      - const: vfe1
-> +      - const: vfe_lite0
-> +      - const: vfe_lite1
-
-Same as above.
-
-> +  interconnects:
-> +    maxItems: 4
-> +
-> +  interconnect-names:
-> +    items:
-> +      - const: cam_ahb
-> +      - const: cam_hf_mnoc
-> +      - const: cam_sf_mnoc
-> +      - const: cam_sf_icp_mnoc
-> +
+bus-type property of the endpoint is missing.
 
 --
 Best wishes,
