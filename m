@@ -1,59 +1,59 @@
-Return-Path: <linux-i2c+bounces-9773-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9774-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1592DA5B6C6
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 03:34:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 237D3A5B6C9
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 03:35:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B927B3AEC4D
-	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 02:34:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 975711893BFB
+	for <lists+linux-i2c@lfdr.de>; Tue, 11 Mar 2025 02:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C9011E7660;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A9981E832A;
 	Tue, 11 Mar 2025 02:34:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="sixPjee/"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="R+l1r2Mj"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4B3EEBA
-	for <linux-i2c@vger.kernel.org>; Tue, 11 Mar 2025 02:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B404C1E51E0
+	for <linux-i2c@vger.kernel.org>; Tue, 11 Mar 2025 02:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741660488; cv=none; b=prIWSNS7G+XMZox/hqfo+LsdQYmJMznqCikKC+Jh2allMujLXW1h8g6ywWvYTVUwCgvN+OG2EanvAYAsH3q67c3IWSVtIt9rJFkGJA2G/MwrkBZlDLmCD8+j05ZT/+lWVBX3N2vQLvPJvfqEXyTyk1DEjTg5wVmS5GNmeD8aFL8=
+	t=1741660489; cv=none; b=iigfqEnS3ZyNby8ciP5ejkJH+Ft1ki7RxWI2LBir/qnIz3y2XuQn54fx3/3ftmQBsJ4/p3MPI7uJWn0SsnKxIxwmeRZWl6FaT0H0tIFGwhXemVU9pfiYXOwvRQkeLhLc0ndEtV86z8sMDardWAH+AM9Bj4gjGAeirWmeSUOefO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741660488; c=relaxed/simple;
-	bh=8tSpg3imDga5tWwzzlp4L8Ce/B9GkfltKPs1gFJ1iSM=;
+	s=arc-20240116; t=1741660489; c=relaxed/simple;
+	bh=GjvmHJxsk9UGNrOlH4v/ZCEgatSxf19HzHHTkPyO7WM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MqvOV3tgTgSQQiV6ED6BSw1jc9ykBMR85ybaqyYRdPCuQt04KASCz41esm69K/fQD+3p5/Vc3DB2Vi9mXwBTb9FWBL93x4B8kCS3fWiq4Ua+ZOsLi5XkoPVBaWzC8b6BqsJ1xJOuj3Mt9HIEIMGPNK4BXZv5NG9ORrKZ+XF86OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=sixPjee/; arc=none smtp.client-ip=202.36.163.20
+	 MIME-Version; b=EHjG3Q8X/ZSuJ94vmK7M7dId0Cv1e4r3v1X2b4tOIPgKAGfeyIXlbDG7rZHyax0gcwPEBRt4RSW22bFRv5Xvc2r4u5OrLJHvNeCYHYoRYfaGUmL6a0IGJOTsPXf6mQMx1mkINCzRgbWAdMarLo1Uy05PFYKmDLTcuy08KOqT514=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=R+l1r2Mj; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 842192C0658;
-	Tue, 11 Mar 2025 15:34:38 +1300 (NZDT)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DC8292C06DB;
+	Tue, 11 Mar 2025 15:34:39 +1300 (NZDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1741660478;
-	bh=rk12yIwRFfsZFO22IbTM3cGgVoF4j8t2R27zQgv6PRs=;
+	s=mail181024; t=1741660479;
+	bh=nzRCVr5N6FLyIuCuaZbWfa3FU+qQwmvIafqw9d8IO/E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sixPjee/to6mjgoJrydqcU8hS7WoVlVtnEY9NMW5T+VAado02JbUl7hwQkCL5xFWw
-	 KUdf9QPREEmaxErhKL+5S+2qfzcwU5yTt0nZDRqcU8JGyGMKlfY5OwxmVeXgWYxYVX
-	 YF5FNI/WFvcZ9aCW4WUXv1YQdyKMzi77oYyKqQtzYiu3NCFq1W8tB93LXOKN5ZL0ZK
-	 K42F0adYfpS3PUsC/rs3wvvwBj6mAjHcuii/26GpHm4yHPJRwm7Cqt6Y3mkRmOTaAm
-	 0rO1aMtTe0SugWZTcchgyOR5UNaiv0TaeVCHsir2+8I9IBRuxDDrQnCHD2X9x2Whbh
-	 OBIwMxyifxDGQ==
+	b=R+l1r2MjM/feejBIjvSHCoAsrsNRr93QQX3VpPHc74OvaJfHDIfScNcmJgoVDUDo/
+	 hVMcyQfayUa1HhF9YnlD44uU7QDcV/2ehEUF1zEnRXLLX30b0eSJ+0D/ykZjvaJrh9
+	 BViyRLvt7RFL745SV9GqvmA7T/kYLw4sphUGCY0WjPVpY4g2HeokEdywxWaaYJaJQ6
+	 BeQgW95jL5XBGFQflBQ4c1dZwehq1DhApe+aMNE/ebgUtes2BG3P096u8kZZCl9Uvd
+	 2LAAMGrjhd7UAMyUaEmc6BAW+Bblc92t4ZSle1u/PY2FSTlJvJI15L7UU/tSpKIF8B
+	 EgQWan8ji5NSw==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B67cfa13e0000>; Tue, 11 Mar 2025 15:34:38 +1300
+	id <B67cfa13f0000>; Tue, 11 Mar 2025 15:34:39 +1300
 Received: from aryans-dl.ws.atlnz.lc (aryans-dl.ws.atlnz.lc [10.33.22.38])
-	by pat.atlnz.lc (Postfix) with ESMTP id 6A02213ED8D;
-	Tue, 11 Mar 2025 15:34:38 +1300 (NZDT)
+	by pat.atlnz.lc (Postfix) with ESMTP id AB8B213ED8D;
+	Tue, 11 Mar 2025 15:34:39 +1300 (NZDT)
 Received: by aryans-dl.ws.atlnz.lc (Postfix, from userid 1844)
-	id 6770A2A1692; Tue, 11 Mar 2025 15:34:38 +1300 (NZDT)
+	id A81992A1692; Tue, 11 Mar 2025 15:34:39 +1300 (NZDT)
 From: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
 To: Andi Shyti <andi.shyti@kernel.org>,
 	Andy Shevchenko <andy.shevchenko@gmail.com>,
@@ -62,9 +62,9 @@ Cc: linux-i2c@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>,
 	Robert Richter <rric@kernel.org>
-Subject: [PATCH v12 1/3] i2c: octeon: fix return commenting
-Date: Tue, 11 Mar 2025 15:34:32 +1300
-Message-ID: <20250311023435.3962466-2-aryan.srivastava@alliedtelesis.co.nz>
+Subject: [PATCH v12 2/3] i2c: octeon: remove 10-bit addressing support
+Date: Tue, 11 Mar 2025 15:34:33 +1300
+Message-ID: <20250311023435.3962466-3-aryan.srivastava@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250311023435.3962466-1-aryan.srivastava@alliedtelesis.co.nz>
 References: <20250311023435.3962466-1-aryan.srivastava@alliedtelesis.co.nz>
@@ -75,88 +75,99 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=ccpxrWDM c=1 sm=1 tr=0 ts=67cfa13e a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=Vs1iUdzkB0EA:10 a=HCePzOn4azgfXwQElH0A:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=ccpxrWDM c=1 sm=1 tr=0 ts=67cfa13f a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=Vs1iUdzkB0EA:10 a=GtLwDOobmrOBVprAYekA:9 a=3ZKOabzyN94A:10
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-Kernel-docs require a ':' to signify the return behaviour of a function
-with within the comment. Many functions in this file were missing ':'
-after the "Returns" line, resulting in kernel-doc warnings.
-
-Add the ':' to satisfy kernel-doc requirements.
+The driver gives the illusion of 10-bit address support, but the upper
+3 bits of the given address are always thrown away. Remove unnecessary
+considerations for 10 bit addressing and always complete 7 bit ops when
+using the hlc methods.
 
 Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
 ---
- drivers/i2c/busses/i2c-octeon-core.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-octeon-core.c | 23 ++++-------------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-octeon-core.c b/drivers/i2c/busses/i2=
 c-octeon-core.c
-index 3fbc828508ab..0094fe5f7460 100644
+index 0094fe5f7460..baf6b27f3752 100644
 --- a/drivers/i2c/busses/i2c-octeon-core.c
 +++ b/drivers/i2c/busses/i2c-octeon-core.c
-@@ -45,7 +45,7 @@ static bool octeon_i2c_test_iflg(struct octeon_i2c *i2c=
-)
-  * octeon_i2c_wait - wait for the IFLG to be set
-  * @i2c: The struct octeon_i2c
-  *
-- * Returns 0 on success, otherwise a negative errno.
-+ * Returns: 0 on success, otherwise a negative errno.
-  */
- static int octeon_i2c_wait(struct octeon_i2c *i2c)
- {
-@@ -139,7 +139,7 @@ static void octeon_i2c_hlc_disable(struct octeon_i2c =
-*i2c)
-  * octeon_i2c_hlc_wait - wait for an HLC operation to complete
-  * @i2c: The struct octeon_i2c
-  *
-- * Returns 0 on success, otherwise -ETIMEDOUT.
-+ * Returns: 0 on success, otherwise -ETIMEDOUT.
-  */
- static int octeon_i2c_hlc_wait(struct octeon_i2c *i2c)
- {
-@@ -273,7 +273,7 @@ static int octeon_i2c_recovery(struct octeon_i2c *i2c=
-)
-  * octeon_i2c_start - send START to the bus
-  * @i2c: The struct octeon_i2c
-  *
-- * Returns 0 on success, otherwise a negative errno.
-+ * Returns: 0 on success, otherwise a negative errno.
-  */
- static int octeon_i2c_start(struct octeon_i2c *i2c)
- {
-@@ -314,7 +314,7 @@ static void octeon_i2c_stop(struct octeon_i2c *i2c)
-  *
-  * The address is sent over the bus, then the data is read.
-  *
-- * Returns 0 on success, otherwise a negative errno.
-+ * Returns: 0 on success, otherwise a negative errno.
-  */
- static int octeon_i2c_read(struct octeon_i2c *i2c, int target,
- 			   u8 *data, u16 *rlength, bool recv_len)
-@@ -382,7 +382,7 @@ static int octeon_i2c_read(struct octeon_i2c *i2c, in=
-t target,
-  *
-  * The address is sent over the bus, then the data.
-  *
-- * Returns 0 on success, otherwise a negative errno.
-+ * Returns: 0 on success, otherwise a negative errno.
-  */
- static int octeon_i2c_write(struct octeon_i2c *i2c, int target,
- 			    const u8 *data, int length)
-@@ -625,7 +625,7 @@ static int octeon_i2c_hlc_comp_write(struct octeon_i2=
+@@ -421,17 +421,12 @@ static int octeon_i2c_hlc_read(struct octeon_i2c *i=
+2c, struct i2c_msg *msgs)
+ 	octeon_i2c_hlc_enable(i2c);
+ 	octeon_i2c_hlc_int_clear(i2c);
+=20
+-	cmd =3D SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR;
++	cmd =3D SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR | SW_TWSI_OP_7;
+ 	/* SIZE */
+ 	cmd |=3D (u64)(msgs[0].len - 1) << SW_TWSI_SIZE_SHIFT;
+ 	/* A */
+ 	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
+=20
+-	if (msgs[0].flags & I2C_M_TEN)
+-		cmd |=3D SW_TWSI_OP_10;
+-	else
+-		cmd |=3D SW_TWSI_OP_7;
+-
+ 	octeon_i2c_writeq_flush(cmd, i2c->twsi_base + OCTEON_REG_SW_TWSI(i2c));
+ 	ret =3D octeon_i2c_hlc_wait(i2c);
+ 	if (ret)
+@@ -463,17 +458,12 @@ static int octeon_i2c_hlc_write(struct octeon_i2c *=
+i2c, struct i2c_msg *msgs)
+ 	octeon_i2c_hlc_enable(i2c);
+ 	octeon_i2c_hlc_int_clear(i2c);
+=20
+-	cmd =3D SW_TWSI_V | SW_TWSI_SOVR;
++	cmd =3D SW_TWSI_V | SW_TWSI_SOVR | SW_TWSI_OP_7;
+ 	/* SIZE */
+ 	cmd |=3D (u64)(msgs[0].len - 1) << SW_TWSI_SIZE_SHIFT;
+ 	/* A */
+ 	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
+=20
+-	if (msgs[0].flags & I2C_M_TEN)
+-		cmd |=3D SW_TWSI_OP_10;
+-	else
+-		cmd |=3D SW_TWSI_OP_7;
+-
+ 	for (i =3D 0, j =3D msgs[0].len - 1; i  < msgs[0].len && i < 4; i++, j-=
+-)
+ 		cmd |=3D (u64)msgs[0].buf[j] << (8 * i);
+=20
+@@ -513,11 +503,6 @@ static bool octeon_i2c_hlc_ext(struct octeon_i2c *i2=
+c, struct i2c_msg msg, u64 *
+ 	bool set_ext =3D false;
+ 	u64 cmd =3D 0;
+=20
+-	if (msg.flags & I2C_M_TEN)
+-		cmd |=3D SW_TWSI_OP_10_IA;
+-	else
+-		cmd |=3D SW_TWSI_OP_7_IA;
+-
+ 	if (msg.len =3D=3D 2) {
+ 		cmd |=3D SW_TWSI_EIA;
+ 		*ext =3D (u64)msg.buf[0] << SW_TWSI_IA_SHIFT;
+@@ -550,7 +535,7 @@ static int octeon_i2c_hlc_comp_read(struct octeon_i2c=
+ *i2c, struct i2c_msg *msgs
+=20
+ 	octeon_i2c_hlc_enable(i2c);
+=20
+-	cmd =3D SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR;
++	cmd =3D SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR | SW_TWSI_OP_7_IA;
+ 	/* SIZE */
+ 	cmd |=3D (u64)(msgs[1].len - 1) << SW_TWSI_SIZE_SHIFT;
+ 	/* A */
+@@ -587,7 +572,7 @@ static int octeon_i2c_hlc_comp_write(struct octeon_i2=
 c *i2c, struct i2c_msg *msg
-  * @msgs: Pointer to the messages to be processed
-  * @num: Length of the MSGS array
-  *
-- * Returns the number of messages processed, or a negative errno on fail=
-ure.
-+ * Returns: the number of messages processed, or a negative errno on fai=
-lure.
-  */
- int octeon_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int =
-num)
- {
+=20
+ 	octeon_i2c_hlc_enable(i2c);
+=20
+-	cmd =3D SW_TWSI_V | SW_TWSI_SOVR;
++	cmd =3D SW_TWSI_V | SW_TWSI_SOVR | SW_TWSI_OP_7_IA;
+ 	/* SIZE */
+ 	cmd |=3D (u64)(msgs[1].len - 1) << SW_TWSI_SIZE_SHIFT;
+ 	/* A */
 --=20
 2.47.1
 
