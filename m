@@ -1,181 +1,208 @@
-Return-Path: <linux-i2c+bounces-9828-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9829-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CBA2A5F93B
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Mar 2025 16:08:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11270A5F9D7
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Mar 2025 16:29:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 229EE3BB5D1
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Mar 2025 15:08:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C60019C33FC
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Mar 2025 15:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 891D0268FCE;
-	Thu, 13 Mar 2025 15:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KLP97L+u"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3AE2268FCF;
+	Thu, 13 Mar 2025 15:29:14 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC00268C62
-	for <linux-i2c@vger.kernel.org>; Thu, 13 Mar 2025 15:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23000268684;
+	Thu, 13 Mar 2025 15:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741878505; cv=none; b=N9N6AEFzncG8W3ZwVoS4T0fIv979MxXlS/kruWEdFgcPaNwcQ5Kk6N9jATk5p0FmbqQSiHiVNLKCieiLnCVeGxq5u1DFNDf8PK4z14Z85gPRRQ6Gvfo67uWmFcw7WJiCixtnp3EqOide5vxTSqFmASEEE5ASkiuRTH7kckwYQlQ=
+	t=1741879754; cv=none; b=Y1el33amSolpelrte+yyZehlGjTkk0NUQ+63CmFY+htaeSZ9AB5nbOet4qqotgShRxkH5vXqViTTdlR0d0QOy9Laa/nCs5iCe7bvlMFPpDQZhUQ6LYojWZhKelsxL8ssxWtGKVpGu5AVmP4S9vl0Rw49//NZFV2tWvBShM2ZRBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741878505; c=relaxed/simple;
-	bh=BZmdNCZ5/qRxlx0SPeoGB47Ed8FZNgHI2espj13qmpI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=safF0Me/vSjEApoLOFPgvP7lOrKsSApebQfmQAHKBFCJ2+QKIGM8BFJBWV+5P+316d+NBTQEAjsWWz7rgFlpHkGQEuPsDL3lfKzlTtq6anyLtJm1ANmNOgCsnfldXLsPds5NgI6oRzalL7h3ipz6bcbp9Leh7A8r0Vn3p4+ezGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KLP97L+u; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741878502;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HVXcsr7GZMEAmniMdC/b6umj6ZIH2ElXr2xetOJBYLo=;
-	b=KLP97L+ur7IF0kX5QAIe25pMsw9XN+ZUlCCQA3JCQTc1uzOGdFkpDFKKy+CRflqReP8fd3
-	NkPc0HySGhELp6PU5DeOC00aW6RQfjdE8CMA5NgYgyyJ0gvYNNRWw2L2sM96/muaOJMSzk
-	WH/hl6kZBUWGExmoNd6vvsLCST0hMIo=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-645-jvIRHMcGOtWHqwnJXVDTCA-1; Thu, 13 Mar 2025 11:08:21 -0400
-X-MC-Unique: jvIRHMcGOtWHqwnJXVDTCA-1
-X-Mimecast-MFC-AGG-ID: jvIRHMcGOtWHqwnJXVDTCA_1741878500
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-ac313093ed8so85765966b.0
-        for <linux-i2c@vger.kernel.org>; Thu, 13 Mar 2025 08:08:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741878500; x=1742483300;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HVXcsr7GZMEAmniMdC/b6umj6ZIH2ElXr2xetOJBYLo=;
-        b=VtLf4QvHqAxfLY+PlxrdZreY/nQrQrBYCRshmGjJCB6mC0pLh0+9NGh7EPYXY5NNd0
-         qviBNYVNsS9quUMu/OrPXqYUNrQvFDZYAKbeMtbdVyn97mcGrD/dq7wLYmX1FOs3IQSt
-         gXCwIZar1UxF8Nj9h10n4ic0WQ2z15q3HPkrAsRc9tr9nFFWmJxyJ2T+/nBY4M1gxBsp
-         SCe71Yhj/m1y55PxOqZTENulimAveI5aT10Dv8lkoswtbSjhpDPHJX4V1wZFMvrGbMH1
-         iSSM93kg390i0mgIp2CevL1sEG8MAxWaOmSwtRZOdrD0MCTMWbNG6TEzqHL0vqP6gEs6
-         7ojw==
-X-Forwarded-Encrypted: i=1; AJvYcCV39eOMk4S2JxsEEYs6FRhc50dh0RR9YWra64wFde6i4Zg8Tman4hDSKWka+2RBWfcuNhpVunZTVdU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTRCszzCXixgnQHQOs140PTZxh2evcKVB5EzzXC+Lk6ShS2H9p
-	zrBIPzCw4pITPoFTCfxRTbyiMwk7qaAM/DtPijdpoEbkbed4PPtzRonCdFXfw1MPG31XYK/+NlH
-	R556FSaeGHh4oKJNk2hpJhQvlEJWsOvU8bhp/utuaqvD9pW2dZ7mtUnD1+g==
-X-Gm-Gg: ASbGnct3gnDE5MKi1MD/EN+2cKfP4uNyfUmu5PjiyBM2SyPMIu6mEaredN96Rimrqhd
-	mgIV7xyCarBcg25S4dgDAOh0ISUpWR6XYkkxFrzUqjOwK/Kx23LlSRE8+5ow0PiNz1+qTGZ5VRp
-	FW8ZIkDEIVbNp/n4ltssxudi6vXyo3juWMHHlYkqJtCWDZv80Q+g0LveR79udz3+0jOpISbjayF
-	kyHH+Di1nX4uakISeQNllaNdIaYg27auA7Ww7uXs44fIjoSW9z2RAcOuEagoYNDX9zKzgIemMFq
-	HHV/5q0JfLX7aSVoOAUxKfRUS46x7yO9Vm61KPVvOBxw3W64TiNOtJoLvzH7QXEg0pVU2NQ9FAo
-	5wMeXNiG2r7F/2es6rHP/tkJihTTZI/K6YWrc2BQ0GNr1xSJj4SfRk3+XlrbtS/8jfQ==
-X-Received: by 2002:a17:907:94ce:b0:abf:69e6:4372 with SMTP id a640c23a62f3a-ac252749adcmr3564775766b.4.1741878498247;
-        Thu, 13 Mar 2025 08:08:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFfz8dFEUeqIRmnyOekkf1jHZOOgVGjHfESNlROwH3AaptJBdPv/biPGWbLkHziULBAePb/Lg==
-X-Received: by 2002:a17:907:94ce:b0:abf:69e6:4372 with SMTP id a640c23a62f3a-ac252749adcmr3564747666b.4.1741878496272;
-        Thu, 13 Mar 2025 08:08:16 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac32510726csm9933266b.127.2025.03.13.08.08.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Mar 2025 08:08:15 -0700 (PDT)
-Message-ID: <4596db59-51fc-4497-9e94-670e9533e7aa@redhat.com>
-Date: Thu, 13 Mar 2025 16:08:14 +0100
+	s=arc-20240116; t=1741879754; c=relaxed/simple;
+	bh=zdbR99QGJYPC1f34tuZXVggykQp/849xlZYMuWUfaQ0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=L3KvWViQuuZzJvVvipYw9+2rq9Vn4Ks/j8CsmKzAzArIo4X/JBtxse9N1KgX9FHEDR+bA4Kd/m8sH4HvCBYQe0/7U5yV+9kVYm3WOZ3FdWjM5XAGcVcog8dsrtoBhTeNVaeZMACPFApSjJH2OacIkSw++V1UbV7eJmtNtkX3OhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDCB11477;
+	Thu, 13 Mar 2025 08:29:21 -0700 (PDT)
+Received: from e133711.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72EE13F694;
+	Thu, 13 Mar 2025 08:29:09 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH v3 00/13] mailbox: pcc: Fixes and cleanup/refactoring
+Date: Thu, 13 Mar 2025 15:28:46 +0000
+Message-Id: <20250313-pcc_fixes_updates-v3-0-019a4aa74d0f@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 0/2] platform: toradex: Add toradex embedded
- controller
-To: Francesco Dolcini <francesco@dolcini.it>,
- Emanuele Ghidoli <ghidoliemanuele@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: Francesco Dolcini <francesco.dolcini@toradex.com>,
- Emanuele Ghidoli <emanuele.ghidoli@toradex.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
- Andy Shevchenko <andy@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-References: <20250313144331.70591-1-francesco@dolcini.it>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20250313144331.70591-1-francesco@dolcini.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALL50mcC/33Nyw6CMBAF0F8hs7amTyCu+A9jSB+DdMEjLTYaw
+ r9b2OjCuLw3c+6sEDF4jHApVgiYfPTTmIM4FWB7Pd6ReJczcMoVFVSQ2dq280+M7WN2esFIlNK
+ s6hyvsSohuzngcZDZ9ZZz7+MyhdfxIrG9/beWGKFEGCk74ZiQhjU6DGc7DbBvJf7t1S/Ps2eG1
+ ZwbW1ey/Pht297ekLDt8AAAAA==
+X-Change-ID: 20250303-pcc_fixes_updates-55a17fd28e76
+To: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Sudeep Holla <sudeep.holla@arm.com>, 
+ Jassi Brar <jassisinghbrar@gmail.com>, Huisong Li <lihuisong@huawei.com>, 
+ Adam Young <admiyo@os.amperecomputing.com>, 
+ Robbie King <robbiek@xsightlabs.com>, Andi Shyti <andi.shyti@kernel.org>, 
+ linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
+ "Rafael J. Wysocki" <rafael@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5426; i=sudeep.holla@arm.com;
+ h=from:subject:message-id; bh=zdbR99QGJYPC1f34tuZXVggykQp/849xlZYMuWUfaQ0=;
+ b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBn0vnDYCUZPlafqDSwEs9LsaePtULqedBwfFF2d
+ ad3xsVEwIOJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZ9L5wwAKCRAAQbq8MX7i
+ mBFHD/4oiodnKGh1JYmVO/F1ApXy+9binXe5A4h09BA30dSOLyXe3VXXDBg1aeQz79QugzSDr36
+ 9LsEZqSvlupZ9HbGWvHc8bz5upqwBbeLe/Gyg4fYrDFInoARWw692IqltBivm4WuALKTwcs+kE+
+ Q6RU+FzkL2v2iYJ1rzKpjB/Leb/Goguk3hPv3ZXkPs1bbtFfB/Nh8MFrjt2ETrLQLtqFiyrsLPr
+ caKVfPodbnaiCCeO9qhMky0hXb6B5mP05DnIKpXZV31snNzyoikvexR5Fd+i1Nu6gPwkjeIqPpi
+ IE736y+quX/+hm6M4rAiVy6WZNvtBhCnIkzebSlbLp4V7RMrqOOzIDFk2lU6kARI7aFRQpXMJLr
+ LZLGuNjOG7lXHltmw3yOHzoshjj0NFhC0/qHpDDuLqDmuBmun97wY8y4AKFI9BYUZq17sUCVo7Q
+ 1Eh33l7XZppgt1k9D8CX5jijkFH4/Cm429GsASaas0xfeqers/uvGYfbCxCl244TWtnmuaVxBT/
+ n1wuItVkgwoRIKnhPyIRTGRmfqNOoBfcsh96+JPZISu948w1x1G2IVFv4PhXRNC6qrmEAkh7DGV
+ QNhh/dn8TZL6sdV5prtBTzJPWFjuFQN3yXTaci8GUPATj3FAUaWwAC4c4/5oppOqLRb0LeQyEJB
+ Oeou6XJvIC/z8BQ==
+X-Developer-Key: i=sudeep.holla@arm.com; a=openpgp;
+ fpr=7360A21742ADF5A11767C1C139CFD4755FE2D5B4
 
-Hi Francesco,
+Here is a summary of the changes in this patch series:
 
-On 13-Mar-25 3:43 PM, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> 
-> This series adds support for the Toradex Embedded Controller, currently used
-> on Toradex SMARC iMX95 and iMX8MP boards, with more to come in the future.
-> 
-> The EC provides board power-off, reset and GPIO expander functionalities.
-> 
-> Sending it as an RFC to gather initial feedback on it before investing more
-> time in testing and adding the remaining functionalities, with that said both
-> the code and the binding are in condition to be wholly reviewed.
-> 
-> Emanuele Ghidoli (2):
->   dt-bindings: firmware: add toradex,embedded-controller
->   platform: toradex: add preliminary support for Embedded Controller
+1. Fix for race condition in updating of the chan_in_use flag
 
-Thank you for your patches.
+   Ensures correct updating of the chan_in_use flag to avoid potential race
+   conditions.
 
-2 remarks, as Andy already hinted at drivers/platform/arm64/ likely
-is a better location for this.
+2. Interrupt handling fix
 
-But as the commit first adding that directory indicates:
+   Ensures platform acknowledgment interrupts are always cleared to avoid
+   leaving the interrupt asserted forever.
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=363c8aea25728604537b170a1cc24e2f46844896
+3. Endian conversion cleanup
 
-The reason for having ARM EC drivers there is that these are for
-x86-pc-like laptops with all the typical laptops bells and whistles
-like EC handled battery charging limits / spk/mic mute-leds built
-into keys on the keyboards. Special key handling (like mute, kbd
-backlight) done by the EC etc.
+   Removes unnecessary endianness conversion in the PCC mailbox driver.
 
-Since all the experience for dealing with those laptop-esque features
-and exporting them to userspace with a consistent userspace API is
-in hands of the maintainers of drivers/platform/x86 it was decided to
-add a new drivers/platform/arm64 directory maintained by the same folks.
+4. Memory mapping improvements
 
-If this EC driver's only functionality is: "The EC provides board
-power-off, reset and GPIO expander functionalities." I'm not sure
-that drivers/platform/arm64 is the best place for this.
+   Uses acpi_os_ioremap() instead of direct mapping methods for better ACPI
+   compatibility.
 
-Also you mention GPIO expander, but that does not seem to be
-supported yet? The GPIO functionality really should be in its
-own GPIO driver. So it seems to me that what would be a better
-fit here would be:
+5. Return early if the command complete register is absent
 
-1. A drivers/mfd/ MFD driver with the regmap stuff,
-   registering "board-reset" and "gpio" cells
+   Ensures that if no GAS (Generic Address Structure) register is available,
+   the function exits early.
 
-2. A drivers/power/reset/ driver for the "board-reset" cell,
-quoting from the Kconfig help text for that dir:
+6. Refactor IRQ handler and move error handling to a separate function
 
-menuconfig POWER_RESET
-        bool "Board level reset or power off"
-        help
-          Provides a number of drivers which either reset a complete board
-          or shut it down, by manipulating the main power supply on the board.
+   Improves readability of error handling in the PCC mailbox driver’s
+   interrupt handler.
 
-          Say Y here to enable board reset and power off
+7. Shared memory mapping refactoring/enhancements
 
-which seems to match exactly with your current EC driver functionality
+   Ensures the shared memory is always mapped and unmapped in the PCC
+   mailbox driver when the PCC channel is requested and release.
 
-3. A drivers/gpio/ driver to expose the GPIOs using the standard
-GPIO framework, this can be added later in a follow up patch.
+8. Refactored check_and_ack() Function
 
+   Simplifies and improves the logic for handling type4 platform notification
+   acknowledgments.
+
+09-13. Shared memory handling simplifications across multiple drivers
+
+    Simplifies shared memory handling in:
+        Kunpeng HCCS driver (soc: hisilicon)
+        Apm X-Gene Slimpro I2C driver
+        X-Gene hardware monitoring driver (hwmon)
+        ACPI PCC driver
+        ACPI CPPC driver
+
+The X-gene related changes now change the mapping attributes to align
+with ACPI specification. There are possibilities for more cleanups on
+top of these changes around how the shmem is accessed within these
+driver.
+
+Also, my main aim is to get 1-8 merged first and target 9-13 for
+following merge window through respective tree.
+
+Overall, the patch series focuses on improving correctness, efficiency, and
+maintainability of the PCC mailbox driver and related components by fixing
+race conditions, optimizing memory handling, simplifying shared memory
+interactions, and refactoring code for clarity.
+
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+Jassi,
+
+Please take patch [1-8]/13 through the mailbox tree if and when you are
+happy with the changes. I haven't got Ack from I2C still, but if you are
+happy to take [9-13]/13, I can check with I2C maintainer. Or else I am
+happy to take it individually later once the PCC changes are merged. I
+am still keeping it together if anyone is interested in testing.
+
+Changes in v3:
+- Updated the comment around updation of chan_in_use flag to keep it
+  appropriate even after acknowledging the interrupt as first action
+  in the irq handler
+- Added all the review/ack/tested-by tags from Huisong Li, Adam Young
+  and Robbie King
+- Added a note that double mapping introduced temporarily will not
+  impact any existing mbox client drivers as all the drivers move to
+  using new and only mapping after all the changes
+- s/pcc_chan_check_and_ack/pcc_chan_acknowledge/ which was originally
+  check_and_ack()
+- Link to v2: https://lore.kernel.org/r/20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com
+
+Changes in v2:
+- Improved time vs flow graph for the platform ack interrupt
+  acknowledgment issue in patch 2
+- Replaced PCC_ACK_FLAG_MASK with PCC_CMD_COMPLETION_NOTIFY in patch 3
+- Fixed return value check from pcc_mbox_error_check_and_clear() in patch 6
+- Dropped the change moving the function pcc_mbox_ioremap()
+- Adjusted error message in kunpeng_hccs driver after the change
+- Added the received ack/review tags
+- Link to v1: https://lore.kernel.org/r/20250303-pcc_fixes_updates-v1-0-3b44f3d134b1@arm.com
+
+---
+Huisong Li (1):
+      mailbox: pcc: Fix the possible race in updation of chan_in_use flag
+
+Sudeep Holla (12):
+      mailbox: pcc: Always clear the platform ack interrupt first
+      mailbox: pcc: Drop unnecessary endianness conversion of pcc_hdr.flags
+      mailbox: pcc: Return early if no GAS register from pcc_mbox_cmd_complete_check
+      mailbox: pcc: Use acpi_os_ioremap() instead of ioremap()
+      mailbox: pcc: Refactor error handling in irq handler into separate function
+      mailbox: pcc: Always map the shared memory communication address
+      mailbox: pcc: Refactor and simplify check_and_ack()
+      soc: hisilicon: kunpeng_hccs: Simplify PCC shared memory region handling
+      i2c: xgene-slimpro: Simplify PCC shared memory region handling
+      hwmon: (xgene-hwmon) Simplify PCC shared memory region handling
+      ACPI: PCC: Simplify PCC shared memory region handling
+      ACPI: CPPC: Simplify PCC shared memory region handling
+
+ drivers/acpi/acpi_pcc.c                |  13 +---
+ drivers/acpi/cppc_acpi.c               |  16 +----
+ drivers/hwmon/xgene-hwmon.c            |  40 ++----------
+ drivers/i2c/busses/i2c-xgene-slimpro.c |  39 ++----------
+ drivers/mailbox/pcc.c                  | 113 ++++++++++++++++-----------------
+ drivers/soc/hisilicon/kunpeng_hccs.c   |  42 +++++-------
+ drivers/soc/hisilicon/kunpeng_hccs.h   |   2 -
+ include/acpi/pcc.h                     |   6 --
+ 8 files changed, 84 insertions(+), 187 deletions(-)
+---
+base-commit: 4d872d51bc9d7b899c1f61534e3dbde72613f627
+change-id: 20250303-pcc_fixes_updates-55a17fd28e76
+-- 
 Regards,
-
-Hans
-
+Sudeep
 
 
