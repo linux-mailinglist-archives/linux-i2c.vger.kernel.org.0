@@ -1,120 +1,102 @@
-Return-Path: <linux-i2c+bounces-9820-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9821-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2873A5E962
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Mar 2025 02:19:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55480A5EFAF
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Mar 2025 10:38:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1B7F1893CE3
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Mar 2025 01:19:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCC523B36CB
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Mar 2025 09:38:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43ABC78F34;
-	Thu, 13 Mar 2025 01:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="BXPR9wXN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E635E264A7E;
+	Thu, 13 Mar 2025 09:38:22 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE307083C
-	for <linux-i2c@vger.kernel.org>; Thu, 13 Mar 2025 01:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8722641D4;
+	Thu, 13 Mar 2025 09:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741828765; cv=none; b=WIK7FxrWNPu1t4UnrV0JhixS4/u1zSGim12rCJqOafhS4399Q7CKxxh/4dkH8XEguivOJZr/3H/QVFlumbjlstzoQOWhe5XHJ3mdtigGkKITVAb+HyOehZwBXsrbz3qW0KlNqjJk/gUWiubzfSSp6vvUEwGeNnULc9Ro4YhI3R0=
+	t=1741858702; cv=none; b=b9Mm/an2I+CIO9+KmQzI8LyrRoJcHWUsLj6RXdcWQJR4vm3iQne0noPxbW8F0u4A0toa/Mty7mv8j5sx0xBZTlKtuILsF44G5mbytJk5kUcCD1UEvQZ9iXtsrPKum40tKYa4Zv2W9penHc6d6IAE6GOxnWaCcSK/K1EX2RtkEKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741828765; c=relaxed/simple;
-	bh=DB68pVaJJ4VS0y+Z+2ellm8XL9+PFw9fg9mxEwWFP1s=;
+	s=arc-20240116; t=1741858702; c=relaxed/simple;
+	bh=+zRnvyYuwinJSmZOrxqeidL+AIOdo3cpe4HzFQMEQqY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dva1sWC59FsU4lt9bQjg7vdrviaJd20fWR1BbSdQwjJVQ6o1E/qbZs7KGjmRLiE4r6NfHTx2A+rLm72J7R6MqPjxXB1U99mnukzKeX7Y7crq8uHAGd280URr460I6mJ3LtBTFqkruZ7r5PZV34Gukwbgw6UbHckFUHWvSr20Ee8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=BXPR9wXN; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=DB68
-	pVaJJ4VS0y+Z+2ellm8XL9+PFw9fg9mxEwWFP1s=; b=BXPR9wXNEzGvWgE7maOj
-	Z2BxD7vbxL5FWMIlcQDzKY6qPnmNui2p07GkK87cf/jjk29HLYbAWaXPU3ER+sDM
-	i0P6cPvK7yKnKYa4mIBQBqaLBzdk/604S+QyMH1OOTDgd5zi5y9c1aVc2opvsBvI
-	gS/TWPT2PIbOuXN72teTk/P5XiPjOcnU239brcOqE6jKiSM01odL0bmoJL8QRubv
-	5ujbeytgi6TngDyzZI/z/2dPtNGTgOKqQzakbf5QgdiltMCnDavT7edmW7Qz4RB7
-	5NHfIEokx5q9y49JMBAhiOKciVhe9yl5Nqz7U+HQBsVZPbzzBPpxE8UssewYCJqv
-	3Q==
-Received: (qmail 1441578 invoked from network); 13 Mar 2025 02:19:13 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Mar 2025 02:19:13 +0100
-X-UD-Smtp-Session: l3s3148p1@OGcbHC8wPJcgAQnoAFAeAGR2+CrWUxoz
-Date: Thu, 13 Mar 2025 02:19:13 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Alex Elder <elder@riscstar.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	spacemit@lists.linux.dev, Guodong Xu <guodong@riscstar.com>
-Subject: Re: [PATCH v6 2/2] i2c: spacemit: add support for SpacemiT K1 SoC
-Message-ID: <Z9IykQgaOL8_Yh_Y@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Alex Elder <elder@riscstar.com>,
-	Troy Mitchell <troymitchell988@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	spacemit@lists.linux.dev, Guodong Xu <guodong@riscstar.com>
-References: <20250307-k1-i2c-master-v6-0-34f17d2dae1c@gmail.com>
- <20250307-k1-i2c-master-v6-2-34f17d2dae1c@gmail.com>
- <7d9e90ba-8c23-44dc-b64f-80213216faf7@riscstar.com>
- <nrmoj7gookedlz2e3fgu3hvn3s5fc6vrxgjueynyp5orj63k4b@cqlhflioxv7h>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ptQfQI7g4oc71MtS34FKqINoDJzJeK8Pc6iBnytGRVLVOcF6SVjiufIlZPbKZjfwvnlgRdZtyKcV9r7RMj6uO4vJLWqEJBDjvdiOmoXhUPJItZd1qPPHg5jrMW5Wl+uaj5ToBp+Uh190SI0krwDky9A/dZkn251eH1SWJD8e1eQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3EAA15A1;
+	Thu, 13 Mar 2025 02:38:30 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1154B3F694;
+	Thu, 13 Mar 2025 02:38:17 -0700 (PDT)
+Date: Thu, 13 Mar 2025 09:38:15 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Adam Young <admiyo@amperemail.onmicrosoft.com>
+Cc: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	Adam Young <admiyo@os.amperecomputing.com>,
+	Huisong Li <lihuisong@huawei.com>,
+	Robbie King <robbiek@xsightlabs.com>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 00/13] mailbox: pcc: Fixes and cleanup/refactoring
+Message-ID: <Z9Knh0lQAHY6aEy1@bogus>
+References: <20250305-pcc_fixes_updates-v2-0-1b1822bc8746@arm.com>
+ <Z9AoOg-cx6xVW_Cu@bogus>
+ <17a7ca5a-31f5-47fc-ab67-348df20b31ec@amperemail.onmicrosoft.com>
+ <20250312200532.67xkag3joatel6m4@bogus>
+ <7237deb3-ad30-457c-a1b2-c92db1c1e9f3@amperemail.onmicrosoft.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CpEyUD+s7U217eGg"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <nrmoj7gookedlz2e3fgu3hvn3s5fc6vrxgjueynyp5orj63k4b@cqlhflioxv7h>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7237deb3-ad30-457c-a1b2-c92db1c1e9f3@amperemail.onmicrosoft.com>
 
+On Wed, Mar 12, 2025 at 04:37:35PM -0400, Adam Young wrote:
+> 
+> On 3/12/25 16:05, Sudeep Holla wrote:
+> > On Wed, Mar 12, 2025 at 02:04:51PM -0400, Adam Young wrote:
+> > > The XGene patch did not apply on top of Linus's current tree. The other
+> > > patches applied OK.
+> > > 
+> > Yes Guenter had mentioned it in his review. I have it rebased locally [1]
+> > but yet to push out v3 on the list.
+> > 
+> > > I only had to make one modification to my patch to remove the call to
+> > > ‘pcc_mbox_ioremap’,  as it is performed in the pcc_mbox_request_channel call
+> > > instead. With that change, my driver continues to work. I will submit
+> > > another version here shortly.
+> > > 
+> > Nice, I wasn't aware of the Ampere driver using ioremap. Is it posted on
+> > the list ? Or are you saying you will post it soon.
+> 
+> It is posted to net-next.
+> 
+> https://lore.kernel.org/lkml/20250224181117.21ad7ab1@kernel.org/T/
+> 
+> I will post an updated version once this series goes in.  I don't expect it
+> to merge for this kernel due to the dependency, but the code will be better
+> for this change.
+> 
+> > 
+> > Thanks for testing. Please provide tested-by for patch 1-8 if you are
+> > happy with it.
+> Happy to do so.
 
---CpEyUD+s7U217eGg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks a lot for your time and testing. Much appreciated!
 
-
-> I checked the two drivers last night and I can see some
-> similarities, on the other hand I also understand that it might
-> require some extra effort.
-
-I think it is okay that it is a seperate driver. If register sets are
-too different, the resulting combined driver would be a maintenance
-nightmare.
-
-
---CpEyUD+s7U217eGg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfSMo0ACgkQFA3kzBSg
-KbYCDxAAkhFVL8kRdmj5c8fja6ix5dc1ANAZJYGlh/G5aNdbj9MhxbQn1OgWSvxZ
-Ap7DZ/G1dkvv/CN7mjMUjqQOaOJzuNdL4m8+pzbVjWwt9odvqe2dzlx2f1Odn/Nj
-g+3FTwbctyi+W4sxkYsv9Fvu6+Z4VybShwmwBzai8HcLvDYrMCTXYUFefX4xodi7
-ZD9mvoGSzRGEKiOITWxDaR6u/6YDZ9fQE2LDEbqGluz6ecDE4YHjIOa/tH6HBx9y
-ut8KLeze7qRvFbkKTVSAXzTnICPRzhE74arEscNQgJDAa0HjJaTPCHT26Z+dS8ne
-+uyF37G/pzBw21/78IEmvaPr40YYn0oJ6nYL8Z6hankoJPA2MpCGhEPFqv1zxRMo
-fnD/CkZSrarzdzZ/5hWPau5cTiqfhvJXOHGXy1Qc0ZT95lAKoynxpmqSxKsFBjmr
-wUZ3fEcR07oMH4NibpI+pTW/q6ah9aUpESH7SDEZrhJ5UQ1Iqhs3Abym02cNc31z
-XckFbHTT3ED1NNvImxNx7lH0AD8rWwWJiiCHTM3SPPAuCjXX01nwCOYhUu0s53iK
-jXmQq8IFMQ8w+QFpVJ52yzlSoTzWB4QRpoztES4C74EWEznf/azvRi3GGQKCdfEK
-k7yd47ORfzrtVqrCNKJQLsODzFbAvo1is5nfxcWpD2KOttuXI28=
-=2C6g
------END PGP SIGNATURE-----
-
---CpEyUD+s7U217eGg--
+-- 
+Regards,
+Sudeep
 
