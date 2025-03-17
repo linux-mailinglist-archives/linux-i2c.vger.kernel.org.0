@@ -1,85 +1,68 @@
-Return-Path: <linux-i2c+bounces-9850-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9851-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A949DA6448A
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 09:00:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E677A645CA
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 09:39:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5150018873D0
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 08:00:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C885916CB41
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 08:39:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A4021B8E1;
-	Mon, 17 Mar 2025 08:00:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D82221D85;
+	Mon, 17 Mar 2025 08:39:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UoNuZaB6"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="H+TbMdwG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E428F21B9C5;
-	Mon, 17 Mar 2025 08:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 285721DED6D;
+	Mon, 17 Mar 2025 08:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742198413; cv=none; b=BPIwmYXla+mx1C5bpKlrrqg8vAJBObMS1hrHbsE68A66PUM6fgYmhwG0wZG+WIAGXbHl3xp204BX2fY9ndhtxwBHA+8NfVG8HHZezrs8bEIZWVNEThpH4KtaKZiEB5/dHnWgM+rfYwYLyLsSkXb12Zwcnf6ip8bloC9UrL0HrP8=
+	t=1742200769; cv=none; b=Tphm9Rp7fJhaMx8YkLFSh/XYGgGYfULQF4AliND5kbEaE70RtD19VvYF+9UULPiOgEOGo4lqMny4/pVKgiORG2T3M59s93xgU70J/yKDdFNk0sszAnPzrbnGxVIyCseiN2oW/0S74hixd2/yQmR/IWjvXn5WOhelSbWIGA0OE+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742198413; c=relaxed/simple;
-	bh=WcJorY7PCd1uLYcrL2Xac0peBqgqcHLr4/yCJRQ9DGw=;
+	s=arc-20240116; t=1742200769; c=relaxed/simple;
+	bh=0LWPwkYHb5CwsDkji/iwkvFIS+/rI+FlG0f6Syt76Q8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a9xtJCAvBysoyn7akm61Su9Nlhen1n+btkSTJ/GEaaf5OM4dtrMer7X3+LVeR7bz8pR/N2EHXJh5yJUbxyioc7fPSz+NoNdb0jwC1kBWKxl/JrVA6jvxQ6XXPGqUEuEaFujtHV8/6gP/WDrrLSKRHHD2q+J5tPFwJmnHVwz7YGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UoNuZaB6; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742198412; x=1773734412;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WcJorY7PCd1uLYcrL2Xac0peBqgqcHLr4/yCJRQ9DGw=;
-  b=UoNuZaB6iW8IYBgwdpzCHwtS+Bqj0wEwx+v6xUzdNIKONSixxAMniOsT
-   xJsYwQ5CLf3bFH85zQacBdtAsUnk/upjELg5loOkGe9U8DX5ljDTuS1jb
-   iLSI9q5ImoDOvt43Bzx+Z/LSREEsDMSP4531u17CouP8xxGey4grHA4ID
-   omVYfj0ers0xRQ9FI35Lzcx/GHIPC2zvGnvF0Tg3pCMny5jjfwiy27Iem
-   MksYvvc7SPn9GT86pi0qR0ncU31GNRN0CTD2w3u8OWhSAzkMiXuHbZWYD
-   CrQnuhkfma2LuFG5tqW4/UxMzzT2xpn7BTjeebJBljU8RB2RIhvf4T9sC
-   g==;
-X-CSE-ConnectionGUID: 3/tAbM+tSWqTYQNfqni4VA==
-X-CSE-MsgGUID: YBQ8tqM1Rtu1eQFdU/FgiQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11375"; a="43383613"
-X-IronPort-AV: E=Sophos;i="6.14,253,1736841600"; 
-   d="scan'208";a="43383613"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 01:00:12 -0700
-X-CSE-ConnectionGUID: aE6cL5gsQ3avEEOtd25fgg==
-X-CSE-MsgGUID: U1U/tNhnTbWmIps9Wc5uMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,253,1736841600"; 
-   d="scan'208";a="121674712"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 01:00:07 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tu5OG-00000003FIn-2NTM;
-	Mon, 17 Mar 2025 10:00:04 +0200
-Date: Mon, 17 Mar 2025 10:00:04 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Ryan Chen <ryan_chen@aspeedtech.com>,
-	benh@kernel.crashing.org, joel@jms.id.au, andi.shyti@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	andrew@codeconstruct.com.au, p.zabel@pengutronix.de,
-	linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v16 2/3] i2c: aspeed: support AST2600 i2c new register
- mode driver
-Message-ID: <Z9fWhGDrUbAmGRl0@smile.fi.intel.com>
-References: <20250224055936.1804279-3-ryan_chen@aspeedtech.com>
- <202502280902.U0gLDhve-lkp@intel.com>
- <Z8GuOT5bJL7CdXX6@smile.fi.intel.com>
- <fec0a1c8-251b-491e-893d-11a8186a2128@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mDOyq7lfpCni6VhZk+6wfNdr9SQukN0Jrz8p6FUreFgbW98STaVO2/ehkiLXRR0Oma6Wu7XESMhQc06bNL1eNxtkY4TEhx9eUPp7A2JIh2g8QUvJWGM5bVglh/meaeQtregyunR/IZZcdei8Zz01jAWzRvaWSgXjEG2acDqdFIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=H+TbMdwG; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 7CF0B1F842;
+	Mon, 17 Mar 2025 09:39:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1742200757;
+	bh=m+AhiKfws1xc+HMC/G6boZQHJPWKEYM0DxVNwOLDPnI=; h=From:To:Subject;
+	b=H+TbMdwGbPL5QAHuKGVI9Fcqp86xbDrmmM5qZ10uPDDHgKuVtimP7VKoCQMf+ZwHZ
+	 YbublZmlatb7jgl3LjrJtkk5F6XXNcBnXH2BdEln57eA42cPCWh6iAv514SR186rxj
+	 znXYPA8tR3GWgRlmi+WHfuz4bUZnAdfJ+QpZQRppJBoKcljCApwFt7+5ZtQxc/xdKl
+	 ZK0DWmtWneTh0/9kPt2QmxCH4Kiux7DoYF3qzYGNuI3Tw8cj2rc4KeJy22IbyuZDPH
+	 5WUZtUt6rgCanoyXpBCpuvhp/7vNkLuQvOjIyRxnkYZG2knWqwoVyD7XQQHO8C/1Ac
+	 71Sr9VUjUjmOA==
+Date: Mon, 17 Mar 2025 09:39:11 +0100
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Andy Shevchenko <andy@kernel.org>
+Cc: Francesco Dolcini <francesco@dolcini.it>,
+	Emanuele Ghidoli <ghidoliemanuele@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org, Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [RFC PATCH v1 2/2] platform: toradex: add preliminary support
+ for Embedded Controller
+Message-ID: <20250317083911.GA17428@francesco-nb>
+References: <20250313144331.70591-1-francesco@dolcini.it>
+ <20250313144331.70591-3-francesco@dolcini.it>
+ <Z9LxbzJ3zf0RT-JS@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -88,51 +71,35 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fec0a1c8-251b-491e-893d-11a8186a2128@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <Z9LxbzJ3zf0RT-JS@smile.fi.intel.com>
 
-On Mon, Mar 17, 2025 at 08:48:03AM +0100, Krzysztof Kozlowski wrote:
-> On 28/02/2025 13:38, Andy Shevchenko wrote:
-> > On Fri, Feb 28, 2025 at 09:28:59AM +0800, kernel test robot wrote:
-> >> Hi Ryan,
-> >>
-> >> kernel test robot noticed the following build warnings:
-> >>
-> >> [auto build test WARNING on andi-shyti/i2c/i2c-host]
-> >> [also build test WARNING on linus/master v6.14-rc4 next-20250227]
-> >> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> >> And when submitting patch, we suggest to use '--base' as documented in
-> >> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >>
-> >> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Chen/dt-bindings-i2c-aspeed-support-for-AST2600-i2cv2/20250224-140221
-> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-> >> patch link:    https://lore.kernel.org/r/20250224055936.1804279-3-ryan_chen%40aspeedtech.com
-> >> patch subject: [PATCH v16 2/3] i2c: aspeed: support AST2600 i2c new register mode driver
-> >> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20250228/202502280902.U0gLDhve-lkp@intel.com/config)
-> >> compiler: mips-linux-gcc (GCC) 14.2.0
-> >> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280902.U0gLDhve-lkp@intel.com/reproduce)
-> >>
-> >> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> >> the same patch/commit), kindly add following tags
-> >> | Reported-by: kernel test robot <lkp@intel.com>
-> >> | Closes: https://lore.kernel.org/oe-kbuild-all/202502280902.U0gLDhve-lkp@intel.com/
-> >>
-> >> All warnings (new ones prefixed by >>):
-> > 
-> > My gosh, this is valid report. But it looks like a preexisted issue.
-> > Can somebody fix this, please?
+Hello Andy,
+thanks for the review.
+
+On Thu, Mar 13, 2025 at 04:53:35PM +0200, Andy Shevchenko wrote:
+> On Thu, Mar 13, 2025 at 03:43:31PM +0100, Francesco Dolcini wrote:
 > 
+> > Add new platform driver for the Embedded Controller currently used
+> > in Toradex SMARC iMX8MP and SMARC iMX95.
+> > It currently provides power-off and restart (reset) handlers.
+
+...
+
+> > +	err = regmap_bulk_read(ec->regmap, EC_CHIP_ID_REG, &reg_val, EC_ID_VERSION_LEN);
+> > +	if (err)
+> > +		return dev_err_probe(dev, err,
+> > +				     "Cannot read id and version registers\n");
+> > +
+> > +	dev_info(dev, "Toradex Embedded Controller id %x - Firmware %d.%d\n",
 > 
-> That was three weeks ago and still no responses from Aspeed or
-> contributors from here.
-> 
-> I think this tells a lot about aspeedtech.com patchsets on the list.
+> Specifiers are semirandom. Why signed? Why x and not %u?
 
-Yeah...
+The firmware version ("Firmware %d.%d") is two unsigned decimal number,
+so yes, I will change to "Firmware %u.%u".
 
--- 
-With Best Regards,
-Andy Shevchenko
+The ID is just an identifier that is documented as hex, therefore I
+think that the most convenient way to display it is as a hex number.
 
+Francesco
 
 
