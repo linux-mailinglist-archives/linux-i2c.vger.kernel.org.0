@@ -1,143 +1,112 @@
-Return-Path: <linux-i2c+bounces-9866-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9867-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 509F6A64E4D
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 13:14:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 642BFA654E5
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 16:04:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E88B8188A3A6
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 12:13:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 623483A72F1
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 15:03:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15BC23F285;
-	Mon, 17 Mar 2025 12:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B33424502C;
+	Mon, 17 Mar 2025 15:03:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZMkp7ltS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MWclU53B"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03819239595
-	for <linux-i2c@vger.kernel.org>; Mon, 17 Mar 2025 12:09:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B1C214A9C;
+	Mon, 17 Mar 2025 15:03:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742213342; cv=none; b=XQ0IUHdC6WdKNuW0U5rdipVNk80XdT4hM3hHknyCXurAOVPtuAox/FMPHQRidU/jG4GbuAg6RKaNz1Aqi/J9jnHJ0jNKDRi19uhYeREiSdrjJcVr8525vlOMGFfie7S+J9+dFp6u21IWNfIluKSthDiGMPi8XTSfUxb2Gazw8X0=
+	t=1742223833; cv=none; b=gvtmlGeFS/SDLp4kkXn/PiXFLw7awG3vFEeg+/7d5aMnTscYgUiY4+vE4lSulGGSVV5nISfGvvjAeNb0n8WQVkVPkWgfSpChY5Bs1H5R5sQPjVT+nuJ1DOoR4+D0yk5OOSfs6fvqybfAKbGxJIY0+hcRCBndZGyTw2+WRT52vVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742213342; c=relaxed/simple;
-	bh=fgKkev5GNis8u+sBMd7UBvRwmZ3uweOhIS9C30idRKE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b7E1sAgeRRKYH7cQpbtEa9NWjIH0DMMGL3grNburYG7iGAJLDQFCr0e2LcPWu09I0Q2LNItrXz6kVfITQJphmvNI3GlXPB54Omn/pLKNclkQcPrROQna2tXkbPZaD2ao9tx9+vCB3VMw/RQEBKsS+KlnGs5lZEi7BsgzoCaP7pU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZMkp7ltS; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742213340;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dJPQeSME8GvdRg4e0/QcxZw7No+3gHVhzWB0lS12ve8=;
-	b=ZMkp7ltSBsmhPdpsAUhquEh2Kp6njV65jlx/8i2MtY83JsTghRaQh7qaQPhYO/PS6eRZjS
-	MI1vTKh5mk0CW7k47NHOwm33/nKJUim3tuyBJIvmd2fLHxY8Vrp7rFIZvX5d6Ip6jjCSn7
-	iR98mEV11leD4FZdC8unTrcIPHpfWnA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-528-AKerZNtnMC2IhRUNOxpseA-1; Mon, 17 Mar 2025 08:08:56 -0400
-X-MC-Unique: AKerZNtnMC2IhRUNOxpseA-1
-X-Mimecast-MFC-AGG-ID: AKerZNtnMC2IhRUNOxpseA_1742213336
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5e82ed0f826so2198974a12.0
-        for <linux-i2c@vger.kernel.org>; Mon, 17 Mar 2025 05:08:56 -0700 (PDT)
+	s=arc-20240116; t=1742223833; c=relaxed/simple;
+	bh=iLaRuezQt/T6WdqKcjHtAOTkdWPLu5drQDYl8LyIh4Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t31ZYmyFiYuAzYZSiDHx8UM6naCoo8IW0KOqWaTAo0dSA5111GdUBiQLgGdmQUSfpjGpDs4+nAkMlg9QKD5kQM3ZgPKctsFLqqzId5BnVYUqxeZ27df1i/KdlLwuo4+/Wvoou1Vki62kB4JR9cvLSnPFJpaLgOLNnzeHe8sR5FU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MWclU53B; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ff65d88103so3747286a91.2;
+        Mon, 17 Mar 2025 08:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742223831; x=1742828631; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o7zFlRnzaKGS1ESWbJzZJmSvwNNhlBm1rOh71RWWkM8=;
+        b=MWclU53BXM0dUuwYlgWaaqLDmWEknFgARzAceys/56fStvR+rlHWH1kx2ie01Zt3hZ
+         SmRsR6TnIuL31bx996gc2Se/hEZ8wtdWzvHh3FQZfoQ5PY94M+jKFaBlEf3xlcNcPXfm
+         ykmLVtgasoCyJT/TIWIlXlKlqeKtbTNhw1JKrSloFjWShwqG3frUK6HckesJBgkDJjVi
+         Au1Btx0dGODP6kY+tWuLjD141ksDKnZuak7IRjdQWWQX63JF+Yo22wYRVrathIViBr3K
+         XGdo8QStvsPI90c/wHoscUn1hpACQVM5C7Gk7AVowr6dBcV1whSgNbqBZxCbhsU5/GsK
+         DM0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742213335; x=1742818135;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dJPQeSME8GvdRg4e0/QcxZw7No+3gHVhzWB0lS12ve8=;
-        b=NOHSrcg311LvJItjf1vD5StbtIJE/Jfnc5XzTQ3SGvQFJfqGj1JbyHUbDKCpkxPk3T
-         dVpaWyX3LBWkKM178tTij9/XSo0LlfeUiIKwT9tPRwf770DoQkprq2XFmubXFFc4EBtj
-         RVDMCoSk+HekT25AH0Xu5cvdP4ikaDwH8EAIGrvrlOLtwZ33jDWAwebjfyYz7KIODZ0/
-         IWC0NM/2EbzQ9A87g2eCbLHVBc2e8TH0g6Fr/LBOqkOkZw0wtY38/pktL+InPsiSI81e
-         9g9hKzeJFDIpdXC6SAWoFImL2Wv+2zcZk6ZehWGeoYyhTilrW0xA1V49EIcmQ+s9GRvC
-         tPLw==
-X-Forwarded-Encrypted: i=1; AJvYcCUfHBlHd1HlVkHmxc4ZqWjdjTocpXMixi1ndDx9zRFI6H/nwqU7DYZYbzUihrBZXnry+Yh1NraILc4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMTbfrzYT9QpIMdtl5Guk5oAg9DzLOgMMq5u6KYhhf7/5akHIJ
-	NJ5SMBoSJzme8R3nb2zPy/flJqigcp5vFlIDD5TbeVrev+9putdxptGKi9aevOw5IdXaChaThSy
-	TeVU6xd99DiLQ+vkhEC7V4e262qBcJxlID0Cy23ydkJRWQQ/LkVp9TfSmUg==
-X-Gm-Gg: ASbGncslT5dqp9zWXEyKmfke3TmR++tusIvRtYcRRQXkCO+cvADogB/PnBy0QkvwLOJ
-	r1p01Aqmp29WADlnWPxZGBqbGRo6fMe0TNk9k+TvYK1LUtKjI1RUBnXQcdDPEwet0CmG/6EYvKr
-	iijQsSqnPjM/NJZmk6SWtonFRPr4zo/87rvbAL6RIMdB1trnk6z0kMJ9mz7l/mt79A8hjRvQSIT
-	20JDn/ymMoW8XhlWNzjsdyTA4cVIyqjTXSx7XqDKcHhjZlW9nhIkXBqRys2g/s/UJa4B7jUSZzG
-	BMZTgSJSbTyU+74U+Tk=
-X-Received: by 2002:a17:907:7251:b0:ac1:ecb5:7207 with SMTP id a640c23a62f3a-ac330301e93mr1164667866b.29.1742213335652;
-        Mon, 17 Mar 2025 05:08:55 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEASQHm2+bhVpahCDmGzllaOZY//NhzMkpnMVSSXwheT0L/ool1AlnploYIuxInxifydvQX+Q==
-X-Received: by 2002:a17:907:7251:b0:ac1:ecb5:7207 with SMTP id a640c23a62f3a-ac330301e93mr1164664766b.29.1742213335224;
-        Mon, 17 Mar 2025 05:08:55 -0700 (PDT)
-Received: from [10.40.98.122] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3146aeaa1sm652245866b.2.2025.03.17.05.08.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Mar 2025 05:08:54 -0700 (PDT)
-Message-ID: <b59d649d-4354-4fab-91aa-865af5d747de@redhat.com>
-Date: Mon, 17 Mar 2025 13:08:54 +0100
+        d=1e100.net; s=20230601; t=1742223831; x=1742828631;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o7zFlRnzaKGS1ESWbJzZJmSvwNNhlBm1rOh71RWWkM8=;
+        b=dxC6qTKr0DL9kj54iv/xFmhy5mVCMk7DNWeru2mopNkQ0/09ypBqbVGjOLaJg/XgLp
+         wHe/Yzk0TRlTwKYG0Bxa9PL80d3blsPkMNF0S+WftN9xBmMz1u5aBdcMoCcG8D8EM9wa
+         NwJ3tXtVfp/DU319OSP7bmD8kZvmz06JMcfEvCo3ngnTU34+xUDyDvjpXndNbEWexwt1
+         tJ4ACAqqibzaDvh7+/O5sM5SFQBm6snE+b6YAr6dAbNtDYWE2EHCPHDTZuFq3eY4nyNM
+         yblAKuw52qFS6Ww/yXe6Np2yKuhyDTgmFet3AM8foNrnLvUxoQdT6SqHnDTQanAzDooz
+         gyOw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0ui0Uspm1QbizUT0006XmmZUdTDOxVz690DoFk1Uh/NfDzquUZjlaZcfWERvv+uGYjqI39+BqmEHgKQc=@vger.kernel.org, AJvYcCW4eTYYUe25vlaFWS4ck1nhIdIxg2IjErCtiX4k0MO4oC5nHv4Wms5pudTZ+jxgWLbEs3uL5lnFlvNs@vger.kernel.org, AJvYcCWUMz0etO75QFInCLeiXZWVpr2LC0bjD9atg6V0UqxV3G0UUUcCCw6IJgvhV3l3Pz0wEqTE8QfeQZhQ@vger.kernel.org, AJvYcCXH2xdtQhP46ORtaxidEev3b0CbmC1U4zrTjVuZF08wcquutapcaxvvJmLcHBSAZf92PoIL5Qcs0PZE@vger.kernel.org, AJvYcCXQqHMMssrLp9SkeaM3+U6LHGCiv1awbNYAaZ9DUiIRUkAapdBLyRlFWpOIJjM0OCCCz437nlIgTYoCNkBh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrS3l+xVZQHhY+pqbimOPNcfBw1vQLx5Mgn22Im1EQTB5tdtaT
+	4AppIlzZbZ4OVDyhr9p3TL4gniNI4Cc7Jii9CJgHarXosMnxtPpD
+X-Gm-Gg: ASbGncukrS2DcTHHyeIhjc9Qo0iZT5HZs9SrB2r32N/icIu2DNqKWUeLZn5e8zx/ue0
+	UudpFid2WfKIa4Fjx7zguiCmPBXqdD2AUkbt5zdZi3CqfEFEyNfuOcIcgWWXwe8Obg4koln1CaQ
+	C1xq1y07P9mL9WbnB423Zbf+oiqq0d2KUi4YnR+Lu7vDc8CrVjjYeSWIv+c4DsaTShw1aQ5n5wS
+	ZLktrGq9Rx+iSrcu80Un2ne1Wr95QfqCPO/dKsjL/LseqaALiwrVlIKG36yHobVK+Q/kt3AFWkj
+	3ilGlXcu27U+fHBfiI7aGDfcJtuTK4Mra7iu7uFjbEIPvsIcy7wGpDcRpbt1SwB04oXR
+X-Google-Smtp-Source: AGHT+IEMJCyihgu3hzsFLndhdamegaKRSNOI/PrpAIwIeAiZP72lHKTsSrfRsiClc1hAcuTcucAYKQ==
+X-Received: by 2002:a17:90b:544e:b0:2ff:62b7:dcc0 with SMTP id 98e67ed59e1d1-30151cbb8cfmr17316504a91.15.1742223830879;
+        Mon, 17 Mar 2025 08:03:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301539ed074sm6141166a91.15.2025.03.17.08.03.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Mar 2025 08:03:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 17 Mar 2025 08:03:48 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Kim Seer Paller <kimseer.paller@analog.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Cherrence Sarip <cherrence.sarip@analog.com>
+Subject: Re: [PATCH 1/3] hwmon: (pmbus/ltc7841) add support for LT717x - docs
+Message-ID: <6cd68f79-41e2-4400-84ca-d07d178acc9f@roeck-us.net>
+References: <20250317-hwmon-next-v1-0-da0218c38197@analog.com>
+ <20250317-hwmon-next-v1-1-da0218c38197@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 0/2] platform: toradex: Add toradex embedded
- controller
-To: Andy Shevchenko <andy@kernel.org>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
- Emanuele Ghidoli <ghidoliemanuele@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Francesco Dolcini <francesco.dolcini@toradex.com>,
- Emanuele Ghidoli <emanuele.ghidoli@toradex.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-References: <20250313144331.70591-1-francesco@dolcini.it>
- <4596db59-51fc-4497-9e94-670e9533e7aa@redhat.com>
- <20250317100856.GC17428@francesco-nb>
- <bc3144b7-23c8-4b47-bdd8-c482b1a6d81d@redhat.com>
- <Z9gQMPjjCt9Rn4lH@smile.fi.intel.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Z9gQMPjjCt9Rn4lH@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250317-hwmon-next-v1-1-da0218c38197@analog.com>
 
-Hi,
-
-On 17-Mar-25 13:06, Andy Shevchenko wrote:
-> On Mon, Mar 17, 2025 at 11:39:14AM +0100, Hans de Goede wrote:
->> On 17-Mar-25 11:08, Francesco Dolcini wrote:
+On Mon, Mar 17, 2025 at 01:02:25PM +0800, Kim Seer Paller wrote:
+> Add LT7170 and LT7171 to compatible devices of LTC2978.
 > 
-> ...
-> 
->> But if Andy and Ilpo are happy to take this as a more monolithic
->> driver under drivers/platform/aarch64 I'm not going to nack that
->> approach.
-> 
-> I'm okay with the choice as long as it's suffice the purpose.
-> I agree that aarch64 maybe not a good choice after all, but
-> we should start from somewhere. Later on we can move to agnostic
-> folder if needed. The question here is more about MFD/not-MFD.
-> If the former becomes the case, it would need to be under drivers/mfd
-> as Lee asked for that (or even required).
+> Co-developed-by: Cherrence Sarip <cherrence.sarip@analog.com>
+> Signed-off-by: Cherrence Sarip <cherrence.sarip@analog.com>
+> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
 
-Right if we go with MFD (which IMHO would be the cleaner approach)
-then the base driver registering the regmap + cells / child devices
-would live under drivers/mfd, there reboot/shutdown driver under
-drivers/power/reset/ , gpio under drivers/gpio and any new
-functionalities in the correct places for those functionalities.
+Applied, though I changed the subject from "ltc7841" to "ltc2978".
 
-Regards,
-
-Hans
-
-
+Guenter
 
