@@ -1,84 +1,103 @@
-Return-Path: <linux-i2c+bounces-9863-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9865-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AA47A64CD6
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 12:35:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0611FA64DDD
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 13:06:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 832283B2E2B
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 11:34:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 008F53AAF62
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Mar 2025 12:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E25D236426;
-	Mon, 17 Mar 2025 11:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C9hMRnyn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B4B72376F7;
+	Mon, 17 Mar 2025 12:06:17 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22DB199E8D;
-	Mon, 17 Mar 2025 11:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5378B2E3373;
+	Mon, 17 Mar 2025 12:06:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742211274; cv=none; b=OKH4h6NZwXCTvzSMwLZYyv9zH7FXrMsGLuJaJNnS5ToTv3M1CoypwPPw+nvYP9vmhNx43qfIulU+hvSqmaahCrkSUUnrX0kB31lWJ2HA3XYYfkEzZ7JQ20tQoSSOJzu/dQkD7WHQRZLbDIWqBA3W63sIwoiB1AdZP6E8fKgpfyo=
+	t=1742213177; cv=none; b=pbVAvpoGyYBbp3qVqGPk05WaozBlq3GY7jDlvEXjvtDwhS8+HOjLrhOnfSKu4k8KGEoGiRnBwkSdSVkx17O2TDb+AfheyuOE0hB2ecS6cpIQ1h+9aDiuAjsqHvw7CxwM1m+jbIWIQm0AVTipDtOFD9SoWew58bzGst+wTKGomxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742211274; c=relaxed/simple;
-	bh=kU2X5hEkiArRpt5luz4fnL6nLNPt8WVJ7YovczxVuY4=;
+	s=arc-20240116; t=1742213177; c=relaxed/simple;
+	bh=3isjYC6z21qtIysFBqMQ/1DQBe0JOMXTX/9T1M/PL54=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rhBqqmp2DoFA3/U8oSRw0T5UVyYtwFH+ASuRVyqcWTP8NNqKeP/i74d16dzjV4VCnH99MpwKfy4QIMlAGuO0jQU0+HdUEkdn+R4TQG7K/SWnVCgp84mMcKpqS/g9I0Km/a9r9D5o0Ks3DNdKOSn/TwlxLBKmlYN3u0ZxSeST2wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C9hMRnyn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DE1C4CEE3;
-	Mon, 17 Mar 2025 11:34:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742211274;
-	bh=kU2X5hEkiArRpt5luz4fnL6nLNPt8WVJ7YovczxVuY4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C9hMRnynlROKeyYD1wVWI8FLRi7fw1bY/xuDeXPwBmhHKKCFVacTfQBt0qkz/4w7J
-	 nKCfFv0hrTG3125R54zbtbPEIm5FTptWw3+k8u4Ss/FmWPd0Rfua5pr8ORHm/Lwc/8
-	 WyXupXwD6/R2k+ZmcZAbk0r1NTEkTwCI8caSzQkZNpHfJyiMehlPH/JxpN79N56TX5
-	 jvTDTUVD3uAvlaa60T+855LLAj1ftPJyEN7qVFT17HnWGrQHIToPCDgVl88O6K75rd
-	 bZVkpB6r01mYCsQCeMp3hFuvWHviyAxm6TcWPlfZX0WO0ei6YSSd3HTyFrbEe0lL9M
-	 DANv2006Ax0sw==
-Date: Mon, 17 Mar 2025 12:34:30 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Kim Seer Paller <kimseer.paller@analog.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	Cherrence Sarip <cherrence.sarip@analog.com>
-Subject: Re: [PATCH 2/3] dt-bindings: hwmon: ltc2978: add support for LT717x
-Message-ID: <20250317-axiomatic-degu-of-chemistry-1c1cee@krzk-bin>
-References: <20250317-hwmon-next-v1-0-da0218c38197@analog.com>
- <20250317-hwmon-next-v1-2-da0218c38197@analog.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=u7S7s0LvAv+PrRpDgAISkXpzwu1bVdKuRDZLqVTHIKrtubS1cIDt5VEcEFxxzZEQmf8DMiwDwC0AkkPb90ifEBPc0f4wnV1fcXYaEl50wKX1G8QLUkuxs49cC7FH6jcrSzDe/8WXstoFO6F2fhlzohAPGufhHJ/YWiF0hlaus+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-CSE-ConnectionGUID: msY5yHa2T7iGsERFEjtnCg==
+X-CSE-MsgGUID: IN1WL6myRnyurxc+fuX+EA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11375"; a="46070439"
+X-IronPort-AV: E=Sophos;i="6.14,254,1736841600"; 
+   d="scan'208";a="46070439"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 05:06:14 -0700
+X-CSE-ConnectionGUID: ORlBzQfaR02LBabS5x8ZCA==
+X-CSE-MsgGUID: AjTMDPT9RGu39HVM1pOi1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,254,1736841600"; 
+   d="scan'208";a="145091378"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 05:06:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andy@kernel.org>)
+	id 1tu9EO-00000003Id9-1gT8;
+	Mon, 17 Mar 2025 14:06:08 +0200
+Date: Mon, 17 Mar 2025 14:06:08 +0200
+From: Andy Shevchenko <andy@kernel.org>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Francesco Dolcini <francesco@dolcini.it>,
+	Emanuele Ghidoli <ghidoliemanuele@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [RFC PATCH v1 0/2] platform: toradex: Add toradex embedded
+ controller
+Message-ID: <Z9gQMPjjCt9Rn4lH@smile.fi.intel.com>
+References: <20250313144331.70591-1-francesco@dolcini.it>
+ <4596db59-51fc-4497-9e94-670e9533e7aa@redhat.com>
+ <20250317100856.GC17428@francesco-nb>
+ <bc3144b7-23c8-4b47-bdd8-c482b1a6d81d@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250317-hwmon-next-v1-2-da0218c38197@analog.com>
+In-Reply-To: <bc3144b7-23c8-4b47-bdd8-c482b1a6d81d@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Mar 17, 2025 at 01:02:26PM +0800, Kim Seer Paller wrote:
-> Add LTC7170 and LT7171 to supported devices of LTC2978. It has similar
-> set of registers to LTC3887, differing only in number of channels and
-> some PMBUS status and functionalities.
-> 
-> Co-developed-by: Cherrence Sarip <cherrence.sarip@analog.com>
-> Signed-off-by: Cherrence Sarip <cherrence.sarip@analog.com>
-> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/lltc,ltc2978.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+On Mon, Mar 17, 2025 at 11:39:14AM +0100, Hans de Goede wrote:
+> On 17-Mar-25 11:08, Francesco Dolcini wrote:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+...
 
-Best regards,
-Krzysztof
+> But if Andy and Ilpo are happy to take this as a more monolithic
+> driver under drivers/platform/aarch64 I'm not going to nack that
+> approach.
+
+I'm okay with the choice as long as it's suffice the purpose.
+I agree that aarch64 maybe not a good choice after all, but
+we should start from somewhere. Later on we can move to agnostic
+folder if needed. The question here is more about MFD/not-MFD.
+If the former becomes the case, it would need to be under drivers/mfd
+as Lee asked for that (or even required).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
