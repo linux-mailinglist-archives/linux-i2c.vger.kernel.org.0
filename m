@@ -1,163 +1,105 @@
-Return-Path: <linux-i2c+bounces-9877-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9880-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A1C8A67169
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 11:36:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F248A67315
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 12:48:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0D81420FB3
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 10:36:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5101F19A2115
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 11:47:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8783F20767B;
-	Tue, 18 Mar 2025 10:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D8CF20B80F;
+	Tue, 18 Mar 2025 11:46:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ufrm5jsa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MAs4ja6a"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F5920459F;
-	Tue, 18 Mar 2025 10:36:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F4D204F80;
+	Tue, 18 Mar 2025 11:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742294202; cv=none; b=eGJXkX0O8vzEPG6HBdWgERr3KH4afZNe9zunXUveP9dug3TV7tg3JZ9c59MfzJRVB/nHSW7x9OAJHVsMFiIEnluTmkUSw9Q7s6nBIPVItr8uTWpQfuDSGrJqXpeRX5FWYZq4jxT3reg5iJ4qyFX4rE0hWp5CJUeGwqBn+kLKEPQ=
+	t=1742298402; cv=none; b=o0zayZRSnU81Ggg2a+RhQ4Fq/4/8U5b8V07tWVGhRNVSVLScmrD8RcsnBh/kKp/4twW4pm78GAR6Cli62vz8LZPCQ8EhaeWoI45nqKv8FG2WBkt1sqXJSdkop+kFv+hOfWTuJzyX0HOtlXcjh01ir44dV2JELGDFO3WDa94+ywU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742294202; c=relaxed/simple;
-	bh=Sai5g5/aPSCV0FNdoUWAXDOQb5aLvdETtjtDL4WuPys=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F072zd1KUhEp91rj3eZNuwj3Uy5fI1vFTXKYF8NuMliyUNGvUM67zqefy7Me84Bzozjl1NWadOblxDzqY3oyUqqLtEOPTHrYEuKZMM8LUe/ezAQBNHDzgjvv+g6vQmse/Qosbf5ipX4EAFVvrEE4EY9GneLcWb3Tq5ZQeDoy074=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=ufrm5jsa; arc=none smtp.client-ip=198.47.23.235
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 52IAaRCj3128589
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Mar 2025 05:36:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1742294187;
-	bh=1lT0nGmOjXid+4lh3vU+4FUK8ztnz2+Zk32BL7lapu0=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=ufrm5jsaus9ObIh1rzJikit9rlKnY0qo6rIYN91Y0hHKGeCIA0ExK2ZLtlQgTGzu5
-	 Ke6Wuj3klwcAlB5R6F9bYyxKSTnFRQiMn9Wh6ZHZuM9azgdi+69X7zoEyh9G8I758i
-	 6isEafIJc8hUDpd84vcT0BbypvyV9DTCa0NtMZ74=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 52IAaQDX125983
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 18 Mar 2025 05:36:26 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 18
- Mar 2025 05:36:26 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 18 Mar 2025 05:36:26 -0500
-Received: from localhost (jayesh-hp-z2-tower-g5-workstation.dhcp.ti.com [10.24.68.98])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 52IAaPsl042214;
-	Tue, 18 Mar 2025 05:36:26 -0500
-From: Jayesh Choudhary <j-choudhary@ti.com>
-To: <vigneshr@ti.com>, <andi.shyti@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: <aaro.koskinen@iki.fi>, <andreas@kemnade.info>, <khilman@baylibre.com>,
-        <rogerq@kernel.org>, <tony@atomide.com>, <jmkrzyszt@gmail.com>,
-        <linux-omap@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <j-choudhary@ti.com>
-Subject: [PATCH 2/2] i2c: omap: Add support for setting mux
-Date: Tue, 18 Mar 2025 16:06:22 +0530
-Message-ID: <20250318103622.29979-3-j-choudhary@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250318103622.29979-1-j-choudhary@ti.com>
-References: <20250318103622.29979-1-j-choudhary@ti.com>
+	s=arc-20240116; t=1742298402; c=relaxed/simple;
+	bh=KL8E0gCwzmRt1EMqDOC1510GTWQzlUEOunkYkhW2oDg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VAJPoyI1gKaPemjY45dbUicfvnO0uLw5Rdsa4mbGb2oR6FsviDNGeTLvVwU5y3wFW/FvUb3hDG9V7NqCoO1KK/A42ZaWQbyj0zMtfzMwSespgMy28XiGfXVGqyIUd5LZBn4Tme99mvB7ymnmFTngIb+rAXPH34XkBM3fi2VXty0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MAs4ja6a; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ac2a81e41e3so1233079266b.1;
+        Tue, 18 Mar 2025 04:46:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742298399; x=1742903199; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KL8E0gCwzmRt1EMqDOC1510GTWQzlUEOunkYkhW2oDg=;
+        b=MAs4ja6a6s4CtMTYwxF8fI0JON5CEW+2CZSMtiXj2u0nhwh3fU3jbjzeeHlRFmAbg8
+         0RrbpVEd35kkxEHQoP0uDuZLhMKjqEQYAE5gP2f/IcsZNA/BPwxSvp487LtcdMPcXDa7
+         xB/u7uUzhxXxhkStpDHhpqfobZqYOU8MSdhJxCQJWHff5/RMcs98aQftzsQk4oqUaOso
+         /4OgSLDZu/X4yoZlamw1e8BgjoZqyNk48MQ0LwSG/kWgRSHMlt5K7T4YhHWdlZsYtEuC
+         5ktr7txukYj5f+3r56O0tkLdDvoJqJbicK7Fnfzt40uxSjc40jfSBwMQ9Kx2HpST22Yw
+         i6IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742298399; x=1742903199;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KL8E0gCwzmRt1EMqDOC1510GTWQzlUEOunkYkhW2oDg=;
+        b=ZpoEWMRFiGHJGB2ZhctLn5d1TK8jwXJ5YatKaAR+I/V6C6q3BrP6TEsa3SbuO56uH8
+         U3iHI1zHek0x7iHqVkKYkphmlgy7DNS8tDnfI2Vjv/T9Sx8zX1JQogjaC0Kkz99OXHEr
+         0eXVVkjuay6bg3SiqEyEt8PezgzIJiCc9R9CHJzBQXgdSHernoFkhr8RUc2jIFxZf5ow
+         DncGsN1eS0RFN/WAzJyEAKh773Ytm5OSC/65+s7yqCaHk7JgJckUIcKqtcBkjdp5xlk3
+         rk2RfQBwhVidTSXxz2I0HDg8bhA1BeMXRmIIKTwMUg3Q67o1+sE+KyBtjoABm3oqLhne
+         g++w==
+X-Forwarded-Encrypted: i=1; AJvYcCU0xuPHbEe/c3tq+ms1zgSgqlFOhHGw8sFuBPwcRfKfoGAr29VOHNoYtNPpPJKLyQGFeC3GmKc8AhULjk1b@vger.kernel.org, AJvYcCWryrc3XYak3CBBetaftpH4NLJZBRc5oqryNoXb5PGUyt/n/ZqV9p9o5yAM2i8kaGidFvH3Bp1051E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRNEuASWxfGAzv/OhhKGaEaIBKl5LlL876U1LhSo4UXF5GArv0
+	SA+5au0B64ahfmLJO07US/47j7x7m9cZVlG8TlYfAZJHIik0OHR+HRpN/5PG3orO5nOniFtC4I0
+	YrfQjEi5tRuJrBf6bJx4udc/soQw=
+X-Gm-Gg: ASbGncuO/5PSSlZ8crASYoKNIq2pASMBlUUeyR0LpbDLO6T3COft0YKVfePFMl4+QKx
+	MtackOhyF+9PezkBAAbavCnSC+yXoHso65PfI4nxvjjzdSjwzdJARfC1gOUpRTks4SFe/AgQIv+
+	bugEBiHrvvBXaAzU6EDMSoXwr52U2j
+X-Google-Smtp-Source: AGHT+IHZVKieU2SHdGbuI3lDvrLFMVr2onCO6I6NWrfsdRduvwawWi0FI7ocrrZODI2sxNgOK6VJR4GOddr0MsTc2Mc=
+X-Received: by 2002:a17:907:d9f:b0:abf:749f:f719 with SMTP id
+ a640c23a62f3a-ac38d3894afmr301647066b.7.1742298398454; Tue, 18 Mar 2025
+ 04:46:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+References: <20250318021632.2710792-1-aryan.srivastava@alliedtelesis.co.nz> <20250318021632.2710792-2-aryan.srivastava@alliedtelesis.co.nz>
+In-Reply-To: <20250318021632.2710792-2-aryan.srivastava@alliedtelesis.co.nz>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 18 Mar 2025 13:46:02 +0200
+X-Gm-Features: AQ5f1Jp1pwMTyen9jMEAQrIJywQNkvClXMRxJ_eQeF94oGzWxGi_MEHILfj9Hbw
+Message-ID: <CAHp75VfHgY1VUVkO6p8OJ=4=Omrxs5fih_DjWzB52KYCX8joDg@mail.gmail.com>
+Subject: Re: [PATCH v13 1/3] i2c: octeon: fix return commenting
+To: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Markus Elfring <Markus.Elfring@web.de>, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Robert Richter <rric@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Some SoCs require muxes in the routing for SDA and SCL lines.
-Therefore, add support for setting the mux by reading the mux-states
-property from the dt-node.
+On Tue, Mar 18, 2025 at 4:16=E2=80=AFAM Aryan Srivastava
+<aryan.srivastava@alliedtelesis.co.nz> wrote:
+>
+> Kernel-docs require a ':' to signify the return behaviour of a function
+> with within the comment. Many functions in this file were missing ':'
+> after the "Returns" line, resulting in kernel-doc warnings.
+>
+> Add the ':' to satisfy kernel-doc requirements.
 
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
----
- drivers/i2c/busses/Kconfig    |  1 +
- drivers/i2c/busses/i2c-omap.c | 22 ++++++++++++++++++++++
- 2 files changed, 23 insertions(+)
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index fc438f445771..0648e58b083e 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -940,6 +940,7 @@ config I2C_OMAP
- 	tristate "OMAP I2C adapter"
- 	depends on ARCH_OMAP || ARCH_K3 || COMPILE_TEST
- 	default MACH_OMAP_OSK
-+	select MULTIPLEXER
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  I2C interface on the Texas Instruments OMAP1/2 family of processors.
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index f18c3e74b076..16afb9ca19bb 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -24,6 +24,7 @@
- #include <linux/platform_device.h>
- #include <linux/clk.h>
- #include <linux/io.h>
-+#include <linux/mux/consumer.h>
- #include <linux/of.h>
- #include <linux/slab.h>
- #include <linux/platform_data/i2c-omap.h>
-@@ -211,6 +212,7 @@ struct omap_i2c_dev {
- 	u16			syscstate;
- 	u16			westate;
- 	u16			errata;
-+	struct mux_state	*mux_state;
- };
- 
- static const u8 reg_map_ip_v1[] = {
-@@ -1452,6 +1454,23 @@ omap_i2c_probe(struct platform_device *pdev)
- 				       (1000 * omap->speed / 8);
- 	}
- 
-+	if (of_property_read_bool(node, "mux-states")) {
-+		struct mux_state *mux_state;
-+
-+		mux_state = devm_mux_state_get(&pdev->dev, NULL);
-+		if (IS_ERR(mux_state)) {
-+			r = PTR_ERR(mux_state);
-+			dev_dbg(&pdev->dev, "failed to get I2C mux: %d\n", r);
-+			goto err_disable_pm;
-+		}
-+		omap->mux_state = mux_state;
-+		r = mux_state_select(omap->mux_state);
-+		if (r) {
-+			dev_err(&pdev->dev, "failed to select I2C mux: %d\n", r);
-+			goto err_disable_pm;
-+		}
-+	}
-+
- 	/* reset ASAP, clearing any IRQs */
- 	omap_i2c_init(omap);
- 
-@@ -1511,6 +1530,9 @@ static void omap_i2c_remove(struct platform_device *pdev)
- 
- 	i2c_del_adapter(&omap->adapter);
- 
-+	if (omap->mux_state)
-+		mux_state_deselect(omap->mux_state);
-+
- 	ret = pm_runtime_get_sync(&pdev->dev);
- 	if (ret < 0)
- 		dev_err(omap->dev, "Failed to resume hardware, skip disable\n");
--- 
-2.34.1
-
+--=20
+With Best Regards,
+Andy Shevchenko
 
