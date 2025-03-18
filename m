@@ -1,82 +1,87 @@
-Return-Path: <linux-i2c+bounces-9883-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9884-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E983AA67791
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 16:20:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8099A67D71
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 20:56:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBA603AFEA6
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 15:17:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3F3C19C48FB
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 19:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28FAC20F08F;
-	Tue, 18 Mar 2025 15:17:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43C76211A0C;
+	Tue, 18 Mar 2025 19:55:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4bw49gc"
+	dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="tthe6w4p";
+	dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="LwxXGaSM"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2644B20E6E1;
-	Tue, 18 Mar 2025 15:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742311051; cv=none; b=cPtOdirQ3fv4CIhY3ajI5CJosyQSW0xs146XH/jBspOT2mhJUX+LJK6tAdW/7Hhes/Z7TpoHjCxntJ39jFgPuo99zN90le73KGZqDoxG7Yupq2m5zELWMe7VBHF+H37O0uTCySNGkJ6RCNGT0+iK2ud4j7TukW7ODFOd/sIaou8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742311051; c=relaxed/simple;
-	bh=psTxiGB92gSaGM/Faa8KmerNR/BeW98o+Pr9u0hxNaw=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C361A20E6F9;
+	Tue, 18 Mar 2025 19:55:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.165
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742327743; cv=pass; b=CpNX87Qsgdu3Uy0CXki2Yq7PNqt/iJQ7bBChDd5j2UTDeGsXTT+3sd8/SNJdr8hatZNUH1eFlZW9D5wQhZo1ZvAmfNgQXzCGPXWFOmXmTA9Aa/oaREIJK6VBu+ohNDav27uLdyBHXz8yZwdcS1Kbp2Y7XltGrzLnNDQpBtdreCU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742327743; c=relaxed/simple;
+	bh=lJkRNO6cs6CcaT4ImdkOxXpcH/ClXVAKxOJlRwIsc1Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=STpel70Jn7dIjpWVnRikvBNNif6y7ryaXQhToQlm6gRB73iRML5tRH7XmqT+i22d7v6dyRTvNH5LNSccAuIgnS9tS/tTojA60WNH9+cX9T8TLu2linNCb3TBkOc+ZAndoVtcIri7JF5nNSgVxi0Hh1Ts9mmsNfFDdHCidYN107s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4bw49gc; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-225e3002dffso62868295ad.1;
-        Tue, 18 Mar 2025 08:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742311049; x=1742915849; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZHAf260asVvJfddY3c+QBCDCOVojVZW9/fzAEGmVdxY=;
-        b=D4bw49gcsdqgTSWJ1sFmEZ/nM2B+dsIskmmEv/lR8gG6gddSDorOXtDHpeod/X5peK
-         jF3v9RHyNZjTA+VjglycIZTNvyDGlpyUoGDMEb5Zqju/f9szir/9SR9JR7csnRNkN/dj
-         uWblDPoraGrJyuv3pspppwACzOs72NqtwanPCDUTWattbLzRV3jIhRf1/IUXI2rvivs0
-         Gd9S9T05G8DqDYoSrlg7rrRwbhDICaly3ZE9K2URtI5A/2YIsjpO9peWb62TQ4jnQgOC
-         f84nfrqU7/r+HCZFNgWHUW3nnHUopEhmIgvTJHwXqDhwk++7RTwnQ4AFmv+cQ6eW1Nbd
-         OuEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742311049; x=1742915849;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZHAf260asVvJfddY3c+QBCDCOVojVZW9/fzAEGmVdxY=;
-        b=o2sXP+TA2JYqyC/4OkqDmxMQ8iswa1JQv00Ti0fjQOUZNsZ5ScUUATmZJpFpBFLOoS
-         WP7TX1wIvhuOs2Vyk6oPMJ1ey3GNWrkSEPPI+PpX/NjugvTHVST3nLnVqCKf266PicOd
-         cSyL7/ysHw3pKC3KDnrV1IbVs//lnwPinbrppAjw7lIZOiZLwaiVTCuqSxBRdwEBJCzN
-         SjfmwH+kAgml+b9I1DTtGi83ITaZUoOQv+NOa3h/xrnWrwd5QufCA2MWpjpj5B0Eb3Dq
-         LhjgV8xsKkOUHKPFhryGkNXVNRE1cw0w5XLZ8sE0duAON6t4JUDNhdDxpSdXkuv0eTYz
-         Go3g==
-X-Forwarded-Encrypted: i=1; AJvYcCV8veftKbTOGFdal8HIMqGgx0WgJpCy1V1YB+kD7TQjZRqmTACUrP97vLphJluhTr9NQDBdtPPw1d5q@vger.kernel.org, AJvYcCVBaHz6vVD+gC5tZ7Wv07kID1vckyYJuSn2TfWSiwy+rI25RStdUrtNlTfcDaoiemp4+uKImdAviWmC@vger.kernel.org, AJvYcCVb2Ivqvwg1xBxJ0kAwhQqKvTL+UGT1st3nOZgX0xrY9ciA2yvOfOk1YKFf1E67kIhA3WlJ8TzLvY/5ncAF@vger.kernel.org, AJvYcCVnV3dPFo8abpaA1WPyzTw8TIr407mpk2kGBGOZmSR8raXV4OeV/YEpGeJ7raVMPjGz1RJOdVhSIPr1kJw=@vger.kernel.org, AJvYcCWHSpR8/dR2S3ODPa7H+UTM0+JeilxX2N1MMnMnCm2oVKZLHIpcNEicBnW1qklPYof5HaiPMmMQlLqi@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgA76Ku79Bj9EWAWcdCIJdG51gx42VSIlkPAe+gDGwzNWNPsMT
-	vokXLFvGjBWl/5UdlpBoJzIgsh5hf9sqlTJZY1BcJ8dZeeUags6x
-X-Gm-Gg: ASbGncuOgXE1I4FDKDuK3svNb69UwZ1t0RtEVC7rLm3kY89LLXyFhGFckU+gjc6C5iz
-	U0ab5imX4mv0Zb5gBJ4Tre3fpM++kiq82Jk5qsEmd4qduprCsrewge4DeNOcWQIsrGn8x9LUiNa
-	KwD2w/4pWEorTuEi4gw3lDXXhSwWg4gvGovYzQfw30RZ9iNg9Z9IURuiY9sVfZRrJLPep79EqqR
-	7s3zbitKYwJ5DELMynkCxCbOfRhLeswXOq33kWwiKpHW2PKu16cuFdyuQC9HZ4LNSzm5fgRqnlI
-	wD+00vLGZikPXWXngVSTIULrgGnusmr32bF4HZtOrSlotUMo5i02y9m47UtDir5rq2YFNJFL/Pd
-	E2sryytaVniILn0t+lw==
-X-Google-Smtp-Source: AGHT+IEqH1G8VZBeSKB8c6EwNUAE+zwq3XXI2OW9qUH7fPlFDKsvo00z+J1eK41UJAnTlcsMJl8jsQ==
-X-Received: by 2002:a17:902:d4c5:b0:223:42ca:10ef with SMTP id d9443c01a7336-2262c6111d4mr51279195ad.43.1742311049329;
-        Tue, 18 Mar 2025 08:17:29 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6888675sm95585345ad.51.2025.03.18.08.17.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Mar 2025 08:17:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <15ce883f-444c-4b27-a48d-b17e3df5895d@roeck-us.net>
-Date: Tue, 18 Mar 2025 08:17:27 -0700
+	 In-Reply-To:Content-Type; b=rd0DMy2Vapb2ohO9QqAJRtKYIp0T6cX6zBF6dPY+YNmxemWqhLpEa47SR68l8empIqGVP3zYLjFYvhLp1WYBDtE08DHNLxBJtreNhGmchE28ab3XBTE0V2sFVcmqZDpLvvzUjFhpdFVp0n+aPdxl1X64+PxjU5NxyoNXNst0YIQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jm0.eu; spf=none smtp.mailfrom=jm0.eu; dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=tthe6w4p; dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=LwxXGaSM; arc=pass smtp.client-ip=81.169.146.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jm0.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jm0.eu
+ARC-Seal: i=1; a=rsa-sha256; t=1742327713; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=jDX0H0wUBOXPQ0tBLgKawwOcKVteea9eQobp8SE9kIeReighELZGIflOKyaHNSZn6p
+    Mdizqy82QGV1HDfl7e5JGeWSv3A3mjDFPc415afLazwcW11cpLF++RFO7jq/QikUmEom
+    7JTypmJysHPdwLNtsKnnMj7I0X+zmUWdYLEnTjP4ddS0JUfaHQsrrjZhdIi7lszepc4m
+    Qy7SEGttoGmaE7JlxqC+qDFpj6Vw8RPEE168eLgp8g/gVs8yd3Sr5mrCCl5XTgwRaB87
+    VX/9VpoLwi7Iyv6g4Xp6dBlf5WeQi2dtivE8c3YvmP8EgheHi7VMOyq+lxUbvSkaGgFp
+    P9Fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1742327713;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=IMFRQPqxsxrdpFDHtTDmw/F5TMStNFJfDOO0t2v2NBY=;
+    b=ex24Rgd6zDwiTAWW8XGvGlmTK6qofHTpDlhJhIlTYtG2jQLbeIsegbKagqqHiOeVvb
+    L1csRgf7OHd/2i7HRTzqlJA2zazy3oCiArvfpaawhbKVhMtE3DYqNv3dAJf63hSGI+2+
+    P6v/yvl4EIzeBdqSClXuf7bv95MQRPZxVu0lx12WTdPg4A9X5djlJWSVn0yGh2OBngIW
+    o9RxBRzYJxIt0zfKqcPiTa240+ngY/MOKREnJ9LQ1lgrfsOVc6vTIXO+3Hpfw9J4eAuV
+    rWtwNh2BOJcUp1FjcT4qSFhxkHeNfnO350WI3DN/JTR4DkBvrCzp5hSlyFNgZcFPY/7F
+    87sw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1742327713;
+    s=strato-dkim-0002; d=jm0.eu;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=IMFRQPqxsxrdpFDHtTDmw/F5TMStNFJfDOO0t2v2NBY=;
+    b=tthe6w4puOOjLQOGLkp4xXJvVp0mtQ9Qf1lFgxcDFRC+z7ZCPTTlq3Nu0LffKmdHV9
+    JirpmRptY6PcCa3npwQ28yNxul5gBNUTZ6WUV7tJp8nO0Esj+YxlEizGQO9BiNRq1pDz
+    oJrcpcVuaXNGKM2WP7/hfws6CE72vDVmRnIQCRv5g1m7ihhFh7oL+Zd0mIkk81is+SIS
+    vFyoG20RLvY2IGLRub8XEZUMHF663bCuN1WMO13//tJBiIxElewpiIGl8KvK6Go7iHVX
+    WqMOgCNaTjajKkhZKZ2gla+2ID8qmModUD2VqZ8MYvuOy7ls3bRZKRhBOvpnMbT6t6/k
+    w7UQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1742327712;
+    s=strato-dkim-0003; d=jm0.eu;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=IMFRQPqxsxrdpFDHtTDmw/F5TMStNFJfDOO0t2v2NBY=;
+    b=LwxXGaSMrZb+MVZOJfQdgqITb+TNnBetgapSSb9emkFA9UqRvdw4C+kKI5Xq7/L+lN
+    o53jdzpC2S5wTVC0c7Bw==
+X-RZG-AUTH: ":JmMXYEHmdv4HaV2cbPh7iS0wbr/uKIfGM0EPTeoCaRth8YQvpoIkZXd2bnDIrOV8VCY="
+Received: from [192.168.1.232]
+    by smtp.strato.de (RZmta 51.3.0 DYNA|AUTH)
+    with ESMTPSA id z292ee12IJtCJ9h
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Tue, 18 Mar 2025 20:55:12 +0100 (CET)
+Message-ID: <59651605-45fa-49d7-bb15-dae83d8ad471@jm0.eu>
+Date: Tue, 18 Mar 2025 20:55:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -84,174 +89,88 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
-To: "Encarnacion, Cedric justine" <Cedricjustine.Encarnacion@analog.com>,
- Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20250225-upstream-lt3074-v2-0-18ad10ba542e@analog.com>
- <20250225-upstream-lt3074-v2-1-18ad10ba542e@analog.com>
- <20250226-gentle-spicy-jacamar-2dd36a@krzk-bin>
- <20250226145931.GA2314060-robh@kernel.org>
- <3f7b031d-7b83-4a00-996d-aabb26278b67@roeck-us.net>
- <20250227-sceptical-phenomenal-wolverine-56e3cf@krzk-bin>
- <dbd9cc84-a0b6-4323-b343-6e80aaaf2d14@roeck-us.net>
- <PH0PR03MB69385BEFFD04ECF850311E988EDE2@PH0PR03MB6938.namprd03.prod.outlook.com>
+Subject: Re: [PATCH 1/2] dt-bindings: i2c: omap: Add mux-states property
+To: Jayesh Choudhary <j-choudhary@ti.com>, vigneshr@ti.com,
+ andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, linux-kernel@vger.kernel.org
+Cc: aaro.koskinen@iki.fi, andreas@kemnade.info, khilman@baylibre.com,
+ rogerq@kernel.org, tony@atomide.com, jmkrzyszt@gmail.com,
+ linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20250318103622.29979-1-j-choudhary@ti.com>
+ <20250318103622.29979-2-j-choudhary@ti.com>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <PH0PR03MB69385BEFFD04ECF850311E988EDE2@PH0PR03MB6938.namprd03.prod.outlook.com>
+From: "Ing. Josua Mayer" <josua.mayer@jm0.eu>
+Autocrypt: addr=josua.mayer@jm0.eu; keydata=
+ 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
+In-Reply-To: <20250318103622.29979-2-j-choudhary@ti.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/18/25 03:03, Encarnacion, Cedric justine wrote:
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Friday, February 28, 2025 12:33 AM
->> To: Krzysztof Kozlowski <krzk@kernel.org>
->> Cc: Rob Herring <robh@kernel.org>; Encarnacion, Cedric justine
->> <Cedricjustine.Encarnacion@analog.com>; Krzysztof Kozlowski
->> <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Jean Delvare
->> <jdelvare@suse.com>; Jonathan Corbet <corbet@lwn.net>; Delphine CC Chiu
->> <Delphine_CC_Chiu@wiwynn.com>; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-hwmon@vger.kernel.org; linux-
->> doc@vger.kernel.org; linux-i2c@vger.kernel.org
->> Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: pmbus: add lt3074
->>
->> [External]
->>
->> On Thu, Feb 27, 2025 at 09:50:23AM +0100, Krzysztof Kozlowski wrote:
->>>>>>
->>>>>> hwmon code might need some changes, but that's not really
->>>>>> relevant for proper hardware description.
->>>>>
->>>>> Normally, I would agree, but it seems generic pmbus code expects
->>>>> this structure. This just came up with changing another binding
->>>>> maintained by 'Not Me' to follow this structure. We're stuck with
->>>>> the existing way, so I don't know that it is worth supporting 2
->>>>> ways forever. OTOH, is it guaranteed that these devices will only
->>>>> ever be pmbus devices or that other regulator devices which are
->>>>> not handled as pmbus devices currently will be in the future. If
->>>>> so, more flexibility in the bindings will be needed.
->>>>>
->>>>
->>>> I would appreciate if someone would explain to me what the problems
->>>> with the current PMBus code actually are. I have seen several
->>>> comments claiming
->>>
->>> Not exactly a problem but missing feature. pmbus code (at least one of
->>> macros I looked at) expects regulator node and some sort of child of
->>> it (vout), while such simple devices should be:
->>>
->>> regulator {
->>> 	compatible = "adi,lt3074";
->>> 	regulator-name = "vout";
->>> 	regulator-min-microvolt = "100000";
->>> 	regulator-max-microvolt = "100000";
->>> };
->>>
->>> so without any of regulators and regulators/vout subnodes.
->>>
->>>> that the code should be changed, but I have no idea what the
->>>> expected changes actually are or, in other words, what the PMBus
->>>> code should be doing differently.
->>>
->>> I did not investigate much into pmbus code, but this might be as
->>> simple as accepting arguments for .of_match and .regulators_node and
->>> then accepting NULLs as them as well. Or a new macro which assigns
->>> NULLs there.
->>>
->>
->> Unless I am missing something, the following should do the trick.
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
->> index ddb19c9726d6..289767e5d599 100644
->> --- a/drivers/hwmon/pmbus/pmbus.h
->> +++ b/drivers/hwmon/pmbus/pmbus.h
->> @@ -512,7 +512,6 @@ int pmbus_regulator_init_cb(struct regulator_dev *rdev,
->>   	{							\
->>   		.name = (_name),				\
->>   		.of_match = of_match_ptr(_name),		\
->> -		.regulators_node = of_match_ptr("regulators"),	\
->>   		.ops = &pmbus_regulator_ops,			\
->>   		.type = REGULATOR_VOLTAGE,			\
->>   		.owner = THIS_MODULE,				\
->>
->> Maybe someone can check if that works.
->>
->> Thanks,
->> Guenter
+Hi Jayesh,
+
+Am 18.03.25 um 11:36 schrieb Jayesh Choudhary:
+> Add mux controller support for when the I2C lines are muxed after
+> signals come out of SoC and before they go to any client.
 > 
-> I'd like to follow up on this one. As of this writing, my understanding
-> is that the dt-binding should not expect regulators subnodes for
-> simple devices like this. There is already a similar binding as
-> mentioned in this thread particularly
-> "dt-bindings/regulator/infineon,ir38060". I think a binding without
-> the subnodes should still work with or without the change above.
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
+>   Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml | 6 ++++++
+>   1 file changed, 6 insertions(+)
 
-Interesting. I am not sure if it really works, though. I looked into
-the regulator code, and I don't immediately see the code path it would
-take.
+Is there any chance for this to be generic across any i2c controller
+regardless of SoC in use?
+Is this perhaps also generic to any device in dts,
+similar to assigned-clocks?
 
-> With this, I'd like to know what the specific next steps are to continue
-> this patch series.
+E.g. in k3-am642-hummingboard-t-{pcie,usb3}.dts we have a mux on the 
+carrier board switching a serdes lane between two different connectors.
+It would make sense for pcie and usb phy nodes to delay probe in a 
+similar fashion.
+The same may hold true for other buses muxed at boot-time or based on 
+assembly options or extension cards.
 
-Can you try on hardware using a devicetree file which doesn't have the
-regulators node ? If the current code works, just submit an updated
-(simplified) .yaml file and we should be good. If not, I have an
-untested patch series introducing another macro which doesn't set
-the regulators node.
-
-Thanks,
-Guenter
-
+sincerely
+Josua Mayer
 
