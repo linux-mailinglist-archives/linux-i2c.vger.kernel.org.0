@@ -1,393 +1,262 @@
-Return-Path: <linux-i2c+bounces-9874-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9875-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52620A66623
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 03:17:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBE56A669BB
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 06:44:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46162189AA06
-	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 02:17:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27E671895C02
+	for <lists+linux-i2c@lfdr.de>; Tue, 18 Mar 2025 05:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF1A199E80;
-	Tue, 18 Mar 2025 02:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 681531DDC34;
+	Tue, 18 Mar 2025 05:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="wGyfoNp9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cwgqgpzy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBB0191F92
-	for <linux-i2c@vger.kernel.org>; Tue, 18 Mar 2025 02:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981031DD0D5;
+	Tue, 18 Mar 2025 05:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742264210; cv=none; b=P0zSyKJ1nS1OxKLGcS0kSR6KeHUz0R9co9RaVPUox4gS2Yp6dm4fhMjEVFGDK5JWp8lIIzaW0wOVubAJNgYBAUiZJFe4fIQWiei/qW6zusNypvWCCGLC0Ivky7LS8O6T3bGwTGj0VcxnBVjFGg+2hwzoBW3YViF0LpB1tLsB51Q=
+	t=1742276658; cv=none; b=gpCgRLxkIgW+9hGnxM4cADHFw/wjdmD8JJGkg9QvOcqGdwnrt37kT34liAQBJnHhAKYmJtORx9RGTSluTEKgmDiEDqX2FB9JIaDV0NP6n0Mc7XSL+vriX6JEwwlvZGkDSOmUyR89XrYek7eT1J3VakFg9oAIIma6XRZaYgoCWoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742264210; c=relaxed/simple;
-	bh=0R7wpe4t70kMt26O6Ulzmih0a+hzlv8OC3dBWVqaJIY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HrjnXw0rAfoKN2aLRQ1dnOmaNb1gPPajVV9NmYU3MQc8blumuVYnVASSk98OHbSNYwZn5ES1LziGRQRYjOpKdjvm2mr2LKvGA9BVGsSsSqcE9VHNgeUCFW3eI/TeUyWwX4Hb2eCUW2sWTMdZDMPDq16qsgNllLUSrNZu4fxlSS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=wGyfoNp9; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7A9392C05FF;
-	Tue, 18 Mar 2025 15:16:40 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1742264200;
-	bh=XFHuGMs0AAAxMq/ySkqlDXNd48utp1w7P8rpynmIcZE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=wGyfoNp9tIDsaXZ4GVmD3XvPNCdYbN8BTTGotqRBfGobDIgwCs1y4uTITJi3llEP3
-	 fi5aPT8yF2RxyNvSO92DSBglv0fIGFNWhEikp2yXIHonnajfze7ytOaipGYGtdTAlR
-	 MsRoc73nmxJzYPL8aU/ktUJ4WJbKbebQlVMi8/jjr7hjHJjEGAknDxHn5h3qx+1s9R
-	 GI5VbE2BOFMGOduYKkWXZCwlgX1PcSGwojX3Ex6i886Wjd7ZNMiEYDL+yEpjTNnNsn
-	 gKI+ACFWm6YhDfH78XTlWsjBom2zXnb3Suo0JopRurf+5HsmVShAv4i8bAKVZCscJ0
-	 afjkgFyIifp/A==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B67d8d7870000>; Tue, 18 Mar 2025 15:16:39 +1300
-Received: from aryans-dl.ws.atlnz.lc (aryans-dl.ws.atlnz.lc [10.33.22.38])
-	by pat.atlnz.lc (Postfix) with ESMTP id 3FF6A13ED56;
-	Tue, 18 Mar 2025 15:16:40 +1300 (NZDT)
-Received: by aryans-dl.ws.atlnz.lc (Postfix, from userid 1844)
-	id 40E012A1692; Tue, 18 Mar 2025 15:16:40 +1300 (NZDT)
-From: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>,
-	Robert Richter <rric@kernel.org>
-Subject: [PATCH v13 3/3] i2c: octeon: add block-mode i2c operations
-Date: Tue, 18 Mar 2025 15:16:31 +1300
-Message-ID: <20250318021632.2710792-4-aryan.srivastava@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250318021632.2710792-1-aryan.srivastava@alliedtelesis.co.nz>
-References: <20250318021632.2710792-1-aryan.srivastava@alliedtelesis.co.nz>
+	s=arc-20240116; t=1742276658; c=relaxed/simple;
+	bh=++xiDYQBqwQPWf46v+TtQ6Rz7NRDZMdVj8iDgBtc3GY=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=JdWjTVQyaqcrn5/Y62X1zthwS60ckwrx3vsH9I65DlkkLAvL8nSLd9u3h7GL2UJMiHvYs74loRQ0/MxauVRzqKjefs/nha6/kFjg187z+SQ3CWmr1OmcD+ozVUeSEBbiWrToHksr0CJ8aB2JBTLImHh2HYI8QL7Ybr7Q5s8PhlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cwgqgpzy; arc=none smtp.client-ip=209.85.214.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-225a28a511eso86633175ad.1;
+        Mon, 17 Mar 2025 22:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742276656; x=1742881456; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4PjJyZg36ViwqvSldxrB9EBP1m7xv7NYMkTSh+jaEjw=;
+        b=Cwgqgpzyu0OBJXRZz6dvEcT2M+aUsL47Mp95SVdV4C/GxWv8+20KqBzEQreNHE+0cO
+         vO3UeEvoc2sZ2gv3mm0P5/7Hfa5UBnpqWWnRZXEhCBs6XOsKCtOWihhkJOeQvDYfIgo4
+         rw+xTYDa4YpMPzF7pscPzyxxHFqfnfiJoH6aPqoTSOfVwI7vSUWDY0mo97KJpWr4C9b2
+         bvHrcG5QOLkC11cWOtT5x80u80WJNUVGGK9J+SMHsEcwaB7Z6wgi6W73hF8ddAQB+Rmw
+         LrpXIpw7oIspRevE/6Rax6xVNLnq5ougUuca1yjxm+g/gsObD1N5/PPpwJ14KTMArZ4k
+         Q4hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742276656; x=1742881456;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4PjJyZg36ViwqvSldxrB9EBP1m7xv7NYMkTSh+jaEjw=;
+        b=lb2WLcZ+Xn/ciYktSRQzBoDmjIwIAr6/SBIVnHj/YBOkknSLmL88xMvXbJMCHd6YMY
+         5D1GB0ihG5+1WCh9/8uJqOFQy968kk6QowtJzjFZ58Nje8Av4DFsqxc/Vxk6VwAufmG3
+         dwgtdAh1Bby6Om18Wr5YiwqQ3KpWi91zhgEUxRQ6tRrsBZdG933IaNUIdkjSQ+TNSbAZ
+         rNc360EcfzM40RQLc4A6hDMDMcJqVjv5uDNux1czZjBdC+dsh7vRHS99xZ9T/8SiOxiQ
+         GCmo5+s3dvJeV0WgPdUzWZayu2bReNOxLEIafER9yOsPZ9pwliM2JhBo1aoxbLzrAPzc
+         1O4g==
+X-Forwarded-Encrypted: i=1; AJvYcCU5lAO6QOLYoq+cJbshaLiubAtM9N9lA4P/ZHH1VZb04s5vWnFVTzfaV1W7fRkjOZpJTt8VnN715r2F@vger.kernel.org, AJvYcCX8GsfYmu50JX4DSckM34jo0ae79JOhBtZihug1KNS5JMeNqQH0+zYJ/nP9IRradOw2171ViKaDL7ja@vger.kernel.org, AJvYcCXx5ur0GHL69UfzztrgMgc/SpzQbU8eSNa/ZC/VzLlSlCiYN0WktQUdF9goHlXeNGrHOaTv2Ki582BFdQJw@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZ76p80fE+mSHFXIiX2GCQlqPQXWYKOUIyiJ6R1AumR9eqs7RY
+	l7W+23wjSA0dv1xG4fywCXfUN6y9WWEksnXLP+ruxSM1/Da9JE6L
+X-Gm-Gg: ASbGncsAj58Ff2C75NKfXqyFrfpNkC/Loer4k5YP9i2/qsT7847Z76KS7P1lpD/uIWX
+	K5NlX3WXL9wL7QGUm0lMFdG16wIXl8LRxgJzGuGomgXyCJ6PHVFoquXzqTfTxhLP3TyMySblnUU
+	gdXZ7yJTtS5YbB9m+RRUJ0difIwR0GacBOQjKTqzfN5jE8jGqxYllvNYvsvvp+uc/PVZiY6YoKL
+	yLAK417oFApKDfkGzlpw/QXxCohQB8Ihbz5kZ+JMaL+CfocNDiAXxy6ycRLwiZr/C61dXQa+R2Q
+	Mr0vA7jgup2Yc9LjkJ5vJN18uD+hNLPNWg==
+X-Google-Smtp-Source: AGHT+IEG4+hnkrP/C2d3aMrojCXyVkPU61K+TAm8adcwhXu+66VTKGntSE5/7EnwZH0/VFjuGJm+Xg==
+X-Received: by 2002:a17:903:228d:b0:21f:61a9:be7d with SMTP id d9443c01a7336-225e0b195fbmr207827245ad.49.1742276655724;
+        Mon, 17 Mar 2025 22:44:15 -0700 (PDT)
+Received: from [192.168.5.101] ([2602:f919:106::1b8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6bd4df4sm85134265ad.240.2025.03.17.22.44.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Mar 2025 22:44:15 -0700 (PDT)
+Message-ID: <c7dc26a0-7cbc-4909-b2ac-582d108fc5e7@gmail.com>
+Date: Tue, 18 Mar 2025 13:44:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=Ko7u2nWN c=1 sm=1 tr=0 ts=67d8d787 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=Vs1iUdzkB0EA:10 a=_GL4yYo1NFTcpOcRNZkA:9 a=3ZKOabzyN94A:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+User-Agent: Mozilla Thunderbird
+Cc: troymitchell988@gmail.com, linux-riscv@lists.infradead.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, spacemit@lists.linux.dev,
+ Alex Elder <elder@riscstar.com>
+Subject: Re: [PATCH v7 2/2] i2c: spacemit: add support for SpacemiT K1 SoC
+To: Alex Elder <elder@ieee.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>
+References: <20250316-k1-i2c-master-v7-0-f2d5c43e2f40@gmail.com>
+ <20250316-k1-i2c-master-v7-2-f2d5c43e2f40@gmail.com>
+ <401059d0-6b2c-4c40-8c4d-51749dca27f3@ieee.org>
+Content-Language: en-US
+From: Troy Mitchell <troymitchell988@gmail.com>
+In-Reply-To: <401059d0-6b2c-4c40-8c4d-51749dca27f3@ieee.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Add functions to perform block read and write operations. This applies
-for cases where the requested operation is for >8 bytes of data.
 
-When not using the block mode transfer, the driver will attempt a series
-of 8 byte i2c operations until it reaches the desired total. For
-example, for a 40 byte request the driver will complete 5 separate
-transactions. This results in large transactions taking a significant
-amount of time to process.
+On 2025/3/18 05:42, Alex Elder wrote:
+> On 3/16/25 2:43 AM, Troy Mitchell wrote:
+>> This patch introduces basic I2C support for the SpacemiT K1 SoC,
+>> utilizing interrupts for transfers.
+>>
+>> The driver has been tested using i2c-tools on a Bananapi-F3 board,
+>> and basic I2C read/write operations have been confirmed to work.
+>>
+>> Reviewed-by: Alex Elder <elder@riscstar.com>
+>> Link:
+>> https://lore.kernel.org/all/20250128-k1-maintainer-1-v1-1-e5dec4f379eb@gentoo.org [1]
+>> Signed-off-by: Troy Mitchell <troymitchell988@gmail.com>
+> 
+> I know I said it was fine, but I'm going to reiterate two comments in
+> the probe function.
+Hi, Alex.
+Thanks for your review!
+> 
+>> ---
+>>   drivers/i2c/busses/Kconfig  |  17 ++
+>>   drivers/i2c/busses/Makefile |   1 +
+>>   drivers/i2c/busses/i2c-k1.c | 605 ++++++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 623 insertions(+)
+>>
+> 
+> . . .
+> 
+>> diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
+>> new file mode 100644
+>> index
+>> 0000000000000000000000000000000000000000..ae43dcd31e8aa480766b44be91656657c7aaaf4a
+>> --- /dev/null
+>> +++ b/drivers/i2c/busses/i2c-k1.c
+>> @@ -0,0 +1,605 @@
+> 
+> . . .
+> 
+>> +static int spacemit_i2c_probe(struct platform_device *pdev)
+>> +{
+>> +    struct clk *clk;
+>> +    struct device *dev = &pdev->dev;
+>> +    struct device_node *of_node = pdev->dev.of_node;
+>> +    struct spacemit_i2c_dev *i2c;
+>> +    int ret;
+>> +
+>> +    i2c = devm_kzalloc(dev, sizeof(*i2c), GFP_KERNEL);
+>> +    if (!i2c)
+>> +        return -ENOMEM;
+>> +
+>> +    ret = of_property_read_u32(of_node, "clock-frequency", &i2c->clock_freq);
+>> +    if (ret)
+>> +        dev_warn(dev, "failed to read clock-frequency property\n");
+> 
+> If the property doesn't exist, I don't think this warrants a warning,
+> because it's optional.  Perhaps if a different error (something other
+> than -EINVAL) is returned it would warrant a warning.
+> 
+>> +
+>> +    /* For now, this driver doesn't support high-speed. */
+>> +    if (!i2c->clock_freq || i2c->clock_freq < 1 ||
+> 
+> For an unsigned value, !i2c->clock_freq is *the same as*
+> i2c->clock_freq < 1.  Get rid of the latter.
+> 
+> I'll leave it up to the maintainer to decide whether these
+> comments can just be ignored--my Reviewed-by is fine, even
+> if you don't change these.
+> 
+>                     -Alex
+I know it's right what you said.
+But I don't know if it's worth to send v8?
+Maybe I can fix it when I add FIFO function?
+If I'm wrong, let me know.
+> 
+>> +        i2c->clock_freq > SPACEMIT_I2C_MAX_FAST_MODE_FREQ) {
+>> +        dev_warn(dev, "unsupported clock frequency %u; using %u\n",
+>> +             i2c->clock_freq, SPACEMIT_I2C_MAX_FAST_MODE_FREQ);
+>> +        i2c->clock_freq = SPACEMIT_I2C_MAX_FAST_MODE_FREQ;
+>> +    } else if (i2c->clock_freq < SPACEMIT_I2C_MAX_STANDARD_MODE_FREQ) {
+>> +        dev_warn(dev, "unsupported clock frequency %u; using %u\n",
+>> +             i2c->clock_freq,  SPACEMIT_I2C_MAX_STANDARD_MODE_FREQ);
+>> +        i2c->clock_freq = SPACEMIT_I2C_MAX_STANDARD_MODE_FREQ;
+>> +    }
+>> +
+>> +    i2c->dev = &pdev->dev;
+>> +
+>> +    i2c->base = devm_platform_ioremap_resource(pdev, 0);
+>> +    if (IS_ERR(i2c->base))
+>> +        return dev_err_probe(dev, PTR_ERR(i2c->base), "failed to do ioremap");
+>> +
+>> +    i2c->irq = platform_get_irq(pdev, 0);
+>> +    if (i2c->irq < 0)
+>> +        return dev_err_probe(dev, i2c->irq, "failed to get irq resource");
+>> +
+>> +    ret = devm_request_irq(i2c->dev, i2c->irq, spacemit_i2c_irq_handler,
+>> +                   IRQF_NO_SUSPEND | IRQF_ONESHOT, dev_name(i2c->dev), i2c);
+>> +    if (ret)
+>> +        return dev_err_probe(dev, ret, "failed to request irq");
+>> +
+>> +    clk = devm_clk_get_enabled(dev, "func");
+>> +    if (IS_ERR(clk))
+>> +        return dev_err_probe(dev, PTR_ERR(clk), "failed to enable func clock");
+>> +
+>> +    clk = devm_clk_get_enabled(dev, "bus");
+>> +    if (IS_ERR(clk))
+>> +        return dev_err_probe(dev, PTR_ERR(clk), "failed to enable bus clock");
+>> +
+>> +    spacemit_i2c_reset(i2c);
+>> +
+>> +    i2c_set_adapdata(&i2c->adapt, i2c);
+>> +    i2c->adapt.owner = THIS_MODULE;
+>> +    i2c->adapt.algo = &spacemit_i2c_algo;
+>> +    i2c->adapt.dev.parent = i2c->dev;
+>> +    i2c->adapt.nr = pdev->id;
+>> +
+>> +    i2c->adapt.dev.of_node = of_node;
+>> +
+>> +    strscpy(i2c->adapt.name, "spacemit-i2c-adapter", sizeof(i2c->adapt.name));
+>> +
+>> +    init_completion(&i2c->complete);
+>> +
+>> +    platform_set_drvdata(pdev, i2c);
+>> +
+>> +    ret = i2c_add_numbered_adapter(&i2c->adapt);
+>> +    if (ret)
+>> +        return dev_err_probe(&pdev->dev, ret, "failed to add i2c adapter");
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void spacemit_i2c_remove(struct platform_device *pdev)
+>> +{
+>> +    struct spacemit_i2c_dev *i2c = platform_get_drvdata(pdev);
+>> +
+>> +    i2c_del_adapter(&i2c->adapt);
+>> +}
+>> +
+>> +static const struct of_device_id spacemit_i2c_of_match[] = {
+>> +    { .compatible = "spacemit,k1-i2c", },
+>> +    { /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, spacemit_i2c_of_match);
+>> +
+>> +static struct platform_driver spacemit_i2c_driver = {
+>> +    .probe = spacemit_i2c_probe,
+>> +    .remove = spacemit_i2c_remove,
+>> +    .driver = {
+>> +        .name = "i2c-k1",
+>> +        .of_match_table = spacemit_i2c_of_match,
+>> +    },
+>> +};
+>> +module_platform_driver(spacemit_i2c_driver);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("I2C bus driver for SpacemiT K1 SoC");
+>>
+> 
 
-Add block mode such that the driver can request larger transactions, up
-to 1024 bytes per transfer.
-
-Many aspects of the block mode transfer is common with the regular 8
-byte operations. Use generic functions for parts of the message
-construction and sending the message. The key difference for the block
-mode is the usage of separate FIFO buffer to store data.
-
-Write to this buffer in the case of a write (before command send).
-Read from this buffer in the case of a read (after command send).
-
-Data is written into this buffer by placing data into the MSB onwards.
-This means the bottom 8 bits of the data will match the top 8 bits, and
-so on and so forth.
-
-Set specific bits in message for block mode, enable block mode transfers
-from global i2c management registers, construct message, send message,
-read or write from FIFO buffer as required.
-
-The block-mode transactions result in a significant speed increase in
-large i2c requests.
-
-Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
----
- drivers/i2c/busses/i2c-octeon-core.c     | 160 ++++++++++++++++++++++-
- drivers/i2c/busses/i2c-octeon-core.h     |  13 +-
- drivers/i2c/busses/i2c-thunderx-pcidrv.c |   3 +
- 3 files changed, 169 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-octeon-core.c b/drivers/i2c/busses/i2=
-c-octeon-core.c
-index baf6b27f3752..c22a8f3d78d6 100644
---- a/drivers/i2c/busses/i2c-octeon-core.c
-+++ b/drivers/i2c/busses/i2c-octeon-core.c
-@@ -135,6 +135,32 @@ static void octeon_i2c_hlc_disable(struct octeon_i2c=
- *i2c)
- 	octeon_i2c_ctl_write(i2c, TWSI_CTL_ENAB);
- }
-=20
-+static void octeon_i2c_block_enable(struct octeon_i2c *i2c)
-+{
-+	u64 mode;
-+
-+	if (i2c->block_enabled || !OCTEON_REG_BLOCK_CTL(i2c))
-+		return;
-+
-+	i2c->block_enabled =3D true;
-+	mode =3D __raw_readq(i2c->twsi_base + OCTEON_REG_MODE(i2c));
-+	mode |=3D TWSX_MODE_BLOCK_MODE;
-+	octeon_i2c_writeq_flush(mode, i2c->twsi_base + OCTEON_REG_MODE(i2c));
-+}
-+
-+static void octeon_i2c_block_disable(struct octeon_i2c *i2c)
-+{
-+	u64 mode;
-+
-+	if (!i2c->block_enabled || !OCTEON_REG_BLOCK_CTL(i2c))
-+		return;
-+
-+	i2c->block_enabled =3D false;
-+	mode =3D __raw_readq(i2c->twsi_base + OCTEON_REG_MODE(i2c));
-+	mode &=3D ~TWSX_MODE_BLOCK_MODE;
-+	octeon_i2c_writeq_flush(mode, i2c->twsi_base + OCTEON_REG_MODE(i2c));
-+}
-+
- /**
-  * octeon_i2c_hlc_wait - wait for an HLC operation to complete
-  * @i2c: The struct octeon_i2c
-@@ -281,6 +307,7 @@ static int octeon_i2c_start(struct octeon_i2c *i2c)
- 	u8 stat;
-=20
- 	octeon_i2c_hlc_disable(i2c);
-+	octeon_i2c_block_disable(i2c);
-=20
- 	octeon_i2c_ctl_write(i2c, TWSI_CTL_ENAB | TWSI_CTL_STA);
- 	ret =3D octeon_i2c_wait(i2c);
-@@ -604,6 +631,119 @@ static int octeon_i2c_hlc_comp_write(struct octeon_=
-i2c *i2c, struct i2c_msg *msg
- 	return ret;
- }
-=20
-+/**
-+ * octeon_i2c_hlc_block_comp_read - high-level-controller composite bloc=
-k read
-+ * @i2c: The struct octeon_i2c
-+ * @msgs: msg[0] contains address, place read data into msg[1]
-+ *
-+ * i2c core command is constructed and written into the SW_TWSI register=
-.
-+ * The execution of the command will result in requested data being
-+ * placed into a FIFO buffer, ready to be read.
-+ * Used in the case where the i2c xfer is for greater than 8 bytes of re=
-ad data.
-+ *
-+ * Returns: 0 on success, otherwise a negative errno.
-+ */
-+static int octeon_i2c_hlc_block_comp_read(struct octeon_i2c *i2c, struct=
- i2c_msg *msgs)
-+{
-+	int ret;
-+	u16 len;
-+	u64 cmd;
-+
-+	octeon_i2c_hlc_enable(i2c);
-+	octeon_i2c_block_enable(i2c);
-+
-+	/* Write (size - 1) into block control register */
-+	len =3D msgs[1].len - 1;
-+	octeon_i2c_writeq_flush((u64)len, i2c->twsi_base + OCTEON_REG_BLOCK_CTL=
-(i2c));
-+
-+	/* Prepare core command */
-+	cmd =3D SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR | SW_TWSI_OP_7_IA;
-+	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-+
-+	/* Send core command */
-+	ret =3D octeon_i2c_hlc_read_cmd(i2c, msgs[0], cmd);
-+	if (ret)
-+		return ret;
-+
-+	cmd =3D __raw_readq(i2c->twsi_base + OCTEON_REG_SW_TWSI(i2c));
-+	if ((cmd & SW_TWSI_R) =3D=3D 0)
-+		return octeon_i2c_check_status(i2c, false);
-+
-+	/* read data in FIFO */
-+	octeon_i2c_writeq_flush(TWSX_BLOCK_STS_RESET_PTR,
-+				i2c->twsi_base + OCTEON_REG_BLOCK_STS(i2c));
-+	for (u16 i =3D 0; i <=3D len; i +=3D 8) {
-+		/* Byte-swap FIFO data and copy into msg buffer */
-+		__be64 rd =3D cpu_to_be64(__raw_readq(i2c->twsi_base + OCTEON_REG_BLOC=
-K_FIFO(i2c)));
-+
-+		memcpy(&msgs[1].buf[i], &rd, min(8, msgs[1].len - i));
-+	}
-+
-+	octeon_i2c_block_disable(i2c);
-+	return ret;
-+}
-+
-+/**
-+ * octeon_i2c_hlc_block_comp_write - high-level-controller composite blo=
-ck write
-+ * @i2c: The struct octeon_i2c
-+ * @msgs: msg[0] contains address, msg[1] contains data to be written
-+ *
-+ * i2c core command is constructed and write data is written into the FI=
-FO buffer.
-+ * The execution of the command will result in HW write, using the data =
-in FIFO.
-+ * Used in the case where the i2c xfer is for greater than 8 bytes of wr=
-ite data.
-+ *
-+ * Returns: 0 on success, otherwise a negative errno.
-+ */
-+static int octeon_i2c_hlc_block_comp_write(struct octeon_i2c *i2c, struc=
-t i2c_msg *msgs)
-+{
-+	bool set_ext;
-+	int ret;
-+	u16 len;
-+	u64 cmd, ext =3D 0;
-+
-+	octeon_i2c_hlc_enable(i2c);
-+	octeon_i2c_block_enable(i2c);
-+
-+	/* Write (size - 1) into block control register */
-+	len =3D msgs[1].len - 1;
-+	octeon_i2c_writeq_flush((u64)len, i2c->twsi_base + OCTEON_REG_BLOCK_CTL=
-(i2c));
-+
-+	/* Prepare core command */
-+	cmd =3D SW_TWSI_V | SW_TWSI_SOVR | SW_TWSI_OP_7_IA;
-+	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-+
-+	/* Set parameters for extended message (if required) */
-+	set_ext =3D octeon_i2c_hlc_ext(i2c, msgs[0], &cmd, &ext);
-+
-+	/* Write msg into FIFO buffer */
-+	octeon_i2c_writeq_flush(TWSX_BLOCK_STS_RESET_PTR,
-+				i2c->twsi_base + OCTEON_REG_BLOCK_STS(i2c));
-+	for (u16 i =3D 0; i <=3D len; i +=3D 8) {
-+		__be64 buf =3D 0;
-+
-+		/* Copy 8 bytes or remaining bytes from message buffer */
-+		memcpy(&buf, &msgs[1].buf[i], min(8, msgs[1].len - i));
-+
-+		/* Byte-swap message data and write into FIFO */
-+		buf =3D cpu_to_be64(buf);
-+		octeon_i2c_writeq_flush((u64)buf, i2c->twsi_base + OCTEON_REG_BLOCK_FI=
-FO(i2c));
-+	}
-+	if (set_ext)
-+		octeon_i2c_writeq_flush(ext, i2c->twsi_base + OCTEON_REG_SW_TWSI_EXT(i=
-2c));
-+
-+	/* Send command to core (send data in FIFO) */
-+	ret =3D octeon_i2c_hlc_cmd_send(i2c, cmd);
-+	if (ret)
-+		return ret;
-+
-+	cmd =3D __raw_readq(i2c->twsi_base + OCTEON_REG_SW_TWSI(i2c));
-+	if ((cmd & SW_TWSI_R) =3D=3D 0)
-+		return octeon_i2c_check_status(i2c, false);
-+
-+	octeon_i2c_block_disable(i2c);
-+	return ret;
-+}
-+
- /**
-  * octeon_i2c_xfer - The driver's xfer function
-  * @adap: Pointer to the i2c_adapter structure
-@@ -630,13 +770,21 @@ int octeon_i2c_xfer(struct i2c_adapter *adap, struc=
-t i2c_msg *msgs, int num)
- 			if ((msgs[0].flags & I2C_M_RD) =3D=3D 0 &&
- 			    (msgs[1].flags & I2C_M_RECV_LEN) =3D=3D 0 &&
- 			    msgs[0].len > 0 && msgs[0].len <=3D 2 &&
--			    msgs[1].len > 0 && msgs[1].len <=3D 8 &&
-+			    msgs[1].len > 0 &&
- 			    msgs[0].addr =3D=3D msgs[1].addr) {
--				if (msgs[1].flags & I2C_M_RD)
--					ret =3D octeon_i2c_hlc_comp_read(i2c, msgs);
--				else
--					ret =3D octeon_i2c_hlc_comp_write(i2c, msgs);
--				goto out;
-+				if (msgs[1].len <=3D 8) {
-+					if (msgs[1].flags & I2C_M_RD)
-+						ret =3D octeon_i2c_hlc_comp_read(i2c, msgs);
-+					else
-+						ret =3D octeon_i2c_hlc_comp_write(i2c, msgs);
-+					goto out;
-+				} else if (msgs[1].len <=3D 1024 && OCTEON_REG_BLOCK_CTL(i2c)) {
-+					if (msgs[1].flags & I2C_M_RD)
-+						ret =3D octeon_i2c_hlc_block_comp_read(i2c, msgs);
-+					else
-+						ret =3D octeon_i2c_hlc_block_comp_write(i2c, msgs);
-+					goto out;
-+				}
- 			}
- 		}
- 	}
-diff --git a/drivers/i2c/busses/i2c-octeon-core.h b/drivers/i2c/busses/i2=
-c-octeon-core.h
-index b265e21189a1..fecaf7388182 100644
---- a/drivers/i2c/busses/i2c-octeon-core.h
-+++ b/drivers/i2c/busses/i2c-octeon-core.h
-@@ -96,18 +96,28 @@ struct octeon_i2c_reg_offset {
- 	unsigned int twsi_int;
- 	unsigned int sw_twsi_ext;
- 	unsigned int mode;
-+	unsigned int block_ctl;
-+	unsigned int block_sts;
-+	unsigned int block_fifo;
- };
-=20
- #define OCTEON_REG_SW_TWSI(x)		((x)->roff.sw_twsi)
- #define OCTEON_REG_TWSI_INT(x)		((x)->roff.twsi_int)
- #define OCTEON_REG_SW_TWSI_EXT(x)	((x)->roff.sw_twsi_ext)
- #define OCTEON_REG_MODE(x)		((x)->roff.mode)
-+#define OCTEON_REG_BLOCK_CTL(x)	(x->roff.block_ctl)
-+#define OCTEON_REG_BLOCK_STS(x)	(x->roff.block_sts)
-+#define OCTEON_REG_BLOCK_FIFO(x)	(x->roff.block_fifo)
-=20
--/* Set REFCLK_SRC and HS_MODE in TWSX_MODE register */
-+/* TWSX_MODE register */
- #define TWSX_MODE_REFCLK_SRC	BIT(4)
-+#define TWSX_MODE_BLOCK_MODE	BIT(2)
- #define TWSX_MODE_HS_MODE	BIT(0)
- #define TWSX_MODE_HS_MASK	(TWSX_MODE_REFCLK_SRC | TWSX_MODE_HS_MODE)
-=20
-+/* TWSX_BLOCK_STS register */
-+#define TWSX_BLOCK_STS_RESET_PTR	BIT(0)
-+
- /* Set BUS_MON_RST to reset bus monitor */
- #define BUS_MON_RST_MASK	BIT(3)
-=20
-@@ -123,6 +133,7 @@ struct octeon_i2c {
- 	void __iomem *twsi_base;
- 	struct device *dev;
- 	bool hlc_enabled;
-+	bool block_enabled;
- 	bool broken_irq_mode;
- 	bool broken_irq_check;
- 	void (*int_enable)(struct octeon_i2c *);
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busse=
-s/i2c-thunderx-pcidrv.c
-index 143d012fa43e..0dc08cd97e8a 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -168,6 +168,9 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev=
-,
- 	i2c->roff.twsi_int =3D 0x1010;
- 	i2c->roff.sw_twsi_ext =3D 0x1018;
- 	i2c->roff.mode =3D 0x1038;
-+	i2c->roff.block_ctl =3D 0x1048;
-+	i2c->roff.block_sts =3D 0x1050;
-+	i2c->roff.block_fifo =3D 0x1058;
-=20
- 	i2c->dev =3D dev;
- 	pci_set_drvdata(pdev, i2c);
---=20
-2.47.1
-
+-- 
+Troy Mitchell
 
