@@ -1,91 +1,97 @@
-Return-Path: <linux-i2c+bounces-9907-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9908-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52C69A68869
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 10:43:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28E7EA688A6
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 10:50:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D056885E2F
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 09:40:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C89747ABF5F
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 09:49:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23AFD25D90C;
-	Wed, 19 Mar 2025 09:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EEFC2566D1;
+	Wed, 19 Mar 2025 09:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbFbMl1y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qBWLZRsn"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A8725D911;
-	Wed, 19 Mar 2025 09:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484EE253F33;
+	Wed, 19 Mar 2025 09:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742376783; cv=none; b=ilS4z3wE+wUjIZLfo8A5uELTCCPpF4RF/di5IaNhQ84vWieqL/fPcsM0fl2/fIZlQ5Ur7g/sNINENb+DSpnbW6kJFJ+kTSdoVe3eybi2oTOU6nEWpWmmFE8dP6dDhDRVs+HMO/Stoy/XHDqUDb+68HPeC7iDTx1TPFt7BYsmGZ0=
+	t=1742377664; cv=none; b=SvfOxlfcgCoNRqJYLNfL9Fd1NxpeXZrE7HOi2lt//4h9inrJRCuW+P6y7jTMCLIkAiMWnW2Kh9fIUnIPEKgmmjKehBpgya994LfmRepOEe4q15rCGljZQn+MM5zoD07ROj+3lPGQXbJ7OdCwHGUGRbd7UrlG25jODo7EXrS4gTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742376783; c=relaxed/simple;
-	bh=8BBppKUFGvXCJbYFUIL2Djj0WLKw8yCOrQ1Pbo0ctj4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a8HgUnBgThZx50Z2h+qEEaPvJfjivfpmBbB0yobxZ7Lx4WdxlhJYIU1DX/9reYDquh+qFUi1QpkmbZq2q7jh3C4MNo3XgeEODMasYGfFqyIMzoSzvohS6wa+BQMQgf1U696q7Y9KkMKgKRAjTX0oWyW3DVeiJLZDaGVj/PAE2ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbFbMl1y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02513C4CEEF;
-	Wed, 19 Mar 2025 09:33:01 +0000 (UTC)
+	s=arc-20240116; t=1742377664; c=relaxed/simple;
+	bh=A+7i8lDvuIwBOp1wOF5vw2fs19ibuLwowfXmp1Iy/Ag=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=js+ewGzj4eO2oOXXqCvZs5wAXTsZxW3W0A/MUdVViFfjk4xFTg7dIIAKe+71aubWrDSf2qeWzzZk3zD9PGyxTuK5S9S7ymIZSi7PoDMSoPl9zKPoOt1d6v7ikQxXds/CvFcYS215wEf6R+ReRCT3tKgA+Mq0YRPn7XmFBd+yFEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qBWLZRsn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F27BC4CEE9;
+	Wed, 19 Mar 2025 09:47:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742376783;
-	bh=8BBppKUFGvXCJbYFUIL2Djj0WLKw8yCOrQ1Pbo0ctj4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VbFbMl1yuID3ix/716z//kaPkLmSd2/9LF4Gerrve3SgcFxP1irS4i7Ipt5XTuHHF
-	 RUPX2oj4MYfWYWhm1JeD2y+fPH0864QgdBL9hDXFGmyhcT/7up9S+FfQPDg25TiMMT
-	 s7fgq/WiBg2oo1klZwhTMVbOhnp8gw2ygu1F+zkffnpKBvqmy8CU1X4zvclcAuybO1
-	 S0nN8ukJNfxsoAb5LEsbcVhVA0g61NUWDcYSRHTJ6zxj0xy7wBYJnQWCCqNqInJc1h
-	 09KK1aVZSZOE9P3QfLYFAUOo5ylKeAQXjtMuyw3ukZu+OyDscOoXkvEsMuEzBJqoHw
-	 ZyYwPr33IlEsA==
-From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To: tglx@linutronix.de
-Cc: maz@kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-	Peter Rosin <peda@axentia.se>,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH v2 45/57] irqdomain: i2c: Switch to irq_find_mapping()
-Date: Wed, 19 Mar 2025 10:29:38 +0100
-Message-ID: <20250319092951.37667-46-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250319092951.37667-1-jirislaby@kernel.org>
-References: <20250319092951.37667-1-jirislaby@kernel.org>
+	s=k20201202; t=1742377663;
+	bh=A+7i8lDvuIwBOp1wOF5vw2fs19ibuLwowfXmp1Iy/Ag=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=qBWLZRsngwbivci6IWv1UytjX6ohj8fM7hZYo+ovrhHY13wHAt+mjAQtziqMlqAxW
+	 JnK+3uCuXjSWwfNgAT7h29OMvOEJlQ4a/M5wRiXuybZJsmu07n8lgXBgNPiKCwJbHi
+	 qTDC2B7yspJJ94mI8kS/414y9VD3OYu+1eFp3RerLiLOxIp7iv0/ciyNhZdT8Jn62+
+	 8+WtTfOZ++kpTyKKwCOm6YNV6dgO+8BOOH03Sqa6RSHhJ/puUVD9m/giY24tzdpx6u
+	 2TJPMPUBq8ag6jp08LWR4kDg4vWmzA0KOIO3HRmJtFNCkV9AbTvtMEEwYKIk8zYepp
+	 Lb4+M4SRGWM6w==
+Date: Wed, 19 Mar 2025 10:47:40 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
+	Markus Elfring <Markus.Elfring@web.de>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Robert Richter <rric@kernel.org>
+Subject: Re: [PATCH v13 2/3] i2c: octeon: remove 10-bit addressing support
+Message-ID: <beqo7xnbo3obxxkop6rq3awzsdcjb7sioeapqj3naekqes2bk4@3ojtbocdejca>
+References: <20250318021632.2710792-1-aryan.srivastava@alliedtelesis.co.nz>
+ <20250318021632.2710792-3-aryan.srivastava@alliedtelesis.co.nz>
+ <j2w45gphxir2hmzr6nhzyrlgj55lhsbkzczpf5bq72pzk26kwp@zncvv3hpfcoc>
+ <Z9pZBDbI2MD7ybEL@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z9pZBDbI2MD7ybEL@shikoro>
 
-irq_linear_revmap() is deprecated, so remove all its uses and supersede
-them by an identical call to irq_find_mapping().
+On Wed, Mar 19, 2025 at 06:41:24AM +0100, Wolfram Sang wrote:
+> > The datasheet I have isn't very clear on this part. Also, I'd
+> > like to know if there's any product line that could be negatively
+> > impacted by this patch.
+> 
+> In my whole I2C life, I have neither seen a target supporting 10-bit
+> addressing nor a a system that uses 10-bit addressing.
 
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-Cc: Peter Rosin <peda@axentia.se>
-Cc: linux-i2c@vger.kernel.org
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+mmhhh... I have to work with my memory and dig into my
+documentations, but I think I've seen some STM sensors supporting
+also 10 bit addresses.
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index f6430db6c115..5bb26af0f532 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -414,7 +414,7 @@ static irqreturn_t pca954x_irq_handler(int irq, void *dev_id)
- 
- 	pending = (ret >> PCA954X_IRQ_OFFSET) & (BIT(data->chip->nchans) - 1);
- 	for_each_set_bit(i, &pending, data->chip->nchans)
--		handle_nested_irq(irq_linear_revmap(data->irq, i));
-+		handle_nested_irq(irq_find_mapping(data->irq, i));
- 
- 	return IRQ_RETVAL(pending);
- }
--- 
-2.49.0
+> I am even tempted
+> to remove support from the kernel omce in a while. If the support is
+> broken in this driver, it can be removed.
 
+The documentation I have is in line with the patch (I had to read
+it twice, though), but I didn't want to exclude corner cases.
+
+> A working version (if
+> possible) can be added again by someone who needs it. I am taking bets
+> it will be "never". Besides, the driver never set I2C_FUNC_10BIT_ADDR,
+> so it really shouldn't have been used anywhere.
+> 
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+OK, I had a little hesitation here, but if you are sure about it
+(and Andy as well) I'll take it in.
+
+Thanks, Wolfram!
+Andi
 
