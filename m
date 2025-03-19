@@ -1,123 +1,124 @@
-Return-Path: <linux-i2c+bounces-9914-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9915-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC090A68BCD
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 12:36:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3E99A68D1C
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 13:43:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C3CE1888BD2
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 11:33:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45B21422C13
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 12:43:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A69F253351;
-	Wed, 19 Mar 2025 11:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 531582561C2;
+	Wed, 19 Mar 2025 12:42:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="QjpuVdmL"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="xgTuQ17q"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9EEA29;
-	Wed, 19 Mar 2025 11:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC4E25524C
+	for <linux-i2c@vger.kernel.org>; Wed, 19 Mar 2025 12:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742383987; cv=none; b=du7LrO8QmkvUAtWNyzXB/yVCSmuXLaGK1cYkZpw5u1g2wZicR1ZN+MeXsREZWeA2O/z/QeJOJPaZt0sHahDvPhAaK/wY0eTT22FxLmLUN10mUFWlrvPZE6UD5EIN5FfkS/y4LgR8jACzY04FC4mTomTeLrw5iCYtLVUO7s+rmPE=
+	t=1742388174; cv=none; b=Cc9wOcRpIz6LQAfc2kRDJinnJjYh4+8cXn2Aotif922sJkWdh/erJATMK0QGwck6ORiegoJzDalisEUirf4ofpvudNNVa+ztkoZ3Cm5LMoRtqQIxnn/BDN+3fvgAymVUW3VJpA0uPz7q/4EayEvyWbjCXHowx4t//GO/ccSWNlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742383987; c=relaxed/simple;
-	bh=cXiXr/JsZvK+TvPi0jxSLIxmXwsNc8aIsF8cyvtS+Zc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VXkKvn9OR3yp5yCOtFnktmP65H5CqmbQ22Y4EDgm1sxSG0uM2zMX4MH+yTdzMlXe/g4DtpHrCtUyVw7p+LZ4nRDSnnjGTtoU46zOUK+abrj3HcKfwyNTHvv3xcrbM1n3JTfbqeEfpp4AyHfi5Wshr9usCqCNSjoVdByo6uuSAe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=QjpuVdmL; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ALHuqvypAVXPwmYHPUNM9vrTavBCqYIlVAQfauZIino=; b=QjpuVdmLmwGDqb3PsuBJiXXCsf
-	Gdr0vXyKAhh3ZOVGKzxpuDEL0zoiqxEW5nCW9ylByoSMnJzl1VQgRtWV5rWhQ3DwcuB4Pxk6Zk48w
-	TW38A2F48+4eTn21KUYNCZDtPtA2gIHnoV67v6IYakxri29nOZXVJVzsnwEIKoZOmd+8Ilx56wlxw
-	vtJHafKUzNc9FFmL2W7OwQ5S4q2tqg5l7T4ORZwBYLCZf86y1rmEPEqTSDh+UH4MwzcO30TQaNV80
-	Hu5UM5hgu01lLf7u5ZmsKBtDeP7BxMYr/1sHmTd54OAgfx66f/h0epElMmE4eqp5uiJKg4ASJ7ZYE
-	JM89WWDQ==;
-Date: Wed, 19 Mar 2025 12:32:56 +0100
-From: Andreas Kemnade <andreas@kemnade.info>
-To: Rob Herring <robh@kernel.org>
-Cc: "Ing. Josua Mayer" <josua.mayer@jm0.eu>, Jayesh Choudhary
- <j-choudhary@ti.com>, vigneshr@ti.com, andi.shyti@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, linux-kernel@vger.kernel.org,
- aaro.koskinen@iki.fi, khilman@baylibre.com, rogerq@kernel.org,
- tony@atomide.com, jmkrzyszt@gmail.com, linux-omap@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: omap: Add mux-states property
-Message-ID: <20250319123256.3482063f@akair>
-In-Reply-To: <CAL_JsqJnhXwbLb3Hos2YdgnzQGOQ0AFp=HT37JsEdfp8qjuVNA@mail.gmail.com>
-References: <20250318103622.29979-1-j-choudhary@ti.com>
-	<20250318103622.29979-2-j-choudhary@ti.com>
-	<59651605-45fa-49d7-bb15-dae83d8ad471@jm0.eu>
-	<CAL_JsqJnhXwbLb3Hos2YdgnzQGOQ0AFp=HT37JsEdfp8qjuVNA@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1742388174; c=relaxed/simple;
+	bh=fZ4N8rOOZtziflSX/PfQXG9Biqs1R/I42srqwO5HUfc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i+A6JnLGtAbkl50wBOVp5R5/Itul3Qvn52V/Op21YrS1740aX1pT0TxtF+TOzathYX783TjKyifLP2WJEtyFVIBqoJtiWz+GX+km4N+LREgFis92I2lO9+Y3dDcP1YfnL67h3OxfRsXuJogbudTuxvMgx62cZTM9EurdSPwe72Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=xgTuQ17q; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-85da5a3667bso233393339f.1
+        for <linux-i2c@vger.kernel.org>; Wed, 19 Mar 2025 05:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1742388171; x=1742992971; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kyeWtEw8zSEmdt2B2rWBlorZy53Vw89+CNeJItSMOLA=;
+        b=xgTuQ17q1KtG+lF1gOtB3V6eu2L3aisyk5JioY2J9ZOSXjsfK+zA9M1q9/aRht1CSH
+         SNPE7WhB5aZdLzfuRJYw/od6WXmSA41L7xSwWOWVbcBURI4ains2mzZ8UaJssGGKkGLo
+         5HN9rFGi7kVqSg2sdaJ99RmMCOn2aLrrNlgufq+0GnJfRURvfr2WgFsPYxTnn9FQyiqn
+         TKgON9AB1/rxtKznsaKOJbNbTypHRrQfMaFSCMZU1lFRBt0aXbax2TxaAmhIREuXj5jE
+         lZD92Xl0aNZJISmtortRs5nhypmHlWyulTmlltOgy2QHAWeL8MC0LTrs8IWL5nW6+z19
+         4qBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742388171; x=1742992971;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kyeWtEw8zSEmdt2B2rWBlorZy53Vw89+CNeJItSMOLA=;
+        b=PFpU7K3T9kjGRqihQpORqXlbJIXSKgQmQVc4ytXmVSWgLtlBOH7aZ86NRaoI1asl4m
+         kt9dqL7btFW9bL/Q0fxPt7ZPdBSRwGPkXw/AoAYguJRztOTlxQtZr3kE7QSmkrBvQd3T
+         +k3WCRpNHAXzGH439VO2o1FDH8AD8bdxs8/xCiX3VjXzxzFYz/gOLQ+p998UnZMI4SUD
+         0QsXWRRKUOhFBPDb0eIuxhymVdSh44/glzND5AjQ4z9DD9O82a+ImXRr4B9MIaq814uW
+         Kwt2sR02AolwBWESGcfJry4rFEyNBomN1ckKZ1tvGfXR3mjvNwCakLsmAXw9mms2F5Nc
+         PlUg==
+X-Forwarded-Encrypted: i=1; AJvYcCVjaVHgEnV2qkIIsmRukDYak5JwOUvka5cxhE12Sb0yNNlBs+jplRC5m2y0CRqpWRwQ/sirCgSSLIM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4OjbxYm29cO5yfCiqWRBv4e8oFcAgtZIUxk9FMQcPOOE7o0FQ
+	/hcapmUZsTNg4Tw2MveEqjJfA8gP+lZ0vppSyGoIjE8a1tc4yqibI9mzuaf++cs=
+X-Gm-Gg: ASbGncvMqC47KGFuut9SsJ5qNCh4lP9Orri4kJhmA3gRUbP1R5+GvK1I6+5aOPh90Sa
+	t7cnbJkWKdd7jzeZAXwC3mpLAnxjyZDaDrycE9rqcsVm96JjGNI1dhFmnTyC1sjxgM+UyKe0Zbv
+	WsZ8/9JPwjX8Z43/cxe+EnNxJe447Jj75V8LKqerRIRYZzZRLRtZvxkd/H4bGlsUUREBt9NZeyN
+	m7k8t4K4DtU0gpL8ZtuUBt66jEEb90PQKhQorbRf6iDh1n5t8Vw196TY+plliV2UwJnGGU0qxa+
+	ObKaCNp3h0PxWvJ3WYI4BcvJX7tKXU6Io4/2aYYYw/POMRdP7KUUlcxMl6FprJOFktE462CzLeZ
+	caee6tprGkdq7o+AL9A==
+X-Google-Smtp-Source: AGHT+IH7sjljQM+QmrKBokA3matC2RiNwzx/l2tsu1F5XWLbsNSdMzt3SBx/tCoCiYaMZ1SyjlQ1fg==
+X-Received: by 2002:a05:6602:388a:b0:855:5e3a:e56b with SMTP id ca18e2360f4ac-85e13870076mr284771939f.12.1742388170792;
+        Wed, 19 Mar 2025 05:42:50 -0700 (PDT)
+Received: from [10.211.55.5] (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f2637fb184sm3185854173.92.2025.03.19.05.42.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Mar 2025 05:42:50 -0700 (PDT)
+Message-ID: <967f135b-9592-4f85-86f9-5c3e31123c3f@riscstar.com>
+Date: Wed, 19 Mar 2025 07:42:49 -0500
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 2/2] i2c: spacemit: add support for SpacemiT K1 SoC
+To: Troy Mitchell <troymitchell988@gmail.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>
+Cc: linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ spacemit@lists.linux.dev
+References: <20250319-k1-i2c-master-v8-0-013e2df2b78d@gmail.com>
+ <20250319-k1-i2c-master-v8-2-013e2df2b78d@gmail.com>
+Content-Language: en-US
+From: Alex Elder <elder@riscstar.com>
+In-Reply-To: <20250319-k1-i2c-master-v8-2-013e2df2b78d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Am Tue, 18 Mar 2025 17:18:29 -0500
-schrieb Rob Herring <robh@kernel.org>:
+On 3/19/25 4:29 AM, Troy Mitchell wrote:
+> This patch introduces basic I2C support for the SpacemiT K1 SoC,
+> utilizing interrupts for transfers.
+> 
+> The driver has been tested using i2c-tools on a Bananapi-F3 board,
+> and basic I2C read/write operations have been confirmed to work.
 
-> On Tue, Mar 18, 2025 at 2:55=E2=80=AFPM Ing. Josua Mayer <josua.mayer@jm0=
-.eu> wrote:
-> >
-> > Hi Jayesh,
-> >
-> > Am 18.03.25 um 11:36 schrieb Jayesh Choudhary: =20
-> > > Add mux controller support for when the I2C lines are muxed after
-> > > signals come out of SoC and before they go to any client.
-> > >
-> > > Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> > > ---
-> > >   Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml | 6 ++++++
-> > >   1 file changed, 6 insertions(+) =20
-> >
-> > Is there any chance for this to be generic across any i2c controller
-> > regardless of SoC in use?
-> > Is this perhaps also generic to any device in dts,
-> > similar to assigned-clocks? =20
->=20
-> $ git grep assigned-clocks arch/ | wc -l
-> 2097
->=20
-> >
-> > E.g. in k3-am642-hummingboard-t-{pcie,usb3}.dts we have a mux on the
-> > carrier board switching a serdes lane between two different connectors.
-> > It would make sense for pcie and usb phy nodes to delay probe in a
-> > similar fashion.
-> > The same may hold true for other buses muxed at boot-time or based on
-> > assembly options or extension cards. =20
->=20
-> $ git grep mux-states arch/
-> arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts:
-> mux-states =3D <&mux0 1>;
-> arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts:
-> mux-states =3D <&mux0 1>;
-> arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts:
-> mux-states =3D <&mux1 1>;
-> arch/arm64/boot/dts/ti/k3-j784s4-j742s2-evm-common.dtsi:
->  mux-states =3D <&mux1 1>;
->=20
-> I'm not convinced it is common enough to allow everywhere.
->=20
-strange logic. It is not in there, because it is not allowed/supported
-and some quirk maybe is added elsewhere, e.g. in bootloader or private
-kernel branch.
-So you cannot say whether such a case is common engough by looking what
-is *now* in the dtb.
+So you removed support for the clock-frequency property, which
+addresses both of the things I commented on in the last version.
+This is great; I hope Andi is satisfied what anything else you
+did and will merge this.
 
-Regards,
-Andreas
+Nice work Troy.
+
+					-Alex
+
+> 
+> Reviewed-by: Alex Elder <elder@riscstar.com>
+> Link: https://lore.kernel.org/all/20250128-k1-maintainer-1-v1-1-e5dec4f379eb@gentoo.org [1]
+> Signed-off-by: Troy Mitchell <troymitchell988@gmail.com>
+> ---
+
+. . .
 
