@@ -1,153 +1,140 @@
-Return-Path: <linux-i2c+bounces-9900-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9901-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B133DA6861B
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 08:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EDB8AA686AA
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 09:24:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5DD81B61F13
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 07:45:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41D9019C2BA2
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Mar 2025 08:24:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00FA02500DE;
-	Wed, 19 Mar 2025 07:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B3C7250C02;
+	Wed, 19 Mar 2025 08:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hu0ro54M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cV/MfMU0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE0E20897A;
-	Wed, 19 Mar 2025 07:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CA52500BC
+	for <linux-i2c@vger.kernel.org>; Wed, 19 Mar 2025 08:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742370283; cv=none; b=tzZ1wXr3iwJm/ue4FL1zWaV3aUkIo6vEVpDQ8I2MXxAORIAWAyhXIKz2qR7ny56BzkptfTZfx22mV2H3gcuoOB1gsYDlz9wcqCCeauJO6BdDFAKzkUwpOUjgGAoY1lc1mjYcNeN/2XiSb638eaNNBLGZID9PkSTtlkNvO7i+U78=
+	t=1742372659; cv=none; b=iJ5eyhM9O4VBJ/uZ1smRld5y81ASho9oXt0qW8XWJBkVL4yjTINLjX2lTP3hZe15Ln09Ph5GIWov4zZYMu8+JKb0MrzsNsLO1BY8lJTVbYQhNWbcVczfHNKQdhaJ9Aar9US3WNC28AKZqbZPwEQaN/f+Vp3IOBUcf8BXzB3YkBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742370283; c=relaxed/simple;
-	bh=I9pxaUwFBnmqpKrVCrtrgKssCeJt8+261lf2JEMgj0E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K2n+sTI/yI0+6xMT5dNFWE+hfFHZHie3h9100h3+072ftBzZBu30JITS6tQDxALKupDivJrOsbxZLMPw330m02cmrbjVdCyeOLdWbHdsntxgpZY8W/cgh2Zu7l2KGxLVNNQ4TqOgOzaulBTnR3FHGTGFuNEY7DLaYgTf9UI/gAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hu0ro54M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29CF0C4CEE9;
-	Wed, 19 Mar 2025 07:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742370281;
-	bh=I9pxaUwFBnmqpKrVCrtrgKssCeJt8+261lf2JEMgj0E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hu0ro54M0uEiznylhsFc0mRAqUFPAoB8iT7mPI7his9qJxzDd0AQY57/gHyIs+ae/
-	 ypdqOMU+fcgj9otvpr5GBQBUI5vFY2kGI+9gerJfpcPXjgo/b/ZQo7FpNSXqmsC+hi
-	 MVB3GVLe5khEugmPEtU+9raheBvAgL8nzzKTC/9n0S9PMouRPbIFYQB5Oj3v7j84if
-	 b42afG+E+7rui4EtzSbHzOGcQwIn8oTVAxTi9y0UwB7XUK4E9Lzp1WiJjjgCWXZ528
-	 gB75lfgd9DqnsYdfjDOq83j0lop1rnhURnB7OWcRZawa1YmoSicldVXMIEI28ZOQSJ
-	 TKAuoe1uOFsLA==
-Message-ID: <677cb075-24ae-45d8-bfb4-9b23fbacc5df@kernel.org>
-Date: Wed, 19 Mar 2025 08:44:32 +0100
+	s=arc-20240116; t=1742372659; c=relaxed/simple;
+	bh=qWKKl5rsi/ROJDByiIt+GITGLbj9UcZd/cXXA4shWrE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZmYHI+OhYJzYVNf3IaPEX940OJel5Uio2ond9nT5oMjxsmfmqEOx5VLPiBmxFdoAMnw/g8ziX6J4ZglDbl0C8kENbHvqc0n0ScXBiQZct9fqpXNWGHbzYQs7hZAbr8IqF3QYGPuSMxXEgpNhidbMIVtQ5EHYbC61eKXVga542AU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cV/MfMU0; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ac34257295dso370546966b.2
+        for <linux-i2c@vger.kernel.org>; Wed, 19 Mar 2025 01:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742372656; x=1742977456; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qWKKl5rsi/ROJDByiIt+GITGLbj9UcZd/cXXA4shWrE=;
+        b=cV/MfMU0ufETBhFi++eqc+mEla3n2+hpd3dSibUYFGfLxU6nP++QlOPQ7ppyo1u59U
+         q+ECHSk8954CBJ+w7fPVoVnaqWx1mrOOj1v/wqt4EbJrlhi9Tbl5raSTcsL+FStOSAwd
+         z+GmpYiE+v0tERpsoAItJ/4F7cftVYyxhSM3DGCeIxgbTY8lQEmCFoPpafRK18NLhUdq
+         3X/D9Pbsx+yLZ95kNhz7qx0tEW0pOX782J6Om7E6zD8/5FD5OZvvMGtvRfE4Em8zSfSB
+         71aMODYERw37VcfOHbK0bUay2DuDQKI7hBqzhu2PWvmCFYSMiFLsOLbIFSeckPfYrwlY
+         TY8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742372656; x=1742977456;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qWKKl5rsi/ROJDByiIt+GITGLbj9UcZd/cXXA4shWrE=;
+        b=cPdh41PH2ss91NOg0JrvypJLLUnz6FxjczWpFaHRjHt/bS4+kuEK3ObXoQoEfVLhAp
+         mf4DNCPjOIOq1qBncDc669NC1LgESUu9pJrcZuhTpsARBdPbGD3VyfXwVptYbXlRxI85
+         IeroE6iMwf7B9TTNm3OkYgsSWOd8Jpmv/28JVf9mSiQEpLxH2XnijL0onuQhbrhmOUqt
+         vyg+e04GUilsgZwINF6BhtMdXOAlhz+Ia9fpFmdNF2w5rivqhwX1DjFLFLXESxQOpJfB
+         t+Rf84lIIGbbjyg+nYHTH34uRei9Or8b0VxfyIdpv536KI8xbasZk9XIXZ2ysQnEnrY6
+         Y4vg==
+X-Forwarded-Encrypted: i=1; AJvYcCUV8m6B6EB5Z/HDe2Wm2jAGpKBoVrrO15+ZY1c8pPRQxvR+UGA/I+7xx6LtEkBbObT83Ot6kOuRphA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYEECylvUlYr5F1J5fG9Oxj4gMsPegWyAjTOIEXk8DO6wckgwT
+	N/4J4nogjr7jHLwe8AtAXRl9Ith1k7AJ6Tcaz0GQWVW54l1UjnV84kA+YrZNuqo2Tw36iJFQ8kJ
+	WMhTKHw4ikEM7HNrdMcaOECjRIPI=
+X-Gm-Gg: ASbGncsSNj2X0wt8UBHuIHwXey2m85mrhnwis9gYLlpq/XLsJZeIEq4StjgaHQhwBUQ
+	W0rxOI7X3sjdqOjUNxcSIspIY49QouJ8A3F56CcKy4byi8nYRw0/fEUB/ApMkzhawSDJbFH5nae
+	P1y8LRuCZyvT7ClaiNNCi2cDXxnw==
+X-Google-Smtp-Source: AGHT+IGUukT9ExgChO+CTtfvbII0VrqOWh2xSIjh4pEOR/RviyO7iBf2JPq33iWLxaW8Lxv9g6+6wzguDlXrXoUwOt0=
+X-Received: by 2002:a17:907:6e8d:b0:ac2:ede5:d0d3 with SMTP id
+ a640c23a62f3a-ac3b7decfafmr178628566b.27.1742372656253; Wed, 19 Mar 2025
+ 01:24:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 1/3] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-To: Ryan Chen <ryan_chen@aspeedtech.com>
-Cc: "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
- "joel@jms.id.au" <joel@jms.id.au>,
- "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Mo Elbadry <elbadrym@google.com>
-References: <20250224055936.1804279-1-ryan_chen@aspeedtech.com>
- <20250224055936.1804279-2-ryan_chen@aspeedtech.com>
- <20250224-arrogant-adventurous-mackerel-0dc18a@krzk-bin>
- <OS8PR06MB75415E95342F26F576B5CF8AF2C22@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <50327725-f3b8-4a8b-94a2-85afccd2868a@kernel.org>
- <OS8PR06MB7541B0DBC64B3EF6838DFE74F2CD2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <d1b184c5-84c1-4d76-a1d0-a9f37f1e363c@kernel.org>
- <OS8PR06MB7541D1D2E16C5E77037F3BB0F2CB2@OS8PR06MB7541.apcprd06.prod.outlook.com>
- <069b9fe4-c54a-4efd-923e-1558c59fe3f4@kernel.org>
- <OS8PR06MB7541C69AB8E6425313DA8606F2DF2@OS8PR06MB7541.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <OS8PR06MB7541C69AB8E6425313DA8606F2DF2@OS8PR06MB7541.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <28ad9377-6d8a-4259-8cd4-7edaa00e26d7@gmail.com>
+ <67535b17-c3fb-4507-b083-9c1884b4dd7d@gmail.com> <Z9nxRwoeLEriKP84@surfacebook.localdomain>
+ <6brcnuejsoor5ejbudtd4wxdrgjzntjat6hqwardxgxierujkg@qvswqhafv36y> <22641e59-8e70-46f4-b01f-5cc6c0b9d23e@gmail.com>
+In-Reply-To: <22641e59-8e70-46f4-b01f-5cc6c0b9d23e@gmail.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Wed, 19 Mar 2025 10:23:39 +0200
+X-Gm-Features: AQ5f1JorrZSdZlrou-P5BvRUTUrbfIBo0BXdPDGMxVBXm2fHFG0PSYcoV9ecnac
+Message-ID: <CAHp75Vdem-DBERs18=VqO+MUh=5Nyg9XLp8Jg-NuQ1Zk7cjFeg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] i2c: i801: Switch to iomapped register access
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 17/03/2025 10:21, Ryan Chen wrote:
->> Neither this.
->>
->> So it seems you describe already existing and documented I2C, but for some
->> reason you want second compatible. The problem is that you do not provide
->> reason from the point of view of bindings.
->>
->> To summarize: what your users want - don't care. Start properly describing
->> hardware and your SoC.
-> 
-> OK, for ast2600 i2c controller have two register mode setting.
-> One, I call it is old register setting, that is right now i2c-aspeed.c .compatible = "aspeed,ast2600-i2c-bus",
-> And there have a global register that can set i2c controller as new mode register set. 
-> That I am going to drive. That I post is all register in new an old register list.
-> 
-> For example, 
-> Global register [2] = 0 => i2c present as old register set
-> Global register [2] = 1 => i2c present as new register set
-It's the same device though, so the same compatible.
+On Wed, Mar 19, 2025 at 9:17=E2=80=AFAM Heiner Kallweit <hkallweit1@gmail.c=
+om> wrote:
+> On 19.03.2025 00:22, Andi Shyti wrote:
+> > On Wed, Mar 19, 2025 at 12:18:47AM +0200, Andy Shevchenko wrote:
+> >> Wed, Mar 12, 2025 at 08:07:23PM +0100, Heiner Kallweit kirjoitti:
 
-Best regards,
-Krzysztof
+
+> >>> Switch to iomapped register access as a prerequisite for adding
+> >>> support for MMIO register access.
+> >>
+> >> I believe that I at least discussed the similar change a few years ago=
+ or even
+> >> proposed a one. The problem here is that *_p() variants of IO port acc=
+essors
+> >> are not the same as non-_p ones. And commit message is kept silent abo=
+ut
+> >> possible consequences of this change.
+> >>
+> >> So, at bare minumum it would be good to test for some period of time b=
+efore
+> >> going for it.
+> >
+> > How would you do it?
+>
+> Documentation/driver-api/device-io.rst states that the artificially delay=
+ed
+> _p versions were needed on ISA devices. And in general I didn't find any =
+hint
+> that the non-delayed versions ever caused issues on PCI devices.
+
+At least put this in the commit message. It will show that you were aware o=
+f _p.
+
+> On my system using the non-delayed version works fine, but I can't say 10=
+0%
+> that it's the same for the very first (> 25 yrs ago) chipsets supported b=
+y i801.
+>
+> Likely users with old systems don't run -next kernels, therefore leaving
+> this change a full cycle in -next may not really help. We can argue that
+> we have the -rc period for testing (and reverting if needed).
+
+My main concern is to make no regressions for most currently used
+cases, that's why one cycle in Linux Next is better than none.
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
