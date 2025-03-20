@@ -1,82 +1,101 @@
-Return-Path: <linux-i2c+bounces-9944-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-9946-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0C00A6A4AE
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 12:17:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A497BA6A53B
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 12:47:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FE553B5A12
-	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 11:16:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 807194625D8
+	for <lists+linux-i2c@lfdr.de>; Thu, 20 Mar 2025 11:45:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69CF221859F;
-	Thu, 20 Mar 2025 11:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bISjCvti"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E603224AE3;
+	Thu, 20 Mar 2025 11:44:15 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 5.mo575.mail-out.ovh.net (5.mo575.mail-out.ovh.net [46.105.62.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D4A2066DC
-	for <linux-i2c@vger.kernel.org>; Thu, 20 Mar 2025 11:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826E8220683
+	for <linux-i2c@vger.kernel.org>; Thu, 20 Mar 2025 11:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.62.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742469416; cv=none; b=dRFEsIqZFPno/eP+jv26PD73V3r75KCiv2kKmIhRGvWfM6U/QPVXHfpNV+23HROZA10BUNVf4/kp9iHbZh4txkxfeXnVHBD0kBEqFBDRleT1X8qxHvP5Nt3uaaoGkQBSHtJbi68LVp5Qo0gb5mLiDsxK55lafOmkM7GIf9SUdg4=
+	t=1742471055; cv=none; b=kaQm3F+jJVV0ox5flVm6mxE/GMr0YlcIsowJDXGPuwsqTcwc2PpQASI4AG0I8CzNOp5rVrg78Tv24/QVSY6n4DUshwaiiLJ0C7c2q6s0kp+4tOZAkAUNK4HI4GV4/NIVpbQFfOmt4xsGv/zg9hL373yOaHqk6qpZNjOaN2yy3Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742469416; c=relaxed/simple;
-	bh=50LWmp0t9rBcSlI0MkxpTiD6DLeIo+bf1yfNgb4HV0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OlBMA5SXkrTfv8t4sx+DDNUZ29y+wiwrGlwb3vrY+fHwfYC+6QVR2D4r/FJlJqAwEtpXKEE+T6R0MFnOmNmTuMeoth3+ua3OFmYB3JqbiEm5ZrOzuGlZ4JUMC2kY88Wn92qfL7x30iO3nKpkLHwcEEKO76PQm6t0FewEQ1fJlZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bISjCvti; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6407C4CEDD;
-	Thu, 20 Mar 2025 11:16:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742469415;
-	bh=50LWmp0t9rBcSlI0MkxpTiD6DLeIo+bf1yfNgb4HV0s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bISjCvtipswWptaLERhVQxhBaKwU27TDgbpnx9GJfyiJ53maLZj+jVewYbNLEzwVR
-	 03pC/euIwTwpTM7cjUjHW45+do3ZhEgQ+jeiAYbt09EuRp/8Ep3xJ5K+oc2anp/MX5
-	 SQxZtxjDMQaIGT9vpwFeaK4i06T/6cXtdlPWyBUPmIlrMld0aX7vtKTGFVqi/hiMzr
-	 ShFpn5nNtBx/0jquGCUvt+dTNXHjDPydgh6DeCcvl6heeKpMz4wdO6KDHPTM0TGaEP
-	 bYDkImgU9S/G1GL+mWBttfXNR6+M8D7FCZp7IhFf0DDtlGmNrJLo748tP2T+o2w36S
-	 1qTLMWW+FXKcA==
-Date: Thu, 20 Mar 2025 12:16:52 +0100
+	s=arc-20240116; t=1742471055; c=relaxed/simple;
+	bh=q1JDobvctWfZvBFVRjNdCwbpGJZnUiXZyOJku4vtQz4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NbJLy8B5Gsthi2yAamQt03CBWnYaTmz/nHkid7ycOWXDFOMIfsazEhUB48BWTTXFmGGvXZqso711TGb+O/FgNMNTxAfZA9UdG5g08+sub3PrUltXNqmgUCFkjnqtPjOjYWLJ8h+faYj4bfiWr3rAnzsf1wJVtmhyMn1VDFgkk8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.62.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director6.ghost.mail-out.ovh.net (unknown [10.109.139.47])
+	by mo575.mail-out.ovh.net (Postfix) with ESMTP id 4ZJNml1Km2z1rwh
+	for <linux-i2c@vger.kernel.org>; Thu, 20 Mar 2025 11:35:35 +0000 (UTC)
+Received: from ghost-submission-5b5ff79f4f-v6m65 (unknown [10.110.188.207])
+	by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 6D3E21FEB8;
+	Thu, 20 Mar 2025 11:35:34 +0000 (UTC)
+Received: from etezian.org ([37.59.142.98])
+	by ghost-submission-5b5ff79f4f-v6m65 with ESMTPSA
+	id UB6VD4b922egZQAAPxPWZw
+	(envelope-from <andi@etezian.org>); Thu, 20 Mar 2025 11:35:34 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-98R002cbf36733-db7b-4af7-b6c7-8b4b7dacfd1b,
+                    7E69928ED4D8A226BEDEC5E8D42620266DA13BA9) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:178.39.90.92
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Yang Yingliang <yangyingliang@huawei.com>
-Cc: linux-i2c@vger.kernel.org, syniurge@gmail.com, 
-	shyam-sundar.s-k@amd.com, Raju.Rangoju@amd.com, basavaraj.natikar@amd.com, wsa@kernel.org
-Subject: Re: [PATCH -next] i2c: amd-mp2: drop free_irq() of
- devm_request_irq() allocated irq
-Message-ID: <2mlgmmld4kih7fvt3bv2fzy2mgkbierbmtmzfbdy2cqweu7txh@tosw5go7mksd>
-References: <20221103121146.99836-1-yangyingliang@huawei.com>
+To: linux-i2c <linux-i2c@vger.kernel.org>
+Cc: Troy Mitchell <troymitchell988@gmail.com>,
+	Alex Elder <elder@riscstar.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] i2c: k1: Initialize variable before use
+Date: Thu, 20 Mar 2025 12:35:21 +0100
+Message-ID: <20250320113521.3966762-1-andi.shyti@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103121146.99836-1-yangyingliang@huawei.com>
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 18268570414810598108
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeekuddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnheptdfgvedujefhgfelkeffkeevudekheevieejhfelkedtieehleeuffdvueefjeffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpudejkedrfeelrdeltddrledvpdefjedrheelrddugedvrdelkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejhegmpdhmohguvgepshhmthhpohhuth
 
-Hi Yang,
+Commit 95a8ca229032 ("i2c: spacemit: add support for SpacemiT K1
+SoC") introduced a check in the probe function to warn the user
+if the DTS has incorrect frequency settings. In such cases, the
+driver falls back to default values.
 
-On Thu, Nov 03, 2022 at 08:11:46PM +0800, Yang Yingliang wrote:
-> irq allocated with devm_request_irq() will be freed in devm_irq_release(),
-> using free_irq() in ->remove() will causes a dangling pointer, and a
-> subsequent double free. So remove the free_irq() in the error path and
-> remove path.
-> 
-> Fixes: 969864efae78 ("i2c: amd-mp2: use msix/msi if the hardware supports")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+However, the return value of of_property_read_u32() was not
+stored, making the check ineffective. Fix this by storing the
+return value in 'ret' and evaluating it properly.
 
-No ack from Ellie and Shyam have come for this patch in almost
-two years. It still applies and it still looks correct to me.
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202503200928.eBWfwnHG-lkp@intel.com/
+Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+Cc: Troy Mitchell <troymitchell988@gmail.com>
+---
+Cc: Alex Elder <elder@riscstar.com>
 
-I'm merging it into i2c/i2c-host-fixes in order to have it in
-time for the tests before the pull requests. If Ellie and/or
-Shyam will have concerns, we are still in time to take it off.
+ drivers/i2c/busses/i2c-k1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Andi
+diff --git a/drivers/i2c/busses/i2c-k1.c b/drivers/i2c/busses/i2c-k1.c
+index 0d8763b852db..5965b4cf6220 100644
+--- a/drivers/i2c/busses/i2c-k1.c
++++ b/drivers/i2c/busses/i2c-k1.c
+@@ -514,7 +514,7 @@ static int spacemit_i2c_probe(struct platform_device *pdev)
+ 	if (!i2c)
+ 		return -ENOMEM;
+ 
+-	of_property_read_u32(of_node, "clock-frequency", &i2c->clock_freq);
++	ret = of_property_read_u32(of_node, "clock-frequency", &i2c->clock_freq);
+ 	if (ret && ret != -EINVAL)
+ 		dev_warn(dev, "failed to read clock-frequency property: %d\n", ret);
+ 
+-- 
+2.47.2
+
 
